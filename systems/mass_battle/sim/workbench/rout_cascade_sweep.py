@@ -19,12 +19,12 @@ into a rout, which is exactly the win-share-regression risk this sweep exists to
 Fixed by deriving the row set PROGRAMMATICALLY (below) instead of hand-listing it, so this class of
 omission cannot recur silently.
 
-WHY NOT THE FULL BATTERY, restated correctly this time. `Unit.derive_rout`'s cascade condition
-(`self._broken_share() >= ROUT_CASCADE_FRAC`) is evaluated per-Unit over that Unit's OWN subunits.
-For a Unit with exactly one subunit, `_broken_share()` is a 0/1 step function (0 before that subunit
+WHY NOT THE FULL BATTERY, restated correctly this time. `Army.derive_rout`'s cascade condition
+(`self._broken_share() >= ROUT_CASCADE_FRAC`) is evaluated per-Army over that Army's OWN units.
+For an Army with exactly one subunit, `_broken_share()` is a 0/1 step function (0 before that subunit
 breaks, 1.0 after), so ANY threshold in (0, 1] clears at the same instant regardless of its value —
 PROVABLY inert, not merely unmeasured. `_faction_to_unit` (`massbattle.py`, the only function
-building Units for the live campaign) builds exactly one subunit per faction, so this sweep's choice
+building Armies for the live campaign) builds exactly one subunit per faction, so this sweep's choice
 has ZERO effect on any campaign-reachable battle today, whatever it picks — disclosed, not hidden.
 Every gauge/CAV row where AT LEAST ONE side is built via a callable army-builder
 (`_envelop_army`/`_refused_army`/`_command_army`, per `gauge_mb.matchup`'s own `a_is_fn`/`b_is_fn`

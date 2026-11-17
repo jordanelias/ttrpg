@@ -43,9 +43,9 @@ def _fight(role, seed):
     random.seed(seed)
     a = build_army([{'role': role, 'troop_type': 'heavy_infantry'}], 'R', 'A')
     b = build_unit('Line', 3, 'E', 'B', 25)
-    su = a.subunits[0]
+    su = a.units[0]
     r0 = su.centroid()[0]
-    _orch.run_battle(a, b, max_turns=18)
+    _orch.run_battle(a, b, max_ticks=18)
     advance = r0 - su.centroid()[0]
     occupied = [t for t in su.cell_troops.values() if t > 0]
     density = sum(occupied) / len(occupied) if occupied else 0.0
@@ -76,13 +76,13 @@ def test_unwired_reproduces_the_label_only_roles(field_path, unwired):
 def test_explicit_stance_beats_the_role_default(wired):
     """A role's stance keyword is a default posture: an explicit non-balanced stance wins."""
     su = build_army([{'role': 'ShieldWall', 'troop_type': 'heavy_infantry', 'stance': 'aggressive'}],
-                    'R', 'A').subunits[0]
+                    'R', 'A').units[0]
     assert su.eff_stance == 'aggressive'
-    su = build_army([{'role': 'ShieldWall', 'troop_type': 'heavy_infantry'}], 'R', 'A').subunits[0]
+    su = build_army([{'role': 'ShieldWall', 'troop_type': 'heavy_infantry'}], 'R', 'A').units[0]
     assert su.eff_stance == 'hold'
-    su = build_army([{'role': 'Push', 'troop_type': 'heavy_infantry'}], 'R', 'A').subunits[0]
+    su = build_army([{'role': 'Push', 'troop_type': 'heavy_infantry'}], 'R', 'A').units[0]
     assert su.eff_stance == 'aggressive'
-    su = build_army([{'role': 'Shock', 'troop_type': 'cavalry'}], 'R', 'A').subunits[0]
+    su = build_army([{'role': 'Shock', 'troop_type': 'cavalry'}], 'R', 'A').units[0]
     assert su.eff_stance == 'aggressive'
 
 
@@ -93,7 +93,7 @@ def test_an_order_that_releases_to_balanced_beats_the_role_keyword(wired):
     from modules.mass_battle.core.contact import check_orders
     u = build_army([{'role': 'ShieldWall', 'troop_type': 'heavy_infantry',
                      'orders': (_hu.Order('tick:3', {'stance': 'balanced'}),)}], 'R', 'A')
-    su = u.subunits[0]
+    su = u.units[0]
     assert su.eff_stance == 'hold'
     check_orders(u, 2, [])
     assert su.eff_stance == 'hold', "the order must not fire before its tick"
@@ -103,14 +103,14 @@ def test_an_order_that_releases_to_balanced_beats_the_role_keyword(wired):
 
 def test_a_build_spec_that_writes_balanced_beats_the_role_keyword(wired):
     su = build_army([{'role': 'ShieldWall', 'troop_type': 'heavy_infantry', 'stance': 'balanced'}],
-                    'R', 'A').subunits[0]
+                    'R', 'A').units[0]
     assert su.eff_stance == 'balanced'
 
 
 def test_a_volley_line_is_not_frozen_by_its_role(wired):
     """VolleyLine used to carry 'hold', which (STANCE_SPEED_MOD['hold'] = -99) stops archers advancing
     and braces them against shock. Its role keyword is 'volley' alone."""
-    su = build_army([{'role': 'VolleyLine', 'troop_type': 'archers'}], 'R', 'A').subunits[0]
+    su = build_army([{'role': 'VolleyLine', 'troop_type': 'archers'}], 'R', 'A').units[0]
     assert su.eff_stance == 'balanced'
 
 
@@ -122,7 +122,7 @@ def test_lure_declares_the_feigned_retreat(wired, monkeypatch):
     pursuer = build_unit('Line', 3, 'P', 'A', 25, troop_type='cavalry', speed='Fast')
     lure = build_army([{'role': 'Feint', 'troop_type': 'cavalry'}], 'L', 'B')
     plain = build_army([{'role': 'Shock', 'troop_type': 'cavalry'}], 'S', 'B')
-    assert lure.feigned is False, "the keyword is read at the pursuit site, not written onto the Unit"
+    assert lure.feigned is False, "the keyword is read at the pursuit site, not written onto the Army"
     assert _orch.resolve_feigned_retreat(pursuer, lure) is not None
     assert _orch.resolve_feigned_retreat(pursuer, plain) is None
 

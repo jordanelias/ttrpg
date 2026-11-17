@@ -45,9 +45,9 @@ def test_emergent_entry_on_disciplined_subunit():
     """ON: a disciplined (>=D_YIELD) subunit crossing the frac<0.50 casualty trigger enters yielding."""
     _, _, S, _, E, _ = _reload(MB_YIELD_EMERGENT=True)
     ua, ub = _pressured_pair(E, discipline=5)
-    assert not ua.subunits[0].yielding
+    assert not ua.units[0].yielding
     S.morale_check_phase(ua, ub, 0)
-    assert ua.subunits[0].yielding is True, "disciplined pressured subunit must enter yielding"
+    assert ua.units[0].yielding is True, "disciplined pressured subunit must enter yielding"
 
 
 def test_emergent_skips_low_discipline():
@@ -55,7 +55,7 @@ def test_emergent_skips_low_discipline():
     _, X, S, _, E, _ = _reload(MB_YIELD_EMERGENT=True)
     ua, ub = _pressured_pair(E, discipline=X.D_YIELD - 1)
     S.morale_check_phase(ua, ub, 0)
-    assert ua.subunits[0].yielding is False, "sub-D_YIELD subunit must not auto-yield"
+    assert ua.units[0].yielding is False, "sub-D_YIELD subunit must not auto-yield"
 
 
 def test_emergent_gate_off_is_inert():
@@ -63,7 +63,7 @@ def test_emergent_gate_off_is_inert():
     _, _, S, _, E, _ = _reload(MB_YIELD_EMERGENT=False)
     ua, ub = _pressured_pair(E, discipline=5)
     S.morale_check_phase(ua, ub, 0)
-    assert ua.subunits[0].yielding is False, "OFF: emergent entry must be inert"
+    assert ua.units[0].yielding is False, "OFF: emergent entry must be inert"
 
 
 # ── §2.4 RALLY exit ─────────────────────────────────────────────────────────────────────────────────
@@ -71,33 +71,33 @@ def test_rally_reverts_recovered_yielding_subunit():
     """ON: at the between-turn lull a yielding subunit with healthy morale reverts to normal combat."""
     C, _, _, _, E, O = _reload(MB_YIELD_RALLY=True)
     ua = E.build_unit('Line', 3, 'A', 'A', 20)  # morale 6 == start -> >= 0.75*start
-    ua.subunits[0].yielding = True
+    ua.units[0].yielding = True
     O.between_turn_recovery(ua)
-    assert ua.subunits[0].yielding is False, "recovered morale must rally the subunit"
+    assert ua.units[0].yielding is False, "recovered morale must rally the subunit"
 
 
 def test_rally_keeps_pressured_yielding_subunit():
     """ON: a yielding subunit still below the rally morale fraction stays yielding (no premature reform)."""
     C, _, _, _, E, O = _reload(MB_YIELD_RALLY=True)
     ua = E.build_unit('Line', 3, 'A', 'A', 20)
-    ua.subunits[0].yielding = True
+    ua.units[0].yielding = True
     ua.morale = 3  # eff_morale 3 < 0.75*6 = 4.5
     O.between_turn_recovery(ua)
-    assert ua.subunits[0].yielding is True, "morale below rally fraction must stay yielding"
+    assert ua.units[0].yielding is True, "morale below rally fraction must stay yielding"
 
 
 def test_rally_gate_off_is_inert():
     """OFF (default): a yielding subunit is never auto-reverted at the turn boundary."""
     C, _, _, _, E, O = _reload(MB_YIELD_RALLY=False)
     ua = E.build_unit('Line', 3, 'A', 'A', 20)
-    ua.subunits[0].yielding = True
+    ua.units[0].yielding = True
     O.between_turn_recovery(ua)
-    assert ua.subunits[0].yielding is True, "OFF: rally must be inert"
+    assert ua.units[0].yielding is True, "OFF: rally must be inert"
 
 
 # ── §2.4 POCKET exit ────────────────────────────────────────────────────────────────────────────────
 def _atom_at(U, anchor):
-    su = U.Subunit(shape='Line', troop_type='infantry', tier=3, starting_position=(0, 0))
+    su = U.Unit(shape='Line', troop_type='infantry', tier=3, starting_position=(0, 0))
     su._node_anchor = anchor
     return su
 
@@ -132,7 +132,7 @@ def test_pocket_removes_pool_malus():
     yielding subunit keeps the YIELD_POOL_MULT malus."""
     C, X, _, U, E, _ = _reload(MB_YIELD_POCKET=True)
     u = E.build_unit('Line', 3, 'A', 'A', 20, discipline=5)  # eff_discipline 5 >= D_YIELD -> yield_active
-    atom = u.subunits[0]
+    atom = u.units[0]
     atom.yielding = True
     yielding_pool = X.subunit_combat_pool(u, atom)   # malus applied
     atom.pocketed = True

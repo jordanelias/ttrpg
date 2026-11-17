@@ -131,8 +131,7 @@ def _massbattle_canon():
 
 
 def _combat_engine():
-    sys.path.insert(0, str(REPO / 'modules' / 'combat'))
-    m = _load('modules/combat/core.py', 'combat_core_probe')
+    m = importlib.import_module('modules.combat.core')   # a package module: imported by dotted name, because loading it by file path would leave its relative imports no parent
     return lambda net, ob: band(m.degree(net, ob))
 
 

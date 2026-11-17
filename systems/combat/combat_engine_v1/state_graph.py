@@ -14,7 +14,7 @@ truth by THIS file. The map's stale items (DAMAGE_SCALE removed; precommit now c
 because the graph is data + tested, not prose."""
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))  # the repository root: `modules.combat` is a package
 
 # Trace-event kinds the engine emits (wrapper._emit). The emit-legality test checks every `emits` is here.
 TRACE_KINDS = {
@@ -191,7 +191,7 @@ def separation_reasons_from_events(events):
 # ============================== self-test ==============================
 if __name__ == '__main__':
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'workbench'))
-    from combatant import Combatant
+    from modules.combat.combatant import Combatant
     from trace import run_traced_fight
 
     checks, rule = [], '=' * 64
@@ -237,7 +237,7 @@ if __name__ == '__main__':
             fired |= fired_states_from_events(ev); reasons |= separation_reasons_from_events(ev)
     # PC-13: the duel-terms fight ('terms' separation + the terms yield) and the decider's withdraw (Withdrawal), both
     # through run_traced_fight's `**fight_kw`.
-    import wrapper as _W
+    from modules.combat import wrapper as _W
     def _traced(A, B, seed, **kw):
         return run_traced_fight(A, B, seed=seed, **kw)[1]
     for s in range(30):

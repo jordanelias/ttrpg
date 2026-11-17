@@ -1,15 +1,14 @@
 """Subsystem modules. Uniform contract: each is a pure function of (aggressor, defender, state, cfg[, rng]).
 NO subsystem touches raw A/B — they receive Combatant objects in role. This isolates every mechanic for
 unit-testing and makes the coupling explicit."""
-import sys, os; sys.path.insert(0, os.path.dirname(__file__))
 from collections import namedtuple   # ED-PC-0042 (I3): the sel_* bundle's two record shapes — HeadOption / ModeSelection, defined below
 from math import tanh, sqrt, exp, log   # logistic single-sourced in core.logistic (ED-PC-0025); exp used by represent_measure_p's armour-fade; log by lever_log_edge (ED-PC-0045)
-import core
-import vocabulary as V   # the token ALPHABET, owned once (ED-PC-0042); core's tables are keyed by it
-import weapon_physics as WP   # derived L0 physics (percussion_authority/puncture_pressure/agility/reach) — cycle-free (WP imports only math + the zero-import `vocabulary` leaf at module scope)
-import ability_primitives as ABIL   # U10/ED-PC-0022: the tradition-modulation surface for the morphology levers. ability_factor(c,channel)==1.0 by default (no equipped ability -> byte-identical), so the TR-less lever sites (legibility/facing_target) can reach it without threading TR. Cycle-free (ability_primitives imports only traditions).
-from combatant import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE
-from attributes import NEUTRAL   # PC-14: the centring values of the direct-centred attributes, owned by the spec
+from . import core
+from . import vocabulary as V   # the token ALPHABET, owned once (ED-PC-0042); core's tables are keyed by it
+from . import weapon_physics as WP   # derived L0 physics (percussion_authority/puncture_pressure/agility/reach) — cycle-free (WP imports only math + the zero-import `vocabulary` leaf at module scope)
+from . import ability_primitives as ABIL   # U10/ED-PC-0022: the tradition-modulation surface for the morphology levers. ability_factor(c,channel)==1.0 by default (no equipped ability -> byte-identical), so the TR-less lever sites (legibility/facing_target) can reach it without threading TR. Cycle-free (ability_primitives imports only traditions).
+from .combatant import WEAPONS, GEOMETRY, HALFSWORD_FORM, HALFSWORD_BASE
+from .attributes import NEUTRAL   # PC-14: the centring values of the direct-centred attributes, owned by the spec
 
 # ---------- ability-lever composition (SINGLE OWNER — M5/F5, ED-PC-0045) ----------
 def lever_log_edge(own_factor, opponent_factor):

@@ -73,7 +73,7 @@ def make_unit(shape, name, faction, **kw):
 
 
 # [LC-8] Composed replacements for the retired Horseshoe/RefusedFlank single-subunit shapes,
-# dogfooding engine.build_envelopment/build_refused_flank (ED-909's Unit-level presets) in this
+# dogfooding engine.build_envelopment/build_refused_flank (ED-909's Army-level presets) in this
 # byte-exact battery itself -- the most direct possible validation that they construct and resolve
 # correctly through the SAME multi-turn ('kind=multi') path the rest of this battery already
 # exercises. Wing/refused placement is symmetric around the same anchor column the retired shapes
@@ -106,7 +106,7 @@ def _refused_army(name, faction, **kw):
 
 # Fixed battery: (label, shape_a, shape_b, kwargs_a, kwargs_b). shape_a/shape_b is either a plain
 # shape string (single-subunit path, via make_unit) or a build_army-style ARMY BUILDER callable
-# (_envelop_army/_refused_army, signature (name, faction, **kw) -> Unit) for the composed presets.
+# (_envelop_army/_refused_army, signature (name, faction, **kw) -> Army) for the composed presets.
 # Spans melee mirror / wedge / envelopment / oblique / manipular + cavalry charge / braced-repel /
 # shaken / ranged / volley so both the PER_CELL=0 and PER_CELL=1 code paths are exercised.
 BATTERY = [
@@ -147,7 +147,7 @@ def trial_vector(ua, ub, r):
 # reproduce these. They are updated ONLY on an intentional behaviour change (a later stage), with the
 # change recorded in tests/coverage_matrix.md — exactly like the gauge digest history (e.g. ED-1032).
 # [LC-8, 2026-07-02, Jordan-approved: "correct, retire them. those are emergent outcomes."] Updated:
-# Horseshoe/RefusedFlank retired as Subunit.shape values; the 'envelop'/'cannae'/'oblique' battery
+# Horseshoe/RefusedFlank retired as Unit.shape values; the 'envelop'/'cannae'/'oblique' battery
 # rows now build via build_envelopment/build_refused_flank instead. A byte-exact isolation check (a
 # worktree diff at 7 unaffected rows only, both before and after this change) confirmed the
 # reset_positions rewrite this required (each subunit now resets to its OWN spawn position, not one
@@ -165,7 +165,7 @@ def trial_vector(ua, ub, r):
 # a subunit is misleading. It should be based upon combat pool per cell as per troop type/quality/
 # density... bottom-up... solves issues with multiple engagements"); (2) a continuous per-phase
 # sibling-morale coupling (core/state.py's morale_check_phase, hierarchy/units.py's new
-# Subunit.pull_morale) -- Jordan's DG-4 ruling ("Subunit morale combination of own morale and overall
+# Unit.pull_morale) -- Jordan's DG-4 ruling ("[Unit] morale combination of own morale and overall
 # morale; more likely to wilt if other subunits losing, more likely to rally if other subunits
 # winning"). Both are additive/structural, not magnitude tuning to fit a band. Full rationale,
 # verification (bat.py all 4 modes, tests/valoria, gauge_mb.py re-run) in coverage_matrix.md's
@@ -281,7 +281,7 @@ EXPECTED = {
     # [2026-07-22, ED-MB-0017, multi-unit deployment geometry fix] RE-BASELINED (grid modes too — a
     # deliberate, verified behaviour change, same as ED-909 when these presets were introduced). The 3
     # multi-subunit rows (envelop/cannae/oblique) move in EVERY mode because build_army/build_envelopment/
-    # build_refused_flank now deploy subunits frontage-aware & centred (no overlap), with symmetric
+    # build_refused_flank now deploy units frontage-aware & centred (no overlap), with symmetric
     # envelopment wings and an echeloned refused wing — replacing the `15 + i*4` fixed-step layout. The 7
     # single-subunit rows are UNCHANGED (build_unit path untouched). See pathing_deployment_diagnosis.md.
     # [2026-07-23, ED-MB-0018, octagon = damage-received multiplier] re-recorded. The octagon facing arc
@@ -384,7 +384,7 @@ EXPECTED = {
     # [Movement/pathing audit, ED-1096/1097, re-recorded 2026-07-02] Re-recorded again for the fix-plan
     # steps 1-7 + decision gates 2/4 landed this session: check_drift/reset_positions node-state
     # corruption fixes, weapon-derived unit_type wiring, restored lateral file-holding, the node WHEEL
-    # facing-stall fix, and fix-plan step 7's waypoint primitive (Subunit._resolve_maneuver_goal/
+    # facing-stall fix, and fix-plan step 7's waypoint primitive (Unit._resolve_maneuver_goal/
     # _envelop_goal/_sweep_goal), which is the first change to give _node_advance real steering for the
     # 'envelop'/'sweep' instructions at all (every prior recording predates step 7 and reflects the
     # straight-line-only centroid attractor these instructions previously reduced to).
@@ -408,7 +408,7 @@ EXPECTED = {
     # adversarial audit found `_envelop_goal`'s phase-1/phase-2 transition shared one threshold for
     # entry and exit, producing a permanent limit cycle (wings wheel to the rear_r line, then jitter
     # there forever, never closing to contact) -- confirmed by direct trace. Fixed with a one-shot
-    # commitment latch (`Subunit._envelop_committed`) in hierarchy/units.py. This battery's own
+    # commitment latch (`Unit._envelop_committed`) in hierarchy/units.py. This battery's own
     # Horseshoe-cavalry/envelop scenarios exercise the 'envelop' instruction on the field path, so
     # this digest moving is expected and intentional -- wings that previously never reached contact
     # now do. `unit` (grid, PER_CELL=0) confirmed BYTE-IDENTICAL for THIS fix in isolation (this fix
@@ -485,7 +485,7 @@ EXPECTED = {
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
     # first-round re-record, meaning the current battery/gauge doesn't happen to exercise those bugs
     # on those 3 modes, but cell_field's PER_CELL=1+FIELD_MOVEMENT=1 combination (continuous-scale
-    # subunits, multi-subunit envelop/cannae/oblique rows, real morale/rout timing) does.
+    # units, multi-subunit envelop/cannae/oblique rows, real morale/rout timing) does.
     # [2026-07-05, D2 fix, same as unit_field above] re-recorded again for the same envelop-goal
     # hysteresis-latch fix; 'cell' (grid, PER_CELL=1) confirmed BYTE-IDENTICAL, unaffected.
     #
@@ -526,7 +526,7 @@ EXPECTED = {
     # disclosed, no constant tuned; GRID modes byte-identical (field-gated).
     # [2026-07-22, ED-MB-0017 — deployment geometry + cavalry/envelop-march speed re-baseline]
     # [2026-07-23, ED-MB-0019 — see the 'unit' note above] re-recorded.
-    # [2026-07-24, ED-MB-0036] re-recorded (perimeter wheel + MORALE_EROSION_DAMP/SUBUNIT_ROUT_FLOOR wirings).
+    # [2026-07-24, ED-MB-0036] re-recorded (perimeter wheel + MORALE_EROSION_DAMP/UNIT_ROUT_FLOOR wirings).
     # [2026-07-29, plan-v2 A1a (ED-MB-0045) — see the 'unit_field' note above] re-recorded, same
     # two-mover bisect: (1) PR #235's change set: a1a97940… -> 3a5807fb… at rout=0; (2) PR #236's
     # MB_STOCHASTIC_ROUT flip: 3a5807fb… -> this value. Account closed by TWO instruments:
@@ -567,7 +567,7 @@ EXPECTED = {
     # pre-combat delta-sigma penalty on the shocked unit's own net successes to a POST-damage,
     # roll-gated Discipline check (discipline_check_cascade) that erodes morale by dmg/(agg_discipline
     # x command) on FAIL — a genuine behaviour change on this battery's envelop/cannae/oblique rows,
-    # which build fixed+flanked subunits by construction (b_fixed_other/a_fixed_other true). PER_CELL=1
+    # which build fixed+flanked units by construction (b_fixed_other/a_fixed_other true). PER_CELL=1
     # only (the whole puncture/shock block this composes on is `if PER_CELL:`-gated) — unit_field_mor0
     # (PER_CELL=0, same battery) is PROVABLY UNAFFECTED, not merely re-verified unchanged: shocked_a/b
     # can only be set True inside the PER_CELL-gated branch, so run_battle's new coupling block always
@@ -592,7 +592,7 @@ EXPECTED = {
     # golden — the ED-1089 shape, one flag later.
     # [ED-MB-0058, 2026-07-29] RE-RECORDED once, and this mode ALONE moved — which is the point.
     # was b42343dbd508d1e939625d9b3b80744dd1005cbc831505355d4de46540013d2b
-    # between_turn_recovery routed own-morale subunits through set_morale, the ABSOLUTE writer that
+    # between_turn_recovery routed own-morale units through set_morale, the ABSOLUTE writer that
     # flattens every cell to the unit mean; per-cell morale divergence was therefore erased once per
     # turn, which is why MB_CELL_MORALE looked inert. Now routed through pull_morale (relative), so
     # divergence survives the recovery step. CONTROL: the other four modes are byte-identical, as
@@ -757,7 +757,7 @@ def compute():
         # that replaced the retired Horseshoe/RefusedFlank shapes (LC-8). resolve_battle's shape_a/
         # shape_b positional is only consulted by reset_positions as a defensive fallback now (every
         # subunit resets to its OWN spawn position first -- see reset_positions) -- 'Line' is a safe
-        # placeholder for a callable side, never actually used since build_army-built subunits always
+        # placeholder for a callable side, never actually used since build_army-built units always
         # carry a real _spawn_position.
         a_is_fn = callable(sa); b_is_fn = callable(sb)
         if not a_is_fn and (sa, TIER) not in ANCHOR_MAP:

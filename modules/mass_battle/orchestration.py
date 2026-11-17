@@ -60,7 +60,7 @@ from modules.mass_battle.core.state import *  # [Stage-1] morale/discipline/rout
 from modules.mass_battle.core.attrition import *  # [Stage-1] Lanchester attrition law extracted to core.attrition
 from modules.mass_battle.core.contact import *  # [Stage-1] targeting/contact extracted to core.contact
 from modules.mass_battle.troop_types.registry import *  # [Stage-1] troop-type stats/roles extracted
-from modules.mass_battle.hierarchy.units import *  # [Stage-1] Subunit/Unit data model extracted
+from modules.mass_battle.hierarchy.units import *  # [Stage-1] Unit/Army data model extracted
 from modules.mass_battle.resolution import *  # [Stage-1] sigma head (roll/degree/morale-sigma/trace) — restored: import rode into hierarchy with the class block
 # [canonical: designs/provincial/mass_battle_v30.md §units — 15×15 cell unit grid fits T4 pattern]
 # [canonical: designs/provincial/mass_battle_v30.md §deployment]
@@ -156,9 +156,9 @@ def stamina_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     Drain happens per-tick in run_battle; this hook handles rotation recovery.
     [canonical: audit_sim_mb_06_v14.md §G-1 — depth permits front-rank rotation]"""
     for u in [unit_a, unit_b]:
-        if u.routed or u.broken:
+        if u.routed or u.disordered:
             continue
-        for atom in u.subunits:
+        for atom in u.units:
             depth = _subunit_depth(atom)
             reserve_ranks = max(0, depth - 1)
             recovery = STAMINA_RECOVERY_PER_RESERVE_RANK * reserve_ranks
@@ -195,19 +195,19 @@ def reform_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     if find_contacts(unit_a, unit_b):
         return  # any contact pair -> both units engaged (1v1) -> no reform this boundary
     for u in (unit_a, unit_b):
-        if u.routed or u.broken:
+        if u.routed or u.disordered:
             continue
         # Command-asymmetry (PP-241 on the citation line above): one cannot restore;
         # restoration needs Command at least one above the (per-subunit) current Discipline.
         if u.command < 2:
             continue
-        for atom in u.subunits:
-            if atom.routed or atom.broken:
+        for atom in u.units:
+            if atom.routed or atom.disordered:
                 continue
             if u.command < atom.eff_discipline + 1:
                 continue
             if atom.eff_discipline < atom.eff_discipline_start:
-                atom.restore_discipline()   # +1 toward start, routes own-else-Unit (byte-exact single-subunit)
+                atom.restore_discipline()   # +1 toward start, routes own-else-Army (byte-exact single-subunit)
         u.check_drift()
 
 def threadwork_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
@@ -360,12 +360,12 @@ def _convergence_scale(unit_a, unit_b, pairs):
     live variant) -- callers gate application accordingly; this function itself is pure dict/float
     math, safe to compute unconditionally."""
     def _dead(unit, atom):
-        return unit.routed or unit.broken or atom.routed or atom.broken
+        return unit.routed or unit.disordered or atom.routed or atom.disordered
 
     def _group_and_scale(key_of, attacker_of, attacker_unit, cells_of, out):
         """attacker_of(p)/cells_of(p) select the CONVERGING side's atom/contact-cells for pair p;
         key_of(p) selects the shared TARGET atom the group is defined by. attacker_unit is that
-        side's Unit (fixed for the whole call -- unit_a for the a_scale pass, unit_b for b_scale)."""
+        side's Army (fixed for the whole call -- unit_a for the a_scale pass, unit_b for b_scale)."""
         groups = {}
         for p in pairs:
             groups.setdefault(id(key_of(p)), []).append(p)
@@ -518,7 +518,7 @@ def _expire_charger_latches(unit_a, unit_b, pairs):
         live.setdefault(id(a), set()).add(id(b))
         live.setdefault(id(b), set()).add(id(a))
     for u in (unit_a, unit_b):
-        for atom in u.subunits:
+        for atom in u.units:
             pressing = getattr(atom, '_pressing', None)
             if pressing:
                 pressing &= live.get(id(atom), set())
@@ -566,8 +566,8 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
     None -> computed locally from `pairs` (direct callers / non-cascading path -> identical, same pairs)."""
     dmg_a, dmg_b = 0, 0
     cell_dmg_a, cell_dmg_b = {}, {}   # [ED-MB-0040] {id(atom): (atom, {abs_cell: dmg})}, MB_CELL_DAMAGE only
-    # [ED-MB-0075 option (2)] Unit-level envelopment-shock flags, OR-accumulated over every pair this call
-    # resolves (mirrors dmg_a/dmg_b's own per-pair accumulation, at the same Unit granularity
+    # [ED-MB-0075 option (2)] Army-level envelopment-shock flags, OR-accumulated over every pair this call
+    # resolves (mirrors dmg_a/dmg_b's own per-pair accumulation, at the same Army granularity
     # cascade_morale_hit consumes). Set below in place of the old pre-combat delta-sigma penalty; consumed
     # by run_battle's per-tick loop (discipline-gated erosion) after damage commits, not here.
     shocked_a = shocked_b = False
@@ -636,7 +636,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
             # [Jordan-ratified 2026-07-05: "Intensive (per-troop, partition-invariant)"]
             # `pair_pool_contribution` already normalizes per-troop internally (`base_pool /
             # atom.cur_troops`), so no outer `a_troops_frac`/`b_troops_frac` multiplier is applied: a
-            # subunit's combat score is partition-invariant (splitting one army into N subunits does
+            # subunit's combat score is partition-invariant (splitting one army into N units does
             # not change its total output).
             a_pool_raw = pair_pool_contribution(atom_a, p["a_cells"], a_base)
             b_pool_raw = pair_pool_contribution(atom_b, p["b_cells"], b_base)
@@ -661,8 +661,8 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
         # their own `pool` argument to a minimum of 1 internally, so zeroing `a_pool` serves bookkeeping
         # only (trace_event, the ranged//3 and encirclement adjustments below); the damage is zeroed by
         # forcing `a_net`/`b_net` to 0 directly, downstream of those calls.
-        a_dead = unit_a.routed or unit_a.broken or atom_a.routed or atom_a.broken
-        b_dead = unit_b.routed or unit_b.broken or atom_b.routed or atom_b.broken
+        a_dead = unit_a.routed or unit_a.disordered or atom_a.routed or atom_a.disordered
+        b_dead = unit_b.routed or unit_b.disordered or atom_b.routed or atom_b.disordered
         a_pool = 0 if a_dead else max(1, math.floor(a_pool_raw + 1e-9))  # [canonical: epsilon: float magnitude guard]
         b_pool = 0 if b_dead else max(1, math.floor(b_pool_raw + 1e-9))  # [canonical: epsilon: float magnitude guard]
 
@@ -1036,7 +1036,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                 cB = STANCE_COMMITMENT.get(atom_b.eff_stance, 0)
                 ns_a += (cA * INTENT_OFFENSE_D + cB * INTENT_DEFENSE_D) * SIGMA_PER_D
                 ns_b += (cB * INTENT_OFFENSE_D + cA * INTENT_DEFENSE_D) * SIGMA_PER_D
-            # [MB-05] A.9 terrain dice (`Unit.terrain_off_d`/`terrain_def_d`, set by
+            # [MB-05] A.9 terrain dice (`Army.terrain_off_d`/`terrain_def_d`, set by
             # `massbattle._run_and_grade`): a side's own offence dice, less the enemy's defence dice --
             # the same Off/Def reading as the INTENT term above. Guarded so an untouched pair adds nothing.
             _ta = unit_a.terrain_off_d - unit_b.terrain_def_d
@@ -1347,13 +1347,13 @@ def volley_phase(unit_a, unit_b):
         # Ammunition: a subunit out of volleys stops contributing missile output entirely -- there
         # is no melee-fallback concept for a 'ranged' unit_type in this sim (confirmed by grep for a
         # stance/profile switch keyed on ammo), so "stops firing" is the whole effect.
-        # Subunit.eff_volleys (own-else-inherited-Unit, mirroring eff_stamina exactly) -- NOT a per-column-block
-        # ledger: ammo tracked on a column position other subunits could occupy would either regenerate for free
+        # Unit.eff_volleys (own-else-inherited-Army, mirroring eff_stamina exactly) -- NOT a per-column-block
+        # ledger: ammo tracked on a column position other units could occupy would either regenerate for free
         # (MB_CLOSE_RANKS=1) or stop being metered (MB_CLOSE_RANKS=0) -- see percell._ColBlock's own note and
-        # Subunit.volleys' own note.
+        # Unit.volleys' own note.
         if MB_AMMO_ENABLED and shooter_atom.eff_volleys <= 0:
             return 0, None, False
-        target_atoms = target_unit.subunits
+        target_atoms = target_unit.units
         # E (atomized archer targeting): an archer ORDERED to a specific or weakest target fires at IT when
         # in range, else the nearest -- so archers can be directed at a flanker / priority unit. Gated by
         # MB_VOLLEY_TARGETING + an explicit order; default (no order) = nearest (the exact prior logic) ->
@@ -1416,14 +1416,14 @@ def volley_phase(unit_a, unit_b):
 
     ordered_a = []
     ordered_b = []
-    for atom in unit_a.subunits:
+    for atom in unit_a.units:
         dmg, tgt, was_ordered = fire(atom, unit_a, unit_b)
         if tgt is not None:
             loss_b += dmg
             shots += 1
             if was_ordered:
                 ordered_b.append((tgt, dmg))
-    for atom in unit_b.subunits:
+    for atom in unit_b.units:
         dmg, tgt, was_ordered = fire(atom, unit_b, unit_a)
         if tgt is not None:
             loss_a += dmg
@@ -1456,15 +1456,15 @@ def _cell_snapshot(atom):
 def _subunit_snapshot(atom):
     return {'shape': atom.shape, 'troop_type': atom.troop_type, 'unit_type': atom.unit_type,
             'role': atom.role, 'instructions': list(atom.instructions),
-            'routed': atom.routed, 'broken': atom.broken, 'stance': atom.stance,
+            'routed': atom.routed, 'broken': atom.disordered, 'stance': atom.stance,
             'cells': _cell_snapshot(atom)}
 
 def _unit_snapshot(unit):
     return {'name': unit.name, 'faction': unit.faction,
             'hp': round(unit.hp, 1), 'hp_max': unit.hp_max,
             'morale': unit.morale, 'discipline': unit.discipline, 'stance': unit.stance,
-            'routed': unit.routed, 'broken': unit.broken,
-            'subunits': [_subunit_snapshot(a) for a in unit.subunits]}
+            'routed': unit.routed, 'broken': unit.disordered,
+            'subunits': [_subunit_snapshot(a) for a in unit.units]}
 
 
 # ─── BATTLE ──────────────────────────────────────────────────────────────────
@@ -1549,11 +1549,11 @@ BETWEEN_TURN_MORALE_RECOVERY = 0    # morale does NOT recover between turns
 def between_turn_recovery(unit):
     """Apply between-turn state changes. Called after each engagement turn.
     [canonical: params/mass_combat.md §PP-712 — discipline persists]"""
-    if unit.routed or unit.broken:
+    if unit.routed or unit.disordered:
         return
-    for atom in unit.subunits:
+    for atom in unit.units:
         atom.recover_stamina(BETWEEN_TURN_STAMINA_RECOVERY)
-        # [A6, ED-MB-0067 Part A] Resupply at the between-turn lull. Per-subunit (Subunit.resupply_volleys,
+        # [A6, ED-MB-0067 Part A] Resupply at the between-turn lull. Per-subunit (Unit.resupply_volleys,
         # capped at MB_VOLLEYS_START), same loop as stamina immediately above and the SAME reasoning: not singled
         # out by troop type (a melee atom's volleys count is simply never read -- see fire()'s own
         # unit_type=='ranged' gate).
@@ -1564,7 +1564,7 @@ def between_turn_recovery(unit):
     # goes to the cells and never updates it), so broadcasting it downward would RE-INFLATE damaged cells
     # to the pool's old value. The pool is kept current here for the unseeded path, which still reads it.
     unit.morale = min(unit.morale_start, unit.morale + BETWEEN_TURN_MORALE_RECOVERY)
-    for atom in unit.subunits:        # per-subunit Morale recovery (own-Morale subunits; inert at RECOVERY=0)
+    for atom in unit.units:        # per-subunit Morale recovery (own-Morale units; inert at RECOVERY=0)
         # [ED-MB-0058, resolving ED-MB-0046] ONE owner, both ownership kinds: `pull_morale`, the RELATIVE
         # owner. Recovery is a bounded INCREMENT, so it must not go through `set_morale` (the ABSOLUTE writer,
         # which sets EVERY cell to one value and would flatten per-cell morale divergence to the mean at every
@@ -1583,8 +1583,8 @@ def between_turn_recovery(unit):
     # YIELD_RALLY_MORALE_FRAC of its start reverts to normal combat/stance ("gave ground, pressure
     # relieved, reformed"). Gated OFF -> inert. `pocketed` is cleared alongside (fresh next engagement).
     if MB_YIELD_RALLY:
-        for atom in unit.subunits:
-            if atom.yielding and not atom.routed and not atom.broken:
+        for atom in unit.units:
+            if atom.yielding and not atom.routed and not atom.disordered:
                 if atom.eff_morale >= YIELD_RALLY_MORALE_FRAC * atom.eff_morale_start:
                     atom.yielding = False
                     atom.pocketed = False
@@ -1596,13 +1596,13 @@ def reset_morale_between_battles(unit):
     Resets the unit's Morale and each own-Morale subunit's Morale to its nominal start, and clears the
     routed/broken flags -- rout is DERIVED from Morale reaching zero, so resetting Morale without clearing
     the flags would leave an incoherent routed-but-full-Morale unit (derive_rout only ever SETS the flag).
-    Discipline is NOT reset (it persists per the citation above). Inherited-Morale subunits (own Morale is
+    Discipline is NOT reset (it persists per the citation above). Inherited-Morale units (own Morale is
     None) are covered by the unit-level reset via eff_morale. Called by the campaign layer at the battle
     boundary -- NOT within a single battle: between_turn_recovery handles the within-battle turn boundary,
     this handles the battle-to-battle boundary. A single-subunit unit reduces to the unit-level reset."""
-    unit.set_morale(unit.morale_start)   # [ED-MB-0042 sweep] reaches inheriting subunits' cells
+    unit.set_morale(unit.morale_start)   # [ED-MB-0042 sweep] reaches inheriting units' cells
     unit.routed = False
-    unit.broken = False
+    unit.disordered = False
     # ED-MB-0022: Feigned Retreat is a per-battle tactic; clear its transient flags at the battle
     # boundary so a feint/overextension does not leak into the next battle (inert when the toggle is OFF).
     unit.feigned = False
@@ -1611,11 +1611,11 @@ def reset_morale_between_battles(unit):
     # immediately above: a signal fired in one battle must not release every order watching for that name
     # on tick 1 of the next.
     unit.fired_signals = set()
-    for atom in unit.subunits:
+    for atom in unit.units:
         if atom.morale is not None:
             atom.set_morale(atom.eff_morale_start)  # own Morale -> nominal start [ED-MB-0042 sweep: via set_morale so the cells reset too]
         atom.routed = False
-        atom.broken = False
+        atom.disordered = False
         # Clear the cached stochastic-rout break-point (ED-MB-0031) and re-base the casualty denominator to this
         # battle's starting strength: a rout is a per-BATTLE will-to-fight collapse, and a subunit that ended the
         # prior battle past its drawn break-point would otherwise auto-rout on phase 1 of every later battle.
@@ -1644,7 +1644,7 @@ def reset_positions(unit, shape, anchor_map):
     """Reset subunit positions for re-engagement after disengagement -- LEGACY GRID PATH ONLY.
     Units return to their starting rows for fresh approach.
 
-    Each subunit returns to its OWN spawn column (Subunit._spawn_position, snapshotted once at
+    Each subunit returns to its OWN spawn column (Unit._spawn_position, snapshotted once at
     construction), not a single shape-keyed anchor shared by every subunit in the unit: a shared anchor
     would collapse any wide-placed wing/escort of a multi-subunit army (build_army/build_envelopment/
     build_refused_flank) back onto the center. `shape`/`anchor_map` are used only as a defensive fallback
@@ -1657,8 +1657,8 @@ def reset_positions(unit, shape, anchor_map):
     starting positions within the same battle" -- within a battle the node path does nothing to position
     at all."""
     start_row = SIDE_A_START_ROW if unit.faction == 'A' else SIDE_B_START_ROW
-    fallback_col = anchor_map.get((shape, unit.subunits[0].tier), 10) if unit.subunits else 10
-    for atom in unit.subunits:
+    fallback_col = anchor_map.get((shape, unit.units[0].tier), 10) if unit.units else 10
+    for atom in unit.units:
         if MB_NODE_COHESION and hasattr(atom, '_node_pos'):
             continue
         spawn = getattr(atom, '_spawn_position', None)
@@ -1749,7 +1749,7 @@ def pursuit_damage(pursuer, routing_unit):
     [canonical: designs/provincial/mass_battle_v30.md §A.12]"""
     if pursuer.speed != "Fast":
         return 0  # Only Fast units can pursue
-    if pursuer.routed or pursuer.broken:
+    if pursuer.routed or pursuer.disordered:
         return 0
     if not routing_unit.routed:
         return 0
@@ -1807,7 +1807,7 @@ def feigned_retreat_check(pursuer):
 def unit_in_reserve(unit):
     """True if the unit is held in Reserve (any subunit carries the 'reserve' instruction).
     [canonical: mass_battle_v30.md §A.6 — Reserve formation: 'cannot engage; commits Phase 3 next turn']"""
-    return any('reserve' in getattr(a, 'instructions', ()) for a in unit.subunits)
+    return any('reserve' in getattr(a, 'instructions', ()) for a in unit.units)
 
 
 def resolve_feigned_retreat(pursuer, feigning_unit):
@@ -1860,9 +1860,9 @@ def freed_attacker_damage(freed_unit, target_unit):
     Returns damage dealt to target.
     [canonical: designs/provincial/mass_battle_v30.md §A.12 — implied by
      rout freeing the victor to attack adjacent enemies]"""
-    if freed_unit.routed or freed_unit.broken:
+    if freed_unit.routed or freed_unit.disordered:
         return 0
-    if target_unit.routed or target_unit.broken:
+    if target_unit.routed or target_unit.disordered:
         return 0
     # [canonical: params/mass_combat.md PP-233 — Pool = min(Size,Cmd)+Cmd]
     a_pool = freed_unit.base_combat_pool()
@@ -1881,8 +1881,8 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
     """Run a multi-unit battle with morale cascade and freed-attacker.
 
     Args:
-        side_a: list of Unit objects for side A
-        side_b: list of Unit objects for side B
+        side_a: list of Army objects for side A
+        side_b: list of Army objects for side B
         pairings: list of (a_idx, b_idx) — initial engagement pairings.
             Indices into side_a / side_b. Pairs are ordered spatially
             (adjacent pairs = adjacent on battlefield).
@@ -1958,7 +1958,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                 attribute_hp_loss(routing, _pursuit_before, routing.hp, 'pursuit')
                 # [ED-MB-0041] Mirror the loss onto the cells: hp and cells feed DIFFERENT mechanics (hp ->
                 # _lanchester_strength, recalc_size, the single-subunit cohesion fast path; cells ->
-                # pair_pool_contribution, troop_total()'s SUBUNIT_ROUT_FLOOR check), so both ledgers must move.
+                # pair_pool_contribution, troop_total()'s UNIT_ROUT_FLOOR check), so both ledgers must move.
                 distribute_casualties(routing, dmg, [])
                 routing.recalc_size()
             turn_log['pursuits'].append({
@@ -1991,7 +1991,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
         # ── Freed-attacker bonus damage (from PREVIOUS turn's freed units) ──
         # [canonical: §A.12 — freed unit attacks adjacent enemy from flank]
         for freed_unit, owner_side, source_pair in list(freed_units):
-            if freed_unit.routed or freed_unit.broken:
+            if freed_unit.routed or freed_unit.disordered:
                 freed_units.remove((freed_unit, owner_side, source_pair))
                 continue
             # Find adjacent active engagement with an enemy to flank
@@ -2007,7 +2007,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                 else:
                     # Freed B unit flanks the A unit in adjacent pair
                     enemy = side_a[a_idx]
-                if not enemy.routed and not enemy.broken:
+                if not enemy.routed and not enemy.disordered:
                     target = enemy
                     break
 
@@ -2027,7 +2027,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                     if _disc > 0 and target.command > 0:
                         erosion = dmg / (_disc * target.command)
                         target.cascade_morale_hit(erosion)
-                    for atom in target.subunits:
+                    for atom in target.units:
                         if not atom.routed and atom.eff_morale <= 0:
                             atom.routed = True
                     target.derive_rout()
@@ -2179,4 +2179,4 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                          for i, u in enumerate(side_b)},
     }
 
-__all__ = ['_subunit_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Subunit', 'Unit', 'derive_command', 'command_base_pool', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'MB_ROLLUP_PER_RANK', 'MB_ROLLUP_MARGIN', 'MB_ROLLUP_REACH', 'MB_ROLLUP_CAP', 'MB_ROLLUP_FLANK_REACH', 'MB_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_morale_between_battles', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle', 'roles_for', 'role_allowed', 'stats_for', 'TROOP_TYPE_STATS']
+__all__ = ['_subunit_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Unit', 'Army', 'derive_command', 'command_base_pool', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'MB_ROLLUP_PER_RANK', 'MB_ROLLUP_MARGIN', 'MB_ROLLUP_REACH', 'MB_ROLLUP_CAP', 'MB_ROLLUP_FLANK_REACH', 'MB_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_morale_between_battles', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle', 'roles_for', 'role_allowed', 'stats_for', 'TROOP_TYPE_STATS']

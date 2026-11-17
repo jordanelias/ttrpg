@@ -5,10 +5,10 @@ the narrator/explorer show come from probabilities.py (the local distribution at
 repeating the fight. For win-rates over many fights use the montecarlo path (workbench server), never this."""
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
 import random
-import wrapper
-import config
+from modules.combat import wrapper
+from modules.combat import config
 
 
 def run_traced_fight(A, B, cfg=None, seed=0, max_bouts=12, **fight_kw):

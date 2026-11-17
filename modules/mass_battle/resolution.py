@@ -136,7 +136,7 @@ def _unit_braced(unit, t=None):
     t=None (default) preserves the old instantaneous check. t given + MB_BRACE_SETUP_DELAY on ->
     also requires >=1 full tick since the brace instruction was set (see _brace_setup_ok)."""
     return any('brace' in getattr(su, 'instructions', ()) and _brace_setup_ok(su, t)
-               for su in getattr(unit, 'subunits', ()))
+               for su in getattr(unit, 'units', ()))
 
 def _subunit_braced(atom, t=None):
     """Per-subunit brace (Jordan directive): THIS subunit carries 'brace'. For a single-subunit

@@ -33,7 +33,7 @@ def field_path():
 
 def _park(unit, row0):
     """Every cell of `unit` to its own spot, 5 pitches from any other, far from the cells under test."""
-    for atom in unit.subunits:
+    for atom in unit.units:
         for k, cid in enumerate(sorted(atom._node_pos)):
             atom._node_pos[cid] = (row0 + 5.0 * (k // 5), 5.0 * (k % 5))
 
@@ -44,7 +44,7 @@ def _setup(enemy_offsets, facing=(-1.0, 0.0)):
     b = build_unit('Line', 3, 'B', 'B', 9)
     _park(a, 100.0)
     _park(b, 200.0)
-    sa, sb = a.subunits[0], b.subunits[0]
+    sa, sb = a.units[0], b.units[0]
     a_cid = sorted(sa._node_pos)[0]
     sa._node_pos[a_cid] = (10.0, 10.0)
     sa.cell_facing_vec[a_cid] = facing

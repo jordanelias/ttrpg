@@ -22,10 +22,10 @@ GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
 GATE: Batch B03g-go-early-landings @048724cd545117255e71d04a583d99c6cb5fe3a9
 GATE: Batch B03c-boot @544cf5719c620331b70aeda93c1672977b44e9ef
-GATE: Batch B16L-mb-words @2d9590e75fd253d1d88612e2d42674e2fdb5db96
-GATE: Batch B03a-prose @871a9b81eab42e31963b21b487d698f8552a1cc5
-GATE: Batch B13-pc-package
-GATE: Batch B16M-mb-engine-words
+GATE: Batch B16L-mb-words @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
+GATE: Batch B03a-prose @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
+GATE: Batch B13-pc-package @1727b462d8e25d654af6b689f6ec059d20659cd4
+GATE: Batch B16M-mb-engine-words @bc1397322
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll
 GATE: Batch B06-keyed-draw

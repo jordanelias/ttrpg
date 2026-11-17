@@ -27,7 +27,7 @@ from engine.season.queries.inputs import ArmyOptionsQuery, ArmyPresetQuery
 from engine.season.seam.wrappers import mass_battle as MB
 from engine.season.state.carriers import Site
 from modules.mass_battle import armyrecord as A
-from modules.mass_battle.config import BLOCK_SIZE, SUBUNIT_ROUT_FLOOR
+from modules.mass_battle.config import BLOCK_SIZE, UNIT_ROUT_FLOOR
 from modules.mass_battle.troop_types import presets as PR
 from modules.mass_battle.troop_types import recruitment as R
 from modules.mass_battle.troop_types.registry import roles_for
@@ -94,7 +94,7 @@ def test_advisories_name_the_routs():
     rec = A.raised(rec, "c1", "spearmen", 50)
     rec = A.assign(rec, "tiny", "c1", 50)
     kinds = {a[0]: a for a in _opts(rec, ())["advisories"]}
-    assert kinds["unit_routs"][1:] == ("tiny", 50, SUBUNIT_ROUT_FLOOR)
+    assert kinds["unit_routs"][1:] == ("tiny", 50, UNIT_ROUT_FLOOR)
     assert kinds["army_routs"][2:] == (50, BLOCK_SIZE)
     # CONTROL, one change: a unit of a full block (400 men) has neither warning
     rec2 = A.assign(A.form(A.raised(A.new("fac_x"), "c1", "spearmen", 400), "line", "spearmen"), "line", "c1", 400)
@@ -239,7 +239,7 @@ def test_plan_drops_a_group_that_would_rout_and_gives_its_room_to_the_levy():
     # six cohorts of weight 10, a stable in one only: its horse is one cohort's fifth of its cap, under the floor
     share = dict((c, s) for c, s, _t in PR.ARM_SHARES)["mounted"]
     horse = int(R.under_arms_cap(10) * share)
-    assert horse < SUBUNIT_ROUT_FLOOR <= 2 * horse, "fixture: one cohort's horse routs, two cohorts' do not"
+    assert horse < UNIT_ROUT_FLOOR <= 2 * horse, "fixture: one cohort's horse routs, two cohorts' do not"
     one = _cohorts(5, 10) + (("c99", 10, {"barracks": FULL, "stable": FULL}),)
     types = {c["troop_type"] for v, c in _plan(one) if v == "recruit"}
     assert "cavalry" not in types and "heavy_infantry" in types
@@ -270,7 +270,7 @@ def test_install_raises_a_whole_organised_army_through_the_real_fold():
     assert rec["strategy"] == "advance" and not rec["trained"], "everything raised is in a unit"
     sizes = {sf["name"]: sum(n for _c, n in sf["assigned"]) for sf in rec["units"]}
     assert set(sizes) == {"heavy_infantry", "crossbow", "cavalry", "levy"}, sizes
-    assert min(sizes.values()) >= SUBUNIT_ROUT_FLOOR and sum(sizes.values()) == 15 * R.under_arms_cap(2) == 900
+    assert min(sizes.values()) >= UNIT_ROUT_FLOOR and sum(sizes.values()) == 15 * R.under_arms_cap(2) == 900
     for c in _governed_cohorts(w, CROWN):
         assert sum(A.by_type(rec, c).values()) <= R.under_arms_cap(2), "no cohort over its cap"
     # the menu agrees: nothing left to raise, and the army is sound

@@ -6,7 +6,7 @@ THE FIELD IS A REAL FOLD OF A HAND-BUILT SITUATION. One season of the shipped re
 `field.unopposed` 3, `march.declared` 6), so the falsifier folds ONE `march` through the real driver (RESOLVE then
 ENCOUNTER, `test_march._fold_one`) -- the engine fights it; no `Resolution` is hand-built -- with the Crown's two
 marchers made cohorts (`Person.weight` 10) on `set_s_036`, the weight -> troops scale at 10 (REM-32's
-`field_troops_per_weight`, a value of THIS TEST) and `field_subunits: person` (CP-T04-01). Realm seed 0: the attacker
+`field_troops_per_weight`, a value of THIS TEST) and `field_units: person` (CP-T04-01). Realm seed 0: the attacker
 WINS (`field.won`), one marcher's subunit is cut (survivor ratio 0.982) and the other's is not. The preconditions are
 asserted, so a moved fixture reads as a precondition, not a pass.
 
@@ -37,7 +37,7 @@ def _mb():
     return importlib.import_module("modules.mass_battle.massbattle")
 
 
-def _fold(arm="engine", *, model=None, subunits="person", spy=None):
+def _fold(arm="engine", *, model=None, units="person", spy=None):
     """Fold the one march. Returns `(world, events, bodies before, stance before, the module's per-person record)`.
     The record is read off `_person_report`'s return (`spy`, when given, is applied to it first)."""
     mb = _mb()
@@ -56,7 +56,7 @@ def _fold(arm="engine", *, model=None, subunits="person", spy=None):
         w = build_realm(SEED)
         for pid in MARCHERS:
             w.persons[pid].weight = WEIGHT
-        w.fixtures = (w.fixtures.sweep("field_troops_per_weight", SCALE).sweep("field_subunits", subunits)
+        w.fixtures = (w.fixtures.sweep("field_troops_per_weight", SCALE).sweep("field_units", units)
                       .sweep("field_winner_casualties", arm))
         if model is not None:
             w.fixtures = w.fixtures.sweep("field_casualty_model", model)

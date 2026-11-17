@@ -26,7 +26,6 @@ ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat'
 # What the import walk from `wrapper`/`combatant` did not reach (`capabilities.py`, `state_graph.py`) and the
 # workbench stayed where the engine was (plan position `31b`); `_engine_file` finds a module in either.
 LEFT = os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1')
-sys.path.insert(0, ENGINE)
 
 
 def _engine_file(name):
@@ -35,11 +34,11 @@ def _engine_file(name):
 
 
 def _mods():
-    import combatant as C
-    import core
-    import combat_systems as S
-    import weapon_physics as WP
-    from config import CFG
+    from modules.combat import combatant as C
+    from modules.combat import core
+    from modules.combat import combat_systems as S
+    from modules.combat import weapon_physics as WP
+    from modules.combat.config import CFG
     return C, core, S, WP, CFG
 
 
@@ -467,7 +466,7 @@ def test_vocabulary_owner_tables_agree():
     `core.py` re-asserts this at import time, so the failure is loud in every consumer too; this test is
     the artifact that proves the assertion exists and can observe a divergence (§0.1 point 3)."""
     C, core, S, WP, CFG = _mods()
-    import vocabulary as V
+    from modules.combat import vocabulary as V
     assert set(core.HEAD_MODE) == V.HEADS, "HEAD_MODE's key set drifted from the declared HEADS alphabet"
     assert set(core.HEAD_MODE.values()) <= V.DAMAGE_MODES, "HEAD_MODE maps a head to a non-token damage mode"
     assert set(core.TIER2MAT) == V.ARMOUR_TIERS, "TIER2MAT's key set drifted from the declared ARMOUR_TIERS"
@@ -495,7 +494,7 @@ def test_no_bare_vocabulary_literal_in_consumers():
 
     Workbench is deliberately NOT in scope (it is measurement tooling, not resolution), and neither is
     `weapons.py` — its tokens are DATA (a weapon record's authored `head`/`mode_elements`), not comparisons."""
-    import vocabulary as V
+    from modules.combat import vocabulary as V
     offenders = {}
     for mod in VOCAB_CONSUMERS:
         hits = collections.Counter(s for s in _string_literals_excluding_docstrings(_engine_file(mod))
@@ -516,7 +515,7 @@ def test_vocabulary_guard_scope_is_the_whole_resolution_surface():
     reviewable exemption rather than left as an unstated gap."""
     NON_RESOLUTION = {'weapons.py', 'combatant.py', 'geometry.py', 'traditions.py', 'tradition.py',
                       'ability_primitives.py', 'state_graph.py', 'config.py', 'attributes.py'}
-    on_disk = {f for d in (ENGINE, LEFT) for f in os.listdir(d) if f.endswith('.py')}
+    on_disk = {f for d in (ENGINE, LEFT) for f in os.listdir(d) if f.endswith('.py') and f != '__init__.py'}
     unaccounted = on_disk - set(VOCAB_OWNERS) - set(VOCAB_CONSUMERS) - NON_RESOLUTION
     assert not unaccounted, (
         f"engine module(s) accounted for by neither the vocabulary guard nor its declared data-module "
@@ -916,7 +915,7 @@ def test_engagement_reach_derivation_runs_clean():
     to completion with no exception, for a gathering-pole matchup (the exact case JD-9 exists to fix)."""
     import random
     C, core, S, WP, CFG = _mods()
-    import wrapper
+    from modules.combat import wrapper
     A = C.Combatant('A', weapon='spear')
     B = C.Combatant('B', weapon='arming')
     for seed in range(5):
@@ -1001,7 +1000,7 @@ def test_commit_depth_byte_identical_at_range_avail_one():
     live function and the pre-I5 formula with the SAME (ba, bb) params."""
     C, core, S, WP, CFG = _mods()
     import random
-    import tradition as TR
+    from modules.combat import tradition as TR
     agg = C.Combatant('agg', weapon='longsword'); agg.range_avail = 1.0
     dfd = C.Combatant('def', weapon='arming')
     rng = random.Random(11)
@@ -1092,7 +1091,7 @@ def test_facing_neutral_byte_identical_to_i5():
     """I6 gate #1: with facing forced to neutral (0.0) for both roles, close_rate and reach_sigma reproduce their
     pre-I6 formulas EXACTLY."""
     C, core, S, WP, CFG = _mods()
-    import tradition as TR
+    from modules.combat import tradition as TR
     agg = C.Combatant('agg', weapon='longsword'); agg.facing = 0.0
     dfd = C.Combatant('def', weapon='arming'); dfd.facing = 0.0
     er = {agg: 6.0, dfd: 5.0}
@@ -1273,7 +1272,7 @@ def test_facing_void_ablation_moves_close_rate_and_reach_sigma():
     which governs the producer, already gated by test_facing_near_neutral_small) is compared against the
     live terms at a real (nonzero, near-neutral) facing value — close_rate and reach_sigma must both move."""
     C, core, S, WP, CFG = _mods()
-    import tradition as TR
+    from modules.combat import tradition as TR
     shorter = C.Combatant('s', weapon='dagger'); shorter.facing = 0.1
     agg = C.Combatant('agg', weapon='longsword'); agg.facing = 0.1
     dfd = C.Combatant('def', weapon='arming'); dfd.facing = -0.05
@@ -1308,7 +1307,7 @@ def test_reach_class_beats_arming_not_inverted():
     annihilated to ~0 — a real zeroing bug still trips the floor.)"""
     import random
     import zlib
-    import wrapper
+    from modules.combat import wrapper
     C, core, S, WP, CFG = _mods()
     share, decided = {}, {}
     for w in ('spear', 'yari', 'guisarme', 'poleaxe'):

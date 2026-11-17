@@ -55,7 +55,7 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
     for u in [unit_a, unit_b]:
         if u.routed:
             continue
-        # [DG-4, ED-MB-0002, 2026-07-04 Jordan ruling: "Subunit morale combination of own morale and
+        # [DG-4, ED-MB-0002, 2026-07-04 Jordan ruling: "[Unit] morale combination of own morale and
         # overall morale; more likely to wilt if other subunits losing, more likely to rally if other
         # subunits winning."] Phase-start snapshot of every living subunit's morale, taken BEFORE any
         # mutation this phase. Siblings pull toward this FIXED snapshot, not toward siblings' already-updated
@@ -64,14 +64,14 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
         # erosion below, so a subunit's own bad phase always has the final say on whether IT routs this phase. A
         # sibling's state can soften/harden the morale a subunit ENTERS this phase's own erosion with; it cannot
         # erase that erosion's result.
-        snapshot = {id(s): s.eff_morale for s in u.subunits if not s.routed}
+        snapshot = {id(s): s.eff_morale for s in u.units if not s.routed}
         # step 3 (Jordan directive 2026-06-03): canonical Size-fraction morale triggers (§A.4),
         # replacing the per-tick absolute-damage erosion. Routs occur at meaningful casualty levels,
         # not ~98% intact. No general-floor in the unit duel (units rout from their own casualties).
-        for atom in u.subunits:
+        for atom in u.units:
             if atom.routed:
                 continue
-            siblings = [s for s in u.subunits if s is not atom and not s.routed]
+            siblings = [s for s in u.units if s is not atom and not s.routed]
             if siblings:
                 sib_troops = sum(s.troop_count for s in siblings)
                 if sib_troops > 0:
@@ -83,7 +83,7 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
             loss = 0.0
             if frac < 0.50: loss += 1.0    # [canonical: mass_battle_v30.md §A.4 — Size<50% morale trigger] Size < 50% max -> -1
             if frac < 0.25: loss += 1.0    # Size < 25% max -> -1 additional
-            if u.broken: loss += 1.0       # unit formation-broken pressure (kept unit-scoped for byte-exactness)
+            if u.disordered: loss += 1.0       # unit formation-disordered pressure (kept unit-scoped for byte-exactness)
             if atom.eff_stamina <= 0 and atom.eff_discipline > 0 and u.command > 0:
                 loss += 1.0 / (atom.eff_discipline * u.command)   # per-subunit exhaustion pressure
             # [ED-MB-0024, DG-2 §2.2 EMERGENT auto-entry] When the casualty-fraction trigger pushes a
@@ -105,7 +105,7 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
                 # §A.4's canonical cap is -3 per Cascade Phase. MORALE_EROSION_DAMP (0.7) scales the whole
                 # capped quantity, so the EFFECTIVE cap is -2.1, NOT -3. This is a deliberate tuning
                 # divergence (Jordan 2026-07-24: "we are allowed to break canon values in the pursuit of
-                # balancing/tuning") — slower morale bleed => longer, more attritional battles. Routes own-else-Unit.
+                # balancing/tuning") — slower morale bleed => longer, more attritional battles. Routes own-else-Army.
             # [ED-MB-0031] Stochastic morale break at the historical 15-30% casualty band (du Picq): the
             # canonical §A.4 steps above don't fire until 50% losses, so units grind to ~58% before breaking.
             # When gated on, a subunit whose casualties cross its own drawn break-point routs NOW (drive its
@@ -159,18 +159,18 @@ def rout_resolution(unit_a, unit_b, phase_idx):  # noqa: ARG001
     Morale Cascade (§A.12): friendly units in same engagement make
     Discipline check Ob 1 on rout — modeled when multi-unit engagements exist."""
     for u, opponent in [(unit_a, unit_b), (unit_b, unit_a)]:
-        if u.routed or u.broken:
+        if u.routed or u.disordered:
             continue
-        for atom in u.subunits:
+        for atom in u.units:
             if atom.routed:
                 continue
-            # [ED-MB-0036, SUBUNIT_ROUT_FLOOR]. A subunit also breaks when its
-            # aggregate troop total falls below SUBUNIT_ROUT_FLOOR — too few men left to hold as a coherent
+            # [ED-MB-0036, UNIT_ROUT_FLOOR]. A subunit also breaks when its
+            # aggregate troop total falls below UNIT_ROUT_FLOOR — too few men left to hold as a coherent
             # body, independent of the morale track (config.py: "a subunit routs when its aggregate total
             # falls below this"). Complements the morale<=0 break above.
-            if atom.eff_morale <= 0 or atom.troop_total() < SUBUNIT_ROUT_FLOOR:
+            if atom.eff_morale <= 0 or atom.troop_total() < UNIT_ROUT_FLOOR:
                 atom.routed = True   # this subunit breaks ("a section of the line") — morale collapse OR too few left
-        u.derive_rout()              # unit routs iff agg morale <= 0 / all subunits routed / general gone (byte-exact single-subunit)
+        u.derive_rout()              # unit routs iff agg morale <= 0 / all units routed / general gone (byte-exact single-subunit)
             # No pursuit damage from Standard infantry (canonical: Fast only).
             # Pursuit damage will be handled at the battle-map level (level 2)
             # when cavalry (G-11) and multi-unit engagements (D-3) are implemented.
@@ -191,11 +191,11 @@ def discipline_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
     a_loss = (unit_a.hp_max - unit_a.hp) / BLOCK_SIZE if BLOCK_SIZE else 0
     b_loss = (unit_b.hp_max - unit_b.hp) / BLOCK_SIZE if BLOCK_SIZE else 0
     for u, their_loss in [(unit_a, b_loss), (unit_b, a_loss)]:
-        if u.routed or u.broken:
+        if u.routed or u.disordered:
             continue
-        single = len(u.subunits) == 1
-        for atom in u.subunits:
-            if atom.routed or atom.broken:
+        single = len(u.units) == 1
+        for atom in u.units:
+            if atom.routed or atom.disordered:
                 continue
             # per-subunit own Size loss drives THIS subunit's degradation
             if single:
@@ -216,5 +216,5 @@ def discipline_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
             # already applied for THIS subunit (single-subunit: == u.discipline_start - u.discipline)
             already_applied = atom.eff_discipline_start - atom.eff_discipline
             if disc_hits > already_applied and my_loss > their_loss:
-                atom.degrade_discipline()   # -1 toward 0, routes own-else-Unit
+                atom.degrade_discipline()   # -1 toward 0, routes own-else-Army
         u.check_drift()

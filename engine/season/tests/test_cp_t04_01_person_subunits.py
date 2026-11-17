@@ -1,11 +1,11 @@
-"""CP-T04-01 (`H-359`): a side is its persons -- `field_subunits: person` builds one subunit per commanding person and
+"""CP-T04-01 (`H-359`): a side is its persons -- `field_units: person` builds one subunit per commanding person and
 `_eff_march` scales each loser's body by HIS subunit's survivor ratio; `side`, shipped, is the field as it was.
 
 THE FIELD IS HAND-BUILT, NOT NATURAL. One season of the shipped realm fights almost no field (seed 0: `field.unopposed`
 3, `march.declared` 6; seed 1: unopposed 2, declared 3; seed 2: `field.lost` 1), so the falsifier runs on a real fold of
 `set_s_014` marching on `set_s_036` with the Crown's two marchers at `Person.weight` 1 and the weight -> troops scale at 200 (REM-32's
 `field_troops_per_weight`; a value of THIS TEST, not Jordan's answer to JQ-4). At that scale a weight-1 subunit is
-200 troops, above `SUBUNIT_ROUT_FLOOR = 80`, and a side is above the 100-troop line, so a subunit does not rout on
+200 troops, above `UNIT_ROUT_FLOOR = 80`, and a side is above the 100-troop line, so a subunit does not rout on
 tick 1. Realm seed 8 loses the field with ONE marcher's subunit routed and the other's untouched (the preconditions
 are asserted below, so a moved fixture reads as a precondition, not a pass). RE-PICKED by MB-07r (the depth support
 cap ON, `POOL_QUALITY_SCALE` 0.5 -> 0.8): at the old pick (seed 0, weight 2, scale 100) the new magnitudes cut BOTH
@@ -46,7 +46,7 @@ def _fold(arm=None, *, seed=SEED):
         w.persons[pid].weight = WEIGHT
     w.fixtures = w.fixtures.sweep("field_troops_per_weight", FIELD_SCALE)
     if arm is not None:
-        w.fixtures = w.fixtures.sweep("field_subunits", arm)
+        w.fixtures = w.fixtures.sweep("field_units", arm)
     assert world_q.mustered(w, "set_s_014", "fac_valorsmark") == list(MARCHERS), "fixture moved: re-read it"
     before = {pid: w.persons[pid].body for pid in MARCHERS}
     events = _fold_one(w, _march_act(MARCHERS[0], "set_s_036", "off_spymaster"), contest_max_depth=2)
@@ -58,7 +58,7 @@ def _broke(events):
 
 
 def test_shipped_arm_is_side():
-    assert build_realm(0).fixtures.get("field_subunits") == "side"
+    assert build_realm(0).fixtures.get("field_units") == "side"
 
 
 def test_falsifier_two_losers_one_routed_one_not_end_with_different_bodies_under_person_and_identical_under_side():
@@ -99,7 +99,7 @@ def test_planted_failure_the_sides_ratio_fed_to_every_person_reddens_the_falsifi
 
 
 def test_control_side_arm_is_the_shipped_field_and_carries_no_per_person_record():
-    """`field_subunits: side` reproduces the shipped bodies exactly (the unswept fold), the same hash, and the module's
+    """`field_units: side` reproduces the shipped bodies exactly (the unswept fold), the same hash, and the module's
     record holds no `subunits` or `broke_first`; no Event names a breaker."""
     w_ship, ev_ship, after_ship, _ = _fold(None)
     w_side, ev_side, after_side, _ = _fold("side")
@@ -127,31 +127,31 @@ def test_the_band_event_names_the_loser_whose_subunit_broke_first():
 def test_a_subunit_logs_its_person_in_the_order_it_breaks_and_not_when_the_whole_unit_is_swept():
     mb = _mb()
     unit, log = mb._person_unit("side_x", (2, 2, 2), ("p0", "p1", "p2"), 5, SCALE)
-    unit.subunits[1].routed = True
-    unit.subunits[0].routed = True
-    unit.subunits[0].routed = True                       # setting it again is not breaking again
+    unit.units[1].routed = True
+    unit.units[0].routed = True
+    unit.units[0].routed = True                       # setting it again is not breaking again
     assert log == ["p1", "p0"]
     unit.routed = True                                   # the whole body routs: the sweep after it is nobody's break
-    unit.subunits[2].routed = True
+    unit.units[2].routed = True
     assert log == ["p1", "p0"]
-    assert [s.routed for s in unit.subunits] == [True, True, True]
+    assert [s.routed for s in unit.units] == [True, True, True]
 
 
 def test_the_person_arm_builds_one_subunit_per_member_sized_by_his_own_weight():
     mb = _mb()
     unit, _log = mb._person_unit("side_x", (1, 3, 2), ("p0", "p1", "p2"), 5, SCALE)
-    assert [s.troops for s in unit.subunits] == [100.0, 300.0, 200.0]
-    assert [s.person for s in unit.subunits] == ["p0", "p1", "p2"]
+    assert [s.troops for s in unit.units] == [100.0, 300.0, 200.0]
+    assert [s.person for s in unit.units] == ["p0", "p1", "p2"]
     assert unit.total_troops() == 600.0
     side = mb._weighted_unit("side_x", 6, 5, SCALE)
     assert side.total_troops() == unit.total_troops()    # the side's total is the same either way
     fed, _ = mb._person_unit("side_x", (1, 3), ("p0", "p1"), 5, SCALE, fed=2.0)
-    assert [s.troops for s in fed.subunits] == [50.0, 150.0]     # provisioned troops spread by weight
+    assert [s.troops for s in fed.units] == [50.0, 150.0]     # provisioned troops spread by weight
 
 
 def test_an_unknown_arm_is_refused():
     inp = MassBattleInput(weights=((2,), (2,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None,
-                          origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, subunits="squad")
+                          origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, units="squad")
     with pytest.raises(ValueError):
         _mb().resolve_field(inp, random.Random(0))
 
@@ -159,10 +159,10 @@ def test_an_unknown_arm_is_refused():
 def test_field_input_hands_the_members_beside_the_weights_and_the_fixture():
     from engine.season.seam.wrappers.mass_battle import field_input
     w = build_realm(0)
-    w.fixtures = w.fixtures.sweep("field_subunits", "person")
+    w.fixtures = w.fixtures.sweep("field_units", "person")
     claimants = list(MARCHERS) + ["p_not_in_the_world"]
     other = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
     inp = field_input(w, claimants, other, "set_s_036")
-    assert inp.subunits == "person"
+    assert inp.units == "person"
     assert inp.members == (MARCHERS, tuple(other))
     assert tuple(len(m) for m in inp.members) == tuple(len(x) for x in inp.weights)

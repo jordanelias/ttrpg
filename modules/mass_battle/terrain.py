@@ -257,14 +257,14 @@ def river_crossed(origin, tid, *, geography):
 
 
 #: A.9's Walls row, the one number it gives: the DEFENDER's damage reduction rises by this much. It
-#: lands on the engine's own `Unit.dr`, the quantity melee already subtracts from damage
+#: lands on the engine's own `Army.dr`, the quantity melee already subtracts from damage
 #: (`orchestration.py`: `DAMAGE_BY_DEGREE[deg](power) - eff_dr`). Applying A.9's +3 1:1 to that unit
 #: is an ASSUMPTION (`H-150`), not a measurement. The row's other two clauses ("no flanking; Slow cannot
 #: advance") are NOT applied -- `massbattle.py::_run_and_grade`'s docstring says why.
 WALLS_DEFENDER_DR = 3  # [canonical: mass_battle_v30.md §A.9 ENVIRONMENTAL MODIFIERS — "Walls / fortifications | Defender +3 DR"]
 
 #: MB-05. A.9's two dice rows, as DICE -- A.6's currency (`Off dice | Def dice`). They land on
-#: `Unit.terrain_off_d`/`terrain_def_d` (`massbattle._run_and_grade`), and the engine turns a die into
+#: `Army.terrain_off_d`/`terrain_def_d` (`massbattle._run_and_grade`), and the engine turns a die into
 #: sigma only through `config.SIGMA_PER_D`, a CALIBRATED-DEBT conversion (its own line says so): the dice
 #: counts are canon's, the size of their effect on a fight is that constant's. Def dice are spent the
 #: way the engine already spends a defensive commitment (`INTENT_DEFENSE_D`): they blunt the enemy's

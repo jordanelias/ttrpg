@@ -48,13 +48,13 @@ def teaching_tradition(lever, tier_idx, trads):
 
 def setup(repo):
     sys.path.insert(0, os.path.join(repo, 'systems/combat/combat_engine_v1/workbench'))
-    sys.path.insert(0, os.path.join(repo, 'modules/combat'))
+    sys.path.insert(0, repo)   # the repository root: `modules.combat` is a package
     global BL, wrapper, S, CFG, AP, TRADS
     import build_levers as BL
-    import wrapper, combat_systems as S
-    from config import CFG
-    import ability_primitives as AP
-    import traditions
+    from modules.combat import wrapper, combat_systems as S
+    from modules.combat.config import CFG
+    from modules.combat import ability_primitives as AP
+    from modules.combat import traditions
     TRADS = tuple(t for t in traditions.TRADITIONS if t != 'none')
     return TRADS
 

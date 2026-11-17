@@ -76,10 +76,10 @@ def _cross_side_bodies(unit_a, unit_b):
     """Every (bodyA, bodyB) cross-side cell-body pair, built exactly as contact and the collision step build them
     (circle, front reach = reach_for(troop_type), heading = cell facing)."""
     a_bodies = []
-    for atom in unit_a.subunits:
+    for atom in unit_a.units:
         a_bodies.extend(_hu.cell_bodies_for(atom, _hu.reach_for(atom.troop_type)))
     b_bodies = []
-    for atom in unit_b.subunits:
+    for atom in unit_b.units:
         b_bodies.extend(_hu.cell_bodies_for(atom, _hu.reach_for(atom.troop_type)))
     for ba in a_bodies:
         for bb in b_bodies:
@@ -128,12 +128,12 @@ def test_head_on_contact_fires_at_reach_touch(field_path):
     for gap, want in [(thr - 0.02, True), (thr + 0.02, False), (thr + 0.4, False)]:
         b = build_unit('Line', 3, 'B', 'B', 9)
         # pin both single cells head-on `gap` apart on the same column (node path floats).
-        a_cid = next(iter(a.subunits[0]._node_pos))
-        b_cid = next(iter(b.subunits[0]._node_pos))
-        a.subunits[0]._node_pos[a_cid] = (0.0, 0.0)
-        b.subunits[0]._node_pos[b_cid] = (gap, 0.0)
-        a.subunits[0].cell_facing_vec[a_cid] = (1.0, 0.0)   # A faces +row toward B
-        b.subunits[0].cell_facing_vec[b_cid] = (-1.0, 0.0)  # B faces -row toward A
+        a_cid = next(iter(a.units[0]._node_pos))
+        b_cid = next(iter(b.units[0]._node_pos))
+        a.units[0]._node_pos[a_cid] = (0.0, 0.0)
+        b.units[0]._node_pos[b_cid] = (gap, 0.0)
+        a.units[0].cell_facing_vec[a_cid] = (1.0, 0.0)   # A faces +row toward B
+        b.units[0].cell_facing_vec[b_cid] = (-1.0, 0.0)  # B faces -row toward A
         pairs = find_contacts(a, b)
         fired = len(pairs) > 0
         assert fired == want, f"gap={gap}: contact fired={fired}, expected {want}"
@@ -151,7 +151,7 @@ def test_head_on_no_interpenetration_no_stall(field_path):
     b = build_unit('Line', 3, 'B', 'B', 9)
     hp_a0, hp_b0 = a.hp, b.hp
     with _CommitProbe() as probe:
-        _orch.run_battle(a, b, max_turns=18)
+        _orch.run_battle(a, b, max_ticks=18)
     assert probe.commits > 0, "the end-of-tick pass never ran -> not on the field path"
     assert not probe.body_interpenetration, "opposing cell BODIES interpenetrated after a commit"
     # no stall: contact was reached and combat resolved -> at least one side lost troops.
@@ -168,7 +168,7 @@ def test_cavalry_charge_reaches_contact(field_path):
     inf = build_unit('Line', 3, 'INF', 'B', 9, troop_type='infantry')
     hp_c0, hp_i0 = cav.hp, inf.hp
     with _CommitProbe() as probe:
-        _orch.run_battle(cav, inf, max_turns=18)
+        _orch.run_battle(cav, inf, max_ticks=18)
     assert probe.commits > 0
     assert not probe.body_interpenetration, "charge drove bodies into interpenetration"
     assert (cav.hp < hp_c0) or (inf.hp < hp_i0), "cavalry charge stalled short of contact"
@@ -194,7 +194,7 @@ def test_grid_path_never_calls_body_code(grid_path, monkeypatch):
     random.seed(1)
     a = build_unit('Line', 3, 'A', 'A', 9)
     b = build_unit('Line', 3, 'B', 'B', 9)
-    res = _orch.run_battle(a, b, max_turns=18)  # must NOT raise
+    res = _orch.run_battle(a, b, max_ticks=18)  # must NOT raise
     assert res['winner'] in ('A', 'B', 'draw')
 
 
@@ -212,7 +212,7 @@ def test_conservation_over_short_battle(field_path):
     random.seed(2026)
     a = build_unit('Line', 3, 'A', 'A', 9)
     b = build_unit('Line', 3, 'B', 'B', 9)
-    _orch.run_battle(a, b, max_turns=18)
+    _orch.run_battle(a, b, max_ticks=18)
     checked = assert_troop_conservation(a, b, context='body seed=2026')
     assert checked >= 2, f"conservation checked {checked} units, expected both"
 
@@ -227,7 +227,7 @@ def test_determinism_same_seed(field_path):
         random.seed(9001)
         a = build_unit('Line', 3, 'A', 'A', 9)
         b = build_unit('Line', 3, 'B', 'B', 9)
-        res = _orch.run_battle(a, b, max_turns=18)
+        res = _orch.run_battle(a, b, max_ticks=18)
         return (res['winner'], res['turns'], round(a.hp, 6), round(b.hp, 6))
 
     assert _run() == _run()

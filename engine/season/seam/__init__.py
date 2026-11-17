@@ -17,15 +17,10 @@ The readers `degree_ladder()`,
 of which module holds a name pointing at it, so `seam.degree_ladder()` runs the same code and reads
 `ladder`'s own globals.
 
-⚠ **THE PERSONAL-COMBAT WRAPPER IS `seam/wrappers/combat.py`, A MEMBER OF `PATH_SEAM_ALLOWED`.** `04` §E.1's
-by-path scan is the enforcement mechanism for AX-2, and `04` §A.2's adapter row puts a wrapper under `wrappers/`.
-
-⚠ **THE SET MUST NOT LOSE A MEMBER.**
-`test_engine_does_not_import_systems.py`'s `_relative_module_files` follows **relative imports only**
--- it skips any `ImportFrom` with `level == 0`. Write the wrapper's imports absolute and the scan
-stops seeing the seam at all: `offenders` shrinks and the exact-equality assertion reddens with a
-message inviting deletion of the entry. The repair for that is restoring the relative import, never
-deleting the declaration.
+⚠ **THE PERSONAL-COMBAT WRAPPER IS `seam/wrappers/combat.py`; it reaches `modules/combat` by the composition rows
+`combat.fight` and `combat.duel_terms` only.** `PATH_SEAM_ALLOWED` is empty (CI-09) and stays so: a `sys.path`
+insert here naming a code root is a new seam, and `04` §E.1's by-path scan is the enforcement mechanism for AX-2.
+`04` §A.2's adapter row puts a wrapper under `wrappers/`.
 
 Governed by **ED-IN-0206**.
 """

@@ -7,7 +7,7 @@ import sys
 
 import pytest  # noqa: E402
 from modules.mass_battle.geometry import footprint_for  # noqa: E402
-from modules.mass_battle.hierarchy.units import Subunit  # noqa: E402
+from modules.mass_battle.hierarchy.units import Unit  # noqa: E402
 from systems.mass_battle.sim.engine import build_army, build_envelopment  # noqa: E402
 from modules.mass_battle.config import SIDE_A_START_ROW  # noqa: E402
 
@@ -45,7 +45,7 @@ def test_gradient_front_loads_leading_ranks():
     from collections import defaultdict
 
     def rowsum(dist):
-        su = Subunit(shape='Line', troop_type='infantry', tier=3, starting_position=(10, 10),
+        su = Unit(shape='Line', troop_type='infantry', tier=3, starting_position=(10, 10),
                      troops=400, concentration=50, distribution=dist)
         by = defaultdict(float)
         for (r, _c), t in su.cell_troops.items():
@@ -69,7 +69,7 @@ def test_build_envelopment_wings_flank_the_center():
              {'shape': 'Line', 'troop_type': 'infantry', 'troops': 133, 'concentration': 100}]
     u = build_envelopment(center, wings, 'A', 'A')
     coms = []
-    for a in u.subunits:
+    for a in u.units:
         cols = [c for _r, c in a.cells()]
         coms.append(sum(cols) / len(cols))
     center_com = coms[0]
@@ -89,7 +89,7 @@ def test_build_envelopment_honors_explicit_wing_positions():
              {'shape': 'Line', 'troop_type': 'infantry', 'troops': 133, 'concentration': 100,
               'starting_position': (row, 20)}]
     u = build_envelopment(center, wings, 'A', 'A')
-    wing_cols = sorted(min(c for _r, c in a.cells()) for a in u.subunits[1:])
+    wing_cols = sorted(min(c for _r, c in a.cells()) for a in u.units[1:])
     assert wing_cols == [2, 20], f"explicit wing columns must be honored, got {wing_cols}"
 
 
@@ -103,14 +103,14 @@ def test_build_refused_flank_honors_strong_position():
                'starting_position': (row, 9)}]
     refused = [{'shape': 'Line', 'troop_type': 'infantry', 'troops': 133, 'concentration': 100}]
     u = build_refused_flank(strong, refused, 'A', 'A')
-    strong_col = sum(c for _r, c in u.subunits[0].cells()) / len(u.subunits[0].cells())
-    refused_col = sum(c for _r, c in u.subunits[1].cells()) / len(u.subunits[1].cells())
+    strong_col = sum(c for _r, c in u.units[0].cells()) / len(u.units[0].cells())
+    refused_col = sum(c for _r, c in u.units[1].cells()) / len(u.units[1].cells())
     # refused wing must be near the strong wing (to its right), not off at the phantom field-center (~26)
     assert refused_col - strong_col <= 8, \
         f"refused wing must be adjacent to the strong wing at col {strong_col:.0f}, got {refused_col:.0f}"
     # and echeloned BACK (different row from the strong wing)
-    strong_row = sum(r for r, _c in u.subunits[0].cells()) / len(u.subunits[0].cells())
-    refused_row = sum(r for r, _c in u.subunits[1].cells()) / len(u.subunits[1].cells())
+    strong_row = sum(r for r, _c in u.units[0].cells()) / len(u.units[0].cells())
+    refused_row = sum(r for r, _c in u.units[1].cells()) / len(u.units[1].cells())
     assert strong_row != refused_row, "refused wing must be echeloned back (different row)"
 
 
@@ -126,16 +126,16 @@ def test_explicit_width_depth_grid():
 
 
 def test_width_depth_via_build_army_spec_and_gradient_forwarding():
-    """width/depth AND distribution reach the Subunit through the build_army spec path (the ED-MB-0025
+    """width/depth AND distribution reach the Unit through the build_army spec path (the ED-MB-0025
     gradient-forwarding gap is closed)."""
     from collections import defaultdict
     row = SIDE_A_START_ROW
     specs = [{'shape': 'Line', 'troop_type': 'infantry', 'troops': 400, 'width': 2, 'depth': 8,
               'starting_position': (row, 11), 'distribution': 'front'}]
     u = build_army(specs, 'A', 'A')
-    a = u.subunits[0]
-    assert a.distribution == 'front', "distribution must reach the Subunit via the spec"
-    assert len(list(a.cells())) == 16, "width×depth must reach the Subunit via the spec"
+    a = u.units[0]
+    assert a.distribution == 'front', "distribution must reach the Unit via the spec"
+    assert len(list(a.cells())) == 16, "width×depth must reach the Unit via the spec"
     by = defaultdict(float)
     for (r, _c), t in a.cell_troops.items():
         by[r] += t

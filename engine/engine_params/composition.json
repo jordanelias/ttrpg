@@ -3,6 +3,13 @@
   "schema_version": 3,
   "source": "references/module_contracts.yaml#composition_roles",
   "roles": {
+    "combat.duel_terms": {
+      "target": "modules.combat.wrapper:DUEL_TERMS",
+      "kind": "value",
+      "entry": null,
+      "verb": null,
+      "needed_by": "engine/season/seam/wrappers/combat.py (the roster check of `duel_terms` and `challenge_terms` against the engine's closed set) and engine/season/harness/pairs.py (the same set, for the pairs report)."
+    },
     "combat.fight": {
       "target": "modules.combat.fight:fight",
       "kind": "callable",
@@ -125,6 +132,7 @@
   },
   "module_files": [
     "modules/combat/fight.py",
+    "modules/combat/wrapper.py",
     "modules/fieldwork/find.py",
     "modules/mass_battle/armyrecord.py",
     "modules/mass_battle/massbattle.py",

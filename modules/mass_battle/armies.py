@@ -1,4 +1,4 @@
-"""modules.mass_battle.armies -- the faction -> ARMY adapter: constructs a MULTI-subunit `Unit` from a list of
+"""modules.mass_battle.armies -- the faction -> ARMY adapter: constructs a MULTI-subunit `Army` from a list of
 per-subunit spec dicts (`build_army`), with the frontage-aware deployment geometry it needs.
 
 `modules/mass_battle/` is the reachable closure and the canon tree (`references/module_contracts.yaml`, the
@@ -8,10 +8,10 @@ and a module may not import from `systems/` (the harness and workbench tree), so
 from modules.mass_battle.config import BATTLEFIELD_SIZE, MB_VOLLEYS_START, ROLE_SPEC, SIDE_A_START_ROW, SIDE_B_START_ROW
 from modules.mass_battle.core.exchange import clamp_command
 from modules.mass_battle.troop_types.registry import role_allowed, roles_for, unit_type_for
-from modules.mass_battle.hierarchy.units import Officer, Subunit, Unit
+from modules.mass_battle.hierarchy.units import Officer, Unit, Army
 from modules.mass_battle.geometry import CELL_PATTERN_FN, footprint_for
 
-__all__ = ['SUBUNIT_CAP', 'DEPLOY_GAP', 'ENVELOP_WING_GAP', 'REFUSE_ECHELON', '_spec_span',
+__all__ = ['UNIT_CAP', 'DEPLOY_GAP', 'ENVELOP_WING_GAP', 'REFUSE_ECHELON', '_spec_span',
            '_centered_line_cols', 'build_army']
 
 # ─── WRAPPER DUTIES (Stage-1 finish): the wrapper adapts + routes; it RESOLVES NOTHING. ─────────────
@@ -20,31 +20,31 @@ __all__ = ['SUBUNIT_CAP', 'DEPLOY_GAP', 'ENVELOP_WING_GAP', 'REFUSE_ECHELON', '_
 # lives here. This is the P1 seam: engine.py = adapter + router + I/O, never an outcome computation.
 
 # [ED-1090, Jordan-ruled 2026-07-02: "subunits can be as high as 11."] Videogame hard ceiling on
-# simultaneously-commanded subunits — LIFTS the TTRPG hard cap of 3 (mass_battle_v30.md §A.5 Command
+# simultaneously-commanded units — LIFTS the TTRPG hard cap of 3 (mass_battle_v30.md §A.5 Command
 # Rating: "Sub-unit limit (max simultaneous commanded = Command; TTRPG hard cap: 3)", PP-504/ED-899 — a
 # tabletop-bookkeeping limit a digital UI does not need). Command remains the span-of-control governor
 # per §A.5; this is the absolute ceiling above it. Module-level (not local to build_army) so any other
 # caller — notably the Army Configuration Mode UI (Stage E, workbench) — reads the single source
 # instead of duplicating the literal. NOTE (flagged, not resolved): the ratified Command formula clamps
-# to 1..7, so reaching 11 commanded subunits implies some future Command-exceeding mechanism (e.g.
+# to 1..7, so reaching 11 commanded units implies some future Command-exceeding mechanism (e.g.
 # subordinate officers) — that reconciliation is queued for canon, not silently invented here.
-SUBUNIT_CAP = 11  # [canonical: mass_battle_v30.md §A.5 Command — videogame cap per ED-1090, superseding the TTRPG hard cap 3]
+UNIT_CAP = 11  # [canonical: mass_battle_v30.md §A.5 Command — videogame cap per ED-1090, superseding the TTRPG hard cap 3]
 
 # ─── ARMY-LEVEL DEPLOYMENT GEOMETRY (ED-MB-0017) ──────────────────────────────
 # [canonical: audit/2026-07-22-mass-battle-stress-test/pathing_deployment_diagnosis.md — multi-unit
 #  deployment fix; historical geometry per the Cannae/Leuctra/triplex-acies research synthesis]
-# `build_army` places subunits by FRONTAGE-AWARE placement: a fixed column step narrower than a battle-scale
-# subunit's frontage would make subunits OVERLAP, land an envelopment's "wings" both on ONE side of the
+# `build_army` places units by FRONTAGE-AWARE placement: a fixed column step narrower than a battle-scale
+# subunit's frontage would make units OVERLAP, land an envelopment's "wings" both on ONE side of the
 # centre, and seat the refused wing level with the line. These helpers lay out a battle line centred on the
 # anchor, symmetric wings for envelopment, and an echeloned-rear refused wing.
-DEPLOY_GAP = 1        # [canonical: pathing_deployment_diagnosis.md §3 — lateral gap (cols) between adjacent subunits; a coherent line (hoplite ~0) not the wide manipular quincunx]
+DEPLOY_GAP = 1        # [canonical: pathing_deployment_diagnosis.md §3 — lateral gap (cols) between adjacent units; a coherent line (hoplite ~0) not the wide manipular quincunx]
 ENVELOP_WING_GAP = 3  # [canonical: pathing_deployment_diagnosis.md §3 / Cannae research §1 — wings sit WIDE of the centre's flanks (columns, refused slightly), clear of its frontage]
 REFUSE_ECHELON = 6    # [canonical: pathing_deployment_diagnosis.md §2 / Leuctra research §2 — refused wing echeloned back so it cannot reach contact when the strong wing does (depth-ratio-grounded offset in rows)]
 
 
 def _spec_span(sp):
     """(cmin, cmax) column span of a spec's footprint pattern, computed PRE-construction (so deployment
-    can space subunits by their true frontage). Resolves shape from an explicit `shape` or a `role`."""
+    can space units by their true frontage). Resolves shape from an explicit `shape` or a `role`."""
     shape = sp.get('shape')
     if shape is None and sp.get('role') is not None and sp['role'] in ROLE_SPEC:
         shape = ROLE_SPEC[sp['role']]['shape']
@@ -60,14 +60,14 @@ def _spec_span(sp):
 
 def _centered_line_cols(specs, anchor_col, gap=DEPLOY_GAP):
     """Deployment columns (the `starting_position` col for each spec) laying `specs` out as a battle line
-    CENTRED on `anchor_col`, spaced by each subunit's own frontage + `gap` — so no two subunits overlap
+    CENTRED on `anchor_col`, spaced by each subunit's own frontage + `gap` — so no two units overlap
     at any subunit count (P-1). Returns [col_i]; col_i places spec i's pattern so the block is centred.
 
     [ED-MB-0017] The block is FIT to the battlefield so it can never place
-    a cell off-board (which Subunit.__post_init__ rejects with a hard ValueError). A block that fits is
+    a cell off-board (which Unit.__post_init__ rejects with a hard ValueError). A block that fits is
     left exactly centred (a no-op for every normal army — the presets and the ≤11-subunit test cases);
     an over-wide block (an army wider than the 50-cell field even at gap 0) is first re-tried at gap 0,
-    then, if still too wide, LINEARLY COMPRESSED to fit — subunits then abut/overlap rather than
+    then, if still too wide, LINEARLY COMPRESSED to fit — units then abut/overlap rather than
     CRASHING. Degrade, don't crash."""
     spans = [_spec_span(s) for s in specs]
 
@@ -97,7 +97,7 @@ def _centered_line_cols(specs, anchor_col, gap=DEPLOY_GAP):
             cols = [c + shift for c in cols]
     # Final per-subunit clamp: every subunit's own cells must land on-board even when the army is wider
     # than the field can hold at all (11 large blocks) -- clamp its start so [col+cmin, col+cmax] ⊆
-    # [0, FIELD-1]. For a fitting army this is a no-op; for an impossible one subunits pile up/overlap at
+    # [0, FIELD-1]. For a fitting army this is a no-op; for an impossible one units pile up/overlap at
     # the edge (no worse than the pre-fix overlap) instead of raising an off-board ValueError.
     cols = [max(-s[0], min(BATTLEFIELD_SIZE - 1 - s[1], c)) for c, s in zip(cols, spans)]
     return cols
@@ -107,9 +107,9 @@ def _centered_line_cols(specs, anchor_col, gap=DEPLOY_GAP):
 def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale=6,  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults, same as build_unit]
                morale_start=None, dr=1, stance='balanced', speed='Standard', anchor_col=25,
                officers=()):
-    """Faction→ARMY adapter: construct a MULTI-subunit Unit from a list of per-subunit spec dicts.
+    """Faction→ARMY adapter: construct a MULTI-subunit Army from a list of per-subunit spec dicts.
     `gauge_mb.make_mixed_unit` already proves the data model supports independently-placed/typed/tasked
-    subunits, but that constructor is gauge-harness-local; this is the public, workbench-facing
+    units, but that constructor is gauge-harness-local; this is the public, workbench-facing
     equivalent (mirrors its spec-dict-list shape). `build_unit` (single-subunit) is untouched.
 
     specs: list of dicts, one per subunit. Each may set shape (required UNLESS role is given — see
@@ -120,8 +120,8 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
     power/discipline/morale/morale_start/dr/stamina/stamina_max overrides.
 
     A canonical troop type (TROOP_TYPE_STATS) draws its §B.2 Power/Discipline/Morale presets via
-    Subunit.of_type unless the spec overrides them; a non-canonical type (e.g. bare 'infantry')
-    inherits the parent Unit's fallbacks below — same behavior as build_unit/make_mixed_unit.
+    Unit.of_type unless the spec overrides them; a non-canonical type (e.g. bare 'infantry')
+    inherits the parent Army's fallbacks below — same behavior as build_unit/make_mixed_unit.
 
     troops/concentration ARE forwarded here, so a caller-supplied density is not dropped.
 
@@ -129,7 +129,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
     via starting_position (the whole point of exposing placement here) must still advance toward the enemy on
     its own side's correct axis on the legacy (non-FIELD_MOVEMENT) path.
 
-    [Stage D, ED-907 L3] `role` WIRES the previously-inert Subunit.role: a spec may set `role` (one of
+    [Stage D, ED-907 L3] `role` WIRES the previously-inert Unit.role: a spec may set `role` (one of
     ROLE_SPEC's keys, e.g. 'ShieldWall'/'Skirmish'/'Shock') instead of `shape`, gated by
     troop_types.registry.role_allowed(troop_type, role) — a role not in that troop type's menu
     (TROOP_TYPE_ROLES) raises ValueError at construction time (fails loud, matching the Order trigger
@@ -137,7 +137,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
     `shape`/`instructions` are NOT also explicitly set in the spec, both default from ROLE_SPEC[role]
     ('the FM position->role model': a role names a typical shape + instruction package). An explicit
     shape/instructions in the spec always wins over the role's defaults. role is also stored on the
-    resulting Subunit. role defaults to None: a spec that never set it is byte-exact.
+    resulting Unit. role defaults to None: a spec that never set it is byte-exact.
 
     [ED-1095, Jordan-ruled 2026-07-02] A spec with troop_type='mounted_archers' and NO explicit role
     AND no explicit shape/instructions implicitly defaults role to 'Kite' (kiting/stand-off posture
@@ -155,22 +155,22 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
     Command the ED-899 way) or Officer instances. A subunit spec may then carry an 'officer': NAME
     key naming which officer commands it (omitted = a direct report to the general, same as today).
     This is ED-1090's own queued reconciliation: Command clamps 1..7, so fielding more than Command
-    (up to the hard ceiling SUBUNIT_CAP=11) "implies a future Command-exceeding mechanism (e.g.
+    (up to the hard ceiling UNIT_CAP=11) "implies a future Command-exceeding mechanism (e.g.
     subordinate officers/lieutenancy)" — verbatim, `registers/editorial_ledger.jsonl`'s ED-1090 row.
     A3's OWN text is precise about what changes and what does not: "the general's cap... counts the
-    officers he commands rather than every sub-unit" — SUBUNIT_CAP itself is NOT dropped, only what
-    it counts changes, from raw subunits to (officers actually used + un-officered direct subunits).
+    officers he commands rather than every sub-unit" — UNIT_CAP itself is NOT dropped, only what
+    it counts changes, from raw units to (officers actually used + un-officered direct units).
     C5 (Part C, ruled 2026-09-25) separately ladders each officer's OWN span, and the general's
     direct-reports count, against Command — "one ladder... at every echelon, including the new
     officer post."
 
-    Validation: `general_direct` (officers actually referenced + un-officered subunits) is computed UNIFORMLY
-    and always checked against SUBUNIT_CAP (so it counts officers instead of raw subunits, exactly as A3's text
+    Validation: `general_direct` (officers actually referenced + un-officered units) is computed UNIFORMLY
+    and always checked against UNIT_CAP (so it counts officers instead of raw units, exactly as A3's text
     says, in BOTH the empty- and non-empty-officers case), and against the general's own (clamped) Command ONLY
     when officers are actually used — enforcing the Command ladder unconditionally would raise on existing
-    single-tier armies built with more direct subunits than their Command (several exist in this package's own
+    single-tier armies built with more direct units than their Command (several exist in this package's own
     tests/gauges). An idle officer contributes to neither `counts` nor the general's Command check."""
-    # [ED-1090] SUBUNIT_CAP is module-level (see its definition above build_unit) so other callers
+    # [ED-1090] UNIT_CAP is module-level (see its definition above build_unit) so other callers
     # (Army Configuration Mode's UI) read the single source rather than duplicating the literal.
     # isinstance(o, Officer) would be the direct check, but several tests in this package reload
     # hierarchy.units (importlib.reload) to pick up an env-var-gated flag -- which rebinds Officer to a NEW class
@@ -179,7 +179,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
     # everything this parameter accepts is either a mapping (build one) or already Officer-shaped (pass through).
     officer_objs = tuple(Officer(**o) if isinstance(o, dict) else o for o in officers)
     # [A3, ED-MB-0067 Part A / ED-MB-0073] Eager, fail-loud validation, matching this file's own
-    # existing SUBUNIT_CAP-raise convention rather than silently truncating or ignoring an
+    # existing UNIT_CAP-raise convention rather than silently truncating or ignoring an
     # over-assigned officer. Runs UNCONDITIONALLY (not only when officers is non-empty, F6's fix): a
     # spec referencing an officer that does not exist is a caller mistake regardless of whether any
     # OTHER officer was supplied.
@@ -202,26 +202,26 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
     for oname, n in counts.items():
         cap = by_name[oname].command
         if n > cap:
-            raise ValueError(f"build_army: officer {oname!r} commands {n} subunits, exceeding "
+            raise ValueError(f"build_army: officer {oname!r} commands {n} units, exceeding "
                               f"their own Command {cap} (C5, ED-MB-0067 Part C: max commanded "
                               f"= Command at every echelon)")
     # general_direct == len(specs) whenever no spec sets 'officer' (every existing caller) --
     # byte-exact continuation of ED-1090's own flat check in that case.
     general_direct = len(counts) + direct
-    if general_direct > SUBUNIT_CAP:
+    if general_direct > UNIT_CAP:
         raise ValueError(f"build_army: {general_direct} direct reports "
-                          f"({len(counts)} officers + {direct} un-officered subunits) exceeds the "
-                          f"videogame cap of {SUBUNIT_CAP} (ED-1090; mass_battle_v30.md §A.5)")
+                          f"({len(counts)} officers + {direct} un-officered units) exceeds the "
+                          f"videogame cap of {UNIT_CAP} (ED-1090; mass_battle_v30.md §A.5)")
     if officer_objs:
         clamped_command = clamp_command(command)
         if general_direct > clamped_command:
             raise ValueError(f"build_army: general commands {general_direct} direct reports "
-                              f"({len(counts)} officers + {direct} un-officered subunits), exceeding "
+                              f"({len(counts)} officers + {direct} un-officered units), exceeding "
                               f"their own Command {clamped_command} (C5, ED-MB-0067 Part C: max "
                               f"commanded = Command at every echelon)")
     advance_dir = -1 if faction == 'A' else 1
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
-    # [ED-MB-0017] Frontage-aware, anchor-centred battle line: space subunits by their own frontage so
+    # [ED-MB-0017] Frontage-aware, anchor-centred battle line: space units by their own frontage so
     # they never overlap (fixes P-1, the `15 + i*4` fixed-step overlap). A spec's explicit
     # `starting_position` always wins (envelopment/refused-flank presets and callers doing bespoke
     # placement); only specs that omit it get an auto column here.
@@ -274,7 +274,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
                   # so an explicit per-spec override silently vanished (sp.pop never ran, kw never
                   # got the key) -- see this loop's own note below for the seed-when-absent half.
                   'troops', 'concentration', 'orders',
-                  'target_condition',  # [ED-IN-0306] was missing from this tuple, so a spec's targeting preference silently vanished (the 'volleys' omission above, again); a Subunit field since class-B targeting
+                  'target_condition',  # [ED-IN-0306] was missing from this tuple, so a spec's targeting preference silently vanished (the 'volleys' omission above, again); a Unit field since class-B targeting
                   'width', 'depth', 'distribution',  # [ED-MB-0025/0026] explicit grid + density gradient
                   'officer'):  # [A3, ED-MB-0067 Part A / ED-MB-0073] already validated above this loop;
                   # forwarded the same generic way as every other per-subunit override in this tuple.
@@ -282,29 +282,29 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
                 kw[k] = sp.pop(k)
         # [DG-4, ED-MB-0002, 2026-07-04 ruling: "Morale is blend of per-subunit as well as whole
         # unit."] Default every subunit to its OWN real starting morale (unless the spec already overrode it above)
-        # instead of leaving it at the Subunit dataclass default of None. A None morale falls through to the shared
-        # parent Unit.morale, so for a composed army
+        # instead of leaving it at the Unit dataclass default of None. A None morale falls through to the shared
+        # parent Army.morale, so for a composed army
         # every subunit's own §A.4 casualty-fraction trigger would independently write to the SAME shared pool,
         # double-eroding it (RC-1(b)). Giving each subunit its own copy closes that double-count by construction.
-        # The "whole unit" half of the blend emerges from Unit.agg_morale()/derive_rout() (a troop-weighted aggregate
-        # of subunits' own eff_morale) and cascade_morale_hit() (army-wide contagion). An explicit None-check (not
+        # The "whole unit" half of the blend emerges from Army.agg_morale()/derive_rout() (a troop-weighted aggregate
+        # of units' own eff_morale) and cascade_morale_hit() (army-wide contagion). An explicit None-check (not
         # `setdefault`): a spec that sets `'morale': None` would otherwise pop that None into kw above and defeat this.
         if kw.get('morale') is None:
             kw['morale'] = morale
         if kw.get('morale_start') is None:
             kw['morale_start'] = kw['morale'] if morale_start is None else morale_start
         # [A6, ED-MB-0067 Part A, F4] `volleys` is forwarded per subunit, seeded for unit_type=='ranged' (the exact
-        # gate volley_phase.fire() checks before reading eff_volleys): a ranged subunit left at Subunit.volleys=None
-        # would inherit the ONE shared parent Unit pool, which between_turn_recovery's per-subunit resupply_volleys
+        # gate volley_phase.fire() checks before reading eff_volleys): a ranged subunit left at Unit.volleys=None
+        # would inherit the ONE shared parent Army pool, which between_turn_recovery's per-subunit resupply_volleys
         # would resupply once per sibling per turn, with its drain not isolated from its siblings'. Same fix shape as
         # the morale defaulting immediately above (DG-4); a melee subunit's ammo count is never read for combat, so
         # only the SHOOTER's own pool is isolated.
         if kw.get('volleys') is None and kw['unit_type'] == 'ranged':
             kw['volleys'] = MB_VOLLEYS_START
-        subs.append(Subunit.of_type(tt, shape, tier, pos, **kw))
-    return Unit(name=name, faction=faction, power=power, command=command,
+        subs.append(Unit.of_type(tt, shape, tier, pos, **kw))
+    return Army(name=name, faction=faction, power=power, command=command,
                 discipline=discipline, discipline_start=discipline,
                 morale=morale, morale_start=(morale if morale_start is None else morale_start),
-                subunits=subs, dr=dr, stance=stance, speed=speed, officers=officer_objs)
+                units=subs, dr=dr, stance=stance, speed=speed, officers=officer_objs)
 
 

@@ -809,7 +809,7 @@ WEAPONS = {
 
 # Bake the geometry coefficient surface ONCE at import (zero runtime cost): geometry derives `gap` (and
 # thrust/cut/perc_conc/halfsword for downstream wiring) from each weapon's nested geometry.
-import geometry as _geo
+from . import geometry as _geo
 for _w, _rec in WEAPONS.items():
     _b = _geo.bake(_rec['geometry'])
     _rec['gap'] = _b['gap']
@@ -887,7 +887,7 @@ for _w, _rec in WEAPONS.items():
 # located parts are static, so the result is too). weapon_physics.derive returns the cached '_derived' when
 # present; a record mutated after bake is OUT OF CONTRACT, exactly as it already is for the baked geo/gap
 # above. Cycle-free: weapon_physics imports only math at module scope.
-import weapon_physics as _wp
+from . import weapon_physics as _wp
 for _w, _rec in WEAPONS.items():
     _rec['_derived'] = _wp.derive(_rec)
 
