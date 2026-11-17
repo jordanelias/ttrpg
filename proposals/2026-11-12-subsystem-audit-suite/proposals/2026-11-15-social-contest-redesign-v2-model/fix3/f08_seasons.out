@@ -1,0 +1,60 @@
+seed 0: hash a20d14c51385d316 deterministic True; errs []; sittings/season [15, 23, 31, 38, 42, 41, 46, 50, 52, 58, 57, 56]; docket [7, 14, 20, 25, 25, 28, 33, 35, 41, 40, 40, 39]; appeals 127 reversed 61; most appeals of one matter in a season 9; skipped by a refusal 0; rulings {'wrong': 53, 'right': 452}
+   regard range by season [(-0.38, 0.27), (-0.73, 0.67), (-0.73, 0.68), (-0.75, 0.72)]
+   legitimacy by season (every 3rd) [{'Crown': -0.512, 'Church': -0.526, 'Guild': 0.0, 'Parliament': -0.09}, {'Crown': -0.554, 'Church': -0.625, 'Guild': 0.0, 'Parliament': -0.482}, {'Crown': -0.686, 'Church': -0.485, 'Guild': 0.0, 'Parliament': -0.261}, {'Crown': -0.53, 'Church': -0.652, 'Guild': 0.0, 'Parliament': -0.65}]
+   standing at end {'Crown': -0.455, 'Church': -0.493, 'Guild': 0.0, 'Parliament': -0.706} strife {'famine': 0.0}
+   hearings as a party/speaker {'merchant': 271, 'reeve': 202, 'prior': 51, 'heretic': 128, 'speaker': 38, 'member': 50, 'master': 189, 'bishop': 33}; never heard among the parties scheduled: []
+   ledger kinds at end {'shown': 1902, 'rattled': 809, 'partial': 553, 'conceded': 235, 'heard': 179, 'contumacy': 101, 'rigged': 26, 'yielded': 9, 'lost his temper': 8, 'converted': 4}; tenures 18 precedents 117 offices {'reeve': 'contested'}
+seed 1: hash 411ec1c5118ca72e deterministic True; errs []; sittings/season [16, 23, 27, 34, 39, 44, 49, 52, 51, 51, 48, 52]; docket [6, 13, 16, 22, 28, 32, 37, 34, 36, 32, 36, 36]; appeals 129 reversed 68; most appeals of one matter in a season 8; skipped by a refusal 0; rulings {'wrong': 82, 'right': 400}
+   regard range by season [(-0.7, 0.58), (-0.68, 0.61), (-0.74, 0.73), (-0.75, 0.74)]
+   legitimacy by season (every 3rd) [{'Crown': -0.639, 'Church': -0.594, 'Guild': 0.0, 'Parliament': -0.345}, {'Crown': -0.263, 'Church': -0.675, 'Guild': 0.0, 'Parliament': -0.556}, {'Crown': -0.481, 'Church': -0.635, 'Guild': 0.0, 'Parliament': -0.22}, {'Crown': -0.429, 'Church': -0.477, 'Guild': 0.0, 'Parliament': -0.226}]
+   standing at end {'Crown': -0.451, 'Church': -0.402, 'Guild': 0.0, 'Parliament': -0.708} strife {'famine': 0.0}
+   hearings as a party/speaker {'merchant': 252, 'reeve': 195, 'prior': 61, 'heretic': 124, 'speaker': 37, 'member': 49, 'master': 179, 'bishop': 30}; never heard among the parties scheduled: []
+   ledger kinds at end {'shown': 1639, 'rattled': 797, 'partial': 540, 'conceded': 318, 'heard': 167, 'contumacy': 84, 'lost his temper': 29, 'rigged': 28, 'converted': 8, 'yielded': 5}; tenures 29 precedents 106 offices {'reeve': 'contested'}
+seed 2: hash 74f01e7580337350 deterministic True; errs []; sittings/season [14, 22, 27, 36, 43, 43, 42, 44, 51, 53, 57, 56]; docket [4, 12, 19, 27, 27, 26, 29, 35, 38, 40, 40, 45]; appeals 127 reversed 62; most appeals of one matter in a season 8; skipped by a refusal 0; rulings {'right': 391, 'wrong': 94}
+   regard range by season [(-0.45, 0.36), (-0.74, 0.72), (-0.74, 0.61), (-0.74, 0.61)]
+   legitimacy by season (every 3rd) [{'Crown': -0.093, 'Church': -0.505, 'Guild': 0.0, 'Parliament': 0.047}, {'Crown': -0.61, 'Church': -0.734, 'Guild': 0.0, 'Parliament': -0.305}, {'Crown': -0.149, 'Church': -0.718, 'Guild': 0.0, 'Parliament': -0.697}, {'Crown': -0.666, 'Church': -0.736, 'Guild': 0.0, 'Parliament': -0.693}]
+   standing at end {'Crown': -0.437, 'Church': -0.448, 'Guild': 0.0, 'Parliament': -0.717} strife {'famine': 0.25}
+   hearings as a party/speaker {'merchant': 257, 'reeve': 207, 'prior': 68, 'heretic': 135, 'speaker': 29, 'member': 41, 'master': 160, 'bishop': 29}; never heard among the parties scheduled: []
+   ledger kinds at end {'shown': 1865, 'rattled': 730, 'partial': 543, 'conceded': 315, 'heard': 177, 'contumacy': 112, 'rigged': 30, 'yielded': 7, 'converted': 6, 'lost his temper': 4}; tenures 26 precedents 107 offices {'reeve': 'contested'}
+
+bounds violations over all seasons/seeds: {}
+final legitimacy/standing by faction (mean over seeds): legit Crown -0.532, stand Crown -0.448, legit Church -0.652, stand Church -0.448, legit Guild +0.000, stand Guild +0.000, legit Parliament -0.438, stand Parliament -0.710
+
+== vacated office at season 4 / a party-seat removed at season 4
+  vacate king_j: seasons completed 4; errors [(4, 'ValueError', 'refused[no_seat]: trial: no seat of authority polity (party-gap refusal)')]; skipped []
+  remove reeve: seasons completed 4; errors [(4, 'KeyError', "'reeve'")]; skipped []
+
+== a single polity appeal bench for every rite (the inquisition's appeal cannot sit)
+  seed 0: seasons completed 0; errors [(0, 'ValueError', 'refused[no_seat]: inquisition: no seat of authority church (party-gap refusal)')]; skipped []
+  seed 1: seasons completed 0; errors [(0, 'ValueError', 'refused[no_seat]: inquisition: no seat of authority church (party-gap refusal)')]; skipped []
+  seed 2: seasons completed 0; errors [(0, 'ValueError', 'refused[no_seat]: inquisition: no seat of authority church (party-gap refusal)')]; skipped []
+seed 0: hash 9d10cc8bb0c1590f deterministic True; errs []; sittings/season [16, 19, 25, 29, 32, 33, 32, 36, 38, 43, 55, 62]; docket [3, 8, 13, 16, 18, 15, 19, 22, 27, 38, 46, 39]; appeals 62 reversed 30; most appeals of one matter in a season 2; skipped by a refusal 0; rulings {'wrong': 70, 'right': 346}
+   regard range by season [(-0.4, 0.39), (-0.57, 0.5), (-0.49, 0.48), (-0.66, 0.69)]
+   legitimacy by season (every 3rd) [{'Crown': -0.325, 'Church': -0.526, 'Guild': -0.562, 'Parliament': -0.431}, {'Crown': -0.361, 'Church': -0.698, 'Guild': -0.598, 'Parliament': -0.342}, {'Crown': -0.545, 'Church': -0.663, 'Guild': -0.6, 'Parliament': -0.252}, {'Crown': -0.281, 'Church': -0.665, 'Guild': -0.611, 'Parliament': -0.655}]
+   standing at end {'Crown': -0.424, 'Church': -0.306, 'Guild': 0.0, 'Parliament': -0.095} strife {'famine': 0.0}
+   hearings as a party/speaker {'merchant': 237, 'reeve': 146, 'prior': 35, 'heretic': 95, 'speaker': 39, 'member': 51, 'master': 165, 'bishop': 13}; never heard among the parties scheduled: []
+   ledger kinds at end {'shown': 1158, 'rattled': 508, 'partial': 433, 'conceded': 155, 'heard': 73, 'contumacy': 60, 'rigged': 24, 'lost his temper': 18, 'yielded': 6, 'converted': 4}; tenures 18 precedents 61 offices {'reeve': 'contested'}
+seed 1: hash 7cfb39e49a28b172 deterministic True; errs []; sittings/season [16, 21, 26, 33, 40, 45, 62, 71, 70, 67, 56, 53]; docket [5, 10, 16, 24, 28, 45, 55, 53, 53, 41, 37, 30]; appeals 63 reversed 27; most appeals of one matter in a season 3; skipped by a refusal 0; rulings {'wrong': 80, 'right': 476}
+   regard range by season [(-0.68, 0.59), (-0.62, 0.6), (-0.7, 0.59), (-0.59, 0.64)]
+   legitimacy by season (every 3rd) [{'Crown': -0.477, 'Church': -0.594, 'Guild': -0.375, 'Parliament': -0.331}, {'Crown': -0.476, 'Church': -0.667, 'Guild': -0.494, 'Parliament': -0.364}, {'Crown': -0.414, 'Church': -0.729, 'Guild': -0.727, 'Parliament': -0.625}, {'Crown': -0.527, 'Church': -0.54, 'Guild': -0.614, 'Parliament': -0.284}]
+   standing at end {'Crown': -0.418, 'Church': -0.335, 'Guild': 0.0, 'Parliament': -0.034} strife {'famine': 0.0}
+   hearings as a party/speaker {'merchant': 352, 'reeve': 167, 'prior': 36, 'heretic': 101, 'speaker': 38, 'member': 50, 'master': 299, 'bishop': 31}; never heard among the parties scheduled: []
+   ledger kinds at end {'shown': 1590, 'rattled': 707, 'partial': 600, 'conceded': 195, 'contumacy': 89, 'heard': 76, 'rigged': 34, 'lost his temper': 31, 'converted': 8, 'yielded': 4}; tenures 26 precedents 67 offices {'reeve': 'contested'}
+seed 2: hash 1bc72875302219fd deterministic True; errs []; sittings/season [15, 23, 27, 35, 39, 38, 37, 35, 35, 38, 44, 50]; docket [5, 11, 18, 23, 21, 21, 20, 20, 22, 26, 34, 36]; appeals 58 reversed 33; most appeals of one matter in a season 2; skipped by a refusal 0; rulings {'right': 356, 'wrong': 57}
+   regard range by season [(-0.37, 0.36), (-0.66, 0.59), (-0.67, 0.59), (-0.63, 0.6)]
+   legitimacy by season (every 3rd) [{'Crown': -0.137, 'Church': -0.505, 'Guild': -0.375, 'Parliament': -0.06}, {'Crown': -0.178, 'Church': -0.604, 'Guild': -0.605, 'Parliament': -0.486}, {'Crown': -0.315, 'Church': -0.547, 'Guild': -0.618, 'Parliament': -0.632}, {'Crown': -0.354, 'Church': -0.678, 'Guild': -0.629, 'Parliament': -0.478}]
+   standing at end {'Crown': -0.447, 'Church': -0.302, 'Guild': 0.0, 'Parliament': -0.092} strife {'famine': 0.0}
+   hearings as a party/speaker {'merchant': 196, 'reeve': 156, 'prior': 34, 'heretic': 122, 'speaker': 40, 'member': 52, 'master': 132, 'bishop': 37}; never heard among the parties scheduled: []
+   ledger kinds at end {'shown': 1122, 'rattled': 594, 'partial': 442, 'conceded': 173, 'contumacy': 95, 'heard': 78, 'rigged': 30, 'lost his temper': 20, 'converted': 6, 'yielded': 6}; tenures 19 precedents 62 offices {'reeve': 'contested'}
+
+bounds violations over all seasons/seeds: {}
+final legitimacy/standing by faction (mean over seeds): legit Crown -0.466, stand Crown -0.430, legit Church -0.674, stand Church -0.314, legit Guild -0.627, stand Guild +0.000, legit Parliament -0.508, stand Parliament -0.074
+
+== vacated office at season 4 / a party-seat removed at season 4
+  vacate king_j: seasons completed 8; errors []; skipped [('adjourned', 'plea', 'refused[no_seat]'), ('sched', 'plea', 'refused[no_seat]'), ('sched', 'rigged', 'refused[no_seat]')]
+  remove reeve: seasons completed 8; errors []; skipped [('grievance', 'grudge:reeve:master', 'refused[absent]'), ('grievance', 'grudge:reeve:merchant', 'refused[absent]'), ('sched', 'charter', 'refused[absent]'), ('sched', 'rigged', 'refused[absent]'), ('sched', 'tolls', 'refused[absent]')]
+
+== a single polity appeal bench for every rite (the inquisition's appeal cannot sit)
+  seed 0: seasons completed 4; errors []; skipped []
+  seed 1: seasons completed 4; errors []; skipped []
+  seed 2: seasons completed 4; errors []; skipped []

@@ -1,0 +1,8 @@
+
+== [before] F5 bounded
+  bounded(0, -1.2) = -1.2 ; bounded(0.5, 2.0) = 1.5 ; bounded(-1, -0.5) = -1.0
+  20,000 random steps in (-3, 3): results outside [-1, 1] 13369; 20,000 steps inside (-1, 1) equal to the old rule 20000
+
+== [after] F5 bounded
+  bounded(0, -1.2) = -1.0 ; bounded(0.5, 2.0) = 1.0 ; bounded(-1, -0.5) = -1.0
+  20,000 random steps in (-3, 3): results outside [-1, 1] 0; 20,000 steps inside (-1, 1) equal to the old rule 20000

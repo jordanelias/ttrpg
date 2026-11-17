@@ -1,0 +1,8 @@
+
+== [before] fuzz 1500 configs: ran 768; crashes 15 {"TypeError: 'NoneType' object is not iterable @ engine.py:245": 15}
+  refusals {'refused[abridged_self]': 2, 'refused[no_seat]': 391, 'refused[no_weight]': 59, 'refused[one_character]': 27, 'refused[one_party]': 27, 'refused[unlawful]': 211}
+  violations {'regard out of [-1,1]': 4}; determinism (every 25th re-run) {True: 27}
+  abridged == the plain roll at control: 200/200
+  A-139 one party twice: refused[one_party]
+  A-139 a party who also judges (the accuser is the one seat): refused[no_seat]
+  office power of the accuser (trial, n=300 each; monotone expected within 2 s.e. 0.053): none 0.383 | r2 0.430 | r3 0.450 | r4m 0.467 | r5M 0.473
