@@ -49,7 +49,7 @@ is reported in. Name the conflict; never silently rank them.
   *"anything key-based gets retired"*)** — `keys.py`, the echo transport and the emit/consume interface
   are gone; build nothing on them. Special-casing an
   entity or outcome is **scripting drift** — stop.
-- **"All directions" is a method, not a NERS criterion (Jordan, 2026-10-28).** Work any pipeline, code,
+- **"All directions" is a method, not a NERS criterion (Jordan).** Work any pipeline, code,
   system or workflow by several routes and from several perspectives, never only the one it was built
   along; `skills/claim-review` STEP 5 operationalises it, and §0.06 is the NERS case.
 - **Adversarial pass at every stage that gates a result.** After you draft canon, a number or a fix,
@@ -82,8 +82,7 @@ is reported in. Name the conflict; never silently rank them.
     **Escalate only what survives all five:** a live design choice where two defensible options lead to
     materially different games, or where the answer would overwrite ratified canon. ⚠ **This cuts BOTH
     ways** — clearing the standing queue is session work.
-- **THE REQUEST IS THE SCOPE; REVIEW RUNS ONE ROUND, THEN STOPS (RULED, Jordan 2026-10-22: *"uncontrolled
-  audit recursion loop"*).** Audit → fix → audit-the-fixes → fix is the forbidden shape. (1) An audit, critic
+- **THE REQUEST IS THE SCOPE; REVIEW RUNS ONE ROUND, THEN STOPS (RULED).** Audit → fix → audit-the-fixes → fix is the forbidden shape. (1) An audit, critic
   or fix pass the request did not name is scope growth: ask Jordan one question, do not start it. (2) The
   adversarial pass runs ONCE per deliverable; its fixes are not themselves audited, and its findings do not
   seed a second fan-out. (3) Before any second wave of agents, STOP and report what the first found. (4) The
@@ -299,9 +298,8 @@ resume from. There is no `deprecated/` tree — **retiring something means delet
 `FORK:` row** in `references/restructure_ledger.md`. Do not recreate the directory.
 
 ⚠ **ONE EXCEPTION (ED-IN-0231): `.designs/` — QUARANTINED, not retired:** *kept, readable and
-resolvable*, moved out of the code trees and default search path so it is not read as canon. It holds
-the design documents
-formerly under `systems/*/reference/` and the root of `engine/`, each bannered `ARCHIVED-NOT-CANON` with
+resolvable*, kept out of the code trees and default search path so it is not read as canon. It holds
+the design documents of `systems/*/reference/` and the root of `engine/`, each bannered `ARCHIVED-NOT-CANON` with
 its original path. **The leading dot is the mechanism** — ripgrep and `glob.glob` skip it unless asked;
 `os.walk`, `Path.rglob` and `git ls-files` do not. **Do not add to it** (new design work goes to
 `proposals/`), **do not point at it** (`CURRENT.md` names those documents by bare filename), **do not
@@ -372,7 +370,7 @@ says where an old path went. Only what those cannot tell you:
 - **`tools/`** — all CI checks, validators, generators; every rule lives once (§8). Check
   `references/ci_checks_registry.yaml` before assuming a module has an automated caller.
 - **`tests/`** — `tests/valoria/` is the pytest unit suite, the only executable tests here; its
-  narrative `.md` is **prose, not executable spec**. `tests/sim/` is unrelated to the retired `sim/`.
+  narrative `.md` is **prose, not executable spec**. `tests/sim/` is unrelated to the dissolved `sim/`.
 - **`.audit/`** — the surviving audit corpus, **HIDDEN** like `.designs/`. A **rename** of `audit/`, not
   a mirror (`.audit/<x>`, where `.designs/` prepends); `tools/ci_claim_provenance_check.py`'s
   `QUARANTINE_MIRRORS` is the one place that difference is written down. Retired **as a category**
@@ -431,9 +429,8 @@ removed is at its fork ref; every old path resolves through `references/restruct
 
 **Rule: never take a number for the engine or the port out of prose.** A value the engine uses lives in a
 typed artifact under `engine/engine_params/` behind an exporter with a blocking `--check` round-trip, or
-in a single Python owner. `params_tables.yaml` was retired (`FORK:` row in
-`references/restructure_ledger.md`); it was a frozen capture of prose tables, and its degree bands were
-superseded by `degree_from_net` in `engine/dice_engine/dice_engine.py`. **Check the code first, every
+in a single Python owner. `params_tables.yaml` is retired (`FORK:` row in
+`references/restructure_ledger.md`); degree bands come from `degree_from_net` in `engine/dice_engine/dice_engine.py`. **Check the code first, every
 time.** Until the typed layer covers numeric operands and structured formulas, every value crossing into
 Godot is hand-transcribed — live drift risk — and do not bind Godot resource fields to descriptor keys
 the registry still marks IN FLUX.
@@ -471,7 +468,7 @@ job `sim-regression`; the reference model is partly stubbed (`NotImplementedErro
 ## 8. Enforcement (where the gates live)
 
 - **Authoritative tier — CI** (`.github/workflows/valoria-ci.yml`) — **the full-suite tier, NOT a
-  required check** (`main` has only a deletion rule; #564, #567 merged before green). Read the
+  required check** (`main` has only a deletion rule). Read the
   workflow for what actually gates; gates are grouped into blocking and report-only jobs, so a job
   name is not a gate's name. `references/ci_checks_registry.yaml` is the per-tool registry.
 - **Local tier — advisory accelerators.** One-time per clone: `git config core.hooksPath .githooks`.
@@ -623,7 +620,7 @@ for the READS.
 
 **A session must never arm its own wake-up.** No PR check-ins, no re-arming heartbeats, and no polling
 of an EXTERNAL service (GitHub merge or CI state, a URL) — by any mechanism. **Polling our own agents
-and local processes is permitted** (RULED, Jordan 2026-10-10: `Monitor` on a background job's log or
+and local processes is permitted** (RULED: `Monitor` on a background job's log or
 CPU time; the waste class is re-asking an outside service, not watching our own work). Enforced:
 `.claude/settings.json`'s `permissions.deny` blocks `send_later`, `create_trigger`, `ScheduleWakeup`,
 `CronCreate`, `update_trigger`, `fire_trigger`, `Skill(loop)`, `watch_url` and `subscribe_pr_activity`
