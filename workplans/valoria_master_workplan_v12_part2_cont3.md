@@ -684,7 +684,7 @@ Reading (hand-read): **not missing**: #5 B05.21 (a forward note that the stance 
 
 | # | item | cites (V12) | landing | the citing clause | at |
 |---|---|---|---|---|---|
-| 1 | B05.08 | B05.10 | after the citer | Batch B04-capability-home (the uses table that B05.10 points at these names). | part8.md:242 |
+| 1 | B05.08 | B05.10 | after the citer | Batch B04-capability-home @109c80648cddfa2b6b87a4642287b9079a6abc62 (the uses table that B05.10 points at these names). | part8.md:242 |
 | 2 | B11.01 | B11.08 | after the citer | `18_DETERMINISM_notice_is_a_draw`, `16_PESSIMIST_FI_C` and B11.08 (`08_FI_01`'s ledger-sourced referents) for the builds, not for this file | part16.md:104 |
 | 3 | B11.51 | B11.52 | after the citer | the first half's `08_FI_02` items (edit 2's tier list, amended in B11.52). | part17.md:108 |
 | 4 | B12b.08 | B12b.09 | after the citer | B12b.04 (`leg_price`, read by B12b.09) | part24.md:238 |

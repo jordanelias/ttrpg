@@ -20,7 +20,7 @@ GATE: Batch B16L-mb-words @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
 GATE: Batch B03a-prose @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
 GATE: Batch B13-pc-package @1727b462d8e25d654af6b689f6ec059d20659cd4
 GATE: Batch B16M-mb-engine-words @bc1397322
-GATE: Batch B04-capability-home
+GATE: Batch B04-capability-home @109c80648cddfa2b6b87a4642287b9079a6abc62
 GATE: Batch B05-one-roll
 GATE: Batch B06-keyed-draw
 GATE: Batch B07-task-draw
