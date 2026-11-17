@@ -5,7 +5,7 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| port gate (`B41-go-port-gate`) | `workplans/valoria_master_workplan_v12_part2.md` (its batch row), `valoria_master_workplan_v12_part29.md`; ledger `ED-GO-0007`..`ED-GO-0009`; holes H-841..H-845 in `engine/season/hole_register.yaml` | per the batch card; v11's B10-20 card (`FORK:1b7c2f87:workplans/valoria_master_workplan_v11_part3.md` §1) is superseded |
+| port gate (`B41-go-port-gate`) | `workplans/valoria_master_workplan_v12_part2.md` (its batch row), `valoria_master_workplan_v12_part29.md` | per the batch card; v11's B10-20 card (`FORK:1b7c2f87:workplans/valoria_master_workplan_v11_part3.md` §1) is superseded |
 
 ## Standing orders — do not re-raise, do not do
 | order | source |
