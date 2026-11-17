@@ -64,9 +64,9 @@ attributes:
     - {key: attr.social.bonds, name: Bonds, aliases: [Sincerity, Affability]}
 
 # CAPABILITIES -- the skills, DEFINED ONCE (B04.02; U1 §2, A-6, A-7, A-11, A-98). The ten attributes are in `attributes:`
-# above and the traits will be in `traits:`; neither is re-defined here. `tools/export_descriptors.py::_capability_roster`
+# above and the traits are in `traits:`; neither is re-defined here. `tools/export_descriptors.py::_capability_roster`
 # validates this block and cooks it into `descriptors.json`; `engine/substrate/descriptors.py::CAPABILITIES` reads it.
-# A skill is never lost (A-106): there is no `lapses_by` column. `opposed_by` absent reads `base`; `none` is no opposition.
+# A skill is never lost (A-106): there is no `lapses_by` column. `opposed_by` absent reads `base`; `none` currently reads as absent too (the opposition falls back to the base attribute) [ASSUMPTION] until the obstacle's one form lands (B05, OBS section 2).
 capabilities:
   source: "U1; A-6, A-7, A-11 (2026-11-12)"
   kinds:    [skill]                               # closed, one kind (A-98 (4))

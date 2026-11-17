@@ -255,7 +255,7 @@ def raised_capability(p: "Person", key: str) -> "dict | None":
 def _grown(w: "World", a: "Act", parties, bands: dict, bodies: dict) -> dict:
     """v11 CP-T03-04 (iv), BUILD-BY-DOING: `{pid: raised capability}` for each party of a fight THAT DREW BLOOD (some
     party `Wounded` or `Felled`, i.e. `bands` is not empty) who SURVIVES it (his written body is not 0) and ALREADY
-    HOLDS the key the verb draws on (`VERB_CAPABILITY[a.verb]`, `rosters.yaml: verb_capability` -- `arms` for the
+    HOLDS the key the verb draws on (`VERB_CAPABILITY[a.verb]`, derived from the verb table's `capability:` column over `descriptors.CAPABILITIES` -- `arms` for the
     three verbs contesting `the body`; the name is read there, never spelt here). Raised by ONE whole point,
     `_eff_train`'s unit.
 
@@ -776,10 +776,10 @@ def _eff_train(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """v9 IN-12 step 9 (#453 §9.4; K-20, K-21) -- `train` RAISES ONE CAPABILITY OF THE SUBJECT BY ONE.
 
     THE CAPABILITY IS THE VOCATION THE ACT CARRIES on the operand `rosters.yaml: vocation_sourced` names
-    for its verb (`kind` for `train`), one Candidate per vocation in `verb_capability`'s range
+    for its verb (`kind` for `train`), one Candidate per vocation in `VOCATIONS` (the skills the verb table's `capability:` column names)
     (`decision/options.py::opening_set`). ⚠ J-13 ANSWERED (iii) AS THE INTERIM [medium; Jordan to
     correct]: it writes `Person.capability` ONLY WHERE A CASE NAMES A VOCATION -- so the key must be a
-    `verb_capability` value (K-20's range: Thread Sensitivity has no carrier, H-85, P-08) and the SUBJECT
+    `VOCATIONS` member (K-20's range: Thread Sensitivity has no carrier, H-85, P-08) and the SUBJECT
     must ALREADY hold it: a key is never minted, because a minted `{copying: 1}` would replace
     `pool_default` and LOWER his pool (`seam/wrappers/sigma.py::faculty`). The ACTOR's own capability is
     NOT read: capability gates nothing (#353 §9.2), here as at formation. ONE whole point, the unit of a

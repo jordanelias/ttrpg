@@ -231,10 +231,24 @@ def _attribute_glosses(reg):
     return out
 
 
+#: The row grammar of each defined roster: the keys a row may carry, no others. A stray key (a typo, or a column a producer
+#: dropped, as `lapses_by:`) is refused by name, since the leaf reads only the keys the exporter cooks and a key it does not
+#: would sit in the registry and do nothing.
+CAPABILITY_ROW_KEYS = ('kind', 'gloss', 'base', 'opposed_by', 'untrained', 'grows_by', 'scale', 'source')
+TRAIT_ROW_KEYS = ('gloss', 'seated_by')
+
+
+def _refuse_row_keys(where, row, allowed):
+    stray = sorted(str(k) for k in row if k not in allowed)
+    if stray:
+        raise SystemExit(f'{where}: carries {stray}, which is outside the row grammar {list(allowed)}. A key the exporter '
+                         f'does not cook reaches no reader; drop it or add it to the grammar.')
+
+
 def _capability_roster(reg, attribute_keys):
     """The skills, defined once (B04.02; U1 §2, A-98 (4)). Refused, naming the row: a `kind` that is not
     `skill` (a leftover `aptitude` or `trait` row, `IS-B2-CHAR-05`), a `base` or `opposed_by` that is none of the ten
-    attribute keys (`opposed_by` may also be `none`, or absent, which reads `base`), a `grows_by` or `untrained`
+    attribute keys (`opposed_by` may also be `none` or absent; both currently read `base` [ASSUMPTION] until the obstacle's one form lands, B05), a `grows_by` or `untrained`
     value outside the block's closed set, an empty `gloss`, and a `scale` that is not `[int, int]` with floor <= ceiling.
     `attribute_keys` is the live roster, so the ten are named once."""
     block = reg.get('capabilities')
@@ -253,6 +267,7 @@ def _capability_roster(reg, attribute_keys):
         where = f'descriptor_registry.yaml: capabilities.rows.{name}'
         if not isinstance(r, dict):
             raise SystemExit(f'{where} is not a mapping.')
+        _refuse_row_keys(where, r, CAPABILITY_ROW_KEYS)
         if r.get('kind') != 'skill':
             raise SystemExit(f'{where}: kind {r.get("kind")!r} is not skill. The one kind is skill (A-98 (4)); '
                              f'an aptitude or trait row is not a capability.')
@@ -300,6 +315,7 @@ def _trait_roster(reg, skill_names):
         where = f'descriptor_registry.yaml: traits.rows.{name}'
         if not isinstance(r, dict):
             raise SystemExit(f'{where} is not a mapping.')
+        _refuse_row_keys(where, r, TRAIT_ROW_KEYS)
         if name in skill_names:
             raise SystemExit(f'{where}: {name!r} is also a row of capabilities. One id, one roster (A-107): a trait '
                              f'is never a skill.')

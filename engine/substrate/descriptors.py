@@ -83,11 +83,6 @@ def about_mid(value, floor, ceiling, gain):
     return 1.0 + gain * (value - mid) / (mid - floor)
 
 
-def at_least(value, threshold):
-    """ROLE `gate`: `value >= threshold`."""
-    return value >= threshold
-
-
 # ---------------------------------------------------------------------------
 # CAPABILITIES (SKILLS) -- B04.02. THE ONLY SKILL DEFINITION IN THE ENGINE.
 # ---------------------------------------------------------------------------
@@ -96,7 +91,8 @@ def at_least(value, threshold):
 @dataclass(frozen=True)
 class CapabilityRow:
     """One skill's definition. `base` is the attribute key its pool starts from; `opposed_by` is an attribute key,
-    `'none'` (no opposition) or `None` (absent: the opposition reads `base`); `floor`/`ceiling` bound the held rank;
+    `'none'` or `None` (absent: the opposition reads `base`; `'none'` currently reads as absent too [ASSUMPTION] until the
+    obstacle's one form lands, B05, OBS section 2); `floor`/`ceiling` bound the held rank;
     `untrained` is what a non-holder brings (`default` or `none`); `grows_by` is the rules that may raise it."""
     kind: str
     gloss: str

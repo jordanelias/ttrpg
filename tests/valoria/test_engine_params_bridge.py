@@ -54,8 +54,9 @@ PARAMS = REPO / 'engine' / 'engine_params'
 ENGINE_READERS = {
     'composition.json': {'engine/substrate/composition.py'},
     'descriptors.json': {'engine/substrate/descriptors.py'},
-    # CP-T03-03: the `kit` section (weapon keys, armour tiers, the Combatant's default kit) has one leaf reader.
-    # The other sections (`cfg`, `core`, `attributes`) are read by no engine module and stay that way.
+    # CP-T03-03: the `kit` section (weapon keys, armour tiers, the Combatant's default kit) and `attributes.end.default`
+    # (a fight's Endurance default, B04.14) have one leaf reader. The other sections (`cfg`, `core`) and the rest of
+    # `attributes` are read by no engine module and stay that way.
     'combat_engine_v1.json': {'engine/substrate/combat_kit.py'},
     # ⚠ `world_initial_state.json` STOOD HERE and is GONE (plan position `29d-ii`, 2026-10-01): its one
     # reader, `engine/substrate/world_initial_state.py`, lost its last production importer when

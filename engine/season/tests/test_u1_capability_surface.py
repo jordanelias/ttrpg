@@ -6,7 +6,7 @@ untrained, grows_by, scale). `tools/export_descriptors.py::_capability_roster` v
 The kind is closed at `skill` (A-98 (4)); `decision/sheet.py::describe` returns a skill's or an attribute's gloss.
 
 Each refusal test plants the defect in the registry the exporter reads, in process, and observes the exporter refuse
-it -- the shipped block is the control (`test_the_shipped_block_loads_the_four_skills`).
+it -- the shipped block is the control (`test_the_shipped_block_loads_the_five_skills`).
 """
 from __future__ import annotations
 
@@ -285,8 +285,9 @@ def _refused(rows, fixtures=None):
     return None
 
 
-def test_the_shipped_uses_table_loads_and_every_site_has_its_reader():
-    """The control: every shipped row loads, its role is one of the ten, its site is registered with a reader."""
+def test_the_shipped_uses_table_loads_and_every_site_is_registered():
+    """The control: every shipped row loads, its role is one of the ten, its site is registered with a non-blank site string.
+    (The string says where the reader is, or that none reads it yet -- `fight` and `kit`; this test does not check a reader exists.)"""
     from engine.season.data import rosters
     roles = rosters.roster("capability_roles", ordered=True)
     assert len(roles) == 10 and len(set(roles)) == 10
@@ -337,23 +338,67 @@ def test_negative_circumstance_gain_is_refused():
     assert msg is not None and "circumstance" in msg and gain in msg and "negative" in msg, msg
 
 
-def test_a_use_with_no_registered_reader_is_refused(monkeypatch):
-    """USES: a site the map carries with no reader -- a row nothing would read -- is refused, naming the site."""
+def test_a_use_site_with_a_blank_site_string_is_refused(monkeypatch):
+    """USES: a site the map carries with a blank site string (it names no reader and says none reads it) is refused, naming the
+    site. The loader checks the string is non-blank, not that the reader it names exists."""
     from engine.season.data import rosters
     sites = dict(rosters.CAPABILITY_USE_SITES)
     site = next(iter(sites))
     for blank in ("", "   ", None):
         monkeypatch.setitem(rosters._ROSTERS, "capability_use_sites", dict(sites, **{site: blank}))
         msg = _refused(_shipped_rows())
-        assert msg is not None and site in msg and "reader" in msg, (blank, msg)
+        assert msg is not None and site in msg and "blank site string" in msg, (blank, msg)
     monkeypatch.setitem(rosters._ROSTERS, "capability_use_sites", sites)
     assert _refused(_shipped_rows()) is None
+
+
+def test_an_unregistered_fixture_is_refused_by_the_load_all_hook_before_play(monkeypatch):
+    """F21: `rosters.py` cannot name the Fixture registry (an import cycle), so `data/fixtures.py::load`, which `data.load_all()`
+    calls on every driver construction, runs the Fixture checks: a `gain` that is no registered Fixture refuses there, naming
+    the row. The control is the shipped table, which passes the same hook."""
+    import copy
+    from engine.season.data import fixtures, rosters
+    from engine.season.gaps import ShapeGap
+    fixtures.load()                                                      # control
+    rows = copy.deepcopy(list(rosters._TABLES["capability_uses"]["rows"]))
+    next(r for r in rows if r["role"] == "judgement")["gain"] = "no_such_fixture"
+    monkeypatch.setitem(rosters._TABLES, "capability_uses", dict(rosters._TABLES["capability_uses"], rows=rows))
+    with pytest.raises(ShapeGap, match="no_such_fixture"):
+        fixtures.load()
+
+
+def test_a_reader_spelling_an_unregistered_site_is_refused_at_import():
+    """F17: each Python literal that names a site binds it through `rosters.require_use_site`, so a renamed site refuses
+    rather than reading no capability. The control is the three shipped literals (each is a registered site)."""
+    from engine.season.data import rosters
+    from engine.season.decision.options import TOLD_CLAIM_CREDIT
+    from engine.season.gaps import Unspecified
+    from engine.season.queries.person_q import OWN_STATE_GATE
+    from engine.season.seam.wrappers.sigma import SOCIAL_ROLL_SITE
+    for literal in (TOLD_CLAIM_CREDIT, OWN_STATE_GATE, SOCIAL_ROLL_SITE):
+        assert rosters.require_use_site(literal) == literal and literal in rosters.CAPABILITY_USE_SITES
+    with pytest.raises(Unspecified, match="renamed_site"):
+        rosters.require_use_site("renamed_site")
 
 
 def test_capability_use_with_an_unregistered_site_is_refused():
     base = _shipped_row("dice")
     msg = _refused([dict(base, use="no_such_site")])
     assert msg is not None and "no_such_site" in msg and "capability_use_sites" in msg, msg
+
+
+def test_a_row_missing_its_roles_required_field_is_refused():
+    """F11: a `judgement` or `gate` row with no `gain`, and an `edge` row with no `level`, is refused at load, naming the row
+    and the field. The control is the shipped row of each role, which loads."""
+    from engine.dice_engine.sigma_leverage import LEVEL_SIGMA
+    edge = _trait_use("edge", per="held", level=sorted(LEVEL_SIGMA)[0])      # no shipped row is an `edge`: plant one
+    for role, need in (("judgement", "gain"), ("gate", "gain"), ("edge", "level")):
+        row = edge if role == "edge" else _shipped_row(role)
+        assert _refused([row]) is None, role                          # control: the row carries it
+        planted = dict(row)
+        del planted[need]
+        msg = _refused([planted])
+        assert msg is not None and need in msg and role in msg and row["use"] in msg, (role, msg)
 
 
 def test_a_level_outside_level_sigma_is_refused():
@@ -413,7 +458,7 @@ def test_a_gain_add_or_floor_that_is_not_a_registered_fixture_is_refused():
 # ---------------------------------------------------------------------------------------------------------------------
 # B04.06 -- THE DECISION LAYER READS THE TABLE. `decision/options.py::competence` reads its key from the `told_claim_credit`
 # row (through `capability_factor`), and `queries/person_q.py::OwnStateReader` reads the Thread gate's key and its threshold
-# fixture from the `own_state_gate` row (through `capability_admits`). The rebound table is the one the readers then see.
+# fixture from the `own_state_gate` row. The rebound table is the one the readers then see.
 # ---------------------------------------------------------------------------------------------------------------------
 
 def _rebound(monkeypatch, edit):
@@ -437,7 +482,8 @@ def _credit(p, gain=0.5):
     from engine.season.decision.options import refracted_confidence
     from engine.season.state.carriers import Claim
     c = Claim("c_x", "p_other", "Hh", "stores:grain", 8, 0, "told_by", 60, "own")
-    return refracted_confidence(p, c, "co_located", 0.5, competence_gain=gain)
+    from engine.season.data.fixtures import DEFAULT_FIXTURES
+    return refracted_confidence(p, c, "co_located", 0.5, fx=DEFAULT_FIXTURES.sweep("competence_gain", gain))
 
 
 def test_repointing_told_claim_credit_moves_the_factor_with_no_decision_edit(monkeypatch):
@@ -469,7 +515,6 @@ def test_a_use_with_no_row_reads_no_capability(monkeypatch):
     ts.thread_sensitivity = 99
     reader = person_q.OwnStateReader(ts, _Fx())
     assert reader.read(ts.id, "thread_sensitivity") is person_q.UNKNOWN
-    assert person_q.capability_admits(ts, gate, _Fx()) is person_q.UNKNOWN
 
 
 class _Fx:
@@ -479,19 +524,13 @@ class _Fx:
         return DEFAULT_FIXTURES.get(name)
 
 
-def test_capability_admits_reads_its_threshold_fixture_and_its_key_from_the_gate_row(monkeypatch):
+def test_the_own_state_reader_reads_its_threshold_fixture_and_its_key_from_the_gate_row(monkeypatch):
     """The gate's threshold is the row's `gain` fixture and its value is the row's key's held value: swapping the fixture
     name in the row moves the answer with no edit under `queries/`."""
     from engine.season.queries import person_q
     row = next(r for r in _shipped_rows() if r["role"] == "gate")
     p = _hearer()
     gate = _Fx().get(row["gain"])
-    p.thread_sensitivity = gate
-    assert person_q.capability_admits(p, row["use"], _Fx()) is True
-    p.thread_sensitivity = gate - 1
-    assert person_q.capability_admits(p, row["use"], _Fx()) is False
-    p.thread_sensitivity = None
-    assert person_q.capability_admits(p, row["use"], _Fx()) is person_q.UNKNOWN
     # the reader's two stems come from the same row
     p.thread_sensitivity = gate
     reader = person_q.OwnStateReader(p, _Fx())
@@ -503,13 +542,12 @@ def test_capability_admits_reads_its_threshold_fixture_and_its_key_from_the_gate
 
 
 def test_the_substrate_forms_and_scale_of():
-    """`about_mid` is 1 at the mid-point and linear about it; `at_least` is the inclusive comparison; `scale_of` returns
+    """`about_mid` is 1 at the mid-point and linear about it; `scale_of` returns
     the attribute scale and a practitioner stat's bounds, and refuses a key with neither."""
     lo, hi = descriptors.ATTRIBUTE_FLOOR, descriptors.ATTRIBUTE_CEILING
     mid = (lo + hi) / 2
     assert descriptors.about_mid(mid, lo, hi, 1.0) == 1.0 and descriptors.about_mid(lo, lo, hi, 1.0) == 0.0
     assert descriptors.about_mid(hi, lo, hi, 0.5) == 1.5 and descriptors.about_mid(lo, lo, hi, 0.0) == 1.0
-    assert descriptors.at_least(5, 5) is True and descriptors.at_least(4, 5) is False
     assert descriptors.scale_of(descriptors.ATTRIBUTES[0]) == (lo, hi)
     assert descriptors.scale_of(next(iter(descriptors.PRACTITIONER_STATS)))[0] == 0
     with pytest.raises(ValueError, match="scale"):
@@ -571,6 +609,21 @@ def test_a_trait_row_that_breaks_the_schema_is_refused_naming_it(monkeypatch):
         ed.build()
 
 
+def test_a_row_key_outside_the_row_grammar_is_refused_naming_the_row(monkeypatch):
+    """F18: a stray key on a skill row (a `lapses_by:` that A-106 removed, a typo of `grows_by`) and on a trait row is refused by
+    the exporter, naming the row and the key; the shipped registry is the control (it builds)."""
+    assert ed.build()["capabilities"]["rows"]
+    for stray in ("lapses_by", "grows_bye"):
+        monkeypatch.setattr(ed.ci_common, "load_yaml", _REAL_LOAD)
+        _plant(monkeypatch, lambda reg, s=stray: reg["capabilities"]["rows"]["arms"].update({s: [1]}))
+        with pytest.raises(SystemExit, match=f"capabilities.rows.arms.*{stray}"):
+            ed.build()
+        monkeypatch.setattr(ed.ci_common, "load_yaml", _REAL_LOAD)
+        _plant(monkeypatch, lambda reg, s=stray: reg["traits"]["rows"]["moved_by_evidence"].update({s: 1}))
+        with pytest.raises(SystemExit, match=f"traits.rows.moved_by_evidence.*{stray}"):
+            ed.build()
+
+
 def _trait_use(role="edge", key="moved_by_evidence", **cols):
     """A planted uses row at the `judgement` row's site, re-roled and re-keyed, then `cols` over it."""
     from engine.season.data import rosters
@@ -585,7 +638,8 @@ def _trait_use(role="edge", key="moved_by_evidence", **cols):
 
 def test_a_trait_key_at_role_edge_with_per_held_loads():
     """The one place a trait key is accepted (U1 §2a step 5): the control for the refusals below."""
-    assert _refused([_trait_use("edge", per="held")]) is None
+    from engine.dice_engine.sigma_leverage import LEVEL_SIGMA
+    assert _refused([_trait_use("edge", per="held", level=sorted(LEVEL_SIGMA)[0])]) is None
 
 
 def test_a_trait_key_outside_role_edge_is_refused():
@@ -682,8 +736,14 @@ def test_fed_by_on_an_arrest_lists_its_dice_and_opposes_rows():
     assert tuple((f[0], f[1], f[2], f[3]) for f in out["fed_by"]) == tuple(
         (r.use, r.role, r.key, r.side) for r in rosters.capability_uses() if r.use == "social_roll")
     dice, opposes = out["fed_by"]
-    assert dice[5] == out["pool"] and isinstance(dice[4], int)
-    assert opposes[4] is not None and opposes[5] == out["ob_terms"]["opposition"]
+    # INDEPENDENT of the record: the same actor and verb read through the pool owner and the opposition owner directly.
+    from engine.season.harness import probes as P
+    from engine.season.seam.wrappers import pool, sigma
+    w = P.tiny_world()
+    assert dice[4] == pool.score(w, w.persons["p_low"], "arrest") and isinstance(dice[4], int)
+    assert dice[5] == pool.faculty(w, w.persons["p_low"], "arrest") == out["pool"]
+    assert opposes[4] is not None and opposes[4] == sigma._opposition_of(w, "p_mid", "arrest")
+    assert opposes[5] == out["ob_terms"]["opposition"] and opposes[5] > 0
 
 
 def test_fed_by_follows_the_table_rows_in_table_order(monkeypatch):
@@ -695,7 +755,11 @@ def test_fed_by_follows_the_table_rows_in_table_order(monkeypatch):
     _rebound(monkeypatch, swap)
     assert tuple((f[0], f[1]) for f in _arrest_roll()["fed_by"]) == (("social_roll", "opposes"), ("social_roll", "dice"))
     _rebound(monkeypatch, lambda rows: rows.__delitem__(next(i for i, r in enumerate(rows) if r["use"] == "social_roll" and r["role"] == "opposes")))
-    assert tuple((f[0], f[1]) for f in _arrest_roll()["fed_by"]) == (("social_roll", "dice"),)
+    out = _arrest_roll()
+    assert tuple((f[0], f[1]) for f in out["fed_by"]) == (("social_roll", "dice"),)
+    # THE PLAN'S FALSIFIER: a fed_by that omits a row the roll read. With the `opposes` row deleted the roll reads no
+    # opposition, so the module's own opposition term of the obstacle is 0 (a roll that read it anyway would not be 0).
+    assert out["ob_terms"].get("opposition", 0.0) == 0
 
 
 def test_a_refused_roll_carries_fed_by_too():
@@ -710,16 +774,14 @@ def test_a_refused_roll_carries_fed_by_too():
 
 def test_party_end_default_is_the_combat_exports(monkeypatch):
     """`party_end` of a person who authors no Endurance, with no body bands, is the combat module's own default for
-    `end` as `engine/engine_params/combat_engine_v1.json: sections.attributes.end.default` exports it -- read off the
-    JSON here, not off the wrapper. FALSIFIER: patch the wrapper's one module-level read to 5 and the answer reads 5
+    `end` as `engine/engine_params/combat_engine_v1.json: sections.attributes.end.default` exports it -- read off
+    `combat_kit`, not off the wrapper. FALSIFIER: patch the wrapper's one module-level read to 5 and the answer reads 5
     (a literal `4` in `party_end` would ignore the patch)."""
-    import json
     from engine.season.harness import probes as P
     from engine.season.data.fixtures import DEFAULT_FIXTURES
     from engine.season.seam.wrappers import combat
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "engine_params", "combat_engine_v1.json")
-    with open(path, encoding="utf-8") as fh:
-        exported = json.load(fh)["sections"]["attributes"]["end"]["default"]
+    from engine.substrate import combat_kit
+    exported = combat_kit.END_DEFAULT       # the artifact's one reader (a second open of the path fails the bridge test)
     w = P.tiny_world()
     person = next(iter(w.persons.values()))
     person.attributes.pop(combat._END_KEY, None)
@@ -961,7 +1023,8 @@ def test_a_cast_row_key_neither_read_nor_unread_listed_is_refused(tmp_path, monk
         assert "NPC-X" in str(e.value)
     cast = _registry_with(tmp_path, monkeypatch, resonant_style="Evidence", certainty=2, coherence=9)
     assert cast.row("NPC-X")["certainty"] == 2
-    assert cast.UNREAD_KEYS == ("certainty", "coherence")
+    assert {"certainty", "coherence", "first_name", "birthplace", "notes"} <= set(cast.UNREAD_KEYS)
+    assert not set(cast.UNREAD_KEYS) & cast.row_keys(cast.load_yaml(cast.NPC_REGISTRY_YAML.read_text(encoding="utf-8")))   # one list
     monkeypatch.setattr(cast, "NPC_REGISTRY_YAML", cast.files.NPC_REGISTRY_YAML)
     monkeypatch.setattr(cast, "_CACHE", None)
     rows = cast.load()

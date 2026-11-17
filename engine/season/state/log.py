@@ -137,7 +137,7 @@ class EventLog:
     def has_id(self, eid: str) -> bool:
         """Whether an Event with this id is logged: the id set `append` already keeps to resolve
         causes, read once more. v9 SC-02 `22b` step 23 -- `world_q.standing_crossed` asks it per
-        person per round, where `in` (a scan of Events) would cost the whole log each time."""
+        person per lap, where `in` (a scan of Events) would cost the whole log each time."""
         return eid in self._ids
 
     def extend(self, events) -> None:

@@ -1062,3 +1062,10 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-414 -- site: Fixtures confer_fit_weight, graded `assumption`; 06_FA_office_capabilities edit 4 gives no number for the weight, so it is injected at the control and swept 0.0 / 0.5 / 1.0]
     confer_fit_weight=0.0,             # `H-414`, swept 0.0 (control, SHIPPED) / 0.5 / 1.0
 )
+
+
+def load() -> None:
+    """`data.load_all()`'s hook: refuse a `tables.capability_uses` row naming a Fixture this registry does not register.
+    It lives here and not in `rosters.py` because this module imports `rosters` (the other way would close an import cycle)."""
+    from .rosters import check_capability_fixtures
+    check_capability_fixtures(dict(DEFAULT_FIXTURES._v))

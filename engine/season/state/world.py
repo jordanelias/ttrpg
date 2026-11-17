@@ -1119,7 +1119,7 @@ class World:
         ⚠ ONE CALLER TODAY, THE MATTER BARRIER (`loop/matter.py`) -- NOT A STRUCTURAL GUARANTEE.
         DELIBERATE -- which `04 §A.2` says *"owns nothing ... token: none"* -- must not mutate the
         tenure store, so the repair runs at MATTER and not in the `tenures` getter or at the head of
-        DELIBERATE. No step between MATTER and any DELIBERATE round can create a Person (checked by
+        DELIBERATE. No step between MATTER and any DELIBERATE lap can create a Person (checked by
         grepping every `Person(` construction in the tree -- `harness/` only), so a Tenure homed at
         MATTER stays homed for the whole map; MATTER holding a token is not what makes this true,
         `_rehome` itself is not a gate write and is not token-checked (below). WHAT IS ACTUALLY GUARDED: `test_g2_token.py`'s DELIBERATE

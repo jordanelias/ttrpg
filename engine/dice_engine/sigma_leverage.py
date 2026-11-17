@@ -221,7 +221,7 @@ def even_line(pool_add: float) -> float:
     return MU_PER_DIE * float(pool_add)
 
 
-def pool_of(score: float, addends: float, pool_add: float, pool_floor: int) -> int:
+def pool_of(score: float, addends: float, pool_add: float, pool_floor: int) -> float:
     """The pool rule: `max(pool_floor, score + addends + pool_add)` (A-6; D-U1-08).
 
     One owner for how a skill score, the rolled addends and the row's pool addition make a

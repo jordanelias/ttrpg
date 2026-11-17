@@ -30,7 +30,7 @@ from ..data.requires import (
 )
 from ..data.rosters import (
     CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, REMOVE_ORDINAL, SUCCESSIONS,
-    capability_uses, refusing_pole, require_member,
+    capability_uses, refusing_pole, require_member, require_use_site,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
@@ -1593,16 +1593,16 @@ def dissents(p: Person, c: Claim, act=None, weigh=None) -> bool:
 # v10 CR-19 / `H-200`: THE ATTRIBUTE `AX-7`'S COMPETENCE READS is a ROW, not a name here: `rosters.yaml: tables.capability_uses`'s
 # `told_claim_credit` row (B04.06; `ED-IN-0327`: Attunement helps one judge whether someone is telling the truth), read by
 # `capability_factor` through the substrate's `about_mid`. Nothing under `decision/` names an attribute or the scale's middle.
-TOLD_CLAIM_CREDIT = "told_claim_credit"
+TOLD_CLAIM_CREDIT = require_use_site("told_claim_credit")
 
 
-def capability_factor(p: Person, use: str, fx, gain: Optional[float] = None) -> Optional[float]:
+def capability_factor(p: Person, use: str, fx) -> Optional[float]:
     """THE `judgement` ROWS OF SITE `use`, as one factor about the scale's mid-point (B04.06; U1 §8), or `None` for NO CAPABILITY.
 
     `None` is returned when `use` has no `judgement` row, or when `p` HOLDS no value at the row's key: a READ, never a default
     (the caller reads it as the factor 1). The value is `p.attributes` at the row's `key`, on `substrate.descriptors.scale_of(key)`;
-    the form is `about_mid`, its `gain` the Fixture the row names (`fx.get(row.gain)`), or `gain` where the caller passes one
-    (a swept gain the caller already holds). `side: actor` is the only side a person-side reader reads: `p` is the actor. A use with several rows multiplies them."""
+    the form is `about_mid`, its `gain` the Fixture the row names (`fx.get(row.gain)`): a sweep of that Fixture overrides
+    the shipped value through `fx`, as every other sweep does, and the caller passes no gain of its own. `side: actor` is the only side a person-side reader reads: `p` is the actor. A use with several rows multiplies them."""
     rows = [r for r in capability_uses() if r.use == use and r.role == "judgement"]
     if not rows:
         return None
@@ -1612,16 +1612,16 @@ def capability_factor(p: Person, use: str, fx, gain: Optional[float] = None) -> 
         if held is None:
             continue
         floor, ceiling = scale_of(row.key)
-        g = fx.get(row.gain) if gain is None else gain
-        one = about_mid(held, floor, ceiling, g)
+        one = about_mid(held, floor, ceiling, fx.get(row.gain))
         factor = one if factor is None else factor * one
     return factor
 
 
-def competence(p: Person, competence_gain: float) -> float:
+def competence(p: Person, fx) -> float:
     """`AX-7`'S THIRD INPUT, THE RECEIVER'S COMPETENCE, in `[0, 1]` (v10 CR-19; `H-200`).
 
-        competence = min(1, 1 + g * (attunement - mid) / (mid - floor))      g = `competence_gain`
+        competence = min(1, 1 + g * (attunement - mid) / (mid - floor))      g = `fx.get(row.gain)`, the Fixture the
+                                                                             `told_claim_credit` row names (`competence_gain`)
 
     `attunement` is the score `p.attributes` holds at the `told_claim_credit` row's key (`Person.attributes`, CR-20),
     `mid` the middle of that key's scale (`capability_factor`). MONOTONE in Attunement and exactly 1 at `mid`; a receiver who HOLDS no
@@ -1650,15 +1650,16 @@ def competence(p: Person, competence_gain: float) -> float:
     alone knows which told claims are false, and to CR-83's design, which must give the separator before the
     gain is flipped live (a declared hash mover scheduled by that design, not by this function). CR-27's
     second falsifier is the guard on that flip."""
-    if not 0.0 <= competence_gain <= 1.0:
-        raise ValueError(f"competence_gain {competence_gain!r} is outside [0, 1] (H-200): a factor below 0 "
-                         "would turn a deposit's confidence negative")
-    factor = capability_factor(p, TOLD_CLAIM_CREDIT, None, gain=competence_gain)
+    for row in capability_uses():
+        if row.use == TOLD_CLAIM_CREDIT and row.role == "judgement" and not 0.0 <= fx.get(row.gain) <= 1.0:
+            raise ValueError(f"{row.gain} {fx.get(row.gain)!r} is outside [0, 1] (H-200): a factor below 0 "
+                             "would turn a deposit's confidence negative")
+    factor = capability_factor(p, TOLD_CLAIM_CREDIT, fx)
     return 1.0 if factor is None else min(1.0, factor)
 
 
 def refracted_confidence(p: Person, c: Claim, channel: str, gain: float,
-                         act=None, weigh=None, competence_gain: float = 0.0) -> int:
+                         act=None, weigh=None, fx=None) -> int:
     """REFRACTION -- `AX-7`'s divergence formula (v9 IN-15; `H-36`'s shape, `H-199`'s magnitude).
     How much `p` credits a claim landing in their ledger, from the channel it reached them by and
     what they already held:
@@ -1668,8 +1669,8 @@ def refracted_confidence(p: Person, c: Claim, channel: str, gain: float,
 
     `g` is `refraction_gain`, in `[0, 1]`; `remove` is `channel_remove`; `dissent` is `dissents`, 0
     or 1 -- with `act` (the act `c` reports happening) and `weigh` passed through to its act-level
-    term (`H-201`); `competence` is `competence(p, competence_gain)` (CR-19, `H-200`: the receiver's Attunement, swept, 1 at the
-    shipped gain 0). Each factor is in `[0, 1]`, so refraction only
+    term (`H-201`); `competence` is `competence(p, fx)` (CR-19, `H-200`: the receiver's Attunement, its gain the `told_claim_credit`
+    row's Fixture, swept, 1 at the shipped gain 0; `fx=None`, a caller that hands no Fixtures, reads no row and the factor is 1). Each factor is in `[0, 1]`, so refraction only
     ever LOWERS a confidence, and at `g = 0` every factor is exactly 1: THE CONTROL, and the deposit
     is today's.
 
@@ -1691,7 +1692,7 @@ def refracted_confidence(p: Person, c: Claim, channel: str, gain: float,
         raise ValueError(f"refraction_gain {gain!r} is outside [0, 1] (H-199): a factor below 0 "
                          "would turn a deposit's confidence negative")
     factor = ((1.0 - gain * channel_remove(channel)) * (1.0 - gain * dissents(p, c, act, weigh))
-              * competence(p, competence_gain))
+              * (1.0 if fx is None else competence(p, fx)))
     return int(c.confidence * factor + 0.5)
 
 

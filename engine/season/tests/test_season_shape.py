@@ -3068,7 +3068,7 @@ def test_t2_one_rebind_moves_score_and_gate(monkeypatch):
 
     Two synthetic tables over the same two verbs with the cells swapped, on the axis the person
     weighs at -0.4 (the refusing pole). Under A `v0` sits past the weight (+0.3: refused, score
-    -0.12) and `v1` does not (-0.6); under B it is the other way lap (`v0` -0.6: tolerated, score
+    -0.12) and `v1` does not (-0.6); under B it is the other way round (`v0` -0.6: tolerated, score
     +0.24). The score is read through `_sample_order`, the one place `make_chooser` hands it on; the
     gate through `opening_set`'s formed set. A second `ALIGNMENT` in `decision/options.py` would
     leave `refuses` reading the stale copy, the gate half of this test would see A's verdict under
@@ -13849,7 +13849,7 @@ def test_u2_two_acts_by_one_person_on_one_subject_in_two_rounds_have_distinct_id
 
     ⚠ `dup_acts` IS NOW VACUOUS BY CONSTRUCTION, DISCLOSED RATHER THAN LEFT SILENT (M4 review
     pass, correctional finding): `loop/resolve.py::_fold` dedupes `self.resolved` by id (M4,
-    `ED-IN-0279` clause (a) build step's own review lap -- march's declare/defer split folds
+    `ED-IN-0279` clause (a) build step's own review round -- march's declare/defer split folds
     the same Act twice), so `Counter(a.id for a in d.resolved)` can never show `n > 1` regardless
     of whether `_qualify_by_lap` still works. `dup_evs`, over `w.log` (never deduped by that
     fix -- `d.resolved` and the log are separate structures), is what still catches the

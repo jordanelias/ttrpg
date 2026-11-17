@@ -72,8 +72,6 @@ that exists rather than a mapping between types that do not meet.
 """
 from __future__ import annotations
 
-import json
-import os
 import random
 from typing import Any, Callable, Optional
 
@@ -86,7 +84,7 @@ from ...gaps import Forbidden, Unspecified
 from ...manifest.providers import provider
 from ...queries.inputs import PersonalCombatInput, PlayHost
 from ...queries.world_q import kit_of, stakes_of
-from ....substrate import composition
+from ....substrate import combat_kit, composition
 from ....substrate.descriptors import attribute_key
 from ...state.ids import H
 from ..ladder import party_degree
@@ -96,11 +94,9 @@ from .pool import faculty
 
 _END_KEY = attribute_key("Endurance")      # the registry key of `end` (`descriptors`, the one owner), not a typed literal
 assert _END_KEY, "descriptors names no Endurance attribute: party_end would read the default for every person"
-# The fight's default for `end` is the combat module's, read once from its typed export (`tools/export_engine_params.py`,
-# section `attributes`); the registry's `default: 1` is the sheet scale's floor, a different fact with a different owner.
-with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "engine_params", "combat_engine_v1.json"),
-          encoding="utf-8") as _fh:
-    _END_DEFAULT = json.load(_fh)["sections"]["attributes"]["end"]["default"]
+# The fight's default for `end` is the combat module's, read once from its typed export through `substrate/combat_kit.py`
+# (the artifact's one reader; section `attributes`); the registry's `default: 1` is the sheet scale's floor, a different fact.
+_END_DEFAULT = combat_kit.END_DEFAULT
 _PROVIDER = "personal_combat"
 _PRIZE = "the body"                 # the prize row this provider deals (`rosters.yaml`)
 PROVIDER = _PROVIDER                # the name `odds_of` asks `_rolled_as` for (a prize row's `provider:`)

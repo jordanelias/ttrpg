@@ -34,7 +34,7 @@ import re
 from typing import Optional
 
 from . import files
-from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_RANKS, LIFEPATH_TEMPLATES, load_yaml
+from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_RANKS, LIFEPATH_TEMPLATES, load_yaml, roster
 from ..gaps import Unspecified
 from ...substrate.descriptors import (
     ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, CAPABILITIES, HERITAGES, PRACTITIONER_STATS, TRAITS, attribute_key,
@@ -81,11 +81,13 @@ _PAREN = re.compile(r"^(?P<base>[^(]+?)\s*\((?P<inner>[^)]*)\)?(?P<tail>.*)$")
 
 _CACHE: Optional[dict] = None
 
-#: Keys authored on the row that NO reader takes, declared so (B04.12, CAP A7 / DEF Edit 4): threadwork's tracks, with no reader
-#: until that lane builds one. A key leaves this tuple by gaining a reader (and joining the registry's `schema:` block) or by
-#: leaving the registry. The keys a row MAY carry are the registry's own `schema: required` + `optional` (`row_keys`); `_rows()`
-#: refuses a row carrying a key in neither those nor this tuple, so a fact authored on a row that nothing reads cannot sit there unseen.
-UNREAD_KEYS = ("certainty", "coherence")
+#: THE ONE LIST OF KEYS AUTHORED ON A ROW THAT NO ENGINE CODE READS BY NAME (B04.12, CAP A7 / DEF Edit 4), authored in
+#: `rosters.yaml: cast_unread_keys` (a literal roster in a module is refused, `test_season_shape`): the person's name
+#: parts, age, birthplace, territory, goals, notes and source (reference prose) and threadwork's tracks (`certainty`, `coherence`,
+#: no reader until that lane builds one). The registry's `schema: required` + `optional` list only keys a reader takes (`row_keys`).
+#: A key leaves this tuple by gaining a reader (and joining the registry's `schema:` block) or by leaving the registry. `_rows()`
+#: refuses a row carrying a key in neither, so a fact authored on a row that nothing reads cannot sit there undeclared.
+UNREAD_KEYS = roster("cast_unread_keys", ordered=True)         # `rosters.yaml: cast_unread_keys`, the list authored once
 
 
 def row_keys(data: dict) -> frozenset:
@@ -124,8 +126,8 @@ def _rows() -> dict:
             if stray:
                 raise Unspecified(
                     f"cast row {cid} carries {stray}, which the registry's `schema:` block does not declare and `UNREAD_KEYS` does not list",
-                    "references/npc_registry.yaml", needs="a key in `schema: required`/`optional` (it has a reader) or in `cast.UNREAD_KEYS`, or no key",
-                    law="CAP A7 / DEF Edit 4 -- a cast row carries only keys a reader takes or that are declared unread")
+                    "references/npc_registry.yaml", needs="a key in `schema: required`/`optional` (the keys a reader takes) or in `cast.UNREAD_KEYS` (declared unread), or no key",
+                    law="CAP A7 / DEF Edit 4 -- a cast row carries only keys the registry's schema lists as read or that `UNREAD_KEYS` declares unread")
         _CACHE = rows
     return _CACHE
 

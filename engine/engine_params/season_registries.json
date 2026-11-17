@@ -2117,7 +2117,7 @@
         "graded_inquiries": {
           "source": "v9 FI-01 (`ED-FI-0009`; J-22 answered option (A)): the inquiries are graded by degree, as ladder step 3 answered (RESOLVE -> WITNESS, \"Claims graded by degree; Failure emits `finding.none` and deposits nothing\"), through a declared routing column that is NOT a prize and NOT a `contests:` shape. A-21: one roll owner (S27.2) -- the `social_contest` module's entry, with the obstacle at the host input builder's non-person default.",
           "row": "H-111",
-          "note": "\u26a0 A ROUTE, NOT A PRIZE. Each row names the provider registered under `@provider(\"contest\", \u2026)` and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::faculty` (`verb_capability`, else the swept `pool_default`) and the obstacle the module's own (`modules/social_contest/roll.py::obstacle`: `obstacle_default`, swept, unless the subject is a person who HOLDS the `inquiry` key, `sigma.py::_opposition_of` -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already binds (`manifest/registry.py::check_graded_inquiries`), so this row adds no roll and no resolver. `verb_capability` now names `inquiry` for the three (REM-30, B10-10; the rows were deferred at CP-T01-01): an inquirer who HOLDS an `inquiry` key rolls it, and one who holds none still rolls `pool_default` (`seam/wrappers/sigma.py::faculty`). \u26a0 THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the questioned person answers by their own `tell`, so there is no degree on the asker); `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read` waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its flat `emits:` and is not counted as graded.",
+          "note": "\u26a0 A ROUTE, NOT A PRIZE. Each row names the provider registered under `@provider(\"contest\", \u2026)` and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::faculty` (the verb's `capability:` column, `descriptors.CAPABILITIES`, else the swept `pool_default`) and the obstacle the module's own (`modules/social_contest/roll.py::obstacle`: `obstacle_default`, swept, unless the subject is a person who HOLDS the `inquiry` key, `sigma.py::_opposition_of` -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already binds (`manifest/registry.py::check_graded_inquiries`), so this row adds no roll and no resolver. the verb table's `capability:` column now names `inquiry` for the three (REM-30, B10-10; the rows were deferred at CP-T01-01): an inquirer who HOLDS an `inquiry` key rolls it, and one who holds none still rolls `pool_default` (`seam/wrappers/sigma.py::faculty`). \u26a0 THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the questioned person answers by their own `tell`, so there is no degree on the asker); `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read` waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its flat `emits:` and is not counted as graded.",
           "keys": [
             "verb_table"
           ],
@@ -2161,6 +2161,20 @@
         },
         "capabilities": {
           "from_descriptor": "capabilities"
+        },
+        "cast_unread_keys": {
+          "values": [
+            "first_name",
+            "last_name",
+            "age",
+            "birthplace",
+            "territory",
+            "goals",
+            "notes",
+            "source",
+            "certainty",
+            "coherence"
+          ]
         },
         "capability_roles": {
           "values": [
@@ -2221,10 +2235,10 @@
         },
         "capability_use_sites": {
           "social_roll": "seam/wrappers/sigma.py::contest_input",
-          "fight": "seam/wrappers/combat.py::combat_input",
-          "kit": "combat_systems.act_cost's caller (host-side shortfall)",
+          "fight": "seam/wrappers/combat.py::combat_input -- no reader of this row on this tree; B05 (CAP B1, B7) builds it",
+          "kit": "combat_systems.act_cost's caller -- no reader of this row on this tree; B05 (CAP B1, B7) builds it",
           "told_claim_credit": "decision/options.py::competence",
-          "own_state_gate": "queries/person_q.py::OwnStateReader (capability_admits)"
+          "own_state_gate": "queries/person_q.py::OwnStateReader"
         },
         "capability_sides": {
           "values": [
@@ -2794,8 +2808,8 @@
           }
         },
         "vocation_sourced": {
-          "source": "#453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) \u00a79.4, the `train` row: *\"The capability raised ranges over the capability names `verb_capability` maps verbs to\"*, and its blocker, *\"a capability-key operand -- the `kind` operand ... [ASSUMPTION]\"*; J-13 answered (iii) as the interim (`workplans/valoria_master_workplan_v9_part5.md` \u00a7J.1, RS-21 item 10, [medium; Jordan to correct]): *\"`train` forms and writes `Person.capability` only where a case names a vocation, and `pool_default` holds everywhere else\"*.",
-          "note": "WHICH VERBS CARRY A VOCATION, AND ON WHICH OPERAND -- `verb: operand`. A VOCATION is a capability key `verb_capability` maps some verb to (its VALUES, `data/verbs.py::VOCATIONS`; `copying`, `argue` and `inquiry`, #453 K-20's range). A verb named here forms ONE Candidate per vocation in that range, the key riding on the named operand (`decision/options.py::opening_set`) -- the `kind` operand #453 \u00a79.4's blocker names, which `_derive_operand` would otherwise answer with a store kind. \u26a0 THE ACTOR'S OWN CAPABILITY IS NOT READ, AND THAT IS THE POINT: capability GATES NOTHING (#353 \u00a79.2; `harness/probes.py` P11 zeroes it and asks that the option set not move), so J-13 (iii)'s *\"`train` forms ... only where a case names a vocation\"* is built as its WRITE half only -- the effect (`loop/effects_combat.py::_eff_train`) raises the key only where the SUBJECT already holds it, and is refused everywhere else. ONE LOADER, `data/verbs.py::VOCATION_SOURCED`, refused at import when a line names a verb the table lacks, a verb that writes no `Person.capability`, or an operand outside `requires_operands`. [ASSUMPTION; medium; Jordan to correct; revert: a formation decline on the actor's own vocations (the plan's *\"forms\"* half), which first needs P11 / #353 \u00a79.2 re-ruled for `train`.]",
+          "source": "#453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) \u00a79.4, the `train` row: *\"The capability raised ranges over the capability names `verb_capability` maps verbs to\"* (quoted as written: that roster is deleted; the names are now the verb table's `capability:` column over `descriptors.CAPABILITIES`), and its blocker, *\"a capability-key operand -- the `kind` operand ... [ASSUMPTION]\"*; J-13 answered (iii) as the interim (`workplans/valoria_master_workplan_v9_part5.md` \u00a7J.1, RS-21 item 10, [medium; Jordan to correct]): *\"`train` forms and writes `Person.capability` only where a case names a vocation, and `pool_default` holds everywhere else\"*.",
+          "note": "WHICH VERBS CARRY A VOCATION, AND ON WHICH OPERAND -- `verb: operand`. A VOCATION is a capability key a verb's `capability:` column names (`data/verbs.py::VOCATIONS`, a subset of `descriptors.CAPABILITIES`; `copying`, `argue` and `inquiry`, #453 K-20's range). A verb named here forms ONE Candidate per vocation in that range, the key riding on the named operand (`decision/options.py::opening_set`) -- the `kind` operand #453 \u00a79.4's blocker names, which `_derive_operand` would otherwise answer with a store kind. \u26a0 THE ACTOR'S OWN CAPABILITY IS NOT READ, AND THAT IS THE POINT: capability GATES NOTHING (#353 \u00a79.2; `harness/probes.py` P11 zeroes it and asks that the option set not move), so J-13 (iii)'s *\"`train` forms ... only where a case names a vocation\"* is built as its WRITE half only -- the effect (`loop/effects_combat.py::_eff_train`) raises the key only where the SUBJECT already holds it, and is refused everywhere else. ONE LOADER, `data/verbs.py::VOCATION_SOURCED`, refused at import when a line names a verb the table lacks, a verb that writes no `Person.capability`, or an operand outside `requires_operands`. [ASSUMPTION; medium; Jordan to correct; revert: a formation decline on the actor's own vocations (the plan's *\"forms\"* half), which first needs P11 / #353 \u00a79.2 re-ruled for `train`.]",
           "values": {
             "train": "kind"
           }
@@ -3549,9 +3563,9 @@
           "row": "H-126",
           "keys": [
             "lifepaths",
-            "verb_capability"
+            "capabilities"
           ],
-          "note": "\u26a0 A CUT, NOT A TRANSCRIPTION. Every authored dice magnitude (+1D, +2D, TS +3, Ob and strain changes) is DROPPED: a template names which of `verb_capability`'s VALUES (`copying`, `argue`, `inquiry`) a lifepath's starting skills draw on, and nothing else. A key is held at `pool_default`, so the grant changes no pool; it makes the key one `train` can raise (`loop/effects_combat.py::_eff_train` raises only a key the subject already holds). A lifepath whose starting skills no key covers holds NONE (`holds: []`), RECORDED here and not invented. \u26a0 THE RULE EACH ROW WAS READ BY, so a reviewer can re-read the text and not the taste. Only the `\u2605` skills count: the `Third Skill (spark)` column is a skill that may be sparked later, not held at creation (the archived file's own header, `Starting Skills (\u2605)` against `Third Skill (spark)`). `argue` is named when a starting skill's text says the Argue act, or adds dice to, or moves a resistance parameter of, the Argue exchange itself (a Recall bonus in a contest genre, an Obscuring bonus in a private negotiation, Audience Resistance: `social_contest_v30.md:102,115,168,177`); a strain, an Appraise, a Regroup or a payout on a win is not the roll and holds nothing. `inquiry` is named when it says Investigation, institutional records or documents recalled (`research`), assessing or authenticating a thing of the kinds `examine` reads (evidence, architecture, documents, objects: `verb_table.yaml` `examine`), or recon of a place (`surveil`: observe a location, person or operation). `copying` is named when it says relaying or copying a text; no starting skill does, so no row holds it. A text that says only a bonus in a domain, a defence, a strain, an identification of forces, the threat of a being or a navigation holds nothing, and the near misses are said in the row's own `ground:` (3-CH3, 3-CR5, 3-HA3, 3-LO2, 3-LO4, and 3-CF4's Knot, which names copying). The wider reading (Appraise, strain and Regroup effects inside the contest also hold `argue`) is NOT adopted; it would add argue to 3-CR3, 3-VA1, 3-VA4, 3-GU1, 3-LO3, 3-CF3 and 3-CF5. CLOSED, BOTH WAYS (`data/rosters.py::_load_lifepath_templates`): a row for every id of `rosters: lifepaths` and for nothing else, each `holds:` entry a `verb_capability` value, a `ground:` on every row. [ASSUMPTION; medium; Jordan to correct; revert: delete the `lifepath:` keys from the cast rows (one re-pin); the key mapping is content.]",
+          "note": "\u26a0 A CUT, NOT A TRANSCRIPTION. Every authored dice magnitude (+1D, +2D, TS +3, Ob and strain changes) is DROPPED: a template names which of the skills a verb's `capability:` column names (`copying`, `argue`, `inquiry`; `descriptors.CAPABILITIES`) a lifepath's starting skills draw on, and nothing else. A key is held at `pool_default`, so the grant changes no pool; it makes the key one `train` can raise (`loop/effects_combat.py::_eff_train` raises only a key the subject already holds). A lifepath whose starting skills no key covers holds NONE (`holds: []`), RECORDED here and not invented. \u26a0 THE RULE EACH ROW WAS READ BY, so a reviewer can re-read the text and not the taste. Only the `\u2605` skills count: the `Third Skill (spark)` column is a skill that may be sparked later, not held at creation (the archived file's own header, `Starting Skills (\u2605)` against `Third Skill (spark)`). `argue` is named when a starting skill's text says the Argue act, or adds dice to, or moves a resistance parameter of, the Argue exchange itself (a Recall bonus in a contest genre, an Obscuring bonus in a private negotiation, Audience Resistance: `social_contest_v30.md:102,115,168,177`); a strain, an Appraise, a Regroup or a payout on a win is not the roll and holds nothing. `inquiry` is named when it says Investigation, institutional records or documents recalled (`research`), assessing or authenticating a thing of the kinds `examine` reads (evidence, architecture, documents, objects: `verb_table.yaml` `examine`), or recon of a place (`surveil`: observe a location, person or operation). `copying` is named when it says relaying or copying a text; no starting skill does, so no row holds it. A text that says only a bonus in a domain, a defence, a strain, an identification of forces, the threat of a being or a navigation holds nothing, and the near misses are said in the row's own `ground:` (3-CH3, 3-CR5, 3-HA3, 3-LO2, 3-LO4, and 3-CF4's Knot, which names copying). The wider reading (Appraise, strain and Regroup effects inside the contest also hold `argue`) is NOT adopted; it would add argue to 3-CR3, 3-VA1, 3-VA4, 3-GU1, 3-LO3, 3-CF3 and 3-CF5. CLOSED, BOTH WAYS (`data/rosters.py::_load_lifepath_templates`): a row for every id of `rosters: lifepaths` and for nothing else, each `holds:` entry a skill of `descriptors.CAPABILITIES`, a `ground:` on every row. [ASSUMPTION; medium; Jordan to correct; revert: delete the `lifepath:` keys from the cast rows (one re-pin); the key mapping is content.]",
           "cells": {
             "3-CR1": {
               "holds": [
@@ -7544,7 +7558,7 @@
           ],
           "class": "ACTS",
           "social": "true",
-          "by": "v9 IN-12 step 9 (#453 \u00a79.4, K-21): RETURNED FROM `retired:` WITH ITS PRODUCER, `train` (`loop/effects_combat.py::_eff_train`), in the same commit -- this file's own rule, *a row exists because a producer produces it*. `{capability key: whole number}` (`state/carriers.py::Person.capability`), the dice a contested act draws (`seam/wrappers/pool.py::faculty`, through `rosters.yaml: verb_capability`); capability GATES NOTHING (#353 \u00a79.2). Written at world build by a `cast:` overlay (`harness/corpus_run.py::build_at`, never through this gate) and in play by TWO writers: `train`, under J-13 (iii)'s interim [medium; Jordan to correct]: only where a case names a vocation; and, since v11 CP-T03-04 (iv), the fight (`loop/effects_combat.py::_grown`, at the ENCOUNTER step: `fight` / `accept` / `capture` at Felled/Wounded raise by one a key a surviving party already holds). `social: true` -- only a person's act raises it; the world does not train anybody",
+          "by": "v9 IN-12 step 9 (#453 \u00a79.4, K-21): RETURNED FROM `retired:` WITH ITS PRODUCER, `train` (`loop/effects_combat.py::_eff_train`), in the same commit -- this file's own rule, *a row exists because a producer produces it*. `{capability key: whole number}` (`state/carriers.py::Person.capability`), the dice a contested act draws (`seam/wrappers/pool.py::faculty`, through the verb table's `capability:` column, `descriptors.CAPABILITIES`); capability GATES NOTHING (#353 \u00a79.2). Written at world build by a `cast:` overlay (`harness/corpus_run.py::build_at`, never through this gate) and in play by TWO writers: `train`, under J-13 (iii)'s interim [medium; Jordan to correct]: only where a case names a vocation; and, since v11 CP-T03-04 (iv), the fight (`loop/effects_combat.py::_grown`, at the ENCOUNTER step: `fight` / `accept` / `capture` at Felled/Wounded raise by one a key a surviving party already holds). `social: true` -- only a person's act raises it; the world does not train anybody",
           "emits": "`capability.raised`"
         },
         {
@@ -7894,25 +7908,17 @@
       "schema": {
         "required": [
           "id",
-          "first_name",
-          "last_name",
           "faction",
           "role",
           "status"
         ],
         "optional": [
-          "age",
-          "birthplace",
           "heritage",
           "lifepath",
-          "territory",
           "ts",
           "stats",
           "convictions",
           "affiliations",
-          "goals",
-          "notes",
-          "source",
           "title",
           "capabilities",
           "resonant_style"

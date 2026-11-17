@@ -35,7 +35,7 @@ import math
 from typing import Optional
 
 from engine.substrate.descriptors import (
-    AFFILIATION_CONCERNS, HERITAGE_ENGAGES, HERITAGES, PURSUITS, at_least,
+    AFFILIATION_CONCERNS, HERITAGE_ENGAGES, HERITAGES, PURSUITS,
 )
 
 from ..data import requires as _requires
@@ -49,7 +49,7 @@ from ..data.requires import (
     UNKNOWN, WORLD_ONLY_STEMS,
 )
 from ..data.rosters import (
-    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, capability_uses, roster,
+    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, capability_uses, require_use_site, roster,
     roster_map,
 )
 from ..state.carriers import Person, Said
@@ -1095,7 +1095,7 @@ class LedgerReader:
 
 #: The site whose `gate` row names the held value and the threshold fixture the Thread gate reads (B04.06; U1 §8). It is the one
 #: site `capability_use_sites` registers to `OwnStateReader`; `told_retain`, the other gate site, has no reader on this tree.
-OWN_STATE_GATE = "own_state_gate"
+OWN_STATE_GATE = require_use_site("own_state_gate")
 
 
 def _gate_row(use: str):
@@ -1107,17 +1107,6 @@ def _gate_row(use: str):
 def _held_at(p: Person, key: str):
     """The value `p` holds at a practitioner stat's registry key (`prac.thread_sensitivity`): the `Person` field of that name."""
     return getattr(p, key.rpartition(".")[2], None)
-
-
-def capability_admits(p: Person, use: str, fx):
-    """WHETHER `p` CLEARS THE `gate` ROW OF SITE `use` (B04.06; U1 §8): `at_least(held, fixture)`, the held value at the row's
-    `key` against the Fixture the row's `gain` names. `UNKNOWN` when `use` has no row or `p` holds nothing at the key -- never 0,
-    so it refuses and does not pass a gate swept to 0. A-11 admits one gate (Thread Sensitivity); the loader closes the row to it."""
-    row = _gate_row(use)
-    if row is None:
-        return UNKNOWN
-    held = _held_at(p, row.key)
-    return UNKNOWN if held is None else at_least(held, fx.get(row.gain))
 
 
 class OwnStateReader:

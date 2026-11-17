@@ -49,7 +49,7 @@ manner is no offset (zero; the control of `IS-B2-CHAR-07`).
 
 | id | person | `stats:` (attributes) | `capabilities:` (skills) | `manner:` (lands in BA1 after B10) | basis (registry) |
 |---|---|---|---|---|---|
-| NPC-001 | Edeyja | acuity 5, focus 5, endurance 4, attunement 3, charisma 3, grace 3 | `[NO BASIS IN THE TREE]` | rigid 0.10 | `stats:` AUTHORED (`cognition: 5` → acuity, `focus: 5`, `endurance: 4`; `attunement/presence/grace: 3–4` — a range, which `attributes_of` refuses; the lower bound taken, Jordan to pick 3 or 4); role "Warden-Chief" names no skill; manner: goals "Continue the work regardless of interference" |
+| NPC-001 | Edeyja | acuity 5, focus 5, endurance 4, attunement 3, charisma 3, grace 3 | `[NO BASIS IN THE TREE]` | rigid 0.10 | `stats:` AUTHORED (`cognition: 5` → acuity, `focus: 5`, `endurance: 4`; `attunement/presence/grace: 3–4` — a range, which `data/cast.py::attributes_of` reads as its lower bound (cast.py ~:338-362), so the engine reads 3 today and Jordan may correct it to 4); role "Warden-Chief" names no skill; manner: goals "Continue the work regardless of interference" |
 | NPC-002 | Maret Uln | perception 5, attunement 4 | inquiry 5 | instrumental 0.10 | notes "Vaynard's intelligence operative. Thread-sensitive."; goals "Serve Varfell intelligence", "Privately sympathize with Restoration Movement" (the double game → instrumental); lifepath 3-VA1 holds no skill |
 | NPC-003 | Yrsa Vossen | charisma 5, will 4 | argue 5 | `[NO BASIS IN THE TREE]` | role "RM Leader"; goals "Cultural restoration", "Equity and social contract" |
 | NPC-004 | Sæmund Haelgrund | perception 5, will 4 | inquiry 5, argue 3, law 3 | rigid 0.15, deontological 0.10 | role "Field Inquisitor"; notes "Attributes Thread perception to investigative instinct … Savonarola archetype"; goals "Investigate heresy", "Enforce Church orthodoxy"; lifepath 3-CH5 holds `inquiry` |
@@ -140,7 +140,7 @@ whole. **Row count: 10.**
 `posture` (`storm`). Axes are `references/descriptor_registry.yaml: axis_roster` (seven; −1 the first-named pole, +1
 the second). The source's `never`/`early` are mapped to the tree's `none`/`0.5` `[ASSUMPTION: "never" is `none`;
 "early" is the earliest threshold, `0.5`]`. No cast row bears on a choice value (the `registry` evidence is absent by
-construction, not missing). **Row count: 23.**
+construction, not missing). **Row count: 22 rows (23 cells if `calm` / `press` counts twice).**
 
 | key | value | cells | basis |
 |---|---|---|---|
@@ -244,7 +244,7 @@ the 17 rows with a non-null `goals:` at `1a52ac6`). **Row count: 2.**
 
 | id | person | `goals:` | basis (registry) |
 |---|---|---|---|
-| NPC-034 | Gustav Linder | "Carry the Crown Inner Circle's counsel to Himlensendt"; "Hold the Church's place at court" | faction "Church (dual-loyalty: Crown Inner Circle agent for Himlensendt)"; role "Archbishop's Representative / Father"; `arc_trajectory` "Himlensendt's agent inside Crown Inner Circle"; convictions doctrine 0.60 |
-| NPC-071 | Torvi Heljason | "Ground the Duchess's Sovereign Authority claim in law"; "Keep Hafenmark's procedure correct" | role "Legal Advisor to Baralta"; NPC-050 goals "Sovereign Authority Doctrine", "Constitutional framework supersedes Church jurisdiction"; `cultural_label` hafenmark_procedural; convictions stability 0.40, scholastics 0.30 |
+| NPC-034 | Gustav Linder | "Carry the Crown Inner Circle's counsel to Himlensendt"; "Hold the Church's place at court" | faction "Church (dual-loyalty: Crown Inner Circle agent for Himlensendt)"; role "Archbishop's Representative / Father"; `arc_trajectory` "Himlensendt's agent inside Crown Inner Circle" (that key left the registry at B04.12; the sentence is now a comment in the NPC-034 case file); convictions doctrine 0.60 |
+| NPC-071 | Torvi Heljason | "Ground the Duchess's Sovereign Authority claim in law"; "Keep Hafenmark's procedure correct" | role "Legal Advisor to Baralta"; NPC-050 goals "Sovereign Authority Doctrine", "Constitutional framework supersedes Church jurisdiction"; `cultural_label` hafenmark_procedural (that key left the registry at B04.12); convictions stability 0.40, scholastics 0.30 |
 
 Whether a free-sentence `goals:` entry mints a live `commit` at build (§10's gate) is read by BA1 on landing, not here.

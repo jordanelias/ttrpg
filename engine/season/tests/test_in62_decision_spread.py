@@ -1,7 +1,7 @@
 """v9 IN-62 -- ONE OWNER OF THE SCORE'S TERMS, AND THE READING THAT ATTRIBUTES A DECISION TO ONE OF THEM.
 
-`decision/choose.py::score_terms(p, c, fx, memo) -> (pursuit, stance)` owns the formula and
-`make_chooser`'s `score` adds its two terms; `harness/decision_spread.py::attribute_top` says which
+`decision/choose.py::score_terms(p, c, fx, memo) -> (pursuit, stance, fit)` owns the formula and
+`make_chooser`'s `score` adds its three terms (`fit` is 0.0 at `confer_fit_weight`'s shipped 0.0); `harness/decision_spread.py::attribute_top` says which
 term decided a top. Five claims, each executed and each able to fail:
 
   1. `score(c) == sum(score_terms(...))` for EVERY candidate a seeded realm season forms (observed

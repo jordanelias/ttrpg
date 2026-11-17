@@ -1149,10 +1149,10 @@ VERB_TABLE = _load_verb_table()
 # `rosters.yaml: verb_capability` and `vocation_attribute` rosters they replace are deleted; `data/rosters.py` re-exports
 # nothing of them (it loads BEFORE this table and may not import it, which is why the derivation lives here).
 # `none` is spelled on a row that contests with no skill (`lie`, `march`) and is in no map. `VOCATION_OPPOSED_BY` leaves out
-# a skill whose `opposed_by` is absent (`arms`: reads `base`) AND one that spells `none` (`copying`: nobody's attribute
-# opposes it) -- a `none` entry would reach `pool.py::_opposition_of` as an attribute key.
-# [ASSUMPTION; medium; Jordan to correct; revert: add `none` to the filter's accepted values] `none` is not a member:
-# the retired roster's `opposed_by` was empty, and `argue` and `inquiry` now hold the definition rows' cell.
+# a skill whose `opposed_by` is absent (`arms`: reads `base`) AND one that spells `none` (`copying`) -- a `none` entry would
+# reach `pool.py::_opposition_of` as an attribute key.
+# [ASSUMPTION; medium; Jordan to correct] `opposed_by: none` currently reads as ABSENT (the opposition falls back to the
+# base attribute) until the obstacle's one form lands (B05, OBS section 2).
 VERB_CAPABILITY = {row.verb: row.capability for row in VERB_TABLE.values() if row.capability not in ("", "none")}
 VOCATIONS = frozenset(VERB_CAPABILITY.values())
 VOCATION_ATTRIBUTE = {k: CAPABILITIES[k].base for k in VOCATIONS}
@@ -1265,8 +1265,8 @@ def act_key(verb: str, subject, operands) -> str:
     seat riding in the operands under `VIA`; two of them share `(actor, verb, subject)`, so without it
     they would share an id and `state/acts.py` would refuse the second. Present only for such a
     Candidate -- a person with one seat carries no `VIA`.
-    ⚠ AND THE VOCATION, FOR A ROW THAT CARRIES ONE (`VOCATION_SOURCED`, v10 REM-30's `verb_capability`
-    rows). A `train` Candidate is formed once per vocation in `VOCATIONS` on the same subject, the
+    ⚠ AND THE VOCATION, FOR A ROW THAT CARRIES ONE (`VOCATION_SOURCED`, v10 REM-30's vocation rows, now
+    the verb table's `capability:` column). A `train` Candidate is formed once per vocation in `VOCATIONS` on the same subject, the
     vocation riding on the `kind` operand (`decision/options.py::opening_set`); two chosen in one
     deliberation share `(actor, verb, subject)` and `state/acts.py` refuses the second. Present only on
     a row `vocation_sourced` names.
@@ -1632,7 +1632,7 @@ def _load_terms_sourced(values: dict) -> dict:
 
 TERMS_SOURCED = _load_terms_sourced(roster_map("terms_sourced", "values"))
 
-# v9 IN-12 step 9: `{verb: operand}` -- the verbs that carry a VOCATION (a `verb_capability` value the
+# v9 IN-12 step 9: `{verb: operand}` -- the verbs that carry a VOCATION (a skill of `descriptors.CAPABILITIES` the
 # actor holds) on the named operand, one Candidate per vocation (`rosters.yaml: vocation_sourced`, read
 # in `opening_set`; `train`'s `kind`). REFUSED AT IMPORT, `TERMS_SOURCED`'s reason: a verb the table
 # lacks, a verb whose row writes no `Person.capability` (it would carry a vocation nothing raises), or

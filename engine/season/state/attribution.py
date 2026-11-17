@@ -123,12 +123,12 @@ def _cover_for(w, e: "Event", who: str) -> Optional[str]:
     `cover_at_logging`) -- never re-read, so a logged Event's anchor does not move when the cover later
     lapses, leaves his hand, or a second one is taken (`_on_logged`'s invariant, which
     `test_in56_last_emission_index.py` holds the index to). For an Event not yet logged (a reader
-    inside RESOLVE, before the round's Events are appended), the live read (`live_cover`).
+    inside RESOLVE, before the lap's Events are appended), the live read (`live_cover`).
 
     ⚠ WHEN "LOGGED" IS [ASSUMPTION; medium; Jordan to correct; revert: the act's own moment, which
-    needs the fold to record it]: the driver appends a round's Events after the round's whole fold
-    (`loop/driver.py`), so a cover taken in a round covers every act of its taker logged with it, those
-    resolved before the `conceal` in that round included, and `cover.assumed` itself anchors on the
+    needs the fold to record it]: the driver appends a lap's Events after the lap's whole fold
+    (`loop/driver.py`), so a cover taken in a lap covers every act of its taker logged with it, those
+    resolved before the `conceal` in that lap included, and `cover.assumed` itself anchors on the
     alias. A hand-built world without the log or the map reads live."""
     log = getattr(w, "log", None)
     has_id = getattr(log, "has_id", None)

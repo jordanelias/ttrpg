@@ -210,7 +210,7 @@ def test_a_grudge_in_a_war_context_still_ranks_fight_first_at_the_shipped_bound(
     fx = w.fixtures
     cands = opening_set(p, View(A, [], fx.get("view_k"), q), q, fx)
     memo = CH.deliberation_memo(p, fx)
-    scores = {id(c): sum(CH.score_terms(p, c, fx, memo, None)[:2]) for c in cands}
+    scores = {id(c): CH.score_total(CH.score_terms(p, c, fx, memo, None)) for c in cands}
     best = max(cands, key=lambda c: scores[id(c)])
     assert best.verb == "fight" and best.subject == B, [(c.verb, c.subject, scores[id(c)]) for c in cands]
 

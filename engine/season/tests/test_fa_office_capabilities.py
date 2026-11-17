@@ -177,7 +177,7 @@ def test_a_seat_naming_a_skill_lifts_the_candidate_the_conferrer_believes_holds_
 def test_a_founding_value_outside_its_roster_is_refused(tmp_path, monkeypatch):
     """B04.23 -- what a computed founding declares (`offices.yaml: founding:`) is data, each value checked at load against
     its own roster: `keeps:` against `remit_acts`, `conferral:` against `conferral_bases`, `revocation:` against
-    `revocation_bases`. The controls: the unchanged file loads and exports the shipped three values, so a loader that
+    `revocation_bases`. The controls: the unchanged file loads and the module exports the shipped three values, so a loader that
     refused every file, or one that read nothing, cannot pass; a missing block is refused, not defaulted."""
     real = _real()
     assert len(_load_with(tmp_path, monkeypatch, real)["seats"]) == len(real["seats"])  # control: the unchanged file loads
@@ -204,7 +204,8 @@ def test_a_founding_value_outside_its_roster_is_refused(tmp_path, monkeypatch):
             _load_with(tmp_path, monkeypatch, doc)
         assert "founding" in str(red.value), (missing, str(red.value))
 
-    # a different lawful value is read through, not ignored: the export follows the file
+    # a different lawful value is read through the LOADER, not ignored: `_load_with`'s return follows the file. (The
+    # module exports `FOUNDED_CONFERRAL` etc. are bound once at import from the shipped file; this does not reload them.)
     other = next(b for b in sorted(rosters.CONFERRAL_BASES) if b != founding["conferral"])
     loaded = _load_with(tmp_path, monkeypatch, dict(real, founding=dict(founding, conferral=other)))
     assert loaded["founding"]["conferral"] == other

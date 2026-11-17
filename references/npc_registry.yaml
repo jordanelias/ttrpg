@@ -28,11 +28,12 @@
 # History and discussion: references/npc_registry_history.md
 
 schema:
-  required: [id, first_name, last_name, faction, role, status]
-  optional: [age, birthplace, heritage, lifepath, territory, ts, stats, convictions, affiliations, goals, notes, source, title, capabilities, resonant_style]
-  # B04.12: `engine/season/data/cast.py` reads `required` + `optional` as the keys a row may carry and REFUSES any other, except the
-  # two it lists as unread (`cast.UNREAD_KEYS`: `certainty`, `coherence` -- threadwork's tracks, no reader until that lane builds one).
-  # A key authored here that nothing reads is the defect this list exists to surface; give it a reader or take it out.
+  required: [id, faction, role, status]
+  optional: [heritage, lifepath, ts, stats, convictions, affiliations, title, capabilities, resonant_style]
+  # B04.12: `engine/season/data/cast.py` reads `required` + `optional` as the keys a row may carry THAT A READER TAKES BY NAME, and
+  # REFUSES any other, except the keys it declares unread (`cast.UNREAD_KEYS`, the one list: authored prose and threadwork's tracks
+  # that no engine code reads -- `first_name`, `last_name`, `age`, `birthplace`, `territory`, `goals`, `notes`, `source`, `certainty`,
+  # `coherence`). A key leaves `UNREAD_KEYS` by gaining a reader (and joining this block) or by leaving the registry.
   # `heritage:` (v10 CR-30) is one of `references/descriptor_registry.yaml: heritage_roster`, read by
   # `engine/season/data/cast.py::heritage_of` into `Person.heritage`, which RAISES on any other value. Authored
   # ONLY where canon names the person's descent or the row's own `birthplace:` states it; silence is no key.

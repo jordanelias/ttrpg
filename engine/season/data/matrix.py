@@ -39,7 +39,7 @@ class Step(enum.Enum):
     RESOLVE = "RESOLVE"
     # M4 (`ED-IN-0279` clause (a), `04 §A.2:134` as amended 2026-09-28): the SEVENTH step, between
     # RESOLVE and WITNESS. It holds no state between steps -- a deferred contest's declaration is
-    # an Event in the round's own list, the act is already in the act store -- and it shares
+    # an Event in the lap's own list, the act is already in the act store -- and it shares
     # barrier 3 (`04 §C.1`) rather than opening a fifth. See `loop/encounter.py`.
     ENCOUNTER = "ENCOUNTER"
     WITNESS = "WITNESS"

@@ -20,11 +20,11 @@ test pins that they respond to the believed-odds query, not that they equal the 
 
 ROWS (JSONL, one object per line, `kind` first):
   * `deliberation` -- every call of `choose` (a person with no question gets a row with `question: null`):
-    season/tick/lap, the actor, the question answered (id, source, referents, classes, `about`), its
+    season/tick/lap (the row's output key stays `round`, D-05: a row key is not renamed with the identifier), the actor, the question answered (id, source, referents, classes, `about`), its
     position in the person's question list and that list's sources, the CLAIM behind a question whose
     `about` is a claim the person holds (id, subject, predicate, source, chain, and its origin: an
     acquaintance claim written at build by CR-81 is recognised by membership in `w._acquaintances`, the ids
-    `seed_acquaintances` returned), the candidate table (verb, subject, `to`, `pursuit`, `stance`, score,
+    `seed_acquaintances` returned), the candidate table (verb, subject, `to`, `pursuit`, `stance`, `fit`, score,
     softmax probability of being sampled first at `choice_temperature`, score rank, sampled rank, chosen),
     the deciding term, the refusal gate's reading, and the relation facts toward every PERSON a chosen act
     names as `subject` or `to`.

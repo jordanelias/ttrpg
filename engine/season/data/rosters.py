@@ -1393,8 +1393,11 @@ MODULES = _load_modules(roster_map("modules", "members"), MODULE_KINDS)
 # a row naming no registered site, role or key is refused, and so is a site with no reader. NOTHING READS THE ROWS BEFORE
 # B04.06 -- the table is data, the refusals are the mechanism.
 #
-# LAZY, NOT AT IMPORT: a `gain`, `add` or `floor` must be a registered Fixture, and `data/fixtures.py` imports this module,
-# so the shipped rows are loaded on first read (`capability_uses()`) and by `data.load_all()`, which every driver runs.
+# LAZY, NOT AT IMPORT: the shipped rows are loaded on first read (`capability_uses()`) and by `data.load_all()`, which every
+# driver runs. A `gain`, `add` or `floor` must be a registered Fixture, and `data/fixtures.py` imports this module, so THIS
+# module cannot name the registry without an import cycle: the load is structural (`fixtures=None` skips the Fixture checks)
+# and `fixtures.py::load` (reached by `data.load_all()`) runs `check_capability_fixtures` with the registered values, so an
+# unregistered Fixture is still refused at driver construction, before play.
 #
 # "A reader whose `use` has no row reads NO CAPABILITY -- a factor of exactly 1, or UNKNOWN for a gate -- never a default."
 # ---------------------------------------------------------------------------
@@ -1422,8 +1425,10 @@ _CAPABILITY_USES_WHERE = "rosters.yaml -- tables: capability_uses"
 
 
 def _capability_use_sites() -> dict:
-    """`{site: reader}`, refused if a site has no reader. Read from `_ROSTERS` at call time, so the shipped map is checked
-    at import (`CAPABILITY_USE_SITES` below) and a planted one is checked at the load that reads it."""
+    """`{site: its site string}`, refused if a site's string is blank. The string names the reader, or says plainly that no
+    reader reads the site's rows on this tree yet; the loader checks a non-blank string, not that the reader exists or calls
+    `capability_uses()`. Read from `_ROSTERS` at call time, so the shipped map is checked at import (`CAPABILITY_USE_SITES`
+    below) and a planted one is checked at the load that reads it."""
     sites = _ROSTERS.get("capability_use_sites")
     if not isinstance(sites, dict) or not sites:
         raise Unspecified(
@@ -1433,8 +1438,8 @@ def _capability_use_sites() -> dict:
     for site, reader in sites.items():
         if not isinstance(reader, str) or not reader.strip():
             raise Unspecified(
-                f"`capability_use_sites` site {site!r} has no reader ({reader!r})", "rosters.yaml",
-                needs="the one host function (or typed-input field) that reads the site's rows, or delete the site",
+                f"`capability_use_sites` site {site!r} has a blank site string ({reader!r})", "rosters.yaml",
+                needs="the one host function (or typed-input field) that reads the site's rows, or a plain statement that none does yet, or delete the site",
                 law="U1 §3 item 7 -- a use that no reader registers is refused at import; a row nothing reads is a column "
                     "that silently does nothing")
     return {str(s): r for s, r in sites.items()}
@@ -1506,7 +1511,9 @@ def _load_capability_uses(rows, fixtures) -> tuple:
     """`tuple[CapabilityUse]`, every row refused by name if it is malformed (U1-A step 4; USES "Closed both ways"; MAP §G edit 2).
 
     `fixtures` is `{registered Fixture name: its shipped value}` -- a `gain`, `add` or `floor` must be one, and a
-    `circumstance` row's gain must not be negative."""
+    `circumstance` row's gain must not be negative; `None` skips those two checks (the structural load `capability_uses()`
+    does, since this module may not import the registry: `check_capability_fixtures` runs them). Each role's required
+    field is refused where absent: a `judgement` or a `gate` row with no `gain`, an `edge` row with no `level`."""
     from engine.dice_engine.sigma_leverage import LEVEL_SIGMA as _LEVELS
     from engine.substrate import descriptors as _desc
 
@@ -1572,12 +1579,16 @@ def _load_capability_uses(rows, fixtures) -> tuple:
             refuse(i, row, "has a `when` that is not a mapping", "a mapping of condition keys", "MAP §C -- `when` is a condition")
         if isinstance(row.get("when"), dict):
             _refuse_when(i, row, row["when"], when_keys, refuse)
+        for need, roles_needing in _CAPABILITY_REQUIRED.items():
+            if role in roles_needing and row.get(need) is None:
+                refuse(i, row, f"is a `{role}` row with no `{need}`", f"a `{need}` on every `{role}` row",
+                       f"MAP §C -- `{need}` is the one thing a `{role}` row says; a row without it reads nothing")
         for col in fixture_cols:
-            if row.get(col) is not None and (not isinstance(row[col], str) or row[col] not in fixtures):
+            if fixtures is not None and row.get(col) is not None and (not isinstance(row[col], str) or row[col] not in fixtures):
                 refuse(i, row, f"has {col} {row[col]!r}, which is not a registered Fixture",
                        "a name in `Fixtures` (`data/fixtures.py`), graded and swept",
                        "S42.2.1 -- an unregistered rate must REFUSE, never answer plausibly")
-        if role == "circumstance" and row.get("gain") is not None and fixtures[row["gain"]] < 0:
+        if fixtures is not None and role == "circumstance" and row.get("gain") is not None and fixtures[row["gain"]] < 0:
             refuse(i, row, f"has a negative gain ({row['gain']} = {fixtures[row['gain']]})", "a non-negative Fixture",
                    "A-25 -- `circumstance` carries hostile terms only; a favourable one is an `edge` row for the roller")
         if role == "gate" and (key not in gate_keys or use not in gate_sites):
@@ -1588,18 +1599,39 @@ def _load_capability_uses(rows, fixtures) -> tuple:
     return tuple(out)
 
 
+#: `{field a role requires: the roles that require it}` -- the one field each of these roles exists to carry.
+_CAPABILITY_REQUIRED = {"gain": ("judgement", "gate"), "level": ("edge",)}
+
 CAPABILITY_ROLES = roster("capability_roles", ordered=True)
 CAPABILITY_USE_SITES = _capability_use_sites()
 _CAPABILITY_USES: Optional[tuple] = None
 
 
+def require_use_site(site: str) -> str:
+    """`site`, if `capability_use_sites` registers it; else a refusal naming it. A reader that spells its site as a literal
+    binds it through here at import, so a site renamed in `rosters.yaml` refuses instead of the reader finding no row
+    (which reads as `no capability`, a factor of exactly 1) and passing silently."""
+    if site not in CAPABILITY_USE_SITES:
+        raise Unspecified(f"a reader spells the capability use site {site!r}, which `capability_use_sites` does not register",
+                          "rosters.yaml -- capability_use_sites", needs=f"one of {sorted(CAPABILITY_USE_SITES)}, or the reader's literal changed",
+                          law="U1 §3 item 7 -- a reader's site is a registered one; a renamed site must refuse, not read no capability")
+    return site
+
+
 def capability_uses() -> tuple:
-    """The shipped uses rows, loaded and checked once against `DEFAULT_FIXTURES`'s registered names. Lazy (see above)."""
+    """The shipped uses rows, loaded and structurally checked once. Lazy (see above); the Fixture-name checks are
+    `check_capability_fixtures`'s, run by `fixtures.py::load`."""
     global _CAPABILITY_USES
     if _CAPABILITY_USES is None:
-        from .fixtures import DEFAULT_FIXTURES
-        _CAPABILITY_USES = _load_capability_uses((_TABLES.get("capability_uses") or {}).get("rows"), dict(DEFAULT_FIXTURES._v))
+        _CAPABILITY_USES = _load_capability_uses((_TABLES.get("capability_uses") or {}).get("rows"), None)
     return _CAPABILITY_USES
+
+
+def check_capability_fixtures(fixtures: dict) -> None:
+    """Refuse, naming the row, a shipped uses row whose `gain`, `add` or `floor` is not a registered Fixture (`fixtures` is
+    `{name: shipped value}`) or whose `circumstance` gain is negative. Called by `fixtures.py::load`, where both modules are
+    loaded, so this module never imports the registry."""
+    _load_capability_uses((_TABLES.get("capability_uses") or {}).get("rows"), fixtures)
 
 
 def load() -> tuple:

@@ -101,7 +101,8 @@ def test_the_records_own_fields_are_the_entrys_and_only_one_is_added():
     margin = _module().roll(inp, random.Random(5))
     assert (out["net"], out["ob"], out["pool"]) == (margin.net, margin.ob, inp.pool)
     # B11 lane A: AND `ob_terms`, every term of the obstacle named on the record (`roll.py::obstacle_terms`)
-    assert set(out) == {"status", "module", "resolver", "pool", "net", "ob", "leverage", "settled_margin", "ob_terms"}
+    # B04.08: AND `fed_by`, the `social_roll` rows that fed the roll (`resolve`'s record, never an `Event` field, D-U1-06)
+    assert set(out) == {"status", "module", "resolver", "pool", "net", "ob", "leverage", "settled_margin", "ob_terms", "fed_by"}
 
 
 def test_degree_of_grades_the_settled_margin_when_present_and_the_pair_otherwise():

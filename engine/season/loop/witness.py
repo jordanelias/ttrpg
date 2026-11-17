@@ -218,16 +218,16 @@ def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = 
 
 
 def _refract(c: Claim, p, channel: str, gain: float, act=None, weigh=None,
-             competence_gain: float = 0.0) -> Claim:
+             fx=None) -> Claim:
     """`c` AS THIS WITNESS RECEIVES IT: `c` with `decision/options.py::refracted_confidence`'s
     confidence (v9 IN-15, `AX-7`'s divergence formula; `H-199`). The one place every deposit below
     passes through, so the six `Claim` constructions share one rule rather than six. The caller
     decides WHETHER to refract (the gain is live and the witness is not the act's own actor); this
     decides HOW MUCH, and only the confidence moves -- id, value, source and chain are `c`'s.
     `act`/`weigh` reach `dissents`' act-level term (`H-201`): passed by the two deposits that report
-    an act happening (event-kind and `seen`), `None` from the other three. `competence_gain` is `H-200`'s
-    (CR-19), read once per barrier by the caller and passed to every site alike."""
-    return replace(c, confidence=refracted_confidence(p, c, channel, gain, act, weigh, competence_gain))
+    an act happening (event-kind and `seen`), `None` from the other three. `fx` is the world's Fixtures, whose
+    `told_claim_credit` row names `H-200`'s gain (CR-19), passed by the caller to every site alike."""
+    return replace(c, confidence=refracted_confidence(p, c, channel, gain, act, weigh, fx))
 
 
 def _credit(w, c: Claim, hearer: str, teller: str, regime_gain: float, ceiling: int) -> Claim:
@@ -285,7 +285,7 @@ require_member(HAND_TERM, OBSERVATION_TERMS,
                    "does not carry would mask nothing and show every finder the hand")
 
 
-def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cgain):
+def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cfx):
     """v9 FI-03 (`ED-FI-0002`): THE CLAIMS A FINDING DEPOSITS -- `(finder, trail Event, Claim)` per claim,
     yielded per uncovered trail Event so each re-check sees the deposits already written.
 
@@ -322,7 +322,7 @@ def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cga
             out.append(Claim(H(w.world_seed, w.tick, pid, f"found_seen:{e.id}:{fid}"), pid, subj,
                              SEEN_PREDICATE, masked, w.tick, src, conf, "own", self.lap, doer=None))
         for c in out:
-            yield p, f, (_refract(c, p, FOUND_CHANNEL, gain, prior_act, prior_weigh, cgain)
+            yield p, f, (_refract(c, p, FOUND_CHANNEL, gain, prior_act, prior_weigh, cfx)
                          if refracting else c)
 
 
@@ -382,9 +382,10 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # is. `0` is the control (0.5 ships, H-199): no deposit is refracted and the barrier is the
     # pre-IN-15 one exactly (no `actor_of` call, no ledger scan).
     gain = w.fixtures.get("refraction_gain")
-    # v10 CR-19 / `H-200`: THE COMPETENCE GAIN, read once per barrier beside `gain` and passed to every
-    # `_refract` alike. `0` is the control and SHIPS: the receiver's Attunement scales nothing.
-    cgain = float(w.fixtures.get("competence_gain"))
+    # v10 CR-19 / `H-200`: THE COMPETENCE GAIN is the `told_claim_credit` row's Fixture (`competence_gain`), read through the
+    # world's Fixtures at each `_refract` (a sweep overrides it as any other). `0` is the control and SHIPS: the receiver's
+    # Attunement scales nothing.
+    cfx = w.fixtures
     # v11 CR-79 / `H-275`: THE CREDIT GAIN, read and range-checked once per barrier beside `gain`, for
     # the same reason; `_credit` (its docstring) owns what it does. `0` is the control: no told deposit
     # is credited and `commensurate` is never read. Independent of `gain`: it applies where nothing
@@ -624,7 +625,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
             c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own", self.lap,
                       doer=doer)
             if refracting:
-                c = _refract(c, p, channel, gain, prior_act, prior_weigh, cgain)
+                c = _refract(c, p, channel, gain, prior_act, prior_weigh, cfx)
             # `W4`. THE DEPOSIT EMITS, AND THAT IS WHAT GIVES A DECAY AN ANTECEDENT. Chained to
             # the witnessed Event, the walk is `decayed -> ... -> deposited -> the act that was
             # witnessed`, which is what #353 §19.4 means by the substrate of the emergent-narrative
@@ -723,7 +724,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                            pid, o.subject, o.predicate, o.value, w.tick, src, conf, "own",
                            self.lap, doer=doer)   # `U2`: see the deposit above
                 if refracting:
-                    oc = _refract(oc, p, channel, gain, competence_gain=cgain)
+                    oc = _refract(oc, p, channel, gain, fx=cfx)
                 _deposit(p, oc, e)
         # `R8.1`. THE THIRD DEPOSIT: ONE `seen` CLAIM PER (WITNESS, EVENT), BESIDE THE TWO ABOVE.
         # Its value is `epistemic.Seen` -- `{stratum, marks, who, why}`, each `None` where the
@@ -741,7 +742,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                        pid, _seen[0], SEEN_PREDICATE, _seen[1], w.tick, src, conf, "own",
                        self.lap, doer=doer)   # `U2`: see the first deposit
             if refracting:
-                sc = _refract(sc, p, channel, gain, prior_act, prior_weigh, cgain)
+                sc = _refract(sc, p, channel, gain, prior_act, prior_weigh, cfx)
             _deposit(p, sc, e)
         # THE FOURTH DEPOSIT: THE CONTENT OF A DOCUMENT THIS WITNESS HAS COME TO HOLD (plan position
         # `15`). `(record, "content:<kind>", <subject_matter, frozen>)` -- `content_value` above:
@@ -768,7 +769,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                        pid, rec.id, pred, said, w.tick, src, conf,
                        "own", self.lap, doer=doer)   # `U2`: see the first deposit
             if refracting:
-                dc = _refract(dc, p, channel, gain, competence_gain=cgain)
+                dc = _refract(dc, p, channel, gain, fx=cfx)
             _deposit(p, dc, e)
         # THE TOLD CHANNEL -- `claim_sources`' `told_by`, WHICH NOTHING WROTE.
         #
@@ -877,7 +878,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                                "told_by", _held.confidence, _circle or "own", self.lap,
                                chain=_held.chain + (_act.actor,))
                     if refracting:
-                        tc = _refract(tc, p, channel, gain, competence_gain=cgain)
+                        tc = _refract(tc, p, channel, gain, fx=cfx)
                     # v11 CR-79 (`H-275`): the credit term, after refraction and whether or not it
                     # refracted (the two gains revert independently). `_act.actor` is the teller,
                     # `tc.chain[-1]`; never `pid`, which the guard above excludes. ⚠ `04:178`'s
@@ -898,7 +899,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # with no graded finding of a covert trail -- deposits nothing, so this block is inert.
     if self.findings:
         for e in events:
-            for p, f, c in _found_claims(self, w, e, claim_rule, conf, mode, gain, cgain):
+            for p, f, c in _found_claims(self, w, e, claim_rule, conf, mode, gain, cfx):
                 _deposit(p, c, e, also=(f.id,))
                 _cap(p)
     w._in_parallel_map = False

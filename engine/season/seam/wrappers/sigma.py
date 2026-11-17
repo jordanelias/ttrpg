@@ -68,7 +68,7 @@ from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds, settle_record
 from engine.substrate import composition
 
-from ...data.rosters import capability_uses, roster
+from ...data.rosters import capability_uses, require_use_site, roster
 from ...data.verbs import VERB_CAPABILITY
 from ...data.verbs import SOCIAL_ROLL_PROVIDER, TASK_DIFFICULTY, VERB_TABLE
 from ...gaps import InstrumentDefect, Unspecified
@@ -163,9 +163,15 @@ def advantage_sigma(fx: Any, operands: dict) -> float:
 
 def contest_input(w: Any, claimants: list, *, verb: str = "",
                   subject: Optional[str] = None, room: Optional[str] = None,
-                  examined: Optional[str] = None, effort: int = 0) -> SocialContestInput:
-    """THE HOST INPUT BUILDER, the record alone: `_read_social_roll`'s first return (see it for the body)."""
-    return _read_social_roll(w, claimants, verb=verb, subject=subject, room=room, examined=examined, effort=effort)[0]
+                  examined: Optional[str] = None, effort: int = 0,
+                  reads: Optional[list] = None) -> SocialContestInput:
+    """THE HOST INPUT BUILDER, the record: `_read_social_roll`'s first return (see it for the body). `reads`, where a
+    caller hands a list, is extended with the second return (`(row, value)` per `social_roll` row), so `resolve` reaches
+    the record through THIS one door and a caller observing it sees every roll's input built."""
+    inp, got = _read_social_roll(w, claimants, verb=verb, subject=subject, room=room, examined=examined, effort=effort)
+    if reads is not None:
+        reads.extend(got)
+    return inp
 
 
 def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
@@ -174,7 +180,9 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     """`(record, reads)`: `contest_input`'s record and, for each `social_roll` row of `tables.capability_uses` (table order),
     `(row, value)` -- the value the row's reader read, so the record `resolve` returns names what fed the roll and cannot
     disagree with what was rolled (CAP A6, MAP §D). `dice` reads the actor's score (`pool.score`, the base `faculty`
-    adds its addends to); `opposes` reads the opposition (`_opposition_of`, `None` for nobody opposing).
+    adds its addends to) and gives the pool; `opposes` reads the opposition (`_opposition_of`, `None` for nobody
+    opposing). The roll reads each term ONLY through its row: a table with no `opposes` row rolls with opposition `None`,
+    and with no `dice` row a pool of 0 (nothing read the actor's score).
 
     THE HOST INPUT BUILDER (plan position `31a`, A-25): `World` -> the frozen record the roll reads.
 
@@ -214,15 +222,24 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     # `speak {subject: himself}`) brings no opposition -- his own score is not an obstacle to himself --
     # so the obstacle starts at `obstacle_default` on the control arm and at the task's difficulty alone on
     # the task arm (B11 lane A: a task no person opposes has no opposition term), the same at any capability he holds.
-    opposition = None if subject == claimants[0] else _opposition_of(w, subject, verb)
-    pool = faculty(w, w.persons[claimants[0]], verb)
+    #
+    # THE ROLL READS ITS TERMS ONLY THROUGH THE SITE'S ROWS (CAP A6): a `dice` row's read gives the pool (and the score
+    # it is built on), an `opposes` row's read gives the opposition; no `opposes` row means opposition `None`, as a
+    # self-plea. A row the table omits is a term the roll does not read, so `fed_by` and the roll cannot disagree.
+    actor = w.persons[claimants[0]]
+    rows = tuple(r for r in capability_uses() if r.use == SOCIAL_ROLL_SITE and r.role in ("dice", "opposes"))
+    roles = {r.role for r in rows}
+    opposition = None
+    if "opposes" in roles and subject != claimants[0]:
+        opposition = _opposition_of(w, subject, verb)
+    pool = faculty(w, actor, verb) if "dice" in roles else 0
     inp = _frame(fx, pool, opposition, doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb)
-    read = {"dice": score(w, w.persons[claimants[0]], verb), "opposes": opposition}
-    return inp, tuple((row, read[row.role]) for row in capability_uses() if row.use == SOCIAL_ROLL_SITE and row.role in read)
+    read = {"dice": score(w, actor, verb) if "dice" in roles else None, "opposes": opposition}
+    return inp, tuple((row, read[row.role]) for row in rows)
 
 
 #: `rosters.yaml: capability_use_sites`' site whose one reader is `contest_input` (the single roll's dice and opposition).
-SOCIAL_ROLL_SITE = "social_roll"
+SOCIAL_ROLL_SITE = require_use_site("social_roll")
 
 
 def _fed_by(reads: tuple, inp: SocialContestInput, ob_terms: dict) -> tuple:
@@ -561,8 +578,9 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     heard = rung if row is not None and row.get("heard_by") == BENCH else None
     # An inquiry (no prize) examines its subject; a Record's forgery quality
     # enters the obstacle (`contest_input`'s `examined`). A prize names a contest, which examines nothing.
-    inp, reads = _read_social_roll(w, claimants, verb=verb, subject=subject, room=heard,
-                                   examined=subject if prize is None else None, effort=effort)
+    reads: list = []
+    inp = contest_input(w, claimants, verb=verb, subject=subject, room=heard,
+                        examined=subject if prize is None else None, effort=effort, reads=reads)
     entry, refusal = entry_for(prize, _PROVIDER, module_entry)
     if entry is None:
         return refusal
