@@ -31,7 +31,7 @@ from __future__ import annotations
 
 import math as _math
 from typing import Any, Callable, Optional
-from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, SEAT_ROW_BY_ID, require_member, roster
+from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member, roster, seat_capability
 from ..data.verbs import VERB_TABLE, act_key, align
 from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
@@ -192,7 +192,7 @@ def fit_term(p: Person, c: Candidate, fx: "Fixtures") -> float:
     """THE CONFERRER'S VIEW OF A CANDIDATE, at `Fixtures.confer_fit_weight` (B04.22; `H-414`): `weight * (regard(p, to) +
     the skill his own ledger holds of `to`)`, over a row that SEATS a person -- the row's shape, never a verb name: a
     `referent_class` of `Office` with a `counterparty` of `to`, the candidate's `subject` being the seat. The skill is the
-    one the SEAT'S ROW names (`offices.yaml`, `capability:`, read through `SEAT_ROW_BY_ID`) as `believed_capability` has
+    one the SEAT'S ROW names (`offices.yaml`, `capability:`, read through `data.rosters.seat_capability`) as `believed_capability` has
     it; `None` -- no seat row, no key, or no claim held, which is every case in a built realm -- adds nothing, so the
     term is regard alone [ASSUMPTION; low; Jordan to correct: regard and skill are summed as they stand, in their own
     units]. Exactly `0.0` at the weight's `0.0` -- the CONTROL, today's positional order -- and reads no ledger there."""
@@ -207,7 +207,7 @@ def fit_term(p: Person, c: Candidate, fx: "Fixtures") -> float:
     if row is None or row.referent_class != "Office" or row.counterparty != "to" or not to:
         return 0.0
     fit = regard(p, to, fx)
-    capability = (SEAT_ROW_BY_ID.get(c.subject) or {}).get("capability")
+    capability = seat_capability(c.subject)
     skill = believed_capability(p, to, capability) if capability else None
     return weight * (fit + (0 if skill is None else float(skill)))
 

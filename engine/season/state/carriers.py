@@ -877,7 +877,10 @@ class PersonInterior:
     tenures: tuple
     ledger: tuple
     weight: int = 1       # S9: a cohort is a Person at weight > 1; a chooser's callback may ask (harness/probes.py P21)
-    heritage: Optional[str] = None   # B04.13: read by `decision/sheet.py`'s development sheet, as `thread_sensitivity` is
+    heritage: Optional[str] = None   # B04.13: read by `decision/sheet.py`'s development sheet, as `thread_sensitivity` is.
+    # 04 §B.2 calls `heritage?` a read-off field whose resolver is WITNESS's `marks` term, and §A.2 / §B.2 make this
+    # record the person's own state; the two rows meet here. The pick: admitted, as his OWN field -- §B.2 excludes only
+    # "anything about another person", and another person's heritage is still read only through a held claim.
 
 
 def frozen(d) -> Mapping:

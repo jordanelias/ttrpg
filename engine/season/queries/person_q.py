@@ -473,8 +473,8 @@ def conviction_stand(p: Person, affiliation: str) -> float:
 
 def heritage_regard(p: Person, q: str, fx) -> float:
     """THE CASTE ESTIMATE (v11 CR-31; ED-IN-0301): how `p`'s OWN creed colours his regard for `q`, through
-    what `p` BELIEVES of `q`'s descent -- never through what `q` is (`Person.heritage` is world truth and is
-    not read here).
+    what `p` BELIEVES of `q`'s descent -- never through what `q` is (another person's `Person.heritage` is world
+    truth and is not read here; `p`'s own reaches his sheet through `PersonInterior.heritage`, B04.13).
 
         heritage_regard = heritage_gain · STANCE_MAX · mean over the affiliations a in the concern
                           `HERITAGE_ENGAGES[h]` of `conviction_stand(p, a)`

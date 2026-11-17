@@ -264,7 +264,7 @@ def test_no_engine_source_outside_the_world_build_assigns_attributes_or_heritage
     import pathlib
     root = pathlib.Path(__file__).resolve().parents[1]
     build = files.REALM_PY
-    fields = {"attributes", "heritage"}
+    fields = {"attributes", "heritage", "traits"}   # traits: B04.07, written at build only (04 §A.2 state/<carrier>)
     sites, scanned = [], 0
     for path in sorted(root.rglob("*.py")):
         if "tests" in path.relative_to(root).parts:

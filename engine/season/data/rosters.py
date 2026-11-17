@@ -185,7 +185,7 @@ def _load_offices() -> dict:
             law="`offices.yaml: meta: rule` -- one seat = one row; a repeated id is collapsed "
                 "by the seat index without a sound")
     # A SEAT ROW MAY NAME THE SKILL ITS POST CALLS ON (B04.21): `capability: <a defined skill> | null`, row data and not a
-    # `Seat` field (the key is `capability:`, not `vocation:`). It is read through `SEAT_ROW_BY_ID[id]["capability"]`;
+    # `Seat` field (the key is `capability:`, not `vocation:`). It is read through `seat_capability(id)`, below;
     # a value that is not a member of `descriptors.CAPABILITIES` is refused here, naming the row.
     for row in (*doc["seats"], *(doc.get("foreign_seats") or ())):
         if isinstance(row, dict) and row.get("capability") is not None:
@@ -1595,6 +1595,13 @@ _CAPABILITY_REQUIRED = {"gain": ("judgement", "gate"), "level": ("edge",)}
 CAPABILITY_ROLES = roster("capability_roles", ordered=True)
 CAPABILITY_USE_SITES = _capability_use_sites()
 _CAPABILITY_USES: Optional[tuple] = None
+
+
+def seat_capability(seat_id: str) -> Optional[str]:
+    """The skill a seat's post calls on (`offices.yaml`, `capability:`, B04.21), or `None`. The one declaration a decision
+    reads off a seat row: `decision/` reads the table's declarations (`04` §A.2), never the raw row, which also carries the
+    occupant authored at build (`holder:`)."""
+    return (SEAT_ROW_BY_ID.get(seat_id) or {}).get("capability")
 
 
 def require_use_site(site: str) -> str:
