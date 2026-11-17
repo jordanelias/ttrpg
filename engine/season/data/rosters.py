@@ -160,6 +160,16 @@ def _load_offices() -> dict:
             needs="one row per `id`",
             law="`offices.yaml: meta: rule` -- one seat = one row; a repeated id is collapsed "
                 "by the seat index without a sound")
+    # A SEAT ROW MAY NAME THE SKILL ITS POST CALLS ON (B04.21): `capability: <a defined skill> | null`, row data and not a
+    # `Seat` field (the key is `capability:`, not `vocation:`). It is read through `SEAT_ROW_BY_ID[id]["capability"]`;
+    # a value that is not a member of `descriptors.CAPABILITIES` is refused here, naming the row.
+    for row in (*doc["seats"], *(doc.get("foreign_seats") or ())):
+        if isinstance(row, dict) and row.get("capability") is not None and not (isinstance(row["capability"], str) and row["capability"] in _CAPABILITIES):
+            raise Unspecified(
+                f"offices.yaml row {row.get('id')!r} names `capability: {row['capability']!r}`, which is not a defined skill",
+                "offices.yaml -- seats",
+                needs="a member of `descriptors.CAPABILITIES` (" + ", ".join(_CAPABILITIES) + ") or `null`",
+                law="`descriptors.CAPABILITIES` is the only skill definition in the engine; a seat row names one, it defines none")
     return doc
 
 
