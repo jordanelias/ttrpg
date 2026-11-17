@@ -254,7 +254,8 @@ def season_pairs():
 
 def test_in62_score_is_the_sum_of_score_terms_for_every_candidate_a_season_forms(season_pairs):
     checked = 0
-    for score, (pursuit, stance) in season_pairs:
+    for score, (pursuit, stance, fit) in season_pairs:
+        assert fit == 0.0, fit      # `confer_fit_weight` ships 0.0 (B04.22)
         assert score == pursuit + stance, (score, pursuit, stance)
         checked += 1
     assert checked >= 1000, f"a seeded realm season formed only {checked} candidates"

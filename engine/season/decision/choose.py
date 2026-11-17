@@ -31,13 +31,15 @@ from __future__ import annotations
 
 import math as _math
 from typing import Any, Callable, Optional
-from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member, roster
+from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, SEAT_ROW_BY_ID, require_member, roster
 from ..data.verbs import VERB_TABLE, act_key, align
 from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
 # imports `person_q` and `data/`); `_stance_arm` calls it, and `confliction` (IN-08 6f,
 # the derived Query's caller, ID-13).
-from ..queries.person_q import confliction, intent_named, intent_said, regard, stance_toward
+from ..queries.person_q import (
+    believed_capability, confliction, intent_named, intent_said, regard, stance_toward,
+)
 from ..state.carriers import EFFORT, Act, Candidate, Person, Question, Scene, Sensation, View
 # `project` is DEFINED in `options.py` (see this module's docstring) and imported here because
 # `make_chooser`'s score calls it; `options` never imports this module.
@@ -186,8 +188,41 @@ def odds_weight(p: Person, c: Candidate, fx: "Fixtures", odds: Optional[Callable
     return 1.0 if chance is None else float(chance)
 
 
+def fit_term(p: Person, c: Candidate, fx: "Fixtures") -> float:
+    """THE CONFERRER'S VIEW OF A CANDIDATE, at `Fixtures.confer_fit_weight` (B04.22; `H-414`): `weight * (regard(p, to) +
+    the skill his own ledger holds of `to`)`, over a row that SEATS a person -- the row's shape, never a verb name: a
+    `referent_class` of `Office` with a `counterparty` of `to`, the candidate's `subject` being the seat. The skill is the
+    one the SEAT'S ROW names (`offices.yaml`, `capability:`, read through `SEAT_ROW_BY_ID`) as `believed_capability` has
+    it; `None` -- no seat row, no key, or no claim held, which is every case in a built realm -- adds nothing, so the
+    term is regard alone [ASSUMPTION; low; Jordan to correct: regard and skill are summed as they stand, in their own
+    units]. Exactly `0.0` at the weight's `0.0` -- the CONTROL, today's positional order -- and reads no ledger there."""
+    weight = float(fx.get("confer_fit_weight"))
+    if not weight >= 0:                  # `not >=`, so a NaN is refused too
+        raise ValueError(f"confer_fit_weight {weight} is not >= 0: a negative weight would seat the conferrer's least "
+                         "regarded candidate (H-414)")
+    if weight == 0.0:
+        return 0.0
+    row = VERB_TABLE.get(c.verb)
+    to = (c.operands or {}).get("to")
+    if row is None or row.referent_class != "Office" or row.counterparty != "to" or not to:
+        return 0.0
+    fit = regard(p, to, fx)
+    capability = (SEAT_ROW_BY_ID.get(c.subject) or {}).get("capability")
+    skill = believed_capability(p, to, capability) if capability else None
+    return weight * (fit + (0 if skill is None else float(skill)))
+
+
+def score_total(terms: tuple) -> float:
+    """A candidate's score from its `score_terms`, the one sum (`make_chooser`, `harness/interactions.py` and
+    `harness/decision_spread.py` read it here). A `fit` of `0.0` -- every candidate at the shipped weight -- adds nothing,
+    not even a sign of zero, so the score is the two-term sum exactly."""
+    s = terms[0] + terms[1]
+    return s + terms[2] if terms[2] else s
+
+
 def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional[Callable] = None) -> tuple:
-    """§F2's score, term by term: `(pursuit, stance)`, and `score(c)` is their sum (IN-62).
+    """§F2's score, term by term: `(pursuit, stance, fit)`, and `score(c)` is `score_total` of them (IN-62; the sum, `fit`
+    being `0.0` at `confer_fit_weight`'s shipped `0.0`).
     The ONE owner of the formula (`CLAUDE.md` §8): `make_chooser`'s `score` calls this and adds, and
     a reading that wants to know WHICH TERM decided a ranking calls this and never re-derives one.
 
@@ -195,7 +230,8 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
         person's projected pursuits, `damp` the `confliction_weight` arm's factor (exactly 1.0 at 0) and
         `odds_weight` CR-17's believed-chance factor on a contested candidate (exactly 1.0 at
         `odds_weighting` `none`, for an uncontested candidate, and when `odds` is `None`);
-      * `stance` -- `stance_term(p, c, fx, memo)`, by `Fixtures.stance_polarity`, at gain `1 + g`.
+      * `stance` -- `stance_term(p, c, fx, memo)`, by `Fixtures.stance_polarity`, at gain `1 + g`;
+      * `fit` -- `fit_term(p, c, fx)`: the conferrer's view of the candidate a seating row names in `to`.
 
     `odds` is the believed-odds query a View carries (`View.odds`); a reading that scores a person outside
     `choose` passes the same query or leaves it `None` and reads the score without CR-17's factor.
@@ -214,7 +250,7 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
     else:
         _odds_arm(fx)           # a zero term is zero whatever the factor: the query is not asked (it scans the log), the arm is still checked.
                                 # Value-equal; the one difference is an error the query would raise on this candidate, which is no longer raised
-    return (pursuit, stance_term(p, c, fx, memo))
+    return (pursuit, stance_term(p, c, fx, memo), fit_term(p, c, fx))
 
 
 def _npc_effort_arm(fx: "Fixtures") -> str:
@@ -525,9 +561,8 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
         # (a test's, a callback's) answers None and the pursuit term stays as it was.
         odds = getattr(v, "odds", None)
         def score(c: Candidate) -> float:
-            # IN-62: the terms have ONE owner, `score_terms`; the score is their left-to-right sum.
-            pursuit, stance = score_terms(p, c, fx, memo, odds)
-            return pursuit + stance
+            # IN-62: the terms have ONE owner, `score_terms`; the score is `score_total` of them.
+            return score_total(score_terms(p, c, fx, memo, odds))
         # ⚠ SCORED ONCE, NOT TWICE. `score` is pure in `c` given the closure, so each candidate is
         # scored once here and `_sample_order` reads it back from `_scores`.
         _scores = {id(c): score(c) for c in cands}

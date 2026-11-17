@@ -441,6 +441,24 @@ def regard(p: Person, referent: str, fx=None) -> float:
     return stored + h if h else stored
 
 
+# The claim a person holds about another's skill: `Claim(subject=<that person>, predicate=CAPABILITY_CLAIM + <the skill>,
+# value=<the score he believes>)`. NOTHING DEPOSITS ONE TODAY (the told, seen and inferred channels carry no capability),
+# so `believed_capability` answers `None` for every person in a built realm until a depositor exists: this is the reading,
+# not the writer. Its two readers -- `seam/wrappers/sigma.py::believed_input` (the opposition of a contest) and
+# `decision/choose.py::score_terms`' `fit` term (B04.22) -- both call the one function below.
+CAPABILITY_CLAIM = "capability:"
+
+
+def believed_capability(p: Person, other: str, capability: str):
+    """WHAT `p` BELIEVES `other`'s SCORE IN `capability` IS, from his OWN ledger alone: the value of his latest claim
+    about `other` at `CAPABILITY_CLAIM + capability` (latest by `(when, lap, confidence)`), else `None` -- unknown, never a
+    figure. Person-side (AX-2): it reads `p`'s ledger and nothing else."""
+    held = [c for c in p.ledger if c.subject == other and c.predicate == CAPABILITY_CLAIM + capability]
+    if not held:
+        return None
+    return max(held, key=lambda c: (c.when, c.lap, c.confidence)).value
+
+
 def conviction_stand(p: Person, affiliation: str) -> float:
     """HOW FAR `p` STANDS FOR (+1) OR AGAINST (-1) ONE AFFILIATION, on `[-1, +1]`: `p.conviction[affiliation]`
     centred on the affiliation scale's midpoint and scaled by its half-range, `(v - mid) / half`. An ABSENT key

@@ -73,6 +73,7 @@ from ...data.verbs import VERB_CAPABILITY
 from ...data.verbs import SOCIAL_ROLL_PROVIDER, TASK_DIFFICULTY, VERB_TABLE
 from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, sides_of
+from ...queries.person_q import CAPABILITY_CLAIM, believed_capability   # noqa: F401 -- `CAPABILITY_CLAIM` stays importable from here (tests, callers)
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup);
 # `manifest/registry.py` imports only `data/` and `gaps` and `queries/` is below `seam/`, so the
@@ -267,11 +268,9 @@ def _frame(fx: Any, pool: int, opposition: Optional[float], forgery_quality: flo
 # ---------------------------------------------------------------------------------------------
 # EXACT ODDS (CP-T01-03): what a roll of this record would deal, read and never rolled.
 # ---------------------------------------------------------------------------------------------
-# The claim a person holds about another's capability: `Claim(subject=<that person>, predicate=
-# CAPABILITY_CLAIM + <the verb's capability key>, value=<the score he believes>)`. NOTHING DEPOSITS
-# ONE TODAY (the told, seen and inferred channels carry no capability), so a believed opposition is
-# `None` for every person in a built realm until a depositor exists; this is the reading, not the writer.
-CAPABILITY_CLAIM = "capability:"
+# The claim a person holds about another's capability, and its one reader (`believed_capability`), are
+# `queries/person_q.py`'s (B04.22: the read the confer term also makes). NOTHING DEPOSITS ONE TODAY, so a believed
+# opposition is `None` for every person in a built realm until a depositor exists; this is the reading, not the writer.
 OBSTACLE_ROLE = "social_contest.obstacle"   # the composition row whose module composes the obstacle
 QUERY_ENTRIES = ((OBSTACLE_ROLE, "query"),)  # the host's declared need, held at driver construction (`registrar.require_entries`)
 
@@ -327,12 +326,10 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
     key = VERB_CAPABILITY.get(verb)
     opposition = None
     if person_subject and key and subject != p.id:
-        held = [c for c in p.ledger
-                if c.subject == subject and c.predicate == CAPABILITY_CLAIM + key]
-        if not held:
+        said = believed_capability(p, subject, key)
+        if said is None:
             return None
-        said = max(held, key=lambda c: (c.when, c.lap, c.confidence))
-        opposition = float(said.value)
+        opposition = float(said)
     elif person_subject and subject != p.id and fx.get("obstacle_model") == OBSTACLE_MODEL_TASK:
         # A VERB NAMING NO KEY (`lie`), ON THE TASK ARM: the roll opposes a person with `pool.score`, which on such a verb is
         # the untrained score for EVERY person (`pool.untrained`; nothing can be held on no vocation), so it is known,

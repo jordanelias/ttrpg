@@ -3,7 +3,7 @@
 ED-IN-0293's headline expectation (*"I expect all of this to end up generating unique decisions"*) as
 three readings and three arms. Every reading that BUILDS A REALM lives here; `harness/conviction_spread.py`
 is not extended, because it declares that it *"MEASURES THE TABLE, NOT A RUN"* (`:34-37`) and builds no
-world. The score's terms have ONE owner, `decision/choose.py::score_terms` -> `(pursuit, stance)`;
+world. The score's terms have ONE owner, `decision/choose.py::score_terms` -> `(pursuit, stance, fit)`;
 this module calls it (through the module, so a rebind of it reaches every reading) and never
 re-derives a term.
 
@@ -67,7 +67,7 @@ THE DECIDING TERM (`attribute_top`), in the order it is tested:
                  (`field_zero`);
   2. `tiebreak`  the top two scores are within `EPS` at temperature 0 (`(verb, subject)` ordered them);
   3. otherwise the TERMS whose removal leaves the top no longer strictly ahead of the field (it changes, or
-     collapses into a tie): `pursuit`, `stance`, joined by `+`; `overdetermined` if no single
+     collapses into a tie): `pursuit`, `stance`, `fit`, joined by `+`; `overdetermined` if no single
      term's removal does (two terms each separate it alone).
 So the attribution CAN say "no state decided": two persons with nothing separating their candidates read
 `draw` or `tiebreak`, never `pursuit`.
@@ -115,7 +115,7 @@ from ..boot.realm import build_realm
 
 # [JUSTIFIED: a float-tie tolerance for the attribution (two scores within it are a tie), an instrument constant and not a game number]
 EPS = 1e-9
-TERMS = ("pursuit", "stance")
+TERMS = ("pursuit", "stance", "fit")
 # [JUSTIFIED: the instrument's near-identical bar for a cosine between two persons' vectors (IN-64's EXIT 'pairs above 0.99'), a reading threshold and not a game number]
 COSINE_HIGH = 0.99
 
@@ -206,7 +206,7 @@ def attribute_top(p, cands: list, fx, draw=None, odds=None, terms=None) -> dict:
     memo = CH.deliberation_memo(p, fx)
     if terms is None:            # a reader that already scored `cands` (harness/interactions.py) passes its terms
         terms = [CH.score_terms(p, c, fx, memo, odds) for c in cands]
-    scores = [t[0] + t[1] for t in terms]
+    scores = [CH.score_total(t) for t in terms]
     field_zero = all(abs(s) <= EPS for s in scores)
     if len(cands) == 1:
         return {"top": cands[0], "decider": "sole", "margin": None, "scores": scores, "terms": terms,

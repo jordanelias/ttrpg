@@ -273,7 +273,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
         memo = CH.deliberation_memo(p, fx)
         odds = getattr(v, "odds", None)          # CR-17: the View's believed-odds query, as the chooser reads it
         terms = [CH.score_terms(p, c, fx, memo, odds) for c in cands]
-        scores = {id(c): t[0] + t[1] for c, t in zip(cands, terms)}
+        scores = {id(c): CH.score_total(t) for c, t in zip(cands, terms)}
         ranked = CH.score_order(cands, scores)
         sampled = CH.sample_order(ranked, lambda c: scores[id(c)], p, fx, draw)
         rank = {id(c): i for i, c in enumerate(ranked)}
@@ -303,7 +303,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
             row["candidates"].append({
                 "verb": c.verb, "subject": c.subject, "to": ops.get("to"),
                 "hostile": is_hostile(c.verb, ("subject",)) and c.subject in w.persons,
-                "pursuit": t[0], "stance": t[1], "score": t[0] + t[1], "p_first": prob[id(c)],
+                "pursuit": t[0], "stance": t[1], "fit": t[2], "score": CH.score_total(t), "p_first": prob[id(c)],
                 "score_rank": rank[id(c)], "sample_rank": srank[id(c)],
                 "chosen": k in chosen, "act": chosen.get(k)})
         r = attribute_top(p, cands, fx, draw, odds, terms=terms)
