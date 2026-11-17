@@ -452,19 +452,19 @@ none of them.
 
 ## 7. Simulation / balance
 
-**Rule: the Python model (`engine/`, `modules/` + `systems/<sub>/sim/`) is the oracle the port validates against, and
-a campaign-level balance claim needs a campaign-level instrument.** The seeded hash pins under
-`engine/season/tests/` observe any output-moving change to season-reachable code but cannot separate a
-balance regression from noise (`engine/tests/goldens/` holds one pure-function dice table), and nothing
-verifies a golden re-pin was intended — say plainly when you re-record one. ⚠ **`tools/balance_oracle.py`
-IS RETIRED** (`FORK:` row in `references/restructure_ledger.md`): the campaign-level instrument has **no
-live successor** — an open gap. `python -m engine.season.harness.arms` is NOT a replacement: a
-season-loop-only n-seed comparison over one mechanic (`field_casualty_model`). Running either instrument
-on a campaign-unreachable change (or, for `arms.py`, a season-unreachable one) is a fake control — both
-arms are identical by construction. Ledger provenance is advisory (schemas differ, provenance fields
-unchecked, no generating SHA pinned) — verify a cited `PP-NNN`/`ED-NNN` by hand.
-`engine/tests/` is CI job `sim-regression`; the reference model is partly stubbed (`NotImplementedError`)
-— grep for the stubs.
+**Rule: the Python model (`engine/`, `modules/` + `systems/<sub>/sim/`) is the oracle the port validates
+against, and a campaign-level balance claim needs a campaign-level instrument.** The seeded hash pins under
+`engine/season/tests/` observe any output-moving change to season-reachable code but cannot separate a balance
+regression from noise (`engine/tests/goldens/` holds one pure-function dice table), and nothing verifies a
+re-pin was intended: before one (a golden, a `canonical_sha__*`, `freshness_gate --update`) show the code it
+covers moved (`git diff` since the pin's commit); if not, the pin is right, leave it. Say plainly when you
+re-record one. ⚠ **`tools/balance_oracle.py` IS RETIRED** (`FORK:` row in `references/restructure_ledger.md`):
+the campaign-level instrument has **no live successor** — an open gap. `python -m engine.season.harness.arms` is
+NOT a replacement: a season-loop-only n-seed comparison over one mechanic (`field_casualty_model`). Running
+either instrument on a campaign-unreachable change (or, for `arms.py`, a season-unreachable one) is a fake
+control — both arms are identical by construction. Ledger provenance is advisory (schemas differ, provenance
+fields unchecked, no generating SHA pinned) — verify a cited `PP-NNN`/`ED-NNN` by hand. `engine/tests/` is CI
+job `sim-regression`; the reference model is partly stubbed (`NotImplementedError`) — grep for the stubs.
 
 ---
 
