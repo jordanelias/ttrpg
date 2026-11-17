@@ -1482,6 +1482,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # drops it. No fallback and no draw: a row with no `lifepath:`, or one whose template names no key, leaves
         # `capability` as it was, `{}`.
         held = cast.capability_of(cast.row(cid) or {}, w.fixtures.get("pool_default"))
+        # B04.09: the row's authored `capabilities:` scores merge over the lifepath expansion, the authored value winning.
+        held = {**held, **cast.capabilities_of(cast.row(cid) or {})}
         if held:
             w.persons[pid].capability = {**held, **w.persons[pid].capability}
 

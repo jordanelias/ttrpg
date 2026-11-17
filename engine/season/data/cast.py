@@ -37,7 +37,7 @@ from . import files
 from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_TEMPLATES, load_yaml
 from ..gaps import Unspecified
 from ...substrate.descriptors import (
-    ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, HERITAGES, PRACTITIONER_STATS, TRAITS, attribute_key,
+    ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, CAPABILITIES, HERITAGES, PRACTITIONER_STATS, TRAITS, attribute_key,
 )
 
 NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
@@ -377,6 +377,40 @@ def traits_of(r: dict) -> frozenset:
         f"cast row {(r or {}).get('id', '?')}: resonant_style {v!r} seats no trait; the traits seat {sorted(seats)}",
         "references/descriptor_registry.yaml", needs=f"one of {sorted(seats)} (any case), or no key",
         law="A-107 -- a resonant_style no trait row names is refused at build")
+
+
+def capabilities_of(r: dict) -> dict:
+    """`Person.capability`'s AUTHORED-SCORE source (B04.09, CAP A7): the row's `capabilities:` mapping, as `{skill id: whole
+    number}`, or `{}` where nothing is authored -- the key absent, `capabilities: null`, or no row at all. Each id must be a
+    skill `substrate.descriptors.CAPABILITIES` defines (a trait, an attribute or a typo is none) and each value a whole
+    number inside THAT row's own `floor`..`ceiling`; a bool, a fraction, a numeric string, a non-mapping, or a value off the
+    scale REFUSES, naming the row (`attributes_of`'s shape). `capability_of` (the lifepath expansion) is unchanged; the builder
+    merges the two with this one winning. The case overlay's `cast: capability:` is checked through this same function
+    (`harness/corpus_run.py::_check_capability`), so the two surfaces cannot disagree about what a skill score is."""
+    raw = (r or {}).get("capabilities")
+    if raw is None:
+        return {}
+    who = (r or {}).get("id", "?")
+    if not isinstance(raw, dict):
+        raise Unspecified(f"cast row {who}: capabilities {raw!r} is no mapping", "references/npc_registry.yaml",
+                          needs="a mapping of skill id to a whole number, or null",
+                          law="CAP A7 -- an authored value this reader cannot parse refuses")
+    out: dict = {}
+    for name, v in raw.items():
+        row = CAPABILITIES.get(name) if isinstance(name, str) else None
+        if row is None:
+            raise Unspecified(
+                f"cast row {who}: capabilities key {name!r} names no defined skill",
+                "references/descriptor_registry.yaml", needs=f"one of {', '.join(CAPABILITIES)}",
+                law="CAP A7 -- a score under an id no definition row carries is refused")
+        if not isinstance(v, int) or isinstance(v, bool) or not row.floor <= v <= row.ceiling:
+            raise Unspecified(
+                f"cast row {who}: capabilities {name!r}: {v!r} -- magnitudes must be whole numbers from {row.floor} to "
+                f"{row.ceiling}", "references/npc_registry.yaml",
+                needs=f"a whole number {row.floor}-{row.ceiling} (the row's own scale)",
+                law="CAP A7 -- the scale is the definition row's, and an out-of-scale value refuses")
+        out[name] = v
+    return out
 
 
 def capability_of(r: dict, pool_default: int) -> dict:

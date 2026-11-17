@@ -26,6 +26,7 @@ from engine.season.harness import corpus_run as C
 from engine.season.harness import run_cases as RC
 from engine.season.queries import world_q
 from engine.season.data.rosters import TITLE_DOMAINS
+from engine.season.data.verbs import VERB_CAPABILITY
 from engine.season.gaps import Forbidden
 from engine.season.tests.test_u8_ambitions import _host_case, _need_props
 
@@ -246,7 +247,7 @@ REFUSALS = {
     "a capability that is not a mapping": ({"capability": 3}, "`capability:` is a int"),
     "a capability that is a list": ({"capability": ["copying"]}, "`capability:` is a list"),
     "a capability left empty of its value": ({"capability": None}, "`capability:` is a NoneType"),
-    "a capability key no verb draws on": ({"capability": {"copyng": 3}}, "keys no verb draws on"),
+    "a capability key no skill row defines": ({"capability": {"copyng": 3}}, "names no defined skill"),
     "a capability magnitude that is text": ({"capability": {"copying": "three"}},
                                             "magnitudes must be whole numbers"),
     "a capability magnitude that is a boolean": ({"capability": {"copying": True}},
@@ -275,7 +276,7 @@ def test_a_real_capability_loads_and_is_seated_so_the_refusals_above_are_not_bla
 
     The key asked for is READ OFF THE ROSTER, never typed: if the roster's capability names ever
     change, the control follows and the refusal's own owner is what is being exercised."""
-    key = sorted(set(C.VERB_CAPABILITY.values()))[0]
+    key = sorted(set(VERB_CAPABILITY.values()))[0]
     es = _cast({"capability": {key: 4}}, {"capability": {}})
     assert _load(tmp_path, monkeypatch, es) == {"X-1": es}
     _, w = _build(monkeypatch, es)
@@ -283,7 +284,7 @@ def test_a_real_capability_loads_and_is_seated_so_the_refusals_above_are_not_bla
         {pid: p.capability for pid, p in w.persons.items()}
     carin = C.CAST["NPC-088"][0]
     assert carin["who"] == "Carin Vedel" and carin["capability"] == {"copying": 3}, carin
-    assert "copying" in set(C.VERB_CAPABILITY.values()), "NPC-088's key is no longer one a verb draws on"
+    assert "copying" in set(VERB_CAPABILITY.values()), "NPC-088's key is no longer one a verb draws on"
 
 
 def test_two_people_with_one_name_make_an_ought_about_it_refuse(tmp_path, monkeypatch):

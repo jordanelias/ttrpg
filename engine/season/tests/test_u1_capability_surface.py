@@ -750,3 +750,70 @@ def test_a_rank_at_its_ceiling_is_not_raised():
     assert raised_capability(_holder(arms=ceiling), "arms") is None
     assert raised_capability(_holder(arms=ceiling - 1, inquiry=2), "arms") == {"arms": ceiling, "inquiry": 2}
     assert raised_capability(_holder(inquiry=2), "arms") is None
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B04.09 -- A CAST ROW MAY AUTHOR SKILL SCORES (CAP A7; CORE Edit 5). `data/cast.py::capabilities_of` is the one reader;
+# the builder merges it over the lifepath expansion; the case overlay's `cast: capability:` is checked through it.
+# The shipped registry authors no row, so each test plants the row it reads.
+
+def test_a_cast_capability_naming_no_definition_is_refused():
+    """FALSIFIER: a row naming an undefined skill that builds. `capabilities_of` refuses it naming the row and the roster;
+    the overlay check refuses it through the same function (a defined skill no verb draws on is no longer refused there)."""
+    from engine.season.data import cast
+    from engine.season.gaps import ShapeGap
+    with pytest.raises(ShapeGap, match="no_such_skill") as e:
+        cast.capabilities_of({"id": "NPC-X", "capabilities": {"arms": 3, "no_such_skill": 2}})
+    assert "NPC-X" in str(e.value) and "arms" in str(e.value)
+    # a trait is no skill
+    with pytest.raises(ShapeGap, match="moved_by_evidence"):
+        cast.capabilities_of({"id": "NPC-X", "capabilities": {"moved_by_evidence": 1}})
+    # a non-mapping refuses
+    with pytest.raises(ShapeGap):
+        cast.capabilities_of({"id": "NPC-X", "capabilities": ["arms"]})
+    # the control: the shipped four load, and absence is `{}`
+    assert cast.capabilities_of({"id": "NPC-X", "capabilities": {"arms": 3, "copying": 0}}) == {"arms": 3, "copying": 0}
+    assert cast.capabilities_of({"id": "NPC-X"}) == {} == cast.capabilities_of({"capabilities": None}) == cast.capabilities_of({})
+    from engine.season.harness import corpus_run
+    with pytest.raises(SystemExit, match="no_such_skill"):
+        corpus_run._check_capability("case", "Who", {"who": "Who", "capability": {"no_such_skill": 2}})
+    corpus_run._check_capability("case", "Who", {"who": "Who", "capability": {"arms": 2}})
+
+
+def test_a_cast_capability_above_its_scale_is_refused():
+    """FALSIFIER: a rank above the row's ceiling that builds. The scale is the definition row's own `floor`..`ceiling`, read
+    from `descriptors.CAPABILITIES`, never a number typed here; a bool, a fraction and a numeric string refuse as `attributes_of`'s do."""
+    from engine.season.data import cast
+    from engine.season.gaps import ShapeGap
+    row = descriptors.CAPABILITIES["arms"]
+    r = lambda v: {"id": "NPC-X", "capabilities": {"arms": v}}
+    assert cast.capabilities_of(r(row.floor)) == {"arms": row.floor}
+    assert cast.capabilities_of(r(row.ceiling)) == {"arms": row.ceiling}
+    for bad in (row.ceiling + 1, row.floor - 1, True, 2.5, "3", None):
+        with pytest.raises(ShapeGap, match="arms"):
+            cast.capabilities_of(r(bad))
+    from engine.season.harness import corpus_run
+    with pytest.raises(SystemExit, match="whole number"):
+        corpus_run._check_capability("case", "Who", {"who": "Who", "capability": {"arms": row.ceiling + 1}})
+
+
+def test_an_authored_capability_wins_over_the_lifepath(monkeypatch):
+    """On a built realm: a row whose lifepath holds `inquiry` at `pool_default` and which authors `capabilities: {inquiry: 5,
+    arms: 4}` is built holding exactly that (the authored value wins, and a key the lifepath does not hold is added); a row
+    with the lifepath alone is built as before (the control); a row with neither holds nothing."""
+    from engine.season.boot.realm import build_realm
+    from engine.season.data import cast
+    from engine.season.data.rosters import LIFEPATH_TEMPLATES
+    rows = {cid: dict(r) for cid, r in cast.load().items()}
+    lifepath = next(k for k, v in LIFEPATH_TEMPLATES.items() if "inquiry" in v)
+    both, only_path, neither = "NPC-087", "NPC-084", "NPC-086"
+    assert not any(rows[c].get("lifepath") or rows[c].get("capabilities") for c in (both, only_path, neither))
+    rows[both].update(lifepath=lifepath, capabilities={"inquiry": 5, "arms": 4})
+    rows[only_path]["lifepath"] = lifepath
+    monkeypatch.setattr(cast, "_CACHE", rows)
+    w = build_realm(0)
+    default = w.fixtures.get("pool_default")
+    assert default != 5
+    assert w.persons["p_npc_087"].capability == {"inquiry": 5, "arms": 4}
+    assert w.persons["p_npc_084"].capability == {"inquiry": default}
+    assert w.persons["p_npc_086"].capability == {}
