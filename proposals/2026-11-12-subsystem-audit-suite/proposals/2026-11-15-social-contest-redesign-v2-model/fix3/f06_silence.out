@@ -1,0 +1,20 @@
+
+== [before] F6 P(for carries), n=600; seeds as lane B
+  trial        crown    cell `refusal` | auto 0.282 | b rests 0.535 | all rest 0.120  (2se~0.037) | card: refusal
+  trial        commune  cell `free` | auto 0.297 | b rests 0.315 | all rest 0.272  (2se~0.037) | card: free
+  tribunal     crown    cell `refusal` | auto 0.217 | b rests 0.558 | all rest 0.055  (2se~0.037) | card: refusal
+  tribunal     commune  cell `free` | auto 0.262 | b rests 0.248 | all rest 0.183  (2se~0.037) | card: free
+  arbitration  crown    cell `refusal` | auto 0.297 | b rests 0.472 | all rest 0.170  (2se~0.037) | card: refusal
+  arbitration  commune  cell `free` | auto 0.280 | b rests 0.305 | all rest 0.282  (2se~0.037) | card: free
+  questioning  crown    cell `refusal` | auto 0.345 | b rests 0.307 | all rest 0.227  (2se~0.037) | card: refusal
+  questioning  commune  cell `free` | auto 0.293 | b rests 0.280 | all rest 0.265  (2se~0.037) | card: free
+
+== [after] F6 P(for carries), n=600; seeds as lane B
+  trial        crown    cell `refusal` | auto 0.280 | b rests 0.548 | all rest 0.120  (2se~0.037) | card: refusal: a point owed an answer and left standing costs 2.50 with each
+  trial        commune  cell `refusal` | auto 0.258 | b rests 0.485 | all rest 0.193  (2se~0.037) | card: refusal: a point owed an answer and left standing costs 1.75 with each
+  tribunal     crown    cell `refusal` | auto 0.222 | b rests 0.567 | all rest 0.055  (2se~0.037) | card: refusal: a point owed an answer and left standing costs 2.50 with each
+  tribunal     commune  cell `refusal` | auto 0.235 | b rests 0.502 | all rest 0.092  (2se~0.037) | card: refusal: a point owed an answer and left standing costs 1.75 with each
+  arbitration  crown    cell `refusal` | auto 0.297 | b rests 0.482 | all rest 0.170  (2se~0.037) | card: refusal: a point owed an answer and left standing costs 2.00 with each
+  arbitration  commune  cell `refusal` | auto 0.287 | b rests 0.427 | all rest 0.207  (2se~0.037) | card: refusal: a point owed an answer and left standing costs 1.31 with each
+  questioning  crown    cell `refusal` | auto 0.315 | b rests 0.288 | all rest 0.202  (2se~0.037) | card: refusal: a point owed an answer and left standing costs 0.00 with each
+  questioning  commune  cell `refusal` | auto 0.247 | b rests 0.357 | all rest 0.222  (2se~0.037) | card: refusal: a point owed an answer and left standing costs 0.69 with each

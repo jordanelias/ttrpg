@@ -77,7 +77,7 @@ H("B6 a conflicted seat: recusal, a conflict that nets to zero, and the price of
 pp = copy.deepcopy(mp); pp["j1"]["layers"] = dict(pursuits={"x": 0.5}, clients=("b",))
 m6 = dict(M, bears={"x": 1.0})
 st6 = host.bearing(pp["j1"], m6, pp)
-print(f"  j1's stake {tuple(round(x, 2) for x in st6)} -> conflict, lean {tuple(round(x, 2) for x in host.conflict(st6))} (opposite interests do not cancel)")
+print(f"  j1's stake {tuple(round(x, 2) for x in st6)} -> conflict, lean {tuple(round(x, 2) for x in host.conflict(pp["j1"], m6, pp))} (opposite interests do not cancel)")
 inp, card = host.build(pp, "trial", m6, bench=BENCH, effort=3)
 print(f"  with other seats of the authority: recused {card.recused}, decided by {card.decided_by}")
 inp, card = host.build(pp, "trial", m6, bench=("j1",), effort=3)

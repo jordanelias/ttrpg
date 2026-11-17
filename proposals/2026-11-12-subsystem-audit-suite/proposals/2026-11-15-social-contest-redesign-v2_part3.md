@@ -2,6 +2,9 @@
 
 ## Status: PROPOSED (the third part of `2026-11-15-social-contest-redesign-v2.md`; read that file's head first; reference under CLAUDE.md §0.05, nothing reads it at runtime)
 
+The figures here are `v8_out.txt`'s. The stress-test fixes (part 4 §L) moved some, chief among them every row where a
+commune made silence `free` (it no longer can where an answer is owed): `fix3/v9_out.txt` holds them as they now are.
+
 ---
 
 ## A. Thematic, immersive, worldly
@@ -74,7 +77,7 @@ stood, kept in `fix2/before/`.
 | audience | 297 : 0 : 0 : 2 | 0 : 297 | budget 148, rested 2 | O 58, S 41, P 13, F 38 |
 
 Conversation (all-mid, n = 300): carried 0.353 (O 20, S 86, P 40, F 154). Negotiation (all-mid): accepted 45,
-withdrawn 19, impasse 236. Invariants over 12,712 beats (and 8,815 in the A-139 run, someone holding both cells in
+withdrawn 19, impasse 236. Invariants over 12,426 beats (and 8,629 in the A-139 run, someone holding both cells in
 800 of 1,600 sittings): **0 violations** of: the beats chain; an argued beat names its point; an answer addresses
 the other side's point; an item is held and admitted; no conceded issue is re-argued; no barred move; a priced
 beat moves the room; only a speaker who decides moves his own track; nobody exceeds the card's turns; the verdicts
@@ -148,7 +151,7 @@ where it leans to manner. **Focus and Will: §B.6** (B14, B15).
 | the view leaks nothing | each perceived number has its own noise: among poor readers the errors of two options correlate -0.009, argue against press on one ground -0.054, an option and the mood -0.079, mood and their point +0.023; `esteem` is perceived (s.d. 0.41 about the truth); resting's worth, `awe`, the frame and the press's object have their own normals. No `Present`, track or `terms` |
 | contumacy recorded | the accused rests every turn in a crown trial (n = 1,200): 2.23 contumacy claims a sitting in the judge's ledger, the judge's regard for him -0.322 (the battery's single-sitting line, seed 0, records none: at that seed no point of the accuser stood when he rested) |
 | odds | the trial's card shows 0.141 (nobody speaking: the charge lapses); 0.132 delivered with both sides silent (n = 600); the abridged menu's chance to land 0.424 against 0.432 delivered |
-| refusals, each keyed | one character; one person as both parties; an abridged act whose only decider is the speaker; a rally with nobody on the floor; a cohort of weight 0; resuming a sitting that ended `yielded`; an unlawful rite; a bench rite with no seat of its authority. A two-turn sitting resumed under four turns runs four more beats |
+| refusals, each keyed | one character; one person as both parties; an abridged act whose only decider is the speaker; a rally with nobody on the floor; a cohort of weight 0; resuming a sitting that ended `yielded`; an unlawful rite; a bench rite with no seat of its authority; and, after the stress-test fixes (p4 §L), a resume in a changed room, of an abridged act, or with no turn left; a declared bench offered fewer seats than its quorum; a weight that is not a whole number; a party or arranger who is gone. A two-turn sitting resumed under four turns runs four more beats |
 
 ### B.5 Character, context, power, the world
 

@@ -1,0 +1,14 @@
+
+== [after] F18 arm `presume`: P(for) by rig 0 / 0.5 / 1, arranger r5M vs r2, Parliament parties, n=400
+  trial     arranger a: 0.367 / 0.420 / 0.475
+  trial     arranger b: 0.240 / 0.198 / 0.165
+  tribunal  arranger a: 0.273 / 0.340 / 0.407
+  tribunal  arranger b: 0.177 / 0.147 / 0.105
+  debate    arranger a: 0.323 / 0.400 / 0.480
+  debate    arranger b: 0.215 / 0.168 / 0.120
+  audience  arranger a: 0.312 / 0.357 / 0.420
+  audience  arranger b: 0.245 / 0.193 / 0.177
+  rally     arranger a: 0.345 / 0.405 / 0.472
+  rally     arranger b: 0.345 / 0.282 / 0.223
+  rows where the rig does not move toward its arranger: 0 of 10
+  C3: the best rig over 9 cases x stakes 0.25 / 0.5 / 1 at rig_price 0.25: {0: 16, 0.5: 8, 1: 3}

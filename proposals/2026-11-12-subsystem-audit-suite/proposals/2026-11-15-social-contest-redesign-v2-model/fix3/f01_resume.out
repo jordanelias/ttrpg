@@ -1,0 +1,14 @@
+
+== [before] F1 resume
+  resume an abridged tell: CRASH TypeError: 'NoneType' object is not iterable
+  resume a trial before another seat: CRASH KeyError: 'j2'
+  CONTROL resume before the same seat, more turns: ok: budget
+  resume a debate with a crowd newly on the floor: CRASH KeyError: 'crowd'
+  resume a spent audience (n=300): ran 300 (band changed 184), refused[spent] 0
+
+== [after] F1 resume
+  resume an abridged tell: refused[abridged_resume]
+  resume a trial before another seat: refused[room_changed]
+  CONTROL resume before the same seat, more turns: ok: budget
+  resume a debate with a crowd newly on the floor: refused[room_changed]
+  resume a spent audience (n=300): ran 17 (band changed 11), refused[spent] 283

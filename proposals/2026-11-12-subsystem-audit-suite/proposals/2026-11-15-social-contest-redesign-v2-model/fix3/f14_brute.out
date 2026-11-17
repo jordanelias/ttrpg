@@ -1,0 +1,44 @@
+
+== [before] F14 brute, and mean legitimacy / standing / compliance after one ruling (n=200 a cell)
+  r2   (power 3) Grace 1: brute 0.905 legit -0.434 standing -0.181 compliance 0.514
+  r2   (power 3) Grace 2: brute 0.738 legit -0.340 standing -0.148 compliance 0.589
+  r2   (power 3) Grace 4: brute 0.405 legit -0.152 standing -0.081 compliance 0.747
+  r2   (power 3) Grace 5: brute 0.238 legit -0.059 standing -0.048 compliance 0.822
+  r2   (power 3) Grace 7: brute 0.000 legit +0.072 standing +0.000 compliance 0.934
+  r3   (power 4) Grace 1: brute 0.964 legit -0.462 standing -0.193 compliance 0.487
+  r3   (power 4) Grace 2: brute 0.797 legit -0.369 standing -0.159 compliance 0.563
+  r3   (power 4) Grace 4: brute 0.464 legit -0.183 standing -0.093 compliance 0.722
+  r3   (power 4) Grace 5: brute 0.297 legit -0.089 standing -0.059 compliance 0.797
+  r3   (power 4) Grace 7: brute 0.000 legit +0.073 standing +0.000 compliance 0.938
+  r4m  (power 6) Grace 1: brute 0.995 legit -0.465 standing -0.199 compliance 0.474
+  r4m  (power 6) Grace 2: brute 0.828 legit -0.373 standing -0.166 compliance 0.559
+  r4m  (power 6) Grace 4: brute 0.495 legit -0.189 standing -0.099 compliance 0.711
+  r4m  (power 6) Grace 5: brute 0.328 legit -0.097 standing -0.066 compliance 0.796
+  r4m  (power 6) Grace 7: brute 0.000 legit +0.081 standing +0.000 compliance 0.948
+  r5M  (power 8) Grace 1: brute 0.999 legit -0.484 standing -0.200 compliance 0.469
+  r5M  (power 8) Grace 2: brute 0.833 legit -0.390 standing -0.167 compliance 0.544
+  r5M  (power 8) Grace 4: brute 0.499 legit -0.204 standing -0.100 compliance 0.704
+  r5M  (power 8) Grace 5: brute 0.333 legit -0.111 standing -0.067 compliance 0.779
+  r5M  (power 8) Grace 7: brute 0.000 legit +0.073 standing +0.000 compliance 0.938
+
+== [after] F14 brute, and mean legitimacy / standing / compliance after one ruling (n=200 a cell)
+  r2   (power 3) Grace 1: brute 0.333 legit -0.104 standing -0.067 compliance 0.782
+  r2   (power 3) Grace 2: brute 0.167 legit -0.012 standing -0.033 compliance 0.866
+  r2   (power 3) Grace 4: brute 0.000 legit +0.078 standing +0.000 compliance 0.942
+  r2   (power 3) Grace 5: brute 0.000 legit +0.078 standing +0.000 compliance 0.942
+  r2   (power 3) Grace 7: brute 0.000 legit +0.078 standing +0.000 compliance 0.942
+  r3   (power 4) Grace 1: brute 0.500 legit -0.200 standing -0.100 compliance 0.704
+  r3   (power 4) Grace 2: brute 0.333 legit -0.107 standing -0.067 compliance 0.779
+  r3   (power 4) Grace 4: brute 0.000 legit +0.076 standing +0.000 compliance 0.938
+  r3   (power 4) Grace 5: brute 0.000 legit +0.076 standing +0.000 compliance 0.938
+  r3   (power 4) Grace 7: brute 0.000 legit +0.076 standing +0.000 compliance 0.938
+  r4m  (power 6) Grace 1: brute 0.833 legit -0.374 standing -0.167 compliance 0.550
+  r4m  (power 6) Grace 2: brute 0.667 legit -0.282 standing -0.133 compliance 0.635
+  r4m  (power 6) Grace 4: brute 0.333 legit -0.098 standing -0.067 compliance 0.787
+  r4m  (power 6) Grace 5: brute 0.167 legit -0.006 standing -0.033 compliance 0.872
+  r4m  (power 6) Grace 7: brute 0.000 legit +0.083 standing +0.000 compliance 0.948
+  r5M  (power 8) Grace 1: brute 1.000 legit -0.479 standing -0.200 compliance 0.470
+  r5M  (power 8) Grace 2: brute 0.833 legit -0.386 standing -0.167 compliance 0.545
+  r5M  (power 8) Grace 4: brute 0.500 legit -0.200 standing -0.100 compliance 0.705
+  r5M  (power 8) Grace 5: brute 0.333 legit -0.107 standing -0.067 compliance 0.781
+  r5M  (power 8) Grace 7: brute 0.000 legit +0.076 standing +0.000 compliance 0.940

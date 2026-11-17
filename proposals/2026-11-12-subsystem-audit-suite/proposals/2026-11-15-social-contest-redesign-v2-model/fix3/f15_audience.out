@@ -1,0 +1,16 @@
+
+== [before] F15 audience, no opponent; P(for), n=1500
+  judge r2: shipped 0.285 +-0.023 | gap_step 0 0.311 +-0.024
+  judge r5M: shipped 0.269 +-0.023 | gap_step 0 0.311 +-0.024
+
+== [before] F15 control: the tell, where the one addressed IS the man opposite (a power-6 respondent; Presence dice only); n=500
+  shipped   : Reason 1 0.060 +-0.021 | Reason 7 0.430 +-0.044
+  gap_step 0: Reason 1 0.166 +-0.033 | Reason 7 0.430 +-0.044
+
+== [after] F15 audience, no opponent; P(for), n=1500
+  judge r2: shipped 0.311 +-0.024 | gap_step 0 0.311 +-0.024
+  judge r5M: shipped 0.311 +-0.024 | gap_step 0 0.311 +-0.024
+
+== [after] F15 control: the tell, where the one addressed IS the man opposite (a power-6 respondent; Presence dice only); n=500
+  shipped   : Reason 1 0.032 +-0.016 | Reason 7 0.418 +-0.044
+  gap_step 0: Reason 1 0.120 +-0.029 | Reason 7 0.418 +-0.044

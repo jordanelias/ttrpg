@@ -53,6 +53,9 @@ DECIDED, with the rung and the before and after figure.** No new ruling was need
 decision recorded there. **One battery, `checks_v8.py`, re-measures every figure these files state on the model as
 it now stands** (output `v8_out.txt`; n = 300 an arm unless stated; the fix pass's own probes are `fix2/*.py`, the
 model as it stood before is kept in `fix2/before/`). Part 3 §B and part 4 §E say plainly what is still open.
+**Fixed a third time, 2026-11-17**, after a stress test of the model: part 4 §L (seventeen items and three from a transcript audit, each cut where the cut was free; the battery
+re-run as `fix3/v9_out.txt`; the model before it in `fix3/before/`). Where §L moved a figure stated elsewhere in
+these files, §L's is the current one.
 
 Markers: `[ASSUMPTION; Jordan to correct]` on every shipped value; `[HOOK]` a carrier that is only proposed in the
 tree, named and not invented; `[UNVERIFIED]` a claim not opened or not run; **(rung n)** a decision taken by the
@@ -129,9 +132,9 @@ So there are **seven structures and four rules**, and nothing else:
 | rule | one line | where |
 |---|---|---|
 | the **exchange** | one speech, one margin per listener, on `pool_of` against `even + opposed_ob` with signed leverage | part 2 §C |
-| the **close** | one draw per decider, his track as leverage; `declared` carries by its quorum-th seat; under consent, and where a party who decides gives way or the bearer drops the matter, the act itself | part 2 §D |
+| the **close** | one draw per decider, his track as leverage; `declared` carries by its quorum-th seat; under consent, and where a party whose verdict alone is the close gives way or the bearer drops the matter, the act itself (one seat, one vote) | part 2 §D |
 | the **bearing** | one reading for stake, fit, aim, sincerity, credit, partiality, concession cost and verdict effect | part 2 §A |
-| the **arrangement** | `tilt = rig x max(0, tanh((power_arranger - power_other) / scale))` moves the rite's cells | part 2 §H |
+| the **arrangement** | `tilt = rig x max(0, tanh((power_arranger - power_other) / scale))` starts those who decide toward the arranger (its one lever), where someone other than a party decides | part 2 §H |
 
 **Where requirements pulled against each other, resolved once (the rungs):** game first against R13's continuity
 and against the simulation's richness: the sitting keeps **one live point a side and one issue**, and a player
@@ -270,7 +273,7 @@ class Card:
     standard: float; unrest: float; gravity: float   # the Grace asked; the pull of the times (Focus); how grave a change is
     reason_weight: tuple                  # Reason's share of the dice per ground here
     recused: tuple                        # seats that stepped down for a conflict
-    odds: Optional[float]                 # P(carried) before an ordinary unmoved bench; None where nothing is drawn
+    odds: Optional[float]                 # P(carried) of the close itself where nobody speaks; None where nothing is drawn
 ```
 
 The card holds no true attribute and no true start (B05.62: a stranger is an ordinary person); what a chooser
@@ -278,6 +281,7 @@ believes of this room is on his `View`. Invariant, checked in the model on every
 kind the card does not admit is shown; nobody speaks more turns than the card gives; the verdicts returned are the
 card's adjudicators and no others; and its odds are what a
 sitting where nobody speaks delivers (the trial's card shows 0.141; a sitting where both sides rest delivers 0.132, n = 600). The card also carries `silence` (what not answering means
-here: `admits`, `refusal`, `free`), `unargued` (what happens to the matter if nobody speaks: under a rite whose
+here: `admits`, `refusal`, `free`, and what a point left standing costs with those who decide; never `free` where
+an answer is owed, A-145), `unargued` (what happens to the matter if nobody speaks: under a rite whose
 other side must answer, an unpressed charge lapses), `ends` (when it closes), `unrest` (the pull of the times,
 which Focus holds against) and `gravity`. A card that promises what the sitting does not do is a defect.

@@ -1,0 +1,4 @@
+
+== [after] F20 outcome bands, 200 seeds a rite
+  (a) the record's bands: the engine is untouched, so every band equals the model's by construction: {'trial': '78b292f4cb', 'negotiation': 'b08c8d72c0', 'rally': '097f0ed724', 'debate': '73beecf70a', 'questioning': '9e0ae94a8d', 'inquisition': '766f8d08bf', 'audience': 'ff2eb4d158'}
+  (b) a smooth saturation in the engine: seeds whose band changes, by rite: {'trial': 2, 'negotiation': 0, 'rally': 0, 'debate': 18, 'questioning': 0, 'inquisition': 2, 'audience': 0}
