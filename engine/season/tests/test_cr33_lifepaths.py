@@ -2,7 +2,7 @@
 
 FALSIFIER (the plan's): a cast row whose lifepath maps to `inquiry` builds with `capability == {"inquiry":
 pool_default}`, rolls the same pool on `research` as a row with no lifepath, and `train` on `inquiry` executes for
-it and is refused for the other; a template naming a key outside `verb_capability`'s values is refused at import;
+it and is refused for the other; a template naming a key outside `descriptors.CAPABILITIES` is refused at import;
 `repr(Person)` contains no lifepath id. PLANTED FAILURE: the expansion skipped reddens the `train` assertion (run
 in-test below, `test_the_planted_failure_...`). CONTROL: the one-season hash with the expansion skipped differs from the
 shipped one (the shipped state's movers are NPC-004's and NPC-088's `inquiry`); the shipped hash is `_realm_goldens.py`'s.
@@ -16,7 +16,7 @@ import pytest
 
 from engine.season.data import cast
 from engine.season.data import rosters as R
-from engine.season.data import verbs as VERBS
+from engine.substrate.descriptors import CAPABILITIES
 from engine.season.decision import assemble
 from engine.season.decision.options import opening_set
 from engine.season.gaps import Unspecified
@@ -52,8 +52,8 @@ def test_the_roster_is_the_34_and_the_struck_niflhel_ids_are_not_members():
     assert set(R.LIFEPATH_TEMPLATES) == set(R.LIFEPATHS)
 
 
-def test_every_template_names_only_verb_capability_values():
-    names = set(VERBS.VOCATIONS)
+def test_every_template_names_only_defined_skills():
+    names = set(CAPABILITIES)
     held = [k for keys in R.LIFEPATH_TEMPLATES.values() for k in keys]
     assert held and set(held) <= names
     assert any(not keys for keys in R.LIFEPATH_TEMPLATES.values()), "no row maps to none: the cut invented one"
@@ -64,7 +64,7 @@ def _cells():
 
 
 @pytest.mark.parametrize("mutate", [
-    lambda c: c["3-CR4"].update(holds=["no_such_vocation"]),        # a key outside `verb_capability`'s values (v11 CP-T03-04: was `arms`, now a vocation)
+    lambda c: c["3-CR4"].update(holds=["no_such_vocation"]),        # a key outside `descriptors.CAPABILITIES` (B04.04: a skill no verb names is still a defined skill)
     lambda c: c.update({"3-NI1": {"holds": [], "ground": "x"}}),    # an id outside the 34 (a struck one)
     lambda c: c.pop("3-CF6"),                                       # a lifepath with no row
     lambda c: c["3-CR1"].update(holds=["argue", "argue"]),          # a key held twice
@@ -75,11 +75,11 @@ def test_a_template_outside_the_closed_set_is_refused_at_import(mutate):
     cells = {k: dict(v) for k, v in _cells().items()}
     mutate(cells)
     with pytest.raises(Unspecified):
-        R._load_lifepaths(cells, R.LIFEPATHS, set(VERBS.VOCATIONS))
+        R._load_lifepaths(cells, R.LIFEPATHS, frozenset(CAPABILITIES))
 
 
 def test_the_shipped_cells_pass_the_same_loader():
-    assert R._load_lifepaths(_cells(), R.LIFEPATHS, set(VERBS.VOCATIONS)) == (R.LIFEPATH_TEMPLATES, R.LIFEPATH_RANKS)
+    assert R._load_lifepaths(_cells(), R.LIFEPATHS, frozenset(CAPABILITIES)) == (R.LIFEPATH_TEMPLATES, R.LIFEPATH_RANKS)
 
 
 # ======================================================================================

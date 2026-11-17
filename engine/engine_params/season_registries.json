@@ -2240,6 +2240,23 @@
           "told_claim_credit": "decision/options.py::competence",
           "own_state_gate": "queries/person_q.py::OwnStateReader"
         },
+        "capability_site_reads": {
+          "social_roll": {
+            "dice": {
+              "key": "verb",
+              "side": "actor"
+            },
+            "opposes": {
+              "key": "verb",
+              "side": "subject"
+            }
+          },
+          "own_state_gate": {
+            "gate": {
+              "side": "actor"
+            }
+          }
+        },
         "capability_sides": {
           "values": [
             "actor",

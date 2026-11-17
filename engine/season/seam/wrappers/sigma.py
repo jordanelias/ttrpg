@@ -220,7 +220,7 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     # it is built on), an `opposes` row's read gives the opposition; no `opposes` row means opposition `None`, as a
     # self-plea. A row the table omits is a term the roll does not read, so `fed_by` and the roll cannot disagree.
     actor = w.persons[claimants[0]]
-    rows = tuple(r for r in capability_rows(SOCIAL_ROLL_SITE) if r.role in ("dice", "opposes"))
+    rows = _social_rows()
     roles = {r.role for r in rows}
     opposition = None
     if "opposes" in roles and subject != claimants[0]:
@@ -233,6 +233,14 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
 
 #: `rosters.yaml: capability_use_sites`' site whose one reader is `contest_input` (the single roll's dice and opposition).
 SOCIAL_ROLL_SITE = require_use_site("social_roll")
+
+
+def _social_rows() -> tuple:
+    """The `social_roll` site's rows that give the roll a term (`dice`, `opposes`), in table order: the ONE place the roll's two
+    builders -- the dealt roll (`_read_social_roll`) and the person's believed one (`believed_input`) -- ask which terms the table
+    gives it, so they cannot compose different obstacles from one table (`_frame`). The loader pins each row's `key` and `side`
+    and allows one of each role (`rosters.yaml: capability_site_reads`), so the role alone says what the reader reads."""
+    return tuple(r for r in capability_rows(SOCIAL_ROLL_SITE) if r.role in ("dice", "opposes"))
 
 
 def _fed_by(reads: tuple, inp: SocialContestInput, ob_terms: dict) -> tuple:
@@ -333,14 +341,17 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
       * the room's terms (`reception`, `proofs`) read other persons' ledgers: unknown unless the caller
         passes his own believed `room` (`{"reception": .., "proofs": ..}`).
     His `effort` is his own act's, held with certainty like his pool (CP-T01-05)."""
+    roles = {r.role for r in _social_rows()}
     key = VERB_CAPABILITY.get(verb)
     opposition = None
-    if person_subject and key and subject != p.id:
+    # THE TABLE'S TERMS, as the dealt roll reads them (`_read_social_roll`): no `opposes` row, no opposition term (and none to
+    # be unknown about); no `dice` row, a pool of 0.
+    if "opposes" in roles and person_subject and key and subject != p.id:
         said = believed_capability(p, subject, key)
         if said is None:
             return None
         opposition = float(said)
-    elif person_subject and subject != p.id and fx.get("obstacle_model") == OBSTACLE_MODEL_TASK:
+    elif "opposes" in roles and person_subject and subject != p.id and fx.get("obstacle_model") == OBSTACLE_MODEL_TASK:
         # A VERB NAMING NO KEY (`lie`), ON THE TASK ARM: the roll opposes a person with `pool.score`, which on such a verb is
         # the untrained score for EVERY person (`pool.untrained`; nothing can be held on no vocation), so it is known,
         # and the believed obstacle is the dealt one. The control
@@ -354,7 +365,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
             return None
         room_terms = dict(reception=room["reception"], reception_gain=fx.get("reception_gain"),
                           proofs=room["proofs"], proof_step=fx.get("proof_step"))
-    return _frame(fx, pool, opposition, 0.0, room_terms, effort, verb)
+    return _frame(fx, pool if "dice" in roles else 0, opposition, 0.0, room_terms, effort, verb)
 
 
 def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:

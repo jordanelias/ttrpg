@@ -327,7 +327,7 @@ def test_a_gate_row_at_a_site_that_is_not_a_gate_site_is_refused():
 
 
 def test_a_judgement_row_its_reader_cannot_read_is_refused():
-    """Phase 2 (`/code-review`): `capability_factor` reads the actor's own `attributes` at the row's key, so a `judgement` row
+    """Phase 2 (`/code-review`): `_judgement_factor` reads the actor's own `attributes` at the row's key, so a `judgement` row
     keyed on a skill, or on `side: subject`, would load and read nothing. Each is refused naming the row."""
     base = _shipped_row("judgement")
     assert _refused([base]) is None                                    # control: the shipped row loads
@@ -336,6 +336,46 @@ def test_a_judgement_row_its_reader_cannot_read_is_refused():
     assert msg is not None and "judgement" in msg and skill in msg, msg
     msg = _refused([dict(base, side="subject")])
     assert msg is not None and "judgement" in msg, msg
+
+
+def test_a_row_its_sites_reader_does_not_read_is_refused():
+    """B04 Phase 3: the `social_roll` reader reads a `dice` row at `key: verb, side: actor` and an `opposes` row at `key: verb,
+    side: subject`, one of each, and the gate's reader reads the actor's own value (`rosters.yaml: capability_site_reads`). A row
+    that differs would load, change nothing the roll does, and be reported by `fed_by` as if it had. Each is refused, naming the
+    row; the shipped rows are the control."""
+    dice, opposes, gate = _shipped_row("dice"), _shipped_row("opposes"), _shipped_row("gate")
+    for row in (dice, opposes, gate):
+        assert _refused([row]) is None, row                                   # control: each shipped row loads
+    msg = _refused([dict(dice, key=descriptors.ATTRIBUTES[0])])
+    assert msg is not None and "dice" in msg and "key" in msg, msg           # a dice row keyed off `verb`
+    msg = _refused([dict(dice, side="subject")])
+    assert msg is not None and "dice" in msg and "side" in msg, msg          # a dice row on the other side
+    msg = _refused([dict(opposes, side="actor")])
+    assert msg is not None and "opposes" in msg and "side" in msg, msg
+    msg = _refused([dice, dict(dice)])
+    assert msg is not None and "second" in msg and "dice" in msg, msg        # a second dice row is reported and never read
+    msg = _refused([dict(gate, side="subject")])
+    assert msg is not None and "gate" in msg and "side" in msg, msg
+
+
+def test_the_believed_roll_reads_the_same_terms_as_the_dealt_one(monkeypatch):
+    """B04 Phase 3: `believed_input` (the chooser's `View.odds`) and `_read_social_roll` (the dealt roll) ask `_social_rows` which
+    terms the table gives the roll. With the `opposes` row deleted the dealt roll reads no opposition, so the believed record
+    carries none either and is no longer `None` (unknown) for want of a claim about the subject; with the `dice` row deleted both
+    deal a pool of 0. FALSIFIER: a believer who still reads an opposition the table no longer gives."""
+    from engine.season.data.fixtures import DEFAULT_FIXTURES
+    from engine.season.harness import probes as P
+    from engine.season.seam.wrappers import sigma
+    p = P.tiny_world().persons["p_low"]
+    kw = dict(pool=3, person_subject=True)
+    # control: the shipped table gives the roll an opposition, and a believer holding no claim of the subject cannot read it
+    assert sigma.believed_input(p, "arrest", "p_mid", DEFAULT_FIXTURES, **kw) is None
+    _rebound(monkeypatch, lambda rows: rows.__delitem__(next(i for i, r in enumerate(rows) if r["use"] == "social_roll" and r["role"] == "opposes")))
+    inp = sigma.believed_input(p, "arrest", "p_mid", DEFAULT_FIXTURES, **kw)
+    assert inp is not None and inp.opposition is None and inp.pool == 3
+    _rebound(monkeypatch, lambda rows: rows.__delitem__(next(i for i, r in enumerate(rows) if r["use"] == "social_roll" and r["role"] == "dice")))
+    assert sigma.believed_input(p, "arrest", "p_mid", DEFAULT_FIXTURES, **kw) is None     # `opposes` is back: unknown again
+    assert sigma._read_social_roll(P.tiny_world(), ["p_low", "p_mid"], verb="arrest", subject="p_mid")[0].pool == 0
 
 
 def test_negative_circumstance_gain_is_refused():
@@ -424,7 +464,7 @@ def test_a_level_outside_level_sigma_is_refused():
 
 
 def test_an_unknown_role_or_key_is_refused():
-    base = _shipped_row("dice")
+    base = next(r for r in _shipped_rows() if r["role"] == "dice" and r["use"] == "fight")     # a site no reader pins to one key
     msg = _refused([dict(base, role="no_such_role")])
     assert msg is not None and "no_such_role" in msg and "capability_roles" in msg, msg
     msg = _refused([dict(base, key="no_such_key")])
@@ -469,7 +509,7 @@ def test_a_gain_add_or_floor_that_is_not_a_registered_fixture_is_refused():
 
 # ---------------------------------------------------------------------------------------------------------------------
 # B04.06 -- THE DECISION LAYER READS THE TABLE. `decision/options.py::competence` reads its key from the `told_claim_credit`
-# row (through `capability_factor`), and `queries/person_q.py::OwnStateReader` reads the Thread gate's key and its threshold
+# row (through `_judgement_factor`), and `queries/person_q.py::OwnStateReader` reads the Thread gate's key and its threshold
 # fixture from the `own_state_gate` row. The rebound table is the one the readers then see.
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -1049,6 +1089,20 @@ def test_a_cast_row_key_neither_read_nor_unread_listed_is_refused(tmp_path, monk
     assert {"certainty", "coherence"} <= carried                       # the listed keys are still authored, so the list is not vacuous
     assert not carried & {"arc_trajectory", "cultural_label", "self_other_initial"}
     assert not {k for r in rows.values() for k in (r.get("convictions") or {})} & {"cultural_label", "self_other_initial"}
+
+
+def test_a_convictions_group_that_holds_no_list_is_refused():
+    """B04 Phase 3: the two keys B04.12 deleted sat inside `convictions:` as scalars, and `pursuits_of` used to skip a group that
+    held no list, so either would have loaded again. A scalar group is refused, naming the person and the group; a shipped row
+    (the control) still reads."""
+    from engine.season.data import cast
+    from engine.season.gaps import Unspecified
+    cid, shipped = next(iter(sorted(cast.load().items())))
+    assert cast.pursuits_of(shipped)                                          # control
+    for bad in ("cultural_label", "self_other_initial"):
+        row = dict(shipped, convictions=dict(shipped["convictions"], **{bad: "x"}))
+        with pytest.raises(Unspecified, match=bad):
+            cast.pursuits_of(row)
 
 
 # B04.13 -- THE DEVELOPMENT SHEET SHOWS THE PERSON (CAP A8; CORE Edit 6, DEF Edit 5). `decision/sheet.py::DevelopmentSheet` gains

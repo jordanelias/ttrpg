@@ -1592,18 +1592,8 @@ def dissents(p: Person, c: Claim, act=None, weigh=None) -> bool:
 
 # v10 CR-19 / `H-200`: THE ATTRIBUTE `AX-7`'S COMPETENCE READS is a ROW, not a name here: `rosters.yaml: tables.capability_uses`'s
 # `told_claim_credit` row (B04.06; `ED-IN-0327`: Attunement helps one judge whether someone is telling the truth), read by
-# `capability_factor` through the substrate's `about_mid`. Nothing under `decision/` names an attribute or the scale's middle.
+# `_judgement_factor` through the substrate's `about_mid`. Nothing under `decision/` names an attribute or the scale's middle.
 TOLD_CLAIM_CREDIT = require_use_site("told_claim_credit")
-
-
-def capability_factor(p: Person, use: str, fx) -> Optional[float]:
-    """THE `judgement` ROWS OF SITE `use`, as one factor about the scale's mid-point (B04.06; U1 §8), or `None` for NO CAPABILITY.
-
-    `None` is returned when `use` has no `judgement` row, or when `p` HOLDS no value at the row's key: a READ, never a default
-    (the caller reads it as the factor 1). The value is `p.attributes` at the row's `key`, on `substrate.descriptors.scale_of(key)`;
-    the form is `about_mid`, its `gain` the Fixture the row names (`fx.get(row.gain)`): a sweep of that Fixture overrides
-    the shipped value through `fx`, as every other sweep does, and the caller passes no gain of its own. `side: actor` is the only side a person-side reader reads: `p` is the actor. A use with several rows multiplies them."""
-    return _judgement_factor(p, _judgement_rows(use), fx)
 
 
 def _judgement_rows(use: str) -> list:
@@ -1612,7 +1602,11 @@ def _judgement_rows(use: str) -> list:
 
 
 def _judgement_factor(p: Person, rows: list, fx) -> Optional[float]:
-    """`capability_factor`'s product over `rows` (the `judgement` rows of one site); `None` where there are none or `p` holds no value at any key."""
+    """THE `judgement` ROWS OF ONE SITE, as one factor about the scale's mid-point (B04.06; U1 §8), or `None` for NO CAPABILITY: `None` where
+    there are no rows, or `p` holds no value at any row's key (a READ, never a default; the caller reads it as the factor 1). The value is
+    `p.attributes` at the row's `key`, on `substrate.descriptors.scale_of(key)`; the form is `about_mid`, its `gain` the Fixture the row
+    names (`fx.get(row.gain)`), so a sweep of that Fixture overrides the shipped value through `fx`. `side: actor` is the only side read:
+    `p` is the actor (the loader refuses any other). A site with several rows multiplies them. The one caller is `competence`."""
     factor = None
     for row in rows:
         held = (getattr(p, "attributes", None) or {}).get(row.key)
@@ -1631,7 +1625,7 @@ def competence(p: Person, fx) -> float:
                                                                              `told_claim_credit` row names (`competence_gain`)
 
     `attunement` is the score `p.attributes` holds at the `told_claim_credit` row's key (`Person.attributes`, CR-20),
-    `mid` the middle of that key's scale (`capability_factor`). MONOTONE in Attunement and exactly 1 at `mid`; a receiver who HOLDS no
+    `mid` the middle of that key's scale (`_judgement_factor`). MONOTONE in Attunement and exactly 1 at `mid`; a receiver who HOLDS no
     Attunement reads 1 (a READ, never a default). ⚠ The built realm (`boot/realm.py`) seats every key on every
     person (`cast_attributes=True`, drawn by `state/carriers.py::generated_attributes` where unauthored),
     so no realm receiver reaches that branch and each unauthored one reads the Attunement he drew, below `mid` for

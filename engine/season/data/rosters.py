@@ -1431,6 +1431,25 @@ def _capability_use_sites() -> dict:
     return {str(s): r for s, r in sites.items()}
 
 
+def _capability_site_reads(sites, roles) -> dict:
+    """`{site: {role: {column: the one value its reader reads}}}` from `rosters.yaml: capability_site_reads`, closed against the
+    registered sites and the ten roles and against the two columns a reader can fix (`key`, `side`). A site with no entry is
+    unconstrained: its reader reads each row's own columns."""
+    reads = _ROSTERS.get("capability_site_reads") or {}
+    if not isinstance(reads, dict):
+        raise Unspecified("`capability_site_reads` is not a site -> role -> columns map", "rosters.yaml",
+                          needs="a map from a site to the roles its reader reads by role, each to the `key` and `side` it reads",
+                          law="U1 §3 item 7 -- a row's columns are read or refused, never ignored")
+    for site, by_role in reads.items():
+        for role, cols in (by_role or {}).items():
+            if site not in sites or role not in roles or not isinstance(cols, dict) or not set(cols) <= {"key", "side"}:
+                raise Unspecified(f"`capability_site_reads` entry {site!r}/{role!r} names an unregistered site or role, or a "
+                                  "column other than `key` and `side`", "rosters.yaml",
+                                  needs="a registered site, one of the ten roles, and only `key` and `side`",
+                                  law="U1 §3 item 7 -- a row's columns are read or refused, never ignored")
+    return reads
+
+
 def _capability_role_fields(roles) -> dict:
     """`{role: frozenset of the columns it takes}` from `capability_roles: fields:`, closed against the ten roles and the
     row grammar."""
@@ -1508,6 +1527,8 @@ def _load_capability_uses(rows, fixtures) -> tuple:
     gate_keys, gate_sites = roster("capability_gate_keys"), roster("capability_gate_sites")
     fixture_cols = roster("capability_fixture_columns", ordered=True)
     when_keys = roster("capability_when_keys")
+    site_reads = _capability_site_reads(sites, roles)
+    seen_reads: set = set()
     if not isinstance(rows, (list, tuple)) or not rows:
         raise Unspecified("`tables: capability_uses` has no `rows:`", _CAPABILITY_USES_WHERE,
                           needs="the uses rows", law="ED-IN-0230 -- a declared-but-empty table is the defect the loaders refuse")
@@ -1576,10 +1597,22 @@ def _load_capability_uses(rows, fixtures) -> tuple:
             if role == "circumstance" and row.get("gain") is not None and fixtures[row["gain"]] < 0:
                 refuse(i, row, f"has a negative gain ({row['gain']} = {fixtures[row['gain']]})", "a non-negative Fixture",
                        "A-25 -- `circumstance` carries hostile terms only; a favourable one is an `edge` row for the roller")
+        pinned = (site_reads.get(use) or {}).get(role)
+        if pinned is not None:
+            for col, want in pinned.items():
+                if row.get(col) != want:
+                    refuse(i, row, f"has {col} {row.get(col)!r}, but the reader of site {use!r} reads a `{role}` row at `{col}: {want}`",
+                           f"`{col}: {want}` on every `{role}` row at {use!r} (`rosters.yaml: capability_site_reads`)",
+                           "U1 §3 item 7 -- a reader that reads a row by role ignores its other columns, so a row that differs "
+                           "would load, change nothing, and be reported (`fed_by`) as if it had")
+            if (use, role) in seen_reads:
+                refuse(i, row, f"is a second `{role}` row at site {use!r}", f"one `{role}` row at {use!r}",
+                       "U1 §3 item 7 -- the reader reads one row of the role; a second would be reported and never read")
+            seen_reads.add((use, role))
         if role == "judgement" and (key not in _ATTRIBUTES or row.get("side", "actor") != "actor"):
             refuse(i, row, "is a `judgement` row its reader cannot read",
                    f"an attribute key ({sorted(_ATTRIBUTES)}) on `side: actor`",
-                   "decision/options.py::capability_factor reads the actor's own `attributes` at the row's key and no "
+                   "decision/options.py::_judgement_factor reads the actor's own `attributes` at the row's key and no "
                    "other side; any other key or side would load and read nothing")
         if role == "gate" and (key not in gate_keys or use not in gate_sites):
             refuse(i, row, "is a `gate` row off its one key or its gate sites",

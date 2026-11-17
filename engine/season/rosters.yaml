@@ -1366,6 +1366,17 @@ rosters:
     told_claim_credit: decision/options.py::competence
     own_state_gate: queries/person_q.py::OwnStateReader
 
+  # WHAT A SITE'S READER READS OF A ROW, where it reads the row by ROLE and not by the row's other columns (B04 Phase 3): a row
+  # of that `role` at that site must carry exactly this `key` and `side`, and the site carries one row of the role. Any other
+  # row would load and change nothing the reader does, while a record that reports the row's columns (`fed_by`,
+  # `seam/wrappers/sigma.py`) says it did. The loader refuses it (`data/rosters.py::_load_capability_uses`).
+  capability_site_reads:
+    social_roll:
+      dice: {key: verb, side: actor}
+      opposes: {key: verb, side: subject}
+    own_state_gate:
+      gate: {side: actor}
+
   # `side`: whose sheet a row reads -- not who benefits (U1 §3 item 3). `per`: once when held, once per rank, or signed steps
   # of the held value from its scale's mid-point (U1 §3 item 2). `key` selectors: the skill the act's verb names (`verb`)
   # and that skill's governing attribute (`verb.base`) (U1 §3 item 1).

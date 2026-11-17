@@ -234,7 +234,12 @@ def pursuits_of(r: dict) -> dict:
     if isinstance(block, dict):
         for group, rows in block.items():
             if not isinstance(rows, list):
-                continue
+                # A KEY IN `convictions:` THAT HOLDS NO LIST OF ENTRIES IS REFUSED, NOT SKIPPED (B04.12): the two nested unread
+                # keys it deleted (`cultural_label`, `self_other_initial`) sat here as scalars, and a skip would load them again.
+                raise Unspecified(f"{r.get('id')!r} carries `convictions: {group}: {rows!r}`, which is not a list of "
+                                  "conviction entries", "references/npc_registry.yaml -- convictions",
+                                  needs="a list of `{conviction, weight}` entries under each group (`primary`)",
+                                  law="B04.12 -- a key nothing reads is declared unread or deleted, at every level")
             for entry in rows:
                 if isinstance(entry, dict) and entry.get("conviction") is not None:
                     out[pursuit(str(entry["conviction"]))] = float(entry.get("weight") or 0.0)
