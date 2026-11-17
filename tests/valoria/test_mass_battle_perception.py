@@ -17,18 +17,18 @@ import pytest
 import modules.mass_battle.hierarchy.units as _hu
 from modules.mass_battle.config import FOV_HALF_DEG
 from modules.mass_battle.core.contact import _visible_enemy_cells, check_orders
-from modules.mass_battle.hierarchy.units import Order, Subunit, Unit
+from modules.mass_battle.hierarchy.units import Order, Unit, Army
 
 
 def _facing_unit(facing):
     """A lone Line subunit with its node facing pinned to a known unit vector (bypassing the
     tick-by-tick facing-update machinery entirely -- this test is about the PERCEPTION filter, not
     about how facing itself comes to be set)."""
-    su = Subunit(shape='Line', troop_type='infantry', tier=2,
+    su = Unit(shape='Line', troop_type='infantry', tier=2,
                  starting_position=(25, 25), advance_dir=1, stance='balanced', unit_type='melee')
     su._node_facing = facing
-    u = Unit(name='observer', faction='A', power=4, command=4, discipline=5, discipline_start=5,
-             morale=6, morale_start=6, subunits=[su])
+    u = Army(name='observer', faction='A', power=4, command=4, discipline=5, discipline_start=5,
+             morale=6, morale_start=6, units=[su])
     return u, su
 
 
@@ -47,7 +47,7 @@ def test_visible_enemy_cells_facing_cone_directly():
 def test_visible_enemy_cells_falls_back_to_advance_dir_when_facing_unset():
     """Default _node_facing is None at construction (never yet slewed by a tick) -- falls back to
     (advance_dir, 0), the same fallback find_contacts' head_a/head_b already use."""
-    su = Subunit(shape='Line', troop_type='infantry', tier=2,
+    su = Unit(shape='Line', troop_type='infantry', tier=2,
                  starting_position=(25, 25), advance_dir=1, stance='balanced', unit_type='melee')
     assert su._node_facing is None
     my = su.centroid()

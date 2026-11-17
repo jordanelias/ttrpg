@@ -16,7 +16,7 @@ GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B03g-go-early-landings @048724cd545117255e71d04a583d99c6cb5fe3a9
 GATE: Batch B03c-boot @544cf5719c620331b70aeda93c1672977b44e9ef
-GATE: Batch B03a-prose @871a9b81eab42e31963b21b487d698f8552a1cc5
+GATE: Batch B03a-prose @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: every conjunct of R-01, R-02, R-03, re-read (M0 closes here, `V12_STRUCTURE.md` §3) → all three hold; R-04 to R-09 print their held counts; no `status:` edited (A-114). No row moves: what the batch serves is A-6, A-7, A-11, A-12, A-98, A-101, A-106, A-107 (one skill roster, its uses as data, the trait roster, "lap" for the season's pass)
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command):
@@ -48,7 +48,7 @@ EST: 13 h [estimate: `V12_STRUCTURE.md` §2.4's formula over this part's 27 posi
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
-| B04.01 | the season's "round" becomes "lap" | PCR-4 (D-05) | BUILD | MOVER(encoding) | Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 |
+| B04.01 | the season's "round" becomes "lap" | PCR-4 (D-05) | BUILD | MOVER(encoding) | Batch B03a @ae7955b7ad09ccd08df79409bed53ac0cfafc05e |
 | B04.02 | the skill definition block, its exporter check and its leaf reader; one kind | CAP A1: CORE Edits 1–2, DEF Edit 1; `IS-B2-CHAR-05` | BUILD | EQUAL | B04.01 |
 | B04.03 | the `capability:` column on contested and graded verb rows | CAP A2: CORE Edit 3 (Edit 8's values) | BUILD | EQUAL | B04.02 |
 | B04.04 | the verb maps derived from the column; two rosters deleted | CAP A3: CORE Edit 4 | BUILD | EQUAL | B04.03 |
@@ -61,17 +61,17 @@ EST: 13 h [estimate: `V12_STRUCTURE.md` §2.4's formula over this part's 27 posi
 | B04.11 | a bundle may grant a skill at a rank | CAP A7: DEF Edit 3 | BUILD | EQUAL | B04.09 |
 | B04.12 | the cast row's unread keys: read, removed or listed | CAP A7: DEF Edit 4 | BUILD | EQUAL | B04.07 |
 | B04.13 | the development sheet shows the person | CAP A8: CORE Edit 6, DEF Edit 5 | BUILD | EQUAL | B04.02 |
-| B04.14 | one Endurance default in a fight | CAP A9: CORE Edit 7 | BUILD | EQUAL | Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 |
+| B04.14 | one Endurance default in a fight | CAP A9: CORE Edit 7 | BUILD | EQUAL | Batch B03a @ae7955b7ad09ccd08df79409bed53ac0cfafc05e |
 | B04.15 | a rank never passes its row's ceiling | CAP A10: MAP §G part two | BUILD | EQUAL | B04.02 |
-| B04.16 | three register rows brought to the tree | DEF Edit 6 | BUILD | EQUAL | Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 |
+| B04.16 | three register rows brought to the tree | DEF Edit 6 | BUILD | EQUAL | Batch B03a @ae7955b7ad09ccd08df79409bed53ac0cfafc05e |
 | B04.17 | a believed trait is read only from a held claim | `05_SC_capability_surface` edit 4 | BUILD | EQUAL | B04.07 |
 | B04.18 | three social skills: `law`, `insight`, `deception` | `05_SC_hearing_capabilities` edit 1 | BUILD | EQUAL | B04.02 |
 | B04.19 | `lie` draws on `deception`, `determine` on `law` | `05_SC_hearing_capabilities` edit 2 | BUILD | EQUAL | B04.18, B04.03 |
 | B04.20 | the governance verbs' cells | `06_FA_office_capabilities` edit 1 | POINTER | — | B04.03, B04.19 |
 | B04.21 | a seat row may name the skill its post calls on | `06_FA_office_capabilities` edit 3 | BUILD | EQUAL | B04.19 |
 | B04.22 | the conferrer weighs the candidate, behind a setting at 0 | `06_FA_office_capabilities` edit 4 | BUILD | EQUAL | B04.21, B04.17 |
-| B04.23 | a founded office's grant as data | `06_FA_office_capabilities` edit 5 | BUILD | EQUAL | Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 |
-| B04.24 | the pool rule, the opposition and the even line as pure functions | `29_DICE` item 29-1 (row 1) with `pool_of` (U1-A step 6) | BUILD | EQUAL | Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 |
+| B04.23 | a founded office's grant as data | `06_FA_office_capabilities` edit 5 | BUILD | EQUAL | Batch B03a @ae7955b7ad09ccd08df79409bed53ac0cfafc05e |
+| B04.24 | the pool rule, the opposition and the even line as pure functions | `29_DICE` item 29-1 (row 1) with `pool_of` (U1-A step 6) | BUILD | EQUAL | Batch B03a @ae7955b7ad09ccd08df79409bed53ac0cfafc05e |
 | B04.25 | a skill is never lost | `IS-B2-CHAR-04` (A-106) | POINTER | — | — |
 | B04.26 | the cast's values drafted; the batch's re-pin | `IS-A-11` stage 1 | CONTENT | MOVER (the re-pin) | B04.01 to B04.24 |
 | B04.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1; B04.26 steps 2 and 3, moved | BUILD | MOVER (the re-pin) | B04.26 |
@@ -92,7 +92,7 @@ Not in this batch, and where each is: CORE Edit 9 and CAP Part B (B05); MAP §G 
 - FALSIFIER and CONTROL: a remaining `.round` read of the season's pass, or `scenes_per_round`, under `engine/season` (`git grep -n "\.round\b\|scenes_per_round" engine/season` prints nothing but harness output keys and the fight's words); a moved tally. Control: the NPC-088 headless act and Event tallies and `corpus_run --seasons 2` [v12: two seasons a case, D-17; the case's own span, to `MAX_SEASONS`, is B99's] seed 0's tallies equal B03a's close (`reading @<sha>`).
 - GATE: `git grep -n "scenes_per_round\|\.round\b" engine/season -- '*.py'` → no hit naming the season's pass (a numeric `.round(` call, if the grep shows one, is listed in the commit body and kept); `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `python tools/ci_sim_fabrication_check.py` → exit 0; `python -m pytest engine/season/tests/test_fi03_trail.py engine/season/tests/test_cp_t03_08_tend_on_the_wounded.py engine/season/tests/test_cr31_heritage_regard.py -q` → pass, and the `test_season_shape.py` tests naming `round` (`-k round`) → pass; the realm content hash (`HASH READING`) after one season at seed 0 → moved (field name in the encoding: `state/world.py::_object_head`, `_encode_into`; D-04), the tallies equal.
 - HASH MOVERS: every content hash, by encoding only: `Claim`'s field name enters `World.content_hash()` (D-04; `loop/driver.py`'s own docstring: "the content hash moves only by `Claim` gaining `round`"). Declared; B04's one re-pin in B04.26.
-- DEPENDS ON: EXISTS-IN-TREE `state/carriers.py::Claim.round`, `loop/driver.py::SeasonDriver.round`, `data/fixtures.py` `scenes_per_round`, `hole_register.yaml` H-124; V12 Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 (comment edits on the same files, CI-02).
+- DEPENDS ON: EXISTS-IN-TREE `state/carriers.py::Claim.round`, `loop/driver.py::SeasonDriver.round`, `data/fixtures.py` `scenes_per_round`, `hole_register.yaml` H-124; V12 Batch B03a @ae7955b7ad09ccd08df79409bed53ac0cfafc05e (comment edits on the same files, CI-02).
 - GLOSSARY: *lap* (step 5). "lap": one pass of the season's deliberate, resolve and witness phases, as a runner's lap is one pass of the track.
 - NAMES: `Claim.round` → `Claim.lap`; `SeasonDriver.round` → `SeasonDriver.lap`; `scenes_per_round` → `scenes_per_lap` (§5.10's B04 row).
 - COST and TIER: wide mechanical rename; `sonnet`, `high` (PCR-4: a `haiku` count first; the count is step 1's command).

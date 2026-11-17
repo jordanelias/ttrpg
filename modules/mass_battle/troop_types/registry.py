@@ -33,9 +33,9 @@ def role_allowed(troop_type, role):
 # per-subunit combat stats. Values are transcribed directly from the canonical BG
 # unit table (mass_battle_v30.md §B.2) — the TTRPG Power / Discipline / Morale columns.
 # Keyed to match the config TROOP_TYPE_ROLES snake_case taxonomy. Accessor: stats_for;
-# constructor: Subunit.of_type. dr (armour) and stamina (endurance) are intentionally
+# constructor: Unit.of_type. dr (armour) and stamina (endurance) are intentionally
 # left to inherit: §B.2's Armour column maps to a vs-Piercing DR scale
-# (None=0/Light=1/Medium=2/Heavy=3) whose identity with the Subunit.dr
+# (None=0/Light=1/Medium=2/Heavy=3) whose identity with the Unit.dr
 # field is unconfirmed, and Endur (1-6) has no clean bridge to the 0-100 stamina pool. [ED-1018]
 TROOP_TYPE_STATS = {
     # troop_type        : power, discipline, morale   (morale_start defaults to morale)
@@ -72,7 +72,7 @@ MOUNTED_TYPES = frozenset({"cavalry", "mounted_archers", "light_cavalry"})
 def stats_for(troop_type):
     """Canonical per-subunit combat stats for a troop type (mass_battle_v30 §B.2), as a
     fresh dict {power, discipline, morale}, or None if the type has no preset. None lets
-    the caller fall back to Unit inheritance. Lookup is case-insensitive."""
+    the caller fall back to Army inheritance. Lookup is case-insensitive."""
     if troop_type is None:
         return None
     preset = TROOP_TYPE_STATS.get(str(troop_type).strip().lower())

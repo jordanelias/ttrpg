@@ -2,7 +2,7 @@
 import os as _os
 import os as _sigma_os
 
-__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'MB_TROOP_DENSITY_CAP', 'TROOP_TYPE_DENSITY_CAP', 'cell_cap_for', 'SUBUNIT_ROUT_FLOOR', 'ROUT_CASCADE_FRAC', 'MB_CELL_MORALE', 'CELL_MORALE_PULL', 'CELL_BREAK_ROUT_FRAC', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'MB_SUPPORT_RANK_CAP', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'MB_STOCHASTIC_ROUT', 'ROUT_ONSET_FRAC', 'ROUT_CAP_FRAC', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'RANGED_DR_DEFAULT', 'VOLLEY_LETHALITY_SCALE', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'MB_VOLLEY_DENSITY_ENABLED', 'MB_VOLLEY_DENSITY_REF', 'MB_VOLLEY_DENSITY_FLOOR', 'MB_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'MB_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'MB_FEIGNED_RETREAT', 'FEIGNED_RECOGNIZE_OB', 'FEIGNED_RETREAT_OB', 'OVEREXTEND_PENALTY', 'MB_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN', 'MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC', 'MB_YIELD_POCKET', 'YIELD_POCKET_REACH', 'STANCE_SPEED_MOD', 'MB_INTENT_RESOLUTION', 'STANCE_COMMITMENT', 'INTENT_OFFENSE_D', 'INTENT_DEFENSE_D', 'MB_FRACTIONAL_POOL', 'PER_DIE_NET_EV', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'MB_FRICTION', 'MB_FRICTION_SIGMA', 'PER_CELL', 'MB_STAMINA_DRAIN', 'MB_STAMINA_REST', 'MB_ROTATE_FLOOR', 'MB_STAM_SIGMA', 'MB_DEPTH_ROTATE', 'MB_FRONTAGE_BLEND', 'MB_FRONTAGE_REF', 'MB_REFILL_FLOOR', 'MB_CLOSE_RANKS', 'MB_CELL_DAMAGE', 'MB_CHARGE_SIGMA', 'MB_SHOCK_FRONT', 'MB_SHOCK_REAR', 'MB_SHOCK_BRACE_FLOOR', 'MB_SHOCK_HOLD_BRACE', 'MB_SHOCK_DISC_FULL', 'MB_SHOCK_DEPTH_FULL', 'MB_SHOCK_DEPTH_REF', 'MB_SHOCK_SHAKEN_GAIN', 'MB_CAVALRY_SPEED_MULT', 'MB_ENVELOP_SPEED_MULT', 'ENVELOP_STANDOFF', 'ENVELOP_ORBIT_CAP', 'MB_BRACE_ENABLED', 'MB_RECOIL_FRONTAL', 'MB_CHARGE_RECOIL', 'MB_BRACE_SETUP_DELAY', 'MB_RECOIL_CHARGER_GATE', 'MB_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'MB_PIN_REACH', 'MB_REFUSE', 'MB_ENVELOP_MOD', 'MB_ENVELOP_DEPTH_RESIST', 'MB_POCKET_MOD', 'MB_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'MB_KITE_ENABLED', 'MB_KITE_STANDOFF', 'MB_NODE_COHESION', 'MB_CELL_EXCLUSION', 'ROUTE_WAYPOINT_EPS', 'ROUTE_BUDGET_TICKS', 'MB_AMMO_ENABLED', 'MB_VOLLEYS_START', 'MB_VOLLEYS_RESUPPLY']
+__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'MB_TROOP_DENSITY_CAP', 'TROOP_TYPE_DENSITY_CAP', 'cell_cap_for', 'UNIT_ROUT_FLOOR', 'ROUT_CASCADE_FRAC', 'MB_CELL_MORALE', 'CELL_MORALE_PULL', 'CELL_BREAK_ROUT_FRAC', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'MB_SUPPORT_RANK_CAP', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'MB_STOCHASTIC_ROUT', 'ROUT_ONSET_FRAC', 'ROUT_CAP_FRAC', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'RANGED_DR_DEFAULT', 'VOLLEY_LETHALITY_SCALE', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'MB_VOLLEY_DENSITY_ENABLED', 'MB_VOLLEY_DENSITY_REF', 'MB_VOLLEY_DENSITY_FLOOR', 'MB_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'MB_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'MB_FEIGNED_RETREAT', 'FEIGNED_RECOGNIZE_OB', 'FEIGNED_RETREAT_OB', 'OVEREXTEND_PENALTY', 'MB_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN', 'MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC', 'MB_YIELD_POCKET', 'YIELD_POCKET_REACH', 'STANCE_SPEED_MOD', 'MB_INTENT_RESOLUTION', 'STANCE_COMMITMENT', 'INTENT_OFFENSE_D', 'INTENT_DEFENSE_D', 'MB_FRACTIONAL_POOL', 'PER_DIE_NET_EV', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'MB_FRICTION', 'MB_FRICTION_SIGMA', 'PER_CELL', 'MB_STAMINA_DRAIN', 'MB_STAMINA_REST', 'MB_ROTATE_FLOOR', 'MB_STAM_SIGMA', 'MB_DEPTH_ROTATE', 'MB_FRONTAGE_BLEND', 'MB_FRONTAGE_REF', 'MB_REFILL_FLOOR', 'MB_CLOSE_RANKS', 'MB_CELL_DAMAGE', 'MB_CHARGE_SIGMA', 'MB_SHOCK_FRONT', 'MB_SHOCK_REAR', 'MB_SHOCK_BRACE_FLOOR', 'MB_SHOCK_HOLD_BRACE', 'MB_SHOCK_DISC_FULL', 'MB_SHOCK_DEPTH_FULL', 'MB_SHOCK_DEPTH_REF', 'MB_SHOCK_SHAKEN_GAIN', 'MB_CAVALRY_SPEED_MULT', 'MB_ENVELOP_SPEED_MULT', 'ENVELOP_STANDOFF', 'ENVELOP_ORBIT_CAP', 'MB_BRACE_ENABLED', 'MB_RECOIL_FRONTAL', 'MB_CHARGE_RECOIL', 'MB_BRACE_SETUP_DELAY', 'MB_RECOIL_CHARGER_GATE', 'MB_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'MB_PIN_REACH', 'MB_REFUSE', 'MB_ENVELOP_MOD', 'MB_ENVELOP_DEPTH_RESIST', 'MB_POCKET_MOD', 'MB_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'MB_KITE_ENABLED', 'MB_KITE_STANDOFF', 'MB_NODE_COHESION', 'MB_CELL_EXCLUSION', 'ROUTE_WAYPOINT_EPS', 'ROUTE_BUDGET_TICKS', 'MB_AMMO_ENABLED', 'MB_VOLLEYS_START', 'MB_VOLLEYS_RESUPPLY']
 
 # [ED-MB-0041] Volley Size-loss -> troop-casualty scale. 3 == the value the gauge baseline (disc 5 / cmd 4 /
 # dr 1) produced.
@@ -28,19 +28,19 @@ TROOPS_PER_SIZE = 100
 # ─── CONTINUOUS-SCALE CELL MODEL (Jordan directive 2026-06-03) ───
 # Units carry a continuous troop count (no discrete tiers). A cell holds CELL_FLOOR..CELL_CAP
 # fighting troops; user-set concentration trades cells for density (denser = fewer cells). A
-# subunit routs below SUBUNIT_ROUT_FLOOR total. All-fight: every troop in a contacting cell
+# subunit routs below UNIT_ROUT_FLOOR total. All-fight: every troop in a contacting cell
 # contributes to the exchange (bounded-square, capped at CELL_CAP).
-CELL_FLOOR = 40             # min troops/cell; below this a cell merges into a neighbour (lifecycle)  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
-CELL_CAP = 200              # max troops/cell that fight; beyond this, troops overflow to new cells  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
+CELL_FLOOR = 40             # min troops/cell; below this a cell merges into a neighbour (lifecycle)  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
+CELL_CAP = 200              # max troops/cell that fight; beyond this, troops overflow to new cells  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
 # [ED-MB-0041, Tier-3 experiment under Jordan's 2026-07-25 permission] ARMY BREAKS BY CONTAGION, not
-# by fighting to the last section. `Unit.derive_rout` requires ALL subunits routed before the unit
+# by fighting to the last section. `Army.derive_rout` requires ALL units routed before the army
 # breaks, so with per-subunit breaking at the historical 15-30% band, sections that have already broken
 # would sit on the field absorbing casualties while their siblings fight on. Armies come apart once a
 # decisive portion of the line goes, and the rest routs by contagion rather than being destroyed in
 # place (du Picq's central claim about the moral, not physical, end of a battle).
 #
-# This is the fraction of a unit's SPAWN strength that must sit in broken subunits before the whole body
-# breaks. 1.0 reproduces the all-subunits behaviour exactly. The number that lands is CALIBRATED-DEBT
+# This is the fraction of an army's SPAWN strength that must sit in broken units before the whole body
+# breaks. 1.0 reproduces the all-units behaviour exactly. The number that lands is CALIBRATED-DEBT
 # until something outside the engine supports it.
 # [ED-MB-0041, Jordan directive 2026-07-25: "the cell needs to be the primitive for morale, discipline,
 # quality, stamina, route, health, armour, facing, damage, troops count, etc"] PHASE 1: MORALE.
@@ -71,8 +71,8 @@ CELL_BREAK_ROUT_FRAC = float(_sigma_os.environ.get('CELL_BREAK_ROUT_FRAC', '0.5'
 CELL_MORALE_PULL = float(_sigma_os.environ.get('CELL_MORALE_PULL', '0.25'))  # [CALIBRATED-DEBT: cohesion pull rate toward the subunit mean; mechanism is du Picq's "men hold because their neighbours hold", magnitude unfitted]
 
 ROUT_CASCADE_FRAC = float(_sigma_os.environ.get('ROUT_CASCADE_FRAC', '0.6'))  # [A8, ED-MB-0067 Part A / ED-MB-0071 (corrected 2026-09-27 after adversarial review found the first choice, 0.5, under-evidenced): CALIBRATED-DEBT, chosen by sweep per this line's own prior rule -- workbench/rout_cascade_sweep.py against the 8 gauge/CAV rows with a multi-subunit side (H3/H4/H5/H6/H10/H11/C4/C7, derived procedurally -- a hand-curated first list wrongly dropped C4/C7; single-subunit armies, including every campaign army _faction_to_unit builds, are provably inert to this parameter by construction). At n=60, 0.6 and 0.5 are IDENTICAL on casualty-realism pass count (3/8: H3/H10/C7, up from 0/8 at the 1.0-0.7 inert plateau) and on 6 of 8 rows' raw numbers -- but 0.6 costs NOTHING on the win-share control (4/8, unchanged from baseline) while 0.5 regresses it by one row (H5 exits its band, 51.0%->43.4%). 0.6 STRICTLY DOMINATES 0.5 on every measured dimension; the earlier choice of 0.5 (matching the concept's own candidate) is not supported by the evidence once win-share is checked as a control (CLAUDE.md Sec.0.1 pt 4) -- disclosed as a correction, not quietly swapped. NOT a full fix: 5 of 8 rows still fail casualty-realism. Full table: ED-MB-0071's ledger row.]
-SUBUNIT_ROUT_FLOOR = 80     # a subunit routs when its aggregate total falls below this  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
-MAX_TROOPS_PER_UNIT = 10000 # design ceiling on a single unit's troop count  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
+UNIT_ROUT_FLOOR = 80     # a subunit routs when its aggregate total falls below this  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
+MAX_TROOPS_PER_UNIT = 10000 # design ceiling on a single unit's troop count  # [canonical: tests/coverage_matrix_archive.md §"2026-06-03 continuous-scale rework - step 1a" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]
 # [ED-MB-0021 / P-DEC-3, spatial_model_v2_plan.md §9 — Jordan-RATIFIED mechanism: "a cavalry cell has a
 #  lower MAX density than infantry (fewer horses than men fit per unit area) — implement as a per-troop-
 #  type density cap (cavalry cap < infantry cap), NOT a larger box."] MECHANISM ratified; the cavalry cap
@@ -271,7 +271,7 @@ MB_FRICTION = _sigma_os.environ.get('MB_FRICTION', '1') == '1'  # [ED-MB-0045 it
 MB_FRICTION_SIGMA = float(_sigma_os.environ.get('MB_FRICTION_SIGMA', '1.1'))
 MORALE_EROSION_DAMP = 0.7    # [class-B] <1 slows morale erosion -> longer, more attritional battles  # [CALIBRATED-DEBT: morale-erosion damping factor — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 MORALE_SIGMA_SCALE  = 0.8    # [class-B] morale->effectiveness: falling morale lowers a unit's sigma-leverage  # [CALIBRATED-DEBT: morale-to-sigma-leverage scaling — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
-MORALE_SIBLING_PULL = 0.15   # [DG-4, ED-MB-0002, 2026-07-04 Jordan ruling: "Subunit morale combination of
+MORALE_SIBLING_PULL = 0.15   # [DG-4, ED-MB-0002, 2026-07-04 Jordan ruling: "[Unit] morale combination of
 # own morale and overall morale; more likely to wilt if other subunits losing, more likely to rally if
 # other subunits winning."] [ASSUMPTION: class-B, Jordan-vetoable] Fraction of the gap between a subunit's
 # own morale and its siblings' troop-weighted aggregate pulled toward that aggregate EACH phase (core/
@@ -284,7 +284,7 @@ PER_CELL = _sigma_os.environ.get('PER_CELL', '1') == '1'   # per-column density/
 # "we are using a field system so there shouldn't even be any assignment issues so long as cell
 # boundaries are respected." resolve_toi_and_commit's own docstring already states the invariant --
 # "two unit squares that must never interpenetrate" -- and applies it to same-side pairs as well as
-# CROSS-SIDE pairs (cells of two subunits on the SAME side would otherwise walk through each other). Reuses
+# CROSS-SIDE pairs (cells of two units on the SAME side would otherwise walk through each other). Reuses
 # the swept-SAT solve; no new magnitude, no RNG. Default ON per the directive: this is a built model being
 # switched on, not a new one being introduced.
 MB_CELL_EXCLUSION = (_sigma_os.environ.get('MB_CELL_EXCLUSION', '1') == '1')
@@ -340,7 +340,7 @@ MB_POCKET_MOD = float(_sigma_os.environ.get('MB_POCKET_MOD', '-1.0'))   # surrou
 MB_POCKET_REACH = int(_sigma_os.environ.get('MB_POCKET_REACH', '2'))    # lateral column reach to count a flanker
 
 # [A1, ED-MB-0067 Part A — squad-engagement synthesis, "Routes with waypoints"] Waypoint-route
-# primitives (hierarchy/units.py Subunit._resolve_route_goal / check_orders' route-clamp). A
+# primitives (hierarchy/units.py Unit._resolve_route_goal / check_orders' route-clamp). A
 # waypoint counts as REACHED once the sub-unit's anchor is within this distance of it (advances
 # _route_idx to the next waypoint); [ASSUMPTION: half a cell — basis: matches this file's other
 # half-cell convergence/aliveness thresholds (_ColBlock.alive()'s density>0.5, the D2b fix's
@@ -352,7 +352,7 @@ ROUTE_WAYPOINT_EPS = 0.5
 # route clamp. DERIVED from
 # TICKS_PER_PHASE (not a second independently-asserted magnitude): 3 phases/engagement is the
 # same "limit of three phases per simultaneous engagement per turn" convention run_battle's own
-# max_turns=18 default already encodes. [ASSUMPTION: "maximum-ticks-in-battle" read as ONE
+# max_ticks=18 default already encodes. [ASSUMPTION: "maximum-ticks-in-battle" read as ONE
 # engagement (run_battle's own 18-tick cap), not a whole multi-turn campaign — basis: `t` resets
 # to 1 at the start of every run_battle call and neither check_orders nor the route resolver has
 # any visibility into which multi-turn battle-turn is currently running, so "one engagement" is
@@ -369,9 +369,9 @@ ROUTE_BUDGET_TICKS = 3 * TICKS_PER_PHASE  # [canonical: mass_battle_v30.md §A.7
 # order condition with a genuinely long-range D could add one.
 
 # [A6, ED-MB-0067 Part A — "Missile ammunition and resupply"] Per-subunit volley count
-# (Subunit.eff_volleys/drain_volleys/resupply_volleys, mirroring stamina's OWN existing per-subunit
-# ledger and its own-else-inherited-Unit pattern exactly -- ammo belongs to the shooter, not to a column
-# other subunits pass through: see percell._ColBlock's own note). New CALIBRATED-DEBT either way — canon
+# (Unit.eff_volleys/drain_volleys/resupply_volleys, mirroring stamina's OWN existing per-subunit
+# ledger and its own-else-inherited-Army pattern exactly -- ammo belongs to the shooter, not to a column
+# other units pass through: see percell._ColBlock's own note). New CALIBRATED-DEBT either way — canon
 # has sling AMMO TYPES only (mass_battle_v30.md:93-101), no volley count or resupply rate to cite.
 #
 # DEFAULTS ON, per this file's own flags-ON precedent. The legacy modes unit_legacy_mor0/cell_legacy_mor0
@@ -388,15 +388,15 @@ MB_AMMO_ENABLED = _sigma_os.environ.get('MB_AMMO_ENABLED', '1') == '1'
 # engagements genuinely exhaust and recover ammunition, instead of shipping a mechanism that is
 # live in code but silently inert at its own default there.
 #
-# ⚠ RE-MEASURED after the percell._ColBlock -> Subunit.eff_volleys move (same battery, same 24
+# ⚠ RE-MEASURED after the percell._ColBlock -> Unit.eff_volleys move (same battery, same 24
 # seeds, both arms): the legacy-lattice arm's numbers are UNCHANGED by the ledger move (this
 # specific battery row's one archer subunit never shifts files at all -- stance='hold' the whole
 # battle -- so the column-sharing defect the move fixes never had anything to bite on HERE; the fix
 # matters for other, moving/multi-subunit scenarios, not this one). RE-MEASURED AGAIN after the F4
 # fix (engine.build_army/gauge_mb.make_mixed_unit seeding a ranged subunit its own pool instead of
-# inheriting a Unit shared with its siblings): also unchanged here, because this specific bat.py
+# inheriting an Army shared with its siblings): also unchanged here, because this specific bat.py
 # row builds its archer via bat.py's own single-subunit `make_unit`, a path F4's fix does not touch
-# at all (a lone subunit already reads its parent Unit's pool 1:1 -- no sibling to share with, so
+# at all (a lone subunit already reads its parent Army's pool 1:1 -- no sibling to share with, so
 # it was never affected by the bug F4 closed). The shipped cell_field configuration -- the one
 # actually playable, per this repo's own "we have no 'grid' mode... it always occurs on a
 # coordinate field" ruling (bat.py's own VOCABULARY section) -- fires EXACTLY 7 shots total in ALL

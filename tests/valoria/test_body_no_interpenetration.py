@@ -11,7 +11,7 @@ THE CHECK RUNS THE BATTLE, not a fixture of two cells: armies of at least 5,000 
 systems/mass_battle/sim/stress_scenarios.json (the harness's own scenarios, shipped flags), measured from the
 harness's end-of-tick snapshots. Two ways this test could pass without testing anything are closed: it asserts it
 CHECKED battles and ticks, and it asserts the armies actually MOVED AND FOUGHT (contact reached, casualties taken,
-few idle subunits), because freezing every formation also leaves no overlap (the ED-MB-0059 deadlock). A second test
+few idle units), because freezing every formation also leaves no overlap (the ED-MB-0059 deadlock). A second test
 switches both mechanisms off and requires the same instrument to SEE interpenetration, so the first cannot be
 vacuous.
 

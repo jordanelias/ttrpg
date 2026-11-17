@@ -376,8 +376,8 @@
       "kind": "scalar",
       "module": "mass_battle",
       "file": "modules/mass_battle/armies.py",
-      "note": "[canonical: pathing_deployment_diagnosis.md §3 — lateral gap (cols) between adjacent subunits; a coherent line (hoplite ~0) not the wide manipular quincunx]",
-      "citation": "pathing_deployment_diagnosis.md §3 — lateral gap (cols) between adjacent subunits; a coherent line (hoplite ~0) not the wide manipular quincunx",
+      "note": "[canonical: pathing_deployment_diagnosis.md §3 — lateral gap (cols) between adjacent units; a coherent line (hoplite ~0) not the wide manipular quincunx]",
+      "citation": "pathing_deployment_diagnosis.md §3 — lateral gap (cols) between adjacent units; a coherent line (hoplite ~0) not the wide manipular quincunx",
       "citation_grade": "source"
     },
     {
@@ -403,8 +403,8 @@
       "citation_grade": "source"
     },
     {
-      "key": "mass_battle.SUBUNIT_CAP",
-      "name": "SUBUNIT_CAP",
+      "key": "mass_battle.UNIT_CAP",
+      "name": "UNIT_CAP",
       "value": 11,
       "kind": "scalar",
       "module": "mass_battle",
@@ -471,8 +471,8 @@
       "kind": "scalar",
       "module": "mass_battle",
       "file": "modules/mass_battle/config.py",
-      "note": "max troops/cell that fight; beyond this, troops overflow to new cells  # [canonical: tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]",
-      "citation": "tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000",
+      "note": "max troops/cell that fight; beyond this, troops overflow to new cells  # [canonical: tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]",
+      "citation": "tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000",
       "citation_grade": "source"
     },
     {
@@ -482,8 +482,8 @@
       "kind": "scalar",
       "module": "mass_battle",
       "file": "modules/mass_battle/config.py",
-      "note": "min troops/cell; below this a cell merges into a neighbour (lifecycle)  # [canonical: tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]",
-      "citation": "tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000",
+      "note": "min troops/cell; below this a cell merges into a neighbour (lifecycle)  # [canonical: tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]",
+      "citation": "tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000",
       "citation_grade": "source"
     },
     {
@@ -559,8 +559,8 @@
       "kind": "scalar",
       "module": "mass_battle",
       "file": "modules/mass_battle/config.py",
-      "note": "design ceiling on a single unit's troop count  # [canonical: tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]",
-      "citation": "tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000",
+      "note": "design ceiling on a single unit's troop count  # [canonical: tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]",
+      "citation": "tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000",
       "citation_grade": "source"
     },
     {
@@ -828,7 +828,7 @@
       "kind": "scalar",
       "module": "mass_battle",
       "file": "modules/mass_battle/config.py",
-      "note": "[DG-4, ED-MB-0002, 2026-07-04 Jordan ruling: \"Subunit morale combination of",
+      "note": "[DG-4, ED-MB-0002, 2026-07-04 Jordan ruling: \"[Unit] morale combination of",
       "citation": "ED-MB-0002",
       "citation_grade": "source"
     },
@@ -1072,17 +1072,6 @@
       "citation_grade": null
     },
     {
-      "key": "mass_battle.SUBUNIT_ROUT_FLOOR",
-      "name": "SUBUNIT_ROUT_FLOOR",
-      "value": 80,
-      "kind": "scalar",
-      "module": "mass_battle",
-      "file": "modules/mass_battle/config.py",
-      "note": "a subunit routs when its aggregate total falls below this  # [canonical: tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]",
-      "citation": "tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/SUBUNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000",
-      "citation_grade": "source"
-    },
-    {
       "key": "mass_battle.SUPPORT_WEIGHTS",
       "name": "SUPPORT_WEIGHTS",
       "value": {
@@ -1182,6 +1171,17 @@
       "file": "modules/mass_battle/config.py",
       "note": "[canonical: designs/provincial/mass_battle_v30.md §A.3b — \"engine rescaled; config.py is leading canon\" for battlefield geometry]",
       "citation": "designs/provincial/mass_battle_v30.md §A.3b — \"engine rescaled; config.py is leading canon\" for battlefield geometry",
+      "citation_grade": "source"
+    },
+    {
+      "key": "mass_battle.UNIT_ROUT_FLOOR",
+      "name": "UNIT_ROUT_FLOOR",
+      "value": 80,
+      "kind": "scalar",
+      "module": "mass_battle",
+      "file": "modules/mass_battle/config.py",
+      "note": "a subunit routs when its aggregate total falls below this  # [canonical: tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]",
+      "citation": "tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000",
       "citation_grade": "source"
     },
     {
@@ -1334,7 +1334,7 @@
       "kind": "scalar",
       "module": "mass_battle",
       "file": "modules/mass_battle/massbattle.py",
-      "note": "floor only -- `Unit.total_troops() == 0` divides by zero deep in",
+      "note": "floor only -- `Army.total_troops() == 0` divides by zero deep in",
       "citation": null,
       "citation_grade": null
     },
@@ -4051,8 +4051,8 @@
       "citation_grade": null
     },
     {
-      "key": "engine.season.settings.field_subunits",
-      "name": "field_subunits",
+      "key": "engine.season.settings.field_units",
+      "name": "field_units",
       "value": "side",
       "kind": "other",
       "module": "engine.season.settings",

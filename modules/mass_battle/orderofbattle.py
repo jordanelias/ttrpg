@@ -1,11 +1,11 @@
 """modules.mass_battle.orderofbattle -- a faction's ORDER OF BATTLE as a typed input, and the builder that turns
-it into the multi-subunit `Unit` the engine fights with (ED-IN-0306, phase 1).
+it into the multi-subunit `Army` the engine fights with (ED-IN-0306, phase 1).
 
 WHAT THIS IS. `massbattle._weighted_unit` builds every season army as ONE 'infantry' subunit sized by headcount.
 An `OrderOfBattle` says what the army actually is: named UNITS (one `UnitRow` each), each of one troop type (spearmen, archers,
 light cavalry, ...), one size, one role, and optionally a posture and a fall-back point; plus one STRATEGY for the
-whole army. `build_unit` constructs the Unit through `armies.build_army`, the engine's one multi-subunit
-constructor, so troop-type stats, reach, density, the role -> shape/instruction menu and the SUBUNIT_CAP all come
+whole army. `build_unit` constructs the Army through `armies.build_army`, the engine's one multi-subunit
+constructor, so troop-type stats, reach, density, the role -> shape/instruction menu and the UNIT_CAP all come
 from their existing owners: nothing is re-implemented here.
 
 WHAT IT DECIDES AND WHAT IT DOES NOT. It decides placement (where on the field each unit starts) and which
@@ -29,7 +29,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional, Tuple
 
-from modules.mass_battle.armies import DEPLOY_GAP, SUBUNIT_CAP, _centered_line_cols, _spec_span, build_army
+from modules.mass_battle.armies import DEPLOY_GAP, UNIT_CAP, _centered_line_cols, _spec_span, build_army
 from modules.mass_battle.config import BATTLEFIELD_SIZE, ROLE_SPEC, cell_cap_for
 from modules.mass_battle.geometry import footprint_for
 from modules.mass_battle.hierarchy.units import Order, _INSTRUCTION_STANCE
@@ -42,7 +42,7 @@ __all__ = ['UnitRow', 'OrderOfBattle', 'STRATEGIES', 'POSTURES', 'TARGETINGS', '
 #: `fall_back_at`, since a unit that STARTS retreating is not a deployment).
 POSTURES = ('balanced', 'aggressive', 'hold')
 
-#: Targeting a unit may be told to prefer (`Subunit.target_condition`; None is the engine's 'nearest').
+#: Targeting a unit may be told to prefer (`Unit.target_condition`; None is the engine's 'nearest').
 TARGETINGS = (None, 'nearest', 'weakest')
 
 #: Strategy -> the posture each CLASS of unit takes unless it sets its own. `class_of` names the classes.
@@ -68,7 +68,7 @@ _SIDE_DIR = {'A': -1, 'B': 1}
 _ANCHOR_COL = 25            # [canonical: armies.build_army's anchor_col default, ED-MB-0017] the field's centre column
 _MIN_COL, _MAX_COL = 1, BATTLEFIELD_SIZE - 2    # keep a 1-cell margin, as `_centered_line_cols` does
 
-#: The Unit-level baseline the units inherit where a troop type sets nothing: the season adapter's own
+#: The Army-level baseline the units inherit where a troop type sets nothing: the season adapter's own
 #: (`massbattle._SEASON_FORCE_POWER`, `_MVP_UNIT_COMMAND`). Duplicated as three literals rather than imported:
 #: `massbattle` imports THIS module, and a cycle is the worse of the two. A test pins them equal.
 _UNIT_POWER, _UNIT_COMMAND, _UNIT_DISCIPLINE = 4, 4, 5  # [canonical: sim_mb_06_v9_historical_spec.md -- T3 baseline P4/C4/D5 defaults, as massbattle._SEASON_FORCE_POWER and _MVP_UNIT_COMMAND carry them]
@@ -117,8 +117,8 @@ def validate(oob: OrderOfBattle) -> None:
         raise ValueError(f"unknown strategy {oob.strategy!r} (known: {sorted(STRATEGIES)})")
     if not oob.units:
         raise ValueError("an order of battle needs at least one unit")
-    if len(oob.units) > SUBUNIT_CAP:
-        raise ValueError(f"{len(oob.units)} units exceeds the cap of {SUBUNIT_CAP}")
+    if len(oob.units) > UNIT_CAP:
+        raise ValueError(f"{len(oob.units)} units exceeds the cap of {UNIT_CAP}")
     seen = set()
     for sf in oob.units:
         if sf.name in seen:
@@ -150,11 +150,11 @@ def _spec_for(sf: UnitRow, strategy: str) -> dict:
     spec = dict(troop_type=sf.troop_type, troops=float(sf.troops),
                 concentration=float(cell_cap_for(sf.troop_type)))
     # POSTURE PRECEDENCE: the unit's own, then the one its role's instructions set (ShieldWall and Hold hold,
-    # Push presses -- `Subunit.eff_stance` reads them only while the engine stance was never written on purpose), then
+    # Push presses -- `Unit.eff_stance` reads them only while the engine stance was never written on purpose), then
     # the strategy's for its class. Always writing the strategy's posture made a role unable to set it.
     role_stance = role is not None and any(k in _INSTRUCTION_STANCE for k in ROLE_SPEC[role]['instructions'])
     if sf.posture is not None:
-        spec['stance'] = sf.posture  # D-9: `build_army`'s spec key is the engine attribute `Subunit.stance`, which keeps its name (an Order sets it by name, `_ORDER_SAFE_FIELDS`)
+        spec['stance'] = sf.posture  # D-9: `build_army`'s spec key is the engine attribute `Unit.stance`, which keeps its name (an Order sets it by name, `_ORDER_SAFE_FIELDS`)
     elif not role_stance:
         spec['stance'] = STRATEGIES[strategy][cls]
     if role is not None:
@@ -226,13 +226,13 @@ def _place(specs: list, classes: list, side: str) -> None:
 
 
 def build_unit(oob: OrderOfBattle, name: str, side: str, *, morale_start: int):
-    """The `Unit` for `oob` on `side` ('A' attacker, 'B' defender): `armies.build_army` over one spec per
+    """The `Army` for `oob` on `side` ('A' attacker, 'B' defender): `armies.build_army` over one spec per
     unit, placed by `_place`. `morale_start` is the side's season morale, applied to every subunit
-    (`build_army` gives each its own copy). Unit-level power/command/discipline are the season adapter's baseline;
-    the TROOP TYPE's own stats override them per subunit (`Subunit.of_type`). [ASSUMPTION; medium; Jordan to correct:
+    (`build_army` gives each its own copy). Army-level power/command/discipline are the season adapter's baseline;
+    the TROOP TYPE's own stats override them per subunit (`Unit.of_type`). [ASSUMPTION; medium; Jordan to correct:
     the side's morale is every subunit's start, so a troop type's own morale preset (levy 2, knights 6) does not apply
     -- in the season morale is a fact about the SIDE (stance, loyalty, battle history, `massbattle._morale_start`);
-    revert: pass no `morale` here so `Subunit.of_type`'s preset applies.]"""
+    revert: pass no `morale` here so `Unit.of_type`'s preset applies.]"""
     if side not in _SIDE_DIR:
         raise ValueError(f"side must be 'A' or 'B', got {side!r}")
     validate(oob)

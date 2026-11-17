@@ -47,13 +47,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 
 | # | old → new | first stated by | applied again by |
 |---|---|---|---|
-| 12 | `max_turns` → `max_ticks` | B16M.01 | B19.08, B19.22 |
-| 13 | `.broken` → `.disordered` | B16M.02 | B19.12, B19.54, B19.58, B19.59, B19.63 |
-| 14 | `hierarchy.units.Unit` → `Army` | B16M.03 | B22.03 |
-| 15 | `Subunit` → `Unit` | B16M.03 | B17.01, B19a.01, B19.01, B19.04, B19.05, B19.06 and 17 more |
-| 16 | `subunits` → `units` | B16M.03 | B31.02 |
-| 17 | `SUBUNIT_*` → `UNIT_*` | B16M.03 | — |
-| 18 | `field_subunits` → `field_units` | B16M.03 | B17.01 |
 | 19 | `Claim.round` → `Claim.lap` | B04.01 | B11.08, B11.22, B08.02, B08.06, B34.03, B22.02 and 3 more |
 | 20 | `SeasonDriver.round` → `SeasonDriver.lap` | B04.01 | — |
 | 21 | `scenes_per_round` → `scenes_per_lap` | B04.01 | B34.10, B28.17, B28.18, B28.29 |
@@ -118,7 +111,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | 80 | `populated.build_realm` → `boot.realm.build_realm` | B37.14 | — |
 | 81 | `populated.py::seat_guards` → `boot/realm.py::seat_guards` | B37.14 | — |
 | 82 | `dice_engine.LEVEL_SIGMA` → `engine/dice_engine/sigma_leverage.py::LEVEL_SIGMA` | B37.15 | — |
-| 83 | `SUBUNIT_ROUT_FLOOR` → `UNIT_ROUT_FLOOR` | B22.24 | — |
 | 84 | `("round", person)` → `("lap", person)` | B28.21 | — |
 | 85 | `populated.py::resolve_anchor` → `boot/realm.py::resolve_anchor` | B32.17 | — |
 | 86 | `loop/effects_shared.py::occupying_faction` → `queries/world_q.py::occupying_faction` | B23.04 | — |

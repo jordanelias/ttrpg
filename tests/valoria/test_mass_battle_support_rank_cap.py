@@ -22,7 +22,7 @@ import modules.mass_battle.config as C
 from modules.mass_battle.troop_types.registry import support_ranks_for, support_weight
 from modules.mass_battle.core.exchange import _pair_engaged_troops
 from modules.mass_battle.geometry import _oriented_abs_map
-from modules.mass_battle.hierarchy.units import Subunit
+from modules.mass_battle.hierarchy.units import Unit
 
 from .test_reach_weapon_class import _charge_vs_brace, _standing, field_path  # noqa: F401  (fixture re-export)
 
@@ -42,7 +42,7 @@ _UNCAPPED_BEYOND = {
 
 def _force(troop_type, shape):
     """A fresh tier-4 subunit and its front-rank contact cells (absolute coords)."""
-    atom = Subunit.of_type(troop_type, shape, 4, (10, 20))
+    atom = Unit.of_type(troop_type, shape, 4, (10, 20))
     amap = _oriented_abs_map(atom)
     front = {ab for ab, orig in amap.items() if orig[0] == 0}
     assert front, f"{troop_type}/{shape}: no front-rank contact cells resolved"
@@ -199,7 +199,7 @@ def test_capped_pike_outfights_levy_in_standing_melee(field_path, monkeypatch):
 # ── MB-07r: the cap reaches the season's own entry ───────────────────────────────────────────────
 
 def _engaged_by_resolve_field(monkeypatch, weight):
-    """The troops `resolve_field` would bring to bear on contact for a headcount side of `weight`: the Unit it builds
+    """The troops `resolve_field` would bring to bear on contact for a headcount side of `weight`: the Army it builds
     is captured at `_run_and_grade` (no battle is fought), and its one subunit is read through the same
     `_pair_engaged_troops` the battle's pools use, with the front rank (orig row 0) as the contact."""
     import random
@@ -213,7 +213,7 @@ def _engaged_by_resolve_field(monkeypatch, weight):
         weights=((weight,), (10,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None, origin=None,
         loyalties=(0.0, 0.0), loyalty_gain=0, geography={}), random.Random(1))
     assert len(seen) == 1
-    atom = seen[0].subunits[0]
+    atom = seen[0].units[0]
     front = {ab for ab, orig in _oriented_abs_map(atom).items() if orig[0] == 0}
     assert front
     return atom.cur_troops, _pair_engaged_troops(atom, front)

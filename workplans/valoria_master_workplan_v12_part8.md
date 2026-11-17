@@ -21,9 +21,9 @@ GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01a-attributes-generated @cbca1ad4fcee656f908d8a75e99bf79213ddeeab (B01a.05: PROVISIONAL until re-read with `harness/pairs.py`: every calibration or tuning this batch reads or sets against persons' attributes is read as a curve over generated pairs, never one even-matchup number; `valoria_master_workplan_v12.md` §3.B, "generated attributes, and curves not centres")
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
-GATE: Batch B03a-prose @871a9b81eab42e31963b21b487d698f8552a1cc5
+GATE: Batch B03a-prose @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
 GATE: Batch B13-pc-package
-GATE: Batch B16M-mb-engine-words
+GATE: Batch B16M-mb-engine-words @113003b1438f098f60568f2639bd6d3a5b18ae8b
 GATE: Batch B04-capability-home
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: R-09.c → `python -m engine.season.harness.corpus_run --seasons 2`'s `DEGREES RESOLVED BY VERB` [v12: two seasons a case, D-17; the case's own span, to `MAX_SEASONS`, is B99's] block: a non-combat verb besides `tell` resolves at two bands whose writes differ (IS-A §12.2's B05 row; it reads "no" at the last reading); re-read R-08.b → `python -m pytest engine/season/tests -q -k test_u4_the_choice_is_sampling` → pass (held; the draw's owner is B06). No `status:` is edited (A-114).
@@ -60,7 +60,7 @@ EST: this half's 25 positions: 0.4 h × 25 = 10.0 h; the batch is 0.4 h × (25 +
 |---|---|---|---|---|---|
 | B05.01 | the face rule and the band edges as exported constants; the margin quantised once at the ladder | `10_DICE_exported_face_rule_and_band_edges` A, D; DOE §1 row 6; C3-L1 | BUILD | EQUAL | Batch B04 |
 | B05.02 | the social roll and every shown odds draw from the one sampler | DOE §1 rows 1, 2, 3, 5, 8, 9 | BUILD | MOVER(behaviour) | B05.01 |
-| B05.03 | the field draws from the one sampler and grades on the one ladder | DOE §1 row 4; U5b §1 row 1; `10_DICE_one_roller` C, D; C3-D2 | BUILD | MOVER(behaviour) | B05.02; Batch B16M |
+| B05.03 | the field draws from the one sampler and grades on the one ladder | DOE §1 row 4; U5b §1 row 1; `10_DICE_one_roller` C, D; C3-D2 | BUILD | MOVER(behaviour) | B05.02; Batch B16M @113003b1438f098f60568f2639bd6d3a5b18ae8b |
 | B05.04 | one resolver name, `d_sigma`, for the three providers | DOE §1 row 7 | BUILD | EQUAL | B05.03 |
 | B05.05 | a wound is a level, not an obstacle term | DOE §2 | POINTER | — | — |
 | B05.06 | five dice-engine corrections the audits decided | DOE §3 rows 2, 3, 4, 5, 10 (row 11 in B05.11, B05.14 and ADV's item) | BUILD | EQUAL | B05.02 |
@@ -166,7 +166,7 @@ EST: this half's 25 positions: 0.4 h × 25 = 10.0 h; the batch is 0.4 h × (25 +
 - GATE: `python -m pytest engine/season/tests/test_mass_battle_module.py tests/valoria/test_degree_ladder_single_owner.py tests/valoria/test_degree_boundary_epsilon.py tests/valoria/test_tn7_always.py -q` → pass; `python systems/mass_battle/sim/mirror_probe.py` → difference below 1.5 standard deviations; `python tools/export_sim_params.py --check` → exit 0; `grep -rn "randint(1, 10)" modules/ engine/season/` → nothing (DOE gate (1), whole); the seed-0 realm hash (`HASH READING`) after one season → moved where `march` fought.
 - HASH MOVERS: "Every fought field; `tools/ci_golden_modes_check.py`'s three digests and every `engine/tests/` golden with a field, re-recorded once" — declared; B05.99 (C3-D2: the field calibration's own re-pin is B19's, after the keyed draw).
 - EXPECTED RED UNTIL: B05.99 for the field goldens and `tools/ci_golden_modes_check.py`.
-- DEPENDS ON: V12 B05.01 (`degree_from_net` in milli-units), B05.02 (`net_boost`, `roll_net_continuous` without the one-die floor); EXISTS-IN-TREE `modules/mass_battle/resolution.py::roll_pool`, `::roll_pool_fractional`, `::compute_degree`, `::_sigma_softcap`, `::_sigma_net_boost`, `modules/mass_battle/config.py::PER_DIE_NET_EV`, `dice_engine.py::degree_label`; V12 Batch B16M-mb-engine-words (the module's names).
+- DEPENDS ON: V12 B05.01 (`degree_from_net` in milli-units), B05.02 (`net_boost`, `roll_net_continuous` without the one-die floor); EXISTS-IN-TREE `modules/mass_battle/resolution.py::roll_pool`, `::roll_pool_fractional`, `::compute_degree`, `::_sigma_softcap`, `::_sigma_net_boost`, `modules/mass_battle/config.py::PER_DIE_NET_EV`, `dice_engine.py::degree_label`; V12 Batch B16M-mb-engine-words @113003b1438f098f60568f2639bd6d3a5b18ae8b (the module's names).
 - GLOSSARY: none.
 - NAMES: none of `V12_STRUCTURE_part2.md` §5.10's B16L or B16M identifiers appears in the copied text; the producer edits the module as B16M left it.
 - COST and TIER: small build in the MB lane; `sonnet`, `high`; MB review at the close.

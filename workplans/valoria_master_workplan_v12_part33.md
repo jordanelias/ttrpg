@@ -17,7 +17,7 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
-GATE: Batch B16L-mb-words @2d9590e75fd253d1d88612e2d42674e2fdb5db96
+GATE: Batch B16L-mb-words @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
 GATE: Batch B04-capability-home
 GATE: Batch B05-one-roll
 GATE: Batch B07-task-draw
@@ -81,7 +81,7 @@ EST: 6 h [estimate: the structure's §2.4 formula; nothing timed]
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
 | B22.01 | which military and physical obstacle terms join the obstacle roster, and which levels join the leverage roster | `U5b_VERBS_military_physical_residue` §1 rule 3; `IS-MB-B1` | DESIGN-FIRST | EQUAL | Batch B05, Batch B07 |
-| B22.02 | the unit row holds what the army lost, by kind | `27_MB_E` 27E-1 | BUILD | EQUAL | Batch B17, Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96 |
+| B22.02 | the unit row holds what the army lost, by kind | `27_MB_E` 27E-1 | BUILD | EQUAL | Batch B17, Batch B16L @ae7955b7ad09ccd08df79409bed53ac0cfafc05e |
 | B22.03 | the battle returns the stamina each unit ended with; a second battle in a lap starts from it | `27_MB_E` 27E-2 | BUILD | EQUAL | B22.02; Batch B19 |
 | B22.04 | a battle's losses are written on the unit row by kind, and counted once | `27_MB_E` 27E-3 | BUILD | EQUAL (MOVER(behaviour) under `recuperation: on`) | B22.03 |
 | B22.05 | the strength a reader sees adds the men who came back, by a draw; an act writes them | `27_MB_E` 27E-4 | BUILD | EQUAL (MOVER(behaviour) under `recuperation: on`) | B22.04 |
@@ -155,7 +155,7 @@ EST: 6 h [estimate: the structure's §2.4 formula; nothing timed]
 - FALSIFIER and CONTROL: a `restore` that returns more than is absent; absent men not counted by `cohort_claims`. Control: the realm content hash at seeds 0 to 2 equal to the previous close's (`reading @<sha>`): no caller yet.
 - GATE: `python -m pytest tests/valoria/test_mass_battle_army_record.py -q` → the four pass; the rest of the file green (the key set the test pins equal to `rosters.yaml`'s, `:189-190`).
 - HASH MOVERS: none (no caller; no shipped world holds an `army` Record).
-- DEPENDS ON: EXISTS-IN-TREE `modules/mass_battle/armyrecord.py::OPS`, `::_apply`, `::cohort_claims`, `::options`, `::validate`; V12 Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96 (the row key `units`, L1-1), Batch B17 (`04_MB_typed_outcome_and_one_path`).
+- DEPENDS ON: EXISTS-IN-TREE `modules/mass_battle/armyrecord.py::OPS`, `::_apply`, `::cohort_claims`, `::options`, `::validate`; V12 Batch B16L @ae7955b7ad09ccd08df79409bed53ac0cfafc05e (the row key `units`, L1-1), Batch B17 (`04_MB_typed_outcome_and_one_path`).
 - GLOSSARY: row *loss* (MB lexicon D-17: dead, captured, injured, fled; regroup, deserters) gains a pointer to `armyrecord.ABSENT_KINDS` for the two kinds the row holds.
 - NAMES: `subformations` → `units` (B16L, L1-1); `Claim.round` → `Claim.lap` (B04, PCR-4).
 - COST and TIER: small build; `sonnet`, high.

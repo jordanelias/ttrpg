@@ -1,10 +1,10 @@
-# Workplan v12 — part 6: batches B13-pc-package, B16M-mb-engine-words
+# Workplan v12 — part 6: batch B13-pc-package
 
 ## Status: RATIFIED, ED-IN-0362 (a body part of workplan v12, drafted under `master/workplan_v12/`; adopted 2026-11-15 as the one active plan; resolves nothing at runtime, CLAUDE.md §0.05; not canon)
 
 ## Written against: the working tree at `aa31fd2` (branch `ccr-62958c70-0kjhsw`), read 2026-11-12; author lane A06 of `master/workplan_v12/V12_STRUCTURE_part2.md` §4.2, with `V12_STRUCTURE_part4.md`'s errata applied (E-1: every batch ends with a `.99` re-pin-and-readings position). Every item is written against the tree as B00 to B03 will leave it; where a symbol is named that does not exist at `aa31fd2`, the item says which batch makes it.
 
-**What this part holds.** The head of parts 6 and 6_cont: the Status, the readings every gate of both uses, the words and the paths; the batches themselves are in `valoria_master_workplan_v12_part6_cont.md`: `B13-pc-package` (PC, S6: personal combat as a package, CI-09, D-09), `B16M-mb-engine-words` (MB, S6: the engine's army names, the lexicon's L2, D-07), in execution order (a topological order of `V12_STRUCTURE.md` §2.1). `B16L-mb-words` (S4, the lexicon's L1) and `B03a-prose` (S5, annotations out of the registries and history out of the source, CI-01, CI-02) closed and their blocks left this part. **Every one is hash EQUAL** (`V12_STRUCTURE.md` §2.2): each ends in a `.99` position that records the EQUAL readings and re-pins nothing, and each states the stop rule a moved hash triggers. A part cites another part's batch or item by handle only; the head's index maps a handle to its file.
+**What this part holds.** The head of parts 6 and 6_cont: the Status, the readings every gate of both uses, the words and the paths; the batches themselves are in `valoria_master_workplan_v12_part6_cont.md`: `B13-pc-package` (PC, S6: personal combat as a package, CI-09, D-09). `B16L-mb-words` (S4, the lexicon's L1), `B03a-prose` (S5, annotations out of the registries and history out of the source, CI-01, CI-02) and `B16M-mb-engine-words` (S6, the engine's army names, the lexicon's L2, D-07) closed and their blocks left this part. **Every one is hash EQUAL** (`V12_STRUCTURE.md` §2.2): each ends in a `.99` position that records the EQUAL readings and re-pins nothing, and each states the stop rule a moved hash triggers. A part cites another part's batch or item by handle only; the head's index maps a handle to its file.
 
 **Words.** `unified/U1_GLOSSARY.md`. A person's numbers are an attribute, a skill and its skill score, a derived score (A-98); armies are an army, a unit, an army formation, a unit formation, with no size word (A-99, the lexicon); a *lap* is one pass of the season's scene budget and a *round* is one engagement of a fight (A-101); the riposte keeps its code id `finalblow_riposte`. No item in this part lands after `PCR-4` (B04), so source text that says `round` for the season's pass keeps the tree's word, and none says it. Copied source text that uses a word a later ruling retired is corrected and the correction said (`V12_STRUCTURE_part2.md` §5.11): the lexicon's "trooper" becomes "man" in the docstrings L1-1 touches (the lexicon's own instruction).
 
@@ -21,4 +21,4 @@ Every before-reading is the previous close's after-reading, quoted `reading @<sh
 
 ---
 
-*The batches of this part are in `valoria_master_workplan_v12_part6_cont.md`: B13-pc-package and B16M-mb-engine-words.*
+*The batch of this part is in `valoria_master_workplan_v12_part6_cont.md`: B13-pc-package.*

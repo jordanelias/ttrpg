@@ -26,8 +26,8 @@ from __future__ import annotations
 
 from typing import Callable, Optional
 
-from modules.mass_battle.armies import SUBUNIT_CAP
-from modules.mass_battle.config import BLOCK_SIZE, SUBUNIT_ROUT_FLOOR
+from modules.mass_battle.armies import UNIT_CAP
+from modules.mass_battle.config import BLOCK_SIZE, UNIT_ROUT_FLOOR
 from modules.mass_battle.orderofbattle import POSTURES, STRATEGIES, TARGETINGS, OrderOfBattle, UnitRow
 from modules.mass_battle.troop_types.recruitment import TRAINING_SITE, recruit_limit
 from modules.mass_battle.troop_types.registry import TROOP_TYPE_STATS, roles_for, stats_for
@@ -135,14 +135,14 @@ def _replace_sf(record: dict, i: int, sf: dict) -> dict:
 def form(record: dict, name: str, troop_type: str, role: Optional[str] = None) -> dict:
     """The record with a new, empty unit `name` of `troop_type`. Fields beyond name, type and role start
     unset; `order` sets them. Refuses a duplicate name, an unknown type, a role outside the type's menu, and a
-    twelfth unit (`armies.SUBUNIT_CAP`)."""
+    twelfth unit (`armies.UNIT_CAP`)."""
     t = _type(troop_type)
     if not isinstance(name, str) or not name.strip():
         raise ValueError(f"a unit needs a name (a non-empty string), got {name!r}")
     if any(sf['name'] == name for sf in record['units']):
         raise ValueError(f"duplicate unit name {name!r}")
-    if len(record['units']) >= SUBUNIT_CAP:
-        raise ValueError(f"an army holds at most {SUBUNIT_CAP} units")
+    if len(record['units']) >= UNIT_CAP:
+        raise ValueError(f"an army holds at most {UNIT_CAP} units")
     if role is not None and role not in roles_for(t):
         raise ValueError(f"role {role!r} is not in {t!r}'s menu {roles_for(t)}")
     sf = {'name': name, 'troop_type': t, 'role': role, 'posture': None, 'target': None, 'fall_back_at': None,
@@ -234,7 +234,7 @@ def set_strategy(record: dict, strategy: str) -> dict:
 
 def validate(record: dict) -> None:
     """Refuse a record that is not well formed: wrong key set, an unknown strategy or troop type, a non-positive
-    count, a duplicate unit name, or more than `SUBUNIT_CAP` units. Raises ValueError."""
+    count, a duplicate unit name, or more than `UNIT_CAP` units. Raises ValueError."""
     if tuple(sorted(record)) != tuple(sorted(KEYS)):
         raise ValueError(f"army record keys {sorted(record)} are not {sorted(KEYS)}")
     if record['strategy'] not in STRATEGIES:
@@ -245,8 +245,8 @@ def validate(record: dict) -> None:
     names = [sf['name'] for sf in record['units']]
     if len(set(names)) != len(names):
         raise ValueError("duplicate unit name")
-    if len(names) > SUBUNIT_CAP:
-        raise ValueError(f"more than {SUBUNIT_CAP} units")
+    if len(names) > UNIT_CAP:
+        raise ValueError(f"more than {UNIT_CAP} units")
     for sf in record['units']:
         _type(sf['troop_type'])
         for _c, n in sf['assigned']:
@@ -344,7 +344,7 @@ def options(q) -> dict:
       strategies, postures, targets  the vocabulary `order` accepts
       troop_types   ((type, roles, site kind or None), ...), the types `recruit` and `form` accept
       raise         ((cohort, type, room), ...), for each cohort and type with room above 0
-      advisories    ((kind, subject, have, floor), ...) -- a unit under `SUBUNIT_ROUT_FLOOR` routs at the first
+      advisories    ((kind, subject, have, floor), ...) -- a unit under `UNIT_ROUT_FLOOR` routs at the first
                     check (`unit_routs`), a record fielding under one `BLOCK_SIZE` block routs at once
                     (`army_routs`), trained troops in no unit do not fight (`unassigned`), and a levy
                     unit never closes to contact (`levy_never_closes`, HANDOFF_MB)."""
@@ -361,8 +361,8 @@ def options(q) -> dict:
     for sf in r['units']:
         n = sum(k for _c, k in sf['assigned'])
         fielded_total += n
-        if n < SUBUNIT_ROUT_FLOOR:
-            notes.append(('unit_routs', sf['name'], n, SUBUNIT_ROUT_FLOOR))
+        if n < UNIT_ROUT_FLOOR:
+            notes.append(('unit_routs', sf['name'], n, UNIT_ROUT_FLOOR))
         if sf['troop_type'] == 'levy':
             notes.append(('levy_never_closes', sf['name'], n, 0))
     if r['units'] and fielded_total < BLOCK_SIZE:

@@ -174,7 +174,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - FALSIFIER and CONTROL: a remaining `designs/audit/` path in `modules/combat`. Control: AST equality of every edited `.py` (comment-only).
 - GATE: `git grep -c "designs/audit/" modules/combat` → no output, exit 1 (with no hit `git grep -c` prints nothing; at the tree of 2026-11-13 it prints six `file:count` lines, 16 hits, exit 0: the control; repair lane R2a, K2 #13); `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`).
 - HASH MOVERS: none.
-- DEPENDS ON: EXISTS-IN-TREE H-123; V12 Batch B03a @871a9b81eab42e31963b21b487d698f8552a1cc5 (CI-02's comment rewrite of the same files).
+- DEPENDS ON: EXISTS-IN-TREE H-123; V12 Batch B03a @ae7955b7ad09ccd08df79409bed53ac0cfafc05e (CI-02's comment rewrite of the same files).
 - GLOSSARY: none.
 - COST and TIER: edit; `haiku`-assisted, `sonnet` lands.
 - LANDS IT: B14's producer; `Item: B14.05`, `[skip ci]`.

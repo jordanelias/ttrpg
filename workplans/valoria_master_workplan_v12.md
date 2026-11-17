@@ -165,7 +165,7 @@ Each binds every batch. Source in the right column; nothing here is decided by t
 - **traits** (`moved_by_evidence`, `moved_by_consequence`, `moved_by_authority`, `moved_by_solidarity`) are a separate roster on `Person.traits`, not skills, and give no dice (A-107; B04);
 - a combatant's skill scores are read through the skill table like everyone's; the combat attribute `faculty` is dropped (A-112; `IS-PC-05` in B15).
 
-**Armies** (A-2, A-94, A-95, A-99; the lexicon): a **unit** is a row of an army's record; the player sees *unit*; no size word for a body of troops is a game term (A-99's list), and there is no fixed-size level between unit and army. The bare word "formation" is refused: **army formation** is where an army's subformations stand, **unit formation** is how one unit's men stand. A **subformation** is a group of units at one post of the army formation, fighting by one set of tactics (lexicon D-1). The levels are three groups, not one ladder: the ground (realm, place), the raiser (faction, side), the army's chain (army, subformation, unit, troops). The code's names follow: L1 landed (B16L, `@2d9590e75fd253d1d88612e2d42674e2fdb5db96`), L2 in B16M (D-07, D-08).
+**Armies** (A-2, A-94, A-95, A-99; the lexicon): a **unit** is a row of an army's record; the player sees *unit*; no size word for a body of troops is a game term (A-99's list), and there is no fixed-size level between unit and army. The bare word "formation" is refused: **army formation** is where an army's subformations stand, **unit formation** is how one unit's men stand. A **subformation** is a group of units at one post of the army formation, fighting by one set of tactics (lexicon D-1). The levels are three groups, not one ladder: the ground (realm, place), the raiser (faction, side), the army's chain (army, subformation, unit, troops). The code's names follow: L1 landed (B16L, `@ae7955b7ad09ccd08df79409bed53ac0cfafc05e`), L2 in B16M (D-07, D-08).
 
 **The season and the fight** (A-101, D-05):
 - a **lap** is one pass of DELIBERATE, RESOLVE and WITNESS inside a season; a season runs `scene_budget` laps. The code says `lap` from B04.01 (`PCR-4`: `Claim.round` → `Claim.lap`, `SeasonDriver.round` → `.lap`, `scenes_per_round` → `scenes_per_lap`); harness output keys keep the string `"round"`; Jordan's quoted words (A-63, A-64) keep his "round";
@@ -246,7 +246,7 @@ For a step with one batch the two texts below agree. For a step with several, th
 | step | open at once |
 |---|---|
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every later row moves one step (part 2 §1.2) |
-| S6 | B04 (IN), B13 (PC), B16M (MB) |
+| S6 | B04 (IN), B13 (PC) |
 | S7 | B05 (IN), alone: it edits IN, SC, PC and MB code |
 | S8 | B06 (IN), B14 (PC) |
 | S9 | B07 (IN), B17 (MB) |
@@ -365,7 +365,6 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 |---|---|---|---|
 | B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-940 (80+0) (allocated 2026-11-14 after B01a's block, on paper: `id_reservations.yaml` is bumped at the batch's opening, SC `next_free` 54 → 57; the fold map's H-856..H-909 assumed H-855 as the last id and B01a had taken H-856..H-860; 80 NUMBER rows since the V2 fold: 55 settings, the fold's 24, the `speech_blend` pointer row) |
 | B13-pc-package | PC | ED-PC-0060..0061 (0+2) | H-404..H-408 (0+5) |
-| B16M-mb-engine-words | MB | ED-MB-0084..0085 (0+2) | H-409..H-413 (0+5) |
 | B04-capability-home | IN | ED-IN-0377..0378 (0+2) | H-414..H-419 (1+5) |
 | B05-one-roll | IN | ED-IN-0379..0380 (0+2); ED-SC-0041..0044 (2+2) | H-420..H-439 (15+5) |
 | B06-keyed-draw | IN | ED-IN-0381..0382 (0+2) | H-440..H-444 (0+5) |
@@ -454,7 +453,7 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 
 | batch | file(s) under `master/workplan_v12/` |
 |---|---|
-| B13-pc-package, B16M-mb-engine-words | `valoria_master_workplan_v12_part6_cont.md` |
+| B13-pc-package | `valoria_master_workplan_v12_part6_cont.md` |
 | B04-capability-home | `valoria_master_workplan_v12_part7.md` |
 | B05-one-roll | `valoria_master_workplan_v12_part8.md`, `_part8_cont.md`, `_part9.md` |
 | B06-keyed-draw | `valoria_master_workplan_v12_part10.md` |

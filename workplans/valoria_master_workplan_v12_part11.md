@@ -20,8 +20,8 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_MB.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
-GATE: Batch B16L-mb-words @2d9590e75fd253d1d88612e2d42674e2fdb5db96
-GATE: Batch B16M-mb-engine-words
+GATE: Batch B16L-mb-words @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
+GATE: Batch B16M-mb-engine-words @113003b1438f098f60568f2639bd6d3a5b18ae8b
 GATE: Batch B05-one-roll
 GATE: Batch B14-pc-outcome
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
@@ -57,7 +57,7 @@ EST: 8.5 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this ba
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
-| B17.01 | one survivor share, one scale, a drawn battle | `04_MB_headcount_grade_and_scale` | BUILD | MOVER(behaviour) | Batch B16M, Batch B05 |
+| B17.01 | one survivor share, one scale, a drawn battle | `04_MB_headcount_grade_and_scale` | BUILD | MOVER(behaviour) | Batch B16M @113003b1438f098f60568f2639bd6d3a5b18ae8b, Batch B05 |
 | B17.02 | pointer, status-line and comment edits; three register rows | `U5b_MB_residue` §2 | BUILD | EQUAL | B17.01 |
 | B17.03 | the field returns a frozen `FieldOutcome`; casualties per cohort | `04_MB_typed_outcome_and_one_path` §1 (its commit 1) | BUILD | MOVER(behaviour) | B17.01 |
 | B17.04 | a side past the ceiling, or of nobody, never reaches the cell engine | `U5b_MB_residue` §6 | BUILD | EQUAL | B17.03 |
@@ -65,7 +65,7 @@ EST: 8.5 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this ba
 | B17.06 | the first skill input waits for `CommandRecord` | `04_MB_typed_outcome_and_one_path` §4 | POINTER | — | — |
 | B17.07 | one list of unit roles that leave the menu | `U5b_MB_residue` §1 with `04_MB_typed_outcome_and_one_path` §2 fifth bullet (its commit 4) | BUILD | EQUAL | B17.05 |
 | B17.08 | `GappedLine`'s minimum Discipline lets its roles keep their shape | `U5b_MB_residue` §9 R-24 | BUILD | MOVER(behaviour) | B17.07 |
-| B17.09 | conservation claims compared exactly | `U5b_MB_residue` §4 item 2 | BUILD | EQUAL | Batch B16M |
+| B17.09 | conservation claims compared exactly | `U5b_MB_residue` §4 item 2 | BUILD | EQUAL | Batch B16M @113003b1438f098f60568f2639bd6d3a5b18ae8b |
 | B17.10 | the troop file, its exporter and its loader; the tables become reads | `04_MB_unit_loadout_and_weapon_in_hand_B` stage 1 | BUILD | EQUAL | B17.07, B17.08 |
 | B17.11 | the four name tests become columns; reach derives from the arm | `04_MB_unit_loadout_and_weapon_in_hand_B` stage 2 | BUILD | EQUAL | B17.10 |
 | B17.12 | no hidden inputs: the environment reads split between the troop file and an explicit `cfg` | `04_MB_typed_outcome_and_one_path` §3 (its commit 3) | BUILD | EQUAL | B17.10, B17.11 |
@@ -108,7 +108,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand` (S
 - GATE: `python -m pytest engine/season/tests/test_march.py engine/season/tests/test_mass_battle_module.py -q` → pass; the realm content hash (`HASH READING`) after one season at seed 0 → equal to B07's after-reading reading; at seed 2 → moved (recorded in the commit body, re-pinned at B17.99); `python tools/ci_golden_modes_check.py` → read and recorded: equal, or the moved mode named in the commit body for B17.99 `[ASSUMPTION: the three `bat.py` modes do not run the headcount constructors — basis: `04_MB_typed_outcome_and_one_path` gate 3 and loadout_B stage 1 both expect the digests equal in this batch; `bat.py` not opened]`.
 - EXPECTED RED UNTIL: B17.99 for the realm pin test of `_realm_goldens.py` at seed 2 (it stays under `[skip ci]`).
 - HASH MOVERS: "every fought field; seed 2's one-season pin" (the source), with the shipped `field_walls_dr=3` and `field_units="person"`. Declared; B17's one re-pin in B17.99.
-- DEPENDS ON: EXISTS-IN-TREE `modules/mass_battle/troop_types/recruitment.py::under_arms_cap`, `seam/ladder.py::field_degree`, `loop/effects_migration.py::_relocate`, the gate's `muster` basis (`state/gate.py`), `orderofbattle._place`, `_APPROACH_ROWS`; V12 Batch B16M (the names), Batch B05 (the one sampler for the module's dice, `U5b_MB_rulings_in_the_field` §1); the fatigue write V12 B22 (`27_MB_E`).
+- DEPENDS ON: EXISTS-IN-TREE `modules/mass_battle/troop_types/recruitment.py::under_arms_cap`, `seam/ladder.py::field_degree`, `loop/effects_migration.py::_relocate`, the gate's `muster` basis (`state/gate.py`), `orderofbattle._place`, `_APPROACH_ROWS`; V12 Batch B16M @113003b1438f098f60568f2639bd6d3a5b18ae8b (the names), Batch B05 (the one sampler for the module's dice, `U5b_MB_rulings_in_the_field` §1); the fatigue write V12 B22 (`27_MB_E`).
 - GLOSSARY: *end state* (step 9).
 - NAMES: `field_subunits` → `field_units`; `Subunit` → `Unit` and the engine's `Unit` → `Army` in any copied reference (B16M; `_MVP_SUBUNIT_SHAPE`, `_PersonSubunit` and `_weighted_unit`/`_person_unit` as B16M left them, the lexicon L2-1 (a) keeps the two builders' names); `build_realm` in `boot/realm.py` (B03c).
 - COST and TIER: edit (one module file, one effect, four data rows); `sonnet`, `high`; MB review of the seam.
@@ -170,7 +170,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand` (S
 - FALSIFIER and CONTROL: "an army field whose reserve cohort is cut as deeply as its line." Control: the realm content hash at seeds 0 and 1, one season, equal to B17.01's reading (no natural season fights an army field); the planted side-share control reddens gate 4.
 - GATE: `python -m pytest engine/season/tests/test_mass_battle_module.py tests/valoria/test_mass_battle_army_record.py engine/season/tests/test_march.py -q` → pass; `python tools/ci_golden_modes_check.py` → digests equal to B17.01's reading; the realm hash (`HASH READING`) at seed 0, one season → equal to B17.01's.
 - HASH MOVERS: "step (1) on the army path only (no natural season fights an army field)". Declared; B17's one re-pin in B17.99.
-- DEPENDS ON: V12 B17.01 (the flags `field_degree` reads); EXISTS-IN-TREE `queries/inputs.py::MassBattleInput`, `battle_loop.run_battle`, `armyrecord` `assigned` rows, `OrderOfBattle.drawn_from`; V12 Batch B16L @2d9590e75fd253d1d88612e2d42674e2fdb5db96 (`UnitRow`, `units`), Batch B16M.
+- DEPENDS ON: V12 B17.01 (the flags `field_degree` reads); EXISTS-IN-TREE `queries/inputs.py::MassBattleInput`, `battle_loop.run_battle`, `armyrecord` `assigned` rows, `OrderOfBattle.drawn_from`; V12 Batch B16L @ae7955b7ad09ccd08df79409bed53ac0cfafc05e (`UnitRow`, `units`), Batch B16M @113003b1438f098f60568f2639bd6d3a5b18ae8b.
 - GLOSSARY: none (`FieldOutcome` is a type, not a new word; *end state* is B17.01's row).
 - NAMES: `drawn: ((subformation, cohort, troops), ...)` → `((unit, cohort, troops), ...)`; `(side, subunit index)` → `(side, unit index)`; "while its unit stands" → "while its army stands" (B16L, B16M).
 - COST and TIER: small build (the outcome record and per-cohort shares); `sonnet`, `high`.
@@ -208,7 +208,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand` (S
 - FALSIFIER and CONTROL: "A season arm that enters a function now under `systems/`." Control: `python tools/ci_golden_modes_check.py` digests equal to B17.04's reading ("the moves and the config object change no arithmetic", gate 3).
 - GATE: `python tools/ci_golden_modes_check.py` → `[BYTE-EXACT OK]`, digests equal to B17.04's; `git grep -n "threadwork_check\|halt_before_enemy\|run_multi_turn_battle\|run_multi_unit_battle" modules engine` → nothing; `git grep -n "import.*systems" modules/mass_battle` → nothing; the realm hash (`HASH READING`) at seed 0, one season → equal to B17.04's; `python -m pytest tests/valoria/test_field_golden_pins.py -q` → pass.
 - HASH MOVERS: none.
-- DEPENDS ON: V12 B17.03 (`run_traced_battle` builds the typed input and reads the typed outcome); EXISTS-IN-TREE every function named in step 1, `orchestration.rally_check`, `threadwork_check`; V12 Batch B16M (`Army`, `Unit`).
+- DEPENDS ON: V12 B17.03 (`run_traced_battle` builds the typed input and reads the typed outcome); EXISTS-IN-TREE every function named in step 1, `orchestration.rally_check`, `threadwork_check`; V12 Batch B16M @113003b1438f098f60568f2639bd6d3a5b18ae8b (`Army`, `Unit`).
 - GLOSSARY: none.
 - NAMES: `Unit.base_combat_pool` → `Army.base_combat_pool`; `Subunit.halt_before_enemy` → `Unit.halt_before_enemy` (B16M).
 - COST and TIER: edit, large and mechanical (moves, deletions); `sonnet`, `high`, "the moves `haiku`-assisted for the mechanical edits" (the source).
@@ -273,7 +273,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand` (S
 - FALSIFIER and CONTROL: "With one troop removed in process inside `distribute_casualties`, the conservation tests fail." Control: unpatched, they pass.
 - GATE: `python -m pytest tests/valoria/test_frontage_conservation.py <the files step 1 lists> -q` → pass; the same run with `modules.mass_battle.percell.distribute_casualties` monkeypatched in a scratch `conftest` (not committed) to drop one troop → the conservation tests fail; both readings in the commit body.
 - HASH MOVERS: none.
-- DEPENDS ON: EXISTS-IN-TREE `modules/mass_battle/percell.py::distribute_casualties`, `tests/valoria/_conservation.py`; V12 Batch B16M (the names the tests use).
+- DEPENDS ON: EXISTS-IN-TREE `modules/mass_battle/percell.py::distribute_casualties`, `tests/valoria/_conservation.py`; V12 Batch B16M @113003b1438f098f60568f2639bd6d3a5b18ae8b (the names the tests use).
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`, medium.
 - LANDS IT: B17's producer; `Item: B17.09`, `[skip ci]`.
