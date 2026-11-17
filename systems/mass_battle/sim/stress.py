@@ -15,7 +15,7 @@ facing and troops, plus the post-movement contact set):
             where a same-side subunit WAS in contact (an ally watching an ally fight).
   edge      nodes within `edge_margin` of the field boundary, and nodes pinned on it (the clamp in `_node_advance`).
   fit       the deployed extent of each side, and any build error (a cell off the field raises at construction).
-  fight     winner, ticks, survivor share, first contact, share of subunits engaged.
+  fight     winner, ticks, survivor share, first contact, share of units engaged.
 
 FLAGS. `--arm shipped` is every flag at its shipped default (all on since MB-07r flipped `MB_SUPPORT_RANK_CAP`);
 `--arm all_on` sets that flag explicitly and is the shipped arm now. The arms are in the JSON. Flags are read at import, so run one arm per

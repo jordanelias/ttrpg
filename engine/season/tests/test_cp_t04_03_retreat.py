@@ -1,5 +1,5 @@
 """CP-T04-03 (B10-12): retreat in good order. A standing order's `retreat_at` (`none`, `0.5`, `0.25`) becomes, per subunit,
-an `own_strength:FRAC` Order whose action is the `retreat` stance; a side every one of whose subunits has retreated or
+an `own_strength:FRAC` Order whose action is the `retreat` stance; a side every one of whose units has retreated or
 routed has CONCEDED (`hierarchy/units.py::unit_conceded`, the one predicate): `run_battle` stops for it as a rout stops it,
 without rout's facing flip, and `_grade` never calls it the winner. No new band; the `MB_YIELD_*` yield is untouched.
 This file is the item's own; nothing here is a shared pin.
@@ -82,7 +82,7 @@ def _fold(inp, seeds):
 
 @lru_cache(maxsize=None)
 def _arm(att, dfn=None, arm="side", n=len(SEEDS)):
-    inp = replace(M._record(_world(att, dfn)), subunits=arm)
+    inp = replace(M._record(_world(att, dfn)), units=arm)
     return inp.orders, _fold(inp, range(n))
 
 
@@ -126,7 +126,7 @@ def test_falsifier_on_the_person_arm_a_side_concedes_when_every_subunit_has_retr
     assert fired >= 5, fired
     assert fired_wins == 0, fired_wins
     assert not _fired_wins(none)[0]
-    assert _mean_loss(half) <= _mean_loss(none) + 1e-9           # (a smaller effect on six small subunits, but never a rise)
+    assert _mean_loss(half) <= _mean_loss(none) + 1e-9           # (a smaller effect on six small units, but never a rise)
 
 
 def test_a_defender_who_retreats_leaves_the_field_to_the_attacker():
@@ -138,12 +138,12 @@ def test_a_defender_who_retreats_leaves_the_field_to_the_attacker():
 
 
 def test_a_retreat_at_a_quarter_is_the_same_primitive_and_a_side_this_thin_has_routed_before_it():
-    inp = replace(M._record(_world("0.25")), subunits="side")
+    inp = replace(M._record(_world("0.25")), units="side")
     assert inp.orders[0].retreat_at == "0.25"
-    (sub,) = _mb()._weighted_unit("a", 20, 5, M.SCALE, None, "0.25").subunits
+    (sub,) = _mb()._weighted_unit("a", 20, 5, M.SCALE, None, "0.25").units
     (order,) = sub.orders
     assert (order.trigger, order.behavior) == ("own_strength:0.25", {"stance": "retreat", "conceded": True})
-    # on a single-subunit side the SUBUNIT_ROUT_FLOOR / morale rout comes first, so it fires in no seed (a limit, not a defect)
+    # on a single-subunit side the UNIT_ROUT_FLOOR / morale rout comes first, so it fires in no seed (a limit, not a defect)
     assert _fired_wins(_arm("0.25")[1])[1] == 0
 
 
@@ -151,7 +151,7 @@ def test_a_retreat_at_a_quarter_is_the_same_primitive_and_a_side_this_thin_has_r
 
 def test_planted_failure_an_order_not_read_reddens_the_falsifier(monkeypatch):
     monkeypatch.setattr(_mb(), "_retreat_orders", lambda retreat_at: ())
-    inp = replace(M._record(_world("0.5")), subunits="side")
+    inp = replace(M._record(_world("0.5")), units="side")
     mutant = _fold(inp, SEEDS)
     assert not _fewer_losses(mutant, _arm("none")[1])
     assert _fired_wins(mutant)[0] == 0                              # (and nothing fired: the order is not there)
@@ -163,7 +163,7 @@ def test_planted_failure_a_battle_that_does_not_stop_for_a_concession_reddens_th
     """The order is read and the retreat fires (its stance is written), but `run_battle` goes on to the end, so the side
     loses what `none` loses: the stance alone saves nothing."""
     monkeypatch.setattr(_bl(), "unit_conceded", lambda unit: False)
-    inp = replace(M._record(_world("0.5")), subunits="side")
+    inp = replace(M._record(_world("0.5")), units="side")
     mutant = _fold(inp, SEEDS)
     assert not _fewer_losses(mutant, _arm("none")[1])
 
@@ -171,7 +171,7 @@ def test_planted_failure_a_battle_that_does_not_stop_for_a_concession_reddens_th
 def _fake_unit(share, stance="balanced", routed=False):
     """A unit as `_grade` and `unit_conceded` read it: one subunit, `share` of its size left."""
     return SimpleNamespace(routed=routed, effective_size=10 * share, size_max=10, hp=100 * share, hp_max=100,
-                           subunits=[SimpleNamespace(routed=routed, eff_stance=stance, conceded=stance == "retreat")])
+                           units=[SimpleNamespace(routed=routed, eff_stance=stance, conceded=stance == "retreat")])
 
 
 def test_grade_a_conceded_attacker_ahead_on_size_is_not_the_winner_and_a_conceded_defender_gives_the_field():
@@ -212,27 +212,27 @@ def test_the_battle_stops_for_a_conceding_side_without_routing_it():
         if units.unit_conceded(a) and not a.routed:      # (a side can retreat and rout in the same tick: that one is a rout)
             stopped += 1
             early += res["turns"] < 18                                  # ended before the 18-tick cap
-            assert not any(x.routed for x in a.subunits)                # no rout, so no rout facing flip
-            assert a.subunits[0].eff_stance == "retreat"
+            assert not any(x.routed for x in a.units)                # no rout, so no rout facing flip
+            assert a.units[0].eff_stance == "retreat"
     assert checked == 60 and stopped >= 5 and early >= 1, (stopped, early)
 
 
 def test_a_side_with_no_retreating_subunit_is_never_conceded_and_the_function_moved_by_name():
     mb, units = _mb(), _units()
     assert not units.unit_conceded(mb._weighted_unit("a", 20, 5, M.SCALE))
-    assert not units.unit_conceded(SimpleNamespace(subunits=[SimpleNamespace(routed=True, conceded=False)]))  # routed is not conceded
-    assert units.unit_conceded(SimpleNamespace(subunits=[SimpleNamespace(routed=True, conceded=False),
+    assert not units.unit_conceded(SimpleNamespace(units=[SimpleNamespace(routed=True, conceded=False)]))  # routed is not conceded
+    assert units.unit_conceded(SimpleNamespace(units=[SimpleNamespace(routed=True, conceded=False),
                                                          SimpleNamespace(routed=False, conceded=True)]))
-    assert not units.unit_conceded(SimpleNamespace(subunits=[SimpleNamespace(routed=False, conceded=True),
+    assert not units.unit_conceded(SimpleNamespace(units=[SimpleNamespace(routed=False, conceded=True),
                                                              SimpleNamespace(routed=False, conceded=False)]))
     # Keyed on the ORDER's mark, not the stance or `yielding`: a DG-2 fighting withdrawal (`yielding` + stance retreat,
     # no `conceded`) is not a concession, and an emergent `yielding` on a subunit whose `retreat_at` order fired does not
-    # hide one. Real subunits, so the field's default and the order-settable set are observed too.
+    # hide one. Real units, so the field's default and the order-settable set are observed too.
     wd = mb._weighted_unit("a", 20, 5, M.SCALE)
-    for s_ in wd.subunits:
+    for s_ in wd.units:
         s_.stance, s_.yielding = "retreat", True
     assert not units.unit_conceded(wd)
-    for s_ in wd.subunits:
+    for s_ in wd.units:
         s_.conceded = True
     assert units.unit_conceded(wd)                                      # conceded AND yielding: still a concession
     assert "conceded" in units._ORDER_SAFE_FIELDS
@@ -257,4 +257,4 @@ def test_control_a_retreat_at_outside_the_closed_set_is_refused_and_none_is_no_o
     assert [o.trigger for o in mb._retreat_orders("0.5")] == ["own_strength:0.5"]
     with pytest.raises(ValueError):
         mb._retreat_orders("0.1")
-    assert mb._weighted_unit("a", 20, 5, M.SCALE).subunits[0].orders == ()
+    assert mb._weighted_unit("a", 20, 5, M.SCALE).units[0].orders == ()

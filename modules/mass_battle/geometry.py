@@ -47,10 +47,10 @@ def gapped_line_cells(tier):
 
 CELL_PATTERN_FN = {
     # [LC-8, ED-909, Jordan-approved 2026-07-02: "correct, retire them. those are emergent outcomes."]
-    # Horseshoe/RefusedFlank are RETIRED here as Subunit-level shapes -- envelopment and refused-flank
-    # are now Unit-level, multi-body, emergent compositions (engine.build_envelopment/
+    # Horseshoe/RefusedFlank are RETIRED here as Unit-level shapes -- envelopment and refused-flank
+    # are now Army-level, multi-body, emergent compositions (engine.build_envelopment/
     # build_refused_flank), not a single subunit's cell pattern. Only Line/Arrowhead/GappedLine/Column
-    # remain valid Subunit.shape values, per ED-909's taxonomy.
+    # remain valid Unit.shape values, per ED-909's taxonomy.
     "Line": line_cells, "Arrowhead": arrowhead_cells, "GappedLine": gapped_line_cells,
     "Column": column_cells,
 }
@@ -245,8 +245,8 @@ def _oriented_abs_map(atom):
         return amap
     # Grid path: iterate _oriented(atom) — the SAME footprint cell_offsets is keyed by (units.py:
     # "_oriented(self) is the sole source of the (or_r,or_c) offset"), not oriented_pattern(shape,tier),
-    # which diverges from the footprint ids for density-built continuous subunits. Byte-identical for legacy
-    # troops=None subunits (_oriented falls back to oriented_pattern). This makes _oriented_abs_map the
+    # which diverges from the footprint ids for density-built continuous units. Byte-identical for legacy
+    # troops=None units (_oriented falls back to oriented_pattern). This makes _oriented_abs_map the
     # single identity map.
     for orig_r, orig_c, or_r, or_c in _oriented(atom):
         abs_r = (atom.starting_position[0] + or_r
@@ -295,7 +295,7 @@ def support_engage_frac(atom, contact_abs_cells):
     return min(1.0, effective_engaged / max_w)
 
 # ─── F-iii: FACING ───────────────────────────────────────────────────────────
-# An engaged defender's cells pivot to face their attacker via `Subunit.cell_facing_vec`
+# An engaged defender's cells pivot to face their attacker via `Unit.cell_facing_vec`
 # (`hierarchy/units.py`): MB_FACING_ATTENTION turns each cell toward the committed target, `_slew_facing`
 # gates the turn rate by Discipline (no instant full pivot), MB_FACING_ROUT flips a routed body's
 # facing, and `get_cell_facing` is what `_octagon_cell_mods` / `_cell_facing_for_box` read.
@@ -305,7 +305,7 @@ def support_engage_frac(atom, contact_abs_cells):
 def cell_speed(shape, tier, local_r, local_c):
     # [LC-8] Horseshoe/RefusedFlank per-cell speed tables retired along with the shapes themselves
     # (see CELL_PATTERN_FN's note) -- their differential-speed behaviour (wing tips faster than the
-    # center; an engaged front rank faster than a refused column) now emerges from the Unit-level
+    # center; an engaged front rank faster than a refused column) now emerges from the Army-level
     # build_envelopment/build_refused_flank presets' own timed-order release + per-subunit stance,
     # not a per-cell lookup table keyed to a retired shape name.
     if shape == "Line":    return 1

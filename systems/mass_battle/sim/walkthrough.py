@@ -50,7 +50,7 @@ def _oob(side: dict, role) -> OrderOfBattle:
 def _subs(unit) -> list:
     """Deployment centroids before tick 1: [troop_type, row, col, cells, troops, routed]."""
     out = []
-    for s in unit.subunits:
+    for s in unit.units:
         cells = list(s.cells())
         out.append([s.troop_type, sum(c[0] for c in cells) / len(cells), sum(c[1] for c in cells) / len(cells),
                     len(cells), round(s.troop_total()), 0])
@@ -62,7 +62,7 @@ def _snap_unit(u, d: int) -> dict:
     subunit's morale, discipline, stamina, stance and rout flags. Positions are the engine's `cells_float()`
     (the point field), not the integer-binned `cells()`."""
     subs = []
-    for s in u.subunits:
+    for s in u.units:
         ids = [(o_r, o_c) for o_r, o_c, _a, _b in _oriented(s)]
         nodes = []
         for cid, (r, c) in zip(ids, s.cells_float()):
@@ -105,8 +105,8 @@ class _Recorder:
             elif not name.startswith('<'):
                 self.stages.setdefault(self.t, []).append(name)
         elif event == 'return' and name == 'find_contacts':
-            ia = {id(s): i for i, s in enumerate(self.a.subunits)}
-            ib = {id(s): i for i, s in enumerate(self.b.subunits)}
+            ia = {id(s): i for i, s in enumerate(self.a.units)}
+            ib = {id(s): i for i, s in enumerate(self.b.units)}
             self.contacts[self.t] = [[ia[id(p['atom_a'])], ib[id(p['atom_b'])], len(p['a_cells']), len(p['b_cells'])]
                                      for p in arg]
 
@@ -172,7 +172,7 @@ def fight(example: dict, seed: int, role=None) -> dict:
 
 
 def table(run: dict) -> str:
-    rows = ['tick   A hp   B hp  A subunits (row,col troops)                         B subunits']
+    rows = ['tick   A hp   B hp  A units (row,col troops)                         B units']
     short = lambda s: f"{s[0][:5]}({s[1]:.0f},{s[2]:.0f}) {s[4]}{'*' if s[5] else ''}"
     for t in sorted(run['ticks']):
         d = run['ticks'][t]
@@ -207,7 +207,7 @@ def build_page(run: dict, out: str, example: dict, seed: int, role=None) -> None
     from modules.mass_battle import config as cfg
     consts = {'volley_scale': cfg.VOLLEY_LETHALITY_SCALE, 'k_square': cfg.K_SQUARE, 'k_linear': cfg.K_LINEAR,
               'ticks_per_phase': cfg.TICKS_PER_PHASE, 'rout_onset': cfg.ROUT_ONSET_FRAC, 'rout_cap': cfg.ROUT_CAP_FRAC,
-              'rout_floor': cfg.SUBUNIT_ROUT_FLOOR, 'cascade_frac': cfg.ROUT_CASCADE_FRAC}
+              'rout_floor': cfg.UNIT_ROUT_FLOOR, 'cascade_frac': cfg.ROUT_CASCADE_FRAC}
     data = {'ticks': {str(k): v for k, v in run['ticks'].items()}, 'hpmax': run['hpmax'], 'grade': run['grade'],
             'result': run['result'], 'sweep': sweep, 'armies': armies, 'consts': consts}
     with open(out, 'w', encoding='utf-8') as f:

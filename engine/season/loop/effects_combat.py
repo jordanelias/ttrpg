@@ -283,7 +283,7 @@ BROKE_STEM = "broke"
 def broke_observed(pid: str, broke: "str | None") -> tuple:
     """CP-T04-01: the Observation the loser whose subunit BROKE FIRST carries on the field's band Event --
     `(pid, "broke", True)` -- or `()` for every other loser and for a field that names nobody (the `side` arm, or a
-    side whose subunits did not break on their own account). An Event carries no payload (`Event.ending`'s note), so the
+    side whose units did not break on their own account). An Event carries no payload (`Event.ending`'s note), so the
     cause rides `Event.observed`, deposited by WITNESS as `body_observed` is. [ASSUMPTION; medium; Jordan to correct;
     revert: the Observation, and the field's cause is unnamed]"""
     return (Observation(pid, BROKE_STEM, True),) if pid == broke else ()
@@ -432,7 +432,7 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     ⚠ CR-24 (`field_winner_casualties`, `H-360`, M4 Ask B (b)): UNDER `engine` (SHIPPED) THE WINNERS TAKE THEIR OWN
     ENGINE CASUALTIES, ON `body` ONLY -- each winner at his own side's survivor ratio (`attacker_size_pct` /
-    `defender_size_pct`) or, under `field_subunits: person`, his own subunit's (CP-T04-01's `subunits` record), never
+    `defender_size_pct`) or, under `field_units: person`, his own subunit's (CP-T04-01's `subunits` record), never
     the loser's, and never above 1 (a winner is not raised). A winner is NOT a loser: he is not appended to `touched`,
     so he earns no grudge against his own faction and no morale hit, and he gets no stance row. A winner who also
     marches is one Subject (the mover's). Under `field_casualty_model: total` ("any wound is lethal") a winner who took a
@@ -526,7 +526,7 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     if drawn is not None and res.degree != UNOPPOSED:
         losers = list(drawn)             # cohorts do not stand beside their army: they are the people at home
     pct = engine_result.get("attacker_size_pct" if attacker_lost else "defender_size_pct")
-    # CP-T04-01 (`field_subunits: person`): the module's record then carries each person's own subunit ratio, and a
+    # CP-T04-01 (`field_units: person`): the module's record then carries each person's own subunit ratio, and a
     # loser is scaled by HIS, not the side's. A person it does not name (a side fought as an order of battle, or the
     # `side` arm, which carries no `subunits` at all) keeps the side's `pct`, so the `side` arm is today's write.
     per_person = engine_result.get("subunits") or {}

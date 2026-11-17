@@ -20,7 +20,7 @@ __all__ = ['_stamina_pool_penalty', 'derive_command', 'clamp_command', 'command_
 # 2026-07-08] Both magnitudes below are explicitly flagged NOT independently derived, per the
 # proposal doc's own §5 -- reused from the nearest existing precedent rather than invented, and
 # disclosed as such (this repo's anti-fabrication discipline). Both are default-inert: `yielding`
-# defaults False on every Subunit, so neither constant is read unless a 'yield' order fires.
+# defaults False on every Unit, so neither constant is read unless a 'yield' order fires.
 D_YIELD = int(_exch_os.environ.get('D_YIELD', '3'))  # [CALIBRATED-DEBT] reuses this file's OWN
 # existing disc_mult tier break (hierarchy/units.py's advance_cells: disc>=5 full speed, disc>=3
 # 0.7x, else 0.4x severely degraded) rather than inventing a new threshold -- a subunit needs
@@ -72,11 +72,11 @@ def subunit_combat_pool(unit, atom):
     """Per-subunit combat pool. Default (POOL_QUALITY_MODEL, Jordan directive 2026-07-08): troop
     TYPE quality (`eff_power`) x NUMBERS (`eff_size`), plus per-subunit Discipline + stamina --
     no Command anywhere. Legacy toggle OFF: SHARED Command (the general) + per-subunit Discipline
-    + cohesion + stamina. Mirrors Unit.base_combat_pool EXACTLY for a single-subunit unit
+    + cohesion + stamina. Mirrors Army.base_combat_pool EXACTLY for a single-subunit unit
     (atom.cohesion fast-paths to unit.hp/hp_max; eff_discipline/eff_power inherit unit) -> byte-exact
     for the homogeneous gauge; differentiates per subunit for mixed units.
     [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; the (5.0-disc)*0.5 discipline penalty
-     mirrors Unit.discipline_penalty 'fix discipline']"""
+     mirrors Army.discipline_penalty 'fix discipline']"""
     if unit.routed or unit.disordered or atom.routed or atom.disordered:
         return 0
     disc = atom.eff_discipline
@@ -88,7 +88,7 @@ def subunit_combat_pool(unit, atom):
         # Single-subunit: the lone subunit disordered => all() true => unit.disordered set exactly as before
         # (byte-exact for the homogeneous gauge).
         atom.disordered = True
-        if all(s.disordered for s in unit.subunits):
+        if all(s.disordered for s in unit.units):
             unit.disordered = True
         return 0
     pen = -max(0.0, min(2.0, (5.0 - disc) * 0.5))
@@ -107,7 +107,7 @@ def subunit_combat_pool(unit, atom):
         # [Jordan follow-up, 2026-07-08: "subunit power is the aggregate or derivation of cell
         # power"] Correct, and this closed form already IS that aggregate: `eff_power * eff_size`
         # equals sum-over-cells(cell_power x cell_troops) / BLOCK_SIZE whenever a subunit's cells
-        # share one troop type/power (true for every Subunit today -- per-cell troop_type doesn't
+        # share one troop type/power (true for every Unit today -- per-cell troop_type doesn't
         # exist yet, see pair_pool_contribution's own docstring on this same gap). Written as the
         # closed form for the SUBUNIT's total score (cheap, no per-cell loop needed here);
         # `pair_pool_contribution`/`_pair_engaged_troops` below are what actually walk `cell_troops`
@@ -124,7 +124,7 @@ def subunit_combat_pool(unit, atom):
     # "stopped fighting") -- gated on discipline (a subunit too disordered to give ground in order
     # just doesn't get the malus removed; it fights at full pool as if not yielding at all, since a
     # low-discipline 'yield' order below D_YIELD is a no-op by design, not a punishment). Default
-    # `yielding=False` on every Subunit -> inert for every existing scenario.
+    # `yielding=False` on every Unit -> inert for every existing scenario.
     # [ED-MB-0024, DG-2 §2.4 pocket exit] A POCKETED yielding body (rearward motion blocked -> holds in
     # place, nowhere left to give ground) fights at FULL pool -- the malus is REMOVED, modeling Cannae's
     # center pinned and fighting for its life. `pocketed` is only ever set when MB_YIELD_POCKET is on

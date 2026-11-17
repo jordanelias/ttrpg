@@ -22,7 +22,7 @@ import random  # noqa: E402
 # Deployment anchor columns per (shape, tier) — mirrors bat.py's own table (workbench owns its own
 # copy rather than reaching into gauge_mb.py, which is a sibling harness script, not a package module).
 # [LC-8, ED-909, 2026-07-02] Horseshoe/RefusedFlank entries retired along with the shapes themselves —
-# Envelopment/RefusedFlank presets below build Line-shaped subunits, so ('Line', tier) covers them.
+# Envelopment/RefusedFlank presets below build Line-shaped units, so ('Line', tier) covers them.
 # [canonical: mass_battle_v30.md §deployment — anchor columns]
 ANCHOR_MAP = {
     ('Line', 3): 9, ('Arrowhead', 3): 8,  # [canonical: mass_battle_v30.md §deployment — anchor columns]
@@ -35,12 +35,12 @@ def _anchor_for(shape, tier):
 
 
 def _build_side(spec, faction):
-    """Build one side's Unit from a workbench spec dict. Two spec shapes:
+    """Build one side's Army from a workbench spec dict. Two spec shapes:
 
     - **single-subunit** (existing, unchanged): {'shape': ..., 'tier': ..., 'name': ...,
       'anchor_col': ..., ...build_unit kwargs}.
     - **multi-subunit preset** (new, LC-8 — Horseshoe/RefusedFlank are retired as literal shapes, so
-      visualizing 'Envelopment'/'Refused Flank' now means building the real Unit-level composition):
+      visualizing 'Envelopment'/'Refused Flank' now means building the real Army-level composition):
       {'preset': 'army'|'envelopment'|'refused_flank', 'name': ..., ...shared build_* kwargs} plus,
       per preset: 'specs' (a build_army-style per-subunit spec list) for 'army'; 'center'/'wings' for
       'envelopment'; 'strong'/'refused' for 'refused_flank' — matching engine.build_army/

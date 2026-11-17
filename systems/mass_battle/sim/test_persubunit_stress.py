@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from modules.mass_battle.orchestration import (  # noqa: E402
-    Subunit, Unit, subunit_combat_pool, morale_check_phase, rout_resolution,
+    Unit, Army, subunit_combat_pool, morale_check_phase, rout_resolution,
     discipline_check_phase, reset_morale_between_battles, stats_for, TROOP_TYPE_STATS,
     SIDE_A_START_ROW, SIDE_B_START_ROW)
 
@@ -35,26 +35,26 @@ def _ok(name, cond, detail=""):
 def mk_su(tt='infantry', shape='Line', tier=1, col=8, fac='A', **kw):
     row = SIDE_A_START_ROW if fac == 'A' else SIDE_B_START_ROW
     adv = -1 if fac == 'A' else 1
-    return Subunit(shape=shape, troop_type=tt, tier=tier, starting_position=(row, col),
+    return Unit(shape=shape, troop_type=tt, tier=tier, starting_position=(row, col),
                    advance_dir=adv, **kw)
 
 
 def mk_unit(subs, command=4, discipline=5, morale=6, power=4, fac='A'):
-    return Unit(name='T', faction=fac, power=power, command=command, discipline=discipline,
-                discipline_start=discipline, morale=morale, morale_start=morale, subunits=subs, dr=1)
+    return Army(name='T', faction=fac, power=power, command=command, discipline=discipline,
+                discipline_start=discipline, morale=morale, morale_start=morale, units=subs, dr=1)
 
 
 def test_of_type_presets():
     print("S1 — of_type reproduces §B.2 presets; unknown inherits; override wins; ranged via kw")
     for tt, exp in TROOP_TYPE_STATS.items():
-        su = Subunit.of_type(tt, 'Line', 1, (SIDE_A_START_ROW, 8))
+        su = Unit.of_type(tt, 'Line', 1, (SIDE_A_START_ROW, 8))
         _ok(f"S1 {tt}", (su.power, su.discipline, su.morale, su.morale_start)
             == (exp['power'], exp['discipline'], exp['morale'], exp['morale']))
-    unk = Subunit.of_type('griffon_rider', 'Line', 1, (SIDE_A_START_ROW, 8))
+    unk = Unit.of_type('griffon_rider', 'Line', 1, (SIDE_A_START_ROW, 8))
     _ok("S1 unknown -> None (inherit)", (unk.power, unk.discipline, unk.morale) == (None, None, None))
-    ov = Subunit.of_type('levy', 'Line', 1, (SIDE_A_START_ROW, 8), power=9, morale=7)
+    ov = Unit.of_type('levy', 'Line', 1, (SIDE_A_START_ROW, 8), power=9, morale=7)
     _ok("S1 override beats preset", ov.power == 9 and ov.morale == 7 and ov.discipline == 1)
-    rg = Subunit.of_type('archers', 'Line', 1, (SIDE_A_START_ROW, 8), unit_type='ranged')
+    rg = Unit.of_type('archers', 'Line', 1, (SIDE_A_START_ROW, 8), unit_type='ranged')
     _ok("S1 ranged: stats from preset, role via kw", rg.unit_type == 'ranged' and rg.power == 3)
 
 
@@ -77,8 +77,8 @@ def test_single_subunit_morale0_routs():
 
 def test_extreme_spread():
     print("S4 — Levy(D1) + Knights Templar(D6): pool differentiates; levy breaks, templar holds")
-    lv = Subunit.of_type('levy', 'Line', 1, (SIDE_A_START_ROW, 8))
-    kt = Subunit.of_type('knights_templar', 'Line', 1, (SIDE_A_START_ROW, 9))
+    lv = Unit.of_type('levy', 'Line', 1, (SIDE_A_START_ROW, 8))
+    kt = Unit.of_type('knights_templar', 'Line', 1, (SIDE_A_START_ROW, 9))
     u = mk_unit([lv, kt], command=6)
     _ok("S4 templar pool > levy pool", subunit_combat_pool(u, kt) > subunit_combat_pool(u, lv))
     for _ in range(3):
@@ -155,15 +155,15 @@ def test_restore_cap():
 def test_fidelity_own_loss():
     print("S11 — Discipline degrades from the sub-unit's OWN loss, not the unit's (roll-input fidelity)")
     def su3(tt, col):
-        return Subunit(shape='Line', troop_type=tt, tier=3, starting_position=(SIDE_A_START_ROW, col),
+        return Unit(shape='Line', troop_type=tt, tier=3, starting_position=(SIDE_A_START_ROW, col),
                        advance_dir=-1, discipline=5, discipline_start=5)
     s0 = su3('heavy_infantry', 8); s1 = su3('levy', 9)
-    a = Unit(name='A', faction='A', power=4, command=4, discipline=5, discipline_start=5,
-             morale=6, morale_start=6, subunits=[s0, s1], dr=1)
-    bsu = Subunit(shape='Line', troop_type='heavy_infantry', tier=3,
+    a = Army(name='A', faction='A', power=4, command=4, discipline=5, discipline_start=5,
+             morale=6, morale_start=6, units=[s0, s1], dr=1)
+    bsu = Unit(shape='Line', troop_type='heavy_infantry', tier=3,
                   starting_position=(SIDE_B_START_ROW, 8), advance_dir=1, discipline=5, discipline_start=5)
-    b = Unit(name='B', faction='B', power=4, command=4, discipline=5, discipline_start=5,
-             morale=6, morale_start=6, subunits=[bsu], dr=1)
+    b = Army(name='B', faction='B', power=4, command=4, discipline=5, discipline_start=5,
+             morale=6, morale_start=6, units=[bsu], dr=1)
     for k in s0.cell_troops:                 # gut s0's own troops; s1 stays fresh
         s0.cell_troops[k] *= 0.5
     a.hp = s0.cur_troops + s1.cur_troops      # unit-level loss large -> OLD code would degrade BOTH
@@ -174,11 +174,11 @@ def test_fidelity_own_loss():
 
 def test_of_type_wiring():
     print("S12 — of_type construction (as make_mixed_unit now builds) draws B.2 presets (taxonomy wiring)")
-    kt = Subunit.of_type('knights_templar', 'Line', 1, (SIDE_A_START_ROW, 8))
+    kt = Unit.of_type('knights_templar', 'Line', 1, (SIDE_A_START_ROW, 8))
     _ok("S12 canonical type draws preset", (kt.power, kt.discipline, kt.morale) == (5, 6, 6))
-    ov = Subunit.of_type('knights_templar', 'Line', 1, (SIDE_A_START_ROW, 8), discipline=3)
+    ov = Unit.of_type('knights_templar', 'Line', 1, (SIDE_A_START_ROW, 8), discipline=3)
     _ok("S12 caller override beats preset", ov.discipline == 3 and ov.power == 5)
-    inf = Subunit.of_type('infantry', 'Line', 1, (SIDE_A_START_ROW, 8))
+    inf = Unit.of_type('infantry', 'Line', 1, (SIDE_A_START_ROW, 8))
     _ok("S12 non-canonical inherits", (inf.power, inf.discipline, inf.morale) == (None, None, None))
 
 
@@ -195,7 +195,7 @@ def test_between_battle_reset():
     _ok("S13 unit morale reset to start", u.morale == u.morale_start)
     _ok("S13 own-subunit morale reset to start", own.eff_morale == own.eff_morale_start)
     _ok("S13 inherited subunit morale follows unit", inh.eff_morale == u.morale_start)
-    _ok("S13 rout/broken cleared (unit+subunits)", not (u.routed or u.disordered or own.routed or inh.routed))
+    _ok("S13 rout/broken cleared (unit+units)", not (u.routed or u.disordered or own.routed or inh.routed))
     _ok("S13 Discipline persists (not reset)", own.eff_discipline == pre_disc_own and pre_disc_own == 3)
 
 
@@ -212,7 +212,7 @@ def test_drift_per_subunit_discipline():
 def test_advance_per_subunit_discipline():
     print("S15 — advance_cells uses per-subunit Discipline: low-disc subunit advances less than high-disc sibling")
     def mk(disc, col):
-        return Subunit(shape='Line', troop_type='heavy_infantry', tier=2,
+        return Unit(shape='Line', troop_type='heavy_infantry', tier=2,
                        starting_position=(SIDE_A_START_ROW, col), advance_dir=-1,
                        discipline=disc, discipline_start=disc)
     tgt = (SIDE_A_START_ROW - 8, 8)
@@ -232,13 +232,13 @@ def test_advance_per_subunit_discipline():
 
 
 def test_recalc_size_routs_subunits():
-    print("S16 — recalc_size destruction propagates rout to subunits (finding 3)")
+    print("S16 — recalc_size destruction propagates rout to units (finding 3)")
     s0 = mk_su('heavy_infantry', col=8); s1 = mk_su('levy', col=9)
     u = mk_unit([s0, s1])
     u.hp = 0
     u.recalc_size()
     _ok("S16 unit routed on size 0", u.routed)
-    _ok("S16 subunits marked routed (per-subunit consumers see it)", s0.routed and s1.routed)
+    _ok("S16 units marked routed (per-subunit consumers see it)", s0.routed and s1.routed)
 
 
 def test_agg_discipline_per_subunit():
@@ -247,7 +247,7 @@ def test_agg_discipline_per_subunit():
     lo = mk_su('levy', col=9, discipline=1, discipline_start=1)
     u = mk_unit([hi, lo])
     agg = u.agg_discipline()
-    _ok("S17 agg reflects both subunits' own Discipline (mean of 5 and 1 = 3)", agg == 3)
+    _ok("S17 agg reflects both units' own Discipline (mean of 5 and 1 = 3)", agg == 3)
     _ok("S17 agg differs from the nominal unit Discipline", agg != u.discipline)
 
 

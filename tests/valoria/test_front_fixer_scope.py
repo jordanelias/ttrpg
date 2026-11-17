@@ -25,7 +25,7 @@ def _sub(faction, row, col, advance_dir):
     army = build_army([{'shape': 'Line', 'troop_type': 'infantry', 'troops': 300.0,
                         'concentration': 100.0, 'starting_position': (row, col)}],
                       faction, faction)
-    su = army.subunits[0]
+    su = army.units[0]
     su.advance_dir = advance_dir
     return su
 

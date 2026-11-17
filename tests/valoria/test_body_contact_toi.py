@@ -76,10 +76,10 @@ def _cross_side_bodies(unit_a, unit_b):
     """Every (bodyA, bodyB) cross-side cell-body pair, built exactly as contact and the collision step build them
     (circle, front reach = reach_for(troop_type), heading = cell facing)."""
     a_bodies = []
-    for atom in unit_a.subunits:
+    for atom in unit_a.units:
         a_bodies.extend(_hu.cell_bodies_for(atom, _hu.reach_for(atom.troop_type)))
     b_bodies = []
-    for atom in unit_b.subunits:
+    for atom in unit_b.units:
         b_bodies.extend(_hu.cell_bodies_for(atom, _hu.reach_for(atom.troop_type)))
     for ba in a_bodies:
         for bb in b_bodies:
@@ -128,12 +128,12 @@ def test_head_on_contact_fires_at_reach_touch(field_path):
     for gap, want in [(thr - 0.02, True), (thr + 0.02, False), (thr + 0.4, False)]:
         b = build_unit('Line', 3, 'B', 'B', 9)
         # pin both single cells head-on `gap` apart on the same column (node path floats).
-        a_cid = next(iter(a.subunits[0]._node_pos))
-        b_cid = next(iter(b.subunits[0]._node_pos))
-        a.subunits[0]._node_pos[a_cid] = (0.0, 0.0)
-        b.subunits[0]._node_pos[b_cid] = (gap, 0.0)
-        a.subunits[0].cell_facing_vec[a_cid] = (1.0, 0.0)   # A faces +row toward B
-        b.subunits[0].cell_facing_vec[b_cid] = (-1.0, 0.0)  # B faces -row toward A
+        a_cid = next(iter(a.units[0]._node_pos))
+        b_cid = next(iter(b.units[0]._node_pos))
+        a.units[0]._node_pos[a_cid] = (0.0, 0.0)
+        b.units[0]._node_pos[b_cid] = (gap, 0.0)
+        a.units[0].cell_facing_vec[a_cid] = (1.0, 0.0)   # A faces +row toward B
+        b.units[0].cell_facing_vec[b_cid] = (-1.0, 0.0)  # B faces -row toward A
         pairs = find_contacts(a, b)
         fired = len(pairs) > 0
         assert fired == want, f"gap={gap}: contact fired={fired}, expected {want}"

@@ -71,13 +71,13 @@ ABS_TOL = 1e-3
 
 
 def unit_troops(unit):
-    """Sum of live per-cell troop counts across a unit's subunits (the cell-side ledger).
+    """Sum of live per-cell troop counts across a unit's units (the cell-side ledger).
 
-    Composes on Subunit.troop_total() — the engine's own single owner of "a subunit's live
+    Composes on Unit.troop_total() — the engine's own single owner of "a subunit's live
     troops" (hierarchy/units.py) — rather than re-summing cell_troops here. Sibling invariant
     home: tests/valoria/test_hp_cell_ledger.py (per-exchange drift; this module checks end-state).
     """
-    return sum(su.troop_total() for su in unit.subunits)
+    return sum(su.troop_total() for su in unit.units)
 
 
 def assert_troop_conservation(*units, context=''):

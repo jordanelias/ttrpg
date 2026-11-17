@@ -1,18 +1,18 @@
 """A6, ED-MB-0067 Part A (proposals/2026-09-25-squad-engagement-synthesis.md) — missile ammunition
 and resupply.
 
-`Subunit.volleys`/`eff_volleys`/`drain_volleys`/`resupply_volleys` (hierarchy/units.py) -- a
-per-SUBUNIT ledger mirroring `stamina`'s own existing own-else-inherited-Unit pattern exactly.
+`Unit.volleys`/`eff_volleys`/`drain_volleys`/`resupply_volleys` (hierarchy/units.py) -- a
+per-SUBUNIT ledger mirroring `stamina`'s own existing own-else-inherited-Army pattern exactly.
 `orchestration.volley_phase`'s `fire()` gates on it before target selection and drains it on every
 real shot; `between_turn_recovery` resupplies it, per-subunit, at the between-turn lull.
 
 [adversarial-pass rework] A first version put this on percell._ColBlock (per-column-block, matching
 stamina's OTHER, column-block-granularity ledger). Reworked after review found that structurally
-unsound: a column position is shared across whatever subunits currently occupy it (see
+unsound: a column position is shared across whatever units currently occupy it (see
 percell.build_column_grid/sync_col_grid), so ammo tracked there could regenerate for free (a
 subunit shifting onto a new column under MB_CLOSE_RANKS=1) or silently stop being metered at all
 (an empty column lookup under MB_CLOSE_RANKS=0). Ammo belongs to the shooter, not to a column other
-subunits pass through.
+units pass through.
 
 [adversarial-pass round 2, 2026-09-26] MB_AMMO_ENABLED DEFAULTS ON, per this file's own flags-ON
 precedent. Round 1 shipped it OFF on the (wrong) premise that this sandbox could not produce a
@@ -36,7 +36,7 @@ import modules.mass_battle.orchestration as _orch
 from modules.mass_battle.config import (SIDE_A_START_ROW, SIDE_B_START_ROW, MB_VOLLEYS_START,
                                              MB_VOLLEYS_RESUPPLY, MB_KITE_STANDOFF, VOLLEY_MAX_RANGE)
 from systems.mass_battle.sim.engine import build_army
-from modules.mass_battle.hierarchy.units import Subunit, Unit
+from modules.mass_battle.hierarchy.units import Unit, Army
 from modules.mass_battle.orchestration import volley_phase, between_turn_recovery
 
 
@@ -54,19 +54,19 @@ def _ammo_on():
 
 
 def _archers(faction='A', row=SIDE_A_START_ROW, col=25):
-    su = Subunit(shape='Line', troop_type='archers', tier=2,
+    su = Unit(shape='Line', troop_type='archers', tier=2,
                  starting_position=(row, col), advance_dir=(-1 if faction == 'A' else 1),
                  stance='hold', unit_type='ranged')
-    return Unit(name=f'{faction}_archers', faction=faction, power=4, command=4, discipline=5,
-                discipline_start=5, morale=6, morale_start=6, subunits=[su])
+    return Army(name=f'{faction}_archers', faction=faction, power=4, command=4, discipline=5,
+                discipline_start=5, morale=6, morale_start=6, units=[su])
 
 
 def _target(faction='B', row=SIDE_A_START_ROW - 5, col=25):
-    su = Subunit(shape='Line', troop_type='infantry', tier=2,
+    su = Unit(shape='Line', troop_type='infantry', tier=2,
                  starting_position=(row, col), advance_dir=(-1 if faction == 'A' else 1),
                  stance='hold', unit_type='melee')
-    return Unit(name=f'{faction}_target', faction=faction, power=4, command=4, discipline=5,
-                discipline_start=5, morale=6, morale_start=6, subunits=[su])
+    return Army(name=f'{faction}_target', faction=faction, power=4, command=4, discipline=5,
+                discipline_start=5, morale=6, morale_start=6, units=[su])
 
 
 def test_ammo_defaults_on_at_the_source():
@@ -86,7 +86,7 @@ def test_ammo_defaults_on_at_the_source():
 
 def test_subunit_starts_at_the_configured_volley_count():
     ua = _archers()
-    su = ua.subunits[0]
+    su = ua.units[0]
     assert su.eff_volleys == pytest.approx(MB_VOLLEYS_START)
 
 
@@ -101,7 +101,7 @@ def test_volley_phase_is_in_range_control():
 
 def test_ranged_atom_stops_contributing_damage_once_volleys_are_exhausted():
     ua, ub = _archers(), _target()
-    su = ua.subunits[0]
+    su = ua.units[0]
     random.seed(4_100_002)
     fired_ticks = 0
     exhausted_at = None
@@ -121,7 +121,7 @@ def test_ranged_atom_stops_contributing_damage_once_volleys_are_exhausted():
 
 def test_between_turn_recovery_resupplies_some_volleys():
     ua = _archers()
-    su = ua.subunits[0]
+    su = ua.units[0]
     su.volleys = 0.0
     between_turn_recovery(ua)
     assert su.eff_volleys == pytest.approx(min(MB_VOLLEYS_START, MB_VOLLEYS_RESUPPLY))
@@ -130,18 +130,18 @@ def test_between_turn_recovery_resupplies_some_volleys():
 
 def test_resupply_does_not_exceed_the_starting_count():
     ua = _archers()
-    su = ua.subunits[0]
+    su = ua.units[0]
     between_turn_recovery(ua)   # already at MB_VOLLEYS_START -- must clamp, not overshoot
     assert su.eff_volleys == pytest.approx(MB_VOLLEYS_START)
 
 
 def test_melee_atoms_are_never_gated_by_ammo():
-    """Control: a melee atom's own volleys count (present via the same own-else-inherited-Unit
-    ledger every Subunit has) is never read -- unit_type != 'ranged' short-circuits fire() before
+    """Control: a melee atom's own volleys count (present via the same own-else-inherited-Army
+    ledger every Unit has) is never read -- unit_type != 'ranged' short-circuits fire() before
     the ammo check. Drain it to 0 directly and confirm melee combat is unaffected by calling
     volley_phase (which must simply not involve this atom at all -- it is not 'ranged')."""
     ua, ub = _target(faction='A', row=SIDE_A_START_ROW), _target(faction='B', row=SIDE_A_START_ROW - 5)
-    ua.subunits[0].volleys = 0.0
+    ua.units[0].volleys = 0.0
     random.seed(4_100_003)
     r = volley_phase(ua, ub)
     assert r['shots'] == 0 and r['loss_a'] == 0 and r['loss_b'] == 0, \
@@ -156,7 +156,7 @@ def test_ammo_is_independent_of_column_identity():
     reshuffle is a much larger apparatus to construct) must not touch its ammo at all -- there is no
     column lookup left in the ammo path to desync."""
     ua = _archers()
-    su = ua.subunits[0]
+    su = ua.units[0]
     su.drain_volleys(4)
     assert su.eff_volleys == pytest.approx(MB_VOLLEYS_START - 4)
     # Simulate a formation reshuffle: the subunit's cells move to entirely different absolute
@@ -168,17 +168,17 @@ def test_ammo_is_independent_of_column_identity():
 
 
 def test_eff_volleys_inherits_from_the_parent_unit_when_unseeded():
-    """Same own-else-inherited-Unit pattern as eff_stamina: an unseeded subunit (volleys=None, the
-    dataclass default) reads the parent Unit's own pool, not a fixed constant."""
-    su = Subunit(shape='Line', troop_type='archers', tier=2, starting_position=(SIDE_A_START_ROW, 25),
+    """Same own-else-inherited-Army pattern as eff_stamina: an unseeded subunit (volleys=None, the
+    dataclass default) reads the parent Army's own pool, not a fixed constant."""
+    su = Unit(shape='Line', troop_type='archers', tier=2, starting_position=(SIDE_A_START_ROW, 25),
                  advance_dir=-1, stance='hold', unit_type='ranged')
     assert su.volleys is None
-    u = Unit(name='u', faction='A', power=4, command=4, discipline=5, discipline_start=5,
-             morale=6, morale_start=6, subunits=[su])
-    u.volleys = 17.0   # override the Unit's own pool directly
-    assert su.eff_volleys == pytest.approx(17.0), "an unseeded subunit must read the parent Unit's pool"
+    u = Army(name='u', faction='A', power=4, command=4, discipline=5, discipline_start=5,
+             morale=6, morale_start=6, units=[su])
+    u.volleys = 17.0   # override the Army's own pool directly
+    assert su.eff_volleys == pytest.approx(17.0), "an unseeded subunit must read the parent Army's pool"
     su.drain_volleys(5)
-    assert u.volleys == pytest.approx(12.0), "draining an inheriting subunit must write back to the Unit"
+    assert u.volleys == pytest.approx(12.0), "draining an inheriting subunit must write back to the Army"
 
 
 # ─── Adversarial-review round 2: F4 (the real army builder) + F7 (kite) ─────
@@ -187,30 +187,30 @@ def test_build_army_gives_a_ranged_subunit_its_own_ammo_pool_not_shared_with_mel
     """F4 [HIGH]: build_army's per-subunit kwarg-forwarding tuple was MISSING 'volleys' entirely --
     not merely unseeded like morale used to be before DG-4, never forwarded at all -- so every
     ranged subunit built through the PUBLIC, workbench-facing army constructor fell through to
-    Subunit.volleys=None -> eff_volleys inherits the ONE shared parent Unit pool, and
+    Unit.volleys=None -> eff_volleys inherits the ONE shared parent Army pool, and
     between_turn_recovery's per-subunit resupply call runs for every OTHER subunit too (melee
     siblings included, unconditionally) -- a full refill every turn instead of the intended
     trickle. The exact column-block-style sharing bug A6's own ledger move already fixed once,
-    relocated one level up from 'per-column' to 'per-Unit'. Uses build_army directly (not raw
-    Subunit/Unit construction), per the review's own instruction, since this is a defect in the
+    relocated one level up from 'per-column' to 'per-Army'. Uses build_army directly (not raw
+    Unit/Army construction), per the review's own instruction, since this is a defect in the
     CONSTRUCTOR, not in the ledger primitives the other tests above already cover directly."""
     u = build_army([
         {'shape': 'Line', 'troop_type': 'archers', 'tier': 2, 'unit_type': 'ranged'},
         {'shape': 'Line', 'troop_type': 'infantry', 'tier': 2, 'unit_type': 'melee'},
         {'shape': 'Line', 'troop_type': 'infantry', 'tier': 2, 'unit_type': 'melee'},
     ], name='mix', faction='A')
-    archer, m1, m2 = u.subunits
+    archer, m1, m2 = u.units
     assert archer.volleys is not None, "a ranged subunit built via build_army must get its OWN pool, not inherit"
     assert archer.eff_volleys == pytest.approx(MB_VOLLEYS_START)
     archer.drain_volleys(4)
     # Every OTHER subunit (melee, unconditionally) also gets a resupply call every turn, matching
     # between_turn_recovery's own per-atom loop shape -- simulated directly here.
-    for atom in u.subunits:
+    for atom in u.units:
         atom.resupply_volleys(MB_VOLLEYS_RESUPPLY)
     assert archer.eff_volleys == pytest.approx(min(MB_VOLLEYS_START, MB_VOLLEYS_START - 4 + MB_VOLLEYS_RESUPPLY)), \
         "the archer's own pool must reflect exactly ITS OWN drain+resupply, not inflated by siblings' calls"
     assert u.volleys == pytest.approx(MB_VOLLEYS_START), \
-        "melee siblings still inherit the shared Unit pool (harmless -- never read for combat), " \
+        "melee siblings still inherit the shared Army pool (harmless -- never read for combat), " \
         "untouched by the archer's own now-separate pool"
 
 
@@ -219,19 +219,19 @@ def test_build_army_spec_can_still_override_volleys_explicitly():
     must still win, the same precedence every other per-subunit stat in this constructor has."""
     u = build_army([{'shape': 'Line', 'troop_type': 'archers', 'tier': 2, 'unit_type': 'ranged',
                       'volleys': 3.0}], name='u', faction='A')
-    assert u.subunits[0].eff_volleys == pytest.approx(3.0)
+    assert u.units[0].eff_volleys == pytest.approx(3.0)
 
 
 def test_kiter_closes_to_melee_once_out_of_ammo():
     """F7: a ranged kiter's far standoff bound used to key on unit_type=='ranged' alone,
-    unconditionally -- an empty kiter (Subunit.eff_volleys <= 0) kept holding the WIDE volley-range
+    unconditionally -- an empty kiter (Unit.eff_volleys <= 0) kept holding the WIDE volley-range
     standoff band forever, 'keeping volleying' a weapon that can no longer fire: a decorative unit
     for the rest of the battle. Must fall back to the melee reach bound once out of ammo, so it
     closes in and re-engages instead."""
-    su = Subunit(shape='Line', troop_type='archers', tier=2, starting_position=(SIDE_A_START_ROW, 25),
+    su = Unit(shape='Line', troop_type='archers', tier=2, starting_position=(SIDE_A_START_ROW, 25),
                  advance_dir=-1, stance='hold', unit_type='ranged', instructions=('kite',))
-    Unit(name='u', faction='A', power=4, command=4, discipline=5, discipline_start=5,
-         morale=6, morale_start=6, subunits=[su])
+    Army(name='u', faction='A', power=4, command=4, discipline=5, discipline_start=5,
+         morale=6, morale_start=6, units=[su])
     ar, ac = su._node_anchor
     assert MB_KITE_STANDOFF < 6 < VOLLEY_MAX_RANGE, \
         "control: this distance must fall inside the OLD (ammo-blind) in-band volley window"

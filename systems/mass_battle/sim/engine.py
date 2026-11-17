@@ -9,7 +9,7 @@ from modules.mass_battle.core.state import *     # [Stage-1] resolver layer: mor
 from modules.mass_battle.core.attrition import * # [Stage-1] resolver layer: Lanchester attrition law
 from modules.mass_battle.core.contact import *   # [Stage-1] targeting + contact detection
 from modules.mass_battle.troop_types.registry import *  # [Stage-1] troop-type stats + gated roles
-from modules.mass_battle.hierarchy.units import *  # [Stage-1] Subunit/Unit data model
+from modules.mass_battle.hierarchy.units import *  # [Stage-1] Unit/Army data model
 from modules.mass_battle.geometry import *
 from modules.mass_battle.percell import *
 from modules.mass_battle.resolution import *
@@ -28,7 +28,7 @@ import modules.mass_battle.resolution as _res
 import modules.mass_battle.orchestration as _orch
 
 # Re-export contract used by gauge_mb.py (and any external caller):
-#   Subunit, Unit, run_battle, run_multi_turn_battle, run_multi_unit_battle,
+#   Unit, Army, run_battle, run_multi_turn_battle, run_multi_unit_battle,
 #   SIDE_A_START_ROW, SIDE_B_START_ROW, plus the full mechanic surface via import *.
 
 def _resolve(sym):
@@ -83,21 +83,21 @@ def mechanics_selftest():
 
 
 # ─── ARMY CONSTRUCTION moved to modules/mass_battle/armies.py (the module closure): re-imported, not copied. ───
-from modules.mass_battle.armies import (SUBUNIT_CAP, DEPLOY_GAP, ENVELOP_WING_GAP, REFUSE_ECHELON,
+from modules.mass_battle.armies import (UNIT_CAP, DEPLOY_GAP, ENVELOP_WING_GAP, REFUSE_ECHELON,
                                         _spec_span, _centered_line_cols, build_army)
 
 
 def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry', unit_type=None,
                power=4, command=4, discipline=5, morale=6, morale_start=None, stance='balanced',  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults]
                speed='Standard', instructions=(), dr=1, role=None):
-    """Faction→unit ADAPTER: construct a single-subunit Unit. The canonical public constructor — the
+    """Faction→unit ADAPTER: construct a single-subunit Army. The canonical public constructor — the
     wrapper's adapter duty. Deployment follows the engine convention (faction A faces −row from
     SIDE_A_START_ROW; B faces +row from SIDE_B_START_ROW); `anchor_col` is the deployment column. Draws
     the data model from hierarchy.units and stats as given; resolution stays in core/. No outcome logic.
 
     [Stage D, ED-907 L3] `role` (default None, byte-exact for every existing call) is validated via
     troop_types.registry.role_allowed(troop_type, role) — raises ValueError on a disallowed combo —
-    and stored on the Subunit; unlike build_army, shape/instructions here stay caller-controlled (both
+    and stored on the Unit; unlike build_army, shape/instructions here stay caller-controlled (both
     are already required/explicit in this single-subunit constructor's own signature, so there is no
     role->shape defaulting ambiguity to resolve).
 
@@ -115,22 +115,22 @@ def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry',
         unit_type = unit_type_for(troop_type)
     advance_dir = -1 if faction == 'A' else 1
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
-    su = Subunit(shape=shape, troop_type=troop_type, tier=tier,
+    su = Unit(shape=shape, troop_type=troop_type, tier=tier,
                  starting_position=(start_row, anchor_col), advance_dir=advance_dir,
                  unit_type=unit_type, instructions=tuple(instructions), role=role)
-    return Unit(name=name, faction=faction, power=power, command=command,
+    return Army(name=name, faction=faction, power=power, command=command,
                 discipline=discipline, discipline_start=discipline,
                 morale=morale, morale_start=(morale if morale_start is None else morale_start),
-                subunits=[su], dr=dr, stance=stance, speed=speed)
+                units=[su], dr=dr, stance=stance, speed=speed)
 
 
 def build_envelopment(center_specs, wing_specs, name, faction, *,
                        release_tick=4,  # [CALIBRATED-DEBT: mirrors Stage C.4's acceptance-test hold duration — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
                        power=4, command=4, discipline=5, morale=6, morale_start=None, dr=1,  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults, same as build_unit/build_army]
                        speed='Standard', freeze_wings=False):
-    """[Stage D, ED-909] Unit-level 'Envelopment' allocation-grid preset (the Cannae 216 BC pattern):
+    """[Stage D, ED-909] Army-level 'Envelopment' allocation-grid preset (the Cannae 216 BC pattern):
     ED-909 retires Horseshoe/RefusedFlank as SUBUNIT-level shapes and re-realizes them as emergent,
-    multi-body UNIT-level postures composed from Line/Arrowhead/GappedLine subunits — "why is
+    multi-body UNIT-level postures composed from Line/Arrowhead/GappedLine units — "why is
     Horseshoe a subformation instead of an emergent strategy," Jordan's own live-fire question. This
     is that composition, built entirely from EXISTING, already-verified primitives: build_army
     (placement) + Stage C's timed Order queue + the pre-existing, UNMODIFIED 'envelop' instruction
@@ -145,7 +145,7 @@ def build_envelopment(center_specs, wing_specs, name, faction, *,
     the enemy line, matching the historical sequencing this preset is named for.
 
     [LC-8, Jordan-approved 2026-07-02: "correct, retire them. those are emergent outcomes."]
-    'Horseshoe'/'RefusedFlank' are now fully retired as Subunit.shape values (removed from
+    'Horseshoe'/'RefusedFlank' are now fully retired as Unit.shape values (removed from
     geometry.CELL_PATTERN_FN/config.MIN_DISCIPLINE) — this preset, not a literal shape choice, is the
     only way to build an envelopment. bat.py's grid-mode byte-exact golden digests were re-baselined
     for this change (a deliberate, verified behavior change, not a regression): three battery rows now
@@ -154,7 +154,7 @@ def build_envelopment(center_specs, wing_specs, name, faction, *,
     [canonical: designs/provincial/mass_battle_v30.md — Cannae 216 BC precedent; ED-909]
 
     [ED-MB-0002 §2 step 4, measurement only] `freeze_wings=True` (default False, zero effect on any
-    existing call site/digest) skips attaching the release order entirely, leaving wing subunits
+    existing call site/digest) skips attaching the release order entirely, leaving wing units
     permanently at `stance='hold'` for the whole battle instead of releasing into 'envelop' at
     `release_tick`. `stance == 'hold'` is an immediate early-return at the top of BOTH `_node_advance`
     and the legacy `advance_cells` (confirmed by direct read, hierarchy/units.py) -- fully sufficient
@@ -214,7 +214,7 @@ def build_envelopment(center_specs, wing_specs, name, faction, *,
     unit = build_army(specs, name, faction, power=power, command=command, discipline=discipline,
                        morale=morale, morale_start=morale_start, dr=dr, speed=speed)
     if not freeze_wings:
-        for atom in unit.subunits[n_center:]:
+        for atom in unit.units[n_center:]:
             if not atom.orders:
                 released = tuple(dict.fromkeys(atom.instructions + ('envelop',)))  # de-dup, order-preserving
                 atom.orders = (Order(f'tick:{release_tick}', {'stance': 'balanced', 'instructions': released}),)
@@ -231,7 +231,7 @@ def build_refused_flank(strong_specs, refused_specs, name, faction, *,
                          # old tag cited a sim_verification_ledger.json row that does not exist.]
                          power=4, command=4, discipline=5, morale=6, morale_start=None, dr=1,  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults, same as build_unit/build_army]
                          speed='Standard'):
-    """[Stage D, ED-909] Unit-level 'Refused Flank' allocation-grid preset (Leuctra 371 BC /
+    """[Stage D, ED-909] Army-level 'Refused Flank' allocation-grid preset (Leuctra 371 BC /
     Leuthen 1757): the other emergent army posture ED-909 names alongside Envelopment. strong_specs
     (the attacking wing/center) are placed and tasked as given; refused_specs (the withheld wing) get
     stance='hold' and, UNLESS the spec already queues its own `orders`, an 'enemy_range:{refuse_range}'
@@ -240,8 +240,8 @@ def build_refused_flank(strong_specs, refused_specs, name, faction, *,
     holds if directly pressed" doctrine. Reuses Stage C's existing enemy_range order trigger; no new
     mechanic. Same LC-8 retirement note as build_envelopment (see its docstring) applies here."""
     # [ED-MB-0017] OBLIQUE deployment (fixes P-3). Lay strong + refused across one centred frontage
-    # (so no lateral overlap), then push the REFUSED subunits ECHELONED BACK by REFUSE_ECHELON rows —
-    # out of contact range while the strong wing engages (Leuctra/Leuthen research §2/§4). Strong subunits
+    # (so no lateral overlap), then push the REFUSED units ECHELONED BACK by REFUSE_ECHELON rows —
+    # out of contact range while the strong wing engages (Leuctra/Leuthen research §2/§4). Strong units
     # take the left of the line and lead at the front; refused take the right and trail rearward: the
     # diagonal "staircase" of an oblique order. Pre-fix, `build_refused_flank` never moved the refused
     # wing at all — it sat level with the strong wing AND overlapped it (P-3, "makes no sense").
@@ -275,7 +275,7 @@ def build_refused_flank(strong_specs, refused_specs, name, faction, *,
     specs = all_specs
     unit = build_army(specs, name, faction, power=power, command=command, discipline=discipline,
                        morale=morale, morale_start=morale_start, dr=dr, speed=speed)
-    for atom in unit.subunits[n_strong:]:
+    for atom in unit.units[n_strong:]:
         if not atom.orders:
             atom.orders = (Order(f'enemy_range:{refuse_range}', {'stance': 'balanced'}),)
     return unit
@@ -297,7 +297,7 @@ def resolve_battle(*args, kind='multi', **kwargs):
     raise ValueError(f"resolve_battle: unknown kind {kind!r} (expected 'single' | 'multi' | 'multi_unit')")
 
 
-_WRAPPER_API = {"build_unit", "build_army", "build_envelopment", "build_refused_flank", "resolve_battle", "SUBUNIT_CAP"}
+_WRAPPER_API = {"build_unit", "build_army", "build_envelopment", "build_refused_flank", "resolve_battle", "UNIT_CAP"}
 
 _mods = (_cfg,_ce,_cs,_ca,_cc,_tt,_hu,_geo,_pc,_res,_orch)
 __all__ = sorted({n for _m in _mods for n in getattr(_m,'__all__',[])} | {"MECHANICS","mechanics_selftest"} | _WRAPPER_API)

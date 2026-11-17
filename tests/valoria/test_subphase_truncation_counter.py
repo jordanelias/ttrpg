@@ -55,13 +55,13 @@ def _sub(faction, row, col, advance_dir):
     army = build_army([{'shape': 'Line', 'troop_type': 'infantry', 'troops': 300.0,
                         'concentration': 100.0, 'starting_position': (row, col)}],
                       faction, faction)
-    su = army.subunits[0]
+    su = army.units[0]
     su.advance_dir = advance_dir
     return su, army
 
 
 def _staircase(n_groups):
-    """n_groups attacker subunits at depths 4 rows apart, each paired with its own defender.
+    """n_groups attacker units at depths 4 rows apart, each paired with its own defender.
 
     `_cascade_depth_key` buckets by 1-row proximity, so a 4-row stride guarantees exactly one
     depth group per attacker — the minimal shape that exercises the sub-phase split at all.
@@ -75,11 +75,11 @@ def _staircase(n_groups):
         b, army_b = _sub('B', SIDE_A_START_ROW + 4 * i + 1, 10 + 2 * i, -1)
         attackers.append((a, army_a))
         defenders.append((b, army_b))
-    # One Unit per side carrying every subunit, so unit-level gates see a live body.
+    # One Army per side carrying every subunit, so unit-level gates see a live body.
     unit_a = attackers[0][1]
     unit_b = defenders[0][1]
-    unit_a.subunits = [a for a, _ in attackers]
-    unit_b.subunits = [b for b, _ in defenders]
+    unit_a.units = [a for a, _ in attackers]
+    unit_b.units = [b for b, _ in defenders]
     for (a, _), (b, _) in zip(attackers, defenders):
         a._unit = unit_a
         b._unit = unit_b

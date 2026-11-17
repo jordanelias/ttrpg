@@ -107,9 +107,9 @@ BROW, BCOL = 25, 12
 
 
 def _mk(orch, pos, adv, fac):
-    su = orch.Subunit(shape='Line', troop_type='infantry', tier=2, starting_position=pos, advance_dir=adv)
-    u = orch.Unit(name=fac, faction=fac, power=4, command=4, discipline=5, discipline_start=5,
-                  morale=6, morale_start=6, subunits=[su], dr=1)
+    su = orch.Unit(shape='Line', troop_type='infantry', tier=2, starting_position=pos, advance_dir=adv)
+    u = orch.Army(name=fac, faction=fac, power=4, command=4, discipline=5, discipline_start=5,
+                  morale=6, morale_start=6, units=[su], dr=1)
     return u, su
 
 
@@ -280,7 +280,7 @@ def test_rear_penalty_persists_across_reaction_window(mb):
     ⚠ THIS TEST DOES NOT CURRENTLY OBSERVE THE WINDOW IT NAMES (ED-MB-0063 critic finding A;
     PRE-EXISTING, not introduced by the isolation fix, and NOT fixed here). The reaction counter
     in `orchestration` is CONSECUTIVE-TICK: it accumulates in a per-subunit `_react_since` map
-    across calls. `_arc_pair` builds a FRESH `Subunit` per call, so the map always starts empty
+    across calls. `_arc_pair` builds a FRESH `Unit` per call, so the map always starts empty
     and `_cnt` can never exceed 1 — while `FACING_REACTION_TICKS` is 2. The `_cnt >=
     FACING_REACTION_TICKS` branch is therefore unreachable from here, and an engine that DID
     wheel out of the blind arc after two consecutive ticks would still pass. Varying `t` varies
@@ -332,10 +332,10 @@ def _pincer_dmgb(orch, contact, attackers, seed=13, t=5):
     """Defender B (faces north) struck by a list of attacker bodies at (row_offset, advance_dir)."""
     random.seed(2000 + seed)
     ub, subB = _mk(orch, (BROW, BCOL), -1, 'B')
-    subs = [orch.Subunit(shape='Line', troop_type='infantry', tier=2,
+    subs = [orch.Unit(shape='Line', troop_type='infantry', tier=2,
                          starting_position=(BROW + dr, BCOL), advance_dir=adv) for dr, adv in attackers]
-    ua = orch.Unit(name='A', faction='A', power=4, command=4, discipline=5, discipline_start=5,
-                   morale=6, morale_start=6, subunits=subs, dr=1)
+    ua = orch.Army(name='A', faction='A', power=4, command=4, discipline=5, discipline_start=5,
+                   morale=6, morale_start=6, units=subs, dr=1)
     for su in subs:
         su._unit = ua
     return orch.resolve_engagements(ua, ub, contact.find_contacts(ua, ub), t=t)['dmg_b']
@@ -382,7 +382,7 @@ def test_multi_side_shock_is_face_based_not_pair_count(mb):
 
 def test_reaction_clock_resets_between_battles(mb):
     """reaction-critic R1: the per-cell reaction clock is per-engagement transient state on a persistent
-    Subunit -- it MUST be cleared at the battle boundary, or a stamp from battle 1 mis-scores battle 2's
+    Unit -- it MUST be cleared at the battle boundary, or a stamp from battle 1 mis-scores battle 2's
     opening ticks. Asserts reset_morale_between_battles clears it."""
     orch, contact, C = mb
     ub, subB = _mk(orch, (BROW, BCOL), -1, 'B')

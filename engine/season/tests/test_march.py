@@ -275,7 +275,7 @@ def test_a_won_field_writes_casualties_and_stance_on_the_defender_only():
     person at weight > 1) against the Church's six individuals, so the attacker's side is the larger one (20 v 6).
     CONTROL, SAME WORLD AND ACT: at the shipped 1 the 20-v-6 attacker still routs on contact and the field is `Lost`
     (`massbattle.py`'s disclosed scale gap, unchanged at k = 1); only the scale differs between the two folds, so
-    the flip to `Won` is the multiplication's, and a `Lost` at 10 would mean it is not reaching the Unit.
+    the flip to `Won` is the multiplication's, and a `Lost` at 10 would mean it is not reaching the Army.
     The band's effects are asserted as the hand-built test asserted them: the defender takes the casualties and the
     stance rows, the winning side is never written."""
     def fold(k):

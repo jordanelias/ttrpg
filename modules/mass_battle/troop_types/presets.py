@@ -18,7 +18,7 @@ horse for the flanks, and levy filling whatever room is left, as the reserve.
 Each cohort gives each class its share of its own cap, in the best type of that class its Sites allow. A
 type the faction has no Site for is skipped (`recruitment.recruit_limit` reads 0), so a realm without a barracks, a
 range or a stable fields levy alone -- which holds a line and cannot press an attack (a named limit, HANDOFF_MB).
-An army that would come to fewer than `BLOCK_SIZE` troops is not raised at all (it routs at once). A group of fewer than `SUBUNIT_ROUT_FLOOR` troops is not raised: it would rout at the first check, and
+An army that would come to fewer than `BLOCK_SIZE` troops is not raised at all (it routs at once). A group of fewer than `UNIT_ROUT_FLOOR` troops is not raised: it would rout at the first check, and
 its room goes to the levy.
 
 [canonical: none -- every share and the type order are this module's; the troop types, their roles and the floors are
@@ -27,7 +27,7 @@ the registry's and `config.py`'s. Revert: a faction's army is whatever its leade
 from __future__ import annotations
 
 from modules.mass_battle.armyrecord import cohort_claims
-from modules.mass_battle.config import BLOCK_SIZE, SUBUNIT_ROUT_FLOOR
+from modules.mass_battle.config import BLOCK_SIZE, UNIT_ROUT_FLOOR
 from modules.mass_battle.troop_types.recruitment import recruit_limit, under_arms_cap
 
 __all__ = ['ARM_SHARES', 'ROLE_OF', 'plan']
@@ -90,7 +90,7 @@ def plan(q) -> tuple:
         for _c, t, n in trial:
             by_t[t] = by_t.get(t, 0) + n
         for c, t, n in trial:
-            if by_t[t] >= SUBUNIT_ROUT_FLOOR:
+            if by_t[t] >= UNIT_ROUT_FLOOR:
                 take(c, t, n)
     # The levy takes the rest of every cohort's room, as the reserve, if it comes to a standing unit.
     levy = []
@@ -98,7 +98,7 @@ def plan(q) -> tuple:
         n = room(c, w, sites, 'levy')
         if n > 0:
             levy.append((c, 'levy', n))
-    if sum(n for _c, _t, n in levy) >= SUBUNIT_ROUT_FLOOR:
+    if sum(n for _c, _t, n in levy) >= UNIT_ROUT_FLOOR:
         for c, t, n in levy:
             take(c, t, n)
     if not raised:

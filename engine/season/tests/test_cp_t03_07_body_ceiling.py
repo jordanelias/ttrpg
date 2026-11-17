@@ -214,7 +214,7 @@ _BODY_WRITES = {
     "w.persons[pid].body = body": "lowers",
     # `_eff_march`: the losing side's casualties, `total` and `scaled_by_degree` arms.
     "p.body = 0": "lowers",
-    # (B10-12 pin commit: CP-T04-01 changed `pct` to `mine`, the loser's own subunit ratio under `field_subunits: person`.)
+    # (B10-12 pin commit: CP-T04-01 changed `pct` to `mine`, the loser's own subunit ratio under `field_units: person`.)
     "p.body = max(1, int(p.body * max(0.0, mine or 0.0)))": "lowers",
     # `_eff_march` (CR-24, `field_winner_casualties: engine`): the winners' own casualties, `body` only; `win_ratio` is clamped
     # to [0, 1] at its one write (`min(1.0, max(0.0, mine))`), so the write can only hold or lower a body.
