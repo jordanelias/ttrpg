@@ -277,8 +277,10 @@ def _capability_roster(reg, attribute_keys):
         rows[str(name)] = {'kind': 'skill', 'gloss': gloss.strip(), 'base': r['base'],
                            'opposed_by': opp, 'floor': sc[0], 'ceiling': sc[1],
                            'untrained': r['untrained'], 'grows_by': list(grows), 'source': r.get('source')}
+    # `names` is DERIVED from the rows, never authored, so `rosters.yaml: capabilities: {from_descriptor: capabilities}`
+    # is served as `pursuit_axes`' is (`data/rosters.py::roster` reads `block['names']`) with no second list to drift.
     return {'source': block.get('source'), 'kinds': ['skill'], 'grows_by': grows_set,
-            'untrained': untrained_set, 'rows': rows}
+            'untrained': untrained_set, 'names': list(rows), 'rows': rows}
 
 
 def build():

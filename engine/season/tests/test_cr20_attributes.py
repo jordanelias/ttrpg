@@ -9,8 +9,9 @@ WHAT THIS PINS, and the falsifier of each:
     FALSIFIER: `faculty` ignoring the base is planted below and reads 2, not 6.
   * THE HELD KEY -- the pool is the larger of the base and the key a person holds (practice); the opposition
     the larger of the key and the attribute, never the fallback.
-  * THE ROSTER IS CLOSED -- `vocation_attribute` refuses a vocation with no row, a row for a non-vocation and a
-    value that is none of the ten.
+  * THE MAP IS CLOSED -- B04.04 derived `VOCATION_ATTRIBUTE` from the verb table's `capability:` column and the skill
+    definition rows, so a vocation with no row is refused by the verb loader, a base that is none of the ten by the
+    exporter, and a skill no verb names is reported (`verbs.skills_without_a_verb`), not refused.
   * THE CAST -- a legacy spelling resolves to its key; a key that is none of the ten, a value outside 1-7, a
     float and a double spelling refuse; no row and `stats: null` are `{}`.
   * NO PLAY-TIME WRITE -- no `write_matrix.yaml` row, so the gate refuses (`test_k3_thread_sensitivity.py` (e)).
@@ -22,10 +23,9 @@ import pytest
 from engine.season.decision.sheet import creation_sheet
 from engine.season.data import cast, files
 from engine.season.data.matrix import matrix_row
-from engine.season.data.rosters import (
-    VERB_CAPABILITY, VOCATION_ATTRIBUTE, _load_vocation_attribute,
+from engine.season.data.verbs import (   # TASK_DIFFICULTY: B11 lane A
+    TASK_DIFFICULTY, VERB_CAPABILITY, VOCATION_ATTRIBUTE, VOCATIONS, skills_without_a_verb,
 )
-from engine.season.data.verbs import TASK_DIFFICULTY, VOCATIONS   # TASK_DIFFICULTY: B11 lane A
 from engine.season.gaps import Unspecified
 from engine.season.harness import probes as P
 from engine.season.loop.driver import mint_token
@@ -137,19 +137,31 @@ def test_the_shipped_roster_covers_the_vocations_with_the_ten():
     assert set(VOCATION_ATTRIBUTE.values()) <= set(descriptors.ATTRIBUTES)
 
 
-def test_the_loader_refuses_a_vocation_with_no_row_a_non_vocation_row_and_a_non_attribute():
-    good = dict(VOCATION_ATTRIBUTE)
-    voc = set(VOCATIONS)
-    assert _load_vocation_attribute(good, voc) == good
-    first = sorted(good)[0]
-    with pytest.raises(Unspecified):
-        _load_vocation_attribute({k: v for k, v in good.items() if k != first}, voc)      # no row for a vocation
-    with pytest.raises(Unspecified):
-        _load_vocation_attribute({**good, "dancing": "attr.body.agility"}, voc)           # a row for a non-vocation
-    with pytest.raises(Unspecified):
-        _load_vocation_attribute({**good, first: "attr.mind.nonsense"}, voc)              # none of the ten
-    with pytest.raises(Unspecified):
-        _load_vocation_attribute({**good, first: "attr.social.bonds"}, voc)               # retired, not one of the ten
+def test_the_closure_is_refused_by_the_exporter_and_the_verb_loader(monkeypatch):
+    """The retired loader's refusals, at their new owners: a base that is none of the ten (`attr.mind.nonsense`, the
+    retired `attr.social.bonds`) is the exporter's; a verb naming a skill with no definition row is the verb loader's.
+    (The retired "row for a non-vocation" refusal is gone: a skill no verb names is REPORTED, below.)"""
+    import copy, os, sys
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "tools"))
+    import export_descriptors as ed
+    real = ed.ci_common.load_yaml
+    for bad in ("attr.mind.nonsense", "attr.social.bonds"):
+        def planted(path, default=None, _bad=bad):
+            reg = copy.deepcopy(real(path, default=default))
+            reg["capabilities"]["rows"][sorted(reg["capabilities"]["rows"])[0]]["base"] = _bad
+            return reg
+        monkeypatch.setattr(ed.ci_common, "load_yaml", planted)
+        with pytest.raises(SystemExit, match="base"):
+            ed.build()
+    monkeypatch.setattr(ed.ci_common, "load_yaml", real)
+    assert ed.build()["capabilities"]["rows"]                       # the control: the shipped block exports
+    from engine.season.tests.test_u1_capability_surface import _planted_verb_load, _row
+    msg = _planted_verb_load(lambda doc: _row(doc, "argue").update(capability="no_such_skill"))
+    assert msg is not None and "no_such_skill" in msg, msg
+
+
+def test_a_skill_no_verb_names_is_reported_not_refused():
+    assert skills_without_a_verb() == sorted(set(descriptors.CAPABILITIES) - set(VOCATIONS))
 
 
 # ======================================================================================

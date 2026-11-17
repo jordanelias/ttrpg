@@ -33,7 +33,7 @@ from ..gaps import Unspecified
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
 from ..seam.wrappers import pool, sigma
-from ..data.rosters import VERB_CAPABILITY
+from ..data.verbs import VERB_CAPABILITY
 from ..state.carriers import Act, Candidate, Claim, Person
 
 AXIS = "grandiose_humble"        # a pursuit axis the equal pursuits below project onto (asserted in the test)

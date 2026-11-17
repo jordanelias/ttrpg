@@ -3798,8 +3798,8 @@
       "citation_grade": null
     },
     {
-      "key": "engine.season.settings.scenes_per_round",
-      "name": "scenes_per_round",
+      "key": "engine.season.settings.scenes_per_lap",
+      "name": "scenes_per_lap",
       "value": 1,
       "kind": "scalar",
       "module": "engine.season.settings",

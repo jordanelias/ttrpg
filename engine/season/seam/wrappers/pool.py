@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from ...data.rosters import VERB_CAPABILITY, VOCATION_ATTRIBUTE, VOCATION_OPPOSED_BY
+from ...data.verbs import VERB_CAPABILITY, VOCATION_ATTRIBUTE, VOCATION_OPPOSED_BY
 from ...queries.world_q import practice
 
 

@@ -1,4 +1,5 @@
-"""v10 CR-96 (AR-44): the OPTIONAL `opposed_by:` per `vocation_attribute` row, executed.
+"""v10 CR-96 (AR-44): the OPTIONAL `opposed_by:` per skill definition row (B04.04: `descriptor_registry.yaml: capabilities`,
+derived into `data/verbs.py::VOCATION_OPPOSED_BY`), executed.
 
 WHAT THIS PINS, and the falsifier of each:
 
@@ -6,19 +7,17 @@ WHAT THIS PINS, and the falsifier of each:
     verb's own attribute 2 oppose at 6.0 (the obstacle halves it to 3), and the row without it at 2.0 (Ob 1).
     FALSIFIER: the column ignored is planted below and reads 2.0 with the row present.
   * THE POOL IS NOT MOVED -- the column is the opposition's only; `faculty` still starts from the row's own attribute.
-  * THE SHIPPED ROSTER IS ABSENT ON EVERY ROW -- so `_opposing_attribute` reads exactly what `_authored_attribute`
+  * THE SHIPPED MAP IS ABSENT ON EVERY ROW (ED-IN-0377: who resists an argument is the social contest's rule, V2 §C.2, not a skill-row column) -- so `_opposing_attribute` reads exactly what `_authored_attribute`
     does, for every verb and every person: the control for the hash (the realm hash is recorded in the commit body).
-  * AN `opposed_by` OUTSIDE THE TEN, OR FOR A NON-VOCATION, IS REFUSED AT IMPORT.
+  * AN `opposed_by` OUTSIDE THE TEN IS REFUSED BY THE EXPORTER (`tools/export_descriptors.py::_capability_roster`).
 """
 import importlib
 
 import pytest
 
-from engine.season.data.rosters import (
-    VERB_CAPABILITY, VOCATION_ATTRIBUTE, VOCATION_OPPOSED_BY, _load_vocation_opposed_by,
+from engine.season.data.verbs import (   # TASK_DIFFICULTY: B11 lane A
+    TASK_DIFFICULTY, VERB_CAPABILITY, VOCATION_ATTRIBUTE, VOCATION_OPPOSED_BY,
 )
-from engine.season.data.verbs import TASK_DIFFICULTY, VOCATIONS   # TASK_DIFFICULTY: B11 lane A
-from engine.season.gaps import Unspecified
 from engine.season.harness import probes as P
 from engine.season.seam.wrappers import pool, sigma
 from engine.substrate import composition, descriptors
@@ -115,16 +114,25 @@ def test_the_held_key_still_competes_with_the_opposing_attribute(monkeypatch):
     assert sigma._opposition_of(w, HOLDER, TELL) == 9.0
 
 
-def test_the_loader_refuses_an_opposed_by_outside_the_ten_or_for_a_non_vocation():
-    voc = set(VOCATIONS)
-    assert _load_vocation_opposed_by({}, voc) == {}
-    assert _load_vocation_opposed_by({VOC: SPIRIT}, voc) == {VOC: SPIRIT}
+def test_the_exporter_refuses_an_opposed_by_outside_the_ten(monkeypatch):
+    """The retired loader's refusals at their new owner. Gone with their subject: "a row for a non-vocation" (a skill no verb
+    names is reported, `verbs.skills_without_a_verb`, not refused)."""
+    import copy, os, sys
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "tools"))
+    import export_descriptors as ed
+    real = ed.ci_common.load_yaml
     assert SPIRIT in descriptors.ATTRIBUTES
-    with pytest.raises(Unspecified):
-        _load_vocation_opposed_by({VOC: "attr.mind.nonsense"}, voc)            # none of the ten
-    with pytest.raises(Unspecified):
-        _load_vocation_opposed_by({VOC: "attr.social.bonds"}, voc)              # retired, not one of the ten
-    with pytest.raises(Unspecified):
-        _load_vocation_opposed_by({VOC: ""}, voc)                               # an empty value
-    with pytest.raises(Unspecified):
-        _load_vocation_opposed_by({"dancing": SPIRIT}, voc)                     # a row for a non-vocation
+    for bad in ("attr.mind.nonsense", "attr.social.bonds", ""):                  # none of the ten; retired; empty
+        def planted(path, default=None, _bad=bad):
+            reg = copy.deepcopy(real(path, default=default))
+            reg["capabilities"]["rows"]["argue"]["opposed_by"] = _bad
+            return reg
+        monkeypatch.setattr(ed.ci_common, "load_yaml", planted)
+        with pytest.raises(SystemExit, match="argue.*opposed_by"):
+            ed.build()
+    def spirit(path, default=None):
+        reg = copy.deepcopy(real(path, default=default))
+        reg["capabilities"]["rows"]["argue"]["opposed_by"] = SPIRIT
+        return reg
+    monkeypatch.setattr(ed.ci_common, "load_yaml", spirit)                       # the control: a valid opposition exports
+    assert ed.build()["capabilities"]["rows"]["argue"]["opposed_by"] == SPIRIT

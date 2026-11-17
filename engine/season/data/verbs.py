@@ -29,6 +29,7 @@ from dataclasses import dataclass, field, fields
 from typing import Optional
 
 from . import files
+from ...substrate.descriptors import CAPABILITIES
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .matrix import MATRIX, Step
 from .requires import (
@@ -37,7 +38,7 @@ from .requires import (
 )
 from .rosters import (
     COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
-    RESTRAINT_KINDS, STRIFE_KINDS, VOCATIONS,
+    RESTRAINT_KINDS, STRIFE_KINDS,
     is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
@@ -793,7 +794,6 @@ def _load_verb_table() -> dict:
         # as `beneficiary:` is required below. "No default by omission; `none` is spelled": a missing key, a value that
         # is neither a `CAPABILITIES` id nor `none`, `none` with no `capability_note:`, and a column on a row nothing
         # rolls for (a column nothing reads) are each refused here, naming the row.
-        from ...substrate.descriptors import CAPABILITIES
         if row.contests or _graded:
             if "capability" not in r:
                 raise SystemExit(
@@ -1143,6 +1143,27 @@ def tenure_kinds_without_an_opener() -> list:
     return sorted(k for k, vs in _OPENERS_FROM_EFFECTS.items() if not vs)
 
 VERB_TABLE = _load_verb_table()
+
+# B04.04 (U1-A steps 2-3): WHICH SKILL A VERB TESTS, AND WHAT THAT SKILL IS, DERIVED FROM THE TWO ROWS THAT HOLD THEM -- the
+# `capability:` column on this table and `descriptors.CAPABILITIES` (`descriptor_registry.yaml: capabilities`). The
+# `rosters.yaml: verb_capability` and `vocation_attribute` rosters they replace are deleted; `data/rosters.py` re-exports
+# nothing of them (it loads BEFORE this table and may not import it, which is why the derivation lives here).
+# `none` is spelled on a row that contests with no skill (`lie`, `march`) and is in no map. `VOCATION_OPPOSED_BY` leaves out
+# a skill whose `opposed_by` is absent (`arms`: reads `base`) AND one that spells `none` (`copying`: nobody's attribute
+# opposes it) -- a `none` entry would reach `pool.py::_opposition_of` as an attribute key.
+# [ASSUMPTION; medium; Jordan to correct; revert: add `none` to the filter's accepted values] `none` is not a member:
+# the retired roster's `opposed_by` was empty, and `argue` and `inquiry` now hold the definition rows' cell.
+VERB_CAPABILITY = {row.verb: row.capability for row in VERB_TABLE.values() if row.capability not in ("", "none")}
+VOCATIONS = frozenset(VERB_CAPABILITY.values())
+VOCATION_ATTRIBUTE = {k: CAPABILITIES[k].base for k in VOCATIONS}
+VOCATION_OPPOSED_BY = {k: CAPABILITIES[k].opposed_by for k in VOCATIONS if CAPABILITIES[k].opposed_by not in (None, "none")}
+
+
+def skills_without_a_verb() -> list:
+    """The defined skills (`descriptors.CAPABILITIES`) no verb row's `capability:` names -- REPORTED, not refused, as
+    `tenure_kinds_without_an_opener` reports an unopened kind: a lifepath template may grant a skill no verb yet tests
+    (B04.04), and which of them are holes is a judgement, not a load failure."""
+    return sorted(set(CAPABILITIES) - VOCATIONS)
 
 # v9 IN-12 step 6: `{verb: record kind}` -- the verbs whose `subject` a HELD record of that kind names
 # (`rosters.yaml: warrant_sourced`). REFUSED AT IMPORT, so a stale line cannot read as "no verb needs a
@@ -1635,7 +1656,7 @@ def _load_vocation_sourced(values: dict) -> dict:
 
 
 VOCATION_SOURCED = _load_vocation_sourced(roster_map("vocation_sourced", "values"))
-# THE VOCATIONS (`rosters.VOCATIONS`, imported above): `verb_capability`'s VALUES, derived once in `rosters.py`.
+# THE VOCATIONS (`VOCATIONS`, derived above): the values of `VERB_CAPABILITY`, the skills a verb's `capability:` names.
 
 
 # v11 CP-T04-02: `{verb: (key, ...)}` -- the verbs whose Candidate is formed once per COMBINATION of the closed sets the

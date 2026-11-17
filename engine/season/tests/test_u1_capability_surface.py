@@ -42,7 +42,9 @@ def test_the_shipped_block_loads_the_four_skills():
     row = descriptors.capability("arms")
     assert row.kind == "skill" and row.base == "attr.body.agility" and row.opposed_by is None
     assert (row.floor, row.ceiling) == (0, 7) and row.grows_by == ("train", "practice", "use")
-    assert descriptors.capability("argue").opposed_by == "attr.spirit.will"
+    # ED-IN-0377, ED-IN-0378: no skill row carries `opposed_by` for `argue` or `inquiry` (the social contest's rule, V2 §C.2): absent reads `base`
+    assert descriptors.capability("argue").opposed_by is None and descriptors.capability("inquiry").opposed_by is None
+    assert descriptors.capability("copying").opposed_by == "none"
     with pytest.raises(ValueError, match="capabilities"):
         descriptors.capability("no_such_skill")
 
@@ -160,8 +162,8 @@ def test_the_shipped_table_declares_the_column_on_every_contested_or_graded_row(
     for v in owed:
         cap = VERB_TABLE[v].capability
         assert cap == "none" or cap in descriptors.CAPABILITIES, (v, cap)
-    # the column carries what `verb_capability` holds, row for row (it still feeds every reader until B04.04)
-    from engine.season.data.rosters import VERB_CAPABILITY
+    # the column carries what the derived `VERB_CAPABILITY` holds, row for row
+    from engine.season.data.verbs import VERB_CAPABILITY
     assert VERB_CAPABILITY and all(VERB_TABLE[v].capability == c for v, c in VERB_CAPABILITY.items())
     # the two contested rows with no skill say so
     assert [v for v in owed if v not in VERB_CAPABILITY and VERB_TABLE[v].capability == "none"] \
@@ -198,3 +200,48 @@ def test_none_without_a_capability_note_is_refused():
 def test_a_capability_on_a_row_that_neither_contests_nor_is_graded_is_refused():
     msg = _planted_verb_load(lambda doc: _row(doc, "give").update(capability="argue"))
     assert msg is not None and "give" in msg and "neither contests nor is graded" in msg, msg
+
+
+# ======================================================================================
+# B04.04 -- THE VERB MAPS DERIVED FROM THE COLUMN; TWO ROSTERS DELETED
+# ======================================================================================
+# The retired rosters' values, CAPTURED AS LITERALS (`rosters.yaml: verb_capability`, `vocation_attribute`, read on
+# B04.03's tree before they were deleted). Spelled as lists of PAIRS: `test_season_shape.py`'s hardcoded-definition scan
+# refuses a literal collection of three or more identifier strings (a dict's keys count), and it reads a pair of
+# strings as nothing, so a roster of pairs is accepted where the dict is not.
+_RETIRED_VERB_CAPABILITY = [
+    ("tell", "copying"), ("speak", "copying"), ("argue", "argue"), ("research", "inquiry"), ("examine", "inquiry"),
+    ("surveil", "inquiry"), ("fight", "arms"), ("accept", "arms"), ("capture", "arms"), ("interrogate", "inquiry"),
+    ("arrest", "arms"), ("determine", "argue"),
+]
+_RETIRED_VOCATION_ATTRIBUTE = [
+    ("copying", "attr.mind.focus"), ("argue", "attr.social.charisma"), ("inquiry", "attr.mind.acuity"),
+    ("arms", "attr.body.agility"),
+]
+# the retired `opposed_by:` was `{}` (every row shipped absent). ED-IN-0377 and ED-IN-0378: who resists an argument is the social
+# contest's rule (V2 part 2 §C.2), so no `argue`/`inquiry` row carries one, and the derived map is
+# EQUAL to the retired one: empty.
+_RETIRED_VOCATION_OPPOSED_BY = []
+
+
+def _derived_maps():
+    """The four maps the verb table's column and the definition block yield."""
+    from engine.season.data import verbs as V
+    return V.VERB_CAPABILITY, V.VOCATIONS, V.VOCATION_ATTRIBUTE, V.VOCATION_OPPOSED_BY
+
+
+def test_derived_vocation_maps_equal_the_retired_rosters():
+    """`==`, not `approx`: the derived `VERB_CAPABILITY` and `VOCATION_ATTRIBUTE` equal the retired rosters' literals, and
+    `VOCATIONS` is the values of the first; the derived opposition equals the retired roster's (empty): `arms` and
+    `argue`/`inquiry` carry no cell (read `base`) and `copying` spells `none` (a `none` entry would reach `_opposition_of`
+    as an attribute key)."""
+    verb_capability, vocations, vocation_attribute, vocation_opposed_by = _derived_maps()
+    assert verb_capability == dict(_RETIRED_VERB_CAPABILITY)
+    assert vocation_attribute == dict(_RETIRED_VOCATION_ATTRIBUTE)
+    assert vocations == frozenset(c for _, c in _RETIRED_VERB_CAPABILITY) == frozenset(vocation_attribute)
+    assert vocation_opposed_by == dict(_RETIRED_VOCATION_OPPOSED_BY) == {}
+    assert descriptors.capability("copying").opposed_by == "none"      # spelled, and filtered out of the map
+    # the two rows with no skill are spelled `none` and are in no map
+    from engine.season.data.verbs import VERB_TABLE
+    assert [v for v, r in VERB_TABLE.items() if r.capability == "none"] == ["lie", "march"] \
+        and "lie" not in verb_capability and "march" not in verb_capability

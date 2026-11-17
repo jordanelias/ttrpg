@@ -33,7 +33,7 @@ from ..gaps import Unspecified
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
 from ..seam.wrappers import sigma
-from ..data.rosters import VERB_CAPABILITY
+from ..data.verbs import VERB_CAPABILITY
 from ..state.carriers import EFFORT, Act, Candidate, Claim, Person, Scene, effort_of
 
 AXIS = "grandiose_humble"

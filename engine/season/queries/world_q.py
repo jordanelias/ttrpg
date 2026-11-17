@@ -35,7 +35,6 @@ from ..data.rosters import (
     INVESTED,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
-    VERB_CAPABILITY,
     faction_prop_id,
     require_member,
     roster_map,
@@ -67,7 +66,7 @@ from ..data import goals as _goals
 from .person_q import deed_doers
 # v9 IN-70: a person's opinion of a faction -- the formula person-side, membership and the faction's
 # expectations here; the doer of a paired deed is the pairing rule's (IN-58).
-from ..data.verbs import DEED_KINDS
+from ..data.verbs import DEED_KINDS, VERB_CAPABILITY
 from .person_q import PAIRED_KINDS, opinion
 from ..state.attribution import anchor_of, causing_act, event_by_id, matured_terms  # noqa: F401 -- re-exported
 from ..state.carriers import Person, Question, Site, Tenure

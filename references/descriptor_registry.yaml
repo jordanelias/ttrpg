@@ -73,10 +73,11 @@ capabilities:
   grows_by: [train, practice, use]                # closed; each names a rule the engine implements
   untrained: [default, none]                      # closed; what a non-holder brings (U1 §4)
   rows:
-    # `opposed_by: attr.spirit.will` where the plan's text says `attr.mind.will`: B01a.06 moved that key (the legacy key is only an alias).
+    # No skill row carries `opposed_by` for `argue` or `inquiry`. Who resists an argument is the social contest's rule (V2 part 2 §C.2, A-137: the
+    # listener's Will plus rank, built by B24p), per ED-IN-0377 and ED-IN-0378. `argue`'s `base` is read by the single roll only; a proceeding's dice are Reason and Presence (V2 R11).
     copying: {kind: skill, gloss: "Carries a text or a message on exactly as it was given.", base: attr.mind.focus,      opposed_by: none,             untrained: default, grows_by: [train, practice],      scale: [0, 7], source: "rosters.yaml vocation_attribute (CR-20)"}
-    argue:   {kind: skill, gloss: "Makes a case to someone's face and moves them by it.", base: attr.social.charisma, opposed_by: attr.spirit.will, untrained: default, grows_by: [train, practice],      scale: [0, 7], source: "rosters.yaml vocation_attribute (CR-20); ED-IN-0350"}
-    inquiry: {kind: skill, gloss: "Finds things out: from a record, a place or a watched person.", base: attr.mind.acuity, opposed_by: attr.spirit.will, untrained: default, grows_by: [train, practice],      scale: [0, 7], source: "rosters.yaml vocation_attribute (CR-20)"}
+    argue:   {kind: skill, gloss: "Makes a case to someone's face and moves them by it.", base: attr.social.charisma, untrained: default, grows_by: [train, practice],      scale: [0, 7], source: "rosters.yaml vocation_attribute (CR-20); ED-IN-0350"}
+    inquiry: {kind: skill, gloss: "Finds things out: from a record, a place or a watched person.", base: attr.mind.acuity, untrained: default, grows_by: [train, practice],      scale: [0, 7], source: "rosters.yaml vocation_attribute (CR-20)"}
     arms:    {kind: skill, gloss: "Fights with a weapon in hand.", base: attr.body.agility, untrained: default, grows_by: [train, practice, use], scale: [0, 7], source: "rosters.yaml vocation_attribute (CR-20); CP-T03-04 (iv)"}
 
 # AGGREGATES (W2.8 PLACEHOLDERS) -- computed from category members; NOT yet wired into derived values.

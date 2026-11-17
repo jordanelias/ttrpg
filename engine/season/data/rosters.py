@@ -21,6 +21,7 @@ from typing import Optional
 
 from . import files
 from ..gaps import Forbidden, Unspecified
+from engine.substrate.descriptors import CAPABILITIES as _CAPABILITIES
 
 
 # ---------------------------------------------------------------------------
@@ -566,64 +567,15 @@ if RECORD_KINDS & TENURE_KINDS:
         needs="rename one; each word the `exists:` stem reads must mean one thing",
         law="`queries/world_q.py::WorldReader.read`'s `exists` branch reads both rosters; a "
             "shared word is two questions spelled one way")
-# `U1`: verb -> the capability key its contested roll draws dice from. A MAPPING inside a roster
-# row, read through `roster_map` so an absent roster refuses rather than defaulting to `{}` -- the
-# polarity that function exists to hold. A verb with no row falls through to `pool_default` inside
-# the wrapper, which is the `assumption` grade's own reading (`08 §3`) and not a refusal.
-VERB_CAPABILITY = roster_map("verb_capability", "values")
-# THE VOCATIONS: the capability keys some verb draws dice from -- `verb_capability`'s VALUES (its keys are verbs),
-# derived here once and never spelt, so a key `train` may raise is exactly a key `faculty` reads (#453 K-20: the
-# range is `verb_capability`'s names; Thread Sensitivity is outside it). `data/verbs.py` re-exports it.
-VOCATIONS = frozenset(VERB_CAPABILITY.values())
-
-
-def _load_vocation_attribute(values: dict, vocations) -> dict:
-    """`rosters.yaml: vocation_attribute`'s `values`, CLOSED BOTH WAYS against `vocations` (v10 CR-20): a row
-    for every vocation and for nothing else, each valued by one of the ten registry keys. A vocation with no
-    row would roll its pool from `pool_default` for everyone while the roster read as complete; a row for a
-    name no verb draws on would sit in the table looking live. Refused whole, naming the difference."""
-    from ...substrate.descriptors import ATTRIBUTES
-    out = {str(k): str(v or "") for k, v in values.items()}
-    missing, extra = sorted(set(vocations) - set(out)), sorted(set(out) - set(vocations))
-    bad = sorted(k for k, v in out.items() if v not in ATTRIBUTES)
-    if missing or extra or bad:
-        raise Unspecified(
-            f"`rosters.yaml: vocation_attribute` is not closed over the vocations: no row for {missing}, "
-            f"a row for a non-vocation {extra}, a value that is none of the ten {bad}", "rosters.yaml",
-            needs="exactly one row per `verb_capability` value, each valued by an `attributes` registry key",
-            law="CR-20 -- which attribute a vocation's pool starts from is stated once, for every vocation")
-    return out
-
-
-VOCATION_ATTRIBUTE = _load_vocation_attribute(roster_map("vocation_attribute", "values"), VOCATIONS)
-
-
-def _load_vocation_opposed_by(opposed: dict, vocations) -> dict:
-    """`rosters.yaml: vocation_attribute`'s `opposed_by` (v10 CR-96, AR-44): the OPTIONAL attribute a person subject
-    opposes a vocation's verbs with, in place of the row's own. A subset of the vocations (an absent vocation is
-    opposed by its own attribute), each valued by one of the ten registry keys -- the same set `_load_vocation_attribute`
-    holds its values to, so there is no second list. Refused whole, naming the difference."""
-    from ...substrate.descriptors import ATTRIBUTES
-    out = {str(k): str(v or "") for k, v in opposed.items()}
-    extra = sorted(set(out) - set(vocations))
-    bad = sorted(k for k, v in out.items() if v not in ATTRIBUTES)
-    if extra or bad:
-        raise Unspecified(
-            f"`rosters.yaml: vocation_attribute: opposed_by` names a non-vocation {extra} and/or a value that is "
-            f"none of the ten {bad}", "rosters.yaml",
-            needs="only `verb_capability` values as keys, each valued by an `attributes` registry key",
-            law="CR-96 / AR-44 -- the opposing attribute is one of the ten, stated once per vocation or absent")
-    return out
-
-
-VOCATION_OPPOSED_BY = _load_vocation_opposed_by(roster_map("vocation_attribute", "opposed_by"), VOCATIONS)
 
 
 def _load_lifepath_templates(cells: dict, lifepaths, vocations) -> dict:
     """`rosters.yaml: tables: lifepath_templates`, CLOSED BOTH WAYS against `rosters: lifepaths` (v10 CR-33): a row
-    for every lifepath and for nothing else, each `holds:` entry a `verb_capability` value (a vocation), each row
-    carrying a `ground:`. A template naming a key no verb draws on would grant a capability `train` could raise and
-    `faculty` never read; a row for an id outside the 34 would never be reached and would read as live. Refused
+    for every lifepath and for nothing else, each `holds:` entry a defined skill (`descriptors.CAPABILITIES`, B04.04: read
+    off the leaf because this module loads BEFORE the verb table and may not import it), each row carrying a `ground:`.
+    A template may grant a skill no verb yet tests (`data/verbs.py::skills_without_a_verb` reports those). A template
+    naming a key that is no defined skill would grant a capability nothing reads; a row for an id outside the 34
+    would never be reached and would read as live. Refused
     whole, naming the difference. Returns `{lifepath id: tuple of capability keys}` -- the lifepath id is the key of
     this table and is stored on no `Person`."""
     out: dict = {}
@@ -639,15 +591,15 @@ def _load_lifepath_templates(cells: dict, lifepaths, vocations) -> dict:
     if missing or extra or malformed or outside or repeated or ungrounded:
         raise Unspecified(
             f"`rosters.yaml: lifepath_templates` is not closed over the lifepaths: no row for {missing}, a row for "
-            f"a non-lifepath {extra}, no `holds:` list {malformed}, a key that is no `verb_capability` value "
+            f"a non-lifepath {extra}, no `holds:` list {malformed}, a key that is no defined skill "
             f"{outside}, a key held twice {repeated}, no `ground:` {ungrounded}", "rosters.yaml",
-            needs="exactly one row per `lifepaths` id, each `holds:` a list of `verb_capability` values, each with a `ground:`",
+            needs="exactly one row per `lifepaths` id, each `holds:` a list of `descriptors.CAPABILITIES` ids, each with a `ground:`",
             law="CR-33 -- which capability keys a lifepath's starting skills name is stated once, for every lifepath")
     return out
 
 
 LIFEPATHS = roster("lifepaths")
-LIFEPATH_TEMPLATES = _load_lifepath_templates(table("lifepath_templates"), LIFEPATHS, VOCATIONS)
+LIFEPATH_TEMPLATES = _load_lifepath_templates(table("lifepath_templates"), LIFEPATHS, frozenset(_CAPABILITIES))
 # v9 FI-01 (`ED-FI-0009`, J-22 (A)): inquiry verb -> `{provider, module_entry}`, the roll that grades
 # it with no prize. Validated against the verb table at load (`data/verbs.py`) and against the prize
 # rows at driver construction (`manifest/registry.py::check_graded_inquiries`); read by

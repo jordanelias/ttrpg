@@ -1320,68 +1320,13 @@ rosters:
     values:
       standing_crossed: "standing.band_crossed"
 
-  verb_capability:
-    source: >-
-      `03 §A.2` -- *"Rank supplies dice and gates nothing"* -- and `#353 §9.2`, quoted live in the
-      tree: *"`capability` supplies dice and GATES NOTHING"*. The verb names a capability; the
-      capability supplies the dice; nothing about it makes a verb unavailable.
-    row: H-126
-    note: >-
-      ⚠ THE MAPPING IS INJECTED AND THE MECHANISM IS NOT. That a contested act draws dice from the
-      actor's capability is the design's; WHICH capability key each verb draws on is stated
-      nowhere, so this table is an `assumption` row before it is a lookup -- `08 §3`'s
-      inject-declare-sweep, and never a refusal of the whole corpus for a missing key.
-      ⚠ A VERB WITH NO ROW HERE IS NOT AN ERROR. `seam/wrappers/sigma.py::faculty` falls through
-      to `pool_default`, which is the `assumption` grade's own polarity: `absent` refuses, and this
-      is not one. The table is therefore OPEN in the sense that matters -- adding a contested verb
-      does not require adding a row before the seam will run it.
-      ⚠ AND IT IS NEARLY INERT ON THE CORPUS, SO NOBODY SHOULD READ THE ROWS AS DOING WORK: the writers
-      of `Person.capability` are a `cast:` overlay's `capability:` (`harness/corpus_run.py`, `build_at`),
-      a cast row's `lifepath:` (`data/cast.py::capability_of`, held at `pool_default`) and, in play,
-      `train` (+1 on a key the subject already holds). Nearly every built person holds none, so every
-      other derivation lands on `pool_default` and the roll varies by SEED and FIXTURE rather than by
-      PERSON. That is why R-09 reads `partial` and not `met`.
-      ⚠ `argue: "argue"` and the three inquiries `research`, `examine`, `surveil: "inquiry"` (REM-30,
-      B10-10) are VALUES of this table, so they ARE the vocation range (`data/verbs.py::VOCATIONS`, a
-      frozenset of these values; no second roster to extend): `argue` and `inquiry` join `copying`, and
-      every `train` formation (`vocation_sourced`) forms one Candidate per vocation. A DECLARED MOVER
-      where formation moves.
-      ⚠ v11 CP-T03-04 (B10-11): `fight`, `accept` and `capture` -- the three rows contesting `the body` -- draw on
-      `arms`, so a held `arms` key reaches combat's pool and Ob through `faculty` (CR-85: `combat_input` fills
-      `PersonalCombatInput.faculties` from it; no second skill input), `train` may raise it (one more Candidate per
-      `train` formation: a formation mover with nobody holding the key), and `_eff_kill` raises it by one on each
-      surviving holder of a fight that drew blood (the key is read off this table by the verb, never spelt there).
-      `capture` is added beside the design's `fight` and `accept` (CR-85 design §5) because it opens the same fight
-      through the same `combat_input`; without its row an `arms` holder would roll `pool_default` in a capture.
-      ⚠ THE NAME: `arms` is the plan's; a reader may take `capability["arms"]` for EQUIPMENT, which is
-      CP-T03-03's `arms_kinds` (matter kinds) -- a different thing. [ASSUMPTION; low; Jordan to correct; revert:
-      rename the roster key] -- the rename is this table's three values and `vocation_attribute`'s key, nothing in a
-      body. NOBODY HOLDS IT at landing: no cast overlay value and no lifepath template names it (Jordan's content).
-    sweep: [declared, uniform, absent]
-    keys: [verb_table]
-    values:
-      tell:  "copying"
-      speak: "copying"
-      argue: "argue"
-      research: "inquiry"
-      examine:  "inquiry"
-      surveil:  "inquiry"
-      fight:    "arms"
-      accept:   "arms"
-      capture:  "arms"
-      # B11 lane A (carrying `10_DICE_one_score_two_roles.md` C): three verbs the social roll deals, each on a vocation
-      # that already exists, so `VOCATIONS` and `train`'s candidate count do not grow. `interrogate` -> `inquiry` (the
-      # graded inquiries' key: questioning is inquiry under contest), `arrest` -> `arms` (laying hands on a man, the
-      # body's key), `determine` -> `argue` (a bench weighing a case). `lie` (CR-27's row) carries no row here: it pools
-      # at `pool_default` and, on the shipped `task` arm, a person opposes it at `pool_default` too (`pool.score`'s
-      # fallback, `pool.untrained`), which a believer reads the same way (`sigma.believed_input`). [ASSUMPTION; medium;
-      # Jordan to correct; revert: drop the three rows.]
-      interrogate: "inquiry"
-      arrest:      "arms"
-      determine:   "argue"
-
-  # An unauthored person's attributes are NOT a row here: they are DRAWN (B01a.01, `Fixtures generated_attribute_range`,
-  # H-856), one keyed draw per person and attribute, by `state/carriers.py::generated_attributes`.
+  # B04.04 (U1 §1): the skills, by the `pursuit_axes` precedent -- this row POINTS at the one owner
+  # (`references/descriptor_registry.yaml: capabilities`, read through `engine/substrate/descriptors.py::CAPABILITIES`)
+  # and carries no `values:`. The verb -> skill map and the skill -> attribute map this file used to hold
+  # (`verb_capability`, `vocation_attribute`) are DERIVED in `data/verbs.py` from the verb table's `capability:` column
+  # and the definition rows; they are deleted here, not mirrored.
+  capabilities:
+    from_descriptor: capabilities
 
   task_difficulty:
     source: >-
@@ -1414,73 +1359,6 @@ rosters:
       examine:     2.0
       research:    2.0
       surveil:     2.0
-
-  vocation_attribute:
-    source: >-
-      v10 CR-20 (M2, taken): a person's input is `faculty`, derived at read; the ten stored attributes
-      (`references/descriptor_registry.yaml: attributes`, ED-IN-0328) are what it derives from. THIS TABLE
-      IS WHICH ATTRIBUTE EACH VOCATION'S POOL STARTS FROM -- the vocation is a `verb_capability` value, the
-      attribute a registry key.
-    note: >-
-      CLOSED, BOTH WAYS: a row for every vocation (`data/verbs.py::VOCATIONS`, the VALUES of
-      `verb_capability`) and for nothing else, each valued by one of the ten registry keys; refused at import
-      otherwise (`data/rosters.py::_load_vocation_attribute`), so a vocation added to `verb_capability` is
-      refused until it is given an attribute, and a row for a name that is no vocation never reads as live.
-      `faculty` takes the HELD value of the person's attribute here as the pool's base and the larger of that
-      and the held capability key; with NO attribute held it is the held key alone, else `pool_default`, exactly
-      as before CR-20 -- so a held key of 0 stays "under one die" without an attribute and is overridden by one
-      (`seam/wrappers/sigma.py::faculty`; the plan's literal "larger of the held key and `pool_default`" would raise
-      a held 0 to 2 against `test_odds_of`'s pin). `_opposition_of` reads the larger of the held key and the
-      authored attribute (the row's `opposed_by` where it has one, CR-96), never practice; the fallback by arm: on the
-      shipped `task` arm (`Fixtures obstacle_model`, B11 lane A) a person holding neither opposes at `pool_default`
-      (`pool.py::score`), on the `stand_in` control arm he reads `None` and the module takes `obstacle_default`.
-      EACH ROW'S GROUND, so a reviewer can check it against the vocation's own text and not against taste:
-      `copying` -> Focus (`attr.mind.focus`): the vocation is `tell`/`speak` (a claim relayed as it was
-      held) and NPC-088's case, a repeated multi-week task of copying a text (`cases/exercises/NPC-088.yaml`),
-      i.e. sustained, exact attention to a thing so that it is reproduced unchanged. `argue` -> Presence (`attr.social.charisma`): RULED by Jordan, 2026-11-05 (ED-IN-0350): *"argue main component is
-      presence, attunement informs how character thinks the other character is receiving it and the best style of
-      argument to deliver"*. Presence is the arguer's pool. Attunement is NOT the pool: it informs the arguer's reading of
-      how the other party is receiving the case and which style of argument to deliver, a choice-side input that no code
-      reads yet (reference, not a mechanism; the carrier for it is a design owed to CR-92/CR-93, `-12`). (Proof is the
-      room's term, `proofs`, composed into the obstacle already.) `inquiry` -> Reason (`attr.mind.acuity`):
-      its three verbs are the fieldwork inquiries whose source rows are headed *Examine · Cognition*,
-      *Research · Recall*, *Surveil · Cognition*
-      (`fieldwork_v30.md:301,303,304`, archived; `verb_table.yaml` `examine` /
-      `research` / `surveil` `requires_typed_note`), and `Cognition` is Reason's registry alias; `Recall`
-      is not among the ten.
-      [ASSUMPTION; medium; Jordan to correct; revert: delete this roster and the loader, and `faculty` /
-      `_opposition_of` read the held capability key alone, as before CR-20.] The competitors, each the
-      cheap swap: `copying` -- Coordination (a copyist's hand) or Presence (`tell` is thrown against the
-      hearer's standing, `verb_table.yaml` `tell`); `argue` -- none: ruled (above);
-      `inquiry` -- Perception for `surveil` ("awareness of surroundings, noticing information",
-      `references/descriptor_registry.yaml`). Focus, Reason and Presence carry no registry description, so
-      no row rests on one. `argue` -> Presence stands (AR-29, influence); no vocation here is forgery or other
-      precise-hand work (AR-16: `forge` draws on no capability key, and its quality is CR-94's); `inquiry` -> Reason
-      is the one row AR-24 (Perception, "surveillance and fieldwork") presses on, through `surveil` and `examine`,
-      while `research` stays Reason's. One row cannot serve both, and a split is a new vocation
-      (`verb_capability`'s values), which is a decision [ASSUMPTION; medium; Jordan to correct].
-      `arms` -> Coordination (`attr.body.agility`, v11 CP-T03-04): the row is forced by this table's closure (a
-      vocation with no row refuses the import), and the choice is the cheap swap
-      [ASSUMPTION; medium; Jordan to correct; revert: Strength (`attr.body.strength`) or Endurance]. Ground:
-      `references/descriptor_registry.yaml`'s alias line alone -- `attr.body.agility` is Coordination, aliases
-      Agility, Dexterity; that the dexterity is the fighter's is this row's reading, not the registry's (it says
-      nothing of weapons). ⚠ The combat module ALSO reads `agi` as its own attribute
-      (`modules/combat/attributes.py`), but a season fighter's `agi` is the module's class default
-      (`modules/combat/fight.py` builds each Combatant from `end`, kit and `faculty` only), so a person holding
-      Coordination brings it once, through `faculty`; no built person holds any attribute at landing.
-    values:
-      copying: "attr.mind.focus"
-      argue:   "attr.social.charisma"
-      inquiry: "attr.mind.acuity"
-      arms:    "attr.body.agility"
-    # v10 CR-96 (AR-44): OPTIONAL, per vocation, which attribute a PERSON SUBJECT opposes the vocation's verbs
-    # WITH when it is not the row's own (Spirit, `attr.spirit.will`, is the attribute that resists influence). A
-    # vocation with no entry here is opposed by its row's own attribute (`values:`), as CR-20 landed it. Closed
-    # against the vocations and valued by one of the ten registry keys, refused at import otherwise
-    # (`data/rosters.py::_load_vocation_opposed_by`); read by `seam/wrappers/pool.py::_opposing_attribute`. It moves
-    # the OPPOSITION only, never the pool (`faculty` reads `values:`). EVERY ROW SHIPS ABSENT: CR-95 writes Spirit
-    # where it applies, so this is data-equal until then.
-    opposed_by: {}
 
   lifepaths:
     source: >-

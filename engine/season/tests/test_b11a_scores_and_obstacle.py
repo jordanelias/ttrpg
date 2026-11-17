@@ -43,13 +43,13 @@ def revert_b11a_scores(monkeypatch) -> None:
     monkeypatch.setitem(boot_realm.DEFAULT_FIXTURES._v, "generated_attribute_range", None)
     monkeypatch.setattr(cast, "attributes_of", lambda r: {})
     for verb in ("interrogate", "arrest", "determine"):          # the three `verb_capability` rows (one dict, read by name)
-        monkeypatch.delitem(R.VERB_CAPABILITY, verb)
+        monkeypatch.delitem(V.VERB_CAPABILITY, verb)
     # and `VOCATIONS` re-read off what is left at each module that bound it (`test_cp_t03_04_arms.revert_cp_t03_04`'s list):
     # an earlier revert that took `arms`'s own rows out kept `arms` only because `arrest` still drew on it
     from ..decision import options as _OPT
     from ..loop import effects_combat as _EC
-    left = frozenset(R.VERB_CAPABILITY.values())
-    for mod in (R, V, _OPT, _EC):
+    left = frozenset(V.VERB_CAPABILITY.values())
+    for mod in (V, _OPT, _EC):
         monkeypatch.setattr(mod, "VOCATIONS", left)
 
 
@@ -97,7 +97,7 @@ def test_a_person_opposes_with_the_score_he_rolls_and_the_control_reads_the_held
 
 def test_the_task_difficulty_is_closed_over_the_verbs_the_roll_deals():
     assert set(V.TASK_DIFFICULTY) == V.social_roll_verbs()
-    assert {"interrogate", "arrest", "determine"} <= set(R.VERB_CAPABILITY)
+    assert {"interrogate", "arrest", "determine"} <= set(V.VERB_CAPABILITY)
     with pytest.raises(Forbidden):
         V._load_task_difficulty({k: v for k, v in V.TASK_DIFFICULTY.items() if k != "tell"})
     with pytest.raises(Forbidden):
@@ -132,7 +132,7 @@ def test_falsifier_a_believers_lie_against_a_person_is_scored_at_the_obstacle_it
     w = P.tiny_world()
     w.fixtures = w.fixtures.sweep("obstacle_model", model)
     liar = w.persons["p_mid"]
-    assert "lie" not in R.VERB_CAPABILITY, "the case is a verb naming no vocation"
+    assert "lie" not in V.VERB_CAPABILITY, "the case is a verb naming no vocation"
     dealt = sigma._composed_obstacle(sigma.contest_input(w, [liar.id], verb="lie", subject="p_low"))
     believed = sigma.believed_input(liar, "lie", "p_low", w.fixtures, pool=pool.faculty(w, liar, "lie"),
                                     person_subject=True)

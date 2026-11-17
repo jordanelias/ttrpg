@@ -17,11 +17,11 @@ from dataclasses import replace
 
 from ..data.rosters import (
     DECLARED, ENDING_FELLED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, FIELD_WINNER_CASUALTY_ARMS, INVESTED, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
-    VERB_CAPABILITY, WOUND_HARM_MODELS, BODY_MARK_MODELS, require_member,
+    WOUND_HARM_MODELS, BODY_MARK_MODELS, require_member,
 )
 from ..data.matrix import matrix_row
 from ..data.requires import Observation
-from ..data.verbs import VERB_TABLE, VOCATION_SOURCED, VOCATIONS
+from ..data.verbs import VERB_CAPABILITY, VERB_TABLE, VOCATION_SOURCED, VOCATIONS
 from ..gaps import Unspecified
 from ..queries.person_q import held_against
 from ..queries.world_q import BODY_STEM, DETAIN_KIND, ancestry, garrison_sites, holder_faction_of, home_of, restrained

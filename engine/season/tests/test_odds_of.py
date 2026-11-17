@@ -58,7 +58,7 @@ def _claim(holder, subject, value, *, when=0, confidence=5):
 
 
 def test_the_verb_draws_on_the_key_these_tests_assume():
-    from ..data.rosters import VERB_CAPABILITY
+    from ..data.verbs import VERB_CAPABILITY
     assert VERB_CAPABILITY["tell"] == KEY
 
 

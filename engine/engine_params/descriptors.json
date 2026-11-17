@@ -164,6 +164,12 @@
       "default",
       "none"
     ],
+    "names": [
+      "copying",
+      "argue",
+      "inquiry",
+      "arms"
+    ],
     "rows": {
       "copying": {
         "kind": "skill",
@@ -183,7 +189,7 @@
         "kind": "skill",
         "gloss": "Makes a case to someone's face and moves them by it.",
         "base": "attr.social.charisma",
-        "opposed_by": "attr.spirit.will",
+        "opposed_by": null,
         "floor": 0,
         "ceiling": 7,
         "untrained": "default",
@@ -197,7 +203,7 @@
         "kind": "skill",
         "gloss": "Finds things out: from a record, a place or a watched person.",
         "base": "attr.mind.acuity",
-        "opposed_by": "attr.spirit.will",
+        "opposed_by": null,
         "floor": 0,
         "ceiling": 7,
         "untrained": "default",

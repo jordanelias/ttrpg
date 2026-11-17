@@ -52,9 +52,9 @@ from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.matrix import Step
 # `CONVICTIONS` dropped 2026-09-16: `seed_pursuits` moved to `run_cases.py`, which is its
 # single owner, and nothing here reads the roster any more.
-from ..data.rosters import (GRADED_INQUIRIES, PURSUIT_AXES, RUNG_KINDS, VERB_CAPABILITY,
+from ..data.rosters import (GRADED_INQUIRIES, PURSUIT_AXES, RUNG_KINDS,
                             load_yaml, refuse_a_titled_post_off_its_rung)
-from ..data.verbs import VERB_TABLE, align, celled_verbs
+from ..data.verbs import VERB_CAPABILITY, VERB_TABLE, align, celled_verbs
 from ..decision import make_chooser
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unspecified
 from ..loop.driver import SeasonDriver, resolvable_verbs
