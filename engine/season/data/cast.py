@@ -34,7 +34,7 @@ import re
 from typing import Optional
 
 from . import files
-from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_TEMPLATES, load_yaml
+from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_RANKS, LIFEPATH_TEMPLATES, load_yaml
 from ..gaps import Unspecified
 from ...substrate.descriptors import (
     ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, CAPABILITIES, HERITAGES, PRACTITIONER_STATS, TRAITS, attribute_key,
@@ -421,7 +421,8 @@ def capability_of(r: dict, pool_default: int) -> dict:
 
     THE LIFEPATH ID IS READ AND DROPPED: it is stored on no `Person`, so no reader in play can ask for it (the
     keys it grants are the hook, `Person.capability`, which `faculty` and `train` already read). Each key is
-    held AT `pool_default` (H-126's fixture), the value `faculty` already falls to, so the grant changes no pool;
+    held AT `pool_default` (H-126's fixture), the value `faculty` already falls to, so the grant changes no pool -- except a
+    `{<id>: <rank>}` entry of the template (B04.11), which is held AT that rank, checked at load against the skill's own scale;
     it makes the key one `train` can raise (`loop/effects_combat.py::_eff_train` raises only a held key). A
     value that names no template REFUSES, naming the row (`heritage_of`'s shape): a typo'd id would otherwise
     read as a lifepath that grants nothing."""
@@ -429,7 +430,7 @@ def capability_of(r: dict, pool_default: int) -> dict:
     if v is None:
         return {}
     if isinstance(v, str) and v in LIFEPATH_TEMPLATES:
-        return {key: pool_default for key in LIFEPATH_TEMPLATES[v]}
+        return {key: LIFEPATH_RANKS[v].get(key, pool_default) for key in LIFEPATH_TEMPLATES[v]}
     raise Unspecified(
         f"cast row {(r or {}).get('id', '?')}: lifepath {v!r} names no template of `lifepath_templates`",
         "references/npc_registry.yaml", needs=f"one of the 34 ids of `rosters.yaml: lifepaths` (3-CR1 ... 3-CF6), or no key",

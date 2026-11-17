@@ -871,3 +871,61 @@ def test_a_rank_at_least_the_loader_cannot_read_is_refused():
     gate = dict(_shipped_row("gate"), when={"rank_at_least": 3})
     msg = _refused([gate])
     assert msg is not None and "when" in msg, msg
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B04.11 -- A BUNDLE MAY GRANT A SKILL AT A RANK (CAP A7; DEF Edit 3). An entry of `lifepath_templates: holds:` is a bare id
+# (held at `pool_default`, as ever) or `{<id>: <rank>}`, the rank checked against that skill's own `floor`..`ceiling`
+# (`descriptors.CAPABILITIES`). `rosters._load_lifepath_templates` checks it; `cast.capability_of` expands it. No shipped
+# entry is a mapping, so each test plants the cells it reads.
+# ---------------------------------------------------------------------------------------------------------------------
+
+def _bundle_cells(lifepath, holds):
+    """The shipped `lifepath_templates` table with `lifepath`'s `holds:` replaced by `holds`."""
+    from engine.season.data import rosters
+    cells = {k: dict(v) for k, v in rosters.table("lifepath_templates").items()}
+    cells[lifepath]["holds"] = holds
+    return cells
+
+
+def _load_bundles(cells):
+    """What the module does at import over `cells`: the id table and the rank table, from the one loader."""
+    from engine.season.data import rosters
+    return (rosters._load_lifepath_templates(cells, rosters.LIFEPATHS, frozenset(descriptors.CAPABILITIES)),
+            rosters._lifepath_ranks(cells))
+
+
+def test_a_bundle_rank_above_its_scale_is_refused():
+    """FALSIFIER: a `{id: 8}` entry that loads. The scale is the skill row's own `floor`..`ceiling`, never a number typed
+    here; a bool, a fraction, a numeric string, a two-key mapping and an undefined id refuse too, naming the lifepath."""
+    from engine.season.gaps import ShapeGap
+    row = descriptors.CAPABILITIES["inquiry"]
+    lp = "3-CR2"
+    for ok in (row.floor, row.ceiling):                                    # the controls: both ends of the scale load
+        ids, ranks = _load_bundles(_bundle_cells(lp, [{"inquiry": ok}]))
+        assert ids[lp] == ("inquiry",) and ranks[lp] == {"inquiry": ok}
+    for bad in (row.ceiling + 1, row.floor - 1, True, 2.5, "3", None):
+        with pytest.raises(ShapeGap, match=lp):
+            _load_bundles(_bundle_cells(lp, [{"inquiry": bad}]))
+    for bad_entry in ({"inquiry": 2, "arms": 2}, {}, {"no_such_skill": 2}, 3):
+        with pytest.raises(ShapeGap, match=lp):
+            _load_bundles(_bundle_cells(lp, [bad_entry]))
+    with pytest.raises(ShapeGap, match=lp):                                # one skill granted twice, bare and ranked
+        _load_bundles(_bundle_cells(lp, ["inquiry", {"inquiry": 3}]))
+
+
+def test_a_bare_bundle_id_keeps_the_untrained_value(monkeypatch):
+    """FALSIFIER: a bare id read as anything but `pool_default`. A bundle of one bare id and one ranked entry expands (through
+    `capability_of`) to the bare id at `pool_default` and the ranked one at its rank; the shipped table, every entry a bare id,
+    expands each key to `pool_default` and carries no rank."""
+    from engine.season.data import cast, rosters
+    assert all(not r for r in rosters._lifepath_ranks(rosters.table("lifepath_templates")).values())
+    lp = "3-CH5"
+    assert rosters.LIFEPATH_TEMPLATES[lp] == ("inquiry",)
+    assert cast.capability_of({"id": "X", "lifepath": lp}, 2) == {"inquiry": 2}
+    assert cast.capability_of({"id": "X", "lifepath": lp}, 5) == {"inquiry": 5}
+    ids, ranks = _load_bundles(_bundle_cells(lp, ["inquiry", {"arms": 4}]))
+    monkeypatch.setattr(cast, "LIFEPATH_TEMPLATES", ids)
+    monkeypatch.setattr(cast, "LIFEPATH_RANKS", ranks)
+    for default in (2, 5):
+        assert cast.capability_of({"id": "X", "lifepath": lp}, default) == {"inquiry": default, "arms": 4}

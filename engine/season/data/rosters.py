@@ -579,37 +579,70 @@ if RECORD_KINDS & TENURE_KINDS:
             "shared word is two questions spelled one way")
 
 
+_BARE = object()    # the rank of a bare id: not `None`, which a mapping entry's rank may be (and is refused as off its scale)
+
+
+def _holds_entries(holds):
+    """One `holds:` list read as `[(skill id, rank or _BARE)]`, or `None` where it is no list. An entry is a bare id (`_BARE`:
+    held at `pool_default`, B04.11 keeps that) or a one-key mapping `{<id>: <rank>}`; any other entry reads as
+    `(entry, _BARE)` so the loader's own id check names it. The one place the two forms are told apart."""
+    if not isinstance(holds, list):
+        return None
+    return [next(iter(h.items())) if isinstance(h, dict) and len(h) == 1 else (h, _BARE) for h in holds]
+
+
+def _rank_is_off_its_scale(skill, rank) -> bool:
+    """True where a `{skill: rank}` entry's rank is no whole number inside THAT skill's own `floor`..`ceiling`
+    (`descriptors.CAPABILITIES`, the leaf: the scale is the definition row's, never typed here)."""
+    row = _CAPABILITIES.get(skill) if isinstance(skill, str) else None
+    return row is None or not isinstance(rank, int) or isinstance(rank, bool) or not row.floor <= rank <= row.ceiling
+
+
 def _load_lifepath_templates(cells: dict, lifepaths, vocations) -> dict:
     """`rosters.yaml: tables: lifepath_templates`, CLOSED BOTH WAYS against `rosters: lifepaths` (v10 CR-33): a row
     for every lifepath and for nothing else, each `holds:` entry a defined skill (`descriptors.CAPABILITIES`, B04.04: read
     off the leaf because this module loads BEFORE the verb table and may not import it), each row carrying a `ground:`.
-    A template may grant a skill no verb yet tests (`data/verbs.py::skills_without_a_verb` reports those). A template
-    naming a key that is no defined skill would grant a capability nothing reads; a row for an id outside the 34
-    would never be reached and would read as live. Refused
+    An entry is a bare id or `{<id>: <rank>}` (B04.11): the rank a whole number inside that skill's own scale; a bare id
+    keeps the untrained value. A template may grant a skill no verb yet tests (`data/verbs.py::skills_without_a_verb`
+    reports those). A template naming a key that is no defined skill would grant a capability nothing reads; a row for an
+    id outside the 34 would never be reached and would read as live. Refused
     whole, naming the difference. Returns `{lifepath id: tuple of capability keys}` -- the lifepath id is the key of
-    this table and is stored on no `Person`."""
+    this table and is stored on no `Person`; the ranks are `_lifepath_ranks`."""
     out: dict = {}
     for lid, cell in cells.items():
-        holds = cell.get("holds") if isinstance(cell, dict) else None
-        out[str(lid)] = tuple(holds) if isinstance(holds, list) else None
+        entries = _holds_entries(cell.get("holds") if isinstance(cell, dict) else None)
+        out[str(lid)] = None if entries is None else tuple(k for k, _ in entries)
+    entries_of = {str(k): _holds_entries(c.get("holds")) for k, c in cells.items() if isinstance(c, dict)}
     missing, extra = sorted(set(lifepaths) - set(out)), sorted(set(out) - set(lifepaths))
     malformed = sorted(k for k, v in out.items() if v is None)
-    outside = sorted(f"{k}:{h}" for k, v in out.items() for h in (v or ()) if h not in vocations)
-    repeated = sorted(k for k, v in out.items() if v and len(set(v)) != len(v))
+    outside = sorted(f"{k}:{h}" for k, v in out.items() for h in (v or ()) if not isinstance(h, str) or h not in vocations)
+    repeated = sorted(k for k, v in out.items() if v and len(set(map(str, v))) != len(v))
+    offscale = sorted(f"{k}:{h}={r}" for k, es in entries_of.items() for h, r in (es or ()) if r is not _BARE
+                      and (isinstance(h, str) and h in vocations) and _rank_is_off_its_scale(h, r))
     ungrounded = sorted(k for k, c in cells.items()
                         if not (isinstance(c, dict) and str(c.get("ground") or "").strip()))
-    if missing or extra or malformed or outside or repeated or ungrounded:
+    if missing or extra or malformed or outside or repeated or offscale or ungrounded:
         raise Unspecified(
             f"`rosters.yaml: lifepath_templates` is not closed over the lifepaths: no row for {missing}, a row for "
             f"a non-lifepath {extra}, no `holds:` list {malformed}, a key that is no defined skill "
-            f"{outside}, a key held twice {repeated}, no `ground:` {ungrounded}", "rosters.yaml",
-            needs="exactly one row per `lifepaths` id, each `holds:` a list of `descriptors.CAPABILITIES` ids, each with a `ground:`",
+            f"{outside}, a key held twice {repeated}, a rank off its skill's scale {offscale}, no `ground:` {ungrounded}", "rosters.yaml",
+            needs="exactly one row per `lifepaths` id, each `holds:` a list of `descriptors.CAPABILITIES` ids or "
+                  "`{id: rank}` (the rank inside that skill's scale), each with a `ground:`",
             law="CR-33 -- which capability keys a lifepath's starting skills name is stated once, for every lifepath")
     return out
 
 
+def _lifepath_ranks(cells: dict) -> dict:
+    """`{lifepath id: {skill id: rank}}`: only the `{<id>: <rank>}` entries of each `holds:` (B04.11); a bare id has no rank
+    here and is held at `pool_default` by `data/cast.py::capability_of`. Read over cells `_load_lifepath_templates` has
+    already refused or passed."""
+    return {str(lid): {k: r for k, r in (_holds_entries(c.get("holds")) or ()) if r is not _BARE}
+            for lid, c in cells.items() if isinstance(c, dict)}
+
+
 LIFEPATHS = roster("lifepaths")
 LIFEPATH_TEMPLATES = _load_lifepath_templates(table("lifepath_templates"), LIFEPATHS, frozenset(_CAPABILITIES))
+LIFEPATH_RANKS = _lifepath_ranks(table("lifepath_templates"))
 # v9 FI-01 (`ED-FI-0009`, J-22 (A)): inquiry verb -> `{provider, module_entry}`, the roll that grades
 # it with no prize. Validated against the verb table at load (`data/verbs.py`) and against the prize
 # rows at driver construction (`manifest/registry.py::check_graded_inquiries`); read by
