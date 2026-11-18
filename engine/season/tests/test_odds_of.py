@@ -219,13 +219,60 @@ def test_an_act_the_social_roll_does_not_deal_has_no_odds():
 # ---- mode (b) -----------------------------------------------------------------------------------
 
 def test_mode_b_with_no_claim_on_the_opposition_is_none_never_a_figure():
+    """THE CONTROL ARM (`believed_prior` `none`, H-435): a person who holds no claim on the opposition cannot say."""
     w = _world()
+    w.fixtures = w.fixtures.sweep("believed_prior", "none")
     p = w.persons["p_low"]
     assert p.ledger == []
     assert sigma.odds_of(w, _tell("p_mid"), believer=p) is None
     # a claim about somebody else is no claim on THIS opposition
     p.ledger.append(_claim("p_low", "p_other", 3))
     assert sigma.odds_of(w, _tell("p_mid"), believer=p) is None
+
+
+def _ordinary_world(*, other=None):
+    """A world whose opponent `p_other` holds NOTHING (no skill rank, no attribute): the dealt opposition against him is what an ordinary
+    person brings, the untrained skill score plus the attribute scale's mid-point."""
+    w = _world()
+    w.persons["p_other"].capability = {} if other is None else {KEY: other}
+    return w
+
+
+def test_mode_b_with_no_claim_uses_the_ordinary_prior_at_the_shipped_arm():
+    """THE SHIPPED ARM (`believed_prior` `ordinary`, H-435; B05.62): he who holds no claim on his opponent assumes an ordinary one -- the
+    figure is the one a dealt roll against a person holding nothing gives, never `None`, composed as the dealt obstacle is (the skill
+    score PLUS the opposing attribute at its mid-point, A-137)."""
+    w = _world()
+    assert w.fixtures.get("believed_prior") == "ordinary"
+    p = w.persons["p_low"]
+    assert p.ledger == []
+    got = sigma.odds_of(w, _tell("p_mid"), believer=p)
+    assert got is not None
+    expected = sigma.odds_of(_ordinary_world(), _tell("p_other"))
+    assert got == expected
+    inp = sigma.believed_input(p, "tell", "p_mid", w.fixtures, pool=4, person_subject=True)
+    assert inp.opposition == pool.untrained(w.fixtures) + pool.attribute_midpoint()
+    # a claim about somebody else is no claim on THIS opposition: the same figure
+    p.ledger.append(_claim("p_low", "p_other", 3))
+    assert sigma.odds_of(w, _tell("p_mid"), believer=p) == expected
+    # a held claim on the skill, none on the attribute: the claim, plus the prior for the attribute (equal to the dealt roll on a person holding that skill and no attribute)
+    assert sigma.odds_of(w, _tell("p_other"), believer=p) == sigma.odds_of(w, _tell("p_other"))
+
+
+def test_mode_b_never_equals_mode_a_for_an_untold_strong_opponent():
+    """THE FALSIFIER: mode (b) for an opponent he was never told of is the ordinary figure and moves with nothing of the World; mode (a)
+    for a strong one differs. Were they ever equal, the query would have read the World."""
+    w = _world(mid=10)
+    p = w.persons["p_low"]
+    assert w.persons["p_mid"].capability[KEY] != pool.untrained(w.fixtures)
+    believed = sigma.odds_of(w, _tell("p_mid"), believer=p)
+    dealt = sigma.odds_of(w, _tell("p_mid"))
+    assert believed is not None and dealt is not None
+    assert believed != dealt
+    assert believed == sigma.odds_of(_ordinary_world(), _tell("p_other"))
+    w.persons["p_mid"].capability = {KEY: 8}                       # the truth moves (a different strong score); his belief does not
+    assert sigma.odds_of(w, _tell("p_mid"), believer=p) == believed
+    assert sigma.odds_of(w, _tell("p_mid")) != believed
 
 
 def test_mode_b_with_a_claim_differs_from_mode_a_where_the_belief_differs_and_equals_it_where_not():

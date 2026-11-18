@@ -716,6 +716,16 @@ def _odds_of_input(inp: SocialContestInput) -> Optional[tuple]:
     return record_odds(inp.pool, ob, inp.leverage)
 
 
+_ORDINARY = SimpleNamespace(capability={}, attributes={}, traits=())    # AN ORDINARY PERSON, the one `believed_prior` `ordinary` takes an unknown opponent for: he holds nothing (B05.62)
+
+
+def _ordinary_score(fx: Any, verb: str) -> Optional[float]:
+    """THE SKILL SCORE OF AN ORDINARY PERSON for `verb`, read by the dealt roll's own reader (`pool.score`, which takes only `w.fixtures` of the
+    world): the untrained score, or `None` where the skill's row says `untrained: none` (the module's stand-in then opposes)."""
+    held = score(SimpleNamespace(fixtures=fx), _ORDINARY, verb)
+    return None if held is None else float(held)
+
+
 def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
                    pool: float, person_subject: bool, examined_record: bool = False,
                    room: Optional[dict] = None, heard: bool = False,
@@ -733,7 +743,10 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
       * the opposition of a person subject: his skill score, a claim in the believer's ledger on that subject at
         `CAPABILITY_CLAIM + key` (the latest, then the most confident; a verb naming no key opposes at the untrained
         score, `pool.untrained`, every person's score on no vocation, so known) PLUS his opposing attribute, a claim at
-        `CAPABILITY_CLAIM + the row's opposed_attribute` (B05.14); either not held -> unknown. A non-person subject
+        `CAPABILITY_CLAIM + the row's opposed_attribute` (B05.14); either not held -> unknown, UNLESS THE PRIOR HOLDS (`Fixtures
+        believed_prior`, B05.62, H-435): at `ordinary` a part he holds no claim on is an ordinary person's, as a dealt roll against a person
+        holding nothing composes it (the untrained skill score, the attribute scale's mid-point), his own guess and never a read of the
+        World, and his stance toward the actor is taken as neutral (below). A non-person subject
         has no opposition, the module opposes it at `opposed_ob(pool_default)`, and that is known; so is the act's
         difficulty (the verb row's, public).
       * an examined Record's forgery quality: a property of the Record, held by nobody's claim here
@@ -744,8 +757,10 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
     (`office`, B05.20): the caller's, read off the seat's own row (`_seat_modifier`), as `person_subject` is the caller's. So is the arrangement
     row the matter is docketed under (`docketed`, B05.21): the docket is public, the caller reads it. THE COUNTERPARTY'S STANCE TOWARD THE ACTOR IS
     HIS INTERIOR, held in no claim of the believer's: where `regard_step` is not 0 and one person stands alone opposite, it is unknown to him (`None`),
-    never a figure; at 0 the term reads nothing, so the answer is as it was."""
+    never a figure; at 0 the term reads nothing, so the answer is as it was; AT THE `ordinary` PRIOR it is read neutral (regard 0, an ordinary
+    person's), so he gets a figure."""
     roles = {r.role for r in _social_rows()}
+    ordinary = fx.get("believed_prior") == "ordinary"        # B05.62 (H-435): a person he holds no claim about is taken for an ordinary one
     key = VERB_CAPABILITY.get(verb)
     opposition = None
     # THE TABLE'S TERMS, as the dealt roll reads them (`_read_social_roll`): no `opposes` row, no opposition term (and none to
@@ -757,19 +772,19 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
     if "opposes" in roles and person_subject and subject != p.id:
         if key:
             said = believed_capability(p, subject, key)
-            if said is None:
+            if said is None and not ordinary:
                 return None
-            skill = float(said)
+            skill = float(said) if said is not None else _ordinary_score(fx, verb)
         else:
             skill = float(untrained(fx))
         attribute = 0.0
         resisted = VERB_TABLE[verb].opposed_attribute if verb in VERB_TABLE else None
-        if resisted:
+        if resisted and skill is not None:
             said = believed_capability(p, subject, resisted)
-            if said is None:
+            if said is None and not ordinary:
                 return None
-            attribute = float(said)
-        opposition = skill + attribute
+            attribute = float(opposing_attribute(fx, _ORDINARY, verb) if said is None else said)     # an ordinary person's: the scale's mid-point
+        opposition = None if skill is None else skill + attribute      # `None`: the module's `opposed_ob(pool_default)` stands, as in `_opposing`
     if examined_record:
         return None
     # THE `capability` SOURCE'S ROWS, as the believer can read them: his own side is his to know; the subject's is a claim of his
@@ -778,12 +793,14 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
         if not person_subject or subject == p.id:
             return None
         said = believed_capability(p, subject, key)
-        return _UNKNOWN if said is None else (SimpleNamespace(capability={row.key: said}), said)
+        if said is None:
+            return (_ORDINARY, _held_at(_ORDINARY, row, key, verb)) if ordinary else _UNKNOWN      # an ordinary person holds nothing
+        return SimpleNamespace(capability={row.key: said}), said
     edge = _edge_reads(verb, p, believed_subject)
     circumstance = _edge_reads(verb, p, believed_subject, CIRCUMSTANCE)
     if edge is _UNKNOWN or circumstance is _UNKNOWN:
         return None
-    if person_subject and subject != p.id and not heard and fx.get("regard_step"):
+    if person_subject and subject != p.id and not heard and fx.get("regard_step") and not ordinary:
         return None                                                     # his interior is not the believer's to know (B05.21)
     room_terms = {}
     if heard:

@@ -890,6 +890,13 @@ DEFAULT_FIXTURES = Fixtures(
     # where it writes in no band. [ASSUMPTION; medium; Jordan to correct; revert: `odds_weighting` `none`, one re-pin]
     # [JUSTIFIED: engine/season/hole_register.yaml H-248 -- `site: Fixtures odds_weighting`, graded `assumption`; whether and how a believed chance weighs a contested choice is no document's (AQ-X1 (b) is taken, M1), so the arm is declared and swept none (the control) / believed]
     odds_weighting="believed",         # `H-248`, swept none (control) / believed (SHIPPED, CR-17)
+    # B05.62 (`10_DICE_believed_odds_have_a_prior` Edit B; `H-435`). WHAT A PERSON ASSUMES OF AN OPPONENT HE HOLDS NO CLAIM ABOUT, read ONLY by
+    # `seam/wrappers/sigma.py::believed_input`: `ordinary` -- he takes the unheld for an ordinary person (the untrained skill score and the attribute
+    # scale's mid-point, as a dealt roll against a person holding nothing composes them) and takes his stance toward the actor as neutral, so he
+    # gets a figure; `none` is the CONTROL: he cannot say (`None`, which `odds_weight` reads as 1.0, certainty). His own guess, never a read of the World.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `none`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-435 -- `site: Fixtures believed_prior`, graded `assumption`; what a person takes an unknown opponent to be is no document's, so it is injected and swept none (the control) / ordinary]
+    believed_prior="ordinary",         # `H-435`, swept none (control) / ordinary (SHIPPED, B05.62)
     # CP-T01-05, THE NPC HALF (B10-10; `H-249`). WHETHER THE COMPUTED CHOOSER MAY FORM AN `effort` ACT: for a contested
     # candidate a believed chance can price, `decision/choose.py::settle_efforts` scores the effort variants by the same
     # score (the pursuit term weighted by his believed chance, `odds_weighting`) and nets off the acts the extra slots

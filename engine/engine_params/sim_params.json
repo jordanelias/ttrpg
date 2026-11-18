@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 122,
-    "total": 393,
-    "uncited": 271,
+    "total": 394,
+    "uncited": 272,
     "of_which_assumption_grade": 8
   },
-  "count": 393,
+  "count": 394,
   "by_module": {
     "engine.dice_engine": 10,
     "engine.season": 26,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 104,
+    "engine.season.settings": 105,
     "engine.season.realm": 8
   },
   "params": [
@@ -4358,6 +4358,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-248`, swept none (control) / believed (SHIPPED, CR-17)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.believed_prior",
+      "name": "believed_prior",
+      "value": "ordinary",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-435`, swept none (control) / ordinary (SHIPPED, B05.62)",
       "citation": null,
       "citation_grade": null
     },
