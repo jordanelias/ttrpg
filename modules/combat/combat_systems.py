@@ -750,6 +750,12 @@ def affords_halfsword(w):
     return (any(e.get('grippable') for e in w.get('elements', ()))
             and bool(w.get('geo', {}).get('halfsword', False)))
 
+def base_form(c):
+    """PURE: the weapon name as issued -- the half-sword form's base, or `c.weapon` itself when it is not a form.
+    `wrapper.engagement` resets `c.weapon` to it with the grip and the lunge at the open measure (B14.13, F-PC-16:
+    the form is per-engagement geometry, taken again at the first closed exchange that calls for it)."""
+    return HALFSWORD_BASE.get(c.weapon, c.weapon)
+
 def halfsword_target(c, closed, opp_armor):
     """PURE predicate: the weapon-form a half-sword-capable fighter SHOULD be in for the current range/armour
     (mit dem kurzen Schwert). Half-sword vs ARMOUR in the CLOSE (gap-thrust/leverage excel); full form at reach / vs

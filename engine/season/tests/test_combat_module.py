@@ -451,3 +451,30 @@ def test_a_felling_deposits_fell_to_under_observation_terms():
         assert not [o for e in out for o in e.observed if o.predicate == "fell_to"], (a, s, b, [e.observed for e in out])
         checked += 1
     assert checked >= 8
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B14.13 (F-PC-16): A ROUND OPENS WITH THE WEAPON AS ISSUED -- THE HALF-SWORD FORM DOES NOT CROSS THE ROUND BOUNDARY.
+# ---------------------------------------------------------------------------------------------------------------------
+def test_no_engagement_opens_in_a_halfsword_form():
+    """A longsword against plate at three seeds: every `engagement_start` weapon key, on either side, is a base key
+    (`HALFSWORD_BASE` has no entry for it), and so is the first of each fight. FALSIFIER: an `engagement_start` that
+    names a `_halfsword` record as either fighter's weapon. The control inside it: the fights reach later engagements (`later >= 1`), the only
+    place a carried form could show; the red reading before the reset is the form reaching one."""
+    import random
+    from modules.combat import wrapper
+    from modules.combat.combatant import Combatant
+    from modules.combat.weapons import HALFSWORD_BASE
+    checked = later = 0
+    for seed in (0, 1, 2):
+        A, B = Combatant("A", weapon="longsword", armor="heavy"), Combatant("B", weapon="arming", armor="heavy")
+        events = []
+        wrapper.fight(A, B, None, random.Random(seed), trace=events.append)
+        starts = [e for e in events if e["kind"] == "engagement_start"]
+        for i, e in enumerate(starts):
+            for key in (e["weapon_A"], e["weapon_B"]):
+                assert key not in HALFSWORD_BASE, (seed, i, key, "an engagement opened in a half-sword form")
+                checked += 1
+        later += max(0, len(starts) - 1)
+    assert checked >= 1
+    assert later >= 1, "no fight reached a second engagement: the carried form was never at issue"

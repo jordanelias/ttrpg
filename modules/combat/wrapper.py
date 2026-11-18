@@ -93,6 +93,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
     # the opening geometry is the honest open-measure one (grip_target re-derives per-beat inside the loop anyway).
     for c in (A, B):
         c.grip_position = 0.0; c.lunge_depth = 0.0
+        c.weapon = S.base_form(c)   # B14.13 (F-PC-16): the half-sword form is the same kind of state; it is re-taken at the first closed exchange that calls for it
     erA=S.reach_base(A,cfg); erB=S.reach_base(B,cfg)
     er={A:erA, B:erB}
     # FAIRNESS: on EXACTLY equal reach the longer/shorter label is a coin-flip — not always A. The label feeds the
