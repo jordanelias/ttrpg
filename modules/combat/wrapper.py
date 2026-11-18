@@ -551,8 +551,8 @@ def _terms_yielder(A, B, terms, cfg):
 ENGAGE, WITHDRAW = 'engage', 'withdraw'
 TURN_CHOICES = (ENGAGE, WITHDRAW)   # closed set, this module's: the host's decider is checked against this tuple
 
-def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None, terms=LETHAL_TERMS, decide=None):
-    import random
+def fight(A, B, cfg, rng, max_bouts=12, yield_decl=None, terms=LETHAL_TERMS, decide=None):
+    # `rng` is a `Draw` (`draw.seeded(...)`) and has no default: a missing stream is a TypeError at the call. `cfg=None` is the CFG.
     if terms not in DUEL_TERMS:
         raise ValueError(f"terms {terms!r} is not one of {DUEL_TERMS}")
     stop = None if terms == LETHAL_TERMS else terms   # None: the lethal fight takes neither the check nor its read
@@ -561,7 +561,7 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None, terms=LETHAL_
             raise ValueError("Yield.by must be the A or B Combatant passed to fight (compared by identity)")
         if not (1 <= yield_decl.turn <= max_bouts):
             raise ValueError(f"Yield.turn {yield_decl.turn} is outside 1..max_bouts ({max_bouts}): it would never fire")
-    cfg=cfg or CFG; rng=rng or random.Random()   # pass draw.seeded(...) for determinism
+    cfg=cfg or CFG
     # A FIGHT BEGINS UNWOUNDED: zero each tracker's damage here, at the fight's own start (PC-13's `wound` events sum to
     # the tracker within one fight). `_init_live` calls `Combatant.rederive(cfg)`, the one derivation path (PC-14),
     # which reads the fighter's attributes as they stand now (an attribute edited after construction is followed) and

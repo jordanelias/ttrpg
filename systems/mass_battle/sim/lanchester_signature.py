@@ -21,7 +21,7 @@ NOT canonical magnitudes (the one exception, LINEAR_BIG_WIN_BAND, is the cited D
 SIGNATURES are the spec section-four validation plan.
 """
 import contextlib
-import os, random, statistics
+import os, statistics
 
 # Lanchester must be ON for the signatures to hold (default ON; assert explicitly).
 os.environ.setdefault('LANCHESTER_ENABLED', '1')
@@ -31,6 +31,8 @@ from modules.mass_battle.config import BLOCK_SIZE, TROOPS_PER_TIER   # [ED-MB-00
 from systems.mass_battle.sim.engine import (Unit, Army, run_battle,
                                 SIDE_A_START_ROW, SIDE_B_START_ROW, LANCHESTER_ENABLED)
 import modules.mass_battle.core.state as _state   # [ED-MB-0050 / A6a] patched by _rout_disabled below
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 # --- signature thresholds (class-B tolerances; signatures per spec §4) ---
 # [ED-MB-0045 superseding row, item (1)] ONE band for the big-force win quantity. It replaces the
@@ -88,16 +90,16 @@ def _sweep(big_tier, small_tier, unit_type, stance='balanced', instructions=()):
     aw = ca = cb = ahp = bhp = 0
     cas_a, cas_b, hp_a, hp_b = [], [], [], []
     for s in range(N):
-        random.seed(s + SEED_BASE)
-        ua = _mk('Line', big_tier, 'A', unit_type, stance, instructions)
-        ub = _mk('Line', small_tier, 'B', unit_type, stance, instructions)
-        a0, b0 = ua.hp_max, ub.hp_max
-        r = run_battle(ua, ub)
-        aw += (r['winner'] == 'A')
-        cas_a.append(100 * (a0 - ua.hp) / a0)
-        cas_b.append(100 * (b0 - ub.hp) / b0)
-        hp_a.append(100 * ua.hp / a0)
-        hp_b.append(100 * ub.hp / b0)
+        with rngsource.using(draw.seeded(draw.H2("lanchester_signature", s + SEED_BASE))):
+            ua = _mk('Line', big_tier, 'A', unit_type, stance, instructions)
+            ub = _mk('Line', small_tier, 'B', unit_type, stance, instructions)
+            a0, b0 = ua.hp_max, ub.hp_max
+            r = run_battle(ua, ub)
+            aw += (r['winner'] == 'A')
+            cas_a.append(100 * (a0 - ua.hp) / a0)
+            cas_b.append(100 * (b0 - ub.hp) / b0)
+            hp_a.append(100 * ua.hp / a0)
+            hp_b.append(100 * ub.hp / b0)
     return dict(big_win=100 * aw / N,
                 cas_big=statistics.mean(cas_a), cas_small=statistics.mean(cas_b),
                 hp_big=statistics.mean(hp_a), hp_small=statistics.mean(hp_b))
@@ -257,58 +259,58 @@ def _trajectory(big_tier, small_tier, unit_type, stance, diag=None, instructions
         diag = _new_diag()
     series = []
     for s in range(TRAJ_SEEDS):
-        random.seed(s + SEED_BASE)
-        # [ED-MB-0049 / plan-v2 A5a] The morale pin, swept onto its single owner.
-        #
-        # This was `ua.morale = ua.morale_start = NO_ROUT_MORALE`, a BARE absolute write — the exact
-        # silent-no-op class that confounded the retracted MB_CELL_MORALE measurement (ED-MB-0042):
-        # `eff_morale` reads the cells once seeded and never falls back to the scalar, so under the
-        # flag this pin would set nothing, bodies would rout mid-signature, and the Lanchester
-        # exponent would be fitted on TRUNCATED battles. `Army.set_morale` is the owner; unseeded
-        # (the shipped default) it reduces exactly to `unit.morale = value`, so this is
-        # behaviour-identical at MB_CELL_MORALE=0 and correct at =1.
-        #
-        # ⚠ CARVE-OUT: `morale_start` stays a BARE write and must. It is non-cellular — there is no
-        # `cell_morale_start`, `eff_morale_start` derives from the subunit/unit scalar, and no owner
-        # exists or should. It is whitelisted in `test_morale_write_sweep._CELL_OWNED['morale']`
-        # rather than exempted by silence. Written on its own line, deliberately: the sweep guard is
-        # a line-anchored regex and could not see it inside the old `x = _mk(...); x.morale = ...`
-        # compound statement — adding this file to the guard's scope without splitting the line
-        # would have produced a guard that passes because it cannot look, not because it is clean.
-        ua = _mk('Line', big_tier, 'A', unit_type, stance, instructions)
-        ua.set_morale(NO_ROUT_MORALE)
-        ua.morale_start = NO_ROUT_MORALE
-        ub = _mk('Line', small_tier, 'B', unit_type, stance, instructions)
-        ub.set_morale(NO_ROUT_MORALE)
-        ub.morale_start = NO_ROUT_MORALE
-        # [ED-MB-0050 / A6a] Floor against BLOCK_SIZE, the engine's annihilation threshold, not
-        # against a fraction of it — see TRAJ_FLOOR_BLOCKS.
-        hp_floor = TRAJ_FLOOR_BLOCKS * BLOCK_SIZE
-        tr = []
-        routed_here = False
-        for _ in range(TRAJ_TICKS):
-            run_battle(ua, ub, max_ticks=1)
-            tr.append((ua.hp, ub.hp))
-            # [ED-MB-0049 / A5a falsifier] The pin's WHOLE PURPOSE is "no rout, pure attrition".
-            # Record whether it held, per trajectory, instead of assuming it. `checked` is the
-            # non-vacuity counter (§0.1 #2): a loop that only asserts conditionally must assert
-            # that it asserted, or an empty loop reads as a pass.
-            diag['checked'] += 1
-            # [ED-MB-0050 / A6a] Order matters, and getting it wrong is how "40/40 routed" stayed
-            # ambiguous. Reaching the attrition floor is a CLEAN stop — the trajectory has run out
-            # of the regime it was measuring. `Army.recalc_size` also flips `routed` at that same
-            # moment (size hits 0 just below one block), so testing `routed` first would score every
-            # clean termination as a precondition violation. A violation is a rout that happens
-            # while BOTH sides are still above the floor: that is the pin failing to do its job.
-            at_floor = ua.hp <= hp_floor or ub.hp <= hp_floor
-            if (ua.routed or ub.routed) and not at_floor:
-                routed_here = True
-            if at_floor or ua.routed or ub.routed:
-                break
-        if routed_here:
-            diag['routed_trajectories'] += 1
-        diag['ticks'].append(len(tr))
-        series.append(tr)
+        with rngsource.using(draw.seeded(draw.H2("lanchester_signature", s + SEED_BASE))):
+            # [ED-MB-0049 / plan-v2 A5a] The morale pin, swept onto its single owner.
+            #
+            # This was `ua.morale = ua.morale_start = NO_ROUT_MORALE`, a BARE absolute write — the exact
+            # silent-no-op class that confounded the retracted MB_CELL_MORALE measurement (ED-MB-0042):
+            # `eff_morale` reads the cells once seeded and never falls back to the scalar, so under the
+            # flag this pin would set nothing, bodies would rout mid-signature, and the Lanchester
+            # exponent would be fitted on TRUNCATED battles. `Army.set_morale` is the owner; unseeded
+            # (the shipped default) it reduces exactly to `unit.morale = value`, so this is
+            # behaviour-identical at MB_CELL_MORALE=0 and correct at =1.
+            #
+            # ⚠ CARVE-OUT: `morale_start` stays a BARE write and must. It is non-cellular — there is no
+            # `cell_morale_start`, `eff_morale_start` derives from the subunit/unit scalar, and no owner
+            # exists or should. It is whitelisted in `test_morale_write_sweep._CELL_OWNED['morale']`
+            # rather than exempted by silence. Written on its own line, deliberately: the sweep guard is
+            # a line-anchored regex and could not see it inside the old `x = _mk(...); x.morale = ...`
+            # compound statement — adding this file to the guard's scope without splitting the line
+            # would have produced a guard that passes because it cannot look, not because it is clean.
+            ua = _mk('Line', big_tier, 'A', unit_type, stance, instructions)
+            ua.set_morale(NO_ROUT_MORALE)
+            ua.morale_start = NO_ROUT_MORALE
+            ub = _mk('Line', small_tier, 'B', unit_type, stance, instructions)
+            ub.set_morale(NO_ROUT_MORALE)
+            ub.morale_start = NO_ROUT_MORALE
+            # [ED-MB-0050 / A6a] Floor against BLOCK_SIZE, the engine's annihilation threshold, not
+            # against a fraction of it — see TRAJ_FLOOR_BLOCKS.
+            hp_floor = TRAJ_FLOOR_BLOCKS * BLOCK_SIZE
+            tr = []
+            routed_here = False
+            for _ in range(TRAJ_TICKS):
+                run_battle(ua, ub, max_ticks=1)
+                tr.append((ua.hp, ub.hp))
+                # [ED-MB-0049 / A5a falsifier] The pin's WHOLE PURPOSE is "no rout, pure attrition".
+                # Record whether it held, per trajectory, instead of assuming it. `checked` is the
+                # non-vacuity counter (§0.1 #2): a loop that only asserts conditionally must assert
+                # that it asserted, or an empty loop reads as a pass.
+                diag['checked'] += 1
+                # [ED-MB-0050 / A6a] Order matters, and getting it wrong is how "40/40 routed" stayed
+                # ambiguous. Reaching the attrition floor is a CLEAN stop — the trajectory has run out
+                # of the regime it was measuring. `Army.recalc_size` also flips `routed` at that same
+                # moment (size hits 0 just below one block), so testing `routed` first would score every
+                # clean termination as a precondition violation. A violation is a rout that happens
+                # while BOTH sides are still above the floor: that is the pin failing to do its job.
+                at_floor = ua.hp <= hp_floor or ub.hp <= hp_floor
+                if (ua.routed or ub.routed) and not at_floor:
+                    routed_here = True
+                if at_floor or ua.routed or ub.routed:
+                    break
+            if routed_here:
+                diag['routed_trajectories'] += 1
+            diag['ticks'].append(len(tr))
+            series.append(tr)
     L = min(len(x) for x in series)
     A = [statistics.mean(series[s][t][0] for s in range(TRAJ_SEEDS)) for t in range(L)]
     B = [statistics.mean(series[s][t][1] for s in range(TRAJ_SEEDS)) for t in range(L)]

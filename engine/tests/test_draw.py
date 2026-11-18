@@ -15,10 +15,9 @@ THE CLAIM, AND WHAT WOULD SHOW IT WRONG:
     `randrange`): a tenth site announces itself as an AttributeError.
   * `draw.py` IS A LEAF: it imports `hashlib` and `fmath` only (the AST check below, the item's GATE).
 
-EXPECTED RED UNTIL B06.05: `test_no_random_Random_in_runtime_code`. It scans runtime code (`engine/season`,
-`engine/dice_engine`, `modules`, tests excluded) for a `random.Random(...)` construction and fails while any remains;
-B06.04 converts the sites and B06.05 removes the fallbacks, after which it passes. It is not marked xfail: red is its
-honest reading until then.
+`test_no_random_Random_in_runtime_code` scans runtime code (`engine/season`, `engine/dice_engine`, `modules`, tests
+excluded) for a `random.Random(...)` construction; only the three harness shuffled-order controls, named by function,
+are excluded. `test_rngsource_refuses_outside_a_block`: the mass-battle draw source has no default.
 """
 import ast
 import hashlib
@@ -284,15 +283,42 @@ def _runtime_files():
     return out
 
 
+# The three harness instruments that SHUFFLE a control: a permutation of recorded data, no game draw. Excluded by
+# function name (the enclosing function of the construction), never by directory or file: a new construction in
+# `harness/`, or in another function of these files, fails.
+_SHUFFLE_CONTROLS = {
+    ("engine/season/harness/strife.py", "pair_profile"),
+    ("engine/season/harness/strife.py", "link_profile"),
+    ("engine/season/harness/arc.py", "shuffled_causes"),
+}
+
+
+def _enclosing_functions(tree):
+    """`{id(call node): name of the innermost function def around it, or None}` for every Call."""
+    out = {}
+
+    def walk(node, fn):
+        for child in ast.iter_child_nodes(node):
+            inner = child.name if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)) else fn
+            if isinstance(child, ast.Call):
+                out[id(child)] = fn
+            walk(child, inner)
+
+    walk(tree, None)
+    return out
+
+
 def test_no_random_Random_in_runtime_code():
-    """EXPECTED RED UNTIL B06.05: every runtime generator is a keyed `Draw`, so no `random.Random(...)` remains in
-    `engine/season`, `engine/dice_engine`, `modules` (tests excluded). Red until B06.04 converts the sites and B06.05
-    removes the fallbacks; not xfail."""
+    """Every runtime generator is a keyed `Draw`, so no `random.Random(...)` remains in `engine/season`,
+    `engine/dice_engine`, `modules` (tests excluded) except the three shuffled-order controls of harness instruments
+    (`_SHUFFLE_CONTROLS`), excluded by function name."""
     files = _runtime_files()
     assert len(files) > 100, "the scan found too few files to mean anything"
-    hits = []
+    hits, excluded = [], set()
     for p in files:
         tree = ast.parse(p.read_text(encoding="utf-8"))
+        rel = p.relative_to(_ROOT).as_posix()
+        enclosing = _enclosing_functions(tree)
         from_random = {a.asname or a.name for n in ast.walk(tree)
                        if isinstance(n, ast.ImportFrom) and n.module == "random" for a in n.names if a.name == "Random"}
         for n in ast.walk(tree):
@@ -301,5 +327,27 @@ def test_no_random_Random_in_runtime_code():
             f = n.func
             if (isinstance(f, ast.Attribute) and f.attr == "Random" and isinstance(f.value, ast.Name)
                     and f.value.id == "random") or (isinstance(f, ast.Name) and f.id in from_random):
-                hits.append(f"{p.relative_to(_ROOT)}:{n.lineno}")
+                fn = enclosing.get(id(n))
+                if (rel, fn) in _SHUFFLE_CONTROLS:
+                    excluded.add((rel, fn))
+                else:
+                    hits.append(f"{rel}:{n.lineno} in {fn}")
     assert not hits, "random.Random( constructions remain in runtime code: " + ", ".join(hits)
+    assert excluded == _SHUFFLE_CONTROLS, f"an excluded control no longer constructs a Random (drop it): {_SHUFFLE_CONTROLS - excluded}"
+
+
+def test_rngsource_refuses_outside_a_block():
+    """The mass-battle draw source has no default: `get()` with no block raises, inside `using(draw.seeded(...))` it
+    returns that draw, `using(None)` raises, and the source does not outlive its block."""
+    from modules.mass_battle import rngsource
+
+    with pytest.raises(LookupError, match="rngsource"):
+        rngsource.get()
+    d = seeded(H2("test_draw", 5))
+    with rngsource.using(d):
+        assert rngsource.get() is d
+    with pytest.raises(LookupError, match="rngsource"):
+        rngsource.get()
+    with pytest.raises(LookupError, match="rngsource"):
+        with rngsource.using(None):
+            pass

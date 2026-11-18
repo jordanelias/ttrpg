@@ -11,7 +11,6 @@ correct — see config.py's note at the flag. The on/off toggle below is unchang
 both paths; only the assertion about which way it points has moved.
 """
 import os
-import random
 import statistics
 import sys
 
@@ -24,6 +23,8 @@ if _SIM not in sys.path:
 import modules.mass_battle.config as C  # noqa: E402
 import modules.mass_battle.core.state as S  # noqa: E402
 from systems.mass_battle.sim.engine import build_army, resolve_battle, SIDE_A_START_ROW, SIDE_B_START_ROW  # noqa: E402
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 
 def _unit(faction, disc=5, mor=6):
@@ -53,13 +54,13 @@ def test_band_is_historical():
 
 
 def test_breakpoint_in_band():
-    random.seed(12345)
-    for disc in (2, 3, 4, 5):
-        su = _unit('A', disc=disc).units[0]
-        assert getattr(su, '_rout_breakpoint', None) is None
-        S._stochastic_break(su, 0.0)  # draws the break-point lazily
-        bp = su._rout_breakpoint
-        assert C.ROUT_ONSET_FRAC <= bp <= C.ROUT_CAP_FRAC, f"break-point {bp} outside the 15-30% band"
+    with rngsource.using(draw.seeded(draw.H2("test_stochastic_rout", 12345))):
+        for disc in (2, 3, 4, 5):
+            su = _unit('A', disc=disc).units[0]
+            assert getattr(su, '_rout_breakpoint', None) is None
+            S._stochastic_break(su, 0.0)  # draws the break-point lazily
+            bp = su._rout_breakpoint
+            assert C.ROUT_ONSET_FRAC <= bp <= C.ROUT_CAP_FRAC, f"break-point {bp} outside the 15-30% band"
 
 
 def test_resilience_orders_by_discipline():
@@ -73,12 +74,12 @@ def test_disciplined_skews_breakpoint_higher():
     # averaged over many draws, higher discipline -> break-point skewed toward the cap (holds longer)
     def mean_bp(disc, n=200):
         bps = []
-        random.seed(999)
-        for _ in range(n):
-            su = _unit('A', disc=disc).units[0]
-            S._stochastic_break(su, 0.0)
-            bps.append(su._rout_breakpoint)
-        return statistics.mean(bps)
+        with rngsource.using(draw.seeded(draw.H2("test_stochastic_rout", 999))):
+            for _ in range(n):
+                su = _unit('A', disc=disc).units[0]
+                S._stochastic_break(su, 0.0)
+                bps.append(su._rout_breakpoint)
+            return statistics.mean(bps)
     assert mean_bp(5) > mean_bp(2) + 0.01, "disciplined units must break later on average"
 
 
@@ -100,15 +101,15 @@ def _mean_loser_casualties(on, n=16, cells=False):
     try:
         loser = []
         for s in range(n):
-            random.seed(3_000_000 + s)
-            ua, ub = _unit('A'), _unit('B')
-            a0, b0 = ua.hp_max, ub.hp_max
-            r = resolve_battle(ua, ub, 'Line', 'Line', {}, kind='multi', max_battle_turns=40)
-            w = r.get('winner')
-            if w == 'A':
-                loser.append(100 * (b0 - ub.hp) / b0)
-            elif w == 'B':
-                loser.append(100 * (a0 - ua.hp) / a0)
+            with rngsource.using(draw.seeded(draw.H2("test_stochastic_rout", 3_000_000 + s))):
+                ua, ub = _unit('A'), _unit('B')
+                a0, b0 = ua.hp_max, ub.hp_max
+                r = resolve_battle(ua, ub, 'Line', 'Line', {}, kind='multi', max_battle_turns=40)
+                w = r.get('winner')
+                if w == 'A':
+                    loser.append(100 * (b0 - ub.hp) / b0)
+                elif w == 'B':
+                    loser.append(100 * (a0 - ua.hp) / a0)
         return statistics.mean(loser) if loser else 0.0
     finally:
         S.MB_STOCHASTIC_ROUT = prev

@@ -53,6 +53,8 @@ def test_sigma_provider_with_no_rng_raises_instrument_defect():
     ok = sigma.resolve(*args, **kw, rng=draw.seeded(draw.H2("test_u5a_core_owed", 3)))
     assert ok["status"] == "RESOLVED", ok
     with pytest.raises(InstrumentDefect, match="sigma"):
+        sigma.resolve(*args, **kw, rng=None)
+    with pytest.raises(TypeError, match="rng"):      # B06.05: the parameter has no default, so none at all fails at the call
         sigma.resolve(*args, **kw)
 
 

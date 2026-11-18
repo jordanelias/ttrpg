@@ -10,17 +10,18 @@ Dependencies:
   - none — root primitive
 
 Entry points:
-  - roll_pool(pool_size: int, tn: int, rng=None) -> RollResult
-  - continuous_engine_sample(pool: float, tn: int, rng=None) -> float
+  - roll_pool(pool_size: int, tn: int, *, rng: Draw) -> RollResult
+  - continuous_engine_sample(pool: float, tn: int, *, rng: Draw) -> float
   - degree_from_net(net, ob, extension: BandExtension | None = None, **context) -> Degree
   - BandExtension — the ED-SC-0032 injection seam a subsystem's wrapper passes as `extension`
 """
 from __future__ import annotations
 
 import math
-import random
 from dataclasses import dataclass
 from enum import Enum
+
+from engine.dice_engine.draw import Draw
 
 
 class Degree(Enum):
@@ -196,11 +197,10 @@ def _require_tn7(tn: int) -> None:
 
 
 def roll_pool(pool_size: int, tn: int = 7, ob: int | float | None = None,
-              rng: random.Random | None = None) -> RollResult:
-    """Roll pool_size d10s under the canonical face rule at TN 7. Pool minimum 1D."""
+              *, rng: Draw) -> RollResult:
+    """Roll pool_size d10s under the canonical face rule at TN 7. Pool minimum 1D. The stream is required: a caller
+    handing none is a `TypeError` at the call, never a fresh stream."""
     _require_tn7(tn)
-    if rng is None:
-        rng = random.Random()
     effective_pool = max(1, pool_size)  # params/core.md §Pool Minimum
     rolls = [rng.die(1, 10) for _ in range(effective_pool)]
     net = sum(_die_result(face) for face in rolls)
@@ -209,7 +209,7 @@ def roll_pool(pool_size: int, tn: int = 7, ob: int | float | None = None,
 
 
 def continuous_engine_sample(pool: float, tn: int = 7,
-                             rng: random.Random | None = None) -> float:
+                             *, rng: Draw) -> float:
     """The sampler every provider draws from (ED-833; Jordan, 2026-11-12). Same mean and variance as the d10
     face rule it is derived from.
 
@@ -218,8 +218,6 @@ def continuous_engine_sample(pool: float, tn: int = 7,
     Canon: params/core.md §Continuous Engine — statistically equivalent to discrete.
     """
     _require_tn7(tn)
-    if rng is None:
-        rng = random.Random()
     if pool <= 0:
         return 0.0
     mu, sigma = _MU_PER_DIE, _SIGMA_PER_DIE

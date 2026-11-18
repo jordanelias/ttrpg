@@ -37,9 +37,9 @@ derives what stands against it.
 from __future__ import annotations
 
 import functools
-import random
 from typing import Optional
 
+from engine.dice_engine.draw import Draw
 from engine.dice_engine.sigma_leverage import M_MAX, OB_MIN, band_odds, even_line, net_boost, opposed_ob, roll_net_continuous, saturate
 from engine.season.queries.inputs import Margin, SocialContestInput
 
@@ -161,7 +161,7 @@ def obstacle(inp: SocialContestInput) -> tuple:
     return ob, tuple(terms)
 
 
-def roll(inp: SocialContestInput, rng: Optional[random.Random] = None) -> Margin:
+def roll(inp: SocialContestInput, rng: Draw) -> Margin:
     """Roll one contested act -> `Margin(net, ob, terms)`.
 
     The `rng` is a parameter and is never constructed here (`04 §C.12` rejection 4): the driver

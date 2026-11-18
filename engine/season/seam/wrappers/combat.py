@@ -72,9 +72,9 @@ that exists rather than a mapping between types that do not meet.
 """
 from __future__ import annotations
 
-import random
 from typing import Any, Callable, Optional
 
+from engine.dice_engine.draw import Draw
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma
 
 from ...data.rosters import ESTIMATE_OUTCOMES, FELLED, WOUND_QUANTITIES
@@ -375,7 +375,7 @@ def _wound_state(lifted: Optional[dict]) -> dict:
 @provider("contest", _PROVIDER)
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
-            rng: Optional[random.Random] = None, rung: Optional[str] = None,
+            rng: Optional[Draw] = None, rung: Optional[str] = None,
             effort: int = 0, host: Optional[PlayHost] = None, via: Optional[str] = None) -> dict:
     """CALL the personal-combat engine. Returns what it said; decides nothing itself.
 

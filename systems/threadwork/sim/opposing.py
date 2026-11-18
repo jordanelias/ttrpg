@@ -158,8 +158,7 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
 
     rng = rng if rng is not None else (world.rng if world is not None and hasattr(world, 'rng') else None)
     if rng is None:
-        import random as _r
-        rng = _r.Random()
+        raise TypeError("opposing: no `rng` (pass `draw.seeded(...)` or a world with `.rng`); there is no default stream")
 
     # Roll both pools
     a_pool = _actor_pool(actor_a)

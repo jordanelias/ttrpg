@@ -67,9 +67,10 @@ imports are dotted `modules.mass_battle.*`, a package, so it needs no path seam.
 """
 from __future__ import annotations
 
-import random
 from dataclasses import replace
 from typing import Any, Optional
+
+from engine.dice_engine.draw import Draw
 
 # `providers` is imported by module, as combat.py and sigma.py do (see their notes on the manifest
 # import order); the entry lookup is `_entry.py`'s, which imports `registrar` and `registry` the same way.
@@ -340,7 +341,7 @@ def _fed(w: Any, inp: MassBattleInput, treasuries: tuple) -> list:
 @provider("contest", _PROVIDER)
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
-            rng: Optional[random.Random] = None, rung: Optional[str] = None,
+            rng: Optional[Draw] = None, rung: Optional[str] = None,
             effort: int = 0, host: Any = None, via: Optional[str] = None) -> dict:
     """CALL the mass-battle engine. Returns what it said; decides nothing itself.
 
