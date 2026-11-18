@@ -284,7 +284,7 @@ def test_a_hand_built_accept_on_a_challenge_reaches_the_seam_with_two_person_cla
     assert len(spy.calls) == 1, "no scene, or more than one"
     inp, got = spy.calls[0]
     assert inp.claimants == (ACC, CHAL) and all(c in w.persons or c in (ACC, CHAL) for c in inp.claimants)
-    assert got["status"] == "RESOLVED" and inp.terms == "blood"
+    assert got.claimants == (ACC, CHAL) and inp.terms == "blood"
 
 
 def _scan(stakes):
@@ -303,7 +303,7 @@ def _scan(stakes):
 def test_a_seeded_blood_challenge_resolves_with_surrender_set():
     scenes = _scan("blood")
     assert all(inp.terms == "blood" for _, inp, _, _, _ in scenes)
-    yielded = [i for i, _, got, _, _ in scenes if combat.surrender_of(got["trace"]) is not None]
+    yielded = [i for i, _, got, _, _ in scenes if got.surrender is not None]
     assert yielded, "no blood duel in the scan stopped on its term: the falsifier observed nothing"
 
 
@@ -318,7 +318,7 @@ def test_a_blood_duel_whose_first_wound_is_not_decisive_emits_duel_yielded_and_n
     """Seeds picked on the LETHAL CONTROL of the same act (`stakes: death`, the same scene seed): its first wound fells
     nobody and the fight goes on. Under `blood` the same act then yields -- no universal is asserted for the rest."""
     lethal = {i: got for i, _, got, _, _ in _scan("death")}
-    picked = [i for i, got in lethal.items() if _first_wound_not_decisive(got["trace"])]
+    picked = [i for i, got in lethal.items() if _first_wound_not_decisive(got.trace)]
     assert picked, "no scene with a non-decisive first wound in the scan: the falsifier observed nothing"
     checked = 0
     for i, inp, got, evs, w in _scan("blood"):
@@ -327,7 +327,7 @@ def test_a_blood_duel_whose_first_wound_is_not_decisive_emits_duel_yielded_and_n
         ks = _kinds(evs)
         assert "duel.yielded" in ks and "person.died" not in ks, (i, ks)
         assert ACC in w.persons and CHAL in w.persons
-        yielder = combat.surrender_of(got["trace"])["by"]
+        yielder = got.surrender.by
         ev = next(e for e in evs if e.kind == "duel.yielded")
         assert ev.degree == "Wounded", ev.degree                                  # a band, not a fourth one
         assert {c.subject for c in ev.changes} == {yielder}, "the yield was earned by someone who did not yield"

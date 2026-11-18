@@ -4,8 +4,9 @@ This module is the HOST (plan position `31b`, A-25): the input builder `combat_i
 `queries/inputs.py::PersonalCombatInput`: the two parties, each one's derived `end`, the wound
 quantities to lift) and the adapter `resolve`, which keeps the PARTY-GAP refusals and the seed, calls
 the module entry the prize row names (`module_entry:`, registered in `manifest.MODULE_ENTRIES` from its
-composition row) and interprets what comes back -- the winner, the surrender, the bouts, the wound-state
-refusal -- and returns the scene's trace beside them (PC-06 M-1). The fight itself is
+composition row) and interprets the `CombatOutcome` that comes back (`queries/inputs.py`) -- the wound state with its
+refusal, the surrender, the decisive beat and the rounds fought -- and returns the scene's trace beside them (PC-06
+M-1). No winner crosses: the integer `wrapper.fight` returns is not lifted (B14.01). The fight itself is
 `modules/combat/fight.py`, reached by string; it, not this module, constructs the `Combatant`s and calls
 `wrapper.fight`.
 
@@ -58,9 +59,8 @@ considered."*
   `felled`, `wounds`, `max_wounds`, `health_remaining` and `health_full`. The severity of the
   outcome was computed by scene combat and is sitting on objects the entry owns.
 
-**So the degree is READ OFF THE SCENE, not mapped from a winner.** It invents nothing: this module
-returns `parties={id: A.end}` by reading the Combatants after the fight, and the wound state is the same
-read one field deeper.
+**So the degree is READ OFF THE SCENE, not mapped from a winner.** It invents nothing: the module entry reads
+each Combatant's tracker after the fight into a `PartyWounds`, and this module lifts that into `wound_state`.
 
 ⚠ WHAT IS STILL REGISTERED, NARROWED RATHER THAN CLOSED (`H-98`). The engine distinguishes exactly
 two terminal states — DECIDED (`result != 0`; `wrapper.fight` sets a result when a fighter is
@@ -72,6 +72,7 @@ that exists rather than a mapping between types that do not meet.
 """
 from __future__ import annotations
 
+import dataclasses
 import random
 from typing import Any, Callable, Optional
 
@@ -84,7 +85,7 @@ from ...gaps import Forbidden, Unspecified
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup).
 from ...manifest.providers import provider
-from ...queries.inputs import PersonalCombatInput, PlayHost
+from ...queries.inputs import CombatOutcome, PartyWounds, PersonalCombatInput, PlayHost
 from ...queries.world_q import kit_of, stakes_of
 from ....substrate import combat_kit, composition
 from ....substrate.descriptors import attribute_key
@@ -312,21 +313,20 @@ def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: st
     return dict(status="ESTIMATED", module=_PROVIDER, samples=n, **{k: v / n for k, v in tally.items()})
 
 
-def scene_outcome(got: dict, actor: str, target: str) -> tuple:
+def scene_outcome(got: CombatOutcome, actor: str, target: str) -> tuple:
     """`(outcome, yielder)` -- HOW ONE SCENE THE MODULE ENTRY DEALT ENDED, THE ONE OWNER OF THAT READING (the random-pairs
     instrument reads a scene the way the display does).
-    `outcome` is one of `ESTIMATE_OUTCOMES`; `yielder` is the id `surrender_of(got["trace"])["by"]` names, `None` where
-    nobody yielded. `got` is the entry's return (`trace`, `wound_state`).
+    `outcome` is one of `ESTIMATE_OUTCOMES`; `yielder` is the id `got.surrender.by` names, `None` where
+    nobody yielded. `got` is the entry's `CombatOutcome` (`wounds`, `surrender`).
 
     ⚠ THE FELLING IS `ladder.party_degree`'S VERDICT ON THE PARTY'S TRACKER (the walk `_eff_kill` writes by and
-    `combat_degree` grades by; it refuses a missing tracker), NEVER `result`'s SIGN. `wrapper.fight` flips
-    `result` after the scene in `UPSET_FLOOR` of the decided fights and leaves the trackers alone, so the sign
+    `combat_degree` grades by; it refuses a missing tracker), NEVER the integer `wrapper.fight` returns (not lifted).
+    That integer flips after the scene in `UPSET_FLOOR` of the decided fights and leaves the trackers alone, so it
     names a winner the fold never grades by. A yield is read first; neither or both down is `undecided` (a draw has
     no one felled; a mutual felling names no one)."""
-    a_down, b_down = (party_degree(_wound_state(got["wound_state"].get(pid))) == FELLED for pid in (actor, target))
-    surrender = surrender_of(got["trace"])
-    if surrender is not None:
-        return "yielded", surrender["by"]
+    a_down, b_down = (party_degree(_wound_state(got.wounds.get(pid))) == FELLED for pid in (actor, target))
+    if got.surrender is not None:
+        return "yielded", got.surrender.by
     if a_down and not b_down:
         return "actor_felled", None
     if b_down and not a_down:
@@ -350,8 +350,11 @@ def estimate(w: Any, act: Any, claimants: list, target: Optional[str]) -> Option
 # ⚠ THE OUTCOME'S SEVERITY, READ OFF THE COMBATANTS THE SCENE JUST FOUGHT WITH (Jordan
 # 2026-09-03). No number is invented and no rule is re-implemented: every field below is a
 # property the engine's own `WoundTracker` computes, on the objects the module entry constructed
-# and lifted before `fight()` collapsed the scene to an int (`modules/combat/fight.py`).
-def _wound_state(lifted: Optional[dict]) -> dict:
+# and lifted into a `CombatOutcome` before `fight()` collapsed the scene to an int (`modules/combat/fight.py`).
+_NO_FIELD = object()    # `getattr`'s default for a roster member the lifted record lacks
+
+
+def _wound_state(lifted: Optional[PartyWounds]) -> dict:
     if lifted is None:                  # ID-5 polarity: absence REFUSES, it does not default
         return dict(available=False)
     # ⚠ THE FIELD LIST IS `rosters.yaml: wound_quantities`, NOT A LITERAL HERE (`H-98`, plan
@@ -360,14 +363,14 @@ def _wound_state(lifted: Optional[dict]) -> dict:
     # REFUSES by name; skipping it would hand `combat_degree` a dict that lacks it.
     out = dict(available=True)
     for q in WOUND_QUANTITIES:
-        if q not in lifted:
+        v = getattr(lifted, q, _NO_FIELD)
+        if v is _NO_FIELD:
             raise Unspecified(
                 f"`wound_quantities` lists {q!r} and the engine's WoundTracker has no such "
                 f"field", "S39.4/H-98", needs=f"a `WoundTracker.{q}`, or delete it from "
                 "rosters.yaml: wound_quantities and from every edge that reads it",
                 law="Jordan 2026-09-03 -- the degree is READ OFF THE SCENE; a quantity the "
                     "scene does not carry cannot be lifted")
-        v = lifted[q]
         out[q] = v if isinstance(v, bool) else int(v)
     return out
 
@@ -442,29 +445,22 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         got = entry.fn(inp, random.Random(seed), decide=host.decide)
     else:
         got = entry.fn(inp, random.Random(seed))
-    result, trace = got["result"], got["trace"]
-    winner = a_id if result == 1 else (b_id if result == -1 else None)
-
-    _wounds = {a_id: _wound_state(got["wound_state"][a_id]), b_id: _wound_state(got["wound_state"][b_id])}
+    _wounds = {a_id: _wound_state(got.wounds.get(a_id)), b_id: _wound_state(got.wounds.get(b_id))}
 
     return dict(status="RESOLVED", module=_PROVIDER, resolver="d_sigma",
-                result=result, winner=winner,
-                # THE DEGREE SOURCE. A caller reads severity from here; it does not map it from
-                # `winner`, which carries none. `H-98`'s remaining half is which wound counts sit
-                # in which band -- an edge over a real quantity, not an invented correspondence.
+                # THE DEGREE SOURCE. A caller reads severity from here; it does not map it from a winner, which
+                # carries none (and which this return no longer names: B14.01). `H-98`'s remaining half is which
+                # wound counts sit in which band -- an edge over a real quantity, not an invented correspondence.
+                # ⚠ An undecided fight is a RULED outcome (Jordan, 2026-06-02: *"an undecided fight is a legitimate
+                # outcome."*), and nothing here retries it into a decision.
                 wound_state=_wounds,
-                # ⚠ `0` IS A RULED OUTCOME, NOT A FAILURE — Jordan, 2026-06-02, in the engine:
-                # *"an undecided fight is a legitimate outcome."* The seam must not retry it into
-                # a decision, which is what a caller expecting a winner would be tempted to do.
-                unresolved=(result == 0),
-                # §11.4: `None` unless a yield ended the scene; then a non-zero `result` with nobody felled.
-                surrender=surrender_of(trace),
-                bouts=sum(1 for e in trace if e.get("kind") == "turn_start"),
-                # PC-06 M-1: THE SCENE'S OWN TRACE, AS THE MODULE ENTRY
-                # CAPTURED IT, returned rather than reduced to `bouts` alone -- the read a grid display
-                # or B-3's per-event measure plays the bout from. `bouts` above is its `turn_start`
-                # count. Nothing here or downstream folds it into `World`: `contest()` hands this dict
-                # to `_fold` as `Resolution.result`, whose effects read `wound_state` and `surrender`
-                # only (`loop/effects_combat.py`), so `content_hash()` is unchanged.
-                trace=trace,
-                parties=got["ends"], seed=seed)
+                # §11.4: `None` unless a yield ended the scene (nobody felled, the yielder standing).
+                surrender=None if got.surrender is None else dataclasses.asdict(got.surrender),
+                # THE WOUND THAT ENDED IT: `None` when nobody was felled.
+                beat=None if got.beat is None else dataclasses.asdict(got.beat),
+                rounds=got.rounds,
+                # PC-06 M-1: THE SCENE'S OWN TRACE, AS THE MODULE ENTRY CAPTURED IT, returned for a grid display or
+                # B-3's per-event measure. Nothing here or downstream folds it into `World`: `contest()` hands this
+                # dict to `_fold` as `Resolution.result`, whose effects read `wound_state` and `surrender` only
+                # (`loop/effects_combat.py`), so `content_hash()` is unchanged.
+                trace=list(got.trace))

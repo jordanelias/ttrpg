@@ -12,17 +12,20 @@ It takes the host's typed input record and a seeded `rng`, and imports the recor
 nothing else of the host. It never reads or writes `World`, holds no token and keeps no state between
 calls (A-25): the engine's `wrapper._TRACE` hook is set for the call and restored after it.
 
-It reads the scene, it does not grade it. It returns what the engine computed before `wrapper.fight`
-collapses it to an int -- the result, the trace, each party's `end` and the `WoundTracker` fields the record
-names -- and the host interprets that: the winner, the surrender, the bout count and the wound-state
-refusal are `seam/wrappers/combat.py`'s, and the degree is `seam/ladder.py::combat_degree`'s.
+It reads the scene, it does not grade it. It returns a `CombatOutcome` (`queries/inputs.py`): what the engine computed
+before `wrapper.fight` collapses it to an int -- each party's lifted `WoundTracker` (`PartyWounds`), the yield, the
+felling wound, the rounds fought and the trace. The integer `wrapper.fight` returns is not lifted, and no winner crosses
+the boundary: the host interprets the record, the wound-state refusal is `seam/wrappers/combat.py`'s, and the degree is
+`seam/ladder.py::combat_degree`'s.
 """
 from __future__ import annotations
 
+import dataclasses
 import random
 from typing import Callable, Optional
 
-from engine.season.queries.inputs import CombatTurnView, PersonalCombatInput
+from engine.season.queries.inputs import (
+    CombatOutcome, CombatTurnView, DecisiveBeat, PartyWounds, PersonalCombatInput, Surrender)
 from . import attributes as spec, combatant, wrapper
 from .config import CFG
 
@@ -60,12 +63,47 @@ def _attr_kw(authored) -> dict:
             if s.key != "end" and s.registry_key is not None and s.registry_key in authored}
 
 
+def _party_wounds(c) -> Optional[PartyWounds]:
+    """One party's `PartyWounds`, every field read off its `WoundTracker`; `None` when the Combatant carries no tracker
+    (the host refuses it by name). A field the tracker lacks raises `AttributeError` naming it."""
+    wt = getattr(c, "wt", None)
+    if wt is None:
+        return None
+    return PartyWounds(**{f.name: getattr(wt, f.name) for f in dataclasses.fields(PartyWounds)})
+
+
+def _surrender(trace: list) -> Optional[Surrender]:
+    """The scene's first `yield` event the engine did not refuse (a refused declaration is not a surrender), or `None`."""
+    for e in trace:
+        if e.get("kind") == "yield" and e.get("refused") is None:
+            return Surrender(by=e["by"], round=e["turn"], accepted=e["accepted"])
+    return None
+
+
+def _beat(trace: list) -> Optional[DecisiveBeat]:
+    """The trace's last `wound` event that felled its victim, or `None` when nobody was felled. The `wound` event
+    names no weapon and no round: the weapon is the striker's as `fight_start` issued it, the round the count of
+    `turn_start` events up to the wound."""
+    weapons: dict = {}
+    rnd, found = 0, None
+    for e in trace:
+        kind = e.get("kind")
+        if kind == "fight_start":
+            weapons = {e["A"]: e["weapon_A"], e["B"]: e["weapon_B"]}
+        elif kind == "turn_start":
+            rnd += 1
+        elif kind == "wound" and e.get("felled"):
+            found = DecisiveBeat(by=e["by"], victim=e["victim"], source=e["source"],
+                                 weapon=weapons.get(e["by"], ""), round=rnd)
+    return found
+
+
 def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
-          decide: Optional[Callable[[CombatTurnView], str]] = None) -> dict:
-    """Fight one bout scene between the record's two parties. RESOLVED -> dict(status, result, trace,
-    ends, wound_state), where `wound_state[id]` is `None` when the Combatant carries no tracker and
-    otherwise holds each `inp.wound_quantities` field the tracker carries (a field it lacks is absent,
-    and the host refuses it by name).
+          decide: Optional[Callable[[CombatTurnView], str]] = None) -> CombatOutcome:
+    """Fight one bout scene between the record's two parties and return a `CombatOutcome`: `wounds[id]` is that
+    party's `PartyWounds` (absent when the Combatant carries no tracker, which the host refuses), `surrender` the
+    scene's un-refused `yield`, `beat` the wound that felled a party, `rounds` the `turn_start` count and `trace` the
+    scene's events.
 
     The `rng` is a parameter and is never constructed here (`04 §C.12` rejection 4): the host builds it
     from its own seed and passes it down. A module whose directory is gone is refused earlier, at
@@ -121,10 +159,10 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
         # The engine's own note: `_TRACE` adds no rng draw and no state mutation, so capturing it
         # CANNOT change the result. That is why the scene may be recorded without perturbing it.
         wrapper._TRACE = trace.append
-        result = wrapper.fight(A, B, cfg=_fight_cfg(inp), rng=rng, terms=terms, decide=turn_choice)
+        wrapper.fight(A, B, cfg=_fight_cfg(inp), rng=rng, terms=terms, decide=turn_choice)   # the integer it returns is not lifted
     finally:
         wrapper._TRACE = prev
 
-    return dict(status="RESOLVED", result=result, trace=trace,
-                ends={a_id: A.end, b_id: B.end},
-                wound_state={a_id: _lift(A), b_id: _lift(B)})
+    wounds = {pid: pw for pid, pw in ((a_id, _party_wounds(A)), (b_id, _party_wounds(B))) if pw is not None}
+    return CombatOutcome(claimants=(a_id, b_id), wounds=wounds, surrender=_surrender(trace), beat=_beat(trace),
+                         rounds=sum(1 for e in trace if e.get("kind") == "turn_start"), trace=tuple(trace))

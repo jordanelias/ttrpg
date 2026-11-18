@@ -23,6 +23,10 @@ itself is a `seam/` item of its own. It lives here, not in a sibling file, becau
 construct it and this leaf is the one host file a module may import
 (`engine/season/tests/test_social_contest_module.py`).
 
+B14.01 adds the combat module's output record, `CombatOutcome` (with `PartyWounds`, `Surrender`, `DecisiveBeat`), beside
+`PersonalCombatInput`: the entry returns it and the host adapter reads it (`seam/wrappers/combat.py::resolve`). It is
+not a `Margin` and carries no winner.
+
 v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`) add the fieldwork scene's pair, at the foot of the file:
 `TrailItem` and `FieldworkInput` in, `Findings` out -- the `inquiry` role's records, for the same reason.
 v9 IN-07 E1 adds the settlements module's larder records after them: `Eater`, `LarderInput` and `Under`
@@ -189,6 +193,67 @@ class PersonalCombatInput:
     opposition_rate: Optional[float] = None
     carried: tuple = (0.0, 0.0)
     attributes: tuple = ()
+
+
+@dataclass(frozen=True)
+class PartyWounds:
+    """One party's lifted `WoundTracker`, its fields in `rosters.yaml: wound_quantities` order (B14.01). The host's
+    `seam/wrappers/combat.py::_wound_state` reads it by that roster and refuses, by name, a roster member this record
+    lacks."""
+    felled: bool
+    wounds: int
+    max_wounds: int
+    health_remaining: int
+    health_full: int
+
+
+@dataclass(frozen=True)
+class Surrender:
+    """The scene's `yield` event, lifted off its trace by the module entry (B14.01). `round` is the round at whose
+    start or end the yield came (A-101; the engine's trace event still names it `turn`)."""
+    by: str
+    round: int
+    accepted: bool
+
+
+@dataclass(frozen=True)
+class DecisiveBeat:
+    """The wound that ended the scene: the trace's last `wound` event that felled its victim (B14.01).
+      * `by`     -- the striker's id;
+      * `victim` -- the felled party's id;
+      * `source` -- the engine's own site name for the wound: exchange | bind | stophit | pursuit | displace_graze;
+      * `weapon` -- the striker's weapon key as the fight opened (the `fight_start` event; the `wound` event carries none);
+      * `round`  -- the round it landed in (A-101; the count of `turn_start` events up to it)."""
+    by: str
+    victim: str
+    source: str
+    weapon: str
+    round: int
+
+
+@dataclass(frozen=True)
+class CombatOutcome:
+    """WHAT THE `combat` MODULE ENTRY RETURNS FOR ONE SCENE (B14.01; the combat entry's output record, as `Margin` is
+    the social contest's).
+
+    ⚠ THIS RECORD IS NOT A `Margin`, AND MUST NOT BE 'FIXED' INTO ONE. Combat's degree is read off its WOUND STATE
+    (`seam/ladder.py::combat_degree` over `wounds`), never off a net and an obstacle; a `net`/`ob` pair here would
+    make the module a second resolver (Jordan, 2026-09-03: *"kill/wound degrees should be directly taken from scene
+    combat"*). Nor does it name a winner: who prevailed is the fold's reading of `wounds` and `surrender`.
+
+      * `claimants` -- `(A, B)`, as the input;
+      * `wounds`    -- `{claimant id: PartyWounds}`; a party whose Combatant carries no tracker is ABSENT (the host
+                       refuses it by name);
+      * `surrender` -- the scene's `yield` event the engine did not refuse, or `None` (a refused declaration is not a surrender);
+      * `beat`      -- the wound that felled a party, or `None` when nobody was felled;
+      * `rounds`    -- rounds fought (A-101; the `turn_start` count);
+      * `trace`     -- the scene's events, for a viewer; folded nowhere."""
+    claimants: tuple
+    wounds: Mapping[str, PartyWounds]
+    surrender: Optional[Surrender]
+    beat: Optional[DecisiveBeat]
+    rounds: int
+    trace: tuple
 
 
 @dataclass(frozen=True)
