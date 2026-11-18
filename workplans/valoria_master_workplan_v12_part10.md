@@ -20,7 +20,7 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
-GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
+GATE: Batch B03-hygiene @a2ca6df04530caf0c1222220c621605b3898e67e (squash of #606; its branch head 61b37b8dc is not an ancestor)
 GATE: Batch B05-one-roll @928dccc9a68232d1afb041c9a1c422d8cfdb690e
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: R-09.e → `python -m pytest engine/tests/test_draw.py -q` green and the same seed twice gives the same hash (IS-A §10 row R-09.e); re-read R-01.b, R-02.a, R-03.a, R-08.b → unchanged in verdict (IS-A §12.2 row B06); no `status:` edited (A-114)
