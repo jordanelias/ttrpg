@@ -47,6 +47,8 @@ _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
+from engine.dice_engine import draw                                            # noqa: E402
+from modules.mass_battle import rngsource                                      # noqa: E402
 import modules.mass_battle.orchestration as O                                  # noqa: E402
 from systems.mass_battle.sim.engine import build_army, SIDE_A_START_ROW            # noqa: E402
 
@@ -116,7 +118,8 @@ def test_counter_observes_a_truncation_when_the_bound_bites(monkeypatch):
     assert n == 4, f"fixture must produce 4 depth groups, produced {n}"
 
     monkeypatch.setattr(O, 'MAX_SUB_PHASES', 2)
-    res = O.resolve_engagements_cascading(unit_a, unit_b, pairs, t=1)
+    with rngsource.using(draw.seeded(draw.H2("test_subphase_truncation_counter", 0))):
+        res = O.resolve_engagements_cascading(unit_a, unit_b, pairs, t=1)
 
     assert res['n_groups'] == 4
     assert res['truncated_groups'] == 2, res
@@ -130,7 +133,8 @@ def test_counter_is_silent_when_the_bound_does_not_bite(monkeypatch):
     """The same fixture, with headroom: every group resolves and nothing is reported dropped."""
     unit_a, unit_b, pairs = _staircase(4)
     monkeypatch.setattr(O, 'MAX_SUB_PHASES', 9)
-    res = O.resolve_engagements_cascading(unit_a, unit_b, pairs, t=1)
+    with rngsource.using(draw.seeded(draw.H2("test_subphase_truncation_counter", 0))):
+        res = O.resolve_engagements_cascading(unit_a, unit_b, pairs, t=1)
     assert res['n_groups'] == 4
     assert res['truncated_groups'] == 0
     assert res['truncated_pairs'] == 0
@@ -153,7 +157,8 @@ def test_shipped_bound_truncates_nothing_on_a_cascading_workload():
     # the SHIPPED value has headroom over fixtures that really do cascade, which is the claim.
     for n in (2, 3, 4):
         unit_a, unit_b, pairs = _staircase(n)
-        res = O.resolve_engagements_cascading(unit_a, unit_b, pairs, t=1)
+        with rngsource.using(draw.seeded(draw.H2("test_subphase_truncation_counter", n))):
+            res = O.resolve_engagements_cascading(unit_a, unit_b, pairs, t=1)
         if res['n_groups'] > 1:
             multi_group_calls += 1
         max_groups = max(max_groups, res['n_groups'])

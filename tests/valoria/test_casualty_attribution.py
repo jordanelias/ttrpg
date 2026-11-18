@@ -22,7 +22,6 @@ Two subtleties the assertions encode rather than assume:
     so the parts sum to the whole even when the clamp bites.
 """
 import os
-import random
 import sys
 
 import pytest
@@ -34,20 +33,22 @@ if _SIM not in sys.path:
 import modules.mass_battle.orchestration as O                                   # noqa: E402
 from modules.mass_battle.resolution import tracing, tracing_on                # noqa: E402
 from systems.mass_battle.sim.engine import build_unit, run_battle                   # noqa: E402
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 _ANCHOR = 9
 
 
 def _battle(seed, a_kw=None, b_kw=None):
     """One traced battle. Returns (events, {'A': measured_delta, 'B': measured_delta})."""
-    random.seed(seed)
-    ua = build_unit('Line', 3, 'A', 'A', _ANCHOR, **(a_kw or {}))
-    ub = build_unit('Line', 3, 'B', 'B', _ANCHOR, **(b_kw or {}))
-    a0, b0 = ua.hp, ub.hp
-    with tracing() as recorded:
-        run_battle(ua, ub)
-        events = [e for e in recorded if e.get('cat') == 'casualty']
-    return events, {'A': a0 - ua.hp, 'B': b0 - ub.hp}
+    with rngsource.using(draw.seeded(draw.H2("test_casualty_attribution", seed))):
+        ua = build_unit('Line', 3, 'A', 'A', _ANCHOR, **(a_kw or {}))
+        ub = build_unit('Line', 3, 'B', 'B', _ANCHOR, **(b_kw or {}))
+        a0, b0 = ua.hp, ub.hp
+        with tracing() as recorded:
+            run_battle(ua, ub)
+            events = [e for e in recorded if e.get('cat') == 'casualty']
+        return events, {'A': a0 - ua.hp, 'B': b0 - ub.hp}
 
 
 def _attributed(events):
@@ -117,16 +118,16 @@ def test_attribution_is_inert_when_tracing_is_off():
     This is what lets the four goldens stay byte-exact. Verified here at the seam AND, in CI, by
     `bat.py --check` across all four modes.
     """
-    random.seed(77)
-    ua = build_unit('Line', 3, 'A', 'A', _ANCHOR)
-    ub = build_unit('Line', 3, 'B', 'B', _ANCHOR)
-    # Plan position `31c`: the buffer is the list a `tracing()` block yields, for that block's extent only.
-    # A block closed BEFORE the battle must see nothing of it, and no block is open while it runs.
-    with tracing() as recorded:
-        pass
-    assert not tracing_on()
-    run_battle(ua, ub)
-    assert [e for e in recorded if e.get('cat') == 'casualty'] == []
+    with rngsource.using(draw.seeded(draw.H2("test_casualty_attribution", 77))):
+        ua = build_unit('Line', 3, 'A', 'A', _ANCHOR)
+        ub = build_unit('Line', 3, 'B', 'B', _ANCHOR)
+        # Plan position `31c`: the buffer is the list a `tracing()` block yields, for that block's extent only.
+        # A block closed BEFORE the battle must see nothing of it, and no block is open while it runs.
+        with tracing() as recorded:
+            pass
+        assert not tracing_on()
+        run_battle(ua, ub)
+        assert [e for e in recorded if e.get('cat') == 'casualty'] == []
 
 
 def test_conservation_fails_when_one_path_is_untagged(monkeypatch):
@@ -145,7 +146,9 @@ def test_conservation_fails_when_one_path_is_untagged(monkeypatch):
         return real(unit, before, after, source, t=t, phase=phase)
 
     monkeypatch.setattr(O, 'attribute_hp_loss', untagged_melee)
-    events, measured = _battle(1000)
+    # B06.05 RE-PICKED (the keyed draw is the stream): `_battle(1000)` falls no casualty, so the precondition below
+    # failed; `_battle(3)` loses troops on both sides. Was 1000.
+    events, measured = _battle(3)
     attributed = _attributed(events)
     assert any(measured[s] > 0 for s in ('A', 'B')), "precondition: casualties must occur"
     assert any(attributed.get(s, 0.0) != measured[s]

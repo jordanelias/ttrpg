@@ -217,8 +217,7 @@ def form_knot(actor_a: str, actor_b: str, world=None,
 
     rng = rng if rng is not None else (world.rng if world is not None and hasattr(world, 'rng') else None)
     if rng is None:
-        import random
-        rng = random.Random()
+        raise TypeError("knots: no `rng` (pass `draw.seeded(...)` or a world with `.rng`); there is no default stream")
 
     roll_result = roll_pool(pool, tn=KNOT_FORMATION_TN, rng=rng)
     net = roll_result.net

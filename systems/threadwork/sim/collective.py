@@ -176,8 +176,7 @@ def attempt_collective_operation(actors: list, op_type: str, target: dict,
 
     rng = rng if rng is not None else (world.rng if world is not None and hasattr(world, 'rng') else None)
     if rng is None:
-        import random as _r
-        rng = _r.Random()
+        raise TypeError("collective: no `rng` (pass `draw.seeded(...)` or a world with `.rng`); there is no default stream")
 
     # Anchor's operation uses pooled dice
     roll = roll_pool(total_pool, tn=tn, rng=rng)

@@ -1,6 +1,6 @@
 """bat.py — byte-exact DIGEST harness for the mass-battle engine (the G5 gate).
 
-Runs a fixed, deterministic battery (per-trial random.seed, exactly as gauge_mb.py does) of
+Runs a fixed, deterministic battery (a keyed `rngsource` scope per trial, as gauge_mb.py does) of
 representative matchups and hashes the FULL per-trial end state (winner, battle-turns, hp, morale,
 discipline, rout flags — not just the aggregate win-rate). A behaviour-preserving refactor must
 reproduce the digest digit-for-digit; any change to the number is a refactor bug, not a tuning
@@ -36,7 +36,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirna
 from systems.mass_battle.sim.engine import (  # noqa: E402
     build_unit, build_envelopment, build_refused_flank, resolve_battle,
     SIDE_A_START_ROW, SIDE_B_START_ROW)
-import random  # noqa: E402
+
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 # anchor columns per (shape,tier) — copied from gauge_mb.py ANCHOR_MAP (T3 row used below)
 # [canonical: mass_battle_v30.md §deployment — anchor columns]
@@ -772,13 +774,13 @@ def compute():
         if not b_is_fn and (sb, TIER) not in ANCHOR_MAP:
             continue
         for s in range(N_SEEDS):
-            random.seed(s + SEED_BASE)
-            ua = sa('A', 'A', **ka) if a_is_fn else make_unit(sa, 'A', 'A', **ka)
-            ub = sb('B', 'B', **kb) if b_is_fn else make_unit(sb, 'B', 'B', **kb)
-            shape_a = 'Line' if a_is_fn else sa
-            shape_b = 'Line' if b_is_fn else sb
-            r = resolve_battle(ua, ub, shape_a, shape_b, ANCHOR_MAP, kind='multi', max_battle_turns=MAX_TURNS)
-            h.update((label + '#' + str(s) + ':' + trial_vector(ua, ub, r) + '\n').encode())
+            with rngsource.using(draw.seeded(draw.H2("bat", s + SEED_BASE))):
+                ua = sa('A', 'A', **ka) if a_is_fn else make_unit(sa, 'A', 'A', **ka)
+                ub = sb('B', 'B', **kb) if b_is_fn else make_unit(sb, 'B', 'B', **kb)
+                shape_a = 'Line' if a_is_fn else sa
+                shape_b = 'Line' if b_is_fn else sb
+                r = resolve_battle(ua, ub, shape_a, shape_b, ANCHOR_MAP, kind='multi', max_battle_turns=MAX_TURNS)
+                h.update((label + '#' + str(s) + ':' + trial_vector(ua, ub, r) + '\n').encode())
     return mode, h.hexdigest()
 
 

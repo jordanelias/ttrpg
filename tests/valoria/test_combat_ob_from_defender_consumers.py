@@ -92,7 +92,7 @@ def test_trace_events_carry_the_ob_their_roll_was_banded_at():
             B = C.Combatant('B', weapon=weapon_b, faculty=2)
             wrapper._TRACE = events.append
             try:
-                wrapper.fight(A, B, rng=draw.seeded(draw.H2("test_combat_ob_from_defender_consumers", seed)))
+                wrapper.fight(A, B, None, draw.seeded(draw.H2("test_combat_ob_from_defender_consumers", seed)))
             finally:
                 wrapper._TRACE = None
             r, s = _check_events(events, {'A': A, 'B': B})

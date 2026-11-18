@@ -54,7 +54,7 @@ wrapper, combatant = (importlib.import_module(pkg + "." + n) for n in ("wrapper"
 oracle = []
 for seed, ends, *_ in out:
     A, B = combatant.Combatant("p_a", end=ends[0]), combatant.Combatant("p_b", end=ends[1])
-    r = wrapper.fight(A, B, rng=draw.seeded(draw.H2("test_combat_module", seed)))
+    r = wrapper.fight(A, B, None, draw.seeded(draw.H2("test_combat_module", seed)))
     oracle.append((r, {{c.label: {{q: getattr(c.wt, q) for q in qs}} for c in (A, B)}}))
 print(repr((loaded, out, oracle)))
 """

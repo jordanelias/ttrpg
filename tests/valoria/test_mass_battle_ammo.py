@@ -28,7 +28,6 @@ Campaign-adapter armies are melee-only (`massbattle.py`'s `_faction_to_unit`), s
 confirmed unreachable from the campaign seam separately (see the two engine/tests files run
 alongside this one).
 """
-import random
 
 import pytest
 
@@ -38,6 +37,8 @@ from modules.mass_battle.config import (SIDE_A_START_ROW, SIDE_B_START_ROW, MB_V
 from systems.mass_battle.sim.engine import build_army
 from modules.mass_battle.hierarchy.units import Unit, Army
 from modules.mass_battle.orchestration import volley_phase, between_turn_recovery
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 
 @pytest.fixture(autouse=True)
@@ -94,29 +95,29 @@ def test_volley_phase_is_in_range_control():
     """Control: the two formations are actually within volley range before any ammo assertion is
     trusted -- otherwise 'stops firing' would be indistinguishable from 'was never in range'."""
     ua, ub = _archers(), _target()
-    random.seed(4_100_001)
-    r = volley_phase(ua, ub)
-    assert r['shots'] >= 1, f"control failed: no shots fired at all (out of range?) -- {r}"
+    with rngsource.using(draw.seeded(draw.H2("test_mass_battle_ammo", 4_100_001))):
+        r = volley_phase(ua, ub)
+        assert r['shots'] >= 1, f"control failed: no shots fired at all (out of range?) -- {r}"
 
 
 def test_ranged_atom_stops_contributing_damage_once_volleys_are_exhausted():
     ua, ub = _archers(), _target()
     su = ua.units[0]
-    random.seed(4_100_002)
-    fired_ticks = 0
-    exhausted_at = None
-    for tick in range(1, int(MB_VOLLEYS_START) + 10):
-        r = volley_phase(ua, ub)
-        if r['shots'] >= 1:
-            fired_ticks += 1
-        if exhausted_at is None and su.eff_volleys <= 0:
-            exhausted_at = tick
-        if exhausted_at is not None and tick > exhausted_at:
-            # past exhaustion: this atom must contribute nothing (loss_b stays 0 from unit A's side)
-            assert r['loss_b'] == 0, f"tick {tick}: exhausted archer still dealt {r['loss_b']} loss"
-            assert r['shots'] == 0, f"tick {tick}: exhausted archer still recorded a shot"
-    assert exhausted_at is not None, "volleys never reached 0 across the whole loop -- test setup is wrong"
-    assert fired_ticks >= 1, "the archer must have actually fired before running out"
+    with rngsource.using(draw.seeded(draw.H2("test_mass_battle_ammo", 4_100_002))):
+        fired_ticks = 0
+        exhausted_at = None
+        for tick in range(1, int(MB_VOLLEYS_START) + 10):
+            r = volley_phase(ua, ub)
+            if r['shots'] >= 1:
+                fired_ticks += 1
+            if exhausted_at is None and su.eff_volleys <= 0:
+                exhausted_at = tick
+            if exhausted_at is not None and tick > exhausted_at:
+                # past exhaustion: this atom must contribute nothing (loss_b stays 0 from unit A's side)
+                assert r['loss_b'] == 0, f"tick {tick}: exhausted archer still dealt {r['loss_b']} loss"
+                assert r['shots'] == 0, f"tick {tick}: exhausted archer still recorded a shot"
+        assert exhausted_at is not None, "volleys never reached 0 across the whole loop -- test setup is wrong"
+        assert fired_ticks >= 1, "the archer must have actually fired before running out"
 
 
 def test_between_turn_recovery_resupplies_some_volleys():
@@ -142,10 +143,10 @@ def test_melee_atoms_are_never_gated_by_ammo():
     volley_phase (which must simply not involve this atom at all -- it is not 'ranged')."""
     ua, ub = _target(faction='A', row=SIDE_A_START_ROW), _target(faction='B', row=SIDE_A_START_ROW - 5)
     ua.units[0].volleys = 0.0
-    random.seed(4_100_003)
-    r = volley_phase(ua, ub)
-    assert r['shots'] == 0 and r['loss_a'] == 0 and r['loss_b'] == 0, \
-        "neither side is 'ranged' -- volley_phase must be a pure no-op regardless of ammo state"
+    with rngsource.using(draw.seeded(draw.H2("test_mass_battle_ammo", 4_100_003))):
+        r = volley_phase(ua, ub)
+        assert r['shots'] == 0 and r['loss_a'] == 0 and r['loss_b'] == 0, \
+            "neither side is 'ranged' -- volley_phase must be a pure no-op regardless of ammo state"
 
 
 # ─── Adversarial-review round 2: the per-subunit ledger itself ──────────────

@@ -21,9 +21,10 @@ import sys
 
 import contextlib  # noqa: E402
 import importlib  # noqa: E402
-import random  # noqa: E402
 
 import pytest  # noqa: E402
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 
 _MB_ENV = {'PER_CELL': '1', 'MB_REFUSE': '1', 'LANCHESTER_ENABLED': '1',
@@ -114,15 +115,15 @@ def _mk(orch, pos, adv, fac):
 
 
 def _dmg_b(orch, contact, def_adv, seed, t=5, def_face=None):
-    random.seed(2000 + seed)
-    ub, subB = _mk(orch, (BROW, BCOL), def_adv, 'B')
-    if def_face is not None:
-        for cid in list(subB.cell_troops):
-            subB.cell_facing_vec[cid] = def_face
-    ua, suA = _mk(orch, (BROW - 3, BCOL), +1, 'A')
-    pairs = contact.find_contacts(ua, ub)
-    assert pairs, "no contact -- geometry setup wrong"
-    return orch.resolve_engagements(ua, ub, pairs, t=t)['dmg_b'], subB
+    with rngsource.using(draw.seeded(draw.H2("test_octagon_damage", 2000 + seed))):
+        ub, subB = _mk(orch, (BROW, BCOL), def_adv, 'B')
+        if def_face is not None:
+            for cid in list(subB.cell_troops):
+                subB.cell_facing_vec[cid] = def_face
+        ua, suA = _mk(orch, (BROW - 3, BCOL), +1, 'A')
+        pairs = contact.find_contacts(ua, ub)
+        assert pairs, "no contact -- geometry setup wrong"
+        return orch.resolve_engagements(ua, ub, pairs, t=t)['dmg_b'], subB
 
 
 # ─── ED-MB-0063: the arc-ratio isolation ──────────────────────────────────────
@@ -324,8 +325,8 @@ def test_visible_flank_refuses_after_delay(mb):
         subB.cell_facing_vec[cid] = (0, 1)   # face east; attacker due north = seen left flank (<=105deg FOV)
     ua, _ = _mk(orch, (BROW - 3, BCOL), +1, 'A')
     for t in range(1, C.FACING_REACTION_TICKS + 3):
-        random.seed(900 + t)
-        orch.resolve_engagements(ua, ub, contact.find_contacts(ua, ub), t=t)
+        with rngsource.using(draw.seeded(draw.H2("test_octagon_damage", 900 + t))):
+            orch.resolve_engagements(ua, ub, contact.find_contacts(ua, ub), t=t)
     rs = getattr(subB, '_react_since', {})
     # the clock stores (last_tick, consecutive_count); after > FACING_REACTION_TICKS consecutive ticks the
     # count must have reached the threshold -> the cell has wheeled -> the source zeroes the arc penalty.
@@ -337,15 +338,15 @@ def test_visible_flank_refuses_after_delay(mb):
 
 def _pincer_dmgb(orch, contact, attackers, seed=13, t=5):
     """Defender B (faces north) struck by a list of attacker bodies at (row_offset, advance_dir)."""
-    random.seed(2000 + seed)
-    ub, subB = _mk(orch, (BROW, BCOL), -1, 'B')
-    subs = [orch.Unit(shape='Line', troop_type='infantry', tier=2,
-                         starting_position=(BROW + dr, BCOL), advance_dir=adv) for dr, adv in attackers]
-    ua = orch.Army(name='A', faction='A', power=4, command=4, discipline=5, discipline_start=5,
-                   morale=6, morale_start=6, units=subs, dr=1)
-    for su in subs:
-        su._unit = ua
-    return orch.resolve_engagements(ua, ub, contact.find_contacts(ua, ub), t=t)['dmg_b']
+    with rngsource.using(draw.seeded(draw.H2("test_octagon_damage", 2000 + seed))):
+        ub, subB = _mk(orch, (BROW, BCOL), -1, 'B')
+        subs = [orch.Unit(shape='Line', troop_type='infantry', tier=2,
+                             starting_position=(BROW + dr, BCOL), advance_dir=adv) for dr, adv in attackers]
+        ua = orch.Army(name='A', faction='A', power=4, command=4, discipline=5, discipline_start=5,
+                       morale=6, morale_start=6, units=subs, dr=1)
+        for su in subs:
+            su._unit = ua
+        return orch.resolve_engagements(ua, ub, contact.find_contacts(ua, ub), t=t)['dmg_b']
 
 
 def test_multi_side_shock_is_face_based_not_pair_count(mb):
@@ -364,7 +365,9 @@ def test_multi_side_shock_is_face_based_not_pair_count(mb):
     # 22.2 on / 14.8 off, so arm (b) reddens; with the shock never applied, on == off and arm (a)'s `>` fails (this was the 0.0 > 0.0 red).
     # B05.99 RE-PICKED (B05.03, the field's one sampler): seed 3 reads 0.0 with the shock on and off again; seed 1 reads PINCER
     # 18.0 on / 12.0 off (the 1.5x) and TWO_FRONT 6.6 on / 6.6 off, a non-zero equality. Was 3.
-    SHOCK_SEED = 1
+    # B06.05 RE-PICKED (the keyed draw is the stream): seed 1 reads 0.0 on and off again; seed 5 reads PINCER 9.0 on / 6.0
+    # off (the 1.5x) and TWO_FRONT 6.0 on / 6.0 off, a non-zero equality. Was 1.
+    SHOCK_SEED = 5
 
     def with_shock(shock, attackers):
         old = orch.MULTI_SIDE_SHOCK
@@ -398,8 +401,8 @@ def test_reaction_clock_resets_between_battles(mb):
     for cid in list(subB.cell_troops):
         subB.cell_facing_vec[cid] = (0, 1)   # face east -> a seen flank stamps the clock
     ua, _ = _mk(orch, (BROW - 3, BCOL), +1, 'A')
-    random.seed(5)
-    orch.resolve_engagements(ua, ub, contact.find_contacts(ua, ub), t=3)
-    assert getattr(subB, '_react_since', {}), "a seen-flank engagement should stamp the reaction clock"
-    orch.reset_morale_between_battles(ub)
-    assert not subB._react_since, "reset_morale_between_battles must CLEAR the reaction clock (R1 leak fix)"
+    with rngsource.using(draw.seeded(draw.H2("test_octagon_damage", 5))):
+        orch.resolve_engagements(ua, ub, contact.find_contacts(ua, ub), t=3)
+        assert getattr(subB, '_react_since', {}), "a seen-flank engagement should stamp the reaction clock"
+        orch.reset_morale_between_battles(ub)
+        assert not subB._react_since, "reset_morale_between_battles must CLEAR the reaction clock (R1 leak fix)"

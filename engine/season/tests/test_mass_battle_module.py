@@ -70,7 +70,12 @@ for seed in (1, 2, 3, 4, 5, 6):
     got = entry(FIELD, draw.seeded(draw.H2("test_mass_battle_module", seed)))
     between = entry(OTHER, draw.seeded(draw.H2("test_mass_battle_module", seed + 100)))
     again = entry(FIELD, draw.seeded(draw.H2("test_mass_battle_module", seed)))
-    out.append((seed, got, again == got, source.get() is random))
+    try:
+        source.get()                      # a scope left open by the call would return its draw here
+        left_open = True
+    except LookupError:                   # no source is the unscoped reading (there is no default stream)
+        left_open = False
+    out.append((seed, got, again == got, not left_open))
 stdlib_untouched = random.getstate() == stdlib_before
 loaded = sorted(os.path.relpath(m.__file__, {root!r}) for n, m in list(sys.modules.items())
                 if n not in before and getattr(m, "__file__", None)

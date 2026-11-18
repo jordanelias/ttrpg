@@ -26,7 +26,7 @@ MB_NODE_COHESION, ...) select, not a frozen snapshot file.
 
 Grounding + citations index: references/historical/mass_battle_gauge_grounding.md
 """
-import sys, os, random, statistics
+import sys, os, statistics
 
 # import the package exactly as bat.py (the G5 digest harness) does
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # tests/sim on path
@@ -35,6 +35,8 @@ from systems.mass_battle.sim.engine import (  # noqa: E402
     run_battle, run_multi_turn_battle, build_unit, build_army, build_envelopment, build_refused_flank,
     resolve_battle, _centered_line_cols)
 from modules.mass_battle.config import TROOPS_PER_TIER, MB_VOLLEYS_START  # noqa: E402
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 # ─────────────────────────────────────────────────────────────────────────────────────────────────
 # [ED-MB-0027] HONEST-GAUGE density-matching constants (fiat register §1 measurement integrity).
@@ -485,31 +487,31 @@ def matchup(sa, sb, ka, kb, mode, n=60, seed_base=1_000_000):  # [Jordan directi
     # resolving — the structural check that would have caught H6's 0.0/0.0 all-draw instrument break.
     win_cas=[]; lose_cas=[]; capped=0
     for s in range(n):
-        random.seed(s+seed_base)
-        ua = sa('A','A',**ka) if a_is_fn else make_unit(sa,3,'A','A',**ka)  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) units]
-        ub = sb('B','B',**kb) if b_is_fn else make_unit(sb,3,'B','B',**kb)
-        a0,b0 = ua.hp_max, ub.hp_max
-        shape_a = 'Line' if a_is_fn else sa
-        shape_b = 'Line' if b_is_fn else sb
-        # [ED-MB-0041] The cap is bound ONCE and reused for both the resolve call and the cap-hit
-        # test below. It was previously written as a literal in each of the two resolve_battle calls,
-        # and the cap-hit check would have needed a third and fourth copy -- at which point a future
-        # change to one would silently stop the "did this battle actually resolve" measurement from
-        # meaning anything, while still reporting a number.
-        cap = SINGLE_TURN_CAP if mode=='single' else MULTI_BATTLE_TURN_CAP
-        if mode=='single':
-            r=resolve_battle(ua,ub,kind='single',max_ticks=cap); turns.append(r.get('turns',cap))
-        else:
-            r=resolve_battle(ua,ub,shape_a,shape_b,ANCHOR_MAP,kind='multi',max_battle_turns=cap); turns.append(r.get('battle_turns',cap))
-        w=winner_of(r)
-        if w=='A':aw+=1
-        elif w=='B':bw+=1
-        else:dr+=1
-        _ac = 100*(a0-ua.hp)/a0 if a0 else 0; _bc = 100*(b0-ub.hp)/b0 if b0 else 0
-        a_cas.append(_ac); b_cas.append(_bc)
-        if w=='A': win_cas.append(_ac); lose_cas.append(_bc)
-        elif w=='B': win_cas.append(_bc); lose_cas.append(_ac)
-        if turns[-1] >= cap: capped += 1
+        with rngsource.using(draw.seeded(draw.H2("gauge_mb", s+seed_base))):
+            ua = sa('A','A',**ka) if a_is_fn else make_unit(sa,3,'A','A',**ka)  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) units]
+            ub = sb('B','B',**kb) if b_is_fn else make_unit(sb,3,'B','B',**kb)
+            a0,b0 = ua.hp_max, ub.hp_max
+            shape_a = 'Line' if a_is_fn else sa
+            shape_b = 'Line' if b_is_fn else sb
+            # [ED-MB-0041] The cap is bound ONCE and reused for both the resolve call and the cap-hit
+            # test below. It was previously written as a literal in each of the two resolve_battle calls,
+            # and the cap-hit check would have needed a third and fourth copy -- at which point a future
+            # change to one would silently stop the "did this battle actually resolve" measurement from
+            # meaning anything, while still reporting a number.
+            cap = SINGLE_TURN_CAP if mode=='single' else MULTI_BATTLE_TURN_CAP
+            if mode=='single':
+                r=resolve_battle(ua,ub,kind='single',max_ticks=cap); turns.append(r.get('turns',cap))
+            else:
+                r=resolve_battle(ua,ub,shape_a,shape_b,ANCHOR_MAP,kind='multi',max_battle_turns=cap); turns.append(r.get('battle_turns',cap))
+            w=winner_of(r)
+            if w=='A':aw+=1
+            elif w=='B':bw+=1
+            else:dr+=1
+            _ac = 100*(a0-ua.hp)/a0 if a0 else 0; _bc = 100*(b0-ub.hp)/b0 if b0 else 0
+            a_cas.append(_ac); b_cas.append(_bc)
+            if w=='A': win_cas.append(_ac); lose_cas.append(_bc)
+            elif w=='B': win_cas.append(_bc); lose_cas.append(_ac)
+            if turns[-1] >= cap: capped += 1
     dec = aw+bw
     return dict(a=aw/n*100, b=bw/n*100, d=dr/n*100,
                 decA=(100*aw/dec if dec else 50.0), dec_n=dec,  # [canonical: mass_battle_gauge_grounding.md §1 — even-split fallback when no decisive result]

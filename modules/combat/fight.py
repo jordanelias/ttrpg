@@ -19,9 +19,9 @@ refusal are `seam/wrappers/combat.py`'s, and the degree is `seam/ladder.py::comb
 """
 from __future__ import annotations
 
-import random
 from typing import Callable, Optional
 
+from engine.dice_engine.draw import Draw
 from engine.season.queries.inputs import CombatTurnView, PersonalCombatInput
 from . import attributes as spec, combatant, wrapper
 from .config import CFG
@@ -60,7 +60,7 @@ def _attr_kw(authored) -> dict:
             if s.key != "end" and s.registry_key is not None and s.registry_key in authored}
 
 
-def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
+def fight(inp: PersonalCombatInput, rng: Draw,
           decide: Optional[Callable[[CombatTurnView], str]] = None) -> dict:
     """Fight one bout scene between the record's two parties. RESOLVED -> dict(status, result, trace,
     ends, wound_state), where `wound_state[id]` is `None` when the Combatant carries no tracker and

@@ -25,6 +25,8 @@ import pytest
 
 import modules.mass_battle.hierarchy.units as _hu
 import modules.mass_battle.orchestration as _orch
+from engine.dice_engine import draw
+from modules.mass_battle import rngsource
 from modules.mass_battle.config import (SIDE_A_START_ROW, SIDE_B_START_ROW, TICKS_PER_PHASE,
                                              MB_CAVALRY_SPEED_MULT, ROUTE_BUDGET_TICKS)
 from modules.mass_battle.core.contact import check_orders
@@ -135,7 +137,8 @@ def test_route_moves_a_subunit_with_no_enemy_in_sight():
     calls advance_cells at all."""
     ua, sa, spawn, _route = _route_unit_from_offsets((2, 4), faction='A', target_condition='in_range:1')
     ub, _sb, _spawn_b, _route_b = _route_unit_from_offsets((), faction='B')   # plain far-side unit; no route of its own
-    run_battle(ua, ub, max_ticks=6)
+    with rngsource.using(draw.seeded(draw.H2("test_mass_battle_routes", 0))):
+        run_battle(ua, ub, max_ticks=6)
     assert sa.target_atom is None, "control: the enemy must still be out of the in_range:1 gate after 6 ticks"
     assert sa._route_idx >= 1 or sa._node_anchor != spawn, \
         "the route-holder never moved: run_battle's moving_a/moving_b must have excluded it"
