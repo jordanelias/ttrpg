@@ -51,6 +51,8 @@
 #   pre-existing cell_last_speed. Wiring requires power × facing inputs.
 
 import math
+from engine.dice_engine.dice_engine import degree_label  # the one degree ladder (A-5); the field grades nothing of its own
+from engine.dice_engine.sigma_leverage import net_boost, roll_net_continuous  # the one mu-shift (soft cap included), the pool as it is
 from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
 
 # [canonical: designs/provincial/mass_battle_v30.md §map — 25×25 grid, 5-cell buffer per side]
@@ -657,8 +659,8 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
         #
         # The `max(1, ...)` floor guarantees a live atom rolls AT LEAST one die; a ROUTED/BROKEN atom
         # (whose true a_pool_raw/b_pool_raw is exactly 0.0, from subunit_combat_pool's own gate) is forced
-        # to pool 0 (§A.12: routing, cannot fight back). `roll_pool`/`_sigma_net_boost` each re-floor
-        # their own `pool` argument to a minimum of 1 internally, so zeroing `a_pool` serves bookkeeping
+        # to pool 0 (§A.12: routing, cannot fight back). On the whole-die path `roll_pool` re-floors
+        # its own `pool` argument to a minimum of 1 internally, so zeroing `a_pool` serves bookkeeping
         # only (trace_event, the ranged//3 and encirclement adjustments below); the damage is zeroed by
         # forcing `a_net`/`b_net` to 0 directly, downstream of those calls.
         a_dead = unit_a.routed or unit_a.disordered or atom_a.routed or atom_a.disordered
@@ -1044,18 +1046,15 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
             if _ta: ns_a += _ta * SIGMA_PER_D
             if _tb: ns_b += _tb * SIGMA_PER_D
             if MB_FRACTIONAL_POOL:
-                # [ED-MB-0032] roll the CONTINUOUS pool without flooring — the σ-boost reads the fractional
-                # pool too (a dead atom's net is forced to 0 below regardless, same as the integer path).
+                # [ED-MB-0032] roll the CONTINUOUS pool without flooring: the one sampler takes the pool as it is, and the
+                # one boost reads the same pool (a dead atom's net is forced to 0 below regardless, same as the integer path).
                 _apr = a_pool_raw if not a_dead else 0.0
                 _bpr = b_pool_raw if not b_dead else 0.0
-                # The σ-boost scales by sqrt(dice), but the fractional remainder adds only an EXPECTED fraction of
-                # a die's worth of *variance* (A3), not a full die. Pass floor(pool): the σ-boost counts only the
-                # guaranteed integer dice, matching the discrete base's real die count.
-                a_net = roll_pool_fractional(_apr) + _sigma_net_boost(ns_a, math.floor(_apr))
-                b_net = roll_pool_fractional(_bpr) + _sigma_net_boost(ns_b, math.floor(_bpr))
+                a_net = roll_net_continuous(_apr, rng=rngsource.get()) + net_boost(_snap_sigma(ns_a), _apr)
+                b_net = roll_net_continuous(_bpr, rng=rngsource.get()) + net_boost(_snap_sigma(ns_b), _bpr)
             else:
-                a_net = roll_pool(a_pool) + _sigma_net_boost(ns_a, a_pool)
-                b_net = roll_pool(b_pool) + _sigma_net_boost(ns_b, b_pool)
+                a_net = roll_pool(a_pool) + net_boost(_snap_sigma(ns_a), a_pool)
+                b_net = roll_pool(b_pool) + net_boost(_snap_sigma(ns_b), b_pool)
         else:
             # === LEGACY POOL-MODIFIER PATH (baseline; advantages modify the pool) ===
             # [ED-MB-0018] octagon = damage multiplier under MB_OCTAGON_DMG -> not a pool penalty here
@@ -1078,14 +1077,14 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
             if _tb: b_pool = max(1, b_pool + _tb)
             a_net = roll_pool(a_pool)
             b_net = roll_pool(b_pool)
-        # `roll_pool`/`_sigma_net_boost` BOTH independently floor their own pool argument to a minimum of 1
+        # `roll_pool` (the whole-die path) floors its own pool argument to a minimum of 1
         # internally, so zeroing `a_pool`/`b_pool` above (for a routed/broken atom) has NO effect on `a_net`/
-        # `b_net`. Force the net directly here: a dead atom always resolves to `compute_degree`'s `net<=0` ->
+        # `b_net`. Force the net directly here: a dead atom always resolves to the owner's `net<=0` ->
         # "Failure" -> `DAMAGE_BY_DEGREE["Failure"]` = 0 damage.
         if a_dead: a_net = 0
         if b_dead: b_net = 0
-        a_deg = compute_degree(a_net, max(1, b_net))
-        b_deg = compute_degree(b_net, max(1, a_net))
+        a_deg = degree_label(a_net, max(1, b_net))
+        b_deg = degree_label(b_net, max(1, a_net))
         # [ED-MB-0018] Octagon = DAMAGE-RECEIVED MULTIPLIER (Jordan): the arc the attacker strikes from
         # multiplies the DEFENDER's casualties -- front 1.0x, flank 1.5x, rear 2.0x -- interpolated from the
         # dedicated per-cell FACING-ARC (`_octagon_cell_mods`, 0..-2 -> mult = 1 - arc*(RED-1)/2, capped at
@@ -1870,7 +1869,7 @@ def freed_attacker_damage(freed_unit, target_unit):
     b_pool = max(1, target_unit.base_combat_pool() - FREED_ATTACKER_FLANK_PENALTY)
     a_net = roll_pool(a_pool)
     b_net = roll_pool(b_pool)
-    a_deg = compute_degree(a_net, max(1, b_net))
+    a_deg = degree_label(a_net, max(1, b_net))
     # [canonical: params/mass_combat.md PP-233 — Damage = successes × (1+Power)]
     dmg = CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[a_deg](freed_unit.power) - target_unit.dr)
     return dmg

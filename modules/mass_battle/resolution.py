@@ -1,11 +1,13 @@
-"""modules.mass_battle.resolution — sigma-leverage head: pool roll, degree, morale/charge-shock
-sigma, softcap, net-boost. Behaviour-frozen P-A extract. Depends on config + percell."""
+"""modules.mass_battle.resolution — sigma-leverage head: pool roll (the one sampler's draw), morale/charge-shock
+sigma, the sigma dust snap. The degree ladder, the soft cap and the net boost are the dice engine's, called from
+the orchestration. Depends on config + percell."""
 import contextlib, contextvars, math
+from engine.dice_engine.sigma_leverage import roll_net_continuous  # the one sampler (A-5); the module's first `engine` import
 from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
 from modules.mass_battle.config import *
 from modules.mass_battle.percell import *
 
-__all__ = ['roll_pool', 'roll_pool_fractional', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_subunit_braced', '_wall_prep', '_disc_prep', '_depth_prep', 'trace_event', 'tracing', 'tracing_on']
+__all__ = ['roll_pool', '_morale_sigma', '_charge_shock_sigma', '_snap_sigma', '_unit_braced', '_subunit_braced', '_wall_prep', '_disc_prep', '_depth_prep', 'trace_event', 'tracing', 'tracing_on']
 
 # ─── passive mechanical-trace collector ─────────────────────────────────────
 # Observe-only. Records per-mechanic internals (melee contest, volley, per-tick markers) inside a
@@ -35,78 +37,13 @@ def tracing_on():
 
 # [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
 def roll_pool(n, tn=7):
-    # `tn` is retained for call-signature compatibility and ASSERTED, not honoured: the success window is the
-    # fixed canonical face rule (every call site passes no `tn`).
+    """One pool roll: the ONE sampler's draw (`sigma_leverage.roll_net_continuous`, A-5; the bell curve every
+    provider draws from), on the generator `rngsource` scopes to the battle. The pool is taken as it is above the
+    module's one-die minimum (PP-273) -- a fractional pool rolls as the fraction it is, with no second rule below
+    one die: that is the owner's. `tn` is retained for call-signature compatibility and ASSERTED, not honoured."""
     # [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
     assert tn == 7, f"TN is 7. Always. (Jordan, 2026-08-25) — got {tn}; a varying difficulty is an Ob."
-    net = 0
-    for _ in range(max(1, n)):
-        f = rngsource.get().randint(1, 10)
-        if f == 1:         net -= 1
-        elif 7 <= f <= 9: net += 1  # [canonical: params/core.md — canonical face rule 1=-1, 2-6=0, 7-9=+1, 10=+2]
-        elif f == 10:      net += 2
-    return net
-
-# [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
-def roll_pool_fractional(pool, tn=7):
-    """[ED-MB-0032, Jordan: "pool must be fractional."] Roll a CONTINUOUS combat pool without flooring it
-    to an integer die count. The integer part rolls real d10s (the discrete stochastic base); the
-    fractional remainder is realised as ONE extra real die rolled with probability `frac`.
-
-    The fractional remainder is realised STOCHASTICALLY, not as a deterministic `frac*PER_DIE_NET_EV` mu-shift:
-    because `compute_degree` thresholds at `net<=0` (Failure), a constant EV would cross the boundary
-    discontinuously (P(Failure) would jump ~31.8%->10% between pool 3.0 and 3.000001, and a sub-1 pool could NEVER
-    Fail). Realising the die stochastically preserves the EV EXACTLY (E[extra die] = PER_DIE_NET_EV = frac
-    contribution when drawn w.p. frac), AND restores the die's own variance, AND keeps the Failure boundary intact
-    (an all-fractional sub-1 pool can
-    now roll a 1 -> net<0 -> Failure). [canonical: params/core.md continuous engine — the discrete dice carry
-    all variance; no deterministic mu-shift.]"""
-    # [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
-    assert tn == 7, f"TN is 7. Always. (Jordan, 2026-08-25) — got {tn}."
-    lo = math.floor(max(0.0, pool))
-    frac = max(0.0, pool - lo)
-    net = roll_pool(lo, tn) if lo >= 1 else 0
-    if frac > 0.0 and rngsource.get().random() < frac:
-        net += roll_pool(1, tn)
-    return net
-
-# [ED-MB-0051 / plan-v2 A2] Absolute epsilon for the degree boundaries. `net` is continuous (fractional pools,
-# the sigma mu-shift), so a value that is MATHEMATICALLY on a boundary can arrive one ulp to the wrong side of
-# it, and every boundary here is a hard step in `DAMAGE_BY_DEGREE` (`3 + _sigma_net_boost(-1e-16, 9)` evaluates
-# to just under 3 and would return "Partial" -> 0 damage at the universal `dr=1`, where the intended answer is
-# "Success" -> 3).
-#
-# ALL THREE COMPARISONS ARE GUARDED, not just `Success`: guarding one would institutionalise an asymmetric,
-# attacker-favouring correction (`net <= 0` would let a mathematically-ZERO net escape `Failure` whenever its
-# ulp error happens to be positive).
-#
-# WHY ABSOLUTE, AND WHY 1e-9. |net| is bounded by pool scale (single digits to low tens), so accumulated float
-# error across the pool sum + softcap + sqrt chain is ~1e-13 at worst, four orders below this epsilon. The
-# epsilon can only alter a verdict for a `net` within 1e-9 of a boundary, and for such a net the INTENDED
-# degree IS the boundary value, because no designed quantity in this engine resolves at 1e-9 (the smallest
-# designed sigma decrement is a morale step, ~1e-1 through `_morale_sigma`). So it cannot promote a designed
-# decrement: it can only recover a boundary the arithmetic lost. A relative epsilon would scale with `ob` and
-# re-introduce the asymmetry at ob=0.
-_DEGREE_EPS = 1e-9   # [JUSTIFIED: ulp-recovery tolerance, 4 orders above measured accumulated error and 8 below the smallest designed sigma decrement; not a mechanical magnitude]
-
-
-def compute_degree(net, ob):
-    """The ruled margin ladder (Jordan, 2026-08-14). Owner: engine.dice_engine.dice_engine.
-
-    Spelled out here rather than imported ON PURPOSE: this tree is the self-contained canon
-    engine (J2) and deliberately takes no `engine.*` dependency — that coupling is a porting
-    -architecture call nobody has made. Equivalence is held by a guard instead of by an import:
-    `tests/valoria/test_degree_ladder_single_owner.py` evaluates every ladder in the tree over
-    the integer AND quarter-step domains and fails unless they collapse to ONE behavioural
-    class, so a divergence here is loud rather than silent.
-
-    The epsilon is unchanged in role — ulp recovery at a band boundary, justified above.
-    """
-    margin = net - ob
-    if margin < -_DEGREE_EPS:      return "Failure"
-    if margin < 1 - _DEGREE_EPS:   return "Partial"
-    if margin >= 3 - _DEGREE_EPS:  return "Overwhelming"
-    return "Success"
+    return roll_net_continuous(max(1, n), rng=rngsource.get())
 
 def _morale_sigma(u, atom=None):
     # Graded morale effectiveness as a delta-sigma: 0 at full morale, down to -MORALE_SIGMA_SCALE near rout.
@@ -195,25 +132,16 @@ def _charge_shock_sigma(defender, def_cells, zone, atom=None, t=None):
     a_shaken = 1.0 + MB_SHOCK_SHAKEN_GAIN * (1.0 - frac)
     return -MB_CHARGE_SIGMA * g_face * g_brace * a_shaken
 
-def _sigma_softcap(x, m=1.5):                 # [canonical: modifier_system_spec.md §3.1 saturating]
-    return m * math.tanh(x / m)
 # [ED-MB-0051 / plan-v2 A2] Snap a numerically-zero sigma to exactly zero at the CHOKEPOINT.
 # This is the semantically correct statement — "no modifier applies" — made once, where every
 # producer's value passes through, rather than patched into each producer in turn. It covers the
-# three cited producers at a stroke and any future one for free. The threshold is three orders
-# TIGHTER than `_DEGREE_EPS`: this snap is for values that are zero and merely rendered as dust by
-# float arithmetic, not for absorbing a small real modifier. Deliberately distinct constants — one
-# tolerance doing two jobs is how the next confound gets built.
-_SIGMA_ZERO_SNAP = 1e-12   # [JUSTIFIED: "this value is arithmetically zero" threshold; sized well below any designed sigma and below _DEGREE_EPS so the two never interact]
+# three cited producers at a stroke and any future one for free. The degree boundaries' own ulp recovery
+# is the owner's (the margin is quantised once at the ladder, `dice_engine.MARGIN_SCALE`); this snap is for
+# values that are zero and merely rendered as dust by float arithmetic, not for absorbing a small real modifier.
+_SIGMA_ZERO_SNAP = 1e-12   # [JUSTIFIED: "this value is arithmetically zero" threshold; sized well below any designed sigma (the smallest, a morale step, is ~1e-1) and far below the ladder's half milli-unit]
 
 
-def _sigma_net_boost(net_sigma, pool, tn=7):  # [canonical: params/core.md continuous engine; modifier_system_spec §2.1] mu-shift
-    # [canonical: Jordan ruling 2026-08-25 "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
-    assert tn == 7, f"TN is 7. Always. (Jordan, 2026-08-25) — got {tn}."
-    # Sigma per die at TN 7 — the only TN there is (ED-IN-0196). The TN 6/8 rows of the EV
-    # table are dead under the ruling; the historical table was reference-only; its capture
-    # (params_tables.yaml) was retired (`FORK:` row in references/restructure_ledger.md).
-    _SIG_PER_DIE = 0.800   # [canonical: params/core.md EV table, TN 7]
-    if abs(net_sigma) < _SIGMA_ZERO_SNAP:
-        return 0.0
-    return _sigma_softcap(net_sigma) * _SIG_PER_DIE * math.sqrt(max(1, pool))  # [canonical: params/core.md EV table — sigma per die at TN, default TN 7 = 0.800]
+def _snap_sigma(net_sigma):
+    """`net_sigma`, or exactly 0.0 where it is arithmetic dust (`_SIGMA_ZERO_SNAP`): the field's producers' value as it
+    reaches `sigma_leverage.net_boost`."""
+    return 0.0 if abs(net_sigma) < _SIGMA_ZERO_SNAP else net_sigma
