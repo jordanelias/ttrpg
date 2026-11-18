@@ -818,9 +818,7 @@ def test_control_the_realm_hash_holds_and_the_reading_is_the_same_read_twice():
     joining claims attach, and reads those holders twice."""
     from engine.season.harness import populated
     from engine.season.boot.realm import build_realm
-    # seed re-picked at B06.99: the stream changed (was 0: 8 of 82 persons then read a non-empty strand off a witnessed
-    # `requisition.taken`; seeds 0..5 hold 8, 0, 0, 5, 11, 4 such persons -- 1 is the first with none, 2 the next)
-    w = build_realm(1)
+    w = build_realm(0)
     populated.run(seasons=1, w=w)
     before, n_log = w.content_hash(), len(w.log)
     # the world reading, with the harness's code-level terminal test, and its presentation write nothing

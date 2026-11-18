@@ -6,8 +6,9 @@ THE FIELD IS A REAL FOLD OF A HAND-BUILT SITUATION. One season of the shipped re
 `field.unopposed` 3, `march.declared` 6), so the falsifier folds ONE `march` through the real driver (RESOLVE then
 ENCOUNTER, `test_march._fold_one`) -- the engine fights it; no `Resolution` is hand-built -- with the Crown's two
 marchers made cohorts (`Person.weight` 10) on `set_s_036`, the weight -> troops scale at 10 (REM-32's
-`field_troops_per_weight`, a value of THIS TEST) and `field_units: person` (CP-T04-01). Realm seed 0: the attacker
-WINS (`field.won`), one marcher's subunit is cut (survivor ratio 0.982) and the other's is not. The preconditions are
+`field_troops_per_weight`, a value of THIS TEST) and `field_units: person` (CP-T04-01). At the fixture's seed, weight and scale (SEED/WEIGHT/SCALE below,
+re-picked at B06.99 when the stream changed) the attacker WINS (`field.won`), one marcher's subunit is cut (survivor
+ratio 0.992) and the other's is not (1.0). The preconditions are
 asserted, so a moved fixture reads as a precondition, not a pass.
 
 Why `person`: under `side` a winning headcount side's ratio reads 1.0 or above (`effective_size / size_max` floors

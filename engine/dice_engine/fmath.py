@@ -12,7 +12,12 @@ these, never `math.*` -- so a port has ONE list of functions to reproduce, and `
 name the function and the input when it does not. These are the platform's libm, not an IEEE-754-exact operation: the
 test states the ulp bound a port must meet. `sqrt` is exact too (IEEE-754 requires it correctly rounded): call sites keep `math.sqrt`, and `fmath.sqrt` exists only because
 `draw.py` may import `fmath` and not `math`. `floor`, `ceil`, `fabs`, `fsum`, `isfinite`, `degrees`, `pi` and the like are exact and stay on `math`. An integer power (`x ** 2`) is
-repeated multiplication and is left alone.
+left alone: CPython evaluates `float ** int` through the platform's `pow`, so it carries the libm bound above, not an exact one.
+
+SCOPE, STATED ONCE: both rules are met on the season path (`engine/`) and the combat and social-contest modules the loop
+reaches; `modules/mass_battle/`'s field arithmetic still holds builtin float `sum()`, `** 0.5` and `math.acos`, and is
+converted by the batch that owns that module (B17). Until then its golden digests (`systems/mass_battle/sim/bat.py`)
+read differently on 3.11 and 3.13, and are recorded on 3.11, CI's interpreter.
 
 A leaf: it imports `math` only. Pure.
 """

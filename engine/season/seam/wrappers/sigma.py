@@ -567,7 +567,7 @@ def _capability_term(fx: Any, facts: dict) -> dict:
     builders as the `edge` rows are), each its held value times its gain (`_circumstance_ob`), summed. ONE operand `("capability", sum,
     1.0)`, always, so the member stands in the module's terms at 0.0 where no row applies (the shipped case). [ASSUMPTION: the
     (raw, step) split -- the sum is the raw operand and the step is 1.0, the gain being already inside each row's term]"""
-    return {"obstacle_operands": (("capability", sum(_circumstance_ob(fx, r, v) for r, _, v in facts.get("circumstance", ())), 1.0),)}
+    return {"obstacle_operands": (("capability", ltr_sum(_circumstance_ob(fx, r, v) for r, _, v in facts.get("circumstance", ())), 1.0),)}
 
 
 # ---------------------------------------------------------------------------------------------

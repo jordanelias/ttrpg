@@ -40,7 +40,7 @@ from ..data.requires import UNKNOWN
 from ..data.verbs import EVENT_KINDS
 from ..data.rosters import (
     HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, TENURE_KINDS, roster)
-from ..gaps import Forbidden, InstrumentDefect, NoProducer, Unowned, Unspecified
+from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
 from ..trace_log import TRACE
 from .attribution import anchor_of, cover_at_logging
 from .carriers import (
@@ -535,17 +535,24 @@ def _decode_into(b: bytes, i: int) -> tuple:
 def decode(data: bytes, fixtures: Fixtures = DEFAULT_FIXTURES) -> "World | SnapshotRefused":
     """Rebuild a `World` from `encode`'s bytes under `fixtures`, the running build's. A snapshot written under
     other fixtures, or one this build cannot read, comes back as a `SnapshotRefused` VALUE: nothing is raised
-    for it and no world is built."""
+    for it and no world is built. Reading is by class name: a class a snapshot holds outside `carriers`
+    (`epistemic.Seen`) is known only once its module is imported, so a process decodes after loading the game."""
     try:
         top, end = _decode_into(data, 0)
         if end != len(data) or not (isinstance(top, tuple) and len(top) == 2 and top[0] == _SNAPSHOT_TAG):
             raise _SnapshotError("not one `snapshot` frame")
         frames = dict(top[1])
-    except (_SnapshotError, ValueError, IndexError, KeyError, UnicodeDecodeError) as exc:
+        want, found = fixtures_digest(fixtures), frames.get("fixtures")
+        if found != want:
+            return SnapshotRefused("fixtures_digest", want, str(found))
+        return _world_from(frames, fixtures)
+    except (_SnapshotError, ShapeGap, ValueError, IndexError, KeyError, TypeError, struct.error,
+            UnicodeDecodeError) as exc:
         return SnapshotRefused("malformed", "", f"{type(exc).__name__}: {exc}")
-    want, found = fixtures_digest(fixtures), frames.get("fixtures")
-    if found != want:
-        return SnapshotRefused("fixtures_digest", want, str(found))
+
+
+def _world_from(frames: dict, fixtures: Fixtures) -> "World":
+    """`decode`'s second half: the world `frames` describe (the caller has read and checked them)."""
     w = World(frames["world_seed"], fixtures)
     w.tick = frames["tick"]
     for n in World._STATE_COLLECTIONS:

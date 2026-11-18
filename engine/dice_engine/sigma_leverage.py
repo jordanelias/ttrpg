@@ -60,7 +60,6 @@ Entry points:
 from __future__ import annotations
 
 import math
-import random
 from typing import Sequence
 
 from engine.dice_engine import dice_engine

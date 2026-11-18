@@ -669,8 +669,8 @@ def pursuit_lean(verb: str, e: str, row: Optional[dict] = None) -> float:
     modules a sweep rebinds."""
     proj = to_axes({e: 1.0})
     if row is None:
-        return ltr_sum(proj[ax] * _verbs.align(verb, ax) for ax in PURSUIT_AXES)
-    return ltr_sum(proj[ax] * row[ax] for ax in PURSUIT_AXES)
+        return ltr_sum(proj[ax] * _verbs.align(verb, ax) for ax in _AXES)
+    return ltr_sum(proj[ax] * row[ax] for ax in _AXES)
 
 
 def consequence_pursuits(p: Person, verb: str, degree, gain: float):
@@ -876,8 +876,8 @@ def _scar_shifted(p: Person, shift: float) -> dict:
     heirs = {e: w for e, w in held.items() if e not in crisis}
     if not crisis or not heirs:
         return base
-    given = sum(held[e] * shift for e in crisis)
-    pool = sum(heirs.values())
+    given = ltr_sum(held[e] * shift for e in crisis)
+    pool = ltr_sum(heirs.values())
     out = dict(base)
     for e in crisis:
         out[e] = held[e] * (1.0 - shift)

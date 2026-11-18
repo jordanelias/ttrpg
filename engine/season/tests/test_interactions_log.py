@@ -19,14 +19,9 @@ from ..harness import interactions as I
 from ..queries import person_q, world_q
 
 
-# seed re-picked at B06.99: the stream changed (was 0: with `same_faction` inverted the selection emptied). Seeds 1, 2 scanned;
-# at 1 the shipped row's finding fails its own control, at 2 the finding holds and the planted reading is read on a row.
-SEED = 2
-
-
 @pytest.fixture(scope="module")
 def season_one():
-    return I.run(SEED, 1)
+    return I.run(0, 1)
 
 
 def _selected(rows):
@@ -92,7 +87,7 @@ def test_a_planted_wrong_relation_reading_is_seen(season_one, monkeypatch):
     _assert_finding(w, rows)            # control: the shipped row's fields read equal to the world's
     real = I.same_faction
     monkeypatch.setattr(I, "same_faction", lambda w, a, t: not real(w, a, t))
-    w2, _, rows2 = I.run(SEED, 1)
+    w2, _, rows2 = I.run(0, 1)
     assert _selected(rows2) is not None, "the plant emptied the selection: the planted reading was not read on a row"
     with pytest.raises(AssertionError, match="same_faction"):
         _assert_finding(w2, rows2)

@@ -14,8 +14,9 @@ delta, restorative term) and `operations.apply_mending_feedback` (the term, thro
     to a pre-stressed mender. Falsifier: a planted change at ONE site alone (re-pricing collective's
     Mending off the unfallen scale, say) reddens it.
   * THE CONTROL (`test_collective_and_opposing_unchanged_outside_mending`, `test_attempt_mending_unchanged`): every op_type EXCEPT Mending, in both
-    collective and opposing, and every `attempt_mending` output, equals the base commit dd91783a
-    at the shipped `RESILIENCE_GAIN` (0). The captured values are inlined as one sha256 per
+    collective and opposing, and every `attempt_mending` output, equals the pinned digests
+    at the shipped `RESILIENCE_GAIN` (0): captured at the base commit dd91783a until B06.99, since then the
+    current tree's own values on the keyed stream (see the note above `BASE_DIGESTS`). The captured values are inlined as one sha256 per
     (site, op_type) over a canonical JSON of every result field and every resulting Coherence
     state, log included; on a mismatch the failure prints the recomputed first record.
   * R-14 ROUTING (`test_collective_and_opposing_route_cost_through_resilience`): collective and
@@ -145,7 +146,9 @@ def digest(records):
 # from this file.
 # RE-RECORDED at B06.99: the uniform's source changed from CPython's generator to the keyed mix (B06.04, A-30), so
 # every digest below reads the keyed stream of `draw.seeded(draw.H2(..., seed))`, not the dd91783a values (a stream
-# change, not a balance change). The recipe above recomputes them.
+# change, not a balance change). PARITY WITH dd91783a IS NO LONGER OBSERVED: the recipe above recomputes the
+# pre-keyed-draw values only on a tree whose `opposing.py` calls `rng.randint`, and `Draw` has no `randint`. These digests
+# pin the current behaviour, so they catch a later change at one site, not a drift from the base commit.
 BASE_DIGESTS = {
     ("collective", "Weaving"): "32d0b2703eaa6a62b4df21ce5a6b21f7912462c1364e683d6bdb6a218b137c96",
     ("collective", "Pulling"): "d3d9f3fea3637663137f34c1b9655786b22c79c456611506b5709e3df2806352",

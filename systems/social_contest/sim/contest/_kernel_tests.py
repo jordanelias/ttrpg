@@ -745,8 +745,8 @@ GOLDEN_TRACE_RES  = "committee"
 # `roll_net_continuous`, not the d10 faces). A DIFFUSE move, as it must be: the draw itself changed, so every
 # beat's advantage differs. THE CONTROL: the beat count (10), the resolved band (`committee`) and the
 # final-beat banding check below are unchanged, and the track stays inside 0-10 and off the 5.0 start.
-# RE-RECORDED AGAIN (B06.99; B06.04: the uniform's source changes from CPython's generator to the keyed mix, A-30, a
-# stream change and not a balance change). A DIFFUSE move, as a stream change must be: every beat's advantage differs.
+# RE-RECORDED AGAIN (B06.99; B06.04: the sampler changes, `Draw.normal` (Box-Muller) for `random.gauss`; this trace's uniform is
+# still the process-global stream, through `resolver._GlobalStream`; a stream change and not a balance change). A DIFFUSE move, as a stream change must be: every beat's advantage differs.
 # THE CONTROL: the beat count (10), the resolved band (`committee`) and the final-beat banding check below are
 # unchanged, and the track stays inside 0-10 and moves off the 5.0 start.
 GOLDEN_TRACE = (

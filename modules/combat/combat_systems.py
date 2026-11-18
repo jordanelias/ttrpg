@@ -1019,7 +1019,7 @@ def assemble_net_sigma(atk_sig, dsig, reach_pen, adef, init_edge, aggressor, def
 def commit_depth(aggressor, defender, cfg, rng, TR):
     """Draw the CONTINUOUS commitment depth in [2,5] (commitment-recovery is a spectrum, not four rungs). Disposition
     lean + WARINESS (vs an unread tradition the aggressor commits shallower) skew a Beta over the range; the 0.25
-    param floor is the spread-floor (never collapses to a spike). Consumes one rng.betavariate draw (kept here so the
+    param floor is the spread-floor (never collapses to a spike). Consumes one `Draw.beta` draw (kept here so the
     wrapper sequences but owns no formula). Returns (commit, beta_a, beta_b, lean).
     SWING-ROOM (I5, D4): the Beta's UPPER SUPPORT is contracted by range_avail's _commit_range_factor (a swing you
     cannot fully develop commits shallower) — reshapes the Beta PARAMS/window only, never adds or reorders the
@@ -1036,7 +1036,7 @@ def commit_depth(aggressor, defender, cfg, rng, TR):
 def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d, cfg, rng, TR):
     """The defender's READ of the attack + the resulting mode selection. read_d (visual+precommit, familiarity-
     and legibility-scaled) vs read_a -> read_win (logistic). If the read wins, the defender picks the BEST mode;
-    else it guesses. Consumes rng.random (the read) then rng.randrange ONLY on a missed read. Pure
+    else it guesses. Consumes `rng.random` (the read) then `rng.below` ONLY on a missed read. Pure
     resolution+selection logic (the orchestrator does not own it). Returns a dict."""
     fam=TR.familiarity(defender.tradition, aggressor.tradition)
     legib=legibility(aggressor, commit, cfg, defender.armor)

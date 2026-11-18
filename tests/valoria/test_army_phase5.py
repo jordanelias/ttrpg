@@ -191,8 +191,7 @@ def test_an_army_is_provisioned_by_the_cohorts_it_drew_from(monkeypatch):
 def test_a_lost_army_costs_the_cohorts_at_home_their_bodies():
     """The people an army drew from bleed, wherever they live, and only they. A Crown army of spearmen takes the field
     against a Hafenmark levy raised from its ten cohorts and commanded by a member standing in the territory."""
-    # seed re-picked at B06.99: the stream changed (was 0: the winning Crown cohorts bled as well as the losers'; seeds 1..5 all read as claimed)
-    w = build_realm(1)
+    w = build_realm(0)
     cohorts = _crown_levy(w, strategy="advance", troop_type="spearmen")
     hafen = _governed_cohorts(w, HAFEN)
     cmdr = world_q.members(w, HAFEN)[0]
