@@ -29,6 +29,7 @@ from dataclasses import dataclass, field, fields
 from typing import Optional
 
 from . import files
+from ...substrate.descriptors import CAPABILITIES
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .matrix import MATRIX, Step
 from .requires import (
@@ -37,7 +38,7 @@ from .requires import (
 )
 from .rosters import (
     COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
-    RESTRAINT_KINDS, STRIFE_KINDS, VOCATIONS,
+    RESTRAINT_KINDS, STRIFE_KINDS,
     is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
@@ -232,6 +233,11 @@ class VerbRow:
     # rows that name an operation are B35's (CP-T07-03, -04, -11). The loader refuses a value outside the roster,
     # so a row naming a working the threadwork module does not have never loads.
     operation: str = ""
+    # B04.03 (U1-A step 2): THE SKILL THE ROW TESTS -- a `descriptors.CAPABILITIES` id, or `none`, spelled. `""` is
+    # the declared absence on a row that neither contests nor is graded (nothing there draws dice from a skill). The
+    # loader requires it on every contested or graded row (no default by omission), refuses a value that is neither a
+    # skill nor `none`, and refuses `none` with no `capability_note:` saying why nobody has a skill there.
+    capability: str = ""
 
     def referents_of(self, q) -> tuple:
         """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
@@ -614,7 +620,8 @@ def _load_verb_table() -> dict:
                       counterparty_may_be_self=r.get("counterparty_may_be_self", False),
                       referent_named=r.get("referent_named", False),
                       subject_may_be_self=r.get("subject_may_be_self", False),
-                      operation=str(r.get("operation") or "").strip())
+                      operation=str(r.get("operation") or "").strip(),
+                      capability=str(r.get("capability") or "").strip())
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.
@@ -783,6 +790,29 @@ def _load_verb_table() -> dict:
                 f"verb_table.yaml: {name!r} declares `contests: {row.contests}` and has a "
                 "`graded_inquiries` route. The route is NOT a prize (`rosters.yaml`: giving an "
                 "inquiry a prize is scripting drift); one degree has one source.")
+        # B04.03 (U1-A step 2): THE `capability:` COLUMN, REQUIRED ON A ROW THAT CONTESTS OR IS GRADED AND ON NO OTHER --
+        # as `beneficiary:` is required below. "No default by omission; `none` is spelled": a missing key, a value that
+        # is neither a `CAPABILITIES` id nor `none`, `none` with no `capability_note:`, and a column on a row nothing
+        # rolls for (a column nothing reads) are each refused here, naming the row.
+        if row.contests or _graded:
+            if "capability" not in r:
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} {'contests' if row.contests else 'is graded'} and declares no "
+                    f"`capability:`. Name the skill it tests ({sorted(CAPABILITIES)}) or spell `none` with a "
+                    "`capability_note:`; a contested row that omits it would roll every person at the untrained "
+                    "default without saying so.")
+            if row.capability != "none" and row.capability not in CAPABILITIES:
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} declares `capability: {row.capability!r}`, which is neither a "
+                    f"skill defined in `descriptor_registry.yaml: capabilities` ({sorted(CAPABILITIES)}) nor `none`.")
+            if row.capability == "none" and not str(r.get("capability_note") or "").strip():
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} declares `capability: none` and no `capability_note:`. `none` is a "
+                    "declaration, and a declaration with no reason is indistinguishable from a skill nobody named.")
+        elif "capability" in r:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares `capability: {row.capability!r}` and neither contests nor is "
+                "graded. Nothing rolls dice from a skill for it, so the column would be read by nothing.")
         # LOADER INVARIANT 12 (#358 rev.2 §B.13). The two shapes are NOT interchangeable, and
         # both directions are checked: a contested verb with a flat list is the `kill / wound`
         # defect, and an uncontested verb with a degree map is a verb claiming an outcome it
@@ -1114,6 +1144,27 @@ def tenure_kinds_without_an_opener() -> list:
 
 VERB_TABLE = _load_verb_table()
 
+# B04.04 (U1-A steps 2-3): WHICH SKILL A VERB TESTS, AND WHAT THAT SKILL IS, DERIVED FROM THE TWO ROWS THAT HOLD THEM -- the
+# `capability:` column on this table and `descriptors.CAPABILITIES` (`descriptor_registry.yaml: capabilities`). The
+# `rosters.yaml: verb_capability` and `vocation_attribute` rosters they replace are deleted; `data/rosters.py` re-exports
+# nothing of them (it loads BEFORE this table and may not import it, which is why the derivation lives here).
+# `none` is spelled on a row that contests with no skill (`lie`, `march`) and is in no map. `VOCATION_OPPOSED_BY` leaves out
+# a skill whose `opposed_by` is absent (`arms`: reads `base`) AND one that spells `none` (`copying`) -- a `none` entry would
+# reach `pool.py::_opposition_of` as an attribute key.
+# [ASSUMPTION; medium; Jordan to correct] `opposed_by: none` currently reads as ABSENT (the opposition falls back to the
+# base attribute) until the obstacle's one form lands (B05, OBS section 2).
+VERB_CAPABILITY = {row.verb: row.capability for row in VERB_TABLE.values() if row.capability not in ("", "none")}
+VOCATIONS = frozenset(VERB_CAPABILITY.values())
+VOCATION_ATTRIBUTE = {k: CAPABILITIES[k].base for k in VOCATIONS}
+VOCATION_OPPOSED_BY = {k: CAPABILITIES[k].opposed_by for k in VOCATIONS if CAPABILITIES[k].opposed_by not in (None, "none")}
+
+
+def skills_without_a_verb() -> list:
+    """The defined skills (`descriptors.CAPABILITIES`) no verb row's `capability:` names -- REPORTED, not refused, as
+    `tenure_kinds_without_an_opener` reports an unopened kind: a lifepath template may grant a skill no verb yet tests
+    (B04.04), and which of them are holes is a judgement, not a load failure."""
+    return sorted(set(CAPABILITIES) - VOCATIONS)
+
 # v9 IN-12 step 6: `{verb: record kind}` -- the verbs whose `subject` a HELD record of that kind names
 # (`rosters.yaml: warrant_sourced`). REFUSED AT IMPORT, so a stale line cannot read as "no verb needs a
 # warrant" (`data/requires.py::_check_record_sourced`'s reason): a verb the table does not carry would
@@ -1214,13 +1265,13 @@ def act_key(verb: str, subject, operands) -> str:
     seat riding in the operands under `VIA`; two of them share `(actor, verb, subject)`, so without it
     they would share an id and `state/acts.py` would refuse the second. Present only for such a
     Candidate -- a person with one seat carries no `VIA`.
-    ⚠ AND THE VOCATION, FOR A ROW THAT CARRIES ONE (`VOCATION_SOURCED`, v10 REM-30's `verb_capability`
-    rows). A `train` Candidate is formed once per vocation in `VOCATIONS` on the same subject, the
+    ⚠ AND THE VOCATION, FOR A ROW THAT CARRIES ONE (`VOCATION_SOURCED`, v10 REM-30's vocation rows, now
+    the verb table's `capability:` column). A `train` Candidate is formed once per vocation in `VOCATIONS` on the same subject, the
     vocation riding on the `kind` operand (`decision/options.py::opening_set`); two chosen in one
     deliberation share `(actor, verb, subject)` and `state/acts.py` refuses the second. Present only on
     a row `vocation_sourced` names.
     ONE OWNER for both minting sites: `decision/choose.py::pack_scenes` and
-    `loop/deliberate.py::_qualify_by_round` (`04 PART D row 35`: purpose uniqueness is a
+    `loop/deliberate.py::_qualify_by_lap` (`04 PART D row 35`: purpose uniqueness is a
     convention, and this is where it is kept)."""
     key = "" if subject is None else str(subject)
     row = VERB_TABLE.get(verb)
@@ -1273,7 +1324,7 @@ def opportunity_key(verb: str, subject, operands) -> Optional[tuple]:
     # realised act be realised again. A refused act through the wrong seat is never recorded (the
     # driver records REALISED acts only), so it does not bar the same act through the right seat.
     # Two seat-acts formed in ONE deliberation share this key and BOTH survive: `loop/deliberate.py`
-    # filters only against what EARLIER rounds realised (`_drop_what_was_already_done`, one call
+    # filters only against what EARLIER laps realised (`_drop_what_was_already_done`, one call
     # site) and a queued scene is released without re-filtering, so the key bars a twin only across
     # a re-deliberation.
     if other is None or other == subject:
@@ -1581,7 +1632,7 @@ def _load_terms_sourced(values: dict) -> dict:
 
 TERMS_SOURCED = _load_terms_sourced(roster_map("terms_sourced", "values"))
 
-# v9 IN-12 step 9: `{verb: operand}` -- the verbs that carry a VOCATION (a `verb_capability` value the
+# v9 IN-12 step 9: `{verb: operand}` -- the verbs that carry a VOCATION (a skill of `descriptors.CAPABILITIES` the
 # actor holds) on the named operand, one Candidate per vocation (`rosters.yaml: vocation_sourced`, read
 # in `opening_set`; `train`'s `kind`). REFUSED AT IMPORT, `TERMS_SOURCED`'s reason: a verb the table
 # lacks, a verb whose row writes no `Person.capability` (it would carry a vocation nothing raises), or
@@ -1605,7 +1656,7 @@ def _load_vocation_sourced(values: dict) -> dict:
 
 
 VOCATION_SOURCED = _load_vocation_sourced(roster_map("vocation_sourced", "values"))
-# THE VOCATIONS (`rosters.VOCATIONS`, imported above): `verb_capability`'s VALUES, derived once in `rosters.py`.
+# THE VOCATIONS (`VOCATIONS`, derived above): the values of `VERB_CAPABILITY`, the skills a verb's `capability:` names.
 
 
 # v11 CP-T04-02: `{verb: (key, ...)}` -- the verbs whose Candidate is formed once per COMBINATION of the closed sets the

@@ -151,9 +151,9 @@ def NOCHOOSE(p, v, s, ask_budget):
 
 
 def once(choose):
-    """`U2`: A `choose` THAT SUBMITS ITS ACTS ONCE PER SEASON RATHER THAN ONCE PER ROUND.
+    """`U2`: A `choose` THAT SUBMITS ITS ACTS ONCE PER SEASON RATHER THAN ONCE PER LAP.
 
-    ⚠ **THE SCENE TICK CALLS `choose` ONCE PER ROUND, AND A PROBE'S `choose` IS A FIXED LAMBDA.**
+    ⚠ **THE SCENE TICK CALLS `choose` ONCE PER LAP, AND A PROBE'S `choose` IS A FIXED LAMBDA.**
     Before `U2` a season was one pass, so a probe could return a hardcoded list and know it would
     be asked exactly once. Under the tick a person with budget left over is asked again, the fixed
     lambda returns the same list against a SMALLER remainder, and `deliberate` refuses it as a
@@ -175,10 +175,10 @@ def once(choose):
     does.
 
     ⚠ **PAIR IT WITH `_one_pass` WHERE THE PROBE NEEDS ITS ACTS IN ONE `resolve`.** On its own this
-    leaves the later rounds returning nothing, and a `choose` returning nothing REPLACES the
+    leaves the later laps returning nothing, and a `choose` returning nothing REPLACES the
     person's queue with nothing — which is the right semantics (a person who re-deliberates and
     chooses nothing does nothing) and which would strand the acts `A37` needs resolved together.
-    `_one_pass` releases them all in round 0, so by the time this returns `[]` the queue is
+    `_one_pass` releases them all in lap 0, so by the time this returns `[]` the queue is
     already empty and there is nothing to strand."""
     fired: set = set()
 
@@ -193,17 +193,17 @@ def once(choose):
 
 
 def _one_pass(w: World) -> World:
-    """`U2`: RELEASE EVERYTHING A PERSON CHOSE IN ROUND 0. Returns the same world, fixtures swept.
+    """`U2`: RELEASE EVERYTHING A PERSON CHOSE IN LAP 0. Returns the same world, fixtures swept.
 
     ⚠ A probe whose claim needs several acts to reach ONE `resolve` — `A37`'s stratum ordering is
-    the clear case — cannot observe it under `scenes_per_round = 1`, where each round resolves one
+    the clear case — cannot observe it under `scenes_per_lap = 1`, where each lap resolves one
     act and the ordering is trivial by construction. This sweeps the RELEASE bound, not the budget:
     `scene_budget` is untouched, so `ask_budget()` and every measurement resting on it are what
     they were.
 
     ⚠ IT IS NOT `scene_budget = 1`, WHICH IS THE TICK'S OWN CONTROL ARM: that shrinks the budget
     too and would change what these probes measure."""
-    w.fixtures = w.fixtures.sweep("scenes_per_round", w.fixtures.get("scene_budget"))
+    w.fixtures = w.fixtures.sweep("scenes_per_lap", w.fixtures.get("scene_budget"))
     return w
 
 
@@ -531,7 +531,7 @@ def p9():
     assert "refuse" in log and "ran-own-choose" in log
     return ("PASS: `dispatch` names ONE PERSON; that person runs their OWN `choose` and refused. "
             "The King's reach really is other people's decisions, mechanically. NOTE the refusal "
-            "and the order landed in the SAME season with no ordering between them -- see A36 (A14 shows a reaction across rounds, not an order within one)")
+            "and the order landed in the SAME season with no ordering between them -- see A36 (A14 shows a reaction across laps, not an order within one)")
 
 
 @probe("P10", "a person tracks multi-season work in progress", "S13", by="construction",
@@ -839,7 +839,7 @@ def p21():
     # that a cohort goes through the SAME `choose` and the SAME resolver as anyone else -- a claim
     # about WHO acts. The list equality additionally pinned HOW MANY TIMES, which was an artifact
     # of `choose` being called once per season: under the scene tick this lambda returns one act
-    # whatever the round, so a person with budget left is asked again and acts again. That is
+    # whatever the lap, so a person with budget left is asked again and acts again. That is
     # lawful and is not this probe's subject. `_one_pass` does not help here -- the `choose`
     # spends 1 of a budget of 5, so the remainder survives any schedule.
     assert acted, "nobody acted — the cohort did not reach the resolver at all"
@@ -1451,7 +1451,7 @@ def f10():
     # claim is that a matter closes BY SCARCITY rather than by cancelling: ONE claimant is granted,
     # every other is REFUSED WITH A DIFFERENT EVENT, and the larder never goes negative. The count
     # of refusals was an artifact of `choose` being called once per season. Under the scene tick
-    # this lambda returns the same transfer whatever the round, so two people with budget left are
+    # this lambda returns the same transfer whatever the lap, so two people with budget left are
     # asked again and refused again — which is the same fact observed more times, not a weaker one.
     # ⚠ THE HALF THAT CARRIES THE CLAIM IS `granted == 1`, AND IT IS STILL EXACT: a second grant
     # would be the larder minting grain, which is precisely what this probe exists to refuse. The
@@ -1636,7 +1636,7 @@ def f17():
     return (f"PASS-CONDITIONALLY, AND THE CONDITION IS THE FINDING: sequence={seen}. Both acts "
             "landed in ONE season and THE FOLD'S CONTENT-DERIVED ORDER -- not intent, not rank, "
             "not the superior's seniority -- decided whether the raid counted as authorised. "
-            "There is no within-season sequencing a person can rely on. See A36 (A14 shows a reaction across rounds, "
+            "There is no within-season sequencing a person can rely on. See A36 (A14 shows a reaction across laps, "
             "not an order within one)")
 
 
@@ -2172,43 +2172,43 @@ def a13():
 def a14():
     """THE WITHIN-SEASON HALF OF `H-56`, RE-POINTED AT `R-03` (plan position IN-43). This probe
     raised `Collision` -- 'no reaction inside a season' (S34.1) against the seam's nested DELIBERATE
-    (S40.2) -- until `R-03` was met: the season is `R = scene_budget` rounds, each deposit lands in
-    the hearers' ledgers at the round's WITNESS, and the next round's DELIBERATE reads them
+    (S40.2) -- until `R-03` was met: the season is `R = scene_budget` laps, each deposit lands in
+    the hearers' ledgers at the lap's WITNESS, and the next lap's DELIBERATE reads them
     (`requirements.yaml` R-03, `loop/driver.py::SeasonDriver.season`). So the question this probe
     names -- may a person react inside the season to what another just did -- is answered by running
     it: ONE season on `tiny_world`, a control arm in which `p_low` does nothing, and `p_mid`'s
-    ledger read at each round's DELIBERATE.
+    ledger read at each lap's DELIBERATE.
 
     ⚠ IT DOES NOT TOUCH THE OTHER HALF. A DELIBERATE nested INSIDE RESOLVE (S40.2's 'a contest can
     open a contest' against a partially-moved world) is not exercised here and `H-56` keeps its
     grade on it."""
-    def p_mid_ledger_by_round(p_low_acts: bool) -> dict:
+    def p_mid_ledger_by_lap(p_low_acts: bool) -> dict:
         w = tiny_world()
         d = SeasonDriver(w)
         seen: dict = {}
 
         def choose(p, v, s, ask_budget):
             if p.id == "p_mid":
-                seen[d.round] = len(p.ledger)
+                seen[d.lap] = len(p.ledger)
             # `utter` since v9 SC-01 step 12 (`P1`'s note): a bare `speak` is refused `speech.unheard`.
-            if p_low_acts and p.id == "p_low" and d.round == 0:
+            if p_low_acts and p.id == "p_low" and d.lap == 0:
                 return [Act_(w, p, "utter")]
             return []
 
         d.season(choose, question=None)
         return seen
 
-    acted, control = p_mid_ledger_by_round(True), p_mid_ledger_by_round(False)
-    assert len(acted) >= 2, f"the season ran {len(acted)} round(s); a reaction needs a later one: {acted}"
-    # The arms are the same experiment until the act lands: round 0 is read BEFORE it is witnessed.
-    assert acted[0] == control[0], (f"the arms differ in round 0, before the act can land: "
+    acted, control = p_mid_ledger_by_lap(True), p_mid_ledger_by_lap(False)
+    assert len(acted) >= 2, f"the season ran {len(acted)} lap(s); a reaction needs a later one: {acted}"
+    # The arms are the same experiment until the act lands: lap 0 is read BEFORE it is witnessed.
+    assert acted[0] == control[0], (f"the arms differ in lap 0, before the act can land: "
                                     f"{acted} vs {control}")
-    assert acted[1] > control[1], (f"p_low's round-0 act changed nothing p_mid holds in round 1: "
+    assert acted[1] > control[1], (f"p_low's lap-0 act changed nothing p_mid holds in lap 1: "
                                    f"acted {acted}, control {control}")
-    return (f"PASS: within ONE season, p_mid's ledger reads {acted[0]} claims in round 0 and "
-            f"{acted[1]} in round 1 after p_low's round-0 `utter`, against {control[1]} in the "
-            "control arm where p_low does nothing. R-03's channel: a deposit at one round's WITNESS "
-            "is read by the next round's DELIBERATE. NOT SHOWN: a DELIBERATE nested inside RESOLVE "
+    return (f"PASS: within ONE season, p_mid's ledger reads {acted[0]} claims in lap 0 and "
+            f"{acted[1]} in lap 1 after p_low's lap-0 `utter`, against {control[1]} in the "
+            "control arm where p_low does nothing. R-03's channel: a deposit at one lap's WITNESS "
+            "is read by the next lap's DELIBERATE. NOT SHOWN: a DELIBERATE nested inside RESOLVE "
             "(`H-56`'s other half)")
 
 
@@ -2744,7 +2744,7 @@ def f21():
        tests="movement, binding decisions and social acts must be able to resolve in a fixed order relative to each other")
 def a37():
     # `U2`: ONE PASS, because the claim is the ORDER of several acts inside one `resolve` — under
-    # the shipped `scenes_per_round = 1` each round resolves one act and the ordering is trivial.
+    # the shipped `scenes_per_lap = 1` each lap resolves one act and the ordering is trivial.
     w = _one_pass(tiny_world())
     seen = []
     def choose(p, v, s, ask_budget):

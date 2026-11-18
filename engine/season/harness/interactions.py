@@ -20,11 +20,11 @@ test pins that they respond to the believed-odds query, not that they equal the 
 
 ROWS (JSONL, one object per line, `kind` first):
   * `deliberation` -- every call of `choose` (a person with no question gets a row with `question: null`):
-    season/tick/round, the actor, the question answered (id, source, referents, classes, `about`), its
+    season/tick/lap (the row's output key stays `round`, D-05: a row key is not renamed with the identifier), the actor, the question answered (id, source, referents, classes, `about`), its
     position in the person's question list and that list's sources, the CLAIM behind a question whose
     `about` is a claim the person holds (id, subject, predicate, source, chain, and its origin: an
     acquaintance claim written at build by CR-81 is recognised by membership in `w._acquaintances`, the ids
-    `seed_acquaintances` returned), the candidate table (verb, subject, `to`, `pursuit`, `stance`, score,
+    `seed_acquaintances` returned), the candidate table (verb, subject, `to`, `pursuit`, `stance`, `fit`, score,
     softmax probability of being sampled first at `choice_temperature`, score rank, sampled rank, chosen),
     the deciding term, the refusal gate's reading, and the relation facts toward every PERSON a chosen act
     names as `subject` or `to`.
@@ -259,7 +259,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
         q = getattr(v, "question", None)
         qs = list(getattr(v, "questions", ()) or ())
         row = {"kind": "deliberation", "i": len(delibs), "season": season_no[0], "tick": w.tick,
-               "round": d.round, "actor": p.id, "name": p.name,
+               "round": d.lap, "actor": p.id, "name": p.name,
                "faction": world_q.faction_holding(w, p.id), "offices": held_offices(w, p.id),
                "question": _question(q, p, acq),
                "question_position": next((i for i, x in enumerate(qs) if x is q), None),
@@ -273,7 +273,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
         memo = CH.deliberation_memo(p, fx)
         odds = getattr(v, "odds", None)          # CR-17: the View's believed-odds query, as the chooser reads it
         terms = [CH.score_terms(p, c, fx, memo, odds) for c in cands]
-        scores = {id(c): t[0] + t[1] for c, t in zip(cands, terms)}
+        scores = {id(c): CH.score_total(t) for c, t in zip(cands, terms)}
         ranked = CH.score_order(cands, scores)
         sampled = CH.sample_order(ranked, lambda c: scores[id(c)], p, fx, draw)
         rank = {id(c): i for i, c in enumerate(ranked)}
@@ -303,7 +303,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
             row["candidates"].append({
                 "verb": c.verb, "subject": c.subject, "to": ops.get("to"),
                 "hostile": is_hostile(c.verb, ("subject",)) and c.subject in w.persons,
-                "pursuit": t[0], "stance": t[1], "score": t[0] + t[1], "p_first": prob[id(c)],
+                "pursuit": t[0], "stance": t[1], "fit": t[2], "score": CH.score_total(t), "p_first": prob[id(c)],
                 "score_rank": rank[id(c)], "sample_rank": srank[id(c)],
                 "chosen": k in chosen, "act": chosen.get(k)})
         r = attribute_top(p, cands, fx, draw, odds, terms=terms)

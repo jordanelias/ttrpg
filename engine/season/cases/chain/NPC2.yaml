@@ -1,3 +1,4 @@
+# NPC-004 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Latent TS — doesn't know he's Thread Sensitive. PC diagnosis possible (Cognition vs Ob 2)."
 - id: NPC-004
   name: Sæmund Haelgrund
   one_line: A Church Field Inquisitor whose "investigative instinct" is actually unrecognized Thread perception, deployed against heresy under conditions that can produce confident false convictions.
@@ -47,6 +48,7 @@
     - "Neither the investigator nor an outside observer should be able to tell, from outside the mechanic, whether a concealing target is currently succeeding or failing at concealment."
   ends_when: "never fully -- a single investigation ends when Reconstructed (successfully or not), but Sæmund's personal arc (undiscovered / defected / suppressed-and-degrading) persists indefinitely until the TS-revelation branch fires"
 
+# NPC-033 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Sole inner-circle contact to settlement-layer intelligence brokers. Truth 3 (lowest in Inner Circle)."
 - id: NPC-033
   name: Kolbrun Thale
   one_line: Crown's Spymaster and sole formal channel to the peninsula's informal intelligence-broker networks, operating on the edge of institutional propriety with a possibly-relevant hidden heritage.
@@ -92,6 +94,7 @@
     - "The actor she investigates does not know, going in, whether she will expose, expel, co-opt, or shelter them once found."
   ends_when: "never specified -- she is a persistent office with no authored personal arc or end condition in the sources"
 
+# NPC-083 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Switchboard NPC at geographic chokepoint (5 adjacencies). Matilda of Tuscany archetype — governed critical territory at the intersection of Pope and Emperor."
 - id: NPC-083
   name: Hedda Kronvald
   one_line: Governor of Ehrenfeld, a five-adjacency geographic chokepoint, whose season is a closed loop of a mandatory faction Directive above her and independent settlement demands below her, both of which she cannot fully satisfy.
@@ -137,6 +140,7 @@
     - "The Provincial Authority does not see the settlement's internal Need-state directly -- only her pattern of compliance or defiance, which is what actually feeds its suspicion track."
   ends_when: "not specified to conclude on its own -- the governorship ends only on removal, death, or promotion; the churn is designed to continue indefinitely otherwise"
 
+# NPC-008 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "CONSERVATIVE — blocks radical action through procedure, not force. Cognition-heavy social contest target."
 - id: NPC-008
   name: Peder Almstedt
   one_line: The Ministry's Chief Parliamentary Clerk, whose custody of the sole surviving record of the founding settlement's terms lets him passively obstruct any reform that would alter it.
@@ -220,6 +224,7 @@
     - "It is unspecified whether the Church's own leadership can know about the connection before the wider public does, though the pre-emptive-removal option implies someone inside could act on it first."
   ends_when: "his tenure ends on exposure-removal, pre-emptive removal, or a Grand Inquisitor succession event; otherwise never"
 
+# NPC-013 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Parish Revolt arc or PC intervention path. Inadvertently funds Church charitable mission while undermining cultural authority."
 - id: NPC-013
   name: Aldric Tormann
   one_line: The Fourth Cardinal (Prudence), whose aggressive tithe policy enriches the Church every season while quietly radicalizing the parishes it squeezes.
@@ -261,6 +266,7 @@
     - "UNCLEAR: no mechanism is specified for how a PC discovers WHICH territories are currently over-tithed before choosing to intervene."
   ends_when: "never automatically -- only a fired Parish Revolt or a PC-driven resolution closes a given territory's version of the problem; his own tenure has no end condition tied to this behavior"
 
+# NPC-007 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Profit-maximizing — sacrifices Guilds Mandate for Wealth. Thread-touched supply chain discoverable."
 - id: NPC-007
   name: Annika Feldhaus
   one_line: The Guilds' economic representative, whose profit-maximizing stewardship has made the Guilds wealthy and politically irrelevant, and whose supply chain is unknowingly Thread-tainted.
@@ -337,6 +343,7 @@
     - "UNCLEAR: no epistemic state beyond her Truth rating is specified for her -- what she knows, suspects, or conceals is not authored anywhere in the corpus."
   ends_when: "UNCLEAR -- no arc, trajectory, or end condition is specified anywhere in the source; she is explicitly below the corpus's own stated minimum for individual arc tracking"
 
+# NPC-034 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Dual-loyalty NPC — Himlensendt's agent inside Crown Inner Circle. Truth 5 (highest)."
 - id: NPC-034
   name: Gustav Linder
   one_line: The Archbishop's Representative seated in the Crown's Inner Circle, whose formal permission is the sole legal conduit for Church heresy jurisdiction on Crown soil while his true loyalty answers to the Confessor.

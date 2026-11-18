@@ -49,7 +49,7 @@ from ..data.requires import (
     UNKNOWN, WORLD_ONLY_STEMS,
 )
 from ..data.rosters import (
-    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, roster,
+    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, capability_rows, require_use_site, roster,
     roster_map,
 )
 from ..state.carriers import Person, Said
@@ -113,7 +113,7 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     judge's own live, un-`imposed` `oblige` to a seat is in `p.tenures` and outlives the victim. What is
     missing is the PAIRING, not the edge: a death's seat reaches a ledger as `(seat, tenure.closed, True)`
     (`state/gate.py::Subject.seat`) beside `(victim, person.died, True)`, two claims that share only
-    `when` and `round`, which this module never reads as a pairing (`deed_doer`: it does not guess), so
+    `when` and `lap`, which this module never reads as a pairing (`deed_doer`: it does not guess), so
     no claim a judge holds says the victim sat in that seat. FACTION-LEVEL grievance is v9 IN-70's: `opinion` here,
     its World half and its referents in `world_q` (`opinion_of`, `opinion_referents`).
     [ASSUMPTION, H-192: a deed's claim subject is read as its doer for every other kind; the sum is
@@ -218,22 +218,22 @@ PAIRED_KINDS = frozenset(k for k in _verbs.DEED_KINDS if k not in _verbs.KIND_VE
 # only if what the witness saw was an act of one of them (`Seen.stratum`). Every channel showing
 # `who` shows `stratum` (`rosters.yaml: observation_terms.supplied_by`), so the test never drops a
 # pairing that `who` alone would have made; it refuses a third party's DIFFERENT act on the patient in
-# the same round being read as the deed's doer.
+# the same lap being read as the deed's doer.
 _KIND_STRATA = {k: frozenset(r.stratum for r in _verbs.VERB_TABLE.values() if k in r.emits)
                 for k in PAIRED_KINDS}
 
 
 def _seen_index(ledger) -> tuple:
-    """A holder's own, untold `seen` claims, indexed twice: `(subject, when, round) -> [seen]`, and
-    `(when, round) -> {(who, stratum)}` -- who the holder saw acting, and at what, in each round."""
+    """A holder's own, untold `seen` claims, indexed twice: `(subject, when, lap) -> [seen]`, and
+    `(when, lap) -> {(who, stratum)}` -- who the holder saw acting, and at what, in each lap."""
     by_subject: dict = {}
     acting: dict = {}
     for s in ledger:
         if s.predicate == SEEN_PREDICATE and not s.chain:
-            by_subject.setdefault((s.subject, s.when, s.round), []).append(s)
+            by_subject.setdefault((s.subject, s.when, s.lap), []).append(s)
             who = getattr(s.value, "who", None)
             if who is not None:
-                acting.setdefault((s.when, s.round), set()).add((who, getattr(s.value, "stratum", None)))
+                acting.setdefault((s.when, s.lap), set()).add((who, getattr(s.value, "stratum", None)))
     return by_subject, acting
 
 
@@ -242,17 +242,17 @@ def deed_doer(c, seen: tuple):
 
     `c` is an untold deed claim `(s, kind, True)` of a `PAIRED_KINDS` kind; `seen` is
     `_seen_index` of the same ledger. A `seen` claim PAIRS with it when it has the same subject
-    `s`, `when` and `round` (WITNESS deposits both from one Event in one pass), names a `who`, that
-    `who` is not `s` (a deed done TO `s` -- `s`'s own act in the same round is not it), and its
+    `s`, `when` and `lap` (WITNESS deposits both from one Event in one pass), names a `who`, that
+    `who` is not `s` (a deed done TO `s` -- `s`'s own act in the same lap is not it), and its
     `stratum` is the stratum of a row emitting `kind`. The doer is the ONE `who` the pairing
     names; none, or two different, is `None` -- the pairing never guesses, so a channel that
     withheld `who` leaves the actor hidden.
-    ⚠ AND `s` MUST NOT HAVE BEEN SEEN DOING SUCH AN ACT IN THAT ROUND: then `c` may be the claim
+    ⚠ AND `s` MUST NOT HAVE BEEN SEEN DOING SUCH AN ACT IN THAT LAP: then `c` may be the claim
     `both` anchors on the ACTOR (`(x, person.died)` for x's kill), and a third party's sighting on
     `s` would name the wrong doer of the wrong death. The price, stated: a person who both struck and was struck in one
-    round is judged a patient by nobody that round.
+    lap is judged a patient by nobody that lap.
     LIMIT, stated: where the ACTOR died attacking, the sighting names him as `who` of his own death,
-    so no killer is named. A `seen` on the same subject, `when` and `round` that names NO `who` (a
+    so no killer is named. A `seen` on the same subject, `when` and `lap` that names NO `who` (a
     channel that withheld the actor) makes the pairing ambiguous, so `None`: an unnamed hand may be
     the one that did it. Holder-side and World-free: `Seen` is read by its fields, never imported
     (AX-2)."""
@@ -260,10 +260,10 @@ def deed_doer(c, seen: tuple):
         return None
     by_subject, acting = seen
     strata = _KIND_STRATA[c.predicate]
-    if any(who == c.subject and st in strata for who, st in acting.get((c.when, c.round), ())):
+    if any(who == c.subject and st in strata for who, st in acting.get((c.when, c.lap), ())):
         return None
     whos = set()
-    for s in by_subject.get((c.subject, c.when, c.round), ()):
+    for s in by_subject.get((c.subject, c.when, c.lap), ()):
         who = getattr(s.value, "who", None)
         if who is None:
             return None             # an actorless sighting on the same key: ambiguous, never guess
@@ -441,6 +441,24 @@ def regard(p: Person, referent: str, fx=None) -> float:
     return stored + h if h else stored
 
 
+# The claim a person holds about another's skill: `Claim(subject=<that person>, predicate=CAPABILITY_CLAIM + <the skill>,
+# value=<the score he believes>)`. NOTHING DEPOSITS ONE TODAY (the told, seen and inferred channels carry no capability),
+# so `believed_capability` answers `None` for every person in a built realm until a depositor exists: this is the reading,
+# not the writer. Its two readers -- `seam/wrappers/sigma.py::believed_input` (the opposition of a contest) and
+# `decision/choose.py::score_terms`' `fit` term (B04.22) -- both call the one function below.
+CAPABILITY_CLAIM = "capability:"
+
+
+def believed_capability(p: Person, other: str, capability: str):
+    """WHAT `p` BELIEVES `other`'s SCORE IN `capability` IS, from his OWN ledger alone: the value of his latest claim
+    about `other` at `CAPABILITY_CLAIM + capability` (latest by `(when, lap, confidence)`), else `None` -- unknown, never a
+    figure. Person-side (AX-2): it reads `p`'s ledger and nothing else."""
+    held = [c for c in p.ledger if c.subject == other and c.predicate == CAPABILITY_CLAIM + capability]
+    if not held:
+        return None
+    return max(held, key=lambda c: (c.when, c.lap, c.confidence)).value
+
+
 def conviction_stand(p: Person, affiliation: str) -> float:
     """HOW FAR `p` STANDS FOR (+1) OR AGAINST (-1) ONE AFFILIATION, on `[-1, +1]`: `p.conviction[affiliation]`
     centred on the affiliation scale's midpoint and scaled by its half-range, `(v - mid) / half`. An ABSENT key
@@ -455,14 +473,14 @@ def conviction_stand(p: Person, affiliation: str) -> float:
 
 def heritage_regard(p: Person, q: str, fx) -> float:
     """THE CASTE ESTIMATE (v11 CR-31; ED-IN-0301): how `p`'s OWN creed colours his regard for `q`, through
-    what `p` BELIEVES of `q`'s descent -- never through what `q` is (`Person.heritage` is world truth and is
-    not read here).
+    what `p` BELIEVES of `q`'s descent -- never through what `q` is (another person's `Person.heritage` is world
+    truth and is not read here; `p`'s own reaches his sheet through `PersonInterior.heritage`, B04.13).
 
         heritage_regard = heritage_gain · STANCE_MAX · mean over the affiliations a in the concern
                           `HERITAGE_ENGAGES[h]` of `conviction_stand(p, a)`
 
     `h` is the heritage named in `p`'s NEWEST own untold `seen` claim whose `who` is `q` and whose `marks`
-    names a heritage (newest by `(when, round)`, a later deposit winning a tie). Each affiliation of the
+    names a heritage (newest by `(when, lap)`, a later deposit winning a tie). Each affiliation of the
     engaged concern contributes `conviction_stand`, an absent key 0 and still counted in the mean. In
     `regard`'s own units, so `teller_weight` reads it through `regard / STANCE_MAX` as it reads any stance.
     `0.0` where `p` holds no such `seen` claim, where the heritage engages no concern, or at `heritage_gain` 0
@@ -480,7 +498,7 @@ def heritage_regard(p: Person, q: str, fx) -> float:
         named = next((m for m in (getattr(c.value, "marks", None) or ()) if m in HERITAGES), None)
         if named is None:
             continue
-        key = (c.when, c.round)
+        key = (c.when, c.lap)
         if best_key is None or key >= best_key:
             best, best_key = named, key
     concern = HERITAGE_ENGAGES.get(best)
@@ -1075,6 +1093,22 @@ class LedgerReader:
         return self._best(lambda _c: True)
 
 
+#: The site whose `gate` row names the held value and the threshold fixture the Thread gate reads (B04.06; U1 §8). It is the one
+#: site `capability_use_sites` registers to `OwnStateReader`; `told_retain`, the other gate site, has no reader on this tree.
+OWN_STATE_GATE = require_use_site("own_state_gate")
+
+
+def _gate_row(use: str):
+    """The one `gate` row of site `use`, or `None`: a site with no row reads NO CAPABILITY, never a default."""
+    rows = [r for r in capability_rows(use) if r.role == "gate"]
+    return rows[0] if rows else None
+
+
+def _held_at(p: Person, key: str):
+    """The value `p` holds at a practitioner stat's registry key (`prac.thread_sensitivity`): the `Person` field of that name."""
+    return getattr(p, key.rpartition(".")[2], None)
+
+
 class OwnStateReader:
     """THE QUESTIONS A PERSON ANSWERS OF HIMSELF (v9 PC-06 K-3, `H-85`) -- `OWN_STATE_STEMS`, and
     nothing else: every other predicate is UNKNOWN here.
@@ -1089,19 +1123,25 @@ class OwnStateReader:
       * `thread_sensitivity` -- the subject's own value, and ONLY when the subject is this person: a
         person reads nobody else's. `None` (nothing authored) is UNKNOWN, never 0, so it refuses at
         the fold and does not pass a gate swept to 0.
-      * `thread_sensitivity.gate` -- `Fixtures thread_sensitivity_gate`, the SECOND READ the value
-        is held against (`work`'s `floor`, `determine`'s `quorum`), the same for every subject."""
+      * `thread_sensitivity.gate` -- the Fixture the gate row names (`thread_sensitivity_gate`), the SECOND READ
+        the value is held against (`work`'s `floor`, `determine`'s `quorum`), the same for every subject.
+
+    ⚠ THE KEY AND THE FIXTURE ARE THE `own_state_gate` ROW'S (`rosters.yaml: tables.capability_uses`, B04.06); the two stems
+    are the verb table's grammar and stay. A site with no row answers UNKNOWN to both."""
 
     def __init__(self, p: Person, fx):
         self._p, self._fx = p, fx
 
     def read(self, subject, predicate: str):
         stem = str(predicate).partition(":")[0]
+        row = _gate_row(OWN_STATE_GATE)
+        if row is None:
+            return UNKNOWN
         if stem == "thread_sensitivity":
-            v = self._p.thread_sensitivity if subject == self._p.id else None
+            v = _held_at(self._p, row.key) if subject == self._p.id else None
             return UNKNOWN if v is None else v
         if stem == "thread_sensitivity.gate":
-            return self._fx.get("thread_sensitivity_gate")
+            return self._fx.get(row.gain)
         return UNKNOWN
 
 

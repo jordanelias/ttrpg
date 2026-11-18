@@ -28,7 +28,7 @@ from engine.substrate import composition
 
 from ..data import verbs as _verbs
 from ..data.matrix import WriteClass
-from ..data.rosters import VERB_CAPABILITY
+from ..data.verbs import VERB_CAPABILITY
 from ..data.verbs import VERB_TABLE
 from ..decision import assemble
 from ..decision.options import opening_set, subject_is_opponent

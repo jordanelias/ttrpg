@@ -424,12 +424,12 @@ def test_mutation_without_the_vocation_line_train_is_not_formed(monkeypatch):
 # (`VOCATIONS = frozenset(VERB_CAPABILITY.values())`); the one roster is the owner, there is no second list.
 
 def test_the_four_verb_capability_rows_resolve_and_are_the_vocation_range():
-    from ..data.rosters import VERB_CAPABILITY
+    from ..data.verbs import VERB_CAPABILITY
     assert {v: VERB_CAPABILITY.get(v) for v in ("argue", "research", "examine", "surveil")} == {
         "argue": "argue", "research": "inquiry", "examine": "inquiry", "surveil": "inquiry"}
     # CR-20: the range is closed over `vocation_attribute`'s rows (same set, derived: a literal triple here is
     # flagged by `test_jordan_no_definition_is_hardcoded_in_a_body` now that a second roster is that set).
-    from ..data.rosters import VOCATION_ATTRIBUTE
+    from ..data.verbs import VOCATION_ATTRIBUTE
     # v11 CP-T03-04: `arms` (`fight`/`accept`/`capture`) joins the range, three -> four.
     assert VERBS.VOCATIONS == set(VOCATION_ATTRIBUTE) and len(VERBS.VOCATIONS) == 4
 
@@ -454,7 +454,7 @@ def test_a_pupil_whose_vocation_reads_argue_or_inquiry_is_trained_and_faculty_fo
     """Before the rows `train` on a pupil holding `argue` or `inquiry` was refused at the effect (the key was
     outside `VOCATIONS`); after, it raises it by one and `faculty` reads the raised key for the verbs that
     name it (`argue`; `research`, `examine`, `surveil`) while a verb of another key still reads the default."""
-    from ..data.rosters import VERB_CAPABILITY
+    from ..data.verbs import VERB_CAPABILITY
     from ..loop import effects_combat as EC
     w, d = _npc088()
     pupil = next(pid for pid, p in sorted(w.persons.items()) if pid != CARIN and not p.capability)

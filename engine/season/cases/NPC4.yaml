@@ -1,3 +1,4 @@
+# NPC-006 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "External threat fixated — evaluates every action against Altonian metric. Brandt succession if Ehrenwall falls."
 - id: NPC-006
   name: Halvar Brandt
   one_line: A Löwenritter officer seated on his order's collective governing table, fixated on an external
@@ -67,6 +68,7 @@
   ends_when: never automatically -- presumably by Ehrenwall's fall and the resulting succession, or by
     his death or removal from the Lions' Table; the source names no other terminus.
 
+# NPC-009 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "OVERPERFORMER — runs every important task. Flattery vulnerability (−1 Ob on social actions acknowledging competence)."
 - id: NPC-009
   name: Gerik Strand
   one_line: A Crown minister who personally absorbs nearly every important administrative task, made vulnerable
@@ -137,6 +139,7 @@
   ends_when: never stated explicitly; presumably his removal, death, or a resolution of the overperformer/indispensability
     tension -- the source names no defined terminus.
 
+# NPC-011 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "PROTECTIVE — priority is Elske's safety. Virtue = Byzantine governance-as-moral-cultivation. Periodic visitor, royal welcome. Flips if Elske Loyalty ≤ 2. Manuel II Palaiologos archetype."
 - id: NPC-011
   name: Alexios Laskaris
   one_line: An Altonian prince who periodically visits Crown lands under royal welcome, whose entire priority
@@ -209,6 +212,7 @@
     the Doux title, or a rupture with the Altonian imperial authority over the sandbagging -- the source
     names no defined terminus.
 
+# NPC-035 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Pre-designated allegiance to Almud personally. His removal triggers Löwenritter Autonomy escalation toward Split."
 - id: NPC-035
   name: Theodor Kreutz
   one_line: A Royal Guard Captain personally loyal to the monarch rather than the Crown as an institution,
@@ -407,6 +411,7 @@
   - whether the Crown's own institutional memory has fully absorbed the correction
   ends_when: never stated; no goal or arc is recorded, so no terminus is named.
 
+# NPC-039 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Scholar's Dilemma — TS exposure via archive work."
 - id: NPC-039
   name: Magnus Klapp
   one_line: A Church cardinal candidate whose sanctioned archive work is described as producing an emergent,

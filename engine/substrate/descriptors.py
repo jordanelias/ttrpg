@@ -18,6 +18,9 @@ from __future__ import annotations
 
 import json
 import os
+from dataclasses import dataclass
+from types import MappingProxyType
+from typing import Mapping, Optional, Tuple
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _PATH = os.path.normpath(os.path.join(_HERE, '..', 'engine_params', 'descriptors.json'))
@@ -51,6 +54,111 @@ def attribute_key(name):
     """The roster key a name, alias or key spells, or `None` if it is none of the ten (a retired attribute's
     names included). Case-insensitive. A READ: the caller decides whether `None` refuses."""
     return ATTRIBUTE_NAMES.get(str(name).strip().lower())
+
+#: `{attribute key: one-sentence gloss}` over the ten (B04.02, DEF Edit 1), cooked by the exporter, which refuses an empty one.
+ATTRIBUTE_GLOSSES = dict(_DATA['attributes']['glosses'])
+
+
+# ---------------------------------------------------------------------------
+# THE TWO FACTOR FORMS OF THE USES TABLE (B04.06; U1 §3, `capability_roles`) -- a closed set of two, each implemented here once.
+# A third form is a code change. The decision layer reads a row of `rosters.yaml: tables.capability_uses` and calls one of these;
+# it names no attribute, no scale and no arithmetic of its own.
+# ---------------------------------------------------------------------------
+def scale_of(key):
+    """`(floor, ceiling)` of the scale a held value at `key` lives on: the attribute scale for an attribute key, the
+    registered bounds for a practitioner stat (`None` where the registry leaves that end open: `about_mid` on it raises). Raises
+    ValueError for any other key."""
+    if key in ATTRIBUTES:
+        return ATTRIBUTE_FLOOR, ATTRIBUTE_CEILING
+    stat = PRACTITIONER_STATS.get(key)
+    if stat is not None:
+        return stat['floor'], stat['ceiling']
+    raise ValueError(f"no scale for {key!r}: it is neither an attribute nor a practitioner stat")
+
+
+def about_mid(value, floor, ceiling, gain):
+    """ROLE `judgement`: `1 + gain * (value - mid) / (mid - floor)`, `mid = (floor + ceiling) / 2`. Exactly 1 at the mid-point
+    (and at `gain` 0), monotone in `value`, unbounded above: a caller that wants a cap applies its own."""
+    mid = (floor + ceiling) / 2
+    return 1.0 + gain * (value - mid) / (mid - floor)
+
+
+# ---------------------------------------------------------------------------
+# CAPABILITIES (SKILLS) -- B04.02. THE ONLY SKILL DEFINITION IN THE ENGINE.
+# ---------------------------------------------------------------------------
+# `references/descriptor_registry.yaml: capabilities`, validated by the exporter's `_capability_roster` and read here:
+# one kind (`skill`, A-98 (4)); the attributes and the traits are defined elsewhere and not re-defined here.
+@dataclass(frozen=True)
+class CapabilityRow:
+    """One skill's definition. `base` is the attribute key its pool starts from; `opposed_by` is an attribute key,
+    `'none'` or `None` (absent: the opposition reads `base`; `'none'` currently reads as absent too [ASSUMPTION] until the
+    obstacle's one form lands, B05, OBS section 2); `floor`/`ceiling` bound the held rank;
+    `untrained` is what a non-holder brings (`default` or `none`); `grows_by` is the rules that may raise it."""
+    kind: str
+    gloss: str
+    base: str
+    opposed_by: Optional[str]
+    floor: int
+    ceiling: int
+    untrained: str
+    grows_by: Tuple[str, ...]
+
+
+CAPABILITIES: Mapping[str, CapabilityRow] = MappingProxyType({
+    name: CapabilityRow(r['kind'], r['gloss'], r['base'], r['opposed_by'], r['floor'], r['ceiling'],
+                        r['untrained'], tuple(r['grows_by']))
+    for name, r in _DATA['capabilities']['rows'].items()})
+
+
+def _defined(rows, name, kind, block, noun):
+    """`rows[name]` or ValueError naming the roster, its owner and its members: the one refusal of `capability` and `trait`."""
+    try:
+        return rows[name]
+    except (KeyError, TypeError):
+        raise ValueError(
+            f'unknown {kind} {name!r}. The roster is owned by references/descriptor_registry.yaml:{block} and read here; '
+            f'the defined {noun}s are: ' + ', '.join(rows) + f'. A {noun} is defined there once, then exported '
+            '(tools/export_descriptors.py); do not add one anywhere else.') from None
+
+
+def capability(name) -> CapabilityRow:
+    """The definition row of skill `name`; raises ValueError naming the roster, as `resolve_pursuit` does."""
+    return _defined(CAPABILITIES, name, 'capability', 'capabilities', 'skill')
+
+
+def rank_in_scale(name, value) -> bool:
+    """True where `value` is a whole number (a bool is not one) inside skill `name`'s own `floor`..`ceiling`; False for a
+    value off it and for a `name` no definition row carries. THE ONE OWNER of what a held skill rank is, so the cast row's
+    authored score and a lifepath bundle's `{<id>: <rank>}` entry cannot disagree."""
+    row = CAPABILITIES.get(name) if isinstance(name, str) else None
+    return row is not None and isinstance(value, int) and not isinstance(value, bool) and row.floor <= value <= row.ceiling
+
+
+# ---------------------------------------------------------------------------
+# TRAITS -- B04.07 (U1 §2a, A-107). A SEPARATE ROSTER FROM THE SKILLS: a trait is held or not and never gives dice.
+# ---------------------------------------------------------------------------
+# `references/descriptor_registry.yaml: traits`, validated by the exporter's `_trait_roster`. `seated_by` is the one
+# lowercase `resonant_style` value that seats the trait (`data/cast.py::traits_of`); held on `Person.traits`.
+@dataclass(frozen=True)
+class TraitRow:
+    """One trait's definition: its `id`, a one-sentence `gloss`, and the `resonant_style` value that seats it."""
+    id: str
+    gloss: str
+    seated_by: str
+
+
+TRAITS: Mapping[str, TraitRow] = MappingProxyType({
+    name: TraitRow(name, r['gloss'], r['seated_by']) for name, r in _DATA['traits']['rows'].items()})
+
+
+#: `{resonant_style value: trait id}` -- the one trait each value seats, inverted from `TRAITS` once (`data/cast.py::traits_of`).
+TRAIT_BY_SEATING: Mapping[str, str] = MappingProxyType({t.seated_by: t.id for t in TRAITS.values()})
+
+
+def trait(id) -> TraitRow:
+    """The definition row of trait `id`; raises ValueError naming the roster, as `capability` does."""
+    return _defined(TRAITS, id, 'trait', 'traits', 'trait')
+
 
 #: {registry key -> {name, floor, ceiling}} for each declared domain.
 SETTLEMENT_STATS = _DATA['settlement_stats']

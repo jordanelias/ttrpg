@@ -1,6 +1,6 @@
 """engine.substrate.combat_kit -- what the personal-combat engine can be armed with, read from its export.
 
-Status: [live, CP-T03-03]. The single runtime reader of the `kit` section of
+Status: [live, CP-T03-03]. The single runtime reader of the `kit` section and of `attributes.end.default` of
 `engine/engine_params/combat_engine_v1.json` (written by `tools/export_engine_params.py` from
 `modules/combat/weapons.py`, `vocabulary.py` and `combatant.py`, behind its blocking `--check`). Same shape as
 `names.py`, `descriptors.py` and `composition.py`.
@@ -18,7 +18,13 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 _PATH = os.path.normpath(os.path.join(_HERE, '..', 'engine_params', 'combat_engine_v1.json'))
 
 with open(_PATH, encoding='utf-8') as _fh:
-    _KIT = json.load(_fh)['sections']['kit']
+    _SECTIONS = json.load(_fh)['sections']
+
+_KIT = _SECTIONS['kit']
+
+#: The combat module's default for the `end` attribute (`attributes.end.default`): what a fight reads for a person who
+#: authors no Endurance (`seam/wrappers/combat.py::party_end`). Not the sheet scale's floor in `descriptor_registry.yaml`.
+END_DEFAULT = _SECTIONS['attributes']['end']['default']
 
 #: Every key of `modules/combat/weapons.py::WEAPONS`: a Combatant's `weapon` is one of these.
 WEAPONS = frozenset(_KIT['weapons'])

@@ -30,7 +30,7 @@ from ..data.requires import (
 )
 from ..data.rosters import (
     CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, REMOVE_ORDINAL, SUCCESSIONS,
-    refusing_pole, require_member,
+    capability_rows, refusing_pole, require_member, require_use_site,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
@@ -50,7 +50,7 @@ from ..queries.person_q import (
 )
 from ..state.carriers import Candidate, Claim, Person, Question, Record, View
 from ..trace_log import TRACE
-from ...substrate.descriptors import ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, attribute_key
+from ...substrate.descriptors import about_mid, scale_of
 
 # v9 IN-12 step 7: THE CLASS A HELD WRIT RIDES THE QUESTION AS -- the carrier's own type name, which is
 # what `queries/world_q.py::_stamped` stamps for a document (`World.class_of`) and what
@@ -1590,23 +1590,42 @@ def dissents(p: Person, c: Claim, act=None, weigh=None) -> bool:
                               actor=act.actor)
 
 
-# v10 CR-19 / `H-200`: THE ATTRIBUTE `AX-7`'S COMPETENCE READS, named once, here, by its registry name and
-# resolved to its key by the registry's own resolver (`ED-IN-0327`: Attunement helps one judge whether
-# someone is telling the truth). Refused at import if the registry stops carrying it.
-COMPETENCE_ATTRIBUTE = attribute_key("Attunement")
-assert COMPETENCE_ATTRIBUTE is not None, "the attribute registry no longer carries Attunement (H-200)"
-#: The scale's middle, where the competence factor is 1: `(floor + ceiling) / 2`, read off the registry's
-#: `attributes.scale` (1-7, so 4), not written here.
-COMPETENCE_MID = (ATTRIBUTE_FLOOR + ATTRIBUTE_CEILING) / 2
+# v10 CR-19 / `H-200`: THE ATTRIBUTE `AX-7`'S COMPETENCE READS is a ROW, not a name here: `rosters.yaml: tables.capability_uses`'s
+# `told_claim_credit` row (B04.06; `ED-IN-0327`: Attunement helps one judge whether someone is telling the truth), read by
+# `_judgement_factor` through the substrate's `about_mid`. Nothing under `decision/` names an attribute or the scale's middle.
+TOLD_CLAIM_CREDIT = require_use_site("told_claim_credit")
 
 
-def competence(p: Person, competence_gain: float) -> float:
+def _judgement_rows(use: str) -> list:
+    """The `judgement` rows of site `use`, in table order."""
+    return [r for r in capability_rows(use) if r.role == "judgement"]
+
+
+def _judgement_factor(p: Person, rows: list, fx) -> Optional[float]:
+    """THE `judgement` ROWS OF ONE SITE, as one factor about the scale's mid-point (B04.06; U1 §8), or `None` for NO CAPABILITY: `None` where
+    there are no rows, or `p` holds no value at any row's key (a READ, never a default; the caller reads it as the factor 1). The value is
+    `p.attributes` at the row's `key`, on `substrate.descriptors.scale_of(key)`; the form is `about_mid`, its `gain` the Fixture the row
+    names (`fx.get(row.gain)`), so a sweep of that Fixture overrides the shipped value through `fx`. `side: actor` is the only side read:
+    `p` is the actor (the loader refuses any other). A site with several rows multiplies them. The one caller is `competence`."""
+    factor = None
+    for row in rows:
+        held = (getattr(p, "attributes", None) or {}).get(row.key)
+        if held is None:
+            continue
+        floor, ceiling = scale_of(row.key)
+        one = about_mid(held, floor, ceiling, fx.get(row.gain))
+        factor = one if factor is None else factor * one
+    return factor
+
+
+def competence(p: Person, fx) -> float:
     """`AX-7`'S THIRD INPUT, THE RECEIVER'S COMPETENCE, in `[0, 1]` (v10 CR-19; `H-200`).
 
-        competence = min(1, 1 + g * (attunement - mid) / (mid - floor))      g = `competence_gain`
+        competence = min(1, 1 + g * (attunement - mid) / (mid - floor))      g = `fx.get(row.gain)`, the Fixture the
+                                                                             `told_claim_credit` row names (`competence_gain`)
 
-    `attunement` is the score `p.attributes` holds at `COMPETENCE_ATTRIBUTE` (`Person.attributes`, CR-20);
-    `mid` is `COMPETENCE_MID`. MONOTONE in Attunement and exactly 1 at `mid`; a receiver who HOLDS no
+    `attunement` is the score `p.attributes` holds at the `told_claim_credit` row's key (`Person.attributes`, CR-20),
+    `mid` the middle of that key's scale (`_judgement_factor`). MONOTONE in Attunement and exactly 1 at `mid`; a receiver who HOLDS no
     Attunement reads 1 (a READ, never a default). ⚠ The built realm (`boot/realm.py`) seats every key on every
     person (`cast_attributes=True`, drawn by `state/carriers.py::generated_attributes` where unauthored),
     so no realm receiver reaches that branch and each unauthored one reads the Attunement he drew, below `mid` for
@@ -1632,17 +1651,17 @@ def competence(p: Person, competence_gain: float) -> float:
     alone knows which told claims are false, and to CR-83's design, which must give the separator before the
     gain is flipped live (a declared hash mover scheduled by that design, not by this function). CR-27's
     second falsifier is the guard on that flip."""
-    if not 0.0 <= competence_gain <= 1.0:
-        raise ValueError(f"competence_gain {competence_gain!r} is outside [0, 1] (H-200): a factor below 0 "
-                         "would turn a deposit's confidence negative")
-    held = (getattr(p, "attributes", None) or {}).get(COMPETENCE_ATTRIBUTE)
-    if held is None:
-        return 1.0
-    return min(1.0, 1.0 + competence_gain * (held - COMPETENCE_MID) / (COMPETENCE_MID - ATTRIBUTE_FLOOR))
+    rows = _judgement_rows(TOLD_CLAIM_CREDIT)
+    for row in rows:
+        if not 0.0 <= fx.get(row.gain) <= 1.0:
+            raise ValueError(f"{row.gain} {fx.get(row.gain)!r} is outside [0, 1] (H-200): a factor below 0 "
+                             "would turn a deposit's confidence negative")
+    factor = _judgement_factor(p, rows, fx)
+    return 1.0 if factor is None else min(1.0, factor)
 
 
 def refracted_confidence(p: Person, c: Claim, channel: str, gain: float,
-                         act=None, weigh=None, competence_gain: float = 0.0) -> int:
+                         act=None, weigh=None, fx=None) -> int:
     """REFRACTION -- `AX-7`'s divergence formula (v9 IN-15; `H-36`'s shape, `H-199`'s magnitude).
     How much `p` credits a claim landing in their ledger, from the channel it reached them by and
     what they already held:
@@ -1652,8 +1671,8 @@ def refracted_confidence(p: Person, c: Claim, channel: str, gain: float,
 
     `g` is `refraction_gain`, in `[0, 1]`; `remove` is `channel_remove`; `dissent` is `dissents`, 0
     or 1 -- with `act` (the act `c` reports happening) and `weigh` passed through to its act-level
-    term (`H-201`); `competence` is `competence(p, competence_gain)` (CR-19, `H-200`: the receiver's Attunement, swept, 1 at the
-    shipped gain 0). Each factor is in `[0, 1]`, so refraction only
+    term (`H-201`); `competence` is `competence(p, fx)` (CR-19, `H-200`: the receiver's Attunement, its gain the `told_claim_credit`
+    row's Fixture, swept, 1 at the shipped gain 0; `fx=None`, a caller that hands no Fixtures, reads no row and the factor is 1). Each factor is in `[0, 1]`, so refraction only
     ever LOWERS a confidence, and at `g = 0` every factor is exactly 1: THE CONTROL, and the deposit
     is today's.
 
@@ -1675,7 +1694,7 @@ def refracted_confidence(p: Person, c: Claim, channel: str, gain: float,
         raise ValueError(f"refraction_gain {gain!r} is outside [0, 1] (H-199): a factor below 0 "
                          "would turn a deposit's confidence negative")
     factor = ((1.0 - gain * channel_remove(channel)) * (1.0 - gain * dissents(p, c, act, weigh))
-              * competence(p, competence_gain))
+              * (1.0 if fx is None else competence(p, fx)))
     return int(c.confidence * factor + 0.5)
 
 

@@ -303,20 +303,20 @@ class Event:
 class Claim:
     """S20. Lives in the HOLDER'S OWN ledger.
 
-    ⚠ `round` IS THE ONLY CARRIER FIELD `U2` ADDS, AND THE ONLY ONE IT MAY ADD. The scene tick
-    subdivides a season into rounds, and §F1's Q2 asks for *a claim LANDING in the holder's ledger*
+    ⚠ `lap` IS THE ONLY CARRIER FIELD `U2` ADDS, AND THE ONLY ONE IT MAY ADD. The scene tick
+    subdivides a season into laps, and §F1's Q2 asks for *a claim LANDING in the holder's ledger*
     — which was readable off `when` alone while a season was one pass, and is not once a season is
     several. `when` still says WHICH SEASON and is what eviction and decay read
-    (`p.ledger.sort(key=lambda c: c.confidence * (c.when + 1))`); `round` says WHICH ROUND WITHIN
-    it, so `questions_for(w, p, since=(tick, round))` can ask *since I last deliberated* rather
+    (`p.ledger.sort(key=lambda c: c.confidence * (c.when + 1))`); `lap` says WHICH LAP WITHIN
+    it, so `questions_for(w, p, since=(tick, lap))` can ask *since I last deliberated* rather
     than *since last season*.
     ⚠ IT DEFAULTS TO `0` AND EVERY EXISTING CONSTRUCTION IS POSITIONAL, so a Claim built anywhere
-    that predates the tick reads as round 0 — which is exactly what a claim from the one-pass loop
+    that predates the tick reads as lap 0 — which is exactly what a claim from the one-pass loop
     WAS. The generalisation is therefore exact at `R = 1`: `since == (tick - 1, 0)` selects the
     same claims `c.when == w.tick - 1` did.
-    ⚠ AND NO OTHER CARRIER GETS ONE (`D-21`, and U2's falsifier (d)). The round index is a DRIVER
-    LOCAL — `SeasonDriver.round` — because it is a fact about where the loop is, not about any
-    thing in the world. A `round` on `Act` or `Event` would make it world state and put a fourth
+    ⚠ AND NO OTHER CARRIER GETS ONE (`D-21`, and U2's falsifier (d)). The lap index is a DRIVER
+    LOCAL — `SeasonDriver.lap` — because it is a fact about where the loop is, not about any
+    thing in the world. A `lap` on `Act` or `Event` would make it world state and put a fourth
     clock in the model."""
     id: str
     holder: str
@@ -333,7 +333,7 @@ class Claim:
     # a circle to someone outside it emits `confidence.broken`. It binds what a holder may RETELL,
     # never who hears (§10 decision 1). Every other deposit is `"own"`.
     visibility: str | tuple
-    round: int = 0
+    lap: int = 0
     # ⚠ `chain` -- WHO PASSED THIS CLAIM ON, ORIGIN FIRST, AS IT WAS PRESENTED (telling workplan `T3b`,
     # `ED-IN-0282`; closes `RULINGS.yaml` CAT-3, *"STORE THE TELLER... The edit is one argument, not a
     # lookup"*). `()` for every claim nobody told (firsthand, seen, inferred, content-deposit, and a
@@ -814,6 +814,12 @@ class Person:
     # write. ONE READER: `epistemic.py::_term_marks`, which deposits it TRUE and verbatim to every co-located
     # witness beside `who` (AX-7: no competence or prior-belief mediation).
     heritage: Optional[str] = None
+    # B04.07 (A-107): TRAITS -- what this person is MOVED BY, the members of `descriptors.TRAITS` he holds, each held or
+    # not and never giving dice. Filled ONCE at world build from a cast row's `resonant_style:`
+    # (`data/cast.py::traits_of`; `frozenset()` where unauthored), held APART from `capability` (the skill map holds
+    # skills only), and written at build only (`write_matrix.yaml`'s `Person.traits` row has no step). No reader reads it
+    # yet: the `edge` reader that will (U1-B step 4) reads 1 if the subject holds the trait, else 0.
+    traits: frozenset = frozenset()
     travel_leg: list[str] = field(default_factory=list)
     # ⚠ THE TENURE STORE IS HERE, as `Tenure`'s OWN DOCSTRING says: "S15 -- THE ONE EDGE. Owned by its
     # SUBJECT (S15.1)." `budget : (Person, View) -> int` reads "own `hold` Tenures" WITH NO WORLD
@@ -871,6 +877,10 @@ class PersonInterior:
     tenures: tuple
     ledger: tuple
     weight: int = 1       # S9: a cohort is a Person at weight > 1; a chooser's callback may ask (harness/probes.py P21)
+    heritage: Optional[str] = None   # B04.13: read by `decision/sheet.py`'s development sheet, as `thread_sensitivity` is.
+    # 04 §B.2 calls `heritage?` a read-off field whose resolver is WITNESS's `marks` term, and §A.2 / §B.2 make this
+    # record the person's own state; the two rows meet here. The pick: admitted, as his OWN field -- §B.2 excludes only
+    # "anything about another person", and another person's heritage is still read only through a held claim.
 
 
 def frozen(d) -> Mapping:
@@ -884,7 +894,7 @@ def interior_of(p: Person) -> PersonInterior:
         p.id, p.name, frozen(p.capability), frozen(p.pursuits), frozen(p.conviction), frozen(p.scar),
         frozen(p.attributes),
         p.body, p.thread_sensitivity, tuple(p.stance), tuple(p.travel_leg), tuple(p.tenures), tuple(p.ledger),
-        p.weight)
+        p.weight, p.heritage)
 
 
 @dataclass

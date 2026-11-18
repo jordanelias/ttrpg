@@ -196,13 +196,13 @@ def test_sc02_17_only_a_prize_a_room_hears_reads_the_room(monkeypatch):
     kind = _kind_with_lean(w, +1)
     w.persons[HEARER].ledger.append(_claim("c1", HEARER, SPEAKER, kind))
     seen = {}
-    real = sigma.contest_input
+    real = sigma._read_social_roll
 
     def spy(*a, **kw):
-        inp = real(*a, **kw)
-        seen[kw.get("verb")] = inp
-        return inp
-    monkeypatch.setattr(sigma, "contest_input", spy)
+        built = real(*a, **kw)
+        seen[kw.get("verb")] = built[0]
+        return built
+    monkeypatch.setattr(sigma, "_read_social_roll", spy)
     for prize, verb in ((PRIZE, "speak"), ("a standing", "tell")):
         sigma.resolve(w, [SPEAKER, PARTY], ["root"], prize, verb=verb, subject=PARTY,
                       rng=random.Random(0), rung="Hh")

@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 124,
-    "total": 379,
-    "uncited": 255,
+    "total": 380,
+    "uncited": 256,
     "of_which_assumption_grade": 8
   },
-  "count": 379,
+  "count": 380,
   "by_module": {
     "engine.dice_engine": 6,
     "engine.season": 24,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 94,
+    "engine.season.settings": 95,
     "engine.season.realm": 8
   },
   "params": [
@@ -3798,8 +3798,8 @@
       "citation_grade": null
     },
     {
-      "key": "engine.season.settings.scenes_per_round",
-      "name": "scenes_per_round",
+      "key": "engine.season.settings.scenes_per_lap",
+      "name": "scenes_per_lap",
       "value": 1,
       "kind": "scalar",
       "module": "engine.season.settings",
@@ -4465,6 +4465,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-356`, swept None (control) / 2 / 4 (SHIPPED) / 8",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.confer_fit_weight",
+      "name": "confer_fit_weight",
+      "value": 0.0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-414`, swept 0.0 (control, SHIPPED) / 0.5 / 1.0",
       "citation": null,
       "citation_grade": null
     },

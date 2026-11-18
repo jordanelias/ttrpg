@@ -34,10 +34,11 @@ import re
 from typing import Optional
 
 from . import files
-from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_TEMPLATES, load_yaml
+from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_RANKS, LIFEPATH_TEMPLATES, load_yaml, roster
 from ..gaps import Unspecified
 from ...substrate.descriptors import (
-    ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, HERITAGES, PRACTITIONER_STATS, attribute_key,
+    ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, CAPABILITIES, HERITAGES, PRACTITIONER_STATS, TRAIT_BY_SEATING,
+    attribute_key, rank_in_scale,
 )
 
 NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
@@ -81,6 +82,26 @@ _PAREN = re.compile(r"^(?P<base>[^(]+?)\s*\((?P<inner>[^)]*)\)?(?P<tail>.*)$")
 
 _CACHE: Optional[dict] = None
 
+#: THE ONE LIST OF KEYS AUTHORED ON A ROW THAT NO ENGINE CODE READS BY NAME (B04.12, CAP A7 / DEF Edit 4), authored in
+#: `rosters.yaml: cast_unread_keys` (a literal roster in a module is refused, `test_season_shape`): the person's name
+#: parts, age, birthplace, territory, goals, notes and source (reference prose) and threadwork's tracks (`certainty`, `coherence`,
+#: no reader until that lane builds one). The registry's `schema: required` + `optional` list only keys a reader takes (`row_keys`).
+#: A key leaves this tuple by gaining a reader (and joining the registry's `schema:` block) or by leaving the registry. `_rows()`
+#: refuses a row carrying a key in neither, so a fact authored on a row that nothing reads cannot sit there undeclared.
+UNREAD_KEYS = roster("cast_unread_keys", ordered=True)         # `rosters.yaml: cast_unread_keys`, the list authored once
+
+
+def row_keys(data: dict) -> frozenset:
+    """The keys a cast row may carry: the registry's `schema: required` + `optional`, read from the parsed file. Raises
+    `Unspecified` if either list is missing -- a registry that declares no keys would let every key through."""
+    schema = (data or {}).get("schema") or {}
+    lists = [schema.get(name) for name in ("required", "optional")]
+    if not all(isinstance(v, list) and v for v in lists):
+        raise Unspecified("the cast registry's `schema:` block", "references/npc_registry.yaml",
+                          needs="`schema: required` and `optional` as lists of row keys",
+                          law="CAP A7 / DEF Edit 4 -- the loader refuses a key it cannot check against a declared set")
+    return frozenset(str(k) for v in lists for k in v)
+
 
 def _rows() -> dict:
     """`{case_id: row}` from the registry, read once and kept.
@@ -99,7 +120,16 @@ def _rows() -> dict:
                 law="a cast read from nothing is a cast invented from a hash, which is the "
                     "behaviour this loader replaces") from exc
         data = load_yaml(text) or {}
-        _CACHE = {str(r["id"]): r for r in (data.get("characters") or []) if r.get("id")}
+        rows = {str(r["id"]): r for r in (data.get("characters") or []) if r.get("id")}
+        allowed = row_keys(data) | set(UNREAD_KEYS)
+        for cid, r in rows.items():
+            stray = [k for k in r if k not in allowed]
+            if stray:
+                raise Unspecified(
+                    f"cast row {cid} carries {stray}, which the registry's `schema:` block does not declare and `UNREAD_KEYS` does not list",
+                    "references/npc_registry.yaml", needs="a key in `schema: required`/`optional` (the keys a reader takes) or in `cast.UNREAD_KEYS` (declared unread), or no key",
+                    law="CAP A7 / DEF Edit 4 -- a cast row carries only keys the registry's schema lists as read or that `UNREAD_KEYS` declares unread")
+        _CACHE = rows
     return _CACHE
 
 
@@ -204,7 +234,12 @@ def pursuits_of(r: dict) -> dict:
     if isinstance(block, dict):
         for group, rows in block.items():
             if not isinstance(rows, list):
-                continue                # `cultural_label` / `self_other_initial` sit here too
+                # A KEY IN `convictions:` THAT HOLDS NO LIST OF ENTRIES IS REFUSED, NOT SKIPPED (B04.12): the two nested unread
+                # keys it deleted (`cultural_label`, `self_other_initial`) sat here as scalars, and a skip would load them again.
+                raise Unspecified(f"{r.get('id')!r} carries `convictions: {group}: {rows!r}`, which is not a list of "
+                                  "conviction entries", "references/npc_registry.yaml -- convictions",
+                                  needs="a list of `{conviction, weight}` entries under each group (`primary`)",
+                                  law="B04.12 -- a key nothing reads is declared unread or deleted, at every level")
             for entry in rows:
                 if isinstance(entry, dict) and entry.get("conviction") is not None:
                     out[pursuit(str(entry["conviction"]))] = float(entry.get("weight") or 0.0)
@@ -361,6 +396,58 @@ def heritage_of(r: dict) -> Optional[str]:
         law="CR-30 -- a heritage outside the registry's roster is refused at build")
 
 
+def traits_of(r: dict) -> frozenset:
+    """`Person.traits`' authored source (B04.07, A-107): the row's `resonant_style:` value, read lowercase through
+    `descriptors.TRAITS[*].seated_by` -- the one trait that value seats -- as a one-member frozenset, or `frozenset()`
+    where nothing is authored (the key absent, `resonant_style: null`, or no row at all). No second roster is made, and
+    nothing is written into `Person.capability` (the skill map holds skills only). A value no trait row seats REFUSES,
+    naming the row (`heritage_of`'s shape)."""
+    v = (r or {}).get("resonant_style")
+    if v is None:
+        return frozenset()
+    seats = TRAIT_BY_SEATING
+    if isinstance(v, str) and v.strip().lower() in seats:
+        return frozenset({seats[v.strip().lower()]})
+    raise Unspecified(
+        f"cast row {(r or {}).get('id', '?')}: resonant_style {v!r} seats no trait; the traits seat {sorted(seats)}",
+        "references/descriptor_registry.yaml", needs=f"one of {sorted(seats)} (any case), or no key",
+        law="A-107 -- a resonant_style no trait row names is refused at build")
+
+
+def capabilities_of(r: dict) -> dict:
+    """`Person.capability`'s AUTHORED-SCORE source (B04.09, CAP A7): the row's `capabilities:` mapping, as `{skill id: whole
+    number}`, or `{}` where nothing is authored -- the key absent, `capabilities: null`, or no row at all. Each id must be a
+    skill `substrate.descriptors.CAPABILITIES` defines (a trait, an attribute or a typo is none) and each value a whole
+    number inside THAT row's own `floor`..`ceiling`; a bool, a fraction, a numeric string, a non-mapping, or a value off the
+    scale REFUSES, naming the row (`attributes_of`'s shape). `capability_of` (the lifepath expansion) is unchanged; the builder
+    merges the two with this one winning. The case overlay's `cast: capability:` is checked through this same function
+    (`harness/corpus_run.py::_check_capability`), so the two surfaces cannot disagree about what a skill score is."""
+    raw = (r or {}).get("capabilities")
+    if raw is None:
+        return {}
+    who = (r or {}).get("id", "?")
+    if not isinstance(raw, dict):
+        raise Unspecified(f"cast row {who}: capabilities {raw!r} is no mapping", "references/npc_registry.yaml",
+                          needs="a mapping of skill id to a whole number, or null",
+                          law="CAP A7 -- an authored value this reader cannot parse refuses")
+    out: dict = {}
+    for name, v in raw.items():
+        row = CAPABILITIES.get(name) if isinstance(name, str) else None
+        if row is None:
+            raise Unspecified(
+                f"cast row {who}: capabilities key {name!r} names no defined skill",
+                "references/descriptor_registry.yaml", needs=f"one of {', '.join(CAPABILITIES)}",
+                law="CAP A7 -- a score under an id no definition row carries is refused")
+        if not rank_in_scale(name, v):
+            raise Unspecified(
+                f"cast row {who}: capabilities {name!r}: {v!r} -- magnitudes must be whole numbers from {row.floor} to "
+                f"{row.ceiling}", "references/npc_registry.yaml",
+                needs=f"a whole number {row.floor}-{row.ceiling} (the row's own scale)",
+                law="CAP A7 -- the scale is the definition row's, and an out-of-scale value refuses")
+        out[name] = v
+    return out
+
+
 def capability_of(r: dict, pool_default: int) -> dict:
     """`Person.capability`'s authored source (v10 CR-33): the row's `lifepath:` key EXPANDED through
     `rosters.yaml: tables: lifepath_templates` into `{capability key: pool_default}`, or `{}` where nothing is
@@ -369,7 +456,8 @@ def capability_of(r: dict, pool_default: int) -> dict:
 
     THE LIFEPATH ID IS READ AND DROPPED: it is stored on no `Person`, so no reader in play can ask for it (the
     keys it grants are the hook, `Person.capability`, which `faculty` and `train` already read). Each key is
-    held AT `pool_default` (H-126's fixture), the value `faculty` already falls to, so the grant changes no pool;
+    held AT `pool_default` (H-126's fixture), the value `faculty` already falls to, so the grant changes no pool -- except a
+    `{<id>: <rank>}` entry of the template (B04.11), which is held AT that rank, checked at load against the skill's own scale;
     it makes the key one `train` can raise (`loop/effects_combat.py::_eff_train` raises only a held key). A
     value that names no template REFUSES, naming the row (`heritage_of`'s shape): a typo'd id would otherwise
     read as a lifepath that grants nothing."""
@@ -377,7 +465,7 @@ def capability_of(r: dict, pool_default: int) -> dict:
     if v is None:
         return {}
     if isinstance(v, str) and v in LIFEPATH_TEMPLATES:
-        return {key: pool_default for key in LIFEPATH_TEMPLATES[v]}
+        return {key: LIFEPATH_RANKS[v].get(key, pool_default) for key in LIFEPATH_TEMPLATES[v]}
     raise Unspecified(
         f"cast row {(r or {}).get('id', '?')}: lifepath {v!r} names no template of `lifepath_templates`",
         "references/npc_registry.yaml", needs=f"one of the 34 ids of `rosters.yaml: lifepaths` (3-CR1 ... 3-CF6), or no key",

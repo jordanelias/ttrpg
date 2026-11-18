@@ -32,8 +32,9 @@ from ..decision import choose as CH
 from ..gaps import Unspecified
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
+from ..queries import person_q
 from ..seam.wrappers import pool, sigma
-from ..data.rosters import VERB_CAPABILITY
+from ..data.verbs import VERB_CAPABILITY
 from ..state.carriers import Act, Candidate, Claim, Person
 
 AXIS = "grandiose_humble"        # a pursuit axis the equal pursuits below project onto (asserted in the test)
@@ -193,7 +194,7 @@ def _believes_the_hearer(p):
     in a built realm. These readings need a figure, so the believer is handed the claim: the hearer's score 4, an
     obstacle of 2.0, which is what the module's own default reads for a hearer who holds no key."""
     p.ledger.append(Claim(id=f"c:{p.id}:{HEARER}", holder=p.id, subject=HEARER,
-                          predicate=sigma.CAPABILITY_CLAIM + VERB_CAPABILITY["argue"], value=4, when=0,
+                          predicate=person_q.CAPABILITY_CLAIM + VERB_CAPABILITY["argue"], value=4, when=0,
                           source="told", confidence=5, visibility="own"))
 
 

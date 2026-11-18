@@ -25,6 +25,7 @@ import pytest
 from engine.substrate.descriptors import ATTRIBUTE_CEILING, ATTRIBUTES
 
 from ..data import rosters as R
+from ..data import verbs as V
 from ..harness import pairs
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
@@ -103,9 +104,9 @@ def test_a_planted_edge_moves_the_carried_share():
 
 def _argue_keys() -> tuple:
     """`(pool key, opposition key, a key neither role reads)` for `argue`, off the rosters `seam/wrappers/pool.py` reads."""
-    voc = R.VERB_CAPABILITY["argue"]
-    pool_key = R.VOCATION_ATTRIBUTE[voc]
-    opp_key = R.VOCATION_OPPOSED_BY.get(voc) or pool_key
+    voc = V.VERB_CAPABILITY["argue"]
+    pool_key = V.VOCATION_ATTRIBUTE[voc]
+    opp_key = V.VOCATION_OPPOSED_BY.get(voc) or pool_key
     unread = next(k for k in ATTRIBUTES if k not in (pool_key, opp_key))
     return pool_key, opp_key, unread
 

@@ -68,10 +68,11 @@ from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds, settle_record
 from engine.substrate import composition
 
-from ...data.rosters import VERB_CAPABILITY, roster
-from ...data.verbs import SOCIAL_ROLL_PROVIDER, TASK_DIFFICULTY, VERB_TABLE
+from ...data.rosters import capability_rows, require_use_site, roster
+from ...data.verbs import SOCIAL_ROLL_PROVIDER, TASK_DIFFICULTY, VERB_CAPABILITY, VERB_TABLE
 from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, sides_of
+from ...queries.person_q import believed_capability
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup);
 # `manifest/registry.py` imports only `data/` and `gaps` and `queries/` is below `seam/`, so the
@@ -162,7 +163,21 @@ def advantage_sigma(fx: Any, operands: dict) -> float:
 def contest_input(w: Any, claimants: list, *, verb: str = "",
                   subject: Optional[str] = None, room: Optional[str] = None,
                   examined: Optional[str] = None, effort: int = 0) -> SocialContestInput:
-    """THE HOST INPUT BUILDER (plan position `31a`, A-25): `World` -> the frozen record the roll reads.
+    """THE HOST INPUT BUILDER's record alone: `_read_social_roll`'s first return (see it for the body and for the
+    rows' reads, which `resolve` takes from the same call)."""
+    return _read_social_roll(w, claimants, verb=verb, subject=subject, room=room, examined=examined, effort=effort)[0]
+
+
+def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
+                      subject: Optional[str] = None, room: Optional[str] = None,
+                      examined: Optional[str] = None, effort: int = 0) -> tuple:
+    """THE HOST INPUT BUILDER (plan position `31a`, A-25): `World` -> the frozen record the roll reads. Returns
+    `(record, reads)`: the record `contest_input` hands out and, for each `social_roll` row of `tables.capability_uses`
+    (table order), `(row, value)` -- the value the row's reader read, so the record `resolve` returns names what fed the
+    roll and cannot disagree with what was rolled (CAP A6, MAP §D). `dice` reads the actor's score (`pool.score`, the base
+    `faculty` adds its addends to) and gives the pool; `opposes` reads the opposition (`_opposition_of`, `None` for nobody
+    opposing). The roll reads each term ONLY through its row: a table with no `opposes` row rolls with opposition `None`,
+    and with no `dice` row a pool of 0 (nothing read the actor's score).
 
     Reads `w.persons` (the actor, `claimants[0]`, and a person subject), `w.fixtures`, `w.records` (the
     Record an inquiry examines) and, for a prize a room hears, the bench's and the opponent's ledgers
@@ -200,9 +215,41 @@ def contest_input(w: Any, claimants: list, *, verb: str = "",
     # `speak {subject: himself}`) brings no opposition -- his own score is not an obstacle to himself --
     # so the obstacle starts at `obstacle_default` on the control arm and at the task's difficulty alone on
     # the task arm (B11 lane A: a task no person opposes has no opposition term), the same at any capability he holds.
-    opposition = None if subject == claimants[0] else _opposition_of(w, subject, verb)
-    return _frame(fx, faculty(w, w.persons[claimants[0]], verb), opposition,
-                  doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb)
+    #
+    # THE ROLL READS ITS TERMS ONLY THROUGH THE SITE'S ROWS (CAP A6): a `dice` row's read gives the pool (and the score
+    # it is built on), an `opposes` row's read gives the opposition; no `opposes` row means opposition `None`, as a
+    # self-plea. A row the table omits is a term the roll does not read, so `fed_by` and the roll cannot disagree.
+    actor = w.persons[claimants[0]]
+    rows = _social_rows()
+    roles = {r.role for r in rows}
+    opposition = None
+    if "opposes" in roles and subject != claimants[0]:
+        opposition = _opposition_of(w, subject, verb)
+    pool = faculty(w, actor, verb) if "dice" in roles else 0
+    inp = _frame(fx, pool, opposition, doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb)
+    read = {"dice": score(w, actor, verb) if "dice" in roles else None, "opposes": opposition}
+    return inp, tuple((row, read[row.role]) for row in rows)
+
+
+#: `rosters.yaml: capability_use_sites`' site whose one reader is `contest_input` (the single roll's dice and opposition).
+SOCIAL_ROLL_SITE = require_use_site("social_roll")
+
+
+def _social_rows() -> tuple:
+    """The `social_roll` site's rows that give the roll a term (`dice`, `opposes`), in table order: the ONE place the roll's two
+    builders -- the dealt roll (`_read_social_roll`) and the person's believed one (`believed_input`) -- ask which terms the table
+    gives it, so they cannot compose different obstacles from one table (`_frame`). The loader pins each row's `key` and `side`
+    and allows one of each role (`rosters.yaml: capability_site_reads`), so the role alone says what the reader reads."""
+    return tuple(r for r in capability_rows(SOCIAL_ROLL_SITE) if r.role in ("dice", "opposes"))
+
+
+def _fed_by(reads: tuple, inp: SocialContestInput, ob_terms: dict) -> tuple:
+    """`((use, role, key, side, value, contributed), ...)` -- every row that fed the roll, in table order (MAP §D; the
+    record is `resolve`'s, never an `Event` field, D-U1-06). `value` is what the row's reader read (`_read_social_roll`);
+    `contributed` is what it added to the roll: the pool for `dice`, the module's own `opposition` term of the obstacle for
+    `opposes` (`ob_terms`, read off the module that composed it, `0.0` where nobody opposed)."""
+    contributed = {"dice": inp.pool, "opposes": ob_terms.get("opposition", 0.0)}
+    return tuple((r.use, r.role, r.key, r.side, value, contributed[r.role]) for r, value in reads)
 
 
 def _difficulty(fx: Any, verb: str) -> Optional[float]:
@@ -239,11 +286,9 @@ def _frame(fx: Any, pool: int, opposition: Optional[float], forgery_quality: flo
 # ---------------------------------------------------------------------------------------------
 # EXACT ODDS (CP-T01-03): what a roll of this record would deal, read and never rolled.
 # ---------------------------------------------------------------------------------------------
-# The claim a person holds about another's capability: `Claim(subject=<that person>, predicate=
-# CAPABILITY_CLAIM + <the verb's capability key>, value=<the score he believes>)`. NOTHING DEPOSITS
-# ONE TODAY (the told, seen and inferred channels carry no capability), so a believed opposition is
-# `None` for every person in a built realm until a depositor exists; this is the reading, not the writer.
-CAPABILITY_CLAIM = "capability:"
+# The claim a person holds about another's capability, and its one reader (`believed_capability`), are
+# `queries/person_q.py`'s (B04.22: the read the confer term also makes). NOTHING DEPOSITS ONE TODAY, so a believed
+# opposition is `None` for every person in a built realm until a depositor exists; this is the reading, not the writer.
 OBSTACLE_ROLE = "social_contest.obstacle"   # the composition row whose module composes the obstacle
 QUERY_ENTRIES = ((OBSTACLE_ROLE, "query"),)  # the host's declared need, held at driver construction (`registrar.require_entries`)
 
@@ -296,16 +341,17 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
       * the room's terms (`reception`, `proofs`) read other persons' ledgers: unknown unless the caller
         passes his own believed `room` (`{"reception": .., "proofs": ..}`).
     His `effort` is his own act's, held with certainty like his pool (CP-T01-05)."""
+    roles = {r.role for r in _social_rows()}
     key = VERB_CAPABILITY.get(verb)
     opposition = None
-    if person_subject and key and subject != p.id:
-        held = [c for c in p.ledger
-                if c.subject == subject and c.predicate == CAPABILITY_CLAIM + key]
-        if not held:
+    # THE TABLE'S TERMS, as the dealt roll reads them (`_read_social_roll`): no `opposes` row, no opposition term (and none to
+    # be unknown about); no `dice` row, a pool of 0.
+    if "opposes" in roles and person_subject and key and subject != p.id:
+        said = believed_capability(p, subject, key)
+        if said is None:
             return None
-        said = max(held, key=lambda c: (c.when, c.round, c.confidence))
-        opposition = float(said.value)
-    elif person_subject and subject != p.id and fx.get("obstacle_model") == OBSTACLE_MODEL_TASK:
+        opposition = float(said)
+    elif "opposes" in roles and person_subject and subject != p.id and fx.get("obstacle_model") == OBSTACLE_MODEL_TASK:
         # A VERB NAMING NO KEY (`lie`), ON THE TASK ARM: the roll opposes a person with `pool.score`, which on such a verb is
         # the untrained score for EVERY person (`pool.untrained`; nothing can be held on no vocation), so it is known,
         # and the believed obstacle is the dealt one. The control
@@ -319,7 +365,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
             return None
         room_terms = dict(reception=room["reception"], reception_gain=fx.get("reception_gain"),
                           proofs=room["proofs"], proof_step=fx.get("proof_step"))
-    return _frame(fx, pool, opposition, 0.0, room_terms, effort, verb)
+    return _frame(fx, pool if "dice" in roles else 0, opposition, 0.0, room_terms, effort, verb)
 
 
 def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
@@ -483,9 +529,11 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     `effort` is the act's own (CP-T01-05, `state/carriers.py::effort_of`, passed by `seam/contest.py`): it
     reaches only `contest_input`, where it becomes `leverage`; the act's draw is unchanged (one id, one draw).
 
-    RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage, settled_margin, ob_terms)   # the entry's Margin + the record
+    RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage, settled_margin, ob_terms, fed_by)   # the entry's Margin + the record
                  # + the margin's fraction settled by the act's own draw (CP-T01-04), the integer `degree_of` grades
-    REFUSED  -> dict(status, why, module, resolver, pool, ob, ob_terms)   # S27.4: ob > obstacle_refusal_multiple x pool
+    REFUSED  -> dict(status, why, module, resolver, pool, ob, ob_terms, fed_by)   # S27.4: ob > obstacle_refusal_multiple x pool
+    `fed_by` (B04.08): a tuple of `(use, role, key, side, value, contributed)`, one per `social_roll` row that fed the roll
+    (`_fed_by`); read by no caller yet, carried on the dict and on no `Event` (D-U1-06).
 
     ⚠ A RETURN THAT IS NOT A `Margin` RAISES, NAMING THE ENTRY (*the provider returns a Margin*). It is a
     software defect in the module -- a winner where a margin belongs is the second resolver S27.2 refuses --
@@ -534,8 +582,8 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     heard = rung if row is not None and row.get("heard_by") == BENCH else None
     # An inquiry (no prize) examines its subject; a Record's forgery quality
     # enters the obstacle (`contest_input`'s `examined`). A prize names a contest, which examines nothing.
-    inp = contest_input(w, claimants, verb=verb, subject=subject, room=heard,
-                        examined=subject if prize is None else None, effort=effort)
+    inp, reads = _read_social_roll(w, claimants, verb=verb, subject=subject, room=heard,
+                                   examined=subject if prize is None else None, effort=effort)
     entry, refusal = entry_for(prize, _PROVIDER, module_entry)
     if entry is None:
         return refusal
@@ -561,7 +609,8 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     ob_terms = _composed_terms(inp)
     if margin.ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
         return dict(status="REFUSED", why="S27.4", module=_PROVIDER,
-                    resolver=_RESOLVER, pool=inp.pool, ob=margin.ob, ob_terms=ob_terms)
+                    resolver=_RESOLVER, pool=inp.pool, ob=margin.ob, ob_terms=ob_terms,
+                    fed_by=_fed_by(reads, inp, ob_terms))
     # CP-T01-04: the margin's fraction is settled here, AFTER the S27.4 check (a refused act draws
     # nothing), by the act's own generator, and only when there is a fraction to settle -- a whole
     # margin draws nothing, so the act's stream and every whole-Ob hash are unmoved. The owner derives
@@ -569,4 +618,5 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     settled = settle_record(margin.net, inp.leverage, inp.pool, margin.ob, rng.random)
     # The margin's own fields, copied whole: the host reads the pair, it never computes one.
     return dict(status="RESOLVED", module=_PROVIDER, resolver=_RESOLVER, pool=inp.pool,
-                **asdict(margin), leverage=inp.leverage, settled_margin=settled, ob_terms=ob_terms)
+                **asdict(margin), leverage=inp.leverage, settled_margin=settled, ob_terms=ob_terms,
+                fed_by=_fed_by(reads, inp, ob_terms))

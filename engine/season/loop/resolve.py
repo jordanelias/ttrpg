@@ -6,7 +6,7 @@ function and `inspect.getsource(SeasonDriver.resolve)` returns THIS SOURCE, whic
 read a step's body rely on (ED-IN-0203 step 9).
 
 ⚠ **THE TOKEN IS HANDED IN BY THE DRIVER (G2).** `SeasonDriver.season` mints an ACTS `Token`
-through `loop/driver.py::mint_token` and passes it as `token`, once per round. `resolve` threads
+through `loop/driver.py::mint_token` and passes it as `token`, once per lap. `resolve` threads
 it to `_fold` and `_fold` to `_apply_write`, each taking it as the argument after `w`; every gate
 write below presents it. This module constructs none and calls no minter --
 `tests/test_g2_token.py` fails if it does.
@@ -49,7 +49,7 @@ from ..trace_log import TRACE
 def _canonical_order(w: "World", acts: list) -> list:
     """S27/S32 rest 3: FIVE STRATA, then a CONTENT-DERIVED hash key within each -- extracted
     from `resolve()`'s own sort (M4, `ED-IN-0279` clause (a)) so `loop/encounter.py` can fold a
-    SUBSET of a round's acts in the SAME canonical order, rather than re-deriving the rule or
+    SUBSET of a lap's acts in the SAME canonical order, rather than re-deriving the rule or
     skipping it (§8: it lives once). No `self`: the ordering is a pure function of the world's
     seed/tick and the acts themselves, not of driver state."""
     return sorted(acts, key=lambda a: (stratum_of(a),
@@ -62,7 +62,7 @@ def _survives(self, w: "World", a: Act) -> list:
     `self.act_of`) that the caller should emit INSTEAD of folding.
 
     Shared with `loop/encounter.py`: a predecessor's act can remove a person just as easily inside
-    RESOLVE as inside an earlier act of the SAME round's ENCOUNTER pass, and the reading is the
+    RESOLVE as inside an earlier act of the SAME lap's ENCOUNTER pass, and the reading is the
     fold's own rather than borrowed.
 
     ⚠ SC-02 `23`: THE TAG ASSERTION IS HERE, BECAUSE THIS IS THE ONE CHECK BOTH FOLD ENTRIES SHARE
@@ -588,7 +588,7 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
     ⚠ DECLARED DIVERGENCE (`ED-IN-0261`): RESOLVE's call can differ from WITNESS's on `co_located`,
     since a later act can move someone. The presence cache is a barrier cache, so it is DISCARDED
     before the call -- the scar reflects who stood there when THIS act happened, not when the
-    first act of the round was folded. (`presence` is the one barrier-cache key in the tree, and
+    first act of the lap was folded. (`presence` is the one barrier-cache key in the tree, and
     nothing else at RESOLVE reads it.)
 
     ⚠ THE VIOLATION PREDICATE IS A CANDIDATE READING, NOT A RULING: `person_q.elements_violated_by`
@@ -731,7 +731,7 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     checks eligibility and `requires` once, before calling this, exactly as it always did; a
     caller reaching this function has already been admitted. ENCOUNTER's own selection is by the
     DECLARATION EVENT (`loop/encounter.py`), never by re-running this repo's own admission check
-    against a world the whole round has since moved -- `_fold`, below, still runs its OWN
+    against a world the whole lap has since moved -- `_fold`, below, still runs its OWN
     internal `_admits` when it applies the writes, which is pre-existing behaviour on every
     contested verb today and not something this function adds or removes.
 
@@ -839,8 +839,8 @@ def _grade(self, w: "World", token: Token, a: Act, route: dict) -> list:
     ⚠ THE SUBJECT IS THE ACT'S `payload["subject"]`, WHICH A CHOOSER-FORMED ACT CARRIES AS THE QUESTION'S
     REFERENT (`research`: a Record, `surveil`: a Rung, a person-kind Rung shares its person's id). The
     provider reads opposition off a PERSON subject only (`sigma.py::_opposition_of`) and only where
-    `verb_capability` names the verb, so the obstacle is `obstacle_default` HOLDS ONLY WHILE
-    `verb_capability` names no inquiry: adding a row for one is the edit that must re-read this.
+    the verb's `capability:` column names a skill (`descriptors.CAPABILITIES`), so the obstacle is `obstacle_default` HOLDS ONLY
+    WHILE that column names no skill for an inquiry verb: adding one is the edit that must re-read this.
     ⚠ THE GENERATOR IS THE ACT'S OWN, `H(seed, tick, actor, "roll:<verb>:<act id>")` -- `_contest`'s
     shape with the verb where a prize would be (there is none), so adding a graded inquiry moves no
     other act's draw (`04 PART D row 35`)."""
@@ -1049,7 +1049,7 @@ def resolve(self, token: Token, acts: list[Act],
             # refusal, not an after-the-fact replacement, not ENCOUNTER's) -- not from `_grade`, so no branch here names a verb, a
             # band or a kind: an unclaimed kind finds nothing, and an ungraded `finding.made` carries no
             # degree and `finding_terms` keys nothing for it -- the data decides. At RESOLVE, after the
-            # act's fold, so the find reads the log as PREVIOUS rounds left it (the log gains a round's
+            # act's fold, so the find reads the log as PREVIOUS laps left it (the log gains a lap's
             # Events only after RESOLVE returns, `loop/driver.py`). WITNESS deposits it.
             # ⚠ Reachable by a `research` only through a plant -- see `epistemic.trail_of`.
             # ⚠ LAYER 1 (`04` §A.2): see `seam/wrappers/fieldwork.py` (`self.findings` is a driver-held store).

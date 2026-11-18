@@ -294,16 +294,16 @@ def test_step25_falsifier_the_examination_reads_the_quality_into_its_obstacle():
 def test_step25_a_prize_contest_examines_nothing_and_an_inquiry_examines_its_subject(monkeypatch):
     """The adapter's gate, `examined = subject if prize is None else None`: an inquiry (no prize) hands the
     Record to the input builder, a contest a prize names hands it nothing, so a `speak` on the same
-    Record reads no forgery quality. Observed through a spy on `contest_input`'s `examined` (the
+    Record reads no forgery quality. Observed through a spy on `_read_social_roll`'s `examined` (the
     gate is a branch in `resolve`, and the builder's own default is not it)."""
     w, _d, rid = trail_world(fixtures=_fx(obstacle_ceiling=None))
     seen = []
-    real = sigma.contest_input
+    real = sigma._read_social_roll
 
     def spy(*args, **kw):
         seen.append(kw.get("examined"))
         return real(*args, **kw)
-    monkeypatch.setattr(sigma, "contest_input", spy)
+    monkeypatch.setattr(sigma, "_read_social_roll", spy)
     sigma.resolve(w, [INVESTIGATOR], ["root"], "a matter", verb="speak", subject=rid,
                   rng=random.Random(0), rung=None)
     sigma.resolve(w, [INVESTIGATOR], ["root"], None, verb="research", subject=rid,

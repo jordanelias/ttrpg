@@ -203,7 +203,7 @@ def _tenure_row(t) -> tuple:
 def _claim_row(c) -> dict:
     return {"id": c.id, "holder": c.holder, "subject": c.subject, "predicate": c.predicate,
             "value": c.value, "when": c.when, "source": c.source, "confidence": c.confidence,
-            "visibility": c.visibility, "round": c.round, "teller": c.teller,
+            "visibility": c.visibility, "round": c.lap, "teller": c.teller,
             "chain": list(c.chain), "doer": c.doer}
 
 
@@ -243,10 +243,10 @@ def _append_jsonl(path: Path, row: dict) -> None:
 
 
 def _record_escape(exceptions_path: Path, escape_type: str, seed: int, arm: str, batch: int,
-                   season: int, tick: int, round_: int, detail: dict) -> None:
+                   season: int, tick: int, lap_: int, detail: dict) -> None:
     _append_jsonl(exceptions_path, {
         "type": escape_type, "seed": seed, "arm": arm, "batch": batch, "season": season,
-        "tick": tick, "round": round_, **detail,
+        "tick": tick, "round": lap_, **detail,
     })
 
 
@@ -329,7 +329,7 @@ def _run_world(args: argparse.Namespace, head: str, world_dir: Path, argv: list)
                 # checks, `state/gate.py`'s `NoToken`). Record the same traceback/frame/hashes a
                 # crash gets, so a reader can tell which it was without re-running.
                 _record_escape(exceptions_path, "instrument_defect", seed, arm, b, s, w.tick,
-                              d.round, {"exception_class": type(exc).__name__,
+                              d.lap, {"exception_class": type(exc).__name__,
                                        "message": str(exc),
                                        "traceback": traceback.format_exc(),
                                        "frame": _innermost_season_frame(exc),
@@ -338,7 +338,7 @@ def _run_world(args: argparse.Namespace, head: str, world_dir: Path, argv: list)
                 break
             except ShapeGap as exc:
                 _record_escape(exceptions_path, "design_gap_escape", seed, arm, b, s, w.tick,
-                              d.round, {"exception_class": type(exc).__name__,
+                              d.lap, {"exception_class": type(exc).__name__,
                                        "kind": exc.kind, "what": exc.what, "where": exc.where,
                                        "needs": exc.needs, "law": exc.law,
                                        "traceback": traceback.format_exc(),
@@ -347,7 +347,7 @@ def _run_world(args: argparse.Namespace, head: str, world_dir: Path, argv: list)
                 end_reason, stopped = "design_gap_escape", True
                 break
             except Exception as exc:                                     # noqa: BLE001 -- C.6.1
-                _record_escape(exceptions_path, "crash", seed, arm, b, s, w.tick, d.round, {
+                _record_escape(exceptions_path, "crash", seed, arm, b, s, w.tick, d.lap, {
                     "exception_class": type(exc).__name__, "message": str(exc),
                     "traceback": traceback.format_exc(),
                     "frame": _innermost_season_frame(exc),

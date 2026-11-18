@@ -476,7 +476,7 @@ DEFAULT_FIXTURES = Fixtures(
     interactions_per_scene=3,          # `H-76`, swept 1 / 3 / unbounded
     extended_scene_cost=2,             # `H-77`, swept 1 / 2 / 3
     scene_packing_rule="greedy",       # `H-78`, swept greedy / one_per_scene / by_subject
-    # `U2` / `H-124`. HOW MANY OF THE FIVE A PERSON MAY SPEND IN ONE ROUND of the scene tick.
+    # `U2` / `H-124`. HOW MANY OF THE FIVE A PERSON MAY SPEND IN ONE LAP of the scene tick.
     #
     # ⚠ THIS IS NOT `scene_budget` UNDER A SECOND NAME. `scene_budget` is 5 and is the season's
     # total, RULED (Jordan, 2026-09-02: *"5 scenes for a character to play per season"*). This is
@@ -485,15 +485,15 @@ DEFAULT_FIXTURES = Fixtures(
     # ⚠ AND IT BOUNDS THE DRIVER, NOT THE PERSON. The person still chooses against their whole
     # season remainder — `pack_scenes` takes that as its COST budget, so an extended scene
     # (`extended_scene_cost` = 2) is still affordable — and the driver releases this many of the
-    # scenes they chose per round. Nothing is discarded, only deferred, so S26.3's *the engine
+    # scenes they chose per lap. Nothing is discarded, only deferred, so S26.3's *the engine
     # never truncates* is untouched. Making this the person's bound instead would have trimmed
     # every extended chunk to one interaction and driven `H-77`'s sweep inert.
     #
     # ⚠ `5` IS A REAL ARM AND NOT A CONTROL. A person whose triage leaves budget UNSPENT empties
-    # their queue with remainder left, so a later round asks them again and they spend it — where
-    # the one-pass loop simply lost it. THE CONTROL IS THE `scene_budget = 1` ARM (one round).
-    # [JUSTIFIED: engine/season/hole_register.yaml H-124 -- `site: Fixtures scenes_per_round`, graded `assumption`; Jordan ruled the unit, the per-season count and that the tick is scene-granular, and supplied no number for the round, so this is injected, declared and swept 1 / 2 / 5]
-    scenes_per_round=1,                # `H-124`, swept 1 / 2 / 5; the control is `scene_budget = 1`
+    # their queue with remainder left, so a later lap asks them again and they spend it — where
+    # the one-pass loop simply lost it. THE CONTROL IS THE `scene_budget = 1` ARM (one lap).
+    # [JUSTIFIED: engine/season/hole_register.yaml H-124 -- `site: Fixtures scenes_per_lap`, graded `assumption`; Jordan ruled the unit, the per-season count and that the tick is scene-granular, and supplied no number for the lap, so this is injected, declared and swept 1 / 2 / 5]
+    scenes_per_lap=1,                # `H-124`, swept 1 / 2 / 5; the control is `scene_budget = 1`
     claim_subject_rule="both",         # `H-79`, swept actor / per_change / both
     # `W-B` / `H-122`. WHO RECEIVES A CLAIM MINTED FROM WHAT THE FOLD READ. #353 §28 says WITNESS
     # deposits and never says whether the deposit may carry the reads, or to whom; the arms are
@@ -1053,4 +1053,19 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: never]
     # [JUSTIFIED: engine/season/hole_register.yaml H-356 -- the docket lapse rule; the observable rules THAT a held matter lapses visibly, and no document gives the number of seasons, so it is injected and swept 2 / 4 / 8]
     docket_lapse=4,                    # `H-356`, swept None (control) / 2 / 4 (SHIPPED) / 8
+    # `H-414` (B04.22). HOW MUCH A CONFERRER'S VIEW OF A CANDIDATE WEIGHS IN WHOM HE SEATS: the weight on the `fit` term
+    # `decision/choose.py::score_terms` reads over a seating row's `to` (his regard for the candidate, and the skill his
+    # own ledger holds of him where the seat's row names one). `0.0` is SHIPPED and the CONTROL: the term is exactly
+    # 0.0 and the conferrer seats positionally, the lowest-id person he knows, as before. `0.5` and `1.0` are the sweep;
+    # the flip to a non-zero value is its own declared mover, made on a reading.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0.0`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-414 -- site: Fixtures confer_fit_weight, graded `assumption`; 06_FA_office_capabilities edit 4 gives no number for the weight, so it is injected at the control and swept 0.0 / 0.5 / 1.0]
+    confer_fit_weight=0.0,             # `H-414`, swept 0.0 (control, SHIPPED) / 0.5 / 1.0
 )
+
+
+def load() -> None:
+    """`data.load_all()`'s hook: refuse a `tables.capability_uses` row naming a Fixture this registry does not register.
+    It lives here and not in `rosters.py` because this module imports `rosters` (the other way would close an import cycle)."""
+    from .rosters import check_capability_fixtures
+    check_capability_fixtures(dict(DEFAULT_FIXTURES._v))

@@ -40,25 +40,62 @@ attributes:
   scale: "1-7"
   default: 1
   body:
-    - {key: attr.body.strength,  name: Strength,     aliases: []}
-    - {key: attr.body.endurance, name: Endurance,    aliases: [Vitality]}
-    - {key: attr.body.agility,   name: Coordination, aliases: [Agility, Dexterity]}
+    # `gloss:` (B04.02, DEF Edit 1) is a one-sentence plain description, required and non-empty on every attribute
+    # (`tools/export_descriptors.py::_attribute_glosses`); `decision/sheet.py::describe` returns it. Where the line's own
+    # description (or rosters.yaml's) existed the gloss is written from it; the rest are [ASSUMPTION]-marked, Jordan to correct.
+    - {key: attr.body.strength,  name: Strength,     aliases: [], gloss: "Raw bodily force: lifting, striking and holding."}   # [ASSUMPTION] no description anywhere; the gloss is the cheap reading
+    - {key: attr.body.endurance, name: Endurance,    aliases: [Vitality], gloss: "How long the body keeps going under strain, hurt or hunger."}   # [ASSUMPTION] no description anywhere; the gloss is the cheap reading
+    - {key: attr.body.agility,   name: Coordination, aliases: [Agility, Dexterity], gloss: "Quickness and control of the body: balance, aim and a steady hand."}   # [ASSUMPTION] only the aliases ground it
   mind:
-    - {key: attr.mind.focus,      name: Focus,      aliases: []}
-    - {key: attr.mind.acuity,     name: Reason,     aliases: [Acuity, Faculty, Forecasting, Predicting, Reasoning, Cognition]}   # [ASSUMPTION] legacy 'Cognition' folds to Reason -- Jordan veto
-    - {key: attr.mind.perception, name: Perception, aliases: []}                   # awareness of surroundings, noticing information; formerly an alias of Attunement
+    - {key: attr.mind.focus,      name: Focus,      aliases: [], gloss: "Sustained, exact attention to one thing."}   # [ASSUMPTION] rosters.yaml vocation_attribute: Focus "carries no registry description"
+    - {key: attr.mind.acuity,     name: Reason,     aliases: [Acuity, Faculty, Forecasting, Predicting, Reasoning, Cognition], gloss: "Working things out: analysis, recall and judgment from what is known."}   # [ASSUMPTION] legacy 'Cognition' folds to Reason -- Jordan veto; the gloss is [ASSUMPTION] too (Reason "carries no registry description", rosters.yaml vocation_attribute)
+    - {key: attr.mind.perception, name: Perception, aliases: [], gloss: "Awareness of surroundings and noticing information."}                   # awareness of surroundings, noticing information; formerly an alias of Attunement
   spirit:   # its own group (Jordan 2026-11-14, B01a.06): `will` left `mind` and its key moved with it
-    - {key: attr.spirit.will,     name: Spirit,     aliases: [Will, Willpower, attr.mind.will]}   # 'spirit move': Spirit is the primary again; 'Will' is the legacy name and back-resolves; `attr.mind.will` is the LEGACY KEY (B01a.06) and back-resolves the same way, to the new key
+    - {key: attr.spirit.will,     name: Spirit,     aliases: [Will, Willpower, attr.mind.will], gloss: "The resolve that resists being swayed or influenced."}   # 'spirit move': Spirit is the primary again; 'Will' is the legacy name and back-resolves; `attr.mind.will` is the LEGACY KEY (B01a.06) and back-resolves the same way, to the new key; gloss from rosters.yaml vocation_attribute ("the attribute that resists influence")
   social:
-    - {key: attr.social.attunement, name: Attunement, aliases: []}                 # reading people
+    - {key: attr.social.attunement, name: Attunement, aliases: [], gloss: "Reading people: sensing how another is taking what is said."}                 # reading people
     # `Influence` is not an attribute (it was `fac.influence`'s name); see names_index.yaml.
-    - {key: attr.social.charisma,   name: Presence,   aliases: [Charisma]}   # NOT 'Social': that is `agg.social`'s name (names_index.yaml), and NPC-001's legacy `social: 3-4` is the whole category, not this attribute (see her row)
-    - {key: attr.social.grace,      name: Grace,      aliases: []}                 # composure, calm, etiquette, manners; NOT the alias 'Composure' (the knot track)
+    - {key: attr.social.charisma,   name: Presence,   aliases: [Charisma], gloss: "The force of a person's presence: how strongly one draws, moves and persuades others."}   # NOT 'Social': that is `agg.social`'s name (names_index.yaml), and NPC-001's legacy `social: 3-4` is the whole category, not this attribute (see her row); the gloss is [ASSUMPTION] (Presence "carries no registry description", rosters.yaml vocation_attribute)
+    - {key: attr.social.grace,      name: Grace,      aliases: [], gloss: "Composure, calm, etiquette and manners."}                 # composure, calm, etiquette, manners; NOT the alias 'Composure' (the knot track)
   # RETIRED attribute: NOT in the roster (the count is ten) and still RESOLVED -- `tools/descriptor_registry.resolve`
   # returns it with `deprecated: true` (read from the `deprecated:` list below, the one retirement mechanism), so a
   # legacy reference learns it is retired instead of failing silently.
   retired:
     - {key: attr.social.bonds, name: Bonds, aliases: [Sincerity, Affability]}
+
+# CAPABILITIES -- the skills, DEFINED ONCE (B04.02; U1 §2, A-6, A-7, A-11, A-98). The ten attributes are in `attributes:`
+# above and the traits are in `traits:`; neither is re-defined here. `tools/export_descriptors.py::_capability_roster`
+# validates this block and cooks it into `descriptors.json`; `engine/substrate/descriptors.py::CAPABILITIES` reads it.
+# A skill is never lost (A-106): there is no `lapses_by` column. `opposed_by` absent reads `base`; `none` currently reads as absent too (the opposition falls back to the base attribute) [ASSUMPTION] until the obstacle's one form lands (B05, OBS section 2).
+capabilities:
+  source: "U1; A-6, A-7, A-11 (2026-11-12)"
+  kinds:    [skill]                               # closed, one kind (A-98 (4))
+  grows_by: [train, practice, use]                # closed; each names a rule the engine implements
+  untrained: [default, none]                      # closed; what a non-holder brings (U1 §4)
+  rows:
+    # No skill row carries `opposed_by` for `argue` or `inquiry`. Who resists an argument is the social contest's rule (V2 part 2 §C.2, A-137: the
+    # listener's Will plus rank, built by B24p), per ED-IN-0377 and ED-IN-0378. `argue`'s `base` is read by the single roll only; a proceeding's dice are Reason and Presence (V2 R11).
+    copying: {kind: skill, gloss: "Carries a text or a message on exactly as it was given.", base: attr.mind.focus,      opposed_by: none,             untrained: default, grows_by: [train, practice],      scale: [0, 7], source: "rosters.yaml vocation_attribute (CR-20)"}
+    argue:   {kind: skill, gloss: "Makes a case to someone's face and moves them by it.", base: attr.social.charisma, untrained: default, grows_by: [train, practice],      scale: [0, 7], source: "rosters.yaml vocation_attribute (CR-20); ED-IN-0350"}
+    inquiry: {kind: skill, gloss: "Finds things out: from a record, a place or a watched person.", base: attr.mind.acuity, untrained: default, grows_by: [train, practice],      scale: [0, 7], source: "rosters.yaml vocation_attribute (CR-20)"}
+    arms:    {kind: skill, gloss: "Fights with a weapon in hand.", base: attr.body.agility, untrained: default, grows_by: [train, practice, use], scale: [0, 7], source: "rosters.yaml vocation_attribute (CR-20); CP-T03-04 (iv)"}
+    # `law` is the one social skill defined (B04.18, ED-IN-0378): `insight` and `deception` are not created, `rhetoric` is not created (D-U1-03). `base` is `grade: assumption`; a designer re-points it by editing this one cell.
+    law:     {kind: skill, gloss: "Knows and applies the rules of a forum: procedure, definition, precedent.", base: attr.mind.acuity, untrained: default, grows_by: [train, practice], scale: [0, 7], source: "05_SC_hearing_capabilities (SC-B3); D-U1-03; U1 §5 (FA's `judgment` is `law`)"}
+
+# TRAITS -- what a person IS MOVED BY, DEFINED ONCE (B04.07; U1 §2a, A-98 (4), A-107: a roster separate from `capabilities`).
+# A trait is held or not (scale [0, 1]) and never gives dice. `seated_by` is the ONE `resonant_style` value of
+# `references/npc_registry.yaml` that seats it (compared lowercase; that key keeps its name and its eighteen values).
+# `tools/export_descriptors.py::_trait_roster` validates this block; `engine/substrate/descriptors.py::TRAITS` reads it;
+# `engine/season/data/cast.py::traits_of` seats `Person.traits`; one id, one roster (no id is also a `capabilities` row).
+traits:
+  source: "U1 §2a; A-98 (4), A-107 (2026-11-12); 02_CHAR_which_ground_moves_whom edit 1"
+  scale: [0, 1]
+  seated_from: "npc_registry.yaml#resonant_style"
+  rows:
+    moved_by_evidence:    {seated_by: evidence,    gloss: "Yields to a case that cites something he can check."}
+    moved_by_consequence: {seated_by: consequence, gloss: "Yields when shown the harm his own position has already done."}
+    moved_by_authority:   {seated_by: authority,   gloss: "Yields to one who stands over him or speaks for his creed."}
+    moved_by_solidarity:  {seated_by: solidarity,  gloss: "Yields to one he holds dear."}
 
 # AGGREGATES (W2.8 PLACEHOLDERS) -- computed from category members; NOT yet wired into derived values.
 aggregates:

@@ -178,6 +178,19 @@ titles:
     "Family Head":      "hearth"
     Individual:         "person"
 
+# v11 CR-25 (CR-11's design §1): WHAT A COMPUTED FOUNDING DECLARES -- moved here from `loop/predicates.py`'s three
+# constants (B04.23, `06_FA_office_capabilities` edit 5). The founder keeps the authority to fill and to strip the seat
+# he founds; the founded seat is filled by appointment and stripped by the rung above that holds the ground. Each value
+# is checked at load against its own roster (`data/rosters.py::_load_offices`): `keeps:` against `rosters.yaml:
+# remit_acts`, `conferral:` against `conferral_bases` (which `state/gate.py::FILLED_BY` opens to `confer`), `revocation:`
+# against `revocation_bases`. `office_founded_by` reads the three through `data/rosters.py`.
+founding:
+  # [ASSUMPTION; medium; Jordan to correct; revert: the full remit] -- the acts the founder keeps, taken off the
+  # founded seat's grant (the founded seat's remit is the founder's grant LESS these two).
+  keeps: [confer, revoke]
+  conferral: appointed
+  revocation: rung_above_in_holdings
+
 # THE THIRTY-ONE SEATS (29 until IN-64 added the Riskbreakers' two) -- id, post, rung anchor, body/faction, remit_acts, conferral, revocation,
 # holder (a case id in the 46-row cast), obligees, source. `[LIVE]` / `[NEW]` are r2 `03` §A.15's
 # marks, kept as written: `[LIVE]` = the per-case loop seated this holder when r2 was drafted;
@@ -615,7 +628,7 @@ foreign_seats:
     revocation: null
     holder:     "NPC-089"
     obligees:   []
-    source:     "references/npc_registry.yaml NPC-089 (`role: Katepano (frontier governor)`; `arc_trajectory`: \"Decides whether Altonia probes, presses, or invades\")"
+    source:     "references/npc_registry.yaml NPC-089 (`role: Katepano (frontier governor)`; his former registry arc sentence: \"Decides whether Altonia probes, presses, or invades\", now a comment on his case entry in `cases/NPC5.yaml`)"
     note:       "[NEW]. The empire's head (`rosters.yaml: faction_leaders`). `conferral`/`revocation` null: canon names no way the empire fills or strips the post."
 
   - id:         off_kommerkiarios
@@ -628,5 +641,5 @@ foreign_seats:
     revocation: null
     holder:     "NPC-090"
     obligees:   []
-    source:     "references/npc_registry.yaml NPC-090 (`role: Kommerkiarios (trade prefect at Schoenland interface)`; `arc_trajectory`: \"Enforces ancient trade treaties\")"
+    source:     "references/npc_registry.yaml NPC-090 (`role: Kommerkiarios (trade prefect at Schoenland interface)`; his former registry arc sentence: \"Enforces ancient trade treaties\", now a comment on his case entry in `cases/NPC5.yaml`)"
     note:       "[NEW]. The Kommerkiarios, trade prefect at the Schoenland interface. FA-01 (not built here) names which seat offers the trade demand."

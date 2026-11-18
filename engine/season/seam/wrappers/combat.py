@@ -84,7 +84,7 @@ from ...gaps import Forbidden, Unspecified
 from ...manifest.providers import provider
 from ...queries.inputs import PersonalCombatInput, PlayHost
 from ...queries.world_q import kit_of, stakes_of
-from ....substrate import composition
+from ....substrate import combat_kit, composition
 from ....substrate.descriptors import attribute_key
 from ...state.ids import H
 from ..ladder import party_degree
@@ -94,6 +94,9 @@ from .pool import faculty
 
 _END_KEY = attribute_key("Endurance")      # the registry key of `end` (`descriptors`, the one owner), not a typed literal
 assert _END_KEY, "descriptors names no Endurance attribute: party_end would read the default for every person"
+# The fight's default for `end` is the combat module's, read once from its typed export through `substrate/combat_kit.py`
+# (the artifact's one reader; section `attributes`); the registry's `default: 1` is the sheet scale's floor, a different fact.
+_END_DEFAULT = combat_kit.END_DEFAULT
 _PROVIDER = "personal_combat"
 _PRIZE = "the body"                 # the prize row this provider deals (`rosters.yaml`)
 PROVIDER = _PROVIDER                # the name `odds_of` asks `_rolled_as` for (a prize row's `provider:`)
@@ -140,9 +143,9 @@ def party_end(person: Any, fx: Any) -> int:
     one point per body band. The other attributes ride on `PersonalCombatInput.attributes` and the module maps
     them (PC-06 K-1). The module entry builds the `Combatant` from this number (`modules/combat/fight.py`)."""
     bands = body_band_penalty(person, fx)
-    # `end`'s class default is 4 (`modules/combat/attributes.py`). One band = one point, floored at 1: a dying
+    # `end`'s default in a fight is the combat export's (`_END_DEFAULT`), not a copy of it. One band = one point, floored at 1: a dying
     # person still fights, which is the same floor `decision.budget` applies for the same reason.
-    base_end = person.attributes.get(_END_KEY, 4)
+    base_end = person.attributes.get(_END_KEY, _END_DEFAULT)
     return max(1, base_end - bands)
 
 

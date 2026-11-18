@@ -54,9 +54,9 @@ def revert_cp_t03_04(monkeypatch):
     `faculty`, `practice`, `_grown`, the corpus check -- holds the same object) and `arms` taken out of `VOCATIONS` at
     each module that bound the frozenset. Other tests that pin a pre-item hash call it."""
     for verb in BODY_VERBS:
-        monkeypatch.delitem(R.VERB_CAPABILITY, verb)
-    off = frozenset(R.VERB_CAPABILITY.values())
-    for mod in (R, VERBS, OPT, EC):
+        monkeypatch.delitem(VERBS.VERB_CAPABILITY, verb)
+    off = frozenset(VERBS.VERB_CAPABILITY.values())
+    for mod in (VERBS, OPT, EC):
         monkeypatch.setattr(mod, "VOCATIONS", off)
 
 
@@ -69,9 +69,9 @@ def _engine():
 # ---- (i) the roster ---------------------------------------------------------------------------------------------
 
 def test_the_three_body_verbs_draw_on_arms_and_arms_is_a_vocation_with_an_attribute():
-    assert {v: R.VERB_CAPABILITY.get(v) for v in BODY_VERBS} == {v: KEY for v in BODY_VERBS}
+    assert {v: VERBS.VERB_CAPABILITY.get(v) for v in BODY_VERBS} == {v: KEY for v in BODY_VERBS}
     assert KEY in VERBS.VOCATIONS and KEY in OPT.VOCATIONS and KEY in EC.VOCATIONS
-    assert R.VOCATION_ATTRIBUTE[KEY] == "attr.body.agility"
+    assert VERBS.VOCATION_ATTRIBUTE[KEY] == "attr.body.agility"
     # the key is spelt in no body: `_grown` reads it off the roster by verb
     src = open(EC.__file__, encoding="utf-8").read()
     assert '"arms"' not in src and "'arms'" not in src

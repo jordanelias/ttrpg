@@ -66,7 +66,6 @@ Three sources, as `H2_DECISIONS.md` Appendix A's script reads them, re-run here 
 | step | open at once (the first named merges first among movers, §3) |
 |---|---|
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every row from B02 down moves one step later (S2 → S3, …, S24 → S25), membership unchanged |
-| S6 | B04 (IN) |
 | S7 | B05 (IN), alone |
 | S8 | B06 (IN), B14 (PC) |
 | S9 | B07 (IN), B17 (MB) |
@@ -89,7 +88,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 
 | batch | lane | wave (§2.1 → now) | step (§2.1 → now) | slack | part files | positions: total (by state) | hash, from the position rows (§2.2 said) | est. h (E-15) | after: every `GATE: Batch` it needs (`+G` a part's GATE line §2.1 lacked; `+R` an edge H2 adopts) |
 |---|---|---|---|---|---|---|---|---|---|
-| B04-capability-home | IN | W6 | S6 | 0 | 7 | 27 (B24 P2 C1) | MOVER (encoding 2) | 13.3 | B00, B01, B02, B03g, B03c, B03a |
 | B05-one-roll | IN | W7 | S7 | 0 | 8, 8_cont, 9 | 41 (B36 P3 R1 DF1; +B05.24 DF, +B05.25 B, 2026-11-13) | MOVER (behaviour 13, encoding 1; B05.16 EQUAL after B01a, 2026-11-14) | 20.9 | B00, B01, B01a (B01a.05), B02, B03a, B13, B16M, B04 |
 | B06-keyed-draw | IN | W8 | S8 | 0 | 10 | 8 (B7 P1) | MOVER (behaviour 1) | 5.7 | B00, B01, B02, B03, B05 |
 | B07-task-draw | IN | W9 | S9 | 0 | 10_cont2 | 10 (B5 P5) | MOVER (behaviour 1) | 6.5 | B00, B01, B02, B05, B06 |
@@ -154,7 +152,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 
 | batch | its boundary row (part:line) | exact text | `GATE: Batch` lines | equal to its after-list in §1 | names a batch closing at or after its own step | H2 added |
 |---|---|---|---|---|---|---|
-| B04-capability-home | 7:551 | yes | 6 | yes | none | — |
 | B05-one-roll | 9:432 | yes | 8 | yes | none | B01a (B01a.05) |
 | B06-keyed-draw | 10:220 | yes | 5 | yes | none | — |
 | B07-task-draw | 10_cont2:173 | yes | 5 | yes | none | — |
@@ -217,7 +214,6 @@ One row per batch in schedule order: the position handles (the part after the do
 
 | step | batch | behaviour movers (position handles) | encoding movers | conditional movers | the re-pin position and what its text says | merge position in its step |
 |---|---|---|---|---|---|---|
-| S6 | B04 | — | 01, 07 | — | `B04.99` (B04.26 steps 2, 3 moved, R1) | 1 of 1 movers |
 | S7 | B05 | 02, 03, 09, 25, 11, 14, 17, 18, 23, 55, 60, 62, 64 (2026-11-14: 16 EQUAL after B01a; 25 added 2026-11-13) | 20 | — | `B05.99` | 1 of 1 movers |
 | S8 | B06 | 04 | — | — | `B06.99` | 1 of 2 movers |
 | S8 | B14 | 02, 03, 07, 15, 16, 24, 27 | — | — | `B14.99` | 2 of 2 movers |

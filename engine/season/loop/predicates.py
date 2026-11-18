@@ -16,7 +16,8 @@ from __future__ import annotations
 from typing import Optional
 
 from ..data.requires import binding_from_act
-from ..data.rosters import BINDS_BASES, RELEASABLE_KINDS, RUNG_KINDS, TITLE_DOMAINS
+from ..data.rosters import (BINDS_BASES, FOUNDED_CONFERRAL, FOUNDED_REVOCATION, FOUNDER_KEEPS, RELEASABLE_KINDS,
+                            RUNG_KINDS, TITLE_DOMAINS)
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..queries.person_q import ABOUT_KEYS
 from ..queries.world_q import BAN_KIND, DETAIN_KIND, DOCKET_PETITION, docketed, founds_over, restrained
@@ -214,14 +215,9 @@ def office_described_by(a: "Act") -> "Optional[Office]":
                   body=body, faction=faction)
 
 
-# v11 CR-25 (CR-11's design §1): WHAT A COMPUTED FOUNDING DECLARES, beside the derivation that reads them. The
-# founder keeps the authority to fill and to strip the seat he founds; the founded seat is filled by appointment
-# (`rosters.yaml: conferral_bases`, which `FILLED_BY` opens to `confer`) and stripped by the rung above that
-# holds the ground (`rosters.yaml: revocation_bases`). The two basis values are roster members, refused by
-# `Office.__post_init__` if a roster edit drops one.
-FOUNDER_KEEPS = ("confer", "revoke")   # [ASSUMPTION; medium; Jordan to correct; revert: the full remit]
-FOUNDED_CONFERRAL = "appointed"
-FOUNDED_REVOCATION = "rung_above_in_holdings"
+# v11 CR-25 (CR-11's design §1): WHAT A COMPUTED FOUNDING DECLARES is `offices.yaml: founding:` (B04.23), read here
+# through `data/rosters.py` (`FOUNDER_KEEPS`, `FOUNDED_CONFERRAL`, `FOUNDED_REVOCATION`) and checked against their
+# rosters at load.
 
 
 def founded_office_id(rung: str, post: str) -> str:
@@ -255,7 +251,7 @@ def office_founded_by(w: "World", a: "Act") -> "Optional[Office]":
                   `remit_acts` that `_eligible` reads -- the design names `remit_acts`; the two are equal unless the
                   office was hand-mutated after seating, and `13e` makes the grant the one consumer read
                   [ASSUMPTION; medium; Jordan to correct; revert: the office's `remit_acts`]) less
-                  `FOUNDER_KEEPS` [ASSUMPTION; medium; Jordan to correct; revert: the full remit];
+                  `FOUNDER_KEEPS` (`offices.yaml: founding: keeps`, where its [ASSUMPTION] mark now sits);
       conferral   `FOUNDED_CONFERRAL`; revocation `FOUNDED_REVOCATION`; id `founded_office_id(rung, post)`.
 
     `None` when the seat or the subject is absent, a conjunct refuses, or no post names the rung's kind.

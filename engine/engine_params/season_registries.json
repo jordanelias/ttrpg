@@ -949,6 +949,14 @@
           "Individual": "person"
         }
       },
+      "founding": {
+        "keeps": [
+          "confer",
+          "revoke"
+        ],
+        "conferral": "appointed",
+        "revocation": "rung_above_in_holdings"
+      },
       "seats": [
         {
           "id": "off_king",
@@ -1539,7 +1547,7 @@
           "revocation": null,
           "holder": "NPC-089",
           "obligees": [],
-          "source": "references/npc_registry.yaml NPC-089 (`role: Katepano (frontier governor)`; `arc_trajectory`: \"Decides whether Altonia probes, presses, or invades\")",
+          "source": "references/npc_registry.yaml NPC-089 (`role: Katepano (frontier governor)`; his former registry arc sentence: \"Decides whether Altonia probes, presses, or invades\", now a comment on his case entry in `cases/NPC5.yaml`)",
           "note": "[NEW]. The empire's head (`rosters.yaml: faction_leaders`). `conferral`/`revocation` null: canon names no way the empire fills or strips the post."
         },
         {
@@ -1557,7 +1565,7 @@
           "revocation": null,
           "holder": "NPC-090",
           "obligees": [],
-          "source": "references/npc_registry.yaml NPC-090 (`role: Kommerkiarios (trade prefect at Schoenland interface)`; `arc_trajectory`: \"Enforces ancient trade treaties\")",
+          "source": "references/npc_registry.yaml NPC-090 (`role: Kommerkiarios (trade prefect at Schoenland interface)`; his former registry arc sentence: \"Enforces ancient trade treaties\", now a comment on his case entry in `cases/NPC5.yaml`)",
           "note": "[NEW]. The Kommerkiarios, trade prefect at the Schoenland interface. FA-01 (not built here) names which seat offers the trade demand."
         }
       ]
@@ -2109,7 +2117,7 @@
         "graded_inquiries": {
           "source": "v9 FI-01 (`ED-FI-0009`; J-22 answered option (A)): the inquiries are graded by degree, as ladder step 3 answered (RESOLVE -> WITNESS, \"Claims graded by degree; Failure emits `finding.none` and deposits nothing\"), through a declared routing column that is NOT a prize and NOT a `contests:` shape. A-21: one roll owner (S27.2) -- the `social_contest` module's entry, with the obstacle at the host input builder's non-person default.",
           "row": "H-111",
-          "note": "\u26a0 A ROUTE, NOT A PRIZE. Each row names the provider registered under `@provider(\"contest\", \u2026)` and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::faculty` (`verb_capability`, else the swept `pool_default`) and the obstacle the module's own (`modules/social_contest/roll.py::obstacle`: `obstacle_default`, swept, unless the subject is a person who HOLDS the `inquiry` key, `sigma.py::_opposition_of` -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already binds (`manifest/registry.py::check_graded_inquiries`), so this row adds no roll and no resolver. `verb_capability` now names `inquiry` for the three (REM-30, B10-10; the rows were deferred at CP-T01-01): an inquirer who HOLDS an `inquiry` key rolls it, and one who holds none still rolls `pool_default` (`seam/wrappers/sigma.py::faculty`). \u26a0 THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the questioned person answers by their own `tell`, so there is no degree on the asker); `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read` waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its flat `emits:` and is not counted as graded.",
+          "note": "\u26a0 A ROUTE, NOT A PRIZE. Each row names the provider registered under `@provider(\"contest\", \u2026)` and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::faculty` (the verb's `capability:` column, `descriptors.CAPABILITIES`, else the swept `pool_default`) and the obstacle the module's own (`modules/social_contest/roll.py::obstacle`: `obstacle_default`, swept, unless the subject is a person who HOLDS the `inquiry` key, `sigma.py::_opposition_of` -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already binds (`manifest/registry.py::check_graded_inquiries`), so this row adds no roll and no resolver. the verb table's `capability:` column now names `inquiry` for the three (REM-30, B10-10; the rows were deferred at CP-T01-01): an inquirer who HOLDS an `inquiry` key rolls it, and one who holds none still rolls `pool_default` (`seam/wrappers/sigma.py::faculty`). \u26a0 THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the questioned person answers by their own `tell`, so there is no degree on the asker); `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read` waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its flat `emits:` and is not counted as graded.",
           "keys": [
             "verb_table"
           ],
@@ -2151,32 +2159,146 @@
             "standing_crossed": "standing.band_crossed"
           }
         },
-        "verb_capability": {
-          "source": "`03 \u00a7A.2` -- *\"Rank supplies dice and gates nothing\"* -- and `#353 \u00a79.2`, quoted live in the tree: *\"`capability` supplies dice and GATES NOTHING\"*. The verb names a capability; the capability supplies the dice; nothing about it makes a verb unavailable.",
-          "row": "H-126",
-          "note": "\u26a0 THE MAPPING IS INJECTED AND THE MECHANISM IS NOT. That a contested act draws dice from the actor's capability is the design's; WHICH capability key each verb draws on is stated nowhere, so this table is an `assumption` row before it is a lookup -- `08 \u00a73`'s inject-declare-sweep, and never a refusal of the whole corpus for a missing key. \u26a0 A VERB WITH NO ROW HERE IS NOT AN ERROR. `seam/wrappers/sigma.py::faculty` falls through to `pool_default`, which is the `assumption` grade's own polarity: `absent` refuses, and this is not one. The table is therefore OPEN in the sense that matters -- adding a contested verb does not require adding a row before the seam will run it. \u26a0 AND IT IS NEARLY INERT ON THE CORPUS, SO NOBODY SHOULD READ THE ROWS AS DOING WORK: the writers of `Person.capability` are a `cast:` overlay's `capability:` (`harness/corpus_run.py`, `build_at`), a cast row's `lifepath:` (`data/cast.py::capability_of`, held at `pool_default`) and, in play, `train` (+1 on a key the subject already holds). Nearly every built person holds none, so every other derivation lands on `pool_default` and the roll varies by SEED and FIXTURE rather than by PERSON. That is why R-09 reads `partial` and not `met`. \u26a0 `argue: \"argue\"` and the three inquiries `research`, `examine`, `surveil: \"inquiry\"` (REM-30, B10-10) are VALUES of this table, so they ARE the vocation range (`data/verbs.py::VOCATIONS`, a frozenset of these values; no second roster to extend): `argue` and `inquiry` join `copying`, and every `train` formation (`vocation_sourced`) forms one Candidate per vocation. A DECLARED MOVER where formation moves. \u26a0 v11 CP-T03-04 (B10-11): `fight`, `accept` and `capture` -- the three rows contesting `the body` -- draw on `arms`, so a held `arms` key reaches combat's pool and Ob through `faculty` (CR-85: `combat_input` fills `PersonalCombatInput.faculties` from it; no second skill input), `train` may raise it (one more Candidate per `train` formation: a formation mover with nobody holding the key), and `_eff_kill` raises it by one on each surviving holder of a fight that drew blood (the key is read off this table by the verb, never spelt there). `capture` is added beside the design's `fight` and `accept` (CR-85 design \u00a75) because it opens the same fight through the same `combat_input`; without its row an `arms` holder would roll `pool_default` in a capture. \u26a0 THE NAME: `arms` is the plan's; a reader may take `capability[\"arms\"]` for EQUIPMENT, which is CP-T03-03's `arms_kinds` (matter kinds) -- a different thing. [ASSUMPTION; low; Jordan to correct; revert: rename the roster key] -- the rename is this table's three values and `vocation_attribute`'s key, nothing in a body. NOBODY HOLDS IT at landing: no cast overlay value and no lifepath template names it (Jordan's content).",
-          "sweep": [
-            "declared",
-            "uniform",
-            "absent"
+        "capabilities": {
+          "from_descriptor": "capabilities"
+        },
+        "cast_unread_keys": {
+          "values": [
+            "first_name",
+            "last_name",
+            "age",
+            "birthplace",
+            "territory",
+            "goals",
+            "notes",
+            "source",
+            "certainty",
+            "coherence"
+          ]
+        },
+        "capability_roles": {
+          "values": [
+            "dice",
+            "addend",
+            "opposes",
+            "edge",
+            "circumstance",
+            "resource",
+            "threshold",
+            "rate",
+            "judgement",
+            "gate"
           ],
-          "keys": [
-            "verb_table"
-          ],
-          "values": {
-            "tell": "copying",
-            "speak": "copying",
-            "argue": "argue",
-            "research": "inquiry",
-            "examine": "inquiry",
-            "surveil": "inquiry",
-            "fight": "arms",
-            "accept": "arms",
-            "capture": "arms",
-            "interrogate": "inquiry",
-            "arrest": "arms",
-            "determine": "argue"
+          "fields": {
+            "dice": [
+              "side",
+              "add",
+              "floor"
+            ],
+            "addend": [
+              "when"
+            ],
+            "opposes": [
+              "side"
+            ],
+            "edge": [
+              "side",
+              "when",
+              "level",
+              "per",
+              "against"
+            ],
+            "circumstance": [
+              "side",
+              "when",
+              "gain"
+            ],
+            "resource": [
+              "side"
+            ],
+            "threshold": [
+              "side"
+            ],
+            "rate": [
+              "when",
+              "gain"
+            ],
+            "judgement": [
+              "side",
+              "gain"
+            ],
+            "gate": [
+              "side",
+              "gain"
+            ]
           }
+        },
+        "capability_use_sites": {
+          "social_roll": "seam/wrappers/sigma.py::contest_input",
+          "fight": "seam/wrappers/combat.py::combat_input -- no reader of this row on this tree; B05 (CAP B1, B7) builds it",
+          "kit": "combat_systems.act_cost's caller -- no reader of this row on this tree; B05 (CAP B1, B7) builds it",
+          "told_claim_credit": "decision/options.py::competence",
+          "own_state_gate": "queries/person_q.py::OwnStateReader"
+        },
+        "capability_site_reads": {
+          "social_roll": {
+            "dice": {
+              "key": "verb",
+              "side": "actor"
+            },
+            "opposes": {
+              "key": "verb",
+              "side": "subject"
+            }
+          },
+          "own_state_gate": {
+            "gate": {
+              "side": "actor"
+            }
+          }
+        },
+        "capability_sides": {
+          "values": [
+            "actor",
+            "subject",
+            "each"
+          ]
+        },
+        "capability_per": {
+          "values": [
+            "held",
+            "rank",
+            "mid"
+          ]
+        },
+        "capability_fixture_columns": {
+          "values": [
+            "gain",
+            "add",
+            "floor"
+          ]
+        },
+        "capability_key_selectors": {
+          "values": [
+            "verb",
+            "verb.base"
+          ]
+        },
+        "capability_when_keys": {
+          "values": [
+            "rank_at_least"
+          ]
+        },
+        "capability_gate_keys": {
+          "values": [
+            "prac.thread_sensitivity"
+          ]
+        },
+        "capability_gate_sites": {
+          "values": [
+            "own_state_gate",
+            "told_retain"
+          ]
         },
         "task_difficulty": {
           "source": "B11 lane A (Jordan, 2026-11-12, relayed: *\"social contest obstacle is defined by the difficulty of the task and all associated modifiers\"*; RULED 2026-08-14, `dice_engine.degree_from_net`'s docstring: an opposed obstacle is *\"their corresponding score/2 plus whatever specific modifiers exist for them in that instance\"*).",
@@ -2194,19 +2316,8 @@
             "surveil": 2.0
           }
         },
-        "vocation_attribute": {
-          "source": "v10 CR-20 (M2, taken): a person's input is `faculty`, derived at read; the ten stored attributes (`references/descriptor_registry.yaml: attributes`, ED-IN-0328) are what it derives from. THIS TABLE IS WHICH ATTRIBUTE EACH VOCATION'S POOL STARTS FROM -- the vocation is a `verb_capability` value, the attribute a registry key.",
-          "note": "CLOSED, BOTH WAYS: a row for every vocation (`data/verbs.py::VOCATIONS`, the VALUES of `verb_capability`) and for nothing else, each valued by one of the ten registry keys; refused at import otherwise (`data/rosters.py::_load_vocation_attribute`), so a vocation added to `verb_capability` is refused until it is given an attribute, and a row for a name that is no vocation never reads as live. `faculty` takes the HELD value of the person's attribute here as the pool's base and the larger of that and the held capability key; with NO attribute held it is the held key alone, else `pool_default`, exactly as before CR-20 -- so a held key of 0 stays \"under one die\" without an attribute and is overridden by one (`seam/wrappers/sigma.py::faculty`; the plan's literal \"larger of the held key and `pool_default`\" would raise a held 0 to 2 against `test_odds_of`'s pin). `_opposition_of` reads the larger of the held key and the authored attribute (the row's `opposed_by` where it has one, CR-96), never practice; the fallback by arm: on the shipped `task` arm (`Fixtures obstacle_model`, B11 lane A) a person holding neither opposes at `pool_default` (`pool.py::score`), on the `stand_in` control arm he reads `None` and the module takes `obstacle_default`. EACH ROW'S GROUND, so a reviewer can check it against the vocation's own text and not against taste: `copying` -> Focus (`attr.mind.focus`): the vocation is `tell`/`speak` (a claim relayed as it was held) and NPC-088's case, a repeated multi-week task of copying a text (`cases/exercises/NPC-088.yaml`), i.e. sustained, exact attention to a thing so that it is reproduced unchanged. `argue` -> Presence (`attr.social.charisma`): RULED by Jordan, 2026-11-05 (ED-IN-0350): *\"argue main component is presence, attunement informs how character thinks the other character is receiving it and the best style of argument to deliver\"*. Presence is the arguer's pool. Attunement is NOT the pool: it informs the arguer's reading of how the other party is receiving the case and which style of argument to deliver, a choice-side input that no code reads yet (reference, not a mechanism; the carrier for it is a design owed to CR-92/CR-93, `-12`). (Proof is the room's term, `proofs`, composed into the obstacle already.) `inquiry` -> Reason (`attr.mind.acuity`): its three verbs are the fieldwork inquiries whose source rows are headed *Examine \u00b7 Cognition*, *Research \u00b7 Recall*, *Surveil \u00b7 Cognition* (`fieldwork_v30.md:301,303,304`, archived; `verb_table.yaml` `examine` / `research` / `surveil` `requires_typed_note`), and `Cognition` is Reason's registry alias; `Recall` is not among the ten. [ASSUMPTION; medium; Jordan to correct; revert: delete this roster and the loader, and `faculty` / `_opposition_of` read the held capability key alone, as before CR-20.] The competitors, each the cheap swap: `copying` -- Coordination (a copyist's hand) or Presence (`tell` is thrown against the hearer's standing, `verb_table.yaml` `tell`); `argue` -- none: ruled (above); `inquiry` -- Perception for `surveil` (\"awareness of surroundings, noticing information\", `references/descriptor_registry.yaml`). Focus, Reason and Presence carry no registry description, so no row rests on one. `argue` -> Presence stands (AR-29, influence); no vocation here is forgery or other precise-hand work (AR-16: `forge` draws on no capability key, and its quality is CR-94's); `inquiry` -> Reason is the one row AR-24 (Perception, \"surveillance and fieldwork\") presses on, through `surveil` and `examine`, while `research` stays Reason's. One row cannot serve both, and a split is a new vocation (`verb_capability`'s values), which is a decision [ASSUMPTION; medium; Jordan to correct]. `arms` -> Coordination (`attr.body.agility`, v11 CP-T03-04): the row is forced by this table's closure (a vocation with no row refuses the import), and the choice is the cheap swap [ASSUMPTION; medium; Jordan to correct; revert: Strength (`attr.body.strength`) or Endurance]. Ground: `references/descriptor_registry.yaml`'s alias line alone -- `attr.body.agility` is Coordination, aliases Agility, Dexterity; that the dexterity is the fighter's is this row's reading, not the registry's (it says nothing of weapons). \u26a0 The combat module ALSO reads `agi` as its own attribute (`modules/combat/attributes.py`), but a season fighter's `agi` is the module's class default (`modules/combat/fight.py` builds each Combatant from `end`, kit and `faculty` only), so a person holding Coordination brings it once, through `faculty`; no built person holds any attribute at landing.",
-          "values": {
-            "copying": "attr.mind.focus",
-            "argue": "attr.social.charisma",
-            "inquiry": "attr.mind.acuity",
-            "arms": "attr.body.agility"
-          },
-          "opposed_by": {}
-        },
         "lifepaths": {
-          "source": "v10 CR-33: the 34 lifepaths (the Stage 3 vocations of `character_histories_v30.md`, archived), by the ids that file prints, `3-CR1` ... `3-CF6`. THE CLOSED SET `tables: lifepath_templates` is keyed by, refused at import both ways (`data/rosters.py::_load_lifepath_templates`), and the set a cast row's `lifepath:` key is checked against (`data/cast.py::capability_of`). Four Niflhel ids (`3-NI1` ... `3-NI4`) are STRUCK in that file (it prints no row for them and sends their backstories to `3-CF6`) and are not members. Jordan's \"34 vocations\" counts these; in code \"vocation\" names a capability key (`data/verbs.py::VOCATIONS`), which is why the cast key is `lifepath:` and not `vocation:`.",
+          "source": "v10 CR-33: the 34 lifepaths (the Stage 3 vocations of `character_histories_v30.md`, archived), by the ids that file prints, `3-CR1` ... `3-CF6`. THE CLOSED SET `tables: lifepath_templates` is keyed by, refused at import both ways (`data/rosters.py::_load_lifepaths`), and the set a cast row's `lifepath:` key is checked against (`data/cast.py::capability_of`). Four Niflhel ids (`3-NI1` ... `3-NI4`) are STRUCK in that file (it prints no row for them and sends their backstories to `3-CF6`) and are not members. Jordan's \"34 vocations\" counts these; in code \"vocation\" names a capability key (`data/verbs.py::VOCATIONS`), which is why the cast key is `lifepath:` and not `vocation:`.",
           "values": [
             "3-CR1",
             "3-CR2",
@@ -2714,8 +2825,8 @@
           }
         },
         "vocation_sourced": {
-          "source": "#453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) \u00a79.4, the `train` row: *\"The capability raised ranges over the capability names `verb_capability` maps verbs to\"*, and its blocker, *\"a capability-key operand -- the `kind` operand ... [ASSUMPTION]\"*; J-13 answered (iii) as the interim (`workplans/valoria_master_workplan_v9_part5.md` \u00a7J.1, RS-21 item 10, [medium; Jordan to correct]): *\"`train` forms and writes `Person.capability` only where a case names a vocation, and `pool_default` holds everywhere else\"*.",
-          "note": "WHICH VERBS CARRY A VOCATION, AND ON WHICH OPERAND -- `verb: operand`. A VOCATION is a capability key `verb_capability` maps some verb to (its VALUES, `data/verbs.py::VOCATIONS`; `copying`, `argue` and `inquiry`, #453 K-20's range). A verb named here forms ONE Candidate per vocation in that range, the key riding on the named operand (`decision/options.py::opening_set`) -- the `kind` operand #453 \u00a79.4's blocker names, which `_derive_operand` would otherwise answer with a store kind. \u26a0 THE ACTOR'S OWN CAPABILITY IS NOT READ, AND THAT IS THE POINT: capability GATES NOTHING (#353 \u00a79.2; `harness/probes.py` P11 zeroes it and asks that the option set not move), so J-13 (iii)'s *\"`train` forms ... only where a case names a vocation\"* is built as its WRITE half only -- the effect (`loop/effects_combat.py::_eff_train`) raises the key only where the SUBJECT already holds it, and is refused everywhere else. ONE LOADER, `data/verbs.py::VOCATION_SOURCED`, refused at import when a line names a verb the table lacks, a verb that writes no `Person.capability`, or an operand outside `requires_operands`. [ASSUMPTION; medium; Jordan to correct; revert: a formation decline on the actor's own vocations (the plan's *\"forms\"* half), which first needs P11 / #353 \u00a79.2 re-ruled for `train`.]",
+          "source": "#453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) \u00a79.4, the `train` row: *\"The capability raised ranges over the capability names `verb_capability` maps verbs to\"* (quoted as written: that roster is deleted; the names are now the verb table's `capability:` column over `descriptors.CAPABILITIES`), and its blocker, *\"a capability-key operand -- the `kind` operand ... [ASSUMPTION]\"*; J-13 answered (iii) as the interim (`workplans/valoria_master_workplan_v9_part5.md` \u00a7J.1, RS-21 item 10, [medium; Jordan to correct]): *\"`train` forms and writes `Person.capability` only where a case names a vocation, and `pool_default` holds everywhere else\"*.",
+          "note": "WHICH VERBS CARRY A VOCATION, AND ON WHICH OPERAND -- `verb: operand`. A VOCATION is a capability key a verb's `capability:` column names (`data/verbs.py::VOCATIONS`, a subset of `descriptors.CAPABILITIES`; `copying`, `argue` and `inquiry`, #453 K-20's range). A verb named here forms ONE Candidate per vocation in that range, the key riding on the named operand (`decision/options.py::opening_set`) -- the `kind` operand #453 \u00a79.4's blocker names, which `_derive_operand` would otherwise answer with a store kind. \u26a0 THE ACTOR'S OWN CAPABILITY IS NOT READ, AND THAT IS THE POINT: capability GATES NOTHING (#353 \u00a79.2; `harness/probes.py` P11 zeroes it and asks that the option set not move), so J-13 (iii)'s *\"`train` forms ... only where a case names a vocation\"* is built as its WRITE half only -- the effect (`loop/effects_combat.py::_eff_train`) raises the key only where the SUBJECT already holds it, and is refused everywhere else. ONE LOADER, `data/verbs.py::VOCATION_SOURCED`, refused at import when a line names a verb the table lacks, a verb that writes no `Person.capability`, or an operand outside `requires_operands`. [ASSUMPTION; medium; Jordan to correct; revert: a formation decline on the actor's own vocations (the plan's *\"forms\"* half), which first needs P11 / #353 \u00a79.2 re-ruled for `train`.]",
           "values": {
             "train": "kind"
           }
@@ -2880,7 +2991,7 @@
         },
         "beneficiary_kinds": {
           "source": "`CAT-2`, closed at step 5 (`proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml`). The carriers a verb's `beneficiary:` column may name -- *\"a carrier a Candidate ALREADY holds (the actor, `subject`, or a named operand), NOT a fifth field on `Candidate`.\"*",
-          "note": "\u26a0 THIS IS A SUBSET OF `requires_operands` PLUS TWO, AND IT IS NOT THAT ROSTER. The operand vocabulary says what a PRECONDITION may bind; this says who an act is taken FOR THE GOOD OF. `from`, `site`, `kind`, `amount` and `floor` are absent because none of them names a person, and a beneficiary that is not a person is not a beneficiary -- it is the `none` member. \u26a0 `actor` IS A MEMBER HERE AND IS NEVER CARRIED IN `operands` (`operands_for` skips it: *\"`actor` is structural on both sides and is never carried\"*). That asymmetry is the point. The actor is the one carrier every Candidate holds unconditionally, so a verb declaring `beneficiary: actor` resolves for every candidate ever formed, where `to` resolves only where the cell binds it. \u26a0 `none` IS A DECLARATION, NOT A BLANK, and the loader requires the column on every row. An act whose good accrues to a Record, an Office, a Site or a Rung has no person-beneficiary the Candidate carries, and saying so in the data is what distinguishes it from a row nobody graded. Absence would read as `false` for every verb -- the UNKNOWN/False collapse `operands_for` refuses one level down. \u26a0 WHAT THIS ROSTER DOES NOT DECIDE: the WEIGHT. `synthesis.md` \u00a71.3 spells the term `orient \u00b7 benefits_me(c)`. The missing piece is the STATE: `Person` has no `orient` field and `data/cast.py` skips the 28 authored `self_other_initial` values in `references/npc_registry.yaml` (`ED-IN-0260`). The term is `6f`'s. This roster and its column deliver `beneficiary_of(p, c)`, which no game code reads (tests only).",
+          "note": "\u26a0 THIS IS A SUBSET OF `requires_operands` PLUS TWO, AND IT IS NOT THAT ROSTER. The operand vocabulary says what a PRECONDITION may bind; this says who an act is taken FOR THE GOOD OF. `from`, `site`, `kind`, `amount` and `floor` are absent because none of them names a person, and a beneficiary that is not a person is not a beneficiary -- it is the `none` member. \u26a0 `actor` IS A MEMBER HERE AND IS NEVER CARRIED IN `operands` (`operands_for` skips it: *\"`actor` is structural on both sides and is never carried\"*). That asymmetry is the point. The actor is the one carrier every Candidate holds unconditionally, so a verb declaring `beneficiary: actor` resolves for every candidate ever formed, where `to` resolves only where the cell binds it. \u26a0 `none` IS A DECLARATION, NOT A BLANK, and the loader requires the column on every row. An act whose good accrues to a Record, an Office, a Site or a Rung has no person-beneficiary the Candidate carries, and saying so in the data is what distinguishes it from a row nobody graded. Absence would read as `false` for every verb -- the UNKNOWN/False collapse `operands_for` refuses one level down. \u26a0 WHAT THIS ROSTER DOES NOT DECIDE: the WEIGHT. `synthesis.md` \u00a71.3 spells the term `orient \u00b7 benefits_me(c)`. The missing piece is the STATE: `Person` has no `orient` field and `references/npc_registry.yaml` authors no such value (its 28 per-row values were deleted at B04.12, unread, `ED-IN-0260`). The term is `6f`'s. This roster and its column deliver `beneficiary_of(p, c)`, which no game code reads (tests only).",
           "values": [
             "actor",
             "subject",
@@ -3349,6 +3460,60 @@
         }
       },
       "tables": {
+        "capability_uses": {
+          "rows": [
+            {
+              "use": "social_roll",
+              "role": "dice",
+              "key": "verb",
+              "side": "actor"
+            },
+            {
+              "use": "social_roll",
+              "role": "opposes",
+              "key": "verb",
+              "side": "subject"
+            },
+            {
+              "use": "fight",
+              "role": "dice",
+              "key": "verb",
+              "side": "each"
+            },
+            {
+              "use": "fight",
+              "role": "opposes",
+              "key": "verb",
+              "side": "each"
+            },
+            {
+              "use": "fight",
+              "role": "resource",
+              "key": "attr.body.endurance",
+              "side": "each"
+            },
+            {
+              "use": "kit",
+              "role": "threshold",
+              "key": "attr.body.strength",
+              "side": "each"
+            },
+            {
+              "use": "told_claim_credit",
+              "role": "judgement",
+              "key": "attr.social.attunement",
+              "side": "actor",
+              "gain": "competence_gain"
+            },
+            {
+              "use": "own_state_gate",
+              "role": "gate",
+              "key": "prac.thread_sensitivity",
+              "side": "actor",
+              "gain": "thread_sensitivity_gate"
+            }
+          ]
+        },
         "site_yield": {
           "source": "`W8` / `H-93`. #353 \u00a725 lists `yield` as written at MATTER and *blocked on `season_factor`'s distribution* (\u00a722.3); it never says what a place produces.",
           "row": "H-93",
@@ -3415,9 +3580,9 @@
           "row": "H-126",
           "keys": [
             "lifepaths",
-            "verb_capability"
+            "capabilities"
           ],
-          "note": "\u26a0 A CUT, NOT A TRANSCRIPTION. Every authored dice magnitude (+1D, +2D, TS +3, Ob and strain changes) is DROPPED: a template names which of `verb_capability`'s VALUES (`copying`, `argue`, `inquiry`) a lifepath's starting skills draw on, and nothing else. A key is held at `pool_default`, so the grant changes no pool; it makes the key one `train` can raise (`loop/effects_combat.py::_eff_train` raises only a key the subject already holds). A lifepath whose starting skills no key covers holds NONE (`holds: []`), RECORDED here and not invented. \u26a0 THE RULE EACH ROW WAS READ BY, so a reviewer can re-read the text and not the taste. Only the `\u2605` skills count: the `Third Skill (spark)` column is a skill that may be sparked later, not held at creation (the archived file's own header, `Starting Skills (\u2605)` against `Third Skill (spark)`). `argue` is named when a starting skill's text says the Argue act, or adds dice to, or moves a resistance parameter of, the Argue exchange itself (a Recall bonus in a contest genre, an Obscuring bonus in a private negotiation, Audience Resistance: `social_contest_v30.md:102,115,168,177`); a strain, an Appraise, a Regroup or a payout on a win is not the roll and holds nothing. `inquiry` is named when it says Investigation, institutional records or documents recalled (`research`), assessing or authenticating a thing of the kinds `examine` reads (evidence, architecture, documents, objects: `verb_table.yaml` `examine`), or recon of a place (`surveil`: observe a location, person or operation). `copying` is named when it says relaying or copying a text; no starting skill does, so no row holds it. A text that says only a bonus in a domain, a defence, a strain, an identification of forces, the threat of a being or a navigation holds nothing, and the near misses are said in the row's own `ground:` (3-CH3, 3-CR5, 3-HA3, 3-LO2, 3-LO4, and 3-CF4's Knot, which names copying). The wider reading (Appraise, strain and Regroup effects inside the contest also hold `argue`) is NOT adopted; it would add argue to 3-CR3, 3-VA1, 3-VA4, 3-GU1, 3-LO3, 3-CF3 and 3-CF5. CLOSED, BOTH WAYS (`data/rosters.py::_load_lifepath_templates`): a row for every id of `rosters: lifepaths` and for nothing else, each `holds:` entry a `verb_capability` value, a `ground:` on every row. [ASSUMPTION; medium; Jordan to correct; revert: delete the `lifepath:` keys from the cast rows (one re-pin); the key mapping is content.]",
+          "note": "\u26a0 A CUT, NOT A TRANSCRIPTION. Every authored dice magnitude (+1D, +2D, TS +3, Ob and strain changes) is DROPPED: a template names which of the skills a verb's `capability:` column names (`copying`, `argue`, `inquiry`; `descriptors.CAPABILITIES`) a lifepath's starting skills draw on, and nothing else. A key is held at `pool_default`, so the grant changes no pool; it makes the key one `train` can raise (`loop/effects_combat.py::_eff_train` raises only a key the subject already holds). A lifepath whose starting skills no key covers holds NONE (`holds: []`), RECORDED here and not invented. \u26a0 THE RULE EACH ROW WAS READ BY, so a reviewer can re-read the text and not the taste. Only the `\u2605` skills count: the `Third Skill (spark)` column is a skill that may be sparked later, not held at creation (the archived file's own header, `Starting Skills (\u2605)` against `Third Skill (spark)`). `argue` is named when a starting skill's text says the Argue act, or adds dice to, or moves a resistance parameter of, the Argue exchange itself (a Recall bonus in a contest genre, an Obscuring bonus in a private negotiation, Audience Resistance: `social_contest_v30.md:102,115,168,177`); a strain, an Appraise, a Regroup or a payout on a win is not the roll and holds nothing. `inquiry` is named when it says Investigation, institutional records or documents recalled (`research`), assessing or authenticating a thing of the kinds `examine` reads (evidence, architecture, documents, objects: `verb_table.yaml` `examine`), or recon of a place (`surveil`: observe a location, person or operation). `copying` is named when it says relaying or copying a text; no starting skill does, so no row holds it. A text that says only a bonus in a domain, a defence, a strain, an identification of forces, the threat of a being or a navigation holds nothing, and the near misses are said in the row's own `ground:` (3-CH3, 3-CR5, 3-HA3, 3-LO2, 3-LO4, and 3-CF4's Knot, which names copying). The wider reading (Appraise, strain and Regroup effects inside the contest also hold `argue`) is NOT adopted; it would add argue to 3-CR3, 3-VA1, 3-VA4, 3-GU1, 3-LO3, 3-CF3 and 3-CF5. CLOSED, BOTH WAYS (`data/rosters.py::_load_lifepaths`): a row for every id of `rosters: lifepaths` and for nothing else, each `holds:` entry a skill of `descriptors.CAPABILITIES`, a `ground:` on every row. [ASSUMPTION; medium; Jordan to correct; revert: delete the `lifepath:` keys from the cast rows (one re-pin); the key mapping is content.]",
           "cells": {
             "3-CR1": {
               "holds": [
@@ -4287,6 +4452,8 @@
         {
           "verb": "argue",
           "stratum": "social",
+          "capability": "argue",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (`argue` is its own vocation, v10 REM-30).",
           "eligibility": [
             "own"
           ],
@@ -4353,6 +4520,8 @@
         {
           "verb": "arrest",
           "stratum": "contested_physical",
+          "capability": "arms",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07).",
           "eligibility": [
             "remit:dispatch"
           ],
@@ -4675,6 +4844,8 @@
           "scale": "settlement",
           "scale_note": "a sitting decides at the venue's rung",
           "stratum": "binding_decision",
+          "capability": "argue",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07).",
           "eligibility": [
             "remit:determine"
           ],
@@ -4965,6 +5136,8 @@
         {
           "verb": "lie",
           "stratum": "social",
+          "capability": "none",
+          "capability_note": "undeclared at authoring; every person rolls the untrained default. No `deception` skill: a lie is an `argue` whose item is the liar's own false word (the social contest's V2, B24p.16; ED-IN-0378).",
           "eligibility": [
             "own"
           ],
@@ -5255,6 +5428,8 @@
         {
           "verb": "fight",
           "stratum": "contested_physical",
+          "capability": "arms",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (CP-T03-04, B10-11: the three rows contesting `the body` draw on `arms`).",
           "eligibility": [
             "own"
           ],
@@ -5333,6 +5508,8 @@
         {
           "verb": "capture",
           "stratum": "contested_physical",
+          "capability": "arms",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (CP-T03-04, B10-11; added beside `fight` and `accept` because it opens the same fight through the same `combat_input`, CR-85 design \u00a75).",
           "eligibility": [
             "remit:dispatch"
           ],
@@ -5480,6 +5657,8 @@
         {
           "verb": "accept",
           "stratum": "contested_physical",
+          "capability": "arms",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (CP-T03-04, B10-11).",
           "eligibility": [
             "own"
           ],
@@ -5637,6 +5816,8 @@
           "scale": "settlement",
           "scale_note": "a march targets a Rung (a settlement or, since ED-IN-0306 phase 4, a territory: `march_target_kinds`) -- the place marched on IS the subject, matching `requisition`'s own scale/scale_note shape for the same reason: the write and the fight both land on a place, not on the actor.",
           "stratum": "contested_physical",
+          "capability": "none",
+          "capability_note": "undeclared at authoring; every person rolls the untrained default. The field's skill enters at the `field` site, on the commander's record (`27_MB_A`).",
           "eligibility": [
             "remit:dispatch"
           ],
@@ -6336,6 +6517,8 @@
         {
           "verb": "speak",
           "stratum": "social",
+          "capability": "copying",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability`; which skill a verb tests is stated nowhere in the design.",
           "eligibility": [
             "own"
           ],
@@ -6487,6 +6670,8 @@
         {
           "verb": "tell",
           "stratum": "social",
+          "capability": "copying",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (`03 \u00a7A.2`, `#353 \u00a79.2`: the verb names a skill, the skill supplies the dice and gates nothing); which skill a verb tests is stated nowhere in the design.",
           "eligibility": [
             "own"
           ],
@@ -6555,6 +6740,8 @@
         {
           "verb": "examine",
           "stratum": "contested_physical",
+          "capability": "inquiry",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (REM-30, B10-10).",
           "stratum_note": "\u00a727's strata are a RESOLUTION-ORDER band over what an act touches, and they are not the `contests:` column -- these six declare no prize (see the block comment). This splits them three ways on what each act TOUCHES -- the physical world, a conversation, or the actor's own held evidence. The split is not derived from `fieldwork_v30.md:353-355` (*EACH investigation action faces: base Ob (from Depth) + Concealment Ob*: canon makes ALL SIX contestable, and conditions concealment on the concealer being PRESENT IN THE SCENE, not on the act being physical); it may still be right for resolution ORDER, which is all a stratum decides, and it is graded with the row.",
           "eligibility": [
             "own",
@@ -6631,6 +6818,8 @@
         {
           "verb": "interrogate",
           "stratum": "social",
+          "capability": "inquiry",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07).",
           "eligibility": [
             "remit:determine"
           ],
@@ -6679,6 +6868,8 @@
         {
           "verb": "research",
           "stratum": "uncontested_material",
+          "capability": "inquiry",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (REM-30, B10-10: the three inquiries `research`, `examine`, `surveil` draw on `inquiry`).",
           "eligibility": [
             "own",
             "presence:<site>"
@@ -6719,6 +6910,8 @@
         {
           "verb": "surveil",
           "stratum": "contested_physical",
+          "capability": "inquiry",
+          "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (REM-30, B10-10).",
           "eligibility": [
             "own",
             "presence:<rung>"
@@ -7382,8 +7575,17 @@
           ],
           "class": "ACTS",
           "social": "true",
-          "by": "v9 IN-12 step 9 (#453 \u00a79.4, K-21): RETURNED FROM `retired:` WITH ITS PRODUCER, `train` (`loop/effects_combat.py::_eff_train`), in the same commit -- this file's own rule, *a row exists because a producer produces it*. `{capability key: whole number}` (`state/carriers.py::Person.capability`), the dice a contested act draws (`seam/wrappers/pool.py::faculty`, through `rosters.yaml: verb_capability`); capability GATES NOTHING (#353 \u00a79.2). Written at world build by a `cast:` overlay (`harness/corpus_run.py::build_at`, never through this gate) and in play by TWO writers: `train`, under J-13 (iii)'s interim [medium; Jordan to correct]: only where a case names a vocation; and, since v11 CP-T03-04 (iv), the fight (`loop/effects_combat.py::_grown`, at the ENCOUNTER step: `fight` / `accept` / `capture` at Felled/Wounded raise by one a key a surviving party already holds). `social: true` -- only a person's act raises it; the world does not train anybody",
+          "by": "v9 IN-12 step 9 (#453 \u00a79.4, K-21): RETURNED FROM `retired:` WITH ITS PRODUCER, `train` (`loop/effects_combat.py::_eff_train`), in the same commit -- this file's own rule, *a row exists because a producer produces it*. `{capability key: whole number}` (`state/carriers.py::Person.capability`), the dice a contested act draws (`seam/wrappers/pool.py::faculty`, through the verb table's `capability:` column, `descriptors.CAPABILITIES`); capability GATES NOTHING (#353 \u00a79.2). Written at world build by a `cast:` overlay (`harness/corpus_run.py::build_at`, never through this gate) and in play by TWO writers: `train`, under J-13 (iii)'s interim [medium; Jordan to correct]: only where a case names a vocation; and, since v11 CP-T03-04 (iv), the fight (`loop/effects_combat.py::_grown`, at the ENCOUNTER step: `fight` / `accept` / `capture` at Felled/Wounded raise by one a key a surviving party already holds). `social: true` -- only a person's act raises it; the world does not train anybody",
           "emits": "`capability.raised`"
+        },
+        {
+          "kind": "Person",
+          "field": "traits",
+          "steps": [],
+          "class": "\u2014",
+          "social": "n/a",
+          "by": "B04.07 (A-107): `frozenset` of `descriptors.TRAITS` ids, seated at world build from the cast row's `resonant_style:` (`data/cast.py::traits_of`, `boot/realm.py::build_realm`) and written NOWHERE in play: no step, so the gate refuses any write (`(Proposition, *)`'s shape). A trait is held or not and never gives dice; it is never a key of `Person.capability`",
+          "emits": "\u2014"
         },
         {
           "kind": "Person",
@@ -7723,26 +7925,20 @@
       "schema": {
         "required": [
           "id",
-          "first_name",
-          "last_name",
           "faction",
           "role",
           "status"
         ],
         "optional": [
-          "age",
-          "birthplace",
           "heritage",
           "lifepath",
-          "territory",
           "ts",
-          "coherence",
           "stats",
           "convictions",
           "affiliations",
-          "goals",
-          "arc_trajectory",
-          "notes"
+          "title",
+          "capabilities",
+          "resonant_style"
         ]
       },
       "characters": [
@@ -7828,16 +8024,13 @@
                 "conviction": "love",
                 "weight": 0.03
               }
-            ],
-            "cultural_label": "varfell_alpine",
-            "self_other_initial": -0.3
+            ]
           },
           "goals": [
             "Maintain substrate stability",
             "Protect Southernmost practitioners",
             "Continue the work regardless of interference"
           ],
-          "arc_trajectory": "Warden-Chief navigating Church pressure and Thread instability",
           "resonant_style": "Evidence",
           "affiliations": {
             "inner_tradition": 4,
@@ -7924,15 +8117,12 @@
                 "conviction": "love",
                 "weight": 0.03
               }
-            ],
-            "cultural_label": "restoration_reformist",
-            "self_other_initial": -0.1
+            ]
           },
           "goals": [
             "Serve Varfell intelligence",
             "Privately sympathize with Restoration Movement"
           ],
-          "arc_trajectory": "Dual loyalty \u2014 personal sympathy vs professional duty. If Vaynard eliminated, takes Varfell leadership (PP-486).",
           "affiliations": {
             "solmund_orthodoxy": 1,
             "thread_truth": 2,
@@ -8017,15 +8207,12 @@
                 "conviction": "love",
                 "weight": 0.03
               }
-            ],
-            "cultural_label": "varfell_alpine",
-            "self_other_initial": -0.3
+            ]
           },
           "goals": [
             "Cultural restoration",
             "Equity and social contract"
           ],
-          "arc_trajectory": "Visibility as vulnerability \u2014 permanent Heresy Investigation target",
           "affiliations": {
             "solmund_orthodoxy": 1,
             "thread_truth": 2,
@@ -8111,15 +8298,12 @@
                 "conviction": "stewardship",
                 "weight": 0.03
               }
-            ],
-            "cultural_label": "ecclesiastical",
-            "self_other_initial": 0.0
+            ]
           },
           "goals": [
             "Investigate heresy",
             "Enforce Church orthodoxy"
           ],
-          "arc_trajectory": "Latent TS \u2014 doesn't know he's Thread Sensitive. PC diagnosis possible (Cognition vs Ob 2).",
           "affiliations": {
             "solmund_orthodoxy": 5,
             "thread_truth": 1,
@@ -8205,15 +8389,12 @@
                 "conviction": "love",
                 "weight": 0.03
               }
-            ],
-            "cultural_label": "lowenritter_military",
-            "self_other_initial": 0.0
+            ]
           },
           "goals": [
             "Mission success",
             "Minimize Thread collateral"
           ],
-          "arc_trajectory": "Risk-averse on Thread collateral despite Riskbreaker doctrine \u2014 TS lets her perceive damage colleagues can't.",
           "affiliations": {
             "solmund_orthodoxy": 2,
             "thread_truth": 3,
@@ -8297,15 +8478,12 @@
                 "conviction": "stewardship",
                 "weight": 0.08
               }
-            ],
-            "cultural_label": "lowenritter_military",
-            "self_other_initial": -0.1
+            ]
           },
           "goals": [
             "Counter Altonian threat",
             "Strengthen peninsular defenses"
           ],
-          "arc_trajectory": "External threat fixated \u2014 evaluates every action against Altonian metric. Brandt succession if Ehrenwall falls.",
           "affiliations": {
             "solmund_orthodoxy": 2,
             "einhir_restoration": 1,
@@ -8389,15 +8567,12 @@
                 "conviction": "stewardship",
                 "weight": 0.05
               }
-            ],
-            "cultural_label": "hafenmark_procedural",
-            "self_other_initial": 0.1
+            ]
           },
           "goals": [
             "Maximize Guilds Wealth",
             "Protect artisan livelihoods"
           ],
-          "arc_trajectory": "Profit-maximizing \u2014 sacrifices Guilds Mandate for Wealth. Thread-touched supply chain discoverable.",
           "affiliations": {
             "solmund_orthodoxy": 2,
             "einhir_restoration": 1,
@@ -8480,15 +8655,12 @@
                 "conviction": "stewardship",
                 "weight": 0.03
               }
-            ],
-            "cultural_label": "valorian_court",
-            "self_other_initial": 0.0
+            ]
           },
           "goals": [
             "Maintain procedural correctness",
             "Block radical action through procedure"
           ],
-          "arc_trajectory": "CONSERVATIVE \u2014 blocks radical action through procedure, not force. Cognition-heavy social contest target.",
           "affiliations": {
             "solmund_orthodoxy": 2,
             "einhir_restoration": 0,
@@ -8571,15 +8743,12 @@
                 "conviction": "stewardship",
                 "weight": 0.04
               }
-            ],
-            "cultural_label": "valorian_court",
-            "self_other_initial": -0.1
+            ]
           },
           "goals": [
             "Efficient Crown administration",
             "Maintain personal indispensability"
           ],
-          "arc_trajectory": "OVERPERFORMER \u2014 runs every important task. Flattery vulnerability (\u22121 Ob on social actions acknowledging competence).",
           "affiliations": {
             "solmund_orthodoxy": 2,
             "einhir_restoration": 1,
@@ -8662,15 +8831,12 @@
                 "conviction": "stewardship",
                 "weight": 0.02
               }
-            ],
-            "cultural_label": "hafenmark_procedural",
-            "self_other_initial": 0.1
+            ]
           },
           "goals": [
             "Maintain Virke trade network",
             "Protect personal trust relationships"
           ],
-          "arc_trajectory": "Personal loyalty to partners vs family directives. Third conflict with family triggers enforcement.",
           "affiliations": {
             "solmund_orthodoxy": 1,
             "einhir_restoration": 1,
@@ -8755,16 +8921,13 @@
                 "conviction": "stewardship",
                 "weight": 0.08
               }
-            ],
-            "cultural_label": "altonian",
-            "self_other_initial": -0.2
+            ]
           },
           "goals": [
             "Protect Elske's safety",
             "Maintain province stability",
             "Sandbag imperial directives"
           ],
-          "arc_trajectory": "PROTECTIVE \u2014 priority is Elske's safety. Virtue = Byzantine governance-as-moral-cultivation. Periodic visitor, royal welcome. Flips if Elske Loyalty \u2264 2. Manuel II Palaiologos archetype.",
           "affiliations": {
             "solmund_orthodoxy": 1,
             "einhir_restoration": 1,
@@ -8848,16 +9011,13 @@
                 "conviction": "stewardship",
                 "weight": 0.03
               }
-            ],
-            "cultural_label": "hafenmark_procedural",
-            "self_other_initial": 0.0
+            ]
           },
           "goals": [
             "Maintain stable trade",
             "Avoid escalation",
             "Return home eventually"
           ],
-          "arc_trajectory": "STABILITY-SEEKING \u2014 natural ally for peace, obstacle for escalation. Motivated by homesickness (discoverable via Read Ob 2).",
           "affiliations": {
             "solmund_orthodoxy": 1,
             "einhir_restoration": 1,
@@ -8940,15 +9100,12 @@
                 "conviction": "stewardship",
                 "weight": 0.05
               }
-            ],
-            "cultural_label": "ecclesiastical",
-            "self_other_initial": 0.1
+            ]
           },
           "goals": [
             "Maximize Church Wealth throughput",
             "Aggressive tithe collection"
           ],
-          "arc_trajectory": "Parish Revolt arc or PC intervention path. Inadvertently funds Church charitable mission while undermining cultural authority.",
           "affiliations": {
             "solmund_orthodoxy": 3,
             "einhir_restoration": 1,
@@ -9033,12 +9190,9 @@
                 "conviction": "stewardship",
                 "weight": 0.08
               }
-            ],
-            "cultural_label": "valorian_court",
-            "self_other_initial": -0.1
+            ]
           },
           "goals": null,
-          "arc_trajectory": "Canonical Crown Captain per sim continuity \u00a71.2. Royal Assassination Fuse target (Arc F Eliminated \u2192 Lenneth Widow Regent).",
           "affiliations": {
             "solmund_orthodoxy": 3,
             "thread_truth": 1,
@@ -9124,12 +9278,9 @@
                 "conviction": "stewardship",
                 "weight": 0.05
               }
-            ],
-            "cultural_label": "ecclesiastical",
-            "self_other_initial": 0.0
+            ]
           },
           "goals": null,
-          "arc_trajectory": null,
           "affiliations": {
             "solmund_orthodoxy": 5,
             "thread_truth": 1,
@@ -9218,7 +9369,6 @@
             ]
           },
           "goals": null,
-          "arc_trajectory": "Off-board diplomatic asset. Elske Loyalty stat drives Laskaris PROTECTIVE behavior. Return arc possible.",
           "affiliations": {
             "solmund_orthodoxy": 2,
             "einhir_restoration": 1,
@@ -9306,7 +9456,6 @@
             ]
           },
           "goals": null,
-          "arc_trajectory": "Arc E Bereaved Father (Royal Assassination Fuse target). Conviction emergence window Seasons 1\u20138 (ED-618).",
           "affiliations": {
             "solmund_orthodoxy": 2,
             "einhir_restoration": 1,
@@ -9390,15 +9539,12 @@
                 "conviction": "stewardship",
                 "weight": 0.06
               }
-            ],
-            "cultural_label": "valorian_court",
-            "self_other_initial": -0.2
+            ]
           },
           "goals": [
             "Einhir revival through Crown authority",
             "Caste dismantlement through royal decree"
           ],
-          "arc_trajectory": "Arc D The Avenger. If Almud eliminated (Arc F): becomes Widow Regent. Pro-Restoration \u2014 institutional revivalist, allied with Yrsa Vossen.",
           "affiliations": {
             "solmund_orthodoxy": 1,
             "einhir_restoration": 5,
@@ -9482,12 +9628,9 @@
                 "conviction": "stewardship",
                 "weight": 0.03
               }
-            ],
-            "cultural_label": "valorian_court",
-            "self_other_initial": 0.0
+            ]
           },
           "goals": null,
-          "arc_trajectory": "Sole inner-circle contact to settlement-layer intelligence brokers. Truth 3 (lowest in Inner Circle).",
           "affiliations": {
             "solmund_orthodoxy": 1,
             "einhir_restoration": 1,
@@ -9571,12 +9714,9 @@
                 "conviction": "stewardship",
                 "weight": 0.03
               }
-            ],
-            "cultural_label": "ecclesiastical",
-            "self_other_initial": 0.0
+            ]
           },
           "goals": null,
-          "arc_trajectory": "Dual-loyalty NPC \u2014 Himlensendt's agent inside Crown Inner Circle. Truth 5 (highest).",
           "affiliations": {
             "solmund_orthodoxy": 5,
             "einhir_restoration": 1,
@@ -9659,12 +9799,9 @@
                 "conviction": "stewardship",
                 "weight": 0.05
               }
-            ],
-            "cultural_label": "lowenritter_military",
-            "self_other_initial": -0.1
+            ]
           },
           "goals": null,
-          "arc_trajectory": "Pre-designated allegiance to Almud personally. His removal triggers L\u00f6wenritter Autonomy escalation toward Split.",
           "affiliations": {
             "solmund_orthodoxy": 2,
             "einhir_restoration": 1,
@@ -9747,12 +9884,9 @@
                 "conviction": "stewardship",
                 "weight": 0.05
               }
-            ],
-            "cultural_label": "valorian_court",
-            "self_other_initial": 0.0
+            ]
           },
           "goals": null,
-          "arc_trajectory": null,
           "affiliations": {
             "solmund_orthodoxy": 2,
             "einhir_restoration": 1,
@@ -9835,12 +9969,9 @@
                 "conviction": "stewardship",
                 "weight": 0.04
               }
-            ],
-            "cultural_label": "valorian_court",
-            "self_other_initial": 0.0
+            ]
           },
           "goals": null,
-          "arc_trajectory": null,
           "affiliations": {
             "solmund_orthodoxy": 2,
             "einhir_restoration": 1,
@@ -9924,12 +10055,9 @@
                 "conviction": "stewardship",
                 "weight": 0.03
               }
-            ],
-            "cultural_label": "ecclesiastical",
-            "self_other_initial": 0.0
+            ]
           },
           "goals": null,
-          "arc_trajectory": null,
           "affiliations": {
             "solmund_orthodoxy": 5,
             "einhir_restoration": 0,
@@ -10013,12 +10141,9 @@
                 "conviction": "stewardship",
                 "weight": 0.04
               }
-            ],
-            "cultural_label": "ecclesiastical",
-            "self_other_initial": -0.1
+            ]
           },
           "goals": null,
-          "arc_trajectory": "Scholar's Dilemma \u2014 TS exposure via archive work.",
           "affiliations": {
             "solmund_orthodoxy": 4,
             "thread_truth": 1,
@@ -10103,12 +10228,9 @@
                 "conviction": "stewardship",
                 "weight": 0.05
               }
-            ],
-            "cultural_label": "ecclesiastical",
-            "self_other_initial": 0.0
+            ]
           },
           "goals": null,
-          "arc_trajectory": null,
           "affiliations": {
             "solmund_orthodoxy": 5,
             "einhir_restoration": 1,
@@ -10194,7 +10316,6 @@
             ]
           },
           "goals": null,
-          "arc_trajectory": null,
           "affiliations": {
             "solmund_orthodoxy": 1,
             "einhir_restoration": 5,
@@ -10279,16 +10400,13 @@
                 "conviction": "stewardship",
                 "weight": 0.04
               }
-            ],
-            "cultural_label": "hafenmark_procedural",
-            "self_other_initial": -0.3
+            ]
           },
           "goals": [
             "Sovereign Authority Doctrine",
             "Constitutional framework supersedes Church jurisdiction",
             "Hafenmark parliamentary sovereignty"
           ],
-          "arc_trajectory": "Six foil pairings per npc_foils_v30: Almud \u2194 Baralta (Custodian/Claimant); Lenneth \u2194 Baralta (campaign-defining); Baralta \u2194 Vaynard (total opposition).",
           "affiliations": {
             "solmund_orthodoxy": 2,
             "einhir_restoration": 0,
@@ -10373,9 +10491,7 @@
                 "conviction": "stewardship",
                 "weight": 0.04
               }
-            ],
-            "cultural_label": "lowenritter_military",
-            "self_other_initial": -0.4
+            ]
           },
           "goals": [
             "Einhir cultural revival at any cost",
@@ -10383,7 +10499,6 @@
             "Dismantle post-war caste order",
             "Intelligence-first approach to RM"
           ],
-          "arc_trajectory": "Von Lohengramm programme \u2014 revolutionary expulsion. If eliminated, Maret Uln succession (PP-486).",
           "affiliations": {
             "solmund_orthodoxy": 1,
             "thread_truth": 2,
@@ -10403,8 +10518,6 @@
           "ts": 0,
           "certainty": 4,
           "resonant_style": "Consequence",
-          "self_other_initial": -0.1,
-          "cultural_label": "lowenritter_military",
           "convictions": {
             "primary": [
               {
@@ -10469,7 +10582,6 @@
               }
             ]
           },
-          "arc_trajectory": "Drives Autonomy track (Loyal\u2192Restless\u2192Autonomous\u2192Split). Brandt succession if removed. Konrad von Jungingen archetype \u2014 if Autonomy track reaches Split, the Tannenberg parallel completes.",
           "affiliations": {
             "solmund_orthodoxy": 2,
             "einhir_restoration": 1,
@@ -10486,7 +10598,6 @@
           "status": "canonical",
           "certainty": 5,
           "resonant_style": "Evidence",
-          "cultural_label": "hafenmark_procedural",
           "convictions": {
             "primary": [
               {
@@ -10567,7 +10678,6 @@
           "status": "canonical",
           "certainty": 4,
           "resonant_style": "Consequence",
-          "cultural_label": "hafenmark_procedural",
           "convictions": {
             "primary": [
               {
@@ -10648,7 +10758,6 @@
           "status": "canonical",
           "certainty": 3,
           "resonant_style": "Consequence",
-          "cultural_label": "einhir_traditional",
           "convictions": {
             "primary": [
               {
@@ -10729,7 +10838,6 @@
           "status": "canonical",
           "certainty": 3,
           "resonant_style": "Solidarity",
-          "cultural_label": "einhir_traditional",
           "convictions": {
             "primary": [
               {
@@ -10812,8 +10920,6 @@
           "ts": 60,
           "certainty": 0,
           "resonant_style": "Evidence",
-          "self_other_initial": -0.2,
-          "cultural_label": "einhir_traditional",
           "convictions": {
             "primary": [
               {
@@ -10881,7 +10987,6 @@
           "goals": [
             "The work. Only the work."
           ],
-          "arc_trajectory": "Arc C: death-Mending seals one Gap permanently (RS +5). 31 years at the Southernmost. Chernobyl liquidator archetype.",
           "affiliations": {
             "inner_tradition": 3,
             "thread_truth": 4,
@@ -10901,7 +11006,6 @@
           "ts": 0,
           "certainty": 5,
           "resonant_style": "Authority",
-          "cultural_label": "lowenritter_military",
           "convictions": {
             "primary": [
               {
@@ -10966,7 +11070,6 @@
               }
             ]
           },
-          "arc_trajectory": "Completes missions Sigrid aborts. TS 0 = can't see Thread collateral. Pre-germ-theory surgeon archetype \u2014 perceptual limitation, not malice. Cannot see Thread collateral (TS 0).",
           "affiliations": {
             "solmund_orthodoxy": 3,
             "einhir_restoration": 1,
@@ -10981,7 +11084,6 @@
           "faction": "Hafenmark (Inner Council)",
           "role": "Commune Representative (Banneret)",
           "status": "proposed",
-          "cultural_label": "hafenmark_procedural",
           "resonant_style": "Consequence",
           "convictions": {
             "primary": [
@@ -11047,7 +11149,6 @@
               }
             ]
           },
-          "arc_trajectory": "IC seat #4. Succession candidate if Baralta falls (popular mandate). Niklaus von Fl\u00fce archetype \u2014 Swiss mediator at the Diet of Stans (1481), commune voice against city power-politics.",
           "affiliations": {
             "solmund_orthodoxy": 2,
             "einhir_restoration": 1,
@@ -11062,7 +11163,6 @@
           "faction": "Varfell (Jarl Council)",
           "role": "Military Jarl",
           "status": "proposed",
-          "cultural_label": "einhir_traditional",
           "resonant_style": "Solidarity",
           "convictions": {
             "primary": [
@@ -11128,7 +11228,6 @@
               }
             ]
           },
-          "arc_trajectory": "Fights for Einhir, not Vaynard. Fracture line if Vaynard's ego diverges from cause. Einar Thambarskelfir archetype \u2014 conditional loyalty to the cause, not the person.",
           "affiliations": {
             "solmund_orthodoxy": 1,
             "einhir_restoration": 5,
@@ -11144,7 +11243,6 @@
           "role": "Governor of Ehrenfeld (T14)",
           "status": "proposed",
           "territory": "T14 (Ehrenfeld)",
-          "cultural_label": "valorian_court",
           "resonant_style": "Evidence",
           "convictions": {
             "primary": [
@@ -11210,7 +11308,6 @@
               }
             ]
           },
-          "arc_trajectory": "Switchboard NPC at geographic chokepoint (5 adjacencies). Matilda of Tuscany archetype \u2014 governed critical territory at the intersection of Pope and Emperor.",
           "affiliations": {
             "solmund_orthodoxy": 3,
             "einhir_restoration": 1,
@@ -11225,7 +11322,6 @@
           "faction": "Guilds",
           "role": "Zunftmeisterin (Guildmaster Council)",
           "status": "proposed",
-          "cultural_label": "hafenmark_procedural",
           "resonant_style": "Solidarity",
           "convictions": {
             "primary": [
@@ -11291,7 +11387,6 @@
               }
             ]
           },
-          "arc_trajectory": "Internal opposition to Feldhaus. Pushes Mandate over Wealth. Katharina Sch\u00fctz Zell archetype \u2014 guild-class communal advocate.",
           "affiliations": {
             "solmund_orthodoxy": 2,
             "einhir_restoration": 1,
@@ -11306,7 +11401,6 @@
           "faction": "Guilds",
           "role": "Guild Advocate (legal representative at Crown court)",
           "status": "proposed",
-          "cultural_label": "hafenmark_procedural",
           "resonant_style": "Evidence",
           "convictions": {
             "primary": [
@@ -11372,7 +11466,6 @@
               }
             ]
           },
-          "arc_trajectory": "Defends guild autonomy against Crown regulation. Bartolus de Saxoferrato archetype.",
           "affiliations": {
             "solmund_orthodoxy": 1,
             "einhir_restoration": 1,
@@ -11387,7 +11480,6 @@
           "faction": "Guilds",
           "role": "Guild Surveyor (mapping maritime Forgetting boundary)",
           "status": "proposed",
-          "cultural_label": "hafenmark_procedural",
           "resonant_style": "Evidence",
           "convictions": {
             "primary": [
@@ -11453,7 +11545,6 @@
               }
             ]
           },
-          "arc_trajectory": "Has data proving southern sea route is physically blocked, not politically. Undermines Varfell conspiracy narrative. Fra Mauro archetype.",
           "affiliations": {
             "solmund_orthodoxy": 1,
             "einhir_restoration": 1,
@@ -11468,7 +11559,6 @@
           "faction": "Restoration Movement",
           "role": "Buditel (hedge school teacher)",
           "status": "proposed",
-          "cultural_label": "restoration_reformist",
           "resonant_style": "Solidarity",
           "convictions": {
             "primary": [
@@ -11534,7 +11624,6 @@
               }
             ]
           },
-          "arc_trajectory": "Illegal Einhir education in southwest. Player discovery \u2192 protect/report/leverage. Josef Dobrovsk\u00fd archetype.",
           "affiliations": {
             "solmund_orthodoxy": 1,
             "einhir_restoration": 4,
@@ -11550,7 +11639,6 @@
           "role": "Copyist (hand-copies suppressed Einhir cultural texts)",
           "lifepath": "3-CF4",
           "status": "proposed",
-          "cultural_label": "restoration_reformist",
           "resonant_style": "Evidence",
           "convictions": {
             "primary": [
@@ -11616,7 +11704,6 @@
               }
             ]
           },
-          "arc_trajectory": "Propagation mechanism. Hand-copied manuscripts increase Church AP. Lollard copyist archetype \u2014 each copy takes weeks, possession is a heresy charge, no press to seize.",
           "affiliations": {
             "solmund_orthodoxy": 1,
             "einhir_restoration": 5,
@@ -11631,7 +11718,6 @@
           "faction": "Altonia",
           "role": "Katepano (frontier governor)",
           "status": "proposed",
-          "cultural_label": "altonian_imperial",
           "resonant_style": "Consequence",
           "convictions": {
             "primary": [
@@ -11697,7 +11783,6 @@
               }
             ]
           },
-          "arc_trajectory": "Decides whether Altonia probes, presses, or invades. Sincere imperialist. Basil Boioannes archetype.",
           "affiliations": {
             "solmund_orthodoxy": 1,
             "einhir_restoration": 1,
@@ -11712,7 +11797,6 @@
           "faction": "Altonia",
           "role": "Kommerkiarios (trade prefect at Schoenland interface)",
           "status": "proposed",
-          "cultural_label": "altonian_imperial",
           "resonant_style": "Authority",
           "convictions": {
             "primary": [
@@ -11778,7 +11862,6 @@
               }
             ]
           },
-          "arc_trajectory": "Enforces ancient trade treaties. Counterparty to Solberg. Book of the Eparch archetype.",
           "affiliations": {
             "solmund_orthodoxy": 1,
             "einhir_restoration": 1,

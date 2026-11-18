@@ -206,6 +206,30 @@ def net_boost(net_sigma: float, pool: float, tn: int = TN_STANDARD, capped: bool
     return eff * sigma * math.sqrt(max(1, pool))    # [canonical: params/core.md §Continuous Engine]
 
 
+def opposed_ob(score: float, rate: float) -> float:
+    """The opposition as an obstacle: `rate` times the opposing SKILL SCORE (floored at 0).
+
+    The operand is a skill score, never a pool (A-26, A-71). `rate` has no default: a caller
+    names the rate it opposes at, and a missing one is a TypeError, not a silent 1.0.
+    """
+    return float(rate) * max(0.0, float(score))
+
+
+def even_line(pool_add: float) -> float:
+    """The even line: the pool's expected net, `MU_PER_DIE` (the owner's mean per die) times
+    the pool's base `pool_add` (A-26, A-71). An obstacle at this line is an even contest."""
+    return MU_PER_DIE * float(pool_add)
+
+
+def pool_of(score: float, addends: float, pool_add: float, pool_floor: int) -> float:
+    """The pool rule: `max(pool_floor, score + addends + pool_add)` (A-6; D-U1-08).
+
+    One owner for how a skill score, the rolled addends and the row's pool addition make a
+    pool, floored at the row's `pool_floor`.
+    """
+    return max(pool_floor, score + addends + pool_add)
+
+
 # ---------------------------------------------------------------------------
 # Level lookup + aggregation
 # ---------------------------------------------------------------------------

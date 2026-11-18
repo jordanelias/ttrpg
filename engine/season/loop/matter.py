@@ -232,7 +232,7 @@ def _standing_crossings(w: "World") -> list:
         p = w.persons[pid]
         if not any(c.subject == pid for c in p.ledger):
             continue                      # `standing_of` reads only claims about himself: no gap to move
-        past = [c for c in p.ledger if (c.when, c.round) < floor]
+        past = [c for c in p.ledger if (c.when, c.lap) < floor]
         if len(past) == len(p.ledger):
             continue                      # nothing landed since: the same claims, the same gap
         before = standing_of(_HeldBefore(pid, past), w.fixtures)
@@ -284,9 +284,9 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # list, so `budget`, `person_side_eligible` and `questions_for` -- which read `p.tenures`
     # directly -- see it. DELIBERATE owns nothing and holds no token (`04 §A.2`), so it cannot
     # host it (`ED-IN-0206`). Here is sufficient because nothing between this line and any
-    # DELIBERATE round can create a Person -- no step does (every `Person(` construction in the
+    # DELIBERATE lap can create a Person -- no step does (every `Person(` construction in the
     # tree is in `harness/`; nothing in `loop/` or an effect constructs one). The world is NOT
-    # frozen across a season's later rounds: RESOLVE thaws it every round (`w.frozen = False`,
+    # frozen across a season's later laps: RESOLVE thaws it every lap (`w.frozen = False`,
     # `loop/resolve.py`), so the freeze protects nothing here and the no-Person-construction
     # fact does the whole of the work.
     w._rehome()
@@ -418,7 +418,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # MATTER is chosen over CALENDAR because it runs before DELIBERATE (`loop/driver.py`); moving it into
     # CALENDAR changes log order (not hash-neutral) and `matter.lapsed` is not in §A.2:173's emits. The log
     # and act-store read in `lapsing_items` is outside §A.2:174's may-read list. THIS BARRIER IS FIRST IN THE SEASON, BEFORE
-    # DELIBERATE: a bench is never deliberating a matter in the round that lapses it. SUBJECT: the
+    # DELIBERATE: a bench is never deliberating a matter in the lap that lapses it. SUBJECT: the
     # venue where there is a sitting (the room that hears of it), else the matter, else the petition.
     for item, docketed_by_ev in world_q.lapsing_items(w, w.fixtures.get("docket_lapse")):
         venue = world_q.slot_venue(w, item)
@@ -754,7 +754,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # FIRST, then bodies, larders, yield, travel, wear"* -- so it sits after the larder/yield loop
     # above and before the wear loop below.
     #
-    # WHAT THE PENALTY NOW MEANS. A `move` in season t adds a leg at RESOLVE; the rounds after it in
+    # WHAT THE PENALTY NOW MEANS. A `move` in season t adds a leg at RESOLVE; the laps after it in
     # season t read the leg (`deliberate.py`'s queue key carries `travel_leg`, so the smaller budget
     # re-opens the traveller's triage), and season t+1's MATTER ends it. The distance penalty is a
     # cost of THE SEASON YOU TRAVEL IN, and nothing after it.

@@ -79,6 +79,8 @@ verbs:
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "argue"
     stratum:     "social"
+    capability:  "argue"
+    capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (`argue` is its own vocation, v10 REM-30)."
     eligibility: ["own"]
     beneficiary: "actor"
     beneficiary_note: "v9 IN-12 step 9 (#453 §9.4: *'beneficiary `actor`'*): THE ARGUER -- he argues for what he holds right; the hearer is the counterparty, not the party served."
@@ -117,6 +119,8 @@ verbs:
     source:      "v9 IN-12 step 9 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.4 `:1896-1923`"
   - verb:        "arrest"
     stratum:     "contested_physical"
+    capability:  "arms"
+    capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07)."
     eligibility: ["remit:dispatch"]
     eligibility_note: "v9 IN-12 step 5 (#453 §9.1): `remit:dispatch` -- the act `state/gate.py::WARRANT_ACT` names, so the fold's eligibility and the gate's `warrant` basis read one grant. J-8 (whether `dispatch` is a remit act at all, `offices.yaml` `meta: remit_unruled`) is Jordan's; this row moves with `WARRANT_ACT` and the ruling. Built on `remit_default` (§A v9)."
     beneficiary: "none"
@@ -308,6 +312,8 @@ verbs:
     scale:   "settlement"
     scale_note: "a sitting decides at the venue's rung"
     stratum:     "binding_decision"
+    capability:  "argue"
+    capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07)."
     eligibility: ["remit:determine"]
     beneficiary: "none"
     beneficiary_note: "who a determination FAVOURS is the `judging_set`, which `requires` itself records as *D11, absent*. The determination binds the party it names (`counterparty:`, below), but a finding is taken AGAINST the party and FOR no carrier the Candidate holds (the bench's seat), `revoke`'s and `dispatch`'s shape, so `none` stands."
@@ -480,6 +486,8 @@ verbs:
   # is; `rosters.yaml: lie_verbs` names this row so `decision/options.py::opening_set` reads that one instead.
   - verb:        "lie"
     stratum:     "social"
+    capability:  "none"
+    capability_note: "undeclared at authoring; every person rolls the untrained default. No `deception` skill: a lie is an `argue` whose item is the liar's own false word (the social contest's V2, B24p.16; ED-IN-0378)."
     eligibility: ["own"]
     beneficiary: "subject"
     requires:    "the liar holds a claim on the subject, and the person told is with the liar"
@@ -669,6 +677,8 @@ verbs:
     # `person.died`) are NOT verb-table keys -- they are `write_matrix.yaml`/`emits:` vocabulary, a different namespace.
   - verb:        "fight"
     stratum:     "contested_physical"
+    capability:  "arms"
+    capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (CP-T03-04, B10-11: the three rows contesting `the body` draw on `arms`)."
     eligibility: ["own"]
     beneficiary: "actor"
     beneficiary_note: "⚠⚠ THE ROW THAT PROVES THIS COLUMN CANNOT BE DERIVED FROM `writes:`. It writes `Person.body` and `Person.exists` ON EACH PARTY (the actor as well as the subject, v10 CP-T03-00), and the good does not accrue to the person felled. A write can be a HARM, so a rule reading the write column would name the victim as the beneficiary of their own killing. `CAT-2`'s *declare it* is what this row is evidence for."
@@ -785,6 +795,8 @@ verbs:
   # `capture` with.
   - verb:        "capture"
     stratum:     "contested_physical"
+    capability:  "arms"
+    capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (CP-T03-04, B10-11; added beside `fight` and `accept` because it opens the same fight through the same `combat_input`, CR-85 design §5)."
     eligibility: ["remit:dispatch"]
     eligibility_note: "`arrest`'s, for `arrest`'s reason (v9 IN-12 step 5): `remit:dispatch` -- the act `state/gate.py::WARRANT_ACT` names, so the fold's eligibility and the gate's `warrant` basis (which admits the `detain` this row opens) read one grant. J-8 (whether `dispatch` is a remit act at all, `offices.yaml` `meta: remit_unruled`) is Jordan's; this row moves with `WARRANT_ACT` and the ruling. A person holding no seat that grants it forms no `capture`."
     beneficiary: "none"
@@ -880,6 +892,8 @@ verbs:
     source:      "ED-IN-0261 (2026-09-20; as narrowed 2026-10-06); `proposals/2026-09-20-pursuit-basis-worksheet.yaml` §4 (*`challenge` / `accept` -- the duel pair*)"
   - verb:        "accept"
     stratum:     "contested_physical"
+    capability:  "arms"
+    capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (CP-T03-04, B10-11)."
     eligibility: ["own"]
     beneficiary: "actor"
     beneficiary_note: "`fight`'s column and reason, the retired pursuit-cells draft's §3.4 (*`accept`: `actor`*). As on `fight`, the writes land on the OPPONENT -- here the challenger, the `to` operand since v10 PC-10b -- and a harm is not a benefit to the person harmed."
@@ -978,6 +992,8 @@ verbs:
     scale:   "settlement"
     scale_note: "a march targets a Rung (a settlement or, since ED-IN-0306 phase 4, a territory: `march_target_kinds`) -- the place marched on IS the subject, matching `requisition`'s own scale/scale_note shape for the same reason: the write and the fight both land on a place, not on the actor."
     stratum:     "contested_physical"
+    capability:  "none"
+    capability_note: "undeclared at authoring; every person rolls the untrained default. The field's skill enters at the `field` site, on the commander's record (`27_MB_A`)."
     eligibility: ["remit:dispatch"]
     beneficiary: "actor"
     referent_class: Rung
@@ -1394,6 +1410,8 @@ verbs:
     source:      "v9 IN-12 step 6 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.1 `:1662-1698`"
   - verb:        "speak"
     stratum:     "social"
+    capability:  "copying"
+    capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability`; which skill a verb tests is stated nowhere in the design."
     eligibility: ["own"]
     beneficiary: "none"
     requires:    "a live occasion at the actor's venue whose docket names the subject"
@@ -1501,6 +1519,8 @@ verbs:
     source:      "v9 IN-12 step 9 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.4 `:1925-1941`"
   - verb:        "tell"
     stratum:     "social"
+    capability:  "copying"
+    capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (`03 §A.2`, `#353 §9.2`: the verb names a skill, the skill supplies the dice and gates nothing); which skill a verb tests is stated nowhere in the design."
     eligibility: ["own"]
     beneficiary: "subject"
     requires:    "the teller holds a claim on the subject, and the person told is with the teller"
@@ -1612,6 +1632,8 @@ verbs:
   # ===========================================================================================
   - verb:        "examine"
     stratum:     "contested_physical"
+    capability:  "inquiry"
+    capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (REM-30, B10-10)."
     stratum_note: "§27's strata are a RESOLUTION-ORDER band over what an act touches, and they are not the `contests:` column -- these six declare no prize (see the block comment). This splits them three ways on what each act TOUCHES -- the physical world, a conversation, or the actor's own held evidence. The split is not derived from `fieldwork_v30.md:353-355` (*EACH investigation action faces: base Ob (from Depth) + Concealment Ob*: canon makes ALL SIX contestable, and conditions concealment on the concealer being PRESENT IN THE SCENE, not on the act being physical); it may still be right for resolution ORDER, which is all a stratum decides, and it is graded with the row."
     eligibility: ["own", "presence:<site>"]
     beneficiary: "actor"
@@ -1657,6 +1679,8 @@ verbs:
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:294 (§4.2), :318 (§4.3). ⚠ THE SINGLE-ROLL INTERVIEW IS RETIRING AND THIS ROW IS ITS BASELINE, NOT A SECOND SPEC: `fieldwork_v30.md:300` (ED-FI-0004, 2026-07-08) folds it into the Dialogue Lattice -- *'the richer object wins'* -- and retains the bare-roll row as *the current mechanical baseline* only until ED-921 and ED-IN-0016 EP-8 settle. This row is that baseline; when the Lattice is built it replaces this row rather than sitting beside it."
   - verb:        "interrogate"
     stratum:     "social"
+    capability:  "inquiry"
+    capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07)."
     eligibility: ["remit:determine"]
     eligibility_note: "v10 IN-12 step 5 (#453 §9.1, the `interrogate` row): `remit:determine` via a seat -- the bench that may bind a party is the one that may question him (`interview` is the `own` row beside it; #453's CONFLICTS line: eligibility, the counterparty's state, the prize)."
     beneficiary: "actor"
@@ -1689,6 +1713,8 @@ verbs:
     source:      "v10 IN-12 step 5 (`workplans/valoria_master_workplan_v10_part4.md` IN-12), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.1 `:1613-1660`"
   - verb:        "research"
     stratum:     "uncontested_material"
+    capability:  "inquiry"
+    capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (REM-30, B10-10: the three inquiries `research`, `examine`, `surveil` draw on `inquiry`)."
     eligibility: ["own", "presence:<site>"]
     beneficiary: "actor"
     referent_class: Record
@@ -1712,6 +1738,8 @@ verbs:
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:295 (§4.2), :319 (§4.3)"
   - verb:        "surveil"
     stratum:     "contested_physical"
+    capability:  "inquiry"
+    capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (REM-30, B10-10)."
     eligibility: ["own", "presence:<rung>"]
     beneficiary: "actor"
     requires:    "the place watched exists and the actor is present at it"

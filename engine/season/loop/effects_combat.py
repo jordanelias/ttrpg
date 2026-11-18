@@ -15,13 +15,15 @@ from __future__ import annotations
 
 from dataclasses import replace
 
+from engine.substrate import descriptors
+
 from ..data.rosters import (
     DECLARED, ENDING_FELLED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, FIELD_WINNER_CASUALTY_ARMS, INVESTED, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
-    VERB_CAPABILITY, WOUND_HARM_MODELS, BODY_MARK_MODELS, require_member,
+    WOUND_HARM_MODELS, BODY_MARK_MODELS, require_member,
 )
 from ..data.matrix import matrix_row
 from ..data.requires import Observation
-from ..data.verbs import VERB_TABLE, VOCATION_SOURCED, VOCATIONS
+from ..data.verbs import VERB_CAPABILITY, VERB_TABLE, VOCATION_SOURCED, VOCATIONS
 from ..gaps import Unspecified
 from ..queries.person_q import held_against
 from ..queries.world_q import BODY_STEM, DETAIN_KIND, ancestry, garrison_sites, holder_faction_of, home_of, restrained
@@ -237,16 +239,23 @@ GROWN_KINDS = matrix_row("Person", "capability").emits
 def raised_capability(p: "Person", key: str) -> "dict | None":
     """`p.capability` with `key` raised by ONE whole point, the unit of a dice count -- `_eff_train`'s write and
     `_grown`'s, one body. `None` where `p` does not already hold `key`: a key is NEVER MINTED, because a minted
-    `{arms: 1}` would replace `pool_default` in `faculty` and LOWER the pool of the man it meant to reward."""
+    `{arms: 1}` would replace `pool_default` in `faculty` and LOWER the pool of the man it meant to reward.
+
+    B04.15 -- A RANK NEVER PASSES ITS ROW'S CEILING: also `None` where the raised rank would pass
+    `descriptors.capability(key).ceiling`, the ceiling of the skill row's `scale` (7 for every row shipped), the answer
+    a key not held already gets; a rank at its ceiling is not raised, by `train` or by `_grown`."""
     if key not in (p.capability or {}):
         return None
-    return {**p.capability, key: int(p.capability[key]) + 1}
+    raised = int(p.capability[key]) + 1
+    if raised > descriptors.capability(key).ceiling:
+        return None
+    return {**p.capability, key: raised}
 
 
 def _grown(w: "World", a: "Act", parties, bands: dict, bodies: dict) -> dict:
     """v11 CP-T03-04 (iv), BUILD-BY-DOING: `{pid: raised capability}` for each party of a fight THAT DREW BLOOD (some
     party `Wounded` or `Felled`, i.e. `bands` is not empty) who SURVIVES it (his written body is not 0) and ALREADY
-    HOLDS the key the verb draws on (`VERB_CAPABILITY[a.verb]`, `rosters.yaml: verb_capability` -- `arms` for the
+    HOLDS the key the verb draws on (`VERB_CAPABILITY[a.verb]`, derived from the verb table's `capability:` column over `descriptors.CAPABILITIES` -- `arms` for the
     three verbs contesting `the body`; the name is read there, never spelt here). Raised by ONE whole point,
     `_eff_train`'s unit.
 
@@ -767,10 +776,10 @@ def _eff_train(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """v9 IN-12 step 9 (#453 §9.4; K-20, K-21) -- `train` RAISES ONE CAPABILITY OF THE SUBJECT BY ONE.
 
     THE CAPABILITY IS THE VOCATION THE ACT CARRIES on the operand `rosters.yaml: vocation_sourced` names
-    for its verb (`kind` for `train`), one Candidate per vocation in `verb_capability`'s range
+    for its verb (`kind` for `train`), one Candidate per vocation in `VOCATIONS` (the skills the verb table's `capability:` column names)
     (`decision/options.py::opening_set`). ⚠ J-13 ANSWERED (iii) AS THE INTERIM [medium; Jordan to
     correct]: it writes `Person.capability` ONLY WHERE A CASE NAMES A VOCATION -- so the key must be a
-    `verb_capability` value (K-20's range: Thread Sensitivity has no carrier, H-85, P-08) and the SUBJECT
+    `VOCATIONS` member (K-20's range: Thread Sensitivity has no carrier, H-85, P-08) and the SUBJECT
     must ALREADY hold it: a key is never minted, because a minted `{copying: 1}` would replace
     `pool_default` and LOWER his pool (`seam/wrappers/sigma.py::faculty`). The ACTOR's own capability is
     NOT read: capability gates nothing (#353 §9.2), here as at formation. ONE whole point, the unit of a
