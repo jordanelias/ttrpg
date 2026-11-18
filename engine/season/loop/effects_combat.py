@@ -27,7 +27,7 @@ from ..data.matrix import matrix_row
 from ..data.requires import Observation
 from ..data.verbs import VERB_CAPABILITY, VERB_TABLE, VOCATION_SOURCED, VOCATIONS
 from ..gaps import Unspecified
-from ..queries.person_q import held_against
+from ..queries.person_q import HAND_PREDICATE, held_against
 from ..queries.world_q import BODY_STEM, DETAIN_KIND, ancestry, garrison_sites, holder_faction_of, home_of, restrained
 from ..seam.ladder import party_degree
 from ..seam.wrappers.pool import pool_pair, untrained
@@ -213,6 +213,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # `Wounded`) would otherwise hand it to every wounded party, a yield nobody made (ID-9). Read off the
     # result, never the verb: a row whose band does not declare the kind emits nothing of it (`_fold`).
     yielder = _yielder(res)
+    ending = fight_ending(w, (a.actor, who), res, above)      # read once, before the write: the Change's and `hand_observed`'s
     named: tuple = ()
     for pid, band in bands.items():
         own = () if band == FELLED else own_kinds(row.emits_at(band))
@@ -221,7 +222,9 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
             # B14.03: THE FELLED PARTY'S OWN SUBJECT (the first `death_subjects` names; the seats follow) carries the
             # wound that felled him, a source and a weapon and no doer, on the death Event WITNESS deposits.
             dead = death_subjects(w, pid, own, fields=("body",))
-            named += (replace(dead[0], observed=fell_observed(pid, res.result.get("beat"))),) + dead[1:]
+            # B14.16: A FELLED ACTOR'S death also names the party left standing (`hand_observed`).
+            named += (replace(dead[0], observed=fell_observed(pid, res.result.get("beat"))
+                              + hand_observed(pid, a.actor, ending)),) + dead[1:]
             continue
         # CP-T03-02 (ii): A WOUNDED PARTY'S SUBJECT CARRIES WHAT HIS BODY NOW IS -- `(pid, "body", v)`, `v` the
         # value `perform` WRITES (`bodies`), never `w.persons[pid].body` read here, which is the pre-fight body
@@ -237,7 +240,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     named += tuple(Subject.entity("persons", pid, earns=GROWN_KINDS, fields=("capability",)) for pid in grown)
     # B14.15: THE SCENE'S SHAPE rides each success Event once (`scene_observed`, `carry_scene`).
     named = carry_scene(named, scene_observed(tuple(dict.fromkeys((a.actor, who))), res.result.get("shape")))
-    return Change(named, perform, fight_ending(w, (a.actor, who), res, above))
+    return Change(named, perform, ending)
 
 
 # CP-T03-04 (iv): THE KINDS A GROWN PARTY EARNS -- the `(Person, capability)` matrix row's own `emits:`
@@ -322,6 +325,21 @@ def fell_observed(pid: str, beat: "dict | None") -> tuple:
     if not beat or beat.get("victim") != pid:
         return ()
     return (Observation(pid, FELL_TO_STEM, f"{beat['source']}:{beat['weapon']}"),)
+
+
+def hand_observed(pid: str, actor: str, ending: tuple) -> tuple:
+    """B14.16 (D-U1-06; `16_PESSIMIST_PC_C` 2): the Observation a felled party's Subject carries where he is the act's ACTOR --
+    `(pid, "fell_to_hand", <the party left standing>)` -- or `()` for a felled subject (the `seen.who` pairing names the actor his
+    killer there), and where no party prevailed (both felled; a yield). `ending` is `fight_ending`'s `(party, ending)` pairs;
+    the standing party is the one it reads `prevailed`, the scene's own verdict, so no second reading of the bands is made here.
+    Unlike `fell_to` it NAMES A PERSON: `queries/person_q.py::deed_doer` reads it before the pairing, which cannot name the
+    killer of an attacker felled by his target (it sees the attacker as `who` of his own death). It rides `Event.observed` as
+    `fell_to` does, and which witness holds it is WITNESS's mode, not a filter here. [ASSUMPTION; medium; Jordan to correct;
+    revert: drop the Observation and `deed_doer`'s read]"""
+    if pid != actor:
+        return ()
+    standing = [p for p, e in ending if e == ENDING_PREVAILED and p != pid]
+    return (Observation(pid, HAND_PREDICATE, standing[0]),) if len(standing) == 1 else ()
 
 
 def scene_observed(parties: tuple, shape: "dict | None") -> tuple:

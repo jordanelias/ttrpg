@@ -53,7 +53,13 @@ from ..data.rosters import (
     roster_map,
 )
 from ..state.carriers import Person, Said
+from ..state.gate import PERSON_DIED
 from ..trace_log import TRACE
+
+# B14.16: THE OBSERVATION THAT NAMES THE HAND OF A FELLED ACTOR'S DEATH. `loop/effects_combat.py::hand_observed` puts
+# `(actor, "fell_to_hand", <standing party>)` on the actor's `person.died` Event; WITNESS deposits it as an ordinary claim,
+# and `deed_doer` reads it. The one spelling; the writer imports it from here.
+HAND_PREDICATE = "fell_to_hand"
 
 
 def entrenchment(p: Person, seasons_held: int, scale: int, span: int) -> int:
@@ -230,17 +236,21 @@ _KIND_STRATA = {k: frozenset(r.stratum for r in _verbs.VERB_TABLE.values() if k 
 
 
 def _seen_index(ledger) -> tuple:
-    """A holder's own, untold `seen` claims, indexed twice: `(subject, when, lap) -> [seen]`, and
-    `(when, lap) -> {(who, stratum)}` -- who the holder saw acting, and at what, in each lap."""
+    """A holder's own, untold claims, indexed three times: `(subject, when, lap) -> [seen]` and
+    `(when, lap) -> {(who, stratum)}` -- who the holder saw acting, and at what, in each lap -- and
+    `(subject, when, lap) -> {value}` for a `fell_to_hand` claim (B14.16: who stood when `subject`, the actor, fell)."""
     by_subject: dict = {}
     acting: dict = {}
+    hand: dict = {}
     for s in ledger:
-        if s.predicate == SEEN_PREDICATE and not s.chain:
+        if s.predicate == HAND_PREDICATE and not s.chain:
+            hand.setdefault((s.subject, s.when, s.lap), set()).add(s.value)
+        elif s.predicate == SEEN_PREDICATE and not s.chain:
             by_subject.setdefault((s.subject, s.when, s.lap), []).append(s)
             who = getattr(s.value, "who", None)
             if who is not None:
                 acting.setdefault((s.when, s.lap), set()).add((who, getattr(s.value, "stratum", None)))
-    return by_subject, acting
+    return by_subject, acting, hand
 
 
 def deed_doer(c, seen: tuple):
@@ -257,14 +267,26 @@ def deed_doer(c, seen: tuple):
     `both` anchors on the ACTOR (`(x, person.died)` for x's kill), and a third party's sighting on
     `s` would name the wrong doer of the wrong death. The price, stated: a person who both struck and was struck in one
     lap is judged a patient by nobody that lap.
-    LIMIT, stated: where the ACTOR died attacking, the sighting names him as `who` of his own death,
-    so no killer is named. A `seen` on the same subject, `when` and `lap` that names NO `who` (a
+    THE ACTOR WHO DIED ATTACKING (B14.16; was this note's LIMIT, stated): the sighting names him as `who` of his
+    own death, so the pairing below names no killer. A `person.died` claim is therefore read FIRST against the
+    holder's own `fell_to_hand` claim on the same subject, `when` and `lap` (`HAND_PREDICATE`, deposited from the
+    felled actor's death Event by `loop/effects_combat.py::hand_observed`), and that value is the answer; the
+    pairing stands for every other case. CLOSED: for a holder who holds that claim, the standing party is named.
+    NOT CLOSED: a holder who does not hold it -- WITNESS deposits an Event's `observed` under
+    `observation_deposit_mode`, and the shipped `actor` deposits to the act's actor alone, a felled actor being
+    no longer a person to receive it, so under the shipped mode no ledger holds it and the limit stands in
+    every ledger; a fight with no standing party (both felled, a yield) carries none; a told copy has none.
+    Two different names held for one death are ambiguous, so `None`.
+    A `seen` on the same subject, `when` and `lap` that names NO `who` (a
     channel that withheld the actor) makes the pairing ambiguous, so `None`: an unnamed hand may be
     the one that did it. Holder-side and World-free: `Seen` is read by its fields, never imported
     (AX-2)."""
     if c.chain or not is_deed(c) or c.predicate not in PAIRED_KINDS:
         return None
-    by_subject, acting = seen
+    by_subject, acting, hand = seen
+    if c.predicate == PERSON_DIED and (c.subject, c.when, c.lap) in hand:
+        named = hand[(c.subject, c.when, c.lap)]
+        return next(iter(named)) if len(named) == 1 else None
     strata = _KIND_STRATA[c.predicate]
     if any(who == c.subject and st in strata for who, st in acting.get((c.when, c.lap), ())):
         return None

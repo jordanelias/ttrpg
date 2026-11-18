@@ -6,7 +6,8 @@ The module folds its own trace into a `SceneShape` (`modules/combat/fight.py::sc
 scene `fight_rounds`, `first_blood` (when a blow landed) and `lead_changes`. They ride `Event.observed` as `fell_to` does
 (B14.03: `rosters.yaml: observation_terms` is `epistemic.Seen`'s field list, not a roster of observation predicates).
 
-The `fell_to_hand` half of the gate-5 test and gate 2 are B14.16's.
+B14.16 adds gate 2 (`test_fell_to_hand_names_the_prevailing_party`) and the `fell_to_hand` half of gate 5: a felled ACTOR's
+`person.died` Event names the standing party, and `person_q.deed_doer` reads it before the `seen.who` pairing.
 """
 from __future__ import annotations
 
@@ -21,6 +22,8 @@ from engine.season.boot.realm import build_realm
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, mint_token
+from engine.season.loop import effects_combat
+from engine.season.queries import person_q
 from engine.season.queries.inputs import PersonalCombatInput, PlayHost, SceneShape
 from engine.season.seam.wrappers import combat
 from engine.season.state.carriers import Act
@@ -94,7 +97,7 @@ def test_scene_shape_is_a_pure_fold_over_trace():
 # ---------------------------------------------------------------------------------------------------------------------
 # THE SEAM AND THE EFFECT (instructions 4 and 5): a `fight` through RESOLVE, ENCOUNTER and WITNESS
 # ---------------------------------------------------------------------------------------------------------------------
-def _fought(aid, seed=1003, host=None, world=None, fan=None, witness=False):
+def _fought(aid, seed=1003, host=None, world=None, fan=None, witness=False, obs=None):
     """`p_low` fights `p_mid` on `tiny_world` at world seed `seed`: declared at RESOLVE, fought at ENCOUNTER (the driver's own
     two calls). Returns `(world, driver, declared, fought)`; the module's `CombatOutcome` is on `box`'s way out through a spy on
     the seam's entry lookup, so the test can fold the trace itself."""
@@ -115,6 +118,8 @@ def _fought(aid, seed=1003, host=None, world=None, fan=None, witness=False):
         w.world_seed = seed
         if fan is not None:
             w.fixtures = w.fixtures.sweep("fan_out_mode", fan)
+        if obs is not None:      # `observation_deposit_mode`: shipped `actor`, so a bystander holds none of an Event's `observed`
+            w.fixtures = w.fixtures.sweep("observation_deposit_mode", obs)
     d = SeasonDriver(w)
     md = w.fixtures.get("contest_max_depth")
     act = Act(id=aid, actor="p_low", verb="fight", payload={"subject": "p_mid"})
@@ -212,7 +217,8 @@ def test_played_and_automated_scenes_carry_equal_observations():
 
 
 def test_document_post_remit_and_chronicle_witnesses_hold_no_fell_to_hand():
-    """GATE 5, THE `first_blood` HALF (the `fell_to_hand` half is B14.16's). WHAT THE TREE DOES, asserted: WITNESS deposits an
+    """GATE 5, `first_blood` here and `fell_to_hand` in `test_the_hand_rides_the_death_and_reaches_only_who_it_was_deposited_to`.
+    WHAT THE TREE DOES, asserted: WITNESS deposits an
     Event's `observed` under `observation_deposit_mode` (shipped `actor`: the act's actor alone), and it does not look at the
     admitting channel for a predicate that is not a `Seen` field; so under the shipped mode the one ledger that holds
     `(first_blood-holder, "first_blood", True)` is the actor's, and witnesses of the death admitted by the other channels hold
@@ -253,3 +259,99 @@ def test_the_chronicle_line_of_a_fight_names_its_shape():
     assert CH.lines(bare, d.act_of, rows, w.persons)[0]["shape"] == ""
     quiet = [dataclasses.replace(e, observed=tuple(o for o in e.observed if o.predicate != "first_blood")) for e in fought]
     assert CH._shapes(quiet, d.act_of, w.persons) == {act.id: "(8 rounds, no first blood, 2 lead changes)"}
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# THE HAND (B14.16; `16_PESSIMIST_PC_C` 2, gates 2 and 5's `fell_to_hand` half)
+# ---------------------------------------------------------------------------------------------------------------------
+def _scenes_where_the_actor_falls(want, obs="total", limit=None):
+    """`want` scenes (`_fought`, act ids `h0`, `h1`, ...) in which the ACTOR `p_low` is felled and the subject `p_mid` stands,
+    each as `(world, fought)`; and how many fights it took. `witness=True`: WITNESS deposits on the real driver; `fan_out_mode`
+    `total` so the bystanders witness the death; `obs` is `observation_deposit_mode` (`total`: a bystander holds the Event's
+    `observed`; `None`: the shipped `actor`, the act's actor alone)."""
+    found, i = [], 0
+    while len(found) < want and i < (limit or 8 * want):
+        w, _d, _declared, fought, _out = _fought(f"h{i}", fan="total", witness=True, obs=obs)
+        i += 1
+        if "p_low" not in w.persons and "p_mid" in w.persons:
+            found.append((w, fought))
+    return found, i
+
+
+def _killers(w, victim="p_low"):
+    """`{bystander: deed_doer of his firsthand `person.died` claim on `victim`}`, the holder's own pairing read as
+    `suffered_deeds` and `attributed_deeds` ask it."""
+    out = {}
+    for p in w.persons.values():
+        if p.id in ("p_low", "p_mid"):
+            continue
+        seen = person_q._seen_index(p.ledger)
+        for c in p.ledger:
+            if c.predicate == "person.died" and c.subject == victim and not c.chain:
+                out[p.id] = person_q.deed_doer(c, seen)
+    return out
+
+
+def test_fell_to_hand_names_the_prevailing_party(monkeypatch):
+    """GATE 2 (the S7 probe restated, U3 §6.2): over 100 fights in which the ACTOR is felled, `deed_doer` on a bystander's
+    `person.died` claim returns the standing party, `p_mid`. Before the change it returns `None` (the `seen.who` pairing
+    refuses a subject seen acting in the lap) or the dead man. The `seen.who` pairing stands for every other case: where the
+    SUBJECT is felled, the bystander's pairing still names the actor. CONTROL (observes the failure it excludes): with
+    `hand_observed` withheld alone, the same scenes name `None` or `p_low`, never `p_mid`."""
+    scenes, fought_n = _scenes_where_the_actor_falls(100)
+    checked = 0
+    for w, fought in scenes:
+        killers = _killers(w)
+        assert killers, "no bystander held the death: the scene proves nothing"
+        assert set(killers.values()) == {"p_mid"}, killers
+        died = [e for e in fought if e.kind == "person.died"]
+        assert [(o.subject, o.value) for e in died for o in e.observed if o.predicate == "fell_to_hand"] == [("p_low", "p_mid")]
+        checked += 1
+    assert checked >= 100, (checked, fought_n)
+    # the pairing stands for every other case: the subject felled, the bystander still names the actor
+    others = 0
+    for i in range(60):
+        w, _d, _declared, fought, _out = _fought(f"h{i}", fan="total", witness=True, obs="total")
+        if "p_mid" not in w.persons and "p_low" in w.persons:
+            assert not [o for e in fought for o in e.observed if o.predicate == "fell_to_hand"], i
+            got = _killers(w, "p_mid")
+            assert got and set(got.values()) == {"p_low"}, (i, got)
+            others += 1
+    assert others >= 10, others
+    # the control: the Observation withheld alone, the same scenes name nobody or the dead man
+    monkeypatch.setattr(effects_combat, "hand_observed", lambda *a, **k: ())
+    withheld = set()
+    for i in range(fought_n):
+        w, _d, _declared, _fought_, _out = _fought(f"h{i}", fan="total", witness=True, obs="total")
+        if "p_low" not in w.persons and "p_mid" in w.persons:
+            withheld |= set(_killers(w).values())
+    assert withheld and withheld <= {None, "p_low"}, withheld
+
+
+def test_the_hand_rides_the_death_and_reaches_only_who_it_was_deposited_to():
+    """GATE 5, THE `fell_to_hand` HALF. WHAT THE TREE DOES, asserted, and what it cannot assert, stated.
+    (1) The Observation `(p_low, fell_to_hand, p_mid)` rides the felled actor's `person.died` Event once and no other Event of
+    the scene (not `body.changed`, the standing party's). (2) Under the shipped `observation_deposit_mode` (`actor`) it is
+    deposited to the act's actor alone, and a felled actor is no longer a person: NO ledger holds it, and a bystander's
+    `deed_doer` names nobody -- the hand is on the log and in no ledger until a mode deposits to witnesses. (3) Under `total`
+    every co-located witness holds it from the admitting channel that supplies `who` (`firsthand`, presence), and a bystander
+    names `p_mid`.
+    NOT ASSERTED, and not built: that a `document_key`, `post_remit` or `chronicle` witness holds none. `loop/witness.py`
+    deposits `Event.observed` per witness under the mode and never reads `observation_terms.supplied_by` for a predicate that
+    is not a `Seen` field, and `tiny_world` has no such witness of a fight; (3)'s source check shows what the one channel
+    present does, not that the others are excluded."""
+    shipped_scenes, _n = _scenes_where_the_actor_falls(1, obs=None)
+    assert shipped_scenes, "no scene in 8 felled the actor under the shipped mode"
+    shipped, fought_s = shipped_scenes[0]
+    died = [e for e in fought_s if e.kind == "person.died"]
+    assert len(died) == 1
+    assert [e.kind for e in fought_s if any(o.predicate == "fell_to_hand" for o in e.observed)] == ["person.died"]
+    assert [(o.subject, o.value) for o in died[0].observed if o.predicate == "fell_to_hand"] == [("p_low", "p_mid")]
+    assert not [c for p in shipped.persons.values() for c in p.ledger if c.predicate == "fell_to_hand"]
+    assert set(_killers(shipped).values()) <= {None}, "a bystander named a hand under the shipped mode"
+    total, _fought_t = _scenes_where_the_actor_falls(1)[0][0]
+    held = {p.id: [c for c in p.ledger if c.predicate == "fell_to_hand"] for p in total.persons.values()}
+    held = {pid: cs for pid, cs in held.items() if cs}
+    assert set(held) - {"p_mid"}, "no bystander held the hand under `total`"
+    for pid, cs in held.items():
+        assert [(c.subject, c.value, c.source) for c in cs] == [("p_low", "p_mid", "firsthand")], (pid, cs)
