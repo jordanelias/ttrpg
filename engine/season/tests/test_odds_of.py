@@ -301,19 +301,72 @@ def test_mode_b_is_only_the_actors_own_odds():
     assert sigma.odds_of(w, _tell("p_other", actor="p_low"), believer=other) is None
 
 
+def _partial_or_better(odds):
+    """The probability of any band above Failure (`odds` is `band_odds`'s tuple, Failure first)."""
+    return sum(odds[1:])
+
+
+def test_an_unauthored_hearer_is_not_harder_than_a_held_one():
+    """B05.11 (TWO's falsifier, `10_DICE_one_score_two_roles.md` "The falsifier"): `odds_of` for a `tell` at an unauthored hearer
+    equals the odds at a hearer holding the skill at `pool_default`, and a hearer holding it at a higher rank gives lower
+    odds. The opposition is the opponent's skill SCORE: the resisting attribute (the verb row's `opposed_attribute`) is held at the
+    ceiling by the unauthored hearer here and below the default by the held one, and neither moves it. FALSIFIER: lane A's
+    `max(attribute, rank)` (the unauthored hearer opposes at 7 and the one holding the default at 2: the inversion TWO names)."""
+    from engine.substrate import descriptors
+    from ..data.verbs import VERB_TABLE
+    w = _world()
+    opposed = VERB_TABLE["tell"].opposed_attribute
+    default = w.fixtures.get("pool_default")
+    for pid, held, attr in (("p_mid", {}, descriptors.ATTRIBUTE_CEILING),      # unauthored, resolute
+                            ("p_other", {KEY: default}, 1),                       # holds the skill at the untrained score, soft
+                            ("p_king", {KEY: default + 3}, 1),                    # holds it higher, soft
+                            ("p_high", {}, None)):                                # unauthored, no attributes held
+        w.persons[pid].capability = dict(held)
+        w.persons[pid].attributes = {} if attr is None else {opposed: attr}
+    odds = {pid: sigma.odds_of(w, _tell(pid)) for pid in ("p_mid", "p_other", "p_king", "p_high")}
+    assert all(o is not None for o in odds.values()), odds
+    assert odds["p_mid"] == odds["p_other"] == odds["p_high"], odds              # the unauthored hearer is no harder than one at the default
+    assert _partial_or_better(odds["p_king"]) < _partial_or_better(odds["p_other"]), odds   # a higher rank is harder to move
+
+
+def test_raising_the_subjects_inquiry_score_lowers_partial_or_better_on_interrogate():
+    """B05.11 (H-312's probe, which printed an unchanged tuple at every setting before): the `interrogate` row names `inquiry`
+    and a resisting attribute; the subject's `inquiry` score alone moves the odds, the attribute (held at the ceiling) does not.
+    CONTROL: the same subject at `pool_default` reads the unauthored subject's odds."""
+    from engine.substrate import descriptors
+    from ..data.verbs import VERB_CAPABILITY, VERB_TABLE
+    w = _world()
+    row = VERB_TABLE["interrogate"]
+    assert VERB_CAPABILITY["interrogate"] == "inquiry" and row.opposed_attribute
+    subject = w.persons["p_mid"]
+    subject.attributes = {row.opposed_attribute: descriptors.ATTRIBUTE_CEILING}
+    act = Act(id="a:p_low:p_mid", actor="p_low", verb="interrogate", payload={"subject": "p_mid"})
+    seen = []
+    for rank in (None, w.fixtures.get("pool_default"), 4, 7):
+        subject.capability = {} if rank is None else {"inquiry": rank}
+        seen.append(sigma.odds_of(w, act))
+    assert all(o is not None for o in seen), seen
+    assert seen[0] == seen[1], seen                                              # control: unauthored == the default
+    moved = [_partial_or_better(o) for o in seen[1:]]
+    assert moved[0] > moved[1] > moved[2], moved                                 # each step of the score lowers Partial-or-better
+
+
 def test_score_reads_no_attribute():
     """B05.09 (TWO "Tests and lands"): the skill score the pool starts from has no attribute in it. A person holding the
-    verb's governing attribute at the ceiling and no skill key scores the untrained score, `pool_default`; with a skill key
-    below it, the same (a first rank is never a loss); the attribute enters only through the opposition's own `attribute=`
-    argument (B05.11 removes it). FALSIFIER: lane A's `max(attribute, rank)` (the pool of this person is 7)."""
+    verb's attributes (governing and opposed) at the ceiling and no skill key scores the untrained score, `pool_default`; with a
+    skill key below it, the same (a first rank is never a loss). B05.11 deleted the opposition's `attribute=` argument, so the
+    attribute enters no score. FALSIFIER: lane A's `max(attribute, rank)` (the score of this person is 7)."""
     from engine.substrate import descriptors
+    from ..data.verbs import VERB_TABLE
     w = _world()
     p = w.persons["p_low"]
     default = w.fixtures.get("pool_default")
-    p.attributes = {descriptors.capability(KEY).base: descriptors.ATTRIBUTE_CEILING}
+    row = VERB_TABLE["tell"]
+    p.attributes = {a: descriptors.ATTRIBUTE_CEILING for a in (*row.governing, row.opposed_attribute)}
     p.capability = {}
     assert pool.score(w, p, "tell") == default
-    assert pool.score(w, p, "tell", attribute=pool._opposing_attribute) == descriptors.ATTRIBUTE_CEILING   # the opposition's read, kept
+    assert not hasattr(pool, "_opposing_attribute") and "attribute" not in inspect.signature(pool.score).parameters
     p.capability = {KEY: 1}
-    assert pool.score(w, p, "tell") == default and pool.faculty(w, p, "tell") == default + sum(
+    # the pool (B05.25) is the governing mean, the rank and the addends: the attributes reach the dice there, and only there
+    assert pool.score(w, p, "tell") == default and pool.faculty(w, p, "tell") == pool.governing_score(w, p, "tell") + 1 + sum(
         int(a(w, p, "tell")) for a in pool.POOL_ADDENDS)

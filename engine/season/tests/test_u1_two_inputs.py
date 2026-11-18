@@ -87,16 +87,28 @@ def test_the_score_is_the_larger_of_the_rank_and_the_untrained_score_and_reads_n
     assert pool.score(w, p, VERB) == default + 3                        # the same with no attribute held
 
 
-def test_the_opposition_keeps_the_attribute_read_through_the_parameter():
-    """`score(..., attribute=)` is B01's parameter, kept until B05.11: the opposition's read only; the pool passes none."""
+def test_the_opposition_reads_the_skill_score_not_the_pool(monkeypatch):
+    """B05.11 (U1-B step 4; CAP B4): a subject with practice addends, a seat and a resisting attribute at the ceiling opposes
+    at his skill SCORE: `opposition == his rank`, no base dice, no practice addend, no seat, no attribute -- while his own pool
+    (`faculty`) carries the addend. FALSIFIER: `_opposition_of` returning `faculty` (the pool) or the larger of the attribute and
+    the rank (lane A's `max`, which reads 7 here). CONTROL: the roller's pool reads the same addend, so the addend is live."""
+    from ..data.verbs import VERB_CAPABILITY, VERB_TABLE
+    from ..seam.wrappers import sigma
+    verb = "tell"
+    key = VERB_CAPABILITY[verb]
     w = _world()
-    p = w.persons["p_low"]
-    p.capability = {KEY: 3}
-    seven = lambda person, verb: 7
-    assert pool.score(w, p, VERB, attribute=seven) == 7                 # the larger of the attribute and the rank
-    assert pool.score(w, p, VERB, attribute=lambda person, verb: 1) == 3
-    assert pool.score(w, p, VERB, attribute=lambda person, verb: None) == 3
-    assert pool.score(w, p, VERB) == 3                                  # the pool passes none
+    SeasonDriver(w)
+    subject = w.persons["p_high"]                                       # holds `off_duke`, a seat
+    assert any(t.kind == "hold" for t in subject.tenures), "the subject holds a seat"
+    subject.capability = {key: 5}
+    subject.attributes = {VERB_TABLE[verb].opposed_attribute: descriptors.ATTRIBUTE_CEILING}
+    monkeypatch.setattr(pool, "POOL_ADDENDS", list(pool.POOL_ADDENDS))
+    pool.register_pool_addend(lambda w_, who, v: 3 if who.id == subject.id else 0)
+    assert pool.faculty(w, subject, verb) > pool.score(w, subject, verb) == 5      # the addend is in his pool, not his score
+    assert sigma._opposition_of(w, subject.id, verb) == 5.0                        # his opposition is his rank
+    assert sigma.contest_input(w, ["p_low", subject.id], verb=verb, subject=subject.id).opposition == 5.0
+    subject.capability = {}
+    assert sigma._opposition_of(w, subject.id, verb) == float(w.fixtures.get("pool_default"))   # no rank: the untrained score
 
 
 def test_the_pool_is_pool_of_with_the_base_and_the_floor():

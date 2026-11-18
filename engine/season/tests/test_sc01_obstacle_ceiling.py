@@ -235,11 +235,14 @@ def _arm(ceiling):
 
 @pytest.mark.parametrize("subject,want", [("p_mid", {2: 2.0, 3: 3.0}),
                                           ("p_other", {2: 1.5, 3: 1.5}),
-                                          ("p_king", {2: 2.0, 3: 2.0})])
+                                          ("p_king", {2: 1.0, 3: 1.0}),
+                                          ("site_harbour", {2: 2.0, 3: 2.0})])
 def test_the_ceiling_is_injected_and_bounds_each_matter_on_its_own(subject, want):
     """Through the real seam on a hand-built world: the fixture's value is what bounds the act's
     obstacle (2 -> 2.0, 3 -> 3.0 for a subject whose score/2 is 5), an obstacle under the ceiling is
-    untouched (1.5), and the no-score stand-in (`obstacle_default` 2) is bounded the same way.
+    untouched (1.5), a person holding nothing opposes at the untrained score (B05.11: `pool_default` 2 / 2 = 1.0 on every arm,
+    where the stand-in was 2), and the no-score stand-in (`obstacle_default` 2) is bounded the same way for a subject
+    who is no person (a site: nobody opposite).
     PER MATTER (ED-SC-0038): each subject's draw is bounded on its own; nothing aggregates them."""
     for c, ob in want.items():
         out = sigma.resolve(_arm(c), ["p_low"], ["c"], "a standing", verb="tell", subject=subject,

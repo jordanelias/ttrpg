@@ -86,13 +86,17 @@ def test_score_is_the_pool_without_its_addends():
         assert pool.faculty(w, p, verb) == pool.score(w, p, verb) + sum(int(a(w, p, verb)) for a in pool.POOL_ADDENDS)
 
 
-def test_a_person_opposes_with_the_score_he_rolls_and_the_control_reads_the_held_values():
+def test_a_person_opposes_with_the_score_he_rolls_on_every_arm():
+    """B05.11: `_opposition_of` returns the skill score on every `obstacle_model` arm (the arm switch is gone from it): a
+    person holding nothing opposes at `pool_default`, a non-person subject opposes at nothing (the module's stand-in)."""
     w = P.tiny_world()
     hearer = w.persons["p_low"]
     assert hearer.attributes in ({}, None) and not hearer.capability.get("copying")
     assert sigma._opposition_of(w, "p_low", "tell") == float(w.fixtures.get("pool_default"))
+    assert sigma._opposition_of(w, "site_harbour", "tell") is None
     w.fixtures = w.fixtures.sweep("obstacle_model", "stand_in")
-    assert sigma._opposition_of(w, "p_low", "tell") is None, "CONTROL: a person holding nothing opposed at the stand-in"
+    assert sigma._opposition_of(w, "p_low", "tell") == float(w.fixtures.get("pool_default"))
+    assert sigma._opposition_of(w, "site_harbour", "tell") is None
 
 
 def test_the_task_difficulty_is_closed_over_the_verbs_the_roll_deals():
@@ -128,7 +132,9 @@ def test_falsifier_a_believers_lie_against_a_person_is_scored_at_the_obstacle_it
     """`lie` names no vocation (no `verb_capability` row), so nobody holds anything on it and the roll opposes a person
     at the untrained score (`pool.score`'s fallback, `Fixtures pool_default`): Ob = 1.0 + 2/2 on the task arm. The
     believer's record (`believed_input`, what the chooser weighs, `odds_weighting: believed`) must compose the SAME
-    obstacle, not the difficulty alone. Both arms: the control composes the stand-in on both sides."""
+    obstacle, not the difficulty alone. Both arms (B05.11 removed the `task`-only conjunct from `believed_input`, as the dealt
+    side has no arm switch): the control arm has no difficulty, so its dealt obstacle is the score term alone, 2/2 = 1.0, and
+    the believer's is the same; FALSIFIER: the conjunct put back, the believer's stand-in 2.0 against the dealt 1.0."""
     w = P.tiny_world()
     w.fixtures = w.fixtures.sweep("obstacle_model", model)
     liar = w.persons["p_mid"]
@@ -136,7 +142,7 @@ def test_falsifier_a_believers_lie_against_a_person_is_scored_at_the_obstacle_it
     dealt = sigma._composed_obstacle(sigma.contest_input(w, [liar.id], verb="lie", subject="p_low"))
     believed = sigma.believed_input(liar, "lie", "p_low", w.fixtures, pool=pool.faculty(w, liar, "lie"),
                                     person_subject=True)
-    assert believed is not None and sigma._composed_obstacle(believed) == dealt == 2.0
+    assert believed is not None and sigma._composed_obstacle(believed) == dealt == {"task": 2.0, "stand_in": 1.0}[model]
 
 
 @pytest.mark.parametrize("opp", [None, 0.0, 1.0, 2.0, 3.0, 7.0])

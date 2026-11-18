@@ -58,7 +58,7 @@ register_pool_addend(practice)
 
 def _held_attribute(entity: Any, attr):
     """The score `entity` holds on attribute `attr` (`Person.attributes`), or `None` where `attr` is none, he holds
-    none, or the entity is no person. The one read `governing_attribute`, `governing_score` and `_opposing_attribute` end in."""
+    none, or the entity is no person. The one read `governing_attribute` and `governing_score` end in."""
     return (getattr(entity, "attributes", None) or {}).get(attr) if attr else None
 
 
@@ -71,13 +71,6 @@ def governing_attribute(entity: Any, verb: str):
 
 
 _authored_attribute = governing_attribute   # B05.09: the name its remaining readers (tests) still use
-
-
-def _opposing_attribute(entity: Any, verb: str):
-    """The score `entity` HOLDS on the attribute that OPPOSES the verb: the row's `opposed_attribute:` (A-71, A-137, AR-44),
-    `None` where the row names none or he holds none. The opposition's read only: `faculty` reads `governing_score`."""
-    row = VERB_TABLE.get(verb)
-    return _held_attribute(entity, row.opposed_attribute if row is not None else None)
 
 
 def governing_score(w: Any, p: Any, verb: str) -> float:
@@ -114,8 +107,8 @@ def faculty(w: Any, p: Any, verb: str) -> float:
     of how the verb's governing score (the mean of his scores in its `governing:` attributes, FRACTIONAL: 2.5, not 3), his rank in
     the verb's skill, the registered addends (`POOL_ADDENDS`, whole dice) and the base and floor the `social_roll` `dice` row names
     (`add: pool_add`, `floor: pool_floor`, B05.10; each 0 at control) make a pool. A first rank adds a die; a person holding no attribute and no rank rolls
-    `pool_default`. The opposition does not read this: it reads the opposing attribute beside the skill score,
-    `opposed_ob(opposing attribute + skill score)` (B05.14, A-137), through `score`.
+    `pool_default`. The opposition does not read this: it reads the opponent's skill score alone (`score`, B05.11);
+    the opposing attribute joins it as `opposed_ob(opposing attribute + skill score)` in B05.14's composer (A-137).
     A brute verb never reaches here (`Forbidden`), nor does a row naming no attribute (`Unspecified`): a (c) row reaches its
     module, which reads `score + addends` (`seam/wrappers/combat.py::_fight_faculty`).
     ⚠ `08 §3` GIVES THE POLARITY: an `assumption` grade means *inject the default, declare the site,
@@ -144,17 +137,14 @@ def addends_of(w: Any, p: Any, verb: str) -> int:
     return sum(int(add(w, p, verb)) for add in POOL_ADDENDS)
 
 
-def score(w: Any, p: Any, verb: str, attribute: Any = None) -> "int | None":
+def score(w: Any, p: Any, verb: str) -> "int | None":
     """(W3-1, A-7, 7b-6) WHAT `p` IS TRAINED IN FOR `verb`'s SKILL: the held rank, never below the untrained score
     `pool_default` (CORE Edit 9: a first rank is never a loss), else the untrained score. `None` where the row says
     `untrained: none` and he holds no rank. No attribute (the governing attribute enters the dice through `governing_score`,
-    B05.25) and no addend (practice raises a pool, never an opposition). The base of his pool AND the score an opponent's
-    `opposed_ob` reads (`sigma.py::_opposition_of`). `attribute` (B01's parameter, kept until B05.11): the opposition's read
-    only -- `_opposing_attribute` (v10 CR-96), the larger of that attribute and the rank, as B01 shipped it; the pool passes
-    none and reads no attribute."""
+    B05.25; the attribute is a level, not a score, A-7; B05.11 deleted the opposition's `attribute=` read) and no addend
+    (practice raises a pool, never an opposition). The score an opponent's `opposed_ob` reads (`sigma.py::_opposition_of`),
+    and the rank `faculty` reads through `rank`."""
     have = _capability(p, verb)
-    if attribute is not None and (attr := attribute(p, verb)) is not None:
-        return int(attr) if have is None else max(int(attr), int(have))
     default = untrained(w.fixtures)
     if have is not None:
         return max(default, int(have))

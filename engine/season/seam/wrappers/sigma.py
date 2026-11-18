@@ -86,7 +86,7 @@ from ...queries.inputs import Margin, SocialContestInput
 from ...queries.world_q import proofs, reception
 from ...state.carriers import EFFORT, effort_of
 from ._entry import entry_for
-from .pool import POOL_ADDENDS, _capability, _opposing_attribute, faculty, governing_attribute, register_pool_addend, score, untrained  # noqa: F401  (moved: see pool.py)
+from .pool import POOL_ADDENDS, _capability, faculty, governing_attribute, register_pool_addend, score, untrained  # noqa: F401  (moved: see pool.py)
 
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
 # (A-25), so the row says the social contest module runs its own prizes. Reached by that string only.
@@ -99,32 +99,20 @@ _RESOLVER = "d_sigma"
 
 
 def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]:
-    """The subject's score on the verb's vocation, or `None` -- a READ, not an obstacle: the LARGER of the
-    capability key he holds and the attribute he holds on the vocation (v10 CR-20), and nothing else. The
-    attribute is the one that OPPOSES the verb (`pool._opposing_attribute`, A-71, AR-44): the verb row's `opposed_attribute:`
-    (B05.25), `None` where it names none.
-
-    ⚠ NEVER PRACTICE, AND THE FALLBACK BY ARM. On the shipped `task` arm (`Fixtures obstacle_model`) a person is
-    opposed at `pool.score`, which falls to the untrained score (`pool_default`) where he holds neither, so
-    `obstacle_default` never stands in for a person; on the `stand_in` control arm a person who holds neither is
-    `None`, and the module falls to `obstacle_default`. The practice addend raises a
-    pool, not an opposition (`practice_cap`'s note), on both arms.
+    """The subject's SKILL SCORE for the verb, or `None` -- a READ, not an obstacle: `pool.score`, the held rank on the verb's
+    skill (never below the untrained score, `pool_default`, where he holds none), and nothing else: no base dice, no practice
+    addend, no seat, no attribute (B05.11, TWO Edit B, CAP B4: the attribute is a level, not a score, A-7). A PERSON SUBJECT
+    ALWAYS HAS A SCORE, on every `obstacle_model` arm, so an unauthored hearer is no harder to move than one holding the skill
+    at `pool_default` and a higher rank is harder (H-312's `interrogate`). `None` for nobody opposite (a record, a rung, a
+    proposition, a person with no entry) and for a person with no score (a skill row saying `untrained: none` that he holds no
+    rank in): the module's stand-in stands there.
 
     The obstacle is composed by `modules/social_contest/roll.py::obstacle` (ED-SC-0033 clause (3), *the
     obstacle has a single owner*). What is here is the half only the host can do: reading `World` for the
-    score a PERSON subject brings (`None` for a record, a rung or a proposition, or a person with no entry)."""
+    score a PERSON subject brings."""
     if subject and subject in w.persons:
-        person = w.persons[subject]
-        # B11 lane A (`10_DICE_one_score_two_roles.md` B): ON THE TASK ARM A PERSON ALWAYS HAS A SCORE -- `pool.score`
-        # (no practice), read on the OPPOSING attribute (the verb row's `opposed_attribute:`, B05.25), so
-        # `obstacle_default` never stands in for a person. The control arm (`Fixtures obstacle_model: stand_in`)
-        # reads the held values alone.
-        if w.fixtures.get("obstacle_model") == OBSTACLE_MODEL_TASK:
-            opposing = score(w, person, verb, attribute=_opposing_attribute)
-            return None if opposing is None else float(opposing)     # no score (`untrained: none`): the module's default stands
-        held = [float(v) for v in (_capability(person, verb), _opposing_attribute(person, verb)) if v is not None]
-        if held:
-            return max(held)
+        opposing = score(w, w.persons[subject], verb)
+        return None if opposing is None else float(opposing)
     return None
 
 
@@ -462,8 +450,8 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
         ledger on that subject at `CAPABILITY_CLAIM + key` (the latest, then the most confident);
         none held -> unknown. A non-person subject has no opposition (the task's difficulty alone on the
         task arm, the module's stand-in on the control), and that is known. A person subject on a verb naming
-        no key opposes at the untrained score on the task arm (`pool.untrained`, every person's score on no
-        vocation, so known; the dealt roll reads the same) and has no opposition on the control arm.
+        no key opposes at the untrained score on every arm (`pool.untrained`, every person's score on no
+        vocation, so known; the dealt roll reads the same, B05.11).
       * an examined Record's forgery quality: a property of the Record, held by nobody's claim here
         -> unknown.
       * the room's terms (`reception`, `proofs`) read other persons' ledgers: unknown unless the caller
@@ -479,11 +467,11 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
         if said is None:
             return None
         opposition = float(said)
-    elif "opposes" in roles and person_subject and subject != p.id and fx.get("obstacle_model") == OBSTACLE_MODEL_TASK:
-        # A VERB NAMING NO KEY (`lie`), ON THE TASK ARM: the roll opposes a person with `pool.score`, which on such a verb is
+    elif "opposes" in roles and person_subject and subject != p.id:
+        # A VERB NAMING NO KEY (`lie`), ON EVERY ARM: the roll opposes a person with `pool.score`, which on such a verb is
         # the untrained score for EVERY person (`pool.untrained`; nothing can be held on no vocation), so it is known,
-        # and the believed obstacle is the dealt one. The control
-        # arm keeps `None`: the true roll's `_opposition_of` is `None` there too and both compose the stand-in.
+        # and the believed obstacle is the dealt one (B05.11: `_opposition_of` returns the score on every arm, so no arm
+        # keeps a `None` here for the module's stand-in).
         opposition = float(untrained(fx))
     if examined_record:
         return None
