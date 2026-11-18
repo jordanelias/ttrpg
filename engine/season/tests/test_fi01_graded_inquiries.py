@@ -97,7 +97,7 @@ def test_the_rosters_name_three_graded_and_the_skip_names_finding_none():
 
 def test_a_failed_inquiry_deposits_no_claim_and_news_untold_still_does():
     """THE SKIP ARM, ON A SEEDED CASE. `research` at the shipped fixtures (`pool_default` 2 against the
-    module's `obstacle_default` 2): the act ids are swept until one draws `Failure` and one draws a finding
+    module's stand-in `opposed_ob(pool_default, opposition_rate)`): the act ids are swept until one draws `Failure` and one draws a finding
     band; each is resolved through the real driver and witnessed. The `Failure` act emits `finding.none`
     with the degree on it and NOTHING lands in any ledger -- no `claim.deposited` names it; the finding
     act's `finding.made` does deposit (the arm reads the kind, not the act). A REFUSED research (no such

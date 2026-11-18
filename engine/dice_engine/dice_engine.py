@@ -240,14 +240,19 @@ def degree_from_net(net: int | float, ob: int | float,
         margin <  0        Failure        fell short
 
     Both operands may be fractional. `net` already is — the continuous engine returns fractional
-    nets. `ob` is RULED to become fractional (Jordan, 2026-08-14: an obstacle rolled against a
-    character or faction is "their corresponding score/2 plus whatever specific modifiers exist for
-    them in that instance"). ⚠ (ED-IN-0202) The derivation is implemented at some sites:
+    nets. `ob` is RULED to become fractional (Jordan, 2026-08-14). An obstacle a person opposes
+    with is `sigma_leverage.opposed_ob(his skill score, opposition_rate)`, `MU_PER_DIE` (0.4) a
+    point (A-26, A-71, A-79), composed by the module owners `modules/social_contest/roll.py::obstacle`
+    and `modules/combat/core.py::ob_from_defender` (the latter reads `faculty / 2.0` until B05.58
+    moves it onto `opposed_ob`); hostile terms add, nothing lowers it.
+    ⚠ (ED-IN-0202) The derivation is implemented at some sites:
     `systems/factions/sim/crown_initiative.py::coronation_renewal_ob` implements
     `floor(Church.L / 2) + 1` exactly, Royal Progress derives its Ob from the standing
     gap, and the tribunal derives under formal grounds. But there is NO
     SINGLE-OWNER derivation — most sites still hand-set (Muster 1, Govern 2, the
-    threadwork table; combat's fixed Ob 3 is deleted, PC-03), the three opposed sites disagree, and `parliamentary_transfer`'s `L+2`
+    threadwork table; combat's fixed Ob 3 is deleted, PC-03), the three opposed sites disagree
+    (the person-opposed term has one owner since B05: `opposed_ob`; the faction and threadwork sites
+    named here are untouched), and `parliamentary_transfer`'s `L+2`
     contradicts the ruling while being stated as canon in `parliamentary_transfer_v30.md`.
     Reconciling them is a systems ruling, not an edit, and is SUSPENDED by Jordan (2026-08-21).
     The distinction matters here more than anywhere else, because this is the function a reader

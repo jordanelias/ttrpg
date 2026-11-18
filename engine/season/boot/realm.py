@@ -1476,8 +1476,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         w.persons[pid].traits = cast.traits_of(cast.row(cid) or {})
         # v10 CR-33: the row's `lifepath:` EXPANDED into the capability keys its template names, each at
         # `pool_default` (the grant changes no POOL; it makes the key one `train` can raise, and it LOWERS the
-        # obstacle the holder presents: a held key at 2 is opposed at 2.0 and halved to 1.0, an unheld person at
-        # `obstacle_default` 2 -- unmeasured in magnitude), set here and
+        # obstacle the holder presents: a held key at 2 is opposed at `opposed_ob(2, opposition_rate)`, a person
+        # holding none at the stand-in `opposed_ob(pool_default, opposition_rate)` -- unmeasured in magnitude), set here and
         # written in play only by `train`. The lifepath id is stored on NO Person: `capability_of` reads it and
         # drops it. No fallback and no draw: a row with no `lifepath:`, or one whose template names no key, leaves
         # `capability` as it was, `{}`.

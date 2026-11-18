@@ -1087,9 +1087,9 @@ DEFAULT_FIXTURES = Fixtures(
     attribute_level="minor",           # `H-422`, swept None (control) / minor (live, SHIPPED) / moderate
     # `opposition_rate`: the share of the opposing person's score an obstacle takes up, per point. Control 0.5 (lane A's
     # halving); live `engine/dice_engine/dice_engine.py::MU_PER_DIE` (SHIPPED), READ FROM THAT OWNER and never retyped.
-    # [ASSUMPTION; medium; Jordan to correct; revert: `0.5`.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-423 -- site: Fixtures opposition_rate, graded `assumption`; CAP B2 gives the live value as `MU_PER_DIE` and the control as lane A's one half, so it is injected and swept 0.5 / 0.45 / MU_PER_DIE]
-    opposition_rate=MU_PER_DIE,        # `H-423`, swept 0.5 (control) / 0.45 / MU_PER_DIE (live, SHIPPED)
+    # [RULED (A-26, A-71, A-79); revert: `0.5`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-423 -- site: Fixtures opposition_rate, graded `ruled` (A-26, A-71, A-79); the live value is `MU_PER_DIE` and the control is lane A's one half, so it is injected and swept 0.5 / MU_PER_DIE / 0.3]
+    opposition_rate=MU_PER_DIE,        # `H-423`, swept 0.5 (control) / MU_PER_DIE (live, SHIPPED) / 0.3
     # `H-424` (B05.14; OBS §1, SC-B Edit A). HOW HARD EACH DIFFICULTY LEVEL IS: the obstacle a verb row's `difficulty:` level contributes
     # before any opposition (`rosters.yaml: difficulty_levels`, closed: refused at load if the keys are not exactly the roster's).
     # SHIPPED: the calibrated arm (B05.23), 0 / 0.8 / 1.6 / 2.4 in level order: `routine` at A-79's centre, equals on a routine matter

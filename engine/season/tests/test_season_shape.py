@@ -8766,7 +8766,7 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
         "2026-09-29 under position `11a` (down from 15 pre-`11a`), 16 after `T4`, 3 at v11 CR-82 (floor 2). The referent checks above run only "
         "on `news.told`, so this is "
         "what keeps them from asserting nothing. A fall here is the σ roll getting harder, not "
-        "the transport breaking: look at `H-126` (`pool_default`) and `H-127` (`obstacle_default`) "
+        "the transport breaking: look at `H-126` (`pool_default`) and `H-127` (the deleted `obstacle_default`; the stand-in is now `opposed_ob(pool_default)`) "
         "before anything in `witness`.")
     assert checked >= 1, "no telling carried a referent, so clause 4 asserted nothing"
 
