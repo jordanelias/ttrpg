@@ -41,6 +41,8 @@ from ..seam.wrappers import pool, sigma
 from .test_sc01_obstacle_ceiling import _module
 
 ROSTER = roster("obstacle_terms", ordered=True)
+CONDITIONAL = ("standard", "stakes", "regard")      # B05.21: members listed in an act's terms only where they weigh (the rest of the roster stands at 0.0)
+STANDING = tuple(n for n in ROSTER if n not in CONDITIONAL)
 LANE_A_STEPS = ("forgery",)                        # outside the roster (U-6); lane A's `room` step left it at B05.17 (the hostile half is the `reception` member, the rest leverage)
 BOUNDS = ("ceiling", "floor")
 SHIPPED_TABLE = V.VERB_TABLE_YAML                 # read at import, before any test re-points the loader
@@ -72,7 +74,8 @@ def test_terms_sum_to_ob():
         ob, terms = mod.obstacle(inp)
         names = [n for n, _ in terms]
         assert set(names) <= set(ROSTER) | set(LANE_A_STEPS) | set(BOUNDS), names
-        assert names[:len(ROSTER)] == list(ROSTER), names                       # every member, in roster order, first
+        assert tuple(names[:len(STANDING)]) == STANDING, names                  # every standing member, in roster order, first (the conditional three weigh nothing here)
+        assert [n for n in names if n in ROSTER] == [n for n in ROSTER if n in names], names         # roster order
         assert sum(v for _, v in terms) == ob, (inp, ob, terms)                # exact: the lattice is dyadic
         assert ob >= OB_MIN, (inp, ob)                                         # the floor
         bounds_seen += sum(n in BOUNDS for n in names)
@@ -245,7 +248,8 @@ def test_a_resolved_roll_carries_margin_terms_and_no_ob_terms():
     w.persons["p_mid"].capability = {"copying": 3}
     out = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="tell", subject="p_mid", rng=random.Random(0))
     assert out["status"] == "RESOLVED" and "ob_terms" not in out, sorted(out)
-    assert tuple(n for n, _ in out["terms"])[:len(ROSTER)] == ROSTER and sum(v for _, v in out["terms"]) == out["ob"], out["terms"]
+    named = tuple(n for n, _ in out["terms"])
+    assert named[:len(STANDING)] == STANDING and sum(v for _, v in out["terms"]) == out["ob"], out["terms"]       # the conditional three weigh nothing at the control
     out = sigma.resolve(_world(), ["p_low"], ["c"], "a standing", verb="tell", subject="site_harbour", rng=random.Random(0))
     assert out["terms"] and sum(v for _, v in out["terms"]) == out["ob"]
     assert isinstance(Margin(net=0.0, ob=1.0).terms, tuple)
@@ -370,3 +374,190 @@ def test_the_levels_are_the_sources_the_leverage_sums():
     none = DEFAULT_FIXTURES.sweep("proof_level", None).sweep("favour_level", None)
     assert sigma.advantage_sigma(none, operands) == 0.0                                                      # the control: None brings no level
     assert sigma.advantage_sigma(fx, {"reception": -3.0}) == 0.0                                             # a hostile bench is no favour
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B05.21 -- THE TUNING TABLES AT THEIR CONTROL SIZES (T13 commit 1; OBS §2 members 3, 5, 7; OBS gate 5)
+#
+# Three members join the roster -- `standard` (the docketed row's level), `stakes` (the Tenure kind the act opens), `regard` (the
+# counterparty's hostility, the hostile half of one stance) -- each with its host function and each at its control: every `standard` is
+# `plain`, `stakes_ob` is 0 for every kind, `regard_step` is 0, `proof_admission` is `off`. A MEMBER THAT WEIGHS NOTHING IS NOT LISTED: the
+# terms ride the Event's `ending`, which the content hash folds, so a zero entry per act would move every world's hash at a commit that
+# declares it moves none. `reception` and `capability` stand at 0.0 because B05.18 declared that move; these three stand where they weigh.
+# ---------------------------------------------------------------------------------------------------------------------
+from ..data import arrangements as ARR
+from ..data import fixtures as FX
+from ..data import rosters as ROS
+from ..queries import world_q
+from . import test_sc02_reception as R
+
+NEW_MEMBERS = CONDITIONAL
+
+
+def _argue_terms(regard_step, stance):
+    """`(terms, levels)` of one `argue`: two NPCs, the hearer (`p_other`) holding the one stance row `stance` toward the arguer (`p_low`)."""
+    w = _world(regard_step=regard_step)
+    w.persons["p_other"].stance = [("p_low", *stance)] if stance else []
+    out = sigma.resolve(w, ["p_low"], ["c"], "a proposition", verb="argue", subject="p_other", rng=random.Random(0))
+    assert out["status"] in ("RESOLVED", "REFUSED"), out
+    return dict(out["terms"]), {n: (f, a) for n, f, a in out["levels"]}
+
+
+def test_a_hostile_hearer_is_a_regard_term_and_a_friendly_one_is_favour():
+    """OBS gate 5, T13 T3's falsifier. A hand-built fold, two NPCs, one `argue`, the hearer holding one stance row toward the arguer at
+    `(arguer, +4, 5)` in one arm and `(arguer, -4, 5)` in the other, `regard_step` 1.0: the hostile arm's terms show `regard` 0.8 x
+    `regard_step` (a stance of 4 x 5 = 20 over `STANCE_MAX` 25), the friendly arm's levels show `favour` and its terms show no `regard`; the
+    two arms' term lists differ in `regard` alone. CONTROL: at `regard_step` 0 neither arm shows `regard` and neither favour. FALSIFIER: the
+    hostile half routed to the leverage, the friendly half to the obstacle, or both arms' obstacles equal."""
+    hostile, hostile_levels = _argue_terms(1.0, (-4, 5))
+    friendly, friendly_levels = _argue_terms(1.0, (4, 5))
+    assert hostile["regard"] == 0.8 * 1.0, hostile
+    assert "regard" not in friendly and friendly_levels["favour"] == (1, 0), (friendly, friendly_levels)       # `levels` count each source's units
+    assert hostile_levels["favour"] == (0, 0), hostile_levels
+    bounds = {"ceiling", "floor"}
+    assert {k: v for k, v in hostile.items() if k not in bounds | {"regard"}} == {k: v for k, v in friendly.items() if k not in bounds}
+    for stance in ((-4, 5), (4, 5), None):                                                      # the control reads nothing, both ways
+        terms, levels = _argue_terms(0.0, stance)
+        assert not set(NEW_MEMBERS) & set(terms) and levels["favour"] == (0, 0), (stance, terms, levels)
+    half, _ = _argue_terms(0.5, (-4, 5))
+    assert half["regard"] == 0.4                                                                # the step is the size: 0.8 x 0.5
+    clamped, _ = _argue_terms(1.0, (-5, 25))                                                    # -125 clamps at `STANCE_MAX`: one full step
+    assert clamped["regard"] == 1.0, clamped
+
+
+def test_the_new_members_are_unlisted_at_the_control_and_the_roster_binds_them():
+    """T13 commit 1, `obstacle_terms` members 3, 5, 7 at their places (`standard` after `opposition`, `stakes` and `regard` before `reception`),
+    each with ONE host function. At the shipped control no rolled verb's term list shows any of them, so the terms every Event carries are
+    what they were. FALSIFIER: a member in the roster with no function (refused at import), or a zero entry listed per act."""
+    assert tuple(ROSTER) == ("even", "difficulty", "opposition", "standard", "stakes", "regard", "reception", "capability"), ROSTER
+    assert tuple(sigma.OBSTACLE_TERMS) == ROSTER
+    w = _world()
+    checked = 0
+    for verb in ROLLED:
+        for subject in ("site_harbour", "p_other", None):
+            terms = dict(_module().obstacle(sigma.contest_input(w, ["p_low"], verb=verb, subject=subject))[1])
+            assert not set(NEW_MEMBERS) & set(terms), (verb, subject, terms)
+            checked += 1
+    assert checked == 3 * len(ROLLED)
+
+
+# --- T1: the second arm of `difficulty_ob` ---------------------------------------------------------------------------
+
+def test_difficulty_ob_has_a_control_and_a_half_arm_and_ships_the_control():
+    """T13 edit 1: `difficulty_ob` two arms -- `control` 0/1/2/3 and `half` 0/0.5/1/1.5 -- each keyed exactly as `rosters.yaml:
+    difficulty_levels`, the control shipped. FALSIFIER (T1): an act whose row names a level other than `plain` and whose term list shows
+    `difficulty` 0 -- at either arm."""
+    levels = roster("difficulty_levels", ordered=True)
+    assert tuple(FX.DIFFICULTY_OB_ARMS) == ("control", "half"), FX.DIFFICULTY_OB_ARMS
+    assert [list(a.values()) for a in FX.DIFFICULTY_OB_ARMS.values()] == [[0, 1, 2, 3], [0, 0.5, 1, 1.5]]
+    assert all(tuple(a) == levels for a in FX.DIFFICULTY_OB_ARMS.values())
+    assert DEFAULT_FIXTURES.get("difficulty_ob") == {"plain": 0, "routine": 1, "demanding": 2, "hard": 3}          # the shipped arm is the control (commit 1)
+    checked = 0
+    for arm, sizes in FX.DIFFICULTY_OB_ARMS.items():
+        w = _world(difficulty_ob=sizes)
+        for verb in ROLLED:
+            level = V.VERB_TABLE[verb].difficulty
+            terms = dict(_module().obstacle(sigma.contest_input(w, ["p_low"], verb=verb, subject="site_harbour"))[1])
+            assert (level == "plain") or terms["difficulty"] > 0, (arm, verb, level, terms)
+            assert terms["difficulty"] == sizes[level], (arm, verb, terms)
+            checked += 1
+    assert checked == 2 * len(ROLLED)
+
+
+# --- T2: the venue's standard ---------------------------------------------------------------------------------------
+
+def _docket(w, matter, row):
+    w.docket.append({"date": None, "matter": matter, world_q.DOCKET_ARRANGEMENT: row, world_q.DOCKET_PETITION: None})
+
+
+def _speak_terms(w, row=None):
+    if row is not None:
+        _docket(w, R.PARTY, row)
+    inp = sigma.contest_input(w, [R.SPEAKER, R.PARTY], verb="speak", subject=R.PARTY, room=world_q.place_of(w, R.SPEAKER))
+    return dict(_module().obstacle(inp)[1])
+
+
+def test_a_docketed_speak_reads_its_rows_standard_and_the_shipped_rows_are_plain(monkeypatch):
+    """T13 edit 2 and T2's falsifier: a `speak` before a bench on a docketed matter whose arrangement row names a level other than `plain`
+    shows `standard` at that level's size (`difficulty_ob`); under a `plain` row, and with nothing docketed, no `standard` is listed. The
+    nine shipped rows are `plain`. FALSIFIER: a non-`plain` row whose term list lacks `standard`, or a `plain` one that lists it."""
+    assert len(ARR.ARRANGEMENTS) == 9 and {r["standard"] for r in ARR.ARRANGEMENTS.values()} == {"plain"}
+    sizes = DEFAULT_FIXTURES.get("difficulty_ob")
+    assert "standard" not in _speak_terms(R._judging_world()[0])                                # nothing docketed
+    row = "arbitration"
+    assert "standard" not in _speak_terms(R._judging_world()[0], row)                           # docketed, `plain`: size 0, not listed
+    checked = 0
+    for level in ("routine", "demanding", "hard"):
+        monkeypatch.setitem(ARR.ARRANGEMENTS, row, {**ARR.ARRANGEMENTS[row], "standard": level})
+        terms = _speak_terms(R._judging_world()[0], row)
+        assert terms["standard"] == sizes[level], (level, terms)
+        checked += 1
+    assert checked == 3
+    other = R._judging_world()[0]                                                               # an act no bench hears reads no standard
+    _docket(other, R.PARTY, row)
+    no_room = dict(_module().obstacle(sigma.contest_input(other, [R.SPEAKER], verb="argue", subject=R.PARTY))[1])
+    assert "standard" not in no_room, no_room
+
+
+def test_a_standard_outside_the_difficulty_levels_is_refused_at_load():
+    """T13 edit 2: `data/arrangements.py` adds `standard` to `_ARRANGEMENT_KEYS` and refuses a value outside `difficulty_levels`, and a row without one."""
+    assert "standard" in ARR._ARRANGEMENT_KEYS
+    shipped = yaml.safe_load(ARR.ARRANGEMENTS_YAML.read_text())["arrangements"][0]
+    assert ARR._load_arrangement(dict(shipped))["standard"] == "plain"                          # CONTROL: the shipped row loads
+    with pytest.raises(SystemExit, match="standard"):
+        ARR._load_arrangement({**shipped, "standard": "easy"})
+    with pytest.raises(SystemExit, match="standard"):
+        ARR._load_arrangement({k: v for k, v in shipped.items() if k != "standard"})
+
+
+# --- T4: stakes ------------------------------------------------------------------------------------------------------
+
+def test_stakes_read_the_tenure_kind_the_act_opens_through_the_docketed_row():
+    """T13 T4 (stakes): `arrest` reads `detain`; `determine` the kind its docketed row `disposes:` (`oblige` where none is docketed, the
+    effect's own reading). A kind sized 0 is not listed; sized above 0 it is the act's `stakes` term. CONTROL: every kind is 0 at the shipped
+    arm. FALSIFIER: a size read for a kind the act does not open."""
+    kinds = DEFAULT_FIXTURES.get("stakes_ob")
+    assert set(kinds) == set(roster("tenure_kinds")) and set(kinds.values()) == {0}, kinds
+    sized = {**kinds, "detain": 0.5, "ban": 1.0, "oblige": 0.25}
+    w = _world(stakes_ob=sized)
+    arrest = dict(_module().obstacle(sigma.contest_input(w, ["p_low"], verb="arrest", subject="p_other"))[1])
+    assert arrest["stakes"] == 0.5, arrest
+    undocketed = dict(_module().obstacle(sigma.contest_input(w, ["p_low"], verb="determine", subject="p_other"))[1])
+    assert undocketed["stakes"] == 0.25, undocketed                                              # `UNDECLARED_DISPOSAL`
+    for row, kind in (("arbitration", "oblige"), ("legal_trial", "detain"), ("tribunal", "ban")):
+        assert ARR.ARRANGEMENTS[row]["disposes"] == kind
+        w = _world(stakes_ob=sized)
+        _docket(w, "p_other", row)
+        terms = dict(_module().obstacle(sigma.contest_input(w, ["p_low"], verb="determine", subject="p_other"))[1])
+        assert terms["stakes"] == sized[kind], (row, terms)
+    plain = dict(_module().obstacle(sigma.contest_input(_world(stakes_ob=sized), ["p_low"], verb="tell", subject="p_other"))[1])
+    assert "stakes" not in plain, plain                                                          # `tell` opens no kind
+
+
+# --- T5: admission ---------------------------------------------------------------------------------------------------
+
+def test_a_row_that_admits_no_proofs_weighs_none_when_admission_is_on():
+    """T13 T5's falsifier: a `speak` under `parliamentary_debate` (which admits no proofs) whose `levels` show a non-zero `proofs`, with
+    `proof_admission` `on`. CONTROL: the same speaker under the same row with admission `off` shows proofs; under `arbitration` (which
+    admits `testimony`, the kind of a firsthand claim) with admission `on` he shows them too -- the filter is the row's, not a blanket zero."""
+    assert ARR.ARRANGEMENTS["parliamentary_debate"]["proofs"] == () and "testimony" in ARR.ARRANGEMENTS["arbitration"]["proofs"]
+    assert DEFAULT_FIXTURES.get("proof_admission") == "off"
+    kinds = ROS.roster_map("proof_kind_of_source", "proof_kind")
+    assert kinds["firsthand"] == "testimony" and set(kinds) == set(roster("claim_sources")), kinds
+
+    def proofs_levels(row, admission):
+        w, _d = R._judging_world(proof_admission=admission)
+        R._proofs(w, 4)                                                                         # four firsthand deed claims against the party
+        assert world_q.proofs(w, R.SPEAKER, R.PARTY, "Hh") == 4 * world_q.remove_weight("firsthand")
+        _docket(w, R.PARTY, row)
+        out = sigma.resolve(w, [R.SPEAKER, R.PARTY], ["root"], R.PRIZE, verb="speak", subject=R.PARTY, rng=random.Random(0),
+                            rung=world_q.place_of(w, R.SPEAKER))
+        return next(f for n, f, _a in out["levels"] if n == "proofs")                           # the count of `proof_level`s the roll recorded
+    assert proofs_levels("parliamentary_debate", "off") > 0                                      # the control: held, unfiltered
+    assert proofs_levels("parliamentary_debate", "on") == 0                                      # the falsifier's cell
+    assert proofs_levels("arbitration", "on") == proofs_levels("arbitration", "off") > 0
+    w, _d = R._judging_world()
+    R._proofs(w, 4)
+    held = 4 * world_q.remove_weight("firsthand")
+    assert world_q.proofs(w, R.SPEAKER, R.PARTY, "Hh", admitted=()) == 0.0
+    assert world_q.proofs(w, R.SPEAKER, R.PARTY, "Hh", admitted=("testimony",)) == held

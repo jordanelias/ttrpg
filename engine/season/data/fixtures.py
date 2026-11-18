@@ -200,6 +200,15 @@ WEAR_RATES, BAND_FLOORS, SUBSISTENCE_WEIGHTS, SITE_YIELD = _load_matter_tables()
 CAPACITY_FLOORS = _load_capacity_floor()
 WORKS_COST = _load_works_cost()
 
+# `H-424`'s SECOND ARM (B05.21, T13 edit 1): `Fixtures.difficulty_ob` below is the shipped arm -- the CONTROL, 0 / 1 / 2 / 3 (with an unopposed act's
+# opposition at `opposed_ob(pool_default)` = 1.0 it reproduces the 2.0 the stand-in gave) -- and this is the HALF arm, 0 / 0.5 / 1 / 1.5 above the
+# even line (OBS §4 step 5's calibrated sizes). `DIFFICULTY_OB_ARMS` (below `DEFAULT_FIXTURES`) names the two; the sweep is
+# `DEFAULT_FIXTURES.sweep("difficulty_ob", DIFFICULTY_OB_HALF)`, and flipping the shipped arm is the declared mover B05.23 makes on a reading.
+# [ASSUMPTION: the arm switch's form (a second module table beside the one Fixtures setting, not a second Fixtures key) -- basis: T13 edit 1 "two
+# arms: `control` ... and `half`, shipped `control` in commit 1"; B05.14 shipped the control values. Jordan to correct; revert: none needed.]
+# [JUSTIFIED: engine/season/hole_register.yaml H-424 -- the table's sweep names the halved arm (0.5 / 1 / 1.5), so this arm is a point of that sweep]
+DIFFICULTY_OB_HALF = {"plain": 0, "routine": 0.5, "demanding": 1, "hard": 1.5}
+
 DEFAULT_FIXTURES = Fixtures(
     # S48: condition is an int on an EXPORTED scale. S22 assigns the scale to `params`, and the
     # in-chain params document "proposes NO VALUES", so this is a fixture. Injection site: here.
@@ -1083,8 +1092,30 @@ DEFAULT_FIXTURES = Fixtures(
     # `rosters.yaml: task_difficulty` (a number per verb) and its `obstacle_model` switch.
     # [ASSUMPTION; medium; Jordan to correct; revert: lane A's per-verb numbers, which are no longer read.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-424 -- site: Fixtures difficulty_ob, graded `assumption`; no document derives the size of a level, so it is injected at the control and swept]
-    difficulty_ob={"plain": 0, "routine": 1, "demanding": 2, "hard": 3},   # `H-424`, swept control (SHIPPED) / halved (OBS §4 step 5's live arm) / one step finer
+    difficulty_ob={"plain": 0, "routine": 1, "demanding": 2, "hard": 3},   # `H-424`, swept control (SHIPPED) / halved (`DIFFICULTY_OB_HALF`, OBS §4 step 5's live arm) / one step coarser
+    # `H-426` (B05.21; T13 edit 1, T3). HOW FAR A HEARER'S HOSTILITY MOVES THE OBSTACLE, per full clamp: the obstacle term `regard` is
+    # `regard_step x clamp(-stance / STANCE_MAX, 0, 1)` over the stance rows the counterparty holds toward the actor (`person_q.stance_toward`,
+    # `data/cast.py::STANCE_MAX`), for one person counterparty and no audience (`sigma.py::_regard_term`); the favourable half of the same clamp is
+    # `favour` leverage, at the same step. `0` is the CONTROL: the term reads nothing and is not listed, and no stance brings a level.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-426 -- site: Fixtures regard_step, graded `assumption`; T13 T3 gives the live 1.0 and no document derives it, so it is injected at the control and swept 0 / 0.5 / 1.0 / 2.0]
+    regard_step=0,                     # `H-426`, swept 0 (control, SHIPPED) / 0.5 / 1.0 (live) / 2.0
+    # `H-427` (B05.21; T13 edit 1, edit 4, T5). WHETHER THE ARRANGEMENT ROW'S `proofs:` COLUMN FILTERS WHAT A SPEAKER'S PROOFS WEIGH: `off` -- every
+    # deed claim counts (`world_q.proofs` as it was); `on` -- under a docketed row only the claims whose kind (`rosters.yaml: proof_kind_of_source`) the
+    # row admits count, the rest weigh 0 (`sigma.py::_read_social_roll` passes the row's `proofs:`; `world_q` reads no arrangement itself).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `off`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-427 -- site: Fixtures proof_admission, graded `assumption`; T13 T5 gives `on` as the calibrated value and no document derives it, so it is injected at the control and swept off / on]
+    proof_admission="off",             # `H-427`, swept off (control, SHIPPED) / on (live)
+    # `H-428` (B05.21; T13 edit 1, T4). THE WEIGHT OF WHAT AN ACT WOULD TAKE OR IMPOSE, in obstacle, by the Tenure kind it opens: the obstacle term
+    # `stakes` (`sigma.py::_stakes_term`: `arrest` reads `detain`; `determine` the kind its docketed row `disposes:`). Keyed on exactly the
+    # `tenure_kinds` roster (refused at load). `0` for every kind is the CONTROL (OBS §1: "control 0"): the term is not listed.
+    # [ASSUMPTION; medium; Jordan to correct; revert: every kind 0.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-428 -- site: Fixtures stakes_ob, graded `assumption`; T13 T4 gives the live `oblige` 0, `detain` 0.5, `ban` 1.0 and no document derives them, so it is injected at the control and swept 0 / 0.5x / 1x / 2x of those]
+    stakes_ob={"ban": 0, "commit": 0, "contain": 0, "detain": 0, "hold": 0, "knot": 0, "oblige": 0, "reside": 0, "succeed": 0, "tie": 0},   # `H-428`, swept 0 (control, SHIPPED) / 0.5x / 1x / 2x
 )
+
+#: `H-424`'s two arms by name, the shipped one first: `control` is `DEFAULT_FIXTURES`' own table (one copy), `half` is `DIFFICULTY_OB_HALF`.
+DIFFICULTY_OB_ARMS = {"control": DEFAULT_FIXTURES.get("difficulty_ob"), "half": DIFFICULTY_OB_HALF}
 
 
 def load() -> None:
@@ -1097,3 +1128,13 @@ def load() -> None:
         raise Forbidden(f"`Fixtures difficulty_ob` sizes {list(sized)}, and `rosters.yaml: difficulty_levels` names {list(levels)}", "data/fixtures.py",
                         needs="one size per difficulty level, in the roster's order",
                         law="B05.14 -- a level with no size is read by nothing, a size for no level is read by nothing; the roster is the closed set")
+    for arm, arm_sizes in DIFFICULTY_OB_ARMS.items():
+        if tuple(arm_sizes) != levels:
+            raise Forbidden(f"`DIFFICULTY_OB_ARMS[{arm!r}]` sizes {list(arm_sizes)}, and `rosters.yaml: difficulty_levels` names {list(levels)}", "data/fixtures.py",
+                            needs="one size per difficulty level, in the roster's order, in every arm",
+                            law="T13 edit 1 -- the arms are one table at two sizes; an arm that skips a level answers for it with a KeyError mid-season")
+    kinds, stakes = set(roster("tenure_kinds")), set(DEFAULT_FIXTURES.get("stakes_ob"))
+    if stakes != kinds:
+        raise Forbidden(f"`Fixtures stakes_ob` sizes {sorted(stakes)}, and `rosters.yaml: tenure_kinds` names {sorted(kinds)}", "data/fixtures.py",
+                        needs="one size per Tenure kind",
+                        law="T13 T4 -- stakes are keyed by Tenure kind; a kind with no size is read by nothing, a size for no kind is read by nothing")

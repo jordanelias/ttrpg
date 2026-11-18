@@ -1448,20 +1448,29 @@ rosters:
     values: [plain, routine, demanding, hard]
 
   obstacle_terms:
-    source: "B05.14, B05.15, B05.17 (`proposals/U5c_SC_one_obstacle_form.md` §1, §2; 29_DICE Item 29-4 step 4; PES-A): the members the obstacle is composed of, in OBS §2's order"
+    source: "B05.14, B05.15, B05.17, B05.21 (`proposals/U5c_SC_one_obstacle_form.md` §1, §2; 29_DICE Item 29-4 step 4; PES-A; `proposals/13_SC_tuning_tables.md` T2-T4): the members the obstacle is composed of, in OBS §2's order"
     note: >-
       THE TERMS OF THE SOCIAL ROLL'S OBSTACLE, IN COMPOSITION ORDER (`roll.py::obstacle` sums them, then the document's
       lane A step, then the ceiling and the floor). `even` -- the pool's even line, `MU_PER_DIE x pool_add`
       (`sigma_leverage.even_line`); `difficulty` -- the act's own, its level's size (`Fixtures.difficulty_ob`); `opposition` -- the
       one acted against, `opposed_ob(opposing attribute + skill score, opposition_rate)`, or the untrained score where no person
-      is opposite (never absent); `reception` -- the audience's hostility (OBS §2 member 8; B05.17): a bench that regards the speaker
+      is opposite (never absent); `standard` -- what the room demands (OBS §2 member 3; B05.21): for an act a bench hears on a
+      docketed matter, the size (`Fixtures.difficulty_ob`) of the `standard:` level of the arrangement row the matter is docketed
+      under; `stakes` -- the weight of what the act would take or impose (member 5): `Fixtures.stakes_ob` of the Tenure kind the act
+      opens (a kind the verb alone opens, or the one the docketed row `disposes:` for a verb that opens several); `regard` -- the
+      counterparty's hostility to the actor (member 7): `regard_step x clamp(-stance / STANCE_MAX, 0, 1)` over the stance rows he
+      holds toward the actor (`person_q.stance_toward`), for one person counterparty and no audience (its favourable half is
+      leverage, `advantage_sources: favour`); `reception` -- the audience's hostility (OBS §2 member 8; B05.17): a bench that regards the speaker
       ill raises the obstacle by `reception_gain x |reception|` (`world_q.reception`, the hostile half, for a prize a room hears,
       0 where none hears it; its favourable half is leverage, `advantage_sources: favour`); `capability` -- a circumstance that punishes a want, the sum over the `circumstance` rows of
       `tables: capability_uses` for the act's site whose `when` holds, each its held value times its `gain` (B05.15; no row ships,
-      so it stands at 0). Every member stands AGAINST the act and is never negative. A member lands with its host
+      so it stands at 0). Every member stands AGAINST the act and is never negative. `even`, `difficulty`, `opposition`,
+      `reception` and `capability` stand in every act's terms (at 0.0 where they weigh nothing); `standard`, `stakes` and `regard`
+      are listed only where they weigh, so a world whose three are at their control sizes carries the terms it carried before them
+      (the terms are folded into the Event's `ending` and so into the content hash). A member lands with its host
       function in `sigma.OBSTACLE_TERMS` and no other code; later members are those the verb lanes add (OBS §2's table).
     ordered: true
-    values: [even, difficulty, opposition, reception, capability]
+    values: [even, difficulty, opposition, standard, stakes, regard, reception, capability]
 
   lifepaths:
     source: >-
@@ -3017,6 +3026,25 @@ rosters:
       there as `10_LOOPS_AND_GAPS.md` `P-13` and NOT invented here. Adding a member is a roster
       edit, never a code change -- the closure claim this roster exists to make survives the gap.
     values: [record, testimony, oath, confession]
+
+  proof_kind_of_source:
+    source: "B05.21 (`proposals/13_SC_tuning_tables.md` T5, edit 3): the kind of proof a deed claim is, by how its holder came to hold it"
+    from_roster: claim_sources
+    note: >-
+      THE ADMISSION FILTER'S MAPPING (`Fixtures.proof_admission` `on`; `queries/world_q.py::proofs`): a deed claim weighs for the
+      speaker only if the arrangement row he is heard under admits the kind of proof it is (`arrangements.yaml: proofs:`, the
+      `proofs` roster). `proof_kind:` maps each `claim_sources` member (a way ONE person came to hold ONE claim) to a `proofs` member,
+      or to `null` where the way of holding is no kind of proof the rows name. A mapping total over the sources and closed over the
+      proofs, refused at import (`data/rosters.py::PROOF_KIND_OF_SOURCE`).
+      [ASSUMPTION: every cell below -- basis: none in a document; the kind a claim is, by its source, read from the sources' own
+      words: what one saw (`firsthand`) is testimony; what one held through a bond's knot (`firsthand_via_knot`) is sworn, an oath;
+      what one was told by a document or a chronicle (`told_by`) is a record; what one worked out (`inferred`) is none of the four.
+      Jordan to correct; revert: `proof_admission: off`, under which no cell is read.]
+    proof_kind:
+      firsthand: testimony
+      firsthand_via_knot: oath
+      told_by: record
+      inferred: null
 
   ladder_rungs:
     source: "`18_FINDINGS.md`:180 and §5 item 5 (Fig. 27) -- the forensic ISSUE LADDER a party descends under `interrogation`'s `order: scripted` / `registers: [restricted]`, verbatim: \"deny, cite something incompatible, impugn the motive, concede the fact, concede the harm, hand the error back.\" Plan position `18` (PROC-A)."

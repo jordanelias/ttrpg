@@ -6660,6 +6660,45 @@ rows:
     cite:      "THE SWEEP IS PES-A's (`None` / `strong` / `major`). CONTROL: `None`, `engine/season/tests/test_sc02_reception.py::test_control_levels_none_moves_nothing` (leverage and obstacle exactly the nothing-held record's, the odds equal at every pool). FALSIFIER: `::test_favour_strictly_raises_partial_or_better` (a unit of favour leaving the odds unchanged at any pool) and `python tools/ci_sim_fabrication_check.py`, which refuses a `Fixtures` setting with no register row."
     source:    "workplan v12 B05.17 (PES-A edits 1 to 5; OBS §4 step 1b; U1-B step 2: hole_register.yaml NUMBER rows)"
 
+  - id:        H-426
+    tier:      1
+    hole:      "HOW FAR A HEARER'S HOSTILITY MOVES THE OBSTACLE -- `regard_step`, the obstacle one full clamp of the counterparty's stance toward the actor is worth (T13 T3; OBS §2 member 7). The term `regard` is `regard_step x clamp(-stance / STANCE_MAX, 0, 1)` over `person_q.stance_toward(counterparty, actor)` (`data/cast.py::STANCE_MAX`), for one person counterparty and no audience; the favourable half of the same clamp is `favour` leverage at the same step. No document derives the live value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.regard_step` the one home. READERS: `engine/season/seam/wrappers/sigma.py::_regard_term`, the `regard` member of `OBSTACLE_TERMS`, and `::_favour_levels`, the stance half of the `favour` source. B05.23 sets the live value for the social roll; B10.09 re-reads it on the stance unit"
+    grade:     "assumption"
+    default:   "0 -- SHIPPED, THE CONTROL: the term reads nothing and is not listed, and no stance brings a level, so every act's terms and leverage are what they were. LIVE 1.0 (T13 T3: one full unit of favour moves equals at `routine` by 0.16 to 0.28, the same order as two levels of effort at pool 2) [ASSUMPTION; medium; Jordan to correct; revert: 0]"
+    site:      "Fixtures regard_step, read by `seam/wrappers/sigma.py::_regard_term` and `::_favour_levels` (through `obstacle_operands` and `advantage_levels`, from `_frame`, for `contest_input`; `believed_input` answers `None` for a person counterparty where it is not 0: his stance is his interior)"
+    sweep:     [0, 0.5, 1.0, 2.0]
+    unblocks:  "a friend's word moving an argument and an enemy's resisting it (T13 T3); the `regard` member of `obstacle_terms`; `favour`'s stance half"
+    cite:      "THE SWEEP IS T13 T3's (0 / 0.5 / 1.0 / 2.0 over a planted +/-25 grid). CONTROL: `PYTHONHASHSEED=0`, `reading @332c2db10` and on the tree with the term added, `build_realm(0)` after one season 73935b81ff9bd2cd98fd8e545d770163 and `harness.headless --seasons 2 --seed 0` CONTENT HASH a18f05a9cc588b8beacbc0b7ef0a7789 are equal before and after. FALSIFIER: `engine/season/tests/test_obstacle_form.py::test_a_hostile_hearer_is_a_regard_term_and_a_friendly_one_is_favour` (OBS gate 5: stance +4x5 against -4x5, the two arms' terms differing in `regard` alone, 0.8 x `regard_step`; at 0 neither arm shows it) and `python tools/ci_sim_fabrication_check.py`, which refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B05.21 (T13 edits 1 and 6; OBS §4 step 3; U1-B step 2: hole_register.yaml NUMBER rows)"
+
+  - id:        H-427
+    tier:      1
+    hole:      "WHETHER THE ARRANGEMENT ROW'S ADMITTED PROOFS FILTER WHAT A SPEAKER'S PROOFS WEIGH -- `proof_admission`, `off` or `on` (T13 T5, edit 4). `on`: under a docketed row only the deed claims whose kind of proof (`rosters.yaml: proof_kind_of_source`, by the claim's `source`) the row's `proofs:` column admits count in `world_q.proofs`, the rest weigh 0. Closes H-216's named limit (*the arrangement's admitted `proofs` column is not read here*) at the owner. No document derives the claim-source to proof-kind mapping."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.proof_admission` the one home. READER: `engine/season/seam/wrappers/sigma.py::_admitted_proofs`, which passes the docketed row's `proofs:` to `queries/world_q.py::proofs` (`world_q` reads no arrangement itself). The mapping is `rosters.yaml: proof_kind_of_source`"
+    grade:     "assumption"
+    default:   "off -- SHIPPED, THE CONTROL: every deed claim counts, `world_q.proofs` as it was. LIVE `on`, set by B05.23 [ASSUMPTION; medium; Jordan to correct; revert: off]"
+    site:      "Fixtures proof_admission, read ONLY by `seam/wrappers/sigma.py::_admitted_proofs`, called from `_read_social_roll` for a prize a room hears"
+    sweep:     ["off", "on", "on with `proof_level` moderate"]
+    unblocks:  "a room that admits no proofs (`parliamentary_debate`, `council_of_state`) being spoken to without the speaker's inventory counting; the `proofs` leverage source reading the room it is spent in"
+    cite:      "THE SWEEP IS T13 T5's (`proof_level` None / minor / moderate with admission on and off, read as three points: off, on, and on at the next level up) [ASSUMPTION: the third point is this row's, T5 crossing two settings where this row sweeps one -- basis: none]. CONTROL: `PYTHONHASHSEED=0`, `reading @332c2db10` and on the tree with the filter added, `build_realm(0)` after one season 73935b81ff9bd2cd98fd8e545d770163 and `harness.headless --seasons 2 --seed 0` CONTENT HASH a18f05a9cc588b8beacbc0b7ef0a7789 are equal before and after. FALSIFIER: `engine/season/tests/test_obstacle_form.py::test_a_row_that_admits_no_proofs_weighs_none_when_admission_is_on` (a `speak` under `parliamentary_debate` whose `levels` show non-zero `proofs` with admission on; the same speaker with it off, and under `arbitration` with it on, shows them) and `python tools/ci_sim_fabrication_check.py`."
+    source:    "workplan v12 B05.21 (T13 edits 1, 3 and 4; OBS §4 step 3; U1-B step 2: hole_register.yaml NUMBER rows)"
+
+  - id:        H-428
+    tier:      1
+    hole:      "THE WEIGHT OF WHAT AN ACT WOULD TAKE OR IMPOSE -- `stakes_ob`, the obstacle each Tenure kind adds to the act that opens it (T13 T4; OBS §2 member 5), keyed on exactly the `tenure_kinds` roster (refused at load). `arrest` reads `detain`; `determine` the kind its docketed row `disposes:` (`oblige` where none is docketed). No document derives the sizes."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.stakes_ob` the one home. READER: `engine/season/seam/wrappers/sigma.py::_stakes_term`, the `stakes` member of `OBSTACLE_TERMS`, which reads the kind off `data/verbs.py::_OPENERS_FROM_EFFECTS` and names no verb"
+    grade:     "assumption"
+    default:   "0 for every Tenure kind -- SHIPPED, THE CONTROL (OBS §1: control 0): the term is not listed. LIVE `oblige` 0, `detain` 0.5, `ban` 1.0, the rest 0 (T13 T4), set by B05.23 [ASSUMPTION; medium; Jordan to correct; revert: every kind 0]"
+    site:      "Fixtures stakes_ob, read ONLY by `seam/wrappers/sigma.py::_stakes_kind` and `::_stakes_term` (through `obstacle_operands`, from `_frame`, for `contest_input` and `believed_input`)"
+    sweep:     ["every kind 0 (control, SHIPPED)", "the live sizes at 0.5x", "the live sizes at 1x", "the live sizes at 2x"]
+    unblocks:  "an arrest or a ban being harder to win than an obligation; the `stakes` member of `obstacle_terms`"
+    cite:      "THE SWEEP IS T13 T4's (0 / 0.5x / 1x / 2x of the live sizes). CONTROL: `PYTHONHASHSEED=0`, `reading @332c2db10` and on the tree with the table added, `build_realm(0)` after one season 73935b81ff9bd2cd98fd8e545d770163 and `harness.headless --seasons 2 --seed 0` CONTENT HASH a18f05a9cc588b8beacbc0b7ef0a7789 are equal before and after. FALSIFIER: `engine/season/tests/test_obstacle_form.py::test_stakes_read_the_tenure_kind_the_act_opens_through_the_docketed_row` (sized 0.5 / 1.0 / 0.25 for `detain` / `ban` / `oblige`, each read for the act that opens it and for no other) and `python tools/ci_sim_fabrication_check.py`."
+    source:    "workplan v12 B05.21 (T13 edits 1 and 7; OBS §4 step 3; U1-B step 2: hole_register.yaml NUMBER rows)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

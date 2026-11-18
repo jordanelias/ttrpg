@@ -55,7 +55,7 @@ class SocialContestInput:
       * `pool_add` -- the pool's base, whose even line (`MU_PER_DIE x pool_add`) is the obstacle's first term;
       * `opposition_rate` -- the share of the opposing score an obstacle takes up, per point;
       * `obstacle_operands` -- `((name, raw operand, step), ...)` in `rosters.yaml: obstacle_terms` order, for the members that are a
-                       raw operand times a step (`reception`, `capability`; the three that do not need one carry their own field above);
+                       raw operand times a step (`standard`, `stakes`, `regard` where each weighs, `reception`, `capability`; the three that do not need one carry their own field above);
       * `obstacle_ceiling` -- the `H-213` bound on how hard one matter can get; `None` is the
                        uncapped control arm;
       * `ceiling_per_pool` -- the `chance_floor` arm (CP-T01-06): from one die, the module solves the

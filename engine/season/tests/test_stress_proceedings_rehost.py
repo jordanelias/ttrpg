@@ -115,7 +115,8 @@ def test_st23_the_loaders_schema_is_the_thirteen_keys_19_plan_step_11_derives():
     question that IS an execution: does the LOADER's own declared schema carry the count
     `19_PLAN.md` step 11 derives (fifteen minus `registers`/`verdict_reasons`/`stakes_grade`, plus
     `quorum` = thirteen), and does a row missing one of them fail to load."""
-    assert len(A._ARRANGEMENT_KEYS - {"id"}) == 13, sorted(A._ARRANGEMENT_KEYS)
+    # the thirteen plus B05.21's `standard:` (T13 edit 2), the one key added since: the room's `difficulty_levels` member
+    assert len(A._ARRANGEMENT_KEYS - {"id"} - {"standard"}) == 13 and "standard" in A._ARRANGEMENT_KEYS, sorted(A._ARRANGEMENT_KEYS)
     for stale in ("registers", "verdict_reasons", "stakes_grade"):
         assert stale not in A._ARRANGEMENT_KEYS, (
             f"{stale!r} is a DELETED key (19_PLAN.md step 11) and must not be schema-legal")

@@ -71,11 +71,13 @@ from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds
 from engine.substrate import composition, descriptors
 
+from ...data.arrangements import ARRANGEMENTS
+from ...data.cast import STANCE_MAX
 from ...data.rosters import capability_rows, require_use_site, roster, when_holds
-from ...data.verbs import SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE
+from ...data.verbs import SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE, _OPENERS_FROM_EFFECTS
 from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, sides_of
-from ...queries.person_q import believed_capability
+from ...queries.person_q import believed_capability, stance_toward
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup);
 # `manifest/registry.py` imports only `data/` and `gaps` and `queries/` is below `seam/`, so the
@@ -84,9 +86,9 @@ from ...manifest.providers import provider
 from ...manifest.registry import BENCH, call as _provider_for, resolve as _prize_row
 from ...queries.inputs import Margin, SocialContestInput
 # The room's two resolver-side reads. The host READS them; the module composes the obstacle they move.
-from ...queries.world_q import proofs, reception
+from ...queries.world_q import docketed_under, proofs, reception
 from ...state.carriers import EFFORT, effort_of
-from ...state.gate import sits_over
+from ...state.gate import UNDECLARED_DISPOSAL, sits_over
 from ._entry import entry_for
 from .pool import (POOL_ADDENDS, _capability, faculty, governing_attribute, opposing_attribute, pool_pair, register_pool_addend,  # noqa: F401  (moved: see pool.py)
                    score, untrained)
@@ -281,10 +283,17 @@ def _proof_levels(fx: Any, operands: dict) -> tuple:
 
 
 def _favour_levels(fx: Any, operands: dict) -> tuple:
-    """`favour`'s levels: one `favour_level` per whole unit of `reception_gain x reception` where that is positive -- FOR the roller: `(levels, [])`.
-    Empty where the fixture is `None`. The bench's hostile half is the obstacle's `reception` member, never a level against him."""
+    """`favour`'s levels: one `favour_level` per whole unit of `reception_gain x reception` where that is positive, and one per whole unit of the
+    counterparty's favourable stance, `regard_step x clamp(stance_toward / STANCE_MAX, 0, 1)` (`operands["regard"]`, the signed clamp, B05.21; OBS §3
+    names both quantities and each counts its own units) -- FOR the roller: `(levels, [])`. Empty where the fixture is `None`, and the stance half is
+    empty at `regard_step` 0. The bench's and the counterparty's hostile halves are the obstacle's `reception` and `regard` members, never a level
+    against him."""
     level = fx.get("favour_level")
-    return ([] if level is None else [level] * _units(float(fx.get("reception_gain")) * operands.get("reception", 0.0))), []
+    if level is None:
+        return [], []
+    units = _units(float(fx.get("reception_gain")) * operands.get("reception", 0.0))
+    units += _units(float(fx.get("regard_step")) * max(0.0, operands.get("regard") or 0.0))
+    return [level] * units, []
 
 
 # ---------------------------------------------------------------------------------------------
@@ -345,10 +354,12 @@ def advantage_sigma(fx: Any, operands: dict) -> float:
     return levels_to_net_sigma(for_, against)
 
 
-def _advantage_operands(effort: int, edge: tuple, room_terms: dict, office: Optional[str] = None) -> dict:
+def _advantage_operands(effort: int, edge: tuple, room_terms: dict, office: Optional[str] = None, regard: Optional[float] = None) -> dict:
     """WHAT THE ACT BRINGS, named once: `contest_input` and `believed_input` both reach the sources through here, so they cannot diverge.
-    `office` is `_seat_modifier`'s answer for the seat the act is exercised through (B05.20), the host's own read, `None` for none."""
-    return {EFFORT: effort, EDGE: edge, "proofs": room_terms.get("proofs", 0.0), "reception": room_terms.get("reception", 0.0), OFFICE: office}
+    `office` is `_seat_modifier`'s answer for the seat the act is exercised through (B05.20), the host's own read, `None` for none. `regard` is
+    `_regard_of`'s answer (B05.21), the counterparty's signed stance in the clamp unit, `None` where no one person stands alone opposite."""
+    return {EFFORT: effort, EDGE: edge, "proofs": room_terms.get("proofs", 0.0), "reception": room_terms.get("reception", 0.0), OFFICE: office,
+            "regard": regard}
 
 
 def _levels_count(levels: tuple) -> tuple:
@@ -403,11 +414,12 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     `w.records`, the one read this builder adds), which the module adds to the obstacle; a site, a
     person, or a contest a prize names carries `0`."""
     fx = w.fixtures
+    docketed = _docketed_row(w, subject)                                        # the arrangement row the act's matter is heard under, if one is docketed (B05.21)
     room_terms = {}
     if room is not None:
         room_terms = dict(reception=reception(w, claimants[0], room),
                           reception_gain=fx.get("reception_gain"),
-                          proofs=proofs(w, claimants[0], subject, room))
+                          proofs=proofs(w, claimants[0], subject, room, admitted=_admitted_proofs(fx, docketed)))
     doc = w.records.get(examined) if examined is not None else None
     # NOBODY OPPOSES HIMSELF (v10 CP-T05-02 (ii), AM-D-02): a subject who IS the actor (the self-plea,
     # `speak {subject: himself}`) brings no opposition -- his own score is not an obstacle to himself --
@@ -430,8 +442,10 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     edge = _edge_reads(verb, actor, subject_read)
     circumstance = _edge_reads(verb, actor, subject_read, CIRCUMSTANCE)         # the `capability` obstacle term's rows (B05.15)
     office = _seat_modifier(w, via, room)                                       # the seat's own level, where its bench is over the room (B05.20)
-    inp = _frame(fx, pool, opposition, doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb, edge, circumstance, office)
-    levels = _levels_count(advantage_levels(fx, _advantage_operands(effort, edge, room_terms, office)))     # the same sources `leverage` summed (OBS §5)
+    regard = _regard_of(w, claimants[0], subject, room)                         # the counterparty's stance toward the actor, signed, in the clamp unit (B05.21)
+    inp = _frame(fx, pool, opposition, doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb, edge, circumstance, office,
+                 docketed=docketed, heard=room is not None, regard=regard)
+    levels = _levels_count(advantage_levels(fx, _advantage_operands(effort, edge, room_terms, office, regard)))     # the same sources `leverage` summed (OBS §5)
     read = {"dice": score(w, actor, verb) if "dice" in roles else None, "opposes": opposition}
     chosen = {id(r): (value, levels_to_net_sigma(*_edge_levels(r, key, value))) for r, key, value in edge}
     chosen.update({id(r): (value, _circumstance_ob(fx, r, value)) for r, key, value in circumstance})
@@ -517,17 +531,88 @@ def _capability_term(fx: Any, facts: dict) -> dict:
     return {"obstacle_operands": (("capability", sum(_circumstance_ob(fx, r, v) for r, _, v in facts.get("circumstance", ())), 1.0),)}
 
 
+# ---------------------------------------------------------------------------------------------
+# THE TUNING TABLES' THREE MEMBERS (B05.21; T13 T2, T3, T4; OBS §2 members 3, 5, 7). Each is a raw operand times a step, listed in the act's
+# terms ONLY WHERE IT WEIGHS (`_weighing`): the terms are folded into the Event's `ending` and so into the content hash, and at their control
+# sizes (every `standard` `plain`, `stakes_ob` 0, `regard_step` 0) these members must leave a world's terms as they were.
+# ---------------------------------------------------------------------------------------------
+def _weighing(name: str, raw: float, step: float) -> dict:
+    """`{"obstacle_operands": ((name, raw, step),)}` where `raw x step` is above 0, else `{}` -- a member that weighs nothing is not listed."""
+    return {"obstacle_operands": ((name, raw, step),)} if raw * step > 0 else {}
+
+
+def _docketed_row(w: Any, subject: Optional[str]) -> Optional[dict]:
+    """The `arrangements.yaml` row the act's matter (its `subject`) is docketed under, or `None`: nothing docketed, an item naming no row (every
+    computed `open_case`, H-80), or more than one row on one matter (a hand-planted docket, which `_eff_determine` declines rather than choosing
+    between: absence refuses, never a guessed row)."""
+    rows = docketed_under(w, subject)
+    (row,) = rows if len(rows) == 1 else (None,)
+    return ARRANGEMENTS.get(row) if isinstance(row, str) else None
+
+
+def _admitted_proofs(fx: Any, docketed: Optional[dict]) -> Optional[tuple]:
+    """The proof kinds the docketed row admits, for `world_q.proofs`' filter -- or `None` for no filter: nothing docketed, or `proof_admission` `off`."""
+    return tuple(docketed["proofs"]) if docketed is not None and fx.get("proof_admission") == "on" else None
+
+
+def _regard_of(w: Any, actor: str, subject: Optional[str], room: Optional[str]) -> Optional[float]:
+    """THE COUNTERPARTY'S STANCE TOWARD THE ACTOR, SIGNED, IN THE CLAMP UNIT (T13 edit 6, C-03): `clamp(stance_toward(counterparty, actor) /
+    STANCE_MAX, -1, 1)` -- his interior (his own stance rows naming the actor), not his ledger. `None` where the term does not apply: it is for ONE
+    PERSON COUNTERPARTY AND NO AUDIENCE (an act a bench hears reads `reception` instead, never both), and nobody is his own counterparty."""
+    other = w.persons.get(subject) if subject and subject != actor and room is None else None
+    return None if other is None else max(-1.0, min(1.0, stance_toward(other, actor) / STANCE_MAX))
+
+
+def _standard_term(fx: Any, facts: dict) -> dict:
+    """`standard`: what the room demands (OBS §2 member 3; T13 T2): for an act a bench hears on a docketed matter, the size (`Fixtures.difficulty_ob`,
+    the one ladder) of the `standard:` level of the row the matter is docketed under. Not listed where nothing is docketed, no bench hears the act or
+    the level is `plain` (0). ⚠ THIS IS THE SINGLE ROLL'S FLAT TERM: inside a proceeding the same cell is the Grace the occasion asks, reached through
+    Grace's `esteem` on the leverage and never an obstacle term (B24p.13), so the host omits `standard` for an act resolving through that path
+    (B24p.05, B24p.19) -- which is not built; until it is, every bench-heard act on a docketed matter reads it here."""
+    row = facts.get("docketed")
+    return _weighing("standard", float(fx.get("difficulty_ob")[row["standard"]]) if row is not None and facts.get("heard") else 0.0, 1.0)
+
+
+def _stakes_kind(fx: Any, verb: str, docketed: Optional[dict]) -> Optional[str]:
+    """The Tenure kind `verb` would open, for `stakes_ob` -- read off the effects, never off a verb's name (`data/verbs.py::_OPENERS_FROM_EFFECTS`,
+    which verbs open which kind): the one kind of `stakes_ob` the verb opens, or where it opens several, the kind a disposal opens -- the docketed row's
+    `disposes:`, or `gate.UNDECLARED_DISPOSAL` where none is docketed (`_eff_determine`'s own reading) -- if that is among them. `None` otherwise."""
+    opened = [k for k in fx.get("stakes_ob") if verb in _OPENERS_FROM_EFFECTS.get(k, ())]
+    if len(opened) == 1:
+        return opened[0]
+    disposed = docketed["disposes"] if docketed is not None else UNDECLARED_DISPOSAL
+    return disposed if disposed in opened else None
+
+
+def _stakes_term(fx: Any, facts: dict) -> dict:
+    """`stakes`: the weight of what the act would take or impose (OBS §2 member 5; T13 T4): `Fixtures.stakes_ob` of the Tenure kind the act opens
+    (`_stakes_kind`: `arrest` opens `detain`; `determine` the kind its docketed row `disposes:`). Not listed where the act opens no such kind or the
+    kind is sized 0."""
+    kind = _stakes_kind(fx, facts["verb"], facts.get("docketed"))
+    return _weighing("stakes", float(fx.get("stakes_ob")[kind]) if kind is not None else 0.0, 1.0)
+
+
+def _regard_term(fx: Any, facts: dict) -> dict:
+    """`regard`: the counterparty's hostility to the actor (OBS §2 member 7; T13 T3): `regard_step x clamp(-stance / STANCE_MAX, 0, 1)`, the hostile half
+    of `facts["regard"]` (`_regard_of`, signed; `None` where there is no one person counterparty or a bench hears the act). Its favourable half is the
+    `favour` source, never a lower obstacle (A-25). Not listed at `regard_step` 0 or for a hearer who is not hostile."""
+    x = facts.get("regard")
+    return _weighing("regard", max(0.0, -x) if x is not None else 0.0, fx.get("regard_step"))
+
+
 #: Each member of `rosters.yaml: obstacle_terms` -> the ONE function that reads it: `fn(fixtures, facts) -> {record field: value}`. A member
 #: that is a raw operand times a step returns `{"obstacle_operands": ((name, raw, step),)}` instead. Refused at import, both ways.
-OBSTACLE_TERMS = _bound_to({"even": _even_term, "difficulty": _difficulty_term, "opposition": _opposition_term,
-                            "reception": _reception_term, "capability": _capability_term}, "obstacle_terms")
+OBSTACLE_TERMS = _bound_to({"even": _even_term, "difficulty": _difficulty_term, "opposition": _opposition_term, "standard": _standard_term,
+                            "stakes": _stakes_term, "regard": _regard_term, "reception": _reception_term, "capability": _capability_term},
+                           "obstacle_terms")
 
 
 def obstacle_operands(fx: Any, facts: dict) -> dict:
     """THE OBSTACLE'S FIELDS OF THE RECORD, every roster member's function asked in roster order: `difficulty`, `pool_default`,
     `pool_add`, `opposition`, `opposition_rate` and `obstacle_operands` (the `(name, raw, step)` triples of the members that are an
     operand times a step, in roster order). `facts` is what the act is: its `verb`, the `opposition` its builder read (`None`
-    for nobody), the room's `reception` and the `circumstance` rows it selected and read. `contest_input` and `believed_input` reach it through `_frame` alone, so they cannot compose different obstacles."""
+    for nobody), the room's `reception` and the `circumstance` rows it selected and read, and (B05.21) the `docketed` arrangement row (or `None`),
+    whether a bench `heard` the act, and the counterparty's signed `regard` (or `None`). `contest_input` and `believed_input` reach it through `_frame` alone, so they cannot compose different obstacles."""
     fields: dict = {}
     operands: list = []
     for name, read in OBSTACLE_TERMS.items():
@@ -539,7 +624,8 @@ def obstacle_operands(fx: Any, facts: dict) -> dict:
 
 def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: float,
            room_terms: dict, effort: int, verb: str, edge: tuple = (), circumstance: tuple = (),
-           office: Optional[str] = None) -> SocialContestInput:
+           office: Optional[str] = None, docketed: Optional[dict] = None, heard: bool = False,
+           regard: Optional[float] = None) -> SocialContestInput:
     """THE RECORD, FILLED THE ONE WAY: what `contest_input` (the true input) and `believed_input` (a
     person's) both hand the module. They differ in where the pool's opposition, the forgery quality
     and the room terms COME FROM; the fixtures and the record's shape are this
@@ -551,10 +637,10 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
         obstacle_ceiling=fx.get("obstacle_ceiling"),
         ceiling_per_pool=fx.get("ceiling_per_pool"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
-        leverage=advantage_sigma(fx, _advantage_operands(effort, edge, room_terms, office)),      # the one place the operands are named
+        leverage=advantage_sigma(fx, _advantage_operands(effort, edge, room_terms, office, regard)),      # the one place the operands are named
         forgery_quality=forgery_quality,
         **obstacle_operands(fx, {"verb": verb, "opposition": opposition, "circumstance": circumstance,
-                                 "reception": room_terms.get("reception", 0.0)}),
+                                 "reception": room_terms.get("reception", 0.0), "docketed": docketed, "heard": heard, "regard": regard}),
         **room_terms)
 
 
@@ -591,7 +677,7 @@ def _odds_of_input(inp: SocialContestInput) -> Optional[tuple]:
 def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
                    pool: float, person_subject: bool, examined_record: bool = False,
                    room: Optional[dict] = None, heard: bool = False,
-                   effort: int = 0, office: Optional[str] = None) -> Optional[SocialContestInput]:
+                   effort: int = 0, office: Optional[str] = None, docketed: Optional[dict] = None) -> Optional[SocialContestInput]:
     """THE PERSON'S RECORD (mode (b)): the same `SocialContestInput`, filled only from what `p` holds.
 
     AX-2: it reads `p` (his own ledger) and the fixtures, never the World; the
@@ -613,7 +699,10 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
       * the room's terms (`reception`, `proofs`) read other persons' ledgers: unknown unless the caller
         passes his own believed `room` (`{"reception": .., "proofs": ..}`).
     His `effort` is his own act's, held with certainty like his pool (CP-T01-05), and so is the level of the seat he acts through
-    (`office`, B05.20): the caller's, read off the seat's own row (`_seat_modifier`), as `person_subject` is the caller's."""
+    (`office`, B05.20): the caller's, read off the seat's own row (`_seat_modifier`), as `person_subject` is the caller's. So is the arrangement
+    row the matter is docketed under (`docketed`, B05.21): the docket is public, the caller reads it. THE COUNTERPARTY'S STANCE TOWARD THE ACTOR IS
+    HIS INTERIOR, held in no claim of the believer's: where `regard_step` is not 0 and one person stands alone opposite, it is unknown to him (`None`),
+    never a figure; at 0 the term reads nothing, so the answer is as it was."""
     roles = {r.role for r in _social_rows()}
     key = VERB_CAPABILITY.get(verb)
     opposition = None
@@ -652,12 +741,15 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
     circumstance = _edge_reads(verb, p, believed_subject, CIRCUMSTANCE)
     if edge is _UNKNOWN or circumstance is _UNKNOWN:
         return None
+    if person_subject and subject != p.id and not heard and fx.get("regard_step"):
+        return None                                                     # his interior is not the believer's to know (B05.21)
     room_terms = {}
     if heard:
         if room is None:
             return None
         room_terms = dict(reception=room["reception"], reception_gain=fx.get("reception_gain"), proofs=room["proofs"])
-    return _frame(fx, pool if "dice" in roles else 0, opposition, 0.0, room_terms, effort, verb, edge, circumstance, office)
+    return _frame(fx, pool if "dice" in roles else 0, opposition, 0.0, room_terms, effort, verb, edge, circumstance, office,
+                  docketed=docketed, heard=heard)
 
 
 def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
@@ -768,7 +860,8 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
                          pool=faculty(w, believer, act.verb),
                          person_subject=bool(subject) and subject in w.persons,
                          examined_record=examined is not None and examined in w.records,
-                         room=believed_room, heard=room is not None, effort=effort, office=_seat_modifier(w, act.via, room))
+                         room=believed_room, heard=room is not None, effort=effort, office=_seat_modifier(w, act.via, room),
+                         docketed=_docketed_row(w, subject))
     return None if inp is None else _odds_of_input(inp)
 
 
