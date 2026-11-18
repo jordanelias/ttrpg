@@ -9,6 +9,9 @@ Each node carries: `to` (target states), `emits` (trace-event kinds the engine f
 `site` (wrapper.py reference), and `entry`/`terminal` flags. Edges and emits are kept in sync with the live
 trace by the dynamic coverage check (run this file: `python state_graph.py`).
 
+Status: this graph is REFERENCE for the Plan-layer proposal (`proposals/03_PC_typed_outcome_one_door.md`,
+Part C row R-PC-20). It is not read by `wrapper.engagement`; no module under `modules/` or `engine/` imports it.
+
 Drift note (reconciliation, WS-1): the 2026-06-09 flow-and-state-map prose is superseded as the source of
 truth by THIS file. The map's stale items (DAMAGE_SCALE removed; precommit now consumed) do not recur here
 because the graph is data + tested, not prose."""
