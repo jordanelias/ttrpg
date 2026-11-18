@@ -32,7 +32,10 @@ from engine.season.tests.test_march import _fold_one, _march_act
 # seeds 0..11 (no winner casualty to observe); a grid of weights {10, 6, 4, 3, 2, 1} x scales {10, 20, 50, 100, 200} x seeds
 # 0..7 first reads the case the claims need at seed 3, weight 10, scale 200 (p_npc_033 at 1.0, p_npc_035 at 0.948). Was
 # SEED 0, SCALE 10 (the docstring's 0.982 is the old reading).
-SEED, WEIGHT, SCALE = 3, 10, 200
+# seed re-picked at B06.99: the stream changed (was 3, 10, 200; on the new stream that reads 0.978 / 0.947, both marchers cut).
+# Re-scanned seeds 0..7 x weight 10 x scales (200, 100, 50, 20, 10); the first reading p_npc_033 at 1.0 and p_npc_035 cut is
+# seed 1 scale 100 (p_npc_035 at 0.992); seed 7 scale 20 is the only other (0.982).
+SEED, WEIGHT, SCALE = 1, 10, 100
 MARCHERS = ("p_npc_033", "p_npc_035")
 
 

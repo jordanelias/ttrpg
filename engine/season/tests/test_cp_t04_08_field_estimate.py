@@ -168,13 +168,14 @@ def test_a_standing_order_is_in_the_estimate_and_a_given_one_replaces_it():
     """With `order` None the estimate reads the standing order exactly as `field_input` does; a given order is the attacker's
     in its place. Same stream, same input, so the figures are EQUAL, not close. The roles are chosen to differ."""
     checked = 0
+    AW = 12      # attacker weight re-picked at B06.99: the stream changed (was 9, where a held Shock left all 50 shown scenes unchanged; 3, 6, 7, 11, 12, 16 differ for both roles)
     for held, other in (("Shock", "ShieldWall"), ("ShieldWall", "Shock")):
-        with_held, plain = _build(9, True, held), _build(9, True, None)
+        with_held, plain = _build(AW, True, held), _build(AW, True, None)
         a = wrapper.field_estimate(with_held, ACTOR, KING_SEAT, TARGET)
         b = wrapper.field_estimate(plain, ACTOR, KING_SEAT, TARGET, FieldOrder(held, "none"))
         c = wrapper.field_estimate(plain, ACTOR, KING_SEAT, TARGET)
         d = wrapper.field_estimate(with_held, ACTOR, KING_SEAT, TARGET, FieldOrder(other, "none"))
-        e = wrapper.field_estimate(_build(9, True, other), ACTOR, KING_SEAT, TARGET)
+        e = wrapper.field_estimate(_build(AW, True, other), ACTOR, KING_SEAT, TARGET)
         assert a == b, (held, a, b)                    # the held order is the given one
         assert a != c, (held, a, c)                    # ... and it is in the figure: no order is another figure
         assert d == e, (other, d, e)                   # a given order governs a held one

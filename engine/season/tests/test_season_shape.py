@@ -12690,7 +12690,10 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # B05.99 re-pin: 2 -> 3, the population move of the batch's movers (the one sampler B05.02, the pool B05.09/B05.25, the
     # calibrated arm B05.23), read off this test's own `got` on e075e511b: `none` 3/3, `actor` 3/3, `total` 2/2; `wide` still
     # equals `verbonly`, and not 0.
-    assert got["actor"]["verbonly"] == 3, (
+    # B06.99 re-pin: 3 -> 4, the stream change (the uniform's source, CPython's generator -> the keyed mix: a stream change, not a balance
+    # change), read off this test's own `got` on the new stream: `none` 3/3, `actor` 4/4, `total` 2/2 (genuine 28 in every arm); `wide`
+    # still equals `verbonly` (4 both), and not 0. Only `actor` moved. The B05.99 values were `none` 3/3, `actor` 3/3, `total` 2/2.
+    assert got["actor"]["verbonly"] == 4, (
         f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
         "means the clause-4 producers the six investigation acts opened are gone again and the "
         "2026-09-07 loss is back; any other number means the population moved and must be "
@@ -12781,7 +12784,9 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # B01a.99: 31/3 -> 28/2, the sibling test's move (NPC-088's persons hold drawn sheets; its `(28, 2)` note and its control).
     # B05.99 re-pin: 28/2 -> 31/3, the batch's movers (`_realm_goldens.py`'s list; first moved at B05.02, the one sampler), read off
     # this test's own `got` on e075e511b: `none` 31/3, `actor` 28/3, `total` 28/2 (unmoved).
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (31, 3), got
+    # B06.99 re-pin: 31/3 -> 28/3, the stream change (the uniform's source: CPython's generator -> the keyed mix; not a balance change), read off this
+    # test's own `got` on the new stream: `none` 28/3, `actor` 28/4, `total` 28/2 (unmoved). The genuine-fork population is 28 in every arm.
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (28, 3), got
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
     # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject
@@ -12798,7 +12803,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # ⚠⚠ **33/10 -> 31/7, PLAN POSITION `7a`, 2026-09-29 -- SAME MECHANISM AS THE `none`-ARM BLOCK
     # ABOVE, AND `wide` STILL EQUALS `verbonly` (7 both).**
     # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- shipped arm genuine 31, wide 7]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (28, 3), got     # B05.99 re-pin: 28/2 -> 28/3 (the batch's movers, the `none` note above); v10 PC-10b: -> 28/2 (the sibling test's move); v11 CR-17: -> 24/1 (the sibling test's move); v11 CR-28: -> 34/8 (the sibling test's move); v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 34/7 (the sibling test's move); v10 REM-23: -> 34/5 (the sibling test's move); IN-12 `give` + Rung: -> 36/8 (the `verbonly` note); `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note); FI-01: -> 36/9 (the `verbonly` note); IN-12 step 9: -> 36/10 (the `verbonly` note)
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (28, 4), got     # B06.99 re-pin: 28/3 -> 28/4 (the stream change; read off `got`, the `none` note above); B05.99 re-pin: 28/2 -> 28/3 (the batch's movers, the `none` note above); v10 PC-10b: -> 28/2 (the sibling test's move); v11 CR-17: -> 24/1 (the sibling test's move); v11 CR-28: -> 34/8 (the sibling test's move); v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 34/7 (the sibling test's move); v10 REM-23: -> 34/5 (the sibling test's move); IN-12 `give` + Rung: -> 36/8 (the `verbonly` note); `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note); FI-01: -> 36/9 (the `verbonly` note); IN-12 step 9: -> 36/10 (the `verbonly` note)
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- `total` 5 of 19 under the widened (verb, subject) fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (28, 3) at the `total` arm]
@@ -13430,7 +13435,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
         pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     SeasonDriver(P.tiny_world())   # `31b`: registers the module entries a direct `contest()` calls
     w = _w(); w.step = Step.RESOLVE
-    raw = contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we0"])
+    raw = contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we3"])   # seed re-picked at B06.99: the stream changed (was we0)
     assert raw["wound_state"]["p_low"]["felled"] is True, raw["wound_state"]
     assert raw["wound_state"]["p_mid"]["felled"] is False, raw["wound_state"]
     assert raw["wound_state"]["p_mid"]["wounds"] > 0, raw["wound_state"]
@@ -13444,7 +13449,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
     d = SeasonDriver(w2)
     # v10 REM-31: declared at RESOLVE, fought at ENCOUNTER (`_we_bands`' note); the fight's Events are ENCOUNTER's.
     evs = d.encounter(mint_token(d.w, WriteClass.ACTS),
-                      d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we0", actor="p_low", verb="fight",
+                      d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we3", actor="p_low", verb="fight",   # seed re-picked at B06.99: the stream changed (was we0)
                                 payload={"subject": "p_mid"})], 2), 2)
     assert {e.kind for e in evs} >= {"person.died", "body.changed"}, [(e.kind, e.degree) for e in evs]
     assert "p_mid" in w2.persons, (

@@ -58,7 +58,10 @@ class _Practitioner:
 
 # ─── The control grid (captured at dd91783a, before WR-03) ───────────────────────────────────────
 
-CONTROL_SEEDS = range(12)
+# seed count re-picked at B06.99: the stream changed (was range(12): the opposed grid then reached 8 of the 9 (A, B) degree pairs,
+# never ('Partial', 'Meets'); 12..15 seeds reach 8, 16 is the smallest count that reaches all nine). Every digest below is
+# re-recorded at 16 seeds.
+CONTROL_SEEDS = range(16)
 CONTROL_SCALES = ("Object", "Personal", "Relational", "Field", "Territorial", "Structural",
                   "Foundational")
 
@@ -134,7 +137,7 @@ def digest(records):
 
 # sha256 of `digest(<site>_records(op_type))`, captured at dd91783a (WR-02, before WR-03) with
 # RESILIENCE_GAIN = 0. Mending in collective/opposing is NOT here: it is the declared mover.
-# 10 digests x 84 records (7 scales x 12 seeds) here, plus BASE_MENDING_DIGEST over 288 records = 1128
+# 10 digests x 112 records (7 scales x 16 seeds) here, plus BASE_MENDING_DIGEST over 384 records = 1504
 # pinned. TO RE-DERIVE (the SHA will not survive a squash merge, so the recipe is the provenance): check
 # out systems/threadwork/sim/{operations,collective,opposing,coherence}.py from the last commit before
 # WR-03's owner existed (the parent of the commit that added `price_mending`), set RESILIENCE_GAIN = 0,
@@ -144,18 +147,18 @@ def digest(records):
 # every digest below reads the keyed stream of `draw.seeded(draw.H2(..., seed))`, not the dd91783a values (a stream
 # change, not a balance change). The recipe above recomputes them.
 BASE_DIGESTS = {
-    ("collective", "Weaving"): "3aa5be8b090280cf41c29ba0eac517587c778a136429fe73c9b6510c055548cb",
-    ("collective", "Pulling"): "78dcdafd3d5c9e8759f7f989bd38259b63ab7e0bcf699dccfd42b891c61111e7",
-    ("collective", "Locking"): "fdcc9ea630d717fe816fc8cad3cbfc77ac03cdf718b3a4c40985ab9d5a5212d2",
-    ("collective", "Dissolution"): "f85f7f3a6df832d7d7f3096f0e5896b942935e6e87b978a042cde1c4115cc99a",
-    ("collective", "POP"): "a7e38e93895e6a519da3345758f008a5f584adf6e77ed464f5a442a8acff7278",
-    ("opposing", "Weaving"): "6d7f829a460e6dbc3096282796d28edfb96e24e8d7fb6f274a1db54519f5cba9",
-    ("opposing", "Pulling"): "b78cdce5473c2d466e586aa053072dcc3f8b751695b6b57b6e3c05f929977ca1",
-    ("opposing", "Locking"): "d3730360185f4539ff0a9634a30a04e8756d7751354adef38143d24a6e2af4b2",
-    ("opposing", "Dissolution"): "2cb119e6009175e8f2f463084e5df35e144d1d16f53c1db4afca4cb4c3908ea2",
-    ("opposing", "POP"): "64473efaf44f40df681ffd74f643ed45d3fb52fb07ec1f612f83ea7e04d3bed3",
+    ("collective", "Weaving"): "32d0b2703eaa6a62b4df21ce5a6b21f7912462c1364e683d6bdb6a218b137c96",
+    ("collective", "Pulling"): "d3d9f3fea3637663137f34c1b9655786b22c79c456611506b5709e3df2806352",
+    ("collective", "Locking"): "094ece0a4da8390c7aeb4685847bd6e026781781a9873a8087541f52108f195b",
+    ("collective", "Dissolution"): "1c3997bb40d941ec7a4697fcfa00f206608120ee506ceb8f83027728865ecf4f",
+    ("collective", "POP"): "c7ec7f1c03ed9ea2469b06647227b0300d09f9bc92c79432960970b68d413264",
+    ("opposing", "Weaving"): "7d141e8c9b363fc091835dc6dca9ef9b93e6472fb621d72de3506b036d86cbf8",
+    ("opposing", "Pulling"): "84f0137f7bbf0790590db4cb5427ce6342045da017f5cab2d6ec86d72406440b",
+    ("opposing", "Locking"): "db6802912123559a4402a2caddeed88926b5a1e1ca58c5f1c4b1825cd824a8ed",
+    ("opposing", "Dissolution"): "b2acdfecd6245df550ded5e60078a9cf9ab012e63a8bd4120f82eb7cc8a8df0d",
+    ("opposing", "POP"): "c146f5e82efb9af05b47ae4500bf59d61f22e01f2b8d599aa8bbe3d34354aa42",
 }
-BASE_MENDING_DIGEST = "85f8ec5d7a91f27276b51bcf143846e3d7320e85d2f7cc7b153e507a87dfd3f4"
+BASE_MENDING_DIGEST = "6a506f3d11bda2c8f9abb6ac109def2712b39039eac79be02e5c29b8c13105c1"
 
 
 @pytest.mark.parametrize("site,op_type", sorted(BASE_DIGESTS))
