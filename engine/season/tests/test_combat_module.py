@@ -19,13 +19,17 @@ process, give one result (module-level state surviving between calls makes the s
 """
 from __future__ import annotations
 
+import random
+
+import pytest
+
 from ._fresh_process import entry_target, probe
 
 _PRIZE = "the body"
 
 
 _PROBE = """
-import sys, os, importlib, random
+import sys, os, importlib, random, dataclasses
 sys.path.insert(0, {root!r})
 before = set(sys.modules)
 mod_name, attr = {target!r}.split(":", 1)
@@ -40,9 +44,8 @@ for seed, ends in ((7, (4, 4)), (11, (4, 1)), (3, (2, 4))):
     # THE PLAYABLE BRANCH (REM-31): a decider that always engages is the automated fight, and taking that branch
     # must load nothing of the host either (a host import placed behind `decide` would otherwise never be seen)
     played = entry(inp, random.Random(seed), decide=lambda view: "engage")
-    out.append((seed, ends, got["status"], got["result"], got["ends"], got["wound_state"],
-                len(got["trace"]), again == got and played["result"] == got["result"]
-                and played["ends"] == got["ends"] and played["wound_state"] == got["wound_state"]))
+    out.append((seed, ends, type(got).__name__, got.claimants, dataclasses.asdict(got),
+                again == got and played.wounds == got.wounds and played.rounds == got.rounds))
 loaded = sorted(os.path.relpath(m.__file__, {root!r}) for n, m in list(sys.modules.items())
                 if n not in before and getattr(m, "__file__", None)
                 and os.path.abspath(m.__file__).startswith({root!r} + os.sep))
@@ -52,8 +55,13 @@ wrapper, combatant = (importlib.import_module(pkg + "." + n) for n in ("wrapper"
 oracle = []
 for seed, ends, *_ in out:
     A, B = combatant.Combatant("p_a", end=ends[0]), combatant.Combatant("p_b", end=ends[1])
-    r = wrapper.fight(A, B, rng=random.Random(seed))
-    oracle.append((r, {{c.label: {{q: getattr(c.wt, q) for q in qs}} for c in (A, B)}}))
+    seen = []
+    wrapper._TRACE = seen.append
+    try:
+        r = wrapper.fight(A, B, rng=random.Random(seed))
+    finally:
+        wrapper._TRACE = None
+    oracle.append((r, {{c.label: {{q: getattr(c.wt, q) for q in qs}} for c in (A, B)}}, seen))
 print(repr((loaded, out, oracle)))
 """
 
@@ -72,16 +80,20 @@ def test_the_combat_entry_fights_a_hand_built_record_as_the_engine_does_and_load
         f"type: {stray}. A-25: a module imports what it runs and the record types, nothing else of the host")
     assert "engine/season/queries/inputs.py" in loaded and f"{module_dir}/wrapper.py" in loaded, loaded
     checked = 0
-    for (seed, ends, status, result, got_ends, wound_state, n_trace, deterministic), (r, wt) in zip(out, oracle):
-        assert status == "RESOLVED", (seed, status)
+    for (seed, ends, kind, claimants, rec, deterministic), (r, wt, seen) in zip(out, oracle):
+        assert kind == "CombatOutcome", (seed, kind)
         assert deterministic, f"{role}: seed {seed} gave two results in one process"
-        assert result == r, f"{role}: seed {seed} result {result} != the engine's own {r}"
-        assert got_ends == {"p_a": ends[0], "p_b": ends[1]}, got_ends
-        assert wound_state == wt, f"{role}: seed {seed} lifted {wound_state}, the trackers read {wt}"
-        assert n_trace > 0, f"{role}: seed {seed} recorded no trace -- `_TRACE` was not captured"
+        assert claimants == ("p_a", "p_b"), claimants
+        # THE ORACLE COMPARISON, re-pointed at the record's fields: the engine called directly, its trackers and its trace
+        assert rec["wounds"] == wt, f"{role}: seed {seed} lifted {rec['wounds']}, the trackers read {wt}"
+        assert list(rec["trace"]) == seen, f"{role}: seed {seed} returned a trace that is not the engine's own"
+        assert rec["rounds"] == sum(1 for e in seen if e["kind"] == "turn_start"), (seed, rec["rounds"])
+        # the integer `wrapper.fight` returns is not lifted: the engine's own `fight_result` event names it
+        assert [e["result"] for e in seen if e["kind"] == "fight_result"] == [r], (seed, r)
+        assert len(rec["trace"]) > 0, f"{role}: seed {seed} recorded no trace -- `_TRACE` was not captured"
         checked += 1
     assert checked == 3, checked
-    assert len({(o[3], repr(o[5])) for o in out}) > 1, (
+    assert len({(repr(o[4]["wounds"]), o[4]["rounds"]) for o in out}) > 1, (
         "every hand-built fight read the same; the comparison cannot tell the parties apart")
 
 
@@ -97,8 +109,42 @@ got = fight(inp, random.Random(7))
 import os
 pkg = os.path.join({root!r}, "modules", "combat") + os.sep
 flat = sorted(n for n, m in list(sys.modules.items()) if str(getattr(m, "__file__", "") or "").startswith(pkg) and not n.startswith("modules.combat"))
-print(repr((got["status"], flat, "modules.combat.core" in sys.modules)))
+print(repr((type(got).__name__, flat, "modules.combat.core" in sys.modules)))
 """
+
+
+def test_resolve_returns_no_winner_key():
+    """B14.01: the seam's `resolve` returns only what the fold and the viewer read -- `wound_state`, `surrender`,
+    `beat`, `rounds`, `trace` -- and the six keys no reader asked for are gone (`winner`, `result`, `unresolved`,
+    `bouts`, `parties`, `seed`). The module entry returns a `CombatOutcome`, not a dict. FALSIFIER: a deleted key
+    returning, or an entry that hands back a dict."""
+    from ..data.matrix import Step
+    from ..harness import probes as P
+    from ..loop.driver import SeasonDriver
+    from ..queries.inputs import CombatOutcome, PartyWounds
+    from ..seam.wrappers import combat as C
+    from ..seam.wrappers._entry import entry_for
+    if C.engine() is None:
+        pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
+    w = P.tiny_world()
+    w.step = Step.RESOLVE
+    SeasonDriver(P.tiny_world())                       # registers the module entries a direct `resolve` calls
+    got = C.resolve(w, ["p_low", "p_mid"], ["a"], "the body")
+    assert got["status"] == "RESOLVED", got
+    deleted = {"winner", "result", "unresolved", "bouts", "parties", "seed"}
+    assert not deleted & set(got), sorted(deleted & set(got))
+    assert {"wound_state", "surrender", "beat", "rounds", "trace"} <= set(got), sorted(got)
+    # the entry's own return is the record (a frozen dataclass), with one `PartyWounds` per claimant
+    entry, refusal = entry_for(C._PRIZE, C._PROVIDER)
+    assert entry is not None, refusal
+    out = entry.fn(C.combat_input(w, ["p_low", "p_mid"], "fight"), random.Random(0))
+    assert isinstance(out, CombatOutcome) and not isinstance(out, dict), type(out)
+    assert out.claimants == ("p_low", "p_mid") and set(out.wounds) == {"p_low", "p_mid"}, out.claimants
+    assert all(isinstance(v, PartyWounds) for v in out.wounds.values()), out.wounds
+    assert out.rounds >= 1 and len(out.trace) > 0, (out.rounds, len(out.trace))
+    # a felling carries a beat; a fight nobody was felled in carries none
+    felled = [pid for pid, pw in out.wounds.items() if pw.felled]
+    assert (out.beat is not None) == bool(felled), (out.beat, felled)
 
 
 def test_a_fight_leaves_no_flat_module_behind():
@@ -106,8 +152,8 @@ def test_a_fight_leaves_no_flat_module_behind():
     identities for one file). A fresh interpreter resolves `combat.fight`, runs one fight on the input the tests
     above build, and lists every module in `sys.modules` whose file is under `modules/combat/` and whose name is not `modules.combat.*`
     (by path, so no roster of names can miss a sibling)."""
-    status, flat, packaged = probe(_FLAT_PROBE, "", 300)
-    assert status == "RESOLVED", status
+    kind, flat, packaged = probe(_FLAT_PROBE, "", 300)
+    assert kind == "CombatOutcome", kind
     assert not flat, f"flat module names loaded beside the package: {flat}"
     assert packaged, "`modules.combat.core` was not loaded: the fight did not run through the package"
 
@@ -190,7 +236,7 @@ def test_skill_score_and_attribute_move_the_fight_separately():
         for seed in range(n):
             inp = PersonalCombatInput(claimants=("me", "op"), ends=(4, 4), wound_quantities=qs, scores=(score, 3),
                                       addends=(0, 0), attributes=({"attr.body.strength": strength}, {}))
-            hit += bool(entry(inp, random.Random(seed))["wound_state"]["op"]["felled"])
+            hit += bool(entry(inp, random.Random(seed)).wounds["op"].felled)
         return hit / n
 
     checked = 0
@@ -243,7 +289,7 @@ def test_a_carried_wound_leaves_health_and_max_wounds_whole():
         assert hurt["inp"].ends == whole["inp"].ends, (lost_steps, hurt["inp"].ends, whole["inp"].ends)
 
         def full(r):
-            return {q: r["got"]["wound_state"][_A][q] for q in ("max_wounds", "health_full")}
+            return {q: getattr(r["got"].wounds[_A], q) for q in ("max_wounds", "health_full")}
         assert full(hurt) == full(whole), (lost_steps, full(hurt), full(whole))
         assert hurt["inp"].carried[0] < 0.0 and hurt["inp"].carried[1] == 0.0 and whole["inp"].carried == (0.0, 0.0), hurt["inp"].carried
         cut = _fight(_wounded_world("endurance_cut", lost_steps))
@@ -263,11 +309,11 @@ def test_the_carried_level_is_applied_once():
     seen_aggressor = set()
     for lost_steps in (1, 2):
         for seed in range(8):
-            whole = _fight(_wounded_world("level", 0), seed)["got"]["trace"]
+            whole = _fight(_wounded_world("level", 0), seed)["got"].trace
             hurt_res = _fight(_wounded_world("level", lost_steps), seed)
             assert hurt_res["inp"].carried == (-lost_steps * unit, 0.0), hurt_res["inp"].carried       # one level per step, signed against him
             roll_whole = next(e for e in whole if e["kind"] == "roll")
-            roll_hurt = next(e for e in hurt_res["got"]["trace"] if e["kind"] == "roll")
+            roll_hurt = next(e for e in hurt_res["got"].trace if e["kind"] == "roll")
             assert (roll_hurt["aggressor"], roll_hurt["pool"], roll_hurt["ob"]) == (roll_whole["aggressor"], roll_whole["pool"], roll_whole["ob"])
             want = -lost_steps * unit if roll_hurt["aggressor"] == _A else lost_steps * unit      # his own attack lower, or the roller's net higher
             assert abs((roll_hurt["net_sigma"] - roll_whole["net_sigma"]) - want) < 1e-9, (lost_steps, seed, roll_hurt, roll_whole)

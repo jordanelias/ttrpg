@@ -175,15 +175,17 @@ def test_the_shares_follow_the_trackers_not_the_sign_of_the_result():
     disagree = scenes = 0
     for _ in range(n):
         r = _ran("entry.fn", entry.fn, inp, rng)
-        a, b = bool(r["wound_state"][ACTOR]["felled"]), bool(r["wound_state"][SUBJECT]["felled"])
-        if combat.surrender_of(r["trace"]) is not None:
+        a, b = bool(r.wounds[ACTOR].felled), bool(r.wounds[SUBJECT].felled)
+        # the sign `wrapper.fight` returned is not lifted into the record; the engine's own `fight_result` event names it
+        sign = next(e["result"] for e in r.trace if e["kind"] == "fight_result")
+        if r.surrender is not None:
             by_trackers["yielded"] += 1
         elif a and not b:
             by_trackers["actor_felled"] += 1
-            disagree += r["result"] != -1
+            disagree += sign != -1
         elif b and not a:
             by_trackers["subject_felled"] += 1
-            disagree += r["result"] != 1
+            disagree += sign != 1
         else:
             by_trackers["undecided"] += 1
         scenes += 1

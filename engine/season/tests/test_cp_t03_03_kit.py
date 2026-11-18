@@ -232,8 +232,8 @@ def _actor_felled_share(w, n=N, seed=7):
     rng = random.Random(seed)
     felled = 0
     for _ in range(n):
-        ws = entry.fn(inp, rng)["wound_state"]
-        felled += bool(ws[ACTOR]["felled"]) and not bool(ws[SUBJECT]["felled"])
+        ws = entry.fn(inp, rng).wounds
+        felled += bool(ws[ACTOR].felled) and not bool(ws[SUBJECT].felled)
     return felled / n
 
 
@@ -281,7 +281,7 @@ def test_a_record_built_without_kits_is_fought_at_the_engines_default():
     for seed in range(5):
         a = entry.fn(plain, random.Random(seed))
         b = entry.fn(default, random.Random(seed))
-        assert (a["result"], a["ends"], a["wound_state"]) == (b["result"], b["ends"], b["wound_state"])
+        assert a == b
 
 
 def test_mutation_reading_the_actors_kit_for_both_parties_loses_the_asymmetry(armed, monkeypatch):

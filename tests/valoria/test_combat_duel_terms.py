@@ -163,7 +163,6 @@ def test_the_module_entry_reads_the_terms_off_the_typed_input():
     the season's to declare (PC-10b); a subclass stands in for it here."""
     from dataclasses import dataclass
     from engine.season.queries.inputs import PersonalCombatInput
-    from engine.season.seam.wrappers.combat import surrender_of
     from modules.combat import fight as entry   # the composition row's `target:` module
 
     @dataclass(frozen=True)
@@ -176,11 +175,13 @@ def test_the_module_entry_reads_the_terms_off_the_typed_input():
         bare = entry.fight(PersonalCombatInput(('p_a', 'p_b'), (4, 4), qs), random.Random(seed))
         death = entry.fight(_Termed(('p_a', 'p_b'), (4, 4), qs, 'death'), random.Random(seed))
         blood = entry.fight(_Termed(('p_a', 'p_b'), (4, 4), qs, 'blood'), random.Random(seed))
-        assert (death['result'], death['trace']) == (bare['result'], bare['trace'])
-        assert surrender_of(bare['trace']) is None
-        s = surrender_of(blood['trace'])
-        assert s is not None and blood['result'] == (-1 if s['by'] == 'p_a' else 1)
-        assert not any(w['felled'] for w in blood['wound_state'].values())
+        assert death == bare                              # the record: wounds, yield, beat, rounds and trace
+        assert bare.surrender is None
+        s = blood.surrender
+        # the integer `wrapper.fight` returns is not in the record; the engine's own `fight_result` event names it
+        won = next(e['result'] for e in blood.trace if e['kind'] == 'fight_result')
+        assert s is not None and won == (-1 if s.by == 'p_a' else 1)
+        assert not any(w.felled for w in blood.wounds.values())
         seen += 1
     assert seen == 10
 
