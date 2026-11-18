@@ -321,12 +321,42 @@ def _office_levels(fx: Any, operands: dict) -> tuple:
     return ([] if level is None else [level]), []
 
 
+# ---------------------------------------------------------------------------------------------
+# THE `wounds` SOURCE (B05.60, ADV Edits B to D; `29_DICE` item 29-4 step 5; A-8): a wound is a NAMED LEVEL on the roll its bearer makes, never an obstacle
+# term and never a die. One `wound_level` AGAINST the roller per `wound_step` of body his person has lost below his ceiling, one FOR him per
+# `wound_step` the person he acts on has lost (the bearer's wound helps the roller when the bearer defends), each side at most `wound_levels_max`.
+# The operands are the persons' own `body` and `body_ceiling` (`_advantage_operands`); a `wound_level` of None is the control and brings none.
+# ---------------------------------------------------------------------------------------------
+WOUNDS = "wounds"                  # the roster member (`rosters.yaml: advantage_sources`)
+
+
+def _wound_count(fx: Any, body: Any, ceiling: Any) -> int:
+    """Whole `wound_step`s of body lost below the ceiling, at most `wound_levels_max`: 0 where none is lost (or the ceiling is not stated)."""
+    lost = int(ceiling) - int(body)
+    if lost <= 0:
+        return 0
+    return min(int(fx.get("wound_levels_max")), lost // int(fx.get("wound_step")))
+
+
+def _wound_levels(fx: Any, operands: dict) -> tuple:
+    """THE `wounds` SOURCE: `(levels for the roller, levels against him)`. One named level AGAINST the actor per `wound_step` of body he has
+    lost below his ceiling, and one level FOR the actor per `wound_step` his person subject has lost, each capped at `wound_levels_max`
+    (A-8: bilateral). `([], [])` when `wound_level` is None (the control)."""
+    level = fx.get("wound_level")
+    if level is None:
+        return [], []
+    n_actor = _wound_count(fx, operands.get("body", 0), operands.get("body_ceiling", 0))
+    n_subject = _wound_count(fx, operands.get("subject_body", 0), operands.get("subject_body_ceiling", 0))
+    return [level] * n_subject, [level] * n_actor
+
+
 # THE ADVANTAGE CHANNEL'S BINDING: each member of `rosters.yaml: advantage_sources` -> the function that
 # returns the named levels it brings to an act, `fn(fixtures, operands) -> (levels for the roller, levels against him)`, each a
 # list of level names. THE ROSTER IS
 # THE CLOSED SET AND THIS IS ITS BINDING: refused at import if the two disagree, so a member with no function
 # (it would silently add nothing) and a function with no member (it would silently never run) are both loud.
-ADVANTAGE_SOURCES = {EFFORT: _effort_levels, CAPABILITY: _capability_levels, "proofs": _proof_levels, "favour": _favour_levels, OFFICE: _office_levels}
+ADVANTAGE_SOURCES = {EFFORT: _effort_levels, CAPABILITY: _capability_levels, "proofs": _proof_levels, "favour": _favour_levels, OFFICE: _office_levels,
+                     WOUNDS: _wound_levels}
 if set(ADVANTAGE_SOURCES) != set(roster("advantage_sources")):
     raise Unspecified(
         f"`advantage_sources` members {sorted(roster('advantage_sources'))} and "
@@ -354,12 +384,22 @@ def advantage_sigma(fx: Any, operands: dict) -> float:
     return levels_to_net_sigma(for_, against)
 
 
-def _advantage_operands(effort: int, edge: tuple, room_terms: dict, office: Optional[str] = None, regard: Optional[float] = None) -> dict:
+def _advantage_operands(effort: int, edge: tuple, room_terms: dict, office: Optional[str] = None, regard: Optional[float] = None,
+                        body: Optional[tuple] = None, subject_body: Optional[tuple] = None) -> dict:
     """WHAT THE ACT BRINGS, named once: `contest_input` and `believed_input` both reach the sources through here, so they cannot diverge.
     `office` is `_seat_modifier`'s answer for the seat the act is exercised through (B05.20), the host's own read, `None` for none. `regard` is
-    `_regard_of`'s answer (B05.21), the counterparty's signed stance in the clamp unit, `None` where no one person stands alone opposite."""
+    `_regard_of`'s answer (B05.21), the counterparty's signed stance in the clamp unit, `None` where no one person stands alone opposite.
+    `body` is `(body, body_ceiling)` of the actor and `subject_body` the same of a person subject (B05.60, the `wounds` source's operands); a
+    subject whose body is not the reader's to know (`believed_input`) is `None`, which reads as nothing lost."""
+    body_op = {} if body is None else {"body": body[0], "body_ceiling": body[1]}
+    subject_op = {} if subject_body is None else {"subject_body": subject_body[0], "subject_body_ceiling": subject_body[1]}
     return {EFFORT: effort, EDGE: edge, "proofs": room_terms.get("proofs", 0.0), "reception": room_terms.get("reception", 0.0), OFFICE: office,
-            "regard": regard}
+            "regard": regard, **body_op, **subject_op}
+
+
+def _body_of(person: Any) -> Optional[tuple]:
+    """`(body, body_ceiling)` of a person, the `wounds` source's operand pair; `None` for no person."""
+    return None if person is None else (person.body, person.body_ceiling)
 
 
 def _levels_count(levels: tuple) -> tuple:
@@ -443,9 +483,10 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     circumstance = _edge_reads(verb, actor, subject_read, CIRCUMSTANCE)         # the `capability` obstacle term's rows (B05.15)
     office = _seat_modifier(w, via, room)                                       # the seat's own level, where its bench is over the room (B05.20)
     regard = _regard_of(w, claimants[0], subject, room)                         # the counterparty's stance toward the actor, signed, in the clamp unit (B05.21)
+    bodies = (_body_of(actor), _body_of(other))                                 # the `wounds` source's operands: his own body, and a person subject's (B05.60)
     inp = _frame(fx, pool, opposition, doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb, edge, circumstance, office,
-                 docketed=docketed, heard=room is not None, regard=regard)
-    levels = _levels_count(advantage_levels(fx, _advantage_operands(effort, edge, room_terms, office, regard)))     # the same sources `leverage` summed (OBS §5)
+                 docketed=docketed, heard=room is not None, regard=regard, bodies=bodies)
+    levels = _levels_count(advantage_levels(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies)))     # the same sources `leverage` summed (OBS §5)
     read = {"dice": score(w, actor, verb) if "dice" in roles else None, "opposes": opposition}
     chosen = {id(r): (value, levels_to_net_sigma(*_edge_levels(r, key, value))) for r, key, value in edge}
     chosen.update({id(r): (value, _circumstance_ob(fx, r, value)) for r, key, value in circumstance})
@@ -625,7 +666,7 @@ def obstacle_operands(fx: Any, facts: dict) -> dict:
 def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: float,
            room_terms: dict, effort: int, verb: str, edge: tuple = (), circumstance: tuple = (),
            office: Optional[str] = None, docketed: Optional[dict] = None, heard: bool = False,
-           regard: Optional[float] = None) -> SocialContestInput:
+           regard: Optional[float] = None, bodies: tuple = (None, None)) -> SocialContestInput:
     """THE RECORD, FILLED THE ONE WAY: what `contest_input` (the true input) and `believed_input` (a
     person's) both hand the module. They differ in where the pool's opposition, the forgery quality
     and the room terms COME FROM; the fixtures and the record's shape are this
@@ -638,7 +679,7 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
         ceiling_per_pool=fx.get("ceiling_per_pool"),
         ceiling_form=fx.get("ceiling_form"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
-        leverage=advantage_sigma(fx, _advantage_operands(effort, edge, room_terms, office, regard)),      # the one place the operands are named
+        leverage=advantage_sigma(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies)),      # the one place the operands are named
         forgery_quality=forgery_quality,
         **obstacle_operands(fx, {"verb": verb, "opposition": opposition, "circumstance": circumstance,
                                  "reception": room_terms.get("reception", 0.0), "docketed": docketed, "heard": heard, "regard": regard}),
@@ -750,7 +791,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
             return None
         room_terms = dict(reception=room["reception"], reception_gain=fx.get("reception_gain"), proofs=room["proofs"])
     return _frame(fx, pool if "dice" in roles else 0, opposition, 0.0, room_terms, effort, verb, edge, circumstance, office,
-                  docketed=docketed, heard=heard)
+                  docketed=docketed, heard=heard, bodies=(_body_of(p), None))      # his own body is his to know; another person's is not without a claim (B05.60)
 
 
 def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:

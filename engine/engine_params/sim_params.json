@@ -3,21 +3,21 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 122,
-    "total": 390,
-    "uncited": 268,
+    "total": 392,
+    "uncited": 270,
     "of_which_assumption_grade": 8
   },
-  "count": 390,
+  "count": 392,
   "by_module": {
     "engine.dice_engine": 10,
-    "engine.season": 25,
+    "engine.season": 26,
     "mass_battle": 161,
     "characters": 5,
     "fieldwork": 15,
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 102,
+    "engine.season.settings": 103,
     "engine.season.realm": 8
   },
   "params": [
@@ -197,6 +197,17 @@
       "module": "engine.season",
       "file": "engine/season/data/fixtures.py",
       "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season._CONDITION_SCALE",
+      "name": "_CONDITION_SCALE",
+      "value": 1000,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-06`'s value, named once so `wound_step` is derived from the fixture's own scale and not typed beside it",
       "citation": null,
       "citation_grade": null
     },
@@ -3485,17 +3496,6 @@
       "citation_grade": null
     },
     {
-      "key": "engine.season.settings.condition_scale",
-      "name": "condition_scale",
-      "value": 1000,
-      "kind": "scalar",
-      "module": "engine.season.settings",
-      "file": "engine/season/data/fixtures.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
       "key": "engine.season.settings.scene_budget",
       "name": "scene_budget",
       "value": 5,
@@ -3737,6 +3737,28 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-425`, swept None (control) / strong / major (SHIPPED)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.wound_level",
+      "name": "wound_level",
+      "value": "minor",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-431`, swept None (control) / minor (SHIPPED) / moderate",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.wound_levels_max",
+      "name": "wound_levels_max",
+      "value": 2,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-433`, swept 1 / 2 (SHIPPED) / 3 (levels, per side)",
       "citation": null,
       "citation_grade": null
     },

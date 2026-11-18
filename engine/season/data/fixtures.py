@@ -213,11 +213,14 @@ WORKS_COST = _load_works_cost()
 # [JUSTIFIED: engine/season/hole_register.yaml H-424 -- the table's sweep names the control arm (0 / 1 / 2 / 3), so this arm is a point of that sweep]
 DIFFICULTY_OB_CONTROL = {"plain": 0, "routine": 1, "demanding": 2, "hard": 3}
 
+# [JUSTIFIED: engine/season/hole_register.yaml H-06 -- `site: Fixtures condition_scale`, graded `assumption`; the mechanism is sourced and the magnitude is injected here and swept]
+_CONDITION_SCALE = 1000            # `H-06`'s value, named once so `wound_step` is derived from the fixture's own scale and not typed beside it
+
 DEFAULT_FIXTURES = Fixtures(
     # S48: condition is an int on an EXPORTED scale. S22 assigns the scale to `params`, and the
     # in-chain params document "proposes NO VALUES", so this is a fixture. Injection site: here.
     # [JUSTIFIED: engine/season/hole_register.yaml H-06 -- `site: Fixtures condition_scale`, graded `assumption`; the mechanism is sourced and the magnitude is injected here and swept]
-    condition_scale=1000,
+    condition_scale=_CONDITION_SCALE,
     # RULED TWICE. #353 §26.3 puts the budget at "~5"; Jordan ruled 2026-09-02 that the UNIT is
     # the SCENE and the number is 5 -- *"5 scenes for a character to play per season"*. A band is
     # not an integer; this is the integer the instrument runs on, and A31 sweeps it because the
@@ -420,6 +423,16 @@ DEFAULT_FIXTURES = Fixtures(
     proof_level="minor",               # `H-216`, swept None (control) / minor (SHIPPED) / moderate
     # [JUSTIFIED: engine/season/hole_register.yaml H-425 -- `site: Fixtures favour_level`, graded `assumption`; no document gives how much a unit of a bench's favour is worth to the speaker, so it is injected and swept None / strong / major]
     favour_level="major",              # `H-425`, swept None (control) / strong / major (SHIPPED)
+    # B05.60 (ADV Edits B to D; A-8): THE WOUND AS A LEVEL ON THE ROLL, read by `seam/wrappers/sigma.py::_wound_levels` (`rosters.yaml: advantage_sources: wounds`).
+    # One named level AGAINST the roller per `wound_step` of body his person has lost below his `body_ceiling`, one FOR him per `wound_step` the person he acts on
+    # has lost, each side at most `wound_levels_max`; never an obstacle term. `None` is `wound_level`'s CONTROL (the source brings nothing). `wound_step` is a third
+    # of the scale, derived from `condition_scale`'s own value (two thresholds, at one third and two thirds lost), not typed beside it.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-431 -- `site: Fixtures wound_level`, graded `assumption`; no document sizes what a wound costs a roll, so it is injected and swept None / minor / moderate]
+    wound_level="minor",               # `H-431`, swept None (control) / minor (SHIPPED) / moderate
+    # [JUSTIFIED: engine/season/hole_register.yaml H-432 -- `site: Fixtures wound_step`, graded `assumption`; a third of `condition_scale` per level is ADV Edit D's own size, injected and swept]
+    wound_step=_CONDITION_SCALE // 3,  # `H-432`, swept a sixth / a third (SHIPPED) / a half of `condition_scale` (body lost per level)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-433 -- `site: Fixtures wound_levels_max`, graded `assumption`; the most levels a wound can stack is ADV Edit D's two, injected and swept]
+    wound_levels_max=2,                # `H-433`, swept 1 / 2 (SHIPPED) / 3 (levels, per side)
     # v9 SC-02 `22b` step 24 (proceedings `19_PLAN.md` step 24): HOW FAR A DETERMINATION MOVES ITS MAKER'S
     # OWN PURSUITS, per unit of `queries/person_q.py::pursuit_lean` and per band step (`data/rosters.py::
     # DEGREE_STEP`), read by `person_q.consequence_pursuits` from `loop/effects_information.py::

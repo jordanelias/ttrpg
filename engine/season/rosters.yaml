@@ -3375,7 +3375,11 @@ rosters:
       where the prize row says `heard_by: bench` and that seat sits over the room (`state/gate.py::sits_over`); FOR the roller only
       (the defender column is struck, OBS §3). A seat declaring none, an act through no seat and a prize no bench hears bring no
       level; no shipped row authors a `modifier:` (the bench seats' first values land with B05.23).
-    values: [effort, capability, proofs, favour, office]
+      `wounds` (B05.60, ADV Edits B to D; A-8): one `wound_level` AGAINST the roller per `wound_step` of body his person has lost below his
+      `body_ceiling`, and one FOR him per `wound_step` the person he acts on has lost, each side at most `wound_levels_max`
+      (`sigma._wound_levels`); never an obstacle term and never a die. A person subject's body is read only by the true input: a believer's
+      own body is his to know, another's is not (`believed_input`). A `wound_level` of None is the control: the source brings no level.
+    values: [effort, capability, proofs, favour, office, wounds]
 
   # ── B03.68 (`09_WR_threadwork_module` edit 3): THE THREAD OPERATIONS ─────────────────────────────
   thread_operations:
