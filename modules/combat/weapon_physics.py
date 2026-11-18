@@ -1,6 +1,6 @@
 """weapon_physics.py — the GEOMETRY-AND-PHYSICS layer: derive a weapon's combat dynamics from its PRIMITIVES.
 
-The bottom-up half of the weapon split (the other half is the weapons DICTIONARY, combatant.WEAPONS). A weapon is
+The bottom-up half of the weapon split (the other half is the weapons DICTIONARY, weapons.WEAPONS). A weapon is
 NOT a bundle of hand-authored aggregates (spd, wt, closes_poorly, HEFT class, GATE caps); it is a set of PHYSICAL
 PRIMITIVES and EVERY combat quantity DERIVES here, once, as documented physics. Aggregate-based emergence: behaviour
 rises from the primitives, never from a per-weapon table.

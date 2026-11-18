@@ -33,7 +33,7 @@ TRACE_KINDS = {
 # flags any reason that NEVER fires across a sweep — that is how a dead transition (e.g. the stamina<=-4
 # collapse abort the 2026-06-09 map flagged as "never observed") is surfaced repeatably.
 SEPARATION_REASONS = {'collapse', 'burst_ceiling', 'clean_defence', 'beat_exhaustion', 'terms'}   # 'terms' (RS-25): a duel's terms were met at a beat head
-# [ED-PC-0042 — MEASURED, do not re-litigate] The (e) sweep below used to flag 'collapse' and 'beat_exhaustion' as
+# [ED-PC-0042] The (e) sweep below used to flag 'collapse' and 'beat_exhaustion' as
 # never-fired, and the 2026-07-26 defect register carried them as dead branches on that basis. They are NOT dead:
 # over 5,184 fights spanning 12 weapons x end in {1,2,6} x armour in {none,heavy} they fire 164 and 1,135 times
 # respectively. The flag was a FALSE POSITIVE of that sweep's build coverage — its 4 matchups all use DEFAULT
@@ -43,24 +43,24 @@ SEPARATION_REASONS = {'collapse', 'burst_ceiling', 'clean_defence', 'beat_exhaus
 
 STATES = {
     # ---- outer loop (fight) ----
-    'FightInit':      {'entry': True, 'to': ['EngagementInit', 'Yielded', 'Withdrawal'], 'emits': ['fight_start'], 'site': 'wrapper.fight:282'},
-    'EngagementInit': {'to': ['Approach', 'AwaitTempo'], 'emits': ['turn_start', 'engagement_start'], 'site': 'wrapper.engagement:16-34'},
+    'FightInit':      {'entry': True, 'to': ['EngagementInit', 'Yielded', 'Withdrawal'], 'emits': ['fight_start'], 'site': 'wrapper.fight'},
+    'EngagementInit': {'to': ['Approach', 'AwaitTempo'], 'emits': ['turn_start', 'engagement_start'], 'site': 'wrapper.engagement'},
     # ---- inner loop (engagement), per beat ----
-    'Approach':       {'to': ['Approach', 'AwaitTempo', 'Felled', 'Separation'], 'emits': ['approach', 'stophit', 'wound'], 'site': 'wrapper.engagement:66-85'},
-    'AwaitTempo':     {'to': ['Exchange', 'AwaitTempo', 'Approach', 'Felled', 'Separation'], 'emits': ['disengage', 'wound'], 'site': 'wrapper.engagement:58-88'},   # disengage (+ its pursuit wound) and the terms separation are beat-head events
+    'Approach':       {'to': ['Approach', 'AwaitTempo', 'Felled', 'Separation'], 'emits': ['approach', 'stophit', 'wound'], 'site': 'wrapper.engagement'},
+    'AwaitTempo':     {'to': ['Exchange', 'AwaitTempo', 'Approach', 'Felled', 'Separation'], 'emits': ['disengage', 'wound'], 'site': 'wrapper.engagement'},   # disengage (+ its pursuit wound) and the terms separation are beat-head events
     'Exchange':       {'to': ['Bind', 'Riposte', 'HitLanded', 'Contact', 'AwaitTempo', 'Felled', 'Separation'],
-                       'emits': ['commit', 'read', 'mode', 'roll', 'outcome', 'wound'], 'site': 'wrapper.engagement:86-262'},
-    'Bind':           {'to': ['HitLanded', 'Riposte', 'Contact', 'Felled'], 'emits': ['wound'], 'site': 'wrapper.engagement:233-252'},
-    'Riposte':        {'to': ['AwaitTempo', 'Contact', 'Felled'], 'emits': [], 'site': 'wrapper.engagement:253-261'},
-    'HitLanded':      {'to': ['AwaitTempo', 'Contact', 'Felled'], 'emits': ['wound'], 'site': 'wrapper.engagement:226-232'},
+                       'emits': ['commit', 'read', 'mode', 'roll', 'outcome', 'wound'], 'site': 'wrapper.engagement'},
+    'Bind':           {'to': ['HitLanded', 'Riposte', 'Contact', 'Felled'], 'emits': ['wound'], 'site': 'wrapper.engagement'},
+    'Riposte':        {'to': ['AwaitTempo', 'Contact', 'Felled'], 'emits': [], 'site': 'wrapper.engagement'},
+    'HitLanded':      {'to': ['AwaitTempo', 'Contact', 'Felled'], 'emits': ['wound'], 'site': 'wrapper.engagement'},
     # ---- contact axis (I7b, D8/D9): a real Contact node — BUILT, not activated (M-11). Reachable from Exchange
     # directly (the deep-commit reopen precondition needs neither Bind/Riposte/HitLanded) as well as from all
     # three, since a grab is opportunistic on ANY of the three opening_created precondition sites.
     'Contact':        {'to': ['AwaitTempo', 'Separation'], 'emits': ['contact'], 'site': 'wrapper.engagement (outcome tail, contact-axis block)'},
     # ---- engagement terminals -> back to the outer loop ----
-    'Felled':         {'to': ['Decided'], 'emits': ['engagement_end'], 'site': 'wrapper.engagement:82,212,232,250,259'},
-    'Separation':     {'to': ['InterTurn'], 'emits': ['separation', 'engagement_end'], 'site': 'wrapper.engagement:84,270-273'},
-    'InterTurn':      {'to': ['EngagementInit', 'Unresolved', 'Yielded', 'Withdrawal'], 'emits': [], 'site': 'wrapper.fight:290-292'},
+    'Felled':         {'to': ['Decided'], 'emits': ['engagement_end'], 'site': 'wrapper.engagement'},
+    'Separation':     {'to': ['InterTurn'], 'emits': ['separation', 'engagement_end'], 'site': 'wrapper.engagement'},
+    'InterTurn':      {'to': ['EngagementInit', 'Unresolved', 'Yielded', 'Withdrawal'], 'emits': [], 'site': 'wrapper.fight'},
     # ---- decision ----
     # §11.4 (PC-01): an unrefused Yield, declared at Phase 1 of a turn (so from FightInit or InterTurn), ends the fight
     # straight at FinalResult with no UPSET_FLOOR draw. A REFUSED declaration emits `yield` and falls through unchanged.
@@ -68,10 +68,10 @@ STATES = {
     # REM-31: the decider's 'withdraw', taken at the head of a turn (so from FightInit or InterTurn): the early UNRESOLVED exit,
     # no UPSET_FLOOR draw.
     'Withdrawal':     {'to': ['Unresolved'], 'emits': ['withdraw'], 'site': 'wrapper.fight (per-turn decider, WITHDRAW)'},
-    'Decided':        {'to': ['UpsetCheck'], 'emits': [], 'site': 'wrapper.fight:287-289'},
-    'UpsetCheck':     {'to': ['FinalResult'], 'emits': [], 'site': 'wrapper.fight:298'},
-    'Unresolved':     {'to': ['FinalResult'], 'emits': [], 'site': 'wrapper.fight:293'},
-    'FinalResult':    {'terminal': True, 'to': [], 'emits': ['fight_result'], 'site': 'wrapper.fight:299-300'},
+    'Decided':        {'to': ['UpsetCheck'], 'emits': [], 'site': 'wrapper.fight'},
+    'UpsetCheck':     {'to': ['FinalResult'], 'emits': [], 'site': 'wrapper.fight'},
+    'Unresolved':     {'to': ['FinalResult'], 'emits': [], 'site': 'wrapper.fight'},
+    'FinalResult':    {'terminal': True, 'to': [], 'emits': ['fight_result'], 'site': 'wrapper.fight'},
 }
 TERMINAL_STATES = {s for s, v in STATES.items() if v.get('terminal')}
 ENTRY_STATES = {s for s, v in STATES.items() if v.get('entry')}

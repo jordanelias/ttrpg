@@ -37,7 +37,7 @@ def degree_distribution(pool, net_sigma, ob):
 
 def outcome_distribution(degree, mode, cfg, exposure=0.0):
     """DEPTH-2: given a roll degree and the defender's mode, the {hit, bind, riposte, miss} distribution it leads
-    to — computed from the engine's outcome-mapping rules (wrapper.py:173-198) + cfg. This is the "what does each
+    to — computed from the engine's outcome-mapping rules (`wrapper.engagement`'s outcome tail) + cfg. This is the "what does each
     roll outcome lead to" branch the explorer expands under the roll node (overcommit_exposure≈0 by default)."""
     neut = {'parry': cfg['NEUTRALIZE_PARRY'], 'dodge': cfg['NEUTRALIZE_DODGE'], 'wind': cfg['NEUTRALIZE_WIND']}[mode]
     out = {'hit': 0.0, 'bind': 0.0, 'riposte': 0.0, 'miss': 0.0}
