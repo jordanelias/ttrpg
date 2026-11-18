@@ -173,7 +173,7 @@ def test_wrapper_fight_has_no_default_stream():
     (the engine's own `CFG`). FALSIFIER: a combat call that passes with no stream supplied."""
     import importlib
     import inspect
-    from modules.combat.combatant import Combatant
+    Combatant = importlib.import_module("modules.combat.combatant").Combatant
     wrapper = importlib.import_module("modules.combat.wrapper")
     params = inspect.signature(wrapper.fight).parameters
     assert params["rng"].default is inspect._empty, params["rng"]
@@ -461,10 +461,11 @@ def test_no_engagement_opens_in_a_halfsword_form():
     (`HALFSWORD_BASE` has no entry for it), and so is the first of each fight. FALSIFIER: an `engagement_start` that
     names a `_halfsword` record as either fighter's weapon. The control inside it: the fights reach later engagements (`later >= 1`), the only
     place a carried form could show; the red reading before the reset is the form reaching one."""
+    import importlib
     import random
-    from modules.combat import wrapper
-    from modules.combat.combatant import Combatant
-    from modules.combat.weapons import HALFSWORD_BASE
+    wrapper = importlib.import_module("modules.combat.wrapper")
+    Combatant = importlib.import_module("modules.combat.combatant").Combatant
+    HALFSWORD_BASE = importlib.import_module("modules.combat.weapons").HALFSWORD_BASE
     checked = later = 0
     for seed in (0, 1, 2):
         A, B = Combatant("A", weapon="longsword", armor="heavy"), Combatant("B", weapon="arming", armor="heavy")
