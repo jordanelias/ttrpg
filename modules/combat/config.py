@@ -1,4 +1,4 @@
-"""All tunable coefficients in ONE place (seeds). Class-C — calibrated against the harness, not canon."""
+"""CFG holds the tunable coefficients of the resolution systems (seeds), Class-C — calibrated against the harness, not canon. It is NOT the only home of a constant: `core.py` holds the resolution/damage/armour constants and tables, `weapon_physics.py` the physical anchors (`PERC_*`, `GRIP_*`, `HEFT_REF`, ...), `combatant.py` the wound and stamina model, and `ability_primitives.py` and `traditions.py` the ability and tradition tables; `tools/export_engine_params.py` exports every one of those to its own section."""
 CFG = dict(
   # reach (continuous, derived from weapon vector)
   L0=4.0,   # live reach_base anchor (reach is geometry-derived; head is a primitive, not a categorical reach table).

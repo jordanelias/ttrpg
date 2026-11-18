@@ -88,7 +88,9 @@ def _world():
 def test_the_export_is_the_engines_own_keys_and_default_kit():
     # by name, inside the function: `test_importing_every_engine_module_pulls_in_no_subsystem` fails on a module-scope import and the ratchet counts a written one
     combatant, vocabulary, weapons = (importlib.import_module(f"modules.combat.{n}") for n in ("combatant", "vocabulary", "weapons"))
-    assert combat_kit.WEAPONS == frozenset(weapons.WEAPONS) and len(combat_kit.WEAPONS) > 10
+    startable = frozenset(n for n, r in weapons.WEAPONS.items() if "base" not in r)    # B14.12: a form is a grip, not a kit
+    assert combat_kit.WEAPONS == startable and len(combat_kit.WEAPONS) > 10
+    assert combat_kit.FORMS == {n: r["base"] for n, r in weapons.WEAPONS.items() if "base" in r} and combat_kit.FORMS
     assert combat_kit.ARMOUR_TIERS == vocabulary.ARMOUR_TIERS == {"none", "light", "medium", "heavy"}
     c = combatant.Combatant("x")
     assert combat_kit.DEFAULTS == {"weapon": c.weapon, "armor": c.armor}, "the default kit is the Combatant's own"
