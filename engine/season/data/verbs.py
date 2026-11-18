@@ -29,7 +29,7 @@ from dataclasses import dataclass, field, fields
 from typing import Optional
 
 from . import files
-from ...substrate.descriptors import CAPABILITIES
+from ...substrate.descriptors import ATTRIBUTES, CAPABILITIES
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .matrix import MATRIX, Step
 from .requires import (
@@ -238,6 +238,17 @@ class VerbRow:
     # loader requires it on every contested or graded row (no default by omission), refuses a value that is neither a
     # skill nor `none`, and refuses `none` with no `capability_note:` saying why nobody has a skill there.
     capability: str = ""
+    # B05.25 (B05.24's row shape, `proposals/2026-11-13-verb-governing-attributes.md` §0): ONE KIND PER ROW. (a) `brute` --
+    # `seat`, `own` or `counterparty`, with `brute_note` saying what authorises the act: it never rolls, it happens when its
+    # gate is met and is refused at formation when it is not. (b) `governing` -- one to three `descriptors.ATTRIBUTES` keys,
+    # averaged into his governing score for the verb (`pool.py::governing_score`), with `opposed_attribute` the one key a
+    # person opposite resists it with, on a row contested against a person. (c) neither: the row's `contests:` prize says
+    # `person_inputs: own` and the module it hands the act to reads the person by its own rule. `_check_governing_attributes`
+    # refuses any other shape at import.
+    governing: tuple = ()
+    opposed_attribute: Optional[str] = None
+    brute: Optional[str] = None
+    brute_note: str = ""
 
     def referents_of(self, q) -> tuple:
         """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
@@ -554,6 +565,61 @@ def _record_subkinds_answered(row: "VerbRow") -> frozenset:
     return (_record_kinds_answered(row) or frozenset()) - {row.referent_class}
 
 
+#: The authorisers of a brute verb (B05.24) and the ways a prize's module reads a person (B05.25): rosters, not lists here.
+BRUTE_KINDS = roster("brute_kinds")
+PERSON_INPUTS = roster("person_inputs_kinds")
+
+
+def _check_governing_attributes(rows: dict, prizes: dict, task_difficulty: dict) -> None:
+    """B05.25: EVERY ROW IS ONE OF THREE KINDS, OR THE LOAD REFUSES, NAMING EACH ROW THAT IS NOT. `rows` is `{verb: VerbRow}`,
+    `prizes` is `rosters.yaml: contest_subsystems.prizes`, `task_difficulty` is the roster of verbs the social roll deals a
+    difficulty for. (a) `brute` (a member of `BRUTE_KINDS`, with a `brute_note`; `seat` only where the eligibility carries `remit:`
+    or the referent class is `Office`); (b) `governing` (one to three distinct `descriptors.ATTRIBUTES` keys); (c) the exemption:
+    the row's prize reads `person_inputs: own`. A brute row never rolls, so it also carries no `opposed_attribute`, no `contests:`
+    prize, no `graded_inquiries` route, no `difficulty:` cell and no `task_difficulty` row; a row contested on a `pool` prize takes
+    (b) and names the `opposed_attribute` of the person opposite; a prize row names its `person_inputs`. A row of kind (b) that
+    nothing yet rolls (no prize, no route, no task difficulty) is inert and is not refused: its draw is B07's."""
+    bad = []
+    for name, prize in prizes.items():
+        if (prize or {}).get("person_inputs") not in PERSON_INPUTS:
+            bad.append(f"prize {name!r}: `person_inputs` is {(prize or {}).get('person_inputs')!r}, not one of {sorted(PERSON_INPUTS)}")
+    for verb, row in rows.items():
+        inputs = (prizes.get(row.contests) or {}).get("person_inputs") if row.contests else None
+        exempt = inputs == "own"
+        taken = [k for k, held in (("brute", row.brute), ("governing", row.governing), ("exempt prize", exempt)) if held]
+        if len(taken) != 1:
+            bad.append(f"{verb!r} takes {taken or 'none'} of `brute`, `governing` and an exempt prize; it takes exactly one")
+        if row.brute:
+            if row.brute not in BRUTE_KINDS:
+                bad.append(f"{verb!r}: `brute: {row.brute}` is none of {sorted(BRUTE_KINDS)}")
+            if not row.brute_note:
+                bad.append(f"{verb!r}: `brute: {row.brute}` with no `brute_note:` saying what authorises it")
+            if row.brute == "seat" and not (any(e.startswith("remit:") for e in row.eligibility) or row.referent_class == "Office"):
+                bad.append(f"{verb!r}: `brute: seat` with no `remit:` eligibility and no Office referent")
+            for what, present in (("governing", row.governing), ("opposed_attribute", row.opposed_attribute),
+                                  ("a `contests:` prize", row.contests), ("a `graded_inquiries` route", verb in GRADED_INQUIRIES),
+                                  ("a `difficulty:` cell", getattr(row, "difficulty", None) is not None),
+                                  ("a `task_difficulty` row", verb in task_difficulty)):
+                if present:
+                    bad.append(f"{verb!r} is brute and carries {what}: a brute verb never rolls")
+        if len(row.governing) > 3 or len(set(row.governing)) != len(row.governing) or not set(row.governing) <= set(ATTRIBUTES):
+            bad.append(f"{verb!r}: `governing: {list(row.governing)}` is not one to three distinct keys of the ten attributes")
+        if row.opposed_attribute is not None and row.opposed_attribute not in ATTRIBUTES:
+            bad.append(f"{verb!r}: `opposed_attribute: {row.opposed_attribute}` is no attribute key")
+        if inputs == "pool":
+            if not row.governing:
+                bad.append(f"{verb!r} is contested on a `pool` prize ({row.contests!r}) and names no `governing:`")
+            if row.opposed_attribute is None:
+                bad.append(f"{verb!r} is contested against a person on a `pool` prize ({row.contests!r}) and names no `opposed_attribute:`")
+    if bad:
+        raise Unspecified(
+            "verb_table.yaml: " + "; ".join(bad), "verb_table.yaml: governing / brute / opposed_attribute",
+            needs="each row exactly one of `brute:` (seat, own, counterparty, with a note), `governing:` (one to three of the ten "
+                  "attributes; `opposed_attribute:` on a row contested on a `pool` prize) or an exempt prize (`person_inputs: own`)",
+            law="B05.24 (ED-IN-0379), Jordan 2026-11-13 -- every verb's dice amount is set by the character's attributes, or it never rolls, or it "
+                "is the subsystem's")
+
+
 def _load_verb_table() -> dict:
     if not VERB_TABLE_YAML.exists():
         raise SystemExit(f"verb_table.yaml not found at {VERB_TABLE_YAML}")
@@ -621,7 +687,11 @@ def _load_verb_table() -> dict:
                       referent_named=r.get("referent_named", False),
                       subject_may_be_self=r.get("subject_may_be_self", False),
                       operation=str(r.get("operation") or "").strip(),
-                      capability=str(r.get("capability") or "").strip())
+                      capability=str(r.get("capability") or "").strip(),
+                      governing=tuple(r.get("governing") or ()),
+                      opposed_attribute=str(r["opposed_attribute"]).strip() if r.get("opposed_attribute") else None,
+                      brute=str(r["brute"]).strip() if r.get("brute") else None,
+                      brute_note=str(r.get("brute_note") or "").strip())
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.
@@ -1125,6 +1195,9 @@ def _load_verb_table() -> dict:
             raise SystemExit(
                 f"write_matrix.yaml ({kind}, {fld}) declares `unproduced:` and a verb writes it. "
                 "04 §B.13 #2 -- the declaration is stale; delete it.")
+    # B05.25: EVERY ROW IS ONE OF THREE KINDS (`_check_governing_attributes`). `task_difficulty` is read raw: `TASK_DIFFICULTY`
+    # is closed over `social_roll_verbs()`, which reads this table, so it cannot be built before it.
+    _check_governing_attributes(out, roster_map("contest_subsystems", "prizes"), roster_map("task_difficulty", "values"))
     return out
 
 
@@ -1144,19 +1217,15 @@ def tenure_kinds_without_an_opener() -> list:
 
 VERB_TABLE = _load_verb_table()
 
-# B04.04 (U1-A steps 2-3): WHICH SKILL A VERB TESTS, AND WHAT THAT SKILL IS, DERIVED FROM THE TWO ROWS THAT HOLD THEM -- the
-# `capability:` column on this table and `descriptors.CAPABILITIES` (`descriptor_registry.yaml: capabilities`). The
-# `rosters.yaml: verb_capability` and `vocation_attribute` rosters they replace are deleted; `data/rosters.py` re-exports
-# nothing of them (it loads BEFORE this table and may not import it, which is why the derivation lives here).
-# `none` is spelled on a row that contests with no skill (`lie`, `march`) and is in no map. `VOCATION_OPPOSED_BY` leaves out
-# a skill whose `opposed_by` is absent (`arms`: reads `base`) AND one that spells `none` (`copying`) -- a `none` entry would
-# reach `pool.py::_opposition_of` as an attribute key.
-# [ASSUMPTION; medium; Jordan to correct] `opposed_by: none` currently reads as ABSENT (the opposition falls back to the
-# base attribute) until the obstacle's one form lands (B05, OBS section 2).
+# B04.04 (U1-A steps 2-3): WHICH SKILL A VERB TESTS, DERIVED FROM THE ROW THAT HOLDS IT -- the `capability:` column on this table
+# (`descriptors.CAPABILITIES` defines the skill, `descriptor_registry.yaml: capabilities`). The `rosters.yaml: verb_capability`
+# roster it replaces is deleted; `data/rosters.py` re-exports nothing of it (it loads BEFORE this table and may not import it,
+# which is why the derivation lives here). `none` is spelled on a row that contests with no skill (`lie`, `march`) and is in no map.
+# B05.25: WHICH ATTRIBUTES A VERB READS is the verb row's own `governing:` and `opposed_attribute:` -- the attribute lives on the
+# verb, not the skill (`inquiry` serves `examine`, `surveil` and `research`, which rely on different attributes). The skill row's
+# `base:` and `opposed_by:` columns, and `VOCATION_ATTRIBUTE` and `VOCATION_OPPOSED_BY` read off them, are deleted.
 VERB_CAPABILITY = {row.verb: row.capability for row in VERB_TABLE.values() if row.capability not in ("", "none")}
 VOCATIONS = frozenset(VERB_CAPABILITY.values())
-VOCATION_ATTRIBUTE = {k: CAPABILITIES[k].base for k in VOCATIONS}
-VOCATION_OPPOSED_BY = {k: CAPABILITIES[k].opposed_by for k in VOCATIONS if CAPABILITIES[k].opposed_by not in (None, "none")}
 
 
 def skills_without_a_verb() -> list:

@@ -237,7 +237,7 @@ def _attribute_glosses(reg):
 #: The row grammar of each defined roster: the keys a row may carry, no others. A stray key (a typo, or a column a producer
 #: dropped, as `lapses_by:`) is refused by name, since the leaf reads only the keys the exporter cooks and a key it does not
 #: would sit in the registry and do nothing.
-CAPABILITY_ROW_KEYS = ('kind', 'gloss', 'base', 'opposed_by', 'untrained', 'grows_by', 'scale', 'source')
+CAPABILITY_ROW_KEYS = ('kind', 'gloss', 'untrained', 'grows_by', 'scale', 'source')
 TRAIT_ROW_KEYS = ('gloss', 'seated_by')
 
 
@@ -253,12 +253,11 @@ def _row(where, row, allowed):
     return row
 
 
-def _capability_roster(reg, attribute_keys):
+def _capability_roster(reg):
     """The skills, defined once (B04.02; U1 §2, A-98 (4)). Refused, naming the row: a `kind` that is not
-    `skill` (a leftover `aptitude` or `trait` row, `IS-B2-CHAR-05`), a `base` or `opposed_by` that is none of the ten
-    attribute keys (`opposed_by` may also be `none` or absent; both currently read `base` [ASSUMPTION] until the obstacle's one form lands, B05), a `grows_by` or `untrained`
+    `skill` (a leftover `aptitude` or `trait` row, `IS-B2-CHAR-05`), a `grows_by` or `untrained`
     value outside the block's closed set, an empty `gloss`, and a `scale` that is not `[int, int]` with floor <= ceiling.
-    `attribute_keys` is the live roster, so the ten are named once."""
+    A skill names no attribute (B05.25): the verb row does."""
     block = reg.get('capabilities')
     if not isinstance(block, dict) or not block.get('rows'):
         raise SystemExit('descriptor_registry.yaml: capabilities is missing or has no rows. It is the one '
@@ -278,11 +277,6 @@ def _capability_roster(reg, attribute_keys):
             raise SystemExit(f'{where}: kind {r.get("kind")!r} is not skill. The one kind is skill (A-98 (4)); '
                              f'an aptitude or trait row is not a capability.')
         gloss = _gloss(where, r, 'skill')
-        if r.get('base') not in attribute_keys:
-            raise SystemExit(f'{where}: base {r.get("base")!r} is not one of the ten attribute keys.')
-        opp = r.get('opposed_by')
-        if opp is not None and opp != 'none' and opp not in attribute_keys:
-            raise SystemExit(f'{where}: opposed_by {opp!r} is none of the ten attribute keys or none.')
         if r.get('untrained') not in untrained_set:
             raise SystemExit(f'{where}: untrained {r.get("untrained")!r} is outside {untrained_set}.')
         grows = r.get('grows_by')
@@ -293,8 +287,8 @@ def _capability_roster(reg, attribute_keys):
         if (not isinstance(sc, list) or len(sc) != 2
                 or any(isinstance(v, bool) or not isinstance(v, int) for v in sc) or sc[0] > sc[1]):
             raise SystemExit(f'{where}: scale {sc!r} is not [int, int] with floor <= ceiling.')
-        rows[str(name)] = {'kind': 'skill', 'gloss': gloss, 'base': r['base'],
-                           'opposed_by': opp, 'floor': sc[0], 'ceiling': sc[1],
+        rows[str(name)] = {'kind': 'skill', 'gloss': gloss,
+                           'floor': sc[0], 'ceiling': sc[1],
                            'untrained': r['untrained'], 'grows_by': list(grows), 'source': r.get('source')}
     # `names` is DERIVED from the rows, never authored, so `rosters.yaml: capabilities: {from_descriptor: capabilities}`
     # is served as `pursuit_axes`' is (`data/rosters.py::roster` reads `block['names']`) with no second list to drift.
@@ -348,7 +342,7 @@ def build():
     for domain in ('body', 'mind', 'spirit', 'social'):
         for key in (attrs.get(domain) or []):
             roster.append(key if isinstance(key, str) else key.get('key'))
-    capabilities = _capability_roster(reg, set(roster))
+    capabilities = _capability_roster(reg)
 
     return {
         '_generated': (

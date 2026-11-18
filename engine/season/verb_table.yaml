@@ -56,6 +56,8 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "none"
+    governing:   [attr.social.charisma, attr.social.grace]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "the good accrues to the PETITIONER, and a `carry` Candidate carries the petition (`subject`, a `Record` of kind `petition`) rather than the person who filed it."
     referent_class: Record
     referent_class_note: "v10 REM-25 (B10-05, AM-A-10; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Record` THE PERSON HOLDS -- `queries/world_q.py::records_held_for_holding_rows` stamps the Records on his live `hold` edges whose kind a `Record` row asking `held_by` of `subject` asks `existence` of (`data/verbs.py::HOLDING_RECORD_KINDS`, derived off the cells) onto the question he answers as `Record`, and `decision/options.py::opening_set` then forms on the classed ids alone, so `subject` binds a held Record and never a person, a Site, a Proposition or a rung. The class is SHARED with `comply`, `found` and `build` and a Record the question itself names is stamped too, so this row also forms on a petition or works the question names and he does not hold (refused on `held_by`), and on a held writ (a writ kind, `data/verbs.py::RECORD_REFERENT_KINDS`, stamped by `writs_held`'s addressee test alone); the fold refuses each on `held_by` or its own kind (`tests/test_referent_class_stamps.py`). REVERT: delete this column (and the term in `questions_for`)."
@@ -83,6 +85,9 @@ verbs:
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (`argue` is its own vocation, v10 REM-30)."
     eligibility: ["own"]
     beneficiary: "actor"
+    governing:   [attr.social.charisma, attr.social.attunement, attr.mind.acuity]
+    opposed_attribute: attr.spirit.will
+    governing_note: "B05.25 INTERIM [ASSUMPTION; medium; Jordan to correct at BA1.13]: a hand-off to the social subsystem (R3, R6); B24p.16 writes this row's `proceeds:` cell beside these, B24p.19 deletes `governing:` and `opposed_attribute:`."
     beneficiary_note: "v9 IN-12 step 9 (#453 §9.4: *'beneficiary `actor`'*): THE ARGUER -- he argues for what he holds right; the hearer is the counterparty, not the party served."
     referent_class: Proposition
     referent_class_note: "v10 CP-T05-04 (B10-05, AM-D-05; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Proposition`-CLASSED REFERENT -- the plain referent of the question he answers that is a Proposition (`queries/world_q.py::own_referents_of_class`, REM-21's term, stamps it through `_stamped`; `decision/options.py::opening_set` then forms on the classed ids alone, IN-53 D1's partition), so `subject` binds a Proposition and never a person, a Site, a Record or a rung, while `to` still fans over the persons he knows. The class removes wrong-kind formations only: this row's cell, its eligibility and who may argue to whom are unchanged, and the `Proposition` stamp is NOT widened beyond REM-21's own-referent term and the term T02 CP-T02-05 defines (`tests/test_referent_class_stamps.py`). REVERT: delete this column."
@@ -124,6 +129,9 @@ verbs:
     eligibility: ["remit:dispatch"]
     eligibility_note: "v9 IN-12 step 5 (#453 §9.1): `remit:dispatch` -- the act `state/gate.py::WARRANT_ACT` names, so the fold's eligibility and the gate's `warrant` basis read one grant. J-8 (whether `dispatch` is a remit act at all, `offices.yaml` `meta: remit_unruled`) is Jordan's; this row moves with `WARRANT_ACT` and the ruling. Built on `remit_default` (§A v9)."
     beneficiary: "none"
+    governing:   [attr.body.strength, attr.social.charisma]
+    opposed_attribute: attr.body.strength
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "#453 §9.1: `none` -- custody is taken AGAINST the prisoner and FOR the seat that issued the warrant (K-17/K-52), an Office no Candidate carries; `seize`'s and `revoke`'s shape."
     requires:    "the subject is a person"
     requires_typed:
@@ -161,6 +169,9 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
+    brute:       "own"
+    brute_note:  "his own pledge: the row writes only his own `Tenure.since`"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     referent_class: Proposition
     referent_class_note: "v10 REM-23 (B10-05, AM-A-08; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Proposition`-CLASSED REFERENT -- the plain referent of the question he answers that is a Proposition (`queries/world_q.py::own_referents_of_class`, REM-21's term, stamps it through `_stamped`; `decision/options.py::opening_set` then forms on the classed ids alone, IN-53 D1's partition), so `subject` binds a Proposition and never a person, a Site, a Record or a rung. The class removes wrong-kind formations only: this row's cell, its eligibility and who may commit are unchanged, and it does NOT answer IN-57's own-act screen (ED-IN-0296 (3)); B10-09's CR-10 does that. No `commit` is formed on a goal Proposition (`data/goals.py::goal`): a person's own goals are not among the referents a question carries. v11 CR-28: `queries/world_q.py::propositions_heard` stamps the Propositions a person's own ledger names through a claim not of his own act, so `commit` forms on a cause another uttered; `rosters.yaml: held_edge_declines` declines it on one he already holds (`tests/test_cr28_propositions_heard.py`, through the real fold). REVERT: delete this column."
     requires:    "the Proposition exists (immutable, §14)"
@@ -179,6 +190,9 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "none"
+    brute:       "own"
+    brute_note:  "his decision on a writ he holds (`requires`); what compliance performs is the separate act the writ names (row `writes_note`), which rolls on its own row"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "the obliger is who compliance is FOR, and no Candidate carries him: the writ's issuer is its maker, not an operand of the act that answers it."
     referent_class: Record
     referent_named: true
@@ -203,6 +217,8 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
+    governing:   [attr.social.grace, attr.mind.focus]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "v9 IN-12 step 10 (#453 §9.3: *'beneficiary `actor`'*): THE CONCEALER -- the cover is minted into his own hand and hides his own name."
     requires:    "—"
     requires_note: "#453 §9.3: *'requires: — (no precondition, so an empty `emits_on_refusal` is lawful)'*. Untyped, `create_record`'s shape: a computed `conceal` forms on its question's referents and carries `subject`, which the effect does not read (the cover names the actor, not the referent). ⚠ ONE PERSON-SIDE DECLINE, NOT A PRECONDITION: a person holding a cover that names him forms no second one (`rosters.yaml: held_document_declines`, read in `decision/options.py::opening_set`), #453's *'a person-side decline while the actor holds a live cover'*; a hand-built act is not declined by the fold."
@@ -227,6 +243,9 @@ verbs:
     counterparty_may_be_self: true
     counterparty_may_be_self_note: "IN-53 (H-207, DECISION 2026-10-13 D2) [ASSUMPTION; medium; Jordan to correct]. THE CONFERRER MAY CONFER ON HIMSELF: the lord who assumes a vacant seat (the cast already has one person holding several). `decision/options.py::operand_bags` ranges `to` over the persons he knows PLUS himself -- he knows himself from his own state, so `known_persons` keeps its three sources (AX-2, ED-IN-0282) -- and both counterparty sites (`opening_set`, `loop/resolve.py::_admits`) waive the self-exclusion for this row alone (`VerbRow.self_counterparty_refused`). ED-IN-0210 ruling 1 (*verbs are not fiats*) is not crossed: a self-conferral writes `Tenure(actor, office)`, not the `Tenure(X,X)` self-loop; it can fail on the world's terms (`may_fill` through `Act.via`, 1-per-object) and be undone by `revoke`; the write gate opens a seat-`hold` under `conferral` even for the actor's own (`state/gate.py::tenure_write_basis`). REVERT: delete this column."
     beneficiary: "subject"
+    brute:       "seat"
+    brute_note:  "the conferral basis and 1-per-object (`requires`); Grace's pull on who is chosen (AR-35) weighs the choice (AR-04), not a roll"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     requires:    "the office's conferral basis, the conferee is a living person, and 1-per-object: no live hold on the object, or the holder-Proposition has zero live commit (§54 it. 20)"
     writes:      ["Tenure.until", "Tenure.since", "Tenure.term"]
     writes_note: "IN-10 (b) (#453 §7.2 `:1382`, §9.6 `:2071`: 'the edits are `_eff_confer` and the row's `writes:`'): `Tenure.term` ADDED, on `oblige`'s precedent (plan position `17b`) -- `_eff_confer` opens the seat-hold WITH the term the act declares (`loop/effects_governance.py::_declared_term`, the payload's `term`, a length in seasons; `Term(tick + n, act)`), so undeclared that write would ride under `Tenure.since`'s gate. Check-only, like the second pair. A computed `confer` declares none and opens an untermed hold exactly as before; a termed one is REGENCY or a TERM-LIMITED SEAT, matured at MATTER (`loop/matter.py`'s term branch) under `T-n`, which leaves the seat vacant. The conferral basis admits the opened edge whole (`state/gate.py`). LIMIT carried from #453: the effect still closes EVERY live hold on the seat, so a termed regent displaces the principal; delegation without a hold is IN-48's. [ASSUMPTION; medium; Jordan to correct -- the term's source: an act-declared payload length, `create_record`'s `stages` precedent, since no operand of the closed roster and no live Record kind carries one. REVERT: drop this pair and `_declared_term`.]"
@@ -239,6 +258,9 @@ verbs:
     stratum:     "binding_decision"
     eligibility: ["remit:convene"]
     beneficiary: "none"
+    brute:       "seat"
+    brute_note:  "`remit:convene`"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     referent_class: Rung
     referent_class_note: "v11 CR-56 (reasons-to-convene RL1, [ASSUMPTION; medium; Jordan to correct; revert: drop the `matters_awaiting` term in `questions_for` and the re-slot loop in `loop/calendar.py`]): THE TIER WHERE A MATTER WAITS JOINS THE VENUES. `queries/world_q.py::matters_awaiting` stamps, as `Rung` beside `places_named`, for each undated person-matter on the docket the lowest rung among the convener's own seats granting this row's remit act that contains the matter's place; a sitting convened there fires a slot `world_q.slot_for` reaches from the matter, and CALENDAR's re-slot step fills the waiting matter into it (and into any open slot that reaches it). RL2 (this row stops forming on `places_named`, as a class of its own) was NOT taken, its stated revert: the score reads the verb, never the matter (reasons-to-convene N6). RL5, a matter-sensitive score term, is NOT BUILT: it would be a fourth `score_terms` summand, which amends `ARCHITECTURE_V2.md` §F2 (the resolution design's I6, RJ-layer1), a Layer-1 question. v10 REM-28 (B10-06, AM-A-14, [ASSUMPTION; medium; Jordan to correct]): THE VENUE. FORMED ONLY ON A `Rung`-CLASSED REFERENT -- the Rungs the standing occasions already stamp onto the question he answers: `queries/world_q.py::places_named` (every Rung his own ledger names that the ladder would seat him in and that he does not live under) and `larders_in_purview` (a stocked Rung in his seat's purview) -- and `subject` binds it through the unchanged referent rule (`decision/options.py::_derive_operand`). `loop/predicates.py::_req_convene` (a Rung of rank above `person`, or no subject) and `loop/effects_governance.py::_eff_convene` (which reads `subject` as the venue) are unchanged. THE CLASS REMOVES WRONG-KIND FORMATIONS. THE LIMIT, STATED: THE RUNG STAMP IS PLACES-TO-SETTLE, NOT VENUES. `Rung` is `occasion_only`, so the question's own Rung referent and the place he lives under are NOT carried and every place he has been told of IS, so the row also forms on hearths and settlements known by hearsay (`_req_convene` asks no presence of a convener: 'convene could happen at any scale except individual/person'); each convened date carries the seat that convened it (SC-01's holder step), so CALENDAR forms a docket slot (CP-T05-02, B10-13). THE DERIVED WIDENING, NAMED: classing this row adds its `remit:convene` to `RUNG_REMIT_ACTS` (`{issue, dispatch}` to `{issue, dispatch, convene}`), so `larders_in_purview` is asked of convene-holding seats too; no seat grants `convene` without `issue` or `dispatch`, so no offer moves. REVERT: delete this column; `RUNG_REMIT_ACTS` narrows back to `{issue, dispatch}`."
     requires:    "rank(subject.kind) > rank(person) -- an ordinal floor above the person tier, or subject is NONE (§6.2)"
@@ -253,6 +275,9 @@ verbs:
     eligibility: ["remit:issue"]
     eligibility_note: "v9 IN-12 step 7 (#453 §9.2, the `covenant` row): `remit:issue` THROUGH A SEAT ONLY -- an `own` alternative would let anyone mint a treaty (#453 K-14). `issue`'s act, because the instrument IS a dispensation (K-54): a covenant is the seat's writ addressed ACROSS purview rather than down it, so the issuing grant licenses it and no new remit act is coined (`rosters.yaml: remit_acts` is closed). [ASSUMPTION; medium; Jordan to correct; revert: a `remit:` act of its own, which the closed roster would have to admit.]"
     beneficiary: "to"
+    brute:       "seat"
+    brute_note:  "`remit:issue`; acceptance is the counterparty's own act"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "THE COUNTERPARTY, who the instrument is FOR -- the `to` operand the typed cell binds (`give`'s and `petition`'s reading of a document handed to its addressee). `subject` is the Proposition, which acts for nobody."
     requires:    "the counterparty is a person, and the terms are an uttered Proposition"
     requires_typed:
@@ -279,6 +304,9 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
+    brute:       "own"
+    brute_note:  "his own paper (18_DET `bookkeeping`); a false one is `forge`"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     requires:    "—"
     writes:      ["Record.exists", "Record.stages"]
     emits:       ["record.created"]
@@ -291,6 +319,9 @@ verbs:
     eligibility: ["own", "hold:<record>", "presence"]
     eligibility_note: "v9 IN-26 (BOUND-PAPER; `A-13`'s held shape, H-75's re-scoped half): `own` FIRST (`give`'s order; `transfer` lists `remit:issue` before it). §E3's two alternatives stay and still decline (both placeholders, `H-75`); what they meant -- the actor holds the Record -- is the typed cell's `held_by` conjunct below, which binds the act's `subject`, so the placeholder is answered by the cell and not by guessing which object a `hold:<record>` named."
     beneficiary: "actor"
+    brute:       "own"
+    brute_note:  "he holds it (`requires`); what it leaves is a witness question"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     requires:    "the subject is a Record, and the actor holds it"
     requires_typed:
       all:
@@ -316,6 +347,9 @@ verbs:
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07)."
     eligibility: ["remit:determine"]
     beneficiary: "none"
+    governing:   [attr.mind.acuity, attr.mind.focus]
+    opposed_attribute: attr.spirit.will
+    governing_note: "B05.25 INTERIM [ASSUMPTION; medium; Jordan to correct at BA1.13]: a hand-off to the social subsystem (R3, R6); B24p.16 writes this row's `proceeds:` cell beside these, B24p.19 deletes `governing:` and `opposed_attribute:`, B24.08 on `determine`."
     beneficiary_note: "who a determination FAVOURS is the `judging_set`, which `requires` itself records as *D11, absent*. The determination binds the party it names (`counterparty:`, below), but a finding is taken AGAINST the party and FOR no carrier the Candidate holds (the bench's seat), `revoke`'s and `dispatch`'s shape, so `none` stands."
     requires:    "a fired Date with a DocketItem; judging_set — D11, absent"
     requires_note: "EVALUATED AS THE TYPED CELL BELOW (plan position `19`, U7-remit), AND THE READING OF EACH HALF IS STATED. *A fired Date with a DocketItem* is read as `existence` of a DocketItem naming the matter -- the proceedings design's own corrected cell (`proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` §B.2: `{form: existence, of: subject, kind: DocketItem}`), which drops the date: the cell reads only that the matter is docketed, dated or not (v9 SC-01: `_eff_convene` gives its Date the convener's seat as holder, CALENDAR forms the slot and `open_case` fills it via `world_q.slot_for`), and the bench is ASKED about a sitting's matters by `world_q.questions_for` (`sittings_before`). *judging_set* is two conjuncts: the seat exercised SITS ON THE BENCH for the party (`basis: bench`, the write gate's own `may_determine` -- `judging_set`'s containment test, `H-32`'s default, asked of the party's home), and the bench MEETS QUORUM (`bench.size >= quorum`, the fixture `bench_quorum`, `H-161`). `D11` is `H-32`, so the grade is `assumption`. The subject must be a PERSON (`party`): the disposal is an edge he owns."
@@ -380,6 +414,9 @@ verbs:
     stratum:     "binding_decision"
     eligibility: ["remit:dispatch"]
     beneficiary: "none"
+    brute:       "seat"
+    brute_note:  "`remit:dispatch`; *\"their own choose decides\"* (row `writes_note`)"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "an order is given TO the named person and taken FOR the issuing remit; the remit is an Office and no Candidate carries it."
     referent_class: Person
     referent_class_note: "v10 REM-28 (B10-06, AM-A-14, [ASSUMPTION; medium; Jordan to correct]): THE NAMED PERSON. FORMED ONLY ON A `Person`-CLASSED REFERENT -- the plain referent of the question he answers that is a person or a cohort (`queries/world_q.py::own_referents_of_class`, REM-21's term, stamps it through `_stamped`, as `open_case` and `petition` use it: `Person` is not `occasion_only`, and a person's own `person`-kind rung is a `Person` there, `World.class_of`) -- and `decision/options.py::opening_set` then forms on the classed ids alone (IN-53 D1's partition), `subject` binding it through the unchanged referent rule (`_derive_operand`), so `subject` never binds a rung, a Record or a Site. `loop/predicates.py::_req_dispatch` ('the named person exists': `subject` in `w.persons`) is the only reader of the referent -- the row writes nothing and has no effect function, so what is ordered rides `order.given`. THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: this row's eligibility (`remit:dispatch`), its cell and whom a seat may order are unchanged. THE LIMIT, STATED: `dispatch` is an UNTYPED PREDICATE row, so a refusal records no `observed` read -- REM-11 files its refusals under 'other', and REM-22's test shape for the typed rows (a refusal on an `exists:<kind>` read) cannot observe it; the kind failure is read off the predicate's own refusal clause (REM-14's `_refuse` trace) and `tests/test_referent_class_stamps.py` holds the untyped row to that. The class is shared with `open_case` and `petition` and moves no derived set: `DECLARED_CLASSES` already holds `Person`, and `RUNG_REMIT_ACTS` reads `Rung` rows alone. A computed `dispatch` forms only on an id `World.class_of` holds, so `person.demanded` (SE-01's census individuation trigger, `loop/census.py`) is reachable only by a hand-built act. REVERT: delete this column."
@@ -397,6 +434,9 @@ verbs:
     stratum:     "binding_decision"
     eligibility: ["remit:confer"]
     beneficiary: "none"
+    brute:       "seat"
+    brute_note:  "the conferral basis and a rung (`requires`)"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     referent_class: Rung
     referent_class_note: "v11 CR-25 (CR-11's design; [ASSUMPTION; medium; Jordan to correct; revert: drop the column and `holdings_to_found`]): THE HOLDING A FOUNDING STANDS ON. FORMED ONLY ON A `Rung`-CLASSED REFERENT -- chiefly a holding his seat may found over (`queries/world_q.py::holdings_to_found`, stamped after `larders_in_purview`), so `subject` binds the rung `office_founded_by` derives the office from, and the row no longer forms on whatever plain referent his question names (the base's computed `establish` acts, every one refused at clause 1). The class is shared: `establish` also forms on the places named and the larders in purview, and the fold disposes. ⚠ THE DERIVED WIDENING (`data/verbs.py::RUNG_REMIT_ACTS`, the union over the `Rung` rows) gains `confer`, so `larders_in_purview` is asked of `confer` holders too."
     requires:    "the establishing office's conferral basis, and a rung to establish it at"
@@ -411,6 +451,9 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
+    brute:       "own"
+    brute_note:  "his decision; *\"disobedience others see or miss\"* is the witnesses' noticing (row `writes_note`)"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     requires:    "as comply"
     referent_class: Record
     referent_named: true
@@ -436,6 +479,9 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
+    brute:       "counterparty"
+    brute_note:  "both stores cover the terms or it is refused; each side's consent is his own choice"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "both sides benefit and both are RUNGS (`from` and `to`), and a beneficiary that is not a person is the `none` member (`rosters.yaml: beneficiary_kinds`) -- `restore`'s and `found`'s reason."
     requires:    "both sides' stores cover their side of the exchange"
     requires_typed:
@@ -462,6 +508,8 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "actor"
+    governing:   [attr.body.agility, attr.mind.focus]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "the forgery is minted into the FORGER's hand (`_mint_document`'s maker's `hold`), `survey`'s carrier: he holds it to plant it (`give`)."
     requires:    "the forger has heard of what he forges a sheet on, and it coheres under one faction"
     requires_typed:
@@ -490,6 +538,9 @@ verbs:
     capability_note: "undeclared at authoring; every person rolls the untrained default. No `deception` skill: a lie is an `argue` whose item is the liar's own false word (the social contest's V2, B24p.16; ED-IN-0378)."
     eligibility: ["own"]
     beneficiary: "subject"
+    governing:   [attr.social.attunement, attr.mind.acuity, attr.social.grace]
+    opposed_attribute: attr.social.attunement
+    governing_note: "B05.25 INTERIM [ASSUMPTION; medium; Jordan to correct at BA1.13]: a hand-off to the social subsystem (R3, R6); B24p.16 writes this row's `proceeds:` cell beside these, B24p.19 deletes `governing:` and `opposed_attribute:`."
     requires:    "the liar holds a claim on the subject, and the person told is with the liar"
     requires_typed:
       all:
@@ -529,6 +580,9 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "subject"
+    brute:       "own"
+    brute_note:  "his own stance rows (row `writes_note`)"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "v9 IN-12 step 13 (#453 §9.4: *'beneficiary `subject`'*): THE ONE FORGIVEN -- the referent the forgiver stops holding his rows against. Structural only: a faction's Proposition or a person, whoever the rows named."
     requires:    "—"
     requires_note: "#453 §9.4: *'requires: — (no precondition)'*. Untyped: a computed `forgive` forms on its question's referents and carries `subject`. ⚠ ONE PERSON-SIDE DECLINE, NOT A PRECONDITION (#453: *'that a negative row naming `subject` exists is a read of the actor's own state (`p.stance`), so it is a person-side decline in `opening_set`, not a stem'*): a person forms `forgive` only on a referent he holds a row against (`rosters.yaml: own_stance_declines`, read in `decision/options.py::opening_set` through `queries/person_q.py::held_against`). A hand-built act is not declined by the formation; the effect refuses one with nothing to end (`forgive.refused`)."
@@ -560,6 +614,8 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
+    governing:   [attr.mind.acuity, attr.social.charisma]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "a founded place is a Rung, and a Rung is no carrier the Candidate holds; who benefits from a new hearth is whoever comes to live or hold there, a WORLD read, which is `restore`'s and `work`'s shape. ⚠ SINCE v9 IN-28 the founder's `hold` on the new Rung IS minted (`H-166` limit 2, `loop/effects_founding.py::_eff_found`), and the column stays `none`: the holding is a Tenure the effect opens, not a Candidate carrier."
     referent_class: Record
     referent_class_note: "v10 REM-25 (B10-05, AM-A-10; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Record` THE PERSON HOLDS, as `carry` (`queries/world_q.py::records_held_for_holding_rows` stamps it, `HOLDING_RECORD_KINDS` holding `works` for this row; `decision/options.py::opening_set` forms on the classed ids alone). A DECLARED SIDEWAYS MOVE, NOT PROGRESS: no computed act declares a works (ED-IN-0297), so the always-refused formation on every referent becomes a formation on a held Record that is never a works in the realm. THE CLASS IS SHARED, so one class cannot tell a works from a petition: a held petition is a Record this row forms on, and the fold refuses it on `exists:works=0` (so does a Record the question itself names, since REM-2C released `Record` to the own-referent term). A maker holding a works executes it through the real fold, in a hand-built world only (`tests/test_referent_class_stamps.py`). REVERT: delete this column."
@@ -585,6 +641,8 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
+    governing:   [attr.mind.acuity, attr.mind.focus]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "a built fabric is a Site, and a Site is no carrier the Candidate holds -- `found`'s reason, and `restore`'s and `work`'s: who benefits from a new dwelling or harbour is a WORLD read."
     referent_class: Record
     referent_class_note: "v10 REM-25 (B10-05, AM-A-10; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Record` THE PERSON HOLDS, as `found` and `carry` (`queries/world_q.py::records_held_for_holding_rows`, `HOLDING_RECORD_KINDS`). A DECLARED SIDEWAYS MOVE, NOT PROGRESS: no computed act declares a works (ED-IN-0297), so always-refused becomes (nearly) never-attempted. THE CLASS IS SHARED, so one class cannot tell a works from a petition: a held petition is a Record this row forms on, and the fold refuses it on `exists:works=0` (`build.refused`). A maker holding a works executes it through the real fold, in a hand-built world only (`tests/test_referent_class_stamps.py`). REVERT: delete this column."
@@ -610,6 +668,9 @@ verbs:
     stratum:     "social"
     eligibility: ["own", "hold:<record>"]
     beneficiary: "to"
+    brute:       "own"
+    brute_note:  "he holds it and the receiver is present (`requires`)"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "THE RECEIVER, who a gift is for -- the `to` operand, which this row's typed cell BINDS (the loader refuses `beneficiary: to` on a cell that binds none). `subject` is the Record."
     requires:    "the actor holds the subject, and the receiver is present where the actor is"
     requires_typed:
@@ -637,6 +698,9 @@ verbs:
     stratum:     "binding_decision"
     eligibility: ["remit:issue"]
     beneficiary: "none"
+    brute:       "seat"
+    brute_note:  "`remit:issue`; execution is each executor's own act"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     requires:    "scope enumerates executors, not places (§37.1)"
     requires_note: "EVALUABLE (plan position `19`), AND SO `issue` IS RESOLVABLE. r2 `02` §A.6's proposal -- `commit`'s `existence of subject kind Proposition` -- is NOT taken: the prose says nothing about the terms, and a computed act binds `subject` and `to` to the question's ONE referent (`H-94`), so the Proposition conjunct and the executor conjunct could never hold at once and every computed `issue` would refuse -- `confer`'s 100% at `★`, for a clause the row does not state. IN-10 separated the two (`requires_typed_note`: `to` fans over known persons), and the Proposition conjunct is STILL not taken: a writ's `terms` may name a person or a Record (a warrant), not only a Proposition (#453 §10.1)."
     requires_typed:
@@ -858,6 +922,9 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
+    brute:       "counterparty"
+    brute_note:  "a declaration (a `challenge` Record); the answer is the other man's `accept`"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "`fight`'s column and reason (the retired pursuit-cells draft's §3.4: *`challenge`: `actor`*): the challenger stands to gain by the contest he calls for, and the challenged is the one put to the question."
     referent_class: Disputant
     referent_class_note: "B11 lane A (the duel chain's reach; REM-28's precedent, which classed `convene`): FORMED ONLY ON A `Disputant`-CLASSED REFERENT -- a man beside the challenger whom the challenger holds a dispute with (`queries/world_q.py::disputes_held`, over `person_q.holds_dispute`, the one owner the cell's `dispute` stem reads; stamped by `questions_for`). The grievance is the occasion, `Detainee`'s and `Enemy`'s shape: the question a man answers almost never names the man he holds the wrong against. The cell's three conjuncts stay for a hand-built act. [ASSUMPTION; medium; Jordan to correct; revert: `referent_class: Person` and `challenge: [dispute]` in `violence_contexts`.]"
@@ -957,6 +1024,8 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["remit:issue", "presence:<rung>"]
     beneficiary: "actor"
+    governing:   [attr.social.charisma]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "THE MATTER GOES into the SEAT'S treasury (the rung of `Act.via`), not the actor's hearth. `revoke`/`dispatch` read *taken for the remit* as `none`; this row declares `actor`, and the column's semantics are `CAT-2`'s."
     referent_class: Rung
     referent_class_note: "v9 IN-49 `requisition` (H-163 limit 3, [ASSUMPTION; medium; Jordan to correct]): THE REQUISITIONED RUNG. FORMED ONLY ON A `Rung`-CLASSED REFERENT -- chiefly a larder his seat may requisition, which `queries/world_q.py::larders_in_purview` stamps onto the question he answers (a rung his own ledger names, holding at least the fixtures' requisition of their matter, inside the purview of a seat of his granting a `Rung` row's remit act (`data/verbs.py::RUNG_REMIT_ACTS`, widened at v10 REM-27/REM-28, so a `dispatch`- or `convene`-only seat is offered larders `requisition` cannot take: its `authority` conjunct asks the exercised `issue` seat), and not that seat's own rung, the treasury `_eff_requisition` pays into, where a requisition moves nothing) -- and `subject` binds it through the unchanged referent rule (`decision/options.py::_derive_operand`; a claim the question is about re-aims neither the subject nor `kind`/`amount`). No ninth operand, no Record kind: the closed roster stands. ⚠ THE CLASS IS SHARED WITH `migrate`: a place `places_named` stamps forms a requisition too (refused `requisition.unauthorized` where no seat reaches it, after which the levier holds the read and stops forming it, `epistemic.belief_contradicts`), and a larder forms a `migrate` (refused where he already lives under it) -- H-163 records the measured cost. REVERT: delete this column (`RUNG_REMIT_ACTS` loses `issue`; the set is the union over the `Rung` rows, so `march`'s and `convene`'s acts still stand and `larders_in_purview` still stamps larders to a seat granting either -- to stamp nothing, drop the term in `questions_for`)."
@@ -1034,6 +1103,8 @@ verbs:
     stratum:     "binding_decision"
     eligibility: ["remit:dispatch"]
     beneficiary: "actor"
+    governing:   [attr.mind.acuity, attr.social.charisma]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "`march`'s column: the marshal's own line is the one he orders, so the order is for his gain; the Record is minted into his hand and is no operand's beneficiary."
     referent_class: Rung
     referent_class_note: "v11 CP-T04-02: FORMED ONLY ON A `Rung`-CLASSED REFERENT, `march`'s class and so `march`'s stamps (`queries/world_q.py::places_named`, `larders_in_purview`, `matters_awaiting`): `subject` binds the place through the unchanged referent rule. The class is shared, so a seat granting `dispatch` is offered the same Rungs for both verbs and the fold disposes (`marshal.unauthorized`: the exercised seat's purview must reach the place). [ASSUMPTION; medium; Jordan to correct; revert: drop this row, `standing_order`, `choice_sourced` and the field read, and the field is fought as it was.]"
@@ -1067,6 +1138,9 @@ verbs:
     stratum:     "binding_decision"
     eligibility: ["remit:dispatch"]
     beneficiary: "none"
+    brute:       "seat"
+    brute_note:  "the seat's purview (`requires`)"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "`seize`'s column, for the same reason mirrored: the place passes to the person who pressed the siege, who is no operand of this act (nothing in the row binds him; he is read off the threat), and the yielder gains no more than the end of the war's cost, which no operand carries."
     referent_class: Rung
     referent_class_note: "v11 CP-T04-07: FORMED ONLY ON A `Rung`-CLASSED REFERENT, `march`'s and `marshal`'s class, so a seat granting `dispatch` is offered the same Rungs for all three and the fold disposes (`surrender.unauthorized`: the exercised seat's purview must reach the place; `surrender.refused`: the effect declines a place that is no settlement, is not held, is under no siege this season, or is held by a faction other than the seat's). [ASSUMPTION; medium; Jordan to correct; revert: drop this row, `cession` and `siege_pressed_by`, and a town changes hands only by blood or by `give`.]"
@@ -1100,6 +1174,8 @@ verbs:
     stratum:     "movement"
     eligibility: ["own"]
     beneficiary: "actor"
+    governing:   [attr.body.endurance]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "`move`'s column and reason: the migrant goes where he chose to live. No operand beneficiary -- the destination is a Rung, which no Candidate carrier holds."
     referent_class: Rung
     referent_class_note: "v9 IN-45 `migrate` (H-168 limit 1, [ASSUMPTION; medium; Jordan to correct]): THE DESTINATION CHANNEL. FORMED ONLY ON A PLACE THE PERSON HAS BEEN TOLD OF AND DOES NOT ALREADY LIVE UNDER -- `queries/world_q.py::places_named` stamps those Rungs onto the question he answers as `Rung` (IN-53 D1's partition, `_stamped`), and `to` binds that referent through the unchanged referent rule (`decision/options.py::_derive_operand`; the document a question is about does not re-aim a classed referent). No ninth operand, no Record kind: the closed roster stands. ATTACKED FIRST AND REJECTED: the held-Record channel (`rosters.yaml: record_sourced_operands`) -- `to` is already mapped on `dispensation`, `petition` and `faction_sheet` to an addressee, and the one kind with a free place key, `works: {to: at}`, is declared by no computed act (H-165 limit 2, ED-IN-0297) and would re-aim every `to`-binding row on a question about a works; the shortfall channel answers `kind`/`amount` and leaves `to` the drained rung, a dearth and not a destination. REVERT: delete this column (and `places_named`'s splice)."
@@ -1135,6 +1211,8 @@ verbs:
     stratum:     "movement"
     eligibility: ["own"]
     beneficiary: "actor"
+    governing:   [attr.body.endurance]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     requires:    "a contain path exists, and the actor may enter the destination"
     requires_typed:
       all:
@@ -1154,6 +1232,9 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
+    brute:       "seat"
+    brute_note:  "the seat's `binds` admits the joiner (`requires`; referent an Office)"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     requires:    "the subject is a seat whose `binds` admits the joiner, the actor does not hold it, and the actor has no live `oblige` to it"
     requires_note: "PLAN POSITION `17a` (r2 item 9, `03_SEATS_AND_CONTENT.md` §A.9, `05` §A.1.5 RULED (b)). §E3's cell was `—`, and with no effect the verb was never folded; the moment it OPENS a Tenure it must name a real seat, or it is the fiat `ED-IN-0211` reverted (`einhir_texts`, a bare string). Evaluated by `loop/predicates.py::_req_oblige`, which states the four clauses and why each is there. ⚠ `03` §A.9 REFUSED reading `binds`; `05` RULED (b) reversed that on `ARCH F.17`'s own resolution, and the later ruling is the one built."
     requires_typed: none
@@ -1176,6 +1257,9 @@ verbs:
     stratum:     "social"
     eligibility: ["remit:determine"]
     beneficiary: "none"
+    brute:       "seat"
+    brute_note:  "`remit:determine`; the act declares the stages (`requires`); how the matter is judged is `determine`'s"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "whom a case serves is the party it is opened on behalf of; the act writes a `Record` and carries no such person."
     referent_class: Person
     referent_class_note: "v10 CP-T05-04 (B10-05, AM-D-05; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Person`-CLASSED REFERENT -- the plain referent of the question he answers that is a person (`queries/world_q.py::own_referents_of_class`, REM-21's term, stamps it through `_stamped`; `decision/options.py::opening_set` then forms on the classed ids alone, IN-53 D1's partition), so `subject`, the matter, binds a person and never a rung, a Site, a Record or a Proposition (a person's own `person`-kind rung shares his id and is a `Person`). ⚠ THE FIRST CLASS THAT REMOVES FORMATIONS THE FOLD ADMITS, not only refusals: this row is a remit verb whose cell asks the exercised seat's purview over the matter's PLACE and no kind (`basis: purview`), so a case opened on a settlement rung or a Site the seat reaches is admitted and executes; but such a matter can never be taken off the docket (`determine`'s `party` conjunct needs a person, so the rung stays docketed for ever and `docketed` declines a second case on it), which is why the home removes the formation (D:#75). A hand-built act may still docket a Rung (a later `Record` disposal, L11 M5, needs it); this row's cell, its eligibility and `docketed`'s decline are unchanged. HR-9's control (3), that a class removes only refusals, does NOT hold for this row: `tests/test_referent_class_stamps.py` pins the removed Candidates the fold admits (the Site and the rung) and the one it refuses (a Proposition has no place, `purview` False). THE DOCKET QUESTION ALSO REACHES THIS ROW: its referents are matters still on the docket and `Person` is a class this row declares, so a seat-holder delivered that question forms `open_case` on a docketed matter and the fold refuses it (`case.refused`, `_eff_open_case`'s `docketed` decline), pinned in a hand-built world by `tests/test_referent_class_stamps.py`. REVERT: delete this column."
@@ -1205,6 +1289,9 @@ verbs:
     stratum:     "binding_decision"
     eligibility: ["remit:determine"]
     beneficiary: "subject"
+    brute:       "seat"
+    brute_note:  "the bench seat over him (`requires`)"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "#453 §9.1: *'beneficiary `subject`'* -- the man released."
     requires:    "the subject is a person over whom the exercised seat sits as a bench"
     requires_typed:
@@ -1231,6 +1318,9 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
+    brute:       "counterparty"
+    brute_note:  "filing; the addressee's answer is his own act (18_DET `bookkeeping`); the persuasion is where the matter is heard (`speak`)"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     referent_class: Person
     referent_class_note: "v10 REM-24 (B10-05, AM-A-09; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Person`-CLASSED REFERENT -- the plain referent of the question he answers that is a person (`queries/world_q.py::own_referents_of_class`, REM-21's term, stamps it through `_stamped`; `decision/options.py::opening_set` then forms on the classed ids alone, IN-53 D1's partition), so `to` -- the counterparty, the operand this row's cell binds, in a cell that binds no `subject` -- and `subject` bind a person and never a rung, a Site, a Record or a Proposition. THE CLASS REMOVES WRONG-KIND FORMATIONS AND ONE ROUTE BESIDE THEM: this row's cell, its eligibility, the person-side self-address decline (`counterparty:`) and who may petition whom are unchanged; but a classed row forms on its classed referent alone and skips the reader of the document the question is about (`decision/options.py::_derive_operand`, `on_referent`), so a question about a held sheet or petition Record -- whose document names the addressee (`rosters.yaml: record_sourced_operands`, `faction_sheet: to: head`) -- no longer forms a `petition`, though that `to` is a person; that route is reachable in a hand-built world only (`tests/test_information_cluster.py`). A PERSON'S OWN `person`-KIND RUNG IS A PERSON: it shares the person's id and `World.class_of` asks `persons` before `rungs`, so a referent that is such an id is stamped `Person` and kept, and `places_named` never stamps it as a place (`class_of == \"Rung\"`), so `migrate` and `requisition` are untouched. A person who answers a question naming a person executes it through the real fold (`tests/test_referent_class_stamps.py`). REVERT: delete this column."
     requires:    "a petition has two sides and both exist: the person it is addressed to, and the place it rises from"
@@ -1257,6 +1347,9 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
+    brute:       "own"
+    brute_note:  "his own reading, a belief (row `writes_note`)"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     requires:    "as comply — ⚠ emitter- or receiver-side is absent, D18"
     referent_class: Record
     referent_named: true
@@ -1282,6 +1375,9 @@ verbs:
     stratum:     "binding_decision"
     eligibility: ["own"]
     beneficiary: "subject"
+    brute:       "own"
+    brute_note:  "his own tenure (`requires`)"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     requires:    "a live tenure of a releasable kind, owned by the actor, toward the subject"
     requires_typed: none
     domain:      [hold, commit, oblige, succeed, tie, knot]
@@ -1299,6 +1395,8 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own", "presence:<site>"]
     beneficiary: "none"
+    governing:   [attr.body.agility, attr.body.strength]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "a restored site benefits whoever holds it, which is a WORLD read (`Tenure` on the site) and not a carrier the Candidate holds. `S10`'s territory, not this column's."
     referent_class: Site
     referent_class_note: "v10 REM-22 (B10-05, AM-A-07; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Site`-CLASSED REFERENT -- the plain referent of the question he answers that is a Site (`queries/world_q.py::own_referents_of_class`, REM-21's term, stamps it through `_stamped`; `decision/options.py::opening_set` then forms on the classed ids alone, IN-53 D1's partition), so `site`, `subject` and `to` bind a Site and never a person, a Record or a rung. THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: this row's cell, its eligibility and who is present at the site are unchanged, and it claims no execution. No question the realm delivers carries a Site among its referents, so the row forms nowhere there (a sideways move, declared, not progress; R-05 is not claimed to move). A person present at a worn Site executes it through the real fold (`tests/test_referent_class_stamps.py`). REVERT: delete this column."
@@ -1325,6 +1423,9 @@ verbs:
     stratum:     "binding_decision"
     eligibility: ["remit:revoke"]
     beneficiary: "none"
+    brute:       "seat"
+    brute_note:  "the revocation basis and a live hold (`requires`); a holder who resists answers by his own acts"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "revocation is taken AGAINST the holder and FOR the revoking remit -- an Office, which no Candidate carries. Same shape as `dispatch`."
     referent_class: Office
     referent_class_note: "v10 REM-28 (B10-06, AM-A-14, [ASSUMPTION; medium; Jordan to correct]): THE SEAT REVOKED. FORMED ONLY ON AN `Office`-CLASSED REFERENT -- the seats the standing occasions already stamp onto the question he answers, the stamp `confer` and `oblige` use (`queries/world_q.py::vacancies`, the vacant seats a conferrer may fill, and `seats_named`, the seats his own ledger names; `Office` is `occasion_only`, so the question's own referent is NOT carried as one) -- and `decision/options.py::opening_set` then forms on the classed ids alone (IN-53 D1's partition), `subject` binding it through the unchanged referent rule (`_derive_operand`), so `subject` never binds a person, a rung, a Record or a Site. THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: this row's eligibility (`remit:revoke`), its cell, `may_revoke` and the disposal (`state/gate.py::REVOCATION_DISPOSAL`) are unchanged. THE LIMIT, STATED IN PLAIN WORDS: THIS COLUMN EXECUTES NOTHING. `_req_revoke` and `_eff_revoke` read `payload['office']`, every computed act carries `subject` (a hand-built one supplies `office`), `loop/predicates.py::office_named_by` says `revoke` IS NOT A CALLER (IN-53 D1, DECISION 2026-10-13) and H-207 ruling (A) says a computed `revoke` is not driven; so every formation that survives is refused on that same clause until a caller reads `subject`, and that edit is H-207 (A)'s. The class is shared with `confer` and `oblige` and moves no derived set: `DECLARED_CLASSES` already holds `Office`, and `RUNG_REMIT_ACTS` reads `Rung` rows alone. REVERT: delete this column."
@@ -1340,6 +1441,8 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own", "presence:<site>"]
     beneficiary: "actor"
+    governing:   [attr.body.agility, attr.mind.acuity]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "v9 IN-12 step 9 (#453 §9.3; K-04, K-09): THE SABOTEUR -- a damaged fabric benefits whoever wanted it damaged, and a Site cannot be held at all (`rosters.yaml: hold_object_kinds`), so *the fabric's holder* is nobody and the row names NO counterparty (K-04). Its sign and beneficiary are what separate it from `restore`/`work` (K-09)."
     requires:    "the site exists and the actor is present at it"
     requires_typed:
@@ -1366,6 +1469,8 @@ verbs:
     eligibility: ["remit:dispatch"]
     eligibility_note: "v9 IN-12 step 11 (#453 §9.2, the `raze` row): `remit:dispatch`, the act that musters the army (`march`'s eligibility, `state/gate.py::MUSTER_ACT`'s grant) -- the seat that can put an army on a town is the seat that can level it. J-8 (whether `dispatch` is a remit act at all, `offices.yaml` `meta: remit_unruled`) is Jordan's; this row moves with the ruling. Built on `remit_default` (§A v9, J-8 partly answered), `arrest`'s precedent."
     beneficiary: "none"
+    governing:   [attr.social.charisma]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "#453 K-06: `none`, the declaration for an act whose good accrues to a Site or a Rung (`rosters.yaml: beneficiary_kinds`) -- and a razed Rung is no longer there to carry it."
     requires:    "the subject is an existing Rung"
     requires_typed:
@@ -1388,6 +1493,9 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["remit:issue"]
     beneficiary: "none"
+    governing:   [attr.social.charisma]
+    opposed_attribute: attr.spirit.will
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "v9 IN-12 step 6 (#453 `seize` row): `none`, `revoke`'s and `destroy_record`'s precedent for a non-consensual act on another's edge -- the taking is for the seat's warrant, and the Record's new holder is the actor, who is no operand's beneficiary here (no operand carries him)."
     requires:    "the exercised seat's purview reaches where the subject is (a Record or a settlement)"
     requires_typed:
@@ -1414,6 +1522,9 @@ verbs:
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability`; which skill a verb tests is stated nowhere in the design."
     eligibility: ["own"]
     beneficiary: "none"
+    governing:   [attr.social.charisma, attr.mind.acuity, attr.social.grace]
+    opposed_attribute: attr.spirit.will
+    governing_note: "B05.25 INTERIM [ASSUMPTION; medium; Jordan to correct at BA1.13]: a hand-off to the social subsystem (R3, R6); B24p.16 writes this row's `proceeds:` cell beside these, B24p.19 deletes `governing:` and `opposed_attribute:`."
     requires:    "a live occasion at the actor's venue whose docket names the subject"
     requires_typed:
       form:      existence
@@ -1446,6 +1557,9 @@ verbs:
     stratum:     "binding_decision"
     eligibility: ["own"]
     beneficiary: "actor"
+    brute:       "seat"
+    brute_note:  "no live hold and the title its `successions` names (`requires`); rival claims are other men's acts"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "v10 IN-61: THE CLAIMANT -- he takes the seat; the seat (`subject`) is what he claims, and acts for nobody."
     referent_class: Office
     referent_class_note: "v10 IN-61 (RS-27, B10-09): FORMED ONLY ON AN `Office`-CLASSED REFERENT -- `confer`'s machinery (IN-53): the seats the question he answers carries as `Office`, which for the heir is the vacant throne he was told of (`queries/world_q.py::seats_named`, the death's or the release's `tenure.closed` claim naming the seat, CP-T02-01; executed by `engine/season/tests/test_in61_heir_hears_vacancy.py`). NARROWED person-side to the seats whose `successions` title he holds (`rosters.yaml: own_title_declines`), so nobody else told of a seat forms a claim on it."
@@ -1477,6 +1591,8 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "actor"
+    governing:   [attr.mind.acuity, attr.mind.perception]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "the sheet is minted into the SURVEYOR's hand, and its content lands in HIS ledger at WITNESS (the content deposit, `rosters.yaml: record_kinds.content`) -- the investigation acts' shape: a finding is the actor's."
     requires:    "the actor has heard of what he surveys, and it coheres under one faction"
     requires_typed:
@@ -1496,6 +1612,8 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "subject"
+    governing:   [attr.mind.focus, attr.body.agility]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "THE PERSON TENDED (#453 §9.4: *'beneficiary `subject`'*), whose body the act raises; self or another."
     referent_class: Person
     referent_class_note: "v11 CP-T03-08 ([ASSUMPTION; medium; Jordan to correct; revert: delete this column and the `wounded_with` term in `queries/world_q.py::questions_for`]): FORMED ONLY ON A `Person`-CLASSED REFERENT -- the wounded `queries/world_q.py::wounded_with` stamps (the asker himself when his own body is below his own `body_ceiling`, and each person with him whom his own ledger's newest `(person, \"body\", v)` claim -- CP-T03-02's Observation, or a told copy -- puts below `condition_scale`), and a question's own plain `Person` referent (REM-21's own-referent term; `Person` is not in `occasion_only_classes`). No other person's true body is read at formation. The fold is unchanged: a subject already whole is refused at the write (`NoOpReceipt`). Pinned by `engine/season/tests/test_cp_t03_08_tend_on_the_wounded.py::test_rem52s_fall_is_tended_whole_the_same_season`."
@@ -1523,6 +1641,9 @@ verbs:
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (`03 §A.2`, `#353 §9.2`: the verb names a skill, the skill supplies the dice and gates nothing); which skill a verb tests is stated nowhere in the design."
     eligibility: ["own"]
     beneficiary: "subject"
+    governing:   [attr.mind.acuity, attr.social.attunement]
+    opposed_attribute: attr.spirit.will
+    governing_note: "B05.25 INTERIM [ASSUMPTION; medium; Jordan to correct at BA1.13]: a hand-off to the social subsystem (R3, R6); B24p.16 writes this row's `proceeds:` cell beside these, B24p.19 deletes `governing:` and `opposed_attribute:`."
     requires:    "the teller holds a claim on the subject, and the person told is with the teller"
     requires_typed:
       all:
@@ -1637,6 +1758,8 @@ verbs:
     stratum_note: "§27's strata are a RESOLUTION-ORDER band over what an act touches, and they are not the `contests:` column -- these six declare no prize (see the block comment). This splits them three ways on what each act TOUCHES -- the physical world, a conversation, or the actor's own held evidence. The split is not derived from `fieldwork_v30.md:353-355` (*EACH investigation action faces: base Ob (from Depth) + Concealment Ob*: canon makes ALL SIX contestable, and conditions concealment on the concealer being PRESENT IN THE SCENE, not on the act being physical); it may still be right for resolution ORDER, which is all a stratum decides, and it is graded with the row."
     eligibility: ["own", "presence:<site>"]
     beneficiary: "actor"
+    governing:   [attr.mind.perception, attr.mind.acuity]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "the six investigation verbs (`examine`, `interview`, `research`, `surveil`, `thread_read`, `reconstruct`) all write `[]` and emit `finding.made`: a finding is a Claim minted at WITNESS into THE ACTOR'S OWN LEDGER, which is the carrier the good lands on. `tell` is the one that points the other way -- it deposits with the person told, so its beneficiary is `subject`."
     referent_class: Site
     referent_class_note: "v10 REM-22 (B10-05, AM-A-07; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Site`-CLASSED REFERENT, as `restore` (`queries/world_q.py::own_referents_of_class` stamps the question's own Site, `decision/options.py::opening_set` forms on it alone). THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: the cell, the eligibility and the graded route (`graded_inquiries`, FI-01) are unchanged, and it claims no finding. No question the realm delivers carries a Site among its referents, so the row forms nowhere there (sideways, declared, not progress); `finding.none` deposits nothing at WITNESS (`undeposited_kinds`). A person present at a Site reaches the graded route through the real fold (`tests/test_referent_class_stamps.py`); what remains refused is `present_at`, a learnable state. REVERT: delete this column."
@@ -1665,6 +1788,9 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
+    brute:       "counterparty"
+    brute_note:  "a prompt: the questioned person answers by his own `tell`, which is drawn (`rosters.yaml:1433-1434`, K-36)"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     requires:    "the person questioned exists"
     requires_typed:
       form:      existence
@@ -1684,6 +1810,9 @@ verbs:
     eligibility: ["remit:determine"]
     eligibility_note: "v10 IN-12 step 5 (#453 §9.1, the `interrogate` row): `remit:determine` via a seat -- the bench that may bind a party is the one that may question him (`interview` is the `own` row beside it; #453's CONFLICTS line: eligibility, the counterparty's state, the prize)."
     beneficiary: "actor"
+    governing:   [attr.social.attunement, attr.social.charisma]
+    opposed_attribute: attr.spirit.will
+    governing_note: "B05.25 INTERIM [ASSUMPTION; medium; Jordan to correct at BA1.13]: a hand-off to the social subsystem (R3, R6); B24p.16 writes this row's `proceeds:` cell beside these, B24p.19 deletes `governing:` and `opposed_attribute:`."
     beneficiary_note: "#453 §9.1: `actor` -- what a confession settles is the questioner's matter, and the seat he acts through is carried on `via`, not on an operand."
     requires:    "the subject is a person, held in a live `detain`, and a docketed petition's `terms` names him"
     requires_typed: none
@@ -1717,6 +1846,8 @@ verbs:
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (REM-30, B10-10: the three inquiries `research`, `examine`, `surveil` draw on `inquiry`)."
     eligibility: ["own", "presence:<site>"]
     beneficiary: "actor"
+    governing:   [attr.mind.acuity, attr.mind.focus]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     referent_class: Record
     referent_class_note: "v10 REM-2C (B10-05, AM-A-11; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Record`-CLASSED REFERENT -- the plain referent of the question he answers that is a Record (`queries/world_q.py::own_referents_of_class`, REM-21's term, which stamps the class since `Record` left `rosters.yaml: occasion_only_classes`; `decision/options.py::opening_set` then forms on the classed ids alone, IN-53 D1's partition), so `subject` binds the document the question is about and never a person, a Site, a Proposition or a rung. NOT the stamp rem-02 REM-2C rejected (every Record the person has heard of): the term reads the question, never the ledger. The cell asks `existence` of the collection itself, so it adds no sub-kind to `writs_held`'s or `records_held_for_holding_rows`' sets (`data/verbs.py::_record_subkinds_answered`); the class is SHARED, so this row also forms on the Records those two standing occasions stamp (a writ naming him, a petition or works he holds), and `comply`, `carry`, `found` and `build` on the question's own Records, the fold disposing. A WRIT is the exception: only `writs_held` stamps one (the B10-05 close), so a non-addressee's question that names a writ forms none of these rows on it. THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: the cell, the eligibility and the graded route (`graded_inquiries`, FI-01) are unchanged, and it claims no finding. `presence:<site>` binds nothing on the classed subject, as on the plain one: it is an eligibility alternative, not an operand of the cell (which binds `subject` alone), `own` admits first person-side and in the fold, and the alternative declines unconditionally if reached (H-75). THE SHARED-CLASS COST is the other four Record rows' wrong-SUB-kind refusals on a question's own Record (`comply` on `exists:dispensation`, `carry` on `exists:petition`, `found` and `build` on `exists:works`), which REM-11's last-read `exists:<K>=0` stopping rule counts. With `Record` put back in `occasion_only_classes` and this column kept, the row forms only on a Record a standing occasion stamps (one he holds), not on the document the question is about. A researcher asked about a document reaches the graded route through the real fold (`tests/test_referent_class_stamps.py`). REVERT: delete this column (and put `Record` back in `occasion_only_classes`)."
     requires:    "the record consulted exists"
@@ -1742,6 +1873,8 @@ verbs:
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (REM-30, B10-10)."
     eligibility: ["own", "presence:<rung>"]
     beneficiary: "actor"
+    governing:   [attr.mind.perception, attr.mind.focus]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     requires:    "the place watched exists and the actor is present at it"
     requires_typed:
       all:
@@ -1767,6 +1900,8 @@ verbs:
     stratum:     "contested_physical"
     eligibility: ["own", "presence:<site>"]
     beneficiary: "actor"
+    governing:   [attr.spirit.will]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     requires:    "Thread Sensitivity >= 30"
     requires_typed:
       form:      scalar_threshold
@@ -1785,6 +1920,8 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "actor"
+    governing:   [attr.mind.acuity, attr.mind.focus]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     requires:    "the actor holds a claim on the subject"
     requires_typed:
       form:      own_ledger
@@ -1800,6 +1937,8 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "actor"
+    governing:   [attr.social.attunement]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     requires:    "—"
     requires_note: "⚠ SUPERSEDED TRANSCRIPTION: *stored once, on the lower id (§15.1)* is `holonic §15.1`'s reading, which `architecture/meta/04_CODE_ARCHITECTURE.md` §A.3 row 9 (`:191`) overrides -- `tie`/`knot` are TWO DIRECTED EDGES, one owned by each party, and strain is a Query."
     writes:      ["Tenure.since"]
@@ -1813,6 +1952,8 @@ verbs:
     eligibility: ["own"]
     eligibility_note: "v9 IN-12 step 9 (#453 §9.4, the `train` row): `own` -- a person practises or teaches as himself; no office makes it eligible and capability GATES NOTHING here (#353 §9.2): the actor's own capability is read neither at formation nor at the fold."
     beneficiary: "subject"
+    governing:   [attr.social.attunement]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "THE PERSON TRAINED, self or a present pupil (#453 §9.4: *'beneficiary `subject` (self or pupil)'*) -- the subject whose `capability` the act raises."
     requires:    "the person trained exists and is with the actor"
     requires_typed:
@@ -1836,6 +1977,8 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
+    governing:   [attr.social.charisma, attr.social.grace]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "an army is a record the actor holds, and no carrier the Candidate holds benefits from a muster roll."
     requires:    "the subject is an army record, and the actor holds it -- the commander's standing"
     requires_typed:
@@ -1859,6 +2002,9 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
+    brute:       "own"
+    brute_note:  "his own army record"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "an army is a record the actor holds, and no carrier the Candidate holds benefits from a muster roll."
     requires:    "the subject is an army record, and the actor holds it -- the commander's standing"
     requires_typed:
@@ -1882,6 +2028,9 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
+    brute:       "own"
+    brute_note:  "as `form_unit`"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "an army is a record the actor holds, and no carrier the Candidate holds benefits from a muster roll."
     requires:    "the subject is an army record, and the actor holds it -- the commander's standing"
     requires_typed:
@@ -1905,6 +2054,9 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
+    brute:       "own"
+    brute_note:  "as `form_unit`"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "an army is a record the actor holds, and no carrier the Candidate holds benefits from a muster roll."
     requires:    "the subject is an army record, and the actor holds it -- the commander's standing"
     requires_typed:
@@ -1928,6 +2080,9 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
+    brute:       "own"
+    brute_note:  "as `form_unit`"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "an army is a record the actor holds, and no carrier the Candidate holds benefits from a muster roll."
     requires:    "the subject is an army record, and the actor holds it -- the commander's standing"
     requires_typed:
@@ -1951,6 +2106,9 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own"]
     beneficiary: "none"
+    brute:       "own"
+    brute_note:  "his own army record; whether it is obeyed in the field is the field's order-friction draw on `command` (A-59 (1))"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "an army is a record the actor holds, and no carrier the Candidate holds benefits from a muster roll."
     requires:    "the subject is an army record, and the actor holds it -- the commander's standing"
     requires_typed:
@@ -1975,6 +2133,9 @@ verbs:
     eligibility: ["remit:issue", "own", "hold:<store>"]
     eligibility_note: "`H-160` LIMIT 1, THROUGH `H-158`'s FIRST REMEDY -- *'an eligibility alternative that names a seat'* -- [ASSUMPTION; medium; Jordan to correct; revert: the other remedy, a ruling that an `own` verb may be exercised through a seat]. `remit:issue` is the existing grammar's way to name one (`decision/options.py::exercised_seat` returns the hold that grants it, `pack_scenes` puts it on `Act.via`, `loop/resolve.py::_eligible` admits through `seat_hold`), so no fifth eligibility kind and no new form. FIRST, because the first alternative that admits decides which one `via` reflects: a holder of a seat granting `issue` gives THROUGH it, and his `from` is the seat's rung, its treasury (`treasury_of`, off the grant's `seat_rung` snapshot); anyone else falls through to `own` exactly as before. The fold admits the same acts either way (`own` still follows), so WHO PAYS FROM WHERE moves, and with it what `Act.via` reaches: the seat's obligees at its rung witness the transfer (`epistemic._ch_post_remit`; `off_restoration_leader` grants `issue` and has one), `_renewals` clauses 1-2 become meetable, and the fold admits the withdrawal through `own` without re-asking the seat (a queued withdrawal survives a same-round revoke or re-stamp; `test_term_upkeep`'s `_ONE_CLAUSE_BROKEN` asserts such a transfer still executes, so no `_eff_transfer` guard); a rungless seat is passed over (`need_treasury`). ⚠ `issue` IS `requisition`'s SUBSTITUTION CARRIED ONE VERB OVER, not a ruling -- `transfer` is not a remit act (`rosters.yaml: remit_acts` is closed), and a payment out of a treasury is read as issued, the converse of a requisition into it (`H-52`'s neighbour; its `eligibility_substitution_note`). ⚠ AND A HOLDER OF SUCH A SEAT NO LONGER FORMS A TRANSFER AS HIMSELF: one alternative per row decides, so his gifts from his own home are not formed. A candidate per admitting alternative is where that choice would go if it ever matters."
     beneficiary: "to"
+    brute:       "own"
+    brute_note:  "his store covers it (`requires`)"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     requires:    "stores(hearth(giver), kind) >= amount (§54 it. 7)"
     requires_typed:
       form:      scalar_threshold
@@ -1994,6 +2155,9 @@ verbs:
     stratum:     "social"
     eligibility: ["own"]
     beneficiary: "none"
+    brute:       "own"
+    brute_note:  "it makes a Proposition exist; belief in it is a later `tell` or `argue`"
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     requires:    "—"
     writes:      ["Proposition.exists"]
     writes_note: "v9 IN-11 (#453 §10.4 step 2): `_eff_utter` also opens the UTTERER'S `hold` on the new Proposition (the maker's-hold shape `create_record` already carries, and like it not a declared `writes:` pair -- the receipt is the Proposition's). It is what lets `commit` execute in computed play: a Proposition has no place, so only a live edge puts it in `reach`, and Q2 then raises the utterer's own claim about it as a question `commit`'s `existence` cell admits."
@@ -2005,6 +2169,8 @@ verbs:
     stratum:     "uncontested_material"
     eligibility: ["own", "presence:<site>"]
     beneficiary: "none"
+    governing:   [attr.body.endurance, attr.body.strength]
+    governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "the same world read as `restore`: the site's holder is not a carrier the Candidate holds."
     referent_class: Site
     referent_class_note: "v10 REM-22 (B10-05, AM-A-07; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Site`-CLASSED REFERENT, as `restore` (`queries/world_q.py::own_referents_of_class` stamps the question's own Site, `decision/options.py::opening_set` forms on it alone). THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY and claims no execution. A `work` formed on a referent that is no Site is refused `work.unavailable` on `condition=UNKNOWN` (the threshold of such a referent reads UNKNOWN), and this row's cell asks no `existence`; no question the realm delivers carries a Site among its referents, so the class makes the row never attempted there (sideways). ED-IN-0297 IS UNTOUCHED: `work` still advances only a works (`loop/effects_economy.py`); a Site no works names stages nothing, and a `work` formed there reads `work.unavailable`. RESIDUE, RECORDED AND NOT FIXED: `work` on a `dwelling` or `garrison` Site still refuses `condition=UNKNOWN` (S12.1: those kinds ship no band floors, `loop/resolve.py::_admits`). REVERT: delete this column."

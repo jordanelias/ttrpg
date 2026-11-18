@@ -224,6 +224,29 @@ def pool_of(score: float, addends: float, pool_add: float, pool_floor: int) -> f
     return max(pool_floor, score + addends + pool_add)
 
 
+def governing_mean(scores) -> float:
+    """A verb's GOVERNING SCORE (B05.24, `ED-IN-0379`; Jordan, 2026-11-13): *a verb names one to three attributes; his
+    governing score for it is the average of his scores in them (an attribute he does not hold counts at the untrained score
+    `pool_default`), rounded to the nearest tenth, a value halfway between two tenths rounding up; the result is a
+    fractional number (2.5, not 3) and feeds the dice as a fractional pool, as the engine already takes one (A-5); his rank
+    in the verb's skill, if the verb names one, is added (`pool.py::faculty`).*
+
+    `(20 * sum + n) // (2 * n) / 10`: the sum is taken in exact integers (attribute scores are integers on
+    `descriptors.ATTRIBUTE_FLOOR` to `ATTRIBUTE_CEILING`) and only the last division is a float, so no float noise enters
+    the rounding. The result is NOT a whole number and does not use `round_half_up` (B38.55's, for integer counts).
+    For `n` of 1 to 3 the mean of integers is a multiple of a third, so a true half-tenth never occurs and the half-up
+    clause is vacuous at this input. [ASSUMPTION: scores stay integers; if the tree ever holds fractional attribute scores,
+    hold them in tenths and sum in tenths: `(2 * sum_tenths + n) // (2 * n) / 10`.]
+    Refuses `n` outside 1 to 3 and a negative score."""
+    scores = list(scores)
+    n = len(scores)
+    if not 1 <= n <= 3:
+        raise ValueError(f"governing_mean takes one to three attribute scores, got {n}")
+    if any(s < 0 for s in scores):
+        raise ValueError(f"governing_mean takes no negative score, got {scores}")
+    return (20 * sum(scores) + n) // (2 * n) / 10
+
+
 # ---------------------------------------------------------------------------
 # Level lookup + aggregation
 # ---------------------------------------------------------------------------

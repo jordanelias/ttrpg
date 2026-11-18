@@ -99,8 +99,8 @@ _RESOLVER = "d_sigma"
 def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]:
     """The subject's score on the verb's vocation, or `None` -- a READ, not an obstacle: the LARGER of the
     capability key he holds and the attribute he holds on the vocation (v10 CR-20), and nothing else. The
-    attribute is the one that OPPOSES the vocation (`pool._opposing_attribute`, v10 CR-96, AR-44): the row's
-    `opposed_by` where it has one, else the row's own.
+    attribute is the one that OPPOSES the verb (`pool._opposing_attribute`, A-71, AR-44): the verb row's `opposed_attribute:`
+    (B05.25), `None` where it names none.
 
     ⚠ NEVER PRACTICE, AND THE FALLBACK BY ARM. On the shipped `task` arm (`Fixtures obstacle_model`) a person is
     opposed at `pool.score`, which falls to the untrained score (`pool_default`) where he holds neither, so
@@ -114,7 +114,7 @@ def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]
     if subject and subject in w.persons:
         person = w.persons[subject]
         # B11 lane A (`10_DICE_one_score_two_roles.md` B): ON THE TASK ARM A PERSON ALWAYS HAS A SCORE -- `pool.score`
-        # (no practice), read on the OPPOSING attribute (CR-96's `opposed_by`, else the row's own), so
+        # (no practice), read on the OPPOSING attribute (the verb row's `opposed_attribute:`, B05.25), so
         # `obstacle_default` never stands in for a person. The control arm (`Fixtures obstacle_model: stand_in`)
         # reads the held values alone.
         if w.fixtures.get("obstacle_model") == OBSTACLE_MODEL_TASK:
@@ -268,7 +268,7 @@ def _difficulty(fx: Any, verb: str) -> Optional[float]:
     return TASK_DIFFICULTY[verb]
 
 
-def _frame(fx: Any, pool: int, opposition: Optional[float], forgery_quality: float,
+def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: float,
            room_terms: dict, effort: int, verb: str) -> SocialContestInput:
     """THE RECORD, FILLED THE ONE WAY: what `contest_input` (the true input) and `believed_input` (a
     person's) both hand the module. They differ in where the pool's opposition, the forgery quality
@@ -318,7 +318,7 @@ def _odds_of_input(inp: SocialContestInput) -> Optional[tuple]:
 
 
 def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
-                   pool: int, person_subject: bool, examined_record: bool = False,
+                   pool: float, person_subject: bool, examined_record: bool = False,
                    room: Optional[dict] = None, heard: bool = False,
                    effort: int = 0) -> Optional[SocialContestInput]:
     """THE PERSON'S RECORD (mode (b)): the same `SocialContestInput`, filled only from what `p` holds.

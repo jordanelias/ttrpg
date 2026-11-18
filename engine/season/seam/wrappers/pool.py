@@ -11,10 +11,11 @@ from __future__ import annotations
 
 from typing import Any
 
-from engine.dice_engine.sigma_leverage import pool_of
+from engine.dice_engine.sigma_leverage import governing_mean, pool_of
 from engine.substrate import descriptors
 
-from ...data.verbs import VERB_CAPABILITY, VOCATION_ATTRIBUTE, VOCATION_OPPOSED_BY
+from ...data.verbs import VERB_CAPABILITY, VERB_TABLE
+from ...gaps import Forbidden, Unspecified
 from ...queries.world_q import practice
 
 
@@ -56,53 +57,71 @@ register_pool_addend(practice)
 
 def _held_attribute(entity: Any, attr):
     """The score `entity` holds on attribute `attr` (`Person.attributes`), or `None` where `attr` is none, he holds
-    none, or the entity is no person. The one read `_authored_attribute` and `_opposing_attribute` end in."""
+    none, or the entity is no person. The one read `governing_attribute`, `governing_score` and `_opposing_attribute` end in."""
     return (getattr(entity, "attributes", None) or {}).get(attr) if attr else None
 
 
 def governing_attribute(entity: Any, verb: str):
-    """(CAP B1, U1 §4) The governing attribute of `verb`'s skill AS HELD (`rosters.yaml: vocation_attribute`;
-    `Person.attributes`), else `None` -- read as the scale's mid-point where a reader needs a number
-    (`(descriptors.ATTRIBUTE_FLOOR + descriptors.ATTRIBUTE_CEILING) / 2`, derived, never stored). `None` too where the verb
-    draws on no skill or the entity is no person. The attribute's twin of `_capability`: a READ, never a default. The pool no
-    longer reads it (the skill score has no attribute in it, A-7); the opposition does, through `_opposing_attribute`."""
-    attr = VOCATION_ATTRIBUTE.get(VERB_CAPABILITY.get(verb))
-    return _held_attribute(entity, attr)
+    """(B05.25) The FIRST of `verb`'s `governing:` attributes (`verb_table.yaml`) AS HELD (`Person.attributes`), else `None` --
+    `None` where he holds none, the row names none (a brute or a subsystem row) or the entity is no person. A READ, never a
+    default: the pool reads every governing attribute through `governing_score`, which counts an unheld one at the untrained score."""
+    row = VERB_TABLE.get(verb)
+    return _held_attribute(entity, row.governing[0] if row is not None and row.governing else None)
 
 
-_authored_attribute = governing_attribute   # B05.09: the name its remaining readers (tests, `sigma.py`'s re-export) still use
+_authored_attribute = governing_attribute   # B05.09: the name its remaining readers (tests) still use
 
 
 def _opposing_attribute(entity: Any, verb: str):
-    """The score `entity` HOLDS on the attribute that OPPOSES the verb's vocation (v10 CR-96, AR-44): the row's
-    `opposed_by` where it has one, else the row's own attribute (so every row shipped absent reads as CR-20 landed
-    it, and `_authored_attribute` is its twin). `None` where he holds none. The opposition's read only: `faculty`
-    keeps the row's own attribute for the pool."""
-    voc = VERB_CAPABILITY.get(verb)
-    attr = VOCATION_OPPOSED_BY.get(voc) or VOCATION_ATTRIBUTE.get(voc)
-    return _held_attribute(entity, attr)
+    """The score `entity` HOLDS on the attribute that OPPOSES the verb: the row's `opposed_attribute:` (A-71, A-137, AR-44),
+    `None` where the row names none or he holds none. The opposition's read only: `faculty` reads `governing_score`."""
+    row = VERB_TABLE.get(verb)
+    return _held_attribute(entity, row.opposed_attribute if row is not None else None)
 
 
-def faculty(w: Any, p: Any, verb: str) -> int:
+def governing_score(w: Any, p: Any, verb: str) -> float:
+    """(B05.25; B05.24's rule, Jordan 2026-11-13) HIS GOVERNING SCORE FOR `verb`: the mean (`sigma_leverage.governing_mean`: to
+    the nearest tenth, a half up, a FRACTIONAL number) of his scores in the verb's one to three `governing:` attributes, an
+    attribute he does not hold counting at the untrained score (`untrained`). Refused (`Forbidden`) for a brute verb and
+    (`Unspecified`) for a row naming no attribute: neither is pooled here."""
+    row = VERB_TABLE.get(verb)
+    if row is not None and row.brute:
+        raise Forbidden(f"{verb!r} is a brute verb (`brute: {row.brute}`) and never rolls; it has no governing score",
+                        "seam/wrappers/pool.py", needs="a verb row with `governing:`",
+                        law="B05.24 -- a brute function is authorised, gated or recorded and does not roll at all")
+    if row is None or not row.governing:
+        raise Unspecified(f"{verb!r} names no `governing:` attribute; its act is a subsystem's (`person_inputs: own`) or the verb is no row",
+                          "seam/wrappers/pool.py", needs="a verb row with `governing:`",
+                          law="B05.24 -- a verb that hands its act to a subsystem names none and the subsystem reads him by its own rule")
+    default = untrained(w.fixtures)
+    return governing_mean([default if (held := _held_attribute(p, a)) is None else held for a in row.governing])
+
+
+def rank(p: Any, verb: str) -> int:
+    """(B05.25) HIS HELD RANK in `verb`'s skill (`_capability`), `0` where he holds none or the row names no skill: an untrained
+    man rolls on his attributes alone, and a first rank always adds a die."""
+    have = _capability(p, verb)
+    return 0 if have is None else have
+
+
+def faculty(w: Any, p: Any, verb: str) -> float:
     """Dice, from what the actor genuinely has: THE ONE POOL READER. `03 §A.2` -- *"Rank supplies dice and
     gates nothing"*. Reached by `contest_input` (the dealt record) and by `odds_of` (the believer's own
     pool, which is known to him; `believed_input` takes it as an argument and has no World).
 
-    THE POOL IS `pool_of` (A-6, D-U1-08, B05.09): `pool_of(score, addends, pool_add, pool_floor)`, the one rule of how a skill
-    score, the registered addends (`POOL_ADDENDS`, whole dice) and the row's base and floor (`Fixtures pool_add`, `pool_floor`,
-    each 0 at control) make a pool. `score` has no attribute in it (A-7): the governing attribute enters the dice through
-    `governing_score` (B05.25), and the opposing attribute enters the opposition beside the skill score,
-    `opposed_ob(opposing attribute + skill score)` (B05.14, A-137). A held 0 is no longer a person under one die: the score is
-    `max(untrained score, rank)`, so a first rank never lowers a pool.
-    A skill whose row says `untrained: none` gives a non-holder NO score (`score` is `None`): his pool is 0, the roll refused as
-    a held 0 was (S27.4); no floor lifts a refusal.
+    THE POOL IS `pool_of` (A-6, D-U1-08, B05.25): `pool_of(governing_score + rank, addends, pool_add, pool_floor)`, the one rule
+    of how the verb's governing score (the mean of his scores in its `governing:` attributes, FRACTIONAL: 2.5, not 3), his rank in
+    the verb's skill, the registered addends (`POOL_ADDENDS`, whole dice) and the row's base and floor (`Fixtures pool_add`,
+    `pool_floor`, each 0 at control) make a pool. A first rank adds a die; a person holding no attribute and no rank rolls
+    `pool_default`. The opposition does not read this: it reads the opposing attribute beside the skill score,
+    `opposed_ob(opposing attribute + skill score)` (B05.14, A-137), through `score`.
+    A brute verb never reaches here (`Forbidden`), nor does a row naming no attribute (`Unspecified`): a (c) row reaches its
+    module, which reads `score + addends` (`seam/wrappers/combat.py::_fight_faculty`).
     ⚠ `08 §3` GIVES THE POLARITY: an `assumption` grade means *inject the default, declare the site,
     sweep three points* -- never refuse the whole corpus for a missing key. `absent` is the grade
     that refuses, and this is not one."""
-    base = score(w, p, verb)
-    if base is None:
-        return 0
-    return pool_of(base, addends_of(w, p, verb), w.fixtures.get("pool_add"), w.fixtures.get("pool_floor"))
+    return pool_of(governing_score(w, p, verb) + rank(p, verb), addends_of(w, p, verb),
+                   w.fixtures.get("pool_add"), w.fixtures.get("pool_floor"))
 
 
 def addends_of(w: Any, p: Any, verb: str) -> int:

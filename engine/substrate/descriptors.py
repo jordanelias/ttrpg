@@ -90,14 +90,11 @@ def about_mid(value, floor, ceiling, gain):
 # one kind (`skill`, A-98 (4)); the attributes and the traits are defined elsewhere and not re-defined here.
 @dataclass(frozen=True)
 class CapabilityRow:
-    """One skill's definition. `base` is the attribute key its pool starts from; `opposed_by` is an attribute key,
-    `'none'` or `None` (absent: the opposition reads `base`; `'none'` currently reads as absent too [ASSUMPTION] until the
-    obstacle's one form lands, B05, OBS section 2); `floor`/`ceiling` bound the held rank;
-    `untrained` is what a non-holder brings (`default` or `none`); `grows_by` is the rules that may raise it."""
+    """One skill's definition. It names NO attribute (B05.25): which attributes a verb reads is the verb row's own `governing:` and
+    `opposed_attribute:`; `floor`/`ceiling` bound the held rank; `untrained` is what a non-holder brings (`default` or `none`);
+    `grows_by` is the rules that may raise it."""
     kind: str
     gloss: str
-    base: str
-    opposed_by: Optional[str]
     floor: int
     ceiling: int
     untrained: str
@@ -105,7 +102,7 @@ class CapabilityRow:
 
 
 CAPABILITIES: Mapping[str, CapabilityRow] = MappingProxyType({
-    name: CapabilityRow(r['kind'], r['gloss'], r['base'], r['opposed_by'], r['floor'], r['ceiling'],
+    name: CapabilityRow(r['kind'], r['gloss'], r['floor'], r['ceiling'],
                         r['untrained'], tuple(r['grows_by']))
     for name, r in _DATA['capabilities']['rows'].items()})
 

@@ -415,6 +415,25 @@ rosters:
       so it needs a ruling before it needs an entry.
     values: [own, remit, hold, presence]
 
+  brute_kinds:
+    source: "B05.24 (`ED-IN-0379`), `proposals/2026-11-13-verb-governing-attributes.md` §0: Jordan, 2026-11-13, a verb that is a brute function (authorised, gated or recorded by a seat, a standing or another's decision; its efficacy not in question) names no attribute and does not roll at all"
+    note: >-
+      WHAT AUTHORISES A VERB THAT NEVER ROLLS, the value of a verb row's `brute:` (`data/verbs.py::_check_governing_attributes`
+      reads this roster and refuses any other). `seat` -- a seat's remit, purview or conferral basis (the row's eligibility
+      carries `remit:` or its referent class is `Office`); `own` -- an act on his own state or what he holds; `counterparty` --
+      another person's own decision completes it, drawn in that person's choice. A fourth kind is a design change: a new way for
+      an act to happen with no draw.
+    values: [seat, own, counterparty]
+
+  person_inputs_kinds:
+    source: "B05.25 (`engine/season/verb_table.yaml`'s row shape): how a `contest_subsystems.prizes` row's module reads a person"
+    note: >-
+      THE VALUES OF A PRIZE ROW'S `person_inputs:`. `own` -- the module reads the person by its own rule (combat's `faculties` and
+      mapped attributes, the field's records), so a verb contesting the prize names no `governing:`; `pool` -- the module takes the
+      pool `seam/wrappers/pool.py::faculty` builds from the verb's `governing:` attributes (the social roll), so the verb names
+      them and, contested against a person, the `opposed_attribute` of the person opposite.
+    values: [own, pool]
+
   # The season-side roster of PURSUITS (`ED-IN-0261`), read from the single owner.
   pursuits:
     source: >-
@@ -1322,9 +1341,9 @@ rosters:
 
   # B04.04 (U1 §1): the skills, by the `pursuit_axes` precedent -- this row POINTS at the one owner
   # (`references/descriptor_registry.yaml: capabilities`, read through `engine/substrate/descriptors.py::CAPABILITIES`)
-  # and carries no `values:`. The verb -> skill map and the skill -> attribute map this file used to hold
-  # (`verb_capability`, `vocation_attribute`) are DERIVED in `data/verbs.py` from the verb table's `capability:` column
-  # and the definition rows; they are deleted here, not mirrored.
+  # and carries no `values:`. The verb -> skill map this file used to hold (`verb_capability`) is DERIVED in `data/verbs.py`
+  # from the verb table's `capability:` column; the skill -> attribute map (`vocation_attribute`) is deleted, and which
+  # attributes a verb reads is the verb row's own `governing:` and `opposed_attribute:` (B05.25).
   capabilities:
     from_descriptor: capabilities
 
@@ -1477,8 +1496,15 @@ rosters:
     # not the same sentence. Repointing a provider is ONE FIELD ON A ROW rather than a code change
     # (`02 §D.4`; ED-SC-0033 clause (2)).
     prizes:
+      # `person_inputs:` (B05.25) IS HOW THE PRIZE'S MODULE READS A PERSON, and it is what exempts a verb from naming attributes
+      # (`data/verbs.py::_check_governing_attributes`): `own` -- the module reads the person by its own rule and the verb row
+      # names no `governing:` (combat's `faculties` and mapped attributes, `seam/wrappers/combat.py::combat_input`; the field's
+      # records); `pool` -- the module takes the pool `seam/wrappers/pool.py::faculty` builds from the verb's `governing:`
+      # attributes and skill rank (`seam/wrappers/sigma.py::contest_input`), and the row names the `opposed_attribute` of the
+      # person opposite.
       "the body":
         module:   "combat"
+        person_inputs: "own"
         provider: "personal_combat"
         module_entry: "combat.fight"   # `31b`, as `a standing`'s: the composition role `seam/wrappers/combat.py` calls through `MODULE_ENTRIES`, for EVERY verb contesting this prize (`fight` and `accept`); the composition row's `verb:` names one of them (`fight`), the registrar's one-verb shape.
         step:     "ENCOUNTER"   # `a field`'s pair. Every fight is declared at RESOLVE and fought at ENCOUNTER, in AUTOMATED and PLAYABLE alike -- the one step the host may suspend at (`seam/wrappers/combat.py::resolve`'s `host`).
@@ -1486,6 +1512,7 @@ rosters:
         cite:     "H-88; the seam already calls it (seam/wrappers/combat.py); `step:`/`declares:` v10 REM-31, design `proposals/2026-10-07-grid-mode-suspension.md` §1 (PROPOSED, held back)"
       "a field":
         module:   "mass_battle"
+        person_inputs: "own"
         provider: "mass_battle"
         module_entry: "mass_battle.resolve_field"   # `31c`, as `the body`'s and `a standing`'s: the composition role `seam/wrappers/mass_battle.py` calls through `MODULE_ENTRIES`
         step:     "ENCOUNTER"
@@ -1507,6 +1534,7 @@ rosters:
           `the body` carries the same pair since v10 REM-31.
       "a standing":
         module:   "social_contest"
+        person_inputs: "pool"
         provider: "social_contest"   # repointed from the interim `sigma_leverage`, ED-SC-0033 clause (2) -- a ROW change. `seam/wrappers/sigma.py` registers this string; refusal (c) refuses construction if nothing does
         module_entry: "social_contest.roll"   # `31a`: the composition role the provider calls through `MODULE_ENTRIES`; refused at construction (`manifest/registry.py::check_contest_prizes`) unless a composition row declares it, as a `verb_call` into this row's `module:`, bound to a verb whose prize names it. A-25: the prize row and the composition row are the two owners of which module is called.
         # The entry is the σ-leverage roll: SC-05's measurement kept it over the kernel (`modules/social_contest/roll.py`'s docstring), and it returns a `Margin` the provider holds it to.
@@ -1523,12 +1551,14 @@ rosters:
           `interim: true` carried CLAUSE (2) ALONE, and steps 13 + 15 discharged it: the row names `social_contest` (`02 §D.4`).
       "a proposition":
         module:   "social_contest"
+        person_inputs: "pool"
         provider: "social_contest"   # as `a standing`'s
         module_entry: "social_contest.roll"   # as `a standing`'s
         # `determine` contests it (`speak` -> `a matter`, `tell` -> `a standing`).
         cite:     "as `a standing`. Same ruling, clause (3) honoured by the module since step 14, same repoint."
       "a matter":
         module:   "social_contest"
+        person_inputs: "pool"
         provider: "social_contest"   # as `a standing`'s
         module_entry: "social_contest.roll"   # as `a standing`'s
         heard_by: "bench"   # the bench at the act's rung hears this prize (`world_q.reception`, `world_q.proofs`; `manifest/registry.py::_check_heard_by`).
