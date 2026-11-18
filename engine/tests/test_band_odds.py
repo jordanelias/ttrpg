@@ -77,19 +77,11 @@ def test_it_equals_a_brute_force_walk_of_the_face_table():
 
 
 def test_swapping_two_band_edges_moves_the_tuple(monkeypatch):
-    """MUTATION: a `degree_from_net` whose Partial and Success edges are swapped. If `band_odds` held
-    its own copy of the ladder the tuple would not move; it reads the owner, so it does."""
+    """MUTATION: the Partial/Success edge moved in `BAND_FLOORS`, the table `degree_from_net` reads. If
+    `band_odds` held its own copy of the ladder the tuple would not move; it reads the owner's table,
+    so it does. This is the falsifier that the ladder reads the table."""
     base = SL.band_odds(2, 2)
-
-    def swapped(net, ob, extension=None, **context):
-        margin = net - ob
-        if margin < 0:
-            return DE.Degree.FAILURE
-        if margin < 2:                                   # was 1: the Partial/Success edge moved
-            return DE.Degree.PARTIAL
-        return DE.Degree.SUCCESS if margin < 3 else DE.Degree.OVERWHELMING
-
-    monkeypatch.setattr(DE, "degree_from_net", swapped)
+    monkeypatch.setattr(DE, "BAND_FLOORS", {**DE.BAND_FLOORS, "success": 2000})    # was 1000: the edge moved
     assert SL.band_odds(2, 2) != base
     assert SL.band_odds(2, 2) == (0.74, 0.25, 0.01, 0.0)    # net 3 (.06) now reads Partial; net 4 Success
 

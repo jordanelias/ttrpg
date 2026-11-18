@@ -459,3 +459,40 @@ def test_no_new_hand_rolled_ladder():
         'new hand-rolled degree ladder(s) found. Route them through '
         'engine.dice_engine.dice_engine.degree_from_net, or add them to DECLARED_ADAPTERS with a '
         'reason:\n  ' + '\n  '.join(sorted(offenders)))
+
+
+# --- the margin is quantised ONCE, at the ladder (B05.01; C3-L1, D-29) ---------------------------------
+def test_quantised_margins_sum_in_either_order():
+    """C3-L1's falsifier. A real margin is converted once, `round(MARGIN_SCALE * margin)`, to an integer
+    milli-unit; integers add exactly, so the sum and its band do not depend on the order the parts are
+    taken in. A float margin does not: `0.1 + 0.2 + 0.7` is 1.0 one way and 0.9999999999999999 the other,
+    which would grade Success one way and Partial the other. A planted float edge or scale fails here."""
+    scale, floors = dice_engine.MARGIN_SCALE, dice_engine.BAND_FLOORS
+    assert isinstance(scale, int) and scale > 0, 'MARGIN_SCALE must be a positive integer'
+    assert set(floors) == {'partial', 'success', 'overwhelming'}
+    assert all(type(v) is int for v in floors.values()), f'a band floor is not an integer milli-unit: {floors}'
+    assert floors['partial'] < floors['success'] < floors['overwhelming']
+
+    def quantise(margin):
+        return round(scale * margin)
+
+    parts = (0.1, 0.2, 0.7, 0.3, 0.6, 1.1, 1.9, 2.3, 0.7000000000000001)
+    checked = 0
+    for a in parts:
+        for b in parts:
+            assert quantise(a) + quantise(b) == quantise(b) + quantise(a)
+            checked += 1
+    # the three-part sums whose float sum differs by order, graded at the ladder through the owner:
+    for trio in ((0.1, 0.2, 0.7), (0.3, 0.6, 0.1), (1.1, 0.9, 1.0), (2.1, 0.5, 0.4)):
+        forward, backward = sum(trio), sum(reversed(trio))
+        assert dice_engine.degree_from_net(forward, 0) == dice_engine.degree_from_net(backward, 0), trio
+        checked += 1
+    # the control: the float sums above really do disagree, so the test can observe the failure it excludes
+    assert (0.1 + 0.2) + 0.7 != (0.7 + 0.2) + 0.1
+    # a margin one milli-unit under a floor is under it; exactly at it is on it:
+    for name, floor in floors.items():
+        below = dice_engine.degree_from_net((floor - 1) / scale, 0)
+        at = dice_engine.degree_from_net(floor / scale, 0)
+        assert below != at, (name, below, at)
+        checked += 1
+    assert checked >= 80

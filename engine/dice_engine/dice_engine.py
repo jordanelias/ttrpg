@@ -141,15 +141,18 @@ class RollResult:
 
 # Canonical die rule (params/core.md §Die Rule, PP-246):
 #   1 = -1 success, 2-6 = 0, 7-9 = +1 success, 10 = +2 successes. No chain.
+# The d10's faces and what each scores. THE face rule; `_die_result` reads it and nothing else spells it.
+FACE_NET = {1: -1, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 1, 8: 1, 9: 1, 10: 2}
+
+
 def _die_result(face: int) -> int:
-    if face == 1:
-        return -1
-    elif face <= 6:
-        return 0
-    elif face <= 9:
-        return 1
-    else:  # 10
-        return 2
+    return FACE_NET[face]
+
+
+# Where the bands fall, as margins: Partial from 0, Success from 1, Overwhelming from 3, held in the
+# ladder's integer milli-units (W3-1, C3-L1: the margin is quantised once, round(MARGIN_SCALE * margin)).
+MARGIN_SCALE = 1000
+BAND_FLOORS = {"partial": 0, "success": 1000, "overwhelming": 3000}
 
 
 # Per-die EV at TN 7 — the only TN there is.
@@ -165,6 +168,9 @@ MU_PER_DIE = 0.40      # [canonical: params/core.md §Expected Value, TN 7]
 SIGMA_PER_DIE = 0.800  # [canonical: params/core.md §Expected Value, TN 7]
 _MU_PER_DIE: float = MU_PER_DIE
 _SIGMA_PER_DIE: float = SIGMA_PER_DIE
+assert abs(MU_PER_DIE - sum(FACE_NET.values()) / 10) < 1e-12 and \
+       abs(SIGMA_PER_DIE ** 2 - sum((v - MU_PER_DIE) ** 2 for v in FACE_NET.values()) / 10) < 1e-12, \
+       "the per-die pair is the face rule's; change them together"
 
 
 _TN_RULING = ('TN is 7. Always. Jordan, 2026-08-25: "TN7 always. Never change TN anywhere '
@@ -269,12 +275,14 @@ def degree_from_net(net: int | float, ob: int | float,
     Partial. It now reads as a Failure. Partial is the near-miss-by-nothing outcome, not the
     tried-and-failed one. Measured deltas are in the ED-IN-0187 ledger entry.
     """
-    margin = net - ob
-    if margin < 0:
+    # The real margin is converted ONCE, here, to integer milli-units and compared against the integer
+    # BAND_FLOORS (C3-L1): a margin that is a float sum a rounding error under an edge reads as on it.
+    m = round(MARGIN_SCALE * (net - ob))
+    if m < BAND_FLOORS["partial"]:
         return Degree.FAILURE
-    if margin < 1:
+    if m < BAND_FLOORS["success"]:
         return Degree.PARTIAL
-    if margin >= 3:
+    if m >= BAND_FLOORS["overwhelming"]:
         # THE ONE BRANCH AN EXTENSION CAN REACH (ED-SC-0032). See `BandExtension` above for why
         # this is the only one, and why the constraint is structural rather than a convention a
         # subsystem is asked to respect. Note the ladder result is NOT passed to the extension:

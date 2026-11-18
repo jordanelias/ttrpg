@@ -98,7 +98,7 @@ TN_STANDARD = 7         # [canonical: params/core.md §TN Values -- FORK: c451bc
 # v32 σ-space modifier seeds (modifier_system_spec.md)
 # Class B draft sim-seeds — sim-tunable, NOT canonical.
 # ---------------------------------------------------------------------------
-LEVEL_SIGMA: dict[str, float] = {
+LEVEL_SIGMA = {
     "minor":    0.25,   # [canonical: modifier_system_spec.md §2.3 Player-facing abstraction]
     "moderate": 0.50,   # [canonical: modifier_system_spec.md §2.3 Player-facing abstraction]
     "strong":   0.75,   # [canonical: modifier_system_spec.md §2.3 Player-facing abstraction]

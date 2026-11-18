@@ -3,13 +3,13 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 124,
-    "total": 380,
-    "uncited": 256,
+    "total": 384,
+    "uncited": 260,
     "of_which_assumption_grade": 8
   },
-  "count": 380,
+  "count": 384,
   "by_module": {
-    "engine.dice_engine": 6,
+    "engine.dice_engine": 10,
     "engine.season": 24,
     "mass_battle": 163,
     "characters": 5,
@@ -21,6 +21,54 @@
     "engine.season.realm": 8
   },
   "params": [
+    {
+      "key": "engine.dice_engine.BAND_FLOORS",
+      "name": "BAND_FLOORS",
+      "value": {
+        "partial": 0,
+        "success": 1000,
+        "overwhelming": 3000
+      },
+      "kind": "table",
+      "module": "engine.dice_engine",
+      "file": "engine/dice_engine/dice_engine.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.dice_engine.FACE_NET",
+      "name": "FACE_NET",
+      "value": {
+        "1": -1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 1,
+        "8": 1,
+        "9": 1,
+        "10": 2
+      },
+      "kind": "table",
+      "module": "engine.dice_engine",
+      "file": "engine/dice_engine/dice_engine.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.dice_engine.MARGIN_SCALE",
+      "name": "MARGIN_SCALE",
+      "value": 1000,
+      "kind": "scalar",
+      "module": "engine.dice_engine",
+      "file": "engine/dice_engine/dice_engine.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
     {
       "key": "engine.dice_engine.MU_PER_DIE",
       "name": "MU_PER_DIE",
@@ -42,6 +90,22 @@
       "note": "[canonical: params/core.md §Expected Value, TN 7]",
       "citation": "params/core.md §Expected Value, TN 7",
       "citation_grade": "source"
+    },
+    {
+      "key": "engine.dice_engine.LEVEL_SIGMA",
+      "name": "LEVEL_SIGMA",
+      "value": {
+        "minor": 0.25,
+        "moderate": 0.5,
+        "strong": 0.75,
+        "major": 1.0
+      },
+      "kind": "table",
+      "module": "engine.dice_engine",
+      "file": "engine/dice_engine/sigma_leverage.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
     },
     {
       "key": "engine.dice_engine.M_MAX",

@@ -35,7 +35,10 @@ def test_every_value_is_a_real_literal_from_source():
     it made this test compare `mass_battle.SEED_BASE`'s bat.py row (1_000_000) against
     lanchester_signature.py's literal (2_000_000) and call the difference fabrication. (key, file) is
     unique across all rows; the pair is what the extractor actually reads."""
-    fresh = {(r["key"], r["file"]): json.dumps(r["value"], sort_keys=True)
+    # The committed side is read back from JSON (dict keys are strings); the fresh side holds the
+    # source's own keys (an int-keyed dict, `FACE_NET`, sorts differently). Round-trip it so both
+    # sides are compared as the file stores them.
+    fresh = {(r["key"], r["file"]): json.dumps(json.loads(json.dumps(r["value"])), sort_keys=True)
              for r in esp.build()["params"]}
     committed = json.load(open(os.path.join(ROOT, 'engine', 'engine_params', 'sim_params.json')))
     for r in committed["params"]:
