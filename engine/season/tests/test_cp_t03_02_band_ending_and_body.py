@@ -33,10 +33,10 @@ _BAND_STATE = {FELLED: dict(felled=True, wounds=2, left=0),
                UNTOUCHED: dict()}
 
 
-def _fight(actor_band, subject_band, yielder=None, fan=None, aid="cp302"):
+def _fight(actor_band, subject_band, yielder=None, fan=None, aid="cp302", beat=None):
     """`ACTOR` fights `SUBJECT` through the real fold and gate at RESOLVE, the band minted by `degree_of`
     as `resolve()`'s seam branch mints it; then WITNESS at the given `fan_out_mode` (the shipped one when
-    `None`)."""
+    `None`). `beat` is the scene's `DecisiveBeat` as the seam lifts it (a dict), or `None` (B14.03)."""
     w = P.tiny_world()
     if fan is not None:
         w.fixtures = w.fixtures.sweep("fan_out_mode", fan)
@@ -48,6 +48,8 @@ def _fight(actor_band, subject_band, yielder=None, fan=None, aid="cp302"):
                            ACTOR: party_state(**_BAND_STATE[actor_band])}}
     if yielder is not None:
         raw["surrender"] = {"by": yielder, "turn": 1, "accepted": True}
+    if beat is not None:
+        raw["beat"] = beat
     res = Resolution(degree_of(raw, SUBJECT, w.fixtures), raw)
     act = Act(id=aid, actor=ACTOR, verb="fight", payload={"subject": SUBJECT})
     out = d._fold(w, mint_token(w, WriteClass.ACTS), act, res)

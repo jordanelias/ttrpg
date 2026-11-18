@@ -270,6 +270,9 @@ class Event:
     # `Observation` channel. A verb on `REQUIRES_PREDICATES` reads the world through a hand-written
     # predicate that records nothing, so it too carries `()` -- that is a gap in the OLD channel,
     # not a claim that nothing was read, and it closes when the verb is typed.
+    #
+    # B14.03: and the outcomes an effect derives from the scene it wrote (a felling's source, a body that broke
+    # first, a named draw), as Observations WITNESS deposits; never an actor, a target or a recipient (S19.3).
     observed: tuple = ()
     # CP-T03-02. HOW A FIGHT ENDED, PER PARTY -- a tuple of `(person id, "felled" | "yielded" |
     # "undecided")` pairs, read off the scene's lifted `wound_state` and `surrender` by the effect that
