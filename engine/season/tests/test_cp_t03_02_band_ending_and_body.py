@@ -133,9 +133,9 @@ def test_the_ending_per_party_on_every_band_event():
     checked = 0
     for (a, s, yielder), want in {
             (UNTOUCHED, WOUNDED, None): {ACTOR: "undecided", SUBJECT: "undecided"},
-            (WOUNDED, FELLED, None): {ACTOR: "undecided", SUBJECT: "felled"},
-            (FELLED, WOUNDED, None): {ACTOR: "felled", SUBJECT: "undecided"},
-            (UNTOUCHED, WOUNDED, SUBJECT): {ACTOR: "undecided", SUBJECT: "yielded"}}.items():
+            (WOUNDED, FELLED, None): {ACTOR: "prevailed", SUBJECT: "felled"},               # B14.02: the one left standing
+            (FELLED, WOUNDED, None): {ACTOR: "felled", SUBJECT: "prevailed"},
+            (UNTOUCHED, WOUNDED, SUBJECT): {ACTOR: "prevailed", SUBJECT: "yielded"}}.items():
         _w, out, _b = _fight(a, s, yielder=yielder)
         assert out
         for e in out:
@@ -165,11 +165,11 @@ def test_a_felled_party_carries_no_body_observation():
 def test_a_capture_yielded_at_the_untouched_band_stamps_the_ending_on_person_captured():
     """`Event.ending` is NOT a Felled/Wounded-only field: `capture`'s Untouched band runs the effect (it declares
     `Tenure.since`), `_eff_capture` returns `_eff_kill`'s `ending` with the opened edge, and the fold stamps it on every
-    success Event -- here `person.captured`, the captive `yielded`, the actor `undecided`, actor first."""
+    success Event -- here `person.captured`, the captive `yielded`, the actor `prevailed` (B14.02), actor first."""
     from .test_cp_t03_09_capture import ACTOR as C_ACTOR, CAPTIVE, _capture, _fold_at, _scene, _world as _cworld
     w, d = _cworld()
     out = _fold_at(w, d, _capture(0), UNTOUCHED, _scene(surrender=dict(by=CAPTIVE, turn=1, accepted=True)))
     assert [e.kind for e in out] == ["person.captured"], [e.kind for e in out]
     (e,) = out
     assert e.ending, "the Untouched capture's Event carries no ending"
-    assert e.ending == ((C_ACTOR, "undecided"), (CAPTIVE, "yielded")), e.ending
+    assert e.ending == ((C_ACTOR, "prevailed"), (CAPTIVE, "yielded")), e.ending      # B14.02: the actor is left standing

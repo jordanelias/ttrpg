@@ -859,9 +859,11 @@ rosters:
     note: >-
       ONE VALUE PER PARTY, read off the scene by `loop/effects_combat.py::fight_ending`: `felled` (his own band is
       `Felled`, `seam/ladder.py::party_degree` off the lifted `wound_state`), `yielded` (the scene's `surrender` names
-      him), `undecided` (neither -- standing, and he did not yield). The ORDER is the tuple's: felled, yielded, undecided.
+      him), `prevailed` (B14.02, D-U1-11a: he is neither felled nor the yielder while the other party is -- the one left
+      standing), `undecided` (neither party is felled or yielded). The ORDER is the tuple's: felled, yielded, undecided,
+      prevailed.
       [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]
-    values: [felled, yielded, undecided]
+    values: [felled, yielded, undecided, prevailed]
 
   margin_endings:
     source: "SC-P1 (H-284): what a margin provider's contest leaves on its Events"

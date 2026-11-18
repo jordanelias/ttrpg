@@ -1149,7 +1149,7 @@ WOUND_QUANTITIES = roster("wound_quantities", ordered=True)
 # CP-T03-05 (`H-251`): the four endings `seam/wrappers/combat.py::fight_estimate` shares out, in `odds_of`'s order.
 ESTIMATE_OUTCOMES = roster("estimate_outcomes", ordered=True)
 # CP-T03-02: how each party's fight ended, as `Event.ending` carries it (`loop/effects_combat.py::fight_ending`).
-ENDING_FELLED, ENDING_YIELDED, ENDING_UNDECIDED = roster("fight_endings", ordered=True)
+ENDING_FELLED, ENDING_YIELDED, ENDING_UNDECIDED, ENDING_PREVAILED = roster("fight_endings", ordered=True)
 # SC-P1 (B05.18): the keys of a margin provider's `Event.ending` tuple, in order (`loop/resolve.py::_fold`).
 MARGIN_ENDING = roster("margin_endings", ordered=True)
 # B05 close: the levels a verb row's `difficulty:` and an arrangement row's `standard:` name, and `Fixtures.difficulty_ob` sizes; bound once.
