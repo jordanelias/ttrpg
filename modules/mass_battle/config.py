@@ -240,7 +240,8 @@ INTENT_DEFENSE_D = 1.0  # die-equivalents a full DEFENSIVE commitment blunts the
 # integer die count before rolling (math.floor(a_pool_raw)) — discarding the fractional remainder and
 # injecting quantization. Gated on, the pool goes to the one sampler as it is (`roll_net_continuous` takes a
 # fractional pool as the fraction it is; one rule below one die is the owner's, DOE §1 rows 4-5) and the
-# one boost reads the same pool. Gated OFF (moves goldens when on — the floored roll is the grid oracle).
+# one boost reads the same pool. Gated OFF (moves goldens when on): the pool is still floored to a whole die count, but it is rolled by the
+# SAME sampler (`resolution.roll_pool` is `roll_net_continuous`, not d10 faces), so the off arm is a floored-pool control, no longer a d10 grid oracle.
 MB_FRACTIONAL_POOL = (_sigma_os.environ.get('MB_FRACTIONAL_POOL', '1') == '1')
 DAMAGE_BY_DEGREE = {"Overwhelming": lambda p: 1+p, "Success": lambda p: p,
                      "Partial": lambda p: 1,        "Failure": lambda p: 0}
