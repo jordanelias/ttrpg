@@ -1,11 +1,11 @@
 """ONE DOOR (B14.11; `03_PC_typed_outcome_one_door` Part B, gate 3): the workbench calls the entry the loop calls.
 
-A workbench trace (`workbench/trace.py::run_traced_fight`) and an entry call (`modules.combat.fight:fight`) on the same
+A workbench trace (`workbench/fight_trace.py::run_traced_fight`) and an entry call (`modules.combat.fight:fight`) on the same
 record at the same seed produce the identical event list; `workbench/balance.py::winrate` is the same fights through the
 same entry; and no caller binds the engine's `wrapper._TRACE` any more (`wrapper.fight(..., trace=)` binds and restores it).
 
-The workbench modules are loaded BY PATH under their own names, because `workbench/trace.py` shadows the standard library's
-`trace` once its directory is on `sys.path` (B14.22 renames it). The record each entry call fights is built here by hand,
+The workbench modules are loaded BY PATH under their own names, because `workbench/` is not a package and its
+directory is kept off `sys.path` here (the former `trace.py`, which shadowed the standard library's `trace`, is `fight_trace.py` since B14.22). The record each entry call fights is built here by hand,
 field by field, never through the workbench's own builder, so a builder that reads a Combatant wrongly is seen as a
 different event list.
 """
@@ -39,7 +39,7 @@ def _load(name: str, file: str):
 
 @pytest.fixture(scope="module")
 def wb_trace():
-    return _load("workbench_trace_under_test", "trace.py")
+    return _load("workbench_trace_under_test", "fight_trace.py")
 
 
 @pytest.fixture(scope="module")

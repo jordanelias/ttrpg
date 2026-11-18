@@ -1,6 +1,6 @@
 """The workbench's one way to a fight: a fighter spec (or a Combatant) becomes a `PersonalCombatInput`, and the record
 is fought by `modules.combat.fight:fight`, the entry the season loop calls (B14.11; `03_PC_typed_outcome_one_door`
-Part B). `trace.py`, `balance.py` and `server.py` read it; none of them calls `wrapper.fight` on a Combatant or touches
+Part B). `fight_trace.py`, `balance.py` and `server.py` read it; none of them calls `wrapper.fight` on a Combatant or touches
 `wrapper._TRACE`.
 
 A PARTY is a plain dict, one fighter's share of the record:
@@ -10,7 +10,7 @@ It comes from a spec (`party_of_spec`: the keys `attributes.KEYS` names, plus we
 or from a built Combatant (`party_of_combatant`). `record_of` zips two parties into the record, `claimants` order.
 
 NOT CARRIED, and said so: state a Combatant holds that the record has no field for (`known_traditions`, a hand-set
-grip or facing) does not cross the door; a declared `Yield` has no field either (`trace.py` keeps its one fallback).
+grip or facing) does not cross the door; a declared `Yield` has no field either (`fight_trace.py` keeps its one fallback).
 
 This file is a leaf: it imports the record type, the entry and the attribute spec, and nothing of the workbench."""
 import os

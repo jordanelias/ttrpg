@@ -195,7 +195,7 @@ def separation_reasons_from_events(events):
 if __name__ == '__main__':
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'workbench'))
     from modules.combat.combatant import Combatant
-    from trace import run_traced_fight
+    from fight_trace import run_traced_fight
 
     checks, rule = [], '=' * 64
     print('state_graph.py — engagement/fight state graph integrity'); print(rule)

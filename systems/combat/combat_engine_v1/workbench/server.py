@@ -22,7 +22,7 @@ from modules.combat import attributes   # the combat attribute spec (PC-14)
 import presets, probabilities as P
 import fight_record as FR   # a spec becomes a PersonalCombatInput, fought by the entry the loop calls (B14.11)
 from commentary import commentate
-from trace import trace_record
+from fight_trace import trace_record
 
 _STATIC = os.path.join(os.path.dirname(__file__), 'static')
 _FIGHTER_FIELDS = attributes.KEYS   # PC-14: the attribute spec owns the roster and the defaults
