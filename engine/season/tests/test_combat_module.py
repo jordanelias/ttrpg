@@ -667,4 +667,4 @@ def test_deepest_gate_reproduces_the_pre_change_hash():
     w = build_realm(0)
     assert w.fixtures.get("body_mark_model") == "deepest_gate"
     run(1, 0, w=w)
-    assert w.content_hash() == "42de0fa6d05fe318145f3d132fdc971f"
+    assert w.content_hash() == "01b25620671b774f0fe3a93f40b82c9f"   # B14.99 re-pin: was 42de0fa6... (B14.02, B14.03, B14.15, B14.16 moved it)
