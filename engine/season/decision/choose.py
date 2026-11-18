@@ -31,6 +31,8 @@ from __future__ import annotations
 
 import math as _math
 from typing import Any, Callable, Optional
+
+from engine.dice_engine.fmath import ltr_sum
 from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member, roster, seat_capability
 from ..data.verbs import VERB_TABLE, act_key, align
 from ..gaps import Unspecified
@@ -244,7 +246,7 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
         raise ValueError("score_terms needs a memo from `deliberation_memo(p, fx)` "
                          "(or `make_chooser`'s): the pursuit weights and damp are "
                          "hoisted per deliberation") from None
-    pursuit = damp * sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES)
+    pursuit = damp * ltr_sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES)
     if pursuit != 0.0:
         pursuit *= odds_weight(p, c, fx, odds)
     else:

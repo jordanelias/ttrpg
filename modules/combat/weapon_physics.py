@@ -28,23 +28,13 @@ fit in the re-baseline, not asserted.
 """
 import math
 
-from . import vocabulary as V   # the engine's token ALPHABET, owned once (ED-PC-0042). A zero-import leaf, so this
+from engine.dice_engine.fmath import ltr_sum
+from . import vocabulary as V  # the engine's token ALPHABET, owned once (ED-PC-0042). A zero-import leaf, so this
                          # module -- which CANNOT import core (core imports IT: `import weapon_physics as WP`) -- still reaches the
                          # same head/mode/hilt tokens core's tables are keyed by, with no cycle.
 
 
-def _ltr_sum(xs):
-    """Left-to-right float accumulation: ((0 + x0) + x1) + x2 ... — each `+` is one IEEE-754 binary64 addition,
-    which is correctly rounded on every platform, so the ACCUMULATION is bit-identical everywhere (the parts' own
-    `**` is the platform's libm and is not controlled here). The builtin `sum()` is NOT: CPython 3.12 changed it
-    to Neumaier-compensated summation for floats, so `sum()` of the same parts reads one ULP apart on 3.11 and on
-    3.12+ (CR-01: bind_sigma for bear_spear). This is the pre-3.12 value. CI pins 3.11, where `sum()`
-    and this agree, so CI cannot observe the difference. Pure."""
-    total = 0
-    for x in xs:
-        total += x
-    return total
-
+# A float sum here goes through `fmath.ltr_sum`, the one accumulation rule (its docstring says why: CR-01).
 # ── composite-mass constants (sourced; recovered weapon_physics_calibration_2026-06-22) ──
 # head_len/grip_len/the GRIP_*/LEVER_*/PERC_GRIP_1H/REC_GRIP_REF/GRAB_SHORT_REACH thresholds are all HONEST
 # METRES (ED-PC-0002).
@@ -163,11 +153,11 @@ def derive(w):
     Lt = Lh + Lg
     parts = _all_parts(w)
     if parts:
-        m_total = _ltr_sum(p[0] for p in parts)
-        moment = _ltr_sum(p[0] * p[1] for p in parts)
-        moi = _ltr_sum(p[0] * (p[1] ** 2 + p[2] ** 2 / 12.0) for p in parts)
+        m_total = ltr_sum(p[0] for p in parts)
+        moment = ltr_sum(p[0] * p[1] for p in parts)
+        moi = ltr_sum(p[0] * (p[1] ** 2 + p[2] ** 2 / 12.0) for p in parts)
         PoB = moment / m_total
-        m_head = _ltr_sum(e['mass_kg'] for e in w.get('elements', ()))
+        m_head = ltr_sum(e['mass_kg'] for e in w.get('elements', ()))
         return dict(PoB_m=PoB, PoB_cm=PoB * 100, PoB_frac=PoB / Lt, m_head=m_head,
                     MoI=moi, static_moment=moment, fwd_extent_m=Lh, length_m=Lt)
     # ── fallback (not exercised by the live roster) ──
@@ -206,9 +196,9 @@ def derive(w):
         me = e['mass_share'] * head_mass
         fparts.append((me, e['pos_frac'] * Lh, e.get('rod_L', 0.0)))
         m_head += me
-    m_total = _ltr_sum(p[0] for p in fparts)
-    moment = _ltr_sum(p[0] * p[1] for p in fparts)
-    moi = _ltr_sum(p[0] * (p[1] ** 2 + p[2] ** 2 / 12.0) for p in fparts)
+    m_total = ltr_sum(p[0] for p in fparts)
+    moment = ltr_sum(p[0] * p[1] for p in fparts)
+    moi = ltr_sum(p[0] * (p[1] ** 2 + p[2] ** 2 / 12.0) for p in fparts)
     PoB = moment / m_total
     return dict(PoB_m=PoB, PoB_cm=PoB * 100, PoB_frac=PoB / Lt, m_head=m_head,
                 MoI=moi, static_moment=moment, fwd_extent_m=Lh, length_m=Lt)
@@ -269,7 +259,7 @@ def hilt_assembly_mass(w):
     ricasso/tip, with the guard+pommel assembly projecting out as an improvised mace head — see
     reversed_grip_percussion's docstring for sourcing). Pure sum over the weapon's own located parts, no name
     check. 0.0 for a weapon with no guard/pommel/haft record (e.g. a synthetic test dict)."""
-    guard_m = _ltr_sum(g['mass_kg'] for g in w.get('guards', ()) if not g.get('dual_role_element'))
+    guard_m = ltr_sum(g['mass_kg'] for g in w.get('guards', ()) if not g.get('dual_role_element'))
     pommel_m = w.get('pommel', {}).get('mass_kg', 0.0)
     haft_m = w.get('haft', {}).get('mass_kg', 0.0)
     return guard_m + pommel_m + haft_m
@@ -586,7 +576,7 @@ DISTRACT_K = 2.0  # [SIM-CALIBRATE] saturating-sum gain on Σ count·extent_m; t
 def distraction(w):
     """Saturating sum over the weapon's adornments (count × extent, position-independent — any motion near the
     weapon draws the eye). In [0,1); 0 for the (typical) weapon with no adornments field. Pure."""
-    total = _ltr_sum(a.get('count', 1) * a.get('extent_m', 0.0) for a in w.get('adornments', ()))
+    total = ltr_sum(a.get('count', 1) * a.get('extent_m', 0.0) for a in w.get('adornments', ()))
     return math.tanh(DISTRACT_K * total)
 
 

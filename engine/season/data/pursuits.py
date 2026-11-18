@@ -31,6 +31,7 @@ from __future__ import annotations
 import math
 from typing import Optional
 
+from engine.dice_engine.fmath import ltr_sum
 from ..gaps import Unspecified
 from engine.substrate.descriptors import resolve_pursuit
 
@@ -142,9 +143,9 @@ _AXES = tuple(sorted(PURSUIT_AXES))
 def pursuit_cosine_axes(mine: dict, theirs: dict) -> Optional[float]:
     """The cosine of two ALREADY PROJECTED vectors (`to_axes` output), `[-1, +1]`; `None` when either is the
     zero vector. The arithmetic of `pursuit_cosine`, for a caller that holds the projection already."""
-    dot = sum(mine[a] * theirs[a] for a in _AXES)
-    na = math.sqrt(sum(mine[a] ** 2 for a in _AXES))
-    nb = math.sqrt(sum(theirs[a] ** 2 for a in _AXES))
+    dot = ltr_sum(mine[a] * theirs[a] for a in _AXES)
+    na = math.sqrt(ltr_sum(mine[a] ** 2 for a in _AXES))
+    nb = math.sqrt(ltr_sum(theirs[a] ** 2 for a in _AXES))
     if not na or not nb:
         return None
     return max(-1.0, min(1.0, dot / (na * nb)))
