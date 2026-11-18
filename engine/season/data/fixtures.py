@@ -648,8 +648,15 @@ DEFAULT_FIXTURES = Fixtures(
     # harm (`body_step` above: the live arm ships, the control is one named value away)
     # [ASSUMPTION; medium; Jordan to correct; revert: none]. `none` is the control: no ceiling moves.
     # Injection site: this line, read by `loop/effects_combat.py::_eff_kill`.
-    # [JUSTIFIED: engine/season/hole_register.yaml H-258 -- the gate and the ceiling walk are the CP-T03-07 home's; only whether the live arm ships is undocumented, so it is injected and swept none / deepest_gate]
-    body_mark_model="deepest_gate",    # `H-258`, swept none (control) / deepest_gate (SHIPPED)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-258 -- the gate and the ceiling walk are the CP-T03-07 home's; only whether the live arm ships is undocumented, so it is injected and swept none / deepest_gate / drawn]
+    body_mark_model="deepest_gate",    # `H-258`, swept none (control) / deepest_gate (SHIPPED) / drawn (B14.23, flipped by B15)
+    # B14.23 (`H-567`). THE OBSTACLE OF THE LASTING MARK'S ROLL, read only under `body_mark_model` `drawn`: a survivor at his limit rolls once
+    # (`loop/effects_combat.py::_marks`, the one pool rule on the untrained default, his body band entering as levels through the `wounds` source,
+    # the one sampler) and the net meets this obstacle on the one ladder. Fractional like every obstacle (A-5); under `deepest_gate` and `none`
+    # it is read by nothing. The seed value is the even line of a pool of `pool_add` dice (`sigma_leverage.even_line`, 0.4 a die); B15 sets it with the flip.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `body_mark_model: deepest_gate`, which reads no obstacle]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-567 -- `site: Fixtures mark_ob`, graded `assumption`; no document gives how hard it is to mend clean at one's limit, so it is injected and swept 1.2 / 2.4 / 4.8]
+    mark_ob=2.4,                       # `H-567`, swept 1.2 / 2.4 (seed value, read only under `drawn`) / 4.8
     # `H-184` (split out of `H-98`). WHERE THE `Wounded` BAND STARTS: the threshold `wounds` must be
     # strictly above for a standing subject to read `Wounded` rather than `Untouched`. The edge is
     # `rosters.yaml: combat_band_edges` and `None` MEANS ITS VALUE (`0`, any wound), so the number is

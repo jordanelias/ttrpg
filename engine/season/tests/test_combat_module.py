@@ -618,3 +618,53 @@ def test_the_believed_estimate_is_private_and_moves_no_hash():
     assert sigma.believed_chance(called, called.persons[_A], act, ("Won",)) is None
     assert sigma.believed_chance(called, called.persons[_B], act, ("Felled",)) is None
     assert sigma.believed_chance(called, called.persons[_A], act, ()) is None
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B14.23 (`U5b_PC_residue` §7; A-30, A-5 to A-8): THE LASTING MARK MAY BE DRAWN, AND SHIPS AT TODAY'S ARM.
+# ---------------------------------------------------------------------------------------------------------------------
+def test_drawn_marks_yield_all_three_outcomes_over_200_seeds():
+    """200 seeded fights, each leaving a survivor at his limit (`wounds == max_wounds`, one gate short of felling), folded through the real
+    gate at `body_mark_model` `drawn`: Failure leaves ceiling 499 (`marked_ceiling` applied twice), Partial 799 (as today), Success and better
+    1000 (no mark); one `marked` Observation on the survivor's Event exactly where a mark fell, carrying the ceiling written. FALSIFIER: under
+    `drawn`, a mark on every such survivor (the 1000 outcome absent), or a `marked` Observation beside no mark. CONTROL: `deepest_gate` marks
+    every one of the same fights at 799 and records no `marked`, so the assertions can see what `drawn` changed. The draw is keyed by the victim
+    and its own purpose (`fight.mark`): the same seed and victim give the same outcome whatever the act's id."""
+    from ..harness import probes as P
+    from ._scar_helpers import party_state
+    from .test_cp_t03_07_body_ceiling import DEEPEST, SUBJECT, _fight as fold
+
+    def one(seed: int, model: str, aid: str = "b1423"):
+        w = P.tiny_world()
+        w.world_seed = seed
+        w.fixtures = w.fixtures.sweep("body_mark_model", model)
+        _res, out = fold(w, party_state(**DEEPEST), aid=aid)
+        marked = [o for e in out for o in e.observed if o.predicate == "marked"]
+        return w.persons[SUBJECT].body_ceiling, marked
+
+    ceilings, checked = {}, 0
+    for seed in range(200):
+        ceiling, marked = one(seed, "drawn")
+        assert (len(marked) == 1 and marked[0].subject == SUBJECT and marked[0].value == ceiling) if ceiling < 1000 else not marked, (seed, ceiling, marked)
+        assert not marked or ceiling in (799, 499), (seed, ceiling)
+        ceilings[ceiling] = ceilings.get(ceiling, 0) + 1
+        checked += 1
+        held, held_marked = one(seed, "deepest_gate")                    # the control, the same fight
+        assert (held, held_marked) == (799, []), (seed, held, held_marked)
+    assert checked >= 200
+    assert set(ceilings) == {1000, 799, 499}, f"the three outcomes each occur over {checked} seeds: {ceilings}"
+    assert ceilings[1000] < checked, "a mark on every survivor is the certainty the draw replaces"
+    for seed in range(8):                                                # keyed by victim and purpose, not by the act or a stream position
+        assert one(seed, "drawn", aid="x")[0] == one(seed, "drawn", aid="y")[0]
+
+
+def test_deepest_gate_reproduces_the_pre_change_hash():
+    """B14.23's control: with `body_mark_model` at its shipped `deepest_gate`, the realm at seed 0 after one season reads the content hash it read
+    before `drawn` was added (the reading @dd5fc96, B14.24's close). The arm is asserted, so a flipped default cannot pass as a reproduction. Pins
+    the item alone: a later mover (B14.15's scene shape) moves it and B14.99 re-pins it."""
+    from ..boot.realm import build_realm
+    from ..harness.populated import run
+    w = build_realm(0)
+    assert w.fixtures.get("body_mark_model") == "deepest_gate"
+    run(1, 0, w=w)
+    assert w.content_hash() == "42de0fa6d05fe318145f3d132fdc971f"

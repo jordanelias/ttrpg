@@ -15,6 +15,8 @@ from __future__ import annotations
 
 from dataclasses import replace
 
+from engine.dice_engine.dice_engine import Degree, degree_from_net
+from engine.dice_engine.sigma_leverage import levels_to_net_sigma, net_boost, pool_of, roll_net_continuous
 from engine.substrate import descriptors
 
 from ..data.rosters import (
@@ -28,11 +30,13 @@ from ..gaps import Unspecified
 from ..queries.person_q import held_against
 from ..queries.world_q import BODY_STEM, DETAIN_KIND, ancestry, garrison_sites, holder_faction_of, home_of, restrained
 from ..seam.ladder import party_degree
+from ..seam.wrappers.pool import pool_pair, untrained
+from ..seam.wrappers.sigma import ADVANTAGE_SOURCES, WOUNDS
 from ..state.carriers import Tenure
 from ..state.gate import (
     NO_CHANGE, PERSON_DIED, Change, Subject, death_subjects, may_muster, may_warrant, own_kinds, seat_faction,
 )
-from ..state.ids import H
+from ..state.ids import H, draw_factory
 
 from .effects_economy import _fall
 from .effects_information import _may_close_custody
@@ -227,7 +231,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         # (`bodies[pid] is None`) writes nothing and observes nothing.
         # [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]
         named += (Subject.entity("persons", pid, earns=own, fields=(BODY_STEM, CEILING),
-                                 observed=body_observed(pid, bodies[pid])),)
+                                 observed=body_observed(pid, bodies[pid]) + marked_observed(w, pid, marks)),)
     # CP-T03-04 (iv): EACH GROWN PARTY IS ITS OWN SUBJECT ON `capability`, earning the `(Person, capability)` cell's
     # kind alone -- never a body subject's kind, and never on a party who did not grow (the filter above).
     named += tuple(Subject.entity("persons", pid, earns=GROWN_KINDS, fields=("capability",)) for pid in grown)
@@ -443,11 +447,43 @@ def marked_ceiling(ceiling: int, floors) -> int:
     return max(below) - 1 if below else ceiling
 
 
+MARKED_STEM = "marked"
+
+
+def marked_observed(w: "World", pid: str, marks: dict) -> tuple:
+    """B14.23: the Observation a DRAWN mark carries -- `(pid, "marked", the ceiling it left)` -- or `()` where no mark fell on `pid`, and at every arm but
+    `drawn` (`deepest_gate` and `none` tell no mark, so the shipped arm's Events are the pre-item ones). Rides `Event.observed` as `broke` and
+    `fell_to` do: an Observation predicate is not a member of `rosters.yaml: observation_terms`, which is `epistemic.Seen`'s field list."""
+    if pid not in marks or w.fixtures.get("body_mark_model") != "drawn":
+        return ()
+    return (Observation(pid, MARKED_STEM, marks[pid]),)
+
+
+def _mark_degree(w: "World", pid: str, body: int, ceiling: int) -> Degree:
+    """B14.23 (`U5b_PC_residue` section 7; A-5 to A-8, A-30): THE BAND OF ONE SURVIVOR'S MARK ROLL. The pool is the one pool rule on the
+    untrained default -- `pool_of(pool_default, 0, pool_add, pool_floor)`, no skill being authored for mending clean -- and his body band enters as
+    LEVELS through the `wounds` source (`ADVANTAGE_SOURCES[WOUNDS]`, the roller's own wound against him, as `combat._carried_of` reads it), summed by
+    `levels_to_net_sigma` and applied as `net_boost`, never a die and never an obstacle term. The sampler is the one (`roll_net_continuous`); the
+    obstacle is the fixture `mark_ob`, graded on the one ladder (`degree_from_net`). The stream is the survivor's own, keyed
+    `(world_seed, tick, victim, "fight.mark")` (`state.ids.draw_factory`, A-30): never a position in the scene's stream and never the season's draw,
+    so the roll reads `World` and writes nothing. [ASSUMPTION; medium; Jordan to correct; revert: `body_mark_model: deepest_gate`]"""
+    fx = w.fixtures
+    add, floor = pool_pair(fx)
+    pool = pool_of(untrained(fx), 0, add, floor)
+    _for, against = ADVANTAGE_SOURCES[WOUNDS](fx, {"body": body, "body_ceiling": ceiling})
+    sigma = levels_to_net_sigma(_for, against)
+    rng = draw_factory(w.world_seed, lambda: w.tick)(pid, "fight.mark")
+    net = roll_net_continuous(pool, rng=rng) + net_boost(sigma, pool)
+    return degree_from_net(net, fx.get("mark_ob"))
+
+
 def _marks(w: "World", bodies: dict, states: dict) -> dict:
     """v11 CP-T03-07: `{pid: new body_ceiling}` for each party of a fight who SURVIVES it (his written body is above 0;
     a `none`-arm party, written nothing, is not marked) at the engine's DEEPEST GATE SHORT OF FELLING -- `wounds >=
     max_wounds` on his lifted tracker (`rosters.yaml: wound_quantities`) -- and whose ceiling the mark lowers
     (`marked_ceiling`). `body_mark_model: none` (`H-258`, the control) marks nobody.
+    `drawn` (B14.23, `H-567`; not shipped): each such survivor rolls ONCE (`_mark_degree`, keyed `fight.mark`) and Failure lowers the ceiling
+    twice (`marked_ceiling` applied twice), Partial once as `deepest_gate` does, Success and better not at all.
     [ASSUMPTION; medium; Jordan to correct; revert: `body_mark_model: none`]"""
     mode = w.fixtures.get("body_mark_model")
     require_member(
@@ -471,6 +507,12 @@ def _marks(w: "World", bodies: dict, states: dict) -> dict:
             continue
         p = w.persons[pid]
         after = marked_ceiling(p.body_ceiling, floors)
+        if mode == "drawn":
+            degree = _mark_degree(w, pid, body, p.body_ceiling)
+            if degree in (Degree.SUCCESS, Degree.OVERWHELMING):
+                continue
+            if degree is Degree.FAILURE:
+                after = marked_ceiling(after, floors)
         if after != p.body_ceiling:
             out[pid] = after
     return out

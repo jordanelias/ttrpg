@@ -5264,10 +5264,23 @@ rows:
     grade:     "assumption"
     default:   "deepest_gate -- SHIPPED [ASSUMPTION; medium; Jordan to correct; revert: none], on REM-52's precedent for a harm (`body_step`): the live arm ships with the control one named value away. A party who survives at `wounds >= max_wounds` (the engine's deepest gate short of felling) has his ceiling fall to one below the next `band_floors[\"body\"]` floor beneath it (1000 -> 799 -> 499 -> 99), as many times as there are floors; the written body is held at or under the new ceiling"
     site:      "Fixtures body_mark_model, read by `engine/season/loop/effects_combat.py::_eff_kill` (`_marks`)"
-    sweep:     [none, deepest_gate]
+    sweep:     [none, deepest_gate, drawn]
     unblocks:  "CP-T03-08 (`tend` forms on a person below his ceiling). Reference, not a dependency: CP-T10-04 (unbuilt) is planned to read the field as its rising arm's cap; no gap there is measured"
     cite:      "FALSIFIER: `engine/season/tests/test_cp_t03_07_body_ceiling.py` -- a survivor at `wounds == max_wounds` holds 799 and his written body is under it; `tend` restores him to 799 where an unmarked man goes to 1000, and his `budget` sits one below whole; mutation red: a raiser reading `condition_scale` lifts him past 799; an asymmetry guard fails on a new bare `body` write not registered with its relation to the ceiling. CONTROL: `none` marks nobody and, with the field dropped from the canonical encoding (`revert_cp_t03_07`), reproduces the pre-item hashes"
-    source:    "v11 CP-T03-07, batch B10-11"
+    source:    "v11 CP-T03-07, batch B10-11; `drawn` swept in by B14.23 (`U5b_PC_residue` section 7), not shipped"
+
+  - id:        H-567
+    tier:      1
+    hole:      "HOW HARD IT IS TO MEND CLEAN AT ONE'S LIMIT (B14.23; `U5b_PC_residue` section 7, G-22). Under `body_mark_model` `deepest_gate` every survivor at `wounds >= max_wounds` is marked with certainty; the standing rule asks a draw for a thing that could go either way. Under `drawn` he rolls once and the net meets this obstacle on the one ladder: Failure lowers the ceiling twice, Partial once, Success and better not at all. No document gives the obstacle."
+    kind:      "NUMBER"
+    owner:     "`engine/season/loop/effects_combat.py::_marks`, the one place `mark_ob` is read, and only under `drawn`"
+    grade:     "assumption"
+    default:   "2.4 -- SEED VALUE, read by nothing at the shipped `deepest_gate` [ASSUMPTION; medium; Jordan to correct; revert: `body_mark_model: deepest_gate`, which reads no obstacle]: the even line of a pool of `pool_add` (6) dice at 0.4 a die (`sigma_leverage.even_line`), taken at `CLAUDE.md` section 0's ladder step 5 (architecture) so that the three outcomes each occur; B15 sets it with the flip, with the calibration batch."
+    site:      "Fixtures mark_ob, read by `engine/season/loop/effects_combat.py::_marks` under `body_mark_model` `drawn`"
+    sweep:     [1.2, 2.4, 4.8]
+    unblocks:  "the flip of `body_mark_model` to `drawn` (B15), after A3's mortal-wound draw (`14_VERBS_PHYSICAL_A`)"
+    cite:      "FALSIFIER: `engine/season/tests/test_combat_module.py::test_drawn_marks_yield_all_three_outcomes_over_200_seeds` (200 survivors at the limit: ceilings 1000, 799 and 499 each occur, a `marked` Observation beside every mark and none beside none; red with `drawn` absent from the roster). CONTROL: `::test_deepest_gate_reproduces_the_pre_change_hash` (the realm hash at seed 0, one season, unmoved at the shipped arm)."
+    source:    "workplan v12 B14.23 (`proposals/2026-11-12-subsystem-audit-suite/proposals/U5b_PC_residue.md` section 7), batch B14-pc-outcome; ED-block slot 1 of the batch's H block"
 
   - id:        H-259
     tier:      1
