@@ -1,7 +1,7 @@
 """`seam/wrappers/pool.py` -- THE ONE POOL READER (CP-T01-01).
 
-`faculty` is read by the social contest (`sigma.py`, `contest_input` and `odds_of`) and, CR-85, by combat
-(`combat.py::combat_input`). `combat.py` imports `sigma.py` (`ADVANTAGE_SOURCES`, `WOUNDS`) and `sigma.py` no longer imports `combat.py` at module
+`faculty` is read by the social contest (`sigma.py`, `contest_input` and `odds_of`); combat reads `score`, `addends_of` and `pool_pair`
+(`combat.py::combat_input`, CR-85) and builds its own pool in the module. `combat.py` imports `sigma.py` (`ADVANTAGE_SOURCES`, `WOUNDS`) and `sigma.py` no longer imports `combat.py` at module
 level, so the edge runs one way; the pool reader still lives here, a leaf both adapters import and neither is imported
 by: ONE OWNER, no copy.
 `sigma.py` re-exports the names it imports from here; a test that REPLACES

@@ -90,7 +90,7 @@ from ...queries.world_q import docketed_under, proofs, reception
 from ...state.carriers import EFFORT, effort_of
 from ...state.gate import UNDECLARED_DISPOSAL, sits_over
 from ._entry import entry_for
-from .pool import (POOL_ADDENDS, _capability, faculty, governing_attribute, opposing_attribute, pool_pair, register_pool_addend,  # noqa: F401  (moved: see pool.py)
+from .pool import (POOL_ADDENDS, _capability, faculty, governing_attribute, governing_score, rank, opposing_attribute, pool_pair, register_pool_addend,  # noqa: F401  (moved: see pool.py)
                    score, untrained)
 
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
@@ -495,7 +495,7 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     inp = _frame(fx, pool, opposition, doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb, edge, circumstance, office,
                  docketed=docketed, heard=room is not None, regard=regard, bodies=bodies)
     levels = _levels_count(advantage_levels(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies)))     # the same sources `leverage` summed (OBS §5)
-    read = {"dice": score(w, actor, verb) if "dice" in roles else None, "opposes": opposition}
+    read = {"dice": governing_score(w, actor, verb) + rank(actor, verb) if "dice" in roles else None, "opposes": opposition}   # the pool's own base (B05.25), not `score`
     chosen = {id(r): (value, levels_to_net_sigma(*_edge_levels(r, key, value))) for r, key, value in edge}
     chosen.update({id(r): (value, _circumstance_ob(fx, r, value)) for r, key, value in circumstance})
     return inp, tuple((r, *chosen[id(r)]) if id(r) in chosen else (r, read[r.role], None)

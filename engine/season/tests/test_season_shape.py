@@ -13321,7 +13321,7 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # unplugged sims that roll their own (the σ composition's source is one of them) and `31b`/`31c`
     # move more resolvers into `modules/`; the one-owner property this guarded is now "the host rolls
     # nothing", and a margin is a module's to produce.
-    pattern = re.compile(r"\bnet\b\s*=|roll_pool|\broll_net\b|\bnet_boost\b|\bsuccesses\b")
+    pattern = re.compile(r"\bnet\b\s*=|roll_pool|\broll_net\b|\broll_net_continuous\b|\bnet_boost\b|\bsuccesses\b")
 
     def _producers(paths, base):
         out = set()

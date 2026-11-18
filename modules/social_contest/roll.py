@@ -107,7 +107,7 @@ def obstacle(inp: SocialContestInput) -> tuple:
     ceiling is one bound inside this composition, the same for every party. PER MATTER (ED-SC-0038's pick): this bounds ONE record's
     obstacle and nothing composes obstacles across a bundle. `None` is the uncapped control arm. THE SHIPPED ARM IS SOLVED PER POOL
     (CP-T01-06, `chance_floor`; `ceiling_per_pool`): from one die the cap is the highest Ob at which that pool keeps the chance of
-    Partial-or-better the fixed ceiling leaves a one-die roll (`_chance_floor_cap`, solved on the closed form of the one sampler at the
+    Partial-or-better the fixed ceiling leaves a one-die roll (`_chance_floor_cap`, solved on the closed form of the one sampler,
     the closed form above; 2.0 at pool 1, 3.06 at pool 2, rising with the pool), so a larger pool is never worse for the
     cap, and at the shipped ceiling (2) S27.4's `ob > multiple x pool` never holds on a derived pair. Below one die the fixed ceiling
     applies. THE CEILING'S FORM (`ceiling_form`, B05.54; `16_PESSIMIST_DICE_soft_ceiling`): `hard` is the flat bound above (`min(ob, cap)`:

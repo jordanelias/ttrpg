@@ -43,7 +43,7 @@ Diagnose substrate and advantage separately:
 | **substrate** | `engine/dice_engine/dice_engine.py` | `roll_pool` (discrete), `continuous_engine_sample` (fractional), `degree_from_net` (**the** ladder, single owner for every scale) |
 | **advantage** | `engine/dice_engine/sigma_leverage.py` — `[CANONICAL]` | turns signed σ-unit advantages into a **μ-shift** on the roll; single-sources σ-leverage for **combat and social contest only** |
 | pinned by | `engine/tests/test_sigma_leverage_parity.py` + `engine/tests/goldens/sigma_leverage_parity.json` | the execution artifact. Read it before claiming behaviour |
-| ⚠ **a second σ path** | `modules/mass_battle/resolution.py` | **declared divergent** (no `engine.*` dependency): own `_sigma_softcap`, `_sigma_net_boost` with a local `_SIG_PER_DIE`, `roll_pool_fractional`, local `compute_degree` with `_DEGREE_EPS`. Ladder half guarded by `tests/valoria/test_degree_ladder_single_owner.py` — do not re-file. σ half and pool floor unguarded. **In scope: reading only `engine/dice_engine/` misses it** |
+| mass battle | `modules/mass_battle/resolution.py` | **one σ path since B05.03**: the field draws `engine.dice_engine.sigma_leverage.roll_net_continuous` and takes its boost through `resolution._net_boost` (the dust snap, then `sigma_leverage.net_boost`) and its degree from `dice_engine.degree_label`. The local `_sigma_softcap`, `_sigma_net_boost`, `roll_pool_fractional` and `compute_degree` are deleted. Ladder half guarded by `tests/valoria/test_degree_ladder_single_owner.py`. |
 
 **The API you are auditing against** — read it, do not restate it from memory:
 `sigma_n(pool)` = `0.8·√max(1,pool)` · `soft_cap(σ)` = `M_MAX·tanh(σ/M_MAX)`, `M_MAX = 1.5` ·
@@ -110,6 +110,8 @@ derivation — an S *calculations consistent in methodology* defect, not a missi
 | the **whole-success-wide Partial window** (`0 ≤ margin < 1`) keeps Partial reachable | read the band in `degree_from_net`. Narrowed to point-equality, Partial stops firing against a fractional Ob |
 
 ## §4 · THE POOL FLOOR IS 1D — AND IT REACHES THE MEAN, NOT ONLY THE VARIANCE
+
+> **B05.02 (read first):** `net_boost`, `roll_net_continuous` and `band_odds` no longer floor the pool at one die (`sqrt(max(0.0, pool))`; below one die the draw is the Normal at the pool as it is). `sigma_n` still floors at 1D, and combat floors its pool at 1 itself. Where the bullets below say a function "floors", read them against `sigma_leverage.py` as it stands; `roll_net` is deleted.
 
 **1D is the floor:** `sigma_leverage.py:276` and `:331`. Their `params/core.md §Pool Floor` tag is
 a citation convention, not an openable path (`engine/params/` is dissolved).

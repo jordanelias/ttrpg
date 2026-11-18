@@ -42,9 +42,7 @@ from modules.mass_battle.resolution import _SIGMA_ZERO_SNAP, _snap_sigma   # noq
 _MILLI = 1 / dice_engine.MARGIN_SCALE
 
 
-def _sigma_net_boost(net_sigma, pool):
-    """The field's boost as the orchestration computes it: the producers' dust snapped, then the owner's boost."""
-    return net_boost(_snap_sigma(net_sigma), pool)
+from modules.mass_battle.resolution import _net_boost as _sigma_net_boost   # noqa: E402  -- the field's chokepoint itself, as the orchestration calls it
 
 _OBS = (1, 3, 6, 9)
 
