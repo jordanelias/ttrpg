@@ -185,13 +185,13 @@
       "citation_grade": "source"
     },
     {
-      "key": "engine.season.DIFFICULTY_OB_HALF",
-      "name": "DIFFICULTY_OB_HALF",
+      "key": "engine.season.DIFFICULTY_OB_CONTROL",
+      "name": "DIFFICULTY_OB_CONTROL",
       "value": {
         "plain": 0,
-        "routine": 0.5,
-        "demanding": 1,
-        "hard": 1.5
+        "routine": 1,
+        "demanding": 2,
+        "hard": 3
       },
       "kind": "table",
       "module": "engine.season",
@@ -4529,33 +4529,33 @@
     {
       "key": "engine.season.settings.pool_add",
       "name": "pool_add",
-      "value": 0,
+      "value": 6,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-420`, swept 0 (control, SHIPPED) / 3 / 6 (live)",
+      "note": "`H-420`, swept 0 (control) / 3 / 6 (live, SHIPPED)",
       "citation": null,
       "citation_grade": null
     },
     {
       "key": "engine.season.settings.pool_floor",
       "name": "pool_floor",
-      "value": 0,
+      "value": 5,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-421`, swept 0 (control, SHIPPED) / 3 / 5 (live)",
+      "note": "`H-421`, swept 0 (control) / 3 / 5 (live, SHIPPED)",
       "citation": null,
       "citation_grade": null
     },
     {
-      "key": "engine.season.settings.opposition_rate",
-      "name": "opposition_rate",
-      "value": 0.5,
-      "kind": "scalar",
+      "key": "engine.season.settings.attribute_level",
+      "name": "attribute_level",
+      "value": "minor",
+      "kind": "other",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-423`, swept 0.5 (control, SHIPPED) / 0.45 / MU_PER_DIE (live)",
+      "note": "`H-422`, swept None (control) / minor (live, SHIPPED) / moderate",
       "citation": null,
       "citation_grade": null
     },
@@ -4564,36 +4564,36 @@
       "name": "difficulty_ob",
       "value": {
         "plain": 0,
-        "routine": 1,
-        "demanding": 2,
-        "hard": 3
+        "routine": 0.8,
+        "demanding": 1.6,
+        "hard": 2.4
       },
       "kind": "table",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-424`, swept control (SHIPPED) / halved (`DIFFICULTY_OB_HALF`, OBS §4 step 5's live arm) / one step coarser",
+      "note": "`H-424`, swept control (`DIFFICULTY_OB_CONTROL`) / half / three-quarter / calibrated (SHIPPED)",
       "citation": null,
       "citation_grade": null
     },
     {
       "key": "engine.season.settings.regard_step",
       "name": "regard_step",
-      "value": 0,
+      "value": 1.0,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-426`, swept 0 (control, SHIPPED) / 0.5 / 1.0 (live) / 2.0",
+      "note": "`H-426`, swept 0 (control) / 0.5 / 1.0 (live, SHIPPED, B05.23: C5) / 2.0",
       "citation": null,
       "citation_grade": null
     },
     {
       "key": "engine.season.settings.proof_admission",
       "name": "proof_admission",
-      "value": "off",
+      "value": "on",
       "kind": "other",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-427`, swept off (control, SHIPPED) / on (live)",
+      "note": "`H-427`, swept off (control) / on (live, SHIPPED, B05.23)",
       "citation": null,
       "citation_grade": null
     },

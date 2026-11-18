@@ -229,7 +229,8 @@ def test_the_opponent_attribute_raises_the_opposition():
     assert b.opposition > a.opposition and tb["opposition"] > ta["opposition"]     # the opponent's attribute is harder to move
     default = w.fixtures.get("pool_default")
     assert a.opposition == 3 + default and b.opposition == 6 + default       # B05.14 (A-137): one point of the attribute, one point of the opposition, ON TOP of the skill score
-    assert tb["opposition"] - ta["opposition"] == 0.5 * (6 - 3)              # and `opposition_rate` of each at the control
+    rate = float(w.fixtures.get("opposition_rate"))                           # B05.23: the live rate, `MU_PER_DIE` (0.5 at the control)
+    assert abs((tb["opposition"] - ta["opposition"]) - rate * (6 - 3)) < 1e-9, (ta, tb, rate)     # and `opposition_rate` of each
     # CONTROL: an opponent holding no `opposed_attribute` at all reads it at the mid-point (B05.16), above the held 3.
     w.persons["p_other"].attributes = {}
     mid = (descriptors.ATTRIBUTE_FLOOR + descriptors.ATTRIBUTE_CEILING) / 2
@@ -315,3 +316,29 @@ def test_faculty_reads_its_pool_pair_from_the_social_roll_dice_row(monkeypatch):
         rows[i] = {k: v for k, v in rows[i].items() if k not in ("add", "floor")}
     _rebind_rows(monkeypatch, bare)
     assert pool.faculty(w, p, "tell") == plain                                  # no names: 0 and 0, whatever the fixtures hold
+
+
+def test_equal_trained_ranks_at_plain_are_even():
+    """B05.23, CAP Part B gate (2), U1 §11 U1-B step 8: THE EVEN CONTEST IS EVEN (A-26). Equals -- equal skill scores 0, 2, 4, 7, the actor's
+    governing attribute and the opponent's opposing attribute both at the scale's mid-point -- on a `plain` row with no room, no regard and no
+    effort: P(margin >= 0) is within 0.005 of one half by the closed form of the one sampler (`sigma_leverage.p_success`, the roll's own boost of
+    the record's leverage). The record is the calibration grid's one cell (`test_sc_calibration_targets._cell`: the host's operand readers, then
+    the module's own `obstacle`), over the SHIPPED fixtures. It holds because the obstacle leads with the even line (`MU_PER_DIE x pool_add`) and
+    the opposition reads what the pool counts (attribute + rank) at `MU_PER_DIE` a point, so the pool's mean and the obstacle are one number.
+    CONTROL: at the control arm (`pool_add` 0, `pool_floor` 0, rate 0.5) the same cells read below one half by more than the tolerance at every
+    rank, so the assertion can see an uneven contest."""
+    from engine.dice_engine.sigma_leverage import p_success
+    from . import test_sc_calibration_targets as CAL
+
+    def even(fx, rank):
+        cell = CAL._cell(fx, "equals plain", rank=rank, level="plain")
+        assert not cell.refused, cell
+        return p_success(cell.ob, cell.pool, cell.leverage)
+
+    checked = 0
+    for rank in CAL.RANKS:
+        shipped, control = even(DEFAULT_FIXTURES, rank), even(CAL._arm(**CAL.CONTROL), rank)
+        assert abs(shipped - 0.5) <= 0.005, (rank, shipped)
+        assert control < 0.5 - 0.005, (rank, control)
+        checked += 1
+    assert checked == len(CAL.RANKS) == 4

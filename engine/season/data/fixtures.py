@@ -18,6 +18,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from engine.dice_engine.dice_engine import MU_PER_DIE
+
 from ..gaps import Forbidden, Ungraded
 from .rosters import ARMY_VERBS, roster, roster_map, table
 
@@ -200,14 +202,16 @@ WEAR_RATES, BAND_FLOORS, SUBSISTENCE_WEIGHTS, SITE_YIELD = _load_matter_tables()
 CAPACITY_FLOORS = _load_capacity_floor()
 WORKS_COST = _load_works_cost()
 
-# `H-424`'s SECOND ARM (B05.21, T13 edit 1): `Fixtures.difficulty_ob` below is the shipped arm -- the CONTROL, 0 / 1 / 2 / 3 (with an unopposed act's
-# opposition at `opposed_ob(pool_default)` = 1.0 it reproduces the 2.0 the stand-in gave) -- and this is the HALF arm, 0 / 0.5 / 1 / 1.5 above the
-# even line (OBS §4 step 5's calibrated sizes). `DIFFICULTY_OB_ARMS` (below `DEFAULT_FIXTURES`) names the two; the sweep is
-# `DEFAULT_FIXTURES.sweep("difficulty_ob", DIFFICULTY_OB_HALF)`, and flipping the shipped arm is the declared mover B05.23 makes on a reading.
+# `H-424`'s CONTROL ARM (B05.21, T13 edit 1; B05.23): `Fixtures.difficulty_ob` below is the shipped arm -- the CALIBRATED one since B05.23,
+# 0 / 0.8 / 1.6 / 2.4 above the even line -- and this is the CONTROL, 0 / 1 / 2 / 3 (with an unopposed act's opposition at
+# `opposed_ob(pool_default)` = 1.0 at the control rate it reproduces the 2.0 the stand-in gave). `DIFFICULTY_OB_ARMS` (below `DEFAULT_FIXTURES`)
+# names the two; the control sweep is `DEFAULT_FIXTURES.sweep("difficulty_ob", DIFFICULTY_OB_CONTROL)`. T13 named the second arm `half`
+# (0 / 0.5 / 1 / 1.5); B05.23's reading left C1 red at ranks 4 and 7 and C3 at rank 7 on it, so the arm that ships is not the half ladder and is
+# named for what it is, `calibrated` (H-424's sweep keeps the half ladder as a point).
 # [ASSUMPTION: the arm switch's form (a second module table beside the one Fixtures setting, not a second Fixtures key) -- basis: T13 edit 1 "two
 # arms: `control` ... and `half`, shipped `control` in commit 1"; B05.14 shipped the control values. Jordan to correct; revert: none needed.]
-# [JUSTIFIED: engine/season/hole_register.yaml H-424 -- the table's sweep names the halved arm (0.5 / 1 / 1.5), so this arm is a point of that sweep]
-DIFFICULTY_OB_HALF = {"plain": 0, "routine": 0.5, "demanding": 1, "hard": 1.5}
+# [JUSTIFIED: engine/season/hole_register.yaml H-424 -- the table's sweep names the control arm (0 / 1 / 2 / 3), so this arm is a point of that sweep]
+DIFFICULTY_OB_CONTROL = {"plain": 0, "routine": 1, "demanding": 2, "hard": 3}
 
 DEFAULT_FIXTURES = Fixtures(
     # S48: condition is an int on an EXPORTED scale. S22 assigns the scale to `params`, and the
@@ -1063,49 +1067,53 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `0.0`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-414 -- site: Fixtures confer_fit_weight, graded `assumption`; 06_FA_office_capabilities edit 4 gives no number for the weight, so it is injected at the control and swept 0.0 / 0.5 / 1.0]
     confer_fit_weight=0.0,             # `H-414`, swept 0.0 (control, SHIPPED) / 0.5 / 1.0
-    # `H-420` to `H-423` (B05.08; CAP B2, U1-B step 2). THE FOUR NUMBERS THE JOINT CALIBRATION SETS, one home each. Each SHIPS AT
-    # ITS CONTROL and NOTHING READS IT YET: B05.09 (`pool_add`, `pool_floor`) and B05.14 (`opposition_rate`) are the readers,
-    # B05.10 the `dice` rows' reader of `attribute_level`; B05.23 sets the live values for the social roll. One pair for every
-    # site (`pool_add`, `pool_floor`); the per-site names MAP's `social_pool_*` and `combat_pool_*` are not created.
-    # `pool_add`: dice a skill score is given before the roll (the base of the pool). Control 0, live 6.
+    # `H-420` to `H-423` (B05.08; CAP B2, U1-B step 2). THE FOUR NUMBERS THE JOINT CALIBRATION SETS, one home each. B05.09 (`pool_add`,
+    # `pool_floor`) and B05.14 (`opposition_rate`) are the readers; `attribute_level` is read only by a planted `edge` row (none ships,
+    # B05.25). B05.23 SHIPS THE LIVE VALUES for the social roll (OBS §4 step 5; the calibration test reads them, CAL §2). One pair for every
+    # site (`pool_add`, `pool_floor`); the per-site names MAP's `social_pool_*` and `combat_pool_*` are not created; the fight reads
+    # `score + addends`, never the pair (B05.09).
+    # `pool_add`: dice a skill score is given before the roll (the base of the pool). Control 0, live 6 (SHIPPED).
     # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-420 -- site: Fixtures pool_add, graded `assumption`; CAP B2 gives the live 6 and no document derives it, so it is injected at the control and swept 0 / 3 / 6]
-    pool_add=0,                        # `H-420`, swept 0 (control, SHIPPED) / 3 / 6 (live)
-    # `pool_floor`: the fewest dice a pool is ever rolled at. Control 0 (no floor), live 5.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-420 -- site: Fixtures pool_add, graded `assumption`; CAP B2 gives the live 6 and no document derives it, so it is injected and swept 0 / 3 / 6]
+    pool_add=6,                        # `H-420`, swept 0 (control) / 3 / 6 (live, SHIPPED)
+    # `pool_floor`: the fewest dice a pool is ever rolled at. Control 0 (no floor), live 5 (SHIPPED).
     # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-421 -- site: Fixtures pool_floor, graded `assumption`; CAP B2 gives the live 5 and no document derives it, so it is injected at the control and swept 0 / 3 / 5]
-    pool_floor=0,                      # `H-421`, swept 0 (control, SHIPPED) / 3 / 5 (live)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-421 -- site: Fixtures pool_floor, graded `assumption`; CAP B2 gives the live 5 and no document derives it, so it is injected and swept 0 / 3 / 5]
+    pool_floor=5,                      # `H-421`, swept 0 (control) / 3 / 5 (live, SHIPPED)
     # `attribute_level`: the size of one step of the governing attribute's edge (U1 §4, A-7): a `LEVEL_SIGMA` name per point
-    # of the attribute above the mid-point (for the roller) or below it (against). Control `None` (no level), live `minor`.
+    # of the attribute above the mid-point (for the roller) or below it (against). Control `None` (no level), live `minor` (SHIPPED).
     # [ASSUMPTION; medium; Jordan to correct; revert: `None`.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-422 -- site: Fixtures attribute_level, graded `assumption`; CAP B2 gives the live `minor` and no document derives it, so it is injected at the control and swept None / minor / moderate]
-    attribute_level=None,              # `H-422`, swept None (control, SHIPPED) / minor (live) / moderate
+    # [JUSTIFIED: engine/season/hole_register.yaml H-422 -- site: Fixtures attribute_level, graded `assumption`; CAP B2 gives the live `minor` and no document derives it, so it is injected and swept None / minor / moderate]
+    attribute_level="minor",           # `H-422`, swept None (control) / minor (live, SHIPPED) / moderate
     # `opposition_rate`: the share of the opposing person's score an obstacle takes up, per point. Control 0.5 (lane A's
-    # halving); live `engine/dice_engine/dice_engine.py::MU_PER_DIE`, READ FROM THAT OWNER by B05.14 and never retyped.
+    # halving); live `engine/dice_engine/dice_engine.py::MU_PER_DIE` (SHIPPED), READ FROM THAT OWNER and never retyped.
     # [ASSUMPTION; medium; Jordan to correct; revert: `0.5`.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-423 -- site: Fixtures opposition_rate, graded `assumption`; CAP B2 gives the live value as `MU_PER_DIE` and the control as lane A's one half, so it is injected at the control and swept 0.5 / 0.45 / MU_PER_DIE]
-    opposition_rate=0.5,               # `H-423`, swept 0.5 (control, SHIPPED) / 0.45 / MU_PER_DIE (live)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-423 -- site: Fixtures opposition_rate, graded `assumption`; CAP B2 gives the live value as `MU_PER_DIE` and the control as lane A's one half, so it is injected and swept 0.5 / 0.45 / MU_PER_DIE]
+    opposition_rate=MU_PER_DIE,        # `H-423`, swept 0.5 (control) / 0.45 / MU_PER_DIE (live, SHIPPED)
     # `H-424` (B05.14; OBS §1, SC-B Edit A). HOW HARD EACH DIFFICULTY LEVEL IS: the obstacle a verb row's `difficulty:` level contributes
     # before any opposition (`rosters.yaml: difficulty_levels`, closed: refused at load if the keys are not exactly the roster's).
-    # Control 0 / 1 / 2 / 3, in level order. At control every rolled row is `routine`, so the difficulty term is 1 and, with the
-    # opposition term at `opposed_ob(pool_default)` = 1 where no person is opposite, an unopposed act's obstacle is 2.0. Replaces lane A's
+    # SHIPPED: the calibrated arm (B05.23), 0 / 0.8 / 1.6 / 2.4 in level order: `routine` at A-79's centre, equals on a routine matter
+    # carrying about a quarter (C1's P(Success or better) 0.24 to 0.29 at skill scores 0 to 7), each level one more such step (C2's rise in
+    # P(Failure) 0.08 to 0.12 a step). The control is `DIFFICULTY_OB_CONTROL` (0 / 1 / 2 / 3). Replaces lane A's
     # `rosters.yaml: task_difficulty` (a number per verb) and its `obstacle_model` switch.
-    # [ASSUMPTION; medium; Jordan to correct; revert: lane A's per-verb numbers, which are no longer read.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-424 -- site: Fixtures difficulty_ob, graded `assumption`; no document derives the size of a level, so it is injected at the control and swept]
-    difficulty_ob={"plain": 0, "routine": 1, "demanding": 2, "hard": 3},   # `H-424`, swept control (SHIPPED) / halved (`DIFFICULTY_OB_HALF`, OBS §4 step 5's live arm) / one step coarser
+    # [ASSUMPTION; Jordan to correct: `routine` 0.8, the value at which V2's model read 25 % carried -- basis:
+    # `proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part4.md` §H item 1 (A-137); the other levels
+    # its multiples, the smallest change that keeps C2 green. revert: `DIFFICULTY_OB_CONTROL`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-424 -- site: Fixtures difficulty_ob, graded `assumption`; no document derives the size of a level, so it is injected and swept]
+    difficulty_ob={"plain": 0, "routine": 0.8, "demanding": 1.6, "hard": 2.4},   # `H-424`, swept control (`DIFFICULTY_OB_CONTROL`) / half / three-quarter / calibrated (SHIPPED)
     # `H-426` (B05.21; T13 edit 1, T3). HOW FAR A HEARER'S HOSTILITY MOVES THE OBSTACLE, per full clamp: the obstacle term `regard` is
     # `regard_step x clamp(-stance / STANCE_MAX, 0, 1)` over the stance rows the counterparty holds toward the actor (`person_q.stance_toward`,
     # `data/cast.py::STANCE_MAX`), for one person counterparty and no audience (`sigma.py::_regard_term`); the favourable half of the same clamp is
     # `favour` leverage, at the same step. `0` is the CONTROL: the term reads nothing and is not listed, and no stance brings a level.
     # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-426 -- site: Fixtures regard_step, graded `assumption`; T13 T3 gives the live 1.0 and no document derives it, so it is injected at the control and swept 0 / 0.5 / 1.0 / 2.0]
-    regard_step=0,                     # `H-426`, swept 0 (control, SHIPPED) / 0.5 / 1.0 (live) / 2.0
+    # [JUSTIFIED: engine/season/hole_register.yaml H-426 -- site: Fixtures regard_step, graded `assumption`; T13 T3 gives the live 1.0 and no document derives it, so it is injected and swept 0 / 0.5 / 1.0 / 2.0]
+    regard_step=1.0,                   # `H-426`, swept 0 (control) / 0.5 / 1.0 (live, SHIPPED, B05.23: C5) / 2.0
     # `H-427` (B05.21; T13 edit 1, edit 4, T5). WHETHER THE ARRANGEMENT ROW'S `proofs:` COLUMN FILTERS WHAT A SPEAKER'S PROOFS WEIGH: `off` -- every
     # deed claim counts (`world_q.proofs` as it was); `on` -- under a docketed row only the claims whose kind (`rosters.yaml: proof_kind_of_source`) the
     # row admits count, the rest weigh 0 (`sigma.py::_read_social_roll` passes the row's `proofs:`; `world_q` reads no arrangement itself).
     # [ASSUMPTION; medium; Jordan to correct; revert: `off`.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-427 -- site: Fixtures proof_admission, graded `assumption`; T13 T5 gives `on` as the calibrated value and no document derives it, so it is injected at the control and swept off / on]
-    proof_admission="off",             # `H-427`, swept off (control, SHIPPED) / on (live)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-427 -- site: Fixtures proof_admission, graded `assumption`; T13 T5 gives `on` as the calibrated value and no document derives it, so it is injected and swept off / on]
+    proof_admission="on",              # `H-427`, swept off (control) / on (live, SHIPPED, B05.23)
     # `H-428` (B05.21; T13 edit 1, T4). THE WEIGHT OF WHAT AN ACT WOULD TAKE OR IMPOSE, in obstacle, by the Tenure kind it opens: the obstacle term
     # `stakes` (`sigma.py::_stakes_term`: `arrest` reads `detain`; `determine` the kind its docketed row `disposes:`). Keyed on exactly the
     # `tenure_kinds` roster (refused at load). `0` for every kind is the CONTROL (OBS §1: "control 0"): the term is not listed.
@@ -1114,8 +1122,8 @@ DEFAULT_FIXTURES = Fixtures(
     stakes_ob={"ban": 0, "commit": 0, "contain": 0, "detain": 0, "hold": 0, "knot": 0, "oblige": 0, "reside": 0, "succeed": 0, "tie": 0},   # `H-428`, swept 0 (control, SHIPPED) / 0.5x / 1x / 2x
 )
 
-#: `H-424`'s two arms by name, the shipped one first: `control` is `DEFAULT_FIXTURES`' own table (one copy), `half` is `DIFFICULTY_OB_HALF`.
-DIFFICULTY_OB_ARMS = {"control": DEFAULT_FIXTURES.get("difficulty_ob"), "half": DIFFICULTY_OB_HALF}
+#: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
+DIFFICULTY_OB_ARMS = {"calibrated": DEFAULT_FIXTURES.get("difficulty_ob"), "control": DIFFICULTY_OB_CONTROL}
 
 
 def load() -> None:

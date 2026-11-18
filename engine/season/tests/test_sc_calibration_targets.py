@@ -87,12 +87,14 @@ def _arm(**sweeps):
     return fx
 
 
-#: The control arm, pinned EXPLICITLY so the falsifier below holds whatever ships: the base 0, no floor, the rate 0.5, the sizes 0/1/2/3.
-CONTROL = dict(pool_add=0, pool_floor=0, opposition_rate=0.5, difficulty_ob=DIFFICULTY_OB_ARMS["control"])
-#: A SCRATCH good arm, NEVER SHIPPED HERE: the live base, floor and rate (CAP B2: 6, 5, `MU_PER_DIE`), `regard_step` 1.0 (T13's live value) and a
-#: ladder `0 / 0.8 / 1.6 / 2.4` (`routine` 0.8, the value B05.23's `[ASSUMPTION]` reads 25 % carried at; the other levels its multiples). It is evidence
-#: that the grid CAN read green on every target, so a red is an arm's and not the grid's. B05.23 decides what ships (the half-step ladder,
-#: `DIFFICULTY_OB_ARMS["half"]`, is its named candidate); nothing here asserts this arm is the one.
+#: The control arm, pinned EXPLICITLY so the falsifier below holds whatever ships: the base 0, no floor, the rate 0.5, the sizes 0/1/2/3, and the
+#: tables B05.23 flipped at their controls (`regard_step` 0, `proof_admission` off, `attribute_level` None), every one of them named here.
+CONTROL = dict(pool_add=0, pool_floor=0, opposition_rate=0.5, difficulty_ob=DIFFICULTY_OB_ARMS["control"], regard_step=0, proof_admission="off",
+               attribute_level=None)
+#: A SCRATCH good arm, pinned independently of what ships: the live base, floor and rate (CAP B2: 6, 5, `MU_PER_DIE`), `regard_step` 1.0 (T13's
+#: live value) and a ladder `0 / 0.8 / 1.6 / 2.4` (`routine` 0.8, the value A-79's centre reads 25 % carried at; the other levels its multiples). It
+#: is evidence that the grid CAN read green on every target, so a red is an arm's and not the grid's. B05.23 shipped these values
+#: (`DIFFICULTY_OB_ARMS["calibrated"]`); the pin stays here so the control of the control does not move when the shipped arm does.
 GOOD_SCRATCH = dict(pool_add=6, pool_floor=5, opposition_rate=MU_PER_DIE, regard_step=1.0,
                     difficulty_ob={"plain": 0, "routine": 0.8, "demanding": 1.6, "hard": 2.4})
 

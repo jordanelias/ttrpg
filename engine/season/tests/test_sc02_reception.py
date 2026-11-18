@@ -474,12 +474,19 @@ def test_sc02_the_reception_gain_and_proof_level_sweeps_run_and_the_control_is_t
 # B05.17 -- WHAT THE SPEAKER BRINGS IS LEVERAGE; THE HOSTILE ROOM IS A TERM (PES-A, OBS §4 step 1b)
 # ================================================================================================
 
-# The closed form is read from `pool_floor` (the control, 0) to `pool_floor + 10`, but from a pool of 1 up: a pool of nothing rolls
-# nothing and `net_boost` is `sqrt(pool)` of its shift, so at pool 0 NO leverage moves the odds (a true dead zone by construction,
-# observed below, not a cell this item leaves). B05.23 sets `pool_floor` 5, where every pool in play is above it.
+# The closed form is read over ten pools from the shipped `pool_floor` up, and never below one die: a pool of nothing rolls nothing and
+# `net_boost` is `sqrt(pool)` of its shift, so at pool 0 NO leverage moves the odds (a true dead zone by construction, observed below,
+# not a cell in play). At the control floor (0) the range is 1 to 10; B05.23 ships `pool_floor` 5 (CAP B2), so it is 5 to 14 and no
+# pool in play is smaller.
 def _pools():
-    floor = DEFAULT_FIXTURES.get("pool_floor")
-    return [p for p in range(floor, floor + 11) if p >= 1]
+    low = max(1, int(DEFAULT_FIXTURES.get("pool_floor")))
+    return list(range(low, low + 10))
+
+
+def test_the_pool_range_reads_the_shipped_pool_floor():
+    """B05.23 (CAP B2; T13 commit 2): the range the falsifiers below read starts at the shipped `pool_floor`, 5 at the calibrated arm."""
+    assert DEFAULT_FIXTURES.get("pool_floor") == 5
+    assert _pools() == list(range(5, 15))
 
 
 def test_a_pool_of_nothing_takes_no_shift():

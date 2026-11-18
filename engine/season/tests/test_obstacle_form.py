@@ -31,7 +31,7 @@ from engine.dice_engine.sigma_leverage import MU_PER_DIE, OB_MIN, band_odds, eve
 from engine.substrate import descriptors
 
 from ..data import verbs as V
-from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.fixtures import DEFAULT_FIXTURES, DIFFICULTY_OB_CONTROL
 from ..data.rosters import roster
 from ..gaps import Unspecified
 from ..harness import probes as P
@@ -40,6 +40,16 @@ from ..queries.inputs import Margin, SocialContestInput
 from ..seam.wrappers import pool, sigma
 from .test_sc01_obstacle_ceiling import _module
 
+
+def _fold(terms):
+    """The terms summed left to right from 0.0, the order `roll.py::obstacle` accumulates them in; the built-in `sum` of
+    floats is compensated on Python 3.12+ and differs from that fold by an ulp, which is not the claim under test."""
+    total = 0.0
+    for _, value in terms:
+        total += value
+    return total
+
+
 ROSTER = roster("obstacle_terms", ordered=True)
 CONDITIONAL = ("standard", "stakes", "regard")      # B05.21: members listed in an act's terms only where they weigh (the rest of the roster stands at 0.0)
 STANDING = tuple(n for n in ROSTER if n not in CONDITIONAL)
@@ -47,6 +57,9 @@ LANE_A_STEPS = ("forgery",)                        # outside the roster (U-6); l
 BOUNDS = ("ceiling", "floor")
 SHIPPED_TABLE = V.VERB_TABLE_YAML                 # read at import, before any test re-points the loader
 ROLLED = ("tell", "lie", "argue", "speak", "determine", "arrest", "interrogate", "research", "examine", "surveil")
+#: The control arm, pinned (B05.23 ships the calibrated one): the settings T13 commit 2 and OBS §4 step 5 flipped, each at its control.
+CONTROL_ARM = dict(pool_add=0, pool_floor=0, opposition_rate=0.5, attribute_level=None, difficulty_ob=DIFFICULTY_OB_CONTROL, regard_step=0,
+                   proof_admission="off")
 
 
 def _inp(**kw) -> SocialContestInput:
@@ -76,7 +89,7 @@ def test_terms_sum_to_ob():
         assert set(names) <= set(ROSTER) | set(LANE_A_STEPS) | set(BOUNDS), names
         assert tuple(names[:len(STANDING)]) == STANDING, names                  # every standing member, in roster order, first (the conditional three weigh nothing here)
         assert [n for n in names if n in ROSTER] == [n for n in ROSTER if n in names], names         # roster order
-        assert sum(v for _, v in terms) == ob, (inp, ob, terms)                # exact: the lattice is dyadic
+        assert _fold(terms) == ob, (inp, ob, terms)                # exact: the lattice is dyadic
         assert ob >= OB_MIN, (inp, ob)                                         # the floor
         bounds_seen += sum(n in BOUNDS for n in names)
         checked += 1
@@ -146,7 +159,8 @@ def test_the_difficulty_levels_are_sized_and_closed():
     sizes = DEFAULT_FIXTURES.get("difficulty_ob")
     assert tuple(sizes) == levels, (sizes, levels)
     assert list(sizes.values()) == sorted(sizes.values()) and min(sizes.values()) == 0 and len(set(sizes.values())) == len(levels)
-    assert {r.difficulty for v, r in V.VERB_TABLE.items() if v in ROLLED} == {"routine"}          # the control: every rolled row `routine`
+    assert ({v: r.difficulty for v, r in V.VERB_TABLE.items() if v in ROLLED}                     # T13 edit 7 (commit 2, B05.23): `interrogate`
+            == {v: ("demanding" if v == "interrogate" else "routine") for v in ROLLED})           # `demanding`, every other rolled row `routine`
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -190,7 +204,7 @@ def test_an_opponent_of_rank_0_is_floored_at_ob_min():
     for planted in (dict(difficulty=0.0, opposition=None, pool_default=0), dict(difficulty=0.0, opposition=0.0)):
         ob, terms = mod.obstacle(_inp(**planted))
         assert ob == OB_MIN and terms[-1] == ("floor", float(OB_MIN)), (planted, ob, terms)
-        assert sum(v for _, v in terms) == ob
+        assert _fold(terms) == ob
     ob, terms = mod.obstacle(_inp(difficulty=0.0, opposition=0.0, obstacle_ceiling=3.0))          # CONTROL: nothing to lift, no floor term
     assert ob == OB_MIN
     ob, terms = mod.obstacle(_inp(difficulty=1.0, opposition=0.0))                                 # `routine` against a score of 0: at OB_MIN already
@@ -215,19 +229,21 @@ def test_step_1a_composes_todays_obstacle_at_control():
     opposite -- a site, a Record, nobody -- composes `1 + opposed_ob(pool_default)` = 2.0, the obstacle the deleted `obstacle_default`
     gave; an act against a person composes `1 + 0.5 x (his opposing attribute + his skill score)`: the stand-in's 2.0 for a person
     opposite at the untrained score on an UNHELD attribute no longer exists, so the move is exactly the attribute's half. FALSIFIER: the
-    attribute dropped from the opposition (a person's term would equal `0.5 x score`), or a non-person act off 2.0."""
-    w = _world()
+    attribute dropped from the opposition (a person's term would equal `0.5 x score`), or a non-person act off 2.0. Read at `CONTROL_ARM`
+    (B05.23 ships the calibrated arm), so `interrogate` is the one row whose level is not `routine`: its difficulty is the control's `demanding`."""
+    w = _world(**CONTROL_ARM)
     default = float(w.fixtures.get("pool_default"))
     checked = moved = 0
     for verb in ROLLED:
         row = V.VERB_TABLE[verb]
+        level = float(DIFFICULTY_OB_CONTROL[row.difficulty])                     # 1.0 (`routine`) on every row but `interrogate` (2.0)
         for subject in ("site_harbour", None):                                   # nobody opposite
             inp = sigma.contest_input(w, ["p_low"], verb=verb, subject=subject)
             ob, terms = _module().obstacle(inp)
-            assert (ob, dict(terms)["even"], dict(terms)["difficulty"], dict(terms)["opposition"]) == (2.0, 0.0, 1.0, 1.0), (verb, subject, terms)
+            assert (ob, dict(terms)["even"], dict(terms)["difficulty"], dict(terms)["opposition"]) == (level + 1.0, 0.0, level, 1.0), (verb, subject, terms)
             checked += 1
         inp = sigma.contest_input(w, ["p_low"], verb=verb, subject="p_low")
-        assert inp.opposition is None and _module().obstacle(inp)[0] == 2.0, (verb, inp)        # a self-plea is the stand-in too
+        assert inp.opposition is None and _module().obstacle(inp)[0] == level + 1.0, (verb, inp)        # a self-plea is the stand-in too
         # a person opposite, his attribute held at 5 and his skill unheld: attribute + the untrained score
         other = w.persons["p_other"]
         other.capability = {}
@@ -249,9 +265,9 @@ def test_a_resolved_roll_carries_margin_terms_and_no_ob_terms():
     out = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="tell", subject="p_mid", rng=random.Random(0))
     assert out["status"] == "RESOLVED" and "ob_terms" not in out, sorted(out)
     named = tuple(n for n, _ in out["terms"])
-    assert named[:len(STANDING)] == STANDING and sum(v for _, v in out["terms"]) == out["ob"], out["terms"]       # the conditional three weigh nothing at the control
+    assert named[:len(STANDING)] == STANDING and _fold(out["terms"]) == out["ob"], out["terms"]       # the conditional three weigh nothing at the control
     out = sigma.resolve(_world(), ["p_low"], ["c"], "a standing", verb="tell", subject="site_harbour", rng=random.Random(0))
-    assert out["terms"] and sum(v for _, v in out["terms"]) == out["ob"]
+    assert out["terms"] and _fold(out["terms"]) == out["ob"]
     assert isinstance(Margin(net=0.0, ob=1.0).terms, tuple)
 
 
@@ -307,7 +323,7 @@ def test_a_circumstance_row_raises_the_obstacle_by_its_gain(monkeypatch):
             after = _module().obstacle(inp)
             out = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="tell", subject="site_harbour", rng=random.Random(0))
         assert dict(after[1])["capability"] == 4 * gain, (arm, after)                    # 4 held x the gain, one operand (name, raw, 1.0)
-        assert sum(v for _, v in after[1]) == after[0], after
+        assert _fold(after[1]) == after[0], after
         named = [f for f in out["fed_by"] if f[1] == "circumstance"]
         assert named == [(sigma.SOCIAL_ROLL_SITE, "circumstance", attribute, "actor", 4, 4 * gain)], out["fed_by"]    # `fed_by` names the row
         outcomes[arm] = (before[0], after[0], dict(after[1]))
@@ -443,15 +459,16 @@ def test_the_new_members_are_unlisted_at_the_control_and_the_roster_binds_them()
 
 # --- T1: the second arm of `difficulty_ob` ---------------------------------------------------------------------------
 
-def test_difficulty_ob_has_a_control_and_a_half_arm_and_ships_the_control():
-    """T13 edit 1: `difficulty_ob` two arms -- `control` 0/1/2/3 and `half` 0/0.5/1/1.5 -- each keyed exactly as `rosters.yaml:
-    difficulty_levels`, the control shipped. FALSIFIER (T1): an act whose row names a level other than `plain` and whose term list shows
-    `difficulty` 0 -- at either arm."""
+def test_difficulty_ob_has_a_control_and_a_calibrated_arm_and_ships_the_calibrated():
+    """T13 edit 1, B05.23: `difficulty_ob` two arms -- `calibrated` 0/0.8/1.6/2.4 (shipped, commit 2) and `control` 0/1/2/3 -- each keyed exactly
+    as `rosters.yaml: difficulty_levels`. T13's second arm was `half` (0/0.5/1/1.5); B05.23's reading left C1 and C3 red on it, so the arm that
+    ships is named for what it is. FALSIFIER (T1): an act whose row names a level other than `plain` and whose term list shows `difficulty` 0
+    -- at either arm."""
     levels = roster("difficulty_levels", ordered=True)
-    assert tuple(FX.DIFFICULTY_OB_ARMS) == ("control", "half"), FX.DIFFICULTY_OB_ARMS
-    assert [list(a.values()) for a in FX.DIFFICULTY_OB_ARMS.values()] == [[0, 1, 2, 3], [0, 0.5, 1, 1.5]]
+    assert tuple(FX.DIFFICULTY_OB_ARMS) == ("calibrated", "control"), FX.DIFFICULTY_OB_ARMS
+    assert [list(a.values()) for a in FX.DIFFICULTY_OB_ARMS.values()] == [[0, 0.8, 1.6, 2.4], [0, 1, 2, 3]]
     assert all(tuple(a) == levels for a in FX.DIFFICULTY_OB_ARMS.values())
-    assert DEFAULT_FIXTURES.get("difficulty_ob") == {"plain": 0, "routine": 1, "demanding": 2, "hard": 3}          # the shipped arm is the control (commit 1)
+    assert DEFAULT_FIXTURES.get("difficulty_ob") is FX.DIFFICULTY_OB_ARMS["calibrated"]                                # the shipped arm is the calibrated one (commit 2)
     checked = 0
     for arm, sizes in FX.DIFFICULTY_OB_ARMS.items():
         w = _world(difficulty_ob=sizes)
@@ -477,11 +494,13 @@ def _speak_terms(w, row=None):
     return dict(_module().obstacle(inp)[1])
 
 
-def test_a_docketed_speak_reads_its_rows_standard_and_the_shipped_rows_are_plain(monkeypatch):
+def test_a_docketed_speak_reads_its_rows_standard_and_the_shipped_rows_are_t2s_first_values(monkeypatch):
     """T13 edit 2 and T2's falsifier: a `speak` before a bench on a docketed matter whose arrangement row names a level other than `plain`
     shows `standard` at that level's size (`difficulty_ob`); under a `plain` row, and with nothing docketed, no `standard` is listed. The
-    nine shipped rows are `plain`. FALSIFIER: a non-`plain` row whose term list lacks `standard`, or a `plain` one that lists it."""
-    assert len(ARR.ARRANGEMENTS) == 9 and {r["standard"] for r in ARR.ARRANGEMENTS.values()} == {"plain"}
+    nine shipped rows carry T2's first values (commit 2, B05.23; `test_sc_tuning_tables.T2_FIRST_VALUES`). FALSIFIER: a non-`plain` row whose
+    term list lacks `standard`, or a `plain` one that lists it."""
+    from .test_sc_tuning_tables import T2_FIRST_VALUES
+    assert len(ARR.ARRANGEMENTS) == 9 and {k: r["standard"] for k, r in ARR.ARRANGEMENTS.items()} == T2_FIRST_VALUES
     sizes = DEFAULT_FIXTURES.get("difficulty_ob")
     assert "standard" not in _speak_terms(R._judging_world()[0])                                # nothing docketed
     row = "arbitration"
@@ -541,7 +560,7 @@ def test_a_row_that_admits_no_proofs_weighs_none_when_admission_is_on():
     `proof_admission` `on`. CONTROL: the same speaker under the same row with admission `off` shows proofs; under `arbitration` (which
     admits `testimony`, the kind of a firsthand claim) with admission `on` he shows them too -- the filter is the row's, not a blanket zero."""
     assert ARR.ARRANGEMENTS["parliamentary_debate"]["proofs"] == () and "testimony" in ARR.ARRANGEMENTS["arbitration"]["proofs"]
-    assert DEFAULT_FIXTURES.get("proof_admission") == "off"
+    assert DEFAULT_FIXTURES.get("proof_admission") == "on"                                       # shipped at commit 2 (B05.23); each arm is set below
     kinds = ROS.roster_map("proof_kind_of_source", "proof_kind")
     assert kinds["firsthand"] == "testimony" and set(kinds) == set(roster("claim_sources")), kinds
 

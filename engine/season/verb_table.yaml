@@ -1811,7 +1811,7 @@ verbs:
     grade:       "assumption"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:294 (§4.2), :318 (§4.3). ⚠ THE SINGLE-ROLL INTERVIEW IS RETIRING AND THIS ROW IS ITS BASELINE, NOT A SECOND SPEC: `fieldwork_v30.md:300` (ED-FI-0004, 2026-07-08) folds it into the Dialogue Lattice -- *'the richer object wins'* -- and retains the bare-roll row as *the current mechanical baseline* only until ED-921 and ED-IN-0016 EP-8 settle. This row is that baseline; when the Lattice is built it replaces this row rather than sitting beside it."
   - verb:        "interrogate"
-    difficulty:  "routine"
+    difficulty:  "demanding"   # B05.23, T13 edit 7 (T1 row values at commit 2): the one rolled row above `routine`; the inquiries stay `routine`. [ASSUMPTION; medium; Jordan to correct; revert: `routine`.]
     stratum:     "social"
     capability:  "inquiry"
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07)."

@@ -93,7 +93,7 @@
           "proofs": [],
           "disposes": "Record",
           "disposal_reach": "realm",
-          "standard": "plain"
+          "standard": "routine"
         },
         {
           "id": "council_of_state",
@@ -111,7 +111,7 @@
           "proofs": [],
           "disposes": "Record",
           "disposal_reach": "realm",
-          "standard": "plain"
+          "standard": "routine"
         },
         {
           "id": "legal_trial",
@@ -134,7 +134,7 @@
           ],
           "disposes": "detain",
           "disposal_reach": "settlement",
-          "standard": "plain"
+          "standard": "routine"
         },
         {
           "id": "tribunal",
@@ -157,7 +157,7 @@
           ],
           "disposes": "ban",
           "disposal_reach": "body",
-          "standard": "plain"
+          "standard": "demanding"
         },
         {
           "id": "interrogation",
@@ -200,7 +200,7 @@
           ],
           "disposes": "ban",
           "disposal_reach": "body",
-          "standard": "plain"
+          "standard": "hard"
         },
         {
           "id": "excommunication_deliberation",
@@ -223,7 +223,7 @@
           ],
           "disposes": "ban",
           "disposal_reach": "realm",
-          "standard": "plain"
+          "standard": "demanding"
         },
         {
           "id": "negotiation",
@@ -982,6 +982,7 @@
             "revoke",
             "convene"
           ],
+          "modifier": "minor",
           "conferral": "inheritance",
           "revocation": null,
           "holder": "NPC-020",
@@ -1071,6 +1072,7 @@
             "revoke",
             "convene"
           ],
+          "modifier": "minor",
           "conferral": null,
           "revocation": null,
           "holder": "NPC-032",
@@ -1248,6 +1250,7 @@
             "revoke",
             "convene"
           ],
+          "modifier": "minor",
           "conferral": "elected",
           "revocation": null,
           "holder": "NPC-021",
@@ -1287,6 +1290,7 @@
             "determine",
             "convene"
           ],
+          "modifier": "minor",
           "conferral": "appointed",
           "revocation": null,
           "holder": "NPC-038",
@@ -1341,6 +1345,7 @@
           "remit_acts": [
             "determine"
           ],
+          "modifier": "minor",
           "conferral": "appointed",
           "revocation": null,
           "holder": "NPC-004",
@@ -1425,6 +1430,7 @@
           "remit_acts": [
             "determine"
           ],
+          "modifier": "minor",
           "conferral": "elected",
           "revocation": "rung_above_same_faction",
           "holder": "NPC-073",
@@ -1443,6 +1449,7 @@
           "remit_acts": [
             "determine"
           ],
+          "modifier": "minor",
           "conferral": "elected",
           "revocation": "rung_above_same_faction",
           "holder": "NPC-074",
@@ -7085,7 +7092,7 @@
         },
         {
           "verb": "interrogate",
-          "difficulty": "routine",
+          "difficulty": "demanding",
           "stratum": "social",
           "capability": "inquiry",
           "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07).",
