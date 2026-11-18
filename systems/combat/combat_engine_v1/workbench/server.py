@@ -128,6 +128,7 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main(port=8765):
+    # One thread: `wrapper.fight(trace=)` binds the module's one `_TRACE` for the call's length, so two requests in flight would read each other's events.
     srv = HTTPServer(('127.0.0.1', port), Handler)
     print(f"Combat Workbench -> http://localhost:{port}  (Ctrl-C to stop)")
     try:

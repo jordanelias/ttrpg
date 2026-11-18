@@ -166,6 +166,9 @@ def main(argv):
         for p in problems:
             print(f"  {p}")
         return 1
+    if AUTHORED_DATA in sys.modules:      # the module's docstring claims this is asserted; the line below must be able to fail
+        print(f"PARITY FAILS: {AUTHORED_DATA} is in sys.modules after the run")
+        return 1
     print(f"{count} weapons; max |derived − recomputed| <= 1e-9")
     print(f"  measured max {worst:.3e}; {AUTHORED_DATA} not in sys.modules")
     return 0
