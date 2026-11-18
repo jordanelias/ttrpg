@@ -11,7 +11,8 @@ operands from what the actor and the subject genuinely have -- for a prize a roo
 that includes the bench's and the opponent's LEDGERS through `queries/world_q.py`'s `reception` and
 `proofs`, a read `04_CODE_ARCHITECTURE.md` §B.2:250 (F8) words for the fold's own ledger query and
 §A.2:168 permits `world_q` ("any store, via World"): the tension is recorded in `hole_register.yaml`
-H-215/H-216, not resolved here -- and freezes them into `queries/inputs.py::SocialContestInput`;
+H-215/H-216, not resolved here -- and freezes them into `queries/inputs.py::SocialContestInput` (the hostile half as the obstacle's
+`reception` term, what the speaker brings -- `proofs`, a friendly bench's `favour` -- as leverage, B05.17);
 `resolve` (the adapter) calls the module entry the prize row names (`module_entry:`, registered in
 `manifest.MODULE_ENTRIES` from its composition row), keeps S27.4's refusal on the pair it returns, and
 otherwise returns what it returned -- the net/ob pair as a dict, the shape `combat_seam` already returns
@@ -261,12 +262,36 @@ def _circumstance_ob(fx: Any, row: Any, value: Any) -> float:
     return float(value or 0) * float(fx.get(row.gain))
 
 
+# ---------------------------------------------------------------------------------------------
+# THE `proofs` AND `favour` SOURCES (B05.17, PES-A edits 1 to 3; OBS §3): what the speaker BRINGS is leverage, never an obstacle reduction (`ED-884`,
+# `ED-934`; P-232 holds by construction, not by a clamp). `proofs` is `world_q.proofs` (the remove-weighted, unmirrored sum), `favour` the bench's
+# favourable `reception_gain x reception`; each is rounded half up to whole units, one named level a unit, all FOR the roller. The other side's
+# standing items (the `proofs` defender list) wait on B24's cited items (U3 §4.1 row 20). A fixture of `None` is the control: no level.
+# ---------------------------------------------------------------------------------------------
+def _units(x: float) -> int:
+    """Whole units of a quantity, rounded half up (OBS §3: "units round half up"); a negative quantity is no unit."""
+    return int(max(0.0, x) + 0.5)
+
+
+def _proof_levels(fx: Any, operands: dict) -> tuple:
+    """`proofs`' levels: one `proof_level` per whole unit of `operands["proofs"]` -- FOR the roller: `(levels, [])`. Empty where the fixture is `None`."""
+    level = fx.get("proof_level")
+    return ([] if level is None else [level] * _units(operands.get("proofs", 0.0))), []
+
+
+def _favour_levels(fx: Any, operands: dict) -> tuple:
+    """`favour`'s levels: one `favour_level` per whole unit of `reception_gain x reception` where that is positive -- FOR the roller: `(levels, [])`.
+    Empty where the fixture is `None`. The bench's hostile half is the obstacle's `reception` member, never a level against him."""
+    level = fx.get("favour_level")
+    return ([] if level is None else [level] * _units(float(fx.get("reception_gain")) * operands.get("reception", 0.0))), []
+
+
 # THE ADVANTAGE CHANNEL'S BINDING: each member of `rosters.yaml: advantage_sources` -> the function that
 # returns the named levels it brings to an act, `fn(fixtures, operands) -> (levels for the roller, levels against him)`, each a
 # list of level names. THE ROSTER IS
 # THE CLOSED SET AND THIS IS ITS BINDING: refused at import if the two disagree, so a member with no function
 # (it would silently add nothing) and a function with no member (it would silently never run) are both loud.
-ADVANTAGE_SOURCES = {EFFORT: _effort_levels, CAPABILITY: _capability_levels}
+ADVANTAGE_SOURCES = {EFFORT: _effort_levels, CAPABILITY: _capability_levels, "proofs": _proof_levels, "favour": _favour_levels}
 if set(ADVANTAGE_SOURCES) != set(roster("advantage_sources")):
     raise Unspecified(
         f"`advantage_sources` members {sorted(roster('advantage_sources'))} and "
@@ -275,24 +300,40 @@ if set(ADVANTAGE_SOURCES) != set(roster("advantage_sources")):
         law="CP-T01-05 -- the roster is the only door into the social roll's sigma term")
 
 
+def advantage_levels(fx: Any, operands: dict) -> tuple:
+    """`((source, levels for the roller, levels against him), ...)`: every `advantage_sources` member's named levels for this act, in roster order
+    (a source with nothing to say carries two empty lists). THE ONE CALL OF EVERY SOURCE: `advantage_sigma` sums these and `resolve`'s `levels` counts
+    them (OBS §5), so the sigma rolled and the levels recorded cannot disagree."""
+    return tuple((name, *ADVANTAGE_SOURCES[name](fx, operands)) for name in roster("advantage_sources", ordered=True))
+
+
 def advantage_sigma(fx: Any, operands: dict) -> float:
     """The social roll's net sigma, SIGNED: every `advantage_sources` member's named levels for this act, those that favour the roller
     and those that count against him, summed through `levels_to_net_sigma(for, against)` (a mu-shift the roll applies as `net_boost`;
-    never a flat bonus on the net, never an Ob reduction). `operands` is what the act brings (`{"effort": e, "edge": rows}`); 0.0
-    when nothing does."""
+    never a flat bonus on the net, never an Ob reduction). `operands` is what the act brings (`_advantage_operands`: effort, the `edge`
+    rows, the room's `proofs` and `reception`); 0.0 when nothing does."""
     for_, against = [], []
-    for name in roster("advantage_sources", ordered=True):
-        f, a = ADVANTAGE_SOURCES[name](fx, operands)
+    for _name, f, a in advantage_levels(fx, operands):
         for_.extend(f)
         against.extend(a)
     return levels_to_net_sigma(for_, against)
 
 
+def _advantage_operands(effort: int, edge: tuple, room_terms: dict) -> dict:
+    """WHAT THE ACT BRINGS, named once: `contest_input` and `believed_input` both reach the sources through here, so they cannot diverge."""
+    return {EFFORT: effort, EDGE: edge, "proofs": room_terms.get("proofs", 0.0), "reception": room_terms.get("reception", 0.0)}
+
+
+def _levels_count(levels: tuple) -> tuple:
+    """`((source, aggressor n, defender n), ...)`: `advantage_levels`' lists as counts (OBS §5; SC-P1 reads them in B05.18)."""
+    return tuple((name, len(f), len(a)) for name, f, a in levels)
+
+
 def contest_input(w: Any, claimants: list, *, verb: str = "",
                   subject: Optional[str] = None, room: Optional[str] = None,
                   examined: Optional[str] = None, effort: int = 0) -> SocialContestInput:
-    """THE HOST INPUT BUILDER's record alone: `_read_social_roll`'s first return (see it for the body and for the
-    rows' reads, which `resolve` takes from the same call)."""
+    """THE HOST INPUT BUILDER's record alone: `_read_social_roll`'s first return (see it for the body, for the
+    rows' reads and for the levels, which `resolve` takes from the same call)."""
     return _read_social_roll(w, claimants, verb=verb, subject=subject, room=room, examined=examined, effort=effort)[0]
 
 
@@ -300,9 +341,10 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
                       subject: Optional[str] = None, room: Optional[str] = None,
                       examined: Optional[str] = None, effort: int = 0) -> tuple:
     """THE HOST INPUT BUILDER (plan position `31a`, A-25): `World` -> the frozen record the roll reads. Returns
-    `(record, reads)`: the record `contest_input` hands out and, for each `social_roll` row of `tables.capability_uses`
+    `(record, reads, levels)`: the record `contest_input` hands out, for each `social_roll` row of `tables.capability_uses`
     (table order), `(row, value)` -- the value the row's reader read, so the record `resolve` returns names what fed the
-    roll and cannot disagree with what was rolled (CAP A6, MAP §D). `dice` reads the actor's score (`pool.score`, the base
+    roll and cannot disagree with what was rolled (CAP A6, MAP §D) -- and `levels`, `((source, aggressor n, defender n), ...)`,
+    the count of the named levels each `advantage_sources` member brought, from the same calls `leverage` sums (OBS §5). `dice` reads the actor's score (`pool.score`, the base
     `faculty` adds its addends to) and gives the pool; `opposes` reads the opposition (`_opposition_of`, `None` for nobody
     opposing). The roll reads each term ONLY through its row: a table with no `opposes` row rolls with opposition `None`,
     and with no `dice` row a pool of 0 (nothing read the actor's score).
@@ -336,8 +378,7 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     if room is not None:
         room_terms = dict(reception=reception(w, claimants[0], room),
                           reception_gain=fx.get("reception_gain"),
-                          proofs=proofs(w, claimants[0], subject, room),
-                          proof_step=fx.get("proof_step"))
+                          proofs=proofs(w, claimants[0], subject, room))
     doc = w.records.get(examined) if examined is not None else None
     # NOBODY OPPOSES HIMSELF (v10 CP-T05-02 (ii), AM-D-02): a subject who IS the actor (the self-plea,
     # `speak {subject: himself}`) brings no opposition -- his own score is not an obstacle to himself --
@@ -360,11 +401,12 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     edge = _edge_reads(verb, actor, subject_read)
     circumstance = _edge_reads(verb, actor, subject_read, CIRCUMSTANCE)         # the `capability` obstacle term's rows (B05.15)
     inp = _frame(fx, pool, opposition, doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb, edge, circumstance)
+    levels = _levels_count(advantage_levels(fx, _advantage_operands(effort, edge, room_terms)))     # the same sources `leverage` summed (OBS §5)
     read = {"dice": score(w, actor, verb) if "dice" in roles else None, "opposes": opposition}
     chosen = {id(r): (value, levels_to_net_sigma(*_edge_levels(r, key, value))) for r, key, value in edge}
     chosen.update({id(r): (value, _circumstance_ob(fx, r, value)) for r, key, value in circumstance})
     return inp, tuple((r, *chosen[id(r)]) if id(r) in chosen else (r, read[r.role], None)
-                      for r in capability_rows(SOCIAL_ROLL_SITE) if id(r) in chosen or r.role in read)
+                      for r in capability_rows(SOCIAL_ROLL_SITE) if id(r) in chosen or r.role in read), levels
 
 
 #: `rosters.yaml: capability_use_sites`' site whose one reader is `contest_input` (the single roll's dice and opposition).
@@ -428,6 +470,14 @@ def _opposition_term(fx: Any, facts: dict) -> dict:
     return {"opposition": facts["opposition"], "pool_default": untrained(fx), "opposition_rate": fx.get("opposition_rate")}
 
 
+def _reception_term(fx: Any, facts: dict) -> dict:
+    """`reception`: the audience's hostility (OBS §2 member 8; B05.17, PES-A edit 4): the bench's signed regard for the speaker
+    (`facts["reception"]`, `world_q.reception` over the room the prize row names; 0 where no room hears the act) read at its hostile half and
+    scaled by `reception_gain`. ONE operand `("reception", max(0, -reception), reception_gain)`, always, so the member stands in the module's
+    terms at 0.0 where the bench is neutral or friendly (the friendly half is `advantage_sources: favour`, never a lower obstacle)."""
+    return {"obstacle_operands": (("reception", max(0.0, -float(facts.get("reception", 0.0))), fx.get("reception_gain")),)}
+
+
 def _capability_term(fx: Any, facts: dict) -> dict:
     """`capability`: a circumstance that punishes a want (MAP §G edit 6; OBS §2 member 9): ONE function over the table's rows for the act's
     operands -- the `circumstance` rows of the act's site whose `when` holds (`facts["circumstance"]`, chosen and read by the input
@@ -440,14 +490,14 @@ def _capability_term(fx: Any, facts: dict) -> dict:
 #: Each member of `rosters.yaml: obstacle_terms` -> the ONE function that reads it: `fn(fixtures, facts) -> {record field: value}`. A member
 #: that is a raw operand times a step returns `{"obstacle_operands": ((name, raw, step),)}` instead. Refused at import, both ways.
 OBSTACLE_TERMS = _bound_to({"even": _even_term, "difficulty": _difficulty_term, "opposition": _opposition_term,
-                            "capability": _capability_term}, "obstacle_terms")
+                            "reception": _reception_term, "capability": _capability_term}, "obstacle_terms")
 
 
 def obstacle_operands(fx: Any, facts: dict) -> dict:
     """THE OBSTACLE'S FIELDS OF THE RECORD, every roster member's function asked in roster order: `difficulty`, `pool_default`,
     `pool_add`, `opposition`, `opposition_rate` and `obstacle_operands` (the `(name, raw, step)` triples of the members that are an
     operand times a step, in roster order). `facts` is what the act is: its `verb`, the `opposition` its builder read (`None`
-    for nobody) and the `circumstance` rows it selected and read. `contest_input` and `believed_input` reach it through `_frame` alone, so they cannot compose different obstacles."""
+    for nobody), the room's `reception` and the `circumstance` rows it selected and read. `contest_input` and `believed_input` reach it through `_frame` alone, so they cannot compose different obstacles."""
     fields: dict = {}
     operands: list = []
     for name, read in OBSTACLE_TERMS.items():
@@ -470,8 +520,10 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
         obstacle_ceiling=fx.get("obstacle_ceiling"),
         ceiling_per_pool=fx.get("ceiling_per_pool"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
-        leverage=advantage_sigma(fx, {EFFORT: effort, EDGE: edge}),      # the one place the operands are named
-        forgery_quality=forgery_quality, **obstacle_operands(fx, {"verb": verb, "opposition": opposition, "circumstance": circumstance}),
+        leverage=advantage_sigma(fx, _advantage_operands(effort, edge, room_terms)),      # the one place the operands are named
+        forgery_quality=forgery_quality,
+        **obstacle_operands(fx, {"verb": verb, "opposition": opposition, "circumstance": circumstance,
+                                 "reception": room_terms.get("reception", 0.0)}),
         **room_terms)
 
 
@@ -572,8 +624,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
     if heard:
         if room is None:
             return None
-        room_terms = dict(reception=room["reception"], reception_gain=fx.get("reception_gain"),
-                          proofs=room["proofs"], proof_step=fx.get("proof_step"))
+        room_terms = dict(reception=room["reception"], reception_gain=fx.get("reception_gain"), proofs=room["proofs"])
     return _frame(fx, pool if "dice" in roles else 0, opposition, 0.0, room_terms, effort, verb, edge, circumstance)
 
 
@@ -738,9 +789,11 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     `effort` is the act's own (CP-T01-05, `state/carriers.py::effort_of`, passed by `seam/contest.py`): it
     reaches only `contest_input`, where it becomes `leverage`; the act's draw is unchanged (one id, one draw).
 
-    RESOLVED -> dict(status, module, resolver, pool, ob, net, terms, leverage, settled_margin, fed_by)   # the entry's Margin + the record
+    RESOLVED -> dict(status, module, resolver, pool, ob, net, terms, leverage, settled_margin, levels, fed_by)   # the entry's Margin + the record
                  # + the real margin `net - ob` the ladder quantises once (B05.02), the number `degree_of` grades
-    REFUSED  -> dict(status, why, module, resolver, pool, ob, terms, fed_by)   # S27.4: ob > obstacle_refusal_multiple x pool
+    REFUSED  -> dict(status, why, module, resolver, pool, ob, terms, levels, fed_by)   # S27.4: ob > obstacle_refusal_multiple x pool
+    `levels` (B05.17, OBS §5): `((source, aggressor n, defender n), ...)`, one per `advantage_sources` member in roster order, the
+    count of the named levels each brought -- the levels `leverage` is the sum of (`advantage_levels`, one call of every source).
     `fed_by` (B04.08): a tuple of `(use, role, key, side, value, contributed)`, one per `social_roll` row that fed the roll
     (`_fed_by`); read by no caller yet, carried on the dict and on no `Event` (D-U1-06).
 
@@ -791,7 +844,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     heard = rung if row is not None and row.get("heard_by") == BENCH else None
     # An inquiry (no prize) examines its subject; a Record's forgery quality
     # enters the obstacle (`contest_input`'s `examined`). A prize names a contest, which examines nothing.
-    inp, reads = _read_social_roll(w, claimants, verb=verb, subject=subject, room=heard,
+    inp, reads, levels = _read_social_roll(w, claimants, verb=verb, subject=subject, room=heard,
                                    examined=subject if prize is None else None, effort=effort)
     entry, refusal = entry_for(prize, _PROVIDER, module_entry)
     if entry is None:
@@ -819,7 +872,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     if margin.ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
         return dict(status="REFUSED", why="S27.4", module=_PROVIDER,
                     resolver=_RESOLVER, pool=inp.pool, ob=margin.ob, terms=terms,
-                    fed_by=_fed_by(reads, inp, terms))
+                    levels=levels, fed_by=_fed_by(reads, inp, terms))
     # B05.02: the margin is REAL -- `net` (the one sampler's draw plus the boost) less `ob` -- and the ladder quantises
     # it once (`degree_from_net`, `MARGIN_SCALE`). Nothing is settled here and no second draw is made: the act's stream
     # is the module's roll alone. The record keeps the name `settled_margin` (B05.18 reads it as a real margin).
@@ -827,4 +880,4 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     # The margin's own fields, copied whole: the host reads the pair, it never computes one.
     return dict(status="RESOLVED", module=_PROVIDER, resolver=_RESOLVER, pool=inp.pool,
                 **asdict(margin), leverage=inp.leverage, settled_margin=settled,
-                fed_by=_fed_by(reads, inp, terms))
+                levels=levels, fed_by=_fed_by(reads, inp, terms))

@@ -55,7 +55,7 @@ class SocialContestInput:
       * `pool_add` -- the pool's base, whose even line (`MU_PER_DIE x pool_add`) is the obstacle's first term;
       * `opposition_rate` -- the share of the opposing score an obstacle takes up, per point;
       * `obstacle_operands` -- `((name, raw operand, step), ...)` in `rosters.yaml: obstacle_terms` order, for the members that are a
-                       raw operand times a step (none ship at step 1a; the three that do not need one carry their own field above);
+                       raw operand times a step (`reception`, `capability`; the three that do not need one carry their own field above);
       * `obstacle_ceiling` -- the `H-213` bound on how hard one matter can get; `None` is the
                        uncapped control arm;
       * `ceiling_per_pool` -- the `chance_floor` arm (CP-T01-06): from one die, the module solves the
@@ -64,7 +64,7 @@ class SocialContestInput:
       * `obstacle_refusal_multiple` -- S27.4's multiple, the fixture the host adapter refuses on,
                        on the pair the entry returns;
       * `leverage`  -- the σ-layer μ-shift: the host's `advantage_sigma` sums the act's advantage sources
-                       (`rosters.yaml: advantage_sources`; today `effort`), zero where none is taken.
+                       (`rosters.yaml: advantage_sources`: `effort`, `capability`, `proofs`, `favour`), zero where none is taken.
 
     ⚠ NO `ob` FIELD, ON PURPOSE (v9 SC-01 step 14; ED-SC-0033 clause (3), *the obstacle has a single
     owner*). The obstacle is COMPOSED by the module (`modules/social_contest/roll.py::obstacle`) from
@@ -78,10 +78,11 @@ class SocialContestInput:
                        route erosion inside it); `0.0` where the prize is heard by no room;
       * `reception_gain` -- the `H-215` fixture scaling it into the obstacle;
       * `proofs`    -- the actor's unmirrored proofs against the opponent, each weighed by remove
-                       (`queries/world_q.py::proofs`); `0.0` where no room hears the prize;
-      * `proof_step` -- the `H-216` fixture: how far one firsthand proof moves the obstacle.
-    The module composes them (`roll.py::obstacle`); the host composes nothing. They default to the
-    no-room reading, which a record built for a prize no room hears carries.
+                       (`queries/world_q.py::proofs`); `0.0` where no room hears the prize.
+    B05.17 (PES-A): THE MODULE READS NONE OF THESE. The host turns them into what they are: the bench's hostile half is the
+    obstacle's `reception` operand (`obstacle_operands`), and a proof or a friendly bench is `leverage` (`advantage_sources`:
+    `proofs`, `favour`). They stay on the record raw, for the trace (SC-P1), and default to the no-room reading, which a record
+    built for a prize no room hears carries.
 
     THE EXAMINED DOCUMENT'S OPERAND (v9 SC-02 `22b` step 25), RAW AS THE OTHERS:
       * `forgery_quality` -- `Record.forgery_quality` of the Record an INQUIRY examines (`sigma.py::
@@ -99,7 +100,6 @@ class SocialContestInput:
     reception: float = 0.0
     reception_gain: float = 0.0
     proofs: float = 0.0
-    proof_step: float = 0.0
     forgery_quality: float = 0.0
     ceiling_per_pool: bool = False
     obstacle_operands: tuple = ()
@@ -112,9 +112,9 @@ class Margin:
     only: *a MARGIN, never a winner*).
 
     `terms` (B05.14; OBS §1, §2; SC-B Edit B) is `((name, value), ...)`: every term of the obstacle in `rosters.yaml:
-    obstacle_terms` order, then lane A's `room` and `forgery` where they acted, then `("ceiling", -clip)` and `("floor", +lift)`
-    where a bound acted. THE VALUES SUM TO `ob`. Every roster member is non-negative; `room` is the one entry that may be
-    negative (a bench disposed toward the speaker), until the favourable half moves to leverage (OBS §4 step 1b). `()` on a margin a
+    obstacle_terms` order, then lane A's `forgery` where it acted, then `("ceiling", -clip)` and `("floor", +lift)`
+    where a bound acted. THE VALUES SUM TO `ob`. Every roster member is non-negative (nothing lowers the obstacle: the favourable
+    half of a room is leverage, B05.17); only the ceiling's clip is negative. `()` on a margin a
     stub entry returns with no composition behind it.
 
     ⚠ NO WINNER, NO BAND, NO SIDE. The band is the one ladder's reading of this pair

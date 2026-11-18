@@ -3,11 +3,11 @@
 
 THE FORM, `modules/social_contest/roll.py::obstacle(inp) -> (ob, terms)`:
     hard  = even + difficulty + opposed_ob(opposition if a person opposes else pool_default, opposition_rate) + sum(raw_i x step_i)
-    ob    = max(OB_MIN, min(hard, cap(pool)))          # lane A's `room` and `forgery` steps stay where they were, before the cap
-    terms = ((name, value), ...) in `rosters.yaml: obstacle_terms` order, + ("ceiling", -clip) and ("floor", +lift) where a bound acted
+    ob    = max(OB_MIN, min(hard, cap(pool)))          # lane A's `forgery` step stays where it was, before the cap; the room is a roster member (B05.17)
+    terms = ((name, value), ...) in `rosters.yaml: obstacle_terms` order, + ("forgery", q) and ("ceiling", -clip) and ("floor", +lift) where each acted
 
 THE CLAIMS, AND WHAT WOULD SHOW EACH WRONG:
-  * `terms` SUM TO `ob` and every name is a roster member (or lane A's `room` / `forgery`, or a bound): a term dropped, renamed or
+  * `terms` SUM TO `ob` and every name is a roster member (or lane A's `forgery`, or a bound): a term dropped, renamed or
     double-counted breaks the sum on the quarter-step lattice, where every figure is exact in binary (so `==` is an exactness claim
     that can fail, not an approximation).
   * NOTHING LOWERS THE OBSTACLE: a negative member raises `ValueError`.
@@ -27,7 +27,7 @@ from types import SimpleNamespace
 import pytest
 import yaml
 
-from engine.dice_engine.sigma_leverage import MU_PER_DIE, OB_MIN, even_line, opposed_ob
+from engine.dice_engine.sigma_leverage import MU_PER_DIE, OB_MIN, band_odds, even_line, net_boost, opposed_ob
 from engine.substrate import descriptors
 
 from ..data import verbs as V
@@ -41,17 +41,19 @@ from ..seam.wrappers import pool, sigma
 from .test_sc01_obstacle_ceiling import _module
 
 ROSTER = roster("obstacle_terms", ordered=True)
-LANE_A_STEPS = ("room", "forgery")                 # outside the roster (U-6), in lane A's order and names
+LANE_A_STEPS = ("forgery",)                        # outside the roster (U-6); lane A's `room` step left it at B05.17 (the hostile half is the `reception` member, the rest leverage)
 BOUNDS = ("ceiling", "floor")
 SHIPPED_TABLE = V.VERB_TABLE_YAML                 # read at import, before any test re-points the loader
 ROLLED = ("tell", "lie", "argue", "speak", "determine", "arrest", "interrogate", "research", "examine", "surveil")
 
 
 def _inp(**kw) -> SocialContestInput:
+    """A record as the host builds one: the roster's `reception` operand (the hostile half of `reception`, times `reception_gain`) and `capability`
+    (at 0 where no row applies) ride in `obstacle_operands` in roster order; `reception` and `reception_gain` themselves stay on the record, raw."""
     base = dict(pool=4, opposition=None, obstacle_ceiling=None, obstacle_refusal_multiple=2.0, leverage=0.0,
-                difficulty=1.0, pool_default=2, pool_add=0, opposition_rate=0.5, ceiling_per_pool=False,
-                obstacle_operands=(("capability", 0.0, 1.0),))        # what the host always carries (B05.15): the member, at 0 where no row applies
+                difficulty=1.0, pool_default=2, pool_add=0, opposition_rate=0.5, ceiling_per_pool=False, reception=0.0, reception_gain=0.0)
     base.update(kw)
+    base.setdefault("obstacle_operands", (("reception", max(0.0, -base["reception"]), base["reception_gain"]), ("capability", 0.0, 1.0)))
     return SocialContestInput(**base)
 
 
@@ -78,13 +80,13 @@ def test_terms_sum_to_ob():
     assert checked == 3 * 5 * 6 * 2 * 3 * 2 * 3 and bounds_seen > 100, (checked, bounds_seen)   # the bounds acted: the clip and the lift are in the sum
 
 
-def test_every_term_is_non_negative_but_the_room_and_the_ceiling():
+def test_every_term_is_non_negative_but_the_ceiling():
     mod = _module()
     negative = set()
     for diff, opp, room in itertools.product((0.0, 1.0, 3.0), (None, 0.0, 2.0, 8.0), (0.0, 1.0, -1.0)):
         _, terms = mod.obstacle(_inp(difficulty=diff, opposition=opp, reception=room, reception_gain=1.0, obstacle_ceiling=2.0))
         negative |= {n for n, v in terms if v < 0}
-    assert negative == {"room", "ceiling"}, negative       # the one favourable entry lane A keeps (OBS §4 step 1b moves it), and the clip
+    assert negative == {"ceiling"}, negative               # nothing lowers the obstacle but the clip: a favourable room is leverage (B05.17)
 
 
 def test_a_negative_term_raises():
@@ -321,3 +323,50 @@ def test_a_circumstance_row_whose_when_fails_adds_nothing(monkeypatch):
         w.persons["p_low"].capability = {"copying": rank}
         read[rank] = dict(_module().obstacle(sigma.contest_input(w, ["p_low"], verb="tell", subject="site_harbour"))[1])["capability"]
     assert read == {3: 0.75, 1: 0.0}, read
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# what the speaker brings is leverage (B05.17; PES-A; OBS gate 2)
+# ---------------------------------------------------------------------------------------------------------------------
+
+def test_favour_and_proof_levels_change_odds_at_every_pool():
+    """OBS gate 2 (F-SC-16's rows, PES-DICE's gate 2): against a person scoring 8 (`opposition` 8) at a shipped-arm obstacle, holding 0, 1, 2 and
+    4 proofs (and, separately, 0, 1, 2 and 4 units of a friendly bench's favour) gives four DIFFERENT, strictly increasing Success-or-better
+    shares on the closed form of the one sampler, at every pool from `pool_floor` (the control, 0) to `pool_floor + 10`. `!=`, no `approx`: a
+    cell where adding one leaves the odds unchanged (the dead zone the subtracting form had, four of six cells) is a failure.
+    From a pool of 1: a pool of nothing rolls nothing and the boost is `sqrt(pool)` of its shift, so no leverage moves pool 0, which is
+    observed in the last line, not skipped silently (B05.23 sets `pool_floor` 5, above it)."""
+    fx = DEFAULT_FIXTURES
+    assert fx.get("proof_level") is not None and fx.get("favour_level") is not None       # the control arms are None; these are the shipped ones
+    floor = fx.get("pool_floor")
+    checked = 0
+    for source, operand in (("proofs", "proofs"), ("favour", "reception")):
+        for pool in range(max(1, floor), floor + 11):
+            shares = []
+            for held in (0, 1, 2, 4):
+                inp = _inp(pool=pool, opposition=8.0, obstacle_ceiling=fx.get("obstacle_ceiling"), ceiling_per_pool=True,
+                           leverage=sigma.advantage_sigma(fx, {operand: held}))
+                ob, _terms = _module().obstacle(inp)
+                failure, partial, success, overwhelming = band_odds(pool, ob, net_boost(inp.leverage, pool))
+                shares.append(success + overwhelming)
+            assert len(set(shares)) == 4 and all(a != b for a, b in itertools.combinations(shares, 2)), (source, pool, shares)
+            assert shares[0] < shares[1] < shares[2] < shares[3], (source, pool, shares)
+            checked += 1
+    assert checked == 2 * len(range(max(1, floor), floor + 11)) and checked >= 20, checked
+    assert net_boost(sigma.advantage_sigma(fx, {"proofs": 4}), 0) == 0.0                   # the one cell not in the range, observed
+
+
+def test_the_levels_are_the_sources_the_leverage_sums():
+    """OBS §5: the `levels` a roll records are the very lists `leverage` is the sum of -- one per `advantage_sources` member, roster order, whole
+    units, each FOR the roller (the defender list is empty for proofs and favour until B24's cited items)."""
+    fx = DEFAULT_FIXTURES
+    operands = {"proofs": 2.5, "reception": 1.4}
+    levels = sigma.advantage_levels(fx, operands)
+    assert tuple(n for n, _, _ in levels) == roster("advantage_sources", ordered=True) and [n for n, _, _ in levels][-2:] == ["proofs", "favour"], levels
+    by = {n: (f, a) for n, f, a in levels}
+    assert by["proofs"] == (["minor"] * 3, []) and by["favour"] == (["major"] * 1, []), by                  # 2.5 and 1.4 round half up
+    assert sigma.advantage_sigma(fx, operands) == 3 * 0.25 + 1.0
+    assert sigma._levels_count(levels)[-2:] == (("proofs", 3, 0), ("favour", 1, 0))
+    none = DEFAULT_FIXTURES.sweep("proof_level", None).sweep("favour_level", None)
+    assert sigma.advantage_sigma(none, operands) == 0.0                                                      # the control: None brings no level
+    assert sigma.advantage_sigma(fx, {"reception": -3.0}) == 0.0                                             # a hostile bench is no favour

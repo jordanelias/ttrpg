@@ -89,14 +89,13 @@ def obstacle(inp: SocialContestInput) -> tuple:
     (his opposing attribute plus his skill score, A-79, A-137 -- the host reads it, `sigma.py::OBSTACLE_TERMS`), read at
     `sigma_leverage.opposed_ob` and `opposition_rate`, and where NO person stands opposite (a docket item, a Record, a site, a self-plea:
     nobody opposes himself) it is `opposed_ob(pool_default)` -- NEVER ABSENT, so no act's obstacle is zero for want of a counterparty
-    and no verb is named here. `obstacle_operands` carries the members that are a raw operand times a step (none ship at step 1a).
+    and no verb is named here. `obstacle_operands` carries the members that are a raw operand times a step (the room's hostile `reception` and the `capability` circumstances).
     Every member is non-negative; a negative one raises `ValueError` (nothing lowers the obstacle). The values in `terms` sum to `ob`.
 
-    ⚠ LANE A'S TWO STEPS STAY WHERE THEY WERE, OUTSIDE THE ROSTER (U-6), SO THE CONTROL IS EXACT: after the members, `room` (minus the
-    bench's reception and the speaker's proofs, never taking the obstacle below `OB_MIN` or below a base already under it -- a bench
-    disposed toward the speaker, and proofs his opponent cannot mirror, make the matter easier; one against him makes it harder, v9 SC-02
-    `22a`) and `forgery` (an examined document's quality, ADDED: a better forgery is harder to find, `22b` step 25). `room` is the one
-    entry that may be negative; OBS §4 step 1b moves its favourable half to leverage.
+    ⚠ WHAT STANDS AGAINST THE ACT RAISES THE OBSTACLE AND NOTHING LOWERS IT; WHAT THE ACTOR BRINGS IS LEVERAGE (B05.17, PES-A; `ED-884`):
+    a hostile bench is the roster's `reception` member, and a held proof or a friendly bench reaches the roll as named levels on the
+    host's `leverage` (`rosters.yaml: advantage_sources`), so this function reads no room. Lane A's one step stays outside the roster
+    (U-6): `forgery` (an examined document's quality, ADDED: a better forgery is harder to find, `22b` step 25).
 
     ⚠ THE CEILING (`H-213`): a ceiling caps how hard a matter can get. M-7 fails without one -- at the 1D pool floor `p_success` is
     0.0006 at Ob 3 and effectively zero above, and buying σ-advantage cannot lift it. It is NOT a pool floor (that would raise
@@ -120,11 +119,6 @@ def obstacle(inp: SocialContestInput) -> tuple:
     ob = 0.0
     for _, value in terms:
         ob += value
-    room = float(inp.reception_gain) * float(inp.reception) + float(inp.proof_step) * float(inp.proofs)
-    if room:
-        before = ob
-        ob = max(ob - room, min(ob, float(OB_MIN))) if room > 0 else ob - room
-        terms.append(("room", ob - before))
     if inp.forgery_quality:
         terms.append(("forgery", float(inp.forgery_quality)))
     ob += float(inp.forgery_quality)

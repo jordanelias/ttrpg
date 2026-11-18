@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 122,
-    "total": 384,
-    "uncited": 262,
+    "total": 385,
+    "uncited": 263,
     "of_which_assumption_grade": 8
   },
-  "count": 384,
+  "count": 385,
   "by_module": {
     "engine.dice_engine": 10,
     "engine.season": 24,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 97,
+    "engine.season.settings": 98,
     "engine.season.realm": 8
   },
   "params": [
@@ -3692,13 +3692,24 @@
       "citation_grade": null
     },
     {
-      "key": "engine.season.settings.proof_step",
-      "name": "proof_step",
-      "value": 0.25,
-      "kind": "scalar",
+      "key": "engine.season.settings.proof_level",
+      "name": "proof_level",
+      "value": "minor",
+      "kind": "other",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-216`, swept 0 (control) / 0.25 (SHIPPED) / 0.5",
+      "note": "`H-216`, swept None (control) / minor (SHIPPED) / moderate",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.favour_level",
+      "name": "favour_level",
+      "value": "major",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-425`, swept None (control) / strong / major (SHIPPED)",
       "citation": null,
       "citation_grade": null
     },

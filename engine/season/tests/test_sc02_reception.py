@@ -8,10 +8,11 @@ through `test_u7_remit._world`: `p_high` holds `off_duke`, whose bench sits over
 and his party `p_mid` live in `Hh`; `p_other` lives there and sits on no bench):
   * `world_q.reception(w, speaker, venue)` -- each bench member's own deed claims about the speaker,
     weighted by `remove_weight(source)` x decayed confidence x the member's valence (arm 1, the alignment
-    table; arm 2 was never authored and the sweep is open, `hole_register.yaml` H-215), summed; `reception_gain` scales it into
-    the obstacle (`H-215`);
+    table; arm 2 was never authored and the sweep is open, `hole_register.yaml` H-215), summed; `reception_gain` scales it: its
+    hostile half into the obstacle (the `reception` member), its favourable half into `favour` levels (`H-215`, B05.17);
   * `world_q.proofs(w, speaker, opponent, venue)` -- the speaker's deed claims about the opponent weighed by
-    remove, zero for any the opponent mirrors (same subject and predicate); `proof_step` (`H-216`);
+    remove, zero for any the opponent mirrors (same subject and predicate); `proof_level` (`H-216`, B05.17: a proof is a
+    named level of leverage, never an obstacle reduction);
   * route erosion -- `rosters.yaml: standing_routes`: a hearer who saw a dominance-route deed done TO the
     speaker zeroes every dominance-route deed of his no newer than it.
 
@@ -29,7 +30,12 @@ import math
 import random
 from pathlib import Path
 
+from dataclasses import replace
+
+from engine.dice_engine.sigma_leverage import LEVEL_SIGMA, band_odds, levels_to_net_sigma, net_boost
+
 from ..data import files
+from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.rosters import DOMINANCE_KINDS, REMOVE_ORDINAL, SEEN_PREDICATE
 from ..data import verbs as _verbs
 from ..epistemic import Seen
@@ -58,8 +64,8 @@ def _seen(cid, holder, subject, who, *, when=0, rnd=0):
                  when, "firsthand", 100, "own", rnd)
 
 
-def _judging_world():
-    w, d = _world()
+def _judging_world(**fixtures):
+    w, d = _world(**fixtures)
     w.persons[HEARER].pursuits = {PURSUIT: 1.0}
     assert world_q.judging_set(w, world_q.place_of(w, SPEAKER)) == [HEARER]
     return w, d
@@ -109,7 +115,9 @@ def test_sc02_17_two_benches_differing_only_in_one_ledger_band_differently_for_t
         assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
     assert world_q.reception(plain, SPEAKER, "Hh") == 0.0
     assert world_q.reception(heard, SPEAKER, "Hh") > 0.0
-    assert _ob(heard) < _ob(plain), (_ob(heard), _ob(plain))
+    # B05.17: the favourable bench is LEVERAGE (`favour`), not a lower obstacle: what the speaker brings rises, what stands against him does not.
+    assert _input(heard).leverage > _input(plain).leverage, (_input(heard).leverage, _input(plain).leverage)
+    assert _ob(heard) == _ob(plain), (_ob(heard), _ob(plain))
     differ = checked = 0
     for i in range(40):
         a = _fold(plain, d_plain, Act(id=f"sp{i}", actor=SPEAKER, verb="speak", payload={"subject": PARTY}))
@@ -136,19 +144,23 @@ def test_sc02_17_a_ledger_off_the_bench_moves_nothing():
 
 def test_sc02_17_a_told_claim_moves_the_obstacle_strictly_less_than_the_same_claim_firsthand():
     """Step 17's second artifact, over the ordinal of remove: firsthand > knot-sourced > told > inferred,
-    each strictly, and every rank still counts (the obstacle below the no-claim base)."""
-    obs = {}
+    each strictly, and every rank still counts (B05.17: read as the speaker's LEVERAGE, `favour` levels, above the
+    no-claim base; the name keeps its first word, the reading moved from the obstacle). A unit of favour is whole, so
+    the bench holds enough claims that each rank's weight is whole units apart."""
+    lev = {}
     for source in REMOVE_ORDINAL:
         w, _d = _judging_world()
         kind = _kind_with_lean(w, +1)
         chain = ("p_king",) if source == "told_by" else ()
-        w.persons[HEARER].ledger.append(_claim("c1", HEARER, SPEAKER, kind, source=source, chain=chain))
-        obs[source] = _ob(w)
+        for i in range(math.ceil(8.0 / _lean(w, kind))):
+            w.persons[HEARER].ledger.append(_claim(f"c{i}", HEARER, SPEAKER, kind, source=source, chain=chain))
+        lev[source] = _input(w).leverage
     w0, _d = _judging_world()
-    base = _ob(w0)
-    ranked = [obs[s] for s in REMOVE_ORDINAL]
-    assert ranked == sorted(ranked) and len(set(ranked)) == len(ranked), obs
-    assert obs["firsthand"] < obs["told_by"] < base, (obs, base)
+    base = _input(w0).leverage
+    ranked = [lev[s] for s in REMOVE_ORDINAL]
+    assert ranked == sorted(ranked, reverse=True) and len(set(ranked)) == len(ranked), lev
+    assert lev["firsthand"] > lev["told_by"] > base, (lev, base)
+    assert min(ranked) > base, (lev, base)                                   # even the most removed rank counts
 
 
 def test_sc02_17_decayed_confidence_counts_less_and_a_hostile_bench_reads_negative():
@@ -230,40 +242,51 @@ def test_sc02_17_a_misspelled_room_refuses_at_boot_naming_the_row(monkeypatch):
 # ================================================================================================
 
 def test_sc02_18_a_mirrored_proof_moves_the_obstacle_by_exactly_zero_and_an_unmirrored_one_by_step_x_remove():
-    """`19_PLAN.md` step 18's artifact. The speaker tells (holds) a deed claim about his opponent; the
-    hearer holds nothing, so reception is 0 and only the proofs term moves the obstacle.
-    FALSIFIER: the mirrored proof moves the obstacle (exact equality with the base, no tolerance)."""
+    """`19_PLAN.md` step 18's artifact, re-pointed at B05.17: a proof is LEVERAGE (`proofs`: one `proof_level` per whole unit of
+    `world_q.proofs`), so what it moves is `leverage`, and it moves the obstacle by exactly nothing. The speaker holds four deed
+    claims about his opponent at each remove (a unit is whole, so one claim at the lowest rank would round to none); the hearer
+    holds nothing, so reception is 0 and only the proofs source moves the leverage.
+    FALSIFIER: the mirrored proof moves the leverage (exact equality with the base, no tolerance), or an unmirrored one moves the obstacle."""
     kind = sorted(_verbs.DEED_KINDS - person_q.PAIRED_KINDS)[0]
     checked = 0
     for source in REMOVE_ORDINAL:
         chain = ("p_king",) if source == "told_by" else ()
         w, _d = _judging_world()
-        base = _ob(w)
-        step = w.fixtures.get("proof_step")
-        assert step > 0, "the shipped step is the control: the falsifier could not see a move"
-        w.persons[SPEAKER].ledger.append(_claim("pf", SPEAKER, PARTY, kind, source=source, chain=chain))
+        base, base_ob = _input(w).leverage, _ob(w)
+        level = w.fixtures.get("proof_level")
+        assert level is not None and base == 0.0, "the shipped level is the control: the falsifier could not see a move"
+        for i in range(4):
+            w.persons[SPEAKER].ledger.append(_claim(f"pf{i}", SPEAKER, PARTY, kind, source=source, chain=chain))
         assert world_q.reception(w, SPEAKER, "Hh") == 0.0
-        assert _ob(w) == base - step * world_q.remove_weight(source), (source, _ob(w), base)
+        owed = levels_to_net_sigma([level] * int(4 * world_q.remove_weight(source) + 0.5))
+        assert owed > 0.0 and _input(w).leverage == base + owed, (source, _input(w).leverage, owed)
+        assert _ob(w) == base_ob, (source, _ob(w), base_ob)                 # the obstacle is not where a proof acts
         # NEAR-MISSES DO NOT MIRROR: the same predicate about another subject, and the same subject
         # under another predicate, leave the proof standing (the mirror keys on BOTH).
         other_kind = next(k for k in sorted(_verbs.DEED_KINDS - person_q.PAIRED_KINDS) if k != kind)
         w.persons[PARTY].ledger += [_claim("near_a", PARTY, NOBODY, kind),
                                     _claim("near_b", PARTY, PARTY, other_kind)]
-        assert _ob(w) == base - step * world_q.remove_weight(source), "a near-miss mirrored a proof"
+        assert _input(w).leverage == base + owed, "a near-miss mirrored a proof"
         # THE MIRROR: the opponent holds a claim of the same subject and predicate -> exactly zero.
         w.persons[PARTY].ledger.append(_claim("mirror", PARTY, PARTY, kind))
         assert world_q.proofs(w, SPEAKER, PARTY, "Hh") == 0.0
-        assert _ob(w) == base, (source, _ob(w), base)
+        assert _input(w).leverage == base, (source, _input(w).leverage, base)
+        assert _ob(w) == base_ob, (source, _ob(w), base_ob)
         checked += 1
     assert checked == len(REMOVE_ORDINAL)
 
 
-def test_sc02_18_proofs_never_take_the_obstacle_below_the_floor_and_a_non_person_mirrors_nothing():
+def test_sc02_18_proofs_never_move_the_obstacle_and_a_non_person_mirrors_nothing():
+    """B05.17: forty proofs lower no obstacle (it was floored at `OB_MIN` before; nothing lowers it now, P-232 by construction) and
+    raise the leverage; the leverage the soft cap bounds is the bound (`net_boost`)."""
+    w0, _d0 = _judging_world()
+    base_ob, base_lev = _ob(w0), _input(w0).leverage
     w, _d = _judging_world()
     kind = sorted(_verbs.DEED_KINDS - person_q.PAIRED_KINDS)[0]
     for i in range(40):
         w.persons[SPEAKER].ledger.append(_claim(f"pf{i}", SPEAKER, PARTY, kind))
-    assert _ob(w) == 1.0                                 # OB_MIN, never below
+    assert _ob(w) == base_ob and _input(w).leverage > base_lev           # the obstacle unmoved, the leverage up
+    assert net_boost(_input(w).leverage, 4) < 1.5 * 0.8 * 2.0 + 1e-9     # bounded: the soft cap's M_MAX, at pool 4
     assert world_q.proofs(w, SPEAKER, None, "Hh") == 0.0
     # A NON-PERSON OPPONENT holds no ledger, so nothing of his mirrors a proof: a deed claim the speaker
     # holds about the rung `Hh` itself is counted whole (observable: it is not zero).
@@ -391,27 +414,155 @@ def _sweep_of(hid):
     return row["sweep"], row["site"].split(",")[0].split()[-1]
 
 
-def test_sc02_the_reception_gain_and_proof_step_sweeps_run_and_zero_is_the_control():
-    """Each declared point is run through the real adapter: `0` reads the no-room obstacle exactly (the
-    CONTROL), and each larger point lowers it at least as far, strictly at the first step."""
-    kind = None
-    for hid in ("H-215", "H-216"):
-        points, fixture = _sweep_of(hid)
-        assert len(points) == 3 and 0 in points, (hid, points)
-        obs = []
-        for point in sorted(points):
-            w, _d = _world(**{fixture: point})
-            w.persons[HEARER].pursuits = {PURSUIT: 1.0}
-            kind = kind or _kind_with_lean(w, +1)
-            w.persons[HEARER].ledger.append(_claim("fav", HEARER, SPEAKER, kind))
-            w.persons[SPEAKER].ledger.append(_claim("pf", SPEAKER, PARTY, kind))
-            other = "proof_step" if fixture == "reception_gain" else "reception_gain"
-            w.fixtures = w.fixtures.sweep(other, 0)
-            obs.append(_ob(w))
-        # B05.14: the no-room obstacle against PARTY (a person holding nothing) is the act's level (`speak`: `routine`) plus `opposed_ob` of
-        # his skill score and his unheld resisting attribute, both at the untrained score: 1 + 0.5 x (2 + 2). It was 2.0, `obstacle_default`.
-        assert obs[0] == w.fixtures.get("difficulty_ob")["routine"] + 0.5 * 2 * w.fixtures.get("pool_default"), (hid, obs)
-        assert obs[0] > obs[1] >= obs[2], (hid, obs)
+def _bench(w, sign, count):
+    """`count` claims of the hearer's about the speaker, each of the kind he leans on hardest in `sign`'s direction."""
+    kind = _kind_with_lean(w, sign)
+    for i in range(count):
+        w.persons[HEARER].ledger.append(_claim(f"bench{sign:+d}_{i}", HEARER, SPEAKER, kind))
+    return kind
+
+
+def _proofs(w, count, source="firsthand"):
+    """`count` deed claims of the speaker's about his opponent, none of which the opponent mirrors."""
+    kind = sorted(_verbs.DEED_KINDS - person_q.PAIRED_KINDS)[0]
+    for i in range(count):
+        w.persons[SPEAKER].ledger.append(_claim(f"proof{i}", SPEAKER, PARTY, kind, source=source))
+
+
+def _obstacle_at(w, pool):
+    """`(ob, terms)` the module composes for the speaker's record at `pool` (the cap rises with the pool, so a pool of 8 leaves a
+    hostile bench room to raise it; the shipped actor's own pool sits at the cap already)."""
+    return _module().obstacle(replace(_input(w), pool=pool))
+
+
+def _partial_or_better(w, pool):
+    """P(Partial or better) on the closed form of the one sampler, for the speaker's record taken at `pool`: the module's obstacle and
+    the roll's own boost (`net_boost`) of the host's leverage. Read, never rolled."""
+    inp = replace(_input(w), pool=pool)
+    ob, _terms = _module().obstacle(inp)
+    return 1.0 - band_odds(pool, ob, net_boost(inp.leverage, pool))[0]
+
+
+def test_sc02_the_reception_gain_and_proof_level_sweeps_run_and_the_control_is_the_nothing_arm():
+    """B05.17: each declared point of `H-215` and `H-216` is run through the real adapter. `reception_gain` 0 is its CONTROL: a hostile
+    bench raises the obstacle by nothing and a favourable one brings no levels, and each larger point moves them strictly further.
+    `proof_level` None is its control (a proof brings nothing) and each named level above it brings strictly more leverage."""
+    gains, _site = _sweep_of("H-215")
+    assert _site == "reception_gain" and len(gains) == 3 and 0 in gains, gains
+    hostile_ob, favour_lev = [], []
+    for gain in sorted(gains):
+        h, _d = _judging_world(reception_gain=gain)
+        _bench(h, -1, 1)
+        hostile_ob.append(_obstacle_at(h, 8)[0])
+        f, _d = _judging_world(reception_gain=gain)
+        _bench(f, +1, 3)
+        favour_lev.append(_input(f).leverage)
+    n, _d = _judging_world(reception_gain=0)
+    assert hostile_ob[0] == _obstacle_at(n, 8)[0] and favour_lev[0] == 0.0, (hostile_ob, favour_lev)       # the control: nothing of the room
+    assert hostile_ob[0] < hostile_ob[1] < hostile_ob[2] and favour_lev[0] < favour_lev[1] < favour_lev[2], (hostile_ob, favour_lev)
+    levels, fixture = _sweep_of("H-216")
+    assert fixture == "proof_level" and len(levels) == 3 and None in levels, levels
+    lev = []
+    for level in levels:
+        w, _d = _judging_world(proof_level=level)
+        _proofs(w, 4)
+        lev.append(_input(w).leverage)
+    assert lev[0] == 0.0 and lev[0] < lev[1] < lev[2], (levels, lev)
+
+
+# ================================================================================================
+# B05.17 -- WHAT THE SPEAKER BRINGS IS LEVERAGE; THE HOSTILE ROOM IS A TERM (PES-A, OBS §4 step 1b)
+# ================================================================================================
+
+# The closed form is read from `pool_floor` (the control, 0) to `pool_floor + 10`, but from a pool of 1 up: a pool of nothing rolls
+# nothing and `net_boost` is `sqrt(pool)` of its shift, so at pool 0 NO leverage moves the odds (a true dead zone by construction,
+# observed below, not a cell this item leaves). B05.23 sets `pool_floor` 5, where every pool in play is above it.
+def _pools():
+    floor = DEFAULT_FIXTURES.get("pool_floor")
+    return [p for p in range(floor, floor + 11) if p >= 1]
+
+
+def test_a_pool_of_nothing_takes_no_shift():
+    """The cell excluded from the range below, observed: at pool 0 the boost is 0 whatever the leverage (the closed form returns 1 or 0)."""
+    w, _d = _judging_world()
+    _bench(w, +1, 12)
+    _proofs(w, 4)
+    assert _input(w).leverage > 0.0
+    assert net_boost(_input(w).leverage, 0) == 0.0
+    assert _partial_or_better(w, 0) == 0.0
+
+
+def test_each_proof_strictly_raises_partial_or_better_at_every_pool():
+    """FALSIFIER (PES-A): a cell in which adding a proof leaves the odds unchanged, at any pool from the floor. Before a hostile, a
+    neutral and a friendly bench, with `proof_level` set, each added proof strictly raises P(Partial or better)."""
+    checked = 0
+    for bench, count in (("hostile", 8), ("neutral", 0), ("friendly", 12)):
+        for pool in _pools():
+            odds = []
+            for held in (0, 1, 2, 3):
+                w, _d = _judging_world(proof_level="minor")
+                if count:
+                    _bench(w, -1 if bench == "hostile" else +1, count)
+                _proofs(w, held)
+                odds.append(_partial_or_better(w, pool))
+            assert odds[0] < odds[1] < odds[2] < odds[3], (bench, pool, odds)
+            checked += 1
+    assert checked == 3 * len(_pools()) and len(_pools()) == 10, checked
+
+
+def test_favour_strictly_raises_partial_or_better():
+    """FALSIFIER (PES-A): a unit of favour that leaves the odds unchanged. A friendlier bench (more whole units of `reception_gain x
+    reception`) strictly raises P(Partial or better) at every pool, with `favour_level` set."""
+    checked = 0
+    for pool in _pools():
+        odds = []
+        for units in (0, 1, 3, 6):
+            w, _d = _judging_world(favour_level="major")
+            if units:
+                kind = _kind_with_lean(w, +1)
+                _bench(w, +1, math.ceil(units / _lean(w, kind)))            # a reception of at least `units`, under `units + 1`
+            odds.append(_partial_or_better(w, pool))
+        assert odds[0] < odds[1] < odds[2] < odds[3], (pool, odds)
+        checked += 1
+    assert checked == 10
+
+
+def test_hostile_bench_raises_the_obstacle_only():
+    """A hostile bench is a TERM (the `reception` member of `obstacle_terms`): it raises the obstacle by `reception_gain x |reception|`
+    and brings no leverage; a friendly one lowers no obstacle. Read at pool 8, where the cap leaves the room to rise."""
+    neutral, _d = _judging_world()
+    hostile, _d = _judging_world()
+    friendly, _d = _judging_world()
+    _bench(hostile, -1, 1)
+    _bench(friendly, +1, 3)
+    r = world_q.reception(hostile, SPEAKER, "Hh")
+    assert r < 0.0 < world_q.reception(friendly, SPEAKER, "Hh")
+    gain = hostile.fixtures.get("reception_gain")
+    (ob_n, t_n), (ob_h, t_h), (ob_f, t_f) = (_obstacle_at(w, 8) for w in (neutral, hostile, friendly))
+    assert dict(t_n)["reception"] == 0.0 and dict(t_f)["reception"] == 0.0, (t_n, t_f)
+    assert dict(t_h)["reception"] == -gain * r > 0.0 and ob_h > ob_n and ob_h - ob_n == dict(t_h)["reception"], (t_h, ob_h, ob_n)
+    assert "room" not in dict(t_h) and sum(v for _, v in t_h) == ob_h
+    assert ob_f == ob_n                                                    # a friendly bench does not touch the obstacle
+    assert _input(hostile).leverage == _input(neutral).leverage == 0.0     # and a hostile one brings the speaker nothing
+    assert _input(friendly).leverage > 0.0
+
+
+def test_control_levels_none_moves_nothing():
+    """CONTROL: with `proof_level` and `favour_level` None a held proof and a friendly bench move NOTHING (leverage and obstacle exactly
+    the nothing-held record's, the odds equal at every pool), and the same world at the shipped levels moves them (the control can fail)."""
+    bare, _d = _judging_world(proof_level=None, favour_level=None)
+    held, _d = _judging_world(proof_level=None, favour_level=None)
+    _bench(held, +1, 12)
+    _proofs(held, 4)
+    live, _d = _judging_world()
+    _bench(live, +1, 12)
+    _proofs(live, 4)
+    assert world_q.proofs(held, SPEAKER, PARTY, "Hh") == 4.0 and world_q.reception(held, SPEAKER, "Hh") > 1.0
+    assert _input(held).leverage == _input(bare).leverage == 0.0
+    assert _ob(held) == _ob(bare)
+    for pool in _pools():
+        assert _partial_or_better(held, pool) == _partial_or_better(bare, pool), pool
+    assert _input(live).leverage > 0.0 and _partial_or_better(live, 4) > _partial_or_better(bare, 4)
 
 
 def test_sc02_20_the_route_roster_names_only_deed_kinds():
