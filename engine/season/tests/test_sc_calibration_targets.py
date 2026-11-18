@@ -332,6 +332,58 @@ def test_each_check_refuses_a_value_just_outside_its_band_and_passes_one_just_in
 
 
 # ---------------------------------------------------------------------------------------------------------------------
+# B05.59 -- THE BETTER ARGUER WINS ON THE FIGHT'S CURVE (`29_DICE` item 29-4 step 6; gate 6). Read on the same composed cells as the grid above.
+# `ORDER_WINDOWS` are the source's TARGETS, copied (the fight's windows, deliberately the same); a reading outside one fails and is named, and no
+# window, fixture or ladder is moved here to make it pass. C3 and C4 restated on ranks are NOT written again: the grid's C3 (an opponent four ranks
+# better, every rank) and C4 (four ranks worse, ranks 4 and 7) rows above are those readings.
+# ---------------------------------------------------------------------------------------------------------------------
+DECIDED_LEVEL = "routine"                 # the grid's reference cell (the level C1, C3 and C4 read at)
+#: (better rank, worse rank, window of the better arguer's share of decided exchanges): +1, +2 and +4 ranks, two pairs each
+ORDER_WINDOWS = ((3, 2, (0.60, 0.70)), (6, 5, (0.60, 0.70)), (4, 2, (0.72, 0.82)), (7, 5, (0.72, 0.82)), (6, 2, (0.88, 0.95)), (7, 3, (0.88, 0.95)))
+
+
+def _decided_share(fx, a: int, b: int, level: str = DECIDED_LEVEL) -> tuple:
+    """`(share, P(a reaches Success), P(b reaches Success))`: of the exchange pairs in which EXACTLY ONE side reaches Success (Success or better),
+    the share where it is `a`. One `_cell` per side, each rolling its own pool against the other's score and opposing attribute; the two are
+    independent, so the pair's chances multiply: `share = pa (1 - pb) / (pa (1 - pb) + pb (1 - pa))`."""
+    pa = _cell(fx, "a", rank=a, level=level, opposed_rank=b).success_or_better
+    pb = _cell(fx, "b", rank=b, level=level, opposed_rank=a).success_or_better
+    one_side_a, one_side_b = pa * (1.0 - pb), pb * (1.0 - pa)
+    return one_side_a / (one_side_a + one_side_b), pa, pb
+
+
+def test_the_better_arguer_wins_on_the_fights_curve():
+    """Gate 6, the decided-pair share from two `band_odds` readings (through `_cell`'s `record_odds`): the better arguer's share of the pairs in which
+    exactly one side reaches Success lies in the fight's window at +1 (3v2, 6v5), +2 (4v2, 7v5) and +4 ranks (6v2, 7v3), at the SHIPPED fixtures.
+    FALSIFIER: equal ranks read 0.5 and the share rises with the gap (+1 < +2 < +4, no overlap), so the instrument can read the
+    curve it gates; a pair outside its window is listed with its reading, not tuned away."""
+    assert _decided_share(DEFAULT_FIXTURES, 4, 4)[0] == pytest.approx(0.5, abs=1e-12)           # the instrument's own control: equals share it evenly
+    checked, bad = 0, []
+    for better, worse, (lo, hi) in ORDER_WINDOWS:
+        share, pa, pb = _decided_share(DEFAULT_FIXTURES, better, worse)
+        checked += 1
+        if not lo <= share <= hi:
+            bad.append(f"  {better}v{worse} at {DECIDED_LEVEL}: share {share:.4f} outside [{lo}, {hi}] (P(Success+) {better}: {pa:.4f}, {worse}: {pb:.4f})")
+    assert checked == len(ORDER_WINDOWS) == 6
+    shares = [_decided_share(DEFAULT_FIXTURES, a, b)[0] for a, b, _ in ORDER_WINDOWS]
+    assert min(shares[:2]) > 0.5 and max(shares[:2]) < min(shares[2:4]) and max(shares[2:4]) < min(shares[4:]), shares      # +1 < +2 < +4, no overlap
+    assert not bad, f"{len(bad)} of {checked} pairs outside the fight's windows at the shipped fixtures\n" + "\n".join(bad)
+
+
+def test_one_minor_level_against_moves_failure_by_five_points():
+    """Gate 6's one-level arm: at equals, `routine`, every grid rank, one `minor` level of leverage AGAINST the actor (`LEVEL_SIGMA["minor"]`, a
+    -σ on the roll's boost) raises P(Failure) by at least 0.05, read from `band_odds` on the composed cell's own pool and obstacle."""
+    from engine.dice_engine.sigma_leverage import LEVEL_SIGMA
+    checked = 0
+    for rank in RANKS:
+        cell = _cell(DEFAULT_FIXTURES, "equals", rank=rank)
+        against = band_odds(cell.pool, cell.ob, net_boost(-LEVEL_SIGMA["minor"], cell.pool))[0]
+        assert against - cell.f >= 0.05, (rank, cell.f, against)
+        checked += 1
+    assert checked == len(RANKS)
+
+
+# ---------------------------------------------------------------------------------------------------------------------
 # the realm read (CAL §3 step 4; OBS §4 step 4 and gate 4): `Margin.terms` off the Event's `ending` (B05.18), `build_realm(0..2)`, one season each
 # ---------------------------------------------------------------------------------------------------------------------
 REALM_SEEDS = (0, 1, 2)

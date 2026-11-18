@@ -249,3 +249,33 @@ def test_the_floor_pool_can_succeed_on_a_plain_task():
     assert ob == even_line(FX.get("pool_add")) + opposed_ob(FX.get("pool_default"), FX.get("opposition_rate")), (ob, terms)   # the stand-in is IN the obstacle
     bands = band_odds(pool, ob)
     assert bands[2] + bands[3] > 0.0, (pool, ob, bands)
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B05.59 -- THE ARGUMENT READS THE OWNER ON THE EVEN LINE (`29_DICE` item 29-4 step 6; gate 8's first half). The record is built by hand, so the
+# composer alone is read: no host operand reader stands between the numbers below and the obstacle.
+# ---------------------------------------------------------------------------------------------------------------------
+
+def test_the_obstacle_is_even_line_plus_difficulty_plus_opposed_ob():
+    """A hand-built record at `pool_add` 6, `plain` (difficulty 0), a person opposite bringing 2, the rate `MU_PER_DIE`, the ceiling off (so no bound
+    hides a term): `obstacle == even_line(6) + opposed_ob(2, MU_PER_DIE)`, which is 3.2 (2.4 + 0.0 + 0.8), and the `terms` sum to it, folded left to
+    right from 0.0 as the module folds them (the built-in `sum` of floats is compensated on Python 3.12+ and differs by an ulp). The even line is the
+    FIRST term (29_DICE's falsifier: "absent from an argument's `terms`")."""
+    from engine.dice_engine.sigma_leverage import MU_PER_DIE, even_line, opposed_ob
+    from engine.season.queries.inputs import SocialContestInput
+    from .test_sc01_obstacle_ceiling import _module
+    inp = SocialContestInput(pool=11, opposition=2.0, difficulty=0.0, pool_default=2, pool_add=6, opposition_rate=MU_PER_DIE, obstacle_ceiling=None,
+                             obstacle_refusal_multiple=3.0, leverage=0.0, ceiling_form="hard")
+    ob, terms = _module().obstacle(inp)
+    assert ob == even_line(6) + 0.0 + opposed_ob(2.0, MU_PER_DIE), (ob, terms)
+    assert abs(ob - 3.2) < 1e-12, ob                                           # the entry's stated figure, read off the owner and not retyped into it
+    assert [name for name, _ in terms][:3] == ["even", "difficulty", "opposition"], terms
+    assert dict(terms)["even"] == even_line(6) and dict(terms)["opposition"] == opposed_ob(2.0, MU_PER_DIE), terms
+    folded = 0.0
+    for _, value in terms:
+        folded += value
+    assert folded == ob, (folded, ob, terms)
+    # the falsifier: the same record at `pool_add` 0 composes no even line, and its obstacle is the lower one (here the Ob floor, `OB_MIN`, lifts it)
+    bare, bare_terms = _module().obstacle(SocialContestInput(pool=11, opposition=2.0, difficulty=0.0, pool_default=2, pool_add=0, opposition_rate=MU_PER_DIE,
+                                                             obstacle_ceiling=None, obstacle_refusal_multiple=3.0, leverage=0.0, ceiling_form="hard"))
+    assert dict(bare_terms)["even"] == 0.0 and bare < ob, (bare, bare_terms, ob)
