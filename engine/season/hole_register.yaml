@@ -5279,7 +5279,7 @@ rows:
     site:      "Fixtures mark_ob, read by `engine/season/loop/effects_combat.py::_marks` under `body_mark_model` `drawn`"
     sweep:     [1.2, 2.4, 4.8]
     unblocks:  "the flip of `body_mark_model` to `drawn` (B15), after A3's mortal-wound draw (`14_VERBS_PHYSICAL_A`)"
-    cite:      "FALSIFIER: `engine/season/tests/test_combat_module.py::test_drawn_marks_yield_all_three_outcomes_over_200_seeds` (200 survivors at the limit: ceilings 1000, 799 and 499 each occur, a `marked` Observation beside every mark and none beside none; red with `drawn` absent from the roster). CONTROL: `::test_deepest_gate_reproduces_the_pre_change_hash` (the realm hash at seed 0, one season, unmoved at the shipped arm)."
+    cite:      "FALSIFIER: `engine/season/tests/test_combat_module.py::test_drawn_marks_yield_all_three_outcomes_over_200_seeds` (200 survivors at the limit: ceilings 1000, 799 and 499 each occur, a `marked` Observation beside every mark and none beside none; red with `drawn` absent from the roster). CONTROL: the shipped arm is `deepest_gate` (`test_cp_t03_07_body_ceiling.py` asserts it), and `engine/season/tests/test_go07_canonical_digest.py` pins the realm hash at that arm (B23's own reading, before the later movers, was equal to its predecessor's: its commit body)."
     source:    "workplan v12 B14.23 (`proposals/2026-11-12-subsystem-audit-suite/proposals/U5b_PC_residue.md` section 7), batch B14-pc-outcome; ED-block slot 1 of the batch's H block"
 
   - id:        H-259

@@ -390,7 +390,7 @@ def believed_estimate(w: Any, believer: Any, act: Any, claimants: list, bands: A
     if len(claimants) < 2 or claimants[0] != believer.id or not bands or any(b not in COMBAT_BANDS for b in bands):
         return None
     got = fight_estimate(w, claimants[0], act.via, claimants[1], act.verb, record_of(act), believed=True)
-    return sum(got["subject_bands"][b] for b in set(bands)) if got["status"] == "ESTIMATED" else None
+    return sum(got["subject_bands"][b] for b in dict.fromkeys(bands)) if got["status"] == "ESTIMATED" else None   # the bands in the order asked, once each: a set sums in hash-seed order
 
 
 # ⚠ THE OUTCOME'S SEVERITY, READ OFF THE COMBATANTS THE SCENE JUST FOUGHT WITH (Jordan

@@ -661,16 +661,3 @@ def test_drawn_marks_yield_all_three_outcomes_over_200_seeds():
     assert ceilings[1000] < checked, "a mark on every survivor is the certainty the draw replaces"
     for seed in range(8):                                                # keyed by victim and purpose, not by the act or a stream position
         assert one(seed, "drawn", aid="x")[0] == one(seed, "drawn", aid="y")[0]
-
-
-def test_deepest_gate_reproduces_the_pre_change_hash():
-    """B14.23's control, as it stands after B14.99: with `body_mark_model` at its shipped `deepest_gate`, the realm at seed 0 after one season reads
-    the shipped pin (`_realm_goldens.SHIPPED`, the batch's one copy of it). The arm is asserted, so a flipped default cannot pass as a reproduction.
-    The reading of B14.23 alone, taken before the pin moved, was equal to its predecessor's (its commit body); the later movers share this pin."""
-    from ..boot.realm import build_realm
-    from ..harness.populated import run
-    from ._realm_goldens import SHIPPED
-    w = build_realm(0)
-    assert w.fixtures.get("body_mark_model") == "deepest_gate"
-    run(1, 0, w=w)
-    assert w.content_hash() == SHIPPED[(0, 1)]

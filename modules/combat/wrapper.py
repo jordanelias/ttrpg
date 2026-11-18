@@ -558,9 +558,9 @@ def fight(A, B, cfg, rng, max_bouts=12, yield_decl=None, terms=LETHAL_TERMS, dec
     for `rng`. `trace` is a callable(event: dict) the engine binds to `_TRACE` for the call and
     restores after it, on every exit; `None` leaves `_TRACE` as it stands (a caller that still holds it bound is not undone)."""
     global _TRACE
-    if trace is None:
-        return _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide)
-    prev, _TRACE = _TRACE, trace
+    prev = _TRACE
+    if trace is not None:
+        _TRACE = trace
     try:
         return _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide)
     finally:
