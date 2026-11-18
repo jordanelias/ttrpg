@@ -15,25 +15,22 @@ import sys, os, json
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 import random
-from modules.combat import wrapper
-from modules.combat.combatant import Combatant
 from modules.combat import attributes   # the combat attribute spec (PC-14)
 import presets, probabilities as P
+import fight_record as FR   # a spec becomes a PersonalCombatInput, fought by the entry the loop calls (B14.11)
 from commentary import commentate
-from trace import run_traced_fight
+from trace import trace_record
 
 _STATIC = os.path.join(os.path.dirname(__file__), 'static')
 _FIGHTER_FIELDS = attributes.KEYS   # PC-14: the attribute spec owns the roster and the defaults
 
 
 def _make_fighter(spec, default_label):
-    attrs = {f: int(spec.get(f, attributes.DEFAULT[f])) for f in _FIGHTER_FIELDS}
-    return Combatant(spec.get('label', default_label), attrs=attrs,
-                     weapon=spec.get('weapon', 'arming'), armor=spec.get('armor', 'light'),
-                     tradition=spec.get('tradition', 'none'))
+    """One party of a record (`fight_record.party_of_spec`): the request's attributes as whole numbers, the rest as given."""
+    return FR.party_of_spec({**spec, **{f: int(spec[f]) for f in _FIGHTER_FIELDS if f in spec}}, default_label)
 
 
 def _wilson(w, n, z=1.96):
@@ -51,7 +48,7 @@ def do_trace(req):
     seed = int(req.get('seed', 0))
     A = _make_fighter(req['scenario']['A'], 'A')
     B = _make_fighter(req['scenario']['B'], 'B')
-    result, events = run_traced_fight(A, B, cfg=cfg, seed=seed)
+    result, events = trace_record(FR.record_of(A, B), cfg=cfg, seed=seed)
     for e in events:                      # attach the alternate-branch distribution to each node (depth-1)
         d = P.node_distribution(e)
         if d is not None:
@@ -59,7 +56,7 @@ def do_trace(req):
             if e['kind'] == 'roll':       # depth-2: what each degree leads to (hit/bind/riposte/miss under the mode)
                 e['dist2'] = {deg: P.outcome_distribution(deg, e['mode'], cfg) for deg in d}
     return {'result': result, 'commentary': commentate(events, cfg), 'events': events,
-            'winner': (A.label if result == 1 else B.label if result == -1 else None)}
+            'winner': (A['label'] if result == 1 else B['label'] if result == -1 else None)}
 
 
 def do_montecarlo(req):
@@ -70,11 +67,11 @@ def do_montecarlo(req):
     rng = random.Random(seed)   # stdlib RNG (engine contract post ED-1085)
     a_wins = decided = draws = 0
     half = trials // 2
+    fwd = FR.record_of(_make_fighter(specA, 'A'), _make_fighter(specB, 'B'))
+    rev = FR.record_of(_make_fighter(specB, 'A'), _make_fighter(specA, 'B'))   # the two seats, built once
     for i in range(trials):
         swap = i >= half                  # position-swap to cancel first-mover; A's win-rate is symmetric
-        X = _make_fighter(specB if swap else specA, 'A')
-        Y = _make_fighter(specA if swap else specB, 'B')
-        r = wrapper.fight(X, Y, cfg, rng)
+        r = FR.fight_result(rev if swap else fwd, rng, cfg)
         if swap:
             r = -r
         if r == 1:
@@ -131,7 +128,7 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main(port=8765):
-    srv = ThreadingHTTPServer(('127.0.0.1', port), Handler)
+    srv = HTTPServer(('127.0.0.1', port), Handler)
     print(f"Combat Workbench -> http://localhost:{port}  (Ctrl-C to stop)")
     try:
         srv.serve_forever()

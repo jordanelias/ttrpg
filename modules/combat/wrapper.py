@@ -10,8 +10,8 @@ from .config import CFG
 
 # ── TRACE SEAM (workbench / branch-explorer hook) ──────────────────────────────────────────────
 # _TRACE is None by default: every _emit() is a single is-None check, so the seam adds ~zero cost
-# and CANNOT change behavior (no rng draw, no state mutation). The workbench sets wrapper._TRACE to a
-# callable(event: dict) before a run and resets it to None after. Events carry the INPUTS each decision
+# and CANNOT change behavior (no rng draw, no state mutation). `fight(..., trace=f)` binds _TRACE to the
+# callable(event: dict) for the call and restores it after, so no caller assigns the module attribute (B14.11). Events carry the INPUTS each decision
 # node consumed (read margins, the commit distribution, the roll's pool/net_sigma) so the narrator and
 # the branch explorer can reconstruct the local probability of every alternate branch without re-deriving
 # engine internals. The engine emits facts; probability math lives in the workbench (probabilities.py).
@@ -538,8 +538,8 @@ def _terms_yielder(A, B, terms, cfg):
     return A if fa < fb else B if fb < fa else None
 
 # ── THE PER-TURN CHOICE (v10 REM-31, IN-46: the grid mode's suspension) ──────────────────────────────────────────────
-# A PLAYABLE fight hands each turn's choice to a DECIDER, a parameter (never a module attribute: `_TRACE`'s rebinding is
-# the precedent not to follow). `decide(turn)` is called at the top of each turn, before every draw of that turn and after
+# A PLAYABLE fight hands each turn's choice to a DECIDER, a parameter (never a module attribute: the way `_TRACE` was
+# rebound by its callers is the precedent not to follow; `fight`'s `trace` argument replaced it). `decide(turn)` is called at the top of each turn, before every draw of that turn and after
 # a declared `Yield` of the same turn (the declaration is the earlier fact), and returns one member of this closed set:
 #   - 'engage'   : the turn is fought. Today's loop engages every turn, so `decide=None` (the default, AUTOMATED) is
 #                  exactly 'engage' every turn.
@@ -551,7 +551,19 @@ def _terms_yielder(A, B, terms, cfg):
 ENGAGE, WITHDRAW = 'engage', 'withdraw'
 TURN_CHOICES = (ENGAGE, WITHDRAW)   # closed set, this module's: the host's decider is checked against this tuple
 
-def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None, terms=LETHAL_TERMS, decide=None):
+def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None, terms=LETHAL_TERMS, decide=None, trace=None):
+    """One scene (`_fight`, below). `trace` is a callable(event: dict) the engine binds to `_TRACE` for the call and
+    restores after it, on every exit; `None` leaves `_TRACE` as it stands (a caller that still holds it bound is not undone)."""
+    global _TRACE
+    if trace is None:
+        return _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide)
+    prev, _TRACE = _TRACE, trace
+    try:
+        return _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide)
+    finally:
+        _TRACE = prev
+
+def _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide):
     import random
     if terms not in DUEL_TERMS:
         raise ValueError(f"terms {terms!r} is not one of {DUEL_TERMS}")

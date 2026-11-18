@@ -2,7 +2,7 @@
 
 It is MEASURED-BY for the numbers in ED-PC-0059's calibration block. It reads the engine through build_levers.build()
 (which forwards **kw, so `equipped` reaches the Combatant; balance._mk is NOT used) and wrapper.fight. Observation is
-non-invasive: wrapper._TRACE (the engine's own seam) for `outcome` and `wound` events, and two pass-through wrappers
+non-invasive: `wrapper.fight(..., trace=)` (the engine's own seam) for `outcome` and `wound` events, and two pass-through wrappers
 (read_contest, bind_sigma) that call the original and return its value untouched, drawing no rng. Every subject is built
 tradition='none' with known_traditions=(the teaching tradition,), equipped={generic: level}; the opponent is the same
 weapon and armour, plain; position-swapped; one random.Random(seed) per cell, seed = crc32(repr(cell key)) % 100000.
@@ -111,7 +111,7 @@ def run_cell(repo, lever, tier_idx, level, kind, n):
         elif k == 'roll':
             rec['rolls'].append((ev['aggressor'], ev['net_sigma']))
 
-    S.read_contest, S.bind_sigma, wrapper._TRACE = rc, bs, trace
+    S.read_contest, S.bind_sigma = rc, bs
     fights = []
     wins = {1: 0, -1: 0, 0: 0}
     try:
@@ -121,7 +121,7 @@ def run_cell(repo, lever, tier_idx, level, kind, n):
             rec.update(reads=[], binds=[], exch=[], wounds=[], rolls=[])
             Sc, Oc = BL.build(subj_spec), BL.build(opp_spec)
             X, Y = (Oc, Sc) if swap else (Sc, Oc)
-            r = wrapper.fight(X, Y, cfg, rng)
+            r = wrapper.fight(X, Y, cfg, rng, trace=trace)
             r = -r if swap else r       # r from S's point of view
             wins[r] += 1
             f = {}
@@ -139,7 +139,7 @@ def run_cell(repo, lever, tier_idx, level, kind, n):
                               ex_s=ex_s, ex_n=len(rec['exch']), dmg_s=dmg_s, dmg_tot=dmg_s + dmg_o)
             fights.append(f)
     finally:
-        S.read_contest, S.bind_sigma, wrapper._TRACE = orig_rc, orig_bs, None
+        S.read_contest, S.bind_sigma = orig_rc, orig_bs
     return dict(lever=lever, name=name, tradition=trad, tier=TIERS[tier_idx], level=level, kind=kind, n=n,
                 seed=seed, weapon=weapon, armor=armor, wins=wins, fights=fights)
 

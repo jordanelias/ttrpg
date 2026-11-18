@@ -180,7 +180,14 @@ class PersonalCombatInput:
                        order (PC-06 K-1, ED-IN-0347). The module maps each key to its `Combatant` field by PC-14's
                        `registry_key` (`modules/combat/attributes.py`); a key absent from the dict leaves its field at
                        the class default, and `end` is carried by `ends`, not read from here. The default is `()`:
-                       `combat_input` fills it only when a claimant has an authored attribute."""
+                       `combat_input` fills it only when a claimant has an authored attribute;
+      * `traditions`, `techniques`, `axes`, `dispositions` -- the WORKBENCH's four fields (B14.11, `03_PC_typed_outcome_one_door`
+                       Part B), each one entry per party in `claimants` order, `ends`' shape, each entry `None` where that party
+                       gives none, each defaulting to `()` so every record built before them is the record it was. The module
+                       passes them to `Combatant(..., tradition=, equipped=, skills=, disp=)` as it passes `kits`:
+                       `traditions` a tradition name; `techniques` `{name: level}` (a list of names is each at level 1.0);
+                       `axes` `{axis: bonus}` (`Combatant`'s own attribute stays `skills`); `dispositions` the `disp` number.
+                       The season fills none of them until a carrier exists (`03_PC_person_inputs_content.md`)."""
     claimants: tuple
     ends: tuple
     wound_quantities: tuple
@@ -193,6 +200,10 @@ class PersonalCombatInput:
     opposition_rate: Optional[float] = None
     carried: tuple = (0.0, 0.0)
     attributes: tuple = ()
+    traditions: tuple = ()
+    techniques: tuple = ()
+    axes: tuple = ()
+    dispositions: tuple = ()
 
 
 @dataclass(frozen=True)

@@ -56,11 +56,7 @@ oracle = []
 for seed, ends, *_ in out:
     A, B = combatant.Combatant("p_a", end=ends[0]), combatant.Combatant("p_b", end=ends[1])
     seen = []
-    wrapper._TRACE = seen.append
-    try:
-        r = wrapper.fight(A, B, rng=random.Random(seed))
-    finally:
-        wrapper._TRACE = None
+    r = wrapper.fight(A, B, rng=random.Random(seed), trace=seen.append)
     oracle.append((r, {{c.label: {{q: getattr(c.wt, q) for q in qs}} for c in (A, B)}}, seen))
 print(repr((loaded, out, oracle)))
 """

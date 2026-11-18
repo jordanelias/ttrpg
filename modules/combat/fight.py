@@ -10,7 +10,8 @@ adapter `seam/wrappers/combat.py::resolve` -- the `@provider("contest", "persona
 
 It takes the host's typed input record and a seeded `rng`, and imports the record type,
 nothing else of the host. It never reads or writes `World`, holds no token and keeps no state between
-calls (A-25): the engine's `wrapper._TRACE` hook is set for the call and restored after it.
+calls (A-25): the engine's `wrapper._TRACE` hook is bound for the call and restored after it by `wrapper.fight`'s own `trace`
+argument; this file never assigns it.
 
 It reads the scene, it does not grade it. It returns a `CombatOutcome` (`queries/inputs.py`): what the engine computed
 before `wrapper.fight` collapses it to an int -- each party's lifted `WoundTracker` (`PartyWounds`), the yield, the
@@ -44,13 +45,21 @@ def _faculty_kw(fac) -> dict:
     return {} if fac is None else dict(faculty=fac)
 
 
-def _fight_cfg(inp: PersonalCombatInput) -> Optional[dict]:
+def _fight_cfg(inp: PersonalCombatInput, cfg: Optional[dict] = None) -> Optional[dict]:
     """The engine's `cfg` carrying the record's operands: `BASE_POOL` and `POOL_FLOOR` (`wrapper._pool_dice` reads them) and
-    `OPPOSITION_RATE` (`core.ob_from_defender` reads it), each where the record carries one (not `None`); or `None` (the
-    engine's own `CFG`, so `core.OPPOSITION_RATE`, the control 0.5) where it carries none. A copy: `config.CFG` is never written."""
+    `OPPOSITION_RATE` (`core.ob_from_defender` reads it), each where the record carries one (not `None`), laid over `cfg`
+    (the workbench's config overlay; `config.CFG` where it passes none); or `cfg` itself (`None`: the engine's own `CFG`, so
+    `core.OPPOSITION_RATE`, the control 0.5) where the record carries none. A copy: neither dict is ever written."""
     carried = {k: v for k, v in (("BASE_POOL", inp.pool_add), ("POOL_FLOOR", inp.pool_floor),
                                  ("OPPOSITION_RATE", inp.opposition_rate)) if v is not None}
-    return {**CFG, **carried} if carried else None
+    return {**(CFG if cfg is None else cfg), **carried} if carried else cfg
+
+
+def _extras_kw(trad, tech, axes, disp) -> dict:
+    """`Combatant`'s keywords for one party's four workbench fields (B14.11): a tradition name, `{name: level}` techniques
+    (`Combatant.equipped`), `{axis: bonus}` axes (`Combatant.skills`, whose own name stays) and a `disp`; each `None`
+    (none given) is none, so the Combatant keeps its own default."""
+    return {k: v for k, v in (("tradition", trad), ("equipped", tech), ("skills", axes), ("disp", disp)) if v is not None}
 
 
 def _attr_kw(authored) -> dict:
@@ -99,7 +108,8 @@ def _beat(trace: list) -> Optional[DecisiveBeat]:
 
 
 def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
-          decide: Optional[Callable[[CombatTurnView], str]] = None) -> CombatOutcome:
+          decide: Optional[Callable[[CombatTurnView], str]] = None, cfg: Optional[dict] = None,
+          max_bouts: Optional[int] = None) -> CombatOutcome:
     """Fight one bout scene between the record's two parties and return a `CombatOutcome`: `wounds[id]` is that
     party's `PartyWounds` (absent when the Combatant carries no tracker, which the host refuses), `surrender` the
     scene's un-refused `yield`, `beat` the wound that felled a party, `rounds` the `turn_start` count and `trace` the
@@ -113,7 +123,10 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
     turn loop (`wrapper.fight`'s `decide`), never re-implemented here. It crosses the module boundary
     OUTWARD, so it is handed a typed view, never a `Combatant`: `CombatTurnView` -- the turn index, the
     claimants and a fresh copy of each party's `inp.wound_quantities` (`_lift`, below). `None` (AUTOMATED,
-    the default) is the engine's own engage-every-turn loop exactly."""
+    the default) is the engine's own engage-every-turn loop exactly.
+
+    `cfg` (a config overlay) and `max_bouts` (a bout cap) are the WORKBENCH's (B14.11), forwarded to `wrapper.fight`; the host
+    never passes them, and `None` is the engine's own `CFG` and bout count. `max_bouts` is the tree's name until PCR-3."""
     a_id, b_id = inp.claimants
     a_end, b_end = inp.ends
     # THE KITS (CP-T03-03): each party's `(weapon, armor)` in `claimants` order, read off the typed input. A record
@@ -128,14 +141,16 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
     a_add, b_add = inp.addends or (0, 0)
     # THE AUTHORED ATTRIBUTES (PC-06 K-1): each party's `Person.attributes`, mapped by PC-14's `registry_key`.
     a_attr, b_attr = inp.attributes or (None, None)
-    A = combatant.Combatant(a_id, end=a_end, **_attr_kw(a_attr), **_kit_kw(a_kit), **_faculty_kw(a_fac))
-    B = combatant.Combatant(b_id, end=b_end, **_attr_kw(b_attr), **_kit_kw(b_kit), **_faculty_kw(b_fac))
+    # THE WORKBENCH'S FOUR FIELDS (B14.11): each party's tradition, techniques, axes and disposition, passed as the kits are.
+    a_ext = _extras_kw(*(p[0] if p else None for p in (inp.traditions, inp.techniques, inp.axes, inp.dispositions)))
+    b_ext = _extras_kw(*(p[1] if p else None for p in (inp.traditions, inp.techniques, inp.axes, inp.dispositions)))
+    A = combatant.Combatant(a_id, end=a_end, **_attr_kw(a_attr), **_kit_kw(a_kit), **_faculty_kw(a_fac), **a_ext)
+    B = combatant.Combatant(b_id, end=b_end, **_attr_kw(b_attr), **_kit_kw(b_kit), **_faculty_kw(b_fac), **b_ext)
     A.pool_addends, B.pool_addends = a_add, b_add
     # THE CARRIED WOUND (B05.61, `UPR` §3 edit 4; A-8): each party's signed level from before the fight, read by `assemble_net_sigma` alone.
     # Carried the way `pool_addends` is, an instance attribute [ASSUMPTION: carrier; IS-PC-05 (B15) replaces it]; 0.0 where the record carries none.
     A.carried, B.carried = inp.carried or (0.0, 0.0)
     trace: list = []
-    prev = getattr(wrapper, "_TRACE", None)
     # THE DUEL TERMS (RS-25, PC-10a): the record's own field, default `'death'` (`wrapper.LETHAL_TERMS`); the engine
     # refuses a term outside `wrapper.DUEL_TERMS` by name.
     terms = inp.terms
@@ -155,13 +170,11 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
     turn_choice = None if decide is None else (
         lambda turn: decide(CombatTurnView(turn=turn, claimants=inp.claimants,
                                            wound_state={a_id: _lift(A), b_id: _lift(B)})))
-    try:
-        # The engine's own note: `_TRACE` adds no rng draw and no state mutation, so capturing it
-        # CANNOT change the result. That is why the scene may be recorded without perturbing it.
-        wrapper._TRACE = trace.append
-        wrapper.fight(A, B, cfg=_fight_cfg(inp), rng=rng, terms=terms, decide=turn_choice)   # the integer it returns is not lifted
-    finally:
-        wrapper._TRACE = prev
+    # The engine's own note: `_TRACE` adds no rng draw and no state mutation, so capturing it CANNOT change the result. That is
+    # why the scene may be recorded without perturbing it. `wrapper.fight` binds the hook from `trace` and restores it itself.
+    bouts = {} if max_bouts is None else dict(max_bouts=max_bouts)
+    wrapper.fight(A, B, cfg=_fight_cfg(inp, cfg), rng=rng, terms=terms, decide=turn_choice, trace=trace.append,
+                  **bouts)   # the integer it returns is not lifted
 
     wounds = {pid: pw for pid, pw in ((a_id, _party_wounds(A)), (b_id, _party_wounds(B))) if pw is not None}
     return CombatOutcome(claimants=(a_id, b_id), wounds=wounds, surrender=_surrender(trace), beat=_beat(trace),
