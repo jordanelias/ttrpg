@@ -56,7 +56,7 @@ oracle = []
 for seed, ends, *_ in out:
     A, B = combatant.Combatant("p_a", end=ends[0]), combatant.Combatant("p_b", end=ends[1])
     seen = []
-    r = wrapper.fight(A, B, rng=random.Random(seed), trace=seen.append)
+    r = wrapper.fight(A, B, cfg=None, rng=random.Random(seed), trace=seen.append)
     oracle.append((r, {{c.label: {{q: getattr(c.wt, q) for q in qs}} for c in (A, B)}}, seen))
 print(repr((loaded, out, oracle)))
 """
@@ -141,6 +141,49 @@ def test_resolve_returns_no_winner_key():
     # a felling carries a beat; a fight nobody was felled in carries none
     felled = [pid for pid, pw in out.wounds.items() if pw.felled]
     assert (out.beat is not None) == bool(felled), (out.beat, felled)
+
+
+def test_a_self_fight_is_refused_party_gap(monkeypatch):
+    """B14.20: one id as both claimants is refused before the engine is called -- `fight_estimate`'s own `PARTY-GAP` line
+    (`actor == target`), now `resolve`'s too. FALSIFIER: a person fighting himself returns `RESOLVED`, or reaches the engine
+    (the module entry is replaced by one that fails the test if called)."""
+    from ..data.matrix import Step
+    from ..harness import probes as P
+    from ..loop.driver import SeasonDriver
+    from ..seam.wrappers import combat as C
+    if C.engine() is None:
+        pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
+    w = P.tiny_world()
+    w.step = Step.RESOLVE
+    SeasonDriver(P.tiny_world())
+    real, built = C.combat_input, []
+    monkeypatch.setattr(C, "combat_input", lambda *a, **k: built.append(a) or real(*a, **k))
+    got = C.resolve(w, ["p_low", "p_low"], ["a"], "the body")
+    assert got["status"] == "PARTY-GAP", got
+    assert "p_low" in got["why"], got
+    assert not built, "the self-fight reached the input builder, so the engine"
+    # the control: two distinct persons still resolve
+    assert C.resolve(w, ["p_low", "p_mid"], ["a"], "the body")["status"] == "RESOLVED"
+    assert len(built) == 1, "the control never built an input: the spy cannot observe the failure it excludes"
+
+
+def test_wrapper_fight_has_no_default_stream():
+    """B14.20: `wrapper.fight(A, B, cfg, rng, ...)` takes neither `cfg` nor `rng` by default, and no fallback builds an unseeded
+    `random.Random()`: a missing stream is a signature error at the call site, not a branch. A caller may still PASS `cfg=None`
+    (the engine's own `CFG`). FALSIFIER: a combat call that passes with no stream supplied."""
+    import importlib
+    import inspect
+    from modules.combat.combatant import Combatant
+    wrapper = importlib.import_module("modules.combat.wrapper")
+    params = inspect.signature(wrapper.fight).parameters
+    assert params["rng"].default is inspect._empty, params["rng"]
+    assert params["cfg"].default is inspect._empty, params["cfg"]
+    with pytest.raises(TypeError):
+        wrapper.fight(Combatant("a"), Combatant("b"))
+    with pytest.raises(TypeError):
+        wrapper.fight(Combatant("a"), Combatant("b"), cfg=None)
+    assert wrapper.fight(Combatant("a"), Combatant("b"), None, random.Random(1)) in (-1, 0, 1)
+    assert "random.Random()" not in inspect.getsource(wrapper)
 
 
 def test_a_fight_leaves_no_flat_module_behind():

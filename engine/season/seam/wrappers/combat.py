@@ -431,6 +431,9 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     if pa is None or pb is None:
         return dict(status="PARTY-GAP", why=f"claimant not a person: {a_id!r} / {b_id!r}",
                     module=_PROVIDER)
+    if a_id == b_id:   # `fight_estimate`'s own line: one id as both claimants is refused before the engine is called
+        return dict(status="PARTY-GAP", why=f"personal combat needs two persons; got {a_id!r} / {b_id!r}",
+                    module=_PROVIDER)
     inp = combat_input(w, claimants, verb, _cause_record(w, causes))
     # `H` returns a blake2b hexdigest (`state/ids.py`), so 16 is the RADIX that parses it back to
     # an int for the RNG -- structural, not a game value.
