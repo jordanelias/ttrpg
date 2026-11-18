@@ -135,6 +135,13 @@ def sigma_N(pool: float) -> float:
     return sigma_n(pool)
 
 
+def saturate(x: float, m: float) -> float:
+    """`m * tanh(x / m)`: nearly `x` for small `x`, approaching `m` for large; no hard ceiling and no
+    dead-zone. The one saturating function: `soft_cap` is it at `M_MAX`, and the social obstacle's
+    bound is it over the span between the fixed ceiling and the pool's cap."""
+    return m * math.tanh(x / m)
+
+
 def soft_cap(net_sigma: float) -> float:
     """Smooth saturating cap: M*tanh(net/M).
 
@@ -142,7 +149,7 @@ def soft_cap(net_sigma: float) -> float:
     no hard ceiling and no dead-zone.
     [canonical: modifier_system_spec.md §3.1 Saturating function]
     """
-    return M_MAX * math.tanh(net_sigma / M_MAX)     # [canonical: modifier_system_spec.md §3.1 Saturating function]
+    return saturate(net_sigma, M_MAX)     # [canonical: modifier_system_spec.md §3.1 Saturating function]
 
 
 def eff_sigma(net_sigma: float) -> float:
