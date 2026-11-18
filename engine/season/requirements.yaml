@@ -105,7 +105,7 @@ scales:
     in_loop:   "seam unbuilt"
     note: >-
       The kernel exists and already rolls through the substrate (`resolver.py` imports
-      `degree_from_net` from `engine/dice_engine/dice_engine.py` and wraps `roll_net` from
+      `degree_from_net` from `engine/dice_engine/dice_engine.py` and wraps `roll_net_continuous` from
       `engine/dice_engine/sigma_leverage.py`). The loop does NOT reach it. ⚠ REWRITTEN 2026-10-01: this
       sentence used to add "`parliamentary_vote.py` calls `roll_pool`"; that module and
       `parliamentary_stay.py` were deleted at `29b` (their `FORK:5c5d8ec6` rows), and nothing under
@@ -842,5 +842,5 @@ rows:
         argv: ["python", "-m", "pytest", "engine/tests/test_draw.py", "-q"]
         expects: "the test file passes; the same seed twice gives the same hash"
         holds: "unread"
-    blocks: [H-98]
-    # spent/removed ids (v9 `_part2`, `blocks:` traces): W23 spent in substance (`fight` resolves through the combat seam and is graded)
+    blocks: []
+    # spent/removed ids (v9 `_part2`, `blocks:` traces): W23 spent in substance (`fight` resolves through the combat seam and is graded); H-98 closed (combat's three bands are data and nothing keys a fourth)

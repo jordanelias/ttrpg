@@ -211,8 +211,8 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
     # ⚠ A CONTEST IS A DISPATCH TO A SUBSYSTEM, NOT A GENERIC ROLL. Jordan, 2026-09-02: *"a
     # contest seems like it can be a call for a different subsystem like personal combat, mass
     # battle or social contest."* `references/module_contracts.yaml` gives
-    # each a doc, a sim module and a declared resolver (`d_sigma` for personal combat, `dice_pool`
-    # for the other two). The seam invents no degree ladder; it CALLS the engine that owns the prize.
+    # each a doc, a sim module and a declared resolver (`d_sigma` for
+    # all three). The seam invents no degree ladder; it CALLS the engine that owns the prize.
     # `contest` dispatches a prize to the subsystem `contest_subsystem(prize)` names; the provider is
     # resolved from that manifest row below (`manifest.call`), never by a literal here.
     if depth >= max_depth:
