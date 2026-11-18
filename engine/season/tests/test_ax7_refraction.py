@@ -73,19 +73,19 @@ def _told(w, pid):
 
 def test_in15_channel_remove_is_the_ordinal_of_remove_read_off_the_roster():
     """`remove` is the channel's SOURCE's place among the distinct `claim_source:` values in the
-    precedence order: presence 0, a knot 1/3, a document and the public record 2/3 (one source, one
-    remove), `post_remit`'s `inferred` 1. Checked against the roster, so a reordered roster is
+    precedence order, one spacing `k / K` (`H-199`): presence 0, a knot 1/4, a document and the public record 1/2
+    (one source, one remove), `post_remit`'s `inferred` 3/4. Checked against the roster, so a reordered roster is
     followed rather than contradicted."""
     got = [channel_remove(ch) for ch in WITNESS_CHANNELS]
-    assert got[0] == 0.0 and got[-1] == 1.0 and got == sorted(got), got
+    assert got[0] == 0.0 and got[-1] == 3 / 4 and got == sorted(got), got
     for a in WITNESS_CHANNELS:
         for b in WITNESS_CHANNELS:
             same = CHANNEL_CLAIM_SOURCE[a] == CHANNEL_CLAIM_SOURCE[b]
             assert (channel_remove(a) == channel_remove(b)) == same, (a, b)
     # The shipped roster, read as values (no roster literal here: `rosters.yaml` owns the list).
-    assert channel_remove("co_located") == 0.0 and channel_remove("witness_key") == 1 / 3
-    assert channel_remove("document_key") == channel_remove("chronicle") == 2 / 3
-    assert channel_remove("post_remit") == 1.0
+    assert channel_remove("co_located") == 0.0 and channel_remove("witness_key") == 1 / 4
+    assert channel_remove("document_key") == channel_remove("chronicle") == 1 / 2
+    assert channel_remove("post_remit") == 3 / 4
 
 
 def test_in15_one_telling_through_two_channels_deposits_two_confidences():
@@ -98,7 +98,7 @@ def test_in15_one_telling_through_two_channels_deposits_two_confidences():
     MUTATION (run 2026-10-09): the told branch's `if refracting: tc = _refract(...)` deleted -- RED
     on the knotted hearer's told confidence (37, expected 31). Restored, GREEN."""
     checked = 0
-    for gain, near_conf, knot_conf, knot_kind_conf in ((0.0, 37, 37, 100), (0.5, 37, 31, 83)):
+    for gain, near_conf, knot_conf, knot_kind_conf in ((0.0, 37, 37, 100), (0.5, 37, 32, 88)):
         w, ev = _tell_hh(gain)
         near, knot = _told(w, NEAR), _told(w, KNOTTED)
         assert len(near) == 1 and len(knot) == 1, (gain, near, knot)
@@ -164,12 +164,12 @@ def test_in15_the_actor_is_never_refracted():
     """`AX-7`'s layer (2) -- the performer's own understanding -- is not this formula's. The actor of a
     transfer holds a firsthand prior (`S` held 999) that its own observation of `S` contradicts:
     above the control the actor's deposits are still whole, while `p_king`, who learns of the act
-    only through the rung they hold (`document_key`, remove 2/3), holds every claim at 67.
+    only through the rung they hold (`document_key`, remove 1/2), holds every claim at 75.
 
     MUTATION (run 2026-10-09): `and actor_of(w, e) != pid` deleted from `refracting` -- RED on the
     actor's observation claim (50). Restored, GREEN."""
     checked = 0
-    for gain, king_conf in ((0.0, 100), (0.5, 67)):
+    for gain, king_conf in ((0.0, 100), (0.5, 75)):
         w, d, out, e = _transfer_into_hh("p_king")
         w.fixtures = w.fixtures.sweep("refraction_gain", gain)
         actor = "p_other"
@@ -189,14 +189,14 @@ def test_in15_the_actor_is_never_refracted():
 def test_in15_a_non_actors_observation_claim_is_refracted():
     """THE OBSERVATION DEPOSIT (`oc`, `loop/witness.py`) REFRACTS LIKE THE OTHER FOUR. Under
     `observation_deposit_mode: total` a non-actor receives the fold's reads too: `p_king`, through
-    `document_key`, holds them at 100 at the control gain 0 and at the refracted 67 at 0.5 -- the
+    `document_key`, holds them at 100 at the control gain 0 and at the refracted 75 at 0.5 -- the
     value his event-kind claim carries through the same channel. The shipped `actor` mode never
     hands a non-actor a read, which is why this arm sets `total`.
 
     MUTATION (run 2026-10-09): `oc = _refract(oc, p, channel, gain)` deleted -- RED (100 at 0.5).
     Restored, GREEN."""
     checked = 0
-    for gain, want in ((0.0, 100), (0.5, 67)):
+    for gain, want in ((0.0, 100), (0.5, 75)):
         w, d, out, e = _transfer_into_hh("p_king")
         w.fixtures = (w.fixtures.sweep("refraction_gain", gain)
                       .sweep("observation_deposit_mode", "total"))
@@ -223,7 +223,7 @@ def _kinds_and_seen(w, pid, e):
 def test_h201_a_witness_who_held_the_actors_granary_empty_doubts_the_transfer_out_of_it():
     """`H-201`, THE PLAN'S CASE, THROUGH THE REAL FOLD AND WITNESS. `p_other` transfers 3 grain out of
     `S`, which it holds; `p_king` learns of it through `Hh`, the rung it holds (`document_key`,
-    remove 2/3). In one world `p_king` already held, firsthand, `S` at 0 grain -- `transfer`'s
+    remove 1/2). In one world `p_king` already held, firsthand, `S` at 0 grain -- `transfer`'s
     `requires` (`stores(from, kind) >= amount`) is KNOWN-FALSE on its own ledger -- and in the other
     it held nothing. Above the control the doubting witness holds THAT the transfer happened, and
     what it saw of it, at a lower confidence than the otherwise identical one; at the control both
@@ -236,7 +236,7 @@ def test_h201_a_witness_who_held_the_actors_granary_empty_doubts_the_transfer_ou
     claim alone at 67)."""
     prior = Claim("c_s_empty", "p_king", "S", "stores:grain", 0, 0, "firsthand", 100, "own")
     checked = 0
-    for gain, plain, doubting in ((0.0, 100, 100), (0.5, 67, 33)):
+    for gain, plain, doubting in ((0.0, 100, 100), (0.5, 75, 38)):
         got = {}
         for planted in (False, True):
             w, d, out, e = _transfer_into_hh("p_king")

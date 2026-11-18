@@ -359,8 +359,8 @@ def test_in22_a_partial_grant_without_a_seat_rung_is_passed_over_too():
 
 def test_in22_the_governors_shortfall_claim_is_refracted_by_the_gain():
     """THE PURVIEW DEPOSIT PASSES THROUGH REFRACTION (`loop/witness.py::_refract`, `H-199`): the
-    reeve's shortfall claim is sourced `inferred`, one remove, so its confidence is 100 at the
-    control gain 0 and 50 at the shipped 0.5. Asserted per held claim, and that one was held."""
+    reeve's shortfall claim is sourced `inferred`, the most removed rank (3/4, one spacing, `H-199`), so its
+    confidence is 100 at the control gain 0 and 63 at the shipped 0.5. Asserted per held claim, and that one was held."""
     got = {}
     for gain in (0.0, 0.5):
         w = _one_season(DEFAULT_FIXTURES.sweep("refraction_gain", gain))
@@ -369,7 +369,7 @@ def test_in22_the_governors_shortfall_claim_is_refracted_by_the_gain():
         assert held, f"the reeve holds no shortfall claim at gain {gain}; nothing is observed"
         assert {c.source for c in held} == {CHANNEL_CLAIM_SOURCE[SEAT_CHANNEL]} == {"inferred"}
         got[gain] = {c.confidence for c in held}
-    assert got == {0.0: {100}, 0.5: {50}}, got
+    assert got == {0.0: {100}, 0.5: {63}}, got
 
 
 # ======================================================================================

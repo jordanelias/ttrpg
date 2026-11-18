@@ -33,10 +33,10 @@ from ..data.rosters import (
     CONTINUATION_TIES, SUCCESSIONS,
     ARMS_KINDS, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
     INVESTED,
-    MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL,
+    MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
     faction_prop_id,
-    require_member,
+    remove_distance, require_member,
     roster_map,
 )
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
@@ -733,10 +733,9 @@ def remove_weight(source: str) -> float:
         remove_weight = (K - k) / K,   k = the source's rank (0 strongest), K = the ranks
 
     1 firsthand, falling by `1/K` a rank, so every rank counts and a farther one strictly less.
-    EQUAL SPACING is the [ASSUMPTION] `H-199` already makes for refraction's `channel_remove`, read off
-    the same ranks; the form differs from `channel_remove`'s `k/(K-1)` only so the most removed rank
-    still counts (an `inferred` claim is evidence, weaker; `1 - channel_remove` would weigh it zero)."""
-    return (len(REMOVE_ORDINAL) - REMOVE_ORDINAL.index(source)) / len(REMOVE_ORDINAL)
+    `1 - remove_distance(source)`: the one spacing of the ordinal (`H-199`), so the most removed rank
+    still counts."""
+    return 1.0 - remove_distance(source)
 
 
 _UNREAD = object()      # `reception`'s "not read yet" marker (None is a legitimate reading: no bluff called)

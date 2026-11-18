@@ -966,6 +966,17 @@ if set(REMOVE_ORDINAL) != set(CLAIM_SOURCES):
         needs="a witness channel minting each `claim_sources` member",
         law="19_PLAN.md step 17 -- every claim is weighted by an ordinal of remove; a source the "
             "ordinal does not rank has no weight")
+
+
+def remove_distance(source: str) -> float:
+    """How far from the thing itself a claim held under `source` stands: its rank in the ordinal of
+    remove over the number of ranks, `k / K` (0 firsthand; the most removed rank (K-1)/K, never 1, so
+    every rank still counts as evidence). The ONE spacing of the ordinal (`H-199`): refraction's
+    `channel_remove` and the weight's `remove_weight` both read it. The ordinal is ruled; the
+    spacing is the [ASSUMPTION]."""
+    return REMOVE_ORDINAL.index(source) / len(REMOVE_ORDINAL)
+
+
 # THE KIND OF PROOF A DEED CLAIM IS, BY HOW ITS HOLDER CAME TO HOLD IT (B05.21, T13 edit 3 / T5): `queries/world_q.py::proofs` reads it where the
 # arrangement row's `proofs:` column filters what weighs (`Fixtures.proof_admission` `on`). Total over `claim_sources`, closed over `proofs` (or
 # `None`, a way of holding that is no kind the rows name), refused at import: a claim whose source maps nowhere would weigh by a guess.
