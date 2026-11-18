@@ -271,7 +271,7 @@ this skill never waits on GitHub (CLAUDE.md §11). A result not yet in is named 
 ### 7. The last batch is also the run's `/close`
 
 When the sequence is exhausted, BATCH-CLOSE is followed by `/close` (its suite step is BATCH-CLOSE's,
-not run twice — lane validator, commit, handoff), **then** the BOUNDARY's expunge. The order is
+not run twice — lane validator, handoff, commit), **then** the BOUNDARY's expunge. The order is
 deliberate: the in-flight row is deleted by the expunge, so it is the last thing to go and a death
 anywhere earlier — the suite stretch included — still resumes from the row. A mid-run boundary does
 not invoke `/close`.

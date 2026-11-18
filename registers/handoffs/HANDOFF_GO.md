@@ -5,7 +5,7 @@
 ## Open
 | item | where it lives | next step |
 |---|---|---|
-| port gate (B10-20) | `FORK:1b7c2f87:workplans/valoria_master_workplan_v11_part3.md` §1, the B10-20 card | B10-03b (GO-07) is CLOSED (closing commit `8a80c4fc`; the item is `15593ac4` on `main`); the card's entry gate is B10-18 merged, with every batch before it closed |
+| port gate (`B41-go-port-gate`) | `workplans/valoria_master_workplan_v12_part2.md` (its batch row), `valoria_master_workplan_v12_part29.md` | per the batch card; v11's B10-20 card (`FORK:1b7c2f87:workplans/valoria_master_workplan_v11_part3.md` §1) is superseded |
 
 ## Standing orders — do not re-raise, do not do
 | order | source |

@@ -11,14 +11,14 @@ the one owner, and `project.godot` and the CI pin in that repo are owed a move t
 
 **This file holds rules only, and POINTERS, never figures** (§1). Reasoning and history live in
 `CLAUDE_RATIONALE.md` — reference, never binding, not required reading; the story goes there, the rule
-here. Open it when a rule here looks arbitrary and you are about to change it. **The cap is 640 lines
+here. Open it when a rule here looks arbitrary and you are about to change it. **The cap is 645 lines
 (`wc -l CLAUDE.md`), and that number is the cap.** Past it, cut something; if the rules genuinely no longer fit, raise the cap in
-the same commit and say what you added. **(RULED)** marks a rule as Jordan's, not agent-revisable.
+the same commit and say what you added. **(RULED)** marks a rule as Jordan's, not agent-revisable; it covers the heading or point it sits on, not what is under it.
 
 **THE LAYERS (RULED by Jordan) — the canonical definition of a GOVERNANCE layer (how work is
 done). No other governance scheme may be spelled "Layer".** Not a licence to sweep:
-`godot/godot_architecture_specification.md`'s runtime layers and `systems/ui/`'s "Layer 3" UI tier are
-unrelated senses and stay.
+`godot/godot_architecture_specification.md`'s runtime layers and `.designs/systems/ui/`'s "Layer 3" UI
+tier are unrelated senses and stay.
 
 | | | binds |
 |---|---|---|
@@ -49,7 +49,7 @@ is reported in. Name the conflict; never silently rank them.
   *"anything key-based gets retired"*)** — `keys.py`, the echo transport and the emit/consume interface
   are gone; build nothing on them. Special-casing an
   entity or outcome is **scripting drift** — stop.
-- **"All directions" is a method, not a NERS criterion (Jordan, 2026-10-28).** Work any pipeline, code,
+- **"All directions" is a method, not a NERS criterion (Jordan).** Work any pipeline, code,
   system or workflow by several routes and from several perspectives, never only the one it was built
   along; `skills/claim-review` STEP 5 operationalises it, and §0.06 is the NERS case.
 - **Adversarial pass at every stage that gates a result.** After you draft canon, a number or a fix,
@@ -81,22 +81,30 @@ is reported in. Name the conflict; never silently rank them.
 
     **Escalate only what survives all five:** a live design choice where two defensible options lead to
     materially different games, or where the answer would overwrite ratified canon. ⚠ **This cuts BOTH
-    ways** — clearing the standing queue is session work.
-- **THE REQUEST IS THE SCOPE; REVIEW RUNS ONE ROUND, THEN STOPS (RULED, Jordan 2026-10-22: *"uncontrolled
-  audit recursion loop"*).** Audit → fix → audit-the-fixes → fix is the forbidden shape. (1) An audit, critic
+    ways** — clearing the standing queue is session work when the request or an open M1 juncture names it;
+    otherwise it is scope growth (next bullet).
+- **THE REQUEST IS THE SCOPE; REVIEW RUNS ONE ROUND, THEN STOPS (RULED).** Audit → fix → audit-the-fixes → fix is the forbidden shape. (1) An audit, critic
   or fix pass the request did not name is scope growth: ask Jordan one question, do not start it. (2) The
   adversarial pass runs ONCE per deliverable; its fixes are not themselves audited, and its findings do not
   seed a second fan-out. (3) Before any second wave of agents, STOP and report what the first found. (4) The
   deliverable named and its one pass applied is the stop condition: *"more could be checked"* is not a reason.
+- **NO MANUFACTURED FINDINGS; NO OVERRULED OR OFF-INTENT FIXES; REFINE BEFORE YOU BUILD.** (1) Report only
+  a problem you observed (a `file:line` or a command's output). An audit, review or critic that finds
+  nothing says *"it is fine"* with what was checked and held (§0.1 pt 3), then stops: the answer Jordan
+  values most when it is true. Never invent or pad findings to look productive. (2) Do not propose
+  a correction that a ruling, ledger row or precedent has already overruled, or that conflicts with the
+  game's intent (§0.06, P-01..P-15); check before proposing. (3) Do not build while the issue can be
+  resolved by simplifying or refining what exists (edit the owner, cut, reuse). If you must build, build it
+  as lightly and flexibly as the need allows, on the existing primitives.
 - **Max effort on the deliverable named by the current milestone** (done = **the behaviour executes**,
   §0.2): the most thorough path *that deliverable* warrants, verified over plausible, finished rather
   than sampled. **Work is this session's work if Jordan asked for it this session, or it traces to an
   open M1 juncture; nothing else is.** If something broken blocks the milestone, **fix it minimally,
   without adding a guard.** Tier *down* deliberately and per-task (§10), never on judgment nodes. Never
   restore *exhaustive* here, nor read this as "prefer the harder-but-correct fix".
-- **Close the loop, honestly — and close it ONCE.** `/close` has the sequence: the full suite, the
-  lane's validator, the `[scope]` commit citing the `PP/ED`, next actions in your lane's
-  `HANDOFF_<LANE>.md`. Mid-session, run only the file covering your edit (§0.4). If a check failed or
+- **Close the loop, honestly — and close it ONCE.** `/close` has the sequence: layer conformance, the
+  full suite, the lane's validator, next actions in your lane's `HANDOFF_<LANE>.md`, then the `[scope]`
+  commit citing the `PP/ED`. Mid-session, run only the file covering your edit (§0.4). If a check failed or
   a step was skipped, say so — an unverified green is worse than a verified red. No banner (§0.3).
 
 ### 0.05 CODE IS THE MECHANISM. PROSE IS REFERENCE.
@@ -121,7 +129,7 @@ work. our design documents in .MD are reference and information only."*
   thing differently, name the ambiguity at the site and pick (`layer-conformance` B4).
 - **A FACT the engine uses must live where code reads it** — a typed artifact under
   `engine/engine_params/` behind an exporter, or a single Python owner. Constants still inside
-  `systems/` are the migration backlog (live count: `python tools/export_sim_params.py --build`).
+  `systems/` are the migration backlog (count `sim_params.json` rows under `systems/`; `--build` rewrites it).
 - ⚠ **A term, a roster, a closed set and a bound are facts exactly as a number is** (Jordan: *"all
   definitions/terms/etc need to come from code, never prose"*). Four clauses, one rule:
   1. **A `.md` is NEVER the authored head of a fact code reads.** The head is YAML/JSON under
@@ -260,9 +268,8 @@ re-run from a hunch; reasoning in `CLAUDE_RATIONALE.md` §0.3.
 
 Timings: `CLAUDE_RATIONALE.md` §0.4 — re-measure rather than quote them.
 
-1. **The full suite runs AT MOST once per commit, and only when it can observe something CI will not
-   (RULED).**
-   CI runs it on every push not marked `[skip ci]`. Name what a local run would catch first; a diff of prose, ledgers, skills
+1. **The full suite runs AT MOST once per commit, and only when it can observe something CI will not (RULED).**
+   CI runs it on every push not marked `[skip ci]`, and §11 bars you from reading that result: for a code change the suite can reach, your close run is the only result before the commit. Name what a local run would catch first; a diff of prose, ledgers, skills
    or links runs only the test files that read what it touched (`grep -rl <path> tests/`).
 2. **Mid-session, run only the file covering what you touched.** If you cannot name it, find it. At the close, `python tools/tests_for_diff.py` names the suites your edits call for (`-m combat|mass_battle|social_contest` when only that subsystem changed).
 3. **Never re-run to re-confirm a green you already hold.**
@@ -270,12 +277,13 @@ Timings: `CLAUDE_RATIONALE.md` §0.4 — re-measure rather than quote them.
    when you believe you are done. Red is not a licence to loop the gate.
 5. **`tools/valoria_local.py --staged` does not run pytest** (local-green ≠ CI-green). It is cheap; run
    it freely. The expensive thing is pytest, and only pytest.
+6. **SIZE THE RUN TO THE QUESTION.** Whether a verb fires or a rule binds needs ONE season (or a hand-built world calling the
+   entry): write the specific test; never run 3+ seasons hoping to see it. Multi-season runs are for what only accumulates (drift, balance, a hash pin).
 
 **This governs EVERY pytest gate** — `engine/season/tests` and `engine/tests` too: at the close, once,
 only the ones your change can reach. ⚠ **Learn your container's known-red BEFORE you debug it:** run
 the failing file on `main`'s tree first; `cat .git/shallow` says whether the clone can reach the commits
-`FORK:` rows name. **NO GUARD MAY BE BUILT FOR
-THIS SUBSECTION** (§0.1 pt 5).
+`FORK:` rows name. **NO GUARD MAY BE BUILT FOR THIS SUBSECTION** (§0.1 pt 5).
 
 ---
 
@@ -299,9 +307,8 @@ resume from. There is no `deprecated/` tree — **retiring something means delet
 `FORK:` row** in `references/restructure_ledger.md`. Do not recreate the directory.
 
 ⚠ **ONE EXCEPTION (ED-IN-0231): `.designs/` — QUARANTINED, not retired:** *kept, readable and
-resolvable*, moved out of the code trees and default search path so it is not read as canon. It holds
-the design documents
-formerly under `systems/*/reference/` and the root of `engine/`, each bannered `ARCHIVED-NOT-CANON` with
+resolvable*, kept out of the code trees and default search path so it is not read as canon. It holds
+the design documents of `systems/*/reference/` and the root of `engine/`, each bannered `ARCHIVED-NOT-CANON` with
 its original path. **The leading dot is the mechanism** — ripgrep and `glob.glob` skip it unless asked;
 `os.walk`, `Path.rglob` and `git ls-files` do not. **Do not add to it** (new design work goes to
 `proposals/`), **do not point at it** (`CURRENT.md` names those documents by bare filename), **do not
@@ -346,8 +353,8 @@ says where an old path went. Only what those cannot tell you:
 
 - **`systems/`** — design source of truth for `combat`, `social_contest` and `mass_battle` (retained by
   ED-IN-0204). **One subsystem = one folder = one ID lane = one `CURRENT.md` row = one
-  `HANDOFF_<LANE>.md`.** Oracle scripts live in `sim/`, imported as `systems.<sub>.sim.*`. ⚠ **`systems/`
-  HOLDS NO `.md` AT ALL** — its design documents are in `.designs/systems/<sub>/`;
+  `HANDOFF_<LANE>.md`.** Oracle scripts, where a subsystem has them, are `systems/<sub>/sim/`; the code
+  the season loop runs is `modules/`. ⚠ **`systems/` HOLDS NO `.md` AT ALL** — its design documents are in `.designs/systems/<sub>/`;
   `tools/ci_design_prose_quarantine.py` is blocking and the invariant is **zero, not a ratchet**.
 - **`engine/`** — the executable model (substrate leaf readers, `engine/dice_engine/`,
   `engine/engine_params/` typed exports, `engine/tests/` = CI job `sim-regression`). **It names
@@ -367,12 +374,12 @@ says where an old path went. Only what those cannot tell you:
   resolving nothing at runtime. Scope: `architecture/meta/04_CODE_ARCHITECTURE.md`'s Status line (indexes: `CURRENT.md`'s Layer-1 row). Exempt from the size WARNING only.
 - **`canon/`** — foundations **P-01..P-15**, timeline, constraints, amendments; world truth only.
 - **`registers/`** — process ledgers and `registers/handoffs/`. **All ledger files are authoritative —
-  read all of them.** **Never edit** the frozen ED fragments in `registers/archive/`:
+  search all of them, not only the main one.** **Never edit** the frozen ED fragments in `registers/archive/`:
   `tools/validate_ed_citations.py` reads them; deleting one makes valid citations read as fabricated.
 - **`tools/`** — all CI checks, validators, generators; every rule lives once (§8). Check
   `references/ci_checks_registry.yaml` before assuming a module has an automated caller.
 - **`tests/`** — `tests/valoria/` is the pytest unit suite, the only executable tests here; its
-  narrative `.md` is **prose, not executable spec**. `tests/sim/` is unrelated to the retired `sim/`.
+  narrative `.md` is **prose, not executable spec**. `tests/sim/` is unrelated to the dissolved `sim/`.
 - **`.audit/`** — the surviving audit corpus, **HIDDEN** like `.designs/`. A **rename** of `audit/`, not
   a mirror (`.audit/<x>`, where `.designs/` prepends); `tools/ci_claim_provenance_check.py`'s
   `QUARANTINE_MIRRORS` is the one place that difference is written down. Retired **as a category**
@@ -413,7 +420,7 @@ removed is at its fork ref; every old path resolves through `references/restruct
   Both resolve through `tools/validate_ed_citations.py` and `tools/currency_consistency_check.py`
   forever; no retrofit. **The ledger is lane-split:** `ED-<LANE>-NNNN` lives in
   `registers/editorial_ledger_<lane>.jsonl` (lowercase); the main file and every lane file are
-  authoritative — read all. **Lane-scoping** (convention, not CI-enforced): declare your lane via the
+  authoritative — search all. **Lane-scoping** (convention, not CI-enforced): declare your lane via the
   ids you allocate; keep commits/PRs to that lane's files, except cross-cutting `IN` work.
 - **Word choice: idempotent in meaning, idiomatic in choosing (RULED, ED-IN-0179)** — process
   vocabulary as much as design terms. A reader with no memory of this repo must land on your meaning,
@@ -431,9 +438,8 @@ removed is at its fork ref; every old path resolves through `references/restruct
 
 **Rule: never take a number for the engine or the port out of prose.** A value the engine uses lives in a
 typed artifact under `engine/engine_params/` behind an exporter with a blocking `--check` round-trip, or
-in a single Python owner. `params_tables.yaml` was retired (`FORK:` row in
-`references/restructure_ledger.md`); it was a frozen capture of prose tables, and its degree bands were
-superseded by `degree_from_net` in `engine/dice_engine/dice_engine.py`. **Check the code first, every
+in a single Python owner. `params_tables.yaml` is retired (`FORK:` row in
+`references/restructure_ledger.md`); degree bands come from `degree_from_net` in `engine/dice_engine/dice_engine.py`. **Check the code first, every
 time.** Until the typed layer covers numeric operands and structured formulas, every value crossing into
 Godot is hand-transcribed — live drift risk — and do not bind Godot resource fields to descriptor keys
 the registry still marks IN FLUX.
@@ -446,32 +452,32 @@ canon via the ledger and re-export — never hand-edit a value into the `.gd` si
 `godot/godot_conversion_strategy_v1.md` is the conversion plan — **PROPOSED, Jordan-vetoable throughout**,
 with an open register and unexecuted Gate-0 preconditions; the season loop's ratified Godot mapping is `04` §C.12. `references/module_contracts.yaml` shows which
 modules have `doc: null` and which resolvers are `[ASSUMPTION]`-grade; porting beyond the combat slice
-waits on the port gate (B10-20 in the active master workplan, which `CURRENT.md` names). The older
+waits on the port gate (batch `B41-go-port-gate` of the active master workplan, which `CURRENT.md` names). The older
 `godot/` docs predate the `d+σ` model, carry `⚠️ STALE` banners and ship wrong schemas: implement from
 none of them.
 
 ## 7. Simulation / balance
 
-**Rule: the Python model (`engine/` + `systems/<sub>/sim/`) is the oracle the port validates against, and
-a campaign-level balance claim needs a campaign-level instrument.** The seeded hash pins under
-`engine/season/tests/` observe any output-moving change to season-reachable code but cannot separate a
-balance regression from noise (`engine/tests/goldens/` holds one pure-function dice table), and nothing
-verifies a golden re-pin was intended — say plainly when you re-record one. ⚠ **`tools/balance_oracle.py`
-IS RETIRED** (`FORK:` row in `references/restructure_ledger.md`): the campaign-level instrument has **no
-live successor** — an open gap. `python -m engine.season.harness.arms` is NOT a replacement: a
-season-loop-only n-seed comparison over one mechanic (`field_casualty_model`). Running either instrument
-on a campaign-unreachable change (or, for `arms.py`, a season-unreachable one) is a fake control — both
-arms are identical by construction. Ledger provenance is advisory (schemas differ, provenance fields
-unchecked, no generating SHA pinned) — verify a cited `PP-NNN`/`ED-NNN` by hand.
-`engine/tests/` is CI job `sim-regression`; the reference model is partly stubbed (`NotImplementedError`)
-and its README's "all modules are stubs" line is stale — grep for the stubs.
+**Rule: the Python model (`engine/`, `modules/` + `systems/<sub>/sim/`) is the oracle the port validates
+against, and a campaign-level balance claim needs a campaign-level instrument.** The seeded hash pins under
+`engine/season/tests/` observe any output-moving change to season-reachable code but cannot separate a balance
+regression from noise (`engine/tests/goldens/` holds one pure-function dice table), and nothing verifies a
+re-pin was intended: before one (a golden, a `canonical_sha__*`, `freshness_gate --update`) show the code it
+covers moved (`git diff` since the pin's commit); if not, the pin is right, leave it. Say plainly when you
+re-record one. ⚠ **`tools/balance_oracle.py` IS RETIRED** (`FORK:` row in `references/restructure_ledger.md`):
+the campaign-level instrument has **no live successor** — an open gap. `python -m engine.season.harness.arms` is
+NOT a replacement: a season-loop-only n-seed comparison over one mechanic (`field_casualty_model`). Running
+either instrument on a campaign-unreachable change (or, for `arms.py`, a season-unreachable one) is a fake
+control — both arms are identical by construction. Ledger provenance is advisory (schemas differ, provenance
+fields unchecked, no generating SHA pinned) — verify a cited `PP-NNN`/`ED-NNN` by hand. `engine/tests/` is CI
+job `sim-regression`; the reference model is partly stubbed (`NotImplementedError`) — grep for the stubs.
 
 ---
 
 ## 8. Enforcement (where the gates live)
 
 - **Authoritative tier — CI** (`.github/workflows/valoria-ci.yml`) — **the full-suite tier, NOT a
-  required check** (`main` has only a deletion rule; #564, #567 merged before green). Read the
+  required check** (`main` has only a deletion rule). Read the
   workflow for what actually gates; gates are grouped into blocking and report-only jobs, so a job
   name is not a gate's name. `references/ci_checks_registry.yaml` is the per-tool registry.
 - **Local tier — advisory accelerators.** One-time per clone: `git config core.hooksPath .githooks`.
@@ -543,15 +549,8 @@ A fresh remote container has pyyaml only; run the provisioner. WHEN each runs is
 ## 10. Model tiering for orchestrated / multi-agent work
 
 Set the model **per task**: subagents inherit the session model, so an un-annotated fan-out on an Opus
-session runs Opus *everywhere*. Actively tier down; reserve Opus for judgment. **This table is the single
-owner of the tier→ID binding**; for live pricing use the `claude-api` skill, not a figure written here.
-
-| Tier | Model ID | Context | Relative cost | Prompt-cache minimum |
-|---|---|---|---|---|
-| `haiku` | `claude-haiku-4-5` | 200K | **1×** | **4,096 tok** |
-| `sonnet` | `claude-sonnet-5` | 1M | **2×** | 1,024 tok |
-| `opus` | `claude-opus-5` | 1M | **5×** | 512 tok |
-| `fable` | `claude-fable-5-1` | 1M | **10×** | 512 tok |
+session runs Opus *everywhere*. Actively tier down; reserve Opus for judgment. **This paragraph is the single
+owner of the tier→model binding**: each tier is its family's LATEST model; live figures: `claude-api` skill.
 
 **Delegating to `haiku` instead of `opus` pays only if the delegation overhead costs less than the tier
 drop saves.** Do that calculation for the task at hand; do not assert a tier.
@@ -592,9 +591,9 @@ for the READS.
    author can no longer recall a citation, **the claim without its line number beats the lost part**.
 3. **Parallel agents sharing a prefix cannot read each other's cache** until the first response *begins
    streaming*: **fire one, await its first token, then fan out the rest.**
-4. **`haiku`'s cache minimum is the largest on the roster; the floor is non-monotonic across tiers.** A
-   shared preamble under it **silently never caches**. **Switching model mid-conversation invalidates
-   the entire cache** — escalate at *phase* boundaries.
+4. **DO NOT RE-CRAWL, UNLESS THE EXTRACT IS INCOMPLETE.** Before dispatching, check whether a finished
+   agent's extract covers the ENTIRE file (not a truncated read); if it does, hand it down, and if it was
+   truncated, retrieve the file again. Escalate tier at *phase* boundaries.
 5. **The same arithmetic governs a SINGLE call.** Bound the page, name the fields, and re-send a large
    body only when the edit needs it.
 
@@ -623,7 +622,7 @@ for the READS.
 
 **A session must never arm its own wake-up.** No PR check-ins, no re-arming heartbeats, and no polling
 of an EXTERNAL service (GitHub merge or CI state, a URL) — by any mechanism. **Polling our own agents
-and local processes is permitted** (RULED, Jordan 2026-10-10: `Monitor` on a background job's log or
+and local processes is permitted** (RULED: `Monitor` on a background job's log or
 CPU time; the waste class is re-asking an outside service, not watching our own work). Enforced:
 `.claude/settings.json`'s `permissions.deny` blocks `send_later`, `create_trigger`, `ScheduleWakeup`,
 `CronCreate`, `update_trigger`, `fire_trigger`, `Skill(loop)`, `watch_url` and `subscribe_pr_activity`

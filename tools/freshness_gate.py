@@ -244,28 +244,43 @@ def run_update():
     unique_paths = list(set(p for p, _ in pairs))
     print(f"Canonical paths found: {len(unique_paths)}\n")
 
-    path_to_sha = {}
-    for path in unique_paths:
-        sha = get_blob_sha(path)
-        path_to_sha[path] = sha
-        print(f"  {path}: {sha[:16] if sha else 'NOT FOUND'}")
+    path_to_sha = {path: get_blob_sha(path) for path in unique_paths}
 
     missing = [p for p, s in path_to_sha.items() if not s]
     if missing:
-        print(f"\n[WARN] {len(missing)} paths not found in working tree:")
+        print(f"[WARN] {len(missing)} paths not found in working tree:")
         for p in missing:
             print(f"  {p}")
 
-    print("\nInjecting SHA fields...")
     updated = inject_shas(content, path_to_sha)
-    sha_count = updated.count("canonical_sha__")
-    print(f"canonical_sha__ fields in updated file: {sha_count}")
 
-    print("Writing canonical_sources.yaml in the working tree...")
+    # Report each pin that moves; a pin already equal to the working tree is a no-op.
+    changed, added, kept = [], [], 0
+    for path, recorded in pairs:
+        new = path_to_sha.get(path)
+        if not new:
+            continue
+        if recorded is None:
+            added.append((path, new))
+        elif recorded != new:
+            changed.append((path, recorded, new))
+        else:
+            kept += 1
+    for path, old, new in changed:
+        print(f"  CHANGED {path}: {old[:12]} -> {new[:12]}")
+    for path, new in added:
+        print(f"  ADDED   {path}: (none) -> {new[:12]}")
+    print(f"\n{len(changed)} changed, {len(added)} added, {kept} already current.")
+
+    if updated == content:
+        print("[DONE] No pin moved; canonical_sources.yaml left untouched.")
+        sys.exit(0)
+
     with open(os.path.join(REPO_ROOT, CANONICAL_SOURCES_PATH), "w", encoding="utf-8") as f:
         f.write(updated)
-    print("\n[DONE] canonical_sources.yaml updated with current working-tree SHAs.")
-    print("Review and commit it yourself; then run 'python3 tools/freshness_gate.py' to verify.")
+    print("[DONE] canonical_sources.yaml rewritten. A pin moves only because its document changed: "
+          "confirm each CHANGED line above was intended (CLAUDE.md §7), commit it yourself, "
+          "then run 'python3 tools/freshness_gate.py'.")
     sys.exit(0)
 
 # ── Entry point ────────────────────────────────────────────────────────────────
