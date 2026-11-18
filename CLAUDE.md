@@ -13,7 +13,7 @@ the one owner, and `project.godot` and the CI pin in that repo are owed a move t
 `CLAUDE_RATIONALE.md` — reference, never binding, not required reading; the story goes there, the rule
 here. Open it when a rule here looks arbitrary and you are about to change it. **The cap is 645 lines
 (`wc -l CLAUDE.md`), and that number is the cap.** Past it, cut something; if the rules genuinely no longer fit, raise the cap in
-the same commit and say what you added. **(RULED)** marks a rule as Jordan's, not agent-revisable.
+the same commit and say what you added. **(RULED)** marks a rule as Jordan's, not agent-revisable; it covers the heading or point it sits on, not what is under it.
 
 **THE LAYERS (RULED by Jordan) — the canonical definition of a GOVERNANCE layer (how work is
 done). No other governance scheme may be spelled "Layer".** Not a licence to sweep:
@@ -81,7 +81,8 @@ is reported in. Name the conflict; never silently rank them.
 
     **Escalate only what survives all five:** a live design choice where two defensible options lead to
     materially different games, or where the answer would overwrite ratified canon. ⚠ **This cuts BOTH
-    ways** — clearing the standing queue is session work.
+    ways** — clearing the standing queue is session work when the request or an open M1 juncture names it;
+    otherwise it is scope growth (next bullet).
 - **THE REQUEST IS THE SCOPE; REVIEW RUNS ONE ROUND, THEN STOPS (RULED).** Audit → fix → audit-the-fixes → fix is the forbidden shape. (1) An audit, critic
   or fix pass the request did not name is scope growth: ask Jordan one question, do not start it. (2) The
   adversarial pass runs ONCE per deliverable; its fixes are not themselves audited, and its findings do not
@@ -89,7 +90,7 @@ is reported in. Name the conflict; never silently rank them.
   deliverable named and its one pass applied is the stop condition: *"more could be checked"* is not a reason.
 - **NO MANUFACTURED FINDINGS; NO OVERRULED OR OFF-INTENT FIXES; REFINE BEFORE YOU BUILD.** (1) Report only
   a problem you observed (a `file:line` or a command's output). An audit, review or critic that finds
-  nothing says *"it is fine"*, and may say why (what was checked and held), then stops: the answer Jordan
+  nothing says *"it is fine"* with what was checked and held (§0.1 pt 3), then stops: the answer Jordan
   values most when it is true. Never invent or pad findings to look productive. (2) Do not propose
   a correction that a ruling, ledger row or precedent has already overruled, or that conflicts with the
   game's intent (§0.06, P-01..P-15); check before proposing. (3) Do not build while the issue can be
@@ -101,9 +102,9 @@ is reported in. Name the conflict; never silently rank them.
   open M1 juncture; nothing else is.** If something broken blocks the milestone, **fix it minimally,
   without adding a guard.** Tier *down* deliberately and per-task (§10), never on judgment nodes. Never
   restore *exhaustive* here, nor read this as "prefer the harder-but-correct fix".
-- **Close the loop, honestly — and close it ONCE.** `/close` has the sequence: the full suite, the
-  lane's validator, the `[scope]` commit citing the `PP/ED`, next actions in your lane's
-  `HANDOFF_<LANE>.md`. Mid-session, run only the file covering your edit (§0.4). If a check failed or
+- **Close the loop, honestly — and close it ONCE.** `/close` has the sequence: layer conformance, the
+  full suite, the lane's validator, next actions in your lane's `HANDOFF_<LANE>.md`, then the `[scope]`
+  commit citing the `PP/ED`. Mid-session, run only the file covering your edit (§0.4). If a check failed or
   a step was skipped, say so — an unverified green is worse than a verified red. No banner (§0.3).
 
 ### 0.05 CODE IS THE MECHANISM. PROSE IS REFERENCE.
@@ -268,7 +269,7 @@ re-run from a hunch; reasoning in `CLAUDE_RATIONALE.md` §0.3.
 Timings: `CLAUDE_RATIONALE.md` §0.4 — re-measure rather than quote them.
 
 1. **The full suite runs AT MOST once per commit, and only when it can observe something CI will not (RULED).**
-   CI runs it on every push not marked `[skip ci]`. Name what a local run would catch first; a diff of prose, ledgers, skills
+   CI runs it on every push not marked `[skip ci]`, and §11 bars you from reading that result: for a code change the suite can reach, your close run is the only result before the commit. Name what a local run would catch first; a diff of prose, ledgers, skills
    or links runs only the test files that read what it touched (`grep -rl <path> tests/`).
 2. **Mid-session, run only the file covering what you touched.** If you cannot name it, find it. At the close, `python tools/tests_for_diff.py` names the suites your edits call for (`-m combat|mass_battle|social_contest` when only that subsystem changed).
 3. **Never re-run to re-confirm a green you already hold.**
@@ -373,7 +374,7 @@ says where an old path went. Only what those cannot tell you:
   resolving nothing at runtime. Scope: `architecture/meta/04_CODE_ARCHITECTURE.md`'s Status line (indexes: `CURRENT.md`'s Layer-1 row). Exempt from the size WARNING only.
 - **`canon/`** — foundations **P-01..P-15**, timeline, constraints, amendments; world truth only.
 - **`registers/`** — process ledgers and `registers/handoffs/`. **All ledger files are authoritative —
-  read all of them.** **Never edit** the frozen ED fragments in `registers/archive/`:
+  search all of them, not only the main one.** **Never edit** the frozen ED fragments in `registers/archive/`:
   `tools/validate_ed_citations.py` reads them; deleting one makes valid citations read as fabricated.
 - **`tools/`** — all CI checks, validators, generators; every rule lives once (§8). Check
   `references/ci_checks_registry.yaml` before assuming a module has an automated caller.
@@ -419,7 +420,7 @@ removed is at its fork ref; every old path resolves through `references/restruct
   Both resolve through `tools/validate_ed_citations.py` and `tools/currency_consistency_check.py`
   forever; no retrofit. **The ledger is lane-split:** `ED-<LANE>-NNNN` lives in
   `registers/editorial_ledger_<lane>.jsonl` (lowercase); the main file and every lane file are
-  authoritative — read all. **Lane-scoping** (convention, not CI-enforced): declare your lane via the
+  authoritative — search all. **Lane-scoping** (convention, not CI-enforced): declare your lane via the
   ids you allocate; keep commits/PRs to that lane's files, except cross-cutting `IN` work.
 - **Word choice: idempotent in meaning, idiomatic in choosing (RULED, ED-IN-0179)** — process
   vocabulary as much as design terms. A reader with no memory of this repo must land on your meaning,
@@ -548,15 +549,8 @@ A fresh remote container has pyyaml only; run the provisioner. WHEN each runs is
 ## 10. Model tiering for orchestrated / multi-agent work
 
 Set the model **per task**: subagents inherit the session model, so an un-annotated fan-out on an Opus
-session runs Opus *everywhere*. Actively tier down; reserve Opus for judgment. **This table is the single
+session runs Opus *everywhere*. Actively tier down; reserve Opus for judgment. **This paragraph is the single
 owner of the tier→model binding**: each tier is its family's LATEST model; live figures: `claude-api` skill.
-
-| Tier | Model | Relative cost |
-|---|---|---|
-| `haiku` | latest Haiku | **1×** |
-| `sonnet` | latest Sonnet | **20×** |
-| `opus` | latest Opus | **40×** |
-| `fable` | latest Fable | **80×** |
 
 **Delegating to `haiku` instead of `opus` pays only if the delegation overhead costs less than the tier
 drop saves.** Do that calculation for the task at hand; do not assert a tier.
