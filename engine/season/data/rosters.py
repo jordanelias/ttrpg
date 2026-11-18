@@ -195,6 +195,19 @@ def _load_offices() -> dict:
                 "offices.yaml -- seats",
                 needs="a member of `descriptors.CAPABILITIES` (" + ", ".join(_CAPABILITIES) + ") or `null`",
                 law="`descriptors.CAPABILITIES` is the only skill definition in the engine; a seat row names one, it defines none")
+    # A SEAT ROW MAY NAME THE ONE LEVEL AN ACT THROUGH IT BRINGS (B05.20, U1-D, D-U1-01a): `modifier: <a level> | null`, copied onto
+    # `Office.modifier` by the realm builder and read by `seam/wrappers/sigma.py`'s `office` source alone. Absent or `null` is none.
+    # A value that is no `sigma_leverage.LEVEL_SIGMA` name is refused here, naming the row: a typo would otherwise be a seat
+    # that declares a level and never brings it.
+    from engine.dice_engine.sigma_leverage import LEVEL_SIGMA as _LEVELS
+    for row in (*doc["seats"], *(doc.get("foreign_seats") or ())):
+        if isinstance(row, dict) and row.get("modifier") is not None:
+            require_member(
+                row["modifier"], _LEVELS,
+                f"offices.yaml row {row.get('id')!r} names `modifier: {row['modifier']!r}`, which is not a `LEVEL_SIGMA` level",
+                "offices.yaml -- seats",
+                needs="one of " + ", ".join(_LEVELS) + " or `null`",
+                law="D-U1-01 -- a seat's modifier is one named level of `sigma_leverage.LEVEL_SIGMA`, the only ladder of levels")
     # WHAT A COMPUTED FOUNDING DECLARES (B04.23): `founding:` carries `keeps:` (acts of `remit_acts`), `conferral:` (a member
     # of `conferral_bases`) and `revocation:` (a member of `revocation_bases`). A missing block or key is refused, not
     # defaulted: a founding that defaulted would silently found a seat the data never described.

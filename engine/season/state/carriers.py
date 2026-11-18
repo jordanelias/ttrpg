@@ -1081,6 +1081,13 @@ class Office:
     # reads.
     body: Optional[str] = None
     faction: Optional[str] = None
+    # B05.20 (U1-D, D-U1-01a): THE ONE LEVEL AN ACT EXERCISED THROUGH THIS SEAT BRINGS TO A ROOM ITS BENCH SITS OVER -- a
+    # `sigma_leverage.LEVEL_SIGMA` name, authored as `offices.yaml`'s row key `modifier:` (refused at load if it is no level)
+    # and read by `seam/wrappers/sigma.py`'s `office` source alone. `None` -- every seat today -- is *none*: *"a seat declaring
+    # none behaves as today"*. Written at build only (`write_matrix.yaml`'s `(Office, modifier)` row has no step): never a die in
+    # the pool and never an opposition. THE FIELD NAME FOLDS INTO `World.content_hash` (see the encoding note above), so adding
+    # it moved the digest of every world holding an office, by name alone: a declared encoding mover, not a behaviour one.
+    modifier: Optional[str] = None
 
     def __post_init__(self):
         # `04` §B.1: A SEAT'S ID IS A `SeatId` -- the same string, tagged (`state/ids.py`), so the fold

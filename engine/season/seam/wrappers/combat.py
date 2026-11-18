@@ -342,7 +342,7 @@ def _wound_state(lifted: Optional[dict]) -> dict:
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
             rng: Optional[random.Random] = None, rung: Optional[str] = None,
-            effort: int = 0, host: Optional[PlayHost] = None) -> dict:
+            effort: int = 0, host: Optional[PlayHost] = None, via: Optional[str] = None) -> dict:
     """CALL the personal-combat engine. Returns what it said; decides nothing itself.
 
     ⚠ `host` (v10 REM-31, IN-46) IS A SECOND INPUT BESIDE §A.2's adapter row's "the projection" (the persons it plays and

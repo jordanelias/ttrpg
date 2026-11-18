@@ -1792,6 +1792,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
             faction=(over.get("faction") if over else None) or (None if body else fac_name),
             conferral=(_off_row or {}).get("conferral"),
             revocation=(_off_row or {}).get("revocation"),
+            modifier=(_off_row or {}).get("modifier"),
         )
         w.add_tenure(Tenure(f"t_{oid}_hold", pid, oid, "hold", 0))
         seated += 1
@@ -1845,7 +1846,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         w.offices[row["id"]] = Office(
             row["id"], row["post"], rung, authored_remit(row), scope_rung=rung,
             body=row.get("body"), faction=row.get("faction"),
-            conferral=row.get("conferral"), revocation=row.get("revocation"))
+            conferral=row.get("conferral"), revocation=row.get("revocation"), modifier=row.get("modifier"))
         w.add_tenure(Tenure(f"t_{row['id']}_hold", pid, row["id"], "hold", 0))
         authored[row["id"]] = row["id"]
         minted.append(row["id"])

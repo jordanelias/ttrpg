@@ -3343,7 +3343,11 @@ rosters:
       remove-weighted, unmirrored sum, rounded half up). `favour`: one `favour_level` per whole unit of `reception_gain x reception`
       where that is positive. Both are FOR the roller only (the defender list waits on cited items, B24); a hostile bench is not here
       but the obstacle's `reception` member. A fixture of None is the control: the source brings no level.
-    values: [effort, capability, proofs, favour]
+      `office` (B05.20, U1-D, D-U1-01a): the one level named by the `modifier:` of the seat an act is exercised through (`Act.via`),
+      where the prize row says `heard_by: bench` and that seat sits over the room (`state/gate.py::sits_over`); FOR the roller only
+      (the defender column is struck, OBS §3). A seat declaring none, an act through no seat and a prize no bench hears bring no
+      level; no shipped row authors a `modifier:` (the bench seats' first values land with B05.23).
+    values: [effort, capability, proofs, favour, office]
 
   # ── B03.68 (`09_WR_threadwork_module` edit 3): THE THREAD OPERATIONS ─────────────────────────────
   thread_operations:

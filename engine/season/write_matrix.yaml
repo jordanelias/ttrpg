@@ -166,6 +166,13 @@ rows:
     social:  "true"
     by:      "DR-2 -- `establish` is an act. ⚠ RETIRED BY W2, RETURNED BY W3 WITH its producer. V2 named `establish` in THIS ROW while giving it no verb row, which is how the row came to look dead"
     emits:   "`remit.changed`"
+  - kind:    "Office"
+    field:   "modifier"
+    steps:   []
+    class:   "—"
+    social:  "n/a"
+    by:      "B05.20 (U1-D, D-U1-01a): the one `sigma_leverage.LEVEL_SIGMA` name an act exercised through the seat brings to a room its bench sits over, authored as `offices.yaml`'s row key `modifier:` (refused at load if it is no level), seated at world build (`boot/realm.py::build_realm`) and written NOWHERE in play: no step, so the gate refuses any write. Read by `seam/wrappers/sigma.py`'s `office` source alone, FOR the roller: never a die in the pool and never an opposition. `None` is none"
+    emits:   "—"
   - kind:    "Person"
     field:   "body"
     steps:   [MAT, RES, ENC]

@@ -362,11 +362,11 @@ def test_the_levels_are_the_sources_the_leverage_sums():
     fx = DEFAULT_FIXTURES
     operands = {"proofs": 2.5, "reception": 1.4}
     levels = sigma.advantage_levels(fx, operands)
-    assert tuple(n for n, _, _ in levels) == roster("advantage_sources", ordered=True) and [n for n, _, _ in levels][-2:] == ["proofs", "favour"], levels
+    assert tuple(n for n, _, _ in levels) == roster("advantage_sources", ordered=True) and [n for n, _, _ in levels][-3:] == ["proofs", "favour", "office"], levels
     by = {n: (f, a) for n, f, a in levels}
     assert by["proofs"] == (["minor"] * 3, []) and by["favour"] == (["major"] * 1, []), by                  # 2.5 and 1.4 round half up
     assert sigma.advantage_sigma(fx, operands) == 3 * 0.25 + 1.0
-    assert sigma._levels_count(levels)[-2:] == (("proofs", 3, 0), ("favour", 1, 0))
+    assert sigma._levels_count(levels)[-3:] == (("proofs", 3, 0), ("favour", 1, 0), ("office", 0, 0))
     none = DEFAULT_FIXTURES.sweep("proof_level", None).sweep("favour_level", None)
     assert sigma.advantage_sigma(none, operands) == 0.0                                                      # the control: None brings no level
     assert sigma.advantage_sigma(fx, {"reception": -3.0}) == 0.0                                             # a hostile bench is no favour
