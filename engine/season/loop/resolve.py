@@ -839,8 +839,9 @@ def _grade(self, w: "World", token: Token, a: Act, route: dict) -> list:
     ⚠ THE SUBJECT IS THE ACT'S `payload["subject"]`, WHICH A CHOOSER-FORMED ACT CARRIES AS THE QUESTION'S
     REFERENT (`research`: a Record, `surveil`: a Rung, a person-kind Rung shares its person's id). The
     provider reads opposition off a PERSON subject only (`sigma.py::_opposition_of`) and only where
-    the verb's `capability:` column names a skill (`descriptors.CAPABILITIES`), so the obstacle is `obstacle_default` HOLDS ONLY
-    WHILE that column names no skill for an inquiry verb: adding one is the edit that must re-read this.
+    the verb's `capability:` column names a skill (`descriptors.CAPABILITIES`). The three inquiry verbs
+    (`research`, `examine`, `surveil`) name `inquiry`, so a PERSON subject is opposed at his score on it and
+    `obstacle_default` stands in only for a subject that is not a person (a Record, a Rung).
     ⚠ THE GENERATOR IS THE ACT'S OWN, `H(seed, tick, actor, "roll:<verb>:<act id>")` -- `_contest`'s
     shape with the verb where a prize would be (there is none), so adding a graded inquiry moves no
     other act's draw (`04 PART D row 35`)."""

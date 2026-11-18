@@ -1,11 +1,11 @@
 """
 engine/dice_engine/sigma_leverage.py — σ-leverage advantage layer atop the d10 dice engine.
 
-Canon source: modifier_system_spec.md (the implementation-pass rewrite)
-Params source: params/core.md, modifier_system_spec.md
-Game Design constraints applicable: none — σ-space resolution math (GD-1..3 govern game-layer mechanics, not dice math)
-Rationale:    D0-2 (audit/2026-06-30-contest-stage0-reconciliation/DECISIONS.md)
-Status:       [CANONICAL — Stage 1a port 2026-06-30]
+The σ-space layer of the one dice chain: the soft cap, the net boost, the level table and `band_odds`, the closed
+form of the one sampler. The code is the source; the numbers are exported to `engine/engine_params/` by
+`tools/export_sim_params.py`. (`params/core.md` and `modifier_system_spec.md`, once named here, are retired.)
+Rationale:    D0-2 (the one σ-kernel for combat and social contest, which this module is)
+Status:       the ruled owner, read by every provider; the code is the mechanism, this text is reference.
 
 Purpose
 -------
@@ -103,7 +103,7 @@ M_MAX = 1.5             # soft-cap ceiling, sigma-units   # [canonical: modifier
 SIGMA_N_COEFF = 0.8     # sigma_N = 0.8 * sqrt(Pool)      # [canonical: modifier_system_spec.md §2.1 The transform]
 
 # Contest engine surface constants (audit/2026-06-03-contest-groundup/engine.py)
-OB_MIN = 1              # [canonical: params/core.md §Obstacle Scale]
+OB_MIN = 1              # the floor a favourable modifier may not push an obstacle below (`eff_ob`; not an "Ob minimum" of a roll)
 
 # Per-die stats (params/core.md §Expected Value): TN7 μ/σ per die. GENERAL, not contest-specific
 # — the contest's de-saturation extension reads them from here (ED-SC-0032).

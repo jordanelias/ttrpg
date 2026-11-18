@@ -304,8 +304,10 @@ class Bout:
         # the top band only. Was `degree(net, self.v.base_ob, pool)` — sigma_leverage's own
         # pool-aware function, which is retired. Value-identical by construction: same bands,
         # same bar, same operands; the seeded campaign goldens are the control.
+        # The pool is context only an extension reads (`degree_from_net` refuses context with no extension).
+        ctx = {} if self.degree_extension is None else {"pool": pool}
         return DEGREE_ORDINAL[degree_from_net(
-            net, self.v.base_ob, extension=self.degree_extension, pool=pool)]
+            net, self.v.base_ob, extension=self.degree_extension, **ctx)]
 
     def _bias(self, side):
         if self.pr.toward != side: return 1.0

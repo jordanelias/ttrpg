@@ -1,9 +1,10 @@
 """
 engine/dice_engine/dice_engine.py — d10 dice pool, TN values, degree of success, continuous engine
 
-Canon source: params/core.md (Die Rule, TN Values, Degrees of Success, Continuous Engine Decision E)
-Params source: params/core.md
-Status: [CANONICAL — Phase 1 implementation 2026-05-17]
+Owner of the d10 face rule (`FACE_NET`), the per-die pair, the one sampler and the degree ladder (`BAND_FLOORS`,
+`MARGIN_SCALE`); the values are exported to `engine/engine_params/` by `tools/export_sim_params.py`.
+(`params/core.md`, which this header once named as source, is retired: the code is the source.)
+Status: the ruled owner of the dice chain for every scale of the game; the code is the mechanism, this text is reference.
 
 Dependencies:
   - none — root primitive
@@ -270,13 +271,23 @@ def degree_from_net(net: int | float, ob: int | float,
     `extension` is the ED-SC-0032 injection seam: a subsystem's declared `BandExtension`, which
     may VETO an Overwhelming and can do nothing else. It is passed BY THE SUBSYSTEM'S WRAPPER,
     never resolved here — the engine does not know which subsystems exist, and a default of None
-    means the unmodified ladder. `**context` is forwarded to the extension untouched.
+    means the unmodified ladder. `**context` is forwarded to the extension untouched, and is validated
+    against the extension's declared keys on entry, in every band; a context with `extension=None` raises
+    `TypeError`.
 
     Behaviour change, stated rather than buried (CLAUDE.md 0.1 point 4): the Partial band was
     `0 < net < Ob`, so a roll that cleared zero but fell far short of a hard obstacle read as a
     Partial. It now reads as a Failure. Partial is the near-miss-by-nothing outcome, not the
     tried-and-failed one. Measured deltas are in the ED-IN-0187 ledger entry.
     """
+    # THE CONTEXT IS CHECKED ON ENTRY, BEFORE THE BAND IS DECIDED (DOE §3 row 2; F-DICE-11): a misspelled key
+    # reached the extension's check only on the Overwhelming branch, so below it the key was swallowed and the
+    # call returned a band with no error. A context with no extension has no reader, and is refused alike.
+    if extension is not None:
+        extension.validate_context(context)
+    elif context:
+        raise TypeError(f"degree_from_net got context {sorted(context)} and no extension to read it; "
+                        "an undeclared key would be swallowed by **context -- pass the extension or drop the key.")
     # The real margin is converted ONCE, here, to integer milli-units and compared against the integer
     # BAND_FLOORS (C3-L1): a margin that is a float sum a rounding error under an edge reads as on it.
     m = round(MARGIN_SCALE * (net - ob))
@@ -289,10 +300,8 @@ def degree_from_net(net: int | float, ob: int | float,
         # this is the only one, and why the constraint is structural rather than a convention a
         # subsystem is asked to respect. Note the ladder result is NOT passed to the extension:
         # it is asked whether an Overwhelming is permissible, never what the band should be.
-        if extension is not None:
-            extension.validate_context(context)
-            if not extension.may_overwhelm(net, ob, **context):
-                return Degree.SUCCESS
+        if extension is not None and not extension.may_overwhelm(net, ob, **context):
+            return Degree.SUCCESS
         return Degree.OVERWHELMING
     return Degree.SUCCESS
 

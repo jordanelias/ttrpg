@@ -14,7 +14,7 @@ list (`04:135`, ED-IN-0206).
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Callable, Optional
+from typing import Any, Optional
 from ..gaps import Forbidden, Unspecified
 from ..manifest import resolve as manifest_resolve
 from ..state.world import World
@@ -176,7 +176,6 @@ def find_trail(w: World, a: Any, e: Any) -> tuple:
 
 def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             depth: int, max_depth: int, causes: list[str],
-            extension: Optional[Callable[[str], bool]] = None,
             *, verb: str = "", subject: Optional[str] = None,
             rng: Optional[Any] = None, effort: int = 0, host: Optional[Any] = None):
     """S39. EVERY ARGUMENT IS LOAD-BEARING.
