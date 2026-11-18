@@ -38,7 +38,8 @@ from ..harness import populated as POP
 from ..boot.realm import build_realm
 from ..state.carriers import Event, Rung, Site, StateChange, Tenure, Term
 from ..state.gate import Subject
-from ..state.world import World, _canonical, _entity_digest
+from ..data.fixtures import DEFAULT_FIXTURES
+from ..state.world import SnapshotRefused, World, _canonical, _entity_digest, decode, encode
 from ._realm_goldens import BUILD, CENSUS, SHIPPED
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -303,3 +304,52 @@ def test_go07_control_the_world_did_not_move_only_its_digest():
         assert w.content_hash() == want, f"seed {seed}: {w.content_hash()}"
         checked += 1
     assert checked >= 6
+
+
+# --- THE SNAPSHOT (B06.06: a save is a state snapshot) -----------------------------------------------
+# `encode` and `decode` in `state/world.py` sit beside the GO-07 encoder. These tests compare a world with
+# its own decoded copy and read no pin, so they hold whatever the seeded pins read.
+
+def _after_two_seasons(seed: int) -> World:
+    w = build_realm(seed)
+    POP.run(2, seed, w=w)
+    return w
+
+
+def test_snapshot_round_trip_hash_equal():
+    """`decode(encode(w))` hashes as `w` does, at seeds 0, 1 and 2 after two seasons."""
+    checked = 0
+    for seed in (0, 1, 2):
+        w = _after_two_seasons(seed)
+        back = decode(encode(w))
+        assert isinstance(back, World), f"seed {seed}: the snapshot did not decode: {back!r}"
+        assert back.content_hash() == w.content_hash(), f"seed {seed}: a field of state did not round-trip"
+        assert back.world_seed == w.world_seed and back.tick == w.tick and len(back.acts) == len(w.acts) > 0
+        checked += 1
+    assert checked == 3
+
+
+def test_a_decoded_world_runs_the_same_next_season():
+    """The control that the act store and the tick came back: one more season on the decoded world equals
+    the same season on the original. The snapshot is taken after two seasons; the third is each copy's
+    own control run, compared with the other, and is not a reading of the game past the two-season cap."""
+    seed = 0
+    w = _after_two_seasons(seed)
+    back = decode(encode(w))
+    assert isinstance(back, World), repr(back)
+    out_w, out_back = POP.run(1, seed, w=w), POP.run(1, seed, w=back)
+    assert out_back["acts"] == out_w["acts"] > 0, "the control season did nothing: it observed nothing"
+    assert back.tick == w.tick and len(back.log) == len(w.log) and len(back.acts) == len(w.acts)
+    assert back.content_hash() == w.content_hash(), "the decoded world's next season diverged from the original's"
+
+
+def test_decode_refuses_a_foreign_fixtures_digest():
+    """A snapshot written under other fixtures is REFUSED BY VALUE, not by a raise: the port loads saves,
+    so `decode` hands back a typed `SnapshotRefused` it can read. The control: the same world under the
+    running build's fixtures decodes."""
+    foreign = DEFAULT_FIXTURES.sweep("scene_budget", int(DEFAULT_FIXTURES.get("scene_budget")) + 1)
+    assert foreign.get("scene_budget") != DEFAULT_FIXTURES.get("scene_budget")
+    refused = decode(encode(World(0, foreign)))
+    assert isinstance(refused, SnapshotRefused) and refused.reason == "fixtures_digest", repr(refused)
+    assert refused.found != refused.expected
+    assert isinstance(decode(encode(World(0, DEFAULT_FIXTURES))), World), "the running build's own snapshot was refused"
