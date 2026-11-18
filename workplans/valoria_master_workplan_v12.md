@@ -364,7 +364,6 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 | batch | lane | ED block (declared + spare) | H block (declared + spare) |
 |---|---|---|---|
 | B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-939 (79+0) (allocated 2026-11-14 after B01a's block, on paper: `id_reservations.yaml` is bumped at the batch's opening, SC `next_free` 54 → 57; the fold map's H-856..H-909 assumed H-855 as the last id and B01a had taken H-856..H-860; 79 NUMBER rows since the V2 stress-test pass: 54 settings (`sympathy_step` cut from the V2 fold's 55), the fold's 24, the `speech_blend` pointer row; H-940 left unused so the next id stays H-941) |
-| B05-one-roll | IN | ED-IN-0379..0380 (0+2); ED-SC-0041..0044 (2+2) | H-420..H-439 (15+5) |
 | B06-keyed-draw | IN | ED-IN-0381..0382 (0+2) | H-440..H-444 (0+5) |
 | B07-task-draw | IN | ED-IN-0383..0384 (0+2) | H-445..H-450 (1+5) |
 | B08-scene-order | IN | ED-IN-0385..0386 (0+2) | H-451..H-455 (0+5) |
@@ -451,7 +450,6 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 
 | batch | file(s) under `master/workplan_v12/` |
 |---|---|
-| B05-one-roll | `valoria_master_workplan_v12_part8.md`, `_part8_cont.md`, `_part9.md` |
 | B06-keyed-draw | `valoria_master_workplan_v12_part10.md` |
 | B14-pc-outcome | `valoria_master_workplan_v12_part10_cont.md` |
 | B07-task-draw | `valoria_master_workplan_v12_part10_cont2.md` |
