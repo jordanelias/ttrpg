@@ -1376,7 +1376,7 @@ rows:
     owner:     "`_eff_kill` -- the value the `Wounded` branch writes to `(Person, body)`"
     grade:     "assumption"
     default:   "`scene_fraction` -- the body is scaled by the fraction of health the fight left standing, `health_remaining / health_full`, both computed by the engine's own `WoundTracker` on the Combatants `combat_seam` still holds"
-    site:      "engine/season/data/fixtures.py -- `DEFAULT_FIXTURES.wound_harm_model`, read by `loop/effects.py` -- `_eff_kill`"
+    site:      "engine/season/data/fixtures.py -- `DEFAULT_FIXTURES.wound_harm_model`, read by `loop/effects_combat.py` -- `_eff_kill`"
     sweep:     ["scene_fraction (the default -- the scene decides, and it introduces NO constant, which is the whole argument for it)", "total (THE CONTROL: any wound is lethal -- the code exactly as it stood before `W-E`, so the arm that measures what the degree is worth is the defect re-run deliberately)", "none (the SECOND control: a wound writes nothing, the fold's write-nothing guard emits the REFUSAL instead of the success, isolating *the band selected a different write set* from *the band changed a value*)"]
     unblocks:  "the `Wounded` band being a distinct outcome rather than a second spelling of `Felled`"
     cite: >-

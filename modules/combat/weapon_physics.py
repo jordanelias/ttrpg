@@ -73,8 +73,7 @@ PERC_CAP = 8.0          # the "steel-hammer reference" ceiling = the top of the 
 # Armour-defeat is continuous: core.adef_cap scales percussion_authority against ADEF_PERC_REF.
 
 # ── concussion energy-credit (2H grip + arc/haft-length) — GROUNDED biomechanics ──
-# designs/audit/2026-06-30-combat-grounding/grounded_weapon_armour_usemode_model.md §1 (task wpwi3b9qf,
-# adversarially fact-checked). A two-handed grip raises the EFFECTIVE MASS behind the blow (not tip speed), and a
+# (task wpwi3b9qf, adversarially fact-checked). A two-handed grip raises the EFFECTIVE MASS behind the blow (not tip speed), and a
 # longer haft adds a little more but saturates (you lose ω as ~I^-0.28). The credit multiplies INSIDE the
 # (sqrt(mass)*PoB_frac)**PERC_EXP authority term, so it compounds at the authority exponent, not linearly.
 PERC_2H_HANDS = 0.25    # GROUNDED: measured 2H/1H force ratio ~=1.25 (Oh et al. 2022 within-subject crossover, S1;

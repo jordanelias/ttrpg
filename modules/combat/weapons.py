@@ -4,7 +4,7 @@ The data half of the weapon split (the derivation half is weapon_physics.py). A 
 behaviour EMERGES upward through weapon_physics, never from a per-weapon behaviour table. Each weapon is a SINGLE
 record here — to add / remove / edit a weapon you touch exactly one entry. Every weapon's MASS DISTRIBUTION is a
 positional sum over LOCATED, MATERIALED PARTS (elements/guards/haft/pommel/butt — specimen-grounded,
-designs/audit/2026-07-02-morphology-rearch-phase0/), not a whole-weapon lump at a wclass-centroid.
+the 2026-07-02-morphology-rearch-phase0 audit), not a whole-weapon lump at a wclass-centroid.
 weapon_physics.derive() sums them; see its STAGE-1 docstring.
 
 RECORD SCHEMA (per weapon):
@@ -26,7 +26,7 @@ RECORD SCHEMA (per weapon):
              bladed weapon; the full shaft for a hafted one) · pommel/butt={x_m, mass_kg} (omitted when absent).
              All positions in METRES, x=0 at the working hand, +toward the tip, −toward the butt
              (weapon_physics.derive()'s axis). **`orient_deg`** (schema restoration, I0/D0, 2026-07-03,
-             `designs/audit/2026-07-02-scene-combat-closing-distance-redesign/`) — sign encodes FORE/AFT ONLY
+             the 2026-07-02-scene-combat-closing-distance-redesign audit) — sign encodes FORE/AFT ONLY
              (source: phase0_morphology_combined.json); does NOT cleanly gate arc-vs-thrust (cutting blades and
              thrust spikes both sit at orient=0 — see D5, which keys arc-vs-thrust on the SELECTED element's
              strike mode instead). **`type`** (guards only, I0/D0) — Phase-0 per-guard type string
@@ -865,14 +865,14 @@ assert set(_EDGES) == {n for n, r in WEAPONS.items() if 'base' not in r}, 'every
 # Bake each MULTI-MODE composite's per-element combat geometry ONCE at import (morphology-rearch Phase B2:
 # the located mass elements now have a parallel combat-geometry view for weapons whose parts afford genuinely
 # different fight-modes — a bec de corbin's hammer face vs beak vs spike — grounded per-element against Phase 0
-# geom_notes, see designs/audit/2026-07-02-morphology-rearch-phase0/. Single-mode weapons carry no
+# geom_notes, see the 2026-07-02-morphology-rearch-phase0 audit. Single-mode weapons carry no
 # `mode_elements` key; systems._mode_elements() already defaults them to the whole-weapon head+geo.
 for _w, _rec in WEAPONS.items():
     for _me in _rec.get('mode_elements', ()):
         _me['geo'] = _geo.bake(_me.pop('geometry'))
 
 # D0 BUILD ASSERTION (I0, schema restoration, 2026-07-03 —
-# designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md): every mode_element's
+# the 2026-07-02-scene-combat-closing-distance-redesign audit): every mode_element's
 # element_ref must index a REAL element in the SAME record (not list order — an explicit index), the mapping
 # this restores for D2b's per-element percussion mass lookup (I2) and the emitted sel_gap/sel_perc/sel_pc (I2).
 for _w, _rec in WEAPONS.items():

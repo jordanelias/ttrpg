@@ -168,7 +168,7 @@ K_STR_HEAD = {V.HEAD_BLUNT: 1.0, V.HEAD_STRAIGHT_CUT: 0.925, V.HEAD_CURVED_CUT: 
 # matchup family's pooled draw rate stay inside their d=0 Wilson 95% intervals (less damage per blow is a longer
 # fight).
 # Material resistance per mode in [0,1] (resist; transmit = 1-resist). GROUNDED (Alan Williams, The Knight
-# and the Blast Furnace, 2003) — designs/audit/2026-06-30-combat-grounding/: a 16-30 layer cloth jack sheds a ~60-130 J
+# and the Blast Furnace, 2003) — the 2026-06-30 combat-grounding audit: a 16-30 layer cloth jack sheds a ~60-130 J
 # cut; a point stops at only ~50 J vs ~80 J cut (the documented cut>>point asymmetry); cloth shows modest standalone
 # blunt absorption; cutting riveted mail is "functionally impossible," >130 J ceiling. Plate row + mail perc/punc are
 # well-pinned.
