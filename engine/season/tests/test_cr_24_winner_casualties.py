@@ -28,7 +28,11 @@ from engine.season.boot.realm import build_realm
 from engine.season.state.world import World
 from engine.season.tests.test_march import _fold_one, _march_act
 
-SEED, WEIGHT, SCALE = 0, 10, 10
+# B05.99 RE-PICKED (B05.03, the field's one sampler): at seed 0 and scale 10 the winning marchers both read ratio 1.0 on
+# seeds 0..11 (no winner casualty to observe); a grid of weights {10, 6, 4, 3, 2, 1} x scales {10, 20, 50, 100, 200} x seeds
+# 0..7 first reads the case the claims need at seed 3, weight 10, scale 200 (p_npc_033 at 1.0, p_npc_035 at 0.948). Was
+# SEED 0, SCALE 10 (the docstring's 0.982 is the old reading).
+SEED, WEIGHT, SCALE = 3, 10, 200
 MARCHERS = ("p_npc_033", "p_npc_035")
 
 

@@ -85,9 +85,11 @@ def _falsifier_holds(w, before) -> list:
 
 def test_falsifier_the_actor_holds_the_written_body_and_a_non_witness_holds_none():
     w, out, before = _fight(UNTOUCHED, WOUNDED)
-    assert [e.kind for e in out] == ["body.changed"], [e.kind for e in out]
+    # B05.09: the fight's survivors are raised in `arms` (a non-holder minted a first rank), one `capability.raised` after the
+    # body Event (B05.99 rewrite; was the body Event alone)
+    assert [e.kind for e in out] == ["body.changed", "capability.raised"], [e.kind for e in out]
     assert _falsifier_holds(w, before) == []
-    [e] = out
+    e = out[0]
     assert any(o.subject == SUBJECT and o.predicate == "body" and o.value == w.persons[SUBJECT].body
                for o in e.observed), e.observed
 

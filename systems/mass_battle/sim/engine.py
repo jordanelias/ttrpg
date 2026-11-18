@@ -46,9 +46,8 @@ MECHANICS = {
     "cell_speed":         {"fn":"cell_speed",            "toggle":None,        "source":"precedents_warfare (Leuctra)", "status":"WIRED"},
     # resolution core
     "pool_roll":          {"fn":"roll_pool",             "toggle":None,        "source":"params/core.md", "status":"WIRED"},
-    "degree":             {"fn":"compute_degree",        "toggle":None,        "source":"params/core.md", "status":"WIRED"},
-    "sigma_net_boost":    {"fn":"_sigma_net_boost",      "toggle":"SIGMA_HEAD","source":"modifier_system_spec §2.1", "status":"WIRED"},
-    "sigma_softcap":      {"fn":"_sigma_softcap",        "toggle":None,        "source":"modifier_system_spec §3.1", "status":"WIRED"},
+    # (degree ladder, sigma soft cap and net boost: the dice engine's, `dice_engine.degree_label` and `sigma_leverage.soft_cap` /
+    #  `net_boost`, called from `orchestration` -- not this module's symbols since B05.03, so no row here)
     "morale_sigma":       {"fn":"_morale_sigma",         "toggle":"MORALE_FIX","source":"mass_battle_v30 §A.4 (du Picq)", "status":"WIRED"},
     "casualties":         {"fn":"distribute_casualties", "toggle":None,        "source":"mass_battle_v30 §A.4", "status":"WIRED"},
     # per-cell layer

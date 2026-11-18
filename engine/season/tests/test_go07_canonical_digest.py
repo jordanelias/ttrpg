@@ -288,8 +288,9 @@ def test_go07_control_the_build_world_old_digest_is_unmoved():
 
 
 def test_go07_control_the_world_did_not_move_only_its_digest():
-    """The shipped one-season realm at seeds 0, 1 and 2: its hash, its act count, its census digest and the
-    length of its Event log read the owner's literals. Nothing is reverted: this is the shipped world."""
+    """The shipped realm at seeds 0, 1 and 2, after one season and after two (the batch gate's reading, B05.99):
+    its hash, its act count, its census digest and the length of its Event log read the owner's literals. Nothing
+    is reverted: this is the shipped world."""
     checked = 0
     for (seed, seasons), want in SHIPPED.items():
         w = build_realm(seed)
@@ -301,4 +302,4 @@ def test_go07_control_the_world_did_not_move_only_its_digest():
         assert got == CENSUS[(seed, seasons)], f"seed {seed}: {got}"
         assert w.content_hash() == want, f"seed {seed}: {w.content_hash()}"
         checked += 1
-    assert checked >= 3
+    assert checked >= 6

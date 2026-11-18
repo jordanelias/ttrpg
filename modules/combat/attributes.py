@@ -25,9 +25,10 @@ season's carrier (`Person.attributes`, CR-20) names a key for one; that commit s
 the same change. `att` is Perception (ED-IN-0347) and is the whole of the read (PC-18 (1)); Reason (`attr.mind.acuity`) has no combat
 role, so an authored acuity does not reach a `Combatant`. (the revert marker is on `combat_systems.reading`).
 
-`faculty` (CR-85, ED-IN-0330/0331) is the party's dice score for the verb that opened the fight -- the season's ONE pool reader
-(`engine/season/seam/wrappers/sigma.py::faculty`), passed in `PersonalCombatInput.faculties` -- and it is read in
-exactly two places, the pool (`core.resolution_pool`) and the Ob the opponent rolls against (`core.ob_from_defender`).
+`faculty` (CR-85, ED-IN-0330/0331; B05.57) is the party's SKILL SCORE for the verb that opened the fight
+(`engine/season/seam/wrappers/pool.py::score`: no attribute, no addend), passed in `PersonalCombatInput.scores` -- and it is read in
+exactly two places, the pool (`core.resolution_pool`, with the party's `pool_addends`) and the Ob the opponent rolls against
+(`core.ob_from_defender`).
 No sigma term reads it, so nothing centres on it: no `neutral`. It is not a registry attribute: `registry_key` None.
 Default 3 is the module's own (the workbench's and the control arm's); the season always passes a value.
 [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] -- the design

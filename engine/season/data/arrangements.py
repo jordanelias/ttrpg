@@ -10,7 +10,8 @@ schema violations raise `SystemExit`, never `Unspecified` -- `H-115`'s ruling, c
 catch and misattribute to one case.
 
 ⚠ THIRTEEN KEYS, NOT FIFTEEN. See `arrangements.yaml`'s own header for the `19_PLAN.md` step 11
-derivation (15 - `registers`/`verdict_reasons`/`stakes_grade` + `quorum` = 13).
+derivation (15 - `registers`/`verdict_reasons`/`stakes_grade` + `quorum` = 13). B05.21 (T13 edit 2) adds a fourteenth, `standard:`, a
+`difficulty_levels` member required of every row.
 
 ⚠ C-1 IS REPORTED, NOT REFUSED, AND THE REASON IS STATED RATHER THAN QUIETLY DECIDED.
 `21_RECONCILIATION.md` PHASE 2 step 6 names a load check: *"every row's `disposes` kind must name
@@ -44,9 +45,10 @@ from typing import Any
 
 from . import files
 from .rosters import (
-    DEGREE_BANDS, GENRES, INTERPOSITION_KINDS, PROOFS, REMIT_ACTS, RUNG_KINDS,
-    TENURE_KINDS, load_yaml,
+    DEGREE_BANDS, DIFFICULTY_LEVELS, GENRES, INTERPOSITION_KINDS, PROOFS, REMIT_ACTS, RUNG_KINDS,
+    TENURE_KINDS, load_yaml, roster,
 )
+
 
 ARRANGEMENTS_YAML = files.ARRANGEMENTS_YAML
 
@@ -72,7 +74,7 @@ _DISPOSES_LITERALS = frozenset({"Record", "none"})      # or a `TENURE_KINDS` me
 _ARRANGEMENT_KEYS = frozenset({
     "id", "disposal", "bench_basis", "floor", "records_dissent", "venue_min_rank",
     "term_required", "appeal_basis", "interposed", "order", "proofs", "disposes",
-    "disposal_reach", "quorum",
+    "disposal_reach", "quorum", "standard",
 })
 _SPEECH_KIND_KEYS = frozenset({"id", "genres", "min_rank", "reachable_bands"})
 
@@ -161,8 +163,8 @@ def _load_arrangement(row: dict) -> dict:
 
     def need(key: str):
         if key not in row:
-            raise SystemExit(f"arrangements.yaml: {name!r} has no `{key}:`. PART D's thirteen keys "
-                             f"are all required (a row states its shape in full, or not at all).")
+            raise SystemExit(f"arrangements.yaml: {name!r} has no `{key}:`. PART D's keys, and `standard:` "
+                             f"(B05.21), are all required (a row states its shape in full, or not at all).")
         return row[key]
 
     disposal = need("disposal")
@@ -202,6 +204,10 @@ def _load_arrangement(row: dict) -> dict:
         raise SystemExit(
             f"arrangements.yaml: {name!r} has `disposal_reach: {disposal_reach!r}`, not `room`, "
             f"`body` or a `rung_kinds` member ({list(RUNG_KINDS)}).")
+    # B05.21 (T13 edit 2): WHAT THE ROOM DEMANDS -- a `difficulty_levels` member (`Fixtures.difficulty_ob` sizes it; no second ladder), required
+    # of every row and refused outside the roster, as `verb_table.yaml`'s `difficulty:` is.
+    standard = need("standard")
+    _refuse_not_in(name, "standard", standard, DIFFICULTY_LEVELS, "a `rosters.yaml: difficulty_levels` member", repr_fn=list)
     # THE ONE KEY `19_PLAN.md` step 11 ADDS: required exactly when `disposal: declared`, and
     # refused otherwise -- both directions checked, on the same discipline `verb_table.yaml`'s
     # `requires_typed_note:` cross-check uses (a key present for no reason is as much a defect as
@@ -226,7 +232,7 @@ def _load_arrangement(row: dict) -> dict:
         "venue_min_rank": venue_min_rank, "term_required": term_required,
         "appeal_basis": appeal_basis, "interposed": tuple(interposed), "order": order,
         "proofs": tuple(proofs), "disposes": disposes, "disposal_reach": disposal_reach,
-        "quorum": quorum,
+        "quorum": quorum, "standard": standard,
     }
 
 

@@ -2946,7 +2946,10 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # and `test_b11a_duel_reach.py::revert_b11a` read the base's one-season hashes (`test_b11a_duel_reach.PRE`).
     # ⚠⚠ B01a.99 (every person's attributes are drawn, a population change, not a balance claim): (792, 792) -> (793, 793);
     # `test_go07_canonical_digest.py` records the 793; the arms still part in the ledgers, asserted below.
-    assert (out["acts"], cout["acts"]) == (793, 793), (
+    # ⚠⚠ B05.99, the batch's one re-pin: (793, 793) -> (778, 778), A RE-RECORD WITH THE BATCH THAT MOVED IT: the B05 movers
+    # `_realm_goldens.py` lists (first moved here by B05.02, the one sampler: 775 at its own commit) move the act mix (seed 0, one
+    # season; `_realm_goldens.CENSUS[(0, 1)]` records the 778). The arms still part in the ledgers, asserted below.
+    assert (out["acts"], cout["acts"]) == (778, 778), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

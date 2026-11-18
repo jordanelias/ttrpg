@@ -193,14 +193,24 @@ def test_g4_kill_is_judged_on_body_and_existence_and_a_refused_wound_scars_nobod
       * CONTROL: a scene that took half the health moves `body` and is `body.changed` -- and DOES
         scar an observer, so the no-scar arm above can fail (`tiny_world`'s persons hold no
         pursuits, so every person is given all fifteen; without that both arms read empty)."""
+    from engine.substrate import descriptors
     from ..data.rosters import PURSUITS
+    from ..data.verbs import VERB_CAPABILITY
+    key = VERB_CAPABILITY["fight"]
 
-    def _with_pursuits():
+    def _with_pursuits(ceiling=True):
+        """B05.09 mints a first `arms` rank for each surviving party of a `Wounded` or `Felled` fight (`_grown`), which is a
+        write, so a no-op wound between non-holders is no longer a no-op act. The parties are held at the `arms` ceiling,
+        where nothing is raised, so `_eff_kill`'s own judgment is what this test reads (B05.99 rewrite)."""
         w = P.tiny_world()
         for p in w.persons.values():
             p.pursuits = {e: 0.5 for e in PURSUITS}
+            if ceiling:
+                p.capability = {key: descriptors.capability(key).ceiling}
         return w
 
+    w = _with_pursuits(ceiling=False)                  # the new rule, read once: the non-holders' first ranks are the write
+    assert _kill(w, "g4_k0n", _wounded("p_mid", 10, 10)) == ["capability.raised"]
     w = _with_pursuits()
     body = w.persons["p_mid"].body
     assert _kill(w, "g4_k0", _wounded("p_mid", 10, 10)) == ["kill.refused"]

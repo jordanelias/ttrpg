@@ -40,11 +40,11 @@ def test_the_shipped_block_loads_the_five_skills():
     assert out["kinds"] == ["skill"]
     assert set(descriptors.CAPABILITIES) == set(out["rows"])
     row = descriptors.capability("arms")
-    assert row.kind == "skill" and row.base == "attr.body.agility" and row.opposed_by is None
+    assert row.kind == "skill"
     assert (row.floor, row.ceiling) == (0, 7) and row.grows_by == ("train", "practice", "use")
-    # ED-IN-0377, ED-IN-0378: no skill row carries `opposed_by` for `argue` or `inquiry` (the social contest's rule, V2 §C.2): absent reads `base`
-    assert descriptors.capability("argue").opposed_by is None and descriptors.capability("inquiry").opposed_by is None
-    assert descriptors.capability("copying").opposed_by == "none"
+    # B05.25 step 7 (B05.99 rewrite): a skill row carries no `base:` and no `opposed_by:` any more -- the verb row names its
+    # `governing:` and `opposed_attribute:` -- so no row's carrier has either field (was: `arms` base agility, `copying` `none`)
+    assert all(not hasattr(r, "base") and not hasattr(r, "opposed_by") for r in descriptors.CAPABILITIES.values())
     with pytest.raises(ValueError, match="capabilities"):
         descriptors.capability("no_such_skill")
 
@@ -214,33 +214,22 @@ _RETIRED_VERB_CAPABILITY = [
     ("surveil", "inquiry"), ("fight", "arms"), ("accept", "arms"), ("capture", "arms"), ("interrogate", "inquiry"),
     ("arrest", "arms"), ("determine", "argue"),
 ]
-_RETIRED_VOCATION_ATTRIBUTE = [
-    ("copying", "attr.mind.focus"), ("argue", "attr.social.charisma"), ("inquiry", "attr.mind.acuity"),
-    ("arms", "attr.body.agility"),
-]
-# the retired `opposed_by:` was `{}` (every row shipped absent). ED-IN-0377 and ED-IN-0378: who resists an argument is the social
-# contest's rule (V2 part 2 §C.2), so no `argue`/`inquiry` row carries one, and the derived map is
-# EQUAL to the retired one: empty.
-_RETIRED_VOCATION_OPPOSED_BY = []
-
-
 def _derived_maps():
-    """The four maps the verb table's column and the definition block yield."""
+    """The two maps the verb table's column and the definition block yield (B05.25 deleted `VOCATION_ATTRIBUTE` and
+    `VOCATION_OPPOSED_BY` with the skill rows' `base:` and `opposed_by:` columns)."""
     from engine.season.data import verbs as V
-    return V.VERB_CAPABILITY, V.VOCATIONS, V.VOCATION_ATTRIBUTE, V.VOCATION_OPPOSED_BY
+    return V.VERB_CAPABILITY, V.VOCATIONS
 
 
 def test_derived_vocation_maps_equal_the_retired_rosters():
-    """`==`, not `approx`: the derived `VERB_CAPABILITY` and `VOCATION_ATTRIBUTE` equal the retired rosters' literals, and
-    `VOCATIONS` is the values of the first; the derived opposition equals the retired roster's (empty): `arms` and
-    `argue`/`inquiry` carry no cell (read `base`) and `copying` spells `none` (a `none` entry would reach `_opposition_of`
-    as an attribute key)."""
-    verb_capability, vocations, vocation_attribute, vocation_opposed_by = _derived_maps()
+    """`==`, not `approx`: the derived `VERB_CAPABILITY` equals the retired roster's literal, and `VOCATIONS` is its values,
+    each a defined skill. B05.99 rewrite: the derived attribute maps were deleted by B05.25 (the verb row names its attributes),
+    so they are asserted gone, not compared."""
+    from engine.season.data import verbs as V
+    verb_capability, vocations = _derived_maps()
     assert verb_capability == dict(_RETIRED_VERB_CAPABILITY)
-    assert vocation_attribute == dict(_RETIRED_VOCATION_ATTRIBUTE)
-    assert vocations == frozenset(c for _, c in _RETIRED_VERB_CAPABILITY) == frozenset(vocation_attribute)
-    assert vocation_opposed_by == dict(_RETIRED_VOCATION_OPPOSED_BY) == {}
-    assert descriptors.capability("copying").opposed_by == "none"      # spelled, and filtered out of the map
+    assert vocations == frozenset(c for _, c in _RETIRED_VERB_CAPABILITY) and vocations <= set(descriptors.CAPABILITIES)
+    assert not hasattr(V, "VOCATION_ATTRIBUTE") and not hasattr(V, "VOCATION_OPPOSED_BY")
     # the two rows with no skill are spelled `none` and are in no map
     from engine.season.data.verbs import VERB_TABLE
     assert [v for v, r in VERB_TABLE.items() if r.capability == "none"] == ["lie", "march"] \
@@ -366,15 +355,19 @@ def test_the_believed_roll_reads_the_same_terms_as_the_dealt_one(monkeypatch):
     from engine.season.data.fixtures import DEFAULT_FIXTURES
     from engine.season.harness import probes as P
     from engine.season.seam.wrappers import sigma
+    from engine.season.seam.wrappers import pool
     p = P.tiny_world().persons["p_low"]
     kw = dict(pool=3, person_subject=True)
-    # control: the shipped table gives the roll an opposition, and a believer holding no claim of the subject cannot read it
-    assert sigma.believed_input(p, "arrest", "p_mid", DEFAULT_FIXTURES, **kw) is None
+    # B05.99 rewrite (B05.62 ships `believed_prior: ordinary`): a believer holding no claim of the subject no longer reads
+    # `None` but the ORDINARY person's opposition (the untrained score + the attribute mid-point); the claim kept is the table's
+    ordinary = pool.untrained(DEFAULT_FIXTURES) + pool.attribute_midpoint()
+    # control: the shipped table gives the roll an opposition, and the believer reads it at the prior
+    assert sigma.believed_input(p, "arrest", "p_mid", DEFAULT_FIXTURES, **kw).opposition == ordinary
     _rebound(monkeypatch, lambda rows: rows.__delitem__(next(i for i, r in enumerate(rows) if r["use"] == "social_roll" and r["role"] == "opposes")))
     inp = sigma.believed_input(p, "arrest", "p_mid", DEFAULT_FIXTURES, **kw)
     assert inp is not None and inp.opposition is None and inp.pool == 3
     _rebound(monkeypatch, lambda rows: rows.__delitem__(next(i for i, r in enumerate(rows) if r["use"] == "social_roll" and r["role"] == "dice")))
-    assert sigma.believed_input(p, "arrest", "p_mid", DEFAULT_FIXTURES, **kw) is None     # `opposes` is back: unknown again
+    assert sigma.believed_input(p, "arrest", "p_mid", DEFAULT_FIXTURES, **kw).opposition == ordinary   # `opposes` is back
     assert sigma._read_social_roll(P.tiny_world(), ["p_low", "p_mid"], verb="arrest", subject="p_mid")[0].pool == 0
 
 
@@ -456,7 +449,7 @@ def test_a_row_missing_its_roles_required_field_is_refused():
 def test_a_level_outside_level_sigma_is_refused():
     """MAP: an `edge` row's `level` is a `sigma_leverage.LEVEL_SIGMA` name."""
     from engine.dice_engine.sigma_leverage import LEVEL_SIGMA
-    base = dict(_shipped_row("dice"), role="edge", level="moderate", per="held")
+    base = dict({k: v for k, v in _shipped_row("dice").items() if k not in ("add", "floor")}, role="edge", level="moderate", per="held")
     for name in LEVEL_SIGMA:                   # control: every name in the owner's table loads
         assert _refused([dict(base, level=name)]) is None, name
     msg = _refused([dict(base, level="enormous")])
@@ -485,7 +478,7 @@ def test_a_field_the_role_does_not_take_is_refused():
 
 
 def test_a_per_outside_held_rank_mid_is_refused():
-    base = dict(_shipped_row("dice"), role="edge", level="minor", per="held")
+    base = dict({k: v for k, v in _shipped_row("dice").items() if k not in ("add", "floor")}, role="edge", level="minor", per="held")
     from engine.season.data import rosters
     pers = sorted(rosters.roster("capability_per"))
     assert len(pers) == 3
@@ -780,7 +773,7 @@ def _arrest_roll(fixtures=None):
 def test_fed_by_on_an_arrest_lists_its_dice_and_opposes_rows():
     """The record's `fed_by` is the `social_roll` rows that contributed, in table order: `==` on the `(use, role)` pairs,
     and the row's own `(key, side)` beside them; a value read and a contribution for each (the opposition halved by the
-    module: `ob_terms`'s own term). The control is the table itself: the tuple is read off `capability_uses()`."""
+    module: `terms`'s own `opposition` entry, `Margin.terms`). The control is the table itself: the tuple is read off `capability_uses()`."""
     from engine.season.data import rosters
     out = _arrest_roll()
     assert out["status"] == "RESOLVED"
@@ -792,10 +785,13 @@ def test_fed_by_on_an_arrest_lists_its_dice_and_opposes_rows():
     from engine.season.harness import probes as P
     from engine.season.seam.wrappers import pool, sigma
     w = P.tiny_world()
-    assert dice[4] == pool.score(w, w.persons["p_low"], "arrest") and isinstance(dice[4], int)
+    # B05 close: the `dice` value is the pool's own base (B05.25: the governing score plus the rank), not `score` (`max(pool_default, rank)`)
+    assert dice[4] == pool.governing_score(w, w.persons["p_low"], "arrest") + pool.rank(w.persons["p_low"], "arrest")
     assert dice[5] == pool.faculty(w, w.persons["p_low"], "arrest") == out["pool"]
-    assert opposes[4] is not None and opposes[4] == sigma._opposition_of(w, "p_mid", "arrest")
-    assert opposes[5] == out["ob_terms"]["opposition"] and opposes[5] > 0
+    # B05.14 (A-137; B05.99 re-pin): the `opposes` row's value is the opposition operand, his skill score PLUS his opposing
+    # attribute (`_opposing`; the mid-point where unheld, B05.16), was the skill score alone (`_opposition_of`)
+    assert opposes[4] is not None and opposes[4] == sigma._opposing(w, "p_mid", "arrest") != sigma._opposition_of(w, "p_mid", "arrest")
+    assert opposes[5] == dict(out["terms"])["opposition"] and opposes[5] > 0      # B05.14: `Margin.terms` replaces `ob_terms`
 
 
 def test_fed_by_follows_the_table_rows_in_table_order(monkeypatch):
@@ -810,8 +806,12 @@ def test_fed_by_follows_the_table_rows_in_table_order(monkeypatch):
     out = _arrest_roll()
     assert tuple((f[0], f[1]) for f in out["fed_by"]) == (("social_roll", "dice"),)
     # THE PLAN'S FALSIFIER: a fed_by that omits a row the roll read. With the `opposes` row deleted the roll reads no
-    # opposition, so the module's own opposition term of the obstacle is 0 (a roll that read it anyway would not be 0).
-    assert out["ob_terms"].get("opposition", 0.0) == 0
+    # opposition, so nobody is opposite and the module's `opposition` term is the stand-in `opposed_ob(pool_default)` (a roll that read a
+    # person anyway would carry his score and attribute), and the fed_by lists no `opposes` row to contribute it (above).
+    from engine.dice_engine.sigma_leverage import opposed_ob
+    from engine.season.data.fixtures import DEFAULT_FIXTURES
+    # B05.99 re-pin (B05.23 ships `opposition_rate` MU_PER_DIE): was 0.5 x pool_default
+    assert dict(out["terms"])["opposition"] == opposed_ob(DEFAULT_FIXTURES.get("pool_default"), DEFAULT_FIXTURES.get("opposition_rate"))
 
 
 def test_a_refused_roll_carries_fed_by_too():
@@ -856,14 +856,15 @@ def _holder(**held):
 
 
 def test_a_rank_at_its_ceiling_is_not_raised():
-    """FALSIFIER: a rank of 8 reachable by `train` or `_grown`. At the row's ceiling `raised_capability` returns `None`
-    (the answer for a key not held); one below it, it returns the rank raised by one whole point, the other keys kept."""
+    """FALSIFIER: a rank of 8 reachable by `train` or `_grown`. At the row's ceiling `raised_capability` returns `None`; one below
+    it, it returns the rank raised by one whole point, the other keys kept; a key not held is MINTED at 1 (B05.09, CORE Edit 9;
+    B05.99 rewrite: it answered `None` under the retired never-minted rule)."""
     from engine.season.loop.effects_combat import raised_capability
     ceiling = descriptors.capability("arms").ceiling
     assert ceiling == 7
     assert raised_capability(_holder(arms=ceiling), "arms") is None
     assert raised_capability(_holder(arms=ceiling - 1, inquiry=2), "arms") == {"arms": ceiling, "inquiry": 2}
-    assert raised_capability(_holder(inquiry=2), "arms") is None
+    assert raised_capability(_holder(inquiry=2), "arms") == {"arms": 1, "inquiry": 2}
 
 
 # ---------------------------------------------------------------------------------------------------------------------

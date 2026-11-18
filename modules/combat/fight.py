@@ -24,6 +24,7 @@ from typing import Callable, Optional
 
 from engine.season.queries.inputs import CombatTurnView, PersonalCombatInput
 from . import attributes as spec, combatant, wrapper
+from .config import CFG
 
 _MISSING = object()   # `getattr`'s default for a tracker field the engine does not carry (None is a value)
 
@@ -35,9 +36,18 @@ def _kit_kw(kit) -> dict:
 
 
 def _faculty_kw(fac) -> dict:
-    """`Combatant`'s keyword for one party's faculty (CR-85); `None` (none given) is none, so the Combatant keeps its
-    own default."""
+    """`Combatant`'s keyword for one party's skill score (CR-85; the record's `scores` entry); `None` (none given) is none, so the
+    Combatant keeps its own default."""
     return {} if fac is None else dict(faculty=fac)
+
+
+def _fight_cfg(inp: PersonalCombatInput) -> Optional[dict]:
+    """The engine's `cfg` carrying the record's operands: `BASE_POOL` and `POOL_FLOOR` (`wrapper._pool_dice` reads them) and
+    `OPPOSITION_RATE` (`core.ob_from_defender` reads it), each where the record carries one (not `None`); or `None` (the
+    engine's own `CFG`, so `core.OPPOSITION_RATE`, the control 0.5) where it carries none. A copy: `config.CFG` is never written."""
+    carried = {k: v for k, v in (("BASE_POOL", inp.pool_add), ("POOL_FLOOR", inp.pool_floor),
+                                 ("OPPOSITION_RATE", inp.opposition_rate)) if v is not None}
+    return {**CFG, **carried} if carried else None
 
 
 def _attr_kw(authored) -> dict:
@@ -71,14 +81,21 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
     # THE KITS (CP-T03-03): each party's `(weapon, armor)` in `claimants` order, read off the typed input. A record
     # built without them (`kits == ()`) is two Combatants at the engine's own default kit, as before.
     a_kit, b_kit = inp.kits or (None, None)
-    # THE FACULTIES (CR-85, ED-IN-0330): each party's dice score for the fight's verb, read off the typed input; it
-    # replaces `history` in the pool and the Ob. A record built without them (`faculties == ()`) fights at the
-    # Combatant's own default. [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays]
-    a_fac, b_fac = inp.faculties or (None, None)
+    # THE SKILL SCORES (CR-85, ED-IN-0330; B05.57): each party's skill score for the fight's verb, read off the typed input; it
+    # is `Combatant.faculty`, the number the Ob his opponent rolls against is taken from. A record built without them
+    # (`scores == ()`) fights at the Combatant's own default. His registered pool addends ride beside it as `pool_addends`
+    # (read by the pool alone, never the Ob). [ASSUMPTION: carrier -- basis: the smallest edit that keeps the two numbers
+    # apart; IS-PC-05 (B15) replaces it with the `pool` slot]
+    a_fac, b_fac = inp.scores or (None, None)
+    a_add, b_add = inp.addends or (0, 0)
     # THE AUTHORED ATTRIBUTES (PC-06 K-1): each party's `Person.attributes`, mapped by PC-14's `registry_key`.
     a_attr, b_attr = inp.attributes or (None, None)
     A = combatant.Combatant(a_id, end=a_end, **_attr_kw(a_attr), **_kit_kw(a_kit), **_faculty_kw(a_fac))
     B = combatant.Combatant(b_id, end=b_end, **_attr_kw(b_attr), **_kit_kw(b_kit), **_faculty_kw(b_fac))
+    A.pool_addends, B.pool_addends = a_add, b_add
+    # THE CARRIED WOUND (B05.61, `UPR` §3 edit 4; A-8): each party's signed level from before the fight, read by `assemble_net_sigma` alone.
+    # Carried the way `pool_addends` is, an instance attribute [ASSUMPTION: carrier; IS-PC-05 (B15) replaces it]; 0.0 where the record carries none.
+    A.carried, B.carried = inp.carried or (0.0, 0.0)
     trace: list = []
     prev = getattr(wrapper, "_TRACE", None)
     # THE DUEL TERMS (RS-25, PC-10a): the record's own field, default `'death'` (`wrapper.LETHAL_TERMS`); the engine
@@ -104,7 +121,7 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
         # The engine's own note: `_TRACE` adds no rng draw and no state mutation, so capturing it
         # CANNOT change the result. That is why the scene may be recorded without perturbing it.
         wrapper._TRACE = trace.append
-        result = wrapper.fight(A, B, rng=rng, terms=terms, decide=turn_choice)
+        result = wrapper.fight(A, B, cfg=_fight_cfg(inp), rng=rng, terms=terms, decide=turn_choice)
     finally:
         wrapper._TRACE = prev
 

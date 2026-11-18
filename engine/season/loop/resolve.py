@@ -18,7 +18,7 @@ import random
 from dataclasses import replace
 from ..gaps import InstrumentDefect
 from ..data.rosters import (PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_INQUIRIES,
-                            STRATA)
+                            MARGIN_ENDING, STRATA)
 
 from typing import Any, Optional
 from ..data.matrix import Step, matrix_row
@@ -35,6 +35,7 @@ from ..queries.person_q import (broken_by, confided_outside, conviction_after_cr
                                  elements_violated_by)
 from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
 from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
+from ..seam.ladder import is_margin_result
 from ..state.carriers import Act, Event, StateChange, effort_of, subject_of
 from ..state.gate import Change, NoOpReceipt, NotYours, Subject, Token, seat_hold
 from ..state.containment import edges_of
@@ -315,6 +316,19 @@ def _demand_earned(w: "World", a: Act, kinds: tuple, at_precondition: bool) -> t
     return tuple(k for k in kinds if k != PERSON_DEMANDED or keep)
 
 
+def _margin_ending(resolution: "Resolution | None") -> tuple:
+    """SC-P1 (B05.18): `Event.ending` of a margin provider's act -- `((key, value), ...)` in `rosters.yaml: margin_endings`' order, read off the
+    result the provider RETURNED (`seam/wrappers/sigma.py::resolve`), nothing recomputed here. `()` where the result is not a margin
+    provider's: the same test `seam/ladder.py::degree_of` makes (a scene's `wound_state` and a field's `attacker_wins` come first; a
+    `net`/`ob` pair is the margin), and where the result lacks a source the tuple names (a result a test planted, no dice dealt).
+    `margin` is the result's real margin (today's key `settled_margin`: `net - ob`, quantised once at the ladder)."""
+    r = resolution.result if resolution is not None else None
+    if not is_margin_result(r):
+        return ()
+    src = tuple("settled_margin" if k == "margin" else k for k in MARGIN_ENDING)
+    return tuple(zip(MARGIN_ENDING, (r[k] for k in src))) if all(k in r for k in src) else ()
+
+
 def _fold(self, w: "World", token: Token, a: Act,
           resolution: "Resolution | None" = None) -> list[Event]:
     """ONE act through the table: the SAME code for every act and every caller.
@@ -396,6 +410,12 @@ def _fold(self, w: "World", token: Token, a: Act,
     # CP-T03-02: what the effect hands the act's success Events beside its receipts -- each moved
     # subject's `observed` (by receipt identity) and the fight's `ending` (`_apply_write`).
     carried: dict = {}
+    # SC-P1 (B05.18): a margin provider's contest leaves the roll that decided it on EVERY Event the act's loop below stamps,
+    # the Failure band's included (`changed` empty there); a scene's own `ending` replaces it in `_apply_write` (never both:
+    # a result is a scene's or a margin's). `()` for every act no margin graded.
+    _roll = _margin_ending(resolution)
+    if _roll:
+        carried["ending"] = _roll
     # ⚠ `writes_at(degree)`, NOT `row.writes` (#358 rev.2 §C.4 / invariant 12). An UNCONTESTED verb
     # has no `writes_by_degree`, so this returns the flat tuple. The degree arrives on `resolution`
     # from `resolve()`'s seam branch, minted by `degree_of` from what the SUBSYSTEM returned. A
@@ -799,7 +819,7 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # here would have to re-enumerate all of them to stay in sync.
     r = contest(w, rung=_rung, prize=contests[0], claimants=_parties, depth=0,
                 max_depth=contest_max_depth, causes=[a.id], verb=a.verb, subject=_subject,
-                rng=_rng, effort=effort_of(a), host=host)
+                rng=_rng, effort=effort_of(a), host=host, via=a.via)
     if isinstance(r, ContestRefused):
         # `04 §A.2`'s typed refusal (`seam/contest.py::REFUSAL_STATUSES`): `PARTY-GAP` (a missing
         # party) and `REFUSED` (`sigma.py`'s S27.4, `Ob > 2x Pool`). `speak` is contested, so a
@@ -839,8 +859,9 @@ def _grade(self, w: "World", token: Token, a: Act, route: dict) -> list:
     ⚠ THE SUBJECT IS THE ACT'S `payload["subject"]`, WHICH A CHOOSER-FORMED ACT CARRIES AS THE QUESTION'S
     REFERENT (`research`: a Record, `surveil`: a Rung, a person-kind Rung shares its person's id). The
     provider reads opposition off a PERSON subject only (`sigma.py::_opposition_of`) and only where
-    the verb's `capability:` column names a skill (`descriptors.CAPABILITIES`), so the obstacle is `obstacle_default` HOLDS ONLY
-    WHILE that column names no skill for an inquiry verb: adding one is the edit that must re-read this.
+    the verb's `capability:` column names a skill (`descriptors.CAPABILITIES`). The three inquiry verbs
+    (`research`, `examine`, `surveil`) name `inquiry`, so a PERSON subject is opposed at his score on it and
+    `opposed_ob(pool_default)` stands in only for a subject that is not a person (a Record, a Rung).
     ⚠ THE GENERATOR IS THE ACT'S OWN, `H(seed, tick, actor, "roll:<verb>:<act id>")` -- `_contest`'s
     shape with the verb where a prize would be (there is none), so adding a graded inquiry moves no
     other act's draw (`04 PART D row 35`)."""

@@ -341,7 +341,7 @@ def _fed(w: Any, inp: MassBattleInput, treasuries: tuple) -> list:
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
             rng: Optional[random.Random] = None, rung: Optional[str] = None,
-            effort: int = 0, host: Any = None) -> dict:
+            effort: int = 0, host: Any = None, via: Optional[str] = None) -> dict:
     """CALL the mass-battle engine. Returns what it said; decides nothing itself.
 
     `effort` (CP-T01-05) is accepted and NOT USED HERE: the seam's call is uniform, and a field battle has no
@@ -393,7 +393,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         # means for the game, but it does not launder "nobody mustered" into a fabricated fight
         # against a floor-sized phantom unit either. `attacker_wins`/`unopposed` are top-level so
         # `seam/ladder.py::field_degree` can grade this without opening `result`.
-        return dict(status="RESOLVED", module=_PROVIDER, resolver="dice_pool",
+        return dict(status="RESOLVED", module=_PROVIDER, resolver="d_sigma",
                     attacker_wins=True, unopposed=True,
                     result=dict(attacker_wins=True, degree="Unopposed",
                                 attacker_size_pct=1.0, defender_size_pct=0.0),
@@ -402,7 +402,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         # CP-T04-06, AN OPPOSED SIEGE: THE ARMY SITS BEFORE THE WALLS AND NO BATTLE IS RUN -- no engine call, so no draw is
         # consumed and nobody is hurt or moved. Graded `Invested` (`seam/ladder.py::field_degree`, off the lifted `invested`
         # marker); `_eff_march` wears the garrison. An empty defence never reaches here: it answered `Unopposed` above, as a storm.
-        return dict(status="RESOLVED", module=_PROVIDER, resolver="dice_pool",
+        return dict(status="RESOLVED", module=_PROVIDER, resolver="d_sigma",
                     attacker_wins=False, unopposed=False, invested=True,
                     result=dict(attacker_wins=False, degree="Invested"),
                     winner=[], parties=parties)
@@ -430,7 +430,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     treasuries = (_seat_treasury(w, act.via if act is not None else None), _defender_treasury(w, rung))
     fed = _fed(w, inp, treasuries)
     result = entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)
-    return dict(status="RESOLVED", module=_PROVIDER, resolver="dice_pool",
+    return dict(status="RESOLVED", module=_PROVIDER, resolver="d_sigma",
                 # v9 IN-52: `((treasury rung, consumed), ...)`, attacker then defender -- what `_eff_march`
                 # debits (LF-3). Empty `consumed` on both sides while the arm is off.
                 provision=tuple((t, p.consumed) for t, p in zip(treasuries, fed)),

@@ -221,23 +221,22 @@ def test_resolution_pool_single_source():
         "pool base being re-spelled. Call core.resolution_pool(faculty).")
 
 
-def test_resolution_pool_rounds_fractional_faculty():
-    """The owner ROUNDS `faculty` (History until CR-85, which renamed this test with the field) to an integer die
-    count; the deleted duplicate did not. This is the
-    assertion that can observe the historical failure (§0.1 point 2) rather than merely coexisting with
-    it: on the pre-a174d4a tree `Combatant(history=3.4).pool` was 9.4 while core.resolution_pool(3.4)
-    was 9, and 3.6 gave 9.6 vs 10 — a fractional pool AND a rounding disagreement, both caught below.
-
-    Integer History (the default, and every build the engine ships) is byte-identical either way, which
-    is exactly why this went unnoticed: the probe must be fractional or it pins nothing."""
+def test_resolution_pool_keeps_a_fractional_faculty():
+    """The owner does NOT round `faculty` (History until CR-85): B05.57 (`UPR` §2 edit 3, F-PC-08 (d)) removed the `int(round(.))`
+    -- a fractional pool is canonical and the bell-curve sampler takes one -- and the pool is `sigma_leverage.pool_of`, the one
+    rule. This was `test_resolution_pool_rounds_fractional_faculty`, which pinned the rounding the ruling retired; it keeps its
+    purpose, to observe the historical failure rather than coexist with it (§0.1 point 2): a second spelling of the rule that
+    ROUNDS (3.4 gave 9 where the unrounded rule gives 9.4) disagrees with the owner on exactly the fractional values below, and
+    an integer faculty is unchanged either way, which is why the probe must be fractional.
+    """
     C, core, S, WP, CFG = _mods()
-    assert core.resolution_pool(3.4) == 9, "3.4 must round DOWN to faculty 3 -> pool 9 (the duplicate gave 9.4)"
-    assert core.resolution_pool(3.6) == 10, "3.6 must round UP to faculty 4 -> pool 10 (the duplicate gave 9.6)"
+    assert core.resolution_pool(3.4) == 9.4, "3.4 is faculty 3.4 -> pool 9.4: the owner no longer rounds"
+    assert core.resolution_pool(3.6) == 9.6, "3.6 is faculty 3.6 -> pool 9.6"
     assert core.resolution_pool(3) == 9 and core.resolution_pool(4) == 10, "an integer faculty must be unchanged"
-    for h in (3.4, 3.5, 3.6, -2.5):
-        assert isinstance(core.resolution_pool(h), int), (
-            f"resolution_pool({h}) returned a non-integer die count — the int(round(...)) has been dropped, "
-            "which is precisely how the deleted duplicate diverged")
+    for h in (3.4, 3.5, 3.6):
+        assert core.resolution_pool(h) == h + core.BASE_POOL, (
+            f"resolution_pool({h}) is not `faculty + BASE_POOL` -- the owner is rounding again, which is how the deleted "
+            "duplicate diverged")
     assert core.resolution_pool(-5) == 5, "the POOL_FLOOR clamp must still hold below it"
 
 

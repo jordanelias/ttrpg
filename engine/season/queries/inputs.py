@@ -47,18 +47,25 @@ class SocialContestInput:
 
     Built by `seam/wrappers/sigma.py::contest_input` (the host input builder) from `World`:
       * `pool`      -- dice, from what the actor genuinely has (`sigma.py::faculty`);
-      * `opposition` -- the subject's score on the verb's capability key when the subject is a person
-                       carrying one, else `None`. A RAW OPERAND, not an obstacle;
-      * `obstacle_default` -- the `H-127` stand-in for a subject with no score to halve;
+      * `opposition` -- what a PERSON opposite brings to the act: his score in the opposing attribute the verb row names
+                       (`opposed_attribute:`) PLUS his skill score in the verb's skill (A-79, A-137), or `None` where nobody is
+                       opposite (a docket item, a Record, a site, a self-plea). A RAW OPERAND, not an obstacle;
+      * `difficulty` -- the act's own, the size of its verb row's `difficulty:` level (`Fixtures.difficulty_ob`), raw;
+      * `pool_default` -- the untrained score: the opposition where no person is opposite (`opposed_ob(pool_default, opposition_rate)`);
+      * `pool_add` -- the pool's base, whose even line (`MU_PER_DIE x pool_add`) is the obstacle's first term;
+      * `opposition_rate` -- the share of the opposing score an obstacle takes up, per point;
+      * `obstacle_operands` -- `((name, raw operand, step), ...)` in `rosters.yaml: obstacle_terms` order, for the members that are a
+                       raw operand times a step (`standard`, `stakes`, `regard` where each weighs, `reception`, `capability`; the three that do not need one carry their own field above);
       * `obstacle_ceiling` -- the `H-213` bound on how hard one matter can get; `None` is the
                        uncapped control arm;
       * `ceiling_per_pool` -- the `chance_floor` arm (CP-T01-06): from one die, the module solves the
                        cap for THIS pool from `obstacle_ceiling`'s own chance at one die, and the
                        fixed value stays the cap below one die. `False` is the fixed arm (the default);
+      * `ceiling_form` -- the ceiling's form past the per-pool bound (`hard`: a flat bound; `soft`: the excess saturates toward it); `hard` by default, so every hand-built record keeps its reading;
       * `obstacle_refusal_multiple` -- S27.4's multiple, the fixture the host adapter refuses on,
                        on the pair the entry returns;
       * `leverage`  -- the σ-layer μ-shift: the host's `advantage_sigma` sums the act's advantage sources
-                       (`rosters.yaml: advantage_sources`; today `effort`), zero where none is taken.
+                       (`rosters.yaml: advantage_sources`: `effort`, `capability`, `proofs`, `favour`), zero where none is taken.
 
     ⚠ NO `ob` FIELD, ON PURPOSE (v9 SC-01 step 14; ED-SC-0033 clause (3), *the obstacle has a single
     owner*). The obstacle is COMPOSED by the module (`modules/social_contest/roll.py::obstacle`) from
@@ -72,39 +79,45 @@ class SocialContestInput:
                        route erosion inside it); `0.0` where the prize is heard by no room;
       * `reception_gain` -- the `H-215` fixture scaling it into the obstacle;
       * `proofs`    -- the actor's unmirrored proofs against the opponent, each weighed by remove
-                       (`queries/world_q.py::proofs`); `0.0` where no room hears the prize;
-      * `proof_step` -- the `H-216` fixture: how far one firsthand proof moves the obstacle.
-    The module composes them (`roll.py::obstacle`); the host composes nothing. They default to the
-    no-room reading, which a record built for a prize no room hears carries.
+                       (`queries/world_q.py::proofs`); `0.0` where no room hears the prize.
+    B05.17 (PES-A): THE MODULE READS NONE OF THESE. The host turns them into what they are: the bench's hostile half is the
+    obstacle's `reception` operand (`obstacle_operands`), and a proof or a friendly bench is `leverage` (`advantage_sources`:
+    `proofs`, `favour`). They stay on the record raw, for the trace (SC-P1), and default to the no-room reading, which a record
+    built for a prize no room hears carries.
 
     THE EXAMINED DOCUMENT'S OPERAND (v9 SC-02 `22b` step 25), RAW AS THE OTHERS:
       * `forgery_quality` -- `Record.forgery_quality` of the Record an INQUIRY examines (`sigma.py::
                        contest_input`'s `examined`); `0` for a genuine document, for any subject that
                        is not a Record, and for every contest a prize names. Composed by the module."""
-    pool: int
+    pool: float          # FRACTIONAL (B05.25): the mean of his governing attributes plus his rank, to the tenth (`pool.faculty`)
     opposition: Optional[float]
-    obstacle_default: float
     obstacle_ceiling: Optional[float]
     obstacle_refusal_multiple: float
     leverage: float
+    difficulty: float    # B05.14: raw, no default -- a record built without the act's difficulty is no record of a rolled act
+    pool_default: float
+    pool_add: float
+    opposition_rate: float
     reception: float = 0.0
     reception_gain: float = 0.0
     proofs: float = 0.0
-    proof_step: float = 0.0
     forgery_quality: float = 0.0
     ceiling_per_pool: bool = False
-    # B11 lane A: THE TASK'S DIFFICULTY (`rosters.yaml: task_difficulty`, `data/verbs.py::TASK_DIFFICULTY`), RAW AS THE
-    # OTHERS -- the obstacle's first term, to which the opposing person's `score / 2` and the room's and the document's
-    # terms are added (`roll.py::obstacle_terms`). `None` is the CONTROL ARM (`Fixtures obstacle_model: stand_in`): the
-    # obstacle the module composes without it, `score / 2` or the `obstacle_default` stand-in.
-    difficulty: Optional[float] = None
+    ceiling_form: str = "hard"   # B05.53: how the obstacle behaves past its ceiling -- `hard` a flat bound, `soft` the excess saturating toward it; read by `modules/social_contest/roll.py::obstacle`, which refuses any other value
+    obstacle_operands: tuple = ()
 
 
 @dataclass(frozen=True)
 class Margin:
     """What the social contest module's entry returns for one matter's draw: the roll's `net` and the
-    `ob` it was thrown at, and nothing else (v9 SC-01 step 15; `08_SEAM.md`'s provider rule, intent
+    `ob` it was thrown at, and the terms that made that `ob` (v9 SC-01 step 15; `08_SEAM.md`'s provider rule, intent
     only: *a MARGIN, never a winner*).
+
+    `terms` (B05.14; OBS §1, §2; SC-B Edit B) is `((name, value), ...)`: every term of the obstacle in `rosters.yaml:
+    obstacle_terms` order, then lane A's `forgery` where it acted, then `("ceiling", -clip)` and `("floor", +lift)`
+    where a bound acted. THE VALUES SUM TO `ob`. Every roster member is non-negative (nothing lowers the obstacle: the favourable
+    half of a room is leverage, B05.17); only the ceiling's clip is negative. `()` on a margin a
+    stub entry returns with no composition behind it.
 
     ⚠ NO WINNER, NO BAND, NO SIDE. The band is the one ladder's reading of this pair
     (`seam/ladder.py::degree_of` -> `degree_from_net`), and who it favours is the fold's reading of the
@@ -112,6 +125,7 @@ class Margin:
     return of any other type (`seam/wrappers/sigma.py::resolve`)."""
     net: float
     ob: float
+    terms: tuple = ()
 
 
 @dataclass(frozen=True)
@@ -138,13 +152,26 @@ class PersonalCombatInput:
                        `world_q.kit_of`: what the rungs the person holds store, read not consumed). The module
                        passes each to `Combatant(..., weapon=, armor=)`. The default is `()`: a record built
                        without kits is fought by two Combatants at the engine's own default kit;
-      * `faculties` -- each party's dice score for the fight's verb, in `claimants` order, `ends`' shape (CR-85,
-                       ED-IN-0330: it replaces combat's `history`). Filled by `combat.py::combat_input` from
-                       `seam/wrappers/sigma.py::faculty`, THE ONE POOL READER, and passed to `Combatant(..., faculty=)`,
-                       where it feeds the party's pool and the Ob his opponent rolls against, and nothing else. The
-                       default is `()`: a record built without it is fought at the module's own default (3).
-                       [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] --
-                       `proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md` is UNRATIFIED (ED-IN-0351);
+      * `scores`    -- each party's SKILL SCORE for the fight's verb, in `claimants` order, `ends`' shape (CR-85, ED-IN-0330,
+                       B05.57; `seam/wrappers/pool.py::score`: no attribute, no addend; 0 where the skill gives him none). Passed
+                       to `Combatant(..., faculty=)`, where it is the number the opponent's Ob is taken from
+                       (`core.ob_from_defender`) and the base of his own pool. The default is `()`: a record built without it
+                       is fought at the module's own default (3);
+      * `addends`   -- each party's registered pool addends for the verb, the sum of `pool.py::POOL_ADDENDS` (`pool.addends_of`,
+                       whole dice), in `claimants` order. The pool is `pool_of(score, addends, pool_add, pool_floor)`: the addend
+                       raises his pool and never an opposition (A-79). The default is `()`: none;
+      * `pool_add`, `pool_floor` -- the fight's row's two operands, carried raw from the fixtures the `fight` site's `dice` row
+                       names (`rosters.yaml: tables.capability_uses`; `pool_add`, `pool_floor`). `None` is the module's own
+                       constants (`core.BASE_POOL`, `core.POOL_FLOOR`), the workbench's;
+      * `opposition_rate` -- the share of a defender's skill score the obstacle takes per point, carried for
+                       `sigma_leverage.opposed_ob`. `None` is the module's own constant (0.5): in B05 `combat_input` carries
+                       `None`, and the flip to the fixture belongs to B15;
+      * `carried`   -- each party's wound carried into the fight, as a SIGNED net sigma (a level against his own rolls is negative), in
+                       `claimants` order (B05.61, `UPR` §3 edit 2; A-8). The host reads it once, from the `wounds` advantage source alone
+                       (`combat.py::_carried_of`: `levels_to_net_sigma` over that member's against-list for the party's own `body`), and
+                       fills it only under `Fixtures carried_wound_model` `level`; the default `(0.0, 0.0)` is `endurance_cut`, the control,
+                       where the wound rides on `ends` instead. The module adds the aggressor's against his attack and the defender's against
+                       his defence beside `wound_impairment` (`combat_systems.assemble_net_sigma`) and holds no `wound_step` of its own;
       * `attributes` -- each party's authored `Person.attributes`, `{registry key: whole number}`, in `claimants`
                        order (PC-06 K-1, ED-IN-0347). The module maps each key to its `Combatant` field by PC-14's
                        `registry_key` (`modules/combat/attributes.py`); a key absent from the dict leaves its field at
@@ -155,7 +182,12 @@ class PersonalCombatInput:
     wound_quantities: tuple
     terms: str = "death"
     kits: tuple = ()
-    faculties: tuple = ()
+    scores: tuple = ()
+    addends: tuple = ()
+    pool_add: Optional[float] = None
+    pool_floor: Optional[float] = None
+    opposition_rate: Optional[float] = None
+    carried: tuple = (0.0, 0.0)
     attributes: tuple = ()
 
 

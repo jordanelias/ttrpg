@@ -1,7 +1,7 @@
 """CR-85 (ED-IN-0330/0331) -- COMBAT'S POOL AND OB READ `faculty`, NOT `history`.
 
 The season computes each party's `faculty(w, person, verb)` (`seam/wrappers/sigma.py`, THE ONE POOL READER) in
-`seam/wrappers/combat.py::combat_input`, it crosses the seam as `PersonalCombatInput.faculties`, and the module
+`seam/wrappers/combat.py::combat_input`, it crosses the seam as `PersonalCombatInput.scores` and `.addends` (B05.57), and the module
 (`modules/combat/fight.py`) constructs each `Combatant` with it. Inside the module it is read in exactly two places,
 the pool (`core.resolution_pool`, `max(5, faculty + 6)`) and the Ob the opponent rolls against
 (`core.ob_from_defender`, `faculty / 2`); the five sigma reads of `history` are deleted.
@@ -13,7 +13,7 @@ withdrawn by ED-IN-0351).
   `pool_default` 2 and the module reads pool `max(5, 2 + 6)` against Ob `2 / 2`.
   PLANTED: a party holding the combat key at 5 (a test-local `VERB_CAPABILITY` row, no roster row) rolls pool 11 and
   his opponent rolls against Ob 2.5.
-  MUTATION (executed, not by hand): the seam's read dropped (`faculties` left empty, the module default 3) reproduces
+  MUTATION (executed, not by hand): the seam's read dropped (`scores` and `addends` left empty, the module default 3) reproduces
   (9, 1.5), and the falsifier's check goes red.
   CONTROL: the realm hashes are `_realm_goldens.py`'s.
   ⚠ `build_realm(0)` forms no fight in one season since CR-87, so the falsifier reads seeds 1 and 2.
@@ -47,10 +47,10 @@ _KEY = "cr85_test_arms"   # a test-local capability key: no roster row is added
 
 
 def _drop_the_read(monkeypatch):
-    """THE MUTATION: the seam's read dropped -- the record carries no faculties, so the module's default stands."""
+    """THE MUTATION: the seam's read dropped -- the record carries no scores, so the module's default stands."""
     real = C.combat_input
     monkeypatch.setattr(C, "combat_input",
-                        lambda *a, **k: dataclasses.replace(real(*a, **k), faculties=()))
+                        lambda *a, **k: dataclasses.replace(real(*a, **k), scores=(), addends=()))
 
 
 def _spy(monkeypatch) -> Counter:
@@ -109,7 +109,7 @@ def test_planted_a_party_holding_the_combat_key_at_5_rolls_11_and_is_attacked_at
     w.persons[a].capability = {**(w.persons[a].capability or {}), _KEY: 5}
     assert _KEY not in (w.persons[b].capability or {})
     inp = C.combat_input(w, [a, b], "fight")
-    assert inp.faculties == (5, 2), inp.faculties
+    assert inp.scores == (5, 2) and inp.addends == (0, 0), (inp.scores, inp.addends)
     mod, attr = entry_target("the body")[1].split(":", 1)
     entry = getattr(importlib.import_module(mod), attr)
     seen = _spy(monkeypatch)
@@ -119,3 +119,25 @@ def test_planted_a_party_holding_the_combat_key_at_5_rolls_11_and_is_attacked_at
         checked += 1
     assert set(seen) == {(11, 1.0), (8, 2.5)}, dict(seen)
     assert checked == 6
+
+
+def test_the_record_carries_the_opposition_rate_to_the_module():
+    """B05.58 (29-2): a hand-built `PersonalCombatInput` with `opposition_rate=0.4` and skill scores (2, 3) is fought at Ob
+    `0.4 x` the struck party's score, `{0.8, 1.2}`; with `None` (the module's own constant, 0.5) at `{1.0, 1.5}`."""
+    from ..queries.inputs import PersonalCombatInput
+    mod, attr = entry_target("the body")[1].split(":", 1)
+    entry = getattr(importlib.import_module(mod), attr)
+
+    def obs(rate) -> set:
+        inp = PersonalCombatInput(claimants=("a", "b"), ends=(5, 5), wound_quantities=(), scores=(2, 3), opposition_rate=rate)
+        seen, checked = set(), 0
+        for s in range(8):
+            for ev in entry(inp, random.Random(s))["trace"]:
+                if "ob" in ev:
+                    seen.add(round(ev["ob"], 9))
+                    checked += 1
+        assert checked >= 1, checked
+        return seen
+
+    assert obs(0.4) == {0.8, 1.2}
+    assert obs(None) == {1.0, 1.5}

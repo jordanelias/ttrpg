@@ -75,6 +75,8 @@ from __future__ import annotations
 import random
 from typing import Any, Callable, Optional
 
+from engine.dice_engine.sigma_leverage import levels_to_net_sigma
+
 from ...data.rosters import ESTIMATE_OUTCOMES, FELLED, WOUND_QUANTITIES
 from ...data.verbs import DUEL_TERMS_BY_VERB
 from ...decision import body_band_penalty
@@ -90,7 +92,8 @@ from ...state.ids import H
 from ..ladder import party_degree
 from ._entry import entry_for
 from ._estimate import rng_of, samples_of
-from .pool import faculty
+from .pool import FIGHT_DICE_SITE, addends_of, pool_pair, score
+from .sigma import ADVANTAGE_SOURCES, WOUNDS
 
 _END_KEY = attribute_key("Endurance")      # the registry key of `end` (`descriptors`, the one owner), not a typed literal
 assert _END_KEY, "descriptors names no Endurance attribute: party_end would read the default for every person"
@@ -137,12 +140,37 @@ def surrender_of(trace: list) -> Optional[dict]:
     return None
 
 
+_CARRIED_MODELS = ("endurance_cut", "level")      # `Fixtures carried_wound_model`'s two arms (H-434); the control first
+
+
+def _carried_level_model(fx: Any) -> bool:
+    """True under `carried_wound_model` `level` (A-8), False under the control `endurance_cut`; any other value is refused by name, never read as the control."""
+    model = fx.get("carried_wound_model")
+    if model not in _CARRIED_MODELS:
+        raise Unspecified(f"`Fixtures carried_wound_model` is {model!r}, and the arms are {list(_CARRIED_MODELS)}", "data/fixtures.py",
+                          needs="one of the two arms", law="B05.61 (`UPR` §3 edit 1; H-434)")
+    return model == "level"
+
+
+def _carried_of(person: Any, fx: Any) -> float:
+    """A party's wound carried into the fight as a SIGNED net sigma (B05.61, `UPR` §3 edits 2 and 3): the `wounds` advantage source's
+    AGAINST-list for his own `body` and `body_ceiling`, summed by `levels_to_net_sigma`, the sum `advantage_sigma` takes (negative: his own wound is a level
+    against his own rolls). The one-member read: `effort`, `capability` and the room's sources bring nothing to a fight [ASSUMPTION; basis: the source's
+    "from the `wounds` advantage source ... computed host-side by the one reader"]. `0.0` where `wound_level` is None (the source's control) or he has lost
+    less than one `wound_step`. The size is the season's own `wound_level`, never a constant of the module's."""
+    _for, against = ADVANTAGE_SOURCES[WOUNDS](fx, {"body": person.body, "body_ceiling": person.body_ceiling})
+    return float(levels_to_net_sigma([], against))
+
+
 def party_end(person: Any, fx: Any) -> int:
     """A `Person`'s `Combatant.end` (`H-97`): the `attr.body.endurance` he HOLDS (authored, or drawn by
     `state/carriers.py::generated_attributes` and seated by `build_realm(cast_attributes=True)`; the class default only where he holds none) less
     one point per body band. The other attributes ride on `PersonalCombatInput.attributes` and the module maps
-    them (PC-06 K-1). The module entry builds the `Combatant` from this number (`modules/combat/fight.py`)."""
-    bands = body_band_penalty(person, fx)
+    them (PC-06 K-1). The module entry builds the `Combatant` from this number (`modules/combat/fight.py`).
+
+    UNDER `carried_wound_model` `level` (B05.61, A-8) NO BAND IS CUT: the authored Endurance arrives whole, so Health, Wound Interval and Max Wounds are
+    an unwounded man's, and the wound rides on `PersonalCombatInput.carried` as a level (`_carried_of`). Under the control `endurance_cut`, as before."""
+    bands = 0 if _carried_level_model(fx) else body_band_penalty(person, fx)
     # `end`'s default in a fight is the combat export's (`_END_DEFAULT`), not a copy of it. One band = one point, floored at 1: a dying
     # person still fights, which is the same floor `decision.budget` applies for the same reason.
     base_end = person.attributes.get(_END_KEY, _END_DEFAULT)
@@ -192,6 +220,14 @@ def _cause_record(w: Any, causes: list) -> Optional[str]:
     return record_of(store.get(causes[0]) if store is not None and causes else None)
 
 
+def _fight_score(w: Any, p: Any, verb: str) -> int:
+    """A party's SKILL SCORE for the fight (B05.57, `UPR` §2 edit 2): `pool.score` (no attribute, no addend), `0` where the skill gives
+    him none (`untrained: none`, a non-holder). It is what `ob_from_defender` opposes with and the base of his own pool. NOT `pool.faculty`,
+    which applies the social pair (`pool_add`, `pool_floor`) and refuses a verb naming no `governing:` attribute (`fight` names none, B05.25)."""
+    base = score(w, p, verb)
+    return 0 if base is None else base
+
+
 def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = None) -> PersonalCombatInput:
     """THE HOST INPUT BUILDER (plan position `31b`, A-25): `World` -> the frozen record the fight reads.
 
@@ -210,21 +246,28 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
     challenge's terms; where it names none the verb's `duel_terms` line stands (`accept: blood`, v11 CR-87) and a
     verb the roster does not name is fought under `'death'`.
 
-    `verb` also fills `faculties` (CR-85, ED-IN-0330): each party's `faculty(w, person, verb)`, the season's ONE pool
-    reader, imported from its owner `pool.py` (a leaf both this adapter and `sigma.py` import) and never copied. `fight`,
-    `accept` and `capture` draw on the `arms` capability key (CP-T03-04, `rosters.yaml: verb_capability`); a person holding no
-    such key (and no attribute for its vocation) reads `pool_default` plus the registered addends, so the season's fight
-    rolls that against half of it. [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] --
-    the CR-85 design is UNRATIFIED (ED-IN-0351)."""
+    `verb` also fills the fight's TWO INPUTS (CR-85, ED-IN-0330; B05.57, `UPR` §2): `scores`, each party's skill score (`_fight_score`), and
+    `addends`, each party's registered pool addends (`pool.addends_of`, the one sum `pool.faculty` takes), read from their owner `pool.py`
+    (a leaf both this adapter and `sigma.py` import) and never copied. The pool is the module's: `pool_of(score, addends, pool_add,
+    pool_floor)` with the fight row's two operands carried raw (`pool_add`, `pool_floor`), the Ob the opponent's skill score alone.
+    `opposition_rate` is `None` in B05 (the module's own constant). `carried` (B05.61, A-8) is each party's wound as a signed level (`_carried_of`), filled
+    only under `Fixtures carried_wound_model` `level` -- where `party_end` also cuts no band; under the control `endurance_cut` it is `(0.0, 0.0)`. `fight`, `accept` and `capture` draw on the `arms` capability key
+    (CP-T03-04, `rosters.yaml: verb_capability`); a person holding no such key reads the untrained score `pool_default`.
+    [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] -- the CR-85 design is UNRATIFIED (ED-IN-0351)."""
     a_id, b_id = claimants[0], claimants[1]
     terms = duel_terms_of(verb, stakes_of(w, record))
     pa, pb = w.persons[a_id], w.persons[b_id]
+    pool_add, pool_floor = pool_pair(w.fixtures, FIGHT_DICE_SITE)      # the fight row's `dice` names the two fixtures, as the social roll's does
     return PersonalCombatInput(
         claimants=(a_id, b_id),
         ends=(party_end(pa, w.fixtures), party_end(pb, w.fixtures)),
         wound_quantities=tuple(WOUND_QUANTITIES),
         kits=(kit_of(w, a_id), kit_of(w, b_id)),
-        faculties=(faculty(w, pa, verb), faculty(w, pb, verb)),
+        scores=(_fight_score(w, pa, verb), _fight_score(w, pb, verb)),
+        addends=(addends_of(w, pa, verb), addends_of(w, pb, verb)),
+        pool_add=pool_add, pool_floor=pool_floor,
+        carried=(_carried_of(pa, w.fixtures), _carried_of(pb, w.fixtures)) if _carried_level_model(w.fixtures) else (0.0, 0.0),   # B05.61: `level` only
+        opposition_rate=None,               # None until 29-3 (B15): the fixture is live for the social roll since B05; the fight flips with its scale (A-71, A-31)
         **({} if terms is None else dict(terms=terms)),
         # PC-06 K-1: the attributes each party HOLDS (authored or drawn), whenever either party holds any -- under the
         # shipped build (`cast_attributes=True`) every person does, so this always passes them; the field's default (the
@@ -333,7 +376,7 @@ def _wound_state(lifted: Optional[dict]) -> dict:
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
             rng: Optional[random.Random] = None, rung: Optional[str] = None,
-            effort: int = 0, host: Optional[PlayHost] = None) -> dict:
+            effort: int = 0, host: Optional[PlayHost] = None, via: Optional[str] = None) -> dict:
     """CALL the personal-combat engine. Returns what it said; decides nothing itself.
 
     ⚠ `host` (v10 REM-31, IN-46) IS A SECOND INPUT BESIDE §A.2's adapter row's "the projection" (the persons it plays and

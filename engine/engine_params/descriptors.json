@@ -175,8 +175,6 @@
       "copying": {
         "kind": "skill",
         "gloss": "Carries a text or a message on exactly as it was given.",
-        "base": "attr.mind.focus",
-        "opposed_by": "none",
         "floor": 0,
         "ceiling": 7,
         "untrained": "default",
@@ -189,8 +187,6 @@
       "argue": {
         "kind": "skill",
         "gloss": "Makes a case to someone's face and moves them by it.",
-        "base": "attr.social.charisma",
-        "opposed_by": null,
         "floor": 0,
         "ceiling": 7,
         "untrained": "default",
@@ -203,8 +199,6 @@
       "inquiry": {
         "kind": "skill",
         "gloss": "Finds things out: from a record, a place or a watched person.",
-        "base": "attr.mind.acuity",
-        "opposed_by": null,
         "floor": 0,
         "ceiling": 7,
         "untrained": "default",
@@ -217,8 +211,6 @@
       "arms": {
         "kind": "skill",
         "gloss": "Fights with a weapon in hand.",
-        "base": "attr.body.agility",
-        "opposed_by": null,
         "floor": 0,
         "ceiling": 7,
         "untrained": "default",
@@ -232,8 +224,6 @@
       "law": {
         "kind": "skill",
         "gloss": "Knows and applies the rules of a forum: procedure, definition, precedent.",
-        "base": "attr.mind.acuity",
-        "opposed_by": null,
         "floor": 0,
         "ceiling": 7,
         "untrained": "default",

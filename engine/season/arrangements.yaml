@@ -97,6 +97,12 @@ speech_kinds:
     reachable_bands:    []
 
 arrangements:
+  # `standard:` (B05.21, T13 edit 2) IS THE FOURTEENTH KEY, a `rosters.yaml: difficulty_levels` member: what the room demands of an act
+  # a bench hears on a matter docketed under the row, sized by `Fixtures.difficulty_ob` and read by `sigma.py::OBSTACLE_TERMS["standard"]`.
+  # Every row is `plain` at the control (size 0: nothing is listed). B05.23 (T13 commit 2, edit 2) authors T2's first values, copied:
+  # one level per formal layer the row's `interposed:` names among `procedure`, `office`, `document`, `ceremony` (`person`, an advocate,
+  # is help, not a layer); the authored value is the fact, so a designer overrides any row. Publicity (`floor: open`) is no term and
+  # carries no bump here: its +1 sweep is reported in B05.23's commit body. [ASSUMPTION; medium; Jordan to correct; revert: every row `plain`.]
   # ── arbitration — one decider, chosen by the parties, and no appeal ───────────────────────────
   # `03_PARAMETERS.md` §E.2. `records_dissent: false` is THIS LOADING'S OWN READING, not a direct
   # transcription: the source's worked block does not state the key for this row at all (only
@@ -117,6 +123,7 @@ arrangements:
     proofs:             [record, testimony, oath]
     disposes:           oblige
     disposal_reach:      room
+    standard:           plain
 
   # ── parliamentary debate — many who must be persuaded, and no issue ladder ────────────────────
   # `03_PARAMETERS.md` §E.2, transcribed in full. `records_dissent: true` and the old
@@ -134,6 +141,7 @@ arrangements:
     proofs:             []
     disposes:           Record
     disposal_reach:      realm
+    standard:           routine
 
   # ── council of state — the same shape, and the opposite trade ─────────────────────────────────
   # `03_PARAMETERS.md` §E.2: "the same shape, and the opposite trade... Four keys differ from the
@@ -156,6 +164,7 @@ arrangements:
     proofs:             []
     disposes:           Record
     disposal_reach:      realm
+    standard:           routine
 
   # ════════════════════════════════════════════════════════════════════════════════════════════════
   # v9 SC-03a (#453 §10.4 step 3, §8.3; K-53/K-55; ratified as intent, ED-IN-0288): THE FOUR ROWS THE
@@ -188,6 +197,7 @@ arrangements:
     proofs:             [record, testimony, oath]
     disposes:           detain
     disposal_reach:      settlement
+    standard:           routine
 
   # ── tribunal — a standing commission, admitted floor ──────────────────────────────────────────
   # §E.2 writes this row as a DIFF against the trial ("differs from a trial in three keys"): `floor`,
@@ -211,6 +221,7 @@ arrangements:
     proofs:             [record, testimony, oath]
     disposes:           ban
     disposal_reach:      body
+    standard:           demanding
 
   # ── interrogation — the questioner decides, and the subject cannot win ────────────────────────
   # §E.2, transcribed in full but `disposes:`. `records_dissent: false` + old `withheld` AGREE.
@@ -227,6 +238,7 @@ arrangements:
     proofs:             [testimony, confession]
     disposes:           detain
     disposal_reach:      room
+    standard:           plain
 
   # ── inquisition hearing — an interrogation with a bench ───────────────────────────────────────
   # §E.2's block omits `disposal:`; §E.1's table gives `bench` for the row, and its title -- *"an
@@ -245,6 +257,7 @@ arrangements:
     proofs:             [testimony, confession, record]
     disposes:           ban
     disposal_reach:      body
+    standard:           hard
 
   # ════════════════════════════════════════════════════════════════════════════════════════════════
   # v9 SC-04: THE FIFTH `<tenure>` ROW, AND THE SUCCESSION ROW. See the header's last paragraph.
@@ -283,6 +296,7 @@ arrangements:
     proofs:             [record, testimony]
     disposes:           ban
     disposal_reach:      realm
+    standard:           demanding
 
   # ── negotiation — the deciders are the parties ────────────────────────────────────────────────
   # §E.2 (`03_PARAMETERS.md:553-565`), transcribed in full under the thirteen-key collapse (header):
@@ -305,3 +319,4 @@ arrangements:
     proofs:             [record, testimony]
     disposes:           oblige
     disposal_reach:      room
+    standard:           plain

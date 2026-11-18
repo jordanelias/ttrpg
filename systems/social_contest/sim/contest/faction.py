@@ -131,7 +131,7 @@ def coalition_vote(sides, lobby=0.0, scale=1.0):
        compromise zone), read in bands. Demonstrates that COALITIONS pool onto the two-party engine — the
        multi-faction case needs no N-party spine. `sides`: list of (Faction, 'pro'|'anti'|'abstain').
        Returns pass | committee | fail."""
-    from .resolver import ContestState, roll_net   # Stage 1b: roll_net wraps sigma_leverage on the GLOBAL rng
+    from .resolver import ContestState, roll_net_continuous   # B05.02: wraps the one sampler on the GLOBAL rng
     pool_A = sum(f.mandate for f, st in sides if st == 'pro')
     pool_B = sum(f.mandate for f, st in sides if st == 'anti')
     # canon §10: high-Stability abstention makes the vote harder to resolve decisively → compress toward
@@ -141,8 +141,8 @@ def coalition_vote(sides, lobby=0.0, scale=1.0):
     damp = max(0.0, 1.0 - RESIST_DAMP * min(2, abst))
     start = max(4.0, min(6.0, 5.0 + lobby))                       # ED-621 lobby clamp
     s = ContestState()
-    s.adv[A] = max(0, roll_net(max(1, pool_A)))
-    s.adv[B] = max(0, roll_net(max(1, pool_B)))
+    s.adv[A] = max(0, roll_net_continuous(max(1, pool_A)))
+    s.adv[B] = max(0, roll_net_continuous(max(1, pool_B)))
     band = PersuasionTrack(scale=scale * damp, start=start).resolve(s, closing=True)
     return {'A_total': 'pass', 'A_decisive': 'pass', 'committee': 'committee',
             'B_decisive': 'fail', 'B_total': 'fail'}[band]

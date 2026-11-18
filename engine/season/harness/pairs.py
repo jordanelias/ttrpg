@@ -25,8 +25,8 @@ THE DIFFERENCE `d`. `sheet` (the duel's default): the mean over the ten keys of 
 keys (`modules/combat/attributes.py`) and the realm's `score` is the larger of an attribute and a capability (`pool.py`),
 so `sheet`'s slope is diluted by the four keys the duel never reads and is not the realm's; `all` names the keys read, and
 a calibration target is set on those (B05.24/B05.25 change which keys a contest reads). `read` (the
-social roll's default): the record's `pool` minus its `opposition` (for a duel, `faculties[0] - faculties[1]`; an
-opposition `None` reads as `obstacle_default`), read off the input so the instrument follows whatever the governing
+social roll's default): the record's `pool` minus its `opposition` (for a duel, the two parties' `scores + addends`, one minus the other; an
+opposition `None` reads as `pool_default`, the untrained score the obstacle opposes it at), read off the input so the instrument follows whatever the governing
 score becomes, bins of 1. A registry key: `a[k] - b[k]`, bins of 1. `all` prints one SLOPE per key (a slope near 0 names
 a key the contest does not read). Bins are rounded half up, `floor(x / width + 0.5)`; the tree's public `round_half_up`
 is B38.55's, and this exact local one is replaced by it then (`modules/mass_battle/massbattle.py` holds a private one, not
@@ -75,7 +75,6 @@ from collections import Counter, namedtuple
 from typing import Callable, Optional
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL, Degree
-from engine.dice_engine.sigma_leverage import settle_record
 from engine.substrate import composition
 from engine.substrate.descriptors import ATTRIBUTES
 
@@ -149,7 +148,7 @@ def duel_pairs(seed: int, n: int, terms: str, plant: Plant = None):
             winner = "b"
         else:
             winner = None
-        yield DuelPair(i, a, b, inp.faculties[0] - inp.faculties[1], outcome, yielder, winner)
+        yield DuelPair(i, a, b, (inp.scores[0] + inp.addends[0]) - (inp.scores[1] + inp.addends[1]), outcome, yielder, winner)
 
 
 def _roll():
@@ -172,9 +171,8 @@ def social_pairs(seed: int, n: int, verb: str, plant: Plant = None):
         if margin.ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
             band = REFUSED
         else:
-            settled = settle_record(margin.net, inp.leverage, inp.pool, margin.ob, rng.random)
-            band = degree_of({"net": margin.net, "ob": margin.ob, "settled_margin": settled})
-        opposition = inp.obstacle_default if inp.opposition is None else inp.opposition
+            band = degree_of({"net": margin.net, "ob": margin.ob, "settled_margin": margin.net - margin.ob})
+        opposition = inp.pool_default if inp.opposition is None else inp.opposition
         yield SocialPair(i, a, b, inp.pool - opposition, inp, band)
 
 

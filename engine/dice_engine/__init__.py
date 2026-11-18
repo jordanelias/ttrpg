@@ -5,7 +5,7 @@ The package holds exactly three files: __init__.py, dice_engine.py, sigma_levera
 ⚠ NOT a Godot autoload and never to become one — the port's [autoload] table holds no simulation state or
 service (architecture/holonic_ARCHITECTURE.md §47).
 
-Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
+Status: the ruled owner of the d10 chain, the one sampler and the degree ladder; not a provisional stub. The code is the mechanism, this text is reference.
 
 Modules:
   - dice_engine: d10 chain rule, TN values, degree of success

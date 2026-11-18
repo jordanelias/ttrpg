@@ -253,7 +253,7 @@ Order notes. U3 §1 item 34 orders GO-B → SURF → fidelity → `16_PESSIMIST_
 - FALSIFIER and CONTROL: a member exported with no `text`, or a second copy of a choice tuple under `game/`. Control: the realm hash equal (no runtime reader).
 - GATE: `python tools/export_engine_params.py --check` → exit 0; `python tools/export_battle_orders.py --check` → exit 0; `python -c "import json; d=json.load(open('engine/engine_params/combat_engine_v1.json')); print(sorted(d))"` → names the choice block.
 - HASH MOVERS: none (an export; no realm pin reads it).
-- DEPENDS ON: V12 Batch B13 @1727b462d8e25d654af6b689f6ec059d20659cd4 (`modules.combat` imports), V12 Batch B16 (`ROUND_CHOICES`, `APPROACHES`); EXISTS-IN-TREE `tools/export_battle_orders.py`, `tools/export_engine_params.py`.
+- DEPENDS ON: V12 Batch B13 @acab52098d2a8ae6b145d84331e152a1cfd59daf (`modules.combat` imports), V12 Batch B16 (`ROUND_CHOICES`, `APPROACHES`); EXISTS-IN-TREE `tools/export_battle_orders.py`, `tools/export_engine_params.py`.
 - GLOSSARY: none.
 - NAMES: `TURN_CHOICES` → `ROUND_CHOICES` (B16, PCR-3).
 - COST and TIER: edit and content; `sonnet`, `high` (effort set explicitly, CLAUDE.md §10; R2c, K6 F16); the texts drafted by `opus`.

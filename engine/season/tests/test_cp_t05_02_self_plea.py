@@ -4,8 +4,7 @@ Part (i) (`hearing`, `hearing_step`) is HELD on SC-02's design and is not built 
 
   * (ii) THE GUARD -- `seam/wrappers/sigma.py::contest_input` reads NO opposition when the subject IS the actor
     (nobody opposes himself), so the self-plea's obstacle carries no opposition term at any capability he holds: on the
-    shipped `task` arm (B11 lane A) it is the task's difficulty alone (`speak`'s, `rosters.yaml: task_difficulty`), on
-    the `stand_in` control arm `obstacle_default`.
+    one form (B05.14) it is `speak`'s difficulty plus `opposed_ob(pool_default)`, the stand-in the module opposes a self-plea at.
     FALSIFIER: a pleader with `speak`'s capability seeded at 3 rolls the self-plea at the same obstacle as with
     capability 0. CONTROL: the same person as someone ELSE's subject opposes at his capability (the guard does not
     swallow the opposed case). PLANTED FAILURE (run 2026-11-08, reverted): the guard's condition made `False` (the
@@ -65,8 +64,8 @@ def test_a_self_plea_rolls_at_the_same_obstacle_at_any_capability_the_pleader_ho
         w.persons[SPEAKER].capability = {KEY: score}
         inp, ob = _obstacle(w, [SPEAKER], SPEAKER)
         assert inp.opposition is None, (score, inp.opposition)
-        seen[score] = (inp.obstacle_default, ob)
-    assert seen[0] == seen[3], seen            # no opposition term (the task's difficulty alone, shipped), the same either way
+        seen[score] = (inp.pool_default, ob)
+    assert seen[0] == seen[3], seen            # the stand-in opposition term, the same either way (the terms are in the pair)
     assert len(seen) == 2
 
 
@@ -74,7 +73,9 @@ def test_the_control_the_same_person_as_anothers_subject_still_opposes_at_his_ca
     w, _ = _world()
     w.persons[SPEAKER].capability = {KEY: 3}
     inp, _ob = _obstacle(w, [PARTY], SPEAKER)      # SPEAKER is another's subject: the score IS read
-    assert inp.opposition == 3.0, inp.opposition
+    # B05.99 re-pin (B05.14, A-137; B05.16): his score 3 PLUS his unheld opposing attribute at the scale's mid-point; was 3.0
+    from ..seam.wrappers import pool
+    assert inp.opposition == 3.0 + pool.attribute_midpoint(), inp.opposition
     inp0, _ = _obstacle(w, [SPEAKER], SPEAKER)     # and his own subject: it is not
     assert inp0.opposition is None
 

@@ -22,9 +22,9 @@ from dataclasses import asdict
 import pytest
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL, Degree
-from engine.dice_engine.sigma_leverage import band_odds, net_boost, settle_record
+from engine.dice_engine.sigma_leverage import band_odds, even_line, net_boost, opposed_ob, pool_of
 
-from ..data.verbs import TASK_DIFFICULTY   # B11 lane A
+from ..data.verbs import VERB_TABLE   # B05.14: the act's level (`TASK_DIFFICULTY` is deleted)
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
@@ -36,6 +36,7 @@ from ..state.carriers import Act, Claim
 from .test_sc01_obstacle_ceiling import _module
 
 KEY = "copying"          # the capability key `tell` draws on (`VERB_CAPABILITY`); asserted below
+TASK_DIFFICULTY = {"tell": DEFAULT_FIXTURES.get("difficulty_ob")[VERB_TABLE["tell"].difficulty]}   # B05.14: `tell`'s level's size, where lane A's number was
 
 
 def _world(*, mid=10, other=3):
@@ -84,11 +85,9 @@ def _dealt_tally(inp, n=N_DEALT, seed=7) -> list:
     tally = [0, 0, 0, 0]
     labels = {v: k for k, v in DEGREE_LABEL.items()}
     for _ in range(n):
-        # dealt as the host deals it: the entry's margin, its fraction settled by the act's own draw
-        # (CP-T01-06's per-pool cap composes a fractional obstacle here, so the fraction rule is live)
+        # dealt as the host deals it: the entry's real margin (`net - ob`), quantised once at the ladder (B05.02)
         margin = mod.roll(inp, rng)
-        settled = settle_record(margin.net, inp.leverage, inp.pool, margin.ob, rng.random)
-        band = labels[ladder.degree_of({**asdict(margin), "settled_margin": settled})]
+        band = labels[ladder.degree_of({**asdict(margin), "settled_margin": margin.net - margin.ob})]
         tally[DEGREE_ORDINAL[band]] += 1
     return tally
 
@@ -113,8 +112,8 @@ def test_mode_a_grades_against_the_modules_obstacle_and_follows_it(monkeypatch):
     act = _tell("p_mid")
     before = sigma.odds_of(w, act)
     inp = sigma.contest_input(w, ["p_low", "p_mid"], verb="tell", subject="p_mid")
-    assert before == band_odds(inp.pool, _module().obstacle(inp), net_boost(inp.leverage, inp.pool))
-    monkeypatch.setitem(composition._CACHE, "social_contest.obstacle", lambda i: 1.0)   # the row the provider reads (B03.12)
+    assert before == band_odds(inp.pool, _module().obstacle(inp)[0], net_boost(inp.leverage, inp.pool))
+    monkeypatch.setitem(composition._CACHE, "social_contest.obstacle", lambda i: (1.0, ()))   # the row the provider reads (B03.12)
     moved = sigma.odds_of(w, act)
     assert moved == band_odds(inp.pool, 1.0, 0.0) and moved != before
 
@@ -130,7 +129,7 @@ def test_mode_a_is_read_only():
 
 def test_mode_a_speak_into_a_bench_shows_the_odds_the_room_deals():
     """`speak` is heard by a bench (`heard_by: bench`): `_rolled_as` hands the fold's rung as the room, so the
-    bench's `reception` of the speaker moves the obstacle, and `odds_of` shows THAT number: it agrees with real
+    bench's `reception` of the speaker moves his leverage (B05.17), and `odds_of` shows THAT number: it agrees with real
     rolls of the record built WITH the room, and differs from the same act's odds without one.
 
     MUTATION (run, reverted): `_rolled_as`'s `heard_by == BENCH` branch returning `None` for the room -- the
@@ -149,7 +148,10 @@ def test_mode_a_speak_into_a_bench_shows_the_odds_the_room_deals():
     odds = sigma.odds_of(w, act)
     with_room = sigma.contest_input(w, [SPEAKER, PARTY], verb="speak", subject=PARTY, room=room)
     roomless = sigma.contest_input(w, [SPEAKER, PARTY], verb="speak", subject=PARTY)
-    assert with_room.reception != 0.0 and _module().obstacle(with_room) != _module().obstacle(roomless)
+    # B05.17: a FAVOURABLE room is leverage for the speaker, not a lower obstacle (only a hostile room is the `reception` term),
+    # so the bench moves the leverage and leaves the obstacle where it was (was: the obstacles differ)
+    assert with_room.reception > 0.0 and with_room.leverage > roomless.leverage == 0
+    assert _module().obstacle(with_room)[0] == _module().obstacle(roomless)[0]
     assert odds is not None and odds == sigma._odds_of_input(with_room)
     assert odds != sigma._odds_of_input(roomless), "the bench's reception moved no odds"
     _assert_dealt(odds, with_room)
@@ -190,17 +192,23 @@ def test_mode_a_has_no_odds_where_s27_4_refuses_and_resolve_refuses_the_same_pai
     claim = lambda: dict(verb="tell", subject="p_mid", rng=random.Random(3))
     control = sigma.resolve(w, ["p_low", "p_mid"], ["root"], prize, **claim())
     assert control["status"] == "RESOLVED" and sigma.odds_of(w, act) is not None
-    w.persons["p_low"].capability = {KEY: 0}                          # (1) the pool below the 1D floor
+    # (1) the pool below the 1D floor. B05.25 made the pool the governing score plus the rank (an `untrained: none` row no longer
+    # gives a pool of 0) and B05.23 ships `pool_floor` 5, so no shipped person rolls under one die: the pool of 0 is PLANTED at
+    # the one pool reader the record reads (`faculty`), for the speaker alone. (Was: the `untrained: none` non-holder's 0.)
+    real_faculty = sigma.faculty
+    monkeypatch.setattr(sigma, "faculty", lambda w_, p, verb: 0 if p.id == "p_low" else real_faculty(w_, p, verb))
     assert sigma.odds_of(w, act) is None
     refused = sigma.resolve(w, ["p_low", "p_mid"], ["root"], prize, **claim())
     assert refused["status"] == "REFUSED" and refused["why"] == "S27.4" and refused["pool"] == 0, refused
-    w.persons["p_low"].capability = {KEY: 4}                          # (2) a pool that holds, an obstacle that does not
+    monkeypatch.setattr(sigma, "faculty", real_faculty)                 # (2) a pool that holds, an obstacle that does not
+    w.persons["p_low"].capability = {KEY: 4}
     assert sigma.odds_of(w, act) is not None
-    monkeypatch.setattr(_module(), "obstacle", lambda i: 1000.0)       # what `resolve` rolls against
-    monkeypatch.setitem(composition._CACHE, "social_contest.obstacle", lambda i: 1000.0)   # what `odds_of` reads (B03.12)
+    held = sigma.contest_input(w, ["p_low", "p_mid"], verb="tell", subject="p_mid").pool
+    monkeypatch.setattr(_module(), "obstacle", lambda i: (1000.0, ()))       # what `resolve` rolls against
+    monkeypatch.setitem(composition._CACHE, "social_contest.obstacle", lambda i: (1000.0, ()))   # what `odds_of` reads (B03.12)
     assert sigma.odds_of(w, act) is None
     over = sigma.resolve(w, ["p_low", "p_mid"], ["root"], prize, **claim())
-    assert over["status"] == "REFUSED" and over["pool"] == 4 and over["ob"] == 1000.0, over
+    assert over["status"] == "REFUSED" and over["pool"] == held and over["ob"] == 1000.0, over   # B05.25: the pool is 2 + 4 + 6, was 4
 
 
 def test_an_act_the_social_roll_does_not_deal_has_no_odds():
@@ -213,13 +221,60 @@ def test_an_act_the_social_roll_does_not_deal_has_no_odds():
 # ---- mode (b) -----------------------------------------------------------------------------------
 
 def test_mode_b_with_no_claim_on_the_opposition_is_none_never_a_figure():
+    """THE CONTROL ARM (`believed_prior` `none`, H-435): a person who holds no claim on the opposition cannot say."""
     w = _world()
+    w.fixtures = w.fixtures.sweep("believed_prior", "none")
     p = w.persons["p_low"]
     assert p.ledger == []
     assert sigma.odds_of(w, _tell("p_mid"), believer=p) is None
     # a claim about somebody else is no claim on THIS opposition
     p.ledger.append(_claim("p_low", "p_other", 3))
     assert sigma.odds_of(w, _tell("p_mid"), believer=p) is None
+
+
+def _ordinary_world(*, other=None):
+    """A world whose opponent `p_other` holds NOTHING (no skill rank, no attribute): the dealt opposition against him is what an ordinary
+    person brings, the untrained skill score plus the attribute scale's mid-point."""
+    w = _world()
+    w.persons["p_other"].capability = {} if other is None else {KEY: other}
+    return w
+
+
+def test_mode_b_with_no_claim_uses_the_ordinary_prior_at_the_shipped_arm():
+    """THE SHIPPED ARM (`believed_prior` `ordinary`, H-435; B05.62): he who holds no claim on his opponent assumes an ordinary one -- the
+    figure is the one a dealt roll against a person holding nothing gives, never `None`, composed as the dealt obstacle is (the skill
+    score PLUS the opposing attribute at its mid-point, A-137)."""
+    w = _world()
+    assert w.fixtures.get("believed_prior") == "ordinary"
+    p = w.persons["p_low"]
+    assert p.ledger == []
+    got = sigma.odds_of(w, _tell("p_mid"), believer=p)
+    assert got is not None
+    expected = sigma.odds_of(_ordinary_world(), _tell("p_other"))
+    assert got == expected
+    inp = sigma.believed_input(p, "tell", "p_mid", w.fixtures, pool=4, person_subject=True)
+    assert inp.opposition == pool.untrained(w.fixtures) + pool.attribute_midpoint()
+    # a claim about somebody else is no claim on THIS opposition: the same figure
+    p.ledger.append(_claim("p_low", "p_other", 3))
+    assert sigma.odds_of(w, _tell("p_mid"), believer=p) == expected
+    # a held claim on the skill, none on the attribute: the claim, plus the prior for the attribute (equal to the dealt roll on a person holding that skill and no attribute)
+    assert sigma.odds_of(w, _tell("p_other"), believer=p) == sigma.odds_of(w, _tell("p_other"))
+
+
+def test_mode_b_never_equals_mode_a_for_an_untold_strong_opponent():
+    """THE FALSIFIER: mode (b) for an opponent he was never told of is the ordinary figure and moves with nothing of the World; mode (a)
+    for a strong one differs. Were they ever equal, the query would have read the World."""
+    w = _world(mid=10)
+    p = w.persons["p_low"]
+    assert w.persons["p_mid"].capability[KEY] != pool.untrained(w.fixtures)
+    believed = sigma.odds_of(w, _tell("p_mid"), believer=p)
+    dealt = sigma.odds_of(w, _tell("p_mid"))
+    assert believed is not None and dealt is not None
+    assert believed != dealt
+    assert believed == sigma.odds_of(_ordinary_world(), _tell("p_other"))
+    w.persons["p_mid"].capability = {KEY: 8}                       # the truth moves (a different strong score); his belief does not
+    assert sigma.odds_of(w, _tell("p_mid"), believer=p) == believed
+    assert sigma.odds_of(w, _tell("p_mid")) != believed
 
 
 def test_mode_b_with_a_claim_differs_from_mode_a_where_the_belief_differs_and_equals_it_where_not():
@@ -229,12 +284,17 @@ def test_mode_b_with_a_claim_differs_from_mode_a_where_the_belief_differs_and_eq
     true = sigma.odds_of(w, act)
     p.ledger.append(_claim("p_low", "p_other", 3))     # he believes the truth
     assert sigma.odds_of(w, act, believer=p) == true
-    p.ledger.append(_claim("p_low", "p_other", 1, when=1))   # a later, wrong belief: obstacle difficulty + 0.5
+    p.ledger.append(_claim("p_low", "p_other", 1, when=1))   # a later, wrong belief: his skill 1, his attribute the ordinary mid-point
     wrong = sigma.odds_of(w, act, believer=p)
     assert wrong is not None and wrong != true
-    # B11 lane A: the obstacle is the task's difficulty (`rosters.yaml: task_difficulty`) plus the score term, re-pinned
-    # from `band_odds(4, 0.5, 0.0)` (the score term alone, before the difficulty)
-    assert wrong == band_odds(4, TASK_DIFFICULTY["tell"] + 0.5, 0.0)
+    # B05.99 re-pin (B05.14's form, B05.23's sizes, B05.25's pool, B05.62's prior): the even line + `tell`'s level + the rate x
+    # (the believed skill 1 + the mid-point attribute), against his pool 2 + 4 + 6; was band_odds(4, difficulty + 0.5, 0.0)
+    fx = w.fixtures
+    ob = 0.0
+    for term in (even_line(fx.get("pool_add")), TASK_DIFFICULTY["tell"], opposed_ob(1 + pool.attribute_midpoint(), fx.get("opposition_rate"))):
+        ob += term                                                     # the module's fold, left to right
+    assert pool.faculty(w, p, "tell") == 12.0
+    assert wrong == band_odds(12.0, ob, 0.0)
 
 
 def test_mode_b_takes_the_latest_then_the_most_confident_claim():
@@ -262,10 +322,14 @@ def test_mode_b_for_a_non_person_subject_needs_no_claim_and_a_record_or_room_is_
     w = _world()
     p = w.persons["p_low"]
     fx = w.fixtures
-    # a non-person subject: the task's difficulty is known to him (B11 lane A: no stand-in; was `obstacle_default`)
+    # a non-person subject: the act's level and the stand-in are known to him (B05.99 re-pin: B05.14's even line and stand-in,
+    # B05.23's sizes -- even 2.4 + routine 0.8 + opposed_ob(pool_default) 0.8; was the task's difficulty alone)
     inp = sigma.believed_input(p, "tell", "somewhere", fx, pool=4, person_subject=False)
     assert inp is not None and inp.opposition is None
-    assert sigma._odds_of_input(inp) == band_odds(4, TASK_DIFFICULTY["tell"], 0.0)
+    ob = 0.0
+    for term in (even_line(fx.get("pool_add")), TASK_DIFFICULTY["tell"], opposed_ob(fx.get("pool_default"), fx.get("opposition_rate"))):
+        ob += term
+    assert sigma._odds_of_input(inp) == band_odds(4, ob, 0.0)
     # an examined Record's forgery quality, and a bench's terms, are unknown unless he supplies them
     assert sigma.believed_input(p, "tell", "r1", fx, pool=4, person_subject=False, examined_record=True) is None
     assert sigma.believed_input(p, "tell", "x", fx, pool=4, person_subject=False, heard=True) is None
@@ -286,7 +350,14 @@ def test_mode_b_pool_is_faculty_and_an_addend_moves_it(monkeypatch):
     monkeypatch.setattr(pool, "POOL_ADDENDS", list(pool.POOL_ADDENDS))
     sigma.register_pool_addend(lambda w_, who, verb: 2 if who.id == "p_low" else 0)
     after = sigma.odds_of(w, act, believer=p)
-    assert after == band_odds(6, TASK_DIFFICULTY["tell"] + 1.5, 0.0) == sigma.odds_of(w, act) and after != before   # B11 lane A: was band_odds(6, 1.5, 0.0)
+    # B05.99 re-pin: his pool 2 + 4 + 6 + the planted 2; the obstacle even + routine + the rate x (his claim 3 + the mid-point,
+    # equal to the truth: `p_other` holds no attribute); was band_odds(6, difficulty + 1.5, 0.0)
+    fx = w.fixtures
+    ob = 0.0
+    for term in (even_line(fx.get("pool_add")), TASK_DIFFICULTY["tell"], opposed_ob(3 + pool.attribute_midpoint(), fx.get("opposition_rate"))):
+        ob += term
+    assert pool.faculty(w, p, "tell") == 14.0
+    assert after == band_odds(14.0, ob, 0.0) == sigma.odds_of(w, act) and after != before
 
 
 def test_mode_b_is_only_the_actors_own_odds():
@@ -294,3 +365,83 @@ def test_mode_b_is_only_the_actors_own_odds():
     other = w.persons["p_mid"]
     other.ledger.append(_claim("p_mid", "p_other", 3))
     assert sigma.odds_of(w, _tell("p_other", actor="p_low"), believer=other) is None
+
+
+def _partial_or_better(odds):
+    """The probability of any band above Failure (`odds` is `band_odds`'s tuple, Failure first)."""
+    return sum(odds[1:])
+
+
+def test_an_unauthored_hearer_is_not_harder_than_a_held_one():
+    """B05.11 (TWO's falsifier, `10_DICE_one_score_two_roles.md` "The falsifier"): `odds_of` for a `tell` at an unauthored hearer
+    equals the odds at a hearer holding the skill at `pool_default`, and a hearer holding it at a higher rank gives lower
+    odds. The SKILL half of the opposition is the opponent's skill SCORE. B05.14 (A-137) joined the resisting attribute (the verb
+    row's `opposed_attribute`) to it, and B05.16 reads an unheld one at the scale's mid-point, so the hearers here hold the same
+    attribute (the mid-point, or none) and the attribute's own move is read last: a resolute hearer is harder (rewritten at B05.99:
+    the attribute moved nothing before A-137). FALSIFIER: lane A's `max(attribute, rank)` (the unauthored hearer opposes at his
+    attribute and the one holding the default at the default: the inversion TWO names)."""
+    from engine.substrate import descriptors
+    from ..data.verbs import VERB_TABLE
+    w = _world()
+    opposed = VERB_TABLE["tell"].opposed_attribute
+    default = w.fixtures.get("pool_default")
+    mid = pool.attribute_midpoint()
+    for pid, held, attr in (("p_mid", {}, mid),                                   # unauthored skill, the ordinary attribute
+                            ("p_other", {KEY: default}, mid),                     # holds the skill at the untrained score
+                            ("p_king", {KEY: default + 3}, mid),                  # holds it higher
+                            ("p_high", {}, None)):                                # unauthored, no attributes held
+        w.persons[pid].capability = dict(held)
+        w.persons[pid].attributes = {} if attr is None else {opposed: attr}
+    odds = {pid: sigma.odds_of(w, _tell(pid)) for pid in ("p_mid", "p_other", "p_king", "p_high")}
+    assert all(o is not None for o in odds.values()), odds
+    assert odds["p_mid"] == odds["p_other"] == odds["p_high"], odds              # the unauthored hearer is no harder than one at the default
+    assert _partial_or_better(odds["p_king"]) < _partial_or_better(odds["p_other"]), odds   # a higher rank is harder to move
+    w.persons["p_mid"].attributes = {opposed: descriptors.ATTRIBUTE_CEILING}      # A-137: the resolute hearer, same skill
+    assert _partial_or_better(sigma.odds_of(w, _tell("p_mid"))) < _partial_or_better(odds["p_other"])
+
+
+def test_raising_the_subjects_inquiry_score_lowers_partial_or_better_on_interrogate():
+    """B05.11 (H-312's probe, which printed an unchanged tuple at every setting before): the `interrogate` row names `inquiry`
+    and a resisting attribute; with the attribute fixed, the subject's `inquiry` score moves the odds.
+    CONTROL: the same subject at `pool_default` reads the unauthored subject's odds. (B05.99: the attribute is held at the FLOOR,
+    not the ceiling, since B05.14 (A-137) adds it to the opposition and at the ceiling ranks 4 and 7 both meet the per-pool cap
+    (H-213) and read one obstacle; the attribute's own move is `test_an_unauthored_hearer_is_not_harder_than_a_held_one`'s.)"""
+    from engine.substrate import descriptors
+    from ..data.verbs import VERB_CAPABILITY, VERB_TABLE
+    w = _world()
+    row = VERB_TABLE["interrogate"]
+    assert VERB_CAPABILITY["interrogate"] == "inquiry" and row.opposed_attribute
+    subject = w.persons["p_mid"]
+    subject.attributes = {row.opposed_attribute: descriptors.ATTRIBUTE_FLOOR}
+    act = Act(id="a:p_low:p_mid", actor="p_low", verb="interrogate", payload={"subject": "p_mid"})
+    seen = []
+    for rank in (None, w.fixtures.get("pool_default"), 4, 7):
+        subject.capability = {} if rank is None else {"inquiry": rank}
+        seen.append(sigma.odds_of(w, act))
+    assert all(o is not None for o in seen), seen
+    assert seen[0] == seen[1], seen                                              # control: unauthored == the default
+    moved = [_partial_or_better(o) for o in seen[1:]]
+    assert moved[0] > moved[1] > moved[2], moved                                 # each step of the score lowers Partial-or-better
+
+
+def test_score_reads_no_attribute():
+    """B05.09 (TWO "Tests and lands"): the skill score the pool starts from has no attribute in it. A person holding the
+    verb's attributes (governing and opposed) at the ceiling and no skill key scores the untrained score, `pool_default`; with a
+    skill key below it, the same (a first rank is never a loss). B05.11 deleted the opposition's `attribute=` argument, so the
+    attribute enters no score. FALSIFIER: lane A's `max(attribute, rank)` (the score of this person is 7)."""
+    from engine.substrate import descriptors
+    from ..data.verbs import VERB_TABLE
+    w = _world()
+    p = w.persons["p_low"]
+    default = w.fixtures.get("pool_default")
+    row = VERB_TABLE["tell"]
+    p.attributes = {a: descriptors.ATTRIBUTE_CEILING for a in (*row.governing, row.opposed_attribute)}
+    p.capability = {}
+    assert pool.score(w, p, "tell") == default
+    assert not hasattr(pool, "_opposing_attribute") and "attribute" not in inspect.signature(pool.score).parameters
+    p.capability = {KEY: 1}
+    # the pool (B05.25) is the governing mean, the rank and the addends: the attributes reach the dice there, and only there
+    # (B05.99 re-pin: B05.23's base and floor reach the pool, `pool_of`; was `governing score + 1 + addends` at control)
+    assert pool.score(w, p, "tell") == default and pool.faculty(w, p, "tell") == pool_of(pool.governing_score(w, p, "tell") + 1, sum(
+        int(a(w, p, "tell")) for a in pool.POOL_ADDENDS), w.fixtures.get("pool_add"), w.fixtures.get("pool_floor"))
+    assert pool.governing_score(w, p, "tell") == descriptors.ATTRIBUTE_CEILING                # the attributes are in the dice

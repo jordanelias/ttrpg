@@ -14,7 +14,7 @@ list (`04:135`, ED-IN-0206).
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Callable, Optional
+from typing import Any, Optional
 from ..gaps import Forbidden, Unspecified
 from ..manifest import resolve as manifest_resolve
 from ..state.world import World
@@ -176,10 +176,12 @@ def find_trail(w: World, a: Any, e: Any) -> tuple:
 
 def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             depth: int, max_depth: int, causes: list[str],
-            extension: Optional[Callable[[str], bool]] = None,
             *, verb: str = "", subject: Optional[str] = None,
-            rng: Optional[Any] = None, effort: int = 0, host: Optional[Any] = None):
+            rng: Optional[Any] = None, effort: int = 0, host: Optional[Any] = None, via: Optional[str] = None):
     """S39. EVERY ARGUMENT IS LOAD-BEARING.
+
+    `via` (B05.20) is the seat the act is exercised through (`Act.via`), passed to the provider as `effort` is: the social roll's
+    `office` source reads that seat's `modifier` (`rosters.yaml: advantage_sources`); the other providers accept and ignore it.
 
     `host` (v10 REM-31, IN-46) is the PLAYABLE host (`queries/inputs.py::PlayHost`), passed by ENCOUNTER alone
     (`loop/encounter.py`, `loop/resolve.py::_contest`) and handed to the provider with `effort`; the
@@ -212,8 +214,8 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
     # ⚠ A CONTEST IS A DISPATCH TO A SUBSYSTEM, NOT A GENERIC ROLL. Jordan, 2026-09-02: *"a
     # contest seems like it can be a call for a different subsystem like personal combat, mass
     # battle or social contest."* `references/module_contracts.yaml` gives
-    # each a doc, a sim module and a declared resolver (`d_sigma` for personal combat, `dice_pool`
-    # for the other two). The seam invents no degree ladder; it CALLS the engine that owns the prize.
+    # each a doc, a sim module and a declared resolver (`d_sigma` for
+    # all three). The seam invents no degree ladder; it CALLS the engine that owns the prize.
     # `contest` dispatches a prize to the subsystem `contest_subsystem(prize)` names; the provider is
     # resolved from that manifest row below (`manifest.call`), never by a literal here.
     if depth >= max_depth:
@@ -250,7 +252,7 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             # row saying `heard_by: bench`; every other provider accepts and ignores it (`combat.py`'s own
             # note on `rng` is the precedent).
             out = _run(w, claimants, causes, prize, verb=verb, subject=subject, rng=rng, rung=rung,
-                       effort=effort, host=host)
+                       effort=effort, host=host, via=via)
             return _returned(out, f"a contest for {prize!r}", f"contest for {prize!r}")
         raise Unspecified(
             f"a contest for {prize!r} belongs to the `{_sub['module']}` subsystem "

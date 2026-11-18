@@ -189,6 +189,12 @@ def field_degree(result: dict) -> str:
     return WON if result.get("attacker_wins") else LOST
 
 
+def is_margin_result(result: Any) -> bool:
+    """A margin provider's result (B05 close): a dict that is neither a scene (`wound_state`) nor a field (`attacker_wins`) and carries the
+    pair `net`, `ob`. The one test `degree_of` takes its third branch on and `loop/resolve.py::_margin_ending` reads an `Event.ending` by."""
+    return isinstance(result, dict) and "wound_state" not in result and "attacker_wins" not in result and "net" in result and "ob" in result
+
+
 def degree_of(result: Any, subject: Optional[str] = None, fixtures: Any = None) -> str:
     """THE ONE PLACE A SUBSYSTEM'S RESULT BECOMES THE TOKEN `writes_at` / `emits_at` KEY ON.
 
@@ -220,12 +226,11 @@ def degree_of(result: Any, subject: Optional[str] = None, fixtures: Any = None) 
     # nor a `net`/`ob` pair, so it takes a third branch rather than fitting either of the others.
     if "attacker_wins" in result:
         return field_degree(result)
-    if "net" in result and "ob" in result:
+    if is_margin_result(result):
         ladder, label = degree_ladder()
-        # CP-T01-04: a record carrying `settled_margin` (the provider settled the margin's fraction by
-        # the act's own draw) is graded on it, against a zero obstacle -- integers on both sides, so
-        # the ladder's no-epsilon comparison is exact. A pair without one (a planted result, a caller
-        # that never settled) is graded on `net` and `ob`.
+        # B05.02: a record carrying `settled_margin` (the provider's real margin, `net - ob`) is graded on it, against
+        # a zero obstacle; the ladder quantises it once (`MARGIN_SCALE`), so the grade is the pair's own. A pair
+        # without one (a planted result, a caller that never wrote it) is graded on `net` and `ob`.
         if "settled_margin" in result:
             return label[ladder(result["settled_margin"], 0)]
         return label[ladder(result["net"], result["ob"])]

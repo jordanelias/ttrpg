@@ -278,7 +278,7 @@ class Event:
     # Untouched band runs the effect: a clean yield's `person.captured` carries it). Empty on every other
     # Event, which is nearly all of them.
     # THE ORDER is the `claimants` order, actor first -- the convention `PersonalCombatInput`'s `ends`,
-    # `kits` and `faculties` follow -- a convention, NOT a role field.
+    # `kits`, `scores` and `addends` follow -- a convention, NOT a role field.
     # ⚠ NO PRODUCTION READER EXISTS YET. The plan gives it as the band Event's payload (the
     # CP-T03-02 home: with the body Observation, it is what CP-T03-05 (mode b) and CP-T03-08 "get their
     # lawful input" from); until one of them reads it, only the tests and `World.content_hash` do.
@@ -288,6 +288,17 @@ class Event:
     # [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation] -- the carrier is
     # a new Event field rather than a payload key, since an Event carries no payload; a carrier+hash
     # schema mover, folded by `World.content_hash` only where non-empty.
+    # B05.18 (SC-P1, H-284). TWO SHAPES, BY PROVIDER: (1) a SCENE provider (personal combat) -- the per-party
+    # endings above, `rosters.yaml: fight_endings`' words, `data/rosters.py::ENDING_*`; (2) a MARGIN provider
+    # (the social contest) -- `((key, value), ...)` in `rosters.yaml: margin_endings`' order (`data/rosters.py::
+    # MARGIN_ENDING`: pool, ob, net, margin, terms, levels, leverage), the roll that graded the act, built in
+    # `loop/resolve.py::_fold` from what `seam/wrappers/sigma.py::resolve` returned, on every Event of the act
+    # (the Failure band's too); a refusal carries none (no dice were dealt). No act is both.
+    # ⚠ A DEPARTURE FROM `04` §B.9, NAMED HERE: its `Event` record names `degree?` and no `ending`; the field already
+    # ships for combat (H-266), and its use for a margin provider's tuple is a departure (`skills/layer-conformance`
+    # B4, third disposition; C3-C16). Its readers: `harness/chronicle.py` and the GO surface's account. It carries
+    # no actor, target or subject (`04` PART D row 9) and is no `Observation`, so no hearer learns the speaker's
+    # pool from being in the room (D-U1-06; `test_sc01_provider.py::test_no_claim_predicate_is_a_margin_ending_after_witness`).
     ending: tuple = ()
 
     def __post_init__(self) -> None:
@@ -1070,6 +1081,13 @@ class Office:
     # reads.
     body: Optional[str] = None
     faction: Optional[str] = None
+    # B05.20 (U1-D, D-U1-01a): THE ONE LEVEL AN ACT EXERCISED THROUGH THIS SEAT BRINGS TO A ROOM ITS BENCH SITS OVER -- a
+    # `sigma_leverage.LEVEL_SIGMA` name, authored as `offices.yaml`'s row key `modifier:` (refused at load if it is no level)
+    # and read by `seam/wrappers/sigma.py`'s `office` source alone. `None` -- every seat today -- is *none*: *"a seat declaring
+    # none behaves as today"*. Written at build only (`write_matrix.yaml`'s `(Office, modifier)` row has no step): never a die in
+    # the pool and never an opposition. THE FIELD NAME FOLDS INTO `World.content_hash` (see the encoding note above), so adding
+    # it moved the digest of every world holding an office, by name alone: a declared encoding mover, not a behaviour one.
+    modifier: Optional[str] = None
 
     def __post_init__(self):
         # `04` §B.1: A SEAT'S ID IS A `SeatId` -- the same string, tagged (`state/ids.py`), so the fold

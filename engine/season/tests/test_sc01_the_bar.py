@@ -187,7 +187,7 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # (858b7a77...) and on the batch base. The bar is an existence claim on SELECTED seeds (above), not a rate.
 # [ASSUMPTION; medium; Jordan to correct; revert: restore stability/35/7 with `revert_b11a`.]
 PROCEEDINGS = (("stability", 95, 7),)
-BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_default", 30).sweep("obstacle_model", "stand_in")   # B11 lane A: `test_u7_remit.JUDGE`'s control obstacle, for its reason       # v9 SC-03b: a judge whose finding opens
+BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_floor", 60)   # B05.99: `test_u7_remit.JUDGE`'s device, rewritten there (was `pool_default` 30 with the deleted `obstacle_model: stand_in`)       # v9 SC-03b: a judge whose finding opens
 # v9 IN-12 step 9: RE-TRACED, the conviction and season count unchanged -- `argue`/`sabotage`/`tend`/`train`
 # are new members of the Duke's and the clerk's option sets, so doctrine/8's trajectory moved (it now fires
 # TWO dates). A sweep of the 15 convictions x seeds 0..23 at 5 seasons for a run meeting every assertion of

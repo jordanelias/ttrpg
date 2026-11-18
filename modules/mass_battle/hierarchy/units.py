@@ -641,7 +641,7 @@ class Unit:
                 # [ED-MB-0051 / plan-v2 A2] Relation to the consumer-side guard: THIS is an EXACTNESS fix. Where
                 # the correct answer is derivable (a uniform body's weighted mean IS its cells' value) the
                 # producer must return it exactly; a tolerance downstream cannot recover information the producer
-                # threw away. `resolution.compute_degree`'s absolute epsilon and `_sigma_net_boost`'s dust snap
+                # threw away. The ladder's milli-unit quantisation (`dice_engine.MARGIN_SCALE`) and `resolution._snap_sigma`'s dust snap
                 # are a TOLERANCE protecting the degree boundaries against accumulated ulp from ANY producer,
                 # including the NON-uniform branch below, which has no exact answer to return. Exactness where
                 # exactness is derivable; tolerance only where it is not.

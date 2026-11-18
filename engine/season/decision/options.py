@@ -29,8 +29,8 @@ from ..data.requires import (
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
 )
 from ..data.rosters import (
-    CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, REMOVE_ORDINAL, SUCCESSIONS,
-    capability_rows, refusing_pole, require_member, require_use_site,
+    CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, SUCCESSIONS,
+    capability_rows, refusing_pole, remove_distance, require_member, require_use_site,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
@@ -470,7 +470,7 @@ def _defence_context(p: Person, q: Question, r: str, records: list, memo: dict) 
     in the newest season his ledger holds, a deed of a kind a violent opponent-rule row emits (`person_q.attackers_of`,
     `_OPPONENT_DEED_KINDS` below)."""
     if "attackers" not in memo:        # depends on the actor alone, never on `r`: one ledger pass per call
-        memo["attackers"] = attackers_of(p.ledger, p.id, _OPPONENT_DEED_KINDS)
+        memo["attackers"] = attackers_of(p.ledger, p.id, _OPPONENT_DEED_KINDS, strata=_OPPONENT_STRATA)
     return r in memo["attackers"]
 
 
@@ -479,6 +479,8 @@ def _defence_context(p: Person, q: Question, r: str, records: list, memo: dict) 
 # row" [ASSUMPTION; medium; Jordan to correct; revert: drop the `VIOLENT_VERBS` test]: `speak` is an opponent-rule
 # row too, and its `pursuit.moved` would make a hard word a licence to fight.
 _OPPONENT_DEED_KINDS = frozenset(k for v in VIOLENT_OPPONENT_VERBS for k in VERB_TABLE[v].emits if k in PAIRED_KINDS)
+# The strata those rows act at: a doer is an attacker only if seen acting at one of them (a kind `train` also emits is no blow).
+_OPPONENT_STRATA = frozenset(VERB_TABLE[v].stratum for v in VIOLENT_OPPONENT_VERBS)
 
 
 def violence_context_of(p: Person, q: Question, r: str, contexts: tuple, records: list,
@@ -1519,10 +1521,10 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
 
 
 def channel_remove(channel: str) -> float:
-    """HOW FAR FROM THE THING ITSELF A CHANNEL PUTS ITS WITNESS, in `[0, 1]`: `0` for presence, `1`
+    """HOW FAR FROM THE THING ITSELF A CHANNEL PUTS ITS WITNESS, in `[0, 1)`: `0` for presence, `(K-1)/K`
     for the most removed channel. REFRACTION's channel term (`refracted_confidence`, v9 IN-15).
 
-        remove(ch) = k / (K - 1),   k = the place of `claim_source[ch]` in the ordinal of remove,
+        remove(ch) = k / K,         k = the place of `claim_source[ch]` in the ordinal of remove,
                                     K = how many distinct sources that ordinal holds
 
     ⚠ THE ORDINAL IS READ OFF THE ROSTER, NOT WRITTEN HERE. `rosters.yaml: witness_channels` is
@@ -1531,9 +1533,8 @@ def channel_remove(channel: str) -> float:
     ARE the ordinal, so a channel's remove is its SOURCE's place. Two channels with one source
     (`document_key`, `chronicle`: both `told_by`) are equally removed, which keeps that note's
     *"the order decides only which channel is reported, never the source"* true of this term too.
-    EQUAL SPACING between the ranks is the [ASSUMPTION] (`H-199`): the ordinal is ruled, the
-    distances are not."""
-    return REMOVE_ORDINAL.index(CHANNEL_CLAIM_SOURCE[channel]) / (len(REMOVE_ORDINAL) - 1)
+    One spacing, `remove_distance`, read here and by `world_q.remove_weight` (`H-199`)."""
+    return remove_distance(CHANNEL_CLAIM_SOURCE[channel])
 
 
 def ledger_weigh(p: Person, fx: "Fixtures"):

@@ -1,6 +1,6 @@
 """PC-03 (ED-PC-0058 critique): the three readers of the per-defender Ob that ED-PC-0058 left behind.
 
-`core.resolve` bands a roll at `core.ob_from_defender(defender)` (faculty / 2; History / 2 until CR-85) on the owner ladder
+`core.resolve` bands a roll at `core.ob_from_defender(defender, cfg)` (`opposed_ob(faculty, rate)`, control 0.5; History / 2 until CR-85) on the owner ladder
 (`engine.dice_engine.dice_engine.degree_from_net`, migrated at PC-02). Three things downstream of that
 change kept reading the retired fixed `core.DECISIVE_OB = 3`:
 
@@ -60,7 +60,7 @@ def test_workbench_band_probabilities_match_resolve_for_a_non_default_faculty_de
     standard errors per band, plus the 4-dp rounding the workbench applies."""
     defender = C.Combatant('D', faculty=5)
     assert defender.faculty != DEFAULT_FACULTY
-    ob = core.ob_from_defender(defender)
+    ob = core.ob_from_defender(defender, CFG)
     pool = core.resolution_pool(DEFAULT_FACULTY)
     n = 20_000
     checked, misses = 0, []
@@ -112,7 +112,7 @@ def _check_events(events, who):
         else:
             continue
         assert 'ob' in ev, f"{ev['kind']} event carries no ob: {ev}"
-        assert ev['ob'] == core.ob_from_defender(struck), ev
+        assert ev['ob'] == core.ob_from_defender(struck, CFG), ev
     return rolls, stophits
 
 
@@ -151,7 +151,7 @@ def test_overwhelming_quality_tail_is_measured_from_the_owner_bar(faculty, monke
     bar in sigma_n units. On the pre-PC-03 tree the tail started at net 6 for every defender, so at every
     faculty but 6 the first assertion past the bar fails (or, for faculty 8, the floor is not at the bar)."""
     defender = C.Combatant('D', faculty=faculty)
-    ob = core.ob_from_defender(defender)
+    ob = core.ob_from_defender(defender, CFG)
     pool = core.resolution_pool(DEFAULT_FACULTY)
     bar = _owner_overwhelming_bar(ob)
     assert DE.degree_from_net(bar, ob) is DE.Degree.OVERWHELMING
@@ -199,7 +199,7 @@ def test_faculty_enters_the_roll_through_exactly_one_channel():
     lo, hi = C.Combatant('D3', faculty=3), C.Combatant('D5', faculty=5)
     for c in (aggressor, lo, hi):
         wrapper._init_live(c, CFG)
-    channels = {'ob': core.ob_from_defender(hi) - core.ob_from_defender(lo)}
+    channels = {'ob': core.ob_from_defender(hi, CFG) - core.ob_from_defender(lo, CFG)}
     for mode in ('parry', 'dodge', 'wind'):
         channels[f'net_sigma[{mode}]'] = (_defender_side_sigma(aggressor, hi, mode)
                                           - _defender_side_sigma(aggressor, lo, mode))
@@ -220,5 +220,28 @@ def test_set_attr_faculty_7_reads_pool_13_ob_3_5_and_no_sigma_moves():
         wrapper._init_live(c, CFG)
     before = {m: _defender_side_sigma(aggressor, d, m) for m in ('parry', 'dodge', 'wind')}
     d.set_attr('faculty', 7)
-    assert (core.resolution_pool(d.faculty), core.ob_from_defender(d)) == (13, 3.5)
+    assert (core.resolution_pool(d.faculty), core.ob_from_defender(d, CFG)) == (13, 3.5)
     assert {m: _defender_side_sigma(aggressor, d, m) for m in ('parry', 'dodge', 'wind')} == before
+
+
+# ── B05.58 (29-2): the fight's Ob is the owner's `opposed_ob` at the cfg's rate ────────────────────
+
+def test_the_fight_obstacle_is_opposed_ob_at_the_cfg_rate():
+    """A fight run with `cfg=dict(CFG, OPPOSITION_RATE=0.4)` and skill scores 2 and 3: every `roll` event's `ob` is
+    `0.4 x` the struck party's skill score (`sigma_leverage.opposed_ob`, A-71), not the control's half-score."""
+    checked = 0
+    for seed in range(8):
+        events = []
+        A, B = C.Combatant('A', faculty=2), C.Combatant('B', faculty=3)
+        wrapper._TRACE = events.append
+        try:
+            wrapper.fight(A, B, cfg=dict(CFG, OPPOSITION_RATE=0.4), rng=random.Random(seed))
+        finally:
+            wrapper._TRACE = None
+        for ev in events:
+            if ev['kind'] != 'roll':
+                continue
+            struck = B if ev['aggressor'] == 'A' else A
+            assert ev['ob'] == SL.opposed_ob(struck.faculty, 0.4) == 0.4 * struck.faculty, ev
+            checked += 1
+    assert checked >= 1, checked

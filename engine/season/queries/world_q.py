@@ -33,10 +33,10 @@ from ..data.rosters import (
     CONTINUATION_TIES, SUCCESSIONS,
     ARMS_KINDS, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
     INVESTED,
-    MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS, REMOVE_ORDINAL,
+    MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
     faction_prop_id,
-    require_member,
+    remove_distance, require_member,
     roster_map,
 )
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
@@ -733,10 +733,9 @@ def remove_weight(source: str) -> float:
         remove_weight = (K - k) / K,   k = the source's rank (0 strongest), K = the ranks
 
     1 firsthand, falling by `1/K` a rank, so every rank counts and a farther one strictly less.
-    EQUAL SPACING is the [ASSUMPTION] `H-199` already makes for refraction's `channel_remove`, read off
-    the same ranks; the form differs from `channel_remove`'s `k/(K-1)` only so the most removed rank
-    still counts (an `inferred` claim is evidence, weaker; `1 - channel_remove` would weigh it zero)."""
-    return (len(REMOVE_ORDINAL) - REMOVE_ORDINAL.index(source)) / len(REMOVE_ORDINAL)
+    `1 - remove_distance(source)`: the one spacing of the ordinal (`H-199`), so the most removed rank
+    still counts."""
+    return 1.0 - remove_distance(source)
 
 
 _UNREAD = object()      # `reception`'s "not read yet" marker (None is a legitimate reading: no bluff called)
@@ -799,7 +798,7 @@ def reception(w: World, speaker: str, venue: Optional[str]) -> float:
     return total
 
 
-def proofs(w: World, speaker: str, opponent: Optional[str], venue: Optional[str]) -> float:
+def proofs(w: World, speaker: str, opponent: Optional[str], venue: Optional[str], admitted: Optional[tuple] = None) -> float:
     """THE PROOFS `speaker` CAN SPEND AGAINST `opponent`, weighed by remove and discounted by the mirror
     -- `19_PLAN.md` step 18, a Query over two ledgers. Each deed claim in the speaker's OWN ledger
     recording an act of the opponent's (`person_q.attributed_deeds`) counts `remove_weight(c.source)`,
@@ -809,9 +808,12 @@ def proofs(w: World, speaker: str, opponent: Optional[str], venue: Optional[str]
     nothing. `venue` is the room that hears the speaker: with nobody on its bench (or no venue) there
     is no one to spend a proof on, and the answer is 0.0, the rule `reception` states.
 
+    `admitted` (B05.21, T13 edit 4; `H-427`) is the docketed row's `proofs:` column, PASSED IN by the host builder -- this query reads no
+    arrangement itself -- or `None` (no filter: nothing docketed, or `Fixtures.proof_admission` `off`). Given, a claim counts only if the kind of
+    proof it is (`rosters.yaml: proof_kind_of_source`, by its `source`) is among them; a claim whose source is no kind of proof counts 0.
+
     ⚠ NAMED LIMITS (`H-216`): every attributed deed counts, creditable or not and whatever the matter
-    docketed (the plan's text asks for neither); the mirror keys on (subject, predicate) alone; and
-    the arrangement's admitted `proofs` column is not read here.
+    docketed (the plan's text asks for neither); and the mirror keys on (subject, predicate) alone.
 
     ⚠ WHAT IS TOLD IS EVERY SUCH CLAIM THE SPEAKER HOLDS, AND THAT IS A NAMED LIMIT, NOT THE DESIGN: the
     design spends proofs one at a time inside a nested run (`21_RECONCILIATION.md` step 15, unbuilt),
@@ -826,7 +828,9 @@ def proofs(w: World, speaker: str, opponent: Optional[str], venue: Optional[str]
         return 0.0
     opp = w.persons.get(opponent)
     mirror = {(c.subject, c.predicate) for c in opp.ledger} if opp is not None else set()
-    return sum(remove_weight(c.source) for c in held if (c.subject, c.predicate) not in mirror)
+    return sum(remove_weight(c.source) for c in held
+               if (c.subject, c.predicate) not in mirror
+               and (admitted is None or PROOF_KIND_OF_SOURCE[c.source] in admitted))
 
 
 def place_of(w: World, x: Optional[str], homes: Optional[dict] = None) -> Optional[str]:

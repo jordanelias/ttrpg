@@ -99,7 +99,9 @@ def test_h11_an_observed_violation_scars_each_observer_on_his_violated_holdings(
     monkeypatch.setattr(A, "ENGAGEMENT", _rebound(**{A.SHARED_COLUMN: {"fight": -0.3}}))
     w = _world(mode, _HOLDING)
     events = fight(w, "h11_fight")
-    assert [e.kind for e in events] == ["body.changed"], [e.kind for e in events]
+    # B05.09: the fight's survivors are raised in `arms` (one `capability.raised`, a non-holder minted a first rank); B05.99
+    # rewrite, was the body Event alone
+    assert [e.kind for e in events] == ["body.changed", "capability.raised"], [e.kind for e in events]
     w.discard_caches()
     seen = {pid for e in events for pid, _ch in observers_for(w, e, mode, list(w.persons))}
     scars = _scars(w)

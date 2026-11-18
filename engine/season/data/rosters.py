@@ -195,6 +195,19 @@ def _load_offices() -> dict:
                 "offices.yaml -- seats",
                 needs="a member of `descriptors.CAPABILITIES` (" + ", ".join(_CAPABILITIES) + ") or `null`",
                 law="`descriptors.CAPABILITIES` is the only skill definition in the engine; a seat row names one, it defines none")
+    # A SEAT ROW MAY NAME THE ONE LEVEL AN ACT THROUGH IT BRINGS (B05.20, U1-D, D-U1-01a): `modifier: <a level> | null`, copied onto
+    # `Office.modifier` by the realm builder and read by `seam/wrappers/sigma.py`'s `office` source alone. Absent or `null` is none.
+    # A value that is no `sigma_leverage.LEVEL_SIGMA` name is refused here, naming the row: a typo would otherwise be a seat
+    # that declares a level and never brings it.
+    from engine.dice_engine.sigma_leverage import LEVEL_SIGMA as _LEVELS
+    for row in (*doc["seats"], *(doc.get("foreign_seats") or ())):
+        if isinstance(row, dict) and row.get("modifier") is not None:
+            require_member(
+                row["modifier"], _LEVELS,
+                f"offices.yaml row {row.get('id')!r} names `modifier: {row['modifier']!r}`, which is not a `LEVEL_SIGMA` level",
+                "offices.yaml -- seats",
+                needs="one of " + ", ".join(_LEVELS) + " or `null`",
+                law="D-U1-01 -- a seat's modifier is one named level of `sigma_leverage.LEVEL_SIGMA`, the only ladder of levels")
     # WHAT A COMPUTED FOUNDING DECLARES (B04.23): `founding:` carries `keeps:` (acts of `remit_acts`), `conferral:` (a member
     # of `conferral_bases`) and `revocation:` (a member of `revocation_bases`). A missing block or key is refused, not
     # defaulted: a founding that defaulted would silently found a seat the data never described.
@@ -953,6 +966,27 @@ if set(REMOVE_ORDINAL) != set(CLAIM_SOURCES):
         needs="a witness channel minting each `claim_sources` member",
         law="19_PLAN.md step 17 -- every claim is weighted by an ordinal of remove; a source the "
             "ordinal does not rank has no weight")
+
+
+def remove_distance(source: str) -> float:
+    """How far from the thing itself a claim held under `source` stands: its rank in the ordinal of
+    remove over the number of ranks, `k / K` (0 firsthand; the most removed rank (K-1)/K, never 1, so
+    every rank still counts as evidence). The ONE spacing of the ordinal (`H-199`): refraction's
+    `channel_remove` and the weight's `remove_weight` both read it. The ordinal is ruled; the
+    spacing is the [ASSUMPTION]."""
+    return REMOVE_ORDINAL.index(source) / len(REMOVE_ORDINAL)
+
+
+# THE KIND OF PROOF A DEED CLAIM IS, BY HOW ITS HOLDER CAME TO HOLD IT (B05.21, T13 edit 3 / T5): `queries/world_q.py::proofs` reads it where the
+# arrangement row's `proofs:` column filters what weighs (`Fixtures.proof_admission` `on`). Total over `claim_sources`, closed over `proofs` (or
+# `None`, a way of holding that is no kind the rows name), refused at import: a claim whose source maps nowhere would weigh by a guess.
+PROOF_KIND_OF_SOURCE = roster_map("proof_kind_of_source", "proof_kind")
+if set(PROOF_KIND_OF_SOURCE) != set(CLAIM_SOURCES) or not {k for k in PROOF_KIND_OF_SOURCE.values() if k is not None} <= set(PROOFS):
+    raise Unspecified(
+        f"`proof_kind_of_source.proof_kind` is {PROOF_KIND_OF_SOURCE!r}; it must key exactly the claim sources {sorted(CLAIM_SOURCES)} "
+        f"and name only `proofs` members {sorted(PROOFS)} (or null)", "rosters.yaml",
+        needs="one `proofs` member (or null) for every `claim_sources` member",
+        law="T13 T5 -- the kind of a deed claim is its source mapped to the `proofs` roster, a roster row and not a code literal")
 # The coercive deed kinds (`standing_routes.kinds.dominance`); `prestige` is the complement and carries
 # no list. Checked against the deed kinds beside `covert_kinds`' own check (`data/verbs.py::
 # _check_dominance_kinds`).
@@ -1116,6 +1150,10 @@ WOUND_QUANTITIES = roster("wound_quantities", ordered=True)
 ESTIMATE_OUTCOMES = roster("estimate_outcomes", ordered=True)
 # CP-T03-02: how each party's fight ended, as `Event.ending` carries it (`loop/effects_combat.py::fight_ending`).
 ENDING_FELLED, ENDING_YIELDED, ENDING_UNDECIDED = roster("fight_endings", ordered=True)
+# SC-P1 (B05.18): the keys of a margin provider's `Event.ending` tuple, in order (`loop/resolve.py::_fold`).
+MARGIN_ENDING = roster("margin_endings", ordered=True)
+# B05 close: the levels a verb row's `difficulty:` and an arrangement row's `standard:` name, and `Fixtures.difficulty_ob` sizes; bound once.
+DIFFICULTY_LEVELS = roster("difficulty_levels", ordered=True)
 
 
 def check_edge_above(above, quantities, what: str, where: str) -> None:

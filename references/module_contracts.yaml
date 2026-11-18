@@ -454,7 +454,7 @@ modules:
     doc: .designs/systems/social_contest/reference/social_contest_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
     sim_module: modules/social_contest/   # the running entry is `modules/social_contest/roll.py` (composition rows `social_contest.roll`, `social_contest.obstacle`); the evaluated predecessor `systems/social_contest/sim/contest/` is kept, not deleted (`roll.py`'s docstring)
     scales: [scene]
-    resolver: dice_pool
+    resolver: d_sigma
     state:
       - {name: "persuasion_track", bucket: clock, writable: true}   # bucket track->clock [verification A4: bidirectional clock, terminal thresholds >=7 / <=3]
     transitions:
@@ -479,7 +479,7 @@ modules:
     doc: .designs/systems/mass_battle/reference/mass_battle_v30.md   # ED-IN-0231: quarantined, and the pointer kept rather than nulled. `doc:` is read by CODE (workbench node-state, the census).
     sim_module: modules/mass_battle/
     scales: [scene]
-    resolver: dice_pool
+    resolver: d_sigma
     state: []
     transitions:
       - {via: "scale_transitions §3.6 Thread → Mass"}

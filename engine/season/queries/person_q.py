@@ -190,12 +190,17 @@ def suffered_deeds(ledger, patient: str):
             yield c
 
 
-def attackers_of(ledger, patient: str, kinds: frozenset, window: int = 1) -> frozenset:
+def attackers_of(ledger, patient: str, kinds: frozenset, window: int = 1, strata=None) -> frozenset:
     """WHO THE HOLDER SAW DO A DEED OF ONE OF `kinds` TO `patient` IN THE NEWEST `window` SEASONS HIS LEDGER
     HOLDS (v11 CR-87, the DEFENCE context of `rosters.yaml: violence_contexts`): the doers `deed_doer` pairs to
     `suffered_deeds`' claims, kept when the claim is among `recent_claims(ledger, window)` (anchored on his newest
     claim, so `window == 1` is "this season" as he knows it) and its kind is in `kinds` (the caller's: the kinds an
-    opponent-rule row emits). Person-side (AX-2); what he was only told of names nobody, as in `suffered_deeds`."""
+    opponent-rule row emits). Person-side (AX-2); what he was only told of names nobody, as in `suffered_deeds`.
+
+    `strata`, where given, keeps a doer only if the holder saw him act at one of them ON THIS DEED'S SUBJECT in that deed's lap. A kind several rows emit
+    (`capability.raised`: `fight` and `train`) pairs on any of its emitters' strata, so a benefit and a blow carry the same kind;
+    the caller that asks for ATTACKERS passes the strata of its violent rows. B05.09 made `train` reach people who held no rank,
+    and `p_npc_004`'s training of `p_npc_038` read as an attack."""
     if not kinds:
         return frozenset()
     recent = {id(c) for c in recent_claims(ledger, window)}
@@ -204,7 +209,8 @@ def attackers_of(ledger, patient: str, kinds: frozenset, window: int = 1) -> fro
         if id(c) in recent and c.predicate in kinds:
             seen = _seen_index(ledger) if seen is None else seen      # built only when a claim qualifies
             d = deed_doer(c, seen)
-            if d is not None:
+            if d is not None and (strata is None or any(getattr(x.value, "who", None) == d and getattr(x.value, "stratum", None) in strata
+                                                         for x in seen[0].get((c.subject, c.when, c.lap), ()))):
                 out.add(d)
     return frozenset(out)
 

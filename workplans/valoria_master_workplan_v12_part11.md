@@ -22,7 +22,7 @@ GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B16L-mb-words @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
 GATE: Batch B16M-mb-engine-words @bc1397322
-GATE: Batch B05-one-roll
+GATE: Batch B05-one-roll @928dccc9a68232d1afb041c9a1c422d8cfdb690e
 GATE: Batch B14-pc-outcome
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — the scale, the field's typed outcome and the troop file that B19a, B19, B20, B22 and B31 read (`V12_STRUCTURE.md` §2.2); rulings served: A-3, A-57, A-58, A-67, A-68, A-70, A-81 (a battle ends won, lost or drawn and each band writes), A-1 (one code path), D-U1-11c (no hidden inputs). `IS-MB-05`'s integrated reading is quoted at the close (B17.13), not a requirement row
@@ -335,7 +335,7 @@ Not in this batch, and where each is: `04_MB_unit_loadout_and_weapon_in_hand` (S
 - FALSIFIER and CONTROL: an unknown arm key or a twice-stated mass that loads; any digest that moves with every `secondary` null. Control: `python tools/ci_golden_modes_check.py` digests equal to B17.08's reading.
 - GATE: "`tools/export_troops.py --check` passes; `python3 tools/ci_golden_modes_check.py` digests equal; an unknown arm key is refused by name; a mass stated twice is refused" → `python tools/export_troops.py --check` → exit 0; `python tools/ci_golden_modes_check.py` → `[BYTE-EXACT OK]`, equal; `python -m pytest tests/valoria/test_export_troops.py tests/valoria/test_field_golden_pins.py -q` → pass; the realm hash (`HASH READING`) at seed 0, one season → equal to B17.08's.
 - HASH MOVERS: none ("none at stages 1–3 with every `secondary` null").
-- DEPENDS ON: V12 B17.07 (the `roles` column is the cut list), B17.08 (`MIN_DISCIPLINE` read before the header moves); EXISTS-IN-TREE `tools/export_battle_orders.py` (the pattern), `engine/engine_params/combat_engine_v1.json` `weapons`, the twelve tables; V12 Batch B13 @1727b462d8e25d654af6b689f6ec059d20659cd4 (`combat_engine_v1.json` byte-identical after the package move), Batch B14 (`03_PC_weapon_records_in_the_export`: the export's weapon records).
+- DEPENDS ON: V12 B17.07 (the `roles` column is the cut list), B17.08 (`MIN_DISCIPLINE` read before the header moves); EXISTS-IN-TREE `tools/export_battle_orders.py` (the pattern), `engine/engine_params/combat_engine_v1.json` `weapons`, the twelve tables; V12 Batch B13 @acab52098d2a8ae6b145d84331e152a1cfd59daf (`combat_engine_v1.json` byte-identical after the package move), Batch B14 (`03_PC_weapon_records_in_the_export`: the export's weapon records).
 - GLOSSARY: *kit*, *troops, troop type, levy* (step 6). "troop file": `references/troops.yaml`, the one authored file of troop types and arms, a file in the ordinary sense of a kept record.
 - COST and TIER: edit (mechanical, hash EQUAL); `sonnet`, `high`; "`haiku` for the transcription check" (the source).
 - LANDS IT: B17's producer; `Item: B17.10`, `[skip ci]`.

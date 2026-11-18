@@ -2855,9 +2855,9 @@ def a39():
     # `TypeError` on the first call and the probe grades INSTRUMENT-ERROR. A spy exists to OBSERVE
     # one argument and must not re-declare the rest; forwarding opaquely is what keeps it from
     # going stale every time the thing it watches grows a parameter.
-    def spy(w_, rung, prize, claimants, depth, max_depth, causes, extension=None, **kw):
+    def spy(w_, rung, prize, claimants, depth, max_depth, causes, **kw):
         captured["causes"] = list(causes)
-        return real(w_, rung, prize, claimants, depth, max_depth, causes, extension, **kw)
+        return real(w_, rung, prize, claimants, depth, max_depth, causes, **kw)
     _s.contest = spy
     try:
         _run(w, choose, contest_max_depth=3)

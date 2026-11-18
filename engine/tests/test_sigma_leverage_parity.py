@@ -589,23 +589,6 @@ class TestPoolAwareDegree:
         )
 
 
-class TestRollNet:
-    """Structural — dice_engine delegation."""
-
-    def test_returns_int(self):
-        import random as _random
-        assert isinstance(SL.roll_net(5, rng=_random.Random(42)), int)
-
-    def test_pool_floor(self):
-        """Pool <= 0 is treated as pool=1 (no crash)."""
-        import random as _random
-        assert isinstance(SL.roll_net(0, rng=_random.Random(0)), int)
-
-    def test_seeded_deterministic(self):
-        import random as _random
-        assert SL.roll_net(10, rng=_random.Random(7)) == SL.roll_net(10, rng=_random.Random(7))
-
-
 class TestRollNetContinuous:
     """Structural — dice_engine delegation."""
 

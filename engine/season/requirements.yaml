@@ -102,18 +102,24 @@ scales:
     conjunct:  R-04.c3
     subsystem: [social_contest]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: RETAINED
-    in_loop:   "seam unbuilt"
+    in_loop:   "the roll is in the loop: `social_contest.roll`, through the prize-routed `contests:` rows
+      (`a standing`, `a proposition`, `a matter`) and the `graded_inquiries` route's three inquiries; READING, not a count:
+      `PYTHONHASHSEED=0 python -m engine.season.harness.corpus_run --seasons 2 <seed>` at seeds 0 and 1 -- its `DEGREES RESOLVED BY
+      VERB` block names the social verbs that rolled and the bands they resolved at"
     note: >-
-      The kernel exists and already rolls through the substrate (`resolver.py` imports
-      `degree_from_net` from `engine/dice_engine/dice_engine.py` and wraps `roll_net` from
-      `engine/dice_engine/sigma_leverage.py`). The loop does NOT reach it. ⚠ REWRITTEN 2026-10-01: this
-      sentence used to add "`parliamentary_vote.py` calls `roll_pool`"; that module and
-      `parliamentary_stay.py` were deleted at `29b` (their `FORK:5c5d8ec6` rows), and nothing under
-      `systems/social_contest` calls `roll_pool` now.
-      4 of 45 verb rows (46 before IN-11 cut `repudiate`) declare `contests:` — `fight` and `accept` (the body, the combat seam), `march` (a
-      field, the mass-battle seam, `ecacb57`) and `tell` (a standing, resolved on the season side
-      by `seam/wrappers/sigma.py`, not by this kernel). The kernel retires at plan position `2-ii`
-      (`workplans/valoria_master_workplan_v9.md`).
+      The kernel under `systems/social_contest` is not reached by the loop (it retires at plan position `2-ii`,
+      `workplans/valoria_master_workplan_v9.md`); the roll the loop runs is the module entry `social_contest.roll`
+      (`modules/social_contest/roll.py`), called by the `social_contest` provider through `seam/wrappers/sigma.py`, and it
+      resolves through `degree_from_net` (`engine/dice_engine/dice_engine.py`) and `roll_net_continuous`
+      (`engine/dice_engine/sigma_leverage.py`). ⚠ REWRITTEN (B05.19): this note used to say the loop does NOT reach the
+      roll, and that "4 of 45 verb rows declare `contests:`" (`fight`, `accept`, `march`, `tell`). Read the verb table instead:
+      `python -c "import yaml; [print(r['verb'], r['contests']) for r in yaml.safe_load(open('engine/season/verb_table.yaml'))['verbs'] if r.get('contests')]"`
+      lists every row that declares a prize, and `rosters.yaml: contest_subsystems.prizes` / `graded_inquiries` say which
+      route each reaches. The reading of the loop at seeds 0 and 1, two seasons each, `PYTHONHASHSEED=0` (B05.19, `16946bbf8`):
+      by verb, from `DEGREES RESOLVED BY VERB` -- seed 0: argue 294, lie 74, speak 35, tell 119, research 638, surveil 68;
+      seed 1: argue 344, arrest 1, lie 93, speak 45, tell 153, research 571, surveil 63 (`determine` formed in neither).
+      The bands the social rolls resolve at are the one ladder's (`seam/ladder.py::degree_of`); an act's `Event.ending` carries
+      the roll's margin (`engine/season/tests/test_sc01_provider.py`, B05.18).
   - scale:    "mass battles / strategy warfare"
     conjunct:  R-04.c4
     subsystem: [mass_battle]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
@@ -722,15 +728,17 @@ rows:
         expects: "the test passes"
         holds: "yes"
         reading:
-          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
-          date: "2026-11-15"
+          tree: "e075e511b (B05.64's tree, the game code B05.99 closes on; read with B05.99's test edits in the working tree)"
+          date: "2026-11-18"
           seed: "per test"
           seasons: "per test"
-          line: "1 passed in 2.53s"
+          line: "1 passed, 2864 deselected in 4.48s"
           control: "the argmax at zero temperature is the test's own second half, read by its assertions (the log holds pytest's closing line only)"
           does_not_show: >-
-            that a played season chooses other than its top candidate (R-08.c); run with `-n 2` and
-            `-p no:cacheprovider` added
+            that a played season chooses other than its top candidate (R-08.c); B05.99's re-read (IS-A §12.2's B05
+            row). On e075e511b itself the same argv stops at collection (two errors: `test_cr20_attributes.py` and
+            `test_cr96_opposed_by.py` import names B05.25 deleted), which B05.99's rewrite and deletion clear; run with
+            `-p no:cacheprovider` and `PYTHONHASHSEED=0` added
       - id: R-08.c
         text: >-
           in play, some chosen acts were not the top-ranked candidate: the share of resolved acts
@@ -815,7 +823,24 @@ rows:
           (`13_SC_draw_for_unrolled_contests`, the task draw)
         argv: ["python", "-m", "engine.season.harness.corpus_run", "--seasons", "2"]
         expects: "a non-combat verb besides `tell` shows two bands whose writes differ in `DEGREES RESOLVED BY VERB`"
-        holds: "unread"
+        holds: "yes"
+        reading:
+          tree: "e075e511b"
+          date: "2026-11-18"
+          seed: 0
+          seasons: 2
+          line: >-
+            DEGREES RESOLVED BY VERB: argue 321 {'Failure': 219, 'Overwhelming': 20, 'Partial': 38, 'Success': 44};
+            BANDS THAT DIFFER argue True (lie False, speak False, tell False)
+          control: >-
+            the block's own CONTROL line, per-verb sum 1553 vs DEGREES RESOLVED total 1553: equal; the batch's opening
+            reading (74910ca78, same argv) already read argue at four bands with BANDS THAT DIFFER argue True (342:
+            Failure 234, Overwhelming 20, Partial 26, Success 62)
+          does_not_show: >-
+            seeds 1 and 2; that the two writes differ IN PLAY (BANDS THAT DIFFER reads the row's `writes_at`, a static
+            declaration, beside the resolved tally); the corpus run at `e075e511b` read `HALTS` on 141 of 143 cases on check
+            R5, because no register row's `site:` named `Fixtures ceiling_form`; H-213's `site:` names it from B05.99, and the run at that
+            tree no longer HALTS on R5 (`test_u8_ambitions` and the `W9` fixture-read check pass); run with `PYTHONHASHSEED=0` and the seed positional (`0`)
       - id: R-09.d
         text: >-
           outcomes that could go either way are drawn: for every converted verb with ten or more
@@ -842,5 +867,5 @@ rows:
         argv: ["python", "-m", "pytest", "engine/tests/test_draw.py", "-q"]
         expects: "the test file passes; the same seed twice gives the same hash"
         holds: "unread"
-    blocks: [H-98]
-    # spent/removed ids (v9 `_part2`, `blocks:` traces): W23 spent in substance (`fight` resolves through the combat seam and is graded)
+    blocks: []
+    # spent/removed ids (v9 `_part2`, `blocks:` traces): W23 spent in substance (`fight` resolves through the combat seam and is graded); H-98 closed (combat's three bands are data and nothing keys a fourth)

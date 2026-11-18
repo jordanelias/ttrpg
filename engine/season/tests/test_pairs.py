@@ -103,11 +103,12 @@ def test_a_planted_edge_moves_the_carried_share():
 
 
 def _argue_keys() -> tuple:
-    """`(pool key, opposition key, a key neither role reads)` for `argue`, off the rosters `seam/wrappers/pool.py` reads."""
-    voc = V.VERB_CAPABILITY["argue"]
-    pool_key = V.VOCATION_ATTRIBUTE[voc]
-    opp_key = V.VOCATION_OPPOSED_BY.get(voc) or pool_key
-    unread = next(k for k in ATTRIBUTES if k not in (pool_key, opp_key))
+    """`(pool key, opposition key, a key neither role reads)` for `argue`, off the verb row `seam/wrappers/pool.py` reads
+    (B05.25: the row's `governing:` attributes make the pool, its `opposed_attribute:` joins the opposition; was the retired
+    `VOCATION_ATTRIBUTE` / `VOCATION_OPPOSED_BY` maps). The pool key is the first governing attribute."""
+    row = V.VERB_TABLE["argue"]
+    pool_key, opp_key = row.governing[0], row.opposed_attribute
+    unread = next(k for k in ATTRIBUTES if k not in (*row.governing, opp_key))
     return pool_key, opp_key, unread
 
 

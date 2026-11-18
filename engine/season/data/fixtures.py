@@ -18,8 +18,10 @@ from __future__ import annotations
 
 from typing import Any
 
+from engine.dice_engine.dice_engine import MU_PER_DIE
+
 from ..gaps import Forbidden, Ungraded
-from .rosters import ARMY_VERBS, roster, roster_map, table
+from .rosters import ARMY_VERBS, DIFFICULTY_LEVELS, roster, roster_map, table
 
 class Fixtures:
     """S42.2.1: never invent a constant. Inject it, declare it a harness fixture at
@@ -200,11 +202,25 @@ WEAR_RATES, BAND_FLOORS, SUBSISTENCE_WEIGHTS, SITE_YIELD = _load_matter_tables()
 CAPACITY_FLOORS = _load_capacity_floor()
 WORKS_COST = _load_works_cost()
 
+# `H-424`'s CONTROL ARM (B05.21, T13 edit 1; B05.23): `Fixtures.difficulty_ob` below is the shipped arm -- the CALIBRATED one since B05.23,
+# 0 / 0.8 / 1.6 / 2.4 above the even line -- and this is the CONTROL, 0 / 1 / 2 / 3 (with an unopposed act's opposition at
+# `opposed_ob(pool_default)` = 1.0 at the control rate it reproduces the 2.0 the stand-in gave). `DIFFICULTY_OB_ARMS` (below `DEFAULT_FIXTURES`)
+# names the two; the control sweep is `DEFAULT_FIXTURES.sweep("difficulty_ob", DIFFICULTY_OB_CONTROL)`. T13 named the second arm `half`
+# (0 / 0.5 / 1 / 1.5); B05.23's reading left C1 red at ranks 4 and 7 and C3 at rank 7 on it, so the arm that ships is not the half ladder and is
+# named for what it is, `calibrated` (H-424's sweep keeps the half ladder as a point).
+# [ASSUMPTION: the arm switch's form (a second module table beside the one Fixtures setting, not a second Fixtures key) -- basis: T13 edit 1 "two
+# arms: `control` ... and `half`, shipped `control` in commit 1"; B05.14 shipped the control values. Jordan to correct; revert: none needed.]
+# [JUSTIFIED: engine/season/hole_register.yaml H-424 -- the table's sweep names the control arm (0 / 1 / 2 / 3), so this arm is a point of that sweep]
+DIFFICULTY_OB_CONTROL = dict(zip(DIFFICULTY_LEVELS, (0, 1, 2, 3), strict=True))
+
+# [JUSTIFIED: engine/season/hole_register.yaml H-06 -- `site: Fixtures condition_scale`, graded `assumption`; the mechanism is sourced and the magnitude is injected here and swept]
+_CONDITION_SCALE = 1000            # `H-06`'s value, named once so `wound_step` is derived from the fixture's own scale and not typed beside it
+
 DEFAULT_FIXTURES = Fixtures(
     # S48: condition is an int on an EXPORTED scale. S22 assigns the scale to `params`, and the
     # in-chain params document "proposes NO VALUES", so this is a fixture. Injection site: here.
     # [JUSTIFIED: engine/season/hole_register.yaml H-06 -- `site: Fixtures condition_scale`, graded `assumption`; the mechanism is sourced and the magnitude is injected here and swept]
-    condition_scale=1000,
+    condition_scale=_CONDITION_SCALE,
     # RULED TWICE. #353 §26.3 puts the budget at "~5"; Jordan ruled 2026-09-02 that the UNIT is
     # the SCENE and the number is 5 -- *"5 scenes for a character to play per season"*. A band is
     # not an integer; this is the integer the instrument runs on, and A31 sweeps it because the
@@ -342,7 +358,7 @@ DEFAULT_FIXTURES = Fixtures(
     # [canonical: architecture/holonic_ARCHITECTURE.md §15.2 -- `entrenchment(h, H) = min(1, seasons_held / 60)`, verbatim at :556 under the §15.2 heading at :553. THE 60 IS IN-CHAIN, which is why this label is `canonical` where its neighbours are `JUSTIFIED`]
     entrenchment_seasons=60,
     # S27.4: "an attempt at Ob > 2 x Pool is refused, and the season is spent."
-    # `U1` / `H-126` / `H-127`. THE TWO OPERANDS OF A CONTESTED ROLL THAT NOTHING ELSE SUPPLIES.
+    # `U1` / `H-126`. THE OPERAND OF A CONTESTED ROLL THAT NOTHING ELSE SUPPLIES (the other, `obstacle_default`, is deleted: B05.14).
     #
     # ⚠ `pool_default` IS WHAT `capability` WOULD SUPPLY. `03 §A.2` rules the
     # mechanism — *"Rank supplies dice and gates nothing"* — and `Person.capability` is the store
@@ -353,34 +369,29 @@ DEFAULT_FIXTURES = Fixtures(
     # row is what licenses injecting it at all: *inject the default, declare the site, sweep three
     # points* — the grade that REFUSES is `absent`, and this is not one.
     #
-    # ⚠ `obstacle_default` IS THE STAND-IN FOR A SUBJECT WITH NO SCORE TO HALVE. Jordan's
-    # 2026-08-14 ruling gives an opposed obstacle as *"their corresponding score/2 plus whatever
-    # specific modifiers exist for them in that instance"*, which reads off a PERSON; a record, a
-    # rung or a proposition has no such score, and this stands in there. **NO "Base Ob by scale"**
-    # (Jordan, 2026-09-05) — the scale of the thing is not the obstacle.
-    # ⚠ SINCE v9 SC-01 step 14 IT IS AN OPERAND, NOT A SITE: `modules/social_contest/roll.py::obstacle` composes it with the ceiling below (ED-SC-0033 cl. 3, one owner).
+    # ⚠ `pool_default` IS ALSO THE UNTRAINED SCORE OF AN OPPONENT (`seam/wrappers/pool.py::untrained`), and where no person stands opposite
+    # (a docket item, a Record, a site, a self-plea) the opposition term of the obstacle is `opposed_ob(pool_default, opposition_rate)`
+    # (`modules/social_contest/roll.py::obstacle`): the deleted stand-in `obstacle_default` (2, halved) is that term at the control. **NO "Base Ob by scale"** (Jordan, 2026-09-05).
     # [JUSTIFIED: engine/season/hole_register.yaml H-126 -- `site: Fixtures pool_default`, graded `assumption`; `capability` is the declared source and is empty on every corpus person, so the magnitude is injected and swept]
     pool_default=2,
     # B01a.01: WHAT A PERSON HOLDS ON AN ATTRIBUTE NOBODY AUTHORED -- uniform on this range, one keyed draw per person and attribute (`state/carriers.py::generated_attributes`). Read at build and at the in-play mint. `(2, 2)` is B01's flat seating at `pool_default` (the control); `None` generates nothing.
     # [JUSTIFIED: engine/season/hole_register.yaml H-856 -- site: Fixtures generated_attribute_range, graded assumption; swept (1, 6) SHIPPED / (2, 2) B01's flat seating / None nothing generated]
     generated_attribute_range=(1, 6),
-    # [JUSTIFIED: engine/season/hole_register.yaml H-127 -- `site: Fixtures obstacle_default`, graded `assumption`; the ruled derivation is `score/2` and reads off a PERSON, so a non-person subject takes this injected and swept stand-in]
-    obstacle_default=2,
     obstacle_refusal_multiple=2,
-    # `H-368` (B11 lane A): HOW THE SOCIAL ROLL'S OBSTACLE IS COMPOSED (`modules/social_contest/roll.py::obstacle_terms`).
-    # `task` SHIPS: the task's difficulty (`rosters.yaml: task_difficulty`) plus the opposing person's score halved (the
-    # score he rolls, `seam/wrappers/pool.py::score`) plus the room's and the document's terms -- no stand-in for a
-    # person. `stand_in` is the CONTROL and the REVERT: `score / 2` of a held value, else `obstacle_default`, byte for
-    # byte the composition before. A switch, not a number.
-    obstacle_model="task",            # `H-368`, swept stand_in (the control, the revert) / task (SHIPPED)
     # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- `site: Fixtures obstacle_ceiling`, graded `assumption`; M-7 fails at the 1D floor above 2 (p_success 0.0006 at Ob 3), and 2 = obstacle_refusal_multiple x the 1D floor; swept 1 / 2 / 3, `None` the uncapped control]
     obstacle_ceiling=2,
     # CP-T01-06: THE `chance_floor` ARM OF THE CEILING. From one die the cap is solved per pool (the highest
     # Ob at which this pool keeps the chance `obstacle_ceiling` leaves a one-die roll), so the fixed value
     # above is the cap below one die and the floor's source; `False` is the fixed arm, `obstacle_ceiling`
     # `None` the uncapped one (both still swept).
-    # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- `site: Fixtures ceiling_per_pool`, graded `assumption`; the chance it holds is not a new number (band_odds(1, obstacle_ceiling)'s Partial-or-better, 10 %), swept True / False]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- `site: Fixtures ceiling_per_pool`, graded `assumption`; the chance it holds is not a new number (band_odds(1, obstacle_ceiling)'s Partial-or-better, about 2.3 % at zero boost on the closed form, 0.08 % at the -M_MAX the cap is read at), swept True / False]
     ceiling_per_pool=True,
+    # B05.53/B05.55: THE CEILING'S FORM -- how the obstacle behaves once it passes its ceiling. `hard` is the flat bound (the control,
+    # SHIPPED); `soft` bends the excess toward the per-pool bound. B05.55's flip to `soft` is HELD: at `soft` no `difficulty_ob` ladder
+    # lands the calibration targets C1 and C3 together (H-430, measured), so `hard` stays shipped. `soft_late` (knee at cap - 1) is a
+    # third arm named in the source and NOT built (the code reads two forms).
+    # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- the same hole: how hard one matter can get; `site: Fixtures ceiling_form`, graded `assumption`; swept hard (control, SHIPPED) / soft (held, H-430)]
+    ceiling_form="hard",
     # CP-T01-05: THE NAMED LEVEL ONE SLOT OF `effort` IS WORTH (`sigma_leverage.LEVEL_SIGMA`: minor / moderate /
     # strong / major). An act carrying `effort` e contributes e of these to the social roll's sigma term through
     # `rosters.yaml: advantage_sources` (a mu-shift, `net_boost`), and fills `1 + e` scene slots. The magnitude is
@@ -400,14 +411,34 @@ DEFAULT_FIXTURES = Fixtures(
     practice_step=2,                   # `H-246`, swept 1 / 2 / 4 (good results per die)
     # [JUSTIFIED: engine/season/hole_register.yaml H-247 -- `site: Fixtures practice_cap`, graded `assumption`; the most dice practice can add is no document's, so it is injected and swept 0 (the control, the arm off) / 1 / 2 (SHIPPED, = pool_default)]
     practice_cap=2,                    # `H-247`, swept 0 (control, off) / 1 / 2 (SHIPPED, = pool_default)
-    # v9 SC-02 `22a` (proceedings `19_PLAN.md` steps 17 and 18): THE ROOM'S TWO MAGNITUDES, carried raw by
-    # `seam/wrappers/sigma.py::contest_input` and composed by `modules/social_contest/roll.py::obstacle`
-    # (`room = reception_gain x reception + proof_step x proofs`, subtracted, floored at `OB_MIN`, under
-    # the ceiling above). `0` is each one's CONTROL: the obstacle as it was before the room existed.
+    # v9 SC-02 `22a` (proceedings `19_PLAN.md` steps 17 and 18), B05.17 (PES-A): THE ROOM'S THREE MAGNITUDES, carried raw by
+    # `seam/wrappers/sigma.py::contest_input`. A HOSTILE bench is an obstacle term (`reception_gain x |reception|`, the `reception`
+    # member of `obstacle_terms`); what the speaker BRINGS is leverage, never an obstacle reduction: a favourable bench is `favour`
+    # levels (one `favour_level` per whole unit of `reception_gain x reception`) and an unmirrored proof is `proofs` levels (one
+    # `proof_level` per whole unit of `world_q.proofs`), both `rosters.yaml: advantage_sources` members. `0` is `reception_gain`'s
+    # CONTROL (the room moves nothing) and `None` is each level's (the source brings nothing).
     # [JUSTIFIED: engine/season/hole_register.yaml H-215 -- `site: Fixtures reception_gain`, graded `assumption`; no document gives how far a bench's regard moves an obstacle, so it is injected and swept 0 / 1 / 2]
     reception_gain=1.0,                # `H-215`, swept 0 (control) / 1 (SHIPPED) / 2
-    # [JUSTIFIED: engine/season/hole_register.yaml H-216 -- `site: Fixtures proof_step`, graded `assumption`; no document gives how far one unmirrored proof moves an obstacle, so it is injected and swept 0 / 0.25 / 0.5]
-    proof_step=0.25,                   # `H-216`, swept 0 (control) / 0.25 (SHIPPED) / 0.5
+    # [JUSTIFIED: engine/season/hole_register.yaml H-216 -- `site: Fixtures proof_level`, graded `assumption`; no document gives how much one unmirrored proof is worth to the speaker, so it is injected and swept None / minor / moderate]
+    proof_level="minor",               # `H-216`, swept None (control) / minor (SHIPPED) / moderate
+    # [JUSTIFIED: engine/season/hole_register.yaml H-425 -- `site: Fixtures favour_level`, graded `assumption`; no document gives how much a unit of a bench's favour is worth to the speaker, so it is injected and swept None / strong / major]
+    favour_level="major",              # `H-425`, swept None (control) / strong / major (SHIPPED)
+    # B05.60 (ADV Edits B to D; A-8): THE WOUND AS A LEVEL ON THE ROLL, read by `seam/wrappers/sigma.py::_wound_levels` (`rosters.yaml: advantage_sources: wounds`).
+    # One named level AGAINST the roller per `wound_step` of body his person has lost below his `body_ceiling`, one FOR him per `wound_step` the person he acts on
+    # has lost, each side at most `wound_levels_max`; never an obstacle term. `None` is `wound_level`'s CONTROL (the source brings nothing). `wound_step` is a third
+    # of the scale, a third of `condition_scale`'s SHIPPED value (`_CONDITION_SCALE // 3`, frozen at import: two thresholds, at one third and two thirds lost). It is its own swept key (H-432: a sixth / a third / a half), so a swept `condition_scale` does not move it.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-431 -- `site: Fixtures wound_level`, graded `assumption`; no document sizes what a wound costs a roll, so it is injected and swept None / minor / moderate]
+    wound_level="minor",               # `H-431`, swept None (control) / minor (SHIPPED) / moderate
+    # [JUSTIFIED: engine/season/hole_register.yaml H-432 -- `site: Fixtures wound_step`, graded `assumption`; a third of `condition_scale` per level is ADV Edit D's own size, injected and swept]
+    wound_step=_CONDITION_SCALE // 3,  # `H-432`, swept a sixth / a third (SHIPPED) / a half of `condition_scale` (body lost per level)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-433 -- `site: Fixtures wound_levels_max`, graded `assumption`; the most levels a wound can stack is ADV Edit D's two, injected and swept]
+    wound_levels_max=2,                # `H-433`, swept 1 / 2 (SHIPPED) / 3 (levels, per side)
+    # B05.61 (`UPR` §3 edit 1; A-8): HOW A WOUND CARRIED INTO A FIGHT ENTERS IT, read ONLY by `seam/wrappers/combat.py` (`party_end`, `combat_input`).
+    # `endurance_cut` is the CONTROL and the shipped arm until B15 reads `UPR` §3's gate: Endurance one point lower per body band, the tracker clean
+    # (Health, Wound Interval and Max Wounds all shrink). `level` is the A-8 arm: the authored Endurance whole, and the person's `wounds` level carried
+    # on `PersonalCombatInput.carried` against his own attack and defence.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-434 -- `site: Fixtures carried_wound_model`, graded `ruled` (A-8); the arm is swept endurance_cut (control, SHIPPED) / level]
+    carried_wound_model="endurance_cut",   # `H-434`, swept endurance_cut (control, SHIPPED until B15) / level
     # v9 SC-02 `22b` step 24 (proceedings `19_PLAN.md` step 24): HOW FAR A DETERMINATION MOVES ITS MAKER'S
     # OWN PURSUITS, per unit of `queries/person_q.py::pursuit_lean` and per band step (`data/rosters.py::
     # DEGREE_STEP`), read by `person_q.consequence_pursuits` from `loop/effects_information.py::
@@ -859,6 +890,13 @@ DEFAULT_FIXTURES = Fixtures(
     # where it writes in no band. [ASSUMPTION; medium; Jordan to correct; revert: `odds_weighting` `none`, one re-pin]
     # [JUSTIFIED: engine/season/hole_register.yaml H-248 -- `site: Fixtures odds_weighting`, graded `assumption`; whether and how a believed chance weighs a contested choice is no document's (AQ-X1 (b) is taken, M1), so the arm is declared and swept none (the control) / believed]
     odds_weighting="believed",         # `H-248`, swept none (control) / believed (SHIPPED, CR-17)
+    # B05.62 (`10_DICE_believed_odds_have_a_prior` Edit B; `H-435`). WHAT A PERSON ASSUMES OF AN OPPONENT HE HOLDS NO CLAIM ABOUT, read ONLY by
+    # `seam/wrappers/sigma.py::believed_input`: `ordinary` -- he takes the unheld for an ordinary person (the untrained skill score and the attribute
+    # scale's mid-point, as a dealt roll against a person holding nothing composes them) and takes his stance toward the actor as neutral, so he
+    # gets a figure; `none` is the CONTROL: he cannot say (`None`, which `odds_weight` reads as 1.0, certainty). His own guess, never a read of the World.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `none`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-435 -- `site: Fixtures believed_prior`, graded `assumption`; what a person takes an unknown opponent to be is no document's, so it is injected and swept none (the control) / ordinary]
+    believed_prior="ordinary",         # `H-435`, swept none (control) / ordinary (SHIPPED, B05.62)
     # CP-T01-05, THE NPC HALF (B10-10; `H-249`). WHETHER THE COMPUTED CHOOSER MAY FORM AN `effort` ACT: for a contested
     # candidate a believed chance can price, `decision/choose.py::settle_efforts` scores the effort variants by the same
     # score (the pursuit term weighted by his believed chance, `odds_weighting`) and nets off the acts the extra slots
@@ -1061,7 +1099,63 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `0.0`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-414 -- site: Fixtures confer_fit_weight, graded `assumption`; 06_FA_office_capabilities edit 4 gives no number for the weight, so it is injected at the control and swept 0.0 / 0.5 / 1.0]
     confer_fit_weight=0.0,             # `H-414`, swept 0.0 (control, SHIPPED) / 0.5 / 1.0
+    # `H-420` to `H-423` (B05.08; CAP B2, U1-B step 2). THE FOUR NUMBERS THE JOINT CALIBRATION SETS, one home each. B05.09 (`pool_add`,
+    # `pool_floor`) and B05.14 (`opposition_rate`) are the readers; `attribute_level` is read only by a planted `edge` row (none ships,
+    # B05.25). B05.23 SHIPS THE LIVE VALUES for the social roll (OBS §4 step 5; the calibration test reads them, CAL §2). One pair for every
+    # site (`pool_add`, `pool_floor`); the per-site names MAP's `social_pool_*` and `combat_pool_*` are not created; the fight reads
+    # `score + addends`, never the pair (B05.09).
+    # `pool_add`: dice a skill score is given before the roll (the base of the pool). Control 0, live 6 (SHIPPED).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-420 -- site: Fixtures pool_add, graded `assumption`; CAP B2 gives the live 6 and no document derives it, so it is injected and swept 0 / 3 / 6]
+    pool_add=6,                        # `H-420`, swept 0 (control) / 3 / 6 (live, SHIPPED)
+    # `pool_floor`: the fewest dice a pool is ever rolled at. Control 0 (no floor), live 5 (SHIPPED).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-421 -- site: Fixtures pool_floor, graded `assumption`; CAP B2 gives the live 5 and no document derives it, so it is injected and swept 0 / 3 / 5]
+    pool_floor=5,                      # `H-421`, swept 0 (control) / 3 / 5 (live, SHIPPED)
+    # `attribute_level`: the size of one step of the governing attribute's edge (U1 §4, A-7): a `LEVEL_SIGMA` name per point
+    # of the attribute above the mid-point (for the roller) or below it (against). Control `None` (no level), live `minor` (SHIPPED).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `None`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-422 -- site: Fixtures attribute_level, graded `assumption`; CAP B2 gives the live `minor` and no document derives it, so it is injected and swept None / minor / moderate]
+    attribute_level="minor",           # `H-422`, swept None (control) / minor (live, SHIPPED) / moderate
+    # `opposition_rate`: the share of the opposing person's score an obstacle takes up, per point. Control 0.5 (lane A's
+    # halving); live `engine/dice_engine/dice_engine.py::MU_PER_DIE` (SHIPPED), READ FROM THAT OWNER and never retyped.
+    # [RULED (A-26, A-71, A-79); revert: `0.5`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-423 -- site: Fixtures opposition_rate, graded `ruled` (A-26, A-71, A-79); the live value is `MU_PER_DIE` and the control is lane A's one half, so it is injected and swept 0.5 / MU_PER_DIE / 0.3]
+    opposition_rate=MU_PER_DIE,        # `H-423`, swept 0.5 (control) / MU_PER_DIE (live, SHIPPED) / 0.3
+    # `H-424` (B05.14; OBS §1, SC-B Edit A). HOW HARD EACH DIFFICULTY LEVEL IS: the obstacle a verb row's `difficulty:` level contributes
+    # before any opposition (`rosters.yaml: difficulty_levels`, closed: refused at load if the keys are not exactly the roster's).
+    # SHIPPED: the calibrated arm (B05.23), 0 / 0.8 / 1.6 / 2.4 in level order: `routine` at A-79's centre, equals on a routine matter
+    # carrying about a quarter (C1's P(Success or better) 0.24 to 0.29 at skill scores 0 to 7, ON THE CALIBRATION GRID'S OPERANDS: the opponent scores rank + 4, `test_sc_calibration_targets.py`; `pool.score` floors an opponent below `pool_default` at `pool_default`, so a rank-0 actor against a rank-0 opponent composes opposition 6 and Ob 5.6 in play, P(Failure) about 0.74, outside C1's band), each level one more such step (C2's rise in
+    # P(Failure) 0.08 to 0.12 a step). The control is `DIFFICULTY_OB_CONTROL` (0 / 1 / 2 / 3). Replaces lane A's
+    # `rosters.yaml: task_difficulty` (a number per verb) and its `obstacle_model` switch.
+    # [ASSUMPTION; Jordan to correct: `routine` 0.8, the value at which V2's model read 25 % carried -- basis:
+    # `proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part4.md` §H item 1 (A-137); the other levels
+    # its multiples, the smallest change that keeps C2 green. revert: `DIFFICULTY_OB_CONTROL`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-424 -- site: Fixtures difficulty_ob, graded `assumption`; no document derives the size of a level, so it is injected and swept]
+    difficulty_ob=dict(zip(DIFFICULTY_LEVELS, (0, 0.8, 1.6, 2.4), strict=True)),   # `H-424`, swept control (`DIFFICULTY_OB_CONTROL`) / half / three-quarter / calibrated (SHIPPED)
+    # `H-426` (B05.21; T13 edit 1, T3). HOW FAR A HEARER'S HOSTILITY MOVES THE OBSTACLE, per full clamp: the obstacle term `regard` is
+    # `regard_step x clamp(-stance / STANCE_MAX, 0, 1)` over the stance rows the counterparty holds toward the actor (`person_q.stance_toward`,
+    # `data/cast.py::STANCE_MAX`), for one person counterparty and no audience (`sigma.py::_regard_term`); the favourable half of the same clamp is
+    # `favour` leverage, at the same step. `0` is the CONTROL: the term reads nothing and is not listed, and no stance brings a level.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-426 -- site: Fixtures regard_step, graded `assumption`; T13 T3 gives the live 1.0 and no document derives it, so it is injected and swept 0 / 0.5 / 1.0 / 2.0]
+    regard_step=1.0,                   # `H-426`, swept 0 (control) / 0.5 / 1.0 (live, SHIPPED, B05.23: C5) / 2.0
+    # `H-427` (B05.21; T13 edit 1, edit 4, T5). WHETHER THE ARRANGEMENT ROW'S `proofs:` COLUMN FILTERS WHAT A SPEAKER'S PROOFS WEIGH: `off` -- every
+    # deed claim counts (`world_q.proofs` as it was); `on` -- under a docketed row only the claims whose kind (`rosters.yaml: proof_kind_of_source`) the
+    # row admits count, the rest weigh 0 (`sigma.py::_read_social_roll` passes the row's `proofs:`; `world_q` reads no arrangement itself).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `off`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-427 -- site: Fixtures proof_admission, graded `assumption`; T13 T5 gives `on` as the calibrated value and no document derives it, so it is injected and swept off / on]
+    proof_admission="on",              # `H-427`, swept off (control) / on (live, SHIPPED, B05.23)
+    # `H-428` (B05.21; T13 edit 1, T4). THE WEIGHT OF WHAT AN ACT WOULD TAKE OR IMPOSE, in obstacle, by the Tenure kind it opens: the obstacle term
+    # `stakes` (`sigma.py::_stakes_term`: `arrest` reads `detain`; `determine` the kind its docketed row `disposes:`). Keyed on exactly the
+    # `tenure_kinds` roster (refused at load). `0` for every kind is the CONTROL (OBS §1: "control 0"): the term is not listed.
+    # [ASSUMPTION; medium; Jordan to correct; revert: every kind 0.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-428 -- site: Fixtures stakes_ob, graded `assumption`; T13 T4 gives the live `oblige` 0, `detain` 0.5, `ban` 1.0 and no document derives them, so it is injected at the control and swept 0 / 0.5x / 1x / 2x of those]
+    stakes_ob={kind: 0 for kind in roster("tenure_kinds")},   # `H-428`, swept 0 (control, SHIPPED) / 0.5x / 1x / 2x
 )
+
+#: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
+DIFFICULTY_OB_ARMS = {"calibrated": DEFAULT_FIXTURES.get("difficulty_ob"), "control": DIFFICULTY_OB_CONTROL}
 
 
 def load() -> None:
@@ -1069,3 +1163,18 @@ def load() -> None:
     It lives here and not in `rosters.py` because this module imports `rosters` (the other way would close an import cycle)."""
     from .rosters import check_capability_fixtures
     check_capability_fixtures(dict(DEFAULT_FIXTURES._v))
+    levels, sized = DIFFICULTY_LEVELS, tuple(DEFAULT_FIXTURES.get("difficulty_ob"))
+    if sized != levels:
+        raise Forbidden(f"`Fixtures difficulty_ob` sizes {list(sized)}, and `rosters.yaml: difficulty_levels` names {list(levels)}", "data/fixtures.py",
+                        needs="one size per difficulty level, in the roster's order",
+                        law="B05.14 -- a level with no size is read by nothing, a size for no level is read by nothing; the roster is the closed set")
+    for arm, arm_sizes in DIFFICULTY_OB_ARMS.items():
+        if tuple(arm_sizes) != levels:
+            raise Forbidden(f"`DIFFICULTY_OB_ARMS[{arm!r}]` sizes {list(arm_sizes)}, and `rosters.yaml: difficulty_levels` names {list(levels)}", "data/fixtures.py",
+                            needs="one size per difficulty level, in the roster's order, in every arm",
+                            law="T13 edit 1 -- the arms are one table at two sizes; an arm that skips a level answers for it with a KeyError mid-season")
+    kinds, stakes = set(roster("tenure_kinds")), set(DEFAULT_FIXTURES.get("stakes_ob"))
+    if stakes != kinds:
+        raise Forbidden(f"`Fixtures stakes_ob` sizes {sorted(stakes)}, and `rosters.yaml: tenure_kinds` names {sorted(kinds)}", "data/fixtures.py",
+                        needs="one size per Tenure kind",
+                        law="T13 T4 -- stakes are keyed by Tenure kind; a kind with no size is read by nothing, a size for no kind is read by nothing")

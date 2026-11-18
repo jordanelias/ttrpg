@@ -24,12 +24,14 @@ from __future__ import annotations
 import pytest
 
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
+from ..data.verbs import VERB_TABLE
 from ..harness import decision_spread as DS
 from ..boot.realm import build_realm
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries.world_q import occasioned_by
-from ..state.carriers import subject_of
+from ..seam.wrappers import pool, sigma
+from ..state.carriers import Act, subject_of
 from ..state.world import World
 
 SEEDS = (0, 1, 2)
@@ -126,3 +128,33 @@ def test_r08_some_chosen_acts_were_not_the_top_candidate_and_none_at_zero_temper
     assert deliberated > 0 and zero_deliberated > 0, "an arm deliberated over no strict top: the counts below read nothing"
     assert shipped > 0, f"seed {seed}: no deliberation chose other than its leading candidate at the shipped temperature"
     assert zero == 0, f"seed {seed}: {zero} deliberations chose other than the leading candidate at zero temperature"
+
+
+def _tell(actor: str, to: str) -> Act:
+    return Act(id=f"a:{actor}:{to}", actor=actor, verb="tell", payload={"to": to})
+
+
+def test_r09_two_persons_of_different_skill_score_read_different_odds_in_the_realm():
+    """R-09 (mechanism half) on the built realm: two persons alike in what governs `tell`'s pool and in body, holding
+    skill scores 4 and 0 in `tell`'s skill, read different `sigma.odds_of` for `tell` to one third person. The control
+    sets both to 4 and the tuples are equal. Nothing is patched: the persons' ranks are set on the `World` the reader reads.
+    (The shipped-cast arm, no rank set by the test, moves to BA1's gate: the cast holds no skill scores yet.)"""
+    w = build_realm(0)
+    key = VERB_TABLE["tell"].capability
+    assert key and key != "none", "`tell` names no skill: the test would set a key nothing reads"
+    alive = [i for i, x in w.persons.items() if getattr(x, "alive", True)]
+    assert len(alive) >= 3, "the realm holds fewer than three living persons"
+    pair = next(((a, b) for n, a in enumerate(alive) for b in alive[n + 1:]
+                 if w.persons[a].body == w.persons[a].body_ceiling and w.persons[b].body == w.persons[b].body_ceiling
+                 and pool.governing_score(w, w.persons[a], "tell") == pool.governing_score(w, w.persons[b], "tell")), None)
+    assert pair is not None, "no two living, unwounded persons are equal on `tell`'s governing score"
+    p, q = pair
+    r = next(i for i in alive if i not in pair)
+    w.persons[p].capability = {key: 4}
+    w.persons[q].capability = {key: 0}
+    assert pool.score(w, w.persons[p], "tell") != pool.score(w, w.persons[q], "tell"), "the pair's skill scores do not differ"
+    odds_p, odds_q = sigma.odds_of(w, _tell(p, r)), sigma.odds_of(w, _tell(q, r))
+    assert odds_p is not None and odds_q is not None, "`tell` deals no social roll for the pair: nothing to compare"
+    assert odds_p != odds_q, f"skill scores 4 and 0 read the same odds {odds_p}: the skill score does not reach the roll"
+    w.persons[q].capability = {key: 4}                      # the control: the cause removed
+    assert sigma.odds_of(w, _tell(p, r)) == sigma.odds_of(w, _tell(q, r)), "equal skill scores read different odds"

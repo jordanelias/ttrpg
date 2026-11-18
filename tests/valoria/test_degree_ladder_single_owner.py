@@ -113,23 +113,6 @@ def _threadwork_operations():
     return lambda net, ob: band(m._compute_degree(net, ob))
 
 
-def _massbattle_canon():
-    """The mass-battle ladder. THERE IS NOW ONE OF THEM, WHICH IS THE POINT.
-
-    Until 2026-08-24 this file enrolled TWO: `systems/mass_battle/sim/massbattle.py`'s
-    `compute_degree` (the engine the campaign ran) and `tests/sim/mass_battle/resolution.py`'s
-    (the canon engine's). Jordan's port of the canon engine over `systems/mass_battle/sim/`
-    dissolved the twin — `massbattle.py` is now a thin strategic adapter with no ladder of its own,
-    and the single remaining implementation lives at `modules/mass_battle/resolution.py`.
-
-    That is a real deduplication, not a bookkeeping change: two implementations of a degree ladder
-    that had to be kept equivalent by measurement are now one implementation. The enrolment shrinks
-    by one and this docstring is why.
-    """
-    m = importlib.import_module('modules.mass_battle.resolution')
-    return lambda net, ob: band(m.compute_degree(net, ob))
-
-
 def _combat_engine():
     m = importlib.import_module('modules.combat.core')   # a package module: imported by dotted name, because loading it by file path would leave its relative imports no parent
     return lambda net, ob: band(m.degree(net, ob))
@@ -153,7 +136,6 @@ def _dice_model_skill():
 LADDERS = {
     'engine/dice_engine/dice_engine.py (OWNER)': _owner,
     'systems/threadwork/sim/operations.py': _threadwork_operations,
-    'modules/mass_battle/resolution.py': _massbattle_canon,
     'skills/valoria-dice-model/valoria_dice.py': _dice_model_skill,
     # MIGRATED 2026-08-27 (ED-SC-0031) out of HELD. The ninth ladder — the one the 2026-08-12
     # census missed despite it living in the owner's own package — now returns the owner's bands
@@ -356,14 +338,6 @@ LADDER_OWNERS = {
 }
 
 DECLARED_ADAPTERS = {
-    # — spells the ladder out instead of importing it, equivalence held by the test above —
-    'modules/mass_battle/resolution.py': (
-        'The canon engine (J2), which deliberately takes no engine.* dependency. PATH MOVED '
-        '2026-08-24: it was tests/sim/mass_battle/resolution.py until Jordan ported the canon '
-        'engine over systems/mass_battle/sim/. The twin it used to be measured against — '
-        'massbattle.py compute_degree — is GONE with that port, so the enrolment above lost a '
-        'ladder rather than gaining one.'),
-
     # — imports the owner and RELABELS its output; trips the detector only on the fold's labels —
     'systems/threadwork/sim/opposing.py': (
         "The 3-band shorthand. It DOES import and call dice_engine.degree_from_net (opposing.py:88) "
@@ -375,7 +349,7 @@ DECLARED_ADAPTERS = {
         '`_run_and_grade` maps ROUT STATE and surviving-size fractions to a band for '
         '`resolve_field`. (`resolve_mass_battle`, its strategic twin, and the `faction_action` ladder '
         'that `LADDERS` once enrolled were deleted at plan position `29b`.) Its one real net/ob ladder, '
-        'compute_degree, IS routed through the owner.'),
+        '`resolution.compute_degree`, is deleted: the field grades through the owner\'s `degree_label` (B05.03).'),
 
     # — FROZEN parity oracles. Migrating them would destroy the thing they exist to be. —
     'tests/sim/v32-combat-balance/combat_resolution.py': _FROZEN_ORACLE,
@@ -459,3 +433,40 @@ def test_no_new_hand_rolled_ladder():
         'new hand-rolled degree ladder(s) found. Route them through '
         'engine.dice_engine.dice_engine.degree_from_net, or add them to DECLARED_ADAPTERS with a '
         'reason:\n  ' + '\n  '.join(sorted(offenders)))
+
+
+# --- the margin is quantised ONCE, at the ladder (B05.01; C3-L1, D-29) ---------------------------------
+def test_quantised_margins_sum_in_either_order():
+    """C3-L1's falsifier. A real margin is converted once, `round(MARGIN_SCALE * margin)`, to an integer
+    milli-unit; integers add exactly, so the sum and its band do not depend on the order the parts are
+    taken in. A float margin does not: `0.1 + 0.2 + 0.7` is 1.0 one way and 0.9999999999999999 the other,
+    which would grade Success one way and Partial the other. A planted float edge or scale fails here."""
+    scale, floors = dice_engine.MARGIN_SCALE, dice_engine.BAND_FLOORS
+    assert isinstance(scale, int) and scale > 0, 'MARGIN_SCALE must be a positive integer'
+    assert set(floors) == {'partial', 'success', 'overwhelming'}
+    assert all(type(v) is int for v in floors.values()), f'a band floor is not an integer milli-unit: {floors}'
+    assert floors['partial'] < floors['success'] < floors['overwhelming']
+
+    def quantise(margin):
+        return round(scale * margin)
+
+    parts = (0.1, 0.2, 0.7, 0.3, 0.6, 1.1, 1.9, 2.3, 0.7000000000000001)
+    checked = 0
+    for a in parts:
+        for b in parts:
+            assert quantise(a) + quantise(b) == quantise(b) + quantise(a)
+            checked += 1
+    # the three-part sums whose float sum differs by order, graded at the ladder through the owner:
+    for trio in ((0.1, 0.2, 0.7), (0.3, 0.6, 0.1), (1.1, 0.9, 1.0), (2.1, 0.5, 0.4)):
+        forward, backward = sum(trio), sum(reversed(trio))
+        assert dice_engine.degree_from_net(forward, 0) == dice_engine.degree_from_net(backward, 0), trio
+        checked += 1
+    # the control: the float sums above really do disagree, so the test can observe the failure it excludes
+    assert (0.1 + 0.2) + 0.7 != (0.7 + 0.2) + 0.1
+    # a margin one milli-unit under a floor is under it; exactly at it is on it:
+    for name, floor in floors.items():
+        below = dice_engine.degree_from_net((floor - 1) / scale, 0)
+        at = dice_engine.degree_from_net(floor / scale, 0)
+        assert below != at, (name, below, at)
+        checked += 1
+    assert checked >= 80

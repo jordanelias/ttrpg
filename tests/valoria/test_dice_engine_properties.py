@@ -145,3 +145,31 @@ def test_degree_from_net_is_total_over_the_sweep_and_never_raises():
         result = de.degree_from_net(net, ob)
         assert result in (de.Degree.OVERWHELMING, de.Degree.SUCCESS,
                           de.Degree.PARTIAL, de.Degree.FAILURE), (net, ob, result)
+
+
+# ── B05.06 row 2 (DOE §3; F-DICE-11): context is validated on entry, before the band is decided ──
+
+def test_degree_from_net_refuses_a_malformed_context():
+    """The DICE audit's E-04 lower-band probe. A misspelled context key (`poool`) reached the extension's
+    check only on the Overwhelming branch, so at margin 2 the ladder returned Success with no error: the
+    key was swallowed. It is refused on entry, whichever band the margin falls in, and a context with no
+    extension to read it is refused too (nothing would ever read it)."""
+    class _E(de.BandExtension):
+        name = "probe:pool"
+        context_keys = ("pool",)
+
+    refused = 0
+    for net, ob in ((2, 0), (0.5, 0), (-1, 0), (5, 0)):     # Success, Partial, Failure, Overwhelming
+        try:
+            de.degree_from_net(net, ob, extension=_E(), poool=8)
+        except TypeError:
+            refused += 1
+    assert refused == 4, "a misspelled context key must be refused in every band, not only the top one"
+    try:
+        de.degree_from_net(2, 0, pool=8)
+    except TypeError:
+        refused += 1
+    assert refused == 5, "a context with extension=None has no reader and must raise TypeError"
+    # Control: the declared key, and no context at all, still return the ladder's band.
+    assert de.degree_from_net(2, 0, extension=_E(), pool=8) is de.Degree.SUCCESS
+    assert de.degree_from_net(2, 0) is de.Degree.SUCCESS

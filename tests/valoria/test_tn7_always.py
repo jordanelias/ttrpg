@@ -92,32 +92,10 @@ def test_the_die_rule_is_pinned_face_by_face():
         )
 
 
-def test_the_mass_battle_roller_uses_the_same_face_window():
-    """The second roller in the tree must not drift from the first.
-
-    `resolution.roll_pool` scores its own faces (it takes no engine dependency by design),
-    so equivalence is held by this test rather than by an import — the same pattern
-    test_degree_ladder_single_owner.py uses for the degree ladder.
-    """
-    for face, expected in CANONICAL_FACES.items():
-        class _FixedRng:
-            def randint(self, _a, _b):
-                return face
-
-        import contextlib
-        from modules.mass_battle import rngsource
-        with contextlib.ExitStack() as stack:
-            stack.enter_context(rngsource.using(_FixedRng()))
-            got = mb.roll_pool(1)
-        assert got == expected, f"mass_battle face {face} -> {got}, canon says {expected}"
-
-
 @pytest.mark.parametrize("bad_tn", [6, 8])
 def test_the_mass_battle_roller_also_refuses_non_7(bad_tn):
     with pytest.raises(AssertionError, match="TN is 7"):
         mb.roll_pool(3, bad_tn)
-    with pytest.raises(AssertionError, match="TN is 7"):
-        mb.roll_pool_fractional(3.5, bad_tn)
 
 
 # ── 3. No constant may name a TN that is not 7 ────────────────────────────────────────
@@ -274,18 +252,15 @@ def test_the_hand_rolled_scan_actually_reaches_a_hand_roller():
     """Assert that it asserted (§0.1 point 2).
 
     If every hand-rolled d10 were refactored away the scan would go vacuously green, so it
-    must keep finding at least one file to inspect. `resolution.py`'s `roll_pool` still rolls
-    its own — `f = rngsource.get().randint(1, 10)` at resolution.py:50, the canonical
-    pool-roller every non-volley MB resolution calls through — which is the live example that
-    keeps this honest. `units.py` was the anchor until ED-MB-0057's re-adjudicated disposition
-    deleted `Unit.resolve_internal_collisions` (its only hand-rolled d10, zero call sites
-    since 2026-05-29) at plan position `11`, 2026-09-29 — re-pointed here rather than left
-    naming a file the scan can no longer reach. Note orchestration.py is deliberately NOT the
-    anchor either: ED-MB-0066 removed its hand-rolled volley loop, which is exactly the outcome
-    this guard wants.
+    must keep finding at least one file to inspect. `engine/dice_engine/dice_engine.py`'s `roll_pool` is the one
+    live roller: the owner's own whole-die loop. `resolution.py`'s was the second live example until B05.03 made
+    the field's `roll_pool` a call to the one sampler (`sigma_leverage.roll_net_continuous`), and the earlier
+    anchor `units.py` went with ED-MB-0057's deletion of `Unit.resolve_internal_collisions` at plan position
+    `11`, 2026-09-29. Note orchestration.py is deliberately NOT the anchor either: ED-MB-0066 removed its
+    hand-rolled volley loop, which is exactly the outcome this guard wants.
     """
     files = dict(_files_that_roll_their_own_d10s())
     assert files, "no file rolls its own d10 any more — this scan is now vacuous"
-    assert "modules/mass_battle/resolution.py" in files, sorted(files)
+    assert "engine/dice_engine/dice_engine.py" in files, sorted(files)
     parsed = sum(1 for _p, t in files.items() for _ in [ast.parse(t)])
     assert parsed >= 2, f"only {parsed} hand-rolling file(s) parsed"

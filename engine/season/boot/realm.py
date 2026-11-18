@@ -1159,7 +1159,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     (`data/cast.py::attributes_of`), over the sheet `state/carriers.py::generated_attributes` DRAWS (`Fixtures
     generated_attribute_range`, B01a.01) for every key a row does not author, and seats a drawn sheet on every other
     person (the cohorts included) last; `Fixtures generated_attribute_range` None draws nothing. ⚠ `True` SHIPS
-    (persons hold scores, so a person is opposed by the score he rolls and never by `obstacle_default`), a declared mover
+    (persons hold scores, so a person is opposed by the score he rolls and his resisting attribute, never by the stand-in `opposed_ob(pool_default)`), a declared mover
     of the build (every `Person` repr) and of every season. `False` is the CONTROL ARM: no person holds an attribute, so
     `faculty` falls to `pool_default`. The registry authors ONE row's `stats:` (NPC-001), and `True` is a MOVER by
     that one person (her pool on the `inquiry` vocation is her Reason, not the default; on `argue`, her Attunement).
@@ -1476,8 +1476,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         w.persons[pid].traits = cast.traits_of(cast.row(cid) or {})
         # v10 CR-33: the row's `lifepath:` EXPANDED into the capability keys its template names, each at
         # `pool_default` (the grant changes no POOL; it makes the key one `train` can raise, and it LOWERS the
-        # obstacle the holder presents: a held key at 2 is opposed at 2.0 and halved to 1.0, an unheld person at
-        # `obstacle_default` 2 -- unmeasured in magnitude), set here and
+        # obstacle the holder presents: a held key at 2 is opposed at `opposed_ob(2, opposition_rate)`, a person
+        # holding none at the stand-in `opposed_ob(pool_default, opposition_rate)` -- unmeasured in magnitude), set here and
         # written in play only by `train`. The lifepath id is stored on NO Person: `capability_of` reads it and
         # drops it. No fallback and no draw: a row with no `lifepath:`, or one whose template names no key, leaves
         # `capability` as it was, `{}`.
@@ -1792,6 +1792,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
             faction=(over.get("faction") if over else None) or (None if body else fac_name),
             conferral=(_off_row or {}).get("conferral"),
             revocation=(_off_row or {}).get("revocation"),
+            modifier=(_off_row or {}).get("modifier"),
         )
         w.add_tenure(Tenure(f"t_{oid}_hold", pid, oid, "hold", 0))
         seated += 1
@@ -1845,7 +1846,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         w.offices[row["id"]] = Office(
             row["id"], row["post"], rung, authored_remit(row), scope_rung=rung,
             body=row.get("body"), faction=row.get("faction"),
-            conferral=row.get("conferral"), revocation=row.get("revocation"))
+            conferral=row.get("conferral"), revocation=row.get("revocation"), modifier=row.get("modifier"))
         w.add_tenure(Tenure(f"t_{row['id']}_hold", pid, row["id"], "hold", 0))
         authored[row["id"]] = row["id"]
         minted.append(row["id"])

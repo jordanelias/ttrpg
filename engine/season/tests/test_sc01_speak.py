@@ -166,7 +166,14 @@ def test_sc01_s12_each_band_emits_its_own_kind_and_all_four_occur():
     ("contests", "a matterr", "which is not a `contest_subsystems.prizes` key"),
 ])
 def test_sc01_s12_the_loader_refuses_a_malformed_speak_cell(monkeypatch, key, value, match):
-    _plant(monkeypatch, "speak", lambda r: r.__setitem__(key, value))
+    # B05.14 (B05.99 rewrite): a row whose `contests:` names no prize is no longer a rolled row, so its `difficulty:` cell is
+    # refused first ("the social roll does not deal it"); the misspelt prize is planted without that cell, so the refusal read
+    # is the prize key's own
+    def plant(r):
+        r[key] = value
+        if key == "contests":
+            r.pop("difficulty", None)
+    _plant(monkeypatch, "speak", plant)
     with pytest.raises(SystemExit, match=match):
         _verbs._load_verb_table()
 
@@ -176,15 +183,20 @@ def test_sc01_s12_the_loader_control_the_shipped_row_loads():
     assert _verbs._load_verb_table()["speak"].contests == "a matter"
 
 
-def test_sc01_s12_a_speaker_under_one_die_is_refused_not_a_crash():
+def test_sc01_s12_a_speaker_under_one_die_is_refused_not_a_crash(monkeypatch):
     """S27.4 (Ob > 2 x Pool) is a refusal, not an abort: a docketed `speak` by a speaker whose
     `copying` pool is under 1D comes back as the verb's refusal kind, where it used to raise an
-    uncaught `Unspecified` out of the season (found at B-N's `/code-review`). Control: pool 1 resolves."""
+    uncaught `Unspecified` out of the season (found at B-N's `/code-review`). Control: pool 1 resolves.
+    B05.99 rewrite: B05.09 floors a held rank at the untrained score and B05.25/B05.23 make the pool the governing score + rank +
+    the base 6 (floor 5), so no held `copying` gives a pool under one die; the pool is PLANTED at the one pool reader the record
+    reads (`sigma.faculty`) for the speaker alone (was: `copying` held at 0, 0.5, 1)."""
+    from ..seam.wrappers import sigma
+    real = sigma.faculty
     checked = 0
     for pool, refused in ((0, True), (0.5, True), (1, False)):
         w, d = _world()
-        w.persons[SPEAKER].capability = {"copying": pool}
         _docket(w, d)
+        monkeypatch.setattr(sigma, "faculty", lambda w_, p, verb, _pool=pool: _pool if p.id == SPEAKER else real(w_, p, verb))
         out = _fold(w, d, _speak(f"zpool{pool}"))
         assert bool(out) and (_kinds(out) == ["speech.unheard"]) is refused, (pool, _kinds(out))
         checked += 1

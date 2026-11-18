@@ -194,8 +194,10 @@ def test_rear_is_exactly_double_front(mb):
     the octagon arc multiplier is EXACTLY 2.0x per seed (front faces attacker, rear turns its back;
     same dice, same contact cells, only the facing arc differs)."""
     orch, contact, C = mb
+    # B05.99 re-pin of the seed range (B05.03: the field draws the one continuous sampler, so a base-pool-4 line's frontal net
+    # reaches a casualty on fewer seeds: 1 of 0..11, 10 of 0..47): the floor and the assertion are unchanged.
     checked = 0
-    for seed in range(12):
+    for seed in range(48):
         front, rear = _arc_pair(orch, contact, seed)   # body fixed; only the arc varies
         if front > 0:
             assert rear == pytest.approx(2.0 * front), f"seed {seed}: rear {rear} != 2x front {front}"
@@ -230,8 +232,10 @@ def test_arc_ratio_is_invariant_to_the_fractional_pool_flag(fractional):
 
 
 def _assert_arc_ratio_invariant(orch, contact, fractional):
+    # B05.99 re-pin of the seed range (B05.03: the field draws the one continuous sampler, so a base-pool-4 line's frontal net
+    # reaches a casualty on fewer seeds: 1 of 0..11, 10 of 0..47): the floor and the assertion are unchanged.
     checked = 0
-    for seed in range(12):
+    for seed in range(48):
         front, rear = _arc_pair(orch, contact, seed)
         if front > 0:
             assert rear == pytest.approx(2.0 * front), (
@@ -248,8 +252,9 @@ def test_front_takes_no_arc_penalty(mb):
     The multiplier uses the LOCAL attacker centroid, so a wide line's wing cell is NOT mis-read as
     flanked by the enemy centre. Front casualties must never exceed the flank/rear casualties."""
     orch, contact, C = mb
+    # B05.99 re-pin of the seed range (B05.03, the one sampler: rear>0 on 2 of 0..11, 16 of 0..47); floor and bound unchanged.
     checked = 0
-    for seed in range(12):
+    for seed in range(48):
         front, _ = _dmg_b(orch, contact, def_adv=-1, seed=seed)
         rear, _ = _dmg_b(orch, contact, def_adv=+1, seed=seed)
         # [test-critic T2] Bound front at rear/2 (i.e. front never exceeds 1.0x when rear is 2.0x): the
@@ -266,7 +271,7 @@ def test_front_takes_no_arc_penalty(mb):
     # RNG-stream reorder is not a false red while "the branch barely/never fired" is still caught —
     # the same robustness policy as test_feigned_retreat.py's floor (critic-pass consistency fix).
     assert checked >= 6, (
-        f"only {checked} of 12 seeds produced a non-zero rear exchange (measured 9) -- the wing-cell "
+        f"only {checked} of 48 seeds produced a non-zero rear exchange (measured 9 of 12 before B05.03) -- the wing-cell "
         f"bound is not being observed, so this test proves nothing")
 
 
@@ -297,7 +302,9 @@ def test_rear_penalty_persists_across_reaction_window(mb):
     for t in range(1, horizon + 1):
         # Matched GREEN/RED at the SAME tick and seed. Routed through _arc_pair (ED-MB-0063): the
         # old `def_adv=±1` form claimed "identical dice/contact" and was not — see that docstring.
-        front, rear = _arc_pair(orch, contact, seed=3, t=t)
+        # B05.99 re-pin (B05.03, the one sampler): seed 3's frontal exchange is 0 at every tick now; seed 8 is the first
+        # whose is not (6.0 / 12.0 at t = 1, 2, 3). Was seed=3.
+        front, rear = _arc_pair(orch, contact, seed=8, t=t)
         if front > 0:
             assert rear == pytest.approx(2.0 * front), (
                 f"t={t}: rear {rear} should stay 2x front {front} -- a blind-arc rear strike never refuses")
@@ -355,7 +362,9 @@ def test_multi_side_shock_is_face_based_not_pair_count(mb):
     # a NON-ZERO equality: the face-based claim is observed on a body that took damage, not on a miss. Mutation
     # (measured, then reverted): `_nb = eng_counts.get(id(atom_b), 0)` in place of the face count reads TWO_FRONT
     # 22.2 on / 14.8 off, so arm (b) reddens; with the shock never applied, on == off and arm (a)'s `>` fails (this was the 0.0 > 0.0 red).
-    SHOCK_SEED = 3
+    # B05.99 RE-PICKED (B05.03, the field's one sampler): seed 3 reads 0.0 with the shock on and off again; seed 1 reads PINCER
+    # 18.0 on / 12.0 off (the 1.5x) and TWO_FRONT 6.6 on / 6.6 off, a non-zero equality. Was 3.
+    SHOCK_SEED = 1
 
     def with_shock(shock, attackers):
         old = orch.MULTI_SIDE_SHOCK

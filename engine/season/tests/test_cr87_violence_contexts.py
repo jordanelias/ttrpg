@@ -119,6 +119,26 @@ def _attacked(w, when: int, doer: str = B) -> None:
                      "firsthand", 100, "own"))
 
 
+def test_a_kind_a_benefit_shares_with_a_blow_is_no_attack_unless_the_doer_was_seen_at_a_violent_stratum():
+    """B05.99: `capability.raised` is emitted by `fight` (contested_physical) and by `train` (uncontested_material). A deed of that kind whose
+    doer was seen training is no attack; seen fighting him it is; seen fighting somebody else in that lap and training him it is still none
+    (the stratum is read ON THE PATIENT). FALSIFIER: `strata=None` reads all three as attacks."""
+    kind = "capability.raised"
+    for stratum, who_on_a, expect in (("uncontested_material", B, set()), ("contested_physical", B, {B})):
+        w = P.tiny_world()
+        led = w.persons[A].ledger
+        led.append(Claim("c_raised", A, A, kind, True, 0, "firsthand", 100, "own"))
+        led.append(Claim("c_seen_a", A, A, SEEN_PREDICATE, Seen(stratum=stratum, who=who_on_a), 0, "firsthand", 100, "own"))
+        assert person_q.attackers_of(led, A, {kind}, strata=O._OPPONENT_STRATA) == expect, stratum
+        assert person_q.attackers_of(led, A, {kind}) == {B}, "the unfiltered read cannot tell them apart"
+    w = P.tiny_world()
+    led = w.persons[A].ledger
+    led.append(Claim("c_raised", A, A, kind, True, 0, "firsthand", 100, "own"))
+    led.append(Claim("c_seen_a", A, A, SEEN_PREDICATE, Seen(stratum="uncontested_material", who=B), 0, "firsthand", 100, "own"))
+    led.append(Claim("c_seen_y", A, "p_other", SEEN_PREDICATE, Seen(stratum="contested_physical", who=B), 0, "firsthand", 100, "own"))
+    assert person_q.attackers_of(led, A, {kind}, strata=O._OPPONENT_STRATA) == set(), "a blow on somebody else is no blow on him"
+
+
 def test_defence_context_an_attack_he_saw_this_season_forms_fight_and_an_older_one_does_not():
     w = P.tiny_world()
     _attacked(w, when=0)

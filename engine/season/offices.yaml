@@ -203,6 +203,7 @@ seats:
     body:       null
     faction:    "Valorsmark"
     remit_acts: [issue, determine, confer, revoke, convene]
+    modifier:   minor   # B05.23, T13 edit 5 (T4, A-12): a bench seat (its `determine` grant seats its holder on the bench `world_q.judging_set` reads) -- one level for an act through it before its own bench [ASSUMPTION; medium; Jordan to correct; revert: no `modifier:`]
     conferral:  inheritance   # v10 IN-61 (RS-27): claimed by the holder of `rosters.yaml: successions`' title (`off_heir`), never conferred [ASSUMPTION; medium; Jordan to correct; revert: null]
     revocation: null   # no rung above the realm
     holder:     "NPC-020"
@@ -255,6 +256,7 @@ seats:
     body:       null
     faction:    "Valorsmark"
     remit_acts: [issue, determine, confer, revoke, convene]
+    modifier:   minor   # B05.23, T13 edit 5: a bench seat (`off_king`'s note)
     conferral:  null
     revocation: null
     holder:     "NPC-032"
@@ -385,6 +387,7 @@ seats:
     body:       "Holy See"
     faction:    null
     remit_acts: [issue, determine, confer, revoke, convene]
+    modifier:   minor   # B05.23, T13 edit 5: a bench seat (`off_king`'s note)
     conferral:  elected
     revocation: null
     holder:     "NPC-021"
@@ -411,6 +414,7 @@ seats:
     body:       "Cardinal of Justice"
     faction:    null
     remit_acts: [issue, determine, convene]
+    modifier:   minor   # B05.23, T13 edit 5: a bench seat (`off_king`'s note)
     conferral:  appointed
     revocation: null   # Jordan 2026-10-11, "null": no same-faction seat on the parent rung
     holder:     "NPC-038"
@@ -450,6 +454,7 @@ seats:
     body:       "Cardinal of Justice"
     faction:    null
     remit_acts: [determine]
+    modifier:   minor   # B05.23, T13 edit 5: a bench seat (`off_king`'s note)
     conferral:  appointed
     revocation: null   # Jordan 2026-10-11, "null": no same-faction seat on the parent rung
     holder:     "NPC-004"
@@ -515,6 +520,7 @@ seats:
     body:       "Jarl Council"
     faction:    null
     remit_acts: [determine]
+    modifier:   minor   # B05.23, T13 edit 5: a bench seat (`off_king`'s note)
     conferral:  elected
     revocation: rung_above_same_faction
     holder:     "NPC-073"
@@ -528,6 +534,7 @@ seats:
     body:       "Jarl Council"
     faction:    null
     remit_acts: [determine]
+    modifier:   minor   # B05.23, T13 edit 5: a bench seat (`off_king`'s note)
     conferral:  elected
     revocation: rung_above_same_faction
     holder:     "NPC-074"

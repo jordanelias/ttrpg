@@ -265,10 +265,10 @@ def test_step25_forge_writes_the_quality_and_survey_does_not():
 
 def test_step25_falsifier_the_examination_reads_the_quality_into_its_obstacle():
     """THE READER, through the real adapter and module entry: an inquiry (no prize) on the forged Record
-    rolls against `obstacle_default + quality` where the ceiling allows it (the uncapped `None` arm),
-    and against the default at quality `0`. A CONTEST naming a prize on the same Record reads no quality
+    rolls against `base + quality` where the ceiling allows it (the uncapped `None` arm), and against `base` at quality `0`, `base` being
+    what no person opposite composes: the act's level plus `opposed_ob(pool_default)` (B05.14; it was `obstacle_default`). A CONTEST naming a prize on the same Record reads no quality
     (only an examination contests it; the gate is observed by
-    `test_step25_a_prize_contest_examines_nothing...`). At the SHIPPED ceiling (2, `= obstacle_default`) the forgery is
+    `test_step25_a_prize_contest_examines_nothing...`). At the SHIPPED ceiling (2) the forgery is
     bounded to the default -- the stated limit, pinned so a ceiling change shows here -- ON THE FIXED ARM.
     CP-T01-06 ships the per-pool arm (`ceiling_per_pool`): a pool whose solved cap is above the default lets
     the quality bite (`pool_default` 30 below: the cap is far above 5), so there the forgery reads in full."""
@@ -284,7 +284,13 @@ def test_step25_falsifier_the_examination_reads_the_quality_into_its_obstacle():
             obs[(q, ceiling, per_pool)] = out["ob"]
             inp = sigma.contest_input(w, [INVESTIGATOR], verb="research", subject=rid)
             assert inp.forgery_quality == 0.0, "a contest with no `examined` read the quality"
-    base = DEFAULT_FIXTURES.get("obstacle_default")
+    # B05.99 re-pin (B05.14's even line, B05.23's sizes): the even line + `research`'s level + the stand-in `opposed_ob(30, rate)`,
+    # folded left to right as the module folds; was `routine + 0.5 x 30` at the control sizes
+    from engine.dice_engine.sigma_leverage import even_line, opposed_ob
+    base = 0.0
+    for term in (even_line(DEFAULT_FIXTURES.get("pool_add")), DEFAULT_FIXTURES.get("difficulty_ob")[VERB_TABLE["research"].difficulty],
+                 opposed_ob(30, DEFAULT_FIXTURES.get("opposition_rate"))):
+        base += term
     shipped = DEFAULT_FIXTURES.get("obstacle_ceiling")
     assert [obs[(q, None, False)] for q in (0, 1, 3)] == [base, base + 1, base + 3], obs
     assert [obs[(q, shipped, False)] for q in (0, 1, 3)] == [min(base, shipped)] * 3, obs

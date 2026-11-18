@@ -257,3 +257,131 @@ def test_the_believed_chance_on_a_real_world_rises_with_the_acts_effort():
         got.append(sigma.believed_chance(w, p, Act(f"a:{e}", p.id, "argue", payload=payload), bands))
     assert None not in got, got
     assert got[0] < got[1] < got[2], got
+
+
+# ---------------------------------------------------------------------------------------------
+# B05.60 -- the advantage channel is signed, and `wounds` is its member (ADV Edits A to D; A-8)
+# ---------------------------------------------------------------------------------------------
+# A wound is a named LEVEL on the roll its bearer makes (one `wound_level` per `wound_step` of body lost below his ceiling, at most
+# `wound_levels_max`), AGAINST him; and the roller's FOR where the bearer is the person he acts on. Never an obstacle term (A-8).
+# Gate 2: the same `tell` by the same person at full body and at one third lost deals what `odds_of` reads, `record_odds(<his pool>, ob, 0.0)`
+# and `record_odds(<his pool>, ob, -0.25)`, within three standard errors over 200,000 seeded rolls.
+from dataclasses import asdict                                                    # noqa: E402
+
+from engine.dice_engine.sigma_leverage import LEVEL_SIGMA, record_odds            # noqa: E402
+
+from .test_odds_of import _assert_dealt, _tell, _world as _tell_world             # noqa: E402
+from .test_sc01_obstacle_ceiling import _module                                   # noqa: E402
+
+N_WOUND = 200_000
+
+
+def _wound_world(**sweeps):
+    """`test_odds_of`'s world (a strong hearer `p_mid`, the speaker `p_low`), the fixtures swept as named."""
+    w = _tell_world()
+    for name, value in sweeps.items():
+        w.fixtures = w.fixtures.sweep(name, value)
+    return w
+
+
+def _lose(w, who, steps):
+    """`who` has lost `steps` of `wound_step` below his ceiling."""
+    w.persons[who].body = w.persons[who].body_ceiling - steps * w.fixtures.get("wound_step")
+
+
+def _contest(w):
+    """The record the fold would build for `p_low` telling `p_mid`, and the obstacle the module composes for it."""
+    inp = sigma.contest_input(w, ["p_low", "p_mid"], verb="tell", subject="p_mid")
+    return inp, _module().obstacle(inp)[0]
+
+
+def test_the_wound_step_is_a_third_of_the_scale_read_from_the_fixtures():
+    fx = DEFAULT_FIXTURES
+    assert fx.get("wound_step") == fx.get("condition_scale") // 3
+    assert (fx.get("wound_level"), fx.get("wound_levels_max")) == ("minor", 2)
+
+
+def test_a_wounded_actor_rolls_with_a_level_against():
+    w = _wound_world()
+    whole, ob = _contest(w)
+    assert whole.leverage == 0.0, "a man at full body brings no wound level"
+    _lose(w, "p_low", 1)
+    hurt, ob_hurt = _contest(w)
+    assert ob_hurt == ob and hurt.pool == whole.pool, "a wound is never an obstacle term and never a die (A-8)"
+    assert hurt.leverage == -LEVEL_SIGMA["minor"] == -0.25
+    odds_whole, odds_hurt = record_odds(whole.pool, ob, 0.0), record_odds(hurt.pool, ob, -0.25)
+    assert odds_hurt[0] > odds_whole[0], "the wound makes Failure likelier"
+    assert sigma.odds_of(w, _tell("p_mid")) == odds_hurt, "`odds_of` reads the same record the fold deals"
+    _assert_dealt(odds_hurt, hurt, N_WOUND)
+    fresh = _wound_world()
+    assert sigma.odds_of(fresh, _tell("p_mid")) == odds_whole
+    _assert_dealt(odds_whole, _contest(fresh)[0], N_WOUND)
+
+
+def test_a_wounded_defender_gives_the_roller_a_level():
+    w = _wound_world()
+    whole, ob = _contest(w)
+    _lose(w, "p_mid", 1)
+    hurt, ob_hurt = _contest(w)
+    assert ob_hurt == ob and hurt.pool == whole.pool
+    assert hurt.leverage == LEVEL_SIGMA["minor"] == 0.25, "the bearer's wound helps the roller when the bearer defends"
+    odds_hurt = record_odds(hurt.pool, ob, 0.25)
+    assert odds_hurt[0] < record_odds(whole.pool, ob, 0.0)[0], "the wound makes Failure less likely for the roller"
+    assert sigma.odds_of(w, _tell("p_mid")) == odds_hurt
+    _assert_dealt(odds_hurt, hurt, N_WOUND)
+
+
+def test_wound_level_none_is_todays_bytes():
+    """THE CONTROL: with `wound_level` None a wounded actor's leverage is exactly 0 and his record is the unwounded man's, field for field."""
+    w = _wound_world(wound_level=None)
+    whole, _ = _contest(w)
+    for who in ("p_low", "p_mid"):                           # both lost two thirds of the scale (green before `wounds` existed, and after)
+        w.persons[who].body = w.persons[who].body_ceiling - 2 * w.fixtures.get("condition_scale") // 3
+    hurt, _ = _contest(w)
+    assert hurt.leverage == 0.0 and asdict(hurt) == asdict(whole)
+    assert sigma.odds_of(w, _tell("p_mid")) == sigma.odds_of(_wound_world(wound_level=None), _tell("p_mid"))
+
+
+def test_wounds_is_the_channels_last_member_and_a_stack_is_capped_at_the_maximum():
+    from ..data.rosters import roster
+    assert roster("advantage_sources", ordered=True)[-1] == "wounds" and set(sigma.ADVANTAGE_SOURCES) == set(roster("advantage_sources"))
+    fx = DEFAULT_FIXTURES
+    ceiling, step = fx.get("condition_scale"), fx.get("wound_step")
+    ops = lambda lost, other=0: {"body": ceiling - lost, "body_ceiling": ceiling, "subject_body": ceiling - other, "subject_body_ceiling": ceiling}
+    assert sigma._wound_levels(fx, ops(step - 1)) == ([], [])                     # short of one step: none
+    assert sigma._wound_levels(fx, ops(step)) == ([], ["minor"])
+    assert sigma._wound_levels(fx, ops(step, 2 * step)) == (["minor"] * 2, ["minor"])
+    assert sigma._wound_levels(fx, ops(ceiling)) == ([], ["minor"] * 2)           # dead on his feet: still `wound_levels_max`
+    assert sigma._wound_levels(fx, {}) == ([], [])                                # operands absent: nothing lost
+
+
+def test_a_wound_level_that_is_no_level_raises_at_the_owner_never_scores_zero():
+    w = _wound_world(wound_level="grievous")
+    assert _contest(w)[0].leverage == 0.0, "no wound, no level to name"
+    _lose(w, "p_low", 1)
+    with pytest.raises(KeyError):
+        _contest(w)
+
+
+def test_the_believer_passes_his_own_body_and_leaves_the_subjects_out():
+    w = _wound_world(regard_step=0)                          # at a live `regard_step` a person counterparty's stance is unknown to him (B05.21): no record at all
+    p = w.persons["p_low"]
+    for key in ("copying", VERB_TABLE["tell"].opposed_attribute):     # his belief of the hearer's skill and of the attribute that resists
+        p.ledger.append(Claim(id=f"c:p_low:p_mid:{key}", holder="p_low", subject="p_mid", predicate=person_q.CAPABILITY_CLAIM + key,
+                              value=10, when=0, source="told", confidence=5, visibility="own"))
+    _lose(w, "p_mid", 2)                                    # the subject's wound is not the believer's to know
+    args = dict(pool=4.0, person_subject=True)
+    sound = sigma.believed_input(p, "tell", "p_mid", w.fixtures, **args)
+    assert sound is not None and sound.leverage == 0.0
+    _lose(w, "p_low", 1)
+    assert sigma.believed_input(p, "tell", "p_mid", w.fixtures, **args).leverage == -0.25, "his own wound is his to know"
+
+
+def test_the_largest_stack_against_still_leaves_a_chance_of_partial_or_better():
+    """U5a closure: at `wound_levels_max` levels against, at the strongest level a sweep names, the chance of Partial or better is not zero."""
+    w = _wound_world(wound_level="moderate")
+    _lose(w, "p_low", 5)                                     # past the maximum: two levels, not five
+    inp, ob = _contest(w)
+    assert inp.leverage == -2 * LEVEL_SIGMA["moderate"]
+    failure = sigma.odds_of(w, _tell("p_mid"))[0]
+    assert 0.0 < 1.0 - failure < 1.0, failure
