@@ -867,5 +867,6 @@ rows:
         argv: ["python", "-m", "pytest", "engine/tests/test_draw.py", "-q"]
         expects: "the test file passes; the same seed twice gives the same hash"
         holds: "unread"
-    blocks: []
+    blocks: [03_PC_duel_chain_reach, 03_PC_person_inputs_content]
+    # for combat: reach (`03_PC_duel_chain_reach`, V12 B01, landed) and per-person inputs (`03_PC_person_inputs_content`, V12 B18); `register.py` reads no `blocks:` value, so these are plan-carrier ids, written as the proposals name them
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W23 spent in substance (`fight` resolves through the combat seam and is graded); H-98 closed (combat's three bands are data and nothing keys a fourth)
