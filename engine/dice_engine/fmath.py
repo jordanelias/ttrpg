@@ -10,8 +10,8 @@ THE SECOND RULE, STATED ONCE: a transcendental goes through this module. `log`, 
 `atan2`, `hypot` and `powf` (`x ** y` for a FLOAT exponent) are each ONE call to `math`, and a game-path module calls
 these, never `math.*` -- so a port has ONE list of functions to reproduce, and `engine/tests/test_fmath.py`'s vectors
 name the function and the input when it does not. These are the platform's libm, not an IEEE-754-exact operation: the
-test states the ulp bound a port must meet. `sqrt` stays on `math` (IEEE-754 requires it correctly rounded), and so do
-`floor`, `ceil`, `fabs`, `fsum`, `isfinite`, `degrees`, `pi` and the like, which are exact. An integer power (`x ** 2`) is
+test states the ulp bound a port must meet. `sqrt` is exact too (IEEE-754 requires it correctly rounded): call sites keep `math.sqrt`, and `fmath.sqrt` exists only because
+`draw.py` may import `fmath` and not `math`. `floor`, `ceil`, `fabs`, `fsum`, `isfinite`, `degrees`, `pi` and the like are exact and stay on `math`. An integer power (`x ** 2`) is
 repeated multiplication and is left alone.
 
 A leaf: it imports `math` only. Pure.
@@ -74,3 +74,10 @@ def powf(x: float, y: float) -> float:
     """`x ** y` for a float exponent: the operator itself, so it is `float.__pow__` (libm `pow`) exactly as the site
     it replaces. Not `math.pow`, which differs from `**` on a negative base and raises where `**` returns complex."""
     return x ** y
+
+
+def sqrt(x: float) -> float:
+    """`math.sqrt`: IEEE-754 requires it correctly rounded, so it is bit-identical on every platform. It is here only
+    for `draw.py`, a leaf that may import `fmath` and not `math`; `powf(x, 0.5)` is libm `pow` and carries no such
+    guarantee, so a sampler never takes a root that way."""
+    return math.sqrt(x)
