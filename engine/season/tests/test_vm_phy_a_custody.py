@@ -3,38 +3,49 @@ This file holds A4's (B14.27); A3's (B15) and A1/A2's (B29) are added by their i
 
 A4, THE REAL CHOOSER. `test_b11a_duel_reach.py` drives the chain through formed Candidates and hand-built acts and
 reverts the whole of lane A at once; this test plants ONE grievance between two co-located persons and plays a season
-through `harness.probes.chooser` (the game's own policy) and `SeasonDriver.season`: no act is built here. The only
-instruments are two spies that watch and change nothing -- one on what the chooser releases, one on the terms a
-fight is built under -- and the stamp's own planted failure, `challenges_heard` returning `()` alone.
+through `harness.probes.chooser` (the game's own policy) and `SeasonDriver.season`: no act is built here. The chain is
+bound to the two persons through the driver's own `act_of` (event id -> the act that made it), which the test keeps:
+the challenge was issued by A, the accept was declared by B on that challenge's Record, and the scene's outcome
+(`body.changed` / `duel.yielded`) is an event of that accept's own act. The instruments watch and change nothing,
+except the stamp's own planted failure (`challenges_heard` returning `()` alone), which the second test plays through
+a whole season.
+
+LIMITS. (1) The world is `probes.tiny_world()`, not `build_realm` (the gate says "a seeded realm"): a stated
+departure, because a realm has no fixed co-located pair to plant a dispute between. (2) Existence at measured seeds,
+not a rate: at the tree of this commit the chain completes at seeds 0, 3, 5 of 0-5; seed 1 attempts accept with no
+accept.declared following, seed 2 attempts none, seed 4's accept is a third party's; a hash-moving change re-measures.
 """
 from __future__ import annotations
 
 import pytest
 
+from ..data.rosters import CHALLENGE_KIND
 from ..decision import assemble
 from ..decision import options as O
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..seam.wrappers import combat as CW
-from ..state.carriers import Claim
+from ..state.carriers import Claim, subject_of
 
 A, B = "p_mid", "p_low"           # `tiny_world`: both stand at the hearth; A holds the grievance, B is its object
-#: Seeds at which the real chooser reaches the whole chain on this world (measured 0-5 on `tiny_world`: 0, 3 and 5 reach
-#: it by A challenging and B accepting; 1 and 2 stop earlier, and 4's accept is a third man's, so none of those is a pin).
-SEEDS = (0, 3, 5)
+SEEDS = range(6)                  # measured on `tiny_world`; see LIMITS above
+#: How many of `SEEDS` the whole bound chain completes at, measured at the tree this floor was written on (0, 3, 5).
+FLOOR = 3
 
 
 def _play(seed, monkeypatch):
-    """One season of the planted world through the real chooser; returns the world, what the chooser released in order
-    (`(actor, verb)`), and the terms every fight was built under."""
+    """One season of the planted world through the real chooser; returns the world, the driver (whose `act_of` binds an
+    event to the act that made it), what the chooser returned in order (`(actor, verb)`, a diagnostic: the driver
+    drops done acts and releases at most `per_lap` scenes, so this is what was OFFERED, not what was attempted) and
+    the terms every fight was built under."""
     w = P.tiny_world()
     w.world_seed = seed
     me = w.persons[A]
     me.ledger.append(Claim("c_vm_phy_a_deed", A, B, "fight.declared", True, w.tick, "firsthand", 100, "own"))
     me.pursuits = {"liberty": 1.0}                    # his own pursuits judge the deed against him: a dispute
 
-    terms, released = [], []
+    terms, offered = [], []
     real_input = CW.combat_input
 
     def spy_input(*a, **k):
@@ -47,42 +58,80 @@ def _play(seed, monkeypatch):
 
     def choose(p, v, s, ask_budget):
         scenes = base(p, v, s, ask_budget)
-        released.extend((a.actor, a.verb) for sc in scenes for a in sc.acts)
+        offered.extend((a.actor, a.verb) for sc in scenes for a in sc.acts)
         return scenes
-    SeasonDriver(w).season(choose, None, contest_max_depth=w.fixtures.get("contest_max_depth"))
-    return w, released, terms
+    d = SeasonDriver(w)
+    d.season(choose, None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+    return w, d, offered, terms
+
+
+def _made(w, d, kind, verb, actor=None):
+    """`(event, act)` for each logged event of `kind` whose act (by `act_of`) is `verb` by `actor` (any, when `None`)."""
+    return [(e, d.act_of[e.id]) for e in w.log
+            if e.kind == kind and e.id in d.act_of and d.act_of[e.id].verb == verb
+            and (actor is None or d.act_of[e.id].actor == actor)]
 
 
 def _accepts_formed(w, pid):
-    """`accept` Candidates in `pid`'s own opening set, on every question the world puts to him."""
+    """`accept` Candidates in `pid`'s own opening set, on every question the world puts to him (the view is the
+    size the real deliberation reads, `w.fixtures["view_k"]`)."""
     p = w.persons[pid]
+    k_view = w.fixtures.get("view_k")
     return [c for q in world_q.questions_for(w, p)
-            for c in O.opening_set(p, assemble(p, q, 12), q, w.fixtures) if c.verb == "accept"]
+            for c in O.opening_set(p, assemble(p, q, k_view), q, w.fixtures) if c.verb == "accept"]
 
 
 def test_accept_forms_on_a_heard_challenge(monkeypatch):
-    """The audit §4.7 gate. Planted failure: `challenges_heard` returning `()` alone (a monkeypatch of that one reader)
-    turns this red at the first `accept` assertion. Control: the challenged's opening set holds `accept` with the stamp
-    and none without it."""
+    """The audit §4.7 gate. Planted failure: `challenges_heard` returning `()` alone turns this red (see the next test,
+    which plays it). Control: the challenged's opening set holds `accept` with the stamp and none without it."""
+    checked = complete = 0
+    for seed in SEEDS:
+        with monkeypatch.context() as m:
+            w, d, offered, terms = _play(seed, m)
+            kinds = [e.kind for e in w.log]
+            # the challenge came from A, the real chooser's pick
+            issued = _made(w, d, "challenge.issued", "challenge", A)
+            assert issued, (seed, kinds, offered)
+            challenge = issued[0][1]
+            accepted = _made(w, d, "accept.declared", "accept", B)
+            if accepted:
+                complete += 1
+                ev, act = accepted[0]
+                # B's accept is on that challenge's own Record, and it came after the challenge
+                assert subject_of(act) == "rec:" + challenge.id, (seed, subject_of(act), challenge.id)
+                assert w.records[subject_of(act)].kind == CHALLENGE_KIND, (seed, w.records[subject_of(act)].kind)
+                log = list(w.log)
+                assert log.index(issued[0][0]) < log.index(ev), (seed, kinds)
+                # the scene it set off ended in one of the duel's typed outcomes, an event of THAT accept's own act
+                ends = [e for e in log[log.index(ev):]
+                        if e.kind in ("duel.yielded", "body.changed") and d.act_of.get(e.id) is act]
+                assert ends, (seed, kinds, offered)
+                # a challenge names no stakes, so the one fight was built under the roster's `accept` line, `blood`
+                assert terms == ["blood"], (seed, terms)
+                # CONTROL: B's opening set has `accept` while the stamp stands, and none with the stamp's reader at `()`
+                assert _accepts_formed(w, B), (seed, "the challenged holds an `accept` with the stamp")
+                m.setattr(world_q, "challenges_heard", lambda w, p, named=None: ())
+                assert world_q.questions_for(w, w.persons[B]), (seed, "B is asked something at all")
+                assert _accepts_formed(w, B) == [], (seed, "without the stamp the challenged has no `accept`")
+        checked += 1
+    assert checked == len(SEEDS)
+    assert complete >= FLOOR, (complete, FLOOR)
+
+
+def test_without_the_stamp_no_accept_forms_on_a_challenge(monkeypatch):
+    """The planted failure, played through the season: with `world_q.challenges_heard` returning `()` (the real call
+    shape is `(w, p, told)`) the challenge is still issued by A and B never offers, attempts or declares `accept`."""
     checked = 0
     for seed in SEEDS:
         with monkeypatch.context() as m:
-            w, released, terms = _play(seed, m)
-            kinds = [e.kind for e in w.log]
-            assert "challenge.issued" in kinds, (seed, kinds)
-            # the challenge came from the real chooser, then the challenged attempted `accept`, in that order
-            assert (A, "challenge") in released, (seed, released)
-            assert (B, "accept") in released, (seed, released)
-            assert released.index((A, "challenge")) < released.index((B, "accept")), (seed, released)
-            # `accept` resolved, and the scene it set off ended in one of the duel's typed outcomes, after the challenge
-            assert "accept.declared" in kinds, (seed, kinds)
-            assert kinds.index("challenge.issued") < kinds.index("accept.declared"), (seed, kinds)
-            assert {"duel.yielded", "body.changed"} & set(kinds[kinds.index("accept.declared"):]), (seed, kinds)
-            # a challenge names no stakes, so the one fight was built under the roster's `accept` line, `blood`
-            assert terms == ["blood"], (seed, terms)
-            # CONTROL: B's opening set has `accept` while the stamp stands, and none with the stamp's reader at `()`
-            assert _accepts_formed(w, B), (seed, "the challenged holds an `accept` with the stamp")
             m.setattr(world_q, "challenges_heard", lambda w, p, named=None: ())
-            assert _accepts_formed(w, B) == [], (seed, "without the stamp the challenged has no `accept`")
+            w, d, offered, _terms = _play(seed, m)
+            assert _made(w, d, "challenge.issued", "challenge", A), (seed, [e.kind for e in w.log])
+            assert not [a for a in d.act_of.values() if a.actor == B and a.verb == "accept"], (seed, "attempted")
+            assert (B, "accept") not in offered, (seed, offered)
+            assert not _made(w, d, "accept.declared", "accept"), (seed, [e.kind for e in w.log])
+            # the empty `accept` list is the stamp's absence, not B having no question at all
+            assert world_q.questions_for(w, w.persons[B]), (seed, "B is asked something at all")
+            assert _accepts_formed(w, B) == [], seed
         checked += 1
-    assert checked == len(SEEDS) >= 3
+    assert checked == len(SEEDS)
