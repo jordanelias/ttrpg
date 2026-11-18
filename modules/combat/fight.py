@@ -93,6 +93,9 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
     A = combatant.Combatant(a_id, end=a_end, **_attr_kw(a_attr), **_kit_kw(a_kit), **_faculty_kw(a_fac))
     B = combatant.Combatant(b_id, end=b_end, **_attr_kw(b_attr), **_kit_kw(b_kit), **_faculty_kw(b_fac))
     A.pool_addends, B.pool_addends = a_add, b_add
+    # THE CARRIED WOUND (B05.61, `UPR` §3 edit 4; A-8): each party's signed level from before the fight, read by `assemble_net_sigma` alone.
+    # Carried the way `pool_addends` is, an instance attribute [ASSUMPTION: carrier; IS-PC-05 (B15) replaces it]; 0.0 where the record carries none.
+    A.carried, B.carried = inp.carried or (0.0, 0.0)
     trace: list = []
     prev = getattr(wrapper, "_TRACE", None)
     # THE DUEL TERMS (RS-25, PC-10a): the record's own field, default `'death'` (`wrapper.LETHAL_TERMS`); the engine

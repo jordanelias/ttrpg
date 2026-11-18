@@ -197,3 +197,77 @@ def test_skill_score_and_attribute_move_the_fight_separately():
         assert d > band, f"score {s1} / Strength {a1} and score {s2} / Strength {a2} fell within {band:.3f} of each other: {d:.3f}"
         checked += 1
     assert checked >= 2
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B05.61 (`UPR` §3 edits 1-4; A-8): A WOUND CARRIED INTO A FIGHT IS A LEVEL, NOT A SHORTER HEALTH TRACK.
+# Under `carried_wound_model` `level` the authored Endurance arrives whole and the wound rides on `PersonalCombatInput.carried`, once.
+# ---------------------------------------------------------------------------------------------------------------------
+_A, _B = "p_low", "p_mid"                      # `tiny_world`'s two persons
+
+
+def _wounded_world(model: str, lost_steps: int = 0, who: str = _A):
+    """`tiny_world` with `carried_wound_model` swept to `model` and `who` having lost `lost_steps` of `wound_step` below his ceiling.
+    Builds a driver too, which registers the combat module entry the host resolves."""
+    from ..harness import probes as P
+    from ..loop.driver import SeasonDriver
+    w = P.tiny_world()
+    SeasonDriver(w)
+    w.fixtures = w.fixtures.sweep("carried_wound_model", model)
+    w.persons[who].body = w.persons[who].body_ceiling - lost_steps * w.fixtures.get("wound_step")
+    return w
+
+
+def _fight(w, seed: int = 5) -> dict:
+    """The record the host builds for `_A` fighting `_B` and the module entry's result on it, one seeded fight (the entry the seam resolves)."""
+    import random
+    from ..seam.wrappers import combat
+    entry, refusal = combat.entry_for(combat._PRIZE, combat._PROVIDER)
+    assert entry is not None, refusal
+    inp = combat.combat_input(w, [_A, _B], "fight")
+    return dict(inp=inp, got=entry.fn(inp, random.Random(seed)))
+
+
+def test_a_carried_wound_leaves_health_and_max_wounds_whole():
+    """UNDER `level` a party one band down, and one at the bottom band, has the Health and Max Wounds of an unwounded man: `party_end` cuts no
+    band. The same worlds under the control `endurance_cut` read lower on every one, so the assertion can see the cut it excludes."""
+    from ..decision import body_band_penalty
+    checked = 0
+    for lost_steps in (1, 2, 3):                 # a third, two thirds and the whole of the body lost: down a band, deeper, the bottom
+        whole = _fight(_wounded_world("level", 0))
+        hurt_w = _wounded_world("level", lost_steps)
+        assert body_band_penalty(hurt_w.persons[_A], hurt_w.fixtures) >= 1, "the planted wound is below the first body band"
+        hurt = _fight(hurt_w)
+        assert hurt["inp"].ends == whole["inp"].ends, (lost_steps, hurt["inp"].ends, whole["inp"].ends)
+
+        def full(r):
+            return {q: r["got"]["wound_state"][_A][q] for q in ("max_wounds", "health_full")}
+        assert full(hurt) == full(whole), (lost_steps, full(hurt), full(whole))
+        assert hurt["inp"].carried[0] < 0.0 and hurt["inp"].carried[1] == 0.0 and whole["inp"].carried == (0.0, 0.0), hurt["inp"].carried
+        cut = _fight(_wounded_world("endurance_cut", lost_steps))
+        assert cut["inp"].ends[0] < whole["inp"].ends[0] and cut["inp"].carried == (0.0, 0.0), cut["inp"]
+        assert full(cut) != full(whole), "under the control the same wound shrinks Health and Max Wounds: the falsifier's reading"
+        checked += 1
+    assert checked == 3
+
+
+def test_the_carried_level_is_applied_once():
+    """The trace's first roll's net sigma for a carried party differs from the unwounded mirror's by EXACTLY one `wound_step` level
+    (`LEVEL_SIGMA[wound_level]`, 0.25 at `minor`) per band lost, not two: the host sizes it once (`combat._carried_of`) and the module adds it once
+    (`assemble_net_sigma`), the party's own, against his attack when he strikes and against his defence when he is struck. The direction is read off
+    the roll's aggressor. Seeds 0 to 7 fight the wounded and the whole world at one seed each, so the draws agree up to the first roll."""
+    from engine.dice_engine.sigma_leverage import LEVEL_SIGMA
+    unit = LEVEL_SIGMA["minor"]
+    seen_aggressor = set()
+    for lost_steps in (1, 2):
+        for seed in range(8):
+            whole = _fight(_wounded_world("level", 0), seed)["got"]["trace"]
+            hurt_res = _fight(_wounded_world("level", lost_steps), seed)
+            assert hurt_res["inp"].carried == (-lost_steps * unit, 0.0), hurt_res["inp"].carried       # one level per step, signed against him
+            roll_whole = next(e for e in whole if e["kind"] == "roll")
+            roll_hurt = next(e for e in hurt_res["got"]["trace"] if e["kind"] == "roll")
+            assert (roll_hurt["aggressor"], roll_hurt["pool"], roll_hurt["ob"]) == (roll_whole["aggressor"], roll_whole["pool"], roll_whole["ob"])
+            want = -lost_steps * unit if roll_hurt["aggressor"] == _A else lost_steps * unit      # his own attack lower, or the roller's net higher
+            assert abs((roll_hurt["net_sigma"] - roll_whole["net_sigma"]) - want) < 1e-9, (lost_steps, seed, roll_hurt, roll_whole)
+            seen_aggressor.add(roll_hurt["aggressor"])
+    assert seen_aggressor == {_A, _B}, f"the sweep read only {seen_aggressor}: both directions of the term must be observed"

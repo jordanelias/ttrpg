@@ -166,6 +166,12 @@ class PersonalCombatInput:
       * `opposition_rate` -- the share of a defender's skill score the obstacle takes per point, carried for
                        `sigma_leverage.opposed_ob`. `None` is the module's own constant (0.5): in B05 `combat_input` carries
                        `None`, and the flip to the fixture belongs to B15;
+      * `carried`   -- each party's wound carried into the fight, as a SIGNED net sigma (a level against his own rolls is negative), in
+                       `claimants` order (B05.61, `UPR` §3 edit 2; A-8). The host reads it once, from the `wounds` advantage source alone
+                       (`combat.py::_carried_of`: `levels_to_net_sigma` over that member's against-list for the party's own `body`), and
+                       fills it only under `Fixtures carried_wound_model` `level`; the default `(0.0, 0.0)` is `endurance_cut`, the control,
+                       where the wound rides on `ends` instead. The module adds the aggressor's against his attack and the defender's against
+                       his defence beside `wound_impairment` (`combat_systems.assemble_net_sigma`) and holds no `wound_step` of its own;
       * `attributes` -- each party's authored `Person.attributes`, `{registry key: whole number}`, in `claimants`
                        order (PC-06 K-1, ED-IN-0347). The module maps each key to its `Combatant` field by PC-14's
                        `registry_key` (`modules/combat/attributes.py`); a key absent from the dict leaves its field at
@@ -181,6 +187,7 @@ class PersonalCombatInput:
     pool_add: Optional[float] = None
     pool_floor: Optional[float] = None
     opposition_rate: Optional[float] = None
+    carried: tuple = (0.0, 0.0)
     attributes: tuple = ()
 
 

@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 122,
-    "total": 392,
-    "uncited": 270,
+    "total": 393,
+    "uncited": 271,
     "of_which_assumption_grade": 8
   },
-  "count": 392,
+  "count": 393,
   "by_module": {
     "engine.dice_engine": 10,
     "engine.season": 26,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 103,
+    "engine.season.settings": 104,
     "engine.season.realm": 8
   },
   "params": [
@@ -3759,6 +3759,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-433`, swept 1 / 2 (SHIPPED) / 3 (levels, per side)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.carried_wound_model",
+      "name": "carried_wound_model",
+      "value": "endurance_cut",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-434`, swept endurance_cut (control, SHIPPED until B15) / level",
       "citation": null,
       "citation_grade": null
     },

@@ -1008,8 +1008,12 @@ def assemble_net_sigma(atk_sig, dsig, reach_pen, adef, init_edge, aggressor, def
     # [ED-PC-0037] There is no flat first-mover bias term on a closed exchange: first-mover advantage lives ONLY in
     # the Vor (initiative), where it is earned — a second independently-calibrated mechanism for the same physics
     # would break "every rule lives once".
+    # B05.61 (`UPR` §3 edit 4; A-8): the wound a party CARRIED INTO the fight, a signed level the host sized (`Combatant.carried`, negative =
+    # against his own roll; 0.0 under the control). The aggressor's is added against his attack and the defender's subtracted from the net
+    # (against his own defence), beside `wound_impairment` and on its sign convention. No constant here: the size is the season's `wound_step` level.
     return (atk_sig - dsig - reach_pen + adef + init_edge
-            + wound_impairment(defender, aggressor, cfg))
+            + wound_impairment(defender, aggressor, cfg)
+            + getattr(aggressor, 'carried', 0.0) - getattr(defender, 'carried', 0.0))
 
 def commit_depth(aggressor, defender, cfg, rng, TR):
     """Draw the CONTINUOUS commitment depth in [2,5] (commitment-recovery is a spectrum, not four rungs). Disposition
