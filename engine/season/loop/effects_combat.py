@@ -18,7 +18,7 @@ from dataclasses import replace
 from engine.substrate import descriptors
 
 from ..data.rosters import (
-    DECLARED, ENDING_FELLED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, FIELD_WINNER_CASUALTY_ARMS, INVESTED, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
+    DECLARED, ENDING_FELLED, ENDING_PREVAILED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, FIELD_WINNER_CASUALTY_ARMS, INVESTED, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
     WOUND_HARM_MODELS, BODY_MARK_MODELS, require_member,
 )
 from ..data.matrix import matrix_row
@@ -302,18 +302,26 @@ def broke_observed(pid: str, broke: "str | None") -> tuple:
 
 
 def fight_ending(w: "World", parties, res: "Resolution", above) -> tuple:
-    """CP-T03-02 (i): `Event.ending` -- `(pid, felled | yielded | undecided)` for each party still a person, in
-    party order, read off the scene's lifted `wound_state` (`party_degree`, the walk `_eff_kill` writes by) and
+    """CP-T03-02 (i): `Event.ending` -- `(pid, felled | yielded | prevailed | undecided)` for each party still a person,
+    in party order, read off the scene's lifted `wound_state` (`party_degree`, the walk `_eff_kill` writes by) and
     `surrender` (`_yielder`). Read BEFORE the write, which is right: it reports the scene, not the world.
-    [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]"""
+
+    B14.02 (A-81, D-U1-11a): a party who is neither felled nor the yielder is `prevailed` where the OTHER party is felled or
+    the yielder -- the one left standing -- and `undecided` only where neither is. A party is read down from the scene
+    whether or not he is still a person, so a felled opponent already removed from the world still makes the survivor
+    `prevailed`. [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]"""
     states = res.result.get("wound_state") or {}
     yielder = _yielder(res)
+    held = tuple(dict.fromkeys(parties))
+    felled = {pid: party_degree(states.get(pid), above) == FELLED for pid in held}
+    down = {pid: felled[pid] or pid == yielder for pid in held}
     out = []
-    for pid in dict.fromkeys(parties):
+    for pid in held:
         if pid not in w.persons:
             continue
-        out.append((pid, ENDING_FELLED if party_degree(states.get(pid), above) == FELLED
-                    else ENDING_YIELDED if pid == yielder else ENDING_UNDECIDED))
+        out.append((pid, ENDING_FELLED if felled[pid]
+                    else ENDING_YIELDED if pid == yielder
+                    else ENDING_PREVAILED if any(down[o] for o in held if o != pid) else ENDING_UNDECIDED))
     return tuple(out)
 
 

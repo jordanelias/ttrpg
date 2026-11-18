@@ -319,3 +319,52 @@ def test_the_carried_level_is_applied_once():
             assert abs((roll_hurt["net_sigma"] - roll_whole["net_sigma"]) - want) < 1e-9, (lost_steps, seed, roll_hurt, roll_whole)
             seen_aggressor.add(roll_hurt["aggressor"])
     assert seen_aggressor == {_A, _B}, f"the sweep read only {seen_aggressor}: both directions of the term must be observed"
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B14.02 (A-81, D-U1-11a, C3-C11): THE PARTY LEFT STANDING `prevailed`; AN UNDECIDED FIGHT STILL WRITES.
+# The scenes are hand-built through the real fold and WITNESS (`test_cp_t03_02_band_ending_and_body._fight`).
+# ---------------------------------------------------------------------------------------------------------------------
+def test_the_party_left_standing_is_prevailed():
+    """`fight_ending` names `prevailed` for the party who is neither felled nor the yielder while the other party is, and
+    `undecided` only where neither is. FALSIFIER: a felled or yielding party named `prevailed`, or a scene with nobody down
+    naming one (every row below reads the word on the Event the real fold stamped)."""
+    from .test_cp_t03_02_band_ending_and_body import (ACTOR, SUBJECT, FELLED, UNTOUCHED, WOUNDED, _fight as scene)
+    checked = 0
+    for (a, s, yielder), want in {
+            (WOUNDED, FELLED, None): {ACTOR: "prevailed", SUBJECT: "felled"},
+            (FELLED, WOUNDED, None): {ACTOR: "felled", SUBJECT: "prevailed"},
+            (UNTOUCHED, FELLED, None): {ACTOR: "prevailed", SUBJECT: "felled"},
+            (UNTOUCHED, WOUNDED, SUBJECT): {ACTOR: "prevailed", SUBJECT: "yielded"},
+            (WOUNDED, UNTOUCHED, ACTOR): {ACTOR: "yielded", SUBJECT: "prevailed"},
+            (FELLED, FELLED, None): {ACTOR: "felled", SUBJECT: "felled"},                       # nobody is left standing
+            (UNTOUCHED, WOUNDED, None): {ACTOR: "undecided", SUBJECT: "undecided"}}.items():    # nobody is down
+        _w, out, _b = scene(a, s, yielder=yielder, aid=f"b1402_{checked}")
+        assert out, (a, s, yielder)
+        for e in out:
+            assert dict(e.ending) == want, (a, s, yielder, e.kind, e.ending)
+            checked += 1
+    assert checked >= 7
+
+
+def test_an_undecided_fight_is_witnessed_by_those_present():
+    """A-81, C3-C11: a fight with no victor still writes. Its Event is witnessed and WITNESS deposits it to those present
+    (`co_located`, `firsthand`), and each party holds his own claim of it. Read on two undecided scenes: one party
+    wounded and nobody down (an `undecided` ending on each party), and both untouched (`contest.undecided`, which
+    carries no ending). A person the channels do not admit holds nothing, so the assertion can see the deposit it excludes."""
+    from .test_cp_t03_02_band_ending_and_body import (ACTOR, SUBJECT, UNTOUCHED, WOUNDED, _fight as scene)
+    from ..data.rosters import ENDING_UNDECIDED
+    checked = 0
+    for a, s, kind in ((UNTOUCHED, WOUNDED, "body.changed"), (UNTOUCHED, UNTOUCHED, "contest.undecided")):
+        w, out, _b = scene(a, s, aid=f"b1402_u{checked}")
+        assert kind in [e.kind for e in out], (a, s, [e.kind for e in out])
+        assert all(e.ending == () or set(dict(e.ending).values()) == {ENDING_UNDECIDED} for e in out), [e.ending for e in out]
+        held = {p.id: [c for c in p.ledger if c.predicate == kind] for p in w.persons.values()}
+        for pid in (ACTOR, SUBJECT):                                              # each party holds his own claim
+            assert held[pid], (kind, pid, "a party holds no claim of his own fight")
+        present = [pid for pid in w.persons if pid not in (ACTOR, SUBJECT) and held[pid]]
+        assert present, (kind, "nobody present witnessed the undecided fight")
+        assert all(c.source == "firsthand" for pid in present for c in held[pid]), (kind, held)
+        assert [pid for pid in w.persons if not held[pid]], (kind, "everyone witnessed: the non-witness clause is vacuous")
+        checked += 1
+    assert checked == 2
