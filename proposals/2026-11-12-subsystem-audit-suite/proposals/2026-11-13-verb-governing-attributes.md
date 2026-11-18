@@ -17,7 +17,7 @@ the working tree of 2026-11-13.
 `workplan_v12_part18_cont.md`); B28.34 (DESIGN-FIRST) and B28.35 (BUILD), the persuasion terms and the self-plea
 (`workplan_v12_part35_cont.md`).
 
-## Status: PROPOSED
+## Status: PROPOSED; §0's rule and row shape recorded by B05.24 (`ED-IN-0379`, 2026-11-18); §2's cells are the interim cells B05.25 writes `[ASSUMPTION; medium; Jordan to correct at BA1.13]`
 
 Design input, reference under CLAUDE.md §0.05. Lanes that own the files the plan items edit: IN
 (`engine/season/verb_table.yaml`, `data/verbs.py`, `data/rosters.py`, `rosters.yaml`, `seam/wrappers/pool.py`,
@@ -25,12 +25,22 @@ Design input, reference under CLAUDE.md §0.05. Lanes that own the files the pla
 
 ## 0. The rule, and the method
 
-**The rule, in one sentence an ordinary reader gets:** *a verb names one to three attributes; a person's governing score
-for it is the average of his scores in them, rounded to the nearest tenth, a fraction like 2.5 staying a fraction (an
-attribute he does not hold counts at the untrained score); his rank in the verb's skill, if the verb names one, is added; that number
-plus the base, and never below the floor, is the dice he rolls (A-6); a verb that is a brute function of a seat, of his
-own standing or of another's decision names no attribute and rolls nothing; and a verb that hands its act to a subsystem
-(a fight, a field) names none either, because the subsystem reads him by its own rule.*
+**The rule, in one sentence (B05.24, `ED-IN-0379`; the sentence B05.25 builds):** *A verb names one to three
+attributes; his governing score for it is the average of his scores in them (an attribute he does not hold counts at
+the untrained score `pool_default`), rounded to the nearest tenth, a value halfway between two tenths rounding up; the
+result is a fractional number (2.5, not 3) and feeds the dice as a fractional pool, as the engine already takes one
+(A-5, `sigma_leverage.py`; Jordan, 2026-11-13); his rank in the verb's skill, if the verb names one, is added; that
+number plus the base, and never below the floor, is the dice he rolls; a verb that hands its act to a subsystem (a
+fight, a field, a proceeding) names none, and the subsystem reads him by its own rule; a verb that influences a person
+by words is such a verb, and its row says which proceeding it opens and whether in full or abridged.* A verb that is a
+brute function names no attribute and does not roll at all (Jordan, 2026-11-13; the row shape's kind (a) below).
+
+**The row shape (B05.24), one kind per row of `engine/season/verb_table.yaml`:**
+(a) `brute: seat | own | counterparty` with `brute_note:` (what authorises it; `seat` only where the row's eligibility
+carries `remit:` or its referent class is `Office`), which never rolls; (b) `governing:` one to three registry keys of
+`descriptors.ATTRIBUTES`, with `opposed_attribute:` one key on a row contested against a person; (c) nothing of
+either, the row's `contests:` prize reading `person_inputs: own`. An office act whose carrying out can be botched is
+(b) with the office modifier, never (a) (the bullet below). §2's last column writes each row in this shape.
 
 - **Three kinds.** Every row is one of: **(a) brute function** — the act is authorised, gated or recorded and cannot be
   done well or badly; the row names what authorises it, one of `seat` (a seat's remit, purview or conferral basis: the
@@ -45,7 +55,7 @@ own standing or of another's decision names no attribute and rolls nothing; and 
   the act can succeed, partly succeed or fail by the doer's ability: one to three attributes, a skill where one applies,
   the office modifier where it is done through a seat; **(c) hands off to a subsystem** — the row's `contests:` prize names
   a module that reads the person by its own rule.
-- **An office act whose carrying out can be botched is (b), with the office modifier**, not (a): the seat makes it
+- **An office act whose carrying out can be botched is (b), with the office modifier (B05.20)**, never (a): the seat makes it
   eligible, the doer's ability decides how well it is done (`arrest`, `interrogate`, `requisition`, `seize`, `raze`,
   `marshal`, `determine`; §3 item 5).
 - **The mean and its rounding (Jordan, 2026-11-13).** The verb's governing score is the mean of the character's scores on
@@ -66,8 +76,10 @@ own standing or of another's decision names no attribute and rolls nothing; and 
 - **The office modifier** is the plan's one named level for an act through a seat (B05.20, U1-D), not a die: one channel
   already carries every seat effect, and a level and a die move the same roll (ladder step 5; ruling (1)'s "office (if
   relevant)" is honoured by the level, whose size is calibration's).
-- **The opposition is unchanged in form**: the defender's skill score (A-79, B05.11) and his `opposed_attribute` as
-  levels (A-79's *"aptitude … as named levels"*, B05.10's subject-side row). The column below names that attribute.
+- **The opposition of a row contested against a person (B05.24)**: `opposed_ob(the defender's opposing attribute + his
+  skill score)` at `MU_PER_DIE` a point (A-137, "keep 0.4": the resisting attribute counts as the mirror of the
+  attribute in the dice; B05.11, B05.14), with no subject-side levels. The row's `opposed_attribute:` names that
+  attribute (§2's "opposed by" column, and its last column in key form).
 - **Method.** For each of the 67 rows of `engine/season/verb_table.yaml` (counted by `yaml.safe_load(...)['verbs']`), in
   the table's own strata: the everyday meaning first, in one sentence (a term of art named as such, with the ordinary word
   it is close to); then whether the doer's ability decides it; then the attributes most reasonably applied, each with one
@@ -75,7 +87,8 @@ own standing or of another's decision names no attribute and rolls nothing; and 
 
 ## 1. The ten attributes, in their own definitions
 
-The roster is `engine/substrate/descriptors.py:50` (`ATTRIBUTES`), ten keys on 1 to 7
+The roster is `engine/substrate/descriptors.py::ATTRIBUTES`, ten keys on 1 to 7 (Spirit's key is `attr.spirit.will`
+since B01a.06; the old key `attr.mind.will` resolves to it)
 (`references/descriptor_registry.yaml:38-53`). The registry comments three of them only (`:48-53`); the definitions below
 are Jordan's words, from the ruling that named the ten (`ED-IN-0328`, `registers/editorial_ledger_in.jsonl:107`) and the
 rulings of 2026-11-05 by subject (`ED-IN-0347`, `:126`; verbatim in `proposals/2026-11-05-attribute-rulings-by-subject.md:36-105`).
@@ -87,7 +100,7 @@ rulings of 2026-11-05 by subject (`ED-IN-0347`, `:126`; verbatim in `proposals/2
 | `attr.body.endurance` | Endurance | *"stamina, the ability to recover your breath, the likelihood of becoming tired which can impact concentration, and it contributes to someone's health/wounds"* (AR-20) |
 | `attr.mind.focus` | Focus | *"focus (concentration, avoiding errors)"* (ED-IN-0328); *"less likely to be distracted as well as less likely to have irrelevant information impact their choices"* (AR-23) |
 | `attr.mind.acuity` | Reason | *"reason (acuity, faculty, forecasting, predicting)"* (ED-IN-0328); *"mental acuity, logic, understanding of concepts/facts, forecasting, understanding what a choice entails"* (AR-21) |
-| `attr.mind.will` | Spirit | *"the ability to stay true to yourself and be free of external influence or compulsion, the capacity to tolerate harm and strain and stress, the likelihood to perform threadwork without losing coherence, the ability to get good results despite poor circumstances, to overcome an obstacle"* (AR-44) |
+| `attr.spirit.will` | Spirit | *"the ability to stay true to yourself and be free of external influence or compulsion, the capacity to tolerate harm and strain and stress, the likelihood to perform threadwork without losing coherence, the ability to get good results despite poor circumstances, to overcome an obstacle"* (AR-44) |
 | `attr.mind.perception` | Perception | *"awareness of surroundings, noticing information"* (ED-IN-0328; `descriptor_registry.yaml:48`); *"surveillance and fieldwork and noticing things out of place"* (AR-24); *"it concerns FACTUAL matters"* (AR-26) |
 | `attr.social.attunement` | Attunement | *"attunement (reading people)"* (ED-IN-0328); *"understanding other characters in terms of their intentions in a given moment as well as their pursuits convictions ambitions goals desires"* (AR-30); *"the likelihood of forming knots/bonds"* (AR-31) |
 | `attr.social.charisma` | Presence | *"charisma magnetism social impact"* (AR-29, governing AR-27 and AR-28) |
@@ -102,99 +115,103 @@ proposes, inert until B07); (c) subsystem. **attributes** are averaged. **curren
 (`opposed_by: {}` ships empty, `:1676`, so a person opposes with the row's own attribute, `pool.py:68-75`); the roll today
 (the social roll's `task_difficulty` rows, `rosters.yaml:1598-1607`; the prize rows; else the flat fold, no roll). A verb
 with no `verb_capability` row pools at `pool_default` for everyone (`pool.py:112-117`). Row numbers are the `verb:` lines
-of `engine/season/verb_table.yaml`.
+of `engine/season/verb_table.yaml`. **cells** (B05.24): the row in §0's row shape, the attributes as registry keys (§1),
+the interim cells B05.25 writes `[ASSUMPTION; medium; Jordan to correct at BA1.13]`; a brute row's `brute_note` is its
+authoriser cell, copied. Six of the 31 (b) rows, `argue`, `tell`, `lie`, `speak`, `interrogate` and `determine`, are
+hand-offs to the social subsystem by R3 and R6: their `governing:` and `opposed_attribute:` cells are an interim only,
+until B24p.19 (the first five) and B24.08 (`determine`).
 
 ### 2.1 Social (21 rows)
 
-| verb (row) | everyday meaning | kind | attributes (averaged), or what authorises it | skill | office modifier | opposed by | calls a subsystem? | current | agree? |
-|---|---|---|---|---|---|---|---|---|---|
-| `carry` (`:108`) | to take a petition up and put it before a forum (term of art, close to "present" or "sponsor") | (b) task | **Presence**, getting a forum to take a matter up is social impact (AR-29); **Grace**, done properly for the venue (AR-36) | `law` (P) | no (`own`) | nobody: the difficulty | none | no skill; no roll | **disagree**: can fail, rolls nothing |
-| `argue` (`:133`) | to give someone reasons meant to change his mind | (b) contest | **Presence**, ruled the main component (ED-IN-0350, `editorial_ledger_in.jsonl:129`); **Attunement**, how the other is receiving it (same ruling; Jordan 2026-11-13 puts it in the roll); **Reason**, the case's logic (AR-21; Jordan's teller points) | `argue` | no (`own`); the seat gap is a hearer-side term (§2.6) | the hearer's **Spirit**, *"free of external influence"* (AR-44; CR-96's reading, `rosters.yaml:1669-1670`) | social contest (`social_contest.roll`, `a proposition`): its input is the generic pool, so not exempt | `argue` → Presence; opposed by Presence; social roll | **disagree**: opposition, and two attributes added |
-| `commit` (`:209`) | to bind oneself publicly to a statement or cause | (a) `own`; roll: none | his own pledge: the row writes only his own `Tenure.since` | — | — | — | none | none; no roll | agree |
-| `comply` (`:227`) | to do what an order requires | (a) `own`; roll: none | his decision on a writ he holds (`requires`); what compliance performs is the separate act the writ names (row `writes_note`), which rolls on its own row | — | — | — | none | none; no roll | agree |
-| `conceal` (`:251`) | to take on a cover (a false identity about oneself) | (b) task | **Grace**, a calm, correct face under scrutiny (*"composure … nerve"*); **Focus**, not slipping out of the part (*"avoiding errors"*) | `deception` (P) | no | nobody when cast; the band is the examiner's obstacle later (18_DET item 4) | none | none; no roll | **disagree** |
-| `covenant` (`:300`) | to offer another party a formal binding agreement | (a) `seat`; roll: none | `remit:issue`; acceptance is the counterparty's own act | — | — | — | none | none; no roll | agree |
-| `lie` (`:534`) | to say what one knows is false so another believes it | (b) contest | **Attunement**, what this hearer will believe (AR-30); **Reason**, a consistent, plausible story (AR-21; Jordan's "knowledge of plausibility"); **Grace**, the liar's nerve (*"composure … nerve"*; U1 §2's `deception.base`, `U1_CAPABILITY_AUTHORING_ARCHITECTURE.md:129`) | `deception` (P) | no | the hearer's **Attunement**, seeing intention in the moment (AR-30); U1 §2 says Perception, ruled *"FACTUAL matters"* (AR-26): the content's fit is an engine fact (§2.6) | social contest (`a standing`) | no skill row: pool and opposition at `pool_default` (`rosters.yaml:1563-1567`) | **disagree**: no attribute on either side |
-| `forgive` (`:573`) | to stop holding a wrong against someone | (a) `own`; roll: none | his own stance rows (row `writes_note`) | — | — | — | none | none; no roll | agree |
-| `give` (`:657`) | to hand something one holds to another | (a) `own`; roll: none | he holds it and the receiver is present (`requires`) | — | — | — | none | none; no roll | agree |
-| `oblige` (`:1217`) | to take on a duty to a seat (term of art, close to "pledge service") | (a) `seat`; roll: none | the seat's `binds` admits the joiner (`requires`; referent an Office) | — | — | — | none | none; no roll | agree |
-| `open_case` (`:1239`) | to begin formal proceedings on a matter | (a) `seat`; roll: none | `remit:determine`; the act declares the stages (`requires`); how the matter is judged is `determine`'s | — | — | — | none | none; no roll | agree (18_DET's `task` class disagreed with) |
-| `petition` (`:1294`) | to ask an authority formally for something | (a) `counterparty`; roll: none | filing; the addressee's answer is his own act (18_DET `bookkeeping`); the persuasion is where the matter is heard (`speak`) | — | — | — | none | none; no roll | agree |
-| `construe` (`:1320`) | to interpret terms, here to one's own advantage | (a) `own`; roll: none | his own reading, a belief (row `writes_note`) | — | — | — | none | none; no roll | agree |
-| `speak` (`:1475`) | to address a hearing on a matter before it (to plead, when it is one's own) | (b) contest | **Presence**, moving a room (AR-29); **Reason**, the case (AR-21; Jordan's teller points); **Grace**, a venue penalizes one *"not doing it right"* (AR-36a) | `argue` (U1, `:139`) | yes where he speaks from a seat in the body that hears him (U1-D `heard_by`); else the gap is a hearer-side term | the matter's party: his **Spirit** (AR-44); the self-plea, §2.7 | social contest (`a matter`, `heard_by: bench`, `rosters.yaml:1786-1790`); the hearing's nested run is unbuilt (`:1379`) | `copying` → Focus; opposed by Focus | **disagree**: a copyist's attribute |
-| `tell` (`:1582`) | to pass on to someone something one knows | (b) contest | **Reason**, knowing the matter and making it hang together (AR-21; "knowledge of plausibility"); **Attunement**, putting it to this hearer (AR-30) | none: attribute only (`copying` is a faithful reproduction of a text, `rosters.yaml:1629-1631`) | no | the hearer's **Spirit** (AR-44) | social contest (`a standing`) | `copying` → Focus; opposed by Focus | **disagree**: attribute and skill |
-| `interview` (`:1767`) | to question someone to learn what he knows | (a) `counterparty`; roll: none | a prompt: the questioned person answers by his own `tell`, which is drawn (`rosters.yaml:1433-1434`, K-36) | — | — | — | none (`finding.made` reaches `fieldwork.find`) | none; no roll | agree (18_DET's contest class disagreed with) |
-| `interrogate` (`:1783`) | to question a prisoner hard to get a confession | (b) contest, an office act that can be botched | **Attunement**, how near he is to breaking (AR-30; AR-42); **Presence**, the questioner's force (AR-29) | `inquiry` (U1 §5, `:300`) | yes: `remit:determine` | the prisoner's **Spirit**, *"free of … compulsion, the capacity to tolerate harm and strain"* (AR-44) | social contest (`a proposition`) | `inquiry` → Reason; opposed by Reason | **disagree**: both attributes |
-| `tie / knot` (`:1896`) | to form a close personal bond with someone | (b) task | **Attunement**, ruled to govern *"the likelihood of forming knots/bonds"* (AR-31) | none | no | nobody's attribute: the other's regard is the term (`person_q.regard`) | none | none; no roll | **disagree**: AR-31 says *likelihood* |
-| `utter` (`:2090`) | to put something into words | (a) `own`; roll: none | it makes a Proposition exist; belief in it is a later `tell` or `argue` | — | — | — | none | none; no roll | agree |
-| `evade / defy` (`:457`) | to dodge an order quietly, or refuse it openly | (a) `own`; roll: none | his decision; *"disobedience others see or miss"* is the witnesses' noticing (row `writes_note`) | — | — | — | none | none; no roll | agree |
-| `challenge` (`:925`) | to call someone out to fight | (a) `counterparty`; roll: none | a declaration (a `challenge` Record); the answer is the other man's `accept` | — | — | — | none (the fight is `accept`'s) | none; no roll | agree |
+| verb (row) | everyday meaning | kind | attributes (averaged), or what authorises it | skill | office modifier | opposed by | calls a subsystem? | current | agree? | cells (B05.24 row shape; interim) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `carry` (`:108`) | to take a petition up and put it before a forum (term of art, close to "present" or "sponsor") | (b) task | **Presence**, getting a forum to take a matter up is social impact (AR-29); **Grace**, done properly for the venue (AR-36) | `law` (P) | no (`own`) | nobody: the difficulty | none | no skill; no roll | **disagree**: can fail, rolls nothing | `governing: [attr.social.charisma, attr.social.grace]` |
+| `argue` (`:133`) | to give someone reasons meant to change his mind | (b) contest | **Presence**, ruled the main component (ED-IN-0350, `editorial_ledger_in.jsonl:129`); **Attunement**, how the other is receiving it (same ruling; Jordan 2026-11-13 puts it in the roll); **Reason**, the case's logic (AR-21; Jordan's teller points) | `argue` | no (`own`); the seat gap is a hearer-side term (§2.6) | the hearer's **Spirit**, *"free of external influence"* (AR-44; CR-96's reading, `rosters.yaml:1669-1670`) | social contest (`social_contest.roll`, `a proposition`): its input is the generic pool, so not exempt | `argue` → Presence; opposed by Presence; social roll | **disagree**: opposition, and two attributes added | `governing: [attr.social.charisma, attr.social.attunement, attr.mind.acuity]`; `opposed_attribute: attr.spirit.will`; INTERIM: a hand-off to the social subsystem (R3, R6) until B24p.19 |
+| `commit` (`:209`) | to bind oneself publicly to a statement or cause | (a) `own`; roll: none | his own pledge: the row writes only his own `Tenure.since` | — | — | — | none | none; no roll | agree | `brute: own`; `brute_note:` the authoriser cell |
+| `comply` (`:227`) | to do what an order requires | (a) `own`; roll: none | his decision on a writ he holds (`requires`); what compliance performs is the separate act the writ names (row `writes_note`), which rolls on its own row | — | — | — | none | none; no roll | agree | `brute: own`; `brute_note:` the authoriser cell |
+| `conceal` (`:251`) | to take on a cover (a false identity about oneself) | (b) task | **Grace**, a calm, correct face under scrutiny (*"composure … nerve"*); **Focus**, not slipping out of the part (*"avoiding errors"*) | `deception` (P) | no | nobody when cast; the band is the examiner's obstacle later (18_DET item 4) | none | none; no roll | **disagree** | `governing: [attr.social.grace, attr.mind.focus]` |
+| `covenant` (`:300`) | to offer another party a formal binding agreement | (a) `seat`; roll: none | `remit:issue`; acceptance is the counterparty's own act | — | — | — | none | none; no roll | agree | `brute: seat`; `brute_note:` the authoriser cell |
+| `lie` (`:534`) | to say what one knows is false so another believes it | (b) contest | **Attunement**, what this hearer will believe (AR-30); **Reason**, a consistent, plausible story (AR-21; Jordan's "knowledge of plausibility"); **Grace**, the liar's nerve (*"composure … nerve"*; U1 §2's `deception.base`, `U1_CAPABILITY_AUTHORING_ARCHITECTURE.md:129`) | `deception` (P) | no | the hearer's **Attunement**, seeing intention in the moment (AR-30); U1 §2 says Perception, ruled *"FACTUAL matters"* (AR-26): the content's fit is an engine fact (§2.6) | social contest (`a standing`) | no skill row: pool and opposition at `pool_default` (`rosters.yaml:1563-1567`) | **disagree**: no attribute on either side | `governing: [attr.social.attunement, attr.mind.acuity, attr.social.grace]`; `opposed_attribute: attr.social.attunement`; INTERIM: a hand-off to the social subsystem (R3, R6) until B24p.19 |
+| `forgive` (`:573`) | to stop holding a wrong against someone | (a) `own`; roll: none | his own stance rows (row `writes_note`) | — | — | — | none | none; no roll | agree | `brute: own`; `brute_note:` the authoriser cell |
+| `give` (`:657`) | to hand something one holds to another | (a) `own`; roll: none | he holds it and the receiver is present (`requires`) | — | — | — | none | none; no roll | agree | `brute: own`; `brute_note:` the authoriser cell |
+| `oblige` (`:1217`) | to take on a duty to a seat (term of art, close to "pledge service") | (a) `seat`; roll: none | the seat's `binds` admits the joiner (`requires`; referent an Office) | — | — | — | none | none; no roll | agree | `brute: seat`; `brute_note:` the authoriser cell |
+| `open_case` (`:1239`) | to begin formal proceedings on a matter | (a) `seat`; roll: none | `remit:determine`; the act declares the stages (`requires`); how the matter is judged is `determine`'s | — | — | — | none | none; no roll | agree (18_DET's `task` class disagreed with) | `brute: seat`; `brute_note:` the authoriser cell |
+| `petition` (`:1294`) | to ask an authority formally for something | (a) `counterparty`; roll: none | filing; the addressee's answer is his own act (18_DET `bookkeeping`); the persuasion is where the matter is heard (`speak`) | — | — | — | none | none; no roll | agree | `brute: counterparty`; `brute_note:` the authoriser cell |
+| `construe` (`:1320`) | to interpret terms, here to one's own advantage | (a) `own`; roll: none | his own reading, a belief (row `writes_note`) | — | — | — | none | none; no roll | agree | `brute: own`; `brute_note:` the authoriser cell |
+| `speak` (`:1475`) | to address a hearing on a matter before it (to plead, when it is one's own) | (b) contest | **Presence**, moving a room (AR-29); **Reason**, the case (AR-21; Jordan's teller points); **Grace**, a venue penalizes one *"not doing it right"* (AR-36a) | `argue` (U1, `:139`) | yes where he speaks from a seat in the body that hears him (U1-D `heard_by`); else the gap is a hearer-side term | the matter's party: his **Spirit** (AR-44); the self-plea, §2.7 | social contest (`a matter`, `heard_by: bench`, `rosters.yaml:1786-1790`); the hearing's nested run is unbuilt (`:1379`) | `copying` → Focus; opposed by Focus | **disagree**: a copyist's attribute | `governing: [attr.social.charisma, attr.mind.acuity, attr.social.grace]`; `opposed_attribute: attr.spirit.will`; INTERIM: a hand-off to the social subsystem (R3, R6) until B24p.19 |
+| `tell` (`:1582`) | to pass on to someone something one knows | (b) contest | **Reason**, knowing the matter and making it hang together (AR-21; "knowledge of plausibility"); **Attunement**, putting it to this hearer (AR-30) | none: attribute only (`copying` is a faithful reproduction of a text, `rosters.yaml:1629-1631`) | no | the hearer's **Spirit** (AR-44) | social contest (`a standing`) | `copying` → Focus; opposed by Focus | **disagree**: attribute and skill | `governing: [attr.mind.acuity, attr.social.attunement]`; `opposed_attribute: attr.spirit.will`; INTERIM: a hand-off to the social subsystem (R3, R6) until B24p.19 |
+| `interview` (`:1767`) | to question someone to learn what he knows | (a) `counterparty`; roll: none | a prompt: the questioned person answers by his own `tell`, which is drawn (`rosters.yaml:1433-1434`, K-36) | — | — | — | none (`finding.made` reaches `fieldwork.find`) | none; no roll | agree (18_DET's contest class disagreed with) | `brute: counterparty`; `brute_note:` the authoriser cell |
+| `interrogate` (`:1783`) | to question a prisoner hard to get a confession | (b) contest, an office act that can be botched | **Attunement**, how near he is to breaking (AR-30; AR-42); **Presence**, the questioner's force (AR-29) | `inquiry` (U1 §5, `:300`) | yes: `remit:determine` | the prisoner's **Spirit**, *"free of … compulsion, the capacity to tolerate harm and strain"* (AR-44) | social contest (`a proposition`) | `inquiry` → Reason; opposed by Reason | **disagree**: both attributes | `governing: [attr.social.attunement, attr.social.charisma]`; `opposed_attribute: attr.spirit.will`; INTERIM: a hand-off to the social subsystem (R3, R6) until B24p.19 |
+| `tie / knot` (`:1896`) | to form a close personal bond with someone | (b) task | **Attunement**, ruled to govern *"the likelihood of forming knots/bonds"* (AR-31) | none | no | nobody's attribute: the other's regard is the term (`person_q.regard`) | none | none; no roll | **disagree**: AR-31 says *likelihood* | `governing: [attr.social.attunement]` |
+| `utter` (`:2090`) | to put something into words | (a) `own`; roll: none | it makes a Proposition exist; belief in it is a later `tell` or `argue` | — | — | — | none | none; no roll | agree | `brute: own`; `brute_note:` the authoriser cell |
+| `evade / defy` (`:457`) | to dodge an order quietly, or refuse it openly | (a) `own`; roll: none | his decision; *"disobedience others see or miss"* is the witnesses' noticing (row `writes_note`) | — | — | — | none | none; no roll | agree | `brute: own`; `brute_note:` the authoriser cell |
+| `challenge` (`:925`) | to call someone out to fight | (a) `counterparty`; roll: none | a declaration (a `challenge` Record); the answer is the other man's `accept` | — | — | — | none (the fight is `accept`'s) | none; no roll | agree | `brute: counterparty`; `brute_note:` the authoriser cell |
 
 ### 2.2 Contested physical (9 rows)
 
-| verb (row) | everyday meaning | kind | attributes (averaged), or what authorises it, or the subsystem's inputs | skill | office modifier | opposed by | calls a subsystem? | current | agree? |
-|---|---|---|---|---|---|---|---|---|---|
-| `arrest` (`:171`) | to seize a person by authority and take him into custody | (b) contest, an office act that can be botched | **Strength**, *"to push and force the opponent"* (AR-10); **Presence**, men submit to the bearing of authority (AR-29) | `arms` (U1 §5, `:303`) | yes: `remit:dispatch` | the subject's **Strength** (Coordination the competitor) | social contest today (`a standing`); the row's own question, standing or body: §6 Q1 | `arms` → Coordination; opposed by Coordination | **disagree**: Coordination → Strength, Presence |
-| `fight` (`:733`) | to try to hurt or overcome someone by force | (c) | none of the verb's own: combat reads the martial skill `arms` (pool `max(5, skill + 6)`, the six base dice, `modules/combat/core.py:51-52`) and six attributes mapped from `Person.attributes`: Strength, Coordination, Endurance, Perception, Spirit, Focus (`modules/combat/attributes.py:45-50`) | `arms` (input) | no | combat's rule (A-71, A-79) | **personal combat** (`combat.fight`, `module_contracts.yaml:58-62`; `the body`); declared at RESOLVE, fought at ENCOUNTER (`rosters.yaml:1740-1741`): no roll before the hand-off | `arms` → Coordination through `faculty`, passed as `faculties` (`seam/wrappers/combat.py:215-229`) | **disagree: a duplicate.** An authored Coordination reaches the fight twice: in `faculty`'s `max(attr, have)` (`pool.py:107-108`) and as combat's `agi` (`attributes.py:46`; `fight.py:46-52`; passed at `combat.py:231-232`); the roster note that `agi` is the class default (`rosters.yaml:1660-1663`) predates PC-06 K-1 |
-| `capture` (`:866`) | to take someone prisoner by force | (c) | as `fight` | `arms` (input) | yes: `remit:dispatch` | combat's rule, `yield` terms | **personal combat** (`the body`) | as `fight` | **disagree**: the same duplicate |
-| `accept` (`:961`) | to take up a challenge, and fight it | (c) | as `fight` | `arms` (input) | no | combat's rule | **personal combat** (`the body`) | as `fight` | **disagree**: the same duplicate |
-| `march` (`:1057`) | to lead an army to a place, and fight what meets it there | (c) | none of the verb's own: the field reads the commander's **command** (P; A-59, `DECISIONS_ANSWERED.md:73`) and each unit's prowess; today no person attribute (no `attributes` read in `seam/wrappers/mass_battle.py`) | `command` (P, input) | yes: `remit:dispatch` | the field's rule | **mass battle** (`mass_battle.resolve_field`, `module_contracts.yaml:64-68`; `a field`) | none (U1 §5 `none`, `:304`) | agree |
-| `raze` (`:1426`) | to destroy a captured town utterly | (b) task, an office act that can be botched | **Presence**, an ugly order carried out is obedience to command (A-59; AR-29) | `command` (P) | yes: `remit:dispatch` | nobody | none (the field was `march`'s, row `writes_note`) | none; no roll | **disagree** |
-| `examine` (`:1738`) | to look closely at a place to find out what happened there | (b) graded | **Perception**, *"noticing things out of place"* (AR-24), *"FACTUAL matters"* (AR-26); **Reason**, what the traces mean (AR-21) | `inquiry` | no | nobody (difficulty); a forger's or concealer's band | graded social roll (`rosters.yaml:1442`), then **field investigation** (`fieldwork.find`, `module_contracts.yaml:120-123`) on the grade: not exempt | `inquiry` → Reason | **disagree**: Perception added; CR-96 named the clash and stopped (`rosters.yaml:1650-1654`) |
-| `surveil` (`:1838`) | to watch a place or person secretly over time | (b) graded | **Perception**, ruled for *"surveillance"* (AR-24); **Focus**, watching without lapses (AR-23) | `inquiry` | no | nobody; a watched person's **Perception** once the Person case is built (`rosters.yaml:1436-1437`) | graded social roll, then field investigation | `inquiry` → Reason | **disagree** |
-| `thread_read` (`:1863`) | to sense the Thread at a site (term of art, close to "divine") | (b) task | **Spirit**, *"the likelihood to perform threadwork without losing coherence"* (AR-44) | none: Thread Sensitivity is the gate, not a skill (glossary `:84`, A-11) | no | nobody | none | none; no roll (waits, `rosters.yaml:1435-1436`) | **disagree** |
+| verb (row) | everyday meaning | kind | attributes (averaged), or what authorises it, or the subsystem's inputs | skill | office modifier | opposed by | calls a subsystem? | current | agree? | cells (B05.24 row shape; interim) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `arrest` (`:171`) | to seize a person by authority and take him into custody | (b) contest, an office act that can be botched | **Strength**, *"to push and force the opponent"* (AR-10); **Presence**, men submit to the bearing of authority (AR-29) | `arms` (U1 §5, `:303`) | yes: `remit:dispatch` | the subject's **Strength** (Coordination the competitor) | social contest today (`a standing`); the row's own question, standing or body: §6 Q1 | `arms` → Coordination; opposed by Coordination | **disagree**: Coordination → Strength, Presence | `governing: [attr.body.strength, attr.social.charisma]`; `opposed_attribute: attr.body.strength` |
+| `fight` (`:733`) | to try to hurt or overcome someone by force | (c) | none of the verb's own: combat reads the martial skill `arms` (pool `max(5, skill + 6)`, the six base dice, `modules/combat/core.py:51-52`) and six attributes mapped from `Person.attributes`: Strength, Coordination, Endurance, Perception, Spirit, Focus (`modules/combat/attributes.py:45-50`) | `arms` (input) | no | combat's rule (A-71, A-79) | **personal combat** (`combat.fight`, `module_contracts.yaml:58-62`; `the body`); declared at RESOLVE, fought at ENCOUNTER (`rosters.yaml:1740-1741`): no roll before the hand-off | `arms` → Coordination through `faculty`, passed as `faculties` (`seam/wrappers/combat.py:215-229`) | **disagree: a duplicate.** An authored Coordination reaches the fight twice: in `faculty`'s `max(attr, have)` (`pool.py:107-108`) and as combat's `agi` (`attributes.py:46`; `fight.py:46-52`; passed at `combat.py:231-232`); the roster note that `agi` is the class default (`rosters.yaml:1660-1663`) predates PC-06 K-1 | none of the three; `contests: the body`, its prize `person_inputs: own` |
+| `capture` (`:866`) | to take someone prisoner by force | (c) | as `fight` | `arms` (input) | yes: `remit:dispatch` | combat's rule, `yield` terms | **personal combat** (`the body`) | as `fight` | **disagree**: the same duplicate | none of the three; `contests: the body`, its prize `person_inputs: own` |
+| `accept` (`:961`) | to take up a challenge, and fight it | (c) | as `fight` | `arms` (input) | no | combat's rule | **personal combat** (`the body`) | as `fight` | **disagree**: the same duplicate | none of the three; `contests: the body`, its prize `person_inputs: own` |
+| `march` (`:1057`) | to lead an army to a place, and fight what meets it there | (c) | none of the verb's own: the field reads the commander's **command** (P; A-59, `DECISIONS_ANSWERED.md:73`) and each unit's prowess; today no person attribute (no `attributes` read in `seam/wrappers/mass_battle.py`) | `command` (P, input) | yes: `remit:dispatch` | the field's rule | **mass battle** (`mass_battle.resolve_field`, `module_contracts.yaml:64-68`; `a field`) | none (U1 §5 `none`, `:304`) | agree | none of the three; `contests: a field`, its prize `person_inputs: own` |
+| `raze` (`:1426`) | to destroy a captured town utterly | (b) task, an office act that can be botched | **Presence**, an ugly order carried out is obedience to command (A-59; AR-29) | `command` (P) | yes: `remit:dispatch` | nobody | none (the field was `march`'s, row `writes_note`) | none; no roll | **disagree** | `governing: [attr.social.charisma]` |
+| `examine` (`:1738`) | to look closely at a place to find out what happened there | (b) graded | **Perception**, *"noticing things out of place"* (AR-24), *"FACTUAL matters"* (AR-26); **Reason**, what the traces mean (AR-21) | `inquiry` | no | nobody (difficulty); a forger's or concealer's band | graded social roll (`rosters.yaml:1442`), then **field investigation** (`fieldwork.find`, `module_contracts.yaml:120-123`) on the grade: not exempt | `inquiry` → Reason | **disagree**: Perception added; CR-96 named the clash and stopped (`rosters.yaml:1650-1654`) | `governing: [attr.mind.perception, attr.mind.acuity]` |
+| `surveil` (`:1838`) | to watch a place or person secretly over time | (b) graded | **Perception**, ruled for *"surveillance"* (AR-24); **Focus**, watching without lapses (AR-23) | `inquiry` | no | nobody; a watched person's **Perception** once the Person case is built (`rosters.yaml:1436-1437`) | graded social roll, then field investigation | `inquiry` → Reason | **disagree** | `governing: [attr.mind.perception, attr.mind.focus]` |
+| `thread_read` (`:1863`) | to sense the Thread at a site (term of art, close to "divine") | (b) task | **Spirit**, *"the likelihood to perform threadwork without losing coherence"* (AR-44) | none: Thread Sensitivity is the gate, not a skill (glossary `:84`, A-11) | no | nobody | none | none; no roll (waits, `rosters.yaml:1435-1436`) | **disagree** | `governing: [attr.spirit.will]` |
 
 ### 2.3 Uncontested material (23 rows)
 
-| verb (row) | everyday meaning | kind | attributes (averaged), or what authorises it | skill | office modifier | opposed by | calls a subsystem? | current | agree? |
-|---|---|---|---|---|---|---|---|---|---|
-| `create_record` (`:327`) | to write a document | (a) `own`; roll: none | his own paper (18_DET `bookkeeping`); a false one is `forge` | — | — | — | none | none; no roll | agree |
-| `destroy_record` (`:338`) | to destroy a document one holds | (a) `own`; roll: none | he holds it (`requires`); what it leaves is a witness question | — | — | — | none | none; no roll | agree (18_DET's `task` disagreed with) |
-| `exchange` (`:480`) | to trade goods with another | (a) `counterparty`; roll: none | both stores cover the terms or it is refused; each side's consent is his own choice | — | — | — | none | none; no roll | agree |
-| `forge` (`:508`) | to make a false document | (b) task | **Coordination**, ruled for *"the quality of a forgery"* (AR-16); **Focus**, *"avoiding errors"* | `copying` (a faithful reproduction of a hand) | no | nobody when made; its band is the examiner's obstacle | none | none (`rosters.yaml:1651`); no roll | **disagree** |
-| `found` (`:607`) | to found a settlement from a planned works | (b) task | **Reason**, planning and *"forecasting"* (AR-21); **Presence**, drawing settlers (AR-29) | none yet (U1 §5, `:307`) | no | nobody | none | none; no roll | **disagree** |
-| `build` (`:632`) | to have a building put up at a site | (b) task | **Reason**, planning the works; **Focus**, without errors | none yet | no | nobody | none | none; no roll | **disagree** |
-| `requisition` (`:1020`) | to take supplies from a place by official demand | (b) task, an office act that can be botched | **Presence**, being obeyed (AR-29) | `command` (P; glossary `:83`) | yes: `remit:issue` | nobody; short stores refuse | none | none; no roll | **disagree** |
-| `restore` (`:1362`) | to repair a place's fabric | (b) task | **Coordination**, *"precise manoeuvres"* (AR-15); **Strength**, heavy work (AR-10) | none yet (craft) | no | nobody | none | none; no roll | **disagree** |
-| `sabotage` (`:1403`) | to damage a place in secret | (b) task | **Coordination**, quiet, precise hands (AR-16); **Reason**, where it will hurt (AR-21) | none | no | nobody in the row | none | none; no roll | **disagree** |
-| `seize` (`:1449`) | to confiscate something by authority | (b) contest, an office act that can be botched | **Presence**, authority's force on the holder (AR-29) | `law` (P) | yes: `remit:issue` | the holder's **Spirit**, refusing to yield (AR-44) | none | none; no roll | **disagree** |
-| `survey` (`:1538`) | to compile an account of what a faction holds | (b) task | **Reason**, putting known facts in order (AR-21); **Perception**, noticing what is missing (AR-26a) | `inquiry` | no | nobody | none | none; no roll | **disagree** |
-| `tend` (`:1557`) | to care for a sick or wounded person | (b) task | **Focus**, care without errors; **Coordination**, dressing a wound (AR-15) | `healing` (P; U1 §2 `:133`) | no | nobody | none | none; no roll | **disagree** |
-| `research` (`:1815`) | to consult records to learn something | (b) graded | **Reason**, *"understanding of concepts/facts"* (AR-21); **Focus**, filtering the irrelevant (AR-23) | `inquiry` | no | nobody | graded social roll (`rosters.yaml:1441`), then field investigation | `inquiry` → Reason | agree (Focus added) |
-| `reconstruct` (`:1881`) | to work out from what one knows what happened | (b) task | **Reason**, logic and forecasting (AR-21); **Focus**, *"filter and prioritize correctly"* (AR-21) | `inquiry` | no | nobody | none | none; no roll (waits, K-37) | **disagree** |
-| `train` (`:1908`) | to teach someone a skill | (b) task | **Attunement**, understanding the learner (AR-30) | the skill taught (the `kind` operand), the trainer's own rank in it | no | nobody | none | none; a certain +1 (row `writes_note`) | **disagree** |
-| `recruit` (`:1932`) | to raise troops from a population | (b) task | **Presence**, drawing men to the banner (AR-29); **Grace**, being seen as apt (AR-35) | `command` (P; U1 §5 `:305`) | no (`own`) | nobody | mass battle's army record (`mass_battle.army`, a query that rolls nothing, `module_contracts.yaml:99-102`): not exempt | none; no roll | **disagree** |
-| `form_unit` (`:1955`) | to create a new, empty unit in an army | (a) `own`; roll: none | his own army record | — | — | — | army record (query) | none; no roll | agree |
-| `assign_troops` (`:1978`) | to move troops into or out of a unit | (a) `own`; roll: none | as `form_unit` | — | — | — | the same | none; no roll | agree |
-| `disband_unit` (`:2001`) | to break up a unit | (a) `own`; roll: none | as `form_unit` | — | — | — | the same | none; no roll | agree |
-| `discharge_troops` (`:2024`) | to send unassigned troops home | (a) `own`; roll: none | as `form_unit` | — | — | — | the same | none; no roll | agree |
-| `order_unit` (`:2047`) | to set a unit's role, stance and target | (a) `own`; roll: none | his own army record; whether it is obeyed in the field is the field's order-friction draw on `command` (A-59 (1)) | — | — | — | the same | none; no roll | agree |
-| `transfer` (`:2070`) | to move goods from one's store to another's | (a) `own`; roll: none | his store covers it (`requires`) | — | — | — | none | none; no roll | agree |
-| `work` (`:2101`) | to labour at a site to keep or raise it | (b) task | **Endurance**, *"the likelihood of becoming tired"* (AR-20); **Strength**, the labour's force (AR-10) | none yet (craft) | no | nobody | none | none; no roll | **disagree** |
+| verb (row) | everyday meaning | kind | attributes (averaged), or what authorises it | skill | office modifier | opposed by | calls a subsystem? | current | agree? | cells (B05.24 row shape; interim) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `create_record` (`:327`) | to write a document | (a) `own`; roll: none | his own paper (18_DET `bookkeeping`); a false one is `forge` | — | — | — | none | none; no roll | agree | `brute: own`; `brute_note:` the authoriser cell |
+| `destroy_record` (`:338`) | to destroy a document one holds | (a) `own`; roll: none | he holds it (`requires`); what it leaves is a witness question | — | — | — | none | none; no roll | agree (18_DET's `task` disagreed with) | `brute: own`; `brute_note:` the authoriser cell |
+| `exchange` (`:480`) | to trade goods with another | (a) `counterparty`; roll: none | both stores cover the terms or it is refused; each side's consent is his own choice | — | — | — | none | none; no roll | agree | `brute: counterparty`; `brute_note:` the authoriser cell |
+| `forge` (`:508`) | to make a false document | (b) task | **Coordination**, ruled for *"the quality of a forgery"* (AR-16); **Focus**, *"avoiding errors"* | `copying` (a faithful reproduction of a hand) | no | nobody when made; its band is the examiner's obstacle | none | none (`rosters.yaml:1651`); no roll | **disagree** | `governing: [attr.body.agility, attr.mind.focus]` |
+| `found` (`:607`) | to found a settlement from a planned works | (b) task | **Reason**, planning and *"forecasting"* (AR-21); **Presence**, drawing settlers (AR-29) | none yet (U1 §5, `:307`) | no | nobody | none | none; no roll | **disagree** | `governing: [attr.mind.acuity, attr.social.charisma]` |
+| `build` (`:632`) | to have a building put up at a site | (b) task | **Reason**, planning the works; **Focus**, without errors | none yet | no | nobody | none | none; no roll | **disagree** | `governing: [attr.mind.acuity, attr.mind.focus]` |
+| `requisition` (`:1020`) | to take supplies from a place by official demand | (b) task, an office act that can be botched | **Presence**, being obeyed (AR-29) | `command` (P; glossary `:83`) | yes: `remit:issue` | nobody; short stores refuse | none | none; no roll | **disagree** | `governing: [attr.social.charisma]` |
+| `restore` (`:1362`) | to repair a place's fabric | (b) task | **Coordination**, *"precise manoeuvres"* (AR-15); **Strength**, heavy work (AR-10) | none yet (craft) | no | nobody | none | none; no roll | **disagree** | `governing: [attr.body.agility, attr.body.strength]` |
+| `sabotage` (`:1403`) | to damage a place in secret | (b) task | **Coordination**, quiet, precise hands (AR-16); **Reason**, where it will hurt (AR-21) | none | no | nobody in the row | none | none; no roll | **disagree** | `governing: [attr.body.agility, attr.mind.acuity]` |
+| `seize` (`:1449`) | to confiscate something by authority | (b) contest, an office act that can be botched | **Presence**, authority's force on the holder (AR-29) | `law` (P) | yes: `remit:issue` | the holder's **Spirit**, refusing to yield (AR-44) | none | none; no roll | **disagree** | `governing: [attr.social.charisma]`; `opposed_attribute: attr.spirit.will` |
+| `survey` (`:1538`) | to compile an account of what a faction holds | (b) task | **Reason**, putting known facts in order (AR-21); **Perception**, noticing what is missing (AR-26a) | `inquiry` | no | nobody | none | none; no roll | **disagree** | `governing: [attr.mind.acuity, attr.mind.perception]` |
+| `tend` (`:1557`) | to care for a sick or wounded person | (b) task | **Focus**, care without errors; **Coordination**, dressing a wound (AR-15) | `healing` (P; U1 §2 `:133`) | no | nobody | none | none; no roll | **disagree** | `governing: [attr.mind.focus, attr.body.agility]` |
+| `research` (`:1815`) | to consult records to learn something | (b) graded | **Reason**, *"understanding of concepts/facts"* (AR-21); **Focus**, filtering the irrelevant (AR-23) | `inquiry` | no | nobody | graded social roll (`rosters.yaml:1441`), then field investigation | `inquiry` → Reason | agree (Focus added) | `governing: [attr.mind.acuity, attr.mind.focus]` |
+| `reconstruct` (`:1881`) | to work out from what one knows what happened | (b) task | **Reason**, logic and forecasting (AR-21); **Focus**, *"filter and prioritize correctly"* (AR-21) | `inquiry` | no | nobody | none | none; no roll (waits, K-37) | **disagree** | `governing: [attr.mind.acuity, attr.mind.focus]` |
+| `train` (`:1908`) | to teach someone a skill | (b) task | **Attunement**, understanding the learner (AR-30) | the skill taught (the `kind` operand), the trainer's own rank in it | no | nobody | none | none; a certain +1 (row `writes_note`) | **disagree** | `governing: [attr.social.attunement]` |
+| `recruit` (`:1932`) | to raise troops from a population | (b) task | **Presence**, drawing men to the banner (AR-29); **Grace**, being seen as apt (AR-35) | `command` (P; U1 §5 `:305`) | no (`own`) | nobody | mass battle's army record (`mass_battle.army`, a query that rolls nothing, `module_contracts.yaml:99-102`): not exempt | none; no roll | **disagree** | `governing: [attr.social.charisma, attr.social.grace]` |
+| `form_unit` (`:1955`) | to create a new, empty unit in an army | (a) `own`; roll: none | his own army record | — | — | — | army record (query) | none; no roll | agree | `brute: own`; `brute_note:` the authoriser cell |
+| `assign_troops` (`:1978`) | to move troops into or out of a unit | (a) `own`; roll: none | as `form_unit` | — | — | — | the same | none; no roll | agree | `brute: own`; `brute_note:` the authoriser cell |
+| `disband_unit` (`:2001`) | to break up a unit | (a) `own`; roll: none | as `form_unit` | — | — | — | the same | none; no roll | agree | `brute: own`; `brute_note:` the authoriser cell |
+| `discharge_troops` (`:2024`) | to send unassigned troops home | (a) `own`; roll: none | as `form_unit` | — | — | — | the same | none; no roll | agree | `brute: own`; `brute_note:` the authoriser cell |
+| `order_unit` (`:2047`) | to set a unit's role, stance and target | (a) `own`; roll: none | his own army record; whether it is obeyed in the field is the field's order-friction draw on `command` (A-59 (1)) | — | — | — | the same | none; no roll | agree | `brute: own`; `brute_note:` the authoriser cell |
+| `transfer` (`:2070`) | to move goods from one's store to another's | (a) `own`; roll: none | his store covers it (`requires`) | — | — | — | none | none; no roll | agree | `brute: own`; `brute_note:` the authoriser cell |
+| `work` (`:2101`) | to labour at a site to keep or raise it | (b) task | **Endurance**, *"the likelihood of becoming tired"* (AR-20); **Strength**, the labour's force (AR-10) | none yet (craft) | no | nobody | none | none; no roll | **disagree** | `governing: [attr.body.endurance, attr.body.strength]` |
 
 ### 2.4 Binding decision (12 rows)
 
-| verb (row) | everyday meaning | kind | attributes (averaged), or what authorises it | skill | office modifier | opposed by | calls a subsystem? | current | agree? |
-|---|---|---|---|---|---|---|---|---|---|
-| `confer` (`:267`) | to appoint someone to an office | (a) `seat`; roll: none | the conferral basis and 1-per-object (`requires`); Grace's pull on who is chosen (AR-35) weighs the choice (AR-04), not a roll | — | — | — | none | none; no roll | agree |
-| `convene` (`:287`) | to call a body to meet on a date | (a) `seat`; roll: none | `remit:convene` | — | — | — | none | none; no roll | agree |
-| `determine` (`:360`) | to judge a matter and decide it | (b) contest, an office act that can be botched | **Reason**, weighing facts and logic (AR-21); **Focus**, keeping the irrelevant out (AR-23) | `law` (P; U1 §5 `:302`; interim `argue`) | yes: `remit:determine` | the party's **Spirit** (AR-44) | social contest (`a proposition`) | `argue` → Presence; opposed by Presence | **disagree**: a judge is not an arguer |
-| `dispatch` (`:424`) | to order a person to go or act | (a) `seat`; roll: none | `remit:dispatch`; *"their own choose decides"* (row `writes_note`) | — | — | — | none | none; no roll | agree |
-| `establish` (`:441`) | to create a new office | (a) `seat`; roll: none | the conferral basis and a rung (`requires`) | — | — | — | none | none; no roll | agree |
-| `issue` (`:682`) | to send out a written order | (a) `seat`; roll: none | `remit:issue`; execution is each executor's own act | — | — | — | none | none; no roll | agree (18_DET's `task` disagreed with) |
-| `marshal` (`:1095`) | to draw up an army's order of battle | (b) task, an office act that can be botched | **Reason**, arranging and forecasting (AR-21); **Presence**, the command that makes it hold (A-59) | `command` (P) | yes: `remit:dispatch` | nobody | none at the act (the field reads the Record, `module_contracts.yaml:103-106`) | none; no roll | **disagree** |
-| `surrender` (`:1128`) | to give a place up to another | (a) `seat`; roll: none | the seat's purview (`requires`) | — | — | — | none | none; no roll | agree |
-| `pardon` (`:1266`) | to free someone from a punishment | (a) `seat`; roll: none | the bench seat over him (`requires`) | — | — | — | none | none; no roll | agree |
-| `release` (`:1345`) | to let go a bond or hold one owns | (a) `own`; roll: none | his own tenure (`requires`) | — | — | — | none | none; no roll | agree |
-| `revoke` (`:1386`) | to take an office back from its holder | (a) `seat`; roll: none | the revocation basis and a live hold (`requires`); a holder who resists answers by his own acts | — | — | — | none | none; no roll | agree (18_DET's contest class disagreed with) |
-| `succeed` (`:1505`) | to take up a vacant seat by right of title | (a) `seat`; roll: none | no live hold and the title its `successions` names (`requires`); rival claims are other men's acts | — | — | — | none | none; no roll | agree |
+| verb (row) | everyday meaning | kind | attributes (averaged), or what authorises it | skill | office modifier | opposed by | calls a subsystem? | current | agree? | cells (B05.24 row shape; interim) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `confer` (`:267`) | to appoint someone to an office | (a) `seat`; roll: none | the conferral basis and 1-per-object (`requires`); Grace's pull on who is chosen (AR-35) weighs the choice (AR-04), not a roll | — | — | — | none | none; no roll | agree | `brute: seat`; `brute_note:` the authoriser cell |
+| `convene` (`:287`) | to call a body to meet on a date | (a) `seat`; roll: none | `remit:convene` | — | — | — | none | none; no roll | agree | `brute: seat`; `brute_note:` the authoriser cell |
+| `determine` (`:360`) | to judge a matter and decide it | (b) contest, an office act that can be botched | **Reason**, weighing facts and logic (AR-21); **Focus**, keeping the irrelevant out (AR-23) | `law` (P; U1 §5 `:302`; interim `argue`) | yes: `remit:determine` | the party's **Spirit** (AR-44) | social contest (`a proposition`) | `argue` → Presence; opposed by Presence | **disagree**: a judge is not an arguer | `governing: [attr.mind.acuity, attr.mind.focus]`; `opposed_attribute: attr.spirit.will`; INTERIM: a hand-off to the social subsystem (R3, R6) until B24.08 |
+| `dispatch` (`:424`) | to order a person to go or act | (a) `seat`; roll: none | `remit:dispatch`; *"their own choose decides"* (row `writes_note`) | — | — | — | none | none; no roll | agree | `brute: seat`; `brute_note:` the authoriser cell |
+| `establish` (`:441`) | to create a new office | (a) `seat`; roll: none | the conferral basis and a rung (`requires`) | — | — | — | none | none; no roll | agree | `brute: seat`; `brute_note:` the authoriser cell |
+| `issue` (`:682`) | to send out a written order | (a) `seat`; roll: none | `remit:issue`; execution is each executor's own act | — | — | — | none | none; no roll | agree (18_DET's `task` disagreed with) | `brute: seat`; `brute_note:` the authoriser cell |
+| `marshal` (`:1095`) | to draw up an army's order of battle | (b) task, an office act that can be botched | **Reason**, arranging and forecasting (AR-21); **Presence**, the command that makes it hold (A-59) | `command` (P) | yes: `remit:dispatch` | nobody | none at the act (the field reads the Record, `module_contracts.yaml:103-106`) | none; no roll | **disagree** | `governing: [attr.mind.acuity, attr.social.charisma]` |
+| `surrender` (`:1128`) | to give a place up to another | (a) `seat`; roll: none | the seat's purview (`requires`) | — | — | — | none | none; no roll | agree | `brute: seat`; `brute_note:` the authoriser cell |
+| `pardon` (`:1266`) | to free someone from a punishment | (a) `seat`; roll: none | the bench seat over him (`requires`) | — | — | — | none | none; no roll | agree | `brute: seat`; `brute_note:` the authoriser cell |
+| `release` (`:1345`) | to let go a bond or hold one owns | (a) `own`; roll: none | his own tenure (`requires`) | — | — | — | none | none; no roll | agree | `brute: own`; `brute_note:` the authoriser cell |
+| `revoke` (`:1386`) | to take an office back from its holder | (a) `seat`; roll: none | the revocation basis and a live hold (`requires`); a holder who resists answers by his own acts | — | — | — | none | none; no roll | agree (18_DET's contest class disagreed with) | `brute: seat`; `brute_note:` the authoriser cell |
+| `succeed` (`:1505`) | to take up a vacant seat by right of title | (a) `seat`; roll: none | no live hold and the title its `successions` names (`requires`); rival claims are other men's acts | — | — | — | none | none; no roll | agree | `brute: seat`; `brute_note:` the authoriser cell |
 
 ### 2.5 Movement (2 rows)
 
-| verb (row) | everyday meaning | kind | attributes (averaged) | skill | office modifier | opposed by | calls a subsystem? | current | agree? |
-|---|---|---|---|---|---|---|---|---|---|
-| `move` (`:1198`) | to travel from one place to another | (b) task | **Endurance**, stamina on the road (AR-20) | none | no | nobody | none | none; no roll | **disagree** |
-| `migrate` (`:1163`) | to move one's household to live elsewhere | (b) task | **Endurance** (AR-20) | none | no | nobody; room at the destination refuses | none | none; no roll | **disagree** |
+| verb (row) | everyday meaning | kind | attributes (averaged) | skill | office modifier | opposed by | calls a subsystem? | current | agree? | cells (B05.24 row shape; interim) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `move` (`:1198`) | to travel from one place to another | (b) task | **Endurance**, stamina on the road (AR-20) | none | no | nobody | none | none; no roll | **disagree** | `governing: [attr.body.endurance]` |
+| `migrate` (`:1163`) | to move one's household to live elsewhere | (b) task | **Endurance** (AR-20) | none | no | nobody; room at the destination refuses | none | none; no roll | **disagree** | `governing: [attr.body.endurance]` |
 
 **Count:** 21 + 9 + 23 + 12 + 2 = 67 rows. Kinds: (a) 32, (b) 31, (c) 4. Against the tree: 33 disagree, 34 agree.
 
@@ -240,6 +257,11 @@ has a self-subject form (`confer`'s `counterparty_may_be_self` is a self-appoint
   `faculty`), so the verb's attributes ARE the module's input. When the hearing scene's nested run is built and reads its
   own inputs (`rosters.yaml:1379`), `speak` moves to (c) by its prize row, with no verb edit. The army verbs reach
   `mass_battle.army`, a query that rolls nothing.
+- **Hand-offs to the social subsystem, interim (b)** (B05.24; R3, R6): `argue`, `tell`, `lie`, `speak`, `interrogate`,
+  `determine` influence a person by words or judge a matter, so by §0's rule each hands its act to a proceeding and its
+  row will say which proceeding it opens and whether in full or abridged. Until B24p.19 (the first five) and B24.08
+  (`determine`) delete them, they carry their `governing:` and `opposed_attribute:` cells as an interim, read by the
+  social roll the tree runs today.
 - **The tree's attribute on a (c) verb** (`fight`, `accept`, `capture`: `arms` → Coordination) is the hand-off's input in
   intent (CR-85) and a **duplicate** in effect (§2.2). B05.09 ends it by removing `max(attr, have)` from the score; B05.25
   makes (c) rows name no attribute, so it cannot return.
@@ -310,7 +332,7 @@ The loader refuses, the test shows it. `engine/season/tests/test_verb_governing_
 
 ## 5. Where the plan carries it
 
-- **B05.24** (DESIGN-FIRST) — the rule of §0 and the row shape; one `ED-IN` row.
+- **B05.24** (DESIGN-FIRST) — the rule of §0 and the row shape; one `ED-IN` row (`ED-IN-0379`).
 - **B05.25** (BUILD, behaviour mover) — the `governing:` / `brute:` / `opposed_attribute:` columns with §2's cells as
   interim, `person_inputs:` on the prize rows, the loader's closure, `sigma_leverage.governing_mean`,
   `pool.governing_score` (a float) and `rank`, `faculty` on their sum, with the `int` casts in `pool.py` removed (B05.25's
@@ -327,6 +349,8 @@ roll, as shipped; an arrest is submission to authority and cannot wound. (B) Bod
 act by force, the yield terms, personal combat): arrests can wound and kill and draw on martial skill, and the row moves to
 kind (c). The worlds differ in how often officers and the arrested die. The table's `arrest` row serves (A); by precedent
 (step 4) (A) for the arrest, with a man who refuses free to answer by `fight`, his own act; Jordan's to confirm.
+**At B05.24 (`ED-IN-0379`): left at this recommendation, (A), answered by precedent** (the row ships `contests: a
+standing`); the `arrest` cells are (b) on that prize, and Jordan corrects them at BA1.13 if he rules (B).
 
 **Q2. Do acts on one's own state roll?** Jordan's brute ruling names *"a function of an office"*; this table extends
 kind (a) to acts authorised by his own standing (`commit`, `forgive`, `give`, `challenge`) or completed by another's
@@ -337,12 +361,16 @@ pardon of a wrong, a gift are what the man decides, and B05.25's loader refuses 
 commits or forgives varies, and those rows become (b) with attributes (Spirit for a commitment, Grace for a forgiveness
 `[ASSUMPTION]`). The worlds differ: under (A) a commitment is as strong as the chooser made it; under (B) the same choice
 holds or breaks by a draw. Recommendation by ruling (step 1): (A), with B28's draws re-read by their lane; Jordan's to
-confirm before B28 lands.
+confirm before B28 lands. **At B05.24 (`ED-IN-0379`): left at this recommendation, (A), answered by the ruling** (its
+brute function is one *"authorised, gated or recorded by a seat, a standing or another's decision"*): the five rows stay
+kind (a), B05.25's loader refuses a draw on them, and the answer is carried to B28's lane (B28.02, .05, .06, .08, .09)
+before B28 opens.
 
 Decided by the ladder, not escalated: the office modifier as a level, not a die (§0, step 5); `determine` as (b) (step 4,
-SC-03b); the skill rank added to the mean (ruling (1), marked); an unheld attribute at `pool_default` in the dice and at
-the mid-point in the opposition's levels (ruling (3) for the dice; A-79 and U1 §4 for the levels: two roles, each read
-once).
+SC-03b), an interim hand-off until B24.08 (§2.8); the skill rank added to the mean (ruling (1), marked); an unheld
+attribute at `pool_default` in the dice (ruling (3)). The opposition is `opposed_ob(opposing attribute + skill score)`
+with no subject-side levels (§0, B05.24, A-137), so the mid-point reading of an opposing attribute as levels (A-79,
+U1 §4) is no longer this table's.
 
 ## 7. What was not checked
 
