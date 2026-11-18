@@ -207,9 +207,11 @@ def test_odds_of_returns_the_shares_for_a_row_contesting_the_body_and_nothing_fo
     assert odds == _shares(_estimate(w)), (odds, _shares(_estimate(w)))
     assert math.isclose(sum(odds), 1.0, abs_tol=1e-12), odds
     believer = w.persons[ACTOR]
-    # mode (b) is not built for a fight: the believer's figure is None, and so is the chooser's query
+    # `odds_of`'s mode (b) is still not a fight's: the believer's figure there is None. The chooser's query is (B14.24): a figure, the fight
+    # sampled on the believer's own picture of the opponent (`test_combat_module.py` reads it).
     assert _ran("odds_of (b)", sigma.odds_of, w, act, believer=believer) is None
-    assert _ran("believed_chance", sigma.believed_chance, w, believer, act, ("Wounded", "Felled")) is None
+    believed = _ran("believed_chance", sigma.believed_chance, w, believer, act, ("Wounded", "Felled"))
+    assert believed is not None and 0.0 <= believed <= 1.0, believed
 
 
 def test_the_estimate_consumes_no_season_draw_and_writes_nothing():

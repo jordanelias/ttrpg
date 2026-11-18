@@ -909,6 +909,13 @@ DEFAULT_FIXTURES = Fixtures(
     # keeps a share's standard error at or under 0.025 (0.5 / sqrt(400)). Shared with CP-T04-08's `field_estimate`.
     # [JUSTIFIED: engine/season/hole_register.yaml H-251 -- `site: Fixtures estimate_samples`, graded `assumption`; no document gives the sample size of a shown figure, so it is injected and swept 100 / 400 / 1600]
     estimate_samples=400,              # `H-251`, swept 100 / 400 (SHIPPED, CP-T03-05) / 1600
+    # B14.24 (`H-568`). HOW MANY FIGHTS A PERSON'S BELIEF ABOUT A FIGHT SAMPLES: `seam/wrappers/sigma.py::believed_chance` on a row whose prize
+    # binds `personal_combat` runs `combat.fight_estimate` this many times, on the believer's own picture of his opponent and the private
+    # stream keyed `estimate.fight`. A BELIEF IS NOT A MEASUREMENT: a person weighing a fight runs it in his head a few dozen times, not the
+    # display's `estimate_samples`, which a player reads as the odds. A whole number >= 1; anything else raises in the reader (`_estimate.samples_of`).
+    # [ASSUMPTION; medium; Jordan to correct; revert: set it to `estimate_samples`' value, one re-pin]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-568 -- `site: Fixtures believed_fight_samples`, graded `assumption`; no document gives how often a person runs a fight in his head, so it is injected and swept 30 / 60 / 400]
+    believed_fight_samples=60,         # `H-568`, swept 30 / 60 (SHIPPED, B14.24) / 400
     # `H-202` (v9 IN-25, BOUND-STAKES). HOW HARD §F2's STANCE TERM PULLS ON A CHOICE: the term
     # `stance_polarity` signs is read at `1 + this` (`decision/choose.py::stance_term`), so a grudge
     # or a judged deed outweighs a person's pursuits sooner as it rises. §F2 weights the term 1 and

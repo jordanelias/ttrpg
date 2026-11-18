@@ -478,3 +478,143 @@ def test_no_engagement_opens_in_a_halfsword_form():
         later += max(0, len(starts) - 1)
     assert checked >= 1
     assert later >= 1, "no fight reached a second engagement: the carried form was never at issue"
+
+# B14.24 (`U5b_PC_residue` §8, F-DICE-14 Edit C; A-1, A-30): A FIGHT IS PRICED BY THE BELIEVER'S OWN PICTURE OF IT.
+# `sigma.believed_chance` answers a row whose prize binds `personal_combat` with the fight sampled on a private stream, read over
+# the bands asked, with the OPPONENT'S kit and wounds as the believer's ledger gives them (the world's where he has seen him).
+# ---------------------------------------------------------------------------------------------------------------------
+_FIGHT_AXIS = "grandiose_humble"      # a pursuit axis the equal pursuits project onto (asserted below)
+_FIGHT_RIVAL = "carry"                # an uncontested verb, whose pursuit term a believed chance never weights
+
+
+def _believing_world(seed: int, body: int = 1000):
+    """`tiny_world` at world seed `seed` with `odds_weighting` `believed`, a driver built (the module entry registered), and `_A`'s body at `body`.
+    `_B` is the unhurt opponent he holds no claim about."""
+    from ..harness import probes as P
+    from ..loop.driver import SeasonDriver
+    w = P.tiny_world()
+    SeasonDriver(w)
+    w.world_seed = seed
+    w.fixtures = w.fixtures.sweep("odds_weighting", "believed").sweep("choice_temperature", 0)
+    w.persons[_A].body = body
+    return w
+
+
+def _forms_fight(w, monkeypatch) -> bool:
+    """`make_chooser`'s real ranking of a `fight` on `_B` and an uncontested rival for `_A`, the View carrying the real believed-odds query
+    (`sigma.believed_odds_query`, closed over `w` and bound to him); the option set is planted and `pack_scenes` is a spy
+    (`test_cr17_odds_weighting._ranked`'s shape). The alignment cells are planted on the rebound table: `fight` 1.0 and the rival 0.7 on one
+    axis (the shipped table's own `fight` cells, all negative, are struck so the term is the planted one), so the fight outranks the rival exactly
+    where the believed chance of its bands exceeds 0.7, a line the unhurt man's figures (0.68 to 0.85) mostly clear and the hurt man's (0.55 to
+    0.77) mostly do not."""
+    from types import SimpleNamespace
+    from engine.substrate.descriptors import PURSUITS
+    from ..data import verbs as V
+    from ..decision import choose as CH
+    from ..seam.wrappers import sigma
+    from ..state.carriers import Candidate, Person
+    table = {ax: {v: a for v, a in row.items() if v != "fight"} for ax, row in V.ALIGNMENT.items()}
+    table.setdefault(_FIGHT_AXIS, {}).update({"fight": 1.0, _FIGHT_RIVAL: 0.7})
+    monkeypatch.setattr(V, "ALIGNMENT", table)
+    person = Person(id=_A, name=_A)
+    person.pursuits = {n: 1.0 for n in PURSUITS}                  # roster-exempt: TEST FIXTURE, one vector for both worlds
+    assert CH.deliberation_memo(person, w.fixtures)[CH._AXIS_W][_FIGHT_AXIS] > 0, "the equal pursuits project to nothing"
+    seen = {}
+    monkeypatch.setattr(CH, "opening_set", lambda p, view, q, fx: [Candidate("fight", _B), Candidate(_FIGHT_RIVAL, "prop_x")])
+
+    def spy(p, ranked, budget, fx, mint, occasion=None):
+        seen["ranked"] = [c.verb for c in ranked]
+        return []
+    monkeypatch.setattr(CH, "pack_scenes", spy)
+    odds = sigma.believed_odds_query(w, w.persons[_A])
+    CH.make_chooser(w.fixtures, lambda *a: "act")(person, SimpleNamespace(question=object(), odds=odds), SimpleNamespace(), lambda: 1)
+    assert "ranked" in seen, "the chooser never ranked: the falsifier did not run"
+    return seen["ranked"][0] == "fight"
+
+
+def test_a_hurt_man_forms_fight_less_often_on_believed_odds(monkeypatch):
+    """B14.24 (the gate's reading): with `odds_weighting` `believed`, a person at `body` 400 forms `fight` on an unhurt opponent less often than
+    the same person unhurt, over seeds 0 to 29 (before the item nothing read his body: `believed_chance` was `None` for a fight, the weight
+    1.0, and both formed it every time). FALSIFIER: the two counts equal, or the unhurt man forming it on no seed (nothing to lose)."""
+    formed = {400: 0, 1000: 0}
+    checked = 0
+    for seed in range(30):
+        for body in formed:
+            formed[body] += _forms_fight(_believing_world(seed, body), monkeypatch)
+            checked += 1
+    assert checked >= 30, checked
+    assert formed[1000] > 0, f"the unhurt man formed no fight on any seed: {formed}"
+    assert formed[400] < formed[1000], f"a hurt man formed fight no less often than an unhurt one: {formed}"
+
+
+class _Sighting:
+    """A `seen` deposit's value: only `who` is read here (`person_q.heritage_regard` reads the same field)."""
+    def __init__(self, who):
+        self.who, self.marks = who, ()
+
+
+def test_an_estimate_reads_no_kit_the_believer_has_no_claim_about(monkeypatch):
+    """B14.24's falsifier: the believer's estimate of a fight reads the OPPONENT'S kit and wounds as the believer's ledger gives them. The world
+    arms `_B` with a longsword and heavy armour and wounds him to `body` 400; `_A` holds NO claim about him and has not seen him. The input the
+    sampler deals is built on the DEFAULT kit and an UNHURT body, not the true ones. Then the same world with a sighting (the world's, `seen`)
+    reads the true kit and the true wound, and with a claim reads the claim's kit: the assertion can see the leak it excludes. `_A`'s OWN kit is
+    his own."""
+    from engine.substrate import combat_kit
+    from ..data.rosters import SEEN_PREDICATE
+    from ..queries import person_q
+    from ..seam.wrappers import combat as C, sigma
+    from ..state.carriers import Act, Claim
+    default = (combat_kit.DEFAULTS["weapon"], combat_kit.DEFAULTS["armor"])
+    true_kit, claimed, own = ("longsword", "heavy"), ("dagger", "none"), ("poleaxe", "medium")
+    assert len({default, true_kit, claimed, own}) == 4
+    monkeypatch.setattr(C, "kit_of", lambda w, pid: own if pid == _A else true_kit)
+    real, built = C.combat_input, []
+    monkeypatch.setattr(C, "combat_input", lambda *a, **k: built.append(real(*a, **k)) or built[-1])
+
+    def read(*claims):
+        w = _believing_world(3)
+        w.persons[_B].body = 400
+        w.persons[_A].ledger.extend(claims)
+        built.clear()
+        got = sigma.believed_chance(w, w.persons[_A], Act("a", _A, "fight", payload={"subject": _B}), ("Felled", "Wounded"))
+        assert got is not None and 0.0 <= got <= 1.0, got
+        assert len(built) == 1, built
+        return built[0], w
+
+    blind, w = read()
+    unhurt = _believing_world(3)
+    true_end = C.party_end(w.persons[_B], w.fixtures)
+    assert true_end < C.party_end(unhurt.persons[_B], unhurt.fixtures), "the world's wound cuts nothing: the control cannot see the leak"
+    assert blind.kits == (own, default), blind.kits                            # his own kit is his own; the stranger's is the DEFAULT, not the true one
+    assert blind.ends[1] == C.party_end(unhurt.persons[_B], unhurt.fixtures), (blind.ends, "the opponent's wound leaked into the believer's picture")
+    sighting = Claim("c_seen", _A, "R", SEEN_PREDICATE, _Sighting(_B), 0, "firsthand", 5, "own")
+    seen_it = read(sighting)[0]
+    assert seen_it.kits == (own, true_kit) and seen_it.ends[1] == true_end, (seen_it.kits, seen_it.ends, true_end)   # where he has seen him: the world's
+    said = read(Claim("c_w", _A, _B, person_q.KIT_CLAIM + "weapon", claimed[0], 0, "told", 5, "own"),
+                Claim("c_a", _A, _B, person_q.KIT_CLAIM + "armor", claimed[1], 0, "told", 5, "own"))[0]
+    assert said.kits == (own, claimed), said.kits                              # a claim of his: the claim's, over the default
+    wounded = read(Claim("c_b", _A, _B, person_q.BODY_CLAIM, 400, 0, "told", 5, "own"))[0]
+    assert wounded.ends[1] == true_end and wounded.kits == (own, default), (wounded.ends, wounded.kits)   # a claim of his wound: the wound, the kit still the default
+
+
+def test_the_believed_estimate_is_private_and_moves_no_hash():
+    """B14.24's control: `believed_chance` on a fight reads `World` and writes nothing -- `content_hash` and the season draw are the same with
+    the call and without it, the figure is the same on every ask (a private stream keyed `estimate.fight`, not a season draw), the sample
+    count is `believed_fight_samples`' (not the display's `estimate_samples`), another's act and a band the combat ladder does not carry are
+    `None`."""
+    from ..seam.wrappers import sigma
+    from ..state.carriers import Act
+    act = Act("a", _A, "fight", payload={"subject": _B})
+    control, called = _believing_world(2), _believing_world(2)
+    assert control.content_hash() == called.content_hash() and control.draw == called.draw
+    first = sigma.believed_chance(called, called.persons[_A], act, ("Felled", "Wounded"))
+    again = sigma.believed_chance(called, called.persons[_A], act, ("Felled", "Wounded"))
+    assert first is not None and first == again, (first, again)
+    assert called.content_hash() == control.content_hash(), "the believed estimate moved the world's content hash"
+    assert called.draw == control.draw and called.new_draw() == control.new_draw(), "the believed estimate took a season draw"
+    n = called.fixtures.get("believed_fight_samples")
+    assert n == 60 and n != called.fixtures.get("estimate_samples"), n
+    assert abs(first * n - round(first * n)) < 1e-9, (first, n)              # a share of `n` scenes, not of the display's 400
+    assert sigma.believed_chance(called, called.persons[_A], act, ("Won",)) is None
+    assert sigma.believed_chance(called, called.persons[_B], act, ("Felled",)) is None
+    assert sigma.believed_chance(called, called.persons[_A], act, ()) is None

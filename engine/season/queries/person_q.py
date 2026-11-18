@@ -459,10 +459,40 @@ def believed_capability(p: Person, other: str, capability: str):
     """WHAT `p` BELIEVES `other`'s SCORE IN `capability` IS, from his OWN ledger alone: the value of his latest claim
     about `other` at `CAPABILITY_CLAIM + capability` (latest by `(when, lap, confidence)`), else `None` -- unknown, never a
     figure. Person-side (AX-2): it reads `p`'s ledger and nothing else."""
-    held = [c for c in p.ledger if c.subject == other and c.predicate == CAPABILITY_CLAIM + capability]
-    if not held:
-        return None
-    return max(held, key=lambda c: (c.when, c.lap, c.confidence)).value
+    return _latest_claim(p, other, CAPABILITY_CLAIM + capability)
+
+
+# B14.24: THE CLAIMS A PERSON HOLDS ABOUT ANOTHER'S ARMS AND WOUNDS, the capability claim's own shape (`Claim(subject=<that person>,
+# predicate=<stem> + <key>, value=<what he believes>)`) and, like it, a READING: NOTHING DEPOSITS ONE TODAY (the told, seen and inferred
+# channels carry neither), so `believed_kit` and `believed_body` answer `None` for every person in a built realm until a depositor exists.
+# `KIT_CLAIM + <a Combatant field>` (`weapon`, `armor`; `engine/substrate/combat_kit.py::FIELDS`) holds the key he believes the person carries
+# in that field; `BODY_CLAIM` holds the condition (the `Person.body` scale) he believes the person is at. Both readers are `believed_capability`'s.
+KIT_CLAIM = "kit:"
+BODY_CLAIM = "condition:body"
+
+
+def _latest_claim(p: Person, other: str, predicate: str):
+    """The value of `p`'s latest claim about `other` at `predicate` (latest by `(when, lap, confidence)`), else `None`; `p`'s ledger alone."""
+    held = [c for c in p.ledger if c.subject == other and c.predicate == predicate]
+    return max(held, key=lambda c: (c.when, c.lap, c.confidence)).value if held else None
+
+
+def believed_kit(p: Person, other: str, field: str):
+    """The key `p` believes `other` carries in the Combatant `field` (`weapon` or `armor`), from his OWN ledger alone: the value of his latest claim
+    at `KIT_CLAIM + field`, else `None` -- unknown, never a figure. Person-side (AX-2)."""
+    return _latest_claim(p, other, KIT_CLAIM + field)
+
+
+def believed_body(p: Person, other: str):
+    """The condition `p` believes `other`'s body is at, from his OWN ledger alone: the value of his latest `BODY_CLAIM` about `other`, else `None`.
+    Person-side (AX-2)."""
+    return _latest_claim(p, other, BODY_CLAIM)
+
+
+def has_seen(p: Person, other: str) -> bool:
+    """Has `p` SEEN `other`: does his ledger hold an untold `seen` claim whose `who` is `other` (`heritage_regard` reads the same deposit)? The
+    reading of a person he has laid eyes on; a person known only by report or not at all is not seen. Person-side (AX-2)."""
+    return any(c.predicate == SEEN_PREDICATE and not c.chain and getattr(c.value, "who", None) == other for c in p.ledger)
 
 
 def conviction_stand(p: Person, affiliation: str) -> float:
