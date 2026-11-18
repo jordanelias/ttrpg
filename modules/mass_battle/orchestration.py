@@ -51,6 +51,7 @@
 #   pre-existing cell_last_speed. Wiring requires power × facing inputs.
 
 import math
+from engine.dice_engine import fmath
 from engine.dice_engine.dice_engine import degree_label  # the one degree ladder (A-5); the field grades nothing of its own
 from engine.dice_engine.sigma_leverage import roll_net_continuous  # the one sampler; the mu-shift is `resolution._net_boost` (soft cap included, the pool as it is)
 from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
@@ -1281,7 +1282,7 @@ def _atom_distance(atom_a, atom_b):
     best = float('inf')
     for (ra, ca) in cells_a:
         for (rb, cb) in cells_b:
-            d = math.hypot(ra - rb, ca - cb) if FIELD_MOVEMENT else max(abs(ra - rb), abs(ca - cb))
+            d = fmath.hypot(ra - rb, ca - cb) if FIELD_MOVEMENT else max(abs(ra - rb), abs(ca - cb))
             if d < best:
                 best = d
                 if best == 0:
@@ -1477,7 +1478,7 @@ def _draw_friction(unit):
     if getattr(unit, '_friction', None) is not None:
         return
     if MB_FRICTION and MB_FRICTION_SIGMA > 0.0:
-        unit._friction = math.exp(rngsource.get().gauss(0.0, MB_FRICTION_SIGMA))
+        unit._friction = fmath.exp(rngsource.get().gauss(0.0, MB_FRICTION_SIGMA))
     else:
         unit._friction = 1.0
 

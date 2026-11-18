@@ -64,6 +64,7 @@ import random
 from typing import Sequence
 
 from engine.dice_engine import dice_engine
+from engine.dice_engine import fmath
 
 # ---------------------------------------------------------------------------
 # Canonical per-die statistics (params/core.md "Expected Value (per die)")
@@ -139,7 +140,7 @@ def saturate(x: float, m: float) -> float:
     """`m * tanh(x / m)`: nearly `x` for small `x`, approaching `m` for large; no hard ceiling and no
     dead-zone. The one saturating function: `soft_cap` is it at `M_MAX`, and the social obstacle's
     bound is it over the span between the fixed ceiling and the pool's cap."""
-    return m * math.tanh(x / m)
+    return m * fmath.tanh(x / m)
 
 
 def soft_cap(net_sigma: float) -> float:
@@ -292,7 +293,7 @@ def levels_to_net_sigma(
 
 def _phi(z: float) -> float:
     """Standard normal CDF (stdlib erf path — no numpy)."""
-    return (1.0 + math.erf(z / math.sqrt(2.0))) / 2.0
+    return (1.0 + fmath.erf(z / math.sqrt(2.0))) / 2.0
 
 
 def p_success(

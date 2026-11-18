@@ -29,9 +29,9 @@ string. Enforced BY PATH over this directory (`04 §E.1`).
 
 from __future__ import annotations
 
-import math as _math
 from typing import Any, Callable, Optional
 
+from engine.dice_engine import fmath
 from engine.dice_engine.fmath import ltr_sum
 from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member, roster, seat_capability
 from ..data.verbs import VERB_TABLE, act_key, align
@@ -472,7 +472,7 @@ def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
         u = rng.random()
         while u <= 0.0:                   # `random()` is [0,1); log(0) is the one unusable draw
             u = rng.random()              # SAME stream, so it advances and can terminate
-        g = -_math.log(-_math.log(u))
+        g = -fmath.log(-fmath.log(u))
         # the trailing two terms are a STABLE TOTAL ORDER for exact float ties, which continuous
         # noise makes measure-zero; they are not the tie-break -- `g` is.
         keyed.append((-(score(c) / tau + g), c.verb, c.subject or "", c))

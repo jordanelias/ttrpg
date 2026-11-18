@@ -40,6 +40,7 @@ from __future__ import annotations
 
 import json
 import math
+from engine.dice_engine import fmath
 import sys
 from typing import Optional
 
@@ -108,8 +109,8 @@ def _eigenvalues(a: list) -> list:
                 if abs(w[p_][q_]) < tol:
                     continue
                 th = (math.pi / 4 if w[p_][p_] == w[q_][q_]
-                      else 0.5 * math.atan2(2 * w[p_][q_], w[p_][p_] - w[q_][q_]))
-                c, s_ = math.cos(th), math.sin(th)
+                      else 0.5 * fmath.atan2(2 * w[p_][q_], w[p_][p_] - w[q_][q_]))
+                c, s_ = fmath.cos(th), fmath.sin(th)
                 for r in range(m):
                     wp, wq = w[p_][r], w[q_][r]
                     w[p_][r], w[q_][r] = c * wp + s_ * wq, -s_ * wp + c * wq

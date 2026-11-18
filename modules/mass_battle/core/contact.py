@@ -6,7 +6,7 @@ attributes of the module at call time (`_u.FIELD_MOVEMENT`), not copied; units i
 here, so there is no cycle. Re-imported by orchestration via
 star-import so resolve_engagements/run_battle and every caller are unchanged.
 [canonical: mass_battle_v30.md §A.7 manoeuvre/contact]"""
-import math
+from engine.dice_engine import fmath
 import modules.mass_battle.hierarchy.units as _u
 from modules.mass_battle.config import *
 from modules.mass_battle.geometry import *
@@ -91,12 +91,12 @@ def check_orders(unit, t, enemy_cells):
                 visible = _visible_enemy_cells(sub, enemy_cells)
                 if visible:
                     my = sub.centroid()
-                    fired = min(math.hypot(my[0] - er, my[1] - ec) for (er, ec) in visible) <= D
+                    fired = min(fmath.hypot(my[0] - er, my[1] - ec) for (er, ec) in visible) <= D
             elif order.trigger.startswith('ally_at:'):
                 D = float(order.trigger.split(':', 1)[1])
                 if order.waypoint_ref is not None:
                     my = sub.centroid(); wp = order.waypoint_ref.centroid()
-                    fired = math.hypot(my[0] - wp[0], my[1] - wp[1]) <= D
+                    fired = fmath.hypot(my[0] - wp[0], my[1] - wp[1]) <= D
             elif order.trigger.startswith('own_strength:'):
                 # [ED-MB-0030] fire once THIS subunit is attrited to <= FRAC of its spawn count — a unit
                 # reacting to its OWN losses (withdraw a spent body / commit a weakened one / brace when
@@ -189,18 +189,18 @@ def assign_targets(unit_a, unit_b):
         cond = atom.target_condition or 'nearest'
         if cond == 'nearest':
             my = atom.centroid()
-            return min(enemies, key=lambda e: math.hypot(my[0]-e.centroid()[0], my[1]-e.centroid()[1]))
+            return min(enemies, key=lambda e: fmath.hypot(my[0]-e.centroid()[0], my[1]-e.centroid()[1]))
         elif cond == 'weakest':
             return min(enemies, key=lambda e: sum(e.cell_troops.values()) if e.cell_troops else 0)
         elif cond.startswith('in_range:'):
             R = float(cond.split(':', 1)[1])
             my = atom.centroid()
-            nearest = min(enemies, key=lambda e: math.hypot(my[0]-e.centroid()[0], my[1]-e.centroid()[1]))
-            d = math.hypot(my[0]-nearest.centroid()[0], my[1]-nearest.centroid()[1])
+            nearest = min(enemies, key=lambda e: fmath.hypot(my[0]-e.centroid()[0], my[1]-e.centroid()[1]))
+            d = fmath.hypot(my[0]-nearest.centroid()[0], my[1]-nearest.centroid()[1])
             return nearest if d <= R else None                   # hold until in range
         else:
             my = atom.centroid()
-            return min(enemies, key=lambda e: math.hypot(my[0]-e.centroid()[0], my[1]-e.centroid()[1]))
+            return min(enemies, key=lambda e: fmath.hypot(my[0]-e.centroid()[0], my[1]-e.centroid()[1]))
     for atom in unit_a.units: atom.target_atom = _pick(atom, unit_b.units)
     for atom in unit_b.units: atom.target_atom = _pick(atom, unit_a.units)
 

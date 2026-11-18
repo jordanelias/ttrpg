@@ -6,8 +6,17 @@ changed it to Neumaier-compensated summation for floats, so `sum()` of the same 
 3.11 and on 3.12+ (CR-01: bind_sigma for bear_spear). `ltr_sum` is the pre-3.12 value on every interpreter, and a
 port reproduces it by adding left to right. Integer sums are left alone (their addition is exact).
 
-A leaf: it imports nothing from the repository (`math` only, when B06.02 adds the transcendentals). Pure.
+THE SECOND RULE, STATED ONCE: a transcendental goes through this module. `log`, `exp`, `tanh`, `erf`, `sin`, `cos`,
+`atan2`, `hypot` and `powf` (`x ** y` for a FLOAT exponent) are each ONE call to `math`, and a game-path module calls
+these, never `math.*` -- so a port has ONE list of functions to reproduce, and `engine/tests/test_fmath.py`'s vectors
+name the function and the input when it does not. These are the platform's libm, not an IEEE-754-exact operation: the
+test states the ulp bound a port must meet. `sqrt` stays on `math` (IEEE-754 requires it correctly rounded), and so do
+`floor`, `ceil`, `fabs`, `fsum`, `isfinite`, `degrees`, `pi` and the like, which are exact. An integer power (`x ** 2`) is
+repeated multiplication and is left alone.
+
+A leaf: it imports `math` only. Pure.
 """
+import math
 
 
 def ltr_sum(xs) -> float:
@@ -19,3 +28,49 @@ def ltr_sum(xs) -> float:
     for x in xs:
         total += x
     return total
+
+
+def log(x: float) -> float:
+    """Natural logarithm: one call to `math.log`."""
+    return math.log(x)
+
+
+def exp(x: float) -> float:
+    """e ** x: one call to `math.exp`."""
+    return math.exp(x)
+
+
+def tanh(x: float) -> float:
+    """Hyperbolic tangent: one call to `math.tanh`."""
+    return math.tanh(x)
+
+
+def erf(x: float) -> float:
+    """Error function: one call to `math.erf`."""
+    return math.erf(x)
+
+
+def sin(x: float) -> float:
+    """Sine of an angle in radians: one call to `math.sin`."""
+    return math.sin(x)
+
+
+def cos(x: float) -> float:
+    """Cosine of an angle in radians: one call to `math.cos`."""
+    return math.cos(x)
+
+
+def atan2(y: float, x: float) -> float:
+    """Angle of the point (x, y) in (-pi, pi]: one call to `math.atan2`."""
+    return math.atan2(y, x)
+
+
+def hypot(x: float, y: float) -> float:
+    """Euclidean length of (x, y): one call to `math.hypot` (two operands, as every game site passes two)."""
+    return math.hypot(x, y)
+
+
+def powf(x: float, y: float) -> float:
+    """`x ** y` for a float exponent: the operator itself, so it is `float.__pow__` (libm `pow`) exactly as the site
+    it replaces. Not `math.pow`, which differs from `**` on a negative base and raises where `**` returns complex."""
+    return x ** y
