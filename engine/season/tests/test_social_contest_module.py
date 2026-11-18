@@ -108,7 +108,7 @@ def test_s27_4_refuses_on_the_derived_pair_strictly_above_the_multiple():
     fed_by = refused.pop("fed_by")           # B04.08: the rows that fed the roll ride the record, a refusal's too (D-U1-06)
     assert tuple((f[0], f[1], f[4], f[5]) for f in fed_by) == (("social_roll", "dice", 2, 2), ("social_roll", "opposes", None, 0.0))
     assert refused == dict(
-        status="REFUSED", why="S27.4", module="social_contest", resolver="d10_sigma", pool=2, ob=4.5,
+        status="REFUSED", why="S27.4", module="social_contest", resolver="d_sigma", pool=2, ob=4.5,
         ob_terms={"stand_in": 4.5})          # B11 lane A: the obstacle's terms ride the record, a refusal's too
     fx["obstacle_ceiling"] = 2
     capped = sigma.resolve(w, ["p"], ["c"], "a standing", rng=random.Random(0))

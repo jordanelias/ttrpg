@@ -89,7 +89,7 @@ from .pool import POOL_ADDENDS, _authored_attribute, _capability, _opposing_attr
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
 # (A-25), so the row says the social contest module runs its own prizes. Reached by that string only.
 _PROVIDER = SOCIAL_ROLL_PROVIDER   # B11 lane A: one owner of the name (`data/verbs.py`), which `task_difficulty`'s closure reads too
-_RESOLVER = "d10_sigma"
+_RESOLVER = "d_sigma"
 
 
 # `_capability`, `POOL_ADDENDS`, `register_pool_addend`, `_authored_attribute` and `faculty` live in `pool.py` (the one pool reader),
