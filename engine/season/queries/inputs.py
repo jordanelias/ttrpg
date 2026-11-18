@@ -243,6 +243,25 @@ class DecisiveBeat:
 
 
 @dataclass(frozen=True)
+class SceneShape:
+    """WHAT THE SCENE'S TRACE SAYS OF ITS COURSE, folded by the module entry from the trace it already holds (B14.15; a pure
+    fold over `wound`, `turn_start` and `yield`, no new engine event). The host reads it off the result and puts it on the
+    act's Events (`loop/effects_combat.py::_eff_kill`); nothing is kept between scenes.
+      * `rounds`      -- rounds fought: the `turn_start` count (A-101; `CombatOutcome.rounds`);
+      * `blows`       -- wounding blows LANDED, by claimant id (a `wound` event is emitted only for a blow that took Health);
+      * `first_blood` -- who landed the first wounding blow, `None` where none landed;
+      * `lead_changes`-- times the party ahead on Health fraction changed (a tie is no lead and no change);
+      * `nearest`     -- each party's lowest Health remaining during the scene, in points (his Health when no blow reached him).
+    A party whose Combatant carries no tracker has no full Health to read a fraction against: it is absent from `nearest`
+    and the scene's `lead_changes` is `0`."""
+    rounds: int
+    blows: Mapping[str, int]
+    first_blood: Optional[str]
+    lead_changes: int
+    nearest: Mapping[str, int]
+
+
+@dataclass(frozen=True)
 class CombatOutcome:
     """WHAT THE `combat` MODULE ENTRY RETURNS FOR ONE SCENE (B14.01; the combat entry's output record, as `Margin` is
     the social contest's).
@@ -258,12 +277,14 @@ class CombatOutcome:
       * `surrender` -- the scene's `yield` event the engine did not refuse, or `None` (a refused declaration is not a surrender);
       * `beat`      -- the wound that felled a party, or `None` when nobody was felled;
       * `rounds`    -- rounds fought (A-101; the `turn_start` count);
-      * `trace`     -- the scene's events, for a viewer; folded nowhere."""
+      * `shape`     -- the scene's course, folded from its trace (B14.15);
+      * `trace`     -- the scene's events, for a viewer; `shape` and `beat` are the only folds of it."""
     claimants: tuple
     wounds: Mapping[str, PartyWounds]
     surrender: Optional[Surrender]
     beat: Optional[DecisiveBeat]
     rounds: int
+    shape: SceneShape
     trace: tuple
 
 

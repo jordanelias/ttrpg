@@ -521,6 +521,8 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                 surrender=None if got.surrender is None else dataclasses.asdict(got.surrender),
                 # THE WOUND THAT ENDED IT: `None` when nobody was felled.
                 beat=None if got.beat is None else dataclasses.asdict(got.beat),
+                # THE SCENE'S COURSE, folded from its trace by the module entry (B14.15): `_eff_kill` puts it on the act's Events.
+                shape=dataclasses.asdict(got.shape),
                 rounds=got.rounds,
                 # PC-06 M-1: THE SCENE'S OWN TRACE, AS THE MODULE ENTRY CAPTURED IT, returned for a grid display or
                 # B-3's per-event measure. Nothing here or downstream folds it into `World`: `contest()` hands this

@@ -15,7 +15,7 @@ argument; this file never assigns it.
 
 It reads the scene, it does not grade it. It returns a `CombatOutcome` (`queries/inputs.py`): what the engine computed
 before `wrapper.fight` collapses it to an int -- each party's lifted `WoundTracker` (`PartyWounds`), the yield, the
-felling wound, the rounds fought and the trace. The integer `wrapper.fight` returns is not lifted, and no winner crosses
+felling wound, the rounds fought, the scene's shape (`scene_shape`, B14.15) and the trace. The integer `wrapper.fight` returns is not lifted, and no winner crosses
 the boundary: the host interprets the record, the wound-state refusal is `seam/wrappers/combat.py`'s, and the degree is
 `seam/ladder.py::combat_degree`'s.
 """
@@ -23,10 +23,10 @@ from __future__ import annotations
 
 import dataclasses
 import random
-from typing import Callable, Optional
+from typing import Callable, Mapping, Optional
 
 from engine.season.queries.inputs import (
-    CombatOutcome, CombatTurnView, DecisiveBeat, PartyWounds, PersonalCombatInput, Surrender)
+    CombatOutcome, CombatTurnView, DecisiveBeat, PartyWounds, PersonalCombatInput, SceneShape, Surrender)
 from . import attributes as spec, combatant, wrapper
 from .config import CFG
 
@@ -107,6 +107,43 @@ def _beat(trace: list) -> Optional[DecisiveBeat]:
     return found
 
 
+def scene_shape(trace, claimants: tuple, health_full: Mapping[str, int]) -> SceneShape:
+    """The scene's `SceneShape` (B14.15), a PURE FOLD over the trace's `wound` and `turn_start` events (and nothing else: a
+    `yield` declares an ending the shape does not count, and no new engine event is emitted for it). `claimants` is the
+    record's `(A, B)`; `health_full` is `{id: full Health}` for each party whose Combatant carries a tracker (a `wound` event
+    carries the victim's `cumulative` damage, and Health full is the one number the trace does not hold).
+
+    `blows[p]` counts `wound` events `p` struck (the engine emits one only for damage above 0); `first_blood` is the first's
+    striker; `nearest[p]` is `health_full[p]` less the most `cumulative` damage `p` reached; `lead_changes` counts the times the
+    party AHEAD on Health fraction became the other one -- ahead is the strictly higher `remaining / full`, compared by cross
+    multiplication (no float), a tie leaves the last leader standing, so a tie is no lead and no change, and the first lead
+    taken from the opening tie is not a change. A party absent from `health_full` has no fraction to compare: `lead_changes`
+    is then 0 and he is absent from `nearest`."""
+    blows = {pid: 0 for pid in claimants}
+    cumulative = {pid: 0 for pid in claimants}
+    rounds, first_blood, changes, ahead = 0, None, 0, None
+    for e in trace:
+        kind = e.get("kind")
+        if kind == "turn_start":
+            rounds += 1
+        elif kind == "wound":
+            by, victim = e["by"], e["victim"]
+            blows[by] = blows.get(by, 0) + 1
+            if first_blood is None:
+                first_blood = by
+            cumulative[victim] = max(cumulative.get(victim, 0), e["cumulative"])
+            if all(pid in health_full for pid in claimants) and len(claimants) == 2:
+                (a, b) = claimants
+                ra, rb = health_full[a] - cumulative[a], health_full[b] - cumulative[b]
+                lead = a if ra * health_full[b] > rb * health_full[a] else b if rb * health_full[a] > ra * health_full[b] else None
+                if lead is not None:
+                    if ahead is not None and lead != ahead:
+                        changes += 1
+                    ahead = lead
+    nearest = {pid: max(0, health_full[pid] - cumulative[pid]) for pid in claimants if pid in health_full}
+    return SceneShape(rounds=rounds, blows=blows, first_blood=first_blood, lead_changes=changes, nearest=nearest)
+
+
 def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
           decide: Optional[Callable[[CombatTurnView], str]] = None, cfg: Optional[dict] = None,
           max_bouts: Optional[int] = None) -> CombatOutcome:
@@ -177,5 +214,6 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
                   **bouts)   # the integer it returns is not lifted
 
     wounds = {pid: pw for pid, pw in ((a_id, _party_wounds(A)), (b_id, _party_wounds(B))) if pw is not None}
+    shape = scene_shape(trace, (a_id, b_id), {pid: pw.health_full for pid, pw in wounds.items()})
     return CombatOutcome(claimants=(a_id, b_id), wounds=wounds, surrender=_surrender(trace), beat=_beat(trace),
-                         rounds=sum(1 for e in trace if e.get("kind") == "turn_start"), trace=tuple(trace))
+                         rounds=shape.rounds, shape=shape, trace=tuple(trace))

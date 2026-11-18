@@ -29,7 +29,7 @@ from ..data import verbs as V
 from ..harness import pairs
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
-from ..queries.inputs import CombatOutcome, PartyWounds, Surrender
+from ..queries.inputs import CombatOutcome, PartyWounds, SceneShape, Surrender
 from ..seam.wrappers import combat, sigma
 from ..seam.wrappers._estimate import rng_of, samples_of
 from ..seam.wrappers._entry import entry_for
@@ -171,7 +171,8 @@ def _scene(w, actor, target, **felled_yield) -> CombatOutcome:
     yielded = felled_yield.get("yielded")
     surrender = None if yielded is None or felled_yield.get("refused") else Surrender(by=yielded, round=2, accepted=True)
     return CombatOutcome(claimants=(actor, target), wounds={actor: state(actor), target: state(target)},
-                         surrender=surrender, beat=None, rounds=2, trace=())
+                         surrender=surrender, beat=None, rounds=2,
+                         shape=SceneShape(rounds=2, blows={actor: 0, target: 0}, first_blood=None, lead_changes=0, nearest={}), trace=())
 
 
 def test_scene_outcome_reads_what_fight_estimate_read():

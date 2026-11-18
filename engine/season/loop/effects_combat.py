@@ -231,6 +231,8 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # CP-T03-04 (iv): EACH GROWN PARTY IS ITS OWN SUBJECT ON `capability`, earning the `(Person, capability)` cell's
     # kind alone -- never a body subject's kind, and never on a party who did not grow (the filter above).
     named += tuple(Subject.entity("persons", pid, earns=GROWN_KINDS, fields=("capability",)) for pid in grown)
+    # B14.15: THE SCENE'S SHAPE rides each success Event once (`scene_observed`, `carry_scene`).
+    named = carry_scene(named, scene_observed(tuple(dict.fromkeys((a.actor, who))), res.result.get("shape")))
     return Change(named, perform, fight_ending(w, (a.actor, who), res, above))
 
 
@@ -316,6 +318,43 @@ def fell_observed(pid: str, beat: "dict | None") -> tuple:
     if not beat or beat.get("victim") != pid:
         return ()
     return (Observation(pid, FELL_TO_STEM, f"{beat['source']}:{beat['weapon']}"),)
+
+
+def scene_observed(parties: tuple, shape: "dict | None") -> tuple:
+    """B14.15 (D-U1-06; `16_PESSIMIST_PC_C` 1): the Observations a fight's success Events carry of the scene's course, read off
+    the `shape` the seam lifted onto the result (`SceneShape` as a dict), or `()` where the result carries none. For each party
+    `p`, `(p, "blows_landed", n)`; once per scene, `(actor, "fight_rounds", n)`, `(first_blood, "first_blood", True)` where a
+    blow landed, and `(actor, "lead_changes", n)` -- `parties[0]` the actor. Numbers and one name, never a doer of a killing:
+    `first_blood` names who struck first, which is not who prevailed. They ride `Event.observed` as `fell_to` does (the
+    predicates are not `observation_terms` members, B14.03's reading). [ASSUMPTION; medium; Jordan to correct; revert: drop
+    the Observations]"""
+    if not shape:
+        return ()
+    blows = shape.get("blows") or {}
+    actor = parties[0]
+    out = [Observation(p, "blows_landed", blows[p]) for p in parties if p in blows]
+    out.append(Observation(actor, "fight_rounds", shape["rounds"]))
+    if shape.get("first_blood") is not None:
+        out.append(Observation(shape["first_blood"], "first_blood", True))
+    out.append(Observation(actor, "lead_changes", shape["lead_changes"]))
+    return tuple(out)
+
+
+def carry_scene(named: tuple, obs: tuple) -> tuple:
+    """`named` with `obs` placed on the subjects so that each success Event carries them ONCE. `_fold` gives a kind's Event the
+    `observed` of every subject riding it, and a subject rides the kinds it earns (every kind, where it names none), so `obs` goes
+    to a subject only if none of its kinds is already ridden by an earlier one that carries them: a kind two subjects earn
+    (both parties wounded) carries them once, and a subject that would double a covered kind is passed over (its other kind
+    is left without them, for the sake of no repeated Observation)."""
+    if not obs:
+        return named
+    everything, covered, out = object(), set(), []
+    for s in named:
+        kinds = set(s.kinds) or {everything}
+        fresh = not (covered & kinds) and everything not in covered and (everything not in kinds or not covered)
+        out.append(replace(s, observed=tuple(s.observed) + obs) if fresh else s)
+        covered |= kinds
+    return tuple(out)
 
 
 def fight_ending(w: "World", parties, res: "Resolution", above) -> tuple:
