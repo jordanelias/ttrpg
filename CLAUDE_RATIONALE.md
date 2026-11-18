@@ -372,3 +372,7 @@ These are the figures it quoted, verbatim, with their dates. They are history: r
 - **§8** — *"the gate: ~2m36s. Serial, it is 9m01s"* and *"pays 3.5× for the same verdict"*.
 - **§4, §10, §11** — the 116-file size-cap figure, the 219 tokens per delivered line and the 116
   check-ins: their sections above already carry them.
+- **§0 / §8 / §11 — dates and attributions** removed from `CLAUDE.md` as history: the "all directions"
+  method was Jordan's, 2026-10-28; the one-round review rule's ruling was *"uncontrolled audit
+  recursion loop"*, 2026-10-22; watching our own agents and processes was allowed by Jordan on
+  2026-10-10; and CI's non-required status was shown by #564 and #567 merging before green.

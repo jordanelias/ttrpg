@@ -10,7 +10,7 @@ description: >
   `04` §C.12 and `architecture/holonic_ARCHITECTURE.md` §43, §45-§47), grades each finding STRUCTURAL / MECHANICAL /
   CONVENTION per that document's §0, and reads both halves of a §A.2 row. Definitions stay with their
   owners (CLAUDE.md's layer table, `architecture/`); this skill owns the method and copies no table or
-  count. Output is edits plus at most a commit paragraph. Run by /close step 4. Use for: code
+  count. Output is edits plus at most a commit paragraph. Run by /close step 3. Use for: code
   architecture compliance, layer conformance, "does this conform to 04", "which layer does this
   belong in", "mechanism or reference", "should this be a guard", "apparatus or game", "is
   engine/season conformant". Not for design quality (ners), inert mechanics (valoria-mechanic-audit), P-01..P-15

@@ -62,7 +62,7 @@ it.
 
 **Relation to `/close` and to `methodology-execute`.** This pipeline runs *before* `/close`, on a
 diff that is otherwise ready to commit — whether that diff already existed, or
-`methodology-execute` just built it. `/close` step 4 also runs `layer-conformance`; Phase 2 below
+`methodology-execute` just built it. `/close` step 3 also runs `layer-conformance`; Phase 2 below
 is not a duplicate of that step, it is why that step should find nothing new by the time it runs.
 `methodology-execute`'s BATCH-CLOSE **is** this file's Phases 1–3, invoked by reference, not
 copied, run once against a whole batch's cumulative diff rather than once per item; a change to
@@ -180,7 +180,7 @@ they queue.
 2. **`/simplify`** — reuse, simplification, efficiency, on the now-correct tree. It applies its own
    fixes by contract; no flag needed.
 3. **`layer-conformance`** — placement and Layer-1 conformance, last. Its own doc places it at
-   `/close` step 4 for the same reason: it wants the tree to have stopped moving before it grades
+   `/close` step 3 for the same reason: it wants the tree to have stopped moving before it grades
    placement.
 
 ### 2.3 Apply before the next stage reads the tree
