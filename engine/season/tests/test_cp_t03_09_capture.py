@@ -320,14 +320,16 @@ def test_a_scene_with_no_yield_and_no_wound_is_capture_refused_not_contest_undec
 def test_a_wounded_scene_with_no_yield_wounds_and_reports_no_capture():
     w, d = _world()
     out = _fold_at(w, d, _capture(0), "Wounded", _scene(captive=_state(1, 6)))
-    assert _kinds(out) == ["body.changed"] and not _detains(w), _kinds(out)
+    # B05.09: a capture that drew blood raises its survivors in `arms` (a non-holder minted a first rank); B05.99 rewrite, was
+    # the body Event alone
+    assert _kinds(out) == ["body.changed", "capability.raised"] and not _detains(w), _kinds(out)
 
 
 def test_a_yield_by_the_captive_opens_one_detain_and_earns_person_captured_alone_on_the_edge():
     w, d = _world()
     surrender = dict(by=CAPTIVE, turn=3, accepted=True)
     out = _fold_at(w, d, _capture(0), "Wounded", _scene(captive=_state(1, 3), surrender=surrender))
-    assert sorted(_kinds(out)) == ["body.changed", "person.captured"], _kinds(out)
+    assert sorted(_kinds(out)) == ["body.changed", "capability.raised", "person.captured"], _kinds(out)   # B05.09's growth, B05.99
     _assert_held(w, out)
     # the body event does not carry the edge, nor the capture event the wound: each kind its own earners' changes
     by_kind = {e.kind: e for e in out}

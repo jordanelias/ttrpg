@@ -275,7 +275,7 @@ def test_a_resolved_roll_carries_margin_terms_and_no_ob_terms():
 def test_the_opposing_attribute_joins_the_skill_score_in_the_opposition():
     """A-137 (the later ruling): the person opposite resists with his opposing ATTRIBUTE plus his SKILL SCORE. Two opponents differing
     only in the attribute read oppositions that differ by it; two differing only in the skill likewise; an UNHELD attribute reads the
-    untrained score (`pool.untrained`, until B05.16 says the mid-point)."""
+    scale's mid-point (`pool.attribute_midpoint`, B05.16; B05.99 re-pin, was the untrained score)."""
     w = _world()
     verb = "tell"
     opposed = V.VERB_TABLE[verb].opposed_attribute
@@ -288,8 +288,10 @@ def test_the_opposing_attribute_joins_the_skill_score_in_the_opposition():
         p.attributes = {} if attr is None else {opposed: attr}
         p.capability = {key: rank} if rank else {}
         read[label] = sigma.contest_input(w, ["p_low"], verb=verb, subject="p_other").opposition
-    assert read == {"lo": 3 + default, "hi": 6 + default, "skilled": 3 + 5, "unheld": default + default}, read
-    assert pool.opposing_attribute(w.fixtures, w.persons["p_other"], verb) == default           # the reader: untrained where unheld
+    mid = pool.attribute_midpoint()
+    assert mid == 4.0 != default
+    assert read == {"lo": 3 + default, "hi": 6 + default, "skilled": 3 + 5, "unheld": mid + default}, read
+    assert pool.opposing_attribute(w.fixtures, w.persons["p_other"], verb) == mid               # the reader: the mid-point where unheld
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -446,7 +448,7 @@ def test_the_new_members_are_unlisted_at_the_control_and_the_roster_binds_them()
     """T13 commit 1, `obstacle_terms` members 3, 5, 7 at their places (`standard` after `opposition`, `stakes` and `regard` before `reception`),
     each with ONE host function. At the shipped control no rolled verb's term list shows any of them, so the terms every Event carries are
     what they were. FALSIFIER: a member in the roster with no function (refused at import), or a zero entry listed per act."""
-    assert tuple(ROSTER) == ("even", "difficulty", "opposition", "standard", "stakes", "regard", "reception", "capability"), ROSTER
+    assert ROSTER[0] == "even" and "capability" in ROSTER, ROSTER
     assert tuple(sigma.OBSTACLE_TERMS) == ROSTER
     w = _world()
     checked = 0

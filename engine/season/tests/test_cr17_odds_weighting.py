@@ -201,8 +201,10 @@ def _believes_the_hearer(p):
 def test_two_pools_give_two_believed_chances_and_two_rankings(cells, monkeypatch):
     w = _world()
     sure, unsure = w.persons["p_low"], w.persons["p_mid"]
-    # roster-exempt: TEST FIXTURE addend -- one person's pool four dice above the other's (`test_odds_of.py`'s way).
-    monkeypatch.setattr(pool, "POOL_ADDENDS", [lambda w_, who, verb: 4 if who.id == sure.id else 0])
+    # roster-exempt: TEST FIXTURE addend -- one person's pool eight dice above the other's (`test_odds_of.py`'s way). B05.99
+    # re-pin of the device (B05.14's opposition with the attribute, B05.23's base 6 and calibrated obstacle): four dice now
+    # part the two chances by 0.14 (0.174 against 0.032), under the 0.2 the rival's cell needs; the threshold is unchanged.
+    monkeypatch.setattr(pool, "POOL_ADDENDS", [lambda w_, who, verb: 8 if who.id == sure.id else 0])
     for p in (sure, unsure):
         p.pursuits = {n: 1.0 for n in PURSUITS}
         _believes_the_hearer(p)

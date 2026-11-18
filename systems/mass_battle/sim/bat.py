@@ -242,6 +242,13 @@ def trial_vector(ua, ub, r):
 #   cell_legacy_mor1   fbe2d87f02b4… -> 4cff46a32a54…
 # ─────────────────────────────────────────────────────────────────────────────────────────────
 EXPECTED = {
+    # [2026-11-18, B05.99, the batch B05-one-roll's one re-pin] RE-RECORDED the three modes tools/ci_golden_modes_check.py gates,
+    # under Python 3.11 (CI's interpreter; read by running the gate's own pin vector through this file's `--check`). THE MOVER:
+    # B05.03 (`resolution.roll_pool` draws `roll_net_continuous`, the one sampler, and grades on the one ladder; declared in its
+    # commit, which read the move under 3.13). unit_field_mor0 674422667b3f... -> a400e6e522bf..., cell_field_mor0
+    # 36a330416919... -> 70e11b9ba59c..., cell_legacy_mor1 4196b47aaee1... -> 2d5673aeeec2... (under 3.13 the field digests read
+    # caac63b95934... and 631f7f916bc2..., cell_legacy_mor1 the same). At B04's close (74910ca78) all three read equal under 3.11;
+    # the two legacy-lattice modes below are gated by nothing and were not re-recorded.
     # [2026-11-08, MB-07r, J-18 (A)] RE-RECORDED the three modes tools/ci_golden_modes_check.py gates, under Python 3.11 (CI's
     # interpreter; the field digests differ under 3.13): MB_SUPPORT_RANK_CAP flipped ON and POOL_QUALITY_SCALE 0.5 -> 0.8
     # (config.py at both). unit_field_mor0 034e4896e01b... -> 674422667b3f..., cell_field_mor0 65710a268f45... -> 36a330416919...,
@@ -479,7 +486,7 @@ EXPECTED = {
     # predicted this breakage; I checked it against the wrapper, saw skip/xfail, and recorded the
     # finding as overturned. It was not. CHECK THE GATE THAT GATES THE THING, not a neighbour.
     # was 0194efcc72118de125ed176b6e6d22d1f56f54dc9c9a76337953b6854d59cf0c
-    'unit_field_mor0': '674422667b3f666ba24d50dd980e6df3524f3d0ba6e3be58774d45f7c1554f69',
+    'unit_field_mor0': 'a400e6e522bf7a4deff246f4b04a6058a93dd1099a1940cd2635ca74e4386ff4',   # B05.99 re-pin (B05.03); was 674422667b3f...
     # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
     # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
@@ -575,7 +582,7 @@ EXPECTED = {
     # Verified by direct execution (before/after): OLD digest [BYTE-EXACT FAIL] confirms the move (the
     # falsifier this row's own re-record discipline requires), NEW digest [BYTE-EXACT OK] below.
     # was 41a2e98485f31420d70e248238d93a24695684dde33a04791ffbd2697ecffecd
-    'cell_field_mor0': '36a3304169190801c828019c155eaa24612ca06c4015ba56b1ec72b60a355a84',
+    'cell_field_mor0': '70e11b9ba59c4f5aa87f2edca5a14ec826ed22528858270dca3a5194ebe08322',   # B05.99 re-pin (B05.03); was 36a330416919...
     # ─── [ED-MB-0053 / plan-v2 §4a, 2026-07-29] THE FIFTH MODE — freshly recorded ───────────────
     # PER_CELL=1 + MB_CELL_MORALE=1 (grid). The other four all run at MB_CELL_MORALE=0, where the
     # three cell-morale maps are EMPTY, so they verify float-order over every per-cell map EXCEPT
@@ -650,7 +657,7 @@ EXPECTED = {
     # above; this mode's own envelop/cannae/oblique rows trip b_fixed_other/a_fixed_other too. OLD
     # digest verified [BYTE-EXACT FAIL] before this re-record, NEW verified [BYTE-EXACT OK] after.
     # was cc6ab475a5ebedec42d551aae42be77ec3d130a1e3ddd4d2924249cfa2e616df
-    'cell_legacy_mor1': '4196b47aaee138cddcf6a8d66588468a83f32cf8a7605666a36b099a0d8542c9',
+    'cell_legacy_mor1': '2d5673aeeec2b43bf8c9a355b475389512d6aa36931f47cbe7cb39f4eb5184a1',   # B05.99 re-pin (B05.03); was 4196b47aaee1...
 }
 
 

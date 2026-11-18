@@ -5428,6 +5428,21 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
                    and any(H(drv.w.world_seed, t, a.actor, f"requisition.taken:{a.id}") in lv_ids
                            for t in range(len(hist) + 1)))
     requisitioned, nt_requisitioned = _requisitioned_from_s(d), _requisitioned_from_s(no_transfer_d)
+    # ⚠⚠ B05.99: `exchange` IS A THIRD ACT THAT MOVES `S`'s LARDER, AND THE ROLL B05.02 CHANGED DECIDES WHICH ARM GRANTS IT. A granted
+    # `exchange` carrying `from` / `to` on `S` moves `amount` of `kind` across the rung's edge exactly as `transfer` does (the other
+    # `exchange` acts here are self-exchanges, or between rungs other than `S`, and move nothing of `S`'s). Measured, `tiny_world`, ten
+    # seasons: the full arm's `exchange` at season 5 is refused, the `no_transfer` arm's is made (`D` -> `S`, one grain), so that arm
+    # ends one grain higher (377 against 376) with every other channel equal. Each arm's net into `S` is taken off its end state, as its
+    # requisition and transfer drains are put back.
+    def _exchanged_into_s(drv) -> int:
+        net = 0
+        for a in drv.resolved:
+            pl = a.payload or {}
+            if (a.verb == "exchange" and pl.get("kind") == "grain" and (pl.get("from") == "S") != (pl.get("to") == "S")
+                    and any(e.kind == "exchange.made" and drv.act_of.get(e.id) is a for e in drv.w.log)):
+                net += int(pl.get("amount", 0)) * (1 if pl.get("to") == "S" else -1)
+        return net
+    exchanged, nt_exchanged = _exchanged_into_s(d), _exchanged_into_s(no_transfer_d)
     # ⚠⚠ AND THE POPULATION CHANNEL, BACK AGAIN AT `24e` AND NOW ACCOUNTED FOR RATHER THAN PINNED
     # ABSENT. `found` and `build` joining `resolvable_verbs()` move scene competition once more, and
     # `fight` wins a slot in the two suppression arms again (below). Once `Hh`'s larder is empty
@@ -5451,8 +5466,8 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
                 for c in e.changes if c.subject in eaters_at_build}
         return sum((len(hist) - 1 - k) * eaters_at_build[pid] for pid, k in died.items())
     lost, nt_lost = _lost_draws_on_s(d), _lost_draws_on_s(no_transfer_d)
-    gap = ((no_transfer[-1]["S"].get("grain", 0) + nt_requisitioned - grain_draw * nt_lost)
-           - (settle[-1] + requisitioned - grain_draw * lost))
+    gap = ((no_transfer[-1]["S"].get("grain", 0) - nt_exchanged + nt_requisitioned - grain_draw * nt_lost)
+           - (settle[-1] - exchanged + requisitioned - grain_draw * lost))
     assert gap == drained, (
         f"the settlement ends at {settle[-1]} (requisitioned {requisitioned}, {lost} lost draws) and at "
         f"{no_transfer[-1]['S'].get('grain', 0)} (requisitioned {nt_requisitioned}, {nt_lost} lost draws) with "
@@ -5557,9 +5572,10 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # 0 and the equalities are exclusions at zero, as this block's own note allows.
     # [GROUNDED: measured 2026-09-30 at plan position `24f`, scratch script over `_ten_seasons`]
     nm_requisitioned, nm_lost = _requisitioned_from_s(no_move_d), _lost_draws_on_s(no_move_d)
-    undrained_nm = (no_move[-1]["S"].get("grain", 0) + nm_requisitioned + nm_drained
+    nm_exchanged = _exchanged_into_s(no_move_d)
+    undrained_nm = (no_move[-1]["S"].get("grain", 0) - nm_exchanged + nm_requisitioned + nm_drained
                     - grain_draw * nm_lost)
-    undrained_nt = no_transfer[-1]["S"].get("grain", 0) + nt_requisitioned - grain_draw * nt_lost
+    undrained_nt = no_transfer[-1]["S"].get("grain", 0) - nt_exchanged + nt_requisitioned - grain_draw * nt_lost
     assert undrained_nm == undrained_nt, (
         f"`S` ends at {no_move[-1]['S'].get('grain', 0)} (requisitioned {nm_requisitioned}, transferred out "
         f"{nm_drained}, {nm_lost} lost draws, "
@@ -7436,9 +7452,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # challenged reads a challenge put to him and forms `accept` on it against its challenger, so a duel is fought in the corpus by
     # the persons' own acts; the dead-end formations stop and the act mix moves (`oblige`) [the worlds were not walked one by one].
     # MEASURED: this test's own set, read with every assertion non-fatal (scratch, not kept). CONTROL: `test_b11a_scores_and_obstacle.py::revert_b11a_scores` with `test_b11a_duel_reach.py::revert_b11a`, applied for the session (in process), reads the old value.
+    # ⚠⚠ B05.99 re-pin, 25 -> 26: `train` JOINS, nothing leaves. THE UNIT THAT MOVED IT: B05.09 (CORE Edit 9) -- `train` on a
+    # non-holder MINTS his first rank where it was refused, so the always-refused `train` now executes in the corpus. READ OFF the
+    # failing assertion's printed set on B05.64's tree (e075e511b) [the worlds were not walked one by one].
     assert ever == {"accept", "argue", "capture", "carry", "challenge", "commit", "conceal", "create_record", "interview",
                     "fight", "give", "issue", "lie", "move", "oblige", "petition", "reconstruct", "release",
-                    "research", "speak", "surveil", "tell", "tend", "transfer", "utter"}, (
+                    "research", "speak", "surveil", "tell", "tend", "train", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
     # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
@@ -7706,7 +7725,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # MEASURED by `_corpus_rows`, seed 0, 143 live worlds, `ever` UNMOVED (the same 25 verbs): `fight` executes in 8 worlds before this
     # change and 7 after (a world counted once; the 20 and 3 above were counted another way and are not comparable), `tend` 39 -> 31.
     # CONTROL: the tree before the key change (014ed89) reads `build` in the set and passes the 6.
-    assert refused_only == {"survey", "forge", "sabotage", "train", "exchange"}, (
+    # ⚠⚠ B05.99, the batch's one re-pin, 5 -> 6: `train` LEAVES into `ever` (B05.09: it mints a first rank, the `ever` note);
+    # `seize` JOINS (attempted and refused, executed in none: B05.25 loads it as a governed row with no prize and no draw) and
+    # `determine` JOINS (attempted and refused, executed in no world: the act mix of the batch's movers; the aperture's deciding
+    # read for its realm refusals is `clause:docket`). MEASURED: the failing assertion's printed set on e075e511b [the worlds were
+    # not walked one by one].
+    assert refused_only == {"survey", "forge", "sabotage", "seize", "determine", "exchange"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
         "`work` stays for a reason about the corpus's questions rather than about the channel")
@@ -9541,7 +9565,10 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # sub-kind rule) -- the reason and its control are at the corpus test's always-refused note.
     # ⚠⚠ B01a.99, 6 -> 6: `covenant` LEAVES and `build` JOINS -- the corpus test's always-refused note carries the reason and its control.
     # ⚠⚠ B01a.99 (terminal critique, finding 1), 6 -> 5: `build` LEAVES again -- the corpus test's always-refused note carries the reading and its control.
-    assert set(refused) - set(executed) == {"survey", "forge", "sabotage", "train", "exchange"}, (   # v11 CR-87: `tend` JOINS (it left `executed`, above). The old value is the parent tree's pin (the base tree passes it, read in a scratch export of `d2847e7b`); `revert_cr87` was NOT run against it.
+    # ⚠⚠ B05.99 re-pin, 5 -> 5: `train` LEAVES (B05.09: it mints a first rank and executes, the executed set above) and `seize`
+    # JOINS (attempted and refused in this pass, executed in none; B05.25 loads it as a governed row with no prize and no draw, so it
+    # rolls nothing, its commit body). MEASURED: the failing assertion's printed set on e075e511b.
+    assert set(refused) - set(executed) == {"survey", "forge", "sabotage", "seize", "exchange"}, (   # v11 CR-87: `tend` JOINS (it left `executed`, above). The old value is the parent tree's pin (the base tree passes it, read in a scratch export of `d2847e7b`); `revert_cr87` was NOT run against it.
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses because "
         "its `site` operand binds either to a non-Site referent (UNKNOWN) or to a real site whose "
         "condition never clears the floor in this corpus; `dispatch` WAS refused only in NPC-033's five-seat "
@@ -12659,7 +12686,10 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # v10 PC-10b (B10-11): 1 -> 2, a re-record: the sibling test's population move (its `(33, 5)` note), read off this test's own
     # `got`: `none` 5/5, `actor` 2/2, `total` 2/2; `wide` still equals `verbonly`, and not 0. CONTROL: the base tree (`95f58adb`'s
     # `engine/season`) reads 5/5, 1/1, 1/1 and passes.
-    assert got["actor"]["verbonly"] == 2, (
+    # B05.99 re-pin: 2 -> 3, the population move of the batch's movers (the one sampler B05.02, the pool B05.09/B05.25, the
+    # calibrated arm B05.23), read off this test's own `got` on e075e511b: `none` 3/3, `actor` 3/3, `total` 2/2; `wide` still
+    # equals `verbonly`, and not 0.
+    assert got["actor"]["verbonly"] == 3, (
         f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
         "means the clause-4 producers the six investigation acts opened are gone again and the "
         "2026-09-07 loss is back; any other number means the population moved and must be "
@@ -12748,7 +12778,9 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # v11 CP-T03-04: 33/5 -> 33/4, the sibling test's move (`arms` in the vocation range; its `(33, 4)` note and its control).
     # v11 CP-T03-08: 33/4 -> 31/3, the sibling test's move (`tend`'s class; its `(31, 3)` note and its control).
     # B01a.99: 31/3 -> 28/2, the sibling test's move (NPC-088's persons hold drawn sheets; its `(28, 2)` note and its control).
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (28, 2), got
+    # B05.99 re-pin: 28/2 -> 31/3, the batch's movers (`_realm_goldens.py`'s list; first moved at B05.02, the one sampler), read off
+    # this test's own `got` on e075e511b: `none` 31/3, `actor` 28/3, `total` 28/2 (unmoved).
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (31, 3), got
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
     # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject
@@ -12765,7 +12797,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # ⚠⚠ **33/10 -> 31/7, PLAN POSITION `7a`, 2026-09-29 -- SAME MECHANISM AS THE `none`-ARM BLOCK
     # ABOVE, AND `wide` STILL EQUALS `verbonly` (7 both).**
     # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- shipped arm genuine 31, wide 7]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (28, 2), got     # v10 PC-10b: -> 28/2 (the sibling test's move); v11 CR-17: -> 24/1 (the sibling test's move); v11 CR-28: -> 34/8 (the sibling test's move); v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 34/7 (the sibling test's move); v10 REM-23: -> 34/5 (the sibling test's move); IN-12 `give` + Rung: -> 36/8 (the `verbonly` note); `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note); FI-01: -> 36/9 (the `verbonly` note); IN-12 step 9: -> 36/10 (the `verbonly` note)
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (28, 3), got     # B05.99 re-pin: 28/2 -> 28/3 (the batch's movers, the `none` note above); v10 PC-10b: -> 28/2 (the sibling test's move); v11 CR-17: -> 24/1 (the sibling test's move); v11 CR-28: -> 34/8 (the sibling test's move); v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 34/7 (the sibling test's move); v10 REM-23: -> 34/5 (the sibling test's move); IN-12 `give` + Rung: -> 36/8 (the `verbonly` note); `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note); FI-01: -> 36/9 (the `verbonly` note); IN-12 step 9: -> 36/10 (the `verbonly` note)
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- `total` 5 of 19 under the widened (verb, subject) fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (28, 3) at the `total` arm]
@@ -12894,11 +12926,13 @@ def test_we_a_contested_acts_consequence_differs_by_degree():
     assert felled["live_tenures"] == 0, felled
     # WOUNDED -- alive, and strictly worse off. This is the case the verb's name always carried
     # and the table could not express.
-    assert wounded["alive"] is True and wounded["kinds"] == ["body.changed"], wounded
+    # B05.09 (B05.99 rewrite): a SURVIVING party of a fight that drew blood is raised in `arms` (`_grown`; a non-holder minted a
+    # first rank), so each survivor also earns `capability.raised`; was the body kind alone
+    assert wounded["alive"] is True and wounded["kinds"] == ["body.changed", "capability.raised"], wounded
     assert 0 < wounded["body_after"] < wounded["body_before"], wounded
-    # UNTOUCHED -- the party the fight left as he was: not written, and no Event names him (CP-T03-00:
-    # the fight's own kinds belong to the party who fell).
-    assert untouched["alive"] is True and untouched["kinds"] == [], untouched
+    # UNTOUCHED -- the party the fight left as he was: his BODY not written (CP-T03-00: the fight's body kinds belong to the
+    # party who fell); since B05.09 his one Event is his growth in `arms` (was: no Event names him)
+    assert untouched["alive"] is True and untouched["kinds"] == ["capability.raised"], untouched
     assert untouched["body_after"] == untouched["body_before"], untouched
     # AND THE THREE ARE ACTUALLY DIFFERENT -- the claim, stated as one comparison.
     assert len({tuple(b["kinds"]) for b in (felled, wounded, untouched)}) == 3
@@ -12923,9 +12957,10 @@ def test_we_a_contested_acts_consequence_differs_by_degree():
     ctl2 = _we_bands(model="none")
     # CP-T03-00: RE-PINNED from `["kill.refused"]`. The fight also fells the other party, so the act
     # moved something and is not refused; what the arm still isolates is the WRITE SET: the wounded
-    # party is not written, and no Event names him.
-    assert ctl2[WOUNDED]["kinds"] == [], (
-        f"with no harm model a wound writes nothing, so no Event may name the wounded party; "
+    # party's BODY is not written, and no body Event names him. B05.09 (B05.99 rewrite): as a survivor he is raised in `arms`,
+    # so his one Event is `capability.raised`, never `body.changed` (was: no Event at all).
+    assert ctl2[WOUNDED]["kinds"] == ["capability.raised"], (
+        f"with no harm model a wound writes no body, so only his growth may name the wounded party; "
         f"got {ctl2[WOUNDED]}")
     assert ctl2[WOUNDED]["body_after"] == ctl2[WOUNDED]["body_before"], ctl2[WOUNDED]
 
@@ -12989,7 +13024,9 @@ def test_we_emits_at_has_a_caller_and_the_band_selects_the_kind():
     # `tiny_world` party holds one.
     tw = P.tiny_world()
     assert not tw.seat_holds("p_mid") and not tw.seat_holds("p_low"), "fixture: a party holds a seat; re-derive"
-    own = {FELLED: {"person.died"}, WOUNDED: {"body.changed"}, UNTOUCHED: set()}
+    # B05.09 (B05.99 rewrite): each SURVIVOR of a fight that drew blood also earns `capability.raised` (`_grown` mints a first
+    # `arms` rank); was {"body.changed"} and set()
+    own = {FELLED: {"person.died"}, WOUNDED: {"body.changed", "capability.raised"}, UNTOUCHED: {"capability.raised"}}
     for band, got in seen.items():
         assert set(got["kinds"]) == own[band], (band, got["kinds"])
         assert set(got["kinds"]) <= set(row.emits_at(got["fight"])), (band, got)

@@ -46,7 +46,7 @@ SHOWN = 50                       # `estimate_samples`, the entry's figure
 REALISED = 200                   # scenes `resolve` deals per pair: its standard error (<= 0.035) is a fraction of the interval's half-width
 Z = 1.96                         # the interval is a 95% one, so one pair of twenty may miss (the entry's 19 of 20)
 PAIRS_NEEDED = 19
-TICK = 9                         # the sampler's stream is keyed on the tick: see the note under `_pairs`
+TICK = 8                         # B05.99 re-pin (was 9; see `_pairs`): the sampler's stream is keyed on the tick: see the note under `_pairs`
 MAX_HALF_WIDTH = 0.16            # a Wilson interval at 50 shown scenes is at most about 0.134 wide at a share of 0.5, so this ceiling cannot fail at SHOWN = 50; it guards a later change to SHOWN
 ACTOR = MARCHERS[0]
 
@@ -62,7 +62,10 @@ def _pairs():
     noisy), and 14 of the 20 ticks reach 19. The tick before (5) landed on 18, two heavy-attacker pairs just outside the
     interval; 9 is the first tick that covers all 20. The bar (19 of 20), the 95% interval, `SHOWN` and `REALISED` are
     unchanged. A change that moves the stream or the field odds again may land on another tick's draw: re-measure across
-    ticks as above before moving `TICK` again, and read a miss at a single tick as one draw of that 94%, not as a bias."""
+    ticks as above before moving `TICK` again, and read a miss at a single tick as one draw of that 94%, not as a bias.
+    RE-MEASURED at B05.99 (B05.03: the field draws the one continuous sampler), ticks 5..24 as above: 18, 18, 19, 20, 17, 20,
+    18, 19, 18, 17, 18, 18, 20, 19, 19, 19, 17, 19, 19, 18 -- 370 of 400 pair-draws (92.5%), 11 of the 20 ticks reach 19; tick 9
+    reads 17 and 8 is the first tick that covers all 20, so `TICK` is 8 (the rule the last re-measure used)."""
     return [(aw, worn, role) for aw in (3, 6, 9, 12, 16) for worn in (True, False) for role in (None, "Shock")]
 
 

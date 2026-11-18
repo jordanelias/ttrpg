@@ -61,14 +61,24 @@ def _reference_state(w, seed):
     return rng.getstate()
 
 
+def _ob(w, opposition):
+    """B05.99 re-pin (B05.14's even line, B05.23's base 6 and rate MU_PER_DIE): the obstacle the module folds, left to right, for
+    a hearer scoring `opposition` with his attribute at 0 and every level sized 0: `even_line(pool_add) + opposed_ob(opposition,
+    rate)` (was `0.5 x score`: Ob 2.0 and 1.5)."""
+    from engine.dice_engine.sigma_leverage import even_line, opposed_ob
+    return 0.0 + even_line(w.fixtures.get("pool_add")) + 0 + opposed_ob(opposition, w.fixtures.get("opposition_rate"))
+
+
 def test_resolve_draws_nothing_beyond_the_roll_at_a_whole_or_a_fractional_ob():
     checked = 0
-    for opposition, ob in ((4, 2.0), (3, 1.5)):
+    for opposition, ob in ((4, 4.0), (3, 3.6)):           # a whole Ob and a fractional one (was 2.0 and 1.5)
         w = _world(opposition)
+        assert abs(_ob(w, opposition) - ob) < 1e-12 and (ob == round(ob)) == (opposition == 4)    # the label, read off the fold
         for seed in range(40):
             rng = random.Random(seed)
             out = _resolve(w, rng)
-            assert out["status"] == "RESOLVED" and out["ob"] == ob and out["pool"] == 4, out
+            # the pool: the untrained governing score 2 + the rank 4 + the base 6 (B05.25, B05.23; was 4)
+            assert out["status"] == "RESOLVED" and out["ob"] == _ob(w, opposition) and out["pool"] == 12.0, out
             assert rng.getstate() == _reference_state(w, seed), (ob, seed)
             checked += 1
     assert checked == 80
@@ -92,7 +102,9 @@ def test_the_records_own_fields_are_the_entrys_and_only_one_is_added():
     assert (out["net"], out["ob"], out["pool"], out["terms"]) == (margin.net, margin.ob, inp.pool, margin.terms)
     # B05.14: AND `terms`, every term of the obstacle named on the record (`Margin.terms`, the entry's own; lane A's `ob_terms` is replaced)
     # B04.08: AND `fed_by`, the `social_roll` rows that fed the roll (`resolve`'s record, never an `Event` field, D-U1-06)
-    assert set(out) == {"status", "module", "resolver", "pool", "net", "ob", "leverage", "settled_margin", "terms", "fed_by"}
+    # B05.17: AND `levels`, each advantage source's named levels for and against (OBS §5); B05.99 re-pin, was absent
+    assert set(out) == {"status", "module", "resolver", "pool", "net", "ob", "leverage", "settled_margin", "terms", "fed_by",
+                        "levels"}
 
 
 def test_degree_of_grades_the_margin_when_present_and_the_pair_otherwise():

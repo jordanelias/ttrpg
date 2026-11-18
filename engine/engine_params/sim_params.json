@@ -3,21 +3,21 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 122,
-    "total": 394,
-    "uncited": 272,
+    "total": 391,
+    "uncited": 269,
     "of_which_assumption_grade": 8
   },
-  "count": 394,
+  "count": 391,
   "by_module": {
     "engine.dice_engine": 10,
-    "engine.season": 26,
+    "engine.season": 25,
     "mass_battle": 161,
     "characters": 5,
     "fieldwork": 15,
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 105,
+    "engine.season.settings": 103,
     "engine.season.realm": 8
   },
   "params": [
@@ -183,22 +183,6 @@
       "note": "[JUSTIFIED: #353 `:333` types the row `(referent, valence -5..+5, weight 0..5)` — the type's own bound, not a tuning; ED-IN-0229]",
       "citation": "ED-IN-0229",
       "citation_grade": "source"
-    },
-    {
-      "key": "engine.season.DIFFICULTY_OB_CONTROL",
-      "name": "DIFFICULTY_OB_CONTROL",
-      "value": {
-        "plain": 0,
-        "routine": 1,
-        "demanding": 2,
-        "hard": 3
-      },
-      "kind": "table",
-      "module": "engine.season",
-      "file": "engine/season/data/fixtures.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
     },
     {
       "key": "engine.season._CONDITION_SCALE",
@@ -4615,22 +4599,6 @@
       "citation_grade": null
     },
     {
-      "key": "engine.season.settings.difficulty_ob",
-      "name": "difficulty_ob",
-      "value": {
-        "plain": 0,
-        "routine": 0.8,
-        "demanding": 1.6,
-        "hard": 2.4
-      },
-      "kind": "table",
-      "module": "engine.season.settings",
-      "file": "engine/season/data/fixtures.py",
-      "note": "`H-424`, swept control (`DIFFICULTY_OB_CONTROL`) / half / three-quarter / calibrated (SHIPPED)",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
       "key": "engine.season.settings.regard_step",
       "name": "regard_step",
       "value": 1.0,
@@ -4649,28 +4617,6 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-427`, swept off (control) / on (live, SHIPPED, B05.23)",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "engine.season.settings.stakes_ob",
-      "name": "stakes_ob",
-      "value": {
-        "ban": 0,
-        "commit": 0,
-        "contain": 0,
-        "detain": 0,
-        "hold": 0,
-        "knot": 0,
-        "oblige": 0,
-        "reside": 0,
-        "succeed": 0,
-        "tie": 0
-      },
-      "kind": "table",
-      "module": "engine.season.settings",
-      "file": "engine/season/data/fixtures.py",
-      "note": "`H-428`, swept 0 (control, SHIPPED) / 0.5x / 1x / 2x",
       "citation": null,
       "citation_grade": null
     },

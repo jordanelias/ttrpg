@@ -413,7 +413,8 @@ def test_a_dice_row_resolves_differently_from_open_flat_and_identically_with_its
     OPEN_FLAT: with the row's A.9 dice zeroed (the pre-MB-05 world, where the row was identified and not
     applied) the two are EQUAL on every seed; with canon's dice they DIFFER on at least one, and the
     defender never ends with fewer survivors. Measured 2026-10-08 (Python 3.11): 0/16 differ before
-    MB-05, 3/16 after, for both rows at these weights -- one-off figures, not asserted. RIVER_CROSSING's
+    MB-05, 3/16 after, for both rows at these weights; at B05.99, after the one sampler (B05.03), river_crossing first differs at seed 89
+    (58 of 1000) and uphill at seed 1, so the seed range is 256 -- one-off figures, not asserted. RIVER_CROSSING's
     speed step is inert here (see the test above), so the zeroed arm is equal for it too."""
     import random
     from modules.mass_battle import massbattle as MB
@@ -423,7 +424,7 @@ def test_a_dice_row_resolves_differently_from_open_flat_and_identically_with_its
         return MB._run_and_grade(a, b, r, random.Random(seed))
 
     checked = differs = 0
-    for seed in range(16):
+    for seed in range(256):
         on_row, flat = fight(row, seed), fight(OPEN_FLAT, seed)
         assert on_row['defender_size_pct'] >= flat['defender_size_pct'], (
             f"{row} seed {seed}: the row left the defender FEWER survivors: {on_row} vs {flat}")
@@ -433,7 +434,7 @@ def test_a_dice_row_resolves_differently_from_open_flat_and_identically_with_its
                 m.setattr(MB, name, 0)
             assert fight(row, seed) == flat, f"{row} seed {seed}: with its dice zeroed it still differs"
         checked += 1
-    assert checked == 16
+    assert checked == 256
     assert differs >= 1, f"{row} resolved identically to OPEN_FLAT on every seed"
 
 
@@ -441,7 +442,7 @@ def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
     """MB-05, re-pinned at MB-05r: RIVER_CROSSING at `resolve_field`, now DERIVED from the record's
     `origin`. The provider's own fixture sides (the 2-man Crown army mustered at `set_s_014` against
     the Church at `set_s_036`), fought over T3 (OPEN_FLAT by polygon) marched on from T9, across the
-    Valoris, and with no origin: they differ on at least one of 16 seeds, and the defenders never end
+    Valoris, and with no origin: they differ on at least one of 256 seeds (the first is seed 89 since B05.03), and the defenders never end
     with fewer survivors. (Before MB-05r the same pair was fought over T1 with the old boolean set and
     unset -- 3 seeds of 16 differed, 2026-10-08; T1's anchor lies on the river, so no origin crosses
     to it, and the field moved to T3, the same OPEN_FLAT row.)"""
@@ -464,11 +465,11 @@ def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
     assert att and dfn, "the provider's fixture sides no longer muster"
     assert terrain_row_for_territory('T3', fort_level=0, geography=_geography()) == OPEN_FLAT, "T3's polygon row moved"
     checked = differs = 0
-    for seed in range(16):
+    for seed in range(256):
         crossed = resolve_field(record(origin='T9'), rng=random.Random(seed))
         dry = resolve_field(record(origin=None), rng=random.Random(seed))
         assert crossed['defender_size_pct'] >= dry['defender_size_pct'], (seed, crossed, dry)
         differs += crossed != dry
         checked += 1
-    assert checked == 16
+    assert checked == 256
     assert differs >= 1, "the river_crossing signal never reached the engine"

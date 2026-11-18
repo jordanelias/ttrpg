@@ -56,16 +56,19 @@ class _Stub:
 
 
 def test_discipline_check_rate_matches_engine_convention():
-    """Hold rate is ~40% at Disc-1 (matches PP-256 exactly) and rises with Discipline under the shared
-    roll_pool convention. Disc-4 realizes ~74.5% (engine net-roll), not the doc's no-botch 87%."""
+    """Hold rate rises with Discipline under the shared roll_pool convention.
+    B05.99 RE-PIN (B05.03: `roll_pool` draws the one continuous sampler, so a whole-die check reads lower at one die, P(net >= 1)
+    4/10 -> P(z >= 0.75)): Disc-1 realizes 0.226 (was ~40%, which matched PP-256 exactly; PP-256's figure is no longer met and
+    is B19's field calibration, B05.03's body), Disc-2 0.430, Disc-4 0.642 (was ~74.5%). Each window keeps its old half-width
+    (0.04, 0.045), re-centred on the engine's reading at this seed."""
     _, O = _reload(on=True)
     random.seed(20260723)
     rates = {}
     for disc in (1, 2, 4):
         holds = sum(O.feigned_retreat_check(_Stub(discipline=disc)) for _ in range(20000)) / 20000
         rates[disc] = holds
-    assert 0.36 <= rates[1] <= 0.44, f"Disc-1 hold ~40% (PP-256), got {rates[1]:.3f}"
-    assert 0.70 <= rates[4] <= 0.79, f"Disc-4 hold ~74.5% (engine convention), got {rates[4]:.3f}"
+    assert 0.186 <= rates[1] <= 0.266, f"Disc-1 hold ~22.6% (the one sampler; PP-256's 40% is B19's), got {rates[1]:.3f}"
+    assert 0.597 <= rates[4] <= 0.687, f"Disc-4 hold ~64.2% (engine convention), got {rates[4]:.3f}"
     assert rates[1] < rates[2] < rates[4], f"hold rate must rise with Discipline: {rates}"
 
 

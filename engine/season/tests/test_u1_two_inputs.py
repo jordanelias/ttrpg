@@ -8,8 +8,9 @@ THE CLAIMS, AND WHAT WOULD SHOW EACH WRONG:
     existed to prevent); the planted failure here is `pool.score` as lane A shipped it, or a score that is the bare rank.
   * `faculty` IS `pool_of(score, addends, pool_add, pool_floor)` (A-6, D-U1-08): with `pool_add` and `pool_floor` set, the
     pool is the one rule's answer, and the `score` it hands over carries no attribute and no addend.
-  * UNTRAINED `none`: a non-holder of a row saying `untrained: none` has NO score, `faculty` answers 0 (a roll refused as a
-    held 0 was) and `raised_capability` mints his first rank.
+  * UNTRAINED `none`: a non-holder of a row saying `untrained: none` has NO score (B05.25: his pool is his governing score at
+    rank 0, no longer 0) and `raised_capability` mints his first rank. (B05.99 rewrote the pool claims above to B05.25's
+    `pool_of(governing score + rank, ...)`: every rank adds a die.)
   * COMBAT KEEPS `score` AND `addends` AS TWO NUMBERS (MAP §G edit 4; B05.57): `combat_input`'s `scores` and `addends` are not
     `faculty`, so `pool_add` and `pool_floor` reach the fight once, carried raw.
 """
@@ -24,7 +25,8 @@ from engine.dice_engine.sigma_leverage import pool_of
 from engine.substrate import descriptors
 
 from ..data.fixtures import DEFAULT_FIXTURES
-from ..data.verbs import VERB_CAPABILITY
+from ..data.verbs import VERB_CAPABILITY, VERB_TABLE
+from ..gaps import Unspecified
 from ..harness import probes as P
 from ..loop import effects_combat as EC
 from ..loop.driver import SeasonDriver
@@ -63,20 +65,22 @@ def test_a_first_rank_never_lowers_a_pool():
     first = _kinds(_resolve(w, d, Act(id="tr_first", actor=CARIN, verb="train", payload={"subject": pupil, "kind": KEY})))
     assert first == ["capability.raised"], first                        # (1) the first rank is minted, not refused
     assert p.capability == {KEY: 1}
-    assert pool.faculty(w, p, VERB) >= before and pool.score(w, p, VERB) == default      # (2) the pool is not lower
+    # (2) the pool is not lower: B05.25 (the pool reads the governing score PLUS the rank, `pool.rank`) makes it one die HIGHER,
+    # where B05.09's pool held at the default until the rank passed it; the score still never falls below the untrained score
+    assert pool.faculty(w, p, VERB) == before + 1 and pool.score(w, p, VERB) == default
     second = _kinds(_resolve(w, d, Act(id="tr_second", actor=CARIN, verb="train", payload={"subject": pupil, "kind": KEY})))
     assert second == ["capability.raised"] and p.capability == {KEY: 2}      # (3) a second training raises the rank
-    assert pool.faculty(w, p, VERB) == before                           # the pool holds at the default until the rank passes it
-    for n in range(3):                                                  # CONTROL: the rank passing the default DOES raise the pool
+    assert pool.faculty(w, p, VERB) == before + 2                       # every rank adds a die (was: held at the default)
+    for n in range(3):                                                  # CONTROL: five ranks are five dice over the untrained man
         _resolve(w, d, Act(id=f"tr_more{n}", actor=CARIN, verb="train", payload={"subject": pupil, "kind": KEY}))
-    assert p.capability[KEY] == 5 and pool.faculty(w, p, VERB) == before + (5 - default)
+    assert p.capability[KEY] == 5 and pool.faculty(w, p, VERB) == before + 5 and pool.score(w, p, VERB) == 5
 
 
 def test_the_score_is_the_larger_of_the_rank_and_the_untrained_score_and_reads_no_attribute():
     w = _world()
     p = w.persons["p_low"]
     default = w.fixtures.get("pool_default")
-    p.attributes = {descriptors.capability(KEY).base: 7}                # the governing attribute, held at the ceiling
+    p.attributes = {a: 7 for a in VERB_TABLE[VERB].governing}           # the governing attributes (B05.25's row), held at the ceiling
     p.capability = {}
     assert pool.score(w, p, VERB) == default                            # a non-holder: the untrained score, whatever he is
     p.capability = {KEY: 1}
@@ -105,41 +109,49 @@ def test_the_opposition_reads_the_skill_score_not_the_pool(monkeypatch):
     monkeypatch.setattr(pool, "POOL_ADDENDS", list(pool.POOL_ADDENDS))
     pool.register_pool_addend(lambda w_, who, v: 3 if who.id == subject.id else 0)
     assert pool.faculty(w, subject, verb) > pool.score(w, subject, verb) == 5      # the addend is in his pool, not his score
-    assert sigma._opposition_of(w, subject.id, verb) == 5.0                        # his opposition is his rank
-    assert sigma.contest_input(w, ["p_low", subject.id], verb=verb, subject=subject.id).opposition == 5.0
+    assert sigma._opposition_of(w, subject.id, verb) == 5.0                        # his opposition's skill score is his rank
+    # B05.14 (A-137): the record's opposition is that score PLUS his opposing attribute (here the ceiling, 7), and still no
+    # base dice, no practice addend, no seat (was 5.0, the score alone, before the attribute joined it)
+    assert sigma.contest_input(w, ["p_low", subject.id], verb=verb, subject=subject.id).opposition == 5.0 + descriptors.ATTRIBUTE_CEILING
+    assert sigma.contest_input(w, ["p_low", subject.id], verb=verb, subject=subject.id).opposition != pool.faculty(w, subject, verb)
     subject.capability = {}
     assert sigma._opposition_of(w, subject.id, verb) == float(w.fixtures.get("pool_default"))   # no rank: the untrained score
 
 
 def test_the_pool_is_pool_of_with_the_base_and_the_floor():
-    """`faculty == pool_of(score, addends, pool_add, pool_floor)`: both fixtures reach the pool, and at control (0, 0) it is
-    `score + addends` (the control the entry names)."""
-    w = _world()
+    """`faculty == pool_of(governing score + rank, addends, pool_add, pool_floor)` (B05.25; was `pool_of(score, ...)`): both
+    fixtures reach the pool, and at control (0, 0) it is `governing score + rank + addends` (the control the entry names)."""
+    w = _world(pool_add=0, pool_floor=0)
     p = w.persons["p_low"]
     p.capability = {KEY: 3}
-    base = pool.score(w, p, VERB)
+    base = pool.governing_score(w, p, VERB) + pool.rank(p, VERB)
     add = _addends(w, p, VERB)
+    assert base == w.fixtures.get("pool_default") + 3                    # nothing held: the untrained score, plus the rank
     assert pool.faculty(w, p, VERB) == base + add                        # control: pool_add 0, pool_floor 0
     for pa, pf in ((0, 5), (3, 0), (6, 5), (6, 0)):
         w2 = _world(pool_add=pa, pool_floor=pf)
         p2 = w2.persons["p_low"]
         p2.capability = {KEY: 3}
-        assert pool.faculty(w2, p2, VERB) == pool_of(pool.score(w2, p2, VERB), _addends(w2, p2, VERB), pa, pf)
+        assert pool.faculty(w2, p2, VERB) == pool_of(pool.governing_score(w2, p2, VERB) + pool.rank(p2, VERB),
+                                                     _addends(w2, p2, VERB), pa, pf)
     w3 = _world(pool_add=0, pool_floor=5)
     p3 = w3.persons["p_low"]
     p3.capability = {KEY: 1}
-    assert pool.faculty(w3, p3, VERB) == max(5, 2 + _addends(w3, p3, VERB))      # the floor lifts a small pool
+    assert pool.faculty(w3, p3, VERB) == max(5, 2 + 1 + _addends(w3, p3, VERB)) == 5      # the floor lifts a small pool
 
 
 def test_the_governing_attribute_is_the_held_one_else_none():
     w = _world()
     p = w.persons["p_low"]
-    attr = descriptors.capability(KEY).base
+    attr = VERB_TABLE[VERB].governing[0]                                # B05.25: the verb row's first `governing:` key
     p.attributes = {attr: 6}
     assert pool.governing_attribute(p, VERB) == 6
     p.attributes = {}
     assert pool.governing_attribute(p, VERB) is None
-    assert pool.governing_attribute(p, "lie") is None                   # a verb drawing on no skill names no attribute
+    # B05.25: a verb drawing on no skill still names attributes (`lie`), so it reads the held one; a brute row names none
+    p.attributes = {VERB_TABLE["lie"].governing[0]: 5}
+    assert VERB_CAPABILITY.get("lie") is None and pool.governing_attribute(p, "lie") == 5
+    assert not VERB_TABLE["transfer"].governing and pool.governing_attribute(p, "transfer") is None
 
 
 def _untrained_none(monkeypatch, key):
@@ -154,9 +166,14 @@ def test_untrained_none_gives_a_non_holder_no_score_and_a_refused_pool(monkeypat
     p.attributes = {}
     p.capability = {}
     assert pool.score(w, p, VERB) == w.fixtures.get("pool_default") and pool.faculty(w, p, VERB) >= 3      # control
+    rolled = pool.faculty(w, p, VERB)
     _untrained_none(monkeypatch, KEY)
     assert pool.score(w, p, VERB) is None
-    assert pool.faculty(w, p, VERB) == 0                                # refused as a held 0 was: no floor lifts a refusal
+    # B05.25 replaced "faculty answers 0" (the pool read the score): the pool is the governing score plus the RANK, so a
+    # non-holder rolls on his attributes alone (`pool.rank` 0) and the `untrained: none` row moves only his score (the
+    # opposition, where `None` stands the module's stand-in in)
+    assert pool.rank(p, VERB) == 0 and pool.faculty(w, p, VERB) == rolled == pool_of(
+        pool.governing_score(w, p, VERB), _addends(w, p, VERB), w.fixtures.get("pool_add"), 3)
     p.capability = {KEY: 1}
     assert pool.score(w, p, VERB) == w.fixtures.get("pool_default")     # the holder is scored (CORE Edit 9)
     p.capability = {}
@@ -177,8 +194,9 @@ def test_raised_capability_mints_a_first_rank_and_holds_the_ceiling():
 
 def test_combat_receives_score_plus_addends_not_faculty():
     """MAP §G edit 4: with the base and the floor live, `faculty` applies them and the fight's `scores` and `addends` do not; the
-    pair rides the record raw (`pool_add`, `pool_floor`), for the module to apply once. (B05.57 re-pointed the kwarg only: the last
-    assertion, `pool.faculty` of a `fight`, is red at its base for a reason that is not this item's, `fight` naming no `governing:`.)"""
+    pair rides the record raw (`pool_add`, `pool_floor`), for the module to apply once. (B05.57 re-pointed the kwarg only; B05.99
+    rewrote the last assertion to B05.25's rule: `fight` names no `governing:` (a hand-off row), so `pool.faculty` REFUSES it and
+    the pool rule is the module's alone.)"""
     w = _world(pool_add=6, pool_floor=5)
     a, b = "p_low", "p_mid"
     for pid in (a, b):
@@ -188,7 +206,9 @@ def test_combat_receives_score_plus_addends_not_faculty():
     for pid, got, added in zip((a, b), inp.scores, inp.addends):
         p = w.persons[pid]
         assert got == pool.score(w, p, "fight") == 3 and added == _addends(w, p, "fight")
-        assert pool.faculty(w, p, "fight") >= 5 and pool.faculty(w, p, "fight") != got
+        assert got != pool_of(got, added, 6, 5)                         # the record's score is not the pool the module makes
+        with pytest.raises(Unspecified):
+            pool.faculty(w, p, "fight")                                 # no second pool rule for a hand-off row
 
 
 # ---------------------------------------------------------------------------------------------------------------------

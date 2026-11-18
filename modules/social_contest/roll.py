@@ -65,6 +65,8 @@ def _chance_floor_cap(pool: float, ceiling: float) -> Optional[float]:
     floor = 1.0 - band_odds(1, ceiling, net_boost(-M_MAX, 1))[0]
     if floor <= 0.0:
         return None
+    if pool == 1:
+        return float(ceiling)                                  # the floor IS this pool's chance at the ceiling; bisection lands a few ulps over it
     lo, hi = 0.0, float(ceiling) + 2.0 * pool + 10.0           # chance(lo) > floor >= chance(hi)
     for _ in range(200):
         mid = (lo + hi) / 2.0

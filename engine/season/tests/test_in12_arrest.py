@@ -61,6 +61,7 @@ from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..seam.contest import Resolution
 from ..state.carriers import Act, Claim, Office, Question, Tenure
 from .test_in10_record_operands import _acts, _formed, _hold_document
+from .test_u7_remit import JUDGE
 
 SEAT, DUKE = "off_duke", "p_high"
 WATCH, WATCHMAN = "off_watch", "p_other"       # a second seat granting `dispatch` only, at `S`
@@ -69,8 +70,8 @@ OPENS = ("Overwhelming", "Success", "Partial")
 
 
 def _world(**fx):
-    """B11 lane A: the strong-arrester tests pass `obstacle_model: stand_in` with their `pool_default` 30, `test_u7_remit.
-    JUDGE`'s reason -- on the shipped `task` arm the prisoner opposes with the score he rolls, here that same 30.
+    """The strong-arrester tests pass `test_u7_remit.JUDGE` (B05.99: the pool floor 30, the roller's dice only; was `pool_default`
+    30 with the deleted `obstacle_model: stand_in`, which since B05.11 raised the prisoner's opposition to the same 30).
     `tiny_world` plus a watch seat (`off_watch`, rung `S`, grant `dispatch`) held by `p_other`, the
     Duke knowing the prisoner (so his `issue` passes its `terms` conjunct), one MATTER barrier run."""
     fixtures = DEFAULT_FIXTURES
@@ -208,11 +209,21 @@ def test_in12_5_the_party_gap_emits_the_counterparty_kind_not_the_union():
     """S27.4 (a pool under 1D) reaches `_refuse_party_gap` through the real fold; the act was admitted
     (eligible, a person, a second party), so the kind is the counterparty clause's, `arrest.refused`, and
     not the union that would publish `arrest.unauthorized` for a seat that WAS authorized. CONTROL: the
-    same act at pool 30 resolves to a band (the refusal is the pool's)."""
+    same act at pool 30 resolves to a band (the refusal is the pool's). B05.99 rewrite: no fixture gives a pool under one die
+    since B05.25/B05.23, so the arrester's pool is PLANTED at the one pool reader (`sigma.faculty`), for him alone (was
+    `pool_default` 0 and 30)."""
+    import pytest
+    from ..seam.wrappers import sigma
+    real = sigma.faculty
+    mp = pytest.MonkeyPatch()
     for pool, refused in ((0, True), (30, False)):
-        w, d = _world(pool_default=pool)
+        w, d = _world()
         _warrant_to_watchman(w, d)
-        out = _fold(w, d, _act("a1", "arrest", WATCHMAN, WATCH, subject=PRISONER))
+        mp.setattr(sigma, "faculty", lambda w_, p, verb, _pool=pool: _pool if p.id == WATCHMAN else real(w_, p, verb))
+        try:
+            out = _fold(w, d, _act("a1", "arrest", WATCHMAN, WATCH, subject=PRISONER))
+        finally:
+            mp.undo()
         assert len(out) == 1, _kinds(out)
         if refused:
             assert _kinds(out) == ["arrest.refused"] and out[0].degree is None, _kinds(out)
@@ -232,7 +243,7 @@ def test_in12_5_the_party_gap_emits_the_counterparty_kind_not_the_union():
 # ======================================================================================
 
 def test_in12_5_arrest_opens_custody_on_the_issuing_seat_blocks_move_and_pardon_ends_it():
-    w, d = _world(pool_default=30, obstacle_model="stand_in")
+    w, d = _world(**JUDGE)
     _warrant_to_watchman(w, d)
     out = _fold(w, d, _act("a1", "arrest", WATCHMAN, WATCH, subject=PRISONER))
     assert _kinds(out) == ["arrest.made"] and out[0].degree in OPENS, (_kinds(out), out[0].degree)
@@ -262,11 +273,11 @@ def test_in12_5_arrest_opens_custody_on_the_issuing_seat_blocks_move_and_pardon_
 def test_in12_5_control_no_held_warrant_no_custody():
     """CONTROLS, each one change from the admitted arrest: the warrant names another man; the watchman
     holds no warrant at all (the Duke keeps his); a prisoner outside the watch's purview."""
-    w, d = _world(pool_default=30, obstacle_model="stand_in")
+    w, d = _world(**JUDGE)
     _warrant_to_watchman(w, d, names=FAR)
     assert _kinds(_fold(w, d, _act("a1", "arrest", WATCHMAN, WATCH, subject=PRISONER))) \
         == ["arrest.refused"]
-    w, d = _world(pool_default=30, obstacle_model="stand_in")
+    w, d = _world(**JUDGE)
     assert _kinds(_fold(w, d, _act("w1", "issue", DUKE, SEAT, subject=PRISONER, to=PRISONER))) \
         == ["dispensation.issued"]
     assert _kinds(_fold(w, d, _act("a1", "arrest", WATCHMAN, WATCH, subject=PRISONER))) \
@@ -287,7 +298,7 @@ def test_in12_5_a_warrant_from_an_issue_only_seat_opens_no_custody():
     Duke's warrant (the first whose seat could close it), opens `detain -> off_duke`, and the Duke's
     `pardon` closes it. (`off_dicastery`, `scope_rung` None, is not a second arm: it cannot `issue` here
     -- `issue.unauthorized` -- so no warrant of its exists to test.)"""
-    w, d = _world(pool_default=30, obstacle_model="stand_in")
+    w, d = _world(**JUDGE)
     w.offices[NOTARY] = Office(NOTARY, "Notary", "D", ["issue"], faction="Crown")
     w.add_tenure(Tenure("t_issuer", FAR, NOTARY, "hold", since=0))
     w.persons[FAR].ledger.append(Claim("c_far_knows", FAR, PRISONER, "exists:Person", 1, 0,
@@ -326,7 +337,7 @@ def _arrests(w, referents, who=WATCHMAN):
 
 
 def test_in12_5_arrest_forms_only_on_a_person_a_held_warrant_names():
-    w, d = _world(pool_default=30, obstacle_model="stand_in")
+    w, d = _world(**JUDGE)
     _hold_document(w, w.persons[WATCHMAN], "dispensation",
                    {"terms": PRISONER, "to": [WATCHMAN], "at": None}, rec_id="rec_held")
     (cand,) = _arrests(w, (PRISONER, FAR))

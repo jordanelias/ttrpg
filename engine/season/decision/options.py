@@ -470,7 +470,7 @@ def _defence_context(p: Person, q: Question, r: str, records: list, memo: dict) 
     in the newest season his ledger holds, a deed of a kind a violent opponent-rule row emits (`person_q.attackers_of`,
     `_OPPONENT_DEED_KINDS` below)."""
     if "attackers" not in memo:        # depends on the actor alone, never on `r`: one ledger pass per call
-        memo["attackers"] = attackers_of(p.ledger, p.id, _OPPONENT_DEED_KINDS)
+        memo["attackers"] = attackers_of(p.ledger, p.id, _OPPONENT_DEED_KINDS, strata=_OPPONENT_STRATA)
     return r in memo["attackers"]
 
 
@@ -479,6 +479,8 @@ def _defence_context(p: Person, q: Question, r: str, records: list, memo: dict) 
 # row" [ASSUMPTION; medium; Jordan to correct; revert: drop the `VIOLENT_VERBS` test]: `speak` is an opponent-rule
 # row too, and its `pursuit.moved` would make a hard word a licence to fight.
 _OPPONENT_DEED_KINDS = frozenset(k for v in VIOLENT_OPPONENT_VERBS for k in VERB_TABLE[v].emits if k in PAIRED_KINDS)
+# The strata those rows act at: a doer is an attacker only if seen acting at one of them (a kind `train` also emits is no blow).
+_OPPONENT_STRATA = frozenset(VERB_TABLE[v].stratum for v in VIOLENT_OPPONENT_VERBS)
 
 
 def violence_context_of(p: Person, q: Question, r: str, contexts: tuple, records: list,

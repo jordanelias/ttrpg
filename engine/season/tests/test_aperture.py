@@ -506,8 +506,10 @@ def _wk_world():
     from .test_in45_carry import DUKE, PARTY, SEAT, _filed
     from .test_u7_remit import JUDGE
     from ..data.fixtures import DEFAULT_FIXTURES
-    w, d = _filed(DEFAULT_FIXTURES.sweep("pool_default", JUDGE["pool_default"])
-                   .sweep("obstacle_model", JUDGE["obstacle_model"]))   # B11 lane A: `JUDGE`'s control obstacle
+    fixtures = DEFAULT_FIXTURES
+    for name, value in JUDGE.items():                 # B05.99: `JUDGE` is the pool floor 60 now (its own note), read by key
+        fixtures = fixtures.sweep(name, value)
+    w, d = _filed(fixtures)
     cast = frozenset(w.persons)
     for key, verb, who, payload in (
             ("a_wk_restore_person", "restore", DUKE, {"subject": PARTY, "site": PARTY}),
@@ -757,7 +759,10 @@ def test_cr18_the_pools_line_reads_the_rolled_pool_and_separates_persons_not_sea
     # read two pools in season one (was `{default}` alone); every unauthored person then held `pool_default` on every key.
     # B01a.99 (every person's attributes are drawn, 1 to 6 by `generated_attribute_range`, a population change): the realm's
     # season-one rolls read every pool 1 to 6 (was `{default, 5}`), so the reader separates persons, not seasons.
-    assert {p for per in realm["pools"].values() for c in per.values() for _, p in c} == {1, 2, 3, 4, 5, 6}
+    # B05.99 re-pin (B05.09, B05.25, B05.23: the pool is `pool_of(the governing attributes' mean + rank, addends, pool_add 6,
+    # pool_floor 5)`, so pools are tenths from 7 up; was {1, 2, 3, 4, 5, 6}): still many pools in one season, persons apart.
+    assert {p for per in realm["pools"].values() for c in per.values() for _, p in c} == {
+        7.0, 7.7, 8.5, 9.0, 9.3, 9.5, 9.7, 10.0, 10.3, 10.5, 10.7, 11.0, 11.5, 12.0}
 
 @pytest.mark.skipif(A.monitoring_blocked() is not None,
                     reason="engines_entered needs Python 3.12 or later and a free monitoring tool id")

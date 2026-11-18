@@ -284,7 +284,13 @@ def test_step25_falsifier_the_examination_reads_the_quality_into_its_obstacle():
             obs[(q, ceiling, per_pool)] = out["ob"]
             inp = sigma.contest_input(w, [INVESTIGATOR], verb="research", subject=rid)
             assert inp.forgery_quality == 0.0, "a contest with no `examined` read the quality"
-    base = DEFAULT_FIXTURES.get("difficulty_ob")["routine"] + 0.5 * 30        # `research` is `routine`; `pool_default` is 30 above, so the stand-in is 15
+    # B05.99 re-pin (B05.14's even line, B05.23's sizes): the even line + `research`'s level + the stand-in `opposed_ob(30, rate)`,
+    # folded left to right as the module folds; was `routine + 0.5 x 30` at the control sizes
+    from engine.dice_engine.sigma_leverage import even_line, opposed_ob
+    base = 0.0
+    for term in (even_line(DEFAULT_FIXTURES.get("pool_add")), DEFAULT_FIXTURES.get("difficulty_ob")[VERB_TABLE["research"].difficulty],
+                 opposed_ob(30, DEFAULT_FIXTURES.get("opposition_rate"))):
+        base += term
     shipped = DEFAULT_FIXTURES.get("obstacle_ceiling")
     assert [obs[(q, None, False)] for q in (0, 1, 3)] == [base, base + 1, base + 3], obs
     assert [obs[(q, shipped, False)] for q in (0, 1, 3)] == [min(base, shipped)] * 3, obs

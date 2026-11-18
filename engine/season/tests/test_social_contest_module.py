@@ -93,28 +93,37 @@ def test_s27_4_refuses_on_the_derived_pair_strictly_above_the_multiple():
     import random
     from types import SimpleNamespace
     from engine.season.data.fixtures import DEFAULT_FIXTURES
+    from engine.season.data.rosters import roster
     from engine.season.harness import probes as P
     from engine.season.loop.driver import SeasonDriver
     from engine.season.seam.wrappers import sigma
     SeasonDriver(P.tiny_world(DEFAULT_FIXTURES))      # the registrar fills MODULE_ENTRIES
     # B05.14: the act's obstacle is the level's size plus `opposed_ob(pool_default)` (1.0 here: nobody is opposite): `tell` is `routine`,
     # sized 3 here, so the obstacle is 4 == 2 x the pool of 2 (`pool_default` 2: no attribute, no rank), and sized 3.5 it is over it.
-    fx = {"pool_default": 2, "obstacle_ceiling": None,
-          "obstacle_refusal_multiple": 2, "difficulty_ob": {"plain": 0, "routine": 3.0, "demanding": 2, "hard": 3},
-          "opposition_rate": 0.5,
-          "practice_cap": 0,       # `faculty` reads the practice addend (CP-T01-02), which reads this key
-          "pool_add": 0, "pool_floor": 0}       # and (B05.09) `pool_of`'s two operands, at control
-    w = SimpleNamespace(persons={"p": SimpleNamespace(capability={})}, fixtures=fx)
+    # B05.99 rewrite: the fixtures are the shipped ones swept (the host reads keys B05.21, B05.53, B05.60 and B05.62 added: a
+    # hand-written dict of the old keys raised before the roll), and the hand-built person carries the body the `wounds` source reads
+    sized = lambda routine: (DEFAULT_FIXTURES.sweep("pool_default", 2).sweep("obstacle_ceiling", None)
+                             .sweep("ceiling_per_pool", False)  # the fixed arm, as the hand-written dict (no such key) read
+                             .sweep("obstacle_refusal_multiple", 2)
+                             .sweep("difficulty_ob", dict(zip(roster("difficulty_levels", ordered=True), (0, routine, 2, 3))))
+                             .sweep("opposition_rate", 0.5)
+                             .sweep("practice_cap", 0)          # `faculty` reads the practice addend (CP-T01-02), which reads this key
+                             .sweep("pool_add", 0).sweep("pool_floor", 0))   # and (B05.09) `pool_of`'s two operands, at control
+    person = SimpleNamespace(id="p", capability={}, attributes={}, traits=(), body=1000, body_ceiling=1000)
+    w = SimpleNamespace(persons={"p": person}, fixtures=sized(3.0))
     at = sigma.resolve(w, ["p"], ["c"], "a standing", verb="tell", rng=random.Random(0))
     assert at["status"] == "RESOLVED" and at["ob"] == 4.0, f"ob 4 == 2 x pool 2 was refused: {at}"
-    fx["difficulty_ob"] = {**fx["difficulty_ob"], "routine": 3.5}
+    w.fixtures = sized(3.5)
     refused = sigma.resolve(w, ["p"], ["c"], "a standing", verb="tell", rng=random.Random(0))
     fed_by = refused.pop("fed_by")           # B04.08: the rows that fed the roll ride the record, a refusal's too (D-U1-06)
     assert tuple((f[0], f[1], f[4], f[5]) for f in fed_by) == (("social_roll", "dice", 2, 2), ("social_roll", "opposes", None, 0.0))
+    levels = refused.pop("levels")           # B05.17: each advantage source's levels ride the record too, all zero here
+    assert all(n_for == n_against == 0 for _src, n_for, n_against in levels) and len(levels) >= 2, levels
     assert refused == dict(
         status="REFUSED", why="S27.4", module="social_contest", resolver="d_sigma", pool=2, ob=4.5,
-        terms=(("even", 0.0), ("difficulty", 3.5), ("opposition", 1.0)))     # B05.14: the obstacle's terms ride the record, a refusal's too
-    fx["obstacle_ceiling"] = 2
+        # B05.14: the obstacle's terms ride the record, a refusal's too; B05.15/B05.17 add the two standing members at 0.0
+        terms=(("even", 0.0), ("difficulty", 3.5), ("opposition", 1.0), ("reception", 0.0), ("capability", 0.0)))
+    w.fixtures = w.fixtures.sweep("obstacle_ceiling", 2)
     capped = sigma.resolve(w, ["p"], ["c"], "a standing", verb="tell", rng=random.Random(0))
     assert capped["status"] == "RESOLVED" and capped["ob"] == 2.0, capped
 
@@ -228,7 +237,7 @@ def test_routine_plus_stand_in_reproduces_the_control_obstacle():
     composes 2.0, the obstacle an inquiry carried before the ladder existed (OBS §4 step 1a)."""
     from engine.season.data.fixtures import DIFFICULTY_OB_CONTROL
     from .test_sc01_obstacle_ceiling import _module
-    assert DIFFICULTY_OB_CONTROL == {"plain": 0, "routine": 1, "demanding": 2, "hard": 3}, DIFFICULTY_OB_CONTROL
+    assert tuple(DIFFICULTY_OB_CONTROL.values()) == (0, 1, 2, 3), DIFFICULTY_OB_CONTROL
     ob, terms = _module().obstacle(_unopposed(pool=2, pool_add=0, pool_default=2, opposition_rate=0.5, ceiling_form="hard",
                                               difficulty=float(DIFFICULTY_OB_CONTROL["routine"])))
     assert ob == 2.0, (ob, terms)

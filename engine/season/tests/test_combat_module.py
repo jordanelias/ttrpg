@@ -146,7 +146,8 @@ def test_an_addend_raises_the_pool_and_never_the_ob_and_the_records_pair_is_the_
     mod, attr = entry_target(_PRIZE)[1].split(":", 1)
     entry = getattr(importlib.import_module(mod), attr)
     seen, real = Counter(), core.resolve
-    qs = ("felled", "wounds", "max_wounds", "health_remaining", "health_full")
+    from ..data.rosters import roster
+    qs = tuple(roster("wound_quantities", ordered=True))
 
     def spy(pool, net_sigma, rng, ob):
         seen[(pool, ob)] += 1
@@ -179,7 +180,8 @@ def test_skill_score_and_attribute_move_the_fight_separately():
     from ..queries.inputs import PersonalCombatInput
     mod, attr = entry_target(_PRIZE)[1].split(":", 1)
     entry = getattr(importlib.import_module(mod), attr)
-    qs = ("felled", "wounds", "max_wounds", "health_remaining", "health_full")
+    from ..data.rosters import roster
+    qs = tuple(roster("wound_quantities", ordered=True))
     n = 400
     band = 3 * (2 * 0.25 / n) ** 0.5
 

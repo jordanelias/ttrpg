@@ -98,7 +98,7 @@ CONTROL = dict(pool_add=0, pool_floor=0, opposition_rate=0.5, difficulty_ob=DIFF
 #: read green on every target, so a red is an arm's and not the grid's. B05.23 shipped these values (`DIFFICULTY_OB_ARMS["calibrated"]`); the pin
 #: stays here so the control of the control does not move when the shipped arm does.
 GOOD_SCRATCH = dict(pool_add=6, pool_floor=5, opposition_rate=MU_PER_DIE, regard_step=1.0,
-                    difficulty_ob={"plain": 0, "routine": 0.8, "demanding": 1.6, "hard": 2.4}, ceiling_form="hard")
+                    difficulty_ob=dict(zip(roster("difficulty_levels", ordered=True), (0, 0.8, 1.6, 2.4))), ceiling_form="hard")
 
 
 # ---------------------------------------------------------------------------------------------------------------------

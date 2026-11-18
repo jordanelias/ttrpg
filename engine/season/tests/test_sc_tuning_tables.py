@@ -23,10 +23,12 @@ from __future__ import annotations
 import functools
 
 from engine.dice_engine.sigma_leverage import LEVEL_SIGMA
+from engine.substrate.descriptors import PURSUITS
 
 from ..data import arrangements as ARR
 from ..data import verbs as V
 from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.rosters import roster
 from ..queries import world_q
 from ..seam.wrappers import pool, sigma
 from ..state.gate import BENCH_BASIS, sits_over
@@ -42,7 +44,7 @@ T2_FIRST_VALUES = {"arbitration": "plain", "interrogation": "plain", "negotiatio
 #: T1 row values at commit 2 (T13 edit 7): `interrogate` `demanding`, every other rolled row (the inquiries with them) `routine`.
 COMMIT_2_DIFFICULTY = {verb: ("demanding" if verb == "interrogate" else "routine") for verb in TOF.ROLLED}
 #: Two opposite temperaments, as the pursuits a person holds (the realm's projection target).
-TEMPERAMENTS = ({"honour": 1.0, "justice": 0.8}, {"wealth": 1.0, "ambition": 0.9})
+TEMPERAMENTS = ({PURSUITS[1]: 1.0, PURSUITS[3]: 0.8}, {PURSUITS[4]: 1.0, PURSUITS[5]: 0.9})
 
 
 def _ob(w, parties, verb, subject, **kw):
@@ -102,7 +104,7 @@ def test_planted_grid_moves_lie_interrogate_and_speak():
         by_level.setdefault(level, set()).add(ob)
         checked += 1
     assert all(len(obs) == 1 for obs in by_level.values()), by_level              # one level, one obstacle: the row adds nothing else
-    ladder = [by_level[lv].pop() for lv in ("plain", "routine", "demanding", "hard")]
+    ladder = [by_level[lv].pop() for lv in roster("difficulty_levels", ordered=True)]
     assert ladder == sorted(set(ladder)), ladder                                  # four levels, four distinct obstacles, in order
 
     # temperament: the counterparty's pursuits move no cell's obstacle

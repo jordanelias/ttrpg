@@ -728,15 +728,17 @@ rows:
         expects: "the test passes"
         holds: "yes"
         reading:
-          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
-          date: "2026-11-15"
+          tree: "e075e511b (B05.64's tree, the game code B05.99 closes on; read with B05.99's test edits in the working tree)"
+          date: "2026-11-18"
           seed: "per test"
           seasons: "per test"
-          line: "1 passed in 2.53s"
+          line: "1 passed, 2864 deselected in 4.48s"
           control: "the argmax at zero temperature is the test's own second half, read by its assertions (the log holds pytest's closing line only)"
           does_not_show: >-
-            that a played season chooses other than its top candidate (R-08.c); run with `-n 2` and
-            `-p no:cacheprovider` added
+            that a played season chooses other than its top candidate (R-08.c); B05.99's re-read (IS-A §12.2's B05
+            row). On e075e511b itself the same argv stops at collection (two errors: `test_cr20_attributes.py` and
+            `test_cr96_opposed_by.py` import names B05.25 deleted), which B05.99's rewrite and deletion clear; run with
+            `-p no:cacheprovider` and `PYTHONHASHSEED=0` added
       - id: R-08.c
         text: >-
           in play, some chosen acts were not the top-ranked candidate: the share of resolved acts
@@ -821,7 +823,24 @@ rows:
           (`13_SC_draw_for_unrolled_contests`, the task draw)
         argv: ["python", "-m", "engine.season.harness.corpus_run", "--seasons", "2"]
         expects: "a non-combat verb besides `tell` shows two bands whose writes differ in `DEGREES RESOLVED BY VERB`"
-        holds: "unread"
+        holds: "yes"
+        reading:
+          tree: "e075e511b"
+          date: "2026-11-18"
+          seed: 0
+          seasons: 2
+          line: >-
+            DEGREES RESOLVED BY VERB: argue 321 {'Failure': 219, 'Overwhelming': 20, 'Partial': 38, 'Success': 44};
+            BANDS THAT DIFFER argue True (lie False, speak False, tell False)
+          control: >-
+            the block's own CONTROL line, per-verb sum 1553 vs DEGREES RESOLVED total 1553: equal; the batch's opening
+            reading (74910ca78, same argv) already read argue at four bands with BANDS THAT DIFFER argue True (342:
+            Failure 234, Overwhelming 20, Partial 26, Success 62)
+          does_not_show: >-
+            seeds 1 and 2; that the two writes differ IN PLAY (BANDS THAT DIFFER reads the row's `writes_at`, a static
+            declaration, beside the resolved tally); the same run reads `HALTS` on 141 of 143 cases, every one on check
+            R5 (`Fixtures ceiling_form` is read and no register row's `site:` names it), which does not touch this
+            block; run with `PYTHONHASHSEED=0` and the seed positional (`0`)
       - id: R-09.d
         text: >-
           outcomes that could go either way are drawn: for every converted verb with ten or more

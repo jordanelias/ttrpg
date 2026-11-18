@@ -236,7 +236,13 @@ def test_a_fractional_governing_score_reaches_the_dice_unrounded():
     assert VERB_TABLE[verb].governing == (PERCEPTION, ACUITY)
     p = _person(w, **{PERCEPTION: 2, ACUITY: 3})
     assert pool.governing_score(w, p, verb) == 2.5
-    assert pool.faculty(w, p, verb) == 2.5                                       # pool_add 0, pool_floor 0
+    # B05.99 re-pin (B05.23 ships the calibrated base and floor, pool_add 6, pool_floor 5): the shipped pool is 2.5 + 6
+    assert (w.fixtures.get("pool_add"), w.fixtures.get("pool_floor")) == (6, 5)
+    assert pool.faculty(w, p, verb) == 8.5
+    inp = sigma.contest_input(w, [p.id], verb=verb, subject="site_harbour")
+    assert inp.pool == 8.5 and isinstance(inp.pool, float)
+    w.fixtures = w.fixtures.sweep("pool_add", 0).sweep("pool_floor", 0)          # the control arm: the governing score itself
+    assert pool.faculty(w, p, verb) == 2.5
     inp = sigma.contest_input(w, [p.id], verb=verb, subject="site_harbour")
     assert inp.pool == 2.5 and isinstance(inp.pool, float)
 
@@ -249,6 +255,9 @@ def test_an_unheld_attribute_counts_at_the_untrained_score():
     assert pool.governing_score(w, p, verb) == SL.governing_mean([default, 6])
     p = _person(w)                                                              # holds none: the control, his pool is the default
     assert pool.governing_score(w, p, verb) == SL.governing_mean([default, default]) == float(default)
+    # B05.99 re-pin (B05.23: pool_add 6 ships): the untrained man's pool is the default plus the base; at control, the default
+    assert pool.faculty(w, p, verb) == default + w.fixtures.get("pool_add") == 8
+    w.fixtures = w.fixtures.sweep("pool_add", 0).sweep("pool_floor", 0)
     assert pool.faculty(w, p, verb) == default
 
 

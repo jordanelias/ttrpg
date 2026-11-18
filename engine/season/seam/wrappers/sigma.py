@@ -552,7 +552,7 @@ def _difficulty_term(fx: Any, facts: dict) -> dict:
 def _opposition_term(fx: Any, facts: dict) -> dict:
     """`opposition`: what a person opposite brings (`facts["opposition"]`: his skill score plus his opposing attribute, `_opposing`;
     `None` for nobody), with the untrained score the module stands in with where nobody is, and the rate it opposes at."""
-    return {"opposition": facts["opposition"], "pool_default": untrained(fx), "opposition_rate": fx.get("opposition_rate")}
+    return dict(opposition=facts["opposition"], pool_default=untrained(fx), opposition_rate=fx.get("opposition_rate"))
 
 
 def _reception_term(fx: Any, facts: dict) -> dict:
@@ -643,8 +643,8 @@ def _regard_term(fx: Any, facts: dict) -> dict:
 
 #: Each member of `rosters.yaml: obstacle_terms` -> the ONE function that reads it: `fn(fixtures, facts) -> {record field: value}`. A member
 #: that is a raw operand times a step returns `{"obstacle_operands": ((name, raw, step),)}` instead. Refused at import, both ways.
-OBSTACLE_TERMS = _bound_to({"even": _even_term, "difficulty": _difficulty_term, "opposition": _opposition_term, "standard": _standard_term,
-                            "stakes": _stakes_term, "regard": _regard_term, "reception": _reception_term, "capability": _capability_term},
+OBSTACLE_TERMS = _bound_to({fn.__name__[1:-len("_term")]: fn for fn in (
+    _even_term, _difficulty_term, _opposition_term, _standard_term, _stakes_term, _regard_term, _reception_term, _capability_term)},
                            "obstacle_terms")
 
 
@@ -681,8 +681,8 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
         leverage=advantage_sigma(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies)),      # the one place the operands are named
         forgery_quality=forgery_quality,
-        **obstacle_operands(fx, {"verb": verb, "opposition": opposition, "circumstance": circumstance,
-                                 "reception": room_terms.get("reception", 0.0), "docketed": docketed, "heard": heard, "regard": regard}),
+        **obstacle_operands(fx, dict(verb=verb, opposition=opposition, circumstance=circumstance,
+                                     reception=room_terms.get("reception", 0.0), docketed=docketed, heard=heard, regard=regard)),
         **room_terms)
 
 

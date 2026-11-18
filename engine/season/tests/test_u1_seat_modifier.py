@@ -29,6 +29,10 @@ from .test_u7_remit import _world
 
 SPEAKER, PARTY = "p_low", "p_mid"
 SEAT = "off_duke"                 # the tiny world's Duke: scope `D`, which contains `Hh`
+#: The seven bench seats B05.23 authors `modifier: minor` on (its commit body names them: the holders of a live hold Tenure
+#: granting `determine` on a seat with a `scope_rung` in build_realm 0, 1, 2). A test pin, read off `offices.yaml` at B05.99.
+BENCH_SEATS = frozenset({"off_king", "off_widow_regent", "off_confessor", "off_cardinal_justice", "off_senior_inquisitor",
+                         "off_senior_jarl_west", "off_skald_chief"})
 PRIZE = "a matter"
 
 
@@ -113,15 +117,20 @@ def test_an_unknown_level_name_is_refused(tmp_path, monkeypatch):
         return rosters._load_offices()
 
     assert len(load(real)["seats"]) == len(real["seats"])                # control: the unchanged file loads
-    row = real["seats"][0]
-    assert "modifier" not in row                                         # control: no shipped row authors one at landing
+    # B05.99 re-pin (B05.23 authors `modifier: minor` on the seven bench seats; was "no shipped row authors one at landing"):
+    # the planted row is the first seat that authors none, so each planted value is the only thing that differs
+    assert {r["id"] for r in real["seats"] if r.get("modifier")} == BENCH_SEATS
+    assert all(r["modifier"] == "minor" for r in real["seats"] if r.get("modifier"))
+    i = next(n for n, r in enumerate(real["seats"]) if "modifier" not in r)
+    row = real["seats"][i]
+    seats = lambda planted: [*real["seats"][:i], planted, *real["seats"][i + 1:]]
     checked = 0
     for ok in (*LEVEL_SIGMA, None):                                      # a level name or `null` (= none) loads, so a loader refusing all cannot pass
-        assert load(dict(real, seats=[dict(row, modifier=ok), *real["seats"][1:]]))["seats"][0]["modifier"] == ok
+        assert load(dict(real, seats=seats(dict(row, modifier=ok))))["seats"][i]["modifier"] == ok
         checked += 1
     for bad in ("bench die", "Minor", "", 1, ["minor"]):
         with pytest.raises(Unspecified) as red:
-            load(dict(real, seats=[dict(row, modifier=bad), *real["seats"][1:]]))
+            load(dict(real, seats=seats(dict(row, modifier=bad))))
         assert row["id"] in str(red.value) and "modifier" in str(red.value), str(red.value)
         checked += 1
     if real.get("foreign_seats"):                                        # the same refusal over `foreign_seats:`, which shares the row shape
@@ -137,9 +146,10 @@ def test_the_carrier_holds_the_row_value_and_defaults_to_none(monkeypatch):
     from ..boot.realm import build_realm
     assert Office("o", "Duke", "D", [], faction="Valorsmark").modifier is None
     realm = build_realm(0)
-    assert all(o.modifier is None for o in realm.offices.values())      # nobody authors one at landing: the control
-    seat = next(iter(rosters.SEAT_ROW_BY_ID))
-    monkeypatch.setitem(rosters.SEAT_ROW_BY_ID[seat], "modifier", "minor")
+    # B05.99 re-pin (B05.23: the seven bench seats author `minor`; was "nobody authors one at landing"): the control is the shipped set
+    assert {o.id: o.modifier for o in realm.offices.values() if o.modifier is not None} == {s: "minor" for s in BENCH_SEATS}
+    seat = next(s for s in rosters.SEAT_ROW_BY_ID if s not in BENCH_SEATS and s in realm.offices)
+    monkeypatch.setitem(rosters.SEAT_ROW_BY_ID[seat], "modifier", "major")
     planted = build_realm(0)
-    assert planted.offices[seat].modifier == "minor"
-    assert [o.id for o in planted.offices.values() if o.modifier is not None] == [seat]
+    assert planted.offices[seat].modifier == "major"
+    assert sorted(o.id for o in planted.offices.values() if o.modifier is not None) == sorted({seat, *BENCH_SEATS})

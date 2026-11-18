@@ -260,7 +260,11 @@ def test_the_inquiry_degree_is_the_one_owners(monkeypatch):
         assert ev.degree == band, (net, ob, ev.degree)
     assert len(seen) == 4
     assert all(i.opposition is None for i in seen), [i.opposition for i in seen]
-    assert all(i.pool == w.fixtures.get("pool_default") for i in seen), [i.pool for i in seen]
+    # B05.99 re-pin (B05.25, B05.23): the actor's pool is the one pool reader's, `pool_of(governing score + rank, .., 6, 5)` -- the
+    # untrained man's 2 + 6 here; was `pool_default` alone
+    from ..seam.wrappers import pool
+    assert all(i.pool == pool.faculty(w, w.persons[ACTOR], "research") == w.fixtures.get("pool_default") + w.fixtures.get("pool_add")
+               for i in seen), [i.pool for i in seen]
 
 
 def test_an_inquiry_admits_before_it_rolls():

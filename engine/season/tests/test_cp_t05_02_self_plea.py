@@ -73,7 +73,9 @@ def test_the_control_the_same_person_as_anothers_subject_still_opposes_at_his_ca
     w, _ = _world()
     w.persons[SPEAKER].capability = {KEY: 3}
     inp, _ob = _obstacle(w, [PARTY], SPEAKER)      # SPEAKER is another's subject: the score IS read
-    assert inp.opposition == 3.0, inp.opposition
+    # B05.99 re-pin (B05.14, A-137; B05.16): his score 3 PLUS his unheld opposing attribute at the scale's mid-point; was 3.0
+    from ..seam.wrappers import pool
+    assert inp.opposition == 3.0 + pool.attribute_midpoint(), inp.opposition
     inp0, _ = _obstacle(w, [SPEAKER], SPEAKER)     # and his own subject: it is not
     assert inp0.opposition is None
 

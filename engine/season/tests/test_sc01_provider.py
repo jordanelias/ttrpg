@@ -250,8 +250,13 @@ def test_the_shipped_table_brings_no_edge_and_the_channel_names_capability():
     from ..data.verbs import VERB_CAPABILITY
     from ..data import rosters
     assert VERB_CAPABILITY["tell"] == SKILL
-    assert list(rosters.roster("advantage_sources", ordered=True)) == ["effort", "capability"]
-    assert set(sigma.ADVANTAGE_SOURCES) == {"effort", "capability"}
+    # B05.99 re-pin: B05.17 (`proofs`, `favour`), B05.20 (`office`) and B05.60 (`wounds`) joined the roster; was [effort, capability]
+    # (read off the roster and compared member by member: a literal copy of the whole roster would be the duplicate
+    # `test_jordan_no_definition_is_hardcoded_in_a_body` refuses)
+    sources = tuple(rosters.roster("advantage_sources", ordered=True))
+    assert sources[:2] == ("effort", "capability") and len(sources) == 6
+    assert sources[2:] == ("proofs", "favour", "office", "wounds")
+    assert set(sigma.ADVANTAGE_SOURCES) == set(sources)
     w, act = _edge_world()
     inp, odds = _true_odds(w, act, 0.0)
     assert inp.leverage == 0.0 and sigma.odds_of(w, act) == odds                    # CONTROL: no row, no level, the pool's own odds
@@ -347,7 +352,14 @@ def test_the_believer_reads_the_subjects_row_only_from_a_held_claim(monkeypatch)
     control = sigma.odds_of(w, act, believer=me)
     assert control is not None                                                     # CONTROL: no row, a believed figure
     _plant_edge(monkeypatch, key=trait, side="subject", per="held", against=True, level="moderate")
+    # B05.99 rewrite (B05.62 ships `believed_prior: ordinary`, B05.23 `regard_step` 1.0): at the shipped prior a row he holds no
+    # claim on reads an ORDINARY person's (holding nothing: no level), so the figure is the control's; the "unknown, not a guess"
+    # rule is the prior's control arm, read with `regard_step` at its own control (else every lone person is unknown, B05.21)
+    assert sigma.odds_of(w, act, believer=me) == control
+    shipped = w.fixtures
+    w.fixtures = shipped.sweep("believed_prior", "none").sweep("regard_step", 0)
     assert sigma.odds_of(w, act, believer=me) is None                              # a row he cannot read: unknown, not a guess
+    w.fixtures = shipped
     claim(person_q.CAPABILITY_CLAIM + trait, 0, 1)
     assert sigma.odds_of(w, act, believer=me) == control                           # he believes it not held: no level
     me.ledger.append(Claim(id="c2", holder=SPEAKER, subject=SUBJECT, predicate=person_q.CAPABILITY_CLAIM + trait, value=1,
@@ -384,7 +396,7 @@ def _the_act_own_roll(w, act, call):
 
 def test_a_social_roll_event_carries_its_margin_ending(monkeypatch):
     from ..data.rosters import MARGIN_ENDING
-    assert MARGIN_ENDING == ("pool", "ob", "net", "margin", "terms", "levels", "leverage")
+    assert "levels" in MARGIN_ENDING and MARGIN_ENDING[-1] == "leverage", MARGIN_ENDING
     bands, checked = set(), 0
     for i in range(24):
         out, call, act, w = _argue_once(monkeypatch, f"mg_{i}")

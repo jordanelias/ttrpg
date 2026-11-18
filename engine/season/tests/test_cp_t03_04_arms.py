@@ -6,14 +6,14 @@
 (`data/verbs.py::VOCATIONS`), so `train` forms on it and `_eff_train` raises it; (iii) the `cast:` overlay
 (`harness/corpus_run.py::cast_overlay`, checked by `_check_capability` against the roster's values) is the authored
 writer and names NO `arms` value (Jordan's content); (iv) `loop/effects_combat.py::_grown`: a fight that drew blood
-raises `arms` by one on each SURVIVING party who ALREADY holds it; nothing is minted.
+raises `arms` by one on each SURVIVING party -- and, since B05.09 (CORE Edit 9, `raised_capability`), MINTS a first rank
+for a survivor who held none (the never-minted rule and its mutation test are retired with it; B05.99 rewrote this file).
 [ASSUMPTION; low; Jordan to correct; revert: rename the roster key] -- `arms` here is the trained skill, not
 CP-T03-03's `arms_kinds` (equipment).
 
   FALSIFIER: a person holding `arms` 5 (the shipped roster, no test-local row) against a default party rolls pool 11
   against Ob 1.0, his opponent pool 8 against Ob 2.5 -- CR-85's planted faculty-5 reading, reproduced through the
-  roster. A surviving holder of a bloodied fight gains one; a non-holder gains none and nothing is minted.
-  MUTATION (executed below): `_grown` minting for a non-holder turns the never-mint check red.
+  roster. A surviving holder of a bloodied fight gains one; a surviving non-holder is minted one.
   CONTROL: a FORMATION MOVER EVEN AT CONTROL -- `arms` in the vocation range adds one `train` Candidate per `train`
   formation, so with nobody holding the key every 1-season hash still moves. The realm hashes are
   `_realm_goldens.py`'s; `revert_cp_t03_04` (the three roster rows and the vocation removed, in process) is what the
@@ -69,9 +69,13 @@ def _engine():
 # ---- (i) the roster ---------------------------------------------------------------------------------------------
 
 def test_the_three_body_verbs_draw_on_arms_and_arms_is_a_vocation_with_an_attribute():
+    """B05.25 (B05.99 rewrite): the retired `VOCATION_ATTRIBUTE` map read `arms` -> agility; a body verb now names NO
+    `governing:` attribute (a hand-off row, `person_inputs: own`): the fight reads the attributes raw, by its own rule."""
+    from engine.substrate import descriptors
     assert {v: VERBS.VERB_CAPABILITY.get(v) for v in BODY_VERBS} == {v: KEY for v in BODY_VERBS}
     assert KEY in VERBS.VOCATIONS and KEY in OPT.VOCATIONS and KEY in EC.VOCATIONS
-    assert VERBS.VOCATION_ATTRIBUTE[KEY] == "attr.body.agility"
+    assert KEY in descriptors.CAPABILITIES
+    assert all(VERBS.VERB_TABLE[v].governing == () and not VERBS.VERB_TABLE[v].brute for v in BODY_VERBS)
     # the key is spelt in no body: `_grown` reads it off the roster by verb
     src = open(EC.__file__, encoding="utf-8").read()
     assert '"arms"' not in src and "'arms'" not in src
@@ -115,7 +119,7 @@ def test_falsifier_arms_5_rolls_pool_11_and_is_attacked_at_ob_2_5_through_the_se
     w.persons[a].capability = {**(w.persons[a].capability or {}), KEY: 5}
     assert KEY not in (w.persons[b].capability or {})
     inp = C.combat_input(w, [a, b], verb)
-    assert inp.scores == (5, 1), inp.scores
+    assert inp.scores == (5, 2), inp.scores          # B05.09: b's score is the untrained score, never his attribute (was 1)
     mod, attr = entry_target("the body")[1].split(":", 1)
     entry = getattr(importlib.import_module(mod), attr)
     seen = _spy(monkeypatch)
@@ -123,24 +127,27 @@ def test_falsifier_arms_5_rolls_pool_11_and_is_attacked_at_ob_2_5_through_the_se
     for s in range(6):
         entry(inp, random.Random(s))
         checked += 1
-    # B01a.99 (every person's attributes are drawn, a population change): b's drawn attribute reads 1, not `pool_default` 2, so
-    # a's roll meets ob 0.5 (was 1.0) and b's own pool is 7 (was 8); a's pool 11 and the ob 2.5 against a (key 5) are unmoved.
-    assert set(seen) == {(11, 0.5), (7, 2.5)}, dict(seen)
+    # B05.99 re-pin (B05.09: the skill score has no attribute; B05.57/B05.58: the fight's pool is `pool_of(score, addends, 6, 5)`
+    # and its Ob `opposed_ob(defender's score, 0.5)`): b scores the untrained 2, so a meets Ob 1.0 and b rolls pool 8 -- the
+    # docstring's CR-85 reading again (B01a.99 had read b's drawn attribute: {(11, 0.5), (7, 2.5)}).
+    assert set(seen) == {(11, 1.0), (8, 2.5)}, dict(seen)
     assert checked == 6
 
 
-def test_control_with_nobody_holding_arms_every_season_roll_reads_the_drawn_attributes_alone(monkeypatch, _engine):
-    """The item moves formation, not a roll: seed 1's season fights roll no `arms` key (nobody holds one). B01a.99 (every
-    person's attributes are drawn, a population change): the rolls were all CR-85's (8, 1.0) at `pool_default`; they now read
-    the persons' drawn attributes, (pool, ob) = (9, 2.5) x2, (11, 2.0), (11, 1.5), read at PYTHONHASHSEED=0.
-    ⚠ A pool of 11 is what `arms` 5 reads in the falsifier above, so the pool values alone no longer exclude the key: the
-    holders are asserted directly, before the season and after it (`_grown` raises only a key already held)."""
+def test_control_with_nobody_holding_arms_every_season_roll_reads_the_untrained_score_alone(monkeypatch, _engine):
+    """The item moves formation, not a roll: seed 1's season fights roll no `arms` key above the untrained score (nobody holds
+    one at the build). B05.99 re-pin: B05.09 took the attribute out of the skill score and B05.57/B05.58 make the fight's pool
+    `pool_of(score, addends, 6, 5)` and its Ob `opposed_ob(score, 0.5)`, so every roll is CR-85's (8, 1.0) again (B01a.99 had
+    read the drawn attributes: (9, 2.5), (11, 2.0), (11, 1.5)). Since B05.09 a surviving party of a bloodied fight is MINTED a
+    first rank (`_grown`), so after the season the holders are exactly those survivors, each at 1, which is below the untrained
+    score and so reads the same pool (was: no holder after the season)."""
     seen = _spy(monkeypatch)
     w = build_realm(1)
     assert [pid for pid, p in w.persons.items() if KEY in (p.capability or {})] == []
     run(1, 1, w=w)
-    assert [pid for pid, p in w.persons.items() if KEY in (p.capability or {})] == []
-    assert seen and set(seen) == {(9, 2.5), (11, 2.0), (11, 1.5)}, dict(seen)
+    held = {pid: p.capability[KEY] for pid, p in w.persons.items() if KEY in (p.capability or {})}
+    assert held and set(held.values()) == {1}, held
+    assert seen and set(seen) == {(8, 1.0)}, dict(seen)
 
 
 def test_control_with_the_item_off_the_same_holder_rolls_the_fallback(monkeypatch, _engine):
@@ -153,7 +160,8 @@ def test_control_with_the_item_off_the_same_holder_rolls_the_fallback(monkeypatc
 
 # ---- (i) train ----------------------------------------------------------------------------------------------------
 
-def test_train_raises_a_held_arms_and_mints_none():
+def test_train_raises_a_held_arms_and_mints_a_first_rank():
+    """B05.09 (CORE Edit 9; B05.99 rewrite): `train` on a non-holder MINTS a first rank (was `train.refused`)."""
     w = P.tiny_world()
     d = SeasonDriver(w)
     w.step, w.frozen = Step.RESOLVE, False
@@ -164,9 +172,9 @@ def test_train_raises_a_held_arms_and_mints_none():
     for pid in (holder, other):
         act = Act(id=f"tr_{pid}", actor=pid, verb="train", payload={"subject": pid, "kind": KEY})
         got[pid] = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), act, None)]
-    assert got == {holder: ["capability.raised"], other: ["train.refused"]}, got
+    assert got == {holder: ["capability.raised"], other: ["capability.raised"]}, got
     assert w.persons[holder].capability == {KEY: 3}
-    assert KEY not in w.persons[other].capability
+    assert w.persons[other].capability == {KEY: 1}
 
 
 # ---- (iv) build-by-doing ------------------------------------------------------------------------------------------
@@ -194,17 +202,19 @@ def _raised(out) -> list:
     return sorted(c.subject for e in out if e.kind == "capability.raised" for c in e.changes)
 
 
-def _never_minted(w, before) -> list:
-    """THE NEVER-MINT CHECK: every party who held no `arms` before holds none after."""
+def _minted(w, before) -> list:
+    """Every party who held no `arms` before and holds it after (B05.09: a surviving non-holder's first rank)."""
     return [pid for pid in before if KEY not in before[pid] and pid in w.persons
             and KEY in (w.persons[pid].capability or {})]
 
 
-def test_falsifier_a_surviving_holder_gains_one_and_a_non_holder_gains_none():
+def test_falsifier_a_surviving_holder_gains_one_and_a_non_holder_is_minted_one():
+    """B05.09 (CORE Edit 9; B05.99 rewrite): the non-holder was refused his growth under the retired never-minted rule; he is
+    minted a first rank now."""
     w, out, before = _fight(WOUNDED, WOUNDED, {ACTOR: {KEY: 2}})
     assert w.persons[ACTOR].capability[KEY] == 3
-    assert _never_minted(w, before) == [] and KEY not in w.persons[SUBJECT].capability
-    assert _raised(out) == [ACTOR]
+    assert _minted(w, before) == [SUBJECT] and w.persons[SUBJECT].capability[KEY] == 1
+    assert _raised(out) == sorted([ACTOR, SUBJECT])
     assert "body.changed" in [e.kind for e in out]
 
 
@@ -213,7 +223,9 @@ def test_both_holders_grow_and_an_untouched_holder_beside_a_wounded_one_grows():
     assert (w.persons[ACTOR].capability[KEY], w.persons[SUBJECT].capability[KEY]) == (3, 5)
     assert _raised(out) == sorted([ACTOR, SUBJECT])
     w, out, _ = _fight(UNTOUCHED, WOUNDED, {ACTOR: {KEY: 2}})
-    assert w.persons[ACTOR].capability[KEY] == 3 and _raised(out) == [ACTOR]
+    # B05.09: the wounded non-holder beside him is minted a first rank (B05.99 rewrite; was [ACTOR])
+    assert w.persons[ACTOR].capability[KEY] == 3 and _raised(out) == sorted([ACTOR, SUBJECT])
+    assert w.persons[SUBJECT].capability[KEY] == 1
 
 
 def test_a_felled_holder_does_not_grow_and_his_surviving_holder_opponent_does():
@@ -226,23 +238,6 @@ def test_an_untouched_fight_grows_nobody_and_still_reads_undecided():
     w, out, _ = _fight(UNTOUCHED, UNTOUCHED, {ACTOR: {KEY: 2}, SUBJECT: {KEY: 2}})
     assert [e.kind for e in out] == ["contest.undecided"]
     assert w.persons[ACTOR].capability[KEY] == w.persons[SUBJECT].capability[KEY] == 2
-
-
-def test_control_non_holders_emit_no_capability_kind_and_no_body_subject_earns_it():
-    w, out, before = _fight(WOUNDED, WOUNDED, {})
-    assert _raised(out) == [] and "capability.raised" not in [e.kind for e in out]
-    assert _never_minted(w, before) == []
-    assert [e.kind for e in out] == ["body.changed"]
-
-
-def test_mutation_a_minting_grown_turns_the_never_mint_check_red(monkeypatch):
-    def minting(w, a, parties, bands, bodies):
-        return {pid: {**(w.persons[pid].capability or {}), KEY: 1}
-                for pid in dict.fromkeys(parties) if pid in w.persons and bodies.get(pid) != 0}
-    monkeypatch.setattr(EC, "_grown", minting)
-    w, out, before = _fight(WOUNDED, WOUNDED, {})
-    assert _never_minted(w, before) == [ACTOR, SUBJECT]
-    assert _raised(out) == [ACTOR, SUBJECT]
 
 
 def test_capture_and_accept_grow_by_the_same_rule():
@@ -258,9 +253,10 @@ def test_capture_and_accept_grow_by_the_same_rule():
         res = Resolution(degree_of(raw, SUBJECT, w.fixtures), raw)
         ch = EFFECTS[verb](w, Act(id="cp304" + verb, actor=ACTOR, verb=verb, payload={operand: SUBJECT}), res)
         grown = [s for s in ch.subjects if "capability.raised" in s.kinds]
-        assert [s.id for s in grown] == [ACTOR], (verb, ch.subjects)
+        # B05.09 (B05.99 rewrite): the untouched non-holder survivor is minted a first rank (was: the holder alone)
+        assert [s.id for s in grown] == [ACTOR, SUBJECT], (verb, ch.subjects)
         ch.apply()
-        assert w.persons[ACTOR].capability[KEY] == 3 and KEY not in w.persons[SUBJECT].capability
+        assert w.persons[ACTOR].capability[KEY] == 3 and w.persons[SUBJECT].capability[KEY] == 1
         checked += 1
     assert checked == 2
     assert set(EC.GROWN_KINDS) == {"capability.raised"}

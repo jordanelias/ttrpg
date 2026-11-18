@@ -168,15 +168,18 @@ def test_capped_pike_out_retains_heavy_after_repelling_a_charge(field_path, monk
     Re-measured at MB-04: the fixture's charger carries the 'charge' keyword, which now drives the
     aggressive stance (hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES). With MB_ROLE_INSTRUCTIONS=0 the
     MB-07 readings return exactly (capped 0.9805/0.9714/0.9275, uncapped 0.9663, levy 0.9244); the
-    ordering this test exists for holds under both."""
+    ordering this test exists for holds under both.
+    RE-RECORDED at B05.99 (B05.03: the field draws the one continuous sampler, `resolution.roll_pool`), read under Python 3.11
+    and 3.13 alike: uncapped pike == heavy 0.9420 (was 0.9514); capped 0.9543 > 0.9494 > 0.8970 (was 0.9604/0.9508/0.8895).
+    The ordering held."""
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', False)
     pike0, heavy0 = _charge_vs_brace('pike'), _charge_vs_brace('heavy_infantry')
     assert math.isclose(pike0, heavy0, abs_tol=1e-6)
-    assert pike0 == pytest.approx(0.9514, abs=1e-4)
+    assert pike0 == pytest.approx(0.9420, abs=1e-4)
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', True)
     pike, heavy, levy = (_charge_vs_brace(t) for t in ('pike', 'heavy_infantry', 'levy'))
     assert pike > heavy > levy, (pike, heavy, levy)
-    assert (pike, heavy, levy) == pytest.approx((0.9604, 0.9508, 0.8895), abs=1e-4)
+    assert (pike, heavy, levy) == pytest.approx((0.9543, 0.9494, 0.8970), abs=1e-4)
 
 
 @pytest.mark.slow
@@ -187,13 +190,15 @@ def test_capped_pike_outfights_levy_in_standing_melee(field_path, monkeypatch):
     RE-RECORDED at MB-07r (POOL_QUALITY_SCALE 0.5 -> 0.8): the ordering held; before: capped (0.9639, 0.9461),
     (0.934, 0.9762), (0.9653, 0.9662), uncapped (0.9219, 0.9619).
     RE-RECORDED 2026-11-01 (ED-MB-0079) when the cell body became a circle one pitch across: the ordering held and
-    the retentions moved by up to 0.014 (before: 0.9646/0.9421, 0.9296/0.9746, 0.963/0.9634; uncapped 0.9273/0.9457)."""
+    the retentions moved by up to 0.014 (before: 0.9646/0.9421, 0.9296/0.9746, 0.963/0.9634; uncapped 0.9273/0.9457).
+    RE-RECORDED at B05.99 (B05.03, the field's one sampler), read under Python 3.11 and 3.13 alike: the ordering held; capped
+    (0.9513, 0.9182), (0.895, 0.9678), (0.9352, 0.9574), uncapped (0.9019, 0.9338) (before: the three pairs above this note)."""
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', False)
     assert _standing('pike', 'levy') == _standing('levy', 'levy') == _standing('levy', 'pike')
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', True)
     pl, lp, ll = _standing('pike', 'levy'), _standing('levy', 'pike'), _standing('levy', 'levy')
     assert pl[0] > pl[1] and lp[1] > lp[0], (pl, lp)
-    assert (pl, lp, ll) == ((0.9588, 0.9151), (0.8851, 0.9697), (0.9415, 0.9527))
+    assert (pl, lp, ll) == ((0.9513, 0.9182), (0.895, 0.9678), (0.9352, 0.9574))
 
 
 # ── MB-07r: the cap reaches the season's own entry ───────────────────────────────────────────────

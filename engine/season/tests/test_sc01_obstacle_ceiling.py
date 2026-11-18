@@ -101,6 +101,11 @@ def _record(opposition, ceiling, *, pool=FLOOR, leverage=0.0):
 
 STAND_IN = 2.0                  # what `obstacle_default` was: B05.14 composes it as `opposed_ob(pool_default)` = 0.5 x 4, at difficulty 0, for these records
 HITS_N = 4000                   # seeded rolls per record in `_hits`
+#: THE CONTROL SIZES these ceiling readings were taken on (B05.99 re-pin): B05.23 ships the calibrated base and rate (`pool_add` 6, which
+#: also lays the even line 2.4 under every obstacle, `pool_floor` 5, `opposition_rate` MU_PER_DIE) and the level ladder; this file reads
+#: WHO bounds the obstacle and HOW, so it reads them at control (base 0, floor 0, rate 0.5, every level 0), where the obstacle is score / 2.
+CONTROL_SIZES = (DEFAULT_FIXTURES.sweep("pool_add", 0).sweep("pool_floor", 0).sweep("opposition_rate", 0.5)
+                 .sweep("difficulty_ob", {k: 0 for k in DEFAULT_FIXTURES.get("difficulty_ob")}))
 
 
 def _hits(mod, rec) -> int:
@@ -209,7 +214,7 @@ def test_the_seam_has_no_second_obstacle_site(monkeypatch):
     mod = _module()
     # B05.14: read with no difficulty and a hearer holding his resisting attribute at 0, so the obstacle is score / 2: this test is about WHO
     # composes the obstacle, not its terms (`test_obstacle_form.py`'s)
-    w = P.tiny_world(DEFAULT_FIXTURES.sweep("difficulty_ob", {k: 0 for k in DEFAULT_FIXTURES.get("difficulty_ob")}))
+    w = P.tiny_world(CONTROL_SIZES)                  # B05.99: at the control sizes, where the obstacle is score / 2
     SeasonDriver(w)                                  # the registrar fills MODULE_ENTRIES
     w.persons["p_mid"].capability = {"copying": 3}
     w.persons["p_mid"].attributes = {VERB_TABLE["tell"].opposed_attribute: 0}
@@ -227,8 +232,7 @@ def _arm(ceiling):
     # the FIXED arm (CP-T01-06 ships the per-pool arm; the 1 / 2 / 3 sweep is read on the fixed one)
     # B05.14: on score / 2 alone (no difficulty, resisting attributes held at 0), the composition these figures were read on; the
     # ceiling bounds the form's obstacle the same way (`roll.py::obstacle`'s `ceiling` term)
-    w = P.tiny_world(DEFAULT_FIXTURES.sweep("ceiling_per_pool", False).sweep("obstacle_ceiling", ceiling)
-                     .sweep("difficulty_ob", {k: 0 for k in DEFAULT_FIXTURES.get("difficulty_ob")}))
+    w = P.tiny_world(CONTROL_SIZES.sweep("ceiling_per_pool", False).sweep("obstacle_ceiling", ceiling))   # B05.99: the control sizes
     SeasonDriver(w)
     for who in ("p_mid", "p_other", "p_king", "p_low"):
         w.persons[who].attributes = {VERB_TABLE["tell"].opposed_attribute: 0}
@@ -387,10 +391,11 @@ def test_the_cap_is_the_floor_met_exactly_and_the_pool_below_one_keeps_the_fixed
 def test_the_chance_floor_reaches_the_resolved_act_through_the_seam():
     """The fixture is carried by the host and read by the module: pool 2 against a score/2 of 5."""
     for per_pool in (False, True):
-        fx = DEFAULT_FIXTURES.sweep("ceiling_per_pool", per_pool)
+        fx = CONTROL_SIZES.sweep("ceiling_per_pool", per_pool)       # B05.99: the control sizes (pool 2, score / 2)
         w = P.tiny_world(fx)
         SeasonDriver(w)
         w.persons["p_mid"].capability = {"copying": 10}       # roster-exempt: TEST FIXTURE, score/2 = 5
+        w.persons["p_mid"].attributes = {VERB_TABLE["tell"].opposed_attribute: 0}   # B05.14: his resisting attribute adds nothing
         out = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="tell", subject="p_mid",
                             rng=random.Random(0))
         assert out["status"] == "RESOLVED", out

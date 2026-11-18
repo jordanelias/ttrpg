@@ -14,6 +14,7 @@ import dataclasses
 
 import pytest
 
+from engine.dice_engine.sigma_leverage import pool_of
 from engine.season.data import cast
 from engine.season.data import rosters as R
 from engine.substrate.descriptors import CAPABILITIES
@@ -141,26 +142,32 @@ def test_a_planted_lifepath_builds_the_key_held_at_pool_default_and_rolls_the_sa
     default = w.fixtures.get("pool_default")
     p, q = w.persons[P_ID], w.persons[Q_ID]
     assert p.capability == {"inquiry": default} and q.capability == {}
-    # B01a.99 (every person's attributes are drawn, a population change): the pool's base is the larger of the attribute he
-    # holds and the key (`pool.score`), so two persons no longer roll the same pool by construction. The claim kept is the
-    # key's: held at `pool_default` it lifts nothing above what the person's attribute reads (it was `== default` for both
-    # when no one held an attribute); the holder of nothing reads his attribute alone.
-    att = lambda x: pool._authored_attribute(x, "research")
-    assert att(p) is not None and att(q) is not None, "the drawn sheets seat the vocation's attribute on both"
-    assert sigma.faculty(w, p, "research") == max(att(p), default)
-    assert sigma.faculty(w, q, "research") == att(q)
+    # B05.99 rewrite (B05.25: the pool is `pool_of(governing score + rank, addends, pool_add, pool_floor)`; was the larger of the
+    # attribute and the key): the key held at `pool_default` ADDS its rank over the person's governing score; the holder of
+    # nothing reads his governing score alone.
+    att = lambda x: pool.governing_attribute(x, "research")
+    assert att(p) is not None and att(q) is not None, "the drawn sheets seat the verb's governing attributes on both"
+    fx = w.fixtures
+    rolled = lambda x, rank: pool_of(pool.governing_score(w, x, "research") + rank, pool.addends_of(w, x, "research"),
+                                     fx.get("pool_add"), fx.get("pool_floor"))
+    assert pool.rank(p, "research") == default and pool.rank(q, "research") == 0
+    assert sigma.faculty(w, p, "research") == rolled(p, default)
+    assert sigma.faculty(w, q, "research") == rolled(q, 0)
     holders = {pid: x.capability for pid, x in w.persons.items() if x.capability}
     assert holders == {P_ID: {"inquiry": default}, "p_npc_004": {"inquiry": default},
                        "p_npc_088": {"inquiry": default}}, holders
 
 
-def test_train_on_inquiry_executes_for_the_holder_and_is_refused_for_the_other(planted_world):
+def test_train_on_inquiry_raises_the_holder_and_mints_the_other_a_first_rank(planted_world):
+    """B05.09 (CORE Edit 9; B05.99 rewrite): `train` on a non-holder mints a first rank (was `train.refused`); the holder's key
+    rises by one, and so does his pool (B05.25: every rank is a die over his governing score)."""
     w, d = planted_world
     default = w.fixtures.get("pool_default")
-    assert _train(w, d, Q_ID) == ["train.refused"] and w.persons[Q_ID].capability == {}
+    before = sigma.faculty(w, w.persons[P_ID], "research")
+    assert _train(w, d, Q_ID) == ["capability.raised"] and w.persons[Q_ID].capability == {"inquiry": 1}
     assert _train(w, d, P_ID) == ["capability.raised"]
     assert w.persons[P_ID].capability == {"inquiry": default + 1}
-    assert sigma.faculty(w, w.persons[P_ID], "research") == default + 1, "the raised key is the pool"
+    assert sigma.faculty(w, w.persons[P_ID], "research") == before + 1, "the raised key is not in the pool"
 
 
 def test_the_lifepath_id_is_stored_nowhere_on_a_person(planted_world):
@@ -177,11 +184,14 @@ def test_the_lifepath_id_is_stored_nowhere_on_a_person(planted_world):
 
 def test_the_planted_failure_the_expansion_skipped_reddens_the_train_assertion(monkeypatch):
     """The assertion above can observe the failure it excludes: with the expansion skipped the planted person
-    holds nothing and `train` on `inquiry` is refused, not raised."""
+    holds nothing, so `train` on `inquiry` MINTS his first rank (B05.09) where the expansion would have raised the key to
+    `pool_default + 1` (B05.99 rewrite: was `train.refused`)."""
     monkeypatch.setattr(cast, "capability_of", lambda r, pool_default: {})
     w, d = _world(monkeypatch)
+    default = w.fixtures.get("pool_default")
     assert w.persons[P_ID].capability == {}
-    assert _train(w, d, P_ID) == ["train.refused"] != ["capability.raised"]
+    assert _train(w, d, P_ID) == ["capability.raised"]
+    assert w.persons[P_ID].capability == {"inquiry": 1} != {"inquiry": default + 1}
 
 
 def test_the_shipped_expansion_is_the_mover_by_the_one_row_that_maps_to_a_key(monkeypatch):

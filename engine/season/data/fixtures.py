@@ -211,7 +211,7 @@ WORKS_COST = _load_works_cost()
 # [ASSUMPTION: the arm switch's form (a second module table beside the one Fixtures setting, not a second Fixtures key) -- basis: T13 edit 1 "two
 # arms: `control` ... and `half`, shipped `control` in commit 1"; B05.14 shipped the control values. Jordan to correct; revert: none needed.]
 # [JUSTIFIED: engine/season/hole_register.yaml H-424 -- the table's sweep names the control arm (0 / 1 / 2 / 3), so this arm is a point of that sweep]
-DIFFICULTY_OB_CONTROL = {"plain": 0, "routine": 1, "demanding": 2, "hard": 3}
+DIFFICULTY_OB_CONTROL = dict(zip(roster("difficulty_levels", ordered=True), (0, 1, 2, 3)))
 
 # [JUSTIFIED: engine/season/hole_register.yaml H-06 -- `site: Fixtures condition_scale`, graded `assumption`; the mechanism is sourced and the magnitude is injected here and swept]
 _CONDITION_SCALE = 1000            # `H-06`'s value, named once so `wound_step` is derived from the fixture's own scale and not typed beside it
@@ -1132,7 +1132,7 @@ DEFAULT_FIXTURES = Fixtures(
     # `proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part4.md` §H item 1 (A-137); the other levels
     # its multiples, the smallest change that keeps C2 green. revert: `DIFFICULTY_OB_CONTROL`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-424 -- site: Fixtures difficulty_ob, graded `assumption`; no document derives the size of a level, so it is injected and swept]
-    difficulty_ob={"plain": 0, "routine": 0.8, "demanding": 1.6, "hard": 2.4},   # `H-424`, swept control (`DIFFICULTY_OB_CONTROL`) / half / three-quarter / calibrated (SHIPPED)
+    difficulty_ob=dict(zip(roster("difficulty_levels", ordered=True), (0, 0.8, 1.6, 2.4))),   # `H-424`, swept control (`DIFFICULTY_OB_CONTROL`) / half / three-quarter / calibrated (SHIPPED)
     # `H-426` (B05.21; T13 edit 1, T3). HOW FAR A HEARER'S HOSTILITY MOVES THE OBSTACLE, per full clamp: the obstacle term `regard` is
     # `regard_step x clamp(-stance / STANCE_MAX, 0, 1)` over the stance rows the counterparty holds toward the actor (`person_q.stance_toward`,
     # `data/cast.py::STANCE_MAX`), for one person counterparty and no audience (`sigma.py::_regard_term`); the favourable half of the same clamp is
@@ -1151,7 +1151,7 @@ DEFAULT_FIXTURES = Fixtures(
     # `tenure_kinds` roster (refused at load). `0` for every kind is the CONTROL (OBS §1: "control 0"): the term is not listed.
     # [ASSUMPTION; medium; Jordan to correct; revert: every kind 0.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-428 -- site: Fixtures stakes_ob, graded `assumption`; T13 T4 gives the live `oblige` 0, `detain` 0.5, `ban` 1.0 and no document derives them, so it is injected at the control and swept 0 / 0.5x / 1x / 2x of those]
-    stakes_ob={"ban": 0, "commit": 0, "contain": 0, "detain": 0, "hold": 0, "knot": 0, "oblige": 0, "reside": 0, "succeed": 0, "tie": 0},   # `H-428`, swept 0 (control, SHIPPED) / 0.5x / 1x / 2x
+    stakes_ob={kind: 0 for kind in roster("tenure_kinds")},   # `H-428`, swept 0 (control, SHIPPED) / 0.5x / 1x / 2x
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
