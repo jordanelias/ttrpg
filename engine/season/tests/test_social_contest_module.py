@@ -166,3 +166,86 @@ def test_no_d10_face_in_social_contest():
                                  obstacle_refusal_multiple=3.0, leverage=lev)
         got = _module().roll(inp, _NoFaces(7))
         assert got.net == roll_net_continuous(pool, rng=random.Random(7)) + net_boost(lev, pool), (pool, lev, got)
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B05.56 -- WHERE NOBODY OPPOSES, THE UNTRAINED SCORE DOES (`16_PESSIMIST_DICE_task_difficulty_and_throughput`, (a)-(c), gates 1, 2, 4).
+# `roll.py::obstacle` (B05.14) reads `opposition=None` as `opposed_ob(pool_default, opposition_rate)`; these four read that term from the
+# composed record. The calibrated sizes are READ from `DEFAULT_FIXTURES` (never copied here); the control arm is pinned, as `test_obstacle_form.py`
+# pins its own. The falsifier of all four: the stand-in replaced by `0.0` (a row with no person opposite then composes no opposition at all).
+# ---------------------------------------------------------------------------------------------------------------------
+
+def _unopposed(**kw):
+    """A hand-built record with NO person opposite (`opposition=None`), the ceiling off (the uncapped control, so no bound hides a term)."""
+    from engine.season.queries.inputs import SocialContestInput
+    base = dict(pool=5, opposition=None, difficulty=0.0, pool_default=2, pool_add=0, opposition_rate=0.5, obstacle_ceiling=None,
+                obstacle_refusal_multiple=3.0, leverage=0.0, ceiling_form="hard")
+    base.update(kw)
+    return SocialContestInput(**base)
+
+
+def test_unopposed_row_term_list_has_an_opposition_entry():
+    """PES-DICE (a): a rolled act with nobody opposite lists an `opposition` term equal to `opposed_ob(pool_default, opposition_rate)`."""
+    from engine.dice_engine.sigma_leverage import opposed_ob
+    from .test_sc01_obstacle_ceiling import _module
+    from ..data.fixtures import DEFAULT_FIXTURES as FX
+    checked = 0
+    for pool_default, rate in ((2, 0.5), (3, 0.5), (FX.get("pool_default"), FX.get("opposition_rate")), (0, FX.get("opposition_rate"))):
+        _, terms = _module().obstacle(_unopposed(pool_default=pool_default, opposition_rate=rate))
+        named = [value for name, value in terms if name == "opposition"]
+        assert len(named) == 1, terms
+        assert named[0] == opposed_ob(pool_default, rate), (pool_default, rate, terms)
+        checked += 1
+    assert checked == 4
+    assert dict(_module().obstacle(_unopposed(pool_default=2, opposition_rate=0.5))[1])["opposition"] > 0.0   # not vacuously 0 (it fails on a stand-in of 0)
+
+
+def test_four_levels_compose_four_strictly_increasing_obstacles_on_an_unopposed_row():
+    """The four levels of ONE unopposed row (a `research` on a site) at the shipped sizes compose four strictly increasing obstacles; no figure
+    is asserted. TWO ARMS, because at the shipped `pool_add` the even line alone (2.4) keeps every level over the `OB_MIN` floor and the stand-in
+    could not be seen to matter: (shipped) every number read off `DEFAULT_FIXTURES`; (floor-visible) the same ladder and rate with `pool_add` 0,
+    where without the stand-in the first two levels both lift to the floor and compose ONE obstacle -- the failure the source names."""
+    from engine.dice_engine.sigma_leverage import OB_MIN
+    from engine.season.data.fixtures import DEFAULT_FIXTURES as FX
+    from engine.season.data.rosters import roster
+    from .test_sc01_obstacle_ceiling import _module
+    levels = tuple(roster("difficulty_levels", ordered=True))
+    sizes = FX.get("difficulty_ob")
+    assert len(levels) == 4 and all(level in sizes for level in levels), (levels, sizes)
+    for arm, pool_add in (("shipped", FX.get("pool_add")), ("floor-visible", 0)):
+        obs = []
+        for level in levels:
+            ob, terms = _module().obstacle(_unopposed(pool=FX.get("pool_floor"), pool_add=pool_add, difficulty=float(sizes[level]),
+                                                      pool_default=FX.get("pool_default"), opposition_rate=FX.get("opposition_rate")))
+            assert "opposition" in dict(terms), (arm, level, terms)
+            obs.append(ob)
+        assert len(obs) == 4 and all(a < b for a, b in zip(obs, obs[1:])), (arm, dict(zip(levels, obs)))     # strictly increasing: three adjacent pairs
+        assert obs[0] >= OB_MIN
+
+
+def test_routine_plus_stand_in_reproduces_the_control_obstacle():
+    """At the control arm (`difficulty_ob` 0/1/2/3, `pool_add` 0, `opposition_rate` 0.5, `pool_default` 2, the `hard` form) `routine` plus the stand-in
+    composes 2.0, the obstacle an inquiry carried before the ladder existed (OBS §4 step 1a)."""
+    from engine.season.data.fixtures import DIFFICULTY_OB_CONTROL
+    from .test_sc01_obstacle_ceiling import _module
+    assert DIFFICULTY_OB_CONTROL == {"plain": 0, "routine": 1, "demanding": 2, "hard": 3}, DIFFICULTY_OB_CONTROL
+    ob, terms = _module().obstacle(_unopposed(pool=2, pool_add=0, pool_default=2, opposition_rate=0.5, ceiling_form="hard",
+                                              difficulty=float(DIFFICULTY_OB_CONTROL["routine"])))
+    assert ob == 2.0, (ob, terms)
+    assert terms == (("even", 0.0), ("difficulty", 1.0), ("opposition", 1.0)), terms
+
+
+def test_the_floor_pool_can_succeed_on_a_plain_task():
+    """Gate 4: at the shipped fixtures the pool at its floor (`pool_floor` dice) meets a `plain` unopposed task at an obstacle that INCLUDES the stand-in
+    (even line + `opposed_ob(pool_default)`), and the closed form's Success-or-better share there is above zero (`band_odds` bands: F, P, S, O)."""
+    from engine.dice_engine.sigma_leverage import band_odds, even_line, opposed_ob
+    from engine.season.data.fixtures import DEFAULT_FIXTURES as FX
+    from .test_sc01_obstacle_ceiling import _module
+    pool = float(FX.get("pool_floor"))
+    ob, terms = _module().obstacle(_unopposed(
+        pool=pool, pool_add=FX.get("pool_add"), pool_default=FX.get("pool_default"), opposition_rate=FX.get("opposition_rate"),
+        difficulty=float(FX.get("difficulty_ob")["plain"]), obstacle_ceiling=FX.get("obstacle_ceiling"),
+        ceiling_per_pool=FX.get("ceiling_per_pool"), ceiling_form=FX.get("ceiling_form")))
+    assert ob == even_line(FX.get("pool_add")) + opposed_ob(FX.get("pool_default"), FX.get("opposition_rate")), (ob, terms)   # the stand-in is IN the obstacle
+    bands = band_odds(pool, ob)
+    assert bands[2] + bands[3] > 0.0, (pool, ob, bands)
