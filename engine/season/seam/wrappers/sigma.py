@@ -636,6 +636,7 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
         pool=pool,
         obstacle_ceiling=fx.get("obstacle_ceiling"),
         ceiling_per_pool=fx.get("ceiling_per_pool"),
+        ceiling_form=fx.get("ceiling_form"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
         leverage=advantage_sigma(fx, _advantage_operands(effort, edge, room_terms, office, regard)),      # the one place the operands are named
         forgery_quality=forgery_quality,

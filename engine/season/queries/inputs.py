@@ -61,6 +61,7 @@ class SocialContestInput:
       * `ceiling_per_pool` -- the `chance_floor` arm (CP-T01-06): from one die, the module solves the
                        cap for THIS pool from `obstacle_ceiling`'s own chance at one die, and the
                        fixed value stays the cap below one die. `False` is the fixed arm (the default);
+      * `ceiling_form` -- the ceiling's form past the per-pool bound (`hard`: a flat bound; `soft`: the excess saturates toward it); `hard` by default, so every hand-built record keeps its reading;
       * `obstacle_refusal_multiple` -- S27.4's multiple, the fixture the host adapter refuses on,
                        on the pair the entry returns;
       * `leverage`  -- the σ-layer μ-shift: the host's `advantage_sigma` sums the act's advantage sources
@@ -102,6 +103,7 @@ class SocialContestInput:
     proofs: float = 0.0
     forgery_quality: float = 0.0
     ceiling_per_pool: bool = False
+    ceiling_form: str = "hard"   # B05.53: how the obstacle behaves past its ceiling -- `hard` a flat bound, `soft` the excess saturating toward it; no reader yet (B05.54)
     obstacle_operands: tuple = ()
 
 

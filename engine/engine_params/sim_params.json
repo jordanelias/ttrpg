@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 122,
-    "total": 389,
-    "uncited": 267,
+    "total": 390,
+    "uncited": 268,
     "of_which_assumption_grade": 8
   },
-  "count": 389,
+  "count": 390,
   "by_module": {
     "engine.dice_engine": 10,
     "engine.season": 25,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 101,
+    "engine.season.settings": 102,
     "engine.season.realm": 8
   },
   "params": [
@@ -3646,6 +3646,17 @@
       "name": "ceiling_per_pool",
       "value": true,
       "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.ceiling_form",
+      "name": "ceiling_form",
+      "value": "hard",
+      "kind": "other",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "",
