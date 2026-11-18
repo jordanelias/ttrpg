@@ -136,7 +136,7 @@
       "kind": "scalar",
       "module": "engine.dice_engine",
       "file": "engine/dice_engine/sigma_leverage.py",
-      "note": "the floor a favourable modifier may not push an obstacle below (`eff_ob`; not an \"Ob minimum\" of a roll)",
+      "note": "the floor a favourable modifier may not push an obstacle below (`eff_ob`); `modules/social_contest/roll.py::obstacle` lifts a composed obstacle to it",
       "citation": null,
       "citation_grade": null
     },
