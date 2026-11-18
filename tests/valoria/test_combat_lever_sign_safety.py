@@ -95,7 +95,7 @@ class _FixedRng:
     def random(self):
         return self._u
 
-    def randrange(self, n):
+    def below(self, n):
         return 0
 
 

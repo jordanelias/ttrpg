@@ -23,6 +23,7 @@ from __future__ import annotations
 import dataclasses
 import importlib
 import random
+from engine.dice_engine import draw
 from collections import Counter
 
 import pytest
@@ -115,7 +116,7 @@ def test_planted_a_party_holding_the_combat_key_at_5_rolls_11_and_is_attacked_at
     seen = _spy(monkeypatch)
     checked = 0
     for s in range(6):
-        entry(inp, random.Random(s))
+        entry(inp, draw.seeded(draw.H2("test_cr85_faculty_replaces_history", s)))
         checked += 1
     assert set(seen) == {(11, 1.0), (8, 2.5)}, dict(seen)
     assert checked == 6
@@ -132,7 +133,7 @@ def test_the_record_carries_the_opposition_rate_to_the_module():
         inp = PersonalCombatInput(claimants=("a", "b"), ends=(5, 5), wound_quantities=(), scores=(2, 3), opposition_rate=rate)
         seen, checked = set(), 0
         for s in range(8):
-            for ev in entry(inp, random.Random(s))["trace"]:
+            for ev in entry(inp, draw.seeded(draw.H2("test_cr85_faculty_replaces_history", s)))["trace"]:
                 if "ob" in ev:
                     seen.add(round(ev["ob"], 9))
                     checked += 1

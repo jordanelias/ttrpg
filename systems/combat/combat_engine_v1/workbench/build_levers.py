@@ -24,6 +24,7 @@ import sys, os, random, zlib
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
+from engine.dice_engine import draw
 from modules.combat import wrapper
 from modules.combat.config import CFG
 from modules.combat.combatant import Combatant
@@ -64,7 +65,7 @@ def build(spec):
 def duel(A, B, n, seed=0, cfg=None):
     """Position-swapped decisive win-rate of build A vs build B. Returns (win%, lo, hi, decided)."""
     cfg = cfg or CFG
-    rng = random.Random(seed)
+    rng = draw.seeded(draw.H2("build_levers", seed))
     aw = dec = 0
     half = n // 2
     for i in range(n):

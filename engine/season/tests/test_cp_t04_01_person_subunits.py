@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import importlib
 import random
+from engine.dice_engine import draw
 
 import pytest
 
@@ -114,7 +115,7 @@ def test_control_side_arm_is_the_shipped_field_and_carries_no_per_person_record(
     inp = MassBattleInput(weights=((2, 2), (6,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None,
                           origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, troops_per_weight=SCALE,
                           members=(("a0", "a1"), ("b0",)))
-    record = _mb().resolve_field(inp, random.Random(0))
+    record = _mb().resolve_field(inp, draw.seeded(draw.H2("test_cp_t04_01_person_subunits", 0)))
     assert set(record) == {"attacker_wins", "degree", "attacker_size_pct", "defender_size_pct"}
 
 
@@ -156,7 +157,7 @@ def test_an_unknown_arm_is_refused():
     inp = MassBattleInput(weights=((2,), (2,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None,
                           origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, units="squad")
     with pytest.raises(ValueError):
-        _mb().resolve_field(inp, random.Random(0))
+        _mb().resolve_field(inp, draw.seeded(draw.H2("test_cp_t04_01_person_subunits", 0)))
 
 
 def test_field_input_hands_the_members_beside_the_weights_and_the_fixture():

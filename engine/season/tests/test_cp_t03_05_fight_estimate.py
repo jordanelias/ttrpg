@@ -161,15 +161,14 @@ def test_the_shares_follow_the_trackers_not_the_sign_of_the_result():
     trackers' tally EXACTLY, (2) the result's sign disagrees with the trackers on at least one scene, so the
     exclusion this asserts is one the stream can show (`wrapper.fight` flips the sign in `UPSET_FLOOR` of the
     decided fights and leaves the trackers alone)."""
-    import random
     from ..seam.wrappers._entry import entry_for
-    from ..state.ids import H
+    from ..state.ids import draw_factory
     w = _world((4, 1))
     got = _estimate(w)
     entry, refusal = entry_for(combat._PRIZE, combat._PROVIDER)
     assert entry is not None, refusal
     inp = _ran("combat_input", combat.combat_input, w, [ACTOR, SUBJECT], "fight")
-    rng = random.Random(int(H(w.world_seed, w.tick, ACTOR, "estimate"), 16))
+    rng = draw_factory(w.world_seed, lambda: w.tick)(ACTOR, "estimate")
     n = w.fixtures.get("estimate_samples")
     by_trackers = dict.fromkeys(combat.ESTIMATE_OUTCOMES, 0)
     disagree = scenes = 0

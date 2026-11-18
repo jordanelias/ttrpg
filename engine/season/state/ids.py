@@ -8,6 +8,8 @@ from __future__ import annotations
 
 import hashlib
 
+from engine.dice_engine.draw import Draw, seeded
+
 
 def H(world_seed: int, tick: int, subject_id: str, purpose: str) -> str:
     """S33/S49: an OWNED, VERSIONED mix -- never a language built-in hash(), whose value is not
@@ -70,10 +72,7 @@ def draw_factory(world_seed: int, tick_of):
     every season and take the identical choice forever, which reads as a plausible world and is an
     artifact of the seeding. `lambda: w.tick` puts the late binding at the call site where a reader
     can see the clock advance, rather than hiding it in a closure."""
-    import random
-
-    def draw(subject_id: str, purpose: str) -> "random.Random":
-        # [JUSTIFIED: a RADIX, not a game value -- `H` returns `hexdigest()`, so 16 is how that string is read back as an integer; the same non-quantity as the `digest_size` above]
-        return random.Random(int(H(world_seed, tick_of(), subject_id, purpose), 16))
+    def draw(subject_id: str, purpose: str) -> Draw:
+        return seeded(H(world_seed, tick_of(), subject_id, purpose))
 
     return draw

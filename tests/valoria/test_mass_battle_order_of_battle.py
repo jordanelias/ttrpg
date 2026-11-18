@@ -12,6 +12,7 @@ record's `orders_of_battle`. What this proves, and the control beside each claim
     new generic roster (spearmen, skirmishers, light cavalry) carrying what makes it a different type.
 """
 import random
+from engine.dice_engine import draw
 
 import pytest
 
@@ -44,8 +45,8 @@ def _line(troop_type, n=1000):
 
 # --------------------------------------------------------------------------------------- the control
 def test_no_orders_of_battle_is_the_field_as_it_was():
-    plain = massbattle.resolve_field(_record(), random.Random(5))
-    explicit = massbattle.resolve_field(_record(oobs=(None, None)), random.Random(5))
+    plain = massbattle.resolve_field(_record(), draw.seeded(draw.H2("test_mass_battle_order_of_battle", 5)))
+    explicit = massbattle.resolve_field(_record(oobs=(None, None)), draw.seeded(draw.H2("test_mass_battle_order_of_battle", 5)))
     assert plain == explicit
     assert massbattle._weighted_unit("side_a", 10).units[0].troop_type == 'infantry', (
         "the control is vacuous if the headcount line stopped being the single infantry subunit")
@@ -53,7 +54,7 @@ def test_no_orders_of_battle_is_the_field_as_it_was():
 
 # ------------------------------------------------------------------------------------- the falsifier
 def _fight(oob_a, seed):
-    return massbattle.resolve_field(_record(oobs=(oob_a, _line('heavy_infantry'))), random.Random(seed))
+    return massbattle.resolve_field(_record(oobs=(oob_a, _line('heavy_infantry'))), draw.seeded(draw.H2("test_mass_battle_order_of_battle", seed)))
 
 
 def _tally(troop_type):
@@ -75,7 +76,7 @@ def test_equal_headcount_of_different_troop_types_fights_differently():
 def test_an_order_of_battle_side_and_a_headcount_side_both_deploy():
     """A side with no order of battle, once the other has one, is a deployed light-infantry line, not a crash."""
     r = massbattle.resolve_field(_record(oobs=(_line('archers', 400), None), weights=((10,), (400,))),
-                                 random.Random(3))
+                                 draw.seeded(draw.H2("test_mass_battle_order_of_battle", 3)))
     assert set(r) >= {'attacker_wins', 'degree', 'attacker_size_pct', 'defender_size_pct'}
 
 
@@ -214,7 +215,7 @@ def test_survivor_shares_of_an_order_of_battle_never_exceed_one():
     seen = []
     for seed in range(12):
         r = massbattle.resolve_field(_record(oobs=(_line('heavy_infantry', 120), _line('heavy_infantry', 120))),
-                                     random.Random(seed))
+                                     draw.seeded(draw.H2("test_mass_battle_order_of_battle", seed)))
         seen += [r['attacker_size_pct'], r['defender_size_pct']]
     assert max(seen) <= 1.0 and min(seen) >= 0.0, seen
     assert min(seen) < 1.0, "vacuous if no side took a casualty in twelve fields"

@@ -49,7 +49,8 @@ def teaching_tradition(lever, tier_idx, trads):
 def setup(repo):
     sys.path.insert(0, os.path.join(repo, 'systems/combat/combat_engine_v1/workbench'))
     sys.path.insert(0, repo)   # the repository root: `modules.combat` is a package
-    global BL, wrapper, S, CFG, AP, TRADS
+    global BL, wrapper, S, CFG, AP, TRADS, draw
+    from engine.dice_engine import draw
     import build_levers as BL
     from modules.combat import wrapper, combat_systems as S
     from modules.combat.config import CFG
@@ -86,7 +87,7 @@ def run_cell(repo, lever, tier_idx, level, kind, n):
     if kind == 'mirror':
         opp_spec = dict(opp_spec, equipped={name: float(level)}, known_traditions=(trad,))
     seed = cell_seed((lever, name, level, kind))
-    rng = random.Random(seed)
+    rng = draw.seeded(draw.H2("calibrate_generics", seed))
 
     # --- observation (pass-through; no rng, no state) ---
     rec = {}

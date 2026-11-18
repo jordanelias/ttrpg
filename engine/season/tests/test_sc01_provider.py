@@ -35,6 +35,7 @@ No test here asserts execution in the seed-0 realm (v9 §0.5's relaxed exit).
 from __future__ import annotations
 
 import random
+from engine.dice_engine import draw
 
 import pytest
 
@@ -143,7 +144,7 @@ def _record(**kw) -> SocialContestInput:
 
 def test_sc01_s15_the_entry_returns_a_margin_and_nothing_that_names_a_winner():
     SeasonDriver(P.tiny_world())                       # the registrar fills MODULE_ENTRIES
-    got = MODULE_ENTRIES[ENTRY].fn(_record(), random.Random(7))
+    got = MODULE_ENTRIES[ENTRY].fn(_record(), draw.seeded(draw.H2("test_sc01_provider", 7)))
     assert isinstance(got, Margin), type(got)
     assert set(Margin.__dataclass_fields__) == {"net", "ob", "terms"}, sorted(Margin.__dataclass_fields__)      # B05.14: and no winner, band or side
 
@@ -157,13 +158,13 @@ def test_sc01_s15_an_entry_returning_a_winner_is_refused_at_the_host_boundary(mo
     real = MODULE_ENTRIES[ENTRY]
     # THE CONTROL: the shipped entry passes the same boundary, on the same world and act.
     ok = sigma.resolve(w, [SPEAKER, PARTY], ["c"], "a standing", verb="tell", subject=PARTY,
-                       rng=random.Random(3))
+                       rng=draw.seeded(draw.H2("test_sc01_provider", 3)))
     assert ok["status"] == "RESOLVED" and ok["module"] == PROVIDER, ok
     monkeypatch.setitem(MODULE_ENTRIES, ENTRY,
                         ModuleEntry(real.role, real.entry, real.verb, real.target, lambda inp, rng: winner))
     with pytest.raises(Unspecified, match=r"social_contest\.roll.*not a `Margin`"):
         sigma.resolve(w, [SPEAKER, PARTY], ["c"], "a standing", verb="tell", subject=PARTY,
-                      rng=random.Random(3))
+                      rng=draw.seeded(draw.H2("test_sc01_provider", 3)))
 
 
 # ================================================================================================

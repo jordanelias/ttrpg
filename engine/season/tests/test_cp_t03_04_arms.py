@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import importlib
 import random
+from engine.dice_engine import draw
 from collections import Counter
 
 import pytest
@@ -125,7 +126,7 @@ def test_falsifier_arms_5_rolls_pool_11_and_is_attacked_at_ob_2_5_through_the_se
     seen = _spy(monkeypatch)
     checked = 0
     for s in range(6):
-        entry(inp, random.Random(s))
+        entry(inp, draw.seeded(draw.H2("test_cp_t03_04_arms", s)))
         checked += 1
     # B05.99 re-pin (B05.09: the skill score has no attribute; B05.57/B05.58: the fight's pool is `pool_of(score, addends, 6, 5)`
     # and its Ob `opposed_ob(defender's score, 0.5)`): b scores the untrained 2, so a meets Ob 1.0 and b rolls pool 8 -- the

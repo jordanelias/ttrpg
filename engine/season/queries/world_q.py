@@ -1155,7 +1155,7 @@ def season_factor_of(w: World, territory: Optional[str] = None) -> float:
                           law="IN-21: each season of the year holds the equally likely multipliers it draws from")
     draw = draw_factory(w.world_seed, lambda: w.tick)("world" if territory is None else territory,
                                                       "season_factor")
-    return base * draw.choice(outcomes)
+    return base * draw.pick(outcomes)
 
 
 def _site_rungs(w: World) -> list:

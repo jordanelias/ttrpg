@@ -26,6 +26,7 @@ the roster `[storm]` fans nothing in `operand_bags` and `[storm, besiege]` fans 
 from __future__ import annotations
 
 import random
+from engine.dice_engine import draw
 
 import pytest
 
@@ -143,7 +144,7 @@ def test_planted_failure_ignoring_the_posture_leaves_the_condition_where_it_was(
 def _attacker_share(w):
     """Attacker win share over the paired `SEEDS`, on the record `field_input` builds from the world as it stands."""
     inp = _record(w)
-    wins = sum(bool(_mb().resolve_field(inp, random.Random(s))["attacker_wins"]) for s in SEEDS)
+    wins = sum(bool(_mb().resolve_field(inp, draw.seeded(draw.H2("test_cp_t04_06_besiege", s)))["attacker_wins"]) for s in SEEDS)
     return wins / len(SEEDS), inp.walls_dr
 
 

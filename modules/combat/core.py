@@ -4,7 +4,7 @@ Stage 1a / D0-2) so every subsystem resolves identically. No A/B knowledge here.
 
 [ED-1085 container de-leak] The sigma math comes from sigma_leverage (parity-tested against the numpy originals
 at 1e-9 — engine/tests/test_sigma_leverage_parity.py); the engine's own combat-state constants live here / in
-combatant.py. The RNG contract: `rng` is a stdlib random.Random (rng.gauss). The continuous engine's distribution
+combatant.py. The RNG contract: `rng` is a `Draw` (rng.normal). The continuous engine's distribution
 is Normal(mu*N, sigma*sqrt(N)), same per-die TN table."""
 import functools
 from engine.dice_engine.fmath import tanh, exp   # one owner per transcendental (B06.02)

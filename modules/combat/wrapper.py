@@ -263,7 +263,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
         actors=[c for c in (A,B) if ready[c]>=cfg['ACT_THRESHOLD']]
         if not actors: continue
         if len(actors)==2:
-            aggressor = max(actors, key=lambda c: ready[c]) if ready[A]!=ready[B] else actors[rng.randrange(2)]   # stdlib uniform int (ED-1085)
+            aggressor = max(actors, key=lambda c: ready[c]) if ready[A]!=ready[B] else actors[rng.below(2)]   # uniform int
         else:
             aggressor = actors[0]
         defender = B if aggressor is A else A
@@ -561,7 +561,7 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None, terms=LETHAL_
             raise ValueError("Yield.by must be the A or B Combatant passed to fight (compared by identity)")
         if not (1 <= yield_decl.turn <= max_bouts):
             raise ValueError(f"Yield.turn {yield_decl.turn} is outside 1..max_bouts ({max_bouts}): it would never fire")
-    cfg=cfg or CFG; rng=rng or random.Random()   # stdlib RNG (ED-1085 numpy de-leak; pass random.Random(seed) for determinism)
+    cfg=cfg or CFG; rng=rng or random.Random()   # pass draw.seeded(...) for determinism
     # A FIGHT BEGINS UNWOUNDED: zero each tracker's damage here, at the fight's own start (PC-13's `wound` events sum to
     # the tracker within one fight). `_init_live` calls `Combatant.rederive(cfg)`, the one derivation path (PC-14),
     # which reads the fighter's attributes as they stand now (an attribute edited after construction is followed) and

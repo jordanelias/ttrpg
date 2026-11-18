@@ -18,6 +18,7 @@ docstring — is intentionally NOT fixed here (ED-WR-0005 Stratum-B tail).
 import os
 import sys
 import random
+from engine.dice_engine import draw
 
 _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 if _REPO_ROOT not in sys.path:
@@ -40,7 +41,7 @@ def test_ed871_mending_zero_coherence_every_degree():
     """attempt_mending nets 0 Coherence for ALL degrees, including Partial/Failure."""
     degrees = set()
     for seed in range(300):
-        r = attempt_mending(_Practitioner(), {"scale": "Relational"}, rng=random.Random(seed))
+        r = attempt_mending(_Practitioner(), {"scale": "Relational"}, rng=draw.seeded(draw.H2("test_thread_mending_ed871", seed)))
         degrees.add(r.degree)
         assert r.coherence_delta == 0, (
             f"Mending {r.degree} cost {r.coherence_delta} Coherence — ED-871 requires 0 at every degree"
@@ -58,7 +59,7 @@ def test_ed871_exemption_is_mending_only():
     """
     saw_penalized = False
     for seed in range(300):
-        r = attempt_weaving(_Practitioner(), {"scale": "Relational"}, rng=random.Random(seed))
+        r = attempt_weaving(_Practitioner(), {"scale": "Relational"}, rng=draw.seeded(draw.H2("test_thread_mending_ed871", seed)))
         if r.degree in ("Partial", "Failure"):
             assert r.coherence_delta == -2, (
                 f"Weaving {r.degree} cost {r.coherence_delta}; expected -2 (base -1 + blanket -1) "

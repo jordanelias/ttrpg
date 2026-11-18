@@ -202,7 +202,7 @@ def roll_pool(pool_size: int, tn: int = 7, ob: int | float | None = None,
     if rng is None:
         rng = random.Random()
     effective_pool = max(1, pool_size)  # params/core.md §Pool Minimum
-    rolls = [rng.randint(1, 10) for _ in range(effective_pool)]
+    rolls = [rng.die(1, 10) for _ in range(effective_pool)]
     net = sum(_die_result(face) for face in rolls)
     deg = degree_from_net(net, ob) if ob is not None else None
     return RollResult(tn=tn, rolls=rolls, net=net, degree=deg, ob=ob)
@@ -225,7 +225,7 @@ def continuous_engine_sample(pool: float, tn: int = 7,
     mu, sigma = _MU_PER_DIE, _SIGMA_PER_DIE
     mean = mu * pool
     std = sigma * math.sqrt(pool)
-    return rng.gauss(mean, std)
+    return rng.normal(mean, std)
 
 
 def degree_from_net(net: int | float, ob: int | float,

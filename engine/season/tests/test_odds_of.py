@@ -17,6 +17,7 @@ from __future__ import annotations
 import inspect
 import math
 import random
+from engine.dice_engine import draw
 from dataclasses import asdict
 
 import pytest
@@ -81,7 +82,7 @@ N_DEALT = 20_000
 def _dealt_tally(inp, n=N_DEALT, seed=7) -> list:
     """`n` real rolls of the record `inp`, graded by the real ladder: the bands the fold would deal."""
     mod = _module()
-    rng = random.Random(seed)
+    rng = draw.seeded(draw.H2("test_odds_of", seed))
     tally = [0, 0, 0, 0]
     labels = {v: k for k, v in DEGREE_LABEL.items()}
     for _ in range(n):
@@ -189,7 +190,7 @@ def test_mode_a_has_no_odds_where_s27_4_refuses_and_resolve_refuses_the_same_pai
     w = _world()
     act = _tell("p_mid")
     prize = VERB_TABLE["tell"].contests
-    claim = lambda: dict(verb="tell", subject="p_mid", rng=random.Random(3))
+    claim = lambda: dict(verb="tell", subject="p_mid", rng=draw.seeded(draw.H2("test_odds_of", 3)))
     control = sigma.resolve(w, ["p_low", "p_mid"], ["root"], prize, **claim())
     assert control["status"] == "RESOLVED" and sigma.odds_of(w, act) is not None
     # (1) the pool below the 1D floor. B05.25 made the pool the governing score plus the rank (an `untrained: none` row no longer

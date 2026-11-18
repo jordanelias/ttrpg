@@ -24,7 +24,7 @@ class _WinRng:
     def random(self):
         return 0.0
 
-    def randrange(self, n):
+    def below(self, n):
         raise AssertionError('a won read must not guess')
 
 

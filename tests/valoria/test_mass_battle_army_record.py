@@ -6,6 +6,7 @@ a recruit limit that ignored population, or infrastructure, or a type's own kind
 test named for that; a record operation that lost or invented a man fails the conservation test.
 """
 import random
+from engine.dice_engine import draw
 
 import pytest
 
@@ -165,7 +166,7 @@ def test_validate_rejects_a_malformed_record():
 def _field(oob_a, oob_b):
     return massbattle.resolve_field(MassBattleInput(
         weights=((10,), (10,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None, origin=None,
-        loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, orders_of_battle=(oob_a, oob_b)), random.Random(7))
+        loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, orders_of_battle=(oob_a, oob_b)), draw.seeded(draw.H2("test_mass_battle_army_record", 7)))
 
 
 def test_an_army_record_fights():

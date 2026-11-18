@@ -20,6 +20,7 @@ from modules.combat import vocabulary as V   # the token ALPHABET (ED-PC-0042) �
                          # tokens here does NOT breach this module's no-systems/core-at-module-scope discipline.
 from modules.combat.combatant import WEAPONS, HALFSWORD_FORM, HALFSWORD_BASE   # pure data; no systems/core at module scope (cycle-free)
 from modules.combat.config import CFG   # pure data (GRAB_SHORT_REACH_M); no cycle risk
+from engine.dice_engine import draw
 
 def _affords_point(w):
     """Local import (combat_systems.py sits above this module in the dependency order — importing it at module
@@ -152,9 +153,9 @@ if __name__ == '__main__':
     # fixed dominance edge and confirm every declared outcome token fires at least once.
     import random
     seen_outcomes = set()
-    rng = random.Random(0)
+    rng = draw.seeded(draw.H2("capabilities", 0))
     for _ in range(4000):
-        seen_outcomes.add(CT.grab_outcome(rng.uniform(-1.5, 1.5), rng, CFG))
+        seen_outcomes.add(CT.grab_outcome((rng.random() * 3.0 - 1.5), rng, CFG))
     e_ok = seen_outcomes == set(CT.GRAB_OUTCOMES)
     checks.append(e_ok)
     print(f"(e) grab_outcome menu reachable across seeds ({sorted(seen_outcomes)}): {'OK' if e_ok else 'FAIL — missing ' + str(set(CT.GRAB_OUTCOMES)-seen_outcomes)}")

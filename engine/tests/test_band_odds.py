@@ -24,6 +24,7 @@ import importlib
 import math
 import os
 import random
+from engine.dice_engine import draw
 import sys
 
 import pytest
@@ -61,7 +62,7 @@ def _by_hand(pool, ob, boost=0.0, floors=None):
 
 def _sampled(pool, ob, boost, n=N_SAMPLED, seed=1) -> list:
     """`n` rolls of the one sampler plus the boost, graded by the one ladder: the bands a roll deals."""
-    rng = random.Random(seed)
+    rng = draw.seeded(draw.H2("test_band_odds", seed))
     tally = [0, 0, 0, 0]
     for _ in range(n):
         net = SL.roll_net_continuous(pool, rng=rng) + boost
@@ -131,10 +132,10 @@ def test_below_one_die_there_is_one_rule():
     assert SL.net_boost(1.0, 0.25) == pytest.approx(SL.soft_cap(1.0) * 0.8 * math.sqrt(0.25))
     assert SL.net_boost(1.0, 0.25) != SL.net_boost(1.0, 1)
     assert SL.band_odds(0.25, 1) != SL.band_odds(1, 1)
-    mean = sum(SL.roll_net_continuous(0.25, rng=r) for r in [random.Random(3)] for _ in range(40_000)) / 40_000
+    mean = sum(SL.roll_net_continuous(0.25, rng=r) for r in [draw.seeded(draw.H2("test_band_odds", 3))] for _ in range(40_000)) / 40_000
     assert abs(mean - 0.4 * 0.25) < 4 * 0.8 * math.sqrt(0.25) / math.sqrt(40_000)       # not the one-die mean 0.4
     # no pool at all: nothing is rolled and the roll is the boost alone (net 0); the ladder grades it as such
-    assert SL.roll_net_continuous(0, rng=random.Random(0)) == 0.0
+    assert SL.roll_net_continuous(0, rng=draw.seeded(draw.H2("test_band_odds", 0))) == 0.0
     assert SL.band_odds(0, 1) == (1.0, 0.0, 0.0, 0.0)
     assert SL.band_odds(0, 0) == (0.0, 1.0, 0.0, 0.0)
 

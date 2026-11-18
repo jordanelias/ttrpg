@@ -737,7 +737,7 @@ def generated_attributes(world_seed: int, pid: str, span: Any) -> dict:
             law="B01a.01 -- one keyed draw per person and attribute, uniform on the declared range")
     lo, hi = span
     draw = draw_factory(world_seed, lambda: 0)
-    return {key: draw(pid, f"attr.generated:{key}").randint(lo, hi) for key in ATTRIBUTES}
+    return {key: draw(pid, f"attr.generated:{key}").die(lo, hi) for key in ATTRIBUTES}
 
 
 @dataclass

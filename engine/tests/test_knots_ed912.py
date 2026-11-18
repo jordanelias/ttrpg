@@ -19,6 +19,7 @@ knots/ is an island (no campaign callers), so the F7 + seed-0 campaign goldens a
 import os
 import sys
 import random
+from engine.dice_engine import draw
 
 import pytest
 
@@ -54,7 +55,7 @@ def test_ed912_formation_starts_at_tier_gauge_start():
     for seed in range(80):
         knots.reset_knots()
         k = knots.form_knot("A", "B", actor_a_obj=_FormActor(), actor_b_obj=_FormActor(),
-                            rng=random.Random(seed))
+                            rng=draw.seeded(draw.H2("test_knots_ed912", seed)))
         if k is not None:
             formed += 1
             assert k.strain == knots.TIER_START[k.tier], (

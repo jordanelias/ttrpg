@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import math
 import random
+from engine.dice_engine import draw
 from dataclasses import replace
 
 import pytest
@@ -102,7 +103,7 @@ def _realised_won(w, seed0):
     won = 0
     for i in range(REALISED):
         r = wrapper.resolve(w, claimants, ["mz_march"], "a field", verb="march", subject=DEF_FACTION, rung=TARGET,
-                            rng=random.Random(seed0 + i))
+                            rng=draw.seeded(draw.H2("test_cp_t04_08_field_estimate", seed0 + i)))
         assert r["status"] == "RESOLVED", r
         won += bool(r["attacker_wins"])
     return won / REALISED
@@ -224,7 +225,7 @@ def test_the_rng_is_keyed_on_world_seed_tick_actor_and_estimate_and_nothing_else
     fed = wrapper._fed(w, inp, (wrapper._seat_treasury(w, KING_SEAT), wrapper._defender_treasury(w, TARGET)))
     entry, refusal = entry_for(wrapper._PRIZE, wrapper._PROVIDER)
     assert entry is not None, refusal
-    rng = random.Random(int(H(w.world_seed, w.tick, ACTOR, "estimate"), 16))
+    rng = draw_factory(w.world_seed, lambda: w.tick)(ACTOR, "estimate")
     won = sum(bool(entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)["attacker_wins"]) for _ in range(SHOWN))
     assert got["Won"] == won / SHOWN and got["Lost"] == (SHOWN - won) / SHOWN
     other_tick = _build(9, True, None)

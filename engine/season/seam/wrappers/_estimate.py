@@ -12,8 +12,9 @@ generator, so an estimate reads `World` and writes nothing, and asking twice in 
 A LEAF, as `_entry.py` is: `gaps` and `state.ids` only, so no import here closes a loop into the seam."""
 from __future__ import annotations
 
-import random
 from typing import Any
+
+from engine.dice_engine.draw import Draw
 
 from ...gaps import Forbidden
 from ...state.ids import draw_factory
@@ -29,7 +30,7 @@ def samples_of(w: Any) -> int:
     return n
 
 
-def rng_of(w: Any, actor: str) -> random.Random:
+def rng_of(w: Any, actor: str) -> Draw:
     """The estimate's private stream, keyed `(world_seed, tick, actor, "estimate")`: `state.ids.draw_factory`'s one
     seeding rule, read at the call's tick."""
     return draw_factory(w.world_seed, lambda: w.tick)(actor, "estimate")

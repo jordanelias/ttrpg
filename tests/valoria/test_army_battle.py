@@ -14,6 +14,7 @@ army Record for each whose one unit holds that cohort's whole 120.
 from __future__ import annotations
 
 import random
+from engine.dice_engine import draw
 from types import SimpleNamespace
 
 import pytest
@@ -157,7 +158,7 @@ def test_the_provider_names_each_sides_faction_and_the_entry_receives_both_order
     act = _march_act()
     w.acts.append(act)
     attackers = world_q.mustered(w, ORIGIN, ATTACKER)
-    r = resolve(w, attackers, [act.id], "a field", subject=DEFENDER, rung=TARGET, rng=random.Random(11))
+    r = resolve(w, attackers, [act.id], "a field", subject=DEFENDER, rung=TARGET, rng=draw.seeded(draw.H2("test_army_battle", 11)))
     assert r["status"] == "RESOLVED" and r["unopposed"] is False, r
     (oobs,) = seen
     assert oobs[0] is not None and oobs[1] is not None, "the provider did not find both factions' armies"
