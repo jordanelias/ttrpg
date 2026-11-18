@@ -639,6 +639,7 @@
     "none": 0.62
    },
    "READ_K": 0.5,
+   "READ_SCALE": 1.0,
    "READ_TEMPO_K": 0.05,
    "REAR_CLEARANCE_STR_K": 0.15,
    "REAR_CLEARANCE_TEMPO_K": 0.3,

@@ -331,4 +331,8 @@ CFG = dict(
   # the hand-before-foot benefit saturates); ARREST_POB_REF: PoB_frac at/above which a weapon is too FRONT-HEAVY to brace
   # as a pole-jab (rear_balance ramps 1.0 at PoB_frac 0 down to 0 at the REF).
   TRUE_TIME_REF=1.5, ARREST_POB_REF=0.6,
+
+  # ── B14.18 (U5b_PC_residue §1 item 2): the scale of the read's logistic in read_contest, p_read = logistic((read_d-read_a)/READ_SCALE);
+  # was the literal 1.0 (byte-identical), now carried by the export so a sweep can fit it. [SIM-CALIBRATE]
+  READ_SCALE=1.0,
 )

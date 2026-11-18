@@ -1002,7 +1002,7 @@ def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d
     # revert: a constant read value]. Agility reaches only this step of the read: mode_sigma's rd, init_emphasis_sigma and
     # tempo_pressure use the bare Perception difference (a lateral-consistency question for NERS S, not decided here).
     read_a=(reading(aggressor,cfg)+cfg['AGI_READ_K']*(aggressor.agi-NEUTRAL['agi']))*TR.eff_cw(aggressor,'visual')+consistency_a
-    p_read=core.logistic((read_d-read_a)/1.0)
+    p_read=core.logistic((read_d-read_a)/cfg['READ_SCALE'])
     read_win=rng.random() < p_read
     modes=list(V.DEFENCE_MODES)   # ORDERED: modes[rng.randrange(3)] below makes the sequence part of the RNG contract
     msig={m:mode_sigma(m,aggressor,defender,commit,read_win,fat_d,cfg) for m in modes}
