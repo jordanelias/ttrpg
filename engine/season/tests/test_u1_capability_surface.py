@@ -785,7 +785,8 @@ def test_fed_by_on_an_arrest_lists_its_dice_and_opposes_rows():
     from engine.season.harness import probes as P
     from engine.season.seam.wrappers import pool, sigma
     w = P.tiny_world()
-    assert dice[4] == pool.score(w, w.persons["p_low"], "arrest") and isinstance(dice[4], int)
+    # B05 close: the `dice` value is the pool's own base (B05.25: the governing score plus the rank), not `score` (`max(pool_default, rank)`)
+    assert dice[4] == pool.governing_score(w, w.persons["p_low"], "arrest") + pool.rank(w.persons["p_low"], "arrest")
     assert dice[5] == pool.faculty(w, w.persons["p_low"], "arrest") == out["pool"]
     # B05.14 (A-137; B05.99 re-pin): the `opposes` row's value is the opposition operand, his skill score PLUS his opposing
     # attribute (`_opposing`; the mid-point where unheld, B05.16), was the skill score alone (`_opposition_of`)
