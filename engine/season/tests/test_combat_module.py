@@ -368,3 +368,47 @@ def test_an_undecided_fight_is_witnessed_by_those_present():
         assert [pid for pid in w.persons if not held[pid]], (kind, "everyone witnessed: the non-witness clause is vacuous")
         checked += 1
     assert checked == 2
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B14.03 (D-U1-06, C3-L5, F-PC-08 (a)): A FELLING RECORDS ITS SOURCE AND WEAPON, NEVER A DOER.
+# ---------------------------------------------------------------------------------------------------------------------
+def test_a_felling_deposits_fell_to_under_observation_terms():
+    """The felled party's Subject carries `(victim, "fell_to", "<source>:<weapon>")` on the Event it earns
+    (`person.died`), as `broke_observed` carries `broke`; WITNESS deposits it to the act's actor (the shipped
+    `observation_deposit_mode`). FALSIFIER: a felling whose Event has no `fell_to`; a value that names a person (either
+    party, or anyone in the world); a `fell_to` on a party the beat did not fell, or on a scene with no beat (the seam
+    lifts `None` for an unfelled fight), or on a wound that did not kill. Read on the real fold and WITNESS."""
+    from .test_cp_t03_02_band_ending_and_body import (ACTOR, SUBJECT, FELLED, UNTOUCHED, WOUNDED, _fight as scene)
+    beat = {"by": ACTOR, "victim": SUBJECT, "source": "stophit", "weapon": "longsword", "round": 2}
+    want = "stophit:longsword"
+    checked = 0
+    # (a) the beat's victim is felled: his Event carries it, and nobody else's does
+    for a, s in ((WOUNDED, FELLED), (UNTOUCHED, FELLED)):
+        w, out, _b = scene(a, s, aid=f"b1403_{checked}", beat=beat)
+        fell = [(e.kind, o) for e in out for o in e.observed if o.predicate == "fell_to"]
+        assert fell, (a, s, "a felling's Event carries no fell_to", [(e.kind, e.observed) for e in out])
+        for kind, o in fell:
+            assert kind == "person.died" and o.subject == SUBJECT and o.value == want, (kind, o)
+            assert not any(pid in str(o.value) for pid in w.persons), o
+            assert ACTOR not in o.value and SUBJECT not in o.value, o
+            checked += 1
+        # WITNESS: the act's actor (the shipped mode) holds the claim; a non-witness holds none
+        held = {p.id: [c.value for c in p.ledger if c.subject == SUBJECT and c.predicate == "fell_to"]
+                for p in w.persons.values()}
+        assert held[ACTOR] == [want], (a, s, held)
+        assert [pid for pid in w.persons if pid != ACTOR and not held[pid]], (a, s, "everyone holds it: the clause is vacuous")
+        assert all(h == [] for pid, h in held.items() if pid != ACTOR), held
+        checked += 1
+    # (b) the beat names the other party: the actor's own felling carries it, the standing subject's does not
+    flipped = {**beat, "by": SUBJECT, "victim": ACTOR}
+    _w, out, _b = scene(FELLED, WOUNDED, aid="b1403_flip", beat=flipped)
+    assert [o.subject for e in out for o in e.observed if o.predicate == "fell_to"] == [ACTOR], [e.observed for e in out]
+    checked += 1
+    # (c) controls: no beat, no `fell_to`; a wound that did not fell carries none even where a beat is on the result
+    for a, s, b in ((WOUNDED, FELLED, None), (UNTOUCHED, WOUNDED, beat), (UNTOUCHED, UNTOUCHED, beat)):
+        _w, out, _b = scene(a, s, aid=f"b1403_c{checked}", beat=b)
+        assert out, (a, s)
+        assert not [o for e in out for o in e.observed if o.predicate == "fell_to"], (a, s, b, [e.observed for e in out])
+        checked += 1
+    assert checked >= 8

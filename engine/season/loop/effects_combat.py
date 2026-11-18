@@ -214,7 +214,10 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         own = () if band == FELLED else own_kinds(row.emits_at(band))
         own = tuple(k for k in own if (k != DUEL_YIELDED or pid == yielder) and k not in GROWN_KINDS)
         if bodies[pid] == 0:
-            named += death_subjects(w, pid, own, fields=("body",))
+            # B14.03: THE FELLED PARTY'S OWN SUBJECT (the first `death_subjects` names; the seats follow) carries the
+            # wound that felled him, a source and a weapon and no doer, on the death Event WITNESS deposits.
+            dead = death_subjects(w, pid, own, fields=("body",))
+            named += (replace(dead[0], observed=fell_observed(pid, res.result.get("beat"))),) + dead[1:]
             continue
         # CP-T03-02 (ii): A WOUNDED PARTY'S SUBJECT CARRIES WHAT HIS BODY NOW IS -- `(pid, "body", v)`, `v` the
         # value `perform` WRITES (`bodies`), never `w.persons[pid].body` read here, which is the pre-fight body
@@ -299,6 +302,20 @@ def broke_observed(pid: str, broke: "str | None") -> tuple:
     cause rides `Event.observed`, deposited by WITNESS as `body_observed` is. [ASSUMPTION; medium; Jordan to correct;
     revert: the Observation, and the field's cause is unnamed]"""
     return (Observation(pid, BROKE_STEM, True),) if pid == broke else ()
+
+
+FELL_TO_STEM = "fell_to"
+
+
+def fell_observed(pid: str, beat: "dict | None") -> tuple:
+    """B14.03 (D-U1-06, C3-L5): the Observation a felled party's Subject carries -- `(pid, "fell_to", "<source>:<weapon>")`,
+    read off the scene's `DecisiveBeat` (lifted onto the result as a dict) -- or `()` where the scene names no beat or the
+    beat's victim is another party. It names the engine's site of the wound and the weapon, NEVER the striker (`beat["by"]`
+    is not read): a deed others can hold without a doer. An Event carries no payload, so the cause rides `Event.observed`
+    as `broke_observed`'s does. [ASSUMPTION; medium; Jordan to correct; revert: drop the Observation]"""
+    if not beat or beat.get("victim") != pid:
+        return ()
+    return (Observation(pid, FELL_TO_STEM, f"{beat['source']}:{beat['weapon']}"),)
 
 
 def fight_ending(w: "World", parties, res: "Resolution", above) -> tuple:
