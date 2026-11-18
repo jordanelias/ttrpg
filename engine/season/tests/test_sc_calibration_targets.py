@@ -142,7 +142,7 @@ def _cell(fx, label: str, *, rank: int, level: str = "routine", opposed_rank: Op
         fields.update(got)
     leverage = sigma.advantage_sigma(fx, {sigma.EFFORT: 0, sigma.EDGE: (), "proofs": 0.0, "reception": reception, sigma.OFFICE: None,
                                           "regard": regard})
-    inp = SocialContestInput(pool=pool_, obstacle_ceiling=fx.get("obstacle_ceiling"), ceiling_per_pool=fx.get("ceiling_per_pool"),
+    inp = SocialContestInput(pool=pool_, obstacle_ceiling=fx.get("obstacle_ceiling"), ceiling_per_pool=fx.get("ceiling_per_pool"), ceiling_form=fx.get("ceiling_form"),
                              obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"), leverage=leverage,
                              difficulty=float(fx.get("difficulty_ob")[level]), reception=reception, reception_gain=fx.get("reception_gain"),
                              **{**fields, "obstacle_operands": tuple(operands)})
