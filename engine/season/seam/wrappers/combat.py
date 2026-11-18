@@ -236,7 +236,7 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
         scores=(_fight_score(w, pa, verb), _fight_score(w, pb, verb)),
         addends=(addends_of(w, pa, verb), addends_of(w, pb, verb)),
         pool_add=w.fixtures.get("pool_add"), pool_floor=w.fixtures.get("pool_floor"),
-        opposition_rate=None,               # B05: the module's own constant (0.5); B15's `29_DICE` 29-3 makes it `fx.get("opposition_rate")`
+        opposition_rate=None,               # None until 29-3 (B15): the fixture is live for the social roll since B05; the fight flips with its scale (A-71, A-31)
         **({} if terms is None else dict(terms=terms)),
         # PC-06 K-1: the attributes each party HOLDS (authored or drawn), whenever either party holds any -- under the
         # shipped build (`cast_attributes=True`) every person does, so this always passes them; the field's default (the

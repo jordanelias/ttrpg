@@ -243,8 +243,7 @@ def degree_from_net(net: int | float, ob: int | float,
     nets. `ob` is RULED to become fractional (Jordan, 2026-08-14). An obstacle a person opposes
     with is `sigma_leverage.opposed_ob(his skill score, opposition_rate)`, `MU_PER_DIE` (0.4) a
     point (A-26, A-71, A-79), composed by the module owners `modules/social_contest/roll.py::obstacle`
-    and `modules/combat/core.py::ob_from_defender` (the latter reads `faculty / 2.0` until B05.58
-    moves it onto `opposed_ob`); hostile terms add, nothing lowers it.
+    and `modules/combat/core.py::ob_from_defender`; hostile terms add, nothing lowers it.
     ⚠ (ED-IN-0202) The derivation is implemented at some sites:
     `systems/factions/sim/crown_initiative.py::coronation_renewal_ob` implements
     `floor(Church.L / 2) + 1` exactly, Royal Progress derives its Ob from the standing

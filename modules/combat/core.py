@@ -36,6 +36,7 @@ from . import weapon_physics as WP   # percussion authority lives ONCE in WP (th
 TN = SL.TN_STANDARD
 POOL_FLOOR = 5     # [canonical: params/core.md §Derived Scores (Combat Pool min 5)]
 BASE_POOL = 6      # [class-C: armature — faculty-driven pool base; pool = max(5, faculty+6), ED-901 (History until CR-85, ED-IN-0330); relocated verbatim from r1, ED-1085]
+OPPOSITION_RATE = 0.5   # control (today's half-score); flips to DE.MU_PER_DIE at item 29-3 (A-71)
 
 def resolution_pool(score, addends=0, add=BASE_POOL, floor=POOL_FLOOR):
     """THE FIGHT'S POOL: `sigma_leverage.pool_of(score, addends, add, floor)` = `max(floor, score + addends + add)` (A-6, D-U1-08,
@@ -67,7 +68,7 @@ def band_floor(band, ob):
     The workbench's displayed distribution and `strike()`'s overwhelming tail both need an edge, so the edge is
     DERIVED here rather than copied. Exact to the float: `degree(band_floor(b, ob), ob)` is `b` and the next float down is not.
     The +/-64 bracket around `ob` is asserted, not assumed (the owner's edges sit within 3 of `ob`). Pure; cached
-    per (band, ob) — Ob is faculty/2, so a fight touches a handful of values. `band` is 'partial', 'success' or
+    per (band, ob) — Ob is `opposed_ob(faculty, rate)`, so a fight touches a handful of values. `band` is 'partial', 'success' or
     'overwhelming': 'fail' is the lowest band and has no edge (it fails the bracket assert)."""
     k = DE.DEGREE_ORDINAL[_DEGREE_OF[band]]
     rank = lambda x: DE.DEGREE_ORDINAL[DE.degree_from_net(x, ob)]
@@ -82,21 +83,18 @@ def band_floor(band, ob):
         else:
             lo = mid
 
-def ob_from_defender(defender):
-    """RULED Ob-derivation (Jordan, 2026-08-15, verbatim: "DECISIVE_OB for combat is stupid as hell and is dead
-    because Ob should be determined by your opponent more than anything" — tests/valoria/test_degree_ladder_
-    single_owner.py's RULINGS dict, entry "2026-08-15 — combat, and the sequence"). Score/2 plus that instance's
-    modifiers, the SAME reading modules/social_contest/roll.py::obstacle applies (under its H-213 ceiling) for a person subject
-    on the season side. This resolver's own score is `faculty` — the SAME score resolution_pool() derives dice
-    from (ED-901): `faculty` is the party's skill score for the verb (`engine/season/seam/wrappers/pool.py::score`), passed
-    in through `PersonalCombatInput.scores` (CR-85, ED-IN-0330; B05.57); one value per party feeds his pool and the Ob he
-    is attacked against. His registered addends (`PersonalCombatInput.addends`) feed his pool alone.
+def ob_from_defender(defender, cfg):
+    """The obstacle a struck party presents: `sigma_leverage.opposed_ob(his skill score, rate)`, the one owner of the opposition
+    (A-26, A-71), where the rate is `cfg['OPPOSITION_RATE']` (an arm's override; the record's `opposition_rate`, `fight.py`) or,
+    absent, this module's `OPPOSITION_RATE` (the control, 0.5). RULED Ob-derivation (Jordan, 2026-08-15, verbatim: "DECISIVE_OB
+    for combat is stupid as hell and is dead because Ob should be determined by your opponent more than anything" --
+    tests/valoria/test_degree_ladder_single_owner.py's RULINGS dict, entry "2026-08-15 — combat, and the sequence").
+    The operand is `defender.faculty`, the party's SKILL SCORE for the verb (`engine/season/seam/wrappers/pool.py::score`), passed
+    in through `PersonalCombatInput.scores` (CR-85, ED-IN-0330; B05.57) -- the SAME score `resolution_pool()` derives dice from
+    (ED-901); one value per party feeds his pool and the Ob he is attacked against. His registered addends
+    (`PersonalCombatInput.addends`) feed his pool alone, never the Ob.
     [ASSUMPTION; medium; Jordan to correct; revert: the faculty value feeds the pool only and the Ob reads the class
     default 3] -- the CR-85 design is UNRATIFIED (ED-IN-0351).
-    ⚠ THE OB READS MORE THAN THE SOCIAL CONTEST'S DOES (Phase 3, B10-11): `faculty` carries `pool_default` as the
-    pool's fallback, which `seam/wrappers/sigma.py::_opposition_of` ("NEVER THE FALLBACK AND NEVER PRACTICE") leaves out
-    (the practice addend is no longer here: B05.57 carries it in `addends`, which feed the pool alone). A person holding no key is attacked at Ob 1.0 here and at `opposed_ob(pool_default)` (plus the act's difficulty) in a
-    social contest: two ladders for one quantity.
     NO INSTANCE MODIFIER IS ADDED HERE. Wound impairment already has its OWNER
     (combat_systems.wound_impairment, ED-1041) and is folded into net_sigma at every call site (bind_sigma,
     the defence assembly, reach_sigma, pursuit_sigma) — adding a second wound term onto Ob would double-count
@@ -104,7 +102,7 @@ def ob_from_defender(defender):
     by dsig, which already shaped the roll via net_sigma (audit C-2: avoid double-counting defender skill)").
     A genuine per-instance Ob modifier would be a NEW term with its own owner, not folded into this function
     silently. Pure."""
-    return defender.faculty / 2.0
+    return SL.opposed_ob(defender.faculty, cfg.get('OPPOSITION_RATE', OPPOSITION_RATE))
 
 
 def resolve(pool, net_sigma, rng, ob):
@@ -112,7 +110,7 @@ def resolve(pool, net_sigma, rng, ob):
     (boost = eff_sigma*sigma_N = soft_cap(net_sigma)*sigma_n(pool)), it does NOT shift the Ob.
     SL.eff_ob is display-only per its own docstring; resolving via the floored Ob-shift distorted the degree
     bands (overwhelming trivialised by the Ob-floor).
-    `ob`: the RULED Ob-from-defender value (Jordan 2026-08-15) — callers pass `ob_from_defender(defender)`.
+    `ob`: the RULED Ob-from-defender value (Jordan 2026-08-15) — callers pass `ob_from_defender(defender, cfg)`.
     REQUIRED rather than defaulted, so no caller can skip the derivation (ED-PC-0058).
     Returns (deg, net)."""
     net = roll_net(pool, rng) + SL.soft_cap(net_sigma) * SL.sigma_n(pool)
@@ -573,7 +571,7 @@ def strike(attacker, defender, deg, cfg, net=None, pool=None):
         # severity beyond the overwhelming bar THIS roll was banded at: the owner's edge at the defender's Ob (PC-03).
         # Every caller banded its roll at ob_from_defender(defender) of this same `defender` (wrapper: the exchange,
         # the stop-hit, the pursuit).
-        z=max(0.0,(net-band_floor('overwhelming', ob_from_defender(defender)))/SL.sigma_n(pool))
+        z=max(0.0,(net-band_floor('overwhelming', ob_from_defender(defender, cfg)))/SL.sigma_n(pool))
         q=1.5+(OW_MAX-1.5)*tanh(z/OW_Z)
     head=getattr(attacker, 'sel_head', None) or attacker.head    # the SELECTED use-mode head (systems.select_mode, set by the wrapper); falls back to the native head
     gap=getattr(attacker, 'sel_gap', None); gap = gap if gap is not None else attacker.w['gap']

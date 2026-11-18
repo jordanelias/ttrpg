@@ -209,7 +209,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                     continue
                 else:                                            # READ -> the closer pursues into the withdrawal (Nachreisen)
                     pool=max(1, _pool_dice(shorter, cfg))
-                    deg,net=core.resolve(pool, S.pursuit_sigma(shorter, longer, ffat[shorter], ffat[longer], cfg, TR), rng, core.ob_from_defender(longer))   # ED-PC-0036: systems.pursuit_sigma owns the formula (the whole sigma-assembly: armour, wounds, the withdrawer's attributes). Ob-from-defender (ED-PC-0058): `longer` is struck if the pursuit lands, so `longer` is the defender this roll is against.
+                    deg,net=core.resolve(pool, S.pursuit_sigma(shorter, longer, ffat[shorter], ffat[longer], cfg, TR), rng, core.ob_from_defender(longer, cfg))   # ED-PC-0036: systems.pursuit_sigma owns the formula (the whole sigma-assembly: armour, wounds, the withdrawer's attributes). Ob-from-defender (ED-PC-0058): `longer` is struck if the pursuit lands, so `longer` is the defender this roll is against.
                     _emit('disengage', longer=longer.label, shorter=shorter.label, ok=False, pursued=True, degree=deg)
                     if deg in ('success','overwhelming'):
                         d=core.strike(shorter, longer, deg, cfg, net=net, pool=pool)
@@ -239,7 +239,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             if measure_gap > 0.0 and rng.random() < stophit_p:
                 pool=max(1, _pool_dice(longer, cfg))
                 nsig=S.stophit_sigma(longer, shorter, measure_gap, cfg)
-                _ob=core.ob_from_defender(shorter)
+                _ob=core.ob_from_defender(shorter, cfg)
                 deg, net = core.resolve(pool, nsig, rng, _ob)   # Ob-from-defender (ED-PC-0058): `shorter` is struck if the stop-thrust lands.
                 _emit('stophit', longer=longer.label, shorter=shorter.label, gap=round(measure_gap,2),
                       pool=pool, net_sigma=round(nsig,3), ob=_ob, net=round(net,2), degree=deg)   # `ob`: the workbench bands its distribution at it (PC-03)
@@ -327,7 +327,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             aggressor.initiative=S.clamp_initiative(aggressor.initiative-steal, cfg)
             counter_attempt=S.counter_select(defender, cfg, rng, TR)
         pool=max(1, _pool_dice(aggressor, cfg))
-        _ob=core.ob_from_defender(defender)
+        _ob=core.ob_from_defender(defender, cfg)
         deg, net = core.resolve(pool, net_sigma, rng, _ob)   # Ob-from-defender (ED-PC-0058)
         _emit('roll', aggressor=_agg0, pool=pool, net_sigma=round(net_sigma,3), ob=_ob, net=round(net,2), degree=deg, mode=mode)   # `ob`: the workbench bands its distribution at it (PC-03)
         # OVERCOMMIT EXPOSURE — systems computes it; the wrapper applies the initiative/poise loss.

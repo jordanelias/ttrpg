@@ -41,10 +41,12 @@ def _faculty_kw(fac) -> dict:
     return {} if fac is None else dict(faculty=fac)
 
 
-def _pool_cfg(inp: PersonalCombatInput) -> Optional[dict]:
-    """The engine's `cfg` carrying the record's two pool operands as `BASE_POOL` and `POOL_FLOOR` (`wrapper._pool_dice` reads them),
-    or `None` (the engine's own `CFG`) where the record carries neither. A copy: `config.CFG` is never written."""
-    carried = {k: v for k, v in (("BASE_POOL", inp.pool_add), ("POOL_FLOOR", inp.pool_floor)) if v is not None}
+def _fight_cfg(inp: PersonalCombatInput) -> Optional[dict]:
+    """The engine's `cfg` carrying the record's operands: `BASE_POOL` and `POOL_FLOOR` (`wrapper._pool_dice` reads them) and
+    `OPPOSITION_RATE` (`core.ob_from_defender` reads it), each where the record carries one (not `None`); or `None` (the
+    engine's own `CFG`, so `core.OPPOSITION_RATE`, the control 0.5) where it carries none. A copy: `config.CFG` is never written."""
+    carried = {k: v for k, v in (("BASE_POOL", inp.pool_add), ("POOL_FLOOR", inp.pool_floor),
+                                 ("OPPOSITION_RATE", inp.opposition_rate)) if v is not None}
     return {**CFG, **carried} if carried else None
 
 
@@ -116,7 +118,7 @@ def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
         # The engine's own note: `_TRACE` adds no rng draw and no state mutation, so capturing it
         # CANNOT change the result. That is why the scene may be recorded without perturbing it.
         wrapper._TRACE = trace.append
-        result = wrapper.fight(A, B, cfg=_pool_cfg(inp), rng=rng, terms=terms, decide=turn_choice)
+        result = wrapper.fight(A, B, cfg=_fight_cfg(inp), rng=rng, terms=terms, decide=turn_choice)
     finally:
         wrapper._TRACE = prev
 

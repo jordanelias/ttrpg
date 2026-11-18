@@ -119,3 +119,25 @@ def test_planted_a_party_holding_the_combat_key_at_5_rolls_11_and_is_attacked_at
         checked += 1
     assert set(seen) == {(11, 1.0), (8, 2.5)}, dict(seen)
     assert checked == 6
+
+
+def test_the_record_carries_the_opposition_rate_to_the_module():
+    """B05.58 (29-2): a hand-built `PersonalCombatInput` with `opposition_rate=0.4` and skill scores (2, 3) is fought at Ob
+    `0.4 x` the struck party's score, `{0.8, 1.2}`; with `None` (the module's own constant, 0.5) at `{1.0, 1.5}`."""
+    from ..queries.inputs import PersonalCombatInput
+    mod, attr = entry_target("the body")[1].split(":", 1)
+    entry = getattr(importlib.import_module(mod), attr)
+
+    def obs(rate) -> set:
+        inp = PersonalCombatInput(claimants=("a", "b"), ends=(5, 5), wound_quantities=(), scores=(2, 3), opposition_rate=rate)
+        seen, checked = set(), 0
+        for s in range(8):
+            for ev in entry(inp, random.Random(s))["trace"]:
+                if "ob" in ev:
+                    seen.add(round(ev["ob"], 9))
+                    checked += 1
+        assert checked >= 1, checked
+        return seen
+
+    assert obs(0.4) == {0.8, 1.2}
+    assert obs(None) == {1.0, 1.5}
