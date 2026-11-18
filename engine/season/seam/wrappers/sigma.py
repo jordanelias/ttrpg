@@ -68,6 +68,7 @@ from types import SimpleNamespace
 from typing import Any, Optional
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
+from engine.dice_engine.fmath import ltr_sum
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds
 from engine.substrate import composition, descriptors
 
@@ -943,7 +944,7 @@ def believed_chance(w: Any, believer: Any, act: Any, bands: Any) -> Optional[flo
     held = [_BAND_PLACE.get(b) for b in bands]
     if not held or None in held:
         return None
-    return sum(odds[n] for n in held)
+    return ltr_sum(odds[n] for n in held)
 
 
 def believed_odds_query(w: Any, holder: Any):
