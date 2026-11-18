@@ -429,6 +429,7 @@ class SnapshotRefused:
 
 def fixtures_digest(fixtures: Fixtures) -> str:
     """The blake2b-128 hex of the canonical encoding of every value `fixtures` holds (a swept value moves it)."""
+    # [JUSTIFIED: 16 bytes = the 128-bit digest the world's own `content_hash` already reads]
     return hashlib.blake2b(_canonical(fixtures._v), digest_size=16).hexdigest()
 
 
@@ -504,6 +505,7 @@ def _decode_into(b: bytes, i: int) -> tuple:
     if tag == b"U":
         return UNKNOWN, i
     if tag == b"f":
+        # [GROUNDED: a binary64 is 8 bytes = 16 hex digits, as `_encode_into` writes it]
         return struct.unpack(">d", bytes.fromhex(b[i:i + 16].decode("ascii")))[0], i + 16
     if tag in (b"t", b"l", b"u", b"z"):
         n, i = _decode_count(b, i, b":")

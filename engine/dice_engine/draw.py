@@ -27,13 +27,14 @@ import hashlib
 
 from engine.dice_engine import fmath
 
-_TWO53 = 9007199254740992.0
-_TWO_PI = 6.283185307179586
+_TWO53 = 9007199254740992.0  # [GROUNDED: 2**53, the span of a binary64 mantissa; `u` keeps the top 53 bits of a 64-bit word]
+_TWO_PI = 6.283185307179586  # [GROUNDED: 2*pi, the angle Box-Muller's cosine takes]
 
 
 def H2(key_hex: str, n: int) -> str:
     """The re-mix of a key at ordinal n >= 1: blake2b(f"v1d|{key_hex}|{n}", digest_size=8), 16 lowercase hex digits.
     Its one home."""
+    # [JUSTIFIED: 8 bytes = the 64-bit word `u` slices; the mix is the keyed-draw owner's own choice (A-30)]
     return hashlib.blake2b(f"v1d|{key_hex}|{n}".encode(), digest_size=8).hexdigest()
 
 
@@ -56,6 +57,7 @@ class Draw:
     def u(self) -> float:
         """The n-th uniform of this key, in [0, 1): the first (n = 0) is the key itself, later ones re-mix it with n
         through `H2`; the 53 high bits of the 64-bit word over 2**53. Consumes one ordinal."""
+        # [GROUNDED: base 16 is the hex of the key and of `H2`; 64 - 53 = 11 low bits dropped]
         word = int(self.key, 16) if self.n == 0 else int(H2(self.key, self.n), 16)
         self.n += 1
         return (word >> 11) / _TWO53
@@ -126,6 +128,7 @@ class Draw:
             t3 = t * t * t
             w = 1.0 - self.u()
             x2 = x * x
+            # [GROUNDED: Marsaglia & Tsang (2000), 'A simple method for generating gamma variables': the squeeze 0.0331]
             if w < 1.0 - 0.0331 * (x2 * x2) or fmath.log(w) < 0.5 * x2 + d * (1.0 - t3 + fmath.log(t3)):
                 return d * t3
 
