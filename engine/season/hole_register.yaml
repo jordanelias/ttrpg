@@ -6604,6 +6604,58 @@ rows:
     cite:      "FALSIFIER `engine/season/tests/test_fa_office_capabilities.py::test_confer_fit_weight_zero_is_positional` (a hand-built vacancy and two known candidates the conferrer regards differently: at 1.0 and 0.5 the higher-regard candidate heads the order, at 0.0 the lowest id he knows does, and removing his stance rows leaves the 0.0 order unchanged). CONTROL, `PYTHONHASHSEED=0`, read on `1d131a7` and on the tree with the term at 0.0: `build_realm(0)`'s build hash bf3064be8fe5830b8cb5e06ef93ee883 and its hash after two seasons 43e357fa5985101a1cd91435443f9d67 are equal before and after."
     source:    "workplan v12 B04.22 (`06_FA_office_capabilities` edit 4; ED-IN-0378: the believed half reads the claim `believed_input` already reads)"
 
+  - id:        H-420
+    tier:      1
+    hole:      "HOW MANY DICE A SKILL SCORE IS GIVEN BEFORE THE ROLL -- the base of the pool, `pool_add` in `engine/dice_engine/sigma_leverage.py::pool_of(score, addends, pool_add, pool_floor)` (A-6, A-7; CAP Part B row B2). One pair (`pool_add`, `pool_floor`) for every site: MAP's per-site `social_pool_*` and `combat_pool_*` are not created. No document derives the live value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.pool_add` the one home. READERS: none yet -- B05.09's `seam/wrappers/pool.py::faculty` reads it through `pool_of`; B05.23 sets the live value for the social roll"
+    grade:     "assumption"
+    default:   "0 -- SHIPPED, THE CONTROL: the base adds no dice, so the pool is what it was. LIVE 6 (CAP B2), set by B05.23 for the social roll [ASSUMPTION; medium; Jordan to correct]"
+    site:      "Fixtures pool_add, read by nothing at B05.08; B05.09 makes `seam/wrappers/pool.py::faculty` its reader"
+    sweep:     [0, 3, 6]
+    unblocks:  "A-6's base re-centring the even matchup (B05's calibration lands CAL C1 to C8 at it); the pool of a person who holds no skill"
+    cite:      "THE SWEEP'S THIRD POINT IS THIS ROW'S: [ASSUMPTION: CAP B2 says 'a three-point sweep' and names no third point -- basis: none; 3 is the midpoint of the control 0 and the live 6]. CONTROL (CAP gate (1)): nothing reads the setting at this commit, so the seed-0 realm hash after one season is B05.07's, `PYTHONHASHSEED=0`, `python -c` per the batch's HASH READING, `reading @6d4d52a0d` and on the tree with the four settings added (recorded in B05.08's commit body). FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B05.08 (CAP B2; U1-B step 2: hole_register.yaml NUMBER rows; A-6, A-7, A-26, A-79)"
+
+  - id:        H-421
+    tier:      1
+    hole:      "THE FEWEST DICE A POOL IS EVER ROLLED AT -- `pool_floor` in `engine/dice_engine/sigma_leverage.py::pool_of(score, addends, pool_add, pool_floor)` (A-6; D-U1-08; CAP Part B row B2). One pair with `pool_add` for every site. No document derives the live value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.pool_floor` the one home. READERS: none yet -- B05.09's `seam/wrappers/pool.py::faculty` reads it through `pool_of`; B05.23 sets the live value for the social roll"
+    grade:     "assumption"
+    default:   "0 -- SHIPPED, THE CONTROL: no floor beyond the roller's own, so the pool is what it was. LIVE 5 (CAP B2), set by B05.23 for the social roll [ASSUMPTION; medium; Jordan to correct]"
+    site:      "Fixtures pool_floor, read by nothing at B05.08; B05.09 makes `seam/wrappers/pool.py::faculty` its reader"
+    sweep:     [0, 3, 5]
+    unblocks:  "a first rank is never a loss (B05.09): a pool that cannot fall below the floor whatever the score and addends"
+    cite:      "THE SWEEP'S THIRD POINT IS THIS ROW'S: [ASSUMPTION: CAP B2 says 'a three-point sweep' and names no third point -- basis: none; 3 is the midpoint 2.5 of the control 0 and the live 5, rounded up to a whole die]. CONTROL (CAP gate (1)): nothing reads the setting at this commit, so the seed-0 realm hash after one season is B05.07's, `PYTHONHASHSEED=0`, `reading @6d4d52a0d` and on the tree with the four settings added (recorded in B05.08's commit body). FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B05.08 (CAP B2; U1-B step 2: hole_register.yaml NUMBER rows; A-6, A-7, A-26, A-79)"
+
+  - id:        H-422
+    tier:      1
+    hole:      "THE SIZE OF ONE STEP OF A GOVERNING ATTRIBUTE'S EDGE -- `attribute_level`, a `LEVEL_SIGMA` name (`engine/dice_engine/sigma_leverage.py`) per point of the attribute above the mid-point (for the roller) or below it (against), the `edge` reader's step (U1 §4's governing-attribute row; CAP Part B row B2; A-7). `None` is no level. No document derives the live level."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.attribute_level` the one home. READERS: none yet -- B05.10's `edge` reader reads it; B05.23 sets the live value for the social roll"
+    grade:     "assumption"
+    default:   "None -- SHIPPED, THE CONTROL: no attribute contributes a level. LIVE `minor` (CAP B2), set by B05.23 for the social roll [ASSUMPTION; medium; Jordan to correct]"
+    site:      "Fixtures attribute_level, read by nothing at B05.08; B05.10 makes `seam/wrappers/sigma.py::advantage_sigma` (the `edge` reader) its reader"
+    sweep:     [null, "minor", "moderate"]
+    unblocks:  "the attribute rows' level (U1 §4); A-7's two inputs (the skill score gives dice, the attribute gives a level)"
+    cite:      "THE SWEEP'S THIRD POINT IS THIS ROW'S: [ASSUMPTION: CAP B2 says 'a three-point sweep' and names no third point; no `LEVEL_SIGMA` name lies between None and `minor` -- basis: `moderate` is the next name above the live `minor` in `LEVEL_SIGMA` (0.25 then 0.50)]. CONTROL (CAP gate (1)): nothing reads the setting at this commit, so the seed-0 realm hash after one season is B05.07's, `PYTHONHASHSEED=0`, `reading @6d4d52a0d` and on the tree with the four settings added (recorded in B05.08's commit body). FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B05.08 (CAP B2; U1-B step 2: hole_register.yaml NUMBER rows; A-6, A-7, A-26, A-79)"
+
+  - id:        H-423
+    tier:      1
+    hole:      "THE RATE AT WHICH THE OPPOSING PERSON'S SCORE BECOMES OBSTACLE -- `opposition_rate`, per point of the opponent's score (CAP Part B row B2; A-79 gives 0.4 a point of skill score). Lane A halves the opposing score (`modules/social_contest/roll.py`'s `/ 2.0`, the control); the live rate is `engine/dice_engine/dice_engine.py::MU_PER_DIE`, the mean net per die."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.opposition_rate` the one home, its live value READ from `dice_engine.py::MU_PER_DIE` and never retyped. READERS: none yet -- B05.14's composer reads it; B05.23 sets the live value for the social roll"
+    grade:     "assumption"
+    default:   "0.5 -- SHIPPED, THE CONTROL: lane A's halving, so the obstacle is what it was. LIVE `MU_PER_DIE` (0.4 at this commit), set by B05.23 for the social roll [ASSUMPTION; medium; Jordan to correct]"
+    site:      "Fixtures opposition_rate, read by nothing at B05.08; B05.14 makes the obstacle composer its reader"
+    sweep:     [0.5, 0.45, 0.4]
+    unblocks:  "A-79's rate per point of the opponent's score; the even bin of CAL C1 to C8"
+    cite:      "THE SWEEP'S THIRD POINT IS THIS ROW'S: [ASSUMPTION: CAP B2 says 'a three-point sweep' and names no third point -- basis: none; 0.45 is the midpoint of the control 0.5 and the live 0.4]. The sweep's 0.4 is `MU_PER_DIE`'s value at this commit, written here for the sweep only: the setting's live value is read from the owner (B05.23), so a change to `MU_PER_DIE` moves the live arm and this point is re-read. CONTROL (CAP gate (1)): nothing reads the setting at this commit, so the seed-0 realm hash after one season is B05.07's, `PYTHONHASHSEED=0`, `reading @6d4d52a0d` and on the tree with the four settings added (recorded in B05.08's commit body). FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B05.08 (CAP B2; U1-B step 2: hole_register.yaml NUMBER rows; A-6, A-7, A-26, A-79)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

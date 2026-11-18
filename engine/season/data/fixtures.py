@@ -1061,6 +1061,28 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `0.0`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-414 -- site: Fixtures confer_fit_weight, graded `assumption`; 06_FA_office_capabilities edit 4 gives no number for the weight, so it is injected at the control and swept 0.0 / 0.5 / 1.0]
     confer_fit_weight=0.0,             # `H-414`, swept 0.0 (control, SHIPPED) / 0.5 / 1.0
+    # `H-420` to `H-423` (B05.08; CAP B2, U1-B step 2). THE FOUR NUMBERS THE JOINT CALIBRATION SETS, one home each. Each SHIPS AT
+    # ITS CONTROL and NOTHING READS IT YET: B05.09 (`pool_add`, `pool_floor`) and B05.14 (`opposition_rate`) are the readers,
+    # B05.10 the `dice` rows' reader of `attribute_level`; B05.23 sets the live values for the social roll. One pair for every
+    # site (`pool_add`, `pool_floor`); the per-site names MAP's `social_pool_*` and `combat_pool_*` are not created.
+    # `pool_add`: dice a skill score is given before the roll (the base of the pool). Control 0, live 6.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-420 -- site: Fixtures pool_add, graded `assumption`; CAP B2 gives the live 6 and no document derives it, so it is injected at the control and swept 0 / 3 / 6]
+    pool_add=0,                        # `H-420`, swept 0 (control, SHIPPED) / 3 / 6 (live)
+    # `pool_floor`: the fewest dice a pool is ever rolled at. Control 0 (no floor), live 5.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-421 -- site: Fixtures pool_floor, graded `assumption`; CAP B2 gives the live 5 and no document derives it, so it is injected at the control and swept 0 / 3 / 5]
+    pool_floor=0,                      # `H-421`, swept 0 (control, SHIPPED) / 3 / 5 (live)
+    # `attribute_level`: the size of one step of the governing attribute's edge (U1 §4, A-7): a `LEVEL_SIGMA` name per point
+    # of the attribute above the mid-point (for the roller) or below it (against). Control `None` (no level), live `minor`.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `None`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-422 -- site: Fixtures attribute_level, graded `assumption`; CAP B2 gives the live `minor` and no document derives it, so it is injected at the control and swept None / minor / moderate]
+    attribute_level=None,              # `H-422`, swept None (control, SHIPPED) / minor (live) / moderate
+    # `opposition_rate`: the share of the opposing person's score an obstacle takes up, per point. Control 0.5 (lane A's
+    # halving); live `engine/dice_engine/dice_engine.py::MU_PER_DIE`, READ FROM THAT OWNER by B05.14 and never retyped.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0.5`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-423 -- site: Fixtures opposition_rate, graded `assumption`; CAP B2 gives the live value as `MU_PER_DIE` and the control as lane A's one half, so it is injected at the control and swept 0.5 / 0.45 / MU_PER_DIE]
+    opposition_rate=0.5,               # `H-423`, swept 0.5 (control, SHIPPED) / 0.45 / MU_PER_DIE (live)
 )
 
 

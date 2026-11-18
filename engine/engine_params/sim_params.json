@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 122,
-    "total": 382,
-    "uncited": 260,
+    "total": 385,
+    "uncited": 263,
     "of_which_assumption_grade": 8
   },
-  "count": 382,
+  "count": 385,
   "by_module": {
     "engine.dice_engine": 10,
     "engine.season": 24,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 95,
+    "engine.season.settings": 98,
     "engine.season.realm": 8
   },
   "params": [
@@ -4518,6 +4518,39 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-414`, swept 0.0 (control, SHIPPED) / 0.5 / 1.0",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.pool_add",
+      "name": "pool_add",
+      "value": 0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-420`, swept 0 (control, SHIPPED) / 3 / 6 (live)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.pool_floor",
+      "name": "pool_floor",
+      "value": 0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-421`, swept 0 (control, SHIPPED) / 3 / 5 (live)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.opposition_rate",
+      "name": "opposition_rate",
+      "value": 0.5,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-423`, swept 0.5 (control, SHIPPED) / 0.45 / MU_PER_DIE (live)",
       "citation": null,
       "citation_grade": null
     },
