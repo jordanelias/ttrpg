@@ -24,6 +24,7 @@ change kept reading the retired fixed `core.DECISIVE_OB = 3`:
 import math
 import os
 import random
+from engine.dice_engine import draw
 import sys
 
 import pytest
@@ -49,7 +50,7 @@ DEFAULT_FACULTY = C.Combatant('probe').faculty
 def _observed(pool, net_sigma, ob, n):
     counts = dict.fromkeys(BANDS, 0)
     for seed in range(n):
-        deg, _ = core.resolve(pool, net_sigma, random.Random(seed), ob)
+        deg, _ = core.resolve(pool, net_sigma, draw.seeded(draw.H2("test_combat_ob_from_defender_consumers", seed)), ob)
         counts[deg] += 1
     return {k: v / n for k, v in counts.items()}
 
@@ -91,7 +92,7 @@ def test_trace_events_carry_the_ob_their_roll_was_banded_at():
             B = C.Combatant('B', weapon=weapon_b, faculty=2)
             wrapper._TRACE = events.append
             try:
-                wrapper.fight(A, B, rng=random.Random(seed))
+                wrapper.fight(A, B, rng=draw.seeded(draw.H2("test_combat_ob_from_defender_consumers", seed)))
             finally:
                 wrapper._TRACE = None
             r, s = _check_events(events, {'A': A, 'B': B})
@@ -235,7 +236,7 @@ def test_the_fight_obstacle_is_opposed_ob_at_the_cfg_rate():
         A, B = C.Combatant('A', faculty=2), C.Combatant('B', faculty=3)
         wrapper._TRACE = events.append
         try:
-            wrapper.fight(A, B, cfg=dict(CFG, OPPOSITION_RATE=0.4), rng=random.Random(seed))
+            wrapper.fight(A, B, cfg=dict(CFG, OPPOSITION_RATE=0.4), rng=draw.seeded(draw.H2("test_combat_ob_from_defender_consumers", seed)))
         finally:
             wrapper._TRACE = None
         for ev in events:

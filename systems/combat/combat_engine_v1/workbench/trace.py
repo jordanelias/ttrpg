@@ -7,6 +7,7 @@ import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
 import random
+from engine.dice_engine import draw
 from modules.combat import wrapper
 from modules.combat import config
 
@@ -20,7 +21,7 @@ def run_traced_fight(A, B, cfg=None, seed=0, max_bouts=12, **fight_kw):
     prev = wrapper._TRACE
     wrapper._TRACE = events.append
     try:
-        rng = random.Random(seed)   # stdlib RNG (engine contract post ED-1085)
+        rng = draw.seeded(draw.H2("trace", seed))   # stdlib RNG (engine contract post ED-1085)
         result = wrapper.fight(A, B, cfg, rng, max_bouts=max_bouts, **fight_kw)
     finally:
         wrapper._TRACE = prev

@@ -14,6 +14,7 @@ The hand-built world is `test_u7_remit._world`: `off_duke` (a Duke at `D`) sits 
 from __future__ import annotations
 
 import random
+from engine.dice_engine import draw
 
 import pytest
 import yaml
@@ -45,7 +46,7 @@ def _plant(w, level, seat=SEAT):
 def _roll(w, via, room="Hh"):
     """`(pool, opposition, ob, leverage, levels)` of one `speak` roll the way the fold's provider call reaches it."""
     out = sigma.resolve(w, [SPEAKER, PARTY], ["root"], PRIZE, verb="speak", subject=PARTY,
-                        rng=random.Random(0), rung=room, via=via)
+                        rng=draw.seeded(draw.H2("test_u1_seat_modifier", 0)), rung=room, via=via)
     assert out["status"] == "RESOLVED", out
     inp = sigma.contest_input(w, [SPEAKER, PARTY], verb="speak", subject=PARTY, room=room, via=via)
     return out["pool"], inp.opposition, out["ob"], out["leverage"], dict((n, (f, a)) for n, f, a in out["levels"])
@@ -78,7 +79,7 @@ def test_a_seat_modifier_reaches_only_acts_through_that_seat():
     checked += 1
     # (5) a prize no bench hears reads no room, so no seat sits over it: `heard` is `None`, the source is silent
     out = sigma.resolve(w, [SPEAKER, PARTY], ["root"], PRIZE, verb="speak", subject=PARTY,
-                        rng=random.Random(0), rung=None, via=SEAT)
+                        rng=draw.seeded(draw.H2("test_u1_seat_modifier", 0)), rung=None, via=SEAT)
     assert dict((n, (f, a)) for n, f, a in out["levels"])["office"] == (0, 0) and out["leverage"] == 0.0
     checked += 1
     assert checked == 5

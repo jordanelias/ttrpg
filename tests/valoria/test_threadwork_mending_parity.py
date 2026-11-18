@@ -25,6 +25,7 @@ import hashlib
 import json
 import os
 import random
+from engine.dice_engine import draw
 import sys
 from types import SimpleNamespace
 
@@ -86,7 +87,7 @@ def collective_records(op_type):
         for seed in CONTROL_SEEDS:
             w = _World()
             r = col.attempt_collective_operation(_collective_actors(), op_type, {"scale": scale},
-                                                 world=w, rng=random.Random(seed))
+                                                 world=w, rng=draw.seeded(draw.H2("test_threadwork_mending_parity", seed)))
             out.append({"scale": scale, "seed": seed, "op_type": r.op_type, "anchor": r.anchor,
                         "helpers": r.helpers, "leap_results": r.leap_results,
                         "lattice_formed": r.lattice_formed,
@@ -103,7 +104,7 @@ def opposing_records(op_type):
             r = opp.resolve_opposing_operations(_Practitioner("a", spirit=3, ts=50),
                                                 _Practitioner("b", spirit=2, ts=40),
                                                 op_type, {"scale": scale}, world=w,
-                                                rng=random.Random(seed))
+                                                rng=draw.seeded(draw.H2("test_threadwork_mending_parity", seed)))
             out.append({"scale": scale, "seed": seed, **{k: getattr(r, k) for k in (
                 "actor_a", "actor_b", "op_type", "a_net", "b_net", "a_degree", "b_degree",
                 "outcome", "ms_delta", "a_consequences", "b_consequences")}, "states": _states(w)})
@@ -122,7 +123,7 @@ def mending_records():
                     if configuration_of is not None:
                         target["configuration_of"] = configuration_of
                     r = ops.attempt_mending(_Practitioner("prac", spirit=2), target, world=w,
-                                            rng=random.Random(seed), environment_in_equilibrium=env)
+                                            rng=draw.seeded(draw.H2("test_threadwork_mending_parity", seed)), environment_in_equilibrium=env)
                     out.append({"scale": scale, "configuration_of": configuration_of, "env": env,
                                 "seed": seed, "result": _op_record(r), "states": _states(w)})
     return out
@@ -204,7 +205,7 @@ def _single(scale, degree, monkeypatch, env=True):
     w = _World()
     _pre_stressed(w)
     r = ops.attempt_mending(_Practitioner("prac"), {"scale": scale}, world=w,
-                            rng=random.Random(0), environment_in_equilibrium=env)
+                            rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)), environment_in_equilibrium=env)
     return (r.ob, r.coherence_delta, r.mending_stability_delta, r.coherence_restored, _elastic(w))
 
 
@@ -218,7 +219,7 @@ def _collective(scale, degree, monkeypatch, env=True):
     _pre_stressed(w, "second")
     r = col.attempt_collective_operation([_Practitioner("prac", ts=60), _Practitioner("second")],
                                          "Mending", {"scale": scale}, world=w,
-                                         rng=random.Random(0), environment_in_equilibrium=env)
+                                         rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)), environment_in_equilibrium=env)
     op = r.operation_result
     assert op.degree == degree and not r.lattice_fractured
     # Every participant whose Leap took is priced alike, not only the Anchor.
@@ -235,7 +236,7 @@ def _opposing(scale, degree, monkeypatch, env=True):
     _pre_stressed(w)
     a, b = _Practitioner("prac"), _Practitioner("other")
     r = opp.resolve_opposing_operations(a, b, "Mending", {"scale": scale}, world=w,
-                                        rng=random.Random(0), environment_in_equilibrium=env)
+                                        rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)), environment_in_equilibrium=env)
     assert r.a_degree == _THREE_BAND[degree]
     cons = r.a_consequences
     # OpposingResult reports no Ob, so the opposed site is compared on the price alone.
@@ -279,10 +280,10 @@ def test_collective_and_opposed_mending_refuse_own_configuration_aim(aim):
     w = _World()
     with pytest.raises(ValueError, match="OWN configuration"):
         col.attempt_collective_operation([_Practitioner("prac", ts=60), _Practitioner("other")],
-                                         "Mending", target, world=w, rng=random.Random(0))
+                                         "Mending", target, world=w, rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)))
     with pytest.raises(ValueError, match="OWN configuration"):
         opp.resolve_opposing_operations(_Practitioner("prac"), _Practitioner("other"), "Mending",
-                                        target, world=w, rng=random.Random(0))
+                                        target, world=w, rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)))
     assert w.practitioners == {}, "a refused Mending must not have touched any state"
 
 
@@ -290,9 +291,9 @@ def test_a_non_mending_working_ignores_configuration_of():
     """The refusal is Mending's: the field means nothing to a Weaving."""
     target = {"scale": "Relational", "configuration_of": "self"}
     col.attempt_collective_operation([_Practitioner("prac", ts=60), _Practitioner("other")],
-                                     "Weaving", target, world=_World(), rng=random.Random(0))
+                                     "Weaving", target, world=_World(), rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)))
     opp.resolve_opposing_operations(_Practitioner("prac"), _Practitioner("other"), "Weaving",
-                                    target, world=_World(), rng=random.Random(0))
+                                    target, world=_World(), rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)))
 
 
 def test_owner_refuses_an_unpriced_scale_and_an_unknown_degree():
@@ -310,7 +311,7 @@ def test_rolled_collective_and_opposed_mending_never_cost_coherence():
         w = _World()
         r = col.attempt_collective_operation(_collective_actors(), "Mending",
                                              {"scale": "Structural"}, world=w,
-                                             rng=random.Random(seed))
+                                             rng=draw.seeded(draw.H2("test_threadwork_mending_parity", seed)))
         if r.operation_result is not None:
             seen.add(("collective", r.operation_result.degree))
             assert r.operation_result.coherence_delta == 0
@@ -323,7 +324,7 @@ def test_rolled_collective_and_opposed_mending_never_cost_coherence():
         o = opp.resolve_opposing_operations(_Practitioner("a", spirit=3, ts=50),
                                             _Practitioner("b", spirit=2, ts=40), "Mending",
                                             {"scale": "Structural"}, world=w,
-                                            rng=random.Random(seed))
+                                            rng=draw.seeded(draw.H2("test_threadwork_mending_parity", seed)))
         seen.add(("opposing", o.a_degree))
         assert o.a_consequences["coherence_delta"] == o.b_consequences["coherence_delta"] == 0
         assert o.ms_delta == 0
@@ -350,7 +351,7 @@ def test_collective_and_opposing_route_cost_through_resilience(gain, monkeypatch
     r = col.attempt_collective_operation(
         [_Practitioner("plain", spirit=3, ts=60), _Practitioner("steady", spirit=3, ts=60 - 1,
                                                                 resilience=1)],
-        "Weaving", _STRUCTURAL, world=w, rng=random.Random(0))
+        "Weaving", _STRUCTURAL, world=w, rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)))
     assert r.leap_results == {"plain": True, "steady": True}, "the planted pair did not both Leap"
     plain, steady = _taken(w, "plain"), _taken(w, "steady")
     assert plain > 0, "the planted working must cost something"
@@ -361,7 +362,7 @@ def test_collective_and_opposing_route_cost_through_resilience(gain, monkeypatch
         w2 = _World()
         o = opp.resolve_opposing_operations(_Practitioner("a", spirit=3, ts=50, resilience=res),
                                             _Practitioner("b", spirit=2, ts=40), "Weaving",
-                                            _STRUCTURAL, world=w2, rng=random.Random(0))
+                                            _STRUCTURAL, world=w2, rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)))
         taken[label] = (o.a_degree, o.b_degree, _taken(w2, "a"), o.a_consequences["coherence_delta"])
     assert taken["plain"][:2] == taken["steady"][:2], "resilience must not touch the roll"
     assert taken["plain"][2] > 0

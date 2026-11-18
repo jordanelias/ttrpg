@@ -27,6 +27,7 @@ import sys
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(_HERE))))   # repo root, as bat.py does
+from engine.dice_engine import draw
 
 from modules.mass_battle import rngsource                                      # noqa: E402
 from modules.mass_battle.massbattle import _grade                              # noqa: E402
@@ -132,7 +133,7 @@ def fight(example: dict, seed: int, role=None) -> dict:
     rec = _Recorder(a, b, example['round_digits'])
     sys.setprofile(rec)
     try:
-        with rngsource.using(random.Random(seed)):
+        with rngsource.using(draw.seeded(draw.H2("walkthrough", seed))):
             with tracing() as events:
                 result = run_battle(a, b, max_ticks=example['max_ticks'])
     finally:

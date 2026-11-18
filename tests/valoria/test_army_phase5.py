@@ -11,6 +11,7 @@ weight 2; the Church's `set_s_036` is defended by six individuals; `terr_T7` is 
 from __future__ import annotations
 
 import random
+from engine.dice_engine import draw
 
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.boot.realm import build_realm
@@ -92,7 +93,7 @@ def test_the_shipped_realm_can_raise_field_and_win_with_an_army():
     assert _troops(inp.orders_of_battle[0]) >= 900 and inp.orders_of_battle[1] is None
     assert inp.fort_level == 0.0
     fn = MODULE_ENTRIES["mass_battle.resolve_field"].fn
-    seen = [fn(inp, random.Random(s)) for s in range(1, 9)]
+    seen = [fn(inp, draw.seeded(draw.H2("test_army_phase5", s))) for s in range(1, 9)]
     assert sum(bool(r["attacker_wins"]) for r in seen) >= 5, [(r["degree"], r["attacker_size_pct"]) for r in seen]
     assert min(r["attacker_size_pct"] for r in seen) > 0.5, "an army of 900 must not be routed by a town's levy"
 
@@ -181,7 +182,7 @@ def test_an_army_is_provisioned_by_the_cohorts_it_drew_from(monkeypatch):
     act = Act(id="mp", actor=ACTOR, verb="march", payload={"subject": DEFENDED_TOWN}, via=SEAT)
     w.acts.append(act)
     att = world_q.mustered(w, ORIGIN, CROWN)
-    MB.resolve(w, att, [act.id], "a field", subject=CHURCH, rung=DEFENDED_TOWN, rng=random.Random(3))
+    MB.resolve(w, att, [act.id], "a field", subject=CHURCH, rung=DEFENDED_TOWN, rng=draw.seeded(draw.H2("test_army_phase5", 3)))
     assert seen[0] == sum(w.persons[c].weight for c in cohorts) == 30, seen
     assert seen[0] != sum(w.persons[p].weight for p in att), "billed the mustered members, not the army"
 

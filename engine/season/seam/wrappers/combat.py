@@ -88,7 +88,7 @@ from ...queries.inputs import PersonalCombatInput, PlayHost
 from ...queries.world_q import kit_of, stakes_of
 from ....substrate import combat_kit, composition
 from ....substrate.descriptors import attribute_key
-from ...state.ids import H
+from ...state.ids import draw_factory
 from ..ladder import party_degree
 from ._entry import entry_for
 from ._estimate import rng_of, samples_of
@@ -404,7 +404,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
 
     The RNG is seeded from the WORLD's own clock and the causing act, so a contest is reproducible
     exactly as every other draw in this instrument is (`S33`: *unique per DRAW, not per
-    operation*). `wrapper.fight`'s own note says to pass `random.Random(seed)` for determinism.
+    operation*). `wrapper.fight`'s own note says to pass `draw.seeded(...)` for determinism.
 
     ⚠ **`@provider` AND THE KEYWORD PARAMETERS ARE THE PROVIDER SIGNATURE.** ED-SC-0033 clause (1) rules that
     *"the seam dispatches by manifest ROW rather than the hardcoded personal_combat literal"*, so this
@@ -429,19 +429,16 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         return dict(status="PARTY-GAP", why=f"claimant not a person: {a_id!r} / {b_id!r}",
                     module=_PROVIDER)
     inp = combat_input(w, claimants, verb, _cause_record(w, causes))
-    # `H` returns a blake2b hexdigest (`state/ids.py`), so 16 is the RADIX that parses it back to
-    # an int for the RNG -- structural, not a game value.
-    # [JUSTIFIED: radix for parsing H()'s hex digest, not a mechanical constant]
-    seed = int(H(w.world_seed, w.tick, a_id, f"contest:{prize}:{causes[0] if causes else ''}"), 16)
+    rng = draw_factory(w.world_seed, lambda: w.tick)(a_id, f"contest:{prize}:{causes[0] if causes else ''}")
     entry, refusal = entry_for(prize, _PROVIDER)
     if entry is None:
         return refusal
     # THE PARTY TEST (REM-31). The AUTOMATED call is byte-identical: the keyword is passed only when a played
     # person is a claimant, so the two other entries' shared `(inp, rng)` shape is untouched.
     if host is not None and any(c in host.persons for c in (a_id, b_id)):
-        got = entry.fn(inp, random.Random(seed), decide=host.decide)
+        got = entry.fn(inp, rng, decide=host.decide)
     else:
-        got = entry.fn(inp, random.Random(seed))
+        got = entry.fn(inp, rng)
     result, trace = got["result"], got["trace"]
     winner = a_id if result == 1 else (b_id if result == -1 else None)
 
@@ -467,4 +464,4 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                 # to `_fold` as `Resolution.result`, whose effects read `wound_state` and `surrender`
                 # only (`loop/effects_combat.py`), so `content_hash()` is unchanged.
                 trace=trace,
-                parties=got["ends"], seed=seed)
+                parties=got["ends"], seed=rng.key)

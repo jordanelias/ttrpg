@@ -25,6 +25,7 @@ import random
 import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))
+from engine.dice_engine import draw
 
 from modules.mass_battle import massbattle  # noqa: E402
 from modules.mass_battle.orderofbattle import OrderOfBattle, UnitRow  # noqa: E402
@@ -47,7 +48,7 @@ def _body(side):
 def one_field(seed):
     """`'A'`, `'B'` or `'drawn'` for the mirror fought with `random.Random(seed)`."""
     a, b = _body("A"), _body("B")
-    got = massbattle._run_and_grade(a, b, OPEN_FLAT, random.Random(seed), by_troops=True)
+    got = massbattle._run_and_grade(a, b, OPEN_FLAT, draw.seeded(draw.H2("mirror_probe", seed)), by_troops=True)
     if got["attacker_wins"]:
         return "A"
     b_stands = not (b.routed or massbattle.unit_conceded(b))

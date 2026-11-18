@@ -63,7 +63,7 @@ MAT_PLATE = 'plate'
 MATERIALS = frozenset({MAT_NONE, MAT_CLOTH, MAT_MAIL, MAT_PLATE})
 
 # ── DEFENCE modes — ORDERED, and the order is load-bearing ─────────────────────────────────────────
-# systems.read_contest picks a missed-read mode with `modes[rng.randrange(3)]`, so this sequence IS part of
+# systems.read_contest picks a missed-read mode with `modes[rng.below(3)]`, so this sequence IS part of
 # the RNG contract: reordering it re-maps every missed-read draw. A tuple, never a set.
 DEF_PARRY = 'parry'
 DEF_DODGE = 'dodge'

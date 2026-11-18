@@ -38,6 +38,7 @@ import collections
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
+from engine.dice_engine import draw
 from modules.combat import core
 from modules.combat import wrapper
 from modules.combat import combat_systems as S
@@ -70,7 +71,7 @@ def capability(name, cfg=CFG):
 
 def _duel(w, armor, n, cfg=CFG):
     """Position-swapped duel vs the reference weapon. Returns (decided_rate, share_of_decided|None)."""
-    rng = random.Random(_seed((w, armor)))
+    rng = draw.seeded(draw.H2("armour_participation", _seed((w, armor))))
     wins = dec = 0
     for i in range(n):
         swap = i >= n // 2
@@ -141,7 +142,7 @@ def strike_profile(n=20, armor='heavy', cfg=CFG):
     try:
         for w in sorted(WEAPONS):
             cur['w'] = w
-            rng = random.Random(_seed((w, armor)))
+            rng = draw.seeded(draw.H2("armour_participation", _seed((w, armor))))
             for _ in range(n):
                 wrapper.fight(Combatant('A', weapon=w, armor=armor),
                               Combatant('B', weapon=REFERENCE, armor=armor), cfg, rng)

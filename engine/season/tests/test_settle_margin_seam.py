@@ -18,6 +18,7 @@ THE CLAIMS, AND WHAT WOULD SHOW EACH WRONG:
 from __future__ import annotations
 
 import random
+from engine.dice_engine import draw
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
 
@@ -56,9 +57,9 @@ def _resolve(w, rng):
 def _reference_state(w, seed):
     """The generator's state after the module's own roll alone."""
     inp = sigma.contest_input(w, ["p_low"], verb="tell", subject="p_mid")
-    rng = random.Random(seed)
+    rng = draw.seeded(draw.H2("test_settle_margin_seam", seed))
     _module().roll(inp, rng)
-    return rng.getstate()
+    return (rng.key, rng.n)
 
 
 def _ob(w, opposition):
@@ -75,11 +76,11 @@ def test_resolve_draws_nothing_beyond_the_roll_at_a_whole_or_a_fractional_ob():
         w = _world(opposition)
         assert abs(_ob(w, opposition) - ob) < 1e-12 and (ob == round(ob)) == (opposition == 4)    # the label, read off the fold
         for seed in range(40):
-            rng = random.Random(seed)
+            rng = draw.seeded(draw.H2("test_settle_margin_seam", seed))
             out = _resolve(w, rng)
             # the pool: the untrained governing score 2 + the rank 4 + the base 6 (B05.25, B05.23; was 4)
             assert out["status"] == "RESOLVED" and out["ob"] == _ob(w, opposition) and out["pool"] == 12.0, out
-            assert rng.getstate() == _reference_state(w, seed), (ob, seed)
+            assert (rng.key, rng.n) == _reference_state(w, seed), (ob, seed)
             checked += 1
     assert checked == 80
 
@@ -88,7 +89,7 @@ def test_the_records_margin_is_the_real_margin_not_a_whole():
     w = _world(3)                                     # Ob 1.5
     fractional = 0
     for seed in range(40):
-        out = _resolve(w, random.Random(seed))
+        out = _resolve(w, draw.seeded(draw.H2("test_settle_margin_seam", seed)))
         assert out["settled_margin"] == out["net"] - out["ob"], out
         fractional += out["settled_margin"] != round(out["settled_margin"])
     assert fractional >= 30, fractional               # the margin is a real: a whole margin is the exception
@@ -96,9 +97,9 @@ def test_the_records_margin_is_the_real_margin_not_a_whole():
 
 def test_the_records_own_fields_are_the_entrys_and_only_one_is_added():
     w = _world(3)
-    out = _resolve(w, random.Random(5))
+    out = _resolve(w, draw.seeded(draw.H2("test_settle_margin_seam", 5)))
     inp = sigma.contest_input(w, ["p_low"], verb="tell", subject="p_mid")
-    margin = _module().roll(inp, random.Random(5))
+    margin = _module().roll(inp, draw.seeded(draw.H2("test_settle_margin_seam", 5)))
     assert (out["net"], out["ob"], out["pool"], out["terms"]) == (margin.net, margin.ob, inp.pool, margin.terms)
     # B05.14: AND `terms`, every term of the obstacle named on the record (`Margin.terms`, the entry's own; lane A's `ob_terms` is replaced)
     # B04.08: AND `fed_by`, the `social_roll` rows that fed the roll (`resolve`'s record, never an `Event` field, D-U1-06)
@@ -117,7 +118,7 @@ def test_degree_of_grades_the_margin_when_present_and_the_pair_otherwise():
     assert ladder.degree_of(dict(pair, settled_margin=-0.0004)) == "Partial"     # -0.4 milli rounds to 0
     w = _world(3)
     for seed in range(40):                                    # the host's own record: both readings agree
-        out = _resolve(w, random.Random(seed))
+        out = _resolve(w, draw.seeded(draw.H2("test_settle_margin_seam", seed)))
         assert ladder.degree_of(out) == ladder.degree_of({k: out[k] for k in ("status", "net", "ob")}), out
 
 
@@ -129,7 +130,7 @@ def test_the_dealt_distribution_is_odds_of_and_a_fractional_ob_deals_its_own_cha
     assert odds is not None and whole is not None and odds != whole
     assert odds[0] < whole[0]                                  # Ob 1.5 is easier than Ob 2.0
     n = 20_000
-    rng = random.Random(11)
+    rng = draw.seeded(draw.H2("test_settle_margin_seam", 11))
     labels = {v: k for k, v in DEGREE_LABEL.items()}
     tally = [0, 0, 0, 0]
     for _ in range(n):

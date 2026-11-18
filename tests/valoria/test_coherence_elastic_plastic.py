@@ -21,6 +21,7 @@ a Mending that stayed inert — the state until position 27's remainder — fail
 """
 import os
 import random
+from engine.dice_engine import draw
 import sys
 
 import pytest
@@ -238,7 +239,7 @@ def _ms_by_degree(op, scale, seeds=400):
     coh.reset_all()
     seen = {}
     for seed in range(seeds):
-        r = op(_Practitioner(), {"scale": scale}, rng=random.Random(seed))
+        r = op(_Practitioner(), {"scale": scale}, rng=draw.seeded(draw.H2("test_coherence_elastic_plastic", seed)))
         seen.setdefault(r.degree, set()).add(r.mending_stability_delta)
     return seen
 
@@ -298,7 +299,7 @@ def _mend_at(w, scale, degree, monkeypatch, *, env, pre_stress=coh.ELASTIC_RANGE
     monkeypatch.setattr(ops, "_compute_degree", lambda net, ob: degree)
     if pre_stress:
         _stress("prac", pre_stress, w)
-    return ops.attempt_mending(_Practitioner(), {"scale": scale}, world=w, rng=random.Random(0),
+    return ops.attempt_mending(_Practitioner(), {"scale": scale}, world=w, rng=draw.seeded(draw.H2("test_coherence_elastic_plastic", 0)),
                                environment_in_equilibrium=env)
 
 
@@ -331,7 +332,7 @@ def test_mending_feedback_is_gated_by_the_menders_environment(monkeypatch, w):
     _stress("prac", 4, w)
     log_before = len(coh.get_state("prac", world=w).log)
     r = ops.attempt_mending(_Practitioner(), {"scale": "Structural"}, world=w,
-                            rng=random.Random(0))             # environment not stated
+                            rng=draw.seeded(draw.H2("test_coherence_elastic_plastic", 0)))             # environment not stated
     assert len(calls) == 1 and calls[0]["environment_in_equilibrium"] is False
     assert calls[0]["mending"] > 0
     s = coh.get_state("prac", world=w)
@@ -346,7 +347,7 @@ def test_mending_feedback_never_reaches_the_resting_point(monkeypatch, w):
     _stress("prac", coh.ELASTIC_RANGE + 2, w)
     for _ in range(coh.ELASTIC_RANGE + 2):
         ops.attempt_mending(_Practitioner(), {"scale": "Foundational"}, world=w,
-                            rng=random.Random(0), environment_in_equilibrium=True)
+                            rng=draw.seeded(draw.H2("test_coherence_elastic_plastic", 0)), environment_in_equilibrium=True)
     s = coh.get_state("prac", world=w)
     assert (s.resting_point, s.elastic_displacement) == (2, 0)
 
@@ -369,7 +370,7 @@ def test_rolled_mending_executes_both_branches(monkeypatch):
         _stress("prac", coh.ELASTIC_RANGE, w)
         n = len(calls)
         r = ops.attempt_mending(_Practitioner(), {"scale": "Relational"}, world=w,
-                                rng=random.Random(seed), environment_in_equilibrium=True)
+                                rng=draw.seeded(draw.H2("test_coherence_elastic_plastic", seed)), environment_in_equilibrium=True)
         assert r.coherence_delta == 0
         if r.degree == "Failure":
             failed += 1
@@ -399,7 +400,7 @@ def _mend_aimed(w, degree, monkeypatch, *, configuration_of, set_=INSIDE_BAND_SE
     target = {"scale": "Relational"}
     if configuration_of is not ...:
         target["configuration_of"] = configuration_of
-    return ops.attempt_mending(_Practitioner(), target, world=w, rng=random.Random(0),
+    return ops.attempt_mending(_Practitioner(), target, world=w, rng=draw.seeded(draw.H2("test_coherence_elastic_plastic", 0)),
                                environment_in_equilibrium=env)
 
 
@@ -469,7 +470,7 @@ def test_rolled_own_configuration_mending_executes_both_branches():
         w = _World()
         _stress("prac", coh.ELASTIC_RANGE + INSIDE_BAND_SET, w)
         r = ops.attempt_mending(_Practitioner(), {"scale": "Relational", "configuration_of": "self"},
-                                world=w, rng=random.Random(seed), environment_in_equilibrium=True)
+                                world=w, rng=draw.seeded(draw.H2("test_coherence_elastic_plastic", seed)), environment_in_equilibrium=True)
         expected = ops.RESTING_POINT_MEND_BY_DEGREE[r.degree]
         assert r.resting_point_mended == expected
         assert coh.get_state("prac", world=w).resting_point == INSIDE_BAND_SET - expected

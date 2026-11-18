@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import importlib
 import random
+from engine.dice_engine import draw
 import subprocess
 import sys
 from collections import Counter
@@ -103,7 +104,7 @@ def _bands(inp):
     """(attacker win share, {degree: share}) over the paired seeds."""
     c, wins = Counter(), 0
     for s in SEEDS:
-        g = _mb().resolve_field(inp, random.Random(s))
+        g = _mb().resolve_field(inp, draw.seeded(draw.H2("test_cp_t04_02_marshal", s)))
         c[g["degree"]] += 1
         wins += g["attacker_wins"]
     return wins / len(SEEDS), {k: c[k] / len(SEEDS) for k in DEGREES}
@@ -186,8 +187,8 @@ def test_control_no_order_held_is_the_field_as_it_was():
     inp = _record(_world())
     assert inp.orders is None
     for s in list(SEEDS)[:20]:
-        assert (_mb().resolve_field(inp, random.Random(s))
-                == _mb().resolve_field(replace(inp, orders=(None, None)), random.Random(s)))
+        assert (_mb().resolve_field(inp, draw.seeded(draw.H2("test_cp_t04_02_marshal", s)))
+                == _mb().resolve_field(replace(inp, orders=(None, None)), draw.seeded(draw.H2("test_cp_t04_02_marshal", s))))
 
 
 def test_control_an_order_of_another_faction_or_place_or_a_closed_one_is_not_read():

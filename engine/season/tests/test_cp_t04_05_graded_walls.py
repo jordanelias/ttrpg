@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import importlib
 import random
+from engine.dice_engine import draw
 from dataclasses import replace
 from functools import lru_cache
 
@@ -68,7 +69,7 @@ def _share(walls_dr, level, builder=None):
     """The defender's win share over the paired seeds, and the `walls_dr` the record carried."""
     w = _world(walls_dr, level)
     inp = _record(w) if builder is None else builder(w)
-    wins = sum(not _mb().resolve_field(inp, random.Random(s))["attacker_wins"] for s in SEEDS)
+    wins = sum(not _mb().resolve_field(inp, draw.seeded(draw.H2("test_cp_t04_05_graded_walls", s)))["attacker_wins"] for s in SEEDS)
     return wins / len(SEEDS), inp.walls_dr
 
 
@@ -146,8 +147,8 @@ def test_control_three_at_full_condition_is_the_shipped_field():
     assert graded[1] == 3 and flat[1] is None
     w3, wn = _world(3, 1.0), _world(None, 1.0)
     for s in SEEDS[:20]:
-        assert (_mb().resolve_field(_record(w3), random.Random(s))
-                == _mb().resolve_field(_record(wn), random.Random(s)))
+        assert (_mb().resolve_field(_record(w3), draw.seeded(draw.H2("test_cp_t04_05_graded_walls", s)))
+                == _mb().resolve_field(_record(wn), draw.seeded(draw.H2("test_cp_t04_05_graded_walls", s))))
 
 
 def test_control_through_the_real_driver_three_at_full_condition_is_hash_equal_to_none():

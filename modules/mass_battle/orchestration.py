@@ -1473,12 +1473,12 @@ def _draw_friction(unit):
     """[ED-MB-0016, DG-6 resolution] Draw `unit`'s per-battle combat-effectiveness friction factor ONCE.
     Idempotent within a battle: a fresh unit has no `_friction`; once set it is never redrawn (so a
     multi-turn battle's repeated run_battle entries keep the single per-battle draw). M ~ LogNormal(0,
-    MB_FRICTION_SIGMA^2) via exp(gauss) on the seeded `random` stream. MB_FRICTION off -> 1.0
+    MB_FRICTION_SIGMA^2) via exp(normal) on the keyed `Draw`. MB_FRICTION off -> 1.0
     (default-inert, byte-exact). See config.py MB_FRICTION for the full grounding."""
     if getattr(unit, '_friction', None) is not None:
         return
     if MB_FRICTION and MB_FRICTION_SIGMA > 0.0:
-        unit._friction = fmath.exp(rngsource.get().gauss(0.0, MB_FRICTION_SIGMA))
+        unit._friction = fmath.exp(rngsource.get().normal(0.0, MB_FRICTION_SIGMA))
     else:
         unit._friction = 1.0
 

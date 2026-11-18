@@ -25,6 +25,7 @@ from modules.mass_battle.geometry import _oriented_abs_map
 from modules.mass_battle.hierarchy.units import Unit
 
 from .test_reach_weapon_class import _charge_vs_brace, _standing, field_path  # noqa: F401  (fixture re-export)
+from engine.dice_engine import draw
 
 _TYPES = ('infantry', 'heavy_infantry', 'pike', 'cavalry')
 _SHAPES = ('Line', 'Column')
@@ -216,7 +217,7 @@ def _engaged_by_resolve_field(monkeypatch, weight):
     monkeypatch.setattr(massbattle, '_run_and_grade', lambda unit_a, unit_b, *a, **k: seen.append(unit_a) or {})
     massbattle.resolve_field(MassBattleInput(
         weights=((weight,), (10,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None, origin=None,
-        loyalties=(0.0, 0.0), loyalty_gain=0, geography={}), random.Random(1))
+        loyalties=(0.0, 0.0), loyalty_gain=0, geography={}), draw.seeded(draw.H2("test_mass_battle_support_rank_cap", 1)))
     assert len(seen) == 1
     atom = seen[0].units[0]
     front = {ab for ab, orig in _oriented_abs_map(atom).items() if orig[0] == 0}

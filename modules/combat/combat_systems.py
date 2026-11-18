@@ -1030,7 +1030,7 @@ def commit_depth(aggressor, defender, cfg, rng, TR):
     g=cfg['COMMIT_BETA_K']*(cfg['DISP_COMMIT_K']*ln - wary)
     ba=max(0.25, cfg['COMMIT_BETA_BASE']*(1+g)); bb=max(0.25, cfg['COMMIT_BETA_BASE']*(1-g))
     span=3.0*_commit_range_factor(getattr(aggressor,'range_avail',1.0))
-    commit=2.0+span*float(rng.betavariate(ba,bb))   # stdlib Beta draw (ED-1085 numpy de-leak; same distribution)
+    commit=2.0+span*float(rng.beta(ba,bb))   # Beta draw (`Draw.beta`)
     return commit, ba, bb, ln
 
 def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d, cfg, rng, TR):
@@ -1050,9 +1050,9 @@ def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d
     read_a=(reading(aggressor,cfg)+cfg['AGI_READ_K']*(aggressor.agi-NEUTRAL['agi']))*TR.eff_cw(aggressor,'visual')+consistency_a
     p_read=core.logistic((read_d-read_a)/1.0)
     read_win=rng.random() < p_read
-    modes=list(V.DEFENCE_MODES)   # ORDERED: modes[rng.randrange(3)] below makes the sequence part of the RNG contract
+    modes=list(V.DEFENCE_MODES)   # ORDERED: modes[rng.below(3)] below makes the sequence part of the RNG contract
     msig={m:mode_sigma(m,aggressor,defender,commit,read_win,fat_d,cfg) for m in modes}
-    mode=max(msig,key=msig.get) if read_win else modes[rng.randrange(3)]   # stdlib uniform int (ED-1085)
+    mode=max(msig,key=msig.get) if read_win else modes[rng.below(3)]   # uniform int (`Draw.below`)
     return dict(read_win=read_win, read_d=read_d, read_a=read_a, p_read=p_read, mode=mode, msig=msig)
 
 def indes_steal_amount(defender, wind, commit, read_d, read_a, cfg, TR):

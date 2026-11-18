@@ -13,6 +13,7 @@ The mapping decision is asserted too: a yielder is read by the EXISTING `combat_
 """
 import functools
 import random
+from engine.dice_engine import draw
 
 import pytest
 
@@ -106,7 +107,7 @@ def test_a_yield_that_could_never_fire_is_refused_loudly():
                 wrapper.Yield(by=A, turn=13),            # after max_bouts
                 wrapper.Yield(by='A', turn=1)):          # not a combatant at all
         with pytest.raises(ValueError):
-            wrapper.fight(A, B, CFG, random.Random(0), max_bouts=12, yield_decl=bad)
+            wrapper.fight(A, B, CFG, draw.seeded(draw.H2("test_combat_yield", 0)), max_bouts=12, yield_decl=bad)
 
 
 def test_a_yield_while_the_objective_is_contested_in_the_zone_is_refused():

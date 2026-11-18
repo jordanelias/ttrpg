@@ -80,6 +80,7 @@ from ..state.attribution import anchor_of, cover_at_logging
 from ..state.carriers import Event, Person, Proposition, Rung, Site, Tenure, View
 from ..state.gate import NotYours
 from ..state.world import World
+from engine.dice_engine import draw as keyed_draw
 
 # ⚠ L5: THE LOOP IS `loop/`, NOT `driver.py`. Six step bodies left the driver for their own
 # modules (`04 §A.2:134`), so a scan pointed at `DRIVER_PY` alone reads a fraction of the season
@@ -8257,7 +8258,7 @@ def test_the_seam_calls_personal_combat_rather_than_naming_it():
         "the seam is not using the resolver `module_contracts.yaml` declares for this prize")
 
     # ⚠ DETERMINISM, WHICH IS THE WHOLE REASON THE SEED IS DERIVED FROM THE WORLD'S CLOCK.
-    # `wrapper.fight`'s own note says to pass `random.Random(seed)`; an unseeded call would make
+    # `wrapper.fight`'s own note says to pass `draw.seeded(...)`; an unseeded call would make
     # every campaign unreproducible, which `W11` and `test_w9_check1` both rest on.
     again = contest(w, "S", "the body", ["p_low", "p_mid"], 0, 2, ["act1"])
     assert again["result"] == out["result"] and again["seed"] == out["seed"], (
@@ -8340,7 +8341,7 @@ def _k1_combatants(w, monkeypatch):
         return real(A, B, **kw)
     monkeypatch.setattr(wrapper, "fight", spy)
     inp = C.combat_input(w, ["p_low", "p_mid"], "fight")
-    entry.fn(inp, __import__("random").Random(0))
+    entry.fn(inp, keyed_draw.seeded(keyed_draw.H2("test_season_shape", 0)))
     return inp, seen
 
 
@@ -8435,9 +8436,9 @@ def test_k1_control_an_all_absent_realm_builds_the_record_it_always_built(monkey
     social = dataclasses.replace(inp, attributes=({"attr.social.charisma": 5}, {"attr.social.grace": 2}))   # no field
     checked = 0
     for seed in range(5):
-        a = entry.fn(inp, random.Random(seed))
+        a = entry.fn(inp, keyed_draw.seeded(keyed_draw.H2("test_season_shape", seed)))
         for other in (explicit, social):
-            b = entry.fn(other, random.Random(seed))
+            b = entry.fn(other, keyed_draw.seeded(keyed_draw.H2("test_season_shape", seed)))
             assert (a["result"], a["ends"], a["wound_state"]) == (b["result"], b["ends"], b["wound_state"])
             checked += 1
     assert checked == 10

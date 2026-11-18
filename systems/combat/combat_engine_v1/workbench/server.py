@@ -18,6 +18,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import random
+from engine.dice_engine import draw
 from modules.combat import wrapper
 from modules.combat.combatant import Combatant
 from modules.combat import attributes   # the combat attribute spec (PC-14)
@@ -67,7 +68,7 @@ def do_montecarlo(req):
     trials = int(req.get('trials', 1000))
     seed = int(req.get('seed', 0))
     specA, specB = req['scenario']['A'], req['scenario']['B']
-    rng = random.Random(seed)   # stdlib RNG (engine contract post ED-1085)
+    rng = draw.seeded(draw.H2("server", seed))   # stdlib RNG (engine contract post ED-1085)
     a_wins = decided = draws = 0
     half = trials // 2
     for i in range(trials):

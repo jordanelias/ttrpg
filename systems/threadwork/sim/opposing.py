@@ -211,7 +211,7 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
                   'knot_ob_penalty': KNOT_STRAIN_FR_LOSER if is_fr else KNOT_STRAIN_STANDARD_LOSER}
     elif a_deg == 'Partial' and b_deg == 'Partial':
         # Weak oscillation — d6 1-2 = Shifting Object one scale below, 3-6 = none
-        shift_roll = rng.randint(1, 6)
+        shift_roll = rng.die(1, 6)
         outcome = f"Weak oscillation; d6={shift_roll} → " + ("Shifting Object one scale below" if shift_roll <= 2 else "no effect")
         ms_delta = -1
         a_cons = {'coherence_delta': COHERENCE_COST_BY_SCALE.get(scale, 0) - 1,

@@ -24,6 +24,7 @@ import dataclasses
 import importlib.util
 import json
 import random
+from engine.dice_engine import draw
 from pathlib import Path
 from unittest import mock
 
@@ -229,7 +230,7 @@ def _actor_felled_share(w, n=N, seed=7):
     entry, refusal = entry_for(combat._PRIZE, combat._PROVIDER)
     assert entry is not None, refusal
     inp = combat.combat_input(w, [ACTOR, SUBJECT], "fight")
-    rng = random.Random(seed)
+    rng = draw.seeded(draw.H2("test_cp_t03_03_kit", seed))
     felled = 0
     for _ in range(n):
         ws = entry.fn(inp, rng)["wound_state"]
@@ -279,8 +280,8 @@ def test_a_record_built_without_kits_is_fought_at_the_engines_default():
     plain = dataclasses.replace(inp, kits=())
     default = dataclasses.replace(inp, kits=((combat_kit.DEFAULTS["weapon"], combat_kit.DEFAULTS["armor"]),) * 2)
     for seed in range(5):
-        a = entry.fn(plain, random.Random(seed))
-        b = entry.fn(default, random.Random(seed))
+        a = entry.fn(plain, draw.seeded(draw.H2("test_cp_t03_03_kit", seed)))
+        b = entry.fn(default, draw.seeded(draw.H2("test_cp_t03_03_kit", seed)))
         assert (a["result"], a["ends"], a["wound_state"]) == (b["result"], b["ends"], b["wound_state"])
 
 

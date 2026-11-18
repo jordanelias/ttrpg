@@ -23,6 +23,7 @@ from __future__ import annotations
 import dataclasses
 import inspect
 import random
+from engine.dice_engine import draw
 import re
 
 import yaml
@@ -279,7 +280,7 @@ def test_step25_falsifier_the_examination_reads_the_quality_into_its_obstacle():
             w, _d, rid = trail_world(fixtures=_fx(default_forgery_quality=q, obstacle_ceiling=ceiling,
                                                   ceiling_per_pool=per_pool, pool_default=30))
             out = sigma.resolve(w, [INVESTIGATOR], ["root"], None, verb="research", subject=rid,
-                                rng=random.Random(0), module_entry="social_contest.roll")
+                                rng=draw.seeded(draw.H2("test_sc02_22b_consequence_and_forgery", 0)), module_entry="social_contest.roll")
             assert out["status"] == "RESOLVED", out
             obs[(q, ceiling, per_pool)] = out["ob"]
             inp = sigma.contest_input(w, [INVESTIGATOR], verb="research", subject=rid)
@@ -311,9 +312,9 @@ def test_step25_a_prize_contest_examines_nothing_and_an_inquiry_examines_its_sub
         return real(*args, **kw)
     monkeypatch.setattr(sigma, "_read_social_roll", spy)
     sigma.resolve(w, [INVESTIGATOR], ["root"], "a matter", verb="speak", subject=rid,
-                  rng=random.Random(0), rung=None)
+                  rng=draw.seeded(draw.H2("test_sc02_22b_consequence_and_forgery", 0)), rung=None)
     sigma.resolve(w, [INVESTIGATOR], ["root"], None, verb="research", subject=rid,
-                  rng=random.Random(0))
+                  rng=draw.seeded(draw.H2("test_sc02_22b_consequence_and_forgery", 0)))
     assert seen == [None, rid], seen
 
 

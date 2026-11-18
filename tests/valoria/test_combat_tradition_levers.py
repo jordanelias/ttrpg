@@ -22,6 +22,7 @@ import pytest
 
 
 import random  # noqa: E402
+from engine.dice_engine import draw
 from modules.combat import ability_primitives as ABIL  # noqa: E402
 from modules.combat import combat_systems as S  # noqa: E402
 from modules.combat import contact as CT  # noqa: E402
@@ -207,7 +208,7 @@ def test_investment_is_bounded_no_overflow_crash():
     import random as _r
     a = Combatant('A', weapon='katana', tradition='japanese', equipped={'shinogi': 999})
     b = Combatant('B', weapon='arming', tradition='german', equipped={'zwerchhau': 999, 'ringen_am_schwert': 999})
-    W.fight(a, b, CFG, _r.Random(3))   # no OverflowError
+    W.fight(a, b, CFG, draw.seeded(draw.H2("test_combat_tradition_levers", 3)))   # no OverflowError
 
 
 def test_investment_level_moves_the_per_event_effect():
