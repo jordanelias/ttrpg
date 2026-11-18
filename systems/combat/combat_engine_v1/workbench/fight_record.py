@@ -1,7 +1,7 @@
 """The workbench's one way to a fight: a fighter spec (or a Combatant) becomes a `PersonalCombatInput`, and the record
 is fought by `modules.combat.fight:fight`, the entry the season loop calls (B14.11; `03_PC_typed_outcome_one_door`
-Part B). `fight_trace.py`, `balance.py` and `server.py` read it; none of them calls `wrapper.fight` on a Combatant or touches
-`wrapper._TRACE`.
+Part B). `fight_trace.py`, `balance.py` and `server.py` read it; none of them touches `wrapper._TRACE`, and only `fight_trace.py`
+calls `wrapper.fight` on a Combatant, for a declared Yield the record cannot carry.
 
 A PARTY is a plain dict, one fighter's share of the record:
   label, end, attributes ({registry key: value}), kit ((weapon, armor)), score (`Combatant.faculty`), disp,

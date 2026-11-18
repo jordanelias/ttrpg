@@ -1044,6 +1044,10 @@ FAN_OUT_MODES = roster("fan_out_modes")
 # `TITLE_DOMAINS`' reason; the terms are cross-validated against `WITNESS_CHANNELS` and
 # `epistemic.Seen` at import in `epistemic.py`, beside the channel predicates they are keyed on.
 OBSERVATION_TERMS = roster("observation_terms", ordered=True)
+# The `person.died` Event kind's name. It lives here and not in `state/gate.py` (where it was spelt) because
+# `queries/person_q.py::deed_doer` must read it and `person_q` may not import the write path: a name two modules
+# need, below both. `state/gate.py` imports it back, so `gate.PERSON_DIED` still resolves for every importer.
+PERSON_DIED = "person.died"
 OBSERVATION_DEPOSIT = roster_map("observation_terms", "deposit")
 # THE ONE NAME THE `seen` CLAIM IS DEPOSITED UNDER. It lives here and not in `epistemic.py` (where
 # it was bound) because `queries/person_q.py::said_of` must read it and `epistemic` imports

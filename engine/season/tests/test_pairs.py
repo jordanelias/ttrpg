@@ -163,13 +163,13 @@ def test_the_instrument_is_deterministic_given_its_seed(capsys):
 
 
 def _scene(w, actor, target, **felled_yield) -> CombatOutcome:
-    """A planted scene: `felled` names who is down, `yielded` the declarer of a `yield` event, `refused` marks it refused
-    (the module entry lifts a refused declaration to no `Surrender`)."""
+    """A planted scene: `felled` names who is down, `yielded` the declarer of a `yield` event (the module entry lifts a refused declaration to no
+    `Surrender`, so a refused one is a scene with none)."""
     def state(pid):
         return PartyWounds(felled=pid in felled_yield.get("felled", ()), wounds=0, max_wounds=3,
                            health_remaining=5, health_full=5)
     yielded = felled_yield.get("yielded")
-    surrender = None if yielded is None or felled_yield.get("refused") else Surrender(by=yielded, round=2, accepted=True)
+    surrender = None if yielded is None else Surrender(by=yielded, round=2, accepted=True)
     return CombatOutcome(claimants=(actor, target), wounds={actor: state(actor), target: state(target)},
                          surrender=surrender, beat=None, rounds=2,
                          shape=SceneShape(rounds=2, blows={actor: 0, target: 0}, first_blood=None, lead_changes=0, nearest={}), trace=())
@@ -185,7 +185,6 @@ def test_scene_outcome_reads_what_fight_estimate_read():
     assert combat.scene_outcome(_scene(w, a, b), a, b) == ("undecided", None)
     assert combat.scene_outcome(_scene(w, a, b, yielded=b), a, b) == ("yielded", b)
     assert combat.scene_outcome(_scene(w, a, b, yielded=a, felled=(b,)), a, b) == ("yielded", a)   # a yield is read first
-    assert combat.scene_outcome(_scene(w, a, b, yielded=b, refused=True, felled=(a,)), a, b) == ("actor_felled", None)
     # every outcome is a member of the roster `fight_estimate` shares out
     for felled in ((), (a,), (b,), (a, b)):
         assert combat.scene_outcome(_scene(w, a, b, felled=felled), a, b)[0] in combat.ESTIMATE_OUTCOMES

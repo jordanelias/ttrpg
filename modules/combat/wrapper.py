@@ -509,7 +509,7 @@ class Yield:
 #   - 'blood' : stops at the first WOUND (a wound gate crossed, `wt.wounds >= 1`), not at the first point of damage.
 #   - 'yield' : stops when Health falls to `CFG['YIELD_HEALTH_FRAC']` of full (`wt.health_remaining`).
 # The stop rides the result exactly as an accepted `Yield` does: a `yield` trace event (with `terms` beside it), the
-# opponent's result, and no further roll -- so `seam/wrappers/combat.py::surrender_of` lifts it unchanged, and no
+# opponent's result, and no further roll -- so `fight.py::_surrender` lifts it unchanged, and no
 # band is added (H-98). ⚠ What a term does NOT do: it does not reshape a blow. A strike that fells a fighter on the
 # beat it lands (a decisive blow crossing every gate, or the gate past the threshold) is a felling under any term;
 # the stop is read between beats, never inside a strike.
@@ -612,7 +612,7 @@ def _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide):
             break
         if stop is not None and _terms_met(A, B, stop, cfg):
             # THE TERMS ARE MET (RS-25): the fighter who crossed them yields, standing. It is the accepted-`Yield` ending
-            # -- the same `yield` event `surrender_of` lifts, the opponent's result, NO UPSET_FLOOR draw (a lucky blow
+            # -- the same `yield` event `fight._surrender` lifts, the opponent's result, NO UPSET_FLOOR draw (a lucky blow
             # cannot steal a fight the terms have already closed) -- read at the END of the turn the terms were met in,
             # where a declared `Yield` is read at the start of its turn. An exact tie yields nobody: UNRESOLVED.
             yielder = _terms_yielder(A, B, stop, cfg)

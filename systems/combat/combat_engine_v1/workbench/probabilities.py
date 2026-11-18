@@ -24,12 +24,12 @@ from engine.dice_engine import sigma_leverage as SL  # the dice owner: band_odds
 def degree_distribution(pool, net_sigma, ob):
     """P(fail / partial / success / overwhelming) for one resolution roll under the continuous engine.
 
-    core.resolve draws net = roll_net(pool) + soft_cap(net_sigma) * sigma_n(pool), then bands it at `ob`.
+    core.resolve draws net = roll_net(pool) + SL.net_boost(net_sigma, pool), then bands it at `ob`.
     That boost is the mu-shift; the roll's mean and spread and the band edges are
     `SL.band_odds(pool, ob, boost)`'s, the closed form of the same sampler and ladder.
     `ob` is REQUIRED — the Ob the roll was banded at (the trace event's `ob`), never a default, for the
     same reason core.resolve requires it."""
-    boost = SL.soft_cap(net_sigma) * SL.sigma_n(pool)      # core.resolve's own boost expression
+    boost = SL.net_boost(net_sigma, pool)                  # core.resolve's own boost call
     p_fail, p_part, p_succ, p_over = SL.band_odds(pool, ob, boost)   # owner order: DEGREE_ORDINAL
     d = {'fail': p_fail, 'partial': p_part, 'success': p_succ, 'overwhelming': p_over}
     return {k: max(0.0, round(v, 4)) for k, v in d.items()}

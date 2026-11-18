@@ -16,8 +16,8 @@ from __future__ import annotations
 from dataclasses import replace
 
 from engine.dice_engine.dice_engine import Degree, degree_from_net
-from engine.dice_engine.sigma_leverage import levels_to_net_sigma, net_boost, pool_of, roll_net_continuous
-from engine.substrate import descriptors
+from engine.dice_engine.sigma_leverage import levels_to_net_sigma, pool_of
+from engine.substrate import composition, descriptors
 
 from ..data.rosters import (
     DECLARED, ENDING_FELLED, ENDING_PREVAILED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, FIELD_WINNER_CASUALTY_ARMS, INVESTED, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
@@ -55,7 +55,7 @@ CEILING = "body_ceiling"          # v11 CP-T03-07: the cell the lasting mark wri
 
 
 def _yielder(res: "Resolution") -> "str | None":
-    """THE PARTY THE SCENE'S `surrender` NAMES (`seam/wrappers/combat.py::surrender_of`, lifted onto the result), or
+    """THE PARTY THE SCENE'S `surrender` NAMES (`modules/combat/fight.py::_surrender`, lifted onto the result), or
     `None`. The one reader both effects ask. `_eff_kill` refuses a `res` with no dict result only AFTER its
     opponent-not-a-person early return, so `_eff_capture` reaches this with such a `res` in a hand call: `None`."""
     if res is None or not isinstance(res.result, dict):
@@ -209,7 +209,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # the felled man's own kind. And because `_fold` gives each kind's Event only its earners' changes,
     # the person.died Event of a felled actor names him, never the standing subject.
     # v10 PC-10b: `duel.yielded` IS EARNED BY THE YIELDER ALONE -- the party the scene's `surrender`
-    # (`seam/wrappers/combat.py::surrender_of`, lifted off the trace) names. A band declaring it (`accept`'s
+    # (`modules/combat/fight.py::_surrender`, lifted off the trace) names. A band declaring it (`accept`'s
     # `Wounded`) would otherwise hand it to every wounded party, a yield nobody made (ID-9). Read off the
     # result, never the verb: a row whose band does not declare the kind emits nothing of it (`_fold`).
     yielder = _yielder(res)
@@ -342,6 +342,10 @@ def hand_observed(pid: str, actor: str, ending: tuple) -> tuple:
     return (Observation(pid, HAND_PREDICATE, standing[0]),) if len(standing) == 1 else ()
 
 
+# B14.15's four scene predicates, spelt once here (the writer) and read by `harness/chronicle.py`; none is an `observation_terms` member.
+BLOWS_LANDED, FIGHT_ROUNDS, FIRST_BLOOD, LEAD_CHANGES = "blows_landed", "fight_rounds", "first_blood", "lead_changes"
+
+
 def scene_observed(parties: tuple, shape: "dict | None") -> tuple:
     """B14.15 (D-U1-06; `16_PESSIMIST_PC_C` 1): the Observations a fight's success Events carry of the scene's course, read off
     the `shape` the seam lifted onto the result (`SceneShape` as a dict), or `()` where the result carries none. For each party
@@ -354,11 +358,11 @@ def scene_observed(parties: tuple, shape: "dict | None") -> tuple:
         return ()
     blows = shape.get("blows") or {}
     actor = parties[0]
-    out = [Observation(p, "blows_landed", blows[p]) for p in parties if p in blows]
-    out.append(Observation(actor, "fight_rounds", shape["rounds"]))
+    out = [Observation(p, BLOWS_LANDED, blows[p]) for p in parties if p in blows]
+    out.append(Observation(actor, FIGHT_ROUNDS, shape["rounds"]))
     if shape.get("first_blood") is not None:
-        out.append(Observation(shape["first_blood"], "first_blood", True))
-    out.append(Observation(actor, "lead_changes", shape["lead_changes"]))
+        out.append(Observation(shape["first_blood"], FIRST_BLOOD, True))
+    out.append(Observation(actor, LEAD_CHANGES, shape["lead_changes"]))
     return tuple(out)
 
 
@@ -413,7 +417,7 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     Record is `accept`'s, not `capture`'s).
 
     WHAT LICENSES THE EDGE, EACH ONE OWNER OF ITS RULE (`_eff_arrest`'s tests, minus the warrant): (1) the scene's
-    `surrender` (`seam/wrappers/combat.py::surrender_of`, lifted off the trace) names the SUBJECT as the one who
+    `surrender` (`modules/combat/fight.py::_surrender`, lifted off the trace) names the SUBJECT as the one who
     yielded -- a yield by the actor, or none, opens nothing, and a scene in which either party was felled opens
     nothing (a felled actor holds no seat to take him into); (2) the subject is a person other than the actor and
     not already in custody (`restrained`, one live `detain` per prisoner); (3) the exercised seat may take him
@@ -466,6 +470,8 @@ def marked_ceiling(ceiling: int, floors) -> int:
 
 
 MARKED_STEM = "marked"
+MARK_ROLE = "combat.resolve"                    # the composition row whose module rolls the mark: `roll_net + net_boost`, one owner
+QUERY_ENTRIES = ((MARK_ROLE, "query"),)         # the host's declared need, held at driver construction (`registrar.require_entries`)
 
 
 def marked_observed(w: "World", pid: str, marks: dict) -> tuple:
@@ -481,7 +487,7 @@ def _mark_degree(w: "World", pid: str, body: int, ceiling: int) -> Degree:
     """B14.23 (`U5b_PC_residue` section 7; A-5 to A-8, A-30): THE BAND OF ONE SURVIVOR'S MARK ROLL. The pool is the one pool rule on the
     untrained default -- `pool_of(pool_default, 0, pool_add, pool_floor)`, no skill being authored for mending clean -- and his body band enters as
     LEVELS through the `wounds` source (`ADVANTAGE_SOURCES[WOUNDS]`, the roller's own wound against him, as `combat._carried_of` reads it), summed by
-    `levels_to_net_sigma` and applied as `net_boost`, never a die and never an obstacle term. The sampler is the one (`roll_net_continuous`); the
+    `levels_to_net_sigma` and applied as `net_boost`, never a die and never an obstacle term. The roll is the module's (`combat.resolve`, reached by role: `roll_net_continuous` plus `net_boost`, the one sampler); the
     obstacle is the fixture `mark_ob`, graded on the one ladder (`degree_from_net`). The stream is the survivor's own, keyed
     `(world_seed, tick, victim, "fight.mark")` (`state.ids.draw_factory`, A-30): never a position in the scene's stream and never the season's draw,
     so the roll reads `World` and writes nothing. [ASSUMPTION; medium; Jordan to correct; revert: `body_mark_model: deepest_gate`]"""
@@ -491,8 +497,8 @@ def _mark_degree(w: "World", pid: str, body: int, ceiling: int) -> Degree:
     _for, against = ADVANTAGE_SOURCES[WOUNDS](fx, {"body": body, "body_ceiling": ceiling})
     sigma = levels_to_net_sigma(_for, against)
     rng = draw_factory(w.world_seed, lambda: w.tick)(pid, "fight.mark")
-    net = roll_net_continuous(pool, rng=rng) + net_boost(sigma, pool)
-    return degree_from_net(net, fx.get("mark_ob"))
+    ob = fx.get("mark_ob")
+    return degree_from_net(composition.require(MARK_ROLE)(pool, sigma, rng, ob)[1], ob)
 
 
 def _marks(w: "World", bodies: dict, states: dict) -> dict:

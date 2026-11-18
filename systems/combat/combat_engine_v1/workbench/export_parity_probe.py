@@ -133,7 +133,6 @@ def run(plant=None):
         columns = [col for col, _g, _f, _s in catalogue.QUANTITIES]
     finally:
         sys.modules.pop(AUTHORED_DATA, None)
-    assert AUTHORED_DATA not in sys.modules, f"{AUTHORED_DATA} is in sys.modules after the run"
 
     derived = sections['derived']
     startable = sections['kit']['weapons']
@@ -146,7 +145,7 @@ def run(plant=None):
         for col in columns:
             w, why = _gap(derived[name].get(col), recomputed[name].get(col))
             worst = max(worst, w)
-            if why or w > TOLERANCE:
+            if why or not (w <= TOLERANCE):      # `not <=`, so a NaN gap is a problem
                 problems.append(f"{name}: {col} derived={derived[name].get(col)!r} "
                                 f"recomputed={recomputed[name].get(col)!r}" + (f" ({why})" if why else ""))
     return len(startable), worst, problems

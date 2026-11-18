@@ -1,7 +1,7 @@
 """Build-lever instrument — what a PLAYER can change about a fighter, and what each change is worth.
 
 `workbench/balance.py` sweeps the three things the balance methodology owns (weapon, attribute, tradition)
-and it builds its combatants through `balance._mk`, which forwards only the nine attributes plus
+and it builds its combatants through `fight_record.party_of_spec` (B14.11 retired its `balance._mk`), which forwards only the nine attributes plus
 weapon/armour/tradition. That leaves four of the engine's build inputs unmeasurable by it: **skills**
 (`c.skills`), **learned techniques and their invested level** (`c.equipped`), **cross-training**
 (`c.known_traditions`), and **asymmetric armour** (balance.py's armour matrix always puts both fighters at

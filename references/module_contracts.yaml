@@ -60,6 +60,11 @@ composition_roles:
     entry: query
     needed_by: "engine/season/seam/wrappers/sigma.py — `_composed_obstacle` (the obstacle a contest is rolled against and the one believed odds read), called by role. Declared in `sigma.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `settlements.larder_draw` is."
 
+  combat.resolve:
+    target: "modules.combat.core:resolve"
+    entry: query
+    needed_by: "engine/season/loop/effects_combat.py — `_mark_degree` (B14.23), the one roll of a survivor's mark, `(pool, net_sigma, rng, ob) -> (degree, net)`: the module owns the roll and the boost (`roll_net + SL.net_boost`), the host keeps the stream (`fight.mark`) and the pool. Declared in `effects_combat.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `social_contest.obstacle` is."
+
   combat.fight:
     target: "modules.combat.fight:fight"
     entry: verb_call

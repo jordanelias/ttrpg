@@ -33,13 +33,12 @@ TRACE_KINDS = {
 # flags any reason that NEVER fires across a sweep — that is how a dead transition (e.g. the stamina<=-4
 # collapse abort the 2026-06-09 map flagged as "never observed") is surfaced repeatably.
 SEPARATION_REASONS = {'collapse', 'burst_ceiling', 'clean_defence', 'beat_exhaustion', 'terms'}   # 'terms' (RS-25): a duel's terms were met at a beat head
-# [ED-PC-0042] The (e) sweep below used to flag 'collapse' and 'beat_exhaustion' as
-# never-fired, and the 2026-07-26 defect register carried them as dead branches on that basis. They are NOT dead:
-# over 5,184 fights spanning 12 weapons x end in {1,2,6} x armour in {none,heavy} they fire 164 and 1,135 times
-# respectively. The flag was a FALSE POSITIVE of that sweep's build coverage — its 4 matchups all use DEFAULT
-# fighters, who reach clean_defence/burst_ceiling long before stamina <= -4 or the beat budget runs out. PC-13 widened
-# the sweep (the WIDE builds, the duel-terms fight and the withdraw fight in the self-test below) rather than delete two
-# reachable guards on the strength of an under-powered probe.
+# [ED-PC-0042] The (e) sweep below used to flag 'collapse' and 'beat_exhaustion' as never-fired. 'collapse' is NOT dead: PC-13
+# widened the sweep (the WIDE builds below) and it fires, because the 4 default matchups use DEFAULT fighters, who reach
+# clean_defence/burst_ceiling long before stamina <= -4, so the flag on it was a false positive of that sweep's build coverage.
+# 'beat_exhaustion' is NOT shown reachable: it is not observed in 1,728 fights (addendum E-B15) nor in 11,000
+# (16_PESSIMIST_PC.md section 1.3), and this sweep, run at B14, still prints it under [DEAD-BRANCH FLAG]. The earlier figure for it
+# (1,135 firings over 5,184 fights) is retracted. It stays declared until a build that reaches it is found or the site is deleted.
 
 STATES = {
     # ---- outer loop (fight) ----

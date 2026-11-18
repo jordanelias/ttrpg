@@ -168,6 +168,9 @@ def test_no_caller_binds_the_engines_trace_hook(wb_trace, wb_balance):
     m = _matchups()[1]
     wrapper.__class__ = _Watched
     try:
+        wrapper._TRACE = None                      # the control: a deliberate caller assignment IS seen
+        assert len(seen) == 1, "the watcher did not record a planted caller assignment, so it cannot observe the failure it excludes"
+        seen.clear()
         out = entry.fight(_record(m), random.Random(1))
         A, B = _combatants(m)
         wb_trace.run_traced_fight(A, B, seed=1)

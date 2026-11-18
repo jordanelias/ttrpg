@@ -99,7 +99,7 @@ def test_scene_shape_is_a_pure_fold_over_trace():
 # ---------------------------------------------------------------------------------------------------------------------
 def _fought(aid, seed=1003, host=None, world=None, fan=None, witness=False, obs=None):
     """`p_low` fights `p_mid` on `tiny_world` at world seed `seed`: declared at RESOLVE, fought at ENCOUNTER (the driver's own
-    two calls). Returns `(world, driver, declared, fought)`; the module's `CombatOutcome` is on `box`'s way out through a spy on
+    two calls). Returns `(world, driver, declared, fought, outcome)`; the module's `CombatOutcome` is on `box`'s way out through a spy on
     the seam's entry lookup, so the test can fold the trace itself."""
     box = {}
     real = combat.entry_for
@@ -216,7 +216,7 @@ def test_played_and_automated_scenes_carry_equal_observations():
     assert checked >= 2
 
 
-def test_document_post_remit_and_chronicle_witnesses_hold_no_fell_to_hand():
+def test_bystanders_hold_no_scene_shape_under_the_shipped_deposit_mode():
     """GATE 5, `first_blood` here and `fell_to_hand` in `test_the_hand_rides_the_death_and_reaches_only_who_it_was_deposited_to`.
     WHAT THE TREE DOES, asserted: WITNESS deposits an
     Event's `observed` under `observation_deposit_mode` (shipped `actor`: the act's actor alone), and it does not look at the

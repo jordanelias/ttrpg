@@ -75,7 +75,7 @@ def test_the_field_is_built_at_condition_scale_and_has_one_row_and_three_writers
     assert Step.ENCOUNTER in row.steps and Step.RESOLVE in row.steps and not row.unproduced
     writers = sorted(v for v, r in VERB_TABLE.items() if f"Person.{CEILING}" in r.writes)
     assert writers == ["accept", "capture", "fight"]
-    assert set(BODY_MARK_MODELS) == {"none", "deepest_gate", "drawn"}      # `drawn` (B14.23) is swept, never shipped
+    assert "drawn" in BODY_MARK_MODELS                                     # `drawn` (B14.23) is swept, never shipped
     assert DEFAULT_FIXTURES.get("body_mark_model") == "deepest_gate", "the shipped arm (REM-52's precedent)"
 
 

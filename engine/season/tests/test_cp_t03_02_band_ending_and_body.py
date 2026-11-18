@@ -1,7 +1,7 @@
 """CP-T03-02 -- THE BAND'S EVENT SAYS HOW THE FIGHT ENDED, AND WHAT THE BODY NOW IS.
 
 (i) Every success Event of a fight's Felled/Wounded band carries `Event.ending`: `(pid, felled | yielded |
-undecided)` per party, read off the scene's lifted `wound_state` and `surrender`
+prevailed | undecided)` per party, read off the scene's lifted `wound_state` and `surrender`
 (`loop/effects_combat.py::fight_ending`). (ii) Each wounded party's `body.changed` carries the Observation
 `(pid, "body", v)`, `v` the body the write LEAVES him with, on `Event.observed` -- deposited by WITNESS's
 shipped `observation_deposit_mode` (`actor`), no new channel.

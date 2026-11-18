@@ -144,7 +144,7 @@ def scene_shape(trace, claimants: tuple, health_full: Mapping[str, int]) -> Scen
     return SceneShape(rounds=rounds, blows=blows, first_blood=first_blood, lead_changes=changes, nearest=nearest)
 
 
-def fight(inp: PersonalCombatInput, rng: Optional[random.Random] = None,
+def fight(inp: PersonalCombatInput, rng: random.Random,
           decide: Optional[Callable[[CombatTurnView], str]] = None, cfg: Optional[dict] = None,
           max_bouts: Optional[int] = None) -> CombatOutcome:
     """Fight one bout scene between the record's two parties and return a `CombatOutcome`: `wounds[id]` is that

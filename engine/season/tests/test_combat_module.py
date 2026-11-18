@@ -146,7 +146,7 @@ def test_resolve_returns_no_winner_key():
 def test_a_self_fight_is_refused_party_gap(monkeypatch):
     """B14.20: one id as both claimants is refused before the engine is called -- `fight_estimate`'s own `PARTY-GAP` line
     (`actor == target`), now `resolve`'s too. FALSIFIER: a person fighting himself returns `RESOLVED`, or reaches the engine
-    (the module entry is replaced by one that fails the test if called)."""
+    (the host's input builder, `combat_input`, is spied on and the test fails if it is reached)."""
     from ..data.matrix import Step
     from ..harness import probes as P
     from ..loop.driver import SeasonDriver
@@ -412,7 +412,7 @@ def test_an_undecided_fight_is_witnessed_by_those_present():
 # ---------------------------------------------------------------------------------------------------------------------
 # B14.03 (D-U1-06, C3-L5, F-PC-08 (a)): A FELLING RECORDS ITS SOURCE AND WEAPON, NEVER A DOER.
 # ---------------------------------------------------------------------------------------------------------------------
-def test_a_felling_deposits_fell_to_under_observation_terms():
+def test_a_felling_deposits_fell_to_on_the_death_event():
     """The felled party's Subject carries `(victim, "fell_to", "<source>:<weapon>")` on the Event it earns
     (`person.died`), as `broke_observed` carries `broke`; WITNESS deposits it to the act's actor (the shipped
     `observation_deposit_mode`). FALSIFIER: a felling whose Event has no `fell_to`; a value that names a person (either
@@ -456,7 +456,7 @@ def test_a_felling_deposits_fell_to_under_observation_terms():
 # ---------------------------------------------------------------------------------------------------------------------
 # B14.13 (F-PC-16): A ROUND OPENS WITH THE WEAPON AS ISSUED -- THE HALF-SWORD FORM DOES NOT CROSS THE ROUND BOUNDARY.
 # ---------------------------------------------------------------------------------------------------------------------
-def test_no_engagement_opens_in_a_halfsword_form():
+def test_no_engagement_opens_in_a_halfsword_form(monkeypatch):
     """A longsword against plate at three seeds: every `engagement_start` weapon key, on either side, is a base key
     (`HALFSWORD_BASE` has no entry for it), and so is the first of each fight. FALSIFIER: an `engagement_start` that
     names a `_halfsword` record as either fighter's weapon. The control inside it: the fights reach later engagements (`later >= 1`), the only
@@ -466,6 +466,9 @@ def test_no_engagement_opens_in_a_halfsword_form():
     wrapper = importlib.import_module("modules.combat.wrapper")
     Combatant = importlib.import_module("modules.combat.combatant").Combatant
     HALFSWORD_BASE = importlib.import_module("modules.combat.weapons").HALFSWORD_BASE
+    S = importlib.import_module("modules.combat.combat_systems")
+    real, carried = S.base_form, []
+    monkeypatch.setattr(S, "base_form", lambda c: (carried.append(c.weapon in HALFSWORD_BASE), real(c))[1])   # the reset, seen
     checked = later = 0
     for seed in (0, 1, 2):
         A, B = Combatant("A", weapon="longsword", armor="heavy"), Combatant("B", weapon="arming", armor="heavy")
@@ -479,6 +482,7 @@ def test_no_engagement_opens_in_a_halfsword_form():
         later += max(0, len(starts) - 1)
     assert checked >= 1
     assert later >= 1, "no fight reached a second engagement: the carried form was never at issue"
+    assert any(carried), "no engagement reset found a half-sword form to carry: the reset was never at issue"
 
 # B14.24 (`U5b_PC_residue` §8, F-DICE-14 Edit C; A-1, A-30): A FIGHT IS PRICED BY THE BELIEVER'S OWN PICTURE OF IT.
 # `sigma.believed_chance` answers a row whose prize binds `personal_combat` with the fight sampled on a private stream, read over
@@ -660,12 +664,13 @@ def test_drawn_marks_yield_all_three_outcomes_over_200_seeds():
 
 
 def test_deepest_gate_reproduces_the_pre_change_hash():
-    """B14.23's control: with `body_mark_model` at its shipped `deepest_gate`, the realm at seed 0 after one season reads the content hash it read
-    before `drawn` was added (the reading @dd5fc96, B14.24's close). The arm is asserted, so a flipped default cannot pass as a reproduction. Pins
-    the item alone: a later mover (B14.15's scene shape) moves it and B14.99 re-pins it."""
+    """B14.23's control, as it stands after B14.99: with `body_mark_model` at its shipped `deepest_gate`, the realm at seed 0 after one season reads
+    the shipped pin (`_realm_goldens.SHIPPED`, the batch's one copy of it). The arm is asserted, so a flipped default cannot pass as a reproduction.
+    The reading of B14.23 alone, taken before the pin moved, was equal to its predecessor's (its commit body); the later movers share this pin."""
     from ..boot.realm import build_realm
     from ..harness.populated import run
+    from ._realm_goldens import SHIPPED
     w = build_realm(0)
     assert w.fixtures.get("body_mark_model") == "deepest_gate"
     run(1, 0, w=w)
-    assert w.content_hash() == "01b25620671b774f0fe3a93f40b82c9f"   # B14.99 re-pin: was 42de0fa6... (B14.02, B14.03, B14.15, B14.16 moved it)
+    assert w.content_hash() == SHIPPED[(0, 1)]

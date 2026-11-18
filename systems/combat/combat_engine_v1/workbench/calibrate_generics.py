@@ -1,7 +1,7 @@
 """Calibration of the PC-17 GENERIC lever abilities (ED-PC-0059, item 7): the driver and its analysis in one file.
 
 It is MEASURED-BY for the numbers in ED-PC-0059's calibration block. It reads the engine through build_levers.build()
-(which forwards **kw, so `equipped` reaches the Combatant; balance._mk is NOT used) and wrapper.fight. Observation is
+(which forwards **kw, so `equipped` reaches the Combatant; balance does not build the fighter) and wrapper.fight. Observation is
 non-invasive: `wrapper.fight(..., trace=)` (the engine's own seam) for `outcome` and `wound` events, and two pass-through wrappers
 (read_contest, bind_sigma) that call the original and return its value untouched, drawing no rng. Every subject is built
 tradition='none' with known_traditions=(the teaching tradition,), equipped={generic: level}; the opponent is the same

@@ -3,7 +3,7 @@
 Jordan, 2026-10-14: *"a duel doesn't have to be lethal"*. Under a non-lethal term the fight STOPS when a fighter's own
 WoundTracker crosses it -- `blood` at the first wound, `yield` at `YIELD_HEALTH_FRAC` of Health -- and that fighter
 yields, standing, through the SAME `yield` event an accepted `Yield` (PC-01, `ED-PC-0056`) emits, so the seam's
-`surrender_of` lifts it unchanged and no band is added (H-98). `death`, the default, is the fight as it was.
+`modules/combat/fight.py::_surrender` lifts it unchanged and no band is added (H-98). `death`, the default, is the fight as it was.
 
 The falsifiers are the plan position's own (v9 `_part7`, PC-10):
   (1) under the default lethal terms the fight is byte-identical: trace, result and every engine-level draw
@@ -109,7 +109,8 @@ def _blood_cases():
 
 def _assert_blood_stop(pair, seed):
     """The assertions (2) rests on, shared with the mutation control below."""
-    from engine.season.seam.wrappers.combat import surrender_of
+    from engine.season.queries.inputs import Surrender
+    from modules.combat.fight import _surrender as surrender_of    # the module's one lift of the yield event (B14.01)
     _, ctrl, ctrl_rng, _, _ = _fight(seed, pair=pair)
     result, trace, rng, A, B = _fight(seed, terms='blood', pair=pair)
     k = _first(ctrl, lambda e: max(e['_wounds']) >= 1)
@@ -133,7 +134,7 @@ def _assert_blood_stop(pair, seed):
     st = dict(available=True, **{q: getattr(yielder.wt, q) for q in WOUND_QUANTITIES})
     assert combat_degree(dict(wound_state={first_wounded: st}), first_wounded) == COMBAT_BANDS[1]   # 'Wounded'
     assert result == (-1 if first_wounded == 'A' else 1)
-    assert surrender_of(trace) == dict(by=first_wounded, turn=ev['turn'], accepted=True)
+    assert surrender_of(trace) == Surrender(by=first_wounded, round=ev['turn'], accepted=True)
 
 
 def test_a_blood_duel_stops_at_the_first_wound_with_surrender_set_and_no_death():
@@ -189,7 +190,8 @@ def test_the_module_entry_reads_the_terms_off_the_typed_input():
 # ── (3) `yield` stops at the threshold ────────────────────────────────────────────────────────────────────────
 
 def test_a_yield_duel_stops_at_the_health_threshold():
-    from engine.season.seam.wrappers.combat import surrender_of
+    from engine.season.queries.inputs import Surrender
+    from modules.combat.fight import _surrender as surrender_of    # the module's one lift of the yield event (B14.01)
     frac = CFG['YIELD_HEALTH_FRAC']
     checked = 0
     for pair in _PAIRS:
@@ -216,14 +218,15 @@ def test_a_yield_duel_stops_at_the_health_threshold():
             assert trace[:_diverge(trace)] == ctrl[:_diverge(trace)]
             assert len(rng.trace) == ev['_draws'] < len(ctrl_rng.trace)
             assert result == (-1 if by == 0 else 1) and ev['terms'] == 'yield'
-            assert surrender_of(trace) == dict(by=ev['by'], turn=ev['turn'], accepted=True)
+            assert surrender_of(trace) == Surrender(by=ev['by'], round=ev['turn'], accepted=True)
             checked += 1
     assert checked >= 20, checked
 
 
 def test_yield_and_blood_are_different_stops():
     """The two terms read different quantities: on some seed the `yield` stop comes in a LATER turn than `blood`'s."""
-    later = checked = 0
+    later = 0
+    checked = {pair: 0 for pair in _PAIRS}
     for pair in _PAIRS:
         for seed in range(30):
             tb = [e for e in _fight(seed, 'blood', pair=pair)[1] if e['kind'] == 'yield']
@@ -231,9 +234,9 @@ def test_yield_and_blood_are_different_stops():
             if tb and ty:
                 assert ty[0]['turn'] >= tb[0]['turn'], (pair, seed)
                 later += ty[0]['turn'] > tb[0]['turn']
-                checked += 1
+                checked[pair] += 1
     # the comparison is conditional on both terms stopping the fight: it must have run at least once per pair
-    assert checked and checked >= len(_PAIRS), checked
+    assert all(n >= 1 for n in checked.values()), checked
     assert later >= 1
 
 

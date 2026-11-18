@@ -27,7 +27,7 @@ def run_traced_fight(A, B, cfg=None, seed=0, max_bouts=12, **fight_kw):
     """Returns (result, events). result is -1/0/+1 (A's perspective). events is the ordered trace. A and B are Combatants,
     read into a record (`fight_record.party_of_combatant`). `fight_kw` is `terms=` and `decide=` (both ride the record and the
     entry) and `yield_decl=`: a declared Yield names a Combatant by identity and the record has no field for it, so a call that
-    passes one is the workbench's one remaining direct `wrapper.fight` (its `trace=` argument; the hook is not touched)."""
+    passes one is this file's one direct `wrapper.fight` call (`armour_participation.py`, `build_levers.py` and `calibrate_generics.py` still call it on Combatants, outside B14.11's WHERE) (its `trace=` argument; the hook is not touched)."""
     terms = fight_kw.pop('terms', wrapper.LETHAL_TERMS)
     decide = fight_kw.pop('decide', None)
     yield_decl = fight_kw.pop('yield_decl', None)

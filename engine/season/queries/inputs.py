@@ -141,10 +141,10 @@ class PersonalCombatInput:
                        result is `+1` when A wins, `-1` when B does, `0` UNRESOLVED (a ruled outcome);
       * `ends`      -- each party's `end`, in `claimants` order (`combat.py::party_end`, `H-97`): the authored
                        `attr.body.endurance` (else the class default) less the body-band penalty, floored at 1;
-      * `wound_quantities` -- the `WoundTracker` fields the host lifts per party after the fight
-                       (`rosters.yaml: wound_quantities`, in roster order). The module reads them off the
-                       trackers and returns what it found; the refusal for one the tracker does not carry
-                       is the host's (`combat.py::_wound_state`);
+      * `wound_quantities` -- the `WoundTracker` fields the host reads per party after the fight
+                       (`rosters.yaml: wound_quantities`, in roster order) and the decider's view lifts. The module
+                       returns `PartyWounds`'s five fixed fields whatever it names; the refusal for a name that
+                       record lacks is the host's (`combat.py::_wound_state`);
       * `terms`     -- the duel's terms (RS-25, PC-10a, CP-T03-09): one of `modules/combat/wrapper.py::DUEL_TERMS`,
                        read by the module entry and handed to `wrapper.fight`. The default is the STRING `'death'`
                        (the engine's `LETHAL_TERMS`, pinned equal by `engine/season/tests/test_cp_t03_09_capture.py`), never `None`:
@@ -208,7 +208,7 @@ class PersonalCombatInput:
 
 @dataclass(frozen=True)
 class PartyWounds:
-    """One party's lifted `WoundTracker`, its fields in `rosters.yaml: wound_quantities` order (B14.01). The host's
+    """One party's lifted `WoundTracker`: five FIXED fields (B14.01), whatever `wound_quantities` names. The host's
     `seam/wrappers/combat.py::_wound_state` reads it by that roster and refuses, by name, a roster member this record
     lacks."""
     felled: bool

@@ -6441,7 +6441,7 @@ rows:
 
   - id:        H-348
     tier:      1
-    hole:      "THE FIGHTER LEFT STANDING IS RECORDED AS `undecided` (premise-check, combat). `Event.ending` is `(pid, felled | yielded | undecided)` for each party (CP-T03-02 (i), loop/effects_combat.py fight_ending); a party neither felled nor yielded reads `undecided`, so in a lethal fight the winner carries the word `undecided` beside the loser's `felled`: 300 of 300 hand-built fights on tiny_world read felled and undecided. A reader with no memory of this repo takes undecided to mean no result, which is what `contest.undecided` means for a fight nobody lost."
+    hole:      "CLOSED (B14.02): THE FIGHTER LEFT STANDING IS RECORDED AS `undecided` (premise-check, combat). `Event.ending` is `(pid, felled | yielded | undecided)` for each party (CP-T03-02 (i), loop/effects_combat.py fight_ending); a party neither felled nor yielded reads `undecided`, so in a lethal fight the winner carries the word `undecided` beside the loser's `felled`: 300 of 300 hand-built fights on tiny_world read felled and undecided. A reader with no memory of this repo takes undecided to mean no result, which is what `contest.undecided` means for a fight nobody lost."
     kind:      "NAME"
     owner:     "`engine/season/loop/effects_combat.py` (fight_ending and the ENDING_ constants)"
     grade:     "measured"

@@ -129,20 +129,6 @@ def load_error() -> str:
     return _probe()[1]
 
 
-def surrender_of(trace: list) -> Optional[dict]:
-    """§11.4 YIELD, LIFTED OFF THE SCENE'S TRACE (PC-01, `ED-PC-0056`) -- `wrapper.fight`'s `yield` event,
-    or `None` when nobody yielded. A declaration the engine REFUSED (the yielder's objective still
-    contested in the zone) is not a surrender and reads `None`: the fight it left behind is the record.
-
-    ⚠ THE SURRENDER RIDES ON THE RESULT, NOT IN THE BAND. A yielder is standing, so `combat_degree`'s
-    shipped walk reads him `Untouched`/`Wounded` off his own `WoundTracker`; `combat_degree_bands` gains
-    no value, because a yield sets no new quantity the band roster could be an edge over."""
-    for e in trace:
-        if e.get("kind") == "yield" and e.get("refused") is None:
-            return dict(by=e["by"], turn=e["turn"], accepted=e["accepted"])
-    return None
-
-
 _CARRIED_MODELS = ("endurance_cut", "level")      # `Fixtures carried_wound_model`'s two arms (H-434); the control first
 
 
@@ -526,6 +512,6 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                 rounds=got.rounds,
                 # PC-06 M-1: THE SCENE'S OWN TRACE, AS THE MODULE ENTRY CAPTURED IT, returned for a grid display or
                 # B-3's per-event measure. Nothing here or downstream folds it into `World`: `contest()` hands this
-                # dict to `_fold` as `Resolution.result`, whose effects read `wound_state` and `surrender` only
-                # (`loop/effects_combat.py`), so `content_hash()` is unchanged.
+                # dict to `_fold` as `Resolution.result`, whose effects read `wound_state`, `surrender`, `beat` and `shape`
+                # (`loop/effects_combat.py`); `trace` is read by none, so this key moves no hash by itself.
                 trace=list(got.trace))

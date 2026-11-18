@@ -99,6 +99,7 @@ from collections import Counter
 
 from ..data.rosters import MARGIN_ENDING
 from ..data.verbs import VERB_TABLE
+from ..loop.effects_combat import FIGHT_ROUNDS, FIRST_BLOOD, LEAD_CHANGES
 from ..state.attribution import causing_act
 from . import arc as ARC
 from . import storybar as SB
@@ -174,11 +175,11 @@ def _shapes(log, act_of: dict, persons) -> dict:
         if a is None or a.id in out:
             continue
         seen = getattr(e, "observed", ())                 # a planted Event (a test's namespace) may carry none
-        held = {o.predicate: o.value for o in seen if o.predicate in ("fight_rounds", "lead_changes")}
-        if "fight_rounds" not in held:
+        held = {o.predicate: o.value for o in seen if o.predicate in (FIGHT_ROUNDS, LEAD_CHANGES)}
+        if FIGHT_ROUNDS not in held:
             continue
-        n, k = held["fight_rounds"], held.get("lead_changes", 0)
-        first = next((o.subject for o in seen if o.predicate == "first_blood"), None)
+        n, k = held[FIGHT_ROUNDS], held.get(LEAD_CHANGES, 0)
+        first = next((o.subject for o in seen if o.predicate == FIRST_BLOOD), None)
         who = "no first blood" if first is None else f"first blood {_name(persons, first)}"
         out[a.id] = f"({n} round{'' if n == 1 else 's'}, {who}, {k} lead change{'' if k == 1 else 's'})"
     return out

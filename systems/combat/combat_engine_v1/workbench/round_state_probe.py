@@ -55,3 +55,4 @@ if __name__ == '__main__':
     print(f"{r['later_in_form']:,} of {r['later_starts']:,} fighter-starts in later engagements open in a half-sword form "
           f"({r['fights']} fights over {len(MATCHUPS)} matchups)")
     print(f"control: {r['first_in_form']} of {r['first_starts']:,} fighter-starts in the first engagement of a fight")
+    sys.exit(1 if r['later_in_form'] else 0)       # the verdict rides the exit status: any later engagement opening in a form is red
