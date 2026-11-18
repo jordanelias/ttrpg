@@ -41,7 +41,7 @@ def test_every_key_is_drawn_in_the_range_one_draw_per_key():
         assert list(sheet) == list(ATTRIBUTES) and len(sheet) == 10
         for key, value in sheet.items():
             assert lo <= value <= hi
-            assert value == draw_factory(7, lambda: 0)(pid, f"attr.generated:{key}").randint(lo, hi)
+            assert value == draw_factory(7, lambda: 0)(pid, f"attr.generated:{key}").die(lo, hi)
             checked += 1
     assert checked == 30
 
@@ -217,7 +217,7 @@ def test_a_sheet_holds_ten_keys_in_range():
                 continue
             assert lo <= value <= hi, (p.id, key)
             # each key is its own stream: no key draws from another key's
-            assert value == draw_factory(w.world_seed, lambda: 0)(p.id, f"attr.generated:{key}").randint(lo, hi), (p.id, key)
+            assert value == draw_factory(w.world_seed, lambda: 0)(p.id, f"attr.generated:{key}").die(lo, hi), (p.id, key)
             checked += 1
     assert checked >= 10 * (len(w.persons) - 1)
     assert "attr.mind.will" not in next(iter(w.persons.values())).attributes

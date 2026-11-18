@@ -442,16 +442,23 @@ def encode(w: "World") -> bytes:
     return _canonical((_SNAPSHOT_TAG, tuple(frames)), ordered=True)
 
 
+def register_snapshot_type(cls: type) -> type:
+    """Enter `cls` in the table `decode` rebuilds `o` objects from. A module that owns a value class
+    and already imports this one registers it where the class is defined, so this module names no
+    class above it (`epistemic.Seen` is entered that way)."""
+    _SNAPSHOT_TYPES[cls.__name__] = cls
+    return cls
+
+
 def _snapshot_types() -> dict:
-    """Class name -> class, for the `o` objects a snapshot may hold (read once; imported late, as
-    `epistemic` imports this module's world)."""
-    if not _SNAPSHOT_TYPES:
+    """Class name -> class, for the `o` objects a snapshot may hold (the carriers and `Observation`
+    are entered once, on first use; a class defined above this module registers itself)."""
+    if "Act" not in _SNAPSHOT_TYPES:
         from ..data.requires import Observation
-        from ..epistemic import Seen
         from . import carriers as _c
         for cls in (_c.Act, _c.Claim, _c.Event, _c.Office, _c.Person, _c.Proposition, _c.Receipt, _c.Record,
-                    _c.Rung, _c.Said, _c.Site, _c.StateChange, _c.Tenure, _c.Term, Observation, Seen):
-            _SNAPSHOT_TYPES[cls.__name__] = cls
+                    _c.Rung, _c.Said, _c.Site, _c.StateChange, _c.Tenure, _c.Term, Observation):
+            register_snapshot_type(cls)
     return _SNAPSHOT_TYPES
 
 

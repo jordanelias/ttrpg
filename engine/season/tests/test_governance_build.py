@@ -2949,7 +2949,10 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # ⚠⚠ B05.99, the batch's one re-pin: (793, 793) -> (778, 778), A RE-RECORD WITH THE BATCH THAT MOVED IT: the B05 movers
     # `_realm_goldens.py` lists (first moved here by B05.02, the one sampler: 775 at its own commit) move the act mix (seed 0, one
     # season; `_realm_goldens.CENSUS[(0, 1)]` records the 778). The arms still part in the ledgers, asserted below.
-    assert (out["acts"], cout["acts"]) == (778, 778), (
+    # ⚠⚠ B06.99, the batch's one re-pin: (778, 778) -> (749, 749), A RE-RECORD WITH THE UNIT THAT MOVED IT: the uniform's source
+    # changes from CPython's generator to the keyed mix (B06.04, A-30), a stream change and not a balance change (seed 0, one season;
+    # `_realm_goldens.CENSUS[(0, 1)]` records the 749). The arms still part in the ledgers, asserted below.
+    assert (out["acts"], cout["acts"]) == (749, 749), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")

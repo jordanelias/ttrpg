@@ -140,19 +140,22 @@ def digest(records):
 # WR-03's owner existed (the parent of the commit that added `price_mending`), set RESILIENCE_GAIN = 0,
 # and run `digest(collective_records(op))` / `digest(opposing_records(op))` / `digest(mending_records())`
 # from this file.
+# RE-RECORDED at B06.99: the uniform's source changed from CPython's generator to the keyed mix (B06.04, A-30), so
+# every digest below reads the keyed stream of `draw.seeded(draw.H2(..., seed))`, not the dd91783a values (a stream
+# change, not a balance change). The recipe above recomputes them.
 BASE_DIGESTS = {
-    ("collective", "Weaving"): "12c54575a96ea3181cbbee8a028fa1b409a2661b33de49b9d3a629e22691fe6a",
-    ("collective", "Pulling"): "0565bff6080038a7b630a023a584d6e3bf8ad177ca2c8d1bd7541c27d519efd2",
-    ("collective", "Locking"): "a3c11b29c120ab2026c8ca92b3c9fe088396ceedddcfc8b21e8c8fca18a979bd",
-    ("collective", "Dissolution"): "3b852e5019baf6fd816086076270dad746288296798702ad5ad296af05c7180c",
-    ("collective", "POP"): "17d862b60771da29bf8fa94d2fda28e296fd114e69eaa27a22e2bbf27d13a02f",
-    ("opposing", "Weaving"): "6cc3f6df33081ea65dce96be96cfd672805e60f696f13f5dfb900e86a41be660",
-    ("opposing", "Pulling"): "5c994c7a4809ceb1b140e03fe7f8987574afd11368339765c254fa91f9e7283c",
-    ("opposing", "Locking"): "aa9bf523a8ca0d37ae25c1dc76051620dddd0f07fedf846145bee8851fc5cff2",
-    ("opposing", "Dissolution"): "a4470b6deb3d04455d27a2d1068c0d5ce69e906c21fbf5252ba4b71c14ded393",
-    ("opposing", "POP"): "763e3426cdce3033c8f4c6c5694bad57fdef03816b237dcbcd8a3c1410cdd7e4",
+    ("collective", "Weaving"): "3aa5be8b090280cf41c29ba0eac517587c778a136429fe73c9b6510c055548cb",
+    ("collective", "Pulling"): "78dcdafd3d5c9e8759f7f989bd38259b63ab7e0bcf699dccfd42b891c61111e7",
+    ("collective", "Locking"): "fdcc9ea630d717fe816fc8cad3cbfc77ac03cdf718b3a4c40985ab9d5a5212d2",
+    ("collective", "Dissolution"): "f85f7f3a6df832d7d7f3096f0e5896b942935e6e87b978a042cde1c4115cc99a",
+    ("collective", "POP"): "a7e38e93895e6a519da3345758f008a5f584adf6e77ed464f5a442a8acff7278",
+    ("opposing", "Weaving"): "6d7f829a460e6dbc3096282796d28edfb96e24e8d7fb6f274a1db54519f5cba9",
+    ("opposing", "Pulling"): "b78cdce5473c2d466e586aa053072dcc3f8b751695b6b57b6e3c05f929977ca1",
+    ("opposing", "Locking"): "d3730360185f4539ff0a9634a30a04e8756d7751354adef38143d24a6e2af4b2",
+    ("opposing", "Dissolution"): "2cb119e6009175e8f2f463084e5df35e144d1d16f53c1db4afca4cb4c3908ea2",
+    ("opposing", "POP"): "64473efaf44f40df681ffd74f643ed45d3fb52fb07ec1f612f83ea7e04d3bed3",
 }
-BASE_MENDING_DIGEST = "df54b6f5164d89f7a83b17299772622546f35598b3568dcf2da0cc14455d97a2"
+BASE_MENDING_DIGEST = "85f8ec5d7a91f27276b51bcf143846e3d7320e85d2f7cc7b153e507a87dfd3f4"
 
 
 @pytest.mark.parametrize("site,op_type", sorted(BASE_DIGESTS))
