@@ -1,6 +1,6 @@
 # PROCEEDINGS — a game structure for negotiations, trials, tribunals, debates and hearings
 
-## Status: **RATIFIED AS INTENT (v9) — ownership ED-SC-0033; PHASE 2–4 = SC-01/SC-02; 00–20 reference, superseded in part by 21. Nothing exists in `engine/season/` until SC-01 is built with its tests. (ED-SC-0039)**
+## Status: **RATIFIED AS INTENT (v9) — ownership ED-SC-0033; PHASE 2–4 = SC-01/SC-02; 00–20 reference, superseded in part by 21. What exists in `engine/season/` is in `registers/handoffs/HANDOFF_SC.md`. (ED-SC-0039)**
 ## Nothing here runs. It changes no head, no roster, no verb table, no code under test, and allocates
 ## no `ED`/`PP`. **No `CURRENT.md` row moves.**
 
