@@ -398,3 +398,60 @@ def test_the_chance_floor_reaches_the_resolved_act_through_the_seam():
             assert 2.0 < out["ob"] < 5.0
         else:
             assert out["ob"] == 2.0
+
+
+# ---------------------------------------------------------------------------------------------
+# B05.54 -- THE CEILING'S FORM (`ceiling_form`: `hard` a flat bound, `soft` the excess saturating toward the cap)
+# ---------------------------------------------------------------------------------------------
+# `16_PESSIMIST_DICE_soft_ceiling` gates 2 and 3, on the closed form. The floor the bent bound must keep is the one-die chance at the
+# fixed ceiling (`CHANCE_FLOOR`, `1 - band_odds(1, ceiling)[0]`): the cap IS the Ob at which every pool holds that chance
+# (`_chance_floor_cap`), so a bound that stays under the cap never gives a pool less. The source's own sentence reads
+# `1 - band_odds(pool_floor, ceiling)[0]`, which is the chance of `pool_floor` dice AT the knee (0.50 at 5 dice) -- not a floor
+# the cap holds (the chance AT the cap is the one-die figure, 0.0228), so that reading fails by construction and is not asserted.
+
+
+def _formed(pool, ob, form, *, forgery=0.0):
+    """A record whose composed obstacle, before any ceiling, is `ob` (opposition = 2 x ob) plus the forgery, on the shipped ceiling and
+    the per-pool cap, in the given ceiling form."""
+    return SocialContestInput(
+        pool=pool, opposition=2 * ob,
+        difficulty=0.0, pool_default=2 * STAND_IN, pool_add=0, opposition_rate=0.5,
+        obstacle_ceiling=DEFAULT_FIXTURES.get("obstacle_ceiling"),
+        obstacle_refusal_multiple=DEFAULT_FIXTURES.get("obstacle_refusal_multiple"),
+        leverage=0.0, ceiling_per_pool=True, ceiling_form=form, forgery_quality=forgery)
+
+
+def test_soft_bound_is_strictly_decreasing_and_floored():
+    mod = _module()
+    knee = DEFAULT_FIXTURES.get("obstacle_ceiling")
+    floor = DEFAULT_FIXTURES.get("pool_floor")
+    steps = [knee + k * 0.005 for k in range(0, int(round((14 - knee) / 0.005)) + 1)]
+    checked = 0
+    for pool in range(floor, floor + 11):
+        prev = None
+        bent = 0
+        for ob in steps:
+            hard = mod.obstacle(_formed(pool, ob, "hard"))[0]
+            soft, terms = mod.obstacle(_formed(pool, ob, "soft"))
+            assert hard == min(ob, mod._chance_floor_cap(pool, knee)), (pool, ob, hard)        # the control inside the test: `hard` is `min`
+            assert soft <= hard + 1e-9, (pool, ob, soft, hard)                                 # bending only eases what the flat bound held
+            bent += soft < hard - 1e-9
+            chance = _clear(pool, soft)
+            assert chance >= CHANCE_FLOOR - EPS, (pool, ob, soft, chance)                      # never under the one-die chance at the ceiling
+            assert prev is None or chance < prev, (pool, ob, chance, prev)                     # strictly decreasing in the obstacle
+            prev = chance
+        assert bent > 0, pool                              # the arm bends somewhere: a `hard` that ignored the field would read bent == 0
+        checked += 1
+    assert checked >= 11
+
+
+def test_four_forgery_qualities_give_four_ordered_chances():
+    mod = _module()
+    pool = DEFAULT_FIXTURES.get("pool_floor")
+    base = 5.0                                             # above the knee, under the floor pool's cap (5.58); a forgery of 1 or more passes the cap
+    qualities = (0.0, 0.5, 1.0, 3.0)
+    hard = [_clear(pool, mod.obstacle(_formed(pool, base, "hard", forgery=q))[0]) for q in qualities]
+    soft = [_clear(pool, mod.obstacle(_formed(pool, base, "soft", forgery=q))[0]) for q in qualities]
+    assert all(a > b for a, b in zip(soft, soft[1:])), soft                    # soft: four strictly ordered chances
+    assert hard[2] == hard[3], hard                                            # hard: the last two are equal -- the assertion that can fail
+    assert hard[0] > hard[1] > hard[2], hard

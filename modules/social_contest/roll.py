@@ -40,7 +40,7 @@ import functools
 import random
 from typing import Optional
 
-from engine.dice_engine.sigma_leverage import M_MAX, OB_MIN, band_odds, even_line, net_boost, opposed_ob, roll_net_continuous
+from engine.dice_engine.sigma_leverage import M_MAX, OB_MIN, band_odds, even_line, net_boost, opposed_ob, roll_net_continuous, saturate
 from engine.season.queries.inputs import Margin, SocialContestInput
 
 
@@ -81,7 +81,7 @@ def obstacle(inp: SocialContestInput) -> tuple:
     associated modifiers"*). THE ONE FORM, at every site and every arm:
 
         hard  = even + difficulty + opposed_ob(opposition if a person opposes else pool_default, opposition_rate) + sum(raw_i x step_i)
-        ob    = max(OB_MIN, min(hard, cap(pool)))          # the ceiling (H-213), then the floor
+        ob    = max(OB_MIN, bound(hard))                   # the ceiling (H-213, `ceiling_form`), then the floor
         terms = ((name, value), ...) in `rosters.yaml: obstacle_terms` order, + ("ceiling", -clip) and ("floor", +lift) where a bound acted
 
     `even` is `sigma_leverage.even_line(pool_add)`, the pool's expected net (an obstacle at it is an even contest); `difficulty` is the
@@ -106,7 +106,12 @@ def obstacle(inp: SocialContestInput) -> tuple:
     Partial-or-better the fixed ceiling leaves a one-die roll (`_chance_floor_cap`, solved on the closed form of the one sampler at the
     largest lawful disadvantage, `-M_MAX`; 2.0 at pool 1, 3.06 at pool 2, rising with the pool), so a larger pool is never worse for the
     cap, and at the shipped ceiling (2) S27.4's `ob > multiple x pool` never holds on a derived pair. Below one die the fixed ceiling
-    applies. A ceiling below the Ob minimum (`OB_MIN`, PP-232) is refused rather than read: it would breach the floor. THE FLOOR comes
+    applies. THE CEILING'S FORM (`ceiling_form`, B05.54; `16_PESSIMIST_DICE_soft_ceiling`): `hard` is the flat bound above (`min(ob, cap)`:
+    a hostile room, a forgery or any other term cannot raise the obstacle past the cap, and past it they are all one value); `soft`
+    bends the excess instead: `bound(ob) = ob` up to the knee (the fixed ceiling), `knee + saturate(ob - knee, cap - knee)` past it, so
+    the obstacle stays strictly under the cap and a hostile term past the knee still changes the odds. At one die, or with no per-pool
+    cap, `cap == knee` and both forms are `min`; the "cannot raise" sentences hold of the `hard` arm and of one die only. The bent bound
+    is recorded as the `ceiling` term the fold adds and `ob` is that fold's last step, so the terms sum to `ob` exactly. A ceiling below the Ob minimum (`OB_MIN`, PP-232) is refused rather than read: it would breach the floor. THE FLOOR comes
     last: a composed obstacle under `OB_MIN` (a `plain` act against a person scoring 0) is lifted to it and the lift is the `floor` term.
     **NO "BASE Ob BY SCALE"** (Jordan, 2026-09-05)."""
     terms = [("even", even_line(inp.pool_add)),
@@ -127,12 +132,21 @@ def obstacle(inp: SocialContestInput) -> tuple:
         if ceiling < OB_MIN:
             raise ValueError(f"obstacle_ceiling {ceiling!r} is below the Ob minimum {OB_MIN} (PP-232); "
                              "a ceiling under the floor is a bad arm, refused rather than read (H-213)")
-        cap = float(ceiling)
+        knee = float(ceiling)
+        cap = knee
         if inp.ceiling_per_pool and inp.pool >= 1:
-            cap = _chance_floor_cap(inp.pool, cap) or cap
-        if ob > cap:
-            terms.append(("ceiling", cap - ob))
-            ob = cap
+            cap = _chance_floor_cap(inp.pool, knee) or knee
+        if inp.ceiling_form == "hard" or cap <= knee or ob <= knee:
+            bounded = min(ob, cap)
+            clip = bounded - ob                  # flat: the bound itself is the new `ob`, as it was before the form existed
+            new_ob = bounded
+        else:
+            bounded = knee + saturate(ob - knee, cap - knee)
+            clip = bounded - ob
+            new_ob = ob + clip                   # bent: the fold's own last step, so the terms sum to `ob` exactly (`bounded` is not dyadic)
+        if bounded < ob:
+            terms.append(("ceiling", clip))
+            ob = new_ob
     if ob < OB_MIN:
         terms.append(("floor", OB_MIN - ob))
         ob = float(OB_MIN)
