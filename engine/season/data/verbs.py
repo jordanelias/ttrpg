@@ -249,6 +249,10 @@ class VerbRow:
     opposed_attribute: Optional[str] = None
     brute: Optional[str] = None
     brute_note: str = ""
+    # B05.14 (SC-B Edit A; D-U1-04): HOW HARD THE ACT ITSELF IS -- a member of `rosters.yaml: difficulty_levels` (`Fixtures.difficulty_ob` sizes it),
+    # on every row the social roll deals (a `contests:` prize its provider resolves, or a `graded_inquiries` route to it) and on no other: the
+    # loader refuses a rolled row with none and any other row with one (`social_rolled`). `None` is the declared absence, a row nothing rolls.
+    difficulty: Optional[str] = None
 
     def referents_of(self, q) -> tuple:
         """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
@@ -568,17 +572,30 @@ def _record_subkinds_answered(row: "VerbRow") -> frozenset:
 #: The authorisers of a brute verb (B05.24) and the ways a prize's module reads a person (B05.25): rosters, not lists here.
 BRUTE_KINDS = roster("brute_kinds")
 PERSON_INPUTS = roster("person_inputs_kinds")
+DIFFICULTY_LEVELS = roster("difficulty_levels", ordered=True)
+
+#: The provider name the social roll's prize rows and inquiry routes carry (`rosters.yaml: contest_subsystems`,
+#: `graded_inquiries`; `seam/wrappers/sigma.py::_PROVIDER`).
+SOCIAL_ROLL_PROVIDER = "social_contest"
 
 
-def _check_governing_attributes(rows: dict, prizes: dict, task_difficulty: dict) -> None:
+def social_rolled(verb: str, row, prizes: dict) -> bool:
+    """IS `row` ONE THE SOCIAL ROLL DEALS? Its `contests:` prize is resolved by the `social_contest` provider
+    (`prizes` is `rosters.yaml: contest_subsystems.prizes`), or a `graded_inquiries` route sends it there. THE ONE TEST: the loader's
+    `difficulty:` refusal and `social_roll_verbs()` both ask it, and no verb is named."""
+    if row.contests and (prizes.get(row.contests) or {}).get("provider") == SOCIAL_ROLL_PROVIDER:
+        return True
+    return (GRADED_INQUIRIES.get(verb) or {}).get("provider") == SOCIAL_ROLL_PROVIDER
+
+
+def _check_governing_attributes(rows: dict, prizes: dict) -> None:
     """B05.25: EVERY ROW IS ONE OF THREE KINDS, OR THE LOAD REFUSES, NAMING EACH ROW THAT IS NOT. `rows` is `{verb: VerbRow}`,
-    `prizes` is `rosters.yaml: contest_subsystems.prizes`, `task_difficulty` is the roster of verbs the social roll deals a
-    difficulty for. (a) `brute` (a member of `BRUTE_KINDS`, with a `brute_note`; `seat` only where the eligibility carries `remit:`
+    `prizes` is `rosters.yaml: contest_subsystems.prizes`. (a) `brute` (a member of `BRUTE_KINDS`, with a `brute_note`; `seat` only where the eligibility carries `remit:`
     or the referent class is `Office`); (b) `governing` (one to three distinct `descriptors.ATTRIBUTES` keys); (c) the exemption:
     the row's prize reads `person_inputs: own`. A brute row never rolls, so it also carries no `opposed_attribute`, no `contests:`
-    prize, no `graded_inquiries` route, no `difficulty:` cell and no `task_difficulty` row; a row contested on a `pool` prize takes
+    prize, no `graded_inquiries` route and no `difficulty:` cell; a row contested on a `pool` prize takes
     (b) and names the `opposed_attribute` of the person opposite; a prize row names its `person_inputs`. A row of kind (b) that
-    nothing yet rolls (no prize, no route, no task difficulty) is inert and is not refused: its draw is B07's."""
+    nothing yet rolls (no prize, no route) is inert and is not refused: its draw is B07's."""
     bad = []
     for name, prize in prizes.items():
         if (prize or {}).get("person_inputs") not in PERSON_INPUTS:
@@ -598,8 +615,7 @@ def _check_governing_attributes(rows: dict, prizes: dict, task_difficulty: dict)
                 bad.append(f"{verb!r}: `brute: seat` with no `remit:` eligibility and no Office referent")
             for what, present in (("governing", row.governing), ("opposed_attribute", row.opposed_attribute),
                                   ("a `contests:` prize", row.contests), ("a `graded_inquiries` route", verb in GRADED_INQUIRIES),
-                                  ("a `difficulty:` cell", getattr(row, "difficulty", None) is not None),
-                                  ("a `task_difficulty` row", verb in task_difficulty)):
+                                  ("a `difficulty:` cell", getattr(row, "difficulty", None) is not None)):
                 if present:
                     bad.append(f"{verb!r} is brute and carries {what}: a brute verb never rolls")
         if len(row.governing) > 3 or len(set(row.governing)) != len(row.governing) or not set(row.governing) <= set(ATTRIBUTES):
@@ -691,7 +707,8 @@ def _load_verb_table() -> dict:
                       governing=tuple(r.get("governing") or ()),
                       opposed_attribute=str(r["opposed_attribute"]).strip() if r.get("opposed_attribute") else None,
                       brute=str(r["brute"]).strip() if r.get("brute") else None,
-                      brute_note=str(r.get("brute_note") or "").strip())
+                      brute_note=str(r.get("brute_note") or "").strip(),
+                      difficulty=str(r["difficulty"]).strip() if r.get("difficulty") else None)
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.
@@ -883,6 +900,22 @@ def _load_verb_table() -> dict:
             raise SystemExit(
                 f"verb_table.yaml: {name!r} declares `capability: {row.capability!r}` and neither contests nor is "
                 "graded. Nothing rolls dice from a skill for it, so the column would be read by nothing.")
+        # B05.14 (SC-B Edit A; D-U1-04): THE `difficulty:` COLUMN, REQUIRED ON A ROW THE SOCIAL ROLL DEALS AND ON NO OTHER -- the shape of
+        # `capability:` above. A rolled row with no level (the roll would have no difficulty to compose), a level outside
+        # `rosters.yaml: difficulty_levels`, and a level on a row nothing rolls (a column nothing reads) are each refused, naming the row.
+        if social_rolled(name, row, roster_map("contest_subsystems", "prizes")):
+            if row.difficulty is None:
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} is dealt by the social roll and declares no `difficulty:`. Name the level of the act "
+                    f"itself ({list(DIFFICULTY_LEVELS)}); a rolled row with none would have no difficulty to compose.")
+            if row.difficulty not in DIFFICULTY_LEVELS:
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} declares `difficulty: {row.difficulty!r}`, which is not a member of "
+                    f"`rosters.yaml: difficulty_levels` ({list(DIFFICULTY_LEVELS)}).")
+        elif "difficulty" in r:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares `difficulty: {r['difficulty']!r}` and the social roll does not deal it. "
+                "Nothing composes an obstacle for it, so the column would be read by nothing.")
         # LOADER INVARIANT 12 (#358 rev.2 §B.13). The two shapes are NOT interchangeable, and
         # both directions are checked: a contested verb with a flat list is the `kill / wound`
         # defect, and an uncontested verb with a degree map is a verb claiming an outcome it
@@ -1195,9 +1228,8 @@ def _load_verb_table() -> dict:
             raise SystemExit(
                 f"write_matrix.yaml ({kind}, {fld}) declares `unproduced:` and a verb writes it. "
                 "04 §B.13 #2 -- the declaration is stale; delete it.")
-    # B05.25: EVERY ROW IS ONE OF THREE KINDS (`_check_governing_attributes`). `task_difficulty` is read raw: `TASK_DIFFICULTY`
-    # is closed over `social_roll_verbs()`, which reads this table, so it cannot be built before it.
-    _check_governing_attributes(out, roster_map("contest_subsystems", "prizes"), roster_map("task_difficulty", "values"))
+    # B05.25: EVERY ROW IS ONE OF THREE KINDS (`_check_governing_attributes`).
+    _check_governing_attributes(out, roster_map("contest_subsystems", "prizes"))
     return out
 
 
@@ -1949,41 +1981,11 @@ def _load_opposed_without_prize(values) -> frozenset:
 
 OPPOSED_WITHOUT_PRIZE = _load_opposed_without_prize(roster("opposed_without_prize"))
 
-#: The provider name the social roll's prize rows and inquiry routes carry (`rosters.yaml: contest_subsystems`,
-#: `graded_inquiries`; `seam/wrappers/sigma.py::_PROVIDER`).
-SOCIAL_ROLL_PROVIDER = "social_contest"
-
-
 def social_roll_verbs() -> frozenset:
-    """THE VERBS THE SOCIAL ROLL DEALS: a row whose `contests:` prize the `social_contest` provider resolves
-    (`rosters.yaml: contest_subsystems`), and a `graded_inquiries` route to it. Read off the rows and the two
-    rosters, no verb named."""
-    from .rosters import GRADED_INQUIRIES
+    """THE VERBS THE SOCIAL ROLL DEALS: the rows `social_rolled` says it deals (a `contests:` prize the `social_contest`
+    provider resolves, a `graded_inquiries` route to it). Read off the rows and the two rosters, no verb named."""
     prizes = roster_map("contest_subsystems", "prizes")
-    contested = {v for v, r in VERB_TABLE.items()
-                 if r.contests and (prizes.get(r.contests) or {}).get("provider") == SOCIAL_ROLL_PROVIDER}
-    inquired = {v for v, g in GRADED_INQUIRIES.items() if (g or {}).get("provider") == SOCIAL_ROLL_PROVIDER}
-    return frozenset(contested | inquired)
-
-
-def _load_task_difficulty(values: dict) -> dict:
-    """`rosters.yaml: task_difficulty` (B11 lane A), CLOSED BOTH WAYS against `social_roll_verbs()`: a task the roll
-    deals with no difficulty is a loud gap (no `obstacle_default` behind it), and a row for a verb the roll never
-    deals would read as live. Each value a number >= 0."""
-    out = {str(k): v for k, v in (values or {}).items()}
-    rolled = social_roll_verbs()
-    missing, extra = sorted(rolled - set(out)), sorted(set(out) - rolled)
-    bad = sorted(k for k, v in out.items() if isinstance(v, bool) or not isinstance(v, (int, float)) or v < 0)
-    if missing or extra or bad:
-        raise Forbidden(
-            f"`rosters.yaml: task_difficulty` is not closed over the social roll's verbs: no row for {missing}, a "
-            f"row for a verb it never deals {extra}, a value that is no number >= 0 {bad}", "rosters.yaml",
-            needs="exactly one difficulty per verb the social roll deals",
-            law="B11 lane A -- an obstacle is the task's difficulty and its modifiers; no task rolls on a stand-in")
-    return {k: float(v) for k, v in out.items()}
-
-
-TASK_DIFFICULTY = _load_task_difficulty(roster_map("task_difficulty", "values"))
+    return frozenset(v for v, r in VERB_TABLE.items() if social_rolled(v, r, prizes))
 
 
 def _derive_rung_remit_acts() -> frozenset:

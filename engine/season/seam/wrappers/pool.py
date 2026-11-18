@@ -28,7 +28,7 @@ def _capability(entity: Any, verb: str):
     differing only in WHOSE dict they read and what default they fall to. Those differences are the
     callers'; the read is not. Returning `None` rather than a default is what keeps it that way:
     the pool falls to `pool_default`, and the opposition's `None` reaches the module, which falls
-    to `obstacle_default`; neither is this function's to know."""
+    to `opposed_ob(pool_default)`; neither is this function's to know."""
     key = VERB_CAPABILITY.get(verb)
     if not key:
         return None
@@ -91,6 +91,19 @@ def governing_score(w: Any, p: Any, verb: str) -> float:
     return governing_mean([default if (held := _held_attribute(p, a)) is None else held for a in row.governing])
 
 
+def opposing_attribute(fx: Any, p: Any, verb: str):
+    """(B05.14; A-79, A-137) THE ATTRIBUTE A PERSON RESISTS `verb` WITH, AS HE HOLDS IT: his score in the verb row's `opposed_attribute:`,
+    counting at the untrained score (`untrained`) where he holds none (B05.16 replaces that reading with the attribute's mid-point), and
+    `None` where the row names none (an inquiry nobody resists by a trait). The one read the obstacle's `opposition` member
+    adds to his skill score (`score`); the pool reads his OWN attributes through `governing_score`, never this."""
+    row = VERB_TABLE.get(verb)
+    key = row.opposed_attribute if row is not None else None
+    if key is None:
+        return None
+    held = _held_attribute(p, key)
+    return untrained(fx) if held is None else held
+
+
 def rank(p: Any, verb: str) -> int:
     """(B05.25) HIS HELD RANK in `verb`'s skill (`_capability`), `0` where he holds none or the row names no skill: an untrained
     man rolls on his attributes alone, and a first rank always adds a die."""
@@ -107,8 +120,9 @@ def faculty(w: Any, p: Any, verb: str) -> float:
     of how the verb's governing score (the mean of his scores in its `governing:` attributes, FRACTIONAL: 2.5, not 3), his rank in
     the verb's skill, the registered addends (`POOL_ADDENDS`, whole dice) and the base and floor the `social_roll` `dice` row names
     (`add: pool_add`, `floor: pool_floor`, B05.10; each 0 at control) make a pool. A first rank adds a die; a person holding no attribute and no rank rolls
-    `pool_default`. The opposition does not read this: it reads the opponent's skill score alone (`score`, B05.11);
-    the opposing attribute joins it as `opposed_ob(opposing attribute + skill score)` in B05.14's composer (A-137).
+    `pool_default`. The opposition does not read this: it reads the opponent's skill score (`score`, B05.11) plus his opposing
+    attribute (`opposing_attribute`, B05.14), which `sigma.py::OBSTACLE_TERMS["opposition"]` adds and `roll.py::obstacle` reads at
+    `opposed_ob` (A-137).
     A brute verb never reaches here (`Forbidden`), nor does a row naming no attribute (`Unspecified`): a (c) row reaches its
     module, which reads `score + addends` (`seam/wrappers/combat.py::_fight_faculty`).
     ⚠ `08 §3` GIVES THE POLARITY: an `assumption` grade means *inject the default, declare the site,
@@ -122,13 +136,19 @@ def faculty(w: Any, p: Any, verb: str) -> float:
 _DICE_SITE = require_use_site("social_roll")
 
 
-def _pool_pair(w: Any) -> tuple:
-    """`(pool_add, pool_floor)` as the `social_roll` site's `dice` row names them (`add:`, `floor:`: Fixture NAMES, read from `w.fixtures`),
+def pool_pair(fx: Any) -> tuple:
+    """`(pool_add, pool_floor)` as the `social_roll` site's `dice` row names them (`add:`, `floor:`: Fixture NAMES, read from `fx`),
     so swapping the names in the row swaps what the pool reads, with no code edit. A row naming neither (or no `dice` row) reads
-    `(0, 0)`: the control, where the pool is `governing score + rank + addends`."""
+    `(0, 0)`: the control, where the pool is `governing score + rank + addends`. Read by `faculty` (through `_pool_pair`) and, for the
+    obstacle's `even` term, by `sigma.py::OBSTACLE_TERMS` -- the base that makes the pool is the base whose line the obstacle starts at."""
     row = next((r for r in capability_rows(_DICE_SITE) if r.role == "dice"), None)
-    return (0 if row is None or row.add is None else w.fixtures.get(row.add),
-            0 if row is None or row.floor is None else w.fixtures.get(row.floor))
+    return (0 if row is None or row.add is None else fx.get(row.add),
+            0 if row is None or row.floor is None else fx.get(row.floor))
+
+
+def _pool_pair(w: Any) -> tuple:
+    """`pool_pair` over `w.fixtures`."""
+    return pool_pair(w.fixtures)
 
 
 def addends_of(w: Any, p: Any, verb: str) -> int:

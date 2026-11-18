@@ -71,7 +71,7 @@ from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds
 from engine.substrate import composition, descriptors
 
 from ...data.rosters import capability_rows, require_use_site, roster, when_holds
-from ...data.verbs import SOCIAL_ROLL_PROVIDER, TASK_DIFFICULTY, VERB_CAPABILITY, VERB_TABLE
+from ...data.verbs import SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE
 from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, sides_of
 from ...queries.person_q import believed_capability
@@ -86,11 +86,12 @@ from ...queries.inputs import Margin, SocialContestInput
 from ...queries.world_q import proofs, reception
 from ...state.carriers import EFFORT, effort_of
 from ._entry import entry_for
-from .pool import POOL_ADDENDS, _capability, faculty, governing_attribute, register_pool_addend, score, untrained  # noqa: F401  (moved: see pool.py)
+from .pool import (POOL_ADDENDS, _capability, faculty, governing_attribute, opposing_attribute, pool_pair, register_pool_addend,  # noqa: F401  (moved: see pool.py)
+                   score, untrained)
 
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
 # (A-25), so the row says the social contest module runs its own prizes. Reached by that string only.
-_PROVIDER = SOCIAL_ROLL_PROVIDER   # B11 lane A: one owner of the name (`data/verbs.py`), which `task_difficulty`'s closure reads too
+_PROVIDER = SOCIAL_ROLL_PROVIDER   # one owner of the name (`data/verbs.py`), which the loader's `difficulty:` refusal reads too
 _RESOLVER = "d_sigma"
 
 
@@ -102,23 +103,30 @@ def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]
     """The subject's SKILL SCORE for the verb, or `None` -- a READ, not an obstacle: `pool.score`, the held rank on the verb's
     skill (never below the untrained score, `pool_default`, where he holds none), and nothing else: no base dice, no practice
     addend, no seat, no attribute (B05.11, TWO Edit B, CAP B4: the attribute is a level, not a score, A-7). A PERSON SUBJECT
-    ALWAYS HAS A SCORE, on every `obstacle_model` arm, so an unauthored hearer is no harder to move than one holding the skill
+    ALWAYS HAS A SCORE, so an unauthored hearer is no harder to move than one holding the skill
     at `pool_default` and a higher rank is harder (H-312's `interrogate`). `None` for nobody opposite (a record, a rung, a
     proposition, a person with no entry) and for a person with no score (a skill row saying `untrained: none` that he holds no
-    rank in): the module's stand-in stands there.
+    rank in): the module's `opposed_ob(pool_default)` stands there.
 
     The obstacle is composed by `modules/social_contest/roll.py::obstacle` (ED-SC-0033 clause (3), *the
     obstacle has a single owner*). What is here is the half only the host can do: reading `World` for the
-    score a PERSON subject brings."""
+    score a PERSON subject brings. What the record carries as his `opposition` is this PLUS his opposing attribute (`_opposing`)."""
     if subject and subject in w.persons:
         opposing = score(w, w.persons[subject], verb)
         return None if opposing is None else float(opposing)
     return None
 
 
-#: `Fixtures obstacle_model`'s shipped arm: the obstacle is the task's difficulty plus its named modifiers (B11 lane A,
-#: H-368); `stand_in` is the control, the composition before.
-OBSTACLE_MODEL_TASK = "task"
+def _opposing(w: Any, subject: Optional[str], verb: str) -> Optional[float]:
+    """WHAT A PERSON OPPOSITE BRINGS to the act (A-79, A-137: the resisting attribute mirrors the attribute in the dice): his skill
+    score (`_opposition_of`) PLUS his opposing attribute (`pool.opposing_attribute`, the verb row's `opposed_attribute:` as he holds
+    it, the untrained score where he holds none, nothing where the row names none). `None` where nobody is opposite. THE OPERAND of
+    the obstacle's `opposition` member: `roll.py::obstacle` reads it at `opposed_ob(.., opposition_rate)`."""
+    skill = _opposition_of(w, subject, verb)
+    if skill is None:
+        return None
+    attribute = opposing_attribute(w.fixtures, w.persons[subject], verb)
+    return skill + (0.0 if attribute is None else float(attribute))
 
 
 def _effort_levels(fx: Any, operands: dict) -> tuple:
@@ -298,8 +306,8 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     `leverage` is the sum of the named levels the `advantage_sources` roster brings to the act
     (`advantage_sigma`; CP-T01-05's `effort` is the first member) and is 0.0 when nothing does -- the
     honest form while nothing supplies it: a fabricated leverage would be a number nobody chose.
-    `effort` is the act's own (`state/carriers.py::effort_of`), passed by the adapter. The obstacle's operands are carried RAW (`opposition`, `obstacle_default`,
-    `obstacle_ceiling`); the module composes them.
+    `effort` is the act's own (`state/carriers.py::effort_of`), passed by the adapter. The obstacle's operands are carried RAW (`even`'s `pool_add`,
+    `difficulty`, `opposition` with `pool_default` and `opposition_rate`, `obstacle_ceiling`: `obstacle_operands` below); the module composes them.
 
     `room` is the rung whose bench hears the contest, or `None`: the adapter passes the
     act's rung when the prize row says `heard_by: bench` (`manifest.resolve`), and nothing otherwise.
@@ -323,8 +331,7 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     doc = w.records.get(examined) if examined is not None else None
     # NOBODY OPPOSES HIMSELF (v10 CP-T05-02 (ii), AM-D-02): a subject who IS the actor (the self-plea,
     # `speak {subject: himself}`) brings no opposition -- his own score is not an obstacle to himself --
-    # so the obstacle starts at `obstacle_default` on the control arm and at the task's difficulty alone on
-    # the task arm (B11 lane A: a task no person opposes has no opposition term), the same at any capability he holds.
+    # so his opposition is `None` and the module opposes him at `opposed_ob(pool_default)` (B05.14: never absent), the same at any capability he holds.
     #
     # THE ROLL READS ITS TERMS ONLY THROUGH THE SITE'S ROWS (CAP A6): a `dice` row's read gives the pool (and the score
     # it is built on), an `opposes` row's read gives the opposition; no `opposes` row means opposition `None`, as a
@@ -334,7 +341,7 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     roles = {r.role for r in rows}
     opposition = None
     if "opposes" in roles and subject != claimants[0]:
-        opposition = _opposition_of(w, subject, verb)
+        opposition = _opposing(w, subject, verb)
     pool = faculty(w, actor, verb) if "dice" in roles else 0
     # THE `capability` SOURCE'S ROWS (B05.10): each `edge` row of the site whose `when` holds, with the value its side holds. A subject
     # who is the actor, or is no person, is read for nothing (nobody opposes himself).
@@ -359,28 +366,72 @@ def _social_rows() -> tuple:
     return tuple(r for r in capability_rows(SOCIAL_ROLL_SITE) if r.role in ("dice", "opposes"))
 
 
-def _fed_by(reads: tuple, inp: SocialContestInput, ob_terms: dict) -> tuple:
+def _fed_by(reads: tuple, inp: SocialContestInput, terms: tuple) -> tuple:
     """`((use, role, key, side, value, contributed), ...)` -- every row that fed the roll, in table order (MAP §D; the
     record is `resolve`'s, never an `Event` field, D-U1-06). `value` is what the row's reader read (`_read_social_roll`);
     `contributed` is what it added to the roll: the pool for `dice`, the module's own `opposition` term of the obstacle for
-    `opposes` (`ob_terms`, read off the module that composed it, `0.0` where nobody opposed)."""
-    contributed = {"dice": inp.pool, "opposes": ob_terms.get("opposition", 0.0)}
+    `opposes` (read off `Margin.terms`, the module that composed it; `0.0` where nobody was opposite, though the term then stands
+    at `opposed_ob(pool_default)`: the row read nothing, so it fed nothing)."""
+    contributed = {"dice": inp.pool, "opposes": dict(terms).get("opposition", 0.0) if inp.opposition is not None else 0.0}
     return tuple((r.use, r.role, r.key, r.side, value, contributed[r.role] if own is None else own) for r, value, own in reads)
 
 
-def _difficulty(fx: Any, verb: str) -> Optional[float]:
-    """THE TASK'S DIFFICULTY for `verb` on the shipped arm (`rosters.yaml: task_difficulty`, closed over every verb the
-    social roll deals, refused at import), `None` on the control arm. A verb the roll deals with no row cannot reach
-    here (the import refused it); a hand call naming a verb the table does not carry is refused, naming it -- a task
-    with no difficulty is a loud gap, never a default."""
-    if fx.get("obstacle_model") != OBSTACLE_MODEL_TASK:
-        return None
-    if verb not in TASK_DIFFICULTY:
-        raise Unspecified(f"the social roll was asked to deal {verb!r}, which `rosters.yaml: task_difficulty` gives no "
-                          "difficulty", "rosters.yaml -- task_difficulty",
-                          needs="a row for every verb the social roll deals",
-                          law="B11 lane A -- an obstacle is the task's difficulty and its modifiers, never a stand-in")
-    return TASK_DIFFICULTY[verb]
+# ---------------------------------------------------------------------------------------------
+# THE OBSTACLE'S OPERANDS (B05.14; OBS §1): each member of `rosters.yaml: obstacle_terms` is read by ONE host function.
+# ---------------------------------------------------------------------------------------------
+def _bound_to(binding: dict, roster_name: str) -> dict:
+    """`binding` (member -> host function) checked against `rosters.yaml: <roster_name>`, both ways, as `ADVANTAGE_SOURCES` is: a member
+    with no function would silently add nothing, a function with no member would silently never run. Returns the binding in the
+    roster's order."""
+    members = roster(roster_name, ordered=True)
+    if set(binding) != set(members):
+        raise Unspecified(
+            f"`{roster_name}` members {list(members)} and their host functions {sorted(binding)} differ", "rosters.yaml",
+            needs="a function for every member and a member for every function",
+            law="OBS §1 -- the roster is the closed set and the binding is its only reader")
+    return {name: binding[name] for name in members}
+
+
+def _even_term(fx: Any, facts: dict) -> dict:
+    """`even`: the pool's base, `pool_add`, as the `social_roll` site's `dice` row names it (`pool.pool_pair`) -- the base that makes
+    the pool is the base whose even line (`MU_PER_DIE x pool_add`) the obstacle starts at. The module derives the line."""
+    return {"pool_add": pool_pair(fx)[0]}
+
+
+def _difficulty_term(fx: Any, facts: dict) -> dict:
+    """`difficulty`: the size (`Fixtures.difficulty_ob`) of the level the verb's row names. A verb the table does not carry, or a row
+    with no level (a row nothing rolls), is refused naming it: a task with no difficulty is a loud gap, never a default."""
+    row = VERB_TABLE.get(facts["verb"])
+    if row is None or row.difficulty is None:
+        raise Unspecified(f"the social roll was asked to deal {facts['verb']!r}, which `verb_table.yaml` gives no `difficulty:`",
+                          "verb_table.yaml -- difficulty", needs="a verb row the social roll deals, with its level",
+                          law="B05.14 -- an obstacle is the act's difficulty and its terms, never a stand-in")
+    return {"difficulty": fx.get("difficulty_ob")[row.difficulty]}
+
+
+def _opposition_term(fx: Any, facts: dict) -> dict:
+    """`opposition`: what a person opposite brings (`facts["opposition"]`: his skill score plus his opposing attribute, `_opposing`;
+    `None` for nobody), with the untrained score the module stands in with where nobody is, and the rate it opposes at."""
+    return {"opposition": facts["opposition"], "pool_default": untrained(fx), "opposition_rate": fx.get("opposition_rate")}
+
+
+#: Each member of `rosters.yaml: obstacle_terms` -> the ONE function that reads it: `fn(fixtures, facts) -> {record field: value}`. A member
+#: that is a raw operand times a step returns `{"obstacle_operands": ((name, raw, step),)}` instead. Refused at import, both ways.
+OBSTACLE_TERMS = _bound_to({"even": _even_term, "difficulty": _difficulty_term, "opposition": _opposition_term}, "obstacle_terms")
+
+
+def obstacle_operands(fx: Any, facts: dict) -> dict:
+    """THE OBSTACLE'S FIELDS OF THE RECORD, every roster member's function asked in roster order: `difficulty`, `pool_default`,
+    `pool_add`, `opposition`, `opposition_rate` and `obstacle_operands` (the `(name, raw, step)` triples of the members that are an
+    operand times a step, in roster order). `facts` is what the act is: its `verb` and the `opposition` its builder read (`None`
+    for nobody). `contest_input` and `believed_input` reach it through `_frame` alone, so they cannot compose different obstacles."""
+    fields: dict = {}
+    operands: list = []
+    for name, read in OBSTACLE_TERMS.items():
+        got = dict(read(fx, facts))
+        operands.extend(got.pop("obstacle_operands", ()))
+        fields.update(got)
+    return {**fields, "obstacle_operands": tuple(operands)}
 
 
 def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: float,
@@ -388,15 +439,16 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
     """THE RECORD, FILLED THE ONE WAY: what `contest_input` (the true input) and `believed_input` (a
     person's) both hand the module. They differ in where the pool's opposition, the forgery quality
     and the room terms COME FROM; the fixtures and the record's shape are this
-    function's alone, so the two modes cannot compose different obstacles from the same fields."""
+    function's alone, so the two modes cannot compose different obstacles from the same fields. THE ACT'S DIFFICULTY IS ALWAYS KNOWN to a
+    believer (it is the verb row's, public), as are the fixtures' rate and base; only the opposition can be unknown to him
+    (`believed_input` answers `None` for that, never a figure)."""
     return SocialContestInput(
-        pool=pool, opposition=opposition,
-        obstacle_default=fx.get("obstacle_default"),
+        pool=pool,
         obstacle_ceiling=fx.get("obstacle_ceiling"),
         ceiling_per_pool=fx.get("ceiling_per_pool"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
         leverage=advantage_sigma(fx, {EFFORT: effort, EDGE: edge}),      # the one place the operands are named
-        forgery_quality=forgery_quality, difficulty=_difficulty(fx, verb), **room_terms)
+        forgery_quality=forgery_quality, **obstacle_operands(fx, {"verb": verb, "opposition": opposition}), **room_terms)
 
 
 # ---------------------------------------------------------------------------------------------
@@ -410,16 +462,13 @@ QUERY_ENTRIES = ((OBSTACLE_ROLE, "query"),)  # the host's declared need, held at
 
 
 def _composed_obstacle(inp: SocialContestInput) -> float:
-    """The obstacle the module composes for `inp`, reached by the `social_contest.obstacle` composition row."""
-    return composition.require(OBSTACLE_ROLE)(inp)
+    """The obstacle the module composes for `inp`, reached by the `social_contest.obstacle` composition row (its pair's first)."""
+    return composition.require(OBSTACLE_ROLE)(inp)[0]
 
 
-def _composed_terms(inp: SocialContestInput) -> dict:
-    """The obstacle's named terms for `inp` (`roll.py::obstacle_terms`), read from the module the obstacle row's
-    target names (loaded by `composition.require`), as `_composed_obstacle` reads the obstacle."""
-    composition.require(OBSTACLE_ROLE)
-    module = sys.modules[composition.ROLES[OBSTACLE_ROLE]["target"].partition(":")[0]]
-    return module.obstacle_terms(inp)[1]
+def _composed_terms(inp: SocialContestInput) -> tuple:
+    """The obstacle's named terms for `inp` (`roll.py::obstacle`'s pair's second), reached by the same row as `_composed_obstacle`."""
+    return composition.require(OBSTACLE_ROLE)(inp)[1]
 
 
 def _odds_of_input(inp: SocialContestInput) -> Optional[tuple]:
@@ -446,12 +495,12 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
     practice addend: the one World read mode (b) makes, and it is of himself), so `faculty` stays the one
     pool reader. Every other field is filled
     only from what he holds, and WHERE A FACTOR IS UNKNOWN TO HIM THE ANSWER IS `None`, never a figure:
-      * the opposition of a person subject, on a verb that names a capability key: a claim in his
-        ledger on that subject at `CAPABILITY_CLAIM + key` (the latest, then the most confident);
-        none held -> unknown. A non-person subject has no opposition (the task's difficulty alone on the
-        task arm, the module's stand-in on the control), and that is known. A person subject on a verb naming
-        no key opposes at the untrained score on every arm (`pool.untrained`, every person's score on no
-        vocation, so known; the dealt roll reads the same, B05.11).
+      * the opposition of a person subject: his skill score, a claim in the believer's ledger on that subject at
+        `CAPABILITY_CLAIM + key` (the latest, then the most confident; a verb naming no key opposes at the untrained
+        score, `pool.untrained`, every person's score on no vocation, so known) PLUS his opposing attribute, a claim at
+        `CAPABILITY_CLAIM + the row's opposed_attribute` (B05.14); either not held -> unknown. A non-person subject
+        has no opposition, the module opposes it at `opposed_ob(pool_default)`, and that is known; so is the act's
+        difficulty (the verb row's, public).
       * an examined Record's forgery quality: a property of the Record, held by nobody's claim here
         -> unknown.
       * the room's terms (`reception`, `proofs`) read other persons' ledgers: unknown unless the caller
@@ -461,18 +510,27 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
     key = VERB_CAPABILITY.get(verb)
     opposition = None
     # THE TABLE'S TERMS, as the dealt roll reads them (`_read_social_roll`): no `opposes` row, no opposition term (and none to
-    # be unknown about); no `dice` row, a pool of 0.
-    if "opposes" in roles and person_subject and key and subject != p.id:
-        said = believed_capability(p, subject, key)
-        if said is None:
-            return None
-        opposition = float(said)
-    elif "opposes" in roles and person_subject and subject != p.id:
-        # A VERB NAMING NO KEY (`lie`), ON EVERY ARM: the roll opposes a person with `pool.score`, which on such a verb is
-        # the untrained score for EVERY person (`pool.untrained`; nothing can be held on no vocation), so it is known,
-        # and the believed obstacle is the dealt one (B05.11: `_opposition_of` returns the score on every arm, so no arm
-        # keeps a `None` here for the module's stand-in).
-        opposition = float(untrained(fx))
+    # be unknown about); no `dice` row, a pool of 0. A PERSON OPPOSITE BRINGS HIS SKILL SCORE PLUS HIS OPPOSING ATTRIBUTE (`_opposing`), and
+    # BOTH ARE HIS TO KNOW ONLY BY A CLAIM IN THE BELIEVER'S OWN LEDGER: the skill's where the verb names one (a verb naming none, `lie`,
+    # opposes at the untrained score for EVERY person, `pool.untrained`, which he knows without asking), the attribute's where the row
+    # names one -- and the attribute is a trait of THAT person, never every person's, so with no claim the answer is unknown (`None`),
+    # never a figure (B05.14; before it the keyless verb's believed obstacle was known and the dealt one).
+    if "opposes" in roles and person_subject and subject != p.id:
+        if key:
+            said = believed_capability(p, subject, key)
+            if said is None:
+                return None
+            skill = float(said)
+        else:
+            skill = float(untrained(fx))
+        attribute = 0.0
+        resisted = VERB_TABLE[verb].opposed_attribute if verb in VERB_TABLE else None
+        if resisted:
+            said = believed_capability(p, subject, resisted)
+            if said is None:
+                return None
+            attribute = float(said)
+        opposition = skill + attribute
     if examined_record:
         return None
     # THE `capability` SOURCE'S ROWS, as the believer can read them: his own side is his to know; the subject's is a claim of his
@@ -655,9 +713,9 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     `effort` is the act's own (CP-T01-05, `state/carriers.py::effort_of`, passed by `seam/contest.py`): it
     reaches only `contest_input`, where it becomes `leverage`; the act's draw is unchanged (one id, one draw).
 
-    RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage, settled_margin, ob_terms, fed_by)   # the entry's Margin + the record
+    RESOLVED -> dict(status, module, resolver, pool, ob, net, terms, leverage, settled_margin, fed_by)   # the entry's Margin + the record
                  # + the real margin `net - ob` the ladder quantises once (B05.02), the number `degree_of` grades
-    REFUSED  -> dict(status, why, module, resolver, pool, ob, ob_terms, fed_by)   # S27.4: ob > obstacle_refusal_multiple x pool
+    REFUSED  -> dict(status, why, module, resolver, pool, ob, terms, fed_by)   # S27.4: ob > obstacle_refusal_multiple x pool
     `fed_by` (B04.08): a tuple of `(use, role, key, side, value, contributed)`, one per `social_roll` row that fed the roll
     (`_fed_by`); read by no caller yet, carried on the dict and on no `Event` (D-U1-06).
 
@@ -730,17 +788,18 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             law="08_SEAM provider rule (intent) and S27.2 -- a contest provider returns a MARGIN, never "
                 "a winner; the band is the one ladder's reading of the margin, so a winner here is a "
                 "second resolver")
-    # B11 lane A: every term of the obstacle, named, on the roll's record (`roll.py::obstacle_terms`).
-    ob_terms = _composed_terms(inp)
+    # B05.14: every term of the obstacle, named, on the roll's record -- `Margin.terms`, the entry's own (`roll.py::obstacle`); it replaces
+    # lane A's `ob_terms` dict (C3-L5). A stub entry's `()` is a margin with no composition behind it.
+    terms = margin.terms
     if margin.ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
         return dict(status="REFUSED", why="S27.4", module=_PROVIDER,
-                    resolver=_RESOLVER, pool=inp.pool, ob=margin.ob, ob_terms=ob_terms,
-                    fed_by=_fed_by(reads, inp, ob_terms))
+                    resolver=_RESOLVER, pool=inp.pool, ob=margin.ob, terms=terms,
+                    fed_by=_fed_by(reads, inp, terms))
     # B05.02: the margin is REAL -- `net` (the one sampler's draw plus the boost) less `ob` -- and the ladder quantises
     # it once (`degree_from_net`, `MARGIN_SCALE`). Nothing is settled here and no second draw is made: the act's stream
     # is the module's roll alone. The record keeps the name `settled_margin` (B05.18 reads it as a real margin).
     settled = margin.net - margin.ob
     # The margin's own fields, copied whole: the host reads the pair, it never computes one.
     return dict(status="RESOLVED", module=_PROVIDER, resolver=_RESOLVER, pool=inp.pool,
-                **asdict(margin), leverage=inp.leverage, settled_margin=settled, ob_terms=ob_terms,
-                fed_by=_fed_by(reads, inp, ob_terms))
+                **asdict(margin), leverage=inp.leverage, settled_margin=settled,
+                fed_by=_fed_by(reads, inp, terms))

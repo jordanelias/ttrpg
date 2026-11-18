@@ -40,7 +40,7 @@ import functools
 import random
 from typing import Optional
 
-from engine.dice_engine.sigma_leverage import M_MAX, OB_MIN, band_odds, net_boost, roll_net_continuous
+from engine.dice_engine.sigma_leverage import M_MAX, OB_MIN, band_odds, even_line, net_boost, opposed_ob, roll_net_continuous
 from engine.season.queries.inputs import Margin, SocialContestInput
 
 
@@ -75,117 +75,83 @@ def _chance_floor_cap(pool: float, ceiling: float) -> Optional[float]:
     return lo
 
 
-def obstacle(inp: SocialContestInput) -> float:
-    """What stands against one matter's draw, BOUNDED ABOVE by the ceiling: `obstacle_terms`'s first member. On the
-    shipped task arm (`inp.difficulty` set, B11 lane A) the task's difficulty plus the opposing person's score halved
-    where a person opposes, and the difficulty alone where none does; on the control arm (`difficulty` `None`) the
-    opposition's score halved, or the `H-127` stand-in where there is no score.
+def obstacle(inp: SocialContestInput) -> tuple:
+    """`(ob, terms)`: WHAT STANDS AGAINST ONE MATTER'S DRAW, AND EVERY TERM THAT MADE IT (B05.14; OBS §2; ED-SC-0033 clause (3), *the
+    obstacle has a single owner*; Jordan, 2026-11-12, relayed: *"social contest obstacle is defined by the difficulty of the task and all
+    associated modifiers"*). THE ONE FORM, at every site and every arm:
 
-    ⚠ THE RULING IS `score/2 PLUS MODIFIERS` AND IT APPLIES TO A PERSON. Jordan, 2026-08-14, carried
-    live in `dice_engine.degree_from_net`'s docstring: an opposed obstacle is *"their corresponding
-    score/2 plus whatever specific modifiers exist for them in that instance"*. The instance
-    modifiers are the room's terms and an examined document's forgery quality, below (and, on the task arm, the task's
-    difficulty). A record, a rung or a proposition has no score: on the task arm it takes the difficulty alone, on the
-    control arm `obstacle_default`. **NO "BASE Ob BY SCALE"** (Jordan, 2026-09-05).
+        hard  = even + difficulty + opposed_ob(opposition if a person opposes else pool_default, opposition_rate) + sum(raw_i x step_i)
+        ob    = max(OB_MIN, min(hard, cap(pool)))          # the ceiling (H-213), then the floor
+        terms = ((name, value), ...) in `rosters.yaml: obstacle_terms` order, + ("ceiling", -clip) and ("floor", +lift) where a bound acted
 
-    ⚠ THE CEILING (`H-213`): a
-    ceiling caps how hard a matter can get. M-7 fails without one -- at the 1D pool floor
-    `p_success` is 0.0006 at Ob 3 and effectively zero above, and buying σ-advantage cannot lift it.
-    It is NOT a pool floor (that would raise everyone's competence, a statement about people), and
-    it is NOT advantage: advantage stays a μ-shift on the roll (`net_boost`), and the ceiling is one
-    bound inside this composition, the same for every party, never applied by a caller to `base_Ob`.
-    PER MATTER (ED-SC-0038's pick): this bounds ONE record's obstacle -- one matter's draw -- and
-    nothing composes obstacles across a bundle. `None` is the uncapped control arm. THE SHIPPED ARM IS
-    SOLVED PER POOL (CP-T01-06, `chance_floor`; `ceiling_per_pool`): from one die the cap is the highest
-    Ob at which that pool keeps the chance of Partial-or-better the fixed ceiling leaves a one-die roll
-    (`_chance_floor_cap`, solved on the closed form of the one sampler at the largest lawful disadvantage,
-    `-M_MAX`; 2.0 at pool 1, 3.06 at pool 2, rising with the pool), so a larger pool is never worse for the
-    cap (it is an equality: each pool's chance at its own cap, at `-M_MAX`, is the one-die chance at the
-    ceiling), and at the shipped ceiling (2) S27.4's `ob > multiple x pool` never holds on a derived
-    pair. A favourable boost only raises the chance at each pool's cap above that floor. The floor is 0 only
-    where the closed form underflows to nothing. Below one die the fixed ceiling applies. `ceiling_per_pool` off is the
-    fixed arm, which the sentences below describe at ceiling 2. A ceiling below
-    the Ob minimum (`OB_MIN`, PP-232) is refused rather than read: it would breach the floor. Nothing floors the composed obstacle itself: a score under 2 composes
-    below `OB_MIN` (score 1 gives 0.5).
+    `even` is `sigma_leverage.even_line(pool_add)`, the pool's expected net (an obstacle at it is an even contest); `difficulty` is the
+    act's own (the size of its verb row's level); `opposition` is the one acted against: a PERSON opposite opposes with what he brings
+    (his opposing attribute plus his skill score, A-79, A-137 -- the host reads it, `sigma.py::OBSTACLE_TERMS`), read at
+    `sigma_leverage.opposed_ob` and `opposition_rate`, and where NO person stands opposite (a docket item, a Record, a site, a self-plea:
+    nobody opposes himself) it is `opposed_ob(pool_default)` -- NEVER ABSENT, so no act's obstacle is zero for want of a counterparty
+    and no verb is named here. `obstacle_operands` carries the members that are a raw operand times a step (none ship at step 1a).
+    Every member is non-negative; a negative one raises `ValueError` (nothing lowers the obstacle). The values in `terms` sum to `ob`.
 
-    ⚠ THE ROOM'S TERMS ARE THE INSTANCE MODIFIERS THE RULING NAMES (v9 SC-02 `22a`; proceedings
-    `19_PLAN.md` steps 17, 18, 20): `room = reception_gain · reception + proof_step · proofs`, both read
-    raw off the record, is SUBTRACTED -- a bench disposed toward the speaker, and proofs his opponent
-    cannot mirror, make the matter easier; a bench against him makes it harder. A room's favour never
-    takes the obstacle below `OB_MIN` (or below a base already under it): it moves the obstacle, it
-    does not abolish it. The ceiling still bounds the result, so under the fixed `H-213` ceiling (2,
-    the same as `obstacle_default`) a hostile room cannot raise a defaulted obstacle -- stated, not
-    hidden; under the per-pool arm it can, up to that pool's cap (a pool of 2 reaches 3.06). THE FAVOURABLE HALF IS CLIPPED THE SAME WAY: the ceiling is applied after the room, so
-    against a strong opposition (base above the ceiling) a favourable room bites only where it takes
-    the obstacle below the ceiling (`room > base - ceiling`); a room of +1.5 against a base of 4 under
-    a ceiling of 2 changes nothing.
+    ⚠ LANE A'S TWO STEPS STAY WHERE THEY WERE, OUTSIDE THE ROSTER (U-6), SO THE CONTROL IS EXACT: after the members, `room` (minus the
+    bench's reception and the speaker's proofs, never taking the obstacle below `OB_MIN` or below a base already under it -- a bench
+    disposed toward the speaker, and proofs his opponent cannot mirror, make the matter easier; one against him makes it harder, v9 SC-02
+    `22a`) and `forgery` (an examined document's quality, ADDED: a better forgery is harder to find, `22b` step 25). `room` is the one
+    entry that may be negative; OBS §4 step 1b moves its favourable half to leverage.
 
-    ⚠ AND AN EXAMINED DOCUMENT'S FORGERY QUALITY IS ONE MORE (v9 SC-02 `22b` step 25; `19_PLAN.md` step
-    25, *"examination contests the record's forgery quality"*): `forgery_quality`, read raw off the
-    Record an inquiry examines, is ADDED -- a better forgery is harder to find -- before the ceiling,
-    which bounds it as it bounds a hostile room. `0` (a genuine document, or the `H-210` control arm)
-    adds nothing. Under the fixed `H-213` ceiling (2 = `obstacle_default`) a forgery cannot raise a
-    defaulted inquiry's obstacle: the quality reaches the roll only where the ceiling sits above the
-    default (the uncapped `None` arm, `3`, or a pool whose solved cap is above 2) -- stated, not hidden."""
-    return obstacle_terms(inp)[0]
-
-
-def obstacle_terms(inp: SocialContestInput) -> tuple:
-    """`(ob, terms)`: THE OBSTACLE AND EVERY TERM THAT MADE IT, NAMED (B11 lane A; Jordan, 2026-11-12, relayed: *"social
-    contest obstacle is defined by the difficulty of the task and all associated modifiers"*). `obstacle` returns the
-    first; the host writes the second on the roll's record (`seam/wrappers/sigma.py::resolve`, `ob_terms`), so why a
-    given Ob was thrown at can be read after the draw. `ob` is composed in sequence, never as `sum(terms)`.
-
-    THE TASK ARM (`inp.difficulty` set, shipped): `difficulty` (the task's own, `rosters.yaml: task_difficulty`) PLUS
-    `opposition` -- the opposing person's score halved, the RULED term (2026-08-14), kept as one modifier and unchanged
-    -- where a person opposes; a task no person opposes (an inquiry, a contest against a Record) has no such term and
-    no stand-in. THE CONTROL ARM (`inp.difficulty is None`): `opposition`, or `stand_in` (`obstacle_default`) where
-    there is no score. THEN, on both: `room` (minus the bench's reception and the speaker's
-    proofs, floored), `forgery` (an examined document's quality) and `ceiling` (the H-213 cap's cut, zero or
-    negative). A term that does not apply is absent from the record."""
-    terms: dict = {}
-    if inp.difficulty is not None:
-        ob = float(inp.difficulty)
-        terms["difficulty"] = ob
-        if inp.opposition is not None:
-            half = float(inp.opposition) / 2.0
-            terms["opposition"] = half
-            ob = ob + half
-    elif inp.opposition is not None:
-        ob = float(inp.opposition) / 2.0
-        terms["opposition"] = ob
-    else:
-        ob = float(inp.obstacle_default)
-        terms["stand_in"] = ob
+    ⚠ THE CEILING (`H-213`): a ceiling caps how hard a matter can get. M-7 fails without one -- at the 1D pool floor `p_success` is
+    0.0006 at Ob 3 and effectively zero above, and buying σ-advantage cannot lift it. It is NOT a pool floor (that would raise
+    everyone's competence, a statement about people), and it is NOT advantage: advantage stays a μ-shift on the roll (`net_boost`), and the
+    ceiling is one bound inside this composition, the same for every party. PER MATTER (ED-SC-0038's pick): this bounds ONE record's
+    obstacle and nothing composes obstacles across a bundle. `None` is the uncapped control arm. THE SHIPPED ARM IS SOLVED PER POOL
+    (CP-T01-06, `chance_floor`; `ceiling_per_pool`): from one die the cap is the highest Ob at which that pool keeps the chance of
+    Partial-or-better the fixed ceiling leaves a one-die roll (`_chance_floor_cap`, solved on the closed form of the one sampler at the
+    largest lawful disadvantage, `-M_MAX`; 2.0 at pool 1, 3.06 at pool 2, rising with the pool), so a larger pool is never worse for the
+    cap, and at the shipped ceiling (2) S27.4's `ob > multiple x pool` never holds on a derived pair. Below one die the fixed ceiling
+    applies. A ceiling below the Ob minimum (`OB_MIN`, PP-232) is refused rather than read: it would breach the floor. THE FLOOR comes
+    last: a composed obstacle under `OB_MIN` (a `plain` act against a person scoring 0) is lifted to it and the lift is the `floor` term.
+    **NO "BASE Ob BY SCALE"** (Jordan, 2026-09-05)."""
+    terms = [("even", even_line(inp.pool_add)),
+             ("difficulty", float(inp.difficulty)),
+             ("opposition", opposed_ob(inp.pool_default if inp.opposition is None else inp.opposition, inp.opposition_rate))]
+    terms += [(name, float(raw) * float(step)) for name, raw, step in inp.obstacle_operands]
+    negative = [(name, value) for name, value in terms if value < 0]
+    if negative:
+        raise ValueError(f"the obstacle's terms are never negative (nothing lowers it); got {negative}")
+    ob = 0.0
+    for _, value in terms:
+        ob += value
     room = float(inp.reception_gain) * float(inp.reception) + float(inp.proof_step) * float(inp.proofs)
     if room:
         before = ob
         ob = max(ob - room, min(ob, float(OB_MIN))) if room > 0 else ob - room
-        terms["room"] = ob - before
+        terms.append(("room", ob - before))
     if inp.forgery_quality:
-        terms["forgery"] = float(inp.forgery_quality)
+        terms.append(("forgery", float(inp.forgery_quality)))
     ob += float(inp.forgery_quality)
     ceiling = inp.obstacle_ceiling
-    if ceiling is None:
-        return ob, terms
-    if ceiling < OB_MIN:
-        raise ValueError(f"obstacle_ceiling {ceiling!r} is below the Ob minimum {OB_MIN} (PP-232); "
-                         "a ceiling under the floor is a bad arm, refused rather than read (H-213)")
-    cap = float(ceiling)
-    if inp.ceiling_per_pool and inp.pool >= 1:
-        cap = _chance_floor_cap(inp.pool, cap) or cap
-    if ob > cap:
-        terms["ceiling"] = cap - ob
-    return min(ob, cap), terms
+    if ceiling is not None:
+        if ceiling < OB_MIN:
+            raise ValueError(f"obstacle_ceiling {ceiling!r} is below the Ob minimum {OB_MIN} (PP-232); "
+                             "a ceiling under the floor is a bad arm, refused rather than read (H-213)")
+        cap = float(ceiling)
+        if inp.ceiling_per_pool and inp.pool >= 1:
+            cap = _chance_floor_cap(inp.pool, cap) or cap
+        if ob > cap:
+            terms.append(("ceiling", cap - ob))
+            ob = cap
+    if ob < OB_MIN:
+        terms.append(("floor", OB_MIN - ob))
+        ob = float(OB_MIN)
+    return ob, tuple(terms)
 
 
 def roll(inp: SocialContestInput, rng: Optional[random.Random] = None) -> Margin:
-    """Roll one contested act -> `Margin(net, ob)`.
+    """Roll one contested act -> `Margin(net, ob, terms)`.
 
     The `rng` is a parameter and is never constructed here (`04 §C.12` rejection 4): the driver
     builds it from the run seed and the seam passes it down, as it passes `World`.
-    `ob` is `obstacle(inp)`, this module's, and is returned so the host can grade the margin and
-    apply S27.4 on the pair (`seam/wrappers/sigma.py::resolve`). The pool and leverage are the
+    `ob` and `terms` are `obstacle(inp)`, this module's, and are returned so the host can grade the margin, apply S27.4 on the pair
+    (`seam/wrappers/sigma.py::resolve`) and record why that obstacle was thrown at. The pool and leverage are the
     record's own, which the host already holds, so the margin does not carry them back."""
-    return Margin(net=roll_net_continuous(inp.pool, rng=rng) + net_boost(inp.leverage, inp.pool),
-                  ob=obstacle(inp))
+    ob, terms = obstacle(inp)
+    return Margin(net=roll_net_continuous(inp.pool, rng=rng) + net_boost(inp.leverage, inp.pool), ob=ob, terms=terms)

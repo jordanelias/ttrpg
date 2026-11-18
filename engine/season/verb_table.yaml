@@ -80,6 +80,7 @@ verbs:
     writes_note: "v9 IN-45 (`loop/effects_information.py::_eff_carry`), built on `open_case`'s body (#453: *build on `open_case`'s body, writing the petition's `Record.stages`*): `Record.stages` is the FIRST pair -- the act re-winds the petition's clock (`_declared_stages`, `H-80`'s default for a computed act), so the petition RECORD moves, the gate's `entity` shape observes it, and its receipt names the petition, which the appended docket item names under `DOCKET_PETITION` (v9 SC-03a). The append rides on that receipt, as `open_case`'s rides on its case file, and every decline comes before the write because the gate does not restore a docket. The MATTER (`H-63`'s value for this row) is the petition's `terms`, `open_case`'s precedent. [ASSUMPTION; medium; Jordan to correct; revert: the matter is the petition's own id; the stages appended rather than replaced.] The later pairs, `(DocketItem, matter)` and the item's `arrangement` (`None`) and `petition` keys, are check-only (each admits RES in the ACTS class), as on `open_case`."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "argue"
+    difficulty:  "routine"
     stratum:     "social"
     capability:  "argue"
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (`argue` is its own vocation, v10 REM-30)."
@@ -123,6 +124,7 @@ verbs:
     grade_note:  "an argued addition (#453 §10.4 step 9): the row, the pursuit direction and the Partial reading are v9 IN-12's, on #453 §9.4 `:1896-1923`, K-21 `:2737-2742`."
     source:      "v9 IN-12 step 9 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.4 `:1896-1923`"
   - verb:        "arrest"
+    difficulty:  "routine"
     stratum:     "contested_physical"
     capability:  "arms"
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07)."
@@ -340,6 +342,7 @@ verbs:
     formation_decline_note: "v9 IN-26 (BOUND-PAPER): THE HOLD IS AN ARM, NOT THE ROW. The row is typed and `own`-eligible (above), so a hand-built `destroy_record` executes through the fold; FORMATION is decided in `decision/options.py::opening_set` by two reads: `rosters.yaml: own_hold_declines` (it forms only on a referent the person himself holds -- his own live `hold` edge, never every referent) and `Fixtures withheld_verbs` (H-156 option (a) as a switch: SHIPPED naming this verb, so nobody forms it; `()` is the sink arm, H-156 option (b) for this row). [ASSUMPTION; medium; Jordan to correct; revert: drop the row's `own` and cell and the roster line, and the fixture's member with them.]"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
   - verb:        "determine"
+    difficulty:  "routine"
     scale:   "settlement"
     scale_note: "a sitting decides at the venue's rung"
     stratum:     "binding_decision"
@@ -381,7 +384,7 @@ verbs:
     counterparty: subject
     counterparty_note: "PLAN POSITION `19`: THE PARTY IS THE SECOND SIDE (`ED-IN-0210` ruling 1, *a real interaction has a COUNTERPARTY*), and a judge does not bind himself -- `may_determine` refuses it at the fold and the gate. Declined person-side here, on `petition`'s precedent, so a self-determination is never formed: no read the fold makes can teach a person *that is you*, so a refusal would only tax his scenes."
     contests:    "a proposition"
-    contests_note: "v9 SC-03b (#453 §10.4 step 4, ED-IN-0288 as INTENT): `determine` is a CONTESTED act through the social contest scene's `social_contest` provider, the prize `a proposition` (`rosters.yaml: contest_subsystems.prizes`, a row no verb claimed until now). ONE ROLL OWNER (S27.2): the roll is the module entry `social_contest.roll`; the host (`seam/wrappers/sigma.py`) builds the input and produces none. The OPPONENT is the row's `counterparty:` operand (`subject`, the party), read by `loop/resolve.py::_contest` as `tell`'s hearer is, so the judge (the actor) rolls against the party; the pool is the judge's `pool_default` (`determine` has no `verb_capability` row, so it falls to the default, `H-126`'s polarity) and the obstacle is `obstacle_default` under `H-213`'s ceiling for EVERY party: `seam/wrappers/sigma.py::_opposition_of` finds no `verb_capability` key to read on the party (the party is named, and the roll is the same for every party). The band is the one ladder's reading of the margin (`seam/ladder.py::degree_of`); this row adds no ladder, no band table and no special case. [ASSUMPTION; medium; Jordan to correct; revert: the flat `writes:`/`emits:` and no `contests:`, the row before SC-03b.]"
+    contests_note: "v9 SC-03b (#453 §10.4 step 4, ED-IN-0288 as INTENT): `determine` is a CONTESTED act through the social contest scene's `social_contest` provider, the prize `a proposition` (`rosters.yaml: contest_subsystems.prizes`, a row no verb claimed until now). ONE ROLL OWNER (S27.2): the roll is the module entry `social_contest.roll`; the host (`seam/wrappers/sigma.py`) builds the input and produces none. The OPPONENT is the row's `counterparty:` operand (`subject`, the party), read by `loop/resolve.py::_contest` as `tell`'s hearer is, so the judge (the actor) rolls against the party; the pool is the judge's `pool_default` (`determine` has no `verb_capability` row, so it falls to the default, `H-126`'s polarity) and the obstacle is the row's difficulty plus the stand-in `opposed_ob(pool_default)` (B05.14; was `obstacle_default`) under `H-213`'s ceiling for EVERY party: `seam/wrappers/sigma.py::_opposition_of` finds no `verb_capability` key to read on the party (the party is named, and the roll is the same for every party). The band is the one ladder's reading of the margin (`seam/ladder.py::degree_of`); this row adds no ladder, no band table and no special case. [ASSUMPTION; medium; Jordan to correct; revert: the flat `writes:`/`emits:` and no `contests:`, the row before SC-03b.]"
     writes:
       Overwhelming: ["Tenure.since", "DocketItem.matter", "Tenure.degree", "Person.pursuits"]
       Success:      ["Tenure.since", "DocketItem.matter", "Tenure.degree", "Person.pursuits"]
@@ -533,6 +536,7 @@ verbs:
   # The false value is `queries/person_q.py::lie_said_of`'s, copied onto the Act at CHOOSE exactly as `said_of`'s
   # is; `rosters.yaml: lie_verbs` names this row so `decision/options.py::opening_set` reads that one instead.
   - verb:        "lie"
+    difficulty:  "routine"
     stratum:     "social"
     capability:  "none"
     capability_note: "undeclared at authoring; every person rolls the untrained default. No `deception` skill: a lie is an `argue` whose item is the liar's own false word (the social contest's V2, B24p.16; ED-IN-0378)."
@@ -1517,6 +1521,7 @@ verbs:
     grade_note:  "an argued addition (#453 §10.4 step 6): the matrix rows `(Tenure, until)` and `(Tenure, since)` are the tree's; the row, its `remit:issue` eligibility, the `seizure` basis and the warrant reading are v9 IN-12's, on #453 `:1412` and `:1662`."
     source:      "v9 IN-12 step 6 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.1 `:1662-1698`"
   - verb:        "speak"
+    difficulty:  "routine"
     stratum:     "social"
     capability:  "copying"
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability`; which skill a verb tests is stated nowhere in the design."
@@ -1532,7 +1537,7 @@ verbs:
       kind:      DocketItem
     requires_typed_note: "v9 SC-01 step 12 (B-N). The proceedings design's own cell, one clause (`04_VERBS.md` §B.1: `form: existence, of: subject, kind: DocketItem`), and `determine`'s `docket` conjunct exactly: the matter is on a docket (`world_q.docketed`, the reader's `docket` branch). It is what stops `speak` being a way to chat: no docket item names the subject, no contest. THE VENUE HALF IS NOT TYPED, as `determine`'s date half is not: a docket item has no venue key, a dateless one (`carry`'s, and `open_case`'s where no slot is open) names no sitting at all, and a filled slot reaches a venue only through its `date`'s Date, which no operand of this cell reads -- so *at the actor's venue* has no operand to read. Unnamed and flat (`survey`'s precedent): one conjunct, one refusal kind."
     contests:    "a matter"
-    contests_note: "v9 SC-01 step 12: `04_VERBS.md` §B.1's prize, *the proceeding is ONE act at the season scale*. `rosters.yaml: contest_subsystems.prizes` carries an `a matter` row routed to the social contest scene's `social_contest` provider (ED-SC-0033 clause (2)), so a docketed `speak` resolves there. The opponent is `subject` (the row names no `counterparty:`), so the docketed matter's party stands against the speaker when it is a person, and the provider's `obstacle_default` stands in when it is not (`modules/social_contest/roll.py::obstacle`, under `H-213`'s ceiling since step 14). v10 CP-T05-02 (iii): `subject_may_be_self` (below) waives `opening_set`'s contested-verb decline (*a person is not his own adversary*) for this row, so a docketed party speaks to his own matter in computed play; `seam/wrappers/sigma.py::contest_input` reads no opposition for a subject who is the actor, so the plea rolls at `obstacle_default` under the room's terms."
+    contests_note: "v9 SC-01 step 12: `04_VERBS.md` §B.1's prize, *the proceeding is ONE act at the season scale*. `rosters.yaml: contest_subsystems.prizes` carries an `a matter` row routed to the social contest scene's `social_contest` provider (ED-SC-0033 clause (2)), so a docketed `speak` resolves there. The opponent is `subject` (the row names no `counterparty:`), so the docketed matter's party stands against the speaker when it is a person, and the provider's `opposed_ob(pool_default)` stands in when it is not (`modules/social_contest/roll.py::obstacle`, under `H-213`'s ceiling since step 14). v10 CP-T05-02 (iii): `subject_may_be_self` (below) waives `opening_set`'s contested-verb decline (*a person is not his own adversary*) for this row, so a docketed party speaks to his own matter in computed play; `seam/wrappers/sigma.py::contest_input` reads no opposition for a subject who is the actor, so the plea rolls at the row's difficulty plus `opposed_ob(pool_default)` under the room's terms."
     subject_may_be_self: true
     subject_may_be_self_note: "v10 CP-T05-02 (iii) (AM-D-02) [ASSUMPTION; medium; Jordan to correct; revert: remove the column]. THE ACCUSED ANSWERS: a person docketed, holding the docketing claim, forms `speak {subject: himself}` -- the self-plea. Waives `decision/options.py::opening_set`'s self-subject decline for this row alone (the loader admits the column only on a row contested against its subject, `VerbRow.opponent_operand() == 'subject'`). It is NOT `counterparty_may_be_self` (`confer`), which waives the counterparty operand's self-exclusion. A DECLARED MOVER of every world in which a docketed party is offered his own matter."
     writes:
@@ -1636,6 +1641,7 @@ verbs:
     grade_note:  "an argued addition (#453 §10.4 step 9): the row and its magnitude are v9 IN-12's, on #453 §9.4 `:1925-1941`."
     source:      "v9 IN-12 step 9 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.4 `:1925-1941`"
   - verb:        "tell"
+    difficulty:  "routine"
     stratum:     "social"
     capability:  "copying"
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (`03 §A.2`, `#353 §9.2`: the verb names a skill, the skill supplies the dice and gates nothing); which skill a verb tests is stated nowhere in the design."
@@ -1752,6 +1758,7 @@ verbs:
   # makes a verb refuse is the harder-to-flatter option, not the easier one.
   # ===========================================================================================
   - verb:        "examine"
+    difficulty:  "routine"
     stratum:     "contested_physical"
     capability:  "inquiry"
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (REM-30, B10-10)."
@@ -1804,6 +1811,7 @@ verbs:
     grade:       "assumption"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:294 (§4.2), :318 (§4.3). ⚠ THE SINGLE-ROLL INTERVIEW IS RETIRING AND THIS ROW IS ITS BASELINE, NOT A SECOND SPEC: `fieldwork_v30.md:300` (ED-FI-0004, 2026-07-08) folds it into the Dialogue Lattice -- *'the richer object wins'* -- and retains the bare-roll row as *the current mechanical baseline* only until ED-921 and ED-IN-0016 EP-8 settle. This row is that baseline; when the Lattice is built it replaces this row rather than sitting beside it."
   - verb:        "interrogate"
+    difficulty:  "routine"
     stratum:     "social"
     capability:  "inquiry"
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07)."
@@ -1841,6 +1849,7 @@ verbs:
     grade_note:  "an argued addition (#453 §10.4 step 5): the row, its bands and the predicate route are v10 IN-12's, on #453 §9.1 `:1613-1660`, K-18, K-35, K-55, K-56, H-226 route (a)."
     source:      "v10 IN-12 step 5 (`workplans/valoria_master_workplan_v10_part4.md` IN-12), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) §9.1 `:1613-1660`"
   - verb:        "research"
+    difficulty:  "routine"
     stratum:     "uncontested_material"
     capability:  "inquiry"
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (REM-30, B10-10: the three inquiries `research`, `examine`, `surveil` draw on `inquiry`)."
@@ -1868,6 +1877,7 @@ verbs:
     grade:       "assumption"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:295 (§4.2), :319 (§4.3)"
   - verb:        "surveil"
+    difficulty:  "routine"
     stratum:     "contested_physical"
     capability:  "inquiry"
     capability_note: "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (REM-30, B10-10)."

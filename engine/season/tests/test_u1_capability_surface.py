@@ -780,7 +780,7 @@ def _arrest_roll(fixtures=None):
 def test_fed_by_on_an_arrest_lists_its_dice_and_opposes_rows():
     """The record's `fed_by` is the `social_roll` rows that contributed, in table order: `==` on the `(use, role)` pairs,
     and the row's own `(key, side)` beside them; a value read and a contribution for each (the opposition halved by the
-    module: `ob_terms`'s own term). The control is the table itself: the tuple is read off `capability_uses()`."""
+    module: `terms`'s own `opposition` entry, `Margin.terms`). The control is the table itself: the tuple is read off `capability_uses()`."""
     from engine.season.data import rosters
     out = _arrest_roll()
     assert out["status"] == "RESOLVED"
@@ -795,7 +795,7 @@ def test_fed_by_on_an_arrest_lists_its_dice_and_opposes_rows():
     assert dice[4] == pool.score(w, w.persons["p_low"], "arrest") and isinstance(dice[4], int)
     assert dice[5] == pool.faculty(w, w.persons["p_low"], "arrest") == out["pool"]
     assert opposes[4] is not None and opposes[4] == sigma._opposition_of(w, "p_mid", "arrest")
-    assert opposes[5] == out["ob_terms"]["opposition"] and opposes[5] > 0
+    assert opposes[5] == dict(out["terms"])["opposition"] and opposes[5] > 0      # B05.14: `Margin.terms` replaces `ob_terms`
 
 
 def test_fed_by_follows_the_table_rows_in_table_order(monkeypatch):
@@ -810,8 +810,10 @@ def test_fed_by_follows_the_table_rows_in_table_order(monkeypatch):
     out = _arrest_roll()
     assert tuple((f[0], f[1]) for f in out["fed_by"]) == (("social_roll", "dice"),)
     # THE PLAN'S FALSIFIER: a fed_by that omits a row the roll read. With the `opposes` row deleted the roll reads no
-    # opposition, so the module's own opposition term of the obstacle is 0 (a roll that read it anyway would not be 0).
-    assert out["ob_terms"].get("opposition", 0.0) == 0
+    # opposition, so nobody is opposite and the module's `opposition` term is the stand-in `opposed_ob(pool_default)` (a roll that read a
+    # person anyway would carry his score and attribute), and the fed_by lists no `opposes` row to contribute it (above).
+    from engine.season.data.fixtures import DEFAULT_FIXTURES
+    assert dict(out["terms"])["opposition"] == 0.5 * DEFAULT_FIXTURES.get("pool_default")
 
 
 def test_a_refused_roll_carries_fed_by_too():

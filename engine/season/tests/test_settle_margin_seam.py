@@ -27,6 +27,7 @@ from ..loop.driver import SeasonDriver
 from ..seam import ladder
 from ..seam.wrappers import sigma
 from ..state.carriers import Act
+from ..data.verbs import VERB_TABLE
 from .test_odds_of import _within_3se
 from .test_sc01_obstacle_ceiling import _module
 
@@ -36,13 +37,14 @@ KEY = "copying"
 def _world(opposition):
     """A speaker at pool 4 against a hearer whose score is `opposition`: the obstacle is score/2 (under the
     shipped ceiling of 2), so 3 gives 1.5 and 4 gives 2.0."""
-    # B11 lane A: read on the CONTROL obstacle (`obstacle_model: stand_in`, score / 2 alone): this file is about how
-    # the margin is carried at a whole and a fractional Ob, which are the stand-in arm's (the shipped `task`
-    # arm adds the task's difficulty, `test_b11a_scores_and_obstacle.py`).
-    w = P.tiny_world(DEFAULT_FIXTURES.sweep("obstacle_model", "stand_in"))
+    # B05.14: read on the form's score/2 ALONE: no difficulty (every level sized 0) and a hearer holding his resisting attribute at 0, so
+    # the obstacle is `0.5 x score`. This file is about how the margin is carried at a whole and a fractional Ob, not about the terms
+    # (`test_obstacle_form.py`'s).
+    w = P.tiny_world(DEFAULT_FIXTURES.sweep("difficulty_ob", {k: 0 for k in DEFAULT_FIXTURES.get("difficulty_ob")}))
     SeasonDriver(w)                                   # the registrar fills MODULE_ENTRIES
     # roster-exempt: TEST FIXTURE capabilities -- a speaker at pool 4 and a hearer scoring `opposition`.
     w.persons["p_low"].capability = {KEY: 4}
+    w.persons["p_mid"].attributes = {VERB_TABLE["tell"].opposed_attribute: 0}
     w.persons["p_mid"].capability = {KEY: opposition}
     return w
 
@@ -87,10 +89,10 @@ def test_the_records_own_fields_are_the_entrys_and_only_one_is_added():
     out = _resolve(w, random.Random(5))
     inp = sigma.contest_input(w, ["p_low"], verb="tell", subject="p_mid")
     margin = _module().roll(inp, random.Random(5))
-    assert (out["net"], out["ob"], out["pool"]) == (margin.net, margin.ob, inp.pool)
-    # B11 lane A: AND `ob_terms`, every term of the obstacle named on the record (`roll.py::obstacle_terms`)
+    assert (out["net"], out["ob"], out["pool"], out["terms"]) == (margin.net, margin.ob, inp.pool, margin.terms)
+    # B05.14: AND `terms`, every term of the obstacle named on the record (`Margin.terms`, the entry's own; lane A's `ob_terms` is replaced)
     # B04.08: AND `fed_by`, the `social_roll` rows that fed the roll (`resolve`'s record, never an `Event` field, D-U1-06)
-    assert set(out) == {"status", "module", "resolver", "pool", "net", "ob", "leverage", "settled_margin", "ob_terms", "fed_by"}
+    assert set(out) == {"status", "module", "resolver", "pool", "net", "ob", "leverage", "settled_margin", "terms", "fed_by"}
 
 
 def test_degree_of_grades_the_margin_when_present_and_the_pair_otherwise():

@@ -342,7 +342,7 @@ DEFAULT_FIXTURES = Fixtures(
     # [canonical: architecture/holonic_ARCHITECTURE.md §15.2 -- `entrenchment(h, H) = min(1, seasons_held / 60)`, verbatim at :556 under the §15.2 heading at :553. THE 60 IS IN-CHAIN, which is why this label is `canonical` where its neighbours are `JUSTIFIED`]
     entrenchment_seasons=60,
     # S27.4: "an attempt at Ob > 2 x Pool is refused, and the season is spent."
-    # `U1` / `H-126` / `H-127`. THE TWO OPERANDS OF A CONTESTED ROLL THAT NOTHING ELSE SUPPLIES.
+    # `U1` / `H-126`. THE OPERAND OF A CONTESTED ROLL THAT NOTHING ELSE SUPPLIES (the other, `obstacle_default`, is deleted: B05.14).
     #
     # ⚠ `pool_default` IS WHAT `capability` WOULD SUPPLY. `03 §A.2` rules the
     # mechanism — *"Rank supplies dice and gates nothing"* — and `Person.capability` is the store
@@ -353,26 +353,15 @@ DEFAULT_FIXTURES = Fixtures(
     # row is what licenses injecting it at all: *inject the default, declare the site, sweep three
     # points* — the grade that REFUSES is `absent`, and this is not one.
     #
-    # ⚠ `obstacle_default` IS THE STAND-IN FOR A SUBJECT WITH NO SCORE TO HALVE. Jordan's
-    # 2026-08-14 ruling gives an opposed obstacle as *"their corresponding score/2 plus whatever
-    # specific modifiers exist for them in that instance"*, which reads off a PERSON; a record, a
-    # rung or a proposition has no such score, and this stands in there. **NO "Base Ob by scale"**
-    # (Jordan, 2026-09-05) — the scale of the thing is not the obstacle.
-    # ⚠ SINCE v9 SC-01 step 14 IT IS AN OPERAND, NOT A SITE: `modules/social_contest/roll.py::obstacle` composes it with the ceiling below (ED-SC-0033 cl. 3, one owner).
+    # ⚠ `pool_default` IS ALSO THE UNTRAINED SCORE OF AN OPPONENT (`seam/wrappers/pool.py::untrained`), and where no person stands opposite
+    # (a docket item, a Record, a site, a self-plea) the opposition term of the obstacle is `opposed_ob(pool_default, opposition_rate)`
+    # (`modules/social_contest/roll.py::obstacle`): the deleted stand-in `obstacle_default` (2, halved) is that term at the control. **NO "Base Ob by scale"** (Jordan, 2026-09-05).
     # [JUSTIFIED: engine/season/hole_register.yaml H-126 -- `site: Fixtures pool_default`, graded `assumption`; `capability` is the declared source and is empty on every corpus person, so the magnitude is injected and swept]
     pool_default=2,
     # B01a.01: WHAT A PERSON HOLDS ON AN ATTRIBUTE NOBODY AUTHORED -- uniform on this range, one keyed draw per person and attribute (`state/carriers.py::generated_attributes`). Read at build and at the in-play mint. `(2, 2)` is B01's flat seating at `pool_default` (the control); `None` generates nothing.
     # [JUSTIFIED: engine/season/hole_register.yaml H-856 -- site: Fixtures generated_attribute_range, graded assumption; swept (1, 6) SHIPPED / (2, 2) B01's flat seating / None nothing generated]
     generated_attribute_range=(1, 6),
-    # [JUSTIFIED: engine/season/hole_register.yaml H-127 -- `site: Fixtures obstacle_default`, graded `assumption`; the ruled derivation is `score/2` and reads off a PERSON, so a non-person subject takes this injected and swept stand-in]
-    obstacle_default=2,
     obstacle_refusal_multiple=2,
-    # `H-368` (B11 lane A): HOW THE SOCIAL ROLL'S OBSTACLE IS COMPOSED (`modules/social_contest/roll.py::obstacle_terms`).
-    # `task` SHIPS: the task's difficulty (`rosters.yaml: task_difficulty`) plus the opposing person's score halved (the
-    # score he rolls, `seam/wrappers/pool.py::score`) plus the room's and the document's terms -- no stand-in for a
-    # person. `stand_in` is the CONTROL and the REVERT: `score / 2` of a held value, else `obstacle_default`, byte for
-    # byte the composition before. A switch, not a number.
-    obstacle_model="task",            # `H-368`, swept stand_in (the control, the revert) / task (SHIPPED)
     # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- `site: Fixtures obstacle_ceiling`, graded `assumption`; M-7 fails at the 1D floor above 2 (p_success 0.0006 at Ob 3), and 2 = obstacle_refusal_multiple x the 1D floor; swept 1 / 2 / 3, `None` the uncapped control]
     obstacle_ceiling=2,
     # CP-T01-06: THE `chance_floor` ARM OF THE CEILING. From one die the cap is solved per pool (the highest
@@ -1083,6 +1072,14 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `0.5`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-423 -- site: Fixtures opposition_rate, graded `assumption`; CAP B2 gives the live value as `MU_PER_DIE` and the control as lane A's one half, so it is injected at the control and swept 0.5 / 0.45 / MU_PER_DIE]
     opposition_rate=0.5,               # `H-423`, swept 0.5 (control, SHIPPED) / 0.45 / MU_PER_DIE (live)
+    # `H-424` (B05.14; OBS §1, SC-B Edit A). HOW HARD EACH DIFFICULTY LEVEL IS: the obstacle a verb row's `difficulty:` level contributes
+    # before any opposition (`rosters.yaml: difficulty_levels`, closed: refused at load if the keys are not exactly the roster's).
+    # Control 0 / 1 / 2 / 3, in level order. At control every rolled row is `routine`, so the difficulty term is 1 and, with the
+    # opposition term at `opposed_ob(pool_default)` = 1 where no person is opposite, an unopposed act's obstacle is 2.0. Replaces lane A's
+    # `rosters.yaml: task_difficulty` (a number per verb) and its `obstacle_model` switch.
+    # [ASSUMPTION; medium; Jordan to correct; revert: lane A's per-verb numbers, which are no longer read.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-424 -- site: Fixtures difficulty_ob, graded `assumption`; no document derives the size of a level, so it is injected at the control and swept]
+    difficulty_ob={"plain": 0, "routine": 1, "demanding": 2, "hard": 3},   # `H-424`, swept control (SHIPPED) / halved (OBS §4 step 5's live arm) / one step finer
 )
 
 
@@ -1091,3 +1088,8 @@ def load() -> None:
     It lives here and not in `rosters.py` because this module imports `rosters` (the other way would close an import cycle)."""
     from .rosters import check_capability_fixtures
     check_capability_fixtures(dict(DEFAULT_FIXTURES._v))
+    levels, sized = tuple(roster("difficulty_levels", ordered=True)), tuple(DEFAULT_FIXTURES.get("difficulty_ob"))
+    if sized != levels:
+        raise Forbidden(f"`Fixtures difficulty_ob` sizes {list(sized)}, and `rosters.yaml: difficulty_levels` names {list(levels)}", "data/fixtures.py",
+                        needs="one size per difficulty level, in the roster's order",
+                        law="B05.14 -- a level with no size is read by nothing, a size for no level is read by nothing; the roster is the closed set")

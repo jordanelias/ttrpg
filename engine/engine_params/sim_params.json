@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 122,
-    "total": 385,
-    "uncited": 263,
+    "total": 384,
+    "uncited": 262,
     "of_which_assumption_grade": 8
   },
-  "count": 385,
+  "count": 384,
   "by_module": {
     "engine.dice_engine": 10,
     "engine.season": 24,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 98,
+    "engine.season.settings": 97,
     "engine.season.realm": 8
   },
   "params": [
@@ -3604,17 +3604,6 @@
       "citation_grade": null
     },
     {
-      "key": "engine.season.settings.obstacle_default",
-      "name": "obstacle_default",
-      "value": 2,
-      "kind": "scalar",
-      "module": "engine.season.settings",
-      "file": "engine/season/data/fixtures.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
       "key": "engine.season.settings.obstacle_refusal_multiple",
       "name": "obstacle_refusal_multiple",
       "value": 2,
@@ -3622,17 +3611,6 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "engine.season.settings.obstacle_model",
-      "name": "obstacle_model",
-      "value": "task",
-      "kind": "other",
-      "module": "engine.season.settings",
-      "file": "engine/season/data/fixtures.py",
-      "note": "`H-368`, swept stand_in (the control, the revert) / task (SHIPPED)",
       "citation": null,
       "citation_grade": null
     },
@@ -4551,6 +4529,22 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-423`, swept 0.5 (control, SHIPPED) / 0.45 / MU_PER_DIE (live)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.difficulty_ob",
+      "name": "difficulty_ob",
+      "value": {
+        "plain": 0,
+        "routine": 1,
+        "demanding": 2,
+        "hard": 3
+      },
+      "kind": "table",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-424`, swept control (SHIPPED) / halved (OBS §4 step 5's live arm) / one step finer",
       "citation": null,
       "citation_grade": null
     },

@@ -133,8 +133,9 @@ def test_sc01_s15_a_deleted_composition_row_refuses_at_driver_construction_namin
 # ================================================================================================
 
 def _record(**kw) -> SocialContestInput:
-    base = dict(pool=4, opposition=None, obstacle_default=2.0, obstacle_ceiling=2.0,
-                obstacle_refusal_multiple=2.0, leverage=0.0)
+    # B05.14: nobody opposite composes `difficulty + opposed_ob(pool_default)`: 0 + 0.5 x 4 = 2.0, the stand-in these records were read at
+    base = dict(pool=4, opposition=None, obstacle_ceiling=2.0, obstacle_refusal_multiple=2.0, leverage=0.0,
+                difficulty=0.0, pool_default=4, pool_add=0, opposition_rate=0.5)
     base.update(kw)
     return SocialContestInput(**base)
 
@@ -143,7 +144,7 @@ def test_sc01_s15_the_entry_returns_a_margin_and_nothing_that_names_a_winner():
     SeasonDriver(P.tiny_world())                       # the registrar fills MODULE_ENTRIES
     got = MODULE_ENTRIES[ENTRY].fn(_record(), random.Random(7))
     assert isinstance(got, Margin), type(got)
-    assert set(Margin.__dataclass_fields__) == {"net", "ob"}, sorted(Margin.__dataclass_fields__)
+    assert set(Margin.__dataclass_fields__) == {"net", "ob", "terms"}, sorted(Margin.__dataclass_fields__)      # B05.14: and no winner, band or side
 
 
 @pytest.mark.parametrize("winner", [
@@ -340,6 +341,8 @@ def test_the_believer_reads_the_subjects_row_only_from_a_held_claim(monkeypatch)
         me.ledger.append(Claim(id=f"c{n}", holder=SPEAKER, subject=SUBJECT, predicate=predicate, value=value,
                                when=0, source="told", confidence=5, visibility="own"))
     claim(person_q.CAPABILITY_CLAIM + SKILL, 2, 0)                                 # the opposition's claim the verb already needs
+    from ..data.verbs import VERB_TABLE
+    claim(person_q.CAPABILITY_CLAIM + VERB_TABLE["tell"].opposed_attribute, 3, 9)  # and, B05.14, the attribute he resists it with
     control = sigma.odds_of(w, act, believer=me)
     assert control is not None                                                     # CONTROL: no row, a believed figure
     _plant_edge(monkeypatch, key=trait, side="subject", per="held", against=True, level="moderate")

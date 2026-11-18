@@ -24,7 +24,7 @@ import pytest
 from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL, Degree
 from engine.dice_engine.sigma_leverage import band_odds, net_boost
 
-from ..data.verbs import TASK_DIFFICULTY   # B11 lane A
+from ..data.verbs import VERB_TABLE   # B05.14: the act's level (`TASK_DIFFICULTY` is deleted)
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
@@ -36,6 +36,7 @@ from ..state.carriers import Act, Claim
 from .test_sc01_obstacle_ceiling import _module
 
 KEY = "copying"          # the capability key `tell` draws on (`VERB_CAPABILITY`); asserted below
+TASK_DIFFICULTY = {"tell": DEFAULT_FIXTURES.get("difficulty_ob")[VERB_TABLE["tell"].difficulty]}   # B05.14: `tell`'s level's size, where lane A's number was
 
 
 def _world(*, mid=10, other=3):
@@ -111,8 +112,8 @@ def test_mode_a_grades_against_the_modules_obstacle_and_follows_it(monkeypatch):
     act = _tell("p_mid")
     before = sigma.odds_of(w, act)
     inp = sigma.contest_input(w, ["p_low", "p_mid"], verb="tell", subject="p_mid")
-    assert before == band_odds(inp.pool, _module().obstacle(inp), net_boost(inp.leverage, inp.pool))
-    monkeypatch.setitem(composition._CACHE, "social_contest.obstacle", lambda i: 1.0)   # the row the provider reads (B03.12)
+    assert before == band_odds(inp.pool, _module().obstacle(inp)[0], net_boost(inp.leverage, inp.pool))
+    monkeypatch.setitem(composition._CACHE, "social_contest.obstacle", lambda i: (1.0, ()))   # the row the provider reads (B03.12)
     moved = sigma.odds_of(w, act)
     assert moved == band_odds(inp.pool, 1.0, 0.0) and moved != before
 
@@ -147,7 +148,7 @@ def test_mode_a_speak_into_a_bench_shows_the_odds_the_room_deals():
     odds = sigma.odds_of(w, act)
     with_room = sigma.contest_input(w, [SPEAKER, PARTY], verb="speak", subject=PARTY, room=room)
     roomless = sigma.contest_input(w, [SPEAKER, PARTY], verb="speak", subject=PARTY)
-    assert with_room.reception != 0.0 and _module().obstacle(with_room) != _module().obstacle(roomless)
+    assert with_room.reception != 0.0 and _module().obstacle(with_room)[0] != _module().obstacle(roomless)[0]
     assert odds is not None and odds == sigma._odds_of_input(with_room)
     assert odds != sigma._odds_of_input(roomless), "the bench's reception moved no odds"
     _assert_dealt(odds, with_room)
@@ -201,8 +202,8 @@ def test_mode_a_has_no_odds_where_s27_4_refuses_and_resolve_refuses_the_same_pai
     assert refused["status"] == "REFUSED" and refused["why"] == "S27.4" and refused["pool"] == 0, refused
     w.persons["p_low"].capability = {KEY: 4}                          # (2) a pool that holds, an obstacle that does not
     assert sigma.odds_of(w, act) is not None
-    monkeypatch.setattr(_module(), "obstacle", lambda i: 1000.0)       # what `resolve` rolls against
-    monkeypatch.setitem(composition._CACHE, "social_contest.obstacle", lambda i: 1000.0)   # what `odds_of` reads (B03.12)
+    monkeypatch.setattr(_module(), "obstacle", lambda i: (1000.0, ()))       # what `resolve` rolls against
+    monkeypatch.setitem(composition._CACHE, "social_contest.obstacle", lambda i: (1000.0, ()))   # what `odds_of` reads (B03.12)
     assert sigma.odds_of(w, act) is None
     over = sigma.resolve(w, ["p_low", "p_mid"], ["root"], prize, **claim())
     assert over["status"] == "REFUSED" and over["pool"] == 4 and over["ob"] == 1000.0, over

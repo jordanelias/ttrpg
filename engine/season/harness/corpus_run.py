@@ -443,7 +443,7 @@ def build_at(case: dict, seed: int = 0) -> World:
     # once; nothing else does."* Until this, the one writer in the tree ZEROED the dict --
     # `probes.py::p11`'s own comment: *"`capability` at zero ... for EVERY corpus person"* -- which
     # is why R-09's roll varies by SEED and FIXTURE and never by PERSON (`hole_register.yaml`
-    # H-126/H-127). Each seated entry writes ITS OWN `capability` onto ITS OWN person (position `17`
+    # H-126; the former H-127 stand-in is `opposed_ob(pool_default)`, B05.14). Each seated entry writes ITS OWN `capability` onto ITS OWN person (position `17`
     # widened this from "the primary entry's onto `p_a`", which is the same rule when the cast has
     # one entry). A case with no overlay, an anonymous seat, or an entry with no `capability`
     # leaves the person exactly as before: `Person`'s own empty-dict default, never a fabricated

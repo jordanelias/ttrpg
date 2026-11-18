@@ -47,9 +47,15 @@ class SocialContestInput:
 
     Built by `seam/wrappers/sigma.py::contest_input` (the host input builder) from `World`:
       * `pool`      -- dice, from what the actor genuinely has (`sigma.py::faculty`);
-      * `opposition` -- the subject's score on the verb's capability key when the subject is a person
-                       carrying one, else `None`. A RAW OPERAND, not an obstacle;
-      * `obstacle_default` -- the `H-127` stand-in for a subject with no score to halve;
+      * `opposition` -- what a PERSON opposite brings to the act: his score in the opposing attribute the verb row names
+                       (`opposed_attribute:`) PLUS his skill score in the verb's skill (A-79, A-137), or `None` where nobody is
+                       opposite (a docket item, a Record, a site, a self-plea). A RAW OPERAND, not an obstacle;
+      * `difficulty` -- the act's own, the size of its verb row's `difficulty:` level (`Fixtures.difficulty_ob`), raw;
+      * `pool_default` -- the untrained score: the opposition where no person is opposite (`opposed_ob(pool_default, opposition_rate)`);
+      * `pool_add` -- the pool's base, whose even line (`MU_PER_DIE x pool_add`) is the obstacle's first term;
+      * `opposition_rate` -- the share of the opposing score an obstacle takes up, per point;
+      * `obstacle_operands` -- `((name, raw operand, step), ...)` in `rosters.yaml: obstacle_terms` order, for the members that are a
+                       raw operand times a step (none ship at step 1a; the three that do not need one carry their own field above);
       * `obstacle_ceiling` -- the `H-213` bound on how hard one matter can get; `None` is the
                        uncapped control arm;
       * `ceiling_per_pool` -- the `chance_floor` arm (CP-T01-06): from one die, the module solves the
@@ -83,28 +89,33 @@ class SocialContestInput:
                        is not a Record, and for every contest a prize names. Composed by the module."""
     pool: float          # FRACTIONAL (B05.25): the mean of his governing attributes plus his rank, to the tenth (`pool.faculty`)
     opposition: Optional[float]
-    obstacle_default: float
     obstacle_ceiling: Optional[float]
     obstacle_refusal_multiple: float
     leverage: float
+    difficulty: float    # B05.14: raw, no default -- a record built without the act's difficulty is no record of a rolled act
+    pool_default: float
+    pool_add: float
+    opposition_rate: float
     reception: float = 0.0
     reception_gain: float = 0.0
     proofs: float = 0.0
     proof_step: float = 0.0
     forgery_quality: float = 0.0
     ceiling_per_pool: bool = False
-    # B11 lane A: THE TASK'S DIFFICULTY (`rosters.yaml: task_difficulty`, `data/verbs.py::TASK_DIFFICULTY`), RAW AS THE
-    # OTHERS -- the obstacle's first term, to which the opposing person's `score / 2` and the room's and the document's
-    # terms are added (`roll.py::obstacle_terms`). `None` is the CONTROL ARM (`Fixtures obstacle_model: stand_in`): the
-    # obstacle the module composes without it, `score / 2` or the `obstacle_default` stand-in.
-    difficulty: Optional[float] = None
+    obstacle_operands: tuple = ()
 
 
 @dataclass(frozen=True)
 class Margin:
     """What the social contest module's entry returns for one matter's draw: the roll's `net` and the
-    `ob` it was thrown at, and nothing else (v9 SC-01 step 15; `08_SEAM.md`'s provider rule, intent
+    `ob` it was thrown at, and the terms that made that `ob` (v9 SC-01 step 15; `08_SEAM.md`'s provider rule, intent
     only: *a MARGIN, never a winner*).
+
+    `terms` (B05.14; OBS §1, §2; SC-B Edit B) is `((name, value), ...)`: every term of the obstacle in `rosters.yaml:
+    obstacle_terms` order, then lane A's `room` and `forgery` where they acted, then `("ceiling", -clip)` and `("floor", +lift)`
+    where a bound acted. THE VALUES SUM TO `ob`. Every roster member is non-negative; `room` is the one entry that may be
+    negative (a bench disposed toward the speaker), until the favourable half moves to leverage (OBS §4 step 1b). `()` on a margin a
+    stub entry returns with no composition behind it.
 
     ⚠ NO WINNER, NO BAND, NO SIDE. The band is the one ladder's reading of this pair
     (`seam/ladder.py::degree_of` -> `degree_from_net`), and who it favours is the fold's reading of the
@@ -112,6 +123,7 @@ class Margin:
     return of any other type (`seam/wrappers/sigma.py::resolve`)."""
     net: float
     ob: float
+    terms: tuple = ()
 
 
 @dataclass(frozen=True)

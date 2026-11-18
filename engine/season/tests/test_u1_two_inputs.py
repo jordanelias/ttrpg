@@ -200,7 +200,7 @@ def _argued(w, actor, subject):
     """The record the social roll deals for `actor` arguing at `subject`, and its obstacle's named terms."""
     from ..seam.wrappers import sigma
     inp = sigma.contest_input(w, [actor, subject], verb="tell", subject=subject)
-    return inp, sigma._composed_terms(inp)
+    return inp, dict(sigma._composed_terms(inp))
 
 
 def test_the_opponent_attribute_raises_the_opposition():
@@ -227,10 +227,12 @@ def test_the_opponent_attribute_raises_the_opposition():
     (a, ta), (b, tb) = _argued(w, "p_low", "p_mid"), _argued(w, "p_low", "p_other")
     assert a.pool == b.pool and a.leverage == b.leverage == 0.0              # the roller is unchanged
     assert b.opposition > a.opposition and tb["opposition"] > ta["opposition"]     # the opponent's attribute is harder to move
-    assert a.opposition == 3 and b.opposition == 6                           # one point of the attribute, one point of the score
-    # CONTROL: an opponent holding no `opposed_attribute` at all reads the untrained score, below the held 3.
+    default = w.fixtures.get("pool_default")
+    assert a.opposition == 3 + default and b.opposition == 6 + default       # B05.14 (A-137): one point of the attribute, one point of the opposition, ON TOP of the skill score
+    assert tb["opposition"] - ta["opposition"] == 0.5 * (6 - 3)              # and `opposition_rate` of each at the control
+    # CONTROL: an opponent holding no `opposed_attribute` at all reads it at the untrained score (B05.16 makes that the mid-point), below the held 3.
     w.persons["p_other"].attributes = {}
-    assert _argued(w, "p_low", "p_other")[0].opposition == w.fixtures.get("pool_default") < a.opposition
+    assert _argued(w, "p_low", "p_other")[0].opposition == 2 * default < a.opposition
 
 
 def _rebind_rows(monkeypatch, edit):

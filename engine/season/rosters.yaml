@@ -1264,8 +1264,8 @@ rosters:
       ⚠ A ROUTE, NOT A PRIZE. Each row names the provider registered under `@provider("contest", …)`
       and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::faculty`
       (the verb's `capability:` column, `descriptors.CAPABILITIES`, else the swept `pool_default`) and the obstacle the module's own
-      (`modules/social_contest/roll.py::obstacle`: `obstacle_default`, swept, unless the subject is a
-      person who HOLDS the `inquiry` key, `sigma.py::_opposition_of` -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already
+      (`modules/social_contest/roll.py::obstacle`: the row's `difficulty:` level plus `opposed_ob(pool_default)` where no person is opposite, or
+      plus `opposed_ob` of the person's skill score and resisting attribute, `sigma.py::_opposing` -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already
       binds (`manifest/registry.py::check_graded_inquiries`), so this row adds no roll and no
       resolver. the verb table's `capability:` column now names `inquiry` for the three (REM-30, B10-10; the rows were deferred at
       CP-T01-01): an inquirer who HOLDS an `inquiry` key rolls it, and one who holds none still rolls
@@ -1420,37 +1420,32 @@ rosters:
   capability_gate_sites:
     values: [own_state_gate, told_retain]
 
-  task_difficulty:
-    source: >-
-      B11 lane A (Jordan, 2026-11-12, relayed: *"social contest obstacle is defined by the difficulty of the task and all
-      associated modifiers"*; RULED 2026-08-14, `dice_engine.degree_from_net`'s docstring: an opposed obstacle is *"their
-      corresponding score/2 plus whatever specific modifiers exist for them in that instance"*).
+  # B05.14 (OBS §1, §2; SC-B Edit A; D-U1-04): THE OBSTACLE'S FORM. `difficulty_levels` is the closed, ordered set of levels a rolled
+  # verb row's `difficulty:` names (`data/verbs.py`); `Fixtures.difficulty_ob` sizes each one. `obstacle_terms` is the closed,
+  # ordered set of the terms the social roll's obstacle is composed of (`modules/social_contest/roll.py::obstacle`), bound member
+  # by member to ONE host function each (`seam/wrappers/sigma.py::OBSTACLE_TERMS`, refused at import both ways). Lane A's
+  # `task_difficulty` (a number per verb) is deleted: a verb names a LEVEL, the fixture says how hard that level is.
+  difficulty_levels:
+    source: "B05.14 (`proposals/05_SC_obstacle_difficulty_and_modifiers_B.md` Edit A, D-U1-04): what lane A's `task_difficulty` roster becomes -- a level a row names, not a number a roster holds"
     note: >-
-      THE DIFFICULTY OF EACH TASK THE SOCIAL ROLL DEALS -- `verb: number`, the obstacle's first term before any
-      modifier. `modules/social_contest/roll.py::obstacle_terms` composes Ob = difficulty + the opposing person's
-      `score / 2` (the ruled term, kept as one modifier, unchanged) - the room's terms (`reception`, `proofs`) +
-      an examined document's `forgery_quality`, under the ceiling (H-213), and names every term on the roll's
-      record (`seam/wrappers/sigma.py::resolve`, `ob_terms`). WHERE THE RULING AND THIS MEET: for a person opponent
-      the ruled form is the score term plus the instance's modifiers, and the task's difficulty is one of those
-      modifiers; at difficulty 0 the obstacle is the ruled form exactly. CLOSED: a row for every verb the social
-      roll deals (a `contests:` prize the `social_contest` provider resolves, or a `graded_inquiries` route to it)
-      and for nothing else, refused at import (`data/verbs.py::_load_task_difficulty`) -- a task with no difficulty
-      is a loud gap, never `obstacle_default`. THE SHIPPED VALUES ARE A CALIBRATION, NOT A DESIGN: a contest against a
-      person is 1.0, so an opponent at the shipped score (2) composes 2.0, the realm's obstacle before this row; an
-      inquiry, which no person opposes, is 2.0, its obstacle before this row (`obstacle_default`). The
-      differences between tasks (a lie against a truth, an arrest against an argument) are Jordan's to author.
-      [ASSUMPTION; medium; Jordan to correct; revert: `Fixtures obstacle_model: stand_in`, the control arm.]
-    values:
-      tell:        1.0
-      lie:         1.0      # v11 CR-27's row (a `tell` saying a false value), dealt by the roll on this tree: a person contest, `tell`'s calibration
-      argue:       1.0
-      speak:       1.0
-      arrest:      1.0
-      determine:   1.0
-      interrogate: 1.0
-      examine:     2.0
-      research:    2.0
-      surveil:     2.0
+      THE LEVELS A ROLLED VERB ROW'S `difficulty:` CELL NAMES, in order of how hard the act itself is. `data/verbs.py` refuses a
+      row that is contested on the social roll's prize or graded to it with no `difficulty:`, a value outside this set, and a
+      `difficulty:` on a row nothing rolls. `Fixtures.difficulty_ob` gives each level its size in obstacle (refused at load if its
+      keys are not exactly these). A new level is a member here and a size there, and no code.
+    ordered: true
+    values: [plain, routine, demanding, hard]
+
+  obstacle_terms:
+    source: "B05.14 (`proposals/U5c_SC_one_obstacle_form.md` §1, §2; 29_DICE Item 29-4 step 4): the members the obstacle is composed of, the first three of them"
+    note: >-
+      THE TERMS OF THE SOCIAL ROLL'S OBSTACLE, IN COMPOSITION ORDER (`roll.py::obstacle` sums them, then the room's and the
+      document's lane A steps, then the ceiling and the floor). `even` -- the pool's even line, `MU_PER_DIE x pool_add`
+      (`sigma_leverage.even_line`); `difficulty` -- the act's own, its level's size (`Fixtures.difficulty_ob`); `opposition` -- the
+      one acted against, `opposed_ob(opposing attribute + skill score, opposition_rate)`, or the untrained score where no person
+      is opposite (never absent). Every member stands AGAINST the act and is never negative. A member lands with its host
+      function in `sigma.OBSTACLE_TERMS` and no other code; later members are those the verb lanes add (OBS §2's table).
+    ordered: true
+    values: [even, difficulty, opposition]
 
   lifepaths:
     source: >-
@@ -1546,7 +1541,7 @@ rosters:
           ⚠⚠ CLAUSE (3) IS HONOURED SINCE v9 SC-01 STEP 14, AND NOT BY THIS ROW. `sigma_leverage` does NOT own the obstacle: `eff_ob` CONSUMES a `base_ob` and is
           "DISPLAY ONLY (not the resolution value)" by its own docstring, `effective_ob` is a pure
           arg-order alias of it, and the tree's live composition has the CALLER supply `base_ob`.
-          The host input builder's own site (`seam/wrappers/sigma.py::_obstacle_of`, `H-127`) was deleted at step 14; the social contest
+          The host input builder's own site (`seam/wrappers/sigma.py::_obstacle_of`, once the former row H-127) was deleted at step 14; the social contest
           module composes the obstacle (`modules/social_contest/roll.py::obstacle`, under `H-213`'s ceiling). So
           `interim: true` carried CLAUSE (2) ALONE, and steps 13 + 15 discharged it: the row names `social_contest` (`02 §D.4`).
       "a proposition":

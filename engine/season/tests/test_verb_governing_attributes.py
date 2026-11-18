@@ -10,7 +10,7 @@ person by its own rule (the prize's `person_inputs: own`) names none either.
 THE CLAIMS, AND WHAT WOULD SHOW EACH WRONG:
   * EVERY ROW TAKES EXACTLY ONE KIND, AND A POOL-PRIZE ROW TAKES (b): the loop asserts it asserted (`checked == len(VERB_TABLE)`).
     FALSIFIER: a row with none of the three loads (the plant in `test_a_row_naming_none_is_refused_at_load`).
-  * A BRUTE ROW NEVER ROLLS: planted with `governing:`, a `difficulty:` cell or a `task_difficulty` row it is refused, naming the
+  * A BRUTE ROW NEVER ROLLS: planted with `governing:` or a `difficulty:` cell it is refused, naming the
     verb; and the realm's own brute acts, folded twice from one state, are one outcome with no `roll:` stream minted and
     `pool.faculty` and `pool.score` patched to raise. CONTROL: a rolled act under the same counter DOES mint a `roll:` stream.
   * THE MEAN: `governing_mean([2, 3]) == 2.5` (a whole-number rounding, 3, or half-to-even, 2, fails), `[2, 2, 3] -> 2.3`,
@@ -56,11 +56,10 @@ def _kinds_of(row, prizes=PRIZES) -> list:
     return [k for k, held in (("a", bool(row.brute)), ("b", bool(row.governing)), ("c", _exempt(row, prizes))) if held]
 
 
-def _check(rows=None, prizes=None, task=None):
+def _check(rows=None, prizes=None):
     return VERBS._check_governing_attributes(
         dict(VERB_TABLE) if rows is None else rows,
-        PRIZES if prizes is None else prizes,
-        dict(roster_map("task_difficulty", "values")) if task is None else task)
+        PRIZES if prizes is None else prizes)
 
 
 def test_every_verb_row_names_its_attributes_or_its_authority_or_its_subsystem():
@@ -89,11 +88,8 @@ def test_a_brute_row_carrying_governing_or_a_difficulty_is_refused():
     planted = {**VERB_TABLE, "give": dataclasses.replace(give, governing=(ACUITY,))}
     with pytest.raises(Unspecified, match="give"):
         _check(planted)
-    as_row = {f.name: getattr(give, f.name) for f in dataclasses.fields(give)}
     with pytest.raises(Unspecified, match="give"):                             # a `difficulty:` cell (D-U1-04's column)
-        _check({**VERB_TABLE, "give": SimpleNamespace(**as_row, difficulty=1.0)})
-    with pytest.raises(Unspecified, match="give"):                             # a `task_difficulty` row: a brute verb never draws
-        _check(task={**roster_map("task_difficulty", "values"), "give": 1.0})
+        _check({**VERB_TABLE, "give": dataclasses.replace(give, difficulty="routine")})
     with pytest.raises(Unspecified, match="give"):                             # a `contests:` prize
         _check({**VERB_TABLE, "give": dataclasses.replace(give, contests="a standing")})
     graded = {**GRADED_INQUIRIES}

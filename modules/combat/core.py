@@ -92,7 +92,7 @@ def ob_from_defender(defender):
     default 3] -- the CR-85 design is UNRATIFIED (ED-IN-0351).
     ⚠ THE OB READS MORE THAN THE SOCIAL CONTEST'S DOES (Phase 3, B10-11): `faculty` carries `pool_default` as the
     pool's fallback and the practice addend, which `seam/wrappers/sigma.py::_opposition_of` ("NEVER THE FALLBACK AND
-    NEVER PRACTICE") leaves out. A person holding no key is attacked at Ob 1.0 here and at `obstacle_default` in a
+    NEVER PRACTICE") leaves out. A person holding no key is attacked at Ob 1.0 here and at `opposed_ob(pool_default)` (plus the act's difficulty) in a
     social contest: two ladders for one quantity.
     NO INSTANCE MODIFIER IS ADDED HERE. Wound impairment already has its OWNER
     (combat_systems.wound_impairment, ED-1041) and is folded into net_sigma at every call site (bind_sigma,

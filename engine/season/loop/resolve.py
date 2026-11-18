@@ -841,7 +841,7 @@ def _grade(self, w: "World", token: Token, a: Act, route: dict) -> list:
     provider reads opposition off a PERSON subject only (`sigma.py::_opposition_of`) and only where
     the verb's `capability:` column names a skill (`descriptors.CAPABILITIES`). The three inquiry verbs
     (`research`, `examine`, `surveil`) name `inquiry`, so a PERSON subject is opposed at his score on it and
-    `obstacle_default` stands in only for a subject that is not a person (a Record, a Rung).
+    `opposed_ob(pool_default)` stands in only for a subject that is not a person (a Record, a Rung).
     ⚠ THE GENERATOR IS THE ACT'S OWN, `H(seed, tick, actor, "roll:<verb>:<act id>")` -- `_contest`'s
     shape with the verb where a prize would be (there is none), so adding a graded inquiry moves no
     other act's draw (`04 PART D row 35`)."""

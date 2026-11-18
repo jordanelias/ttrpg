@@ -68,6 +68,7 @@ from engine.dice_engine.sigma_leverage import LEVEL_SIGMA, OB_MIN, band_odds, ne
 from engine.substrate import composition
 
 from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.verbs import VERB_TABLE
 from ..harness import probes as P
 from ..harness import register as REG
 from ..loop.driver import SeasonDriver
@@ -92,12 +93,13 @@ def _module():
 def _record(opposition, ceiling, *, pool=FLOOR, leverage=0.0):
     return SocialContestInput(
         pool=pool, opposition=opposition,
-        obstacle_default=DEFAULT_FIXTURES.get("obstacle_default"),
+        difficulty=0.0, pool_default=2 * STAND_IN, pool_add=0, opposition_rate=0.5,
         obstacle_ceiling=ceiling,
         obstacle_refusal_multiple=DEFAULT_FIXTURES.get("obstacle_refusal_multiple"),
         leverage=leverage)
 
 
+STAND_IN = 2.0                  # what `obstacle_default` was: B05.14 composes it as `opposed_ob(pool_default)` = 0.5 x 4, at difficulty 0, for these records
 HITS_N = 4000                   # seeded rolls per record in `_hits`
 
 
@@ -118,7 +120,7 @@ def _m7(mod, ceiling) -> dict:
     out = {}
     for ob in M7_OBS:
         rec = _record(2 * ob, ceiling)
-        eff = mod.obstacle(rec)
+        eff = mod.obstacle(rec)[0]
         hits = _hits(mod, rec)
         out[ob] = (eff, _clear(FLOOR, eff), hits)
         # the instrument is the dealt roll: its chance is the sampled rate, to four standard errors
@@ -152,7 +154,7 @@ def test_m7_at_the_1d_floor_clears_ob_4_and_above_under_the_ceiling_and_fails_wi
     # CONTROL 2: an obstacle BELOW the ceiling is untouched -- the ceiling bounds, it does not shift.
     for ob in (1, 2):
         if ob <= shipped:
-            assert mod.obstacle(_record(2 * ob, shipped)) == mod.obstacle(_record(2 * ob, None)) == ob
+            assert mod.obstacle(_record(2 * ob, shipped))[0] == mod.obstacle(_record(2 * ob, None))[0] == ob
     # M-7's second clause: without the ceiling, BUYING ADVANTAGE does not rescue Ob 4 at the floor
     # (remedy (a) refuted, `21_RECONCILIATION.md`) -- every rostered level stays effectively zero.
     for lv, s in LEVEL_SIGMA.items():
@@ -193,8 +195,8 @@ def test_a_ceiling_below_the_ob_minimum_is_refused_and_one_at_it_is_read():
     so it raises rather than bounding anything; the ceiling AT the minimum is the control, read."""
     mod = _module()
     with pytest.raises(ValueError, match="below the Ob minimum"):
-        mod.obstacle(_record(10, OB_MIN - 0.5))
-    assert mod.obstacle(_record(10, OB_MIN)) == OB_MIN
+        mod.obstacle(_record(10, OB_MIN - 0.5))[0]
+    assert mod.obstacle(_record(10, OB_MIN))[0] == OB_MIN
 
 
 def test_the_seam_has_no_second_obstacle_site(monkeypatch):
@@ -205,15 +207,16 @@ def test_the_seam_has_no_second_obstacle_site(monkeypatch):
         "the host record carries an `ob`: a host-derived obstacle can reach the roll again")
     assert not hasattr(sigma, "_obstacle_of"), "the seam's own obstacle site is back"
     mod = _module()
-    # B11 lane A: read on the CONTROL obstacle (`obstacle_model: stand_in`, score / 2): this test is about WHO composes the
-    # obstacle, not its terms (the shipped `task` arm's are `test_b11a_scores_and_obstacle.py`'s)
-    w = P.tiny_world(DEFAULT_FIXTURES.sweep("obstacle_model", "stand_in"))
+    # B05.14: read with no difficulty and a hearer holding his resisting attribute at 0, so the obstacle is score / 2: this test is about WHO
+    # composes the obstacle, not its terms (`test_obstacle_form.py`'s)
+    w = P.tiny_world(DEFAULT_FIXTURES.sweep("difficulty_ob", {k: 0 for k in DEFAULT_FIXTURES.get("difficulty_ob")}))
     SeasonDriver(w)                                  # the registrar fills MODULE_ENTRIES
     w.persons["p_mid"].capability = {"copying": 3}
+    w.persons["p_mid"].attributes = {VERB_TABLE["tell"].opposed_attribute: 0}
     seen = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="tell", subject="p_mid",
                          rng=random.Random(0))
     assert seen["status"] == "RESOLVED" and seen["ob"] == 1.5, seen
-    monkeypatch.setattr(mod, "obstacle", lambda inp: 1.25)
+    monkeypatch.setattr(mod, "obstacle", lambda inp: (1.25, ()))
     moved = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="tell", subject="p_mid",
                           rng=random.Random(0))
     assert moved["ob"] == 1.25, (
@@ -222,11 +225,13 @@ def test_the_seam_has_no_second_obstacle_site(monkeypatch):
 
 def _arm(ceiling):
     # the FIXED arm (CP-T01-06 ships the per-pool arm; the 1 / 2 / 3 sweep is read on the fixed one)
-    # B11 lane A: on the CONTROL obstacle (`obstacle_model: stand_in`), the composition these figures were read on; the
-    # ceiling bounds the shipped `task` arm's obstacle the same way (`roll.py::obstacle_terms`'s `ceiling` term)
+    # B05.14: on score / 2 alone (no difficulty, resisting attributes held at 0), the composition these figures were read on; the
+    # ceiling bounds the form's obstacle the same way (`roll.py::obstacle`'s `ceiling` term)
     w = P.tiny_world(DEFAULT_FIXTURES.sweep("ceiling_per_pool", False).sweep("obstacle_ceiling", ceiling)
-                     .sweep("obstacle_model", "stand_in"))
+                     .sweep("difficulty_ob", {k: 0 for k in DEFAULT_FIXTURES.get("difficulty_ob")}))
     SeasonDriver(w)
+    for who in ("p_mid", "p_other", "p_king", "p_low"):
+        w.persons[who].attributes = {VERB_TABLE["tell"].opposed_attribute: 0}
     # roster-exempt: TEST FIXTURE capabilities -- one matter far over every sweep point, one under.
     w.persons["p_mid"].capability = {"copying": 10}       # score/2 = 5
     w.persons["p_other"].capability = {"copying": 3}      # score/2 = 1.5
@@ -236,12 +241,12 @@ def _arm(ceiling):
 @pytest.mark.parametrize("subject,want", [("p_mid", {2: 2.0, 3: 3.0}),
                                           ("p_other", {2: 1.5, 3: 1.5}),
                                           ("p_king", {2: 1.0, 3: 1.0}),
-                                          ("site_harbour", {2: 2.0, 3: 2.0})])
+                                          ("site_harbour", {2: 1.0, 3: 1.0})])
 def test_the_ceiling_is_injected_and_bounds_each_matter_on_its_own(subject, want):
     """Through the real seam on a hand-built world: the fixture's value is what bounds the act's
     obstacle (2 -> 2.0, 3 -> 3.0 for a subject whose score/2 is 5), an obstacle under the ceiling is
     untouched (1.5), a person holding nothing opposes at the untrained score (B05.11: `pool_default` 2 / 2 = 1.0 on every arm,
-    where the stand-in was 2), and the no-score stand-in (`obstacle_default` 2) is bounded the same way for a subject
+    where the stand-in was 2), and the no-score stand-in (`opposed_ob(pool_default)`, 2 here) is bounded the same way for a subject
     who is no person (a site: nobody opposite).
     PER MATTER (ED-SC-0038): each subject's draw is bounded on its own; nothing aggregates them."""
     for c, ob in want.items():
@@ -285,7 +290,7 @@ def _pooled(pool, ob, *, per_pool=True, ceiling=None, fixed=True):
     """A record whose composed obstacle, before any ceiling, is `ob` (opposition = 2 x ob)."""
     return SocialContestInput(
         pool=pool, opposition=2 * ob,
-        obstacle_default=DEFAULT_FIXTURES.get("obstacle_default"),
+        difficulty=0.0, pool_default=2 * STAND_IN, pool_add=0, opposition_rate=0.5,
         obstacle_ceiling=DEFAULT_FIXTURES.get("obstacle_ceiling") if fixed else ceiling,
         obstacle_refusal_multiple=DEFAULT_FIXTURES.get("obstacle_refusal_multiple"),
         leverage=0.0, ceiling_per_pool=per_pool)
@@ -316,9 +321,9 @@ def test_the_shipped_arm_is_the_chance_floor_and_the_old_arms_stay_selectable():
     assert DEFAULT_FIXTURES.get("ceiling_per_pool") is True
     mod = _module()
     # the fixed arm (what shipped before) is one fixture away, and the uncapped arm is `None`
-    assert mod.obstacle(_pooled(4, 20, per_pool=False)) == DEFAULT_FIXTURES.get("obstacle_ceiling")
-    assert mod.obstacle(_pooled(4, 20, per_pool=True, ceiling=None, fixed=False)) == 20
-    assert mod.obstacle(_pooled(4, 20, per_pool=True)) > DEFAULT_FIXTURES.get("obstacle_ceiling")
+    assert mod.obstacle(_pooled(4, 20, per_pool=False))[0] == DEFAULT_FIXTURES.get("obstacle_ceiling")
+    assert mod.obstacle(_pooled(4, 20, per_pool=True, ceiling=None, fixed=False))[0] == 20
+    assert mod.obstacle(_pooled(4, 20, per_pool=True))[0] > DEFAULT_FIXTURES.get("obstacle_ceiling")
 
 
 def test_the_enumeration_pools_by_composed_ob():
@@ -330,10 +335,10 @@ def test_the_enumeration_pools_by_composed_ob():
     table = {}
     for pool in POOLS:
         for ob in QUARTERS:
-            eff = mod.obstacle(_pooled(pool, ob))
-            base = mod.obstacle(_pooled(pool, ob, per_pool=False))
-            assert base == min(ob, fixed)                                  # the control arm is today's
-            assert eff <= ob + EPS and (eff == ob or eff >= OB_MIN), (pool, ob, eff)   # (1) a cap is never under OB_MIN
+            eff = mod.obstacle(_pooled(pool, ob))[0]
+            base = mod.obstacle(_pooled(pool, ob, per_pool=False))[0]
+            assert base == max(OB_MIN, min(ob, fixed))                     # the control arm is today's, over B05.14's floor
+            assert eff <= max(ob, OB_MIN) + EPS and (eff == ob or eff >= OB_MIN), (pool, ob, eff)   # (1) a cap is never under OB_MIN
             table[(pool, ob)] = _plus(pool, eff)
             if pool < 1:
                 assert eff == base, (pool, ob, eff, base)                  # (2) below a die: the base, refused as now
@@ -357,7 +362,7 @@ def test_the_enumeration_pools_by_composed_ob():
 
 def test_the_inversion_count_is_zero_and_the_detector_sees_the_rejected_caps():
     mod = _module()
-    solved = lambda pool, ob: mod.obstacle(_pooled(pool, ob))
+    solved = lambda pool, ob: mod.obstacle(_pooled(pool, ob))[0]
     assert _inversions(solved) == 0
     # the same detector on the cap CP-T01-06 rejected (`2 * pool`): it must see the failure it excludes
     assert _inversions(lambda pool, ob: min(ob, 2.0 * pool)) >= 300
@@ -365,7 +370,7 @@ def test_the_inversion_count_is_zero_and_the_detector_sees_the_rejected_caps():
 
 def test_the_cap_is_the_floor_met_exactly_and_the_pool_below_one_keeps_the_fixed_value():
     mod = _module()
-    caps = {p: mod.obstacle(_pooled(p, 20)) for p in range(1, 9)}
+    caps = {p: mod.obstacle(_pooled(p, 20))[0] for p in range(1, 9)}
     assert caps[1] == pytest.approx(2.0, abs=1e-9)                         # the 1D floor's own value
     assert list(caps.values()) == sorted(caps.values())                    # the cap rises with the pool
     for pool, cap in caps.items():
@@ -374,9 +379,9 @@ def test_the_cap_is_the_floor_met_exactly_and_the_pool_below_one_keeps_the_fixed
     assert round(caps[2], 3) == 3.063 and round(caps[3], 3) == 3.971 and round(caps[4], 2) == 4.8
     # the closed form keeps a chance at every ceiling (a 1D roll at Ob 3 keeps 0.06 %, not nothing), so the
     # per-pool arm solves at a ceiling of 3 too: it no longer falls back to the fixed value
-    assert _module().obstacle(_pooled(4, 20, ceiling=3, fixed=False)) == pytest.approx(0.4 * 4 + 2.6 * 2, abs=1e-3)
+    assert _module().obstacle(_pooled(4, 20, ceiling=3, fixed=False))[0] == pytest.approx(0.4 * 4 + 2.6 * 2, abs=1e-3)
     with pytest.raises(ValueError, match="below the Ob minimum"):
-        mod.obstacle(_pooled(4, 20, ceiling=OB_MIN - 0.5, fixed=False))
+        mod.obstacle(_pooled(4, 20, ceiling=OB_MIN - 0.5, fixed=False))[0]
 
 
 def test_the_chance_floor_reaches_the_resolved_act_through_the_seam():

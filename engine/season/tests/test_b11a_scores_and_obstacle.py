@@ -1,43 +1,40 @@
 """B11 lane A -- PERSONS HOLD SCORES, AND THE SOCIAL ROLL'S OBSTACLE IS THE TASK'S DIFFICULTY PLUS ITS NAMED MODIFIERS.
+(B05.14 re-grounds the obstacle half on the one form: `test_obstacle_form.py` owns the form's claims; what stays here is lane A's
+PERSON half and the rising-obstacle case, read on the new composer.)
 
   (3) `build_realm` seats the sheet `state/carriers.py::generated_attributes` draws (B01a.01; B01 seated `pool_default` on
       every key) under every person's authored `stats:` (`cast_attributes` ships on), so every person holds a score on
       every vocation's attribute. Its tests moved to `test_b01a_generated_attributes.py`.
   (4) one score, two roles (`10_DICE_one_score_two_roles.md`): `seam/wrappers/pool.py::score` is the base of a person's
-      pool and the score his opponent's obstacle halves (`sigma.py::_opposition_of`), so `obstacle_default` never stands in
-      for a person. `modules/social_contest/roll.py::obstacle_terms` composes Ob = the task's difficulty
-      (`rosters.yaml: task_difficulty`, closed over the verbs the roll deals) + the opposing person's score / 2 (the
-      2026-08-14 RULED term, one modifier, unchanged) - the room's terms + an examined document's forgery quality, under the
-      ceiling, and names every term on the roll's record (`resolve`'s `ob_terms`). `interrogate`, `arrest` and `determine`
-      name a vocation.
-  CONTROL: `Fixtures obstacle_model: stand_in` composes the obstacle before this item, byte for byte (asserted over a grid of
-  records here); `revert_b11a_scores` (the switch, and no attribute seated) is what other files' reverts call. The realm
-  hashes are `_realm_goldens.py`'s.
+      pool and the skill score his opponent's obstacle reads (`sigma.py::_opposition_of`), which the opposing ATTRIBUTE joins
+      (`_opposing`, B05.14, A-137). `modules/social_contest/roll.py::obstacle` composes the obstacle -- the even line + the act's
+      `difficulty:` level + `opposed_ob(opposition)` - the room's terms + an examined document's forgery quality, under the
+      ceiling and over the floor -- and names every term on the roll's record (`Margin.terms`, `resolve`'s `terms`). `interrogate`,
+      `arrest` and `determine` name a vocation.
+  CONTROL (B05.14): the stand-in arm (`Fixtures obstacle_model`, a grid of records against `_legacy`) is gone with the arm; its
+  replacement is `test_obstacle_form.py::test_step_1a_composes_todays_obstacle_at_control`. `revert_b11a_scores` (no attribute
+  seated) is what other files' reverts call. The realm hashes are `_realm_goldens.py`'s.
 """
 from __future__ import annotations
 
-import pytest
+from engine.dice_engine.sigma_leverage import record_odds
 
-from ..data import rosters as R
 from ..data import verbs as V
 from ..data import cast
 from ..boot import realm as boot_realm
 from ..data.fixtures import DEFAULT_FIXTURES
-from ..gaps import Forbidden
 from ..harness import probes as P
+from ..queries import person_q
 from ..queries.inputs import SocialContestInput
 from ..seam.wrappers import pool, sigma
+from ..state.carriers import Claim
 from .test_sc01_obstacle_ceiling import _module
 
 
 def revert_b11a_scores(monkeypatch) -> None:
-    """THIS ITEM AT ITS REVERT, for the life of one test: the obstacle composed as before (`obstacle_model: stand_in`) and
-    no attribute seated (`generated_attribute_range` None and the cast's `stats:` read as empty, which
-    `cast_attributes=False` writes). A test pinning an earlier hash calls it."""
-    monkeypatch.setitem(DEFAULT_FIXTURES._v, "obstacle_model", "stand_in")
-    # an earlier item's revert may have swept `populated`'s fixtures into a copy: switch that copy IN PLACE, so a later revert
-    # in the same chain that edits the copy (or the original) keeps this switch
-    monkeypatch.setitem(boot_realm.DEFAULT_FIXTURES._v, "obstacle_model", "stand_in")
+    """THIS ITEM AT ITS REVERT, for the life of one test: no attribute seated (`generated_attribute_range` None and the cast's
+    `stats:` read as empty, which `cast_attributes=False` writes). A test pinning an earlier hash calls it. (B05.14: the obstacle's
+    `stand_in` arm it once also switched to is deleted with `Fixtures obstacle_model`.)"""
     # the `None` point of `generated_attribute_range` is the earlier no-seating world (B01a.01, H-856)
     monkeypatch.setitem(DEFAULT_FIXTURES._v, "generated_attribute_range", None)
     monkeypatch.setitem(boot_realm.DEFAULT_FIXTURES._v, "generated_attribute_range", None)
@@ -54,25 +51,10 @@ def revert_b11a_scores(monkeypatch) -> None:
 
 
 def _inp(**kw) -> SocialContestInput:
-    base = dict(pool=2, opposition=None, obstacle_default=2.0, obstacle_ceiling=None, obstacle_refusal_multiple=2.0,
-                leverage=0.0)
+    base = dict(pool=2, opposition=None, obstacle_ceiling=None, obstacle_refusal_multiple=2.0, leverage=0.0,
+                difficulty=1.0, pool_default=2, pool_add=0, opposition_rate=0.5)
     base.update(kw)
     return SocialContestInput(**base)
-
-
-def _legacy(inp) -> float:
-    """The obstacle before this item, verbatim (its control)."""
-    from engine.dice_engine.sigma_leverage import OB_MIN
-    ob = float(inp.opposition) / 2.0 if inp.opposition is not None else float(inp.obstacle_default)
-    room = float(inp.reception_gain) * float(inp.reception) + float(inp.proof_step) * float(inp.proofs)
-    ob = max(ob - room, min(ob, float(OB_MIN))) if room > 0 else ob - room
-    ob += float(inp.forgery_quality)
-    if inp.obstacle_ceiling is None:
-        return ob
-    cap = float(inp.obstacle_ceiling)
-    if inp.ceiling_per_pool and inp.pool >= 1:
-        cap = _module()._chance_floor_cap(inp.pool, cap) or cap
-    return min(ob, cap)
 
 
 # ---- (3) the generated sheet: B01a.01's tests are `test_b01a_generated_attributes.py` -----------------------------
@@ -82,75 +64,65 @@ def _legacy(inp) -> float:
 def test_score_is_the_pool_without_its_addends():
     w = P.tiny_world()
     p = w.persons["p_mid"]
-    for verb in ("tell", "argue", "interrogate", "fight"):
+    for verb in ("tell", "argue", "interrogate"):                  # B05.25: `fight` is a subsystem's row and names no `governing:`, so `faculty` refuses it
         assert pool.faculty(w, p, verb) == pool.score(w, p, verb) + sum(int(a(w, p, verb)) for a in pool.POOL_ADDENDS)
 
 
-def test_a_person_opposes_with_the_score_he_rolls_on_every_arm():
-    """B05.11: `_opposition_of` returns the skill score on every `obstacle_model` arm (the arm switch is gone from it): a
-    person holding nothing opposes at `pool_default`, a non-person subject opposes at nothing (the module's stand-in)."""
+def test_a_person_opposes_with_the_score_he_rolls():
+    """B05.11: `_opposition_of` returns the skill score (no arm switch): a person holding nothing opposes at `pool_default`, a
+    non-person subject opposes at nothing (the module's `opposed_ob(pool_default)` stands there). The record's `opposition` adds the
+    resisting attribute (B05.14: `_opposing`)."""
     w = P.tiny_world()
     hearer = w.persons["p_low"]
     assert hearer.attributes in ({}, None) and not hearer.capability.get("copying")
     assert sigma._opposition_of(w, "p_low", "tell") == float(w.fixtures.get("pool_default"))
     assert sigma._opposition_of(w, "site_harbour", "tell") is None
-    w.fixtures = w.fixtures.sweep("obstacle_model", "stand_in")
-    assert sigma._opposition_of(w, "p_low", "tell") == float(w.fixtures.get("pool_default"))
-    assert sigma._opposition_of(w, "site_harbour", "tell") is None
+    assert sigma._opposing(w, "site_harbour", "tell") is None
+    assert sigma._opposing(w, "p_low", "tell") == 2 * float(w.fixtures.get("pool_default"))      # score + the unheld attribute, both untrained
 
 
-def test_the_task_difficulty_is_closed_over_the_verbs_the_roll_deals():
-    assert set(V.TASK_DIFFICULTY) == V.social_roll_verbs()
-    assert {"interrogate", "arrest", "determine"} <= set(V.VERB_CAPABILITY)
-    with pytest.raises(Forbidden):
-        V._load_task_difficulty({k: v for k, v in V.TASK_DIFFICULTY.items() if k != "tell"})
-    with pytest.raises(Forbidden):
-        V._load_task_difficulty({**V.TASK_DIFFICULTY, "give": 1.0})
+def test_every_verb_the_roll_deals_names_a_level_the_fixture_sizes():
+    assert V.social_roll_verbs() and {"interrogate", "arrest", "determine"} <= set(V.VERB_CAPABILITY)
+    sizes = DEFAULT_FIXTURES.get("difficulty_ob")
+    assert {V.VERB_TABLE[v].difficulty for v in V.social_roll_verbs()} <= set(sizes)
 
 
-def test_the_obstacle_is_the_difficulty_plus_the_ruled_score_term_and_every_term_is_named():
-    ob, terms = _module().obstacle_terms(_inp(difficulty=1.0, opposition=4.0))
-    assert (ob, terms) == (3.0, {"difficulty": 1.0, "opposition": 2.0})
-    ob, terms = _module().obstacle_terms(_inp(difficulty=2.0))
-    assert (ob, terms) == (2.0, {"difficulty": 2.0}), "no person opposes: no score term and no stand-in"
-    ob, terms = _module().obstacle_terms(_inp(difficulty=1.0, opposition=2.0, reception=1.0, reception_gain=0.5,
-                                         forgery_quality=1.0, obstacle_ceiling=2.0))
-    assert set(terms) == {"difficulty", "opposition", "room", "forgery", "ceiling"}
-    assert ob == pytest.approx(sum(terms.values()), abs=1e-12)
+def test_the_obstacle_is_the_form_and_every_term_is_named():
+    ob, terms = _module().obstacle(_inp(difficulty=1.0, opposition=4.0))
+    assert (ob, terms) == (3.0, (("even", 0.0), ("difficulty", 1.0), ("opposition", 2.0)))
+    ob, terms = _module().obstacle(_inp(difficulty=2.0))
+    assert (ob, terms) == (3.0, (("even", 0.0), ("difficulty", 2.0), ("opposition", 1.0))), "no person opposes: `opposed_ob(pool_default)`, never absent"
+    ob, terms = _module().obstacle(_inp(difficulty=1.0, opposition=2.0, reception=1.0, reception_gain=0.5,
+                                        forgery_quality=1.0, obstacle_ceiling=2.0))
+    assert [n for n, _ in terms] == ["even", "difficulty", "opposition", "room", "forgery", "ceiling"]
+    assert ob == sum(v for _, v in terms) == 2.0
 
 
 def test_falsifier_a_higher_opposing_score_raises_the_obstacle_and_lowers_the_odds():
-    from engine.dice_engine.sigma_leverage import record_odds
-    obs = [_module().obstacle(_inp(difficulty=1.0, opposition=float(s))) for s in (1, 2, 4, 6)]
+    """Scores 1, 2, 4, 6 give strictly rising obstacles and a strictly rising P(Failure) (kept from lane A's file, now on the one form)."""
+    obs = [_module().obstacle(_inp(difficulty=1.0, opposition=float(s)))[0] for s in (1, 2, 4, 6)]
     assert all(a < b for a, b in zip(obs, obs[1:])), obs                 # strictly rising
     fail = [record_odds(2, ob, 0.0)[0] for ob in obs]
     assert all(a < b for a, b in zip(fail, fail[1:])), fail              # P(Failure) strictly rising, no step ties
 
 
-@pytest.mark.parametrize("model", ["task", "stand_in"])
-def test_falsifier_a_believers_lie_against_a_person_is_scored_at_the_obstacle_it_is_dealt(model):
-    """`lie` names no vocation (no `verb_capability` row), so nobody holds anything on it and the roll opposes a person
-    at the untrained score (`pool.score`'s fallback, `Fixtures pool_default`): Ob = 1.0 + 2/2 on the task arm. The
-    believer's record (`believed_input`, what the chooser weighs, `odds_weighting: believed`) must compose the SAME
-    obstacle, not the difficulty alone. Both arms (B05.11 removed the `task`-only conjunct from `believed_input`, as the dealt
-    side has no arm switch): the control arm has no difficulty, so its dealt obstacle is the score term alone, 2/2 = 1.0, and
-    the believer's is the same; FALSIFIER: the conjunct put back, the believer's stand-in 2.0 against the dealt 1.0."""
-    w = P.tiny_world()
-    w.fixtures = w.fixtures.sweep("obstacle_model", model)
-    liar = w.persons["p_mid"]
+def test_falsifier_a_believer_weighs_a_lie_against_a_person_only_on_what_he_has_a_claim_on():
+    """`lie` names no vocation, so nobody holds a skill for it and the roll opposes a person at the untrained score on the skill half; the
+    `opposed_attribute` half (`attr.social.attunement`) is that person's own. The believer (`believed_input`, what the chooser weighs,
+    `odds_weighting: believed`) holds no claim on it, so he CANNOT SAY (`None`, never a figure -- B05.14); with a claim equal to what the
+    person holds, his record composes the SAME obstacle the roll is dealt. A non-person subject opposes at nothing, and that he knows."""
+    w = P.tiny_world(DEFAULT_FIXTURES.sweep("obstacle_ceiling", None))                  # uncapped: the cap is not this test's subject
+    liar, hearer = w.persons["p_mid"], w.persons["p_low"]
     assert "lie" not in V.VERB_CAPABILITY, "the case is a verb naming no vocation"
+    opposed = V.VERB_TABLE["lie"].opposed_attribute
+    hearer.attributes = {opposed: 4}
     dealt = sigma._composed_obstacle(sigma.contest_input(w, [liar.id], verb="lie", subject="p_low"))
-    believed = sigma.believed_input(liar, "lie", "p_low", w.fixtures, pool=pool.faculty(w, liar, "lie"),
-                                    person_subject=True)
-    assert believed is not None and sigma._composed_obstacle(believed) == dealt == {"task": 2.0, "stand_in": 1.0}[model]
-
-
-@pytest.mark.parametrize("opp", [None, 0.0, 1.0, 2.0, 3.0, 7.0])
-@pytest.mark.parametrize("room", [(0.0, 0.0), (1.0, 0.5), (-1.0, 0.5)])
-@pytest.mark.parametrize("ceil", [None, 2.0])
-@pytest.mark.parametrize("fq", [0.0, 1.0])
-def test_control_the_stand_in_arm_composes_the_old_obstacle_exactly(opp, room, ceil, fq):
-    inp = _inp(opposition=opp, reception=room[0], reception_gain=room[1], obstacle_ceiling=ceil,
-               forgery_quality=fq, ceiling_per_pool=True)
-    assert _module().obstacle(inp) == _legacy(inp)           # exact, not approx: the control is byte-identity
-
+    assert dealt == 1.0 + 0.5 * (4 + 2), dealt                                  # difficulty + the rate x (his attribute + the untrained score)
+    kw = dict(pool=pool.faculty(w, liar, "lie"), person_subject=True)
+    assert sigma.believed_input(liar, "lie", "p_low", w.fixtures, **kw) is None          # FALSIFIER: a believer reading the dealt figure unasked
+    liar.ledger.append(Claim(id="c0", holder=liar.id, subject="p_low", predicate=person_q.CAPABILITY_CLAIM + opposed, value=4,
+                             when=0, source="told", confidence=5, visibility="own"))
+    believed = sigma.believed_input(liar, "lie", "p_low", w.fixtures, **kw)
+    assert believed is not None and sigma._composed_obstacle(believed) == dealt
+    nobody = sigma.believed_input(liar, "lie", "site_harbour", w.fixtures, pool=kw["pool"], person_subject=False)
+    assert nobody is not None and sigma._composed_obstacle(nobody) == 2.0

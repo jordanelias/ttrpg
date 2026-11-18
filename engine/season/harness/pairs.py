@@ -26,7 +26,7 @@ keys (`modules/combat/attributes.py`) and the realm's `score` is the larger of a
 so `sheet`'s slope is diluted by the four keys the duel never reads and is not the realm's; `all` names the keys read, and
 a calibration target is set on those (B05.24/B05.25 change which keys a contest reads). `read` (the
 social roll's default): the record's `pool` minus its `opposition` (for a duel, `faculties[0] - faculties[1]`; an
-opposition `None` reads as `obstacle_default`), read off the input so the instrument follows whatever the governing
+opposition `None` reads as `pool_default`, the untrained score the obstacle opposes it at), read off the input so the instrument follows whatever the governing
 score becomes, bins of 1. A registry key: `a[k] - b[k]`, bins of 1. `all` prints one SLOPE per key (a slope near 0 names
 a key the contest does not read). Bins are rounded half up, `floor(x / width + 0.5)`; the tree's public `round_half_up`
 is B38.55's, and this exact local one is replaced by it then (`modules/mass_battle/massbattle.py` holds a private one, not
@@ -172,7 +172,7 @@ def social_pairs(seed: int, n: int, verb: str, plant: Plant = None):
             band = REFUSED
         else:
             band = degree_of({"net": margin.net, "ob": margin.ob, "settled_margin": margin.net - margin.ob})
-        opposition = inp.obstacle_default if inp.opposition is None else inp.opposition
+        opposition = inp.pool_default if inp.opposition is None else inp.opposition
         yield SocialPair(i, a, b, inp.pool - opposition, inp, band)
 
 

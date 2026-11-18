@@ -2134,7 +2134,7 @@
         "graded_inquiries": {
           "source": "v9 FI-01 (`ED-FI-0009`; J-22 answered option (A)): the inquiries are graded by degree, as ladder step 3 answered (RESOLVE -> WITNESS, \"Claims graded by degree; Failure emits `finding.none` and deposits nothing\"), through a declared routing column that is NOT a prize and NOT a `contests:` shape. A-21: one roll owner (S27.2) -- the `social_contest` module's entry, with the obstacle at the host input builder's non-person default.",
           "row": "H-111",
-          "note": "\u26a0 A ROUTE, NOT A PRIZE. Each row names the provider registered under `@provider(\"contest\", \u2026)` and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::faculty` (the verb's `capability:` column, `descriptors.CAPABILITIES`, else the swept `pool_default`) and the obstacle the module's own (`modules/social_contest/roll.py::obstacle`: `obstacle_default`, swept, unless the subject is a person who HOLDS the `inquiry` key, `sigma.py::_opposition_of` -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already binds (`manifest/registry.py::check_graded_inquiries`), so this row adds no roll and no resolver. the verb table's `capability:` column now names `inquiry` for the three (REM-30, B10-10; the rows were deferred at CP-T01-01): an inquirer who HOLDS an `inquiry` key rolls it, and one who holds none still rolls `pool_default` (`seam/wrappers/sigma.py::faculty`). \u26a0 THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the questioned person answers by their own `tell`, so there is no degree on the asker); `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read` waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its flat `emits:` and is not counted as graded.",
+          "note": "\u26a0 A ROUTE, NOT A PRIZE. Each row names the provider registered under `@provider(\"contest\", \u2026)` and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::faculty` (the verb's `capability:` column, `descriptors.CAPABILITIES`, else the swept `pool_default`) and the obstacle the module's own (`modules/social_contest/roll.py::obstacle`: the row's `difficulty:` level plus `opposed_ob(pool_default)` where no person is opposite, or plus `opposed_ob` of the person's skill score and resisting attribute, `sigma.py::_opposing` -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already binds (`manifest/registry.py::check_graded_inquiries`), so this row adds no roll and no resolver. the verb table's `capability:` column now names `inquiry` for the three (REM-30, B10-10; the rows were deferred at CP-T01-01): an inquirer who HOLDS an `inquiry` key rolls it, and one who holds none still rolls `pool_default` (`seam/wrappers/sigma.py::faculty`). \u26a0 THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the questioned person answers by their own `tell`, so there is no degree on the asker); `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read` waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its flat `emits:` and is not counted as graded.",
           "keys": [
             "verb_table"
           ],
@@ -2317,21 +2317,26 @@
             "told_retain"
           ]
         },
-        "task_difficulty": {
-          "source": "B11 lane A (Jordan, 2026-11-12, relayed: *\"social contest obstacle is defined by the difficulty of the task and all associated modifiers\"*; RULED 2026-08-14, `dice_engine.degree_from_net`'s docstring: an opposed obstacle is *\"their corresponding score/2 plus whatever specific modifiers exist for them in that instance\"*).",
-          "note": "THE DIFFICULTY OF EACH TASK THE SOCIAL ROLL DEALS -- `verb: number`, the obstacle's first term before any modifier. `modules/social_contest/roll.py::obstacle_terms` composes Ob = difficulty + the opposing person's `score / 2` (the ruled term, kept as one modifier, unchanged) - the room's terms (`reception`, `proofs`) + an examined document's `forgery_quality`, under the ceiling (H-213), and names every term on the roll's record (`seam/wrappers/sigma.py::resolve`, `ob_terms`). WHERE THE RULING AND THIS MEET: for a person opponent the ruled form is the score term plus the instance's modifiers, and the task's difficulty is one of those modifiers; at difficulty 0 the obstacle is the ruled form exactly. CLOSED: a row for every verb the social roll deals (a `contests:` prize the `social_contest` provider resolves, or a `graded_inquiries` route to it) and for nothing else, refused at import (`data/verbs.py::_load_task_difficulty`) -- a task with no difficulty is a loud gap, never `obstacle_default`. THE SHIPPED VALUES ARE A CALIBRATION, NOT A DESIGN: a contest against a person is 1.0, so an opponent at the shipped score (2) composes 2.0, the realm's obstacle before this row; an inquiry, which no person opposes, is 2.0, its obstacle before this row (`obstacle_default`). The differences between tasks (a lie against a truth, an arrest against an argument) are Jordan's to author. [ASSUMPTION; medium; Jordan to correct; revert: `Fixtures obstacle_model: stand_in`, the control arm.]",
-          "values": {
-            "tell": 1.0,
-            "lie": 1.0,
-            "argue": 1.0,
-            "speak": 1.0,
-            "arrest": 1.0,
-            "determine": 1.0,
-            "interrogate": 1.0,
-            "examine": 2.0,
-            "research": 2.0,
-            "surveil": 2.0
-          }
+        "difficulty_levels": {
+          "source": "B05.14 (`proposals/05_SC_obstacle_difficulty_and_modifiers_B.md` Edit A, D-U1-04): what lane A's `task_difficulty` roster becomes -- a level a row names, not a number a roster holds",
+          "note": "THE LEVELS A ROLLED VERB ROW'S `difficulty:` CELL NAMES, in order of how hard the act itself is. `data/verbs.py` refuses a row that is contested on the social roll's prize or graded to it with no `difficulty:`, a value outside this set, and a `difficulty:` on a row nothing rolls. `Fixtures.difficulty_ob` gives each level its size in obstacle (refused at load if its keys are not exactly these). A new level is a member here and a size there, and no code.",
+          "ordered": true,
+          "values": [
+            "plain",
+            "routine",
+            "demanding",
+            "hard"
+          ]
+        },
+        "obstacle_terms": {
+          "source": "B05.14 (`proposals/U5c_SC_one_obstacle_form.md` \u00a71, \u00a72; 29_DICE Item 29-4 step 4): the members the obstacle is composed of, the first three of them",
+          "note": "THE TERMS OF THE SOCIAL ROLL'S OBSTACLE, IN COMPOSITION ORDER (`roll.py::obstacle` sums them, then the room's and the document's lane A steps, then the ceiling and the floor). `even` -- the pool's even line, `MU_PER_DIE x pool_add` (`sigma_leverage.even_line`); `difficulty` -- the act's own, its level's size (`Fixtures.difficulty_ob`); `opposition` -- the one acted against, `opposed_ob(opposing attribute + skill score, opposition_rate)`, or the untrained score where no person is opposite (never absent). Every member stands AGAINST the act and is never negative. A member lands with its host function in `sigma.OBSTACLE_TERMS` and no other code; later members are those the verb lanes add (OBS \u00a72's table).",
+          "ordered": true,
+          "values": [
+            "even",
+            "difficulty",
+            "opposition"
+          ]
         },
         "lifepaths": {
           "source": "v10 CR-33: the 34 lifepaths (the Stage 3 vocations of `character_histories_v30.md`, archived), by the ids that file prints, `3-CR1` ... `3-CF6`. THE CLOSED SET `tables: lifepath_templates` is keyed by, refused at import both ways (`data/rosters.py::_load_lifepaths`), and the set a cast row's `lifepath:` key is checked against (`data/cast.py::capability_of`). Four Niflhel ids (`3-NI1` ... `3-NI4`) are STRUCK in that file (it prints no row for them and sends their backstories to `3-CF6`) and are not members. Jordan's \"34 vocations\" counts these; in code \"vocation\" names a capability key (`data/verbs.py::VOCATIONS`), which is why the cast key is `lifepath:` and not `vocation:`.",
@@ -2400,7 +2405,7 @@
               "person_inputs": "pool",
               "provider": "social_contest",
               "module_entry": "social_contest.roll",
-              "cite": "JORDAN, 2026-09-09, VERBATIM: \"we have the sigma leverage d10 resolver in engine to use.\" A third option neither of ED-SC-0037's two costed, and the row is `status: ruled`. \u26a0 ED-SC-0033 (2026-09-06) rules that (2) the two contest prizes mapping to `social_contest` REPOINT TO THE PROCEEDINGS PROVIDER -- \"this provider\" there means THE PROCEEDINGS SUBSYSTEM'S, not this row -- and that (3) THE OBSTACLE HAS A SINGLE OWNER. \u26a0\u26a0 CLAUSE (3) IS HONOURED SINCE v9 SC-01 STEP 14, AND NOT BY THIS ROW. `sigma_leverage` does NOT own the obstacle: `eff_ob` CONSUMES a `base_ob` and is \"DISPLAY ONLY (not the resolution value)\" by its own docstring, `effective_ob` is a pure arg-order alias of it, and the tree's live composition has the CALLER supply `base_ob`. The host input builder's own site (`seam/wrappers/sigma.py::_obstacle_of`, `H-127`) was deleted at step 14; the social contest module composes the obstacle (`modules/social_contest/roll.py::obstacle`, under `H-213`'s ceiling). So `interim: true` carried CLAUSE (2) ALONE, and steps 13 + 15 discharged it: the row names `social_contest` (`02 \u00a7D.4`)."
+              "cite": "JORDAN, 2026-09-09, VERBATIM: \"we have the sigma leverage d10 resolver in engine to use.\" A third option neither of ED-SC-0037's two costed, and the row is `status: ruled`. \u26a0 ED-SC-0033 (2026-09-06) rules that (2) the two contest prizes mapping to `social_contest` REPOINT TO THE PROCEEDINGS PROVIDER -- \"this provider\" there means THE PROCEEDINGS SUBSYSTEM'S, not this row -- and that (3) THE OBSTACLE HAS A SINGLE OWNER. \u26a0\u26a0 CLAUSE (3) IS HONOURED SINCE v9 SC-01 STEP 14, AND NOT BY THIS ROW. `sigma_leverage` does NOT own the obstacle: `eff_ob` CONSUMES a `base_ob` and is \"DISPLAY ONLY (not the resolution value)\" by its own docstring, `effective_ob` is a pure arg-order alias of it, and the tree's live composition has the CALLER supply `base_ob`. The host input builder's own site (`seam/wrappers/sigma.py::_obstacle_of`, once the former row H-127) was deleted at step 14; the social contest module composes the obstacle (`modules/social_contest/roll.py::obstacle`, under `H-213`'s ceiling). So `interim: true` carried CLAUSE (2) ALONE, and steps 13 + 15 discharged it: the row names `social_contest` (`02 \u00a7D.4`)."
             },
             "a proposition": {
               "module": "social_contest",
@@ -4481,6 +4486,7 @@
         },
         {
           "verb": "argue",
+          "difficulty": "routine",
           "stratum": "social",
           "capability": "argue",
           "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (`argue` is its own vocation, v10 REM-30).",
@@ -4556,6 +4562,7 @@
         },
         {
           "verb": "arrest",
+          "difficulty": "routine",
           "stratum": "contested_physical",
           "capability": "arms",
           "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07).",
@@ -4910,6 +4917,7 @@
         },
         {
           "verb": "determine",
+          "difficulty": "routine",
           "scale": "settlement",
           "scale_note": "a sitting decides at the venue's rung",
           "stratum": "binding_decision",
@@ -4968,7 +4976,7 @@
           "counterparty": "subject",
           "counterparty_note": "PLAN POSITION `19`: THE PARTY IS THE SECOND SIDE (`ED-IN-0210` ruling 1, *a real interaction has a COUNTERPARTY*), and a judge does not bind himself -- `may_determine` refuses it at the fold and the gate. Declined person-side here, on `petition`'s precedent, so a self-determination is never formed: no read the fold makes can teach a person *that is you*, so a refusal would only tax his scenes.",
           "contests": "a proposition",
-          "contests_note": "v9 SC-03b (#453 \u00a710.4 step 4, ED-IN-0288 as INTENT): `determine` is a CONTESTED act through the social contest scene's `social_contest` provider, the prize `a proposition` (`rosters.yaml: contest_subsystems.prizes`, a row no verb claimed until now). ONE ROLL OWNER (S27.2): the roll is the module entry `social_contest.roll`; the host (`seam/wrappers/sigma.py`) builds the input and produces none. The OPPONENT is the row's `counterparty:` operand (`subject`, the party), read by `loop/resolve.py::_contest` as `tell`'s hearer is, so the judge (the actor) rolls against the party; the pool is the judge's `pool_default` (`determine` has no `verb_capability` row, so it falls to the default, `H-126`'s polarity) and the obstacle is `obstacle_default` under `H-213`'s ceiling for EVERY party: `seam/wrappers/sigma.py::_opposition_of` finds no `verb_capability` key to read on the party (the party is named, and the roll is the same for every party). The band is the one ladder's reading of the margin (`seam/ladder.py::degree_of`); this row adds no ladder, no band table and no special case. [ASSUMPTION; medium; Jordan to correct; revert: the flat `writes:`/`emits:` and no `contests:`, the row before SC-03b.]",
+          "contests_note": "v9 SC-03b (#453 \u00a710.4 step 4, ED-IN-0288 as INTENT): `determine` is a CONTESTED act through the social contest scene's `social_contest` provider, the prize `a proposition` (`rosters.yaml: contest_subsystems.prizes`, a row no verb claimed until now). ONE ROLL OWNER (S27.2): the roll is the module entry `social_contest.roll`; the host (`seam/wrappers/sigma.py`) builds the input and produces none. The OPPONENT is the row's `counterparty:` operand (`subject`, the party), read by `loop/resolve.py::_contest` as `tell`'s hearer is, so the judge (the actor) rolls against the party; the pool is the judge's `pool_default` (`determine` has no `verb_capability` row, so it falls to the default, `H-126`'s polarity) and the obstacle is the row's difficulty plus the stand-in `opposed_ob(pool_default)` (B05.14; was `obstacle_default`) under `H-213`'s ceiling for EVERY party: `seam/wrappers/sigma.py::_opposition_of` finds no `verb_capability` key to read on the party (the party is named, and the roll is the same for every party). The band is the one ladder's reading of the margin (`seam/ladder.py::degree_of`); this row adds no ladder, no band table and no special case. [ASSUMPTION; medium; Jordan to correct; revert: the flat `writes:`/`emits:` and no `contests:`, the row before SC-03b.]",
           "writes": {
             "Overwhelming": [
               "Tenure.since",
@@ -5227,6 +5235,7 @@
         },
         {
           "verb": "lie",
+          "difficulty": "routine",
           "stratum": "social",
           "capability": "none",
           "capability_note": "undeclared at authoring; every person rolls the untrained default. No `deception` skill: a lie is an `argue` whose item is the liar's own false word (the social contest's V2, B24p.16; ED-IN-0378).",
@@ -6697,6 +6706,7 @@
         },
         {
           "verb": "speak",
+          "difficulty": "routine",
           "stratum": "social",
           "capability": "copying",
           "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability`; which skill a verb tests is stated nowhere in the design.",
@@ -6719,7 +6729,7 @@
           },
           "requires_typed_note": "v9 SC-01 step 12 (B-N). The proceedings design's own cell, one clause (`04_VERBS.md` \u00a7B.1: `form: existence, of: subject, kind: DocketItem`), and `determine`'s `docket` conjunct exactly: the matter is on a docket (`world_q.docketed`, the reader's `docket` branch). It is what stops `speak` being a way to chat: no docket item names the subject, no contest. THE VENUE HALF IS NOT TYPED, as `determine`'s date half is not: a docket item has no venue key, a dateless one (`carry`'s, and `open_case`'s where no slot is open) names no sitting at all, and a filled slot reaches a venue only through its `date`'s Date, which no operand of this cell reads -- so *at the actor's venue* has no operand to read. Unnamed and flat (`survey`'s precedent): one conjunct, one refusal kind.",
           "contests": "a matter",
-          "contests_note": "v9 SC-01 step 12: `04_VERBS.md` \u00a7B.1's prize, *the proceeding is ONE act at the season scale*. `rosters.yaml: contest_subsystems.prizes` carries an `a matter` row routed to the social contest scene's `social_contest` provider (ED-SC-0033 clause (2)), so a docketed `speak` resolves there. The opponent is `subject` (the row names no `counterparty:`), so the docketed matter's party stands against the speaker when it is a person, and the provider's `obstacle_default` stands in when it is not (`modules/social_contest/roll.py::obstacle`, under `H-213`'s ceiling since step 14). v10 CP-T05-02 (iii): `subject_may_be_self` (below) waives `opening_set`'s contested-verb decline (*a person is not his own adversary*) for this row, so a docketed party speaks to his own matter in computed play; `seam/wrappers/sigma.py::contest_input` reads no opposition for a subject who is the actor, so the plea rolls at `obstacle_default` under the room's terms.",
+          "contests_note": "v9 SC-01 step 12: `04_VERBS.md` \u00a7B.1's prize, *the proceeding is ONE act at the season scale*. `rosters.yaml: contest_subsystems.prizes` carries an `a matter` row routed to the social contest scene's `social_contest` provider (ED-SC-0033 clause (2)), so a docketed `speak` resolves there. The opponent is `subject` (the row names no `counterparty:`), so the docketed matter's party stands against the speaker when it is a person, and the provider's `opposed_ob(pool_default)` stands in when it is not (`modules/social_contest/roll.py::obstacle`, under `H-213`'s ceiling since step 14). v10 CP-T05-02 (iii): `subject_may_be_self` (below) waives `opening_set`'s contested-verb decline (*a person is not his own adversary*) for this row, so a docketed party speaks to his own matter in computed play; `seam/wrappers/sigma.py::contest_input` reads no opposition for a subject who is the actor, so the plea rolls at the row's difficulty plus `opposed_ob(pool_default)` under the room's terms.",
           "subject_may_be_self": true,
           "subject_may_be_self_note": "v10 CP-T05-02 (iii) (AM-D-02) [ASSUMPTION; medium; Jordan to correct; revert: remove the column]. THE ACCUSED ANSWERS: a person docketed, holding the docketing claim, forms `speak {subject: himself}` -- the self-plea. Waives `decision/options.py::opening_set`'s self-subject decline for this row alone (the loader admits the column only on a row contested against its subject, `VerbRow.opponent_operand() == 'subject'`). It is NOT `counterparty_may_be_self` (`confer`), which waives the counterparty operand's self-exclusion. A DECLARED MOVER of every world in which a docketed party is offered his own matter.",
           "writes": {
@@ -6870,6 +6880,7 @@
         },
         {
           "verb": "tell",
+          "difficulty": "routine",
           "stratum": "social",
           "capability": "copying",
           "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (`03 \u00a7A.2`, `#353 \u00a79.2`: the verb names a skill, the skill supplies the dice and gates nothing); which skill a verb tests is stated nowhere in the design.",
@@ -6946,6 +6957,7 @@
         },
         {
           "verb": "examine",
+          "difficulty": "routine",
           "stratum": "contested_physical",
           "capability": "inquiry",
           "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (REM-30, B10-10).",
@@ -7032,6 +7044,7 @@
         },
         {
           "verb": "interrogate",
+          "difficulty": "routine",
           "stratum": "social",
           "capability": "inquiry",
           "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (lane A's row, D-U1-07).",
@@ -7088,6 +7101,7 @@
         },
         {
           "verb": "research",
+          "difficulty": "routine",
           "stratum": "uncontested_material",
           "capability": "inquiry",
           "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (REM-30, B10-10: the three inquiries `research`, `examine`, `surveil` draw on `inquiry`).",
@@ -7135,6 +7149,7 @@
         },
         {
           "verb": "surveil",
+          "difficulty": "routine",
           "stratum": "contested_physical",
           "capability": "inquiry",
           "capability_note": "[ASSUMPTION; medium; Jordan to correct; revert: Jordan names the skill] carried over from `rosters.yaml: verb_capability` (REM-30, B10-10).",

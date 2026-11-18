@@ -43,7 +43,7 @@ from engine.season.queries.inputs import Margin, SocialContestInput
 from engine.dice_engine.sigma_leverage import net_boost, roll_net_continuous
 out = []
 for lev in (0.0, 1.5):
-    inp = SocialContestInput(pool=4, opposition=None, obstacle_default=2.0, obstacle_ceiling=3.0,
+    inp = SocialContestInput(pool=4, opposition=None, difficulty=0.0, pool_default=4, pool_add=0, opposition_rate=0.5, obstacle_ceiling=3.0,
                              obstacle_refusal_multiple=3.0, leverage=lev)
     got = entry(inp, random.Random(7))
     again = entry(inp, random.Random(7))
@@ -97,22 +97,25 @@ def test_s27_4_refuses_on_the_derived_pair_strictly_above_the_multiple():
     from engine.season.loop.driver import SeasonDriver
     from engine.season.seam.wrappers import sigma
     SeasonDriver(P.tiny_world(DEFAULT_FIXTURES))      # the registrar fills MODULE_ENTRIES
-    fx = {"pool_default": 2, "obstacle_default": 4, "obstacle_ceiling": None,
-          "obstacle_refusal_multiple": 2,
+    # B05.14: the act's obstacle is the level's size plus `opposed_ob(pool_default)` (1.0 here: nobody is opposite): `tell` is `routine`,
+    # sized 3 here, so the obstacle is 4 == 2 x the pool of 2 (`pool_default` 2: no attribute, no rank), and sized 3.5 it is over it.
+    fx = {"pool_default": 2, "obstacle_ceiling": None,
+          "obstacle_refusal_multiple": 2, "difficulty_ob": {"plain": 0, "routine": 3.0, "demanding": 2, "hard": 3},
+          "opposition_rate": 0.5,
           "practice_cap": 0,       # `faculty` reads the practice addend (CP-T01-02), which reads this key
           "pool_add": 0, "pool_floor": 0}       # and (B05.09) `pool_of`'s two operands, at control
     w = SimpleNamespace(persons={"p": SimpleNamespace(capability={})}, fixtures=fx)
-    at = sigma.resolve(w, ["p"], ["c"], "a standing", rng=random.Random(0))
-    assert at["status"] == "RESOLVED", f"ob 4 == 2 x pool 2 was refused: {at}"
-    fx["obstacle_default"] = 4.5
-    refused = sigma.resolve(w, ["p"], ["c"], "a standing", rng=random.Random(0))
+    at = sigma.resolve(w, ["p"], ["c"], "a standing", verb="tell", rng=random.Random(0))
+    assert at["status"] == "RESOLVED" and at["ob"] == 4.0, f"ob 4 == 2 x pool 2 was refused: {at}"
+    fx["difficulty_ob"] = {**fx["difficulty_ob"], "routine": 3.5}
+    refused = sigma.resolve(w, ["p"], ["c"], "a standing", verb="tell", rng=random.Random(0))
     fed_by = refused.pop("fed_by")           # B04.08: the rows that fed the roll ride the record, a refusal's too (D-U1-06)
     assert tuple((f[0], f[1], f[4], f[5]) for f in fed_by) == (("social_roll", "dice", 2, 2), ("social_roll", "opposes", None, 0.0))
     assert refused == dict(
         status="REFUSED", why="S27.4", module="social_contest", resolver="d_sigma", pool=2, ob=4.5,
-        ob_terms={"stand_in": 4.5})          # B11 lane A: the obstacle's terms ride the record, a refusal's too
+        terms=(("even", 0.0), ("difficulty", 3.5), ("opposition", 1.0)))     # B05.14: the obstacle's terms ride the record, a refusal's too
     fx["obstacle_ceiling"] = 2
-    capped = sigma.resolve(w, ["p"], ["c"], "a standing", rng=random.Random(0))
+    capped = sigma.resolve(w, ["p"], ["c"], "a standing", verb="tell", rng=random.Random(0))
     assert capped["status"] == "RESOLVED" and capped["ob"] == 2.0, capped
 
 
@@ -123,9 +126,9 @@ def test_the_obstacle_is_reached_by_its_own_composition_row(monkeypatch):
     from engine.season.queries.inputs import SocialContestInput
     from engine.season.seam.wrappers import sigma
     role = "social_contest.obstacle"
-    monkeypatch.setitem(composition._CACHE, role, lambda inp: 7.0)
+    monkeypatch.setitem(composition._CACHE, role, lambda inp: (7.0, ()))
     for pool, opposition in ((1, None), (4, 3.0)):
-        inp = SocialContestInput(pool=pool, opposition=opposition, obstacle_default=2.0, obstacle_ceiling=3.0,
+        inp = SocialContestInput(pool=pool, opposition=opposition, difficulty=0.0, pool_default=4, pool_add=0, opposition_rate=0.5, obstacle_ceiling=3.0,
                                  obstacle_refusal_multiple=3.0, leverage=0.0)
         assert sigma._composed_obstacle(inp) == 7.0
 
@@ -159,7 +162,7 @@ def test_no_d10_face_in_social_contest():
         randrange = randint
 
     for pool, lev in ((4, 0.0), (8, 1.5), (0.5, 0.0)):
-        inp = SocialContestInput(pool=pool, opposition=None, obstacle_default=2.0, obstacle_ceiling=3.0,
+        inp = SocialContestInput(pool=pool, opposition=None, difficulty=0.0, pool_default=4, pool_add=0, opposition_rate=0.5, obstacle_ceiling=3.0,
                                  obstacle_refusal_multiple=3.0, leverage=lev)
         got = _module().roll(inp, _NoFaces(7))
         assert got.net == roll_net_continuous(pool, rng=random.Random(7)) + net_boost(lev, pool), (pool, lev, got)
