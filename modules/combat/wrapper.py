@@ -51,7 +51,7 @@ def _select(c, opp, closed, cfg, measure_gap):
     thread leaves a post-swap `c.w` resolved against a pre-swap-selected element (R-7's object confusion)."""
     _sel = S.select_mode(c, opp.armor, closed, cfg, measure_gap=measure_gap)
     c.sel_dmg, c.sel_head, c.sel_gap, c.sel_perc, c.sel_pc, c.sel_eff = _sel.dm, _sel.head, _sel.gap, _sel.perc, _sel.pc, _sel.eff
-    c.sel_eff_cut, c.sel_eff_thrust = S.selected_arm_magnitudes(c, c.sel_head)
+    c.sel_eff_cut, c.sel_eff_thrust = S.selected_arm_magnitudes(c, c.sel_head, cfg)
 
 def _carry(ready, cfg):
     """Phase-transition readiness: keep each fighter's RESIDUAL cadence phase, drop any banked whole action.

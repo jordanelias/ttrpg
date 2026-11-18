@@ -6,8 +6,8 @@ non-invasive: wrapper._TRACE (the engine's own seam) for `outcome` and `wound` e
 (read_contest, bind_sigma) that call the original and return its value untouched, drawing no rng. Every subject is built
 tradition='none' with known_traditions=(the teaching tradition,), equipped={generic: level}; the opponent is the same
 weapon and armour, plain; position-swapped; one random.Random(seed) per cell, seed = crc32(repr(cell key)) % 100000.
-A first run whose visual/precommit K-zero control did not null (the module-level LEGIB_SWING_ROOM_K is not in CFG) is
-why that control zeroes it too. This is a CALIBRATION instrument for provisional generics: re-run it now that CR-85
+A first run whose visual/precommit K-zero control did not null (LEGIB_SWING_ROOM_K, then a module-level constant outside
+CFG, was left live; it is in CFG now, B14.08) is why that control zeroes it too. This is a CALIBRATION instrument for provisional generics: re-run it now that CR-85
 has replaced `history` with `faculty` and deleted its five sigma terms (the plan's PC-17 RE-BASE), and read its limits in ED-PC-0059 before quoting a number.
 
 Usage (the repo root is derived from this file's location):
@@ -77,9 +77,8 @@ def run_cell(repo, lever, tier_idx, level, kind, n):
         cfg.update(KZERO[lever])
     if kind == 'k0b':
         cfg.update(READ_TEMPO_K=0.0)   # tempo only: ALSO zero the cadence site, to separate it from the init-sigma site
-    _room = S.LEGIB_SWING_ROOM_K
     if kind == 'k0' and lever in ('visual', 'precommit'):
-        S.LEGIB_SWING_ROOM_K = 0.0     # a module-level (not CFG) legibility term; the first run left it live and the control was NOT null
+        cfg.update(LEGIB_SWING_ROOM_K=0.0)   # the swing-room legibility term; the first run left it live and the control was NOT null
     subj_spec = dict(label='S', weapon=weapon, armor=armor, tradition='none',
                      equipped={name: float(level)}, known_traditions=(trad,))
     opp_spec = dict(label='O', weapon=weapon, armor=armor, tradition='none')
@@ -141,7 +140,6 @@ def run_cell(repo, lever, tier_idx, level, kind, n):
             fights.append(f)
     finally:
         S.read_contest, S.bind_sigma, wrapper._TRACE = orig_rc, orig_bs, None
-        S.LEGIB_SWING_ROOM_K = _room
     return dict(lever=lever, name=name, tradition=trad, tier=TIERS[tier_idx], level=level, kind=kind, n=n,
                 seed=seed, weapon=weapon, armor=armor, wins=wins, fights=fights)
 

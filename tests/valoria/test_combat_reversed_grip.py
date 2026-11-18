@@ -47,13 +47,14 @@ def test_thrust_factor_is_wired():
     directly against the formula (not a hand-picked weapon pair, since gap and thrust are close enough across
     the roster that no weapon reliably demonstrates the direction of the swap on its own)."""
     from modules.combat import combat_systems as S
+    from modules.combat.config import CFG
     for n in ('longsword', 'arming', 'dagger', 'jian'):
         w = WEAPONS[n]
         assert w['head'] == 'cut_thrust', f"test premise: {n} must be cut_thrust-headed"
         geo = w['geometry']
         thrust = G.thrust_factor(geo['point_concentration'], geo['cross_section'], geo['curvature'])
         cut = G.cut_factor(geo['curvature'], geo['edge_keenness'])
-        heads = S.afforded_heads(w)
+        heads = S.afforded_heads(w, CFG)
         eff = heads['cut_thrust'][0]
         assert abs(eff - max(cut, thrust)) < 1e-9, f"{n}: cut_thrust score should be max(cut, thrust)"
 
