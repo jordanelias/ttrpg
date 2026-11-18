@@ -223,7 +223,7 @@ def test_a_yield_duel_stops_at_the_health_threshold():
 
 def test_yield_and_blood_are_different_stops():
     """The two terms read different quantities: on some seed the `yield` stop comes in a LATER turn than `blood`'s."""
-    later = 0
+    later = checked = 0
     for pair in _PAIRS:
         for seed in range(30):
             tb = [e for e in _fight(seed, 'blood', pair=pair)[1] if e['kind'] == 'yield']
@@ -231,6 +231,9 @@ def test_yield_and_blood_are_different_stops():
             if tb and ty:
                 assert ty[0]['turn'] >= tb[0]['turn'], (pair, seed)
                 later += ty[0]['turn'] > tb[0]['turn']
+                checked += 1
+    # the comparison is conditional on both terms stopping the fight: it must have run at least once per pair
+    assert checked and checked >= len(_PAIRS), checked
     assert later >= 1
 
 

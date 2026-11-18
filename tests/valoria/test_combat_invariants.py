@@ -1149,13 +1149,18 @@ def test_rear_clearance_monotone_non_decreasing():
     """I7a gate #3: rear_clearance(g) is monotone non-decreasing in grip for the WHOLE roster — gathering in
     never shortens what trails behind the hand."""
     C, core, S, WP, CFG = _mods()
+    grips = (0.0, 0.25, 0.5, 0.75, 1.0)
+    checked = 0
     for n, w in C.WEAPONS.items():
         prev = None
-        for g in (0.0, 0.25, 0.5, 0.75, 1.0):
+        for g in grips:
             rc = WP.at_circumstance(w, g)['rear_clearance']
             if prev is not None:
                 assert rc >= prev - 1e-9, (n, g, rc, prev)
+                checked += 1
             prev = rc
+    # one comparison per consecutive grip pair, for every weapon on the roster
+    assert checked and checked >= len(C.WEAPONS) * (len(grips) - 1), checked
 
 
 def test_rear_clearance_staff_changes_with_grip_despite_zero_u():
@@ -1289,6 +1294,10 @@ def test_facing_void_ablation_moves_close_rate_and_reach_sigma():
     assert live_rs != ablated_rs
 
 
+_REACH_WEAPONS = ('spear', 'yari', 'guisarme', 'poleaxe')    # the reach roster test_reach_class_beats_arming_not_inverted sweeps
+_REACH_ARMOURS = ('none', 'light', 'medium', 'heavy')          # ... at every armour tier
+
+
 @pytest.mark.slow
 def test_reach_class_beats_arming_not_inverted():
     """Reach vs a uniform arming-sword baseline — the GROUNDED, armour-CONDITIONAL ladder.
@@ -1309,8 +1318,9 @@ def test_reach_class_beats_arming_not_inverted():
     from modules.combat import wrapper
     C, core, S, WP, CFG = _mods()
     share, decided = {}, {}
-    for w in ('spear', 'yari', 'guisarme', 'poleaxe'):
-        for armor in ('none', 'light', 'medium', 'heavy'):
+    checked = 0
+    for w in _REACH_WEAPONS:
+        for armor in _REACH_ARMOURS:
             # crc32, not hash() — hash() is PYTHONHASHSEED-salted (non-reproducible run-to-run); see
             # workbench/balance.py's _seed() docstring for the same rationale.
             rng = random.Random(zlib.crc32(repr((w, armor)).encode()) % 9999)
@@ -1339,6 +1349,7 @@ def test_reach_class_beats_arming_not_inverted():
             if armor != 'heavy':
                 assert dec >= 20, (f"{w}@{armor}: only {dec} decided of {n} — too few to judge a win-share "
                                    f"band; raise n rather than trusting the ratio")
+            checked += 1      # this cell passed its decided-count judgement (the floor off-plate; heavy is judged on the share below)
             # [ED-PC-0038] dec == 0 at heavy is not a failure — it is the STRONGEST form of the property below
             # ("a pure point cannot decide against plate"), and it became reachable once penetration was gated on
             # armour-defeat CAPABILITY rather than raw magnitude: a spear now lands 0 damage through a harness, so it
@@ -1350,6 +1361,8 @@ def test_reach_class_beats_arming_not_inverted():
                 continue
             share[(w, armor)] = wins / dec
             decided[(w, armor)] = dec / n
+    # every (weapon, tier) cell was swept: the per-cell asserts above are all conditional on the tier and on dec
+    assert checked and checked >= len(_REACH_WEAPONS) * len(_REACH_ARMOURS), checked
     # (1) reach dominates every NON-plate tier for the DEDICATED reach weapons — the reach advantage vs flesh/cloth/mail
     #     is real. (spear/yari long point + poleaxe percussion; guisarme handled separately below.)
     #     [ED-PC-0027, 2026-07-23] the mode-aware heft correction (a thrust no longer carries the swing moment — the
