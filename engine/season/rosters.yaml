@@ -1436,16 +1436,18 @@ rosters:
     values: [plain, routine, demanding, hard]
 
   obstacle_terms:
-    source: "B05.14 (`proposals/U5c_SC_one_obstacle_form.md` §1, §2; 29_DICE Item 29-4 step 4): the members the obstacle is composed of, the first three of them"
+    source: "B05.14, B05.15 (`proposals/U5c_SC_one_obstacle_form.md` §1, §2; 29_DICE Item 29-4 step 4): the members the obstacle is composed of, the first four of them"
     note: >-
       THE TERMS OF THE SOCIAL ROLL'S OBSTACLE, IN COMPOSITION ORDER (`roll.py::obstacle` sums them, then the room's and the
       document's lane A steps, then the ceiling and the floor). `even` -- the pool's even line, `MU_PER_DIE x pool_add`
       (`sigma_leverage.even_line`); `difficulty` -- the act's own, its level's size (`Fixtures.difficulty_ob`); `opposition` -- the
       one acted against, `opposed_ob(opposing attribute + skill score, opposition_rate)`, or the untrained score where no person
-      is opposite (never absent). Every member stands AGAINST the act and is never negative. A member lands with its host
+      is opposite (never absent); `capability` -- a circumstance that punishes a want, the sum over the `circumstance` rows of
+      `tables: capability_uses` for the act's site whose `when` holds, each its held value times its `gain` (B05.15; no row ships,
+      so it stands at 0). Every member stands AGAINST the act and is never negative. A member lands with its host
       function in `sigma.OBSTACLE_TERMS` and no other code; later members are those the verb lanes add (OBS §2's table).
     ordered: true
-    values: [even, difficulty, opposition]
+    values: [even, difficulty, opposition, capability]
 
   lifepaths:
     source: >-

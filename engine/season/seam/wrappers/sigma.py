@@ -148,9 +148,12 @@ CAPABILITY = "capability"          # the roster member (`rosters.yaml: advantage
 _UNKNOWN = object()                # a value the believer cannot read: `believed_input` answers `None`, never a guess
 
 
-def _edge_rows() -> tuple:
-    """The `social_roll` site's `edge` rows, in table order (none ship; a planted or authored row is read here)."""
-    return tuple(r for r in capability_rows(SOCIAL_ROLL_SITE) if r.role == EDGE)
+CIRCUMSTANCE = "circumstance"      # the role whose rows the obstacle's member `capability` reads (B05.15), selected and read as `edge`'s are
+
+
+def _site_rows(role: str) -> tuple:
+    """The `social_roll` site's rows of `role` (`edge`, `circumstance`), in table order (none ship; a planted or authored row is read here)."""
+    return tuple(r for r in capability_rows(SOCIAL_ROLL_SITE) if r.role == role)
 
 
 def _edge_key(row: Any, verb: str):
@@ -181,20 +184,20 @@ def _held_at(person: Any, row: Any, key: str, verb: str):
 
 
 def _edge_side(row: Any) -> str:
-    """The side an `edge` row reads: the roller's (`actor`) or the person he acts on (`subject`). `each` is a fight's word."""
+    """The side an `edge` or `circumstance` row reads: the roller's (`actor`) or the person he acts on (`subject`). `each` is a fight's word."""
     if row.side not in ("actor", "subject"):
-        raise Unspecified(f"an `edge` row at the social roll has side {row.side!r}", "rosters.yaml -- tables: capability_uses",
+        raise Unspecified(f"a `{row.role}` row at the social roll has side {row.side!r}", "rosters.yaml -- tables: capability_uses",
                           needs="`side: actor` or `side: subject`", law="U1 §3 item 3 -- a roll with one roller and one subject reads those two sheets")
     return row.side
 
 
-def _edge_reads(verb: str, actor: Any, subject_read) -> Any:
-    """`((row, key, value), ...)`: the `edge` rows this act brings, in table order, each with the value its side holds, a row whose
+def _edge_reads(verb: str, actor: Any, subject_read, role: str = EDGE) -> Any:
+    """`((row, key, value), ...)`: the rows of `role` (`edge`; `circumstance`, B05.15) this act brings, in table order, each with the value its side holds, a row whose
     `when` fails for that holder left out (`rosters.when_holds`, the one comparison). `subject_read(row, key)` answers the subject's
     side: `(holder, value)`, `None` where there is no one to read (not a person, or himself: nobody opposes himself), or `_UNKNOWN`
     (the believer holds no claim), which makes the whole answer `_UNKNOWN`."""
     out = []
-    for row in _edge_rows():
+    for row in _site_rows(role):
         key = _edge_key(row, verb)
         if key is None:
             continue
@@ -249,6 +252,13 @@ def _capability_levels(fx: Any, operands: dict) -> tuple:
         for_.extend(f)
         against.extend(a)
     return for_, against
+
+
+def _circumstance_ob(fx: Any, row: Any, value: Any) -> float:
+    """What one selected `circumstance` row adds to the obstacle: the value its side holds times the row's `gain` (a fixture, successes per
+    point held). A value not held (`None`) is 0: a circumstance punishes a want of nothing the holder lacks to count. The loader refuses a
+    negative gain (A-25, B04.05), so a row never lowers the obstacle; the module refuses a negative term all the same."""
+    return float(value or 0) * float(fx.get(row.gain))
 
 
 # THE ADVANTAGE CHANNEL'S BINDING: each member of `rosters.yaml: advantage_sources` -> the function that
@@ -346,10 +356,13 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     # THE `capability` SOURCE'S ROWS (B05.10): each `edge` row of the site whose `when` holds, with the value its side holds. A subject
     # who is the actor, or is no person, is read for nothing (nobody opposes himself).
     other = w.persons.get(subject) if subject and subject != claimants[0] else None
-    edge = _edge_reads(verb, actor, lambda row, key: None if other is None else (other, _held_at(other, row, key, verb)))
-    inp = _frame(fx, pool, opposition, doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb, edge)
+    subject_read = lambda row, key: None if other is None else (other, _held_at(other, row, key, verb))
+    edge = _edge_reads(verb, actor, subject_read)
+    circumstance = _edge_reads(verb, actor, subject_read, CIRCUMSTANCE)         # the `capability` obstacle term's rows (B05.15)
+    inp = _frame(fx, pool, opposition, doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb, edge, circumstance)
     read = {"dice": score(w, actor, verb) if "dice" in roles else None, "opposes": opposition}
     chosen = {id(r): (value, levels_to_net_sigma(*_edge_levels(r, key, value))) for r, key, value in edge}
+    chosen.update({id(r): (value, _circumstance_ob(fx, r, value)) for r, key, value in circumstance})
     return inp, tuple((r, *chosen[id(r)]) if id(r) in chosen else (r, read[r.role], None)
                       for r in capability_rows(SOCIAL_ROLL_SITE) if id(r) in chosen or r.role in read)
 
@@ -415,16 +428,26 @@ def _opposition_term(fx: Any, facts: dict) -> dict:
     return {"opposition": facts["opposition"], "pool_default": untrained(fx), "opposition_rate": fx.get("opposition_rate")}
 
 
+def _capability_term(fx: Any, facts: dict) -> dict:
+    """`capability`: a circumstance that punishes a want (MAP §G edit 6; OBS §2 member 9): ONE function over the table's rows for the act's
+    operands -- the `circumstance` rows of the act's site whose `when` holds (`facts["circumstance"]`, chosen and read by the input
+    builders as the `edge` rows are), each its held value times its gain (`_circumstance_ob`), summed. ONE operand `("capability", sum,
+    1.0)`, always, so the member stands in the module's terms at 0.0 where no row applies (the shipped case). [ASSUMPTION: the
+    (raw, step) split -- the sum is the raw operand and the step is 1.0, the gain being already inside each row's term]"""
+    return {"obstacle_operands": (("capability", sum(_circumstance_ob(fx, r, v) for r, _, v in facts.get("circumstance", ())), 1.0),)}
+
+
 #: Each member of `rosters.yaml: obstacle_terms` -> the ONE function that reads it: `fn(fixtures, facts) -> {record field: value}`. A member
 #: that is a raw operand times a step returns `{"obstacle_operands": ((name, raw, step),)}` instead. Refused at import, both ways.
-OBSTACLE_TERMS = _bound_to({"even": _even_term, "difficulty": _difficulty_term, "opposition": _opposition_term}, "obstacle_terms")
+OBSTACLE_TERMS = _bound_to({"even": _even_term, "difficulty": _difficulty_term, "opposition": _opposition_term,
+                            "capability": _capability_term}, "obstacle_terms")
 
 
 def obstacle_operands(fx: Any, facts: dict) -> dict:
     """THE OBSTACLE'S FIELDS OF THE RECORD, every roster member's function asked in roster order: `difficulty`, `pool_default`,
     `pool_add`, `opposition`, `opposition_rate` and `obstacle_operands` (the `(name, raw, step)` triples of the members that are an
-    operand times a step, in roster order). `facts` is what the act is: its `verb` and the `opposition` its builder read (`None`
-    for nobody). `contest_input` and `believed_input` reach it through `_frame` alone, so they cannot compose different obstacles."""
+    operand times a step, in roster order). `facts` is what the act is: its `verb`, the `opposition` its builder read (`None`
+    for nobody) and the `circumstance` rows it selected and read. `contest_input` and `believed_input` reach it through `_frame` alone, so they cannot compose different obstacles."""
     fields: dict = {}
     operands: list = []
     for name, read in OBSTACLE_TERMS.items():
@@ -435,7 +458,7 @@ def obstacle_operands(fx: Any, facts: dict) -> dict:
 
 
 def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: float,
-           room_terms: dict, effort: int, verb: str, edge: tuple = ()) -> SocialContestInput:
+           room_terms: dict, effort: int, verb: str, edge: tuple = (), circumstance: tuple = ()) -> SocialContestInput:
     """THE RECORD, FILLED THE ONE WAY: what `contest_input` (the true input) and `believed_input` (a
     person's) both hand the module. They differ in where the pool's opposition, the forgery quality
     and the room terms COME FROM; the fixtures and the record's shape are this
@@ -448,7 +471,8 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
         ceiling_per_pool=fx.get("ceiling_per_pool"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
         leverage=advantage_sigma(fx, {EFFORT: effort, EDGE: edge}),      # the one place the operands are named
-        forgery_quality=forgery_quality, **obstacle_operands(fx, {"verb": verb, "opposition": opposition}), **room_terms)
+        forgery_quality=forgery_quality, **obstacle_operands(fx, {"verb": verb, "opposition": opposition, "circumstance": circumstance}),
+        **room_terms)
 
 
 # ---------------------------------------------------------------------------------------------
@@ -541,7 +565,8 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
         said = believed_capability(p, subject, key)
         return _UNKNOWN if said is None else (SimpleNamespace(capability={row.key: said}), said)
     edge = _edge_reads(verb, p, believed_subject)
-    if edge is _UNKNOWN:
+    circumstance = _edge_reads(verb, p, believed_subject, CIRCUMSTANCE)
+    if edge is _UNKNOWN or circumstance is _UNKNOWN:
         return None
     room_terms = {}
     if heard:
@@ -549,7 +574,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
             return None
         room_terms = dict(reception=room["reception"], reception_gain=fx.get("reception_gain"),
                           proofs=room["proofs"], proof_step=fx.get("proof_step"))
-    return _frame(fx, pool if "dice" in roles else 0, opposition, 0.0, room_terms, effort, verb, edge)
+    return _frame(fx, pool if "dice" in roles else 0, opposition, 0.0, room_terms, effort, verb, edge, circumstance)
 
 
 def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:

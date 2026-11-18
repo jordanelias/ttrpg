@@ -49,7 +49,8 @@ ROLLED = ("tell", "lie", "argue", "speak", "determine", "arrest", "interrogate",
 
 def _inp(**kw) -> SocialContestInput:
     base = dict(pool=4, opposition=None, obstacle_ceiling=None, obstacle_refusal_multiple=2.0, leverage=0.0,
-                difficulty=1.0, pool_default=2, pool_add=0, opposition_rate=0.5, ceiling_per_pool=False)
+                difficulty=1.0, pool_default=2, pool_add=0, opposition_rate=0.5, ceiling_per_pool=False,
+                obstacle_operands=(("capability", 0.0, 1.0),))        # what the host always carries (B05.15): the member, at 0 where no row applies
     base.update(kw)
     return SocialContestInput(**base)
 
@@ -266,3 +267,57 @@ def test_the_opposing_attribute_joins_the_skill_score_in_the_opposition():
         read[label] = sigma.contest_input(w, ["p_low"], verb=verb, subject="p_other").opposition
     assert read == {"lo": 3 + default, "hi": 6 + default, "skilled": 3 + 5, "unheld": default + default}, read
     assert pool.opposing_attribute(w.fixtures, w.persons["p_other"], verb) == default           # the reader: untrained where unheld
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# member `capability`: a hostile circumstance reaches the obstacle as data (B05.15; MAP §G edits 6, 7 and its falsifier; OBS §2 member 9)
+# ---------------------------------------------------------------------------------------------------------------------
+
+def _plant_circumstance(monkeypatch, key, *, when=None, side="actor", gain="reception_gain"):
+    """Rebind `capability_uses()` to the shipped rows plus one `circumstance` row on the social roll's site, loaded by the real loader."""
+    from .test_u1_capability_surface import _rebound
+    row = dict(use=sigma.SOCIAL_ROLL_SITE, role="circumstance", key=key, side=side, gain=gain)
+    if when is not None:
+        row["when"] = when
+    _rebound(monkeypatch, lambda rows: rows.append(row))
+
+
+def test_a_circumstance_row_raises_the_obstacle_by_its_gain(monkeypatch):
+    """MAP's falsifier, copied: a `circumstance` row with a gain of 0.25 on an attribute the actor holds at 4, on the uncapped arm
+    (`obstacle_ceiling` None): the composed obstacle rises by exactly 1.0, and `fed_by` names the row. On the shipped arm the rise is
+    clipped at the pool's cap, as a hostile room's is. No `circumstance` row ships, so the control is the same act with the table as shipped.
+    FALSIFIER: a roster member with no row-reading function adds 0.0 whatever the table says; a row that needed Python to take effect
+    would show here as a rise of 0.0."""
+    attribute = descriptors.attribute_key("grace")
+    outcomes = {}
+    for arm, ceiling, gain in (("uncapped", None, 0.25), ("shipped", DEFAULT_FIXTURES.get("obstacle_ceiling"), 1.0)):   # the shipped arm's gain overshoots its cap
+        w = _world(reception_gain=gain, obstacle_ceiling=ceiling)
+        w.persons["p_low"].attributes = {attribute: 4}
+        before = _module().obstacle(sigma.contest_input(w, ["p_low"], verb="tell", subject="site_harbour"))
+        assert dict(before[1])["capability"] == 0.0, before                              # CONTROL: nothing ships, the member stands at 0
+        with monkeypatch.context() as m:
+            _plant_circumstance(m, attribute)
+            inp = sigma.contest_input(w, ["p_low"], verb="tell", subject="site_harbour")
+            after = _module().obstacle(inp)
+            out = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="tell", subject="site_harbour", rng=random.Random(0))
+        assert dict(after[1])["capability"] == 4 * gain, (arm, after)                    # 4 held x the gain, one operand (name, raw, 1.0)
+        assert sum(v for _, v in after[1]) == after[0], after
+        named = [f for f in out["fed_by"] if f[1] == "circumstance"]
+        assert named == [(sigma.SOCIAL_ROLL_SITE, "circumstance", attribute, "actor", 4, 4 * gain)], out["fed_by"]    # `fed_by` names the row
+        outcomes[arm] = (before[0], after[0], dict(after[1]))
+    low, high, terms = outcomes["uncapped"]
+    assert high - low == 1.0 and "ceiling" not in terms, outcomes                       # exactly the gain's worth, nothing clipped
+    low, high, terms = outcomes["shipped"]
+    assert high - low < 4.0 and terms["capability"] == 4.0 and terms["ceiling"] < 0, outcomes   # the cap bites: the rise is clipped, as a room's is
+
+
+def test_a_circumstance_row_whose_when_fails_adds_nothing(monkeypatch):
+    """The row's `when` selects it (`rosters.when_holds`): `rank_at_least` on the row's own skill, read on the holder the row's side names.
+    The actor holds `copying` at 3 over a bar of 2 (the row applies: 3 x 0.25) and at 1 under it (the row is left out)."""
+    w = _world(reception_gain=0.25, obstacle_ceiling=None)
+    _plant_circumstance(monkeypatch, "copying", when=dict(rank_at_least=2))
+    read = {}
+    for rank in (3, 1):
+        w.persons["p_low"].capability = {"copying": rank}
+        read[rank] = dict(_module().obstacle(sigma.contest_input(w, ["p_low"], verb="tell", subject="site_harbour"))[1])["capability"]
+    assert read == {3: 0.75, 1: 0.0}, read
