@@ -251,7 +251,7 @@ def governing_mean(scores) -> float:
         raise ValueError(f"governing_mean takes one to three attribute scores, got {n}")
     if any(s < 0 for s in scores):
         raise ValueError(f"governing_mean takes no negative score, got {scores}")
-    # [canonical: proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-13-verb-governing-attributes.md §0 (ED-IN-0379): the tenth, taken as 20 half-tenths a point]
+    # [canonical: ED-IN-0379 (Jordan, 2026-11-13; the ledger row is ratified): the tenth, taken as 20 half-tenths a point]
     return (20 * sum(scores) + n) // (2 * n) / 10
 
 

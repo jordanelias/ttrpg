@@ -448,7 +448,7 @@ def test_the_new_members_are_unlisted_at_the_control_and_the_roster_binds_them()
     """T13 commit 1, `obstacle_terms` members 3, 5, 7 at their places (`standard` after `opposition`, `stakes` and `regard` before `reception`),
     each with ONE host function. At the shipped control no rolled verb's term list shows any of them, so the terms every Event carries are
     what they were. FALSIFIER: a member in the roster with no function (refused at import), or a zero entry listed per act."""
-    assert ROSTER[0] == "even" and "capability" in ROSTER, ROSTER
+    assert ROSTER[:3] == ("even", "difficulty", "opposition") and "capability" in ROSTER, ROSTER   # the three the module composes first (`roll.py::obstacle`)
     assert tuple(sigma.OBSTACLE_TERMS) == ROSTER
     w = _world()
     checked = 0

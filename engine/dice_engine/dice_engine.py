@@ -143,7 +143,7 @@ class RollResult:
 # Canonical die rule (params/core.md §Die Rule, PP-246):
 #   1 = -1 success, 2-6 = 0, 7-9 = +1 success, 10 = +2 successes. No chain.
 # The d10's faces and what each scores. THE face rule; `_die_result` reads it and nothing else spells it.
-# [canonical: params/core.md §Die Rule, PP-246 -- 1 scores -1, 2-6 score 0, 7-9 score +1, 10 scores +2]
+# [canonical: PP-246 -- 1 scores -1, 2-6 score 0, 7-9 score +1, 10 scores +2]
 FACE_NET = {1: -1, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 1, 8: 1, 9: 1, 10: 2}
 
 

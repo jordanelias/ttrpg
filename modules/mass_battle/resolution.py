@@ -2,7 +2,7 @@
 sigma, the sigma dust snap. The degree ladder, the soft cap and the net boost are the dice engine's, called from
 the orchestration. Depends on config + percell."""
 import contextlib, contextvars
-from engine.dice_engine.sigma_leverage import net_boost, roll_net_continuous  # the one sampler (A-5); the module's first `engine` import
+from engine.dice_engine.sigma_leverage import net_boost, roll_net_continuous  # the one sampler (A-5)
 from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
 from modules.mass_battle.config import *
 from modules.mass_battle.percell import *
