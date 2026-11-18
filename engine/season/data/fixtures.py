@@ -21,7 +21,7 @@ from typing import Any
 from engine.dice_engine.dice_engine import MU_PER_DIE
 
 from ..gaps import Forbidden, Ungraded
-from .rosters import ARMY_VERBS, roster, roster_map, table
+from .rosters import ARMY_VERBS, DIFFICULTY_LEVELS, roster, roster_map, table
 
 class Fixtures:
     """S42.2.1: never invent a constant. Inject it, declare it a harness fixture at
@@ -211,7 +211,7 @@ WORKS_COST = _load_works_cost()
 # [ASSUMPTION: the arm switch's form (a second module table beside the one Fixtures setting, not a second Fixtures key) -- basis: T13 edit 1 "two
 # arms: `control` ... and `half`, shipped `control` in commit 1"; B05.14 shipped the control values. Jordan to correct; revert: none needed.]
 # [JUSTIFIED: engine/season/hole_register.yaml H-424 -- the table's sweep names the control arm (0 / 1 / 2 / 3), so this arm is a point of that sweep]
-DIFFICULTY_OB_CONTROL = dict(zip(roster("difficulty_levels", ordered=True), (0, 1, 2, 3)))
+DIFFICULTY_OB_CONTROL = dict(zip(DIFFICULTY_LEVELS, (0, 1, 2, 3)))
 
 # [JUSTIFIED: engine/season/hole_register.yaml H-06 -- `site: Fixtures condition_scale`, graded `assumption`; the mechanism is sourced and the magnitude is injected here and swept]
 _CONDITION_SCALE = 1000            # `H-06`'s value, named once so `wound_step` is derived from the fixture's own scale and not typed beside it
@@ -1132,7 +1132,7 @@ DEFAULT_FIXTURES = Fixtures(
     # `proposals/2026-11-12-subsystem-audit-suite/proposals/2026-11-15-social-contest-redesign-v2_part4.md` §H item 1 (A-137); the other levels
     # its multiples, the smallest change that keeps C2 green. revert: `DIFFICULTY_OB_CONTROL`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-424 -- site: Fixtures difficulty_ob, graded `assumption`; no document derives the size of a level, so it is injected and swept]
-    difficulty_ob=dict(zip(roster("difficulty_levels", ordered=True), (0, 0.8, 1.6, 2.4))),   # `H-424`, swept control (`DIFFICULTY_OB_CONTROL`) / half / three-quarter / calibrated (SHIPPED)
+    difficulty_ob=dict(zip(DIFFICULTY_LEVELS, (0, 0.8, 1.6, 2.4))),   # `H-424`, swept control (`DIFFICULTY_OB_CONTROL`) / half / three-quarter / calibrated (SHIPPED)
     # `H-426` (B05.21; T13 edit 1, T3). HOW FAR A HEARER'S HOSTILITY MOVES THE OBSTACLE, per full clamp: the obstacle term `regard` is
     # `regard_step x clamp(-stance / STANCE_MAX, 0, 1)` over the stance rows the counterparty holds toward the actor (`person_q.stance_toward`,
     # `data/cast.py::STANCE_MAX`), for one person counterparty and no audience (`sigma.py::_regard_term`); the favourable half of the same clamp is
@@ -1163,7 +1163,7 @@ def load() -> None:
     It lives here and not in `rosters.py` because this module imports `rosters` (the other way would close an import cycle)."""
     from .rosters import check_capability_fixtures
     check_capability_fixtures(dict(DEFAULT_FIXTURES._v))
-    levels, sized = tuple(roster("difficulty_levels", ordered=True)), tuple(DEFAULT_FIXTURES.get("difficulty_ob"))
+    levels, sized = DIFFICULTY_LEVELS, tuple(DEFAULT_FIXTURES.get("difficulty_ob"))
     if sized != levels:
         raise Forbidden(f"`Fixtures difficulty_ob` sizes {list(sized)}, and `rosters.yaml: difficulty_levels` names {list(levels)}", "data/fixtures.py",
                         needs="one size per difficulty level, in the roster's order",

@@ -136,7 +136,7 @@ def faculty(w: Any, p: Any, verb: str) -> float:
     ⚠ `08 §3` GIVES THE POLARITY: an `assumption` grade means *inject the default, declare the site,
     sweep three points* -- never refuse the whole corpus for a missing key. `absent` is the grade
     that refuses, and this is not one."""
-    add, floor = _pool_pair(w)
+    add, floor = pool_pair(w.fixtures)
     return pool_of(governing_score(w, p, verb) + rank(p, verb), addends_of(w, p, verb), add, floor)
 
 
@@ -144,19 +144,18 @@ def faculty(w: Any, p: Any, verb: str) -> float:
 _DICE_SITE = require_use_site("social_roll")
 
 
-def pool_pair(fx: Any) -> tuple:
-    """`(pool_add, pool_floor)` as the `social_roll` site's `dice` row names them (`add:`, `floor:`: Fixture NAMES, read from `fx`),
+#: The fight's own `dice` row names the same pair (`rosters.yaml: capability_uses`); `combat.py::combat_input` reads it through `pool_pair`.
+FIGHT_DICE_SITE = require_use_site("fight")
+
+
+def pool_pair(fx: Any, site: str = _DICE_SITE) -> tuple:
+    """`(pool_add, pool_floor)` as `site`'s (the `social_roll` site's, unless given) `dice` row names them (`add:`, `floor:`: Fixture NAMES, read from `fx`),
     so swapping the names in the row swaps what the pool reads, with no code edit. A row naming neither (or no `dice` row) reads
-    `(0, 0)`: the control, where the pool is `governing score + rank + addends`. Read by `faculty` (through `_pool_pair`) and, for the
+    `(0, 0)`: the control, where the pool is `governing score + rank + addends`. Read by `faculty` and, for the
     obstacle's `even` term, by `sigma.py::OBSTACLE_TERMS` -- the base that makes the pool is the base whose line the obstacle starts at."""
-    row = next((r for r in capability_rows(_DICE_SITE) if r.role == "dice"), None)
+    row = next((r for r in capability_rows(site) if r.role == "dice"), None)
     return (0 if row is None or row.add is None else fx.get(row.add),
             0 if row is None or row.floor is None else fx.get(row.floor))
-
-
-def _pool_pair(w: Any) -> tuple:
-    """`pool_pair` over `w.fixtures`."""
-    return pool_pair(w.fixtures)
 
 
 def addends_of(w: Any, p: Any, verb: str) -> int:

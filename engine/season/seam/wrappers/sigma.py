@@ -355,14 +355,22 @@ def _wound_levels(fx: Any, operands: dict) -> tuple:
 # list of level names. THE ROSTER IS
 # THE CLOSED SET AND THIS IS ITS BINDING: refused at import if the two disagree, so a member with no function
 # (it would silently add nothing) and a function with no member (it would silently never run) are both loud.
-ADVANTAGE_SOURCES = {EFFORT: _effort_levels, CAPABILITY: _capability_levels, "proofs": _proof_levels, "favour": _favour_levels, OFFICE: _office_levels,
-                     WOUNDS: _wound_levels}
-if set(ADVANTAGE_SOURCES) != set(roster("advantage_sources")):
-    raise Unspecified(
-        f"`advantage_sources` members {sorted(roster('advantage_sources'))} and "
-        f"`ADVANTAGE_SOURCES` functions {sorted(ADVANTAGE_SOURCES)} differ", "rosters.yaml",
-        needs="a function for every member and a member for every function",
-        law="CP-T01-05 -- the roster is the only door into the social roll's sigma term")
+def _bound_to(binding: dict, roster_name: str, law: str = "OBS §1 -- the roster is the closed set and the binding is its only reader") -> dict:
+    """`binding` (member -> host function) checked against `rosters.yaml: <roster_name>`, both ways: a member
+    with no function would silently add nothing, a function with no member would silently never run. Returns the binding in the
+    roster's order."""
+    members = roster(roster_name, ordered=True)
+    if set(binding) != set(members):
+        raise Unspecified(
+            f"`{roster_name}` members {list(members)} and their host functions {sorted(binding)} differ", "rosters.yaml",
+            needs="a function for every member and a member for every function",
+            law=law)
+    return {name: binding[name] for name in members}
+
+
+ADVANTAGE_SOURCES = _bound_to({EFFORT: _effort_levels, CAPABILITY: _capability_levels, "proofs": _proof_levels, "favour": _favour_levels,
+                               OFFICE: _office_levels, WOUNDS: _wound_levels}, "advantage_sources",
+                              law="CP-T01-05 -- the roster is the only door into the social roll's sigma term")
 
 
 def advantage_levels(fx: Any, operands: dict) -> tuple:
@@ -519,17 +527,6 @@ def _fed_by(reads: tuple, inp: SocialContestInput, terms: tuple) -> tuple:
 # ---------------------------------------------------------------------------------------------
 # THE OBSTACLE'S OPERANDS (B05.14; OBS §1): each member of `rosters.yaml: obstacle_terms` is read by ONE host function.
 # ---------------------------------------------------------------------------------------------
-def _bound_to(binding: dict, roster_name: str) -> dict:
-    """`binding` (member -> host function) checked against `rosters.yaml: <roster_name>`, both ways, as `ADVANTAGE_SOURCES` is: a member
-    with no function would silently add nothing, a function with no member would silently never run. Returns the binding in the
-    roster's order."""
-    members = roster(roster_name, ordered=True)
-    if set(binding) != set(members):
-        raise Unspecified(
-            f"`{roster_name}` members {list(members)} and their host functions {sorted(binding)} differ", "rosters.yaml",
-            needs="a function for every member and a member for every function",
-            law="OBS §1 -- the roster is the closed set and the binding is its only reader")
-    return {name: binding[name] for name in members}
 
 
 def _even_term(fx: Any, facts: dict) -> dict:

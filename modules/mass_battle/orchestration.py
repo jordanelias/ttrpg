@@ -52,7 +52,7 @@
 
 import math
 from engine.dice_engine.dice_engine import degree_label  # the one degree ladder (A-5); the field grades nothing of its own
-from engine.dice_engine.sigma_leverage import net_boost, roll_net_continuous  # the one mu-shift (soft cap included), the pool as it is
+from engine.dice_engine.sigma_leverage import roll_net_continuous  # the one sampler; the mu-shift is `resolution._net_boost` (soft cap included, the pool as it is)
 from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
 
 # [canonical: designs/provincial/mass_battle_v30.md §map — 25×25 grid, 5-cell buffer per side]
@@ -1050,11 +1050,11 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                 # one boost reads the same pool (a dead atom's net is forced to 0 below regardless, same as the integer path).
                 _apr = a_pool_raw if not a_dead else 0.0
                 _bpr = b_pool_raw if not b_dead else 0.0
-                a_net = roll_net_continuous(_apr, rng=rngsource.get()) + net_boost(_snap_sigma(ns_a), _apr)
-                b_net = roll_net_continuous(_bpr, rng=rngsource.get()) + net_boost(_snap_sigma(ns_b), _bpr)
+                a_net = roll_net_continuous(_apr, rng=rngsource.get()) + _net_boost(ns_a, _apr)
+                b_net = roll_net_continuous(_bpr, rng=rngsource.get()) + _net_boost(ns_b, _bpr)
             else:
-                a_net = roll_pool(a_pool) + net_boost(_snap_sigma(ns_a), a_pool)
-                b_net = roll_pool(b_pool) + net_boost(_snap_sigma(ns_b), b_pool)
+                a_net = roll_pool(a_pool) + _net_boost(ns_a, a_pool)
+                b_net = roll_pool(b_pool) + _net_boost(ns_b, b_pool)
         else:
             # === LEGACY POOL-MODIFIER PATH (baseline; advantages modify the pool) ===
             # [ED-MB-0018] octagon = damage multiplier under MB_OCTAGON_DMG -> not a pool penalty here

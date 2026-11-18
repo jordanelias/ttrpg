@@ -37,7 +37,7 @@ from .requires import (
     TypedRequires, build_typed_requires,
 )
 from .rosters import (
-    COVERT_KINDS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STRIFE_KINDS,
     is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
@@ -55,7 +55,8 @@ ELIGIBILITY_KINDS = roster("eligibility_kinds")
 NO_PRECONDITION = ("—", "-", "")
 
 # Loader invariant 9's roster: the prizes `contest_subsystems` claims, read once at load.
-_CONTEST_PRIZES = frozenset(roster_map("contest_subsystems", "prizes"))
+_PRIZES = roster_map("contest_subsystems", "prizes")
+_CONTEST_PRIZES = frozenset(_PRIZES)
 
 BENEFICIARY_KINDS = roster("beneficiary_kinds")
 # ⚠ WHICH BENEFICIARY KINDS NEED A CELL TO BIND -- READ FROM THE ROSTER, NEVER LISTED HERE.
@@ -572,7 +573,6 @@ def _record_subkinds_answered(row: "VerbRow") -> frozenset:
 #: The authorisers of a brute verb (B05.24) and the ways a prize's module reads a person (B05.25): rosters, not lists here.
 BRUTE_KINDS = roster("brute_kinds")
 PERSON_INPUTS = roster("person_inputs_kinds")
-DIFFICULTY_LEVELS = roster("difficulty_levels", ordered=True)
 
 #: The provider name the social roll's prize rows and inquiry routes carry (`rosters.yaml: contest_subsystems`,
 #: `graded_inquiries`; `seam/wrappers/sigma.py::_PROVIDER`).
@@ -903,7 +903,7 @@ def _load_verb_table() -> dict:
         # B05.14 (SC-B Edit A; D-U1-04): THE `difficulty:` COLUMN, REQUIRED ON A ROW THE SOCIAL ROLL DEALS AND ON NO OTHER -- the shape of
         # `capability:` above. A rolled row with no level (the roll would have no difficulty to compose), a level outside
         # `rosters.yaml: difficulty_levels`, and a level on a row nothing rolls (a column nothing reads) are each refused, naming the row.
-        if social_rolled(name, row, roster_map("contest_subsystems", "prizes")):
+        if social_rolled(name, row, _PRIZES):
             if row.difficulty is None:
                 raise SystemExit(
                     f"verb_table.yaml: {name!r} is dealt by the social roll and declares no `difficulty:`. Name the level of the act "
@@ -1229,7 +1229,7 @@ def _load_verb_table() -> dict:
                 f"write_matrix.yaml ({kind}, {fld}) declares `unproduced:` and a verb writes it. "
                 "04 §B.13 #2 -- the declaration is stale; delete it.")
     # B05.25: EVERY ROW IS ONE OF THREE KINDS (`_check_governing_attributes`).
-    _check_governing_attributes(out, roster_map("contest_subsystems", "prizes"))
+    _check_governing_attributes(out, _PRIZES)
     return out
 
 
@@ -1984,7 +1984,7 @@ OPPOSED_WITHOUT_PRIZE = _load_opposed_without_prize(roster("opposed_without_priz
 def social_roll_verbs() -> frozenset:
     """THE VERBS THE SOCIAL ROLL DEALS: the rows `social_rolled` says it deals (a `contests:` prize the `social_contest`
     provider resolves, a `graded_inquiries` route to it). Read off the rows and the two rosters, no verb named."""
-    prizes = roster_map("contest_subsystems", "prizes")
+    prizes = _PRIZES
     return frozenset(v for v, r in VERB_TABLE.items() if social_rolled(v, r, prizes))
 
 

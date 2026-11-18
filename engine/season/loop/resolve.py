@@ -35,6 +35,7 @@ from ..queries.person_q import (broken_by, confided_outside, conviction_after_cr
                                  elements_violated_by)
 from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
 from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
+from ..seam.ladder import is_margin_result
 from ..state.carriers import Act, Event, StateChange, effort_of, subject_of
 from ..state.gate import Change, NoOpReceipt, NotYours, Subject, Token, seat_hold
 from ..state.containment import edges_of
@@ -322,7 +323,7 @@ def _margin_ending(resolution: "Resolution | None") -> tuple:
     `net`/`ob` pair is the margin), and where the result lacks a source the tuple names (a result a test planted, no dice dealt).
     `margin` is the result's real margin (today's key `settled_margin`: `net - ob`, quantised once at the ladder)."""
     r = resolution.result if resolution is not None else None
-    if not isinstance(r, dict) or "wound_state" in r or "attacker_wins" in r or "net" not in r or "ob" not in r:
+    if not is_margin_result(r):
         return ()
     src = tuple("settled_margin" if k == "margin" else k for k in MARGIN_ENDING)
     return tuple(zip(MARGIN_ENDING, (r[k] for k in src))) if all(k in r for k in src) else ()

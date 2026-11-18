@@ -45,11 +45,10 @@ from typing import Any
 
 from . import files
 from .rosters import (
-    DEGREE_BANDS, GENRES, INTERPOSITION_KINDS, PROOFS, REMIT_ACTS, RUNG_KINDS,
+    DEGREE_BANDS, DIFFICULTY_LEVELS, GENRES, INTERPOSITION_KINDS, PROOFS, REMIT_ACTS, RUNG_KINDS,
     TENURE_KINDS, load_yaml, roster,
 )
 
-DIFFICULTY_LEVELS = roster("difficulty_levels", ordered=True)     # the levels a row's `standard:` names (the roster `verbs.py::DIFFICULTY_LEVELS` also reads)
 
 ARRANGEMENTS_YAML = files.ARRANGEMENTS_YAML
 

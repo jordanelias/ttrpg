@@ -92,8 +92,8 @@ from ...state.ids import H
 from ..ladder import party_degree
 from ._entry import entry_for
 from ._estimate import rng_of, samples_of
-from .pool import addends_of, score
-from .sigma import WOUNDS, advantage_levels
+from .pool import FIGHT_DICE_SITE, addends_of, pool_pair, score
+from .sigma import ADVANTAGE_SOURCES, WOUNDS
 
 _END_KEY = attribute_key("Endurance")      # the registry key of `end` (`descriptors`, the one owner), not a typed literal
 assert _END_KEY, "descriptors names no Endurance attribute: party_end would read the default for every person"
@@ -158,9 +158,8 @@ def _carried_of(person: Any, fx: Any) -> float:
     against his own rolls). The one-member read: `effort`, `capability` and the room's sources bring nothing to a fight [ASSUMPTION; basis: the source's
     "from the `wounds` advantage source ... computed host-side by the one reader"]. `0.0` where `wound_level` is None (the source's control) or he has lost
     less than one `wound_step`. The size is the season's own `wound_level`, never a constant of the module's."""
-    by_source = {name: against for name, _for, against in
-                 advantage_levels(fx, {"body": person.body, "body_ceiling": person.body_ceiling})}
-    return float(levels_to_net_sigma([], by_source[WOUNDS]))
+    _for, against = ADVANTAGE_SOURCES[WOUNDS](fx, {"body": person.body, "body_ceiling": person.body_ceiling})
+    return float(levels_to_net_sigma([], against))
 
 
 def party_end(person: Any, fx: Any) -> int:
@@ -258,6 +257,7 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
     a_id, b_id = claimants[0], claimants[1]
     terms = duel_terms_of(verb, stakes_of(w, record))
     pa, pb = w.persons[a_id], w.persons[b_id]
+    pool_add, pool_floor = pool_pair(w.fixtures, FIGHT_DICE_SITE)      # the fight row's `dice` names the two fixtures, as the social roll's does
     return PersonalCombatInput(
         claimants=(a_id, b_id),
         ends=(party_end(pa, w.fixtures), party_end(pb, w.fixtures)),
@@ -265,7 +265,7 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
         kits=(kit_of(w, a_id), kit_of(w, b_id)),
         scores=(_fight_score(w, pa, verb), _fight_score(w, pb, verb)),
         addends=(addends_of(w, pa, verb), addends_of(w, pb, verb)),
-        pool_add=w.fixtures.get("pool_add"), pool_floor=w.fixtures.get("pool_floor"),
+        pool_add=pool_add, pool_floor=pool_floor,
         carried=(_carried_of(pa, w.fixtures), _carried_of(pb, w.fixtures)) if _carried_level_model(w.fixtures) else (0.0, 0.0),   # B05.61: `level` only
         opposition_rate=None,               # None until 29-3 (B15): the fixture is live for the social roll since B05; the fight flips with its scale (A-71, A-31)
         **({} if terms is None else dict(terms=terms)),

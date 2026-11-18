@@ -61,8 +61,9 @@ def _chance_floor_cap(pool: float, ceiling: float) -> Optional[float]:
 
     The chance falls strictly as Ob rises, so the cap is found by bisection on `band_odds` (the one closed form);
     pure; cached on its two operands."""
+    boost = net_boost(-M_MAX, pool)
     def chance(ob: float) -> float:
-        return 1.0 - band_odds(pool, ob, net_boost(-M_MAX, pool))[0]
+        return 1.0 - band_odds(pool, ob, boost)[0]
     floor = 1.0 - band_odds(1, ceiling, net_boost(-M_MAX, 1))[0]
     if floor <= 0.0:
         return None
@@ -71,10 +72,10 @@ def _chance_floor_cap(pool: float, ceiling: float) -> Optional[float]:
     lo, hi = 0.0, float(ceiling) + 2.0 * pool + 10.0           # chance(lo) > floor >= chance(hi)
     for _ in range(200):
         mid = (lo + hi) / 2.0
-        if chance(mid) >= floor:
-            lo = mid
-        else:
-            hi = mid
+        nlo, nhi = (mid, hi) if chance(mid) >= floor else (lo, mid)
+        if (nlo, nhi) == (lo, hi):
+            break                                              # adjacent doubles: the state is a fixed point, so the 200th step returns this `lo`
+        lo, hi = nlo, nhi
     return lo
 
 

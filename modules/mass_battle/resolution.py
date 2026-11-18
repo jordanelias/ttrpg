@@ -1,13 +1,13 @@
 """modules.mass_battle.resolution — sigma-leverage head: pool roll (the one sampler's draw), morale/charge-shock
 sigma, the sigma dust snap. The degree ladder, the soft cap and the net boost are the dice engine's, called from
 the orchestration. Depends on config + percell."""
-import contextlib, contextvars, math
-from engine.dice_engine.sigma_leverage import roll_net_continuous  # the one sampler (A-5); the module's first `engine` import
+import contextlib, contextvars
+from engine.dice_engine.sigma_leverage import net_boost, roll_net_continuous  # the one sampler (A-5); the module's first `engine` import
 from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
 from modules.mass_battle.config import *
 from modules.mass_battle.percell import *
 
-__all__ = ['roll_pool', '_morale_sigma', '_charge_shock_sigma', '_snap_sigma', '_unit_braced', '_subunit_braced', '_wall_prep', '_disc_prep', '_depth_prep', 'trace_event', 'tracing', 'tracing_on']
+__all__ = ['roll_pool', '_morale_sigma', '_charge_shock_sigma', '_snap_sigma', '_net_boost', '_unit_braced', '_subunit_braced', '_wall_prep', '_disc_prep', '_depth_prep', 'trace_event', 'tracing', 'tracing_on']
 
 # ─── passive mechanical-trace collector ─────────────────────────────────────
 # Observe-only. Records per-mechanic internals (melee contest, volley, per-tick markers) inside a
@@ -145,3 +145,11 @@ def _snap_sigma(net_sigma):
     """`net_sigma`, or exactly 0.0 where it is arithmetic dust (`_SIGMA_ZERO_SNAP`): the field's producers' value as it
     reaches `sigma_leverage.net_boost`."""
     return 0.0 if abs(net_sigma) < _SIGMA_ZERO_SNAP else net_sigma
+
+
+def _net_boost(net_sigma, pool):
+    """THE CHOKEPOINT the snap above is made at (B05 close): `sigma_leverage.net_boost` of `_snap_sigma(net_sigma)`, so a caller cannot reach the
+    boost without the snap. A sigma that snaps to zero is no boost at all and skips the `tanh` and `sqrt` (what the deleted `_sigma_net_boost`
+    short-circuited): `net_boost(0.0, pool)` is `0.0` for any finite pool."""
+    snapped = _snap_sigma(net_sigma)
+    return 0.0 if snapped == 0.0 else net_boost(snapped, pool)
