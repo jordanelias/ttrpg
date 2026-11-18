@@ -21,7 +21,7 @@ Geometric parameters (all 0..1 unless noted):
   strike_concentration   broad face (mace flat / staff end) = 0 ... beak/pick = 1   (percussion focus; blunt heads)
   head_len, grip_len  absolute lengths in METRES (U0/ED-PC-0002; already used by the lever-arm module)
 """
-from math import tanh
+from engine.dice_engine.fmath import tanh   # one owner per transcendental (B06.02)
 
 # ---- derivations (pure) ----
 

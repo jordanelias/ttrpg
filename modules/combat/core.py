@@ -7,7 +7,7 @@ at 1e-9 — engine/tests/test_sigma_leverage_parity.py); the engine's own combat
 combatant.py. The RNG contract: `rng` is a stdlib random.Random (rng.gauss). The continuous engine's distribution
 is Normal(mu*N, sigma*sqrt(N)), same per-die TN table."""
 import functools
-from math import tanh, exp
+from engine.dice_engine.fmath import tanh, exp   # one owner per transcendental (B06.02)
 from engine.dice_engine import sigma_leverage as SL
 from engine.dice_engine import dice_engine as DE   # THE degree ladder's owner (degree() below routes through it)
 from . import vocabulary as V   # the token ALPHABET (ED-PC-0042) — a zero-import leaf, so weapon_physics and

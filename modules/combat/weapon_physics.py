@@ -28,6 +28,7 @@ fit in the re-baseline, not asserted.
 """
 import math
 
+from engine.dice_engine import fmath
 from engine.dice_engine.fmath import ltr_sum
 from . import vocabulary as V  # the engine's token ALPHABET, owned once (ED-PC-0042). A zero-import leaf, so this
                          # module -- which CANNOT import core (core imports IT: `import weapon_physics as WP`) -- still reaches the
@@ -428,7 +429,7 @@ def percussion_authority(w, grip=0.0, room=1.0, sel_head=None, sel_pc=None):
         return reversed_grip_percussion(w, grip=grip, room=room)
     m_strike, x_strike, _ = delivered_strike(w)
     lever = strike_point_lever(w, m_strike, x_strike)
-    base = min(PERC_CAP, PERC_SCALE * (math.sqrt(m_strike) * lever * energy_credit(w)) ** PERC_EXP)
+    base = min(PERC_CAP, PERC_SCALE * fmath.powf(math.sqrt(m_strike) * lever * energy_credit(w), PERC_EXP))
     return base * phi_grip(w, grip, V.HEAD_BLUNT, sel_pc) * phi_room_percussion(room)
 
 
@@ -463,7 +464,7 @@ def percussion_element_authority(w, elem_mass, elem_x, grip=0.0, room=1.0):
     See tests/valoria/test_combat_element_reachability.py."""
     m_total = delivered_strike(w)[2]
     lever = strike_point_lever(w, m_total, elem_x)     # == (STRIKE_HAND_LEVER + |x|) / (STRIKE_HAND_LEVER + Lt)
-    base = min(PERC_CAP, PERC_SCALE * (math.sqrt(max(0.0, elem_mass)) * lever * energy_credit(w)) ** PERC_EXP)
+    base = min(PERC_CAP, PERC_SCALE * fmath.powf(math.sqrt(max(0.0, elem_mass)) * lever * energy_credit(w), PERC_EXP))
     return base * phi_grip(w, grip, V.HEAD_BLUNT, None) * phi_room_percussion(room)
 
 
@@ -545,7 +546,7 @@ def _guard_catch_raw(w, proximity):
     weighted (hand_guard's own-hand coverage). Pure."""
     total = 0.0
     for g in w.get('guards', ()):
-        wgt = math.exp(-abs(g['x_m']) / GUARD_HAND_SCALE) if proximity else 1.0
+        wgt = fmath.exp(-abs(g['x_m']) / GUARD_HAND_SCALE) if proximity else 1.0
         total += g['extent_m'] * wgt
     return total
 
@@ -554,14 +555,14 @@ def hand_guard(w):
     weighted), scaled by hilt complexity (a swept/basket hilt covers the hand far more than a plain cross of the
     same bar length). In [0,1). A bare haft (spear, staff, mace — no guards) -> 0. Pure."""
     hm = HILT_CATCH_MULT.get(w.get('hilt', V.HILT_NONE), 1.0)
-    return math.tanh(GUARD_HAND_K * hm * _guard_catch_raw(w, proximity=True))
+    return fmath.tanh(GUARD_HAND_K * hm * _guard_catch_raw(w, proximity=True))
 
 def blade_guard(w):
     """Bind-catch capability, DERIVED: a saturating function of ALL located catching surfaces (guards AND
     dual-role catching elements — hooks/prongs/tines/lugs), position-independent (a bind can land anywhere along
     a long polearm's reach, not just at the hand), scaled by hilt complexity. In [0,1). Pure."""
     hm = HILT_CATCH_MULT.get(w.get('hilt', V.HILT_NONE), 1.0)
-    return math.tanh(GUARD_BLADE_K * hm * _guard_catch_raw(w, proximity=False))
+    return fmath.tanh(GUARD_BLADE_K * hm * _guard_catch_raw(w, proximity=False))
 
 
 # ════════════════════ STAGE 3c — DISTRACTION: adornment motion degrades the defender's read (Phase B5) ════════════
@@ -577,7 +578,7 @@ def distraction(w):
     """Saturating sum over the weapon's adornments (count × extent, position-independent — any motion near the
     weapon draws the eye). In [0,1); 0 for the (typical) weapon with no adornments field. Pure."""
     total = ltr_sum(a.get('count', 1) * a.get('extent_m', 0.0) for a in w.get('adornments', ()))
-    return math.tanh(DISTRACT_K * total)
+    return fmath.tanh(DISTRACT_K * total)
 
 
 # ════════════════════ STAGE 3d — EDGE VIBRATION: a wavy/serrated edge degrades the OPPONENT's tactile read (Phase B5) ═
@@ -597,14 +598,14 @@ def facing_pref(w):
     with a mild reach saturation (a longer weapon commits its regime harder). No weapon name. Pure. Wired multiplicative
     into systems.facing_target (FACING_REGIME_K, K=0 -> inert/byte-identical until the U9 recalibration)."""
     sign = 1.0 if w['hands'] == 1 else -1.0
-    return sign * (0.85 + 0.15 * math.tanh(2.0 * w['head_len']))
+    return sign * (0.85 + 0.15 * fmath.tanh(2.0 * w['head_len']))
 
 def edge_vibration(w):
     """The weapon's peak edge-undulation intensity — the MAX amplitude across its located elements (the most
     extreme undulating segment dominates the tactile signature felt by an opponent bound against it). In [0,1);
     0 for the (typical) plain-edged weapon. Pure."""
     amp = max((e.get('edge_undulation', {}).get('amplitude_mm', 0.0) for e in w.get('elements', ())), default=0.0)
-    return math.tanh(VIBRATION_K * amp)
+    return fmath.tanh(VIBRATION_K * amp)
 
 
 # ════════════════════ U3 — EDGE-COUNT PRIMITIVE: per-element edges={sides∈{0,1,2}, false_edge_frac} (ED-PC-0018) ═

@@ -70,6 +70,7 @@ import argparse
 import dataclasses
 import importlib
 import math
+from engine.dice_engine import fmath
 import sys
 from collections import Counter, namedtuple
 from typing import Callable, Optional
@@ -221,7 +222,7 @@ def curve(acc: dict, width: float, min_bin: int, carried: Callable[[Counter], in
                        if sxx > 0 else None)
     out["range"] = max(r["y"] for r in rows) - min(r["y"] for r in rows)
     out["sd"] = math.sqrt(sum(r["n"] * (r["y"] - ybar) ** 2 for r in rows) / total)
-    out["monotone"] = None if len(rows) < 2 else all(r["y"] >= l["y"] - 2 * math.hypot(r["se"], l["se"]) for l, r in zip(rows, rows[1:]))
+    out["monotone"] = None if len(rows) < 2 else all(r["y"] >= l["y"] - 2 * fmath.hypot(r["se"], l["se"]) for l, r in zip(rows, rows[1:]))
     out["dominant"] = max(((v / r["n"], r["x"], k) for r in rows for k, v in r["counts"].items()),
                           key=lambda t: (t[0], -t[1], t[2]))
     return out
