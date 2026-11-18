@@ -3655,7 +3655,7 @@
     {
       "key": "engine.season.settings.ceiling_form",
       "name": "ceiling_form",
-      "value": "soft",
+      "value": "hard",
       "kind": "other",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",

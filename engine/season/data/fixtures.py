@@ -383,11 +383,12 @@ DEFAULT_FIXTURES = Fixtures(
     # `None` the uncapped one (both still swept).
     # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- `site: Fixtures ceiling_per_pool`, graded `assumption`; the chance it holds is not a new number (band_odds(1, obstacle_ceiling)'s Partial-or-better, 10 %), swept True / False]
     ceiling_per_pool=True,
-    # B05.53/B05.55: THE CEILING'S FORM -- how the obstacle behaves once it passes its ceiling. `soft` bends the excess toward the
-    # per-pool bound (SHIPPED at B05.55); `hard` is the flat bound, the control and the revert (set it back to `hard`). `soft_late`
-    # (knee at cap - 1) is a third arm named in the source and NOT built (the code reads two forms).
-    # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- the same hole: how hard one matter can get; `site: Fixtures ceiling_form`, graded `assumption`; swept hard (control) / soft (SHIPPED, B05.55)]
-    ceiling_form="soft",
+    # B05.53/B05.55: THE CEILING'S FORM -- how the obstacle behaves once it passes its ceiling. `hard` is the flat bound (the control,
+    # SHIPPED); `soft` bends the excess toward the per-pool bound. B05.55's flip to `soft` is HELD: at `soft` no `difficulty_ob` ladder
+    # lands the calibration targets C1 and C3 together (H-430, measured), so `hard` stays shipped. `soft_late` (knee at cap - 1) is a
+    # third arm named in the source and NOT built (the code reads two forms).
+    # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- the same hole: how hard one matter can get; `site: Fixtures ceiling_form`, graded `assumption`; swept hard (control, SHIPPED) / soft (held, H-430)]
+    ceiling_form="hard",
     # CP-T01-05: THE NAMED LEVEL ONE SLOT OF `effort` IS WORTH (`sigma_leverage.LEVEL_SIGMA`: minor / moderate /
     # strong / major). An act carrying `effort` e contributes e of these to the social roll's sigma term through
     # `rosters.yaml: advantage_sources` (a mu-shift, `net_boost`), and fills `1 + e` scene slots. The magnitude is

@@ -57,9 +57,10 @@ LANE_A_STEPS = ("forgery",)                        # outside the roster (U-6); l
 BOUNDS = ("ceiling", "floor")
 SHIPPED_TABLE = V.VERB_TABLE_YAML                 # read at import, before any test re-points the loader
 ROLLED = ("tell", "lie", "argue", "speak", "determine", "arrest", "interrogate", "research", "examine", "surveil")
-#: The control arm, pinned (B05.23 ships the calibrated one): the settings T13 commit 2 and OBS §4 step 5 flipped, each at its control.
+#: The control arm, pinned (B05.23 ships the calibrated one): the settings T13 commit 2 and OBS §4 step 5 flipped, each at its control, and
+#: the ceiling's form at its control (`hard`, B05.53), so the arm reads the flat bound whatever form ships (H-213, H-430).
 CONTROL_ARM = dict(pool_add=0, pool_floor=0, opposition_rate=0.5, attribute_level=None, difficulty_ob=DIFFICULTY_OB_CONTROL, regard_step=0,
-                   proof_admission="off")
+                   proof_admission="off", ceiling_form="hard")
 
 
 def _inp(**kw) -> SocialContestInput:
