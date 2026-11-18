@@ -143,6 +143,7 @@ class RollResult:
 # Canonical die rule (params/core.md §Die Rule, PP-246):
 #   1 = -1 success, 2-6 = 0, 7-9 = +1 success, 10 = +2 successes. No chain.
 # The d10's faces and what each scores. THE face rule; `_die_result` reads it and nothing else spells it.
+# [canonical: params/core.md §Die Rule, PP-246 -- 1 scores -1, 2-6 score 0, 7-9 score +1, 10 scores +2]
 FACE_NET = {1: -1, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 1, 8: 1, 9: 1, 10: 2}
 
 
@@ -152,7 +153,9 @@ def _die_result(face: int) -> int:
 
 # Where the bands fall, as margins: Partial from 0, Success from 1, Overwhelming from 3, held in the
 # ladder's integer milli-units (W3-1, C3-L1: the margin is quantised once, round(MARGIN_SCALE * margin)).
+# [JUSTIFIED: a unit of account, not a game magnitude -- the margin is quantised once to integer milli-units (C3-L1) so no float sum a rounding error under an edge reads as on it; the bands below are the whole-success edges 0 / 1 / 3 of the degree ladder in `degree_from_net`'s docstring (Jordan ruling, 2026-08-14)]
 MARGIN_SCALE = 1000
+# [canonical: Jordan ruling 2026-08-14, the degree ladder -- margin >= 3 Overwhelming, >= 1 Success, >= 0 Partial, in milli-units of MARGIN_SCALE]
 BAND_FLOORS = {"partial": 0, "success": 1000, "overwhelming": 3000}
 
 
@@ -169,8 +172,9 @@ MU_PER_DIE = 0.40      # [canonical: params/core.md §Expected Value, TN 7]
 SIGMA_PER_DIE = 0.800  # [canonical: params/core.md §Expected Value, TN 7]
 _MU_PER_DIE: float = MU_PER_DIE
 _SIGMA_PER_DIE: float = SIGMA_PER_DIE
-assert abs(MU_PER_DIE - sum(FACE_NET.values()) / 10) < 1e-12 and \
-       abs(SIGMA_PER_DIE ** 2 - sum((v - MU_PER_DIE) ** 2 for v in FACE_NET.values()) / 10) < 1e-12, \
+_PAIR_TOL = 1e-12      # [JUSTIFIED: a float tolerance on the pair's equality with the face rule's own mean and variance, not a game magnitude]
+assert abs(MU_PER_DIE - sum(FACE_NET.values()) / 10) < _PAIR_TOL and \
+       abs(SIGMA_PER_DIE ** 2 - sum((v - MU_PER_DIE) ** 2 for v in FACE_NET.values()) / 10) < _PAIR_TOL, \
        "the per-die pair is the face rule's; change them together"
 
 

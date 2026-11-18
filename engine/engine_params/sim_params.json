@@ -3,13 +3,13 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 122,
-    "total": 391,
-    "uncited": 269,
+    "total": 392,
+    "uncited": 270,
     "of_which_assumption_grade": 8
   },
-  "count": 391,
+  "count": 392,
   "by_module": {
-    "engine.dice_engine": 10,
+    "engine.dice_engine": 11,
     "engine.season": 25,
     "mass_battle": 161,
     "characters": 5,
@@ -90,6 +90,17 @@
       "note": "[canonical: params/core.md §Expected Value, TN 7]",
       "citation": "params/core.md §Expected Value, TN 7",
       "citation_grade": "source"
+    },
+    {
+      "key": "engine.dice_engine._PAIR_TOL",
+      "name": "_PAIR_TOL",
+      "value": 1e-12,
+      "kind": "scalar",
+      "module": "engine.dice_engine",
+      "file": "engine/dice_engine/dice_engine.py",
+      "note": "[JUSTIFIED: a float tolerance on the pair's equality with the face rule's own mean and variance, not a game magnitude]",
+      "citation": null,
+      "citation_grade": null
     },
     {
       "key": "engine.dice_engine.LEVEL_SIGMA",

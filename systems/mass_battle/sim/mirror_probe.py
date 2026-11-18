@@ -34,6 +34,7 @@ def _body_spec():
     """The probe's own sizes: troop type, troops a side, the standard-deviation limit. A function, not module
     scalars: `tools/export_sim_params.py` reads every module-level literal under `systems/mass_battle/sim/` as a game
     constant, and none of these is one."""
+    # [JUSTIFIED: the probe's own sizes, read by nothing else -- a heavy-infantry body of 600 a side and a 1.5 standard-deviation limit make a symmetric mirror whose two sides differ only by the draw]
     return "heavy_infantry", 600.0, 1.5
 
 
@@ -55,6 +56,7 @@ def one_field(seed):
     return "drawn"
 
 
+# [JUSTIFIED: the probe's own sample count, a trial number and not a game magnitude]
 def run(n=300):
     tally = {"A": 0, "B": 0, "drawn": 0}
     for seed in range(n):
@@ -65,7 +67,7 @@ def run(n=300):
 
 
 def main(argv):
-    n = int(argv[1]) if len(argv) > 1 else 300
+    n = int(argv[1]) if len(argv) > 1 else 300   # [JUSTIFIED: the same sample count as `run`'s default]
     tally, sd = run(n)
     troop_type, troops, limit = _body_spec()
     print(f"mirror of two {troops:g}-troop {troop_type} bodies, seeds 0..{n - 1}")
