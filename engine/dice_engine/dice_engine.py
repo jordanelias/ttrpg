@@ -206,10 +206,12 @@ def roll_pool(pool_size: int, tn: int = 7, ob: int | float | None = None,
 
 def continuous_engine_sample(pool: float, tn: int = 7,
                              rng: random.Random | None = None) -> float:
-    """Sample net successes from Normal(μ·N, σ·√N) per Decision E continuous engine.
+    """The sampler every provider draws from (ED-833; Jordan, 2026-11-12). Same mean and variance as the d10
+    face rule it is derived from.
 
+    Normal(μ·N, σ·√N) per Decision E continuous engine; the pool is taken as it is for `pool > 0` (it may be
+    fractional, which enables a fractional Ob), and a pool of nothing rolls nothing.
     Canon: params/core.md §Continuous Engine — statistically equivalent to discrete.
-    Pool may be fractional (enables a fractional Ob).
     """
     _require_tn7(tn)
     if rng is None:

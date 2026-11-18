@@ -28,7 +28,7 @@ RULED, ED-SC-0037. JORDAN, 2026-09-09, VERBATIM: *"we have the sigma leverage d1
 engine to use."*
 
 The σ layer is `net_boost`, the μ-shift ED-884 / ED-934 ruled, *"base_ob untouched, Ob floor never
-breached"*; `roll_net` alone applies zero σ-leverage. The composition lives in the module
+breached"*; `roll_net_continuous` alone applies zero σ-leverage. The composition lives in the module
 (`modules/social_contest/roll.py`).
 
 THE HOST DERIVES NO OBSTACLE: it is composed by the social contest module
@@ -65,7 +65,7 @@ from dataclasses import asdict
 from typing import Any, Optional
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
-from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds, settle_record
+from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds
 from engine.substrate import composition
 
 from ...data.rosters import capability_rows, require_use_site, roster
@@ -530,7 +530,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     reaches only `contest_input`, where it becomes `leverage`; the act's draw is unchanged (one id, one draw).
 
     RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage, settled_margin, ob_terms, fed_by)   # the entry's Margin + the record
-                 # + the margin's fraction settled by the act's own draw (CP-T01-04), the integer `degree_of` grades
+                 # + the real margin `net - ob` the ladder quantises once (B05.02), the number `degree_of` grades
     REFUSED  -> dict(status, why, module, resolver, pool, ob, ob_terms, fed_by)   # S27.4: ob > obstacle_refusal_multiple x pool
     `fed_by` (B04.08): a tuple of `(use, role, key, side, value, contributed)`, one per `social_roll` row that fed the roll
     (`_fed_by`); read by no caller yet, carried on the dict and on no `Event` (D-U1-06).
@@ -587,8 +587,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     entry, refusal = entry_for(prize, _PROVIDER, module_entry)
     if entry is None:
         return refusal
-    # ONE generator for the act's whole roll: the dice (`entry.fn`) and the margin's fraction (below)
-    # draw from it. An absent `rng` is a caller that handed no generator -- an instrument defect, refused naming
+    # ONE generator for the act's whole roll: the module's draw (`entry.fn`) is the only one. An absent `rng` is a caller that handed no generator -- an instrument defect, refused naming
     # that caller, never a fresh unseeded `random.Random()` and never the process-global stream (04 §C.12: the RNG
     # is threaded, never global).
     if rng is None:
@@ -611,11 +610,10 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         return dict(status="REFUSED", why="S27.4", module=_PROVIDER,
                     resolver=_RESOLVER, pool=inp.pool, ob=margin.ob, ob_terms=ob_terms,
                     fed_by=_fed_by(reads, inp, ob_terms))
-    # CP-T01-04: the margin's fraction is settled here, AFTER the S27.4 check (a refused act draws
-    # nothing), by the act's own generator, and only when there is a fraction to settle -- a whole
-    # margin draws nothing, so the act's stream and every whole-Ob hash are unmoved. The owner derives
-    # the roll and its boost from the record's fields (`settle_record`); the host does no arithmetic.
-    settled = settle_record(margin.net, inp.leverage, inp.pool, margin.ob, rng.random)
+    # B05.02: the margin is REAL -- `net` (the one sampler's draw plus the boost) less `ob` -- and the ladder quantises
+    # it once (`degree_from_net`, `MARGIN_SCALE`). Nothing is settled here and no second draw is made: the act's stream
+    # is the module's roll alone. The record keeps the name `settled_margin` (B05.18 reads it as a real margin).
+    settled = margin.net - margin.ob
     # The margin's own fields, copied whole: the host reads the pair, it never computes one.
     return dict(status="RESOLVED", module=_PROVIDER, resolver=_RESOLVER, pool=inp.pool,
                 **asdict(margin), leverage=inp.leverage, settled_margin=settled, ob_terms=ob_terms,

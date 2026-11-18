@@ -27,13 +27,12 @@ Porting notes
 All numerical behaviour is byte-identical to m1_dice_sigma_core.py:
   • tanh via math.tanh (CPython delegates to libm, same IEEE-754 result)
   • sqrt via math.sqrt (same)
-  • roll_net / roll_net_continuous delegate to dice_engine (no new die-roll path)
+  • roll_net_continuous delegates to dice_engine (no new die-roll path)
   • PER_DIE / MU_PER_DIE / SD_PER_DIE are read from the owner dice_engine (one copy of the pair)
   • LEVEL_SIGMA / M_MAX / SIGMA_N_COEFF copied verbatim with provenance tags
 
 Functions NOT ported from m1_dice_sigma_core:
   • _phi — reproduced here from the original's math.erf path (was already stdlib)
-  • roll_net — delegates to dice_engine.roll_pool (integer net)
   • roll_net_continuous — delegates to dice_engine.continuous_engine_sample
 
 Functions added (contest surface, audit/2026-06-03-contest-groundup/engine.py):
@@ -54,19 +53,14 @@ Entry points:
   - level(name: str) -> float  (contest modifier-level → σ lookup)
   - levels_to_net_sigma(aggressor: Sequence[str] | None = None, defender: Sequence[str] | None = None) -> float
   - p_success(base_ob: float, pool: float, net_sigma: float = 0.0, tn: int = TN_STANDARD, capped: bool = True) -> float
-  - band_odds(pool: float, ob: float, boost: float = 0.0) -> (F, P, S, O)  (exact odds of the discrete roll, CP-T01-03)
-  - settle_margin(raw_net: int, boost: float, ob: float, uniform) -> int  (the fraction of a margin, CP-T01-04)
-  - record_odds(pool, ob, leverage) -> (F, P, S, O) and settle_record(net, leverage, pool, ob, uniform) -> int
-    (the same two, over a contest record's fields, so a host names no boost arithmetic)
-  - roll_net(pool: float, tn: int = TN_STANDARD, rng: random.Random | None = None) -> int
+  - band_odds(pool: float, ob: float, boost: float = 0.0) -> (F, P, S, O)  (the Normal closed form of the one sampler, graded on BAND_FLOORS)
+  - record_odds(pool, ob, leverage) -> (F, P, S, O)  (the same, over a contest record's fields, so a host names no boost arithmetic)
   - roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random | None = None) -> float
 """
 from __future__ import annotations
 
-import functools
 import math
 import random
-from fractions import Fraction
 from typing import Sequence
 
 from engine.dice_engine import dice_engine
@@ -203,7 +197,7 @@ def net_boost(net_sigma: float, pool: float, tn: int = TN_STANDARD, capped: bool
     """
     _, sigma = PER_DIE[tn]
     eff = soft_cap(net_sigma) if capped else net_sigma
-    return eff * sigma * math.sqrt(max(1, pool))    # [canonical: params/core.md §Continuous Engine]
+    return eff * sigma * math.sqrt(max(0.0, pool))  # [canonical: params/core.md §Continuous Engine] the pool as it is: one rule below one die (DOE §1 row 5)
 
 
 def opposed_ob(score: float, rate: float) -> float:
@@ -283,179 +277,84 @@ def p_success(
     breached:  shifted_mean = μ·N + net_boost ;  P = 1 - Φ((base_Ob - shifted_mean)/(σ·√N)).
     [canonical: params/core.md §Continuous Engine]
 
-    THE POOL FLOOR APPLIES TO THE MEAN AS WELL AS THE VARIANCE (Jordan, 2026-09-04: "1D is
-    floor"): flooring only the SPREAD would let the closed form drift below 1D away from the
-    sampler `roll_net_continuous` draws from, which floors both via
-    `effective_pool = max(1.0, float(pool))`. One flooring convention in the module.
-    CONTROL: `max(1.0, pool) == pool` at and above 1D, so the byte-exact parity goldens
-    (no golden row carries a sub-1D pool) prove the floor changes nothing there.
-    [canonical: params/core.md §Pool Floor (all systems)]
+    THE POOL IS TAKEN AS IT IS FOR `pool > 0` (DOE §1 row 5): mean and spread both scale with the pool, as the
+    sampler `roll_net_continuous` draws them, so the closed form and the draw are one rule at every size. This
+    is the one-band case of `band_odds` (the band edge unquantised). CONTROL: no pool below 1D reaches it from a
+    person, and at and above 1D the result is what it was, so the parity goldens (no row carries a sub-1D pool)
+    are unmoved.
     """
     mu, sigma = PER_DIE[tn]
-    effective_pool = max(1.0, float(pool))          # [canonical: params/core.md §Pool Floor (all systems)]
+    effective_pool = float(pool)
+    if effective_pool <= 0:                          # no pool rolls nothing: the net is 0 (the sampler's own)
+        return 1.0 if 0.0 >= base_ob else 0.0
     shifted_mean = mu * effective_pool + net_boost(net_sigma, effective_pool, tn, capped)
     z = (base_ob - shifted_mean) / (sigma * math.sqrt(effective_pool))   # [canonical: params/core.md §Continuous Engine]
     return 1.0 - _phi(z)
 
 
 # ---------------------------------------------------------------------------
-# Exact band odds of the DISCRETE roll (CP-T01-03)
+# Band odds of the roll (B05.02): the closed form of the one sampler
 # ---------------------------------------------------------------------------
 
-def _dice_dealt(pool: float) -> int:
-    """The whole dice a (possibly fractional) pool deals: rounded, floored at one. `roll_net` deals this many and
-    `band_odds` enumerates this many, so the odds shown are for the dice dealt: ONE rule, read by both."""
-    return max(1, int(round(pool)))     # [canonical: params/core.md §Pool Floor (all systems)]
-
-
-@functools.lru_cache(maxsize=None)
-def _net_counts(dice: int) -> tuple:
-    """How many of the 10**dice face combinations deal each net, as sorted (net, count) pairs.
-
-    The per-die net comes from the owner's face table, `dice_engine._die_result`, called once per
-    face; the d10 is `roll_pool`'s own `rng.randint(1, 10)`. The pool's net is the sum over dice, so
-    the counts are an integer convolution -- exact, and no floating error enters until the division."""
-    per_die = [dice_engine._die_result(face) for face in range(1, 11)]      # roll_pool deals 1..10
-    counts = {0: 1}
-    for _ in range(dice):
-        step: dict[int, int] = {}
-        for net, n in counts.items():
-            for r in per_die:
-                step[net + r] = step.get(net + r, 0) + n
-        counts = step
-    return tuple(sorted(counts.items()))
-
-
-def _split_margin(boost: float, ob: float) -> tuple:
-    """`(whole, fraction)` of `boost - ob`: its floor and what is left (`0.0 <= fraction < 1.0`).
-    The one place the rule's two parts are cut, read by `settle_margin` and by `band_odds`."""
-    q = boost - ob
-    whole = math.floor(q)
-    return whole, q - whole
-
-
-def settle_margin(raw_net: int, boost: float, ob: float, uniform) -> int:
-    """THE FRACTION OF A MARGIN IS WORTH ITS FRACTION (CP-T01-04): the whole margin the ladder reads.
-
-    `raw_net` is the roll's own integer net (`roll_net`), `boost` the mu-shift it was given
-    (`net_boost`), `ob` the composed obstacle, and `uniform` the act's OWN generator's `random`, a
-    zero-argument callable. With `q = boost - ob` the settled margin is
-        raw_net + floor(q) + [u < frac(q)]
-    an integer, so the ladder reads it against a zero obstacle (`degree_from_net(m, 0)`). Expected margin
-    is `raw_net + q`, unrounded: advantage stays a mu-shift in expectation, and two obstacles a fraction
-    apart (or two boosts) differ in their odds, which whole dice alone collapse.
-
-    `uniform` IS CALLED ONLY WHEN `frac(q) > 0`. A whole margin (every whole-Ob roll with no boost: the corpus,
-    and the realm but for the few draws at a capped fractional Ob, H-213) draws nothing, so the act's
-    stream, and every hash behind it, is unmoved; the rule is then the identity, `raw_net + q`. Base Ob and TN are never modified: the obstacle is only the
-    fraction's source. Pure but for that one call."""
-    whole, fraction = _split_margin(boost, ob)
-    if fraction > 0.0 and uniform() < fraction:
-        whole += 1
-    return int(raw_net) + whole
+def _at_or_above(pool: float, ob: float, boost: float, floor: int) -> float:
+    """P(the roll's margin, quantised once at the ladder, reaches `floor`): the roll is the one sampler's
+    Normal(MU_PER_DIE * pool, SIGMA_PER_DIE * sqrt(pool)) plus `boost`; the ladder reads
+    `round(MARGIN_SCALE * (net - ob))` against the integer `floor` (`dice_engine.degree_from_net`), which is the real
+    margin reaching `(floor - 0.5) / MARGIN_SCALE`. No pool at all rolls nothing: the net is the boost alone."""
+    edge = (floor - 0.5) / dice_engine.MARGIN_SCALE
+    if pool <= 0:
+        return 1.0 if boost - ob >= edge else 0.0
+    mean = dice_engine.MU_PER_DIE * pool + boost
+    sd = dice_engine.SIGMA_PER_DIE * math.sqrt(pool)
+    return 1.0 - _phi((ob + edge - mean) / sd)
 
 
 def band_odds(pool: float, ob: float, boost: float = 0.0) -> tuple:
-    """`(F, P, S, O)`: the exact chance of each of the four bands -- in the owner's order, the
-    ordinals of `dice_engine.DEGREE_ORDINAL` -- for one roll of `pool` d10s against `ob`, the roll
-    shifted by `boost`, its margin settled by `settle_margin`.
+    """`(F, P, S, O)`: the chance of each of the four bands -- in the owner's order, the ordinals of
+    `dice_engine.DEGREE_ORDINAL` -- for one roll of `pool` against `ob`, the roll shifted by `boost`.
 
-    AN ENUMERATION OF THE DEALT ROLL, NOT A MODEL OF IT. The net of the pool is enumerated over
-    `dice_engine._die_result`'s own faces; each net is settled by THE SAME RULE `settle_margin` deals
-    (`_split_margin`: the whole part with certainty, one more with probability `frac`) and graded by
-    `dice_engine.degree_from_net`, the one ladder. Neither the faces, the ladder nor the rule is copied
-    here, so a change to any of them moves this tuple with the roll (the tests swap a band edge, and
-    walk the face table through `settle_margin` itself). The boost is the mu-shift and the obstacle is
-    untouched -- never an Ob reduction.
+    THE NORMAL CLOSED FORM OF THE ONE SAMPLER (A-5; DOE §1 row 2), `dice_engine.continuous_engine_sample`: mean
+    `MU_PER_DIE * pool` plus the boost, spread `SIGMA_PER_DIE * sqrt(pool)`, the pool as it is for `pool > 0`.
+    The band edges are `dice_engine.BAND_FLOORS`, read from the owner's table in its milli-units, so a change to
+    the ladder's table moves this tuple with the roll (the test mutates it). The boost is the mu-shift and the
+    obstacle is untouched -- never an Ob reduction.
 
-    `pool` is rounded and floored as `roll_net` deals it (`max(1, int(round(pool)))` whole dice), so
-    the odds are for the dice dealt. `p_success` stays the Gaussian closed form combat reads; on these
-    dice it is up to 17 points off (17.3 at pool 1 / Ob 1, 11.6 at pool 2 / Ob 2, 7.7 at the shipped
-    ceiling's pair), which is why this exists. Pure and read-only; the result is a tuple of
-    floats (a count over 10**dice, a whole margin weighing exactly 1), so
-    `band_odds(2, 2) == (0.74, 0.19, 0.07, 0.0)` exactly."""
-    dice = _dice_dealt(pool)
-    whole, fraction = _split_margin(boost, ob)
-    pays = Fraction(fraction)                       # exact, so the four bands sum to 1 and none exceeds it
-    tally = [Fraction(0)] * 4
-    for net, n in _net_counts(dice):
-        if fraction > 0.0:
-            tally[dice_engine.DEGREE_ORDINAL[dice_engine.degree_from_net(net + whole, 0)]] += n * (1 - pays)
-            tally[dice_engine.DEGREE_ORDINAL[dice_engine.degree_from_net(net + whole + 1, 0)]] += n * pays
-        else:
-            tally[dice_engine.DEGREE_ORDINAL[dice_engine.degree_from_net(net + whole, 0)]] += n
-    total = 10 ** dice
-    return tuple(float(n / total) for n in tally)
+    A SAMPLED CLAIM, NOT AN ENUMERATION: `engine/tests/test_band_odds.py` checks it against the sampler at a stated
+    n and tolerance. Pure and read-only; the four bands sum to 1 by construction."""
+    floors = dice_engine.BAND_FLOORS
+    partial = _at_or_above(pool, ob, boost, floors["partial"])
+    success = _at_or_above(pool, ob, boost, floors["success"])
+    overwhelming = _at_or_above(pool, ob, boost, floors["overwhelming"])
+    by_band = {dice_engine.Degree.FAILURE: 1.0 - partial, dice_engine.Degree.PARTIAL: partial - success,
+               dice_engine.Degree.SUCCESS: success - overwhelming, dice_engine.Degree.OVERWHELMING: overwhelming}
+    return tuple(by_band[d] for d, _ in sorted(dice_engine.DEGREE_ORDINAL.items(), key=lambda kv: kv[1]))
 
 
 def record_odds(pool: float, ob: float, leverage: float) -> tuple:
     """`band_odds` for a contest RECORD's own fields: its pool, its composed obstacle and its leverage
     (net sigma), the boost being the roll's own `net_boost(leverage, pool)`. The host reads a record and
     names no arithmetic: the boost the roll adds is derived HERE, by the owner of `net_boost`, so the
-    odds shown are the odds of the roll dealt (`band_odds` is the one enumeration)."""
+    odds shown are the odds of the roll dealt."""
     return band_odds(pool, ob, net_boost(leverage, pool))
 
 
-def settle_record(net: float, leverage: float, pool: float, ob: float, uniform) -> int:
-    """`settle_margin` for the net an entry RETURNED: `net` is the integer roll plus the boost it was
-    given (`net_boost(leverage, pool)`), so the roll is that net less the boost, rounded back to the
-    whole it is. The host passes the record's fields and the act's `uniform`; the boost and the roll
-    are derived here, by the owner, and the fraction rule stays `settle_margin`'s alone."""
-    boost = net_boost(leverage, pool)
-    roll = net - boost
-    if abs(roll - round(roll)) > 1e-9:       # [JUSTIFIED: a float tolerance, not a mechanic: net minus boost carries ~1e-15 of error on a shipped roll, so 1e-9 sits six orders above it and far below a half]
-        raise ValueError(
-            f"settle_record: net {net!r} less the boost {boost!r} is {roll!r}, not a whole roll -- an "
-            "entry's net is its integer roll plus the boost it was given (`modules/social_contest/roll.py`)")
-    return settle_margin(round(roll), boost, ob, uniform)
-
-
 # ---------------------------------------------------------------------------
-# Rolling entry points (delegate to dice_engine — NO new die-roll path)
+# Rolling entry point (delegates to dice_engine — NO new die-roll path)
 # ---------------------------------------------------------------------------
-
-def roll_net(pool: float, tn: int = TN_STANDARD, rng: random.Random | None = None) -> int:
-    """Discrete canonical d10 engine roll, delegating to dice_engine.roll_pool.
-
-    Pool floored at 1D. [canonical: params/core.md §Die Rule (d10)]
-    This sigma_leverage wrapper exists so callers that previously imported from
-    m1_dice_sigma_core can switch to engine.dice_engine.sigma_leverage without a call-site
-    change. The authoritative implementation is dice_engine.roll_pool.
-    """
-    effective_pool = _dice_dealt(pool)
-    result = dice_engine.roll_pool(pool_size=effective_pool, tn=tn, rng=rng)
-    return result.net
-
 
 def roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random | None = None) -> float:
-    """Continuous engine sample, delegating to dice_engine.continuous_engine_sample.
+    """The sampler every provider draws from (ED-833; Jordan, 2026-11-12). Same mean and variance as the d10
+    face rule it is derived from.
 
-    Canonical for Godot; statistically equivalent to the discrete engine.
-    [canonical: params/core.md §Continuous Engine, Decision E]
+    Delegates to `dice_engine.continuous_engine_sample`, which takes the pool as it is for `pool > 0` (fractional
+    dice, Jordan 2026-08-14; below one die one rule, DOE §1 row 5: no floor at one die here) and rolls nothing
+    for a pool of nothing. Its closed form is `band_odds`.
 
-    THE POOL IS FRACTIONAL HERE (M1 juncture 1). Jordan ruled "fractional dice" on 2026-08-14: a
-    3.5-die pool is sampled as a 3.5-die pool, not rounded to 4. `dice_engine.continuous_engine_sample`
-    accepts a fractional pool (`dice_engine.py:92`), computing `mu*pool` and `sigma*sqrt(pool)`
-    with no quantisation.
-
-    THE FLOOR STAYS AT 1D and is canon, not caution — `params/core.md §Pool Floor (all systems)`.
-    What goes is the rounding, not the floor.
-
-    `roll_net` above is the DISCRETE d10 path and keeps `int(round(pool))`: whole dice are correct
-    there, because it deals actual dice rather than sampling their limit distribution.
-
-    BLAST RADIUS, because two subsystems share this entry point (§0.1 pt 4 — a number
-    without a control is not a measurement):
-      * faction strategic actions — pools are fractional, and were silently rounded before this
-        change. These MOVE.
-      * personal combat, via `modules/combat/core.py:56` — pools are integral, because
-        `core.resolution_pool()` returns `max(POOL_FLOOR, int(round(faculty)) + BASE_POOL)` and no
-        call site modifies it. `int(round(n)) == n` for integral n, so combat is value-identical
-        and its byte-exact goldens are the CONTROL: if they move, this change did something it
-        was not meant to.
+    BLAST RADIUS, because subsystems share this entry point (§0.1 pt 4 -- a number without a control is not a
+    measurement): personal combat (`modules/combat/core.py`) draws it with pools at and above its own floor, so
+    nothing moves there and its byte-exact goldens are the CONTROL; the social roll moved to it at B05.02.
     """
-    effective_pool = max(1.0, float(pool))          # [canonical: params/core.md §Pool Floor (all systems)]
-    return dice_engine.continuous_engine_sample(pool=effective_pool, tn=tn, rng=rng)
+    return dice_engine.continuous_engine_sample(pool=float(pool), tn=tn, rng=rng)
 
 
 # ---------------------------------------------------------------------------

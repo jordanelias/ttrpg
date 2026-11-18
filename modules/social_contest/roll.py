@@ -20,10 +20,10 @@ winner* (`08_SEAM.md`; a degree adapter would be the second resolver S27.2 refus
 host's record. The proceedings design's nested run (`21_RECONCILIATION.md` step 15) is not this entry either.
 
 RULED, ED-SC-0037 (Jordan, 2026-09-09): *"we have the sigma leverage d10 resolver in engine to use."*
-⚠ BOTH IMPORTS, AND THE SECOND ONE IS THE POINT: `roll_net` alone is the bare pool roll (a back-compat
-shim over `dice_engine.roll_pool` that drops its `ob`); the σ layer is `net_boost`, the μ-shift
-ED-884 / ED-934 ruled. The composition is the tree's own
-(`systems/social_contest/sim/contest/resolver.py:302`): `net = roll_net(pool) + net_boost(lev, pool)`.
+⚠ BOTH IMPORTS, AND THE SECOND ONE IS THE POINT: `roll_net_continuous` alone is the bare pool roll, the one
+sampler every provider draws from (B05.02; A-5); the σ layer is `net_boost`, the μ-shift
+ED-884 / ED-934 ruled. The composition is `net = roll_net_continuous(pool) + net_boost(lev, pool)`, a REAL
+margin that the ladder quantises once (`dice_engine.degree_from_net`, `MARGIN_SCALE`); nothing here draws a d10 face.
 
 It returns a net/ob pair as a `Margin` and NEVER a band: `seam/ladder.py` grades it by calling
 `degree_from_net`, the single owner.
@@ -40,33 +40,39 @@ import functools
 import random
 from typing import Optional
 
-from engine.dice_engine.sigma_leverage import OB_MIN, band_odds, net_boost, roll_net
+from engine.dice_engine.sigma_leverage import M_MAX, OB_MIN, band_odds, net_boost, roll_net_continuous
 from engine.season.queries.inputs import Margin, SocialContestInput
 
 
 @functools.lru_cache(maxsize=None)
 def _chance_floor_cap(pool: float, ceiling: float) -> Optional[float]:
-    """THE `chance_floor` CAP (CP-T01-06): the highest Ob at which `pool` still keeps the chance of
-    Partial-or-better that `ceiling` leaves a ONE-DIE roll -- `band_odds(1, ceiling)`'s, 10 % at the
-    shipped 2. The floor is therefore no new number: it is the fixed ceiling's own chance, and the cap
-    at one die is that ceiling itself.
+    """THE `chance_floor` CAP (CP-T01-06), SOLVED ON THE CLOSED FORM OF THE ONE SAMPLER (B05.02, DOE §1 row 3): the
+    highest Ob at which `pool` still keeps the chance of Partial-or-better that `ceiling` leaves a ONE-DIE roll
+    -- `band_odds(1, ceiling)`'s. The floor is therefore no new number: it is the fixed ceiling's own chance, and
+    the cap at one die is that ceiling itself.
 
-    Exact, not a whole step: with no boost the odds at an Ob between two whole Obs are the straight
-    line between the two whole-Ob odds (the fraction rule, `settle_margin`), so the cap is read off the
-    segment where the chance crosses the floor. The chance only falls as Ob rises and the floor is
-    above zero, so the walk from `OB_MIN` stops. Returns `None` where the floor is 0 (a ceiling at
-    which a one-die roll keeps no chance, 3 and over): there is nothing to hold. Pure; cached on its
-    two operands."""
+    SOLVED AT THE LARGEST LAWFUL DISADVANTAGE, NOT "AT NO ADVANTAGE" (closes the pessimist's P-iii (c)): both the
+    one-die floor and the pool's chance are read with the roll's boost at `net_boost(-M_MAX, pool)`, the soft
+    cap's own floor on a hostile channel, so a signed leverage channel can never carry a roll through the floor:
+    under the cap, no pool's chance of Partial-or-better at `-M_MAX` falls below the one-die chance at the
+    ceiling at `-M_MAX`. Returns `None` where the floor is 0 (a ceiling at which a one-die roll keeps no chance
+    at all): there is nothing to hold.
+
+    The chance falls strictly as Ob rises, so the cap is found by bisection on `band_odds` (the one closed form);
+    pure; cached on its two operands."""
     def chance(ob: float) -> float:
-        return 1.0 - band_odds(pool, ob)[0]
-    floor = 1.0 - band_odds(1, ceiling)[0]
+        return 1.0 - band_odds(pool, ob, net_boost(-M_MAX, pool))[0]
+    floor = 1.0 - band_odds(1, ceiling, net_boost(-M_MAX, 1))[0]
     if floor <= 0.0:
         return None
-    k = float(OB_MIN)
-    while chance(k + 1) >= floor:
-        k += 1
-    above, below = chance(k), chance(k + 1)
-    return k + (above - floor) / (above - below)
+    lo, hi = 0.0, float(ceiling) + 2.0 * pool + 10.0           # chance(lo) > floor >= chance(hi)
+    for _ in range(200):
+        mid = (lo + hi) / 2.0
+        if chance(mid) >= floor:
+            lo = mid
+        else:
+            hi = mid
+    return lo
 
 
 def obstacle(inp: SocialContestInput) -> float:
@@ -92,14 +98,12 @@ def obstacle(inp: SocialContestInput) -> float:
     nothing composes obstacles across a bundle. `None` is the uncapped control arm. THE SHIPPED ARM IS
     SOLVED PER POOL (CP-T01-06, `chance_floor`; `ceiling_per_pool`): from one die the cap is the highest
     Ob at which that pool keeps the chance of Partial-or-better the fixed ceiling leaves a one-die roll
-    (`_chance_floor_cap`; 2.0 at pool 1, 2.842 at pool 2, rising with the pool), so, AT NO ADVANTAGE, a
-    larger pool is never worse for the cap (it is an equality: each pool's chance at its own cap is the
-    same 10 %), and at the shipped ceiling (2) S27.4's `ob > multiple x pool` never holds on a derived
-    pair. With an `effort` boost the chance at each pool's own cap is NOT monotone in the pool (the
-    boost grows with the root of the pool while the cap sits where the unboosted chance is 10 %);
-    and a ceiling of 3 or more has floor 0 and falls back to the fixed ceiling, which is tighter than the
-    solved cap at ceiling 2 for pools of 3 and up (H-213). Below one
-    die the fixed ceiling applies. `ceiling_per_pool` off is the
+    (`_chance_floor_cap`, solved on the closed form of the one sampler at the largest lawful disadvantage,
+    `-M_MAX`; 2.0 at pool 1, 3.06 at pool 2, rising with the pool), so a larger pool is never worse for the
+    cap (it is an equality: each pool's chance at its own cap, at `-M_MAX`, is the one-die chance at the
+    ceiling), and at the shipped ceiling (2) S27.4's `ob > multiple x pool` never holds on a derived
+    pair. A favourable boost only raises the chance at each pool's cap above that floor. The floor is 0 only
+    where the closed form underflows to nothing. Below one die the fixed ceiling applies. `ceiling_per_pool` off is the
     fixed arm, which the sentences below describe at ceiling 2. A ceiling below
     the Ob minimum (`OB_MIN`, PP-232) is refused rather than read: it would breach the floor. Nothing floors the composed obstacle itself: a score under 2 composes
     below `OB_MIN` (score 1 gives 0.5).
@@ -111,7 +115,7 @@ def obstacle(inp: SocialContestInput) -> float:
     takes the obstacle below `OB_MIN` (or below a base already under it): it moves the obstacle, it
     does not abolish it. The ceiling still bounds the result, so under the fixed `H-213` ceiling (2,
     the same as `obstacle_default`) a hostile room cannot raise a defaulted obstacle -- stated, not
-    hidden; under the per-pool arm it can, up to that pool's cap (a pool of 2 reaches 2.842). THE FAVOURABLE HALF IS CLIPPED THE SAME WAY: the ceiling is applied after the room, so
+    hidden; under the per-pool arm it can, up to that pool's cap (a pool of 2 reaches 3.06). THE FAVOURABLE HALF IS CLIPPED THE SAME WAY: the ceiling is applied after the room, so
     against a strong opposition (base above the ceiling) a favourable room bites only where it takes
     the obstacle below the ceiling (`room > base - ceiling`); a room of +1.5 against a base of 4 under
     a ceiling of 2 changes nothing.
@@ -183,5 +187,5 @@ def roll(inp: SocialContestInput, rng: Optional[random.Random] = None) -> Margin
     `ob` is `obstacle(inp)`, this module's, and is returned so the host can grade the margin and
     apply S27.4 on the pair (`seam/wrappers/sigma.py::resolve`). The pool and leverage are the
     record's own, which the host already holds, so the margin does not carry them back."""
-    return Margin(net=roll_net(inp.pool, rng=rng) + net_boost(inp.leverage, inp.pool),
+    return Margin(net=roll_net_continuous(inp.pool, rng=rng) + net_boost(inp.leverage, inp.pool),
                   ob=obstacle(inp))

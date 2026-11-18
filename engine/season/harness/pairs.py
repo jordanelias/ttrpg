@@ -75,7 +75,6 @@ from collections import Counter, namedtuple
 from typing import Callable, Optional
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL, Degree
-from engine.dice_engine.sigma_leverage import settle_record
 from engine.substrate import composition
 from engine.substrate.descriptors import ATTRIBUTES
 
@@ -172,8 +171,7 @@ def social_pairs(seed: int, n: int, verb: str, plant: Plant = None):
         if margin.ob > inp.obstacle_refusal_multiple * max(inp.pool, 0):
             band = REFUSED
         else:
-            settled = settle_record(margin.net, inp.leverage, inp.pool, margin.ob, rng.random)
-            band = degree_of({"net": margin.net, "ob": margin.ob, "settled_margin": settled})
+            band = degree_of({"net": margin.net, "ob": margin.ob, "settled_margin": margin.net - margin.ob})
         opposition = inp.obstacle_default if inp.opposition is None else inp.opposition
         yield SocialPair(i, a, b, inp.pool - opposition, inp, band)
 

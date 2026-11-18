@@ -222,10 +222,9 @@ def degree_of(result: Any, subject: Optional[str] = None, fixtures: Any = None) 
         return field_degree(result)
     if "net" in result and "ob" in result:
         ladder, label = degree_ladder()
-        # CP-T01-04: a record carrying `settled_margin` (the provider settled the margin's fraction by
-        # the act's own draw) is graded on it, against a zero obstacle -- integers on both sides, so
-        # the ladder's no-epsilon comparison is exact. A pair without one (a planted result, a caller
-        # that never settled) is graded on `net` and `ob`.
+        # B05.02: a record carrying `settled_margin` (the provider's real margin, `net - ob`) is graded on it, against
+        # a zero obstacle; the ladder quantises it once (`MARGIN_SCALE`), so the grade is the pair's own. A pair
+        # without one (a planted result, a caller that never wrote it) is graded on `net` and `ob`.
         if "settled_margin" in result:
             return label[ladder(result["settled_margin"], 0)]
         return label[ladder(result["net"], result["ob"])]

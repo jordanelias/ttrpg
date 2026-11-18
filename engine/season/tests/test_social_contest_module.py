@@ -40,14 +40,14 @@ loaded = sorted(os.path.relpath(m.__file__, {root!r}) for n, m in list(sys.modul
                 if n not in before and getattr(m, "__file__", None)
                 and os.path.abspath(m.__file__).startswith({root!r} + os.sep))
 from engine.season.queries.inputs import Margin, SocialContestInput
-from engine.dice_engine.sigma_leverage import net_boost, roll_net
+from engine.dice_engine.sigma_leverage import net_boost, roll_net_continuous
 out = []
 for lev in (0.0, 1.5):
     inp = SocialContestInput(pool=4, opposition=None, obstacle_default=2.0, obstacle_ceiling=3.0,
                              obstacle_refusal_multiple=3.0, leverage=lev)
     got = entry(inp, random.Random(7))
     again = entry(inp, random.Random(7))
-    want = roll_net(4, rng=random.Random(7)) + net_boost(lev, 4)
+    want = roll_net_continuous(4, rng=random.Random(7)) + net_boost(lev, 4)
     out.append((type(got) is Margin, dict(net=got.net, ob=got.ob), again == got, want))
 print(repr((loaded, out)))
 """
@@ -76,8 +76,8 @@ def test_the_social_contest_entry_resolves_a_hand_built_record_importing_only_th
             assert is_margin, f"{role} returned something other than a `Margin`: {got}"
             assert got["ob"] == 2.0, got
             assert got["net"] == want, (
-                f"{role}: net {got['net']} is not the tree's composition roll_net(pool) + "
-                f"net_boost(lev, pool) = {want} (ED-SC-0037)")
+                f"{role}: net {got['net']} is not the tree's composition roll_net_continuous(pool) + "
+                f"net_boost(lev, pool) = {want} (ED-SC-0037, B05.02)")
             assert deterministic, f"{role}: the same seed gave two results"
             checked += 1
     assert checked >= 2, checked
@@ -127,3 +127,38 @@ def test_the_obstacle_is_reached_by_its_own_composition_row(monkeypatch):
         inp = SocialContestInput(pool=pool, opposition=opposition, obstacle_default=2.0, obstacle_ceiling=3.0,
                                  obstacle_refusal_multiple=3.0, leverage=0.0)
         assert sigma._composed_obstacle(inp) == 7.0
+
+
+def test_no_d10_face_in_social_contest():
+    """DOE §1 gate (1), for `modules/social_contest` and the season loop: a graded act outside combat draws no d10 face.
+    Two arms, each able to observe the failure it excludes: (a) the source of the module and of `engine/season/`
+    (tests excepted) holds no d10-face draw (a `randint` over 1..10); (b) the entry run with a generator whose every integer draw RAISES
+    still returns the sampler's margin -- only `gauss` is drawn, and the draw is the one sampler's."""
+    import random
+    import re
+    from pathlib import Path
+    from engine.dice_engine.sigma_leverage import net_boost, roll_net_continuous
+    from engine.season.data import files
+    from engine.season.queries.inputs import SocialContestInput
+    from .test_sc01_obstacle_ceiling import _module
+
+    root = Path(files.REPO_ROOT)
+    scanned = 0
+    for base in (root / "modules" / "social_contest", root / "engine" / "season"):
+        for path in base.rglob("*.py"):
+            if "tests" in path.relative_to(root).parts:
+                continue
+            scanned += 1
+            assert not re.search(r"randint\(\s*1\s*,\s*10\s*\)", path.read_text(encoding="utf-8")), path
+    assert scanned >= 20, scanned
+
+    class _NoFaces(random.Random):
+        def randint(self, a, b):
+            raise AssertionError("a d10 face was drawn in the social roll")
+        randrange = randint
+
+    for pool, lev in ((4, 0.0), (8, 1.5), (0.5, 0.0)):
+        inp = SocialContestInput(pool=pool, opposition=None, obstacle_default=2.0, obstacle_ceiling=3.0,
+                                 obstacle_refusal_multiple=3.0, leverage=lev)
+        got = _module().roll(inp, _NoFaces(7))
+        assert got.net == roll_net_continuous(pool, rng=random.Random(7)) + net_boost(lev, pool), (pool, lev, got)

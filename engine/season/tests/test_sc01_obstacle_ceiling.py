@@ -18,9 +18,15 @@ PHASE 0 result): at the 1D pool floor against the maximum plausible composed obs
 non-Failure band must not be effectively zero. "EFFECTIVELY ZERO" is named here, not left to a reader:
 `EFFECTIVELY_ZERO = 0.001`, because the reconciliation's own table calls its Ob-3 row (0.0006) the
 point where the floor "reaches zero". The quantity is `1 - F` of `sigma_leverage.band_odds(1, ob)` with
-`ob = obstacle(record)` for a requested obstacle of 4..11 (`opposition = 2 x Ob`), checked against the
-EXACT discrete count of non-Failure bands at 1D through the real module entry and the real ladder (each
-of the ten d10 faces forced in turn).
+`ob = obstacle(record)` for a requested obstacle of 4..11 (`opposition = 2 x Ob`), checked at B05.02 against
+`HITS_N` seeded rolls of the real module entry graded by the real ladder (the one sampler, A-5; it was the
+exact count of the ten d10 faces forced in turn until the faces left the social roll).
+
+RE-MEASURED AT B05.02 (the one sampler): `band_odds` is the Normal closed form of the sampler the roll draws,
+so the figures below return to the Gaussian column of the CP-T01-03 table (0.226627 / 0.02275 / 0.000577 /
+3e-06 at ceilings 1 / 2 / 3 / None, 1D, Ob = the ceiling): the verdicts are unchanged (the control and the
+ceiling-3 arm fail M-7, the shipped arm clears it). The figures further down this docstring are the whole-dice
+ones and are history.
 
 RE-MEASURED AT CP-T01-03 (B10-08): the instrument moved from `p_success`, the Gaussian closed form
 (up to 17 points wrong on these dice: 17.3 at the ceiling-1 pair, 7.7 at the shipped one), to
@@ -51,6 +57,7 @@ THE FALSIFIERS (each seen red before the build, 2026-10-16: the record had no `o
 from __future__ import annotations
 
 import importlib
+import math
 import random
 from dataclasses import asdict, fields
 
@@ -69,7 +76,7 @@ from ..seam import ladder
 from ..seam.wrappers import sigma
 
 EFFECTIVELY_ZERO = 0.001
-FLOOR = 1                       # the 1D pool floor (`sigma_leverage.roll_net`, `p_success`)
+FLOOR = 1                       # the 1D pool (the one-die roll M-7 is read at)
 M7_OBS = range(4, 12)           # requested obstacles 4..11 (11: the reconciliation's own pool sweep)
 FAILURE = DEGREE_LABEL[Degree.FAILURE]
 ROW = "H-213"
@@ -91,22 +98,14 @@ def _record(opposition, ceiling, *, pool=FLOOR, leverage=0.0):
         leverage=leverage)
 
 
-class _Face:
-    """An rng whose d10 always shows `face` -- so the ten faces of a 1D roll can be enumerated
-    EXACTLY through the real entry (`roll_net` -> `dice_engine.roll_pool` -> `rng.randint`)."""
-
-    def __init__(self, face):
-        self.face = face
-
-    def randint(self, a, b):
-        assert (a, b) == (1, 10), (a, b)
-        return self.face
+HITS_N = 4000                   # seeded rolls per record in `_hits`
 
 
-def _discrete_hits(mod, rec) -> int:
-    """How many of the ten 1D faces the real entry + the real ladder grade above Failure (the
+def _hits(mod, rec) -> int:
+    """How many of `HITS_N` seeded rolls of the real entry the real ladder grades above Failure (the
     `Margin` graded as the host grades it, as its `net`/`ob` pair)."""
-    return sum(ladder.degree_of(asdict(mod.roll(rec, _Face(f)))) != FAILURE for f in range(1, 11))
+    rng = random.Random(7)
+    return sum(ladder.degree_of(asdict(mod.roll(rec, rng))) != FAILURE for _ in range(HITS_N))
 
 
 def _clear(pool, ob, boost=0.0) -> float:
@@ -120,10 +119,11 @@ def _m7(mod, ceiling) -> dict:
     for ob in M7_OBS:
         rec = _record(2 * ob, ceiling)
         eff = mod.obstacle(rec)
-        hits = _discrete_hits(mod, rec)
+        hits = _hits(mod, rec)
         out[ob] = (eff, _clear(FLOOR, eff), hits)
-        # the instrument is the dealt dice: its chance IS the forced-face count over the ten faces
-        assert abs(out[ob][1] - hits / 10) < 1e-12, (ceiling, ob, out[ob])
+        # the instrument is the dealt roll: its chance is the sampled rate, to four standard errors
+        chance = out[ob][1]
+        assert abs(chance - hits / HITS_N) <= 4 * math.sqrt(chance * (1 - chance) / HITS_N) + 1e-9, (ceiling, ob, out[ob])
     return out
 
 
@@ -140,13 +140,13 @@ def test_m7_at_the_1d_floor_clears_ob_4_and_above_under_the_ceiling_and_fails_wi
         # the reconciliation's measurement, reproduced through the owner rather than cited.
         assert eff0 == ob, (ob, eff0)
         assert p0 < EFFECTIVELY_ZERO and hits0 == 0, (
-            f"control arm: Ob {ob} at 1D gave chance {p0:.6f} and {hits0}/10 faces -- M-7 "
+            f"control arm: Ob {ob} at 1D gave chance {p0:.6f} and {hits0}/{HITS_N} rolls -- M-7 "
             f"should FAIL without a ceiling; if it passes, the instrument cannot see the failure")
         # THE CLAIM: the ceiling bounds the obstacle, and the floor-pool speaker keeps a chance.
         assert eff1 == shipped, (ob, eff1)
         assert p1 >= EFFECTIVELY_ZERO and hits1 >= 1, (
-            f"Ob {ob} at the 1D floor under ceiling {shipped}: chance {p1:.6f}, {hits1}/10 "
-            f"faces -- M-7 still fails (`EFFECTIVELY_ZERO` = {EFFECTIVELY_ZERO})")
+            f"Ob {ob} at the 1D floor under ceiling {shipped}: chance {p1:.6f}, {hits1}/{HITS_N} "
+            f"rolls -- M-7 still fails (`EFFECTIVELY_ZERO` = {EFFECTIVELY_ZERO})")
         checked += 1
     assert checked == len(M7_OBS)
     # CONTROL 2: an obstacle BELOW the ceiling is untouched -- the ceiling bounds, it does not shift.
@@ -158,8 +158,8 @@ def test_m7_at_the_1d_floor_clears_ob_4_and_above_under_the_ceiling_and_fails_wi
     for lv, s in LEVEL_SIGMA.items():
         boost = net_boost(s, FLOOR)
         assert _clear(FLOOR, 4, boost) < EFFECTIVELY_ZERO, (lv, _clear(FLOOR, 4, boost))
-        # under the ceiling, buying advantage RAISES the chance at the floor, strictly (the fraction rule
-        # makes a boost under one success worth its fraction: 0.1 + 0.3 * b at pool 1, Ob 2) ...
+        # under the ceiling, buying advantage RAISES the chance at the floor, strictly (a boost is a mu-shift of
+        # the one sampler, worth its shift at every size) ...
         assert boost > 0 and _clear(FLOOR, shipped, boost) > _clear(FLOOR, shipped, 0.0), lv
     # ... and no level clears a whole success at pool 1, while pool 4's major level does.
     assert max(net_boost(s, FLOOR) for s in LEVEL_SIGMA.values()) < 1.0
@@ -266,13 +266,15 @@ def test_changing_the_ceiling_changes_the_outcome():
 # ---------------------------------------------------------------------------------------------
 # Below one die the fixed value applies as it always did. From one die, the composed obstacle is
 # capped at the highest Ob at which THIS pool still keeps `H-213`'s chance -- Partial-or-better of
-# `band_odds(1, obstacle_ceiling)`, 10 % -- so, at no advantage, a larger pool is never worse for the cap, and an
-# admitted roll keeps a real chance. The detector below is run on the rejected `2 * pool` cap too
+# `band_odds(1, obstacle_ceiling)`, 2.2 % on the one sampler (B05.02; it was 10 % on whole dice) -- so a larger
+# pool is never worse for the cap, and an admitted roll keeps a real chance. The cap is solved at the largest
+# lawful disadvantage (`-M_MAX`, `roll.py::_chance_floor_cap`), and the same z-shift cancels on both sides, so the
+# cap equals the one solved with no advantage and the chance AT the cap, with no advantage, is the one-die floor. The detector below is run on the rejected `2 * pool` cap too
 # (301 inversions measured at the base of CP-T01-06): a count of zero means something only because
 # the same count sees the others fail.
 POOLS = (0, 0.5) + tuple(range(1, 9))
 QUARTERS = tuple(q / 4 for q in range(0, 81))             # composed Ob 0 .. 20 in quarter steps
-CHANCE_FLOOR = 0.10                                       # H-213's shipped chance at the 1D floor
+CHANCE_FLOOR = 1.0 - band_odds(1, DEFAULT_FIXTURES.get("obstacle_ceiling"))[0]    # H-213's shipped chance at the 1D floor, no advantage
 EPS = 1e-12                                               # float noise on a 1 - F; not a tolerance on a rule
 
 
@@ -361,14 +363,15 @@ def test_the_inversion_count_is_zero_and_the_detector_sees_the_rejected_caps():
 def test_the_cap_is_the_floor_met_exactly_and_the_pool_below_one_keeps_the_fixed_value():
     mod = _module()
     caps = {p: mod.obstacle(_pooled(p, 20)) for p in range(1, 9)}
-    assert caps[1] == 2.0                                                  # the 1D floor's own value
+    assert caps[1] == pytest.approx(2.0, abs=1e-9)                         # the 1D floor's own value
     assert list(caps.values()) == sorted(caps.values())                    # the cap rises with the pool
     for pool, cap in caps.items():
-        assert _plus(pool, cap)[0] == pytest.approx(CHANCE_FLOOR, abs=1e-9)   # met, not exceeded by a step
+        assert _plus(pool, cap)[0] == pytest.approx(CHANCE_FLOOR, abs=1e-9)   # met, not exceeded
         assert _plus(pool, cap + 0.05)[0] < CHANCE_FLOOR - 1e-6              # and no higher Ob keeps it
-    assert round(caps[2], 3) == 2.842 and round(caps[3], 3) == 3.6 and round(caps[4], 2) == 4.23
-    # a ceiling the floor cannot be solved from (3: the 1D roll keeps nothing there) holds the fixed value
-    assert _module().obstacle(_pooled(4, 20, ceiling=3, fixed=False)) == 3
+    assert round(caps[2], 3) == 3.063 and round(caps[3], 3) == 3.971 and round(caps[4], 2) == 4.8
+    # the closed form keeps a chance at every ceiling (a 1D roll at Ob 3 keeps 0.06 %, not nothing), so the
+    # per-pool arm solves at a ceiling of 3 too: it no longer falls back to the fixed value
+    assert _module().obstacle(_pooled(4, 20, ceiling=3, fixed=False)) == pytest.approx(0.4 * 4 + 2.6 * 2, abs=1e-3)
     with pytest.raises(ValueError, match="below the Ob minimum"):
         mod.obstacle(_pooled(4, 20, ceiling=OB_MIN - 0.5, fixed=False))
 

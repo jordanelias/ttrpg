@@ -22,7 +22,7 @@ from dataclasses import asdict
 import pytest
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL, Degree
-from engine.dice_engine.sigma_leverage import band_odds, net_boost, settle_record
+from engine.dice_engine.sigma_leverage import band_odds, net_boost
 
 from ..data.verbs import TASK_DIFFICULTY   # B11 lane A
 from ..data.fixtures import DEFAULT_FIXTURES
@@ -84,11 +84,9 @@ def _dealt_tally(inp, n=N_DEALT, seed=7) -> list:
     tally = [0, 0, 0, 0]
     labels = {v: k for k, v in DEGREE_LABEL.items()}
     for _ in range(n):
-        # dealt as the host deals it: the entry's margin, its fraction settled by the act's own draw
-        # (CP-T01-06's per-pool cap composes a fractional obstacle here, so the fraction rule is live)
+        # dealt as the host deals it: the entry's real margin (`net - ob`), quantised once at the ladder (B05.02)
         margin = mod.roll(inp, rng)
-        settled = settle_record(margin.net, inp.leverage, inp.pool, margin.ob, rng.random)
-        band = labels[ladder.degree_of({**asdict(margin), "settled_margin": settled})]
+        band = labels[ladder.degree_of({**asdict(margin), "settled_margin": margin.net - margin.ob})]
         tally[DEGREE_ORDINAL[band]] += 1
     return tally
 

@@ -17,19 +17,19 @@ from .primitives import (Stasis, Appeal, Standing, Reserve, Pool, SelfGating, Le
                         RhetoricalWeights, FaceScale)
 # Stage 1b: rewired to the ONE canonical σ-kernel (engine.dice_engine.sigma_leverage), replacing the
 # groundup local engine.py (the "third σ-kernel" hazard). effective_ob/degree/net_boost are
-# byte-identical at TN7 (parity-tested). roll_net is wrapped below to preserve the kernel's
-# GLOBAL-random stream (sigma_leverage.roll_net(rng=random) draws from the module-level RNG the
-# 151 seeded tests rely on; passing rng=None would use a fresh Random and desync the seed).
+# byte-identical at TN7 (parity-tested). roll_net_continuous is wrapped below to preserve the kernel's
+# GLOBAL-random stream (sigma_leverage.roll_net_continuous(rng=random) draws from the module-level RNG the
+# seeded tests rely on; passing rng=None would use a fresh Random and desync the seed). B05.02: the one
+# sampler (A-5) -- the oracle's roll is the bell curve every provider draws, not the d10 faces.
 from engine.dice_engine import sigma_leverage as _sigma
 from engine.dice_engine.dice_engine import DEGREE_ORDINAL, degree_from_net
 from engine.dice_engine.sigma_leverage import effective_ob, net_boost
 from .degree_extension import CONTEST_DEGREE_EXTENSION as _DEFAULT_DEGREE_EXTENSION
 
-def roll_net(pool):
-    """Behavior-preserving wrapper: canonical d10 roll drawn from the GLOBAL random stream
-    (the 151-test suite seeds module-level random). Byte-identical to the groundup
-    engine.roll_net loop; single-sourced through sigma_leverage/dice_engine."""
-    return _sigma.roll_net(pool, rng=random)
+def roll_net_continuous(pool):
+    """The one sampler (B05.02, A-5) drawn from the GLOBAL random stream (the seeded suite seeds module-level
+    random); single-sourced through sigma_leverage/dice_engine."""
+    return _sigma.roll_net_continuous(pool, rng=random)
 
 VALID_KINDS = ("advance", "hard", "shift", "support", "pass", "evidence", "rebut")
 RES_FLOOR = 0.15  # [JUSTIFIED: de-saturation floor; 0.15 is a fitted seed, citation: null]
@@ -299,7 +299,7 @@ class Bout:
         # parallel armature channels are deleted (judge findings 3/4/6).
         pool = Pool.size(c.faculty) + max(0.0, pool_bonus)
         lev = Leverage.net(c.faculty, on_ground=True) + max(0.0, dsigma_bonus)   # armature δσ enters the CR6 leverage term (continuous μ-shift, not the rounded pool)
-        net = roll_net(pool) + net_boost(lev, pool)             # σ-leverage as mu-shift (ED-884/934): base_ob untouched, Ob floor never breached
+        net = roll_net_continuous(pool) + net_boost(lev, pool)             # σ-leverage as mu-shift (ED-884/934): base_ob untouched, Ob floor never breached
         # ED-SC-0032: the OWNER's ladder, with this contest's injected extension consulted on
         # the top band only. Was `degree(net, self.v.base_ob, pool)` — sigma_leverage's own
         # pool-aware function, which is retired. Value-identical by construction: same bands,

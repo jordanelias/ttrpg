@@ -80,7 +80,9 @@ def test_pools_follow_the_vocation_attribute_and_the_opposition_reads_the_score(
     # B11 lane A: the task's difficulty (`tell`, `rosters.yaml: task_difficulty`) is the obstacle's first term; was 1.0
     assert low_ob == TASK_DIFFICULTY[TELL] + 1.0                          # difficulty + 2 / 2: under the ceiling
     cap = SC_ROLL._chance_floor_cap(high_inp.pool, float(high_inp.obstacle_ceiling))
-    assert 1.0 < cap < 3.0, "the plan's premise (Ob 3 reads) is false at this ceiling: the cap bites"
+    # B05.02: the cap is solved on the closed form of the one sampler (3.06 at pool 2, was 2.84 on whole dice); what the
+    # next line needs is that it bites below difficulty + 3, the obstacle the 6 would otherwise read
+    assert 1.0 < cap < TASK_DIFFICULTY[TELL] + 3.0, "the plan's premise (Ob 3 reads) is false at this ceiling: the cap bites"
     assert high_ob == cap, "the ceiling is the obstacle a 6 reads against a pool of 2, not difficulty + 3"
 
 
