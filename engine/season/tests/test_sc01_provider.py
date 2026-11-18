@@ -46,6 +46,7 @@ from ..manifest import MODULE_ENTRIES, PROVIDERS
 from ..manifest.registrar import ModuleEntry
 from ..queries import world_q
 from ..queries.inputs import Margin, SocialContestInput
+from ..queries import person_q
 from ..queries.person_q import said_of
 from ..seam import ladder
 from ..seam.wrappers import sigma
@@ -202,3 +203,150 @@ def test_sc01_s15_a_tell_resolves_through_the_provider(monkeypatch):
     graded = [e for e in out if e.degree is not None]
     assert graded and all(e.degree == ladder.degree_of(call["out"]) for e in graded), (
         [(e.kind, e.degree) for e in out], call["out"])
+
+
+# ================================================================================================
+# B05.10 -- THE LEVERAGE CHANNEL IS SIGNED, AND THE `capability` SOURCE READS THE `edge` ROWS (ADV Edit A, MAP §G edit 6)
+# ================================================================================================
+# A row planted in a copy of the shipped table and loaded by the real loader; the shipped table (no `edge` row) is the control.
+# `when: {plea: ...}` (`05_SC_capability_surface`'s gate) cannot be planted: `capability_when_keys` is `rank_at_least` alone and no
+# act operand carries a plea, so `when` is exercised through the one key that exists.
+
+from engine.dice_engine.sigma_leverage import LEVEL_SIGMA, record_odds       # noqa: E402
+from engine.substrate import descriptors                                      # noqa: E402
+
+SUBJECT, SKILL = "p_mid", "copying"          # `tell`'s skill (asserted in the first test below)
+
+
+def _edge_world():
+    import copy                                                               # noqa: F401  (the planter below)
+    from ..data.fixtures import DEFAULT_FIXTURES
+    w = P.tiny_world(DEFAULT_FIXTURES)
+    SeasonDriver(w)
+    for p in w.persons.values():
+        p.capability, p.attributes = {}, {}
+    return w, Act(id="edge_tell", actor=SPEAKER, verb="tell", payload={"to": SUBJECT})
+
+
+def _plant_edge(monkeypatch, **columns):
+    """Append one `social_roll` `edge` row (`columns`) to a copy of the shipped table, loaded by the real loader."""
+    import copy
+    from ..data import rosters
+    from ..data.fixtures import DEFAULT_FIXTURES
+    rows = copy.deepcopy(list(rosters._TABLES["capability_uses"]["rows"]))
+    rows.append(dict(use="social_roll", role="edge", **columns))
+    monkeypatch.setattr(rosters, "_CAPABILITY_USES", rosters._load_capability_uses(rows, dict(DEFAULT_FIXTURES._v)))
+
+
+def _true_odds(w, act, leverage):
+    """What the record's own pool and obstacle give at `leverage`: the number a signed channel must reproduce."""
+    inp = sigma.contest_input(w, [act.actor, SUBJECT], verb=act.verb, subject=SUBJECT)
+    return inp, record_odds(inp.pool, sigma._composed_obstacle(inp), leverage)
+
+
+def test_the_shipped_table_brings_no_edge_and_the_channel_names_capability():
+    from ..data.verbs import VERB_CAPABILITY
+    from ..data import rosters
+    assert VERB_CAPABILITY["tell"] == SKILL
+    assert list(rosters.roster("advantage_sources", ordered=True)) == ["effort", "capability"]
+    assert set(sigma.ADVANTAGE_SOURCES) == {"effort", "capability"}
+    w, act = _edge_world()
+    inp, odds = _true_odds(w, act, 0.0)
+    assert inp.leverage == 0.0 and sigma.odds_of(w, act) == odds                    # CONTROL: no row, no level, the pool's own odds
+
+
+def test_a_level_against_lowers_odds(monkeypatch):
+    """ADV Edit A: a source returning `([], ["minor"])` is a level AGAINST the roller: `record_odds(pool, ob, -0.25)`."""
+    w, act = _edge_world()
+    inp, before = _true_odds(w, act, 0.0)
+    assert sigma.odds_of(w, act) == before
+    monkeypatch.setitem(sigma.ADVANTAGE_SOURCES, "capability", lambda fx, operands: ([], ["minor"]))
+    assert sigma.advantage_sigma(w.fixtures, {}) == -LEVEL_SIGMA["minor"] == -0.25
+    after = sigma.odds_of(w, act)
+    assert after == record_odds(inp.pool, sigma._composed_obstacle(inp), -0.25)
+    assert after[0] > before[0] and after[2] + after[3] < before[2] + before[3]     # more Failure, fewer Success-or-better
+    monkeypatch.setitem(sigma.ADVANTAGE_SOURCES, "capability", lambda fx, operands: (["minor"], []))
+    assert sigma.advantage_sigma(w.fixtures, {}) == 0.25                             # the same level FOR the roller is the mirror
+
+
+def test_a_planted_edge_row_moves_odds_only_where_its_when_holds(monkeypatch):
+    """A `when`-selected `edge` row (against the roller, one `moderate` level, once held) on the subject's skill, selected by
+    `rank_at_least: 3`: with a subject at rank 5 the odds are the pool's own at -0.5; at rank 2 `when` fails and the odds equal the
+    no-row odds; with the row removed they equal them again."""
+    w, act = _edge_world()
+
+    def at(rank):
+        w.persons[SUBJECT].capability = {SKILL: rank}
+        return sigma.odds_of(w, act)
+    plain = {r: at(r) for r in (2, 5)}
+    _plant_edge(monkeypatch, key=SKILL, side="subject", per="held", against=True, level="moderate", when=dict(rank_at_least=3))
+    assert at(2) == plain[2]                                                       # `when` fails: nothing moves
+    moved = at(5)
+    assert moved != plain[5]
+    inp, expected = _true_odds(w, act, -0.5)
+    assert inp.leverage == -0.5 and moved == expected                              # `moderate` once, against
+    assert moved[0] > plain[5][0]
+    monkeypatch.undo()
+    assert at(5) == plain[5]                                                       # the row removed: equal again
+
+
+def test_a_planted_trait_row_counts_for_the_actor_and_against_him_through_the_subject(monkeypatch):
+    """A trait is held (1) or not (0). `side: subject, against: true` counts a level against the roller when the SUBJECT holds it
+    and nothing when he does not; `side: actor` counts for him when HE holds it. A trait nobody holds changes no odds."""
+    trait = next(iter(descriptors.TRAITS))
+    w, act = _edge_world()
+    plain = sigma.odds_of(w, act)
+    _plant_edge(monkeypatch, key=trait, side="subject", per="held", against=True, level="moderate")
+    assert sigma.odds_of(w, act) == plain                                          # nobody holds it
+    w.persons[SUBJECT].traits = frozenset({trait})
+    inp, expected = _true_odds(w, act, -0.5)
+    assert inp.leverage == -0.5 and sigma.odds_of(w, act) == expected != plain
+    monkeypatch.undo()
+    _plant_edge(monkeypatch, key=trait, side="actor", per="held", level="strong")
+    w.persons[SUBJECT].traits = frozenset()
+    assert sigma.odds_of(w, act) == plain                                          # the actor does not hold it
+    w.persons[SPEAKER].traits = frozenset({trait})
+    inp, expected = _true_odds(w, act, 0.75)
+    assert inp.leverage == 0.75 and sigma.odds_of(w, act) == expected
+
+
+def test_per_mid_counts_signed_steps_from_the_scale_midpoint(monkeypatch):
+    """`per: mid`: an unauthored attribute is the mid-point (zero steps), above it counts for the side named, below it against;
+    `against: true` flips the sign. One `minor` level a step."""
+    key = descriptors.ATTRIBUTES[0]
+    mid = (descriptors.ATTRIBUTE_FLOOR + descriptors.ATTRIBUTE_CEILING) / 2
+    w, act = _edge_world()
+    plain = sigma.odds_of(w, act)
+    _plant_edge(monkeypatch, key=key, side="actor", per="mid", level="minor")
+    assert sigma.odds_of(w, act) == plain                                          # unauthored: the mid-point, zero steps
+    for held, steps in ((int(mid) + 2, 2), (int(mid) - 3, -3)):
+        w.persons[SPEAKER].attributes = {key: held}
+        inp = sigma.contest_input(w, [SPEAKER, SUBJECT], verb="tell", subject=SUBJECT)
+        assert inp.leverage == steps * LEVEL_SIGMA["minor"], (held, inp.leverage)
+    monkeypatch.undo()
+    _plant_edge(monkeypatch, key=key, side="actor", per="mid", level="minor", against=True)
+    inp = sigma.contest_input(w, [SPEAKER, SUBJECT], verb="tell", subject=SUBJECT)
+    assert inp.leverage == 3 * LEVEL_SIGMA["minor"]                                # held 3 below the mid, `against` flips it
+
+
+def test_the_believer_reads_the_subjects_row_only_from_a_held_claim(monkeypatch):
+    """Mode (b): the roller's own values are his to know; the subject's are `None` without a claim (`CAPABILITY_CLAIM` + the key),
+    never a figure, and a held claim gives the same level the true input gives for the same held value."""
+    trait = next(iter(descriptors.TRAITS))
+    w, act = _edge_world()
+    me = w.persons[SPEAKER]
+
+    def claim(predicate, value, n):
+        me.ledger.append(Claim(id=f"c{n}", holder=SPEAKER, subject=SUBJECT, predicate=predicate, value=value,
+                               when=0, source="told", confidence=5, visibility="own"))
+    claim(person_q.CAPABILITY_CLAIM + SKILL, 2, 0)                                 # the opposition's claim the verb already needs
+    control = sigma.odds_of(w, act, believer=me)
+    assert control is not None                                                     # CONTROL: no row, a believed figure
+    _plant_edge(monkeypatch, key=trait, side="subject", per="held", against=True, level="moderate")
+    assert sigma.odds_of(w, act, believer=me) is None                              # a row he cannot read: unknown, not a guess
+    claim(person_q.CAPABILITY_CLAIM + trait, 0, 1)
+    assert sigma.odds_of(w, act, believer=me) == control                           # he believes it not held: no level
+    me.ledger.append(Claim(id="c2", holder=SPEAKER, subject=SUBJECT, predicate=person_q.CAPABILITY_CLAIM + trait, value=1,
+                           when=5, source="told", confidence=5, visibility="own"))      # the later claim wins (`believed_capability`)
+    believed = sigma.odds_of(w, act, believer=me)
+    assert believed is not None and believed != control and believed[0] > control[0]

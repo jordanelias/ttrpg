@@ -27,6 +27,7 @@ from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.verbs import VERB_CAPABILITY
 from ..harness import probes as P
 from ..loop import effects_combat as EC
+from ..loop.driver import SeasonDriver
 from ..seam.wrappers import combat, pool
 from ..state.carriers import Act
 from .test_in12_step9 import CARIN, _kinds, _npc088, _resolve
@@ -173,3 +174,88 @@ def test_combat_receives_score_plus_addends_not_faculty():
         p = w.persons[pid]
         assert got == pool.score(w, p, "fight") + _addends(w, p, "fight") == 3 + _addends(w, p, "fight")
         assert pool.faculty(w, p, "fight") >= 5 and pool.faculty(w, p, "fight") != got
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B05.10 -- THE GOVERNING ATTRIBUTE IS DICE; THE OPPONENT'S ATTRIBUTE IS THE OPPOSITION; NEITHER IS A LEVEL.
+# (CAP B3 and gate (3), as reconciled 2026-11-13 at B05.25: the roller's attributes are in his dice, averaged, so no `side: actor`
+# `edge` row ships; the opponent's attribute is the verb row's `opposed_attribute:` and enters the opposition, never as levels.)
+# FALSIFIER: a `side: actor` or `side: subject` `edge` row on `verb.base` shipped in `tables.capability_uses`, or a reader that
+# turns an attribute into levels with none: `leverage` would then differ from 0.0 here with `attribute_level` at `minor`.
+# ---------------------------------------------------------------------------------------------------------------------
+
+def _argued(w, actor, subject):
+    """The record the social roll deals for `actor` arguing at `subject`, and its obstacle's named terms."""
+    from ..seam.wrappers import sigma
+    inp = sigma.contest_input(w, [actor, subject], verb="tell", subject=subject)
+    return inp, sigma._composed_terms(inp)
+
+
+def test_the_opponent_attribute_raises_the_opposition():
+    """Two rollers differing only in a `governing` attribute read different pools and the same leverage (no level); two opponents
+    differing only in the verb's `opposed_attribute` read different oppositions and the same pool. `attribute_level` is `minor`
+    (live) in the test's fixtures: it changes nothing, since no row reads it at the social roll."""
+    from ..data.verbs import VERB_TABLE
+    from ..seam.wrappers import sigma
+    verb = "tell"
+    row = VERB_TABLE[verb]
+    governing, opposed = row.governing[0], row.opposed_attribute
+    assert governing and opposed and governing != opposed
+    w = _world(attribute_level="minor")
+    SeasonDriver(w)                                                          # the registrar fills the module entries
+    lo, hi, other = w.persons["p_low"], w.persons["p_high"], w.persons["p_other"]
+    for p in (lo, hi, other, w.persons["p_mid"]):
+        p.capability, p.attributes = {}, {}
+    lo.attributes, hi.attributes = {governing: 2}, {governing: 6}
+    pools = [pool.faculty(w, p, verb) for p in (lo, hi)]
+    assert pools[0] < pools[1], pools                                        # the governing attribute gives dice
+    leverage = [sigma.contest_input(w, [p.id, "p_mid"], verb=verb, subject="p_mid").leverage for p in (lo, hi)]
+    assert leverage == [0.0, 0.0], leverage                                  # and gives no level, with `attribute_level` live
+    w.persons["p_mid"].attributes, other.attributes = {opposed: 3}, {opposed: 6}
+    (a, ta), (b, tb) = _argued(w, "p_low", "p_mid"), _argued(w, "p_low", "p_other")
+    assert a.pool == b.pool and a.leverage == b.leverage == 0.0              # the roller is unchanged
+    assert b.opposition > a.opposition and tb["opposition"] > ta["opposition"]     # the opponent's attribute is harder to move
+    assert a.opposition == 3 and b.opposition == 6                           # one point of the attribute, one point of the score
+    # CONTROL: an opponent holding no `opposed_attribute` at all reads the untrained score, below the held 3.
+    w.persons["p_other"].attributes = {}
+    assert _argued(w, "p_low", "p_other")[0].opposition == w.fixtures.get("pool_default") < a.opposition
+
+
+def _rebind_rows(monkeypatch, edit):
+    """`capability_uses()` returns the shipped rows after `edit(rows)`, loaded by the real loader (no code edit)."""
+    import copy
+    from ..data import rosters
+    rows = copy.deepcopy(list(rosters._TABLES["capability_uses"]["rows"]))
+    edit(rows)
+    monkeypatch.setattr(rosters, "_CAPABILITY_USES", rosters._load_capability_uses(rows, dict(DEFAULT_FIXTURES._v)))
+
+
+def test_the_shipped_dice_row_names_the_pool_pair():
+    from ..data import rosters
+    dice = [r for r in rosters.capability_rows("social_roll") if r.role == "dice"]
+    assert len(dice) == 1 and (dice[0].add, dice[0].floor) == ("pool_add", "pool_floor"), dice
+    assert not [r for r in rosters.capability_rows("social_roll") if r.role == "edge"]      # no `edge` row ships (reconciled, B05.25)
+
+
+def test_faculty_reads_its_pool_pair_from_the_social_roll_dice_row(monkeypatch):
+    """MAP §G edit 4: `faculty` takes the fixture NAMES from the `social_roll` `dice` row. The shipped row names `pool_add` and
+    `pool_floor`; swapping the two names in the row, with no code edit, swaps what the pool reads; a row naming neither reads 0
+    and 0 whatever the fixtures hold (the control: at 0 and 0 the pool is `governing score + rank + addends`)."""
+    w = _world(pool_add=3, pool_floor=0)
+    p = w.persons["p_low"]
+    p.attributes, p.capability = {}, {}
+    plain = pool.governing_score(w, p, "tell") + pool.rank(p, "tell") + _addends(w, p, "tell")
+    assert pool.faculty(w, p, "tell") == plain + 3                              # shipped: `add: pool_add`
+
+    def swap(rows):
+        i = next(i for i, r in enumerate(rows) if r["use"] == "social_roll" and r["role"] == "dice")
+        rows[i] = dict(rows[i], add="pool_floor", floor="pool_add")
+    _rebind_rows(monkeypatch, swap)
+    assert pool.faculty(w, p, "tell") == max(3, plain)                          # swapped: the floor reads `pool_add`, the base reads `pool_floor` (0)
+    assert pool.faculty(w, p, "tell") != plain + 3
+
+    def bare(rows):
+        i = next(i for i, r in enumerate(rows) if r["use"] == "social_roll" and r["role"] == "dice")
+        rows[i] = {k: v for k, v in rows[i].items() if k not in ("add", "floor")}
+    _rebind_rows(monkeypatch, bare)
+    assert pool.faculty(w, p, "tell") == plain                                  # no names: 0 and 0, whatever the fixtures hold

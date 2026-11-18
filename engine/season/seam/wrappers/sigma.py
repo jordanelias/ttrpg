@@ -59,16 +59,18 @@ prize row names. NO entry is added to
 """
 from __future__ import annotations
 
+import math
 import random
 import sys
 from dataclasses import asdict
+from types import SimpleNamespace
 from typing import Any, Optional
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds
-from engine.substrate import composition
+from engine.substrate import composition, descriptors
 
-from ...data.rosters import capability_rows, require_use_site, roster
+from ...data.rosters import capability_rows, require_use_site, roster, when_holds
 from ...data.verbs import SOCIAL_ROLL_PROVIDER, TASK_DIFFICULTY, VERB_CAPABILITY, VERB_TABLE
 from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, sides_of
@@ -84,7 +86,7 @@ from ...queries.inputs import Margin, SocialContestInput
 from ...queries.world_q import proofs, reception
 from ...state.carriers import EFFORT, effort_of
 from ._entry import entry_for
-from .pool import POOL_ADDENDS, _capability, _opposing_attribute, faculty, register_pool_addend, score, untrained  # noqa: F401  (moved: see pool.py)
+from .pool import POOL_ADDENDS, _capability, _opposing_attribute, faculty, governing_attribute, register_pool_addend, score, untrained  # noqa: F401  (moved: see pool.py)
 
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
 # (A-25), so the row says the social contest module runs its own prizes. Reached by that string only.
@@ -131,18 +133,134 @@ def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]
 OBSTACLE_MODEL_TASK = "task"
 
 
-def _effort_levels(fx: Any, operands: dict) -> list:
+def _effort_levels(fx: Any, operands: dict) -> tuple:
     """`effort`'s levels (CP-T01-05): an act at effort `e` brings `e` copies of the `effort_level` fixture
-    (a `sigma_leverage.LEVEL_SIGMA` name, shipped `moderate`) -- one named level per slot of effort. None at
-    effort 0, so the shipped chooser, which forms no effort, adds nothing."""
-    return [fx.get("effort_level")] * int(operands.get(EFFORT, 0))
+    (a `sigma_leverage.LEVEL_SIGMA` name, shipped `moderate`) -- one named level per slot of effort, all FOR the roller:
+    `(levels, [])`. None at effort 0, so the shipped chooser, which forms no effort, adds nothing."""
+    return [fx.get("effort_level")] * int(operands.get(EFFORT, 0)), []
+
+
+# ---------------------------------------------------------------------------------------------
+# THE `capability` SOURCE (B05.10, ADV Edit A, MAP §G edit 6): the `edge` rows of the act's site, ONE function for every skill, attribute and
+# trait a row names, so none needs a function of its own. A row's `key` is read off the person its `side` names (`actor`: the roller,
+# his own to know; `subject`: the person he acts on); its `per` counts the held value into steps; its `level` is one `LEVEL_SIGMA` name a
+# step; `against: true` flips the sign, so a count counts AGAINST the roller. `contest_input` and `believed_input` choose the rows that
+# apply (`when`) and read each one's value, and hand them to the source as the `edge` operand: `((row, key, value), ...)`.
+# ---------------------------------------------------------------------------------------------
+EDGE = "edge"                      # the operand key of the selected `edge` rows, beside `EFFORT`
+CAPABILITY = "capability"          # the roster member (`rosters.yaml: advantage_sources`)
+_UNKNOWN = object()                # a value the believer cannot read: `believed_input` answers `None`, never a guess
+
+
+def _edge_rows() -> tuple:
+    """The `social_roll` site's `edge` rows, in table order (none ship; a planted or authored row is read here)."""
+    return tuple(r for r in capability_rows(SOCIAL_ROLL_SITE) if r.role == EDGE)
+
+
+def _edge_key(row: Any, verb: str):
+    """The key `row` reads for `verb`: `verb` is the skill the verb names, `verb.base` the first attribute the verb row governs by
+    (`pool.governing_attribute`'s read); any other key is its own. `None` where the verb names none (the row then reads nothing)."""
+    if row.key == "verb":
+        return VERB_CAPABILITY.get(verb) or None
+    if row.key == "verb.base":
+        v = VERB_TABLE.get(verb)
+        return v.governing[0] if v is not None and v.governing else None
+    return row.key
+
+
+def _held_at(person: Any, row: Any, key: str, verb: str):
+    """What `person` HOLDS at `key`: a skill's rank (`None` where he holds none), an attribute's score (`None` where unauthored),
+    a trait as 1 if held else 0 (A-107). `verb.base` reads through `pool.governing_attribute`."""
+    if row.key == "verb.base":
+        return governing_attribute(person, verb)
+    if key in descriptors.TRAITS:
+        return 1 if key in (getattr(person, "traits", None) or ()) else 0
+    if key in descriptors.CAPABILITIES:
+        return (getattr(person, "capability", None) or {}).get(key)
+    if key in descriptors.ATTRIBUTES:
+        return (getattr(person, "attributes", None) or {}).get(key)
+    raise Unspecified(f"an `edge` row at the social roll keys {key!r}, which no person holds on this tree (not a skill, an attribute or a trait)",
+                      "rosters.yaml -- tables: capability_uses", needs="a skill, an attribute or a trait key",
+                      law="B05.10 -- the `capability` source reads what a person holds; a practitioner stat has no reader here")
+
+
+def _edge_side(row: Any) -> str:
+    """The side an `edge` row reads: the roller's (`actor`) or the person he acts on (`subject`). `each` is a fight's word."""
+    if row.side not in ("actor", "subject"):
+        raise Unspecified(f"an `edge` row at the social roll has side {row.side!r}", "rosters.yaml -- tables: capability_uses",
+                          needs="`side: actor` or `side: subject`", law="U1 §3 item 3 -- a roll with one roller and one subject reads those two sheets")
+    return row.side
+
+
+def _edge_reads(verb: str, actor: Any, subject_read) -> Any:
+    """`((row, key, value), ...)`: the `edge` rows this act brings, in table order, each with the value its side holds, a row whose
+    `when` fails for that holder left out (`rosters.when_holds`, the one comparison). `subject_read(row, key)` answers the subject's
+    side: `(holder, value)`, `None` where there is no one to read (not a person, or himself: nobody opposes himself), or `_UNKNOWN`
+    (the believer holds no claim), which makes the whole answer `_UNKNOWN`."""
+    out = []
+    for row in _edge_rows():
+        key = _edge_key(row, verb)
+        if key is None:
+            continue
+        if _edge_side(row) == "actor":
+            holder, value = actor, _held_at(actor, row, key, verb)
+        else:
+            got = subject_read(row, key)
+            if got is _UNKNOWN:
+                return _UNKNOWN
+            if got is None:
+                continue
+            holder, value = got
+        if when_holds(row, holder):
+            out.append((row, key, value))
+    return tuple(out)
+
+
+def _edge_scale(key: str) -> tuple:
+    """`(floor, ceiling)` of the scale `key`'s value lives on: an attribute's or a practitioner stat's (`descriptors.scale_of`), a skill's own."""
+    if key in descriptors.CAPABILITIES:
+        row = descriptors.CAPABILITIES[key]
+        return row.floor, row.ceiling
+    return descriptors.scale_of(key)
+
+
+def _edge_levels(row: Any, key: str, value: Any) -> tuple:
+    """`(levels for the roller, levels against him)` of one selected row. The count is `per: held` 1 if held, `per: rank` the held rank,
+    `per: mid` the signed WHOLE steps of the value from its scale's mid-point (an unauthored value IS the mid-point: zero steps; a
+    half step is no step); `against: true` negates it; a positive count is that many copies of the row's `level` FOR the roller, a
+    negative one that many AGAINST him."""
+    if row.per == "held":
+        n = 1 if value else 0
+    elif row.per == "rank":
+        n = int(value or 0)
+    elif row.per == "mid":
+        floor, ceiling = _edge_scale(key)
+        mid = (floor + ceiling) / 2
+        n = math.trunc((mid if value is None else value) - mid)
+    else:
+        raise Unspecified(f"an `edge` row at the social roll ({row.key!r}) has per {row.per!r}", "rosters.yaml -- tables: capability_uses",
+                          needs="`per: held`, `per: rank` or `per: mid`", law="U1 §3 item 2 -- an edge row counts its held value one of three ways")
+    n = -n if row.against else n
+    return ([row.level] * n, []) if n > 0 else ([], [row.level] * -n)
+
+
+def _capability_levels(fx: Any, operands: dict) -> tuple:
+    """THE `capability` SOURCE: `(levels for the roller, levels against him)` summed over the act's selected `edge` rows
+    (`operands[EDGE]`, chosen and read by the input builders). `([], [])` where the act brings none -- the shipped case."""
+    for_, against = [], []
+    for row, key, value in operands.get(EDGE, ()):
+        f, a = _edge_levels(row, key, value)
+        for_.extend(f)
+        against.extend(a)
+    return for_, against
 
 
 # THE ADVANTAGE CHANNEL'S BINDING: each member of `rosters.yaml: advantage_sources` -> the function that
-# returns the named levels it brings to an act, `fn(fixtures, operands) -> [level name, ...]`. THE ROSTER IS
+# returns the named levels it brings to an act, `fn(fixtures, operands) -> (levels for the roller, levels against him)`, each a
+# list of level names. THE ROSTER IS
 # THE CLOSED SET AND THIS IS ITS BINDING: refused at import if the two disagree, so a member with no function
 # (it would silently add nothing) and a function with no member (it would silently never run) are both loud.
-ADVANTAGE_SOURCES = {EFFORT: _effort_levels}
+ADVANTAGE_SOURCES = {EFFORT: _effort_levels, CAPABILITY: _capability_levels}
 if set(ADVANTAGE_SOURCES) != set(roster("advantage_sources")):
     raise Unspecified(
         f"`advantage_sources` members {sorted(roster('advantage_sources'))} and "
@@ -152,13 +270,16 @@ if set(ADVANTAGE_SOURCES) != set(roster("advantage_sources")):
 
 
 def advantage_sigma(fx: Any, operands: dict) -> float:
-    """The social roll's net sigma: every `advantage_sources` member's named levels for this act, summed
-    through `levels_to_net_sigma` (a mu-shift the roll applies as `net_boost`; never a flat bonus on the net,
-    never an Ob reduction). `operands` is what the act brings (`{"effort": e}`); 0.0 when nothing does."""
-    levels = []
+    """The social roll's net sigma, SIGNED: every `advantage_sources` member's named levels for this act, those that favour the roller
+    and those that count against him, summed through `levels_to_net_sigma(for, against)` (a mu-shift the roll applies as `net_boost`;
+    never a flat bonus on the net, never an Ob reduction). `operands` is what the act brings (`{"effort": e, "edge": rows}`); 0.0
+    when nothing does."""
+    for_, against = [], []
     for name in roster("advantage_sources", ordered=True):
-        levels.extend(ADVANTAGE_SOURCES[name](fx, operands))
-    return levels_to_net_sigma(levels)
+        f, a = ADVANTAGE_SOURCES[name](fx, operands)
+        for_.extend(f)
+        against.extend(a)
+    return levels_to_net_sigma(for_, against)
 
 
 def contest_input(w: Any, claimants: list, *, verb: str = "",
@@ -227,9 +348,15 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     if "opposes" in roles and subject != claimants[0]:
         opposition = _opposition_of(w, subject, verb)
     pool = faculty(w, actor, verb) if "dice" in roles else 0
-    inp = _frame(fx, pool, opposition, doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb)
+    # THE `capability` SOURCE'S ROWS (B05.10): each `edge` row of the site whose `when` holds, with the value its side holds. A subject
+    # who is the actor, or is no person, is read for nothing (nobody opposes himself).
+    other = w.persons.get(subject) if subject and subject != claimants[0] else None
+    edge = _edge_reads(verb, actor, lambda row, key: None if other is None else (other, _held_at(other, row, key, verb)))
+    inp = _frame(fx, pool, opposition, doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb, edge)
     read = {"dice": score(w, actor, verb) if "dice" in roles else None, "opposes": opposition}
-    return inp, tuple((row, read[row.role]) for row in rows)
+    chosen = {id(r): (value, levels_to_net_sigma(*_edge_levels(r, key, value))) for r, key, value in edge}
+    return inp, tuple((r, *chosen[id(r)]) if id(r) in chosen else (r, read[r.role], None)
+                      for r in capability_rows(SOCIAL_ROLL_SITE) if id(r) in chosen or r.role in read)
 
 
 #: `rosters.yaml: capability_use_sites`' site whose one reader is `contest_input` (the single roll's dice and opposition).
@@ -250,7 +377,7 @@ def _fed_by(reads: tuple, inp: SocialContestInput, ob_terms: dict) -> tuple:
     `contributed` is what it added to the roll: the pool for `dice`, the module's own `opposition` term of the obstacle for
     `opposes` (`ob_terms`, read off the module that composed it, `0.0` where nobody opposed)."""
     contributed = {"dice": inp.pool, "opposes": ob_terms.get("opposition", 0.0)}
-    return tuple((r.use, r.role, r.key, r.side, value, contributed[r.role]) for r, value in reads)
+    return tuple((r.use, r.role, r.key, r.side, value, contributed[r.role] if own is None else own) for r, value, own in reads)
 
 
 def _difficulty(fx: Any, verb: str) -> Optional[float]:
@@ -269,7 +396,7 @@ def _difficulty(fx: Any, verb: str) -> Optional[float]:
 
 
 def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: float,
-           room_terms: dict, effort: int, verb: str) -> SocialContestInput:
+           room_terms: dict, effort: int, verb: str, edge: tuple = ()) -> SocialContestInput:
     """THE RECORD, FILLED THE ONE WAY: what `contest_input` (the true input) and `believed_input` (a
     person's) both hand the module. They differ in where the pool's opposition, the forgery quality
     and the room terms COME FROM; the fixtures and the record's shape are this
@@ -280,7 +407,7 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
         obstacle_ceiling=fx.get("obstacle_ceiling"),
         ceiling_per_pool=fx.get("ceiling_per_pool"),
         obstacle_refusal_multiple=fx.get("obstacle_refusal_multiple"),
-        leverage=advantage_sigma(fx, {EFFORT: effort}),      # the one place the operands are named
+        leverage=advantage_sigma(fx, {EFFORT: effort, EDGE: edge}),      # the one place the operands are named
         forgery_quality=forgery_quality, difficulty=_difficulty(fx, verb), **room_terms)
 
 
@@ -360,13 +487,23 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
         opposition = float(untrained(fx))
     if examined_record:
         return None
+    # THE `capability` SOURCE'S ROWS, as the believer can read them: his own side is his to know; the subject's is a claim of his
+    # (`CAPABILITY_CLAIM` + the key), and where he holds none the answer is unknown, never a figure.
+    def believed_subject(row, key):
+        if not person_subject or subject == p.id:
+            return None
+        said = believed_capability(p, subject, key)
+        return _UNKNOWN if said is None else (SimpleNamespace(capability={row.key: said}), said)
+    edge = _edge_reads(verb, p, believed_subject)
+    if edge is _UNKNOWN:
+        return None
     room_terms = {}
     if heard:
         if room is None:
             return None
         room_terms = dict(reception=room["reception"], reception_gain=fx.get("reception_gain"),
                           proofs=room["proofs"], proof_step=fx.get("proof_step"))
-    return _frame(fx, pool if "dice" in roles else 0, opposition, 0.0, room_terms, effort, verb)
+    return _frame(fx, pool if "dice" in roles else 0, opposition, 0.0, room_terms, effort, verb, edge)
 
 
 def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:

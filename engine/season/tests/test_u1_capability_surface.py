@@ -456,7 +456,7 @@ def test_a_row_missing_its_roles_required_field_is_refused():
 def test_a_level_outside_level_sigma_is_refused():
     """MAP: an `edge` row's `level` is a `sigma_leverage.LEVEL_SIGMA` name."""
     from engine.dice_engine.sigma_leverage import LEVEL_SIGMA
-    base = dict(_shipped_row("dice"), role="edge", level="moderate", per="held")
+    base = dict({k: v for k, v in _shipped_row("dice").items() if k not in ("add", "floor")}, role="edge", level="moderate", per="held")
     for name in LEVEL_SIGMA:                   # control: every name in the owner's table loads
         assert _refused([dict(base, level=name)]) is None, name
     msg = _refused([dict(base, level="enormous")])
@@ -485,7 +485,7 @@ def test_a_field_the_role_does_not_take_is_refused():
 
 
 def test_a_per_outside_held_rank_mid_is_refused():
-    base = dict(_shipped_row("dice"), role="edge", level="minor", per="held")
+    base = dict({k: v for k, v in _shipped_row("dice").items() if k not in ("add", "floor")}, role="edge", level="minor", per="held")
     from engine.season.data import rosters
     pers = sorted(rosters.roster("capability_per"))
     assert len(pers) == 3

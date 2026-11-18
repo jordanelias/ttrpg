@@ -14,6 +14,7 @@ from typing import Any
 from engine.dice_engine.sigma_leverage import governing_mean, pool_of
 from engine.substrate import descriptors
 
+from ...data.rosters import capability_rows, require_use_site
 from ...data.verbs import VERB_CAPABILITY, VERB_TABLE
 from ...gaps import Forbidden, Unspecified
 from ...queries.world_q import practice
@@ -111,8 +112,8 @@ def faculty(w: Any, p: Any, verb: str) -> float:
 
     THE POOL IS `pool_of` (A-6, D-U1-08, B05.25): `pool_of(governing_score + rank, addends, pool_add, pool_floor)`, the one rule
     of how the verb's governing score (the mean of his scores in its `governing:` attributes, FRACTIONAL: 2.5, not 3), his rank in
-    the verb's skill, the registered addends (`POOL_ADDENDS`, whole dice) and the row's base and floor (`Fixtures pool_add`,
-    `pool_floor`, each 0 at control) make a pool. A first rank adds a die; a person holding no attribute and no rank rolls
+    the verb's skill, the registered addends (`POOL_ADDENDS`, whole dice) and the base and floor the `social_roll` `dice` row names
+    (`add: pool_add`, `floor: pool_floor`, B05.10; each 0 at control) make a pool. A first rank adds a die; a person holding no attribute and no rank rolls
     `pool_default`. The opposition does not read this: it reads the opposing attribute beside the skill score,
     `opposed_ob(opposing attribute + skill score)` (B05.14, A-137), through `score`.
     A brute verb never reaches here (`Forbidden`), nor does a row naming no attribute (`Unspecified`): a (c) row reaches its
@@ -120,8 +121,21 @@ def faculty(w: Any, p: Any, verb: str) -> float:
     ⚠ `08 §3` GIVES THE POLARITY: an `assumption` grade means *inject the default, declare the site,
     sweep three points* -- never refuse the whole corpus for a missing key. `absent` is the grade
     that refuses, and this is not one."""
-    return pool_of(governing_score(w, p, verb) + rank(p, verb), addends_of(w, p, verb),
-                   w.fixtures.get("pool_add"), w.fixtures.get("pool_floor"))
+    add, floor = _pool_pair(w)
+    return pool_of(governing_score(w, p, verb) + rank(p, verb), addends_of(w, p, verb), add, floor)
+
+
+#: `rosters.yaml: capability_use_sites`' site whose `dice` row names the pool's base and floor (B05.10, MAP §G edit 4).
+_DICE_SITE = require_use_site("social_roll")
+
+
+def _pool_pair(w: Any) -> tuple:
+    """`(pool_add, pool_floor)` as the `social_roll` site's `dice` row names them (`add:`, `floor:`: Fixture NAMES, read from `w.fixtures`),
+    so swapping the names in the row swaps what the pool reads, with no code edit. A row naming neither (or no `dice` row) reads
+    `(0, 0)`: the control, where the pool is `governing score + rank + addends`."""
+    row = next((r for r in capability_rows(_DICE_SITE) if r.role == "dice"), None)
+    return (0 if row is None or row.add is None else w.fixtures.get(row.add),
+            0 if row is None or row.floor is None else w.fixtures.get(row.floor))
 
 
 def addends_of(w: Any, p: Any, verb: str) -> int:

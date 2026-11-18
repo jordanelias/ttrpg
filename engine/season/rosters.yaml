@@ -3320,7 +3320,15 @@ rosters:
       person does not take in that scene.
       [ASSUMPTION; medium; Jordan to correct; revert: delete this row and `sigma.ADVANTAGE_SOURCES`'
       `effort` entry -- the channel then sums to 0.0 and `Scene.slots` counts every act as one slot].
-    values: [effort]
+      `capability` (B05.10, MAP §G edit 6): the `edge` rows of `tables.capability_uses` at the act's site, read by ONE
+      function (`sigma._capability_levels`), so a skill, an attribute or a trait becomes a level on the roll by a ROW and never
+      by a function per trait. THE CHANNEL IS SIGNED: each member returns `(levels for the roller, levels against him)`;
+      `levels_to_net_sigma` takes both lists. A row's count is once when held (`per: held`), once per rank (`per: rank`) or
+      the signed steps of the held value from its scale's mid-point (`per: mid`: above counts for the side named, below
+      against; an unauthored value is the mid-point, zero steps); `against: true` flips the sign, so it counts against the
+      ROLLER. No `edge` row ships at the social roll (B05.25: the roller's attributes are in his dice, averaged, and the
+      opponent's is the opposition's), so the member returns no level and the roll is as it was.
+    values: [effort, capability]
 
   # ── B03.68 (`09_WR_threadwork_module` edit 3): THE THREAD OPERATIONS ─────────────────────────────
   thread_operations:
@@ -3339,13 +3347,16 @@ rosters:
 tables:
 
   # B04.05 (MAP §C, U1 §3): the uses table -- today's rules restated, one row per place a skill changes an outcome. Read by
-  # `data/rosters.py::capability_uses()`; no reader reads it before B04.06. The `dice` rows carry no `add:`/`floor:` yet (those
-  # name `pool_add` and `pool_floor`, which B05 creates). No row ships for `edge`, `circumstance`, `addend` or `rate`.
+  # `data/rosters.py::capability_uses()`; no reader reads it before B04.06. The `social_roll` `dice` row names `add: pool_add` and
+  # `floor: pool_floor` (B05.10: `pool.py::faculty` reads the two names off the row); the `fight` row's are the fight's (B05, with
+  # the pair carried raw). No row ships for `edge`, `circumstance`, `addend` or `rate`: the social roll's `edge` reader is
+  # `sigma.py::_capability_levels`, and a planted row is read by it (B05.10; no `side: actor` or `side: subject` row on
+  # `verb.base` ships, B05.25).
   # The `social_roll` rows are the single roll's (`seam/wrappers/sigma.py::contest_input`); a proceeding's dice and opposition
   # are the social contest's (V2), not rows here.
   capability_uses:
     rows:
-      - {use: social_roll,       role: dice,      key: verb, side: actor}
+      - {use: social_roll,       role: dice,      key: verb, side: actor, add: pool_add, floor: pool_floor}
       - {use: social_roll,       role: opposes,   key: verb, side: subject}
       - {use: fight,             role: dice,      key: verb, side: each}
       - {use: fight,             role: opposes,   key: verb, side: each}
