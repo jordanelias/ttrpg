@@ -10,7 +10,7 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_PC.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
-GATE: Batch B13-pc-package @1727b462d8e25d654af6b689f6ec059d20659cd4
+GATE: Batch B13-pc-package @acab52098d2a8ae6b145d84331e152a1cfd59daf
 GATE: Batch B05-one-roll
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — the batch makes the typed outcome B15, B16, B19a and B19 read (`V12_STRUCTURE.md` §2.2, "none of its own"); IS-B1 §1.1 row 6: after it "the workbench and the loop run one entry; the victor is recorded; an `undecided` fight still writes". The close quotes R-04.c5 (i)'s `aperture 2 s` reading at s = 0, 1, 2 (`combat.fight` in `ENGINES`; `accept` attempted, executed and refused on `exists:challenge`) as a re-read, not a status move (A-114)
@@ -41,7 +41,7 @@ EST: 14.1 h [estimate: `V12_STRUCTURE.md` §2.4's formula over this batch's 29 p
 
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
-| B14.01 | the combat outcome is a dataclass; the seam returns only what is read | `03_PC_typed_outcome_one_door` Part A (record and `resolve`) | BUILD | EQUAL | Batch B13 @1727b462d8e25d654af6b689f6ec059d20659cd4, Batch B05 |
+| B14.01 | the combat outcome is a dataclass; the seam returns only what is read | `03_PC_typed_outcome_one_door` Part A (record and `resolve`) | BUILD | EQUAL | Batch B13 @acab52098d2a8ae6b145d84331e152a1cfd59daf, Batch B05 |
 | B14.02 | the fighter left standing `prevailed`; an undecided fight still writes | Part A (`prevailed`, A-81) | BUILD | MOVER(behaviour) | B14.01 |
 | B14.03 | a felling records its source and weapon (`fell_to`) | Part A (`fell_to`) | BUILD | MOVER(behaviour) | B14.02 |
 | B14.04 | H-98 closed; R-09's `blocks:` re-pointed | Part C R-PC-01 | BUILD | EQUAL | B14.03 |
@@ -118,7 +118,7 @@ Not in this batch, and where each is: `U5b_PC_residue` §1 items 3–5 (B15, the
 - FALSIFIER and CONTROL: "any reader of a deleted key (the build fails at that reader)"; `git grep -nE "\[\"(winner|result|unresolved|bouts|parties|seed)\"\]|\.get\(\"(winner|bouts)\"" engine/season -- '*.py'` (tests excluded) prints no reader. Control: the realm hash reading at seed 0 equal to the batch's base (`reading @<sha>`) (the fold reads `wound_state` and `surrender` only).
 - GATE: `python -m pytest engine/season/tests/test_combat_module.py -q` → pass; the realm hash reading (`HASH READING`) at seed 0 → equal to the base.
 - HASH MOVERS: none.
-- DEPENDS ON: EXISTS-IN-TREE `queries/inputs.py::PersonalCombatInput`, `modules/combat/fight.py::fight`, `::_lift`, `seam/wrappers/combat.py::resolve`, `::fight_estimate`, `::surrender_of`; V12 Batch B13 @1727b462d8e25d654af6b689f6ec059d20659cd4 (`modules/combat` a package, CI-09), Batch B05.
+- DEPENDS ON: EXISTS-IN-TREE `queries/inputs.py::PersonalCombatInput`, `modules/combat/fight.py::fight`, `::_lift`, `seam/wrappers/combat.py::resolve`, `::fight_estimate`, `::surrender_of`; V12 Batch B13 @acab52098d2a8ae6b145d84331e152a1cfd59daf (`modules/combat` a package, CI-09), Batch B05.
 - GLOSSARY: none (*record*'s row already says "dataclass", U4d).
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B14's `valoria-author` producer, `isolation: worktree`; `Item: B14.01`, `[skip ci]`.

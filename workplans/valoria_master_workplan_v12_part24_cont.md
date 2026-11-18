@@ -524,7 +524,7 @@ Not in this batch, and where each is: MBA-02 stage 2 (`--missile`) and MBA-09 (B
 - FALSIFIER and CONTROL: "a measured table whose mirror cells disagree beyond their intervals …; a table that differs when `--workers` changes. Controls: the mirror cells; `--workers 1` against `--workers 4` on 10 cells, byte-identical."
 - GATE: "`python tools/calibrate_mb_contact.py --trust` prints seven `ok` lines; `--spot 20` prints 20 `inside` lines; `--cell` on one pilot cell (`spear light 3 / arming light 3`) reproduces its stored row. Expected (the pilot on today's engine; B19a's reading is the one recorded): mirror win shares within 0.03; mean rounds a mirror duel at least 2."
 - HASH MOVERS: none.
-- DEPENDS ON: V12 B19a.01; V12 Batch B13 @1727b462d8e25d654af6b689f6ec059d20659cd4 (D-09's import), B14, B15, B16 (`fight_round`; MBA §5.1); EXISTS-IN-TREE `systems/combat/combat_engine_v1/workbench/balance.py::winrate`, `modules/combat/attributes.py`.
+- DEPENDS ON: V12 B19a.01; V12 Batch B13 @acab52098d2a8ae6b145d84331e152a1cfd59daf (D-09's import), B14, B15, B16 (`fight_round`; MBA §5.1); EXISTS-IN-TREE `systems/combat/combat_engine_v1/workbench/balance.py::winrate`, `modules/combat/attributes.py`.
 - NAMES: `pc_engine.load()` → `from modules.combat import wrapper, combatant` (D-09); `engagement_end` → `round_end` (PCR-3); `faculty` → the skill score (B15, `IS-PC-05`).
 - GLOSSARY: *felling chance*, MBA §8.3's row (owner `mb_contact.json`, B19a.03); *duel round* unchanged (A-101).
 - COST and TIER: small build; `sonnet`, `high`; the run `haiku`-supervised; a `--trust` failure read by `opus`.
