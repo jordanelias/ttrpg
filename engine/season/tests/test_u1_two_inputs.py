@@ -108,7 +108,11 @@ def test_the_opposition_reads_the_skill_score_not_the_pool(monkeypatch):
     subject.attributes = {VERB_TABLE[verb].opposed_attribute: descriptors.ATTRIBUTE_CEILING}
     monkeypatch.setattr(pool, "POOL_ADDENDS", list(pool.POOL_ADDENDS))
     pool.register_pool_addend(lambda w_, who, v: 3 if who.id == subject.id else 0)
-    assert pool.faculty(w, subject, verb) > pool.score(w, subject, verb) == 5      # the addend is in his pool, not his score
+    with_addend = pool.faculty(w, subject, verb)
+    assert pool.score(w, subject, verb) == 5                                       # the addend is not in his score
+    pool.POOL_ADDENDS.clear()
+    assert with_addend - pool.faculty(w, subject, verb) == 3                       # CONTROL: removing the addend lowers his pool by exactly it
+    pool.register_pool_addend(lambda w_, who, v: 3 if who.id == subject.id else 0)
     assert sigma._opposition_of(w, subject.id, verb) == 5.0                        # his opposition's skill score is his rank
     # B05.14 (A-137): the record's opposition is that score PLUS his opposing attribute (here the ceiling, 7), and still no
     # base dice, no practice addend, no seat (was 5.0, the score alone, before the attribute joined it)

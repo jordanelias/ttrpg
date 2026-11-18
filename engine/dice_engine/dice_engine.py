@@ -166,8 +166,7 @@ BAND_FLOORS = {"partial": 0, "success": 1000, "overwhelming": 3000}
 # literals (plain assignments: tools/export_sim_params.py reads only those, so the typed export keeps
 # the pair) and engine/dice_engine/sigma_leverage.py aliases them rather than keeping a copy. The
 # private names stay as aliases of the public ones: tests/valoria/test_tn7_always.py pins them.
-# modules/mass_battle/resolution.py (`_SIG_PER_DIE`) and modules/mass_battle/config.py
-# (`PER_DIE_NET_EV`) hold values of their own; REM-42 does not reach them.
+# modules/mass_battle reads these through `engine.dice_engine` since B05.03 (its own `_SIG_PER_DIE` and `PER_DIE_NET_EV` are deleted).
 MU_PER_DIE = 0.40      # [canonical: params/core.md §Expected Value, TN 7]
 SIGMA_PER_DIE = 0.800  # [canonical: params/core.md §Expected Value, TN 7]
 _MU_PER_DIE: float = MU_PER_DIE

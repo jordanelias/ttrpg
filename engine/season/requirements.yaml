@@ -838,9 +838,9 @@ rows:
             Failure 234, Overwhelming 20, Partial 26, Success 62)
           does_not_show: >-
             seeds 1 and 2; that the two writes differ IN PLAY (BANDS THAT DIFFER reads the row's `writes_at`, a static
-            declaration, beside the resolved tally); the same run reads `HALTS` on 141 of 143 cases, every one on check
-            R5 (`Fixtures ceiling_form` is read and no register row's `site:` names it), which does not touch this
-            block; run with `PYTHONHASHSEED=0` and the seed positional (`0`)
+            declaration, beside the resolved tally); the corpus run at `e075e511b` read `HALTS` on 141 of 143 cases on check
+            R5, because no register row's `site:` named `Fixtures ceiling_form`; H-213's `site:` names it from B05.99, and the run at that
+            tree no longer HALTS on R5 (`test_u8_ambitions` and the `W9` fixture-read check pass); run with `PYTHONHASHSEED=0` and the seed positional (`0`)
       - id: R-09.d
         text: >-
           outcomes that could go either way are drawn: for every converted verb with ten or more

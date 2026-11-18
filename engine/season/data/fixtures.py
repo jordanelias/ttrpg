@@ -384,7 +384,7 @@ DEFAULT_FIXTURES = Fixtures(
     # Ob at which this pool keeps the chance `obstacle_ceiling` leaves a one-die roll), so the fixed value
     # above is the cap below one die and the floor's source; `False` is the fixed arm, `obstacle_ceiling`
     # `None` the uncapped one (both still swept).
-    # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- `site: Fixtures ceiling_per_pool`, graded `assumption`; the chance it holds is not a new number (band_odds(1, obstacle_ceiling)'s Partial-or-better, 10 %), swept True / False]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-213 -- `site: Fixtures ceiling_per_pool`, graded `assumption`; the chance it holds is not a new number (band_odds(1, obstacle_ceiling)'s Partial-or-better, about 2.3 % at zero boost on the closed form, 0.08 % at the -M_MAX the cap is read at), swept True / False]
     ceiling_per_pool=True,
     # B05.53/B05.55: THE CEILING'S FORM -- how the obstacle behaves once it passes its ceiling. `hard` is the flat bound (the control,
     # SHIPPED); `soft` bends the excess toward the per-pool bound. B05.55's flip to `soft` is HELD: at `soft` no `difficulty_ob` ladder
@@ -426,7 +426,7 @@ DEFAULT_FIXTURES = Fixtures(
     # B05.60 (ADV Edits B to D; A-8): THE WOUND AS A LEVEL ON THE ROLL, read by `seam/wrappers/sigma.py::_wound_levels` (`rosters.yaml: advantage_sources: wounds`).
     # One named level AGAINST the roller per `wound_step` of body his person has lost below his `body_ceiling`, one FOR him per `wound_step` the person he acts on
     # has lost, each side at most `wound_levels_max`; never an obstacle term. `None` is `wound_level`'s CONTROL (the source brings nothing). `wound_step` is a third
-    # of the scale, derived from `condition_scale`'s own value (two thresholds, at one third and two thirds lost), not typed beside it.
+    # of the scale, a third of `condition_scale`'s SHIPPED value (`_CONDITION_SCALE // 3`, frozen at import: two thresholds, at one third and two thirds lost). It is its own swept key (H-432: a sixth / a third / a half), so a swept `condition_scale` does not move it.
     # [JUSTIFIED: engine/season/hole_register.yaml H-431 -- `site: Fixtures wound_level`, graded `assumption`; no document sizes what a wound costs a roll, so it is injected and swept None / minor / moderate]
     wound_level="minor",               # `H-431`, swept None (control) / minor (SHIPPED) / moderate
     # [JUSTIFIED: engine/season/hole_register.yaml H-432 -- `site: Fixtures wound_step`, graded `assumption`; a third of `condition_scale` per level is ADV Edit D's own size, injected and swept]
@@ -1125,7 +1125,7 @@ DEFAULT_FIXTURES = Fixtures(
     # `H-424` (B05.14; OBS §1, SC-B Edit A). HOW HARD EACH DIFFICULTY LEVEL IS: the obstacle a verb row's `difficulty:` level contributes
     # before any opposition (`rosters.yaml: difficulty_levels`, closed: refused at load if the keys are not exactly the roster's).
     # SHIPPED: the calibrated arm (B05.23), 0 / 0.8 / 1.6 / 2.4 in level order: `routine` at A-79's centre, equals on a routine matter
-    # carrying about a quarter (C1's P(Success or better) 0.24 to 0.29 at skill scores 0 to 7), each level one more such step (C2's rise in
+    # carrying about a quarter (C1's P(Success or better) 0.24 to 0.29 at skill scores 0 to 7, ON THE CALIBRATION GRID'S OPERANDS: the opponent scores rank + 4, `test_sc_calibration_targets.py`; `pool.score` floors an opponent below `pool_default` at `pool_default`, so a rank-0 actor against a rank-0 opponent composes opposition 6 and Ob 5.6 in play, P(Failure) about 0.74, outside C1's band), each level one more such step (C2's rise in
     # P(Failure) 0.08 to 0.12 a step). The control is `DIFFICULTY_OB_CONTROL` (0 / 1 / 2 / 3). Replaces lane A's
     # `rosters.yaml: task_difficulty` (a number per verb) and its `obstacle_model` switch.
     # [ASSUMPTION; Jordan to correct: `routine` 0.8, the value at which V2's model read 25 % carried -- basis:

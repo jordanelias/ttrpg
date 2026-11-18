@@ -24,7 +24,7 @@ Dependencies: stdlib only (math, random) + engine.dice_engine.dice_engine.
 
 Porting notes
 -------------
-All numerical behaviour is byte-identical to m1_dice_sigma_core.py:
+All numerical behaviour is byte-identical to m1_dice_sigma_core.py, EXCEPT below one die (B05.02: `net_boost`, the sampler and `band_odds` take the pool as it is; `sigma_n` still floors at one die, unreachable today because combat floors its pool at 1):
   • tanh via math.tanh (CPython delegates to libm, same IEEE-754 result)
   • sqrt via math.sqrt (same)
   • roll_net_continuous delegates to dice_engine (no new die-roll path)
@@ -103,7 +103,7 @@ M_MAX = 1.5             # soft-cap ceiling, sigma-units   # [canonical: modifier
 SIGMA_N_COEFF = 0.8     # sigma_N = 0.8 * sqrt(Pool)      # [canonical: modifier_system_spec.md §2.1 The transform]
 
 # Contest engine surface constants (audit/2026-06-03-contest-groundup/engine.py)
-OB_MIN = 1              # the floor a favourable modifier may not push an obstacle below (`eff_ob`; not an "Ob minimum" of a roll)
+OB_MIN = 1              # the floor a favourable modifier may not push an obstacle below (`eff_ob`); `modules/social_contest/roll.py::obstacle` lifts a composed obstacle to it
 
 # Per-die stats (params/core.md §Expected Value): TN7 μ/σ per die. GENERAL, not contest-specific
 # — the contest's de-saturation extension reads them from here (ED-SC-0032).

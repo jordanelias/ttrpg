@@ -99,7 +99,8 @@ def test_a_seat_is_never_in_the_pool_or_the_opposition():
         moved += leverage != base[3]
         checked += 1
     assert checked == len(LEVEL_SIGMA) and moved == checked
-    # the believer's own mode reads the same operand: his shown chance is the dealt one's input (`odds_of` mode (b) is built the same way)
+    # the SEAT'S read is `contest_input`'s: `via=SEAT` raises the leverage and leaves the pool, opposition and operands equal to the seatless input
+    # (`believed_input`'s `office=` plumbing is not asserted in this file)
     _plant(w, "strong")
     inp = sigma.contest_input(w, [SPEAKER, PARTY], verb="speak", subject=PARTY, room="Hh", via=SEAT)
     plain = sigma.contest_input(w, [SPEAKER, PARTY], verb="speak", subject=PARTY, room="Hh")

@@ -51,12 +51,13 @@ def _chance_floor_cap(pool: float, ceiling: float) -> Optional[float]:
     -- `band_odds(1, ceiling)`'s. The floor is therefore no new number: it is the fixed ceiling's own chance, and
     the cap at one die is that ceiling itself.
 
-    SOLVED AT THE LARGEST LAWFUL DISADVANTAGE, NOT "AT NO ADVANTAGE" (closes the pessimist's P-iii (c)): both the
-    one-die floor and the pool's chance are read with the roll's boost at `net_boost(-M_MAX, pool)`, the soft
-    cap's own floor on a hostile channel, so a signed leverage channel can never carry a roll through the floor:
-    under the cap, no pool's chance of Partial-or-better at `-M_MAX` falls below the one-die chance at the
-    ceiling at `-M_MAX`. Returns `None` where the floor is 0 (a ceiling at which a one-die roll keeps no chance
-    at all): there is nothing to hold.
+    THE CAP DOES NOT DEPEND ON THE BOOST (B05 close, antagonist): `net_boost` shifts the z of a roll by the same amount at every pool, so
+    equating the pool's chance to the one-die floor gives one cap at any common leverage, in closed form `0.4 N + (c - 0.4) sqrt(N)` for pool
+    `N` and ceiling `c` (2.0 / 3.06 / 3.97 / 4.80 at pools 1..4 for c = 2). Both chances are read at `net_boost(-M_MAX, pool)`, which makes the
+    floor the one the soft cap leaves a hostile channel (-1.142 sigma sqrt(N) on `soft_cap(-1.5)`; a stack deeper than that is past the soft cap's
+    own -1.5 limit and past this floor, unreachable at the shipped sources), and which moves where `None` is returned (a ceiling at which a
+    one-die roll keeps no chance at all, about 6.2 at that boost): there is nothing to hold. At a swept ceiling of 3 the derived pairs at
+    pools 1 and 2 (cap 3 and 4.48) are over S27.4's `multiple x pool` where `pool_floor` is swept to 0.
 
     The chance falls strictly as Ob rises, so the cap is found by bisection on `band_odds` (the one closed form);
     pure; cached on its two operands."""
@@ -106,14 +107,14 @@ def obstacle(inp: SocialContestInput) -> tuple:
     obstacle and nothing composes obstacles across a bundle. `None` is the uncapped control arm. THE SHIPPED ARM IS SOLVED PER POOL
     (CP-T01-06, `chance_floor`; `ceiling_per_pool`): from one die the cap is the highest Ob at which that pool keeps the chance of
     Partial-or-better the fixed ceiling leaves a one-die roll (`_chance_floor_cap`, solved on the closed form of the one sampler at the
-    largest lawful disadvantage, `-M_MAX`; 2.0 at pool 1, 3.06 at pool 2, rising with the pool), so a larger pool is never worse for the
+    the closed form above; 2.0 at pool 1, 3.06 at pool 2, rising with the pool), so a larger pool is never worse for the
     cap, and at the shipped ceiling (2) S27.4's `ob > multiple x pool` never holds on a derived pair. Below one die the fixed ceiling
     applies. THE CEILING'S FORM (`ceiling_form`, B05.54; `16_PESSIMIST_DICE_soft_ceiling`): `hard` is the flat bound above (`min(ob, cap)`:
     a hostile room, a forgery or any other term cannot raise the obstacle past the cap, and past it they are all one value); `soft`
     bends the excess instead: `bound(ob) = ob` up to the knee (the fixed ceiling), `knee + saturate(ob - knee, cap - knee)` past it, so
     the obstacle stays strictly under the cap and a hostile term past the knee still changes the odds. At one die, or with no per-pool
     cap, `cap == knee` and both forms are `min`; the "cannot raise" sentences hold of the `hard` arm and of one die only. The bent bound
-    is recorded as the `ceiling` term the fold adds and `ob` is that fold's last step, so the terms sum to `ob` exactly. A ceiling below the Ob minimum (`OB_MIN`, PP-232) is refused rather than read: it would breach the floor. THE FLOOR comes
+    is recorded as the `ceiling` term the fold adds and `ob` is that fold's last step, so the terms sum to `ob` exactly on this branch (on the hard branch the clip is `bounded - ob`, which sums back to `bounded` to within an ulp outside the Sterbenz range). A ceiling below the Ob minimum (`OB_MIN`, PP-232) is refused rather than read: it would breach the floor. THE FLOOR comes
     last: a composed obstacle under `OB_MIN` (a `plain` act against a person scoring 0) is lifted to it and the lift is the `floor` term.
     **NO "BASE Ob BY SCALE"** (Jordan, 2026-09-05)."""
     terms = [("even", even_line(inp.pool_add)),
@@ -126,6 +127,8 @@ def obstacle(inp: SocialContestInput) -> tuple:
     ob = 0.0
     for _, value in terms:
         ob += value
+    if inp.forgery_quality < 0:
+        raise ValueError(f"the obstacle's terms are never negative (nothing lowers it); got forgery {inp.forgery_quality!r}")
     if inp.forgery_quality:
         terms.append(("forgery", float(inp.forgery_quality)))
     ob += float(inp.forgery_quality)
@@ -138,6 +141,8 @@ def obstacle(inp: SocialContestInput) -> tuple:
         cap = knee
         if inp.ceiling_per_pool and inp.pool >= 1:
             cap = _chance_floor_cap(inp.pool, knee) or knee
+        if inp.ceiling_form not in ("hard", "soft"):
+            raise ValueError(f"ceiling_form {inp.ceiling_form!r} is not an arm the module reads ('hard', 'soft'); `soft_late` is named, not built (H-213)")
         if inp.ceiling_form == "hard" or cap <= knee or ob <= knee:
             bounded = min(ob, cap)
             clip = bounded - ob                  # flat: the bound itself is the new `ob`, as it was before the form existed

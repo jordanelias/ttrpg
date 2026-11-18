@@ -1,9 +1,9 @@
 """`seam/wrappers/pool.py` -- THE ONE POOL READER (CP-T01-01).
 
 `faculty` is read by the social contest (`sigma.py`, `contest_input` and `odds_of`) and, CR-85, by combat
-(`combat.py::combat_input`). `sigma.py` imports `combat.py` at module level (`fight_estimate`, `record_of`), so
-`combat.py` importing `faculty` from `sigma.py` would close a two-module import cycle (`test_import_cycle_game_state_npe`
-counts it). The reader lives here, a leaf both adapters import and neither is imported by: ONE OWNER, no copy.
+(`combat.py::combat_input`). `combat.py` imports `sigma.py` (`WOUNDS`, `advantage_levels`) and `sigma.py` no longer imports `combat.py` at module
+level, so the edge runs one way; the pool reader still lives here, a leaf both adapters import and neither is imported
+by: ONE OWNER, no copy.
 `sigma.py` re-exports the names it imports from here; a test that REPLACES
 `POOL_ADDENDS` patches THIS module (the list `faculty` reads), not `sigma`'s binding of it.
 """
@@ -71,7 +71,6 @@ def governing_attribute(entity: Any, verb: str):
     return _held_attribute(entity, row.governing[0] if row is not None and row.governing else None)
 
 
-_authored_attribute = governing_attribute   # B05.09: the name its remaining readers (tests) still use
 
 
 def governing_score(w: Any, p: Any, verb: str) -> float:

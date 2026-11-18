@@ -103,7 +103,7 @@ class SocialContestInput:
     proofs: float = 0.0
     forgery_quality: float = 0.0
     ceiling_per_pool: bool = False
-    ceiling_form: str = "hard"   # B05.53: how the obstacle behaves past its ceiling -- `hard` a flat bound, `soft` the excess saturating toward it; no reader yet (B05.54)
+    ceiling_form: str = "hard"   # B05.53: how the obstacle behaves past its ceiling -- `hard` a flat bound, `soft` the excess saturating toward it; read by `modules/social_contest/roll.py::obstacle`, which refuses any other value
     obstacle_operands: tuple = ()
 
 
