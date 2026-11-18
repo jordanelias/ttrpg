@@ -65,7 +65,8 @@ def _held_attribute(entity: Any, attr):
 def governing_attribute(entity: Any, verb: str):
     """(B05.25) The FIRST of `verb`'s `governing:` attributes (`verb_table.yaml`) AS HELD (`Person.attributes`), else `None` --
     `None` where he holds none, the row names none (a brute or a subsystem row) or the entity is no person. A READ, never a
-    default: the pool reads every governing attribute through `governing_score`, which counts an unheld one at the untrained score."""
+    default (B05.16): `None` is an unheld value, which the opposition reads as the mid-point (`opposing_attribute`) and the pool, through
+    `governing_score`, as the untrained score."""
     row = VERB_TABLE.get(verb)
     return _held_attribute(entity, row.governing[0] if row is not None and row.governing else None)
 
@@ -91,17 +92,25 @@ def governing_score(w: Any, p: Any, verb: str) -> float:
     return governing_mean([default if (held := _held_attribute(p, a)) is None else held for a in row.governing])
 
 
+def attribute_midpoint() -> float:
+    """THE ATTRIBUTE SCALE'S MID-POINT, `(ATTRIBUTE_FLOOR + ATTRIBUTE_CEILING) / 2` (4 on 1-7): what the OPPOSITION reads for an
+    attribute a person holds no value on (B05.16; U1 §4). Neither above nor below it: zero levels either way. Derived, never stored."""
+    return (descriptors.ATTRIBUTE_FLOOR + descriptors.ATTRIBUTE_CEILING) / 2
+
+
 def opposing_attribute(fx: Any, p: Any, verb: str):
-    """(B05.14; A-79, A-137) THE ATTRIBUTE A PERSON RESISTS `verb` WITH, AS HE HOLDS IT: his score in the verb row's `opposed_attribute:`,
-    counting at the untrained score (`untrained`) where he holds none (B05.16 replaces that reading with the attribute's mid-point), and
-    `None` where the row names none (an inquiry nobody resists by a trait). The one read the obstacle's `opposition` member
-    adds to his skill score (`score`); the pool reads his OWN attributes through `governing_score`, never this."""
+    """(B05.14, B05.16; A-79, A-137) THE ATTRIBUTE A PERSON RESISTS `verb` WITH, AS HE HOLDS IT: his score in the verb row's `opposed_attribute:`,
+    read at the scale's MID-POINT (`attribute_midpoint`) where he holds none (`_held_attribute` is `None`: a hand-built world's person; every
+    realm person holds all ten after B01a), and `None` where the row names none (an inquiry nobody resists by a trait). So an authored
+    character is easier to oppose than an unauthored one only by being authored low. The one read the obstacle's `opposition` member
+    adds to his skill score (`score`); the pool reads his OWN attributes through `governing_score`, where an unheld one counts at the
+    untrained score (`untrained`), never this. `fx` is kept for the caller's signature."""
     row = VERB_TABLE.get(verb)
     key = row.opposed_attribute if row is not None else None
     if key is None:
         return None
     held = _held_attribute(p, key)
-    return untrained(fx) if held is None else held
+    return attribute_midpoint() if held is None else held
 
 
 def rank(p: Any, verb: str) -> int:

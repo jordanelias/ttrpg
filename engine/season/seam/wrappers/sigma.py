@@ -120,7 +120,7 @@ def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]
 def _opposing(w: Any, subject: Optional[str], verb: str) -> Optional[float]:
     """WHAT A PERSON OPPOSITE BRINGS to the act (A-79, A-137: the resisting attribute mirrors the attribute in the dice): his skill
     score (`_opposition_of`) PLUS his opposing attribute (`pool.opposing_attribute`, the verb row's `opposed_attribute:` as he holds
-    it, the untrained score where he holds none, nothing where the row names none). `None` where nobody is opposite. THE OPERAND of
+    it, the scale's mid-point where he holds none (B05.16), nothing where the row names none). `None` where nobody is opposite. THE OPERAND of
     the obstacle's `opposition` member: `roll.py::obstacle` reads it at `opposed_ob(.., opposition_rate)`."""
     skill = _opposition_of(w, subject, verb)
     if skill is None:

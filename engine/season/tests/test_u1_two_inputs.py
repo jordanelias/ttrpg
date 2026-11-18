@@ -230,9 +230,51 @@ def test_the_opponent_attribute_raises_the_opposition():
     default = w.fixtures.get("pool_default")
     assert a.opposition == 3 + default and b.opposition == 6 + default       # B05.14 (A-137): one point of the attribute, one point of the opposition, ON TOP of the skill score
     assert tb["opposition"] - ta["opposition"] == 0.5 * (6 - 3)              # and `opposition_rate` of each at the control
-    # CONTROL: an opponent holding no `opposed_attribute` at all reads it at the untrained score (B05.16 makes that the mid-point), below the held 3.
+    # CONTROL: an opponent holding no `opposed_attribute` at all reads it at the mid-point (B05.16), above the held 3.
     w.persons["p_other"].attributes = {}
-    assert _argued(w, "p_low", "p_other")[0].opposition == 2 * default < a.opposition
+    mid = (descriptors.ATTRIBUTE_FLOOR + descriptors.ATTRIBUTE_CEILING) / 2
+    assert _argued(w, "p_low", "p_other")[0].opposition == default + mid > a.opposition
+
+
+def test_an_unauthored_person_reads_zero_attribute_levels():
+    """B05.16 (CAP B9, U1 §4 "Unauthored attribute", §6; U1-B step 7): a person who holds NO value on an attribute (a hand-built world's
+    person, `tiny_world`, no generic cast) reads the scale's MID-POINT `(ATTRIBUTE_FLOOR + ATTRIBUTE_CEILING) / 2` in the OPPOSITION,
+    where the averaged dice side counts him at the untrained score. `governing_attribute` returns `None` for the key he does not hold
+    (never a default), the opposition reads that `None` as the mid-point, and he is neither above nor below it: zero levels either
+    way. FALSIFIER (CAP): an authored character is easier to oppose than an unauthored one: the unheld opponent reads `mid`, so a
+    person authored BELOW the mid-point is the easier to move and one authored above is the harder, the unheld one reading
+    exactly the person authored AT the mid-point. CONTROL: the held reads are what they were (`test_the_opponent_attribute_raises_the_opposition`)."""
+    from ..data.verbs import VERB_TABLE
+    from ..seam.wrappers import sigma
+    verb = "tell"
+    row = VERB_TABLE[verb]
+    opposed, governing = row.opposed_attribute, row.governing[0]
+    mid = (descriptors.ATTRIBUTE_FLOOR + descriptors.ATTRIBUTE_CEILING) / 2
+    w = _world(attribute_level="minor")
+    SeasonDriver(w)
+    default = w.fixtures.get("pool_default")
+    assert mid != default                                                    # the two readings differ here, so the test can tell them apart
+    p, other = w.persons["p_other"], w.persons["p_mid"]
+    p.capability, p.attributes = {}, {}
+    assert pool.governing_attribute(p, verb) is None                         # no value held: None, not a default
+    assert pool.opposing_attribute(w.fixtures, p, verb) == mid               # the opposition reads that None as the mid-point
+    assert pool.opposing_attribute(w.fixtures, p, "forge") is None          # a row naming no `opposed_attribute` has none, held or not
+    read = {}
+    for label, held in (("below", mid - 1), ("at", mid), ("above", mid + 1), ("unheld", None)):
+        p.attributes = {} if held is None else {opposed: held}
+        read[label] = sigma.contest_input(w, [other.id], verb=verb, subject=p.id).opposition
+    assert read["unheld"] == default + mid, read                             # his skill score plus the mid-point
+    assert read["unheld"] == read["at"], read                                # unauthored IS the mid-point
+    assert read["below"] < read["unheld"] < read["above"], read              # an authored character is easier or harder, not the unheld one
+    p.attributes = {}
+    other.attributes = {}
+    assert sigma.contest_input(w, [p.id, other.id], verb=verb, subject=other.id).leverage == 0.0     # zero levels, `attribute_level` live
+    other.attributes = {governing: descriptors.ATTRIBUTE_CEILING}
+    assert sigma.contest_input(w, [p.id, other.id], verb=verb, subject=other.id).leverage == 0.0     # and an authored value gives none either
+    p.attributes = {governing: 1}                                            # CONTROL: the dice side still counts an unheld attribute at the untrained score
+    q = w.persons["p_low"]
+    q.capability, q.attributes = {}, {}
+    assert pool.governing_score(w, q, verb) == float(default) and mid != default
 
 
 def _rebind_rows(monkeypatch, edit):
