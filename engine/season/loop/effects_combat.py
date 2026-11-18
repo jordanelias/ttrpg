@@ -238,15 +238,18 @@ GROWN_KINDS = matrix_row("Person", "capability").emits
 
 def raised_capability(p: "Person", key: str) -> "dict | None":
     """`p.capability` with `key` raised by ONE whole point, the unit of a dice count -- `_eff_train`'s write and
-    `_grown`'s, one body. `None` where `p` does not already hold `key`: a key is NEVER MINTED, because a minted
-    `{arms: 1}` would replace `pool_default` in `faculty` and LOWER the pool of the man it meant to reward.
+    `_grown`'s, one body.
 
-    B04.15 -- A RANK NEVER PASSES ITS ROW'S CEILING: also `None` where the raised rank would pass
-    `descriptors.capability(key).ceiling`, the ceiling of the skill row's `scale` (7 for every row shipped), the answer
-    a key not held already gets; a rank at its ceiling is not raised, by `train` or by `_grown`."""
-    if key not in (p.capability or {}):
-        return None
-    raised = int(p.capability[key]) + 1
+    B05.09 (CORE Edit 9) -- A FIRST RANK IS MINTED: a person who holds no `key` is written `{key: 1}`, and his pool does not
+    move, because `pool.score` is `max(untrained score, rank)`: a rank below `pool_default` gives no dice and takes none (the
+    rule that kept a key from being minted, `{arms: 1}` replacing `pool_default`, no longer holds). [ASSUMPTION; medium; Jordan
+    to correct; revert: restore the never-minted rule, `None` for a key `p` does not hold].
+
+    B04.15 -- A RANK NEVER PASSES ITS ROW'S CEILING: `None` where the raised rank would pass
+    `descriptors.capability(key).ceiling`, the ceiling of the skill row's `scale` (7 for every row shipped); a rank at its
+    ceiling is not raised, by `train` or by `_grown`."""
+    held = p.capability or {}
+    raised = int(held[key]) + 1 if key in held else 1
     if raised > descriptors.capability(key).ceiling:
         return None
     return {**p.capability, key: raised}
@@ -254,13 +257,12 @@ def raised_capability(p: "Person", key: str) -> "dict | None":
 
 def _grown(w: "World", a: "Act", parties, bands: dict, bodies: dict) -> dict:
     """v11 CP-T03-04 (iv), BUILD-BY-DOING: `{pid: raised capability}` for each party of a fight THAT DREW BLOOD (some
-    party `Wounded` or `Felled`, i.e. `bands` is not empty) who SURVIVES it (his written body is not 0) and ALREADY
-    HOLDS the key the verb draws on (`VERB_CAPABILITY[a.verb]`, derived from the verb table's `capability:` column over `descriptors.CAPABILITIES` -- `arms` for the
+    party `Wounded` or `Felled`, i.e. `bands` is not empty) who SURVIVES it (his written body is not 0), for the key the verb draws on (`VERB_CAPABILITY[a.verb]`, derived from the verb table's `capability:` column over `descriptors.CAPABILITIES` -- `arms` for the
     three verbs contesting `the body`; the name is read there, never spelt here). Raised by ONE whole point,
     `_eff_train`'s unit.
 
-    ⚠ NEVER MINTED (`_eff_train`'s rule and its reason): a minted `{arms: 1}` would replace `pool_default` 2 in
-    `faculty` and LOWER the pool of the man it meant to reward. A party holding no key gains nothing.
+    ⚠ A FIRST RANK IS MINTED (B05.09, `raised_capability`): a surviving party who holds no `arms` key is written `{arms: 1}`,
+    and his pool does not move (`pool.score` is `max(untrained score, rank)`).
     ⚠ ONLY WHERE BLOOD WAS DRAWN, AND THE REASON IS THE FOLD, NOT TASTE: `fight`'s and `accept`'s `Untouched` band
     writes nothing, so the fold never runs this effect there (`loop/resolve.py`, `_pairs`); declaring a
     `Person.capability` write on it would turn every untouched fight between non-holders into `kill.refused`
@@ -780,13 +782,13 @@ def _eff_train(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     (`decision/options.py::opening_set`). ⚠ J-13 ANSWERED (iii) AS THE INTERIM [medium; Jordan to
     correct]: it writes `Person.capability` ONLY WHERE A CASE NAMES A VOCATION -- so the key must be a
     `VOCATIONS` member (K-20's range: Thread Sensitivity has no carrier, H-85, P-08) and the SUBJECT
-    must ALREADY hold it: a key is never minted, because a minted `{copying: 1}` would replace
-    `pool_default` and LOWER his pool (`seam/wrappers/sigma.py::faculty`). The ACTOR's own capability is
+    need not hold it: a non-holder is minted `{key: 1}` (B05.09, `raised_capability`), his pool unchanged until the rank
+    passes `pool_default` (`seam/wrappers/pool.py::score`). The ACTOR's own capability is
     NOT read: capability gates nothing (#353 §9.2), here as at formation. ONE whole point, the unit of a
     dice count [ASSUMPTION; medium; Jordan to correct; revert: a swept fixture step].
 
-    DECLINES (`NO_CHANGE` -> `train.refused`): no such subject; a key that is no vocation; a subject who
-    holds none in it (a pupil whose case names no vocation)."""
+    DECLINES (`NO_CHANGE` -> `train.refused`): no such subject; a key that is no vocation; a rank at its
+    row's ceiling."""
     who = _operand(a, "subject")
     key = _operand(a, VOCATION_SOURCED[a.verb])
     p = w.persons.get(who)

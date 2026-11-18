@@ -84,7 +84,7 @@ from ...queries.inputs import Margin, SocialContestInput
 from ...queries.world_q import proofs, reception
 from ...state.carriers import EFFORT, effort_of
 from ._entry import entry_for
-from .pool import POOL_ADDENDS, _authored_attribute, _capability, _opposing_attribute, faculty, register_pool_addend, score, untrained  # noqa: F401  (moved: see pool.py)
+from .pool import POOL_ADDENDS, _capability, _opposing_attribute, faculty, register_pool_addend, score, untrained  # noqa: F401  (moved: see pool.py)
 
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
 # (A-25), so the row says the social contest module runs its own prizes. Reached by that string only.
@@ -92,7 +92,7 @@ _PROVIDER = SOCIAL_ROLL_PROVIDER   # B11 lane A: one owner of the name (`data/ve
 _RESOLVER = "d_sigma"
 
 
-# `_capability`, `POOL_ADDENDS`, `register_pool_addend`, `_authored_attribute` and `faculty` live in `pool.py` (the one pool reader),
+# `_capability`, `POOL_ADDENDS`, `register_pool_addend`, `governing_attribute` and `faculty` live in `pool.py` (the one pool reader),
 # imported at the top of this module; see its docstring.
 
 
@@ -118,7 +118,8 @@ def _opposition_of(w: Any, subject: Optional[str], verb: str) -> Optional[float]
         # `obstacle_default` never stands in for a person. The control arm (`Fixtures obstacle_model: stand_in`)
         # reads the held values alone.
         if w.fixtures.get("obstacle_model") == OBSTACLE_MODEL_TASK:
-            return float(score(w, person, verb, attribute=_opposing_attribute))
+            opposing = score(w, person, verb, attribute=_opposing_attribute)
+            return None if opposing is None else float(opposing)     # no score (`untrained: none`): the module's default stands
         held = [float(v) for v in (_capability(person, verb), _opposing_attribute(person, verb)) if v is not None]
         if held:
             return max(held)

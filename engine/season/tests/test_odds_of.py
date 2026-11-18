@@ -188,7 +188,14 @@ def test_mode_a_has_no_odds_where_s27_4_refuses_and_resolve_refuses_the_same_pai
     claim = lambda: dict(verb="tell", subject="p_mid", rng=random.Random(3))
     control = sigma.resolve(w, ["p_low", "p_mid"], ["root"], prize, **claim())
     assert control["status"] == "RESOLVED" and sigma.odds_of(w, act) is not None
-    w.persons["p_low"].capability = {KEY: 0}                          # (1) the pool below the 1D floor
+    # (1) the pool below the 1D floor. B05.09: a held 0 now scores `max(pool_default, 0)`, so the pool of 0 is the one a skill
+    # row saying `untrained: none` gives a non-holder (no score, `faculty` 0), planted on the key `tell` draws on.
+    import dataclasses
+    from types import MappingProxyType
+    from engine.substrate import descriptors
+    row = dataclasses.replace(descriptors.CAPABILITIES[KEY], untrained="none")
+    monkeypatch.setattr(descriptors, "CAPABILITIES", MappingProxyType({**descriptors.CAPABILITIES, KEY: row}))
+    w.persons["p_low"].capability = {}
     assert sigma.odds_of(w, act) is None
     refused = sigma.resolve(w, ["p_low", "p_mid"], ["root"], prize, **claim())
     assert refused["status"] == "REFUSED" and refused["why"] == "S27.4" and refused["pool"] == 0, refused
@@ -292,3 +299,21 @@ def test_mode_b_is_only_the_actors_own_odds():
     other = w.persons["p_mid"]
     other.ledger.append(_claim("p_mid", "p_other", 3))
     assert sigma.odds_of(w, _tell("p_other", actor="p_low"), believer=other) is None
+
+
+def test_score_reads_no_attribute():
+    """B05.09 (TWO "Tests and lands"): the skill score the pool starts from has no attribute in it. A person holding the
+    verb's governing attribute at the ceiling and no skill key scores the untrained score, `pool_default`; with a skill key
+    below it, the same (a first rank is never a loss); the attribute enters only through the opposition's own `attribute=`
+    argument (B05.11 removes it). FALSIFIER: lane A's `max(attribute, rank)` (the pool of this person is 7)."""
+    from engine.substrate import descriptors
+    w = _world()
+    p = w.persons["p_low"]
+    default = w.fixtures.get("pool_default")
+    p.attributes = {descriptors.capability(KEY).base: descriptors.ATTRIBUTE_CEILING}
+    p.capability = {}
+    assert pool.score(w, p, "tell") == default
+    assert pool.score(w, p, "tell", attribute=pool._opposing_attribute) == descriptors.ATTRIBUTE_CEILING   # the opposition's read, kept
+    p.capability = {KEY: 1}
+    assert pool.score(w, p, "tell") == default and pool.faculty(w, p, "tell") == default + sum(
+        int(a(w, p, "tell")) for a in pool.POOL_ADDENDS)

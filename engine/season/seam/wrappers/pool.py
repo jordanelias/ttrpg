@@ -11,6 +11,9 @@ from __future__ import annotations
 
 from typing import Any
 
+from engine.dice_engine.sigma_leverage import pool_of
+from engine.substrate import descriptors
+
 from ...data.verbs import VERB_CAPABILITY, VOCATION_ATTRIBUTE, VOCATION_OPPOSED_BY
 from ...queries.world_q import practice
 
@@ -57,12 +60,17 @@ def _held_attribute(entity: Any, attr):
     return (getattr(entity, "attributes", None) or {}).get(attr) if attr else None
 
 
-def _authored_attribute(entity: Any, verb: str):
-    """The score `entity` HOLDS on the attribute the verb's vocation starts from (`rosters.yaml:
-    vocation_attribute`; `Person.attributes`), or `None` where he holds none, the verb draws on no
-    capability, or the entity is no person. The attribute's twin of `_capability`: a READ, never a default."""
+def governing_attribute(entity: Any, verb: str):
+    """(CAP B1, U1 §4) The governing attribute of `verb`'s skill AS HELD (`rosters.yaml: vocation_attribute`;
+    `Person.attributes`), else `None` -- read as the scale's mid-point where a reader needs a number
+    (`(descriptors.ATTRIBUTE_FLOOR + descriptors.ATTRIBUTE_CEILING) / 2`, derived, never stored). `None` too where the verb
+    draws on no skill or the entity is no person. The attribute's twin of `_capability`: a READ, never a default. The pool no
+    longer reads it (the skill score has no attribute in it, A-7); the opposition does, through `_opposing_attribute`."""
     attr = VOCATION_ATTRIBUTE.get(VERB_CAPABILITY.get(verb))
     return _held_attribute(entity, attr)
+
+
+_authored_attribute = governing_attribute   # B05.09: the name its remaining readers (tests, `sigma.py`'s re-export) still use
 
 
 def _opposing_attribute(entity: Any, verb: str):
@@ -80,33 +88,45 @@ def faculty(w: Any, p: Any, verb: str) -> int:
     gates nothing"*. Reached by `contest_input` (the dealt record) and by `odds_of` (the believer's own
     pool, which is known to him; `believed_input` takes it as an argument and has no World).
 
-    `VERB_CAPABILITY` maps a verb to the capability key it draws on; `Person.capability` is the
-    person's own dict, written by a `cast:` overlay and (v9 IN-12 step 9) `train`, which raises a key
-    only a person already holds. v10 CR-20: WHERE HE HOLDS THE VOCATION'S ATTRIBUTE (`VOCATION_ATTRIBUTE`,
-    `Person.attributes`) that score is the pool's base, and the pool is the LARGER of it and the capability
-    key he holds (practice raises a key; it never takes dice from an attribute). WHERE HE HOLDS NONE the held
-    key stands alone and `pool_default` is the fallback -- so a held 0 is still
-    a person under one die (`test_odds_of.py`, `test_sc01_speak.py` pin it). Then the registered addends
-    (`POOL_ADDENDS`) are summed on.
+    THE POOL IS `pool_of` (A-6, D-U1-08, B05.09): `pool_of(score, addends, pool_add, pool_floor)`, the one rule of how a skill
+    score, the registered addends (`POOL_ADDENDS`, whole dice) and the row's base and floor (`Fixtures pool_add`, `pool_floor`,
+    each 0 at control) make a pool. `score` has no attribute in it (A-7): the governing attribute enters the dice through
+    `governing_score` (B05.25), and the opposing attribute enters the opposition beside the skill score,
+    `opposed_ob(opposing attribute + skill score)` (B05.14, A-137). A held 0 is no longer a person under one die: the score is
+    `max(untrained score, rank)`, so a first rank never lowers a pool.
+    A skill whose row says `untrained: none` gives a non-holder NO score (`score` is `None`): his pool is 0, the roll refused as
+    a held 0 was (S27.4); no floor lifts a refusal.
     ⚠ `08 §3` GIVES THE POLARITY: an `assumption` grade means *inject the default, declare the site,
     sweep three points* -- never refuse the whole corpus for a missing key. `absent` is the grade
     that refuses, and this is not one."""
-    return score(w, p, verb) + sum(int(add(w, p, verb)) for add in POOL_ADDENDS)
+    base = score(w, p, verb)
+    if base is None:
+        return 0
+    return pool_of(base, addends_of(w, p, verb), w.fixtures.get("pool_add"), w.fixtures.get("pool_floor"))
 
 
-def score(w: Any, p: Any, verb: str, attribute: Any = None) -> int:
-    """WHAT `p` HOLDS FOR `verb`'s VOCATION (B11 lane A, `10_DICE_one_score_two_roles.md` A): the larger of the held
-    capability key and the vocation's attribute he holds, else the key alone, else `pool_default` -- `faculty`'s base.
-    ONE SCORE, TWO ROLES: the base of his pool AND the score an opponent's obstacle
-    halves (`sigma.py::_opposition_of`). No addend: practice raises a pool, never an opposition. `attribute` is the
-    attribute read: the vocation's own for the pool (`None`, `_authored_attribute`, looked up at the call so a test's
-    patch reaches it), `_opposing_attribute` for the opposition (v10 CR-96: the row's `opposed_by` where it has one),
-    the one difference between the two roles."""
+def addends_of(w: Any, p: Any, verb: str) -> int:
+    """The registered addends (`POOL_ADDENDS`) summed, whole dice: the one sum, read by `faculty` and by `combat_input` (which
+    applies its own row's two operands and receives `score + addends`, MAP §G edit 4)."""
+    return sum(int(add(w, p, verb)) for add in POOL_ADDENDS)
+
+
+def score(w: Any, p: Any, verb: str, attribute: Any = None) -> "int | None":
+    """(W3-1, A-7, 7b-6) WHAT `p` IS TRAINED IN FOR `verb`'s SKILL: the held rank, never below the untrained score
+    `pool_default` (CORE Edit 9: a first rank is never a loss), else the untrained score. `None` where the row says
+    `untrained: none` and he holds no rank. No attribute (the governing attribute enters the dice through `governing_score`,
+    B05.25) and no addend (practice raises a pool, never an opposition). The base of his pool AND the score an opponent's
+    `opposed_ob` reads (`sigma.py::_opposition_of`). `attribute` (B01's parameter, kept until B05.11): the opposition's read
+    only -- `_opposing_attribute` (v10 CR-96), the larger of that attribute and the rank, as B01 shipped it; the pool passes
+    none and reads no attribute."""
     have = _capability(p, verb)
-    attr = (attribute or _authored_attribute)(p, verb)
-    if attr is not None:
+    if attribute is not None and (attr := attribute(p, verb)) is not None:
         return int(attr) if have is None else max(int(attr), int(have))
-    return int(have) if have is not None else untrained(w.fixtures)
+    default = untrained(w.fixtures)
+    if have is not None:
+        return max(default, int(have))
+    row = descriptors.CAPABILITIES.get(VERB_CAPABILITY.get(verb))
+    return None if row is not None and row.untrained == "none" else default
 
 
 def untrained(fx: Any) -> int:

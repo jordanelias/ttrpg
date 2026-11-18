@@ -90,7 +90,7 @@ from ...state.ids import H
 from ..ladder import party_degree
 from ._entry import entry_for
 from ._estimate import rng_of, samples_of
-from .pool import faculty
+from .pool import addends_of, score
 
 _END_KEY = attribute_key("Endurance")      # the registry key of `end` (`descriptors`, the one owner), not a typed literal
 assert _END_KEY, "descriptors names no Endurance attribute: party_end would read the default for every person"
@@ -192,6 +192,15 @@ def _cause_record(w: Any, causes: list) -> Optional[str]:
     return record_of(store.get(causes[0]) if store is not None and causes else None)
 
 
+def _fight_faculty(w: Any, p: Any, verb: str) -> int:
+    """What a party brings to the fight's dice: `score + addends` (B05.09, MAP §G edit 4), NOT `pool.faculty` -- which now
+    applies the social pair (`pool_add`, `pool_floor`) the fight applies its own row's two operands for (today's
+    `max(5, faculty + 6)`), so the pair would reach the fight twice. At control (`pool_add` 0, `pool_floor` 0) the two are equal.
+    A skill with no score (`untrained: none`, a non-holder) brings 0, the pool `faculty` answers."""
+    base = score(w, p, verb)
+    return 0 if base is None else base + addends_of(w, p, verb)
+
+
 def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = None) -> PersonalCombatInput:
     """THE HOST INPUT BUILDER (plan position `31b`, A-25): `World` -> the frozen record the fight reads.
 
@@ -210,8 +219,8 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
     challenge's terms; where it names none the verb's `duel_terms` line stands (`accept: blood`, v11 CR-87) and a
     verb the roster does not name is fought under `'death'`.
 
-    `verb` also fills `faculties` (CR-85, ED-IN-0330): each party's `faculty(w, person, verb)`, the season's ONE pool
-    reader, imported from its owner `pool.py` (a leaf both this adapter and `sigma.py` import) and never copied. `fight`,
+    `verb` also fills `faculties` (CR-85, ED-IN-0330): each party's `score + addends` (`_fight_faculty`: `pool.faculty` without the social pair), the season's ONE pool
+    reader's parts, imported from their owner `pool.py` (a leaf both this adapter and `sigma.py` import) and never copied. `fight`,
     `accept` and `capture` draw on the `arms` capability key (CP-T03-04, `rosters.yaml: verb_capability`); a person holding no
     such key (and no attribute for its vocation) reads `pool_default` plus the registered addends, so the season's fight
     rolls that against half of it. [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] --
@@ -224,7 +233,7 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
         ends=(party_end(pa, w.fixtures), party_end(pb, w.fixtures)),
         wound_quantities=tuple(WOUND_QUANTITIES),
         kits=(kit_of(w, a_id), kit_of(w, b_id)),
-        faculties=(faculty(w, pa, verb), faculty(w, pb, verb)),
+        faculties=(_fight_faculty(w, pa, verb), _fight_faculty(w, pb, verb)),
         **({} if terms is None else dict(terms=terms)),
         # PC-06 K-1: the attributes each party HOLDS (authored or drawn), whenever either party holds any -- under the
         # shipped build (`cast_attributes=True`) every person does, so this always passes them; the field's default (the
