@@ -278,7 +278,7 @@ class Event:
     # Untouched band runs the effect: a clean yield's `person.captured` carries it). Empty on every other
     # Event, which is nearly all of them.
     # THE ORDER is the `claimants` order, actor first -- the convention `PersonalCombatInput`'s `ends`,
-    # `kits` and `faculties` follow -- a convention, NOT a role field.
+    # `kits`, `scores` and `addends` follow -- a convention, NOT a role field.
     # ⚠ NO PRODUCTION READER EXISTS YET. The plan gives it as the band Event's payload (the
     # CP-T03-02 home: with the body Observation, it is what CP-T03-05 (mode b) and CP-T03-08 "get their
     # lawful input" from); until one of them reads it, only the tests and `World.content_hash` do.

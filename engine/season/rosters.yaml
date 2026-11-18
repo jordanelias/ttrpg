@@ -428,7 +428,7 @@ rosters:
   person_inputs_kinds:
     source: "B05.25 (`engine/season/verb_table.yaml`'s row shape): how a `contest_subsystems.prizes` row's module reads a person"
     note: >-
-      THE VALUES OF A PRIZE ROW'S `person_inputs:`. `own` -- the module reads the person by its own rule (combat's `faculties` and
+      THE VALUES OF A PRIZE ROW'S `person_inputs:`. `own` -- the module reads the person by its own rule (combat's `scores`, `addends` and
       mapped attributes, the field's records), so a verb contesting the prize names no `governing:`; `pool` -- the module takes the
       pool `seam/wrappers/pool.py::faculty` builds from the verb's `governing:` attributes (the social roll), so the verb names
       them and, contested against a person, the `opposed_attribute` of the person opposite.
@@ -1392,7 +1392,7 @@ rosters:
 
   capability_use_sites:
     social_roll: seam/wrappers/sigma.py::contest_input
-    fight: "seam/wrappers/combat.py::combat_input -- no reader of this row on this tree; B05 (CAP B1, B7) builds it"
+    fight: "seam/wrappers/combat.py::combat_input -> PersonalCombatInput (applied by the module: the fight's attribute input is the six attributes on `PersonalCombatInput.attributes`, sigma-assembled in `modules/combat`, so the site carries no host-side `edge` row and `advantage_sigma` adds no second attribute term to a fight)"
     kit: "combat_systems.act_cost's caller -- no reader of this row on this tree; B05 (CAP B1, B7) builds it"
     told_claim_credit: decision/options.py::competence
     own_state_gate: queries/person_q.py::OwnStateReader
@@ -1518,7 +1518,7 @@ rosters:
     prizes:
       # `person_inputs:` (B05.25) IS HOW THE PRIZE'S MODULE READS A PERSON, and it is what exempts a verb from naming attributes
       # (`data/verbs.py::_check_governing_attributes`): `own` -- the module reads the person by its own rule and the verb row
-      # names no `governing:` (combat's `faculties` and mapped attributes, `seam/wrappers/combat.py::combat_input`; the field's
+      # names no `governing:` (combat's `scores`, `addends` and mapped attributes, `seam/wrappers/combat.py::combat_input`; the field's
       # records); `pool` -- the module takes the pool `seam/wrappers/pool.py::faculty` builds from the verb's `governing:`
       # attributes and skill rank (`seam/wrappers/sigma.py::contest_input`), and the row names the `opposed_attribute` of the
       # person opposite.
@@ -3395,8 +3395,8 @@ tables:
 
   # B04.05 (MAP §C, U1 §3): the uses table -- today's rules restated, one row per place a skill changes an outcome. Read by
   # `data/rosters.py::capability_uses()`; no reader reads it before B04.06. The `social_roll` `dice` row names `add: pool_add` and
-  # `floor: pool_floor` (B05.10: `pool.py::faculty` reads the two names off the row); the `fight` row's are the fight's (B05, with
-  # the pair carried raw). No row ships for `edge`, `circumstance`, `addend` or `rate`: the social roll's `edge` reader is
+  # `floor: pool_floor` (B05.10: `pool.py::faculty` reads the two names off the row); the `fight` row names the same two (B05.57: the
+  # pair is carried raw on `PersonalCombatInput.pool_add` and `.pool_floor`, `seam/wrappers/combat.py::combat_input`, and the module applies it). No row ships for `edge`, `circumstance`, `addend` or `rate`: the social roll's `edge` reader is
   # `sigma.py::_capability_levels`, and a planted row is read by it (B05.10; no `side: actor` or `side: subject` row on
   # `verb.base` ships, B05.25).
   # The `social_roll` rows are the single roll's (`seam/wrappers/sigma.py::contest_input`); a proceeding's dice and opposition
@@ -3405,7 +3405,7 @@ tables:
     rows:
       - {use: social_roll,       role: dice,      key: verb, side: actor, add: pool_add, floor: pool_floor}
       - {use: social_roll,       role: opposes,   key: verb, side: subject}
-      - {use: fight,             role: dice,      key: verb, side: each}
+      - {use: fight,             role: dice,      key: verb, side: each, add: pool_add, floor: pool_floor}
       - {use: fight,             role: opposes,   key: verb, side: each}
       - {use: fight,             role: resource,  key: attr.body.endurance, side: each}
       - {use: kit,               role: threshold, key: attr.body.strength,  side: each}

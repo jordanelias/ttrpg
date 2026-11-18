@@ -1794,7 +1794,7 @@
         },
         "person_inputs_kinds": {
           "source": "B05.25 (`engine/season/verb_table.yaml`'s row shape): how a `contest_subsystems.prizes` row's module reads a person",
-          "note": "THE VALUES OF A PRIZE ROW'S `person_inputs:`. `own` -- the module reads the person by its own rule (combat's `faculties` and mapped attributes, the field's records), so a verb contesting the prize names no `governing:`; `pool` -- the module takes the pool `seam/wrappers/pool.py::faculty` builds from the verb's `governing:` attributes (the social roll), so the verb names them and, contested against a person, the `opposed_attribute` of the person opposite.",
+          "note": "THE VALUES OF A PRIZE ROW'S `person_inputs:`. `own` -- the module reads the person by its own rule (combat's `scores`, `addends` and mapped attributes, the field's records), so a verb contesting the prize names no `governing:`; `pool` -- the module takes the pool `seam/wrappers/pool.py::faculty` builds from the verb's `governing:` attributes (the social roll), so the verb names them and, contested against a person, the `opposed_attribute` of the person opposite.",
           "values": [
             "own",
             "pool"
@@ -2281,7 +2281,7 @@
         },
         "capability_use_sites": {
           "social_roll": "seam/wrappers/sigma.py::contest_input",
-          "fight": "seam/wrappers/combat.py::combat_input -- no reader of this row on this tree; B05 (CAP B1, B7) builds it",
+          "fight": "seam/wrappers/combat.py::combat_input -> PersonalCombatInput (applied by the module: the fight's attribute input is the six attributes on `PersonalCombatInput.attributes`, sigma-assembled in `modules/combat`, so the site carries no host-side `edge` row and `advantage_sigma` adds no second attribute term to a fight)",
           "kit": "combat_systems.act_cost's caller -- no reader of this row on this tree; B05 (CAP B1, B7) builds it",
           "told_claim_credit": "decision/options.py::competence",
           "own_state_gate": "queries/person_q.py::OwnStateReader"
@@ -3556,7 +3556,9 @@
               "use": "fight",
               "role": "dice",
               "key": "verb",
-              "side": "each"
+              "side": "each",
+              "add": "pool_add",
+              "floor": "pool_floor"
             },
             {
               "use": "fight",

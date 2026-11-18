@@ -192,13 +192,12 @@ def _cause_record(w: Any, causes: list) -> Optional[str]:
     return record_of(store.get(causes[0]) if store is not None and causes else None)
 
 
-def _fight_faculty(w: Any, p: Any, verb: str) -> int:
-    """What a party brings to the fight's dice: `score + addends` (B05.09, MAP §G edit 4), NOT `pool.faculty` -- which now
-    applies the social pair (`pool_add`, `pool_floor`) the fight applies its own row's two operands for (today's
-    `max(5, faculty + 6)`), so the pair would reach the fight twice. At control (`pool_add` 0, `pool_floor` 0) the two are equal.
-    A skill with no score (`untrained: none`, a non-holder) brings 0, the pool `faculty` answers."""
+def _fight_score(w: Any, p: Any, verb: str) -> int:
+    """A party's SKILL SCORE for the fight (B05.57, `UPR` §2 edit 2): `pool.score` (no attribute, no addend), `0` where the skill gives
+    him none (`untrained: none`, a non-holder). It is what `ob_from_defender` opposes with and the base of his own pool. NOT `pool.faculty`,
+    which applies the social pair (`pool_add`, `pool_floor`) and refuses a verb naming no `governing:` attribute (`fight` names none, B05.25)."""
     base = score(w, p, verb)
-    return 0 if base is None else base + addends_of(w, p, verb)
+    return 0 if base is None else base
 
 
 def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = None) -> PersonalCombatInput:
@@ -219,12 +218,13 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
     challenge's terms; where it names none the verb's `duel_terms` line stands (`accept: blood`, v11 CR-87) and a
     verb the roster does not name is fought under `'death'`.
 
-    `verb` also fills `faculties` (CR-85, ED-IN-0330): each party's `score + addends` (`_fight_faculty`: `pool.faculty` without the social pair), the season's ONE pool
-    reader's parts, imported from their owner `pool.py` (a leaf both this adapter and `sigma.py` import) and never copied. `fight`,
-    `accept` and `capture` draw on the `arms` capability key (CP-T03-04, `rosters.yaml: verb_capability`); a person holding no
-    such key (and no attribute for its vocation) reads `pool_default` plus the registered addends, so the season's fight
-    rolls that against half of it. [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] --
-    the CR-85 design is UNRATIFIED (ED-IN-0351)."""
+    `verb` also fills the fight's TWO INPUTS (CR-85, ED-IN-0330; B05.57, `UPR` §2): `scores`, each party's skill score (`_fight_score`), and
+    `addends`, each party's registered pool addends (`pool.addends_of`, the one sum `pool.faculty` takes), read from their owner `pool.py`
+    (a leaf both this adapter and `sigma.py` import) and never copied. The pool is the module's: `pool_of(score, addends, pool_add,
+    pool_floor)` with the fight row's two operands carried raw (`pool_add`, `pool_floor`), the Ob the opponent's skill score alone.
+    `opposition_rate` is `None` in B05 (the module's own constant). `fight`, `accept` and `capture` draw on the `arms` capability key
+    (CP-T03-04, `rosters.yaml: verb_capability`); a person holding no such key reads the untrained score `pool_default`.
+    [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] -- the CR-85 design is UNRATIFIED (ED-IN-0351)."""
     a_id, b_id = claimants[0], claimants[1]
     terms = duel_terms_of(verb, stakes_of(w, record))
     pa, pb = w.persons[a_id], w.persons[b_id]
@@ -233,7 +233,10 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
         ends=(party_end(pa, w.fixtures), party_end(pb, w.fixtures)),
         wound_quantities=tuple(WOUND_QUANTITIES),
         kits=(kit_of(w, a_id), kit_of(w, b_id)),
-        faculties=(_fight_faculty(w, pa, verb), _fight_faculty(w, pb, verb)),
+        scores=(_fight_score(w, pa, verb), _fight_score(w, pb, verb)),
+        addends=(addends_of(w, pa, verb), addends_of(w, pb, verb)),
+        pool_add=w.fixtures.get("pool_add"), pool_floor=w.fixtures.get("pool_floor"),
+        opposition_rate=None,               # B05: the module's own constant (0.5); B15's `29_DICE` 29-3 makes it `fx.get("opposition_rate")`
         **({} if terms is None else dict(terms=terms)),
         # PC-06 K-1: the attributes each party HOLDS (authored or drawn), whenever either party holds any -- under the
         # shipped build (`cast_attributes=True`) every person does, so this always passes them; the field's default (the

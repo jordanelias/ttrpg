@@ -37,11 +37,14 @@ TN = SL.TN_STANDARD
 POOL_FLOOR = 5     # [canonical: params/core.md §Derived Scores (Combat Pool min 5)]
 BASE_POOL = 6      # [class-C: armature — faculty-driven pool base; pool = max(5, faculty+6), ED-901 (History until CR-85, ED-IN-0330); relocated verbatim from r1, ED-1085]
 
-def resolution_pool(faculty):
-    """Agility-INDEPENDENT resolution pool (ED-901; re-ratified ED-900/904): max(5, faculty + 6). `faculty` is the
-    party's dice score for the verb that opened the fight (CR-85, ED-IN-0330: it replaces `history`, formula unchanged;
-    `attributes.py` says where the season's value comes from)."""
-    return max(POOL_FLOOR, int(round(faculty)) + BASE_POOL)
+def resolution_pool(score, addends=0, add=BASE_POOL, floor=POOL_FLOOR):
+    """THE FIGHT'S POOL: `sigma_leverage.pool_of(score, addends, add, floor)` = `max(floor, score + addends + add)` (A-6, D-U1-08,
+    the one owner), UNROUNDED: a fractional pool is canonical and the bell-curve sampler takes one (F-PC-08 (d)), and a score
+    under the floor meets it. `score` is the party's skill score for the verb that opened the fight (CR-85, ED-IN-0330;
+    `attributes.py` says where the season's value comes from); `addends` the registered pool addends (whole dice; the record's
+    `addends`); `add` and `floor` the fight row's two operands (the record's `pool_add`, `pool_floor`), defaulting to `BASE_POOL`
+    and `POOL_FLOOR`, which the workbench passes."""
+    return SL.pool_of(score, addends, add, floor)
 def roll_net(pool, rng): return SL.roll_net_continuous(pool, TN, rng=rng)
 # Combat's lower-case band spelling of the owner's enum. A RELABEL, not a ladder: every key is decided by
 # `DE.degree_from_net`, and this map cannot move a boundary.
@@ -85,14 +88,14 @@ def ob_from_defender(defender):
     single_owner.py's RULINGS dict, entry "2026-08-15 — combat, and the sequence"). Score/2 plus that instance's
     modifiers, the SAME reading modules/social_contest/roll.py::obstacle applies (under its H-213 ceiling) for a person subject
     on the season side. This resolver's own score is `faculty` — the SAME score resolution_pool() derives dice
-    from (ED-901): `faculty` is the value `engine/season/seam/wrappers/sigma.py::faculty` reads for the party, passed
-    in through `PersonalCombatInput.faculties` (CR-85, ED-IN-0330); one value per party feeds his pool and the Ob he
-    is attacked against.
+    from (ED-901): `faculty` is the party's skill score for the verb (`engine/season/seam/wrappers/pool.py::score`), passed
+    in through `PersonalCombatInput.scores` (CR-85, ED-IN-0330; B05.57); one value per party feeds his pool and the Ob he
+    is attacked against. His registered addends (`PersonalCombatInput.addends`) feed his pool alone.
     [ASSUMPTION; medium; Jordan to correct; revert: the faculty value feeds the pool only and the Ob reads the class
     default 3] -- the CR-85 design is UNRATIFIED (ED-IN-0351).
     ⚠ THE OB READS MORE THAN THE SOCIAL CONTEST'S DOES (Phase 3, B10-11): `faculty` carries `pool_default` as the
-    pool's fallback and the practice addend, which `seam/wrappers/sigma.py::_opposition_of` ("NEVER THE FALLBACK AND
-    NEVER PRACTICE") leaves out. A person holding no key is attacked at Ob 1.0 here and at `opposed_ob(pool_default)` (plus the act's difficulty) in a
+    pool's fallback, which `seam/wrappers/sigma.py::_opposition_of` ("NEVER THE FALLBACK AND NEVER PRACTICE") leaves out
+    (the practice addend is no longer here: B05.57 carries it in `addends`, which feed the pool alone). A person holding no key is attacked at Ob 1.0 here and at `opposed_ob(pool_default)` (plus the act's difficulty) in a
     social contest: two ladders for one quantity.
     NO INSTANCE MODIFIER IS ADDED HERE. Wound impairment already has its OWNER
     (combat_systems.wound_impairment, ED-1041) and is folded into net_sigma at every call site (bind_sigma,

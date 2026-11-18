@@ -2,7 +2,7 @@
 
 `rosters.yaml: verb_capability` maps `fight`, `accept` and `capture` (the rows contesting `the body`) to `arms`. So:
 (ii) a held `arms` key reaches combat's pool and Ob through `seam/wrappers/sigma.py::faculty` -- CR-85's one path,
-`combat_input` -> `PersonalCombatInput.faculties` -- and NO second skill input exists; (i) `arms` is a vocation
+`combat_input` -> `PersonalCombatInput.scores` -- and NO second skill input exists; (i) `arms` is a vocation
 (`data/verbs.py::VOCATIONS`), so `train` forms on it and `_eff_train` raises it; (iii) the `cast:` overlay
 (`harness/corpus_run.py::cast_overlay`, checked by `_check_capability` against the roster's values) is the authored
 writer and names NO `arms` value (Jordan's content); (iv) `loop/effects_combat.py::_grown`: a fight that drew blood
@@ -115,7 +115,7 @@ def test_falsifier_arms_5_rolls_pool_11_and_is_attacked_at_ob_2_5_through_the_se
     w.persons[a].capability = {**(w.persons[a].capability or {}), KEY: 5}
     assert KEY not in (w.persons[b].capability or {})
     inp = C.combat_input(w, [a, b], verb)
-    assert inp.faculties == (5, 1), inp.faculties
+    assert inp.scores == (5, 1), inp.scores
     mod, attr = entry_target("the body")[1].split(":", 1)
     entry = getattr(importlib.import_module(mod), attr)
     seen = _spy(monkeypatch)
@@ -148,7 +148,7 @@ def test_control_with_the_item_off_the_same_holder_rolls_the_fallback(monkeypatc
     w = build_realm(1)
     a, b = sorted(w.persons)[:2]
     w.persons[a].capability = {**(w.persons[a].capability or {}), KEY: 5}
-    assert C.combat_input(w, [a, b], "fight").faculties == (2, 2)
+    assert C.combat_input(w, [a, b], "fight").scores == (2, 2)
 
 
 # ---- (i) train ----------------------------------------------------------------------------------------------------

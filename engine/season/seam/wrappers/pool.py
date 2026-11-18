@@ -133,7 +133,7 @@ def faculty(w: Any, p: Any, verb: str) -> float:
     attribute (`opposing_attribute`, B05.14), which `sigma.py::OBSTACLE_TERMS["opposition"]` adds and `roll.py::obstacle` reads at
     `opposed_ob` (A-137).
     A brute verb never reaches here (`Forbidden`), nor does a row naming no attribute (`Unspecified`): a (c) row reaches its
-    module, which reads `score + addends` (`seam/wrappers/combat.py::_fight_faculty`).
+    module, which reads `score` and `addends` as two numbers (`seam/wrappers/combat.py::combat_input`, B05.57).
     ⚠ `08 §3` GIVES THE POLARITY: an `assumption` grade means *inject the default, declare the site,
     sweep three points* -- never refuse the whole corpus for a missing key. `absent` is the grade
     that refuses, and this is not one."""
@@ -162,7 +162,7 @@ def _pool_pair(w: Any) -> tuple:
 
 def addends_of(w: Any, p: Any, verb: str) -> int:
     """The registered addends (`POOL_ADDENDS`) summed, whole dice: the one sum, read by `faculty` and by `combat_input` (which
-    applies its own row's two operands and receives `score + addends`, MAP §G edit 4)."""
+    carries it beside the skill score as `PersonalCombatInput.addends`; the module applies its own row's two operands, MAP §G edit 4)."""
     return sum(int(add(w, p, verb)) for add in POOL_ADDENDS)
 
 

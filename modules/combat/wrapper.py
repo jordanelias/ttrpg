@@ -68,6 +68,16 @@ def _carry(ready, cfg):
     # action, and no free one either.
     return {c: (max(0.0, r) % cfg['ACT_THRESHOLD']) for c, r in ready.items()}
 
+def _pool_dice(c, cfg):
+    """THE POOL A COMBATANT ROLLS (B05.57, `UPR` §2 edit 3): `core.resolution_pool(c.faculty, c.pool_addends, add, floor)` at the
+    three roll sites (the pursuit, the stop-hit, the exchange). `c.faculty` is his skill score; `c.pool_addends` his registered
+    pool addends, set by the module entry (a `Combatant` built by the workbench has none and reads 0). `add` and `floor` are the
+    record's `pool_add` and `pool_floor` when the entry carried them in `cfg` as `BASE_POOL` and `POOL_FLOOR`, else the owner's
+    own defaults (the bounds are read nowhere else, so this spells no pool constant)."""
+    kw = {k: cfg[name] for k, name in (("add", "BASE_POOL"), ("floor", "POOL_FLOOR")) if name in cfg}
+    return core.resolution_pool(c.faculty, getattr(c, "pool_addends", 0), **kw)
+
+
 def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
     """One engagement (the exchange inside a bout). `first` is the initiating Combatant object. `prev_closed` is the
     measure state the PREVIOUS engagement ended in (see the re-presentation gate below). Returns (felled Combatant or
@@ -198,7 +208,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                     _emit('disengage', longer=longer.label, shorter=shorter.label, ok=True, gap=round(base_gap,2))
                     continue
                 else:                                            # READ -> the closer pursues into the withdrawal (Nachreisen)
-                    pool=max(1, core.resolution_pool(shorter.faculty))
+                    pool=max(1, _pool_dice(shorter, cfg))
                     deg,net=core.resolve(pool, S.pursuit_sigma(shorter, longer, ffat[shorter], ffat[longer], cfg, TR), rng, core.ob_from_defender(longer))   # ED-PC-0036: systems.pursuit_sigma owns the formula (the whole sigma-assembly: armour, wounds, the withdrawer's attributes). Ob-from-defender (ED-PC-0058): `longer` is struck if the pursuit lands, so `longer` is the defender this roll is against.
                     _emit('disengage', longer=longer.label, shorter=shorter.label, ok=False, pursued=True, degree=deg)
                     if deg in ('success','overwhelming'):
@@ -227,7 +237,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             recoil = 0.0
             stophit_p = cfg['STOPHIT_CHANCE'] * min(1.0, measure_gap/cfg['STOPHIT_FULL_GAP']) * (1-displ) * rt  # FIX-1: a stop-hit that can't pierce the armour deters less
             if measure_gap > 0.0 and rng.random() < stophit_p:
-                pool=max(1, core.resolution_pool(longer.faculty))
+                pool=max(1, _pool_dice(longer, cfg))
                 nsig=S.stophit_sigma(longer, shorter, measure_gap, cfg)
                 _ob=core.ob_from_defender(shorter)
                 deg, net = core.resolve(pool, nsig, rng, _ob)   # Ob-from-defender (ED-PC-0058): `shorter` is struck if the stop-thrust lands.
@@ -316,7 +326,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             defender.initiative=S.clamp_initiative(defender.initiative+steal, cfg)
             aggressor.initiative=S.clamp_initiative(aggressor.initiative-steal, cfg)
             counter_attempt=S.counter_select(defender, cfg, rng, TR)
-        pool=max(1, core.resolution_pool(aggressor.faculty))
+        pool=max(1, _pool_dice(aggressor, cfg))
         _ob=core.ob_from_defender(defender)
         deg, net = core.resolve(pool, net_sigma, rng, _ob)   # Ob-from-defender (ED-PC-0058)
         _emit('roll', aggressor=_agg0, pool=pool, net_sigma=round(net_sigma,3), ob=_ob, net=round(net,2), degree=deg, mode=mode)   # `ob`: the workbench bands its distribution at it (PC-03)

@@ -152,13 +152,20 @@ class PersonalCombatInput:
                        `world_q.kit_of`: what the rungs the person holds store, read not consumed). The module
                        passes each to `Combatant(..., weapon=, armor=)`. The default is `()`: a record built
                        without kits is fought by two Combatants at the engine's own default kit;
-      * `faculties` -- each party's dice score for the fight's verb, in `claimants` order, `ends`' shape (CR-85,
-                       ED-IN-0330: it replaces combat's `history`). Filled by `combat.py::combat_input` from
-                       `seam/wrappers/sigma.py::faculty`, THE ONE POOL READER, and passed to `Combatant(..., faculty=)`,
-                       where it feeds the party's pool and the Ob his opponent rolls against, and nothing else. The
-                       default is `()`: a record built without it is fought at the module's own default (3).
-                       [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] --
-                       `proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md` is UNRATIFIED (ED-IN-0351);
+      * `scores`    -- each party's SKILL SCORE for the fight's verb, in `claimants` order, `ends`' shape (CR-85, ED-IN-0330,
+                       B05.57; `seam/wrappers/pool.py::score`: no attribute, no addend; 0 where the skill gives him none). Passed
+                       to `Combatant(..., faculty=)`, where it is the number the opponent's Ob is taken from
+                       (`core.ob_from_defender`) and the base of his own pool. The default is `()`: a record built without it
+                       is fought at the module's own default (3);
+      * `addends`   -- each party's registered pool addends for the verb, the sum of `pool.py::POOL_ADDENDS` (`pool.addends_of`,
+                       whole dice), in `claimants` order. The pool is `pool_of(score, addends, pool_add, pool_floor)`: the addend
+                       raises his pool and never an opposition (A-79). The default is `()`: none;
+      * `pool_add`, `pool_floor` -- the fight's row's two operands, carried raw from the fixtures the `fight` site's `dice` row
+                       names (`rosters.yaml: tables.capability_uses`; `pool_add`, `pool_floor`). `None` is the module's own
+                       constants (`core.BASE_POOL`, `core.POOL_FLOOR`), the workbench's;
+      * `opposition_rate` -- the share of a defender's skill score the obstacle takes per point, carried for
+                       `sigma_leverage.opposed_ob`. `None` is the module's own constant (0.5): in B05 `combat_input` carries
+                       `None`, and the flip to the fixture belongs to B15;
       * `attributes` -- each party's authored `Person.attributes`, `{registry key: whole number}`, in `claimants`
                        order (PC-06 K-1, ED-IN-0347). The module maps each key to its `Combatant` field by PC-14's
                        `registry_key` (`modules/combat/attributes.py`); a key absent from the dict leaves its field at
@@ -169,7 +176,11 @@ class PersonalCombatInput:
     wound_quantities: tuple
     terms: str = "death"
     kits: tuple = ()
-    faculties: tuple = ()
+    scores: tuple = ()
+    addends: tuple = ()
+    pool_add: Optional[float] = None
+    pool_floor: Optional[float] = None
+    opposition_rate: Optional[float] = None
     attributes: tuple = ()
 
 

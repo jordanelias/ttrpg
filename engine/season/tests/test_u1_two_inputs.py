@@ -10,8 +10,8 @@ THE CLAIMS, AND WHAT WOULD SHOW EACH WRONG:
     pool is the one rule's answer, and the `score` it hands over carries no attribute and no addend.
   * UNTRAINED `none`: a non-holder of a row saying `untrained: none` has NO score, `faculty` answers 0 (a roll refused as a
     held 0 was) and `raised_capability` mints his first rank.
-  * COMBAT KEEPS `score + addends` (MAP §G edit 4): `combat_input`'s `faculties` is not `faculty`, so `pool_add` and
-    `pool_floor` do not reach the fight twice.
+  * COMBAT KEEPS `score` AND `addends` AS TWO NUMBERS (MAP §G edit 4; B05.57): `combat_input`'s `scores` and `addends` are not
+    `faculty`, so `pool_add` and `pool_floor` reach the fight once, carried raw.
 """
 from __future__ import annotations
 
@@ -176,15 +176,18 @@ def test_raised_capability_mints_a_first_rank_and_holds_the_ceiling():
 
 
 def test_combat_receives_score_plus_addends_not_faculty():
-    """MAP §G edit 4: with the base and the floor live, `faculty` applies them and the fight's `faculties` does not."""
+    """MAP §G edit 4: with the base and the floor live, `faculty` applies them and the fight's `scores` and `addends` do not; the
+    pair rides the record raw (`pool_add`, `pool_floor`), for the module to apply once. (B05.57 re-pointed the kwarg only: the last
+    assertion, `pool.faculty` of a `fight`, is red at its base for a reason that is not this item's, `fight` naming no `governing:`.)"""
     w = _world(pool_add=6, pool_floor=5)
     a, b = "p_low", "p_mid"
     for pid in (a, b):
         w.persons[pid].capability = {"arms": 3}
     inp = combat.combat_input(w, [a, b], "fight")
-    for pid, got in zip((a, b), inp.faculties):
+    assert (inp.pool_add, inp.pool_floor, inp.opposition_rate) == (6, 5, None)
+    for pid, got, added in zip((a, b), inp.scores, inp.addends):
         p = w.persons[pid]
-        assert got == pool.score(w, p, "fight") + _addends(w, p, "fight") == 3 + _addends(w, p, "fight")
+        assert got == pool.score(w, p, "fight") == 3 and added == _addends(w, p, "fight")
         assert pool.faculty(w, p, "fight") >= 5 and pool.faculty(w, p, "fight") != got
 
 
