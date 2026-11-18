@@ -113,7 +113,7 @@ def resolve(pool, net_sigma, rng, ob):
     `ob`: the RULED Ob-from-defender value (Jordan 2026-08-15) — callers pass `ob_from_defender(defender, cfg)`.
     REQUIRED rather than defaulted, so no caller can skip the derivation (ED-PC-0058).
     Returns (deg, net)."""
-    net = roll_net(pool, rng) + SL.soft_cap(net_sigma) * SL.sigma_n(pool)
+    net = roll_net(pool, rng) + SL.net_boost(net_sigma, pool)
     return degree(net, ob), net
 
 # ---- damage (Impact x Coupling x Quality) — CONTINUOUS transmission, NO tanh saturation ----
