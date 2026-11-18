@@ -863,6 +863,18 @@ rosters:
       [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]
     values: [felled, yielded, undecided]
 
+  margin_endings:
+    source: "SC-P1 (H-284): what a margin provider's contest leaves on its Events"
+    note: >-
+      THE SOCIAL PROVIDER'S ENDING SHAPE, beside `fight_endings` (the scene's): `Event.ending` of a margin provider's act is
+      `((key, value), ...)` in THIS roster's order, built by `loop/resolve.py::_fold` from the result `seam/wrappers/sigma.py::resolve`
+      returned and nothing recomputed: `pool` and `ob` the roll's, `net` the draw plus its boost, `margin` the real margin `net - ob`
+      the ladder quantises once (the result's `settled_margin`), `terms` `Margin.terms` (the obstacle's named terms in roster order,
+      summing to `ob`), `levels` `((source, aggressor n, defender n), ...)` one per `advantage_sources` member, `leverage` the act's
+      net sigma. A refusal carries none: no dice were dealt. It names no actor, target or subject, and is no `Claim`'s predicate
+      (`test_sc01_provider.py::test_no_claim_predicate_is_a_margin_ending_after_witness`).
+    values: ["pool", "ob", "net", "margin", "terms", "levels", "leverage"]
+
   duel_terms:
     source: "CP-T03-09 (`-08` AM-C-03; home `proposals/2026-10-23-subsystem-completion/` T03 §2): the terms a verb's fight is fought under."
     cite: "AM-C-03"

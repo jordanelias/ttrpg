@@ -288,6 +288,17 @@ class Event:
     # [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation] -- the carrier is
     # a new Event field rather than a payload key, since an Event carries no payload; a carrier+hash
     # schema mover, folded by `World.content_hash` only where non-empty.
+    # B05.18 (SC-P1, H-284). TWO SHAPES, BY PROVIDER: (1) a SCENE provider (personal combat) -- the per-party
+    # endings above, `rosters.yaml: fight_endings`' words, `data/rosters.py::ENDING_*`; (2) a MARGIN provider
+    # (the social contest) -- `((key, value), ...)` in `rosters.yaml: margin_endings`' order (`data/rosters.py::
+    # MARGIN_ENDING`: pool, ob, net, margin, terms, levels, leverage), the roll that graded the act, built in
+    # `loop/resolve.py::_fold` from what `seam/wrappers/sigma.py::resolve` returned, on every Event of the act
+    # (the Failure band's too); a refusal carries none (no dice were dealt). No act is both.
+    # ⚠ A DEPARTURE FROM `04` §B.9, NAMED HERE: its `Event` record names `degree?` and no `ending`; the field already
+    # ships for combat (H-266), and its use for a margin provider's tuple is a departure (`skills/layer-conformance`
+    # B4, third disposition; C3-C16). Its readers: `harness/chronicle.py` and the GO surface's account. It carries
+    # no actor, target or subject (`04` PART D row 9) and is no `Observation`, so no hearer learns the speaker's
+    # pool from being in the room (D-U1-06; `test_sc01_provider.py::test_no_claim_predicate_is_a_margin_ending_after_witness`).
     ending: tuple = ()
 
     def __post_init__(self) -> None:

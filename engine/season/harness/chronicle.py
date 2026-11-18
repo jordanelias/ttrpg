@@ -97,6 +97,7 @@ import os
 import sys
 from collections import Counter
 
+from ..data.rosters import MARGIN_ENDING
 from ..data.verbs import VERB_TABLE
 from ..state.attribution import causing_act
 from . import arc as ARC
@@ -151,11 +152,35 @@ def _kinds(log, act_of: dict) -> dict:
     return out
 
 
+def _rolled(log, act_of: dict) -> dict:
+    """`{act_id: the margin tuple its Events carry}` (B05.18, SC-P1: `Event.ending` under `rosters.yaml: margin_endings`). A scene's
+    `ending` (`fight_endings`: pairs of person and word) is not a margin tuple and is not read here: the keys decide."""
+    out: dict = {}
+    for e in log:
+        a = act_of.get(e.id)
+        end = getattr(e, "ending", ())                    # a planted Event (a test's namespace) may carry none
+        if a is not None and end and {k for k, _v in end} == set(MARGIN_ENDING):
+            out.setdefault(a.id, end)
+    return out
+
+
+def rolled_text(ending: tuple) -> str:
+    """One act's roll as a line: *obstacle 3.7 = even 2.4 + difficulty 0.5 + opposition 0.8, pool 4.0, net 3.1, margin -0.6; leverage: proofs +2, favour +1*
+    (SC-B Edit B's form). The terms are `Margin.terms` as it carried them; the levels are the aggressor's less the defender's per source."""
+    d = dict(ending)
+    terms = " + ".join(f"{n} {v:.3g}" for n, v in d["terms"])
+    lev = ", ".join(f"{n} {a - b:+d}" for n, a, b in d["levels"] if a != b) or "none"
+    return (f"obstacle {d['ob']:.3g} = {terms}, pool {d['pool']:.3g}, net {d['net']:.3g}, margin {d['margin']:.3g}; "
+            f"leverage {d['leverage']:+.3g}: {lev}")
+
+
 def lines(log, act_of: dict, rows: dict, persons) -> list:
-    """The chain as structured lines: `[{"n", "act", "season", "actor", "verb", "kinds",
-    "answers"}]`, `answers` the earlier line's `n` (None on the first). Root first."""
+    """The chain as structured lines: `[{"n", "act", "season", "actor", "verb", "kinds", "rolled",
+    "answers"}]`, `rolled` the margin tuple of a social roll's Events (`()` for every act none graded),
+    `answers` the earlier line's `n` (None on the first). Root first."""
     chain = deepest_chain(rows)
     kinds = _kinds(log, act_of)
+    rolled = _rolled(log, act_of)
     verb = {}
     for a in act_of.values():
         verb.setdefault(a.id, a.verb)
@@ -164,7 +189,7 @@ def lines(log, act_of: dict, rows: dict, persons) -> list:
         r = rows[aid]
         out.append({"n": i + 1, "act": aid, "season": r["season"],
                     "actor": _name(persons, r["actor"]), "verb": verb.get(aid, "?"),
-                    "kinds": kinds.get(aid, []),
+                    "kinds": kinds.get(aid, []), "rolled": rolled.get(aid, ()),
                     "answers": i if i else None})
     return out
 
@@ -183,8 +208,9 @@ def render(log, act_of: dict, rows: dict, persons) -> str:
         else:
             a = ls[l["answers"] - 1]
             tail = f"answers {a['n']}. {a['actor']} {a['verb']}"
+        roll = f" (rolled: {rolled_text(l['rolled'])})" if l["rolled"] else ""        # B05.18: beside what it emitted, where a margin graded it
         out.append(f"{l['n']}. season {l['season']} | {l['actor']} {l['verb']} | "
-                   f"emitted {', '.join(l['kinds']) or '(nothing)'} | {tail}")
+                   f"emitted {', '.join(l['kinds']) or '(nothing)'}{roll} | {tail}")
     return "\n".join(out)
 
 

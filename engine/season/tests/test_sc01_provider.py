@@ -74,7 +74,8 @@ def _recording(monkeypatch) -> list:
 
     def rec(w, claimants, causes, prize, **kw):
         out = real(w, claimants, causes, prize, **kw)
-        calls.append(dict(verb=kw.get("verb"), rung=kw.get("rung"), prize=prize, out=out))
+        calls.append(dict(verb=kw.get("verb"), rung=kw.get("rung"), prize=prize, out=out,
+                          claimants=list(claimants), causes=list(causes), kw=dict(kw)))
         return out
     monkeypatch.setitem(PROVIDERS, ("contest", PROVIDER), rec)
     return calls
@@ -353,3 +354,78 @@ def test_the_believer_reads_the_subjects_row_only_from_a_held_claim(monkeypatch)
                            when=5, source="told", confidence=5, visibility="own"))      # the later claim wins (`believed_capability`)
     believed = sigma.odds_of(w, act, believer=me)
     assert believed is not None and believed != control and believed[0] > control[0]
+
+
+# ================================================================================================
+# B05.18 -- A SOCIAL ROLL'S EVENT CARRIES THE ROLL THAT DECIDED IT (SC-P1, OBS §4 step 2; closes H-284)
+# ================================================================================================
+# `Event.ending` is the margin provider's tuple `((key, value), ...)` in `rosters.yaml: margin_endings`' order. Read
+# against the provider's OWN return, recomputed with the act's own generator: the tuple follows the roll, never a recomputation.
+
+def _argue_once(monkeypatch, key):
+    """One `argue` folded on `tiny_world`: `(events, the provider's call, the act, the world)`."""
+    from .test_in12_step9 import _argue, _argue_world
+    from .test_in10_record_operands import _resolve
+    w, d, pid, _keys = _argue_world()
+    calls = _recording(monkeypatch)
+    act = _argue(pid, key)
+    out = _resolve(w, d, act)
+    assert len(calls) == 1, calls
+    return out, calls[0], act, w
+
+
+def _the_act_own_roll(w, act, call):
+    """`sigma.resolve` called again with the act's own generator (`loop/resolve.py::_contest`'s purpose) and the seam's own arguments."""
+    from ..state.ids import draw_factory
+    kw = dict(call["kw"])
+    kw["rng"] = draw_factory(w.world_seed, lambda: w.tick)(act.actor, f"roll:{call['prize']}:{act.id}")
+    return sigma.resolve(w, call["claimants"], call["causes"], call["prize"], **kw)
+
+
+def test_a_social_roll_event_carries_its_margin_ending(monkeypatch):
+    from ..data.rosters import MARGIN_ENDING
+    assert MARGIN_ENDING == ("pool", "ob", "net", "margin", "terms", "levels", "leverage")
+    bands, checked = set(), 0
+    for i in range(24):
+        out, call, act, w = _argue_once(monkeypatch, f"mg_{i}")
+        monkeypatch.undo()
+        r = _the_act_own_roll(w, act, call)
+        assert r["status"] == "RESOLVED" and r == call["out"], (r, call["out"])            # the recomputation is the roll the fold saw
+        expected = tuple((k, r["settled_margin" if k == "margin" else k]) for k in MARGIN_ENDING)
+        assert out and all(e.ending == expected for e in out), [(e.kind, e.degree, e.ending) for e in out]
+        # the tuple grades to the Event's band on the one ladder, through the same dispatcher the fold used
+        e = dict(expected)
+        assert ladder.degree_of({"net": e["net"], "ob": e["ob"], "settled_margin": e["margin"]}) == out[0].degree
+        assert e["margin"] == e["net"] - e["ob"] and sum(v for _n, v in e["terms"]) == pytest.approx(e["ob"])
+        from ..harness import chronicle
+        assert chronicle.rolled_text(expected).startswith(f"obstacle {e['ob']:.3g} = ")        # the chronicle's one line reads the same tuple
+        bands.add(out[0].degree)
+        checked += 1
+    assert checked == 24 and "Failure" in bands and len(bands) > 1, bands                 # the Failure band's Events carry it too
+
+
+def test_a_refused_contest_carries_no_margin_ending():
+    """`_refuse_party_gap`: no dice were dealt, so the refusal's Event carries no tuple."""
+    from .test_in12_step9 import _argue, _argue_world
+    from .test_in10_record_operands import _resolve
+    w, d, pid, _keys = _argue_world()
+    out = _resolve(w, d, _argue(pid, "mg_gap", to="p_nobody"))
+    assert out and all(e.ending == () for e in out), [(e.kind, e.ending) for e in out]
+
+
+def test_no_claim_predicate_is_a_margin_ending_after_witness():
+    """Falsifier (b): a hearer must not learn the speaker's pool from the room. After a WITNESS barrier no `Claim` in any ledger has a
+    predicate drawn from `margin_endings`."""
+    from ..data.rosters import MARGIN_ENDING
+    from ..data.matrix import WriteClass
+    from ..loop.driver import mint_token
+    from .test_in12_step9 import _argue, _argue_world
+    from .test_in10_record_operands import _resolve
+    w, d, pid, _keys = _argue_world()
+    out = _resolve(w, d, _argue(pid, "mg_wit"))
+    assert out and all(e.ending for e in out)                                              # the control: the record exists to leak
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
+    claims = [c for p in w.persons.values() for c in p.ledger]
+    assert claims                                                                          # the barrier deposited something to read
+    leaked = [c for c in claims if c.predicate in MARGIN_ENDING or c.predicate.split(":")[0] in MARGIN_ENDING]
+    assert not leaked, leaked
