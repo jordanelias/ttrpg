@@ -205,12 +205,16 @@ def test_the_field_eats_its_ration_from_the_treasury_only_when_on(on, monkeypatc
     before_b = dict(w.rungs[TREASURY_B].stores or {})
     events = _fold(w, _march_act())
     kinds = {e.kind for e in events}
-    assert kinds & {"field.lost", "field.won"}, sorted(kinds)
+    fought = {"field.lost", "field.won", "field.drawn"}
     assert len(seen) == 1, seen
     if on:
+        # B17.01: the realm's weight-1 persons are 30 troops each, under the rout floor, so the field is a `Drawn` one nobody is
+        # hurt in; it is told because the ration it ate is a durable write (`Drawn` debits as `Won` and `Lost` do)
+        assert kinds & fought, sorted(kinds)
         assert seen[0][1] == {"troops_a": 1, "troops_b": 0}, seen
         assert w.rungs[TREASURY_A].stores == {"grain": 2, "salt": 0}, w.rungs[TREASURY_A].stores
     else:
+        assert not kinds & fought and "march.refused" in kinds, sorted(kinds)     # nobody hurt, nothing eaten: nothing to write
         assert seen[0][1] == {"troops_a": 2, "troops_b": 6}, seen
         assert w.rungs[TREASURY_A].stores == {"grain": 4, "salt": 1}, w.rungs[TREASURY_A].stores
     assert dict(w.rungs[TREASURY_B].stores or {}) == before_b
@@ -245,7 +249,8 @@ def _patch_won_recording(monkeypatch):
 
     def fn(inp, rng, **kw):
         seen.append(kw)
-        return dict(attacker_wins=True, degree="Success", attacker_size_pct=1.0, defender_size_pct=0.5)
+        return dict(attacker_routed=False, attacker_conceded=False, defender_routed=True, defender_conceded=False,
+                    attacker_size_pct=1.0, defender_size_pct=0.5)
     monkeypatch.setattr(MB, "entry_for", lambda prize, module: (SimpleNamespace(fn=fn), None))
     return seen
 

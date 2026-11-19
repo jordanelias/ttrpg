@@ -4,8 +4,8 @@ shared pin.
 
 THE FIELD IS HAND-BUILT, NOT NATURAL. One season of the shipped realm fights almost no field (seed 0: unopposed 3;
 seed 1: unopposed 2; seed 2: lost 1), so the falsifier runs on a hand fold of `set_s_014` (the Crown's two marchers,
-made cohorts of `WEIGHT`) on `set_s_036` (the Church's six), the weight -> troops scale at `SCALE` (a value of THIS
-TEST, as `test_cp_t04_01_person_subunits.py`'s). The record is `field_input`'s own, so the line under test is the one
+made cohorts of `WEIGHT`) on `set_s_036` (the Church's six, `DEFENDER_WEIGHT`), at the one scale of 30 troops a weight
+(B17.01 retired the scale fixture: `under_arms_cap`). The record is `field_input`'s own, so the line under test is the one
 that builds `walls_dr`; two fields of it are this test's, as `tests/valoria/test_mass_battle_terrain.py` does: the place
 (`territory='T3'`, an OPEN_FLAT polygon, so fort 0 is a plain field and a fort above 0 is WALLS) and no origin (no river
 crossing to confound the steps).
@@ -25,14 +25,20 @@ import pytest
 
 from engine.season.boot.realm import build_realm
 from engine.season.queries import world_q
+from engine.season.data.rosters import WON
+from engine.season.seam.ladder import field_degree
 from engine.season.seam.wrappers import mass_battle as wrapper
-from engine.season.tests.test_march import _fold_one, _march_act
+from engine.season.tests.test_march import _fold_one, _march_act, _weigh
 
 #: RE-PICKED by MB-07r (the depth support cap ON, `POOL_QUALITY_SCALE` 0.5 -> 0.8): at the old fold (weight 8, scale 100)
 #: the defender's shares read {1.0: 0.54, 0.67: 0.465, 0.33: 0.42, 0.0: 0.42}, a 4.5-point second step under the +-7
 #: band the entry names. At (10, 60) they read {1.0: 0.49, 0.67: 0.385, 0.33: 0.285, 0.0: 0.285}: base inside the 45-56 %
 #: shape, both steps ~10 points, the 0.33 -> 0 plateau exact (`int(3 * 0.33)` is 0). The predicate and n are unchanged.
-WEIGHT, SCALE, SEEDS = 10, 60, range(200)
+#: RE-PICKED by B17.01 (the scale, the placement by `orderofbattle._place` and the three-way grade moved every fight): the fold
+#: is the `side` arm (one subunit a side, so the garrison's DR is the one thing between the two bodies) at marcher weight 10
+#: against defender weight 2 (300 and 60 troops a person, six a side). Shares {1.0: 0.58, 0.67: 0.465, 0.33: 0.335, 0.0: 0.335}:
+#: both steps over the +-7 band, the 0.33 -> 0 plateau exact. Of (20, 2): 0.355 / 0.235 / 0.14 / 0.14, a base under the 0.2 floor.
+WEIGHT, DEFENDER_WEIGHT, SEEDS = 10, 2, range(200)
 MARCHERS = ("p_npc_033", "p_npc_035")
 LEVELS = (1.0, 0.67, 0.33, 0.0)
 TARGET, HOME = "set_s_036", "set_s_014"
@@ -46,9 +52,9 @@ def _mb():
 
 def _world(walls_dr, level):
     w = build_realm(0)
-    for pid in MARCHERS:
-        w.persons[pid].weight = WEIGHT
-    w.fixtures = w.fixtures.sweep("field_troops_per_weight", SCALE).sweep("field_walls_dr", walls_dr)
+    _weigh(w, MARCHERS, WEIGHT)
+    _weigh(w, world_q.mustered(w, TARGET, "fac_church_of_solmund"), DEFENDER_WEIGHT)
+    w.fixtures = w.fixtures.sweep("field_walls_dr", walls_dr).sweep("field_units", "side")
     full = w.fixtures.get("condition_scale")
     garrisons = [s for s in w.sites.values() if s.kind == "garrison" and s.rung == TARGET]
     assert garrisons, "fixture moved: set_s_036 holds no garrison Site"
@@ -68,7 +74,7 @@ def _share(walls_dr, level, builder=None):
     """The defender's win share over the paired seeds, and the `walls_dr` the record carried."""
     w = _world(walls_dr, level)
     inp = _record(w) if builder is None else builder(w)
-    wins = sum(not _mb().resolve_field(inp, random.Random(s))["attacker_wins"] for s in SEEDS)
+    wins = sum(field_degree(_mb().resolve_field(inp, random.Random(s))) != WON for s in SEEDS)
     return wins / len(SEEDS), inp.walls_dr
 
 
@@ -94,8 +100,8 @@ def _falls(shares):
     return (s[1.0] - s[0.67] >= NOISE and s[0.67] - s[0.33] >= NOISE and s[0.33] == s[0.0])
 
 
-def test_shipped_arm_is_none():
-    assert build_realm(0).fixtures.get("field_walls_dr") is None
+def test_shipped_arm_is_three_and_none_is_the_flat_control():
+    assert build_realm(0).fixtures.get("field_walls_dr") == 3
 
 
 def test_falsifier_defender_win_share_falls_as_the_garrison_wears_under_paired_seeds():
@@ -129,7 +135,7 @@ def test_the_grade_is_floored_not_banker_rounded():
     assert _record(w).walls_dr == 0 and int(1 * 0.5) == 0
 
 
-def test_control_shipped_none_hands_none_and_is_flat_across_the_steps_that_stay_walled():
+def test_control_none_hands_none_and_is_flat_across_the_steps_that_stay_walled():
     shares = _flat()
     assert all(shares[lv][1] is None for lv in LEVELS), shares
     s = {lv: shares[lv][0] for lv in LEVELS}
@@ -138,9 +144,9 @@ def test_control_shipped_none_hands_none_and_is_flat_across_the_steps_that_stay_
     assert s[0.0] < s[1.0]                                  # ... and fort 0 is no wall, as today
 
 
-def test_control_three_at_full_condition_is_the_shipped_field():
-    """A.9's number times 1.0: the graded arm and the shipped arm are one field at full condition, so the flip moves
-    only a worn garrison. Same record, same share, same result on every seed."""
+def test_control_three_at_full_condition_is_the_flat_field():
+    """A.9's number times 1.0: the graded arm (shipped) and the flat `None` control are one field at full condition, so the
+    grading moves only a worn garrison. Same record, same share, same result on every seed."""
     graded, flat = _graded()[1.0], _flat()[1.0]
     assert graded[0] == flat[0]
     assert graded[1] == 3 and flat[1] is None
@@ -155,9 +161,9 @@ def test_control_through_the_real_driver_three_at_full_condition_is_hash_equal_t
     hashes = []
     for walls_dr in (None, 3):
         w = build_realm(0)
-        for pid in MARCHERS:
-            w.persons[pid].weight = 2
-        w.fixtures = w.fixtures.sweep("field_troops_per_weight", SCALE).sweep("field_walls_dr", walls_dr)
+        _weigh(w, MARCHERS, 4)
+        _weigh(w, world_q.mustered(w, TARGET, "fac_church_of_solmund"), DEFENDER_WEIGHT)
+        w.fixtures = w.fixtures.sweep("field_walls_dr", walls_dr).sweep("field_units", "side")
         events = _fold_one(w, _march_act(MARCHERS[0], TARGET, "off_spymaster"), contest_max_depth=2)
         assert any(e.kind.startswith("field.") for e in events), [e.kind for e in events]
         hashes.append(w.content_hash())

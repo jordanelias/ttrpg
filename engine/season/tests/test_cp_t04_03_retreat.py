@@ -5,7 +5,7 @@ without rout's facing flip, and `_grade` never calls it the winner. No new band;
 This file is the item's own; nothing here is a shared pin.
 
 THE FIELD is `test_cp_t04_02_marshal.py`'s (its helpers are reused, not re-invented): the Crown's two marchers against the
-Church's six at `SCALE` 30 on an open field, the record `field_input`'s own, and the order a real `marshal` act folded
+Church's six at the one scale (30 troops a weight) on an open field, the record `field_input`'s own, and the order a real `marshal` act folded
 through the driver (`marshal` ships WITHHELD, so the act is hand-minted). Both sides name the role `Screen`, whose one
 instruction is wired to no primitive, so the order changes the field by its `retreat_at` alone (the control below checks
 that `Screen`/`none` is the field as it was).
@@ -27,11 +27,17 @@ from types import SimpleNamespace
 
 import pytest
 
+from engine.season.data.rosters import DRAWN, LOST, WON
+from engine.season.seam.ladder import field_degree
 from engine.season.tests import test_cp_t04_02_marshal as M
 from engine.season.tests.test_march import _fold_one
 
 SEEDS, PERSON_SEEDS = range(200), range(100)
 ROLE = "Screen"            # a role with no wired primitive: the order is its `retreat_at` and nothing else
+# B17.01: the sides start `_APPROACH_ROWS` apart, as an army's do, and an even field (20 a side) is then decided in one burst: the
+# loser routs before its retreat line is read (0 of 40 seeds fire it). A retreat is read on a field the attacker is losing slowly,
+# so the Crown's marchers are weight 7 (420 troops) against the Church's 20 weight (600): 17 of 40 seeds fire at 0.5.
+ATT_WEIGHT, WEAK_ATTACKER, DEFENDER_WEAKER = 7, 14, 12
 
 
 def _mb():
@@ -46,10 +52,10 @@ def _units():
     return M._mod("hierarchy.units")
 
 
-def _world(att="none", dfn=None):
+def _world(att="none", dfn=None, att_weight=ATT_WEIGHT):
     """`test_cp_t04_02_marshal._world` with each order's `retreat_at` carried: a real `marshal` act per side that is given
     one (`att`/`dfn` are `retreat_at` values or None for no order), folded through the driver."""
-    w = M._world()
+    w = M._world(att_weight=att_weight)
     w.tick = 3
     for retreat, actor, via, place, aid in ((att, M.KING, M.KING_SEAT, M.HOME, "rt_att"),
                                             (dfn, M.CARDINAL, M.CARDINAL_SEAT, M.TARGET, "rt_def")):
@@ -65,9 +71,9 @@ def _fold(inp, seeds):
     mb, units = _mb(), _units()
     seen, orig = [], mb._grade
 
-    def spy(unit_a, unit_b, by_troops=False):
+    def spy(unit_a, unit_b):
         seen.append((units.unit_conceded(unit_a), units.unit_conceded(unit_b)))
-        return orig(unit_a, unit_b, by_troops)
+        return orig(unit_a, unit_b)
 
     mb._grade = spy
     try:
@@ -81,8 +87,8 @@ def _fold(inp, seeds):
 
 
 @lru_cache(maxsize=None)
-def _arm(att, dfn=None, arm="side", n=len(SEEDS)):
-    inp = replace(M._record(_world(att, dfn)), units=arm)
+def _arm(att, dfn=None, arm="side", n=len(SEEDS), att_weight=ATT_WEIGHT):
+    inp = replace(M._record(_world(att, dfn, att_weight)), units=arm)
     return inp.orders, _fold(inp, range(n))
 
 
@@ -99,7 +105,7 @@ def _fewer_losses(rows_retreat, rows_none, margin=0.01):
 def _fired_wins(rows):
     """THE FALSIFIER'S SECOND PREDICATE: (seeds where the attacker's retreat fired, of those graded a win)."""
     fired = [g for g, a_conceded, _ in rows if a_conceded]
-    return len(fired), sum(g["attacker_wins"] for g in fired)
+    return len(fired), sum(field_degree(g) == WON for g in fired)
 
 
 # --------------------------------------------------------------------------------------------------------------- falsifier
@@ -112,12 +118,14 @@ def test_falsifier_an_attacker_who_retreats_at_half_loses_fewer_troops_and_never
     assert _fewer_losses(half, none), (_mean_loss(half), _mean_loss(none))
     assert fired_wins == 0, fired_wins                            # a win with a fired retreat is a grading defect
     # the saving is the retreat's, seed for seed: every seed where the two arms differ is a seed the retreat fired in, and
-    # in each the retreating attacker ends with more of its troops (the orderly retreat stopped the fight for it)
+    # in each the retreating attacker ends with no fewer of its troops, and in most with more (the orderly retreat stopped the fight
+    # for it; where the share is the same the arms differ in the concession flag alone)
     differ = [i for i, ((gh, *_), (gn, *_)) in enumerate(zip(half, none)) if gh != gn]
     assert len(differ) >= 20 and all(half[i][1] for i in differ)
-    assert all(half[i][0]["attacker_size_pct"] > none[i][0]["attacker_size_pct"] for i in differ)
-    # a fired retreat is the attacker's concession, never the rout it spares
-    assert all(not half[i][0]["attacker_wins"] and half[i][0]["degree"] in ("Partial", "Failure") for i in differ)
+    assert all(half[i][0]["attacker_size_pct"] >= none[i][0]["attacker_size_pct"] for i in differ)
+    assert sum(half[i][0]["attacker_size_pct"] > none[i][0]["attacker_size_pct"] for i in differ) >= 20
+    # a fired retreat is the attacker's concession, never the rout it spares: it is out and the field is not won
+    assert all(field_degree(half[i][0]) in (LOST, DRAWN) for i in differ)
 
 
 def test_falsifier_on_the_person_arm_a_side_concedes_when_every_subunit_has_retreated_or_routed():
@@ -130,17 +138,17 @@ def test_falsifier_on_the_person_arm_a_side_concedes_when_every_subunit_has_retr
 
 
 def test_a_defender_who_retreats_leaves_the_field_to_the_attacker():
-    rows = _arm("none", "0.5")[1]
+    rows = _arm("none", "0.5", att_weight=DEFENDER_WEAKER)[1]      # the Crown's 28 against the Church's 20: the defender is the thinner side
     d_fired = [g for g, _, d_conceded in rows if d_conceded]
-    assert len(d_fired) >= 20
-    assert all(g["attacker_wins"] for g in d_fired)                # the defender gave the field up; the attacker holds it
+    assert len(d_fired) >= 3      # rare: the thinner defender usually routs in the first burst before its retreat line is read
+    assert all(field_degree(g) == WON for g in d_fired)            # the defender gave the field up; the attacker holds it
     assert not any(a for _, a, _ in rows)
 
 
 def test_a_retreat_at_a_quarter_is_the_same_primitive_and_a_side_this_thin_has_routed_before_it():
     inp = replace(M._record(_world("0.25")), units="side")
     assert inp.orders[0].retreat_at == "0.25"
-    (sub,) = _mb()._weighted_unit("a", 20, 5, M.SCALE, None, "0.25").units
+    (sub,) = _mb()._weighted_unit("a", 20, "A", 5, None, "0.25").units
     (order,) = sub.orders
     assert (order.trigger, order.behavior) == ("own_strength:0.25", {"stance": "retreat", "conceded": True})
     # on a single-subunit side the UNIT_ROUT_FLOOR / morale rout comes first, so it fires in no seed (a limit, not a defect)
@@ -178,23 +186,24 @@ def test_grade_a_conceded_attacker_ahead_on_size_is_not_the_winner_and_a_concede
     mb = _mb()
     ahead, behind = _fake_unit(0.8, "retreat"), _fake_unit(0.6)
     g = mb._grade(ahead, behind)
-    assert not g["attacker_wins"] and g["degree"] == "Partial"       # ahead on size, but it gave the field up
-    g = mb._grade(_fake_unit(0.8), _fake_unit(0.9))                  # the control: no concession, behind on size
-    assert not g["attacker_wins"]
+    assert field_degree(g) == LOST and g["attacker_conceded"]        # ahead on size, but it gave the field up
+    g = mb._grade(_fake_unit(0.8), _fake_unit(0.9))                  # the control: no concession, behind on size: nobody is out
+    assert field_degree(g) == DRAWN and not (g["attacker_conceded"] or g["defender_conceded"])
     g = mb._grade(_fake_unit(0.55), _fake_unit(0.9, "retreat"))      # behind on size, but the defender conceded
-    assert g["attacker_wins"] and g["degree"] == "Success"
+    assert field_degree(g) == WON and g["defender_conceded"]
     g = mb._grade(_fake_unit(0.8, "retreat"), _fake_unit(0.9, "retreat"))   # both gave it up: nobody holds it
-    assert not g["attacker_wins"]
+    assert field_degree(g) == DRAWN
 
 
-def test_planted_failure_a_grade_blind_to_a_concession_grades_a_fired_retreat_a_win(monkeypatch):
+def test_planted_failure_a_grade_blind_to_a_concession_no_longer_reads_the_side_as_out(monkeypatch):
+    """B17.01 took the survivor-share tie-break away, so a grade blind to a concession can no longer hand the retreating side a
+    win. What it still gets wrong is who is out: the retreating attacker reads `Lost` and, blind, reads `Drawn`."""
     mb = _mb()
     ahead, behind = _fake_unit(0.8, "retreat"), _fake_unit(0.6)
-    assert not mb._grade(ahead, behind)["attacker_wins"]
+    assert field_degree(mb._grade(ahead, behind)) == LOST
     monkeypatch.setattr(mb, "unit_conceded", lambda unit: False)
-    assert mb._grade(ahead, behind)["attacker_wins"]                 # the grading defect the falsifier's second predicate names
-    # ... and the second predicate sees it on a row shaped like a fold's
-    assert _fired_wins([(mb._grade(ahead, behind), True, False)]) == (1, 1)
+    assert field_degree(mb._grade(ahead, behind)) == DRAWN           # the grading defect: the concession is not read
+    assert _fired_wins([(mb._grade(ahead, behind), True, False)]) == (1, 0)
 
 
 # ---------------------------------------------------------------------------------------- the stop, and no facing flip
@@ -204,8 +213,8 @@ def test_the_battle_stops_for_a_conceding_side_without_routing_it():
     rngsource = M._mod("rngsource")
     stopped = checked = early = 0
     for s in range(60):
-        a = mb._weighted_unit("side_a", 20, 5, M.SCALE, None, "0.5")
-        b = mb._weighted_unit("side_b", 20, 5, M.SCALE)
+        a = mb._weighted_unit("side_a", WEAK_ATTACKER, "A", 5, None, "0.5")
+        b = mb._weighted_unit("side_b", 20, "B", 5)
         with rngsource.using(random.Random(s)):
             res = bl.run_battle(a, b, max_ticks=18)
         checked += 1
@@ -219,7 +228,7 @@ def test_the_battle_stops_for_a_conceding_side_without_routing_it():
 
 def test_a_side_with_no_retreating_subunit_is_never_conceded_and_the_function_moved_by_name():
     mb, units = _mb(), _units()
-    assert not units.unit_conceded(mb._weighted_unit("a", 20, 5, M.SCALE))
+    assert not units.unit_conceded(mb._weighted_unit("a", 20, "A", 5))
     assert not units.unit_conceded(SimpleNamespace(units=[SimpleNamespace(routed=True, conceded=False)]))  # routed is not conceded
     assert units.unit_conceded(SimpleNamespace(units=[SimpleNamespace(routed=True, conceded=False),
                                                          SimpleNamespace(routed=False, conceded=True)]))
@@ -228,7 +237,7 @@ def test_a_side_with_no_retreating_subunit_is_never_conceded_and_the_function_mo
     # Keyed on the ORDER's mark, not the stance or `yielding`: a DG-2 fighting withdrawal (`yielding` + stance retreat,
     # no `conceded`) is not a concession, and an emergent `yielding` on a subunit whose `retreat_at` order fired does not
     # hide one. Real units, so the field's default and the order-settable set are observed too.
-    wd = mb._weighted_unit("a", 20, 5, M.SCALE)
+    wd = mb._weighted_unit("a", 20, "A", 5)
     for s_ in wd.units:
         s_.stance, s_.yielding = "retreat", True
     assert not units.unit_conceded(wd)
@@ -257,4 +266,4 @@ def test_control_a_retreat_at_outside_the_closed_set_is_refused_and_none_is_no_o
     assert [o.trigger for o in mb._retreat_orders("0.5")] == ["own_strength:0.5"]
     with pytest.raises(ValueError):
         mb._retreat_orders("0.1")
-    assert mb._weighted_unit("a", 20, 5, M.SCALE).units[0].orders == ()
+    assert mb._weighted_unit("a", 20, "A", 5).units[0].orders == ()

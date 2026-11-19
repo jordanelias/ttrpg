@@ -25,7 +25,7 @@ from __future__ import annotations
 from typing import Any, Optional
 from engine.dice_engine.dice_engine import DEGREE_LABEL, degree_from_net
 from ..data.rosters import (
-    COMBAT_BANDS, COMBAT_EDGES, INVESTED, LOST, UNOPPOSED, WON, WOUND_QUANTITIES, WOUNDED,
+    COMBAT_BANDS, COMBAT_EDGES, DRAWN, INVESTED, LOST, UNOPPOSED, WON, WOUND_QUANTITIES, WOUNDED,
     check_edge_above)
 from ..gaps import Unspecified
 
@@ -162,11 +162,22 @@ def combat_degree(result: dict, subject: Optional[str], wounded_above=None) -> s
     return min((party_degree(s, wounded_above) for s in states.values()), key=COMBAT_BANDS.index)
 
 
+# B17.01: THE FOUR FLAGS A FOUGHT FIELD'S RESULT CARRIES, each side's `routed` and `conceded` (`massbattle._grade`'s own
+# keys, lifted by `seam/wrappers/mass_battle.py` to the top level of what it returns). Their presence is what makes a result
+# a field's, for `degree_of`'s third branch; the rule over them is `field_degree`'s alone.
+FIELD_FLAGS = ("attacker_routed", "attacker_conceded", "defender_routed", "defender_conceded")
+
+
 def field_degree(result: dict) -> str:
     """THE BAND `march` FOLDS ON (`ED-IN-0279` clause (a)), READ OFF THE MASS-BATTLE
     PROVIDER'S OWN RESULT -- the shape `combat_degree` reads off a scene's `wound_state`, one
-    function above. `seam/wrappers/mass_battle.py` lifts `attacker_wins`/`unopposed` to the TOP
-    level of what it returns for exactly this read.
+    function above. `seam/wrappers/mass_battle.py` lifts the two sides' `routed`/`conceded` flags
+    (`FIELD_FLAGS`) and `unopposed` to the TOP level of what it returns for exactly this read.
+
+    B17.01 (A-57, A-58, A-81): A BATTLE ENDS WON, LOST OR DRAWN, and this is the one place the rule is written. A side is OUT when
+    it routed or conceded; the attacker `Won` when the defender is out and it is not, `Lost` when it is out and the defender is
+    not, and the field is `Drawn` otherwise -- both out, or neither out when the ticks ran down. The survivor-share tie-break
+    (`a_size_pct > b_size_pct`) is gone: a field in which neither side broke is drawn.
 
     ⚠ NO `subject` PARAMETER, UNLIKE `combat_degree`. `kill / wound` grades one duellist; `march`
     grades a SIDE, and there is no single person the band is read off of -- `Won`/`Lost` is the
@@ -175,24 +186,26 @@ def field_degree(result: dict) -> str:
     matches `degree_of`'s margin branch, which also carries no `subject` (`degree_from_net` reads
     only `net`/`ob`).
 
-    ⚠ DOES NOT GRADE `massbattle.py`'s OWN NON-CANONICAL `result['degree']`
-    (Overwhelming/Success/Partial/Failure) -- that classification is disclosed as *"NOT the
-    canonical degree ladder... a bespoke post-hoc classification"* by its own module header, and
-    reconciling the two remains open MB-lane work. `march` writes on its graded bands (Won, Lost,
-    Unopposed and, CP-T04-06, Invested); the engine's finer four-way split is available under
-    `result['result']['degree']` for introspection and stays there."""
+    The module returns no verdict and no four-way `degree` (B17.01 deleted that classification, which had no reader here):
+    `march` writes on its graded bands (Won, Lost, Drawn, Unopposed and, CP-T04-06, Invested)."""
     if result.get("unopposed"):
         return UNOPPOSED
     # CP-T04-06: an opposed `besiege` fought no field -- the provider lifts `invested` and nobody won or lost.
     if result.get("invested"):
         return INVESTED
-    return WON if result.get("attacker_wins") else LOST
+    a_out = result["attacker_routed"] or result["attacker_conceded"]
+    b_out = result["defender_routed"] or result["defender_conceded"]
+    if b_out and not a_out:
+        return WON
+    if a_out and not b_out:
+        return LOST
+    return DRAWN
 
 
 def is_margin_result(result: Any) -> bool:
-    """A margin provider's result (B05 close): a dict that is neither a scene (`wound_state`) nor a field (`attacker_wins`) and carries the
+    """A margin provider's result (B05 close): a dict that is neither a scene (`wound_state`) nor a field (its `FIELD_FLAGS`) and carries the
     pair `net`, `ob`. The one test `degree_of` takes its third branch on and `loop/resolve.py::_margin_ending` reads an `Event.ending` by."""
-    return isinstance(result, dict) and "wound_state" not in result and "attacker_wins" not in result and "net" in result and "ob" in result
+    return isinstance(result, dict) and "wound_state" not in result and FIELD_FLAGS[0] not in result and "net" in result and "ob" in result
 
 
 def degree_of(result: Any, subject: Optional[str] = None, fixtures: Any = None) -> str:
@@ -208,10 +221,9 @@ def degree_of(result: Any, subject: Optional[str] = None, fixtures: Any = None) 
     ⚠ `mass_battle` IS THE THIRD SHAPE (`ED-IN-0279` clause (a)). Its provider's result is a
     survivor-ratio classification, not a margin -- see
     `seam/wrappers/mass_battle.py`'s own docstring -- and `field_degree` does not grade THAT
-    classification either; it reads the top-level `attacker_wins`/`unopposed` markers the provider
+    classification either; it reads the top-level `FIELD_FLAGS` and `unopposed` markers the provider
     lifts for exactly this purpose, onto the bands `march` writes on
-    (Won/Lost/Unopposed, and Invested under a besiege). Reconciling the engine's own finer four-way split with the canonical
-    ladder stays open MB-lane work, unrelated to this."""
+    (Won/Lost/Drawn/Unopposed, and Invested under a besiege)."""
     if not isinstance(result, dict):
         raise Unspecified(
             f"a contest returned {type(result).__name__}, which carries no outcome to grade",
@@ -221,10 +233,10 @@ def degree_of(result: Any, subject: Optional[str] = None, fixtures: Any = None) 
         return combat_degree(
             result, subject,
             None if fixtures is None else fixtures.get("combat_wounded_above"))
-    # `attacker_wins` is `mass_battle`'s own top-level marker (`ED-IN-0279` clause (a)),
+    # the `FIELD_FLAGS` are `mass_battle`'s own top-level markers (`ED-IN-0279` clause (a)),
     # present on every RESOLVED result including the `unopposed` bypass -- neither a `wound_state`
     # nor a `net`/`ob` pair, so it takes a third branch rather than fitting either of the others.
-    if "attacker_wins" in result:
+    if FIELD_FLAGS[0] in result:
         return field_degree(result)
     if is_margin_result(result):
         ladder, label = degree_ladder()

@@ -79,6 +79,22 @@ def _fold_one(w, act, contest_max_depth=2):
     return events
 
 
+def _weigh(w, pids, weight):
+    """B17.01: a person's weight IS his troops now (`under_arms_cap`: 30 a weight, the one weight -> troops owner), and a unit
+    under `UNIT_ROUT_FLOOR` (80) routs on tick 1 untouched. A world that wants a fought field says how heavy each side is."""
+    for pid in pids:
+        w.persons[pid].weight = weight
+    return w
+
+
+def _contested(w, attacker_weight=3, defender_weight=10):
+    """The realm's Crown pair on `set_s_014` (two persons) marching on the Church's six at `set_s_036`, made a FIGHT the attacker
+    loses: each marcher 90 troops (above the rout floor, so the battle reaches him) against six of 300. The shipped realm's weight-1
+    persons are 30 troops and break on tick 1 on both sides, which is a `Drawn` field nobody is hurt in."""
+    _weigh(w, world_q.mustered(w, "set_s_014", "fac_valorsmark"), attacker_weight)
+    return _weigh(w, world_q.mustered(w, "set_s_036", "fac_church_of_solmund"), defender_weight)
+
+
 def _new_rows(w, pid, before: dict) -> set:
     """THE STANCE ROWS THE BATTLE WROTE on `pid`: his rows now, less the ones he held before it (a multiset difference).
     v11 CR-87 (`Fixtures loyalty_toward_creed`) writes the build-time loyalty row toward the CREED Proposition, which
@@ -103,7 +119,7 @@ def test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only():
     landing the grudge on the LOSER's own faction and the morale hit on the WINNER -- and this
     test, at the shared default, could not see it. Distinct weights make the two rows
     distinguishable by VALUE, not merely by presence."""
-    w = build_realm(0)
+    w = _contested(build_realm(0))
     w.fixtures = w.fixtures.sweep("field_grudge_weight", 3)
     attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
     defenders = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
@@ -265,45 +281,41 @@ def test_a_march_on_an_unheld_settlement_arrives_rather_than_crashing_the_season
 
 
 def test_a_won_field_writes_casualties_and_stance_on_the_defender_only():
-    """`Won` (the ATTACKER wins, defenders lose) THROUGH A REAL FOLD (REM-32, `H-250`). This test used to construct
-    the `Resolution` by hand, because `massbattle._weighted_unit` sized a side `troops = weight` and a corpus-scale
-    force (single/double-digit weight sums) routs on contact whoever is stronger, so `Won` was unreachable through
-    the module. `field_troops_per_weight` (the weight -> troops scale, shipped at 1) is the one place that scale now
-    lives; here it is swept to 10 -- a value of THIS TEST, not a shipped one, and not Jordan's answer to JQ-4.
-
-    The world: the Crown's two marchers are cohorts (`Person.weight` 10 each, `state/carriers.py`: a cohort is a
-    person at weight > 1) against the Church's six individuals, so the attacker's side is the larger one (20 v 6).
-    CONTROL, SAME WORLD AND ACT: at the shipped 1 the 20-v-6 attacker still routs on contact and the field is `Lost`
-    (`massbattle.py`'s disclosed scale gap, unchanged at k = 1); only the scale differs between the two folds, so
-    the flip to `Won` is the multiplication's, and a `Lost` at 10 would mean it is not reaching the Army.
-    The band's effects are asserted as the hand-built test asserted them: the defender takes the casualties and the
-    stance rows, the winning side is never written."""
-    def fold(k):
-        w = build_realm(0)
-        for pid in ("p_npc_033", "p_npc_035"):
-            w.persons[pid].weight = 10
-        w.fixtures = w.fixtures.sweep("field_troops_per_weight", k)
+    """`Won` (the ATTACKER wins, defenders lose) THROUGH A REAL FOLD. This test used to construct the `Resolution` by hand,
+    because a corpus-scale force routed on contact whoever was stronger (`H-250`); a side is now `under_arms_cap(weight)` troops,
+    so the weights say who is stronger. The Crown's two marchers are cohorts (`Person.weight` 10, 600 troops) against the
+    Church's six individuals at weight 3 (90 troops each, above the rout floor so each is fought and cut).
+    The world is realm seed 3 (the draw is the act's, so the seed is a fight's dice): at seeds 1 to 3 these weights read `Won`,
+    at seed 0 `Drawn`. CONTROL, SAME WORLD AND ACT: with the two sides' weights swapped (3 against 10) the field is `Lost`, so
+    the flip to `Won` is the weights' and not a fold that always reads one band. The band's effects are asserted as the hand-built test
+    asserted them: the defender takes the casualties and the stance rows, the winning side is never written."""
+    def fold(attacker_weight, defender_weight):
+        w = build_realm(3)
         attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
         defenders = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
         assert attackers == ["p_npc_033", "p_npc_035"] and len(defenders) == 6, (
             f"fixture moved ({attackers}, {defenders}): re-read it")
+        _weigh(w, attackers, attacker_weight)
+        _weigh(w, defenders, defender_weight)
         before_a = {pid: w.persons[pid].body for pid in attackers}
         before_d = {pid: w.persons[pid].body for pid in defenders}
         before_s = {pid: list(w.persons[pid].stance or []) for pid in attackers + defenders}
         events = _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_spymaster"), contest_max_depth=2)
         return w, attackers, defenders, before_a, before_d, before_s, [(e.kind, e.degree) for e in events]
 
-    kinds_at_1 = fold(1)[-1]
-    assert ("field.lost", "Lost") in kinds_at_1 and not any(k == "field.won" for k, _ in kinds_at_1), (
-        f"at the shipped scale the 20-v-6 attacker no longer routs on contact: {kinds_at_1}")
+    kinds_lost = fold(3, 10)[-1]
+    assert ("field.lost", "Lost") in kinds_lost and not any(k == "field.won" for k, _ in kinds_lost), (
+        f"the weaker attacker no longer loses: {kinds_lost}")
 
-    w, attackers, defenders, before_a, before_d, before_s, kinds = fold(10)
-    assert ("field.won", "Won") in kinds, f"the scale did not carry the fold to Won: {kinds}"
+    w, attackers, defenders, before_a, before_d, before_s, kinds = fold(10, 3)
+    assert ("field.won", "Won") in kinds, f"the weights did not carry the fold to Won: {kinds}"
 
     for pid in attackers:
-        assert w.persons[pid].body == before_a[pid], f"{pid} (the WINNING side) was written"
-    for pid in defenders:
-        assert w.persons[pid].body < before_d[pid], f"{pid} (the losing side) took no casualties"
+        # CR-24 (`field_winner_casualties`, shipped `engine`): a winner takes his own engine casualties on `body` only, never raised
+        assert w.persons[pid].body <= before_a[pid], f"{pid} (the WINNING side) was raised"
+    # each loser is scaled by HIS subunit's share (`field_units: person`): a defender the battle never reached keeps his body
+    assert all(w.persons[pid].body <= before_d[pid] for pid in defenders), "a loser was raised"
+    assert any(w.persons[pid].body < before_d[pid] for pid in defenders), "the losing side took no casualties"
 
     for pid in defenders:
         rows = _new_rows(w, pid, before_s)
@@ -353,7 +365,7 @@ def test_the_total_casualty_model_zeroes_the_losing_side():
     (`/code-review` finding): the first writing of `total` left a living person recorded at body
     0, a state `_eff_kill` never produces. The person is gone from `w.persons`, not merely
     zeroed."""
-    w = build_realm(0)
+    w = _contested(build_realm(0))
     w.fixtures = w.fixtures.sweep("field_casualty_model", "total")
     attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
     act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
@@ -377,7 +389,7 @@ def test_the_none_casualty_model_writes_stance_only():
     two SPECIFIC new rows against a before/after snapshot, on `wound_harm_model`'s own precedent
     for isolating "the write happened" from "the value moved", is the falsifying version
     (`/code-review` finding on the M4 diff)."""
-    w = build_realm(0)
+    w = _contested(build_realm(0))
     w.fixtures = w.fixtures.sweep("field_casualty_model", "none")
     attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
     before_body = {pid: w.persons[pid].body for pid in attackers}
@@ -421,7 +433,7 @@ def test_a_real_chooser_forms_and_folds_a_march_that_reaches_a_real_field_battle
     therefore carries the settlement as a `Rung` pair, `test_migrate_capacity.py`'s shape; the stamp
     itself is `test_referent_class_stamps.py::test_rem27_*`'s.
     """
-    w = build_realm(0)
+    w = _contested(build_realm(0))
     p = w.persons["p_npc_033"]
     q = Question("q:28ii_chooser_march", "need", ("set_s_036",), classes=(("set_s_036", "Rung"),))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
@@ -509,7 +521,7 @@ def test_a_real_fold_reads_the_targets_fortification_on_the_battle_path(monkeypa
         return real(w_, rung_id)
 
     monkeypatch.setattr(world_q, "fortification_of", counting)
-    w = build_realm(0)
+    w = _contested(build_realm(0))
     events = _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_spymaster"), contest_max_depth=2)
     assert ("field.lost", "Lost") in [(e.kind, e.degree) for e in events], "no field was fought"
     assert calls == ["set_s_036"], f"fortification_of was called {calls!r} on the battle path"
@@ -534,7 +546,8 @@ def _patch_won(monkeypatch, defender_pct=0.5):
     from engine.season.seam.wrappers import mass_battle as MB
     # `**_`: since v9 IN-52 the adapter also hands the entry each side's fielded troops
     # (`troops_a`/`troops_b`, the levy-to-field feed); this patched field does not read them.
-    entry = SimpleNamespace(fn=lambda inp, rng, **_: dict(attacker_wins=True, degree="Success",
+    entry = SimpleNamespace(fn=lambda inp, rng, **_: dict(attacker_routed=False, attacker_conceded=False,
+                                                      defender_routed=True, defender_conceded=False,
                                                       attacker_size_pct=1.0,
                                                       defender_size_pct=defender_pct))
     monkeypatch.setattr(MB, "entry_for", lambda prize, module: (entry, None))
@@ -687,13 +700,75 @@ def test_in13_exit_i_lost_leaves_the_claimants_at_their_origin_r7():
     """EXIT (i), the `Lost` arm, PINNING #453 R-7 [ASSUMPTION; medium; Jordan to correct; revert:
     Jordan states that a routed army arrives, and this arm is re-pinned]: a real `field.lost` at
     `set_s_036` leaves `mustered(w, set_s_014, fac_valorsmark)` equal to the claimants, and nobody arrives."""
-    w = _no_resident_crown(build_realm(0))
+    w = _no_resident_crown(_contested(build_realm(0)))
     attackers = world_q.mustered(w, "set_s_014", CROWN)
     events = _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_spymaster"))
     kinds = [e.kind for e in events]
     assert "field.lost" in kinds and "army.arrived" not in kinds, kinds
     assert world_q.mustered(w, "set_s_014", CROWN) == attackers
     assert world_q.mustered(w, "set_s_036", CROWN) == []
+
+
+# ---- B17.01, THE DRAWN BAND (A-67, A-68, A-70, A-80, A-81) ---------------------------------------------
+
+def _drawn_fold(w, model=None):
+    """A hand-built stalemate -- neither side routed or conceded, the shares 0.8 (the attacker) and 0.6 (the
+    defender) -- folded through the real driver at ENCOUNTER, the effect, the fold and the gate real. Returns the
+    sides, their bodies and stance rows and `contain` targets before, and the events."""
+    attackers = world_q.mustered(w, "set_s_014", CROWN)
+    defenders = world_q.mustered(w, "set_s_036", CHURCH)
+    assert len(attackers) == 2 and len(defenders) == 6, f"fixture moved ({attackers}, {defenders}): re-read it"
+    snap = {pid: (w.persons[pid].body, list(w.persons[pid].stance or []), list(w.persons[pid].travel_leg or []),
+                  world_q.home_of(w).get(pid)) for pid in attackers + defenders}
+    res = Resolution("Drawn", {"parties": {"claimants": attackers, "subject_members": defenders},
+                               "result": {"attacker_size_pct": 0.8, "defender_size_pct": 0.6}})
+    d = SeasonDriver(w)
+    w.step = Step.ENCOUNTER
+    w.frozen = False
+    events = d._fold(w, mint_token(w, WriteClass.ACTS), _march_act("p_npc_033", "set_s_036", "off_spymaster"), res)
+    return attackers, defenders, snap, events
+
+
+def test_a_drawn_field_writes_both_sides_losses():
+    """B17.01 gate 4, the write half: a stalemate folds `field.drawn` and BOTH sides' bodies fall, each by its own
+    side's share (`field_casualty_model: scaled_by_degree`, the winners' write as it is today); NO stance row is
+    written on anyone (a drawn field has no loser to hold a grudge or lose morale). CONTROL, same world: the arm
+    `none` writes no body, so the fall is the band's write and not an artefact of the fold."""
+    w = build_realm(0)
+    attackers, defenders, snap, events = _drawn_fold(w)
+    kinds = [(e.kind, e.degree) for e in events]
+    assert ("field.drawn", "Drawn") in kinds, kinds
+    assert not any(k in ("field.won", "field.lost", "army.arrived") for k, _ in kinds), kinds
+    for pid in attackers:
+        assert w.persons[pid].body == max(1, int(snap[pid][0] * 0.8)) < snap[pid][0], f"{pid}: the attacker's share"
+    for pid in defenders:
+        assert w.persons[pid].body == max(1, int(snap[pid][0] * 0.6)) < snap[pid][0], f"{pid}: the defender's share"
+    for pid in attackers + defenders:
+        assert _new_rows(w, pid, {pid: snap[pid][1]}) == set(), f"{pid} gained a stance row on a drawn field"
+    none = build_realm(0)
+    none.fixtures = none.fixtures.sweep("field_casualty_model", "none")
+    a2, d2, snap2, _ = _drawn_fold(none)
+    assert all(none.persons[pid].body == snap2[pid][0] for pid in a2 + d2), "the `none` arm wrote a body"
+
+
+def test_a_drawn_field_returns_each_army_to_its_station():
+    """B17.01 gate 4, the station half (A-67, A-68, A-70): after a stalemate each army stands where it stood --
+    the aggressor where the march began, the defender at its own base -- and nobody has made a journey: every
+    person's home and `travel_leg` are as they were, and no `army.arrived` is told. CONTROL, same world: a `Won`
+    over the same sides DOES move the aggressor onto the target, so the equality is the band's and not a fold that
+    never moves anybody."""
+    w = _no_resident_crown(build_realm(0))
+    attackers, defenders, snap, events = _drawn_fold(w)
+    assert ("field.drawn", "Drawn") in [(e.kind, e.degree) for e in events]
+    homes = world_q.home_of(w)
+    for pid in attackers + defenders:
+        assert homes.get(pid) == snap[pid][3], f"{pid} no longer stands where he stood"
+        assert list(w.persons[pid].travel_leg or []) == snap[pid][2], f"{pid} made a journey"
+    assert world_q.mustered(w, "set_s_014", CROWN) == attackers
+    assert world_q.mustered(w, "set_s_036", CHURCH) == defenders
+    control = _no_resident_crown(build_realm(0))
+    assert ("army.arrived", "Won") in _won_fold(control, attackers)
+    assert world_q.mustered(control, "set_s_036", CROWN) == attackers
 
 
 # ---- EXIT (ii) -- H-151's own falsifier ---------------------------------------------------------------
@@ -731,7 +806,7 @@ def test_in13_exit_ii_h151_a_march_on_ones_own_occupied_settlement_is_unopposed(
 
 def test_in13_exit_iii_an_arrived_army_intercepts_a_later_march():
     """EXIT (iii): the Crown relocates to Crown-held `set_s_003` in one `_fold_one` (`Unopposed`,
-    arrives); a Church march on it in a second meets that army -- `Won` or `Lost`, not `Unopposed`.
+    arrives); a Church march on it in a second meets that army -- `Won`, `Lost` or `Drawn`, not `Unopposed`.
     CONTROL, one change (no first fold): the same Church march on the empty `set_s_003` is
     `Unopposed`, so the interception is the arrival's doing."""
     church = _march_act("p_npc_013", "set_s_003", "off_cardinal_prudence", act_id="m_church")
@@ -743,7 +818,7 @@ def test_in13_exit_iii_an_arrived_army_intercepts_a_later_march():
     assert "army.arrived" in first, first
     assert world_q.mustered(w, "set_s_003", CROWN), "nobody stands at set_s_003 after the arrival"
     second = [(e.kind, e.degree) for e in _fold_one(w, church)]
-    assert any(d in ("Won", "Lost") for _k, d in second), second
+    assert any(d in ("Won", "Lost", "Drawn") for _k, d in second), second
     assert not any(d == "Unopposed" for _k, d in second), second
 
 
@@ -941,7 +1016,7 @@ def test_in13_exit_vii_an_opposed_won_removes_no_defender_and_the_seizure_is_adm
     faction be mustered there. CONTROL, one change (a `Lost` instead, unpatched): the army stays home,
     and the same seizure is refused."""
     assert build_realm(0).fixtures.get("field_casualty_model") == "scaled_by_degree"
-    ctrl = _no_resident_crown(build_realm(0))
+    ctrl = _no_resident_crown(_contested(build_realm(0)))
     lost = [e.kind for e in _fold_one(ctrl, _march_act("p_npc_033", "set_s_036", "off_spymaster"))]
     assert "field.lost" in lost, lost
     assert _seize_kinds(ctrl, "set_s_036") == ["seize.refused"]
@@ -1003,7 +1078,7 @@ def _witnessed_field(monkeypatch, won):
     if won:
         _patch_won(monkeypatch)
     kind, where = ("field.won", "set_s_036") if won else ("field.lost", "b_s_014_barracks")
-    w = build_realm(0)
+    w = _contested(build_realm(0))
     wid = _plant_witness(w, kind, where)
     d = SeasonDriver(w)
     w.step = Step.RESOLVE

@@ -168,7 +168,7 @@ def fight(example: dict, seed: int, role=None) -> dict:
         v['detail'] = rec.snaps[k]
         v['contacts'] = rec.contacts.get(k, [])
     stages = {k: _collapse(v) for k, v in rec.stages.items()}
-    return {'result': result, 'ticks': ticks, 'hpmax': hpmax, 'stages': stages, 'grade': _grade(a, b, by_troops=True)}
+    return {'result': result, 'ticks': ticks, 'hpmax': hpmax, 'stages': stages, 'grade': _grade(a, b)}
 
 
 def table(run: dict) -> str:
@@ -192,6 +192,14 @@ def _summary(example: dict) -> dict:
             'morale_start': example['morale_start'], 'max_ticks': example['max_ticks']}
 
 
+def _end_state(grade: dict) -> str:
+    """B17.01: how the fought field ended, from the attacker's side -- the three-way rule `seam/ladder.py::field_degree` owns (a side
+    is out when it routed or conceded), read off `_grade`'s flags: the module no longer returns a four-way degree."""
+    a_out = grade['attacker_routed'] or grade['attacker_conceded']
+    b_out = grade['defender_routed'] or grade['defender_conceded']
+    return 'won' if b_out and not a_out else 'lost' if a_out and not b_out else 'drawn'
+
+
 def build_page(run: dict, out: str, example: dict, seed: int, role=None) -> None:
     """Write the walkthrough page: the template with this run's data. Every number on the page is read from DATA, so
     the page cannot disagree with the engine it was built from; the sweep over the example's seeds is fought here."""
@@ -201,7 +209,7 @@ def build_page(run: dict, out: str, example: dict, seed: int, role=None) -> None
     for sd in example['sweep_seeds']:
         r = fight(example, sd, role)
         sweep.append({'seed': sd, 'winner': r['result']['winner'], 'ticks': r['result']['turns'],
-                      'a': r['result']['a_hp_pct'], 'b': r['result']['b_hp_pct'], 'degree': r['grade']['degree']})
+                      'a': r['result']['a_hp_pct'], 'b': r['result']['b_hp_pct'], 'degree': _end_state(r['grade'])})
     armies = _summary(example)
     armies['seed'] = seed
     from modules.mass_battle import config as cfg

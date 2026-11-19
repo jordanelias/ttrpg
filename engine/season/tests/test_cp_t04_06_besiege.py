@@ -34,7 +34,9 @@ from engine.season.data.verbs import CHOICE_RANGES, VERB_TABLE, act_key
 from engine.season.decision.options import operand_bags
 from engine.season.gaps import Unspecified
 from engine.season.boot.realm import build_realm
+from engine.season.data.rosters import WON
 from engine.season.queries import world_q
+from engine.season.seam.ladder import field_degree
 from engine.season.seam.wrappers import mass_battle as wrapper
 from engine.season.state.carriers import Act, Question, Tenure
 from engine.season.state.world import World
@@ -143,7 +145,7 @@ def test_planted_failure_ignoring_the_posture_leaves_the_condition_where_it_was(
 def _attacker_share(w):
     """Attacker win share over the paired `SEEDS`, on the record `field_input` builds from the world as it stands."""
     inp = _record(w)
-    wins = sum(bool(_mb().resolve_field(inp, random.Random(s))["attacker_wins"]) for s in SEEDS)
+    wins = sum(field_degree(_mb().resolve_field(inp, random.Random(s))) == WON for s in SEEDS)
     return wins / len(SEEDS), inp.walls_dr
 
 

@@ -3,11 +3,11 @@
 `seam/wrappers/mass_battle.py::field_estimate(w, actor, via, target, order=None)` builds the `MassBattleInput` the provider
 would build for `actor` marching on `target` through the seat `via`, runs `resolve_field` `estimate_samples` times on the
 private stream `(world_seed, tick, actor, "estimate")` (`_estimate.py`, shared with `combat.fight_estimate`) and returns the
-shares of `Won`, `Lost` and `Unopposed`. `sigma.odds_of`, mode (a), returns them for a row contesting `a field`, found
+shares of `Won`, `Lost`, `Drawn` and `Unopposed`. `sigma.odds_of`, mode (a), returns them for a row contesting `a field`, found
 through the ESTIMATE provider role (`@provider("estimate", ...)`), as it now finds combat's: it imports neither wrapper.
 
 THE FIELD IS HAND-BUILT, NOT NATURAL. A natural season fights no field (the aperture reading; `test_cp_t04_02_marshal.py`),
-so the pairs are that file's: the Crown's two marchers (`set_s_014`) against the Church's six (`set_s_036`) at `SCALE` 30,
+so the pairs are that file's: the Crown's two marchers (`set_s_014`) against the Church's six (`set_s_036`) at the one scale (30 troops a weight),
 the garrison worn (an open field) or kept (WALLS), each side's order a real `marshal` act folded through the driver.
 
   FALSIFIER (1): over HELD-OUT seeds the realised `Won` share lies within the estimate's sampling interval at
@@ -27,12 +27,14 @@ from dataclasses import replace
 
 import pytest
 
+from ..data.rosters import DRAWN, LOST, WON
 from ..gaps import Forbidden
 from ..harness.play_surface import dispatching_chooser
 from ..boot.realm import build_realm
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..queries.inputs import FieldOrder
+from ..seam.ladder import field_degree
 from ..seam.wrappers import mass_battle as wrapper, sigma
 from ..state.carriers import Act
 from ..state.ids import H, draw_factory
@@ -46,7 +48,7 @@ SHOWN = 50                       # `estimate_samples`, the entry's figure
 REALISED = 200                   # scenes `resolve` deals per pair: its standard error (<= 0.035) is a fraction of the interval's half-width
 Z = 1.96                         # the interval is a 95% one, so one pair of twenty may miss (the entry's 19 of 20)
 PAIRS_NEEDED = 19
-TICK = 8                         # B05.99 re-pin (was 9; see `_pairs`): the sampler's stream is keyed on the tick: see the note under `_pairs`
+TICK = 9                         # B17.01 re-pin (was 8; see `_pairs`): the sampler's stream is keyed on the tick: see the note under `_pairs`
 MAX_HALF_WIDTH = 0.16            # a Wilson interval at 50 shown scenes is at most about 0.134 wide at a share of 0.5, so this ceiling cannot fail at SHOWN = 50; it guards a later change to SHOWN
 ACTOR = MARCHERS[0]
 
@@ -65,7 +67,9 @@ def _pairs():
     ticks as above before moving `TICK` again, and read a miss at a single tick as one draw of that 94%, not as a bias.
     RE-MEASURED at B05.99 (B05.03: the field draws the one continuous sampler), ticks 5..24 as above: 18, 18, 19, 20, 17, 20,
     18, 19, 18, 17, 18, 18, 20, 19, 19, 19, 17, 19, 19, 18 -- 370 of 400 pair-draws (92.5%), 11 of the 20 ticks reach 19; tick 9
-    reads 17 and 8 is the first tick that covers all 20, so `TICK` is 8 (the rule the last re-measure used)."""
+    reads 17 and 8 is the first tick that covers all 20, so `TICK` is 8 (the rule the last re-measure used).
+    RE-MEASURED at B17.01 (the one scale, the placement by `orderofbattle._place` and the three-way grade moved every field; 8 had
+    fallen to 18 of 20), ticks 5..11: 17, 19, 18, 18, 20, 19, 20; 9 is the first tick that covers all 20, so `TICK` is 9 (the same rule)."""
     return [(aw, worn, role) for aw in (3, 6, 9, 12, 16) for worn in (True, False) for role in (None, "Shock")]
 
 
@@ -104,7 +108,7 @@ def _realised_won(w, seed0):
         r = wrapper.resolve(w, claimants, ["mz_march"], "a field", verb="march", subject=DEF_FACTION, rung=TARGET,
                             rng=random.Random(seed0 + i))
         assert r["status"] == "RESOLVED", r
-        won += bool(r["attacker_wins"])
+        won += field_degree(r) == WON
     return won / REALISED
 
 
@@ -225,8 +229,10 @@ def test_the_rng_is_keyed_on_world_seed_tick_actor_and_estimate_and_nothing_else
     entry, refusal = entry_for(wrapper._PRIZE, wrapper._PROVIDER)
     assert entry is not None, refusal
     rng = random.Random(int(H(w.world_seed, w.tick, ACTOR, "estimate"), 16))
-    won = sum(bool(entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)["attacker_wins"]) for _ in range(SHOWN))
-    assert got["Won"] == won / SHOWN and got["Lost"] == (SHOWN - won) / SHOWN
+    bands = [field_degree(entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)) for _ in range(SHOWN)]
+    won = bands.count(WON)
+    assert got["Won"] == won / SHOWN and got["Lost"] == bands.count(LOST) / SHOWN and got["Drawn"] == bands.count(DRAWN) / SHOWN
+    assert got["Won"] + got["Lost"] + got["Drawn"] == pytest.approx(1.0)
     other_tick = _build(9, True, None)
     other_tick.tick += 1
     assert 0 < got["Won"] < 1 and wrapper.field_estimate(other_tick, ACTOR, KING_SEAT, TARGET) != got

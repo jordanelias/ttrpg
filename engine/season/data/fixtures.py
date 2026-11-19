@@ -702,30 +702,23 @@ DEFAULT_FIXTURES = Fixtures(
     field_morale_loyalty_gain=0,  # `H-148`, swept 0 (control, SHIPPED) / 0.4 / 1
     # `H-150`. THE DEFENDER DR A WALLED FIELD ADDS -- A.9's one Walls number,
     # applied 1:1 to the engine's own `Army.dr` (an ASSUMPTION about the unit, which is why it is
-    # swept). `None` IS THE DEFAULT AND IT MEANS A.9's NUMBER, NOT "NO WALLS": `engine/` cannot name
+    # swept). `None` (the flat row, the control since B17.01 shipped `3`) MEANS A.9's NUMBER, NOT "NO WALLS": `engine/` cannot name
     # `systems/`, so the 3 stays authored once, at `terrain.WALLS_DEFENDER_DR`, and the engine reads it
     # when this is `None` -- a literal 3 here would be a second copy that drifts the day A.9 is
     # re-ruled. An int overrides it for the season: `3` spells A.9's number out (it reproduces `None`
     # at fort_level 1.0; CP-T04-05 grades it `int(3 * fort_level)` below that, `None` stays binary), `0` is the CONTROL (the only live
     # difference between a walled and an open field removed), `1` the middle arm. Injection site: this
     # line, read by `seam/wrappers/mass_battle.py::field_input` into the record's `walls_dr` (`31c`).
-    field_walls_dr=None,     # `H-150`, swept 3 (A.9, = the default) / 0 (control) / 1
-    # REM-32 (`H-250`, JQ-4). THE WEIGHT -> TROOPS SCALE OF A SEASON FIELD: each headcount side's Army is sized
-    # `troops = max(weight * this, _MIN_TROOPS)` (`massbattle._weighted_unit`). `1` IS SHIPPED AND IS THE
-    # IDENTITY -- `troops = weight`, the field as it was, on which a realm force routs on contact; the value
-    # is Jordan's to name at JQ-4 and is not invented here. Injection site: this line, read by
-    # `seam/wrappers/mass_battle.py::field_input` into the record's `troops_per_weight`. An order-of-battle
-    # side, and a headcount side facing one, are sized by `under_arms_cap`, not by this (`resolve_field`: the scale reaches only
-    # a field where neither side holds an order of battle).
-    field_troops_per_weight=1,  # `H-250`, swept 1 (control, SHIPPED, = troops = weight) / above 1
-    # CP-T04-01 (`H-359`). WHAT A HEADCOUNT SIDE IS MADE OF: `side` IS SHIPPED AND IS THE FIELD AS IT WAS -- one
-    # subunit sized by the side's Σ weight, and `_eff_march` scales every loser's body by the SIDE's survivor ratio.
-    # `person` builds one subunit per commanding person, sized by his own weight (`field_troops_per_weight` applies),
-    # and `_eff_march` scales each loser by HIS subunit's ratio and names, on the band Event, the loser whose subunit
-    # broke first. A side that holds an order of battle, or faces one, is unchanged by either value. The flip to
-    # `person` is its own declared-mover commit. Injection site: this line, read by
+    # B17.01 SHIPS `3`, A.9's number spelled out: with CP-T04-05's scaling it is the archived table's +3 at a full garrison and
+    # proportionally less below, and `None`, the flat row, stays in the sweep as the control.
+    field_walls_dr=3,     # `H-150`, swept 3 (A.9, SHIPPED) / 0 (control) / 1 / None (the flat row, control) [JUSTIFIED: B17.01 -- A.9's Walls DR scaled by the garrison's condition (CP-T04-05), the archived table's +3 at a full garrison; H-308 graded as shipped]
+    # CP-T04-01 (`H-359`). WHAT A HEADCOUNT SIDE IS MADE OF: `person` IS SHIPPED (B17.01) -- one subunit per commanding
+    # person, sized by `under_arms_cap` of his own weight, and `_eff_march` scales each side's person by HIS subunit's ratio
+    # and names, on the band Event, the person whose subunit broke first. `side` is the control: one subunit sized by the
+    # side's Σ weight, every body of the side scaled by the SIDE's survivor ratio. A side that holds an order of battle, or
+    # faces one, is unchanged by either value. Injection site: this line, read by
     # `seam/wrappers/mass_battle.py::field_input` into the record's `units`; the module refuses any other string.
-    field_units="side",  # `H-359`, swept side (control, SHIPPED) / person
+    field_units="person",  # `H-359`, swept person (SHIPPED) / side (control) [JUSTIFIED: B17.01 -- a field is fought by the persons who command it, each scaled by his own subunit; H-359 default shipped]
     # CR-24 (`H-360`). WHAT A FOUGHT FIELD COSTS THE WINNER: `engine` IS SHIPPED -- each winner's `body` is scaled by his own
     # side's (or, under `field_units: person`, his own subunit's) survivor ratio from the engine's result, `body` ONLY: a
     # winner earns no stance row (no grudge, no morale hit) and is never in `touched`. `off` is the field as it was (the

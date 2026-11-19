@@ -224,14 +224,15 @@ def _engaged_by_resolve_field(monkeypatch, weight):
     return atom.cur_troops, _pair_engaged_troops(atom, front)
 
 
-def test_resolve_field_at_weight_3000_engages_the_capped_troops(monkeypatch):
-    """Measured (Python 3.11.18): a 3000-troop infantry line of 3 ranks engages 2700 troops uncapped (the contact rank
+def test_resolve_field_at_3000_troops_engages_the_capped_troops(monkeypatch):
+    """B17.01: a side of weight 100 is 3000 troops (`under_arms_cap`, 30 a weight; the retired scale was 1).
+    Measured (Python 3.11.18): a 3000-troop infantry line of 3 ranks engages 2700 troops uncapped (the contact rank
     plus depth 1 at weight 1.0 and depth 2 at 0.7: `SUPPORT_WEIGHTS`) and 2000 with the cap ON (infantry reaches one rank past contact, so the
     third rank weighs 0). The OFF arm is the control: it reads the uncapped stack and the weight is unchanged."""
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', False)
-    troops_off, engaged_off = _engaged_by_resolve_field(monkeypatch, 3000)
+    troops_off, engaged_off = _engaged_by_resolve_field(monkeypatch, 100)
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', True)
-    troops_on, engaged_on = _engaged_by_resolve_field(monkeypatch, 3000)
+    troops_on, engaged_on = _engaged_by_resolve_field(monkeypatch, 100)
     assert troops_off == troops_on == 3000.0
     assert engaged_off == 2700.0, repr(engaged_off)
     assert engaged_on == 2000.0, repr(engaged_on)

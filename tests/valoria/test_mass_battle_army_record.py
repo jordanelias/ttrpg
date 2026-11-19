@@ -175,7 +175,8 @@ def test_an_army_record_fights():
     a = A.assign(A.assign(a, 'wall', 'c1', 120), 'bows', 'c1', 120)
     b = A.assign(A.raised(A.form(A.new('fac_guilds'), 'rabble', 'levy'), 'g1', 'levy', 240), 'rabble', 'g1', 240)
     r = _field(A.to_order_of_battle(a), A.to_order_of_battle(b))
-    assert set(r) >= {'attacker_wins', 'degree', 'attacker_size_pct', 'defender_size_pct'}
+    assert set(r) >= {'attacker_size_pct', 'defender_size_pct', 'attacker_routed', 'attacker_conceded',
+                      'defender_routed', 'defender_conceded'}
     assert min(r['attacker_size_pct'], r['defender_size_pct']) < 1.0, "vacuous: nobody took a casualty"
 
 

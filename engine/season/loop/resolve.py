@@ -319,7 +319,7 @@ def _demand_earned(w: "World", a: Act, kinds: tuple, at_precondition: bool) -> t
 def _margin_ending(resolution: "Resolution | None") -> tuple:
     """SC-P1 (B05.18): `Event.ending` of a margin provider's act -- `((key, value), ...)` in `rosters.yaml: margin_endings`' order, read off the
     result the provider RETURNED (`seam/wrappers/sigma.py::resolve`), nothing recomputed here. `()` where the result is not a margin
-    provider's: the same test `seam/ladder.py::degree_of` makes (a scene's `wound_state` and a field's `attacker_wins` come first; a
+    provider's: the same test `seam/ladder.py::degree_of` makes (a scene's `wound_state` and a field's `FIELD_FLAGS` come first; a
     `net`/`ob` pair is the margin), and where the result lacks a source the tuple names (a result a test planted, no dice dealt).
     `margin` is the result's real margin (today's key `settled_margin`: `net - ob`, quantised once at the ladder)."""
     r = resolution.result if resolution is not None else None

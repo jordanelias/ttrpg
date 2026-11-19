@@ -8,8 +8,8 @@ here holds a number of the game: the body, the size and the count are the probe'
 
 WHAT IT PRINTS. Per side the win count, the drawn count, and the difference of the two win counts in standard
 deviations of a fair coin over the decided fields: `(A - B) / sqrt(A + B)`. A side-fair field reads under 1.5.
-A win is the grade's own: a side whose survivor share is higher while it stands and its opponent routed or conceded
-or fell behind; a field neither side wins is drawn. The exit code is 1 when the difference is 1.5 or over.
+A win is the grade's own (B17.01): a side that stands while its opponent routed or conceded; a field in which both sides
+are out, or neither, is drawn. The exit code is 1 when the difference is 1.5 or over.
 
 THE CONTROL IT IS. A mirror cannot show a balance, only a bias: every asymmetry it finds (deployment row, the order
 the two sides are walked, an unmirrored draw) is the engine's, since the two bodies are the same. It is the
@@ -47,11 +47,12 @@ def _body(side):
 def one_field(seed):
     """`'A'`, `'B'` or `'drawn'` for the mirror fought with `random.Random(seed)`."""
     a, b = _body("A"), _body("B")
-    got = massbattle._run_and_grade(a, b, OPEN_FLAT, random.Random(seed), by_troops=True)
-    if got["attacker_wins"]:
+    got = massbattle._run_and_grade(a, b, OPEN_FLAT, random.Random(seed))
+    a_out = got["attacker_routed"] or got["attacker_conceded"]
+    b_out = got["defender_routed"] or got["defender_conceded"]
+    if b_out and not a_out:
         return "A"
-    b_stands = not (b.routed or massbattle.unit_conceded(b))
-    if b_stands and (a.routed or massbattle.unit_conceded(a) or got["defender_size_pct"] > got["attacker_size_pct"]):
+    if a_out and not b_out:
         return "B"
     return "drawn"
 

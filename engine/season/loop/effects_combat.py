@@ -20,7 +20,7 @@ from engine.dice_engine.sigma_leverage import levels_to_net_sigma, pool_of
 from engine.substrate import composition, descriptors
 
 from ..data.rosters import (
-    DECLARED, ENDING_FELLED, ENDING_PREVAILED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, FIELD_WINNER_CASUALTY_ARMS, INVESTED, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
+    DECLARED, DRAWN, ENDING_FELLED, ENDING_PREVAILED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, FIELD_WINNER_CASUALTY_ARMS, INVESTED, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
     WOUND_HARM_MODELS, BODY_MARK_MODELS, require_member,
 )
 from ..data.matrix import matrix_row
@@ -600,6 +600,14 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     that correction was about a payload naming ONE person; a field battle genuinely has two
     candidate losing SIDES and `res.degree` already names which one.
 
+    ⚠ B17.01 (A-67, A-68, A-70, A-80, A-81), `Drawn`: A FIELD IN WHICH BOTH SIDES ARE OUT OR NEITHER IS HAS NO LOSER. Every member
+    of both sides (or the drawn cohorts of a side that fought as an order of battle) has his `body` scaled by his own side's, or
+    his own subunit's, share under `field_casualty_model` exactly as a winner's is above (`win_ratio` holds them), and the ration is debited
+    as on `Won` and `Lost`. No stance row is written, and nobody is relocated: a drawn army stands at its station, the
+    aggressor where the march began and the defender at its own base, so there is no journey for `_relocate` to write (it
+    would only close a `contain` edge and open another at the same place). The winners' arm `field_winner_casualties` is the
+    winner's switch and a drawn field has none, so it does not gate this write. The fatigue half of A-69 is `27_MB_E`'s (B22).
+
     ⚠ THE MAGNITUDE IS READ FROM THE ENGINE, NOT INVENTED, ON `wound_harm_model`'s OWN PRECEDENT.
     `field_casualty_model` (`H-148`) names three arms: `scaled_by_degree` (the default -- each
     loser's body scales by the SAME survivor fraction the engine computed for their whole side,
@@ -660,12 +668,13 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # hand-built `Resolution`; he stays where he is. The actor's own legs are `T-m`'s.
     movers = (_not_yet_under(w, attackers, target, a.actor, a.via) if arrive else [])
     attacker_lost = res.degree == LOST
-    losers = [] if res.degree == UNOPPOSED else (attackers if attacker_lost else defenders)
+    drawn_field = res.degree == DRAWN
+    losers = [] if res.degree in (UNOPPOSED, DRAWN) else (attackers if attacker_lost else defenders)
     # ED-IN-0306: a side that fought as an order of battle bleeds only where it fought -- the cohorts its troops were
     # drawn from (`parties["fielded"]`, the provider's) -- not everybody who happened to be mustered beside them. A
     # side that fought as a headcount (None) loses all its mustered people, as before.
     drawn = (parties.get("fielded") or (None, None))[0 if attacker_lost else 1]
-    if drawn is not None and res.degree != UNOPPOSED:
+    if drawn is not None and res.degree not in (UNOPPOSED, DRAWN):
         losers = list(drawn)             # cohorts do not stand beside their army: they are the people at home
     pct = engine_result.get("attacker_size_pct" if attacker_lost else "defender_size_pct")
     # CP-T04-01 (`field_units: person`): the module's record then carries each person's own subunit ratio, and a
@@ -689,21 +698,30 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # an order of battle bleeds only its drawn cohorts (`fielded`), as the loser does. Each carries his own ratio: his
     # subunit's under `person`, else his side's, capped at 1 (the casualty can only lower a body). A winner with no ratio
     # to read (a hand-built result that carries none) is left unwritten; under `total` only a winner below 1 dies.
-    win_ratio: dict = {}                     # winner pid -> his ratio; its keys ARE the winners, in win_side order
-    if winner_arm == "engine" and model != "none" and res.degree != UNOPPOSED:
-        win_drawn = (parties.get("fielded") or (None, None))[1 if attacker_lost else 0]
-        win_side = win_drawn if win_drawn is not None else (defenders if attacker_lost else attackers)
-        win_pct = engine_result.get("defender_size_pct" if attacker_lost else "attacker_size_pct")
+    win_ratio: dict = {}                     # pid -> his ratio; its keys ARE the winners (both sides, on `Drawn`), in side order
+    fielded = parties.get("fielded") or (None, None)
+    if drawn_field:
+        # B17.01: nobody lost, so both sides are written as a winner is, each by its own share.
+        take = (((fielded[0] if fielded[0] is not None else attackers), engine_result.get("attacker_size_pct")),
+                ((fielded[1] if fielded[1] is not None else defenders), engine_result.get("defender_size_pct")))
+    elif winner_arm == "engine" and res.degree != UNOPPOSED:
+        win_drawn = fielded[1 if attacker_lost else 0]
+        take = (((win_drawn if win_drawn is not None else (defenders if attacker_lost else attackers)),
+                 engine_result.get("defender_size_pct" if attacker_lost else "attacker_size_pct")),)
+    else:
+        take = ()
+    if model != "none":
         loser_set = set(losers)
-        for pid in win_side:
-            if pid not in w.persons or pid in loser_set or pid in win_ratio:
-                continue
-            mine = per_person[pid][0] if pid in per_person else win_pct
-            if mine is None or (model == "total" and mine >= 1.0):
-                continue            # no ratio, no write; under `total` only a winner who took a casualty dies
-            win_ratio[pid] = min(1.0, max(0.0, mine))
-        if model == "total":
-            movers = [pid for pid in movers if pid not in win_ratio]     # a winner the arm kills does not arrive
+        for win_side, win_pct in take:
+            for pid in win_side:
+                if pid not in w.persons or pid in loser_set or pid in win_ratio:
+                    continue
+                mine = per_person[pid][0] if pid in per_person else win_pct
+                if mine is None or (model == "total" and mine >= 1.0):
+                    continue            # no ratio, no write; under `total` only a winner who took a casualty dies
+                win_ratio[pid] = min(1.0, max(0.0, mine))
+    if model == "total":
+        movers = [pid for pid in movers if pid not in win_ratio]     # a winner the arm kills does not arrive
     debits = _ration_debits(w, res)
     if not touched and not movers and not debits and not win_ratio:
         return NO_CHANGE
@@ -751,7 +769,7 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
                 p.body = 0
             elif model == "scaled_by_degree":
                 mine = per_person[pid][0] if pid in per_person else pct
-                p.body = max(1, int(p.body * max(0.0, mine or 0.0)))
+                p.body = max(1, int(p.body * min(1.0, max(0.0, mine or 0.0))))     # B17.01: capped as the winner's is, a loss never raises
             # `none`: the control arm -- body is not written at all.
             rows = list(p.stance or [])
             if winner_faction:

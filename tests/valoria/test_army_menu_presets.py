@@ -21,9 +21,11 @@ from engine.season.harness import army_presets as AP
 from engine.season.harness import military_menu as MM
 from engine.season.harness.play_surface import dispatching_chooser
 from engine.season.boot.realm import build_realm
+from engine.season.data.rosters import WON
 from engine.season.manifest.registrar import MODULE_ENTRIES
 from engine.season.queries import world_q
 from engine.season.queries.inputs import ArmyOptionsQuery, ArmyPresetQuery
+from engine.season.seam.ladder import field_degree
 from engine.season.seam.wrappers import mass_battle as MB
 from engine.season.state.carriers import Site
 from modules.mass_battle import armyrecord as A
@@ -313,7 +315,7 @@ def _wins_vs_the_churchs_territory(sites):
     oob = inp.orders_of_battle[0]
     assert oob is not None and sum(s.troops for s in oob.units) == 900
     fn = MODULE_ENTRIES["mass_battle.resolve_field"].fn
-    return sum(bool(fn(inp, random.Random(s))["attacker_wins"]) for s in range(1, 9))
+    return sum(field_degree(fn(inp, random.Random(s))) == WON for s in range(1, 9))
 
 
 def test_a_preset_army_with_sites_beats_a_town_s_levy_and_the_sites_are_why():

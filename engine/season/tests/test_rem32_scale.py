@@ -1,11 +1,10 @@
-"""REM-32's scale, observed where it is applied (the Phase 1 close of B10-10): `modules/mass_battle/massbattle.py`
-`resolve_field` sizes a HEADCOUNT side by `weight * troops_per_weight`, applies the scale to BOTH headcount sides and
-to fed troops (`troops_a`/`troops_b`, which stand in the weight's place), and does NOT apply it to a side with an
-order of battle or to the headcount side facing one (that side is sized by `under_arms_cap`).
+"""B17.01's ONE SCALE (REM-32's `troops_per_weight` fixture is gone), observed where it is applied: `modules/mass_battle/massbattle.py`
+`resolve_field` sizes a HEADCOUNT side by `under_arms_cap(weight)`, applies it to BOTH headcount sides and to fed troops
+(`troops_a`/`troops_b`, which stand in the weight's place), and gives a side with an order of battle its own headcounts and the
+headcount side facing one the same `under_arms_cap` (`_oob_unit`).
 
-Until now `troops_per_weight` was exercised only through `test_march.py`'s real fold, which cannot say which side
-the scale reached. The battle itself is replaced by a recorder (`_run_and_grade`): this file reads the units the
-scale produced, and nothing is resolved."""
+The battle itself is replaced by a recorder (`_run_and_grade`): this file reads the units the scale produced, and nothing is
+resolved."""
 from __future__ import annotations
 
 import importlib
@@ -45,25 +44,30 @@ def _units(monkeypatch, inp, **kw):
     return seen["a"], seen["b"], seen["k"]
 
 
-def test_the_scale_sizes_both_headcount_sides(monkeypatch):
-    a, b, _ = _units(monkeypatch, _field(troops_per_weight=3))
-    assert (a.total_troops(), b.total_troops()) == (45.0, 18.0)          # 15 * 3 and 6 * 3
-    a1, b1, _ = _units(monkeypatch, _field(troops_per_weight=1))
-    assert (a1.total_troops(), b1.total_troops()) == (15.0, 6.0)         # the identity: the weight sum, as before
+def test_the_cap_sizes_both_headcount_sides(monkeypatch):
+    a, b, _ = _units(monkeypatch, _field(units="side"))
+    assert (a.total_troops(), b.total_troops()) == (float(under_arms_cap(15.0)), float(under_arms_cap(6.0)))
+    assert (a.total_troops(), b.total_troops()) == (450.0, 180.0)        # 15 * 30 and 6 * 30
+    assert (a.faction, b.faction) == ("A", "B")                          # the engine's deployment convention, as an army's
 
 
-def test_the_scale_applies_after_the_provisioning_bound(monkeypatch):
-    """Fed troops (`troops_a`) stand in the weight's place and are then scaled: the bound is in weight units."""
-    a, b, _ = _units(monkeypatch, _field(troops_per_weight=3), troops_a=4.0)
-    assert (a.total_troops(), b.total_troops()) == (12.0, 18.0)
-    a, _, _ = _units(monkeypatch, _field(troops_per_weight=3), troops_a=0.0)
+def test_the_cap_applies_after_the_provisioning_bound(monkeypatch):
+    """Fed troops (`troops_a`) stand in the weight's place and are then capped: the bound is in weight units."""
+    a, b, _ = _units(monkeypatch, _field(units="side"), troops_a=4.0)
+    assert (a.total_troops(), b.total_troops()) == (float(under_arms_cap(4.0)), 180.0)
+    a, _, _ = _units(monkeypatch, _field(units="side"), troops_a=0.0)
     assert a.total_troops() == 1.0                                       # the crash floor still applies
 
 
-def test_a_side_with_an_order_of_battle_and_the_headcount_side_facing_it_are_not_scaled(monkeypatch):
+def test_a_person_side_is_the_same_cap_person_by_person(monkeypatch):
+    """The `person` arm sizes each person by `under_arms_cap` of his own weight, so the side's total is the side arm's."""
+    a, b, _ = _units(monkeypatch, _field(units="person", members=(("a0", "a1"), ("b0",))))
+    assert [s.troops for s in a.units] == [300.0, 150.0] and [s.troops for s in b.units] == [180.0]
+
+
+def test_a_side_with_an_order_of_battle_and_the_headcount_side_facing_it_are_sized_by_the_same_owner(monkeypatch):
     """With one side armied the whole field is sized by `_oob_unit`: the armied side by its own headcounts, the other by
-    `under_arms_cap(weight)`; `_weighted_unit` is not reached, so the scale touches neither (D5 of the Phase 1 close:
-    the knob reaches only fields where NEITHER side holds an order of battle)."""
+    `under_arms_cap(weight)`, the cap the headcount path now takes too; `_weighted_unit` is not reached."""
     called = []
     monkeypatch.setattr(_mb(), "_weighted_unit", lambda *a, **k: called.append((a, k)) or (_ for _ in ()).throw(
         AssertionError("the headcount path ran on an armied field")))
@@ -74,8 +78,8 @@ def test_a_side_with_an_order_of_battle_and_the_headcount_side_facing_it_are_not
         return NS(total_troops=lambda: float(under_arms_cap(weight)) if oob is None else 99.0)
 
     monkeypatch.setattr(_mb(), "_oob_unit", spy)
-    inp = _field(troops_per_weight=3, orders_of_battle=(object(), None))
+    inp = _field(orders_of_battle=(object(), None))
     a, b, kw = _units(monkeypatch, inp)
-    assert not called and kw.get("by_troops") is True
+    assert not called
     assert [(s, o is None, w) for s, o, w in sized] == [("A", False, 15.0), ("B", True, 6.0)]   # weights unscaled
     assert b.total_troops() == float(under_arms_cap(6.0)), "the headcount side facing an army is under_arms_cap's"

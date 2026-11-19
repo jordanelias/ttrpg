@@ -279,7 +279,7 @@ def test_open_ground_resolves_unmodified(monkeypatch):
 
 def _units():
     from modules.mass_battle.massbattle import _weighted_unit
-    return _weighted_unit('side_a', 10), _weighted_unit('side_b', 10)
+    return _weighted_unit('side_a', 10, 'A'), _weighted_unit('side_b', 10, 'B')
 
 
 def test_run_and_grade_accepts_every_row_without_crashing():
@@ -291,7 +291,7 @@ def test_run_and_grade_accepts_every_row_without_crashing():
     for row in (NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT, 'river_crossing', None):
         a, b = _units()
         r = _run_and_grade(a, b, row, None)
-        assert 'attacker_wins' in r
+        assert 'attacker_routed' in r
 
 
 def test_forest_broken_forces_a_fast_side_to_standard_speed():
@@ -412,7 +412,8 @@ def test_a_dice_row_resolves_differently_from_open_flat_and_identically_with_its
     """MB-05's falsifier, both arms in one run. The same two units and seeds fought on the row and on
     OPEN_FLAT: with the row's A.9 dice zeroed (the pre-MB-05 world, where the row was identified and not
     applied) the two are EQUAL on every seed; with canon's dice they DIFFER on at least one, and the
-    defender never ends with fewer survivors. Measured 2026-10-08 (Python 3.11): 0/16 differ before
+    defender ends with no fewer survivors on average (B17.01: the fights are one-burst and a seed's first contact decides them,
+    so a paired seed is no longer monotone in the row; the row's effect is the mean over the seeds, as the control shows). Measured 2026-10-08 (Python 3.11): 0/16 differ before
     MB-05, 3/16 after, for both rows at these weights; at B05.99, after the one sampler (B05.03), river_crossing first differs at seed 89
     (58 of 1000) and uphill at seed 1, so the seed range is 256 -- one-off figures, not asserted. RIVER_CROSSING's
     speed step is inert here (see the test above), so the zeroed arm is equal for it too."""
@@ -424,10 +425,11 @@ def test_a_dice_row_resolves_differently_from_open_flat_and_identically_with_its
         return MB._run_and_grade(a, b, r, random.Random(seed))
 
     checked = differs = 0
+    row_share = flat_share = 0.0
     for seed in range(256):
         on_row, flat = fight(row, seed), fight(OPEN_FLAT, seed)
-        assert on_row['defender_size_pct'] >= flat['defender_size_pct'], (
-            f"{row} seed {seed}: the row left the defender FEWER survivors: {on_row} vs {flat}")
+        row_share += on_row['defender_size_pct']
+        flat_share += flat['defender_size_pct']
         differs += on_row != flat
         with monkeypatch.context() as m:
             for name in zeroed:
@@ -436,6 +438,7 @@ def test_a_dice_row_resolves_differently_from_open_flat_and_identically_with_its
         checked += 1
     assert checked == 256
     assert differs >= 1, f"{row} resolved identically to OPEN_FLAT on every seed"
+    assert row_share >= flat_share, f"{row} left the defender FEWER survivors on average: {row_share / 256} vs {flat_share / 256}"
 
 
 def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
@@ -443,7 +446,7 @@ def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
     `origin`. The provider's own fixture sides (the 2-man Crown army mustered at `set_s_014` against
     the Church at `set_s_036`), fought over T3 (OPEN_FLAT by polygon) marched on from T9, across the
     Valoris, and with no origin: they differ on at least one of 256 seeds (the first is seed 89 since B05.03), and the defenders never end
-    with fewer survivors. (Before MB-05r the same pair was fought over T1 with the old boolean set and
+    with fewer survivors on average. (Before MB-05r the same pair was fought over T1 with the old boolean set and
     unset -- 3 seeds of 16 differed, 2026-10-08; T1's anchor lies on the river, so no origin crosses
     to it, and the field moved to T3, the same OPEN_FLAT row.)"""
     import random
@@ -463,13 +466,21 @@ def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
     att = world_q.mustered(w, 'set_s_014', 'fac_valorsmark')
     dfn = world_q.mustered(w, 'set_s_036', 'fac_church_of_solmund')
     assert att and dfn, "the provider's fixture sides no longer muster"
+    # B17.01: a weight is 30 troops now and the shipped realm's weight-1 persons (30 troops) are under the rout floor, so both sides
+    # break on tick 1 whatever the ground; the sides are weight 5 (150 troops each) so the river is fought over
+    for pid in att + dfn:
+        w.persons[pid].weight = 5
     assert terrain_row_for_territory('T3', fort_level=0, geography=_geography()) == OPEN_FLAT, "T3's polygon row moved"
     checked = differs = 0
+    crossed_share = dry_share = 0.0
     for seed in range(256):
         crossed = resolve_field(record(origin='T9'), rng=random.Random(seed))
         dry = resolve_field(record(origin=None), rng=random.Random(seed))
-        assert crossed['defender_size_pct'] >= dry['defender_size_pct'], (seed, crossed, dry)
+        crossed_share += crossed['defender_size_pct']
+        dry_share += dry['defender_size_pct']
         differs += crossed != dry
         checked += 1
     assert checked == 256
     assert differs >= 1, "the river_crossing signal never reached the engine"
+    # B17.01: on average, not seed by seed (the fights are one-burst and a paired seed is not monotone in the crossing)
+    assert crossed_share >= dry_share, (crossed_share / 256, dry_share / 256)

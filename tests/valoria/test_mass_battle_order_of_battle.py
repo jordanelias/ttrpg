@@ -15,7 +15,9 @@ import random
 
 import pytest
 
+from engine.season.data.rosters import WON
 from engine.season.queries.inputs import MassBattleInput
+from engine.season.seam.ladder import field_degree
 from modules.mass_battle import massbattle
 from modules.mass_battle.config import TROOP_TYPE_ROLES
 from modules.mass_battle.equipment import loadout_for
@@ -47,7 +49,7 @@ def test_no_orders_of_battle_is_the_field_as_it_was():
     plain = massbattle.resolve_field(_record(), random.Random(5))
     explicit = massbattle.resolve_field(_record(oobs=(None, None)), random.Random(5))
     assert plain == explicit
-    assert massbattle._weighted_unit("side_a", 10).units[0].troop_type == 'infantry', (
+    assert massbattle._weighted_unit("side_a", 10, 'A').units[0].troop_type == 'infantry', (
         "the control is vacuous if the headcount line stopped being the single infantry subunit")
 
 
@@ -59,7 +61,7 @@ def _fight(oob_a, seed):
 def _tally(troop_type):
     rs = [_fight(_line(troop_type), s) for s in SEEDS]
     assert len(rs) == len(SEEDS)
-    return sum(r['attacker_wins'] for r in rs), sum(r['attacker_size_pct'] for r in rs) / len(rs)
+    return sum(field_degree(r) == WON for r in rs), sum(r['attacker_size_pct'] for r in rs) / len(rs)
 
 
 def test_equal_headcount_of_different_troop_types_fights_differently():
@@ -76,7 +78,8 @@ def test_an_order_of_battle_side_and_a_headcount_side_both_deploy():
     """A side with no order of battle, once the other has one, is a deployed light-infantry line, not a crash."""
     r = massbattle.resolve_field(_record(oobs=(_line('archers', 400), None), weights=((10,), (400,))),
                                  random.Random(3))
-    assert set(r) >= {'attacker_wins', 'degree', 'attacker_size_pct', 'defender_size_pct'}
+    assert set(r) >= {'attacker_size_pct', 'defender_size_pct', 'attacker_routed', 'attacker_conceded',
+                      'defender_routed', 'defender_conceded'}
 
 
 # ---------------------------------------------------------------------------------------- refusals
@@ -209,8 +212,8 @@ def test_the_unit_baseline_matches_the_season_adapters():
 def test_survivor_shares_of_an_order_of_battle_never_exceed_one():
     """A side's survivor share is its troops left over its troops at the start. Counted as `effective_size /
     size_max` it passed 1.0 for an army that is not a whole number of 100-troop blocks (120 troops: 1.2 blocks against
-    a floored 1), and `march` then RAISED a loser's body. FALSIFIER: set `by_troops=False` in `resolve_field` and the
-    120-troop seeds below read above 1."""
+    a floored 1), and `march` then RAISED a loser's body. B17.01 made `hp / hp_max` the one reading on every path (the
+    `by_troops` switch is gone). FALSIFIER: read `effective_size / size_max` in `_grade` and the 120-troop seeds below read above 1."""
     seen = []
     for seed in range(12):
         r = massbattle.resolve_field(_record(oobs=(_line('heavy_infantry', 120), _line('heavy_infantry', 120))),

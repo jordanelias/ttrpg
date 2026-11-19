@@ -50,13 +50,11 @@ module may carry the read without deciding anything -- `seam/wrappers/combat.py`
 engine without deciding who picked the fight.
 
 ⚠ **`degree_of` (`seam/ladder.py`) GRADES THIS RESULT THROUGH A THIRD BRANCH RATHER THAN BY
-MANUFACTURING A MARGIN (`ED-IN-0279` clause (a)).** It does NOT grade `massbattle.py`'s own
-survivor-ratio classification, which is disclosed as *"NOT the canonical degree ladder ... a
-bespoke post-hoc classification"* by that module's own header. What it grades is the top-level
-`attacker_wins`/`unopposed` this function lifts,
-onto the bands `march` writes on (Won, Lost, Unopposed, and Invested under a besiege) (`seam/ladder.py::field_degree`). Manufacturing a `net`/`ob`
-from the survivor-ratio classification would have been the second resolver S27.2 refuses; reading
-a marker this function already derives is not that.
+MANUFACTURING A MARGIN (`ED-IN-0279` clause (a)).** The module returns each side's survivor share and its
+`routed`/`conceded` flags and no verdict. What it grades is the four top-level `seam/ladder.py::FIELD_FLAGS` (and `unopposed`)
+this function lifts, onto the bands `march` writes on (Won, Lost, Drawn, Unopposed, and Invested under a besiege)
+(`seam/ladder.py::field_degree`). Manufacturing a `net`/`ob` from the survivor shares would have been the second resolver
+S27.2 refuses; reading flags the module already reports is not that.
 
 ⚠ **NO NEW `sys.path` SEAM, AND NO IMPORT OF THE MODULE.** `resolve_field` is reached by STRING: the
 composition row `mass_battle.resolve_field` (`references/module_contracts.yaml`) names it, the registrar
@@ -77,7 +75,7 @@ from ...manifest.providers import provider
 from ...data.geography import geography
 from ...data.rosters import SUBTREE_OCCUPATION_KINDS, territory_id_of
 from ...data import rosters
-from ...data.rosters import BESIEGE, LOST, MARCH_POSTURE_KEY, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, STORM, UNOPPOSED, WON, require_member
+from ...data.rosters import BESIEGE, DRAWN, LOST, MARCH_POSTURE_KEY, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, STORM, UNOPPOSED, WON, require_member
 from ...loop.sides import sides_of
 from ...queries.inputs import ArmyMuster, FieldOrder, MassBattleInput, ProvisionInput
 from ...queries.person_q import stance_toward
@@ -87,13 +85,17 @@ from ...state.carriers import Act
 from ...state.gate import seat_faction
 from ._entry import entry_for
 from ._estimate import rng_of, samples_of
-from ..ladder import field_degree
+from ..ladder import FIELD_FLAGS, field_degree
 
 _PROVIDER = "mass_battle"
 _PRIZE = "a field"      # the prize row this provider deals (`rosters.yaml`), `march`'s
-# CP-T04-08: the bands `field_estimate` shares out, in `sigma.odds_of`'s order -- the three `field_degree` grades a
-# fought or unopposed field into (`Declared` is the band RESOLVE writes before anything is fought, not an ending).
-ESTIMATE_BANDS = (WON, LOST, UNOPPOSED)
+# CP-T04-08: the bands `field_estimate` shares out, in `sigma.odds_of`'s order -- the four `field_degree` grades a
+# fought or unopposed field into (`Declared` is the band RESOLVE writes before anything is fought, not an ending; `Invested`
+# fights no field).
+ESTIMATE_BANDS = (WON, LOST, DRAWN, UNOPPOSED)
+# A result no field was fought for (an unopposed march, an invested garrison) carries the four flags all unset, so it is
+# the field's shape for `degree_of` and `field_degree` reads its `unopposed`/`invested` marker first.
+_NO_FLAGS = dict.fromkeys(FIELD_FLAGS, False)
 
 
 def _territory_of(w: Any, rung: str) -> Optional[str]:
@@ -224,7 +226,6 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
     the record's `geography` -- the file `data/geography.py` reads once per process; the module opens none.
     MB-03: `loyalties` and `loyalty_gain` are the build-time loyalty rows and the fixture gain; what
     they do to the morale-start is `massbattle._morale_start`'s.
-    REM-32: `troops_per_weight` is the `field_troops_per_weight` fixture (`H-250`), handed on unread.
     CP-T04-05: `walls_dr` is the `field_walls_dr` fixture times `fort_level`, floored; `None` stays `None`.
     CP-T04-01: `members` are the person ids beside `weights` (the same test, so they align) and `units` is the
     `field_units` fixture (`H-359`), handed on unread; the module reads them only on its `person` arm.
@@ -259,7 +260,6 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
         loyalty_gain=w.fixtures.get("field_morale_loyalty_gain"),
         geography=geography(),
         orders_of_battle=None if oobs == (None, None) else oobs,
-        troops_per_weight=w.fixtures.get("field_troops_per_weight"),
         members=(members(claimants), members(other)),
         units=w.fixtures.get("field_units"),
         orders=None if orders == (None, None) else orders)
@@ -394,17 +394,16 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         # against a floor-sized phantom unit either. `attacker_wins`/`unopposed` are top-level so
         # `seam/ladder.py::field_degree` can grade this without opening `result`.
         return dict(status="RESOLVED", module=_PROVIDER, resolver="d_sigma",
-                    attacker_wins=True, unopposed=True,
-                    result=dict(attacker_wins=True, degree="Unopposed",
-                                attacker_size_pct=1.0, defender_size_pct=0.0),
+                    **_NO_FLAGS, unopposed=True,
+                    result=dict(_NO_FLAGS, attacker_size_pct=1.0, defender_size_pct=0.0),
                     winner=claimants, parties=parties)
     if declared == BESIEGE:
         # CP-T04-06, AN OPPOSED SIEGE: THE ARMY SITS BEFORE THE WALLS AND NO BATTLE IS RUN -- no engine call, so no draw is
         # consumed and nobody is hurt or moved. Graded `Invested` (`seam/ladder.py::field_degree`, off the lifted `invested`
         # marker); `_eff_march` wears the garrison. An empty defence never reaches here: it answered `Unopposed` above, as a storm.
         return dict(status="RESOLVED", module=_PROVIDER, resolver="d_sigma",
-                    attacker_wins=False, unopposed=False, invested=True,
-                    result=dict(attacker_wins=False, degree="Invested"),
+                    **_NO_FLAGS, unopposed=False, invested=True,
+                    result=dict(_NO_FLAGS),
                     winner=[], parties=parties)
     # ⚠ THE ENTRY IS LOOKED UP BY THE ROLE THE PRIZE ROW NAMES (`module_entry:`), IN `MODULE_ENTRIES`,
     # as `sigma.py` and `combat.py` look theirs up: a call reaching here with the role
@@ -438,11 +437,11 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                 # (`seam/ladder.py`) reads a provider's return directly -- `wound_state` and
                 # `net`/`ob` are already top-level for the other two providers -- so a third,
                 # nested-only shape would be the one branch `degree_of` could not reach without
-                # a special case. `result['degree']` stays as `massbattle.py`'s own
-                # non-canonical classification, kept for introspection only; it is NOT this.
-                attacker_wins=result.get("attacker_wins"), unopposed=False,
+                # a special case. The four flags are the module's own (`massbattle._grade`); the winner is the band's:
+                # the claimants on `Won`, the defending side on `Lost`, nobody on `Drawn`.
+                **{k: result[k] for k in FIELD_FLAGS}, unopposed=False,
                 result=result,
-                winner=(claimants if result.get("attacker_wins") else other),
+                winner={WON: claimants, LOST: other}.get(field_degree(result), []),
                 parties=parties)
 
 
@@ -455,7 +454,7 @@ def field_estimate(w: Any, actor: str, via: Optional[str], target: Optional[str]
     `loop/sides.py::sides_of`'s, the same function the fold uses; the input is `field_input`'s; the troops are `_fed`'s),
     runs the module entry `resolve_field` `estimate_samples` times on the private stream `_estimate.rng_of` keys
     `(world_seed, tick, actor, "estimate")`, grades each result with `ladder.field_degree` (the one grader, so no second
-    odds function and no band mapped here), and returns the SHARES `Won`, `Lost` and `Unopposed` (`ESTIMATE_BANDS`; they
+    odds function and no band mapped here), and returns the SHARES `Won`, `Lost`, `Drawn` and `Unopposed` (`ESTIMATE_BANDS`; they
     sum to 1) beside `status` `ESTIMATED` and the `samples` run. An empty defending side is `Unopposed` with share 1 and
     `samples` 0: `resolve` deals it with no battle, so nothing is sampled. A refusal is `resolve`'s own dict
     (`PARTY-GAP`, `ENGINE-UNAVAILABLE`).
@@ -488,13 +487,13 @@ def field_estimate(w: Any, actor: str, via: Optional[str], target: Optional[str]
     tally = dict.fromkeys(ESTIMATE_BANDS, 0)
     for _ in range(n):
         got = entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)
-        tally[field_degree(dict(attacker_wins=got.get("attacker_wins"), unopposed=False))] += 1
+        tally[field_degree(got)] += 1
     return dict(status="ESTIMATED", module=_PROVIDER, samples=n, **{b: c / n for b, c in tally.items()})
 
 
 @provider("estimate", _PROVIDER)
 def estimate(w: Any, act: Any, claimants: list, target: Optional[str]) -> Optional[tuple]:
-    """THIS PROVIDER'S CASE FOR `sigma.odds_of`, MODE (a): `field_estimate`'s shares as `(Won, Lost, Unopposed)`
+    """THIS PROVIDER'S CASE FOR `sigma.odds_of`, MODE (a): `field_estimate`'s shares as `(Won, Lost, Drawn, Unopposed)`
     (`ESTIMATE_BANDS`' order), or `None` for a refusal. `claimants` is `odds_of`'s own derivation of the act's parties,
     unused here beyond being non-empty (`field_estimate` derives the sides itself, from the act's actor, seat and target)."""
     got = field_estimate(w, act.actor, act.via, target)

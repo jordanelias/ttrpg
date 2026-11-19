@@ -3,14 +3,15 @@
 
 THE FIELD IS HAND-BUILT, NOT NATURAL. One season of the shipped realm fights almost no field (seed 0: `field.unopposed`
 3, `march.declared` 6; seed 1: unopposed 2, declared 3; seed 2: `field.lost` 1), so the falsifier runs on a real fold of
-`set_s_014` marching on `set_s_036` with the Crown's two marchers at `Person.weight` 1 and the weight -> troops scale at 200 (REM-32's
-`field_troops_per_weight`; a value of THIS TEST, not Jordan's answer to JQ-4). At that scale a weight-1 subunit is
-200 troops, above `UNIT_ROUT_FLOOR = 80`, and a side is above the 100-troop line, so a subunit does not rout on
-tick 1. Realm seed 8 loses the field with ONE marcher's subunit routed and the other's untouched (the preconditions
-are asserted below, so a moved fixture reads as a precondition, not a pass). RE-PICKED by MB-07r (the depth support
-cap ON, `POOL_QUALITY_SCALE` 0.5 -> 0.8): at the old pick (seed 0, weight 2, scale 100) the new magnitudes cut BOTH
-marchers ({p_npc_033: 820, p_npc_035: 460}), so the unrouted one was no longer untouched. Seed, weight and scale are
-the helper's own three knobs; the claims below are unchanged.
+`set_s_014` marching on `set_s_036` with the Crown's two marchers at `Person.weight` `WEIGHT` and the Church's six at
+`DEFENDER_WEIGHT`. A weight is 30 troops (`under_arms_cap`, B17.01's one scale), so a weight-1 person is 30 troops, under
+`UNIT_ROUT_FLOOR = 80`, and every subunit of the shipped realm routs on tick 1 (a `Drawn` field nobody is hurt in); a marcher
+of weight 3 is 90. Realm seed 3 loses the field with ONE marcher's subunit routed and the other's untouched (the preconditions
+are asserted below, so a moved fixture reads as a precondition, not a pass). RE-PICKED by B17.01 (the scale, the placement
+by `orderofbattle._place` and the three-way grade moved every fight): of a grid of marcher weights 3 to 8, defender weights 3
+to 10 and seeds 0 to 13, the case the claims need (the first marcher untouched at his full body, the second cut and named
+by the band Event) is read at marcher weight 3 only: (3, 7, seed 3), (3, 8, seed 7), (3, 10, seeds 4 and 7). Seed and weights
+are the helper's own knobs; the claims below are unchanged.
 
 The cases: the falsifier (different bodies under `person`, identical under `side`), its planted failure (the side's ratio
 fed to every person: the same check reddens), the control (`side` writes today's bodies and carries no per-person
@@ -26,13 +27,10 @@ import pytest
 from engine.season.boot.realm import build_realm
 from engine.season.queries import world_q
 from engine.season.queries.inputs import MassBattleInput
-from engine.season.tests.test_march import _fold_one, _march_act
+from engine.season.tests.test_march import _fold_one, _march_act, _weigh
 
-# B05.99 RE-PICKED (B05.03, the field's one sampler): at seed 8 neither marcher's subunit breaks first any more; seed 7 is the
-# first seed of 0..39 where the person arm reads the case the claims need (p_npc_033 untouched at 1000, p_npc_035 cut to 661,
-# the band Event naming him). Was 8; the weight and the scale are unchanged.
-SEED, WEIGHT, FIELD_SCALE = 7, 1, 200      # the hand-built fold's three knobs
-SCALE = 100                                  # the weight -> troops scale of the unit-shape cases (a subunit of weight 1 is 100)
+# B17.01 RE-PICKED (see the docstring): was seed 7, weight 1, scale 200 (B05.99: seed 8 before it).
+SEED, WEIGHT, DEFENDER_WEIGHT = 3, 3, 7      # the hand-built fold's three knobs
 MARCHERS = ("p_npc_033", "p_npc_035")
 
 
@@ -45,9 +43,8 @@ def _fold(arm=None, *, seed=SEED):
     """The hand-built field: the Crown's two marchers (each of weight `WEIGHT`) on the Church's six at `set_s_036`.
     `arm=None` leaves the shipped fixture untouched. Returns `(world, events, bodies after, bodies before)`."""
     w = build_realm(seed)
-    for pid in MARCHERS:
-        w.persons[pid].weight = WEIGHT
-    w.fixtures = w.fixtures.sweep("field_troops_per_weight", FIELD_SCALE)
+    _weigh(w, MARCHERS, WEIGHT)
+    _weigh(w, world_q.mustered(w, "set_s_036", "fac_church_of_solmund"), DEFENDER_WEIGHT)
     if arm is not None:
         w.fixtures = w.fixtures.sweep("field_units", arm)
     assert world_q.mustered(w, "set_s_014", "fac_valorsmark") == list(MARCHERS), "fixture moved: re-read it"
@@ -60,8 +57,8 @@ def _broke(events):
     return [(e.kind, o.subject) for e in events for o in e.observed if o.predicate == "broke"]
 
 
-def test_shipped_arm_is_side():
-    assert build_realm(0).fixtures.get("field_units") == "side"
+def test_shipped_arm_is_person():
+    assert build_realm(0).fixtures.get("field_units") == "person"
 
 
 def test_falsifier_two_losers_one_routed_one_not_end_with_different_bodies_under_person_and_identical_under_side():
@@ -101,21 +98,23 @@ def test_planted_failure_the_sides_ratio_fed_to_every_person_reddens_the_falsifi
         assert after[MARCHERS[0]] != after[MARCHERS[1]], "the falsifier's person-arm check"
 
 
-def test_control_side_arm_is_the_shipped_field_and_carries_no_per_person_record():
-    """`field_units: side` reproduces the shipped bodies exactly (the unswept fold), the same hash, and the module's
-    record holds no `subunits` or `broke_first`; no Event names a breaker."""
+def test_the_shipped_arm_is_the_person_arm_and_side_is_the_control_that_carries_no_per_person_record():
+    """The unswept fold is the `person` fold (the shipped arm), same bodies and hash; `field_units: side` is the control: the
+    module's record holds no `subunits` or `broke_first` and no Event names a breaker."""
     w_ship, ev_ship, after_ship, _ = _fold(None)
-    w_side, ev_side, after_side, _ = _fold("side")
-    assert after_ship == after_side
-    assert [(e.kind, e.degree) for e in ev_ship] == [(e.kind, e.degree) for e in ev_side]
-    assert w_ship.content_hash() == w_side.content_hash()
+    w_person, ev_person, after_person, _ = _fold("person")
+    assert after_ship == after_person
+    assert [(e.kind, e.degree) for e in ev_ship] == [(e.kind, e.degree) for e in ev_person]
+    assert w_ship.content_hash() == w_person.content_hash()
+    _w, ev_side, _after, _ = _fold("side")
     assert _broke(ev_side) == []
 
     inp = MassBattleInput(weights=((2, 2), (6,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None,
-                          origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, troops_per_weight=SCALE,
-                          members=(("a0", "a1"), ("b0",)))
+                          origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={},
+                          members=(("a0", "a1"), ("b0",)), units="side")
     record = _mb().resolve_field(inp, random.Random(0))
-    assert set(record) == {"attacker_wins", "degree", "attacker_size_pct", "defender_size_pct"}
+    assert set(record) == {"attacker_size_pct", "defender_size_pct", "attacker_routed", "attacker_conceded",
+                           "defender_routed", "defender_conceded"}
 
 
 def test_the_band_event_names_the_loser_whose_subunit_broke_first():
@@ -129,7 +128,7 @@ def test_the_band_event_names_the_loser_whose_subunit_broke_first():
 
 def test_a_subunit_logs_its_person_in_the_order_it_breaks_and_not_when_the_whole_unit_is_swept():
     mb = _mb()
-    unit, log = mb._person_unit("side_x", (2, 2, 2), ("p0", "p1", "p2"), 5, SCALE)
+    unit, log = mb._person_unit("side_x", (2, 2, 2), ("p0", "p1", "p2"), "A", 5)
     unit.units[1].routed = True
     unit.units[0].routed = True
     unit.units[0].routed = True                       # setting it again is not breaking again
@@ -142,14 +141,14 @@ def test_a_subunit_logs_its_person_in_the_order_it_breaks_and_not_when_the_whole
 
 def test_the_person_arm_builds_one_subunit_per_member_sized_by_his_own_weight():
     mb = _mb()
-    unit, _log = mb._person_unit("side_x", (1, 3, 2), ("p0", "p1", "p2"), 5, SCALE)
-    assert [s.troops for s in unit.units] == [100.0, 300.0, 200.0]
+    unit, _log = mb._person_unit("side_x", (1, 3, 2), ("p0", "p1", "p2"), "A", 5)
+    assert [s.troops for s in unit.units] == [30.0, 90.0, 60.0]     # `under_arms_cap`: 30 troops a weight
     assert [s.person for s in unit.units] == ["p0", "p1", "p2"]
-    assert unit.total_troops() == 600.0
-    side = mb._weighted_unit("side_x", 6, 5, SCALE)
+    assert unit.total_troops() == 180.0
+    side = mb._weighted_unit("side_x", 6, "A", 5)
     assert side.total_troops() == unit.total_troops()    # the side's total is the same either way
-    fed, _ = mb._person_unit("side_x", (1, 3), ("p0", "p1"), 5, SCALE, fed=2.0)
-    assert [s.troops for s in fed.units] == [50.0, 150.0]     # provisioned troops spread by weight
+    fed, _ = mb._person_unit("side_x", (1, 3), ("p0", "p1"), "A", 5, fed=2.0)
+    assert [s.troops for s in fed.units] == [15.0, 45.0]      # provisioned troops spread by weight, then capped
 
 
 def test_an_unknown_arm_is_refused():

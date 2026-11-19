@@ -94,7 +94,8 @@ def test_one_march_resolved_twice_in_one_process_gives_one_result_and_loads_noth
     assert f"{module_dir}/massbattle.py" in loaded and f"{module_dir}/orchestration.py" in loaded, loaded
     checked = 0
     for seed, got, deterministic, unscoped in out:
-        assert set(got) == {"attacker_wins", "degree", "attacker_size_pct", "defender_size_pct"}, got
+        assert set(got) == {"attacker_size_pct", "defender_size_pct", "attacker_routed", "attacker_conceded",
+                            "defender_routed", "defender_conceded"}, got
         assert deterministic, f"{role}: seed {seed} gave two results in one process with a field between"
         assert unscoped, f"{role}: seed {seed} left a draw source scoped after the call returned"
         checked += 1
@@ -154,7 +155,7 @@ def test_no_d10_face_in_mass_battle():
             return super().randint(a, b)
 
     fought = _fought(_entry(), range(1, 5), _NoFaces)
-    assert len(fought) == 8 and all("degree" in got for got in fought), fought
+    assert len(fought) == 8 and all("attacker_routed" in got for got in fought), fought
     assert len({repr(got) for got in fought}) > 1, "every field gave one result; the arm cannot tell fields apart"
 
 
@@ -191,3 +192,63 @@ def test_one_ladder_for_the_field(monkeypatch):
     _fought(entry, range(1, 4), random.Random)
     assert len(seen) >= 50, f"only {len(seen)} grade(s) went through the owner: the field grades elsewhere"
     assert all(got == real(net, ob) for net, ob, got in seen)
+
+
+# ---- B17.01: ONE SURVIVOR SHARE, ONE SCALE, A DRAWN BATTLE -----------------------------------------------------
+
+_SIDE_PAIRS = ((30, 18), (20, 6), (6, 20), (12, 12))
+
+
+def _headcount_record(weights):
+    """A hand-built record of two headcount sides, one person each, on open ground (the `_fought` fields' geography)."""
+    import yaml
+    from engine.season.queries.inputs import MassBattleInput
+    with open(files.GEOGRAPHY_YAML, encoding="utf-8") as f:
+        geo = yaml.safe_load(f)
+    return MassBattleInput(weights=((float(weights[0]),), (float(weights[1]),)), territory=None, fort_level=0.0,
+                           stances=(0.0, 0.0), walls_dr=None, origin=None, loyalties=(0.0, 0.0), loyalty_gain=0,
+                           geography=geo, members=(("a",), ("b",)))
+
+
+def test_no_share_exceeds_one():
+    """B17.01 gate 1: a side's survivor share is `hp / hp_max` on every path, so it never exceeds 1.0. Four size
+    pairs of headcount sides (`_weighted_unit`), seeds 0 to 99. An assertion that could not observe the failure is
+    no assertion (CLAUDE.md §0.1 pt 2): the loop asserts that it asserted, and that a side the battle never touched
+    reads EXACTLY 1.0 -- an unfought pair, graded through the one `_grade`, is that side."""
+    import importlib
+    import random
+    mb = importlib.import_module("modules.mass_battle.massbattle")      # by string: `engine/` imports no module code
+    entry, checked, worst = _entry(), 0, 0.0
+    for pair in _SIDE_PAIRS:
+        for seed in range(100):
+            got = entry(_headcount_record(pair), random.Random(seed))
+            for share in (got["attacker_size_pct"], got["defender_size_pct"]):
+                assert share <= 1.0, f"{pair} seed {seed}: a side's share is {share}"
+                worst = max(worst, share)
+                checked += 1
+    assert checked >= 800, checked
+    a, b = mb._weighted_unit("side_a", 30, "A"), mb._weighted_unit("side_b", 18, "B")
+    got = mb._grade(a, b)
+    assert got["attacker_size_pct"] == 1.0 and got["defender_size_pct"] == 1.0, got
+
+
+def test_realm_weight_pairs_vary_by_seed():
+    """B17.01 gate 2: at the scale one owner now gives (`under_arms_cap`), weights 30 v 18, 20 v 6 and 6 v 20
+    through `resolve_field`, seeds 0 to 59, are fought battles whose verdict varies by seed, and the larger side wins
+    more of them than the smaller. The verdict is the ladder's (`field_degree`, the one grader), read off what the
+    module returned. A pair that always read one band would be a fixture, not a battle."""
+    import random
+    from engine.season.data.rosters import LOST, WON
+    from engine.season.seam.ladder import field_degree
+    entry, checked = _entry(), 0
+    seen = set()
+    for (wa, wb) in ((30, 18), (20, 6), (6, 20)):
+        bands = [field_degree(entry(_headcount_record((wa, wb)), random.Random(seed))) for seed in range(60)]
+        checked += len(bands)
+        seen |= set(bands)
+        attacker_larger = wa > wb
+        larger = bands.count(WON if attacker_larger else LOST)
+        smaller = bands.count(LOST if attacker_larger else WON)
+        assert larger > smaller, f"{wa} v {wb}: the larger side won {larger}, the smaller {smaller}: {bands}"
+    assert checked >= 180, checked
+    assert len(seen) >= 2, f"every field read one band: {seen}"
