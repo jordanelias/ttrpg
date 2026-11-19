@@ -109,7 +109,7 @@
       "kind": "scalar",
       "module": "engine.dice_engine",
       "file": "engine/dice_engine/draw.py",
-      "note": "",
+      "note": "[GROUNDED: 2**53, the span of a binary64 mantissa; `u` keeps the top 53 bits of a 64-bit word]",
       "citation": null,
       "citation_grade": null
     },
@@ -120,7 +120,7 @@
       "kind": "scalar",
       "module": "engine.dice_engine",
       "file": "engine/dice_engine/draw.py",
-      "note": "",
+      "note": "[GROUNDED: 2*pi, the angle Box-Muller's cosine takes]",
       "citation": null,
       "citation_grade": null
     },
