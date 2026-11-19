@@ -44,6 +44,8 @@ import modules.mass_battle.hierarchy.units as _hu  # noqa: E402
 import modules.mass_battle.orchestration as _orch  # noqa: E402
 from systems.mass_battle.sim import validators as _val  # noqa: E402
 from systems.mass_battle.sim.engine import build_unit  # noqa: E402
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 
 @pytest.fixture
@@ -79,26 +81,25 @@ def _advance_free(exclusion, ticks=6):
     saved = _hu.MB_CELL_EXCLUSION
     _hu.MB_CELL_EXCLUSION = exclusion
     try:
-        import random
-        random.seed(20260729)
-        ua, ub = _mk('A', 'A', 9), _mk('B', 'B', 9)
-        # park B at the far edge; A advances toward it and cannot reach it in `ticks`
-        for atom in ub.units:
-            atom.starting_position = (_hu.BATTLEFIELD_SIZE - 1, atom.starting_position[1])
-        # same shape orchestration's nested _cells_float_of builds; _node_advance consults it only
-        # for truthiness (it is the toi_deferred signal), so building it here is not a second owner
-        # of any rule — just the same list.
-        b_float = [(r, c, _hu.reach_for(sub.troop_type))
-                   for sub in ub.units for (r, c) in sub.cells_float()]
-        b_set = set(c for sub in ub.units for c in sub.cells())
-        target = (float(_hu.BATTLEFIELD_SIZE - 1), float(ua.units[0].starting_position[1]))
-        for _ in range(ticks):
-            for atom in ua.units:
-                atom.advance_cells(atom.eff_discipline, target,
-                                   enemy_cells=b_set, enemy_cells_float=b_float)
-            _hu.resolve_toi_and_commit(ua.units, ub.units)
-        return {cid: tuple(round(v, 12) for v in pos)
-                for cid, pos in sorted(ua.units[0]._node_pos.items())}
+        with rngsource.using(draw.seeded(draw.H2("test_cell_exclusion_no_deadlock", 20260729))):
+            ua, ub = _mk('A', 'A', 9), _mk('B', 'B', 9)
+            # park B at the far edge; A advances toward it and cannot reach it in `ticks`
+            for atom in ub.units:
+                atom.starting_position = (_hu.BATTLEFIELD_SIZE - 1, atom.starting_position[1])
+            # same shape orchestration's nested _cells_float_of builds; _node_advance consults it only
+            # for truthiness (it is the toi_deferred signal), so building it here is not a second owner
+            # of any rule — just the same list.
+            b_float = [(r, c, _hu.reach_for(sub.troop_type))
+                       for sub in ub.units for (r, c) in sub.cells_float()]
+            b_set = set(c for sub in ub.units for c in sub.cells())
+            target = (float(_hu.BATTLEFIELD_SIZE - 1), float(ua.units[0].starting_position[1]))
+            for _ in range(ticks):
+                for atom in ua.units:
+                    atom.advance_cells(atom.eff_discipline, target,
+                                       enemy_cells=b_set, enemy_cells_float=b_float)
+                _hu.resolve_toi_and_commit(ua.units, ub.units)
+            return {cid: tuple(round(v, 12) for v in pos)
+                    for cid, pos in sorted(ua.units[0]._node_pos.items())}
     finally:
         _hu.MB_CELL_EXCLUSION = saved
 
@@ -166,28 +167,27 @@ def _head_on_same_side(exclusion, start_gap=4.0, step=2.0):
     saved = _hu.MB_CELL_EXCLUSION
     _hu.MB_CELL_EXCLUSION = exclusion
     try:
-        import random
-        random.seed(20260730)
-        ua = _mk('A', 'A', 9)
-        atom = ua.units[0]
-        ids = [(o_r, o_c) for o_r, o_c, _a, _b in _hu._oriented(atom)]
-        a_id, b_id = ids[0], ids[-1]
-        # place the pair 4 apart on the same row and propose each 2.0 toward the other -> they would
-        # end 0.0 apart (fully co-located) if nothing caps them.
-        row = 20.0
-        atom._node_pos[a_id] = (row, 10.0)
-        atom._node_pos[b_id] = (row, 10.0 + start_gap)
-        atom.cell_facing_vec[a_id] = (0.0, 1.0)
-        atom.cell_facing_vec[b_id] = (0.0, -1.0)
-        atom.halted_cells = set()
-        atom._node_pending_proposal = {
-            a_id: (row, 10.0, row, 10.0 + step),
-            b_id: (row, 10.0 + start_gap, row, 10.0 + start_gap - step)}
-        atom._node_pending_target_centroid = (row, 10.0 + start_gap / 2.0)
-        atom._node_pending_discipline = 5
-        _hu.resolve_toi_and_commit(ua.units, [])
-        pa, pb = atom._node_pos[a_id], atom._node_pos[b_id]
-        return math.hypot(pa[0] - pb[0], pa[1] - pb[1])
+        with rngsource.using(draw.seeded(draw.H2("test_cell_exclusion_no_deadlock", 20260730))):
+            ua = _mk('A', 'A', 9)
+            atom = ua.units[0]
+            ids = [(o_r, o_c) for o_r, o_c, _a, _b in _hu._oriented(atom)]
+            a_id, b_id = ids[0], ids[-1]
+            # place the pair 4 apart on the same row and propose each 2.0 toward the other -> they would
+            # end 0.0 apart (fully co-located) if nothing caps them.
+            row = 20.0
+            atom._node_pos[a_id] = (row, 10.0)
+            atom._node_pos[b_id] = (row, 10.0 + start_gap)
+            atom.cell_facing_vec[a_id] = (0.0, 1.0)
+            atom.cell_facing_vec[b_id] = (0.0, -1.0)
+            atom.halted_cells = set()
+            atom._node_pending_proposal = {
+                a_id: (row, 10.0, row, 10.0 + step),
+                b_id: (row, 10.0 + start_gap, row, 10.0 + start_gap - step)}
+            atom._node_pending_target_centroid = (row, 10.0 + start_gap / 2.0)
+            atom._node_pending_discipline = 5
+            _hu.resolve_toi_and_commit(ua.units, [])
+            pa, pb = atom._node_pos[a_id], atom._node_pos[b_id]
+            return math.hypot(pa[0] - pb[0], pa[1] - pb[1])
     finally:
         _hu.MB_CELL_EXCLUSION = saved
 

@@ -28,6 +28,7 @@ from __future__ import annotations
 
 from ..data import files
 from ._fresh_process import entry_target, probe
+from engine.dice_engine import draw
 
 _PRIZE = "a field"
 
@@ -51,6 +52,7 @@ mod_name, attr = {target!r}.split(":", 1)
 entry = getattr(importlib.import_module(mod_name), attr)
 source = importlib.import_module(mod_name.rsplit(".", 1)[0] + ".rngsource")
 from engine.season.queries.inputs import MassBattleInput
+from engine.dice_engine import draw
 
 # Sides large enough that the field is fought for ticks rather than routing on contact, on an UPHILL
 # territory (T9) with a fortification (so the WALLS row and its DR are inside the replayed battle) and
@@ -65,10 +67,15 @@ OTHER = MassBattleInput(weights=((90.0,), (60.0, 30.0)), territory="T3", fort_le
 stdlib_before = random.getstate()
 out = []
 for seed in (1, 2, 3, 4, 5, 6):
-    got = entry(FIELD, random.Random(seed))
-    between = entry(OTHER, random.Random(seed + 100))
-    again = entry(FIELD, random.Random(seed))
-    out.append((seed, got, again == got, source.get() is random))
+    got = entry(FIELD, draw.seeded(draw.H2("test_mass_battle_module", seed)))
+    between = entry(OTHER, draw.seeded(draw.H2("test_mass_battle_module", seed + 100)))
+    again = entry(FIELD, draw.seeded(draw.H2("test_mass_battle_module", seed)))
+    try:
+        source.get()                      # a scope left open by the call would return its draw here
+        left_open = True
+    except LookupError:                   # no source is the unscoped reading (there is no default stream)
+        left_open = False
+    out.append((seed, got, again == got, not left_open))
 stdlib_untouched = random.getstate() == stdlib_before
 loaded = sorted(os.path.relpath(m.__file__, {root!r}) for n, m in list(sys.modules.items())
                 if n not in before and getattr(m, "__file__", None)
@@ -144,14 +151,17 @@ def test_no_d10_face_in_mass_battle():
     scanned = 0
     for path in (root / "modules" / "mass_battle").rglob("*.py"):
         scanned += 1
-        assert not re.search(r"randint\(\s*1\s*,\s*10\s*\)", path.read_text(encoding="utf-8")), path
+        assert not re.search(r"(randint|die)\(\s*1\s*,\s*10\s*\)", path.read_text(encoding="utf-8")), path
     assert scanned >= 20, scanned
 
-    class _NoFaces(random.Random):
-        def randint(self, a, b):
-            if (a, b) == (1, 10):
+    class _NoFaces(draw.Draw):
+        def __init__(self, seed):
+            super().__init__(draw.H2("test_mass_battle_module", seed))
+
+        def die(self, lo, hi):
+            if (lo, hi) == (1, 10):
                 raise AssertionError("a d10 face was drawn on the field")
-            return super().randint(a, b)
+            return super().die(lo, hi)
 
     fought = _fought(_entry(), range(1, 5), _NoFaces)
     assert len(fought) == 8 and all("degree" in got for got in fought), fought
@@ -188,6 +198,6 @@ def test_one_ladder_for_the_field(monkeypatch):
         return got
 
     monkeypatch.setattr(dice_engine, "degree_from_net", counting)
-    _fought(entry, range(1, 4), random.Random)
+    _fought(entry, range(1, 4), lambda s: draw.seeded(draw.H2("test_mass_battle_module", s)))
     assert len(seen) >= 50, f"only {len(seen)} grade(s) went through the owner: the field grades elsewhere"
     assert all(got == real(net, ob) for net, ob, got in seen)

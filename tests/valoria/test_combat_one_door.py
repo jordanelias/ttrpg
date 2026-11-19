@@ -13,12 +13,12 @@ from __future__ import annotations
 
 import importlib.util
 import os
-import random
 import sys
 import types
 
 import pytest
 
+from engine.dice_engine import draw
 from engine.season.queries.inputs import PersonalCombatInput
 from modules.combat import fight as entry
 from modules.combat import wrapper
@@ -90,7 +90,7 @@ def _raw_events(m, seed):
     wrapper._TRACE = seen.append
     try:
         kw = dict(terms=m["terms"]) if "terms" in m else {}
-        result = wrapper.fight(A, B, m.get("cfg"), random.Random(seed), max_bouts=m.get("max_bouts", 12), **kw)
+        result = wrapper.fight(A, B, m.get("cfg"), draw.seeded(draw.H2("fight_trace", seed)), max_bouts=m.get("max_bouts", 12), **kw)
     finally:
         wrapper._TRACE = None
     return result, seen
@@ -103,7 +103,7 @@ def test_workbench_trace_and_entry_give_identical_events(wb_trace, monkeypatch):
     checked = 0
     for m in _matchups():
         for seed in range(8):
-            out = real(_record(m), random.Random(seed), cfg=m.get("cfg"), max_bouts=m.get("max_bouts"))
+            out = real(_record(m), draw.seeded(draw.H2("fight_trace", seed)), cfg=m.get("cfg"), max_bouts=m.get("max_bouts"))
             A, B = _combatants(m)
             kw = dict(terms=m["terms"]) if "terms" in m else {}
             result, events = wb_trace.run_traced_fight(A, B, cfg=m.get("cfg"), seed=seed,
@@ -128,7 +128,7 @@ def test_winrate_is_the_same_fights_through_the_entry(wb_balance, monkeypatch):
     got = wb_balance.winrate(specA, specB, CFG, n, seed=3)
     assert len(calls) == n, f"winrate called the entry {len(calls)} times in {n} fights"
     # the old route, kept here as the oracle: Combatants fought by `wrapper.fight`, one rng for the sweep
-    rng = random.Random(3)
+    rng = draw.seeded(draw.H2("balance", 3))
     aw = dec = draws = 0
     for i in range(n):
         swap = i >= n // 2
@@ -171,7 +171,7 @@ def test_no_caller_binds_the_engines_trace_hook(wb_trace, wb_balance):
         wrapper._TRACE = None                      # the control: a deliberate caller assignment IS seen
         assert len(seen) == 1, "the watcher did not record a planted caller assignment, so it cannot observe the failure it excludes"
         seen.clear()
-        out = entry.fight(_record(m), random.Random(1))
+        out = entry.fight(_record(m), draw.seeded(draw.H2("test_combat_one_door", 1)))
         A, B = _combatants(m)
         wb_trace.run_traced_fight(A, B, seed=1)
         wb_balance.winrate({"weapon": "arming"}, {"weapon": "dagger"}, CFG, 2, seed=1)
@@ -185,6 +185,6 @@ def test_no_caller_binds_the_engines_trace_hook(wb_trace, wb_balance):
 def test_the_four_new_fields_default_to_nothing_and_the_entry_forwards_its_two_parameters():
     rec = PersonalCombatInput(claimants=("A", "B"), ends=(4, 4), wound_quantities=_QS)
     assert (rec.traditions, rec.techniques, rec.axes, rec.dispositions) == ((), (), (), ())
-    capped = entry.fight(rec, random.Random(0), max_bouts=1)
+    capped = entry.fight(rec, draw.seeded(draw.H2("test_combat_one_door", 0)), max_bouts=1)
     assert capped.rounds <= 1
-    assert entry.fight(rec, random.Random(0)).trace == entry.fight(rec, random.Random(0), cfg=None, max_bouts=None).trace
+    assert entry.fight(rec, draw.seeded(draw.H2("test_combat_one_door", 0))).trace == entry.fight(rec, draw.seeded(draw.H2("test_combat_one_door", 0)), cfg=None, max_bouts=None).trace

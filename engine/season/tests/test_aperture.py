@@ -761,8 +761,10 @@ def test_cr18_the_pools_line_reads_the_rolled_pool_and_separates_persons_not_sea
     # season-one rolls read every pool 1 to 6 (was `{default, 5}`), so the reader separates persons, not seasons.
     # B05.99 re-pin (B05.09, B05.25, B05.23: the pool is `pool_of(the governing attributes' mean + rank, addends, pool_add 6,
     # pool_floor 5)`, so pools are tenths from 7 up; was {1, 2, 3, 4, 5, 6}): still many pools in one season, persons apart.
+    # B06.99 re-pin (B06.04: the uniform's source changes from CPython's generator to the keyed mix, so the drawn attributes
+    # differ; a stream change, not a balance change): was {7.0, 7.7, 8.5, 9.0, 9.3, 9.5, 9.7, 10.0, 10.3, 10.5, 10.7, 11.0, 11.5, 12.0}.
     assert {p for per in realm["pools"].values() for c in per.values() for _, p in c} == {
-        7.0, 7.7, 8.5, 9.0, 9.3, 9.5, 9.7, 10.0, 10.3, 10.5, 10.7, 11.0, 11.5, 12.0}
+        7.5, 8.0, 8.5, 9.0, 9.3, 9.5, 10.0, 10.5, 10.7, 11.0, 11.5, 12.0}
 
 @pytest.mark.skipif(A.monitoring_blocked() is not None,
                     reason="engines_entered needs Python 3.12 or later and a free monitoring tool id")

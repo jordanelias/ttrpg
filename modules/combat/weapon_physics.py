@@ -28,23 +28,14 @@ fit in the re-baseline, not asserted.
 """
 import math
 
-from . import vocabulary as V   # the engine's token ALPHABET, owned once (ED-PC-0042). A zero-import leaf, so this
+from engine.dice_engine import fmath
+from engine.dice_engine.fmath import ltr_sum
+from . import vocabulary as V  # the engine's token ALPHABET, owned once (ED-PC-0042). A zero-import leaf, so this
                          # module -- which CANNOT import core (core imports IT: `import weapon_physics as WP`) -- still reaches the
                          # same head/mode/hilt tokens core's tables are keyed by, with no cycle.
 
 
-def _ltr_sum(xs):
-    """Left-to-right float accumulation: ((0 + x0) + x1) + x2 ... — each `+` is one IEEE-754 binary64 addition,
-    which is correctly rounded on every platform, so the ACCUMULATION is bit-identical everywhere (the parts' own
-    `**` is the platform's libm and is not controlled here). The builtin `sum()` is NOT: CPython 3.12 changed it
-    to Neumaier-compensated summation for floats, so `sum()` of the same parts reads one ULP apart on 3.11 and on
-    3.12+ (CR-01: bind_sigma for bear_spear). This is the pre-3.12 value. CI pins 3.11, where `sum()`
-    and this agree, so CI cannot observe the difference. Pure."""
-    total = 0
-    for x in xs:
-        total += x
-    return total
-
+# A float sum here goes through `fmath.ltr_sum`, the one accumulation rule (its docstring says why: CR-01).
 # ── composite-mass constants (sourced; recovered weapon_physics_calibration_2026-06-22) ──
 # head_len/grip_len/the GRIP_*/LEVER_*/PERC_GRIP_1H/REC_GRIP_REF/GRAB_SHORT_REACH thresholds are all HONEST
 # METRES (ED-PC-0002).
@@ -162,11 +153,11 @@ def derive(w):
     Lt = Lh + Lg
     parts = _all_parts(w)
     if parts:
-        m_total = _ltr_sum(p[0] for p in parts)
-        moment = _ltr_sum(p[0] * p[1] for p in parts)
-        moi = _ltr_sum(p[0] * (p[1] ** 2 + p[2] ** 2 / 12.0) for p in parts)
+        m_total = ltr_sum(p[0] for p in parts)
+        moment = ltr_sum(p[0] * p[1] for p in parts)
+        moi = ltr_sum(p[0] * (p[1] ** 2 + p[2] ** 2 / 12.0) for p in parts)
         PoB = moment / m_total
-        m_head = _ltr_sum(e['mass_kg'] for e in w.get('elements', ()))
+        m_head = ltr_sum(e['mass_kg'] for e in w.get('elements', ()))
         return dict(PoB_m=PoB, PoB_cm=PoB * 100, PoB_frac=PoB / Lt, m_head=m_head,
                     MoI=moi, static_moment=moment, fwd_extent_m=Lh, length_m=Lt)
     # ── fallback (not exercised by the live roster) ──
@@ -205,9 +196,9 @@ def derive(w):
         me = e['mass_share'] * head_mass
         fparts.append((me, e['pos_frac'] * Lh, e.get('rod_L', 0.0)))
         m_head += me
-    m_total = _ltr_sum(p[0] for p in fparts)
-    moment = _ltr_sum(p[0] * p[1] for p in fparts)
-    moi = _ltr_sum(p[0] * (p[1] ** 2 + p[2] ** 2 / 12.0) for p in fparts)
+    m_total = ltr_sum(p[0] for p in fparts)
+    moment = ltr_sum(p[0] * p[1] for p in fparts)
+    moi = ltr_sum(p[0] * (p[1] ** 2 + p[2] ** 2 / 12.0) for p in fparts)
     PoB = moment / m_total
     return dict(PoB_m=PoB, PoB_cm=PoB * 100, PoB_frac=PoB / Lt, m_head=m_head,
                 MoI=moi, static_moment=moment, fwd_extent_m=Lh, length_m=Lt)
@@ -268,7 +259,7 @@ def hilt_assembly_mass(w):
     ricasso/tip, with the guard+pommel assembly projecting out as an improvised mace head — see
     reversed_grip_percussion's docstring for sourcing). Pure sum over the weapon's own located parts, no name
     check. 0.0 for a weapon with no guard/pommel/haft record (e.g. a synthetic test dict)."""
-    guard_m = _ltr_sum(g['mass_kg'] for g in w.get('guards', ()) if not g.get('dual_role_element'))
+    guard_m = ltr_sum(g['mass_kg'] for g in w.get('guards', ()) if not g.get('dual_role_element'))
     pommel_m = w.get('pommel', {}).get('mass_kg', 0.0)
     haft_m = w.get('haft', {}).get('mass_kg', 0.0)
     return guard_m + pommel_m + haft_m
@@ -437,7 +428,7 @@ def percussion_authority(w, grip=0.0, room=1.0, sel_head=None, sel_pc=None):
         return reversed_grip_percussion(w, grip=grip, room=room)
     m_strike, x_strike, _ = delivered_strike(w)
     lever = strike_point_lever(w, m_strike, x_strike)
-    base = min(PERC_CAP, PERC_SCALE * (math.sqrt(m_strike) * lever * energy_credit(w)) ** PERC_EXP)
+    base = min(PERC_CAP, PERC_SCALE * fmath.powf(math.sqrt(m_strike) * lever * energy_credit(w), PERC_EXP))
     return base * phi_grip(w, grip, V.HEAD_BLUNT, sel_pc) * phi_room_percussion(room)
 
 
@@ -472,7 +463,7 @@ def percussion_element_authority(w, elem_mass, elem_x, grip=0.0, room=1.0):
     See tests/valoria/test_combat_element_reachability.py."""
     m_total = delivered_strike(w)[2]
     lever = strike_point_lever(w, m_total, elem_x)     # == (STRIKE_HAND_LEVER + |x|) / (STRIKE_HAND_LEVER + Lt)
-    base = min(PERC_CAP, PERC_SCALE * (math.sqrt(max(0.0, elem_mass)) * lever * energy_credit(w)) ** PERC_EXP)
+    base = min(PERC_CAP, PERC_SCALE * fmath.powf(math.sqrt(max(0.0, elem_mass)) * lever * energy_credit(w), PERC_EXP))
     return base * phi_grip(w, grip, V.HEAD_BLUNT, None) * phi_room_percussion(room)
 
 
@@ -499,7 +490,7 @@ def agility(w):
     I1, D11a: reads at_grip(w,0.0)['I_g'] (the SAME grip-adjusted MoI wield_heft/_recovery_mode_commitment/
     recoverability_factor read), at grip=0; at_grip(w,0)['I_g'] reconstructs derive(w)['MoI'] to within float
     round-trip noise."""
-    return min(1.0, (AGILITY_REF / max(1e-6, at_grip(w, 0.0)['I_g'])) ** AGILITY_EXP)
+    return min(1.0, fmath.powf(AGILITY_REF / max(1e-6, at_grip(w, 0.0)['I_g']), AGILITY_EXP))
 
 
 def defense_affinities(w):
@@ -554,7 +545,7 @@ def _guard_catch_raw(w, proximity):
     weighted (hand_guard's own-hand coverage). Pure."""
     total = 0.0
     for g in w.get('guards', ()):
-        wgt = math.exp(-abs(g['x_m']) / GUARD_HAND_SCALE) if proximity else 1.0
+        wgt = fmath.exp(-abs(g['x_m']) / GUARD_HAND_SCALE) if proximity else 1.0
         total += g['extent_m'] * wgt
     return total
 
@@ -563,14 +554,14 @@ def hand_guard(w):
     weighted), scaled by hilt complexity (a swept/basket hilt covers the hand far more than a plain cross of the
     same bar length). In [0,1). A bare haft (spear, staff, mace — no guards) -> 0. Pure."""
     hm = HILT_CATCH_MULT.get(w.get('hilt', V.HILT_NONE), 1.0)
-    return math.tanh(GUARD_HAND_K * hm * _guard_catch_raw(w, proximity=True))
+    return fmath.tanh(GUARD_HAND_K * hm * _guard_catch_raw(w, proximity=True))
 
 def blade_guard(w):
     """Bind-catch capability, DERIVED: a saturating function of ALL located catching surfaces (guards AND
     dual-role catching elements — hooks/prongs/tines/lugs), position-independent (a bind can land anywhere along
     a long polearm's reach, not just at the hand), scaled by hilt complexity. In [0,1). Pure."""
     hm = HILT_CATCH_MULT.get(w.get('hilt', V.HILT_NONE), 1.0)
-    return math.tanh(GUARD_BLADE_K * hm * _guard_catch_raw(w, proximity=False))
+    return fmath.tanh(GUARD_BLADE_K * hm * _guard_catch_raw(w, proximity=False))
 
 
 # ════════════════════ STAGE 3c — DISTRACTION: adornment motion degrades the defender's read (Phase B5) ════════════
@@ -585,8 +576,8 @@ DISTRACT_K = 2.0  # [SIM-CALIBRATE] saturating-sum gain on Σ count·extent_m; t
 def distraction(w):
     """Saturating sum over the weapon's adornments (count × extent, position-independent — any motion near the
     weapon draws the eye). In [0,1); 0 for the (typical) weapon with no adornments field. Pure."""
-    total = _ltr_sum(a.get('count', 1) * a.get('extent_m', 0.0) for a in w.get('adornments', ()))
-    return math.tanh(DISTRACT_K * total)
+    total = ltr_sum(a.get('count', 1) * a.get('extent_m', 0.0) for a in w.get('adornments', ()))
+    return fmath.tanh(DISTRACT_K * total)
 
 
 # ════════════════════ STAGE 3d — EDGE VIBRATION: a wavy/serrated edge degrades the OPPONENT's tactile read (Phase B5) ═
@@ -606,14 +597,14 @@ def facing_pref(w):
     with a mild reach saturation (a longer weapon commits its regime harder). No weapon name. Pure. Wired multiplicative
     into systems.facing_target (FACING_REGIME_K, K=0 -> inert/byte-identical until the U9 recalibration)."""
     sign = 1.0 if w['hands'] == 1 else -1.0
-    return sign * (0.85 + 0.15 * math.tanh(2.0 * w['head_len']))
+    return sign * (0.85 + 0.15 * fmath.tanh(2.0 * w['head_len']))
 
 def edge_vibration(w):
     """The weapon's peak edge-undulation intensity — the MAX amplitude across its located elements (the most
     extreme undulating segment dominates the tactile signature felt by an opponent bound against it). In [0,1);
     0 for the (typical) plain-edged weapon. Pure."""
     amp = max((e.get('edge_undulation', {}).get('amplitude_mm', 0.0) for e in w.get('elements', ())), default=0.0)
-    return math.tanh(VIBRATION_K * amp)
+    return fmath.tanh(VIBRATION_K * amp)
 
 
 # ════════════════════ U3 — EDGE-COUNT PRIMITIVE: per-element edges={sides∈{0,1,2}, false_edge_frac} (ED-PC-0018) ═

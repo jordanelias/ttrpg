@@ -25,6 +25,8 @@ from dataclasses import dataclass, replace
 from fractions import Fraction
 from typing import Callable, NamedTuple, Optional
 
+from engine.dice_engine.fmath import ltr_sum
+
 from ..data.arrangements import ARRANGEMENTS      # v11 CR-34: `declared_sitting` reads a row's `disposal`/`quorum`
 from ..data.requires import (
     OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, UNKNOWN, binding_from_act, binding_of, evaluate,
@@ -828,7 +830,7 @@ def proofs(w: World, speaker: str, opponent: Optional[str], venue: Optional[str]
         return 0.0
     opp = w.persons.get(opponent)
     mirror = {(c.subject, c.predicate) for c in opp.ledger} if opp is not None else set()
-    return sum(remove_weight(c.source) for c in held
+    return ltr_sum(remove_weight(c.source) for c in held
                if (c.subject, c.predicate) not in mirror
                and (admitted is None or PROOF_KIND_OF_SOURCE[c.source] in admitted))
 
@@ -1155,7 +1157,7 @@ def season_factor_of(w: World, territory: Optional[str] = None) -> float:
                           law="IN-21: each season of the year holds the equally likely multipliers it draws from")
     draw = draw_factory(w.world_seed, lambda: w.tick)("world" if territory is None else territory,
                                                       "season_factor")
-    return base * draw.choice(outcomes)
+    return base * draw.pick(outcomes)
 
 
 def _site_rungs(w: World) -> list:

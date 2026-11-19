@@ -19,11 +19,11 @@ process, give one result (module-level state surviving between calls makes the s
 """
 from __future__ import annotations
 
-import random
 
 import pytest
 
 from ._fresh_process import entry_target, probe
+from engine.dice_engine import draw
 
 _PRIZE = "the body"
 
@@ -35,15 +35,16 @@ before = set(sys.modules)
 mod_name, attr = {target!r}.split(":", 1)
 entry = getattr(importlib.import_module(mod_name), attr)
 from engine.season.queries.inputs import PersonalCombatInput
+from engine.dice_engine import draw
 qs = ("felled", "wounds", "max_wounds", "health_remaining", "health_full")
 out = []
 for seed, ends in ((7, (4, 4)), (11, (4, 1)), (3, (2, 4))):
     inp = PersonalCombatInput(claimants=("p_a", "p_b"), ends=ends, wound_quantities=qs)
-    got = entry(inp, random.Random(seed))
-    again = entry(inp, random.Random(seed))
+    got = entry(inp, draw.seeded(draw.H2("test_combat_module", seed)))
+    again = entry(inp, draw.seeded(draw.H2("test_combat_module", seed)))
     # THE PLAYABLE BRANCH (REM-31): a decider that always engages is the automated fight, and taking that branch
     # must load nothing of the host either (a host import placed behind `decide` would otherwise never be seen)
-    played = entry(inp, random.Random(seed), decide=lambda view: "engage")
+    played = entry(inp, draw.seeded(draw.H2("test_combat_module", seed)), decide=lambda view: "engage")
     out.append((seed, ends, type(got).__name__, got.claimants, dataclasses.asdict(got),
                 again == got and played.wounds == got.wounds and played.rounds == got.rounds))
 loaded = sorted(os.path.relpath(m.__file__, {root!r}) for n, m in list(sys.modules.items())
@@ -56,7 +57,7 @@ oracle = []
 for seed, ends, *_ in out:
     A, B = combatant.Combatant("p_a", end=ends[0]), combatant.Combatant("p_b", end=ends[1])
     seen = []
-    r = wrapper.fight(A, B, cfg=None, rng=random.Random(seed), trace=seen.append)
+    r = wrapper.fight(A, B, cfg=None, rng=draw.seeded(draw.H2("test_combat_module", seed)), trace=seen.append)
     oracle.append((r, {{c.label: {{q: getattr(c.wt, q) for q in qs}} for c in (A, B)}}, seen))
 print(repr((loaded, out, oracle)))
 """
@@ -99,9 +100,10 @@ sys.path.insert(0, {root!r})
 from engine.substrate import composition
 fight = composition.require("combat.fight")
 from engine.season.queries.inputs import PersonalCombatInput
+from engine.dice_engine import draw
 inp = PersonalCombatInput(claimants=("p_a", "p_b"), ends=(4, 4),
                           wound_quantities=("felled", "wounds", "max_wounds", "health_remaining", "health_full"))
-got = fight(inp, random.Random(7))
+got = fight(inp, draw.seeded(draw.H2("test_combat_module", 7)))
 import os
 pkg = os.path.join({root!r}, "modules", "combat") + os.sep
 flat = sorted(n for n, m in list(sys.modules.items()) if str(getattr(m, "__file__", "") or "").startswith(pkg) and not n.startswith("modules.combat"))
@@ -133,7 +135,7 @@ def test_resolve_returns_no_winner_key():
     # the entry's own return is the record (a frozen dataclass), with one `PartyWounds` per claimant
     entry, refusal = entry_for(C._PRIZE, C._PROVIDER)
     assert entry is not None, refusal
-    out = entry.fn(C.combat_input(w, ["p_low", "p_mid"], "fight"), random.Random(0))
+    out = entry.fn(C.combat_input(w, ["p_low", "p_mid"], "fight"), draw.seeded(draw.H2("test_combat_module", 0)))
     assert isinstance(out, CombatOutcome) and not isinstance(out, dict), type(out)
     assert out.claimants == ("p_low", "p_mid") and set(out.wounds) == {"p_low", "p_mid"}, out.claimants
     assert all(isinstance(v, PartyWounds) for v in out.wounds.values()), out.wounds
@@ -182,7 +184,7 @@ def test_wrapper_fight_has_no_default_stream():
         wrapper.fight(Combatant("a"), Combatant("b"))
     with pytest.raises(TypeError):
         wrapper.fight(Combatant("a"), Combatant("b"), cfg=None)
-    assert wrapper.fight(Combatant("a"), Combatant("b"), None, random.Random(1)) in (-1, 0, 1)
+    assert wrapper.fight(Combatant("a"), Combatant("b"), None, draw.seeded(draw.H2("test_combat_module", 1))) in (-1, 0, 1)
     assert "random.Random()" not in inspect.getsource(wrapper)
 
 
@@ -246,7 +248,7 @@ def test_an_addend_raises_the_pool_and_never_the_ob_and_the_records_pair_is_the_
             seen.clear()
             for seed in range(5):
                 entry(PersonalCombatInput(claimants=("a", "b"), ends=(4, 4), wound_quantities=qs, scores=(2, 2),
-                                          addends=(3, 0), **kw), random.Random(seed))
+                                          addends=(3, 0), **kw), draw.seeded(draw.H2("test_combat_module", seed)))
                 checked += 1
             assert set(seen) == want, (kw, dict(seen))
     finally:
@@ -275,7 +277,7 @@ def test_skill_score_and_attribute_move_the_fight_separately():
         for seed in range(n):
             inp = PersonalCombatInput(claimants=("me", "op"), ends=(4, 4), wound_quantities=qs, scores=(score, 3),
                                       addends=(0, 0), attributes=({"attr.body.strength": strength}, {}))
-            hit += bool(entry(inp, random.Random(seed)).wounds["op"].felled)
+            hit += bool(entry(inp, draw.seeded(draw.H2("test_combat_module", seed))).wounds["op"].felled)
         return hit / n
 
     checked = 0
@@ -312,7 +314,7 @@ def _fight(w, seed: int = 5) -> dict:
     entry, refusal = combat.entry_for(combat._PRIZE, combat._PROVIDER)
     assert entry is not None, refusal
     inp = combat.combat_input(w, [_A, _B], "fight")
-    return dict(inp=inp, got=entry.fn(inp, random.Random(seed)))
+    return dict(inp=inp, got=entry.fn(inp, draw.seeded(draw.H2("test_combat_module", seed))))
 
 
 def test_a_carried_wound_leaves_health_and_max_wounds_whole():
@@ -473,7 +475,7 @@ def test_no_engagement_opens_in_a_halfsword_form(monkeypatch):
     for seed in (0, 1, 2):
         A, B = Combatant("A", weapon="longsword", armor="heavy"), Combatant("B", weapon="arming", armor="heavy")
         events = []
-        wrapper.fight(A, B, None, random.Random(seed), trace=events.append)
+        wrapper.fight(A, B, None, draw.seeded(draw.H2("test_combat_module", seed)), trace=events.append)
         starts = [e for e in events if e["kind"] == "engagement_start"]
         for i, e in enumerate(starts):
             for key in (e["weapon_A"], e["weapon_B"]):

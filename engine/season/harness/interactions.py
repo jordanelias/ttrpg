@@ -66,7 +66,7 @@ from __future__ import annotations
 
 import argparse
 import json
-import math
+from engine.dice_engine import fmath
 import os
 import sys
 import tempfile
@@ -280,7 +280,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
         srank = {id(c): i for i, c in enumerate(sampled)}
         if cands and tau > 0:
             top = max(scores.values())
-            ex = {k: math.exp((s - top) / tau) for k, s in scores.items()}
+            ex = {k: fmath.exp((s - top) / tau) for k, s in scores.items()}
             z = sum(ex.values())
             prob = {k: e / z for k, e in ex.items()}
         else:

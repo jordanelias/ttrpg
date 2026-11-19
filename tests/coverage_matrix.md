@@ -4,6 +4,13 @@ Settled entries (dated 2026-07-25 and earlier) are in `tests/coverage_matrix_arc
 which was restored 2026-08-23 after the evacuation deleted it — see that file for why this
 one had drifted to 94% of a blocking cap with no working relief valve.
 
+## 2026-11-18 — B06 (keyed draw): `gauge_mb.py` is re-pointed at `Draw`, not re-run
+
+`tests/sim/gauge_mb.py` changed only in how it builds its streams: `random.Random(seed)` became
+`draw.seeded(draw.H2(stem, seed))` (batch B06-keyed-draw, B06.04/B06.05). No gauge constant, test row or sampling
+default changed, and the gauge was NOT re-run for this change; the uniform's source is the one thing that moved
+(a stream change, not a balance change; the two-arm corpus reading is in the B06.99 commit body).
+
 ## 2026-10-12 — IN-05 (`31c`): the mass-battle sim moves to `modules/mass_battle/`; `gauge_mb.py` is re-pointed, not re-run
 
 The reachable closure of `massbattle.py::resolve_field` left `systems/mass_battle/sim/` for `modules/mass_battle/`

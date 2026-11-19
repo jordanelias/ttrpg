@@ -2,6 +2,7 @@
 Behaviour-frozen P-A extract. Depends only on config + stdlib.
 NB: explicit __all__ so underscore-prefixed helpers cross `import *`."""
 import math
+from engine.dice_engine import fmath
 from dataclasses import dataclass
 from modules.mass_battle.config import *
 from modules.mass_battle.troop_types.registry import support_weight
@@ -355,7 +356,7 @@ def _normalize_heading(heading):
     """Unit-length (dr, dc). Zero (or near-zero) vector guards to the default
     up-field heading (-1.0, 0.0) -- matches advance_dir=-1 ("up-field")."""
     dr, dc = heading
-    mag = math.hypot(dr, dc)
+    mag = fmath.hypot(dr, dc)
     # [antagonist reconcile, ED-MB-0011 v2 Stage A] Guard non-finite as well as near-zero: a NaN/inf
     # heading would otherwise propagate NaN axes into SAT and silently return garbage overlaps. Out of
     # the intended domain (headings are finite movement vectors) but cheap defense-in-depth on the
@@ -398,13 +399,13 @@ def _dist_point_to_segment(pr, pc, ar, ac, br, bc):
     sr, sc = br - ar, bc - ac
     len2 = sr * sr + sc * sc
     t = 0.0 if len2 <= 0.0 else max(0.0, min(1.0, ((pr - ar) * sr + (pc - ac) * sc) / len2))
-    return math.hypot(pr - (ar + t * sr), pc - (ac + t * sc))
+    return fmath.hypot(pr - (ar + t * sr), pc - (ac + t * sc))
 
 
 def body_depth(a, b):
     """How far two bodies interpenetrate along the line of their centres: 2*CELL_RADIUS minus the distance
     between the centres, floored at 0.0. Bodies one pitch apart (tangent) have depth 0.0."""
-    return max(0.0, 2.0 * CELL_RADIUS - math.hypot(a.cr - b.cr, a.cc - b.cc))
+    return max(0.0, 2.0 * CELL_RADIUS - fmath.hypot(a.cr - b.cr, a.cc - b.cc))
 
 
 def body_overlap(a, b):

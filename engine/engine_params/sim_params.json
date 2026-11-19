@@ -9,7 +9,7 @@
   },
   "count": 394,
   "by_module": {
-    "engine.dice_engine": 11,
+    "engine.dice_engine": 13,
     "engine.season": 25,
     "mass_battle": 161,
     "characters": 5,
@@ -99,6 +99,28 @@
       "module": "engine.dice_engine",
       "file": "engine/dice_engine/dice_engine.py",
       "note": "[JUSTIFIED: a float tolerance on the pair's equality with the face rule's own mean and variance, not a game magnitude]",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.dice_engine._TWO53",
+      "name": "_TWO53",
+      "value": 9007199254740992.0,
+      "kind": "scalar",
+      "module": "engine.dice_engine",
+      "file": "engine/dice_engine/draw.py",
+      "note": "[GROUNDED: 2**53, the span of a binary64 mantissa; `u` keeps the top 53 bits of a 64-bit word]",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.dice_engine._TWO_PI",
+      "name": "_TWO_PI",
+      "value": 6.283185307179586,
+      "kind": "scalar",
+      "module": "engine.dice_engine",
+      "file": "engine/dice_engine/draw.py",
+      "note": "[GROUNDED: 2*pi, the angle Box-Muller's cosine takes]",
       "citation": null,
       "citation_grade": null
     },
@@ -2759,54 +2781,54 @@
       "name": "GOLDEN_TRACE",
       "value": [
         [
-          0.0,
-          0.0,
-          5.0
-        ],
-        [
-          0.0,
           0.690741,
-          3.963889
+          0.0,
+          6.036111
         ],
         [
-          0.486813,
           0.690741,
-          4.694108
-        ],
-        [
           0.486813,
-          1.43791,
-          3.573353
+          5.305892
         ],
         [
-          0.932474,
-          1.43791,
-          4.241846
+          0.914911,
+          0.486813,
+          5.642148
         ],
         [
-          0.932474,
-          2.086699,
-          3.268663
+          0.914911,
+          1.171544,
+          4.61505
         ],
         [
-          0.932474,
-          2.086699,
-          3.268663
+          1.360617,
+          1.171544,
+          5.283609
         ],
         [
-          0.932474,
-          2.086699,
-          3.268663
+          1.360617,
+          1.405857,
+          4.93214
         ],
         [
-          1.40979,
-          2.086699,
-          3.984636
+          1.360617,
+          1.405857,
+          4.93214
         ],
         [
-          1.40979,
-          2.531771,
-          3.317028
+          1.360617,
+          1.405857,
+          4.93214
+        ],
+        [
+          1.794716,
+          1.405857,
+          5.583289
+        ],
+        [
+          1.794716,
+          1.881713,
+          4.869504
         ]
       ],
       "kind": "vector",

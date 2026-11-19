@@ -40,6 +40,8 @@ from systems.mass_battle.sim.engine import build_unit  # noqa: E402
 from systems.mass_battle.sim import validators as _val  # noqa: E402
 
 from ._conservation import assert_troop_conservation  # noqa: E402
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 
 # ─── fixtures ────────────────────────────────────────────────────────────────
@@ -154,32 +156,31 @@ def test_field_pairs_carry_continuous_frontage(field_path):
     """On the live field path, find_contacts pairs now carry continuous a_front/b_front, and at least
     one meeting is FRACTIONAL (not an integer) -- proof the continuous width is actually in play, not
     silently collapsing back to integers."""
-    import random
-    random.seed(313)
-    a = build_unit('Line', 3, 'A', 'A', 9)
-    b = build_unit('Line', 3, 'B', 'B', 9)
-    seen_front, seen_fractional = False, False
-    real = _orch.resolve_engagements_cascading
+    with rngsource.using(draw.seeded(draw.H2("test_frontage_conservation", 313))):
+        a = build_unit('Line', 3, 'A', 'A', 9)
+        b = build_unit('Line', 3, 'B', 'B', 9)
+        seen_front, seen_fractional = False, False
+        real = _orch.resolve_engagements_cascading
 
-    def _spy(unit_a, unit_b, pairs, *args, **kwargs):
-        nonlocal seen_front, seen_fractional
-        for p in pairs:
-            if 'a_front' in p and 'b_front' in p:
-                seen_front = True
-                for key in ('a_front', 'b_front'):
-                    v = p[key]
-                    if v > 0 and not math.isclose(v, round(v), abs_tol=1e-6):
-                        seen_fractional = True
-        return real(unit_a, unit_b, pairs, *args, **kwargs)
+        def _spy(unit_a, unit_b, pairs, *args, **kwargs):
+            nonlocal seen_front, seen_fractional
+            for p in pairs:
+                if 'a_front' in p and 'b_front' in p:
+                    seen_front = True
+                    for key in ('a_front', 'b_front'):
+                        v = p[key]
+                        if v > 0 and not math.isclose(v, round(v), abs_tol=1e-6):
+                            seen_fractional = True
+            return real(unit_a, unit_b, pairs, *args, **kwargs)
 
-    _orch.resolve_engagements_cascading = _spy
-    try:
-        _orch.run_battle(a, b, max_ticks=18)
-    finally:
-        _orch.resolve_engagements_cascading = real
-    assert seen_front, "field pairs did not carry a_front/b_front -> Stage D not wired"
-    # not asserting seen_fractional strictly (a perfectly aligned mirror can stay integer), but for an
-    # asymmetric seed we expect some fractional meeting; keep it informative if it ever regresses.
+        _orch.resolve_engagements_cascading = _spy
+        try:
+            _orch.run_battle(a, b, max_ticks=18)
+        finally:
+            _orch.resolve_engagements_cascading = real
+        assert seen_front, "field pairs did not carry a_front/b_front -> Stage D not wired"
+        # not asserting seen_fractional strictly (a perfectly aligned mirror can stay integer), but for an
+        # asymmetric seed we expect some fractional meeting; keep it informative if it ever regresses.
 
 
 @pytest.mark.parametrize("seed", [1, 7, 42, 101, 2026])
@@ -193,25 +194,23 @@ def test_conservation_under_continuous_frontage(field_path, seed):
     `_conservation.assert_troop_conservation`, which checks every unit (the skip was unnecessary --
     see that module for the measurement) and returns the count so vacuity is asserted away.
     """
-    import random
-    random.seed(seed)
-    a = build_unit('Line', 3, 'A', 'A', 9)
-    b = build_unit('Line', 3, 'B', 'B', 9)
-    _orch.run_battle(a, b, max_ticks=18)
-    checked = assert_troop_conservation(a, b, context=f"seed={seed}")
-    assert checked >= 2, f"seed={seed}: conservation checked {checked} units, expected both"
+    with rngsource.using(draw.seeded(draw.H2("test_frontage_conservation", seed))):
+        a = build_unit('Line', 3, 'A', 'A', 9)
+        b = build_unit('Line', 3, 'B', 'B', 9)
+        _orch.run_battle(a, b, max_ticks=18)
+        checked = assert_troop_conservation(a, b, context=f"seed={seed}")
+        assert checked >= 2, f"seed={seed}: conservation checked {checked} units, expected both"
 
 
 def test_determinism_same_seed(field_path):
     """Same seed twice -> identical public outcome (the continuous frontage is a deterministic float
     computation: projection + interval merge, no set-iteration order dependence)."""
-    import random
 
     def _run():
-        random.seed(555)
-        a = build_unit('Line', 3, 'A', 'A', 9)
-        b = build_unit('Line', 3, 'B', 'B', 9)
-        res = _orch.run_battle(a, b, max_ticks=18)
-        return (res['winner'], res['turns'], round(a.hp, 6), round(b.hp, 6))
+        with rngsource.using(draw.seeded(draw.H2("test_frontage_conservation", 555))):
+            a = build_unit('Line', 3, 'A', 'A', 9)
+            b = build_unit('Line', 3, 'B', 'B', 9)
+            res = _orch.run_battle(a, b, max_ticks=18)
+            return (res['winner'], res['turns'], round(a.hp, 6), round(b.hp, 6))
 
     assert _run() == _run()

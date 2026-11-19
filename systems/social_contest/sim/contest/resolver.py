@@ -19,17 +19,32 @@ from .primitives import (Stasis, Appeal, Standing, Reserve, Pool, SelfGating, Le
 # groundup local engine.py (the "third σ-kernel" hazard). effective_ob/degree/net_boost are
 # byte-identical at TN7 (parity-tested). roll_net_continuous is wrapped below to preserve the kernel's
 # GLOBAL-random stream (sigma_leverage.roll_net_continuous(rng=random) draws from the module-level RNG the
-# seeded tests rely on; passing rng=None would use a fresh Random and desync the seed). B05.02: the one
+# seeded tests rely on; passing no `rng` is refused: the draw is required). B05.02: the one
 # sampler (A-5) -- the oracle's roll is the bell curve every provider draws, not the d10 faces.
 from engine.dice_engine import sigma_leverage as _sigma
+from engine.dice_engine.draw import Draw as _Draw
 from engine.dice_engine.dice_engine import DEGREE_ORDINAL, degree_from_net
 from engine.dice_engine.sigma_leverage import effective_ob, net_boost
 from .degree_extension import CONTEST_DEGREE_EXTENSION as _DEFAULT_DEGREE_EXTENSION
 
+class _GlobalStream(_Draw):
+    """The sim's stream is the module-level `random` (the seeded suite calls `random.seed`): `u()` reads it, so the
+    `Draw` surface the one sampler now needs rides on that stream; the key is unused."""
+
+    def __init__(self):
+        super().__init__("")
+
+    def u(self):
+        return random.random()
+
+
+_GLOBAL = _GlobalStream()
+
+
 def roll_net_continuous(pool):
     """The one sampler (B05.02, A-5) drawn from the GLOBAL random stream (the seeded suite seeds module-level
     random); single-sourced through sigma_leverage/dice_engine."""
-    return _sigma.roll_net_continuous(pool, rng=random)
+    return _sigma.roll_net_continuous(pool, rng=_GLOBAL)
 
 VALID_KINDS = ("advance", "hard", "shift", "support", "pass", "evidence", "rebut")
 RES_FLOOR = 0.15  # [JUSTIFIED: de-saturation floor; 0.15 is a fitted seed, citation: null]

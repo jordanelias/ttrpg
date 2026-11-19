@@ -20,6 +20,7 @@ from engine.substrate import descriptors
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "tools"))
 import export_descriptors as ed  # noqa: E402
+from engine.dice_engine import draw as keyed_draw
 
 _REAL_LOAD = ed.ci_common.load_yaml
 
@@ -767,7 +768,7 @@ def _arrest_roll(fixtures=None):
     from engine.season.seam.wrappers import sigma
     w = P.tiny_world(fixtures) if fixtures is not None else P.tiny_world()
     SeasonDriver(w)    # registers the module entry the prize row names
-    return sigma.resolve(w, ["p_low", "p_mid"], ["c"], "a standing", verb="arrest", subject="p_mid", rng=random.Random(3))
+    return sigma.resolve(w, ["p_low", "p_mid"], ["c"], "a standing", verb="arrest", subject="p_mid", rng=keyed_draw.seeded(keyed_draw.H2("test_u1_capability_surface", 3)))
 
 
 def test_fed_by_on_an_arrest_lists_its_dice_and_opposes_rows():

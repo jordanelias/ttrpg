@@ -19,7 +19,7 @@ Separation of concerns (D0-2):
   dice_engine  = pool / degree primitive (stdlib root, no deps)
   sigma_leverage = advantage→μ-shift layer atop it (this module)
 
-Dependencies: stdlib only (math, random) + engine.dice_engine.dice_engine.
+Dependencies: stdlib only (math) + engine.dice_engine.dice_engine and `draw` (the stream a caller passes).
               numpy is NOT imported — stdlib math.tanh / math.sqrt are used throughout.
 
 Porting notes
@@ -55,15 +55,16 @@ Entry points:
   - p_success(base_ob: float, pool: float, net_sigma: float = 0.0, tn: int = TN_STANDARD, capped: bool = True) -> float
   - band_odds(pool: float, ob: float, boost: float = 0.0) -> (F, P, S, O)  (the Normal closed form of the one sampler, graded on BAND_FLOORS)
   - record_odds(pool, ob, leverage) -> (F, P, S, O)  (the same, over a contest record's fields, so a host names no boost arithmetic)
-  - roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random | None = None) -> float
+  - roll_net_continuous(pool: float, tn: int = TN_STANDARD, *, rng: Draw) -> float
 """
 from __future__ import annotations
 
 import math
-import random
 from typing import Sequence
 
 from engine.dice_engine import dice_engine
+from engine.dice_engine import fmath
+from engine.dice_engine.draw import Draw
 
 # ---------------------------------------------------------------------------
 # Canonical per-die statistics (params/core.md "Expected Value (per die)")
@@ -139,7 +140,7 @@ def saturate(x: float, m: float) -> float:
     """`m * tanh(x / m)`: nearly `x` for small `x`, approaching `m` for large; no hard ceiling and no
     dead-zone. The one saturating function: `soft_cap` is it at `M_MAX`, and the social obstacle's
     bound is it over the span between the fixed ceiling and the pool's cap."""
-    return m * math.tanh(x / m)
+    return m * fmath.tanh(x / m)
 
 
 def soft_cap(net_sigma: float) -> float:
@@ -292,7 +293,7 @@ def levels_to_net_sigma(
 
 def _phi(z: float) -> float:
     """Standard normal CDF (stdlib erf path — no numpy)."""
-    return (1.0 + math.erf(z / math.sqrt(2.0))) / 2.0
+    return (1.0 + fmath.erf(z / math.sqrt(2.0))) / 2.0
 
 
 def p_success(
@@ -373,7 +374,7 @@ def record_odds(pool: float, ob: float, leverage: float) -> tuple:
 # Rolling entry point (delegates to dice_engine — NO new die-roll path)
 # ---------------------------------------------------------------------------
 
-def roll_net_continuous(pool: float, tn: int = TN_STANDARD, rng: random.Random | None = None) -> float:
+def roll_net_continuous(pool: float, tn: int = TN_STANDARD, *, rng: Draw) -> float:
     """The sampler every provider draws from (ED-833; Jordan, 2026-11-12). Same mean and variance as the d10
     face rule it is derived from.
 

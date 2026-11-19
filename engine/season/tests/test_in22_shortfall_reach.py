@@ -155,7 +155,7 @@ def test_in22_an_acts_reads_do_not_reach_a_governor():
     """ACTORLESS ONLY. The steward's executed `transfer` out of the granary carries the fold's reads of
     the granary's stores, and the granary lies inside the reeve's purview -- yet those reads stay the
     steward's (`H-122`'s `actor` arm). Asserted that the transfer EXECUTED, or the absence is vacuous."""
-    w = S.governed()
+    w = S.governed(seed=4)   # seed re-picked at B06.99: the stream changed (was 0; seeds 1..8 scanned, 4 is the first where the steward transfers)
     d = _season(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     real = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),

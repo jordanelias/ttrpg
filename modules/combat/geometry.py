@@ -21,7 +21,7 @@ Geometric parameters (all 0..1 unless noted):
   strike_concentration   broad face (mace flat / staff end) = 0 ... beak/pick = 1   (percussion focus; blunt heads)
   head_len, grip_len  absolute lengths in METRES (U0/ED-PC-0002; already used by the lever-arm module)
 """
-from math import tanh
+from engine.dice_engine.fmath import tanh, powf   # one owner per transcendental (B06.02)
 
 # ---- derivations (pure) ----
 
@@ -31,7 +31,7 @@ def gap_precision(point_concentration, cross_section):
     a fine point on a whippy blade (rapier) loses authority vs plate; a fine point on a rigid section (estoc, rondel)
     keeps it. Rigidity is the dominant gate vs hard plate, so it enters with a steep weight. Reproduces validated `gap`."""
     conc = 0.25 + 0.75*point_concentration
-    rigid = cross_section**1.15           # whippy sections lose plate-thrust authority (steep but not extreme)
+    rigid = powf(cross_section, 1.15)           # whippy sections lose plate-thrust authority (steep but not extreme)
     return round(min(1.0, conc * (0.30 + 0.70*rigid)), 2)
 
 def thrust_factor(point_concentration, cross_section, curvature):

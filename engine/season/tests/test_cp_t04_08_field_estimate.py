@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import math
 import random
+from engine.dice_engine import draw
 from dataclasses import replace
 
 import pytest
@@ -102,7 +103,7 @@ def _realised_won(w, seed0):
     won = 0
     for i in range(REALISED):
         r = wrapper.resolve(w, claimants, ["mz_march"], "a field", verb="march", subject=DEF_FACTION, rung=TARGET,
-                            rng=random.Random(seed0 + i))
+                            rng=draw.seeded(draw.H2("test_cp_t04_08_field_estimate", seed0 + i)))
         assert r["status"] == "RESOLVED", r
         won += bool(r["attacker_wins"])
     return won / REALISED
@@ -167,13 +168,14 @@ def test_a_standing_order_is_in_the_estimate_and_a_given_one_replaces_it():
     """With `order` None the estimate reads the standing order exactly as `field_input` does; a given order is the attacker's
     in its place. Same stream, same input, so the figures are EQUAL, not close. The roles are chosen to differ."""
     checked = 0
+    AW = 12      # attacker weight re-picked at B06.99: the stream changed (was 9, where a held Shock left all 50 shown scenes unchanged; 3, 6, 7, 11, 12, 16 differ for both roles)
     for held, other in (("Shock", "ShieldWall"), ("ShieldWall", "Shock")):
-        with_held, plain = _build(9, True, held), _build(9, True, None)
+        with_held, plain = _build(AW, True, held), _build(AW, True, None)
         a = wrapper.field_estimate(with_held, ACTOR, KING_SEAT, TARGET)
         b = wrapper.field_estimate(plain, ACTOR, KING_SEAT, TARGET, FieldOrder(held, "none"))
         c = wrapper.field_estimate(plain, ACTOR, KING_SEAT, TARGET)
         d = wrapper.field_estimate(with_held, ACTOR, KING_SEAT, TARGET, FieldOrder(other, "none"))
-        e = wrapper.field_estimate(_build(9, True, other), ACTOR, KING_SEAT, TARGET)
+        e = wrapper.field_estimate(_build(AW, True, other), ACTOR, KING_SEAT, TARGET)
         assert a == b, (held, a, b)                    # the held order is the given one
         assert a != c, (held, a, c)                    # ... and it is in the figure: no order is another figure
         assert d == e, (other, d, e)                   # a given order governs a held one
@@ -224,7 +226,7 @@ def test_the_rng_is_keyed_on_world_seed_tick_actor_and_estimate_and_nothing_else
     fed = wrapper._fed(w, inp, (wrapper._seat_treasury(w, KING_SEAT), wrapper._defender_treasury(w, TARGET)))
     entry, refusal = entry_for(wrapper._PRIZE, wrapper._PROVIDER)
     assert entry is not None, refusal
-    rng = random.Random(int(H(w.world_seed, w.tick, ACTOR, "estimate"), 16))
+    rng = draw_factory(w.world_seed, lambda: w.tick)(ACTOR, "estimate")
     won = sum(bool(entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)["attacker_wins"]) for _ in range(SHOWN))
     assert got["Won"] == won / SHOWN and got["Lost"] == (SHOWN - won) / SHOWN
     other_tick = _build(9, True, None)

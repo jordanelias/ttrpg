@@ -39,6 +39,8 @@ from systems.mass_battle.sim import validators as _val  # noqa: E402
 from modules.mass_battle.config import VOLLEY_MAX_RANGE  # noqa: E402
 
 from ._conservation import assert_troop_conservation  # noqa: E402
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 
 @pytest.fixture
@@ -88,31 +90,29 @@ def test_pike_troop_type_authored():
 
 def _standing(ta, tb, n=12):
     """Mean surviving share of two Line-3 forces of types `ta`, `tb` after a standing melee (seeds 500..)."""
-    import random
     ha = hb = 0.0
     for s in range(n):
-        random.seed(500 + s)
-        a = build_unit('Line', 3, 'A', 'A', 9, troop_type=ta)
-        b = build_unit('Line', 3, 'B', 'B', 9, troop_type=tb)
-        h0a, h0b = a.hp, b.hp
-        _orch.run_battle(a, b, max_ticks=18)
-        ha += a.hp / h0a; hb += b.hp / h0b
+        with rngsource.using(draw.seeded(draw.H2("test_reach_weapon_class", 500 + s))):
+            a = build_unit('Line', 3, 'A', 'A', 9, troop_type=ta)
+            b = build_unit('Line', 3, 'B', 'B', 9, troop_type=tb)
+            h0a, h0b = a.hp, b.hp
+            _orch.run_battle(a, b, max_ticks=18)
+            ha += a.hp / h0a; hb += b.hp / h0b
     return round(ha / n, 4), round(hb / n, 4)
 
 
 def _charge_vs_brace(def_type, n=16):
     """Braced defender of `def_type` holding vs a Fast cavalry charge; returns mean defender hp retained."""
-    import random
     tot = 0.0
     for s in range(n):
-        random.seed(700 + s)
-        d = build_unit('Line', 3, 'DEF', 'A', 9, troop_type=def_type, stance='hold',
-                       instructions=('brace', 'hold'))
-        c = build_unit('Line', 3, 'CAV', 'B', 9, troop_type='cavalry', speed='Fast',
-                       instructions=('charge',))
-        h0 = d.hp
-        _orch.run_battle(d, c, max_ticks=18)
-        tot += d.hp / h0
+        with rngsource.using(draw.seeded(draw.H2("test_reach_weapon_class", 700 + s))):
+            d = build_unit('Line', 3, 'DEF', 'A', 9, troop_type=def_type, stance='hold',
+                           instructions=('brace', 'hold'))
+            c = build_unit('Line', 3, 'CAV', 'B', 9, troop_type='cavalry', speed='Fast',
+                           instructions=('charge',))
+            h0 = d.hp
+            _orch.run_battle(d, c, max_ticks=18)
+            tot += d.hp / h0
     return tot / n
 
 
@@ -178,23 +178,21 @@ def test_conservation_with_pike(field_path, seed):
     across a 60-seed sweep, vs 0 of 120 for the Line-vs-Line matchup the other three use), so the skip
     was live here rather than merely theoretical -- and conservation held for all 8.
     """
-    import random
-    random.seed(seed)
-    a = build_unit('Line', 3, 'PIKE', 'A', 9, troop_type='pike', instructions=('brace', 'hold'))
-    b = build_unit('Line', 3, 'CAV', 'B', 9, troop_type='cavalry', speed='Fast', instructions=('charge',))
-    _orch.run_battle(a, b, max_ticks=18)
-    checked = assert_troop_conservation(a, b, context=f"seed={seed}")
-    assert checked >= 2, f"seed={seed}: conservation checked {checked} units, expected both"
+    with rngsource.using(draw.seeded(draw.H2("test_reach_weapon_class", seed))):
+        a = build_unit('Line', 3, 'PIKE', 'A', 9, troop_type='pike', instructions=('brace', 'hold'))
+        b = build_unit('Line', 3, 'CAV', 'B', 9, troop_type='cavalry', speed='Fast', instructions=('charge',))
+        _orch.run_battle(a, b, max_ticks=18)
+        checked = assert_troop_conservation(a, b, context=f"seed={seed}")
+        assert checked >= 2, f"seed={seed}: conservation checked {checked} units, expected both"
 
 
 def test_determinism_with_pike(field_path):
-    import random
 
     def _run():
-        random.seed(808)
-        a = build_unit('Line', 3, 'PIKE', 'A', 9, troop_type='pike', instructions=('brace', 'hold'))
-        b = build_unit('Line', 3, 'CAV', 'B', 9, troop_type='cavalry', speed='Fast', instructions=('charge',))
-        res = _orch.run_battle(a, b, max_ticks=18)
-        return (res['winner'], res['turns'], round(a.hp, 6), round(b.hp, 6))
+        with rngsource.using(draw.seeded(draw.H2("test_reach_weapon_class", 808))):
+            a = build_unit('Line', 3, 'PIKE', 'A', 9, troop_type='pike', instructions=('brace', 'hold'))
+            b = build_unit('Line', 3, 'CAV', 'B', 9, troop_type='cavalry', speed='Fast', instructions=('charge',))
+            res = _orch.run_battle(a, b, max_ticks=18)
+            return (res['winner'], res['turns'], round(a.hp, 6), round(b.hp, 6))
 
     assert _run() == _run()

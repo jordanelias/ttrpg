@@ -40,6 +40,7 @@ from __future__ import annotations
 
 import pathlib
 import random
+from engine.dice_engine import draw
 import re
 import sys
 
@@ -65,15 +66,15 @@ CANONICAL_FACES = {1: -1, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 1, 8: 1, 9: 1, 10: 2}
 @pytest.mark.parametrize("bad_tn", [5, 6, 8, 9, 0, -1])
 def test_the_owner_refuses_a_non_7_tn(bad_tn):
     with pytest.raises(ValueError, match="TN is 7"):
-        de.roll_pool(5, tn=bad_tn, rng=random.Random(0))
+        de.roll_pool(5, tn=bad_tn, rng=draw.seeded(draw.H2("test_tn7_always", 0)))
     with pytest.raises(ValueError, match="TN is 7"):
-        de.continuous_engine_sample(5.0, tn=bad_tn, rng=random.Random(0))
+        de.continuous_engine_sample(5.0, tn=bad_tn, rng=draw.seeded(draw.H2("test_tn7_always", 0)))
 
 
 def test_tn_7_is_accepted():
     """The refusal must not be so broad it breaks the one legal value."""
-    assert de.roll_pool(5, tn=7, rng=random.Random(0)).net is not None
-    assert isinstance(de.continuous_engine_sample(5.0, tn=7, rng=random.Random(0)), float)
+    assert de.roll_pool(5, tn=7, rng=draw.seeded(draw.H2("test_tn7_always", 0))).net is not None
+    assert isinstance(de.continuous_engine_sample(5.0, tn=7, rng=draw.seeded(draw.H2("test_tn7_always", 0))), float)
 
 
 # ── 2. THE LOAD-BEARING ONE: the die rule cannot be quietly widened ────────────────────
@@ -190,7 +191,7 @@ CANONICAL_FACE_BOUNDS = {1, 7, 9, 10}   # the only literals the canonical rule c
 def _die_face_comparisons(tree):
     """Yield (lineno, literal) for comparisons of a d10-face variable against an int literal.
 
-    A "d10-face variable" is one bound to a `randint(1, 10)` call inside the same function —
+    A "d10-face variable" is one bound to a `randint(1, 10)` or `die(1, 10)` call inside the same function —
     real dataflow, not a text match, which is what keeps this off the false positives.
     """
     for fn in ast.walk(tree):
@@ -202,7 +203,7 @@ def _die_face_comparisons(tree):
                 continue
             call = node.value
             args = call.args
-            if (getattr(call.func, "attr", None) == "randint" and len(args) == 2
+            if (getattr(call.func, "attr", None) in ("randint", "die") and len(args) == 2
                     and all(isinstance(a, ast.Constant) for a in args)
                     and (args[0].value, args[1].value) == (1, 10)):
                 for tgt in node.targets:
@@ -231,7 +232,7 @@ def _files_that_roll_their_own_d10s():
             if "/tests/" in p:
                 continue
             text = path.read_text(encoding="utf-8")
-            if "randint(1, 10)" in text or "randint(1,10)" in text:
+            if any(spelling in text for spelling in ("randint(1, 10)", "randint(1,10)", "die(1, 10)", "die(1,10)")):
                 out.append((p, text))
     return out
 

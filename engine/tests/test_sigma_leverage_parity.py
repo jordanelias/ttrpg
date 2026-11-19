@@ -50,6 +50,7 @@ from engine.dice_engine import sigma_leverage as SL  # noqa: E402
 # that owns them. This file still tests the sigma layer; the degree half now addresses the
 # contest package, and that relocation is itself the point of the ruling being executed.
 from systems.social_contest.sim.contest import degree_extension as CD  # noqa: E402
+from engine.dice_engine import draw
 
 # ---------------------------------------------------------------------------
 # Golden table — the parity oracle, committed as data.
@@ -594,9 +595,9 @@ class TestRollNetContinuous:
 
     def test_returns_float(self):
         import random as _random
-        assert isinstance(SL.roll_net_continuous(5, rng=_random.Random(99)), float)
+        assert isinstance(SL.roll_net_continuous(5, rng=draw.seeded(draw.H2("test_sigma_leverage_parity", 99))), float)
 
     def test_seeded_deterministic(self):
         import random as _random
-        assert (SL.roll_net_continuous(10, rng=_random.Random(13))
-                == SL.roll_net_continuous(10, rng=_random.Random(13)))
+        assert (SL.roll_net_continuous(10, rng=draw.seeded(draw.H2("test_sigma_leverage_parity", 13)))
+                == SL.roll_net_continuous(10, rng=draw.seeded(draw.H2("test_sigma_leverage_parity", 13))))

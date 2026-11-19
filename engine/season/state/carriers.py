@@ -719,7 +719,7 @@ def generated_attributes(world_seed: int, pid: str, span: Any) -> dict:
     fighter reads its class defaults and a roll reads `pool_default`); two whole numbers `lo <= hi` inside the scale
     are the range; anything else is `Forbidden`, naming the setting and H-856.
     (2) THE KEY. One keyed draw per (person, attribute) through `state/ids.py::draw_factory`, `lambda: 0` as the clock,
-    purpose `attr.generated:<key>`, one `randint(lo, hi)` taken from each stream: a sheet is a function of (seed,
+    purpose `attr.generated:<key>`, one `die(lo, hi)` taken from each stream: a sheet is a function of (seed,
     person id, attribute) alone, whenever and wherever the person is minted. No wall clock, no `random.Random(` here.
     (3) AUTHORED OVERRIDES. The caller lays an authored value over this dict key by key (`{**generated, **authored}`),
     so an authored key replaces its own draw and no other: all ten draws are taken whatever a person authors.
@@ -740,7 +740,7 @@ def generated_attributes(world_seed: int, pid: str, span: Any) -> dict:
             law="B01a.01 -- one keyed draw per person and attribute, uniform on the declared range")
     lo, hi = span
     draw = draw_factory(world_seed, lambda: 0)
-    return {key: draw(pid, f"attr.generated:{key}").randint(lo, hi) for key in ATTRIBUTES}
+    return {key: draw(pid, f"attr.generated:{key}").die(lo, hi) for key in ATTRIBUTES}
 
 
 @dataclass

@@ -370,7 +370,9 @@ def test_faculty_varies_by_person_once_train_raises_carins_vocation():
     # training (was 4, the key alone); the persons without a key read their drawn sheets' means + 6: {p_b: 10.0, p_c: 9.0}
     # (was {3, 2}, the larger of attribute and key)
     assert pools[CARIN] == 11.0 == before + 1, (pools, before)
-    assert {pools[p.id] for p in others} == {9.0, 10.0}, pools
+    # B06.99 re-pin (B06.04: the keyed mix draws the sheets; a stream change, not a balance change): {p_b: 11.5, p_c: 9.5}
+    # (was {9.0, 10.0})
+    assert {pools[p.id] for p in others} == {9.5, 11.5}, pools
     assert len(set(pools.values())) > 1, pools
 
 

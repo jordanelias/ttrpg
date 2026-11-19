@@ -24,6 +24,7 @@ excludes (CLAUDE.md §0.1 point 2).
 """
 import os
 import random
+from engine.dice_engine import draw
 import sys
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -49,7 +50,7 @@ def test_roll_pool_respects_pool_minimum_and_die_rule_bounds_property():
         pool_size = rng_seeder.randint(-10, 200)  # includes <= 0 to exercise the minimum clamp
         tn = 7  # TN7 always (ED-IN-0196); this test's subject is the pool minimum and the
                 # die-rule bounds, not TN, so pinning it weakens nothing here.
-        trial_rng = random.Random(rng_seeder.randint(0, 2**32 - 1))
+        trial_rng = draw.seeded(draw.H2("test_dice_engine_properties", rng_seeder.randint(0, 2**32 - 1)))
 
         result = de.roll_pool(pool_size, tn=tn, rng=trial_rng)
 
@@ -74,8 +75,8 @@ def test_roll_pool_is_deterministic_given_an_identically_seeded_rng():
     """A narrower, individual-engine echo of row_determinism's shape (same seed -> same
     result) -- exercised here at the dice-pool level, not the season level."""
     for trial_seed in (1, 2, 3, 424242, SWEEP_SEED):
-        r1 = de.roll_pool(12, tn=7, rng=random.Random(trial_seed))
-        r2 = de.roll_pool(12, tn=7, rng=random.Random(trial_seed))
+        r1 = de.roll_pool(12, tn=7, rng=draw.seeded(draw.H2("test_dice_engine_properties", trial_seed)))
+        r2 = de.roll_pool(12, tn=7, rng=draw.seeded(draw.H2("test_dice_engine_properties", trial_seed)))
         assert r1.rolls == r2.rolls
         assert r1.net == r2.net
 

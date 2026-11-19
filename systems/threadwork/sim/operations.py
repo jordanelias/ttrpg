@@ -195,8 +195,7 @@ def _resolve_operation(operation: str, actor, ob: int, tn: int,
     # Roll
     rng = rng if rng is not None else (world.rng if world is not None and hasattr(world, 'rng') else None)
     if rng is None:
-        import random
-        rng = random.Random()
+        raise TypeError("operations: no `rng` (pass `draw.seeded(...)` or a world with `.rng`); there is no default stream")
     net_successes = roll_pool(pool, tn=tn, rng=rng).net if pool > 0 else 0
 
     degree = _compute_degree(net_successes, ob)

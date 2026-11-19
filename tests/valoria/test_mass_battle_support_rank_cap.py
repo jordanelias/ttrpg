@@ -25,6 +25,7 @@ from modules.mass_battle.geometry import _oriented_abs_map
 from modules.mass_battle.hierarchy.units import Unit
 
 from .test_reach_weapon_class import _charge_vs_brace, _standing, field_path  # noqa: F401  (fixture re-export)
+from engine.dice_engine import draw
 
 _TYPES = ('infantry', 'heavy_infantry', 'pike', 'cavalry')
 _SHAPES = ('Line', 'Column')
@@ -171,15 +172,18 @@ def test_capped_pike_out_retains_heavy_after_repelling_a_charge(field_path, monk
     ordering this test exists for holds under both.
     RE-RECORDED at B05.99 (B05.03: the field draws the one continuous sampler, `resolution.roll_pool`), read under Python 3.11
     and 3.13 alike: uncapped pike == heavy 0.9420 (was 0.9514); capped 0.9543 > 0.9494 > 0.8970 (was 0.9604/0.9508/0.8895).
+    The ordering held.
+    RE-RECORDED at B06.99 (B06.04: the uniform's source changes from CPython's generator to the keyed mix, a stream change
+    and not a balance change): uncapped pike == heavy 0.9414 (was 0.9420); capped 0.9585 > 0.9510 > 0.8916 (was 0.9543/0.9494/0.8970).
     The ordering held."""
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', False)
     pike0, heavy0 = _charge_vs_brace('pike'), _charge_vs_brace('heavy_infantry')
     assert math.isclose(pike0, heavy0, abs_tol=1e-6)
-    assert pike0 == pytest.approx(0.9420, abs=1e-4)
+    assert pike0 == pytest.approx(0.9414, abs=1e-4)
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', True)
     pike, heavy, levy = (_charge_vs_brace(t) for t in ('pike', 'heavy_infantry', 'levy'))
     assert pike > heavy > levy, (pike, heavy, levy)
-    assert (pike, heavy, levy) == pytest.approx((0.9543, 0.9494, 0.8970), abs=1e-4)
+    assert (pike, heavy, levy) == pytest.approx((0.9585, 0.9510, 0.8916), abs=1e-4)
 
 
 @pytest.mark.slow
@@ -192,13 +196,15 @@ def test_capped_pike_outfights_levy_in_standing_melee(field_path, monkeypatch):
     RE-RECORDED 2026-11-01 (ED-MB-0079) when the cell body became a circle one pitch across: the ordering held and
     the retentions moved by up to 0.014 (before: 0.9646/0.9421, 0.9296/0.9746, 0.963/0.9634; uncapped 0.9273/0.9457).
     RE-RECORDED at B05.99 (B05.03, the field's one sampler), read under Python 3.11 and 3.13 alike: the ordering held; capped
-    (0.9513, 0.9182), (0.895, 0.9678), (0.9352, 0.9574), uncapped (0.9019, 0.9338) (before: the three pairs above this note)."""
+    (0.9513, 0.9182), (0.895, 0.9678), (0.9352, 0.9574), uncapped (0.9019, 0.9338) (before: the three pairs above this note).
+    RE-RECORDED at B06.99 (B06.04, the keyed mix replaces CPython's generator; a stream change, not a balance change): the
+    ordering held; capped (0.9613, 0.888), (0.9131, 0.9519), (0.9531, 0.9355), uncapped (0.93, 0.9168) (before: the pairs above)."""
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', False)
     assert _standing('pike', 'levy') == _standing('levy', 'levy') == _standing('levy', 'pike')
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', True)
     pl, lp, ll = _standing('pike', 'levy'), _standing('levy', 'pike'), _standing('levy', 'levy')
     assert pl[0] > pl[1] and lp[1] > lp[0], (pl, lp)
-    assert (pl, lp, ll) == ((0.9513, 0.9182), (0.895, 0.9678), (0.9352, 0.9574))
+    assert (pl, lp, ll) == ((0.9613, 0.888), (0.9131, 0.9519), (0.9531, 0.9355))
 
 
 # ── MB-07r: the cap reaches the season's own entry ───────────────────────────────────────────────
@@ -216,7 +222,7 @@ def _engaged_by_resolve_field(monkeypatch, weight):
     monkeypatch.setattr(massbattle, '_run_and_grade', lambda unit_a, unit_b, *a, **k: seen.append(unit_a) or {})
     massbattle.resolve_field(MassBattleInput(
         weights=((weight,), (10,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None, origin=None,
-        loyalties=(0.0, 0.0), loyalty_gain=0, geography={}), random.Random(1))
+        loyalties=(0.0, 0.0), loyalty_gain=0, geography={}), draw.seeded(draw.H2("test_mass_battle_support_rank_cap", 1)))
     assert len(seen) == 1
     atom = seen[0].units[0]
     front = {ab for ab, orig in _oriented_abs_map(atom).items() if orig[0] == 0}

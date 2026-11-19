@@ -16,34 +16,35 @@ margin tuple (B05.18), `Office.modifier` (B05.20, by encoding: the build hash to
 (B05.23, the bench seats' `modifier: minor`: the build hash too), the `wounds` row in every roll's
 `levels` (B05.60), the believed prior (B05.62), one spacing of remove (B05.64). Earlier: B03 by
 encoding (`Office.body_function`, B03.28), B04 by encoding (`Claim.lap`, B04.01; `Person.traits`,
-B04.07). The shipped world, `DEFAULT_FIXTURES` as they stand, with no revert applied. A test support
+B04.07). RE-PINNED ONCE MORE AT B06.99 (every value below): the uniform's source changes from CPython's
+generator to the keyed mix (B06.04, A-30), a stream change and not a balance change (seed 0, one season,
+read equal at B06.04, B06.05 and B06.06: `7ccf4abe89d508d4221e0a0c7cbcbfaf`). The shipped world, `DEFAULT_FIXTURES` as they stand, with no revert applied. A test support
 module beside `_scar_helpers.py`, not a registry: nothing but tests reads it.
 """
 
-BUILD = {0: "4b56a92cf2438d45bd080a7be0ab1d3c"}                      # build_realm(seed), unplayed
+BUILD = {0: "d691552fcd4931573c465bbc341bdcad"}                      # build_realm(seed), unplayed
 
-SHIPPED = {(0, 1): "01b25620671b774f0fe3a93f40b82c9f",                # (seed, seasons) at DEFAULT_FIXTURES; B14.99 re-pin, was ce765e35...
-           (1, 1): "2d813f1dcb529318681fcdd2ab7f2f09",                # was d35b4a0f...
-           (2, 1): "f5dad72e776496746807815fcfb17a82",                # was 2a1a02ea...
-           (0, 2): "faba3b35e6dfd677f12c11bd797d8843",                # two seasons: the batch gate's reading (B05.99); was e3e950c8...
-           (1, 2): "33a7af20eed995e5ff7e92ebad0e21fd",                # was 27ee8b2e...
-           (2, 2): "ca30d5d44b869278da5387932d01b747"}                # was 6b56a542...
+SHIPPED = {(0, 1): "7ccf4abe89d508d4221e0a0c7cbcbfaf",                # (seed, seasons) at DEFAULT_FIXTURES
+           (1, 1): "8c038011362cc69a17e964f0bfd3735f",
+           (2, 1): "61af70f40c67f8972a416b8c59612789",
+           (0, 2): "d20ef860170ebe0d96001935bdd5e1d3",                # two seasons: the batch gate's reading (B05.99)
+           (1, 2): "709e1f8a879ace385ee79200aae7d65b",
+           (2, 2): "b6d80014c71394b100192f629aeb8cbb"}
 
 #: What the run leaves, beside its hash: `acts` is `populated.run`'s act count, `log` the
 #: length of the world's Event log, `census` the sha256 of `populated.run`'s return value as sorted
 #: JSON (the census plus `acts`, `actors`, `act_subjects` and `claim_sources`).
 CENSUS = {
-    # B14.99 re-pin (the old literal in the trailing comment of each row; (2, 1) and (2, 2) census digests did not move).
-    (0, 1): dict(acts=778, log=14178,           # was log 14168, census 3557439b...
-                 census="ba2bf038f06594c4ba0d99bcfdf6dd95d3601175c1550ff4d06bce9992f4d7e4"),
-    (1, 1): dict(acts=768, log=12299,           # was log 12289, census 0ee3acea...
-                 census="ae3ca459f53d689d01eb0134074d745c446826b423e3accc9e61f7070898850a"),
-    (2, 1): dict(acts=748, log=12787,
-                 census="e1093e96566f6d08e25f2673e67099cbd4b8ab1d49fc95a6740102b286d05e93"),
-    (0, 2): dict(acts=1611, log=38977,          # was acts 1610, log 39397, census e940a0aa...
-                 census="4e51703ea60164c3755b23b8e6381e4f4c6479cdbbc9ed72263d381d85a3a970"),
-    (1, 2): dict(acts=1594, log=35585,          # was acts 1601, log 35575, census f3d047f0...
-                 census="d9420f9480e175f8c9e8517ae5d07ac9862d52da00e08d5ca9af288cd0bdf718"),
-    (2, 2): dict(acts=1593, log=36061,
-                 census="27d02877c57b82b50c43a099e025dd04aa5ec1dc7293ae48bf2a25ee0b0744e3"),
+    (0, 1): dict(acts=749, log=12603,
+                 census="6e538abddb9081e0bd01afc7ac8b173b14a772fa8be199bcc9e558d048c926da"),
+    (1, 1): dict(acts=780, log=11299,
+                 census="3c5cd6408e05fe987dce1f97f7be6e5d7d87101c860fc4bf7c400ccdbd0daa84"),
+    (2, 1): dict(acts=766, log=11715,
+                 census="4077a96cb9e8c41bab637281dfd2943e443f30cadf88c8a9429db666c013f31d"),
+    (0, 2): dict(acts=1621, log=35807,
+                 census="f5057483dcfda198b382585a678732be7f06342bcdd5ddd321d37bd0d88c6572"),
+    (1, 2): dict(acts=1548, log=31651,
+                 census="6305e2362c868cf9c9a6b8bfb152a6ba3725ffade2e4d1931982e2846ca81e78"),
+    (2, 2): dict(acts=1617, log=35704,
+                 census="4600e8ccd416bf35bdd3283ab7d5f5e9199a974ca6630e1e9a084a573a062c51"),
 }

@@ -36,12 +36,13 @@ RED (xfail) CI gate: the measurement instrument fix-plan step 7 (the waypoint pr
 green, so "the maneuver works now" is never claimed again without something actually checking it.
 """
 import statistics
-import random
 from collections import namedtuple
 
 import modules.mass_battle.orchestration as _orch
 import modules.mass_battle.hierarchy.units as _hu
 from systems.mass_battle.sim.engine import Unit, Army, run_battle
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 GoalResult = namedtuple("GoalResult", "name passed measured expected anchor note")
 
@@ -113,11 +114,11 @@ def _attacker_retained(pin, fix, shock, def_stance='hold', def_disc=_DISC,
     _orch.MB_ENVELOP_SHOCK = shock
     out = []
     for s in range(seeds):
-        random.seed(s)
-        a = _attacker(pin)
-        d = _defender(def_stance, def_disc)
-        run_battle(a, d, max_ticks=turns)
-        out.append(a.hp / a.hp_max if a.hp_max else 0.0)
+        with rngsource.using(draw.seeded(draw.H2("validators", s))):
+            a = _attacker(pin)
+            d = _defender(def_stance, def_disc)
+            run_battle(a, d, max_ticks=turns)
+            out.append(a.hp / a.hp_max if a.hp_max else 0.0)
     return out
 
 
@@ -243,11 +244,11 @@ def _envelop_reach(path_on, path='grid', seeds=_SEEDS, turns=_TURNS):
     _orch.MB_ENVELOP_PATH = path_on; _hu.MB_ENVELOP_PATH = path_on  # consumer (advance_cells) now lives in hierarchy.units
     diffs = []
     for s in range(seeds):
-        random.seed(s)
-        a = _attacker_envelop(); d = _defender('hold', _VULN_DISC)
-        run_battle(a, d, max_ticks=turns)
-        det = a.units[1]; dfn = d.units[0]
-        diffs.append(det.centroid()[0] - dfn.centroid()[0])
+        with rngsource.using(draw.seeded(draw.H2("validators", s))):
+            a = _attacker_envelop(); d = _defender('hold', _VULN_DISC)
+            run_battle(a, d, max_ticks=turns)
+            det = a.units[1]; dfn = d.units[0]
+            diffs.append(det.centroid()[0] - dfn.centroid()[0])
     return diffs
 
 
@@ -341,14 +342,14 @@ def _archer_far_loss(target_idx, on, seeds=_SEEDS, turns=6):  # [canonical: vali
     _orch.MB_VOLLEY_TARGETING = on
     losses = []
     for s in range(seeds):
-        random.seed(s)
-        a, b = _archer_pair(target_idx)
-        far0 = sum(b.units[1].cell_troops.values())
-        run_battle(a, b, max_ticks=turns)
-        far1 = sum(b.units[1].cell_troops.values())
-        cellsum = sum(sum(su.cell_troops.values()) for su in b.units)
-        assert abs(cellsum - b.hp) < 1, "cell==hp invariant broken under ordered volley"
-        losses.append(far0 - far1)
+        with rngsource.using(draw.seeded(draw.H2("validators", s))):
+            a, b = _archer_pair(target_idx)
+            far0 = sum(b.units[1].cell_troops.values())
+            run_battle(a, b, max_ticks=turns)
+            far1 = sum(b.units[1].cell_troops.values())
+            cellsum = sum(sum(su.cell_troops.values()) for su in b.units)
+            assert abs(cellsum - b.hp) < 1, "cell==hp invariant broken under ordered volley"
+            losses.append(far0 - far1)
     return losses
 
 
@@ -388,12 +389,12 @@ def _sweep_disp(sweep_on, path='grid', seeds=_SEEDS, turns=_TURNS):
     _orch.MB_SWEEP = sweep_on; _hu.MB_SWEEP = sweep_on  # consumer (advance_cells) lives in hierarchy.units
     out = []
     for s in range(seeds):
-        random.seed(s)
-        a = _attacker_sweep(); d = _defender('hold', _VULN_DISC)
-        c0 = a.units[0].centroid()[1]
-        run_battle(a, d, max_ticks=turns)
-        c1 = a.units[0].centroid()[1]
-        out.append(abs(c1 - c0))
+        with rngsource.using(draw.seeded(draw.H2("validators", s))):
+            a = _attacker_sweep(); d = _defender('hold', _VULN_DISC)
+            c0 = a.units[0].centroid()[1]
+            run_battle(a, d, max_ticks=turns)
+            c1 = a.units[0].centroid()[1]
+            out.append(abs(c1 - c0))
     return out
 
 

@@ -22,9 +22,9 @@ the boundary: the host interprets the record, the wound-state refusal is `seam/w
 from __future__ import annotations
 
 import dataclasses
-import random
 from typing import Callable, Mapping, Optional
 
+from engine.dice_engine.draw import Draw
 from engine.season.queries.inputs import (
     CombatOutcome, CombatTurnView, DecisiveBeat, PartyWounds, PersonalCombatInput, SceneShape, Surrender)
 from . import attributes as spec, combatant, wrapper
@@ -144,7 +144,7 @@ def scene_shape(trace, claimants: tuple, health_full: Mapping[str, int]) -> Scen
     return SceneShape(rounds=rounds, blows=blows, first_blood=first_blood, lead_changes=changes, nearest=nearest)
 
 
-def fight(inp: PersonalCombatInput, rng: random.Random,
+def fight(inp: PersonalCombatInput, rng: Draw,
           decide: Optional[Callable[[CombatTurnView], str]] = None, cfg: Optional[dict] = None,
           max_bouts: Optional[int] = None) -> CombatOutcome:
     """Fight one bout scene between the record's two parties and return a `CombatOutcome`: `wounds[id]` is that

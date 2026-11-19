@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import importlib
 import random
+from engine.dice_engine import draw
 
 import pytest
 
@@ -31,7 +32,9 @@ from engine.season.tests.test_march import _fold_one, _march_act
 # B05.99 RE-PICKED (B05.03, the field's one sampler): at seed 8 neither marcher's subunit breaks first any more; seed 7 is the
 # first seed of 0..39 where the person arm reads the case the claims need (p_npc_033 untouched at 1000, p_npc_035 cut to 661,
 # the band Event naming him). Was 8; the weight and the scale are unchanged.
-SEED, WEIGHT, FIELD_SCALE = 7, 1, 200      # the hand-built fold's three knobs
+# seed re-picked at B06.99: the stream changed (was 7: p_npc_033 cut to 80, p_npc_035 to 1). Seeds 0..31 scanned for the same
+# case (p_npc_033 untouched, p_npc_035 cut, `broke` Event naming him); seed 32 is the first (1000 / 643). Weight, scale unchanged.
+SEED, WEIGHT, FIELD_SCALE = 32, 1, 200      # the hand-built fold's three knobs
 SCALE = 100                                  # the weight -> troops scale of the unit-shape cases (a subunit of weight 1 is 100)
 MARCHERS = ("p_npc_033", "p_npc_035")
 
@@ -114,7 +117,7 @@ def test_control_side_arm_is_the_shipped_field_and_carries_no_per_person_record(
     inp = MassBattleInput(weights=((2, 2), (6,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None,
                           origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, troops_per_weight=SCALE,
                           members=(("a0", "a1"), ("b0",)))
-    record = _mb().resolve_field(inp, random.Random(0))
+    record = _mb().resolve_field(inp, draw.seeded(draw.H2("test_cp_t04_01_person_subunits", 0)))
     assert set(record) == {"attacker_wins", "degree", "attacker_size_pct", "defender_size_pct"}
 
 
@@ -156,7 +159,7 @@ def test_an_unknown_arm_is_refused():
     inp = MassBattleInput(weights=((2,), (2,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None,
                           origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, units="squad")
     with pytest.raises(ValueError):
-        _mb().resolve_field(inp, random.Random(0))
+        _mb().resolve_field(inp, draw.seeded(draw.H2("test_cp_t04_01_person_subunits", 0)))
 
 
 def test_field_input_hands_the_members_beside_the_weights_and_the_fixture():

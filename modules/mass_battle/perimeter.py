@@ -2,7 +2,7 @@
 `units._envelop_goal`. Pure geometry (functions of the cell set only).
 [Known limitation: a genuinely CONCAVE footprint (GappedLine's internal lane) is bridged by the hull.]
 """
-import math
+from engine.dice_engine import fmath
 from dataclasses import dataclass
 from typing import List, Sequence, Tuple
 
@@ -40,7 +40,7 @@ def _convex_hull(points: Sequence[Point]) -> List[Point]:
 
 
 def _unit(v: Tuple[float, float]) -> Tuple[float, float]:
-    m = math.hypot(v[0], v[1]) or 1.0
+    m = fmath.hypot(v[0], v[1]) or 1.0
     return (v[0] / m, v[1] / m)
 
 

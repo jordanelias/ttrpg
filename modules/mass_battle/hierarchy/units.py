@@ -6,7 +6,7 @@ troop_types.registry (stats_for), percell (build_column_grid) — and never impo
 (no cycle). Re-imported by orchestration via star-import so every Unit(...)/Army(...) call site
 is unchanged. [canonical: mass_battle_v30.md §A.3b/§A.4; derived_stats unit composition]"""
 import math
-import random as _cell_random
+from engine.dice_engine import fmath
 from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
 from dataclasses import dataclass, field
 from typing import List, Tuple, Optional, Dict, Set
@@ -200,20 +200,20 @@ def _pair_toi_scale(start_a, start_b, proposed_a, proposed_b, rho_a, rho_b, targ
 def _slew_facing(cur, desired, discipline):
     """Rotate `cur` toward `desired` by at most MB_FACING_SLEW_BASE*disc_mult degrees; return a unit vector.
     Zero-mag `desired` returns `cur` unchanged. Deterministic (no RNG). [movement-substrate review 06 — facing (b)]"""
-    cmag = math.hypot(cur[0], cur[1])
-    dmag = math.hypot(desired[0], desired[1])
+    cmag = fmath.hypot(cur[0], cur[1])
+    dmag = fmath.hypot(desired[0], desired[1])
     if dmag < 1e-9:  # [canonical: epsilon: float magnitude guard]
         return cur
     if cmag < 1e-9:  # [canonical: epsilon: float magnitude guard]
         return (desired[0] / dmag, desired[1] / dmag)
     cx, cy = cur[0] / cmag, cur[1] / cmag
     dx, dy = desired[0] / dmag, desired[1] / dmag
-    ang = math.atan2(cx * dy - cy * dx, cx * dx + cy * dy)  # signed angle cur->desired
+    ang = fmath.atan2(cx * dy - cy * dx, cx * dx + cy * dy)  # signed angle cur->desired
     disc_mult = 1.0 if discipline >= 5 else (0.7 if discipline >= 3 else 0.4)  # [canonical: mass_battle_v30.md §A.4 — Discipline degradation tiers]
     max_turn = math.radians(MB_FACING_SLEW_BASE * disc_mult)
     if ang > max_turn: ang = max_turn
     elif ang < -max_turn: ang = -max_turn
-    ca, sa = math.cos(ang), math.sin(ang)
+    ca, sa = fmath.cos(ang), fmath.sin(ang)
     return (cx * ca - cy * sa, cx * sa + cy * ca)
 
 
@@ -1135,7 +1135,7 @@ inert today.
         total = 0.0
         out = []
         for (wr, wc) in tail:
-            total += math.hypot(wr - r, wc - c)
+            total += fmath.hypot(wr - r, wc - c)
             if total > budget:
                 break
             out.append((wr, wc))
@@ -1200,7 +1200,7 @@ inert today.
             self._route_wait_ticks = 0
         ar, ac = self._node_anchor
         wr, wc = route[idx]
-        if math.hypot(wr - ar, wc - ac) <= ROUTE_WAYPOINT_EPS:
+        if fmath.hypot(wr - ar, wc - ac) <= ROUTE_WAYPOINT_EPS:
             idx += 1
             self._route_idx = idx
             self._route_wait_idx = idx
@@ -1343,7 +1343,7 @@ inert today.
         radius = e_rad + ENVELOP_STANDOFF                       # the orbit radius we hold while wheeling
         rear = (float(self.advance_dir), 0.0)                   # enemy's far side = our advance direction
         br, bc = ar - ecen_r, ac - ecen_c                       # our current bearing from the enemy centre
-        bmag = math.hypot(br, bc) or 1.0
+        bmag = fmath.hypot(br, bc) or 1.0
         bu = (br / bmag, bc / bmag)
         aligned = bu[0] * rear[0] + bu[1] * rear[1]             # +1 = we're already behind the enemy
         orbits = getattr(self, '_envelop_orbit_ticks', 0)
@@ -1359,7 +1359,7 @@ inert today.
         cross = bu[0] * rear[1] - bu[1] * rear[0]
         direction = 1.0 if cross >= 0 else -1.0                 # orbit the shorter way toward the rear
         step = 0.9  # [canonical: mass_battle_v30.md §A.7 manoeuvre — cavalry WHEEL rate rad/tick (ED-MB-0035 calibration; the node step-cap bounds the actual per-tick move)]
-        s = math.sin(step) * direction; c = math.cos(step)
+        s = fmath.sin(step) * direction; c = fmath.cos(step)
         nb = (bu[0] * c - bu[1] * s, bu[0] * s + bu[1] * c)     # bearing rotated toward the rear
         return (ecen_r + radius * nb[0], ecen_c + radius * nb[1])
 
@@ -1455,7 +1455,7 @@ inert today.
         time."""
         ar, ac = self._node_anchor
         nearest = min(enemy_cells, key=lambda e: (e[0] - ar) ** 2 + (e[1] - ac) ** 2)
-        d = math.hypot(nearest[0] - ar, nearest[1] - ac)
+        d = fmath.hypot(nearest[0] - ar, nearest[1] - ac)
         far_bound = (VOLLEY_MAX_RANGE if self.unit_type == 'ranged' and self.eff_volleys > 0
                      else reach_for(self.troop_type))
         if d < MB_KITE_STANDOFF:
@@ -1492,7 +1492,7 @@ inert today.
         standoff/collision detection' accounting."""
         ar, ac = self._node_anchor
         fr, fc = flee[0] - ar, flee[1] - ac
-        fmag = math.hypot(fr, fc)
+        fmag = fmath.hypot(fr, fc)
         if fmag < 1e-9:                       # [canonical: epsilon: float magnitude guard] threat coincident with anchor -> nowhere to flee
             return True
         ur, uc = fr / fmag, fc / fmag         # unit flee direction
@@ -1635,7 +1635,7 @@ inert today.
                 # keeps its own dmin-1 cap exactly as before.
                 mine = self._node_cells()
                 if mine:
-                    dmin = min((math.hypot(mr - er, mc - ec) if FIELD_MOVEMENT else max(abs(mr - er), abs(mc - ec)))
+                    dmin = min((fmath.hypot(mr - er, mc - ec) if FIELD_MOVEMENT else max(abs(mr - er), abs(mc - ec)))
                                for (mr, mc) in mine for (er, ec) in enemy_cells)  # [migration S2] Euclidean on the field; Chebyshev on the grid (byte-exact OFF)
                     step = min(step, max(0, dmin - 1))   # vector-halt: stop at adjacency, not past
             # The FIELD_MOVEMENT+enemy_cells_float anchor proposes its FULL uncapped step (no standoff clamp at the
@@ -1659,7 +1659,7 @@ inert today.
         rc_w, rs_w = 1.0, 0.0   # (cos, sin) of the spawn->current rotation; identity until the body wheels
         if target_centroid:
             tdr = target_centroid[0] - nar; tdc = target_centroid[1] - nac
-            tmag = math.hypot(tdr, tdc)
+            tmag = fmath.hypot(tdr, tdc)
             if tmag > 0:
                 ftr, ftc = tdr / tmag, tdc / tmag   # f_target: unit direction to the enemy
                 if self._node_facing is None:
@@ -1673,13 +1673,13 @@ inert today.
                     # nearly identical (sin(theta)~=theta), and at 180 degrees the rotation is well-defined for any kw>0.
                     kw = disc_mult * 0.5            # wheel rate (disc-gated, slower than the cohesion snap)
                     fr0, fc0 = self._node_facing
-                    theta_cur = math.atan2(fc0, fr0)
-                    theta_tgt = math.atan2(ftc, ftr)
-                    delta = math.atan2(math.sin(theta_tgt - theta_cur), math.cos(theta_tgt - theta_cur))  # wrap to (-pi, pi]
+                    theta_cur = fmath.atan2(fc0, fr0)
+                    theta_tgt = fmath.atan2(ftc, ftr)
+                    delta = fmath.atan2(fmath.sin(theta_tgt - theta_cur), fmath.cos(theta_tgt - theta_cur))  # wrap to (-pi, pi]
                     if abs(delta) >= math.pi - 1e-9:  # [canonical: epsilon: float angle-wrap tolerance guard]
                         delta = math.pi  # deterministic tie-break: exact/near-exact reversal always turns the same way
                     theta_new = theta_cur + kw * delta
-                    self._node_facing = (math.cos(theta_new), math.sin(theta_new))
+                    self._node_facing = (fmath.cos(theta_new), fmath.sin(theta_new))
                 f0r, f0c = self._node_facing0; fr, fc = self._node_facing
                 rc_w = f0r * fr + f0c * fc          # cos of rotation f0 -> f
                 rs_w = f0r * fc - f0c * fr          # sin of rotation f0 -> f
@@ -1807,7 +1807,7 @@ inert today.
             far_bound = VOLLEY_MAX_RANGE if self.unit_type == 'ranged' else reach_for(self.troop_type)
             mine = self.cells()
             if mine:
-                d = min((math.hypot(mr - er, mc - ec) if FIELD_MOVEMENT else max(abs(mr - er), abs(mc - ec))) for (mr, mc) in mine for (er, ec) in enemy_cells)  # [migration S2] Euclidean on the field (byte-exact OFF)
+                d = min((fmath.hypot(mr - er, mc - ec) if FIELD_MOVEMENT else max(abs(mr - er), abs(mc - ec))) for (mr, mc) in mine for (er, ec) in enemy_cells)  # [migration S2] Euclidean on the field (byte-exact OFF)
                 if d < MB_KITE_STANDOFF: kite_mode = 'away'    # too close -> open the gap (retreat vector)
                 elif d > far_bound:      kite_mode = 'toward'  # out of range -> close into the band
                 else:                    return                # in band -> hold position, keep volleying
@@ -2232,7 +2232,7 @@ def _separate_bodies(cells_a, cells_b, same_side):
     start = [[e.sr, e.sc] for e in cells]
     capped = [[e.sr + e.best_t * (e.pr - e.sr), e.sc + e.best_t * (e.pc - e.sc)] if mv[k] else [e.sr, e.sc]
               for k, e in enumerate(cells)]
-    travel = [math.hypot(c[0] - s0[0], c[1] - s0[1]) for c, s0 in zip(capped, start)]
+    travel = [fmath.hypot(c[0] - s0[0], c[1] - s0[1]) for c, s0 in zip(capped, start)]
     near = []
     reach = 2.0 * D + 2.0 * max(travel, default=0.0)   # one pitch of slack beyond the two bodies and their travel
     for i, j in _pairs_within(start, reach):
@@ -2240,7 +2240,7 @@ def _separate_bodies(cells_a, cells_b, same_side):
             continue
         if not same_side and (i < n_a) == (j < n_a):
             continue
-        d0 = math.hypot(start[i][0] - start[j][0], start[i][1] - start[j][1])
+        d0 = fmath.hypot(start[i][0] - start[j][0], start[i][1] - start[j][1])
         if d0 > 2.0 * D + travel[i] + travel[j]:   # one pitch of slack: a push can carry a cell past its own travel
             continue
         near.append((i, j, min(D, d0) - _BODY_TOL))
@@ -2294,7 +2294,7 @@ def separate_all_bodies(unit_a, unit_b):
         # Every pair within two pitches is a candidate, not only the pairs overlapping now: pushing one body
         # apart carries it toward its other neighbours, and the pairs are rebuilt each round for the same reason.
         near = [(i, j, D - _BODY_TOL) for i, j in _pairs_within(pos, 2.0 * D)]
-        if not any(math.hypot(pos[i][0] - pos[j][0], pos[i][1] - pos[j][1]) < f - _BODY_TOL for i, j, f in near):
+        if not any(fmath.hypot(pos[i][0] - pos[j][0], pos[i][1] - pos[j][1]) < f - _BODY_TOL for i, j, f in near):
             clear = True
             break
         _relax_bodies(pos, near, mv, _SEPARATE_PASSES)
@@ -2340,11 +2340,11 @@ def turn_to_face_aggressors(unit_a, unit_b):
         js = near[i]
         dr = sum(pos[j][0] for j in js) / len(js) - p[0]
         dc = sum(pos[j][1] for j in js) / len(js) - p[1]
-        if math.hypot(dr, dc) < _FACE_BALANCE_TOL:
+        if fmath.hypot(dr, dc) < _FACE_BALANCE_TOL:
             continue
         cur = atom.cell_facing_vec.get(cid, (atom.advance_dir, 0))
         if MB_FACING_FOV_GATE:
-            seen = math.degrees(abs(math.atan2(cur[0] * dc - cur[1] * dr, cur[0] * dr + cur[1] * dc)))
+            seen = math.degrees(abs(fmath.atan2(cur[0] * dc - cur[1] * dr, cur[0] * dr + cur[1] * dc)))
             if seen > FOV_HALF_DEG:
                 continue
         new = _slew_facing(cur, (dr, dc), atom.eff_discipline)
