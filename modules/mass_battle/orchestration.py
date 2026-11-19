@@ -183,9 +183,8 @@ def reform_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     #   cannot restore (the Command-asymmetry rule).
     # [canonical: mass_battle_v30.md §A.7 Phase Reform — non-engaged units restore Discipline.]
     """G-8 Reform: an unengaged unit restores one step of Discipline toward its start,
-    gated by the general's Command. Flag-gated default OFF (REFORM_CHECK_ENABLED) to
-    preserve the calibrated byte-exact baseline; opt-in for re-baseline, mirroring
-    PER_CELL / MB_NODE_COHESION. Canon Reform also recovers Morale and merges sub-units —
+    gated by the general's Command. Flag-gated (REFORM_CHECK_ENABLED, which defaults
+    '1', so the check runs unless the environment sets it otherwise). Canon Reform also recovers Morale and merges sub-units —
     not implemented here (separate, morale/lifecycle-touching).
     [ASSUMPTION: cadence — fires per phase-boundary, bounded by discipline_start so a unit
      only recovers what it lost. Canon Reform is once-per-turn (the Reform Phase); the sim's

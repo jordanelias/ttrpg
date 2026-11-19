@@ -3347,7 +3347,7 @@ rows:
 
   - id:        H-151
     tier:      1
-    hole:      "MARCHING ON YOUR OWN FACTION'S SETTLEMENT, WHEN IT HOLDS TROOPS, FIGHTS THEM
+    hole:      "CLOSED (its own `default:` says so: v9 IN-13, a same-faction target is no opposition and resolves `Unopposed`). THE TEXT BELOW IS THE PRE-CLOSURE ROW: MARCHING ON YOUR OWN FACTION'S SETTLEMENT, WHEN IT HOLDS TROOPS, FIGHTS THEM
       AGAINST EACH OTHER. Jordan's verbatim ruling frames `march` as an army going out \"to meet
       an OPPOSITION army\" -- a same-faction target is not that. `sides_of`
       (`loop/sides.py`) does not refuse it: `subject == faction` proceeds exactly as an opposing
@@ -5127,10 +5127,10 @@ rows:
 
   - id:        H-250
     tier:      1
-    hole:      "THE SCALE AT WHICH TWO SEASON ARMIES MEET (REM-32; JQ-4). `massbattle._weighted_unit` sized a headcount side `troops = weight`, a literal in a function body: a corpus-scale force (single and double digit weight sums) routs on contact whoever is stronger, because the engine's own calibration (`config.SUBUNIT_ROUT_FLOOR`) targets battles of hundreds. No ratified person-weight to troop-count conversion exists, so the scale could not be answered by changing a value, and a real fold could not be made to reach `Won`"
+    hole:      "CLOSED (B17.01): THE SCALE AT WHICH TWO SEASON ARMIES MEET (REM-32; JQ-4). `massbattle._weighted_unit` sized a headcount side `troops = weight`, a literal in a function body: a corpus-scale force (single and double digit weight sums) routs on contact whoever is stronger, because the engine's own calibration (`config.SUBUNIT_ROUT_FLOOR`) targets battles of hundreds. No ratified person-weight to troop-count conversion exists, so the scale could not be answered by changing a value, and a real fold could not be made to reach `Won`"
     kind:      "NUMBER"
     owner:     "`modules/mass_battle/troop_types/recruitment.py::under_arms_cap`, the one weight -> troops owner (`massbattle._weighted_unit` and `_person_unit` read it; `_oob_unit` already did)"
-    grade:     "assumption"
+    grade:     "ruled"
     default:   "CLOSED at B17.01: there is no scale fixture. A headcount side is `max(under_arms_cap(weight), _MIN_TROOPS)` troops (`field_provisioning`'s fed troops stand in for the weight, the cap applying after the bound), the size a headcount side facing an order of battle already had, so one weight -> troops owner serves every path. `Fixtures field_troops_per_weight`, `MassBattleInput.troops_per_weight` and `_weighted_unit`'s multiplication are deleted. A weight-1 person is 30 troops, under `config.UNIT_ROUT_FLOOR` (80), so a realm force of weight-1 persons still breaks on tick 1 and the field is `Drawn` (H-354) [ASSUMPTION; medium; Jordan to correct; revert: restore the fixture]"
     site:      "closed: no fixture, no record field"
     sweep:     []
@@ -6532,7 +6532,7 @@ rows:
 
   - id:        H-355
     tier:      1
-    hole:      "THE SIDE THAT LOSES A FIELD DOES NOT RETREAT, AND THE WINNING ARMY STANDS BESIDE IT (premise-check, mass battle). On `Won` the attacker's claimants are re-homed under the target (`army.arrived`) while the defenders, cut to the survivor fraction of their bodies, stay mustered at the same settlement, and the settlement's holder is unchanged (title moves by `seize`, `give`, `release` or death: the code's R-6). On `Lost` the attacker stays at its origin (R-7). No flight, pursuit or withdrawal is written for the side that lost, so after a won field two armies of different factions stand in one settlement, which the premise 'the loser breaks and retreats from the field and the winner holds it' does not describe. Both choices are labelled [ASSUMPTION; medium; Jordan to correct] in `_eff_march`."
+    hole:      "CLOSED by A-57, A-58 and A-66 (the land may pass after an aggressor's win, by his own `seize`, C3-L12; a routed defender is re-homed [read at B17.02: `_eff_march` relocates the winning claimants only (`_relocate` has one call site there), so the defender's re-home is the rulings' reading and not a write of this tree]). THE TEXT BELOW IS THE ROW'S HISTORY, LEFT AS TRANSCRIBED: THE SIDE THAT LOSES A FIELD DOES NOT RETREAT, AND THE WINNING ARMY STANDS BESIDE IT (premise-check, mass battle). On `Won` the attacker's claimants are re-homed under the target (`army.arrived`) while the defenders, cut to the survivor fraction of their bodies, stay mustered at the same settlement, and the settlement's holder is unchanged (title moves by `seize`, `give`, `release` or death: the code's R-6). On `Lost` the attacker stays at its origin (R-7). No flight, pursuit or withdrawal is written for the side that lost, so after a won field two armies of different factions stand in one settlement, which the premise 'the loser breaks and retreats from the field and the winner holds it' does not describe. Both choices are labelled [ASSUMPTION; medium; Jordan to correct] in `_eff_march`."
     kind:      "RULING"
     owner:     "`loop/effects_combat.py::_eff_march` (R-6 and R-7 as written there) and `queries/world_q.py::occupies` (what holding reads). Whether a beaten defender withdraws, or stays and the field is held by presence, is Jordan's."
     grade:     "measured"
@@ -6558,7 +6558,7 @@ rows:
 
   - id:        H-360
     tier:      1
-    hole:      "WHAT A FOUGHT FIELD COSTS THE WINNER (CR-24, M4 Ask B (b)). ED-IN-0279 specified a casualty, a morale hit and a grudge for the loser and 'nothing specified for the winner', so `_eff_march` wrote only the losing side and a won field was free: the winner walked away at full body. No document rules the winner's cost; the two arms make different games -- under `off` winning costs nothing and nothing in a campaign wears, under `engine` every field costs both sides and a winner walks away hurt"
+    hole:      "POINTED at the per-part outcome: B17.03's `FieldOutcome` carries each side's casualties as a `PartOutcome` per cohort, the one write `_eff_march` reads for a winner as for a loser (this pointer reads true from B17.03). WHAT A FOUGHT FIELD COSTS THE WINNER (CR-24, M4 Ask B (b)). ED-IN-0279 specified a casualty, a morale hit and a grudge for the loser and 'nothing specified for the winner', so `_eff_march` wrote only the losing side and a won field was free: the winner walked away at full body. No document rules the winner's cost; the two arms make different games -- under `off` winning costs nothing and nothing in a campaign wears, under `engine` every field costs both sides and a winner walks away hurt"
     kind:      "MODE"
     owner:     "`loop/effects_combat.py::_eff_march` (the write: a separate `winners` list, `body` only, never in `touched`); the arm is `Fixtures field_winner_casualties`, closed by `rosters.yaml` `field_winner_casualty_arms`"
     grade:     "assumption"
