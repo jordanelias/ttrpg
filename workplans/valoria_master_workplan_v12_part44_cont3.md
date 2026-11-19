@@ -22,7 +22,7 @@ GATE: Batch B13-pc-package @acab52098d2a8ae6b145d84331e152a1cfd59daf
 GATE: Batch B16M-mb-engine-words @bc1397322
 GATE: Batch B04-capability-home @109c80648cddfa2b6b87a4642287b9079a6abc62
 GATE: Batch B05-one-roll @928dccc9a68232d1afb041c9a1c422d8cfdb690e
-GATE: Batch B06-keyed-draw
+GATE: Batch B06-keyed-draw @bcbe3ed5e595ff465e12dbe246c29f1216d14f3a
 GATE: Batch B07-task-draw
 GATE: Batch B08-scene-order
 GATE: Batch B09-memory

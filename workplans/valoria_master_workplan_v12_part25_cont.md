@@ -417,7 +417,7 @@ Order notes. U3 §1 item 34 orders GO-B → SURF → fidelity → `16_PESSIMIST_
 - FALSIFIER and CONTROL: the two tests; "Control: §1's own round trip, unchanged, with `scenario` `None`."
 - GATE: `python -m pytest engine/season/tests/test_go07_canonical_digest.py engine/season/tests/test_scenarios_runner.py -q` → pass.
 - HASH MOVERS: none ("no game path reads a snapshot").
-- DEPENDS ON: V12 Batch B06 (B06.06, `decode`); V12 Batch B11 (`scenarios.py`); V12 B34.20.
+- DEPENDS ON: V12 Batch B06 (B06.06 @bcbe3ed5e595ff465e12dbe246c29f1216d14f3a, `decode`); V12 Batch B11 (`scenarios.py`); V12 B34.20.
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`, `high` (effort set explicitly, CLAUDE.md §10; R2c, K6 F16).
 - LANDS IT: B34's producer; `Item: B34.21`, `[skip ci]`.
