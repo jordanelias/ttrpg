@@ -6,7 +6,6 @@ troop_types.registry (stats_for), percell (build_column_grid) — and never impo
 (no cycle). Re-imported by orchestration via star-import so every Unit(...)/Army(...) call site
 is unchanged. [canonical: mass_battle_v30.md §A.3b/§A.4; derived_stats unit composition]"""
 import math
-import random as _cell_random
 from engine.dice_engine import fmath
 from modules.mass_battle import rngsource  # single owner of engine randomness (see rngsource.py)
 from dataclasses import dataclass, field

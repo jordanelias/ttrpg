@@ -491,7 +491,7 @@ def agility(w):
     I1, D11a: reads at_grip(w,0.0)['I_g'] (the SAME grip-adjusted MoI wield_heft/_recovery_mode_commitment/
     recoverability_factor read), at grip=0; at_grip(w,0)['I_g'] reconstructs derive(w)['MoI'] to within float
     round-trip noise."""
-    return min(1.0, (AGILITY_REF / max(1e-6, at_grip(w, 0.0)['I_g'])) ** AGILITY_EXP)
+    return min(1.0, fmath.powf(AGILITY_REF / max(1e-6, at_grip(w, 0.0)['I_g']), AGILITY_EXP))
 
 
 def defense_affinities(w):

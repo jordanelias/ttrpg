@@ -547,7 +547,7 @@ def decode(data: bytes, fixtures: Fixtures = DEFAULT_FIXTURES) -> "World | Snaps
             return SnapshotRefused("fixtures_digest", want, str(found))
         return _world_from(frames, fixtures)
     except (_SnapshotError, ShapeGap, ValueError, IndexError, KeyError, TypeError, struct.error,
-            UnicodeDecodeError) as exc:
+            UnicodeDecodeError, RecursionError) as exc:
         return SnapshotRefused("malformed", "", f"{type(exc).__name__}: {exc}")
 
 

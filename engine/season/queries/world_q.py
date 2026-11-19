@@ -25,6 +25,8 @@ from dataclasses import dataclass, replace
 from fractions import Fraction
 from typing import Callable, NamedTuple, Optional
 
+from engine.dice_engine.fmath import ltr_sum
+
 from ..data.arrangements import ARRANGEMENTS      # v11 CR-34: `declared_sitting` reads a row's `disposal`/`quorum`
 from ..data.requires import (
     OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, UNKNOWN, binding_from_act, binding_of, evaluate,
@@ -828,7 +830,7 @@ def proofs(w: World, speaker: str, opponent: Optional[str], venue: Optional[str]
         return 0.0
     opp = w.persons.get(opponent)
     mirror = {(c.subject, c.predicate) for c in opp.ledger} if opp is not None else set()
-    return sum(remove_weight(c.source) for c in held
+    return ltr_sum(remove_weight(c.source) for c in held
                if (c.subject, c.predicate) not in mirror
                and (admitted is None or PROOF_KIND_OF_SOURCE[c.source] in admitted))
 
