@@ -166,11 +166,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | 65 | `tests/valoria/test_fmath_one_owner.py` | test file | B06.02 | — |
 | 66 | `engine/dice_engine/draw.py` | module | B06.03 | — |
 | 67 | `engine/tests/test_draw.py` | test file | B06.03 | — |
-| 68 | `systems/combat/combat_engine_v1/workbench/export_parity_probe.py` | module | B14.12 | — |
-| 69 | `systems/combat/combat_engine_v1/workbench/round_state_probe.py` | module | B14.13 | — |
-| 70 | `tests/valoria/test_combat_scene_shape.py` | test file | B14.15 | — |
-| 71 | `engine/season/tests/test_vm_phy_a_custody.py` | test file | B14.27 | — |
-| 72 | `proposals/2026-11-12-pc-opponent-model/00_DESIGN.md` | design file | B14.28 | — |
 | 73 | `engine/season/tests/test_task_draw.py` | test file | B07.01 | — |
 | 74 | `engine/season/tests/test_vres_task_and_prize.py` | test file | B07.04 | B11.83 |
 | 75 | `systems/mass_battle/sim/extremes_probe.py` | module | B17.04 | — |

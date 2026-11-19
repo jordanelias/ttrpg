@@ -59,8 +59,6 @@
 | `engine/tests/test_fmath.py` | B06.01 | S8 |
 | `S/tests/valoria/test_fmath_one_owner.py` | B06.02 | S8 |
 | `engine/tests/test_draw.py` | B06.03 | S8 |
-| `S/tests/valoria/test_combat_scene_shape.py` | B14.15 | S8 |
-| `S/tests/test_vm_phy_a_custody.py` | B14.27 | S8 |
 | `S/tests/test_task_draw.py` | B07.01 | S9 |
 | `S/tests/test_vres_task_and_prize.py` | B07.04, B11.83 **(two creators: C-03)** | S9 |
 | `S/tests/valoria/test_export_troops.py` | B17.10 | S9 |
@@ -489,7 +487,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | B12a-world-motion-and-ground | SE+WR | ED-SE-0059..0060 (0+2) | H-523..H-540 (13+5) | same |
 | B12b-weather-arcs-population | SE+WR | ED-SE-0061..0062 (0+2) | H-541..H-549 (4+5) | same |
 | B12c-material-verbs-and-valley | SE+WR | ED-SE-0063..0064 (0+2) | H-550..H-566 (12+5) | H count 11 → 12 |
-| B14-pc-outcome | PC | ED-PC-0062..0063 (0+2) | H-567..H-573 (2+5) | H shifted |
 | B15-pc-calibration | PC | ED-PC-0064..0065 (0+2) | H-574..H-579 (1+5) | H shifted |
 | B16-pc-round | PC | ED-PC-0066..0067 (0+2) | H-580..H-584 (0+5) | H shifted |
 | B17-mb-scale | MB | ED-MB-0086..0087 (0+2) | H-585..H-589 (0+5) | H shifted |
@@ -538,7 +535,7 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | M0 · ground | B04 (S6; §2.3 S6) | B00 S0, B01 S1, B02 S2, B03 S3, B04 S6 | none | R-01, R-02, R-03, R-04, R-09 |
 | M1 · every outcome is drawn | B08 (S13; §2.3 S13) | B05 S7, B06 S8, B07 S9, B08 S13 | none | R-01, R-03, R-09 |
 | M2 · persons | BA1 (S12; §2.3 S12) | B09 S10, B10 S11, BA1 S12 | none | R-06, R-07, R-08, R-09 |
-| M3 · every verb | B35 (S18; §2.3 S18) | B11 S12, B12a S13, B12b S14, B12c S15, B14 S8, B15 S12, B21 S12, B21b S13, B21c S14, B22 S17, B23 S18, B24a S15, B25 S16, B26 S17, B27 S16, B28 S17, B29 S14, B32 S17, B35 S18 | none | R-01, R-04, R-05, R-07, R-08, R-09 |
+| M3 · every verb | B35 (S18; §2.3 S18) | B11 S12, B12a S13, B12b S14, B12c S15, B15 S12, B21 S12, B21b S13, B21c S14, B22 S17, B23 S18, B24a S15, B25 S16, B26 S17, B27 S16, B28 S17, B29 S14, B32 S17, B35 S18 | none | R-01, R-04, R-05, R-07, R-08, R-09 |
 | M4 · every scale | B36 (S19; §2.3 S19) | B16 S13, B17 S9, B19a S14, B19 S15, B20 S16, B24 S13, B30 S18, B34 S14, B36 S19 | none | R-04 |
 | M5 · the rulings beyond the nine, and the carried positions | B40 (S22; §2.3 S22) | B18 S15, B31 S19, B33 S19, B37 S16, B38 S20, B39 S21, B40 S22, B41 S18, B11F1 S16, B11F2 S17, B21d S15, B21s S18, B37p S17 | none | R-01 to R-09, every conjunct: B40's REQUIREMENT re-reads all on its closing tree (`valoria_master_workplan_v12_part43.md`; corrected by repair lane V1 from "R-01, R-09"); R-05.a is first named at B35 (`valoria_master_workplan_v12_part36.md` REQUIREMENT) |
 | the settings, then the re-take | B99 (S24; §2.3 S24) | B98 S23, B99 S24 | none | — |
@@ -644,7 +641,6 @@ The second table reads every batch's `REQUIREMENT:` line for `R-0n`, so it lists
 |---|---|---|---|---|
 | 1 | B10 | B10.51 | `grep -c '^## Status: PROPOSED' <file>` → 1 | `test -f` + `git diff --stat` (above); the Status arm dropped (R2b noted it, out of its scope) |
 | 2 | B10 | B10.52 | `grep -c '^## Status: PROPOSED' <file>` → 1 | the same |
-| 3 | B14 | B14.28 | "the file exists and states (1) to (4), each with a falsifier" | `test -f` + `git diff --stat` |
 | 4 | B16 | B16.10 | `grep -c "SUPERSEDED IN PART" <proposal>` → 1 or more (a POINTER, no commit of its own) | E-6's form, `GATE: none (record only)`: a POINTER executes nothing, so a document count is no gate; or `git log -1 --format=%H -- <proposal>` naming the commit that wrote the banner |
 | 5 | B21c | BATCH GATE | `ls <design file>` → "exists and states (1) to (6) of B21c.06" | keep `ls`; the "states" half to B21c.06's critic (it already carries `git diff --stat`) |
 | 6 | B23 | B23.01 | "the file exists and states (1) to (5)" | `test -f` + `git diff --stat` |
