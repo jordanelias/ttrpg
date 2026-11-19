@@ -95,12 +95,18 @@ class UnitRow:
 
 @dataclass(frozen=True)
 class OrderOfBattle:
-    """An army: its units, in line order, and one strategy for the whole. `drawn_from` is the host's, not the
-    battle's: the ids of the cohorts the troops were drawn from, so the host writes a fight's casualties to the people
-    who fought and not to everybody standing nearby. The battle never reads it."""
+    """An army: its units, in line order, and one strategy for the whole. `drawn` is the host's, not the battle's:
+    `((unit name, cohort id, troops), ...)`, the troops each cohort gave each unit (its assigned count scaled by how fit the
+    cohort was), so a fight's casualties are written to the people who fought, each cohort by the unit it fed, and not to
+    everybody standing nearby (B17.03). The battle never reads it; `massbattle.resolve_field` reads it to cut each cohort."""
     units: Tuple[UnitRow, ...]
     strategy: str = 'line'
-    drawn_from: Tuple[str, ...] = ()
+    drawn: Tuple[Tuple[str, str, float], ...] = ()
+
+    @property
+    def cohorts(self) -> Tuple[str, ...]:
+        """The cohorts the troops were drawn from, each once, in the order `drawn` first names them."""
+        return tuple(dict.fromkeys(cohort for _unit, cohort, _troops in self.drawn))
 
 
 def class_of(troop_type: str) -> str:

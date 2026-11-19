@@ -257,13 +257,15 @@ def to_order_of_battle(record: dict, fitness: Optional[Callable[[str], float]] =
     """The `OrderOfBattle` the battle fights with. Each unit's strength is the sum over its assigned cohorts
     of `count * fitness(cohort)`; `fitness` is the share of a cohort still fit to fight (1.0 for a whole one; the
     season passes its body fraction). A unit left with no strength is dropped; an army with none left
-    raises ValueError, since there is nothing to field."""
+    raises ValueError, since there is nothing to field. `OrderOfBattle.drawn` is `((unit, cohort, troops), ...)`, the strength
+    each cohort gave each fielded unit (B17.03), so the battle's casualties can be cut cohort by cohort."""
     fit = fitness or (lambda _c: 1.0)
     parts, drawn = [], []
     for sf in record['units']:
-        strength = sum(n * max(0.0, min(1.0, float(fit(c)))) for c, n in sf['assigned'])
+        gave = [(c, n * max(0.0, min(1.0, float(fit(c))))) for c, n in sf['assigned']]
+        strength = sum(t for _c, t in gave)
         if strength > 0:
-            drawn += [c for c, n in sf['assigned'] if n > 0 and float(fit(c)) > 0 and c not in drawn]
+            drawn += [(sf['name'], c, t) for c, t in gave if t > 0]
             parts.append(UnitRow(sf['name'], sf['troop_type'], strength, role=sf['role'], posture=sf['posture'],
                                  target=sf['target'], fall_back_at=sf['fall_back_at']))
     if not parts:

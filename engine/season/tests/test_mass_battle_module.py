@@ -27,12 +27,13 @@ the host shares one mapping across every field.
 from __future__ import annotations
 
 from ..data import files
+from ._field_outcomes import SCALE            # the body scale the world ships (`Fixtures condition_scale`); a hand-built record names it
 from ._fresh_process import entry_target, probe
 
 _PRIZE = "a field"
 
 _PROBE = """
-import sys, os, io, builtins, copy, importlib, random, yaml
+import sys, os, io, builtins, copy, importlib, random, yaml, dataclasses
 sys.path.insert(0, {root!r})
 # The geography the host hands the module on the record, read HERE, before anything is watched: the
 # module takes it on `MassBattleInput.geography` and opens no file of its own.
@@ -57,18 +58,18 @@ from engine.season.queries.inputs import MassBattleInput
 # morale moved off the base by the stances.
 FIELD = MassBattleInput(weights=((180.0, 120.0), (240.0,)), territory="T9", fort_level=1.0,
                         stances=(-1.0, 0.5), walls_dr=None, origin=None,
-                        loyalties=(1.5, -0.5), loyalty_gain=0.4, geography=GEO)
+                        loyalties=(1.5, -0.5), loyalty_gain=0.4, geography=GEO, condition_scale=1000)
 # A RIVER_CROSSING field (MB-05r): a march from T9 onto T3's open ground crosses the Valoris.
 OTHER = MassBattleInput(weights=((90.0,), (60.0, 30.0)), territory="T3", fort_level=0.0,
                         stances=(0.0, 0.0), walls_dr=1, origin="T9",
-                        loyalties=(0.0, 0.0), loyalty_gain=0, geography=GEO)
+                        loyalties=(0.0, 0.0), loyalty_gain=0, geography=GEO, condition_scale=1000)
 stdlib_before = random.getstate()
 out = []
 for seed in (1, 2, 3, 4, 5, 6):
     got = entry(FIELD, random.Random(seed))
     between = entry(OTHER, random.Random(seed + 100))
     again = entry(FIELD, random.Random(seed))
-    out.append((seed, got, again == got, source.get() is random))
+    out.append((seed, dataclasses.asdict(got), again == got, source.get() is random))
 stdlib_untouched = random.getstate() == stdlib_before
 loaded = sorted(os.path.relpath(m.__file__, {root!r}) for n, m in list(sys.modules.items())
                 if n not in before and getattr(m, "__file__", None)
@@ -94,8 +95,7 @@ def test_one_march_resolved_twice_in_one_process_gives_one_result_and_loads_noth
     assert f"{module_dir}/massbattle.py" in loaded and f"{module_dir}/orchestration.py" in loaded, loaded
     checked = 0
     for seed, got, deterministic, unscoped in out:
-        assert set(got) == {"attacker_size_pct", "defender_size_pct", "attacker_routed", "attacker_conceded",
-                            "defender_routed", "defender_conceded"}, got
+        assert set(got) == {"ended", "ticks", "attacker", "defender"} and got["ended"] in ("rout", "concession", "time"), got
         assert deterministic, f"{role}: seed {seed} gave two results in one process with a field between"
         assert unscoped, f"{role}: seed {seed} left a draw source scoped after the call returned"
         checked += 1
@@ -118,10 +118,10 @@ def _fought(entry, seeds, rng_for):
         geo = yaml.safe_load(f)
     field = MassBattleInput(weights=((180.0, 120.0), (240.0,)), territory="T9", fort_level=1.0,
                             stances=(-1.0, 0.5), walls_dr=None, origin=None,
-                            loyalties=(1.5, -0.5), loyalty_gain=0.4, geography=geo)
+                            loyalties=(1.5, -0.5), loyalty_gain=0.4, geography=geo, condition_scale=SCALE)
     other = MassBattleInput(weights=((90.0,), (60.0, 30.0)), territory="T3", fort_level=0.0,
                             stances=(0.0, 0.0), walls_dr=1, origin="T9",
-                            loyalties=(0.0, 0.0), loyalty_gain=0, geography=geo)
+                            loyalties=(0.0, 0.0), loyalty_gain=0, geography=geo, condition_scale=SCALE)
     return [entry(inp, rng_for(seed)) for seed in seeds for inp in (field, other)]
 
 
@@ -155,7 +155,7 @@ def test_no_d10_face_in_mass_battle():
             return super().randint(a, b)
 
     fought = _fought(_entry(), range(1, 5), _NoFaces)
-    assert len(fought) == 8 and all("attacker_routed" in got for got in fought), fought
+    assert len(fought) == 8 and all(type(got).__name__ == "FieldOutcome" for got in fought), fought
     assert len({repr(got) for got in fought}) > 1, "every field gave one result; the arm cannot tell fields apart"
 
 
@@ -207,7 +207,7 @@ def _headcount_record(weights):
         geo = yaml.safe_load(f)
     return MassBattleInput(weights=((float(weights[0]),), (float(weights[1]),)), territory=None, fort_level=0.0,
                            stances=(0.0, 0.0), walls_dr=None, origin=None, loyalties=(0.0, 0.0), loyalty_gain=0,
-                           geography=geo, members=(("a",), ("b",)))
+                           geography=geo, condition_scale=SCALE, members=(("a",), ("b",)))
 
 
 def test_no_share_exceeds_one():
@@ -222,14 +222,14 @@ def test_no_share_exceeds_one():
     for pair in _SIDE_PAIRS:
         for seed in range(100):
             got = entry(_headcount_record(pair), random.Random(seed))
-            for share in (got["attacker_size_pct"], got["defender_size_pct"]):
+            for share in (got.attacker.share / SCALE, got.defender.share / SCALE):
                 assert share <= 1.0, f"{pair} seed {seed}: a side's share is {share}"
                 worst = max(worst, share)
                 checked += 1
     assert checked >= 800, checked
     a, b = mb._weighted_unit("side_a", 30, "A"), mb._weighted_unit("side_b", 18, "B")
-    got = mb._grade(a, b)
-    assert got["attacker_size_pct"] == 1.0 and got["defender_size_pct"] == 1.0, got
+    got = mb._grade(a, b, SCALE, 0)
+    assert got.attacker.share == SCALE and got.defender.share == SCALE, got
 
 
 def test_realm_weight_pairs_vary_by_seed():
@@ -252,3 +252,72 @@ def test_realm_weight_pairs_vary_by_seed():
         assert larger > smaller, f"{wa} v {wb}: the larger side won {larger}, the smaller {smaller}: {bands}"
     assert checked >= 180, checked
     assert len(seen) >= 2, f"every field read one band: {seen}"
+
+
+# ---- B17.03: THE FIELD RETURNS A FROZEN `FieldOutcome` ---------------------------------------------------------
+
+def test_resolve_field_returns_a_frozen_field_outcome():
+    """B17.03 step 1 and 2: `resolve_field` returns a `FieldOutcome` on EVERY arm (the `side` arm, which names no part, and
+    the `person` arm, which names each member's); it is frozen; each side's `share` and each part's are integers on the body
+    scale, `0..scale`; the `person` arm's parts are the members in input order, and `broke_first` names one of them or nobody.
+    The loop asserts that it asserted (CLAUDE.md §0.1 pt 2): a `person` field that named no part would pass every per-part
+    line vacuously."""
+    import dataclasses
+    import random
+    from engine.season.queries.inputs import FieldOutcome, PartOutcome, SideOutcome
+    entry, parts_seen, fields = _entry(), 0, 0
+    for units in ("side", "person"):
+        for seed in range(8):
+            inp = dataclasses.replace(_headcount_record((30, 18)), units=units)
+            got = entry(inp, random.Random(seed))
+            fields += 1
+            assert type(got) is FieldOutcome, f"{units}: the arm returned {type(got).__name__}"
+            assert got.ended in ("rout", "concession", "time") and isinstance(got.ticks, int) and got.ticks >= 1, got
+            for field in dataclasses.fields(got):
+                try:
+                    setattr(got, field.name, getattr(got, field.name))
+                except dataclasses.FrozenInstanceError:
+                    continue
+                raise AssertionError(f"FieldOutcome.{field.name} is writable: the record is not frozen")
+            for side, members in zip((got.attacker, got.defender), inp.members):
+                assert type(side) is SideOutcome and type(side.share) is int and 0 <= side.share <= SCALE, side
+                assert isinstance(side.routed, bool) and isinstance(side.conceded, bool), side
+                if units == "side":
+                    assert side.parts == () and side.broke_first is None, side
+                    continue
+                assert tuple(part.id for part in side.parts) == members, (side.parts, members)
+                for part in side.parts:
+                    assert type(part) is PartOutcome and type(part.share) is int and 0 <= part.share <= SCALE, part
+                    assert isinstance(part.routed, bool), part
+                    parts_seen += 1
+                assert side.broke_first in (None, *members), side.broke_first
+    assert fields == 16 and parts_seen == 16, (fields, parts_seen)
+
+
+def test_ended_outside_its_set_is_refused():
+    """B17.03 step 1: `FieldOutcome.__post_init__` refuses an `ended` outside `'rout' | 'concession' | 'time'`. CONTROL, the
+    same record built with each member of the set: it is accepted, so the refusal is the set's and not the record's."""
+    import pytest
+    from engine.season.queries.inputs import FieldOutcome, SideOutcome
+    side = SideOutcome(share=SCALE, routed=False, conceded=False, parts=(), broke_first=None)
+    for ended in ("rout", "concession", "time"):
+        assert FieldOutcome(ended=ended, ticks=1, attacker=side, defender=side).ended == ended
+    for bad in ("draw", "won", "", None, "Rout"):
+        with pytest.raises(ValueError):
+            FieldOutcome(ended=bad, ticks=1, attacker=side, defender=side)
+
+
+def test_an_untouched_side_reads_exactly_the_scale_and_the_share_quantises_float_noise():
+    """B17.03 step 1: a share is `round(scale x hp_left / hp_start)`, so the engine's float noise is quantised away AT THE SEAM.
+    A side the battle never touched reads EXACTLY the scale (an unfought pair, graded through the one `_grade`), and a ratio
+    that is one part in 10^15 short of 1 (an untouched unit reads 0.9999999999999987 off `_person_report`'s float division, which
+    cost an untouched winner a body under `int(body x ratio)`) reads the scale too: `int(1000 * 0.9999999999999987)` is 999,
+    `_share(...)` is 1000. A share never leaves `0..scale`."""
+    import importlib
+    mb = importlib.import_module("modules.mass_battle.massbattle")
+    got = mb._grade(mb._weighted_unit("side_a", 30, "A"), mb._weighted_unit("side_b", 18, "B"), SCALE, 0)
+    assert (got.attacker.share, got.defender.share) == (SCALE, SCALE) and got.ended == "time", got
+    noisy = 0.9999999999999987
+    assert noisy < 1.0 and int(SCALE * noisy) == SCALE - 1, "vacuous: the noise no longer costs a body under int()"
+    assert mb._share(noisy * 450.0, 450.0, SCALE) == SCALE
+    assert mb._share(0.0, 450.0, SCALE) == 0 and mb._share(451.0, 450.0, SCALE) == SCALE

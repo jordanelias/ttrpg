@@ -3,7 +3,8 @@
 The engine lives beside this file (`orchestration.py`, `hierarchy/`, `core/`, `geometry.py`, `percell.py`,
 ...). Its entry point is TACTICAL -- `run_battle(unit_a, unit_b, max_ticks=18)` takes constructed Armies --
 while the season's is STRATEGIC. This module is the adapter between them: `resolve_field`, `_weighted_unit`,
-`_run_and_grade` and `_grade`, the finished battle's two survivor shares and each side's `routed` / `conceded` flags.
+`_run_and_grade` and `_grade`, which hand back a frozen `FieldOutcome` (B17.03): the finished battle's two survivor shares, each side's
+`routed` / `conceded` flags, the parts of each side (a member of the `person` arm, a cohort of an army) and the part that broke first.
 
 `resolve_field` builds each side one of three ways: from an order of battle when either side carries one
 (`_oob_unit`, ED-IN-0306); one subunit per commanding person when `field_units` is `'person'`
@@ -23,6 +24,7 @@ from __future__ import annotations
 
 import math
 
+from engine.season.queries.inputs import FieldOutcome, PartOutcome, SideOutcome
 from modules.mass_battle import rngsource
 from modules.mass_battle.config import CELL_CAP, ROLE_SPEC
 from modules.mass_battle.hierarchy.units import Order, Unit, Army, unit_conceded
@@ -226,63 +228,66 @@ def _weighted_unit(name, weight, side, morale_start=_MORALE_START_BASE, role=Non
 SUBUNIT_ARMS = ('side', 'person')
 
 
-class _PersonSubunit(Unit):
-    """A `Unit` that remembers WHEN it broke, for the field's cause (CP-T04-01). `routed` is a plain bool on the
-    engine's `Unit` and the engine records no order of breaking; this subclass logs the person onto `broke_log` the
-    first time the flag is set while the Army around it is still standing, i.e. when the SUBUNIT broke on its own
-    account (its morale reached 0, or it fell below `UNIT_ROUT_FLOOR`), not when `Army.derive_rout` or
-    `recalc_size` routed the whole body and swept every subunit after it. It changes no value the engine reads."""
-    person = None
-    broke_log = None
-
-    @property
-    def routed(self):
-        return self.__dict__.get('_routed_flag', False)
-
-    @routed.setter
-    def routed(self, value):
-        unit = self._u()
-        if (value and not self.__dict__.get('_routed_flag', False) and self.broke_log is not None
-                and not (unit is not None and unit.routed)):
-            self.broke_log.append(self.person)
-        self.__dict__['_routed_flag'] = bool(value)
-
-
 def _person_unit(name, weights, members, side, morale_start=_MORALE_START_BASE, fed=None, role=None,
                  retreat_at=None):
     """CP-T04-01: the `person` arm of a headcount side -- ONE `Army`, ONE `Unit` PER COMMANDING PERSON, each sized by
     `under_arms_cap` of that person's own weight (B17.01's one scale, floored at `_MIN_TROOPS` as `_weighted_unit`
     floors the side) and the line placed by `orderofbattle._place` for `side`. `fed`, when the host provisioned the field
     (v9 IN-52), is the side's fielded troops standing in for Σ weight: it is spread over the persons in proportion to their
-    weights, so the side's total is what it was. Every subunit has `_weighted_unit`'s shape and the Army its command and
-    morale. Returns `(unit, broke_log)`; `broke_log` is the persons whose units broke,
-    in the order they broke. CP-T04-02: `role`, the side's standing order, is every subunit's (`_role_fields`).
-    CP-T04-03: so is `retreat_at` (`_retreat_orders`): each subunit retreats on its OWN strength."""
+    weights, so the side's total is what it was. Every unit has `_weighted_unit`'s shape and the Army its command and
+    morale. The unit at index `i` is `members[i]`'s (B17.03: `_person_parts` and the engine's order of breaking name him by
+    that index; the unit carries no person of its own). CP-T04-02: `role`, the side's standing order, is every unit's
+    (`_role_fields`). CP-T04-03: so is `retreat_at` (`_retreat_orders`): each unit retreats on its OWN strength."""
     total = float(sum(weights))
     share = (float(fed) / total) if (fed is not None and total > 0) else 1.0
-    log = []
     specs = [_line_spec(role, max(float(under_arms_cap(float(wt) * share)), _MIN_TROOPS)) for wt in weights]
     _place(specs, [class_of(sp['troop_type']) for sp in specs], side)
-    subs = []
-    for pid, spec in zip(members, specs):
-        sub = _PersonSubunit(**spec, advance_dir=_SIDE_DIR[side], orders=_retreat_orders(retreat_at))
-        sub.person, sub.broke_log = pid, log
-        subs.append(sub)
-    unit = Army(name=name, faction=side, power=_SEASON_FORCE_POWER, **_MVP_UNIT_COMMAND,
+    subs = [Unit(**spec, advance_dir=_SIDE_DIR[side], orders=_retreat_orders(retreat_at)) for spec in specs]
+    return Army(name=name, faction=side, power=_SEASON_FORCE_POWER, **_MVP_UNIT_COMMAND,
                 morale=morale_start, morale_start=morale_start, units=subs)
-    return unit, log
 
 
-def _person_report(units, members, logs):
-    """CP-T04-01: what the battle left each PERSON's subunit as, for the host to write casualties by. `subunits` maps a
-    person id to `(survivor ratio, routed)` -- the subunit's live troops over its starting troops, the share `_eff_march`
-    scales that person's body by; `broke_first` is `(attacker's, defender's)`, the person whose subunit broke first on
-    that side, `None` where none broke on its own account."""
-    out = {}
-    for unit, pids in zip(units, members):
-        for sub, pid in zip(unit.units, pids):
-            out[pid] = (sub.cur_troops / max(1.0, sub._start_troops), bool(sub.routed))
-    return {'subunits': out, 'broke_first': tuple(log[0] if log else None for log in logs)}
+def _share(left, start, scale):
+    """B17.03: THE ONE QUANTISER, a survivor count as an integer on the body scale: `round(scale x left / start)`, `start` floored at
+    1 as `_grade`'s ratio always was, clamped to `0..scale`. It is where the engine's floats meet the host's integers, so a side
+    the battle never touched reads EXACTLY `scale` (a ratio one part in 10^15 short of 1 rounds to it), and a share never exceeds
+    it. Quantised at the seam, not an integer-state commitment (A-29)."""
+    return max(0, min(scale, round(scale * left / max(1.0, start))))
+
+
+def _cohort_share(drawn, left, cohort, scale):
+    """B17.03: a cohort's survivors on the body scale. `drawn` is `OrderOfBattle.drawn`, `((unit, cohort, troops), ...)`; `left` maps a
+    unit's name to the fraction of it that survived. Each unit's surviving fraction is applied to the troops this cohort gave
+    that unit, summed over the units it fed, over what it gave in all."""
+    gave = [(unit, troops) for unit, c, troops in drawn if c == cohort]
+    return _share(sum(troops * left[unit] for unit, troops in gave), sum(troops for _unit, troops in gave), scale)
+
+
+def _person_namer(members):
+    """B17.03: how the `person` arm names the parts of its side, for `_run_and_grade`. A part is one member and his unit, so
+    `members[i]` is the unit at index `i`: `(parts, credit)`, the parts in input order and the id the engine's `(side, unit index)`
+    order of breaking credits for each unit index."""
+    def name(army, scale):
+        return (tuple(PartOutcome(pid, _share(sub.cur_troops, sub._start_troops, scale), bool(sub.routed))
+                      for sub, pid in zip(army.units, members)), tuple(members))
+    return name
+
+
+def _cohort_namer(oob):
+    """B17.03: how an army (an order of battle) names the parts of its side. A part is a COHORT: each of the order's units
+    surviving fraction (`cur_troops / _start_troops`) is applied to the troops each cohort gave it (`OrderOfBattle.drawn`) and
+    summed per cohort (`_cohort_share`); a cohort is routed when every unit it fed routed. A unit's break is credited to the cohort
+    that gave it the most troops (the first, on a tie): the part that broke the line, by the engine's order of breaking."""
+    def name(army, scale):
+        left = {row.name: sub.cur_troops / max(1.0, sub._start_troops) for row, sub in zip(oob.units, army.units)}
+        out = {row.name: bool(sub.routed) for row, sub in zip(oob.units, army.units)}
+        parts = tuple(PartOutcome(c, _cohort_share(oob.drawn, left, c, scale),
+                                  all(out[unit] for unit, cohort, _t in oob.drawn if cohort == c))
+                      for c in oob.cohorts)
+        credit = tuple(max((r for r in oob.drawn if r[0] == row.name), key=lambda r: r[2], default=(None, None, 0))[1]
+                       for row in oob.units)
+        return parts, credit
+    return name
 
 
 #: The troop type a side with no order of battle fights as, once the OTHER side has one. It is the nearest canonical
@@ -309,8 +314,8 @@ def _oob_unit(oob, weight, side, morale_start):
     return _build_oob_unit(oob, f'side_{side.lower()}', side, morale_start=morale_start)
 
 
-def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None, persons=None):
-    """`run_battle` plus the two sides' shares and flags (`_grade`; `resolve_field` is its only caller).
+def _run_and_grade(unit_a, unit_b, terrain, rng, scale, walls_dr=None, namers=(None, None)):
+    """`run_battle` plus the finished field's typed outcome (`_grade`; `resolve_field` is its only caller).
 
     `walls_dr` (plan position `20-v`, `H-150`): the defender DR the WALLS row adds. `None` -- the
     default -- is A.9's own number, `terrain.WALLS_DEFENDER_DR`, read here and never copied; an int
@@ -335,16 +340,16 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None, persons=None):
     not a deferral: "1 engagement per side; Fibonacci impossible" restricts how many units engage and
     the Concentration tactic, and a season unit is ONE subunit with no tactic -- both clauses already
     hold on every field this function fights, so applying them would change nothing. NO VERDICT: this returns
-    each side's share and flags and decides nothing; the host's `field_degree` reads them.
+    the typed outcome (each side's share and flags) and decides nothing; the host's `field_degree` reads it.
 
     Takes `rng` directly rather than a `world`-shaped object -- this is the only thing either
     caller ever reads off `world`, so narrowing the parameter to what is actually used means
     `resolve_field` (which has no `World`, only a bare `rng`) needs no adapter object to satisfy
     an attribute it does not otherwise have.
 
-    CP-T04-01: `persons` -- `None`, the default, is the side as it was and the return is exactly what it was. Given
-    `((members_a, members_b), (broke_log_a, broke_log_b))` (the `person` arm's, from `_person_unit`), the return also
-    carries `_person_report`'s `subunits` and `broke_first`, read off the units AFTER the battle."""
+    B17.03: `scale` is the body scale each share is quantised onto (`_share`). `namers` is `(attacker's, defender's)`, each `None`
+    (a headcount side, which names no part) or the side's namer (`_person_namer`, `_cohort_namer`), read off the units AFTER the
+    battle; `run_battle`'s `broke` (its order of breaking) names the part that broke first on each side."""
     if terrain == FOREST_BROKEN:
         if unit_a.speed == 'Fast':
             unit_a.speed = 'Standard'
@@ -361,31 +366,32 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, walls_dr=None, persons=None):
 
     with rngsource.using(rng):
         # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), the canon engine's own default]
-        run_battle(unit_a, unit_b, max_ticks=18)
+        ran = run_battle(unit_a, unit_b, max_ticks=18)
 
-    graded = _grade(unit_a, unit_b)
-    if persons is not None:
-        graded.update(_person_report((unit_a, unit_b), *persons))
-    return graded
+    named = [((), ()) if namer is None else namer(army, scale) for namer, army in zip(namers, (unit_a, unit_b))]
+    first = tuple(next((credit[i] for who, i in ran['broke'] if who == side and i < len(credit)), None)
+                  for side, (_parts, credit) in zip('AB', named))
+    return _grade(unit_a, unit_b, scale, ran['turns'], tuple(parts for parts, _credit in named), first)
 
 
-def _grade(unit_a, unit_b):
-    """A FINISHED battle's two survivor shares and each side's `routed` / `conceded` flags, and NO verdict (B17.01; split
-    out of `_run_and_grade` so the one reading has one owner -- the walkthrough harness reads a run it has already
-    fought through this, not a copy). `unit_a` is the attacker. A side's share is its troops left over its troops
-    at the start, `hp / hp_max` (the quantity `march` scales a side's bodies by, so a side that took no casualty reads
-    exactly 1.0 and none reads above it). The verdict is the host's: `engine/season/seam/ladder.py::field_degree` reads
-    `a_out = routed or conceded` (CP-T04-03: a side every one of whose subunits retreated or routed has given the field
-    up, `unit_conceded`) and the same for the defender, and a side that is out with the other standing is lost; both out,
-    or neither out when the ticks ran down, is drawn."""
-    return {
-        'attacker_size_pct': unit_a.hp / max(1.0, unit_a.hp_max),
-        'defender_size_pct': unit_b.hp / max(1.0, unit_b.hp_max),
-        'attacker_routed': bool(unit_a.routed),
-        'attacker_conceded': bool(unit_conceded(unit_a)),
-        'defender_routed': bool(unit_b.routed),
-        'defender_conceded': bool(unit_conceded(unit_b)),
-    }
+def _grade(unit_a, unit_b, scale, ticks, parts=((), ()), broke_first=(None, None)):
+    """A FINISHED battle's typed outcome (B17.03; B17.01's one reading, split out of `_run_and_grade` so it has one owner -- the walkthrough
+    harness reads a run it has already fought through this, not a copy), and NO verdict. `unit_a` is the attacker. A side's share is its
+    troops left over its troops at the start, `hp / hp_max`, quantised onto `scale` (`_share`: a side that took no casualty reads
+    exactly `scale` and none reads above it). `ended` is `rout` when either army routed, else `concession` when a side gave the
+    field up, else `time`. The band is the host's: `engine/season/seam/ladder.py::field_degree` reads `a_out = routed or conceded`
+    (CP-T04-03: a side every one of whose units retreated or routed has given the field up, `unit_conceded`) and the same for the
+    defender, and a side that is out with the other standing is lost; both out, or neither out when the ticks ran down, is
+    drawn. `parts` and `broke_first` are `(attacker's, defender's)`."""
+    ended = 'rout' if unit_a.routed or unit_b.routed else (
+        'concession' if unit_conceded(unit_a) or unit_conceded(unit_b) else 'time')
+    return FieldOutcome(ended=ended, ticks=int(ticks), attacker=_side_outcome(unit_a, scale, parts[0], broke_first[0]),
+                        defender=_side_outcome(unit_b, scale, parts[1], broke_first[1]))
+
+
+def _side_outcome(unit, scale, parts, broke_first):
+    return SideOutcome(share=_share(unit.hp, unit.hp_max, scale), routed=bool(unit.routed),
+                       conceded=bool(unit_conceded(unit)), parts=parts, broke_first=broke_first)
 
 
 def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
@@ -453,9 +459,10 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     sized by that order's own headcounts; the headcount side facing it is sized by the same cap, so there is one scale.
 
     CP-T04-01 (`H-359`): `inp.units` is the `field_units` fixture. `side`, shipped, is the side as it was. `person`
-    builds a headcount side as one subunit per member of `inp.members` (`_person_unit`) and the return then carries each
-    person's survivor ratio and rout and the person who broke first on each side (`_person_report`); a side that holds an
-    order of battle, or faces one, is unchanged by it (its units are the order's, not persons').
+    builds a headcount side as one unit per member of `inp.members` (`_person_unit`) and the return then names each
+    person as a part of his side, with his own share and rout, and the person who broke first (`_person_namer`); a side that holds
+    an order of battle, or faces one, is unchanged by it (its units are the order's, not persons': its parts are its cohorts,
+    `_cohort_namer`).
 
     CP-T04-02 (`H-361`): `inp.orders` is `(attacker, defender)`, each a record with `role` (a `ROLE_SPEC` name) and
     `retreat_at`, or `None`. A side's `role` is the shape and instruction package of every subunit of its headcount line,
@@ -464,7 +471,7 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     here is not read. CP-T04-03: a side's `retreat_at` is each of its headcount line's units' `own_strength` retreat Order
     (`_retreat_orders`), on either `units` arm; `'none'`, or no order, is no Order. `_grade` reads the side's concession.
 
-    Returns exactly what `_run_and_grade` returns."""
+    B17.03: returns a frozen `FieldOutcome` on every arm (`_run_and_grade`'s), each share an integer on `inp.condition_scale`."""
     weight_a, weight_b = (sum(side) for side in inp.weights)
     if troops_a is not None:
         weight_a = troops_a
@@ -484,13 +491,13 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     retreat_b = None if order_b is None else order_b.retreat_at
     if inp.units not in SUBUNIT_ARMS:
         raise ValueError(f"field_units {inp.units!r} is not one of {SUBUNIT_ARMS}")
-    persons = None
+    namers = (None, None)
     if not armies and inp.units == 'person':
-        # CP-T04-01: one subunit per commanding person. `members` is `weights`' own order, so zip pairs a person with
+        # CP-T04-01: one unit per commanding person. `members` is `weights`' own order, so zip pairs a person with
         # his weight. A provisioned side (`troops_a`/`troops_b`) is spread over its persons by weight.
-        unit_a, log_a = _person_unit("side_a", inp.weights[0], inp.members[0], 'A', morale_a, troops_a, role_a, retreat_a)
-        unit_b, log_b = _person_unit("side_b", inp.weights[1], inp.members[1], 'B', morale_b, troops_b, role_b, retreat_b)
-        persons = (inp.members, (log_a, log_b))
+        unit_a = _person_unit("side_a", inp.weights[0], inp.members[0], 'A', morale_a, troops_a, role_a, retreat_a)
+        unit_b = _person_unit("side_b", inp.weights[1], inp.members[1], 'B', morale_b, troops_b, role_b, retreat_b)
+        namers = (_person_namer(inp.members[0]), _person_namer(inp.members[1]))
     elif not armies:
         unit_a = _weighted_unit("side_a", weight_a, 'A', morale_a, role_a, retreat_a)
         unit_b = _weighted_unit("side_b", weight_b, 'B', morale_b, role_b, retreat_b)
@@ -500,11 +507,12 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
         # order of battle's size (phase 2), and scaling it here would silently overrule that.
         unit_a = _oob_unit(oob_a, weight_a, 'A', morale_a)
         unit_b = _oob_unit(oob_b, weight_b, 'B', morale_b)
+        # B17.03: an army's parts are its cohorts; a headcount side facing one names none.
+        namers = tuple(None if oob is None else _cohort_namer(oob) for oob in (oob_a, oob_b))
     # No territory: `river_crossed` answers False and the lookup OPEN_FLAT. WALLS outranks a crossing
     # (`terrain_row_for_territory`), so a fortified field does not derive one.
     crossing = inp.fort_level <= 0 and river_crossed(inp.origin, inp.territory, geography=inp.geography)
     return _run_and_grade(unit_a, unit_b,
                           terrain_row_for_territory(inp.territory, inp.fort_level, crossing,
                                                     geography=inp.geography),
-                          rng, walls_dr=inp.walls_dr,
-                          persons=persons)
+                          rng, inp.condition_scale, walls_dr=inp.walls_dr, namers=namers)

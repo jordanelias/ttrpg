@@ -15,7 +15,7 @@ are the helper's own knobs; the claims below are unchanged.
 
 The cases: the falsifier (different bodies under `person`, identical under `side`), its planted failure (the side's ratio
 fed to every person: the same check reddens), the control (`side` writes today's bodies and carries no per-person
-key), the cause (the Event names the loser whose subunit broke first, and `_PersonSubunit` logs it in order), and the
+key), the cause (the Event names the loser whose subunit broke first, and `run_battle`'s own order of breaking records it, B17.03), and the
 shape of the `person` arm (one subunit per member, sized by his own weight, the provisioned troops spread by weight)."""
 from __future__ import annotations
 
@@ -28,6 +28,7 @@ from engine.season.boot.realm import build_realm
 from engine.season.queries import world_q
 from engine.season.queries.inputs import MassBattleInput
 from engine.season.tests.test_march import _fold_one, _march_act, _weigh
+from engine.season.tests._field_outcomes import SCALE
 
 # B17.01 RE-PICKED (see the docstring): was seed 7, weight 1, scale 200 (B05.99: seed 8 before it).
 SEED, WEIGHT, DEFENDER_WEIGHT = 3, 3, 7      # the hand-built fold's three knobs
@@ -81,17 +82,20 @@ def test_falsifier_two_losers_one_routed_one_not_end_with_different_bodies_under
 def test_planted_failure_the_sides_ratio_fed_to_every_person_reddens_the_falsifier(monkeypatch):
     """MUTATION: every person's ratio is the side's. The falsifier's `person`-arm check (the two bodies differ) must
     then fail -- were it to pass, the test could not observe the failure it excludes."""
-    real = _mb()._person_report
+    from engine.season.queries.inputs import PartOutcome
+    mb = _mb()
+    real = mb._person_namer
 
-    def side_ratio_for_all(units, members, logs):
-        rep = real(units, members, logs)
-        for unit, pids in zip(units, members):
-            side = unit.hp / max(1.0, unit.hp_max)
-            for pid in pids:
-                rep['subunits'][pid] = (side, rep['subunits'][pid][1])
-        return rep
+    def side_share_for_all(members):
+        namer = real(members)
 
-    monkeypatch.setattr(_mb(), "_person_report", side_ratio_for_all)
+        def name(army, scale):
+            parts, credit = namer(army, scale)
+            side = mb._share(army.hp, army.hp_max, scale)
+            return tuple(PartOutcome(part.id, side, part.routed) for part in parts), credit
+        return name
+
+    monkeypatch.setattr(mb, "_person_namer", side_share_for_all)
     _w, _events, after, _before = _fold("person")
     assert after[MARCHERS[0]] == after[MARCHERS[1]], "the mutant still wrote two different bodies"
     with pytest.raises(AssertionError):
@@ -100,7 +104,7 @@ def test_planted_failure_the_sides_ratio_fed_to_every_person_reddens_the_falsifi
 
 def test_the_shipped_arm_is_the_person_arm_and_side_is_the_control_that_carries_no_per_person_record():
     """The unswept fold is the `person` fold (the shipped arm), same bodies and hash; `field_units: side` is the control: the
-    module's record holds no `subunits` or `broke_first` and no Event names a breaker."""
+    module's outcome names no part and no breaker, and no Event names one."""
     w_ship, ev_ship, after_ship, _ = _fold(None)
     w_person, ev_person, after_person, _ = _fold("person")
     assert after_ship == after_person
@@ -110,11 +114,10 @@ def test_the_shipped_arm_is_the_person_arm_and_side_is_the_control_that_carries_
     assert _broke(ev_side) == []
 
     inp = MassBattleInput(weights=((2, 2), (6,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None,
-                          origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={},
+                          origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, condition_scale=SCALE,
                           members=(("a0", "a1"), ("b0",)), units="side")
     record = _mb().resolve_field(inp, random.Random(0))
-    assert set(record) == {"attacker_size_pct", "defender_size_pct", "attacker_routed", "attacker_conceded",
-                           "defender_routed", "defender_conceded"}
+    assert all(side.parts == () and side.broke_first is None for side in (record.attacker, record.defender))
 
 
 def test_the_band_event_names_the_loser_whose_subunit_broke_first():
@@ -126,34 +129,48 @@ def test_the_band_event_names_the_loser_whose_subunit_broke_first():
     assert cut == [MARCHERS[1]] and named == [("field.lost", MARCHERS[1])], (named, after)
 
 
-def test_a_subunit_logs_its_person_in_the_order_it_breaks_and_not_when_the_whole_unit_is_swept():
+def test_the_engines_order_of_breaking_names_each_unit_once_and_not_a_unit_swept_with_its_army():
+    """B17.03: `run_battle` returns `broke`, `(side, unit index)` in the order units broke on their own account while their army
+    stood (`_PersonSubunit`'s setter that logged a person is deleted). Three-person sides of weight 3 (90 troops a unit, above
+    `UNIT_ROUT_FLOOR`) are fought over seeds 0 to 7: every name is `A` or `B` and a unit of that army, none is named twice, and
+    the fields that broke a unit are most of them (the loop asserts that it asserted). CONTROL, the same fight with weight 1 (30
+    troops, under the floor): the army routs whole, every unit is swept with it and NOBODY is named, which is what keeps a swept
+    unit from being credited with a break it did not make."""
     mb = _mb()
-    unit, log = mb._person_unit("side_x", (2, 2, 2), ("p0", "p1", "p2"), "A", 5)
-    unit.units[1].routed = True
-    unit.units[0].routed = True
-    unit.units[0].routed = True                       # setting it again is not breaking again
-    assert log == ["p1", "p0"]
-    unit.routed = True                                   # the whole body routs: the sweep after it is nobody's break
-    unit.units[2].routed = True
-    assert log == ["p1", "p0"]
-    assert [s.routed for s in unit.units] == [True, True, True]
+    rngsource = importlib.import_module("modules.mass_battle.rngsource")
+    run_battle = importlib.import_module("modules.mass_battle.battle_loop").run_battle     # by string: `engine/` imports no module code
+
+    def fight(weight, seed):
+        a = mb._person_unit("side_a", (weight,) * 3, ("a0", "a1", "a2"), "A", 5)
+        b = mb._person_unit("side_b", (weight,) * 3, ("b0", "b1", "b2"), "B", 5)
+        with rngsource.using(random.Random(seed)):
+            return run_battle(a, b, max_ticks=18)["broke"], a, b
+
+    named = 0
+    for seed in range(8):
+        got, a, b = fight(3, seed)
+        assert len(set(got)) == len(got) and all(side in "AB" and 0 <= i < 3 for side, i in got), got
+        named += bool(got)
+    assert named >= 6, named
+    for seed in range(8):
+        got, a, b = fight(1, seed)
+        assert got == [] and a.routed and b.routed, (seed, got)
 
 
 def test_the_person_arm_builds_one_subunit_per_member_sized_by_his_own_weight():
     mb = _mb()
-    unit, _log = mb._person_unit("side_x", (1, 3, 2), ("p0", "p1", "p2"), "A", 5)
+    unit = mb._person_unit("side_x", (1, 3, 2), ("p0", "p1", "p2"), "A", 5)
     assert [s.troops for s in unit.units] == [30.0, 90.0, 60.0]     # `under_arms_cap`: 30 troops a weight
-    assert [s.person for s in unit.units] == ["p0", "p1", "p2"]
     assert unit.total_troops() == 180.0
     side = mb._weighted_unit("side_x", 6, "A", 5)
     assert side.total_troops() == unit.total_troops()    # the side's total is the same either way
-    fed, _ = mb._person_unit("side_x", (1, 3), ("p0", "p1"), "A", 5, fed=2.0)
+    fed = mb._person_unit("side_x", (1, 3), ("p0", "p1"), "A", 5, fed=2.0)
     assert [s.troops for s in fed.units] == [15.0, 45.0]      # provisioned troops spread by weight, then capped
 
 
 def test_an_unknown_arm_is_refused():
     inp = MassBattleInput(weights=((2,), (2,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None,
-                          origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, units="squad")
+                          origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, condition_scale=SCALE, units="squad")
     with pytest.raises(ValueError):
         _mb().resolve_field(inp, random.Random(0))
 

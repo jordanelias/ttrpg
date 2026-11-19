@@ -27,6 +27,7 @@ import pytest
 from engine.season.boot.realm import build_realm
 from engine.season.state.world import World
 from engine.season.queries import world_q
+from engine.season.tests._field_outcomes import SCALE
 from engine.season.tests.test_march import _fold_one, _march_act, _weigh
 
 # B05.99 RE-PICKED (B05.03, the field's one sampler): at seed 0 and scale 10 the winning marchers both read ratio 1.0 on
@@ -43,20 +44,22 @@ def _mb():
 
 
 def _fold(arm="engine", *, model=None, units="person", spy=None):
-    """Fold the one march. Returns `(world, events, bodies before, stance before, the module's per-person record)`.
-    The record is read off `_person_report`'s return (`spy`, when given, is applied to it first)."""
+    """Fold the one march. Returns `(world, events, bodies before, stance before, the module's per-person record)`: each
+    person's `(his part's share, routed)` on the body scale, read off the `FieldOutcome` `_grade` returns (`spy`, when given, is
+    applied to the outcome first, and the record is read off what it returns)."""
     mb = _mb()
-    real = mb._person_report
+    real = mb._grade
     seen = {}
 
-    def tap(units, members, logs):
-        rep = real(units, members, logs)
+    def tap(*args, **kwargs):
+        out = real(*args, **kwargs)
         if spy is not None:
-            rep = spy(units, rep)
-        seen.update(rep["subunits"])
-        return rep
+            out = spy(out)
+        for side in (out.attacker, out.defender):
+            seen.update({part.id: (part.share, part.routed) for part in side.parts})
+        return out
 
-    mb._person_report = tap
+    mb._grade = tap
     try:
         w = build_realm(SEED)
         _weigh(w, MARCHERS, WEIGHT)
@@ -68,18 +71,18 @@ def _fold(arm="engine", *, model=None, units="person", spy=None):
         stance = {pid: list(w.persons[pid].stance or []) for pid in w.persons}
         events = _fold_one(w, _march_act(MARCHERS[0], "set_s_036", "off_spymaster"), contest_max_depth=2)
     finally:
-        mb._person_report = real
+        mb._grade = real
     return w, events, before, stance, seen
 
 
 def _check_winners_by_own_ratio(w, before, record):
-    """The falsifier's assertions: each attacking claimant's body is `max(1, int(body * his ratio))`, strictly below the
-    start for the one whose subunit was cut, so a write at any other ratio fails here."""
+    """The falsifier's assertions: each attacking claimant's body is `max(1, body x his share // scale)`, strictly below the
+    start for the one whose subunit was cut, so a write at any other share fails here."""
     for pid in MARCHERS:
-        want = max(1, int(before[pid] * min(1.0, record[pid][0])))
-        assert w.persons[pid].body == want, f"{pid}: body {w.persons[pid].body}, his own ratio gives {want}"
-    cut = [pid for pid in MARCHERS if record[pid][0] < 1.0]
-    assert cut, "precondition: a winner with a survivor ratio below 1"
+        want = max(1, before[pid] * min(SCALE, record[pid][0]) // SCALE)
+        assert w.persons[pid].body == want, f"{pid}: body {w.persons[pid].body}, his own share gives {want}"
+    cut = [pid for pid in MARCHERS if record[pid][0] < SCALE]
+    assert cut, "precondition: a winner with a survivor share below the scale"
     assert all(w.persons[pid].body < before[pid] for pid in cut)
 
 
@@ -94,7 +97,7 @@ def test_falsifier_each_winning_claimant_falls_by_his_own_ratio_and_earns_no_sta
     w, events, before, stance, record = _fold("engine")
     kinds = [e.kind for e in events]
     assert "field.won" in kinds and "field.lost" not in kinds, f"precondition: the attacker wins ({kinds})"
-    assert record[MARCHERS[0]][0] == 1.0 and 0.0 < record[MARCHERS[1]][0] < 1.0, f"precondition: ratios {record}"
+    assert record[MARCHERS[0]][0] == SCALE and 0 < record[MARCHERS[1]][0] < SCALE, f"precondition: shares {record}"
     _check_winners_by_own_ratio(w, before, record)
     assert w.persons[MARCHERS[0]].body == before[MARCHERS[0]] != w.persons[MARCHERS[1]].body
 
@@ -112,11 +115,11 @@ def test_planted_failure_winners_written_at_the_losers_ratio_reddens_the_falsifi
     check, against the unmutated record, must then fail -- were it to pass, the test could not observe the failure."""
     _w0, _e0, before0, _s0, record0 = _fold("engine")
 
-    def loser_ratio(units, rep):
-        loser = units[1].effective_size / max(1, units[1].size_max)
-        for pid in MARCHERS:
-            rep["subunits"][pid] = (loser, rep["subunits"][pid][1])
-        return rep
+    def loser_ratio(out):
+        import dataclasses
+        from engine.season.queries.inputs import PartOutcome
+        parts = tuple(PartOutcome(p.id, out.defender.share, p.routed) for p in out.attacker.parts)
+        return dataclasses.replace(out, attacker=dataclasses.replace(out.attacker, parts=parts))
 
     w, _events, _before, _stance, _rec = _fold("engine", spy=loser_ratio)
     assert w.persons[MARCHERS[0]].body < before0[MARCHERS[0]], "the mutant wrote nobody (the loser's ratio is below 1)"
@@ -133,7 +136,7 @@ def test_control_off_writes_no_winner_and_engine_differs_from_it_in_the_winners_
     assert [e.kind for e in ev_off] == [e.kind for e in ev_on]
     assert [w_off.persons[pid].body for pid in MARCHERS] == [before[pid] for pid in MARCHERS]
     assert w_off.content_hash() != w_on.content_hash()
-    cut = [pid for pid in MARCHERS if record[pid][0] < 1.0]
+    cut = [pid for pid in MARCHERS if record[pid][0] < SCALE]
     assert cut == [MARCHERS[1]]
     for pid in cut:
         w_on.persons[pid].body = before[pid]

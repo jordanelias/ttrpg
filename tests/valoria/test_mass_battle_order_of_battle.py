@@ -26,12 +26,14 @@ from modules.mass_battle.orderofbattle import (STRATEGIES, OrderOfBattle, UnitRo
 from modules.mass_battle.troop_types.registry import (MOUNTED_TYPES, is_mounted, reach_for, stats_for,
                                                       support_ranks_for, unit_type_for)
 
+from engine.season.tests._field_outcomes import SCALE
+
 SEEDS = tuple(range(40, 52))     # twelve: the engine's losses are one-sided per seed, so a type's effect shows in the aggregate
 
 
 def _record(oobs=None, **kw):
     base = dict(weights=((10,), (10,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None,
-                origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={})
+                origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, condition_scale=SCALE)
     base.update(kw)
     return MassBattleInput(**base, **({} if oobs is None else {'orders_of_battle': oobs}))
 
@@ -61,7 +63,7 @@ def _fight(oob_a, seed):
 def _tally(troop_type):
     rs = [_fight(_line(troop_type), s) for s in SEEDS]
     assert len(rs) == len(SEEDS)
-    return sum(field_degree(r) == WON for r in rs), sum(r['attacker_size_pct'] for r in rs) / len(rs)
+    return sum(field_degree(r) == WON for r in rs), sum(r.attacker.share for r in rs) / len(rs) / SCALE
 
 
 def test_equal_headcount_of_different_troop_types_fights_differently():
@@ -78,8 +80,7 @@ def test_an_order_of_battle_side_and_a_headcount_side_both_deploy():
     """A side with no order of battle, once the other has one, is a deployed light-infantry line, not a crash."""
     r = massbattle.resolve_field(_record(oobs=(_line('archers', 400), None), weights=((10,), (400,))),
                                  random.Random(3))
-    assert set(r) >= {'attacker_size_pct', 'defender_size_pct', 'attacker_routed', 'attacker_conceded',
-                      'defender_routed', 'defender_conceded'}
+    assert type(r).__name__ == 'FieldOutcome' and r.attacker.parts == () and r.defender.parts == ()
 
 
 # ---------------------------------------------------------------------------------------- refusals
@@ -218,9 +219,9 @@ def test_survivor_shares_of_an_order_of_battle_never_exceed_one():
     for seed in range(12):
         r = massbattle.resolve_field(_record(oobs=(_line('heavy_infantry', 120), _line('heavy_infantry', 120))),
                                      random.Random(seed))
-        seen += [r['attacker_size_pct'], r['defender_size_pct']]
-    assert max(seen) <= 1.0 and min(seen) >= 0.0, seen
-    assert min(seen) < 1.0, "vacuous if no side took a casualty in twelve fields"
+        seen += [r.attacker.share, r.defender.share]
+    assert max(seen) <= SCALE and min(seen) >= 0, seen
+    assert min(seen) < SCALE, "vacuous if no side took a casualty in twelve fields"
 
 
 def _stance_of(sf, strategy='line'):

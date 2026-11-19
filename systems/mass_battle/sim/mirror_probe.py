@@ -30,6 +30,8 @@ from modules.mass_battle import massbattle  # noqa: E402
 from modules.mass_battle.orderofbattle import OrderOfBattle, UnitRow  # noqa: E402
 from modules.mass_battle.terrain import OPEN_FLAT  # noqa: E402
 
+_SCALE = 1000   # the body scale a share is quantised onto; the probe reads the two sides' flags and no share
+
 def _body_spec():
     """The probe's own sizes: troop type, troops a side, the standard-deviation limit. A function, not module
     scalars: `tools/export_sim_params.py` reads every module-level literal under `systems/mass_battle/sim/` as a game
@@ -47,9 +49,9 @@ def _body(side):
 def one_field(seed):
     """`'A'`, `'B'` or `'drawn'` for the mirror fought with `random.Random(seed)`."""
     a, b = _body("A"), _body("B")
-    got = massbattle._run_and_grade(a, b, OPEN_FLAT, random.Random(seed))
-    a_out = got["attacker_routed"] or got["attacker_conceded"]
-    b_out = got["defender_routed"] or got["defender_conceded"]
+    got = massbattle._run_and_grade(a, b, OPEN_FLAT, random.Random(seed), _SCALE)
+    a_out = got.attacker.routed or got.attacker.conceded
+    b_out = got.defender.routed or got.defender.conceded
     if b_out and not a_out:
         return "A"
     if a_out and not b_out:

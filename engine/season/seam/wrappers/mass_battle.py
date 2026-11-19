@@ -85,7 +85,7 @@ from ...state.carriers import Act
 from ...state.gate import seat_faction
 from ._entry import entry_for
 from ._estimate import rng_of, samples_of
-from ..ladder import FIELD_FLAGS, field_degree
+from ..ladder import FIELD_FLAGS, field_degree, field_flags
 
 _PROVIDER = "mass_battle"
 _PRIZE = "a field"      # the prize row this provider deals (`rosters.yaml`), `march`'s
@@ -232,6 +232,7 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
     ED-IN-0306 phase 3: `factions` is `(attacker, defender)`, each side's faction Proposition id or `None`;
     each side whose faction holds an army Record fights as that Record's order of battle
     (`_order_of_battle`). Neither side having one leaves `orders_of_battle` `None`, the record exactly as it was.
+    B17.03: `condition_scale` is the `condition_scale` fixture, the body scale the module quantises each survivor share onto.
     CP-T04-02 (`H-361`): `orders` is each side's STANDING ORDER (`_standing_order`): the attacker's about
     `origin_place` (the settlement it marched from, `world_q.march_origin`), the defender's about `rung` (the target). A
     side whose faction's seats hold no order about its place reads `None`; neither side having one leaves `orders` `None`,
@@ -259,6 +260,7 @@ def field_input(w: Any, claimants: list, other: list, rung: str,
         loyalties=(_side_stance(w, claimants, _creed_referent), _side_stance(w, other, _creed_referent)),
         loyalty_gain=w.fixtures.get("field_morale_loyalty_gain"),
         geography=geography(),
+        condition_scale=w.fixtures.get("condition_scale"),
         orders_of_battle=None if oobs == (None, None) else oobs,
         members=(members(claimants), members(other)),
         units=w.fixtures.get("field_units"),
@@ -311,7 +313,7 @@ def _fielded_by(inp: MassBattleInput) -> tuple:
     (everybody mustered, as it always did). `(None, None)` when neither side has an order of battle."""
     if inp.orders_of_battle is None:
         return (None, None)
-    return tuple(None if o is None else o.drawn_from for o in inp.orders_of_battle)
+    return tuple(None if o is None else o.cohorts for o in inp.orders_of_battle)
 
 
 def _fed(w: Any, inp: MassBattleInput, treasuries: tuple) -> list:
@@ -360,9 +362,8 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     stands. REQUIRED: a caller with no rung has no
     place to defend, which is a PARTY-GAP exactly like a caller with no claimants.
 
-    `result` carries `massbattle.py`'s own non-canonical survivor-ratio classification under
-    `result['degree']`, kept for introspection; it is NOT the token `degree_of` grades with (see
-    this module's docstring) and callers should not read it as one."""
+    `result` is the module's frozen `FieldOutcome` (B17.03), or `None` where no field was fought (`Unopposed`, `Invested`); the
+    four `FIELD_FLAGS` are lifted from its two sides to the top level for `degree_of`, and `field_degree` grades the outcome."""
     if not claimants:
         return dict(status="PARTY-GAP", why="a field battle needs at least one claimant",
                     module=_PROVIDER)
@@ -395,7 +396,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         # `seam/ladder.py::field_degree` can grade this without opening `result`.
         return dict(status="RESOLVED", module=_PROVIDER, resolver="d_sigma",
                     **_NO_FLAGS, unopposed=True,
-                    result=dict(_NO_FLAGS, attacker_size_pct=1.0, defender_size_pct=0.0),
+                    result=None,
                     winner=claimants, parties=parties)
     if declared == BESIEGE:
         # CP-T04-06, AN OPPOSED SIEGE: THE ARMY SITS BEFORE THE WALLS AND NO BATTLE IS RUN -- no engine call, so no draw is
@@ -403,7 +404,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         # marker); `_eff_march` wears the garrison. An empty defence never reaches here: it answered `Unopposed` above, as a storm.
         return dict(status="RESOLVED", module=_PROVIDER, resolver="d_sigma",
                     **_NO_FLAGS, unopposed=False, invested=True,
-                    result=dict(_NO_FLAGS),
+                    result=None,
                     winner=[], parties=parties)
     # ⚠ THE ENTRY IS LOOKED UP BY THE ROLE THE PRIZE ROW NAMES (`module_entry:`), IN `MODULE_ENTRIES`,
     # as `sigma.py` and `combat.py` look theirs up: a call reaching here with the role
@@ -439,7 +440,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
                 # nested-only shape would be the one branch `degree_of` could not reach without
                 # a special case. The four flags are the module's own (`massbattle._grade`); the winner is the band's:
                 # the claimants on `Won`, the defending side on `Lost`, nobody on `Drawn`.
-                **{k: result[k] for k in FIELD_FLAGS}, unopposed=False,
+                **field_flags(result), unopposed=False,
                 result=result,
                 winner={WON: claimants, LOST: other}.get(field_degree(result), []),
                 parties=parties)

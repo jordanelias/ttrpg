@@ -28,6 +28,7 @@ from ..data.rosters import (
     COMBAT_BANDS, COMBAT_EDGES, DRAWN, INVESTED, LOST, UNOPPOSED, WON, WOUND_QUANTITIES, WOUNDED,
     check_edge_above)
 from ..gaps import Unspecified
+from ..queries.inputs import FieldOutcome
 
 
 # ---------------------------------------------------------------------------
@@ -162,17 +163,24 @@ def combat_degree(result: dict, subject: Optional[str], wounded_above=None) -> s
     return min((party_degree(s, wounded_above) for s in states.values()), key=COMBAT_BANDS.index)
 
 
-# B17.01: THE FOUR FLAGS A FOUGHT FIELD'S RESULT CARRIES, each side's `routed` and `conceded` (`massbattle._grade`'s own
-# keys, lifted by `seam/wrappers/mass_battle.py` to the top level of what it returns). Their presence is what makes a result
-# a field's, for `degree_of`'s third branch; the rule over them is `field_degree`'s alone.
+# B17.01: THE FOUR FLAGS A FOUGHT FIELD'S RESULT CARRIES, each side's `routed` and `conceded`, lifted by
+# `seam/wrappers/mass_battle.py` to the top level of what it returns from the module's `FieldOutcome` (`field_flags`). Their presence
+# is what makes a result a field's, for `degree_of`'s third branch; the rule over them is `field_degree`'s alone.
 FIELD_FLAGS = ("attacker_routed", "attacker_conceded", "defender_routed", "defender_conceded")
 
 
-def field_degree(result: dict) -> str:
-    """THE BAND `march` FOLDS ON (`ED-IN-0279` clause (a)), READ OFF THE MASS-BATTLE
-    PROVIDER'S OWN RESULT -- the shape `combat_degree` reads off a scene's `wound_state`, one
-    function above. `seam/wrappers/mass_battle.py` lifts the two sides' `routed`/`conceded` flags
-    (`FIELD_FLAGS`) and `unopposed` to the TOP level of what it returns for exactly this read.
+def field_flags(outcome: FieldOutcome) -> dict:
+    """The four `FIELD_FLAGS`, read off a `FieldOutcome`'s two sides: the one place the typed outcome becomes the provider's
+    top-level markers."""
+    return dict(zip(FIELD_FLAGS, (outcome.attacker.routed, outcome.attacker.conceded,
+                                  outcome.defender.routed, outcome.defender.conceded)))
+
+
+def field_degree(result: Any) -> str:
+    """THE BAND `march` FOLDS ON (`ED-IN-0279` clause (a)), READ OFF THE MASS-BATTLE MODULE'S OWN `FieldOutcome` -- the shape
+    `combat_degree` reads off a scene's `wound_state`, one function above. `result` is the module's `FieldOutcome` (B17.03: the
+    two `SideOutcome`s' `routed`/`conceded` flags), or the provider's own dict (`seam/wrappers/mass_battle.py::resolve`), whose
+    `unopposed` / `invested` markers are read first and whose `result` is then the `FieldOutcome`.
 
     B17.01 (A-57, A-58, A-81): A BATTLE ENDS WON, LOST OR DRAWN, and this is the one place the rule is written. A side is OUT when
     it routed or conceded; the attacker `Won` when the defender is out and it is not, `Lost` when it is out and the defender is
@@ -188,13 +196,15 @@ def field_degree(result: dict) -> str:
 
     The module returns no verdict and no four-way `degree` (B17.01 deleted that classification, which had no reader here):
     `march` writes on its graded bands (Won, Lost, Drawn, Unopposed and, CP-T04-06, Invested)."""
-    if result.get("unopposed"):
-        return UNOPPOSED
-    # CP-T04-06: an opposed `besiege` fought no field -- the provider lifts `invested` and nobody won or lost.
-    if result.get("invested"):
-        return INVESTED
-    a_out = result["attacker_routed"] or result["attacker_conceded"]
-    b_out = result["defender_routed"] or result["defender_conceded"]
+    if not isinstance(result, FieldOutcome):
+        if result.get("unopposed"):
+            return UNOPPOSED
+        # CP-T04-06: an opposed `besiege` fought no field -- the provider lifts `invested` and nobody won or lost.
+        if result.get("invested"):
+            return INVESTED
+        return field_degree(result["result"])
+    a_out = result.attacker.routed or result.attacker.conceded
+    b_out = result.defender.routed or result.defender.conceded
     if b_out and not a_out:
         return WON
     if a_out and not b_out:

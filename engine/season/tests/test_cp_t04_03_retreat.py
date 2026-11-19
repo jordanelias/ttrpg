@@ -30,6 +30,7 @@ import pytest
 from engine.season.data.rosters import DRAWN, LOST, WON
 from engine.season.seam.ladder import field_degree
 from engine.season.tests import test_cp_t04_02_marshal as M
+from engine.season.tests._field_outcomes import SCALE
 from engine.season.tests.test_march import _fold_one
 
 SEEDS, PERSON_SEEDS = range(200), range(100)
@@ -71,9 +72,9 @@ def _fold(inp, seeds):
     mb, units = _mb(), _units()
     seen, orig = [], mb._grade
 
-    def spy(unit_a, unit_b):
+    def spy(unit_a, unit_b, *rest):
         seen.append((units.unit_conceded(unit_a), units.unit_conceded(unit_b)))
-        return orig(unit_a, unit_b)
+        return orig(unit_a, unit_b, *rest)
 
     mb._grade = spy
     try:
@@ -93,7 +94,7 @@ def _arm(att, dfn=None, arm="side", n=len(SEEDS), att_weight=ATT_WEIGHT):
 
 
 def _mean_loss(rows):
-    return sum(1.0 - g["attacker_size_pct"] for g, *_ in rows) / len(rows)
+    return sum(1.0 - g.attacker.share / SCALE for g, *_ in rows) / len(rows)
 
 
 def _fewer_losses(rows_retreat, rows_none, margin=0.01):
@@ -122,8 +123,8 @@ def test_falsifier_an_attacker_who_retreats_at_half_loses_fewer_troops_and_never
     # for it; where the share is the same the arms differ in the concession flag alone)
     differ = [i for i, ((gh, *_), (gn, *_)) in enumerate(zip(half, none)) if gh != gn]
     assert len(differ) >= 20 and all(half[i][1] for i in differ)
-    assert all(half[i][0]["attacker_size_pct"] >= none[i][0]["attacker_size_pct"] for i in differ)
-    assert sum(half[i][0]["attacker_size_pct"] > none[i][0]["attacker_size_pct"] for i in differ) >= 20
+    assert all(half[i][0].attacker.share >= none[i][0].attacker.share for i in differ)
+    assert sum(half[i][0].attacker.share > none[i][0].attacker.share for i in differ) >= 20
     # a fired retreat is the attacker's concession, never the rout it spares: it is out and the field is not won
     assert all(field_degree(half[i][0]) in (LOST, DRAWN) for i in differ)
 
@@ -185,13 +186,13 @@ def _fake_unit(share, stance="balanced", routed=False):
 def test_grade_a_conceded_attacker_ahead_on_size_is_not_the_winner_and_a_conceded_defender_gives_the_field():
     mb = _mb()
     ahead, behind = _fake_unit(0.8, "retreat"), _fake_unit(0.6)
-    g = mb._grade(ahead, behind)
-    assert field_degree(g) == LOST and g["attacker_conceded"]        # ahead on size, but it gave the field up
-    g = mb._grade(_fake_unit(0.8), _fake_unit(0.9))                  # the control: no concession, behind on size: nobody is out
-    assert field_degree(g) == DRAWN and not (g["attacker_conceded"] or g["defender_conceded"])
-    g = mb._grade(_fake_unit(0.55), _fake_unit(0.9, "retreat"))      # behind on size, but the defender conceded
-    assert field_degree(g) == WON and g["defender_conceded"]
-    g = mb._grade(_fake_unit(0.8, "retreat"), _fake_unit(0.9, "retreat"))   # both gave it up: nobody holds it
+    g = mb._grade(ahead, behind, SCALE, 0)
+    assert field_degree(g) == LOST and g.attacker.conceded and g.ended == "concession"   # ahead on size, but it gave the field up
+    g = mb._grade(_fake_unit(0.8), _fake_unit(0.9), SCALE, 0)        # the control: no concession, behind on size: nobody is out
+    assert field_degree(g) == DRAWN and not (g.attacker.conceded or g.defender.conceded) and g.ended == "time"
+    g = mb._grade(_fake_unit(0.55), _fake_unit(0.9, "retreat"), SCALE, 0)   # behind on size, but the defender conceded
+    assert field_degree(g) == WON and g.defender.conceded
+    g = mb._grade(_fake_unit(0.8, "retreat"), _fake_unit(0.9, "retreat"), SCALE, 0)   # both gave it up: nobody holds it
     assert field_degree(g) == DRAWN
 
 
@@ -200,10 +201,10 @@ def test_planted_failure_a_grade_blind_to_a_concession_no_longer_reads_the_side_
     win. What it still gets wrong is who is out: the retreating attacker reads `Lost` and, blind, reads `Drawn`."""
     mb = _mb()
     ahead, behind = _fake_unit(0.8, "retreat"), _fake_unit(0.6)
-    assert field_degree(mb._grade(ahead, behind)) == LOST
+    assert field_degree(mb._grade(ahead, behind, SCALE, 0)) == LOST
     monkeypatch.setattr(mb, "unit_conceded", lambda unit: False)
-    assert field_degree(mb._grade(ahead, behind)) == DRAWN           # the grading defect: the concession is not read
-    assert _fired_wins([(mb._grade(ahead, behind), True, False)]) == (1, 0)
+    assert field_degree(mb._grade(ahead, behind, SCALE, 0)) == DRAWN           # the grading defect: the concession is not read
+    assert _fired_wins([(mb._grade(ahead, behind, SCALE, 0), True, False)]) == (1, 0)
 
 
 # ---------------------------------------------------------------------------------------- the stop, and no facing flip

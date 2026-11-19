@@ -35,6 +35,8 @@ from engine.season.queries.inputs import ProvisionInput
 from engine.season.state.carriers import Act
 from engine.substrate import composition
 
+from ._field_outcomes import field_outcome
+
 # `build_realm(0)`'s fixture facts this file stands on (each re-asserted where it is used): the Crown's two
 # at `set_s_014` march through `off_spymaster` (rung `terr_T1`, the treasury `requisition` fills) on
 # `set_s_036`, where six of the Church of Solmund stand and the nearest held rung is `terr_T9`.
@@ -249,8 +251,7 @@ def _patch_won_recording(monkeypatch):
 
     def fn(inp, rng, **kw):
         seen.append(kw)
-        return dict(attacker_routed=False, attacker_conceded=False, defender_routed=True, defender_conceded=False,
-                    attacker_size_pct=1.0, defender_size_pct=0.5)
+        return field_outcome(1.0, 0.5, defender_out=True)
     monkeypatch.setattr(MB, "entry_for", lambda prize, module: (SimpleNamespace(fn=fn), None))
     return seen
 

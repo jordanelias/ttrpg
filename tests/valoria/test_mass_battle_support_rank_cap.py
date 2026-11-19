@@ -210,13 +210,14 @@ def _engaged_by_resolve_field(monkeypatch, weight):
     import random
 
     from engine.season.queries.inputs import MassBattleInput
+    from engine.season.tests._field_outcomes import SCALE
     from modules.mass_battle import massbattle
 
     seen = []
     monkeypatch.setattr(massbattle, '_run_and_grade', lambda unit_a, unit_b, *a, **k: seen.append(unit_a) or {})
     massbattle.resolve_field(MassBattleInput(
         weights=((weight,), (10,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None, origin=None,
-        loyalties=(0.0, 0.0), loyalty_gain=0, geography={}), random.Random(1))
+        loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, condition_scale=SCALE), random.Random(1))
     assert len(seen) == 1
     atom = seen[0].units[0]
     front = {ab for ab, orig in _oriented_abs_map(atom).items() if orig[0] == 0}

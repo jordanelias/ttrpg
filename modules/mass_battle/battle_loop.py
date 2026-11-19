@@ -16,7 +16,13 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
      engagement per turn"]
 
     Returns:
-      {"winner": "A"|"B"|"draw", "turns": int, "phases": int, "tick_in_phase": int}
+      {"winner": "A"|"B"|"draw", "turns": int, "phases": int, "tick_in_phase": int, ..., "broke": [(side, unit index), ...]}
+
+    `broke` (B17.03) is the engine's own ORDER OF BREAKING: `(side, unit index)`, `side` 'A' or 'B' and the index into that army's
+    `units`, appended the first time a unit is seen routed while its army still stands. A unit routed by its army's own rout (the
+    whole body fleeing, `Army.derive_rout`, or destroyed, `recalc_size`) is the sweep after the break, not a break, and is not
+    named. It is read at two points -- the tick's own rout check (before `derive_rout` sweeps) and after the phase boundary --
+    so a unit that broke and an army that was swept inside ONE phase boundary is named only if the army stood after it.
     """
     # ED-1043: the names this function reads are resolved from `orchestration` AT CALL TIME, as the globals they were
     # while it lived there (a patch on `orchestration.<name>` is still seen), and so that this module need not
@@ -57,6 +63,16 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
     trunc_groups = trunc_pairs = 0
     trunc_troops = 0.0
     max_groups = 0
+    broke, _named = [], set()
+
+    def _note_breaks(side, army):
+        """Name each unit of a STANDING army that is routed now and was not named before, in unit order."""
+        if army.routed:
+            return
+        for i, atom in enumerate(army.units):
+            if atom.routed and (side, i) not in _named:
+                _named.add((side, i))
+                broke.append((side, i))
     for t in range(1, max_ticks + 1):
         ticks = t
         trace_event('tick', t=t)
@@ -400,12 +416,15 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
                 if not atom.routed and (atom.eff_morale <= 0
                                         or atom.troop_total() < UNIT_ROUT_FLOOR):
                     atom.routed = True
+            _note_breaks('A' if u is unit_a else 'B', u)       # B17.03: named BEFORE `derive_rout` sweeps the rest
             u.derive_rout()   # single-subunit: fires iff old `u.morale<=0` did (byte-exact)
         # v15: phase boundary — stamina_check, morale_check_phase, rout_resolution
         # are now populated (G-1 + G-2). rally/reform/threadwork remain empty.
         if t % TICKS_PER_PHASE == 0:
             current_phase += 1
             phase_boundary(unit_a, unit_b, current_phase)
+            _note_breaks('A', unit_a)
+            _note_breaks('B', unit_b)
         # A cell with enemies on it turns toward them (per cell, rate-limited); then no two bodies interpenetrate at the
         # end of any tick, whatever step last wrote a position.
         turn_to_face_aggressors(unit_a, unit_b)
@@ -425,5 +444,7 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
             # cannot move a golden; readable by any harness that wants to know whether the
             # MAX_SUB_PHASES bound bit during a run.
             "truncated_groups": trunc_groups, "truncated_pairs": trunc_pairs,
-            "truncated_troops": trunc_troops, "max_groups": max_groups}
+            "truncated_troops": trunc_troops, "max_groups": max_groups,
+            # B17.03: the order the units broke in, `(side, unit index)` -- read by `massbattle` for `SideOutcome.broke_first`.
+            "broke": broke}
 

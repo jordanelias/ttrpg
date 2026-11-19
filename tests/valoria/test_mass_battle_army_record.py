@@ -10,7 +10,7 @@ import random
 import pytest
 
 from engine.season.data.rosters import SITE_KINDS
-from engine.season.queries.inputs import MassBattleInput
+from engine.season.queries.inputs import FieldOutcome, MassBattleInput
 from modules.mass_battle import armyrecord as A
 from modules.mass_battle import massbattle
 from modules.mass_battle.troop_types import recruitment as R
@@ -162,10 +162,11 @@ def test_validate_rejects_a_malformed_record():
 
 
 # ----------------------------------------------------------------- the record reaches the battle
-def _field(oob_a, oob_b):
+def _field(oob_a, oob_b, seed=7):
     return massbattle.resolve_field(MassBattleInput(
         weights=((10,), (10,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None, origin=None,
-        loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, orders_of_battle=(oob_a, oob_b)), random.Random(7))
+        loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, condition_scale=FULL,
+        orders_of_battle=(oob_a, oob_b)), random.Random(seed))
 
 
 def test_an_army_record_fights():
@@ -175,9 +176,66 @@ def test_an_army_record_fights():
     a = A.assign(A.assign(a, 'wall', 'c1', 120), 'bows', 'c1', 120)
     b = A.assign(A.raised(A.form(A.new('fac_guilds'), 'rabble', 'levy'), 'g1', 'levy', 240), 'rabble', 'g1', 240)
     r = _field(A.to_order_of_battle(a), A.to_order_of_battle(b))
-    assert set(r) >= {'attacker_size_pct', 'defender_size_pct', 'attacker_routed', 'attacker_conceded',
-                      'defender_routed', 'defender_conceded'}
-    assert min(r['attacker_size_pct'], r['defender_size_pct']) < 1.0, "vacuous: nobody took a casualty"
+    assert type(r) is FieldOutcome and r.ended in ('rout', 'concession', 'time')
+    assert min(r.attacker.share, r.defender.share) < FULL, "vacuous: nobody took a casualty"
+
+
+# ------------------------------------------------- B17.03: a part is a cohort, cut by the unit it fed
+def _two_cohort_line(holder_troops=200, breaker_troops=60):
+    """An army of two units fed by two cohorts: `wall`, heavy infantry from c1, a body big enough to hold, and `rabble`, a
+    levy from c2 below `UNIT_ROUT_FLOOR`, which routs on the first check whatever the enemy does to it."""
+    a = A.raised(A.raised(A.new('fac_valorsmark'), 'c1', 'heavy_infantry', holder_troops), 'c2', 'levy', breaker_troops)
+    a = A.form(A.form(a, 'wall', 'heavy_infantry', role='ShieldWall'), 'rabble', 'levy')
+    return A.assign(A.assign(a, 'wall', 'c1', holder_troops), 'rabble', 'c2', breaker_troops)
+
+
+def _enemy_line(troops=300):
+    return A.assign(A.raised(A.form(A.new('fac_guilds'), 'foe', 'heavy_infantry'), 'g1', 'heavy_infantry', troops), 'foe', 'g1', troops)
+
+
+def _cuts_each_cohort_by_its_own_unit(side):
+    """THE CLAIM (B17.03 gate 4): the cohorts that fed a routed unit and the cohorts that fed a holding one are cut by different
+    amounts, each by the unit it was drawn into, so a side's parts do not all read the side's own share. A planted "side share
+    for every cohort" outcome fails this: every part reads `side.share`."""
+    return len({part.share for part in side.parts}) > 1 and any(part.share != side.share for part in side.parts)
+
+
+def test_routed_and_holding_units_cut_their_own_cohorts():
+    """B17.03 gate 4: an army field in which one unit routs and another holds leaves the cohorts that fed them with different
+    bodies. The parts of an army side are its cohorts, in the order the order of battle drew them, each cut by the surviving
+    fraction of the unit it was assigned to (`OrderOfBattle.drawn`); the routed unit's cohort reads routed and the holding one's
+    does not. Seeds 0 to 19 are all fought, and only the fields that are THIS claim are asserted on (the wall held, the rabble
+    routed and the line was hurt: at the rest the foe never reached the wall, and a side with nothing taken from it cuts every
+    cohort alike); the loop asserts that it asserted. CONTROL: a planted side-share-for-every-cohort outcome reddens
+    `_cuts_each_cohort_by_its_own_unit`."""
+    import dataclasses
+    from engine.season.queries.inputs import PartOutcome
+    checked = 0
+    for seed in range(20):
+        got = _field(A.to_order_of_battle(_two_cohort_line()), A.to_order_of_battle(_enemy_line()), seed)
+        side = got.attacker
+        assert tuple(part.id for part in side.parts) == ('c1', 'c2'), side.parts
+        by_id = {part.id: part for part in side.parts}
+        if by_id['c1'].routed or not by_id['c2'].routed or min(part.share for part in side.parts) == FULL:
+            continue
+        assert _cuts_each_cohort_by_its_own_unit(side), (seed, side)
+        planted = dataclasses.replace(side, parts=tuple(PartOutcome(p.id, side.share, p.routed) for p in side.parts))
+        assert not _cuts_each_cohort_by_its_own_unit(planted), "the planted side-share-for-every-cohort outcome was not caught"
+        assert side.broke_first == 'c2', ("the unit that broke on its own account first was the rabble, fed by c2", side.broke_first)
+        checked += 1
+    assert checked >= 3, checked
+
+
+def test_a_cohort_fed_two_units_is_cut_by_the_troop_weighted_mean_of_them():
+    """B17.03 step 2, `OrderOfBattle.drawn = ((unit, cohort, troops), ...)`: a cohort that fed two units is cut by the sum of
+    each unit's surviving fraction applied to the troops it gave that unit, over what it gave in all. Hand-built `drawn` rows, so
+    the arithmetic is observed with no battle in the way."""
+    drawn = (('wall', 'c1', 100.0), ('bows', 'c1', 50.0), ('bows', 'c2', 50.0))
+    left = {'wall': 0.5, 'bows': 1.0}
+    got = {c: massbattle._cohort_share(drawn, left, c, FULL) for c in ('c1', 'c2')}
+    assert got == {'c1': round(FULL * (100 * 0.5 + 50 * 1.0) / 150), 'c2': FULL}, got
+    assert A.to_order_of_battle(A.assign(A.assign(_army(), 'wall', 'c1', 30), 'wall', 'c2', 10)).drawn == (
+        ('wall', 'c1', 30.0), ('wall', 'c2', 10.0))
 
 
 # ---------------------------------------------------------------------------- the season's one entry, `apply`

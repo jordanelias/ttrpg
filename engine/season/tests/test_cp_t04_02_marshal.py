@@ -286,7 +286,7 @@ def test_the_role_is_not_gated_by_role_allowed():
     plain = mb._weighted_unit("a", 20, "A", 5).units[0]
     assert (ordered.role, ordered.shape, ordered.instructions) == ("Shock", "Arrowhead", ("charge",))
     assert (plain.role, plain.shape, plain.instructions) == (None, "Line", ())
-    persons, _ = mb._person_unit("a", (5, 5), ("x", "y"), "A", 5, None, "ShieldWall")
+    persons = mb._person_unit("a", (5, 5), ("x", "y"), "A", 5, None, "ShieldWall")
     assert [(s.role, s.shape) for s in persons.units] == [("ShieldWall", "Line")] * 2   # on the `person` arm too
     with pytest.raises(ValueError):
         mb._weighted_unit("a", 20, "A", 5, "Berserker")

@@ -62,6 +62,8 @@ from engine.season.state import gate as G
 from engine.season.state.carriers import Act, Person, Question, Rung, Sensation, Tenure, View
 from engine.season.state.ids import H, draw_factory
 
+from ._field_outcomes import SCALE, field_outcome
+
 
 def _march_act(actor: str, target: str, via: str, act_id: str = "m1") -> Act:
     return Act(id=act_id, actor=actor, verb="march", payload={"subject": target}, via=via)
@@ -341,8 +343,7 @@ def test_declared_is_no_change_and_unopposed_changes_only_with_claimants_in_the_
     attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
     assert eff(w, act, Resolution("Declared", {})) is G.NO_CHANGE
     assert eff(w, act, Resolution("Unopposed", {})) is G.NO_CHANGE
-    with_claimants = Resolution("Unopposed", {"parties": {"claimants": attackers, "subject_members": []},
-                                              "result": {"attacker_size_pct": 1.0}})
+    with_claimants = Resolution("Unopposed", {"parties": {"claimants": attackers, "subject_members": []}, "result": None})
     change = eff(w, act, with_claimants)
     assert change is not G.NO_CHANGE
     assert [s.id for s in change.subjects] == attackers
@@ -546,10 +547,7 @@ def _patch_won(monkeypatch, defender_pct=0.5):
     from engine.season.seam.wrappers import mass_battle as MB
     # `**_`: since v9 IN-52 the adapter also hands the entry each side's fielded troops
     # (`troops_a`/`troops_b`, the levy-to-field feed); this patched field does not read them.
-    entry = SimpleNamespace(fn=lambda inp, rng, **_: dict(attacker_routed=False, attacker_conceded=False,
-                                                      defender_routed=True, defender_conceded=False,
-                                                      attacker_size_pct=1.0,
-                                                      defender_size_pct=defender_pct))
+    entry = SimpleNamespace(fn=lambda inp, rng, **_: field_outcome(1.0, defender_pct, defender_out=True))
     monkeypatch.setattr(MB, "entry_for", lambda prize, module: (entry, None))
 
 
@@ -608,7 +606,7 @@ def test_in13_exit_i_won_through_the_gate_leaves_the_claimants_mustered_at_the_t
     assert world_q.mustered(w, "set_s_036", CROWN) == [], "fixture: the Crown already stands there"
     act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
     res = Resolution("Won", {"parties": {"claimants": attackers, "subject_members": defenders},
-                             "result": {"attacker_size_pct": 1.0, "defender_size_pct": 0.5}})
+                             "result": field_outcome(1.0, 0.5, defender_out=True)})
     w.step = Step.ENCOUNTER
     w.frozen = False
     got = w.write("body", mint_token(w, WriteClass.ACTS), None, record_kind="Person", fieldname="body",
@@ -632,7 +630,7 @@ def test_in13_exit_i_a_won_whose_army_already_stands_there_fells_without_an_arri
     defenders = world_q.mustered(w, "set_s_036", CHURCH)
     before = {pid: w.persons[pid].body for pid in defenders}
     res = Resolution("Won", {"parties": {"claimants": claimants, "subject_members": defenders},
-                             "result": {"attacker_size_pct": 1.0, "defender_size_pct": 0.5}})
+                             "result": field_outcome(1.0, 0.5, defender_out=True)})
     d = SeasonDriver(w)
     w.step = Step.ENCOUNTER
     w.frozen = False
@@ -649,7 +647,7 @@ def _won_fold(w, claimants):
     effect, the fold and the gate real (`Won` is unreachable at fixture scale)."""
     defenders = world_q.mustered(w, "set_s_036", CHURCH)
     res = Resolution("Won", {"parties": {"claimants": claimants, "subject_members": defenders},
-                             "result": {"attacker_size_pct": 1.0, "defender_size_pct": 0.5}})
+                             "result": field_outcome(1.0, 0.5, defender_out=True)})
     d = SeasonDriver(w)
     w.step = Step.ENCOUNTER
     w.frozen = False
@@ -721,7 +719,7 @@ def _drawn_fold(w, model=None):
     snap = {pid: (w.persons[pid].body, list(w.persons[pid].stance or []), list(w.persons[pid].travel_leg or []),
                   world_q.home_of(w).get(pid)) for pid in attackers + defenders}
     res = Resolution("Drawn", {"parties": {"claimants": attackers, "subject_members": defenders},
-                               "result": {"attacker_size_pct": 0.8, "defender_size_pct": 0.6}})
+                               "result": field_outcome(0.8, 0.6)})
     d = SeasonDriver(w)
     w.step = Step.ENCOUNTER
     w.frozen = False
@@ -740,9 +738,9 @@ def test_a_drawn_field_writes_both_sides_losses():
     assert ("field.drawn", "Drawn") in kinds, kinds
     assert not any(k in ("field.won", "field.lost", "army.arrived") for k, _ in kinds), kinds
     for pid in attackers:
-        assert w.persons[pid].body == max(1, int(snap[pid][0] * 0.8)) < snap[pid][0], f"{pid}: the attacker's share"
+        assert w.persons[pid].body == max(1, snap[pid][0] * round(SCALE * 0.8) // SCALE) < snap[pid][0], f"{pid}: the attacker's share"
     for pid in defenders:
-        assert w.persons[pid].body == max(1, int(snap[pid][0] * 0.6)) < snap[pid][0], f"{pid}: the defender's share"
+        assert w.persons[pid].body == max(1, snap[pid][0] * round(SCALE * 0.6) // SCALE) < snap[pid][0], f"{pid}: the defender's share"
     for pid in attackers + defenders:
         assert _new_rows(w, pid, {pid: snap[pid][1]}) == set(), f"{pid} gained a stance row on a drawn field"
     none = build_realm(0)
@@ -769,6 +767,81 @@ def test_a_drawn_field_returns_each_army_to_its_station():
     control = _no_resident_crown(build_realm(0))
     assert ("army.arrived", "Won") in _won_fold(control, attackers)
     assert world_q.mustered(control, "set_s_036", CROWN) == attackers
+
+
+# ---- B17.03, THE TYPED OUTCOME: PER-PART SHARES, EXACT ARITHMETIC, BOTH SIDES' BREAKERS ------------------------------
+
+def _fold_planted(w, degree, outcome, claimants, defenders, fielded=None):
+    """A constructed `degree` carrying `outcome` (a planted `FieldOutcome`) folded through the real driver at ENCOUNTER, the
+    effect, the fold and the gate real. `fielded` names the cohorts each side drew from, as the provider's `parties` does."""
+    parties = {"claimants": claimants, "subject_members": defenders}
+    if fielded is not None:
+        parties["fielded"] = fielded
+    d = SeasonDriver(w)
+    w.step = Step.ENCOUNTER
+    w.frozen = False
+    return d._fold(w, mint_token(w, WriteClass.ACTS), _march_act("p_npc_033", "set_s_036", "off_spymaster"),
+                   Resolution(degree, {"parties": parties, "result": outcome}))
+
+
+def test_an_untouched_side_loses_no_body_on_a_drawn_field():
+    """B17.03 step 1 (B17.01's float-noise finding): a side that took no casualty reads exactly the scale, and `body x share // scale`
+    is exact, so none of its bodies falls. CONTROL, same bodies: the float ratio `_person_report` used to hand on for an untouched
+    unit, 0.9999999999999987, cost every one of them a body under `int(body * ratio)`, so the exactness is the share's and not a
+    body too small to notice."""
+    w = build_realm(0)
+    attackers = world_q.mustered(w, "set_s_014", CROWN)
+    defenders = world_q.mustered(w, "set_s_036", CHURCH)
+    before = {pid: w.persons[pid].body for pid in attackers + defenders}
+    noisy = 0.9999999999999987
+    assert all(int(before[pid] * noisy) == before[pid] - 1 for pid in attackers), "vacuous: the noise costs no body here"
+    events = _fold_planted(w, "Drawn", field_outcome(1.0, 0.6), attackers, defenders)
+    assert ("field.drawn", "Drawn") in [(e.kind, e.degree) for e in events]
+    assert all(w.persons[pid].body == before[pid] for pid in attackers), "an untouched side lost a body"
+    assert all(w.persons[pid].body < before[pid] for pid in defenders), "the hurt side was not cut: the fold wrote nothing"
+
+
+def test_a_fought_army_field_cuts_each_cohort_by_its_own_part_and_not_by_the_side():
+    """B17.03 step 3: a person the side's `parts` name is cut by HIS part's share, anyone else by the side's. Two cohorts fed one
+    army, one cut deep (400 of 1000) and one barely (900); the side's own share is 650. CONTROL, the same fold with the parts
+    stripped (the side's share for everyone): both bodies read the side's, so the per-part write is what separates them."""
+    def fold(parts):
+        w = build_realm(0)
+        attackers = world_q.mustered(w, "set_s_014", CROWN)
+        defenders = world_q.mustered(w, "set_s_036", CHURCH)
+        assert attackers == ["p_npc_033", "p_npc_035"], "fixture moved: re-read it"
+        before = {pid: w.persons[pid].body for pid in attackers}
+        out = field_outcome(0.65, 1.0, defender_out=True, attacker_parts=parts)
+        events = _fold_planted(w, "Won", out, attackers, defenders, fielded=(tuple(attackers), None))
+        assert ("field.won", "Won") in [(e.kind, e.degree) for e in events]
+        return before, {pid: w.persons[pid].body for pid in attackers}
+
+    before, after = fold((("p_npc_033", 0.4, False), ("p_npc_035", 0.9, False)))
+    assert after["p_npc_033"] == before["p_npc_033"] * round(SCALE * 0.4) // SCALE
+    assert after["p_npc_035"] == before["p_npc_035"] * round(SCALE * 0.9) // SCALE
+    assert after["p_npc_033"] < after["p_npc_035"]
+    before, after = fold(())
+    assert after["p_npc_033"] == before["p_npc_033"] * round(SCALE * 0.65) // SCALE == after["p_npc_035"], (
+        "the control (no parts) must cut both cohorts by the side's share")
+
+
+def test_the_part_that_broke_first_is_observed_on_both_sides():
+    """B17.03 step 3: `broke_observed` is written for BOTH sides (it was the losers' alone): on a `Won` field the winner whose part
+    broke first and the loser whose part broke first each carry `(pid, "broke", True)` on the band Event, and nobody else does.
+    CONTROL, no breaker named: no Observation on anyone."""
+    def broke(events):
+        return sorted({(o.subject, o.predicate) for e in events for o in e.observed if o.predicate == "broke"})
+
+    w = build_realm(0)
+    attackers = world_q.mustered(w, "set_s_014", CROWN)
+    defenders = world_q.mustered(w, "set_s_036", CHURCH)
+    named = field_outcome(0.9, 0.5, defender_out=True, attacker_parts=((attackers[0], 0.9, False), (attackers[1], 0.9, False)),
+                          defender_parts=tuple((pid, 0.5, True) for pid in defenders),
+                          attacker_broke=attackers[1], defender_broke=defenders[2])
+    got = broke(_fold_planted(w, "Won", named, attackers, defenders))
+    assert got == sorted([(attackers[1], "broke"), (defenders[2], "broke")]), got
+    w = build_realm(0)
+    assert broke(_fold_planted(w, "Won", field_outcome(0.9, 0.5, defender_out=True), attackers, defenders)) == []
 
 
 # ---- EXIT (ii) -- H-151's own falsifier ---------------------------------------------------------------

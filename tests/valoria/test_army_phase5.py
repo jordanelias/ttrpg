@@ -20,6 +20,7 @@ from engine.season.loop.sides import sides_of
 from engine.season.manifest.registrar import MODULE_ENTRIES
 from engine.season.queries import world_q
 from engine.season.seam.ladder import field_degree
+from engine.season.tests._field_outcomes import SCALE
 from engine.season.seam.wrappers import mass_battle as MB
 from engine.season.state.carriers import Act, Site, Tenure
 from modules.mass_battle import armyrecord as A
@@ -95,8 +96,8 @@ def test_the_shipped_realm_can_raise_field_and_win_with_an_army():
     assert inp.fort_level == 0.0
     fn = MODULE_ENTRIES["mass_battle.resolve_field"].fn
     seen = [fn(inp, random.Random(s)) for s in range(1, 9)]
-    assert sum(field_degree(r) == WON for r in seen) >= 5, [(field_degree(r), r["attacker_size_pct"]) for r in seen]
-    assert min(r["attacker_size_pct"] for r in seen) > 0.5, "an army of 900 must not be routed by a town's levy"
+    assert sum(field_degree(r) == WON for r in seen) >= 5, [(field_degree(r), r.attacker.share) for r in seen]
+    assert min(r.attacker.share for r in seen) > 0.5 * SCALE, "an army of 900 must not be routed by a town's levy"
 
 
 def test_an_army_is_where_its_commander_is():

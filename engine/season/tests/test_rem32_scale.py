@@ -11,6 +11,7 @@ import importlib
 from types import SimpleNamespace as NS
 
 from ..queries.inputs import MassBattleInput
+from ._field_outcomes import SCALE
 
 
 def _mb():
@@ -29,7 +30,7 @@ def under_arms_cap(weight):
 
 def _field(**kw):
     base = dict(weights=((10.0, 5.0), (6.0,)), territory=None, fort_level=0.0, stances=(0.0, 0.0),
-                walls_dr=None, origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography=None)
+                walls_dr=None, origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography=None, condition_scale=SCALE)
     base.update(kw)
     return MassBattleInput(**base)
 
