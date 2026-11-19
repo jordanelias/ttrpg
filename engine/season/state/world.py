@@ -538,7 +538,12 @@ def decode(data: bytes, fixtures: Fixtures = DEFAULT_FIXTURES) -> "World | Snaps
 
 
 def _world_from(frames: dict, fixtures: Fixtures) -> "World":
-    """`decode`'s second half: the world `frames` describe (the caller has read and checked them)."""
+    """`decode`'s second half: the world `frames` describe (the caller has read and checked them).
+
+    A RESTORE, NOT A WRITE: it fills a fresh world's stores directly (`04` §C.2's gate is the one path for a write
+    DURING a run, and it is bypassed here by design: the stores of a world no step has touched), then re-registers
+    the receipts the log holds so the gate's serials continue from the last one. `04` is silent on a restore; this
+    is the site that decides it (`layer-conformance` B4, third disposition)."""
     w = World(frames["world_seed"], fixtures)
     w.tick = frames["tick"]
     for n in World._STATE_COLLECTIONS:
