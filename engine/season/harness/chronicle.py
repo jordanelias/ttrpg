@@ -98,6 +98,7 @@ import sys
 from collections import Counter
 
 from ..data.rosters import MARGIN_ENDING
+from ..data.rosters import PERSON_DIED
 from ..data.verbs import VERB_TABLE
 from ..loop.effects_combat import FIGHT_ROUNDS, FIRST_BLOOD, LEAD_CHANGES
 from ..state.attribution import causing_act
@@ -295,7 +296,7 @@ TENURE_EVENT_KINDS = ("tenure.opened", "tenure.closed", "succession.claimed")
 TENURE_CAUSE_OF_VERB = {"revoke": "revocation", "succeed": "claim", "seize": "conquest"}
 
 #: Column 3's terminal Event kinds: what happened to a person, a seat, a field, a matter, a telling or a body.
-TERMINALS = ("person.died", "tenure.closed", "field.won", "field.lost", "matter.determined",
+TERMINALS = (PERSON_DIED, "tenure.closed", "field.won", "field.lost", "matter.determined",
              "news.told", "body.changed")
 
 #: The kinds a row may write and still be deposit-only (column 2): a document, a proposition, a claim.
@@ -359,7 +360,7 @@ def tenure_changes_by_cause(w) -> dict:
     the act it names (MATTER's maturing of a declared term closes with `causes=[term.declared_by]`, the
     declaring act's id, so `_act_of` ties it to that act and only its tick tells it from a close the act
     made itself; with no act at all a `tenure.closed` is `term` too); else `other`."""
-    died = {(tuple(e.causes), e.emitted_at) for e in w.log if e.kind == "person.died"}
+    died = {(tuple(e.causes), e.emitted_at) for e in w.log if e.kind == PERSON_DIED}
     act_of = _act_of(w)
     first_at: dict = {}
     for e in w.log:

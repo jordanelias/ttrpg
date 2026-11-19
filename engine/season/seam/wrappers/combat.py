@@ -295,6 +295,12 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
         **({} if not (pa.attributes or pb.attributes) else dict(attributes=(dict(pa.attributes), dict(pb.attributes)))))
 
 
+def _party_gap(a: str, b: str) -> dict:
+    """The refusal of a fight that is not between two persons (one id as both claimants, or an id the world does not hold): the one
+    spelling `fight_estimate` and `resolve` share."""
+    return dict(status="PARTY-GAP", why=f"personal combat needs two persons; got {a!r} / {b!r}", module=_PROVIDER)
+
+
 def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: str = "",
                    record: Optional[str] = None, *, believed: bool = False) -> dict:
     """THE ODDS A FIGHT WOULD DEAL, SAMPLED LIVE (CP-T03-05; `-08` AM-C-02; MODE (a), THE PLAYER'S DISPLAY ONLY).
@@ -325,8 +331,7 @@ def fight_estimate(w: Any, actor: str, via: Any, target: Optional[str], verb: st
     claimants = [actor, target]
     pa, pb = w.persons.get(actor), w.persons.get(target)
     if pa is None or pb is None or actor == target:
-        return dict(status="PARTY-GAP", why=f"personal combat needs two persons; got {actor!r} / {target!r}",
-                    module=_PROVIDER)
+        return _party_gap(actor, target)
     n = samples_of(w, "believed_fight_samples" if believed else "estimate_samples")
     entry, refusal = entry_for(_PRIZE, _PROVIDER)
     if entry is None:
@@ -478,8 +483,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         return dict(status="PARTY-GAP", why=f"claimant not a person: {a_id!r} / {b_id!r}",
                     module=_PROVIDER)
     if a_id == b_id:   # `fight_estimate`'s own line: one id as both claimants is refused before the engine is called
-        return dict(status="PARTY-GAP", why=f"personal combat needs two persons; got {a_id!r} / {b_id!r}",
-                    module=_PROVIDER)
+        return _party_gap(a_id, b_id)
     inp = combat_input(w, claimants, verb, _cause_record(w, causes))
     rng = draw_factory(w.world_seed, lambda: w.tick)(a_id, f"contest:{prize}:{causes[0] if causes else ''}")
     entry, refusal = entry_for(prize, _PROVIDER)
