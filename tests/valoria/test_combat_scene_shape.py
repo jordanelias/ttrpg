@@ -13,11 +13,11 @@ from __future__ import annotations
 
 import copy
 import dataclasses
-import random
 from types import SimpleNamespace
 
 import pytest
 
+from engine.dice_engine import draw
 from engine.season.boot.realm import build_realm
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.harness import probes as P
@@ -80,7 +80,7 @@ def test_scene_shape_is_a_pure_fold_over_trace():
     checked = 0
     for seed in range(24):
         inp = PersonalCombatInput(claimants=(a, b), ends=(4, 3), wound_quantities=_QS)
-        out = entry.fight(inp, random.Random(seed))
+        out = entry.fight(inp, draw.seeded(draw.H2("test_combat_scene_shape", seed)))
         full = {pid: pw.health_full for pid, pw in out.wounds.items()}
         assert out.shape == entry.scene_shape(out.trace, out.claimants, full), seed
         assert out.shape.rounds == out.rounds == sum(1 for e in out.trace if e["kind"] == "turn_start"), seed
@@ -91,7 +91,7 @@ def test_scene_shape_is_a_pure_fold_over_trace():
     assert checked >= 24
     # the control the sweep can see: a fold over a stripped trace is not the same shape (the assertion observes what it excludes)
     assert any(entry.fight(PersonalCombatInput(claimants=(a, b), ends=(4, 3), wound_quantities=_QS),
-                           random.Random(s)).shape.lead_changes for s in range(24)), "no scene in 24 changed its lead"
+                           draw.seeded(draw.H2("test_combat_scene_shape", s))).shape.lead_changes for s in range(24)), "no scene in 24 changed its lead"
 
 
 # ---------------------------------------------------------------------------------------------------------------------
