@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 122,
-    "total": 394,
-    "uncited": 272,
+    "total": 396,
+    "uncited": 274,
     "of_which_assumption_grade": 8
   },
-  "count": 394,
+  "count": 396,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 25,

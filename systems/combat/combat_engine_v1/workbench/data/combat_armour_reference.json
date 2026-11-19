@@ -1,6 +1,6 @@
 {
  "_": "Reference armour-interaction table (ED-PC-0040). Regenerate ONLY with `python workbench/armour_participation.py --update`, and treat the resulting diff as the required disclosure of what a change moved. Cells are [decided_rate, share_of_decided|null] vs the arming sword, position-swapped, deterministically seeded.",
- "generated_at_sha": "38494b4fbf02dcdf8cc5ef470aa327ababdd0a67",
+ "generated_at_sha": "0a16a56977a8808d2965b06a93a3e1145b318667",
  "n": 40,
  "reference_weapon": "arming",
  "table": {
@@ -150,8 +150,8 @@
   },
   "estoc": {
    "heavy": [
-    1.0,
-    1.0
+    0.95,
+    0.9473684210526315
    ],
    "light": [
     1.0,
@@ -159,7 +159,7 @@
    ],
    "medium": [
     1.0,
-    0.95
+    1.0
    ],
    "none": [
     1.0,
@@ -173,15 +173,15 @@
    ],
    "light": [
     1.0,
-    0.975
+    1.0
    ],
    "medium": [
     1.0,
-    0.85
+    0.95
    ],
    "none": [
     1.0,
-    0.95
+    0.925
    ]
   },
   "falchion": {
@@ -222,8 +222,8 @@
   },
   "flamberge": {
    "heavy": [
-    0.95,
-    0.9736842105263158
+    0.975,
+    1.0
    ],
    "light": [
     1.0,
@@ -240,20 +240,20 @@
   },
   "flamberge_halfsword": {
    "heavy": [
-    0.95,
-    1.0
+    0.925,
+    0.9459459459459459
    ],
    "light": [
     1.0,
-    0.9
+    0.925
    ],
    "medium": [
     1.0,
-    0.725
+    0.9
    ],
    "none": [
     1.0,
-    0.975
+    0.95
    ]
   },
   "glaive": {
@@ -294,7 +294,7 @@
   },
   "greatsword": {
    "heavy": [
-    0.975,
+    0.925,
     1.0
    ],
    "light": [
@@ -303,7 +303,7 @@
    ],
    "medium": [
     1.0,
-    0.9
+    0.95
    ],
    "none": [
     1.0,
@@ -312,20 +312,20 @@
   },
   "greatsword_halfsword": {
    "heavy": [
-    0.975,
-    0.9230769230769231
+    0.9,
+    0.9444444444444444
    ],
    "light": [
     1.0,
-    0.95
+    0.9
    ],
    "medium": [
     1.0,
-    0.8
+    0.9
    ],
    "none": [
     1.0,
-    0.95
+    0.925
    ]
   },
   "guandao": {
@@ -465,7 +465,7 @@
    ],
    "medium": [
     1.0,
-    0.825
+    0.85
    ],
    "none": [
     1.0,
@@ -475,19 +475,19 @@
   "longsword_halfsword": {
    "heavy": [
     1.0,
-    0.95
+    1.0
    ],
    "light": [
     1.0,
-    0.5
+    0.775
    ],
    "medium": [
     1.0,
-    0.75
+    0.875
    ],
    "none": [
-    0.975,
-    0.7435897435897436
+    1.0,
+    0.8
    ]
   },
   "lucerne_hammer": {
