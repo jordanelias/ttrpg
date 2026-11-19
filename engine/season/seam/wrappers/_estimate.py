@@ -26,7 +26,7 @@ def samples_of(w: Any, fixture: str = "estimate_samples") -> int:
     n = w.fixtures.get(fixture)
     if isinstance(n, bool) or not isinstance(n, int) or n < 1:
         raise Forbidden(f"`{fixture}` must be a whole number of at least 1; got {n!r}",
-                        "H-251", law="a sampler of no fights has no shares, and shares of a fraction of one are not shares")
+                        "H-568" if fixture == "believed_fight_samples" else "H-251", law="a sampler of no fights has no shares, and shares of a fraction of one are not shares")
     return n
 
 
