@@ -57,9 +57,10 @@ class Draw:
     def u(self) -> float:
         """The n-th uniform of this key, in [0, 1): the first (n = 0) is the key itself, later ones re-mix it with n
         through `H2`; the 53 high bits of the 64-bit word over 2**53. Consumes one ordinal."""
-        # [GROUNDED: base 16 is the hex of the key and of `H2`; 64 - 53 = 11 low bits dropped]
+        # [GROUNDED: base 16 is the hex of the key and of `H2`]
         word = int(self.key, 16) if self.n == 0 else int(H2(self.key, self.n), 16)
         self.n += 1
+        # [GROUNDED: 64 - 53 = 11 low bits dropped, so the 53 high bits are the uniform's mantissa]
         return (word >> 11) / _TWO53
 
     def random(self) -> float:
