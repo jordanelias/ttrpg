@@ -84,7 +84,7 @@ from ...queries.person_q import believed_capability, stance_toward
 # `manifest/registry.py` imports only `data/` and `gaps` and `queries/` is below `seam/`, so the
 # two imports below close none either.
 from ...manifest.providers import provider
-from ...manifest.registry import BENCH, call as _provider_for, resolve as _prize_row
+from ...manifest.registry import BELIEVED_ESTIMATE_ROLE, BENCH, call as _provider_for, resolve as _prize_row
 from ...queries.inputs import Margin, SocialContestInput
 # The room's two resolver-side reads. The host READS them; the module composes the obstacle they move.
 from ...queries.world_q import docketed_under, proofs, reception
@@ -843,16 +843,24 @@ def _estimated(w: Any, act: Any) -> tuple:
     `(False, None)` when it did not (the social roll's case, `odds_of` below). The seam names the ROLE; which module
     answers is the prize row's `provider:`, so neither fight is named here (CP-T04-08). The act's parties are the fold's own derivation (`loop.sides`);
     none -> `None`, as the social roll's `_rolled_as` answers a party gap."""
+    estimator, claimants, target = _estimating(w, act, "estimate")
+    if estimator is None:
+        return False, None
+    return True, (estimator(w, act, claimants, target) if claimants else None)
+
+
+def _estimating(w: Any, act: Any, role: str) -> tuple:
+    """`(callable, claimants, target)` for the provider of `act`'s prize registered under `role` (`estimate`, or B14.24's `believed_estimate`), the act's
+    parties the fold's own derivation (`loop.sides`); `(None, None, None)` where the act contests nothing or its prize's provider registered none."""
     row = VERB_TABLE.get(act.verb)
     contests = _contests_of(act, row)
     prize = _prize_row("contest", contests[0]) if contests else None
-    estimator = _provider_for("estimate", prize.get("provider")) if prize else None
-    if estimator is None:
-        return False, None
+    fn = _provider_for(role, prize.get("provider")) if prize else None
+    if fn is None:
+        return None, None, None
     payload = act.payload if isinstance(act.payload, dict) else {}
     target = payload.get(row.opponent_operand() if row is not None else "subject")
-    claimants = sides_of(w, act, target, contests[0])[0]
-    return True, (estimator(w, act, claimants, target) if claimants else None)
+    return fn, sides_of(w, act, target, contests[0])[0], target
 
 
 def odds_of(w: Any, act: Any, *, believer: Any = None,
@@ -888,9 +896,10 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
     `combat.fight_estimate`'s shares as `(actor felled, subject felled, yielded, undecided)`, sampled live on a
     private rng (no season draw, nothing written), `None` for a refusal. They are the shares of the scene's
     four endings, not the social roll's four bands, and the caller knows which it asked by the act's prize.
-    MODE (b) IS NOT BUILT for a fight: a believer's call falls through to the social roll below, which does
-    not deal the act, so `believed_chance` is `None` and the chooser's score is as it was (AQ-X1 (b)'s combat
-    term is not proposed here). No loop caller reaches mode (a): the display is the player's.
+    `odds_of`'S MODE (b) IS NOT BUILT for a fight: a believer's call here falls through to the social roll below,
+    which does not deal the act, so it is `None`. THE BELIEVER'S FIGURE FOR A FIGHT IS `believed_chance`'s (B14.24):
+    it reaches the prize provider's `believed_estimate` before ever asking this function. No loop caller reaches
+    mode (a): the display is the player's.
 
     A ROW CONTESTING `a field` (CP-T04-08, MODE (a) ONLY, AQ-X1: no NPC reads it) IS MASS BATTLE'S: the answer is
     `mass_battle.field_estimate`'s shares as `(Won, Lost, Unopposed)` (`mass_battle.ESTIMATE_BANDS`), the field's three
@@ -934,10 +943,19 @@ def believed_chance(w: Any, believer: Any, act: Any, bands: Any) -> Optional[flo
     order is the owner's (`DEGREE_ORDINAL`, the tuple `band_odds` returns): neither the labels nor their
     places are spelt here.
 
+    A ROW WHOSE PRIZE BINDS A PROVIDER THAT REGISTERED A `believed_estimate` (B14.24: `personal_combat`'s) IS ANSWERED BY IT, not by `odds_of`: the
+    provider's own resolver sampled on a private stream, on the believer's picture of the opponent (`combat.believed_picture`: his kit and wounds as the
+    believer's ledger gives them, the world's where he has seen him, the default kit where he knows nothing), summed over the bands asked. No closed
+    form and no table; the seam names the ROLE, never the wrapper. `None` for another's act, for a band that provider's ladder does not carry, and for a
+    refusal. A provider with no such role (mass battle) falls through to `odds_of`, as before.
+
     A QUERY, NOT A STORE (`04` §A.2: the chooser asks, the host answers): `loop/deliberate.py` closes it over
     the frozen store and hands the chooser `View.odds`, so `decision/` holds a callable and never the store
     (AX-2). READ-ONLY, like `odds_of`. `believer` is the person choosing; another actor's act is `None`
     (`odds_of`'s own refusal)."""
+    believed, claimants, _target = _estimating(w, act, BELIEVED_ESTIMATE_ROLE)
+    if believed is not None:                # a fight: the believer's own estimate, the resolver sampled over the bands asked (B14.24)
+        return believed(w, believer, act, claimants, tuple(bands)) if claimants and believer.id == act.actor else None
     odds = odds_of(w, act, believer=believer)
     if odds is None:
         return None

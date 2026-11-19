@@ -1972,11 +1972,12 @@
         "fight_endings": {
           "source": "CP-T03-02 (home `proposals/2026-10-23-subsystem-completion/` T03 \u00a72): how each party's fight ended, as the band's Event carries it (`Event.ending`): fight/accept at Felled/Wounded, and capture at any band where an edge is opened.",
           "cite": "CP-T03-02",
-          "note": "ONE VALUE PER PARTY, read off the scene by `loop/effects_combat.py::fight_ending`: `felled` (his own band is `Felled`, `seam/ladder.py::party_degree` off the lifted `wound_state`), `yielded` (the scene's `surrender` names him), `undecided` (neither -- standing, and he did not yield). The ORDER is the tuple's: felled, yielded, undecided. [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]",
+          "note": "ONE VALUE PER PARTY, read off the scene by `loop/effects_combat.py::fight_ending`: `felled` (his own band is `Felled`, `seam/ladder.py::party_degree` off the lifted `wound_state`), `yielded` (the scene's `surrender` names him), `prevailed` (B14.02, D-U1-11a: he is neither felled nor the yielder while the other party is -- the one left standing), `undecided` (neither party is felled or yielded). The ORDER is the tuple's: felled, yielded, undecided, prevailed. [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]",
           "values": [
             "felled",
             "yielded",
-            "undecided"
+            "undecided",
+            "prevailed"
           ]
         },
         "margin_endings": {
@@ -2040,10 +2041,11 @@
         "body_mark_models": {
           "source": "v11 CP-T03-07 (P32, a permanent injury mark). A fight can wound and every recovery heals to the scale, so no fight leaves a lasting mark; `Person.body_ceiling` is the bound a recovery heals toward.",
           "cite": "H-258",
-          "note": "WHETHER A FIGHT LEAVES A LASTING MARK. `deepest_gate` is the SHIPPED arm: a party who survives a fight at the engine's deepest gate short of felling (`wounds >= max_wounds` on his lifted tracker, both `wound_quantities` members) has his `body_ceiling` fall to one below the next `band_floors[\"body\"]` floor beneath it, so the marks are as many as the body has floors (`loop/effects_combat.py::marked_ceiling`). `none` is the CONTROL: no ceiling moves and every outcome is the pre-item tree's (the field itself is still a schema mover).",
+          "note": "WHETHER A FIGHT LEAVES A LASTING MARK. `deepest_gate` is the SHIPPED arm: a party who survives a fight at the engine's deepest gate short of felling (`wounds >= max_wounds` on his lifted tracker, both `wound_quantities` members) has his `body_ceiling` fall to one below the next `band_floors[\"body\"]` floor beneath it, so the marks are as many as the body has floors (`loop/effects_combat.py::marked_ceiling`). `none` is the CONTROL: no ceiling moves and every outcome is the pre-item tree's (the field itself is still a schema mover). `drawn` (B14.23, `U5b_PC_residue` section 7) is NOT shipped: the same survivor at his limit rolls once, on the one sampler, against the fixture `mark_ob` -- Failure lowers the ceiling twice, Partial once (as `deepest_gate` does), Success and better not at all -- and the mark is told as the Observation `marked`.",
           "values": [
             "deepest_gate",
-            "none"
+            "none",
+            "drawn"
           ]
         },
         "field_degree_bands": {

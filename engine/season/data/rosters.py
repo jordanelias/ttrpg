@@ -1044,6 +1044,10 @@ FAN_OUT_MODES = roster("fan_out_modes")
 # `TITLE_DOMAINS`' reason; the terms are cross-validated against `WITNESS_CHANNELS` and
 # `epistemic.Seen` at import in `epistemic.py`, beside the channel predicates they are keyed on.
 OBSERVATION_TERMS = roster("observation_terms", ordered=True)
+# The `person.died` Event kind's name. It lives here and not in `state/gate.py` (where it was spelt) because
+# `queries/person_q.py::deed_doer` must read it and `person_q` may not import the write path: a name two modules
+# need, below both. `state/gate.py` imports it back, so `gate.PERSON_DIED` still resolves for every importer.
+PERSON_DIED = "person.died"
 OBSERVATION_DEPOSIT = roster_map("observation_terms", "deposit")
 # THE ONE NAME THE `seen` CLAIM IS DEPOSITED UNDER. It lives here and not in `epistemic.py` (where
 # it was bound) because `queries/person_q.py::said_of` must read it and `epistemic` imports
@@ -1149,7 +1153,7 @@ WOUND_QUANTITIES = roster("wound_quantities", ordered=True)
 # CP-T03-05 (`H-251`): the four endings `seam/wrappers/combat.py::fight_estimate` shares out, in `odds_of`'s order.
 ESTIMATE_OUTCOMES = roster("estimate_outcomes", ordered=True)
 # CP-T03-02: how each party's fight ended, as `Event.ending` carries it (`loop/effects_combat.py::fight_ending`).
-ENDING_FELLED, ENDING_YIELDED, ENDING_UNDECIDED = roster("fight_endings", ordered=True)
+ENDING_FELLED, ENDING_YIELDED, ENDING_UNDECIDED, ENDING_PREVAILED = roster("fight_endings", ordered=True)
 # SC-P1 (B05.18): the keys of a margin provider's `Event.ending` tuple, in order (`loop/resolve.py::_fold`).
 MARGIN_ENDING = roster("margin_endings", ordered=True)
 # B05 close: the levels a verb row's `difficulty:` and an arrangement row's `standard:` name, and `Fixtures.difficulty_ob` sizes; bound once.

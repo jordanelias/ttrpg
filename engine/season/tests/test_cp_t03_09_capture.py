@@ -21,7 +21,6 @@ from __future__ import annotations
 
 import dataclasses
 import importlib
-import random
 from engine.dice_engine import draw
 from unittest import mock
 
@@ -167,7 +166,7 @@ def test_the_default_terms_is_the_string_death_and_a_none_default_would_raise():
     entry, refusal = entry_for("the body", combat.PROVIDER)
     assert entry is not None, refusal
     lethal = entry.fn(combat.combat_input(w, [ACTOR, CAPTIVE], "fight"), draw.seeded(draw.H2("test_cp_t03_09_capture", 5)))
-    assert lethal["status"] == "RESOLVED"
+    assert lethal.claimants == (ACTOR, CAPTIVE) and lethal.rounds >= 1
     with pytest.raises(ValueError):                         # CONTROL: the `None` default the string replaces
         entry.fn(dataclasses.replace(combat.combat_input(w, [ACTOR, CAPTIVE], "fight"), terms=None),
                  draw.seeded(draw.H2("test_cp_t03_09_capture", 5)))

@@ -859,9 +859,11 @@ rosters:
     note: >-
       ONE VALUE PER PARTY, read off the scene by `loop/effects_combat.py::fight_ending`: `felled` (his own band is
       `Felled`, `seam/ladder.py::party_degree` off the lifted `wound_state`), `yielded` (the scene's `surrender` names
-      him), `undecided` (neither -- standing, and he did not yield). The ORDER is the tuple's: felled, yielded, undecided.
+      him), `prevailed` (B14.02, D-U1-11a: he is neither felled nor the yielder while the other party is -- the one left
+      standing), `undecided` (neither party is felled or yielded). The ORDER is the tuple's: felled, yielded, undecided,
+      prevailed.
       [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]
-    values: [felled, yielded, undecided]
+    values: [felled, yielded, undecided, prevailed]
 
   margin_endings:
     source: "SC-P1 (H-284): what a margin provider's contest leaves on its Events"
@@ -974,8 +976,11 @@ rosters:
       tracker, both `wound_quantities` members) has his `body_ceiling` fall to one below the next
       `band_floors["body"]` floor beneath it, so the marks are as many as the body has floors
       (`loop/effects_combat.py::marked_ceiling`). `none` is the CONTROL: no ceiling moves and
-      every outcome is the pre-item tree's (the field itself is still a schema mover).
-    values: [deepest_gate, none]
+      every outcome is the pre-item tree's (the field itself is still a schema mover). `drawn` (B14.23,
+      `U5b_PC_residue` section 7) is NOT shipped: the same survivor at his limit rolls once, on the one
+      sampler, against the fixture `mark_ob` -- Failure lowers the ceiling twice, Partial once (as
+      `deepest_gate` does), Success and better not at all -- and the mark is told as the Observation `marked`.
+    values: [deepest_gate, none, drawn]
 
   field_degree_bands:
     source: "M4, `ED-IN-0279` clause (a). The token every `march` fold writes -- `seam/ladder.py`'s `field_degree`, analogous to `combat_degree_bands` above."

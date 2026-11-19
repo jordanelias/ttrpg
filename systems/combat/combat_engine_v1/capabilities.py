@@ -31,7 +31,7 @@ def _affords_point(w):
     genuine point, and combat_systems.select_mode already lets it SELECT that spike vs plate armour at runtime (the
     situational gap game) — so the static-head-only check under-reports this capability for it."""
     from modules.combat import combat_systems as S
-    return V.HEAD_POINT in S.afforded_heads(w)
+    return V.HEAD_POINT in S.afforded_heads(w, CFG)
 
 
 # Each capability: the state-graph node it gates, a pure predicate over (name, weapon-dict), and the human
@@ -123,7 +123,7 @@ if __name__ == '__main__':
     b_ok = True
     for n in names:
         head = WEAPONS[n]['head']
-        puncture_capable = (core.HEAD_MODE.get(head) == V.MODE_PUNCTURE) or head == V.HEAD_CUT_THRUST or V.HEAD_POINT in S.afforded_heads(WEAPONS[n])  # cut_thrust = max(shear,puncture)
+        puncture_capable = (core.HEAD_MODE.get(head) == V.MODE_PUNCTURE) or head == V.HEAD_CUT_THRUST or V.HEAD_POINT in S.afforded_heads(WEAPONS[n], CFG)  # cut_thrust = max(shear,puncture)
         if puncture_capable != allowed('gap_thrust', n):
             b_ok = False; print(f"    MISMATCH gap_thrust {n}: engine={puncture_capable} pred={allowed('gap_thrust', n)}")
     checks.append(b_ok); print(f"(b) gap_thrust pred == coupling puncture path: {'OK' if b_ok else 'FAIL'}")

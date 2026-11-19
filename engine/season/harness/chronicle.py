@@ -99,6 +99,7 @@ from collections import Counter
 
 from ..data.rosters import MARGIN_ENDING
 from ..data.verbs import VERB_TABLE
+from ..loop.effects_combat import FIGHT_ROUNDS, FIRST_BLOOD, LEAD_CHANGES
 from ..state.attribution import causing_act
 from . import arc as ARC
 from . import storybar as SB
@@ -164,6 +165,26 @@ def _rolled(log, act_of: dict) -> dict:
     return out
 
 
+def _shapes(log, act_of: dict, persons) -> dict:
+    """`{act_id: "(n rounds, first blood X, k lead changes)"}` for each act whose Events carry `fight_rounds` (B14.15), read off
+    the Observations `loop/effects_combat.py::scene_observed` put there; X is the person's name as a line names its actor, or
+    `no first blood` where no blow landed. An act whose Events carry none gains nothing. A render change only."""
+    out: dict = {}
+    for e in log:
+        a = act_of.get(e.id)
+        if a is None or a.id in out:
+            continue
+        seen = getattr(e, "observed", ())                 # a planted Event (a test's namespace) may carry none
+        held = {o.predicate: o.value for o in seen if o.predicate in (FIGHT_ROUNDS, LEAD_CHANGES)}
+        if FIGHT_ROUNDS not in held:
+            continue
+        n, k = held[FIGHT_ROUNDS], held.get(LEAD_CHANGES, 0)
+        first = next((o.subject for o in seen if o.predicate == FIRST_BLOOD), None)
+        who = "no first blood" if first is None else f"first blood {_name(persons, first)}"
+        out[a.id] = f"({n} round{'' if n == 1 else 's'}, {who}, {k} lead change{'' if k == 1 else 's'})"
+    return out
+
+
 def rolled_text(ending: tuple) -> str:
     """One act's roll as a line: *obstacle 3.7 = even 2.4 + difficulty 0.5 + opposition 0.8, pool 4.0, net 3.1, margin -0.6; leverage: proofs +2, favour +1*
     (SC-B Edit B's form). The terms are `Margin.terms` as it carried them; the levels are the aggressor's less the defender's per source."""
@@ -176,11 +197,13 @@ def rolled_text(ending: tuple) -> str:
 
 def lines(log, act_of: dict, rows: dict, persons) -> list:
     """The chain as structured lines: `[{"n", "act", "season", "actor", "verb", "kinds", "rolled",
-    "answers"}]`, `rolled` the margin tuple of a social roll's Events (`()` for every act none graded),
+    "shape", "answers"}]`, `rolled` the margin tuple of a social roll's Events (`()` for every act none graded),
+    `shape` a fight's `(n rounds, first blood X, k lead changes)` (`""` for every act whose Events carry no `fight_rounds`, B14.15),
     `answers` the earlier line's `n` (None on the first). Root first."""
     chain = deepest_chain(rows)
     kinds = _kinds(log, act_of)
     rolled = _rolled(log, act_of)
+    shapes = _shapes(log, act_of, persons)
     verb = {}
     for a in act_of.values():
         verb.setdefault(a.id, a.verb)
@@ -190,7 +213,7 @@ def lines(log, act_of: dict, rows: dict, persons) -> list:
         out.append({"n": i + 1, "act": aid, "season": r["season"],
                     "actor": _name(persons, r["actor"]), "verb": verb.get(aid, "?"),
                     "kinds": kinds.get(aid, []), "rolled": rolled.get(aid, ()),
-                    "answers": i if i else None})
+                    "shape": shapes.get(aid, ""), "answers": i if i else None})
     return out
 
 
@@ -209,6 +232,7 @@ def render(log, act_of: dict, rows: dict, persons) -> str:
             a = ls[l["answers"] - 1]
             tail = f"answers {a['n']}. {a['actor']} {a['verb']}"
         roll = f" (rolled: {rolled_text(l['rolled'])})" if l["rolled"] else ""        # B05.18: beside what it emitted, where a margin graded it
+        roll += f" {l['shape']}" if l["shape"] else ""                                                                 # B14.15: and a fight's shape
         out.append(f"{l['n']}. season {l['season']} | {l['actor']} {l['verb']} | "
                    f"emitted {', '.join(l['kinds']) or '(nothing)'}{roll} | {tail}")
     return "\n".join(out)

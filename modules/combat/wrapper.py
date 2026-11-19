@@ -10,8 +10,8 @@ from .config import CFG
 
 # ── TRACE SEAM (workbench / branch-explorer hook) ──────────────────────────────────────────────
 # _TRACE is None by default: every _emit() is a single is-None check, so the seam adds ~zero cost
-# and CANNOT change behavior (no rng draw, no state mutation). The workbench sets wrapper._TRACE to a
-# callable(event: dict) before a run and resets it to None after. Events carry the INPUTS each decision
+# and CANNOT change behavior (no rng draw, no state mutation). `fight(..., trace=f)` binds _TRACE to the
+# callable(event: dict) for the call and restores it after, so no caller assigns the module attribute (B14.11). Events carry the INPUTS each decision
 # node consumed (read margins, the commit distribution, the roll's pool/net_sigma) so the narrator and
 # the branch explorer can reconstruct the local probability of every alternate branch without re-deriving
 # engine internals. The engine emits facts; probability math lives in the workbench (probabilities.py).
@@ -51,7 +51,7 @@ def _select(c, opp, closed, cfg, measure_gap):
     thread leaves a post-swap `c.w` resolved against a pre-swap-selected element (R-7's object confusion)."""
     _sel = S.select_mode(c, opp.armor, closed, cfg, measure_gap=measure_gap)
     c.sel_dmg, c.sel_head, c.sel_gap, c.sel_perc, c.sel_pc, c.sel_eff = _sel.dm, _sel.head, _sel.gap, _sel.perc, _sel.pc, _sel.eff
-    c.sel_eff_cut, c.sel_eff_thrust = S.selected_arm_magnitudes(c, c.sel_head)
+    c.sel_eff_cut, c.sel_eff_thrust = S.selected_arm_magnitudes(c, c.sel_head, cfg)
 
 def _carry(ready, cfg):
     """Phase-transition readiness: keep each fighter's RESIDUAL cadence phase, drop any banked whole action.
@@ -93,6 +93,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
     # the opening geometry is the honest open-measure one (grip_target re-derives per-beat inside the loop anyway).
     for c in (A, B):
         c.grip_position = 0.0; c.lunge_depth = 0.0
+        c.weapon = S.base_form(c)   # B14.13 (F-PC-16): the half-sword form is the same kind of state; it is re-taken at the first closed exchange that calls for it
     erA=S.reach_base(A,cfg); erB=S.reach_base(B,cfg)
     er={A:erA, B:erB}
     # FAIRNESS: on EXACTLY equal reach the longer/shorter label is a coin-flip — not always A. The label feeds the
@@ -169,7 +170,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             c.facing=S.facing_target(c, closed, cfg)   # FACING (I6, D6): near-neutral per-beat state, keyed ONLY on stance/measure/grip (C2 — never weapon class). Feeds the lateral-void close_rate term + reach_sigma's small profile term.
             c.lunge_depth=0.0                                # reset the body-extension each beat; a deep thrust re-sets it below
             _select(c, B if c is A else A, closed, cfg, measure_gap)   # USE-MODE: the afforded head with the best damage-coupling vs the opponent's armour (S.select_mode); refreshed after the half-sword form-switch below.
-            er[c]=S.reach_base(c,cfg)   # er REFRESH #1 (I3, D3, two-recompute contract — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/): re-derives ONLY er[c] on the grip-aware CURRENT (pre-swap) form; NEVER measure_gap (the running approach decrement, below) or `closed` (latched); longer/shorter LABELS stay frozen at engagement start (JD-2 plan default). Feeds reopen (below) and close_tempo/tempo (next line) via reach-derived close_unwieldiness.
+            er[c]=S.reach_base(c,cfg)   # er REFRESH #1 (I3, D3, two-recompute contract — the 2026-07-02-scene-combat-closing-distance-redesign audit): re-derives ONLY er[c] on the grip-aware CURRENT (pre-swap) form; NEVER measure_gap (the running approach decrement, below) or `closed` (latched); longer/shorter LABELS stay frozen at engagement start (JD-2 plan default). Feeds reopen (below) and close_tempo/tempo (next line) via reach-derived close_unwieldiness.
         if not closed: rate={c:S.weapon_tempo(c,cfg,ffat[c]) for c in (A,B)}
         else:          rate={c:S.close_tempo(c,cfg,ffat[c]) for c in (A,B)}
         # WHO ACTS FIRST = CADENCE x ANTICIPATION (ED-PC-0037, F16). Weapon cadence ALONE would decide the fight's most
@@ -508,7 +509,7 @@ class Yield:
 #   - 'blood' : stops at the first WOUND (a wound gate crossed, `wt.wounds >= 1`), not at the first point of damage.
 #   - 'yield' : stops when Health falls to `CFG['YIELD_HEALTH_FRAC']` of full (`wt.health_remaining`).
 # The stop rides the result exactly as an accepted `Yield` does: a `yield` trace event (with `terms` beside it), the
-# opponent's result, and no further roll -- so `seam/wrappers/combat.py::surrender_of` lifts it unchanged, and no
+# opponent's result, and no further roll -- so `fight.py::_surrender` lifts it unchanged, and no
 # band is added (H-98). ⚠ What a term does NOT do: it does not reshape a blow. A strike that fells a fighter on the
 # beat it lands (a decisive blow crossing every gate, or the gate past the threshold) is a felling under any term;
 # the stop is read between beats, never inside a strike.
@@ -538,8 +539,8 @@ def _terms_yielder(A, B, terms, cfg):
     return A if fa < fb else B if fb < fa else None
 
 # ── THE PER-TURN CHOICE (v10 REM-31, IN-46: the grid mode's suspension) ──────────────────────────────────────────────
-# A PLAYABLE fight hands each turn's choice to a DECIDER, a parameter (never a module attribute: `_TRACE`'s rebinding is
-# the precedent not to follow). `decide(turn)` is called at the top of each turn, before every draw of that turn and after
+# A PLAYABLE fight hands each turn's choice to a DECIDER, a parameter (never a module attribute: the way `_TRACE` was
+# rebound by its callers is the precedent not to follow; `fight`'s `trace` argument replaced it). `decide(turn)` is called at the top of each turn, before every draw of that turn and after
 # a declared `Yield` of the same turn (the declaration is the earlier fact), and returns one member of this closed set:
 #   - 'engage'   : the turn is fought. Today's loop engages every turn, so `decide=None` (the default, AUTOMATED) is
 #                  exactly 'engage' every turn.
@@ -551,8 +552,21 @@ def _terms_yielder(A, B, terms, cfg):
 ENGAGE, WITHDRAW = 'engage', 'withdraw'
 TURN_CHOICES = (ENGAGE, WITHDRAW)   # closed set, this module's: the host's decider is checked against this tuple
 
-def fight(A, B, cfg, rng, max_bouts=12, yield_decl=None, terms=LETHAL_TERMS, decide=None):
-    # `rng` is a `Draw` (`draw.seeded(...)`) and has no default: a missing stream is a TypeError at the call. `cfg=None` is the CFG.
+def fight(A, B, cfg, rng, max_bouts=12, yield_decl=None, terms=LETHAL_TERMS, decide=None, trace=None):
+    """One scene (`_fight`, below). `cfg` and `rng` take no default: a missing stream is a signature error at the call site,
+    not a branch (B14.20); `cfg=None` is passed on purpose and means the engine's own `CFG`; pass a keyed
+    `Draw` (`draw.seeded(...)`) for `rng`. `trace` is a callable(event: dict) the engine binds to `_TRACE` for the call and
+    restores after it, on every exit; `None` leaves `_TRACE` as it stands (a caller that still holds it bound is not undone)."""
+    global _TRACE
+    prev = _TRACE
+    if trace is not None:
+        _TRACE = trace
+    try:
+        return _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide)
+    finally:
+        _TRACE = prev
+
+def _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide):
     if terms not in DUEL_TERMS:
         raise ValueError(f"terms {terms!r} is not one of {DUEL_TERMS}")
     stop = None if terms == LETHAL_TERMS else terms   # None: the lethal fight takes neither the check nor its read
@@ -561,7 +575,7 @@ def fight(A, B, cfg, rng, max_bouts=12, yield_decl=None, terms=LETHAL_TERMS, dec
             raise ValueError("Yield.by must be the A or B Combatant passed to fight (compared by identity)")
         if not (1 <= yield_decl.turn <= max_bouts):
             raise ValueError(f"Yield.turn {yield_decl.turn} is outside 1..max_bouts ({max_bouts}): it would never fire")
-    cfg=cfg or CFG
+    cfg=cfg or CFG   # `None`: the engine's own CFG. The stream is the caller's keyed `Draw`; never built here
     # A FIGHT BEGINS UNWOUNDED: zero each tracker's damage here, at the fight's own start (PC-13's `wound` events sum to
     # the tracker within one fight). `_init_live` calls `Combatant.rederive(cfg)`, the one derivation path (PC-14),
     # which reads the fighter's attributes as they stand now (an attribute edited after construction is followed) and
@@ -598,7 +612,7 @@ def fight(A, B, cfg, rng, max_bouts=12, yield_decl=None, terms=LETHAL_TERMS, dec
             break
         if stop is not None and _terms_met(A, B, stop, cfg):
             # THE TERMS ARE MET (RS-25): the fighter who crossed them yields, standing. It is the accepted-`Yield` ending
-            # -- the same `yield` event `surrender_of` lifts, the opponent's result, NO UPSET_FLOOR draw (a lucky blow
+            # -- the same `yield` event `fight._surrender` lifts, the opponent's result, NO UPSET_FLOOR draw (a lucky blow
             # cannot steal a fight the terms have already closed) -- read at the END of the turn the terms were met in,
             # where a declared `Yield` is read at the start of its turn. An exact tie yields nobody: UNRESOLVED.
             yielder = _terms_yielder(A, B, stop, cfg)

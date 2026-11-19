@@ -69,7 +69,7 @@ def run_b(log: Log, n: int = 600) -> dict:
     rows = []
     for s in range(n):
         A = combatant.Combatant("A", end=4); B = combatant.Combatant("B", end=4)
-        r = wrapper.fight(A, B, rng=random.Random(s))
+        r = wrapper.fight(A, B, cfg=None, rng=random.Random(s))
         win, lose = (A, B) if r == 1 else ((B, A) if r == -1 else (None, None))
         rows.append(dict(result=r,
                          a_w=A.wt.wounds, b_w=B.wt.wounds,

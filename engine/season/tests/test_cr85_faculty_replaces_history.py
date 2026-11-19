@@ -22,7 +22,6 @@ from __future__ import annotations
 
 import dataclasses
 import importlib
-import random
 from engine.dice_engine import draw
 from collections import Counter
 
@@ -133,7 +132,7 @@ def test_the_record_carries_the_opposition_rate_to_the_module():
         inp = PersonalCombatInput(claimants=("a", "b"), ends=(5, 5), wound_quantities=(), scores=(2, 3), opposition_rate=rate)
         seen, checked = set(), 0
         for s in range(8):
-            for ev in entry(inp, draw.seeded(draw.H2("test_cr85_faculty_replaces_history", s)))["trace"]:
+            for ev in entry(inp, draw.seeded(draw.H2("test_cr85_faculty_replaces_history", s))).trace:
                 if "ob" in ev:
                     seen.add(round(ev["ob"], 9))
                     checked += 1

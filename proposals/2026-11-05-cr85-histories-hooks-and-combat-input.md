@@ -1,6 +1,6 @@
 # CR-85: histories, hooks and combat's input. What replaces the `history` summed into rolls
 
-## Status: PROPOSED. Ratified by Jordan at 2026-11-05 (ED-IN-0349) and WITHDRAWN the same day ("undo ratification of combat", ED-IN-0351). Reopened with it, for combat and the social contest: whether `faculty` (a trained skill's level, with CR-20's attribute base under it) is the right single input to a contest pool, or attribute and trained skill are separate inputs. Nothing in `engine/` or `modules/` was built on this file; its build (B10-11) waits on that answer.
+## Status: PROPOSED; ratification withdrawn (ED-IN-0351). Its combat build is in the tree (`modules/combat/attributes.py`, `core.py`, `fight.py`) and stands on this unratified design
 ## Version: v1.0 · Lane: PC (with IN, WR) · Position: `workplans/valoria_master_workplan_v11_part4.md` `### CR-85` (DESIGN-FIRST, B10-10; build B10-11)
 ## Grade under `CLAUDE.md` §0.2: `paper`. This is a design. It changes nothing in `engine/` or `modules/`, and whether its build executes is decided by the tests named in §8, not by this file.
 ## Citation rule: every `file:line` was opened by this author on the tree at `3ce1f08e` unless tagged `[UNVERIFIED]`. A drifted line from the plan is cited at its current line, and §9 lists the drift. Design documents are cited for intent only (`CLAUDE.md` §0.05). No formula below is correct because this file states it; the code that will hold each fact is named beside it.

@@ -23,7 +23,6 @@ from __future__ import annotations
 import dataclasses
 import importlib.util
 import json
-import random
 from engine.dice_engine import draw
 from pathlib import Path
 from unittest import mock
@@ -89,7 +88,9 @@ def _world():
 def test_the_export_is_the_engines_own_keys_and_default_kit():
     # by name, inside the function: `test_importing_every_engine_module_pulls_in_no_subsystem` fails on a module-scope import and the ratchet counts a written one
     combatant, vocabulary, weapons = (importlib.import_module(f"modules.combat.{n}") for n in ("combatant", "vocabulary", "weapons"))
-    assert combat_kit.WEAPONS == frozenset(weapons.WEAPONS) and len(combat_kit.WEAPONS) > 10
+    startable = frozenset(n for n, r in weapons.WEAPONS.items() if "base" not in r)    # B14.12: a form is a grip, not a kit
+    assert combat_kit.WEAPONS == startable and len(combat_kit.WEAPONS) > 10
+    assert combat_kit.FORMS == {n: r["base"] for n, r in weapons.WEAPONS.items() if "base" in r} and combat_kit.FORMS
     assert combat_kit.ARMOUR_TIERS == vocabulary.ARMOUR_TIERS == {"none", "light", "medium", "heavy"}
     c = combatant.Combatant("x")
     assert combat_kit.DEFAULTS == {"weapon": c.weapon, "armor": c.armor}, "the default kit is the Combatant's own"
@@ -233,8 +234,8 @@ def _actor_felled_share(w, n=N, seed=7):
     rng = draw.seeded(draw.H2("test_cp_t03_03_kit", seed))
     felled = 0
     for _ in range(n):
-        ws = entry.fn(inp, rng)["wound_state"]
-        felled += bool(ws[ACTOR]["felled"]) and not bool(ws[SUBJECT]["felled"])
+        ws = entry.fn(inp, rng).wounds
+        felled += bool(ws[ACTOR].felled) and not bool(ws[SUBJECT].felled)
     return felled / n
 
 
@@ -282,7 +283,7 @@ def test_a_record_built_without_kits_is_fought_at_the_engines_default():
     for seed in range(5):
         a = entry.fn(plain, draw.seeded(draw.H2("test_cp_t03_03_kit", seed)))
         b = entry.fn(default, draw.seeded(draw.H2("test_cp_t03_03_kit", seed)))
-        assert (a["result"], a["ends"], a["wound_state"]) == (b["result"], b["ends"], b["wound_state"])
+        assert a == b
 
 
 def test_mutation_reading_the_actors_kit_for_both_parties_loses_the_asymmetry(armed, monkeypatch):

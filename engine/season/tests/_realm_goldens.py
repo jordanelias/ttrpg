@@ -6,7 +6,9 @@ An item that moves the realm proves in its own commit that its revert reads the 
 records that in the commit message; the proof is not kept as a test.
 
 Read with `build_realm(s)` and `populated.run(k, s, w=w)` at `PYTHONHASHSEED=0`, seeds 0, 1, 2, one and
-two seasons, on the tree of B05.64 (`e075e511b`), RE-PINNED ONCE at B05.99. The movers since B04.99,
+two seasons, on the tree of B05.64 (`e075e511b`), RE-PINNED ONCE at B05.99 and ONCE at B14.99 (the B14
+movers: `prevailed` B14.02, `fell_to` B14.03, the scene's shape B14.15, the hand B14.16; the believed price
+B14.24 and the drawn mark B14.23 read equal at one season; the build hash did not move). The movers since B04.99,
 each a declared B05 item, each segment between two of them read equal at seeds 0, 1, 2: the one sampler
 (B05.02), the skill score without the attribute (B05.09), the averaged governing score (B05.25), the
 opposition is the opponent's score (B05.11), the one obstacle form (B05.14), `Event.ending` carries the

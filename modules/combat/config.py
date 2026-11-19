@@ -1,4 +1,4 @@
-"""All tunable coefficients in ONE place (seeds). Class-C — calibrated against the harness, not canon."""
+"""CFG holds the tunable coefficients of the resolution systems (seeds), Class-C — calibrated against the harness, not canon. It is NOT the only home of a constant: `core.py` holds the resolution/damage/armour constants and tables, `weapon_physics.py` the physical anchors (`PERC_*`, `GRIP_*`, `HEFT_REF`, ...), `combatant.py` the wound and stamina model, and `ability_primitives.py` and `traditions.py` the ability and tradition tables; `tools/export_engine_params.py` exports every one of those to its own section."""
 CFG = dict(
   # reach (continuous, derived from weapon vector)
   L0=4.0,   # live reach_base anchor (reach is geometry-derived; head is a primitive, not a categorical reach table).
@@ -304,4 +304,35 @@ CFG = dict(
   # already functionally at grapple range. GRAB_STR_K >> GRAB_LEV_K*(leverage spread) so the grab reads
   # strength-dominant (a gross-motor contest), unlike bind_sigma's tactile/technique lead. [SIM-CALIBRATE] all.
   GRAB_SHORT_REACH_M=0.375, GRAB_STR_K=0.06, GRAB_LEV_K=0.5, GRAB_ESCAPE_P=0.25, GRAB_EDGE_K=0.07,   # GRAB_EDGE_K [U3/ED-PC-0018, U10/ED-PC-0022]: a live edge self-injures an unskilled bare-hand grab (weapon_physics.grab_hazard of the GRABBED weapon), mitigated by grab skill AND ability_factor 'edge_grab' (German Ringen am Schwert seizes a live blade safely — factor<1)
+
+  # ── B14.08 (R-PC-18): the 18 constants that lived at module level in combat_systems.py, moved here unchanged so the
+  # typed export carries them (CLAUDE.md §5); combat_systems reads every one through cfg[...]. Tags and meanings kept.
+  # rear clearance (I7a, D7): close_tempo / str_demand penalty per metre of length trailing behind the working hand — the
+  # counterweight that makes choking up a real tradeoff (Silver: the length behind the hands "will hinder him to strike,
+  # thrust, ward, or go back"); the str_demand term is general handling difficulty, not close-scoped. [SIM-CALIBRATE]
+  REAR_CLEARANCE_TEMPO_K=0.3, REAR_CLEARANCE_STR_K=0.15,
+  # swing-room (I5, D4): range_avail floor (even the tightest melee retains some room); the range_avail fraction above which
+  # the commit-window stays at its FULL upper bound (the C4 interior-optimum plateau — only real crowding shallows
+  # commitment, never a monotone-from-the-start ramp); the floor on the commit-window contraction factor; the swing-room
+  # legibility gain (weakly grounded — ships small, ablation-gated); the approach stop-hit's commitment-depth term (a
+  # stop-hit thrown with full extension threatens more than one snapped into a cramped, rapidly-closing gap). [SIM-CALIBRATE]
+  RANGE_AVAIL_FLOOR=0.3, RANGE_COMMIT_PEAK=0.85, RANGE_COMMIT_FLOOR=0.5, LEGIB_SWING_ROOM_K=0.3, STOPHIT_RANGE_K=0.3,
+  # facing (I6, D6): lateral-void closing contribution and the close_rate multiplier [SIM-CALIBRATE]; the reach_sigma
+  # profile term [FIAT — C1 unresolved]. Near-neutral by design: C1 (polearm facing direction) is unresolved.
+  FACING_VOID_K=0.08, FACING_PROFILE_K=0.03, FACING_VOID_GAIN=0.15,
+  # close-efficacy (I4, D5): the measure_gap scale the close-quarters ramp saturates over (unanchored to any other
+  # reference, standing on its own calibration, ED-PC-0053) and the cap on f(measure_gap, range_avail). [SIM-CALIBRATE]
+  CLOSE_EFF_GAP_REF=6.5, CLOSE_EFF_FLOOR=0.5,
+  # graded secondary-affordance floors (U2/ED-PC-0008/0009, [DESIGN]): percussion, cut and thrust per-primitive floors a
+  # mode must clear to be afforded regardless of its native head; SELECT_EPS is the affordance floor on a derived per-mode
+  # effectiveness for each mode's OWN native-head branch (a vanishing mode is not even a candidate).
+  MODE_PERC_MIN=0.5, MODE_EDGE_MIN=0.15, MODE_TIP_MIN=0.15, SELECT_EPS=0.05,
+  # [DESIGN] TRUE_TIME_REF: reach-gap (reach-points) at which the true-time edge is ~tanh(1)=0.76 of its max (sets where
+  # the hand-before-foot benefit saturates); ARREST_POB_REF: PoB_frac at/above which a weapon is too FRONT-HEAVY to brace
+  # as a pole-jab (rear_balance ramps 1.0 at PoB_frac 0 down to 0 at the REF).
+  TRUE_TIME_REF=1.5, ARREST_POB_REF=0.6,
+
+  # ── B14.18 (U5b_PC_residue §1 item 2): the scale of the read's logistic in read_contest, p_read = logistic((read_d-read_a)/READ_SCALE);
+  # was the literal 1.0 (byte-identical), now carried by the export so a sweep can fit it. [SIM-CALIBRATE]
+  READ_SCALE=1.0,
 )

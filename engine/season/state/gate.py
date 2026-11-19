@@ -29,7 +29,7 @@ from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import MATRIX, WriteClass
 from ..data.rosters import (
     BAN_KIND, CONFERRAL_BASES, DETAIN_KIND, MARCH_TARGET_KINDS, RESTRAINT_KINDS, REVOCATION_BASES, SEAT_ROW_BY_ID,
-    SUCCESSIONS, TENURE_KINDS, faction_prop_id,
+    PERSON_DIED, SUCCESSIONS, TENURE_KINDS, faction_prop_id,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 from .carriers import Office, Receipt, Tenure
@@ -1557,10 +1557,9 @@ EDGE = "edge"
 STAGED = "staged"
 
 # CP-T02-01: THE TWO KINDS A DEATH EARNS PER SUBJECT -- the dead person's `person.died` and each emptied
-# seat's `tenure.closed` (`death_subjects`). Spelt once here, as `loop/effects_governance.py` spells the
+# seat's `tenure.closed` (`death_subjects`). `PERSON_DIED` is spelt once in `data/rosters.py` and read here; `TENURE_CLOSED` is spelt once here, as `loop/effects_governance.py` spells the
 # kinds its subjects earn; the fold's derived roster (`data/verbs.py::EVENT_KINDS`) still refuses either
 # at emission if no column declares it.
-PERSON_DIED = "person.died"
 TENURE_CLOSED = "tenure.closed"
 DEATH_KINDS = (PERSON_DIED, TENURE_CLOSED)
 

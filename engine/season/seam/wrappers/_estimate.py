@@ -20,17 +20,18 @@ from ...gaps import Forbidden
 from ...state.ids import draw_factory
 
 
-def samples_of(w: Any) -> int:
-    """`estimate_samples`, the number of scenes an estimate runs: a whole number of at least 1 or a refusal naming the
-    fixture (a sampler of no scenes has no shares, and shares of a fraction of one are not shares)."""
-    n = w.fixtures.get("estimate_samples")
+def samples_of(w: Any, fixture: str = "estimate_samples") -> int:
+    """`fixture` (`estimate_samples` unless the caller names its own: a believer's `believed_fight_samples`, `H-568`), the number of
+    scenes an estimate runs: a whole number of at least 1 or a refusal naming the fixture (a sampler of no scenes has no shares, and
+    shares of a fraction of one are not shares)."""
+    n = w.fixtures.get(fixture)
     if isinstance(n, bool) or not isinstance(n, int) or n < 1:
-        raise Forbidden(f"`estimate_samples` must be a whole number of at least 1; got {n!r}",
+        raise Forbidden(f"`{fixture}` must be a whole number of at least 1; got {n!r}",
                         "H-251", law="a sampler of no fights has no shares, and shares of a fraction of one are not shares")
     return n
 
 
-def rng_of(w: Any, actor: str) -> Draw:
-    """The estimate's private stream, keyed `(world_seed, tick, actor, "estimate")`: `state.ids.draw_factory`'s one
-    seeding rule, read at the call's tick."""
-    return draw_factory(w.world_seed, lambda: w.tick)(actor, "estimate")
+def rng_of(w: Any, actor: str, purpose: str = "estimate") -> Draw:
+    """The estimate's private stream, keyed `(world_seed, tick, actor, purpose)` -- `purpose` `estimate` for the display (A-30), `estimate.fight`
+    for a believer's own fight (B14.24): `state.ids.draw_factory`'s one seeding rule, read at the call's tick."""
+    return draw_factory(w.world_seed, lambda: w.tick)(actor, purpose)

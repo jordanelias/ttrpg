@@ -5,7 +5,7 @@ gate short of felling -- `wounds >= max_wounds` on his lifted tracker -- has his
 `band_floors["body"]` floor beneath it (`loop/effects_combat.py::marked_ceiling`: 1000 -> 799 -> 499 -> 99, as many
 marks as the body has floors), and his written body is held under it. (iii) Every raiser of `body` heals toward
 `body_ceiling`: `_eff_tend` at HEAD (the one raiser; CP-T10-04 is unbuilt). (iv) `body_mark_model in {none,
-deepest_gate}`, SHIPPED `deepest_gate` on REM-52's precedent (`body_step`) [ASSUMPTION; medium; Jordan to correct;
+deepest_gate, drawn}`, SHIPPED `deepest_gate` on REM-52's precedent (`body_step`) [ASSUMPTION; medium; Jordan to correct;
 revert: none].
 
   FALSIFIER: a survivor at `wounds == max_wounds` holds 799; `tend` on him at body 250 restores him to 799 where the
@@ -75,7 +75,7 @@ def test_the_field_is_built_at_condition_scale_and_has_one_row_and_three_writers
     assert Step.ENCOUNTER in row.steps and Step.RESOLVE in row.steps and not row.unproduced
     writers = sorted(v for v, r in VERB_TABLE.items() if f"Person.{CEILING}" in r.writes)
     assert writers == ["accept", "capture", "fight"]
-    assert set(BODY_MARK_MODELS) == {"none", "deepest_gate"}
+    assert "drawn" in BODY_MARK_MODELS                                     # `drawn` (B14.23) is swept, never shipped
     assert DEFAULT_FIXTURES.get("body_mark_model") == "deepest_gate", "the shipped arm (REM-52's precedent)"
 
 

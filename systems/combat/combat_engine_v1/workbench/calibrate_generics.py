@@ -1,13 +1,13 @@
 """Calibration of the PC-17 GENERIC lever abilities (ED-PC-0059, item 7): the driver and its analysis in one file.
 
 It is MEASURED-BY for the numbers in ED-PC-0059's calibration block. It reads the engine through build_levers.build()
-(which forwards **kw, so `equipped` reaches the Combatant; balance._mk is NOT used) and wrapper.fight. Observation is
-non-invasive: wrapper._TRACE (the engine's own seam) for `outcome` and `wound` events, and two pass-through wrappers
+(which forwards **kw, so `equipped` reaches the Combatant; balance does not build the fighter) and wrapper.fight. Observation is
+non-invasive: `wrapper.fight(..., trace=)` (the engine's own seam) for `outcome` and `wound` events, and two pass-through wrappers
 (read_contest, bind_sigma) that call the original and return its value untouched, drawing no rng. Every subject is built
 tradition='none' with known_traditions=(the teaching tradition,), equipped={generic: level}; the opponent is the same
 weapon and armour, plain; position-swapped; one keyed `Draw` per cell, seed = crc32(repr(cell key)) % 100000.
-A first run whose visual/precommit K-zero control did not null (the module-level LEGIB_SWING_ROOM_K is not in CFG) is
-why that control zeroes it too. This is a CALIBRATION instrument for provisional generics: re-run it now that CR-85
+A first run whose visual/precommit K-zero control did not null (LEGIB_SWING_ROOM_K, then a module-level constant outside
+CFG, was left live; it is in CFG now, B14.08) is why that control zeroes it too. This is a CALIBRATION instrument for provisional generics: re-run it now that CR-85
 has replaced `history` with `faculty` and deleted its five sigma terms (the plan's PC-17 RE-BASE), and read its limits in ED-PC-0059 before quoting a number.
 
 Usage (the repo root is derived from this file's location):
@@ -78,9 +78,8 @@ def run_cell(repo, lever, tier_idx, level, kind, n):
         cfg.update(KZERO[lever])
     if kind == 'k0b':
         cfg.update(READ_TEMPO_K=0.0)   # tempo only: ALSO zero the cadence site, to separate it from the init-sigma site
-    _room = S.LEGIB_SWING_ROOM_K
     if kind == 'k0' and lever in ('visual', 'precommit'):
-        S.LEGIB_SWING_ROOM_K = 0.0     # a module-level (not CFG) legibility term; the first run left it live and the control was NOT null
+        cfg.update(LEGIB_SWING_ROOM_K=0.0)   # the swing-room legibility term; the first run left it live and the control was NOT null
     subj_spec = dict(label='S', weapon=weapon, armor=armor, tradition='none',
                      equipped={name: float(level)}, known_traditions=(trad,))
     opp_spec = dict(label='O', weapon=weapon, armor=armor, tradition='none')
@@ -113,7 +112,7 @@ def run_cell(repo, lever, tier_idx, level, kind, n):
         elif k == 'roll':
             rec['rolls'].append((ev['aggressor'], ev['net_sigma']))
 
-    S.read_contest, S.bind_sigma, wrapper._TRACE = rc, bs, trace
+    S.read_contest, S.bind_sigma = rc, bs
     fights = []
     wins = {1: 0, -1: 0, 0: 0}
     try:
@@ -123,7 +122,7 @@ def run_cell(repo, lever, tier_idx, level, kind, n):
             rec.update(reads=[], binds=[], exch=[], wounds=[], rolls=[])
             Sc, Oc = BL.build(subj_spec), BL.build(opp_spec)
             X, Y = (Oc, Sc) if swap else (Sc, Oc)
-            r = wrapper.fight(X, Y, cfg, rng)
+            r = wrapper.fight(X, Y, cfg, rng, trace=trace)
             r = -r if swap else r       # r from S's point of view
             wins[r] += 1
             f = {}
@@ -141,8 +140,7 @@ def run_cell(repo, lever, tier_idx, level, kind, n):
                               ex_s=ex_s, ex_n=len(rec['exch']), dmg_s=dmg_s, dmg_tot=dmg_s + dmg_o)
             fights.append(f)
     finally:
-        S.read_contest, S.bind_sigma, wrapper._TRACE = orig_rc, orig_bs, None
-        S.LEGIB_SWING_ROOM_K = _room
+        S.read_contest, S.bind_sigma = orig_rc, orig_bs
     return dict(lever=lever, name=name, tradition=trad, tier=TIERS[tier_idx], level=level, kind=kind, n=n,
                 seed=seed, weapon=weapon, armor=armor, wins=wins, fights=fights)
 

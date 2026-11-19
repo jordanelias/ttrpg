@@ -136,7 +136,7 @@ QUANTITIES = [
     ("rear_clear",      "L3 systems",  lambda n, w, c: S.rear_clearance(c, CFG),     S.rear_clearance),
     ("arrest_impulse",  "L3 systems",  lambda n, w, c: S.arrest_impulse(c, CFG),     S.arrest_impulse),
     ("affords_hs",      "L3 systems",  lambda n, w, c: S.affords_halfsword(w),       S.affords_halfsword),
-    ("afforded_heads",  "L3 systems",  lambda n, w, c: sorted(S.afforded_heads(w)),  S.afforded_heads),
+    ("afforded_heads",  "L3 systems",  lambda n, w, c: sorted(S.afforded_heads(w, CFG)),  S.afforded_heads),
     ("adef_cap",        "L3 systems",  lambda n, w, c: core.adef_cap(w, CFG),        core.adef_cap),
     ("thrust_auth",     "L3 systems",  lambda n, w, c: core.thrust_authority(w['head_len']), core.thrust_authority),
 ]
@@ -201,7 +201,7 @@ def coupling_matrix():
     for n in sorted(roster()):
         w = W.WEAPONS[n]
         c = _fighter(n)
-        heads = S.afforded_heads(w)
+        heads = S.afforded_heads(w, CFG)
         sel = {}
         for t in TIERS:
             r = _safe(S.select_mode, c, t, True, CFG, measure_gap=0.0)

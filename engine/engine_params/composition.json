@@ -17,6 +17,13 @@
       "verb": "fight",
       "needed_by": "engine/season/seam/wrappers/combat.py \u2014 the host adapter `@provider(\"contest\", \"personal_combat\")` builds the typed input record (`combat_input`) and calls this entry through `manifest.MODULE_ENTRIES` (plan position `31b`, A-25). The prize row `the body` (`engine/season/rosters.yaml` `contest_subsystems`) names it in `module_entry:`, and `manifest/registry.py::check_contest_prizes` refuses at driver construction a prize row whose `module_entry:` no composition row declares, or one that disagrees with it. `verb: fight` is the registrar's one verb per row; `accept`, which contests the same prize, reaches this entry through the prize row, not through a second row (the registrar refuses one target under two roles)."
     },
+    "combat.resolve": {
+      "target": "modules.combat.core:resolve",
+      "kind": "callable",
+      "entry": "query",
+      "verb": null,
+      "needed_by": "engine/season/loop/effects_combat.py \u2014 `_mark_degree` (B14.23), the one roll of a survivor's mark, `(pool, net_sigma, rng, ob) -> (degree, net)`: the module owns the roll and the boost (`roll_net + SL.net_boost`), the host keeps the stream (`fight.mark`) and the pool. Declared in `effects_combat.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `social_contest.obstacle` is."
+    },
     "fieldwork.find": {
       "target": "modules.fieldwork.find:find",
       "kind": "callable",
@@ -131,6 +138,7 @@
     }
   },
   "module_files": [
+    "modules/combat/core.py",
     "modules/combat/fight.py",
     "modules/combat/wrapper.py",
     "modules/fieldwork/find.py",
