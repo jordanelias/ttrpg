@@ -796,7 +796,7 @@ class Seen:
     why: Optional[str] = None
 
 
-register_snapshot_type(Seen)                     # `World.decode` rebuilds it by class name
+register_snapshot_type(Seen)                     # `state.world.decode` rebuilds it by class name
 
 
 if tuple(f.name for f in _dc_fields(Seen)) != tuple(OBSERVATION_TERMS):

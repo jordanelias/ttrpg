@@ -5,7 +5,7 @@ It is MEASURED-BY for the numbers in ED-PC-0059's calibration block. It reads th
 non-invasive: wrapper._TRACE (the engine's own seam) for `outcome` and `wound` events, and two pass-through wrappers
 (read_contest, bind_sigma) that call the original and return its value untouched, drawing no rng. Every subject is built
 tradition='none' with known_traditions=(the teaching tradition,), equipped={generic: level}; the opponent is the same
-weapon and armour, plain; position-swapped; one random.Random(seed) per cell, seed = crc32(repr(cell key)) % 100000.
+weapon and armour, plain; position-swapped; one keyed `Draw` per cell, seed = crc32(repr(cell key)) % 100000.
 A first run whose visual/precommit K-zero control did not null (the module-level LEGIB_SWING_ROOM_K is not in CFG) is
 why that control zeroes it too. This is a CALIBRATION instrument for provisional generics: re-run it now that CR-85
 has replaced `history` with `faculty` and deleted its five sigma terms (the plan's PC-17 RE-BASE), and read its limits in ED-PC-0059 before quoting a number.

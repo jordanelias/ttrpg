@@ -470,8 +470,6 @@ def _decode_object(name: str, fields: dict) -> Any:
     if getattr(cls, "_DECLARED", None) is not None:                  # `Rung`: not a dataclass
         rest = dict(fields)
         return cls(rest.pop("id"), rest.pop("kind"), **rest)
-    if hasattr(cls, "_fields"):
-        return cls(**fields)
     return cls(**fields)
 
 
@@ -533,7 +531,7 @@ def decode(data: bytes, fixtures: Fixtures = DEFAULT_FIXTURES) -> "World | Snaps
         if found != want:
             return SnapshotRefused("fixtures_digest", want, str(found))
         return _world_from(frames, fixtures)
-    except (ShapeGap, ValueError, IndexError, KeyError, TypeError, struct.error, RecursionError) as exc:
+    except (ShapeGap, ValueError, IndexError, KeyError, TypeError, AttributeError, struct.error, RecursionError) as exc:
         return SnapshotRefused("malformed", "", f"{type(exc).__name__}: {exc}")
 
 

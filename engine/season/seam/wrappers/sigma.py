@@ -1000,9 +1000,10 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
     HAND CALL WITH NO `rng` IS A `TypeError` AT THE CALL (the parameter has no default), AND ONE PASSING NONE IS
     REFUSED (`InstrumentDefect`, naming the caller; never a fresh unseeded stream, never the process-global stream,
     never a seeded one made here). THAT IS `04 §C.12`'s REJECTION 4:
-    *"its generator must be constructed by the driver from the run seed and passed down exactly as `World` is."*
-    ⚠ *"Threaded like `World`"* MEANS PASSED BY PARAMETER RATHER THAN REACHABLE BY A GLOBAL NAME —
-    not one continuous stream. `04 PART D row 35` settles it: `H(seed, tick, subject, purpose)`, no
+    *"A draw is a function of its key (`H(seed, tick, subject, purpose)`, the index `n` part of the key): the driver
+    constructs no generator object and passes none down"* (04:953, as amended by A-30), AND A `Draw` IS A KEY AND AN
+    INDEX, NOT A HIDDEN-STATE GENERATOR. ⚠ *Threaded* (superseded) MEANT PASSED BY PARAMETER RATHER THAN REACHABLE BY A
+    GLOBAL NAME — not one continuous stream. `04 PART D row 35` settles it: `H(seed, tick, subject, purpose)`, no
     counter, no service. A single stream threaded through a season would make every roll depend on
     the count of prior draws, so adding one contested verb would move every other verb's outcome.
 

@@ -14,7 +14,6 @@ import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
-import random
 from engine.dice_engine import draw
 import zlib
 from modules.combat import wrapper, config
@@ -56,7 +55,7 @@ def _wilson(w, n, z=r8.WILSON_Z):
 
 def winrate(specA, specB, cfg, n, seed=0):
     """Position-swapped decisive win-rate of A vs B (cancels first-mover). Returns (p, lo, hi, decided, draws)."""
-    rng = draw.seeded(draw.H2("balance", seed))   # stdlib RNG (engine contract post ED-1085)
+    rng = draw.seeded(draw.H2("balance", seed))
     aw = dec = draws = 0
     half = n // 2
     for i in range(n):

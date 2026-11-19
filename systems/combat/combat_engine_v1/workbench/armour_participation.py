@@ -31,7 +31,6 @@ To compare against another commit, run it in a worktree and diff:
     git worktree add /tmp/wt <sha> && (cd /tmp/wt && python systems/combat/combat_engine_v1/workbench/armour_participation.py tiers)
 """
 import sys, os
-import random
 import zlib
 import collections
 
