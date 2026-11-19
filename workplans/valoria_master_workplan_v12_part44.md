@@ -40,7 +40,7 @@ GATE: Batch B11F2-flow-in
 GATE: Batch B12a-world-motion-and-ground
 GATE: Batch B12b-weather-arcs-population
 GATE: Batch B12c-material-verbs-and-valley
-GATE: Batch B14-pc-outcome
+GATE: Batch B14-pc-outcome @9f260ef5b6bd5cb98d4b996f66e93c5d386e18fa
 GATE: Batch B15-pc-calibration
 GATE: Batch B16-pc-round
 GATE: Batch B17-mb-scale

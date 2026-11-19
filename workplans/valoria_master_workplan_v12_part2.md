@@ -66,7 +66,7 @@ Three sources, as `H2_DECISIONS.md` Appendix A's script reads them, re-run here 
 | step | open at once (the first named merges first among movers, §3) |
 |---|---|
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every row from B02 down moves one step later (S2 → S3, …, S24 → S25), membership unchanged |
-| S8 | B06 (IN), B14 (PC) |
+| S8 | B06 (IN) |
 | S9 | B07 (IN), B17 (MB) |
 | S10 · S11 | B09 · B10 (IN) |
 | S12 | B24p (SC), BA1 (IN), B11 (FI), B15 (PC), B21 (FA); ⚠ 2026-11-14: B24p is held to S12 by a schedule floor (it opens after B10 has closed: its block's UNDECIDED (1)), not by an edge |
@@ -99,7 +99,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B12a-world-motion-and-ground | SE+WR | W13 | S13 | 0 | 19, 20 | 40 (B36 P2 H1 DF1; H3: B12a.07 "BUILD (with a CONTENT value)" read as BUILD) | MOVER (behaviour 12, conditional 1) | 18.5 | B00, B01, B02, B04, B05, B07, B10, B11 |
 | B12b-weather-arcs-population | SE+WR | W14 | S14 | 0 | 24, 24_cont | 48 (B38 P7 R1 H1 C1) | MOVER (behaviour 12, encoding 1) | 21.7 | B12a |
 | B12c-material-verbs-and-valley | SE+WR | W15 | S15 | 0 | 28, 28_cont | 36 (B29 P2 R3 H1 DF1) | MOVER (behaviour 13, conditional 1; R2c) | 16.9 | B12b, B15 +R1, B34 +R1 |
-| B14-pc-outcome | PC | W8 | S8 | 3 | 10_cont | 29 (B26 P1 R1 DF1) | MOVER (behaviour 7) | 14.1 | B00, B01, B02, B13, B05 |
 | B15-pc-calibration | PC | W12 | S12 | 0 | 18 | 16 (B13 R2 DF1) | MOVER (behaviour 10) | 10.9 | B00, B01, B01a (B01a.05), B02, B04, B05, B10, B14 |
 | B16-pc-round | PC | W13 | S13 | 0 | 23 | 13 (B11 P1 R1) | MOVER (behaviour 1) | 7.7 | B00, B01, B01a (B01a.05), B02, B06, B07, B10, B11 +R, B15 |
 | B17-mb-scale | MB | W9 | S9 | 4 | 11 | 15 (B12 P1 R1 H1; +R2a B17.14) | MOVER (behaviour 3) | 8.5 | B00, B01, B02, B16L, B16M, B05, B14 |
@@ -162,7 +161,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 | B12a-world-motion-and-ground | 20:543 | yes | 8 | yes | none | — |
 | B12b-weather-arcs-population | 24_cont:437 | yes | 1 | yes | none | — |
 | B12c-material-verbs-and-valley | 28_cont:277 | yes | 3 | yes | none | —, R1: B15, B34 |
-| B14-pc-outcome | 10_cont:536 | yes | 5 | yes | none | — |
 | B15-pc-calibration | 18:374 | yes | 8 | yes | none | B01a (B01a.05) |
 | B16-pc-round | 23:306 | yes | 9 | yes | none | B01a (B01a.05) |
 | B17-mb-scale | 11:401 | yes | 7 | yes | none | — |
@@ -212,7 +210,6 @@ One row per batch in schedule order: the position handles (the part after the do
 | step | batch | behaviour movers (position handles) | encoding movers | conditional movers | the re-pin position and what its text says | merge position in its step |
 |---|---|---|---|---|---|---|
 | S8 | B06 | 04 | — | — | `B06.99` | 1 of 2 movers |
-| S8 | B14 | 02, 03, 07, 15, 16, 24, 27 | — | — | `B14.99` | 2 of 2 movers |
 | S9 | B07 | 05 | — | — | `B07.99` | 1 of 2 movers |
 | S9 | B17 | 01, 03, 08 | — | — | `B17.99` | 2 of 2 movers |
 | S10 | B09 | 01, 05, 07, 08, 10, 11, 12, 21 | — | — | `B09.99` | 1 of 1 movers |

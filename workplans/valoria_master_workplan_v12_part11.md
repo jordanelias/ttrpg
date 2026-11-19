@@ -23,7 +23,7 @@ GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B16L-mb-words @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
 GATE: Batch B16M-mb-engine-words @bc1397322
 GATE: Batch B05-one-roll @928dccc9a68232d1afb041c9a1c422d8cfdb690e
-GATE: Batch B14-pc-outcome
+GATE: Batch B14-pc-outcome @9f260ef5b6bd5cb98d4b996f66e93c5d386e18fa
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — the scale, the field's typed outcome and the troop file that B19a, B19, B20, B22 and B31 read (`V12_STRUCTURE.md` §2.2); rulings served: A-3, A-57, A-58, A-67, A-68, A-70, A-81 (a battle ends won, lost or drawn and each band writes), A-1 (one code path), D-U1-11c (no hidden inputs). `IS-MB-05`'s integrated reading is quoted at the close (B17.13), not a requirement row
 BATCH GATE (read once, on the closing tree; `PYTHONHASHSEED=0` on every seeded command):
