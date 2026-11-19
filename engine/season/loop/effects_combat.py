@@ -15,24 +15,28 @@ from __future__ import annotations
 
 from dataclasses import replace
 
-from engine.substrate import descriptors
+from engine.dice_engine.dice_engine import Degree, degree_from_net
+from engine.dice_engine.sigma_leverage import levels_to_net_sigma, pool_of
+from engine.substrate import composition, descriptors
 
 from ..data.rosters import (
-    DECLARED, ENDING_FELLED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, FIELD_WINNER_CASUALTY_ARMS, INVESTED, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
+    DECLARED, ENDING_FELLED, ENDING_PREVAILED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, FIELD_WINNER_CASUALTY_ARMS, INVESTED, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
     WOUND_HARM_MODELS, BODY_MARK_MODELS, require_member,
 )
 from ..data.matrix import matrix_row
 from ..data.requires import Observation
 from ..data.verbs import VERB_CAPABILITY, VERB_TABLE, VOCATION_SOURCED, VOCATIONS
 from ..gaps import Unspecified
-from ..queries.person_q import held_against
+from ..queries.person_q import HAND_PREDICATE, held_against
 from ..queries.world_q import BODY_STEM, DETAIN_KIND, ancestry, garrison_sites, holder_faction_of, home_of, restrained
 from ..seam.ladder import party_degree
+from ..seam.wrappers.pool import pool_pair, untrained
+from ..seam.wrappers.sigma import ADVANTAGE_SOURCES, WOUNDS
 from ..state.carriers import Tenure
 from ..state.gate import (
     NO_CHANGE, PERSON_DIED, Change, Subject, death_subjects, may_muster, may_warrant, own_kinds, seat_faction,
 )
-from ..state.ids import H
+from ..state.ids import H, draw_factory
 
 from .effects_economy import _fall
 from .effects_information import _may_close_custody
@@ -51,7 +55,7 @@ CEILING = "body_ceiling"          # v11 CP-T03-07: the cell the lasting mark wri
 
 
 def _yielder(res: "Resolution") -> "str | None":
-    """THE PARTY THE SCENE'S `surrender` NAMES (`seam/wrappers/combat.py::surrender_of`, lifted onto the result), or
+    """THE PARTY THE SCENE'S `surrender` NAMES (`modules/combat/fight.py::_surrender`, lifted onto the result), or
     `None`. The one reader both effects ask. `_eff_kill` refuses a `res` with no dict result only AFTER its
     opponent-not-a-person early return, so `_eff_capture` reaches this with such a `res` in a hand call: `None`."""
     if res is None or not isinstance(res.result, dict):
@@ -205,16 +209,22 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # the felled man's own kind. And because `_fold` gives each kind's Event only its earners' changes,
     # the person.died Event of a felled actor names him, never the standing subject.
     # v10 PC-10b: `duel.yielded` IS EARNED BY THE YIELDER ALONE -- the party the scene's `surrender`
-    # (`seam/wrappers/combat.py::surrender_of`, lifted off the trace) names. A band declaring it (`accept`'s
+    # (`modules/combat/fight.py::_surrender`, lifted off the trace) names. A band declaring it (`accept`'s
     # `Wounded`) would otherwise hand it to every wounded party, a yield nobody made (ID-9). Read off the
     # result, never the verb: a row whose band does not declare the kind emits nothing of it (`_fold`).
     yielder = _yielder(res)
+    ending = fight_ending(w, (a.actor, who), res, above)      # read once, before the write: the Change's and `hand_observed`'s
     named: tuple = ()
     for pid, band in bands.items():
         own = () if band == FELLED else own_kinds(row.emits_at(band))
         own = tuple(k for k in own if (k != DUEL_YIELDED or pid == yielder) and k not in GROWN_KINDS)
         if bodies[pid] == 0:
-            named += death_subjects(w, pid, own, fields=("body",))
+            # B14.03: THE FELLED PARTY'S OWN SUBJECT (the first `death_subjects` names; the seats follow) carries the
+            # wound that felled him, a source and a weapon and no doer, on the death Event WITNESS deposits.
+            dead = death_subjects(w, pid, own, fields=("body",))
+            # B14.16: A FELLED ACTOR'S death also names the party left standing (`hand_observed`).
+            named += (replace(dead[0], observed=fell_observed(pid, res.result.get("beat"))
+                              + hand_observed(pid, a.actor, ending)),) + dead[1:]
             continue
         # CP-T03-02 (ii): A WOUNDED PARTY'S SUBJECT CARRIES WHAT HIS BODY NOW IS -- `(pid, "body", v)`, `v` the
         # value `perform` WRITES (`bodies`), never `w.persons[pid].body` read here, which is the pre-fight body
@@ -224,11 +234,13 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         # (`bodies[pid] is None`) writes nothing and observes nothing.
         # [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]
         named += (Subject.entity("persons", pid, earns=own, fields=(BODY_STEM, CEILING),
-                                 observed=body_observed(pid, bodies[pid])),)
+                                 observed=body_observed(pid, bodies[pid]) + marked_observed(w, pid, marks)),)
     # CP-T03-04 (iv): EACH GROWN PARTY IS ITS OWN SUBJECT ON `capability`, earning the `(Person, capability)` cell's
     # kind alone -- never a body subject's kind, and never on a party who did not grow (the filter above).
     named += tuple(Subject.entity("persons", pid, earns=GROWN_KINDS, fields=("capability",)) for pid in grown)
-    return Change(named, perform, fight_ending(w, (a.actor, who), res, above))
+    # B14.15: THE SCENE'S SHAPE rides each success Event once (`scene_observed`, `carry_scene`).
+    named = carry_scene(named, scene_observed(tuple(dict.fromkeys((a.actor, who))), res.result.get("shape")))
+    return Change(named, perform, ending)
 
 
 # CP-T03-04 (iv): THE KINDS A GROWN PARTY EARNS -- the `(Person, capability)` matrix row's own `emits:`
@@ -301,19 +313,97 @@ def broke_observed(pid: str, broke: "str | None") -> tuple:
     return (Observation(pid, BROKE_STEM, True),) if pid == broke else ()
 
 
+FELL_TO_STEM = "fell_to"
+
+
+def fell_observed(pid: str, beat: "dict | None") -> tuple:
+    """B14.03 (D-U1-06, C3-L5): the Observation a felled party's Subject carries -- `(pid, "fell_to", "<source>:<weapon>")`,
+    read off the scene's `DecisiveBeat` (lifted onto the result as a dict) -- or `()` where the scene names no beat or the
+    beat's victim is another party. It names the engine's site of the wound and the weapon, NEVER the striker (`beat["by"]`
+    is not read): a deed others can hold without a doer. An Event carries no payload, so the cause rides `Event.observed`
+    as `broke_observed`'s does. [ASSUMPTION; medium; Jordan to correct; revert: drop the Observation]"""
+    if not beat or beat.get("victim") != pid:
+        return ()
+    return (Observation(pid, FELL_TO_STEM, f"{beat['source']}:{beat['weapon']}"),)
+
+
+def hand_observed(pid: str, actor: str, ending: tuple) -> tuple:
+    """B14.16 (D-U1-06; `16_PESSIMIST_PC_C` 2): the Observation a felled party's Subject carries where he is the act's ACTOR --
+    `(pid, "fell_to_hand", <the party left standing>)` -- or `()` for a felled subject (the `seen.who` pairing names the actor his
+    killer there), and where no party prevailed (both felled; a yield). `ending` is `fight_ending`'s `(party, ending)` pairs;
+    the standing party is the one it reads `prevailed`, the scene's own verdict, so no second reading of the bands is made here.
+    Unlike `fell_to` it NAMES A PERSON: `queries/person_q.py::deed_doer` reads it before the pairing, which cannot name the
+    killer of an attacker felled by his target (it sees the attacker as `who` of his own death). It rides `Event.observed` as
+    `fell_to` does, and which witness holds it is WITNESS's mode, not a filter here. [ASSUMPTION; medium; Jordan to correct;
+    revert: drop the Observation and `deed_doer`'s read]"""
+    if pid != actor:
+        return ()
+    standing = [p for p, e in ending if e == ENDING_PREVAILED and p != pid]
+    return (Observation(pid, HAND_PREDICATE, standing[0]),) if len(standing) == 1 else ()
+
+
+# B14.15's four scene predicates, spelt once here (the writer) and read by `harness/chronicle.py`; none is an `observation_terms` member.
+BLOWS_LANDED, FIGHT_ROUNDS, FIRST_BLOOD, LEAD_CHANGES = "blows_landed", "fight_rounds", "first_blood", "lead_changes"
+
+
+def scene_observed(parties: tuple, shape: "dict | None") -> tuple:
+    """B14.15 (D-U1-06; `16_PESSIMIST_PC_C` 1): the Observations a fight's success Events carry of the scene's course, read off
+    the `shape` the seam lifted onto the result (`SceneShape` as a dict), or `()` where the result carries none. For each party
+    `p`, `(p, "blows_landed", n)`; once per scene, `(actor, "fight_rounds", n)`, `(first_blood, "first_blood", True)` where a
+    blow landed, and `(actor, "lead_changes", n)` -- `parties[0]` the actor. Numbers and one name, never a doer of a killing:
+    `first_blood` names who struck first, which is not who prevailed. They ride `Event.observed` as `fell_to` does (the
+    predicates are not `observation_terms` members, B14.03's reading). [ASSUMPTION; medium; Jordan to correct; revert: drop
+    the Observations]"""
+    if not shape:
+        return ()
+    blows = shape.get("blows") or {}
+    actor = parties[0]
+    out = [Observation(p, BLOWS_LANDED, blows[p]) for p in parties if p in blows]
+    out.append(Observation(actor, FIGHT_ROUNDS, shape["rounds"]))
+    if shape.get("first_blood") is not None:
+        out.append(Observation(shape["first_blood"], FIRST_BLOOD, True))
+    out.append(Observation(actor, LEAD_CHANGES, shape["lead_changes"]))
+    return tuple(out)
+
+
+def carry_scene(named: tuple, obs: tuple) -> tuple:
+    """`named` with `obs` placed on the subjects so that each success Event carries them ONCE. `_fold` gives a kind's Event the
+    `observed` of every subject riding it, and a subject rides the kinds it earns (every kind, where it names none), so `obs` goes
+    to a subject only if none of its kinds is already ridden by an earlier one that carries them: a kind two subjects earn
+    (both parties wounded) carries them once, and a subject that would double a covered kind is passed over (its other kind
+    is left without them, for the sake of no repeated Observation)."""
+    if not obs:
+        return named
+    everything, covered, out = object(), set(), []
+    for s in named:
+        kinds = set(s.kinds) or {everything}
+        fresh = not (covered & kinds) and everything not in covered and (everything not in kinds or not covered)
+        out.append(replace(s, observed=tuple(s.observed) + obs) if fresh else s)
+        covered |= kinds
+    return tuple(out)
+
+
 def fight_ending(w: "World", parties, res: "Resolution", above) -> tuple:
-    """CP-T03-02 (i): `Event.ending` -- `(pid, felled | yielded | undecided)` for each party still a person, in
-    party order, read off the scene's lifted `wound_state` (`party_degree`, the walk `_eff_kill` writes by) and
+    """CP-T03-02 (i): `Event.ending` -- `(pid, felled | yielded | prevailed | undecided)` for each party still a person,
+    in party order, read off the scene's lifted `wound_state` (`party_degree`, the walk `_eff_kill` writes by) and
     `surrender` (`_yielder`). Read BEFORE the write, which is right: it reports the scene, not the world.
-    [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]"""
+
+    B14.02 (A-81, D-U1-11a): a party who is neither felled nor the yielder is `prevailed` where the OTHER party is felled or
+    the yielder -- the one left standing -- and `undecided` only where neither is. A party is read down from the scene
+    whether or not he is still a person, so a felled opponent already removed from the world still makes the survivor
+    `prevailed`. [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]"""
     states = res.result.get("wound_state") or {}
     yielder = _yielder(res)
+    held = tuple(dict.fromkeys(parties))
+    felled = {pid: party_degree(states.get(pid), above) == FELLED for pid in held}
+    down = {pid: felled[pid] or pid == yielder for pid in held}
     out = []
-    for pid in dict.fromkeys(parties):
+    for pid in held:
         if pid not in w.persons:
             continue
-        out.append((pid, ENDING_FELLED if party_degree(states.get(pid), above) == FELLED
-                    else ENDING_YIELDED if pid == yielder else ENDING_UNDECIDED))
+        out.append((pid, ENDING_FELLED if felled[pid]
+                    else ENDING_YIELDED if pid == yielder
+                    else ENDING_PREVAILED if any(down[o] for o in held if o != pid) else ENDING_UNDECIDED))
     return tuple(out)
 
 
@@ -327,7 +417,7 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     Record is `accept`'s, not `capture`'s).
 
     WHAT LICENSES THE EDGE, EACH ONE OWNER OF ITS RULE (`_eff_arrest`'s tests, minus the warrant): (1) the scene's
-    `surrender` (`seam/wrappers/combat.py::surrender_of`, lifted off the trace) names the SUBJECT as the one who
+    `surrender` (`modules/combat/fight.py::_surrender`, lifted off the trace) names the SUBJECT as the one who
     yielded -- a yield by the actor, or none, opens nothing, and a scene in which either party was felled opens
     nothing (a felled actor holds no seat to take him into); (2) the subject is a person other than the actor and
     not already in custody (`restrained`, one live `detain` per prisoner); (3) the exercised seat may take him
@@ -379,11 +469,45 @@ def marked_ceiling(ceiling: int, floors) -> int:
     return max(below) - 1 if below else ceiling
 
 
+MARKED_STEM = "marked"
+MARK_ROLE = "combat.resolve"                    # the composition row whose module rolls the mark: `roll_net + net_boost`, one owner
+QUERY_ENTRIES = ((MARK_ROLE, "query"),)         # the host's declared need, held at driver construction (`registrar.require_entries`)
+
+
+def marked_observed(w: "World", pid: str, marks: dict) -> tuple:
+    """B14.23: the Observation a DRAWN mark carries -- `(pid, "marked", the ceiling it left)` -- or `()` where no mark fell on `pid`, and at every arm but
+    `drawn` (`deepest_gate` and `none` tell no mark, so the shipped arm's Events are the pre-item ones). Rides `Event.observed` as `broke` and
+    `fell_to` do: an Observation predicate is not a member of `rosters.yaml: observation_terms`, which is `epistemic.Seen`'s field list."""
+    if pid not in marks or w.fixtures.get("body_mark_model") != "drawn":
+        return ()
+    return (Observation(pid, MARKED_STEM, marks[pid]),)
+
+
+def _mark_degree(w: "World", pid: str, body: int, ceiling: int) -> Degree:
+    """B14.23 (`U5b_PC_residue` section 7; A-5 to A-8, A-30): THE BAND OF ONE SURVIVOR'S MARK ROLL. The pool is the one pool rule on the
+    untrained default -- `pool_of(pool_default, 0, pool_add, pool_floor)`, no skill being authored for mending clean -- and his body band enters as
+    LEVELS through the `wounds` source (`ADVANTAGE_SOURCES[WOUNDS]`, the roller's own wound against him, as `combat._carried_of` reads it), summed by
+    `levels_to_net_sigma` and applied as `net_boost`, never a die and never an obstacle term. The roll is the module's (`combat.resolve`, reached by role: `roll_net_continuous` plus `net_boost`, the one sampler); the
+    obstacle is the fixture `mark_ob`, graded on the one ladder (`degree_from_net`). The stream is the survivor's own, keyed
+    `(world_seed, tick, victim, "fight.mark")` (`state.ids.draw_factory`, A-30): never a position in the scene's stream and never the season's draw,
+    so the roll reads `World` and writes nothing. [ASSUMPTION; medium; Jordan to correct; revert: `body_mark_model: deepest_gate`]"""
+    fx = w.fixtures
+    add, floor = pool_pair(fx)
+    pool = pool_of(untrained(fx), 0, add, floor)
+    _for, against = ADVANTAGE_SOURCES[WOUNDS](fx, {"body": body, "body_ceiling": ceiling})
+    sigma = levels_to_net_sigma(_for, against)
+    rng = draw_factory(w.world_seed, lambda: w.tick)(pid, "fight.mark")
+    ob = fx.get("mark_ob")
+    return degree_from_net(composition.require(MARK_ROLE)(pool, sigma, rng, ob)[1], ob)
+
+
 def _marks(w: "World", bodies: dict, states: dict) -> dict:
     """v11 CP-T03-07: `{pid: new body_ceiling}` for each party of a fight who SURVIVES it (his written body is above 0;
     a `none`-arm party, written nothing, is not marked) at the engine's DEEPEST GATE SHORT OF FELLING -- `wounds >=
     max_wounds` on his lifted tracker (`rosters.yaml: wound_quantities`) -- and whose ceiling the mark lowers
     (`marked_ceiling`). `body_mark_model: none` (`H-258`, the control) marks nobody.
+    `drawn` (B14.23, `H-567`; not shipped): each such survivor rolls ONCE (`_mark_degree`, keyed `fight.mark`) and Failure lowers the ceiling
+    twice (`marked_ceiling` applied twice), Partial once as `deepest_gate` does, Success and better not at all.
     [ASSUMPTION; medium; Jordan to correct; revert: `body_mark_model: none`]"""
     mode = w.fixtures.get("body_mark_model")
     require_member(
@@ -407,6 +531,12 @@ def _marks(w: "World", bodies: dict, states: dict) -> dict:
             continue
         p = w.persons[pid]
         after = marked_ceiling(p.body_ceiling, floors)
+        if mode == "drawn":
+            degree = _mark_degree(w, pid, body, p.body_ceiling)
+            if degree in (Degree.SUCCESS, Degree.OVERWHELMING):
+                continue
+            if degree is Degree.FAILURE:
+                after = marked_ceiling(after, floors)
         if after != p.body_ceiling:
             out[pid] = after
     return out

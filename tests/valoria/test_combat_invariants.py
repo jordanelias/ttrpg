@@ -673,9 +673,9 @@ def test_afforded_heads_emerge_from_primitives():
     """Affordance emerges from geometry primitives: the poleaxe affords blunt+point (spike from point_concentration
     0.78); the mace/staff afford NO point (point_concentration 0.02/0.05 < the gate) — no weapon name involved."""
     C, core, S, WP, CFG = _mods()
-    assert set(S.afforded_heads(C.WEAPONS['poleaxe'])) == {'blunt', 'point'}
-    assert 'point' not in S.afforded_heads(C.WEAPONS['mace'])
-    assert 'point' not in S.afforded_heads(C.WEAPONS['staff'])
+    assert set(S.afforded_heads(C.WEAPONS['poleaxe'], CFG)) == {'blunt', 'point'}
+    assert 'point' not in S.afforded_heads(C.WEAPONS['mace'], CFG)
+    assert 'point' not in S.afforded_heads(C.WEAPONS['staff'], CFG)
 
 
 def test_afforded_heads_emerge_from_phase_b2_mode_elements():
@@ -693,13 +693,13 @@ def test_afforded_heads_emerge_from_phase_b2_mode_elements():
     spike), not a separate incidental-edge source, and their own cut_thrust element already carries the ONLY
     edge each weapon has."""
     C, core, S, WP, CFG = _mods()
-    assert set(S.afforded_heads(C.WEAPONS['bec_de_corbin'])) == {'blunt', 'point'}
-    assert set(S.afforded_heads(C.WEAPONS['lucerne_hammer'])) == {'blunt', 'point'}
-    assert set(S.afforded_heads(C.WEAPONS['goedendag'])) == {'blunt', 'point'}
-    assert set(S.afforded_heads(C.WEAPONS['ji'])) == {'point', 'curved_cut', 'cut'}
-    assert set(S.afforded_heads(C.WEAPONS['kama_yari'])) == {'point', 'curved_cut', 'cut'}
-    assert set(S.afforded_heads(C.WEAPONS['guisarme'])) == {'cut_thrust', 'point'}
-    assert set(S.afforded_heads(C.WEAPONS['voulge'])) == {'cut_thrust', 'point'}
+    assert set(S.afforded_heads(C.WEAPONS['bec_de_corbin'], CFG)) == {'blunt', 'point'}
+    assert set(S.afforded_heads(C.WEAPONS['lucerne_hammer'], CFG)) == {'blunt', 'point'}
+    assert set(S.afforded_heads(C.WEAPONS['goedendag'], CFG)) == {'blunt', 'point'}
+    assert set(S.afforded_heads(C.WEAPONS['ji'], CFG)) == {'point', 'curved_cut', 'cut'}
+    assert set(S.afforded_heads(C.WEAPONS['kama_yari'], CFG)) == {'point', 'curved_cut', 'cut'}
+    assert set(S.afforded_heads(C.WEAPONS['guisarme'], CFG)) == {'cut_thrust', 'point'}
+    assert set(S.afforded_heads(C.WEAPONS['voulge'], CFG)) == {'cut_thrust', 'point'}
 
 
 # ── GAP GAME ──────────────────────────────────────────────────────────────────────────────────────
@@ -719,7 +719,7 @@ def test_gap_game_poleaxe_thrusts_in_the_duel():
         dm, h = S.select_mode(C.Combatant('x', weapon='poleaxe'), tier, False, CFG)[:2]
         assert (dm, h) == ('puncture', 'point'), f"poleaxe should thrust (the 1v1 staple) vs {tier}; got {(dm, h)}"
     # the hammer is still AFFORDED (not removed) — it just loses the 1v1 exposure trade
-    assert 'blunt' in S.afforded_heads(C.WEAPONS['poleaxe']), "the poleaxe's hammer face is still afforded"
+    assert 'blunt' in S.afforded_heads(C.WEAPONS['poleaxe'], CFG), "the poleaxe's hammer face is still afforded"
 
 
 # ── I2 CIRCUMSTANCE DEGRADATION (D1/D2/D2b/D5, 2026-07-03) ──────────────────────────────────────────
@@ -795,7 +795,7 @@ def test_damage_retention_worst_case_material_lever():
 
     def worst_retention(name, grip_star, cut_head):
         w = C.WEAPONS[name]
-        eff, dm, gap, perc, spc, ref = S.afforded_heads(w)[cut_head][:6]   # [ED-PC-0037.1] the cut_thrust entry is now 8 wide (element-local per-arm cut/thrust at 6/7); slice to the stable prefix
+        eff, dm, gap, perc, spc, ref = S.afforded_heads(w, CFG)[cut_head][:6]   # [ED-PC-0037.1] the cut_thrust entry is now 8 wide (element-local per-arm cut/thrust at 6/7); slice to the stable prefix
         gap = gap if gap is not None else w['gap']
         perc = perc if perc is not None else WP.percussion_authority(w)
         worst = 0.0
@@ -927,9 +927,9 @@ def test_close_efficacy_identity_at_open_measure():
     """D5 gate: close_efficacy is EXACTLY 1.0 (not merely approximate) at open measure (closed=False) or when
     measure_gap is unset — the lever is inert until the fight is genuinely in the close."""
     C, core, S, WP, CFG = _mods()
-    assert S.close_efficacy(0.0, None, 1.0, True) == 1.0
-    assert S.close_efficacy(0.0, 0.0, 1.0, False) == 1.0
-    assert S.close_efficacy(0.0, 6.5, 1.0, True) == 1.0
+    assert S.close_efficacy(0.0, None, CFG, 1.0, True) == 1.0
+    assert S.close_efficacy(0.0, 0.0, CFG, 1.0, False) == 1.0
+    assert S.close_efficacy(0.0, 6.5, CFG, 1.0, True) == 1.0
 
 
 def test_close_efficacy_arc_vs_thrust_from_selected_element():
@@ -940,12 +940,12 @@ def test_close_efficacy_arc_vs_thrust_from_selected_element():
     pc alone, so bear_spear is correctly untouched despite its moderate whole-weapon pc."""
     C, core, S, WP, CFG = _mods()
     guandao_pc = C.WEAPONS['guandao']['mode_elements'][0]['geo']['point_concentration']
-    assert S.close_efficacy(guandao_pc, 0.0, 1.0, True, head='curved_cut') < 0.9
+    assert S.close_efficacy(guandao_pc, 0.0, CFG, 1.0, True, head='curved_cut') < 0.9
     c = C.Combatant('x', weapon='bear_spear')
     dm, h, sg, sp, spc, se = S.select_mode(c, 'none', True, CFG, measure_gap=0.0)
     assert h == 'point'
     assert spc == C.WEAPONS['bear_spear']['geometry']['point_concentration'] == 0.55, "bear_spear has no mode_elements; its moderate whole-weapon pc is the R-3 trap"
-    assert S.close_efficacy(spc, 0.0, 1.0, True, head=h) == 1.0, "gated on the SELECTED HEAD, not pc alone"
+    assert S.close_efficacy(spc, 0.0, CFG, 1.0, True, head=h) == 1.0, "gated on the SELECTED HEAD, not pc alone"
 
 
 def test_close_efficacy_shifts_selection_in_tight_quarters():
@@ -990,7 +990,7 @@ def test_range_utilization_identity():
     C, core, S, WP, CFG = _mods()
     assert S.range_utilization(None, None, CFG) == 1.0
     assert S.range_utilization(None, 100.0, CFG) == 1.0
-    assert S.range_utilization(None, 0.0, CFG) == S.RANGE_AVAIL_FLOOR
+    assert S.range_utilization(None, 0.0, CFG) == CFG['RANGE_AVAIL_FLOOR']
 
 
 def test_commit_depth_byte_identical_at_range_avail_one():
@@ -1016,9 +1016,9 @@ def test_commit_depth_contracts_with_less_room():
     a small loss of room near range_avail=1.0 does NOT immediately shallow commitment; only real crowding does),
     and never falls below the floored minimum span."""
     C, core, S, WP, CFG = _mods()
-    assert S._commit_range_factor(0.9) == 1.0            # plateau near full room
-    assert S._commit_range_factor(0.0) == S.RANGE_COMMIT_FLOOR
-    assert 0.0 < S._commit_range_factor(0.4) < 1.0
+    assert S._commit_range_factor(0.9, CFG) == 1.0            # plateau near full room
+    assert S._commit_range_factor(0.0, CFG) == CFG['RANGE_COMMIT_FLOOR']
+    assert 0.0 < S._commit_range_factor(0.4, CFG) < 1.0
 
 
 def test_swing_room_legibility_zero_at_full_room():
@@ -1149,13 +1149,18 @@ def test_rear_clearance_monotone_non_decreasing():
     """I7a gate #3: rear_clearance(g) is monotone non-decreasing in grip for the WHOLE roster — gathering in
     never shortens what trails behind the hand."""
     C, core, S, WP, CFG = _mods()
+    grips = (0.0, 0.25, 0.5, 0.75, 1.0)
+    checked = 0
     for n, w in C.WEAPONS.items():
         prev = None
-        for g in (0.0, 0.25, 0.5, 0.75, 1.0):
+        for g in grips:
             rc = WP.at_circumstance(w, g)['rear_clearance']
             if prev is not None:
                 assert rc >= prev - 1e-9, (n, g, rc, prev)
+                checked += 1
             prev = rc
+    # one comparison per consecutive grip pair, for every weapon on the roster
+    assert checked and checked >= len(C.WEAPONS) * (len(grips) - 1), checked
 
 
 def test_rear_clearance_staff_changes_with_grip_despite_zero_u():
@@ -1176,14 +1181,9 @@ def test_rear_clearance_penalty_moves_close_tempo_and_str_demand():
     c = C.Combatant('x', weapon='guisarme'); c.grip_position = 0.5
     live_tempo = S.close_tempo(c, CFG)
     live_str = S.str_demand(c, CFG)
-    old_tempo_k, old_str_k = S.REAR_CLEARANCE_TEMPO_K, S.REAR_CLEARANCE_STR_K
-    try:
-        S.REAR_CLEARANCE_TEMPO_K = 0.0
-        S.REAR_CLEARANCE_STR_K = 0.0
-        ablated_tempo = S.close_tempo(c, CFG)
-        ablated_str = S.str_demand(c, CFG)
-    finally:
-        S.REAR_CLEARANCE_TEMPO_K, S.REAR_CLEARANCE_STR_K = old_tempo_k, old_str_k
+    ablated_cfg = dict(CFG, REAR_CLEARANCE_TEMPO_K=0.0, REAR_CLEARANCE_STR_K=0.0)   # a copy: CFG itself is never mutated
+    ablated_tempo = S.close_tempo(c, ablated_cfg)
+    ablated_str = S.str_demand(c, ablated_cfg)
     assert live_tempo != ablated_tempo
     assert live_str != ablated_str
 
@@ -1278,15 +1278,15 @@ def test_facing_void_ablation_moves_close_rate_and_reach_sigma():
     er = {agg: 6.0, dfd: 5.0}
     live_cr = S.close_rate(shorter, 0.0, 0.2, 0.9, CFG)
     live_rs = S.reach_sigma(agg, dfd, er, 0.0, 0.0, CFG, TR)
-    old_void_gain, old_profile_k = S.FACING_VOID_GAIN, S.FACING_PROFILE_K
-    try:
-        S.FACING_VOID_GAIN = 0.0; S.FACING_PROFILE_K = 0.0
-        ablated_cr = S.close_rate(shorter, 0.0, 0.2, 0.9, CFG)
-        ablated_rs = S.reach_sigma(agg, dfd, er, 0.0, 0.0, CFG, TR)
-    finally:
-        S.FACING_VOID_GAIN, S.FACING_PROFILE_K = old_void_gain, old_profile_k
+    ablated_cfg = dict(CFG, FACING_VOID_GAIN=0.0, FACING_PROFILE_K=0.0)   # a copy: CFG itself is never mutated
+    ablated_cr = S.close_rate(shorter, 0.0, 0.2, 0.9, ablated_cfg)
+    ablated_rs = S.reach_sigma(agg, dfd, er, 0.0, 0.0, ablated_cfg, TR)
     assert live_cr != ablated_cr
     assert live_rs != ablated_rs
+
+
+_REACH_WEAPONS = ('spear', 'yari', 'guisarme', 'poleaxe')    # the reach roster test_reach_class_beats_arming_not_inverted sweeps
+_REACH_ARMOURS = ('none', 'light', 'medium', 'heavy')          # ... at every armour tier
 
 
 @pytest.mark.slow
@@ -1309,8 +1309,9 @@ def test_reach_class_beats_arming_not_inverted():
     from modules.combat import wrapper
     C, core, S, WP, CFG = _mods()
     share, decided = {}, {}
-    for w in ('spear', 'yari', 'guisarme', 'poleaxe'):
-        for armor in ('none', 'light', 'medium', 'heavy'):
+    checked = 0
+    for w in _REACH_WEAPONS:
+        for armor in _REACH_ARMOURS:
             # crc32, not hash() — hash() is PYTHONHASHSEED-salted (non-reproducible run-to-run); see
             # workbench/balance.py's _seed() docstring for the same rationale.
             rng = random.Random(zlib.crc32(repr((w, armor)).encode()) % 9999)
@@ -1339,6 +1340,7 @@ def test_reach_class_beats_arming_not_inverted():
             if armor != 'heavy':
                 assert dec >= 20, (f"{w}@{armor}: only {dec} decided of {n} — too few to judge a win-share "
                                    f"band; raise n rather than trusting the ratio")
+            checked += 1      # this cell passed its decided-count judgement (the floor off-plate; heavy is judged on the share below)
             # [ED-PC-0038] dec == 0 at heavy is not a failure — it is the STRONGEST form of the property below
             # ("a pure point cannot decide against plate"), and it became reachable once penetration was gated on
             # armour-defeat CAPABILITY rather than raw magnitude: a spear now lands 0 damage through a harness, so it
@@ -1350,6 +1352,8 @@ def test_reach_class_beats_arming_not_inverted():
                 continue
             share[(w, armor)] = wins / dec
             decided[(w, armor)] = dec / n
+    # every (weapon, tier) cell was swept: the per-cell asserts above are all conditional on the tier and on dec
+    assert checked and checked >= len(_REACH_WEAPONS) * len(_REACH_ARMOURS), checked
     # (1) reach dominates every NON-plate tier for the DEDICATED reach weapons — the reach advantage vs flesh/cloth/mail
     #     is real. (spear/yari long point + poleaxe percussion; guisarme handled separately below.)
     #     [ED-PC-0027, 2026-07-23] the mode-aware heft correction (a thrust no longer carries the swing moment — the

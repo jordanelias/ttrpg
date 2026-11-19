@@ -8260,7 +8260,7 @@ def test_the_seam_calls_personal_combat_rather_than_naming_it():
     # `wrapper.fight`'s own note says to pass `random.Random(seed)`; an unseeded call would make
     # every campaign unreproducible, which `W11` and `test_w9_check1` both rest on.
     again = contest(w, "S", "the body", ["p_low", "p_mid"], 0, 2, ["act1"])
-    assert again["result"] == out["result"] and again["seed"] == out["seed"], (
+    assert again == out, (
         "the same contest in the same world gave a different answer — the seam is not seeded "
         "from the world clock and the instrument is no longer reproducible")
 
@@ -8270,11 +8270,9 @@ def test_the_seam_calls_personal_combat_rather_than_naming_it():
     assert "degree" not in out and "band" not in out, (
         f"the seam has started reporting a degree ({ {k: out[k] for k in out if k in ('degree','band')} }) "
         "— it has become the second resolver, which is S27.2's highest-value refusal")
-    assert out["result"] in (-1, 0, 1), out["result"]
-
-    # ⚠ `0` IS A RULED OUTCOME. Jordan, 2026-06-02, in the engine: "an undecided fight is a
-    # legitimate outcome." A seam that retried it into a decision would overwrite that ruling.
-    assert out["unresolved"] == (out["result"] == 0)
+    # ⚠ NO WINNER CROSSES (B14.01): the six keys nothing read are gone, and `0` -- an undecided fight, a RULED outcome
+    # (Jordan, 2026-06-02: "an undecided fight is a legitimate outcome") -- is a wound state the fold grades, not a key.
+    assert not {"winner", "result", "unresolved", "bouts", "parties", "seed"} & set(out), sorted(out)
 
     # A party it cannot derive is a GAP, never a fabricated side (`combat_bridge`'s rule).
     gap = C.resolve(w, ["p_low"], ["a"], "the body")
@@ -8315,7 +8313,8 @@ def test_the_combat_seam_derives_one_field_and_it_decides_something():
         n = 0
         for t in range(40):
             w.tick = t
-            n += C.resolve(w, ["p_low", "p_mid"], ["a"], "the body")["winner"] == "p_low"
+            ws = C.resolve(w, ["p_low", "p_mid"], ["a"], "the body")["wound_state"]
+            n += bool(ws["p_mid"]["felled"]) and not ws["p_low"]["felled"]   # `p_low` prevailed: the other fell, he stood
         return n
     healthy, dying = wins(scale), wins(50)
     assert healthy > dying, (
@@ -8438,7 +8437,7 @@ def test_k1_control_an_all_absent_realm_builds_the_record_it_always_built(monkey
         a = entry.fn(inp, random.Random(seed))
         for other in (explicit, social):
             b = entry.fn(other, random.Random(seed))
-            assert (a["result"], a["ends"], a["wound_state"]) == (b["result"], b["ends"], b["wound_state"])
+            assert a == b
             checked += 1
     assert checked == 10
 

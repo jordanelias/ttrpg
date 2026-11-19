@@ -270,9 +270,12 @@ class Event:
     # `Observation` channel. A verb on `REQUIRES_PREDICATES` reads the world through a hand-written
     # predicate that records nothing, so it too carries `()` -- that is a gap in the OLD channel,
     # not a claim that nothing was read, and it closes when the verb is typed.
+    #
+    # B14.03: and the outcomes an effect derives from the scene it wrote (a felling's source, a body that broke
+    # first, a named draw), as Observations WITNESS deposits. `fell_to` and the scene's numbers name no one as a doer; `fell_to_hand` (B14.16) names the standing party, and `first_blood` the one who struck first.
     observed: tuple = ()
     # CP-T03-02. HOW A FIGHT ENDED, PER PARTY -- a tuple of `(person id, "felled" | "yielded" |
-    # "undecided")` pairs, read off the scene's lifted `wound_state` and `surrender` by the effect that
+    # "prevailed" | "undecided")` pairs, read off the scene's lifted `wound_state` and `surrender` by the effect that
     # wrote the band (`loop/effects_combat.py::fight_ending`). Stamped on every success Event of
     # `fight`/`accept` at Felled/Wounded, and of `capture` at any band where an edge is opened (its
     # Untouched band runs the effect: a clean yield's `person.captured` carries it). Empty on every other

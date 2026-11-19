@@ -892,7 +892,7 @@ verbs:
     contests: "the body"
     contests_note: "`fight`'s prize, no new prize and no new provider (`rosters.yaml: contest_subsystems.prizes`). The scene is fought under `rosters.yaml: duel_terms`' `yield` (`seam/wrappers/combat.py::combat_input`), so it ends when a party has crossed the yield threshold rather than at a felling."
     # `fight`'s bands and cells, plus `Tenure.since` WHERE A YIELDER CAN STAND: a yielder is not felled, so he reads
-    # `Untouched` or `Wounded` off his own tracker (`seam/wrappers/combat.py::surrender_of`: the yield rides the result,
+    # `Untouched` or `Wounded` off his own tracker (`modules/combat/fight.py::_surrender`: the yield rides the result,
     # not the band). `Tenure.since` is declared in both so a clean yield (`Untouched`) runs the effect, which is what
     # opens the `detain`; with no yield `_eff_capture` writes nothing there and a scene that moved nobody is
     # `capture.refused` (the fold's write clause), NOT `contest.undecided` (LIMIT, stated: `fight` reports the latter).

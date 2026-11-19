@@ -1,7 +1,7 @@
 """CP-T03-02 -- THE BAND'S EVENT SAYS HOW THE FIGHT ENDED, AND WHAT THE BODY NOW IS.
 
 (i) Every success Event of a fight's Felled/Wounded band carries `Event.ending`: `(pid, felled | yielded |
-undecided)` per party, read off the scene's lifted `wound_state` and `surrender`
+prevailed | undecided)` per party, read off the scene's lifted `wound_state` and `surrender`
 (`loop/effects_combat.py::fight_ending`). (ii) Each wounded party's `body.changed` carries the Observation
 `(pid, "body", v)`, `v` the body the write LEAVES him with, on `Event.observed` -- deposited by WITNESS's
 shipped `observation_deposit_mode` (`actor`), no new channel.
@@ -33,10 +33,10 @@ _BAND_STATE = {FELLED: dict(felled=True, wounds=2, left=0),
                UNTOUCHED: dict()}
 
 
-def _fight(actor_band, subject_band, yielder=None, fan=None, aid="cp302"):
+def _fight(actor_band, subject_band, yielder=None, fan=None, aid="cp302", beat=None):
     """`ACTOR` fights `SUBJECT` through the real fold and gate at RESOLVE, the band minted by `degree_of`
     as `resolve()`'s seam branch mints it; then WITNESS at the given `fan_out_mode` (the shipped one when
-    `None`)."""
+    `None`). `beat` is the scene's `DecisiveBeat` as the seam lifts it (a dict), or `None` (B14.03)."""
     w = P.tiny_world()
     if fan is not None:
         w.fixtures = w.fixtures.sweep("fan_out_mode", fan)
@@ -48,6 +48,8 @@ def _fight(actor_band, subject_band, yielder=None, fan=None, aid="cp302"):
                            ACTOR: party_state(**_BAND_STATE[actor_band])}}
     if yielder is not None:
         raw["surrender"] = {"by": yielder, "turn": 1, "accepted": True}
+    if beat is not None:
+        raw["beat"] = beat
     res = Resolution(degree_of(raw, SUBJECT, w.fixtures), raw)
     act = Act(id=aid, actor=ACTOR, verb="fight", payload={"subject": SUBJECT})
     out = d._fold(w, mint_token(w, WriteClass.ACTS), act, res)
@@ -133,9 +135,9 @@ def test_the_ending_per_party_on_every_band_event():
     checked = 0
     for (a, s, yielder), want in {
             (UNTOUCHED, WOUNDED, None): {ACTOR: "undecided", SUBJECT: "undecided"},
-            (WOUNDED, FELLED, None): {ACTOR: "undecided", SUBJECT: "felled"},
-            (FELLED, WOUNDED, None): {ACTOR: "felled", SUBJECT: "undecided"},
-            (UNTOUCHED, WOUNDED, SUBJECT): {ACTOR: "undecided", SUBJECT: "yielded"}}.items():
+            (WOUNDED, FELLED, None): {ACTOR: "prevailed", SUBJECT: "felled"},               # B14.02: the one left standing
+            (FELLED, WOUNDED, None): {ACTOR: "felled", SUBJECT: "prevailed"},
+            (UNTOUCHED, WOUNDED, SUBJECT): {ACTOR: "prevailed", SUBJECT: "yielded"}}.items():
         _w, out, _b = _fight(a, s, yielder=yielder)
         assert out
         for e in out:
@@ -165,11 +167,11 @@ def test_a_felled_party_carries_no_body_observation():
 def test_a_capture_yielded_at_the_untouched_band_stamps_the_ending_on_person_captured():
     """`Event.ending` is NOT a Felled/Wounded-only field: `capture`'s Untouched band runs the effect (it declares
     `Tenure.since`), `_eff_capture` returns `_eff_kill`'s `ending` with the opened edge, and the fold stamps it on every
-    success Event -- here `person.captured`, the captive `yielded`, the actor `undecided`, actor first."""
+    success Event -- here `person.captured`, the captive `yielded`, the actor `prevailed` (B14.02), actor first."""
     from .test_cp_t03_09_capture import ACTOR as C_ACTOR, CAPTIVE, _capture, _fold_at, _scene, _world as _cworld
     w, d = _cworld()
     out = _fold_at(w, d, _capture(0), UNTOUCHED, _scene(surrender=dict(by=CAPTIVE, turn=1, accepted=True)))
     assert [e.kind for e in out] == ["person.captured"], [e.kind for e in out]
     (e,) = out
     assert e.ending, "the Untouched capture's Event carries no ending"
-    assert e.ending == ((C_ACTOR, "undecided"), (CAPTIVE, "yielded")), e.ending
+    assert e.ending == ((C_ACTOR, "prevailed"), (CAPTIVE, "yielded")), e.ending      # B14.02: the actor is left standing

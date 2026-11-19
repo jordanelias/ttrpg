@@ -202,7 +202,7 @@ if __name__ == '__main__':
     sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
     from modules.combat import config
     from modules.combat.combatant import Combatant
-    from trace import run_traced_fight
+    from fight_trace import run_traced_fight
     seed = int(sys.argv[1]) if len(sys.argv) > 1 else 3
     A = Combatant('Bryn', weapon='arming', tradition='italian')
     B = Combatant('Halla', weapon='longsword', tradition='german')

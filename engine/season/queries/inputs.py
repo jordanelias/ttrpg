@@ -23,6 +23,10 @@ itself is a `seam/` item of its own. It lives here, not in a sibling file, becau
 construct it and this leaf is the one host file a module may import
 (`engine/season/tests/test_social_contest_module.py`).
 
+B14.01 adds the combat module's output record, `CombatOutcome` (with `PartyWounds`, `Surrender`, `DecisiveBeat`), beside
+`PersonalCombatInput`: the entry returns it and the host adapter reads it (`seam/wrappers/combat.py::resolve`). It is
+not a `Margin` and carries no winner.
+
 v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`) add the fieldwork scene's pair, at the foot of the file:
 `TrailItem` and `FieldworkInput` in, `Findings` out -- the `inquiry` role's records, for the same reason.
 v9 IN-07 E1 adds the settlements module's larder records after them: `Eater`, `LarderInput` and `Under`
@@ -137,10 +141,10 @@ class PersonalCombatInput:
                        result is `+1` when A wins, `-1` when B does, `0` UNRESOLVED (a ruled outcome);
       * `ends`      -- each party's `end`, in `claimants` order (`combat.py::party_end`, `H-97`): the authored
                        `attr.body.endurance` (else the class default) less the body-band penalty, floored at 1;
-      * `wound_quantities` -- the `WoundTracker` fields the host lifts per party after the fight
-                       (`rosters.yaml: wound_quantities`, in roster order). The module reads them off the
-                       trackers and returns what it found; the refusal for one the tracker does not carry
-                       is the host's (`combat.py::_wound_state`);
+      * `wound_quantities` -- the `WoundTracker` fields the host reads per party after the fight
+                       (`rosters.yaml: wound_quantities`, in roster order) and the decider's view lifts. The module
+                       returns `PartyWounds`'s five fixed fields whatever it names; the refusal for a name that
+                       record lacks is the host's (`combat.py::_wound_state`);
       * `terms`     -- the duel's terms (RS-25, PC-10a, CP-T03-09): one of `modules/combat/wrapper.py::DUEL_TERMS`,
                        read by the module entry and handed to `wrapper.fight`. The default is the STRING `'death'`
                        (the engine's `LETHAL_TERMS`, pinned equal by `engine/season/tests/test_cp_t03_09_capture.py`), never `None`:
@@ -176,7 +180,14 @@ class PersonalCombatInput:
                        order (PC-06 K-1, ED-IN-0347). The module maps each key to its `Combatant` field by PC-14's
                        `registry_key` (`modules/combat/attributes.py`); a key absent from the dict leaves its field at
                        the class default, and `end` is carried by `ends`, not read from here. The default is `()`:
-                       `combat_input` fills it only when a claimant has an authored attribute."""
+                       `combat_input` fills it only when a claimant has an authored attribute;
+      * `traditions`, `techniques`, `axes`, `dispositions` -- the WORKBENCH's four fields (B14.11, `03_PC_typed_outcome_one_door`
+                       Part B), each one entry per party in `claimants` order, `ends`' shape, each entry `None` where that party
+                       gives none, each defaulting to `()` so every record built before them is the record it was. The module
+                       passes them to `Combatant(..., tradition=, equipped=, skills=, disp=)` as it passes `kits`:
+                       `traditions` a tradition name; `techniques` `{name: level}` (a list of names is each at level 1.0);
+                       `axes` `{axis: bonus}` (`Combatant`'s own attribute stays `skills`); `dispositions` the `disp` number.
+                       The season fills none of them until a carrier exists (`03_PC_person_inputs_content.md`)."""
     claimants: tuple
     ends: tuple
     wound_quantities: tuple
@@ -189,6 +200,92 @@ class PersonalCombatInput:
     opposition_rate: Optional[float] = None
     carried: tuple = (0.0, 0.0)
     attributes: tuple = ()
+    traditions: tuple = ()
+    techniques: tuple = ()
+    axes: tuple = ()
+    dispositions: tuple = ()
+
+
+@dataclass(frozen=True)
+class PartyWounds:
+    """One party's lifted `WoundTracker`: five FIXED fields (B14.01), whatever `wound_quantities` names. The host's
+    `seam/wrappers/combat.py::_wound_state` reads it by that roster and refuses, by name, a roster member this record
+    lacks."""
+    felled: bool
+    wounds: int
+    max_wounds: int
+    health_remaining: int
+    health_full: int
+
+
+@dataclass(frozen=True)
+class Surrender:
+    """The scene's `yield` event, lifted off its trace by the module entry (B14.01). `round` is the round at whose
+    start or end the yield came (A-101; the engine's trace event still names it `turn`)."""
+    by: str
+    round: int
+    accepted: bool
+
+
+@dataclass(frozen=True)
+class DecisiveBeat:
+    """The wound that ended the scene: the trace's last `wound` event that felled its victim (B14.01).
+      * `by`     -- the striker's id;
+      * `victim` -- the felled party's id;
+      * `source` -- the engine's own site name for the wound: exchange | bind | stophit | pursuit | displace_graze;
+      * `weapon` -- the striker's weapon key as the fight opened (the `fight_start` event; the `wound` event carries none);
+      * `round`  -- the round it landed in (A-101; the count of `turn_start` events up to it)."""
+    by: str
+    victim: str
+    source: str
+    weapon: str
+    round: int
+
+
+@dataclass(frozen=True)
+class SceneShape:
+    """WHAT THE SCENE'S TRACE SAYS OF ITS COURSE, folded by the module entry from the trace it already holds (B14.15; a pure
+    fold over `wound`, `turn_start` and `yield`, no new engine event). The host reads it off the result and puts it on the
+    act's Events (`loop/effects_combat.py::_eff_kill`); nothing is kept between scenes.
+      * `rounds`      -- rounds fought: the `turn_start` count (A-101; `CombatOutcome.rounds`);
+      * `blows`       -- wounding blows LANDED, by claimant id (a `wound` event is emitted only for a blow that took Health);
+      * `first_blood` -- who landed the first wounding blow, `None` where none landed;
+      * `lead_changes`-- times the party ahead on Health fraction changed (a tie is no lead and no change);
+      * `nearest`     -- each party's lowest Health remaining during the scene, in points (his Health when no blow reached him).
+    A party whose Combatant carries no tracker has no full Health to read a fraction against: it is absent from `nearest`
+    and the scene's `lead_changes` is `0`."""
+    rounds: int
+    blows: Mapping[str, int]
+    first_blood: Optional[str]
+    lead_changes: int
+    nearest: Mapping[str, int]
+
+
+@dataclass(frozen=True)
+class CombatOutcome:
+    """WHAT THE `combat` MODULE ENTRY RETURNS FOR ONE SCENE (B14.01; the combat entry's output record, as `Margin` is
+    the social contest's).
+
+    ⚠ THIS RECORD IS NOT A `Margin`, AND MUST NOT BE 'FIXED' INTO ONE. Combat's degree is read off its WOUND STATE
+    (`seam/ladder.py::combat_degree` over `wounds`), never off a net and an obstacle; a `net`/`ob` pair here would
+    make the module a second resolver (Jordan, 2026-09-03: *"kill/wound degrees should be directly taken from scene
+    combat"*). Nor does it name a winner: who prevailed is the fold's reading of `wounds` and `surrender`.
+
+      * `claimants` -- `(A, B)`, as the input;
+      * `wounds`    -- `{claimant id: PartyWounds}`; a party whose Combatant carries no tracker is ABSENT (the host
+                       refuses it by name);
+      * `surrender` -- the scene's `yield` event the engine did not refuse, or `None` (a refused declaration is not a surrender);
+      * `beat`      -- the wound that felled a party, or `None` when nobody was felled;
+      * `rounds`    -- rounds fought (A-101; the `turn_start` count);
+      * `shape`     -- the scene's course, folded from its trace (B14.15);
+      * `trace`     -- the scene's events, for a viewer; `shape` and `beat` are the only folds of it."""
+    claimants: tuple
+    wounds: Mapping[str, PartyWounds]
+    surrender: Optional[Surrender]
+    beat: Optional[DecisiveBeat]
+    rounds: int
+    shape: SceneShape
+    trace: tuple
 
 
 @dataclass(frozen=True)

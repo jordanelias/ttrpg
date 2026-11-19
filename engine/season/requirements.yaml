@@ -157,7 +157,7 @@ scales:
     note: >-
       ⚠ THE TWO HALVES OF THIS SCALE ARE NOT THE SAME THING. The duel engine is real and the loop
       already calls it (`combat_seam.py` -> `wrapper.fight`), but it is a CONTINUOUS RANGE model
-      (`combat_systems.py::RANGE_COMMIT_PEAK`, `RANGE_AVAIL_FLOOR`) between two combatants.
+      (`config.py::CFG['RANGE_COMMIT_PEAK']`, `CFG['RANGE_AVAIL_FLOOR']`) between two combatants.
       ⚠ CORRECTED 2026-10-26 (v10 REM-03, B10-01): this note used to say grid-based map combat with
       units exists nowhere in the tree. `modules/mass_battle` holds a cell battlefield
       (`config.py:14` `BATTLEFIELD_SIZE`, `:23` `UNIT_GRID_SIZE`); what does not exist is the
@@ -867,5 +867,6 @@ rows:
         argv: ["python", "-m", "pytest", "engine/tests/test_draw.py", "-q"]
         expects: "the test file passes; the same seed twice gives the same hash"
         holds: "unread"
-    blocks: []
+    blocks: [03_PC_duel_chain_reach, 03_PC_person_inputs_content]
+    # for combat: reach (`03_PC_duel_chain_reach`, V12 B01, landed) and per-person inputs (`03_PC_person_inputs_content`, V12 B18); `register.py` reads no `blocks:` value, so these are plan-carrier ids, written as the proposals name them
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W23 spent in substance (`fight` resolves through the combat seam and is graded); H-98 closed (combat's three bands are data and nothing keys a fourth)

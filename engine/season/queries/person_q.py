@@ -49,11 +49,16 @@ from ..data.requires import (
     UNKNOWN, WORLD_ONLY_STEMS,
 )
 from ..data.rosters import (
-    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, capability_rows, require_use_site, roster,
+    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, capability_rows, require_use_site, roster,
     roster_map,
 )
 from ..state.carriers import Person, Said
 from ..trace_log import TRACE
+
+# B14.16: THE OBSERVATION THAT NAMES THE HAND OF A FELLED ACTOR'S DEATH. `loop/effects_combat.py::hand_observed` puts
+# `(actor, "fell_to_hand", <standing party>)` on the actor's `person.died` Event; WITNESS deposits it as an ordinary claim,
+# and `deed_doer` reads it. The one spelling; the writer imports it from here.
+HAND_PREDICATE = "fell_to_hand"
 
 
 def entrenchment(p: Person, seasons_held: int, scale: int, span: int) -> int:
@@ -230,17 +235,21 @@ _KIND_STRATA = {k: frozenset(r.stratum for r in _verbs.VERB_TABLE.values() if k 
 
 
 def _seen_index(ledger) -> tuple:
-    """A holder's own, untold `seen` claims, indexed twice: `(subject, when, lap) -> [seen]`, and
-    `(when, lap) -> {(who, stratum)}` -- who the holder saw acting, and at what, in each lap."""
+    """A holder's own, untold claims, indexed three times: `(subject, when, lap) -> [seen]` and
+    `(when, lap) -> {(who, stratum)}` -- who the holder saw acting, and at what, in each lap -- and
+    `(subject, when, lap) -> {value}` for a `fell_to_hand` claim (B14.16: who stood when `subject`, the actor, fell)."""
     by_subject: dict = {}
     acting: dict = {}
+    hand: dict = {}
     for s in ledger:
-        if s.predicate == SEEN_PREDICATE and not s.chain:
+        if s.predicate == HAND_PREDICATE and not s.chain:
+            hand.setdefault((s.subject, s.when, s.lap), set()).add(s.value)
+        elif s.predicate == SEEN_PREDICATE and not s.chain:
             by_subject.setdefault((s.subject, s.when, s.lap), []).append(s)
             who = getattr(s.value, "who", None)
             if who is not None:
                 acting.setdefault((s.when, s.lap), set()).add((who, getattr(s.value, "stratum", None)))
-    return by_subject, acting
+    return by_subject, acting, hand
 
 
 def deed_doer(c, seen: tuple):
@@ -257,14 +266,26 @@ def deed_doer(c, seen: tuple):
     `both` anchors on the ACTOR (`(x, person.died)` for x's kill), and a third party's sighting on
     `s` would name the wrong doer of the wrong death. The price, stated: a person who both struck and was struck in one
     lap is judged a patient by nobody that lap.
-    LIMIT, stated: where the ACTOR died attacking, the sighting names him as `who` of his own death,
-    so no killer is named. A `seen` on the same subject, `when` and `lap` that names NO `who` (a
+    THE ACTOR WHO DIED ATTACKING (B14.16; was this note's LIMIT, stated): the sighting names him as `who` of his
+    own death, so the pairing below names no killer. A `person.died` claim is therefore read FIRST against the
+    holder's own `fell_to_hand` claim on the same subject, `when` and `lap` (`HAND_PREDICATE`, deposited from the
+    felled actor's death Event by `loop/effects_combat.py::hand_observed`), and that value is the answer; the
+    pairing stands for every other case. CLOSED: for a holder who holds that claim, the standing party is named.
+    NOT CLOSED: a holder who does not hold it -- WITNESS deposits an Event's `observed` under
+    `observation_deposit_mode`, and the shipped `actor` deposits to the act's actor alone, a felled actor being
+    no longer a person to receive it, so under the shipped mode no ledger holds it and the limit stands in
+    every ledger; a fight with no standing party (both felled, a yield) carries none; a told copy has none.
+    Two different names held for one death are ambiguous, so `None`.
+    A `seen` on the same subject, `when` and `lap` that names NO `who` (a
     channel that withheld the actor) makes the pairing ambiguous, so `None`: an unnamed hand may be
     the one that did it. Holder-side and World-free: `Seen` is read by its fields, never imported
     (AX-2)."""
     if c.chain or not is_deed(c) or c.predicate not in PAIRED_KINDS:
         return None
-    by_subject, acting = seen
+    by_subject, acting, hand = seen
+    if c.predicate == PERSON_DIED and (c.subject, c.when, c.lap) in hand:
+        named = hand[(c.subject, c.when, c.lap)]
+        return next(iter(named)) if len(named) == 1 else None
     strata = _KIND_STRATA[c.predicate]
     if any(who == c.subject and st in strata for who, st in acting.get((c.when, c.lap), ())):
         return None
@@ -459,10 +480,40 @@ def believed_capability(p: Person, other: str, capability: str):
     """WHAT `p` BELIEVES `other`'s SCORE IN `capability` IS, from his OWN ledger alone: the value of his latest claim
     about `other` at `CAPABILITY_CLAIM + capability` (latest by `(when, lap, confidence)`), else `None` -- unknown, never a
     figure. Person-side (AX-2): it reads `p`'s ledger and nothing else."""
-    held = [c for c in p.ledger if c.subject == other and c.predicate == CAPABILITY_CLAIM + capability]
-    if not held:
-        return None
-    return max(held, key=lambda c: (c.when, c.lap, c.confidence)).value
+    return _latest_claim(p, other, CAPABILITY_CLAIM + capability)
+
+
+# B14.24: THE CLAIMS A PERSON HOLDS ABOUT ANOTHER'S ARMS AND WOUNDS, the capability claim's own shape (`Claim(subject=<that person>,
+# predicate=<stem> + <key>, value=<what he believes>)`) and, like it, a READING: NOTHING DEPOSITS ONE TODAY (the told, seen and inferred
+# channels carry neither), so `believed_kit` and `believed_body` answer `None` for every person in a built realm until a depositor exists.
+# `KIT_CLAIM + <a Combatant field>` (`weapon`, `armor`; `engine/substrate/combat_kit.py::FIELDS`) holds the key he believes the person carries
+# in that field; `BODY_CLAIM` holds the condition (the `Person.body` scale) he believes the person is at. Both readers are `believed_capability`'s.
+KIT_CLAIM = "kit:"
+BODY_CLAIM = "condition:body"
+
+
+def _latest_claim(p: Person, other: str, predicate: str):
+    """The value of `p`'s latest claim about `other` at `predicate` (latest by `(when, lap, confidence)`), else `None`; `p`'s ledger alone."""
+    held = [c for c in p.ledger if c.subject == other and c.predicate == predicate]
+    return max(held, key=lambda c: (c.when, c.lap, c.confidence)).value if held else None
+
+
+def believed_kit(p: Person, other: str, field: str):
+    """The key `p` believes `other` carries in the Combatant `field` (`weapon` or `armor`), from his OWN ledger alone: the value of his latest claim
+    at `KIT_CLAIM + field`, else `None` -- unknown, never a figure. Person-side (AX-2)."""
+    return _latest_claim(p, other, KIT_CLAIM + field)
+
+
+def believed_body(p: Person, other: str):
+    """The condition `p` believes `other`'s body is at, from his OWN ledger alone: the value of his latest `BODY_CLAIM` about `other`, else `None`.
+    Person-side (AX-2)."""
+    return _latest_claim(p, other, BODY_CLAIM)
+
+
+def has_seen(p: Person, other: str) -> bool:
+    """Has `p` SEEN `other`: does his ledger hold an untold `seen` claim whose `who` is `other` (`heritage_regard` reads the same deposit)? The
+    reading of a person he has laid eyes on; a person known only by report or not at all is not seen. Person-side (AX-2)."""
+    return any(c.predicate == SEEN_PREDICATE and not c.chain and getattr(c.value, "who", None) == other for c in p.ledger)
 
 
 def conviction_stand(p: Person, affiliation: str) -> float:

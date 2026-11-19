@@ -648,8 +648,15 @@ DEFAULT_FIXTURES = Fixtures(
     # harm (`body_step` above: the live arm ships, the control is one named value away)
     # [ASSUMPTION; medium; Jordan to correct; revert: none]. `none` is the control: no ceiling moves.
     # Injection site: this line, read by `loop/effects_combat.py::_eff_kill`.
-    # [JUSTIFIED: engine/season/hole_register.yaml H-258 -- the gate and the ceiling walk are the CP-T03-07 home's; only whether the live arm ships is undocumented, so it is injected and swept none / deepest_gate]
-    body_mark_model="deepest_gate",    # `H-258`, swept none (control) / deepest_gate (SHIPPED)
+    # [JUSTIFIED: engine/season/hole_register.yaml H-258 -- the gate and the ceiling walk are the CP-T03-07 home's; only whether the live arm ships is undocumented, so it is injected and swept none / deepest_gate / drawn]
+    body_mark_model="deepest_gate",    # `H-258`, swept none (control) / deepest_gate (SHIPPED) / drawn (B14.23, flipped by B15)
+    # B14.23 (`H-567`). THE OBSTACLE OF THE LASTING MARK'S ROLL, read only under `body_mark_model` `drawn`: a survivor at his limit rolls once
+    # (`loop/effects_combat.py::_marks`, the one pool rule on the untrained default, his body band entering as levels through the `wounds` source,
+    # the one sampler) and the net meets this obstacle on the one ladder. Fractional like every obstacle (A-5); under `deepest_gate` and `none`
+    # it is read by nothing. The seed value is the even line of a pool of `pool_add` dice (`sigma_leverage.even_line`, 0.4 a die); B15 sets it with the flip.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `body_mark_model: deepest_gate`, which reads no obstacle]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-567 -- `site: Fixtures mark_ob`, graded `assumption`; no document gives how hard it is to mend clean at one's limit, so it is injected and swept 1.2 / 2.4 / 4.8]
+    mark_ob=2.4,                       # `H-567`, swept 1.2 / 2.4 (seed value, read only under `drawn`) / 4.8
     # `H-184` (split out of `H-98`). WHERE THE `Wounded` BAND STARTS: the threshold `wounds` must be
     # strictly above for a standing subject to read `Wounded` rather than `Untouched`. The edge is
     # `rosters.yaml: combat_band_edges` and `None` MEANS ITS VALUE (`0`, any wound), so the number is
@@ -909,6 +916,13 @@ DEFAULT_FIXTURES = Fixtures(
     # keeps a share's standard error at or under 0.025 (0.5 / sqrt(400)). Shared with CP-T04-08's `field_estimate`.
     # [JUSTIFIED: engine/season/hole_register.yaml H-251 -- `site: Fixtures estimate_samples`, graded `assumption`; no document gives the sample size of a shown figure, so it is injected and swept 100 / 400 / 1600]
     estimate_samples=400,              # `H-251`, swept 100 / 400 (SHIPPED, CP-T03-05) / 1600
+    # B14.24 (`H-568`). HOW MANY FIGHTS A PERSON'S BELIEF ABOUT A FIGHT SAMPLES: `seam/wrappers/sigma.py::believed_chance` on a row whose prize
+    # binds `personal_combat` runs `combat.fight_estimate` this many times, on the believer's own picture of his opponent and the private
+    # stream keyed `estimate.fight`. A BELIEF IS NOT A MEASUREMENT: a person weighing a fight runs it in his head a few dozen times, not the
+    # display's `estimate_samples`, which a player reads as the odds. A whole number >= 1; anything else raises in the reader (`_estimate.samples_of`).
+    # [ASSUMPTION; medium; Jordan to correct; revert: set it to `estimate_samples`' value, one re-pin]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-568 -- `site: Fixtures believed_fight_samples`, graded `assumption`; no document gives how often a person runs a fight in his head, so it is injected and swept 30 / 60 / 400]
+    believed_fight_samples=60,         # `H-568`, swept 30 / 60 (SHIPPED, B14.24) / 400
     # `H-202` (v9 IN-25, BOUND-STAKES). HOW HARD §F2's STANCE TERM PULLS ON A CHOICE: the term
     # `stance_polarity` signs is read at `1 + this` (`decision/choose.py::stance_term`), so a grudge
     # or a judged deed outweighs a person's pursuits sooner as it rises. §F2 weights the term 1 and

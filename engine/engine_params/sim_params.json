@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 122,
-    "total": 392,
-    "uncited": 270,
+    "total": 394,
+    "uncited": 272,
     "of_which_assumption_grade": 8
   },
-  "count": 392,
+  "count": 394,
   "by_module": {
     "engine.dice_engine": 11,
     "engine.season": 25,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 103,
+    "engine.season.settings": 105,
     "engine.season.realm": 8
   },
   "params": [
@@ -4077,7 +4077,18 @@
       "kind": "other",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-258`, swept none (control) / deepest_gate (SHIPPED)",
+      "note": "`H-258`, swept none (control) / deepest_gate (SHIPPED) / drawn (B14.23, flipped by B15)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.mark_ob",
+      "name": "mark_ob",
+      "value": 2.4,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-567`, swept 1.2 / 2.4 (seed value, read only under `drawn`) / 4.8",
       "citation": null,
       "citation_grade": null
     },
@@ -4386,6 +4397,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-251`, swept 100 / 400 (SHIPPED, CP-T03-05) / 1600",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.believed_fight_samples",
+      "name": "believed_fight_samples",
+      "value": 60,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-568`, swept 30 / 60 (SHIPPED, B14.24) / 400",
       "citation": null,
       "citation_grade": null
     },

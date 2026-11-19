@@ -1,6 +1,6 @@
 {
  "_": "Reference armour-interaction table (ED-PC-0040). Regenerate ONLY with `python workbench/armour_participation.py --update`, and treat the resulting diff as the required disclosure of what a change moved. Cells are [decided_rate, share_of_decided|null] vs the arming sword, position-swapped, deterministically seeded.",
- "generated_at_sha": "7c5d4e89b3a1371f12c1f4546507389d77ecc957",
+ "generated_at_sha": "9b2690780fe6cbcd94c48539b9c42083c9142f56",
  "n": 40,
  "reference_weapon": "arming",
  "table": {
@@ -150,16 +150,16 @@
   },
   "estoc": {
    "heavy": [
-    0.975,
-    0.8717948717948718
+    0.95,
+    0.9210526315789473
    ],
    "light": [
     1.0,
     0.95
    ],
    "medium": [
-    0.975,
-    0.9487179487179487
+    1.0,
+    0.95
    ],
    "none": [
     1.0,
@@ -168,8 +168,8 @@
   },
   "estoc_halfsword": {
    "heavy": [
-    1.0,
-    0.925
+    0.975,
+    0.8974358974358975
    ],
    "light": [
     1.0,
@@ -177,11 +177,11 @@
    ],
    "medium": [
     1.0,
-    0.875
+    0.975
    ],
    "none": [
     1.0,
-    0.95
+    0.975
    ]
   },
   "falchion": {
@@ -222,8 +222,8 @@
   },
   "flamberge": {
    "heavy": [
-    0.975,
-    1.0
+    0.875,
+    0.9714285714285714
    ],
    "light": [
     1.0,
@@ -231,7 +231,7 @@
    ],
    "medium": [
     1.0,
-    0.825
+    0.95
    ],
    "none": [
     1.0,
@@ -240,20 +240,20 @@
   },
   "flamberge_halfsword": {
    "heavy": [
-    0.925,
-    0.9459459459459459
+    0.975,
+    0.9487179487179487
    ],
    "light": [
     1.0,
-    0.875
+    0.925
    ],
    "medium": [
     1.0,
-    0.75
+    0.9
    ],
    "none": [
     1.0,
-    0.975
+    0.9
    ]
   },
   "glaive": {
@@ -303,7 +303,7 @@
    ],
    "medium": [
     1.0,
-    0.95
+    0.925
    ],
    "none": [
     1.0,
@@ -312,20 +312,20 @@
   },
   "greatsword_halfsword": {
    "heavy": [
-    1.0,
-    0.875
+    0.925,
+    1.0
    ],
    "light": [
     1.0,
-    0.95
+    0.975
    ],
    "medium": [
     1.0,
-    0.85
+    0.9
    ],
    "none": [
     1.0,
-    0.95
+    0.85
    ]
   },
   "guandao": {
@@ -407,7 +407,7 @@
    ],
    "light": [
     1.0,
-    0.5
+    0.625
    ],
    "medium": [
     1.0,
@@ -456,38 +456,38 @@
   },
   "longsword": {
    "heavy": [
-    1.0,
-    1.0
+    0.975,
+    0.8974358974358975
    ],
    "light": [
     1.0,
     0.85
    ],
    "medium": [
-    0.975,
-    0.6923076923076923
+    1.0,
+    0.8
    ],
    "none": [
     1.0,
-    0.75
+    0.875
    ]
   },
   "longsword_halfsword": {
    "heavy": [
     1.0,
-    0.925
+    0.9
    ],
    "light": [
     1.0,
-    0.8
+    0.75
    ],
    "medium": [
     1.0,
-    0.9
+    0.825
    ],
    "none": [
     1.0,
-    0.8
+    0.675
    ]
   },
   "lucerne_hammer": {
@@ -510,7 +510,7 @@
   },
   "mace": {
    "heavy": [
-    0.925,
+    0.975,
     1.0
    ],
    "light": [
@@ -528,8 +528,8 @@
   },
   "main_gauche": {
    "heavy": [
-    0.35,
-    0.9285714285714286
+    0.325,
+    0.9230769230769231
    ],
    "light": [
     1.0,
@@ -555,7 +555,7 @@
    ],
    "medium": [
     1.0,
-    0.375
+    0.35
    ],
    "none": [
     1.0,
@@ -663,7 +663,7 @@
    ],
    "medium": [
     1.0,
-    0.875
+    0.9
    ],
    "none": [
     1.0,

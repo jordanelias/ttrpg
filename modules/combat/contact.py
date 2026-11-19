@@ -49,6 +49,25 @@ def grab_sigma(actor, opponent, cfg):
 # Branching grapple menu (Fiore's 2nd Remedy four-branch + a foot-pin/escape pair) — reachable
 # across seeds; a flat escape chance first, then gsig-skewed weights over the rest. [SIM-CALIBRATE]
 # weights. A single one-shot resolution — never loops, never mutates a caller's `beats` counter.
+#
+# WHAT EACH OUTCOME DOES (the only effects, applied in wrapper.py's contact branch): every member
+# shifts POISE or INITIATIVE and nothing else.
+#   'disarm'   — defender.poise falls by POISE_BREAK_BIND * CONTACT_DISARM_POISE_K. No weapon is removed.
+#   'throw'    — defender.poise falls by POISE_BREAK_BIND * CONTACT_THROW_POISE_K; aggressor.initiative
+#                rises by INIT_GAIN_HIT.
+#   'pin'      — the same two shifts as 'throw' (the poise fall and the initiative gain).
+#   'control'  — aggressor.initiative rises by INIT_STEAL_INDES * CONTACT_CONTROL_VOR_K. No poise moves.
+#   'foot_pin' — defender.poise falls by POISE_BREAK_OVERCOMMIT. The defender is not moved to the ground.
+#   'escape'   — no effect; the attempt is voided.
+# NONE of these removes a weapon from a fighter's hand, moves a fighter to the ground, or holds him in
+# place. The names describe the branch's intent in the fiction and do NOT describe the mechanism: read
+# the effect above, not the name.
+#
+# TRACE VOCABULARY, NOT PLAYER TEXT: the names are trace vocabulary and are not shown to a player. No
+# file renders a member today (workbench narrate.py and commentary.py do not name them). The rule binds
+# the first rendering added: that rendering must state the effect above (a balance taken, an initiative
+# gained), never a weapon lost, a fighter felled to the ground or a fighter held. A player-facing string
+# built from a member is a falsifier of this note.
 GRAB_OUTCOMES = ('disarm', 'throw', 'pin', 'control', 'foot_pin', 'escape')
 
 

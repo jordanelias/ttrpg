@@ -376,15 +376,19 @@ def check_contest_prizes(verb_table: dict) -> list:
 # row's `provider:` -- the seam names a ROLE, never a wrapper. Unlike `contest` and `inquiry` it has NO ROSTER of its own
 # (its key is a contest provider's name, which the prize rows already carry), so it is not in `_ROLE_ROSTERS`.
 ESTIMATE_ROLE = "estimate"
+# B14.24: its believer's twin. A provider whose estimate a PERSON can hold of the act registers `@provider("believed_estimate", <name>)`, called as
+# `(w, believer, act, claimants, bands) -> chance | None` by `sigma.believed_chance` over the bands asked; a provider registering none (mass battle) is
+# answered `None` there. Keyed, like the display's role, by the contest provider's name.
+BELIEVED_ESTIMATE_ROLE = "believed_estimate"
 
 
 def check_estimate_providers() -> list:
-    """CP-T04-08: every `estimate` provider is the estimate OF a registered contest provider -- refused naming the
+    """CP-T04-08: every `estimate` (and, B14.24, `believed_estimate`) provider is the estimate OF a registered contest provider -- refused naming the
     provider, at driver construction (called by `check_contest_prizes`). An estimate registered under a name no `contest`
     provider carries is unreachable (`odds_of` finds it through a prize row's `provider:`) and would never be asked; a
     misspelled name is the typical way to get one. Returns the names checked, so a caller can see the sweep was not empty
     (`CLAUDE.md` §0.1 pt 2)."""
-    names = sorted(name for role, name in PROVIDERS if role == ESTIMATE_ROLE)
+    names = sorted({name for role, name in PROVIDERS if role in (ESTIMATE_ROLE, BELIEVED_ESTIMATE_ROLE)})
     for name in names:
         if not has("contest", name):
             raise Unspecified(

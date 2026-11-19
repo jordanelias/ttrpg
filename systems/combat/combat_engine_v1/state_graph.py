@@ -9,6 +9,9 @@ Each node carries: `to` (target states), `emits` (trace-event kinds the engine f
 `site` (wrapper.py reference), and `entry`/`terminal` flags. Edges and emits are kept in sync with the live
 trace by the dynamic coverage check (run this file: `python state_graph.py`).
 
+Status: this graph is REFERENCE for the Plan-layer proposal (`proposals/03_PC_typed_outcome_one_door.md`,
+Part C row R-PC-20). It is not read by `wrapper.engagement`; no module under `modules/` or `engine/` imports it.
+
 Drift note (reconciliation, WS-1): the 2026-06-09 flow-and-state-map prose is superseded as the source of
 truth by THIS file. The map's stale items (DAMAGE_SCALE removed; precommit now consumed) do not recur here
 because the graph is data + tested, not prose."""
@@ -30,34 +33,33 @@ TRACE_KINDS = {
 # flags any reason that NEVER fires across a sweep — that is how a dead transition (e.g. the stamina<=-4
 # collapse abort the 2026-06-09 map flagged as "never observed") is surfaced repeatably.
 SEPARATION_REASONS = {'collapse', 'burst_ceiling', 'clean_defence', 'beat_exhaustion', 'terms'}   # 'terms' (RS-25): a duel's terms were met at a beat head
-# [ED-PC-0042 — MEASURED, do not re-litigate] The (e) sweep below used to flag 'collapse' and 'beat_exhaustion' as
-# never-fired, and the 2026-07-26 defect register carried them as dead branches on that basis. They are NOT dead:
-# over 5,184 fights spanning 12 weapons x end in {1,2,6} x armour in {none,heavy} they fire 164 and 1,135 times
-# respectively. The flag was a FALSE POSITIVE of that sweep's build coverage — its 4 matchups all use DEFAULT
-# fighters, who reach clean_defence/burst_ceiling long before stamina <= -4 or the beat budget runs out. PC-13 widened
-# the sweep (the WIDE builds, the duel-terms fight and the withdraw fight in the self-test below) rather than delete two
-# reachable guards on the strength of an under-powered probe.
+# [ED-PC-0042] The (e) sweep below used to flag 'collapse' and 'beat_exhaustion' as never-fired. 'collapse' is NOT dead: PC-13
+# widened the sweep (the WIDE builds below) and it fires, because the 4 default matchups use DEFAULT fighters, who reach
+# clean_defence/burst_ceiling long before stamina <= -4, so the flag on it was a false positive of that sweep's build coverage.
+# 'beat_exhaustion' is NOT shown reachable: it is not observed in 1,728 fights (addendum E-B15) nor in 11,000
+# (16_PESSIMIST_PC.md section 1.3), and this sweep, run at B14, still prints it under [DEAD-BRANCH FLAG]. The earlier figure for it
+# (1,135 firings over 5,184 fights) is retracted. It stays declared until a build that reaches it is found or the site is deleted.
 
 STATES = {
     # ---- outer loop (fight) ----
-    'FightInit':      {'entry': True, 'to': ['EngagementInit', 'Yielded', 'Withdrawal'], 'emits': ['fight_start'], 'site': 'wrapper.fight:282'},
-    'EngagementInit': {'to': ['Approach', 'AwaitTempo'], 'emits': ['turn_start', 'engagement_start'], 'site': 'wrapper.engagement:16-34'},
+    'FightInit':      {'entry': True, 'to': ['EngagementInit', 'Yielded', 'Withdrawal'], 'emits': ['fight_start'], 'site': 'wrapper.fight'},
+    'EngagementInit': {'to': ['Approach', 'AwaitTempo'], 'emits': ['turn_start', 'engagement_start'], 'site': 'wrapper.engagement'},
     # ---- inner loop (engagement), per beat ----
-    'Approach':       {'to': ['Approach', 'AwaitTempo', 'Felled', 'Separation'], 'emits': ['approach', 'stophit', 'wound'], 'site': 'wrapper.engagement:66-85'},
-    'AwaitTempo':     {'to': ['Exchange', 'AwaitTempo', 'Approach', 'Felled', 'Separation'], 'emits': ['disengage', 'wound'], 'site': 'wrapper.engagement:58-88'},   # disengage (+ its pursuit wound) and the terms separation are beat-head events
+    'Approach':       {'to': ['Approach', 'AwaitTempo', 'Felled', 'Separation'], 'emits': ['approach', 'stophit', 'wound'], 'site': 'wrapper.engagement'},
+    'AwaitTempo':     {'to': ['Exchange', 'AwaitTempo', 'Approach', 'Felled', 'Separation'], 'emits': ['disengage', 'wound'], 'site': 'wrapper.engagement'},   # disengage (+ its pursuit wound) and the terms separation are beat-head events
     'Exchange':       {'to': ['Bind', 'Riposte', 'HitLanded', 'Contact', 'AwaitTempo', 'Felled', 'Separation'],
-                       'emits': ['commit', 'read', 'mode', 'roll', 'outcome', 'wound'], 'site': 'wrapper.engagement:86-262'},
-    'Bind':           {'to': ['HitLanded', 'Riposte', 'Contact', 'Felled'], 'emits': ['wound'], 'site': 'wrapper.engagement:233-252'},
-    'Riposte':        {'to': ['AwaitTempo', 'Contact', 'Felled'], 'emits': [], 'site': 'wrapper.engagement:253-261'},
-    'HitLanded':      {'to': ['AwaitTempo', 'Contact', 'Felled'], 'emits': ['wound'], 'site': 'wrapper.engagement:226-232'},
+                       'emits': ['commit', 'read', 'mode', 'roll', 'outcome', 'wound'], 'site': 'wrapper.engagement'},
+    'Bind':           {'to': ['HitLanded', 'Riposte', 'Contact', 'Felled'], 'emits': ['wound'], 'site': 'wrapper.engagement'},
+    'Riposte':        {'to': ['AwaitTempo', 'Contact', 'Felled'], 'emits': [], 'site': 'wrapper.engagement'},
+    'HitLanded':      {'to': ['AwaitTempo', 'Contact', 'Felled'], 'emits': ['wound'], 'site': 'wrapper.engagement'},
     # ---- contact axis (I7b, D8/D9): a real Contact node — BUILT, not activated (M-11). Reachable from Exchange
     # directly (the deep-commit reopen precondition needs neither Bind/Riposte/HitLanded) as well as from all
     # three, since a grab is opportunistic on ANY of the three opening_created precondition sites.
     'Contact':        {'to': ['AwaitTempo', 'Separation'], 'emits': ['contact'], 'site': 'wrapper.engagement (outcome tail, contact-axis block)'},
     # ---- engagement terminals -> back to the outer loop ----
-    'Felled':         {'to': ['Decided'], 'emits': ['engagement_end'], 'site': 'wrapper.engagement:82,212,232,250,259'},
-    'Separation':     {'to': ['InterTurn'], 'emits': ['separation', 'engagement_end'], 'site': 'wrapper.engagement:84,270-273'},
-    'InterTurn':      {'to': ['EngagementInit', 'Unresolved', 'Yielded', 'Withdrawal'], 'emits': [], 'site': 'wrapper.fight:290-292'},
+    'Felled':         {'to': ['Decided'], 'emits': ['engagement_end'], 'site': 'wrapper.engagement'},
+    'Separation':     {'to': ['InterTurn'], 'emits': ['separation', 'engagement_end'], 'site': 'wrapper.engagement'},
+    'InterTurn':      {'to': ['EngagementInit', 'Unresolved', 'Yielded', 'Withdrawal'], 'emits': [], 'site': 'wrapper.fight'},
     # ---- decision ----
     # §11.4 (PC-01): an unrefused Yield, declared at Phase 1 of a turn (so from FightInit or InterTurn), ends the fight
     # straight at FinalResult with no UPSET_FLOOR draw. A REFUSED declaration emits `yield` and falls through unchanged.
@@ -65,10 +67,10 @@ STATES = {
     # REM-31: the decider's 'withdraw', taken at the head of a turn (so from FightInit or InterTurn): the early UNRESOLVED exit,
     # no UPSET_FLOOR draw.
     'Withdrawal':     {'to': ['Unresolved'], 'emits': ['withdraw'], 'site': 'wrapper.fight (per-turn decider, WITHDRAW)'},
-    'Decided':        {'to': ['UpsetCheck'], 'emits': [], 'site': 'wrapper.fight:287-289'},
-    'UpsetCheck':     {'to': ['FinalResult'], 'emits': [], 'site': 'wrapper.fight:298'},
-    'Unresolved':     {'to': ['FinalResult'], 'emits': [], 'site': 'wrapper.fight:293'},
-    'FinalResult':    {'terminal': True, 'to': [], 'emits': ['fight_result'], 'site': 'wrapper.fight:299-300'},
+    'Decided':        {'to': ['UpsetCheck'], 'emits': [], 'site': 'wrapper.fight'},
+    'UpsetCheck':     {'to': ['FinalResult'], 'emits': [], 'site': 'wrapper.fight'},
+    'Unresolved':     {'to': ['FinalResult'], 'emits': [], 'site': 'wrapper.fight'},
+    'FinalResult':    {'terminal': True, 'to': [], 'emits': ['fight_result'], 'site': 'wrapper.fight'},
 }
 TERMINAL_STATES = {s for s, v in STATES.items() if v.get('terminal')}
 ENTRY_STATES = {s for s, v in STATES.items() if v.get('entry')}
@@ -192,7 +194,7 @@ def separation_reasons_from_events(events):
 if __name__ == '__main__':
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'workbench'))
     from modules.combat.combatant import Combatant
-    from trace import run_traced_fight
+    from fight_trace import run_traced_fight
 
     checks, rule = [], '=' * 64
     print('state_graph.py — engagement/fight state graph integrity'); print(rule)

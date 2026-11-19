@@ -29,6 +29,7 @@ from ..data import verbs as V
 from ..harness import pairs
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
+from ..queries.inputs import CombatOutcome, PartyWounds, SceneShape, Surrender
 from ..seam.wrappers import combat, sigma
 from ..seam.wrappers._estimate import rng_of, samples_of
 from ..seam.wrappers._entry import entry_for
@@ -161,16 +162,17 @@ def test_the_instrument_is_deterministic_given_its_seed(capsys):
     assert printed("social", "--n", "500", "--seed", "1", "--min-bin", "20") != social
 
 
-def _scene(w, actor, target, **felled_yield) -> dict:
-    """A planted scene: `felled` names who is down, `yielded` the declarer of a `yield` event, `refused` marks it refused."""
+def _scene(w, actor, target, **felled_yield) -> CombatOutcome:
+    """A planted scene: `felled` names who is down, `yielded` the declarer of a `yield` event (the module entry lifts a refused declaration to no
+    `Surrender`, so a refused one is a scene with none)."""
     def state(pid):
-        return combat._wound_state(dict(felled=pid in felled_yield.get("felled", ()), wounds=0, max_wounds=3,
-                                        health_remaining=5, health_full=5))
-    trace = []
-    if "yielded" in felled_yield:
-        trace.append(dict(kind="yield", by=felled_yield["yielded"], turn=2, accepted=True,
-                          refused="contested" if felled_yield.get("refused") else None))
-    return dict(trace=trace, wound_state={actor: state(actor), target: state(target)})
+        return PartyWounds(felled=pid in felled_yield.get("felled", ()), wounds=0, max_wounds=3,
+                           health_remaining=5, health_full=5)
+    yielded = felled_yield.get("yielded")
+    surrender = None if yielded is None else Surrender(by=yielded, round=2, accepted=True)
+    return CombatOutcome(claimants=(actor, target), wounds={actor: state(actor), target: state(target)},
+                         surrender=surrender, beat=None, rounds=2,
+                         shape=SceneShape(rounds=2, blows={actor: 0, target: 0}, first_blood=None, lead_changes=0, nearest={}), trace=())
 
 
 def test_scene_outcome_reads_what_fight_estimate_read():
@@ -183,7 +185,6 @@ def test_scene_outcome_reads_what_fight_estimate_read():
     assert combat.scene_outcome(_scene(w, a, b), a, b) == ("undecided", None)
     assert combat.scene_outcome(_scene(w, a, b, yielded=b), a, b) == ("yielded", b)
     assert combat.scene_outcome(_scene(w, a, b, yielded=a, felled=(b,)), a, b) == ("yielded", a)   # a yield is read first
-    assert combat.scene_outcome(_scene(w, a, b, yielded=b, refused=True, felled=(a,)), a, b) == ("actor_felled", None)
     # every outcome is a member of the roster `fight_estimate` shares out
     for felled in ((), (a,), (b,), (a, b)):
         assert combat.scene_outcome(_scene(w, a, b, felled=felled), a, b)[0] in combat.ESTIMATE_OUTCOMES

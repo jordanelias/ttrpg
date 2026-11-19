@@ -132,7 +132,7 @@ def test_the_record_carries_the_opposition_rate_to_the_module():
         inp = PersonalCombatInput(claimants=("a", "b"), ends=(5, 5), wound_quantities=(), scores=(2, 3), opposition_rate=rate)
         seen, checked = set(), 0
         for s in range(8):
-            for ev in entry(inp, random.Random(s))["trace"]:
+            for ev in entry(inp, random.Random(s)).trace:
                 if "ob" in ev:
                     seen.add(round(ev["ob"], 9))
                     checked += 1

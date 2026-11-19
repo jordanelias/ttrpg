@@ -1,6 +1,6 @@
 """engine.substrate.combat_kit -- what the personal-combat engine can be armed with, read from its export.
 
-Status: [live, CP-T03-03]. The single runtime reader of the `kit` section and of `attributes.end.default` of
+Status: [live, CP-T03-03; `FORMS` B14.12]. The single runtime reader of the `kit` section and of `attributes.end.default` of
 `engine/engine_params/combat_engine_v1.json` (written by `tools/export_engine_params.py` from
 `modules/combat/weapons.py`, `vocabulary.py` and `combatant.py`, behind its blocking `--check`). Same shape as
 `names.py`, `descriptors.py` and `composition.py`.
@@ -26,8 +26,13 @@ _KIT = _SECTIONS['kit']
 #: authors no Endurance (`seam/wrappers/combat.py::party_end`). Not the sheet scale's floor in `descriptor_registry.yaml`.
 END_DEFAULT = _SECTIONS['attributes']['end']['default']
 
-#: Every key of `modules/combat/weapons.py::WEAPONS`: a Combatant's `weapon` is one of these.
+#: Every key of `modules/combat/weapons.py::WEAPONS` WITHOUT a `base` (the 50): a Combatant's `weapon` is one of these.
+#: A half-sword form is a grip the engine switches into, never a person's kit, so it is not here (B14.12).
 WEAPONS = frozenset(_KIT['weapons'])
+
+#: `{form: its base weapon}` for each record carrying a `base` (the half-sword grips), for a reader that needs the
+#: mapping. Disjoint from `WEAPONS`.
+FORMS = dict(_KIT['forms'])
 
 #: Every member of `modules/combat/vocabulary.py::ARMOUR_TIERS`: a Combatant's `armor` is one of these.
 ARMOUR_TIERS = frozenset(_KIT['armour_tiers'])
