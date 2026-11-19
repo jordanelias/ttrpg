@@ -19,7 +19,7 @@ from .primitives import (Stasis, Appeal, Standing, Reserve, Pool, SelfGating, Le
 # groundup local engine.py (the "third σ-kernel" hazard). effective_ob/degree/net_boost are
 # byte-identical at TN7 (parity-tested). roll_net_continuous is wrapped below to preserve the kernel's
 # GLOBAL-random stream (sigma_leverage.roll_net_continuous(rng=random) draws from the module-level RNG the
-# seeded tests rely on; passing rng=None would use a fresh Random and desync the seed). B05.02: the one
+# seeded tests rely on; passing no `rng` is refused: the draw is required). B05.02: the one
 # sampler (A-5) -- the oracle's roll is the bell curve every provider draws, not the d10 faces.
 from engine.dice_engine import sigma_leverage as _sigma
 from engine.dice_engine.draw import Draw as _Draw

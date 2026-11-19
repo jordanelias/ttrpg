@@ -36,7 +36,7 @@ from typing import Any, Callable, Optional
 
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
 from ..data.matrix import Step, WriteClass, matrix_row, partition_lookup
-from ..data.requires import UNKNOWN
+from ..data.requires import UNKNOWN, Observation
 from ..data.verbs import EVENT_KINDS
 from ..data.rosters import (
     HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, TENURE_KINDS, roster)
@@ -44,7 +44,7 @@ from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, U
 from ..trace_log import TRACE
 from .attribution import anchor_of, cover_at_logging
 from .carriers import (
-    Event, Office, Person, Proposition, Receipt, Record, Rung, Site, StateChange, Tenure,
+    Act, Claim, Event, Office, Person, Proposition, Receipt, Record, Rung, Said, Site, StateChange, Tenure, Term,
 )
 from .ids import H
 from .acts import ActStore
@@ -409,7 +409,10 @@ def _entity_moved(item: Any, was: dict) -> bool:
 # A `SeatId` decodes as the plain string it encodes as, and the constructors of `Office` and `Act` tag it again.
 # An Enum has no decode rule (its class is not in the encoding); none is held.
 _SNAPSHOT_TAG = "snapshot"
-_SNAPSHOT_TYPES: dict = {}
+# Class name -> class, for the `o` objects a snapshot may hold; a class defined above this module (`epistemic.Seen`)
+# enters it with `register_snapshot_type`, where it is defined.
+_SNAPSHOT_TYPES: dict = {c.__name__: c for c in (Act, Claim, Event, Office, Person, Proposition, Receipt, Record, Rung,
+                                                  Said, Site, StateChange, Tenure, Term, Observation)}
 
 
 class _SnapshotError(ValueError):
@@ -451,25 +454,13 @@ def register_snapshot_type(cls: type) -> type:
     return cls
 
 
-def _snapshot_types() -> dict:
-    """Class name -> class, for the `o` objects a snapshot may hold (the carriers and `Observation`
-    are entered once, on first use; a class defined above this module registers itself)."""
-    if "Act" not in _SNAPSHOT_TYPES:
-        from ..data.requires import Observation
-        from . import carriers as _c
-        for cls in (_c.Act, _c.Claim, _c.Event, _c.Office, _c.Person, _c.Proposition, _c.Receipt, _c.Record,
-                    _c.Rung, _c.Said, _c.Site, _c.StateChange, _c.Tenure, _c.Term, Observation):
-            register_snapshot_type(cls)
-    return _SNAPSHOT_TYPES
-
-
 def _decode_count(b: bytes, i: int, end: bytes) -> tuple:
     j = b.index(end, i)
     return int(b[i:j]), j + 1
 
 
 def _decode_object(name: str, fields: dict) -> Any:
-    cls = _snapshot_types().get(name)
+    cls = _SNAPSHOT_TYPES.get(name)
     if cls is None:
         raise _SnapshotError(f"no class {name!r} in the snapshot's type table")
     declared = (set(cls._DECLARED) if getattr(cls, "_DECLARED", None) is not None
@@ -481,11 +472,7 @@ def _decode_object(name: str, fields: dict) -> Any:
         return cls(rest.pop("id"), rest.pop("kind"), **rest)
     if hasattr(cls, "_fields"):
         return cls(**fields)
-    late = {f.name for f in _dc_fields(cls) if not f.init}
-    obj = cls(**{k: v for k, v in fields.items() if k not in late})
-    for k in late:
-        object.__setattr__(obj, k, fields[k])
-    return obj
+    return cls(**fields)
 
 
 def _decode_into(b: bytes, i: int) -> tuple:
@@ -546,8 +533,7 @@ def decode(data: bytes, fixtures: Fixtures = DEFAULT_FIXTURES) -> "World | Snaps
         if found != want:
             return SnapshotRefused("fixtures_digest", want, str(found))
         return _world_from(frames, fixtures)
-    except (_SnapshotError, ShapeGap, ValueError, IndexError, KeyError, TypeError, struct.error,
-            UnicodeDecodeError, RecursionError) as exc:
+    except (ShapeGap, ValueError, IndexError, KeyError, TypeError, struct.error, RecursionError) as exc:
         return SnapshotRefused("malformed", "", f"{type(exc).__name__}: {exc}")
 
 
@@ -572,7 +558,6 @@ def _world_from(frames: dict, fixtures: Fixtures) -> "World":
             if isinstance(c, Receipt) and c.serial >= 0:
                 e.changes[k] = minted.setdefault(c.serial, c)
                 w.gate._serial = max(w.gate._serial, c.serial)
-    w.log = EventLog(w.gate, EVENT_KINDS, lambda: w.acts.ids(), w._on_logged)
     for e in frames["log"]:
         w.log.append(e)
     # `_on_logged` just read each Event's cover off the world as it stands NOW; the snapshot holds the cover as

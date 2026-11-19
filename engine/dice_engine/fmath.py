@@ -22,6 +22,8 @@ read differently on 3.11 and 3.13, and are recorded on 3.11, CI's interpreter.
 A leaf: it imports `math` only. Pure.
 """
 import math
+from functools import reduce as _reduce
+from operator import add as _add
 
 
 def ltr_sum(xs) -> float:
@@ -29,10 +31,7 @@ def ltr_sum(xs) -> float:
     correctly rounded on every platform, so the ACCUMULATION is bit-identical everywhere (an operand's own `**` or
     transcendental is the platform's libm and is not controlled here). An empty input is the integer 0, as `sum()`
     gives."""
-    total = 0
-    for x in xs:
-        total += x
-    return total
+    return _reduce(_add, xs, 0)
 
 
 def log(x: float) -> float:

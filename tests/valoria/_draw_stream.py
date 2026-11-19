@@ -155,7 +155,7 @@ class RecordingRandom(_keyed.Draw):
         which silently attributed 6,470 draws to a single wrapper line. Hence the cross-check against
         the static scan; an off-by-one here is not visibly wrong on its own."""
         f = sys._getframe(2)
-        while f is not None and os.path.basename(f.f_code.co_filename) in ('random.py', 'draw.py', _THIS_FILE):
+        while f is not None and os.path.basename(f.f_code.co_filename) in ('draw.py', _THIS_FILE):
             f = f.f_back
         return (os.path.basename(f.f_code.co_filename), f.f_lineno) if f is not None else ('?', 0)
 
