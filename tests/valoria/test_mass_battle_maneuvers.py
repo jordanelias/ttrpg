@@ -83,32 +83,6 @@ def test_sweep_displaces_laterally_grid():
     assert r.passed, f"V-SWEEP (grid) regressed: measured={r.measured} expected={r.expected}"
 
 
-@pytest.mark.xfail(
-    reason="[2026-07-05, UPDATED again -- see docstring] A follow-up Fable-5 adversarial audit found "
-    "the 'steering mechanism is proven correct' claim below was WRONG: _envelop_goal had a genuine "
-    "limit-cycle bug (D2, no hysteresis between phase-1/phase-2) plus _node_advance had a genuine "
-    "step-freeze bug (D2b, a body could stall forever within 0.5 combined units of any waypoint). "
-    "Both fixed. At GAUGE SCALE this closes the racing-clocks question for good: H3-H6's draws are "
-    "now GONE entirely (were 100%/90%/100%/100%). THIS FIXTURE specifically still fails, but for a "
-    "DIFFERENT, disclosed-not-chased reason: its small detachment's base cell speed is only 1, and "
-    "the discipline-degradation speed tiers (floor(base*disc_mult)) floor to exactly 0 the moment "
-    "discipline drops below the top tier -- a discretization edge case only low-base-speed bodies "
-    "hit, confirmed by direct trace, not fixed here (out of scope for this pass; flagged for a "
-    "future movement-tier pass). Measured: 11/20 seeds now reach behind the defender (up from 6, up "
-    "from 0 before D2/D2b), mean row-diff -0.58 (up from -0.1) -- real, substantial improvement, "
-    "still short of this validator's strict pass threshold. Separately, DG-3's pool-semantics "
-    "ruling (intensive/per-troop) and DG-1's composition ruling (force-parity + majority-pin/"
-    "cavalry-wing) were both implemented -- but the gauge-scale rows this unlocked now OVERSHOOT "
-    "their bands decisively in the attacker's favor instead of landing in them, a newly-surfaced "
-    "partition-invariance/Command-scaling question, not this fixture's concern. See "
-    "proposals/mass_battle_fighting_withdrawal_v1.md (DG-2 workplan) and "
-    "tests/coverage_matrix.md's 2026-07-05 entry for the full record. "
-    "[2026-07-08 update] Unexpectedly XPASSED (not a failure -- strict=False) once the ED-MB-0006 "
-    "pool-formula change (troop-type/quality/numbers, not Command) landed -- plausibly the "
-    "small detachment's discipline-degradation speed-floor edge case above interacts differently "
-    "with the new pool magnitudes, but this was observed on ONE run, not re-verified across many "
-    "seeds, so the xfail marker is left in place rather than claiming this is now a reliable pass.",
-    strict=False)
 def test_envelop_reaches_rear_node():
     """Acceptance: V-ENVELOP on the LIVE default (node/field) path -- the path Jordan actually
     watches in the workbench. Unit._resolve_maneuver_goal/_envelop_goal (fix-plan step 7) gives
@@ -141,7 +115,7 @@ def test_envelop_reaches_rear_node():
     overshooting). Re-measured: this fixture's own detachment now reaches behind the defender in
     11/20 seeds (was 6, was 0 pre-fix) -- real movement, still short of a clean pass, for a THIRD,
     separate, disclosed-not-chased reason (a discipline-degradation speed-floor discretization edge
-    case specific to this fixture's low-base-speed detachment -- see the xfail reason above). At
+    case specific to this fixture's low-base-speed detachment -- the xfail that carried this reason was removed at B17.14). At
     GAUGE SCALE (larger armies, higher base speeds, unaffected by that third issue), the fix is much
     more decisive: H3/H4/H5/H6/C4's 100%/90%/100%/100%/66.7% DRAWS are entirely gone. The racing-
     clocks ablation's own frozen-vs-wheeling null result is therefore RE-CONFIRMED as uninformative
@@ -163,8 +137,22 @@ def test_envelop_reaches_rear_node():
     tests/coverage_matrix.md's 2026-07-08 entry for the honest numeric record of both.
 
     See tests/coverage_matrix.md's 2026-07-05 entry for the full numeric record."""
-    r = _val.v_envelop(path='node', seeds=_CI_SEEDS)
-    assert r.passed, f"V-ENVELOP (node) measured={r.measured} expected={r.expected}"
+    # B17.14: the single-fixture pass/fail (and its xfail) is replaced by a two-arm count over the twenty
+    # seeds the history above cites. Same detachment, same seeds; the arms differ only in whether the
+    # 'envelop' maneuver is on. "Behind" is the validator's own threshold (row-diff < -1.0, validators.v_envelop).
+    # No invented margin: a direction with a control.
+    seeds = 20
+    envelop = _val._envelop_reach(True, path='node', seeds=seeds)
+    hold = _val._envelop_reach(False, path='node', seeds=seeds)
+    checked = len(envelop) + len(hold)
+    envelop_behind = sum(1 for x in envelop if x < -1.0)
+    hold_behind = sum(1 for x in hold if x < -1.0)
+    assert checked >= 20, f"checked {checked} seed readings; the count is only evidence if it was taken"
+    assert hold_behind == 0, (
+        f"control failed: the hold arm reached behind the defender in {hold_behind}/{seeds} seeds")
+    assert envelop_behind > hold_behind, (
+        f"the envelop arm reached behind the defender in {envelop_behind}/{seeds} seeds, "
+        f"the hold arm in {hold_behind}/{seeds}: the maneuver does not beat its control")
 
 
 def test_sweep_displaces_laterally_node():
