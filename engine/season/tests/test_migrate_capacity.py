@@ -33,6 +33,10 @@ from ..decision import budget
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token
 from ..state.carriers import Act
+import pytest
+
+#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
+pytestmark = pytest.mark.flat_fold
 
 TRAVELLER, STAYER = "p_low", "p_mid"          # both in `Hh` at build; only the first travels
 

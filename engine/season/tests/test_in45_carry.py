@@ -32,6 +32,10 @@ from ..loop.effects import EFFECTS
 from ..queries import world_q
 from ..state.carriers import Act, Claim, Question, Record, Tenure, View
 from .test_u7_remit import JUDGE, OPENS
+import pytest
+
+#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
+pytestmark = pytest.mark.flat_fold
 
 SEAT, DUKE = "off_duke", "p_high"
 PETITIONER, PARTY, OTHER = "p_low", "p_mid", "p_other"

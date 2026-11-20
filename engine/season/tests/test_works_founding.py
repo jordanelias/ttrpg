@@ -37,6 +37,9 @@ from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..state.carriers import Act
 
+#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
+pytestmark = pytest.mark.flat_fold
+
 HARBOUR, SETTLEMENT, HEARTH = "site_harbour", "S", "Hh"
 PRESENT, ABSENT = "p_high", "p_low"          # at `S`, the harbour's rung / at `Hh`, below it
 

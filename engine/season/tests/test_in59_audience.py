@@ -40,6 +40,10 @@ from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..state.carriers import DETERMINED_BY, Act, Claim, Office, Tenure
 from .test_in10_record_operands import _hold_document
+import pytest
+
+#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
+pytestmark = pytest.mark.flat_fold
 
 COURT, SEAT, DUKE = "S", "off_duke", "p_high"
 MOVER = "p_mid"                                  # seatless, sworn to nobody, at `Hh`
