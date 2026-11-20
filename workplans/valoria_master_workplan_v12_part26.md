@@ -24,7 +24,7 @@ GATE: Batch B05-one-roll @928dccc9a68232d1afb041c9a1c422d8cfdb690e
 GATE: Batch B06-keyed-draw @bcbe3ed5e595ff465e12dbe246c29f1216d14f3a
 GATE: Batch B15-pc-calibration
 GATE: Batch B16-pc-round
-GATE: Batch B17-mb-scale
+GATE: Batch B17-mb-scale @5377bd99c0ab3823d2ed9870bddf6f3e37999c0e
 GATE: Batch B19a-mb-contact-instrument
 GATE: Batch B29-pc-custody   (added by H2: `H2_DECISIONS.md` HD-09, B19.60's named captives go into custody; no wave moves; `valoria_master_workplan_v12_part2.md` §1)
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").

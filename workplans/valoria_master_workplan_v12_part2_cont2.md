@@ -58,7 +58,6 @@
 | `S/tests/test_h199_one_spacing.py` | B05.64 | S7 |
 | `S/tests/test_task_draw.py` | B07.01 | S9 |
 | `S/tests/test_vres_task_and_prize.py` | B07.04, B11.83 **(two creators: C-03)** | S9 |
-| `S/tests/valoria/test_export_troops.py` | B17.10 | S9 |
 | `S/tests/test_claim_fade_as_read.py` | B09.01 | S10 |
 | `S/tests/test_refusal_memory.py` | B09.02 | S10 |
 | `S/tests/test_one_reader_of_a_ledger.py` | B09.06 | S10 |
@@ -302,10 +301,6 @@
 
 | path created | item | caller the item names (searched in the item's own text) |
 |---|---|---|
-| `engine/engine_params/troops.json` | B17.10 | a `ci_checks_registry.yaml` row; the local tier; its exporter's `--check` (named in the item) |
-| `tools/export_troops.py` | B17.10 | a `ci_checks_registry.yaml` row; the local tier; a gate command |
-| `modules/mass_battle/troop_types/table.py` | B17.10 | a `ci_checks_registry.yaml` row; the local tier |
-| `engine/engine_params/mass_battle_v1.json` | B17.12 | its exporter's `--check` (named in the item) |
 | `engine/season/harness/scenarios.py` | B11.05 | a gate command |
 | `engine/season/harness/duel_scene.py` | B16.11 | a gate command |
 | `modules/social_contest/proceeding.py` | B24.06 | a composition row |
@@ -342,7 +337,7 @@
 
 | node | status, Layer 1 lines, ledger id | batches it concerned | what the batch still holds back, for its own reason |
 |---|---|---|---|
-| `L1-A3` | APPLIED `:777`, `:786`, `:182`, rows 24 `:1050`, 30 `:1057`; `hol:1407`; ED-IN-0358 | B17, B23 | nothing |
+| `L1-A3` | APPLIED `:777`, `:786`, `:182`, rows 24 `:1050`, 30 `:1057`; `hol:1407`; ED-IN-0358 | B23 | nothing |
 | `L1-A4` | APPLIED `:182`, row 22 `:1048`; `hol:1684`; ED-IN-0358 | B16, B20, B30 | nothing |
 | `L1-A72` | APPLIED row 19 `:1045`; `hol:1396`; ED-IN-0358 | B30 | B30 keeps the tree's one setting `contest_max_depth` (A37: no `contest_nesting_cap` created; part 37_cont `UNDECIDED` 1) |
 | `L1-A9` | APPLIED `:662`, rows 29 `:1056`, 36 `:1065`, 41a `:1071`, F.26 `:1227`; ED-IN-0358 | B08, B28 | `interactions_per_scene` stays 3, its value 1 being B08's gate control |
@@ -483,7 +478,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | B12c-material-verbs-and-valley | SE+WR | ED-SE-0063..0064 (0+2) | H-550..H-566 (12+5) | H count 11 → 12 |
 | B15-pc-calibration | PC | ED-PC-0064..0065 (0+2) | H-574..H-579 (1+5) | H shifted |
 | B16-pc-round | PC | ED-PC-0066..0067 (0+2) | H-580..H-584 (0+5) | H shifted |
-| B17-mb-scale | MB | ED-MB-0086..0087 (0+2) | H-585..H-589 (0+5) | H shifted |
 | B18-pc-content | PC | ED-PC-0068..0069 (0+2) | H-590..H-594 (0+5) | H shifted |
 | B19a-mb-contact-instrument | MB | ED-MB-0088..0089 (0+2) | H-595..H-599 (0+5) | H shifted |
 | B19-mb-field-calibration | MB | ED-MB-0090..0092 (1+2) | H-600..H-604 (0+5) | H shifted |
@@ -530,7 +524,7 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | M1 · every outcome is drawn | B08 (S13; §2.3 S13) | B05 S7, B07 S9, B08 S13 | none | R-01, R-03, R-09 |
 | M2 · persons | BA1 (S12; §2.3 S12) | B09 S10, B10 S11, BA1 S12 | none | R-06, R-07, R-08, R-09 |
 | M3 · every verb | B35 (S18; §2.3 S18) | B11 S12, B12a S13, B12b S14, B12c S15, B15 S12, B21 S12, B21b S13, B21c S14, B22 S17, B23 S18, B24a S15, B25 S16, B26 S17, B27 S16, B28 S17, B29 S14, B32 S17, B35 S18 | none | R-01, R-04, R-05, R-07, R-08, R-09 |
-| M4 · every scale | B36 (S19; §2.3 S19) | B16 S13, B17 S9, B19a S14, B19 S15, B20 S16, B24 S13, B30 S18, B34 S14, B36 S19 | none | R-04 |
+| M4 · every scale | B36 (S19; §2.3 S19) | B16 S13, B19a S14, B19 S15, B20 S16, B24 S13, B30 S18, B34 S14, B36 S19 | none | R-04 |
 | M5 · the rulings beyond the nine, and the carried positions | B40 (S22; §2.3 S22) | B18 S15, B31 S19, B33 S19, B37 S16, B38 S20, B39 S21, B40 S22, B41 S18, B11F1 S16, B11F2 S17, B21d S15, B21s S18, B37p S17 | none | R-01 to R-09, every conjunct: B40's REQUIREMENT re-reads all on its closing tree (`valoria_master_workplan_v12_part43.md`; corrected by repair lane V1 from "R-01, R-09"); R-05.a is first named at B35 (`valoria_master_workplan_v12_part36.md` REQUIREMENT) |
 | the settings, then the re-take | B99 (S24; §2.3 S24) | B98 S23, B99 S24 | none | — |
 
