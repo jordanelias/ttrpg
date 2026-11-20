@@ -804,6 +804,20 @@ def test_an_untouched_side_loses_no_body_on_a_drawn_field():
     assert all(w.persons[pid].body < before[pid] for pid in defenders), "the hurt side was not cut: the fold wrote nothing"
 
 
+def test_a_drawn_field_that_hurts_nobody_writes_nothing_and_is_refused():
+    """B17.01 step 8's amendment, observed: both sides at the full scale writes no body and no stance, so the gate's no-op refuses the
+    march (`march.refused`, band `Drawn`); it is not `field.drawn`. CONTROL: the same fold with one side hurt (the test above) is
+    `field.drawn` and cuts the hurt side."""
+    w = build_realm(0)
+    attackers = world_q.mustered(w, "set_s_014", CROWN)
+    defenders = world_q.mustered(w, "set_s_036", CHURCH)
+    before = {pid: w.persons[pid].body for pid in attackers + defenders}
+    events = _fold_planted(w, "Drawn", field_outcome(1.0, 1.0), attackers, defenders)
+    kinds = [(e.kind, e.degree) for e in events]
+    assert kinds == [("march.refused", "Drawn")], kinds
+    assert all(w.persons[pid].body == before[pid] for pid in before), "a refused field cut a body"
+
+
 def test_a_fought_army_field_cuts_each_cohort_by_its_own_part_and_not_by_the_side():
     """B17.03 step 3: a person the side's `parts` name is cut by HIS part's share, anyone else by the side's. Two cohorts fed one
     army, one cut deep (400 of 1000) and one barely (900); the side's own share is 650. CONTROL, the same fold with the parts

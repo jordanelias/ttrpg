@@ -41,8 +41,8 @@ __all__ = ['TROOPS_PER_WEIGHT', 'MUSTER_FRACTION', 'TRAINING_SITE', 'training_si
 #: armies to be a minimum of 1000 troops"; "typically ... 5000 to 10000"). The weight is the floor and a heavier side is
 #: a multiple of it; `massbattle` splits what a side raises into units of at most `config.MAX_TROOPS_PER_UNIT`. A weight
 #: under one is a place that cannot raise an army: it fields fewer than the floor and the form-time warning says so.
-#: [ASSUMPTION; medium; Jordan to correct; revert: 300 (the 100-troop unit floor's scale, ED-IN-0306).]
-TROOPS_PER_WEIGHT = 10_000  # [canonical: ED-MB-0101 -- Jordan, 2026-11-20: an army is at least 1,000 troops; sized so one weight at MUSTER_FRACTION raises that floor]
+#: [ASSUMPTION; medium; Jordan to correct; revert: 300 (the 100-troop unit floor's scale, ED-IN-0306).] The ruling fixes the floor, not this constant.
+TROOPS_PER_WEIGHT = 10_000  # [ASSUMPTION: sized so one weight at MUSTER_FRACTION raises ED-MB-0101's 1,000-troop floor; whether the floor or the typical battle sets it is Jordan's open question, ED-MB-0101's last row]
 
 #: The share of a place's people that can be under arms at once. A tenth is the usual ceiling of pre-industrial
 #: mobilisation (the able-bodied men of military age are about a fifth of a population, and half of those is a hard

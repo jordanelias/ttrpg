@@ -1619,6 +1619,7 @@ def resolve_feigned_retreat(pursuer, feigning_unit):
 
 
 # ─── MULTI-UNIT BATTLE ORCHESTRATOR (D-3, D-5) ──────────────────────────
+# (B17.05: the multi-engagement loops moved to `systems/mass_battle/sim/multi.py`; what stays here is what the season reaches.)
 # Models battles with multiple units per side. Each engagement pair runs through
 # run_battle (1v1). After all pairs resolve: morale cascade, rout contagion,
 # freed-attacker flanking. Between turns: recovery.

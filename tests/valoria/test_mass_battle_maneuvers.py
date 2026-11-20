@@ -113,7 +113,7 @@ def test_envelop_reaches_rear_node():
     a small fixed distance of ANY goal. Both are real, confirmed-by-direct-trace bugs, now fixed (a
     one-shot commitment latch; capping the step at the remaining distance instead of freezing/
     overshooting). Re-measured: this fixture's own detachment now reaches behind the defender in
-    11/20 seeds (was 6, was 0 pre-fix) -- real movement, still short of a clean pass, for a THIRD,
+    11/20 seeds at that fix (was 6, was 0 pre-fix; B17.14 read 0/20 in both arms after B06's draws) -- real movement, still short of a clean pass, for a THIRD,
     separate, disclosed-not-chased reason (a discipline-degradation speed-floor discretization edge
     case specific to this fixture's low-base-speed detachment -- the xfail that carried this reason was removed at B17.14). At
     GAUGE SCALE (larger armies, higher base speeds, unaffected by that third issue), the fix is much
@@ -145,6 +145,7 @@ def test_envelop_reaches_rear_node():
     envelop = _val._envelop_reach(True, path='node', seeds=seeds)
     hold = _val._envelop_reach(False, path='node', seeds=seeds)
     checked = len(envelop) + len(hold)
+    assert len(envelop) == seeds and len(hold) == seeds, (len(envelop), len(hold))   # an empty arm would make the control vacuous
     envelop_behind = sum(1 for x in envelop if x < -1.0)
     hold_behind = sum(1 for x in hold if x < -1.0)
     assert checked >= 20, f"checked {checked} seed readings; the count is only evidence if it was taken"

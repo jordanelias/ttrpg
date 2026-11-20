@@ -493,7 +493,7 @@ def scene_sources(d) -> dict:
 
 #: The Events a fought field leaves, and the one an unopposed march leaves: the kinds `FOUGHT FIELDS` counts.
 #: The verbs that emit them are read off the table (`fought_fields`), not named.
-FIELD_FOUGHT = ("field.won", "field.lost")
+FIELD_FOUGHT = ("field.won", "field.lost", "field.drawn")
 FIELD_UNOPPOSED = "field.unopposed"
 #: The `Receipt.field` a stance write carries (`write_matrix.yaml`: `(Person, stance)`).
 STANCE_FIELD = "stance"

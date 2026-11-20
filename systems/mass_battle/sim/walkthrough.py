@@ -32,6 +32,7 @@ from engine.dice_engine import draw
 from modules.mass_battle import rngsource                                      # noqa: E402
 
 _SCALE = 1000   # the body scale a share is read on (the world's `condition_scale`); the page shows a share as a fraction of it
+from engine.season.seam.ladder import field_degree                            # noqa: E402
 from modules.mass_battle.massbattle import _grade                              # noqa: E402
 from modules.mass_battle.geometry import _oriented                             # noqa: E402
 from modules.mass_battle.orchestration import run_battle                       # noqa: E402
@@ -175,7 +176,8 @@ def fight(example: dict, seed: int, role=None) -> dict:
     # the page reads the two sides as fractions and four flags (`walkthrough_template.html`); B17.03's `FieldOutcome` carries shares
     grade = {'attacker_size_pct': graded.attacker.share / _SCALE, 'defender_size_pct': graded.defender.share / _SCALE,
              'attacker_routed': graded.attacker.routed, 'attacker_conceded': graded.attacker.conceded,
-             'defender_routed': graded.defender.routed, 'defender_conceded': graded.defender.conceded}
+             'defender_routed': graded.defender.routed, 'defender_conceded': graded.defender.conceded,
+             'degree': field_degree(graded)}
     return {'result': result, 'ticks': ticks, 'hpmax': hpmax, 'stages': stages, 'grade': grade}
 
 
@@ -200,14 +202,6 @@ def _summary(example: dict) -> dict:
             'morale_start': example['morale_start'], 'max_ticks': example['max_ticks']}
 
 
-def _end_state(grade: dict) -> str:
-    """B17.01: how the fought field ended, from the attacker's side -- the three-way rule `seam/ladder.py::field_degree` owns (a side
-    is out when it routed or conceded), read off `_grade`'s flags: the module no longer returns a four-way degree."""
-    a_out = grade['attacker_routed'] or grade['attacker_conceded']
-    b_out = grade['defender_routed'] or grade['defender_conceded']
-    return 'won' if b_out and not a_out else 'lost' if a_out and not b_out else 'drawn'
-
-
 def build_page(run: dict, out: str, example: dict, seed: int, role=None) -> None:
     """Write the walkthrough page: the template with this run's data. Every number on the page is read from DATA, so
     the page cannot disagree with the engine it was built from; the sweep over the example's seeds is fought here."""
@@ -217,7 +211,7 @@ def build_page(run: dict, out: str, example: dict, seed: int, role=None) -> None
     for sd in example['sweep_seeds']:
         r = fight(example, sd, role)
         sweep.append({'seed': sd, 'winner': r['result']['winner'], 'ticks': r['result']['turns'],
-                      'a': r['result']['a_hp_pct'], 'b': r['result']['b_hp_pct'], 'degree': _end_state(r['grade'])})
+                      'a': r['result']['a_hp_pct'], 'b': r['result']['b_hp_pct'], 'degree': r['grade']['degree']})
     armies = _summary(example)
     armies['seed'] = seed
     from modules.mass_battle import config as cfg

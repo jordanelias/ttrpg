@@ -1,4 +1,4 @@
-"""CP-T04-05: graded walls -- `field_input` hands the engine `int(field_walls_dr * fort_level)` (floor), `None` (shipped)
+"""CP-T04-05: graded walls -- `field_input` hands the engine `int(field_walls_dr * fort_level)` (floor), `None` (the flat control; B17.01 ships `3`)
 staying `None`, so a worn garrison's walls armour the defender less. This file is the item's own; nothing here is a
 shared pin.
 
@@ -12,7 +12,7 @@ crossing to confound the steps).
 
 The cases: the falsifier (defender win share falls as the garrison's condition steps 1.0 -> 0.67 -> 0.33 -> 0 under
 paired seeds, `field_walls_dr = 3`), its planted failure (a flat `walls_dr` reaches the engine: the same predicate
-reddens), the control (shipped `None` is flat across the same steps and `3` at full condition is the same field as
+reddens), the control (`None` is flat across the same steps and `3` at full condition is the same field as
 `None`, through `field_input` and through the real driver), and the floor (`int`, never `round`)."""
 from __future__ import annotations
 
@@ -101,7 +101,10 @@ def _falls(shares):
 
 
 def test_shipped_arm_is_three_and_none_is_the_flat_control():
+    import importlib
     assert build_realm(0).fixtures.get("field_walls_dr") == 3
+    # the fixture's 3 is a second spelling of A.9's number (`engine/` cannot import it): it must stay equal to its one owner
+    assert importlib.import_module("modules.mass_battle.terrain").WALLS_DEFENDER_DR == 3
 
 
 def test_falsifier_defender_win_share_falls_as_the_garrison_wears_under_paired_seeds():

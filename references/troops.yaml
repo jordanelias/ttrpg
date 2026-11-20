@@ -9,16 +9,16 @@
 # WHAT THIS FILE IS AT LANDING (B17.10): a TRANSCRIPTION of the tables it replaced -- `TROOP_TYPE_STATS`,
 # `MOUNTED_TYPES`, `TROOP_TYPE_DENSITY_CAP`, `TROOP_TYPE_ROLES`, `ROLE_SPEC`, `TROOP_LOADOUT`, `TRAINING_SITE` -- row for
 # row, so no read of any of them moved. Every `secondary` is null, so no field computes anything from a second weapon.
-# Read by nothing yet: `strength`, `ranks`, `upkeep`, `charge`, `wheel`, `default_role` (the four name tests of
-# `hierarchy/units.py`, `orchestration.py`, `armies.py`, `orderofbattle.py` read them at B17.11), `arms` and `classes`
-# (`reach_for` reads them at B17.11; the arms' `range` and `volleys` are today's `VOLLEY_MIN_RANGE`, `VOLLEY_MAX_RANGE`
-# and `MB_VOLLEYS_START`, transcribed), `secondary` (a later stage).
+# Read by nothing yet: `strength`, `ranks`, `upkeep`, `secondary` (a later stage). `charge`, `wheel`, `default_role`, `arms` and
+# `classes` are read (`troop_types/table.py`, `registry.py`: the four name tests and `reach_for`, B17.11). An arm carries no
+# `range` or `volleys`: the volley's reach and count are `VOLLEY_MIN_RANGE`, `VOLLEY_MAX_RANGE` and `MB_VOLLEYS_START`
+# in `config.py`, their one owner, until a reader of this file moves them here.
 #
 # CONTENT FOR JORDAN (authored seeds, not decisions of this file): every `mass_kg` is a seed at memory grade; every
 # `strength` is the smallest whole number at or above the carry demand of the row's own armour (personal combat's
 # `ARMOR_DEMAND`: none 0, light 5/3, medium 10/3, heavy 5), so a type carrying only its primary pays nothing, as today;
 # `heavy_cut` and `heavy_blunt` are weight classes more than weapons, and both carry a pole weapon's reach today;
-# knights templar are `mounted: false` with a 100-troop cell and a lance class, which today's tables say and which
+# knights templar are `mounted: false` with a 50-troop cell and a lance class, which today's tables say and which
 # contradict each other (one visible cell to set); which named weapons of personal combat's roster troops carry
 # (`arming` is the example the proposal uses).
 
@@ -59,11 +59,11 @@ arms:
   spear:       {class: pole}                          # mass from personal combat's export (its key `spear`)
   arming:      {class: non_pole}                      # mass from personal combat's export (its key `arming`)
   pike:        {class: pike,     mass_kg: 3.5}
-  bow:         {class: missile,  mass_kg: 2.0, range: [2, 8], volleys: 10}
-  crossbow:    {class: missile,  mass_kg: 4.0, range: [2, 8], volleys: 10}
-  sling:       {class: missile,  mass_kg: 0.8, range: [2, 8], volleys: 10}
-  javelin:     {class: missile,  mass_kg: 2.5, range: [2, 8], volleys: 10}
-  siege:       {class: missile,  mass_kg: 0.0, range: [2, 8], volleys: 10}   # crew-served: not carried
+  bow:         {class: missile,  mass_kg: 2.0}
+  crossbow:    {class: missile,  mass_kg: 4.0}
+  sling:       {class: missile,  mass_kg: 0.8}
+  javelin:     {class: missile,  mass_kg: 2.5}
+  siege:       {class: missile,  mass_kg: 0.0}   # crew-served: not carried
 
 # The ruled P-DEC-1 map (ED-MB-0014), authored once.
 classes:
@@ -79,7 +79,7 @@ classes:
 #   charge                      charge penetration: 3 for today's `cavalry`, 0 otherwise
 #   wheel                       the fast enveloping wheel: today's `cavalry` and `light_cavalry`
 #   default_role                the role a unit of the type takes when none is named: `Kite` for today's `mounted_archers`
-#   cell_cap                    the most troops a cell holds: 50 for the four horse types (half of `CELL_CAP`, P-DEC-3: a horse and rider take more ground), `CELL_CAP` (100) else
+#   cell_cap                    the most troops a cell holds: 50 for the four horse types (half of `CELL_CAP`, P-DEC-3: a horse and rider take more ground), `CELL_CAP` (100) else. ⚠ 50 is also `CELL_FLOOR` (ED-MB-0101: "cells hold 50-100"), so a horse unit whose troops are not a multiple of 50 starts with cells UNDER 50 (333 troops: 7 cells of 47.6); the two rulings cannot both hold at 50, and which yields is Jordan's
 #   ranks                       the unit's default depth: the tree has none today, so 1 (today's one-rank bodies)
 #   primary, secondary          an `arms` key, or null
 #   armour                      an `armour_tiers` member, or null

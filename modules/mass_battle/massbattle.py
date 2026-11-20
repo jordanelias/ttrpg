@@ -145,12 +145,15 @@ def _refusal(army_a, army_b):
     """B17.04: THE TWO SHAPES THE CELL ENGINE CANNOT HOLD, as a typed refusal beside the typed outcome, or `None` for a field it can.
     A dict on `PARTY-GAP`'s shape (`status`, `why`), which `seam/wrappers/mass_battle.py::resolve` hands on and `seam/contest.py::
     REFUSAL_STATUSES` reads as the game's refusal. Read off the Armies as built, so the headcount arms and an order of battle are one
-    rule. `SCALE-GAP`: a unit past `config.MAX_TROOPS_PER_UNIT`, the module's stated ceiling. `PARTY-GAP`: BOTH sides are nobody, every
+    rule. `SCALE-GAP`: a unit past `config.MAX_TROOPS_PER_UNIT`, the module's stated ceiling, or an army of more than `armies.UNIT_CAP` units. `PARTY-GAP`: BOTH sides are nobody, every
     unit of each at or below `_MIN_TROOPS`, the crash floor, which is a floor-sized phantom and not a block (a field of nobody
     against nobody, or one man a side, is the host's no-party branch, not a battle that the attacker `loses`). One side of nobody
     against a real side is fought as it was."""
     sizes = [[u._start_troops for u in army.units] for army in (army_a, army_b)]
     big = max(max(side) for side in sizes)
+    if max(len(army.units) for army in (army_a, army_b)) > UNIT_CAP:
+        return dict(status="SCALE-GAP", why=f"an army of more than {UNIT_CAP} units is past the module's ceiling "
+                    f"(armies.UNIT_CAP)")
     if big > MAX_TROOPS_PER_UNIT:
         return dict(status="SCALE-GAP", why=f"a unit of {big:g} troops is past the module's ceiling of "
                     f"{MAX_TROOPS_PER_UNIT} (config.MAX_TROOPS_PER_UNIT)")

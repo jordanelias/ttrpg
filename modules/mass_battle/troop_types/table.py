@@ -43,7 +43,7 @@ COMBAT_EXPORT_PATH = os.path.join(_REPO, 'engine', 'engine_params', 'combat_engi
 META_KEYS = ('_generated', 'schema_version', 'source')
 HEADER_KEYS = ('site_kinds', 'armour_tiers', 'default_roles', 'role_specs', 'arms', 'classes', 'troops')
 ROLE_COLUMNS = ('shape', 'instructions')
-ARM_COLUMNS = ('class', 'mass_kg', 'range', 'volleys')
+ARM_COLUMNS = ('class', 'mass_kg')
 CLASS_COLUMNS = ('reach', 'support_ranks')
 TROOP_COLUMNS = ('power', 'discipline', 'morale', 'strength', 'mounted', 'charge', 'wheel', 'default_role', 'cell_cap',
                  'ranks', 'primary', 'secondary', 'armour', 'roles', 'training_site', 'min_site_condition', 'upkeep')

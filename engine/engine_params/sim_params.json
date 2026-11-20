@@ -3,15 +3,15 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 121,
-    "total": 396,
-    "uncited": 275,
+    "total": 395,
+    "uncited": 274,
     "of_which_assumption_grade": 7
   },
-  "count": 396,
+  "count": 395,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 25,
-    "mass_battle": 161,
+    "mass_battle": 160,
     "characters": 5,
     "fieldwork": 15,
     "overview": 5,
@@ -1701,8 +1701,8 @@
       "kind": "scalar",
       "module": "mass_battle",
       "file": "modules/mass_battle/troop_types/recruitment.py",
-      "note": "[canonical: ED-MB-0101 -- Jordan, 2026-11-20: an army is at least 1,000 troops; sized so one weight at MUSTER_FRACTION raises that floor]",
-      "citation": "ED-MB-0101 -- Jordan, 2026-11-20: an army is at least 1,000 troops; sized so one weight at MUSTER_FRACTION raises that floor",
+      "note": "[ASSUMPTION: sized so one weight at MUSTER_FRACTION raises ED-MB-0101's 1,000-troop floor; whether the floor or the typical battle sets it is Jordan's open question, ED-MB-0101's last row]",
+      "citation": "ED-MB-0101",
       "citation_grade": "source"
     },
     {
@@ -1858,48 +1858,23 @@
           },
           "bow": {
             "class": "missile",
-            "mass_kg": 2.0,
-            "range": [
-              2,
-              8
-            ],
-            "volleys": 10
+            "mass_kg": 2.0
           },
           "crossbow": {
             "class": "missile",
-            "mass_kg": 4.0,
-            "range": [
-              2,
-              8
-            ],
-            "volleys": 10
+            "mass_kg": 4.0
           },
           "sling": {
             "class": "missile",
-            "mass_kg": 0.8,
-            "range": [
-              2,
-              8
-            ],
-            "volleys": 10
+            "mass_kg": 0.8
           },
           "javelin": {
             "class": "missile",
-            "mass_kg": 2.5,
-            "range": [
-              2,
-              8
-            ],
-            "volleys": 10
+            "mass_kg": 2.5
           },
           "siege": {
             "class": "missile",
-            "mass_kg": 0.0,
-            "range": [
-              2,
-              8
-            ],
-            "volleys": 10
+            "mass_kg": 0.0
           }
         },
         "classes": {
@@ -2539,33 +2514,6 @@
       "note": "[canonical: sim_mb_06_v9_historical_spec.md — T3 uniform stats]",
       "citation": "sim_mb_06_v9_historical_spec.md — T3 uniform stats",
       "citation_grade": "source"
-    },
-    {
-      "key": "mass_battle.CASES",
-      "name": "CASES",
-      "value": [
-        [
-          "0",
-          0.0,
-          "PARTY-GAP"
-        ],
-        [
-          "1",
-          0.04,
-          "PARTY-GAP"
-        ],
-        [
-          "20000",
-          667.0,
-          "SCALE-GAP"
-        ]
-      ],
-      "kind": "vector",
-      "module": "mass_battle",
-      "file": "systems/mass_battle/sim/extremes_probe.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
     },
     {
       "key": "mass_battle.BIG_CV",

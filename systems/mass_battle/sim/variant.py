@@ -9,8 +9,10 @@ and builds the engine from it. That is done here and only under `systems/mass_ba
 WHY A BUILT ENGINE AND NOT A PARAMETER THREADED THROUGH EVERY CALL. The engine's modules read their constants as
 module names (`from modules.mass_battle.config import *`), several hundred read sites in functions that have no
 `cfg` argument to receive one. A variant is therefore a second copy of the module tree whose `config` was built from
-the variant's config, so every read in it is a read of that config. Nothing is selected for a running engine, there is
-no `config.active()` and no `using()`: `resolve_field(inp, rng, cfg=variant)` on the shipped tree refuses a config
+the variant's config, so every read in it is a read of that config. `install` and `built` DO swap the process's
+`modules.mass_battle` tree (and `restore` puts the shipped one back): a caller that installs must restore, as
+`test_body_no_interpenetration`'s fixture does. A declared departure from 04 C.12's "no ambient selector". There is no
+`config.active()` and no `using()`: `resolve_field(inp, rng, cfg=variant)` on the shipped tree refuses a config
 that is not its own and names this module, and the variant tree's own `resolve_field` accepts it.
 
 TWO WAYS TO USE IT.

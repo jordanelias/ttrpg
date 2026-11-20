@@ -701,7 +701,7 @@ DEFAULT_FIXTURES = Fixtures(
     # swept). `None` (the flat row, the control since B17.01 shipped `3`) MEANS A.9's NUMBER, NOT "NO WALLS": `engine/` cannot name
     # `systems/`, so the 3 stays authored once, at `terrain.WALLS_DEFENDER_DR`, and the engine reads it
     # when this is `None` -- a literal 3 here would be a second copy that drifts the day A.9 is
-    # re-ruled. An int overrides it for the season: `3` spells A.9's number out (it reproduces `None`
+    # re-ruled (B17.01 nonetheless ships the spelled-out `3` below, plan-ordered, and `test_cp_t04_05_graded_walls` pins it equal to that owner). An int overrides it for the season: `3` spells A.9's number out (it reproduces `None`
     # at fort_level 1.0; CP-T04-05 grades it `int(3 * fort_level)` below that, `None` stays binary), `0` is the CONTROL (the only live
     # difference between a walled and an open field removed), `1` the middle arm. Injection site: this
     # line, read by `seam/wrappers/mass_battle.py::field_input` into the record's `walls_dr` (`31c`).

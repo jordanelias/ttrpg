@@ -126,48 +126,23 @@
     },
     "bow": {
       "class": "missile",
-      "mass_kg": 2.0,
-      "range": [
-        2,
-        8
-      ],
-      "volleys": 10
+      "mass_kg": 2.0
     },
     "crossbow": {
       "class": "missile",
-      "mass_kg": 4.0,
-      "range": [
-        2,
-        8
-      ],
-      "volleys": 10
+      "mass_kg": 4.0
     },
     "sling": {
       "class": "missile",
-      "mass_kg": 0.8,
-      "range": [
-        2,
-        8
-      ],
-      "volleys": 10
+      "mass_kg": 0.8
     },
     "javelin": {
       "class": "missile",
-      "mass_kg": 2.5,
-      "range": [
-        2,
-        8
-      ],
-      "volleys": 10
+      "mass_kg": 2.5
     },
     "siege": {
       "class": "missile",
-      "mass_kg": 0.0,
-      "range": [
-        2,
-        8
-      ],
-      "volleys": 10
+      "mass_kg": 0.0
     }
   },
   "classes": {

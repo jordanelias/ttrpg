@@ -236,6 +236,19 @@ def test_no_share_exceeds_one():
                 worst = max(worst, share)
                 checked += 1
     assert checked >= 320, checked
+    # `_share` clamps to the scale, so the loop above cannot see a unit that ends above its start: read the raw armies. A unit
+    # whose troops ended past its start is the failure this gate excludes (the retired `by_troops` read above 1.0).
+    bl, raw = importlib.import_module("modules.mass_battle.orchestration"), 0
+    rng_ = importlib.import_module("modules.mass_battle.rngsource")
+    for pair in _SIDE_PAIRS:
+        for seed in range(10):
+            ra, rb = mb._weighted_unit("side_a", pair[0], "A"), mb._weighted_unit("side_b", pair[1], "B")
+            with rng_.using(draw.seeded(draw.H2("test_mass_battle_module_raw", seed))):
+                bl.run_battle(ra, rb, max_ticks=18)
+            for u in ra.units + rb.units:
+                assert u.cur_troops <= u._start_troops + 1e-9, (pair, seed, u.cur_troops, u._start_troops)
+                raw += 1
+    assert raw >= 40, raw
     a, b = mb._weighted_unit("side_a", 3, "A"), mb._weighted_unit("side_b", 2, "B")
     got = mb._grade(a, b, SCALE, 0)
     assert got.attacker.share == SCALE and got.defender.share == SCALE, got
@@ -456,6 +469,24 @@ def test_past_the_ceiling_returns_scale_gap(monkeypatch):
     # ... and one that needs more than `armies.UNIT_CAP` units to stay under it is past the ceiling, refused and not built
     got = entry(_headcount_record((112, 2)), draw.seeded(draw.H2("test_mass_battle_module", 0)))
     assert isinstance(got, dict) and got["status"] == "SCALE-GAP", got
+
+
+def test_a_person_side_of_more_than_the_unit_cap_is_refused_not_fought():
+    """An army holds at most `armies.UNIT_CAP` units. The `person` arm builds one unit per person at least, so twelve persons of one
+    weight are twelve units however small: SCALE-GAP and `run_battle` is not entered. CONTROL: eleven persons are fought."""
+    import importlib
+    from dataclasses import replace
+    from engine.season.queries.inputs import FieldOutcome
+    cap = importlib.import_module("modules.mass_battle.armies").UNIT_CAP
+    entry = _entry()
+    def record(n):
+        base = _headcount_record((1, 1))
+        ids = tuple(f"p{i}" for i in range(n))
+        return replace(base, weights=(tuple(1.0 for _ in ids), (1.0,)), members=(ids, ("b",)), units="person")
+    got = entry(record(cap + 1), draw.seeded(draw.H2("test_mass_battle_module", 0)))
+    assert isinstance(got, dict) and got["status"] == "SCALE-GAP", got
+    got = entry(record(cap), draw.seeded(draw.H2("test_mass_battle_module", 0)))
+    assert isinstance(got, FieldOutcome), got
 
 
 def test_empty_sides_never_reach_run_battle(monkeypatch):

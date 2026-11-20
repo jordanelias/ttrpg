@@ -43,6 +43,19 @@ def test_a_horse_cell_never_exceeds_its_own_cap():
     assert checked >= 1
 
 
+def test_a_horse_unit_of_whole_fifties_starts_every_cell_at_fifty():
+    """The horse half of the band, as far as it holds: a horse cap (50) is the cell floor, so a unit whose troops are a multiple of 50 starts
+    every cell at exactly 50. One whose troops are not starts UNDER 50 (333 troops: 7 cells of 47.6), which the two rulings (P-DEC-3,
+    ED-MB-0101) cannot both avoid; that case is Jordan's and is not asserted here."""
+    checked = 0
+    for troops in (200, 400, 1000, 4000):
+        for troop_type in ('cavalry', 'light_cavalry', 'knights_templar', 'mounted_archers'):
+            u = _unit(troops, troop_type)
+            assert min(u.cell_troops.values()) >= CELL_FLOOR - 1e-9, (troops, troop_type, min(u.cell_troops.values()))
+            checked += 1
+    assert checked == 16
+
+
 def test_a_unit_of_two_hundred_has_four_cells():
     checked = 0
     for troops in (200, 250, 400, 600, 1000, 4000):
