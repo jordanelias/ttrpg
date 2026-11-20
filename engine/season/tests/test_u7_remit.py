@@ -40,7 +40,9 @@ from ..data import verbs as _verbs
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import Step, WriteClass
 from ..data.requires import UNKNOWN, binding_from_act, evaluate
-from ..data.verbs import COUNTERPARTY_CLAUSE, ELIGIBILITY_CLAUSE, VERB_TABLE, WRITE_CLAUSE
+from ..data.rosters import GRADED_TASKS
+from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, VERB_TABLE,
+                          WRITE_CLAUSE)
 from ..epistemic import belief_contradicts
 from ..harness import probes as P
 from ..loop import resolve as _resolve
@@ -162,8 +164,16 @@ def test_19_the_four_are_resolvable_typed_and_key_every_failable_clause():
         # (`determine`'s party, `issue`'s executor).
         if row.counterparty:
             expected.add(COUNTERPARTY_CLAUSE)
+        # B07.01 (18-A item 4): a `form: task` row (`requisition`) keys a `draw` clause for its lost draw -- a
+        # clause the fold never refuses at, so `emits_on_refusal` (the refusal union) leaves its kind out
+        task = (GRADED_TASKS.get(verb) or {}).get("form") == "task"
+        assert task == (verb == "requisition"), (verb, "the one task row of the four")
+        if task:
+            expected.add(DRAW_CLAUSE)
         assert set(row.refusals_by_clause) == expected, (verb, sorted(row.refusals_by_clause))
-        assert set(row.emits_on_refusal) == {k for v in row.refusals_by_clause.values() for k in v}
+        assert set(row.emits_on_refusal) == {
+            k for c, v in row.refusals_by_clause.items() if c != DRAW_CLAUSE for k in v}
+        assert (DRAW_CLAUSE in row.refusals_by_clause) == task
 
 
 def test_19_a_flat_row_refuses_exactly_as_before():
@@ -581,9 +591,15 @@ def _plant(monkeypatch, verb, mutate):
 def test_19_the_loader_refuses_a_keyed_row_that_does_not_key_exactly_its_clauses(monkeypatch, defect,
                                                                                     match):
     """Each defect planted on `requisition`'s row, and the load fails naming it. The control is the table
-    itself, which loaded to run this file."""
+    itself, which loaded to run this file.
+
+    B07.01: `flat named` is planted on `open_case` (a keyed row that is no `task`). A flat
+    `emits_on_refusal` on `requisition`, a `form: task` row, trips the task rule first (it must key the
+    clause `draw`), so the plant would observe that refusal and not the one this case is named for."""
+    verb = "open_case" if defect == "flat named" else "requisition"
+
     def mutate(r):
-        ref, cell = r["emits_on_refusal"], r["requires_typed"]["all"]
+        ref, cell = r["emits_on_refusal"], r["requires_typed"].get("all")
         if defect == "missing":
             ref.pop("stores")
         elif defect == "extra":
@@ -592,7 +608,7 @@ def test_19_the_loader_refuses_a_keyed_row_that_does_not_key_exactly_its_clauses
             cell[1].pop("conjunct")
             ref.pop("stores")
         elif defect == "flat named":
-            r["emits_on_refusal"] = ["requisition.refused"]
+            r["emits_on_refusal"] = ["case.refused"]
         elif defect == "twice":
             cell[1]["conjunct"] = cell[0]["conjunct"]
         elif defect == "nested":
@@ -602,7 +618,7 @@ def test_19_the_loader_refuses_a_keyed_row_that_does_not_key_exactly_its_clauses
                        "conjunct": "authority"}
         else:
             ref["stores"] = []
-    _plant(monkeypatch, "requisition", mutate)
+    _plant(monkeypatch, verb, mutate)
     with pytest.raises(SystemExit, match=match):
         _verbs._load_verb_table()
 

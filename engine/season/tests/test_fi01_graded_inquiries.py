@@ -29,7 +29,8 @@ import yaml
 from ..data import rosters as _rosters
 from ..data import verbs as VERBS
 from ..data.matrix import Step, WriteClass
-from ..data.rosters import GRADED_INQUIRIES, UNDEPOSITED_KINDS, roster_map
+from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.rosters import GRADED_TASKS, UNDEPOSITED_KINDS, graded_route, roster_map
 from ..data.verbs import VERB_TABLE
 from ..data.requires import binding_from_act, evaluate
 from ..gaps import Unspecified
@@ -37,7 +38,7 @@ from ..harness import populated as POP
 from ..boot.realm import build_realm
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token
-from ..manifest import MODULE_ENTRIES, check_graded_inquiries, resolve as manifest_resolve
+from ..manifest import MODULE_ENTRIES, check_graded_tasks, resolve as manifest_resolve
 from ..queries.inputs import Margin
 from ..queries.person_q import said_of
 from ..queries.world_q import WorldReader
@@ -84,14 +85,17 @@ def _deposits_caused_by(w, eid) -> list:
 def test_the_rosters_name_three_graded_and_the_skip_names_finding_none():
     """The routing roster grades exactly the three the position builds and names none that waits; the
     skip arm is keyed on the one kind. A row that waits keeps a flat `emits:`, so it cannot be graded."""
-    assert set(GRADED_INQUIRIES) == set(GRADED), sorted(GRADED_INQUIRIES)
+    # B07.01: the roster is `graded_tasks`; the routes LIVE at the shipped fixtures are the three (the armed rows,
+    # `reconstruct` and `thread_read` among them, are taken only with `task_draw_arm` on, `graded_route`).
+    live = {v for v in GRADED_TASKS if graded_route(v, DEFAULT_FIXTURES) is not None}
+    assert live == set(GRADED), sorted(live)
     assert UNDEPOSITED_KINDS == frozenset({"finding.none"}), UNDEPOSITED_KINDS
     for verb in GRADED:
         row = VERB_TABLE[verb]
         assert set(row.emits_by_degree) == {"Overwhelming", "Success", "Partial", "Failure"}, verb
         assert row.emits_at("Failure") == ("finding.none",) and "finding.none" in row.emits_on_refusal
     for verb in (PROMPT, *WAITING):
-        assert verb not in GRADED_INQUIRIES and not VERB_TABLE[verb].emits_by_degree, (
+        assert graded_route(verb, DEFAULT_FIXTURES) is None and not VERB_TABLE[verb].emits_by_degree, (
             f"{verb!r} is graded, and it is a prompt or waits ({WAITING.get(verb, 'K-36')})")
 
 
@@ -160,19 +164,20 @@ def test_a_failed_inquiry_deposits_no_claim_and_news_untold_still_does():
 def test_the_route_is_not_readable_as_a_prize():
     """NOT A PRIZE (`rosters.yaml`: a prize here is scripting drift). No graded verb declares `contests:`,
     no route key or field is a `contest_subsystems` prize, the contest manifest answers `None` for every
-    route key, and a route carries exactly `{provider, module_entry}` -- no `module:` a prize reader keys
+    route key, and a route carries `{provider, module_entry, form}` and at most `armed_by` (B07.01) -- no `module:` a prize reader keys
     on. Then the refusals, each planted and each naming what it refuses: a routed row that also contests
     (loader), a routed row with a flat `emits:` (loader), a route with a `module:` (loader), and a route
     to a roll no prize row binds (driver construction)."""
     prizes = roster_map("contest_subsystems", "prizes")
     checked = 0
-    for verb, route in GRADED_INQUIRIES.items():
+    for verb, route in GRADED_TASKS.items():
         assert VERB_TABLE[verb].contests == "", verb
         assert verb not in prizes and manifest_resolve("contest", verb) is None, verb
-        assert set(route) == {"provider", "module_entry"} and not set(route.values()) & set(prizes), route
+        assert {"provider", "module_entry", "form"} <= set(route) <= {"provider", "module_entry", "form", "armed_by"}, route
+        assert not set(route.values()) & set(prizes), route
         checked += 1
-    assert checked == 3
-    assert check_graded_inquiries(VERB_TABLE) == sorted(GRADED)
+    assert checked == len(GRADED_TASKS) >= 3
+    assert check_graded_tasks(VERB_TABLE) == sorted(GRADED_TASKS)
 
     src = yaml.safe_load(VERBS.VERB_TABLE_YAML.read_text())
 
@@ -180,7 +185,7 @@ def test_the_route_is_not_readable_as_a_prize():
         doc = copy.deepcopy(src)
         mutate(doc)
         with mock.patch.object(VERBS, "VERB_TABLE_YAML") as fake, \
-                mock.patch.object(VERBS, "GRADED_INQUIRIES", routes or GRADED_INQUIRIES), \
+                mock.patch.object(VERBS, "GRADED_TASKS", routes or GRADED_TASKS), \
                 mock.patch.object(VERBS, "UNDEPOSITED_KINDS", kinds or UNDEPOSITED_KINDS):
             fake.exists.return_value = True
             fake.read_text.return_value = yaml.safe_dump(doc)
@@ -195,17 +200,17 @@ def test_the_route_is_not_readable_as_a_prize():
     assert "NOT a prize" in msg and "research" in msg, msg
     msg = loads(lambda doc: row(doc, "surveil").update(emits=["finding.made"]))
     assert "FLAT `emits:`" in msg and "surveil" in msg, msg
-    with_module = dict(GRADED_INQUIRIES, examine=dict(GRADED_INQUIRIES["examine"], module="social_contest"))
+    with_module = dict(GRADED_TASKS, examine=dict(GRADED_TASKS["examine"], module="social_contest"))
     msg = loads(lambda doc: None, routes=with_module)
     assert "examine" in msg and "fields" in msg, msg
     # A MISSPELLED skip kind would skip nothing and report the deposit half built: the loader names it.
     msg = loads(lambda doc: None, kinds=frozenset({"finding.nnoe"}))
     assert "finding.nnoe" in msg, msg
 
-    stray = dict(GRADED_INQUIRIES, research={"provider": "social_contest", "module_entry": "combat.fight"})
-    with mock.patch.object(_rosters, "GRADED_INQUIRIES", stray):
+    stray = dict(GRADED_TASKS, research={"provider": "social_contest", "module_entry": "combat.fight", "form": "inquiry"})
+    with mock.patch.object(_rosters, "GRADED_TASKS", stray):
         with pytest.raises(Unspecified) as e:
-            check_graded_inquiries(VERB_TABLE)
+            check_graded_tasks(VERB_TABLE)
         # ...and the same refusal at DRIVER CONSTRUCTION, where the check is wired (`loop/driver.py`):
         # delete that call and this goes red, which the direct call above cannot show.
         with pytest.raises(Unspecified) as e2:
@@ -214,10 +219,10 @@ def test_the_route_is_not_readable_as_a_prize():
     assert "research" in str(e2.value), str(e2.value)
     # A PAIR A PRIZE ROW BINDS, on a provider that cannot take a route: bound, so refusal 2 passes, and
     # refused for the signature instead of raising `TypeError` at the first act.
-    bound_elsewhere = dict(GRADED_INQUIRIES, research={"provider": "personal_combat", "module_entry": "combat.fight"})
-    with mock.patch.object(_rosters, "GRADED_INQUIRIES", bound_elsewhere):
+    bound_elsewhere = dict(GRADED_TASKS, research={"provider": "personal_combat", "module_entry": "combat.fight", "form": "inquiry"})
+    with mock.patch.object(_rosters, "GRADED_TASKS", bound_elsewhere):
         with pytest.raises(Unspecified) as e3:
-            check_graded_inquiries(VERB_TABLE)
+            check_graded_tasks(VERB_TABLE)
     assert "research" in str(e3.value) and "module_entry" in str(e3.value), str(e3.value)
 
 

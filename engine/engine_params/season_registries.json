@@ -2162,26 +2162,242 @@
             ]
           }
         },
-        "graded_inquiries": {
+        "graded_tasks": {
           "source": "v9 FI-01 (`ED-FI-0009`; J-22 answered option (A)): the inquiries are graded by degree, as ladder step 3 answered (RESOLVE -> WITNESS, \"Claims graded by degree; Failure emits `finding.none` and deposits nothing\"), through a declared routing column that is NOT a prize and NOT a `contests:` shape. A-21: one roll owner (S27.2) -- the `social_contest` module's entry, with the obstacle at the host input builder's non-person default.",
           "row": "H-111",
-          "note": "\u26a0 A ROUTE, NOT A PRIZE. Each row names the provider registered under `@provider(\"contest\", \u2026)` and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::faculty` (the verb's `capability:` column, `descriptors.CAPABILITIES`, else the swept `pool_default`) and the obstacle the module's own (`modules/social_contest/roll.py::obstacle`: the row's `difficulty:` level plus `opposed_ob(pool_default)` where no person is opposite, or plus `opposed_ob` of the person's skill score and resisting attribute, `sigma.py::_opposing` -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already binds (`manifest/registry.py::check_graded_inquiries`), so this row adds no roll and no resolver. the verb table's `capability:` column now names `inquiry` for the three (REM-30, B10-10; the rows were deferred at CP-T01-01): an inquirer who HOLDS an `inquiry` key rolls it, and one who holds none still rolls `pool_default` (`seam/wrappers/sigma.py::faculty`). \u26a0 THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the questioned person answers by their own `tell`, so there is no degree on the asker); `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read` waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its flat `emits:` and is not counted as graded.",
+          "note": "\u26a0 A ROUTE, NOT A PRIZE. Each row names the provider registered under `@provider(\"contest\", \u2026)` and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::faculty` (the verb's `capability:` column, `descriptors.CAPABILITIES`, else the swept `pool_default`) and the obstacle the module's own (`modules/social_contest/roll.py::obstacle`: the row's `difficulty:` level plus `opposed_ob(pool_default)` where no person is opposite, or plus `opposed_ob` of the person's skill score and resisting attribute, `sigma.py::_opposing` -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already binds (`manifest/registry.py::check_graded_tasks`), so this row adds no roll and no resolver. the verb table's `capability:` column now names `inquiry` for the three (REM-30, B10-10; the rows were deferred at CP-T01-01): an inquirer who HOLDS an `inquiry` key rolls it, and one who holds none still rolls `pool_default` (`seam/wrappers/sigma.py::faculty`). \u26a0 THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the questioned person answers by their own `tell`, so there is no degree on the asker); `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read` waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its flat `emits:` and is not counted as graded. \u26a0 B07.01 (18-A edits 1-2; workplan v12 part 10 cont. 2, UNDECIDED (10), (11)): RENAMED from `graded_inquiries` for what it now holds -- the route of every `task`-class row (an act a person attempts alone, drawn against the job's difficulty), beside the three inquiries. Each row carries `form: inquiry | task` (`data/verbs.py` refuses each shape's other columns by form). `reconstruct` joins as `form: inquiry` (UNDECIDED (2)). Every row B07 adds carries `armed_by: task_draw_arm`: the loop takes it only while that `Fixtures` member reads `on` (`data/rosters.py::graded_route`), so with the arm `off` (the control, shipped) each such verb folds flat as it did before; the key leaves with the arm (B98). The three carried inquiries carry no key and route as before.",
           "keys": [
             "verb_table"
           ],
           "values": {
             "research": {
               "provider": "social_contest",
-              "module_entry": "social_contest.roll"
+              "module_entry": "social_contest.roll",
+              "form": "inquiry"
             },
             "examine": {
               "provider": "social_contest",
-              "module_entry": "social_contest.roll"
+              "module_entry": "social_contest.roll",
+              "form": "inquiry"
             },
             "surveil": {
               "provider": "social_contest",
-              "module_entry": "social_contest.roll"
+              "module_entry": "social_contest.roll",
+              "form": "inquiry"
+            },
+            "reconstruct": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "inquiry",
+              "armed_by": "task_draw_arm"
+            },
+            "tend": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
+            },
+            "train": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
+            },
+            "recruit": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
+            },
+            "work": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
+            },
+            "restore": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
+            },
+            "build": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
+            },
+            "found": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
+            },
+            "raze": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
+            },
+            "sabotage": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
+            },
+            "requisition": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
+            },
+            "forge": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
+            },
+            "conceal": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
+            },
+            "survey": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
+            },
+            "thread_read": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
+            },
+            "move": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
+            },
+            "migrate": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
+            },
+            "carry": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
+            },
+            "marshal": {
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "form": "task",
+              "armed_by": "task_draw_arm"
             }
+          }
+        },
+        "bookkeeping_verbs": {
+          "source": "`proposals/2026-11-12-subsystem-audit-suite/proposals/18_DETERMINISM_task_draw_for_uncontested_verbs.md` \"The resolution, decided\" 1 and 5; workplan v12 B07.01, UNDECIDED (10) (`open_case`, `issue`, `destroy_record` are brute rows and join this class). A row's `why:` names what keeps it from moving anyone else.",
+          "keys": [
+            "verb_table"
+          ],
+          "values": {
+            "create_record": {
+              "why": "a person writes his own record; nothing of anyone else's moves [ASSUMPTION: the producer's sentence, 18-A gives none]"
+            },
+            "utter": {
+              "why": "a word said aloud is recorded; its hearers' uptake is their own act [ASSUMPTION: the producer's sentence, 18-A gives none]"
+            },
+            "commit": {
+              "why": "`brute: own` -- the row's `brute_note:` says what authorises the write"
+            },
+            "oblige": {
+              "why": "`brute: seat` -- the row's `brute_note:` says what authorises the write"
+            },
+            "convene": {
+              "why": "a sitting is scheduled; what it decides is its members' acts [ASSUMPTION: the producer's sentence, 18-A gives none]"
+            },
+            "dispatch": {
+              "why": "an order is sent; its addressee's compliance is his act [ASSUMPTION: the producer's sentence, 18-A gives none]"
+            },
+            "petition": {
+              "why": "filing; the addressee's answer is his act"
+            },
+            "give": {
+              "why": "consent is each side's sampled choice; `brute: own` -- the row's `brute_note:`"
+            },
+            "transfer": {
+              "why": "consent is each side's sampled choice; `brute: own` -- the row's `brute_note:`"
+            },
+            "exchange": {
+              "why": "consent is each side's sampled choice; `brute: counterparty` -- the row's `brute_note:`"
+            },
+            "form_unit": {
+              "why": "a commander records a unit of his own army [ASSUMPTION: the producer's sentence, 18-A gives none]"
+            },
+            "assign_troops": {
+              "why": "a commander records an assignment within his own army [ASSUMPTION: the producer's sentence, 18-A gives none]"
+            },
+            "disband_unit": {
+              "why": "a commander records the end of a unit of his own army [ASSUMPTION: the producer's sentence, 18-A gives none]"
+            },
+            "discharge_troops": {
+              "why": "a commander records a discharge from his own army [ASSUMPTION: the producer's sentence, 18-A gives none]"
+            },
+            "order_unit": {
+              "why": "a commander records an order to his own unit; the field resolves it [ASSUMPTION: the producer's sentence, 18-A gives none]"
+            },
+            "forgive": {
+              "why": "a person releases his own grievance; nothing of anyone else's moves [ASSUMPTION: the producer's sentence, 18-A gives none]"
+            },
+            "tie / knot": {
+              "why": "a person records a tie he holds himself [ASSUMPTION: the producer's sentence, 18-A gives none]"
+            },
+            "open_case": {
+              "why": "`brute: seat` -- the row's `brute_note:` says what authorises the write (UNDECIDED (10))"
+            },
+            "issue": {
+              "why": "`brute: seat` -- the row's `brute_note:` says what authorises the write (UNDECIDED (10))"
+            },
+            "destroy_record": {
+              "why": "`brute: own` -- the row's `brute_note:` says what authorises the write (UNDECIDED (10))"
+            }
+          }
+        },
+        "bookkeeping_forbidden_cells": {
+          "source": "18-A \"The resolution, decided\" 1 (`Person.body`, `Person.capability`, `Person.exists`, `Person.body_ceiling`); workplan v12 B07.01 INSTRUCTION 1.",
+          "keys": [
+            "verb_table"
+          ],
+          "values": [
+            "Person.body",
+            "Person.capability",
+            "Person.exists",
+            "Person.body_ceiling"
+          ]
+        },
+        "contest_owed": {
+          "source": "18-A \"The resolution, decided\" 5 (\"contest (owed to the lane named)\"); workplan v12 B07-task-draw UNDECIDED (1) reading (ii). [ASSUMPTION: which `14_VERBS_BINDING_*` file carries `seize` and `release` -- basis: a grep of the verb over `proposals/2026-11-12-subsystem-audit-suite/proposals/14_VERBS_BINDING_*.md` (`seize` is named only in `_E`; `release` in `_A`, not `_B`); each other verb's file is the one naming it most]",
+          "keys": [
+            "verb_table"
+          ],
+          "values": {
+            "confer": "14_VERBS_BINDING_C_turnover",
+            "revoke": "14_VERBS_BINDING_C_turnover",
+            "succeed": "14_VERBS_BINDING_C_turnover",
+            "establish": "14_VERBS_BINDING_A_formation",
+            "pardon": "14_VERBS_BINDING_B_sittings",
+            "release": "14_VERBS_BINDING_A_formation",
+            "surrender": "14_VERBS_BINDING_E_war_seats",
+            "seize": "14_VERBS_BINDING_E_war_seats",
+            "covenant": "14_VERBS_SOCIAL1_A_formation",
+            "challenge": "14_VERBS_SOCIAL1_D_grievance_and_settlement",
+            "interview": "14_VERBS_SOCIAL2_C_case_question_confession"
           }
         },
         "undeposited_kinds": {
@@ -3359,7 +3575,7 @@
         "inquiry_modules": {
           "source": "v9 FI-02 (`SM-3`, Jordan 2026-09-05: *\"investigation is not a contest seam. it is its own thing.\"*), built in one landing with FI-03 (`ED-FI-0002`, the counter-espionage loop with fieldwork as host): the second role in `manifest/registry.py::_ROLE_ROSTERS`, `inquiry`.",
           "cite": "SM-3; ED-FI-0002",
-          "note": "\u26a0 KEYED BY THE KIND A FINDING EMITS, NEVER BY THE VERB. `graded_inquiries` is already the verb-keyed table, and FI-01 rules it a ROUTE that may carry nothing but `{provider, module_entry}` (`data/verbs.py`), so a second verb-keyed table would be two tables on one key. A prize is what is contested; the inquiry analogue is what is FOUND, so the key is the Event kind -- `undeposited_kinds`' keying, for its reason. A `Failure` inquiry emits `finding.none`, which no row claims, so `manifest.resolve(\"inquiry\", ...)` answers `None` and nothing is found, with no branch on a band anywhere in the host. An ungraded `finding.made` (`interview`, `reconstruct`, `thread_read`) reaches the row and finds nothing: it carries no degree, and `finding_terms` keys on the degree. Each row names `module:` (the module's one identity, its directory, A-25), `provider:` (`@provider(\"inquiry\", ...)`, `seam/wrappers/fieldwork.py`) and `module_entry:` (the composition row the provider calls through `MODULE_ENTRIES`). Refused at driver construction by `manifest/registry.py::check_inquiry_modules`, and at boot by `check_rows()` naming the row.",
+          "note": "\u26a0 KEYED BY THE KIND A FINDING EMITS, NEVER BY THE VERB. `graded_tasks` is already the verb-keyed table, and FI-01 rules it a ROUTE that may carry nothing but `{provider, module_entry}` (`data/verbs.py`), so a second verb-keyed table would be two tables on one key. A prize is what is contested; the inquiry analogue is what is FOUND, so the key is the Event kind -- `undeposited_kinds`' keying, for its reason. A `Failure` inquiry emits `finding.none`, which no row claims, so `manifest.resolve(\"inquiry\", ...)` answers `None` and nothing is found, with no branch on a band anywhere in the host. An ungraded `finding.made` (`interview`, `reconstruct`, `thread_read`) reaches the row and finds nothing: it carries no degree, and `finding_terms` keys on the degree. Each row names `module:` (the module's one identity, its directory, A-25), `provider:` (`@provider(\"inquiry\", ...)`, `seam/wrappers/fieldwork.py`) and `module_entry:` (the composition row the provider calls through `MODULE_ENTRIES`). Refused at driver construction by `manifest/registry.py::check_inquiry_modules`, and at boot by `check_rows()` naming the row.",
           "findings": {
             "finding.made": {
               "module": "fieldwork",
@@ -4490,6 +4706,9 @@
       "verbs": [
         {
           "verb": "carry",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "copying",
           "stratum": "social",
           "eligibility": [
             "own"
@@ -4509,12 +4728,14 @@
               {
                 "form": "existence",
                 "of": "subject",
-                "kind": "petition"
+                "kind": "petition",
+                "conjunct": "exists"
               },
               {
                 "form": "relation",
                 "of": "subject",
-                "relation": "held_by"
+                "relation": "held_by",
+                "conjunct": "held"
               }
             ]
           },
@@ -4530,9 +4751,21 @@
           "emits": [
             "petition.carried"
           ],
-          "emits_on_refusal": [
-            "carry.refused"
-          ],
+          "emits_on_refusal": {
+            "exists": [
+              "carry.refused"
+            ],
+            "held": [
+              "carry.refused"
+            ],
+            "write": [
+              "carry.refused"
+            ],
+            "draw": [
+              "carry.failed"
+            ]
+          },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "grade": "ruled",
           "writes_note": "v9 IN-45 (`loop/effects_information.py::_eff_carry`), built on `open_case`'s body (#453: *build on `open_case`'s body, writing the petition's `Record.stages`*): `Record.stages` is the FIRST pair -- the act re-winds the petition's clock (`_declared_stages`, `H-80`'s default for a computed act), so the petition RECORD moves, the gate's `entity` shape observes it, and its receipt names the petition, which the appended docket item names under `DOCKET_PETITION` (v9 SC-03a). The append rides on that receipt, as `open_case`'s rides on its case file, and every decline comes before the write because the gate does not restore a docket. The MATTER (`H-63`'s value for this row) is the petition's `terms`, `open_case`'s precedent. [ASSUMPTION; medium; Jordan to correct; revert: the matter is the petition's own id; the stages appended rather than replaced.] The later pairs, `(DocketItem, matter)` and the item's `arrangement` (`None`) and `petition` keys, are check-only (each admits RES in the ACTS class), as on `open_case`.",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed"
@@ -4765,6 +4998,10 @@
         },
         {
           "verb": "conceal",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "none",
+          "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `conceal`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
           "stratum": "social",
           "eligibility": [
             "own"
@@ -4786,7 +5023,15 @@
             "cover.assumed"
           ],
           "emits_note": "#453 \u00a79.3's kind, emitted by this row alone. \u26a0 NO CHANNEL EXCEPTION (K-19): taking a cover is witnessed as any act is, by `witness_channels`' ordinary precedence -- a per-verb exception there would be scripting drift. `social`, so `_ch_chronicle` does not broadcast it.",
-          "emits_on_refusal": [],
+          "emits_on_refusal": {
+            "write": [
+              "conceal.refused"
+            ],
+            "draw": [
+              "conceal.failed"
+            ]
+          },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "refusal_note": "#453 \u00a79.3: no precondition, so an empty `emits_on_refusal` is lawful (`create_record`'s shape); a mint that moves nothing (a hand-built act naming the id of an identical Record) is the fold's flat `act.refused`.",
           "grade": "assumption",
           "grade_note": "an argued addition (#453 \u00a710.4 step 10): the matrix row `(Record, exists)` is the tree's; the row, the `cover` kind and the `anchor_of` cover read are v9 IN-12's, on #453 \u00a78.2 `:1486-1495`, \u00a79.3 `:1826-1863`, K-19 `:2722-2727`.",
@@ -5252,6 +5497,9 @@
         },
         {
           "verb": "forge",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "copying",
           "stratum": "uncontested_material",
           "eligibility": [
             "own"
@@ -5278,9 +5526,15 @@
             "record.forged"
           ],
           "emits_note": "v9 IN-45: `record.forged`, the kind the matrix names for a forgery (`write_matrix.yaml`'s `(Record, forgery_quality)` row), so the row and the matrix agree; it joins `(Record, exists)`'s `emits:` as `faction.surveyed` did for `survey`. Its own kind for `survey`'s reason (`faction.surveyed`'s `emits_note:`): a forgery is a private act, and neither broadcast channel reads it. Witnesses learn THAT a document was made; that it is false, nobody learns from the Event.",
-          "emits_on_refusal": [
-            "forge.refused"
-          ],
+          "emits_on_refusal": {
+            "write": [
+              "forge.refused"
+            ],
+            "draw": [
+              "forge.failed"
+            ]
+          },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "refusal_note": "FLAT: one kind for every failable clause (`data/verbs.py`, invariant 4). Refusal conditions, `survey`'s: the forger holds no claim on the subject (the cell); the subject coheres under no single faction (the effect's decline, the `write` clause).",
           "grade": "assumption",
           "grade_note": "an argued addition: the matrix rows `(Record, exists)` and `(Record, forgery_quality)` are the tree's; the cell, the kind and the false key (`head`) are v9 IN-45's, on #453 `:515`. The forged sheet's CONTENT is read -- the sheet consumer, `rosters.yaml: record_sourced_operands.faction_sheet` -- and since v9 SC-02 `22b` step 25 its `forgery_quality` too, by the examination's obstacle (`H-210`).",
@@ -5396,6 +5650,10 @@
         },
         {
           "verb": "found",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "none",
+          "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `found`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
           "stratum": "uncontested_material",
           "eligibility": [
             "own"
@@ -5415,12 +5673,14 @@
               {
                 "form": "existence",
                 "of": "subject",
-                "kind": "works"
+                "kind": "works",
+                "conjunct": "exists"
               },
               {
                 "form": "relation",
                 "of": "subject",
-                "relation": "held_by"
+                "relation": "held_by",
+                "conjunct": "held"
               }
             ]
           },
@@ -5434,9 +5694,21 @@
           "emits": [
             "rung.founded"
           ],
-          "emits_on_refusal": [
-            "found.refused"
-          ],
+          "emits_on_refusal": {
+            "exists": [
+              "found.refused"
+            ],
+            "held": [
+              "found.refused"
+            ],
+            "write": [
+              "found.refused"
+            ],
+            "draw": [
+              "found.failed"
+            ]
+          },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "grade": "assumption",
           "grade_note": "the matrix row `(Rung, exists)` is the tree's (`W2/H-41`); the VERB is plan position `24e`'s, on r2 `04` \u00a7A.7.1's reading, and its preconditions are the plan's corrected list -- an argued addition, graded as `succeed`, `utter` and `forge` are.",
           "refusal_note": "FLAT: one kind for every failable clause, which a flat row declares (`data/verbs.py`, invariant 4). Refusal conditions: the subject is no works, or the actor does not hold it (the cell); the works plans no `rung_kinds` member, names no rung, has already founded, or its plan does not strictly ascend into its `at`; and since v9 IN-28, the plan has no `works_cost` row or the works' rung cannot pay it (the effect's decline, the `write` clause).",
@@ -5444,6 +5716,10 @@
         },
         {
           "verb": "build",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "none",
+          "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `build`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
           "stratum": "uncontested_material",
           "eligibility": [
             "own"
@@ -5463,12 +5739,14 @@
               {
                 "form": "existence",
                 "of": "subject",
-                "kind": "works"
+                "kind": "works",
+                "conjunct": "exists"
               },
               {
                 "form": "relation",
                 "of": "subject",
-                "relation": "held_by"
+                "relation": "held_by",
+                "conjunct": "held"
               }
             ]
           },
@@ -5481,9 +5759,21 @@
           "emits": [
             "site.built"
           ],
-          "emits_on_refusal": [
-            "build.refused"
-          ],
+          "emits_on_refusal": {
+            "exists": [
+              "build.refused"
+            ],
+            "held": [
+              "build.refused"
+            ],
+            "write": [
+              "build.refused"
+            ],
+            "draw": [
+              "build.failed"
+            ]
+          },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "grade": "assumption",
           "grade_note": "`found`'s grade and reason: the matrix row is the tree's, the verb is plan position `24e`'s.",
           "refusal_note": "FLAT, as `found`'s. Refusal conditions: the subject is no works, or the actor does not hold it (the cell); the works plans no `site_kinds` member, names no rung, or has already built; and since v9 IN-28, the plan has no `works_cost` row (`body` among them) or the works' rung cannot pay it (the effect's decline).",
@@ -5934,6 +6224,10 @@
         },
         {
           "verb": "requisition",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "none",
+          "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `requisition`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
           "scale": "settlement",
           "scale_note": "a requisition moves a Rung's stores -- the rung IS the subject",
           "stratum": "uncontested_material",
@@ -5990,8 +6284,12 @@
             ],
             "write": [
               "requisition.refused"
+            ],
+            "draw": [
+              "requisition.failed"
             ]
           },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "refusal_note": "PLAN POSITION `19`: KEYED PER CLAUSE (`04 \u00a7B.13` invariant 4's per-conjunct half). `requisition.refused` is \u00a727.1's SCARCITY channel -- *the second claimant on an emptied granary gets a DIFFERENT Event* -- and it is now the `stores` conjunct's alone: two requisitions on one larder in one fold, and the second finds it short (`tests/test_u7_remit.py`). `requisition.unauthorized` is the SEAT refusing: none exercised grants `issue`, or its purview does not reach the rung. A witness can tell a seat that could not reach the larder from a larder that could not cover the requisition.",
           "grade": "assumption",
           "eligibility_note": "\u00a7E3's eligibility cell carried a PRECONDITION as well as the remit act (`remit:requisition + ...`). The act is the eligibility and the basis is a `requires`: the fold splits on the first `:` and tests the whole tail against the remit roster.",
@@ -6080,6 +6378,10 @@
         },
         {
           "verb": "marshal",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "none",
+          "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `marshal`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
           "scale": "settlement",
           "scale_note": "a standing order is read about a settlement, the place the side stands at when it fights (the attacker's origin, the defender's target): the settlement IS the subject, as `march`'s and `requisition`'s are, and the exercised seat's purview must reach it.",
           "stratum": "binding_decision",
@@ -6120,8 +6422,12 @@
             ],
             "write": [
               "marshal.refused"
+            ],
+            "draw": [
+              "marshal.failed"
             ]
           },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "refusal_note": "KEYED PER CLAUSE, `seize`'s shape. `marshal.unauthorized` -- the SEAT, at `authority`: none exercised grants `dispatch`, or its purview does not reach the subject's place. `marshal.refused` -- the WORLD, at `write`: the effect declined (a hand-built act naming a `role` outside `order_roles` or a `retreat_at` outside `order_retreat_at` is refused before anything is written, a caller defect) or the mint moved nothing.",
           "grade": "assumption",
           "grade_note": "an argued addition (v11 CP-T04-02, AM-C-09): the matrix row `(Record, exists)` is the tree's; the verb, its `remit:dispatch` eligibility, the three-key kind and the `role_allowed` bypass (the `role` ranges over the module's whole `ROLE_SPEC`, `H-361`) are this item's, on the user's ruling to build it as the entry writes it.",
@@ -6177,6 +6483,10 @@
         },
         {
           "verb": "migrate",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "none",
+          "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `migrate`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
           "stratum": "movement",
           "eligibility": [
             "own"
@@ -6234,8 +6544,12 @@
             ],
             "write": [
               "migrate.refused"
+            ],
+            "draw": [
+              "travel.failed"
             ]
           },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "refusal_note": "KEYED PER CLAUSE (`04 \u00a7B.13` invariant 4's per-conjunct half, plan position `19`'s shape). `path` is the journey failing, and it emits `move`'s own `travel.blocked` because it IS the same fact -- *there is no road from here to there* -- so a witness of either verb learns the same thing. `room` (v10 REM-29) is the destination refusing the settler for RR-2's throttle -- AT CAPACITY, a newcomer whose weight would take `world_q.population` past `world_q.capacity` (`world_q.has_room`) -- and emits `migrate.refused`, the kind the effect's capacity decline emitted, so what a witness learns is unchanged; the read rides the Event. `write` is the destination refusing him in the effect: the ladder will not seat him there, he already lives there, he is in custody (a live `detain`, v9 SC-03a: `_decline_custody`), or (a caller running the effect without the fold's admission) no room. `audience` (v9 IN-59 (b)) is the mover's standing at a guarded destination, and emits `travel.blocked` too: it is the same fact as `move`'s refusal of an unadmitted entrant. ELIGIBILITY is `own`, which cannot decline, so it keys nothing.",
           "grade": "assumption",
           "grade_note": "the VERB is RR-2's (ruled: *a verb persons take*); its row -- the cell, the writes, the kinds, the throttle's place -- is plan position `19c`'s, argued at `_eff_migrate`, graded as `found`'s and `build`'s are. Its `alignment` cells arrived with IN-08's cells commit, graded `reasoned` (`rosters.yaml: tables.alignment`).",
@@ -6243,6 +6557,10 @@
         },
         {
           "verb": "move",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "none",
+          "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `move`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
           "stratum": "movement",
           "eligibility": [
             "own"
@@ -6258,12 +6576,14 @@
               {
                 "form": "contain_path",
                 "of": "actor",
-                "to": "to"
+                "to": "to",
+                "conjunct": "path"
               },
               {
                 "form": "relation",
                 "of": "to",
-                "relation": "audience"
+                "relation": "audience",
+                "conjunct": "audience"
               }
             ]
           },
@@ -6276,9 +6596,21 @@
           "emits": [
             "travel.moved"
           ],
-          "emits_on_refusal": [
-            "travel.blocked"
-          ],
+          "emits_on_refusal": {
+            "path": [
+              "travel.blocked"
+            ],
+            "audience": [
+              "travel.blocked"
+            ],
+            "write": [
+              "travel.blocked"
+            ],
+            "draw": [
+              "travel.failed"
+            ]
+          },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "grade": "assumption",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed"
         },
@@ -6550,6 +6882,10 @@
         },
         {
           "verb": "restore",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "none",
+          "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `restore`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
           "stratum": "uncontested_material",
           "eligibility": [
             "own",
@@ -6570,12 +6906,14 @@
               {
                 "form": "existence",
                 "of": "site",
-                "kind": "Site"
+                "kind": "Site",
+                "conjunct": "exists"
               },
               {
                 "form": "relation",
                 "of": "site",
-                "relation": "present_at"
+                "relation": "present_at",
+                "conjunct": "present"
               }
             ]
           },
@@ -6586,9 +6924,24 @@
           "emits": [
             "site.restored"
           ],
-          "emits_on_refusal": [
-            "restore.refused"
-          ],
+          "emits_on_refusal": {
+            "eligibility": [
+              "restore.refused"
+            ],
+            "exists": [
+              "restore.refused"
+            ],
+            "present": [
+              "restore.refused"
+            ],
+            "write": [
+              "restore.refused"
+            ],
+            "draw": [
+              "restore.failed"
+            ]
+          },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "grade": "ruled",
           "effect_formula_note": "\u0394 = +(1 \u2212 condition) \u00d7 f(degree) \u00d7 share (\u00a754 it. 7's mirror). \u26a0 BUILT AT PLAN POSITION `24e` as `loop/effects.py::_rise`, the one owner `work` also reads when it advances a works: `(1 \u2212 condition)` is the headroom to the works' ceiling (`queries/world_q.py::ceiling`, the full scale where no works names the site), `share` is `queries/world_q.py::share` (one over those standing at the fabric), and `f(degree)` is the IDENTITY because this row is uncontested and `_fold` hands it no degree (`H-164`). Staged on `(Site, condition)` and clamped once under the ceiling, `work`'s G4 shape.",
           "effect_note": "An effect formula is not a precondition: a precondition is a question the fold asks of the world, an effect is what the write does, and conflating them is how a resolver grows a second body.",
@@ -6627,6 +6980,10 @@
         },
         {
           "verb": "sabotage",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "none",
+          "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `sabotage`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
           "stratum": "uncontested_material",
           "eligibility": [
             "own",
@@ -6645,12 +7002,14 @@
               {
                 "form": "existence",
                 "of": "site",
-                "kind": "Site"
+                "kind": "Site",
+                "conjunct": "exists"
               },
               {
                 "form": "relation",
                 "of": "site",
-                "relation": "present_at"
+                "relation": "present_at",
+                "conjunct": "present"
               }
             ]
           },
@@ -6662,9 +7021,24 @@
           "emits": [
             "site.damaged"
           ],
-          "emits_on_refusal": [
-            "sabotage.refused"
-          ],
+          "emits_on_refusal": {
+            "eligibility": [
+              "sabotage.refused"
+            ],
+            "exists": [
+              "sabotage.refused"
+            ],
+            "present": [
+              "sabotage.refused"
+            ],
+            "write": [
+              "sabotage.refused"
+            ],
+            "draw": [
+              "sabotage.failed"
+            ]
+          },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "refusal_note": "v9 IN-12 step 9, #453 \u00a79.3: *'refusal `sabotage.refused`'* -- one flat kind, `restore`'s shape: the site is not a Site, the saboteur is not at it, or the write moved nothing.",
           "grade": "assumption",
           "grade_note": "an argued addition (#453 \u00a710.4 step 9): the row and the mirror are v9 IN-12's, on #453 \u00a79.3 `:1865-1890`, K-04 `:2600-2605`, K-09 `:2640-2646`.",
@@ -6672,6 +7046,10 @@
         },
         {
           "verb": "raze",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "none",
+          "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `raze`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
           "scale": "settlement",
           "scale_note": "#453 \u00a79.2: a razing ends the settlement it names -- the place IS the subject, `march`'s and `seize`'s scale for the same reason.",
           "stratum": "contested_physical",
@@ -6689,7 +7067,8 @@
           "requires_typed": {
             "form": "existence",
             "of": "subject",
-            "kind": "Rung"
+            "kind": "Rung",
+            "conjunct": "exists"
           },
           "requires_typed_note": "\u26a0 v9 IN-12 step 11 KEEPS THE ROW TYPED, ON `march`'s CELL, WHERE #453 \u00a79.2 SENDS IT UNTYPED. #453: *'untyped -- \"Site or Rung\" is a disjunction ... a registered predicate and a flat `raze.refused`'*. This row ends a RUNG ONLY (the entry's falsifier is `w.rungs` shrinks), so the disjunction is not asked and the one conjunct the grammar can spell is kept: `existence` of `subject` kind `Rung`, `march`'s own cell (`WorldReader.read` answers `exists:Rung` generically). THE SUB-KIND AND THE LICENCE ARE THE EFFECT'S (`loop/effects_founding.py::_eff_raze`): a `march_target_kinds` member (a settlement), and OCCUPATION -- the exercised seat's faction `mustered` there, the place held by another faction -- the read `seize`'s Rung half inlines (`_seize_rung`), copied. A refusal at either is `raze.refused` (the `write` clause). The Site half of #453's row (`Site.exists` -> absent, `site.razed`) is NOT BUILT (`hole_register.yaml` H-228). [ASSUMPTION; medium; Jordan to correct; revert: `requires_typed: none` + a registered predicate asking the same reads, #453's own text.]",
           "writes": [
@@ -6700,9 +7079,21 @@
             "rung.razed"
           ],
           "emits_note": "#453 \u00a79.2's kind for the Rung half (`site.razed` waits on the Site half, H-228). A NEW kind, emitted by this row alone (`data/verbs.py::KIND_VERB`); not `rung.seized` -- a taking keeps the place and a razing ends it.",
-          "emits_on_refusal": [
-            "raze.refused"
-          ],
+          "emits_on_refusal": {
+            "eligibility": [
+              "raze.refused"
+            ],
+            "exists": [
+              "raze.refused"
+            ],
+            "write": [
+              "raze.refused"
+            ],
+            "draw": [
+              "raze.failed"
+            ]
+          },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "refusal_note": "#453 \u00a79.2: *'refusal `raze.refused` (flat)'*, `march`'s shape on a typed row: the subject is no Rung (the `existence` conjunct), or the effect declined -- not a settlement, the seat has no faction, nobody or the seat's own faction holds the place, or the seat's faction is not mustered there (no army).",
           "grade": "assumption",
           "grade_note": "an argued addition (#453 \u00a710.4 step 11): the row is v9 IN-12's, on #453 \u00a79.2 `:1800-1822`, K-06 `:2617-2619`; the occupation licence is IN-13's read (`_seize_rung`), copied.",
@@ -6852,6 +7243,9 @@
         },
         {
           "verb": "survey",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "inquiry",
           "stratum": "uncontested_material",
           "eligibility": [
             "own"
@@ -6877,9 +7271,15 @@
             "faction.surveyed"
           ],
           "emits_note": "A KIND OF ITS OWN, NOT `record.created`: a survey is a private act (`own`, `uncontested_material`), and neither broadcast channel reads it -- `_ch_chronicle` reads the kinds `binding_decision` rows emit and `_ch_post_remit` those of `remit:`-eligible rows (`give`'s `emits_note` gives the reason in full). Witnesses learn THAT a survey was made of the subject, by the channels that admit them; only the holder learns what it says.",
-          "emits_on_refusal": [
-            "survey.refused"
-          ],
+          "emits_on_refusal": {
+            "write": [
+              "survey.refused"
+            ],
+            "draw": [
+              "survey.failed"
+            ]
+          },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "refusal_note": "FLAT: one kind for every failable clause (`data/verbs.py`, invariant 4). Refusal conditions: the surveyor holds no claim on the subject (the cell); the subject coheres under no single faction -- a person committed to none or to two, a rung nobody up its chain holds or whose holder coheres under none (v9 IN-12), a site, an office, a document, an unrostered Proposition (the effect's decline, the `write` clause).",
           "grade": "assumption",
           "grade_note": "an argued addition, graded as `found`, `build` and `forge` are: the matrix row `(Record, exists)` is the tree's; the verb, its cell and its reading of WHICH faction are plan position `20-iii`'s, on proposal 14's reconciliation. The operand reading is `faction_holding`'s, not a new rule.",
@@ -6887,6 +7287,10 @@
         },
         {
           "verb": "tend",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "none",
+          "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `tend`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
           "stratum": "uncontested_material",
           "eligibility": [
             "own"
@@ -6906,12 +7310,14 @@
               {
                 "form": "existence",
                 "of": "subject",
-                "kind": "Person"
+                "kind": "Person",
+                "conjunct": "exists"
               },
               {
                 "form": "relation",
                 "of": "subject",
-                "relation": "with"
+                "relation": "with",
+                "conjunct": "with"
               }
             ]
           },
@@ -6923,9 +7329,21 @@
           "emits": [
             "body.tended"
           ],
-          "emits_on_refusal": [
-            "tend.refused"
-          ],
+          "emits_on_refusal": {
+            "exists": [
+              "tend.refused"
+            ],
+            "with": [
+              "tend.refused"
+            ],
+            "write": [
+              "tend.refused"
+            ],
+            "draw": [
+              "tend.failed"
+            ]
+          },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "refusal_note": "v9 IN-12 step 9, #453 \u00a79.4: *'refusal `tend.refused`'* -- one flat kind: the subject is no person, is not with the tender, or is already whole (the write moved nothing).",
           "grade": "assumption",
           "grade_note": "an argued addition (#453 \u00a710.4 step 9): the row and its magnitude are v9 IN-12's, on #453 \u00a79.4 `:1925-1941`.",
@@ -7027,7 +7445,7 @@
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
           "beneficiary_note": "the six investigation verbs (`examine`, `interview`, `research`, `surveil`, `thread_read`, `reconstruct`) all write `[]` and emit `finding.made`: a finding is a Claim minted at WITNESS into THE ACTOR'S OWN LEDGER, which is the carrier the good lands on. `tell` is the one that points the other way -- it deposits with the person told, so its beneficiary is `subject`.",
           "referent_class": "Site",
-          "referent_class_note": "v10 REM-22 (B10-05, AM-A-07; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Site`-CLASSED REFERENT, as `restore` (`queries/world_q.py::own_referents_of_class` stamps the question's own Site, `decision/options.py::opening_set` forms on it alone). THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: the cell, the eligibility and the graded route (`graded_inquiries`, FI-01) are unchanged, and it claims no finding. No question the realm delivers carries a Site among its referents, so the row forms nowhere there (sideways, declared, not progress); `finding.none` deposits nothing at WITNESS (`undeposited_kinds`). A person present at a Site reaches the graded route through the real fold (`tests/test_referent_class_stamps.py`); what remains refused is `present_at`, a learnable state. REVERT: delete this column.",
+          "referent_class_note": "v10 REM-22 (B10-05, AM-A-07; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Site`-CLASSED REFERENT, as `restore` (`queries/world_q.py::own_referents_of_class` stamps the question's own Site, `decision/options.py::opening_set` forms on it alone). THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: the cell, the eligibility and the graded route (`graded_tasks`, FI-01) are unchanged, and it claims no finding. No question the realm delivers carries a Site among its referents, so the row forms nowhere there (sideways, declared, not progress); `finding.none` deposits nothing at WITNESS (`undeposited_kinds`). A person present at a Site reaches the graded route through the real fold (`tests/test_referent_class_stamps.py`); what remains refused is `present_at`, a learnable state. REVERT: delete this column.",
           "requires": "the site exists and the actor is present at it",
           "requires_typed": {
             "all": [
@@ -7060,7 +7478,7 @@
               "finding.none"
             ]
           },
-          "emits_note": "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_inquiries` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits nothing for (`undeposited_kinds`, RS-21 item 1); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built.",
+          "emits_note": "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits nothing for (`undeposited_kinds`, RS-21 item 1); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built.",
           "emits_on_refusal": [
             "finding.none"
           ],
@@ -7169,7 +7587,7 @@
           ],
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
           "referent_class": "Record",
-          "referent_class_note": "v10 REM-2C (B10-05, AM-A-11; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Record`-CLASSED REFERENT -- the plain referent of the question he answers that is a Record (`queries/world_q.py::own_referents_of_class`, REM-21's term, which stamps the class since `Record` left `rosters.yaml: occasion_only_classes`; `decision/options.py::opening_set` then forms on the classed ids alone, IN-53 D1's partition), so `subject` binds the document the question is about and never a person, a Site, a Proposition or a rung. NOT the stamp rem-02 REM-2C rejected (every Record the person has heard of): the term reads the question, never the ledger. The cell asks `existence` of the collection itself, so it adds no sub-kind to `writs_held`'s or `records_held_for_holding_rows`' sets (`data/verbs.py::_record_subkinds_answered`); the class is SHARED, so this row also forms on the Records those two standing occasions stamp (a writ naming him, a petition or works he holds), and `comply`, `carry`, `found` and `build` on the question's own Records, the fold disposing. A WRIT is the exception: only `writs_held` stamps one (the B10-05 close), so a non-addressee's question that names a writ forms none of these rows on it. THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: the cell, the eligibility and the graded route (`graded_inquiries`, FI-01) are unchanged, and it claims no finding. `presence:<site>` binds nothing on the classed subject, as on the plain one: it is an eligibility alternative, not an operand of the cell (which binds `subject` alone), `own` admits first person-side and in the fold, and the alternative declines unconditionally if reached (H-75). THE SHARED-CLASS COST is the other four Record rows' wrong-SUB-kind refusals on a question's own Record (`comply` on `exists:dispensation`, `carry` on `exists:petition`, `found` and `build` on `exists:works`), which REM-11's last-read `exists:<K>=0` stopping rule counts. With `Record` put back in `occasion_only_classes` and this column kept, the row forms only on a Record a standing occasion stamps (one he holds), not on the document the question is about. A researcher asked about a document reaches the graded route through the real fold (`tests/test_referent_class_stamps.py`). REVERT: delete this column (and put `Record` back in `occasion_only_classes`).",
+          "referent_class_note": "v10 REM-2C (B10-05, AM-A-11; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Record`-CLASSED REFERENT -- the plain referent of the question he answers that is a Record (`queries/world_q.py::own_referents_of_class`, REM-21's term, which stamps the class since `Record` left `rosters.yaml: occasion_only_classes`; `decision/options.py::opening_set` then forms on the classed ids alone, IN-53 D1's partition), so `subject` binds the document the question is about and never a person, a Site, a Proposition or a rung. NOT the stamp rem-02 REM-2C rejected (every Record the person has heard of): the term reads the question, never the ledger. The cell asks `existence` of the collection itself, so it adds no sub-kind to `writs_held`'s or `records_held_for_holding_rows`' sets (`data/verbs.py::_record_subkinds_answered`); the class is SHARED, so this row also forms on the Records those two standing occasions stamp (a writ naming him, a petition or works he holds), and `comply`, `carry`, `found` and `build` on the question's own Records, the fold disposing. A WRIT is the exception: only `writs_held` stamps one (the B10-05 close), so a non-addressee's question that names a writ forms none of these rows on it. THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: the cell, the eligibility and the graded route (`graded_tasks`, FI-01) are unchanged, and it claims no finding. `presence:<site>` binds nothing on the classed subject, as on the plain one: it is an eligibility alternative, not an operand of the cell (which binds `subject` alone), `own` admits first person-side and in the fold, and the alternative declines unconditionally if reached (H-75). THE SHARED-CLASS COST is the other four Record rows' wrong-SUB-kind refusals on a question's own Record (`comply` on `exists:dispensation`, `carry` on `exists:petition`, `found` and `build` on `exists:works`), which REM-11's last-read `exists:<K>=0` stopping rule counts. With `Record` put back in `occasion_only_classes` and this column kept, the row forms only on a Record a standing occasion stamps (one he holds), not on the document the question is about. A researcher asked about a document reaches the graded route through the real fold (`tests/test_referent_class_stamps.py`). REVERT: delete this column (and put `Record` back in `occasion_only_classes`).",
           "requires": "the record consulted exists",
           "requires_typed": {
             "form": "existence",
@@ -7193,7 +7611,7 @@
               "finding.none"
             ]
           },
-          "emits_note": "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_inquiries` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits nothing for (`undeposited_kinds`, RS-21 item 1); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built.",
+          "emits_note": "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits nothing for (`undeposited_kinds`, RS-21 item 1); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built.",
           "emits_on_refusal": [
             "finding.none"
           ],
@@ -7248,7 +7666,7 @@
               "finding.none"
             ]
           },
-          "emits_note": "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_inquiries` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits nothing for (`undeposited_kinds`, RS-21 item 1); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built.",
+          "emits_note": "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits nothing for (`undeposited_kinds`, RS-21 item 1); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built.",
           "emits_on_refusal": [
             "finding.none"
           ],
@@ -7257,6 +7675,10 @@
         },
         {
           "verb": "thread_read",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "none",
+          "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers reading the Thread (Thread Sensitivity is a practitioner stat, not a skill), so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
           "stratum": "contested_physical",
           "eligibility": [
             "own",
@@ -7273,7 +7695,8 @@
             "of": "actor",
             "scalar": "thread_sensitivity",
             "threshold_predicate": "thread_sensitivity.gate",
-            "comparator": ">="
+            "comparator": ">=",
+            "conjunct": "sensitivity"
           },
           "requires_typed_note": "v9 PC-06 K-3 (`H-85`; `proposals/2026-10-07-unplugged-systems-replug.md` \u00a73.3, re-reviewed at the B-S opener) TYPES THE GATE WITH NO NEW OPERAND: a `scalar_threshold` (\u00a7F.24a form 2) `of: actor` over the STEM `thread_sensitivity` -- the actor's own `Person.thread_sensitivity`, set once at world build from the cast's authored `ts:` (`data/cast.py::thread_sensitivity_of`) and never written in play -- against the SECOND READ `thread_sensitivity.gate`, `Fixtures thread_sensitivity_gate` (`work`'s `floor` and `determine`'s `quorum` shape), so `requires_operands` stays closed. The `30` of `fieldwork_v30.md` \u00a74.2 (the Thread-Read row) is that fixture's SOURCE (`H-239`), not the reason it is correct. Both stems are `OWN_STATE_STEMS` (`data/requires.py`), answered by `queries/person_q.py::OwnStateReader` for the fold and for the person alike: a person with no authored value reads UNKNOWN and is refused, never 0, and `decision/options.py::opening_set` forms the Candidate only for a person his own reading admits -- canon's *'TS >= 30 required'* (\u00a74.2; declining at formation is this change's own reasoning, not \u00a72.2's *cannot attempt*, which governs the attribute gates: ED-FI-0009's retraction). \u26a0 STILL NOT EXPRESSED: what the act reads (the Depth \u00a71 gates on the same number, K-37) and its Coherence cost (`source:`), so it stays ungraded and its `writes:` stay `[]`. [ASSUMPTION; medium; Jordan to correct.]",
           "writes": [],
@@ -7281,14 +7704,26 @@
           "emits": [
             "finding.made"
           ],
-          "emits_on_refusal": [
-            "finding.none"
-          ],
+          "emits_on_refusal": {
+            "eligibility": [
+              "finding.none"
+            ],
+            "sensitivity": [
+              "finding.none"
+            ],
+            "draw": [
+              "thread_read.failed"
+            ]
+          },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "grade": "assumption",
           "source": "investigation_systems_v30.md:217; fieldwork_v30.md:297 (\u00a74.2), :321 (\u00a74.3), \u00a74.5 :341-347. \u26a0 P-01 CO-MOVEMENT AND THE COHERENCE COST (\u00a74.5 :344-346) ARE NOT EXPRESSED HERE and are not silently dropped: they are threadwork effects with no carrier in this loop, carried on ED-FI-0009 with the Exposure gap"
         },
         {
           "verb": "reconstruct",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "inquiry",
           "stratum": "uncontested_material",
           "eligibility": [
             "own"
@@ -7342,6 +7777,10 @@
         },
         {
           "verb": "train",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "none",
+          "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `train`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
           "stratum": "uncontested_material",
           "eligibility": [
             "own"
@@ -7359,12 +7798,14 @@
               {
                 "form": "existence",
                 "of": "subject",
-                "kind": "Person"
+                "kind": "Person",
+                "conjunct": "exists"
               },
               {
                 "form": "relation",
                 "of": "subject",
-                "relation": "with"
+                "relation": "with",
+                "conjunct": "with"
               }
             ]
           },
@@ -7376,9 +7817,21 @@
           "emits": [
             "capability.raised"
           ],
-          "emits_on_refusal": [
-            "train.refused"
-          ],
+          "emits_on_refusal": {
+            "exists": [
+              "train.refused"
+            ],
+            "with": [
+              "train.refused"
+            ],
+            "write": [
+              "train.refused"
+            ],
+            "draw": [
+              "train.failed"
+            ]
+          },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "refusal_note": "v9 IN-12 step 9, #453 \u00a79.4: *'refusal `train.refused`'* -- one flat kind: the subject is no person, is not with the actor, or holds no capability in the vocation the act carries (the effect's decline, J-13 (iii)'s write clause).",
           "grade": "assumption",
           "grade_note": "an argued addition (#453 \u00a710.4 step 9): the row, its magnitude and the J-13 (iii) interim are v9 IN-12's, on #453 \u00a79.4 `:1943-1968`, K-20 `:2729-2735`, K-21 `:2737-2742`.",
@@ -7386,6 +7839,10 @@
         },
         {
           "verb": "recruit",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "none",
+          "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `recruit`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
           "stratum": "uncontested_material",
           "eligibility": [
             "own"
@@ -7403,12 +7860,14 @@
               {
                 "form": "existence",
                 "of": "subject",
-                "kind": "army"
+                "kind": "army",
+                "conjunct": "exists"
               },
               {
                 "form": "relation",
                 "of": "subject",
-                "relation": "held_by"
+                "relation": "held_by",
+                "conjunct": "held"
               }
             ]
           },
@@ -7420,9 +7879,21 @@
           "emits": [
             "army.recruited"
           ],
-          "emits_on_refusal": [
-            "recruit.refused"
-          ],
+          "emits_on_refusal": {
+            "exists": [
+              "recruit.refused"
+            ],
+            "held": [
+              "recruit.refused"
+            ],
+            "write": [
+              "recruit.refused"
+            ],
+            "draw": [
+              "recruit.failed"
+            ]
+          },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "grade": "assumption",
           "grade_note": "ED-IN-0306 (Jordan, 2026-10-28): the army record is ruled; the verb, its magnitudes and its refusals are phase 2's. No ARCHITECTURE_V2.md cell.",
           "refusal_note": "FLAT. Refusal conditions: the subject is no army, or the actor does not hold it (the cell); the payload names no cohort of the army's faction, no known troop type, or a count above `recruit_limit` for the cohort's population and training sites (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError).",
@@ -7701,6 +8172,10 @@
         },
         {
           "verb": "work",
+          "difficulty": "plain",
+          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "capability": "none",
+          "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `work`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
           "stratum": "uncontested_material",
           "eligibility": [
             "own",
@@ -7721,7 +8196,8 @@
             "of": "site",
             "scalar": "condition",
             "threshold_predicate": "floor",
-            "comparator": ">="
+            "comparator": ">=",
+            "conjunct": "floor"
           },
           "requires_typed_note": "\u00a7E3 `:420` \u2014 *`condition >= floor(verb)`* (\u00a712.1). THE THRESHOLD IS A DECLARED READING OF `floor(verb)` FOR A VERB THAT NAMES NO USE: `WorldReader.read`'s `floor` branch returns `min(floors.values())` and argues for doing so \u2014 *`work` is the GENERIC labour verb, so a site is workable if it clears the floor of its LEAST demanding use*; `max` refuses a seam surface-gleaning supports, and `UNKNOWN` destroys the gate outright, since `work`'s precondition could then never return False. `floor` reads **100** for `site_harbour` and **50** for `site_seam`, and a named workable site emits `site.worked` (`test_tracer_is_honest.py`). The objection the reading answers is real: `band_floors`' inner keys are SITE-USE verbs (bulk_shipping, fishing, deep_mining \u2026), **NOT verb-table rows**, so `work` is not among them, and on a harbour the cell asks `condition >= 100` where `floor(bulk_shipping)` is 800 -- every condition in 100..800 is ADMITTED WHERE THE PROSE REFUSES, an UNDER-refusal, which `G4` weighs equally with an invention. THE SITE-USE IS AN OPERAND THE CLOSED ROSTER DOES NOT CARRY, so the reader answers with `min` WITH THE READING STATED, not UNKNOWN. What stays open is that a `work` MEANING deep-mining is admitted on a seam only surface-gleaning could support, because nothing on the act says which use is intended. `W-C` binds `site` to the question's referent, so the substitution is reached on every computed `work`. Registered on `H-08`/`H-94`; typing the threshold needs a site-use operand first.",
           "writes": [
@@ -7731,9 +8207,21 @@
           "emits": [
             "site.worked"
           ],
-          "emits_on_refusal": [
-            "work.unavailable"
-          ],
+          "emits_on_refusal": {
+            "eligibility": [
+              "work.unavailable"
+            ],
+            "floor": [
+              "work.unavailable"
+            ],
+            "write": [
+              "work.unavailable"
+            ],
+            "draw": [
+              "work.failed"
+            ]
+          },
+          "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "grade": "ruled",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed"
         }

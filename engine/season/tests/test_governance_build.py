@@ -844,14 +844,19 @@ def _load_with(table_text: str):
                 _verbs.VERB_TABLE = table
 
 
-_LEVY_ROW = (
-    '  - verb:        "requisition"\n'
-    '    scale:   "settlement"\n'
-    '    scale_note: "a requisition moves a Rung\'s stores -- the rung IS the subject"\n'
-    '    stratum:     "uncontested_material"\n'
-    '    eligibility: ["remit:issue", "presence:<rung>"]\n'
-    '    beneficiary: "actor"\n'
-)
+def _row_head(verb: str) -> str:
+    """A verb row's text from its `- verb:` line through its `beneficiary:` line, cut from the shipped
+    file. B07.01 inserted `difficulty:`/`capability:` (and their notes) between `verb:` and `scale:`, so a
+    hand-copied block no longer matched the file and the plants below substituted nothing (the vacuity
+    assertion caught it); cutting the block from the file keeps the plant matching whatever a lane
+    puts between the two lines."""
+    src = _verb_table_text()
+    start = src.index(f'  - verb:        "{verb}"\n')
+    end = src.index("    beneficiary:", start)
+    return src[start:src.index("\n", end) + 1]
+
+
+_LEVY_ROW = _row_head("requisition")
 
 # ⚠ PLAN POSITION `19` TYPED `requisition` (`transfer`'s form-2 cell plus a `basis` conjunct), and a typed
 # cell's `needs:` ADMITS `to` -- so `beneficiary: to` on `requisition` became CARRIABLE and stopped being the
@@ -865,12 +870,7 @@ _LEVY_ROW = (
 # -- untyped (`requires: —`, `create_record`'s shape: no precondition, so no cell) and `beneficiary: actor`,
 # the shape the plant needs. The two tests above keep `requisition`: a missing or off-roster beneficiary is
 # refused whatever the row's cell.
-_UNTYPED_ROW = (
-    '  - verb:        "conceal"\n'
-    '    stratum:     "social"\n'
-    '    eligibility: ["own"]\n'
-    '    beneficiary: "actor"\n'
-)
+_UNTYPED_ROW = _row_head("conceal")
 
 
 def test_lb6d_every_verb_declares_a_rostered_beneficiary():

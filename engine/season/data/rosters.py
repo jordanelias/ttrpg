@@ -664,11 +664,27 @@ def _load_lifepaths(cells: dict, lifepaths, vocations) -> tuple:
 
 LIFEPATHS = roster("lifepaths")
 LIFEPATH_TEMPLATES, LIFEPATH_RANKS = _load_lifepaths(table("lifepath_templates"), LIFEPATHS, frozenset(_CAPABILITIES))
-# v9 FI-01 (`ED-FI-0009`, J-22 (A)): inquiry verb -> `{provider, module_entry}`, the roll that grades
-# it with no prize. Validated against the verb table at load (`data/verbs.py`) and against the prize
-# rows at driver construction (`manifest/registry.py::check_graded_inquiries`); read by
-# `loop/resolve.py::_grade`.
-GRADED_INQUIRIES = roster_map("graded_inquiries", "values")
+# v9 FI-01 (`ED-FI-0009`, J-22 (A)); B07.01 (18-A edit 2): verb -> `{provider, module_entry, form[, armed_by]}`, the roll
+# that grades it with no prize -- the three inquiries and every `task`-class row. Validated against the verb table at load
+# (`data/verbs.py`) and against the prize rows at driver construction (`manifest/registry.py::check_graded_tasks`); the
+# loop reads a route through `graded_route` alone.
+GRADED_TASKS = roster_map("graded_tasks", "values")
+# B07.01 (18-A item 1; UNDECIDED (10)): `{verb: {why}}`, the `bookkeeping` class; refused at load by `data/verbs.py`.
+BOOKKEEPING_VERBS = roster_map("bookkeeping_verbs", "values")
+# B07.01 (UNDECIDED (1) (ii)): `{verb: carrying proposal}`, the rows 18-A classes `contest`, owed to the lane named.
+CONTEST_OWED = roster_map("contest_owed", "values")
+
+
+def graded_route(verb: str, fixtures) -> Optional[dict]:
+    """THE ROUTE THE LOOP TAKES FOR `verb`, or `None`: its `graded_tasks` row, except that a row carrying `armed_by:` is
+    taken only while that `Fixtures` member reads `on` (B07.01, UNDECIDED (11) (iii): `task_draw_arm` ships `off`, so each
+    such verb folds flat as before). The ONE reader for the fold (`loop/resolve.py`) and the believer's odds
+    (`seam/wrappers/sigma.py::_rolled_as`), so the two cannot disagree on whether an act is drawn. The loader reads the
+    whole roster (`GRADED_TASKS`), armed or not: a row's shape does not depend on a fixture's value."""
+    route = GRADED_TASKS.get(verb)
+    if route is not None and route.get("armed_by") and fixtures.get(route["armed_by"]) != "on":
+        return None
+    return route
 # RS-21 item 1 (H-111): the Event kinds WITNESS deposits nothing for (`loop/witness.py::witness`).
 UNDEPOSITED_KINDS = roster("undeposited_kinds")
 # ED-IN-0306 phase 2: the verbs that change an `army` Record (`loop/effects_army.py`); `data/fixtures.py` withholds them from formation.

@@ -53,7 +53,7 @@ from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.matrix import Step
 # `CONVICTIONS` dropped 2026-09-16: `seed_pursuits` moved to `run_cases.py`, which is its
 # single owner, and nothing here reads the roster any more.
-from ..data.rosters import (GRADED_INQUIRIES, PURSUIT_AXES, RUNG_KINDS,
+from ..data.rosters import (GRADED_TASKS, PURSUIT_AXES, RUNG_KINDS,
                             load_yaml, refuse_a_titled_post_off_its_rung)
 from ..data.verbs import VERB_TABLE, align, celled_verbs
 from ..decision import make_chooser
@@ -854,8 +854,8 @@ def bands_that_differ(table=None) -> dict:
 def deposit_only_rulings() -> dict:
     """`{verb: ruling}`: the rows a ruling says are deposit-only (their product is a Claim minted at
     WITNESS, not a typed write). `tell` (`G1`); the graded inquiries (FI-01, RS-21 item 1), read from
-    `rosters.yaml: graded_inquiries` and not listed here."""
-    return {"tell": "G1", **{v: "RS-21 item 1 (FI-01)" for v in GRADED_INQUIRIES}}
+    `rosters.yaml: graded_tasks` (its `form: inquiry` rows, B07.01) and not listed here."""
+    return {"tell": "G1", **{v: "RS-21 item 1 (FI-01)" for v, r in GRADED_TASKS.items() if r.get("form") == "inquiry"}}
 
 
 def emits_and_writes_nothing(table=None, effects=None, rulings=None) -> dict:

@@ -838,7 +838,7 @@ def _eff_forge(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     ⚠ v9 SC-02 `22b` STEP 25: `Record.forgery_quality` IS WRITTEN HERE, WITH ITS READER IN THE SAME
     CHANGE (`H-210`): the minted sheet carries `Fixtures.default_forgery_quality` (`_mint_sheet`, through
     `_mint_document`), and an EXAMINATION contests it -- an inquiry's roll on the Record (`research`,
-    rolled through `graded_inquiries`' route) carries the quality into its obstacle
+    rolled through `graded_tasks`' route) carries the quality into its obstacle
     (`seam/wrappers/sigma.py::contest_input` -> `modules/social_contest/roll.py::obstacle`), so a better
     forgery is harder to find, and what a finding then deposits stays FI-03's (`_found_claims`). A
     HOLDER still cannot read it -- *"a forged writ and a genuine writ are indistinguishable in every
