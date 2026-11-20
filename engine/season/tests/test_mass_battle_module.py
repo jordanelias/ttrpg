@@ -321,3 +321,68 @@ def test_an_untouched_side_reads_exactly_the_scale_and_the_share_quantises_float
     assert noisy < 1.0 and int(SCALE * noisy) == SCALE - 1, "vacuous: the noise no longer costs a body under int()"
     assert mb._share(noisy * 450.0, 450.0, SCALE) == SCALE
     assert mb._share(0.0, 450.0, SCALE) == 0 and mb._share(451.0, 450.0, SCALE) == SCALE
+
+
+# ---- B17.04: A SIDE PAST THE CEILING, OR OF NOBODY, NEVER REACHES THE CELL ENGINE ------------------------------------
+
+def _count_run_battle(monkeypatch):
+    """Wrap `massbattle.run_battle` (the cell engine's entry) in a counter; returns the one-slot list the count lands in."""
+    import importlib
+    mb = importlib.import_module("modules.mass_battle.massbattle")
+    entered, real = [0], mb.run_battle
+
+    def counting(*a, **k):
+        entered[0] += 1
+        return real(*a, **k)
+
+    monkeypatch.setattr(mb, "run_battle", counting)
+    return entered
+
+
+def test_past_the_ceiling_returns_scale_gap(monkeypatch):
+    """B17.04 step 1: a unit past `config.MAX_TROOPS_PER_UNIT` is refused with `status="SCALE-GAP"` (a dict, on `PARTY-GAP`'s
+    shape) and `run_battle` is not entered; `SCALE-GAP` is a member of the seam's `REFUSAL_STATUSES`, so `contest()` reads it as a
+    refusal and not as a software defect. CONTROL, the same record one weight under the ceiling: it resolves to a `FieldOutcome`
+    through `run_battle`, so the refusal is the ceiling's and not the record's. The boundary is the ceiling itself: 10,000 troops
+    resolve, 10,020 do not."""
+    import importlib
+    import random
+    from engine.season.queries.inputs import FieldOutcome
+    from engine.season.seam.contest import REFUSAL_STATUSES, _returned
+    config = importlib.import_module("modules.mass_battle.config")
+    cap = importlib.import_module("modules.mass_battle.troop_types.recruitment").under_arms_cap
+    entry, entered = _entry(), _count_run_battle(monkeypatch)
+    over = next(w for w in range(1, 10_000) if cap(w) > config.MAX_TROOPS_PER_UNIT)
+    assert cap(over - 1) <= config.MAX_TROOPS_PER_UNIT < cap(over), "vacuous: no weight straddles the ceiling"
+    got = entry(_headcount_record((over, over)), random.Random(0))
+    assert isinstance(got, dict) and got["status"] == "SCALE-GAP" and got["why"], got
+    assert entered == [0], f"run_battle entered {entered[0]} time(s) on a side past the ceiling"
+    assert "SCALE-GAP" in REFUSAL_STATUSES
+    refused = _returned(dict(got, module="mass_battle"), "a field", "test")
+    assert (refused.status, refused.why) == ("SCALE-GAP", got["why"]), refused
+    # one side alone past the ceiling refuses the field too
+    got = entry(_headcount_record((over - 1, over)), random.Random(0))
+    assert isinstance(got, dict) and got["status"] == "SCALE-GAP", got
+    # CONTROL
+    got = entry(_headcount_record((over - 1, over - 1)), random.Random(0))
+    assert isinstance(got, FieldOutcome) and entered == [1], (got, entered)
+
+
+def test_empty_sides_never_reach_run_battle(monkeypatch):
+    """B17.04 step 2: a field of nobody against nobody (a weight of 0) and one of two sides at the crash floor (one man a side,
+    `_MIN_TROOPS`) return `status="PARTY-GAP"` and never enter `run_battle`. The floor holds only for BOTH sides: CONTROL, a real
+    side against a floor-sized one (the attacker marching on a thin garrison) is fought as it always was, through `run_battle`."""
+    import importlib
+    import random
+    from engine.season.queries.inputs import FieldOutcome
+    cap = importlib.import_module("modules.mass_battle.troop_types.recruitment").under_arms_cap
+    entry, entered = _entry(), _count_run_battle(monkeypatch)
+    assert cap(0.0) == 0 and cap(0.04) == 1, "vacuous: the probe weights are not nobody and one man"
+    for pair in ((0.0, 0.0), (0.04, 0.04), (0.0, 0.04), (0.04, 0.0)):
+        got = entry(_headcount_record(pair), random.Random(0))
+        assert isinstance(got, dict) and got["status"] == "PARTY-GAP" and got["why"], (pair, got)
+    assert entered == [0], f"run_battle entered {entered[0]} time(s) on a field of nobody"
+    for pair in ((30.0, 0.0), (0.04, 30.0)):
+        got = entry(_headcount_record(pair), random.Random(0))
+        assert isinstance(got, FieldOutcome), (pair, got)
+    assert entered == [2], entered

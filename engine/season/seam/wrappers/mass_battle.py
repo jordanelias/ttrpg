@@ -363,7 +363,9 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     place to defend, which is a PARTY-GAP exactly like a caller with no claimants.
 
     `result` is the module's frozen `FieldOutcome` (B17.03), or `None` where no field was fought (`Unopposed`, `Invested`); the
-    four `FIELD_FLAGS` are lifted from its two sides to the top level for `degree_of`, and `field_degree` grades the outcome."""
+    four `FIELD_FLAGS` are lifted from its two sides to the top level for `degree_of`, and `field_degree` grades the outcome.
+    B17.04: a field the module refuses (`resolve_field` returns a dict: `SCALE-GAP`, or `PARTY-GAP` for two sides of nobody) is
+    that dict with this provider named, a refusal `seam/contest.py` folds and not a result."""
     if not claimants:
         return dict(status="PARTY-GAP", why="a field battle needs at least one claimant",
                     module=_PROVIDER)
@@ -430,6 +432,10 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     treasuries = (_seat_treasury(w, act.via if act is not None else None), _defender_treasury(w, rung))
     fed = _fed(w, inp, treasuries)
     result = entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)
+    if isinstance(result, dict):
+        # B17.04: the module's typed refusal (`SCALE-GAP`, or `PARTY-GAP` for two sides of nobody), on `PARTY-GAP`'s shape: handed on
+        # whole with this provider named, so `seam/contest.py` folds it as the verb's refusal and no fight was run.
+        return dict(result, module=_PROVIDER)
     return dict(status="RESOLVED", module=_PROVIDER, resolver="d_sigma",
                 # v9 IN-52: `((treasury rung, consumed), ...)`, attacker then defender -- what `_eff_march`
                 # debits (LF-3). Empty `consumed` on both sides while the arm is off.
@@ -458,7 +464,7 @@ def field_estimate(w: Any, actor: str, via: Optional[str], target: Optional[str]
     odds function and no band mapped here), and returns the SHARES `Won`, `Lost`, `Drawn` and `Unopposed` (`ESTIMATE_BANDS`; they
     sum to 1) beside `status` `ESTIMATED` and the `samples` run. An empty defending side is `Unopposed` with share 1 and
     `samples` 0: `resolve` deals it with no battle, so nothing is sampled. A refusal is `resolve`'s own dict
-    (`PARTY-GAP`, `ENGINE-UNAVAILABLE`).
+    (`PARTY-GAP`, `SCALE-GAP`, `ENGINE-UNAVAILABLE`).
 
     THE ORDER. `order` None reads the standing order as `field_input` reads it (`world_q.standing_order`, both
     sides'); a `FieldOrder` given is the ATTACKER's order for this estimate in the standing one's place (the defender's
@@ -488,6 +494,9 @@ def field_estimate(w: Any, actor: str, via: Optional[str], target: Optional[str]
     tally = dict.fromkeys(ESTIMATE_BANDS, 0)
     for _ in range(n):
         got = entry.fn(inp, rng, troops_a=fed[0].troops, troops_b=fed[1].troops)
+        if isinstance(got, dict):
+            # B17.04: a field the module refuses is refused every sample alike; `resolve`'s dict, as for any refusal here.
+            return dict(got, module=_PROVIDER)
         tally[field_degree(got)] += 1
     return dict(status="ESTIMATED", module=_PROVIDER, samples=n, **{b: c / n for b, c in tally.items()})
 

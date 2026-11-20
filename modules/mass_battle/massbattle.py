@@ -26,7 +26,7 @@ import math
 
 from engine.season.queries.inputs import FieldOutcome, PartOutcome, SideOutcome
 from modules.mass_battle import rngsource
-from modules.mass_battle.config import CELL_CAP, ROLE_SPEC
+from modules.mass_battle.config import CELL_CAP, MAX_TROOPS_PER_UNIT, ROLE_SPEC
 from modules.mass_battle.hierarchy.units import Order, Unit, Army, unit_conceded
 from modules.mass_battle.orchestration import run_battle
 from modules.mass_battle.orderofbattle import (OrderOfBattle, UnitRow, _SIDE_DIR, _place, class_of,
@@ -147,6 +147,25 @@ _SEASON_FORCE_POWER = 4  # [canonical: sim_mb_06_v9_historical_spec.md — P4 ti
 _MIN_TROOPS = 1.0  # floor only -- `Army.total_troops() == 0` divides by zero deep in
                    # `orchestration.resolve_engagements`; this is the smallest value that avoids
                    # that crash, not a claim about what a minimal army is.
+
+
+def _refusal(army_a, army_b):
+    """B17.04: THE TWO SHAPES THE CELL ENGINE CANNOT HOLD, as a typed refusal beside the typed outcome, or `None` for a field it can.
+    A dict on `PARTY-GAP`'s shape (`status`, `why`), which `seam/wrappers/mass_battle.py::resolve` hands on and `seam/contest.py::
+    REFUSAL_STATUSES` reads as the game's refusal. Read off the Armies as built, so the headcount arms and an order of battle are one
+    rule. `SCALE-GAP`: a unit past `config.MAX_TROOPS_PER_UNIT`, the module's stated ceiling. `PARTY-GAP`: BOTH sides are nobody, every
+    unit of each at or below `_MIN_TROOPS`, the crash floor, which is a floor-sized phantom and not a block (a field of nobody
+    against nobody, or one man a side, is the host's no-party branch, not a battle that the attacker `loses`). One side of nobody
+    against a real side is fought as it was."""
+    sizes = [[u._start_troops for u in army.units] for army in (army_a, army_b)]
+    big = max(max(side) for side in sizes)
+    if big > MAX_TROOPS_PER_UNIT:
+        return dict(status="SCALE-GAP", why=f"a unit of {big:g} troops is past the module's ceiling of "
+                    f"{MAX_TROOPS_PER_UNIT} (config.MAX_TROOPS_PER_UNIT)")
+    if all(n <= _MIN_TROOPS for side in sizes for n in side):
+        return dict(status="PARTY-GAP", why="a field battle needs a block of troops on a side; both sides are nobody "
+                    "or one man (the crash floor)")
+    return None
 
 
 #: CP-T04-02 (`H-361`): THE STANDING ORDER'S VOCABULARY, owned HERE and read by the season through
@@ -471,7 +490,9 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
     here is not read. CP-T04-03: a side's `retreat_at` is each of its headcount line's units' `own_strength` retreat Order
     (`_retreat_orders`), on either `units` arm; `'none'`, or no order, is no Order. `_grade` reads the side's concession.
 
-    B17.03: returns a frozen `FieldOutcome` on every arm (`_run_and_grade`'s), each share an integer on `inp.condition_scale`."""
+    B17.03: returns a frozen `FieldOutcome` on every arm (`_run_and_grade`'s), each share an integer on `inp.condition_scale`.
+    B17.04: or a refusal dict (`_refusal`: `SCALE-GAP` past `MAX_TROOPS_PER_UNIT`, `PARTY-GAP` for two sides of nobody) on which
+    `run_battle` is never entered."""
     weight_a, weight_b = (sum(side) for side in inp.weights)
     if troops_a is not None:
         weight_a = troops_a
@@ -509,6 +530,9 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
         unit_b = _oob_unit(oob_b, weight_b, 'B', morale_b)
         # B17.03: an army's parts are its cohorts; a headcount side facing one names none.
         namers = tuple(None if oob is None else _cohort_namer(oob) for oob in (oob_a, oob_b))
+    refused = _refusal(unit_a, unit_b)
+    if refused is not None:
+        return refused
     # No territory: `river_crossed` answers False and the lookup OPEN_FLAT. WALLS outranks a crossing
     # (`terrain_row_for_territory`), so a fortified field does not derive one.
     crossing = inp.fort_level <= 0 and river_crossed(inp.origin, inp.territory, geography=inp.geography)
