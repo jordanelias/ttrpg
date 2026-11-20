@@ -167,3 +167,21 @@ def test_every_role_keyword_is_classified():
     assert len(vocab) >= 8   # B17.07 cut seven unwired keywords from the 15 the menus carried: the eight left each have a row
     table = _hu.ROLE_INSTRUCTION_PRIMITIVES
     assert vocab <= set(table), f"unclassified: {sorted(vocab - set(table))}"
+
+
+def test_every_gapped_line_role_keeps_its_shape_past_tick_one(field_path):
+    """R-24: `MIN_DISCIPLINE['GappedLine']` is the Discipline of the lightest troop type whose menu offers a
+    GappedLine role, so no menu offers a role its own type cannot hold. After one tick every GappedLine role
+    still reads GappedLine on each type that offers it."""
+    checked = 0
+    for troop_type, roles in C.TROOP_TYPE_ROLES.items():
+        for role in roles:
+            if C.ROLE_SPEC[role]['shape'] != 'GappedLine':
+                continue
+            random.seed(11)
+            a = build_army([{'role': role, 'troop_type': troop_type}], 'R', 'A')
+            b = build_unit('Line', 3, 'E', 'B', 25)
+            _orch.run_battle(a, b, max_ticks=2)
+            assert a.units[0].shape == 'GappedLine', (troop_type, role, a.units[0].shape)
+            checked += 1
+    assert checked >= 3

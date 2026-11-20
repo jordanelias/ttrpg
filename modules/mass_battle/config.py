@@ -143,7 +143,9 @@ MB_VOLLEY_DENSITY_CAP = float(_sigma_os.environ.get('MB_VOLLEY_DENSITY_CAP', '2.
 # depth-damping, support vectors, facing/angle. A formation template is a SHAPE, not a bonus carrier.
 MIN_DISCIPLINE = {
     # [canonical: mass_battle_v30.md §ED-815 shape discipline — min disc required by shape]
-    "Line": 1, "Arrowhead": 4, "GappedLine": 5, "Column": 3
+    # [B17.08, R-24] GappedLine = the Discipline of the lightest troop type whose menu offers a GappedLine role:
+    # skirmishers (Skirmish, discipline 2; light_infantry and mounted_archers are 3), so no menu offers a role its type cannot hold.
+    "Line": 1, "Arrowhead": 4, "GappedLine": 2, "Column": 3
 }
 ANGLE_DEF_MOD = {
     # v11: per-cell octagon. GREEN < 45° = 0D; YELLOW 45-90° = -1D; RED ≥ 90° = -2D.
