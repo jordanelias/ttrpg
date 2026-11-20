@@ -7759,8 +7759,8 @@
         },
         {
           "verb": "reconstruct",
-          "difficulty": "plain",
-          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "difficulty": "routine",
+          "difficulty_note": "B07.11 (premise-check F3, UNDECIDED (13) (ii)): `routine`, the inquiries' level (B05.23, T13 edit 7: the inquiries stay `routine`); 18-A's `plain` applies only where no verb lane has stated a level. Read by the draw only (`task_draw_arm` `on`). [ASSUMPTION; medium; Jordan to correct; revert: `plain`]",
           "capability": "inquiry",
           "stratum": "uncontested_material",
           "eligibility": [

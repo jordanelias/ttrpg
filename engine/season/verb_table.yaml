@@ -2061,8 +2061,8 @@ verbs:
     grade:       "assumption"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:297 (§4.2), :321 (§4.3), §4.5 :341-347. ⚠ P-01 CO-MOVEMENT AND THE COHERENCE COST (§4.5 :344-346) ARE NOT EXPRESSED HERE and are not silently dropped: they are threadwork effects with no carrier in this loop, carried on ED-FI-0009 with the Exposure gap"
   - verb:        "reconstruct"
-    difficulty:  "plain"
-    difficulty_note: "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`)."
+    difficulty:  "routine"
+    difficulty_note: "B07.11 (premise-check F3, UNDECIDED (13) (ii)): `routine`, the inquiries' level (B05.23, T13 edit 7: the inquiries stay `routine`); 18-A's `plain` applies only where no verb lane has stated a level. Read by the draw only (`task_draw_arm` `on`). [ASSUMPTION; medium; Jordan to correct; revert: `plain`]"
     capability:  "inquiry"
     stratum:     "uncontested_material"
     eligibility: ["own"]
