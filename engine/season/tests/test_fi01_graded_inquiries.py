@@ -87,7 +87,8 @@ def test_the_rosters_name_three_graded_and_the_skip_names_finding_none():
     skip arm is keyed on the one kind. A row that waits keeps a flat `emits:`, so it cannot be graded."""
     # B07.01: the roster is `graded_tasks`; the routes LIVE at the shipped fixtures are the three (the armed rows,
     # `reconstruct` and `thread_read` among them, are taken only with `task_draw_arm` on, `graded_route`).
-    live = {v for v in GRADED_TASKS if graded_route(v, DEFAULT_FIXTURES) is not None}
+    # B07.05 ships the arm on, so every armed route is live at the shipped fixtures; the three CARRIED inquiries are the routes live with it off.
+    live = {v for v in GRADED_TASKS if graded_route(v, DEFAULT_FIXTURES.sweep("task_draw_arm", "off")) is not None}
     assert live == set(GRADED), sorted(live)
     assert UNDEPOSITED_KINDS == frozenset({"finding.none"}), UNDEPOSITED_KINDS
     for verb in GRADED:
