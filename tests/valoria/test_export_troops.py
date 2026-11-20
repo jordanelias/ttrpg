@@ -133,12 +133,13 @@ def test_reach_and_support_derive_from_the_arm_with_no_result_moving():
 
 
 def test_the_transcribed_rows_read_as_the_old_tables_did():
-    """The rows that carry a decision, pinned by value: the knights keep today's behaviour (`mounted: false`, a 100-troop
-    cell), the unmustered body has no stat preset and no loadout, a levy has no site, and the two elite sites need half."""
+    """The rows that carry a decision, pinned by value: the knights keep today's behaviour (`mounted: false`, the horse
+    cell of 50 troops, half of `CELL_CAP`: B17.15), the unmustered body has no stat preset and no loadout, a levy has no
+    site, and the two elite sites need half."""
     assert not registry.is_mounted('knights_templar') and registry.is_mounted('light_cavalry')
     assert sorted(registry.MOUNTED_TYPES) == ['cavalry', 'light_cavalry', 'mounted_archers']
     from modules.mass_battle import config
-    assert config.cell_cap_for('knights_templar') == 100 == config.cell_cap_for('cavalry')
+    assert config.cell_cap_for('knights_templar') == 50 == config.cell_cap_for('cavalry') == config.CELL_CAP // 2
     assert config.cell_cap_for('pike') == config.CELL_CAP == config.cell_cap_for('infantry') == config.cell_cap_for('zzz')
     assert registry.stats_for('infantry') is None and 'infantry' not in registry.TROOP_TYPE_STATS
     from modules.mass_battle.equipment import loadout_for

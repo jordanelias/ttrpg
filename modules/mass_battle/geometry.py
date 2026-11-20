@@ -106,17 +106,23 @@ def footprint_for(shape, troops, concentration, troop_type=None, width=None, dep
         Frontage and depth are the coupled tactical axes (wide-shallow = frontage/envelopment; narrow-deep
         = breakthrough/staying-power). Per-cell density = troops/(width·depth) falls out of the choice
         (combat caps it at CELL_CAP downstream), so this honours 'explicitly define the number of columns
-        vs rows, which affect each other.'
+        vs rows, which affect each other.' A grid under MIN_CELLS_PER_UNIT cells is deepened to meet it (below).
       • else `concentration` = target troops/cell, which BOUNDS the cell count: cells = round(troops/
         concentration), clamped so per-cell stays in [CELL_FLOOR, cell_cap_for(troop_type)], built via
         `_build_shape_n`. (The old sparse size-parameter search silently ignored this — a 133-troop Line
         collapsed to 1 cell at every concentration, the M2 measurement bug.)
-    [P-DEC-3] A mounted troop_type caps lower (cell_cap_for) so the same troops deploy over MORE cells."""
+    [P-DEC-3] A mounted troop_type caps lower (cell_cap_for) so the same troops deploy over MORE cells.
+    [ED-MB-0101] A unit of at least MIN_CELLS_PER_UNIT x CELL_FLOOR troops has at least MIN_CELLS_PER_UNIT cells, by either
+    path; a smaller unit is below the ruled minimum and keeps the footprint it always had."""
     if width is not None and depth is not None:                     # explicit frontage×depth grid
         w, d = max(1, int(width)), max(1, int(depth))
+        if troops is not None and troops >= MIN_CELLS_PER_UNIT * CELL_FLOOR and w * d < MIN_CELLS_PER_UNIT:
+            d = math.ceil(MIN_CELLS_PER_UNIT / w)                   # the frontage stands, the depth makes up the cells
         return [(r, c) for r in range(d) for c in range(w)]
     troops = max(1, int(troops))
     lo = math.ceil(troops / cell_cap_for(troop_type))               # densest allowed (>= CELL_CAP/cell)
+    if troops >= MIN_CELLS_PER_UNIT * CELL_FLOOR:
+        lo = max(lo, MIN_CELLS_PER_UNIT)                            # the ruled minimum of cells
     hi = max(lo, troops // CELL_FLOOR)                               # sparsest allowed (>= CELL_FLOOR/cell)
     n = min(hi, max(lo, round(troops / max(1.0, float(concentration)))))
     return _build_shape_n(shape, n)

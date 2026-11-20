@@ -29,7 +29,7 @@ from engine.season.seam.ladder import field_degree
 from engine.season.seam.wrappers import mass_battle as MB
 from engine.season.state.carriers import Site
 from modules.mass_battle import armyrecord as A
-from modules.mass_battle.config import BLOCK_SIZE, UNIT_ROUT_FLOOR
+from modules.mass_battle.config import BLOCK_SIZE, CELL_FLOOR, MIN_ARMY_TROOPS, MIN_CELLS_PER_UNIT, MIN_UNITS_PER_ARMY, UNIT_ROUT_FLOOR
 from modules.mass_battle.troop_types import presets as PR
 from modules.mass_battle.troop_types import recruitment as R
 from modules.mass_battle.troop_types.registry import roles_for
@@ -96,7 +96,7 @@ def test_advisories_name_the_routs():
     rec = A.raised(rec, "c1", "spearmen", 50)
     rec = A.assign(rec, "tiny", "c1", 50)
     kinds = {a[0]: a for a in _opts(rec, ())["advisories"]}
-    assert kinds["unit_routs"][1:] == ("tiny", 50, UNIT_ROUT_FLOOR)
+    assert kinds["unit_routs"][1:] == ("tiny", 50, MIN_CELLS_PER_UNIT * CELL_FLOOR)   # B17.15: the unit's ruled minimum of four cells
     assert kinds["army_routs"][2:] == (50, BLOCK_SIZE)
     # CONTROL, one change: a unit of a full block (400 men) has neither warning
     rec2 = A.assign(A.form(A.raised(A.new("fac_x"), "c1", "spearmen", 400), "line", "spearmen"), "line", "c1", 400)
@@ -275,10 +275,15 @@ def test_install_raises_a_whole_organised_army_through_the_real_fold():
     assert min(sizes.values()) >= UNIT_ROUT_FLOOR and sum(sizes.values()) == 15 * R.under_arms_cap(2) == 900
     for c in _governed_cohorts(w, CROWN):
         assert sum(A.by_type(rec, c).values()) <= R.under_arms_cap(2), "no cohort over its cap"
-    # the menu agrees: nothing left to raise, and the army is sound
+    # the menu agrees: nothing left to raise, and its advisories are exactly what the ruled minimums say of these sizes
+    # (B17.15: a unit under four cells, an army under 1,000 troops; the shipped scale is B17.16's)
     cmd = next(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == world_q.army_of(w, CROWN))
     m = MM.menu(w, cmd)
-    assert m.commands and not m.raise_ and not {a[0] for a in m.advisories} & {"unit_routs", "army_routs", "unassigned"}
+    assert m.commands and not m.raise_ and not {a[0] for a in m.advisories} & {"army_routs", "unassigned"}
+    small = {n for n, k in sizes.items() if k < MIN_CELLS_PER_UNIT * CELL_FLOOR}
+    assert {a[1] for a in m.advisories if a[0] == "unit_routs"} == small
+    assert any(a[0] == "army_troops" for a in m.advisories) == (sum(sizes.values()) < MIN_ARMY_TROOPS)
+    assert any(a[0] == "army_units" for a in m.advisories) == (len(sizes) < MIN_UNITS_PER_ARMY)
 
 
 def test_install_is_deterministic_idempotent_and_leaves_other_factions_alone():
