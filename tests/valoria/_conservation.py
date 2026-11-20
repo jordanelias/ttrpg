@@ -64,10 +64,13 @@ could go red on a correct engine).
 import math
 import sys
 
-# The tolerance the four call sites all used, kept identical so this is a pure de-duplication and
-# moves no assertion. Float slop only: the measured worst case above is 4.5e-13.
-REL_TOL = 1e-6
-ABS_TOL = 1e-3
+# The tolerance is the engine's OWN epsilon, not a looser test one: `percell._apply_with_spill` stops
+# spilling casualties when the residual is <= 1e-9 ("float residual guard", `percell.py:103`), so a
+# cells-vs-hp gap above 1e-9 is a troop the engine lost, not float slop. Measured 2026-11-20 over the
+# conservation tests of the four call sites: worst |Sum(cell_troops) - hp| = 5.7e-14 (an exact `==`
+# does not hold on floats; one troop of 1.0, or a leak of 1e-6, is far above this bound). The old
+# rel_tol=1e-6 / abs_tol=1e-3 would have passed a 1e-4 leak (CLAUDE.md §0.1 pt 2).
+ENGINE_EPS = 1e-9
 
 
 def unit_troops(unit):
@@ -96,7 +99,7 @@ def assert_troop_conservation(*units, context=''):
     where = f"{context}: " if context else ''
     for unit in units:
         troops = unit_troops(unit)
-        assert math.isclose(troops, unit.hp, rel_tol=REL_TOL, abs_tol=ABS_TOL), (
+        assert math.isclose(troops, unit.hp, rel_tol=0.0, abs_tol=ENGINE_EPS), (
             f"{where}{getattr(unit, 'name', unit)}"
             f"{' [routed]' if getattr(unit, 'routed', False) else ''}"
             f"{' [broken]' if getattr(unit, 'disordered', False) else ''}"
