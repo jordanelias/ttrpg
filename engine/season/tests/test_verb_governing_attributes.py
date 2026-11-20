@@ -33,7 +33,7 @@ from engine.dice_engine import sigma_leverage as SL
 from engine.substrate import descriptors
 
 from ..data import verbs as VERBS
-from ..data.rosters import GRADED_INQUIRIES, roster_map
+from ..data.rosters import GRADED_TASKS, roster_map
 from ..data.verbs import BRUTE_KINDS, VERB_TABLE
 from ..gaps import Unspecified
 from ..harness import probes as P
@@ -92,7 +92,7 @@ def test_a_brute_row_carrying_governing_or_a_difficulty_is_refused():
         _check({**VERB_TABLE, "give": dataclasses.replace(give, difficulty="routine")})
     with pytest.raises(Unspecified, match="give"):                             # a `contests:` prize
         _check({**VERB_TABLE, "give": dataclasses.replace(give, contests="a standing")})
-    graded = {**GRADED_INQUIRIES}
+    graded = {**GRADED_TASKS}
     assert "give" not in graded
     with pytest.raises(Unspecified, match="issue"):                            # a `brute:` row carrying `opposed_attribute`
         _check({**VERB_TABLE, "issue": dataclasses.replace(VERB_TABLE["issue"], opposed_attribute=ACUITY)})

@@ -28,7 +28,7 @@ from __future__ import annotations
 import copy as _copymod
 import hashlib
 import struct
-from dataclasses import fields as _dc_fields
+from dataclasses import dataclass as _dataclass, fields as _dc_fields
 from enum import Enum
 from itertools import compress as _compress, count as _count, repeat as _repeat
 from operator import attrgetter as _attrgetter, is_ as _is, is_not as _is_not, ne as _ne
@@ -36,15 +36,15 @@ from typing import Any, Callable, Optional
 
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
 from ..data.matrix import Step, WriteClass, matrix_row, partition_lookup
-from ..data.requires import UNKNOWN
+from ..data.requires import UNKNOWN, Observation
 from ..data.verbs import EVENT_KINDS
 from ..data.rosters import (
     HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, TENURE_KINDS, roster)
-from ..gaps import Forbidden, InstrumentDefect, NoProducer, Unowned, Unspecified
+from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
 from ..trace_log import TRACE
 from .attribution import anchor_of, cover_at_logging
 from .carriers import (
-    Event, Office, Person, Proposition, Receipt, Record, Rung, Site, StateChange, Tenure,
+    Act, Claim, Event, Office, Person, Proposition, Receipt, Record, Rung, Said, Site, StateChange, Tenure, Term,
 )
 from .ids import H
 from .acts import ActStore
@@ -212,6 +212,7 @@ def rung_kind_ascends(child_kind: str, parent_kind: str) -> bool:
 #   t<n>:<enc>...  a tuple of n items, each encoded, in order
 #   l<n>:<enc>...  a list of n items, each encoded, in order
 #   m<n>:...       a mapping of n entries, each <enc key><enc value>, sorted by the encoded key's bytes
+#   M<n>:...       the same entries in INSERTION order: written by a snapshot (`encode`) and never by the hash
 #   u<n>:... / z<n>:...  a set / a frozenset of n items, sorted by the encoded item's bytes
 #   o<enc class name><n>:...  an object: n <enc field name><enc value> pairs. A dataclass's fields in
 #                  DECLARATION order (`dataclasses.fields`); a named tuple's in `_fields` order; an
@@ -254,16 +255,18 @@ def _object_head(cls: type) -> tuple:
     return head
 
 
-def _encode_object(v: Any, names: Any, out: bytearray) -> None:
+def _encode_object(v: Any, names: Any, out: bytearray, ordered: bool) -> None:
     """`v` as an `o` object over `names` (a named tuple's `_fields`, a `_DECLARED` set sorted)."""
     out += b"o" + _str_bytes(type(v).__name__) + b"%d:" % len(names)
     for n in names:
         out += _str_bytes(n)
-        _encode_into(getattr(v, n), out)
+        _encode_into(getattr(v, n), out, ordered)
 
 
-def _encode_into(v: Any, out: bytearray) -> None:
-    """Append `v`'s canonical encoding (the table above) to `out`."""
+def _encode_into(v: Any, out: bytearray, ordered: bool = False) -> None:
+    """Append `v`'s canonical encoding (the table above) to `out`. `ordered` (a snapshot's, never the hash's)
+    writes a mapping as `M`, in insertion order, where the hash writes `m`, sorted: the game sums floats
+    in a mapping's iteration order, so a world that keeps its mappings' order is the one that runs on."""
     t = type(v)
     if t is str:
         out += _str_bytes(v)
@@ -274,7 +277,7 @@ def _encode_into(v: Any, out: bytearray) -> None:
     elif t is list or t is tuple:
         out += (b"l%d:" if t is list else b"t%d:") % len(v)
         for x in v:
-            _encode_into(x, out)
+            _encode_into(x, out, ordered)
     elif t is bool:
         out += b"T" if v else b"F"
     elif hasattr(t, "__dataclass_fields__"):
@@ -282,47 +285,53 @@ def _encode_into(v: Any, out: bytearray) -> None:
         out += prefix
         for n, nb in names:
             out += nb
-            _encode_into(getattr(v, n), out)
+            _encode_into(getattr(v, n), out, ordered)
     elif t is float:
         out += b"f" + struct.pack(">d", v).hex().encode("ascii")
     elif isinstance(v, dict):
-        out += b"m%d:" % len(v)
-        for kb, vb in sorted((_canonical(k), _canonical(x)) for k, x in v.items()):
-            out += kb
-            out += vb
+        if ordered:
+            out += b"M%d:" % len(v)
+            for k, x in v.items():
+                _encode_into(k, out, True)
+                _encode_into(x, out, True)
+        else:
+            out += b"m%d:" % len(v)
+            for kb, vb in sorted((_canonical(k), _canonical(x)) for k, x in v.items()):
+                out += kb
+                out += vb
     elif t is _UNKNOWN_TYPE:
         out += b"U"
     elif isinstance(v, Enum):
         out += b"e"
-        _encode_into(v.value, out)
+        _encode_into(v.value, out, ordered)
     # A subclass of a hot type above (a `SeatId`, an int or float subclass) encodes as its base: one
     # encoding per type, so the delegation reads the exact-type branch and no wire line is repeated.
     elif isinstance(v, str):
         out += _str_bytes(v)
     elif isinstance(v, int):
-        _encode_into(int(v), out)
+        _encode_into(int(v), out, ordered)
     elif isinstance(v, float):
-        _encode_into(float(v), out)
+        _encode_into(float(v), out, ordered)
     elif isinstance(v, tuple) and hasattr(t, "_fields"):
-        _encode_object(v, t._fields, out)
+        _encode_object(v, t._fields, out, ordered)
     elif isinstance(v, (list, tuple)):
-        _encode_into(list(v) if isinstance(v, list) else tuple(v), out)
+        _encode_into(list(v) if isinstance(v, list) else tuple(v), out, ordered)
     elif isinstance(v, (set, frozenset)):
         out += (b"z%d:" if isinstance(v, frozenset) else b"u%d:") % len(v)
-        for b in sorted(_canonical(x) for x in v):
+        for b in sorted(_canonical(x, ordered) for x in v):
             out += b
     elif getattr(t, "_DECLARED", None) is not None:
-        _encode_object(v, sorted(t._DECLARED), out)
+        _encode_object(v, sorted(t._DECLARED), out, ordered)
     else:
         raise TypeError(
             f"GO-07: no canonical encoding for a {t.__module__}.{t.__qualname__} ({v!r}); "
             f"`state/world.py`'s encoding table has no rule for this type")
 
 
-def _canonical(v: Any) -> bytes:
+def _canonical(v: Any, ordered: bool = False) -> bytes:
     """`v`'s canonical, language-neutral encoding (the GO-07 table above `_OBJECT_HEADS`)."""
     out = bytearray()
-    _encode_into(v, out)
+    _encode_into(v, out, ordered)
     return bytes(out)
 
 
@@ -373,6 +382,196 @@ def _entity_moved(item: Any, was: dict) -> bool:
         if n is not v and (type(v).__hash__ is None or n != v):
             return True
     return False
+
+
+# -- B06.06: A SAVE IS A STATE SNAPSHOT ---------------------------------------------------------------
+# `encode(w)` is ONE GO-07 encoding (the table above `_OBJECT_HEADS`; a float is its IEEE-754 bits, `_encode_into`'s
+# own `f` rule, no second float format) of the tuple `("snapshot", ((name, value), ...))`, with one difference from
+# what the hash folds: every mapping is written `M`, in INSERTION order, not `m`, sorted. The hash is blind to a
+# mapping's order and the game is not (a float sum runs in iteration order, so two worlds of one hash can differ in
+# the last bit of the next season; the round-trip control of `test_go07_canonical_digest.py` read exactly that).
+# WHAT A SNAPSHOT HOLDS, in frame order:
+#   the four named extras the digest omits   `world_seed`, `tick`, `acts` (the act store, in resolution
+#                                            order), `fixtures` (`fixtures_digest`, a hex string);
+#   the hashed frames                        each of `World._STATE_COLLECTIONS` (a mapping), each of
+#                                            `World._STATE_SEQUENCES` (a list);
+#   what `content_hash` folds outside them   `unowned` (the Tenures no person owns: the person-owned ones ride
+#                                            on `Person.tenures`) and `log` (every Event, its receipts and
+#                                            observations);
+#   one unhashed fact the hash cannot rebuild `covers_logged` (`{event id: cover id}`, as at each Event's
+#                                            logging: a live read of the world, so decode must not re-read it).
+# NO GENERATOR STATE: a draw is a function of its key (A-30), so a loaded world continues with the draws the
+# unbroken run would have made. NOT HELD, rebuilt or per-tick: the log's last-emission indexes (re-derived from
+# the log), the gate's receipt serials (re-registered from the receipts the log holds), `draw`, `_departed`,
+# `_subsistence_shortfall`, `_staged`, the barrier cache and the tenure shadow (all empty at a season boundary),
+# `manifest` (resolved by `boot`), `event_kinds` (the default roster), and the realm builder's census attributes
+# (`_office_census`, `_tie_of` and the like: reported by the harness, read by no step of the loop).
+# A `SeatId` decodes as the plain string it encodes as, and the constructors of `Office` and `Act` tag it again.
+# An Enum has no decode rule (its class is not in the encoding); none is held.
+_SNAPSHOT_TAG = "snapshot"
+# Class name -> class, for the `o` objects a snapshot may hold; a class defined above this module (`epistemic.Seen`)
+# enters it with `register_snapshot_type`, where it is defined.
+_SNAPSHOT_TYPES: dict = {c.__name__: c for c in (Act, Claim, Event, Office, Person, Proposition, Receipt, Record, Rung,
+                                                  Said, Site, StateChange, Tenure, Term, Observation)}
+
+
+class _SnapshotError(ValueError):
+    """The bytes are not a snapshot this build reads (a grammar fault, a class or a field set it does not know)."""
+
+
+@_dataclass(frozen=True)
+class SnapshotRefused:
+    """`decode`'s refusal, a VALUE and not a raise (the port loads saves, so `decode` is port-reached;
+    `U5b_PC_residue.md` §4's application of `hol` §53). `reason` is `"fixtures_digest"` (the snapshot was written
+    under other fixtures than the running build's: `expected` is the build's digest, `found` the snapshot's) or
+    `"malformed"` (`found` says why; `expected` is empty)."""
+    reason: str
+    expected: str
+    found: str
+
+
+def fixtures_digest(fixtures: Fixtures) -> str:
+    """The blake2b-128 hex of the canonical encoding of every value `fixtures` holds (a swept value moves it)."""
+    # [JUSTIFIED: 16 bytes = the 128-bit digest the world's own `content_hash` already reads]
+    return hashlib.blake2b(_canonical(fixtures._v), digest_size=16).hexdigest()
+
+
+def encode(w: "World") -> bytes:
+    """`w`'s snapshot: see the block above for what it holds."""
+    frames = [("world_seed", w.world_seed), ("tick", w.tick), ("acts", list(w.acts)),
+              ("fixtures", fixtures_digest(w.fixtures)), ("unowned", list(w._unowned)),
+              ("log", list(w.log)), ("covers_logged", w._covers_logged)]
+    frames += [(n, getattr(w, n)) for n in w._STATE_COLLECTIONS]
+    frames += [(n, list(getattr(w, n))) for n in w._STATE_SEQUENCES]
+    return _canonical((_SNAPSHOT_TAG, tuple(frames)), ordered=True)
+
+
+def register_snapshot_type(cls: type) -> type:
+    """Enter `cls` in the table `decode` rebuilds `o` objects from. A module that owns a value class
+    and already imports this one registers it where the class is defined, so this module names no
+    class above it (`epistemic.Seen` is entered that way)."""
+    _SNAPSHOT_TYPES[cls.__name__] = cls
+    return cls
+
+
+def _decode_count(b: bytes, i: int, end: bytes) -> tuple:
+    j = b.index(end, i)
+    return int(b[i:j]), j + 1
+
+
+def _decode_object(name: str, fields: dict) -> Any:
+    cls = _SNAPSHOT_TYPES.get(name)
+    if cls is None:
+        raise _SnapshotError(f"no class {name!r} in the snapshot's type table")
+    declared = (set(cls._DECLARED) if getattr(cls, "_DECLARED", None) is not None
+                else set(cls._fields) if hasattr(cls, "_fields") else {f.name for f in _dc_fields(cls)})
+    if set(fields) != declared:
+        raise _SnapshotError(f"{name} holds {sorted(declared)}, the snapshot {sorted(fields)}")
+    if getattr(cls, "_DECLARED", None) is not None:                  # `Rung`: not a dataclass
+        rest = dict(fields)
+        return cls(rest.pop("id"), rest.pop("kind"), **rest)
+    return cls(**fields)
+
+
+def _decode_into(b: bytes, i: int) -> tuple:
+    """The inverse of `_encode_into`: `(value, next position)` for the one value at `b[i:]`."""
+    tag = b[i:i + 1]
+    i += 1
+    if tag == b"s":
+        n, i = _decode_count(b, i, b":")
+        return b[i:i + n].decode("utf-8"), i + n
+    if tag == b"i":
+        j = b.index(b";", i)
+        return int(b[i:j]), j + 1
+    if tag == b"N":
+        return None, i
+    if tag == b"T" or tag == b"F":
+        return tag == b"T", i
+    if tag == b"U":
+        return UNKNOWN, i
+    if tag == b"f":
+        # [GROUNDED: a binary64 is 8 bytes = 16 hex digits, as `_encode_into` writes it]
+        return struct.unpack(">d", bytes.fromhex(b[i:i + 16].decode("ascii")))[0], i + 16
+    if tag in (b"t", b"l", b"u", b"z"):
+        n, i = _decode_count(b, i, b":")
+        items = []
+        for _ in range(n):
+            x, i = _decode_into(b, i)
+            items.append(x)
+        return ({b"t": tuple, b"l": list, b"u": set, b"z": frozenset}[tag](items)), i
+    if tag == b"m" or tag == b"M":
+        n, i = _decode_count(b, i, b":")
+        out = {}
+        for _ in range(n):
+            k, i = _decode_into(b, i)
+            out[k], i = _decode_into(b, i)
+        return out, i
+    if tag == b"o":
+        name, i = _decode_into(b, i)
+        n, i = _decode_count(b, i, b":")
+        fields = {}
+        for _ in range(n):
+            k, i = _decode_into(b, i)
+            fields[k], i = _decode_into(b, i)
+        return _decode_object(name, fields), i
+    raise _SnapshotError(f"tag {tag!r} at byte {i - 1} has no decode rule")
+
+
+def decode(data: bytes, fixtures: Fixtures = DEFAULT_FIXTURES) -> "World | SnapshotRefused":
+    """Rebuild a `World` from `encode`'s bytes under `fixtures`, the running build's. A snapshot written under
+    other fixtures, or one this build cannot read, comes back as a `SnapshotRefused` VALUE: nothing is raised
+    for it and no world is built. Reading is by class name: a class a snapshot holds outside `carriers`
+    (`epistemic.Seen`) is known only once its module is imported, so a process decodes after loading the game."""
+    try:
+        top, end = _decode_into(data, 0)
+        if end != len(data) or not (isinstance(top, tuple) and len(top) == 2 and top[0] == _SNAPSHOT_TAG):
+            raise _SnapshotError("not one `snapshot` frame")
+        frames = dict(top[1])
+        want, found = fixtures_digest(fixtures), frames.get("fixtures")
+        if found != want:
+            return SnapshotRefused("fixtures_digest", want, str(found))
+        return _world_from(frames, fixtures)
+    except (ShapeGap, ValueError, IndexError, KeyError, TypeError, AttributeError, struct.error, RecursionError) as exc:
+        return SnapshotRefused("malformed", "", f"{type(exc).__name__}: {exc}")
+
+
+def _world_from(frames: dict, fixtures: Fixtures) -> "World":
+    """`decode`'s second half: the world `frames` describe (the caller has read and checked them).
+
+    A RESTORE, NOT A WRITE: it fills a fresh world's stores directly (`04` §C.2's gate is the one path for a write
+    DURING a run, and it is bypassed here by design: the stores of a world no step has touched), then re-registers
+    the receipts the log holds so the gate's serials continue from the last one. `04` is silent on a restore; this
+    is the site that decides it (`layer-conformance` B4, third disposition)."""
+    w = World(frames["world_seed"], fixtures)
+    w.tick = frames["tick"]
+    for n in World._STATE_COLLECTIONS:
+        getattr(w, n).update(frames[n])
+    for n in World._STATE_SEQUENCES:
+        getattr(w, n)[:] = frames[n]
+    w._unowned[:] = frames["unowned"]
+    w._tenure_version += 1
+    for a in frames["acts"]:
+        w.acts.append(a)
+    # The gate re-registers the receipts the log holds, so the log's identity check passes and the next
+    # receipt's serial follows the last one. One receipt sits in several Events and encodes once per Event;
+    # a serial names ONE minted object, so the copies of a serial are folded back to the first decoded.
+    minted = w.gate._minted
+    for e in frames["log"]:
+        for k, c in enumerate(e.changes):
+            if isinstance(c, Receipt) and c.serial >= 0:
+                e.changes[k] = minted.setdefault(c.serial, c)
+                w.gate._serial = max(w.gate._serial, c.serial)
+    for e in frames["log"]:
+        w.log.append(e)
+    # `_on_logged` just read each Event's cover off the world as it stands NOW; the snapshot holds the cover as
+    # it stood at each logging, so it is put back and the last-emission maps are indexed again against it.
+    w._covers_logged.clear()
+    w._covers_logged.update(frames["covers_logged"])
+    w._last_by_anchor.clear()
+    w._last_by_subject.clear()
+    for e in frames["log"]:
+        w._index_logged(e)
+    return w
 
 
 class World:
@@ -1579,6 +1778,10 @@ class World:
         cover = cover_at_logging(self, e)
         if cover is not None:
             self._covers_logged[e.id] = cover
+        self._index_logged(e)
+
+    def _index_logged(self, e: Event) -> None:
+        """The two last-emission maps' one writer: `_on_logged` calls it per append and `decode` per restored Event."""
         self._last_by_anchor[(e.kind, anchor_of(self, e))] = e.id
         for subj in {c.subject for c in e.changes}:
             self._last_by_subject[(e.kind, subj)] = e.id

@@ -41,7 +41,7 @@ from ..state.ids import H, draw_factory
 from .effects_economy import _fall
 from .effects_information import _may_close_custody
 from .effects_migration import _relocate
-from .effects_shared import _debit, _operand, effect_for
+from .effects_shared import _debit, _operand, _scaled, effect_for
 
 
 # `accept` (the duel pair's second half) is the same contest over the same prize, `contests: "the
@@ -937,7 +937,8 @@ def _eff_tend(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     if p is None:
         return NO_CHANGE
     # v11 CP-T03-07: HEALS TOWARD THE PERSON'S OWN CEILING, never `condition_scale`: a marked man is restored to his mark.
-    whole = max(p.body, p.body_ceiling)
+    # B07.02 (18-A edit 5, D-05): the band lets a share of the headroom land (`_scaled`; share 1, or no band, is the whole).
+    whole = p.body + _scaled(max(p.body, p.body_ceiling) - p.body, res)
 
     def perform() -> None:
         p.body = whole
@@ -964,7 +965,10 @@ def _eff_train(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     key = _operand(a, VOCATION_SOURCED[a.verb])
     p = w.persons.get(who)
     raised = raised_capability(p, key) if p is not None and key in VOCATIONS else None
-    if raised is None:
+    # B07.02: the ONE whole point is `_scaled` by the band, so a band short of the full effect lands no point (floor of one half is
+    # nothing). [ASSUMPTION: 18-A's "a `practice` mark the practice addend already reads" is not written -- `train` names no skill
+    # (`capability: none`), so `world_q.practice` keys nothing on it; basis: `VERB_CAPABILITY['train']` is empty]
+    if raised is None or not _scaled(1, res):
         return NO_CHANGE
 
     def perform() -> None:

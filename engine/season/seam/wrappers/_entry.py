@@ -20,7 +20,7 @@ def entry_for(prize: Any, module: str, module_entry: Any = None) -> tuple:
     """`(entry, None)` when the prize row's `module_entry:` role is registered, else
     `(None, refusal)` with `refusal` the `ENGINE-UNAVAILABLE` dict naming `module`.
 
-    `module_entry` is a role named by a `graded_inquiries` route (v9 FI-01): an inquiry has no prize,
+    `module_entry` is a role named by a `graded_tasks` route (v9 FI-01): an inquiry has no prize,
     so its route names the role directly, and it is looked up in the same table the same way."""
     role = module_entry or (prize_row("contest", prize) or {}).get("module_entry")
     entry = MODULE_ENTRIES.get(role)

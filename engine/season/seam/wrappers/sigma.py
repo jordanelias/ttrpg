@@ -61,13 +61,14 @@ prize row names. NO entry is added to
 from __future__ import annotations
 
 import math
-import random
 import sys
 from dataclasses import asdict
 from types import SimpleNamespace
 from typing import Any, Optional
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
+from engine.dice_engine.draw import Draw
+from engine.dice_engine.fmath import ltr_sum
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds
 from engine.substrate import composition, descriptors
 
@@ -457,7 +458,7 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     with no room terms.
 
     `examined` is the subject an INQUIRY examines, or `None`: the adapter passes
-    the act's subject when there is no prize (an inquiry, `graded_inquiries`' route), and nothing
+    the act's subject when there is no prize (an inquiry or a task, `graded_tasks`' route), and nothing
     otherwise. Where it names a Record, the record carries that Record's `forgery_quality` (read from
     `w.records`, the one read this builder adds), which the module adds to the obstacle; a site, a
     person, or a contest a prize names carries `0`."""
@@ -566,7 +567,7 @@ def _capability_term(fx: Any, facts: dict) -> dict:
     builders as the `edge` rows are), each its held value times its gain (`_circumstance_ob`), summed. ONE operand `("capability", sum,
     1.0)`, always, so the member stands in the module's terms at 0.0 where no row applies (the shipped case). [ASSUMPTION: the
     (raw, step) split -- the sum is the raw operand and the step is 1.0, the gain being already inside each row's term]"""
-    return {"obstacle_operands": (("capability", sum(_circumstance_ob(fx, r, v) for r, _, v in facts.get("circumstance", ())), 1.0),)}
+    return {"obstacle_operands": (("capability", ltr_sum(_circumstance_ob(fx, r, v) for r, _, v in facts.get("circumstance", ())), 1.0),)}
 
 
 # ---------------------------------------------------------------------------------------------
@@ -812,11 +813,11 @@ def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
     """`(claimants, subject, room, examined)` exactly as the fold hands the act to `resolve`, or `None`
     when `owner`'s roll does not deal it (an uncontested act, another provider's prize, a party
     gap; `owner` is the social roll's unless `odds_of` asks for combat's). The derivation is the fold's
-    own: `loop/sides.py::_contests_of` and `::sides_of` and the prize row's `heard_by:` for a contest; the verb's `graded_inquiries` route for an inquiry. `loop.sides`
+    own: `loop/sides.py::_contests_of` and `::sides_of` and the prize row's `heard_by:` for a contest; the verb's `graded_tasks` route (`data/rosters.py::graded_route`, armed or live) for an inquiry or a task. `loop.sides`
     imports nothing that imports `seam` (`loop/__init__.py` imports nothing), so this module imports it at module
     level; `loop.resolve` would close a cycle the census counts (`tests/valoria/test_import_cycle_game_state_npe.py`),
     which is why the contest-of-an-act helper lives in `sides.py`."""
-    from ...data.rosters import GRADED_INQUIRIES
+    from ...data.rosters import graded_route
     row = VERB_TABLE.get(act.verb)
     payload = act.payload if isinstance(act.payload, dict) else {}
     contests = _contests_of(act, row)
@@ -829,7 +830,7 @@ def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
         if not parties:
             return None
         return parties, subject, (rung if prize.get("heard_by") == BENCH else None), None
-    route = GRADED_INQUIRIES.get(act.verb)
+    route = graded_route(act.verb, w.fixtures)          # B07.01: the fold's own reading of the route (`task_draw_arm`)
     if route is not None and route.get("provider") == owner:
         subject = payload.get("subject")
         return [act.actor], subject, None, subject
@@ -961,7 +962,7 @@ def believed_chance(w: Any, believer: Any, act: Any, bands: Any) -> Optional[flo
     held = [_BAND_PLACE.get(b) for b in bands]
     if not held or None in held:
         return None
-    return sum(odds[n] for n in held)
+    return ltr_sum(odds[n] for n in held)
 
 
 def believed_odds_query(w: Any, holder: Any):
@@ -975,9 +976,9 @@ def believed_odds_query(w: Any, holder: Any):
 
 
 @provider("contest", _PROVIDER)
-def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
+def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
             verb: str = "", subject: Optional[str] = None,
-            rng: Optional[random.Random] = None, rung: Optional[str] = None,
+            rung: Optional[str] = None,
             module_entry: Optional[str] = None, effort: int = 0, host: Any = None, via: Optional[str] = None) -> dict:
     """Roll for one contested act: build the record, call the module entry, hold its return to a
     `Margin`, refuse S27.4. Returns a net/ob pair, NEVER a band and never a winner.
@@ -1013,12 +1014,14 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     declaring `heard_by: bench` (`a matter`, `speak`'s) has the bench sitting over it read the speaker
     (`contest_input`'s `room`). Every other prize still derives its obstacle from the parties alone.
 
-    ⚠ THE RNG IS A PARAMETER: THE DRIVER'S GENERATOR IS PASSED ON EVERY SHIPPED PATH (`loop/resolve.py`), AND A
-    HAND CALL WITH NONE IS REFUSED (`InstrumentDefect`, naming the caller; never a fresh unseeded `random.Random()`,
-    never the process-global stream, never a seeded one made here). THAT IS `04 §C.12`'s REJECTION 4:
-    *"its generator must be constructed by the driver from the run seed and passed down exactly as `World` is."*
-    ⚠ *"Threaded like `World`"* MEANS PASSED BY PARAMETER RATHER THAN REACHABLE BY A GLOBAL NAME —
-    not one continuous stream. `04 PART D row 35` settles it: `H(seed, tick, subject, purpose)`, no
+    ⚠ THE RNG IS A REQUIRED PARAMETER: THE DRIVER'S GENERATOR IS PASSED ON EVERY SHIPPED PATH (`loop/resolve.py`), A
+    HAND CALL WITH NO `rng` IS A `TypeError` AT THE CALL (the parameter has no default), AND ONE PASSING NONE IS
+    REFUSED (`InstrumentDefect`, naming the caller; never a fresh unseeded stream, never the process-global stream,
+    never a seeded one made here). THAT IS `04 §C.12`'s REJECTION 4:
+    *"A draw is a function of its key (`H(seed, tick, subject, purpose)`, the index `n` part of the key): the driver
+    constructs no generator object and passes none down"* (04:953, as amended by A-30), AND A `Draw` IS A KEY AND AN
+    INDEX, NOT A HIDDEN-STATE GENERATOR. ⚠ *Threaded* (superseded) MEANT PASSED BY PARAMETER RATHER THAN REACHABLE BY A
+    GLOBAL NAME — not one continuous stream. `04 PART D row 35` settles it: `H(seed, tick, subject, purpose)`, no
     counter, no service. A single stream threaded through a season would make every roll depend on
     the count of prior draws, so adding one contested verb would move every other verb's outcome.
 
@@ -1030,7 +1033,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     never refused here; only a pool below the floor is.
 
     ⚠ `module_entry` IS THE INQUIRIES' ROUTE (`ED-FI-0009`, J-22 (A)): `seam/contest.py::grade`
-    passes the role a `graded_inquiries` row names, with `prize=None`, and everything else here is the
+    passes the role a `graded_tasks` row names, with `prize=None`, and everything else here is the
     same body -- the same input builder, the same entry table, the same `Margin` hold and the same
     S27.4 -- so an inquiry is rolled by the one owner and graded on the one ladder, with no prize."""
     if not claimants:
@@ -1051,7 +1054,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     if entry is None:
         return refusal
     # ONE generator for the act's whole roll: the module's draw (`entry.fn`) is the only one. An absent `rng` is a caller that handed no generator -- an instrument defect, refused naming
-    # that caller, never a fresh unseeded `random.Random()` and never the process-global stream (04 §C.12: the RNG
+    # that caller, never a fresh unseeded stream and never the process-global stream (04 §C.12: the RNG
     # is threaded, never global).
     if rng is None:
         caller = sys._getframe(1)

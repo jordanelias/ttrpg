@@ -28,6 +28,7 @@ from __future__ import annotations
 import ast
 import math
 import random
+from engine.dice_engine import draw
 from pathlib import Path
 
 from dataclasses import replace
@@ -87,7 +88,7 @@ def _kind_with_lean(w, sign=+1, among=None):
 def _ob(w, actor=SPEAKER, subject=PARTY):
     """The composed obstacle of one `speak`'s draw, through the real adapter and module entry."""
     out = sigma.resolve(w, [actor, subject], ["root"], PRIZE, verb="speak", subject=subject,
-                        rng=random.Random(0), rung=world_q.place_of(w, actor))
+                        rng=draw.seeded(draw.H2("test_sc02_reception", 0)), rung=world_q.place_of(w, actor))
     assert out["status"] == "RESOLVED", out
     return out["ob"]
 
@@ -217,7 +218,7 @@ def test_sc02_17_only_a_prize_a_room_hears_reads_the_room(monkeypatch):
     monkeypatch.setattr(sigma, "_read_social_roll", spy)
     for prize, verb in ((PRIZE, "speak"), ("a standing", "tell")):
         sigma.resolve(w, [SPEAKER, PARTY], ["root"], prize, verb=verb, subject=PARTY,
-                      rng=random.Random(0), rung="Hh")
+                      rng=draw.seeded(draw.H2("test_sc02_reception", 0)), rung="Hh")
     assert seen["speak"].reception > 0.0
     assert seen["tell"].reception == 0.0 and seen["tell"].reception_gain == 0.0, seen["tell"]
 

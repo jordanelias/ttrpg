@@ -43,6 +43,7 @@ import traceback
 _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(_HERE))))   # repo root, as bat.py does
 sys.path.insert(0, _HERE)
+from engine.dice_engine import draw
 PARAMS = os.path.join(_HERE, 'stress_scenarios.json')
 
 M = {}   # the module's names, filled by _load() AFTER the arm's flags and the grid size are set
@@ -288,7 +289,7 @@ def fight_one(task: tuple) -> dict:
         rec = M['Recorder'](a, b, P['round_digits'])
         sys.setprofile(rec)
         try:
-            with M['rngsource'].using(random.Random(seed)):
+            with M['rngsource'].using(draw.seeded(draw.H2("stress", seed))):
                 res = M['run_battle'](a, b, max_ticks=cap)
         finally:
             sys.setprofile(None)

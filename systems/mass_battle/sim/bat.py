@@ -1,6 +1,6 @@
 """bat.py — byte-exact DIGEST harness for the mass-battle engine (the G5 gate).
 
-Runs a fixed, deterministic battery (per-trial random.seed, exactly as gauge_mb.py does) of
+Runs a fixed, deterministic battery (a keyed `rngsource` scope per trial, as gauge_mb.py does) of
 representative matchups and hashes the FULL per-trial end state (winner, battle-turns, hp, morale,
 discipline, rout flags — not just the aggregate win-rate). A behaviour-preserving refactor must
 reproduce the digest digit-for-digit; any change to the number is a refactor bug, not a tuning
@@ -36,7 +36,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirna
 from systems.mass_battle.sim.engine import (  # noqa: E402
     build_unit, build_envelopment, build_refused_flank, resolve_battle,
     SIDE_A_START_ROW, SIDE_B_START_ROW)
-import random  # noqa: E402
+
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 # anchor columns per (shape,tier) — copied from gauge_mb.py ANCHOR_MAP (T3 row used below)
 # [canonical: mass_battle_v30.md §deployment — anchor columns]
@@ -242,6 +244,11 @@ def trial_vector(ua, ub, r):
 #   cell_legacy_mor1   fbe2d87f02b4… -> 4cff46a32a54…
 # ─────────────────────────────────────────────────────────────────────────────────────────────
 EXPECTED = {
+    # [2026-11-18, B06.99, the batch B06-keyed-draw's one re-pin] RE-RECORDED the three modes tools/ci_golden_modes_check.py gates, under
+    # Python 3.11 (CI's interpreter). THE MOVER: B06.04 (the uniform's source changes from CPython's generator to the keyed mix, A-30; a
+    # stream change, not a balance change). unit_field_mor0 a400e6e522bf... -> 00684ba5e632..., cell_field_mor0 70e11b9ba59c... ->
+    # c28b850909c2..., cell_legacy_mor1 2d5673aeeec2... -> d1d886e4ba54... (under 3.13 the field digests read 2273efe9b3f2... and
+    # cf102a9c5d20..., cell_legacy_mor1 the same). The two legacy-lattice modes below were not re-recorded (gated by nothing).
     # [2026-11-18, B05.99, the batch B05-one-roll's one re-pin] RE-RECORDED the three modes tools/ci_golden_modes_check.py gates,
     # under Python 3.11 (CI's interpreter; read by running the gate's own pin vector through this file's `--check`). THE MOVER:
     # B05.03 (`resolution.roll_pool` draws `roll_net_continuous`, the one sampler, and grades on the one ladder; declared in its
@@ -486,7 +493,7 @@ EXPECTED = {
     # predicted this breakage; I checked it against the wrapper, saw skip/xfail, and recorded the
     # finding as overturned. It was not. CHECK THE GATE THAT GATES THE THING, not a neighbour.
     # was 0194efcc72118de125ed176b6e6d22d1f56f54dc9c9a76337953b6854d59cf0c
-    'unit_field_mor0': 'a400e6e522bf7a4deff246f4b04a6058a93dd1099a1940cd2635ca74e4386ff4',   # B05.99 re-pin (B05.03); was 674422667b3f...
+    'unit_field_mor0': '00684ba5e632ecb94f7e2bb9dd1c94895c8cffa0b745ed083d411449cddec178',   # B06.99 re-pin (B06.04); was a400e6e522bf...; B05.99 re-pin (B05.03) was 674422667b3f...
     # [2026-07-04, re-recorded a second time] cell_field alone moved again after the adversarial-
     # review fixes above (pair_pool_contribution's cell_troops iteration bug; the sibling-morale-pull
     # reorder/snapshot fix) -- unit/cell/unit_field all re-confirmed BYTE-IDENTICAL to their
@@ -582,7 +589,7 @@ EXPECTED = {
     # Verified by direct execution (before/after): OLD digest [BYTE-EXACT FAIL] confirms the move (the
     # falsifier this row's own re-record discipline requires), NEW digest [BYTE-EXACT OK] below.
     # was 41a2e98485f31420d70e248238d93a24695684dde33a04791ffbd2697ecffecd
-    'cell_field_mor0': '70e11b9ba59c4f5aa87f2edca5a14ec826ed22528858270dca3a5194ebe08322',   # B05.99 re-pin (B05.03); was 36a330416919...
+    'cell_field_mor0': 'c28b850909c266f076e95eef7b8e3df8b444b41f36ab314b4d77760e74074e63',   # B06.99 re-pin (B06.04); was 70e11b9ba59c...; B05.99 re-pin (B05.03) was 36a330416919...
     # ─── [ED-MB-0053 / plan-v2 §4a, 2026-07-29] THE FIFTH MODE — freshly recorded ───────────────
     # PER_CELL=1 + MB_CELL_MORALE=1 (grid). The other four all run at MB_CELL_MORALE=0, where the
     # three cell-morale maps are EMPTY, so they verify float-order over every per-cell map EXCEPT
@@ -657,7 +664,7 @@ EXPECTED = {
     # above; this mode's own envelop/cannae/oblique rows trip b_fixed_other/a_fixed_other too. OLD
     # digest verified [BYTE-EXACT FAIL] before this re-record, NEW verified [BYTE-EXACT OK] after.
     # was cc6ab475a5ebedec42d551aae42be77ec3d130a1e3ddd4d2924249cfa2e616df
-    'cell_legacy_mor1': '2d5673aeeec2b43bf8c9a355b475389512d6aa36931f47cbe7cb39f4eb5184a1',   # B05.99 re-pin (B05.03); was 4196b47aaee1...
+    'cell_legacy_mor1': 'd1d886e4ba545f6f4dbf4edd1f2b513597be4a86f5ef43e8d730665e147da3c0',   # B06.99 re-pin (B06.04); was 2d5673aeeec2...; B05.99 re-pin (B05.03) was 4196b47aaee1...
 }
 
 
@@ -772,13 +779,13 @@ def compute():
         if not b_is_fn and (sb, TIER) not in ANCHOR_MAP:
             continue
         for s in range(N_SEEDS):
-            random.seed(s + SEED_BASE)
-            ua = sa('A', 'A', **ka) if a_is_fn else make_unit(sa, 'A', 'A', **ka)
-            ub = sb('B', 'B', **kb) if b_is_fn else make_unit(sb, 'B', 'B', **kb)
-            shape_a = 'Line' if a_is_fn else sa
-            shape_b = 'Line' if b_is_fn else sb
-            r = resolve_battle(ua, ub, shape_a, shape_b, ANCHOR_MAP, kind='multi', max_battle_turns=MAX_TURNS)
-            h.update((label + '#' + str(s) + ':' + trial_vector(ua, ub, r) + '\n').encode())
+            with rngsource.using(draw.seeded(draw.H2("bat", s + SEED_BASE))):
+                ua = sa('A', 'A', **ka) if a_is_fn else make_unit(sa, 'A', 'A', **ka)
+                ub = sb('B', 'B', **kb) if b_is_fn else make_unit(sb, 'B', 'B', **kb)
+                shape_a = 'Line' if a_is_fn else sa
+                shape_b = 'Line' if b_is_fn else sb
+                r = resolve_battle(ua, ub, shape_a, shape_b, ANCHOR_MAP, kind='multi', max_battle_turns=MAX_TURNS)
+                h.update((label + '#' + str(s) + ':' + trial_vector(ua, ub, r) + '\n').encode())
     return mode, h.hexdigest()
 
 

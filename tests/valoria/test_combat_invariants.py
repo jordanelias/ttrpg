@@ -21,6 +21,7 @@ import re
 import sys
 
 import pytest
+from engine.dice_engine import draw
 
 ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
 # What the import walk from `wrapper`/`combatant` did not reach (`capabilities.py`, `state_graph.py`) and the
@@ -918,7 +919,7 @@ def test_engagement_reach_derivation_runs_clean():
     A = C.Combatant('A', weapon='spear')
     B = C.Combatant('B', weapon='arming')
     for seed in range(5):
-        wrapper.fight(A, B, cfg=CFG, rng=random.Random(seed))
+        wrapper.fight(A, B, cfg=CFG, rng=draw.seeded(draw.H2("test_combat_invariants", seed)))
 
 
 # ── I4 MODE/MEASURE COUPLING — CLOSE-EFFICACY (D5, 2026-07-03) ──────────────────────────────────────
@@ -995,19 +996,19 @@ def test_range_utilization_identity():
 
 def test_commit_depth_byte_identical_at_range_avail_one():
     """I5 gate #1: with range_avail forced 1.0 (the I1/I5 default), commit_depth reproduces the pre-I5 [2,5] draw
-    EXACTLY — a single rng.betavariate draw, no reorder — verified by replaying the same seed through both the
+    EXACTLY — a single rng.beta draw, no reorder — verified by replaying the same seed through both the
     live function and the pre-I5 formula with the SAME (ba, bb) params."""
     C, core, S, WP, CFG = _mods()
     import random
     from modules.combat import tradition as TR
     agg = C.Combatant('agg', weapon='longsword'); agg.range_avail = 1.0
     dfd = C.Combatant('def', weapon='arming')
-    rng = random.Random(11)
+    rng = draw.seeded(draw.H2("test_combat_invariants", 11))
     commit, ba, bb, ln = S.commit_depth(agg, dfd, CFG, rng, TR)
-    rng2 = random.Random(11)
+    rng2 = draw.seeded(draw.H2("test_combat_invariants", 11))
     # replay commit_depth's own pre-draw computation (ln/wary/g/ba/bb are deterministic, not rng-consuming) then
     # the pre-I5 formula's SAME single draw
-    old_commit = 2.0 + 3.0 * float(rng2.betavariate(ba, bb))
+    old_commit = 2.0 + 3.0 * float(rng2.beta(ba, bb))
     assert commit == old_commit
 
 
@@ -1314,7 +1315,7 @@ def test_reach_class_beats_arming_not_inverted():
         for armor in _REACH_ARMOURS:
             # crc32, not hash() — hash() is PYTHONHASHSEED-salted (non-reproducible run-to-run); see
             # workbench/balance.py's _seed() docstring for the same rationale.
-            rng = random.Random(zlib.crc32(repr((w, armor)).encode()) % 9999)
+            rng = draw.seeded(draw.H2("test_combat_invariants", zlib.crc32(repr((w, armor)).encode()) % 9999))
             wins = dec = 0
             # SAMPLE SIZE IS TIER-DEPENDENT (ED-PC-0037). n=60 everywhere was an unusable instrument at HEAVY, where
             # most of these matchups are attrition STALEMATES: guisarme@heavy decides only ~13% of its fights, so 60

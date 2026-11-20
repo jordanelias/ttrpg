@@ -10,7 +10,7 @@ weight 2; the Church's `set_s_036` is defended by six individuals; `terr_T7` is 
 
 from __future__ import annotations
 
-import random
+from engine.dice_engine import draw
 
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.boot.realm import build_realm
@@ -95,7 +95,7 @@ def test_the_shipped_realm_can_raise_field_and_win_with_an_army():
     assert _troops(inp.orders_of_battle[0]) >= 900 and inp.orders_of_battle[1] is None
     assert inp.fort_level == 0.0
     fn = MODULE_ENTRIES["mass_battle.resolve_field"].fn
-    seen = [fn(inp, random.Random(s)) for s in range(1, 9)]
+    seen = [fn(inp, draw.seeded(draw.H2("test_army_phase5", s))) for s in range(1, 9)]
     assert sum(field_degree(r) == WON for r in seen) >= 5, [(field_degree(r), r.attacker.share) for r in seen]
     assert min(r.attacker.share for r in seen) > 0.5 * SCALE, "an army of 900 must not be routed by a town's levy"
 
@@ -184,7 +184,7 @@ def test_an_army_is_provisioned_by_the_cohorts_it_drew_from(monkeypatch):
     act = Act(id="mp", actor=ACTOR, verb="march", payload={"subject": DEFENDED_TOWN}, via=SEAT)
     w.acts.append(act)
     att = world_q.mustered(w, ORIGIN, CROWN)
-    MB.resolve(w, att, [act.id], "a field", subject=CHURCH, rung=DEFENDED_TOWN, rng=random.Random(3))
+    MB.resolve(w, att, [act.id], "a field", subject=CHURCH, rung=DEFENDED_TOWN, rng=draw.seeded(draw.H2("test_army_phase5", 3)))
     assert seen[0] == sum(w.persons[c].weight for c in cohorts) == 30, seen
     assert seen[0] != sum(w.persons[p].weight for p in att), "billed the mustered members, not the army"
 
@@ -192,8 +192,10 @@ def test_an_army_is_provisioned_by_the_cohorts_it_drew_from(monkeypatch):
 # ----------------------------------------------------------------------------------- M2 again: who bleeds, at home
 def test_a_lost_army_costs_the_cohorts_at_home_their_bodies():
     """The people an army drew from bleed, wherever they live, and only they. A Crown army of spearmen takes the field
-    against a Hafenmark levy raised from its ten cohorts and commanded by a member standing in the territory."""
-    w = build_realm(0)
+    against a Hafenmark levy raised from its ten cohorts and commanded by a member standing in the territory.
+    The realm seed is 1: at the B06/B17 merge the keyed draw is the stream, and at seed 0 this field is drawn (nobody bleeds);
+    seeds 1, 2 and 3 each decide it."""
+    w = build_realm(1)
     cohorts = _crown_levy(w, strategy="advance", troop_type="spearmen")
     hafen = _governed_cohorts(w, HAFEN)
     cmdr = world_q.members(w, HAFEN)[0]

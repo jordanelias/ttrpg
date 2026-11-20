@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import itertools
 import random
+from engine.dice_engine import draw
 from types import SimpleNamespace
 
 import pytest
@@ -181,14 +182,15 @@ def _load_with(monkeypatch, tmp_path, verb, **cell):
 
 
 def test_a_rolled_row_with_no_difficulty_is_refused(monkeypatch, tmp_path):
-    assert set(V.social_roll_verbs()) == set(ROLLED), sorted(V.social_roll_verbs())              # the ten rows, derived from the prizes and routes
+    armed = {v for v, r in V.GRADED_TASKS.items() if r.get("armed_by")}                            # B07.01: the task rows, dealt once their arm is on
+    assert set(V.social_roll_verbs()) == set(ROLLED) | armed, sorted(V.social_roll_verbs())      # the ten rows and the armed routes, derived from the prizes and routes
     assert _load_with(monkeypatch, tmp_path, "tell", difficulty="routine")["tell"].difficulty == "routine"       # CONTROL: the shipped cell loads
     for verb in ROLLED:                                                                           # contested rows and graded rows both
         with pytest.raises(SystemExit, match=f"{verb!r} is dealt by the social roll and declares no `difficulty:`"):
             _load_with(monkeypatch, tmp_path, verb, difficulty=None)
     with pytest.raises(SystemExit, match="not a member of `rosters.yaml: difficulty_levels`"):
         _load_with(monkeypatch, tmp_path, "tell", difficulty="easy")
-    assert V.GRADED_INQUIRIES and set(V.GRADED_INQUIRIES) <= set(ROLLED)             # the graded rows are among the ten, and were refused above
+    assert set(V.GRADED_TASKS) - armed and set(V.GRADED_TASKS) - armed <= set(ROLLED)  # the live graded rows are among the ten, and were refused above
     unrolled = next(v for v, r in V.VERB_TABLE.items() if v not in ROLLED and r.brute)
     with pytest.raises(SystemExit, match=f"{unrolled!r} declares `difficulty: 'routine'` and the social roll does not deal it"):
         _load_with(monkeypatch, tmp_path, unrolled, difficulty="routine")
@@ -263,11 +265,11 @@ def test_a_resolved_roll_carries_margin_terms_and_no_ob_terms():
     module returned, summing to `ob`, in roster order; the refusal's too."""
     w = _world()
     w.persons["p_mid"].capability = {"copying": 3}
-    out = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="tell", subject="p_mid", rng=random.Random(0))
+    out = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="tell", subject="p_mid", rng=draw.seeded(draw.H2("test_obstacle_form", 0)))
     assert out["status"] == "RESOLVED" and "ob_terms" not in out, sorted(out)
     named = tuple(n for n, _ in out["terms"])
     assert named[:len(STANDING)] == STANDING and _fold(out["terms"]) == out["ob"], out["terms"]       # the conditional three weigh nothing at the control
-    out = sigma.resolve(_world(), ["p_low"], ["c"], "a standing", verb="tell", subject="site_harbour", rng=random.Random(0))
+    out = sigma.resolve(_world(), ["p_low"], ["c"], "a standing", verb="tell", subject="site_harbour", rng=draw.seeded(draw.H2("test_obstacle_form", 0)))
     assert out["terms"] and _fold(out["terms"]) == out["ob"]
     assert isinstance(Margin(net=0.0, ob=1.0).terms, tuple)
 
@@ -324,7 +326,7 @@ def test_a_circumstance_row_raises_the_obstacle_by_its_gain(monkeypatch):
             _plant_circumstance(m, attribute)
             inp = sigma.contest_input(w, ["p_low"], verb="tell", subject="site_harbour")
             after = _module().obstacle(inp)
-            out = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="tell", subject="site_harbour", rng=random.Random(0))
+            out = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="tell", subject="site_harbour", rng=draw.seeded(draw.H2("test_obstacle_form", 0)))
         assert dict(after[1])["capability"] == 4 * gain, (arm, after)                    # 4 held x the gain, one operand (name, raw, 1.0)
         assert _fold(after[1]) == after[0], after
         named = [f for f in out["fed_by"] if f[1] == "circumstance"]
@@ -417,7 +419,7 @@ def _argue_terms(regard_step, stance):
     """`(terms, levels)` of one `argue`: two NPCs, the hearer (`p_other`) holding the one stance row `stance` toward the arguer (`p_low`)."""
     w = _world(regard_step=regard_step)
     w.persons["p_other"].stance = [("p_low", *stance)] if stance else []
-    out = sigma.resolve(w, ["p_low"], ["c"], "a proposition", verb="argue", subject="p_other", rng=random.Random(0))
+    out = sigma.resolve(w, ["p_low"], ["c"], "a proposition", verb="argue", subject="p_other", rng=draw.seeded(draw.H2("test_obstacle_form", 0)))
     assert out["status"] in ("RESOLVED", "REFUSED"), out
     return dict(out["terms"]), {n: (f, a) for n, f, a in out["levels"]}
 
@@ -572,7 +574,7 @@ def test_a_row_that_admits_no_proofs_weighs_none_when_admission_is_on():
         R._proofs(w, 4)                                                                         # four firsthand deed claims against the party
         assert world_q.proofs(w, R.SPEAKER, R.PARTY, "Hh") == 4 * world_q.remove_weight("firsthand")
         _docket(w, R.PARTY, row)
-        out = sigma.resolve(w, [R.SPEAKER, R.PARTY], ["root"], R.PRIZE, verb="speak", subject=R.PARTY, rng=random.Random(0),
+        out = sigma.resolve(w, [R.SPEAKER, R.PARTY], ["root"], R.PRIZE, verb="speak", subject=R.PARTY, rng=draw.seeded(draw.H2("test_obstacle_form", 0)),
                             rung=world_q.place_of(w, R.SPEAKER))
         return next(f for n, f, _a in out["levels"] if n == "proofs")                           # the count of `proof_level`s the roll recorded
     assert proofs_levels("parliamentary_debate", "off") > 0                                      # the control: held, unfiltered

@@ -10,7 +10,7 @@ built them would have.
 
 from __future__ import annotations
 
-import random
+from engine.dice_engine import draw
 import re
 from pathlib import Path
 from types import SimpleNamespace
@@ -315,7 +315,7 @@ def _wins_vs_the_churchs_territory(sites):
     oob = inp.orders_of_battle[0]
     assert oob is not None and sum(s.troops for s in oob.units) == 900
     fn = MODULE_ENTRIES["mass_battle.resolve_field"].fn
-    return sum(field_degree(fn(inp, random.Random(s))) == WON for s in range(1, 9))
+    return sum(field_degree(fn(inp, draw.seeded(draw.H2("test_army_menu_presets", s)))) == WON for s in range(1, 9))
 
 
 def test_a_preset_army_with_sites_beats_a_town_s_levy_and_the_sites_are_why():

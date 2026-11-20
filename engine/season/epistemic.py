@@ -50,7 +50,7 @@ from .state.gate import purview_reaches
 from .queries import cache, world_q
 from .queries.person_q import LedgerReader
 from .state.carriers import Event, Person
-from .state.world import World
+from .state.world import World, register_snapshot_type
 
 
 def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
@@ -794,6 +794,9 @@ class Seen:
     marks: Optional[tuple] = None
     who: Optional[str] = None
     why: Optional[str] = None
+
+
+register_snapshot_type(Seen)                     # `state.world.decode` rebuilds it by class name
 
 
 if tuple(f.name for f in _dc_fields(Seen)) != tuple(OBSERVATION_TERMS):

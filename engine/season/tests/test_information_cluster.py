@@ -573,7 +573,7 @@ def test_in45_forge_mints_a_sheet_true_but_for_its_head_into_the_forgers_hand():
     """`_eff_forge` through the real fold: `survey`'s document (`faction_q.resolve` of the faction the
     subject coheres under, at the moment of writing) with the FORGER as its head, and the forger's
     `hold`; the one kind is `record.forged`. Since v9 SC-02 `22b` step 25 the sheet carries the shipped
-    `default_forgery_quality` (`H-210`; its reader, the examination's obstacle, landed with it --
+    `rosters.yaml: forge_quality` `Success` row (`H-210`; its reader, the examination's obstacle, landed with it --
     `test_sc02_22b_consequence_and_forgery.py`). CONTROL: in the same world a forge on a subject
     under no single faction is `forge.refused` and mints nothing -- so the mint is the subject's,
     not a verb that always writes."""
@@ -587,7 +587,8 @@ def test_in45_forge_mints_a_sheet_true_but_for_its_head_into_the_forgers_hand():
     truth = dataclasses.asdict(faction_q.resolve(w, FAC))
     assert rec.kind == SHEET and rec.subject_matter == {**truth, "head": "p_other"}, rec
     assert truth["head"] != "p_other", "the fixture: the forger is not the true head"
-    assert rec.forgery_quality == w.fixtures.get("default_forgery_quality") != 0, rec.forgery_quality
+    from ..data.rosters import forge_quality_at
+    assert rec.forgery_quality == forge_quality_at(None) != 0, rec.forgery_quality
     assert world_q.hold_force(w, rec.id).subject == "p_other"
     assert "record.forged" in _kinds(w.log) and "record.created" not in _kinds(w.log)
 

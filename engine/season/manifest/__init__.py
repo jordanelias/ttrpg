@@ -24,7 +24,7 @@ This module holds the signature, the crossing and the boot-time failure only.
 """
 
 from .registry import (
-    PROVIDERS, call, check_contest_prizes, check_effects, check_graded_inquiries,
+    PROVIDERS, call, check_contest_prizes, check_effects, check_graded_tasks,
     check_inquiry_modules, check_preconditions, check_rows, check_roles, has, provider, resolve,
 )
 # A-25: the REGISTRAR and its one table. `registrar.py`'s docstring defines

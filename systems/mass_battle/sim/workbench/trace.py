@@ -19,7 +19,8 @@ from systems.mass_battle.sim.engine import (  # noqa: E402
     build_unit, build_army, build_envelopment, build_refused_flank, resolve_battle,
     SIDE_A_START_ROW, SIDE_B_START_ROW)
 from modules.mass_battle.resolution import tracing  # noqa: E402
-import random  # noqa: E402
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 # Deployment anchor columns per (shape, tier) — mirrors bat.py's own table (workbench owns its own
 # copy rather than reaching into gauge_mb.py, which is a sibling harness script, not a package module).
@@ -94,7 +95,7 @@ def _run_traced_field(spec_a, spec_b, seed):
     from engine.season.seam.ladder import field_degree
     from modules.mass_battle import massbattle
     with tracing() as recorded:
-        got = massbattle.resolve_field(_field_record(spec_a, spec_b), random.Random(seed))
+        got = massbattle.resolve_field(_field_record(spec_a, spec_b), draw.seeded(draw.H2("trace", seed)))
     events = list(recorded)
     if isinstance(got, dict):
         return {'winner': None, 'events': events, 'refused': got}
@@ -117,27 +118,27 @@ def run_traced_battle(spec_a, spec_b, *, seed=0, max_battle_turns=8, kind='field
     block records them (no re-shaping), so the frontend consumes the engine's own event vocabulary."""
     if kind == 'field':
         return _run_traced_field(spec_a, spec_b, seed)
-    random.seed(seed)
-    ua, shape_a, tier_a, anchor_a = _build_side(spec_a, 'A')
-    ub, shape_b, tier_b, anchor_b = _build_side(spec_b, 'B')
-    a0, b0 = ua.hp_max, ub.hp_max
+    with rngsource.using(draw.seeded(draw.H2("trace", seed))):
+        ua, shape_a, tier_a, anchor_a = _build_side(spec_a, 'A')
+        ub, shape_b, tier_b, anchor_b = _build_side(spec_b, 'B')
+        a0, b0 = ua.hp_max, ub.hp_max
 
-    with tracing() as recorded:
-        if kind == 'single':
-            r = resolve_battle(ua, ub, kind='single', max_ticks=18)  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), same default as orchestration.run_battle]
-        else:
-            anchor_map = {(shape_a, tier_a): anchor_a, (shape_b, tier_b): anchor_b}
-            r = resolve_battle(ua, ub, shape_a, shape_b, anchor_map,
-                                kind='multi', max_battle_turns=max_battle_turns)
-    events = list(recorded)
+        with tracing() as recorded:
+            if kind == 'single':
+                r = resolve_battle(ua, ub, kind='single', max_ticks=18)  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), same default as orchestration.run_battle]
+            else:
+                anchor_map = {(shape_a, tier_a): anchor_a, (shape_b, tier_b): anchor_b}
+                r = resolve_battle(ua, ub, shape_a, shape_b, anchor_map,
+                                    kind='multi', max_battle_turns=max_battle_turns)
+        events = list(recorded)
 
-    return {
-        'winner': r.get('winner'), 'events': events,
-        'a': {'name': ua.name, 'shape': shape_a, 'hp_max': a0, 'hp_final': ua.hp,
-              'morale_final': ua.morale, 'routed': ua.routed},
-        'b': {'name': ub.name, 'shape': shape_b, 'hp_max': b0, 'hp_final': ub.hp,
-              'morale_final': ub.morale, 'routed': ub.routed},
-    }
+        return {
+            'winner': r.get('winner'), 'events': events,
+            'a': {'name': ua.name, 'shape': shape_a, 'hp_max': a0, 'hp_final': ua.hp,
+                  'morale_final': ua.morale, 'routed': ua.routed},
+            'b': {'name': ub.name, 'shape': shape_b, 'hp_max': b0, 'hp_final': ub.hp,
+                  'morale_final': ub.morale, 'routed': ub.routed},
+        }
 
 
 if __name__ == '__main__':

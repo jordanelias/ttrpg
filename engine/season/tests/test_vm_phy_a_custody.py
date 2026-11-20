@@ -12,8 +12,9 @@ a whole season.
 
 LIMITS. (1) The world is `probes.tiny_world()`, not `build_realm` (the gate says "a seeded realm"): a stated
 departure, because a realm has no fixed co-located pair to plant a dispute between. (2) Existence at measured seeds,
-not a rate: at the tree of this commit the chain completes at seeds 0, 3, 5 of 0-5; seed 1 attempts accept with no
-accept.declared following, seed 2 attempts none, seed 4's accept is a third party's; a hash-moving change re-measures.
+not a rate: at the tree of this commit the chain completes at seeds 8, 13, 20 of 0-20 (it was 0, 3, 5 of 0-5 before the
+keyed stream, B06; seeds 4-7 attempt accept with no accept.declared following, most others attempt none); a hash-moving
+change re-measures.
 """
 from __future__ import annotations
 
@@ -29,8 +30,9 @@ from ..seam.wrappers import combat as CW
 from ..state.carriers import Claim, subject_of
 
 A, B = "p_mid", "p_low"           # `tiny_world`: both stand at the hearth; A holds the grievance, B is its object
-SEEDS = range(6)                  # measured on `tiny_world`; see LIMITS above
-#: How many of `SEEDS` the whole bound chain completes at, measured at the tree this floor was written on (0, 3, 5).
+SEEDS = range(21)                 # measured on `tiny_world`; see LIMITS above. Was range(6): under the keyed stream (B06) the chain completes at none of 0-5
+#: How many of `SEEDS` the whole bound chain completes at, measured at the tree this floor was written on (8, 13, 20 of 0-20;
+#: was 0, 3, 5 of 0-5 before B06's stream, and the floor is unchanged).
 FLOOR = 3
 
 

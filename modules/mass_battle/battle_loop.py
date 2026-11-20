@@ -4,7 +4,7 @@ ED-1043 (the mass-battle god-file split): CP-T04-03's stop test (`unit_conceded`
 `orchestration` re-exports it (`from modules.mass_battle.battle_loop import run_battle`), so every caller and
 every `orchestration.run_battle` name resolves there. Nothing imports this module directly: it needs
 `orchestration` loaded, which loads it."""
-import math  # noqa: F401  (read by the nested helpers below, as `orchestration`'s own `math` was)
+from engine.dice_engine import fmath
 from modules.mass_battle.hierarchy.units import unit_conceded
 
 
@@ -143,7 +143,7 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
                 fc = sum(v[1] for v in _vecs) / len(_vecs)
             else:
                 fr, fc = sub.advance_dir, 0
-            mag = math.hypot(fr, fc)
+            mag = fmath.hypot(fr, fc)
             return (fr / mag, fc / mag) if mag > 1e-9 else (float(sub.advance_dir), 0.0)  # [canonical: epsilon: float magnitude guard]
 
         for atom in unit_a.units + unit_b.units:

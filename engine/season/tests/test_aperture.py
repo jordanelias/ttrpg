@@ -317,10 +317,15 @@ def _reading(w, d) -> dict:
 
 
 def _restore_on_a_person():
-    """`tiny_world`: a `restore` aimed at a PERSON (`p_mid`) where a Site belongs, beside a `transfer`
-    refused for want of grain -- a refusal whose deciding read is not `exists:<Kind>=0`."""
+    """`tiny_world`: a `restore` aimed at a PERSON (`p_mid`) where a Site belongs, an `interview` aimed at a
+    rung (`S`) where a Person belongs, beside a `transfer` refused for want of grain -- a refusal whose
+    deciding read is not `exists:<Kind>=0`.
+    B07.01: `restore` keys its refusals by clause now (`exists`, `present`, `write`, `draw`), and the
+    instrument reports a keyed row's clause, not its last read (`aperture.py` `clause:<name>`); the
+    last-read `exists:<Kind>=0` reading is observed on `interview`, a flat row with one existence cell."""
     w, d = _world()
     _fold(w, d, Act(id="a_rem11_restore", actor="p_low", verb="restore", payload={"site": "p_mid"}))
+    _fold(w, d, Act(id="a_rem11_iv", actor="p_low", verb="interview", payload={"subject": "S"}))
     _fold(w, d, Act(id="a_rem11_tr", actor="p_low", verb="transfer",
                     payload={"from": "S", "to": "Hh", "kind": "grain", "amount": 10 ** 6}))
     return w, d
@@ -349,15 +354,18 @@ def _migrate_into_a_full_rung():
 
 
 def test_rem11_a_restore_on_a_person_id_reads_exists_site_zero():
-    """The deciding read of a `restore` aimed at a person is `exists:Site` = 0: the subject is not a
-    Site. The `transfer` beside it is the control: it is refused on `stores:grain`, so only the
-    `restore` is counted by `exists_zero`, and neither is a post-admission refusal (a read FAILED).
+    """The deciding read of an `interview` aimed at a rung is `exists:Person` = 0: the subject is not a
+    Person. The `restore` aimed at a person is refused on its keyed `exists` clause (B07.01 keyed it), which
+    `exists_zero` does not count (only a `last-read` carries it). The `transfer` beside them is the control:
+    it is refused on `stores:grain`, so only the `interview` is counted by `exists_zero`, and none is a
+    post-admission refusal (a read FAILED).
 
     MUTATION (run 2026-10-26, reverted): `_observed_of` returning `()` -- this test and the
     post-admission test below both red."""
     w, d = _restore_on_a_person()
     rd = _reading(w, d)
-    assert rd["reasons"]["restore"] == {"last-read exists:Site=0": 1}, rd["reasons"]
+    assert rd["reasons"]["interview"] == {"last-read exists:Person=0": 1}, rd["reasons"]
+    assert rd["reasons"]["restore"] == {"clause:exists": 1}, rd["reasons"]
     assert list(rd["reasons"]["transfer"]) == ["last-read stores:grain=>0"], rd["reasons"]
     assert A.exists_zero(rd["reasons"]) == 1
     assert rd["post_admission"] == {}, rd["post_admission"]
@@ -380,15 +388,19 @@ def test_rem11_a_migrate_into_a_full_rung_is_a_post_admission_refusal():
 
 def test_rem11_dropping_the_observed_read_blinds_both_readings(monkeypatch):
     """THE MUTATION, IN THE SUITE: with the instrument's one read of `Event.observed` returning
-    nothing, the `restore` has no deciding read and the `migrate` is no longer provably
-    post-admission. Each reading is taken first with the read intact, so the change is what is
+    nothing, the `interview` has no deciding read and the `migrate` is no longer provably
+    post-admission (the keyed `restore` is the control: its reading is a clause, not a read). Each reading is taken first with the read intact, so the change is what is
     observed and not the absence of a baseline."""
     wr, dr = _restore_on_a_person()
     wm, dm = _migrate_into_a_full_rung()
-    assert _reading(wr, dr)["reasons"]["restore"] == {"last-read exists:Site=0": 1}
+    assert _reading(wr, dr)["reasons"]["interview"] == {"last-read exists:Person=0": 1}
     assert _reading(wm, dm)["post_admission"] == {"migrate": 1}
     monkeypatch.setattr(A, "_observed_of", lambda event: ())
-    assert _reading(wr, dr)["reasons"]["restore"] == {"no-read": 1}
+    assert _reading(wr, dr)["reasons"]["interview"] == {"no-read": 1}
+    # the keyed `restore` is blinded too, in its own way: with no read to replay, `_replayed` cannot name the clause
+    # that failed, and the reason is every clause keying the kind it emitted, which is more than one (so, not `exists`)
+    (blind,) = _reading(wr, dr)["reasons"]["restore"]
+    assert blind.startswith("clause:") and "|" in blind and "exists" in blind, blind
     assert A.exists_zero(_reading(wr, dr)["reasons"]) == 0
     assert _reading(wm, dm)["post_admission"] == {}
 
@@ -761,8 +773,10 @@ def test_cr18_the_pools_line_reads_the_rolled_pool_and_separates_persons_not_sea
     # season-one rolls read every pool 1 to 6 (was `{default, 5}`), so the reader separates persons, not seasons.
     # B05.99 re-pin (B05.09, B05.25, B05.23: the pool is `pool_of(the governing attributes' mean + rank, addends, pool_add 6,
     # pool_floor 5)`, so pools are tenths from 7 up; was {1, 2, 3, 4, 5, 6}): still many pools in one season, persons apart.
+    # B06.99 re-pin (B06.04: the uniform's source changes from CPython's generator to the keyed mix, so the drawn attributes
+    # differ; a stream change, not a balance change): was {7.0, 7.7, 8.5, 9.0, 9.3, 9.5, 9.7, 10.0, 10.3, 10.5, 10.7, 11.0, 11.5, 12.0}.
     assert {p for per in realm["pools"].values() for c in per.values() for _, p in c} == {
-        7.0, 7.7, 8.5, 9.0, 9.3, 9.5, 9.7, 10.0, 10.3, 10.5, 10.7, 11.0, 11.5, 12.0}
+        7.5, 8.0, 8.5, 9.0, 9.3, 9.5, 10.0, 10.5, 10.7, 11.0, 11.5, 12.0}
 
 @pytest.mark.skipif(A.monitoring_blocked() is not None,
                     reason="engines_entered needs Python 3.12 or later and a free monitoring tool id")

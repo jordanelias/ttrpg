@@ -21,12 +21,13 @@ from __future__ import annotations
 
 import importlib
 import os
-import random
 import sys
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
+
+from engine.dice_engine import draw  # noqa: E402
 
 #: (label, the weight of the one person on each side). `under_arms_cap(w)` is floor(w x 300 x 0.10).
 CASES = (("0", 0.0, "PARTY-GAP"), ("1", 0.04, "PARTY-GAP"), ("20000", 667.0, "SCALE-GAP"))
@@ -58,7 +59,7 @@ def read() -> list[tuple[str, str]]:
     try:
         for label, weight, want in CASES:
             entered[0] = 0
-            got = mb.resolve_field(_record(weight), random.Random(0))
+            got = mb.resolve_field(_record(weight), draw.seeded(draw.H2("extremes_probe", 0)))
             said = got.get("status") if isinstance(got, dict) else f"resolved ({got.ended})"
             out.append((f"{label} a side: {said}, run_battle entered {entered[0]} time(s)",
                         f"{label} a side: {want}, run_battle entered 0 time(s)"))

@@ -161,11 +161,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | 60 | `engine/season/tests/test_sc_calibration_targets.py` | test file | B05.22 | — |
 | 61 | `engine/season/tests/test_sc_tuning_tables.py` | test file | B05.23 | — |
 | 62 | `engine/season/tests/test_h199_one_spacing.py` | test file | B05.64 | — |
-| 63 | `engine/dice_engine/fmath.py` | module | B06.01 | — |
-| 64 | `engine/tests/test_fmath.py` | test file | B06.01 | — |
-| 65 | `tests/valoria/test_fmath_one_owner.py` | test file | B06.02 | — |
-| 66 | `engine/dice_engine/draw.py` | module | B06.03 | — |
-| 67 | `engine/tests/test_draw.py` | test file | B06.03 | — |
 | 73 | `engine/season/tests/test_task_draw.py` | test file | B07.01 | — |
 | 74 | `engine/season/tests/test_vres_task_and_prize.py` | test file | B07.04 | B11.83 |
 | 75 | `systems/mass_battle/sim/extremes_probe.py` | module | B17.04 | — |

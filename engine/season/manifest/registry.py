@@ -350,7 +350,7 @@ def check_contest_prizes(verb_table: dict) -> list:
     # ⚠ THE CONTEST ROLE ALONE (v9 FI-02, `SM-3`'s fact 4). This looped over EVERY role in
     # `_ROLE_ROSTERS`, which was the contest role while it was the only one; with `inquiry` beside it,
     # half 3 asked whether an inquiry entry's composition row `contests:` a prize -- it contests none,
-    # by ruling -- and no driver constructed. `unclaimed_contest_prizes` and `check_graded_inquiries`
+    # by ruling -- and no driver constructed. `unclaimed_contest_prizes` and `check_graded_tasks`
     # already read this one row of the map; the inquiry role's rows are `check_inquiry_modules`'.
     role = "contest"
     roster, column = _ROLE_ROSTERS[role]
@@ -413,10 +413,10 @@ def check_inquiry_modules(verb_table: dict) -> list:
          provider always calls one), and that entry agrees with its composition row
          (`_check_module_entry`): a row declares it as a `step_call` entry -- RESOLVE's per-act bookkeeping calls it, keyed by the Event's kind, so no
          verb's adapter does -- whose target lies in the row's `module:`; and, half 3's analogue, a verb
-         the loop GRADES (a `graded_inquiries` route) emits the row's key at some band, so the key can
+         the loop GRADES (a `graded_tasks` route) emits the row's key at some band, so the key can
          reach the entry carrying a degree (`_graded_verb_emits_it`);
       3. the provider takes the `module_entry` keyword `seam/contest.py::find_trail` always passes
-         (`check_graded_inquiries`' refusal 3, for its reason: a `TypeError` at the first find).
+         (`check_graded_tasks`' refusal 3, for its reason: a `TypeError` at the first find).
     THIS IS THE DECLARATION THAT THE COMPOSITION ROW MUST EXIST: in a fresh process the registrar holds
     nothing to miss, so a deleted `fieldwork.find` row is refused here, naming it. Returns the
     `(role, key)` rows checked, so a caller can see the sweep was not empty (`CLAUDE.md` §0.1 pt 2)."""
@@ -459,11 +459,11 @@ def check_inquiry_modules(verb_table: dict) -> list:
     return checked
 
 
-def check_graded_inquiries(verb_table: dict) -> list:
+def check_graded_tasks(verb_table: dict) -> list:
     """v9 FI-01 (`ED-FI-0009`, J-22 option (A)): **an inquiry's route names a roll a prize row already
     binds, and is not itself a prize** -- at driver construction, naming the verb.
 
-    `rosters.yaml: graded_inquiries` maps an inquiry verb to `{provider, module_entry}`, which
+    `rosters.yaml: graded_tasks` (B07.01; was `graded_tasks`) maps an inquiry or task verb to `{provider, module_entry, form}`, which
     `seam/contest.py::grade` calls with no prize. Three refusals, each a way the route could become a
     second resolver (a route that is also a contest is the loader's refusal, `data/verbs.py`):
       1. the provider is not registered (`has`, the code, as `check_contest_prizes` half 2 asks);
@@ -473,7 +473,7 @@ def check_graded_inquiries(verb_table: dict) -> list:
       3. the provider takes no `module_entry` keyword (`grade()` always passes one, and only the
          `social_contest` adapter accepts it), which would be a `TypeError` at the first act.
     Returns the verbs checked, so a caller can see the sweep was not empty (`CLAUDE.md` §0.1 pt 2)."""
-    from ..data.rosters import GRADED_INQUIRIES
+    from ..data.rosters import GRADED_TASKS
     roster, column = _ROLE_ROSTERS["contest"]
     prizes = roster_map(roster, column)
     bound = {(r["provider"], r["module_entry"]) for k in prizes if (r := resolve("contest", k))}
@@ -481,7 +481,7 @@ def check_graded_inquiries(verb_table: dict) -> list:
            "roll owner. A route is a pointer at a roll the tree already makes, never a prize and never "
            "a roll of its own")
     checked = []
-    for verb, route in sorted(GRADED_INQUIRIES.items()):
+    for verb, route in sorted(GRADED_TASKS.items()):
         provider_name = route.get("provider")
         if not provider_name or not has("contest", provider_name):
             raise Unspecified(
@@ -533,16 +533,18 @@ def _graded_verb_emits_it(role: str, key: Any, entry_role: str, comp: dict, verb
                           law: str) -> None:
     """Half 3's analogue for the INQUIRY role (v9 FI-02): a `step_call` entry names no verb, so what must
     hold is that the row's KEY can reach it carrying a degree -- some verb the loop grades (a
-    `graded_inquiries` route) emits the key at some band (`VerbRow.emits_by_degree`). Otherwise the
+    `graded_tasks` route) emits the key at some band (`VerbRow.emits_by_degree`). Otherwise the
     entry is reached by ungraded findings alone, and `finding_terms` keys nothing for them."""
-    from ..data.rosters import GRADED_INQUIRIES
-    # `VerbRow.emits` is the flat union of the degree bands, and a graded route's `emits:` is
-    # degree-keyed (`data/verbs.py` refuses a flat one), so membership there is "some band emits it".
-    if not any(str(key) in verb_table[v].emits for v in sorted(GRADED_INQUIRIES) if v in verb_table):
+    from ..data.rosters import GRADED_TASKS
+    # `VerbRow.emits` is the flat union of the degree bands, and a graded inquiry's `emits:` is
+    # degree-keyed (`data/verbs.py` refuses a flat one on a live route), so membership there is "some band emits it".
+    # B07.01: the `form: inquiry` rows of `graded_tasks` only -- a `task` row's `emits:` is flat and finds nothing.
+    inquiries = sorted(v for v, r in GRADED_TASKS.items() if r.get("form") == "inquiry")
+    if not any(str(key) in verb_table[v].emits for v in inquiries if v in verb_table):
         raise Unspecified(
             f"`{role}` row {key!r} (`module_entry: {entry_role!r}`) is a kind no graded inquiry emits at "
-            f"any band (graded: {sorted(GRADED_INQUIRIES)})", "04 PART E step 10",
-            needs="the row keyed by a kind a `graded_inquiries` verb's degree-keyed `emits:` declares",
+            f"any band (graded: {inquiries})", "04 PART E step 10",
+            needs="the row keyed by a kind a `graded_tasks` verb's degree-keyed `emits:` declares",
             law=law)
 
 

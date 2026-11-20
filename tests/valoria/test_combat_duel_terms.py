@@ -16,7 +16,7 @@ The falsifiers are the plan position's own (v9 `_part7`, PC-10):
 The cross-TREE half of (1) -- the lethal fight equal to the pre-PC-10a engine's -- is the existing combat suite and
 the draw-stream pins, which this position does not move.
 """
-import random
+from engine.dice_engine import draw
 
 import pytest
 
@@ -83,7 +83,7 @@ def test_a_term_outside_the_closed_set_is_refused_by_name():
     A, B = C.Combatant('A'), C.Combatant('B')
     for bad in ('first_blood', '', None, 'Death'):
         with pytest.raises(ValueError, match='terms'):
-            wrapper.fight(A, B, CFG, random.Random(0), terms=bad)
+            wrapper.fight(A, B, CFG, draw.seeded(draw.H2("test_combat_duel_terms", 0)), terms=bad)
     assert wrapper.DUEL_TERMS == ('yield', 'blood', 'death') and wrapper.LETHAL_TERMS == 'death'
 
 
@@ -173,9 +173,9 @@ def test_the_module_entry_reads_the_terms_off_the_typed_input():
     qs = ('felled', 'wounds', 'health_remaining', 'health_full')
     seen = 0
     for seed in range(10):
-        bare = entry.fight(PersonalCombatInput(('p_a', 'p_b'), (4, 4), qs), random.Random(seed))
-        death = entry.fight(_Termed(('p_a', 'p_b'), (4, 4), qs, 'death'), random.Random(seed))
-        blood = entry.fight(_Termed(('p_a', 'p_b'), (4, 4), qs, 'blood'), random.Random(seed))
+        bare = entry.fight(PersonalCombatInput(('p_a', 'p_b'), (4, 4), qs), draw.seeded(draw.H2("test_combat_duel_terms", seed)))
+        death = entry.fight(_Termed(('p_a', 'p_b'), (4, 4), qs, 'death'), draw.seeded(draw.H2("test_combat_duel_terms", seed)))
+        blood = entry.fight(_Termed(('p_a', 'p_b'), (4, 4), qs, 'blood'), draw.seeded(draw.H2("test_combat_duel_terms", seed)))
         assert death == bare                              # the record: wounds, yield, beat, rounds and trace
         assert bare.surrender is None
         s = blood.surrender
@@ -272,7 +272,7 @@ def _fight_with_stub_engagement(monkeypatch, damage_A, damage_B, terms):
     monkeypatch.setattr(wrapper, 'engagement', _both_cross)
     trace = []
     monkeypatch.setattr(wrapper, '_TRACE', trace.append)
-    return wrapper.fight(A, B, CFG, random.Random(0), terms=terms), trace, A, B
+    return wrapper.fight(A, B, CFG, draw.seeded(draw.H2("test_combat_duel_terms", 0)), terms=terms), trace, A, B
 
 
 def test_an_exact_tie_on_the_terms_ends_unresolved_with_no_yield(monkeypatch):

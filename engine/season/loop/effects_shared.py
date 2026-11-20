@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from ..data.rosters import MARCH_TARGET_KINDS
+from ..data.rosters import MARCH_TARGET_KINDS, task_share
 from ..gaps import Forbidden, InstrumentDefect
 from ..queries.world_q import holder_faction_of, occupies
 from ..state.carriers import Term
@@ -45,6 +45,19 @@ def effect_for(verb: str):
         EFFECTS[verb] = fn
         return fn
     return deco
+
+
+def _share(res: "Resolution | None"):
+    """B07.02: THE FRACTION OF ITS EFFECT THE ACT'S BAND LETS LAND -- `task_share` read off `res.degree`, the one table; a `res` of
+    `None` (the arm `off`, a flat un-routed act, a bookkeeping row) is the full effect. No effect names a band."""
+    return task_share(None if res is None else res.degree)
+
+
+def _scaled(n: int, res: "Resolution | None") -> int:
+    """B07.02: `n` of a magnitude, as much of it as the band lets land, floored (`n * share`, whole units). Share 1 returns `n`
+    itself, so an act with no band, or a full band, writes what it always wrote."""
+    f = _share(res)
+    return n if f == 1 else (n * f.numerator) // f.denominator
 
 
 def _operand(a: "Act", name: str):

@@ -745,17 +745,21 @@ GOLDEN_TRACE_RES  = "committee"
 # `roll_net_continuous`, not the d10 faces). A DIFFUSE move, as it must be: the draw itself changed, so every
 # beat's advantage differs. THE CONTROL: the beat count (10), the resolved band (`committee`) and the
 # final-beat banding check below are unchanged, and the track stays inside 0-10 and off the 5.0 start.
+# RE-RECORDED AGAIN (B06.99; B06.04: the sampler changes, `Draw.normal` (Box-Muller) for `random.gauss`; this trace's uniform is
+# still the process-global stream, through `resolver._GlobalStream`; a stream change and not a balance change). A DIFFUSE move, as a stream change must be: every beat's advantage differs.
+# THE CONTROL: the beat count (10), the resolved band (`committee`) and the final-beat banding check below are
+# unchanged, and the track stays inside 0-10 and moves off the 5.0 start.
 GOLDEN_TRACE = (
-    (0.0, 0.0, 5.0),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (0.0, 0.690741, 3.963889),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (0.486813, 0.690741, 4.694108),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (0.486813, 1.43791, 3.573353),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (0.932474, 1.43791, 4.241846),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (0.932474, 2.086699, 3.268663),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (0.932474, 2.086699, 3.268663),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (0.932474, 2.086699, 3.268663),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (1.40979, 2.086699, 3.984636),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (1.40979, 2.531771, 3.317028),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (0.690741, 0.0, 6.036111),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (0.690741, 0.486813, 5.305892),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (0.914911, 0.486813, 5.642148),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (0.914911, 1.171544, 4.61505),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.360617, 1.171544, 5.283609),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.360617, 1.405857, 4.93214),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.360617, 1.405857, 4.93214),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.360617, 1.405857, 4.93214),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.794716, 1.405857, 5.583289),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.794716, 1.881713, 4.869504),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
 )
 def _golden_trace(seed, proc="grand_contest"):
     random.seed(seed)

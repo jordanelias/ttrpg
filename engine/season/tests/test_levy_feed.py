@@ -21,6 +21,7 @@ What each block proves, and the control that stops it passing vacuously:
      larder's grain is planted), a field between them -- the second field fields more troops than the first.
 """
 import random
+from engine.dice_engine import draw
 from types import SimpleNamespace
 
 import pytest
@@ -139,7 +140,7 @@ def _provider_field(w, act):
     attackers = world_q.mustered(w, ORIGIN, "fac_valorsmark")
     assert len(attackers) == 2, attackers
     return resolve(w, attackers, [act.id], "a field", subject=DEFENDER, rung=TARGET,
-                   rng=random.Random(11))
+                   rng=draw.seeded(draw.H2("test_levy_feed", 11)))
 
 
 def test_on_a_short_attacker_treasury_fields_fewer_than_its_weight_and_an_empty_defender_the_floor(
@@ -178,8 +179,8 @@ def test_off_the_field_is_the_none_keyword_field():
     inp = field_input(w, attackers, defenders, TARGET)
     fn = MODULE_ENTRIES["mass_battle.resolve_field"].fn
     weights = tuple(sum(s) for s in inp.weights)
-    assert (fn(inp, random.Random(3)) == fn(inp, random.Random(3), troops_a=None, troops_b=None)
-            == fn(inp, random.Random(3), troops_a=weights[0], troops_b=weights[1]))
+    assert (fn(inp, draw.seeded(draw.H2("test_levy_feed", 3))) == fn(inp, draw.seeded(draw.H2("test_levy_feed", 3)), troops_a=None, troops_b=None)
+            == fn(inp, draw.seeded(draw.H2("test_levy_feed", 3)), troops_a=weights[0], troops_b=weights[1]))
 
 
 # ======================================================================================

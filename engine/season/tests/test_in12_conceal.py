@@ -131,7 +131,11 @@ def test_conceal_is_a_resolvable_own_verb_that_opens_hold_and_is_declared_uncell
     assert row.beneficiary == "actor" and not row.counterparty
     assert row.stratum == "social", "a `binding_decision` row's kinds are chronicled by kind"
     assert row.writes == ("Record.exists",)
-    assert row.emits == ("cover.assumed",) and tuple(row.emits_on_refusal) == ()
+    # B07.01 (18-A item 4): `conceal` kept no precondition (`requires: —`), but its mint can be declined, so the
+    # row keys `write` -> `conceal.refused` (was `emits_on_refusal: []`) and a lost draw under `draw` -> `conceal.failed`,
+    # which `emits_on_refusal` (the refusal union) leaves out (`VerbRow.draw_kinds`)
+    assert row.emits == ("cover.assumed",) and tuple(row.emits_on_refusal) == ("conceal.refused",)
+    assert row.refusals_by_clause == {"write": ("conceal.refused",), "draw": ("conceal.failed",)}
     assert row.requires_typed is None, "no precondition (#453 §9.3)"
     assert "conceal" in resolvable_verbs()
     assert "conceal" in _OPENERS_FROM_EFFECTS["hold"], _OPENERS_FROM_EFFECTS["hold"]

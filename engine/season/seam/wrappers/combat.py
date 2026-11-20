@@ -73,10 +73,10 @@ that exists rather than a mapping between types that do not meet.
 from __future__ import annotations
 
 import dataclasses
-import random
 from types import SimpleNamespace
 from typing import Any, Callable, Optional
 
+from engine.dice_engine.draw import Draw
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma
 
 from ...data.rosters import ESTIMATE_OUTCOMES, FELLED, WOUND_QUANTITIES
@@ -91,7 +91,7 @@ from ...queries.inputs import CombatOutcome, PartyWounds, PersonalCombatInput, P
 from ...queries.world_q import kit_of, stakes_of
 from ....substrate import combat_kit, composition
 from ....substrate.descriptors import attribute_key
-from ...state.ids import H
+from ...state.ids import draw_factory
 from ..ladder import COMBAT_BANDS, party_degree
 from ._entry import entry_for
 from ._estimate import rng_of, samples_of
@@ -429,7 +429,7 @@ def _wound_state(lifted: Optional[PartyWounds]) -> dict:
 @provider("contest", _PROVIDER)
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
-            rng: Optional[random.Random] = None, rung: Optional[str] = None,
+            rng: Optional[Draw] = None, rung: Optional[str] = None,
             effort: int = 0, host: Optional[PlayHost] = None, via: Optional[str] = None) -> dict:
     """CALL the personal-combat engine. Returns what it said; decides nothing itself.
 
@@ -458,7 +458,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
 
     The RNG is seeded from the WORLD's own clock and the causing act, so a contest is reproducible
     exactly as every other draw in this instrument is (`S33`: *unique per DRAW, not per
-    operation*). `wrapper.fight`'s own note says to pass `random.Random(seed)` for determinism.
+    operation*). `wrapper.fight`'s own note says to pass `draw.seeded(...)` for determinism.
 
     ⚠ **`@provider` AND THE KEYWORD PARAMETERS ARE THE PROVIDER SIGNATURE.** ED-SC-0033 clause (1) rules that
     *"the seam dispatches by manifest ROW rather than the hardcoded personal_combat literal"*, so this
@@ -485,19 +485,16 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     if a_id == b_id:   # `fight_estimate`'s own line: one id as both claimants is refused before the engine is called
         return _party_gap(a_id, b_id)
     inp = combat_input(w, claimants, verb, _cause_record(w, causes))
-    # `H` returns a blake2b hexdigest (`state/ids.py`), so 16 is the RADIX that parses it back to
-    # an int for the RNG -- structural, not a game value.
-    # [JUSTIFIED: radix for parsing H()'s hex digest, not a mechanical constant]
-    seed = int(H(w.world_seed, w.tick, a_id, f"contest:{prize}:{causes[0] if causes else ''}"), 16)
+    rng = draw_factory(w.world_seed, lambda: w.tick)(a_id, f"contest:{prize}:{causes[0] if causes else ''}")
     entry, refusal = entry_for(prize, _PROVIDER)
     if entry is None:
         return refusal
     # THE PARTY TEST (REM-31). The AUTOMATED call is byte-identical: the keyword is passed only when a played
     # person is a claimant, so the two other entries' shared `(inp, rng)` shape is untouched.
     if host is not None and any(c in host.persons for c in (a_id, b_id)):
-        got = entry.fn(inp, random.Random(seed), decide=host.decide)
+        got = entry.fn(inp, rng, decide=host.decide)
     else:
-        got = entry.fn(inp, random.Random(seed))
+        got = entry.fn(inp, rng)
     _wounds = {a_id: _wound_state(got.wounds.get(a_id)), b_id: _wound_state(got.wounds.get(b_id))}
 
     return dict(status="RESOLVED", module=_PROVIDER, resolver="d_sigma",

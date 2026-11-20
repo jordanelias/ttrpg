@@ -17,7 +17,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-import random
+from engine.dice_engine import draw
+from modules.combat import wrapper
+from modules.combat.combatant import Combatant
 from modules.combat import attributes   # the combat attribute spec (PC-14)
 import presets, probabilities as P
 import fight_record as FR   # a spec becomes a PersonalCombatInput, fought by the entry the loop calls (B14.11)
@@ -64,7 +66,7 @@ def do_montecarlo(req):
     trials = int(req.get('trials', 1000))
     seed = int(req.get('seed', 0))
     specA, specB = req['scenario']['A'], req['scenario']['B']
-    rng = random.Random(seed)   # stdlib RNG (engine contract post ED-1085)
+    rng = draw.seeded(draw.H2("server", seed))
     a_wins = decided = draws = 0
     half = trials // 2
     fwd = FR.record_of(_make_fighter(specA, 'A'), _make_fighter(specB, 'B'))

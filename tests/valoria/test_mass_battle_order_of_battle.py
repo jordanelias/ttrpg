@@ -11,7 +11,7 @@ record's `orders_of_battle`. What this proves, and the control beside each claim
   * Refusals at the boundary, deployment without overlap, strategy and tactic fields reaching the Unit, and the
     new generic roster (spearmen, skirmishers, light cavalry) carrying what makes it a different type.
 """
-import random
+from engine.dice_engine import draw
 
 import pytest
 
@@ -48,8 +48,8 @@ def _line(troop_type, n=1000):
 
 # --------------------------------------------------------------------------------------- the control
 def test_no_orders_of_battle_is_the_field_as_it_was():
-    plain = massbattle.resolve_field(_record(), random.Random(5))
-    explicit = massbattle.resolve_field(_record(oobs=(None, None)), random.Random(5))
+    plain = massbattle.resolve_field(_record(), draw.seeded(draw.H2("test_mass_battle_order_of_battle", 5)))
+    explicit = massbattle.resolve_field(_record(oobs=(None, None)), draw.seeded(draw.H2("test_mass_battle_order_of_battle", 5)))
     assert plain == explicit
     assert massbattle._weighted_unit("side_a", 10, 'A').units[0].troop_type == 'infantry', (
         "the control is vacuous if the headcount line stopped being the single infantry subunit")
@@ -57,7 +57,7 @@ def test_no_orders_of_battle_is_the_field_as_it_was():
 
 # ------------------------------------------------------------------------------------- the falsifier
 def _fight(oob_a, seed):
-    return massbattle.resolve_field(_record(oobs=(oob_a, _line('heavy_infantry'))), random.Random(seed))
+    return massbattle.resolve_field(_record(oobs=(oob_a, _line('heavy_infantry'))), draw.seeded(draw.H2("test_mass_battle_order_of_battle", seed)))
 
 
 def _tally(troop_type):
@@ -79,7 +79,7 @@ def test_equal_headcount_of_different_troop_types_fights_differently():
 def test_an_order_of_battle_side_and_a_headcount_side_both_deploy():
     """A side with no order of battle, once the other has one, is a deployed light-infantry line, not a crash."""
     r = massbattle.resolve_field(_record(oobs=(_line('archers', 400), None), weights=((10,), (300,))),
-                                 random.Random(3))
+                                 draw.seeded(draw.H2("test_mass_battle_order_of_battle", 3)))
     assert type(r).__name__ == 'FieldOutcome' and r.attacker.parts == () and r.defender.parts == ()
 
 
@@ -221,7 +221,7 @@ def test_survivor_shares_of_an_order_of_battle_never_exceed_one():
     seen = []
     for seed in range(12):
         r = massbattle.resolve_field(_record(oobs=(_line('heavy_infantry', 120), _line('heavy_infantry', 120))),
-                                     random.Random(seed))
+                                     draw.seeded(draw.H2("test_mass_battle_order_of_battle", seed)))
         seen += [r.attacker.share, r.defender.share]
     assert max(seen) <= SCALE and min(seen) >= 0, seen
     assert min(seen) < SCALE, "vacuous if no side took a casualty in twelve fields"
@@ -284,8 +284,8 @@ def test_a_new_row_charges_and_wheels_with_no_code_edit(new_rows):
     same row with `charge: 0` is the control that each of the three reads is the column and not the spelling of a name.
     FALSIFIER: restore `troop_type == 'cavalry'` at `Unit.charge_pen` or at either recoil site, or the name tuple at
     `_envelop_goal`, and the matching assertion below reads the old answer."""
-    import random
     from types import SimpleNamespace
+    from modules.mass_battle import rngsource
     import modules.mass_battle.hierarchy.units as hu
     import modules.mass_battle.orchestration as orch
     from systems.mass_battle.sim import validators as val
@@ -315,11 +315,11 @@ def test_a_new_row_charges_and_wheels_with_no_code_edit(new_rows):
         def wall_hp(charger, seeds=(700, 701, 702)):
             tot = 0.0
             for s in seeds:
-                random.seed(s)
-                d = sim_unit('Line', 3, 'DEF', 'A', 9, troop_type='pike', stance='hold', instructions=('brace', 'hold'))
-                c = sim_unit('Line', 3, 'CAV', 'B', 9, troop_type=charger, speed='Fast', instructions=('charge',))
-                h0 = d.hp
-                orch.run_battle(d, c, max_ticks=18)
+                with rngsource.using(draw.seeded(draw.H2("test_mass_battle_order_of_battle", s))):
+                    d = sim_unit('Line', 3, 'DEF', 'A', 9, troop_type='pike', stance='hold', instructions=('brace', 'hold'))
+                    c = sim_unit('Line', 3, 'CAV', 'B', 9, troop_type=charger, speed='Fast', instructions=('charge',))
+                    h0 = d.hp
+                    orch.run_battle(d, c, max_ticks=18)
                 tot += d.hp / h0
             return tot / len(seeds)
         lanced, named, unlanced = wall_hp('cavalry'), wall_hp('cataphracts'), wall_hp('cataphracts_unlanced')

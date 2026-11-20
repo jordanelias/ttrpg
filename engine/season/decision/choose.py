@@ -29,9 +29,12 @@ string. Enforced BY PATH over this directory (`04 §E.1`).
 
 from __future__ import annotations
 
-import math as _math
 from typing import Any, Callable, Optional
-from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member, roster, seat_capability
+
+from engine.dice_engine import fmath
+from engine.dice_engine.fmath import ltr_sum
+from ..data.pursuits import _AXES   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
+from ..data.rosters import SCENE_PACKING_RULES, require_member, roster, seat_capability
 from ..data.verbs import VERB_TABLE, act_key, align
 from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
@@ -244,7 +247,7 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
         raise ValueError("score_terms needs a memo from `deliberation_memo(p, fx)` "
                          "(or `make_chooser`'s): the pursuit weights and damp are "
                          "hoisted per deliberation") from None
-    pursuit = damp * sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES)
+    pursuit = damp * ltr_sum(axis_w[ax] * align(c.verb, ax) for ax in _AXES)
     if pursuit != 0.0:
         pursuit *= odds_weight(p, c, fx, odds)
     else:
@@ -302,7 +305,7 @@ def settle_efforts(cands: list, scores: dict, score: Callable, fx: "Fixtures") -
                 if others is None:
                     others = sorted(scores[id(o)] for o in cands if o is not c)         # ascending
                 beneath = [max(0.0, x) for x in others if x <= raw]
-                priced = raw - sum(beneath[-e:])                                   # the `e` best beneath it
+                priced = raw - ltr_sum(beneath[-e:])                                   # the `e` best beneath it
                 if priced > best_net:
                     best, best_net, best_score = v, priced, raw
         kept.append(best)
@@ -470,7 +473,7 @@ def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
         u = rng.random()
         while u <= 0.0:                   # `random()` is [0,1); log(0) is the one unusable draw
             u = rng.random()              # SAME stream, so it advances and can terminate
-        g = -_math.log(-_math.log(u))
+        g = -fmath.log(-fmath.log(u))
         # the trailing two terms are a STABLE TOTAL ORDER for exact float ties, which continuous
         # noise makes measure-zero; they are not the tie-break -- `g` is.
         keyed.append((-(score(c) / tau + g), c.verb, c.subject or "", c))

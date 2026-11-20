@@ -20,7 +20,7 @@ other side is then ahead), so `_grade`'s concession rule cannot be observed by a
 (`test_grade_*`). CONTROLS: no order, and `none` on both sides, are the field as it was, seed for seed."""
 from __future__ import annotations
 
-import random
+from engine.dice_engine import draw
 from dataclasses import replace
 from functools import lru_cache
 from types import SimpleNamespace
@@ -80,7 +80,7 @@ def _fold(inp, seeds):
     try:
         out = []
         for s in seeds:
-            g = mb.resolve_field(inp, random.Random(s))
+            g = mb.resolve_field(inp, draw.seeded(draw.H2("test_cp_t04_03_retreat", s)))
             out.append((g, *seen[-1]))
         return out
     finally:
@@ -216,7 +216,7 @@ def test_the_battle_stops_for_a_conceding_side_without_routing_it():
     for s in range(60):
         a = mb._weighted_unit("side_a", WEAK_ATTACKER, "A", 5, None, "0.5")
         b = mb._weighted_unit("side_b", 20, "B", 5)
-        with rngsource.using(random.Random(s)):
+        with rngsource.using(draw.seeded(draw.H2("test_cp_t04_03_retreat", s))):
             res = bl.run_battle(a, b, max_ticks=18)
         checked += 1
         if units.unit_conceded(a) and not a.routed:      # (a side can retreat and rout in the same tick: that one is a rout)
@@ -258,7 +258,7 @@ def test_control_no_order_and_none_everywhere_are_the_field_as_it_was():
     ordered = replace(inp, orders=_arm("none", "none")[0])
     assert ordered.orders[0].retreat_at == ordered.orders[1].retreat_at == "none"
     for s in list(SEEDS)[:40]:
-        assert mb.resolve_field(inp, random.Random(s)) == mb.resolve_field(ordered, random.Random(s))
+        assert mb.resolve_field(inp, draw.seeded(draw.H2("test_cp_t04_03_retreat", s))) == mb.resolve_field(ordered, draw.seeded(draw.H2("test_cp_t04_03_retreat", s)))
 
 
 def test_control_a_retreat_at_outside_the_closed_set_is_refused_and_none_is_no_order():

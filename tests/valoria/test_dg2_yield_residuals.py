@@ -15,6 +15,8 @@ import sys
 import pytest  # noqa: E402
 
 from systems.mass_battle.sim import multi as M  # noqa: E402  (B17.05: the multi-battle loops moved out of the module)
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 
 def _reload(**flags):
@@ -48,7 +50,8 @@ def test_emergent_entry_on_disciplined_subunit():
     _, _, S, _, E, _ = _reload(MB_YIELD_EMERGENT=True)
     ua, ub = _pressured_pair(E, discipline=5)
     assert not ua.units[0].yielding
-    S.morale_check_phase(ua, ub, 0)
+    with rngsource.using(draw.seeded(draw.H2("test_dg2_yield_residuals", 0))):
+        S.morale_check_phase(ua, ub, 0)
     assert ua.units[0].yielding is True, "disciplined pressured subunit must enter yielding"
 
 
@@ -56,7 +59,8 @@ def test_emergent_skips_low_discipline():
     """ON: a subunit below D_YIELD erodes/routs exactly as today — it does NOT enter yielding."""
     _, X, S, _, E, _ = _reload(MB_YIELD_EMERGENT=True)
     ua, ub = _pressured_pair(E, discipline=X.D_YIELD - 1)
-    S.morale_check_phase(ua, ub, 0)
+    with rngsource.using(draw.seeded(draw.H2("test_dg2_yield_residuals", 0))):
+        S.morale_check_phase(ua, ub, 0)
     assert ua.units[0].yielding is False, "sub-D_YIELD subunit must not auto-yield"
 
 
@@ -64,7 +68,8 @@ def test_emergent_gate_off_is_inert():
     """OFF (default): the casualty trigger never sets yielding — rout dynamics unchanged (byte-exact)."""
     _, _, S, _, E, _ = _reload(MB_YIELD_EMERGENT=False)
     ua, ub = _pressured_pair(E, discipline=5)
-    S.morale_check_phase(ua, ub, 0)
+    with rngsource.using(draw.seeded(draw.H2("test_dg2_yield_residuals", 0))):
+        S.morale_check_phase(ua, ub, 0)
     assert ua.units[0].yielding is False, "OFF: emergent entry must be inert"
 
 

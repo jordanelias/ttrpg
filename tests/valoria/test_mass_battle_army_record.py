@@ -5,7 +5,7 @@ Both are pure, so they are tested without a `World`. What each test is able to s
 a recruit limit that ignored population, or infrastructure, or a type's own kind of infrastructure, fails the
 test named for that; a record operation that lost or invented a man fails the conservation test.
 """
-import random
+from engine.dice_engine import draw
 
 import pytest
 
@@ -166,7 +166,7 @@ def _field(oob_a, oob_b, seed=7):
     return massbattle.resolve_field(MassBattleInput(
         weights=((10,), (10,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None, origin=None,
         loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, condition_scale=FULL,
-        orders_of_battle=(oob_a, oob_b)), random.Random(seed))
+        orders_of_battle=(oob_a, oob_b)), draw.seeded(draw.H2("test_mass_battle_army_record", seed)))
 
 
 def test_an_army_record_fights():

@@ -34,7 +34,9 @@ from engine.season.tests.test_march import _fold_one, _march_act, _weigh
 # seeds 0..11 (no winner casualty to observe); a grid of weights {10, 6, 4, 3, 2, 1} x scales {10, 20, 50, 100, 200} x seeds
 # 0..7 first reads the case the claims need at seed 3, weight 10, scale 200 (p_npc_033 at 1.0, p_npc_035 at 0.948). Was
 # SEED 0, SCALE 10 (the docstring's 0.982 is the old reading).
-SEED, WEIGHT, DEFENDER_WEIGHT = 3, 10, 3
+# Seed re-picked again at the B06/B17 merge (the keyed draw is the stream; was 3, where the attacker drew): seeds 0..79 at
+# weights 10 / 3 scanned for a won field with p_npc_033 at the full scale and p_npc_035 cut; seed 9 is the first (1000 / 970), 45 the next.
+SEED, WEIGHT, DEFENDER_WEIGHT = 9, 10, 3
 MARCHERS = ("p_npc_033", "p_npc_035")
 
 

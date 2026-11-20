@@ -34,6 +34,7 @@ import functools
 import math
 from typing import Optional
 
+from engine.dice_engine.fmath import ltr_sum
 from engine.substrate.descriptors import (
     AFFILIATION_CONCERNS, HERITAGE_ENGAGES, HERITAGES, PURSUITS,
 )
@@ -433,7 +434,7 @@ def deed_valence(axis_w: dict, c) -> float:
 def _lean(axis_w: dict, kind: str) -> float:
     """`Σ_axis axis_w[axis] · align_kind(kind, axis)`: how pursuits projected to `axis_w` lean on a
     deed of `kind`. One owner for the unpaired (`deed_valence`) and the paired (IN-58) scoring."""
-    return sum(axis_w[ax] * _verbs.align_kind(kind, ax) for ax in _AXES)
+    return ltr_sum(axis_w[ax] * _verbs.align_kind(kind, ax) for ax in _AXES)
 
 
 def regard(p: Person, referent: str, fx=None) -> float:
@@ -562,7 +563,7 @@ def heritage_regard(p: Person, q: str, fx) -> float:
     if concern is None:
         return 0.0
     members = AFFILIATION_CONCERNS[concern]
-    return gain * STANCE_MAX * (sum(conviction_stand(p, a) for a in members) / len(members))
+    return gain * STANCE_MAX * (ltr_sum(conviction_stand(p, a) for a in members) / len(members))
 
 
 # ---------------------------------------------------------------------------
@@ -679,9 +680,9 @@ def opinion_terms(p: Person, expected: dict, engaged: tuple, regarded: tuple, fx
     shift = fx.get("scar_weight_shift") if fx is not None else 0.0
     cosine = pursuit_cosine_axes(projected_axes(p, shift), to_axes(expected or {}))
     held = p.conviction or {}
-    aff = (sum(sign * held.get(name, 0) / AFFILIATION_CEILING for name, sign in engaged) / len(engaged)
+    aff = (ltr_sum(sign * held.get(name, 0) / AFFILIATION_CEILING for name, sign in engaged) / len(engaged)
            if engaged else 0.0)
-    reg = (sum(max(-1.0, min(1.0, regard(p, x, fx) / STANCE_MAX)) for x in regarded) / len(regarded)
+    reg = (ltr_sum(max(-1.0, min(1.0, regard(p, x, fx) / STANCE_MAX)) for x in regarded) / len(regarded)
            if regarded else 0.0)
     return (0.0 if cosine is None else cosine), aff, reg
 
@@ -690,9 +691,8 @@ def opinion(p: Person, expected: dict, engaged: tuple, regarded: tuple, fx=None)
     """`p`'s OPINION OF A FACTION, on `[-3, +3]`: the sum of `opinion_terms` (v9 IN-70). `0` is
     indifference -- each term's own midpoint -- so the sign is the side. Computed when asked, never
     written (A-29, T-a). Person-side; the World half is `world_q.opinion_of`. Added left to right, not
-    by `sum()`, whose float summation is compensated since Python 3.12: one order, one number. (The
-    means inside `opinion_terms` use `sum()`; the value is consumed only as `< 0`, so a last-ulp
-    difference between Python versions matters only at exact cancellation.)"""
+    by `sum()`, whose float summation is compensated since Python 3.12: one order, one number (`fmath.ltr_sum`'s
+    rule; the means inside `opinion_terms` go through it too)."""
     pursuit, affiliation, reg = opinion_terms(p, expected, engaged, regarded, fx)
     return pursuit + affiliation + reg
 
@@ -720,8 +720,8 @@ def pursuit_lean(verb: str, e: str, row: Optional[dict] = None) -> float:
     modules a sweep rebinds."""
     proj = to_axes({e: 1.0})
     if row is None:
-        return sum(proj[ax] * _verbs.align(verb, ax) for ax in PURSUIT_AXES)
-    return sum(proj[ax] * row[ax] for ax in PURSUIT_AXES)
+        return ltr_sum(proj[ax] * _verbs.align(verb, ax) for ax in _AXES)
+    return ltr_sum(proj[ax] * row[ax] for ax in _AXES)
 
 
 def consequence_pursuits(p: Person, verb: str, degree, gain: float):
@@ -927,8 +927,8 @@ def _scar_shifted(p: Person, shift: float) -> dict:
     heirs = {e: w for e, w in held.items() if e not in crisis}
     if not crisis or not heirs:
         return base
-    given = sum(held[e] * shift for e in crisis)
-    pool = sum(heirs.values())
+    given = ltr_sum(held[e] * shift for e in crisis)
+    pool = ltr_sum(heirs.values())
     out = dict(base)
     for e in crisis:
         out[e] = held[e] * (1.0 - shift)

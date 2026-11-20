@@ -10,7 +10,7 @@ import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
 sys.path.insert(0, os.path.dirname(__file__))
-import random
+from engine.dice_engine import draw
 from modules.combat import wrapper
 from modules.combat import fight as entry
 import fight_record as FR
@@ -18,7 +18,7 @@ import fight_record as FR
 
 def trace_record(rec, cfg=None, seed=0, max_bouts=12, decide=None):
     """Returns (result, events) for the record `rec`, fought through the entry at `seed`. `decide(turn)` takes the turn number."""
-    out = entry.fight(rec, random.Random(seed),   # stdlib RNG (engine contract post ED-1085)
+    out = entry.fight(rec, draw.seeded(draw.H2("fight_trace", seed)),
                       decide=None if decide is None else (lambda view: decide(view.turn)), cfg=cfg, max_bouts=max_bouts)
     return FR.result_of(out), list(out.trace)
 
@@ -31,7 +31,7 @@ def run_traced_fight(A, B, cfg=None, seed=0, max_bouts=12, *, terms=wrapper.LETH
     on Combatants, outside B14.11's WHERE), through its `trace=` argument; the hook is not touched."""
     if yield_decl is not None:
         events = []
-        result = wrapper.fight(A, B, cfg, random.Random(seed), max_bouts=max_bouts, yield_decl=yield_decl, terms=terms,
+        result = wrapper.fight(A, B, cfg, draw.seeded(draw.H2("fight_trace", seed)), max_bouts=max_bouts, yield_decl=yield_decl, terms=terms,
                                decide=decide, trace=events.append)
         return result, events
     rec = FR.record_of(FR.party_of_combatant(A), FR.party_of_combatant(B), terms=terms)

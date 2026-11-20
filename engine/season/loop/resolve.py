@@ -17,7 +17,7 @@ from __future__ import annotations
 import random
 from dataclasses import replace
 from ..gaps import InstrumentDefect
-from ..data.rosters import (PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_INQUIRIES,
+from ..data.rosters import (PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, graded_route,
                             MARGIN_ENDING, STRATA)
 
 from typing import Any, Optional
@@ -731,6 +731,10 @@ def _refuse_party_gap(self, w: "World", a: Act) -> list:
         declared = ()
     elif COUNTERPARTY_CLAUSE in row.refusals_by_clause:
         declared = row.refusal_for(COUNTERPARTY_CLAUSE)
+    elif row.draw_kinds and WRITE_CLAUSE in row.refusals_by_clause:
+        # B07.01 (UNDECIDED (11) (i)): a `task` row has nobody opposite, so no counterparty clause; its refused roll is an
+        # act that did not take, its `write` key's kinds (the loader accepts its two refusal kinds on that ground).
+        declared = row.refusal_for(WRITE_CLAUSE)
     else:
         declared = row.emits_on_refusal
     kinds = _demand_earned(w, a, declared, False) or (FOLD_REFUSED,)
@@ -852,7 +856,7 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
 def _grade(self, w: "World", token: Token, a: Act, route: dict) -> list:
     """v9 FI-01 (`ED-FI-0009`, J-22 option (A)): AN INQUIRY, ROLLED AND FOLDED AT ITS DEGREE.
 
-    `route` is the verb's `graded_inquiries` row; ASSUMES `_admits` HAS PASSED, as `_contest` does. The
+    `route` is the verb's `graded_tasks` row (`data/rosters.py::graded_route`); ASSUMES `_admits` HAS PASSED, as `_contest` does. The
     roll is `seam.grade`'s, the band `degree_of`'s (the one ladder), and the fold reports the band's
     `emits:` as for a contested act. A `ContestRefused` folds through `_refuse_party_gap`.
 
@@ -1014,10 +1018,12 @@ def resolve(self, token: Token, acts: list[Act],
         # personal combat scene. you can't just kill or wound imo."*
         _row = VERB_TABLE.get(a.verb)
         _contests = _contests_of(a, _row)
-        # v9 FI-01: an inquiry's `graded_inquiries` route -- the second source of a degree, which the
+        # v9 FI-01: an inquiry's `graded_tasks` route -- the second source of a degree, which the
         # loader refuses beside a `contests:` on the VERB ROW (one degree, one source); an act carrying its own
         # `contests` (`_contests_of`, hand-built acts only) takes the contest branch below and the route is unread.
-        _route = GRADED_INQUIRIES.get(a.verb)
+        # B07.01 (18-A edit 6): `graded_route` -- a route carrying `armed_by: task_draw_arm` is taken only with the arm `on`;
+        # `off` (shipped, the control) folds the act flat below, as before B07.
+        _route = graded_route(a.verb, w.fixtures)
         if _contests or _route:
             # ⚠⚠ §E2's ORDER: ELIGIBILITY AND `requires` BEFORE THE SEAM, NOT AFTER IT. `_fold`, which
             # owns that check, is the branch this one is the alternative to, so a contested act's

@@ -3,7 +3,7 @@
 
 WHAT IT RUNS. `n` fields (default 300, seeds 0..n-1), each two identical single bodies of 600 heavy infantry on open
 ground, built through the module's own builder (`massbattle._oob_unit`) and fought and graded through its own
-`_run_and_grade` -- the call `resolve_field` makes -- with the seed's `random.Random` scoped by `rngsource`. Nothing
+`_run_and_grade` -- the call `resolve_field` makes -- with the seed's keyed `Draw` scoped by `rngsource`. Nothing
 here holds a number of the game: the body, the size and the count are the probe's own, and the ruling is the grade.
 
 WHAT IT PRINTS. Per side the win count, the drawn count, and the difference of the two win counts in standard
@@ -21,10 +21,10 @@ from __future__ import annotations
 
 import math
 import os
-import random
 import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))
+from engine.dice_engine import draw
 
 from modules.mass_battle import massbattle  # noqa: E402
 from modules.mass_battle.orderofbattle import OrderOfBattle, UnitRow  # noqa: E402
@@ -47,9 +47,9 @@ def _body(side):
 
 
 def one_field(seed):
-    """`'A'`, `'B'` or `'drawn'` for the mirror fought with `random.Random(seed)`."""
+    """`'A'`, `'B'` or `'drawn'` for the mirror fought on `draw.seeded(draw.H2("mirror_probe", seed))`."""
     a, b = _body("A"), _body("B")
-    got = massbattle._run_and_grade(a, b, OPEN_FLAT, random.Random(seed), _SCALE)
+    got = massbattle._run_and_grade(a, b, OPEN_FLAT, draw.seeded(draw.H2("mirror_probe", seed)), _SCALE)
     a_out = got.attacker.routed or got.attacker.conceded
     b_out = got.defender.routed or got.defender.conceded
     if b_out and not a_out:

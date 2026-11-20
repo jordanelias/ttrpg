@@ -34,6 +34,7 @@ from modules.mass_battle.terrain import (
     terrain_row_for_territory, river_crossed, _point_in_polygon, _TYPE_TO_ROW,
     NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT, RIVER_CROSSING,
 )
+from engine.dice_engine import draw
 
 
 # ─── the point-in-polygon primitive ──────────────────────────────────────────
@@ -292,7 +293,7 @@ def test_run_and_grade_accepts_every_row_without_crashing():
 
     for row in (NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT, 'river_crossing', None):
         a, b = _units()
-        r = _run_and_grade(a, b, row, None, SCALE)
+        r = _run_and_grade(a, b, row, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE)
         assert r.attacker.routed in (True, False)
 
 
@@ -311,7 +312,7 @@ def test_forest_broken_forces_a_fast_side_to_standard_speed():
         "if this ever changes, the FOREST_BROKEN branch stops being vacuous on the season path " \
         "and the patching below becomes unnecessary -- not a failure, but worth noticing"
     a.speed = 'Fast'
-    _run_and_grade(a, b, FOREST_BROKEN, None, SCALE)
+    _run_and_grade(a, b, FOREST_BROKEN, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE)
     assert a.speed == 'Standard', "a Fast side must be forced to Standard when terrain is forest_broken"
 
 
@@ -325,13 +326,13 @@ def test_walls_raise_the_defenders_dr_and_only_the_defenders_dr():
 
     a, b = _units()
     a0, b0 = a.dr, b.dr
-    _run_and_grade(a, b, WALLS, None, SCALE)
+    _run_and_grade(a, b, WALLS, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE)
     assert b.dr == b0 + WALLS_DEFENDER_DR, "the defender (unit_b) must take A.9's walls bonus, once"
     assert a.dr == a0, "the attacker (unit_a) must not take the walls bonus"
 
     a, b = _units()
     a0, b0 = a.dr, b.dr
-    _run_and_grade(a, b, OPEN_FLAT, None, SCALE)
+    _run_and_grade(a, b, OPEN_FLAT, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE)
     assert (a.dr, b.dr) == (a0, b0), "OPEN_FLAT must not touch DR (control)"
 
 
@@ -347,14 +348,14 @@ def test_walls_dr_override_replaces_a9s_number_only_on_a_walls_field():
     for label, walls_dr in (('none', None), ('a9', WALLS_DEFENDER_DR), ('zero', 0), ('one', 1)):
         a, b = _units()
         a0, b0 = a.dr, b.dr
-        _run_and_grade(a, b, WALLS, None, SCALE, walls_dr=walls_dr)
+        _run_and_grade(a, b, WALLS, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE, walls_dr=walls_dr)
         seen[label] = b.dr - b0
         assert a.dr == a0, f"{label}: the attacker must never take the walls bonus"
     assert seen == {'none': WALLS_DEFENDER_DR, 'a9': WALLS_DEFENDER_DR, 'zero': 0, 'one': 1}, seen
 
     a, b = _units()
     a0, b0 = a.dr, b.dr
-    _run_and_grade(a, b, OPEN_FLAT, None, SCALE, walls_dr=1)
+    _run_and_grade(a, b, OPEN_FLAT, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE, walls_dr=1)
     assert (a.dr, b.dr) == (a0, b0), "walls_dr must be inert off a WALLS field (control)"
 
 
@@ -365,7 +366,7 @@ def test_open_flat_does_not_touch_speed():
 
     a, b = _units()
     a.speed = 'Fast'
-    _run_and_grade(a, b, OPEN_FLAT, None, SCALE)
+    _run_and_grade(a, b, OPEN_FLAT, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE)
     assert a.speed == 'Fast', "OPEN_FLAT must not touch speed (control)"
 
 
@@ -388,7 +389,7 @@ def test_each_row_puts_its_a9_dice_on_the_right_side_once(row, attacker, defende
 
     a, b = _units()
     assert _terrain_dice(a) == _terrain_dice(b) == (0, 0), "a fresh unit already carries terrain dice"
-    _run_and_grade(a, b, row, None, SCALE)
+    _run_and_grade(a, b, row, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE)
     assert _terrain_dice(a) == attacker and _terrain_dice(b) == defender, (row, _terrain_dice(a), _terrain_dice(b))
 
 
@@ -401,7 +402,7 @@ def test_river_crossing_steps_the_crosser_one_speed_tier_slower(before, after):
 
     a, b = _units()
     a.speed = before
-    _run_and_grade(a, b, RIVER_CROSSING, None, SCALE)
+    _run_and_grade(a, b, RIVER_CROSSING, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE)
     assert (a.speed, b.speed) == (after, 'Standard')
 
 
@@ -419,12 +420,11 @@ def test_a_dice_row_resolves_differently_from_open_flat_and_identically_with_its
     MB-05, 3/16 after, for both rows at these weights; at B05.99, after the one sampler (B05.03), river_crossing first differs at seed 89
     (58 of 1000) and uphill at seed 1, so the seed range is 256 -- one-off figures, not asserted. RIVER_CROSSING's
     speed step is inert here (see the test above), so the zeroed arm is equal for it too."""
-    import random
     from modules.mass_battle import massbattle as MB
 
     def fight(r, seed):
         a, b = _units()
-        return MB._run_and_grade(a, b, r, random.Random(seed), SCALE)
+        return MB._run_and_grade(a, b, r, draw.seeded(draw.H2("test_mass_battle_terrain", seed)), SCALE)
 
     checked = differs = 0
     row_share = flat_share = 0.0
@@ -451,7 +451,6 @@ def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
     with fewer survivors on average. (Before MB-05r the same pair was fought over T1 with the old boolean set and
     unset -- 3 seeds of 16 differed, 2026-10-08; T1's anchor lies on the river, so no origin crosses
     to it, and the field moved to T3, the same OPEN_FLAT row.)"""
-    import random
     from engine.season.boot.realm import build_realm
     from dataclasses import replace
     from engine.season.queries import world_q
@@ -476,8 +475,8 @@ def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
     checked = differs = 0
     crossed_share = dry_share = 0.0
     for seed in range(256):
-        crossed = resolve_field(record(origin='T9'), rng=random.Random(seed))
-        dry = resolve_field(record(origin=None), rng=random.Random(seed))
+        crossed = resolve_field(record(origin='T9'), rng=draw.seeded(draw.H2("test_mass_battle_terrain", seed)))
+        dry = resolve_field(record(origin=None), rng=draw.seeded(draw.H2("test_mass_battle_terrain", seed)))
         crossed_share += crossed.defender.share
         dry_share += dry.defender.share
         differs += crossed != dry

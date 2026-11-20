@@ -29,6 +29,7 @@ from __future__ import annotations
 from ..data import files
 from ._field_outcomes import SCALE            # the body scale the world ships (`Fixtures condition_scale`); a hand-built record names it
 from ._fresh_process import entry_target, probe
+from engine.dice_engine import draw
 
 _PRIZE = "a field"
 
@@ -52,6 +53,7 @@ mod_name, attr = {target!r}.split(":", 1)
 entry = getattr(importlib.import_module(mod_name), attr)
 source = importlib.import_module(mod_name.rsplit(".", 1)[0] + ".rngsource")
 from engine.season.queries.inputs import MassBattleInput
+from engine.dice_engine import draw
 
 # Sides large enough that the field is fought for ticks rather than routing on contact, on an UPHILL
 # territory (T9) with a fortification (so the WALLS row and its DR are inside the replayed battle) and
@@ -66,10 +68,15 @@ OTHER = MassBattleInput(weights=((90.0,), (60.0, 30.0)), territory="T3", fort_le
 stdlib_before = random.getstate()
 out = []
 for seed in (1, 2, 3, 4, 5, 6):
-    got = entry(FIELD, random.Random(seed))
-    between = entry(OTHER, random.Random(seed + 100))
-    again = entry(FIELD, random.Random(seed))
-    out.append((seed, dataclasses.asdict(got), again == got, source.get() is random))
+    got = entry(FIELD, draw.seeded(draw.H2("test_mass_battle_module", seed)))
+    between = entry(OTHER, draw.seeded(draw.H2("test_mass_battle_module", seed + 100)))
+    again = entry(FIELD, draw.seeded(draw.H2("test_mass_battle_module", seed)))
+    try:
+        source.get()                      # a scope left open by the call would return its draw here
+        left_open = True
+    except LookupError:                   # no source is the unscoped reading (there is no default stream)
+        left_open = False
+    out.append((seed, dataclasses.asdict(got), again == got, not left_open))
 stdlib_untouched = random.getstate() == stdlib_before
 loaded = sorted(os.path.relpath(m.__file__, {root!r}) for n, m in list(sys.modules.items())
                 if n not in before and getattr(m, "__file__", None)
@@ -145,14 +152,17 @@ def test_no_d10_face_in_mass_battle():
     scanned = 0
     for path in (root / "modules" / "mass_battle").rglob("*.py"):
         scanned += 1
-        assert not re.search(r"randint\(\s*1\s*,\s*10\s*\)", path.read_text(encoding="utf-8")), path
+        assert not re.search(r"(randint|die)\(\s*1\s*,\s*10\s*\)", path.read_text(encoding="utf-8")), path
     assert scanned >= 20, scanned
 
-    class _NoFaces(random.Random):
-        def randint(self, a, b):
-            if (a, b) == (1, 10):
+    class _NoFaces(draw.Draw):
+        def __init__(self, seed):
+            super().__init__(draw.H2("test_mass_battle_module", seed))
+
+        def die(self, lo, hi):
+            if (lo, hi) == (1, 10):
                 raise AssertionError("a d10 face was drawn on the field")
-            return super().randint(a, b)
+            return super().die(lo, hi)
 
     fought = _fought(_entry(), range(1, 5), _NoFaces)
     assert len(fought) == 8 and all(type(got).__name__ == "FieldOutcome" for got in fought), fought
@@ -189,7 +199,7 @@ def test_one_ladder_for_the_field(monkeypatch):
         return got
 
     monkeypatch.setattr(dice_engine, "degree_from_net", counting)
-    _fought(entry, range(1, 4), random.Random)
+    _fought(entry, range(1, 4), lambda s: draw.seeded(draw.H2("test_mass_battle_module", s)))
     assert len(seen) >= 50, f"only {len(seen)} grade(s) went through the owner: the field grades elsewhere"
     assert all(got == real(net, ob) for net, ob, got in seen)
 
@@ -216,12 +226,11 @@ def test_no_share_exceeds_one():
     no assertion (CLAUDE.md §0.1 pt 2): the loop asserts that it asserted, and that a side the battle never touched
     reads EXACTLY 1.0 -- an unfought pair, graded through the one `_grade`, is that side."""
     import importlib
-    import random
     mb = importlib.import_module("modules.mass_battle.massbattle")      # by string: `engine/` imports no module code
     entry, checked, worst = _entry(), 0, 0.0
     for pair in _SIDE_PAIRS:
         for seed in range(100):
-            got = entry(_headcount_record(pair), random.Random(seed))
+            got = entry(_headcount_record(pair), draw.seeded(draw.H2("test_mass_battle_module", seed)))
             for share in (got.attacker.share / SCALE, got.defender.share / SCALE):
                 assert share <= 1.0, f"{pair} seed {seed}: a side's share is {share}"
                 worst = max(worst, share)
@@ -237,13 +246,12 @@ def test_realm_weight_pairs_vary_by_seed():
     through `resolve_field`, seeds 0 to 59, are fought battles whose verdict varies by seed, and the larger side wins
     more of them than the smaller. The verdict is the ladder's (`field_degree`, the one grader), read off what the
     module returned. A pair that always read one band would be a fixture, not a battle."""
-    import random
     from engine.season.data.rosters import LOST, WON
     from engine.season.seam.ladder import field_degree
     entry, checked = _entry(), 0
     seen = set()
     for (wa, wb) in ((30, 18), (20, 6), (6, 20)):
-        bands = [field_degree(entry(_headcount_record((wa, wb)), random.Random(seed))) for seed in range(60)]
+        bands = [field_degree(entry(_headcount_record((wa, wb)), draw.seeded(draw.H2("test_mass_battle_module", seed)))) for seed in range(60)]
         checked += len(bands)
         seen |= set(bands)
         attacker_larger = wa > wb
@@ -263,13 +271,12 @@ def test_resolve_field_returns_a_frozen_field_outcome():
     The loop asserts that it asserted (CLAUDE.md §0.1 pt 2): a `person` field that named no part would pass every per-part
     line vacuously."""
     import dataclasses
-    import random
     from engine.season.queries.inputs import FieldOutcome, PartOutcome, SideOutcome
     entry, parts_seen, fields = _entry(), 0, 0
     for units in ("side", "person"):
         for seed in range(8):
             inp = dataclasses.replace(_headcount_record((30, 18)), units=units)
-            got = entry(inp, random.Random(seed))
+            got = entry(inp, draw.seeded(draw.H2("test_mass_battle_module", seed)))
             fields += 1
             assert type(got) is FieldOutcome, f"{units}: the arm returned {type(got).__name__}"
             assert got.ended in ("rout", "concession", "time") and isinstance(got.ticks, int) and got.ticks >= 1, got
@@ -346,7 +353,6 @@ def test_past_the_ceiling_returns_scale_gap(monkeypatch):
     through `run_battle`, so the refusal is the ceiling's and not the record's. The boundary is the ceiling itself: 10,000 troops
     resolve, 10,020 do not."""
     import importlib
-    import random
     from engine.season.queries.inputs import FieldOutcome
     from engine.season.seam.contest import REFUSAL_STATUSES, _returned
     config = importlib.import_module("modules.mass_battle.config")
@@ -354,17 +360,17 @@ def test_past_the_ceiling_returns_scale_gap(monkeypatch):
     entry, entered = _entry(), _count_run_battle(monkeypatch)
     over = next(w for w in range(1, 10_000) if cap(w) > config.MAX_TROOPS_PER_UNIT)
     assert cap(over - 1) <= config.MAX_TROOPS_PER_UNIT < cap(over), "vacuous: no weight straddles the ceiling"
-    got = entry(_headcount_record((over, over)), random.Random(0))
+    got = entry(_headcount_record((over, over)), draw.seeded(draw.H2("test_mass_battle_module", 0)))
     assert isinstance(got, dict) and got["status"] == "SCALE-GAP" and got["why"], got
     assert entered == [0], f"run_battle entered {entered[0]} time(s) on a side past the ceiling"
     assert "SCALE-GAP" in REFUSAL_STATUSES
     refused = _returned(dict(got, module="mass_battle"), "a field", "test")
     assert (refused.status, refused.why) == ("SCALE-GAP", got["why"]), refused
     # one side alone past the ceiling refuses the field too
-    got = entry(_headcount_record((over - 1, over)), random.Random(0))
+    got = entry(_headcount_record((over - 1, over)), draw.seeded(draw.H2("test_mass_battle_module", 0)))
     assert isinstance(got, dict) and got["status"] == "SCALE-GAP", got
     # CONTROL
-    got = entry(_headcount_record((over - 1, over - 1)), random.Random(0))
+    got = entry(_headcount_record((over - 1, over - 1)), draw.seeded(draw.H2("test_mass_battle_module", 0)))
     assert isinstance(got, FieldOutcome) and entered == [1], (got, entered)
 
 
@@ -373,16 +379,15 @@ def test_empty_sides_never_reach_run_battle(monkeypatch):
     `_MIN_TROOPS`) return `status="PARTY-GAP"` and never enter `run_battle`. The floor holds only for BOTH sides: CONTROL, a real
     side against a floor-sized one (the attacker marching on a thin garrison) is fought as it always was, through `run_battle`."""
     import importlib
-    import random
     from engine.season.queries.inputs import FieldOutcome
     cap = importlib.import_module("modules.mass_battle.troop_types.recruitment").under_arms_cap
     entry, entered = _entry(), _count_run_battle(monkeypatch)
     assert cap(0.0) == 0 and cap(0.04) == 1, "vacuous: the probe weights are not nobody and one man"
     for pair in ((0.0, 0.0), (0.04, 0.04), (0.0, 0.04), (0.04, 0.0)):
-        got = entry(_headcount_record(pair), random.Random(0))
+        got = entry(_headcount_record(pair), draw.seeded(draw.H2("test_mass_battle_module", 0)))
         assert isinstance(got, dict) and got["status"] == "PARTY-GAP" and got["why"], (pair, got)
     assert entered == [0], f"run_battle entered {entered[0]} time(s) on a field of nobody"
     for pair in ((30.0, 0.0), (0.04, 30.0)):
-        got = entry(_headcount_record(pair), random.Random(0))
+        got = entry(_headcount_record(pair), draw.seeded(draw.H2("test_mass_battle_module", 0)))
         assert isinstance(got, FieldOutcome), (pair, got)
     assert entered == [2], entered

@@ -13,6 +13,7 @@ Falsifier: with the application line in `_resolve_operation` disabled,
 """
 import os
 import random
+from engine.dice_engine import draw
 import sys
 
 import pytest
@@ -54,9 +55,9 @@ def _displacement_taken(actor_id, w):
 def _run_pair(resilience):
     """One planted pair: same stats, same seed, same working; only `resilience` differs."""
     w = _World()
-    plain = ops.attempt_weaving(_Practitioner("plain"), _WORKING, world=w, rng=random.Random(_SEED))
+    plain = ops.attempt_weaving(_Practitioner("plain"), _WORKING, world=w, rng=draw.seeded(draw.H2("test_threadwork_resilience", _SEED)))
     steady = ops.attempt_weaving(_Practitioner("steady", resilience), _WORKING, world=w,
-                                 rng=random.Random(_SEED))
+                                 rng=draw.seeded(draw.H2("test_threadwork_resilience", _SEED)))
     assert plain.degree == steady.degree and plain.net_successes == steady.net_successes, \
         "resilience must not touch the roll — the pair is not planted"
     assert plain.coherence_delta < 0, "the planted working must cost something, or nothing is tested"
@@ -98,7 +99,7 @@ def test_a_huge_resilience_floors_at_zero_and_never_raises(attempt, gain, monkey
     monkeypatch.setattr(ops, "RESILIENCE_GAIN", gain)
     for seed in range(20):
         w = _World()
-        r = attempt(_Practitioner("titan", 10 ** 6), _WORKING, world=w, rng=random.Random(seed))
+        r = attempt(_Practitioner("titan", 10 ** 6), _WORKING, world=w, rng=draw.seeded(draw.H2("test_threadwork_resilience", seed)))
         assert r.coherence_delta <= 0
         assert _displacement_taken("titan", w) == -r.coherence_delta >= 0
         if gain > 0:
@@ -134,12 +135,15 @@ def test_mending_is_unaffected_by_resilience(monkeypatch):
     pre-stressed and the environment stated, so the restorative path actually runs (a fresh mender
     with nothing to return would make the comparison 0 == 0)."""
     outcomes = {}
+    # seed re-picked at B06.99: the stream changed (was _SEED = 0, where the draw is a Failure and the restorative term does not run;
+    # seeds 0..11 scanned: 1 is the first whose degree restores, a Partial)
+    mend_seed = 1
     for gain in (0, 3):
         monkeypatch.setattr(ops, "RESILIENCE_GAIN", gain)
         w = _World()
         coh.apply_coherence_delta("mender", -coh.ELASTIC_RANGE, "pre-stress", world=w)
         r = ops.attempt_mending(_Practitioner("mender", 5), {"scale": "Field"}, world=w,
-                                rng=random.Random(_SEED), environment_in_equilibrium=True)
+                                rng=draw.seeded(draw.H2("test_threadwork_resilience", mend_seed)), environment_in_equilibrium=True)
         outcomes[gain] = (r.degree, r.coherence_delta, r.coherence_restored,
                           _displacement_taken("mender", w))
     assert outcomes[0] == outcomes[3]

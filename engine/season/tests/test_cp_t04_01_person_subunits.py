@@ -6,7 +6,7 @@ THE FIELD IS HAND-BUILT, NOT NATURAL. One season of the shipped realm fights alm
 `set_s_014` marching on `set_s_036` with the Crown's two marchers at `Person.weight` `WEIGHT` and the Church's six at
 `DEFENDER_WEIGHT`. A weight is 30 troops (`under_arms_cap`, B17.01's one scale), so a weight-1 person is 30 troops, under
 `UNIT_ROUT_FLOOR = 80`, and every subunit of the shipped realm routs on tick 1 (a `Drawn` field nobody is hurt in); a marcher
-of weight 3 is 90. Realm seed 3 loses the field with ONE marcher's subunit routed and the other's untouched (the preconditions
+of weight 3 is 90. The realm at `SEED` loses the field with ONE marcher's subunit routed and the other's untouched (the preconditions
 are asserted below, so a moved fixture reads as a precondition, not a pass). RE-PICKED by B17.01 (the scale, the placement
 by `orderofbattle._place` and the three-way grade moved every fight): of a grid of marcher weights 3 to 8, defender weights 3
 to 10 and seeds 0 to 13, the case the claims need (the first marcher untouched at his full body, the second cut and named
@@ -20,7 +20,7 @@ shape of the `person` arm (one subunit per member, sized by his own weight, the 
 from __future__ import annotations
 
 import importlib
-import random
+from engine.dice_engine import draw
 
 import pytest
 
@@ -31,7 +31,9 @@ from engine.season.tests.test_march import _fold_one, _march_act, _weigh
 from engine.season.tests._field_outcomes import SCALE
 
 # B17.01 RE-PICKED (see the docstring): was seed 7, weight 1, scale 200 (B05.99: seed 8 before it).
-SEED, WEIGHT, DEFENDER_WEIGHT = 3, 3, 7      # the hand-built fold's three knobs
+# Seed re-picked again at the B06/B17 merge: the keyed draw changed the stream (was 3: p_npc_033 cut to 870, both marchers cut). Weights
+# (3, 7) kept; seeds 0..99 scanned for the case (p_npc_033 untouched, p_npc_035 cut, `broke` Event naming him): seed 81 is the first (1000 / 90).
+SEED, WEIGHT, DEFENDER_WEIGHT = 81, 3, 7      # the hand-built fold's three knobs
 MARCHERS = ("p_npc_033", "p_npc_035")
 
 
@@ -116,7 +118,7 @@ def test_the_shipped_arm_is_the_person_arm_and_side_is_the_control_that_carries_
     inp = MassBattleInput(weights=((2, 2), (6,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None,
                           origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, condition_scale=SCALE,
                           members=(("a0", "a1"), ("b0",)), units="side")
-    record = _mb().resolve_field(inp, random.Random(0))
+    record = _mb().resolve_field(inp, draw.seeded(draw.H2("test_cp_t04_01_person_subunits", 0)))
     assert all(side.parts == () and side.broke_first is None for side in (record.attacker, record.defender))
 
 
@@ -143,7 +145,7 @@ def test_the_engines_order_of_breaking_names_each_unit_once_and_not_a_unit_swept
     def fight(weight, seed):
         a = mb._person_unit("side_a", (weight,) * 3, ("a0", "a1", "a2"), "A", 5)
         b = mb._person_unit("side_b", (weight,) * 3, ("b0", "b1", "b2"), "B", 5)
-        with rngsource.using(random.Random(seed)):
+        with rngsource.using(draw.seeded(draw.H2("test_cp_t04_01_person_subunits", seed))):
             return run_battle(a, b, max_ticks=18)["broke"], a, b
 
     named = 0
@@ -172,7 +174,7 @@ def test_an_unknown_arm_is_refused():
     inp = MassBattleInput(weights=((2,), (2,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None,
                           origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, condition_scale=SCALE, units="squad")
     with pytest.raises(ValueError):
-        _mb().resolve_field(inp, random.Random(0))
+        _mb().resolve_field(inp, draw.seeded(draw.H2("test_cp_t04_01_person_subunits", 0)))
 
 
 def test_field_input_hands_the_members_beside_the_weights_and_the_fixture():

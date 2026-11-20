@@ -21,7 +21,6 @@ THE RECORDED ROWS (read, not excused): `VolleyLine` stays as a shape, its instru
 from __future__ import annotations
 
 import os
-import random
 import sys
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
@@ -30,7 +29,8 @@ if ROOT not in sys.path:
 
 os.environ["MB_FRICTION"] = "0"   # friction off, read by `config` at import: set before it is imported
 
-from modules.mass_battle import config  # noqa: E402
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import config, rngsource  # noqa: E402
 from modules.mass_battle.orchestration import run_battle  # noqa: E402
 from systems.mass_battle.sim import validators as _val  # noqa: E402
 from systems.mass_battle.sim.engine import build_army, build_unit  # noqa: E402
@@ -59,15 +59,15 @@ def _fingerprint(*armies):
 
 
 def _field(troop_type, role, seed):
-    random.seed(seed)
     spec = {"troop_type": troop_type}
     if role is None:
         spec["shape"] = "Line"
     else:
         spec["role"] = role
-    a = build_army([spec], "R", "A")
-    b = build_unit("Line", 3, "E", "B", 25)
-    run_battle(a, b, max_ticks=18)   # [JUSTIFIED: the probe's own engagement length, the one the role tests fight]
+    with rngsource.using(draw.seeded(draw.H2("role_edges_probe", seed))):
+        a = build_army([spec], "R", "A")
+        b = build_unit("Line", 3, "E", "B", 25)
+        run_battle(a, b, max_ticks=18)   # [JUSTIFIED: the probe's own engagement length, the one the role tests fight]
     return _fingerprint(a, b)
 
 

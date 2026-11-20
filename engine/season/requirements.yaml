@@ -862,14 +862,34 @@ rows:
         text: >-
           the draw is one owner's, keyed: `pytest engine/tests/test_draw.py -q`; same seed twice,
           same hash. Last recorded `no` (14 `random.Random(` constructions in 7 files,
-          `HOLISTIC_AUDIT_part2.md` H-10); moved by A-30, `11_GO_one_draw_owner` (B06).
+          `HOLISTIC_AUDIT_part2.md` H-10); moved by A-30, `11_GO_one_draw_owner` (B06): from B06.99
+          the three constructions left in runtime code are `harness/strife.py::pair_profile`,
+          `::link_profile` and `harness/arc.py::shuffled_causes`, read by `test_draw.py`.
           `[ASSUMPTION: R-09.d and .e are conjuncts of the row and not only gates of B06 and B07 —
           basis: the standing rule names R-09; v11's text would read met on one verb at two bands
           while nine in ten successes stay a fixed function of state. Revert: drop them; the row
           can then read met at B07 plus BA1.]`
         argv: ["python", "-m", "pytest", "engine/tests/test_draw.py", "-q"]
         expects: "the test file passes; the same seed twice gives the same hash"
-        holds: "unread"
+        holds: "yes"
+        reading:
+          tree: "38494b4fb (re-pin tree: this commit)"
+          date: "2026-11-18"
+          seed: 0
+          seasons: 1
+          line: >-
+            `pytest engine/tests/test_draw.py -q`: 10 passed in 1.09s; the realm content hash at seed 0 after one season
+            (`populated.run(1, 0, w=build_realm(0))`), run twice under `PYTHONHASHSEED` 0, 1 and 2 (six runs): 7ccf4abe89d508d4221e0a0c7cbcbfaf
+            every time, and the same under `python3.11` and `python3.13`; seeds 1 and 2 read 8c038011362cc69a17e964f0bfd3735f and
+            61af70f40c67f8972a416b8c59612789 in every pair
+          control: >-
+            the hash is the one B06.04, B06.05 and B06.06 each read at their own commits (7ccf4abe89d508d4221e0a0c7cbcbfaf), so it is a
+            function of the key and not of the run; B05's close read ce765e35b9f59de3aa6f3485f0286772 at the same seed (the stream
+            change, re-pinned in `_realm_goldens.py`)
+          does_not_show: >-
+            that the stream is a balance-neutral change (the two-arm reading over seeds 0 to 9 is B06.99's other step); a run past one
+            season twice (two seasons are pinned in `_realm_goldens.py`, not run twice here); the `random.Random(`
+            count itself (`test_no_random_Random_in_runtime_code` in the same file counts it)
     blocks: [03_PC_duel_chain_reach, 03_PC_person_inputs_content]
     # for combat: reach (`03_PC_duel_chain_reach`, V12 B01, landed) and per-person inputs (`03_PC_person_inputs_content`, V12 B18); `register.py` reads no `blocks:` value, so these are plan-carrier ids, written as the proposals name them
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W23 spent in substance (`fight` resolves through the combat seam and is graded); H-98 closed (combat's three bands are data and nothing keys a fourth)

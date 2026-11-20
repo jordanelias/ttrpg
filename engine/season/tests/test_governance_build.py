@@ -844,14 +844,19 @@ def _load_with(table_text: str):
                 _verbs.VERB_TABLE = table
 
 
-_LEVY_ROW = (
-    '  - verb:        "requisition"\n'
-    '    scale:   "settlement"\n'
-    '    scale_note: "a requisition moves a Rung\'s stores -- the rung IS the subject"\n'
-    '    stratum:     "uncontested_material"\n'
-    '    eligibility: ["remit:issue", "presence:<rung>"]\n'
-    '    beneficiary: "actor"\n'
-)
+def _row_head(verb: str) -> str:
+    """A verb row's text from its `- verb:` line through its `beneficiary:` line, cut from the shipped
+    file. B07.01 inserted `difficulty:`/`capability:` (and their notes) between `verb:` and `scale:`, so a
+    hand-copied block no longer matched the file and the plants below substituted nothing (the vacuity
+    assertion caught it); cutting the block from the file keeps the plant matching whatever a lane
+    puts between the two lines."""
+    src = _verb_table_text()
+    start = src.index(f'  - verb:        "{verb}"\n')
+    end = src.index("    beneficiary:", start)
+    return src[start:src.index("\n", end) + 1]
+
+
+_LEVY_ROW = _row_head("requisition")
 
 # ⚠ PLAN POSITION `19` TYPED `requisition` (`transfer`'s form-2 cell plus a `basis` conjunct), and a typed
 # cell's `needs:` ADMITS `to` -- so `beneficiary: to` on `requisition` became CARRIABLE and stopped being the
@@ -865,12 +870,7 @@ _LEVY_ROW = (
 # -- untyped (`requires: —`, `create_record`'s shape: no precondition, so no cell) and `beneficiary: actor`,
 # the shape the plant needs. The two tests above keep `requisition`: a missing or off-roster beneficiary is
 # refused whatever the row's cell.
-_UNTYPED_ROW = (
-    '  - verb:        "conceal"\n'
-    '    stratum:     "social"\n'
-    '    eligibility: ["own"]\n'
-    '    beneficiary: "actor"\n'
-)
+_UNTYPED_ROW = _row_head("conceal")
 
 
 def test_lb6d_every_verb_declares_a_rostered_beneficiary():
@@ -2949,7 +2949,12 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # ⚠⚠ B05.99, the batch's one re-pin: (793, 793) -> (778, 778), A RE-RECORD WITH THE BATCH THAT MOVED IT: the B05 movers
     # `_realm_goldens.py` lists (first moved here by B05.02, the one sampler: 775 at its own commit) move the act mix (seed 0, one
     # season; `_realm_goldens.CENSUS[(0, 1)]` records the 778). The arms still part in the ledgers, asserted below.
-    assert (out["acts"], cout["acts"]) == (778, 778), (
+    # ⚠⚠ B06.99, the batch's one re-pin: (778, 778) -> (749, 749), A RE-RECORD WITH THE UNIT THAT MOVED IT: the uniform's source
+    # changes from CPython's generator to the keyed mix (B06.04, A-30), a stream change and not a balance change (seed 0, one season;
+    # `_realm_goldens.CENSUS[(0, 1)]` records the 749). The arms still part in the ledgers, asserted below.
+    # ⚠⚠ B06/B14 merge re-pin: (749, 749) -> (750, 750), A RE-RECORD WITH THE UNITS THAT MOVED IT: B14's combat record was pinned against
+    # the old stream and now reads against the keyed one (seed 0, one season; `_realm_goldens.CENSUS[(0, 1)]` records the 750).
+    assert (out["acts"], cout["acts"]) == (750, 750), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")
