@@ -1,6 +1,6 @@
 # Mass battle: troop floor, troops per weight, typical army size, cells, and the cell-to-cell refill
 
-## Status: PROPOSED 2026-11-20 (not ratified; reference only, CLAUDE.md §0.05). Prepared mid-close of batch B17-mb-scale at Jordan's request. Nothing here is built. ED-MB-0101 is the ruling it answers.
+## Status: ADOPTED PROVISIONALLY FOR TESTING 2026-11-20 (Jordan: "Adopt troop scale proposals for the sake of testing going forward"; "Horse maximum 75. Just go with that for now."). Section 4's package is the testing baseline; a later ruling replaces any of it. Built: the horse maximum of 75 (`references/troops.yaml`). Not built: the army verbs that assemble typical armies, and refill options C and D (B19, with a measurement). ED-MB-0101 is the ruling it answers (its last row records the adoption). Reference only (CLAUDE.md §0.05): the code is the mechanism.
 
 ## 0. What is ruled, and what is open
 
@@ -90,7 +90,7 @@ The conflict (observed, `geometry.py:123-127`): horse rows carry `cell_cap: 50` 
 | C. Round horse units to multiples of 50 | cap 50 and floor 50 both hold; the muster and `_cut` round each person's horse troops, and the lost troops are unaccounted |
 | D. Horse cap 100, with each horse cell counting two grid cells | one density, a doubled footprint; changes frontage and contact geometry |
 
-Recommend A: it is the only option that keeps both rulings literal. Its 75 is a calibration, so it needs your word or a measurement, which I have not taken.
+**Adopted: A** (Jordan, 2026-11-20: "Horse maximum 75"). 75 is a calibration, not a measurement; the cell-band test now asserts every horse cell starts between 50 and 75 for the counts that used to fall under 50.
 
 ### P5. Replenishing cells, and what it implies for the unit minimum
 

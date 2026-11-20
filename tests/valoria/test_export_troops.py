@@ -139,7 +139,7 @@ def test_the_transcribed_rows_read_as_the_old_tables_did():
     assert not registry.is_mounted('knights_templar') and registry.is_mounted('light_cavalry')
     assert sorted(registry.MOUNTED_TYPES) == ['cavalry', 'light_cavalry', 'mounted_archers']
     from modules.mass_battle import config
-    assert config.cell_cap_for('knights_templar') == 50 == config.cell_cap_for('cavalry') == config.CELL_CAP // 2
+    assert config.cell_cap_for('knights_templar') == 75 == config.cell_cap_for('cavalry') == config.CELL_CAP * 3 // 4
     assert config.cell_cap_for('pike') == config.CELL_CAP == config.cell_cap_for('infantry') == config.cell_cap_for('zzz')
     assert registry.stats_for('infantry') is None and 'infantry' not in registry.TROOP_TYPE_STATS
     from modules.mass_battle.equipment import loadout_for

@@ -18,7 +18,7 @@
 # `strength` is the smallest whole number at or above the carry demand of the row's own armour (personal combat's
 # `ARMOR_DEMAND`: none 0, light 5/3, medium 10/3, heavy 5), so a type carrying only its primary pays nothing, as today;
 # `heavy_cut` and `heavy_blunt` are weight classes more than weapons, and both carry a pole weapon's reach today;
-# knights templar are `mounted: false` with a 50-troop cell and a lance class, which today's tables say and which
+# knights templar are `mounted: false` with a 75-troop cell and a lance class, which today's tables say and which
 # contradict each other (one visible cell to set); which named weapons of personal combat's roster troops carry
 # (`arming` is the example the proposal uses).
 
@@ -79,7 +79,7 @@ classes:
 #   charge                      charge penetration: 3 for today's `cavalry`, 0 otherwise
 #   wheel                       the fast enveloping wheel: today's `cavalry` and `light_cavalry`
 #   default_role                the role a unit of the type takes when none is named: `Kite` for today's `mounted_archers`
-#   cell_cap                    the most troops a cell holds: 50 for the four horse types (half of `CELL_CAP`, P-DEC-3: a horse and rider take more ground), `CELL_CAP` (100) else. ⚠ 50 is also `CELL_FLOOR` (ED-MB-0101: "cells hold 50-100"), so a horse unit whose troops are not a multiple of 50 starts with cells UNDER 50 (333 troops: 7 cells of 47.6); the two rulings cannot both hold at 50, and which yields is Jordan's
+#   cell_cap                    the most troops a cell holds: 75 for the four horse types (P-DEC-3: a horse and rider take more ground, so fewer than `CELL_CAP`; Jordan, 2026-11-20, "Horse maximum 75", so the horse band is `CELL_FLOOR` 50 to 75 and both rulings hold), `CELL_CAP` (100) else
 #   ranks                       the unit's default depth: the tree has none today, so 1 (today's one-rank bodies)
 #   primary, secondary          an `arms` key, or null
 #   armour                      an `armour_tiers` member, or null
@@ -102,7 +102,7 @@ troops:
      training_site: barracks, min_site_condition: 0.0, upkeep: 0}
   cavalry:
     {power: 5, discipline: 5, morale: 5, strength: 5, mounted: true, charge: 3, wheel: true, default_role: null,
-     cell_cap: 50, ranks: 1, primary: heavy_cut, secondary: null, armour: heavy, roles: [Shock, Flanker],
+     cell_cap: 75, ranks: 1, primary: heavy_cut, secondary: null, armour: heavy, roles: [Shock, Flanker],
      training_site: stable, min_site_condition: 0.0, upkeep: 0}
   archers:
     {power: 3, discipline: 3, morale: 3, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
@@ -122,7 +122,7 @@ troops:
      training_site: siege_workshop, min_site_condition: 0.5, upkeep: 0}
   knights_templar:
     {power: 5, discipline: 6, morale: 6, strength: 5, mounted: false, charge: 0, wheel: false, default_role: null,
-     cell_cap: 50, ranks: 1, primary: heavy_blunt, secondary: null, armour: heavy, roles: null,
+     cell_cap: 75, ranks: 1, primary: heavy_blunt, secondary: null, armour: heavy, roles: null,
      training_site: stable, min_site_condition: 0.5, upkeep: 0}
   pike:
     {power: 4, discipline: 4, morale: 5, strength: 4, mounted: false, charge: 0, wheel: false, default_role: null,
@@ -138,11 +138,11 @@ troops:
      training_site: archery_range, min_site_condition: 0.0, upkeep: 0}
   mounted_archers:
     {power: 3, discipline: 3, morale: 3, strength: 2, mounted: true, charge: 0, wheel: false, default_role: Kite,
-     cell_cap: 50, ranks: 1, primary: bow, secondary: null, armour: light, roles: [Kite],
+     cell_cap: 75, ranks: 1, primary: bow, secondary: null, armour: light, roles: [Kite],
      training_site: stable, min_site_condition: 0.0, upkeep: 0}
   light_cavalry:
     {power: 3, discipline: 3, morale: 4, strength: 2, mounted: true, charge: 0, wheel: true, default_role: null,
-     cell_cap: 50, ranks: 1, primary: light_cut, secondary: null, armour: light, roles: [Flanker],
+     cell_cap: 75, ranks: 1, primary: light_cut, secondary: null, armour: light, roles: [Flanker],
      training_site: stable, min_site_condition: 0.0, upkeep: 0}
   # The unmustered body of a side with no army Record, carrying the literals that side lends it today
   # (`massbattle._SEASON_FORCE_POWER` 4, `_MVP_UNIT_COMMAND['discipline']` 5). It has no `morale` (`_weighted_unit` sets

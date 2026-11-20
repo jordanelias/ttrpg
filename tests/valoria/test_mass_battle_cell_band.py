@@ -33,27 +33,22 @@ def test_every_cell_starts_between_fifty_and_a_hundred():
     assert checked >= 1000
 
 
-def test_a_horse_cell_never_exceeds_its_own_cap():
-    checked = 0
-    for troops in (200, 333, 400, 1234, 4000):
-        for troop_type in ('cavalry', 'light_cavalry', 'knights_templar', 'mounted_archers'):
-            u = _unit(troops, troop_type)
-            assert u.cell_troops and max(u.cell_troops.values()) <= 50 + 1e-9, (troops, troop_type)
-            checked += 1
-    assert checked >= 1
+HORSE = ('cavalry', 'light_cavalry', 'knights_templar', 'mounted_archers')
 
 
-def test_a_horse_unit_of_whole_fifties_starts_every_cell_at_fifty():
-    """The horse half of the band, as far as it holds: a horse cap (50) is the cell floor, so a unit whose troops are a multiple of 50 starts
-    every cell at exactly 50. One whose troops are not starts UNDER 50 (333 troops: 7 cells of 47.6), which the two rulings (P-DEC-3,
-    ED-MB-0101) cannot both avoid; that case is Jordan's and is not asserted here."""
+def test_every_horse_cell_starts_between_fifty_and_seventy_five():
+    """Jordan, 2026-11-20: "Horse maximum 75". A horse cell holds at most 75 (P-DEC-3: fewer than foot) and, as every cell, at least
+    `CELL_FLOOR` at its start (ED-MB-0101), for the counts that were under 50 when the horse cap was 50 (333: 7 cells of 47.6)."""
     checked = 0
-    for troops in (200, 400, 1000, 4000):
-        for troop_type in ('cavalry', 'light_cavalry', 'knights_templar', 'mounted_archers'):
-            u = _unit(troops, troop_type)
-            assert min(u.cell_troops.values()) >= CELL_FLOOR - 1e-9, (troops, troop_type, min(u.cell_troops.values()))
-            checked += 1
-    assert checked == 16
+    for troops in (200, 201, 250, 333, 400, 777, 1000, 1234, 4000, 9999):
+        for troop_type in HORSE:
+            for shape in SHAPES:
+                for conc in (None, 50, 75):
+                    u = _unit(troops, troop_type, shape, conc)
+                    for cid, t in u.cell_troops.items():
+                        assert CELL_FLOOR - 1e-9 <= t <= 75 + 1e-9, (troops, troop_type, shape, conc, cid, t)
+                        checked += 1
+    assert checked >= 1000, checked
 
 
 def test_a_unit_of_two_hundred_has_four_cells():
@@ -85,7 +80,7 @@ def test_an_explicit_grid_below_four_cells_is_widened_to_four():
 def test_the_troop_file_caps_agree_with_the_band():
     from modules.mass_battle.troop_types import table
     assert config.cell_cap_for('infantry') == CELL_CAP == 100
-    assert config.cell_cap_for('cavalry') == 50
+    assert config.cell_cap_for('cavalry') == 75
     assert all(table.cell_cap_of(t) <= CELL_CAP for t in FOOT + ('cavalry',))
 
 

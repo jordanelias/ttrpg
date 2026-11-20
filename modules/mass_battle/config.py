@@ -231,7 +231,7 @@ MAX_TROOPS_PER_UNIT = 10000 # design ceiling on a single unit's troop count  # [
 #  density factor (attrition `min(tpc,CELL_CAP)`) drops naturally via the higher ncells, no attrition edit.
 MB_TROOP_DENSITY_CAP = DEFAULT.MB_TROOP_DENSITY_CAP
 # [B17.10] The per-type cap is the troop file's `cell_cap` column (`references/troops.yaml`, read by `troop_types/table.py`):
-# 50 (half of `CELL_CAP`) for the four horse types, `CELL_CAP` for every other row. The `cell_cap` column of `references/troops.yaml` is the one owner (B17.10; `TROOP_TYPE_DENSITY_CAP` is deleted).
+# 75 (three quarters of `CELL_CAP`; Jordan, 2026-11-20) for the four horse types, `CELL_CAP` for every other row. The `cell_cap` column of `references/troops.yaml` is the one owner (B17.10; `TROOP_TYPE_DENSITY_CAP` is deleted).
 def cell_cap_for(troop_type):
     """Max fighting troops per 1x1 cell for a troop type (P-DEC-3). A mounted row packs looser (its `cell_cap`); every
     other type, a type the troop file does not name, and the whole engine when MB_TROOP_DENSITY_CAP is OFF use CELL_CAP -> byte-exact."""

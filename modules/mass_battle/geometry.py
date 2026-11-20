@@ -58,7 +58,7 @@ CELL_PATTERN_FN = {
 
 # ─── CONTINUOUS-SCALE FOOTPRINT GENERATOR (Jordan directive 2026-06-03) ───
 # The tier *_cells fns above stay for the legacy path. footprint_for lays a continuous troop count into a
-# shape at a user-set concentration, bounded so per-cell troops stay in [CELL_FLOOR, CELL_CAP] (a horse type's cap is lower: see below); achievable
+# shape at a user-set concentration, bounded so per-cell troops stay in [CELL_FLOOR, CELL_CAP] (a horse type's cap is 75: see below); achievable
 # density is the closest the shape's discrete geometry allows within that bound.
 def _build_shape_n(shape, n):
     """Build a footprint of EXACTLY `n` cells in `shape`'s aspect, for any n>=1 (ED-MB-0025).
@@ -108,8 +108,7 @@ def footprint_for(shape, troops, concentration, troop_type=None, width=None, dep
         (combat caps it at CELL_CAP downstream), so this honours 'explicitly define the number of columns
         vs rows, which affect each other.' A grid under MIN_CELLS_PER_UNIT cells is deepened to meet it (below).
       • else `concentration` = target troops/cell, which BOUNDS the cell count: cells = round(troops/
-        concentration), clamped so per-cell stays in [CELL_FLOOR, cell_cap_for(troop_type)] (⚠ not for a horse type, whose cap IS the floor: a count that is not
-        a multiple of 50 starts under it, 333 troops being 7 cells of 47.6 -- two rulings of Jordan's, P-DEC-3 and ED-MB-0101, that cannot both hold at 50), built via
+        concentration), clamped so per-cell stays in [CELL_FLOOR, cell_cap_for(troop_type)] (a horse type's cap is 75, so its band is 50 to 75; ED-MB-0101 and P-DEC-3 both hold), built via
         `_build_shape_n`. (The old sparse size-parameter search silently ignored this — a 133-troop Line
         collapsed to 1 cell at every concentration, the M2 measurement bug.)
     [P-DEC-3] A mounted troop_type caps lower (cell_cap_for) so the same troops deploy over MORE cells.
