@@ -1,0 +1,44 @@
+# Part 7 — Precedent adjudication: gating, enabling, reward, sets, mixing
+
+## Status: PROPOSED. Reference only. An adjudication, not a survey: each precedent is read on the same five questions, then judged for Valoria. Tags as in Part 6; **[carried: brief §2]** marks a fact the orchestrator verified by search earlier this session and handed down (FFT, FF5, GURPS Martial Arts, Pathfinder 2e, SaGa); I did not re-read those sources. Nothing here rests on my own recall alone; where I recall a precedent without a sheet, it is tagged **[UNVERIFIED RECALL]** and carries no design claim.
+
+## 7.1 What each precedent does
+
+| precedent | GATING (what unlocks what) | ENABLING (what a unit gains the ability to do) | DYNAMISM AND REWARD (why assembling and playing it satisfies) | SETS AND COMBINATIONS | MIXING ACROSS JOBS |
+|---|---|---|---|---|---|
+| **Troubleshooter** | character level opens slots; class level opens class masteries at 1/4/8/12/16; advanced classes at character level 15 [FAN] | access masteries grant abilities and reactions (Overwatch, Serial Shot) [V] | "one of the best build systems ever devised" [FAN]; role-swapping [V]; but "dizzying" and grind [V] | four-mastery sets, automatic, hidden, hundreds [V] | learned abilities cross classes; class masteries do not; Dance lent by rule [V/FAN] |
+| **Triangle Strategy** | level 10 + Medal of Bravery, level 20 + Medal of Valor; medals limited [V: S10] | promotion "raises stats and unlocks new abilities" [V: S6]; either/or weapon nodes [V: S3] | distinct roles: "characters don't step on each other's toes" [V: S3]; but "linear" [V: S6] | none named | none: "locked to their class paths" [V: S5] |
+| **Tactics Ogre** | Classmark items buy a class; race (Reborn) and alignment (original) gate the list; kill counts gate two classes (original) [V: S8, S17] | four skill slots (Reborn); ranked weapon skills open finishers at 2/4/6/8 [V: S1, S15] | Reborn's unit levels restored on player feedback; PSP's class levels "the 2nd most problematic aspect" [V: S4, S5; FAN: S16] | finishers as rank rewards | skills carry across class change, class-specific ones do not [V: S13] |
+| **Bravely Default** | defeating an asterisk holder unlocks a job [V: B1, B3] | one ability per job level, cap 14; a carried secondary command set; support abilities from any job within a cost limit 1 → 5 [V: B2, B4] | "all of this mixing and matching just begs players to experiment" [V: B12]; but "necessitated grinding" [V: B1] | none named; Abilink borrows a friend's abilities [V: B6] | main job plus one secondary; supports from anywhere [V: B2] |
+| **Final Fantasy Tactics** | a job DAG: Knight at Squire 2, Samurai at Knight 4 + Monk 5 + Dragoon 2, Mime at six parents [V: FF wiki, `precedents_other.md` §1.1] | five slots: primary command, secondary command, one reaction, one support, one movement [V: §1.3]; support can let a job equip another's weapon [V] | jobs as "ability mines"; S-tier jobs and JP exploits [FAN; V] | none as a mechanic; named combinations (Ninja Dual Wield on a Monk) [V] | any learned reaction, support or movement in any job; one secondary [V] |
+| **Fire Emblem: Three Houses** | a seal item per tier plus subject ranks plus a pass-rate floor; a failed exam spends the seal [V: `precedents_other.md` FE3H block] | class mastery permanently teaches an ability usable in any class [V] | "enjoyed planning ahead and growing the students skills for their future classes" [SNIPPET] | none | free after certification; class abilities stay with the class [V] |
+| **Divinity: Original Sin 2** | school points (up to 5 for a school's skills), level tiers, Memory slots (skills cost 1–3) [V: DOS2 block] | skillbooks; cross-school skillbooks need a point in both schools [V] | surfaces and statuses set each other up ("Wet → Shocked") [V] | crafted skillbook pairs (Aerotheurge + Warfare → Breathing Bubble) [V] | free; no class lock; limits are economic [V] |
+| **D&D 5e** | ability score 13 in both classes' prime abilities [V: SRD 5.1] | partial proficiencies from a new class [V] | "Most of the fun features you get are in the first few levels" [FAN] | none | full, with carve-outs; dips [V/FAN] |
+| **Pathfinder 2e** | a dedication feat, then "two other feats from your current archetype" before another [V: AoN] | archetype feats replace class feats [V] | "sidegrades rather than straight upgrades" [FAN] | archetype feat chains [V] | gated by the dedication lockout, "a universal safety valve" [FAN] |
+| **Final Fantasy V** | jobs from crystals [carried: brief §2] | mastered job abilities carry to the Freelancer and Mime [carried] | — | — | mastery carry-over [carried] |
+| **GURPS Martial Arts** | a technique's level capped by its parent skill [carried] | the default: an unlearned technique at a penalty [carried] | — | — | styles as named bundles [carried] |
+| **SaGa** | — | techniques "glimmer" from use in battle [carried] | surprise | — | — |
+
+## 7.2 The verdict for Valoria
+
+| precedent | takes | rejects | why |
+|---|---|---|---|
+| **Troubleshooter** | the board as a layer beside the job; three kinds of entry; a pinned foundation; four-member automatic sets; three saved boards; lending a behaviour by a board rule | hidden recipes; hundreds of sets; set magnitudes and forced outcomes; a consumable to unequip; drops from defeated enemies | Part 6 §6.4 row by row; the rejections are each a repo ruling (ED-PC-0023; the fiat audit; PC-22) or a reported failure |
+| **Triangle Strategy** | a person's own line as an ordering and a head start; either/or choices made by the board | a line that no one else may walk; promotion items | the bespoke line breaks "every build available" if it is a wall (Part 1, J-C); as a path through a shared curriculum it does not (J-D) |
+| **Tactics Ogre** | the 1–8 rank ladder; depth rewards at fixed ranks (sets open at 3, Part 4); no-death training battles as the shape of `spar` | growth by use; class-wide levels | growth by use contradicts the 2026-11-07 ruling; class-wide levels erased the unit and were reversed by the same developer |
+| **Bravely Default** | a budget for what is carried that grows over the game; a carried secondary as the mixing rule | the swap of the active job; JP only to the current job | the swap carries no historical ground and invites a per-job bonus; single-job JP is a grind generator |
+| **FFT** | orthogonal columns; one reaction slot as a real choice; a prerequisite DAG as `requires` | JP; jobs as ability mines | JP is growth by use; a job you take only to strip it is a curriculum with no identity |
+| **FE3H** | learning is permanent and portable; a teacher's scarcity as a gate (the seal, re-read as a person) | exams with a failure cost | Valoria has no GM to run an exam; a teacher's own level is the gate the world already has |
+| **DOS2** | Memory: a capacity from an attribute that skills cost against (the shape of attention); combinations that set each other up through state (the shape of a set opening a gate) | free mixing with only economic limits | without a primary tradition, familiarity loses its reader and the fixed baseline its owner |
+| **D&D 5e** | — | front-loaded dips | a second tradition gives techniques at the person's own levels, so there is no front-loaded prize to dip for |
+| **Pathfinder 2e** | the dedication lockout as the cross-training threshold | — | cheap, legible, and a pacing rule rather than a balance rule here |
+| **FF5** | mastery carry-over as a second tradition's lend | — | [carried] |
+| **GURPS** | a parent cap as `requires` with a level | defaulting an unlearned technique at a penalty | the default breaks the engine's exact-zero guarantee (an untaught technique is inert, `ability_primitives.py:180-181`) and the no-fiat ruling |
+| **SaGa** | — | glimmer by use | growth by use; the ruling |
+
+## 7.3 What the adjudication settles
+
+1. **Gating is free data except where the engine already gates.** Every precedent gates by authored data (levels, items, prerequisites); the only gates Valoria cannot author are its physics (Part 3 §3.1). So every gate in this proposal is host-side and every engine gate is left as it is, apart from four widenings by set.
+2. **Enabling is where the satisfaction lives.** The praise in every sheet attaches to something a unit can *do* that it could not (Troubleshooter's Overwatch, FFT's reactions, DOS2's surfaces), not to a number. Hence sets open gates and never add magnitude.
+3. **Mixing needs one anchor.** The free-mixing precedents (DOS2, Troubleshooter's abilities) and the locked ones (Triangle Strategy) both drew complaints at their extreme; the satisfied middle (FFT, Bravely Default, FE3H) keeps a primary identity and lends across it. J-D does the same.
+4. **Hidden or vast combination spaces fail legibility.** Troubleshooter's hidden hundreds and FFT's job mines are the two warnings; three visible sets per tradition is the answer.
