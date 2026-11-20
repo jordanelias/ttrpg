@@ -79,7 +79,8 @@ def test_a_side_with_an_order_of_battle_and_the_headcount_side_facing_it_are_siz
 
     def spy(oob, weight, side, morale_start):
         sized.append((side, oob, weight))
-        return NS(total_troops=lambda: float(under_arms_cap(weight)) if oob is None else 99.0)
+        size = float(under_arms_cap(weight)) if oob is None else 99.0
+        return NS(total_troops=lambda: size, units=[NS(_start_troops=size)])     # `_refusal` (B17.04) reads each Army's units
 
     monkeypatch.setattr(_mb(), "_oob_unit", spy)
     inp = _field(orders_of_battle=(object(), None))
