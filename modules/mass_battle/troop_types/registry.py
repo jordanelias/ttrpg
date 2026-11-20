@@ -1,12 +1,15 @@
 """modules.mass_battle.troop_types.registry — troop-type stat presets + gated role menus.
-Owns TROOP_TYPE_STATS, stats_for, roles_for, role_allowed. The "stat home" for the taxonomy (ED-1018):
-a subunit OF a type draws these per-subunit combat stats. Depends on config (TROOP_TYPE_ROLES) only —
-no up-DAG import, no cycle.
+The "stat home" for the taxonomy (ED-1018): a subunit OF a type draws these per-subunit combat stats. [B17.10] The
+rows are authored once, in the troop file (`references/troops.yaml`, read by `troop_types/table.py`); `TROOP_TYPE_STATS`
+and `MOUNTED_TYPES` are that file read as tables, and `stats_for`, `is_mounted` and `roles_for` are its loader's
+functions under their old names. Reach (`TROOP_TYPE_REACH`, `reach_for`) is still kept here until B17.11 derives it
+from the arm. Depends on config and the loader only — no up-DAG import, no cycle.
 [canonical: mass_battle_v30.md §B.2 troop table; config TROOP_TYPE_ROLES/ROLE_SPEC]"""
 from modules.mass_battle.config import *
 import modules.mass_battle.config as _cfg
 import functools as _functools
 from modules.mass_battle.equipment import loadout_for
+from modules.mass_battle.troop_types import table as _table
 
 __all__ = ['MOUNTED_TYPES', 'is_mounted', 'roles_for', 'role_allowed', 'TROOP_TYPE_STATS', 'stats_for',
            'REACH_SHORT', 'REACH_MELEE_DEFAULT', 'TROOP_TYPE_REACH', 'reach_for',
@@ -15,13 +18,13 @@ __all__ = ['MOUNTED_TYPES', 'is_mounted', 'roles_for', 'role_allowed', 'TROOP_TY
 
 
 def is_mounted(troop_type):
-    """True iff `troop_type` fights mounted (MOUNTED_TYPES, below). Case-sensitive."""
-    return troop_type in MOUNTED_TYPES
+    """True iff `troop_type` fights mounted (the troop file's `mounted` column). Case-sensitive."""
+    return _table.is_mounted(troop_type)
 
 
 def roles_for(troop_type):
     """Roles a troop type may be assigned (its gated menu); falls back to the 'any' menu."""
-    return TROOP_TYPE_ROLES.get(troop_type, TROOP_TYPE_ROLES.get("any", []))
+    return _table.roles_for(troop_type)
 
 def role_allowed(troop_type, role):
     """True iff `role` is in `troop_type`'s gated menu."""
@@ -29,54 +32,25 @@ def role_allowed(troop_type, role):
 
 
 # ─── CANONICAL TROOP-TYPE STAT PRESETS ──────────────────────────────────────
-# The "stat home" for the troop taxonomy: a subunit OF a given type carries these
-# per-subunit combat stats. Values are transcribed directly from the canonical BG
-# unit table (mass_battle_v30.md §B.2) — the TTRPG Power / Discipline / Morale columns.
-# Keyed to match the config TROOP_TYPE_ROLES snake_case taxonomy. Accessor: stats_for;
-# constructor: Unit.of_type. dr (armour) and stamina (endurance) are intentionally
-# left to inherit: §B.2's Armour column maps to a vs-Piercing DR scale
-# (None=0/Light=1/Medium=2/Heavy=3) whose identity with the Unit.dr
-# field is unconfirmed, and Endur (1-6) has no clean bridge to the 0-100 stamina pool. [ED-1018]
-TROOP_TYPE_STATS = {
-    # troop_type        : power, discipline, morale   (morale_start defaults to morale)
-    "levy":             {"power": 1, "discipline": 1, "morale": 2},
-    "light_infantry":   {"power": 3, "discipline": 3, "morale": 4},  # [canonical: mass_battle_v30.md §B.2 — troop-type stat table]
-    "heavy_infantry":   {"power": 4, "discipline": 4, "morale": 5},  # [canonical: mass_battle_v30.md §B.2 — troop-type stat table]
-    "cavalry":          {"power": 5, "discipline": 5, "morale": 5},
-    "archers":          {"power": 3, "discipline": 3, "morale": 3},
-    "crossbow":         {"power": 3, "discipline": 3, "morale": 3},
-    "sling":            {"power": 2, "discipline": 2, "morale": 3},
-    "artillery":        {"power": 2, "discipline": 2, "morale": 3},
-    "knights_templar":  {"power": 5, "discipline": 6, "morale": 6},  # [canonical: mass_battle_v30.md §B.2 — troop-type stat table]
-    # [v2 Stage E, ED-MB-0014, Jordan P-DEC-1 2026-07-22 "add a pike troop type carrying reach 0.3"]
-    # A pike block is disciplined heavy formation infantry whose edge is the pike's REACH (0.3, the
-    # longest melee in TROOP_TYPE_REACH below), not raw per-soldier power. Stats mirror heavy_infantry
-    # EXACTLY so reach is the sole, isolated differentiator (no fabricated stat line): §B.2 carries no
-    # pike row, so mirroring the closest canonical type is the non-inventing choice, pending an explicit
-    # §B.2 pike grounding. [provisional-by-analogy: heavy_infantry base + P-DEC-1 reach 0.3]
-    "pike":             {"power": 4, "discipline": 4, "morale": 5},
-    # [ED-IN-0306, Jordan 2026-10-28: "draw from romance of the three kingdoms and total war for generic unit
-    # types"] The generic roster both games share and this table lacked: spear infantry (RTK spearmen, TW spear
-    # line), javelin skirmishers (TW skirmishers) and light cavalry (RTK/TW scouting and flanking horse). Like the
-    # pike above, each is PROVISIONAL-BY-ANALOGY: §B.2 has no row, so the stats mirror the nearest canonical type
-    # and the isolated differentiator is reach, weapon, role or speed -- no fabricated stat line.
-    "spearmen":         {"power": 3, "discipline": 3, "morale": 4},  # mirrors light_infantry; differs by spear reach 0.2 + anti-cavalry hold roles
-    "skirmishers":      {"power": 2, "discipline": 2, "morale": 3},  # mirrors sling, the lightest ranged type; differs by weapon (javelin) + harassing roles
-    "mounted_archers":  {"power": 3, "discipline": 3, "morale": 3},  # mirrors archers (U-5 of proposals/2026-09-30-character-and-play-surface/08_mass_battle_units.md: it had reach, roles and a density cap but no stat line); differs by mounted speed/density and the Kite role
-    "light_cavalry":    {"power": 3, "discipline": 3, "morale": 4},  # mirrors light_infantry (light cut, light armour); differs by mounted speed/density and flank/pursuit roles, no lance (no charge penetration)
-}
-# Types that fight mounted: the one owner of "is this a horse". knights_templar is deliberately NOT here.
-MOUNTED_TYPES = frozenset({"cavalry", "mounted_archers", "light_cavalry"})
+# The "stat home" for the troop taxonomy: a subunit OF a given type carries these per-subunit combat stats, the
+# TTRPG Power / Discipline / Morale columns of the canonical BG unit table (mass_battle_v30.md §B.2), authored in the
+# troop file's rows (each row's provenance is its entry there; the pike, spearmen, skirmishers, mounted_archers and
+# light_cavalry lines are PROVISIONAL-BY-ANALOGY to the nearest canonical type, ED-MB-0014 and ED-IN-0306).
+# Keyed to match the troop-type snake_case taxonomy. Accessor: stats_for; constructor: Unit.of_type. dr (armour) and
+# stamina (endurance) are intentionally left to inherit: §B.2's Armour column maps to a vs-Piercing DR scale
+# (None=0/Light=1/Medium=2/Heavy=3) whose identity with the Unit.dr field is unconfirmed, and Endur (1-6) has no clean
+# bridge to the 0-100 stamina pool. [ED-1018]
+TROOP_TYPE_STATS = _table.stats_table()
+# Types that fight mounted: the one owner of "is this a horse" is the troop file's `mounted` column. knights_templar is
+# deliberately NOT here.
+MOUNTED_TYPES = _table.mounted_types()
 
 
 def stats_for(troop_type):
     """Canonical per-subunit combat stats for a troop type (mass_battle_v30 §B.2), as a
     fresh dict {power, discipline, morale}, or None if the type has no preset. None lets
     the caller fall back to Army inheritance. Lookup is case-insensitive."""
-    if troop_type is None:
-        return None
-    preset = TROOP_TYPE_STATS.get(str(troop_type).strip().lower())
-    return dict(preset) if preset is not None else None
+    return _table.stats_for(troop_type)
 
 
 # ─── REACH (Stage A — true-adjacency stand-off primitive) ───────────────────

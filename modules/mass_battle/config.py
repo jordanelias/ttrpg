@@ -1,8 +1,9 @@
 """modules.mass_battle.config — module-level tunables/constants (behaviour-frozen P-A extract). Canonical comments preserved."""
 import os as _os
 import os as _sigma_os
+from modules.mass_battle.troop_types import table as _troops   # the troop file's reader: a data file, imports nothing of this package, so no cycle
 
-__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'MB_TROOP_DENSITY_CAP', 'TROOP_TYPE_DENSITY_CAP', 'cell_cap_for', 'UNIT_ROUT_FLOOR', 'ROUT_CASCADE_FRAC', 'MB_CELL_MORALE', 'CELL_MORALE_PULL', 'CELL_BREAK_ROUT_FRAC', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'MB_SUPPORT_RANK_CAP', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'MB_STOCHASTIC_ROUT', 'ROUT_ONSET_FRAC', 'ROUT_CAP_FRAC', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'RANGED_DR_DEFAULT', 'VOLLEY_LETHALITY_SCALE', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'MB_VOLLEY_DENSITY_ENABLED', 'MB_VOLLEY_DENSITY_REF', 'MB_VOLLEY_DENSITY_FLOOR', 'MB_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'MB_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'MB_FEIGNED_RETREAT', 'FEIGNED_RECOGNIZE_OB', 'FEIGNED_RETREAT_OB', 'OVEREXTEND_PENALTY', 'MB_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN', 'MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC', 'MB_YIELD_POCKET', 'YIELD_POCKET_REACH', 'STANCE_SPEED_MOD', 'MB_INTENT_RESOLUTION', 'STANCE_COMMITMENT', 'INTENT_OFFENSE_D', 'INTENT_DEFENSE_D', 'MB_FRACTIONAL_POOL', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'MB_FRICTION', 'MB_FRICTION_SIGMA', 'PER_CELL', 'MB_STAMINA_DRAIN', 'MB_STAMINA_REST', 'MB_ROTATE_FLOOR', 'MB_STAM_SIGMA', 'MB_DEPTH_ROTATE', 'MB_FRONTAGE_BLEND', 'MB_FRONTAGE_REF', 'MB_REFILL_FLOOR', 'MB_CLOSE_RANKS', 'MB_CELL_DAMAGE', 'MB_CHARGE_SIGMA', 'MB_SHOCK_FRONT', 'MB_SHOCK_REAR', 'MB_SHOCK_BRACE_FLOOR', 'MB_SHOCK_HOLD_BRACE', 'MB_SHOCK_DISC_FULL', 'MB_SHOCK_DEPTH_FULL', 'MB_SHOCK_DEPTH_REF', 'MB_SHOCK_SHAKEN_GAIN', 'MB_CAVALRY_SPEED_MULT', 'MB_ENVELOP_SPEED_MULT', 'ENVELOP_STANDOFF', 'ENVELOP_ORBIT_CAP', 'MB_BRACE_ENABLED', 'MB_RECOIL_FRONTAL', 'MB_CHARGE_RECOIL', 'MB_BRACE_SETUP_DELAY', 'MB_RECOIL_CHARGER_GATE', 'MB_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'MB_PIN_REACH', 'MB_REFUSE', 'MB_ENVELOP_MOD', 'MB_ENVELOP_DEPTH_RESIST', 'MB_POCKET_MOD', 'MB_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'MB_KITE_ENABLED', 'MB_KITE_STANDOFF', 'MB_NODE_COHESION', 'MB_CELL_EXCLUSION', 'ROUTE_WAYPOINT_EPS', 'ROUTE_BUDGET_TICKS', 'MB_AMMO_ENABLED', 'MB_VOLLEYS_START', 'MB_VOLLEYS_RESUPPLY']
+__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'MB_TROOP_DENSITY_CAP', 'cell_cap_for', 'UNIT_ROUT_FLOOR', 'ROUT_CASCADE_FRAC', 'MB_CELL_MORALE', 'CELL_MORALE_PULL', 'CELL_BREAK_ROUT_FRAC', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'MB_SUPPORT_RANK_CAP', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'MB_STOCHASTIC_ROUT', 'ROUT_ONSET_FRAC', 'ROUT_CAP_FRAC', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'RANGED_DR_DEFAULT', 'VOLLEY_LETHALITY_SCALE', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'MB_VOLLEY_DENSITY_ENABLED', 'MB_VOLLEY_DENSITY_REF', 'MB_VOLLEY_DENSITY_FLOOR', 'MB_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'MB_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'MB_FEIGNED_RETREAT', 'FEIGNED_RECOGNIZE_OB', 'FEIGNED_RETREAT_OB', 'OVEREXTEND_PENALTY', 'MB_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN', 'MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC', 'MB_YIELD_POCKET', 'YIELD_POCKET_REACH', 'STANCE_SPEED_MOD', 'MB_INTENT_RESOLUTION', 'STANCE_COMMITMENT', 'INTENT_OFFENSE_D', 'INTENT_DEFENSE_D', 'MB_FRACTIONAL_POOL', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'MB_FRICTION', 'MB_FRICTION_SIGMA', 'PER_CELL', 'MB_STAMINA_DRAIN', 'MB_STAMINA_REST', 'MB_ROTATE_FLOOR', 'MB_STAM_SIGMA', 'MB_DEPTH_ROTATE', 'MB_FRONTAGE_BLEND', 'MB_FRONTAGE_REF', 'MB_REFILL_FLOOR', 'MB_CLOSE_RANKS', 'MB_CELL_DAMAGE', 'MB_CHARGE_SIGMA', 'MB_SHOCK_FRONT', 'MB_SHOCK_REAR', 'MB_SHOCK_BRACE_FLOOR', 'MB_SHOCK_HOLD_BRACE', 'MB_SHOCK_DISC_FULL', 'MB_SHOCK_DEPTH_FULL', 'MB_SHOCK_DEPTH_REF', 'MB_SHOCK_SHAKEN_GAIN', 'MB_CAVALRY_SPEED_MULT', 'MB_ENVELOP_SPEED_MULT', 'ENVELOP_STANDOFF', 'ENVELOP_ORBIT_CAP', 'MB_BRACE_ENABLED', 'MB_RECOIL_FRONTAL', 'MB_CHARGE_RECOIL', 'MB_BRACE_SETUP_DELAY', 'MB_RECOIL_CHARGER_GATE', 'MB_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'MB_PIN_REACH', 'MB_REFUSE', 'MB_ENVELOP_MOD', 'MB_ENVELOP_DEPTH_RESIST', 'MB_POCKET_MOD', 'MB_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'MB_KITE_ENABLED', 'MB_KITE_STANDOFF', 'MB_NODE_COHESION', 'MB_CELL_EXCLUSION', 'ROUTE_WAYPOINT_EPS', 'ROUTE_BUDGET_TICKS', 'MB_AMMO_ENABLED', 'MB_VOLLEYS_START', 'MB_VOLLEYS_RESUPPLY']
 
 # [ED-MB-0041] Volley Size-loss -> troop-casualty scale. 3 == the value the gauge baseline (disc 5 / cmd 4 /
 # dr 1) produced.
@@ -80,14 +81,15 @@ MAX_TROOPS_PER_UNIT = 10000 # design ceiling on a single unit's troop count  # [
 #  cells hold fewer troops -> the SAME troop count deploys over MORE cells (wider frontage) -> the combat
 #  density factor (attrition `min(tpc,CELL_CAP)`) drops naturally via the higher ncells, no attrition edit.
 MB_TROOP_DENSITY_CAP = (_sigma_os.environ.get('MB_TROOP_DENSITY_CAP', '1') == '1')
-TROOP_TYPE_DENSITY_CAP = {   # mounted: ~half infantry density (a horse+rider occupies ~2x a man's ground). GROUNDED default, needs_jordan on the value.  # [canonical: P-DEC-3 mechanism; value calibration pending]
-    'cavalry': 100, 'knights_templar': 100, 'mounted_archers': 100, 'light_cavalry': 100,  # light_cavalry: ED-IN-0306, mounted like the rest
-}
+# [B17.10] The per-type cap is the troop file's `cell_cap` column (`references/troops.yaml`, read by `troop_types/table.py`):
+# 100 for the four horse types, `CELL_CAP` for every other row. `TROOP_TYPE_DENSITY_CAP` is deleted; the function stays.
 def cell_cap_for(troop_type):
-    """Max fighting troops per 1x1 cell for a troop type (P-DEC-3). Mounted types pack looser; every
-    other type (and the whole engine when MB_TROOP_DENSITY_CAP is OFF) uses CELL_CAP -> byte-exact."""
-    if MB_TROOP_DENSITY_CAP and troop_type in TROOP_TYPE_DENSITY_CAP:
-        return TROOP_TYPE_DENSITY_CAP[troop_type]
+    """Max fighting troops per 1x1 cell for a troop type (P-DEC-3). A mounted row packs looser (its `cell_cap`); every
+    other type, a type the troop file does not name, and the whole engine when MB_TROOP_DENSITY_CAP is OFF use CELL_CAP -> byte-exact."""
+    if MB_TROOP_DENSITY_CAP:
+        cap = _troops.cell_cap_of(troop_type)
+        if cap is not None:
+            return cap
     return CELL_CAP
 LINE_ASPECT = 1.4           # generator: Line width:depth ratio (from the per-tier tables' progression)  # [CALIBRATED-DEBT: engine generator ratio (coverage_matrix_archive.md "Line=1.4xdepth") — magnitude fitted to engine behaviour, no external source; was tagged `canonical: sim_verification_ledger.json`, the bare-integer self-whitelist deleted in ED-MB-0041 Tier-0.1]
 ENCIRCLEMENT_PENALTY = 1
@@ -491,45 +493,20 @@ POOL_QUALITY_SCALE = float(_sigma_os.environ.get('POOL_QUALITY_SCALE', '0.8'))
 # hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES, MB-04; see pc_formation_design.md §3.5/§9.1).
 # Troop type gates the role menu (the FM "position"→role model). This is a STARTING POINT for the
 # historical troop-type/role research — expect the taxonomy and per-type role lists to be revised.
-TROOP_TYPE_ROLES = {
-    # taxonomy grounded in the historical troop-roles research (Research_Report.md) + design §3.5
-    "heavy_infantry":  ["ShieldWall", "Hold", "Anvil", "Push"],
-    "pike":            ["ShieldWall", "Hold", "Anvil"],   # [v2 Stage E, ED-MB-0014] pike block: defensive/anti-cavalry braced formation (its reach 0.3 is the edge, not mobility)
-    # [B17.07] `Pursue`, `Screen`, `Harass` and `Feint` are on no menu: a choice of one reads identical to no role in 60 of 60
-    # fields (its keyword has no primitive, or only one no season path reaches). A role returns to a menu when a primitive
-    # exists for it: `pursue` with `16_PESSIMIST_MB_rout_has_two_exits` (`may_pursue`), `screen` and `harass` with a primitive
-    # of their own, `feint` with `26_MASS_BATTLE_maneuver_orders`. Their names stay in `ROLE_SPEC`: a standing order ranges over all.
-    "light_infantry":  ["Skirmish"],
-    "cavalry":         ["Shock", "Flanker"],
-    "archers":         ["VolleyLine"],
-    "spearmen":        ["ShieldWall", "Hold", "Anvil"],   # [ED-IN-0306] the pike's lighter sibling: a braced spear line, reach 0.2
-    "skirmishers":     ["Skirmish"],   # [ED-IN-0306] javelin screen: loose order (the shape's gaps)
-    "light_cavalry":   ["Flanker"],   # [ED-IN-0306] cavalry's menu without Shock: no lance, so no charge role
-    "mounted_archers": ["Kite"],   # report's #1 troop type; Kite blocked on the kiting primitive (gap)
-    # generic fallbacks for the engine's current coarse troop_type values ('infantry'/'cavalry')
-    "infantry":        ["Hold", "Push", "ShieldWall"],
-    "any":             ["Support", "Reserve"],
-}
+# [B17.10] The menus are the troop file's `roles` column, and the fallback menu its `default_roles` (`references/troops.yaml`).
+# `TROOP_TYPE_ROLES` is that file read as a table: a type with a menu of its own, `infantry` (the unmustered body's
+# generic fallback) and `any`. [B17.07] `Pursue`, `Screen`, `Harass` and `Feint` are on no menu: a choice of one reads identical
+# to no role in 60 of 60 fields (its keyword has no primitive, or only one no season path reaches). A role returns to a menu
+# when a primitive exists for it: `pursue` with `16_PESSIMIST_MB_rout_has_two_exits` (`may_pursue`), `screen` and `harass`
+# with a primitive of their own, `feint` with `26_MASS_BATTLE_maneuver_orders`. Their names stay in `ROLE_SPEC`: a standing
+# order ranges over all.
+TROOP_TYPE_ROLES = _troops.role_menus()
 
 # Each role = a typical shape + an instruction package (the FM "role + tactics" model). Instructions
 # are the behaviour layer; they MODULATE foundational primitives and never add flat numbers. Data only
 # here: which keyword drives which primitive -- and which stay unwired, with the reason -- is owned by
 # hierarchy.units.ROLE_INSTRUCTION_PRIMITIVES (MB-04, #445 U-3). Push's keyword was 'advance', read by
 # nothing; it is 'push' since MB-04, the role's own name, driving the aggressive stance.
-ROLE_SPEC = {
-    "ShieldWall": {"shape": "Line",       "instructions": ("brace", "hold")},
-    "Hold":       {"shape": "Line",       "instructions": ("hold",)},
-    "Anvil":      {"shape": "Line",       "instructions": ("brace",)},
-    "Push":       {"shape": "Line",       "instructions": ("push",)},
-    "Skirmish":   {"shape": "GappedLine", "instructions": ()},   # [B17.07] open order is the shape's gaps: `loose` and `harass` have no primitive
-    "Screen":     {"shape": "Line",       "instructions": ()},   # [B17.07] `screen` has no primitive; on no menu
-    "Pursue":     {"shape": "Line",       "instructions": ()},   # [B17.07] `pursue` has no primitive; on no menu
-    "Shock":      {"shape": "Arrowhead",  "instructions": ("charge",)},
-    "Flanker":    {"shape": "Line",       "instructions": ("envelop",)},   # Column shape not yet defined; Line placeholder
-    "Feint":      {"shape": "Line",       "instructions": ("lure",)},
-    "VolleyLine": {"shape": "Line",       "instructions": ()},   # [B17.07] a shape: `volley` has no primitive. Not "hold": hold freezes archers (STANCE_SPEED_MOD -99) and braces them against shock; see units.ROLE_INSTRUCTION_PRIMITIVES
-    "Harass":     {"shape": "GappedLine", "instructions": ()},   # [B17.07] `loose` and `shoot_move` have no primitive; on no menu
-    "Kite":       {"shape": "GappedLine", "instructions": ("kite",)},   # blocked on the kiting primitive
-    "Support":    {"shape": "Line",       "instructions": ("reserve",)},
-    "Reserve":    {"shape": "Line",       "instructions": ("reserve",)},
-}
+# [B17.10] `ROLE_SPEC` is the troop file's `role_specs` section read as a table (`references/troops.yaml`): the role names,
+# their shapes and instruction packages are authored there.
+ROLE_SPEC = _troops.role_spec_table()

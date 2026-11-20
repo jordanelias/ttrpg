@@ -1,0 +1,154 @@
+# The troop file: every kind of soldier and every arm a soldier carries, authored once.
+#
+# OWNER: mass battle (MB lane). EXPORT: engine/engine_params/troops.json, by `tools/export_troops.py` (its blocking
+# `--check` round trip); a hand edit of the JSON fails the check. READER: `modules/mass_battle/troop_types/table.py`,
+# loaded once; it refuses an unknown column, a row naming an arm, armour tier, role or site kind outside its closed set
+# (the header keys below), an arm whose mass is stated here AND in personal combat's export
+# (`engine/engine_params/combat_engine_v1.json`, `sections.weapons`), and a `secondary` equal to the `primary`.
+#
+# WHAT THIS FILE IS AT LANDING (B17.10): a TRANSCRIPTION of the tables it replaced -- `TROOP_TYPE_STATS`,
+# `MOUNTED_TYPES`, `TROOP_TYPE_DENSITY_CAP`, `TROOP_TYPE_ROLES`, `ROLE_SPEC`, `TROOP_LOADOUT`, `TRAINING_SITE` -- row for
+# row, so no read of any of them moved. Every `secondary` is null, so no field computes anything from a second weapon.
+# Read by nothing yet: `strength`, `ranks`, `upkeep`, `charge`, `wheel`, `default_role` (the four name tests of
+# `hierarchy/units.py`, `orchestration.py`, `armies.py`, `orderofbattle.py` read them at B17.11), `arms` and `classes`
+# (`reach_for` reads them at B17.11; the arms' `range` and `volleys` are today's `VOLLEY_MIN_RANGE`, `VOLLEY_MAX_RANGE`
+# and `MB_VOLLEYS_START`, transcribed), `secondary` (a later stage).
+#
+# CONTENT FOR JORDAN (authored seeds, not decisions of this file): every `mass_kg` is a seed at memory grade; every
+# `strength` is the smallest whole number at or above the carry demand of the row's own armour (personal combat's
+# `ARMOR_DEMAND`: none 0, light 5/3, medium 10/3, heavy 5), so a type carrying only its primary pays nothing, as today;
+# `heavy_cut` and `heavy_blunt` are weight classes more than weapons, and both carry a pole weapon's reach today;
+# knights templar are `mounted: false` with a 100-troop cell and a lance class, which today's tables say and which
+# contradict each other (one visible cell to set); which named weapons of personal combat's roster troops carry
+# (`arming` is the example the proposal uses).
+
+# The closed sets a row may name. `site_kinds` is a subset of the season's `rosters.yaml: site_kinds` (the exporter
+# refuses a member that is not there); `armour_tiers` are `equipment/armour.py`'s tiers, in order.
+site_kinds: [barracks, archery_range, stable, siege_workshop]
+armour_tiers: [none, light, medium, heavy]
+
+# The menu of a troop type with no menu of its own (a row whose `roles` is null) and of a type the file does not name:
+# today's `TROOP_TYPE_ROLES["any"]`.
+default_roles: [Support, Reserve]
+
+# What a role is: a typical shape and an instruction package (today's `config.ROLE_SPEC`). The names are the closed set
+# a row's `roles`, a row's `default_role` and a standing order's `role` range over; B17.07 took `Pursue`, `Screen`, `Harass`
+# and `Feint` off every menu, and their names stay because a standing order ranges over all.
+role_specs:
+  ShieldWall: {shape: Line,       instructions: [brace, hold]}
+  Hold:       {shape: Line,       instructions: [hold]}
+  Anvil:      {shape: Line,       instructions: [brace]}
+  Push:       {shape: Line,       instructions: [push]}
+  Skirmish:   {shape: GappedLine, instructions: []}          # open order is the shape's gaps: `loose` and `harass` have no primitive
+  Screen:     {shape: Line,       instructions: []}          # `screen` has no primitive; on no menu
+  Pursue:     {shape: Line,       instructions: []}          # `pursue` has no primitive; on no menu
+  Shock:      {shape: Arrowhead,  instructions: [charge]}
+  Flanker:    {shape: Line,       instructions: [envelop]}   # Column shape not yet defined; Line placeholder
+  Feint:      {shape: Line,       instructions: [lure]}
+  VolleyLine: {shape: Line,       instructions: []}          # a shape: `volley` has no primitive. Not `hold`: hold freezes archers (STANCE_SPEED_MOD -99) and braces them against shock
+  Harass:     {shape: GappedLine, instructions: []}          # `loose` and `shoot_move` have no primitive; on no menu
+  Kite:       {shape: GappedLine, instructions: [kite]}      # blocked on the kiting primitive
+  Support:    {shape: Line,       instructions: [reserve]}
+  Reserve:    {shape: Line,       instructions: [reserve]}
+
+# What a soldier fights with. `mass_kg` is stated here only for an arm personal combat's export does not carry.
+arms:
+  light_cut:   {class: non_pole, mass_kg: 1.2}
+  heavy_cut:   {class: pole,     mass_kg: 2.0}
+  heavy_blunt: {class: pole,     mass_kg: 1.5}
+  spear:       {class: pole}                          # mass from personal combat's export (its key `spear`)
+  arming:      {class: non_pole}                      # mass from personal combat's export (its key `arming`)
+  pike:        {class: pike,     mass_kg: 3.5}
+  bow:         {class: missile,  mass_kg: 2.0, range: [2, 8], volleys: 10}
+  crossbow:    {class: missile,  mass_kg: 4.0, range: [2, 8], volleys: 10}
+  sling:       {class: missile,  mass_kg: 0.8, range: [2, 8], volleys: 10}
+  javelin:     {class: missile,  mass_kg: 2.5, range: [2, 8], volleys: 10}
+  siege:       {class: missile,  mass_kg: 0.0, range: [2, 8], volleys: 10}   # crew-served: not carried
+
+# The ruled P-DEC-1 map (ED-MB-0014), authored once.
+classes:
+  non_pole: {reach: 0.1, support_ranks: 1}
+  pole:     {reach: 0.2, support_ranks: 2}
+  pike:     {reach: 0.3, support_ranks: 3}
+  missile:  {reach: 0.1, support_ranks: 1}      # a missile weapon used hand to hand: REACH_MELEE_DEFAULT
+
+# One row per troop type, in `TROOP_TYPE_STATS`' order, then the unmustered body.
+#   power, discipline, morale   today's stat line (§B.2); a row with a null among the three has no preset (`stats_for` None)
+#   strength                    the score the carry demand is charged against (seed rule above)
+#   mounted                     speed, deployment on the flanks (today's `MOUNTED_TYPES`)
+#   charge                      charge penetration: 3 for today's `cavalry`, 0 otherwise
+#   wheel                       the fast enveloping wheel: today's `cavalry` and `light_cavalry`
+#   default_role                the role a unit of the type takes when none is named: `Kite` for today's `mounted_archers`
+#   cell_cap                    the most troops a cell holds: 100 for the four horse types today, `CELL_CAP` (200) else
+#   ranks                       the unit's default depth: the tree has none today, so 1 (today's one-rank bodies)
+#   primary, secondary          an `arms` key, or null
+#   armour                      an `armour_tiers` member, or null
+#   roles                       the type's menu, or null for `default_roles`
+#   training_site               a `site_kinds` member, or null (levy: the call-up of ordinary people needs no ground)
+#   min_site_condition          the least condition fraction of that site at which the type trains at all
+#   upkeep                      a column for the party economy; nothing reads it
+troops:
+  levy:
+    {power: 1, discipline: 1, morale: 2, strength: 0, mounted: false, charge: 0, wheel: false, default_role: null,
+     cell_cap: 200, ranks: 1, primary: light_cut, secondary: null, armour: none, roles: null,
+     training_site: null, min_site_condition: 0.0, upkeep: 0}
+  light_infantry:
+    {power: 3, discipline: 3, morale: 4, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
+     cell_cap: 200, ranks: 1, primary: light_cut, secondary: null, armour: light, roles: [Skirmish],
+     training_site: barracks, min_site_condition: 0.0, upkeep: 0}
+  heavy_infantry:
+    {power: 4, discipline: 4, morale: 5, strength: 4, mounted: false, charge: 0, wheel: false, default_role: null,
+     cell_cap: 200, ranks: 1, primary: heavy_cut, secondary: null, armour: medium, roles: [ShieldWall, Hold, Anvil, Push],
+     training_site: barracks, min_site_condition: 0.0, upkeep: 0}
+  cavalry:
+    {power: 5, discipline: 5, morale: 5, strength: 5, mounted: true, charge: 3, wheel: true, default_role: null,
+     cell_cap: 100, ranks: 1, primary: heavy_cut, secondary: null, armour: heavy, roles: [Shock, Flanker],
+     training_site: stable, min_site_condition: 0.0, upkeep: 0}
+  archers:
+    {power: 3, discipline: 3, morale: 3, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
+     cell_cap: 200, ranks: 1, primary: bow, secondary: null, armour: light, roles: [VolleyLine],
+     training_site: archery_range, min_site_condition: 0.0, upkeep: 0}
+  crossbow:
+    {power: 3, discipline: 3, morale: 3, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
+     cell_cap: 200, ranks: 1, primary: crossbow, secondary: null, armour: light, roles: null,
+     training_site: archery_range, min_site_condition: 0.0, upkeep: 0}
+  sling:
+    {power: 2, discipline: 2, morale: 3, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
+     cell_cap: 200, ranks: 1, primary: sling, secondary: null, armour: light, roles: null,
+     training_site: archery_range, min_site_condition: 0.0, upkeep: 0}
+  artillery:
+    {power: 2, discipline: 2, morale: 3, strength: 0, mounted: false, charge: 0, wheel: false, default_role: null,
+     cell_cap: 200, ranks: 1, primary: siege, secondary: null, armour: none, roles: null,
+     training_site: siege_workshop, min_site_condition: 0.5, upkeep: 0}
+  knights_templar:
+    {power: 5, discipline: 6, morale: 6, strength: 5, mounted: false, charge: 0, wheel: false, default_role: null,
+     cell_cap: 100, ranks: 1, primary: heavy_blunt, secondary: null, armour: heavy, roles: null,
+     training_site: stable, min_site_condition: 0.5, upkeep: 0}
+  pike:
+    {power: 4, discipline: 4, morale: 5, strength: 4, mounted: false, charge: 0, wheel: false, default_role: null,
+     cell_cap: 200, ranks: 1, primary: pike, secondary: null, armour: medium, roles: [ShieldWall, Hold, Anvil],
+     training_site: barracks, min_site_condition: 0.0, upkeep: 0}
+  spearmen:
+    {power: 3, discipline: 3, morale: 4, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
+     cell_cap: 200, ranks: 1, primary: spear, secondary: null, armour: light, roles: [ShieldWall, Hold, Anvil],
+     training_site: barracks, min_site_condition: 0.0, upkeep: 0}
+  skirmishers:
+    {power: 2, discipline: 2, morale: 3, strength: 2, mounted: false, charge: 0, wheel: false, default_role: null,
+     cell_cap: 200, ranks: 1, primary: javelin, secondary: null, armour: light, roles: [Skirmish],
+     training_site: archery_range, min_site_condition: 0.0, upkeep: 0}
+  mounted_archers:
+    {power: 3, discipline: 3, morale: 3, strength: 2, mounted: true, charge: 0, wheel: false, default_role: Kite,
+     cell_cap: 100, ranks: 1, primary: bow, secondary: null, armour: light, roles: [Kite],
+     training_site: stable, min_site_condition: 0.0, upkeep: 0}
+  light_cavalry:
+    {power: 3, discipline: 3, morale: 4, strength: 2, mounted: true, charge: 0, wheel: true, default_role: null,
+     cell_cap: 100, ranks: 1, primary: light_cut, secondary: null, armour: light, roles: [Flanker],
+     training_site: stable, min_site_condition: 0.0, upkeep: 0}
+  # The unmustered body of a side with no army Record, carrying the literals that side lends it today
+  # (`massbattle._SEASON_FORCE_POWER` 4, `_MVP_UNIT_COMMAND['discipline']` 5). It has no `morale` (`_weighted_unit` sets
+  # it from the season) and so no stat preset: `stats_for('infantry')` stays None, as today. No weapon, no armour:
+  # `loadout_for('infantry')` stays `(None, None)`.
+  infantry:
+    {power: 4, discipline: 5, morale: null, strength: 0, mounted: false, charge: 0, wheel: false, default_role: null,
+     cell_cap: 200, ranks: 1, primary: null, secondary: null, armour: null, roles: [Hold, Push, ShieldWall],
+     training_site: null, min_site_condition: 0.0, upkeep: 0}

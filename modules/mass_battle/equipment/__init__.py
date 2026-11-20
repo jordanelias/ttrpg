@@ -13,41 +13,18 @@ from modules.mass_battle.equipment import weapons, armour
 from modules.mass_battle.equipment.weapons import ARSENAL
 from modules.mass_battle.equipment.armour import ARMOURY
 
-# Provisional troop -> (weapon, armour) loadout, transcribed from mass_battle_v30 §B.2. A thin NAMED
-# association, NOT a derivation: the primitive mapping (weapon/armour physics -> speed / DR / lethality)
-# is not worked out. A troop type is thus a "dictionary definition" that points at equipment entries.
-TROOP_LOADOUT = {
-    "levy":             ("light_cut",   "none"),
-    "light_infantry":   ("light_cut",   "light"),
-    "heavy_infantry":   ("heavy_cut",   "medium"),
-    "cavalry":          ("heavy_cut",   "heavy"),
-    "archers":          ("bow",         "light"),
-    "crossbow":         ("crossbow",    "light"),
-    "sling":            ("sling",       "light"),
-    "artillery":        ("siege",       "none"),
-    "knights_templar":  ("heavy_blunt", "heavy"),
-    "pike":             ("pike",        "medium"),  # [v2 Stage E, ED-MB-0014 / P-DEC-1] pike + medium armour (disciplined heavy formation)
-    # [ED-MB-0001, gate 2] mounted_archers isn't a §B.2 troop type (ED-1095/T4, Jordan 2026-07-02).
-    # Same weapon as archers (a bow), light armour to keep it mobile -- the troop type is speed + range,
-    # not endurance.
-    "mounted_archers":  ("bow",         "light"),
-    # [ED-IN-0306, Jordan 2026-10-28: "draw from romance of the three kingdoms and total war for generic unit
-    # types"] three generic types the engine lacked, each PROVISIONAL-BY-ANALOGY like the pike: stats mirror the
-    # nearest canonical type (registry.TROOP_TYPE_STATS) and the differentiator is reach, role, speed or weapon.
-    "spearmen":         ("spear",       "light"),
-    "skirmishers":      ("javelin",     "light"),
-    "light_cavalry":    ("light_cut",   "light"),
-}
+from modules.mass_battle.troop_types import table as _table
 
 
 def loadout_for(troop_type):
-    """(weapon_record, armour_record) a troop type carries, or (None, None) if unknown. Provisional —
-    a NAMED lookup over the two catalogues, not a derivation."""
-    pair = TROOP_LOADOUT.get(str(troop_type).strip().lower()) if troop_type else None
-    if not pair:
+    """(weapon_record, armour_record) a troop type carries, or (None, None) if unknown. Provisional --
+    a NAMED lookup over the two catalogues, not a derivation. [B17.10] The names are the troop file's `primary` and
+    `armour` columns (`references/troops.yaml`, read by `troop_types/table.py::loadout_for_names`), transcribed from
+    mass_battle_v30 §B.2; the old `TROOP_LOADOUT` table is deleted."""
+    w, a = _table.loadout_for_names(troop_type)
+    if w is None and a is None:
         return (None, None)
-    w, a = pair
     return (ARSENAL.get(w), ARMOURY.get(a))
 
 
-__all__ = ["weapons", "armour", "ARSENAL", "ARMOURY", "TROOP_LOADOUT", "loadout_for"]
+__all__ = ["weapons", "armour", "ARSENAL", "ARMOURY", "loadout_for"]
