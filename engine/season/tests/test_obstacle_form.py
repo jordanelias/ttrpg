@@ -572,7 +572,7 @@ def test_a_row_that_admits_no_proofs_weighs_none_when_admission_is_on():
     def proofs_levels(row, admission):
         w, _d = R._judging_world(proof_admission=admission)
         R._proofs(w, 4)                                                                         # four firsthand deed claims against the party
-        assert world_q.proofs(w, R.SPEAKER, R.PARTY, "Hh") == 4 * world_q.remove_weight("firsthand")
+        assert world_q.proofs(w, R.SPEAKER, R.PARTY, world_q.judging_set(w, "Hh")) == 4 * world_q.remove_weight("firsthand")
         _docket(w, R.PARTY, row)
         out = sigma.resolve(w, [R.SPEAKER, R.PARTY], ["root"], R.PRIZE, verb="speak", subject=R.PARTY, rng=draw.seeded(draw.H2("test_obstacle_form", 0)),
                             rung=world_q.place_of(w, R.SPEAKER))
@@ -583,5 +583,5 @@ def test_a_row_that_admits_no_proofs_weighs_none_when_admission_is_on():
     w, _d = R._judging_world()
     R._proofs(w, 4)
     held = 4 * world_q.remove_weight("firsthand")
-    assert world_q.proofs(w, R.SPEAKER, R.PARTY, "Hh", admitted=()) == 0.0
-    assert world_q.proofs(w, R.SPEAKER, R.PARTY, "Hh", admitted=("testimony",)) == held
+    assert world_q.proofs(w, R.SPEAKER, R.PARTY, world_q.judging_set(w, "Hh"), admitted=()) == 0.0
+    assert world_q.proofs(w, R.SPEAKER, R.PARTY, world_q.judging_set(w, "Hh"), admitted=("testimony",)) == held

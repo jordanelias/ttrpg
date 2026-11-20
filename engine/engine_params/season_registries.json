@@ -2694,6 +2694,23 @@
               "module_entry": "social_contest.roll",
               "heard_by": "bench",
               "cite": "v9 SC-01 step 12 (B-N): `speak`'s prize (`proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` \u00a7B.1, `08_SEAM.md`: `a matter` -> the proceedings provider). Routed to the interim provider at step 12; ED-SC-0033 clause (2)'s repoint (steps 13 + 15, ONE change) reached THIS row too, so it was three rows, not the two the plan names [ASSUMPTION; medium; revert: no row, and `speak` declares no `contests:`]."
+            },
+            "a seat": {
+              "module": "social_contest",
+              "person_inputs": "pool",
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "heard_by": "seat_body",
+              "cite": "U5c_VERBS_residue \u00a72 edit 3 (B07.04): the audience is a cell of the prize row, read by one host function and by no verb's name."
+            },
+            "a holding": {
+              "module": "social_contest",
+              "person_inputs": "pool",
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "heard_by": "residents",
+              "toward": "to",
+              "cite": "U5c_VERBS_residue \u00a72 edits 3 and 4 (B07.04)."
             }
           }
         },

@@ -1720,6 +1720,23 @@ rosters:
         module_entry: "social_contest.roll"   # as `a standing`'s
         heard_by: "bench"   # the bench at the act's rung hears this prize (`world_q.reception`, `world_q.proofs`; `manifest/registry.py::_check_heard_by`).
         cite:     "v9 SC-01 step 12 (B-N): `speak`'s prize (`proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` §B.1, `08_SEAM.md`: `a matter` -> the proceedings provider). Routed to the interim provider at step 12; ED-SC-0033 clause (2)'s repoint (steps 13 + 15, ONE change) reached THIS row too, so it was three rows, not the two the plan names [ASSUMPTION; medium; revert: no row, and `speak` declares no `contests:`]."
+      # B07.04 (`U5c_VERBS_residue` §2 edit 3): the two governance prizes, with the room each is heard in (`seam/wrappers/sigma.py::audience_of`'s table
+      # keyed by room). No verb row names either yet: a row naming one lands with its verb (`a seat`: confer, revoke, succeed, establish; `a holding`: surrender).
+      "a seat":
+        module:   "social_contest"
+        person_inputs: "pool"
+        provider: "social_contest"   # as `a proposition`'s
+        module_entry: "social_contest.roll"   # as `a proposition`'s
+        heard_by: "seat_body"   # the members of the body the act's seat belongs to, else the seated persons at that seat's rung (`audience_of`).
+        cite:     "U5c_VERBS_residue §2 edit 3 (B07.04): the audience is a cell of the prize row, read by one host function and by no verb's name."
+      "a holding":
+        module:   "social_contest"
+        person_inputs: "pool"
+        provider: "social_contest"   # as `a proposition`'s
+        module_entry: "social_contest.roll"   # as `a proposition`'s
+        heard_by: "residents"   # the persons residing at the act's place (`audience_of`).
+        toward: "to"   # the residents' stance toward whoever would hold the place: the room is asked about the receiver, not the actor (`sigma.py::_read_social_roll`).
+        cite:     "U5c_VERBS_residue §2 edits 3 and 4 (B07.04)."
     # NO `values:` — the members ARE the `prizes:` mapping above, read with `roster_map()`. A `values: []` would be a declared-but-unread key (`04 §B.13` ID-12) and `roster()` would return an EMPTY frozenset, which is the silent-false this file's own header forbids.
 
   # titles: DELETED -- its domains live in `engine/season/offices.yaml: titles:`

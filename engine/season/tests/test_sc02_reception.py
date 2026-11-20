@@ -6,11 +6,11 @@ WHAT IS BUILT, asked of the real host builder (`seam/wrappers/sigma.py`), the re
 (`modules/social_contest/roll.py::obstacle`) and the real fold on a HAND-BUILT world (`probes.tiny_world`
 through `test_u7_remit._world`: `p_high` holds `off_duke`, whose bench sits over `Hh`; the speaker `p_low`
 and his party `p_mid` live in `Hh`; `p_other` lives there and sits on no bench):
-  * `world_q.reception(w, speaker, venue)` -- each bench member's own deed claims about the speaker,
+  * `world_q.reception(w, speaker, audience)` -- each bench member's own deed claims about the speaker,
     weighted by `remove_weight(source)` x decayed confidence x the member's valence (arm 1, the alignment
     table; arm 2 was never authored and the sweep is open, `hole_register.yaml` H-215), summed; `reception_gain` scales it: its
     hostile half into the obstacle (the `reception` member), its favourable half into `favour` levels (`H-215`, B05.17);
-  * `world_q.proofs(w, speaker, opponent, venue)` -- the speaker's deed claims about the opponent weighed by
+  * `world_q.proofs(w, speaker, opponent, audience)` -- the speaker's deed claims about the opponent weighed by
     remove, zero for any the opponent mirrors (same subject and predicate); `proof_level` (`H-216`, B05.17: a proof is a
     named level of leverage, never an obstacle reduction);
   * route erosion -- `rosters.yaml: standing_routes`: a hearer who saw a dominance-route deed done TO the
@@ -114,8 +114,8 @@ def test_sc02_17_two_benches_differing_only_in_one_ledger_band_differently_for_t
         heard.persons[HEARER].ledger.append(_claim(f"fav{i}", HEARER, SPEAKER, kind))
     for w, d in ((plain, d_plain), (heard, d_heard)):
         assert _kinds(_fold(w, d, _open("oc"))) == ["case.opened"]
-    assert world_q.reception(plain, SPEAKER, "Hh") == 0.0
-    assert world_q.reception(heard, SPEAKER, "Hh") > 0.0
+    assert world_q.reception(plain, SPEAKER, world_q.judging_set(plain, "Hh")) == 0.0
+    assert world_q.reception(heard, SPEAKER, world_q.judging_set(heard, "Hh")) > 0.0
     # B05.17: the favourable bench is LEVERAGE (`favour`), not a lower obstacle: what the speaker brings rises, what stands against him does not.
     assert _input(heard).leverage > _input(plain).leverage, (_input(heard).leverage, _input(plain).leverage)
     assert _ob(heard) == _ob(plain), (_ob(heard), _ob(plain))
@@ -139,7 +139,7 @@ def test_sc02_17_a_ledger_off_the_bench_moves_nothing():
     base = _ob(w)
     for i in range(5):
         w.persons[NOBODY].ledger.append(_claim(f"off{i}", NOBODY, SPEAKER, kind))
-    assert world_q.reception(w, SPEAKER, "Hh") == 0.0
+    assert world_q.reception(w, SPEAKER, world_q.judging_set(w, "Hh")) == 0.0
     assert _ob(w) == base
 
 
@@ -168,12 +168,12 @@ def test_sc02_17_decayed_confidence_counts_less_and_a_hostile_bench_reads_negati
     w, _d = _judging_world()
     kind = _kind_with_lean(w, +1)
     w.persons[HEARER].ledger.append(_claim("full", HEARER, SPEAKER, kind))
-    full = world_q.reception(w, SPEAKER, "Hh")
+    full = world_q.reception(w, SPEAKER, world_q.judging_set(w, "Hh"))
     w.persons[HEARER].ledger[-1] = _claim("half", HEARER, SPEAKER, kind, conf=50)
-    assert world_q.reception(w, SPEAKER, "Hh") == full / 2
+    assert world_q.reception(w, SPEAKER, world_q.judging_set(w, "Hh")) == full / 2
     hostile = _kind_with_lean(w, -1)
     w.persons[HEARER].ledger[-1] = _claim("bad", HEARER, SPEAKER, hostile)
-    assert world_q.reception(w, SPEAKER, "Hh") < 0.0
+    assert world_q.reception(w, SPEAKER, world_q.judging_set(w, "Hh")) < 0.0
     # Under the FIXED ceiling (`H-213`, 2) a hostile room cannot raise the
     # obstacle; one notch up it does; and under the shipped per-pool arm (CP-T01-06) it raises it up to
     # the pool's cap (pool 2: 2.842). Stated in `roll.obstacle`'s docstring and in H-215.
@@ -258,7 +258,7 @@ def test_sc02_18_a_mirrored_proof_moves_the_obstacle_by_exactly_zero_and_an_unmi
         assert level is not None and base == 0.0, "the shipped level is the control: the falsifier could not see a move"
         for i in range(4):
             w.persons[SPEAKER].ledger.append(_claim(f"pf{i}", SPEAKER, PARTY, kind, source=source, chain=chain))
-        assert world_q.reception(w, SPEAKER, "Hh") == 0.0
+        assert world_q.reception(w, SPEAKER, world_q.judging_set(w, "Hh")) == 0.0
         owed = levels_to_net_sigma([level] * int(4 * world_q.remove_weight(source) + 0.5))
         assert owed > 0.0 and _input(w).leverage == base + owed, (source, _input(w).leverage, owed)
         assert _ob(w) == base_ob, (source, _ob(w), base_ob)                 # the obstacle is not where a proof acts
@@ -270,7 +270,7 @@ def test_sc02_18_a_mirrored_proof_moves_the_obstacle_by_exactly_zero_and_an_unmi
         assert _input(w).leverage == base + owed, "a near-miss mirrored a proof"
         # THE MIRROR: the opponent holds a claim of the same subject and predicate -> exactly zero.
         w.persons[PARTY].ledger.append(_claim("mirror", PARTY, PARTY, kind))
-        assert world_q.proofs(w, SPEAKER, PARTY, "Hh") == 0.0
+        assert world_q.proofs(w, SPEAKER, PARTY, world_q.judging_set(w, "Hh")) == 0.0
         assert _input(w).leverage == base, (source, _input(w).leverage, base)
         assert _ob(w) == base_ob, (source, _ob(w), base_ob)
         checked += 1
@@ -288,13 +288,13 @@ def test_sc02_18_proofs_never_move_the_obstacle_and_a_non_person_mirrors_nothing
         w.persons[SPEAKER].ledger.append(_claim(f"pf{i}", SPEAKER, PARTY, kind))
     assert _ob(w) == base_ob and _input(w).leverage > base_lev           # the obstacle unmoved, the leverage up
     assert net_boost(_input(w).leverage, 4) < 1.5 * 0.8 * 2.0 + 1e-9     # bounded: the soft cap's M_MAX, at pool 4
-    assert world_q.proofs(w, SPEAKER, None, "Hh") == 0.0
+    assert world_q.proofs(w, SPEAKER, None, world_q.judging_set(w, "Hh")) == 0.0
     # A NON-PERSON OPPONENT holds no ledger, so nothing of his mirrors a proof: a deed claim the speaker
     # holds about the rung `Hh` itself is counted whole (observable: it is not zero).
     w2, _d2 = _judging_world()
     assert "Hh" not in w2.persons
     w2.persons[SPEAKER].ledger.append(_claim("pr", SPEAKER, "Hh", kind))
-    assert world_q.proofs(w2, SPEAKER, "Hh", "Hh") == world_q.remove_weight("firsthand") > 0.0
+    assert world_q.proofs(w2, SPEAKER, "Hh", world_q.judging_set(w2, "Hh")) == world_q.remove_weight("firsthand") > 0.0
 
 
 def test_sc02_18_proofs_are_spent_on_a_bench_and_never_on_an_empty_room():
@@ -303,12 +303,12 @@ def test_sc02_18_proofs_are_spent_on_a_bench_and_never_on_an_empty_room():
     w, _d = _judging_world()
     kind = sorted(_verbs.DEED_KINDS - person_q.PAIRED_KINDS)[0]
     w.persons[SPEAKER].ledger.append(_claim("pf", SPEAKER, PARTY, kind))
-    assert world_q.proofs(w, SPEAKER, PARTY, "Hh") == world_q.remove_weight("firsthand") > 0.0
-    assert world_q.proofs(w, SPEAKER, PARTY, None) == 0.0
+    assert world_q.proofs(w, SPEAKER, PARTY, world_q.judging_set(w, "Hh")) == world_q.remove_weight("firsthand") > 0.0
+    assert world_q.proofs(w, SPEAKER, PARTY, ()) == 0.0
     assert world_q.judging_set(w, "Hh") == [HEARER]
     # the only seated person IS the speaker: nobody else is in the room
     w.persons[HEARER].ledger.append(_claim("pf2", HEARER, PARTY, kind))
-    assert world_q.proofs(w, HEARER, PARTY, "Hh") == 0.0
+    assert world_q.proofs(w, HEARER, PARTY, world_q.judging_set(w, "Hh")) == 0.0
 
 
 def test_sc02_17_a_man_does_not_receive_himself():
@@ -318,9 +318,9 @@ def test_sc02_17_a_man_does_not_receive_himself():
     w, _d = _judging_world()
     kind = _kind_with_lean(w, +1)
     w.persons[HEARER].ledger.append(_claim("mine", HEARER, HEARER, kind))
-    assert world_q.reception(w, HEARER, "Hh") == 0.0
+    assert world_q.reception(w, HEARER, world_q.judging_set(w, "Hh")) == 0.0
     w.persons[HEARER].ledger.append(_claim("his", HEARER, SPEAKER, kind))
-    assert world_q.reception(w, SPEAKER, "Hh") != 0.0
+    assert world_q.reception(w, SPEAKER, world_q.judging_set(w, "Hh")) != 0.0
 
 
 # ================================================================================================
@@ -349,7 +349,7 @@ def test_sc02_20_the_nobodys_one_success_collapses_the_lord_and_his_failure_leav
     assert wound in DOMINANCE_KINDS and wound in person_q.PAIRED_KINDS
     before_w, _ = _judging_world()
     _feared_lord(before_w)
-    before = world_q.reception(before_w, SPEAKER, "Hh")
+    before = world_q.reception(before_w, SPEAKER, world_q.judging_set(before_w, "Hh"))
     assert before != 0.0
 
     won, _ = _judging_world()
@@ -357,11 +357,11 @@ def test_sc02_20_the_nobodys_one_success_collapses_the_lord_and_his_failure_leav
     won.persons[HEARER].ledger += [_claim("hit", HEARER, SPEAKER, wound, when=1),
                                    _seen("saw", HEARER, SPEAKER, NOBODY, when=1)]
     assert [c.id for c in person_q.suffered_deeds(won.persons[HEARER].ledger, SPEAKER)] == ["hit"]
-    assert world_q.reception(won, SPEAKER, "Hh") == 0.0, "a called bluff left the dominance weight"
+    assert world_q.reception(won, SPEAKER, world_q.judging_set(won, "Hh")) == 0.0, "a called bluff left the dominance weight"
     # "NO NEWER THAN" is inclusive: a dominance deed deposited at exactly the bluff's tick is eroded too.
     kind_eq = _feared_lord(_judging_world()[0])
     won.persons[HEARER].ledger.append(_claim("eq", HEARER, SPEAKER, kind_eq, when=1))
-    assert world_q.reception(won, SPEAKER, "Hh") == 0.0, "a deed at the bluff's own tick escaped erosion"
+    assert world_q.reception(won, SPEAKER, world_q.judging_set(won, "Hh")) == 0.0, "a deed at the bluff's own tick escaped erosion"
 
     lost, _ = _judging_world()
     _feared_lord(lost)
@@ -371,10 +371,10 @@ def test_sc02_20_the_nobodys_one_success_collapses_the_lord_and_his_failure_leav
     only_new, _ = _judging_world()
     only_new.persons[HEARER].ledger += [_claim("hit", HEARER, NOBODY, wound, when=1),
                                         _seen("saw", HEARER, NOBODY, SPEAKER, when=1)]
-    assert world_q.reception(only_new, SPEAKER, "Hh") != 0.0, "the wound is not one more deed of his"
+    assert world_q.reception(only_new, SPEAKER, world_q.judging_set(only_new, "Hh")) != 0.0, "the wound is not one more deed of his"
     # Additive: the lord keeps his whole prior weight plus the new deed's (float sum order differs).
-    assert math.isclose(world_q.reception(lost, SPEAKER, "Hh"),
-                        before + world_q.reception(only_new, SPEAKER, "Hh"), rel_tol=1e-12)
+    assert math.isclose(world_q.reception(lost, SPEAKER, world_q.judging_set(lost, "Hh")),
+                        before + world_q.reception(only_new, SPEAKER, world_q.judging_set(only_new, "Hh")), rel_tol=1e-12)
 
 
 def test_sc02_20_only_a_witness_is_moved_and_a_later_coercive_deed_counts_again():
@@ -383,10 +383,10 @@ def test_sc02_20_only_a_witness_is_moved_and_a_later_coercive_deed_counts_again(
     wound = "body.changed"
     told, _ = _judging_world()
     _feared_lord(told)
-    before = world_q.reception(told, SPEAKER, "Hh")
+    before = world_q.reception(told, SPEAKER, world_q.judging_set(told, "Hh"))
     told.persons[HEARER].ledger.append(_claim("hit", HEARER, SPEAKER, wound, source="told_by",
                                               chain=(NOBODY,), when=1))
-    assert world_q.reception(told, SPEAKER, "Hh") == before
+    assert world_q.reception(told, SPEAKER, world_q.judging_set(told, "Hh")) == before
 
     later, _ = _judging_world()
     kind = _feared_lord(later)
@@ -394,14 +394,14 @@ def test_sc02_20_only_a_witness_is_moved_and_a_later_coercive_deed_counts_again(
                                      _seen("saw", HEARER, SPEAKER, NOBODY, when=1),
                                      _claim("again", HEARER, SPEAKER, kind, when=2)]
     # Only the re-earned deed counts: one firsthand claim at full confidence is its valence exactly.
-    assert world_q.reception(later, SPEAKER, "Hh") == _lean(later, kind) != 0.0
+    assert world_q.reception(later, SPEAKER, world_q.judging_set(later, "Hh")) == _lean(later, kind) != 0.0
 
     other, _ = _judging_world()
     gentle = _kind_with_lean(other, +1, among=_verbs.DEED_KINDS - DOMINANCE_KINDS)
     other.persons[HEARER].ledger += [_claim("g", HEARER, SPEAKER, gentle, when=0),
                                      _claim("hit", HEARER, SPEAKER, wound, when=1),
                                      _seen("saw", HEARER, SPEAKER, NOBODY, when=1)]
-    assert world_q.reception(other, SPEAKER, "Hh") == _lean(other, gentle)
+    assert world_q.reception(other, SPEAKER, world_q.judging_set(other, "Hh")) == _lean(other, gentle)
 
 
 # ================================================================================================
@@ -543,8 +543,8 @@ def test_hostile_bench_raises_the_obstacle_only():
     friendly, _d = _judging_world()
     _bench(hostile, -1, 1)
     _bench(friendly, +1, 3)
-    r = world_q.reception(hostile, SPEAKER, "Hh")
-    assert r < 0.0 < world_q.reception(friendly, SPEAKER, "Hh")
+    r = world_q.reception(hostile, SPEAKER, world_q.judging_set(hostile, "Hh"))
+    assert r < 0.0 < world_q.reception(friendly, SPEAKER, world_q.judging_set(friendly, "Hh"))
     gain = hostile.fixtures.get("reception_gain")
     (ob_n, t_n), (ob_h, t_h), (ob_f, t_f) = (_obstacle_at(w, 8) for w in (neutral, hostile, friendly))
     assert dict(t_n)["reception"] == 0.0 and dict(t_f)["reception"] == 0.0, (t_n, t_f)
@@ -565,7 +565,7 @@ def test_control_levels_none_moves_nothing():
     live, _d = _judging_world()
     _bench(live, +1, 12)
     _proofs(live, 4)
-    assert world_q.proofs(held, SPEAKER, PARTY, "Hh") == 4.0 and world_q.reception(held, SPEAKER, "Hh") > 1.0
+    assert world_q.proofs(held, SPEAKER, PARTY, world_q.judging_set(held, "Hh")) == 4.0 and world_q.reception(held, SPEAKER, world_q.judging_set(held, "Hh")) > 1.0
     assert _input(held).leverage == _input(bare).leverage == 0.0
     assert _ob(held) == _ob(bare)
     for pool in _pools():

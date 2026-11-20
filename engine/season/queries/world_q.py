@@ -743,14 +743,16 @@ def remove_weight(source: str) -> float:
 _UNREAD = object()      # `reception`'s "not read yet" marker (None is a legitimate reading: no bluff called)
 
 
-def reception(w: World, speaker: str, venue: Optional[str]) -> float:
-    """HOW THE BENCH AT `venue` RECEIVES `speaker` -- `19_PLAN.md` step 17, the room reading the person
+def reception(w: World, speaker: str, audience: tuple) -> float:
+    """HOW THE `audience` RECEIVES `speaker` -- `19_PLAN.md` step 17, the room reading the person
     who rises in it. Signed: above zero the bench is disposed toward him, below it against him.
 
         reception = Σ_h∈bench Σ_c∈deeds_h(speaker)  remove_weight(c.source) · c.confidence/full · v_h(c)
 
-      * the BENCH is `judging_set(w, venue)` -- the one owner of who sits over a rung -- each seated
-        person once, never the speaker himself (a man does not receive himself);
+      * the AUDIENCE is the tuple of persons `seam/wrappers/sigma.py::audience_of` names for the room
+        the prize row says hears the act (B07.04; the bench is `judging_set(w, venue)`, the one owner of
+        who sits over a rung) -- each person once, never the speaker himself (a man does not receive
+        himself);
       * `deeds_h(speaker)` is `person_q.attributed_deeds` over `h`'s OWN ledger: the deed claims that
         record an act of the speaker's, a paired kind's doer read off its sighting's `seen.who`
         (R8.1's struct, `21_RECONCILIATION.md` PHASE 3's correction), never a bare subject;
@@ -774,14 +776,14 @@ def reception(w: World, speaker: str, venue: Optional[str]) -> float:
     fails suffers the deed himself, so the speaker's weight stands. A later coercive deed counts
     again.
 
-    `venue` `None` (a placeless speaker) or an empty bench -> 0.0: nobody is in the room."""
+    An empty audience (a placeless speaker has no bench) -> 0.0: nobody is in the room."""
     TRACE.query("reception", "resolver")
-    if venue is None or speaker not in w.persons:
+    if speaker not in w.persons:
         return 0.0
     full = float(w.fixtures.get("confidence_default"))
     shift = w.fixtures.get("scar_weight_shift")
     total = 0.0
-    for hid in dict.fromkeys(judging_set(w, venue)):
+    for hid in dict.fromkeys(audience):
         h = w.persons.get(hid)
         if h is None or hid == speaker:
             continue
@@ -800,15 +802,15 @@ def reception(w: World, speaker: str, venue: Optional[str]) -> float:
     return total
 
 
-def proofs(w: World, speaker: str, opponent: Optional[str], venue: Optional[str], admitted: Optional[tuple] = None) -> float:
+def proofs(w: World, speaker: str, opponent: Optional[str], audience: tuple, admitted: Optional[tuple] = None) -> float:
     """THE PROOFS `speaker` CAN SPEND AGAINST `opponent`, weighed by remove and discounted by the mirror
     -- `19_PLAN.md` step 18, a Query over two ledgers. Each deed claim in the speaker's OWN ledger
     recording an act of the opponent's (`person_q.attributed_deeds`) counts `remove_weight(c.source)`,
     UNLESS THE OPPONENT CAN MIRROR IT: he holds a claim with the same subject and predicate
     (`18_FINDINGS.md`'s mirror test, *does the opponent hold a claim with the same subject and
     predicate?*), and then it counts exactly zero. A non-person opponent holds no ledger and mirrors
-    nothing. `venue` is the room that hears the speaker: with nobody on its bench (or no venue) there
-    is no one to spend a proof on, and the answer is 0.0, the rule `reception` states.
+    nothing. `audience` is the persons of the room that hears the speaker (`reception`'s): with nobody in it
+    besides him there is no one to spend a proof on, and the answer is 0.0, the rule `reception` states.
 
     `admitted` (B05.21, T13 edit 4; `H-427`) is the docketed row's `proofs:` column, PASSED IN by the host builder -- this query reads no
     arrangement itself -- or `None` (no filter: nothing docketed, or `Fixtures.proof_admission` `off`). Given, a claim counts only if the kind of
@@ -823,10 +825,10 @@ def proofs(w: World, speaker: str, opponent: Optional[str], venue: Optional[str]
     inventory. The mirror is still hidden from him -- nothing person-side reads it."""
     TRACE.query("proofs", "resolver")
     who = w.persons.get(speaker)
-    if who is None or opponent is None or opponent == speaker or venue is None:
+    if who is None or opponent is None or opponent == speaker:
         return 0.0
     held = list(attributed_deeds(who.ledger, opponent))
-    if not held or not any(hid != speaker for hid in judging_set(w, venue)):
+    if not held or not any(hid != speaker for hid in audience):
         return 0.0
     opp = w.persons.get(opponent)
     mirror = {(c.subject, c.predicate) for c in opp.ledger} if opp is not None else set()
