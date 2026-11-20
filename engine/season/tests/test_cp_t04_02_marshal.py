@@ -77,6 +77,7 @@ def _world(orders=(), worn=True):
     """The shipped realm resized so the sides are even, plus each `(actor, via, place, role, act id, tick)` order folded
     through the real driver. `worn` wears the target's garrison to 0 (an open field); else it stays (WALLS)."""
     w = build_realm(0)
+    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: this test asks the flat fold; under the arm a drawn task can fail before the effect it observes
     for pid in MARCHERS:
         w.persons[pid].weight = ATT_WEIGHT
     for pid, wt in zip(world_q.mustered(w, TARGET, DEF_FACTION), DEF_WEIGHTS):
@@ -237,6 +238,7 @@ def test_a_role_outside_the_closed_set_is_refused_before_anything_is_written():
 
 def test_operand_bags_ranges_role_and_retreat_at_over_their_closed_sets():
     w = build_realm(0)
+    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: this test asks the flat fold; under the arm a drawn task can fail before the effect it observes
     p, q = w.persons[KING], Question("q:mz", "need", (HOME,))
     bags = operand_bags(p, VERB_TABLE["marshal"], q, HOME, w.fixtures)
     assert CHOICE_SOURCED["marshal"] == ("role", "retreat_at")

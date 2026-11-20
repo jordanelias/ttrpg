@@ -52,6 +52,7 @@ def _world(grants=("dispatch", "determine"), seat_rung="D", scope="D"):
     """`tiny_world` plus a seat (`off_watch`) the actor holds, granting `grants`, at `seat_rung`; the driver is built
     (the registrar fills the combat entry at construction) and one MATTER barrier run."""
     w = P.tiny_world()
+    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: this test asks the flat fold; under the arm a drawn task can fail before the effect it observes
     w.offices[SEAT] = Office(SEAT, "Watch", seat_rung, list(grants), scope_rung=scope, faction="Crown")
     w.add_tenure(Tenure("t_watch", ACTOR, SEAT, "hold", since=0))
     d = SeasonDriver(w)
@@ -262,6 +263,7 @@ def test_a_seat_whose_purview_does_not_reach_the_captive_opens_nothing():
     opened = fought = 0
     for i in range(TRIES):
         w = P.tiny_world()
+        w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: this test asks the flat fold; under the arm a drawn task can fail before the effect it observes
         w.rungs["S2"] = Rung("S2", "settlement", stores={"grain": 40})
         w.add_tenure(Tenure("t_s2", "S2", "D", "contain", since=0))
         w.offices[SEAT] = Office(SEAT, "Watch", "S2", ["dispatch", "determine"], scope_rung="S2", faction="Crown")
