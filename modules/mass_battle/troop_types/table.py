@@ -11,6 +11,9 @@ pins the two artifacts equal, so there is no second owner.
 THE TABLES IT REPLACED, each now a function of this loader (or a view of it) under its present name and signature:
 `stats_for` (the §B.2 stat line), `is_mounted`, `roles_for`, `training_site_for`, `loadout_for_names` (what
 `equipment.loadout_for` turns into records) and `cell_cap_of` (what `config.cell_cap_for` wraps with its density flag).
+B17.11 adds the four columns code used to read by a troop type's spelling -- `charge_of`, `wheels_fast`,
+`default_role_of` and (with `is_mounted`) `mounted` -- and derives reach and support depth from the arm in hand:
+`reach_of` and `support_ranks_of` read the `classes` row of the primary arm's class, so no per-type reach table is kept.
 The views (`stats_table`, `mounted_types`, `role_menus`, `role_spec_table`, `training_sites`) are built from the file
 for a reader that iterates a table; none is a second copy.
 
@@ -30,7 +33,7 @@ from typing import Optional
 
 __all__ = ['TroopFileError', 'check', 'combat_weapon_keys', 'COMBAT_EXPORT_PATH', 'troop_types', 'row_of',
            'stats_for', 'is_mounted', 'roles_for', 'training_site_for', 'loadout_for_names', 'cell_cap_of',
-           'stats_table', 'mounted_types', 'role_menus', 'role_spec_table', 'training_sites']
+           'charge_of', 'wheels_fast', 'default_role_of', 'reach_of', 'support_ranks_of', 'stats_table', 'mounted_types', 'role_menus', 'role_spec_table', 'training_sites']
 
 _REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 COMBAT_EXPORT_PATH = os.path.join(_REPO, 'engine', 'engine_params', 'combat_engine_v1.json')
@@ -225,3 +228,47 @@ def cell_cap_of(troop_type) -> Optional[int]:
     density flag and the fallthrough to `CELL_CAP` are `config.cell_cap_for`'s."""
     row = _rows().get(troop_type) if isinstance(troop_type, str) else None
     return row['cell_cap'] if row is not None else None
+
+
+def charge_of(troop_type) -> int:
+    """The row's charge penetration (ranks punched through on impact); 0 for a type with no row. Exact match, as the
+    `== 'cavalry'` it replaced. A recoil that needs "a charger" asks for `charge_of(t) > 0`."""
+    row = _rows().get(troop_type) if isinstance(troop_type, str) else None
+    return row['charge'] if row is not None else 0
+
+
+def wheels_fast(troop_type) -> bool:
+    """True iff the row makes the fast enveloping wheel (today's `cavalry` and `light_cavalry`). Exact match."""
+    row = _rows().get(troop_type) if isinstance(troop_type, str) else None
+    return bool(row['wheel']) if row is not None else False
+
+
+def default_role_of(troop_type) -> Optional[str]:
+    """The role a body of this type takes when no role, shape or instructions are named (`Kite` for mounted archers),
+    or None. Exact match."""
+    row = _rows().get(troop_type) if isinstance(troop_type, str) else None
+    return row['default_role'] if row is not None else None
+
+
+def _class_row(troop_type) -> Optional[dict]:
+    """The `classes` row of the class of the troop's primary arm, or None for an unknown type (case-insensitive, as
+    `reach_for` was) or one that carries no arm (the unmustered `infantry`)."""
+    row = _rows().get(_lower(troop_type)) if troop_type is not None else None
+    if row is None or row['primary'] is None:
+        return None
+    data = _data()
+    return data['classes'][data['arms'][row['primary']]['class']]
+
+
+def reach_of(troop_type) -> Optional[float]:
+    """The front-face reach of the arm in hand (its class's `reach`), or None when there is no arm to read; the
+    fallthrough to the melee default is `registry.reach_for`'s."""
+    cls = _class_row(troop_type)
+    return cls['reach'] if cls is not None else None
+
+
+def support_ranks_of(troop_type) -> Optional[int]:
+    """The ranks behind contact the arm in hand reaches (its class's `support_ranks`), or None when there is no arm to
+    read; the floor of one is `registry.support_ranks_for`'s."""
+    cls = _class_row(troop_type)
+    return cls['support_ranks'] if cls is not None else None

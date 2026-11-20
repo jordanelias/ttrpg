@@ -115,7 +115,8 @@ def test_a_site_kind_the_season_does_not_have_is_refused(tmp_path, monkeypatch):
 
 def test_reach_and_support_derive_from_the_arm_with_no_result_moving():
     """The proposal's claim, read: for every troop row, the class of its primary arm gives the reach and support depth the
-    tree keeps per type today (`TROOP_TYPE_REACH`, `support_ranks_for`); a row with no weapon takes the melee default."""
+    tree kept per type before B17.11 (`TROOP_TYPE_REACH`, deleted there, and `support_ranks_for`); a row with no weapon
+    takes the melee default. B17.11 made the loader's read the only owner, so this is the artifact against the reads."""
     data = _artifact()
     checked = 0
     for t, row in data['troops'].items():

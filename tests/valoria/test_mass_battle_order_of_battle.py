@@ -197,11 +197,13 @@ def test_the_generic_roster_is_complete_and_distinct():
 
 def test_every_stat_preset_has_a_loadout_and_a_reach():
     """The tables a troop type must appear in agree, so a type cannot be half-registered. A role menu is NOT one of
-    them: levy, the missile troops and artillery fall to the 'any' menu by design (`config.TROOP_TYPE_ROLES`)."""
-    from modules.mass_battle.troop_types.registry import TROOP_TYPE_REACH, TROOP_TYPE_STATS
+    them: levy, the missile troops and artillery fall to the 'any' menu by design (`config.TROOP_TYPE_ROLES`). Reach
+    is no table of its own (B17.11): it is the class of the primary arm, so a type has one exactly when it has an arm."""
+    from modules.mass_battle.troop_types import table
+    from modules.mass_battle.troop_types.registry import TROOP_TYPE_STATS
     for t in TROOP_TYPE_STATS:
         assert loadout_for(t)[0] is not None, f"{t}: no loadout"
-        assert t in TROOP_TYPE_REACH, f"{t}: no reach"
+        assert table.reach_of(t) is not None, f"{t}: no reach"
 
 
 def test_the_unit_baseline_matches_the_season_adapters():
@@ -251,3 +253,92 @@ def test_one_site_is_shared_by_every_type_trained_at_it():
     assert R.recruit_limit('spearmen', 12, sites, {'heavy_infantry': first}, 1000) == 0, "the barracks is spent"
     assert R.recruit_limit('archers', 12, {**sites, 'archery_range': 250}, {'heavy_infantry': first}, 1000) == cap // 4, (
         "control: a different kind of site is not spent by the barracks's troops")
+
+
+# ------------------------------------------------------------ a troop type is a row (B17.11): no name is spelled in code
+@pytest.fixture
+def new_rows(monkeypatch):
+    """The loaded troop file with two rows added that no code names: `cataphracts` (the `cavalry` row under another name:
+    mounted, charge 3, wheel) and `steppe_archers` (the `mounted_archers` row under another name: default role Kite). The
+    loader's tables are cleared on the way in and out, so the doc is the only thing that changed."""
+    import copy
+    from modules.mass_battle.troop_types import table
+    doc = copy.deepcopy(table._data())
+    doc['troops']['cataphracts'] = dict(doc['troops']['cavalry'])
+    doc['troops']['cataphracts_unlanced'] = dict(doc['troops']['cavalry'], charge=0)
+    doc['troops']['steppe_archers'] = dict(doc['troops']['mounted_archers'])
+    table.check(doc)
+
+    def clear():
+        for f in (table._stats, table._mounted, table._menus, table._sites):
+            f.cache_clear()
+    monkeypatch.setattr(table, '_data', lambda: doc)
+    clear()
+    yield doc
+    monkeypatch.undo()
+    clear()
+
+
+def test_a_new_row_charges_and_wheels_with_no_code_edit(new_rows):
+    """A row `cataphracts` with `mounted: true, charge: 3, wheel: true` charges, recoils and wheels with no code edit; the
+    same row with `charge: 0` is the control that each of the three reads is the column and not the spelling of a name.
+    FALSIFIER: restore `troop_type == 'cavalry'` at `Unit.charge_pen` or at either recoil site, or the name tuple at
+    `_envelop_goal`, and the matching assertion below reads the old answer."""
+    import random
+    from types import SimpleNamespace
+    import modules.mass_battle.hierarchy.units as hu
+    import modules.mass_battle.orchestration as orch
+    from systems.mass_battle.sim import validators as val
+    from systems.mass_battle.sim.engine import build_unit as sim_unit
+
+    # charges: the penetration is the column
+    assert sim_unit('Line', 3, 'A', 'A', 9, troop_type='cataphracts').units[0].charge_pen == 3
+    assert sim_unit('Line', 3, 'A', 'A', 9, troop_type='cataphracts_unlanced').units[0].charge_pen == 0
+    assert sim_unit('Line', 3, 'A', 'A', 9, troop_type='pike').units[0].charge_pen == 0
+
+    # wheels: the fast enveloping wheel is the column (the control takes the infantry's flank face instead)
+    enemy = [(r, c) for r in range(10, 13) for c in range(10, 13)]
+
+    def goal(tt):
+        me = SimpleNamespace(troop_type=tt, unit_type='melee', _node_anchor=(30.0, 11.0),
+                             _envelop_wheel_goal=lambda cells: 'WHEEL', _envelop_goal_legacy=lambda cells: 'LEGACY')
+        return hu.Unit._envelop_goal(me, enemy)
+    assert goal('cataphracts') == 'WHEEL' and goal('cavalry') == 'WHEEL' and goal('light_cavalry') == 'WHEEL'
+    assert goal('cataphracts_unlanced') == 'WHEEL', "wheel is its own column, not charge"
+    assert goal('pike') not in ('WHEEL', 'LEGACY')
+
+    # recoils: a braced pike wall repels a charge from the new row exactly as it repels the `cavalry` row's, and not at all
+    # when the new row's charge is 0 (same seeds, same everything else)
+    saved = [(m, m.FIELD_MOVEMENT, m.MB_NODE_COHESION) for m in (hu, orch)]
+    val._set_movement_path('node')
+    try:
+        def wall_hp(charger, seeds=(700, 701, 702)):
+            tot = 0.0
+            for s in seeds:
+                random.seed(s)
+                d = sim_unit('Line', 3, 'DEF', 'A', 9, troop_type='pike', stance='hold', instructions=('brace', 'hold'))
+                c = sim_unit('Line', 3, 'CAV', 'B', 9, troop_type=charger, speed='Fast', instructions=('charge',))
+                h0 = d.hp
+                orch.run_battle(d, c, max_ticks=18)
+                tot += d.hp / h0
+            return tot / len(seeds)
+        lanced, named, unlanced = wall_hp('cavalry'), wall_hp('cataphracts'), wall_hp('cataphracts_unlanced')
+    finally:
+        for m, fm, nc in saved:
+            m.FIELD_MOVEMENT = fm
+            m.MB_NODE_COHESION = nc
+    assert named == lanced, "the renamed row recoils as `cavalry` does"
+    assert unlanced != lanced, "control: with charge 0 the wall does not repel it, so the read is the column"
+
+
+def test_a_new_row_with_a_default_role_stands_off_with_no_code_edit(new_rows):
+    """`default_role: Kite` on a row of another name stands the body off as Kite on both build paths (`build_army` and the
+    order-of-battle path) when no role, shape or instructions are named; a row without it stays a plain line."""
+    from systems.mass_battle.sim.engine import build_army
+    kite = build_unit(_oob(('s', 'steppe_archers', 300, {})), 'u', 'A', morale_start=5).units[0]
+    assert kite.role == 'Kite' and kite.instructions, (kite.role, kite.instructions)
+    assert build_army([dict(troop_type='steppe_archers', troops=300.0, concentration=200.0)], 'u', 'A').units[0].role == 'Kite'
+    assert build_army([dict(troop_type='steppe_archers', troops=300.0, concentration=200.0, shape='Line')], 'u', 'A').units[0].role is None, (
+        "an explicit shape still wins")
+    plain = build_unit(_oob(('c', 'cataphracts', 300, {})), 'u', 'A', morale_start=5).units[0]
+    assert plain.role is None and not plain.instructions

@@ -3,15 +3,15 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 118,
-    "total": 392,
-    "uncited": 274,
+    "total": 391,
+    "uncited": 273,
     "of_which_assumption_grade": 8
   },
-  "count": 392,
+  "count": 391,
   "by_module": {
     "engine.dice_engine": 11,
     "engine.season": 25,
-    "mass_battle": 159,
+    "mass_battle": 158,
     "characters": 5,
     "fieldwork": 15,
     "overview": 5,
@@ -1671,33 +1671,6 @@
       "note": "[canonical: params/core.md §Reach Terminology (PP-290) — \"Short Reach... <=1 metre\"]",
       "citation": "params/core.md §Reach Terminology (PP-290) — \"Short Reach... <=1 metre\"",
       "citation_grade": "source"
-    },
-    {
-      "key": "mass_battle.TROOP_TYPE_REACH",
-      "name": "TROOP_TYPE_REACH",
-      "value": {
-        "levy": 0.1,
-        "light_infantry": 0.1,
-        "infantry": 0.1,
-        "heavy_infantry": 0.2,
-        "pike": 0.3,
-        "cavalry": 0.2,
-        "knights_templar": 0.2,
-        "archers": 0.1,
-        "crossbow": 0.1,
-        "sling": 0.1,
-        "artillery": 0.1,
-        "mounted_archers": 0.1,
-        "spearmen": 0.2,
-        "skirmishers": 0.1,
-        "light_cavalry": 0.1
-      },
-      "kind": "table",
-      "module": "mass_battle",
-      "file": "modules/mass_battle/troop_types/registry.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
     },
     {
       "key": "mass_battle.DATA",

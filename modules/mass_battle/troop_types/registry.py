@@ -2,8 +2,9 @@
 The "stat home" for the taxonomy (ED-1018): a subunit OF a type draws these per-subunit combat stats. [B17.10] The
 rows are authored once, in the troop file (`references/troops.yaml`, read by `troop_types/table.py`); `TROOP_TYPE_STATS`
 and `MOUNTED_TYPES` are that file read as tables, and `stats_for`, `is_mounted` and `roles_for` are its loader's
-functions under their old names. Reach (`TROOP_TYPE_REACH`, `reach_for`) is still kept here until B17.11 derives it
-from the arm. Depends on config and the loader only — no up-DAG import, no cycle.
+functions under their old names. Reach and support depth are derived from the arm in hand (B17.11) and the four columns
+code once read by a type's name (`charge`, `wheel`, `default_role`, `mounted`) are read through the loader.
+Depends on config and the loader only — no up-DAG import, no cycle.
 [canonical: mass_battle_v30.md §B.2 troop table; config TROOP_TYPE_ROLES/ROLE_SPEC]"""
 from modules.mass_battle.config import *
 import modules.mass_battle.config as _cfg
@@ -12,7 +13,7 @@ from modules.mass_battle.equipment import loadout_for
 from modules.mass_battle.troop_types import table as _table
 
 __all__ = ['MOUNTED_TYPES', 'is_mounted', 'roles_for', 'role_allowed', 'TROOP_TYPE_STATS', 'stats_for',
-           'REACH_SHORT', 'REACH_MELEE_DEFAULT', 'TROOP_TYPE_REACH', 'reach_for',
+           'REACH_SHORT', 'REACH_MELEE_DEFAULT', 'reach_for', 'charge_for', 'wheels_fast', 'default_role_for',
            'support_ranks_for', 'support_weight',
            'unit_type_for']
 
@@ -60,57 +61,51 @@ def stats_for(troop_type):
 # rather than injecting an unratified meters-per-lattice-unit conversion.
 REACH_SHORT = 0.5  # [canonical: params/core.md §Reach Terminology (PP-290) — "Short Reach... <=1 metre"]
 
-# [v2 Stage E, ED-MB-0014, Jordan P-DEC-1 2026-07-22] Per-troop-type FRONT-FACE weapon reach, in
-# lattice units (COL_WIDTH=1.0 pitch), feeding the front-reach body (hierarchy/units.cell_bodies_for
-# -> geometry.reach_reaches). Jordan-ruled weapon-class map: non-pole melee 0.1, pole/spear
-# 0.2, PIKE 0.3, cavalry/knights lance 0.2, ranged = projectile band (VOLLEY_MAX_RANGE, handled
-# separately) + a 0.1 melee sidearm. NOTE (flagged for Jordan): the 0.1/0.2/0.3 scale is a FINER
-# differentiation than PP-290's Short≤1m (0.5) / Long≤3m (1.5) meter-grounding above -- P-DEC-1 is
-# the newer, explicit ruling and governs the field OBB model; whether the two scales coexist or one
-# re-grounds the other is open (REACH_SHORT/REACH_LONG stay defined + exported for any PP-290 consumer).
+# [v2 Stage E, ED-MB-0014, Jordan P-DEC-1 2026-07-22] FRONT-FACE weapon reach, in lattice units (COL_WIDTH=1.0
+# pitch), feeding the front-reach body (hierarchy/units.cell_bodies_for -> geometry.reach_reaches). The Jordan-ruled
+# weapon-class map is the troop file's `classes` (non-pole melee 0.1, pole/spear 0.2, PIKE 0.3, a missile arm used hand
+# to hand 0.1; a missile troop's projectile band is VOLLEY_MAX_RANGE, handled separately); [B17.11] a troop
+# type's reach is that of the class of the arm in hand, read through the loader, not kept per type. NOTE (flagged for
+# Jordan): the 0.1/0.2/0.3 scale is a FINER differentiation than PP-290's Short<=1m (0.5) / Long<=3m (1.5)
+# meter-grounding above -- P-DEC-1 is the newer, explicit ruling and governs the field OBB model; whether the two scales
+# coexist or one re-grounds the other is open (REACH_SHORT/REACH_LONG stay defined + exported for any PP-290 consumer).
 # [canonical: audit/2026-07-22-mass-battle-stress-test/spatial_model_v2_plan.md §9 P-DEC-1 — weapon-class reach map (ED-MB-0014)]
 REACH_MELEE_DEFAULT = 0.1   # non-pole melee (P-DEC-1); the fallthrough for unmapped/bare 'infantry'
-TROOP_TYPE_REACH = {
-    "levy":             0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — non-pole melee (ED-MB-0014)]
-    "light_infantry":   0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — non-pole melee (ED-MB-0014)]
-    "infantry":         0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — bare-default non-pole melee (ED-MB-0014)]
-    "heavy_infantry":   0.2,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — pole/spear (ED-MB-0014)]
-    "pike":             0.3,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — PIKE, longest melee reach (ED-MB-0014)]
-    "cavalry":          0.2,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — lance (ED-MB-0014)]
-    "knights_templar":  0.2,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — lance (ED-MB-0014)]
-    "archers":          0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014)]
-    "crossbow":         0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014)]
-    "sling":            0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014)]
-    "artillery":        0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014)]
-    "mounted_archers":  0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014)]
-    "spearmen":         0.2,   # [ED-IN-0306: the P-DEC-1 pole/spear class, as heavy_infantry]
-    "skirmishers":      0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — ranged, melee sidearm (ED-MB-0014); ED-IN-0306]
-    "light_cavalry":    0.1,   # [canonical: spatial_model_v2_plan.md §9 P-DEC-1 — non-pole melee; the lance's 0.2 is not carried (ED-MB-0014); ED-IN-0306]
-}
 
 
 def reach_for(troop_type):
-    """[v2 Stage E, ED-MB-0014] Per-troop-type front-face weapon reach in lattice units (COL_WIDTH=1.0
-    pitch), from the Jordan-ruled P-DEC-1 weapon-class map (TROOP_TYPE_REACH). Unmapped types, including
-    bare 'infantry' (a real call-site default, not a TROOP_TYPE_STATS key), fall through to
-    REACH_MELEE_DEFAULT=0.1 (non-pole melee). Lookup
-    is case-insensitive, matching stats_for."""
-    if troop_type is None:
-        return REACH_MELEE_DEFAULT
-    return TROOP_TYPE_REACH.get(str(troop_type).strip().lower(), REACH_MELEE_DEFAULT)
+    """[v2 Stage E, ED-MB-0014] Front-face weapon reach in lattice units (COL_WIDTH=1.0 pitch) of the arm the troop
+    type carries (the troop file's class row, P-DEC-1). A type with no arm, including bare 'infantry' (a real call-site
+    default), and an unmapped one fall through to REACH_MELEE_DEFAULT=0.1 (non-pole melee). Lookup is
+    case-insensitive, matching stats_for."""
+    reach = _table.reach_of(troop_type)
+    return REACH_MELEE_DEFAULT if reach is None else reach
+
+
+def charge_for(troop_type):
+    """The charge penetration (ranks punched through on impact) of the troop file's row; 0 for any other type."""
+    return _table.charge_of(troop_type)
+
+
+def wheels_fast(troop_type):
+    """True iff the troop file's row makes the fast enveloping wheel."""
+    return _table.wheels_fast(troop_type)
+
+
+def default_role_for(troop_type):
+    """The role a body of this type takes when none is named (the troop file's `default_role`), or None."""
+    return _table.default_role_of(troop_type)
 
 
 # ─── support depth (MB-07, J-18 (A), ED-MB-0041) ─────────────────────────────────
-# Ranks behind contact a troop type's weapon reaches: DERIVED from the reach map above, not kept, as
-# reach / REACH_MELEE_DEFAULT: non-pole melee 0.1 -> 1, pole/spear/lance 0.2 -> 2, pike 0.3 -> 3 (sword/axe: only
-# the rank directly behind presses its blade into the fight; a spear is levelled from the second rank behind; a
-# pike's points project from the third; ranged types fight hand-to-hand with a sidearm). Lives here, not in
-# config, because it reads reach_for and config sits below this module. [ASSUMPTION; medium; Jordan to correct]
-# dividing a lattice-unit reach by 0.1 to get a rank count is the builder's step -- the note on the reach map
-# above calls its scale finer than PP-290's.
-@_functools.lru_cache(maxsize=None)   # pure in troop_type and the static reach map; read per supporter cell
+# Ranks behind contact a troop type's weapon reaches: the `support_ranks` of the class of the arm in hand (troop file),
+# so it is read, not kept per type (sword/axe: only the rank directly behind presses its blade into the fight; a spear is
+# levelled from the second rank behind; a pike's points project from the third; a missile arm used hand to hand is
+# non-pole). Lives here, not in config, because config sits below the loader's callers. [ASSUMPTION; medium; Jordan to correct]
+@_functools.lru_cache(maxsize=None)   # pure in troop_type and the static troop file; read per supporter cell
 def support_ranks_for(troop_type):
-    return max(1, round(reach_for(troop_type) / REACH_MELEE_DEFAULT))
+    ranks = _table.support_ranks_of(troop_type)
+    return 1 if ranks is None else ranks
 
 
 def support_weight(depth, troop_type):

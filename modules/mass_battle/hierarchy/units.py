@@ -849,7 +849,7 @@ class Unit:
         # Cavalry charge is the stubbed mechanic being wired ("noted but not wired").
         # [ASSUMPTION: cavalry charge_pen=3 ranks — basis: real shock-cavalry penetration of
         #  thin lines; absorbed by deep formations (pike/deep infantry). Class-B, Jordan-vetoable.]
-        return 3 if self.troop_type == 'cavalry' else 0
+        return charge_for(self.troop_type)   # [B17.11] the troop file's `charge` column (3 for today's `cavalry`)
 
     def cells(self):
         if MB_NODE_COHESION and hasattr(self, '_node_pos'):
@@ -1313,7 +1313,7 @@ inert today.
         # FLANK face (infantry envelops the flank, cavalry the rear — Cannae's division of labour). The full
         # relative-waypoint standoff approach ("maintain distance D from the nearest enemy face while
         # circling") is the next build on top of this face-selection.
-        fast = getattr(self, 'troop_type', None) in ('cavalry', 'light_cavalry') or getattr(self, 'unit_type', None) == 'cavalry'  # light_cavalry: ED-IN-0306
+        fast = wheels_fast(getattr(self, 'troop_type', None)) or getattr(self, 'unit_type', None) == 'cavalry'  # [B17.11] the troop file's `wheel` column (`cavalry`, `light_cavalry`: ED-IN-0306)
         if fast:
             return self._envelop_wheel_goal(enemy_cells)
         from modules.mass_battle import perimeter as _peri   # wired here; perimeter imports only geometry/config (no cycle)

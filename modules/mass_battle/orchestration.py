@@ -997,11 +997,11 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                     b_charging = (b_mom > a_mom) or (id(atom_a) in _b_press)
                     if MB_BRACE_ENABLED:
                         if (a_charging and _subunit_braced(atom_b, t) and (not MB_RECOIL_FRONTAL or b_angle_mod > -0.5)
-                                and (not MB_RECOIL_CHARGER_GATE or (atom_a.troop_type == 'cavalry'
+                                and (not MB_RECOIL_CHARGER_GATE or (charge_for(atom_a.troop_type) > 0
                                                                      and reach_for(atom_b.troop_type) >= reach_for(atom_a.troop_type)))):
                             ns_a -= MB_CHARGE_RECOIL * _wall_prep(unit_b, p["b_cells"], atom_b) * SIGMA_PER_D
                         elif (b_charging and _subunit_braced(atom_a, t) and (not MB_RECOIL_FRONTAL or a_angle_mod > -0.5)
-                                and (not MB_RECOIL_CHARGER_GATE or (atom_b.troop_type == 'cavalry'
+                                and (not MB_RECOIL_CHARGER_GATE or (charge_for(atom_b.troop_type) > 0
                                                                      and reach_for(atom_a.troop_type) >= reach_for(atom_b.troop_type)))):
                             ns_b -= MB_CHARGE_RECOIL * _wall_prep(unit_a, p["a_cells"], atom_a) * SIGMA_PER_D
             # [ED-MB-0018] The legacy ENCIRCLEMENT_PENALTY fires on the SAME >=2 trigger as the multi-side damage

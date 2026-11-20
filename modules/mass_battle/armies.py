@@ -7,7 +7,7 @@ and a module may not reach into `systems/` (the harness and workbench tree), so 
 (`systems/mass_battle/sim/engine.py` re-imports every name below)."""
 from modules.mass_battle.config import BATTLEFIELD_SIZE, MB_VOLLEYS_START, ROLE_SPEC, SIDE_A_START_ROW, SIDE_B_START_ROW
 from modules.mass_battle.core.exchange import clamp_command
-from modules.mass_battle.troop_types.registry import role_allowed, roles_for, unit_type_for
+from modules.mass_battle.troop_types.registry import default_role_for, role_allowed, roles_for, unit_type_for
 from modules.mass_battle.hierarchy.units import Officer, Unit, Army
 from modules.mass_battle.geometry import CELL_PATTERN_FN, footprint_for
 
@@ -234,14 +234,14 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
         role = sp.pop('role', None)
         # [ED-1095, Jordan-ruled 2026-07-02: "mounted archers shouldn't be closing in on the enemy--
         # they should be flying by and taking advantage of their range advantage with their bows."]
-        # A mounted_archers spec with NO explicit role AND no explicit shape/instructions defaults to
-        # the Kite role (kiting/stand-off posture) instead of silently closing to melee like any other
+        # A spec of a type whose troop-file row names a `default_role` (`mounted_archers`: Kite) with NO explicit role AND
+        # no explicit shape/instructions takes that role (kiting/stand-off posture) instead of silently closing to melee like any other
         # troop type. Checked BEFORE 'shape'/'instructions' are popped below so an explicit caller
         # choice of either is detected and always wins (matches every other precedence rule in this
         # function: explicit beats default). Mirrors the existing role->shape/instructions defaulting
         # immediately below, just with an implicit role instead of a caller-supplied one.
-        if role is None and tt == 'mounted_archers' and 'shape' not in sp and 'instructions' not in sp:
-            role = 'Kite'
+        if role is None and default_role_for(tt) is not None and 'shape' not in sp and 'instructions' not in sp:
+            role = default_role_for(tt)   # [B17.11] the troop file's `default_role` column (`Kite` for `mounted_archers`)
         if role is not None and not role_allowed(tt, role):
             raise ValueError(f"role {role!r} not allowed for troop_type {tt!r} "
                               f"(allowed: {roles_for(tt)})")

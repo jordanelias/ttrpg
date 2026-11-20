@@ -147,11 +147,13 @@ def test_table_follows_the_weapon_classes():
     assert _cap('infantry') < _cap('heavy_infantry') < _cap('pike')
     assert _cap('heavy_infantry') == _cap('cavalry')
     assert _cap('no_such_type') == _cap('infantry') == 1
-    # derived from the reach map, so EVERY mapped type is covered and a reach edit moves its rank
-    from modules.mass_battle.troop_types.registry import TROOP_TYPE_REACH
+    # derived from the primary arm's class, so EVERY troop row is covered and a class edit moves its rank
+    from modules.mass_battle.troop_types import table
+    from modules.mass_battle.troop_types.registry import reach_for
     expect = {0.1: 1, 0.2: 2, 0.3: 3}
-    assert len(TROOP_TYPE_REACH) == 15      # 12 + spearmen, skirmishers, light_cavalry (ED-IN-0306)
-    assert {t: _cap(t) for t in TROOP_TYPE_REACH} == {t: expect[r] for t, r in TROOP_TYPE_REACH.items()}
+    rows = table.troop_types()
+    assert len(rows) == 15      # 12 + spearmen, skirmishers, light_cavalry (ED-IN-0306)
+    assert {t: _cap(t) for t in rows} == {t: expect[reach_for(t)] for t in rows}
 
 
 # ── what the cap does to play (measured, Python 3.11.18, POOL_QUALITY_SCALE 0.8) ─────────────────────────────────────────
