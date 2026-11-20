@@ -85,7 +85,9 @@ def _band_order(territories) -> list:
 
 
 def _world(weight: int, menders_at: tuple = ()) -> World:
-    fixtures = DEFAULT_FIXTURES.sweep("lattice_coupling", weight)
+    # B07.99: the coupling is asked of the managed holder's `restore` EXECUTING every season; under `task_draw_arm` on a drawn restore fails
+    # about two seasons in three (a failed draw mends nothing), so the world runs the flat fold, as the arm-off control does.
+    fixtures = DEFAULT_FIXTURES.sweep("lattice_coupling", weight).sweep("task_draw_arm", "off")
     w = World(world_seed=1, fixtures=fixtures)
     scale = fixtures.get("condition_scale")
     w.rungs["R"] = Rung("R", "realm")
