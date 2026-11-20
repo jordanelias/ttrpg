@@ -129,7 +129,7 @@ def counter_reach(build):
 def room_rows():
     """The swing room in a closed exchange and the commit window it leaves (live `range_utilization`, `_commit_range_factor`)."""
     rows = []
-    for gap in (0.0, 0.3, 1.0, 3.0):
+    for gap in (0.0, 0.3, 0.6, 1.0, 3.0):
         room = S.range_utilization(None, gap, CFG)
         rows.append((gap, room, 2.0 + 3.0 * S._commit_range_factor(room, CFG)))
     return rows
@@ -169,8 +169,9 @@ def part_7_1(n):
            "(\"there is what is called the internal school, which uses stillness to control movement; whoever attacks it "
            "falls at the touch of the hand\") [PERIOD-TEXT; V: zh.wikisource 王征南墓誌銘; the sheet's gloss]. The Push-Hands "
            "Song couplet: \"彼不動，己不動；彼微動，己先動\" [LATER-CLASSIC; V: zh.wikisource 太極拳經]. Munenori: \"you obtain "
-           "the victory by having your opponent make the first move\", and the cost, \"if you do not think your opponent will "
-           "attack, you will be set upon quickly and severely\" [PERIOD-TEXT; V: WILSON].",
+           "the victory by having your opponent make the first move\" [PERIOD-TEXT; V: WILSON]. None of these names a price "
+           "for waiting; the sheet's own summary of one (\"waiting costs the initiative\") is the compiler's, not the "
+           "tradition's.",
            "",
            "**The two nearest engine quantities.** (a) the fighter's temperament, `disp` (`combat_systems.py:171-174`), which "
            "skews his own commitment shallow (`:989-994`), raises his reach for the counter by `1 − 0.5·lean` (`:1029`) and "
@@ -199,12 +200,30 @@ def part_7_1(n):
         out.append("")
     out += ["**Why the door so rarely opens: the swing room in a closed exchange.** The commit is drawn over `[2, 2 + 3·f]`, "
             "where `f` is `_commit_range_factor` of the room (`combat_systems.py:403-411`, `:993-994`), and the room in a "
-            "closed exchange is `range_utilization` of a measure gap the close has already shrunk to `CLOSE_GAP_REF` or less "
-            "(`:391-401`; `wrapper.py:169`, `:255-257`). Live values:", "",
+            "closed exchange is `range_utilization` of a measure gap the close has already shrunk to `CLOSE_GAP_REF` or less, "
+            "or to `CLOSE_GAP_REF + CLOSE_LATCH_BAND` (0.6) when the soft latch closed it at the engagement's start "
+            "(`:391-401`; `wrapper.py:110-113`, `:169`, `:255-257`). Rows above 0.6 are not reachable in a closed exchange. "
+            "Live values:", "",
             "| measure gap | room | highest commit the window allows (`DEEP_COMMIT` is "
             f"{CFG['DEEP_COMMIT']}) |", "|---|---|---|"]
     for gap, room, top in room_rows():
         out.append(f"| {gap} | {_f(room)} | {_f(top)} |")
+    out += ["",
+            "**How often a commit reaches `DEEP_COMMIT`, by the attacker's temper.** The live `commit_depth` "
+            "(`combat_systems.py:980-995`) drawn 20,000 times with a keyed draw, the attacker at the room of a closed "
+            "exchange at gap 0 (the mirror cells above), both fighters Italian. Reaching `DEEP_COMMIT` is not yet an opening: "
+            "the defender must also win the read (`wrapper.py:325`).", "",
+            "| attacker's temper | Beta (a, b) | share of commits at or above `DEEP_COMMIT` |", "|---|---|---|"]
+    for disp in (1, 4, 7):
+        att = _live(Combatant('X', weapon='arming', armor='light', tradition='italian', disp=disp))
+        dfn = _live(Combatant('D', weapon='arming', armor='light', tradition='italian'))
+        att.range_avail = S.range_utilization(att, 0.0, CFG)
+        rng = draw.seeded(draw.H2(SEED_KEY + '/deepshare', disp))
+        hits = ba = bb = 0
+        for _ in range(20000):
+            cmt, ba, bb, _ln = S.commit_depth(att, dfn, CFG, rng, TR)
+            hits += cmt >= CFG['DEEP_COMMIT']
+        out.append(f"| {disp} | ({_f(ba)}, {_f(bb)}) | {_pct(hits / 20000)} |")
     opened_world = dict(CFG, DEEP_COMMIT=3.0)
     out += ["",
             "**The same question in a world where the door can open.** Both fighters, `DEEP_COMMIT` set to 3.0 through the "
@@ -251,7 +270,7 @@ def part_7_2(n):
            "(`combat_systems.py:936-940`; live generic `blade_feel_refined`, ×1.5 per level, German); (b) the `leverage` "
            "lever, a log-odds shift on the same contest (`:934`; live `staerke_schwaeche`, ×1.2 per level, German).",
            "",
-           "**The observation that separates them, and tests the claim.** The tradition's claim is that the yielder's edge "
+           "**The observation that tests the claim (it does not separate the two levers: both turn out to be constant log-odds terms).** The tradition's claim is that the yielder's edge "
            "comes *from* the opponent's force: it should grow as he presses harder. In the engine, the opponent's force in the "
            "bind is his Strength (`BIND_STR_K`, `:941`) and his lever arm. Sweep the opponent's Strength and read A's "
            "probability of dominating one bind iteration, `bind_dominance_p(bind_sigma(A, B))` (`:1303-1305`), A the "
@@ -290,7 +309,7 @@ def part_7_2(n):
 
 # ── Part 7.3: the stopping mind — Concentration against the read lever ──────────────────────────────────────────────
 def mind_measure(a, b, n=N, cfg=None, tag='/mind'):
-    before, after, wins = [], [], 0
+    before, after, sb, sa, wins, losses = [], [], [], [], 0, 0
     for trace in _fights(a, b, n, cfg=cfg, tag=tag):
         hit = False
         for e in trace:
@@ -298,15 +317,19 @@ def mind_measure(a, b, n=N, cfg=None, tag='/mind'):
                 hit = True
             elif e['kind'] == 'read' and e['defender'] == 'A':
                 (after if hit else before).append(e['p_read_win'])
+            elif e['kind'] == 'roll' and e['aggressor'] == 'A':
+                (sa if hit else sb).append(e['net_sigma'])
             elif e['kind'] == 'fight_result':
                 wins += e.get('winner') == 'A'
-    mb = sum(before) / max(1, len(before))
-    ma = sum(after) / max(1, len(after))
-    return dict(before=mb, after=ma, gap=ma - mb, nb=len(before), na=len(after), win=wins / n)
+                losses += e.get('winner') == 'B'
+    av = lambda xs: sum(xs) / max(1, len(xs))
+    mb, ma = av(before), av(after)
+    return dict(before=mb, after=ma, gap=ma - mb, nb=len(before), na=len(after), win=wins / n, loss=losses / n,
+                sig_before=av(sb), sig_after=av(sa))
 
 
 def part_7_3(n):
-    base = dict(weapon='arming', armour='heavy', tradition='german')
+    base = dict(weapon='arming', armour='medium', tradition='german')
     drain_off = dict(CFG, CONC_DRAIN_HIT=0.0, CONC_DRAIN_LOSS=0.0)
     arms = [('control (no technique, default Focus)', base, None),
             ('`keen_eye_basic` L2 (visual ×1.21)', dict(base, tech={'keen_eye_basic': 2}), None),
@@ -328,37 +351,43 @@ def part_7_3(n):
            "**The observation that separates them.** Takuan's failure is caused by the blow that captured the mind: it is "
            "worse *after* being struck than before. So read the engine's own probability that the defender wins the read "
            "(`p_read_win`, emitted by `read_contest`, `wrapper.py:310-311`) for A as defender, before A has taken a wound and "
-           "after. A read lever should lift both; a Concentration effect should close the gap between them.",
+           "after. A read lever should lift both; a Concentration effect should close the gap between them. Concentration "
+           "has a second channel, on the **attacker's** side: `consistency` is added unscaled to his attack σ "
+           "(`wrapper.py:297`; `combat_systems.py:965`) and to his opposing read value (`:1011`). So the table also gives "
+           "the mean net σ of A's own rolls before and after his first wound; that figure also carries the wound "
+           "impairment itself (`:919-923`), so only the difference between arms isolates Concentration.",
            "",
-           f"Builds: both German, arming sword, heavy armour (longer fights, so more reads after a wound), attributes at "
+           f"Builds: both German, arming sword, medium armour (longer fights, so more reads after a wound), attributes at "
            f"default unless named; {n} keyed fights per arm. The last arm changes the configuration for both fighters through "
            "`fight.fight`'s overlay argument; it is a world in which no blow drains the mind, not a technique.", "",
-           "| arm | A's p(read) before a wound | after | gap | reads before / after |",
-           "|---|---|---|---|---|"]
+           "| arm | A's p(read) before a wound | after | gap | reads before / after | A's attack σ before / after | A wins / B wins |",
+           "|---|---|---|---|---|---|---|"]
     for name, a, cfg in arms:
         m = mind_measure(a, base, n, cfg=cfg)
         out.append(f"| {name} | {_pct(m['before'])} | {_pct(m['after'])} | {100 * m['gap']:+.2f} pts | "
-                   f"{m['nb']} / {m['na']} |")
+                   f"{m['nb']} / {m['na']} | {_f(m['sig_before'])} / {_f(m['sig_after'])} | {_pct(m['win'])} / {_pct(m['loss'])} |")
     out += ["",
             "**The magnitude chain, from the live functions.** A default fighter (Focus 3, Spirit 3: Concentration 15) after "
             "k hits taken, each draining `CONC_DRAIN_HIT` "
-            f"({CFG['CONC_DRAIN_HIT']}): the response term `LAPSE_K·consistency` added inside `mode_sigma` (`:340`), and the "
-            "factor on the defender's read, `1 − MENTAL_FAT_READ_K·mental_fatigue` (`:1004`), at a stamina fatigue of 0.5. "
-            "For scale, one level of `keen_eye_basic` multiplies the read by 1.1.", "",
-            "| hits taken | Concentration | LAPSE term on the response (σ) | read factor at fatigue 0.5 |", "|---|---|---|---|"]
+            f"({CFG['CONC_DRAIN_HIT']}): `consistency` itself, which is added unscaled to the fighter's own attack σ "
+            "(`:965`) and read value (`:1011`); the response term `LAPSE_K·consistency` added inside `mode_sigma` (`:340`); "
+            "and the factor on the defender's read, `1 − MENTAL_FAT_READ_K·mental_fatigue` (`:1004`), at a stamina fatigue "
+            "of 0.5. For scale, one point of commit depth is `COMMIT_SIGMA` "
+            f"({CFG['COMMIT_SIGMA']}) σ of attack, and one level of `keen_eye_basic` multiplies the read by 1.1.", "",
+            "| hits taken | Concentration | consistency: on his own attack σ and read value | LAPSE term on the response (σ) | read factor at fatigue 0.5 |", "|---|---|---|---|---|"]
     for k in range(0, 8, 2):
-        c = _live(Combatant('A', weapon='arming', armor='heavy', tradition='german'))
+        c = _live(Combatant('A', weapon='arming', armor='medium', tradition='german'))
         c.conc = max(0.0, c.conc_max - k * CFG['CONC_DRAIN_HIT'])
         lapse = CFG['LAPSE_K'] * S.consistency(c, CFG)
         rf = 1 - CFG['MENTAL_FAT_READ_K'] * S.mental_fatigue(c, 0.5, CFG)
-        out.append(f"| {k} | {c.conc:g} | {lapse:+.4f} | {rf:.4f} |")
+        out.append(f"| {k} | {c.conc:g} | {S.consistency(c, CFG):+.4f} | {lapse:+.4f} | {rf:.4f} |")
     out.append("")
     return out
 
 
 # ── discriminating runs for rows outside the worked examples ────────────────────────────────────────────────────────
 def discriminators():
-    out = ["## 7.4 Discriminating runs for three more rows", ""]
+    out = ["## 7.4 Two more runs: one discriminator (CM-04) and one figure (JP-06)", ""]
     # CM-04 qinggong: Agility against the balance lever
     def pair(agi=4, tech=None):
         d = _live(Combatant('D', weapon='arming', armor='light', tradition='spanish', agi=agi, equipped=dict(tech or {})))
@@ -378,22 +407,8 @@ def discriminators():
         cr = S.close_rate(d, 0.0, 0.0, 1.0, CFG)
         out.append(f"| {name} | {_f(dodge, 4)} | {_f(rs, 4)} | {_f(cr, 4)} |")
     out.append("")
-    # CM-07 Dugu: the formless fighter is the most legible
-    out += ["**CM-07, 無招勝有招 no move beats move.** A German defender reads attackers of four traditions: the live "
-            "`read_contest` (`combat_systems.py:997-1017`) returns the probability he wins the read (`p_read`), and the live "
-            "`commit_depth` (`:980-995`) returns the Beta parameters of the attacker's commitment against him (equal "
-            "parameters: no wariness). Arming swords, every attribute at default, commit 3.5.", "",
-            "| attacker's tradition | familiarity (`traditions.py:40-48`) | defender's p(read) | attacker's Beta (a, b) |",
-            "|---|---|---|---|"]
-    for trad in ('none', 'german', 'italian', 'japanese'):
-        att = _live(Combatant('X', weapon='arming', armor='light', tradition=trad))
-        dfn = _live(Combatant('D', weapon='arming', armor='light', tradition='german'))
-        rc = S.read_contest(att, dfn, 3.5, S.consistency(att, CFG), 0.0, 0.0, CFG, _Fixed(0.0), TR)
-        _, ba, bb, _ = S.commit_depth(att, dfn, CFG, _Fixed(0.5), TR)
-        out.append(f"| {trad} | {TR.familiarity('german', trad):.2f} | {_pct(rc['p_read'])} | ({_f(ba)}, {_f(bb)}) |")
-    out.append("")
     # JP-06 hyoshi: one's own tempo factor lowers the opponent's readiness
-    out += ["**JP-06, 無拍子 out of rhythm.** The anticipation factor on each fighter's readiness (`tempo_pressure`, "
+    out += ["**JP-06, 無拍子 out of rhythm (a figure, not a discriminator: the Vor is held equal, so this does not separate the `tempo` term from the Vor; UBR).** The anticipation factor on each fighter's readiness (`tempo_pressure`, "
             "`combat_systems.py:1173-1198`) at equal Vor, A with `timing_refined` (×1.5 per level, Italian), B without.", "",
             "| A's level | A's tempo_pressure | B's tempo_pressure |", "|---|---|---|"]
     for lvl in (0, 1, 2, 3):

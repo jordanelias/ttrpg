@@ -10,9 +10,9 @@
 
 Three findings the derivations forced, each run on the live module:
 
-1. **The counter family is behind a door that is nearly shut.** In a closed exchange the swing room caps the commit at 4.03-4.09 against a `DEEP_COMMIT` of 4.0, so about 1% of commits (0.1-1.2% across Part 7 §7.1's cells) open the counter, the open Indes steal, the displace-and-step-inside and the lunge (Part 7 §7.1). Three levels of `mezzo_tempo` move a fight by about 0 points with the door as it is and by +1 to +4 once it can open. Workplan v12 **B15.04** already owns this ("the deep tier follows the window"); this proposal corroborates it.
-2. **Concentration is the right quantity for the "mind" concepts, and it barely acts.** A defender's read after a wound is within 0.3 points of his read before it, and switching the drains off moves nothing measurable, because the reserve's effect on the read is multiplied by stamina fatigue (Part 7 §7.3). Takuan's mind stops on the first blow, fresh; the engine's only once the body tires. **PC-22**'s single Concentration function owns the fix.
-3. **The engine disagrees with three claims, and the run shows it**: the still temper finishes behind the neutral one against every opponent temper tried (stillness pays its price and gets no payoff); the engine's feel in the bind is a constant that does not grow with the opponent's force (the four ounces have no lever to stand on); and the formless fighter of the wuxia novels is, in the engine, the *easiest* to read.
+1. **The counter family is behind a door that is nearly shut.** In a closed exchange the swing room caps the commit at 4.03-4.14 against a `DEEP_COMMIT` of 4.0, so few commits reach `DEEP_COMMIT`: 0.0% from a temper-1 attacker, 0.8% from a neutral one, 10.8% from a temper-7 one (the live `commit_depth`, Part 7 §7.1). Reaching it is not yet an opening (the defender must also win the read): the door opened 0.00-0.01 times per fight against a neutral or waiting opponent and 0.18 against a presser. Behind it sit the counter, the open Indes steal, the displace-and-step-inside and the lunge. Three levels of `mezzo_tempo` move a fight by about 0 points with the door as it is, and by +3.0 and +4.3 once it can open (a third cell, +1.1, is below this set's 2-point threshold). Workplan v12 **B15.04** already owns this ("the deep tier follows the window"); this proposal corroborates it.
+2. **Concentration is the right quantity for the "mind" concepts, and it acts on the wrong side.** On the **defender's** side, where Takuan's failure lives, it barely acts: his read after a wound is within 0.2 points of his read before it, and switching the drains off moves nothing measurable, because the reserve's effect on the read is multiplied by stamina fatigue; the lapse term is ±0.012 σ at the extremes. On the **attacker's** side it acts unscaled: `consistency` goes straight into his own attack σ and read value, −0.08 σ per two hits taken; switching the drains off lifts A's attack σ after a wound from −0.062 to −0.013, and Focus 5 lifts it fresh from 0.088 to 0.224 with A winning 56.8% against 51.7% (Part 7 §7.3). The engine's stopped mind weakens one's own blows; Takuan's leaves one unable to answer. **PC-22**'s single Concentration function owns the form.
+3. **The engine disagrees with two claims, and the run shows it**: the still temper finishes behind the neutral one against every opponent temper tried (it pays the engine's costs, the Vor drift and weaker attacks, and gets no payoff); the engine's feel in the bind is a constant that does not grow with the opponent's force (the four ounces have no lever to stand on). (The wuxia "no move beats move" is left NO-HANDLE: the engine has no move patterns to forget, N-1.)
 
 **The one new mechanism worth Jordan's decision is a memory within the engagement** (D-1): it alone would carry the largest family the engine cannot express — the feint, the lure, the lull and the pattern (seven rows, five clusters).
 
@@ -21,7 +21,7 @@ Three findings the derivations forced, each run on the live module:
 | rank | proposal | part | one line |
 |---|---|---|---|
 | 1 | **File by derivation, not by name** | 1, 2 | a concept that lands on temperament, Concentration or an attribute is never a board entry; the board holds what lands on a lever or a gate; re-file *kiri-otoshi* from `guard_prior_parry` to the counter route |
-| 2 | **Make the two landing quantities act before selling techniques on them** | 7, 8 §8.2 | the counter door (B15.04) and Concentration on a fresh body (PC-22's function); this proposal supplies the evidence to both owners and builds neither |
+| 2 | **Make the two landing quantities act before selling techniques on them** | 7, 8 §8.2 | the counter door (B15.04) and Concentration acting on the defender's response for a fresh fighter (PC-22's function); this proposal supplies the evidence to both owners and builds neither |
 | 3 | **D-1: memory within an engagement** | 6, 8 | the one new mechanism; scheduled after B15.04 and B16 |
 | 4 | **Vows narrow, they do not grant** | 5 | a vow is a set run backwards: it closes doors the engine offers (the decider's `withdraw`, the terms, the fighting withdrawal); the engine carries only the narrowing |
 | 5 | **No charm, possession or invulnerability is ever a combat handle** | 5 | forbidden targets (agency proposal §5 Class A) with no canon carrier (P-07, P-08, P-13) |
@@ -32,15 +32,17 @@ Three findings the derivations forced, each run on the live module:
 
 | status of the whole row | rows |
 |---|---|
-| EXISTS (a live lever, attribute, axis, rule or host-side composition; 8 of them flagged near-inert, door-shut or held by ruling) | 23 |
+| EXISTS (a live lever, attribute, axis, rule or host-side composition; 8 of them flagged inert on the defender's side, door-shut or held by ruling) | 23 |
 | EXISTS-PHYS (everyone's already, through physics or the contest structure) | 5 |
 | NEEDS-LEVER | 5 |
 | NEEDS-GATE | 1 |
 | NEEDS-BEHAVIOUR | 0 |
-| NO-HANDLE (6 forbidden, 1 without canon carrier, 3 where the engine models the situation differently, 1 not a fight claim, 2 outside the bout, 7 awaiting a Part 6 addition) | 20 |
+| NO-HANDLE (6 forbidden, 1 without canon carrier, 2 where the engine models the situation differently, 1 not a fight claim, 2 outside the bout, 8 awaiting a Part 6 addition) | 20 |
 | **split** (one half exists, the other does not: 17 NO-HANDLE halves, 2 NEEDS-BEHAVIOUR, 1 NEEDS-LEVER, 1 NEEDS-GATE) | 21 |
 
-Rows run on the live module: JP-01, JP-03, JP-05, CP-04, CP-05, CP-06, CP-12 (the worked examples), CM-04, CM-07, JP-06 (discriminators), and the counter rows through §7.1's door figures. Every other choice between two nearest quantities is marked UBR in its row.
+**Counting rule:** a row whose status cell names one status for the whole row is counted under the first status named (EU-08, "EXISTS-PHYS and EXISTS", counts as EXISTS-PHYS); a row whose cell names a status for each half is "split".
+
+Rows run on the live module: JP-01, JP-03, JP-05, CP-06, CP-12 (worked examples with a discriminating observation), CP-04 and CP-05 (a run that tests the Taiji claim but does not separate `tactile` from `leverage`: UBR), CM-04 (discriminator), JP-06 (a figure only; UBR against the Vor), and the counter rows through §7.1's door figures. Every other choice between two nearest quantities is marked UBR in its row.
 
 ## Words used in every part (each defined once, here)
 
@@ -65,7 +67,7 @@ Board, set, gate, lever, technique, tradition and attention are the jobs set's w
 | 4 | `04_stages_of_mastery.md` | every ladder in the clusters; what changes between rungs, mapped to the jobs set's growth path; what a stage unlocks and costs |
 | 5 | `05_vows_taboos_ritual_fury.md` | the canon's position; each kind of obligation; vows as sets run backwards; the fury hypothesis tested |
 | 6 | `06_no_handle_ledger.md` | the missing things, ranked by rows unlocked, each with its hook; NO-HANDLE rows with no addition and why |
-| 7 | `07_worked_examples.md` (generated by `examples.py`); `07_worked_examples_part2.md` | stillness, yielding and the stopping mind run end to end, plus three discriminating runs; the reading of each table |
+| 7 | `07_worked_examples.md` (generated by `examples.py`); `07_worked_examples_part2.md` | stillness, yielding and the stopping mind run end to end, plus one more discriminating run (CM-04) and one figure (JP-06); the reading of each table |
 | 8 | `08_decisions_for_jordan.md` | the one escalated decision; the candidates answered without escalation, with their owners |
 
 **Regenerate and check:** `python -I proposals/2026-11-20-pc-esoteric-concepts-to-levers/examples.py > proposals/2026-11-20-pc-esoteric-concepts-to-levers/07_worked_examples.md` (about 75 seconds; 600 keyed fights per arm; two consecutive runs produced identical tables) and `examples.py --check` (28 assertions: every technique used is live and gated to the tradition it is used with; an empty technique argument fights byte-identically to none over 20 seeds; the stub bisection recovers the neutral counter reach exactly; the drain overlay is not a no-op). The script imports `modules.combat` by its package path, adds nothing to the engine's tables, and uses one configuration overlay through `fight.fight`'s own `cfg` argument.

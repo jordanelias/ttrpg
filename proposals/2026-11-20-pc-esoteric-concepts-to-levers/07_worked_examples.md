@@ -4,7 +4,7 @@
 
 ## 7.1 Stillness (CP-06, CP-07, JP-05): temperament against the counter lever
 
-**Source passages.** Huang Zongxi, *Epitaph for Wang Zhengnan* (1669): "有所謂內家者，以靜制動，犯者應手即仆" ("there is what is called the internal school, which uses stillness to control movement; whoever attacks it falls at the touch of the hand") [PERIOD-TEXT; V: zh.wikisource 王征南墓誌銘; the sheet's gloss]. The Push-Hands Song couplet: "彼不動，己不動；彼微動，己先動" [LATER-CLASSIC; V: zh.wikisource 太極拳經]. Munenori: "you obtain the victory by having your opponent make the first move", and the cost, "if you do not think your opponent will attack, you will be set upon quickly and severely" [PERIOD-TEXT; V: WILSON].
+**Source passages.** Huang Zongxi, *Epitaph for Wang Zhengnan* (1669): "有所謂內家者，以靜制動，犯者應手即仆" ("there is what is called the internal school, which uses stillness to control movement; whoever attacks it falls at the touch of the hand") [PERIOD-TEXT; V: zh.wikisource 王征南墓誌銘; the sheet's gloss]. The Push-Hands Song couplet: "彼不動，己不動；彼微動，己先動" [LATER-CLASSIC; V: zh.wikisource 太極拳經]. Munenori: "you obtain the victory by having your opponent make the first move" [PERIOD-TEXT; V: WILSON]. None of these names a price for waiting; the sheet's own summary of one ("waiting costs the initiative") is the compiler's, not the tradition's.
 
 **The two nearest engine quantities.** (a) the fighter's temperament, `disp` (`combat_systems.py:171-174`), which skews his own commitment shallow (`:989-994`), raises his reach for the counter by `1 − 0.5·lean` (`:1029`) and drifts his Vor down every beat (`wrapper.py:165`); (b) a technique on the `counter_select` lever (live: `mezzo_tempo`, ×1.4 per level, `ability_primitives.py:36-37`), which raises only the reach.
 
@@ -48,14 +48,23 @@ Builds: both fighters Italian, arming sword, light armour, every attribute at it
 | temper 4 + mezzo_tempo L2 | 88.2% | 0.00 | 0.9% | 12.9% | 0.061 | 56.8% |
 | temper 4 + mezzo_tempo L3 | 100.0% | 0.00 | 0.9% | 12.9% | 0.061 | 56.8% |
 
-**Why the door so rarely opens: the swing room in a closed exchange.** The commit is drawn over `[2, 2 + 3·f]`, where `f` is `_commit_range_factor` of the room (`combat_systems.py:403-411`, `:993-994`), and the room in a closed exchange is `range_utilization` of a measure gap the close has already shrunk to `CLOSE_GAP_REF` or less (`:391-401`; `wrapper.py:169`, `:255-257`). Live values:
+**Why the door so rarely opens: the swing room in a closed exchange.** The commit is drawn over `[2, 2 + 3·f]`, where `f` is `_commit_range_factor` of the room (`combat_systems.py:403-411`, `:993-994`), and the room in a closed exchange is `range_utilization` of a measure gap the close has already shrunk to `CLOSE_GAP_REF` or less, or to `CLOSE_GAP_REF + CLOSE_LATCH_BAND` (0.6) when the soft latch closed it at the engagement's start (`:391-401`; `wrapper.py:110-113`, `:169`, `:255-257`). Rows above 0.6 are not reachable in a closed exchange. Live values:
 
 | measure gap | room | highest commit the window allows (`DEEP_COMMIT` is 4.0) |
 |---|---|---|
 | 0.0 | 0.300 | 4.029 |
 | 0.3 | 0.332 | 4.086 |
+| 0.6 | 0.365 | 4.143 |
 | 1.0 | 0.408 | 4.219 |
 | 3.0 | 0.623 | 4.600 |
+
+**How often a commit reaches `DEEP_COMMIT`, by the attacker's temper.** The live `commit_depth` (`combat_systems.py:980-995`) drawn 20,000 times with a keyed draw, the attacker at the room of a closed exchange at gap 0 (the mirror cells above), both fighters Italian. Reaching `DEEP_COMMIT` is not yet an opening: the defender must also win the read (`wrapper.py:325`).
+
+| attacker's temper | Beta (a, b) | share of commits at or above `DEEP_COMMIT` |
+|---|---|---|
+| 1 | (0.624, 1.776) | 0.0% |
+| 4 | (1.200, 1.200) | 0.8% |
+| 7 | (1.776, 0.624) | 10.8% |
 
 **The same question in a world where the door can open.** Both fighters, `DEEP_COMMIT` set to 3.0 through the overlay argument (it also moves the other sites that read it: the displace-and-step-inside branch, `wrapper.py:387`, the over-committed closer's reopen moment, `:401`, and the centre of the Indes scale, `combat_systems.py:1023`). It approximates what workplan v12 B15.04 would do (the deep tier at the window's upper third, not built on this branch) and, for everyone, what the jobs set's `counter_shallow` gate would do for a set's holder; it is not a proposal to change the constant.
 
@@ -77,7 +86,7 @@ Builds: both fighters Italian, arming sword, light armour, every attribute at it
 
 **The two nearest engine quantities.** (a) the `tactile` lever, which multiplies each side's own read in the bind (`combat_systems.py:936-940`; live generic `blade_feel_refined`, ×1.5 per level, German); (b) the `leverage` lever, a log-odds shift on the same contest (`:934`; live `staerke_schwaeche`, ×1.2 per level, German).
 
-**The observation that separates them, and tests the claim.** The tradition's claim is that the yielder's edge comes *from* the opponent's force: it should grow as he presses harder. In the engine, the opponent's force in the bind is his Strength (`BIND_STR_K`, `:941`) and his lever arm. Sweep the opponent's Strength and read A's probability of dominating one bind iteration, `bind_dominance_p(bind_sigma(A, B))` (`:1303-1305`), A the aggressor, both German, both with a longsword.
+**The observation that tests the claim (it does not separate the two levers: both turn out to be constant log-odds terms).** The tradition's claim is that the yielder's edge comes *from* the opponent's force: it should grow as he presses harder. In the engine, the opponent's force in the bind is his Strength (`BIND_STR_K`, `:941`) and his lever arm. Sweep the opponent's Strength and read A's probability of dominating one bind iteration, `bind_dominance_p(bind_sigma(A, B))` (`:1303-1305`), A the aggressor, both German, both with a longsword.
 
 | A's technique | B's Strength 4 | 5 | 6 | 7 | A's gain over no technique, in log-odds, at Strength 4 / 7 |
 |---|---|---|---|---|---|
@@ -100,28 +109,28 @@ Builds: both fighters Italian, arming sword, light armour, every attribute at it
 
 **The two nearest engine quantities.** (a) Concentration: drained by a hit taken (`wrapper.py:411`, `:217`, `:249`, `:437`) and a lost riposte (`:445`), read back into the defender's read through `mental_fatigue` (`combat_systems.py:1285-1289`, `:1004`) and into his response through `consistency` (`:1281-1283`, `:340`); (b) the read levers, `visual` (`:1004`, `:1011`; live generic `keen_eye_basic`, ×1.1 per level, German).
 
-**The observation that separates them.** Takuan's failure is caused by the blow that captured the mind: it is worse *after* being struck than before. So read the engine's own probability that the defender wins the read (`p_read_win`, emitted by `read_contest`, `wrapper.py:310-311`) for A as defender, before A has taken a wound and after. A read lever should lift both; a Concentration effect should close the gap between them.
+**The observation that separates them.** Takuan's failure is caused by the blow that captured the mind: it is worse *after* being struck than before. So read the engine's own probability that the defender wins the read (`p_read_win`, emitted by `read_contest`, `wrapper.py:310-311`) for A as defender, before A has taken a wound and after. A read lever should lift both; a Concentration effect should close the gap between them. Concentration has a second channel, on the **attacker's** side: `consistency` is added unscaled to his attack σ (`wrapper.py:297`; `combat_systems.py:965`) and to his opposing read value (`:1011`). So the table also gives the mean net σ of A's own rolls before and after his first wound; that figure also carries the wound impairment itself (`:919-923`), so only the difference between arms isolates Concentration.
 
-Builds: both German, arming sword, heavy armour (longer fights, so more reads after a wound), attributes at default unless named; 600 keyed fights per arm. The last arm changes the configuration for both fighters through `fight.fight`'s overlay argument; it is a world in which no blow drains the mind, not a technique.
+Builds: both German, arming sword, medium armour (longer fights, so more reads after a wound), attributes at default unless named; 600 keyed fights per arm. The last arm changes the configuration for both fighters through `fight.fight`'s overlay argument; it is a world in which no blow drains the mind, not a technique.
 
-| arm | A's p(read) before a wound | after | gap | reads before / after |
+| arm | A's p(read) before a wound | after | gap | reads before / after | A's attack σ before / after | A wins / B wins |
+|---|---|---|---|---|---|---|
+| control (no technique, default Focus) | 40.6% | 40.5% | -0.17 pts | 1262 / 1814 | 0.088 / -0.062 | 51.7% / 46.5% |
+| `keen_eye_basic` L2 (visual ×1.21) | 53.8% | 53.2% | -0.57 pts | 1262 / 1862 | 0.098 / -0.066 | 50.5% / 47.7% |
+| `keen_eye_basic` L4 (visual ×1.46) | 69.0% | 68.0% | -0.97 pts | 1250 / 1932 | 0.094 / -0.071 | 49.3% / 48.8% |
+| Focus 5 (Concentration 21 against 15) | 40.8% | 40.8% | +0.03 pts | 1274 / 1733 | 0.224 / 0.089 | 56.8% / 42.3% |
+| both fighters: the drains on a hit and on a lost riposte set to 0 | 40.0% | 39.6% | -0.38 pts | 1239 / 1755 | 0.101 / -0.013 | 52.8% / 46.0% |
+
+**The magnitude chain, from the live functions.** A default fighter (Focus 3, Spirit 3: Concentration 15) after k hits taken, each draining `CONC_DRAIN_HIT` (2.0): `consistency` itself, which is added unscaled to the fighter's own attack σ (`:965`) and read value (`:1011`); the response term `LAPSE_K·consistency` added inside `mode_sigma` (`:340`); and the factor on the defender's read, `1 − MENTAL_FAT_READ_K·mental_fatigue` (`:1004`), at a stamina fatigue of 0.5. For scale, one point of commit depth is `COMMIT_SIGMA` (0.18) σ of attack, and one level of `keen_eye_basic` multiplies the read by 1.1.
+
+| hits taken | Concentration | consistency: on his own attack σ and read value | LAPSE term on the response (σ) | read factor at fatigue 0.5 |
 |---|---|---|---|---|
-| control (no technique, default Focus) | 40.7% | 40.4% | -0.23 pts | 1916 / 4818 |
-| `keen_eye_basic` L2 (visual ×1.21) | 53.7% | 53.0% | -0.69 pts | 2082 / 4723 |
-| `keen_eye_basic` L4 (visual ×1.46) | 68.6% | 67.5% | -1.03 pts | 2022 / 4791 |
-| Focus 5 (Concentration 21 against 15) | 40.8% | 40.9% | +0.01 pts | 1958 / 4874 |
-| both fighters: the drains on a hit and on a lost riposte set to 0 | 40.1% | 39.6% | -0.48 pts | 1881 / 4897 |
+| 0 | 15 | +0.0000 | +0.0000 | 0.9000 |
+| 2 | 11 | -0.0800 | -0.0040 | 0.8733 |
+| 4 | 7 | -0.1600 | -0.0080 | 0.8467 |
+| 6 | 3 | -0.2400 | -0.0120 | 0.8200 |
 
-**The magnitude chain, from the live functions.** A default fighter (Focus 3, Spirit 3: Concentration 15) after k hits taken, each draining `CONC_DRAIN_HIT` (2.0): the response term `LAPSE_K·consistency` added inside `mode_sigma` (`:340`), and the factor on the defender's read, `1 − MENTAL_FAT_READ_K·mental_fatigue` (`:1004`), at a stamina fatigue of 0.5. For scale, one level of `keen_eye_basic` multiplies the read by 1.1.
-
-| hits taken | Concentration | LAPSE term on the response (σ) | read factor at fatigue 0.5 |
-|---|---|---|---|
-| 0 | 15 | +0.0000 | 0.9000 |
-| 2 | 11 | -0.0040 | 0.8733 |
-| 4 | 7 | -0.0080 | 0.8467 |
-| 6 | 3 | -0.0120 | 0.8200 |
-
-## 7.4 Discriminating runs for three more rows
+## 7.4 Two more runs: one discriminator (CM-04) and one figure (JP-06)
 
 **CM-04, 輕功 lightness.** The dodge (`mode_sigma`, `combat_systems.py:309-341`, at commit 3 and a won read), the defender's reach-and-footwork term against an equal attacker (`reach_sigma`, `:778-792`; positive lowers the attacker's net), and the closing rate as the shorter fighter (`close_rate`, `:1220-1227`). Spanish fighters, arming swords.
 
@@ -131,16 +140,7 @@ Builds: both German, arming sword, heavy armour (longer fights, so more reads af
 | Agility 5 | 0.1530 | 0.0375 | 0.2983 |
 | `footing_refined` L2 (balance ×2.25) | 0.0408 | 0.2812 | 0.2497 |
 
-**CM-07, 無招勝有招 no move beats move.** A German defender reads attackers of four traditions: the live `read_contest` (`combat_systems.py:997-1017`) returns the probability he wins the read (`p_read`), and the live `commit_depth` (`:980-995`) returns the Beta parameters of the attacker's commitment against him (equal parameters: no wariness). Arming swords, every attribute at default, commit 3.5.
-
-| attacker's tradition | familiarity (`traditions.py:40-48`) | defender's p(read) | attacker's Beta (a, b) |
-|---|---|---|---|
-| none | 1.00 | 68.6% | (1.200, 1.200) |
-| german | 1.00 | 68.6% | (1.200, 1.200) |
-| italian | 0.93 | 62.6% | (1.124, 1.276) |
-| japanese | 0.85 | 55.3% | (1.038, 1.362) |
-
-**JP-06, 無拍子 out of rhythm.** The anticipation factor on each fighter's readiness (`tempo_pressure`, `combat_systems.py:1173-1198`) at equal Vor, A with `timing_refined` (×1.5 per level, Italian), B without.
+**JP-06, 無拍子 out of rhythm (a figure, not a discriminator: the Vor is held equal, so this does not separate the `tempo` term from the Vor; UBR).** The anticipation factor on each fighter's readiness (`tempo_pressure`, `combat_systems.py:1173-1198`) at equal Vor, A with `timing_refined` (×1.5 per level, Italian), B without.
 
 | A's level | A's tempo_pressure | B's tempo_pressure |
 |---|---|---|

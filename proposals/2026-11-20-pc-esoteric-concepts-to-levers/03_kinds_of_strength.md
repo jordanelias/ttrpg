@@ -30,7 +30,7 @@
 | Crude native force (拙力) against intent-led force (China · 氣力非二物) | force without intent is "master and servant inverted" | **none**: one Strength | **NO-HANDLE** (no addition proposed: it would be a second Strength) |
 | Visible against hidden strength (China · 練氣歸根; 五行拳's clear/hidden/transforming jin) | true strength does not show | **none**: no fighter reads the other's capacity before the bout | **NO-HANDLE** (out of the bout: it belongs to a reading of the opponent the season would own) |
 | Inner firmness against outer bravery (China · 內壯/外壯) | firmness is accumulated, bravery is active | nearest: Concentration (held) against temperament (spent) | UBR; no addition |
-| Courage, "gall" (China · 有膽始有力); the lion (Europe) | fear stagnates the limbs | Concentration (Spirit, Focus) | **EXISTS**, near-inert (Part 7 §7.3) |
+| Courage, "gall" (China · 有膽始有力); the lion (Europe) | fear stagnates the limbs | Concentration (Spirit, Focus) | **EXISTS**: inert on the defender's read, active on one's own attack σ (Part 7 §7.3) |
 | The soft and yielding; water (China · 柔弱勝剛強; SE Asia · *Teratai*) | the yielding thing outlasts | **none** as a force (CP-05: the engine's feel does not grow with the opponent's force) | **NO-HANDLE** (N-5) |
 | Precise strength, point-striking (China · 點穴; South Asia · *marmam*) | disables by placement | damage physics | forbidden (Class A) |
 | Hardened body: iron shirt, the diamond body, the thunderbolt body (China; South Asia · *kāya-sampat*) | blows do not hurt | wounds | forbidden (Class A); armour is the loadout's |

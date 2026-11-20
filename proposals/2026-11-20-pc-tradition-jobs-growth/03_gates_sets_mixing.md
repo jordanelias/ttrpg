@@ -77,6 +77,8 @@ Codes. **Status:** `LIVE` in `ABILITIES` today; `DRAFT` from `kits_draft.py` on 
 | **Filipino** (continuous flow) — authorable under Addendum 6 | `flow` NEW on `tempo`: continuous striking without a reset (INSP the roster's own `mode` label, `traditions.py:21`; RECALL) | `flow` → `live_hand` NEW on `tactile`: the empty or second hand checking the opponent's arm (RECALL) · `triangle_step` NEW on `balance`: angled footwork (RECALL) | **S-PH-1 "Live hand"**: `flow` + `live_hand` + `triangle_step` → open `grab_close`, which in the engine is where disarms already live (`capabilities.py:64-68`: disarm is a branch of the universal grab menu) (INV) |
 | **none** | none | no curriculum; may learn the generics (§3.5) | none |
 
+**Correction (2026-11-20, from `proposals/2026-11-20-pc-esoteric-concepts-to-levers/` row JP-15):** `kiriotoshi` belongs on the counter route (`counter_select`/`counter_success`), not `guard_prior_parry`: its source describes a cut made on a *won* read during the opponent's cut, while a guard prior acts only on a lost read; S-JP-1 above already uses it to open `counter_shallow`, which is the counter route.
+
 **What the table is not.** It is not content Jordan has approved (plan rule P11: content is Jordan's). It is a worked example of the *mechanism*, filled densely enough that a sheet can be generated from it. Every `NEW` and `INV` entry is `[ASSUMPTION; low; Jordan to correct]`.
 
 **Counts, so the NERS-E ceiling can be checked:** each tradition has 1 fixed baseline (counted among its techniques), 3–6 techniques and 1–2 sets. German and Italian are the largest (6 techniques, 2 sets each); `sheets.py --curriculum` prints the counts from the data. No tradition reaches the three-set ceiling.
