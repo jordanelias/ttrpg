@@ -88,6 +88,7 @@ def test_the_shipped_rows_mint_one_works_each_held_by_the_seat_they_name(monkeyp
     paying rung, three terms from tick 1 (`record_stage_term`), and held by the person who holds the seat the
     row names -- the maker's `hold`, which is what makes him the master `found` and `build` ask for."""
     w = build_realm(0)
+    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: this test asks the planned works' found and build EXECUTING; under the arm a drawn one can fail first
     works = {r.id: r for r in w.records.values() if r.kind == world_q.WORKS_KIND}
     assert sorted(works) == [DWELLING_WORKS, HEARTH_WORKS], sorted(works)
     hearth, dwelling = works[HEARTH_WORKS], works[DWELLING_WORKS]
@@ -127,6 +128,7 @@ def test_the_hearth_anchor_names_a_building_by_its_settlement_and_slug_and_a_gho
     """The fifth anchor form (`{hearth: "<code>:<slug>"}`) is one more line at the building mint site: the
     resolver is unchanged, resolves the Royal Court, and still refuses what is not indexed."""
     w = build_realm(0)
+    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: this test asks the planned works' found and build EXECUTING; under the arm a drawn one can fail first
     assert resolve_anchor(w, w._anchors, {"hearth": "S-001:court"}) == "b_s_001_court"
     assert resolve_anchor(w, w._anchors, {"settlement": "S-001"}) == "set_s_001"
     for ghost in ({"hearth": "S-001:no_such_building"}, {"hearth": "b_s_001_court"}):
@@ -145,6 +147,7 @@ def test_the_masters_found_and_build_execute_on_the_planned_works_and_a_stranger
     the timber consumed out of `set_s_001`). CONTROL: the Steward is not the hearth works' master, the Duke is
     not the dwelling works' -- each is refused on the other's works, and nothing is made."""
     w = build_realm(0)
+    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: this test asks the planned works' found and build EXECUTING; under the arm a drawn one can fail first
     d = _tick0(w)
     assert w.rungs["set_s_002"].stores.get("grain", 0) >= 10 and w.rungs["set_s_001"].stores.get("timber", 0) >= 10
     rungs, sites = len(w.rungs), len(w.sites)
@@ -178,6 +181,8 @@ def test_matter_ripens_a_planned_works_terms_with_root_as_their_cause():
         return [e for e in w.log if e.kind == "term.matured" and any(c.subject == rid for c in e.changes)]
 
     w = build_realm(0)
+
+    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: this test asks the planned works' found and build EXECUTING; under the arm a drawn one can fail first
     d = _tick0(w)
     w.tick = 1
     d.matter(mint_token(w, WriteClass.MATTER), [])
