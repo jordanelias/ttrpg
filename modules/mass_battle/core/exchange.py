@@ -72,7 +72,7 @@ def subunit_combat_pool(unit, atom):
     """Per-subunit combat pool. Default (POOL_QUALITY_MODEL, Jordan directive 2026-07-08): troop
     TYPE quality (`eff_power`) x NUMBERS (`eff_size`), plus per-subunit Discipline + stamina --
     no Command anywhere. Legacy toggle OFF: SHARED Command (the general) + per-subunit Discipline
-    + cohesion + stamina. Mirrors Army.base_combat_pool EXACTLY for a single-subunit unit
+    + cohesion + stamina. Mirrors multi.base_combat_pool EXACTLY for a single-subunit unit
     (atom.cohesion fast-paths to unit.hp/hp_max; eff_discipline/eff_power inherit unit) -> byte-exact
     for the homogeneous gauge; differentiates per subunit for mixed units.
     [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; the (5.0-disc)*0.5 discipline penalty

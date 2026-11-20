@@ -15,7 +15,7 @@ import pytest
 
 from modules.mass_battle.core.contact import check_orders
 from modules.mass_battle.hierarchy.units import Order, Unit, Army
-from modules.mass_battle.orchestration import reset_morale_between_battles
+from systems.mass_battle.sim.multi import reset_morale_between_battles  # B17.05: moved out of the module
 
 
 def _signal_unit(signal_name='advance'):

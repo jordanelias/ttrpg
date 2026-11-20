@@ -529,7 +529,7 @@ mechanics:
     canon_sources:
       - "systems/mass_battle/mass_battle_v30.md"
       - "tests/sim/v17-integration/m6_faction_actions.py"
-    sim_module: systems/mass_battle/sim/tactic_cards.py
+    sim_module: null   # the empty stub was deleted (workplan v12 B17.05: unreached by any season arm); nothing remains to run
     test_status: contested
     notes: "Card pool contents may include Claude-overreach contamination per Jordan diagnosis 2026-05-17. Audit pending before authoring new cards."
 
@@ -618,7 +618,7 @@ mechanics:
     canon_sources:
       - "audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-3"
     canon_authoring_target: "systems/mass_battle/altonian_reinforcements_v30.md (NOT YET AUTHORED — Pass 2e pending; lane MB. Home derived from its own sim_module systems/mass_battle/sim/altonian_reinforcements.py per RULED §2a.)"
-    sim_module: systems/mass_battle/sim/altonian_reinforcements.py
+    sim_module: null   # the NotImplementedError stub was deleted (workplan v12 B17.05: unreached by any season arm)
     test_status: validated_n1000_v12c
     notes: "v12c version was auto-at-arc-boundary. Pass 2e iteration adds choice-lock (Jordan 2026-05-17): once invoked, Hafenmark Standing-with-other-parliamentaries permanently locked <= +1."
 
@@ -627,7 +627,7 @@ mechanics:
     faction: Hafenmark
     canon_sources: []
     canon_authoring_target: "systems/mass_battle/hafenmark_equipment_v30.md (NOT YET AUTHORED — Pass 2e pending; lane MB. Home derived from its own sim_module systems/mass_battle/sim/tactic_cards.py per RULED §2a. Contested: contents flagged as possible Claude-overreach contamination, Jordan 2026-05-17 — author the audit before the doc.)"
-    sim_module: systems/mass_battle/sim/tactic_cards.py
+    sim_module: null   # tactic_cards.py was deleted (workplan v12 B17.05: unreached by any season arm)
     test_status: contested
     notes: "Wagenburg + Bombards tactic cards per Jordan 2026-05-17 (Hussite battle wagons + proto-firearms). Pass 2e canon authoring pending contamination audit. Dependency: tactic_cards module pool may need to be partially struck before adding new cards."
 

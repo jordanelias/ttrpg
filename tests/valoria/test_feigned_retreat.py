@@ -142,20 +142,21 @@ def _build_unit(on):
 
 
 def test_overextended_pool_penalty_applies_only_when_gated_on():
-    """base_combat_pool: an overextended pursuer's pool is cut by OVEREXTEND_PENALTY when the toggle is
+    """multi.base_combat_pool: an overextended pursuer's pool is cut by OVEREXTEND_PENALTY when the toggle is
     ON; the flag is inert when OFF (byte-exact)."""
+    from systems.mass_battle.sim.multi import base_combat_pool   # B17.05: a function of the army, moved out of Army
     C, u = _build_unit(on=True)
-    base = u.base_combat_pool()
+    base = base_combat_pool(u)
     u.overextended = True
-    penalized = u.base_combat_pool()
+    penalized = base_combat_pool(u)
     assert penalized == max(1, base - C.OVEREXTEND_PENALTY), \
         f"ON: overextended pool must drop by {C.OVEREXTEND_PENALTY} ({base} -> {penalized})"
 
     # OFF: the flag is inert.
     _, u2 = _build_unit(on=False)
-    off_base = u2.base_combat_pool()
+    off_base = base_combat_pool(u2)
     u2.overextended = True
-    assert u2.base_combat_pool() == off_base, "OFF: overextended flag must be inert (byte-exact)"
+    assert base_combat_pool(u2) == off_base, "OFF: overextended flag must be inert (byte-exact)"
 
 
 # ─── C4, ED-MB-0067 Part C / ED-MB-0071: the missing trigger ─────────────────

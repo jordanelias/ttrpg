@@ -71,7 +71,7 @@ ROLE_INSTRUCTION_PRIMITIVES = {
     'envelop': ('literal: envelop path', 'Unit._resolve_maneuver_goal -> _envelop_goal; Unit.advance_cells'),
     'sweep':   ('literal: sweep path', 'Unit._resolve_maneuver_goal -> _sweep_goal; Unit.advance_cells'),
     'kite':    ('literal: kite standoff band', 'Unit._resolve_maneuver_goal -> _kite_goal; Unit.advance_cells'),
-    'reserve': ('literal: reserve commitment', 'orchestration.unit_in_reserve'),
+    'reserve': ('literal: reserve commitment', 'systems.mass_battle.sim.multi.unit_in_reserve (workbench loop only)'),
     # MB-04 -- the STANCE primitive (STANCE_SPEED_MOD movement, STANCE_COMMITMENT intent, MB_SHOCK_HOLD_BRACE)
     'hold':    ('stance:hold', 'Unit.eff_stance'),
     'push':    ('stance:aggressive', 'Unit.eff_stance'),
@@ -105,7 +105,7 @@ _FEINT_KEYWORDS = frozenset(k for k, (p, _w) in ROLE_INSTRUCTION_PRIMITIVES.item
 def unit_lures(unit):
     """True if any subunit's instructions declare PP-256's Feigned Retreat (the 'lure' row above).
     Read where the feint resolves, beside the order-set `Army.feigned`; mirrors
-    orchestration.unit_in_reserve. False whenever MB_ROLE_INSTRUCTIONS is off."""
+    multi.unit_in_reserve (systems/mass_battle/sim). False whenever MB_ROLE_INSTRUCTIONS is off."""
     return MB_ROLE_INSTRUCTIONS and any(k in _FEINT_KEYWORDS for a in getattr(unit, 'units', ())
                                         for k in getattr(a, 'instructions', ()))
 
@@ -555,7 +555,7 @@ class Unit:
         if MB_CELL_MORALE and self.morale is not None:
             self.seed_cell_morale()
         self._cell_target = dict(self.cell_troops)  # [ED-MB-0028] prescribed per-cell density at spawn (close_ranks fill target)
-        self._spawn_position = self.starting_position  # snapshot for reset_positions (multi-turn re-engagement)
+        self._spawn_position = self.starting_position  # snapshot for multi.reset_positions (multi-turn re-engagement)
         self._brace_since_tick = 0 if 'brace' in self.instructions else -1  # [ED-1095] prepared before the battle if deployed already braced
         if MB_NODE_COHESION:
             self._init_node_state()
@@ -833,7 +833,7 @@ class Unit:
     def cohesion(self):
         u = self._u()
         if u is not None and len(u.units) == 1:
-            return (u.hp / u.hp_max) if u.hp_max else 0.0   # exact match to unit base_combat_pool (byte-exact single-subunit path)
+            return (u.hp / u.hp_max) if u.hp_max else 0.0   # exact match to multi.base_combat_pool (byte-exact single-subunit path)
         start = getattr(self, '_start_troops', 0) or self.troop_count
         return (self.cur_troops / start) if start else 0.0
     @property
@@ -2099,15 +2099,6 @@ inert today.
             return (-fv[0], -fv[1])
         return self.cell_facing_vec.get((orig_r, orig_c), (self.advance_dir, 0))
 
-    def halt_before_enemy(self, enemy_unit):
-        """
-        Over-run correction is disabled: pre-pairs halting (in run_battle) handles contact stability, and the
-        per-cell octagon sees REAR angles symmetrically when both sides over-run, which cancels out in symmetric
-        matchups.
-        [canonical: Jordan design — removed after causing ordering asymmetries]
-        """
-        pass
-
     def role_at_contact(self, contact_col):
         if self.shape == "Line": return "normal"
         if self.shape == "Arrowhead":
@@ -2551,7 +2542,7 @@ class Army:
     # 'signal:NAME' eligible to fire -- within the SAME check_orders call if that subunit's own
     # turn through the per-subunit loop has not yet been taken this tick, otherwise the next call
     # (see check_orders' 'signal:' branch). Per-UNIT, not synchronized across the several
-    # Units of one multi-unit side (run_multi_unit_battle's side_a/side_b are plain lists of Armies,
+    # Units of one multi-unit side (the multi-unit loop's side_a/side_b are plain lists of Armies,
     # with no side-level container to hold shared state instead -- [ASSUMPTION: a go-code is scoped
     # to the Army it's issued on, not broadcast across a whole multi-unit side -- basis: no such
     # broadcast primitive exists today and the brief explicitly scoped this item to "the signal
@@ -2625,7 +2616,7 @@ class Army:
         """[ED-MB-0041] Fraction of this unit's STARTING strength sitting in routed units.
 
         Weighted by `_start_troops` -- the per-BATTLE strength snapshot, re-based at each campaign
-        boundary by reset_morale_between_battles -- so a unit that enters its third battle already
+        boundary by multi.reset_morale_between_battles -- so a unit that enters its third battle already
         depleted measures collapse against the strength it actually started that battle with, not
         against its original spawn size. `troop_count` is the fallback for a subunit built without the
         snapshot; note it is itself a static nominal (it returns `self.troops`), NOT a live count, so
@@ -2708,41 +2699,6 @@ class Army:
         if self.discipline <= 0: return -99  # [canonical: mass_battle_v30.md §A.4 — sentinel: Disc<=0 formation-disordered]
         return -max(0.0, min(2.0, (5.0 - self.discipline) * 0.5))
 
-    def base_combat_pool(self):
-        if self.routed or self.disordered: return 0
-        pen = self.discipline_penalty()
-        if pen == -99: self.disordered = True; return 0  # [canonical: mass_battle_v30.md §A.4 — sentinel: -99 disordered-formation flag]
-        # Pool uses continuous effective_size (float), floored for dice count.
-        # [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; live value =
-        #  Command*(1+cohesion) (2*Command at full strength -> Command at annihilation,
-        #  ED-899/ED-1013); legacy OFF-path min(Size,Command)+Command at COMMAND_SIGMA_ENABLED=0]
-        stam_pen = _stamina_pool_penalty(self.agg_stamina())
-        if POOL_QUALITY_MODEL:
-            # [Jordan directive 2026-07-08, mirrors core.exchange.subunit_combat_pool's default
-            # branch for the UNIT-level pool this pursuit/rout path uses -- see config.py's
-            # POOL_QUALITY_MODEL comment.] No Command: troop-type quality (`power`) x numbers
-            # (`effective_size`, the continuously-degrading quantity).
-            raw = self.power * self.effective_size * POOL_QUALITY_SCALE + pen + stam_pen
-        elif COMMAND_SIGMA_ENABLED:
-            # SMOOTH POOLS (Jordan 2026-06-15): 2*command at FULL strength (size-decoupled per ED-899),
-            # degrading SMOOTHLY with own casualties to command at annihilation via cohesion=hp/hp_max.
-            # Cohesion is a FRACTION (not headcount) -> per-capita effectiveness size-independent -> Lanchester
-            # exponent stays ~1 (ED-899 preserved). The smooth own-casualty degradation dilutes the discipline
-            # term so it can no longer dominate and bias the mirror (the flat-2*command pool was the defect).
-            cohesion = self.hp / self.hp_max if self.hp_max else 0.0
-            raw = self.command * (1.0 + cohesion) + pen + stam_pen
-        else:
-            raw = min(self.effective_size, self.command) + self.command + pen + stam_pen
-        # ED-MB-0022: an OVEREXTENDED pursuer (failed the PP-256 Feigned Retreat Discipline check)
-        # re-engages at a bounded pool penalty. Gated by MB_FEIGNED_RETREAT (default ON). `.overextended` is set
-        # only via resolve_feigned_retreat, which requires the feigning unit's `.feigned` (the 'feign_retreat'
-        # order pseudo-field, C4, ED-MB-0067 Part C / ED-MB-0071) or a 'lure' instruction (`unit_lures`, MB-04)
-        # -- see Army.feigned's own comment.
-        # [canonical: mass_battle_v30.md §B.4 — Overextended -2D]
-        if MB_FEIGNED_RETREAT and self.overextended:
-            raw -= OVEREXTEND_PENALTY
-        return max(1, math.floor(raw))
-
     def check_drift(self):
         # per-subunit formation drift: each subunit's OWN Discipline governs whether it can hold its
         # shape (consistent with the per-subunit Discipline model); single-subunit == unit -> byte-exact.
@@ -2781,7 +2737,7 @@ def unit_conceded(unit):
     the order's own mark, not on the stance: a DG-2 fighting withdrawal (`yielding` + `stance: 'retreat'`, which "keeps
     FIGHTING", the entry leaving the `MB_YIELD_*` yield untouched) and an army's `fall_back_at` are never a concession, and
     an emergent `yielding` cannot hide one. It is read by `battle_loop.run_battle`'s stop test (the battle ends for it as a
-    rout ends it) and by `massbattle._grade` (it cannot be graded the winner); `orchestration.run_multi_turn_battle` does
+    rout ends it) and by `massbattle._grade` (it cannot be graded the winner); the multi-turn loop (`systems/mass_battle/sim/multi.py`) does
     not read it (it ends a conceded turn a 'draw', and breaks only on `.routed`), a sim-path grading `_grade` does not
     share. It sets nothing, so a conceding side does not take rout's facing flip. A side no subunit of which has conceded
     is never conceded, so a battle in which no `retreat_at` order fired is exactly what it was."""

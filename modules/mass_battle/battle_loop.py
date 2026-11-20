@@ -210,9 +210,6 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
         # directly.
         if FIELD_MOVEMENT:
             resolve_toi_and_commit(unit_a.units, unit_b.units)
-        # v11: vector halt-at-contact — prevent over-run that creates paradoxical angles
-        for atom in unit_a.units: atom.halt_before_enemy(unit_b)
-        for atom in unit_b.units: atom.halt_before_enemy(unit_a)
         # Cross-side cell contention (speed → size → random priority).
         # After both sides have advanced, cells from opposing sides may occupy the
         # same abs position. Resolve per Jordan design 2026-05-12: higher-speed
@@ -388,10 +385,10 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
         # [ED-MB-0075 option (2), C2/C3, ED-MB-0067 Part C] Envelopment-shock damage-to-morale coupling. C2 ruled
         # the rear/flank damage multiplier (ED-MB-0018) a CONTRIBUTING CAUSE of morale collapse; C3 ruled it
         # "checked against Discipline". This is that check, at the scale run_battle already commits damage at
-        # (above, dmg_a/dmg_b — NOT run_multi_unit_battle's cross-pair post-processing). A unit flagged shocked
+        # (above, dmg_a/dmg_b — NOT the multi-unit loop's cross-pair post-processing (`systems/mass_battle/sim/multi.py`)). A unit flagged shocked
         # this tick (result["shocked_a"/"shocked_b"], OR-accumulated over every engaged pair/sub-phase) rolls
         # discipline_check_cascade (Ob 1); on FAIL (does not resist), the damage it received this tick erodes
-        # morale by the SAME formula run_multi_unit_battle's freed_attacker path uses (erosion = dmg /
+        # morale by the SAME formula the multi-unit loop's freed_attacker path uses (erosion = dmg /
         # (agg_discipline x command), via cascade_morale_hit). The sibling CHARGE-shock branches in
         # resolve_engagements are a different mechanism. MB_ENVELOP_SHOCK-gated defensively (shocked_a/b can
         # only be True when it is already on) — byte-exact OFF, same convention as every other MB_ flag here.

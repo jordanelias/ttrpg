@@ -1,24 +1,12 @@
-"""Season-facing adapter: `resolve_field` -> the canon mass-battle engine (it was the strategic-layer faction adapter).
+"""Season-facing adapter: `resolve_field`, the one battle path the season reaches, over `run_battle`.
 
-The engine lives beside this file (`orchestration.py`, `hierarchy/`, `core/`, `geometry.py`, `percell.py`,
-...). Its entry point is TACTICAL -- `run_battle(unit_a, unit_b, max_ticks=18)` takes constructed Armies --
-while the season's is STRATEGIC. This module is the adapter between them: `resolve_field`, `_weighted_unit`,
-`_run_and_grade` and `_grade`, which hand back a frozen `FieldOutcome` (B17.03): the finished battle's two survivor shares, each side's
-`routed` / `conceded` flags, the parts of each side (a member of the `person` arm, a cohort of an army) and the part that broke first.
-
-`resolve_field` builds each side one of three ways: from an order of battle when either side carries one
-(`_oob_unit`, ED-IN-0306); one subunit per commanding person when `field_units` is `'person'`
-(`_person_unit`, CP-T04-01); else the minimum-viable default, one Line subunit (`_weighted_unit`: tier 2,
-command 4, discipline 5, power `_SEASON_FORCE_POWER`). Every headcount side is sized by `under_arms_cap(weight)`,
-the one weight -> troops owner, and placed by `orderofbattle._place` as an order of battle's is. Morale and terrain come from season
-state: `resolve_field` takes each side's morale-start from its mean stance toward its own faction (the
-carrier `_eff_march` writes a lost field's "decrease in morale" onto; `_morale_start`) and its terrain from
-the target's territory and garrison (`terrain_row_for_territory`, with A.9's Walls DR applied in
-`_run_and_grade`). The canon engine can express far more -- troop types, equipment, formations,
-multi-subunit hierarchies -- and what a faction's army IS at the strategic scale, beyond an authored order of
-battle, is a design question this adapter does not answer.
-
-[GAP: faction -> unit construction lacks canonical spec — carried over from the pre-port adapter.]
+`run_battle(unit_a, unit_b, max_ticks=18)` takes constructed Armies; the season's edge is strategic. `resolve_field`
+builds each side (from an order of battle when either side carries one, `_oob_unit`; one unit per commanding person
+when `field_units` is `'person'`, `_person_unit`; else one Line unit, `_weighted_unit`), sizes every headcount side by
+`under_arms_cap(weight)`, takes each side's morale-start from season state (`_morale_start`) and the terrain from the
+target's territory and garrison (`terrain_row_for_territory`), fights it in `_run_and_grade`, and `_grade`s the finished
+battle into a frozen `FieldOutcome`: the two survivor shares, each side's `routed` / `conceded` flags, the parts of
+each side and the part that broke first.
 """
 from __future__ import annotations
 
@@ -346,7 +334,7 @@ def _run_and_grade(unit_a, unit_b, terrain, rng, scale, walls_dr=None, namers=(N
     TERRAIN: UPHILL, RIVER_CROSSING and WALLS are applied (UPHILL's two A.9 clauses fully; NARROW_PASS
     is identified and applies nothing, see below); the attacker is `unit_a`, the defender `unit_b`.
     FOREST_BROKEN's speed half is INERT -- `run_battle` never reads `.speed` (only
-    `orchestration.pursuit_damage` and `run_multi_unit_battle` do, and neither is reachable from here).
+    `orchestration.pursuit_damage` and the multi-unit loop of `systems/mass_battle/sim/multi.py` do, and neither is reachable from here).
     WALLS (plan position `20-iv`, the garrisoned march target) adds `terrain.WALLS_DEFENDER_DR` to the
     DEFENDER's `dr`, read live at every melee and rout hit (`eff_dr` falls through to the Army;
     `h_per_size`, the one field derived from `dr` at construction, has no reader), so mutating it here is

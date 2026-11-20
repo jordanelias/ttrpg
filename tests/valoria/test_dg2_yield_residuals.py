@@ -14,6 +14,8 @@ import sys
 
 import pytest  # noqa: E402
 
+from systems.mass_battle.sim import multi as M  # noqa: E402  (B17.05: the multi-battle loops moved out of the module)
+
 
 def _reload(**flags):
     for k in ('MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'MB_YIELD_POCKET'):
@@ -72,7 +74,7 @@ def test_rally_reverts_recovered_yielding_subunit():
     C, _, _, _, E, O = _reload(MB_YIELD_RALLY=True)
     ua = E.build_unit('Line', 3, 'A', 'A', 20)  # morale 6 == start -> >= 0.75*start
     ua.units[0].yielding = True
-    O.between_turn_recovery(ua)
+    M.between_turn_recovery(ua)
     assert ua.units[0].yielding is False, "recovered morale must rally the subunit"
 
 
@@ -82,7 +84,7 @@ def test_rally_keeps_pressured_yielding_subunit():
     ua = E.build_unit('Line', 3, 'A', 'A', 20)
     ua.units[0].yielding = True
     ua.morale = 3  # eff_morale 3 < 0.75*6 = 4.5
-    O.between_turn_recovery(ua)
+    M.between_turn_recovery(ua)
     assert ua.units[0].yielding is True, "morale below rally fraction must stay yielding"
 
 
@@ -91,7 +93,7 @@ def test_rally_gate_off_is_inert():
     C, _, _, _, E, O = _reload(MB_YIELD_RALLY=False)
     ua = E.build_unit('Line', 3, 'A', 'A', 20)
     ua.units[0].yielding = True
-    O.between_turn_recovery(ua)
+    M.between_turn_recovery(ua)
     assert ua.units[0].yielding is True, "OFF: rally must be inert"
 
 

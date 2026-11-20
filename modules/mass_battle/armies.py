@@ -3,7 +3,7 @@ per-subunit spec dicts (`build_army`), with the frontage-aware deployment geomet
 
 `modules/mass_battle/` is the reachable closure and the canon tree (`references/module_contracts.yaml`, the
 `mass_battle` row's note); a season-facing order-of-battle builder (`orderofbattle.py`) needs this constructor,
-and a module may not import from `systems/` (the harness and workbench tree), so this module is its one owner
+and a module may not reach into `systems/` (the harness and workbench tree), so this module is its one owner
 (`systems/mass_battle/sim/engine.py` re-imports every name below)."""
 from modules.mass_battle.config import BATTLEFIELD_SIZE, MB_VOLLEYS_START, ROLE_SPEC, SIDE_A_START_ROW, SIDE_B_START_ROW
 from modules.mass_battle.core.exchange import clamp_command
@@ -295,7 +295,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
             kw['morale_start'] = kw['morale'] if morale_start is None else morale_start
         # [A6, ED-MB-0067 Part A, F4] `volleys` is forwarded per subunit, seeded for unit_type=='ranged' (the exact
         # gate volley_phase.fire() checks before reading eff_volleys): a ranged subunit left at Unit.volleys=None
-        # would inherit the ONE shared parent Army pool, which between_turn_recovery's per-subunit resupply_volleys
+        # would inherit the ONE shared parent Army pool, which multi.between_turn_recovery's per-subunit resupply_volleys
         # would resupply once per sibling per turn, with its drain not isolated from its siblings'. Same fix shape as
         # the morale defaulting immediately above (DG-4); a melee subunit's ammo count is never read for combat, so
         # only the SHOOTER's own pool is isolated.

@@ -401,5 +401,6 @@ def test_reaction_clock_resets_between_battles(mb):
     random.seed(5)
     orch.resolve_engagements(ua, ub, contact.find_contacts(ua, ub), t=3)
     assert getattr(subB, '_react_since', {}), "a seen-flank engagement should stamp the reaction clock"
-    orch.reset_morale_between_battles(ub)
+    from systems.mass_battle.sim import multi   # B17.05: the loops moved out of the module
+    multi.reset_morale_between_battles(ub)
     assert not subB._react_since, "reset_morale_between_battles must CLEAR the reaction clock (R1 leak fix)"

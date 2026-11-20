@@ -3,15 +3,15 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 119,
-    "total": 391,
-    "uncited": 272,
+    "total": 394,
+    "uncited": 275,
     "of_which_assumption_grade": 8
   },
-  "count": 391,
+  "count": 394,
   "by_module": {
     "engine.dice_engine": 11,
     "engine.season": 25,
-    "mass_battle": 158,
+    "mass_battle": 161,
     "characters": 5,
     "fieldwork": 15,
     "overview": 5,
@@ -2157,6 +2157,33 @@
       "citation_grade": "source"
     },
     {
+      "key": "mass_battle.CASES",
+      "name": "CASES",
+      "value": [
+        [
+          "0",
+          0.0,
+          "PARTY-GAP"
+        ],
+        [
+          "1",
+          0.04,
+          "PARTY-GAP"
+        ],
+        [
+          "20000",
+          667.0,
+          "SCALE-GAP"
+        ]
+      ],
+      "kind": "vector",
+      "module": "mass_battle",
+      "file": "systems/mass_battle/sim/extremes_probe.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
       "key": "mass_battle.BIG_CV",
       "name": "BIG_CV",
       "value": 9.0,
@@ -2332,6 +2359,17 @@
       "module": "mass_battle",
       "file": "systems/mass_battle/sim/lanchester_signature.py",
       "note": "[JUSTIFIED: tick budget for a no-rout trajectory, chosen here; no external source]",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "mass_battle._SCALE",
+      "name": "_SCALE",
+      "value": 1000,
+      "kind": "scalar",
+      "module": "mass_battle",
+      "file": "systems/mass_battle/sim/mirror_probe.py",
+      "note": "the body scale a share is quantised onto; the probe reads the two sides' flags and no share",
       "citation": null,
       "citation_grade": null
     },
@@ -2554,6 +2592,17 @@
       "note": "[canonical: class-B test-fixture: a typical (un-braced) line's discipline -- shattered by envelopment shock]",
       "citation": "class-B test-fixture: a typical (un-braced) line's discipline -- shattered by envelopment shock",
       "citation_grade": "source"
+    },
+    {
+      "key": "mass_battle._SCALE",
+      "name": "_SCALE",
+      "value": 1000,
+      "kind": "scalar",
+      "module": "mass_battle",
+      "file": "systems/mass_battle/sim/walkthrough.py",
+      "note": "the body scale a share is read on (the world's `condition_scale`); the page shows a share as a fraction of it",
+      "citation": null,
+      "citation_grade": null
     },
     {
       "key": "mass_battle.CANDIDATE_VALUES",

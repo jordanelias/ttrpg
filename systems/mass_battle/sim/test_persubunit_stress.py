@@ -20,8 +20,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from modules.mass_battle.orchestration import (  # noqa: E402
     Unit, Army, subunit_combat_pool, morale_check_phase, rout_resolution,
-    discipline_check_phase, reset_morale_between_battles, stats_for, TROOP_TYPE_STATS,
+    discipline_check_phase, stats_for, TROOP_TYPE_STATS,
     SIDE_A_START_ROW, SIDE_B_START_ROW)
+from systems.mass_battle.sim.multi import reset_morale_between_battles, between_turn_recovery  # noqa: E402  (B17.05: moved out of the module)
 
 _FAILS = []
 
@@ -260,7 +261,7 @@ def test_between_turn_recovery_per_subunit():
     saved = _O.BETWEEN_TURN_MORALE_RECOVERY
     try:
         _O.BETWEEN_TURN_MORALE_RECOVERY = 1
-        _O.between_turn_recovery(u)
+        between_turn_recovery(u)
         _ok("S18 per-subunit Morale recovered toward start", own.eff_morale == 5)
     finally:
         _O.BETWEEN_TURN_MORALE_RECOVERY = saved

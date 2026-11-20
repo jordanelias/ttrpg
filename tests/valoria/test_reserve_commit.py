@@ -28,7 +28,8 @@ def _reload(on):
     importlib.reload(E)
     import modules.mass_battle.orchestration as O
     importlib.reload(O)
-    return C, E, O
+    import systems.mass_battle.sim.multi as M   # B17.05: the loops moved out of the module; reads O's constants at call time
+    return C, E, M
 
 
 def _pair(on, a_instructions=(), b_instructions=()):
@@ -45,7 +46,7 @@ def _pair(on, a_instructions=(), b_instructions=()):
 
 def test_unit_in_reserve_predicate():
     _, _, O = _reload(on=True), None, None  # noqa: F841
-    import modules.mass_battle.orchestration as O2
+    import systems.mass_battle.sim.multi as O2
     import systems.mass_battle.sim.engine as E2
     reserve = E2.build_unit('Line', 3, 'R', 'A', 20, instructions=('reserve',))
     normal = E2.build_unit('Line', 3, 'N', 'A', 20, instructions=('hold',))

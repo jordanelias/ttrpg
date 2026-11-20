@@ -4,9 +4,11 @@ the coordinate-field migration).
 
 Uses the engine's existing observe-only trace seam (resolution.tracing/trace_event, "no-op outside
 a `tracing()` block -> byte-exact") plus the tick-by-tick 'positions' snapshots orchestration.py now
-emits when tracing is on. Builds units via the wrapper's engine.build_unit adapter and runs via
-engine.resolve_battle — the same public surface bat.py dogfoods, so this workbench never reaches
-past the wrapper. Read-only: a traced run mutates no engine state beyond the battle it itself runs.
+emits when tracing is on. The default, `kind='field'`, traces the ONE path the season reaches: it builds a
+`MassBattleInput` and calls `massbattle.resolve_field` inside `tracing()`. The other kinds ('single', 'multi')
+build units via the wrapper's engine.build_unit adapter and run via engine.resolve_battle (the multi-battle
+loops of `multi.py`) — the same public surface bat.py dogfoods. Read-only: a traced run mutates no engine
+state beyond the battle it itself runs.
 
 A single run is n=1 by construction — a point sample for visual inspection, not a probability. For
 win-rate statistics across many seeds, use gauge_mb.py, never this."""
@@ -49,7 +51,7 @@ def _build_side(spec, faction):
 
     Returns (unit, shape_label, tier_label, anchor_col) — the label/anchor are consulted only by
     resolve_battle's now-fallback-only shape_a/shape_b/anchor_map positional args (every subunit built
-    through __post_init__ carries its own _spawn_position; see orchestration.reset_positions)."""
+    through __post_init__ carries its own _spawn_position; see multi.reset_positions)."""
     spec = dict(spec)
     preset = spec.pop('preset', None)
     name = spec.pop('name', 'A' if faction == 'A' else 'B')
@@ -70,14 +72,51 @@ def _build_side(spec, faction):
     return unit, 'Line', tier, _anchor_for('Line', tier)
 
 
-def run_traced_battle(spec_a, spec_b, *, seed=0, max_battle_turns=8, kind='multi'):  # [canonical: mass_battle_v30.md §A.7 — battle-turn cap, same default as orchestration.run_multi_turn_battle]
-    """spec_a/spec_b: see _build_side — either a single-subunit build_unit spec, or a multi-subunit
+def _field_record(spec_a, spec_b):
+    """A hand-built `MassBattleInput`: two headcount sides on open ground, as the module's own tests build one. A side's
+    spec is its weight (a number), or `{'weight': w, 'stance': s}` (`stance` defaults to 0.0, the base morale-start)."""
+    import yaml
+    from engine.season.data import files
+    from engine.season.data.fixtures import DEFAULT_FIXTURES
+    from engine.season.queries.inputs import MassBattleInput
+    sides = [s if isinstance(s, dict) else {'weight': s} for s in (spec_a, spec_b)]
+    with open(files.GEOGRAPHY_YAML, encoding='utf-8') as f:
+        geo = yaml.safe_load(f)
+    return MassBattleInput(weights=((float(sides[0]['weight']),), (float(sides[1]['weight']),)), territory=None,
+                           fort_level=0.0, stances=tuple(float(s.get('stance', 0.0)) for s in sides), walls_dr=None,
+                           origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography=geo,
+                           condition_scale=DEFAULT_FIXTURES.get('condition_scale'), members=(('a',), ('b',)))
+
+
+def _run_traced_field(spec_a, spec_b, seed):
+    """The season's one battle path under `tracing()`: `resolve_field` on a hand-built record. Returns the other kinds'
+    keys, with the typed outcome under 'outcome'; a refusal (`PARTY-GAP`, `SCALE-GAP`) comes back under 'refused'."""
+    from engine.season.seam.ladder import field_degree
+    from modules.mass_battle import massbattle
+    with tracing() as recorded:
+        got = massbattle.resolve_field(_field_record(spec_a, spec_b), random.Random(seed))
+    events = list(recorded)
+    if isinstance(got, dict):
+        return {'winner': None, 'events': events, 'refused': got}
+    band = field_degree(got)
+    return {'winner': {'Won': 'A', 'Lost': 'B'}.get(band, 'draw'), 'band': band, 'events': events, 'outcome': got,
+            'a': {'name': 'side_a', 'share': got.attacker.share, 'routed': got.attacker.routed,
+                  'conceded': got.attacker.conceded},
+            'b': {'name': 'side_b', 'share': got.defender.share, 'routed': got.defender.routed,
+                  'conceded': got.defender.conceded}}
+
+
+def run_traced_battle(spec_a, spec_b, *, seed=0, max_battle_turns=8, kind='field'):  # [canonical: mass_battle_v30.md §A.7 — battle-turn cap, same default as multi.run_multi_turn_battle]
+    """kind='field' (the default): spec_a/spec_b are each a side's weight, or `{'weight', 'stance'}` (`_field_record`).
+    kind='single' | 'multi': see _build_side — either a single-subunit build_unit spec, or a multi-subunit
     'preset' spec (army/envelopment/refused_flank). Faction is fixed ('A' for spec_a, 'B' for spec_b)
     so the trace is always readable the same way.
 
     Returns {'winner', 'events': [...], 'a': {summary}, 'b': {summary}}. `events` is the ordered
     trace — 'tick'/'melee'/'volley'/'positions' category dicts, exactly as a resolution.tracing()
     block records them (no re-shaping), so the frontend consumes the engine's own event vocabulary."""
+    if kind == 'field':
+        return _run_traced_field(spec_a, spec_b, seed)
     random.seed(seed)
     ua, shape_a, tier_a, anchor_a = _build_side(spec_a, 'A')
     ub, shape_b, tier_b, anchor_b = _build_side(spec_b, 'B')
@@ -110,7 +149,7 @@ if __name__ == '__main__':
                     'starting_position': (SIDE_A_START_ROW, 3)},
                    {'shape': 'Line', 'tier': 3, 'troop_type': 'cavalry', 'speed': 'Fast',
                     'starting_position': (SIDE_A_START_ROW, 15)}]},
-        {'shape': 'Line'}, seed=1)
+        {'shape': 'Line'}, seed=1, kind='multi')
     n_pos = sum(1 for e in result['events'] if e.get('cat') == 'positions')
     print(f"winner={result['winner']}  events={len(result['events'])}  position-snapshots={n_pos}")
     print(json.dumps(result['a'], indent=2), json.dumps(result['b'], indent=2))

@@ -14,6 +14,7 @@ from modules.mass_battle.geometry import *
 from modules.mass_battle.percell import *
 from modules.mass_battle.resolution import *
 from modules.mass_battle.orchestration import *
+from systems.mass_battle.sim.multi import *  # the multi-battle loops: workbench code, not the module's (B17.05)
 
 import modules.mass_battle.config as _cfg
 import modules.mass_battle.core.exchange as _ce
@@ -26,13 +27,14 @@ import modules.mass_battle.geometry as _geo
 import modules.mass_battle.percell as _pc
 import modules.mass_battle.resolution as _res
 import modules.mass_battle.orchestration as _orch
+import systems.mass_battle.sim.multi as _multi
 
 # Re-export contract used by gauge_mb.py (and any external caller):
 #   Unit, Army, run_battle, run_multi_turn_battle, run_multi_unit_battle,
 #   SIDE_A_START_ROW, SIDE_B_START_ROW, plus the full mechanic surface via import *.
 
 def _resolve(sym):
-    for m in (_ce,_cs,_ca,_cc,_tt,_hu,_orch,_res,_pc,_geo,_cfg):
+    for m in (_ce,_cs,_ca,_cc,_tt,_hu,_orch,_multi,_res,_pc,_geo,_cfg):
         if hasattr(m, sym): return getattr(m, sym)
     return None
 
@@ -282,7 +284,7 @@ def build_refused_flank(strong_specs, refused_specs, name, faction, *,
 
 def resolve_battle(*args, kind='multi', **kwargs):
     """Battle-type ROUTER — the wrapper's routing duty. Transparently dispatches to the loop in
-    orchestration; it computes no outcome itself. Kinds:
+    orchestration or multi.py; it computes no outcome itself. Kinds:
       'single'     → run_battle(unit_a, unit_b, max_ticks=18)
       'multi'      → run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map, max_battle_turns=8)
       'multi_unit' → run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b, anchor_map, max_battle_turns=8)
@@ -298,5 +300,5 @@ def resolve_battle(*args, kind='multi', **kwargs):
 
 _WRAPPER_API = {"build_unit", "build_army", "build_envelopment", "build_refused_flank", "resolve_battle", "UNIT_CAP"}
 
-_mods = (_cfg,_ce,_cs,_ca,_cc,_tt,_hu,_geo,_pc,_res,_orch)
+_mods = (_cfg,_ce,_cs,_ca,_cc,_tt,_hu,_geo,_pc,_res,_orch,_multi)
 __all__ = sorted({n for _m in _mods for n in getattr(_m,'__all__',[])} | {"MECHANICS","mechanics_selftest"} | _WRAPPER_API)
