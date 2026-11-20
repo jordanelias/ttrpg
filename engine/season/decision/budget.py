@@ -19,17 +19,12 @@ def budget(p: Person, v: View, k: int, fx: "Fixtures") -> int:
     """S26 / `H-28`: `budget : (Person, View) -> int`, PERSON-SIDE, NO WORLD. Returns SCENE
     ACTIONS, per Jordan's 2026-09-02 ruling.
 
-    ⚠ REV 4 IS THE FIRST VERSION THAT READS ITS OWN ARGUMENTS. Rev 3's docstring disclosed,
-    honestly, that it "RETURNS THE INJECTED FIXTURE AND IGNORES `p` AND `v`" -- functionally
-    the FIELD S26.3 forbids. The reason it gave was a collision it called unresolved: S26
-    types it with no `World`, S26.3 says it varies by office, condition and distance, and all
-    three looked resolver-side.
-
-    **They were never resolver-side; the STORE was in the wrong place.** #353 `:730` gives
+    ⚠ IT READS ITS OWN ARGUMENTS, NOT AN INJECTED FIXTURE (a returned fixture is the FIELD S26.3
+    forbids). S26 types it with no `World`, and S26.3 says it varies by office, condition and
+    distance; none of those is resolver-side. #353 `:730` gives
     Person "every Tenure whose subject they are", so office-holding is the person's own state;
-    `(Person, body)` and `(Person, travel_leg)` are Part D rows on Person. W5 moved the tenure
-    store onto its subject (see `_TenureView`) and added the two fields, and the collision
-    dissolved with no signature change. That is PLAN §3.3's SMALLER AMENDMENT, and taking it
+    `(Person, body)` and `(Person, travel_leg)` are Part D rows on Person, and the tenure store
+    sits on its subject (see `_TenureView`). That is PLAN §3.3's SMALLER AMENDMENT, and taking it
     is what lets `:634`'s "the ONE non-decision function permitted a `World`" stay true --
     V2 §F3 took the larger one and made `budget` a second such function.
 

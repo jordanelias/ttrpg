@@ -47,6 +47,8 @@ _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
+from engine.dice_engine import draw                                            # noqa: E402
+from modules.mass_battle import rngsource                                      # noqa: E402
 import modules.mass_battle.orchestration as O                                  # noqa: E402
 from systems.mass_battle.sim.engine import build_army, SIDE_A_START_ROW            # noqa: E402
 
@@ -55,13 +57,13 @@ def _sub(faction, row, col, advance_dir):
     army = build_army([{'shape': 'Line', 'troop_type': 'infantry', 'troops': 300.0,
                         'concentration': 100.0, 'starting_position': (row, col)}],
                       faction, faction)
-    su = army.subunits[0]
+    su = army.units[0]
     su.advance_dir = advance_dir
     return su, army
 
 
 def _staircase(n_groups):
-    """n_groups attacker subunits at depths 4 rows apart, each paired with its own defender.
+    """n_groups attacker units at depths 4 rows apart, each paired with its own defender.
 
     `_cascade_depth_key` buckets by 1-row proximity, so a 4-row stride guarantees exactly one
     depth group per attacker — the minimal shape that exercises the sub-phase split at all.
@@ -75,11 +77,11 @@ def _staircase(n_groups):
         b, army_b = _sub('B', SIDE_A_START_ROW + 4 * i + 1, 10 + 2 * i, -1)
         attackers.append((a, army_a))
         defenders.append((b, army_b))
-    # One Unit per side carrying every subunit, so unit-level gates see a live body.
+    # One Army per side carrying every subunit, so unit-level gates see a live body.
     unit_a = attackers[0][1]
     unit_b = defenders[0][1]
-    unit_a.subunits = [a for a, _ in attackers]
-    unit_b.subunits = [b for b, _ in defenders]
+    unit_a.units = [a for a, _ in attackers]
+    unit_b.units = [b for b, _ in defenders]
     for (a, _), (b, _) in zip(attackers, defenders):
         a._unit = unit_a
         b._unit = unit_b
@@ -116,7 +118,8 @@ def test_counter_observes_a_truncation_when_the_bound_bites(monkeypatch):
     assert n == 4, f"fixture must produce 4 depth groups, produced {n}"
 
     monkeypatch.setattr(O, 'MAX_SUB_PHASES', 2)
-    res = O.resolve_engagements_cascading(unit_a, unit_b, pairs, t=1)
+    with rngsource.using(draw.seeded(draw.H2("test_subphase_truncation_counter", 0))):
+        res = O.resolve_engagements_cascading(unit_a, unit_b, pairs, t=1)
 
     assert res['n_groups'] == 4
     assert res['truncated_groups'] == 2, res
@@ -130,7 +133,8 @@ def test_counter_is_silent_when_the_bound_does_not_bite(monkeypatch):
     """The same fixture, with headroom: every group resolves and nothing is reported dropped."""
     unit_a, unit_b, pairs = _staircase(4)
     monkeypatch.setattr(O, 'MAX_SUB_PHASES', 9)
-    res = O.resolve_engagements_cascading(unit_a, unit_b, pairs, t=1)
+    with rngsource.using(draw.seeded(draw.H2("test_subphase_truncation_counter", 0))):
+        res = O.resolve_engagements_cascading(unit_a, unit_b, pairs, t=1)
     assert res['n_groups'] == 4
     assert res['truncated_groups'] == 0
     assert res['truncated_pairs'] == 0
@@ -153,7 +157,8 @@ def test_shipped_bound_truncates_nothing_on_a_cascading_workload():
     # the SHIPPED value has headroom over fixtures that really do cascade, which is the claim.
     for n in (2, 3, 4):
         unit_a, unit_b, pairs = _staircase(n)
-        res = O.resolve_engagements_cascading(unit_a, unit_b, pairs, t=1)
+        with rngsource.using(draw.seeded(draw.H2("test_subphase_truncation_counter", n))):
+            res = O.resolve_engagements_cascading(unit_a, unit_b, pairs, t=1)
         if res['n_groups'] > 1:
             multi_group_calls += 1
         max_groups = max(max_groups, res['n_groups'])

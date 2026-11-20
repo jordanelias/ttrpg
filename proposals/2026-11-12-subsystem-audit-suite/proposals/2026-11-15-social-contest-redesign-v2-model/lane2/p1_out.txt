@@ -1,0 +1,112 @@
+ok runs 48560; illegal movers 0; non-Margin verdicts 0
+
+REFUSALS / CRASHES (count = cells):
+     540 ('build', 'inquisition_hearing', 'full', 'ValueError', 'inquisition_hearing')
+         e.g. ('inquisition_hearing', 'full', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     540 ('build', 'inquisition_hearing', 'abridged', 'ValueError', 'inquisition_hearing')
+         e.g. ('inquisition_hearing', 'abridged', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     540 ('build', 'excommunication_deliberation', 'full', 'ValueError', 'excommunication_deliberation')
+         e.g. ('excommunication_deliberation', 'full', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     540 ('build', 'excommunication_deliberation', 'abridged', 'ValueError', 'excommunication_deliberation')
+         e.g. ('excommunication_deliberation', 'abridged', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     420 ('build', 'conversation', 'full', 'ValueError', 'a one-speaker proceeding needs someone addressed (RD A.4)')
+         e.g. ('conversation', 'full', 0, 0, 0, None, ('mid', 'mid', 'mid'))
+     420 ('build', 'questioning', 'full', 'ValueError', 'a one-speaker proceeding needs someone addressed (RD A.4)')
+         e.g. ('questioning', 'full', 0, 0, 0, None, ('mid', 'mid', 'mid'))
+     420 ('build', 'negotiation', 'full', 'ValueError', 'a one-speaker proceeding needs someone addressed (RD A.4)')
+         e.g. ('negotiation', 'full', 0, 0, 0, None, ('mid', 'mid', 'mid'))
+     360 ('build', 'audience', 'full', 'ValueError', 'audience')
+         e.g. ('audience', 'full', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     360 ('build', 'audience', 'abridged', 'ValueError', 'audience')
+         e.g. ('audience', 'abridged', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     360 ('build', 'legal_trial', 'full', 'ValueError', 'legal_trial')
+         e.g. ('legal_trial', 'full', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     360 ('build', 'legal_trial', 'abridged', 'ValueError', 'legal_trial')
+         e.g. ('legal_trial', 'abridged', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     360 ('build', 'tribunal', 'full', 'ValueError', 'tribunal')
+         e.g. ('tribunal', 'full', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     360 ('build', 'tribunal', 'abridged', 'ValueError', 'tribunal')
+         e.g. ('tribunal', 'abridged', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     360 ('build', 'interrogation', 'full', 'ValueError', 'interrogation')
+         e.g. ('interrogation', 'full', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     360 ('build', 'interrogation', 'abridged', 'ValueError', 'interrogation')
+         e.g. ('interrogation', 'abridged', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     360 ('build', 'parliamentary_debate', 'full', 'ValueError', 'parliamentary_debate')
+         e.g. ('parliamentary_debate', 'full', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     360 ('build', 'parliamentary_debate', 'abridged', 'ValueError', 'parliamentary_debate')
+         e.g. ('parliamentary_debate', 'abridged', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     360 ('build', 'council_of_state', 'full', 'ValueError', 'council_of_state')
+         e.g. ('council_of_state', 'full', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     360 ('build', 'council_of_state', 'abridged', 'ValueError', 'council_of_state')
+         e.g. ('council_of_state', 'abridged', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     180 ('build', 'arbitration', 'full', 'ValueError', 'arbitration')
+         e.g. ('arbitration', 'full', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     180 ('build', 'arbitration', 'abridged', 'ValueError', 'arbitration')
+         e.g. ('arbitration', 'abridged', 0, 0, 0, 'b', ('mid', 'mid', 'mid'))
+     140 ('build', 'rally', 'full', 'ValueError', 'a one-speaker proceeding needs someone addressed (RD A.4)')
+         e.g. ('rally', 'full', 0, 0, 0, None, ('mid', 'mid', 'mid'))
+      60 ('build', 'conversation', 'abridged', 'ValueError', 'abridged form with nobody addressed')
+         e.g. ('conversation', 'abridged', 0, 0, 0, None, ('mid', 'mid', 'mid'))
+      60 ('build', 'questioning', 'abridged', 'ValueError', 'abridged form with nobody addressed')
+         e.g. ('questioning', 'abridged', 0, 0, 0, None, ('mid', 'mid', 'mid'))
+      60 ('build', 'rally', 'abridged', 'ValueError', 'abridged form with nobody addressed')
+         e.g. ('rally', 'abridged', 0, 0, 0, None, ('mid', 'mid', 'mid'))
+      60 ('build', 'negotiation', 'abridged', 'ValueError', 'abridged form with nobody addressed')
+         e.g. ('negotiation', 'abridged', 0, 0, 0, None, ('mid', 'mid', 'mid'))
+
+act_margin type by disposal: {'hearers': {'Margin': 5600}, 'exchange': {'Margin': 25440}, 'bench': {'Margin': 14400}, 'mutual': {'Margin': 1680}, 'declared': {'Margin': 1440}}
+act_margin None cells: {}
+
+ENDS / EXCHANGES / BANDS per (row, form):
+  ('arbitration', 'abridged'): ends={'budget': 2160} nx={1: 2160}
+      bands={'failure': 753, 'success': 311, 'overwhelming': 920, 'partial': 176}
+  ('arbitration', 'full'): ends={'rested': 720, 'budget': 1410, 'yielded': 30} nx={1: 180, 2: 540, 3: 1440}
+      bands={'failure': 2035, 'partial': 107, 'success': 18}
+  ('audience', 'abridged'): ends={'budget': 1800} nx={1: 1800}
+      bands={'overwhelming': 769, 'failure': 665, 'success': 251, 'partial': 115}
+  ('audience', 'full'): ends={'rested': 450, 'budget': 1350} nx={1: 450, 2: 1350}
+      bands={'failure': 1698, 'partial': 88, 'success': 14}
+  ('conversation', 'abridged'): ends={'budget': 2400} nx={1: 2400}
+      bands={'success': 376, 'failure': 791, 'overwhelming': 1042, 'partial': 191}
+  ('conversation', 'full'): ends={'rested': 420, 'budget': 1225, 'yielded': 35} nx={2: 420, 3: 1260}
+      bands={'failure': 771, 'overwhelming': 267, 'partial': 246, 'success': 396}
+  ('council_of_state', 'abridged'): ends={'budget': 1800} nx={1: 1800}
+      bands={'partial': 129, 'overwhelming': 740, 'failure': 674, 'success': 257}
+  ('council_of_state', 'full'): ends={'rested': 600, 'budget': 1188, 'yielded': 12} nx={1: 150, 2: 450, 3: 1200}
+      bands={'failure': 1684, 'partial': 101, 'success': 15}
+  ('excommunication_deliberation', 'abridged'): ends={'budget': 1440} nx={1: 1440}
+      bands={'overwhelming': 589, 'failure': 569, 'partial': 103, 'success': 179}
+  ('excommunication_deliberation', 'full'): ends={'rested': 480, 'budget': 951, 'yielded': 9} nx={1: 120, 2: 360, 3: 960}
+      bands={'failure': 1372, 'failure(veto)': 14, 'partial': 54}
+  ('inquisition_hearing', 'abridged'): ends={'budget': 1440} nx={1: 1440}
+      bands={'success': 207, 'failure': 574, 'overwhelming': 579, 'partial': 80}
+  ('inquisition_hearing', 'full'): ends={'rested': 912, 'budget': 312, 'yielded': 192, 'broken': 24} nx={1: 120, 2: 360, 3: 96, 4: 336, 5: 528}
+      bands={'failure': 1379, 'partial': 52, 'success': 9}
+  ('interrogation', 'abridged'): ends={'budget': 1800} nx={1: 1800}
+      bands={'overwhelming': 817, 'failure': 514, 'partial': 151, 'success': 318}
+  ('interrogation', 'full'): ends={'rested': 720, 'budget': 1080} nx={1: 150, 2: 450, 3: 120, 4: 1080}
+      bands={'failure': 1717, 'partial': 71, 'success': 12}
+  ('legal_trial', 'abridged'): ends={'budget': 1800} nx={1: 1800}
+      bands={'overwhelming': 744, 'failure': 682, 'partial': 119, 'success': 255}
+  ('legal_trial', 'full'): ends={'rested': 1109, 'yielded': 284, 'broken': 98, 'budget': 309} nx={1: 150, 2: 450, 3: 134, 4: 482, 5: 584}
+      bands={'failure': 1711, 'success': 13, 'partial': 76}
+  ('negotiation', 'abridged'): ends={'budget': 2400} nx={1: 2400}
+      bands={'partial': 163, 'success': 401, 'failure': 790, 'overwhelming': 1046}
+  ('negotiation', 'full'): ends={'rested': 420, 'budget': 1206, 'yielded': 54} nx={2: 420, 3: 1260}
+      bands={'overwhelming': 720, 'failure': 566, 'success': 245, 'partial': 149}
+  ('parliamentary_debate', 'abridged'): ends={'budget': 1800} nx={1: 1800}
+      bands={'partial': 147, 'success': 236, 'failure': 646, 'overwhelming': 771}
+  ('parliamentary_debate', 'full'): ends={'rested': 1107, 'broken': 92, 'yielded': 275, 'budget': 326} nx={1: 150, 2: 450, 3: 129, 4: 474, 5: 597}
+      bands={'failure': 1693, 'partial': 92, 'success': 15}
+  ('questioning', 'abridged'): ends={'budget': 2400} nx={1: 2400}
+      bands={'partial': 179, 'success': 364, 'failure': 837, 'overwhelming': 1020}
+  ('questioning', 'full'): ends={'rested': 420, 'budget': 1260} nx={2: 420, 4: 1260}
+      bands={'failure': 953, 'overwhelming': 189, 'success': 313, 'partial': 225}
+  ('rally', 'abridged'): ends={'budget': 2400} nx={1: 2400}
+      bands={'success': 316, 'overwhelming': 991, 'failure': 918, 'partial': 175}
+  ('rally', 'full'): ends={'rested': 1120, 'budget': 1120} nx={1: 560, 2: 560, 3: 1120}
+      bands={'failure': 1014, 'partial': 336, 'success': 557, 'overwhelming': 333}
+  ('tribunal', 'abridged'): ends={'budget': 1800} nx={1: 1800}
+      bands={'overwhelming': 749, 'failure': 682, 'success': 246, 'partial': 123}
+  ('tribunal', 'full'): ends={'rested': 720, 'budget': 980, 'broken': 89, 'yielded': 11} nx={1: 150, 2: 450, 3: 128, 4: 1072}
+      bands={'failure': 1722, 'partial': 63, 'success': 15}

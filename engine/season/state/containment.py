@@ -1,23 +1,21 @@
 """`season.state.containment` -- THE CONTAINMENT TREE, READ: one edge up, and the subtree down.
 
-⚠ MOVED HERE FROM `queries/world_q.py` BY G3 (plan position 6), BODIES UNCHANGED, AND THE MOVE IS
-FORCED BY THE LAYERING RATHER THAN CHOSEN. `04 §C.2`'s F3 clause puts *"via is a Seat whose
-`revocation` basis reaches it"* INSIDE THE GATE, and ruling (3)'s rule (`rung_above_same_faction`)
-asks for the seat's PARENT rung, while ruling (4)'s purview asks for a seat's SUBTREE. The gate is in
-`state/`; `queries/` imports `state/` and never the reverse (`state/__init__.py`, `world.py`'s own
-header). So a gate that calls `world_q.parent_of` is an upward import, and a gate that re-derives the
-walk is `CLAUDE.md` §8's second copy. The walk moved DOWN instead: `world_q` re-exports these two
-names, so `world_q.parent_of is containment.parent_of` and every existing caller (`loop/predicates`,
-the probes, the tests) reaches the same function object it always did.
+⚠ THE WALK LIVES IN `state/` AND NOT IN `queries/`, BY THE LAYERING. `04 §C.2`'s F3 clause puts
+*"via is a Seat whose `revocation` basis reaches it"* INSIDE THE GATE, and ruling (3)'s rule
+(`rung_above_same_faction`) asks for the seat's PARENT rung, while ruling (4)'s purview asks for a
+seat's SUBTREE. The gate is in `state/`; `queries/` imports `state/` and never the reverse
+(`state/__init__.py`, `world.py`'s own header). So a gate that calls `world_q.parent_of` is an
+upward import, and a gate that re-derives the walk is `CLAUDE.md` §8's second copy. `world_q`
+re-exports these two names, so `world_q.parent_of is containment.parent_of` and every caller
+(`loop/predicates`, the probes, the tests) reaches the same function object.
 
-⚠ PRECEDENT, NOT INVENTION: `World.contain_ascends` already lives in `state/` for the same reason --
+⚠ PRECEDENT, NOT INVENTION: `World.contain_ascends` lives in `state/` for the same reason --
 *"ONE OWNER, TWO POLARITIES"*, the store's writer needs the ladder rule, so the rule lives where the
 writer can reach it and the loop calls it from there.
 
 Both read `w.tenures` and nothing else, so this module imports no carrier and no store -- it takes
-the `World` it is handed and asks it. `descendants` keeps its `TRACE.query` line verbatim: a caller
-that consolidates a walk must not change what the walk traces (`world_q.ancestry`'s docstring
-records the red that taught this).
+the `World` it is handed and asks it. `descendants` traces `TRACE.query`: a consolidated walk must
+not change what the walk traces.
 """
 
 from __future__ import annotations
@@ -30,9 +28,49 @@ from ..trace_log import TRACE
 # and the import-cycle instrument counts a guarded import as an edge. The type is named as a string.
 
 
+class _LiveEdges:
+    """The barrier's view of the Tenures a hot reader asks by `(kind, subject)`: Tenure OBJECTS, in
+    `w.tenures` order, for the kinds in `_VIEWED`. Objects, not ids, because `seat_hold` returns the
+    Tenure; so a reader re-asks `t.live` / `t.until` of the object it is handed, and a Tenure closed
+    since the view was built reads as closed. What the view cannot see is a Tenure ADDED or REMOVED, which
+    `stamp` (`World.tenure_extent`) catches: `edges_of` rebuilds on a changed stamp."""
+    __slots__ = ("stamp", "by")
+
+    def __init__(self) -> None:
+        self.stamp = None
+        self.by: dict = {}
+
+
+_VIEWED = ("hold", "contain")
+
+
+def edges_of(w: "World", kind: str, subject: str) -> list:
+    """Every `kind` Tenure of `subject` (live or closed), in `w.tenures` order; the caller filters.
+
+    From the barrier's cache (`World.cache_at_barrier`, key `"live_edges"`, dropped by `discard_caches`
+    like every barrier index) where one may be built: `parent_of`, `seat_hold` and `_eligible` read this
+    inside loops, and each asked `w.tenures`, which sorts and concatenates the whole store per call. Where
+    none may be -- inside a parallel map, which refuses the cache even to read -- or for a kind the view
+    does not carry, the answer is the same scan of `w.tenures` those readers made, so the two routes agree.
+
+    This lives in `state/` and not in `queries/cache.py` because `state/` may not import `queries/`
+    (`gate.py` is a reader); the key and the shape have this one owner."""
+    if kind in _VIEWED and not w.in_parallel_map:
+        view = w.cache_at_barrier("live_edges", _LiveEdges)
+        stamp = w.tenure_extent()
+        if view.stamp != stamp:
+            by: dict = {}
+            for t in w.tenures:
+                if t.kind in _VIEWED:
+                    by.setdefault((t.kind, t.subject), []).append(t)
+            view.by, view.stamp = by, stamp
+        return view.by.get((kind, subject), [])
+    return [t for t in w.tenures if t.kind == kind and t.subject == subject]
+
+
 def parent_of(w: "World", rung_id: str) -> Optional[str]:
-    for t in w.tenures:
-        if t.kind == "contain" and t.subject == rung_id and t.live:
+    for t in edges_of(w, "contain", rung_id):
+        if t.live:
             return t.object
     return None
 
@@ -57,36 +95,31 @@ def descendants(w: "World", rung_id: str) -> list[str]:
 
 
 # =================================================================================================
-# ⚠ `ancestry` AND `home_of` MOVED HERE FROM `queries/world_q.py` AT PLAN POSITION `19` (U7-remit),
-# BODIES UNCHANGED, FOR THE REASON `parent_of`/`descendants` MOVED AT G3 AND BY THE SAME ROUTE. The
-# write gate's `determination` basis (`state/gate.py::may_determine`) asks whether a judging seat's
-# ground contains the PARTY's home -- the bench's containment test (`judging_set`'s, `H-32`), asked of
-# the person a determination binds. The gate is in `state/`, which may not import `queries/`; a
-# gate re-deriving either walk would be `CLAUDE.md` §8's second copy. So both moved DOWN, and
-# `world_q` re-exports them: `world_q.ancestry is containment.ancestry`, `world_q.home_of is
-# containment.home_of`, and every existing caller reaches the same function object. `home_of`
-# keeps its `TRACE.query` line verbatim and `ancestry` keeps tracing nothing -- a moved walk must
-# not change what it traces (`ancestry`'s own docstring records the red that taught this).
+# ⚠ `ancestry` AND `home_of` ARE HERE FOR THE REASON `parent_of`/`descendants` ARE, AND BY THE SAME
+# ROUTE. The write gate's `determination` basis (`state/gate.py::may_determine`) asks whether a
+# judging seat's ground contains the PARTY's home -- the bench's containment test (`judging_set`'s,
+# `H-32`), asked of the person a determination binds. The gate is in `state/`, which may not import
+# `queries/`; a gate re-deriving either walk would be `CLAUDE.md` §8's second copy. `world_q`
+# re-exports them: `world_q.ancestry is containment.ancestry`, `world_q.home_of is
+# containment.home_of`. `home_of` traces `TRACE.query` and `ancestry` traces nothing -- a shared walk
+# must not change what it traces (`ancestry`'s own docstring says why).
 # =================================================================================================
 
 
 def home_of(w: "World") -> dict:
     """`{person id: containing rung id}` for every person with a live `contain` edge.
 
-    ⚠ **THE INVERSE OF `presence`, AND IT EXISTS BECAUSE FOUR SITES HAD ROLLED IT BY HAND.**
-    `presence(w, rung)` answers *who is here*; this answers *where is everyone*, which is the
-    question `harness/populated.py` (twice — the `by_home`/`home_of` index and `census`),
-    `tools/export_npc_roster.py` and `engine/season/tests/test_season_shape.py` were each
-    computing with their own copy of `t.kind == "contain" and t.live and t.subject in w.persons`.
-    That is load-bearing rather than cosmetic: `export_npc_roster.py --check` detects drift by
-    comparing ITS notion of home against the builder's, so the two agreeing by coincidence is the
-    whole point of the check, and `census`'s `largest_building` is asserted in the suite. A change
-    to what counts as home — a dead tenure, a person with two contain edges — had to land in four
-    places with nothing to catch a miss (§8, and the §0.1 pt 5 pattern-defect signature).
+    ⚠ **THE INVERSE OF `presence`.** `presence(w, rung)` answers *who is here*; this answers *where
+    is everyone*, the question `harness/populated.py::census`, `tools/export_npc_roster.py` and
+    `engine/season/tests/test_season_shape.py` each ask. That is load-bearing rather than cosmetic:
+    `export_npc_roster.py --check` detects drift by comparing ITS notion of home against the
+    builder's, and `census`'s `largest_building` is asserted in the suite. A change to what counts as
+    home — a dead tenure, a person with two contain edges — lands in one place (§8, and the §0.1 pt 5
+    pattern-defect signature).
 
     ⚠ LAST WRITE WINS on a person with more than one live `contain`, which `World.add_tenure`
-    does not forbid. That is the incumbent behaviour of every site this replaces, preserved
-    deliberately rather than quietly tightened here."""
+    does not forbid. That is the behaviour every reader of this map relies on; it is deliberately
+    not tightened here."""
     TRACE.query("home_of", "resolver")
     return home_map(w)
 
@@ -102,29 +135,21 @@ def home_map(w: "World") -> dict:
 def ancestry(w: "World", rung_id: str) -> list[str]:
     """`[rung_id, its parent, ..., the root]` — the containment walk up from a rung.
 
-    ⚠ **IT EXISTS BECAUSE THREE SITES HAD ROLLED IT BY HAND**, which is the same reason and the
-    same remedy as `home_of` above. `parent_of` owns ONE EDGE; every caller that wants the CHAIN
-    was repeating the identical loop — step, guard with a visited set, stop at the root or on a
-    revisit — in `WorldReader._ancestry`, in `conferral_path` (deleted at `18a`), and most
-    recently in `harness/governance_spine.census`. §8: the walk is a rule, and a rule lives once.
+    ⚠ **ONE OWNER OF THE CHAIN.** `parent_of` owns ONE EDGE; every caller that wants the CHAIN asks this
+    loop -- step, guard with a visited set, stop at the root or on a revisit. §8: the walk is a rule,
+    and a rule lives once.
 
     ⚠ **THE VISITED SET IS LOAD-BEARING, NOT DEFENSIVE.** `World.add_tenure` enforces strict
     ascent on a `contain` edge, so a well-formed world presents no cycle — but `contain_ascends`
-    passes any edge whose endpoints are not both resolvable rungs, so a half-built world can. The
-    three hand copies each carried their own guard and agreed; consolidating keeps that agreement
-    a property of one function rather than a coincidence of three.
+    passes any edge whose endpoints are not both resolvable rungs, so a half-built world can.
 
     The start rung is INCLUDED, so `len(ancestry(w, r)) - 1` is its depth and a root returns
     `[root]`. An unknown id returns `[id]` — this reports the containment edges that exist and
     does not assert the rung does.
 
-    ⚠ **IT DOES NOT `TRACE`, AND THAT IS THE EXTRACTION BEING CORRECT RATHER THAN AN OMISSION.**
-    The first writing called `TRACE.query("ancestry", "resolver")` like its neighbours, and
-    `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte` went red on `TRACE.txt`
-    and `results.json`: `conferral_path` traces its own name and would now have traced twice, and
-    `WorldReader._ancestry` traced nothing and would have started. A helper extracted to remove
-    duplication must be INVISIBLE to its callers -- the moment it emits, consolidating three copies
-    becomes a behaviour change, and the callers own their query names."""
+    ⚠ **IT DOES NOT `TRACE`.** A shared helper must be INVISIBLE to its callers: the moment it emits,
+    consolidating copies becomes a behaviour change (`TRACE.txt` and `results.json` would move), and
+    the callers own their query names."""
     out: list[str] = []
     seen: set[str] = set()
     cur: str | None = rung_id

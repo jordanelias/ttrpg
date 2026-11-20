@@ -10,12 +10,10 @@ this returns, so the filename is idiomatic rather than coined (`CLAUDE.md` §4).
 `containing_rung_of`, `store_kind_of`, `_from_content_claim`, `_from_shortfall_claim`), the
 eligibility predicate, and the two agreement/standing readers.
 
-⚠ `entrenchment` SITS HERE PROVISIONALLY AND L3 RE-ADJUDICATES IT. Three functions in the old
-`decision.py` self-declared as person-side Queries via `TRACE.query(..., "person")`: `budget`,
-`opening_set` and `entrenchment`. The first two are named by §A.2 (the `decision/` row) as `decision/` MEMBERS and
-therefore cannot move to `queries/person_q` -- which is why `ED-IN-0206` item (2) is wrong about
-them. `entrenchment` is the only one of the three that §A.2 (the `decision/` row) does not name, so it is the only
-real `queries/person_q` candidate in this file, and L3 owns that call.
+⚠ `entrenchment` SITS HERE PROVISIONALLY AND L3 RE-ADJUDICATES IT. `budget` and `opening_set` are
+named by §A.2 (the `decision/` row) as `decision/` MEMBERS and cannot move to `queries/person_q`.
+`entrenchment` is the one function here that §A.2 does not name, so it is the only real
+`queries/person_q` candidate in this file, and L3 owns that call.
 
 AX-2 binds every file under `decision/`: no `World`, as an import, a name, an attribute or a
 string. Enforced BY PATH over this directory (`04 §E.1`).
@@ -31,15 +29,15 @@ from ..data.requires import (
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
 )
 from ..data.rosters import (
-    CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, REMOVE_ORDINAL, SUCCESSIONS,
-    refusing_pole, require_member,
+    CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, SUCCESSIONS,
+    capability_rows, refusing_pole, remove_distance, require_member, require_use_site,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
     CHOICE_RANGES, CHOICE_SOURCED, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, LIE_VERBS,
     OWN_HOLD_DECLINES,
-    OWN_STANCE_DECLINES, OWN_TITLE_DECLINES,
+    OPPOSED_WITHOUT_PRIZE, OWN_STANCE_DECLINES, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
     TERMS_SOURCED, VERB_TABLE, VIOLENCE_CONTEXTS, VIOLENT_VERBS, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED,
     align,
 )
@@ -52,7 +50,7 @@ from ..queries.person_q import (
 )
 from ..state.carriers import Candidate, Claim, Person, Question, Record, View
 from ..trace_log import TRACE
-from ...substrate.descriptors import ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, attribute_key
+from ...substrate.descriptors import about_mid, scale_of
 
 # v9 IN-12 step 7: THE CLASS A HELD WRIT RIDES THE QUESTION AS -- the carrier's own type name, which is
 # what `queries/world_q.py::_stamped` stamps for a document (`World.class_of`) and what
@@ -63,12 +61,7 @@ _HELD_WRIT_CLASS = Record.__name__
 def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candidate]:
     """§F1 -- COMPUTED FROM THE VERB TABLE. No `roster` parameter: that is `D2` entire.
 
-    ⚠ WHAT CHANGED, AND WHY IT COULD NOT CHANGE BEFORE. Rev 2 took `roster: list[Candidate]`
-    and returned it, and said so: "the PROPERTY S17 chose the type to protect -- an option set
-    that is COMPUTED rather than an AUTHORED LIST -- is not [faithful], because `roster` is the
-    caller's authored list." Its reason was real: §61 gave `q` no producer, so there was
-    nothing to compute a set FROM. `questions_for()` is that producer, so the roster's excuse
-    is gone and with it the roster.
+    `questions_for()` produces `q`, so the set is computed from it:
 
         { Candidate(verb, subject, operands) :                   -- §F1's `why`: gone, `14`
             verb    in the verb table                            -- clause 1
@@ -92,9 +85,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     `Query.budget` already takes one for exactly this reason, with the argument written out
     there. Two of `transfer`'s operands (`kind`, `amount`) are values the design supplies NO
     number for, so they are fixtures with a register row and a sweep (`H-94`), and a person
-    who cannot reach the registry cannot derive them. The alternative was to leave them in the
-    verb table's `operand_defaults`, where the FOLD filled them under the person -- which is
-    the two-owner defect this item deletes. What §F1's signature is protecting is that no
+    who cannot reach the registry cannot derive them. What §F1's signature is protecting is that no
     AUTHORED OPTION LIST reaches here (`D2`); a params registry is not one, and the AST proof
     still sees no `World`.
 
@@ -106,18 +97,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     KNOWN-FALSE — a claim the person holds that contradicts the requirement — and NOT
     "unproven". Absence of a belief is not a belief in the negative.
 
-    ⚠ **THIS PARAGRAPH DESCRIBES THE PRE-2026-09-18 BEHAVIOUR AND IS KEPT AS THE RECORD.**
-    `H-71` IS CLOSED: `remit:` is now evaluated person-side off the `hold` Tenure's granted acts,
-    and `presence:` is the only kind still declining unconditionally. What follows is why it could
-    not be evaluated before, which is still the reason the hole existed.
-
-    ⚠ ONE OF §F1'S FOUR ELIGIBILITY KINDS CANNOT BE EVALUATED HERE, and it declines rather
-    than admitting. See `person_side_eligible`: `remit:` needs the OFFICE's remit, and #353
-    §11.1 is explicit that "who holds an office is NOT a field on the office -- it is a `hold`
-    Tenure, owned by the holder", which gives the person the TENURE and leaves the REMIT with
-    the office. That is a genuine collision in §F1 and it is registered (`H-71`), not filled.
-    It is not the `budget` case: there the data was the person's and merely stored in the
-    wrong place, and no such relocation is available for a remit two holders share."""
+    `remit:` is evaluated person-side off the `hold` Tenure's granted acts, and `presence:` is
+    the only eligibility kind that still declines unconditionally (`person_side_eligible`)."""
     TRACE.query("opening_set", "person")
     out: list[Candidate] = []
     axis = fx.get("refusal_axis")
@@ -129,6 +110,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     people: Optional[tuple] = None
     records: Optional[list] = None
     held: Optional[frozenset] = None
+    read: Optional[dict] = None         # `documents_known_as`, once per call, only if a sub-kind row is reached
     # v9 IN-26 (`H-156` option (a) as a switch, `Fixtures withheld_verbs`): A VERB HELD OUT OF FORMATION
     # forms no Candidate for anybody, before any other read -- so a withheld row costs the season nothing
     # and the hand-built fold, which never asks this, is untouched. A member the table lacks is refused,
@@ -144,8 +126,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             continue
         # v11 CR-27 (M9 taken (a), `rosters.yaml: lie_verbs`): A ROW THAT SAYS A FALSE VALUE IS FORMED ONLY WHILE
         # `Fixtures lie_offered` is True, and the gate is HERE, in formation, not in `loop/driver.py::
-        # resolvable_verbs()`: a hand-built `lie` still folds, and the person simply does not offer it. At False
-        # the row forms no Candidate for anybody, and the realm is the pre-item one.
+        # resolvable_verbs()`: a hand-built `lie` still folds, and the person simply does not offer it.
         if verb in LIE_VERBS and not fx.get("lie_offered"):
             continue
         if not person_side_eligible(p, row):
@@ -238,6 +219,24 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             if held is None:
                 held = _held_objects(p)
             refs = tuple(r for r in refs if SUCCESSIONS.get(r) in held)
+        # B11 lane A (`data/verbs.py::RECORD_SUBKINDS_BY_VERB`): A `Record` ROW WHOSE CELL ASKS A SUB-KIND forms only
+        # on a Record his own content claims say is of that kind (`documents_known_as`) -- `accept` on a challenge,
+        # `comply` on a dispensation. The kind is read off the row's own cell, never a verb name; a document is known
+        # by what it says, so one he holds no reading of is no challenge to him (the addressee of a challenge made
+        # before him reads it, `loop/witness.py`'s content deposit). It NARROWS and widens
+        # nothing; the fold's `existence` conjunct stays for a hand-built act. [ASSUMPTION; medium; Jordan to
+        # correct; revert: empty `RECORD_SUBKINDS_BY_VERB`.]
+        # A HOLDING row (`RECORD_SUBKINDS_HELD`: `carry`, `found`, `build`, held by the person, `own_hold_declines`) keeps
+        # a document he holds no reading of -- unknown forms, clause 4's polarity -- and declines one his reading says is
+        # of another kind.
+        kinds_asked = RECORD_SUBKINDS_BY_VERB.get(verb)
+        if kinds_asked and refs:
+            if read is None:
+                read = documents_known_as(p)
+            if verb in RECORD_SUBKINDS_HELD:
+                refs = tuple(r for r in refs if r not in read or read[r] & kinds_asked)
+            else:
+                refs = tuple(r for r in refs if read.get(r, frozenset()) & kinds_asked)
         if not refs:
             continue
         # v9 IN-12 step 9 (`rosters.yaml: vocation_sourced`): A VERB THAT CARRIES A VOCATION forms one
@@ -301,14 +300,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # `move`'s `contain_path` cell keeps the same shape of rule -- *"a node is not a path
             # to itself"* -- as the reader's own, and this is that rule one seam over. It reads
             # the ROW'S OWN COLUMN (`contests:`), never a verb name, so it holds for whatever
-            # else declares a prize later.
-            #
-            # MEASURED, the day `kill / wound` was admitted to `resolvable_verbs()`
-            # (`ED-IN-0261`, amended): `opening_set` offers every person THEMSELVES as a referent
-            # for every verb -- 49.6% of all candidates in the one-season sweep name the actor as
-            # their own subject -- so the commonest contested candidate in the corpus was a
-            # person attacking himself. 47 of 143 cases died on `personal combat needs two
-            # parties; got 1` for no other reason.
+            # else declares a prize later. `opening_set` offers every person THEMSELVES as a
+            # referent for every verb, so without this a person attacks himself.
             #
             # ⚠ WHY IT DECLINES HERE RATHER THAN REFUSING IN THE FOLD, which is the opposite of
             # the choice clause 4 makes: clause 4 is EPISTEMIC -- a person who wrongly believes
@@ -348,19 +341,15 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 # no Candidate whose counterparty is the person -- a petition to oneself is the
                 # Tenure(X,X) fiat ruling 1 names. Declined HERE, not refused in the fold, for the
                 # reason the contest rule gives: no read the fold makes can say *that is you*, so a
-                # refusal teaches nothing -- MEASURED, it fed itself (the refusal's claim about the
-                # petitioner raised the next question about them). Reads the row's column, never a
+                # refusal teaches nothing: it feeds itself (the refusal's claim about the
+                # petitioner raises the next question about them). Reads the row's column, never a
                 # verb name, and the loader guarantees the operand is carried.
                 # ⚠ AND A SECOND SIDE NOBODY CAN NAME IS NO SECOND SIDE (plan position 16). On a TYPED
                 # row the loader guarantees the counterparty is carried, so `None` cannot arise there.
                 # On an UNTYPED row (`give` until plan position `14` typed it; `oblige` carries its
                 # `subject` since IN-10 (a)) nothing may be carried, and forming the Candidate would mint an act with no second party --
-                # refused by the fold every time, for the instrument's reason. MEASURED before this
-                # clause, the `give` row without it: 3 such acts in
-                # `headless.run(3, 0)` and 41 in `populated.run(2, 0)`, every one `give.refused`, and
-                # `release` dropped out of the corpus's executed set because they took its scenes --
-                # position `15`'s *constant scene tax with nothing behind it*, the shape the petition
-                # row's seat reading was refused for.
+                # refused by the fold every time, for the instrument's reason, and each takes a
+                # scene -- *a constant scene tax with nothing behind it*.
                 # IN-53 D2: the self half waived for a row declaring `counterparty_may_be_self`
                 # (`VerbRow.self_counterparty_refused`, the one owner the fold asks too).
                 if row.counterparty and row.self_counterparty_refused(ops.get(row.counterparty), p.id):
@@ -379,10 +368,9 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 # after every decline so the copy is paid only for a Candidate that is formed;
                 # `said` is not a `requires_operands` member, so `binding_of` drops it from both
                 # readers' bindings.
-                # ⚠ AND NOTHING TO SAY IS DECLINED (T1's deferral, decided at `T4`): a telling that
-                # carries nothing passes nothing on, and the fold used to refuse it on `holds`
-                # anyway -- a scene spent on a refusal the person could have known. Measured at T1:
-                # 3 of 31 corpus candidates. Only the named conjunct declines; `survey` and
+                # ⚠ AND NOTHING TO SAY IS DECLINED: a telling that carries nothing passes nothing on,
+                # and the fold would refuse it on `holds` -- a scene spent on a refusal the person could
+                # have known. Only the named conjunct declines; `survey` and
                 # `reconstruct` carry no `said` and are untouched.
                 if ledger_of:
                     # `said` depends on the entity alone, never on the hearer, so a subject's
@@ -416,10 +404,10 @@ def subject_is_opponent(row: "VerbRow") -> bool:
     readers. Read off the row's own columns, never a verb name. One owner for two readers:
     `opening_set`'s self-subject decline (a person is not their own adversary) and
     `decision/choose.py`'s score term 2 under `stance_polarity: declared` (v9 IN-18 `G2`: an act
-    against a disliked opponent scores higher, not lower). CR-16: it read `not row.counterparty`,
-    which is False for a row that names `counterparty: subject`, so those rows were scored on the
-    wrong side under `declared`."""
-    return row.contested_against_subject()
+    against a disliked opponent scores higher, not lower). B11 lane A: OR the row is listed in `rosters.yaml: opposed_without_prize` (`challenge`:
+    no prize, done against the man it calls out)."""
+    return row.contested_against_subject() or (
+        row.verb in OPPOSED_WITHOUT_PRIZE and row.opponent_operand() == "subject")
 
 
 # v11 CR-87: THE VIOLENT ROWS WHOSE SUBJECT IS THEIR OPPONENT (`data/verbs.py::VIOLENT_VERBS`, off `rosters.yaml:
@@ -461,9 +449,7 @@ def _crime_context(p: Person, q: Question, r: str, records: list, memo: dict) ->
     on a seat he holds: `arrest`'s and `capture`'s custody, `world_q.detainees_held`).
     THE ADDRESSEE TEST NARROWS "A WARRANT HIS SEAT ISSUED OR HOLDS" [ASSUMPTION; medium; Jordan to correct; revert:
     drop the `addressed_to` test]: a dispensation whose `terms` is a person is a warrant to the tree
-    (`warrant_sourced`), so the maker of any writ about the King held a "warrant" against him -- MEASURED at seed 0,
-    season 1: four `fight` formations on the King by the two officers whose writs named him (stance +2, +3), none
-    addressed to the officer. The man a warrant charges is its addressee, not its maker."""
+    (`warrant_sourced`), so the maker of any writ about the King held a "warrant" against him. The man a warrant charges is its addressee, not its maker."""
     return (r in q.referents_for(DETAINEE_CLASS)
             or any(content_kind(c) in _WARRANT_KINDS and _content_answer(c, "subject") == r
                    and addressed_to(content_said(c), p.id) for c in records))
@@ -484,7 +470,7 @@ def _defence_context(p: Person, q: Question, r: str, records: list, memo: dict) 
     in the newest season his ledger holds, a deed of a kind a violent opponent-rule row emits (`person_q.attackers_of`,
     `_OPPONENT_DEED_KINDS` below)."""
     if "attackers" not in memo:        # depends on the actor alone, never on `r`: one ledger pass per call
-        memo["attackers"] = attackers_of(p.ledger, p.id, _OPPONENT_DEED_KINDS)
+        memo["attackers"] = attackers_of(p.ledger, p.id, _OPPONENT_DEED_KINDS, strata=_OPPONENT_STRATA)
     return r in memo["attackers"]
 
 
@@ -493,6 +479,8 @@ def _defence_context(p: Person, q: Question, r: str, records: list, memo: dict) 
 # row" [ASSUMPTION; medium; Jordan to correct; revert: drop the `VIOLENT_VERBS` test]: `speak` is an opponent-rule
 # row too, and its `pursuit.moved` would make a hard word a licence to fight.
 _OPPONENT_DEED_KINDS = frozenset(k for v in VIOLENT_OPPONENT_VERBS for k in VERB_TABLE[v].emits if k in PAIRED_KINDS)
+# The strata those rows act at: a doer is an attacker only if seen acting at one of them (a kind `train` also emits is no blow).
+_OPPONENT_STRATA = frozenset(VERB_TABLE[v].stratum for v in VIOLENT_OPPONENT_VERBS)
 
 
 def violence_context_of(p: Person, q: Question, r: str, contexts: tuple, records: list,
@@ -512,34 +500,27 @@ for _v, _ctx in VIOLENCE_CONTEXTS.items():
             law="CR-87 -- a violence decline narrows an attack on its subject by a context the actor holds")
 
 
-# ⚠ `project` LIVES HERE, NOT IN `choose.py`, AND THE REASON IS AN IMPORT CYCLE THAT EXECUTED.
-# `ED-IN-0261`'s refusal gate (`H-146`) made `opening_set` call it, and it was reached by
-# `from .choose import ...` inside a function body while `choose.py` imports this module at top
-# level: `choose <-> options`, a real runtime cycle that
-# `tests/valoria/test_import_cycle_game_state_npe.py` counted, because a deferred import hides a
-# cycle from an instrument without removing it. It is defined ONCE, here, and `choose.py` imports
-# it back -- the edge now runs one way only.
+# ⚠ `project` LIVES HERE, NOT IN `choose.py`, BECAUSE OF AN IMPORT CYCLE: `opening_set` calls it
+# (`ED-IN-0261`'s refusal gate, `H-146`) and `choose.py` imports this module at top level, so
+# importing it from `choose` inside a function body would be a `choose <-> options` cycle hidden
+# from an instrument, not removed (`tests/valoria/test_import_cycle_game_state_npe.py`). It is
+# defined ONCE, here, and `choose.py` imports it back -- the edge runs one way only.
 #
-# `align` is NOT here any more: it moved to `data/verbs.py` beside `ALIGNMENT` (telling workplan T2),
-# so the `H-66` rebind is `data.verbs.ALIGNMENT` and reaches `choose`'s score and this module's
-# `refuses` gate through the one function. `project` is still recorded for the same move into
-# `data/pursuits.to_axes`, its own docstring's stated single owner; not done here.
+# `align` lives in `data/verbs.py` beside `ALIGNMENT`, so the `H-66` rebind is `data.verbs.ALIGNMENT`
+# and reaches `choose`'s score and this module's `refuses` gate through the one function.
+# `project`'s stated single owner is `data/pursuits.to_axes`; it is not moved here.
 
 
 def project(p: Person, scar_shift: float = 0.0) -> dict:
-    """A person's thirteen conviction weights, in the four-axis basis. `U3` / R-06a.
+    """A person's fifteen pursuit weights, in the seven-axis basis. `U3` / R-06a.
 
-    ⚠⚠ **§F2's `conviction[axis]` IS COMPUTED NOW, NOT LOOKED UP, AND THE FORMULA IS UNCHANGED IN
-    SHAPE.** V2 §F2 spells `score(c) = Σ_axis conviction[axis] · alignment(c.verb, axis)` and that
-    indexing only works if a person's convictions are KEYED BY AXIS — which is what
-    `pursuit_axes` used to be forced to be, holding `Precedent` (a conviction) beside
-    `self_preservation`, `suspicion` and `harm_borne` (three ad-hoc scalars) so the lookup had
-    something to hit. `pursuit_axes`'s own note named the conflation and predicted the repair.
-    So:
+    ⚠⚠ **§F2's `conviction[axis]` IS COMPUTED, NOT LOOKED UP.** V2 §F2 spells
+    `score(c) = Σ_axis conviction[axis] · alignment(c.verb, axis)`, and that indexing needs a
+    person's convictions KEYED BY AXIS:
 
         conviction[axis]  :=  Σ_conv  p.pursuits[conv] · projection[conv][axis]
 
-    and `Σ_axis` above is untouched. A person holds weights over the THIRTEEN; the projection is
+    and `Σ_axis` above is untouched. A person holds weights over the FIFTEEN pursuits; the projection is
     the only thing that knows about axes.
 
     ⚠ **THE MATRIX IS READ, NOT INVENTED** — `conviction_axis_matrix_v30.md` §2, with a per-cell
@@ -553,8 +534,8 @@ def project(p: Person, scar_shift: float = 0.0) -> dict:
     data chose to leave sparse, not a typo that got through.
 
     ⚠ DELEGATED, NOT DUPLICATED. `data.pursuits.to_axes` is the one owner of *convictions → axes*,
-    because a second caller appeared that does not have a `Person`: `data.cast.loyalty` projects a
-    ROLE TEMPLATE's expected-conviction vector through the same 13×4. `to_axes` reads
+    because a second caller does not have a `Person`: `data.cast.loyalty` projects a
+    ROLE TEMPLATE's expected-conviction vector through the same 15×7. `to_axes` reads
     `data.verbs.PURSUIT_PROJECTION` at call time, so that is still the rebind that reaches here.
 
     ⚠ `scar_shift` is IN-08 H9's crisis reader (`Fixtures.scar_weight_shift`, `H-187`): the weights
@@ -576,8 +557,7 @@ def refusal_tolerance(p: Person, axis: Optional[str]) -> Optional[float]:
     THIS IS KNOWN AND DEFERRED, NOT MISSED. Dormant today -- `refusal_axis` ships unset, and this
     line short-circuits above before `project` is ever called. Threading the caller's own
     projection through would need an optional parameter on `opening_set` itself, which breaks
-    every test/harness spy pinned to its current four-parameter arity (measured: one such spy in
-    `test_governance_build.py` alone); worth doing WITH `H6`, when the gate ships live and the
+    every test/harness spy pinned to its current four-parameter arity; worth doing WITH `H6`, when the gate ships live and the
     cost stops being theoretical, not as a speculative widening now."""
     if axis is None:
         return None
@@ -596,8 +576,8 @@ def refuses(verb: str, axis: str, tolerance: float) -> bool:
     WHICH POLE REFUSES IS DATA (CR-21, H-146's repair): `data.rosters.refusing_pole(axis)` reads it
     from `rosters.yaml: pursuit_axes.refusing_pole` -- `-1`, the NEG pole, for `deontological` on
     `deontological/instrumental` (ED-IN-0261). A verb is refused when its alignment sits further toward
-    the OPPOSITE pole than the person's own weight: `sign * (cell - weight) < 0`, which for `-1` is the
-    old `cell > weight` exactly. An axis with no authored pole raises, so the gate cannot invert or
+    the OPPOSITE pole than the person's own weight: `sign * (cell - weight) < 0`, which for `-1` is
+    `cell > weight`. An axis with no authored pole raises, so the gate cannot invert or
     default silently. Only a verb the axis ENGAGES can be refused -- a zero cell, including the sparse
     default, is not one of the *"certain actions"* the ruling gates; the scar's
     `person_q.elements_violated_by` reads engagement the same way.
@@ -614,13 +594,9 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
     A DISJUNCTION: `transfer` is eligible by `remit:issue` OR `own` OR `hold:<store>`, so one
     alternative admitting is enough and one alternative declining decides nothing.
 
-    ⚠ **ONE OF THE FOUR KINDS DECLINES HERE — `remit:` NO LONGER DOES, AS OF 2026-09-18 (`13b`,
-    `H-71`).** The bullet below is kept because it states WHY the hole existed and what closed it,
-    but read it as history: the grant now rides on the `hold` Tenure (`World._grant_remit` writes
-    it at `add_tenure`, `Tenure.granted_acts` owns the shape) and the body 45 lines down ADMITS on
-    `arg in t.granted_acts`. An earlier version of this docstring still opened *"TWO OF THE FOUR
-    KINDS DECLINE"* with the `remit:` bullet unmarked, so the function a reader opens to learn the
-    rule stated the opposite of what it did.
+    ⚠ **ONE OF THE FOUR KINDS DECLINES HERE: `presence:`. `remit:` ADMITS** (`13b`, `H-71`): the
+    grant rides on the `hold` Tenure (`World._grant_remit` writes it at `add_tenure`,
+    `Tenure.granted_acts` owns the shape) and the body below admits on `arg in t.granted_acts`.
 
     ⚠ THE DECLINING KIND NAMES ITS HOLE, and neither it nor any other branch admits on an
     unevaluable predicate -- that would be a silent fill off the register (`G1`) at the opposite
@@ -628,20 +604,14 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
     resolver's `_eligible` still evaluates both, because it HAS a `World`; this is the person's
     reading, and the gap between the two readings is the finding.
 
-      * ~~`remit:<act>`~~ **— CLOSED 2026-09-18, kept as the history of the hole.** It needed
-        the OFFICE's `remit_acts`, which the person could not see. #353 §11.1: "who holds an
-        office is NOT a field on the office -- it is a `hold` Tenure, owned by the holder", so
-        the person owns the tenure and the office owns the remit. Unlike `budget`'s collision
-        there is no relocation available: two holders of one office share one remit, so it is not
-        the person's state to move. §F1 asserted this clause is person-side and did not say
-        how; `13b` is the how — a SNAPSHOT of the office's remit is stamped onto the Tenure when
-        the hold opens, so the person reads their own row and `choose` still receives no `World`.
+      * `remit:<act>` -- ADMITS (closed 2026-09-18; not a declining kind): it needs the OFFICE's `remit_acts`, and #353 §11.1: "who holds an office
+        is NOT a field on the office -- it is a `hold` Tenure, owned by the holder". Two holders
+        of one office share one remit, so it is not the person's state to move; a SNAPSHOT of the
+        office's remit is stamped onto the Tenure when the hold opens, so the person reads their
+        own row and `choose` still receives no `World`.
       * `presence:<rung>` -- declined because the ARGUMENT IS A PLACEHOLDER naming a kind of
         rung rather than an id, which is `H-75`, and is the same reasoning the `hold:<store>`
-        branch already carries one block below. ⚠ CORRECTED BY `W6`'s adversarial pass: this said
-        *"`H-33`, the presence index, which does not exist"*, and `W6` BUILT it -- `_ch_co_located`
-        reads it and `H-33` now carries a `site:`. The citation survived the thing it cited. The
-        refusal itself is unchanged and correct; only its reason was stale."""
+        branch already carries one block below."""
     return _admitted_through(p, row, trace=True)[0]
 
 
@@ -660,8 +630,7 @@ def exercised_seat(p: Person, row: "Optional[VerbRow]") -> Optional[str]:
     and so does `transfer` for a person whose seats grant no `issue` (its first alternative is
     `remit:issue` since `H-160` limit 1, so a holder of a seat granting `issue` WITH A RUNG gives
     THROUGH it, from its rung). The fold's `_eligible` then admits the same act through the same
-    seat, so making `via` required there moves no computed act (measured: `build_realm(0)`'s
-    content hash over one season is unchanged by G3).
+    seat, so making `via` required there moves no computed act.
 
     ⚠ WHEN SEVERAL SEATS GRANT THE ACT (`H-134`) THIS IS ONLY THE FIRST: `opening_set` forms ONE
     Candidate per seat (`exercisable_seats`), the seat riding on it (`VIA` in its operands) to
@@ -797,10 +766,9 @@ def _admitted_through(p: Person, row: "VerbRow", trace: bool) -> tuple:
 def containing_rung_of(p: Person) -> Optional[str]:
     """WHERE THE ACTOR IS, READ OFF THE ACTOR: the object of their own live `contain` Tenure.
 
-    A person's live `contain` Tenure. `W5` moved the tenure store onto the Person precisely so a
-    person-side function could ask this without a World, and this is that move being spent rather
-    than restated: #353 `:730` gives a Person "every Tenure whose subject they are", and where you
-    are is one of them.
+    A person's live `contain` Tenure. The tenure store is on the Person so a person-side function
+    can ask this without a World: #353 `:730` gives a Person "every Tenure whose subject they are",
+    and where you are is one of them.
 
     ⚠ IT IS NOT A CHOICE, AND THAT IS WHY IT IS DERIVED RATHER THAN OFFERED. `H-94` asked where
     `transfer`'s operands come from and the answer differs per operand: where the actor is, is
@@ -809,38 +777,22 @@ def containing_rung_of(p: Person) -> Optional[str]:
     kind needs a fixture. Reading the first as a choice would invent an option the person does not
     have; reading it as a fixture would invent a place.
 
-    ⚠ IT WAS CALLED `hearth_of` AND THE NAME ASSERTED SOMETHING THE CODE DOES NOT DO. RENAMED BY
-    THE `W-C` ADVERSARIAL PASS, WHICH IS ALSO WHERE THE ASSUMPTION IS DECLARED. §54 item 7 writes
-    `stores(hearth(giver), kind) >= amount` and supplies THE TOKEN AND NO DEFINITION
-    (`ARCHITECTURE.md:1898`, `ARCHITECTURE_V2.md:418`) -- while `hearth` is SEPARATELY a member of
-    `rosters.yaml: rung_kinds` (`person, hearth, community, settlement, territory, province,
-    duchy, realm`; `ARCHITECTURE.md:376`). So the term has a second, narrower reading the document
-    neither states nor excludes, and a function named for it was claiming the document had chosen.
+    ⚠ THE NAME IS NOT `hearth_of`. §54 item 7 writes `stores(hearth(giver), kind) >= amount` and
+    supplies THE TOKEN AND NO DEFINITION (`ARCHITECTURE.md:1898`, `ARCHITECTURE_V2.md:418`) --
+    while `hearth` is SEPARATELY a member of `rosters.yaml: rung_kinds` (`person, hearth,
+    community, settlement, territory, province, duchy, realm`; `ARCHITECTURE.md:376`). So the term
+    has a second, narrower reading the document neither states nor excludes, and a function named
+    for it would claim the document had chosen.
 
       READING A (this one, SHIPPED): the actor's containing rung, WHATEVER ITS KIND.
       READING B (the alternative, NAMED so the choice is visible): walk up the containment ladder
         to the nearest rung whose `kind` is `hearth`.
 
-    ⚠ MEASURED 2026-09-04, BOTH READINGS, OVER ALL 89 RUNNABLE CORPUS WORLDS, because a declared
-    alternative nobody runs is the laundering §0.1 point 4 names. Reading B was built and folded.
-      * CENSUS of what reading A returns, over all 267 corpus seatings (89 worlds x 3 persons):
-        `hearth` 111 · `realm` 153 · `settlement` 3. So in 156 of 267 the shipped reading returns
-        a rung that is NOT of kind `hearth` -- a majority, and the divergence is real, not
-        theoretical.
-      * `transfer` EXECUTED 702 -> 237, REFUSED 21 -> 0, and 0 -> 486 Candidates decline for want
-        of `from`. The executed SET does not move (`transfer` still executes, in the 37
-        person-scale worlds, which are the ones whose ladder HAS a hearth rung).
-      * MOST OF THE DIVERGENCE IS THE WORLD BUILDER'S. `corpus_run.build_at` truncates the ladder
-        at the case's own `scale:`, so a realm-scale case has no hearth rung to walk up to and
-        seats its people directly in the realm; under a full ladder those 153 seatings would be
-        hearths and the two readings would agree on them.
-      * ⚠ BUT NOT ALL OF IT, AND THE REMAINDER IS NOT A DEFECT. A person may legitimately sit
-        ABOVE a hearth in a hand-built world -- `tiny_world` seats the Duke in the settlement and
-        the King in the realm, deliberately -- and there the two readings still differ. So this is
-        not "a fixture bug that would vanish", and the closure below does not rest on pretending
-        it is.
+    A person may legitimately sit ABOVE a hearth in a hand-built world -- `tiny_world` seats the
+    Duke in the settlement and the King in the realm, deliberately -- and there the two readings
+    differ.
 
-    ⚠ AND READING B IS REFUSED ON ARCHITECTURE (§0 test 5), NOT ON THE NUMBER. It is not
+    ⚠ READING B IS REFUSED ON ARCHITECTURE (§0 test 5). It is not
     person-side: `Rung.kind` and `Query.parent_of` are WORLD reads, and this function is exactly
     the site §F1's L2 keeps World-free -- a person knows WHICH rung contains them, because that
     Tenure is their own, and does not know WHAT KIND of rung it is, because kinds are the world's.
@@ -848,7 +800,7 @@ def containing_rung_of(p: Person) -> Optional[str]:
     `test_w5_sense_is_still_the_only_world_taking_non_decision_function` red, which is the
     falsifier for this paragraph rather than a claim about it. The remaining alternative -- let
     the FOLD compute `hearth(giver)`, which does have a World -- gives one operand two owners
-    again, which is the divergence `W-C` closed.
+    again.
 
     `None` for a person with no live containment -- a person nowhere cannot give from a store, and
     the Candidate is not formed. That is a REFUSAL and not a hole in the design: #353 seats every
@@ -919,24 +871,21 @@ def _from_content_claim(p: Person, q: "Question", name: str):
     stays on its own branch below.
 
     `None` when `q.about` names no claim in `p`'s own ledger, the claim's predicate does not
-    start `content:`, or its kind maps nothing for `name` (`_content_answer`). ⚠ PLAN POSITION
-    IN-10 MADE THE MAP PER KIND (`rosters.yaml: record_sourced_operands`): `15c`'s flat list asked
-    `kind`/`amount` too and they declined EVERY TIME, since neither live schema carries either key;
-    they left the map with no behaviour moved. ⚠ AND `subject` IS NEVER ASKED HERE, though both
+    start `content:`, or its kind maps nothing for `name` (`_content_answer`). ⚠ THE MAP IS PER
+    KIND (`rosters.yaml: record_sourced_operands`). ⚠ AND `subject` IS NEVER ASKED HERE, though both
     kinds map it: on a question about a document the act is about the document itself, so
     `_derive_operand` answers `subject` with the referent before it reaches this reader. A HELD
     Record answers `subject` too, through `held_record_claims` (`_derive_operand`'s `held=`).
 
     ⚠ A SINGLETON LIST COLLAPSES TO ITS ONE ID; ANY OTHER COUNT DECLINES. `to`'s writ-side type
     is `[PersonId|OfficeId]` (r2 §A.3) -- a LIST, because a document may address several people
-    -- but every operand this vocabulary has ever carried is a SCALAR (`_derive_operand`'s own
-    `to`/`subject`/`site` branches, `_eff_transfer`'s single `w.rungs.get(...)`). FOUND BY
-    RUNNING THE POPULATED CORPUS, not reasoned in advance (`CLAUDE.md` §0.1 pt 3): the first
-    writing of this function returned the raw tuple, and 173 `petition`/`transfer` Candidates
-    formed carrying it verbatim -- each one UNABLE TO EVER RESOLVE, because `w.persons`/
+    -- but every operand this vocabulary carries is a SCALAR (`_derive_operand`'s own
+    `to`/`subject`/`site` branches, `_eff_transfer`'s single `w.rungs.get(...)`). Returning the
+    raw tuple would form `petition`/`transfer` Candidates carrying it verbatim -- each one UNABLE
+    TO EVER RESOLVE, because `w.persons`/
     `w.rungs` key on strings and a tuple matches nothing there, EVEN WHEN the sole named
-    addressee genuinely exists. That is the instrument inventing a NEW way to refuse an act for
-    a reason that is not there (§42.2's polarity), on top of the ones the design already has.
+    addressee genuinely exists. That would be the instrument inventing a NEW way to refuse an act
+    for a reason that is not there (§42.2's polarity), on top of the ones the design already has.
     Naming WHICH of several addressees a scalar operand means is a choice nobody has ruled --
     `ID-13`'s `floor` precedent -- so more than one, or none, declines exactly as an unreadable
     floor does; exactly one is not a choice at all, so it is not held back."""
@@ -951,7 +900,7 @@ def _content_answer(c: Optional["Claim"], name: str):
     (`content:<kind>`) maps `name` to one of its own content keys, and that key's value is the
     answer. `None` when `c` is no content claim, its kind maps nothing for `name`, or the key is
     absent. A singleton id list collapses to its one id and any other count declines
-    (`_from_content_claim`'s docstring, measured at `15c`). The one reader of the map, for both
+    (`_from_content_claim`'s docstring). The one reader of the map, for both
     channels (`_from_content_claim`, `_derive_operand`'s `held=`)."""
     said = None if c is None else content_said(c)   # `person_q`'s one reader of the claim's shape
     if said is None:
@@ -990,7 +939,7 @@ def held_record_claims(p: Person) -> list:
     if not held:
         return []
     # NEWEST BY `LedgerReader._best`'s comparator, the one owner of *most recent, then most
-    # confident* (strict `>`, first found wins a tie) -- not a second ladder (B-K close, LOG 6).
+    # confident* (strict `>`, first found wins a tie) -- not a second ladder.
     held_set = set(held)
     pool = [c for c in p.ledger if c.subject in held_set]
     out = []
@@ -999,6 +948,27 @@ def held_record_claims(p: Person) -> list:
                           and content_kind(c) in RECORD_SOURCED_OPERANDS]).belief_among()
         if c is not None:
             out.append(c)
+    return out
+
+
+def document_read(p: Person, rid) -> Optional["Claim"]:
+    """`p`'s OWN READING OF DOCUMENT `rid`: the newest `content:<kind>` claim on it in his ledger (`LedgerReader`'s
+    comparator, `held_record_claims`' rule), whether he holds the Record or only read it made before him; `None`
+    where he holds no reading. Person-side and World-free (AX-2)."""
+    return LedgerReader([c for c in p.ledger if c.subject == rid and content_said(c) is not None
+                         and content_kind(c) in RECORD_SOURCED_OPERANDS]).belief_among()
+
+
+def documents_known_as(p: Person) -> dict:
+    """WHAT `p`'s OWN LEDGER SAYS EACH DOCUMENT IS: `{record id: frozenset of kinds}` over every `content:<kind>` claim
+    he holds (`person_q.content_kind`, the one reader of the stem). Person-side and World-free (AX-2): what a document
+    is, to him, is what his reading of it says (B11 lane A, `opening_set`'s sub-kind rule). A document he holds no
+    reading of is absent: its kind is unknown to him."""
+    out: dict = {}
+    for c in p.ledger:
+        k = content_kind(c)
+        if k is not None:
+            out[c.subject] = out.get(c.subject, frozenset()) | {k}
     return out
 
 
@@ -1086,8 +1056,7 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     `on_referent` is False when the ROW forms on a classed referent (`not VerbRow.referent_class`,
     passed by `_operands`): such a row's subject rides the question without being what it is about,
     so the three readers of the claim `q.about` names (the document, the shortfall,
-    `store_kind_of`) answer nothing for it -- even when the same id is ALSO one of `q.referents`
-    (B-K close, COR 4).
+    `store_kind_of`) answer nothing for it -- even when the same id is ALSO one of `q.referents`.
 
     `held` (plan position IN-10, #453 §10.1) is the content claim of a Record the person HOLDS
     (`held_record_claims`), or `None`. When given it answers FIRST, for every name its kind maps in
@@ -1139,15 +1108,11 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     new to read from this branch.
 
     ⚠ THE REFERENT IS WORLD-SOURCED, AND THAT IS §F1'S OWN SHAPE RATHER THAN A WIDENING OF IT.
-    Raised by the `W-C` adversarial pass and closed here rather than escalated, because it is
-    answered: one of the two question sources reads the world directly (`questions_for` Q4 `need`
-    from `w.propositions`); Q2 `claim_landed` is ledger-sourced -- `for c in p.ledger`, unchanged --
-    but ADMITTED through `reach`/`place_of` (`queries/world_q.py`, position `11a`), which read
+    One of the two question sources reads the world directly (`questions_for` Q4 `need`
+    from `w.propositions`); Q2 `claim_landed` is ledger-sourced -- `for c in p.ledger` -- but
+    ADMITTED through `reach`/`place_of` (`queries/world_q.py`, position `11a`), which read
     world state (`w.tenures`, `w.offices`, `w.rungs`) to decide whether the person may be ASKED
-    about a claim their own ledger already holds. ⚠ `date_due` and `band_crossed` -- the two other
-    world-reading sources this paragraph used to name -- were folded out at `11a`: both MEASURED
-    zero questions in every buildable world, and both fold into `claim_landed` rather than into a
-    third route. `W-C` promotes that referent from *which Candidate forms* to *an operand of the
+    about a claim their own ledger already holds. `W-C` promotes that referent from *which Candidate forms* to *an operand of the
     minted act*. §F1 states the derivation in terms -- `subject ∈ referents(q)`, "what the
     question is ABOUT" -- and puts the epistemic constraint in a DIFFERENT clause: `requires(verb)
     not KNOWN-false FROM p's OWN CLAIMS`, with its own warning that softening THAT clause is the
@@ -1161,9 +1126,8 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
     referent they have no reach to. (b) THE REFERENT PROPOSES AND THE FOLD DISPOSES: naming a
     receiver is not moving matter to it. `_eff_transfer` returns nothing when a
     side is no rung and the fold emits `transfer.refused`; `move`'s `contain_path` cell reads
-    UNKNOWN off the world and `contain_ascends` blocks a sibling. Measured over the corpus: 21 of
-    723 transfers refused, 73 of 723 moves blocked -- so world-sourced ids do not DECIDE where
-    matter goes, which was the sharp form of the objection.
+    UNKNOWN off the world and `contain_ascends` blocks a sibling -- so world-sourced ids do not
+    DECIDE where matter goes.
 
     ⚠ AN OPERAND WITH NO BRANCH DECLINES, AND `floor` IS THE LIVE CASE. §12.1's floors are
     per-SITE-KIND (`band_floors`), and person-side there is no way to learn a site's kind without
@@ -1284,17 +1248,15 @@ def operands_for(p: Person, row: "VerbRow", q: "Question", subject,
         here and a RECORD kind in `_eff_create_record` -- from arriving on a `create_record` and
         silently making every record a record of grain.
 
-    ⚠ AN UNTYPED VERB IS NOT DECLINED. `{}` is the right answer for `utter` and `create_record`
-    (`speak` too until v9 SC-01 step 12 typed it): the grammar states no precondition, nothing to bind, and
+    ⚠ AN UNTYPED VERB IS NOT DECLINED. `{}` is the right answer for `utter` and `create_record`:
+    the grammar states no precondition, nothing to bind, and
     refusing them would be reading "no cell" as "an unmet cell" -- the UNKNOWN/False collapse the
     whole of this block exists to refuse. Their effects want operands of their own (`stages` is
     `H-80`, `harm` is `W-E`); those are not in `requires_operands` and are not this item.
 
     ⚠ NO WORLD, AND THE GUARD ACTUALLY REACHES IT. The AST proof in
     `test_w5_sense_is_still_the_only_world_taking_non_decision_function` examines every function
-    whose FIRST parameter is annotated `Person`, which is why `p` is first here and not `row`:
-    `binding_from`'s docstring recorded that the same guard could not see IT, because its first
-    parameter was a `TypedRequires`. A signature is where that gets fixed, not a sentence.
+    whose FIRST parameter is annotated `Person`, which is why `p` is first here and not `row`.
 
     ⚠ TELLING WORKPLAN `T4`: THE FIRST OF `operand_bags`, for the callers that ask for one bag. A
     row whose `to` is a known person has one bag per person known; this answers the first, or
@@ -1319,11 +1281,11 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     ⚠ PERSON-SIDE AND WORLD-FREE, like `operands_for` -- `p` first for the AST guard's reason
     recorded there. WHETHER the person told is present is the fold's `hearer` conjunct; a known
     person who is elsewhere still gets a Candidate. THE TELLER DOES NOT LEARN IT FROM THE REFUSAL: the
-    `with` read is observed, never deposited (batch-2 close `F1`), and `tell.refused` is one kind for
+    `with` read is observed, never deposited, and `tell.refused` is one kind for
     both conjuncts, so a refused telling to an absent hearer is retried whenever the teller
     re-deliberates -- a scene tax with nothing behind it. (CP-T05-03: a LOST telling, `news.untold`,
-    is a realised act and is not retried within the season; only the refusal is.) Recorded, with the measurement owed, at
-    the telling workplan's T4b *As built* line. `give` (plan position `14`) shares the shape: its
+    is a realised act and is not retried within the season; only the refusal is.)
+    `give` (plan position `14`) shares the shape: its
     receiver is a known person and its `with` conjunct the fold's. `people` is `known_persons`'
     answer when the caller already holds it (`opening_set`, once per call); `None` computes it.
 
@@ -1368,6 +1330,17 @@ def _person_bags(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixture
     if not fan:
         ops = _operands(p, row, q, subject, fx, {}, seat)
         return [] if ops is None else [ops]
+    # B11 lane A (the duel chain's fourth link, [ASSUMPTION; medium; Jordan to correct; revert: drop this branch]):
+    # A ROW ABOUT A DOCUMENT (`referent_class: Record`) WHOSE SUBJECT HE HAS READ, AND WHOSE KIND ANSWERS EVERY FAN
+    # OPERAND (`rosters.yaml: record_sourced_operands`, `_content_answer`), takes them from the document, not one bag
+    # per person known: `accept` is fought against the challenge's `challenger`; a Candidate per
+    # acquaintance would be refused by the fold's `names:to` for all but one. `subject` stays the document (no `held=`: the act answers the Record itself).
+    if row.referent_class == _HELD_WRIT_CLASS:
+        doc = document_read(p, subject)
+        given = {n: _content_answer(doc, n) for n in fan}
+        if doc is not None and None not in given.values():
+            ops = _operands(p, row, q, subject, fx, given, seat)
+            return [] if ops is None else [ops]
     if people is None:
         people = known_persons(p.ledger, p.id)
     # IN-53 D2 (H-207): A ROW DECLARING `counterparty_may_be_self` (`confer`) ALSO RANGES OVER THE
@@ -1386,7 +1359,7 @@ def _person_bags(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixture
     formed = {tuple(b.get(n) for n in fan) for b in out}
     for c in records:
         # The Record's own `terms` must BE the referent; a Record saying nothing about it (no
-        # `terms`, several) answers `None` and forms no bag (B-K close, COR 1).
+        # `terms`, several) answers `None` and forms no bag.
         if _content_answer(c, "subject") != subject:
             continue
         given = {n: _content_answer(c, n) for n in fan}
@@ -1427,7 +1400,7 @@ def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
     # `_derive_operand` reads it for `from` alone, so the (untraced) walk runs only for a bag
     # carrying `from`. `H-134`: a `seat` the caller names (`opening_set`, forming one Candidate per
     # seat) is the one the act will be exercised through and is used as given; `None` is the walk's
-    # first seat, as before.
+    # first seat.
     if seat is None and "from" in names:
         seat = exercised_seat(p, row)
     out: dict = {}
@@ -1501,8 +1474,7 @@ def _pair(told: list[Claim], own: list[Claim], key: Callable[[Claim], Any],
     holds several claims at one `key`, the one paired against is `LedgerReader._best`'s -- most
     recent, then most confident -- because list order is the EVICTION sort (`state/ledgers.py`:
     `confidence x (when + 1)`), not an order of belief, and a second ladder here would score a
-    truthful told claim against a belief the person no longer holds. (This replaced a dict
-    comprehension in which the last-listed claim at a key silently won.) A tie goes to the first
+    truthful told claim against a belief the person no longer holds. A tie goes to the first
     listed, as `_best` has it."""
     by_key: dict = {}
     for c in own:
@@ -1536,8 +1508,7 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
     Zero would mean "nobody has told you anything about yourself, therefore everyone agrees with
     you", which is §42.2's polarity rule run backwards -- zero evidence maps to the verdict
     AGAINST the thing measured, and the flattering reading is the one that rule exists to refuse.
-    Raising instead would restore the blocker §F4 warns about: standing blocked 9 cases for a
-    value nothing could produce."""
+    Raising instead would restore the blocker §F4 warns about."""
     scale = fx.get("condition_scale")
     told = [c for c in p.ledger if c.subject == p.id and c.source == "told_by"]
     own = [c for c in p.ledger if c.subject == p.id and c.source == "firsthand"]
@@ -1545,15 +1516,15 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
     return scale if paired == 0 else (dis * scale) // paired
 
 
-# The ordinal is `data/rosters.py::REMOVE_ORDINAL`'s, built once there (v9 SC-02 `22a` moved it out of
-# this module so the resolver-side `reception` reads the same ranks without importing decision code).
+# The ordinal is `data/rosters.py::REMOVE_ORDINAL`'s, built once there so the resolver-side `reception`
+# reads the same ranks without importing decision code.
 
 
 def channel_remove(channel: str) -> float:
-    """HOW FAR FROM THE THING ITSELF A CHANNEL PUTS ITS WITNESS, in `[0, 1]`: `0` for presence, `1`
+    """HOW FAR FROM THE THING ITSELF A CHANNEL PUTS ITS WITNESS, in `[0, 1)`: `0` for presence, `(K-1)/K`
     for the most removed channel. REFRACTION's channel term (`refracted_confidence`, v9 IN-15).
 
-        remove(ch) = k / (K - 1),   k = the place of `claim_source[ch]` in the ordinal of remove,
+        remove(ch) = k / K,         k = the place of `claim_source[ch]` in the ordinal of remove,
                                     K = how many distinct sources that ordinal holds
 
     ⚠ THE ORDINAL IS READ OFF THE ROSTER, NOT WRITTEN HERE. `rosters.yaml: witness_channels` is
@@ -1562,9 +1533,8 @@ def channel_remove(channel: str) -> float:
     ARE the ordinal, so a channel's remove is its SOURCE's place. Two channels with one source
     (`document_key`, `chronicle`: both `told_by`) are equally removed, which keeps that note's
     *"the order decides only which channel is reported, never the source"* true of this term too.
-    EQUAL SPACING between the ranks is the [ASSUMPTION] (`H-199`): the ordinal is ruled, the
-    distances are not."""
-    return REMOVE_ORDINAL.index(CHANNEL_CLAIM_SOURCE[channel]) / (len(REMOVE_ORDINAL) - 1)
+    One spacing, `remove_distance`, read here and by `world_q.remove_weight` (`H-199`)."""
+    return remove_distance(CHANNEL_CLAIM_SOURCE[channel])
 
 
 def ledger_weigh(p: Person, fx: "Fixtures"):
@@ -1621,25 +1591,48 @@ def dissents(p: Person, c: Claim, act=None, weigh=None) -> bool:
                               actor=act.actor)
 
 
-# v10 CR-19 / `H-200`: THE ATTRIBUTE `AX-7`'S COMPETENCE READS, named once, here, by its registry name and
-# resolved to its key by the registry's own resolver (`ED-IN-0327`: Attunement helps one judge whether
-# someone is telling the truth). Refused at import if the registry stops carrying it.
-COMPETENCE_ATTRIBUTE = attribute_key("Attunement")
-assert COMPETENCE_ATTRIBUTE is not None, "the attribute registry no longer carries Attunement (H-200)"
-#: The scale's middle, where the competence factor is 1: `(floor + ceiling) / 2`, read off the registry's
-#: `attributes.scale` (1-7, so 4), not written here.
-COMPETENCE_MID = (ATTRIBUTE_FLOOR + ATTRIBUTE_CEILING) / 2
+# v10 CR-19 / `H-200`: THE ATTRIBUTE `AX-7`'S COMPETENCE READS is a ROW, not a name here: `rosters.yaml: tables.capability_uses`'s
+# `told_claim_credit` row (B04.06; `ED-IN-0327`: Attunement helps one judge whether someone is telling the truth), read by
+# `_judgement_factor` through the substrate's `about_mid`. Nothing under `decision/` names an attribute or the scale's middle.
+TOLD_CLAIM_CREDIT = require_use_site("told_claim_credit")
 
 
-def competence(p: Person, competence_gain: float) -> float:
+def _judgement_rows(use: str) -> list:
+    """The `judgement` rows of site `use`, in table order."""
+    return [r for r in capability_rows(use) if r.role == "judgement"]
+
+
+def _judgement_factor(p: Person, rows: list, fx) -> Optional[float]:
+    """THE `judgement` ROWS OF ONE SITE, as one factor about the scale's mid-point (B04.06; U1 §8), or `None` for NO CAPABILITY: `None` where
+    there are no rows, or `p` holds no value at any row's key (a READ, never a default; the caller reads it as the factor 1). The value is
+    `p.attributes` at the row's `key`, on `substrate.descriptors.scale_of(key)`; the form is `about_mid`, its `gain` the Fixture the row
+    names (`fx.get(row.gain)`), so a sweep of that Fixture overrides the shipped value through `fx`. `side: actor` is the only side read:
+    `p` is the actor (the loader refuses any other). A site with several rows multiplies them. The one caller is `competence`."""
+    factor = None
+    for row in rows:
+        held = (getattr(p, "attributes", None) or {}).get(row.key)
+        if held is None:
+            continue
+        floor, ceiling = scale_of(row.key)
+        one = about_mid(held, floor, ceiling, fx.get(row.gain))
+        factor = one if factor is None else factor * one
+    return factor
+
+
+def competence(p: Person, fx) -> float:
     """`AX-7`'S THIRD INPUT, THE RECEIVER'S COMPETENCE, in `[0, 1]` (v10 CR-19; `H-200`).
 
-        competence = min(1, 1 + g * (attunement - mid) / (mid - floor))      g = `competence_gain`
+        competence = min(1, 1 + g * (attunement - mid) / (mid - floor))      g = `fx.get(row.gain)`, the Fixture the
+                                                                             `told_claim_credit` row names (`competence_gain`)
 
-    `attunement` is the score `p.attributes` holds at `COMPETENCE_ATTRIBUTE` (`Person.attributes`, CR-20);
-    `mid` is `COMPETENCE_MID`. MONOTONE in Attunement and exactly 1 at `mid`; a receiver with NO authored
-    Attunement reads 1 (a READ, never a default: the cast carries none, so the realm is unmoved). At
-    `g = 0` it is 1 for everyone: THE CONTROL, and the shipped value.
+    `attunement` is the score `p.attributes` holds at the `told_claim_credit` row's key (`Person.attributes`, CR-20),
+    `mid` the middle of that key's scale (`_judgement_factor`). MONOTONE in Attunement and exactly 1 at `mid`; a receiver who HOLDS no
+    Attunement reads 1 (a READ, never a default). ⚠ The built realm (`boot/realm.py`) seats every key on every
+    person (`cast_attributes=True`, drawn by `state/carriers.py::generated_attributes` where unauthored),
+    so no realm receiver reaches that branch and each unauthored one reads the Attunement he drew, below `mid` for
+    some. Harmless ONLY while `competence_gain`
+    ships at 0: at `g = 0` it is 1 for everyone (THE CONTROL, and the shipped value); a live gain would lower
+    the credit of every receiver drawn below `mid`.
 
     ⚠ CAPPED AT 1 ABOVE `mid` [ASSUMPTION; medium; Jordan to correct; revert: drop the `min` and clamp the
     product to a confidence ceiling, which no owner names]: the other two factors only ever LOWER a
@@ -1659,17 +1652,17 @@ def competence(p: Person, competence_gain: float) -> float:
     alone knows which told claims are false, and to CR-83's design, which must give the separator before the
     gain is flipped live (a declared hash mover scheduled by that design, not by this function). CR-27's
     second falsifier is the guard on that flip."""
-    if not 0.0 <= competence_gain <= 1.0:
-        raise ValueError(f"competence_gain {competence_gain!r} is outside [0, 1] (H-200): a factor below 0 "
-                         "would turn a deposit's confidence negative")
-    held = (getattr(p, "attributes", None) or {}).get(COMPETENCE_ATTRIBUTE)
-    if held is None:
-        return 1.0
-    return min(1.0, 1.0 + competence_gain * (held - COMPETENCE_MID) / (COMPETENCE_MID - ATTRIBUTE_FLOOR))
+    rows = _judgement_rows(TOLD_CLAIM_CREDIT)
+    for row in rows:
+        if not 0.0 <= fx.get(row.gain) <= 1.0:
+            raise ValueError(f"{row.gain} {fx.get(row.gain)!r} is outside [0, 1] (H-200): a factor below 0 "
+                             "would turn a deposit's confidence negative")
+    factor = _judgement_factor(p, rows, fx)
+    return 1.0 if factor is None else min(1.0, factor)
 
 
 def refracted_confidence(p: Person, c: Claim, channel: str, gain: float,
-                         act=None, weigh=None, competence_gain: float = 0.0) -> int:
+                         act=None, weigh=None, fx=None) -> int:
     """REFRACTION -- `AX-7`'s divergence formula (v9 IN-15; `H-36`'s shape, `H-199`'s magnitude).
     How much `p` credits a claim landing in their ledger, from the channel it reached them by and
     what they already held:
@@ -1679,8 +1672,8 @@ def refracted_confidence(p: Person, c: Claim, channel: str, gain: float,
 
     `g` is `refraction_gain`, in `[0, 1]`; `remove` is `channel_remove`; `dissent` is `dissents`, 0
     or 1 -- with `act` (the act `c` reports happening) and `weigh` passed through to its act-level
-    term (`H-201`); `competence` is `competence(p, competence_gain)` (CR-19, `H-200`: the receiver's Attunement, swept, 1 at the
-    shipped gain 0). Each factor is in `[0, 1]`, so refraction only
+    term (`H-201`); `competence` is `competence(p, fx)` (CR-19, `H-200`: the receiver's Attunement, its gain the `told_claim_credit`
+    row's Fixture, swept, 1 at the shipped gain 0; `fx=None`, a caller that hands no Fixtures, reads no row and the factor is 1). Each factor is in `[0, 1]`, so refraction only
     ever LOWERS a confidence, and at `g = 0` every factor is exactly 1: THE CONTROL, and the deposit
     is today's.
 
@@ -1702,7 +1695,7 @@ def refracted_confidence(p: Person, c: Claim, channel: str, gain: float,
         raise ValueError(f"refraction_gain {gain!r} is outside [0, 1] (H-199): a factor below 0 "
                          "would turn a deposit's confidence negative")
     factor = ((1.0 - gain * channel_remove(channel)) * (1.0 - gain * dissents(p, c, act, weigh))
-              * competence(p, competence_gain))
+              * (1.0 if fx is None else competence(p, fx)))
     return int(c.confidence * factor + 0.5)
 
 
@@ -1712,13 +1705,12 @@ def _clamp(x: float, lo: float, hi: float) -> float:
 
 def rank(p: Person, teller: str) -> int:
     """`+1` if `p`'s own claims say `teller` outranks `p`, `-1` if outranked, `0` if they say
-    neither. ALWAYS `0` TODAY, AND THAT IS A MEASURED ABSENCE, NOT A STUB'S GUESS.
+    neither. ALWAYS `0` TODAY.
 
     The ordering itself exists -- `offices.yaml: titles` maps each title to a rung kind, and
     *"rank is the ordinal in `rung_kinds`"* -- but a hearer can only rank a teller off claims
     the HEARER holds, and no writer in the tree deposits an `office` claim (the `person_predicates`
-    member is a vocabulary word with no producer; MEASURED, `build_realm(0)` one season: zero
-    `office` claims in any ledger), nor is an `office` claim's value typed as a title or a seat.
+    member is a vocabulary word with no producer), nor is an `office` claim's value typed as a title or a seat.
     Comparing values nobody writes, in a shape nobody declared, would be inventing the ruling."""
     # ABSENT: H-181 rank ordering  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
     return 0
@@ -1787,9 +1779,9 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
     seen, inferred, or a `told_by` deposit through a channel with no speaking actor -- weighs 1.0.
 
     ⚠ THE FIXTURES ARE READ ON THE FIRST TOLD CLAIM, NOT AT BUILD. A ledger with no teller in it
-    reads none of them, so a world with no telling reads exactly what it read before `T3a`.
+    reads none of them.
     ⚠ AT THE CONTROL VALUES (`told_weight` 1.0, `rank_gain`, `regard_gain` and `record_gain` all
-    0) EVERY CLAIM WEIGHS EXACTLY 1.0 and `LedgerReader` orders as it did before `T3a`.
+    0) EVERY CLAIM WEIGHS EXACTLY 1.0.
     ⚠ THE ONE-HOP BOUND. `told_weight` x `relation` x `record` is clamped at 1.0, and a one-hop claim
     at the shipped 0.5 stays strictly below a firsthand claim's 1.0 only while `relation` x `record`
     stays below 2. At NEUTRAL regard a good record ALONE gives 0.5 x 1 x 1.5 = 0.75 (< 1); 1.0 needs

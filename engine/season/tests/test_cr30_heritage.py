@@ -128,5 +128,5 @@ def test_the_cast_authors_exactly_the_grounded_rows_and_every_value_is_a_member(
     assert {cid: h for cid, h in got.items() if h is not None} == AUTHORED
     assert set(AUTHORED.values()) <= set(descriptors.HERITAGES)
     # the two canon rows are the persons canon names
-    assert cast.name_of(cast.row("NPC-020")) == "Almud Almqvist" and cast.name_of(cast.row("NPC-052")) == "Magnus Vaynard"
+    assert (cast.row("NPC-020")["first_name"], cast.row("NPC-020")["last_name"]) == ("Almud", "Almqvist") and (cast.row("NPC-052")["first_name"], cast.row("NPC-052")["last_name"]) == ("Magnus", "Vaynard")
     assert cast.row("NPC-011")["birthplace"] == "Altonia" and cast.row("NPC-012")["birthplace"] == "Schoenland"

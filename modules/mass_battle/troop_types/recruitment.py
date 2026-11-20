@@ -36,16 +36,15 @@ __all__ = ['TROOPS_PER_WEIGHT', 'MUSTER_FRACTION', 'TRAINING_SITE', 'training_si
            'recruit_limit']
 
 #: People per unit of `Person.weight`. One weight is a hamlet of three hundred. It is set by what the engine can fight
-#: with, not by a census: a unit under `Unit.recalc_size`'s 100-troop block routs at once, `config.TROOPS_PER_TIER` runs
+#: with, not by a census: a unit under `Army.recalc_size`'s 100-troop block routs at once, `config.TROOPS_PER_TIER` runs
 #: 100..800 for a field army, and the shipped realm holds 120 weight in all (the Crown 30, Hafenmark and Varfell 20 each,
 #: the Church 2). At 300 and a tenth under arms the Crown can raise 900, a middling faction 600, and the Church 60 --
-#: a garrison, which routs in the open and should. At the first writing's 100 the Crown's best was 300 and a town's
-#: cohort (weight 2) 20, which no field could use. [ASSUMPTION; medium; Jordan to correct; revert: 100.]
+#: a garrison, which routs in the open and should. [ASSUMPTION; medium; Jordan to correct; revert: 100.]
 TROOPS_PER_WEIGHT = 300  # [canonical: ED-IN-0306 -- ASSUMPTION, Jordan: "you can invent one"; sized to the engine's 100-troop unit floor and 100..800 field armies, ED-IN-0306 phase 5]
 
 #: The share of a place's people that can be under arms at once. A tenth is the usual ceiling of pre-industrial
 #: mobilisation (the able-bodied men of military age are about a fifth of a population, and half of those is a hard
-#: draw on it), and at `TROOPS_PER_WEIGHT` it lands a weight-12 cohort at 360 troops, well clear of `config.SUBUNIT_ROUT_FLOOR`.
+#: draw on it), and at `TROOPS_PER_WEIGHT` it lands a weight-12 cohort at 360 troops, well clear of `config.UNIT_ROUT_FLOOR`.
 MUSTER_FRACTION = 0.10  # [canonical: ED-IN-0306 -- ASSUMPTION, pre-industrial mobilisation ceiling; Jordan to correct]
 
 #: troop type -> (the Site kind it is trained at, the least condition fraction at which that Site trains it at all).

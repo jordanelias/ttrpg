@@ -1,6 +1,6 @@
 # THE IMPROVEMENT PLAN — WHAT TO BUILD, IN WHAT ORDER, AND WHAT MAY NOT BE INVENTED WHILE BUILDING IT
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`. ⚠ AMENDED 2026-11-12 (Jordan, A-104; A-97, ED-IN-0360): pointers appended in place — L1-A104 (W5, Part F's `choose` bound; W17 item 1 and its Proof: the budget bounds the summed cost of the scenes chosen; a scene of management orders costs 0, `04` §B.9).**
 ## Scope: **PR #337 → now, for evidence AND for answers.** Every closure in Part 3 is made on #353's
 ## own text. §2.6 and W16 record what a tree-wide search returns and **the plan rests on none of it.**
 ## Companion to `ARCHITECTURE_V2.md` (the specification) and `01_NPC_VS_ARC.md` (the split).
@@ -905,7 +905,7 @@ person-side**, reading own `hold` Tenures, own body band, own travel legs — **
 of §3.3** — and, per Jordan's 2026-09-02 ruling, **returning SCENE actions rather than acts** (§3.4).
 `choose` returns **at most `budget` scenes**, each resolving into 1–3 verb applications from
 `verb_table.yaml`; the interactions-per-scene bound and the extended-scene cost are **`assumption`
-rows, swept** — never constants in a body. `standing` with a **defined predicate vocabulary and a defined `agreement`** — `V2`
+rows, swept** — never constants in a body. (⚠ AMENDED 2026-11-12, Jordan, A-104; A-97, node L1-A104: "at most `budget` scenes" now reads the summed cost of the scenes chosen, a scene of management orders costing 0, `04` §B.9.) `standing` with a **defined predicate vocabulary and a defined `agreement`** — `V2`
 §F4's `agreement(claims, convictions)` is undefined and compares the TRUE layer with the RIGHT layer
 that #353 `:352-362` calls *"the most dangerous collision in the design"*, so **H-29's default is not
 injectable as written**. A **View-builder rule row**: #353 says *"at most K ids … BUILT, not
@@ -1201,7 +1201,7 @@ petition chain ends at a sitting and a sitting does not decide until `H-32` has 
 **Do.** Add the scene as the level above the verb table — **the only structural change any ruling in
 this chain has required, and it is additive.**
 
-1. `budget` returns **scene actions**; `choose` returns at most that many **scenes**.
+1. `budget` returns **scene actions**; `choose` returns at most that many **scenes**. ⚠ AMENDED 2026-11-12 (Jordan, A-104; A-97, node L1-A104): scenes whose summed cost is at most that many; a scene of management orders costs 0 (`04` §B.9).
 2. A scene carries its 1–3 verb applications. Both that bound and the **extended-scene cost of 2** are
    **register rows graded `assumption`**, citing `player_agency_v30.md` §6.3 as the default, with a
    declared sweep — **not constants**, because Jordan ruled the unit and the number and **did not rule
@@ -1230,7 +1230,7 @@ above them. **This is the cheapest shape the ruling could have taken, and it is 
 
 **Proof.** A person with `budget = 5` returning 6 scenes raises; a scene carrying 4 interactions
 raises at the swept bound of 3 and **passes at the swept bound of `unbounded`, with the flip
-reported**; `P2x` fails on scene count and no longer on interaction count.
+reported**; `P2x` fails on scene count and no longer on interaction count. ⚠ AMENDED 2026-11-12 (Jordan, A-104; A-97, node L1-A104): "6 scenes" means scenes costing 6; a sixth scene carrying only management orders costs 0 and does not raise (`04` §B.9).
 
 **Size S–M.** Depends on **W3** and **W5**. ⚠ **On the critical path to `W9`** — artifact 2 cannot
 count a season's activity until it knows what it is counting.

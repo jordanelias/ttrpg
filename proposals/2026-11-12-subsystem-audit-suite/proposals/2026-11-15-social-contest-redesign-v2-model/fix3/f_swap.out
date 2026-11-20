@@ -1,0 +1,6 @@
+
+== [before] side swap, trial, n=2000 (one p about +-0.022)
+  identical 0.452; Reason 7 as `for` 0.640 (+0.189), as `against` 0.319 (-0.133); asymmetry +0.055
+
+== [after] side swap, trial, n=2000 (one p about +-0.022)
+  identical 0.439; Reason 7 as `for` 0.634 (+0.195), as `against` 0.333 (-0.106); asymmetry +0.089

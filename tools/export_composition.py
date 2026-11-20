@@ -60,9 +60,9 @@ _MISSING = object()
 
 #: A role resolves to a named module attribute. `callable` (the default) is the overwhelming
 #: majority and keeps the original assertion; `value` admits a module CONSTANT and is declared per
-#: row so the callable check is never lost silently. Added 2026-08-22 (plan S5a) for
-#: `systems.social_contest.sim.contest`'s side labels, which `engine/cross_scale/scene_dispatch.py`
-#: compares a verdict against — a constant, so no callable role could carry it, and no authored
+#: row so the callable check is never lost silently. Added 2026-08-22 (plan S5a) for the contest side
+#: labels (rows since retired); now `combat.duel_terms`, the closed set of duel terms a season roster is
+#: checked against — a constant, so no callable role could carry it, and no authored
 #: surface declares it either (the two EARLIER constant seams each had one: settlements' STAT_MIN/
 #: MAX are `set.order` in descriptor_registry.yaml, and the persuasion thresholds turned out to be
 #: re-derivation of a verdict the callee already returned). This is a widening of the ONE mechanism,
@@ -77,7 +77,7 @@ _KINDS = ('callable', 'value')
 #:   `step_call`  -- a loop step calls it (MATTER, for instance).
 #:   `query`      -- a projection consumer calls it.
 #: A row with no `entry:` is not a module entry and keeps whatever caller already `require()`s it
-#: (`mass_battle.resolve_field` was the last such row until `31c` re-keyed it). Validated here, at export, beside `kind:`;
+#: (`mass_battle.resolve_field` was the last such callable row until `31c` re-keyed it; `combat.duel_terms` (CI-09) is a `kind: value` row). Validated here, at export, beside `kind:`;
 #: `entry:` and `verb:` are cooked into every row, `None` where absent, so the artifact has one shape.
 _ENTRIES = ('verb_call', 'step_call', 'query')
 _VERB_ENTRY = _ENTRIES[0]
@@ -124,6 +124,17 @@ def _resolve(target, kind):
             f'deliberate — a module constant rather than a function — declare `kind: value` on the '
             f'row so the widening is visible in the registry rather than assumed at the call site.')
     return fn
+
+
+def _module_file(role, target):
+    """The repository-relative file a `dotted.module:attribute` target names: `a/b/c.py`, or
+    `a/b/c/__init__.py` where `c` is a package. Raises naming the role when neither is a file."""
+    stem = target.split(':', 1)[0].replace('.', '/')
+    for rel in (stem + '.py', stem + '/__init__.py'):
+        if os.path.isfile(os.path.join(REPO, rel)):
+            return rel
+    raise SystemExit(f'composition_roles {role!r}: target {target!r} names no file '
+                     f'({stem}.py or {stem}/__init__.py) under the repository.')
 
 
 def validate_wiring(contracts):
@@ -210,11 +221,13 @@ def build():
                          'block was removed, nothing resolves through engine/substrate/composition.py '
                          '— restore it rather than deleting this exporter.')
     out = {}
+    files = set()
     for role in sorted(roles):
         row = roles[role]
         target = row['target'] if isinstance(row, dict) else row
         kind = (row.get('kind') if isinstance(row, dict) else None) or 'callable'
         _resolve(target, kind)   # fail HERE, in CI, not at first call during a campaign
+        files.add(_module_file(role, target))
         entry, verb = _check_entry(role, row)
         out[role] = {
             'target': target,
@@ -235,6 +248,10 @@ def build():
         'schema_version': 3,
         'source': 'references/module_contracts.yaml#composition_roles',
         'roles': out,
+        # GO-05 (B03g.04): the files the targets above name, derived in this same loop so the list cannot
+        # disagree with `roles`. The port packs files, and `load()` resolves these by string (SM-13).
+        # No runtime reader: `engine/substrate/composition.py` reads `roles` only.
+        'module_files': sorted(files),
     }
 
 

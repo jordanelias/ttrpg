@@ -5,30 +5,21 @@ row and §A.2's table.
 >
 > `queries/person_q` | owns **nothing** | may read **a `PersonInterior` snapshot only** | -- | --
 
-⚠ **ONE MEMBER, AND THE SMALLNESS IS A MEASUREMENT RATHER THAN A STUB.** Unit L3 adjudicated every
-candidate against `04` per symbol instead of executing `ED-IN-0206` item (2) literally, which would
-have been wrong. That row reads *"§A.1's AX-2 row assigns the person-side family to
-`queries/person_q`; step 7 put budget/opening_set/assemble/entrenchment in `decision.py` instead."*
-Measured:
-
-- **`budget` and `opening_set` are named BY `04:133` as `decision/`'s OWN members** -- *"`decision/`
-  AX-2's island: questions · opening_set · choose · budget"*. Moving them here would BREAK
-  conformance, not restore it. ED-IN-0206 item (2) is wrong about them and says so now.
-- **`assemble` is the `questions` member**, same line.
-- **`entrenchment` is the only one of the four `04` does not name**, and it is person-first in
-  signature and self-declares as a person Query at its own first statement --
-  `TRACE.query("entrenchment", "person")`. It reads a `Person` and three ints and touches nothing
-  else, which is exactly the *"`PersonInterior` snapshot only"* the table allows. So it is here.
-- **Nearly every function in `world_q.py` takes `w: World` first**; the helpers `named` and
-  `_stamped` do not (04:116 splits the two families by module, not by first parameter), and no
-  check enforces the first-parameter rule. There is no misfiled person-first Query hiding in the
-  world-side module: the person-side scan below is what holds the line.
+⚠ **WHICH FUNCTIONS ARE HERE.** `budget` and `opening_set` are named BY `04:133` as `decision/`'s OWN
+members -- *"`decision/` AX-2's island: questions · opening_set · choose · budget"* -- and `assemble` is
+the `questions` member, same line. `entrenchment` is the one of the four `04` does not name, and it is
+person-first in signature and self-declares as a person Query at its own first statement --
+`TRACE.query("entrenchment", "person")`. It reads a `Person` and three ints and touches nothing else,
+which is exactly the *"`PersonInterior` snapshot only"* the table allows. Nearly every function in
+`world_q.py` takes `w: World` first; the helpers `named` and `_stamped` do not (04:116 splits the two
+families by module, not by first parameter), and no check enforces the first-parameter rule: there is
+no misfiled person-first Query in the world-side module, and the person-side scan below is what holds
+the line.
 
 ⚠ **§A.3 ROW 2's PROPERTY IS THE POINT, NOT THE FILE COUNT.** *"one `Query` class holding both
 families"* becomes *"two modules; the second cannot import the first"*, forced by T-f: *"in one
 class, a person-side function calls a resolver-side one with no import to scan."* Splitting by
-module makes that checkable, and **nothing checked it until this unit** --
-`test_person_q_cannot_reach_the_world_side` is the scan.
+module makes that checkable: `test_person_q_cannot_reach_the_world_side` is the scan.
 
 `decision/` MAY import this module (`04 §C.3`: *"`decision/` imports `person_q` and `data/`"*), and
 does: `choose` and `options` read `stance_toward` and `said_of` from here. The AX-2 by-path scan
@@ -43,6 +34,7 @@ import functools
 import math
 from typing import Optional
 
+from engine.dice_engine.fmath import ltr_sum
 from engine.substrate.descriptors import (
     AFFILIATION_CONCERNS, HERITAGE_ENGAGES, HERITAGES, PURSUITS,
 )
@@ -52,17 +44,22 @@ from ..data import verbs as _verbs
 from ..data import affiliations as _aff
 from ..data.affiliations import AFFILIATION_CEILING, AFFILIATION_FLOOR, conviction_map, engagement
 from ..data.cast import STANCE_MAX
-from ..data.pursuits import pursuit_cosine_axes, to_axes
+from ..data.pursuits import _AXES, pursuit_cosine_axes, to_axes   # `_AXES`: the sorted axis order, owned once
 from ..data.requires import (
     CELL_STEMS, KNOWN_PERSON_CLAIM, OWN_STATE_STEMS, REQUIRES_OPERANDS, REQUIRES_STEMS, SHORTFALL_PREDICATE,
     UNKNOWN, WORLD_ONLY_STEMS,
 )
 from ..data.rosters import (
-    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, roster,
+    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, capability_rows, require_use_site, roster,
     roster_map,
 )
 from ..state.carriers import Person, Said
 from ..trace_log import TRACE
+
+# B14.16: THE OBSERVATION THAT NAMES THE HAND OF A FELLED ACTOR'S DEATH. `loop/effects_combat.py::hand_observed` puts
+# `(actor, "fell_to_hand", <standing party>)` on the actor's `person.died` Event; WITNESS deposits it as an ordinary claim,
+# and `deed_doer` reads it. The one spelling; the writer imports it from here.
+HAND_PREDICATE = "fell_to_hand"
 
 
 def entrenchment(p: Person, seasons_held: int, scale: int, span: int) -> int:
@@ -122,7 +119,7 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     judge's own live, un-`imposed` `oblige` to a seat is in `p.tenures` and outlives the victim. What is
     missing is the PAIRING, not the edge: a death's seat reaches a ledger as `(seat, tenure.closed, True)`
     (`state/gate.py::Subject.seat`) beside `(victim, person.died, True)`, two claims that share only
-    `when` and `round`, which this module never reads as a pairing (`deed_doer`: it does not guess), so
+    `when` and `lap`, which this module never reads as a pairing (`deed_doer`: it does not guess), so
     no claim a judge holds says the victim sat in that seat. FACTION-LEVEL grievance is v9 IN-70's: `opinion` here,
     its World half and its referents in `world_q` (`opinion_of`, `opinion_referents`).
     [ASSUMPTION, H-192: a deed's claim subject is read as its doer for every other kind; the sum is
@@ -157,8 +154,7 @@ def holds_dispute(p: Person, referent: str, scar_shift: float = 0.0) -> bool:
 
 def attributed_deeds(ledger, referent: str):
     """THE DEED CLAIMS IN `ledger` THAT RECORD AN ACT OF `referent`'s, in ledger order -- the one owner
-    of *which of a holder's claims are about what this person did* (v9 SC-02 `22a`, split out of
-    `deeds_judged` unchanged). An unpaired kind's claim is `referent`'s when its subject is
+    of *which of a holder's claims are about what this person did* (v9 SC-02 `22a`). An unpaired kind's claim is `referent`'s when its subject is
     ([ASSUMPTION, H-192]), told or not; a `PAIRED_KINDS` claim is `referent`'s when it is untold and its
     `seen.who` pairing names him (`deed_doer`, IN-58) -- the paired kinds are the ones whose subject
     may be the PATIENT, so the doer is read off the sighting's `who`, never the subject. A told copy
@@ -200,12 +196,17 @@ def suffered_deeds(ledger, patient: str):
             yield c
 
 
-def attackers_of(ledger, patient: str, kinds: frozenset, window: int = 1) -> frozenset:
+def attackers_of(ledger, patient: str, kinds: frozenset, window: int = 1, strata=None) -> frozenset:
     """WHO THE HOLDER SAW DO A DEED OF ONE OF `kinds` TO `patient` IN THE NEWEST `window` SEASONS HIS LEDGER
     HOLDS (v11 CR-87, the DEFENCE context of `rosters.yaml: violence_contexts`): the doers `deed_doer` pairs to
     `suffered_deeds`' claims, kept when the claim is among `recent_claims(ledger, window)` (anchored on his newest
     claim, so `window == 1` is "this season" as he knows it) and its kind is in `kinds` (the caller's: the kinds an
-    opponent-rule row emits). Person-side (AX-2); what he was only told of names nobody, as in `suffered_deeds`."""
+    opponent-rule row emits). Person-side (AX-2); what he was only told of names nobody, as in `suffered_deeds`.
+
+    `strata`, where given, keeps a doer only if the holder saw him act at one of them ON THIS DEED'S SUBJECT in that deed's lap. A kind several rows emit
+    (`capability.raised`: `fight` and `train`) pairs on any of its emitters' strata, so a benefit and a blow carry the same kind;
+    the caller that asks for ATTACKERS passes the strata of its violent rows. B05.09 made `train` reach people who held no rank,
+    and `p_npc_004`'s training of `p_npc_038` read as an attack."""
     if not kinds:
         return frozenset()
     recent = {id(c) for c in recent_claims(ledger, window)}
@@ -214,7 +215,8 @@ def attackers_of(ledger, patient: str, kinds: frozenset, window: int = 1) -> fro
         if id(c) in recent and c.predicate in kinds:
             seen = _seen_index(ledger) if seen is None else seen      # built only when a claim qualifies
             d = deed_doer(c, seen)
-            if d is not None:
+            if d is not None and (strata is None or any(getattr(x.value, "who", None) == d and getattr(x.value, "stratum", None) in strata
+                                                         for x in seen[0].get((c.subject, c.when, c.lap), ()))):
                 out.add(d)
     return frozenset(out)
 
@@ -228,23 +230,27 @@ PAIRED_KINDS = frozenset(k for k in _verbs.DEED_KINDS if k not in _verbs.KIND_VE
 # only if what the witness saw was an act of one of them (`Seen.stratum`). Every channel showing
 # `who` shows `stratum` (`rosters.yaml: observation_terms.supplied_by`), so the test never drops a
 # pairing that `who` alone would have made; it refuses a third party's DIFFERENT act on the patient in
-# the same round being read as the deed's doer.
+# the same lap being read as the deed's doer.
 _KIND_STRATA = {k: frozenset(r.stratum for r in _verbs.VERB_TABLE.values() if k in r.emits)
                 for k in PAIRED_KINDS}
 
 
 def _seen_index(ledger) -> tuple:
-    """A holder's own, untold `seen` claims, indexed twice: `(subject, when, round) -> [seen]`, and
-    `(when, round) -> {(who, stratum)}` -- who the holder saw acting, and at what, in each round."""
+    """A holder's own, untold claims, indexed three times: `(subject, when, lap) -> [seen]` and
+    `(when, lap) -> {(who, stratum)}` -- who the holder saw acting, and at what, in each lap -- and
+    `(subject, when, lap) -> {value}` for a `fell_to_hand` claim (B14.16: who stood when `subject`, the actor, fell)."""
     by_subject: dict = {}
     acting: dict = {}
+    hand: dict = {}
     for s in ledger:
-        if s.predicate == SEEN_PREDICATE and not s.chain:
-            by_subject.setdefault((s.subject, s.when, s.round), []).append(s)
+        if s.predicate == HAND_PREDICATE and not s.chain:
+            hand.setdefault((s.subject, s.when, s.lap), set()).add(s.value)
+        elif s.predicate == SEEN_PREDICATE and not s.chain:
+            by_subject.setdefault((s.subject, s.when, s.lap), []).append(s)
             who = getattr(s.value, "who", None)
             if who is not None:
-                acting.setdefault((s.when, s.round), set()).add((who, getattr(s.value, "stratum", None)))
-    return by_subject, acting
+                acting.setdefault((s.when, s.lap), set()).add((who, getattr(s.value, "stratum", None)))
+    return by_subject, acting, hand
 
 
 def deed_doer(c, seen: tuple):
@@ -252,30 +258,40 @@ def deed_doer(c, seen: tuple):
 
     `c` is an untold deed claim `(s, kind, True)` of a `PAIRED_KINDS` kind; `seen` is
     `_seen_index` of the same ledger. A `seen` claim PAIRS with it when it has the same subject
-    `s`, `when` and `round` (WITNESS deposits both from one Event in one pass), names a `who`, that
-    `who` is not `s` (a deed done TO `s` -- `s`'s own act in the same round is not it), and its
+    `s`, `when` and `lap` (WITNESS deposits both from one Event in one pass), names a `who`, that
+    `who` is not `s` (a deed done TO `s` -- `s`'s own act in the same lap is not it), and its
     `stratum` is the stratum of a row emitting `kind`. The doer is the ONE `who` the pairing
     names; none, or two different, is `None` -- the pairing never guesses, so a channel that
     withheld `who` leaves the actor hidden.
-    ⚠ AND `s` MUST NOT HAVE BEEN SEEN DOING SUCH AN ACT IN THAT ROUND: then `c` may be the claim
+    ⚠ AND `s` MUST NOT HAVE BEEN SEEN DOING SUCH AN ACT IN THAT LAP: then `c` may be the claim
     `both` anchors on the ACTOR (`(x, person.died)` for x's kill), and a third party's sighting on
-    `s` would name the wrong doer of the wrong death. MEASURED at IN-58 on the corpus before this
-    clause: 1 of 61 killer-subject `person.died` claims paired, to the witness's own attack on the
-    killer in the same round. The price, stated: a person who both struck and was struck in one
-    round is judged a patient by nobody that round.
-    LIMIT, stated: where the ACTOR died attacking, the sighting names him as `who` of his own death,
-    so no killer is named. A `seen` on the same subject, `when` and `round` that names NO `who` (a
+    `s` would name the wrong doer of the wrong death. The price, stated: a person who both struck and was struck in one
+    lap is judged a patient by nobody that lap.
+    THE ACTOR WHO DIED ATTACKING (B14.16; was this note's LIMIT, stated): the sighting names him as `who` of his
+    own death, so the pairing below names no killer. A `person.died` claim is therefore read FIRST against the
+    holder's own `fell_to_hand` claim on the same subject, `when` and `lap` (`HAND_PREDICATE`, deposited from the
+    felled actor's death Event by `loop/effects_combat.py::hand_observed`), and that value is the answer; the
+    pairing stands for every other case. CLOSED: for a holder who holds that claim, the standing party is named.
+    NOT CLOSED: a holder who does not hold it -- WITNESS deposits an Event's `observed` under
+    `observation_deposit_mode`, and the shipped `actor` deposits to the act's actor alone, a felled actor being
+    no longer a person to receive it, so under the shipped mode no ledger holds it and the limit stands in
+    every ledger; a fight with no standing party (both felled, a yield) carries none; a told copy has none.
+    Two different names held for one death are ambiguous, so `None`.
+    A `seen` on the same subject, `when` and `lap` that names NO `who` (a
     channel that withheld the actor) makes the pairing ambiguous, so `None`: an unnamed hand may be
     the one that did it. Holder-side and World-free: `Seen` is read by its fields, never imported
     (AX-2)."""
     if c.chain or not is_deed(c) or c.predicate not in PAIRED_KINDS:
         return None
-    by_subject, acting = seen
+    by_subject, acting, hand = seen
+    if c.predicate == PERSON_DIED and (c.subject, c.when, c.lap) in hand:
+        named = hand[(c.subject, c.when, c.lap)]
+        return next(iter(named)) if len(named) == 1 else None
     strata = _KIND_STRATA[c.predicate]
-    if any(who == c.subject and st in strata for who, st in acting.get((c.when, c.round), ())):
+    if any(who == c.subject and st in strata for who, st in acting.get((c.when, c.lap), ())):
         return None
     whos = set()
-    for s in by_subject.get((c.subject, c.when, c.round), ()):
+    for s in by_subject.get((c.subject, c.when, c.lap), ()):
         who = getattr(s.value, "who", None)
         if who is None:
             return None             # an actorless sighting on the same key: ambiguous, never guess
@@ -418,12 +434,7 @@ def deed_valence(axis_w: dict, c) -> float:
 def _lean(axis_w: dict, kind: str) -> float:
     """`Σ_axis axis_w[axis] · align_kind(kind, axis)`: how pursuits projected to `axis_w` lean on a
     deed of `kind`. One owner for the unpaired (`deed_valence`) and the paired (IN-58) scoring."""
-    return sum(axis_w[ax] * _verbs.align_kind(kind, ax) for ax in _AXES)
-
-
-# sorted: PURSUIT_AXES is a frozenset, and a float sum's order would move with PYTHONHASHSEED
-# while callers test the result for exact zero.
-_AXES = tuple(sorted(PURSUIT_AXES))
+    return ltr_sum(axis_w[ax] * _verbs.align_kind(kind, ax) for ax in _AXES)
 
 
 def regard(p: Person, referent: str, fx=None) -> float:
@@ -458,6 +469,54 @@ def regard(p: Person, referent: str, fx=None) -> float:
     return stored + h if h else stored
 
 
+# The claim a person holds about another's skill: `Claim(subject=<that person>, predicate=CAPABILITY_CLAIM + <the skill>,
+# value=<the score he believes>)`. NOTHING DEPOSITS ONE TODAY (the told, seen and inferred channels carry no capability),
+# so `believed_capability` answers `None` for every person in a built realm until a depositor exists: this is the reading,
+# not the writer. Its two readers -- `seam/wrappers/sigma.py::believed_input` (the opposition of a contest) and
+# `decision/choose.py::score_terms`' `fit` term (B04.22) -- both call the one function below.
+CAPABILITY_CLAIM = "capability:"
+
+
+def believed_capability(p: Person, other: str, capability: str):
+    """WHAT `p` BELIEVES `other`'s SCORE IN `capability` IS, from his OWN ledger alone: the value of his latest claim
+    about `other` at `CAPABILITY_CLAIM + capability` (latest by `(when, lap, confidence)`), else `None` -- unknown, never a
+    figure. Person-side (AX-2): it reads `p`'s ledger and nothing else."""
+    return _latest_claim(p, other, CAPABILITY_CLAIM + capability)
+
+
+# B14.24: THE CLAIMS A PERSON HOLDS ABOUT ANOTHER'S ARMS AND WOUNDS, the capability claim's own shape (`Claim(subject=<that person>,
+# predicate=<stem> + <key>, value=<what he believes>)`) and, like it, a READING: NOTHING DEPOSITS ONE TODAY (the told, seen and inferred
+# channels carry neither), so `believed_kit` and `believed_body` answer `None` for every person in a built realm until a depositor exists.
+# `KIT_CLAIM + <a Combatant field>` (`weapon`, `armor`; `engine/substrate/combat_kit.py::FIELDS`) holds the key he believes the person carries
+# in that field; `BODY_CLAIM` holds the condition (the `Person.body` scale) he believes the person is at. Both readers are `believed_capability`'s.
+KIT_CLAIM = "kit:"
+BODY_CLAIM = "condition:body"
+
+
+def _latest_claim(p: Person, other: str, predicate: str):
+    """The value of `p`'s latest claim about `other` at `predicate` (latest by `(when, lap, confidence)`), else `None`; `p`'s ledger alone."""
+    held = [c for c in p.ledger if c.subject == other and c.predicate == predicate]
+    return max(held, key=lambda c: (c.when, c.lap, c.confidence)).value if held else None
+
+
+def believed_kit(p: Person, other: str, field: str):
+    """The key `p` believes `other` carries in the Combatant `field` (`weapon` or `armor`), from his OWN ledger alone: the value of his latest claim
+    at `KIT_CLAIM + field`, else `None` -- unknown, never a figure. Person-side (AX-2)."""
+    return _latest_claim(p, other, KIT_CLAIM + field)
+
+
+def believed_body(p: Person, other: str):
+    """The condition `p` believes `other`'s body is at, from his OWN ledger alone: the value of his latest `BODY_CLAIM` about `other`, else `None`.
+    Person-side (AX-2)."""
+    return _latest_claim(p, other, BODY_CLAIM)
+
+
+def has_seen(p: Person, other: str) -> bool:
+    """Has `p` SEEN `other`: does his ledger hold an untold `seen` claim whose `who` is `other` (`heritage_regard` reads the same deposit)? The
+    reading of a person he has laid eyes on; a person known only by report or not at all is not seen. Person-side (AX-2)."""
+    return any(c.predicate == SEEN_PREDICATE and not c.chain and getattr(c.value, "who", None) == other for c in p.ledger)
+
+
 def conviction_stand(p: Person, affiliation: str) -> float:
     """HOW FAR `p` STANDS FOR (+1) OR AGAINST (-1) ONE AFFILIATION, on `[-1, +1]`: `p.conviction[affiliation]`
     centred on the affiliation scale's midpoint and scaled by its half-range, `(v - mid) / half`. An ABSENT key
@@ -472,14 +531,14 @@ def conviction_stand(p: Person, affiliation: str) -> float:
 
 def heritage_regard(p: Person, q: str, fx) -> float:
     """THE CASTE ESTIMATE (v11 CR-31; ED-IN-0301): how `p`'s OWN creed colours his regard for `q`, through
-    what `p` BELIEVES of `q`'s descent -- never through what `q` is (`Person.heritage` is world truth and is
-    not read here).
+    what `p` BELIEVES of `q`'s descent -- never through what `q` is (another person's `Person.heritage` is world
+    truth and is not read here; `p`'s own reaches his sheet through `PersonInterior.heritage`, B04.13).
 
         heritage_regard = heritage_gain · STANCE_MAX · mean over the affiliations a in the concern
                           `HERITAGE_ENGAGES[h]` of `conviction_stand(p, a)`
 
     `h` is the heritage named in `p`'s NEWEST own untold `seen` claim whose `who` is `q` and whose `marks`
-    names a heritage (newest by `(when, round)`, a later deposit winning a tie). Each affiliation of the
+    names a heritage (newest by `(when, lap)`, a later deposit winning a tie). Each affiliation of the
     engaged concern contributes `conviction_stand`, an absent key 0 and still counted in the mean. In
     `regard`'s own units, so `teller_weight` reads it through `regard / STANCE_MAX` as it reads any stance.
     `0.0` where `p` holds no such `seen` claim, where the heritage engages no concern, or at `heritage_gain` 0
@@ -497,14 +556,14 @@ def heritage_regard(p: Person, q: str, fx) -> float:
         named = next((m for m in (getattr(c.value, "marks", None) or ()) if m in HERITAGES), None)
         if named is None:
             continue
-        key = (c.when, c.round)
+        key = (c.when, c.lap)
         if best_key is None or key >= best_key:
             best, best_key = named, key
     concern = HERITAGE_ENGAGES.get(best)
     if concern is None:
         return 0.0
     members = AFFILIATION_CONCERNS[concern]
-    return gain * STANCE_MAX * (sum(conviction_stand(p, a) for a in members) / len(members))
+    return gain * STANCE_MAX * (ltr_sum(conviction_stand(p, a) for a in members) / len(members))
 
 
 # ---------------------------------------------------------------------------
@@ -621,9 +680,9 @@ def opinion_terms(p: Person, expected: dict, engaged: tuple, regarded: tuple, fx
     shift = fx.get("scar_weight_shift") if fx is not None else 0.0
     cosine = pursuit_cosine_axes(projected_axes(p, shift), to_axes(expected or {}))
     held = p.conviction or {}
-    aff = (sum(sign * held.get(name, 0) / AFFILIATION_CEILING for name, sign in engaged) / len(engaged)
+    aff = (ltr_sum(sign * held.get(name, 0) / AFFILIATION_CEILING for name, sign in engaged) / len(engaged)
            if engaged else 0.0)
-    reg = (sum(max(-1.0, min(1.0, regard(p, x, fx) / STANCE_MAX)) for x in regarded) / len(regarded)
+    reg = (ltr_sum(max(-1.0, min(1.0, regard(p, x, fx) / STANCE_MAX)) for x in regarded) / len(regarded)
            if regarded else 0.0)
     return (0.0 if cosine is None else cosine), aff, reg
 
@@ -632,52 +691,15 @@ def opinion(p: Person, expected: dict, engaged: tuple, regarded: tuple, fx=None)
     """`p`'s OPINION OF A FACTION, on `[-3, +3]`: the sum of `opinion_terms` (v9 IN-70). `0` is
     indifference -- each term's own midpoint -- so the sign is the side. Computed when asked, never
     written (A-29, T-a). Person-side; the World half is `world_q.opinion_of`. Added left to right, not
-    by `sum()`, whose float summation is compensated since Python 3.12: one order, one number. (The
-    means inside `opinion_terms` use `sum()`; the value is consumed only as `< 0`, so a last-ulp
-    difference between Python versions matters only at exact cancellation.)"""
+    by `sum()`, whose float summation is compensated since Python 3.12: one order, one number (`fmath.ltr_sum`'s
+    rule; the means inside `opinion_terms` go through it too)."""
     pursuit, affiliation, reg = opinion_terms(p, expected, engaged, regarded, fx)
     return pursuit + affiliation + reg
 
 
-def violated_pursuits(p: Person, verb: str) -> tuple:
-    """WHICH OF `p`'s OWN PURSUITS AN ACT OF `verb` VIOLATES -- the per-element half of the scar
-    (IN-08 H3, `ED-IN-0261`'s scar model: a COUNT per element, accrued by WITNESSING).
-
-    A pursuit `e` that `p` holds (weight > 0) is violated when `Σ_axis projection[e][axis] ·
-    alignment(verb, axis) < 0` -- the verb leans against where the pursuit points. ⚠ THAT SIGN TEST
-    IS A CANDIDATE READING RECORDED FOR REVIEW, NOT A RULING (`workplans/valoria_master_workplan_v9_part5.md`,
-    IN-08 H3): no source states the violation predicate; this is the plainest one the two owned
-    tables admit. It composes on the two owners and copies neither: `data/pursuits.py::to_axes`
-    (pursuit -> axes, one owner) and `data/verbs.py::align` (the one binding the alignment sweep
-    rebinds). A verb with no celled axis violates nothing, by construction. Person-side, no World
-    (AX-2). Sorted, so a caller writing counts in this order writes a canonical dict.
-
-    NO PRODUCTION CALLER: `loop/resolve.py::_scar_witnesses` asks `elements_violated_by` once per act
-    and `broken_by` per person, which compose the same `_pursuits_violated_by` below. This wrapper
-    is the per-person reading kept for tests (`test_h11_affiliation_scar.py` asserts it equals
-    the production scar; `test_h3_scar_by_observation.py` computes its own), so a change to the sign test is made in `_pursuits_violated_by`."""
-    return _held(p.pursuits, _pursuits_violated_by(verb))
-
-
-def violated_affiliations(p: Person, verb: str) -> tuple:
-    """WHICH OF `p`'s OWN RELIGIOUS AFFILIATIONS AN ACT OF `verb` VIOLATES -- IN-08 H11, H3's
-    mechanism over the affiliation table (J-5's C4).
-
-    An affiliation `a` that `p` holds (intensity > 0) is violated when `data/affiliations.py::
-    engagement(verb, a) < 0`: the verb's cell for that affiliation, which is the shared column's
-    cell when the affiliation has none of its own (R-C4.1: the vow-shaped verbs engage every creed
-    alike). A sign test, as `violated_pursuits` is; the intensity does not enter it, because the
-    scar is a COUNT per element and an act is witnessed or not. It is `violated_pursuits`'
-    sibling and not a second scar path: `loop/resolve.py::_scar_witnesses` asks for both through
-    `elements_violated_by` + `broken_by` and writes once, so this wrapper has no production caller
-    (it is a test oracle, as `violated_pursuits` is). Person-side, no World (AX-2). Sorted, as
-    `violated_pursuits` is."""
-    return _held(p.conviction, _affiliations_violated_by(verb))
-
-
 def _pursuits_violated_by(verb: str) -> frozenset:
-    """The pursuits an act of `verb` violates, whoever holds them: `violated_pursuits`' sign test,
-    which reads only `(verb, element)`. The candidates are `data/verbs.py::PURSUIT_PROJECTION`'s
+    """The pursuits an act of `verb` violates, whoever holds them: `elements_violated_by`' pursuit
+    half, which reads only `(verb, element)`. The candidates are `data/verbs.py::PURSUIT_PROJECTION`'s
     keys, read through the module at call time so a rebound projection is what is asked; a pursuit
     the projection does not list projects to the zero vector and violates nothing."""
     row = {ax: _verbs.align(verb, ax) for ax in PURSUIT_AXES}
@@ -698,8 +720,8 @@ def pursuit_lean(verb: str, e: str, row: Optional[dict] = None) -> float:
     modules a sweep rebinds."""
     proj = to_axes({e: 1.0})
     if row is None:
-        return sum(proj[ax] * _verbs.align(verb, ax) for ax in PURSUIT_AXES)
-    return sum(proj[ax] * row[ax] for ax in PURSUIT_AXES)
+        return ltr_sum(proj[ax] * _verbs.align(verb, ax) for ax in _AXES)
+    return ltr_sum(proj[ax] * row[ax] for ax in _AXES)
 
 
 def consequence_pursuits(p: Person, verb: str, degree, gain: float):
@@ -750,19 +772,37 @@ def argued_pursuits(hearer: Person, arguer: Person, degree, gain: float):
 
 def _affiliations_violated_by(verb: str) -> frozenset:
     """The rostered affiliations an act of `verb` violates, whoever holds them:
-    `violated_affiliations`' sign test, `engagement(verb, a) < 0`. The candidates are
+    `elements_violated_by`' affiliation half, `engagement(verb, a) < 0`. The candidates are
     `rosters.AFFILIATIONS`, the roster `data/affiliations.py::conviction_map` holds every
     `Person.conviction` key to."""
     return frozenset(a for a in AFFILIATIONS if engagement(verb, a) < 0)
 
 
 def elements_violated_by(verb: str) -> tuple:
-    """`(pursuits, affiliations)` an act of `verb` violates, as two frozensets -- the person-free
-    half of `violated_pursuits` and `violated_affiliations`. Whether an element is violated is a
-    property of `(verb, element)` alone, so `loop/resolve.py::_scar_witnesses` asks this once per
-    act and intersects each person's holdings with it (`broken_by`) instead of re-deriving the sign
-    test per person. Reads `ALIGNMENT` and `PURSUIT_PROJECTION` at call time: never cache it
-    across a sweep's rebind."""
+    """WHICH ELEMENTS AN ACT OF `verb` VIOLATES -- `(pursuits, affiliations)`, as two frozensets, the
+    person-free reading under the scar (IN-08 H3, `ED-IN-0261`'s scar model: a COUNT per element,
+    accrued by WITNESSING; H11 over the affiliation table, J-5's C4).
+
+    A pursuit `e` is violated when `Σ_axis projection[e][axis] · alignment(verb, axis) < 0` -- the
+    verb leans against where the pursuit points. ⚠ THAT SIGN TEST IS A CANDIDATE READING RECORDED FOR
+    REVIEW, NOT A RULING (IN-08 H3): no source states
+    the violation predicate; this is the plainest one the two owned tables admit. It composes on the
+    two owners and copies neither: `data/pursuits.py::to_axes` (pursuit -> axes, one owner) and
+    `data/verbs.py::align` (the one binding the alignment sweep rebinds). A verb with no celled axis
+    violates nothing, by construction.
+
+    An affiliation `a` is violated when `data/affiliations.py::engagement(verb, a) < 0`: the verb's
+    cell for that affiliation, which is the shared column's cell when the affiliation has none of
+    its own (R-C4.1: the vow-shaped verbs engage every creed alike). Both halves are a sign test:
+    the intensity or weight a person holds does not enter it, because the scar is a COUNT per element
+    and an act is witnessed or not.
+
+    Whether an element is violated is a property of `(verb, element)` alone, so
+    `loop/resolve.py::_scar_witnesses` asks this once per act and intersects each person's holdings
+    with it (`broken_by`) instead of re-deriving the sign test per person; a change to either sign
+    test is made in `_pursuits_violated_by` or `_affiliations_violated_by`. Person-side, no World
+    (AX-2). Reads `ALIGNMENT` and `PURSUIT_PROJECTION` at call time: never cache it across a sweep's
+    rebind."""
     return _pursuits_violated_by(verb), _affiliations_violated_by(verb)
 
 
@@ -774,8 +814,8 @@ def _held(weights, violated: frozenset) -> tuple:
 
 def broken_by(p: Person, violated: tuple) -> tuple:
     """The elements `p` holds that `violated` (an `elements_violated_by` answer) names: the held
-    pursuits, then the held affiliations, each sorted -- `violated_pursuits(p, verb) +
-    violated_affiliations(p, verb)` without re-asking the sign test."""
+    pursuits, then the held affiliations, each sorted. "Held" is `_held`'s sense (a weight above
+    zero); the sign test is not re-asked, `violated` already carries it."""
     pursuits, affiliations = violated
     return _held(p.pursuits, pursuits) + _held(p.conviction, affiliations)
 
@@ -887,8 +927,8 @@ def _scar_shifted(p: Person, shift: float) -> dict:
     heirs = {e: w for e, w in held.items() if e not in crisis}
     if not crisis or not heirs:
         return base
-    given = sum(held[e] * shift for e in crisis)
-    pool = sum(heirs.values())
+    given = ltr_sum(held[e] * shift for e in crisis)
+    pool = ltr_sum(heirs.values())
     out = dict(base)
     for e in crisis:
         out[e] = held[e] * (1.0 - shift)
@@ -980,19 +1020,15 @@ def conviction_after_crisis(p: Person, among: frozenset | None = None) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# `LedgerReader` -- MOVED HERE FROM `queries/readers.py` AT UNIT L3 (ED-IN-0206). It asks ONE
-# PERSON'S OWN CLAIMS and nothing else: it takes neither a `World` nor even a `Person`, only the
-# claims themselves, which is the asker-first family exactly and the `§A.2` table's *"may read a
-# `PersonInterior` snapshot only"* row it now sits under.
+# `LedgerReader` (ED-IN-0206). It asks ONE PERSON'S OWN CLAIMS and nothing else: it takes neither a
+# `World` nor even a `Person`, only the claims themselves, which is the asker-first family exactly and
+# the `§A.2` table's *"may read a `PersonInterior` snapshot only"* row it sits under.
 #
-# ⚠ THE TWO READERS ARE STILL THE SAME QUESTION ASKED OF TWO SOURCES, and splitting them by source
-# is what makes that symmetry checkable instead of merely stated -- `test_person_q_cannot_reach_the
-# _world_side` can now assert that this side cannot reach the other. The pointer note that stood
-# between them in `readers.py` travels here because it is about what BOTH `.read` methods dispatch
-# on, and this is the module a reader of the person-side half meets first:
-# `REQUIRES_STEMS` and `LEDGER_DERIVED_STEMS` -- the stems `WorldReader.read`/`LedgerReader.read`
-# dispatch on, above and below -- now live in `season.data.requires` (step 3), imported back at
-# the top of this file. See that module for the two roster-exempt notes that used to stand here.
+# ⚠ THE TWO READERS ARE THE SAME QUESTION ASKED OF TWO SOURCES, and splitting them by source is what
+# makes that symmetry checkable instead of merely stated -- `test_person_q_cannot_reach_the
+# _world_side` asserts that this side cannot reach the other. `REQUIRES_STEMS` and
+# `LEDGER_DERIVED_STEMS` -- the stems `WorldReader.read`/`LedgerReader.read` dispatch on -- live in
+# `season.data.requires`, imported at the top of this file.
 # ---------------------------------------------------------------------------
 
 
@@ -1064,12 +1100,9 @@ class LedgerReader:
         -- and, under a `weigh`, *best supported* first (`_support`). Strict `>`, so the first
         found wins a tie, in both forms.
 
-        ⚠ IT EXISTS BECAUSE THE DOCSTRING BELOW CLAIMED IT ALREADY DID. `latest_about` was added
-        asserting it *"reuses `read`'s comparator rather than restating it"* while carrying its own
-        copy of the identical loop -- a single-owner claim made in the act of breaking it, which is
-        the anti-pattern `ci_common.load_yaml`'s own docstring records against itself
-        (*"a single-owner comment asserting a property the tree lacks is worse than no comment"*).
-        Extracting it makes the sentence true."""
+        ⚠ ONE OWNER: `read` and `latest_about` both call it, so neither carries its own copy of the
+        loop (`ci_common.load_yaml`'s docstring records the anti-pattern: *"a single-owner comment
+        asserting a property the tree lacks is worse than no comment"*)."""
         if self._weigh is None:
             best = None
             for c in self._claims:
@@ -1102,7 +1135,7 @@ class LedgerReader:
         cell is *the teller holds a claim on the subject*, with no predicate in it.
 
         ⚠ AND IT REUSES `read`'s COMPARATOR RATHER THAN RESTATING IT -- through `_best`, which
-        both methods now call. `CLAUDE.md` §8: the rule lives once. MOST RECENT, THEN MOST
+        both methods call. `CLAUDE.md` §8: the rule lives once. MOST RECENT, THEN MOST
         CONFIDENT is this class's answer to *a ledger may hold two claims about one thing*, and a
         second copy of that key anywhere would be a second owner of which belief a person holds --
         free to drift, and drifting silently, because both orderings agree until the day two
@@ -1115,6 +1148,22 @@ class LedgerReader:
         ledger to one cell (`decision/options._pair`) and wants `read`'s ordering without reaching
         into a private name."""
         return self._best(lambda _c: True)
+
+
+#: The site whose `gate` row names the held value and the threshold fixture the Thread gate reads (B04.06; U1 §8). It is the one
+#: site `capability_use_sites` registers to `OwnStateReader`; `told_retain`, the other gate site, has no reader on this tree.
+OWN_STATE_GATE = require_use_site("own_state_gate")
+
+
+def _gate_row(use: str):
+    """The one `gate` row of site `use`, or `None`: a site with no row reads NO CAPABILITY, never a default."""
+    rows = [r for r in capability_rows(use) if r.role == "gate"]
+    return rows[0] if rows else None
+
+
+def _held_at(p: Person, key: str):
+    """The value `p` holds at a practitioner stat's registry key (`prac.thread_sensitivity`): the `Person` field of that name."""
+    return getattr(p, key.rpartition(".")[2], None)
 
 
 class OwnStateReader:
@@ -1131,19 +1180,25 @@ class OwnStateReader:
       * `thread_sensitivity` -- the subject's own value, and ONLY when the subject is this person: a
         person reads nobody else's. `None` (nothing authored) is UNKNOWN, never 0, so it refuses at
         the fold and does not pass a gate swept to 0.
-      * `thread_sensitivity.gate` -- `Fixtures thread_sensitivity_gate`, the SECOND READ the value
-        is held against (`work`'s `floor`, `determine`'s `quorum`), the same for every subject."""
+      * `thread_sensitivity.gate` -- the Fixture the gate row names (`thread_sensitivity_gate`), the SECOND READ
+        the value is held against (`work`'s `floor`, `determine`'s `quorum`), the same for every subject.
+
+    ⚠ THE KEY AND THE FIXTURE ARE THE `own_state_gate` ROW'S (`rosters.yaml: tables.capability_uses`, B04.06); the two stems
+    are the verb table's grammar and stay. A site with no row answers UNKNOWN to both."""
 
     def __init__(self, p: Person, fx):
         self._p, self._fx = p, fx
 
     def read(self, subject, predicate: str):
         stem = str(predicate).partition(":")[0]
+        row = _gate_row(OWN_STATE_GATE)
+        if row is None:
+            return UNKNOWN
         if stem == "thread_sensitivity":
-            v = self._p.thread_sensitivity if subject == self._p.id else None
+            v = _held_at(self._p, row.key) if subject == self._p.id else None
             return UNKNOWN if v is None else v
         if stem == "thread_sensitivity.gate":
-            return self._fx.get("thread_sensitivity_gate")
+            return self._fx.get(row.gain)
         return UNKNOWN
 
 
@@ -1172,12 +1227,11 @@ def said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None
     nothing to say. Asked of the TELLER'S OWN claims at CHOOSE (`decision/options.py::opening_set`),
     never at WITNESS: what a telling passes on is decided when it is chosen, and rides the Act.
 
-    ⚠ A `seen` CLAIM IS PASSED ON ONLY WHEN IT IS ALL THE TELLER HOLDS ABOUT THE SUBJECT (`R8.1`,
-    moved here from `loop/witness.py::_told_content` unchanged). The `seen` deposit lands in every
-    co-located witness -- the teller included -- with an identical value, so without this the
-    teller's NEWEST claim about a rung was almost always a `seen` the hearer already held, the
-    exact-triple guard at the told deposit suppressed it, and the told channel carried nothing:
-    MEASURED at the `R8.1` commit, `build_world(0)`, four seasons, 0 `told_by` claims. A rumour of
+    ⚠ A `seen` CLAIM IS PASSED ON ONLY WHEN IT IS ALL THE TELLER HOLDS ABOUT THE SUBJECT (`R8.1`).
+    The `seen` deposit lands in every co-located witness -- the teller included -- with an
+    identical value, so without this the teller's NEWEST claim about a rung is almost always a
+    `seen` the hearer already holds, the exact-triple guard at the told deposit suppresses it, and
+    the told channel carries nothing. A rumour of
     a sighting still travels when a sighting is all the teller has.
 
     ⚠ THE COMPARATOR IS `LedgerReader`'s, BOTH TIMES. *Most recent, then most confident* lives once
@@ -1188,7 +1242,7 @@ def said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None
     `|deed_valence|` by the teller's own projected pursuits -- and the comparator picks among those;
     where no claim carries valence (every one 0) the pick is the unslanted one exactly. A teller
     passes on the deed that matters most to THEM, not the newest thing they hold. At `newest` (the
-    CONTROL, shipped), with no `teller`, or with no `fx`, it is the pre-G3 pick and reads no
+    CONTROL, shipped), with no `teller`, or with no `fx`, it is the unslanted pick and reads no
     pursuits."""
     pool = [c for c in claims if c.subject == subject] if claims else []
     if teller is not None and fx is not None and pool and _slant(fx) == "valence":
@@ -1208,7 +1262,7 @@ def said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None
 
 def drifted(before, band: float, sel: int, whole_band: bool = False):
     """A HELD NUMBER MOVED WITHIN `band`, SIGN-PRESERVING AND NEVER CROSSING ZERO -- `loop/witness.py::
-    _told_value`'s numeric branch (v10 `15b`, r2 `02` §A.10.2's three clauses), moved here unchanged so the
+    _told_value`'s numeric branch (v10 `15b`, r2 `02` §A.10.2's three clauses), shared so the
     liar's false number (`lie_said_of`) and the channel's lossy copy are ONE rule and not two. The three
     clauses: (1) `before` of 0, or a band that moves nothing (`ceil(band * |before|) < 1`, the control),
     comes back as it was; (2) otherwise a magnitude of `1 + sel % max_delta` and a direction from the next
@@ -1284,7 +1338,8 @@ def confided_outside(claims, said: "Said", hearer: str) -> bool:
     `said_of` copies out of it above, so the match lives beside the copy it inverts. A circle is a
     tuple `Claim.visibility` (a confided telling's deposit, `loop/witness.py::_circle_of`); `"own"`
     is none. `claims` is the TELLER'S OWN ledger, passed by the fold (`loop/resolve.py::
-    _confidence_broken`). Asker-less like its sibling `said_of`; `PersonInterior` does not exist;
+    _confidence_broken`). Asker-less like its sibling `said_of`; a `PersonInterior` exists
+    (`state/carriers.py`) but no act carries one to the fold, so `claims` is the live ledger;
     graded CONVENTION either way."""
     key = (said.subject, said.predicate, said.value, tuple(said.chain))
     return any(isinstance(c.visibility, tuple) and hearer not in c.visibility
@@ -1349,8 +1404,7 @@ def content_said(c) -> "dict | None":
     as a key -> value dict (`rosters.yaml: record_kinds.content`), `None` for any other predicate or
     a claim with no value. `intent_named`'s shape for the other content-bearing stem: the one reader
     of that claim's shape that `ledger_names`, `world_q.named` and `decision/options.py::
-    _from_content_claim` share (batch B-I close, layer-conformance: the three had each parsed it;
-    `loop/witness.py`'s Partial-telling rewrite still guards it its own way, on a tuple value)."""
+    _from_content_claim` share (`loop/witness.py`'s Partial-telling rewrite guards it its own way, on a tuple value)."""
     stem, sep, _ = str(c.predicate).partition(":")
     if not sep or stem != RECORD_CONTENT.get("predicate") or c.value is None:
         return None
@@ -1359,8 +1413,7 @@ def content_said(c) -> "dict | None":
 
 def content_kind(c) -> "str | None":
     """THE `<kind>` OF A `content:<kind>` CLAIM (`rosters.yaml: record_kinds.content.predicate`),
-    `None` for any other predicate. `content_said`'s sibling: the one reader of the stem's argument
-    (B-K close, ARC 2: `decision/options.py` had parsed it twice)."""
+    `None` for any other predicate. `content_said`'s sibling: the one reader of the stem's argument."""
     stem, sep, kind = str(c.predicate).partition(":")
     if not sep or stem != RECORD_CONTENT.get("predicate"):
         return None
@@ -1382,9 +1435,9 @@ def addressed_to(said, pid) -> bool:
 
 #: THE CONTENT KEY THAT SAYS WHAT A DOCUMENT IS ABOUT, PER RECORD KIND -- the key `rosters.yaml:
 #: record_sourced_operands` maps `subject` to for that kind (`terms` for a dispensation or petition,
-#: `proposition` for a faction sheet). B-K close (ARC 5): the ONE owner of "what a document is
-#: about", which `decision/options.py::_content_answer` reads for `subject` too; it was derived from
-#: `record_kinds.content.read_from` and disagreed with it for `faction_sheet` (no `read_from` row).
+#: `proposition` for a faction sheet). The ONE owner of "what a document is
+#: about", which `decision/options.py::_content_answer` reads for `subject` too (not
+#: `record_kinds.content.read_from`, which has no `faction_sheet` row).
 ABOUT_KEYS = {kind: m["subject"] for kind, m in _requires.RECORD_SOURCED_OPERANDS.items()
               if "subject" in m}
 
@@ -1425,11 +1478,10 @@ def known_persons(claims, actor) -> tuple:
     person does not tell themselves (`opening_set`'s counterparty rule declines it too).
     ⚠ THE TOPIC IS NOT EXCLUDED (v9 IN-18 step 2a, #453): a telling names its topic on `subject`
     and its hearer on `to`, and they MAY be one person -- B, knowing C and holding `(C, x)`, may tell
-    C what B holds about C. Until step 2a the topic was discarded here, so that telling never formed.
+    C what B holds about C.
 
-    ⚠ `exists:Person` DEPOSITS ARE RARE AND `Seen.who` CARRIES THE LOAD: measured at T0 (scratch
-    `t0/m0_summary.md`, M0d), every realm hit came from `seen`. The told source is empty until a
-    told claim lands, which T4 itself is what makes possible."""
+    ⚠ `exists:Person` DEPOSITS ARE RARE AND `Seen.who` CARRIES THE LOAD. The told source is empty
+    until a told claim lands, which T4 itself is what makes possible."""
     predicate = KNOWN_PERSON_CLAIM.get("predicate")
     term = KNOWN_PERSON_CLAIM.get("seen_term")
     out = set()

@@ -27,12 +27,13 @@ import sys
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(_HERE))))   # repo root, as bat.py does
+from engine.dice_engine import draw
 
 from modules.mass_battle import rngsource                                      # noqa: E402
 from modules.mass_battle.massbattle import _grade                              # noqa: E402
 from modules.mass_battle.geometry import _oriented                             # noqa: E402
 from modules.mass_battle.orchestration import run_battle                       # noqa: E402
-from modules.mass_battle.orderofbattle import OrderOfBattle, Subformation, build_unit   # noqa: E402
+from modules.mass_battle.orderofbattle import OrderOfBattle, UnitRow, build_unit   # noqa: E402
 from modules.mass_battle.resolution import tracing                             # noqa: E402
 
 EXAMPLE = os.path.join(_HERE, 'walkthrough_example.json')
@@ -41,16 +42,16 @@ TEMPLATE = os.path.join(_HERE, 'walkthrough_template.html')
 
 def _oob(side: dict, role) -> OrderOfBattle:
     subs = []
-    for sf in side['subformations']:
+    for sf in side['units']:
         r = role if (role and sf['troop_type'] == 'light_cavalry') else sf.get('role')
-        subs.append(Subformation(sf['name'], sf['troop_type'], sf['troops'], role=r))
+        subs.append(UnitRow(sf['name'], sf['troop_type'], sf['troops'], role=r))
     return OrderOfBattle(tuple(subs), strategy=side['strategy'])
 
 
 def _subs(unit) -> list:
     """Deployment centroids before tick 1: [troop_type, row, col, cells, troops, routed]."""
     out = []
-    for s in unit.subunits:
+    for s in unit.units:
         cells = list(s.cells())
         out.append([s.troop_type, sum(c[0] for c in cells) / len(cells), sum(c[1] for c in cells) / len(cells),
                     len(cells), round(s.troop_total()), 0])
@@ -62,7 +63,7 @@ def _snap_unit(u, d: int) -> dict:
     subunit's morale, discipline, stamina, stance and rout flags. Positions are the engine's `cells_float()`
     (the point field), not the integer-binned `cells()`."""
     subs = []
-    for s in u.subunits:
+    for s in u.units:
         ids = [(o_r, o_c) for o_r, o_c, _a, _b in _oriented(s)]
         nodes = []
         for cid, (r, c) in zip(ids, s.cells_float()):
@@ -70,7 +71,7 @@ def _snap_unit(u, d: int) -> dict:
             nodes.append([round(r, d), round(c, d), round(s.cell_troops.get(cid, 0.0)),
                           None if f is None else [round(f[0], d), round(f[1], d)]])
         bf = getattr(s, '_node_facing', None)
-        subs.append({'type': s.troop_type, 'routed': bool(s.routed), 'broken': bool(s.broken), 'stance': s.eff_stance,
+        subs.append({'type': s.troop_type, 'routed': bool(s.routed), 'broken': bool(s.disordered), 'stance': s.eff_stance,
                      'morale': round(s.eff_morale, d), 'discipline': s.eff_discipline,
                      'stamina': round(s.eff_stamina, d),
                      'body_facing': None if bf is None else [round(bf[0], d), round(bf[1], d)], 'nodes': nodes})
@@ -105,8 +106,8 @@ class _Recorder:
             elif not name.startswith('<'):
                 self.stages.setdefault(self.t, []).append(name)
         elif event == 'return' and name == 'find_contacts':
-            ia = {id(s): i for i, s in enumerate(self.a.subunits)}
-            ib = {id(s): i for i, s in enumerate(self.b.subunits)}
+            ia = {id(s): i for i, s in enumerate(self.a.units)}
+            ib = {id(s): i for i, s in enumerate(self.b.units)}
             self.contacts[self.t] = [[ia[id(p['atom_a'])], ib[id(p['atom_b'])], len(p['a_cells']), len(p['b_cells'])]
                                      for p in arg]
 
@@ -132,9 +133,9 @@ def fight(example: dict, seed: int, role=None) -> dict:
     rec = _Recorder(a, b, example['round_digits'])
     sys.setprofile(rec)
     try:
-        with rngsource.using(random.Random(seed)):
+        with rngsource.using(draw.seeded(draw.H2("walkthrough", seed))):
             with tracing() as events:
-                result = run_battle(a, b, max_turns=example['max_turns'])
+                result = run_battle(a, b, max_ticks=example['max_ticks'])
     finally:
         sys.setprofile(None)
     if rec.t not in rec.snaps:
@@ -172,7 +173,7 @@ def fight(example: dict, seed: int, role=None) -> dict:
 
 
 def table(run: dict) -> str:
-    rows = ['tick   A hp   B hp  A subunits (row,col troops)                         B subunits']
+    rows = ['tick   A hp   B hp  A units (row,col troops)                         B units']
     short = lambda s: f"{s[0][:5]}({s[1]:.0f},{s[2]:.0f}) {s[4]}{'*' if s[5] else ''}"
     for t in sorted(run['ticks']):
         d = run['ticks'][t]
@@ -185,11 +186,11 @@ def table(run: dict) -> str:
 def _summary(example: dict) -> dict:
     """What the page says about the two armies, straight from the example file."""
     def side(d):
-        return {'strategy': d['strategy'], 'subformations': [
+        return {'strategy': d['strategy'], 'units': [
             {'name': sf['name'], 'type': sf['troop_type'], 'troops': sf['troops'], 'role': sf.get('role')}
-            for sf in d['subformations']]}
+            for sf in d['units']]}
     return {'a': side(example['side_a']), 'b': side(example['side_b']), 'seed': None,
-            'morale_start': example['morale_start'], 'max_turns': example['max_turns']}
+            'morale_start': example['morale_start'], 'max_ticks': example['max_ticks']}
 
 
 def build_page(run: dict, out: str, example: dict, seed: int, role=None) -> None:
@@ -207,7 +208,7 @@ def build_page(run: dict, out: str, example: dict, seed: int, role=None) -> None
     from modules.mass_battle import config as cfg
     consts = {'volley_scale': cfg.VOLLEY_LETHALITY_SCALE, 'k_square': cfg.K_SQUARE, 'k_linear': cfg.K_LINEAR,
               'ticks_per_phase': cfg.TICKS_PER_PHASE, 'rout_onset': cfg.ROUT_ONSET_FRAC, 'rout_cap': cfg.ROUT_CAP_FRAC,
-              'rout_floor': cfg.SUBUNIT_ROUT_FLOOR, 'cascade_frac': cfg.ROUT_CASCADE_FRAC}
+              'rout_floor': cfg.UNIT_ROUT_FLOOR, 'cascade_frac': cfg.ROUT_CASCADE_FRAC}
     data = {'ticks': {str(k): v for k, v in run['ticks'].items()}, 'hpmax': run['hpmax'], 'grade': run['grade'],
             'result': run['result'], 'sweep': sweep, 'armies': armies, 'consts': consts}
     with open(out, 'w', encoding='utf-8') as f:

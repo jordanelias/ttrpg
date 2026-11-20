@@ -5,12 +5,12 @@ snapshot F3 judges from is taken inside `write()`. A tenure the effect's own bod
 returned its `Change` was therefore baked into that snapshot and judged by nothing.
 `World.effect_body_observed`, which `_apply_write` calls, now observes the tenure store around the
 effect call and refuses a change there the same way the gate refuses an unauthored one: the store
-put back first, then `NotYours`.
+put back first, then `NotYours` -- which the fold emits as the row's refusal (H-143, B03.76).
 
 What each block proves, and the control that stops it passing vacuously:
 
   1. THE HOLE ROW'S WORKED EXAMPLE. An effect that sets `seat.until` on an unrelated live
-     seat-hold in its own body and returns an unrelated `Change` raises `NotYours`, and the seat is
+     seat-hold in its own body and returns an unrelated `Change` is refused (`NotYours`, emitted by the fold as `act.refused`), and the seat is
      live afterwards. Control (same host, same actor): an effect that builds the same `Change`
      with no eager closure is a success, so the refusal is the eager body's and not the host's.
   2. THE OPENED-EDGE ARM. An eager body that OPENS a tenure (one the actor would be lawfully
@@ -20,15 +20,13 @@ What each block proves, and the control that stops it passing vacuously:
   3. A LEGITIMATE `Change` IS NOT REFUSED. An effect that mutates nothing in its body and returns
      a `Change` whose `apply` writes a tenure the gate admits is observed by `World.write` as before.
 
-Tenures only: an eager write to an entity field is still convention-bound (`_apply_write` says so).
+An eager write to an entity field is observed the same way: `test_gate_observation.py`.
 """
-import pytest
-
 from engine.season.data.matrix import WriteClass
 from engine.season.harness import probes as P
 from engine.season.loop.driver import mint_token
 from engine.season.state.carriers import Act, Tenure
-from engine.season.state.gate import Change, NotYours, Subject
+from engine.season.state.gate import Change, Subject
 
 from .test_g4_no_op_receipt import _driver, _plant
 
@@ -59,13 +57,13 @@ def test_cr06_an_effect_body_that_closes_a_seat_by_itself_is_refused_and_put_bac
     _plant(monkeypatch, "utter", eager)
     w = P.tiny_world()
     assert _live(w, "t9") == [True], "the fixture seat is not live"
-    with pytest.raises(NotYours):
-        _run(w, "cr06_eager")
+    evs = _run(w, "cr06_eager")         # H-143: the gate's `NotYours` is emitted by the fold as the refusal
+    assert [e.kind for e in evs] == ["act.refused"], [e.kind for e in evs]
     assert _live(w, "t9") == [True], "the eager closure stood"
     assert w.rungs["Hh"].stores == {"grain": 8}, "the refused effect's write still ran"
 
     # CONTROL: the same host, actor and `Change` with no eager closure is a success and leaves the
-    # seat live, so the `NotYours` above came from the effect body's closure and from nothing else.
+    # seat live, so the refusal above came from the effect body's closure and from nothing else.
     def clean(w, a, res=None):
         return _grain(w)
     _plant(monkeypatch, "utter", clean)
@@ -82,8 +80,8 @@ def test_cr06_an_effect_body_that_opens_an_edge_by_itself_is_refused_and_removed
         return _grain(w)
     _plant(monkeypatch, "utter", eager)
     w = P.tiny_world()
-    with pytest.raises(NotYours):
-        _run(w, "cr06_open")
+    evs = _run(w, "cr06_open")
+    assert [e.kind for e in evs] == ["act.refused"], [e.kind for e in evs]
     assert not [t for t in w.tenures if t.id == "cr06_side_hold"], "the eagerly opened edge stood"
 
     # CONTROL: the same edge opened INSIDE `apply` (T-m: the actor owns it) is admitted and stands.

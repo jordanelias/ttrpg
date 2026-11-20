@@ -70,7 +70,7 @@ never counted as clear.
 `tests/` or `systems/`: a standard pointed at the repository's own apparatus is the recursion
 `CLAUDE.md` §0.1 pt 5 exists to stop.
 
-**When to run it.** Routine per-commit conformance is `/close` step 4 and `methodology-close`. This pass is
+**When to run it.** Routine per-commit conformance is `/close` step 3 and `methodology-close`. This pass is
 for the subject-wide questions a diff cannot ask: second owners across modules, subject-wide minimality,
 pluggability, the clarity of code nobody has changed. The request is the scope (`CLAUDE.md` §0).
 

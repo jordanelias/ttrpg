@@ -44,6 +44,7 @@ from ..data.verbs import VERB_TABLE
 from ..decision.options import _derive_operand, _from_content_claim, opening_set
 from ..gaps import Forbidden, Ungraded, Unspecified
 from ..harness import populated
+from ..boot.realm import build_realm
 from ..harness import probes as P
 from ..loop.witness import content_value
 from ..queries.world_q import named, questions_for
@@ -248,7 +249,7 @@ def test_the_populated_corpus_forms_candidates_with_writ_derived_operands():
     > 0 -- not merely nonzero-looking, and not a value the fold could only ever refuse. At least one
     names a person still alive at the season's end, so the positive count is carried by a live
     addressee and not only by the dead one."""
-    w = populated.build_realm(0)
+    w = build_realm(0)
     # The ids that exist BEFORE the season: a writ's addressee who dies during it (a combat
     # outcome the ladder decides) leaves `w.persons` but is still a well-formed referent, which
     # is all this control asks (B-D1 PC-02: the degree-ladder migration kills `p_npc_034` here).
@@ -280,14 +281,19 @@ def test_no_writ_derived_operand_is_ever_a_raw_tuple():
     `_from_content_claim` returned the addressee list verbatim and 173 Candidates on this exact
     corpus carried it as a tuple -- a value `w.persons`/`w.rungs` can never key on, so every one
     of them was refused for a reason that was never in the design. This pins the fix."""
-    w = populated.build_realm(0)
+    w = build_realm(0)
     populated.run(seasons=1, seed=0, w=w)
+    carried = 0
     for pid, p in w.persons.items():
         for q in questions_for(w, p):
             v = View(pid, [], w.fixtures.get("view_k"), q)
             for c in opening_set(p, v, q, w.fixtures):
+                if "to" in c.operands:
+                    carried += 1
                 assert not isinstance(c.operands.get("to"), tuple), (
                     f"{pid}/{c.verb} carries a tuple `to`: {c.operands}")
+    # a floor two orders below the 194,714 candidates read carrying `to`: the loop saw the operand
+    assert carried >= 1000, f"only {carried} candidates carried `to`: the loop checked nothing"
 
 
 # ======================================================================================

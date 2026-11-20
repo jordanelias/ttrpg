@@ -1,5 +1,4 @@
-"""contact.py — L2 module for the post-opening grapple/contact resolution (D8/D9, I7b,
-designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md).
+"""contact.py — L2 module for the post-opening grapple/contact resolution (D8/D9, I7b; `grab_available`, `grab_sigma`, `grab_outcome`).
 
 Grab affinity derives from real primitives the schema actually supports — free-hand availability
 (a dagger/unarmed-class weapon is already functionally at grapple range) and LEVERAGE
@@ -11,9 +10,8 @@ identical to the `clinch` scalar D9 deletes — explicitly forbidden.
 
 Callers (wrapper.py) own the `opening_created` flag: a real prior opening this beat (a bind, a
 beaten-aside/slip-inside displace, or a deep-commit reopen moment) — never re-derived here."""
-import sys, os; sys.path.insert(0, os.path.dirname(__file__))
-import combat_systems as S   # exposes S.core.logistic (single-source overflow-safe squash, ED-PC-0025)
-import ability_primitives as ABIL   # U10/ED-PC-0022: 'edge_grab' modulation (Ringen am Schwert seizes a live blade with less self-injury)
+from . import combat_systems as S   # exposes S.core.logistic (single-source overflow-safe squash, ED-PC-0025)
+from . import ability_primitives as ABIL   # U10/ED-PC-0022: 'edge_grab' modulation (Ringen am Schwert seizes a live blade with less self-injury)
 
 # ── contact axis (I7b) ──────────────────────────────────────────────────────────────────────────
 def _short_reach_exempt(c, cfg):
@@ -44,13 +42,32 @@ def grab_sigma(actor, opponent, cfg):
     term (D9/JD-7 retraction). +ve favours actor. Pure."""
     lev = S.leverage(actor, cfg) - S.leverage(opponent, cfg)
     strq = (actor.strength - opponent.strength) * cfg['GRAB_STR_K']
-    edge = cfg['GRAB_EDGE_K'] * S.WP.grab_hazard(opponent.w) * max(0.0, 1.0 - actor.skill('grab')) * ABIL.ability_factor(actor, 'edge_grab')   # ED-PC-0034 fix: the skill mitigation is CLAMPED at 0. Skills are uncapped ("positive = trained bonus", combatant.py), so any grab skill >1 sent (1-skill) NEGATIVE and flipped the sign of the whole term — seizing an opponent's LIVE double edge bare-handed then IMPROVED the grab, scaling with how sharp the grabbed blade is. A highly-trained grappler is now immune to the hazard, never rewarded by it.   # U3/ED-PC-0018 -> ACTIVATED U10/ED-PC-0022: seizing the opponent's LIVE edge bare-handed self-injures an unskilled/untimely grab -> lowers the actor's grab affinity; reads the GRABBED (opponent's) weapon hazard, mitigated by the actor's grab skill AND by a grappling tradition ('edge_grab' factor<1, Ringen am Schwert — seizing the strong/bind of a live blade safely). 0 for an edgeless weapon.
+    edge = cfg['GRAB_EDGE_K'] * S.WP.grab_hazard(opponent.w) * max(0.0, 1.0 - actor.skill('grab')) * ABIL.ability_factor(actor, 'edge_grab')   # ED-PC-0034: the skill mitigation is CLAMPED at 0 (skills are uncapped, "positive = trained bonus", combatant.py), so a grab skill >1 cannot flip the sign of the term: a highly-trained grappler is immune to the hazard, never rewarded by it.   # U3/ED-PC-0018, U10/ED-PC-0022: seizing the opponent's LIVE edge bare-handed self-injures an unskilled/untimely grab -> lowers the actor's grab affinity; reads the GRABBED (opponent's) weapon hazard, mitigated by the actor's grab skill AND by a grappling tradition ('edge_grab' factor<1, Ringen am Schwert — seizing the strong/bind of a live blade safely). 0 for an edgeless weapon.
     return strq + cfg['GRAB_LEV_K'] * lev - edge
 
 
 # Branching grapple menu (Fiore's 2nd Remedy four-branch + a foot-pin/escape pair) — reachable
 # across seeds; a flat escape chance first, then gsig-skewed weights over the rest. [SIM-CALIBRATE]
 # weights. A single one-shot resolution — never loops, never mutates a caller's `beats` counter.
+#
+# WHAT EACH OUTCOME DOES (the only effects, applied in wrapper.py's contact branch): every member
+# shifts POISE or INITIATIVE and nothing else.
+#   'disarm'   — defender.poise falls by POISE_BREAK_BIND * CONTACT_DISARM_POISE_K. No weapon is removed.
+#   'throw'    — defender.poise falls by POISE_BREAK_BIND * CONTACT_THROW_POISE_K; aggressor.initiative
+#                rises by INIT_GAIN_HIT.
+#   'pin'      — the same two shifts as 'throw' (the poise fall and the initiative gain).
+#   'control'  — aggressor.initiative rises by INIT_STEAL_INDES * CONTACT_CONTROL_VOR_K. No poise moves.
+#   'foot_pin' — defender.poise falls by POISE_BREAK_OVERCOMMIT. The defender is not moved to the ground.
+#   'escape'   — no effect; the attempt is voided.
+# NONE of these removes a weapon from a fighter's hand, moves a fighter to the ground, or holds him in
+# place. The names describe the branch's intent in the fiction and do NOT describe the mechanism: read
+# the effect above, not the name.
+#
+# TRACE VOCABULARY, NOT PLAYER TEXT: the names are trace vocabulary and are not shown to a player. No
+# file renders a member today (workbench narrate.py and commentary.py do not name them). The rule binds
+# the first rendering added: that rendering must state the effect above (a balance taken, an initiative
+# gained), never a weapon lost, a fighter felled to the ground or a fighter held. A player-facing string
+# built from a member is a falsifier of this note.
 GRAB_OUTCOMES = ('disarm', 'throw', 'pin', 'control', 'foot_pin', 'escape')
 
 

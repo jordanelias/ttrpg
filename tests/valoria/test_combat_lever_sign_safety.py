@@ -54,21 +54,17 @@ killed, and only at the site it broke:
   · COUNTS re-measured after the close added the stacked and placement tests (182 cases in all): the tradition gate
     deleted fails 76 (the placement test fails with it); edge_read inverted at legibility fails 7, choke_control 6
 """
-import os
-import sys
 from collections import namedtuple
 
 import pytest
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
-sys.path.insert(0, ENGINE)
 
-import ability_primitives as ABIL  # noqa: E402
-import combat_systems as S  # noqa: E402
-import tradition as TR  # noqa: E402
-import weapon_physics as WP  # noqa: E402
-from combatant import Combatant  # noqa: E402
-from config import CFG  # noqa: E402
+from modules.combat import ability_primitives as ABIL  # noqa: E402
+from modules.combat import combat_systems as S  # noqa: E402
+from modules.combat import tradition as TR  # noqa: E402
+from modules.combat import weapon_physics as WP  # noqa: E402
+from modules.combat.combatant import Combatant  # noqa: E402
+from modules.combat.config import CFG  # noqa: E402
 
 LEVELS = (0.0, 0.5, 1.0, 2.0, 4.0, 8.0)
 LEVERS = ('visual', 'precommit', 'tactile', 'tempo', 'balance', 'edge_read', 'choke_control')
@@ -99,7 +95,7 @@ class _FixedRng:
     def random(self):
         return self._u
 
-    def randrange(self, n):
+    def below(self, n):
         return 0
 
 

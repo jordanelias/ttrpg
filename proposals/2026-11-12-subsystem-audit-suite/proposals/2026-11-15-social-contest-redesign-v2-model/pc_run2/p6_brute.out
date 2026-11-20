@@ -1,0 +1,22 @@
+n=150 per cell; trial; presiding j1 played; legitimacy(Crown), compliance, appeal weight, crowd->judge regard, Crown standing
+== the 2x2 at a rung-4 'moderate' judge (power 6); verdict 'for' with the judge leaning to a = right, leaning to b = wrong
+  Grace 1 right? -> fold says right (n=101) power 6.0: legit -0.400 compliance 0.00 appeal 1.00 regard -0.200 standing -0.200
+  Grace 1 right? -> fold says wrong (n= 49) power 6.0: legit -0.800 compliance 0.00 appeal 2.00 regard -0.400 standing -0.200
+  Grace 1 wrong? -> fold says wrong (n= 69) power 6.0: legit -0.800 compliance 0.00 appeal 2.00 regard -0.400 standing -0.200
+  Grace 1 wrong? -> fold says right (n= 81) power 6.0: legit -0.400 compliance 0.00 appeal 1.00 regard -0.200 standing -0.200
+  Grace 7 right? -> fold says wrong (n= 57) power 6.0: legit +0.100 compliance 0.90 appeal 0.00 regard +0.100 standing +0.000
+  Grace 7 right? -> fold says right (n= 93) power 6.0: legit +0.100 compliance 1.00 appeal 0.00 regard +0.100 standing +0.000
+  Grace 7 wrong? -> fold says wrong (n= 61) power 6.0: legit +0.100 compliance 0.90 appeal 0.00 regard +0.100 standing +0.000
+  Grace 7 wrong? -> fold says right (n= 89) power 6.0: legit +0.100 compliance 1.00 appeal 0.00 regard +0.100 standing +0.000
+
+== sweep Grace 1..7 x station (no office / rung 1 / rung 4 moderate / rung 6 major), right and wrong; legitimacy(Crown) | regard
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-ttrpg/2a1f4990-cd7a-5bdc-982c-435886385374/scratchpad/sc_model_v2/pc_run2/p6_brute.py", line 50, in <module>
+    r = cell(rung, mod, g, "for", "a", n=60)["right"]
+        ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-0/-home-user-ttrpg/2a1f4990-cd7a-5bdc-982c-435886385374/scratchpad/sc_model_v2/pc_run2/p6_brute.py", line 25, in cell
+    inp, card = host.build(pp, "trial", M, bench=("j1",), floor=("crowd",), effort=3)
+                ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-0/-home-user-ttrpg/2a1f4990-cd7a-5bdc-982c-435886385374/scratchpad/sc_model_v2/sc2/host.py", line 285, in build
+    raise ValueError(f"{rid}: no seat of authority {r['authority']} (party-gap refusal)")
+ValueError: trial: no seat of authority polity (party-gap refusal)

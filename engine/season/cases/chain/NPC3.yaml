@@ -1,4 +1,4 @@
-```yaml
+# NPC-020 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Canonical Crown Captain per sim continuity §1.2. Royal Assassination Fuse target (Arc F Eliminated → Lenneth Widow Regent)."
 - id: NPC-020
   name: Almud Almqvist
   one_line: "A king whose season is entirely triage among pressures he cannot resolve, constrained more tightly by publicness than any private citizen would be."
@@ -109,6 +109,7 @@
     - "no one knows in advance whether a subordinate arm-leader will seize control if his own crisis becomes public"
   ends_when: "never automatically; his personal arc resolves via unchallenged doctrinal dominance, a private crisis of faith, or public confrontation and schism, and the institution's leadership itself ends only on his death, incapacity, or forced doctrinal crisis triggering a successor process"
 
+# NPC-050 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Six foil pairings per npc_foils_v30: Almud ↔ Baralta (Custodian/Claimant); Lenneth ↔ Baralta (campaign-defining); Baralta ↔ Vaynard (total opposition)."
 - id: NPC-050
   name: Inge Baralta
   one_line: "A duchess whose total personal command of her own duchy conceals that its survival without her is entirely unresolved, pressing a decades-long claim on a throne she cannot simply take."
@@ -155,6 +156,7 @@
     - "no one knows whether the church will grant or refuse recognition until the moment her claim actually succeeds"
   ends_when: "never automatically; her personal arc resolves via unchallenged rule of her own duchy, a forced turn to extralegal action, or being cast out of the religious institution entirely, and separately her pursuit of the throne resolves win, loss, or her death/removal triggering her own duchy's succession"
 
+# NPC-052 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Von Lohengramm programme — revolutionary expulsion. If eliminated, Maret Uln succession (PP-486)."
 - id: NPC-052
   name: Magnus Vaynard
   one_line: "A revolutionary duke whose authority is elective rather than absolute, whose private research risks transforming him, and whose fall could split his domain in two."
@@ -201,6 +203,7 @@
     - "no one knows whether a succession, if triggered, resolves unified or split until the contenders' relative strength is actually compared"
   ends_when: "never automatically; his personal arc resolves via unchecked scholarship, a personally transformative awakening, or being consumed by what he sought, and his leadership ends only on death, incapacity, or removal, triggering the succession/split outcome"
 
+# NPC-070 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Drives Autonomy track (Loyal→Restless→Autonomous→Split). Brandt succession if removed. Konrad von Jungingen archetype — if Autonomy track reaches Split, the Tannenberg parallel completes."
 - id: NPC-070
   name: Lisbeth Ehrenwall
   one_line: "The commander of the crown's only standing army, whose institutional loyalty is a silent, gradually shifting professional judgment rather than a fixed allegiance."
@@ -244,6 +247,7 @@
     - "if a member of the institution is discovered to hold forbidden knowledge, the institution's response is structural distrust regardless of its actual moral view of that knowledge"
   ends_when: "never automatically; concludes with either sustained loyalty through the campaign, an outright break in which the institution stops executing the ruler's will, or her removal transferring command with revised, harsher thresholds"
 
+# NPC-003 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Visibility as vulnerability — permanent Heresy Investigation target"
 - id: NPC-003
   name: Yrsa Vossen
   one_line: "A movement leader whose authority exists entirely through relationship and visibility rather than any formal seat, and whose visibility is also her permanent vulnerability."
@@ -290,6 +294,7 @@
     - "the movement's own rank and file may disagree amongst themselves about whether cooperating with an outside patron is betrayal or strategy, an internally contested belief rather than a single tracked value"
   ends_when: "never automatically while any presence remains; the movement formally ends only via reaching the highest institutional stage, total suppression with no remaining presence anywhere, or collapse once it has reached full institutional status"
 
+# NPC-032 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Arc D The Avenger. If Almud eliminated (Arc F): becomes Widow Regent. Pro-Restoration — institutional revivalist, allied with Yrsa Vossen."
 - id: NPC-032
   name: Lenneth Almqvist
   one_line: "A queen consort with no independent action economy of her own, whose entire programme routes through persuading a man whose blockage is uncertainty, not disagreement — until an unpredictable event can make her sole ruler or kill her outright."
@@ -338,6 +343,7 @@
     - "UNCLEAR: whether Lenneth herself is aware her personal-capability ceiling is a hard structural stop rather than a target she simply hasn't reached yet — the source states the ceiling as setting fact but not her own awareness of it"
   ends_when: "never automatically while she remains queen consort; if she is elevated to sole ruler her case continues indefinitely as a new ongoing reign, and if she is instead the one killed her case ends immediately and permanently"
 
+# NPC-031 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Arc E Bereaved Father (Royal Assassination Fuse target). Conviction emergence window Seasons 1–8 (ED-618)."
 - id: NPC-031
   name: Torben Almqvist
   one_line: "A minor heir with no fixed political identity, whose eventual allegiance is won by whichever outside power invests in him fastest within a closing window, and who can be killed before it resolves."
@@ -385,6 +391,7 @@
     - "whoever rules in his stead may not know his precise readiness for maturation without directly engaging him"
   ends_when: "the contested-alignment phase ends at the window's close (or earlier, if a party wins outright) with a locked identity; his dependent status ends at maturation; his overall case ends only on death or the campaign's end"
 
+# NPC-030 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Off-board diplomatic asset. Elske Loyalty stat drives Laskaris PROTECTIVE behavior. Return arc possible."
 - id: NPC-030
   name: Elske Almqvist
   one_line: "A princess entirely off the main board whose safety alone drives another person's every relevant decision, and who is repatriated, if ever, only by an unrelated sibling's death."
@@ -429,6 +436,7 @@
     - "no one knows in advance whether the fatal event targeting her brother will occur, so her entire future status hinges on an event outside anyone's knowledge until it resolves"
   ends_when: "never automatically as a standing leverage asset; a triggered retrieval arc ends in extraction success, extraction failure, or an indefinite multi-season stalemate"
 
+# NPC-001 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Warden-Chief navigating Church pressure and Thread instability"
 - id: NPC-001
   name: Edeyja
   one_line: "The single most perceptive person in the setting, holding an isolated post that answers to no institution, whose authority is real but reachable by almost nothing ordinary politics can offer her."
@@ -481,4 +489,3 @@
     - "she does not know in advance whether a party who wagers a future commitment to her will actually honor it"
     - "the wider world, lacking her kind of perception, cannot know what she knows about the true condition of what she protects"
   ends_when: "never automatically — her holdout is indefinite by default; her personal arc concludes locally via a confrontation's resolution, a wager's pass or fail, or her post's actual transition into one of several possible forms of wider political organization"
-```

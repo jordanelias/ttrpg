@@ -1,7 +1,7 @@
 """Build-lever instrument — what a PLAYER can change about a fighter, and what each change is worth.
 
 `workbench/balance.py` sweeps the three things the balance methodology owns (weapon, attribute, tradition)
-and it builds its combatants through `balance._mk`, which forwards only the nine attributes plus
+and it builds its combatants through `fight_record.party_of_spec` (B14.11 retired its `balance._mk`), which forwards only the nine attributes plus
 weapon/armour/tradition. That leaves four of the engine's build inputs unmeasurable by it: **skills**
 (`c.skills`), **learned techniques and their invested level** (`c.equipped`), **cross-training**
 (`c.known_traditions`), and **asymmetric armour** (balance.py's armour matrix always puts both fighters at
@@ -23,10 +23,11 @@ import sys, os, random, zlib
 
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
-import wrapper
-from config import CFG
-from combatant import Combatant
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
+from engine.dice_engine import draw
+from modules.combat import wrapper
+from modules.combat.config import CFG
+from modules.combat.combatant import Combatant
 
 WILSON_Z = 1.96          # same constant balance.py imports from r8_parity_harness (Class-M method)
 BASE = dict(weapon='arming', armor='light', tradition='none')
@@ -64,7 +65,7 @@ def build(spec):
 def duel(A, B, n, seed=0, cfg=None):
     """Position-swapped decisive win-rate of build A vs build B. Returns (win%, lo, hi, decided)."""
     cfg = cfg or CFG
-    rng = random.Random(seed)
+    rng = draw.seeded(draw.H2("build_levers", seed))
     aw = dec = 0
     half = n // 2
     for i in range(n):
@@ -156,9 +157,10 @@ def disposition(n=600):
 
 def armour(n=600):
     """ASYMMETRIC armour — the case balance.py's armour matrix cannot show, because it always puts both
-    fighters at the same tier. Note what the engine reads: `c.armor` is consumed only as the TARGET's
-    protection (select_mode, armor_defeat_sigma, reach_threat, the percussion-transmit table). No site
-    charges the wearer for it — there is no mass, tempo, stamina or mobility cost."""
+    fighters at the same tier. Note what the engine reads: `c.armor` is consumed as the TARGET's
+    protection (select_mode, armor_defeat_sigma, reach_threat, the percussion-transmit table), and as a
+    Strength demand: `combat_systems.act_cost` charges the wearer stamina when Strength is short of the
+    tier's demand (ARMOR_DEMAND, max(0, demand - strength)); a fighter at or over the demand pays nothing."""
     _hdr(f"Armour choice, same weapon, asymmetric protection (n={n})")
     for a in ('light', 'medium', 'heavy'):
         _row(f'armour {a} vs none (arming)', dict(BASE, armor=a), dict(BASE, armor='none'), n)

@@ -9,15 +9,11 @@ selection this session — see systems.py's element_afforded docstring for the a
 safe integration (core.coupling's DELIVERY constants don't scale with percussion magnitude except against
 mail/plate, so a naive wiring made every two-handed sword prefer a weak pommel-strike over its own edge
 against UNARMOURED targets — backwards from the historical grounding)."""
-import os
-import sys
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
-sys.path.insert(0, ENGINE)
 
-import geometry as G  # noqa: E402
-import weapon_physics as WP  # noqa: E402
-from combatant import WEAPONS  # noqa: E402
+from modules.combat import geometry as G  # noqa: E402
+from modules.combat import weapon_physics as WP  # noqa: E402
+from modules.combat.combatant import WEAPONS  # noqa: E402
 
 
 def test_mace_staff_no_thrust():
@@ -50,14 +46,15 @@ def test_thrust_factor_is_wired():
     fact kept for the downstream armour-defeat math) — the previously-dead thrust_factor is live. Checked
     directly against the formula (not a hand-picked weapon pair, since gap and thrust are close enough across
     the roster that no weapon reliably demonstrates the direction of the swap on its own)."""
-    import combat_systems as S
+    from modules.combat import combat_systems as S
+    from modules.combat.config import CFG
     for n in ('longsword', 'arming', 'dagger', 'jian'):
         w = WEAPONS[n]
         assert w['head'] == 'cut_thrust', f"test premise: {n} must be cut_thrust-headed"
         geo = w['geometry']
         thrust = G.thrust_factor(geo['point_concentration'], geo['cross_section'], geo['curvature'])
         cut = G.cut_factor(geo['curvature'], geo['edge_keenness'])
-        heads = S.afforded_heads(w)
+        heads = S.afforded_heads(w, CFG)
         eff = heads['cut_thrust'][0]
         assert abs(eff - max(cut, thrust)) < 1e-9, f"{n}: cut_thrust score should be max(cut, thrust)"
 

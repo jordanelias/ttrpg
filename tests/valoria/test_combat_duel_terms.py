@@ -3,7 +3,7 @@
 Jordan, 2026-10-14: *"a duel doesn't have to be lethal"*. Under a non-lethal term the fight STOPS when a fighter's own
 WoundTracker crosses it -- `blood` at the first wound, `yield` at `YIELD_HEALTH_FRAC` of Health -- and that fighter
 yields, standing, through the SAME `yield` event an accepted `Yield` (PC-01, `ED-PC-0056`) emits, so the seam's
-`surrender_of` lifts it unchanged and no band is added (H-98). `death`, the default, is the fight as it was.
+`modules/combat/fight.py::_surrender` lifts it unchanged and no band is added (H-98). `death`, the default, is the fight as it was.
 
 The falsifiers are the plan position's own (v9 `_part7`, PC-10):
   (1) under the default lethal terms the fight is byte-identical: trace, result and every engine-level draw
@@ -16,23 +16,16 @@ The falsifiers are the plan position's own (v9 `_part7`, PC-10):
 The cross-TREE half of (1) -- the lethal fight equal to the pre-PC-10a engine's -- is the existing combat suite and
 the draw-stream pins, which this position does not move.
 """
-import os
-import random
-import sys
+from engine.dice_engine import draw
 
 import pytest
 
-_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-_ENGINE = os.path.join(_ROOT, 'modules', 'combat')
-for _p in (_ROOT, _ENGINE):
-    if _p not in sys.path:
-        sys.path.insert(0, _p)
 
 from valoria import _draw_stream as DS          # noqa: E402  the single owner of the draw instrument (CLAUDE.md §8)
 
-import combatant as C                            # noqa: E402
-import wrapper                                   # noqa: E402
-from config import CFG                           # noqa: E402
+from modules.combat import combatant as C                            # noqa: E402
+from modules.combat import wrapper                                   # noqa: E402
+from modules.combat.config import CFG                           # noqa: E402
 
 _PAIRS = (('arming', 'arming'), ('spear', 'arming'), ('longsword', 'dagger'))
 
@@ -90,7 +83,7 @@ def test_a_term_outside_the_closed_set_is_refused_by_name():
     A, B = C.Combatant('A'), C.Combatant('B')
     for bad in ('first_blood', '', None, 'Death'):
         with pytest.raises(ValueError, match='terms'):
-            wrapper.fight(A, B, CFG, random.Random(0), terms=bad)
+            wrapper.fight(A, B, CFG, draw.seeded(draw.H2("test_combat_duel_terms", 0)), terms=bad)
     assert wrapper.DUEL_TERMS == ('yield', 'blood', 'death') and wrapper.LETHAL_TERMS == 'death'
 
 
@@ -116,7 +109,8 @@ def _blood_cases():
 
 def _assert_blood_stop(pair, seed):
     """The assertions (2) rests on, shared with the mutation control below."""
-    from engine.season.seam.wrappers.combat import surrender_of
+    from engine.season.queries.inputs import Surrender
+    from modules.combat.fight import _surrender as surrender_of    # the module's one lift of the yield event (B14.01)
     _, ctrl, ctrl_rng, _, _ = _fight(seed, pair=pair)
     result, trace, rng, A, B = _fight(seed, terms='blood', pair=pair)
     k = _first(ctrl, lambda e: max(e['_wounds']) >= 1)
@@ -140,7 +134,7 @@ def _assert_blood_stop(pair, seed):
     st = dict(available=True, **{q: getattr(yielder.wt, q) for q in WOUND_QUANTITIES})
     assert combat_degree(dict(wound_state={first_wounded: st}), first_wounded) == COMBAT_BANDS[1]   # 'Wounded'
     assert result == (-1 if first_wounded == 'A' else 1)
-    assert surrender_of(trace) == dict(by=first_wounded, turn=ev['turn'], accepted=True)
+    assert surrender_of(trace) == Surrender(by=first_wounded, round=ev['turn'], accepted=True)
 
 
 def test_a_blood_duel_stops_at_the_first_wound_with_surrender_set_and_no_death():
@@ -168,11 +162,9 @@ def test_the_blood_assertions_observe_a_missing_stop(monkeypatch):
 def test_the_module_entry_reads_the_terms_off_the_typed_input():
     """`fight.py` passes `inp.terms` when the record carries it, the lethal default when it does not. The field is
     the season's to declare (PC-10b); a subclass stands in for it here."""
-    import importlib
     from dataclasses import dataclass
     from engine.season.queries.inputs import PersonalCombatInput
-    from engine.season.seam.wrappers.combat import surrender_of
-    entry = importlib.import_module('modules.combat.fight')   # the composition row's `target:` module
+    from modules.combat import fight as entry   # the composition row's `target:` module
 
     @dataclass(frozen=True)
     class _Termed(PersonalCombatInput):
@@ -181,14 +173,16 @@ def test_the_module_entry_reads_the_terms_off_the_typed_input():
     qs = ('felled', 'wounds', 'health_remaining', 'health_full')
     seen = 0
     for seed in range(10):
-        bare = entry.fight(PersonalCombatInput(('p_a', 'p_b'), (4, 4), qs), random.Random(seed))
-        death = entry.fight(_Termed(('p_a', 'p_b'), (4, 4), qs, 'death'), random.Random(seed))
-        blood = entry.fight(_Termed(('p_a', 'p_b'), (4, 4), qs, 'blood'), random.Random(seed))
-        assert (death['result'], death['trace']) == (bare['result'], bare['trace'])
-        assert surrender_of(bare['trace']) is None
-        s = surrender_of(blood['trace'])
-        assert s is not None and blood['result'] == (-1 if s['by'] == 'p_a' else 1)
-        assert not any(w['felled'] for w in blood['wound_state'].values())
+        bare = entry.fight(PersonalCombatInput(('p_a', 'p_b'), (4, 4), qs), draw.seeded(draw.H2("test_combat_duel_terms", seed)))
+        death = entry.fight(_Termed(('p_a', 'p_b'), (4, 4), qs, 'death'), draw.seeded(draw.H2("test_combat_duel_terms", seed)))
+        blood = entry.fight(_Termed(('p_a', 'p_b'), (4, 4), qs, 'blood'), draw.seeded(draw.H2("test_combat_duel_terms", seed)))
+        assert death == bare                              # the record: wounds, yield, beat, rounds and trace
+        assert bare.surrender is None
+        s = blood.surrender
+        # the integer `wrapper.fight` returns is not in the record; the engine's own `fight_result` event names it
+        won = next(e['result'] for e in blood.trace if e['kind'] == 'fight_result')
+        assert s is not None and won == (-1 if s.by == 'p_a' else 1)
+        assert not any(w.felled for w in blood.wounds.values())
         seen += 1
     assert seen == 10
 
@@ -196,7 +190,8 @@ def test_the_module_entry_reads_the_terms_off_the_typed_input():
 # ── (3) `yield` stops at the threshold ────────────────────────────────────────────────────────────────────────
 
 def test_a_yield_duel_stops_at_the_health_threshold():
-    from engine.season.seam.wrappers.combat import surrender_of
+    from engine.season.queries.inputs import Surrender
+    from modules.combat.fight import _surrender as surrender_of    # the module's one lift of the yield event (B14.01)
     frac = CFG['YIELD_HEALTH_FRAC']
     checked = 0
     for pair in _PAIRS:
@@ -223,7 +218,7 @@ def test_a_yield_duel_stops_at_the_health_threshold():
             assert trace[:_diverge(trace)] == ctrl[:_diverge(trace)]
             assert len(rng.trace) == ev['_draws'] < len(ctrl_rng.trace)
             assert result == (-1 if by == 0 else 1) and ev['terms'] == 'yield'
-            assert surrender_of(trace) == dict(by=ev['by'], turn=ev['turn'], accepted=True)
+            assert surrender_of(trace) == Surrender(by=ev['by'], round=ev['turn'], accepted=True)
             checked += 1
     assert checked >= 20, checked
 
@@ -231,6 +226,7 @@ def test_a_yield_duel_stops_at_the_health_threshold():
 def test_yield_and_blood_are_different_stops():
     """The two terms read different quantities: on some seed the `yield` stop comes in a LATER turn than `blood`'s."""
     later = 0
+    checked = {pair: 0 for pair in _PAIRS}
     for pair in _PAIRS:
         for seed in range(30):
             tb = [e for e in _fight(seed, 'blood', pair=pair)[1] if e['kind'] == 'yield']
@@ -238,6 +234,9 @@ def test_yield_and_blood_are_different_stops():
             if tb and ty:
                 assert ty[0]['turn'] >= tb[0]['turn'], (pair, seed)
                 later += ty[0]['turn'] > tb[0]['turn']
+                checked[pair] += 1
+    # the comparison is conditional on both terms stopping the fight: it must have run at least once per pair
+    assert all(n >= 1 for n in checked.values()), checked
     assert later >= 1
 
 
@@ -273,7 +272,7 @@ def _fight_with_stub_engagement(monkeypatch, damage_A, damage_B, terms):
     monkeypatch.setattr(wrapper, 'engagement', _both_cross)
     trace = []
     monkeypatch.setattr(wrapper, '_TRACE', trace.append)
-    return wrapper.fight(A, B, CFG, random.Random(0), terms=terms), trace, A, B
+    return wrapper.fight(A, B, CFG, draw.seeded(draw.H2("test_combat_duel_terms", 0)), terms=terms), trace, A, B
 
 
 def test_an_exact_tie_on_the_terms_ends_unresolved_with_no_yield(monkeypatch):

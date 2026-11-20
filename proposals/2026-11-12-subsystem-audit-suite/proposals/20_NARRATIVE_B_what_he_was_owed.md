@@ -1,0 +1,202 @@
+# NARRATIVE-B — what he was owed: a due that lapses unmet is a grievance against the one he believes owed it
+
+Folded: 2026-11-12 by `audits/30_ERAS_REGIMES_STRIFE_AND_MOMENTUM.md` (F-30-11; the momentum charge). Nothing here is deleted; edit 1 is **amended before it ships live** by `30_WR_D_momentum_and_its_brakes.md` commit 1. As written `dues_unmet` counts each lapsed edge once, for ever, so the term only rises: a compounding path with no brake. The amendment: `dues_unmet(p, x, window)` counts only lapses whose `until` falls inside the estimate window (the argument `legitimacy` and `stability` take; `regard` passes `Fixtures estimate_window_seasons`), **less** one for each lapse followed by a newer `oblige` edge of his to the same seat that is live or was ended by his own `release` (the tie renewed); never below 0. Tests are named there (`test_a_lapse_older_than_the_window_is_not_counted`, `test_a_renewed_tie_nets_the_lapse_before_it`, and two more). This path is declared as LOOP row L8 (sign `+`; bounds: the window, the netting, redress at Success or better, `refused_before`, the scene budget), and its compounding is read by the fork lift of `30_WR_E` clause C7 with `dues_valence` 0 as the control. A-80 and A-81: the lapse, the refusal and the wait each leave a write (`30_WR_D` §3), and a lord who does not pay is one of the entrenching things of its §4.
+
+Reconciled: 2026-11-12, U5d closure — folded **A-12**, **A-23** and the story lane's R-11. A due that lapses under an empty seat is laid at the door of the believed holder of a seat that may fill it (`U5d_STORY_owed_edits.md` §3). A holder in custody forms no act through his seat (A-23), so his dues can lapse while he is held; whom the wronged man then blames is read from his own claims as for any lapse, and this lane adds no rule for it. No step is removed.
+
+Folded: 2026-11-12 by `audits/28_SCENE_ACCESS.md` (ruling A-64). Nothing here is deleted; edit 5's owed petition clause is carried by `28_CORE_scene_access_C_the_petition_that_waits.md` §1. `dues_unmet(p, x)` gains its second clause there: a petition of `p`'s addressed to `x` of which he holds a claim that it lapsed or was returned, and a promise of `x`'s to receive him that ended at its term while he was turned away. A separate, lighter term, `waiting_valence × kept_waiting(p, x)`, reads his own claims of being kept waiting at `x`'s door (the Event `visitor.kept_waiting`) and fades as they fade. The `[UNVERIFIED]` in edit 5 (what the lapse's deposit names) stands: that file relies on `U5c_SC_proceedings_residue.md` §4 item 6 appending the `lapsed` stage to the petition Record.
+
+Reconciled: 2026-11-12, wave 3 lane W3-5b (`unified/work/R5_READ.md` §1 row what_he_was_owed CONFORMS, §2 row edit 1 vs `30_WR_D` (A-80, A-81), §7, 7b; `30_WR_D_momentum_and_its_brakes.md` commit 1 (the amended text, copied, not paraphrased); `unified/U3_CONFLICT_LEDGER.md` C3-D8; `unified/U3_DEPENDENCY_ORDER.md` §1 item 38, §3.1). Changed: (1) edits 1 and 2 are replaced by `30_WR_D` commit 1's amended form (`dues_unmet(p, x, window)`, the window and the netting; `regard` passes `estimate_window_seasons`), so the body no longer carries the compounding form the head says must not ship; (2) tests are named in `30_WR_D`'s file name, `engine/season/tests/test_narrative_dues.py`, with that file's four and this file's two; the planted world is built inside the test (no probe file); (3) batch order: this file needs `20_NARRATIVE_C_who_holds_what.md`'s `believed_holder`, so inside B38 NARR_C lands before it; U3 §1 item 38 lists NARR_B before NARR_C, which cannot import at the tree (the reader would not exist) and is corrected here; C3-D8 (this file before `28_CORE_scene_access_C_the_petition_that_waits.md`) stands; (4) tier.
+
+Depends on: `20_NARRATIVE_C_who_holds_what.md` (B38, `believed_holder`; lands first); `30_WR_D_momentum_and_its_brakes.md` commit 1 (carried inside this file's first commit, as that file says); `U5c_SC_proceedings_residue.md` §4 item 6 (B27; the petition's `lapsed` stage, for the clause `28_CORE_scene_access_C` adds).
+Lands in batch: B38 (lane WR), after `20_NARRATIVE_C`, before `28_CORE_scene_access_C_the_petition_that_waits.md` (C3-D8). Commit 1 (`dues_valence` 0) hash-equal; the live value a declared mover.
+Tier: sonnet / high.
+
+## Status: PROPOSED
+
+Source: `audits/20_NARRATIVE_CHURN.md` F-NARR-02 (an omission has no author), F-NARR-03 (an office owes
+nothing), §2 edges B2 to B6, B10; §7.2 generator G1. Reference only (`CLAUDE.md` §0.05). Not ratified by
+being written.
+
+## What it changes in `engine/season/` at runtime
+
+`person_q.regard(p, x, fx)` gains one term, `− dues_valence × dues_unmet(p, x)`. At `dues_valence 0` (the
+control, shipped in the first commit) the function is today's exactly and every hash is EQUAL. At a live
+value it is a **declared hash mover** for every world in which a termed oath has lapsed unpaid and the
+sworn person holds a belief about who held the seat (which needs `20_NARRATIVE_C_who_holds_what.md`;
+without it `dues_unmet` is 0 for everyone and nothing moves). No Event, carrier, verb or write is
+added; MATTER's lapse is untouched (T-n stands).
+
+## The problem, with evidence
+
+A demand unmet, a duty failed and an oath not kept are the absence of an act. The log holds acts.
+
+- An unpaid `oblige` closes at MATTER with `subject = the edge's id` and `causes = [the oath]`
+  (`loop/matter.py:428-435`): it cites the sworn man's own act and names nobody who owed him.
+- A docket item lapses with `matter.lapsed`, cause the Event that docketed it (`:437-…`, CR-55).
+- WITNESS deposits a non-`hold` edge by its Tenure id (`queries/world_q.py:5403-5406`), and an actorless
+  Event's sighting names no one (`epistemic.py:1049-1066`), so `person_q.deed_doer` can pair a lapse with
+  no doer; `deeds_judged` says of this very case "THE SWORN-TO HALF IS NOT BUILT … what is missing is the
+  PAIRING, not the edge" (`person_q.py:121-126`).
+- S19.3 (`state/carriers.py:276-290`) rules that an Event carries no actor and no target: attribution is a
+  per-witness claim. So the door a lapse is laid at cannot be a field of the Event.
+- Read over three seeds, four seasons (audit E-N04): 46 / 39 / 89 oaths sworn in play, `term.renewed` 0,
+  `transfer` executed 2 / 3 / 7 of 98 / 129 / 108; petitions filed 35 / 44 / 44, determined 0 / 2 / 0;
+  writs 40 / 23 / 47, complied 0. At season five the oaths lapse together (`tenure.closed` 27 and 27 at
+  seeds 0 and 1, WR addendum §3.2). Nobody is blamed for any of it, by construction.
+- With the terms shortened to their own swept values so lapses fall inside a short run (audit E-N10,
+  seed 0, three seasons, `oblige_term` 1): 26 oaths lapsed unpaid, sworn by 26 persons, **all to one
+  seat**. What the lapses occasioned: six acts formed on a claim of the closure, none by the sworn man
+  and none toward the seat or its holder (`convene`, `create_record`, `commit` executed; `march`,
+  `capture`, `sabotage` refused). `oblige→transfer` 0, `oblige→release` 0.
+- The plan's own owner of grievance, CR-88's `person_q.grievance_against(p, q)` (design-first, B10-17b),
+  counts "the deeds by `q` … that `p`'s `deeds_judged` scores against" him: acts only.
+
+## The resolution, decided
+
+**The wronged man does the attributing, from what he himself holds.** His own oath is in `p.tenures`
+and outlives the lapse; whether it ended by its own term is on the edge; who sat in the seat is what he
+believes (`held_by`, proposal C). So "my lord let my service lapse" is a person-side reading of own
+state, lawful under AX-2 and S19.3 both, and needs no new Event and no world read.
+
+Ladder: step 3 (ED-IN-0345, ruled: a clock is an accumulation of world events, and nothing may move from
+the bare absence of an act; FA's adjudication of ARC-01 and ARC-03 restates "inaction" on the Events
+that already mark it, `06_FA_audit.md` §13) for *what counts*: the lapse Event MATTER already writes.
+Step 4 for *where it is read*: `regard`'s `judged` half is the precedent for a derived, never-stored
+judgement of a person. Step 5 for the form: one pure function with two callers.
+
+Nothing here decides an outcome. The term moves how the aggrieved man ranks acts toward one person;
+which act he takes is his sampled choice (`choose.py::_sample_order`), and whether a petition, a
+challenge or a hearing then goes his way is that act's draw (`13_SC_draw_for_unrolled_contests.md`,
+`14_VERBS_BINDING`). A lord in good standing who misses a payment is resented and usually forgiven by
+the dice of what follows; one who is already hated may find it the last straw. Neither is certain.
+
+## Exact edits, by owner
+
+**1. `engine/season/queries/person_q.py` — new, beside `held_against`.**
+
+```python
+def dues_unmet(p: Person, x: str, window: int) -> int:
+    """HOW MANY OF `p`'S OWN DUES LAPSED UNMET AT `x`'S DOOR, INSIDE THE ESTIMATE WINDOW: his own
+    `oblige` edges (`p.tenures`) that carry a `term` and ended at or after it (`until >=
+    term.matures_at`: MATTER's closure; a `release` ends an edge before its term and is his own act,
+    not a due unmet) with `until` inside the last `window` seasons, whose seat he BELIEVED `x` held
+    when it lapsed -- his newest `held_by` claim on that seat with `when <= until` (`believed_holder`,
+    proposal C's reader) -- LESS one for each such lapse followed by a newer `oblige` edge of his to
+    the same seat that is live or was ended by his own `release` (the tie renewed). Never below 0.
+    0 for a seat he holds no such belief of: a man who does not know who failed him blames no one.
+    Person-side, own state and own ledger only (AX-2); nothing is stored (T-a). The window and the
+    netting are `30_WR_D_momentum_and_its_brakes.md` commit 1's brake (A-80): without them the count
+    only rises. [ASSUMPTION; medium; Jordan to correct; revert: count every lapse.]"""
+```
+
+**2. `person_q.regard`** (`:424-453`): after the `judged`/`told` block,
+
+```python
+    dv = float(fx.get("dues_valence"))
+    if dv:
+        stored -= dv * dues_unmet(p, referent, int(fx.get("estimate_window_seasons")))
+```
+
+with the `>= 0` refusal the other gains carry; the window is the argument `legitimacy` and `stability`
+take (`person_q.py:537`, `:566`) and the fixture `harness/storybar.py:270` already reads. The
+docstring's formula gains the term.
+
+**3. `engine/season/data/fixtures.py`.** `dues_valence=0.0`, swept `0` (control) / `2` / `4` (a stance
+row's valence is −5 to +5 at weight 1; 2 is a moderate grievance per lapsed oath, 4 a heavy one), with a
+`hole_register.yaml` NUMBER row, `[ASSUMPTION; medium; Jordan to correct; revert: 0.0]`.
+
+**4. CR-88's design file, when it is drafted** (not an edit to code here): `grievance_against(p, q)`
+adds `dues_unmet(p, q)` to its count of distinct origins (one lapsed edge is one origin, ED-IN-0322),
+so an unpaid oath can help clear the betrayal band exactly as a deed can. One function, both callers.
+
+**5. Not edited here, owed and named.**
+- *Petitions.* The same count should read a petition that lapsed unanswered against the believed holder
+  of the seat it waited on. It needs the lapse to reach the filer as a claim about his petition Record
+  (`matter.lapsed`'s write names the docket item; what its deposit's subject is was not opened,
+  `[UNVERIFIED]`). Interface for SC (`13_SC_*`, WR `_B` step 3 "a matter about to lapse is an
+  occasion"): the lapse's deposit names the petition Record. Then `dues_unmet` gains a second clause.
+- *Writs.* A writ ignored is the issuer's grievance, and `06_FA_decree_binds.md` already folds it from
+  the issuer's own claims of defied writs into a recall. No second rule.
+- *The debtor's side.* That the bill reaches the one who must pay it before it lapses is
+  `15_INSTITUTIONS_BYZANTINE_B_the_roga_and_the_fisc.md` (a shortfall claim on the holder) and
+  `01_CORE_unmet_need_is_attended_first.md` (he attends to it first). With those, neglect is a choice he
+  made; without them it is an accident, and this proposal still blames him for it.
+
+## The gate that shows it worked (execution artifacts)
+
+Tests: NEW `engine/season/tests/test_narrative_dues.py` (the file `30_WR_D` commit 1 names), written as
+the first commit: `test_a_lapse_older_than_the_window_is_not_counted`,
+`test_a_renewed_tie_nets_the_lapse_before_it`, `test_two_lapses_and_one_renewal_count_one`,
+`test_the_count_is_never_negative` (`30_WR_D`'s four); `test_no_belief_about_the_holder_reads_zero`;
+`test_paid_arm_blames_only_the_unpaid_half` (gate 3, on world (i), built inside the test: three held
+seats, four sworn persons each, one-season terms, half paid). Run that file and
+`engine/season/tests/test_strife_credit.py` (the other `regard` terms).
+
+Two worlds, because the shipped realm cannot yet show it (its four built oaths carry no term, and the
+oaths sworn in play go to a seat nobody holds, audit E-N14): **(i)** a planted realm of three held
+seats, each with four sworn persons on a one-season term, half of them paid (gates 2 to 4 are read here
+first, and it is the falsifier's world); **(ii)** `build_realm`, seeds 0, 1, 2, six seasons (the shipped
+terms are four), once in-play oaths reach held seats. `PYTHONHASHSEED=0`, proposal C live in both:
+
+1. Control: `dues_valence 0` reproduces the base hashes.
+2. At `dues_valence 2`: persons with `dues_unmet(p, x) > 0` for some `x`: more than zero at every seed;
+   the holders blamed number at least three at two seeds, and no holder draws a larger share of the
+   grievances than his share of the seats sworn to plus the seed spread (a non-degenerate distribution:
+   it follows who was sworn to, not one name).
+3. A **paid arm**: the same world with half the lapsing oaths renewed by a planted `transfer` the season
+   before. Grievances appear only among the unpaid half. (The term reads the due, not the seat.)
+4. Executed acts by an aggrieved person whose subject is the holder he blames, in the two seasons after
+   the lapse, by verb, against the control arm: at least one of `petition`, `speak`, `tell`, `challenge`,
+   `release` differs by more than the control's seed-to-seed spread.
+5. The story reading of `20_NARRATIVE_F` prints class G1 (a due unmet, answered) above zero at two seeds
+   and zero in the control.
+
+## The falsifier
+
+- Gate 2 at zero: nobody sworn believes anything about who held his seat (C did not land, or its
+  seeding reached nobody), which is a finding about C.
+- Gate 4 with no verb moved: the grievance has nothing to ride. That is the closing verbs' refusals
+  (`challenge` 0 of 152 / 180 / 174, audit E-N04; PC and SC own them), and this term then ships at 0
+  until one executes.
+- Gate 2 with every grievance on one holder at every seed: the oaths of the built realm all point at one
+  seat, and the content (who is sworn to whom) is what is degenerate. **This is the expected first
+  reading, and worse:** at seed 0 all 26 oaths sworn in play are to `off_lord_terr_T1`, a seat founded
+  in season 0 that **nobody holds** (audit E-N14); `world_q.seats_named` names it for 83 of 83 persons,
+  so `oblige` forms on it for everyone. A sworn man with no belief about a holder blames no one
+  (`dues_unmet` reads 0), so on today's content this term is silent, correctly: there is no lord to
+  resent. The repair is not here: an oath to a seat with no holder should be declined person-side
+  where he believes it vacant (`20_NARRATIVE_C`'s claim makes that readable), and a founded seat
+  should be filled (FA: `06_FA_seat_terms_and_turnover.md`, the vacancy occasion). Listed for FA and
+  CHAR.
+
+## NERS reading
+
+- **N.** Cut it and three of Jordan's five crossings (a demand unmet, a duty failed, an obligation
+  meeting a new holder) leave no mark on anyone: the realm's commonest ending stays nobody's fault.
+  Bottom-up it is one man's memory of one oath; top-down it is how an institution's decay becomes
+  politics; lateral, CR-88 reads the same count; diagonal, it is what makes BYZ's stipend matter.
+- **R.** No player is needed: a lord who cannot pay loses standing with nobody watching. Complete at
+  the extremes: no oaths, no term, or no belief about the holder each read 0.
+- **S.** One methodology with `regard`'s other terms (a derived number, a gain, a control at 0); no
+  second ladder of grievance beside CR-88's.
+- **E, last.** One function, one line in `regard`, one fixture; against the absence of any consequence
+  for neglect. High. It makes a complex outcome ("the unpaid households turned on him") follow from a
+  simple, legible fact a player can act on (pay your men).
+
+## Cost class
+
+Edit. After `20_NARRATIVE_C` in B38, with `30_WR_D` commit 1 inside its first commit. One session with
+its sweep and the paid arm.
+
+## Dependency edges
+
+- **Needs:** `20_NARRATIVE_C_who_holds_what.md` (`believed_holder`).
+- **Feeds:** CR-88 (B10-17b); `20_NARRATIVE_F` class G1.
+- **FA:** `06_FA_seat_terms_and_turnover.md`, `06_FA_seat_terms_by_body_B.md` (a seat that changes
+  hands changes whom the next lapse is laid on); `06_FA_decree_binds.md` (the writ half).
+- **INSTITUTIONS:** `15_INSTITUTIONS_BYZANTINE_B` (what is owed and the bill), `15_INSTITUTIONS_VENICE_A`
+  (the same live edge as an obstacle term while it holds: arrears there, a grievance here once lapsed).
+- **CHAR:** `02_CHAR_relations_have_a_ground.md` (its `service` and `oath` grounds seed a stance row at
+  build; this term is what service unpaid later does to it).
+- **SC:** the petition clause (edit 5).

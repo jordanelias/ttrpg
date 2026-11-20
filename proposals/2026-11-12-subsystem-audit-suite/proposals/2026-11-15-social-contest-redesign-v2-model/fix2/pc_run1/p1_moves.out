@@ -1,0 +1,50 @@
+
+== all-mid trial (n=400 sittings): mean move at the deciders toward the speaker's side, per beat
+   argue    raises            n= 1147 mean +0.416  share>0 0.47
+   argue    answers           n=  921 mean +0.439  share>0 0.47
+   press    presses           n=  719 mean -0.279  share>0 0.31
+   concede  concedes          n=  193 mean -1.012  share>0 0.00
+   press    presses   evaded  n=   13 mean -3.010  share>0 0.00
+   rest     rests     evaded  n=    7 mean -2.500  share>0 0.00
+   P(accuser carries) by how many issues the ACCUSED conceded: {0: (343, 0.271), 1: (55, 0.364), 2: (2, 1.0)}
+
+== all-mid debate (n=400 sittings): mean move at the deciders toward the speaker's side, per beat
+   press    presses           n= 1168 mean -0.357  share>0 0.30
+   argue    raises            n=  851 mean +0.340  share>0 0.45
+   argue    answers           n=  411 mean +0.548  share>0 0.54
+   concede  concedes          n=   42 mean -1.548  share>0 0.21
+
+== cast trial (n=400 sittings): mean move at the deciders toward the speaker's side, per beat
+   argue    raises            n= 1184 mean +1.711  share>0 0.68
+   argue    answers           n= 1040 mean +0.471  share>0 0.50
+   press    presses           n=  698 mean -0.083  share>0 0.45
+   concede  concedes          n=   84 mean -1.087  share>0 0.01
+   press    presses   evaded  n=    2 mean -4.408  share>0 0.00
+   P(accuser carries) by how many issues the ACCUSED conceded: {0: (385, 0.475), 1: (14, 0.643), 2: (1, 0.0)}
+
+== cast negotiation (n=400 sittings): mean move at the deciders toward the speaker's side, per beat
+
+== cast rally (n=400 sittings): mean move at the deciders toward the speaker's side, per beat
+   argue    raises            n= 1026 mean +0.951  share>0 0.57
+
+== cast questioning (n=400 sittings): mean move at the deciders toward the speaker's side, per beat
+   argue    raises            n= 1299 mean +0.297  share>0 0.45
+   argue    answers           n=  754 mean +0.375  share>0 0.50
+   press    presses           n=  332 mean +0.318  share>0 0.52
+   rest     rests     evaded  n=  125 mean +0.000  share>0 0.00
+   concede  concedes          n=  107 mean -3.245  share>0 0.04
+   argue    raises    evaded  n=   11 mean +0.997  share>0 0.64
+   press    presses   evaded  n=    2 mean -2.875  share>0 0.00
+
+== cast debate (n=400 sittings): mean move at the deciders toward the speaker's side, per beat
+   press    presses           n= 1348 mean -0.092  share>0 0.45
+   argue    raises            n=  532 mean +0.704  share>0 0.53
+   argue    answers           n=  229 mean +0.304  share>0 0.43
+   concede  concedes          n=   66 mean -0.688  share>0 0.30
+
+== one-sided matters (no 'against' party)
+   trial: ran; ended budget, band success, beats [('argue', 'raises'), ('argue', 'raises'), ('argue', 'raises'), ('argue', 'raises')]
+   debate: ran; ended rested, band failure, beats [('rest', 'rests')]
+   questioning: ValueError: ValueError('refused[one_character]: a sitting with one character (A-139)')
+   conversation: ValueError: ValueError('refused[one_character]: a sitting with one character (A-139)')
+   audience: ran; ended rested, band success, beats [('rest', 'rests')]

@@ -1,0 +1,16 @@
+
+== C5.1 who speaks: sittings in which a side never argues / says nothing at all; answers to points that no longer stand; standing points left unmarked (n=400)
+  trial all-mid        against never argues 18; against never raises 255; against says nothing 0; answers 880; for never argues 0; for never raises 1; for says nothing 0; left standing (marked) 9
+  trial cast           against never argues 14; against never raises 379; against says nothing 0; answers 1106; for never argues 0; for never raises 0; for says nothing 0; left standing (marked) 0
+  debate all-mid       against never argues 68; against never raises 166; against says nothing 6; answers 422; for never argues 52; for never raises 102; for says nothing 7; left standing (marked) 159
+  debate cast          against never argues 246; against never raises 358; against says nothing 30; answers 159; for never argues 116; for never raises 119; for says nothing 0; left standing (marked) 183
+  questioning all-mid  against never argues 37; against never raises 110; against says nothing 8; answers 671; for never argues 8; for never raises 21; for says nothing 7; left standing (marked) 63
+  questioning cast     against never argues 31; against never raises 162; against says nothing 3; answers 731; for never argues 0; for never raises 8; for says nothing 0; left standing (marked) 114
+  inquisition all-mid  against never argues 0; against never raises 157; against says nothing 0; answers 1040; for never argues 0; for never raises 0; for says nothing 0; left standing (marked) 4
+  negotiation cast     against never argues 119; against never raises 224; against says nothing 3; answers 256; for never argues 41; for never raises 71; for says nothing 0; left standing (marked) 81
+
+== C5.2 a conceded issue STAYS conceded and costs: the conceder's standing with those who decide, before and after his concession (trial cast, n=400)
+  issue concessions that IMPROVED the conceder's standing 0, that cost it 75
+
+== C5.3 a declared close: verdicts where the band goes against the majority of seats (debate, n=400)
+  the band against the majority of seats in 0 of 400

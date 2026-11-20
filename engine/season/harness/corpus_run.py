@@ -1,7 +1,7 @@
 """EVERY CASE, EXECUTED — not graded, and not merely attempted.
 
 `run_cases.py` GRADES the corpus: it reads each case's prose `need` rows, looks up the authored
-declaration naming which verb / hole / probe answers each one, and reports PLAYABLE / DEGRADED /
+declaration naming which verb / hole / probe answers each one, and reports DECLARED-PRESENT / DEGRADED /
 BLOCKED / NOT-ASSESSED. That is a judgement about whether the engine COULD support a character.
 
 This RUNS them. Jordan asked for it, 2026-09-02: *"shouldn't we consider running all NPCs and all
@@ -42,30 +42,34 @@ polarity rule sends zero evidence to the verdict AGAINST the thing measured, and
 onto `settlement` would manufacture a pass for the largest single block of the corpus.
 """
 from __future__ import annotations
+import argparse
 import string
 import sys
-from collections import Counter
+from collections import Counter, defaultdict
 
 from .. import decision
+from ..data import cast as cast_data
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.matrix import Step
 # `CONVICTIONS` dropped 2026-09-16: `seed_pursuits` moved to `run_cases.py`, which is its
 # single owner, and nothing here reads the roster any more.
-from ..data.rosters import (GRADED_INQUIRIES, PURSUIT_AXES, RUNG_KINDS, VERB_CAPABILITY,
+from ..data.rosters import (GRADED_TASKS, PURSUIT_AXES, RUNG_KINDS,
                             load_yaml, refuse_a_titled_post_off_its_rung)
 from ..data.verbs import VERB_TABLE, align, celled_verbs
 from ..decision import make_chooser
-from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
+from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unspecified
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..loop.effects import EFFECTS
 from ..queries.world_q import RESIDE_KIND, questions_for
-from ..state.carriers import Act, Event, Office, Person, Proposition, Rung, Site, Tenure
+from ..state.carriers import (Act, Event, Office, Person, Proposition, Rung, Site, Tenure,
+                              generated_attributes)
 from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
 from ..data import files
 from . import probes as P
 from . import run_cases as R
-from .run_cases import seed_pursuits, wants_of
+from ..boot.realm import _check_office, _exercise_docs, _rescales_once, seed_pursuits, wants_of   # moved to `boot/` (B03c.01): the builder reads them too
+RESCALES = _rescales_once()   # the one dict the builder reads, read here at import as before the move
 
 # `CLAUDE.md` §0.1 pt 5 / `G1`: declared here with its reason, not a bare literal in a body.
 # [JUSTIFIED: an INSTRUMENT BUDGET, not a rule of the game -- no design document names a season cap. `W6`'s flood is the measurement it is fitted to: the corpus's longest `span_seasons` is 16, and running those costs more than the grading they buy. Lowering it truncates long cases; raising it changes no verdict this instrument reports]
@@ -87,101 +91,6 @@ def endings() -> dict:
 
 
 ENDINGS = endings()
-
-
-def rescales() -> dict:
-    """`W28`. The corpus's `scale:` re-authoring, as an OVERLAY keyed by case id.
-
-    ⚠ AN OVERLAY, NOT AN EDIT TO THE CORPUS, AND THE REASON IS ARCHITECTURAL. 47 of the 57
-    unrepresentable cases live in `engine/season/cases/chain/` — a PREDECESSOR proposal's
-    committed corpus, which this chain reads and does not own. Editing another chain's extraction
-    would destroy the record of what was extracted, and the corpus is evidence. `cases/exercises/`
-    is already the established overlay: per-case files, bound by id, carrying this chain's answers
-    about someone else's rows. One overlay mechanism, not two (§8).
-
-    ⚠ EVERY RE-SCALE CARRIES ITS `why:`, WHICH IS WHAT MAKES IT AUTHORING RATHER THAN INVENTION.
-    The defect being repaired is that `CASE_BRIEF.md`'s schema offered `faction` and `world`, which
-    `rung_kinds` has never had — so the extractors wrote a vocabulary the architecture had already
-    closed. A re-scale is a reading of the case's OWN text; where the text does not say, the case
-    stays unrepresentable, which is the honest answer (§42.2's polarity rule).
-
-    ⚠ AND THERE IS NO CLASSIFIER. 23 of the 47 match none of the institution words the other 24
-    do, so a keyword rule would cover half the corpus and silently mis-scale the rest — the ROUTER
-    `W10` deleted, returning as a corpus tool. Measured before deciding not to build one."""
-    out: dict = {}
-    files_of: dict = {}                   # case id -> the file that authored its re-scale
-    for f, doc in _exercise_docs():
-        sc = doc.get("scale")
-        if doc.get("case") and isinstance(sc, dict):
-            if not sc.get("why"):
-                raise SystemExit(f"{f.name}: a `scale:` re-authoring with no `why:` — the "
-                                 "derivation is what distinguishes this from an invention")
-            _check_office(f.name, sc.get("office"))
-            # REFUSED, NOT OVERWRITTEN: two files naming one `case:` let the LAST silently replace
-            # the first -- the refusal `cast_overlay` makes for a `cast:`, in the same words.
-            if doc["case"] in files_of:
-                raise SystemExit(f"{f.name}: `case: {doc['case']}` is already the case of "
-                                 f"{files_of[doc['case']]}'s `scale:` -- the later file would "
-                                 "silently replace the earlier one")
-            files_of[doc["case"]] = f.name
-            out[doc["case"]] = sc
-    return out
-
-
-def _exercise_docs():
-    """The one directory walk `rescales()` and `cast_overlay()` both read a different top-level
-    key off — `cases/exercises/*.yaml`, "ONE OVERLAY MECHANISM, NOT TWO" (this module's own
-    header). Factored out (methodology close, 2026-09-29, `/simplify` REUSE lens) after the two
-    functions carried this loop byte-for-byte twice, differing only in which key and which type
-    check each reads afterward — a third overlay key (already anticipated: position `17`'s
-    roles/offices) would otherwise have copied it a third time. Yields `(path, doc)` so a caller
-    can still cite the file by name in its own error messages; tolerant of a missing directory
-    (no `sorted(d.glob(...))` on a `d` that doesn't exist)."""
-    d = files.EXERCISES_DIR
-    if not d.is_dir():
-        return
-    for f in sorted(d.glob("*.yaml")):
-        yield f, (load_yaml(f.read_text()) or {})
-
-
-def _check_office(where: str, off) -> None:
-    """`H-99`. An overlay's `office:` block, resolved against canon AT LOAD.
-
-    ⚠ THE THREE AXES JORDAN ASKED FOR, AND THE CHECK IS HERE BECAUSE THE ERROR IS A RE-SCALING
-    ERROR. 47 cases get an office authored by hand; the failure mode at that volume is a body
-    seated in the wrong faction, which nothing downstream would notice — the world would build,
-    the season would run, and a Cardinal would quietly belong to the Crown. `office_faction`
-    refuses the mismatch, and refusing at LOAD means a bad overlay never reaches a world.
-
-    ⚠ IT ALSO REFUSES A REMIT ACT THAT IS NOT IN THE ROSTER, for the same reason `Office` does:
-    a remit is what the office MAY DO, and an unrecognised verb there is a silent no-op."""
-    if off is None:
-        return
-    if not isinstance(off, dict) or not off.get("post"):
-        raise SystemExit(f"{where}: an `office:` block with no `post:`")
-    if not off.get("why"):
-        raise SystemExit(f"{where}: an `office:` with no `why:` — same rule as `scale:`")
-    if not off.get("body") and not off.get("faction"):
-        # ⚠ REQUIRED AT THE OVERLAY, WHERE THE RULING APPLIES. `Office` leaves belonging optional
-        # because a test fixture is not a canon office; a corpus overlay that names neither a
-        # `body` nor a `faction` has simply not answered Jordan's question, and §42.2's polarity
-        # rule makes no evidence a refusal rather than a default.
-        raise SystemExit(f"{where}: an `office:` names neither a `body` nor a `faction`")
-    # ⚠ THE VALIDATOR IS THE CONSTRUCTOR, NOT A SECOND COPY OF ITS RULES (§8). Rev 1 re-checked
-    # the faction and the remit here by hand, and drifted immediately: `Office.__post_init__`
-    # refuses a post that is both a TITLE and a body, and this loader did not, so
-    # `{post: "King", body: "Cardinal of Justice"}` passed the overlay gate and was refused only
-    # later at world-build. Building a throwaway Office means every rule the class enforces --
-    # present and future -- applies at LOAD, before any world exists.
-    try:
-        Office("probe:" + where, str(off["post"]), None,
-                 list(off.get("remit") or []),
-                 body=off.get("body"), faction=off.get("faction"))
-    except (Unspecified, Forbidden, Unowned) as e:
-        raise SystemExit(f"{where}: {e}") from None
-
-
-RESCALES = rescales()
 
 
 def apply_rescale(case: dict) -> dict:
@@ -262,8 +171,8 @@ def cast_overlay() -> dict:
     ⚠ A MALFORMED ENTRY REFUSES AT LOAD (a world is never built from it), by `_check_cast`: not a
     mapping, no `who`, a key outside `CAST_KEYS`, a bad `office:` (`_check_office`'s own errors), an
     `ought:` that is not exactly `{about, predicate}` or whose `about` names no OTHER seated entry
-    (or names two), a `capability:` that is not a mapping, names a key `VERB_CAPABILITY` has no verb
-    drawing on, or carries a magnitude that is not a whole number, a WAITS-ON-PLAYER entry carrying
+    (or names two), a `capability:` that is not a mapping, names a key no skill row defines
+    (`cast.capabilities_of`), or carries a magnitude that is not a whole number, a WAITS-ON-PLAYER entry carrying
     an `office:`/`ought:` or the KEY `capability:` at all, even empty (never seated, so the field
     would read nothing), or more seated entries than `string.ascii_lowercase` can name (`seat_ids`).
     A FILE refuses at load too: a `cast:` with no non-empty string `case:` (blank, missing or
@@ -271,9 +180,8 @@ def cast_overlay() -> dict:
 
     ⚠ COUNT THIS WITH THIS FUNCTION, NEVER WITH A GREP OVER THE CASE FILES. The historical GAP this
     position's own plan entry names in terms: an antagonist once re-derived a corpus count by
-    grepping raw YAML and got it wrong, because `_tolerant_yaml` is what actually parses the
-    chain's non-standard files (markdown fences, a truncated head) and a grep sees none of that
-    parsing. `len(cast_overlay())` (or `len(CAST)`) is the harness's own count; a
+    grepping raw YAML and got it wrong, because `run_cases.load_cases` is what actually parses
+    the chain's files and a grep sees none of that parsing. `len(cast_overlay())` (or `len(CAST)`) is the harness's own count; a
     `grep -c 'who:' cases/**/*.yaml` is not, and will over- or under-count the moment a comment or
     an unrelated `who:`-shaped string appears in a file this function does not read as one."""
     out: dict = {}
@@ -335,13 +243,14 @@ def _referent(seated: list, entry: dict) -> int:
 
 def _check_capability(where: str, who: str, e: dict) -> None:
     """A SEATED entry's `capability:`, validated AT LOAD. `build_at` copies it onto the person, and
-    its one reader, `seam/wrappers/sigma.py::_capability`, asks `Person.capability[VERB_CAPABILITY[
-    verb]]` and nothing else -- `int()`-ed into a dice pool, halved into an opposed obstacle. So a
-    key no verb maps to is NEVER READ, and a magnitude that is not a whole number is truncated
+    its one reader, `seam/wrappers/sigma.py::_capability`, asks `Person.capability[<the verb's skill>]`
+    and nothing else -- `int()`-ed into a dice pool, halved into an opposed obstacle. So a key no
+    definition row carries is NEVER READ, and a magnitude that is not a whole number is truncated
     (`2.5` -> 2) or raises at the first roll; both used to land silently, because `build_at` only
-    tests `isinstance(cap, dict) and cap`. `VERB_CAPABILITY` is the owner of which keys exist -- the
-    capability NAMES are its VALUES (`rosters.yaml: verb_capability`; its keys are verbs) -- so this
-    asks it and keeps no list of its own. `{}` is the person's own default and is allowed: it seats
+    tests `isinstance(cap, dict) and cap`. `data/cast.py::capabilities_of` is the owner of which keys
+    and values a cast row's skill scores may be (a key must be a skill `descriptors.CAPABILITIES`
+    defines, a value a whole number on that row's scale) -- so this asks it and keeps no list of its
+    own. `{}` is the person's own default and is allowed: it seats
     nothing and does not claim to. (A WAITS-ON-PLAYER entry is refused for carrying the KEY at all,
     by `_check_cast`, before this runs.)"""
     if "capability" not in e:
@@ -350,18 +259,12 @@ def _check_capability(where: str, who: str, e: dict) -> None:
     if not isinstance(cap, dict):
         raise SystemExit(f"{where}: cast entry {who!r}: `capability:` is a {type(cap).__name__}, "
                          f"not a mapping of capability key -> whole number -- {cap!r}")
-    known = set(VERB_CAPABILITY.values())
-    unread = sorted(str(k) for k in cap if k not in known)
-    if unread:
-        raise SystemExit(f"{where}: cast entry {who!r}: `capability:` keys no verb draws on: "
-                         f"{unread} (`rosters.yaml: verb_capability` names {sorted(known)}) -- "
-                         "nothing would ever read them")
-    # `bool` is an `int` in Python and `True` would be read as a pool of 1: refused by name
-    bad = {k: v for k, v in cap.items() if isinstance(v, bool) or not isinstance(v, int)}
-    if bad:
-        raise SystemExit(f"{where}: cast entry {who!r}: `capability:` magnitudes must be whole "
-                         f"numbers (the pool is `int()`-ed, so a fraction would be truncated "
-                         f"silently): {bad!r}")
+    # B04.09: the keys and the magnitudes are checked by `cast.capabilities_of`, the one reader of a cast row's authored
+    # skill scores (a key must be a DEFINED skill, `descriptors.CAPABILITIES`; a value a whole number on that row's scale).
+    try:
+        cast_data.capabilities_of({"id": who, "capabilities": cap})
+    except ShapeGap as gap:
+        raise SystemExit(f"{where}: cast entry {who!r}: `capability:` {gap.what}") from None
 
 
 def _check_cast(where: str, entries: list) -> None:
@@ -369,7 +272,7 @@ def _check_cast(where: str, entries: list) -> None:
     `office:` goes through `_check_office` -- the validator IS the constructor's own rules (that
     function's comment), not a second copy -- and `ought:` through `_referent`, the resolver
     `build_at` seats from, so load and build cannot disagree about whom an OUGHT is about.
-    `capability:` goes through `_check_capability`, which asks `VERB_CAPABILITY` what a key may be.
+    `capability:` goes through `_check_capability`, which asks `cast.capabilities_of` what a key may be.
     An `ought.predicate` is a LABEL: nothing reads it (`H-185`), and it is validated only as
     non-empty text."""
     for e in entries:
@@ -457,11 +360,13 @@ def _seat_office(w: World, oid: str, pid: str, scope: str, off: dict) -> None:
     w.add_tenure(Tenure(f"t_{oid}", pid, oid, "hold", 0))
 
 
-def seasons_for(case: dict) -> int:
-    """The case's own `temporal.span_seasons` where it is an integer, clamped to `MAX_SEASONS`."""
+def seasons_for(case: dict, cap: int | None = None) -> int:
+    """The case's own `temporal.span_seasons` where it is an integer, clamped to `MAX_SEASONS`; with
+    `cap`, clamped to `cap` too (a gate's two-season horizon, D-17). With no cap, the shipped clamp."""
     t = case.get("temporal")
     n = t.get("span_seasons") if isinstance(t, dict) else None
-    return min(int(n), MAX_SEASONS) if isinstance(n, int) and n > 0 else DEFAULT_SEASONS
+    n = min(int(n), MAX_SEASONS) if isinstance(n, int) and n > 0 else DEFAULT_SEASONS
+    return n if cap is None else min(n, cap)
 
 
 def build_at(case: dict, seed: int = 0) -> World:
@@ -508,7 +413,16 @@ def build_at(case: dict, seed: int = 0) -> World:
     by_pid = dict(zip(pids, seated))      # the entry each seated person stands for; the floor has none
     for pid in pids:
         entry = by_pid.get(pid)
-        w.persons[pid] = Person(pid, str(entry["who"]) if entry else pid)
+        # B01a.03: A SEATED PERSON HOLDS A DRAWN SHEET (`state/carriers.py::generated_attributes`, one keyed draw per
+        # person and attribute, the same owner `build_realm` seats). KEYED ON THE CASE AND THE PERSON, as `seed_pursuits`
+        # below is: every case runs at one seed and seat ids repeat (`p_a`, `p_b`, `p_c`), so a key on the seat id alone
+        # gave every case's first seat one sheet (B01a terminal critique, finding 1); a named seat keys on who it is, so
+        # reordering a cast does not move a sheet. No cast entry authors `stats:` (`CAST_KEYS` refuses it), so there is
+        # nothing to lay over the draw.
+        w.persons[pid] = Person(pid, str(entry["who"]) if entry else pid,
+                                attributes=generated_attributes(
+                                    w.world_seed, f"{case.get('id')}:{entry['who'] if entry else pid}",
+                                    w.fixtures.get("generated_attribute_range")))
         # ⚠ A PERSON IS THE BOTTOM RUNG OF THE LADDER, and `tiny_world` models it that way. Without
         # this, `move` is refused everywhere. ⚠ THE STATED REASON IS NOW STALE AND THE FIXTURE
         # IS NOT: `_req_move` was retired by `W-A` and the typed cell short-circuits on an
@@ -529,7 +443,7 @@ def build_at(case: dict, seed: int = 0) -> World:
     # once; nothing else does."* Until this, the one writer in the tree ZEROED the dict --
     # `probes.py::p11`'s own comment: *"`capability` at zero ... for EVERY corpus person"* -- which
     # is why R-09's roll varies by SEED and FIXTURE and never by PERSON (`hole_register.yaml`
-    # H-126/H-127). Each seated entry writes ITS OWN `capability` onto ITS OWN person (position `17`
+    # H-126; the former H-127 stand-in is `opposed_ob(pool_default)`, B05.14). Each seated entry writes ITS OWN `capability` onto ITS OWN person (position `17`
     # widened this from "the primary entry's onto `p_a`", which is the same rule when the cast has
     # one entry). A case with no overlay, an anonymous seat, or an entry with no `capability`
     # leaves the person exactly as before: `Person`'s own empty-dict default, never a fabricated
@@ -888,6 +802,27 @@ def graded_losses(w: World, n: int) -> list:
 NO_ACT = "(no act)"
 
 
+def seats(w) -> dict:
+    """`{person id: [office id, ...]}` — every live `hold` whose object is an OFFICE and whose
+    subject is a person. A `hold` on a Record or a Rung is not a seat and is not counted."""
+    out: dict = defaultdict(list)
+    for t in w.tenures:
+        if t.kind == "hold" and t.live and t.object in w.offices and t.subject in w.persons:
+            out[t.subject].append(t.object)
+    return dict(out)
+
+
+def refusal_sets(w, n: int) -> tuple:
+    """`(refused, graded)`, two frozensets of act ids over the ACT STORE of `w` after `n` seasons.
+    An act is REFUSED when `corpus_run.attempts`' `refused` tuple for it is non-empty -- any Event of
+    one of its row's `emits_on_refusal` kinds is in the log, the driver's rule (`loop/driver.py`), so a
+    graded loss counts as refused. `graded` is `corpus_run.graded_losses`: the refused acts that are
+    losses of a contest rather than refusals (every one of them is also in `refused`). Neither reads
+    `attribute`'s `made`, which counts a graded loss as made too. Reads only."""
+    refused = frozenset(a.id for a, _made, ref in attempts(w, n) if ref)
+    return refused, frozenset(a.id for a in graded_losses(w, n))
+
+
 def degrees_by_verb(log, act_of: dict) -> dict:
     """`{verb: {degree: n}}` over the graded Events of `log` (an Event carries a `degree` only when
     the fold took the contest branch), each credited to the verb of its act, resolved through
@@ -919,8 +854,8 @@ def bands_that_differ(table=None) -> dict:
 def deposit_only_rulings() -> dict:
     """`{verb: ruling}`: the rows a ruling says are deposit-only (their product is a Claim minted at
     WITNESS, not a typed write). `tell` (`G1`); the graded inquiries (FI-01, RS-21 item 1), read from
-    `rosters.yaml: graded_inquiries` and not listed here."""
-    return {"tell": "G1", **{v: "RS-21 item 1 (FI-01)" for v in GRADED_INQUIRIES}}
+    `rosters.yaml: graded_tasks` (its `form: inquiry` rows, B07.01) and not listed here."""
+    return {"tell": "G1", **{v: "RS-21 item 1 (FI-01)" for v, r in GRADED_TASKS.items() if r.get("form") == "inquiry"}}
 
 
 def emits_and_writes_nothing(table=None, effects=None, rulings=None) -> dict:
@@ -941,18 +876,45 @@ def emits_and_writes_nothing(table=None, effects=None, rulings=None) -> dict:
     return out
 
 
-def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
+def told_redeposits_in(ledger) -> int:
+    """How many `told_by` claims in one person's `ledger` arrived when he ALREADY HELD the same
+    triple untold -- one belief stored twice, which the told channel's deposit-time guard in
+    `loop/witness.py` forbids (a held copy with an empty chain always skips the telling).
+
+    ⚠ DEPOSIT ORDER IS READ OFF THE CLAIM, NEVER OFF ITS LEDGER POSITION. The ledger is not kept in
+    arrival order: `state/ledgers.py::evict_over_cap` sorts it in place by `confidence * (when + 1)`
+    whenever it overflows its cap (`queries/world_q.py::wounded_with`: "position is NOT arrival
+    order"), so comparing positions can put a firsthand claim after a telling it preceded and miss a
+    true redeposit. `Claim.when` is the tick of DEPOSIT: every deposit in `loop/witness.py` stamps
+    `w.tick`, and `_refract` / `_credit` replace only `confidence`. `Claim.lap` orders deposits
+    within a tick (`state/carriers.py::Claim`). So a told claim is counted when an untold claim of
+    its triple was deposited at an EARLIER OR EQUAL `(when, lap)`.
+    ⚠ A TIE COUNTS. No field orders two deposits of one `(when, lap)` (the id is a hash), so a told
+    claim sharing its lap with a firsthand copy is counted as a redeposit: the counter's reader
+    asserts zero, and a detector that cannot see the order must not resolve the tie in the
+    defect's favour. A told claim whose holder saw the same thing only in a LATER lap is not a
+    redeposit (B01a.99: EMG-C3, drawn sheets, told at `when` 2, firsthand at 3 and 5) and is not
+    counted. The planted ledgers in `engine/season/tests/test_told_by_counter.py` are its falsifier."""
+    first_own, told = {}, []
+    for c in ledger:
+        key = (c.subject, c.predicate, c.value)
+        if c.source == "told_by":
+            told.append((key, (c.when, c.lap)))
+        elif key not in first_own or (c.when, c.lap) < first_own[key]:
+            first_own[key] = (c.when, c.lap)
+    return sum(1 for key, at in told if key in first_own and first_own[key] <= at)
+
+
+def run_case(case: dict, seed: int = 0, lane: str = "NPC", seasons_cap: int | None = None) -> dict:
     case = apply_rescale(case)
     scale, cid = str(case.get("scale")), case["id"]
     if scale not in set(RUNG_KINDS):
         return dict(id=cid, scale=scale, status="UNREPRESENTABLE", executed=[], refused=[],
                     seasons=0, why=f"`scale: {scale}` is not a rung kind", checks={})
-    n = seasons_for(case)
+    n = seasons_for(case, seasons_cap)
     w = build_at(case, seed)
     d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                      draw=draw_factory(w.world_seed, lambda: w.tick))
+    ch = P.chooser(w, verbs=resolvable_verbs())
     try:
         for _ in range(n):
             # `H-87` -- S39.3 gives the contest depth cap NO DEFAULT, so an uncapped call raised
@@ -983,9 +945,7 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     before = dict(DEFAULT_FIXTURES.reads)
     w2 = build_at(case, seed)
     d2 = SeasonDriver(w2)
-    mint2 = lambda pid, verb, subj: H(w2.world_seed, w2.tick, pid, f"act:{verb}:{subj}")
-    ch2 = make_chooser(w2.fixtures, mint2, verbs=resolvable_verbs(),
-                       draw=draw_factory(w2.world_seed, lambda: w2.tick))
+    ch2 = P.chooser(w2, verbs=resolvable_verbs())
     try:
         for _ in range(n):
             # ⚠ THE SAME FIXTURE, ON BOTH CALL SITES. A cap on the measured run and not the R4
@@ -1030,29 +990,25 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     # the tree, and `tools/ci_claim_provenance_check.py` is right to refuse one that cannot be.
     # ⚠ COUNTED PER WORLD AND SUMMED BY THE CALLER, like `degrees` above, rather than recomputed
     # from a second walk: the ledgers are this world's and the report is the corpus's.
-    # ⚠ ONE WALK OVER THE LEDGERS, NOT THREE. `sources`, `told_holders` and `told_redeposits`
-    # were three independent `for p_ in w.persons.values(): for c in p_.ledger` passes over the
-    # same pairs, run once per corpus case (up to 143 a run). The redeposit count still needs
-    # `own` complete before it can test membership, so it keeps its own second pass over THAT
-    # person's ledger — which is per-person and bounded by `ledger_cap`, not a third world walk.
+    # ⚠ ONE PERSON LOOP, NOT THREE. `sources`, `told_holders` and `told_redeposits` were three
+    # independent `for p_ in w.persons.values(): for c in p_.ledger` passes over the same pairs,
+    # run once per corpus case (up to 143 a run). Each ledger is now walked twice: once for its
+    # sources (which give `told_holders`), once by `told_redeposits_in`, the redeposit count's one
+    # owner (its docstring says how it reads deposit order: the ledger itself is not in it).
     sources, told_holders, told_redeposits = Counter(), 0, 0
     for p_ in w.persons.values():
-        own, told_here, holds_told = set(), [], False
-        for c in p_.ledger:
-            sources[c.source] += 1
-            if c.source == "told_by":
-                holds_told = True
-                told_here.append(c)
-            else:
-                own.add((c.subject, c.predicate, c.value))
-        told_holders += 1 if holds_told else 0
-        told_redeposits += sum(1 for c in told_here
-                               if (c.subject, c.predicate, c.value) in own)
+        mine = Counter(c.source for c in p_.ledger)
+        sources.update(mine)
+        told_holders += 1 if mine["told_by"] else 0
+        told_redeposits += told_redeposits_in(p_.ledger)
     # ⚠ THE REDEPOSIT COUNT IS THE ONE THAT CAUGHT A REAL DEFECT, so it is reported rather than
-    # left to a probe. A `told_by` claim whose triple the hearer ALREADY HOLDS firsthand is one
-    # belief stored twice — it tells them nothing and takes a `ledger_cap` slot from a claim that
-    # would have. The first cut of the told channel deposited 180 and **175 were this**; the
-    # corpus is where that is visible, because `build_world(0)` produces none.
+    # left to a probe. A `told_by` claim whose triple the hearer ALREADY HELD firsthand WHEN IT
+    # ARRIVED is one belief stored twice — it tells them nothing and takes a `ledger_cap` slot from
+    # a claim that would have. The first cut of the told channel deposited 180 and **175 were
+    # this**; the corpus is where that is visible, because `build_world(0)` produces none. A told
+    # claim whose holder SAW the same thing only LATER is not one (B01a.99: EMG-C3, drawn sheets,
+    # told at `when` 2, firsthand at 3 and 5): no deposit-time guard can prevent it, and the
+    # counter does not count it.
     # `17`: the cast entries that name a player and so were NOT seated, by `who` -- the PLAN's
     # *"reported `WAITS-ON-PLAYER` naming the entry that caused it"*. Read through `seating`, the
     # same resolver `build_at` seats from, so the two cannot disagree about who was left out.
@@ -1090,13 +1046,14 @@ def planted_control(seed: int = 0) -> tuple:
     return before, _r3_propagates(w, d)
 
 
-def main(seed: int = 0) -> int:
+def main(seed: int = 0, seasons_cap: int | None = None) -> int:
     rows = []
     for lane in ("NPC", "ARC"):
         for c in R.load_cases(lane):
-            r = run_case(c, seed, lane); r["lane"] = lane; rows.append(r)
+            r = run_case(c, seed, lane, seasons_cap); r["lane"] = lane; rows.append(r)
     by = Counter(r["status"] for r in rows)
-    print(f"CORPUS RUN — {len(rows)} cases, seed {seed}, seasons from `temporal.span_seasons`")
+    print(f"CORPUS RUN — {len(rows)} cases, seed {seed}, seasons from `temporal.span_seasons`"
+          + (f", capped at {seasons_cap}" if seasons_cap is not None else ""))
     for k, v in sorted(by.items()):
         print(f"  {k:18} {v}")
     un = Counter(r["scale"] for r in rows if r["status"] == "UNREPRESENTABLE")
@@ -1252,5 +1209,18 @@ def main(seed: int = 0) -> int:
     return 0
 
 
+def parse_argv(argv: list[str]) -> tuple[list[int], int | None]:
+    """`[seed] [--seasons N]`: the positional seed as before; `--seasons N` caps every case at N seasons.
+    A bad value, a second seed or a missing number exits with argparse's message."""
+    ap = argparse.ArgumentParser(prog="corpus_run", add_help=False)
+    ap.add_argument("seed", type=int, nargs="?")
+    ap.add_argument("--seasons", type=int)
+    ns = ap.parse_args(argv)
+    if ns.seasons is not None and ns.seasons < 1:
+        ap.error("--seasons must be at least 1")
+    return ([] if ns.seed is None else [ns.seed]), ns.seasons
+
+
 if __name__ == "__main__":
-    raise SystemExit(main(*(int(a) for a in sys.argv[1:])))
+    args, cap = parse_argv(sys.argv[1:])
+    raise SystemExit(main(*args, seasons_cap=cap))

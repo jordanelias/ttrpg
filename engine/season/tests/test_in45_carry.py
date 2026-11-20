@@ -194,9 +194,12 @@ def test_rem25_carry_forms_on_the_petition_he_holds_and_not_on_a_question_that_m
 def test_in45_a_bench_determines_a_carried_matter():
     """The carried item is the docket `open_case` writes: the Duke's bench `determine`s the party
     and takes the matter off it. CONTROL: with no carry the same determination is refused (nothing
-    on the docket). v9 SC-03b: `determine` is contested, so the bench is a STRONG JUDGE (`pool_default`
-    30, as `test_u7_remit.JUDGE`) and the control asserts the band it opened at."""
-    w, d = _filed(DEFAULT_FIXTURES.sweep("pool_default", JUDGE["pool_default"]))
+    on the docket). v9 SC-03b: `determine` is contested, so the bench is a STRONG JUDGE (`test_u7_remit.JUDGE`, rewritten at
+    B05.99 to the pool floor 60) and the control asserts the band it opened at."""
+    fixtures = DEFAULT_FIXTURES
+    for name, value in JUDGE.items():
+        fixtures = fixtures.sweep(name, value)
+    w, d = _filed(fixtures)
     det = Act(id="dt0", actor=DUKE, verb="determine", via=SEAT, payload={"subject": PARTY})
     assert _kinds(_fold(w, d, det)) == ["determine.refused"]
     assert _kinds(_fold(w, d, _carry("c1"))) == ["petition.carried"]

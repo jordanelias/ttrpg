@@ -1,0 +1,20 @@
+A-146 (N p3:122; n=600 seed prov): low 0.84 / 0.565 vs 0.425; ordinary 0.16 / 0.257 vs 0.223; high 0 / 0.093 both
+  low       [on] carried 0.565 broke 0.84 [off] carried 0.425 broke 0.00
+  ordinary  [on] carried 0.257 broke 0.16 [off] carried 0.223 broke 0.00
+  high      [on] carried 0.093 broke 0.00 [off] carried 0.093 broke 0.00
+D3 (N p3:41; n=300 seed d3): 0.530/0.463/0.507; control 0.480/0.463/0.363
+  press-then-argue 0.530/0.480 argue 0.463/0.463 press-every 0.507/0.363
+F7 uncharged (N p3:48; n=600 seed f7): argue 0.243, rest 0.300, auto 0.353
+  argue 0.253 auto 0.353 rest 0.260
+  same, seed 'crit' (the critic's rows): argue 0.243 rest 0.300 auto 0.353
+partial judge (N p3:137; n=300 seed part): judge2 0.490, judge3 0.590; flattened 0.637/0.623
+   () {'judge2': 0.49, 'judge3': 0.59}
+   ('bearing',) {'judge2': 0.6366666666666667, 'judge3': 0.6233333333333333}
+gauge (N p3:108; trial bench j1, smart chooser, seed att): 0.327/0.360/0.440 at Attunement 1/4/7
+  n=300: {1: 0.32666666666666666, 4: 0.36, 7: 0.44}
+  n=2000: {1: 0.3385, 4: 0.3675, 7: 0.431}
+party-decider rows (N p3:124; n=600 seed pd): conv 0.355/0.312; quest 0.402/0.367; noble 0.248/0.273; control 0.485/0.408
+  conversation   argues 0.355 rests 0.312
+  questioning    argues 0.402 rests 0.367
+  noble          argues 0.248 rests 0.273
+  control trial  argues 0.485 rests 0.408

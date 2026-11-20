@@ -1,20 +1,16 @@
-"""`season.data.matrix` -- S23/S30's write matrix, extracted from `shape.py` (step 2 of the
-decomposition, a PURE MOVE: no behaviour changed, only where the code lives).
+"""`season.data.matrix` -- S23/S30's write matrix.
 
-Owns the seven-step loop's `Step`/`WriteClass` enums (six until M4 added `ENCOUNTER`,
-`04 §A.2:134` as amended 2026-09-28, `ED-IN-0279` clause (a)), the STEP -> WRITE CLASS relation,
+Owns the seven-step loop's `Step`/`WriteClass` enums (`04 §A.2:134`, `ED-IN-0279` clause (a): the
+seventh step is `ENCOUNTER`), the STEP -> WRITE CLASS relation,
 and the
 `(kind, field)` table loaded from `write_matrix.yaml` that says which step may write which record
 field, and how (S30's own rule: ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION).
 
-⚠ TWO THINGS THIS MODULE DELIBERATELY DOES NOT OWN, BOTH ADJUDICATED AT THE SAME TIME AS THE MOVE:
-`MATRIX_REFUSAL_LAW` travels with its only reader -- the gate in `World` -- which is why it is now
-in `season.state.world` and not here. (This sentence read *"stays in `shape.py`"* until step 4;
-that named where the READER was, and the reader moved. The ruling is unchanged: the table goes
-where the gate is.) It is a loop over a fix, not a definition, and moving it here would invite
-editing it as one. `rows_without_a_producer` also left `shape.py`, at step 3, for
-`season.data.verbs`: it reads `VERB_TABLE`, which belongs to the verb table this module does not
-load, and it moved with it.
+⚠ TWO THINGS THIS MODULE DELIBERATELY DOES NOT OWN: `MATRIX_REFUSAL_LAW` travels with its only
+reader -- the gate in `World` -- so it lives in `season.state.world` and not here; the table goes
+where the gate is. It is a loop over a fix, not a definition, and moving it here would invite
+editing it as one. `rows_without_a_producer` lives in `season.data.verbs`: it reads `VERB_TABLE`,
+which belongs to the verb table this module does not load.
 
 `load_yaml` -- the one YAML reader every loader in this package shares -- lives in
 `season.data.rosters`, not here, which is why `season/data/__init__.py` loads `rosters` before
@@ -43,7 +39,7 @@ class Step(enum.Enum):
     RESOLVE = "RESOLVE"
     # M4 (`ED-IN-0279` clause (a), `04 §A.2:134` as amended 2026-09-28): the SEVENTH step, between
     # RESOLVE and WITNESS. It holds no state between steps -- a deferred contest's declaration is
-    # an Event in the round's own list, the act is already in the act store -- and it shares
+    # an Event in the lap's own list, the act is already in the act store -- and it shares
     # barrier 3 (`04 §C.1`) rather than opening a fifth. See `loop/encounter.py`.
     ENCOUNTER = "ENCOUNTER"
     WITNESS = "WITNESS"
@@ -142,7 +138,6 @@ _MATRIX_ROW_KEYS = frozenset(f.name for f in fields(MatrixRow)) | {"class"}
 
 
 def _load_write_matrix() -> dict:
-    import yaml as _yaml
     if not WRITE_MATRIX_YAML.exists():
         raise SystemExit(f"write_matrix.yaml not found at {WRITE_MATRIX_YAML}")
     doc = load_yaml(WRITE_MATRIX_YAML.read_text())
@@ -163,10 +158,6 @@ def _load_write_matrix() -> dict:
         social = {"true": True, "false": False, "n/a": None}[r["social"].strip()]
         # THE CROSS-CHECK. `class:` is V2's prose; the derivation is this file's. If they
         # disagree, one of them is wrong and neither may be trusted silently.
-        derived = "/".join(sorted({STEP_CLASS[st].value for st in steps},
-                                  key=lambda v: [s.value for s in Step].index(v)
-                                  # [JUSTIFIED: a SORT SENTINEL, not a game value -- it orders a class outside `Step` last, and any value above len(Step) is equivalent]
-                                  if v in [s.value for s in Step] else 99))
         stated = r["class"].strip()
         if steps and stated != "—":
             want = set(stated.split("/"))
@@ -204,7 +195,7 @@ MATRIX: dict[tuple[str, str], MatrixRow] = _load_write_matrix()
 # a bare string (W2's own shape: no producing verb, no MATTER write) or a mapping with its own
 # `reason`/`needs` -- `Person.beliefs` is retired because #358 rev.2 §D.1.1 DELETES the field, not
 # because nothing produces it, and telling that writer to "add a producing verb" would be advice
-# for the wrong defect. Found by a read-only critic, layer-conformance pass, 2026-09-25.
+# for the wrong defect.
 _W2_LAW = ("retired by W2 -- its `emits:` kind is produced by no Part E verb "
            "and written at no MATTER site")
 _W2_NEEDS = "a Part E verb that produces its `emits:` kind, added in the same commit as the row"
@@ -223,20 +214,17 @@ MATRIX_RETIRED: dict = {
     for x in (load_yaml(WRITE_MATRIX_YAML.read_text()).get("retired") or [])
 }
 
-# S320's disclosure hook. W2 empties it BY CONSTRUCTION -- the three rows it used to carry were
-# instrument assumptions only because the old two-clause derivation could not reach them, and
-# S D2's DR-3 states all three. `report.py` still reads it, and it now reports zero.
+# S320's disclosure hook, empty BY CONSTRUCTION: S D2's DR-3 states every partition row. `report.py`
+# reads it and reports its length.
 PARTITION_ASSUMED: dict[tuple[str, str], tuple[bool, str]] = {}
 
 
 def assume_partition_row(record_kind: str, fieldname: str, social: bool, why: str) -> None:
     """THE CHANNEL, kept live so its emptiness means something.
 
-    ⚠ W2 emptied `PARTITION_ASSUMED` and reported "ZERO exercised assumptions" as its proof. An
-    adversarial pass observed that the dict had become a LITERAL NO CODE PATH COULD POPULATE, so
-    the claim was satisfiable BY DELETION and `ASSUMPTIONS.md` read "0 of 0" rather than "0 of 3".
-    That is §0.1 point 2 in its purest form: an assertion that cannot observe the failure it
-    excludes. This function is the path, so zero is now a measurement rather than an absence.
+    ⚠ A `PARTITION_ASSUMED` no code path could populate would make "ZERO exercised assumptions"
+    satisfiable BY DELETION -- §0.1 point 2: an assertion that cannot observe the failure it
+    excludes. This function is the path, so zero is a measurement rather than an absence.
 
     An instrument that must assume a schema row calls this. It should never need to — §D2's DR-3
     states the three rows that used to be assumed — and if it ever does, `report.py` says so."""
@@ -244,10 +232,8 @@ def assume_partition_row(record_kind: str, fieldname: str, social: bool, why: st
     ASSUMPTIONS_USED.add((record_kind, fieldname))
 
 
-# ⚠ REV 5. This set was WRITTEN AND NEVER READ for two revisions, while S320's comment promised
-# the assumed rows were "REPORTED IN THE OUTPUT, so a reader can see exactly how much of L4's
-# enforcement rests on the instrument". Under this file's own fidelity rule 6 that was a false
-# claim of a disclosure mechanism. `report.py` now reads it.
+# The assumed rows are "REPORTED IN THE OUTPUT, so a reader can see exactly how much of L4's
+# enforcement rests on the instrument"; `report.py` reads this set.
 ASSUMPTIONS_USED: set[tuple[str, str]] = set()
 
 

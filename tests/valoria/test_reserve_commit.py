@@ -9,11 +9,12 @@ GATED behind MB_RESERVE_COMMIT (default OFF): the `reserve` instruction stays in
 active from turn 1 (byte-exact; run_multi_unit_battle is not in the bat.py golden battery anyway)."""
 import importlib
 import os
-import random
 import sys
 
 
 import pytest  # noqa: E402
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 
 def _reload(on):
@@ -34,13 +35,13 @@ def _reload(on):
 def _pair(on, a_instructions=(), b_instructions=()):
     """Build a single-pair multi-unit battle: A vs B. Returns (config, log)."""
     C, E, O = _reload(on)
-    random.seed(77)
-    ua = E.build_unit('Line', 3, 'A0', 'A', 20, instructions=a_instructions)
-    ub = E.build_unit('Line', 3, 'B0', 'B', 20, instructions=b_instructions)
-    anchor_map = {('Line', 3): 20}
-    res = O.run_multi_unit_battle([ua], [ub], [(0, 0)], {0: 'Line'}, {0: 'Line'},
-                                  anchor_map, max_battle_turns=6)
-    return C, O, res
+    with rngsource.using(draw.seeded(draw.H2("test_reserve_commit", 77))):
+        ua = E.build_unit('Line', 3, 'A0', 'A', 20, instructions=a_instructions)
+        ub = E.build_unit('Line', 3, 'B0', 'B', 20, instructions=b_instructions)
+        anchor_map = {('Line', 3): 20}
+        res = O.run_multi_unit_battle([ua], [ub], [(0, 0)], {0: 'Line'}, {0: 'Line'},
+                                      anchor_map, max_battle_turns=6)
+        return C, O, res
 
 
 def test_unit_in_reserve_predicate():

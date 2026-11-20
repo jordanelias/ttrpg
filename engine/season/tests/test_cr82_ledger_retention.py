@@ -22,7 +22,7 @@ from __future__ import annotations
 
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..harness import storybar
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 
 SEED = 1
 SEASONS = 2

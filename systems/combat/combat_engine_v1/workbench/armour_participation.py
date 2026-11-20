@@ -31,19 +31,19 @@ To compare against another commit, run it in a worktree and diff:
     git worktree add /tmp/wt <sha> && (cd /tmp/wt && python systems/combat/combat_engine_v1/workbench/armour_participation.py tiers)
 """
 import sys, os
-import random
 import zlib
 import collections
 
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
-import core
-import wrapper
-import combat_systems as S
-import weapons as W
-from combatant import Combatant, WEAPONS
-from config import CFG
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
+from engine.dice_engine import draw
+from modules.combat import core
+from modules.combat import wrapper
+from modules.combat import combat_systems as S
+from modules.combat import weapons as W
+from modules.combat.combatant import Combatant, WEAPONS
+from modules.combat.config import CFG
 
 REFERENCE = 'arming'   # the uniform opponent every cell is measured against, as in workbench/balance.py
 
@@ -70,7 +70,7 @@ def capability(name, cfg=CFG):
 
 def _duel(w, armor, n, cfg=CFG):
     """Position-swapped duel vs the reference weapon. Returns (decided_rate, share_of_decided|None)."""
-    rng = random.Random(_seed((w, armor)))
+    rng = draw.seeded(draw.H2("armour_participation", _seed((w, armor))))
     wins = dec = 0
     for i in range(n):
         swap = i >= n // 2
@@ -141,7 +141,7 @@ def strike_profile(n=20, armor='heavy', cfg=CFG):
     try:
         for w in sorted(WEAPONS):
             cur['w'] = w
-            rng = random.Random(_seed((w, armor)))
+            rng = draw.seeded(draw.H2("armour_participation", _seed((w, armor))))
             for _ in range(n):
                 wrapper.fight(Combatant('A', weapon=w, armor=armor),
                               Combatant('B', weapon=REFERENCE, armor=armor), cfg, rng)

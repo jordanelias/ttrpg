@@ -1,10 +1,8 @@
 """`season.loop.effects` — the resolver's BODY. One effect per verb that writes.
 
-EXTRACTED, step 5 of the decomposition (a PURE MOVE). `EFFECTS`, its decorator, the ONE operand
-reader (`_operand`) and the eleven `_eff_*` (ten until `release`, 2026-09-11) move together and
-must: §8's *"THE OWNER OF THE RULE, AND
-THREE EFFECTS HAD THEIR OWN COPY"* is about `_operand` specifically, and the decorator-filled
-table has to be defined where the decorated functions are or it is empty when the fold reads it.
+`EFFECTS` is one flat dict every domain module's `@effect_for(...)` decorators fill; the dict, the
+decorator and the ONE operand reader (`_operand`) live in `effects_shared.py`. §8's *"THE OWNER OF
+THE RULE, AND THREE EFFECTS HAD THEIR OWN COPY"* is about `_operand` specifically.
 
 WHAT THIS MODULE IS AGAINST, which is the reason it exists at all (§27.2). The fold once took an
 `effect` parameter — a CALLER-SUPPLIED LAMBDA that inspected `a.verb` and returned Events, and
@@ -12,12 +10,10 @@ every probe wrote its own. That is a resolver per caller, each free to disagree 
 does. A verb-keyed effect registered here is one implementation for every caller, and a verb with
 a `writes:` column and no effect REFUSES rather than silently writing nothing. Register row H-63.
 
-⚠ NOTHING HERE TAKES A WRITE TOKEN, AND NO EFFECT CALLS `w.write`. The first version of this
-docstring said every effect writes THROUGH `w.write(...)`, which is the exact inversion the old
-`_eff_confer` docstring refuted -- *"AN EFFECT MUTATES AND RETURNS THE IDS IT TOUCHED; IT DOES NOT
-CALL `w.write` … My first version did both, and the fold correctly refused."* Caught by a
-read-only critic, and it is §47's failure exactly: a false claim of enforcement stops the next
-reader checking.
+⚠ NOTHING HERE TAKES A WRITE TOKEN, AND NO EFFECT CALLS `w.write`: an effect returns a `Change`
+(below) and the fold hands it to `World.write`. An effect that called `w.write` would be a write
+inside a write, which the fold refuses. A claim that every effect writes THROUGH `w.write(...)` is
+§47's failure exactly: a false claim of enforcement stops the next reader checking.
 
 ⚠⚠ G4 (plan position 7): THE CONTRACT EVERY EFFECT HERE IS WRITTEN TO, AND IT CHANGED. An effect
 no longer MUTATES and REPORTS; it DESCRIBES. It reads the world as its predecessors left it and
@@ -32,7 +28,7 @@ happen (`establish`'s `moved`, `_grant_remit`'s return value read as an `earned`
 gate's now, once.
 
 WHAT EACH EFFECT NAMES IS A DECISION, and each docstring below states its own. Two rules hold for
-all twelve, and both exist to keep every hash that is not `work`'s where it was:
+every effect, and both exist to keep every hash that is not `work`'s where it was:
 
   1. AN EFFECT NAMES THE IDS IT USED TO REPORT, IN THE ORDER IT REPORTED THEM -- and where it
      used to decide by hand WHETHER to report one (`establish`'s office), it names it always and
@@ -45,22 +41,20 @@ all twelve, and both exist to keep every hash that is not `work`'s where it was:
      `move` up no ladder, an `utter` over an existing Proposition) returns it, and the gate's
      `NoOpReceipt` is the refusal -- the same channel as an effect that ran and moved nothing.
 
-THE SPLIT (PHASE 4 of the decomposition, per the repo owner's settled requirement that each
-subsystem be its own module -- per-subsystem files, human-readable, self-contained, the shape
-`queries/` already had): this file's body divided into six sibling modules in `loop/`, flat --
-no package, no `__init__.py` barrel:
+THE SPLIT: each subsystem is its own module -- per-subsystem files, human-readable, self-contained,
+the shape `queries/` has -- sibling modules in `loop/`, flat, no package, no `__init__.py` barrel:
 
   * `effects_shared.py`      -- `effect_for`, `_operand`, and the handful of helpers three or
                                  more domain files' effects share.
-  * `effects_governance.py`  -- office/seat lifecycle: confer, establish, release, revoke,
-                                 convene, oblige, requisition.
-  * `effects_economy.py`     -- labour, repair, material transfer: work, restore, transfer, exchange.
-  * `effects_migration.py`   -- travel and settlement: move, migrate.
-  * `effects_founding.py`    -- minting works: found, build.
-  * `effects_information.py` -- records, propositions, matters: create_record, issue, open_case,
-                                 determine, petition, survey, give, destroy_record, utter, commit.
-  * `effects_combat.py`      -- casualties and morale: fight (renamed from "kill / wound"), march.
-  * `effects_army.py`        -- a faction's army record: recruit, form_unit, assign_troops, order_unit (ED-IN-0306).
+  * `effects_governance.py`  -- office/seat lifecycle.
+  * `effects_economy.py`     -- labour, repair, material transfer.
+  * `effects_migration.py`   -- travel and settlement.
+  * `effects_founding.py`    -- minting and razing works.
+  * `effects_information.py` -- records, propositions, matters.
+  * `effects_combat.py`      -- casualties and morale; the person raised.
+  * `effects_army.py`        -- a faction's army record (ED-IN-0306).
+  Which verbs a file registers is its `@effect_for(...)` decorators (each file's header names them):
+  this list names the split, not the verbs, so it cannot fall behind a verb added to a file.
 
 ⚠ THIS FILE IS THE REASONED EXCEPTION TO `queries/__init__.py`'s "THIS FILE IMPORTS NONE OF ITS
 SUBMODULES" CONVENTION, NOT A SILENT COPY OF A PATTERN THAT DOES NOT FIT HERE. `queries/`'s reason

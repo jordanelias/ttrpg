@@ -19,10 +19,10 @@ measured readings and reports it `UNGRADED`, naming the missing flag, rather tha
 threshold. A `FAIL` makes the exit status 1.
 
 WHAT THIS IS NOT. It is not a second `populated.run` — that owner is untouched, imported and
-reused for its construction (`build_realm`, `make_chooser`, `SeasonDriver`, `resolvable_verbs`,
-`H`, `draw_factory`). This module only keeps ONE driver alive across many seasons, where every
+reused for its construction (`build_realm`, `probes.chooser`, `SeasonDriver`, `resolvable_verbs`).
+This module only keeps ONE driver alive across many seasons, where every
 existing caller builds a fresh one, and records what crosses its path along the way. It is not a
-second `corpus_run`/`run_cases`: those still own PLAYABLE/DEGRADED/BLOCKED and R1/R3/R4/R5; the two
+second `corpus_run`/`run_cases`: those still own DECLARED-PRESENT/DEGRADED/BLOCKED and R1/R3/R4/R5; the two
 grades here are about duration alone and read only the rows this harness itself wrote.
 
 WHERE THE OUTPUT GOES, AND WHY NOT `engine/season/runs/`. That tree is `harness/report.py`'s
@@ -42,8 +42,8 @@ reporting an unruled hole -- the WORLD stops, `end_reason: design_gap_escape`, a
 filled in to make it go away (scripting drift, off the register). Anything else is a genuine code
 defect and is fix-worthy at the raising site, in its own commit, never inside this harness.
 
-ARCS ARE OUT OF SCOPE BY DECISION (`ED-IN-0225`, Jordan 2026-09-13: *"Maybe we just ignore the arcs
-now"*). This module seats and reads the NPC lane only, exactly as `populated.build_realm` already
+AN ARC HAS NO CARRIER (`ED-IN-0225`, 2026-09-13: no type, no rung, no tenure kind; the carrier is not
+to be built). This module seats and reads the NPC lane only, exactly as `populated.build_realm` already
 does, and mints no carrier, field, Event kind, write-matrix row, roster or register row for an arc,
 a story, a thread or a plot. Nothing here is named for one either.
 """
@@ -62,13 +62,14 @@ import traceback
 from collections import Counter, defaultdict
 from pathlib import Path
 
-# Four of these five mirror lines `harness/populated.py` already imports for this exact
-# composition; the fifth (`build_realm`/`census`) is imported FROM `populated.py` itself, which
-# obviously does not import from itself.
-from ..decision import make_chooser
+# `SeasonDriver`/`resolvable_verbs` mirror lines `harness/populated.py` already imports for this exact
+# composition; the chooser is `probes.chooser`, the one owner of its composition (`CI-06`); and
+# `build_realm`/`census` are imported FROM `populated.py` itself, which obviously does not import
+# from itself.
 from ..loop.driver import SeasonDriver, resolvable_verbs
-from ..state.ids import H, draw_factory
-from .populated import build_realm, census
+from . import probes as P
+from ..boot.realm import build_realm
+from .populated import census
 # `corpus_run._attribute_acts` is the ONE owner of the made/refused rule -- `[(act, made, refused)]`;
 # `attribute` calls it over the fold set (this module's reading) and `attempts` over the act store. Reused
 # rather than re-derived from `emits`/`emits_on_refusal` a second time (CLAUDE.md §8, §0.06 S: "one rule
@@ -202,7 +203,7 @@ def _tenure_row(t) -> tuple:
 def _claim_row(c) -> dict:
     return {"id": c.id, "holder": c.holder, "subject": c.subject, "predicate": c.predicate,
             "value": c.value, "when": c.when, "source": c.source, "confidence": c.confidence,
-            "visibility": c.visibility, "round": c.round, "teller": c.teller,
+            "visibility": c.visibility, "round": c.lap, "teller": c.teller,
             "chain": list(c.chain), "doer": c.doer}
 
 
@@ -242,10 +243,10 @@ def _append_jsonl(path: Path, row: dict) -> None:
 
 
 def _record_escape(exceptions_path: Path, escape_type: str, seed: int, arm: str, batch: int,
-                   season: int, tick: int, round_: int, detail: dict) -> None:
+                   season: int, tick: int, lap_: int, detail: dict) -> None:
     _append_jsonl(exceptions_path, {
         "type": escape_type, "seed": seed, "arm": arm, "batch": batch, "season": season,
-        "tick": tick, "round": round_, **detail,
+        "tick": tick, "round": lap_, **detail,
     })
 
 
@@ -253,6 +254,7 @@ def _record_escape(exceptions_path: Path, escape_type: str, seed: int, arm: str,
 # ONE WORLD, MANY SEASONS.
 # ---------------------------------------------------------------------------------------------
 
+@TRACE.recording()      # the one window this instrument reads `TRACE.gaps` and `.counts()` in
 def _run_world(args: argparse.Namespace, head: str, world_dir: Path, argv: list) -> str:
     seed, arm = args.seed, args.arm
 
@@ -264,9 +266,7 @@ def _run_world(args: argparse.Namespace, head: str, world_dir: Path, argv: list)
     w = build_realm(seed)                                                  # cap=None: the full realm
     w.fixtures = w.fixtures.sweep("question_aggregation_rule", arm)        # BEFORE the chooser
     d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                      draw=draw_factory(w.world_seed, lambda: w.tick))
+    ch = P.chooser(w, verbs=resolvable_verbs())
 
     pre_census = census(w)
     world_meta = {
@@ -329,7 +329,7 @@ def _run_world(args: argparse.Namespace, head: str, world_dir: Path, argv: list)
                 # checks, `state/gate.py`'s `NoToken`). Record the same traceback/frame/hashes a
                 # crash gets, so a reader can tell which it was without re-running.
                 _record_escape(exceptions_path, "instrument_defect", seed, arm, b, s, w.tick,
-                              d.round, {"exception_class": type(exc).__name__,
+                              d.lap, {"exception_class": type(exc).__name__,
                                        "message": str(exc),
                                        "traceback": traceback.format_exc(),
                                        "frame": _innermost_season_frame(exc),
@@ -338,7 +338,7 @@ def _run_world(args: argparse.Namespace, head: str, world_dir: Path, argv: list)
                 break
             except ShapeGap as exc:
                 _record_escape(exceptions_path, "design_gap_escape", seed, arm, b, s, w.tick,
-                              d.round, {"exception_class": type(exc).__name__,
+                              d.lap, {"exception_class": type(exc).__name__,
                                        "kind": exc.kind, "what": exc.what, "where": exc.where,
                                        "needs": exc.needs, "law": exc.law,
                                        "traceback": traceback.format_exc(),
@@ -347,7 +347,7 @@ def _run_world(args: argparse.Namespace, head: str, world_dir: Path, argv: list)
                 end_reason, stopped = "design_gap_escape", True
                 break
             except Exception as exc:                                     # noqa: BLE001 -- C.6.1
-                _record_escape(exceptions_path, "crash", seed, arm, b, s, w.tick, d.round, {
+                _record_escape(exceptions_path, "crash", seed, arm, b, s, w.tick, d.lap, {
                     "exception_class": type(exc).__name__, "message": str(exc),
                     "traceback": traceback.format_exc(),
                     "frame": _innermost_season_frame(exc),

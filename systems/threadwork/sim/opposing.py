@@ -34,9 +34,11 @@ from dataclasses import dataclass
 
 from engine.dice_engine import dice_engine
 from engine.dice_engine.dice_engine import roll_pool
+from systems.threadwork.sim.params import (
+    COHERENCE_COST_BY_SCALE, DEPTH_OB, FR_SURCHARGE, MENDING_OB, TN_STANDARD,
+)
 from systems.threadwork.sim.operations import (
-    DEPTH_OB, MENDING_OB, TN_STANDARD,
-    _actor_pool, COHERENCE_COST_BY_SCALE, FR_SURCHARGE, OperationResult,
+    _actor_pool, OperationResult,
     aims_at_own_configuration, apply_mending_feedback, charge_working, mending_priced_scale,
     price_mending,
 )
@@ -156,8 +158,7 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
 
     rng = rng if rng is not None else (world.rng if world is not None and hasattr(world, 'rng') else None)
     if rng is None:
-        import random as _r
-        rng = _r.Random()
+        raise TypeError("opposing: no `rng` (pass `draw.seeded(...)` or a world with `.rng`); there is no default stream")
 
     # Roll both pools
     a_pool = _actor_pool(actor_a)
@@ -209,7 +210,7 @@ def resolve_opposing_operations(actor_a, actor_b, op_type: str, target: dict,
                   'knot_ob_penalty': KNOT_STRAIN_FR_LOSER if is_fr else KNOT_STRAIN_STANDARD_LOSER}
     elif a_deg == 'Partial' and b_deg == 'Partial':
         # Weak oscillation — d6 1-2 = Shifting Object one scale below, 3-6 = none
-        shift_roll = rng.randint(1, 6)
+        shift_roll = rng.die(1, 6)  # [JUSTIFIED: a d6, the range of the `randint(1, 6)` it replaces (B06.04)]
         outcome = f"Weak oscillation; d6={shift_roll} → " + ("Shifting Object one scale below" if shift_roll <= 2 else "no effect")
         ms_delta = -1
         a_cons = {'coherence_delta': COHERENCE_COST_BY_SCALE.get(scale, 0) - 1,

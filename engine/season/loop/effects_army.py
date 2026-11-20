@@ -11,7 +11,7 @@ which is the verb's refusal (`NO_CHANGE` -> the row's `*.refused`).
 THE ONE WRITE IS `(Record, subject_matter)`, a matrix row this position adds: every other Record kind is written
 once, inside its mint. Each effect declines a Record that is not an `army`, so no other kind gains a mutable body.
 
-WHAT THE COMMAND SAYS IS THE ACT'S PAYLOAD (a cohort, a troop type, a count, a subformation's name and tactics), not
+WHAT THE COMMAND SAYS IS THE ACT'S PAYLOAD (a cohort, a troop type, a count, a unit's name and tactics), not
 an operand: the operand vocabulary is closed at eight and names none of these (`rosters.yaml: requires_operands`).
 So these verbs are reached by a hand-built act -- what the menu builds -- and `Fixtures withheld_verbs` keeps
 `decision/options.py::opening_set` from forming them for anybody.
@@ -28,7 +28,7 @@ from ..queries import world_q
 from ..queries.world_q import faction_holding
 from ..queries.inputs import ArmyCommand
 from ..state.gate import NO_CHANGE, Change, Subject
-from .effects_shared import _operand, effect_for
+from .effects_shared import _operand, _scaled, effect_for
 
 
 def _army(w: "World", a: "Act"):
@@ -83,6 +83,10 @@ def _eff_recruit(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     if (len(args) != 3 or cohort is None or not cohort.weight > 1
             or not world_q.raisable_by(w, cohort.id, rec.subject_matter["faction"])):
         return NO_CHANGE
+    # B07.02 (18-A edit 5): the turnout is the band's share of the `count` asked for (`_scaled`; no band, or a full one, is all of it).
+    # [ASSUMPTION: `14_VERBS_MILITARY`'s own recruit map is B22's; until it lands the one `task_fraction` table reads here]
+    if isinstance(args["count"], int):
+        args = dict(args, count=_scaled(args["count"], res))
     args = dict(args, weight=cohort.weight, sites=world_q.training_sites(w, cohort.id),
                 full=w.fixtures.get("condition_scale"), others=world_q.other_army_records(w, rec.id))
     return _apply(w, a, "recruit", args, "army.recruited")
@@ -90,20 +94,20 @@ def _eff_recruit(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
 
 @effect_for("form_unit")
 def _eff_form_unit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
-    """FORM A SUBFORMATION: an empty, named one of `troop_type` (and optionally a `role` from the type's menu)."""
+    """FORM A UNIT: an empty, named one of `troop_type` (and optionally a `role` from the type's menu)."""
     return _apply(w, a, "form", _payload(a, "name", "troop_type", "role"), "army.formed")
 
 
 @effect_for("assign_troops")
 def _eff_assign_troops(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
-    """ASSIGN TROOPS: move `count` trained troops of `cohort` into subformation `name`, or out of it when `count` is
-    negative. No trooper is created or lost."""
+    """ASSIGN TROOPS: move `count` trained troops of `cohort` into unit `name`, or out of it when `count` is
+    negative. No man is created or lost."""
     return _apply(w, a, "assign", _payload(a, "name", "cohort", "count"), "army.assigned")
 
 
 @effect_for("disband_unit")
 def _eff_disband_unit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
-    """DISBAND A SUBFORMATION: remove subformation `name`; its troops return to the trained, unassigned pool."""
+    """DISBAND A UNIT: remove unit `name`; its troops return to the trained, unassigned pool."""
     return _apply(w, a, "disband", _payload(a, "name"), "army.disbanded")
 
 
@@ -116,7 +120,7 @@ def _eff_discharge_troops(w: "World", a: "Act", res: "Resolution | None" = None)
 
 @effect_for("order_unit")
 def _eff_order_unit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
-    """ORDER A SUBFORMATION OR THE ARMY: set subformation `name`'s `role`, `stance`, `target` and `fall_back_at`
+    """ORDER A UNIT OR THE ARMY: set unit `name`'s `role`, `posture`, `target` and `fall_back_at`
     (a field the payload leaves out is unchanged), or the army's `strategy` alone."""
-    return _apply(w, a, "order", _payload(a, "name", "role", "stance", "target", "fall_back_at", "strategy"),
+    return _apply(w, a, "order", _payload(a, "name", "role", "posture", "target", "fall_back_at", "strategy"),
                   "army.ordered")

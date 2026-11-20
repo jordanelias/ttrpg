@@ -1,0 +1,55 @@
+conversation                  sp=(('a', 'for'), ('b', 'against')) dec=('b',) room=('none', 0.0, 0.5)
+    nx=3.00 moves={'argue': 968, 'press': 232} press_by_side={'for': 39, 'against': 193}
+    ends={'budget': 346, 'yielded': 54}
+    bands={'failure': 192, 'success': 100, 'overwhelming': 48, 'partial': 60}
+questioning                   sp=(('a', 'for'), ('b', 'against')) dec=('b',) room=('none', 0.0, 0.5)
+    nx=4.00 moves={'argue': 1532, 'press': 68} press_by_side={'for': 68}
+    ends={'budget': 385, 'yielded': 15}
+    bands={'failure': 238, 'overwhelming': 35, 'partial': 55, 'success': 72}
+rally                         sp=(('a', 'for'),) dec=('cohort', 'h1', 'crowd12') room=('crowd', 5.0, 0.25)
+    nx=3.00 moves={'argue': 1200} press_by_side={}
+    ends={'budget': 400}
+    bands={'partial': 66, 'success': 123, 'overwhelming': 54, 'failure': 157}
+audience                      sp=(('a', 'for'),) dec=('pol0', 'pol1', 'pol2') room=('bench', 2.0, 0.75)
+    nx=2.00 moves={'argue': 800} press_by_side={}
+    ends={'budget': 400}
+    bands={'failure': 373, 'partial': 25, 'success': 2}
+negotiation                   sp=(('a', 'for'), ('b', 'against')) dec=() room=('none', 0.0, 0.5)
+    nx=3.00 moves={'argue': 968, 'press': 232} press_by_side={'for': 39, 'against': 193}
+    ends={'budget': 346, 'yielded': 54}
+    bands={'overwhelming': 160, 'partial': 42, 'success': 93, 'failure': 105}
+arbitration                   sp=(('a', 'for'), ('b', 'against')) dec=('pol0', 'pol1', 'pol2') room=('bench', 2.0, 0.75)
+    nx=3.00 moves={'argue': 971, 'press': 229} press_by_side={'against': 189, 'for': 40}
+    ends={'budget': 352, 'yielded': 48}
+    bands={'failure': 372, 'partial': 26, 'success': 2}
+legal_trial                   sp=(('a', 'for'), ('b', 'against')) dec=('pol0', 'pol1', 'pol2') room=('bench', 2.0, 0.75)
+    nx=4.70 moves={'argue': 1541, 'press': 340} press_by_side={'against': 260, 'for': 80}
+    ends={'budget': 220, 'yielded': 153, 'broken': 27}
+    bands={'failure': 374, 'partial': 23, 'success': 3}
+tribunal                      sp=(('a', 'for'), ('b', 'against')) dec=('pol0', 'pol1', 'pol2') room=('bench', 2.0, 0.75)
+    nx=3.90 moves={'argue': 1259, 'press': 300} press_by_side={'against': 260, 'for': 40}
+    ends={'budget': 322, 'yielded': 56, 'broken': 22}
+    bands={'failure': 377, 'partial': 19, 'success': 4}
+interrogation                 sp=(('a', 'for'), ('b', 'against')) dec=('pol0', 'pol1', 'pol2') room=('bench', 2.0, 0.75)
+    nx=4.00 moves={'argue': 1518, 'press': 82} press_by_side={'for': 82}
+    ends={'budget': 382, 'yielded': 18}
+    bands={'failure': 379, 'partial': 17, 'success': 4}
+inquisition_hearing           sp=(('a', 'for'), ('b', 'against')) dec=('ch0', 'ch1', 'ch2') room=('bench', 2.0, 0.75)
+    nx=4.97 moves={'argue': 1879, 'press': 108} press_by_side={'for': 108}
+    ends={'budget': 258, 'yielded': 135, 'broken': 7}
+    bands={'failure': 381, 'partial': 16, 'success': 3}
+excommunication_deliberation  sp=(('a', 'for'), ('b', 'against')) dec=('ch0', 'ch1', 'ch2') room=('bench', 2.0, 0.75)
+    nx=3.00 moves={'argue': 1032, 'press': 168} press_by_side={'against': 133, 'for': 35}
+    ends={'budget': 364, 'yielded': 36}
+    bands={'failure': 378, 'partial': 21, 'success': 1}
+parliamentary_debate          sp=(('a', 'for'), ('b', 'against')) dec=('pol0', 'pol1', 'pol2') room=('bench', 2.0, 0.75)
+    nx=4.69 moves={'argue': 1521, 'press': 354} press_by_side={'against': 268, 'for': 86}
+    ends={'budget': 219, 'yielded': 153, 'broken': 28}
+    bands={'failure': 373, 'partial': 24, 'success': 3}
+council_of_state              sp=(('a', 'for'), ('b', 'against')) dec=('pol0', 'pol1', 'pol2') room=('bench', 2.0, 0.75)
+    nx=3.00 moves={'argue': 1002, 'press': 198} press_by_side={'against': 154, 'for': 44}
+    ends={'budget': 359, 'yielded': 41}
+    bands={'failure': 375, 'partial': 24, 'success': 1}
+
+PAIRS with identical sittings on every seed (exchange sequences equal):
+  conversation ~ negotiation: sittings equal 400/400, bands equal 130/400

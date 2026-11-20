@@ -37,6 +37,7 @@ import pytest
 
 from ..data.matrix import Step, WriteClass
 from ..harness import populated as POP
+from ..boot.realm import build_realm
 from ..harness import probes as P
 from ..loop import census
 from ..loop.driver import SeasonDriver, mint_token
@@ -91,7 +92,7 @@ def _age_to_certain(w, pid, arm):
 def _realm_with_an_old_holder(arm, **build):
     """`build_realm(0, **build)` with its first seat-holder who has company (found by the realm, not named) aged
     to certain death at `age_step = arm`; the world's `age_step` is left at the shipped control."""
-    w = POP.build_realm(0, **build)
+    w = build_realm(0, **build)
     seats = _seats(w)
     assert seats, "nobody is seated on the realm; the falsifier is vacuous"
     home = world_q.home_of(w)
@@ -137,7 +138,7 @@ def test_in34_age_is_read_off_the_clock_and_the_hazard_is_a_query_over_it():
 def test_in34_a_person_minted_at_census_is_age_at_build_old_when_minted():
     """`loop/census.py::_individuate` mints from the `Person` defaults, whose `born` is `-age_at_build`
     -- age `age_at_build` at tick 0 and older by every season since. The mint passes its own `born`."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     at = sorted(r for r, x in w.rungs.items() if x.kind == "settlement")[0]
     w.fixtures = w.fixtures.sweep("age_at_build", 7)
     w.tick = 3
@@ -150,8 +151,8 @@ def test_in34_control_at_the_shipped_rates_nobody_dies_however_old():
     """THE CONTROL AT MATTER: the realm with every individual a thousand years old, at the shipped
     rates, runs the same MATTER barrier as the untouched realm -- the same events, in the same order --
     and loses nobody. A hazard that fired at step 0 would kill every one of them here."""
-    base = POP.build_realm(0)
-    old = POP.build_realm(0)
+    base = build_realm(0)
+    old = build_realm(0)
     people = _individuals(old)
     assert len(people) >= 10, "the realm seats too few individuals for the control to observe anything"
     for pid in people:
@@ -202,7 +203,8 @@ def test_in34_a_seat_holders_death_by_age_deposits_claims_naming_him_where_he_st
     assert len(on_here) >= 1, (
         f"no one at {place} holds a `person.died` claim naming the dead holder: the death reached "
         "nobody (H-206 not holding)")
-    on_away = {p: [c for c in cs if c.id not in at_build] for p, cs in named(w, holder, away).items()}
+    # `c.doer != p` (B11 lane A): an away man who tried an act on the dead holder reads `exists:Person` 0 off his OWN refusal, which is no news of the death reaching him; dropping the filter reds arm 0.25 (re-run at the B01 close).
+    on_away = {p: [c for c in cs if c.id not in at_build and c.doer != p] for p, cs in named(w, holder, away).items()}
     on_away = {p: cs for p, cs in on_away.items() if cs}
     assert not on_away, f"{len(on_away)} persons out of reach hold a claim naming him: {sorted(on_away)}"
     assert world_q.event_place(w, died[0]) == place, "the death is not placed where he stood"
@@ -241,7 +243,7 @@ def test_in34_a_seat_holder_old_enough_dies_at_matter_and_his_seat_falls_vacant(
     seat-holder and only him, once, and the death goes through the one cascade -- his `hold` closes, so
     the office has no live holder. A write that removed the person without the cascade leaves the seat
     held by a dead man."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     w.fixtures = w.fixtures.sweep("age_step", arm)
     seats = _seats(w)
     assert seats, "nobody is seated on the realm; the falsifier is vacuous"
@@ -267,7 +269,7 @@ def test_in34_born_has_a_reader_the_older_person_dies_and_the_younger_lives():
     """ID-13: no field without a reader. Two individuals at one `age_step` arm; only `born` differs.
     The old one is certain to die, the new one has no hazard. An `age_of` that ignored `born` (the
     field dead) gives both the same hazard, so either both live or both die -- red."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     old, new = _individuals(w)[:2]
     arm = AGE_ARMS[1]
     w.fixtures = w.fixtures.sweep("age_step", arm)
@@ -282,7 +284,7 @@ def test_in34_a_second_person_died_at_matter_cites_the_first_it_chains_to():
     """`person.died` is chained to ITS OWN PRIOR EMISSION (`last_emission_of`): an id that died, was
     individuated again (`census._individuate`) and died again cites its first death, not ROOT. The
     first death has no antecedent and cites ROOT."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     w.fixtures = w.fixtures.sweep("illness_rate", 1.0)
     pid = _individuals(w)[0]
     first = [e for e in _matter(w) if e.kind == "person.died"
@@ -304,7 +306,7 @@ def test_in34_at_certain_illness_every_individual_dies_no_cohort_does_and_it_is_
     no cohort dies (a population's bound is E-1's, not this hazard). The same seed twice gives the
     same deaths, at an arm a draw can miss."""
     def run(rate):
-        w = POP.build_realm(0)
+        w = build_realm(0)
         w.fixtures = w.fixtures.sweep("illness_rate", rate)
         people = _individuals(w)
         return people, _died(_matter(w)), w
@@ -327,7 +329,7 @@ def test_in34_one_persons_missing_draw_moves_nobody_elses_the_draws_are_keyed_no
     stream in sorted-pid order would hand every later person the draw of the one before, and the sets
     would differ. He is chosen so that a death in the base sorts after him -- the one the shift reaches."""
     def run(skip):
-        w = POP.build_realm(0)
+        w = build_realm(0)
         w.fixtures = w.fixtures.sweep("age_step", 0.05)
         for pid in _individuals(w):
             w.persons[pid].born = w.tick - 10

@@ -5,19 +5,18 @@ Three controls (the module docstring says what each row holds):
      seasons with the chooser watched equal the same run unwatched (seed 0 here; seeds 1-2 under `slow`).
   2. PLANTED FAILURE: `interactions.same_faction` inverted makes `_assert_finding` fail, so the finding below
      is one the log can be seen to get wrong.
-  3. THE FINDING: at `build_realm(0)`, season 1, the Cardinal of Prudence (`p_npc_013`) is logged taking
-     `fight` against the Senior Inquisitor (`p_npc_004`), same faction, stance 0.0, answering the question
-     raised by the CR-81 acquaintance claim `c_acq_p_npc_013_p_npc_004`, and the act is in `--audit`'s set.
+  3. THE FINDING: on the shipped season (`build_realm(0)`, season 1), the first audited row whose candidate was chosen
+     and whose verb declares `contests:` carries six fields equal to the world's for that pair: same faction, stance,
+     the question's source, its claim in the actor's ledger, the claim's origin, and the candidate being the act.
   Plus the re-read table IS the chooser's: every act the chooser returned matches a re-read candidate.
 """
 from __future__ import annotations
 
 import pytest
 
+from ..data.verbs import VERB_TABLE
 from ..harness import interactions as I
-from .test_cr87_violence_contexts import revert_cr87
-
-CARDINAL, INQUISITOR = "p_npc_013", "p_npc_004"
+from ..queries import person_q, world_q
 
 
 @pytest.fixture(scope="module")
@@ -25,26 +24,35 @@ def season_one():
     return I.run(0, 1)
 
 
-def _assert_finding(rows) -> None:
-    hits = [r for r in I.audit(rows)
-            if r["actor"] == CARDINAL and r["target"] == INQUISITOR and r["verb"] == "fight"]
-    assert hits, "the Cardinal's fight on the Inquisitor is not among the audited rows"
-    r = hits[0]
-    assert r["relation"]["same_faction"] is True
-    assert r["relation"]["stance"] == 0.0
+def _selected(rows):
+    """The first audited row of the season whose candidate was chosen and whose verb declares `contests:`."""
+    return next((r for r in I.audit(rows)
+                 if r["candidate"] and r["candidate"]["chosen"] and VERB_TABLE[r["verb"]].contests), None)
+
+
+def _assert_finding(w, rows) -> None:
+    r = _selected(rows)
+    assert r is not None, "no audited row of the season is a chosen act of a verb that declares `contests:`"
+    actor, target = r["actor"], r["target"]
+    assert r["relation"]["same_faction"] == (world_q.faction_holding(w, actor) is not None
+                                             and world_q.faction_holding(w, actor) == world_q.faction_holding(w, target)), \
+        "same_faction: the logged reading is not the world's for this pair"
+    assert r["relation"]["stance"] == person_q.stance_toward(w.persons[actor], target)
     assert r["question"]["source"] == "claim_landed"
-    assert r["question"]["claim"]["id"] == f"c_acq_{CARDINAL}_{INQUISITOR}"
-    assert r["question"]["claim"]["origin"].startswith("acquaintance")
-    assert r["candidate"]["chosen"] and r["candidate"]["verb"] == "fight"
+    claim = r["question"]["claim"]
+    assert claim["id"] in {c.id for c in w.persons[actor].ledger}, "the question's claim is not in the actor's ledger"
+    assert claim["origin"].startswith("acquaintance") == (claim["id"] in w._acquaintances)
+    assert r["candidate"]["chosen"] and r["candidate"]["verb"] == r["verb"]
 
 
-def test_the_log_names_the_cardinals_fight_on_the_inquisitor(monkeypatch):
-    """v11 CR-87 MADE THE FINDING ITS FALSIFIER: with `fight`'s contexts the Cardinal forms no `fight` on the Inquisitor
-    (`test_cr87_violence_contexts.py` asserts it gone on the shipped tree). The instrument's own claim -- that it names the
-    case where the case occurs -- is read on the world it was found in, CR-87 at its revert (`revert_cr87`)."""
-    revert_cr87(monkeypatch)
-    _, _, rows = I.run(0, 1)
-    _assert_finding(rows)
+def test_the_log_names_a_contested_act_between_friends_on_the_shipped_season(season_one):
+    """The finding is read off the shipped season, no reverted fixture: the first audited row (a hostile act between
+    same-faction persons, stance >= 0) whose candidate was chosen and whose verb declares `contests:` carries the six
+    fields the world holds for that pair."""
+    w, _, rows = season_one
+    checked = len(I.audit(rows))
+    assert checked >= 1, "the shipped season has no audited row"
+    _assert_finding(w, rows)
 
 
 def test_the_re_read_table_is_the_choosers(season_one):
@@ -74,13 +82,15 @@ def test_the_logged_scores_carry_the_believed_odds_factor(monkeypatch):
     assert moved >= 1, "a reader that dropped the believed-odds query logs the same scores: the log cannot see it"
 
 
-def test_a_planted_wrong_relation_reading_is_seen(monkeypatch):
-    revert_cr87(monkeypatch)            # v11 CR-87: the finding the plant must break exists only at the revert (above)
+def test_a_planted_wrong_relation_reading_is_seen(season_one, monkeypatch):
+    w, _, rows = season_one
+    _assert_finding(w, rows)            # control: the shipped row's fields read equal to the world's
     real = I.same_faction
     monkeypatch.setattr(I, "same_faction", lambda w, a, t: not real(w, a, t))
-    _, _, rows = I.run(0, 1)
-    with pytest.raises(AssertionError):
-        _assert_finding(rows)
+    w2, _, rows2 = I.run(0, 1)
+    assert _selected(rows2) is not None, "the plant emptied the selection: the planted reading was not read on a row"
+    with pytest.raises(AssertionError, match="same_faction"):
+        _assert_finding(w2, rows2)
 
 
 def _hash_arm(seed: int) -> None:

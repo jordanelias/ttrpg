@@ -25,9 +25,12 @@ The three death writes: `loop/effects_combat.py::_eff_kill` (`fight`/`accept` `F
 """
 from __future__ import annotations
 
+import pytest
+
 from ..data.matrix import Step, WriteClass
+from ..gaps import InstrumentDefect
 from ..harness import probes as P
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 from ..loop import effects_combat
 from ..loop.driver import SeasonDriver, mint_token
 from ..loop.matter import _die
@@ -66,6 +69,17 @@ def _felled(w, actor, victim, aid="cp01_kill"):
     return d, out
 
 
+#: B05.09 (CORE Edit 9; the combat growth path `_grown` shares `raised_capability`): the SURVIVING party of a fight is raised in
+#: `arms` -- a non-holder is minted a first rank, where the retired never-minted rule emitted nothing -- so every felling below
+#: ends in ONE `capability.raised` whose receipt is the killer. Rewritten at B05.99: was absent from these kind lists.
+GROWTH = ["capability.raised"]
+
+
+def _raised(out):
+    """The persons the felling's `capability.raised` Events name."""
+    return [c.subject for e in out if e.kind == "capability.raised" for c in e.changes]
+
+
 def _witness(w, d, events):
     w.step = Step.WITNESS
     d.witness(mint_token(w, WriteClass.INTERIOR), events)
@@ -86,6 +100,7 @@ def _check_a_fight(w) -> tuple:
     assert [t.object for t in w.seat_holds(HOLDER)] == [OFFICE], "fixture: p_high does not hold off_duke"
     d, out = _felled(w, "p_near", HOLDER)
     assert HOLDER not in w.persons, "fixture: the planted death did not happen"
+    assert _raised(out) == ["p_near"], _raised(out)                     # the survivor's growth, B05.09
     kinds = [e.kind for e in out]
     seat_receipts = [c.subject for e in out if e.kind == "tenure.closed" for c in e.changes
                      if c.subject in w.offices]
@@ -98,7 +113,7 @@ def _check_a_fight(w) -> tuple:
 
 def test_a_a_felled_seat_holder_names_his_seat_to_every_living_person():
     kinds, seats, lacking, named = _check_a_fight(_tiny())
-    assert kinds == ["person.died", "tenure.closed"], kinds
+    assert kinds == ["person.died", "tenure.closed", *GROWTH], kinds
     assert seats == [OFFICE], f"the tenure.closed Event's receipts name {seats}, not the seat"
     assert lacking == [], f"living persons holding no claim about {OFFICE}: {lacking}"
     assert OFFICE in named, f"seats_named for a person who was not there is {named}"
@@ -113,7 +128,7 @@ def test_a_mutation_with_the_seat_holds_unread_the_death_names_no_seat(monkeypat
     assert held, "fixture: p_high does not hold off_duke"
     d, out = _felled(w, "p_near", HOLDER)
     assert not held[0].live, "the cascade stopped closing the hold; this mutation is not the one meant"
-    assert [e.kind for e in out] == ["person.died"]
+    assert [e.kind for e in out] == ["person.died", *GROWTH] and _raised(out) == ["p_near"]
     _witness(w, d, out)
     far = w.persons["p_king"]
     assert OFFICE not in world_q.seats_named(w, far), "the seat reached the far person with the emission off"
@@ -154,7 +169,8 @@ def test_b_a_death_emptying_no_seat_earns_no_tenure_closed():
     assert w.seat_holds("p_near") == []
     _d, out = _felled(w, HOLDER, "p_near", aid="cp01_kill_b")
     assert "p_near" not in w.persons, "fixture: the planted death did not happen"
-    assert [e.kind for e in out] == ["person.died"], [e.kind for e in out]
+    assert [e.kind for e in out] == ["person.died", *GROWTH], [e.kind for e in out]
+    assert _raised(out) == [HOLDER]
     assert not any(c.subject in w.offices for e in out for c in e.changes)
 
 
@@ -174,7 +190,8 @@ def test_b_a_realm_death_closing_only_commit_edges_earns_no_tenure_closed():
         _d, out = _felled(w, killer, pid, aid=f"cp01_b_{pid}")
         if pid in w.persons:
             continue
-        assert [e.kind for e in out] == ["person.died"], (pid, [e.kind for e in out])
+        assert [e.kind for e in out] == ["person.died", *GROWTH], (pid, [e.kind for e in out])
+        assert _raised(out) == [killer], (pid, _raised(out))
         assert not any(c.subject in w.offices for e in out for c in e.changes)
         checked += 1
         break
@@ -227,12 +244,11 @@ def test_c_a_total_won_still_emits_field_won_and_army_arrived_beside_the_deaths(
 def test_c_mutation_with_no_subject_naming_the_bands_kinds_the_deaths_silence_field_won(monkeypatch):
     """THE MUTATION, run: the HR-1 form off -- `own_kinds` returning `()`, so the movers, the losers'
     own outcome and the treasuries name nothing (the pre-HR-1 `None`) while the dead name `person.died`.
-    The non-empty `earned` set then drops the band's kind and the arrival: the falsifier goes red."""
+    The non-empty `earned` set then dropped the band's kind and the arrival (H-141's silencing); that
+    mix is now refused where the `Change` is built, so the mutation cannot publish a silenced set."""
     monkeypatch.setattr(effects_combat, "own_kinds", lambda declared: ())
-    _d, _a, _s, out = _won_total(build_realm(0))
-    kinds = [e.kind for e in out]
-    assert "field.won" not in kinds and "army.arrived" not in kinds, kinds
-    assert "person.died" in kinds
+    with pytest.raises(InstrumentDefect, match="H-141"):
+        _won_total(build_realm(0))
 
 
 def test_c_a_total_lost_emits_field_lost_and_a_person_died_naming_each_pid_removed():

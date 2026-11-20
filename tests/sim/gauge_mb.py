@@ -26,15 +26,17 @@ MB_NODE_COHESION, ...) select, not a frozen snapshot file.
 
 Grounding + citations index: references/historical/mass_battle_gauge_grounding.md
 """
-import sys, os, random, statistics
+import sys, os, statistics
 
 # import the package exactly as bat.py (the G5 digest harness) does
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # tests/sim on path
 from systems.mass_battle.sim.engine import (  # noqa: E402
-    Subunit, Unit, SIDE_A_START_ROW, SIDE_B_START_ROW,
+    Unit, Army, SIDE_A_START_ROW, SIDE_B_START_ROW,
     run_battle, run_multi_turn_battle, build_unit, build_army, build_envelopment, build_refused_flank,
     resolve_battle, _centered_line_cols)
 from modules.mass_battle.config import TROOPS_PER_TIER, MB_VOLLEYS_START  # noqa: E402
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 # ─────────────────────────────────────────────────────────────────────────────────────────────────
 # [ED-MB-0027] HONEST-GAUGE density-matching constants (fiat register §1 measurement integrity).
@@ -60,7 +62,7 @@ GAUGE_CONC = 100.0     # per-cell troop density held constant across ALL gauge u
 ANCHOR_MAP = {  # [canonical: mass_battle_v30.md §deployment — anchor columns]
     # [LC-8, ED-909, Jordan-approved 2026-07-02] Horseshoe/RefusedFlank entries retired along with
     # the shapes themselves -- _envelop_army/_refused_army below reference ('Line', tier) instead,
-    # since those Unit-level presets are now built from Line-shaped center/wing/refused subunits.
+    # since those Army-level presets are now built from Line-shaped center/wing/refused units.
     ('Line',1):11,('Line',2):10,('Line',3):9,('Line',4):8,                       # [canonical: mass_battle_v30.md §deployment]
     ('Arrowhead',1):11,('Arrowhead',2):10,('Arrowhead',3):8,('Arrowhead',4):7,   # [canonical: mass_battle_v30.md §deployment]
     ('GappedLine',1):11,('GappedLine',2):9,('GappedLine',3):7,                   # [canonical: mass_battle_v30.md §deployment]
@@ -68,18 +70,18 @@ ANCHOR_MAP = {  # [canonical: mass_battle_v30.md §deployment — anchor columns
 
 def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, morale=6,  # [canonical: sim_mb_06_v9_historical_spec.md — uniform T3 stats P4/C4/D5/M6, same baseline as make_unit's defaults below]
                     morale_start=None, dr=1, stance='balanced', speed='Standard'):
-    """Build a MULTI-subunit Unit with per-subunit stats (Jordan directive: different unit
+    """Build a MULTI-subunit Army with per-subunit stats (Jordan directive: different unit
     types / troop counts per subunit). `specs` = list of dicts; each may set shape, tier, troop_type,
     unit_type, stance, instructions, starting_position, and per-subunit power/discipline/morale/morale_start/dr/stamina/stamina_max.
-    Each subunit is built via Subunit.of_type, so a CANONICAL troop type (TROOP_TYPE_STATS:
+    Each subunit is built via Unit.of_type, so a CANONICAL troop type (TROOP_TYPE_STATS:
     levy, light_infantry, heavy_infantry, cavalry, archers, crossbow, sling, artillery, knights_templar)
     draws its §B.2 Power/Discipline/Morale presets unless the spec overrides them. A non-canonical
     type (e.g. 'infantry') or an explicit override behaves exactly as before -> inherits the unit-level
     fallbacks below, so a spec list of non-canonical types with no overrides still reproduces a homogeneous
     unit. make_unit (single-subunit) is unchanged.
-    [canonical: derived_stats architecture -- unit stats composed from subunits]"""
-    # [ED-MB-0017, adversarial-review finding 2] Frontage-aware centred line for un-positioned subunits
-    # (was `(10 + i*4, 15)` — same row-stagger-at-fixed-col defect that stacked subunits, the P-1 bug the
+    [canonical: derived_stats architecture -- unit stats composed from units]"""
+    # [ED-MB-0017, adversarial-review finding 2] Frontage-aware centred line for un-positioned units
+    # (was `(10 + i*4, 15)` — same row-stagger-at-fixed-col defect that stacked units, the P-1 bug the
     # engine builders fixed). No live gauge row hits this branch (every multi-subunit gauge row below sets
     # explicit `starting_position`), so this closes the latent default without changing any gauge result.
     _start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
@@ -89,7 +91,7 @@ def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, mora
         sp = dict(sp)
         pos = sp.pop('starting_position', (_start_row, _auto_cols[i]))
         tt = sp.pop('troop_type', 'infantry')
-        # build typed subunits via Subunit.of_type so a canonical troop type draws its
+        # build typed units via Unit.of_type so a canonical troop type draws its
         # §B.2 Power/Discipline/Morale presets (the taxonomy stat home, ED-1018). Only forward the
         # stat keys the caller explicitly set, so of_type's setdefault fills the rest from the preset;
         # a non-canonical type ('infantry') fills nothing and inherits the unit-level fallbacks exactly
@@ -101,7 +103,7 @@ def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, mora
                 kw[k] = sp.pop(k)
         # [A6, ED-MB-0067 Part A -- adversarial-pass round 2, F4] Same cross-subunit ammo-pool gap
         # engine.build_army had (see its own note): an unseeded ranged subunit's volleys (None)
-        # inherits the ONE shared parent Unit pool, which every OTHER subunit's between_turn_recovery
+        # inherits the ONE shared parent Army pool, which every OTHER subunit's between_turn_recovery
         # resupply call also writes to. Give a ranged subunit its own explicit pool unless the spec
         # already set one; a melee subunit's ammo count is never read for combat (volley_phase.fire's
         # own unit_type=='ranged' gate), so it is left inheriting as before. This does NOT backport
@@ -110,11 +112,11 @@ def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, mora
         # to A6, out of scope here.
         if kw.get('volleys') is None and kw['unit_type'] == 'ranged':
             kw['volleys'] = MB_VOLLEYS_START
-        subs.append(Subunit.of_type(tt, sp.pop('shape'), sp.pop('tier', 3), pos, **kw))
-    return Unit(name=name, faction=faction, power=power, command=command,
+        subs.append(Unit.of_type(tt, sp.pop('shape'), sp.pop('tier', 3), pos, **kw))
+    return Army(name=name, faction=faction, power=power, command=command,
                 discipline=discipline, discipline_start=discipline,
                 morale=morale, morale_start=(morale if morale_start is None else morale_start),
-                subunits=subs, dr=dr, stance=stance, speed=speed)
+                units=subs, dr=dr, stance=stance, speed=speed)
 
 
 def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,   # [canonical: sim_mb_06_v9_historical_spec.md — uniform T3 stats P4/C4]
@@ -157,7 +159,7 @@ def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,
     _troops = GAUGE_TROOPS if troops is None else troops
     _conc = GAUGE_CONC if concentration is None else concentration
     # [Fable-audit A1 fix, 2026-07-24] Forward power/discipline INTO the spec dict. Without them,
-    # build_army -> Subunit.of_type fills the canonical §B.2 troop-type PRESET (cavalry Power 5), silently
+    # build_army -> Unit.of_type fills the canonical §B.2 troop-type PRESET (cavalry Power 5), silently
     # changing the gauge's cavalry from the documented uniform baseline P4 to P5 when make_unit was routed
     # through build_army for the ED-MB-0027 density match — an unintended stat change that inverted the
     # C-battery verdicts. Explicit spec keys beat of_type's setdefault (engine.py), so this restores P4
@@ -222,7 +224,7 @@ def _command_army(shape, tier=3, n_cmd=3):  # [canonical: sim_mb_06_v9_historica
 
 def _envelop_army(name, faction, tier=3, troop_type='infantry', speed='Standard', **kw):  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) baseline]
     """[LC-8, ED-909] Composed replacement for the retired Horseshoe shape: a held center + two
-    wide-placed wings released into 'envelop' via a Stage C timed order -- ED-909's Unit-level
+    wide-placed wings released into 'envelop' via a Stage C timed order -- ED-909's Army-level
     Envelopment preset. Mirrors make_unit's kwarg surface closely enough to drop straight into
     matchup()'s (sa,tier,name,faction,**k) call convention.
 
@@ -254,9 +256,9 @@ def _envelop_army(name, faction, tier=3, troop_type='infantry', speed='Standard'
     conc = kw.pop('concentration', GAUGE_CONC)  # [ED-MB-0027] density held at GAUGE_CONC to match make_unit; [canonical: config.py CELL_FLOOR=40/CELL_CAP=200 band]
     center_troops = total_troops * pin_frac
     wing_troops = (total_troops - center_troops) / 2
-    # [2026-07-05 adversarial-review fix] `Subunit` has NO `speed` field at all -- a per-subunit
+    # [2026-07-05 adversarial-review fix] `Unit` has NO `speed` field at all -- a per-subunit
     # 'speed' key in these spec dicts is silently dropped by `build_army` (it never pops one), so it
-    # was pure dead decoration. `Unit.speed` is the only real speed knob (checked whole-unit at
+    # was pure dead decoration. `Army.speed` is the only real speed knob (checked whole-unit at
     # post-rout pursuit, orchestration.py `routing_unit.speed == "Fast"`/`victor.speed == "Fast"`) --
     # forwarded below via `build_envelopment(..., speed=wing_speed)` instead. For the infantry rows
     # (H3/H5/H6) `wing_speed` defaults to `speed` ('Standard'), so this is a no-op there; for C4/C7's
@@ -282,7 +284,7 @@ def _envelop_army(name, faction, tier=3, troop_type='infantry', speed='Standard'
 
 def _refused_army(name, faction, tier=3, troop_type='infantry', speed='Standard', **kw):  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) baseline]
     """[LC-8, ED-909] Composed replacement for the retired RefusedFlank shape: a strong wing +
-    a withheld/refused wing released only once directly threatened -- ED-909's Unit-level Refused
+    a withheld/refused wing released only once directly threatened -- ED-909's Army-level Refused
     Flank preset.
 
     [2026-07-05 fix, same force-parity rationale as _envelop_army above] `total_troops` (default
@@ -298,7 +300,7 @@ def _refused_army(name, faction, tier=3, troop_type='infantry', speed='Standard'
     strong_troops = total_troops * strong_frac
     refused_troops = total_troops - strong_troops
     # [2026-07-05 adversarial-review fix, same rationale as _envelop_army above] per-subunit 'speed'
-    # keys are dead (Subunit has no speed field); the real Unit.speed is forwarded below instead.
+    # keys are dead (Unit has no speed field); the real Army.speed is forwarded below instead.
     strong = [{'shape': 'Line', 'troop_type': troop_type,
                'troops': strong_troops, 'concentration': conc,
                'starting_position': (start_row, anchor - 4)}]
@@ -485,31 +487,31 @@ def matchup(sa, sb, ka, kb, mode, n=60, seed_base=1_000_000):  # [Jordan directi
     # resolving — the structural check that would have caught H6's 0.0/0.0 all-draw instrument break.
     win_cas=[]; lose_cas=[]; capped=0
     for s in range(n):
-        random.seed(s+seed_base)
-        ua = sa('A','A',**ka) if a_is_fn else make_unit(sa,3,'A','A',**ka)  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) units]
-        ub = sb('B','B',**kb) if b_is_fn else make_unit(sb,3,'B','B',**kb)
-        a0,b0 = ua.hp_max, ub.hp_max
-        shape_a = 'Line' if a_is_fn else sa
-        shape_b = 'Line' if b_is_fn else sb
-        # [ED-MB-0041] The cap is bound ONCE and reused for both the resolve call and the cap-hit
-        # test below. It was previously written as a literal in each of the two resolve_battle calls,
-        # and the cap-hit check would have needed a third and fourth copy -- at which point a future
-        # change to one would silently stop the "did this battle actually resolve" measurement from
-        # meaning anything, while still reporting a number.
-        cap = SINGLE_TURN_CAP if mode=='single' else MULTI_BATTLE_TURN_CAP
-        if mode=='single':
-            r=resolve_battle(ua,ub,kind='single',max_turns=cap); turns.append(r.get('turns',cap))
-        else:
-            r=resolve_battle(ua,ub,shape_a,shape_b,ANCHOR_MAP,kind='multi',max_battle_turns=cap); turns.append(r.get('battle_turns',cap))
-        w=winner_of(r)
-        if w=='A':aw+=1
-        elif w=='B':bw+=1
-        else:dr+=1
-        _ac = 100*(a0-ua.hp)/a0 if a0 else 0; _bc = 100*(b0-ub.hp)/b0 if b0 else 0
-        a_cas.append(_ac); b_cas.append(_bc)
-        if w=='A': win_cas.append(_ac); lose_cas.append(_bc)
-        elif w=='B': win_cas.append(_bc); lose_cas.append(_ac)
-        if turns[-1] >= cap: capped += 1
+        with rngsource.using(draw.seeded(draw.H2("gauge_mb", s+seed_base))):
+            ua = sa('A','A',**ka) if a_is_fn else make_unit(sa,3,'A','A',**ka)  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) units]
+            ub = sb('B','B',**kb) if b_is_fn else make_unit(sb,3,'B','B',**kb)
+            a0,b0 = ua.hp_max, ub.hp_max
+            shape_a = 'Line' if a_is_fn else sa
+            shape_b = 'Line' if b_is_fn else sb
+            # [ED-MB-0041] The cap is bound ONCE and reused for both the resolve call and the cap-hit
+            # test below. It was previously written as a literal in each of the two resolve_battle calls,
+            # and the cap-hit check would have needed a third and fourth copy -- at which point a future
+            # change to one would silently stop the "did this battle actually resolve" measurement from
+            # meaning anything, while still reporting a number.
+            cap = SINGLE_TURN_CAP if mode=='single' else MULTI_BATTLE_TURN_CAP
+            if mode=='single':
+                r=resolve_battle(ua,ub,kind='single',max_ticks=cap); turns.append(r.get('turns',cap))
+            else:
+                r=resolve_battle(ua,ub,shape_a,shape_b,ANCHOR_MAP,kind='multi',max_battle_turns=cap); turns.append(r.get('battle_turns',cap))
+            w=winner_of(r)
+            if w=='A':aw+=1
+            elif w=='B':bw+=1
+            else:dr+=1
+            _ac = 100*(a0-ua.hp)/a0 if a0 else 0; _bc = 100*(b0-ub.hp)/b0 if b0 else 0
+            a_cas.append(_ac); b_cas.append(_bc)
+            if w=='A': win_cas.append(_ac); lose_cas.append(_bc)
+            elif w=='B': win_cas.append(_bc); lose_cas.append(_ac)
+            if turns[-1] >= cap: capped += 1
     dec = aw+bw
     return dict(a=aw/n*100, b=bw/n*100, d=dr/n*100,
                 decA=(100*aw/dec if dec else 50.0), dec_n=dec,  # [canonical: mass_battle_gauge_grounding.md §1 — even-split fallback when no decisive result]

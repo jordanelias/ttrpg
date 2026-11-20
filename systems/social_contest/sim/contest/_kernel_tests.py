@@ -446,7 +446,7 @@ ck("scaffold returns a self-flagging StubResult (stubwire; OI-18a)",
 
 # == DE-SATURATION + RES-FLOOR + BALLOTTA (balancing pass 2026-06-05) ==
 print("== de-saturation bar + resonance floor + ballotta ==")
-from .resolver import roll_net as _rn
+from .resolver import roll_net_continuous as _rn
 from .resolver import RES_FLOOR as _RF, PUBLIC_LEAK as _PL
 # T1: live (pool-aware) degree-3 stays bounded across pools; legacy (pool-less) saturates at high pool
 random.seed(20260605)
@@ -471,9 +471,15 @@ ck(f"de-saturation: high-pool Overwhelming bounded (max {max(_paw.values()):.2f}
 # reproducer did not match it, which is exactly the §0.1-pt-4 gap of a number without an
 # instrument. Two fixes rather than a reworded comment: the MC check keeps a loose bound
 # appropriate to an unpaired estimate, and `_d3_paired` below reproduces the real claim exactly.
-_own8 = _leg8 = _d3(8, leg=True)  # [JUSTIFIED: fitted tolerance measured on this suite's own seeded run, not a canonical magnitude — ED-SC-0031]
-ck(f"de-saturation: the extension still cuts the high-pool rate (owner-only8 {_own8:.2f} vs paw8 {_paw[8]:.2f}, UNPAIRED)",
-   _own8 > 0.24 and _paw[8] < _own8 * 0.7)  # [JUSTIFIED: fitted tolerance measured on this suite's own seeded run, not a canonical magnitude — ED-SC-0031]
+# RE-FITTED AT B05.02 (the one sampler, A-5). On the bell curve pool 8 is EXACTLY the extension's crossover at ob 2
+# (`crossover_pool(2.0) == 8`, below), where it only begins to bite: measured 0.213 owner-only against 0.198 with
+# it, so the old pool-8 reading (0.24+ against a 0.7 ratio, fitted on whole-dice nets) no longer separates the
+# arms. The unpaired check reads pool 12, where the bar bites on this sampler (measured 0.47 against 0.20);
+# the paired check below is the exact claim and is unchanged.
+_own8 = _leg8 = _d3(12, leg=True)  # [JUSTIFIED: fitted tolerance measured on this suite's own seeded run, not a canonical magnitude — ED-SC-0031]
+_paw12 = _d3(12)
+ck(f"de-saturation: the extension still cuts the high-pool rate (owner-only12 {_own8:.2f} vs paw12 {_paw12:.2f}, UNPAIRED)",
+   _own8 > 0.40 and _paw12 < _own8 * 0.7)  # [JUSTIFIED: fitted tolerance measured on this suite's own seeded run, not a canonical magnitude — ED-SC-0031]
 
 def _d3_paired(pool, ob=2.0, N=20000):  # [JUSTIFIED: fitted tolerance measured on this suite's own seeded run, not a canonical magnitude — ED-SC-0031]
     """One draw, banded BOTH ways. Returns (owner_rate, extension_rate) over the same nets."""
@@ -735,17 +741,25 @@ GOLDEN_TRACE_RES  = "committee"
 #   A one-cell band change with a constant downstream offset is what this ruling predicts. A
 #   diffuse, per-beat-varying move would have meant something else broke, and would not be
 #   re-recordable.
+# RE-RECORDED AGAIN (B05.02; A-5, DOE §1 rows 1-2: the oracle's roll is the one sampler, the bell curve
+# `roll_net_continuous`, not the d10 faces). A DIFFUSE move, as it must be: the draw itself changed, so every
+# beat's advantage differs. THE CONTROL: the beat count (10), the resolved band (`committee`) and the
+# final-beat banding check below are unchanged, and the track stays inside 0-10 and off the 5.0 start.
+# RE-RECORDED AGAIN (B06.99; B06.04: the sampler changes, `Draw.normal` (Box-Muller) for `random.gauss`; this trace's uniform is
+# still the process-global stream, through `resolver._GlobalStream`; a stream change and not a balance change). A DIFFUSE move, as a stream change must be: every beat's advantage differs.
+# THE CONTROL: the beat count (10), the resolved band (`committee`) and the final-beat banding check below are
+# unchanged, and the track stays inside 0-10 and moves off the 5.0 start.
 GOLDEN_TRACE = (
-    (0.22417,  0.0,      5.336255),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (0.22417,  0.482663, 4.612261),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (0.893156, 0.482663, 5.61574),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (0.893156, 0.931129, 4.94304),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (1.345992, 0.931129, 5.622294),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (1.345992, 1.419577, 4.889623),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (1.345992, 1.419577, 4.889623),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (1.345992, 1.419577, 4.889623),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (1.829307, 1.419577, 5.614596),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
-    (1.829307, 1.879483, 4.924737),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (0.690741, 0.0, 6.036111),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (0.690741, 0.486813, 5.305892),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (0.914911, 0.486813, 5.642148),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (0.914911, 1.171544, 4.61505),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.360617, 1.171544, 5.283609),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.360617, 1.405857, 4.93214),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.360617, 1.405857, 4.93214),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.360617, 1.405857, 4.93214),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.794716, 1.405857, 5.583289),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
+    (1.794716, 1.881713, 4.869504),  # [JUSTIFIED: recorded output of _golden_trace(GOLDEN_TRACE_SEED), not an authored magnitude — regenerate only under a ledger-cited mechanic change; ED-SC-0031]
 )
 def _golden_trace(seed, proc="grand_contest"):
     random.seed(seed)
@@ -1323,7 +1337,7 @@ ck("CR4 epideictic: the present/epideictic register genuinely survives in the su
 # SAME seed, SAME contestant — only the pool_bonus toggles (0 vs the CR4 +1D). This is the mechanism CR4
 # plumbs into resolution; a higher mean degree ⇒ more track movement ⇒ the verdict moves.
 from .resolver import (Bout as _B4, Contestant as _C4, Venue as _V4, PersuasionTrack as _PT4,
-                       roll_net as _rn4)
+                       roll_net_continuous as _rn4)
 from .contract import Adjudicator as _Adj4
 from engine.dice_engine.sigma_leverage import net_boost as _nb4
 from .primitives import Pool as _Pool4, Leverage as _Lev4
@@ -1428,7 +1442,7 @@ def _cr4_church_tribunal_adv(style, seed_base=9000, N=1200):
 _ct_memory     = _cr4_church_tribunal_adv("precedent")  # Memory-chosen; church_tribunal live ground FACT -> primary Memory -> +1D fires
 _ct_projection = _cr4_church_tribunal_adv("vision")      # Projection-chosen; FACT-primary is Memory -> no +1D
 ck(f"CR4 reachability BEHAVIORAL (build_contest path, real Church Tribunal proceeding): Precedent (Memory-chosen) now earns its CR4 +1D and resolves DIFFERENTLY from Vision (Projection-chosen) on the SAME live proceeding (Δadv {abs(_ct_memory - _ct_projection):.3f}) ({_ct_memory:.3f} vs {_ct_projection:.3f})",
-   abs(_ct_memory - _ct_projection) > 0.05)
+   abs(_ct_memory - _ct_projection) > 0.02)  # [JUSTIFIED: re-fitted at B05.02 -- the +1D's effect on the bell curve is ~0.05 (0.044-0.053 over six seeded N=1200/6000 reads); 0.02 is >5 sd above the null of 0, not a canonical magnitude]
 # Direct check the +1D actually applies at the pool level on this proceeding's own live ground.
 ck("CR4 reachability: on church_tribunal's live ground (FACT), a Precedent (Memory) orator's chosen genre matches the primary genre -> the +1D fires; a Vision (Projection) orator's does not",
    _pgpb(_gos("precedent"), _ct_contest.venue.start_ground) == _CR4B
@@ -1496,7 +1510,7 @@ ck("CR5: the self-gating record documents trigger + magnitude + Nyaya grounding 
 # CR5 WIRED in the resolver (opt-in): a deg==0 Obscuring FOUL strips the mover's Face; a Direct move
 # does not; and — judge finding 7 — a move that LANDED (advanced the mover's own track) NEVER strips
 # Face. Assert against the LIVE resolver, not just the pure function.
-from .resolver import Bout as _B5, Contestant as _C5, Venue as _V5, TallyAtClose as _TAC5, roll_net as _rn5
+from .resolver import Bout as _B5, Contestant as _C5, Venue as _V5, TallyAtClose as _TAC5, roll_net_continuous as _rn5
 from .armature import ArmatureConfig as _AC5
 from .contract import Adjudicator as _Adj5, Move as _Mv5
 from .primitives import Stasis as _St5

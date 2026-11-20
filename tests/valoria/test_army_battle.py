@@ -8,19 +8,20 @@ on the field, how fit, which side's faction, and that a field with no army Recor
 
 Fixture: `test_levy_feed.py`'s realm (`build_realm(0)`), the Crown marching `set_s_014` -> `set_s_036` where the
 Church of Solmund stands, plus one cohort of weight 12 planted on each side and committed to its faction, and an
-army Record for each whose one subformation holds that cohort's whole 120.
+army Record for each whose one unit holds that cohort's whole 120.
 """
 
 from __future__ import annotations
 
 import random
+from engine.dice_engine import draw
 from types import SimpleNamespace
 
 import pytest
 
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.harness import probes as P
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.manifest.registrar import MODULE_ENTRIES
 from engine.season.queries import world_q
@@ -66,7 +67,7 @@ def _input(w):
 
 
 def _troops(oob):
-    return sum(sf.troops for sf in oob.subformations)
+    return sum(sf.troops for sf in oob.units)
 
 
 # --------------------------------------------------------------------------------------------- who fights as what
@@ -79,11 +80,11 @@ def test_a_world_with_no_army_record_builds_the_field_it_always_did():
 def test_each_side_with_an_army_record_fights_as_that_records_order_of_battle():
     w, _ = _world()
     oob_a, oob_d = _input(w).orders_of_battle
-    assert [s.name for s in oob_a.subformations] == ["wall"] and [s.name for s in oob_d.subformations] == ["wall"]
+    assert [s.name for s in oob_a.units] == ["wall"] and [s.name for s in oob_d.units] == ["wall"]
     assert (_troops(oob_a), _troops(oob_d)) == (120, 120)
     # the defender holds its ground behind a shield wall and the attacker does not: two held lines never close
-    assert oob_a.subformations[0].role is None and oob_d.subformations[0].role == "ShieldWall"
-    assert oob_a.subformations[0].troop_type == "heavy_infantry"
+    assert oob_a.units[0].role is None and oob_d.units[0].role == "ShieldWall"
+    assert oob_a.units[0].troop_type == "heavy_infantry"
 
 
 def test_a_side_without_an_army_record_is_none_while_the_other_fights_its_own():
@@ -100,11 +101,11 @@ def test_the_orders_a_faction_sets_reach_the_battle():
     w, _ = _world()
     base = _input(w).orders_of_battle[0]
     rec = w.records["army_a"]
-    rec.subject_matter = A.set_strategy(A.order(rec.subject_matter, "wall", stance="hold", fall_back_at=0.4), "advance")
+    rec.subject_matter = A.set_strategy(A.order(rec.subject_matter, "wall", posture="hold", fall_back_at=0.4), "advance")
     oob = _input(w).orders_of_battle[0]
-    sf = oob.subformations[0]
-    assert (oob.strategy, sf.stance, sf.fall_back_at) == ("advance", "hold", 0.4)
-    assert (base.strategy, base.subformations[0].stance) == ("line", None), "vacuous if the base already had the orders"
+    sf = oob.units[0]
+    assert (oob.strategy, sf.posture, sf.fall_back_at) == ("advance", "hold", 0.4)
+    assert (base.strategy, base.units[0].posture) == ("line", None), "vacuous if the base already had the orders"
 
 
 # ------------------------------------------------------------------------------------- who is there, and how fit
@@ -157,7 +158,7 @@ def test_the_provider_names_each_sides_faction_and_the_entry_receives_both_order
     act = _march_act()
     w.acts.append(act)
     attackers = world_q.mustered(w, ORIGIN, ATTACKER)
-    r = resolve(w, attackers, [act.id], "a field", subject=DEFENDER, rung=TARGET, rng=random.Random(11))
+    r = resolve(w, attackers, [act.id], "a field", subject=DEFENDER, rung=TARGET, rng=draw.seeded(draw.H2("test_army_battle", 11)))
     assert r["status"] == "RESOLVED" and r["unopposed"] is False, r
     (oobs,) = seen
     assert oobs[0] is not None and oobs[1] is not None, "the provider did not find both factions' armies"

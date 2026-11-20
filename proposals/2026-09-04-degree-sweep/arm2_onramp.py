@@ -85,7 +85,7 @@ def run(log: Log) -> dict:
         wrapper, combatant = eng
         for s in range(300):
             A = combatant.Combatant("A", end=4); B = combatant.Combatant("B", end=4)
-            r = wrapper.fight(A, B, rng=_rnd.Random(s))
+            r = wrapper.fight(A, B, cfg=None, rng=_rnd.Random(s))
             if r == 0:
                 unres += 1; continue
             win = A if r == 1 else B

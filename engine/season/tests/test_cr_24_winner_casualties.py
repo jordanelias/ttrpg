@@ -6,8 +6,9 @@ THE FIELD IS A REAL FOLD OF A HAND-BUILT SITUATION. One season of the shipped re
 `field.unopposed` 3, `march.declared` 6), so the falsifier folds ONE `march` through the real driver (RESOLVE then
 ENCOUNTER, `test_march._fold_one`) -- the engine fights it; no `Resolution` is hand-built -- with the Crown's two
 marchers made cohorts (`Person.weight` 10) on `set_s_036`, the weight -> troops scale at 10 (REM-32's
-`field_troops_per_weight`, a value of THIS TEST) and `field_subunits: person` (CP-T04-01). Realm seed 0: the attacker
-WINS (`field.won`), one marcher's subunit is cut (survivor ratio 0.982) and the other's is not. The preconditions are
+`field_troops_per_weight`, a value of THIS TEST) and `field_units: person` (CP-T04-01). At the fixture's seed, weight and scale (SEED/WEIGHT/SCALE below,
+re-picked at B06.99 when the stream changed) the attacker WINS (`field.won`), one marcher's subunit is cut (survivor
+ratio 0.992) and the other's is not (1.0). The preconditions are
 asserted, so a moved fixture reads as a precondition, not a pass.
 
 Why `person`: under `side` a winning headcount side's ratio reads 1.0 or above (`effective_size / size_max` floors
@@ -24,11 +25,18 @@ import importlib
 
 import pytest
 
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.state.world import World
 from engine.season.tests.test_march import _fold_one, _march_act
 
-SEED, WEIGHT, SCALE = 0, 10, 10
+# B05.99 RE-PICKED (B05.03, the field's one sampler): at seed 0 and scale 10 the winning marchers both read ratio 1.0 on
+# seeds 0..11 (no winner casualty to observe); a grid of weights {10, 6, 4, 3, 2, 1} x scales {10, 20, 50, 100, 200} x seeds
+# 0..7 first reads the case the claims need at seed 3, weight 10, scale 200 (p_npc_033 at 1.0, p_npc_035 at 0.948). Was
+# SEED 0, SCALE 10 (the docstring's 0.982 is the old reading).
+# seed re-picked at B06.99: the stream changed (was 3, 10, 200; on the new stream that reads 0.978 / 0.947, both marchers cut).
+# Re-scanned seeds 0..7 x weight 10 x scales (200, 100, 50, 20, 10); the first reading p_npc_033 at 1.0 and p_npc_035 cut is
+# seed 1 scale 100 (p_npc_035 at 0.992); seed 7 scale 20 is the only other (0.982).
+SEED, WEIGHT, SCALE = 1, 10, 100
 MARCHERS = ("p_npc_033", "p_npc_035")
 
 
@@ -37,7 +45,7 @@ def _mb():
     return importlib.import_module("modules.mass_battle.massbattle")
 
 
-def _fold(arm="engine", *, model=None, subunits="person", spy=None):
+def _fold(arm="engine", *, model=None, units="person", spy=None):
     """Fold the one march. Returns `(world, events, bodies before, stance before, the module's per-person record)`.
     The record is read off `_person_report`'s return (`spy`, when given, is applied to it first)."""
     mb = _mb()
@@ -56,7 +64,7 @@ def _fold(arm="engine", *, model=None, subunits="person", spy=None):
         w = build_realm(SEED)
         for pid in MARCHERS:
             w.persons[pid].weight = WEIGHT
-        w.fixtures = (w.fixtures.sweep("field_troops_per_weight", SCALE).sweep("field_subunits", subunits)
+        w.fixtures = (w.fixtures.sweep("field_troops_per_weight", SCALE).sweep("field_units", units)
                       .sweep("field_winner_casualties", arm))
         if model is not None:
             w.fixtures = w.fixtures.sweep("field_casualty_model", model)

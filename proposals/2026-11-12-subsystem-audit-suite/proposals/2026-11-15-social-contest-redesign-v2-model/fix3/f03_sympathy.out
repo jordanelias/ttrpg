@@ -1,0 +1,24 @@
+
+== [before] F3 arranger a (r5M) vs b (r2), Parliament seats; paired seeds; n=600
+  trial        shipped   rig0 0.328 rig1 0.345 gain +0.017 (2se 0.055); seats' start at rig 1 {'j1': 0.49}
+  trial        sympathy0 rig0 0.328 rig1 0.440 gain +0.112 (2se 0.056); seats' start at rig 1 {'j1': 1.97}
+  audience     shipped   rig0 0.310 rig1 0.338 gain +0.028 (2se 0.054); seats' start at rig 1 {'j1': 0.49}
+  audience     sympathy0 rig0 0.310 rig1 0.435 gain +0.125 (2se 0.055); seats' start at rig 1 {'j1': 1.97}
+  examination  shipped   rig0 0.320 rig1 0.350 gain +0.030 (2se 0.054); seats' start at rig 1 {'j1': 0.49}
+  examination  sympathy0 rig0 0.320 rig1 0.427 gain +0.107 (2se 0.056); seats' start at rig 1 {'j1': 1.97}
+  inquisition  shipped   rig0 0.303 rig1 0.333 gain +0.030 (2se 0.054); seats' start at rig 1 {'c1': 0.49}
+  inquisition  sympathy0 rig0 0.303 rig1 0.407 gain +0.103 (2se 0.055); seats' start at rig 1 {'c1': 1.97}
+  arbitration  shipped   rig0 0.293 rig1 0.313 gain +0.020 (2se 0.053); seats' start at rig 1 {'j1': 0.49}
+  arbitration  sympathy0 rig0 0.293 rig1 0.398 gain +0.105 (2se 0.055); seats' start at rig 1 {'j1': 1.97}
+
+== [after] F3 arranger a (r5M) vs b (r2), Parliament seats; paired seeds; n=600
+  trial        shipped   rig0 0.323 rig1 0.435 gain +0.112 (2se 0.056); seats' start at rig 1 {'j1': 1.97}
+  trial        sympathy0 rig0 0.323 rig1 0.435 gain +0.112 (2se 0.056); seats' start at rig 1 {'j1': 1.97}
+  audience     shipped   rig0 0.310 rig1 0.442 gain +0.132 (2se 0.055); seats' start at rig 1 {'j1': 1.97}
+  audience     sympathy0 rig0 0.310 rig1 0.442 gain +0.132 (2se 0.055); seats' start at rig 1 {'j1': 1.97}
+  examination  shipped   rig0 0.322 rig1 0.425 gain +0.103 (2se 0.056); seats' start at rig 1 {'j1': 1.97}
+  examination  sympathy0 rig0 0.322 rig1 0.425 gain +0.103 (2se 0.056); seats' start at rig 1 {'j1': 1.97}
+  inquisition  shipped   rig0 0.307 rig1 0.412 gain +0.105 (2se 0.055); seats' start at rig 1 {'c1': 1.97}
+  inquisition  sympathy0 rig0 0.307 rig1 0.412 gain +0.105 (2se 0.055); seats' start at rig 1 {'c1': 1.97}
+  arbitration  shipped   rig0 0.297 rig1 0.395 gain +0.098 (2se 0.055); seats' start at rig 1 {'j1': 1.97}
+  arbitration  sympathy0 rig0 0.297 rig1 0.395 gain +0.098 (2se 0.055); seats' start at rig 1 {'j1': 1.97}

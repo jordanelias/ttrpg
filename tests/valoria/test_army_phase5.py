@@ -11,9 +11,10 @@ weight 2; the Church's `set_s_036` is defended by six individuals; `terr_T7` is 
 from __future__ import annotations
 
 import random
+from engine.dice_engine import draw
 
 from engine.season.data.matrix import Step, WriteClass
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.loop.sides import sides_of
 from engine.season.manifest.registrar import MODULE_ENTRIES
@@ -44,7 +45,7 @@ def _governed_cohorts(w, faction):
 
 
 def _crown_levy(w, strategy="advance", troop_type="levy"):
-    """The Crown's whole levy under arms in one subformation, through the real verbs, commanded by ACTOR. A trained
+    """The Crown's whole levy under arms in one unit, through the real verbs, commanded by ACTOR. A trained
     type needs its Site: one full barracks is planted in each cohort's town, as a faction that had built them would
     have (the shipped realm seats none, so it can only raise levy, and a levy line does not advance)."""
     _fold(w, Act(id="mk", actor=ACTOR, verb="create_record",
@@ -72,27 +73,27 @@ def _input(w, target):
 
 
 def _troops(oob):
-    return sum(s.troops for s in oob.subformations)
+    return sum(s.troops for s in oob.units)
 
 
 # ---------------------------------------------------------------------------------------- M1, M2, M3: the chain runs
 def test_the_shipped_realm_can_raise_field_and_win_with_an_army():
-    """One shipped cohort cannot field a unit (weight 2 = 60 troops, under the engine's 100-troop floor); the faction's
+    """One shipped cohort cannot field an army (weight 2 = 60 troops, under the engine's 100-troop army floor); the faction's
     whole levy, under its commander, can: 15 cohorts = 900, recruited from cohorts that are committed to nobody."""
-    assert R.under_arms_cap(2) < 100, "control: a single shipped cohort is below the engine's unit floor"
+    assert R.under_arms_cap(2) < 100, "control: a single shipped cohort is below the engine's army floor"
     w = build_realm(0)
     cohorts = _governed_cohorts(w, CROWN)
     assert len(cohorts) == 15 and not set(cohorts) & set(world_q.members(w, CROWN)), "fixture: governed, not committed"
     _crown_levy(w, troop_type="spearmen")
     rec = w.records["crown_army"].subject_matter
-    assert sum(n for sf in rec["subformations"] for _c, n in sf["assigned"]) == 15 * R.under_arms_cap(2) >= 900
+    assert sum(n for sf in rec["units"] for _c, n in sf["assigned"]) == 15 * R.under_arms_cap(2) >= 900
     # The Church's territory, not its walled town: slow infantry cannot storm walls (A.9, WALLS), which is a rule and
     # not a defect, and a field AT a territory is an open one.
     inp = _input(w, DEFENDED_TERR)
     assert _troops(inp.orders_of_battle[0]) >= 900 and inp.orders_of_battle[1] is None
     assert inp.fort_level == 0.0
     fn = MODULE_ENTRIES["mass_battle.resolve_field"].fn
-    seen = [fn(inp, random.Random(s)) for s in range(1, 9)]
+    seen = [fn(inp, draw.seeded(draw.H2("test_army_phase5", s))) for s in range(1, 9)]
     assert sum(bool(r["attacker_wins"]) for r in seen) >= 5, [(r["degree"], r["attacker_size_pct"]) for r in seen]
     assert min(r["attacker_size_pct"] for r in seen) > 0.5, "an army of 900 must not be routed by a town's levy"
 
@@ -181,7 +182,7 @@ def test_an_army_is_provisioned_by_the_cohorts_it_drew_from(monkeypatch):
     act = Act(id="mp", actor=ACTOR, verb="march", payload={"subject": DEFENDED_TOWN}, via=SEAT)
     w.acts.append(act)
     att = world_q.mustered(w, ORIGIN, CROWN)
-    MB.resolve(w, att, [act.id], "a field", subject=CHURCH, rung=DEFENDED_TOWN, rng=random.Random(3))
+    MB.resolve(w, att, [act.id], "a field", subject=CHURCH, rung=DEFENDED_TOWN, rng=draw.seeded(draw.H2("test_army_phase5", 3)))
     assert seen[0] == sum(w.persons[c].weight for c in cohorts) == 30, seen
     assert seen[0] != sum(w.persons[p].weight for p in att), "billed the mustered members, not the army"
 

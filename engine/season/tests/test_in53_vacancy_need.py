@@ -26,8 +26,8 @@ and the one reader of the office a `confer` names (`loop/predicates.py::office_n
       one naming nobody is refused.
   (e) RETIRED 2026-10-13 (the session user's "Relax exit rules"; plan §0.5): the realm-execution
       exit on `build_realm(0)` at 4 seasons is a recorded reading, not a test.
-  (f) the U2 fingerprint moves when a classed referent opens or is told of under an unchanged
-      question id (`loop/deliberate.py::_inputs_fingerprint`).
+  (f) the formed set moves when a classed referent opens or is told of under an unchanged
+      question id.
 
 MUTATIONS, run at the build: `vacant = vacancies(w, p)` -> `vacant = ()` in `questions_for`, and the
 self term in `operand_bags` deleted -- each reddens this file (counts in H-207's OUTCOME).
@@ -233,17 +233,10 @@ def test_in53v_b_no_office_referent_outside_reach():
 # ======================================================================================
 
 def test_in53v_c_the_classes_survive_the_fold_and_are_closed():
-    # RE-RECORDED AT v9 IN-09: `Record` joins (was `{"Office"}`), the held writs `writs_held` stamps.
-    # RE-RECORDED AT v9 IN-45 `migrate`: `Rung` joins, the places `places_named` stamps (H-168).
-    # Spelled as a size and two memberships: `test_jordan_no_definition_is_hardcoded_in_a_body` flags a
-    # three-string literal here as a roster duplicated from rosters.yaml.
-    # RE-RECORDED AT v10 REM-21: `Site`, `Proposition` and `Person` join (was 3), the classes the
-    # own-referent term stamps once a row declares one (`test_referent_class_stamps.py`).
-    # RE-RECORDED AT v10 IN-12 step 5: `Detainee` joins (6 -> 7), the restrained-persons class
-    # `world_q.detainees_held` stamps (`interrogate`'s, `test_in12_interrogate.py`).
-    # RE-RECORDED AT v11 CR-87: `Enemy` joins (7 -> 8), the war-context class `world_q.enemies_heard` stamps (no row declares
-    # it; the `fight` decline reads it, `test_cr87_violence_contexts.py`).
-    assert len(REFERENT_CLASSES) == 8 and {"Office", "Record"} <= REFERENT_CLASSES and "Rung" in REFERENT_CLASSES
+    # The class roster is closed by its loader (the `Forbidden` refusals below), so its size is not pinned here: the
+    # memberships this test reads are. Spelled as memberships because `test_jordan_no_definition_is_hardcoded_in_a_body`
+    # flags a three-string literal as a roster duplicated from rosters.yaml.
+    assert {"Office", "Record"} <= REFERENT_CLASSES and "Rung" in REFERENT_CLASSES
     a = Question("q:claim:x", "claim_landed", ("S",), "x")
     b = Question("q:need:off_reeve", "need", (), "off_reeve", (("off_reeve", "Office"),))
     for rule in ("all", "one_per_source"):
@@ -272,40 +265,9 @@ def _planted(monkeypatch, verb, key, value):
 
 
 def test_in53v_c_the_declarations_as_built():
-    # RE-RECORDED AT v9 IN-10 (a): `oblige` declares the class (was `{"confer"}`); AT v9 IN-09 the
-    # `comply` declares `Record` (was `{"confer", "oblige"}`); AT v9 IN-45 `migrate` declares `Rung`;
-    # AT v9 IN-49 `requisition` declares `Rung` beside it; AT v10 REM-22 `restore`, `work` and `examine`
-    # declare `Site` (B10-05); AT v10 REM-23 `commit` declares `Proposition` (B10-05); AT v10 REM-24
-    # `petition` declares `Person` (B10-05); AT v10 REM-25 `carry`, `found` and `build` declare `Record`
-    # beside `comply` (B10-05; ten rows -> thirteen); AT v10 CP-T05-04 `argue` declares `Proposition` and
-    # `open_case` declares `Person` (B10-05; thirteen rows -> fifteen); AT v10 REM-2C `research` declares
-    # `Record` (B10-05; fifteen rows -> sixteen; control: the CP-T05-04 tree `ea6f1dba`, fifteen); AT v10 REM-27
-    # `march` declares `Rung` beside `migrate` and `requisition` (B10-06; sixteen rows -> seventeen; control: the
-    # B10-05 close `2bc4afcf`, sixteen); AT v10 REM-28 (B10-06) `convene` declares `Rung` (seventeen rows -> eighteen;
-    # control: the REM-27 fallout fix `ee5acba1`, seventeen); AT v10 REM-28 (B10-06) `dispatch` declares `Person` beside
-    # `petition` and `open_case` (eighteen rows -> nineteen; control: the convene commit `b8fd583b`, eighteen); AT v10
-    # REM-28 (B10-06) `revoke` declares `Office` beside `confer` and `oblige` (nineteen rows -> twenty; control: the
-    # dispatch commit `a4c508c5`, nineteen); AT v10 REM-2B (B10-06) `evade / defy` and `construe` declare `Record`
-    # beside `comply` (twenty rows -> twenty-two; control: the REM-2A tree `f23194871`, twenty); AT v10 IN-12 step 5
-    # (B10-09) `interrogate` declares `Detainee` (twenty-two rows -> twenty-three; control: `114ae5da4`, twenty-two);
-    # AT v10 IN-61 (B10-09) `succeed` declares `Office` beside `confer`, `oblige` and `revoke` (twenty-three rows ->
-    # twenty-four; control: the CR-26 tree `59e5cf452`, twenty-three); AT v11 CR-25 (B10-09) `establish` declares
-    # `Rung` (twenty-four rows -> twenty-five; control: the CR-81 tree `c35f6599`, twenty-four); AT v10 PC-10b (B10-11)
-    # `accept` declares `Record` on a held `challenge` (twenty-five rows -> twenty-six; control: the CP-T03-09 tree
-    # `95f58adb`, twenty-five); AT v11 CP-T03-08 (B10-11) `tend` declares `Person` (twenty-six rows -> twenty-seven;
-    # control: the CP-T03-07 tree, twenty-six); AT B10-12 (pin commit, P15) `marshal` (CP-T04-02) and `surrender` (CP-T04-07)
-    # declare a referent class (twenty-seven rows -> twenty-nine; both ship WITHHELD; control: the B10-13 tree, twenty-seven).
-    assert {v for v, r in VERB_TABLE.items() if r.referent_class} == {"confer", "oblige", "comply", "march",
-                                                                      "establish",
-                                                                      "interrogate", "succeed",
-                                                                      "evade / defy", "construe",
-                                                                      "convene", "dispatch", "revoke", "migrate", "requisition",
-                                                                      "restore", "work", "examine",
-                                                                      "commit", "petition",
-                                                                      "carry", "found", "build",
-                                                                      "argue", "open_case",
-                                                                      "research", "accept", "tend",
-                                                                      "marshal", "surrender"}
+    # Not pinned as a set of rows: which verbs declare a class moves with every row that adds one, and the rows this test is
+    # about are asserted one by one below. That every declared class is a member of the roster is the loader's refusal
+    # (`test_in53v_c_the_loader_refuses`), not asserted here.
     assert VERB_TABLE["migrate"].referent_class == "Rung" and not VERB_TABLE["migrate"].referent_named
     assert VERB_TABLE["requisition"].referent_class == "Rung" and not VERB_TABLE["requisition"].referent_named
     assert VERB_TABLE["confer"].referent_class == VERB_TABLE["oblige"].referent_class == "Office"
@@ -395,7 +357,7 @@ def test_in53v_d_an_act_on_a_classed_referent_cites_no_unrelated_occasion():
     cites it, and so does one whose subject is both plain and classed."""
     from engine.season.state.carriers import Event, Scene, StateChange
     w, d = _gov_world()
-    origin = Event("ev_v_origin", "speech.made", [], [ROOT], w.tick)
+    origin = Event("ev_v_origin", "news.told", [], [ROOT], w.tick)
     w.log.append(origin)
     w.log.append(Event("ev_v_deposit", "claim.deposited",
                        [StateChange("claim_v", "set", "Act")], [origin.id], w.tick))
@@ -435,47 +397,43 @@ def test_in53v_d_a_confer_onto_no_living_person_is_refused():
 
 
 # ======================================================================================
-# (f) THE U2 FINGERPRINT SEES THE CLASSED REFERENTS (batch B-I close, L1): `loop/deliberate.py::
-# _inputs_fingerprint` must move whenever `opening_set` would form a different set, or the driver
-# serves a stale queue. Both arms keep every question id fixed, which is the case the id alone missed.
+# (f) THE FORMED SET SEES THE CLASSED REFERENTS (batch B-I close, L1): `opening_set` forms a different
+# set when a vacancy opens or a seat is told of. Both arms keep every question id fixed, which is the
+# case the id alone missed. (The U2 fingerprint these arms once also asserted went with the stored plan.)
 # ======================================================================================
 
-def _fp_and_formed(w, pid, since=None):
-    from engine.season.loop.deliberate import _inputs_fingerprint
+def _classes_and_formed(w, pid, since=None):
     p = w.persons[pid]
     qs = world_q.questions_for(w, p, since)
-    return ([q.id for q in qs], _inputs_fingerprint(p, qs),
+    return ([q.id for q in qs], [q.classes for q in qs],
             _sig(c for q in qs for c in _formed(w, pid, q)))
 
 
-def test_in53v_f_a_vacancy_opening_under_a_standing_question_moves_the_fingerprint():
+def test_in53v_f_a_vacancy_opening_under_a_standing_question_moves_the_formed_set():
     """`p_king` answers an ambition question. `off_reeve` is seated (no vacancy), then its hold
-    closes: the question keeps its id and gains the seat as `Office`, `confer` forms on it -- and the
-    fingerprint must move, though nothing of `p_king`'s own (tenures, ledger) did."""
+    closes: the question keeps its id and gains the seat as `Office`, and `confer` forms on it."""
     w, _ = _gov_world()
     _ambition(w, "p_king", "prop_k", "R")
     w.add_tenure(Tenure("t_seat_reeve", "p_mid", "off_reeve", "hold", since=0))
-    ids0, fp0, sig0 = _fp_and_formed(w, "p_king")
+    ids0, _, sig0 = _classes_and_formed(w, "p_king")
     _hold(w, "off_reeve").until = w.tick
-    ids1, fp1, sig1 = _fp_and_formed(w, "p_king")
+    ids1, _, sig1 = _classes_and_formed(w, "p_king")
     assert ids1 == ids0 == ["q:need:prop_k"], (ids0, ids1)
     assert sig1 != sig0 and any("'confer', 'off_reeve'" in s for s in sig1), sig1
-    assert fp1 != fp0, "the vacancy moved the candidate set and left the fingerprint unmoved"
 
 
-def test_in53v_f_being_told_of_a_seat_already_carried_moves_the_fingerprint():
+def test_in53v_f_being_told_of_a_seat_already_carried_moves_the_formed_set():
     """`off_reeve` is already `p_king`'s vacancy, so being TOLD of it moves no class and no id -- but
     `oblige` (`referent_named`) starts forming on it. `since` is past the told claim, so Q2 does not
     admit it as a question of its own (it would move the ids by itself, and the arm would observe
-    nothing): what is left is the seventh term."""
+    nothing)."""
     from .test_in10a_oblige_formable import _told
     w, _ = _gov_world()
     _ambition(w, "p_king", "prop_k", "R")
     since = (w.tick, 1)
-    ids0, fp0, sig0 = _fp_and_formed(w, "p_king", since)
+    ids0, cls0, sig0 = _classes_and_formed(w, "p_king", since)
     _told(w, "p_king", "off_reeve")
-    ids1, fp1, sig1 = _fp_and_formed(w, "p_king", since)
+    ids1, cls1, sig1 = _classes_and_formed(w, "p_king", since)
     assert ids1 == ids0 == ["q:need:prop_k"], (ids0, ids1)
-    assert fp1[0] == fp0[0], "the classes moved: this arm no longer isolates the told term"
+    assert cls1 == cls0, "the classes moved: this arm no longer isolates the told term"
     assert sig1 != sig0 and any("'oblige', 'off_reeve'" in s for s in sig1), sig1
-    assert fp1 != fp0, "being told of the seat moved the candidate set, not the fingerprint"

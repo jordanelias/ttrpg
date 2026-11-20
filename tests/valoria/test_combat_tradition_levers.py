@@ -16,22 +16,19 @@ won, a grab de-hazarded) that aggregate winrate cannot see — the situational n
 the SURFACE (every lever site reaches ability_factor; default 1.0 = inert-safe) and the PER-EVENT effect — NOT an
 aggregate edge, which the review showed the abilities do not robustly confer.
 """
-import os
 import sys
 
 import pytest
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
-sys.path.insert(0, ENGINE)
 
-import random  # noqa: E402
-import ability_primitives as ABIL  # noqa: E402
-import combat_systems as S  # noqa: E402
-import contact as CT  # noqa: E402
-import tradition as TR  # noqa: E402
-import wrapper as W  # noqa: E402
-from combatant import Combatant  # noqa: E402
-from config import CFG  # noqa: E402
+from engine.dice_engine import draw
+from modules.combat import ability_primitives as ABIL  # noqa: E402
+from modules.combat import combat_systems as S  # noqa: E402
+from modules.combat import contact as CT  # noqa: E402
+from modules.combat import tradition as TR  # noqa: E402
+from modules.combat import wrapper as W  # noqa: E402
+from modules.combat.combatant import Combatant  # noqa: E402
+from modules.combat.config import CFG  # noqa: E402
 
 
 def test_surface_exists_and_is_inert_by_default():
@@ -135,7 +132,7 @@ def test_levers_add_texture_without_shifting_balance():
     against the old true rate) — still failing loudly if the levers go dead."""
     import os as _os
     _wb = _os.path.join(_os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1', 'workbench'); sys.path.insert(0, _wb)   # stayed at `31b`
-    from trace import run_traced_fight  # noqa: E402
+    from fight_trace import run_traced_fight  # noqa: E402
     OFF = dict(CFG, LEGIB_EDGELINE_K=0, BIND_SPINE_K=0, GRAB_EDGE_K=0, CHOKE_ACCURACY_K=0, FACING_REGIME_K=0)
 
     def _sig(ev):
@@ -207,10 +204,9 @@ def test_investment_is_bounded_no_overflow_crash():
     # levels above the cap saturate (level 30 == level MAX)
     assert ABIL.ability_factor(_C({'shinogi': 30.0}), 'spine_press') == ABIL.ability_factor(_C({'shinogi': ABIL.MAX_INVESTMENT_LEVEL}), 'spine_press')
     # a real fight with an extreme-investment fighter must RESOLVE, not crash
-    import random as _r
     a = Combatant('A', weapon='katana', tradition='japanese', equipped={'shinogi': 999})
     b = Combatant('B', weapon='arming', tradition='german', equipped={'zwerchhau': 999, 'ringen_am_schwert': 999})
-    W.fight(a, b, CFG, _r.Random(3))   # no OverflowError
+    W.fight(a, b, CFG, draw.seeded(draw.H2("test_combat_tradition_levers", 3)))   # no OverflowError
 
 
 def test_investment_level_moves_the_per_event_effect():

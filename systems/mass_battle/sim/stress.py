@@ -15,7 +15,7 @@ facing and troops, plus the post-movement contact set):
             where a same-side subunit WAS in contact (an ally watching an ally fight).
   edge      nodes within `edge_margin` of the field boundary, and nodes pinned on it (the clamp in `_node_advance`).
   fit       the deployed extent of each side, and any build error (a cell off the field raises at construction).
-  fight     winner, ticks, survivor share, first contact, share of subunits engaged.
+  fight     winner, ticks, survivor share, first contact, share of units engaged.
 
 FLAGS. `--arm shipped` is every flag at its shipped default (all on since MB-07r flipped `MB_SUPPORT_RANK_CAP`);
 `--arm all_on` sets that flag explicitly and is the shipped arm now. The arms are in the JSON. Flags are read at import, so run one arm per
@@ -43,6 +43,7 @@ import traceback
 _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(_HERE))))   # repo root, as bat.py does
 sys.path.insert(0, _HERE)
+from engine.dice_engine import draw
 PARAMS = os.path.join(_HERE, 'stress_scenarios.json')
 
 M = {}   # the module's names, filled by _load() AFTER the arm's flags and the grid size are set
@@ -58,13 +59,13 @@ def _load(arm_env: dict, grid) -> None:
     from modules.mass_battle.config import cell_cap_for
     from modules.mass_battle.geometry import body_depth, cellbody_from, footprint_for
     from modules.mass_battle.orchestration import run_battle
-    from modules.mass_battle.orderofbattle import OrderOfBattle, Subformation, build_unit
+    from modules.mass_battle.orderofbattle import OrderOfBattle, UnitRow, build_unit
     from systems.mass_battle.sim.engine import REFUSE_ECHELON, build_army, build_envelopment, build_refused_flank
     import walkthrough
     M.update(rngsource=rngsource, ENVELOP_WING_GAP=ENVELOP_WING_GAP, _centered_line_cols=_centered_line_cols,
              _spec_span=_spec_span, cell_cap_for=cell_cap_for, body_depth=body_depth,
              cellbody_from=cellbody_from, footprint_for=footprint_for,
-             run_battle=run_battle, OrderOfBattle=OrderOfBattle, Subformation=Subformation, build_unit=build_unit,
+             run_battle=run_battle, OrderOfBattle=OrderOfBattle, UnitRow=UnitRow, build_unit=build_unit,
              REFUSE_ECHELON=REFUSE_ECHELON, build_army=build_army, build_envelopment=build_envelopment,
              build_refused_flank=build_refused_flank, Recorder=walkthrough._Recorder, cfg=cfg)
     if grid:
@@ -122,8 +123,8 @@ def _build_side(desc: dict, side: str, ex: dict, P: dict):
     name = 'side_' + side.lower()
     kind = desc['kind']
     if kind == 'oob':
-        oob = M['OrderOfBattle'](tuple(M['Subformation'](s['name'], s['troop_type'], s['troops'], role=s.get('role'))
-                                       for s in desc['subformations']), strategy=desc['strategy'])
+        oob = M['OrderOfBattle'](tuple(M['UnitRow'](s['name'], s['troop_type'], s['troops'], role=s.get('role'))
+                                  for s in desc['units']), strategy=desc['strategy'])
         return M['build_unit'](oob, name, side, morale_start=ms)
     if kind == 'army':
         specs = _prep(desc['subunits'])
@@ -288,8 +289,8 @@ def fight_one(task: tuple) -> dict:
         rec = M['Recorder'](a, b, P['round_digits'])
         sys.setprofile(rec)
         try:
-            with M['rngsource'].using(random.Random(seed)):
-                res = M['run_battle'](a, b, max_turns=cap)
+            with M['rngsource'].using(draw.seeded(draw.H2("stress", seed))):
+                res = M['run_battle'](a, b, max_ticks=cap)
         finally:
             sys.setprofile(None)
         if rec.t not in rec.snaps:

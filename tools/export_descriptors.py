@@ -218,6 +218,116 @@ def _heritage_roster(reg, concerns):
             'engages': {str(m): str(c) for m, c in engages.items()}}
 
 
+def _gloss(where, row, noun):
+    """`row`'s one-sentence gloss, stripped, or SystemExit naming `where`: the one check of an empty or missing gloss, for the
+    attributes, the skills and the traits alike."""
+    gloss = row.get('gloss')
+    if not isinstance(gloss, str) or not gloss.strip():
+        raise SystemExit(f'{where}: empty or missing gloss. Every {noun} carries a one-sentence gloss.')
+    return gloss.strip()
+
+
+def _attribute_glosses(reg):
+    """`{attribute key: gloss}` over the ten, each gloss a non-empty string (B04.02, DEF Edit 1). One plain
+    sentence per attribute, so `decision/sheet.py::describe` can show a player what a name means."""
+    return {e['key']: _gloss(f'descriptor_registry.yaml: attributes {e["key"]}', e, 'attribute')
+            for e in descriptor_registry.all_attributes(reg)}
+
+
+#: The row grammar of each defined roster: the keys a row may carry, no others. A stray key (a typo, or a column a producer
+#: dropped, as `lapses_by:`) is refused by name, since the leaf reads only the keys the exporter cooks and a key it does not
+#: would sit in the registry and do nothing.
+CAPABILITY_ROW_KEYS = ('kind', 'gloss', 'untrained', 'grows_by', 'scale', 'source')
+TRAIT_ROW_KEYS = ('gloss', 'seated_by')
+
+
+def _row(where, row, allowed):
+    """`row`, if it is a mapping carrying no key outside `allowed`; else SystemExit naming `where`: the preamble of every row
+    of a defined roster."""
+    if not isinstance(row, dict):
+        raise SystemExit(f'{where} is not a mapping.')
+    stray = sorted(str(k) for k in row if k not in allowed)
+    if stray:
+        raise SystemExit(f'{where}: carries {stray}, which is outside the row grammar {list(allowed)}. A key the exporter '
+                         f'does not cook reaches no reader; drop it or add it to the grammar.')
+    return row
+
+
+def _capability_roster(reg):
+    """The skills, defined once (B04.02; U1 §2, A-98 (4)). Refused, naming the row: a `kind` that is not
+    `skill` (a leftover `aptitude` or `trait` row, `IS-B2-CHAR-05`), a `grows_by` or `untrained`
+    value outside the block's closed set, an empty `gloss`, and a `scale` that is not `[int, int]` with floor <= ceiling.
+    A skill names no attribute (B05.25): the verb row does."""
+    block = reg.get('capabilities')
+    if not isinstance(block, dict) or not block.get('rows'):
+        raise SystemExit('descriptor_registry.yaml: capabilities is missing or has no rows. It is the one '
+                         'definition of each skill; the engine reads it through engine/substrate/descriptors.py.')
+    if list(block.get('kinds') or []) != ['skill']:
+        raise SystemExit(f'descriptor_registry.yaml: capabilities.kinds is {block.get("kinds")!r}; it is closed '
+                         f'at [skill] (A-98 (4)): the attributes and the traits are not defined here.')
+    grows_set, untrained_set = list(block.get('grows_by') or []), list(block.get('untrained') or [])
+    if not grows_set or not untrained_set:
+        raise SystemExit('descriptor_registry.yaml: capabilities.grows_by and capabilities.untrained are the '
+                         'closed sets a row is held to; neither may be empty.')
+    rows = {}
+    for name, r in block['rows'].items():
+        where = f'descriptor_registry.yaml: capabilities.rows.{name}'
+        r = _row(where, r, CAPABILITY_ROW_KEYS)
+        if r.get('kind') != 'skill':
+            raise SystemExit(f'{where}: kind {r.get("kind")!r} is not skill. The one kind is skill (A-98 (4)); '
+                             f'an aptitude or trait row is not a capability.')
+        gloss = _gloss(where, r, 'skill')
+        if r.get('untrained') not in untrained_set:
+            raise SystemExit(f'{where}: untrained {r.get("untrained")!r} is outside {untrained_set}.')
+        grows = r.get('grows_by')
+        if not isinstance(grows, list) or not grows or any(g not in grows_set for g in grows) \
+                or len(set(grows)) != len(grows):
+            raise SystemExit(f'{where}: grows_by {grows!r} is not a non-empty, repeat-free subset of {grows_set}.')
+        sc = r.get('scale')
+        if (not isinstance(sc, list) or len(sc) != 2
+                or any(isinstance(v, bool) or not isinstance(v, int) for v in sc) or sc[0] > sc[1]):
+            raise SystemExit(f'{where}: scale {sc!r} is not [int, int] with floor <= ceiling.')
+        rows[str(name)] = {'kind': 'skill', 'gloss': gloss,
+                           'floor': sc[0], 'ceiling': sc[1],
+                           'untrained': r['untrained'], 'grows_by': list(grows), 'source': r.get('source')}
+    # `names` is DERIVED from the rows, never authored, so `rosters.yaml: capabilities: {from_descriptor: capabilities}`
+    # is served as `pursuit_axes`' is (`data/rosters.py::roster` reads `block['names']`) with no second list to drift.
+    return {'source': block.get('source'), 'kinds': ['skill'], 'grows_by': grows_set,
+            'untrained': untrained_set, 'names': list(rows), 'rows': rows}
+
+
+def _trait_roster(reg, skill_names):
+    """The traits, defined once (B04.07; U1 §2a, A-107), beside `_capability_roster`. Refused, naming the row: a missing
+    or empty block, a `scale` other than `[0, 1]` (a trait is held or not), an empty `gloss`, a missing `seated_by`,
+    a `seated_by` value used by two rows (one `resonant_style` value seats one trait), and an id that is also a row of
+    `capabilities:` (one id, one roster). `skill_names` is the exported skill roster's ids."""
+    block = reg.get('traits')
+    if not isinstance(block, dict) or not block.get('rows'):
+        raise SystemExit('descriptor_registry.yaml: traits is missing or has no rows. It is the one definition of '
+                         'each trait; the engine reads it through engine/substrate/descriptors.py.')
+    if block.get('scale') != [0, 1]:
+        raise SystemExit(f'descriptor_registry.yaml: traits.scale is {block.get("scale")!r}; a trait is held or not, '
+                         f'so the scale is [0, 1] (A-98 (4)).')
+    rows, seated = {}, {}
+    for name, r in block['rows'].items():
+        where = f'descriptor_registry.yaml: traits.rows.{name}'
+        r = _row(where, r, TRAIT_ROW_KEYS)
+        if name in skill_names:
+            raise SystemExit(f'{where}: {name!r} is also a row of capabilities. One id, one roster (A-107): a trait '
+                             f'is never a skill.')
+        gloss = _gloss(where, r, 'trait')
+        by = r.get('seated_by')
+        if not isinstance(by, str) or not by.strip() or by != by.strip().lower():
+            raise SystemExit(f'{where}: seated_by {by!r} is not one lowercase resonant_style value.')
+        if by in seated:
+            raise SystemExit(f'{where}: seated_by {by!r} is already used by {seated[by]}. One resonant_style value '
+                             f'seats one trait.')
+        seated[by] = str(name)
+        rows[str(name)] = {'gloss': gloss, 'seated_by': by}
+    return {'source': block.get('source'), 'scale': [0, 1], 'seated_from': block.get('seated_from'),
+            'names': list(rows), 'rows': rows}
+
+
 def build():
     reg = ci_common.load_yaml(SRC, default=None)
     if not reg:
@@ -229,9 +339,10 @@ def build():
         raise SystemExit('descriptor_registry.yaml: attributes.scale is missing. The attribute scale '
                          'is the one bound the engine clamps every character stat on; it may not be absent.')
     roster = []
-    for domain in ('body', 'mind', 'social'):
+    for domain in ('body', 'mind', 'spirit', 'social'):
         for key in (attrs.get(domain) or []):
             roster.append(key if isinstance(key, str) else key.get('key'))
+    capabilities = _capability_roster(reg)
 
     return {
         '_generated': (
@@ -253,6 +364,8 @@ def build():
             # without a second alias list. A retired attribute's names (Bonds) are absent: a value
             # authored under one is refused as not one of the ten.
             'names': _attribute_names(reg),
+            # B04.02: each attribute's one-sentence gloss, by key (`decision/sheet.py::describe`).
+            'glosses': _attribute_glosses(reg),
             'pending_tenth': (
                 'Jordan ruled 2026-08-14 that the roster WILL BE 10 attributes. The registry ships '
                 f'{len(roster)} and the tenth is UNNAMED. This sentinel exists so a reader cannot mistake '
@@ -273,6 +386,10 @@ def build():
         'affiliation_roster': _affiliation_roster(reg),
         # THE HERITAGE ROSTER (CR-30): what `Person.heritage` is one of, with the concern each engages.
         'heritage_roster': _heritage_roster(reg, _affiliation_roster(reg)['concerns']),
+        # THE SKILLS (B04.02), defined once: what each is, its attribute, what opposes it, how it grows.
+        'capabilities': capabilities,
+        # THE TRAITS (B04.07), defined once beside the skills: what a person is moved by; held or not, never dice.
+        'traits': _trait_roster(reg, capabilities['rows']),
         'settlement_stats': _section(reg, 'settlement_stats'),
         'practitioner_stats': _section(reg, 'practitioner_stats'),
         'territory_stats': _section(reg, 'territory_stats'),

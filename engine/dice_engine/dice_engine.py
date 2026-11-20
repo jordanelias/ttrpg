@@ -1,27 +1,27 @@
 """
 engine/dice_engine/dice_engine.py — d10 dice pool, TN values, degree of success, continuous engine
-(The header read `sim/autoload/...` until 2026-08-27; that tree was retired 2026-07-21. Its twin
-in sigma_leverage.py was fixed the same day and this one was missed — §0.1 pt 5's sweep-the-pattern.)
 
-Canon source: params/core.md (Die Rule, TN Values, Degrees of Success, Continuous Engine Decision E)
-Params source: params/core.md
-Status: [CANONICAL — Phase 1 implementation 2026-05-17]
+Owner of the d10 face rule (`FACE_NET`), the per-die pair, the one sampler and the degree ladder (`BAND_FLOORS`,
+`MARGIN_SCALE`); the values are exported to `engine/engine_params/` by `tools/export_sim_params.py`.
+(`params/core.md`, which this header once named as source, is retired: the code is the source.)
+Status: the ruled owner of the dice chain for every scale of the game; the code is the mechanism, this text is reference.
 
 Dependencies:
   - none — root primitive
 
 Entry points:
-  - roll_pool(pool_size: int, tn: int, rng=None) -> RollResult
-  - continuous_engine_sample(pool: float, tn: int, rng=None) -> float
+  - roll_pool(pool_size: int, tn: int, *, rng: Draw) -> RollResult
+  - continuous_engine_sample(pool: float, tn: int, *, rng: Draw) -> float
   - degree_from_net(net, ob, extension: BandExtension | None = None, **context) -> Degree
   - BandExtension — the ED-SC-0032 injection seam a subsystem's wrapper passes as `extension`
 """
 from __future__ import annotations
 
 import math
-import random
 from dataclasses import dataclass
 from enum import Enum
+
+from engine.dice_engine.draw import Draw
 
 
 class Degree(Enum):
@@ -60,12 +60,9 @@ DEGREE_ORDINAL: dict["Degree", int] = {
 #    if a system does require any modification or extension, then the wrapper needs to inject
 #    the engine in such a manner that it can be modified cleanly."
 #
-# ED-SC-0031 satisfied the first clause — every subsystem's bands became this module's — and
-# NOT the second: the social contest's pool-aware de-saturation survived as a hard-coded
-# post-filter inside `sigma_leverage`, with no hook here and nothing stopping the next
-# subsystem bolting on a differently-shaped one. This is the hook, and the point of putting it
-# HERE rather than leaving each subsystem to police itself is that the constraint becomes
-# STRUCTURAL:
+# Every subsystem's bands are this module's (ED-SC-0031); this is the hook for the second clause,
+# and the point of putting it HERE rather than leaving each subsystem to police itself is that
+# the constraint becomes STRUCTURAL:
 #
 #   * an extension's only power is to VETO the top band. `may_overwhelm`'s return is coerced with
 #     `not` and consulted in exactly one branch below — the OVERWHELMING one — so the only band
@@ -74,13 +71,11 @@ DEGREE_ORDINAL: dict["Degree", int] = {
 #   * `context` is the subsystem's own state (the contest passes its pool). The engine neither
 #     interprets it nor stores it. Unknown keys are REFUSED rather than swallowed (below).
 #
-# ⚠ THE LIMIT OF "STRUCTURAL", stated because an adversarial pass broke the stronger claim this
-# comment first made. Two sentences are retracted. (1) "the ladder itself is never passed to the
-# extension, so an extension cannot re-derive it" — FALSE: `may_overwhelm` is arbitrary Python and
-# can import `degree_from_net` in one line. What the design prevents is RETURNING a different
-# band, not re-deriving one. (2) "whatever its author intends" — OVERSTATED: an extension runs in
-# this process with access to this module's mutable state, and `DEGREE_ORDINAL` is a plain dict a
-# hostile extension could mutate mid-call. The honest claim is narrower and still worth having:
+# ⚠ THE LIMIT OF "STRUCTURAL". `may_overwhelm` is arbitrary Python and can import
+# `degree_from_net` in one line: what the design prevents is RETURNING a different band, not
+# re-deriving one. An extension runs in this process with access to this module's mutable state,
+# and `DEGREE_ORDINAL` is a plain dict a hostile extension could mutate mid-call. The claim is
+# narrower and still worth having:
 # an extension that confines itself to its own contract CANNOT express any band change but 3 -> 2,
 # and any attempt to do more has to reach outside the seam, where it is visible in a diff. That is
 # an auditable convention with a structurally-bounded return channel — not a sandbox, and this
@@ -113,11 +108,10 @@ class BandExtension:
     def validate_context(self, context) -> None:
         """Refuse a context key this extension does not declare. Called by the ladder.
 
-        ⚠ THIS EXISTS BECAUSE THE SEAM SHIPPED WITH A SILENT-NO-OP HOLE, found by an adversarial
-        pass on the commit that built it. `**context` accepts any keyword, and an extension that
-        defaults its parameter (`pool=None` -> abstain) turns a MISSPELLED OR RENAMED key into a
-        band change: `degree_from_net(net, ob, extension=E, poool=8)` returned Overwhelming where
-        `pool=8` would have returned Success, with no error and no warning. That is CLAUDE.md
+        ⚠ `**context` accepts any keyword, and an extension that defaults its parameter (`pool=None`
+        -> abstain) would turn a MISSPELLED OR RENAMED key into a band change:
+        `degree_from_net(net, ob, extension=E, poool=8)` would return Overwhelming where
+        `pool=8` returns Success, with no error and no warning. That is CLAUDE.md
         §0.1 point 1's read/write asymmetry exactly — the write silently misses the read — and it
         is the failure mode a seam must not have, because the whole point of a declared extension
         is that its inputs are declared.
@@ -140,7 +134,6 @@ class BandExtension:
 
 @dataclass
 class RollResult:
-    pool_size: int
     tn: int
     rolls: list[int]
     net: int
@@ -150,38 +143,39 @@ class RollResult:
 
 # Canonical die rule (params/core.md §Die Rule, PP-246):
 #   1 = -1 success, 2-6 = 0, 7-9 = +1 success, 10 = +2 successes. No chain.
+# The d10's faces and what each scores. THE face rule; `_die_result` reads it and nothing else spells it.
+# [canonical: PP-246 -- 1 scores -1, 2-6 score 0, 7-9 score +1, 10 scores +2]
+FACE_NET = {1: -1, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 1, 8: 1, 9: 1, 10: 2}
+
+
 def _die_result(face: int) -> int:
-    if face == 1:
-        return -1
-    elif face <= 6:
-        return 0
-    elif face <= 9:
-        return 1
-    else:  # 10
-        return 2
+    return FACE_NET[face]
+
+
+# Where the bands fall, as margins: Partial from 0, Success from 1, Overwhelming from 3, held in the
+# ladder's integer milli-units (W3-1, C3-L1: the margin is quantised once, round(MARGIN_SCALE * margin)).
+# [JUSTIFIED: a unit of account, not a game magnitude -- the margin is quantised once to integer milli-units (C3-L1) so no float sum a rounding error under an edge reads as on it; the bands below are the whole-success edges 0 / 1 / 3 of the degree ladder in `degree_from_net`'s docstring (Jordan ruling, 2026-08-14)]
+MARGIN_SCALE = 1000
+# [canonical: Jordan ruling 2026-08-14, the degree ladder -- margin >= 3 Overwhelming, >= 1 Success, >= 0 Partial, in milli-units of MARGIN_SCALE]
+BAND_FLOORS = {"partial": 0, "success": 1000, "overwhelming": 3000}
 
 
 # Per-die EV at TN 7 — the only TN there is.
 # [Jordan, 2026-08-25: "TN7 always. Never change TN anywhere ever." — ED-IN-0196]
-# The table used to carry TN 6 (μ=0.50, σ=0.806) and TN 8 (μ=0.30, σ=0.781). Those rows are
-# dead under the ruling and are deleted rather than left as reachable-looking configuration.
-# The historical table was reference-only and NOT a mechanism (§0.05); its capture
-# (params_tables.yaml) was retired (`FORK:` row in references/restructure_ledger.md).
-#
-# Note the TN 6 row was always in tension with `_die_result` below, which has never read `tn`:
-# μ=0.50 is only reachable if faces 6-9 score, and no face rule here has ever done that. The
-# ruling resolves that tension in favour of the die rule.
 #
 # The ONE owner, within engine/dice_engine/, of the per-die mean and sigma. The PUBLIC names carry the
 # literals (plain assignments: tools/export_sim_params.py reads only those, so the typed export keeps
 # the pair) and engine/dice_engine/sigma_leverage.py aliases them rather than keeping a copy. The
 # private names stay as aliases of the public ones: tests/valoria/test_tn7_always.py pins them.
-# modules/mass_battle/resolution.py (`_SIG_PER_DIE`) and modules/mass_battle/config.py
-# (`PER_DIE_NET_EV`) hold values of their own; REM-42 does not reach them.
+# modules/mass_battle reads these through `engine.dice_engine` since B05.03 (its own `_SIG_PER_DIE` and `PER_DIE_NET_EV` are deleted).
 MU_PER_DIE = 0.40      # [canonical: params/core.md §Expected Value, TN 7]
 SIGMA_PER_DIE = 0.800  # [canonical: params/core.md §Expected Value, TN 7]
 _MU_PER_DIE: float = MU_PER_DIE
 _SIGMA_PER_DIE: float = SIGMA_PER_DIE
+_PAIR_TOL = 1e-12      # [JUSTIFIED: a float tolerance on the pair's equality with the face rule's own mean and variance, not a game magnitude]
+assert abs(MU_PER_DIE - sum(FACE_NET.values()) / 10) < _PAIR_TOL and \
+       abs(SIGMA_PER_DIE ** 2 - sum((v - MU_PER_DIE) ** 2 for v in FACE_NET.values()) / 10) < _PAIR_TOL, \
+       "the per-die pair is the face rule's; change them together"
 
 
 _TN_RULING = ('TN is 7. Always. Jordan, 2026-08-25: "TN7 always. Never change TN anywhere '
@@ -203,34 +197,33 @@ def _require_tn7(tn: int) -> None:
 
 
 def roll_pool(pool_size: int, tn: int = 7, ob: int | float | None = None,
-              rng: random.Random | None = None) -> RollResult:
-    """Roll pool_size d10s under the canonical face rule at TN 7. Pool minimum 1D."""
+              *, rng: Draw) -> RollResult:
+    """Roll pool_size d10s under the canonical face rule at TN 7. Pool minimum 1D. The stream is required: a caller
+    handing none is a `TypeError` at the call, never a fresh stream."""
     _require_tn7(tn)
-    if rng is None:
-        rng = random.Random()
     effective_pool = max(1, pool_size)  # params/core.md §Pool Minimum
-    rolls = [rng.randint(1, 10) for _ in range(effective_pool)]
+    rolls = [rng.die(1, 10) for _ in range(effective_pool)]
     net = sum(_die_result(face) for face in rolls)
     deg = degree_from_net(net, ob) if ob is not None else None
-    return RollResult(pool_size=effective_pool, tn=tn, rolls=rolls, net=net, degree=deg, ob=ob)
+    return RollResult(tn=tn, rolls=rolls, net=net, degree=deg, ob=ob)
 
 
 def continuous_engine_sample(pool: float, tn: int = 7,
-                             rng: random.Random | None = None) -> float:
-    """Sample net successes from Normal(μ·N, σ·√N) per Decision E continuous engine.
+                             *, rng: Draw) -> float:
+    """The sampler every provider draws from (ED-833; Jordan, 2026-11-12). Same mean and variance as the d10
+    face rule it is derived from.
 
+    Normal(μ·N, σ·√N) per Decision E continuous engine; the pool is taken as it is for `pool > 0` (it may be
+    fractional, which enables a fractional Ob), and a pool of nothing rolls nothing.
     Canon: params/core.md §Continuous Engine — statistically equivalent to discrete.
-    Pool may be fractional (enables a fractional Ob).
     """
     _require_tn7(tn)
-    if rng is None:
-        rng = random.Random()
     if pool <= 0:
         return 0.0
     mu, sigma = _MU_PER_DIE, _SIGMA_PER_DIE
     mean = mu * pool
     std = sigma * math.sqrt(pool)
-    return rng.gauss(mean, std)
+    return rng.normal(mean, std)
 
 
 def degree_from_net(net: int | float, ob: int | float,
@@ -248,15 +241,18 @@ def degree_from_net(net: int | float, ob: int | float,
         margin <  0        Failure        fell short
 
     Both operands may be fractional. `net` already is — the continuous engine returns fractional
-    nets. `ob` is RULED to become fractional (Jordan, 2026-08-14: an obstacle rolled against a
-    character or faction is "their corresponding score/2 plus whatever specific modifiers exist for
-    them in that instance"). ⚠ CORRECTED 2026-09-05 (ED-IN-0202) — this read "THAT DERIVATION IS
-    IMPLEMENTED NOWHERE — every call site in the tree still passes a hand-set Ob", and the second
-    clause is FALSE. Measured: `systems/factions/sim/crown_initiative.py::coronation_renewal_ob`
-    implements `floor(Church.L / 2) + 1` exactly, Royal Progress derives its Ob from the standing
-    gap, and the tribunal derives under formal grounds. What is true is narrower: there is NO
+    nets. `ob` is RULED to become fractional (Jordan, 2026-08-14). An obstacle a person opposes
+    with is `sigma_leverage.opposed_ob(his skill score, opposition_rate)`, `MU_PER_DIE` (0.4) a
+    point (A-26, A-71, A-79), composed by the module owners `modules/social_contest/roll.py::obstacle`
+    and `modules/combat/core.py::ob_from_defender`; hostile terms add, nothing lowers it.
+    ⚠ (ED-IN-0202) The derivation is implemented at some sites:
+    `systems/factions/sim/crown_initiative.py::coronation_renewal_ob` implements
+    `floor(Church.L / 2) + 1` exactly, Royal Progress derives its Ob from the standing
+    gap, and the tribunal derives under formal grounds. But there is NO
     SINGLE-OWNER derivation — most sites still hand-set (Muster 1, Govern 2, the
-    threadwork table; combat's fixed Ob 3 is deleted, PC-03), the three opposed sites disagree, and `parliamentary_transfer`'s `L+2`
+    threadwork table; combat's fixed Ob 3 is deleted, PC-03), the three opposed sites disagree
+    (the person-opposed term has one owner since B05: `opposed_ob`; the faction and threadwork sites
+    named here are untouched), and `parliamentary_transfer`'s `L+2`
     contradicts the ruling while being stated as canon in `parliamentary_transfer_v30.md`.
     Reconciling them is a systems ruling, not an edit, and is SUSPENDED by Jordan (2026-08-21).
     The distinction matters here more than anywhere else, because this is the function a reader
@@ -267,12 +263,11 @@ def degree_from_net(net: int | float, ob: int | float,
     only the windowed one survives contact with fractional obstacles, where exact equality
     essentially never occurs and Partial would otherwise vanish.
 
-    ⚠ THE RETIRED PARAMS CAPTURE (`params_tables.yaml`, `FORK:` row) HELD THE OLD LADDER: the
-    PRE-RULING bands (Overwhelming at Net >= 2*Ob, Failure at Net <= 0), from the evacuated
-    `params/core.md`. It is history, not canon: where it disagrees with code, the code wins
-    (principle 7 / ED-1050). Do not restore bands from it.
+    ⚠ THE PRE-RULING BANDS (Overwhelming at Net >= 2*Ob, Failure at Net <= 0) ARE NOT CANON: where
+    any capture of them disagrees with code, the code wins (principle 7 / ED-1050). Do not restore
+    bands from one.
 
-    RULED OUT, explicitly, by the same ruling (all three were live here until 2026-08-14):
+    RULED OUT, explicitly, by the same ruling:
       * Ob-scaled Overwhelming (`net >= 2*Ob`) — Overwhelming no longer depends on difficulty.
       * The separate PP-232 `net >= 3` floor — subsumed; the margin bar IS 3.
       * The Ob-20 exception (Overwhelming unavailable, Partial needing net >= 10) — "always"
@@ -281,27 +276,37 @@ def degree_from_net(net: int | float, ob: int | float,
     `extension` is the ED-SC-0032 injection seam: a subsystem's declared `BandExtension`, which
     may VETO an Overwhelming and can do nothing else. It is passed BY THE SUBSYSTEM'S WRAPPER,
     never resolved here — the engine does not know which subsystems exist, and a default of None
-    means the unmodified ladder. `**context` is forwarded to the extension untouched.
+    means the unmodified ladder. `**context` is forwarded to the extension untouched, and is validated
+    against the extension's declared keys on entry, in every band; a context with `extension=None` raises
+    `TypeError`.
 
     Behaviour change, stated rather than buried (CLAUDE.md 0.1 point 4): the Partial band was
     `0 < net < Ob`, so a roll that cleared zero but fell far short of a hard obstacle read as a
     Partial. It now reads as a Failure. Partial is the near-miss-by-nothing outcome, not the
     tried-and-failed one. Measured deltas are in the ED-IN-0187 ledger entry.
     """
-    margin = net - ob
-    if margin < 0:
+    # THE CONTEXT IS CHECKED ON ENTRY, BEFORE THE BAND IS DECIDED (DOE §3 row 2; F-DICE-11): a misspelled key
+    # reached the extension's check only on the Overwhelming branch, so below it the key was swallowed and the
+    # call returned a band with no error. A context with no extension has no reader, and is refused alike.
+    if extension is not None:
+        extension.validate_context(context)
+    elif context:
+        raise TypeError(f"degree_from_net got context {sorted(context)} and no extension to read it; "
+                        "an undeclared key would be swallowed by **context -- pass the extension or drop the key.")
+    # The real margin is converted ONCE, here, to integer milli-units and compared against the integer
+    # BAND_FLOORS (C3-L1): a margin that is a float sum a rounding error under an edge reads as on it.
+    m = round(MARGIN_SCALE * (net - ob))
+    if m < BAND_FLOORS["partial"]:
         return Degree.FAILURE
-    if margin < 1:
+    if m < BAND_FLOORS["success"]:
         return Degree.PARTIAL
-    if margin >= 3:
+    if m >= BAND_FLOORS["overwhelming"]:
         # THE ONE BRANCH AN EXTENSION CAN REACH (ED-SC-0032). See `BandExtension` above for why
         # this is the only one, and why the constraint is structural rather than a convention a
         # subsystem is asked to respect. Note the ladder result is NOT passed to the extension:
         # it is asked whether an Overwhelming is permissible, never what the band should be.
-        if extension is not None:
-            extension.validate_context(context)
-            if not extension.may_overwhelm(net, ob, **context):
-                return Degree.SUCCESS
+        if extension is not None and not extension.may_overwhelm(net, ob, **context):
+            return Degree.SUCCESS
         return Degree.OVERWHELMING
     return Degree.SUCCESS
 

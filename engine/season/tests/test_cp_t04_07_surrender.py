@@ -40,12 +40,13 @@ from engine.season.data import rosters
 from engine.season.data.verbs import CHOICE_RANGES, VERB_TABLE
 from engine.season.decision import assemble
 from engine.season.decision.options import opening_set
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.loop import effects_information as eff
 from engine.season.queries import world_q
 from engine.season.state import gate as G
 from engine.season.state.carriers import Act, Tenure
 from engine.season.tests.test_cp_t04_05_graded_walls import MARCHERS, TARGET, _world
+from engine.season.tests._realm_goldens import BUILD
 from engine.season.tests.test_march import _fold_one
 
 SEEDS = range(20)
@@ -56,7 +57,6 @@ PRUDENCE, PRUDENCE_SEAT = "p_npc_013", "off_cardinal_prudence"      # Church; di
 REP, REP_SEAT = "p_npc_034", "off_archbishops_rep"                  # Church; dispatch; purview does NOT reach TARGET
 FORTITUDE, FORTITUDE_SEAT = "p_npc_040", "off_cardinal_fortitude"   # Church; NO dispatch
 KING, KING_SEAT = "p_npc_020", "off_king"                           # Crown; dispatch; purview reaches TARGET
-BUILD = "600d8b27147478e158553552cc1409a5"                          # build_realm(0), unmoved by this item
 
 
 @pytest.fixture
@@ -265,8 +265,8 @@ def test_planted_failure_a_predicate_that_answers_yes_leaves_the_refusal_to_the_
     monkeypatch.setattr(eff, "may_cede", lambda *a, **k: True)
     w = _world(3, 1.0)
     _besiege(w)
-    with pytest.raises(G.NotYours):
-        _surrender(w, KING, KING_SEAT)
+    out = _surrender(w, KING, KING_SEAT)
+    assert [e.kind for e in out] == ["surrender.refused"], [e.kind for e in out]   # H-143: emitted, not raised
     assert world_q.holder_faction_of(w, TARGET) == CHURCH
 
 
@@ -276,8 +276,8 @@ def test_planted_failure_without_the_cession_clause_the_gate_refuses_the_effects
     monkeypatch.setattr(G, "may_cede", lambda *a, **k: False)
     w = _world(3, 1.0)
     _besiege(w)
-    with pytest.raises(G.NotYours):
-        _surrender(w)
+    out = _surrender(w)
+    assert [e.kind for e in out] == ["surrender.refused"], [e.kind for e in out]   # H-143: emitted, not raised
     assert world_q.holder_faction_of(w, TARGET) == CHURCH
 
 
@@ -285,7 +285,7 @@ def test_planted_failure_without_the_cession_clause_the_gate_refuses_the_effects
 
 def test_control_surrender_ships_withheld_so_no_candidate_forms_and_the_realm_is_the_pre_item_one():
     w = build_realm(0)
-    assert w.content_hash() == BUILD
+    assert w.content_hash() == BUILD[0]
     assert "surrender" in w.fixtures.get("withheld_verbs")
     p = w.persons[KING]
     flipped = w.fixtures.sweep("withheld_verbs", tuple(v for v in w.fixtures.get("withheld_verbs") if v != "surrender"))

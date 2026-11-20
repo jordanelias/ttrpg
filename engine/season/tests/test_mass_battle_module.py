@@ -28,6 +28,7 @@ from __future__ import annotations
 
 from ..data import files
 from ._fresh_process import entry_target, probe
+from engine.dice_engine import draw
 
 _PRIZE = "a field"
 
@@ -51,6 +52,7 @@ mod_name, attr = {target!r}.split(":", 1)
 entry = getattr(importlib.import_module(mod_name), attr)
 source = importlib.import_module(mod_name.rsplit(".", 1)[0] + ".rngsource")
 from engine.season.queries.inputs import MassBattleInput
+from engine.dice_engine import draw
 
 # Sides large enough that the field is fought for ticks rather than routing on contact, on an UPHILL
 # territory (T9) with a fortification (so the WALLS row and its DR are inside the replayed battle) and
@@ -65,10 +67,15 @@ OTHER = MassBattleInput(weights=((90.0,), (60.0, 30.0)), territory="T3", fort_le
 stdlib_before = random.getstate()
 out = []
 for seed in (1, 2, 3, 4, 5, 6):
-    got = entry(FIELD, random.Random(seed))
-    between = entry(OTHER, random.Random(seed + 100))
-    again = entry(FIELD, random.Random(seed))
-    out.append((seed, got, again == got, source.get() is random))
+    got = entry(FIELD, draw.seeded(draw.H2("test_mass_battle_module", seed)))
+    between = entry(OTHER, draw.seeded(draw.H2("test_mass_battle_module", seed + 100)))
+    again = entry(FIELD, draw.seeded(draw.H2("test_mass_battle_module", seed)))
+    try:
+        source.get()                      # a scope left open by the call would return its draw here
+        left_open = True
+    except LookupError:                   # no source is the unscoped reading (there is no default stream)
+        left_open = False
+    out.append((seed, got, again == got, not left_open))
 stdlib_untouched = random.getstate() == stdlib_before
 loaded = sorted(os.path.relpath(m.__file__, {root!r}) for n, m in list(sys.modules.items())
                 if n not in before and getattr(m, "__file__", None)
@@ -84,9 +91,12 @@ def test_one_march_resolved_twice_in_one_process_gives_one_result_and_loads_noth
     module_dir = target.split(":", 1)[0].rsplit(".", 1)[0].replace(".", "/")
     allowed = {"engine/__init__.py", "engine/season/__init__.py", "engine/season/queries/__init__.py",
                "engine/season/queries/inputs.py", module_dir.split("/", 1)[0] + "/__init__.py"}
-    stray = [f for f in loaded if f not in allowed and not f.startswith(module_dir + "/")]
+    # The dice engine is the one leaf the module imports besides the record type (B05.03, U5b §1 row 1): the
+    # sampler and the ladder it draws from and grades on, as the other two registered modules already do.
+    stray = [f for f in loaded if f not in allowed and not f.startswith("engine/dice_engine/")
+             and not f.startswith(module_dir + "/")]
     assert not stray, (
-        f"{role} ({target}) loaded repository code beyond the module it runs and the record type: {stray}. "
+        f"{role} ({target}) loaded repository code beyond the module it runs, the dice engine and the record type: {stray}. "
         "A-25: a module imports what it runs and the record types, nothing else of the host")
     assert f"{module_dir}/massbattle.py" in loaded and f"{module_dir}/orchestration.py" in loaded, loaded
     checked = 0
@@ -104,3 +114,90 @@ def test_one_march_resolved_twice_in_one_process_gives_one_result_and_loads_noth
         f"{role} ({target}) opened {opened} while importing or fighting: the geography (and any other "
         "data) arrives on the record (`MassBattleInput.geography`, the host's one read), never by path")
     assert geo_untouched, f"{role} wrote into the record's geography, a mapping the host shares across fields"
+
+
+def _fought(entry, seeds, rng_for):
+    """Fight the two hand-built fields of the probe above, in this process, once per seed with `rng_for(seed)`."""
+    import yaml
+    from engine.season.queries.inputs import MassBattleInput
+    with open(files.GEOGRAPHY_YAML, encoding="utf-8") as f:
+        geo = yaml.safe_load(f)
+    field = MassBattleInput(weights=((180.0, 120.0), (240.0,)), territory="T9", fort_level=1.0,
+                            stances=(-1.0, 0.5), walls_dr=None, origin=None,
+                            loyalties=(1.5, -0.5), loyalty_gain=0.4, geography=geo)
+    other = MassBattleInput(weights=((90.0,), (60.0, 30.0)), territory="T3", fort_level=0.0,
+                            stances=(0.0, 0.0), walls_dr=1, origin="T9",
+                            loyalties=(0.0, 0.0), loyalty_gain=0, geography=geo)
+    return [entry(inp, rng_for(seed)) for seed in seeds for inp in (field, other)]
+
+
+def _entry():
+    import importlib
+    _role, target = entry_target(_PRIZE)
+    mod_name, attr = target.split(":", 1)
+    return getattr(importlib.import_module(mod_name), attr)
+
+
+def test_no_d10_face_in_mass_battle():
+    """DOE §1 gate (1), for the field: a graded act draws no d10 face. Two arms, each able to observe the failure it
+    excludes: (a) the source of `modules/mass_battle` holds no d10-face draw (a `randint` over 1..10); (b) whole fields
+    fought with a generator whose every d10-face `randint` over 1..10 RAISES come back, so the roll the field makes is the one
+    sampler's `gauss` draw (a roll that still dealt faces would raise)."""
+    import random
+    import re
+    from pathlib import Path
+
+    root = Path(files.REPO_ROOT)
+    scanned = 0
+    for path in (root / "modules" / "mass_battle").rglob("*.py"):
+        scanned += 1
+        assert not re.search(r"(randint|die)\(\s*1\s*,\s*10\s*\)", path.read_text(encoding="utf-8")), path
+    assert scanned >= 20, scanned
+
+    class _NoFaces(draw.Draw):
+        def __init__(self, seed):
+            super().__init__(draw.H2("test_mass_battle_module", seed))
+
+        def die(self, lo, hi):
+            if (lo, hi) == (1, 10):
+                raise AssertionError("a d10 face was drawn on the field")
+            return super().die(lo, hi)
+
+    fought = _fought(_entry(), range(1, 5), _NoFaces)
+    assert len(fought) == 8 and all("degree" in got for got in fought), fought
+    assert len({repr(got) for got in fought}) > 1, "every field gave one result; the arm cannot tell fields apart"
+
+
+def test_one_ladder_for_the_field(monkeypatch):
+    """DOE §1 gate (2): the field grades on the owner's ladder and has none of its own. Two arms: (a) the module holds
+    no ladder of its own (`compute_degree` and its epsilon are gone, nothing under `modules/mass_battle` spells the
+    `net - ob` bands); (b) fought fields grade THROUGH `dice_engine.degree_from_net`, the one function a call to it
+    is counted on, and every grade the field acted on is the owner's grade for that (net, ob)."""
+    import importlib
+    import re
+    from pathlib import Path
+    import random
+    from engine.dice_engine import dice_engine
+
+    _role, target = entry_target(_PRIZE)
+    pkg = target.split(":", 1)[0].rsplit(".", 1)[0]
+    entry = _entry()
+    resolution = importlib.import_module(pkg + ".resolution")
+    assert not hasattr(resolution, "compute_degree"), "the field still has a ladder of its own"
+    assert not hasattr(resolution, "_DEGREE_EPS"), "the field still carries its own band epsilon"
+    root = Path(files.REPO_ROOT)
+    for path in (root / "modules" / "mass_battle").rglob("*.py"):
+        assert not re.search(r"return\s+[\'\"](?:Overwhelming|Partial)[\'\"]", path.read_text(encoding="utf-8")), path
+
+    seen = []
+    real = dice_engine.degree_from_net
+
+    def counting(net, ob, *a, **k):
+        got = real(net, ob, *a, **k)
+        seen.append((net, ob, got))
+        return got
+
+    monkeypatch.setattr(dice_engine, "degree_from_net", counting)
+    _fought(entry, range(1, 4), lambda s: draw.seeded(draw.H2("test_mass_battle_module", s)))
+    assert len(seen) >= 50, f"only {len(seen)} grade(s) went through the owner: the field grades elsewhere"
+    assert all(got == real(net, ob) for net, ob, got in seen)

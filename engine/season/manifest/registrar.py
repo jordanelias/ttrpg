@@ -1,7 +1,7 @@
 """`manifest/registrar.py` -- THE REGISTRAR: every composition row that carries a module ENTRY,
 resolved by string and recorded in ONE table, `MODULE_ENTRIES`, at driver construction.
 
-Plan position `30` (A-25; `ED-IN-0284`, revised by `ED-IN-0285`). Terms, defined where code invokes
+A-25; `ED-IN-0284`, revised by `ED-IN-0285`. Terms, defined where code invokes
 them (`CLAUDE.md` §4):
 
   * A MODULE is running code reached by a composition row (`references/module_contracts.yaml`
@@ -154,7 +154,8 @@ def require_entries(needs) -> list:
                     needs="the composition row back in references/module_contracts.yaml "
                           "`composition_roles:` (re-run tools/export_composition.py), or the host's "
                           "need removed with its caller from where it is declared "
-                          "(queries/world_q.py::QUERY_ENTRIES or loop/matter.py::STEP_CALLS)")
+                          "(queries/world_q.py::QUERY_ENTRIES, loop/matter.py::STEP_CALLS or "
+                          "seam/wrappers/sigma.py::QUERY_ENTRIES)")
         if held.entry != kind:
             _refuse(f"the host needs module entry {role!r} as `entry: {kind}`, and its composition "
                     f"row declares `entry: {held.entry}`",

@@ -16,8 +16,8 @@ Six parts, each read here through the code that carries it:
   Spymaster->King formations are 0; hand-built war, crime (a warrant addressed to him; a detainee), duel and defence
   contexts each form a `fight`, and with none it does not.
   MUTATION: the decline emptied (`VIOLENCE_CONTEXTS` = {}), the realm forms `fight` on same-faction persons again.
-  CONTROL: the block empty and every value at its revert reproduce the pre-item hash exactly (`build_realm(0)` and one
-  season at seed 0, the hashes given at the base, after PC-10b).
+  CONTROL: `revert_cr87` (the block empty and every value at its revert), which other files' reverts call; the build at
+  the revert reads another hash than the shipped one. The realm hashes are `_realm_goldens.py`'s.
 """
 from __future__ import annotations
 
@@ -35,22 +35,16 @@ from ..decision import options as O
 from ..decision.options import opening_set
 from ..epistemic import Seen
 from ..harness import interactions as I
-from ..harness import populated
+from ..boot import realm as boot_realm
+from ..boot.realm import build_realm
 from ..harness import probes as P
 from ..loop.witness import content_value
 from ..queries import person_q, world_q
 from ..queries.person_q import SEEN_PREDICATE
 from ..seam.wrappers import combat
 from ..state.carriers import Claim, Proposition, Question, Tenure, View
-from .test_cp_t03_02_band_ending_and_body import revert_cp_t03_02
-from .test_cr85_faculty_replaces_history import revert_cr85
-from .test_cp_t03_04_arms import revert_cp_t03_04
-from .test_cp_t03_07_body_ceiling import revert_cp_t03_07
-from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
 
 A, B = "p_mid", "p_low"          # `probes.tiny_world`: both at the hearth `Hh`
-BASE_BUILD = "837d0f83c62917b88d69da3daa3ea027"     # build_realm(0).content_hash(), after PC-10b (the pre-item base)
-BASE_SEASON = "bcc4ee3fa3d93ede38fb937f204511ea"    # one season, seed 0, after PC-10b; B10-13 batch pin commit: was 0fb73bc8...; B10-13 Phase 1 A1, the self-plea's stance sign: was 8bca0263...
 CARDINALS = {"off_cardinal_fortitude", "off_cardinal_justice", "off_cardinal_prudence", "off_cardinal_temperance"}
 
 
@@ -103,7 +97,13 @@ def test_crime_context_a_detainee_stamp_forms_fight():
     assert _fights(w, _q((B, V.DETAINEE_CLASS)))
 
 
-def test_duel_context_a_held_challenge_naming_both_forms_fight_and_one_naming_a_third_does_not():
+def test_duel_context_a_held_challenge_naming_both_forms_fight_and_one_naming_a_third_does_not(monkeypatch):
+    """The `duel` READER, read with `duel` on the line (B11 lane A dropped it from `fight`'s shipped line: a duel is
+    `accept`'s, `test_b11a_duel_reach.py`); the shipped line forms no `fight` on a held challenge."""
+    w = P.tiny_world()
+    _hold(w, A, "rec:c1", "challenge", {"terms": B, "to": (B,), "stakes": None, "challenger": A})
+    assert not _fights(w, _q()), "the shipped line: a challenger forms no `fight` on the man he called out"
+    monkeypatch.setattr(O, "VIOLENCE_CONTEXTS", {**O.VIOLENCE_CONTEXTS, "fight": ("war", "crime", "duel", "defence")})
     w = P.tiny_world()
     _hold(w, A, "rec:c0", "challenge", {"terms": "p_other", "to": ("p_other",), "stakes": None, "challenger": A})
     assert not _fights(w, _q())
@@ -117,6 +117,26 @@ def _attacked(w, when: int, doer: str = B) -> None:
     led.append(Claim(f"c_wound_{when}", A, A, "body.changed", True, when, "firsthand", 100, "own"))
     led.append(Claim(f"c_seen_{when}", A, A, SEEN_PREDICATE, Seen(stratum="contested_physical", who=doer), when,
                      "firsthand", 100, "own"))
+
+
+def test_a_kind_a_benefit_shares_with_a_blow_is_no_attack_unless_the_doer_was_seen_at_a_violent_stratum():
+    """B05.99: `capability.raised` is emitted by `fight` (contested_physical) and by `train` (uncontested_material). A deed of that kind whose
+    doer was seen training is no attack; seen fighting him it is; seen fighting somebody else in that lap and training him it is still none
+    (the stratum is read ON THE PATIENT). FALSIFIER: `strata=None` reads all three as attacks."""
+    kind = "capability.raised"
+    for stratum, who_on_a, expect in (("uncontested_material", B, set()), ("contested_physical", B, {B})):
+        w = P.tiny_world()
+        led = w.persons[A].ledger
+        led.append(Claim("c_raised", A, A, kind, True, 0, "firsthand", 100, "own"))
+        led.append(Claim("c_seen_a", A, A, SEEN_PREDICATE, Seen(stratum=stratum, who=who_on_a), 0, "firsthand", 100, "own"))
+        assert person_q.attackers_of(led, A, {kind}, strata=O._OPPONENT_STRATA) == expect, stratum
+        assert person_q.attackers_of(led, A, {kind}) == {B}, "the unfiltered read cannot tell them apart"
+    w = P.tiny_world()
+    led = w.persons[A].ledger
+    led.append(Claim("c_raised", A, A, kind, True, 0, "firsthand", 100, "own"))
+    led.append(Claim("c_seen_a", A, A, SEEN_PREDICATE, Seen(stratum="uncontested_material", who=B), 0, "firsthand", 100, "own"))
+    led.append(Claim("c_seen_y", A, "p_other", SEEN_PREDICATE, Seen(stratum="contested_physical", who=B), 0, "firsthand", 100, "own"))
+    assert person_q.attackers_of(led, A, {kind}, strata=O._OPPONENT_STRATA) == set(), "a blow on somebody else is no blow on him"
 
 
 def test_defence_context_an_attack_he_saw_this_season_forms_fight_and_an_older_one_does_not():
@@ -152,7 +172,7 @@ def test_the_roster_is_refused_at_import_for_an_unknown_verb_and_the_reader_set_
 
 
 def test_enemies_heard_stamps_the_other_faction_only_once_he_knows_of_a_live_war():
-    w = populated.build_realm(0)
+    w = build_realm(0)
     me = "p_npc_033"                                    # the Spymaster (a Valorsmark officer)
     mine = world_q.faction_holding(w, me)
     other = next(f for f in sorted({world_q.faction_holding(w, x) for x in w.persons} - {None, mine}))
@@ -210,7 +230,7 @@ def test_a_grudge_in_a_war_context_still_ranks_fight_first_at_the_shipped_bound(
     fx = w.fixtures
     cands = opening_set(p, View(A, [], fx.get("view_k"), q), q, fx)
     memo = CH.deliberation_memo(p, fx)
-    scores = {id(c): sum(CH.score_terms(p, c, fx, memo, None)[:2]) for c in cands}
+    scores = {id(c): CH.score_total(CH.score_terms(p, c, fx, memo, None)) for c in cands}
     best = max(cands, key=lambda c: scores[id(c)])
     assert best.verb == "fight" and best.subject == B, [(c.verb, c.subject, scores[id(c)]) for c in cands]
 
@@ -248,7 +268,7 @@ def test_loyalty_in_band_cuts_a_negative_row_to_the_member_band_and_passes_a_pos
 
 
 def test_at_build_no_loyalty_row_names_a_faction_head_below_the_band_and_the_revert_does(monkeypatch):
-    w = populated.build_realm(0)
+    w = build_realm(0)
     heads = I.faction_heads(w)
     spy, king = "p_npc_033", "p_npc_020"
     assert king in heads.values()
@@ -257,8 +277,8 @@ def test_at_build_no_loyalty_row_names_a_faction_head_below_the_band_and_the_rev
     assert creed_rows and all(float(r[1]) * float(r[2]) >= MEMBER_BAND for r in creed_rows)
     # THE REVERT, OBSERVED (batch close B3): the same Spymaster, with the fixture at its revert, holds the grudge toward the
     # King the audit found -- so the `>= 0` above is the fix and not an absent row.
-    monkeypatch.setattr(populated, "DEFAULT_FIXTURES", DEFAULT_FIXTURES.sweep("loyalty_toward_creed", False))
-    reverted = populated.build_realm(0)
+    monkeypatch.setattr(boot_realm, "DEFAULT_FIXTURES", DEFAULT_FIXTURES.sweep("loyalty_toward_creed", False))
+    reverted = build_realm(0)
     assert person_q.stance_toward(reverted.persons[spy], king) < 0, reverted.persons[spy].stance
 
 
@@ -363,7 +383,7 @@ def revert_cr87(monkeypatch) -> None:
     world it was measured on."""
     monkeypatch.setattr(O, "VIOLENCE_CONTEXTS", {})                                     # (1) the block empty
     _old_cells(monkeypatch)                                                            # (2) today's cells
-    monkeypatch.setattr(populated, "DEFAULT_FIXTURES",                                 # (3), (5) the reverts
+    monkeypatch.setattr(boot_realm, "DEFAULT_FIXTURES",                                 # (3), (5) the reverts
                         DEFAULT_FIXTURES.sweep("hostile_stance_gain", None).sweep("loyalty_toward_creed", False))
     monkeypatch.delitem(V.DUEL_TERMS_BY_VERB, "accept")                                # (4) death duels
     row = V.VERB_TABLE["challenge"]
@@ -374,24 +394,9 @@ def revert_cr87(monkeypatch) -> None:
                         dataclasses.replace(row, requires_typed=TypedRequires(AllOf(kept), req.names)))
 
 
-def test_control_the_block_empty_and_every_value_at_its_revert_reproduce_the_pre_item_hash(monkeypatch):
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
+def test_the_build_moves_under_the_item_so_its_revert_is_not_vacuous(monkeypatch):
+    """CR-87 moves the build (the build-time loyalty rows name the creed, never its head): the same build at the revert
+    reads another hash. The shipped build hash is `_realm_goldens.py`'s."""
+    shipped = build_realm(0).content_hash()
     revert_cr87(monkeypatch)
-    # v10 CP-T03-02 (a later mover of every season that fought: the band's `ending`, the body Observation) is
-    # reverted too, so the base tree's reading stands rather than being re-taken.
-    revert_cp_t03_02(monkeypatch)
-    # v11 CR-85 (`faculty` replaces `history` in the pool and the Ob, a later mover of every season that fought) is
-    # reverted too (`revert_cr85`, the seam's faculty at 3 for every party), the same way.
-    revert_cr85(monkeypatch)
-    # v11 CP-T03-04 (`arms` in the vocation range, a formation mover of every season) is reverted too, the same way.
-    revert_cp_t03_04(monkeypatch)
-    revert_cp_t03_07(monkeypatch)   # v11 CP-T03-07 (`body_ceiling`, a schema mover of the build), the same way
-    revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
-    assert populated.build_realm(0).content_hash() == BASE_BUILD
-    w, _d, _rows = I.run(0, 1, observe=False)          # the audit's own run, which read the base hash
-    assert w.content_hash() == BASE_SEASON
-
-
-def test_the_shipped_build_differs_from_the_base_so_the_control_is_not_vacuous():
-    assert populated.build_realm(0).content_hash() != BASE_BUILD
+    assert build_realm(0).content_hash() != shipped

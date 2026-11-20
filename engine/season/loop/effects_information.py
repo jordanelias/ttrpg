@@ -2,7 +2,7 @@
 covenant, conceal, open_case, carry, determine, argue, petition, survey, forge, give, seize, arrest,
 destroy_record, utter, commit, challenge, marshal, surrender.
 
-EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the document/proposition/
+Holds the document/proposition/
 matter cluster: the one mint (`_mint_document`) that `create_record`, `issue`, `petition` and
 `open_case` share, plus its own small readers (`_content_of`, `_addressed`, `_seat_rung`) -- all four
 stay local, since nothing outside this file's own verbs calls any of them. See `effects_shared.py`
@@ -23,7 +23,7 @@ from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
 from ..data.rosters import (
     CHALLENGE_KIND, CHALLENGE_TERMS, CHALLENGER_KEY, COVER_KEY, COVER_KIND, FACTION_BY_PROP, ORDER_AT_KEY, ORDER_KIND,
     ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, RECORD_CONTENT, RECORD_KIND_KEYS, STAKES_KEY,
-    SUBTREE_OCCUPATION_KINDS,
+    SUBTREE_OCCUPATION_KINDS, forge_quality_at,
 )
 from ..gaps import Forbidden
 from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
@@ -70,14 +70,10 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
     overwrite, as it was; whether a Record id may be re-made at all is not this position's to
     decide (`utter` refuses the same case for a Proposition by immutability, S14).
 
-    ⚠ PLAN POSITION `15`: THE MINT MOVED INTO `_mint_document`, UNCHANGED, SO `issue` AND
-    `petition` SHARE IT. What this verb adds is only its own reading of the act: the kind the act
-    declares (else `text`), the content the act carries verbatim, and the rung the act names (else
-    the actor -- r2 `02` §A.4 records that default as a defect and leaves it to `place_of`'s owner).
-    MEASURED, WITH A CONTROL: on the finished position with `petition` withheld from the option set,
-    `headless.run(3, 0)` and `populated.run(2, 0)` hash byte-identically to the tree before it -- the
-    Record, the `hold` and the `Change` are built exactly as they were, and the one hash move the
-    position makes is `petition` entering `resolvable_verbs()`.
+    ⚠ PLAN POSITION `15`: THE MINT IS `_mint_document`, SHARED BY `issue` AND `petition`. What this
+    verb adds is only its own reading of the act: the kind the act declares (else `text`), the
+    content the act carries verbatim, and the rung the act names (else the actor -- r2 `02` §A.4
+    records that default as a defect and leaves it to `place_of`'s owner).
 
     ⚠ PLAN POSITION `24e`: THIS IS THE `works`' PRODUCER, AND IT DECLINES A SECOND LIVE WORKS ON ONE
     TARGET. r2 `04` §A.6.2's moment 1 -- *"DECLARE the works: `create_record` -- exists, RUNS"* -- so
@@ -88,8 +84,7 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
     the fold emits for any declined mint (`act.refused`, this row declaring no kind of its own;
     `F.20b`). r2 put the guard on `found` as a `cardinality` conjunct; see `works_for` for why it
     lives at the producer instead. Every other kind, and a computed act (which carries no payload
-    and so always mints `text`), reads exactly as before -- no world built before `24e` holds a
-    works, so no hash moves."""
+    and so always mints `text`), mints as a plain document."""
     d = a.payload if isinstance(a.payload, dict) else {}
     kind = d.get("kind") or "text"
     plan, at = works_target(kind, d.get("subject_matter"))      # (None, None) for any other kind
@@ -97,7 +92,7 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
         return NO_CHANGE
     if kind == "army" and not _army_mintable(w, a.actor, d.get("subject_matter")):
         return NO_CHANGE
-    if kind == ORDER_KIND:      # an order of battle is minted by `marshal` alone: its closed role / retreat_at sets, its purview conjunct, its withheld arm
+    if kind == ORDER_KIND:      # a standing order is minted by `marshal` alone: its closed role / retreat_at sets, its purview conjunct, its withheld arm
         return NO_CHANGE
     return _mint_document(w, a, kind, d.get("subject_matter"), d.get("rung") or a.actor)
 
@@ -119,9 +114,9 @@ def _army_mintable(w: "World", actor: str, content) -> bool:
         composition.require(ARMY)(ArmyCommand(content, "validate", {}))
     except (ValueError, KeyError, TypeError):
         return False
-    # MINTED EMPTY: troops come in through `recruit` (its cap, its Sites, its membership) and subformations through
+    # MINTED EMPTY: troops come in through `recruit` (its cap, its Sites, its membership) and units through
     # `form_unit`, so a record minted already holding either would bypass the recruiting rule.
-    return not content["trained"] and not content["subformations"]
+    return not content["trained"] and not content["units"]
 
 
 def _content_of(a: "Act", kind: str) -> Optional[dict]:
@@ -177,7 +172,7 @@ def _makers_hold(w: "World", actor: str, obj: str) -> Tenure:
 def _declared_stages(w: "World", a: "Act") -> list:
     """THE STAGES AN ACT WINDS ON A DOCUMENT: the act's declared `stages`, else `H-80`'s default.
     The one owner of that rule -- `_mint_document` winds them on a Record it mints, and `carry` on
-    the petition it puts before the room (IN-45). Factored out of `_mint_document` unchanged.
+    the petition it puts before the room (IN-45).
 
     `H-80`, DECLARED AND SWEPT. The act SHOULD declare these (#353 §13.1) and a computed act cannot:
     §F1's Candidate is `(verb, subject, why)` with no operand channel. Refusing instead would make
@@ -239,8 +234,7 @@ def _seat_rung(w: "World", a: "Act") -> str:
     in -- and a hand-built act may name no seat at all -- and only then does the mint fall back to
     `create_record`'s own reading of the act, the one existing default rather than a new one.
 
-    ⚠ FACTORED AT PLAN POSITION `19` OUT OF `_eff_issue`, WHERE IT WAS THREE INLINE LINES, BECAUSE
-    `_eff_open_case` DRAWS ITS CASE FILE UP THE SAME WAY (§8). For both, the fallback is no longer
+    ⚠ ONE OWNER (§8): `_eff_issue` AND `_eff_open_case` DRAW A DOCUMENT UP THE SAME WAY. For both, the fallback is no longer
     guaranteed unreachable from an ADMITTED act: each row's `purview` conjunct (`data/requires.py::
     Basis`) refuses a rungless seat only by its OWN ground, and since v9 IN-40 a rungless seat passes
     when a sworn holder brings ground (`state/gate.py::purview_reaches`' oblige clause). Such a seat
@@ -259,16 +253,11 @@ def _eff_issue(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     ⚠ REACHABLE SINCE PLAN POSITION `19`, WHICH GAVE `issue` ITS EVALUABLE CELL -- the executor
     exists and is a person, and the issuing seat's purview reaches him (`verb_table.yaml`'s `issue`
-    row). Until then this docstring said *"NOTHING REACHES THIS YET"*: the prose `requires:` had no
-    predicate, the fold raised before any effect ran, and `resolvable_verbs()` excluded the verb.
-    This body is UNCHANGED by `19` but for the rung, factored into `_seat_rung` (`_eff_open_case`
-    draws up the same way): the thing `15` built it to mint is what the precondition now admits.
+    row). The rung is `_seat_rung` (`_eff_open_case` draws up the same way).
 
-    ⚠ A COMPUTED `issue` WAS ADDRESSED TO WHAT IT IS ABOUT -- `terms` and `to` both bound the
-    question's one referent (`H-94`'s single-referent limit), so its `terms` named the executor
-    himself. Since plan position IN-10 `to` fans over the persons the issuer knows (the row's
-    `terms` conjunct binds `subject`, #453 §10.1), so `terms` is the referent and `to` an executor.
-    `petition`'s row keeps the single-referent limit. This body is unchanged by it."""
+    ⚠ `terms` IS THE REFERENT AND `to` AN EXECUTOR: since plan position IN-10 `to` fans over the
+    persons the issuer knows (the row's `terms` conjunct binds `subject`, #453 §10.1).
+    `petition`'s row keeps the single-referent limit (`H-94`)."""
     return _mint_document(w, a, "dispensation", _content_of(a, "dispensation"), _seat_rung(w, a))
 
 
@@ -301,7 +290,12 @@ def _eff_conceal(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
 
     What the cover DOES is not here: `state/attribution.py::anchor_of` reads it (`live_cover`)."""
     d = a.payload if isinstance(a.payload, dict) else {}
-    return _mint_document(w, a, COVER_KIND, {COVER_KEY: a.actor}, d.get("rung") or a.actor)
+    # B07.02 (18-A edit 5): a DRAWN cover carries its band's `forge_quality` (the examining draw reads it as obstacle); an act with
+    # no band writes the `0` it always did, and a band with no row (Failure) makes no cover.
+    quality = 0 if res is None else forge_quality_at(res.degree)
+    if quality is None:
+        return NO_CHANGE
+    return _mint_document(w, a, COVER_KIND, {COVER_KEY: a.actor}, d.get("rung") or a.actor, forgery_quality=quality)
 
 
 @effect_for("challenge")
@@ -338,7 +332,7 @@ def _eff_challenge(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
 
 @effect_for("marshal")
 def _eff_marshal(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
-    """v11 CP-T04-02 (B10-12): A STANDING ORDER OF BATTLE IS A `Record` OF KIND `order_of_battle`, minted with the
+    """v11 CP-T04-02 (B10-12): A STANDING ORDER IS A `Record` OF KIND `standing_order`, minted with the
     marshal's `hold` through `_mint_document`, the one mint. Its keys (`rosters.yaml: record_kinds`): `at` -- the
     settlement it is read about, the act's `subject` (the side's place when the field is fought: the attacker's origin,
     the defender's target); `role` -- a `order_roles` member, the shape and instruction package the module maps onto
@@ -369,8 +363,7 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     drawn up at the opening seat's rung. The plan's `19`: *"`open_case` gains `writes:
     DocketItem.matter` and the world reader a `docket` branch: a proceeding with zero authored acts
     needs somebody to have put the matter before the room, and no step did that."* CALENDAR forms
-    docket SLOTS (`matter: None`, `loop/calendar.py`) and until v9 SC-01's fired-slot step nothing
-    filled one (below); this is the act that puts a matter before a bench, and `determine`'s docket conjunct is the act that needs it.
+    docket SLOTS (`matter: None`, `loop/calendar.py`); this is the act that puts a matter before a bench (filling a slot where one exists, below), and `determine`'s docket conjunct is the act that needs it.
 
     WHAT IT WRITES, IN ONE `apply`:
       * THE CASE FILE -- `_mint_document`, the one mint (`create_record`/`issue`/`petition`'s), so
@@ -410,8 +403,7 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     binds). Two readers answer `_eff_determine`'s old objection to a key *"nobody else reads"*: the
     determination reads the row's `disposes:`, and `interrogate`/the contested bench will read the
     petition's charge (#453 step 5). A COMPUTED `open_case` carries neither (no operand channel names
-    them, `H-80`/§F1) and writes both `None` -- which is why every world where `open_case` executes
-    moves its content hash once (the item gained two keys) and no further. TWO MORE DECLINES, before
+    them, `H-80`/§F1) and writes both `None`. TWO MORE DECLINES, before
     anything is built, so a docket never names what does not exist: an arrangement no
     `arrangements.yaml` row carries, and a petition that is not a Record of kind `petition`.
     ⚠ WHICH arrangement a computed case is heard under is NOT DERIVED here -- no source exists
@@ -478,7 +470,7 @@ def _eff_carry(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     (`docketed`, the one owner -- `open_case`'s decline); and stages that would read the same after
     as before (the only way the named subject could fail to move).
 
-    ⚠ THE STAGES DECLINE, MEASURED BY ARM (B-K close, COR 2 / LOG 8). At `record_stages_default` >= 1
+    ⚠ THE STAGES DECLINE, BY ARM. At `record_stages_default` >= 1
     it never fires for a computed carry: every wound stage names THIS act's id, so the list differs
     from the filing's; only a declared `stages` equal to the petition's trips it. At
     `record_stages_default` = 0 -- arm 0 of `H-80`'s declared sweep -- filing and carriage both wind
@@ -492,7 +484,7 @@ def _eff_carry(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     rec = w.records.get(pid) if isinstance(pid, str) else None
     if rec is None or rec.kind != "petition":
         return NO_CHANGE
-    # What the petition is ABOUT, by `person_q.ABOUT_KEYS`' key for its kind (B-K close, ARC 1).
+    # What the petition is ABOUT, by `person_q.ABOUT_KEYS`' key for its kind.
     about = ABOUT_KEYS.get(rec.kind)
     matter = (rec.subject_matter or {}).get(about) if about else None
     if not isinstance(matter, str) or docketed(w, matter):
@@ -525,7 +517,7 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         A row disposing a `Record` or `none` DECLINES: a Record disposal is not on this row's
         `writes:`, and is unbuilt (named, not guessed). So does a docket naming two rows for one
         matter (only a hand-planted docket can), rather than choose between them. The bullet below
-        is the `oblige` case's reasoning, unchanged:
+        is the `oblige` case's reasoning:
       * KIND `oblige`. Five of `arrangements.yaml`'s seven seeded rows dispose a Tenure kind (`oblige`
         for `arbitration`, `detain` and `ban` for the SC-03a rows); the other two dispose a `Record`.
         This bullet is the `oblige` case: C-1 (`21_RECONCILIATION.md:167`,
@@ -558,8 +550,8 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         body, and nothing opens. ⚠ THE GATE ADMITS A `degree` ON AN EDGE ONLY WHEN THE SAME WRITE OPENS IT
         (`determination` asks `opened` first: authority to bind is not authority to re-grade), which is
         why the degree is set on the edge being OPENED, not written to one already live. `res` is `None`
-        only for a hand-built call of this body with no contest, and the edge then carries no degree, as it
-        did before SC-03b. `Partial` declares the same three pairs as `Success` (the row's `writes_note`), and
+        only for a hand-built call of this body with no contest, and the edge then carries no degree.
+        `Partial` declares the same three pairs as `Success` (the row's `writes_note`), and
         opens the disposal graded `Partial`.
 
     AND IT TAKES THE MATTER OFF THE DOCKET: every item naming the party is written back to
@@ -598,7 +590,7 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     row's kind) and the edge the band's own kind BY NAME, so a judge whose pursuits do not move (none
     held, none leaning, or `pursuit_shift` 0, the control) publishes exactly what he did before -- the
     edge earning `None` would earn the band's whole `emits:`, `pursuit.moved` included, a move that did
-    not happen (found by this step's control test). ⚠ NOT AT `Failure`, WHERE THE PLAN MOVES HIM
+    not happen. ⚠ NOT AT `Failure`, WHERE THE PLAN MOVES HIM
     AGAINST HIS AXIS (`H-221`): the row writes `[]` there and the fold never calls this body; making it
     write would give a failed hearing's Event a change, so WITNESS's empty-changes rule (`epistemic.
     claim_subjects`) would land its claim on the JUDGE instead of the party (`deed:matter.undetermined`'s
@@ -627,7 +619,7 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
             moved = consequence_pursuits(judge, a.verb, res.degree, w.fixtures.get("pursuit_shift"))
         # THE EDGE EARNS THE BAND'S OWN KIND BY NAME, ALWAYS: an edge earning `None` earns every kind
         # the band declares (`loop/resolve.py`), and `pursuit.moved` is declared on the moving bands
-        # -- so a judge whose pursuits did not move (the `0` control arm, measured) would publish a
+        # -- so a judge whose pursuits did not move (the `0` control arm) would publish a
         # move that did not happen. The pursuit subject alone earns `pursuit.moved`.
         band_kind, = (k for k in VERB_TABLE[a.verb].emits_at(res.degree) if k != PURSUIT_MOVED)
         subjects = (Subject.edge(nt, earns=band_kind),)
@@ -708,18 +700,15 @@ def _eff_petition(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
     """§36.1 / #353 §26.3: A PETITION IS A `Record` OF KIND `petition`, minted with the
     petitioner's `hold` -- `{terms, to, from}`: what it is about (the act's `subject`), the person
     it is addressed to (`to`), and the place it rises from (`from`). Drawn up where it rises from,
-    so `Record.rung` is a place and not the petitioner's id (the defect r2 `02` §A.4 measured on
-    every `create_record`).
+    so `Record.rung` is a place and not the petitioner's id.
 
     ⚠ TWO-SIDED (`ED-IN-0210` ruling 2 -- *withdraw (petitioner) or deny (receiver)*): the row's
     typed cell makes both sides EXIST, `opening_set` never forms a Candidate addressed to its own
     petitioner (the row's `counterparty:`), and the FOLD refuses the same case for a HAND-BUILT act
     (`loop/resolve.py::_admits`'s counterparty clause, plan position `14`) before this body runs.
-    This body carried that decline itself until `14` moved it into the fold, where every row naming
-    a second party shares it. ⚠ WHAT THIS DOES NOT BUILD: the two closers. Ruling 2's
+    ⚠ WHAT THIS DOES NOT BUILD: the two closers. Ruling 2's
     WITHDRAW and DENY both close `(Record, exists)`, whose one closer is `destroy_record` -- which
-    declines on both its eligibility alternatives today (`H-75`; plan position `14` built its
-    formable shape and HELD it on measurement, the row's `formation_decline_note`), and which the receiver
+    declines on both its eligibility alternatives today (`H-75`; the row's `formation_decline_note`), and which the receiver
     can only reach once `give` (position `16`) puts the petition in his hand. The fold makes both
     sides NAMEABLE on the document; neither side can yet end it."""
     return _mint_document(w, a, "petition", _content_of(a, "petition"), _operand(a, "from"))
@@ -752,20 +741,16 @@ def _eff_survey(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
       * THE SUBJECT IS THE FACTION AND NOTHING ELSE (`commit`'s cell, `existence` of `subject`, kind
         `Proposition`). No computed act's referent is ever a Proposition -- `questions_for`'s clause
         1 admits a claim only if its subject is in the asker's `reach`, and `place_of` of a
-        Proposition is `None` (BO-9/BO-10's gap; `commit` MEASURED refused 33 of 33 in one realm
-        season, `python -m engine.season.harness.aperture`) -- so a survey would be formed on every
+        Proposition is `None` (BO-9/BO-10's gap) -- so a survey would be formed on every
         referent and refused on every one: a fourth instance of `H-156`'s scene tax, and a
         mechanism that runs in no shipped world.
-      * (`20-iii`'s, LIFTED at v9 IN-12) `holder_faction_of` FOR A RUNG as *a second derivation
-        the position does not name*: the plan named it at IN-12, and it is a call to the owner, not a
-        derivation written here.
       * `create_record` DECLARING `kind: faction_sheet` (`works`' route at `24e`). Three reasons,
         any one sufficient. (a) A sheet's content is RESOLVED, and `create_record` stores what the
         act carries VERBATIM (r2 `02` §A.4, *verbatim or not at all*): a sheet whose maker supplies
         its content is a forgery by construction, and teaching `create_record` to resolve for one
         kind is a kind-keyed branch changing what a generic verb means. (b) A COMPUTED
         `create_record` carries nothing -- the row is untyped, so `operands_for` returns `{}` -- and
-        could never say WHICH faction; it mints `text`, as it does 46 times a realm season. (c)
+        could never say WHICH faction; it mints `text`. (c)
         `issue`'s and `petition`'s precedent: one mint, the kind supplied by the verb that knows it
         (r2 `02` §A.6's *one function, several registrations*).
 
@@ -795,17 +780,20 @@ def _eff_survey(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     return _mint_sheet(w, a)
 
 
-def _mint_sheet(w: "World", a: "Act", forged: bool = False) -> Change:
+def _mint_sheet(w: "World", a: "Act", forged: bool = False, res: "Resolution | None" = None) -> Change:
     """THE BODY `survey` AND `forge` SHARE: the resolved sheet (`NO_CHANGE` where the subject coheres
-    under no faction), with one key falsified and `default_forgery_quality` written if `forged` (v9
-    SC-02 `22b` step 25; a survey's sheet carries `0`), minted through `_mint_document` where the
-    maker stands. `"hold"` still opens inside `_mint_document`, so the opener derivation reaches it."""
+    under no faction), with one key falsified and the band's `rosters.yaml: forge_quality` written if `forged` (v9
+    SC-02 `22b` step 25; B07.02: the roster replaced `default_forgery_quality`, and an act with no band reads its
+    `Success` row, the shipped 1; a survey's sheet carries `0`; a band with no row, Failure, makes no document), minted
+    through `_mint_document` where the maker stands. `"hold"` still opens inside `_mint_document`, so the opener derivation reaches it."""
     sheet = _resolved_sheet(w, a)
     if sheet is None:
         return NO_CHANGE
+    quality = forge_quality_at(None if res is None else res.degree) if forged else 0
+    if quality is None:
+        return NO_CHANGE
     if forged:
         sheet[_FORGED_SHEET_KEY] = a.actor
-    quality = w.fixtures.get("default_forgery_quality") if forged else 0
     return _mint_document(w, a, faction_q.SHEET_KIND, sheet, place_of(w, a.actor) or a.actor,
                           forgery_quality=quality)
 
@@ -813,7 +801,7 @@ def _mint_sheet(w: "World", a: "Act", forged: bool = False) -> Change:
 def _resolved_sheet(w: "World", a: "Act") -> Optional[dict]:
     """WHAT A SHEET ON THE ACT'S `subject` SAYS TODAY -- `faction_q.resolve`'s view of the one faction
     the subject coheres under, as a fresh mapping (`asdict`), or `None` when it coheres under none.
-    `survey` mints it as it is; `forge` mints it with one key false. Factored at v9 IN-45 so the two
+    `survey` mints it as it is; `forge` mints it with one key false. The two
     verbs read WHICH faction one way (`_eff_survey`'s docstring).
 
     WHICH FACTION: `world_q.faction_of`, the one dispatch by the subject's class (`World.class_of`):
@@ -856,16 +844,16 @@ def _eff_forge(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     which a computed act cannot carry (`H-94`).]
 
     ⚠ v9 SC-02 `22b` STEP 25: `Record.forgery_quality` IS WRITTEN HERE, WITH ITS READER IN THE SAME
-    CHANGE (`H-210`): the minted sheet carries `Fixtures.default_forgery_quality` (`_mint_sheet`, through
+    CHANGE (`H-210`): the minted sheet carries `rosters.yaml: forge_quality`'s value for its band (`_mint_sheet`, through
     `_mint_document`), and an EXAMINATION contests it -- an inquiry's roll on the Record (`research`,
-    rolled through `graded_inquiries`' route) carries the quality into its obstacle
+    rolled through `graded_tasks`' route) carries the quality into its obstacle
     (`seam/wrappers/sigma.py::contest_input` -> `modules/social_contest/roll.py::obstacle`), so a better
     forgery is harder to find, and what a finding then deposits stays FI-03's (`_found_claims`). A
     HOLDER still cannot read it -- *"a forged writ and a genuine writ are indistinguishable in every
     executor's ledger -- by construction, not by a flag"* (r2 §A.15) -- so the content deposit
     (`loop/witness.py`) hands a holder the same claim either way; what this forgery does downstream is
     its false `head`, and how hard it is to find out. [ASSUMPTION; medium; Jordan to correct; revert:
-    `default_forgery_quality = 0`, the control, and the examination reads every Record alike.]
+    every `forge_quality` row `0`, the control, and the examination reads every Record alike.]
 
     DECLINES (`NO_CHANGE` -> `forge.refused`, the `write` clause) exactly where `survey` does: the
     subject coheres under no single faction. (So a forge on a RUNG mints since v9 IN-12, as a survey
@@ -876,7 +864,7 @@ def _eff_forge(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     would any holder: the instrument does not know he wrote it (the deposit carries no attribution,
     r2 §A.9). His own petition on it would be addressed to himself and is declined person-side
     (`counterparty:`), so the lie misleads others, not him, on the one decision that reads it."""
-    return _mint_sheet(w, a, forged=True)
+    return _mint_sheet(w, a, forged=True, res=res)
 
 
 # The kind each half of `give` earns: the `give` row's `emits:` in its declared order (`verb_table.yaml`,
@@ -1039,7 +1027,7 @@ def _seize_rung(w: "World", a: "Act", rid: str) -> Change:
     """v9 IN-13 (#453 §10.4 step 8), `seize`'S RUNG HALF: the actor opens a `hold` on an OCCUPIED
     SETTLEMENT, and whatever `hold` it already carries closes -- one town changing hands without its
     territory (#453 §9.1: a hold on the settlement itself shadows a territory hold in
-    `holder_faction_of`'s walk). The ROW stays keyed as IN-12 step 6 built it; the halves split HERE, on
+    `holder_faction_of`'s walk). The ROW is keyed as IN-12 step 6; the halves split HERE, on
     what the subject is (a Record, or not), and share the gate's `seizure` basis for the closure and
     `T-m` for the opening.
 
@@ -1254,9 +1242,8 @@ def _eff_commit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     """§E3 `:426`: commits the actor to a Proposition -- a new `commit` Tenure opens, subject the
     actor, object the Proposition the act names (`Act.subject`, the row's typed precondition:
     *the Proposition exists, immutable, §14*). Plan position `7a`. `commit` is a `tenure_kinds`
-    member (`rosters.yaml`) with no opener until this effect -- `tenure_kinds_without_an_opener()`
-    reported it, and `resolvable_verbs()` (`loop/driver.py`) excluded the verb for want of one,
-    per §E3's `writes: ["Tenure.since"]` with nothing to perform it.
+    member (`rosters.yaml`) and this effect is its opener (`tenure_kinds_without_an_opener()`,
+    `resolvable_verbs()` in `loop/driver.py`), per §E3's `writes: ["Tenure.since"]`.
 
     ⚠ THE BAREST OPENER IN THIS FILE: no seat, no closure, no per-kind branch. `commit` is
     `own`-eligible with `beneficiary: actor` and carries no `via`, so the edge it opens names the
@@ -1273,34 +1260,21 @@ def _eff_commit(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     the effect itself to decline.
 
     THE ID SALTS ON THE OBJECT AND THE ACT, `_eff_give`'s `f"hold:{rid}:{a.id}"` pattern (`H`'s
-    `subject_id` slot is the new Tenure's own subject, its `purpose` is `f"{kind}:{object}:{act}"`)
-    -- BATCH-CLOSE FINDING (methodology-close Phase 1, antagonist), corrected from the plain
-    `f"commit:{prop_id}"` this shipped with: two different actors committing to the same
-    Proposition already minted distinct ids (each one's `subject_id` is its own actor), but an
-    actor who releases a `commit` and re-commits to the SAME Proposition within the same tick
-    would otherwise mint the identical id as the now-closed one -- the same collision `_eff_give`'s
-    own docstring names and salts against. When this salt landed `commit` never executed in computed
-    play (H-156), so no release-then-reopen path was reachable; since v9 IN-11 `commit` EXECUTES
-    (utter mints the utterer's hold, Q2 raises the Proposition as a referent) and `release` closes
-    it, so the path is reachable and the salt is load-bearing, not merely free.
+    `subject_id` slot is the new Tenure's own subject, its `purpose` is `f"{kind}:{object}:{act}"`):
+    an actor who releases a `commit` and re-commits to the SAME Proposition within the same tick
+    would otherwise mint the identical id as the now-closed one -- the collision `_eff_give`'s own
+    docstring names and salts against. `commit` executes in computed play (`utter` mints the
+    utterer's hold, Q2 raises the Proposition as a referent) and `release` closes it, so the path
+    is reachable and the salt is load-bearing.
 
-    ⚠ BUILD-ORDER BO-9/BO-10 (`proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md`
-    §7.2): the first build of this effect, before any question source offered a Proposition
-    referent, measured `commitment.made : 0` / `commitment.refused : 42` on one populated season --
-    a structural gap in `operands_for`/`questions_for`, not in this body, and HELD rather than
-    shipped. Items 5/7/8 (here `15`, `15c`, `15b`) are what BO-10 named as opening that aperture;
-    this effect is unchanged from the held draft, because the diagnosis put the gap upstream of it.
-
-    ⚠ NOT FACTORED WITH `_eff_oblige` BELOW, THOUGH THE TWO BODIES ARE IDENTICAL BUT FOR ONE STRING
-    -- BATCH-CLOSE FINDING (methodology-close Phase 2, REUSE/SIMPLIFICATION lenses), REVERTED after
-    trying it: `_derive_openers_from_effects` (`data/verbs.py::OPENERS-DERIVE`) is an AST walk over
+    ⚠ NOT FACTORED WITH `_eff_oblige` BELOW, THOUGH THE TWO BODIES ARE IDENTICAL BUT FOR ONE STRING:
+    `_derive_openers_from_effects` (`data/verbs.py::OPENERS-DERIVE`) is an AST walk over
     THIS FILE's own source that reads which verb opens which `tenure_kinds` member off a STRING
     LITERAL at each `Tenure(...)` call site, by design (its docstring: *"every site today names
     `kind` as a STRING LITERAL"*). A shared helper taking `kind` as a parameter makes that literal
-    disappear from this file's source, and the walker silently stopped seeing `commit`/`oblige` as
-    openers at all (`test_obligees.py::test_17a_oblige_is_resolvable_and_takes_releases_route`
-    caught it: `_OPENERS_FROM_EFFECTS.get("oblige")` went from `["oblige"]` to `[]`). The
-    duplication is real and the fix is not -- this is `create_record`/`issue`/`petition`'s
+    disappear from this file's source, and the walker stops seeing `commit`/`oblige` as
+    openers at all (`test_obligees.py::test_17a_oblige_is_resolvable_and_takes_releases_route`).
+    The duplication is real and the fix is not -- this is `create_record`/`issue`/`petition`'s
     `_mint_document` in reverse: that helper is safe to share because all three name the SAME
     literal kind (`hold`) inside it; `commit` and `oblige` do not, so nothing here can be factored
     without either losing the literal or hand-editing the derived roster back into a second copy."""

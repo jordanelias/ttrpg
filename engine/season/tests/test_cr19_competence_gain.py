@@ -20,9 +20,12 @@ import pytest
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import WriteClass
 from ..decision import options as OPT
-from ..decision.options import COMPETENCE_ATTRIBUTE, COMPETENCE_MID, competence, refracted_confidence
+from ..data.rosters import capability_uses
+from ..decision.options import competence, refracted_confidence
 from ..epistemic import observers_for
+from ...substrate.descriptors import scale_of
 from ..harness import populated as POP
+from ..boot.realm import build_realm
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries.person_q import said_of
@@ -30,8 +33,14 @@ from ..state.carriers import Act, Claim, Event
 from ..state.ids import H
 from .test_ax7_refraction import HELD_CONF, TELLER, _told
 
+CREDIT_KEY = next(r.key for r in capability_uses() if r.use == "told_claim_credit")   # the told-claim credit's row (B04.06)
 LOW, HIGH = "p_mid", "p_other"      # two hearers standing in `Hh`, so one channel (`co_located`) reaches both
 LIVE = 0.5                          # a live competence gain, set in the test and never shipped
+
+
+def _fx(competence_gain: float):
+    """The shipped Fixtures with `competence_gain` swept: the `told_claim_credit` row's gain, read through `fx`."""
+    return DEFAULT_FIXTURES.sweep("competence_gain", competence_gain)
 
 
 def _two_hear(competence_gain: float, attunement=(2, 6)):
@@ -41,7 +50,7 @@ def _two_hear(competence_gain: float, attunement=(2, 6)):
     w.fixtures = w.fixtures.sweep("competence_gain", competence_gain)
     for pid, a in zip((LOW, HIGH), attunement):
         if a is not None:
-            w.persons[pid].attributes = {COMPETENCE_ATTRIBUTE: a}
+            w.persons[pid].attributes = {CREDIT_KEY: a}
     w.persons[TELLER].ledger.append(
         Claim("c_held", TELLER, "Hh", "stores:grain", 8, 0, "firsthand", HELD_CONF, "own"))
     act = Act(id="a_tell_cr19", actor=TELLER, verb="tell",
@@ -81,33 +90,33 @@ def test_at_the_shipped_gain_zero_they_hold_it_equal():
 def test_a_receiver_with_no_authored_attunement_reads_one_at_a_live_gain():
     got = _two_hear(LIVE, attunement=(None, None))
     assert got == {LOW: HELD_CONF, HIGH: HELD_CONF}, got
-    assert competence(P.tiny_world().persons[LOW], 1.0) == 1.0
+    assert competence(P.tiny_world().persons[LOW], _fx(1.0)) == 1.0
 
 
 def test_the_factor_is_one_at_the_scales_middle_and_monotone_in_attunement():
     p = P.tiny_world().persons[LOW]
-    assert COMPETENCE_MID == 4
+    assert sum(scale_of(CREDIT_KEY)) / 2 == 4
     seen = []
     for a in range(1, 8):
-        p.attributes = {COMPETENCE_ATTRIBUTE: a}
-        seen.append(competence(p, 1.0))
+        p.attributes = {CREDIT_KEY: a}
+        seen.append(competence(p, _fx(1.0)))
     assert seen[3] == 1.0, seen                                # Attunement 4
     assert seen == sorted(seen) and seen[0] < seen[3], seen    # monotone, and not flat
     assert seen[0] == 0.0, seen                                # the floor at gain 1
-    p.attributes = {COMPETENCE_ATTRIBUTE: 2}
-    assert [competence(p, 0.0)] == [1.0]                       # gain 0: 1 for everyone
+    p.attributes = {CREDIT_KEY: 2}
+    assert [competence(p, _fx(0.0))] == [1.0]                       # gain 0: 1 for everyone
     for bad in (-0.1, 1.5):
         with pytest.raises(ValueError):
-            competence(p, bad)
+            competence(p, _fx(bad))
 
 
 def test_refracted_confidence_reads_the_factor_directly():
     c = Claim("c_x", LOW, "Hh", "stores:grain", 8, 0, "told_by", 60, "own")
     p = P.tiny_world().persons[LOW]
-    p.attributes = {COMPETENCE_ATTRIBUTE: 2}
-    assert refracted_confidence(p, c, "co_located", 0.5) == 60                          # competence_gain defaults to 0
-    assert refracted_confidence(p, c, "co_located", 0.5, competence_gain=0.0) == 60
-    assert refracted_confidence(p, c, "co_located", 0.5, competence_gain=LIVE) < 60
+    p.attributes = {CREDIT_KEY: 2}
+    assert refracted_confidence(p, c, "co_located", 0.5) == 60                          # no Fixtures handed: no row read, factor 1
+    assert refracted_confidence(p, c, "co_located", 0.5, fx=_fx(0.0)) == 60
+    assert refracted_confidence(p, c, "co_located", 0.5, fx=_fx(LIVE)) < 60
 
 
 def test_the_realm_at_the_shipped_gain_is_the_realm_with_the_factor_inert(monkeypatch):
@@ -117,7 +126,7 @@ def test_the_realm_at_the_shipped_gain_is_the_realm_with_the_factor_inert(monkey
     the switch off nobody holds any and `competence` is 1 at every gain, so the equality would be true by
     construction and could not observe a factor leaking at the shipped gain 0 (the Phase 3 close of B10-10)."""
     def run(seed=0):
-        w = POP.build_realm(seed, cast_attributes=True)
+        w = build_realm(seed, cast_attributes=True)
         POP.run(seasons=1, seed=seed, w=w)
         return w.content_hash(), [(e.kind, e.id) for e in w.log]
 

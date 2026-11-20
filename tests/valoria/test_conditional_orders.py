@@ -8,7 +8,6 @@ cannot silently regress and documents the canonical usage.
 """
 import math
 import os
-import random
 import sys
 
 import pytest
@@ -18,6 +17,8 @@ if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
 from systems.mass_battle.sim.engine import build_army, Order, resolve_battle, SIDE_A_START_ROW, SIDE_B_START_ROW  # noqa: E402
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 
 def _adv_then_withdraw(faction, trigger_range):
@@ -54,13 +55,13 @@ def test_safe_fields_allow_stance_and_yielding():
 def test_conditional_withdraw_fires_when_enemy_closes():
     ua = _adv_then_withdraw('A', 5)
     ub = _plain('B', 'aggressive')
-    su = ua.subunits[0]
+    su = ua.units[0]
     assert su.stance == 'balanced' and su.yielding is False and su._order_idx == 0
-    random.seed(2_000_555)
-    resolve_battle(ua, ub, 'Line', 'Line', {}, kind='multi', max_battle_turns=40)
-    # the enemy closed in -> the order fired -> the subunit flipped to a fighting withdrawal
-    assert su._order_idx == 1, "the enemy_range order must fire once the enemy closes"
-    assert su.stance == 'retreat' and su.yielding is True
+    with rngsource.using(draw.seeded(draw.H2("test_conditional_orders", 2_000_555))):
+        resolve_battle(ua, ub, 'Line', 'Line', {}, kind='multi', max_battle_turns=40)
+        # the enemy closed in -> the order fired -> the subunit flipped to a fighting withdrawal
+        assert su._order_idx == 1, "the enemy_range order must fire once the enemy closes"
+        assert su.stance == 'retreat' and su.yielding is True
 
 
 def test_conditional_order_does_not_fire_out_of_range():
@@ -68,11 +69,11 @@ def test_conditional_order_does_not_fire_out_of_range():
     # so the order must stay pending — a condition correctly never met stays unfired (by design).
     ua = _adv_then_withdraw('A', 0.5)
     ub = _plain('B', 'balanced')
-    su = ua.subunits[0]
-    random.seed(2_000_556)
-    resolve_battle(ua, ub, 'Line', 'Line', {}, kind='multi', max_battle_turns=6)
-    assert su._order_idx == 0, "an enemy_range order must NOT fire while the enemy stays outside the range"
-    assert su.stance == 'balanced' and su.yielding is False
+    su = ua.units[0]
+    with rngsource.using(draw.seeded(draw.H2("test_conditional_orders", 2_000_556))):
+        resolve_battle(ua, ub, 'Line', 'Line', {}, kind='multi', max_battle_turns=6)
+        assert su._order_idx == 0, "an enemy_range order must NOT fire while the enemy stays outside the range"
+        assert su.stance == 'balanced' and su.yielding is False
 
 
 def test_own_strength_trigger_validates():
@@ -90,12 +91,12 @@ def test_own_strength_fires_when_attrited():
                       'orders': (Order(trigger='own_strength:0.9',
                                        behavior={'yielding': True, 'stance': 'retreat'}),)}], 'A', 'A')
     ub = _plain('B', 'aggressive')
-    su = ua.subunits[0]
+    su = ua.units[0]
     assert su._order_idx == 0 and su.troop_total() == pytest.approx(su._start_troops)
-    random.seed(2_000_999)
-    resolve_battle(ua, ub, 'Line', 'Line', {}, kind='multi', max_battle_turns=40)
-    assert su._order_idx == 1, "own_strength order must fire once the subunit is attrited past the threshold"
-    assert su.yielding is True and su.stance == 'retreat'
+    with rngsource.using(draw.seeded(draw.H2("test_conditional_orders", 2_000_999))):
+        resolve_battle(ua, ub, 'Line', 'Line', {}, kind='multi', max_battle_turns=40)
+        assert su._order_idx == 1, "own_strength order must fire once the subunit is attrited past the threshold"
+        assert su.yielding is True and su.stance == 'retreat'
 
 
 def test_own_strength_does_not_fire_at_full_strength():
@@ -105,7 +106,7 @@ def test_own_strength_does_not_fire_at_full_strength():
     ua = build_army([{'shape': 'Line', 'troop_type': 'infantry', 'unit_type': 'melee', 'stance': 'balanced',
                       'width': 6, 'depth': 2, 'troops': 1200, 'starting_position': (sr, 25),
                       'orders': (Order(trigger='own_strength:0.5', behavior={'stance': 'retreat'}),)}], 'A', 'A')
-    su = ua.subunits[0]
+    su = ua.units[0]
     check_orders(ua, 0, [(0, 25)])  # a tick with the subunit at full strength
     assert su._order_idx == 0 and su.stance == 'balanced', "must not fire at full strength"
 
@@ -117,7 +118,7 @@ def test_retreat_only_when_within_range_via_stance():
                       'width': 6, 'depth': 2, 'troops': 1200, 'starting_position': (sr, 25),
                       'orders': (Order(trigger='enemy_range:6', behavior={'stance': 'retreat'}),)}], 'A', 'A')
     ub = _plain('B', 'aggressive')
-    su = ua.subunits[0]
-    random.seed(2_000_557)
-    resolve_battle(ua, ub, 'Line', 'Line', {}, kind='multi', max_battle_turns=40)
-    assert su._order_idx == 1 and su.stance == 'retreat'
+    su = ua.units[0]
+    with rngsource.using(draw.seeded(draw.H2("test_conditional_orders", 2_000_557))):
+        resolve_battle(ua, ub, 'Line', 'Line', {}, kind='multi', max_battle_turns=40)
+        assert su._order_idx == 1 and su.stance == 'retreat'

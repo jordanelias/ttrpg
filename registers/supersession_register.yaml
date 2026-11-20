@@ -39,6 +39,13 @@ entries:
       fac.legitimacy are different quantities. The `Faction.L`-serves-as-both conflation is older
       than either ruling and is NOT resolved by this one -- what is settled is that the field is a
       declared base descriptor with declared bounds, not what every call site writing it means.
+      ⚠ CLOSED 2026-11-15 (B03.80): the `fac.*` block this replacement names was RETIRED at plan
+      position `29b` -- `references/restructure_ledger.md`'s `FORK:5c5d8ec6` row for
+      `tests/valoria/test_faction_stat_bounds.py` ("`Faction.adjust`, `descriptors.faction_bounds`
+      and the `fac.*` block are all deleted"), and `references/descriptor_registry.yaml` says
+      "FACTION stats: RETIRED at plan position `29b`". `fac.legitimacy` is no longer a descriptor
+      key and `FACTION_KEY_TO_FIELD` no longer binds it; this row stands as history, and its
+      PENDING rechecks below name files the retirement overtook.
     files_to_recheck:
       - systems/factions/faction_canon_v30.md   # §5.3 banner + the §1 lineup box -- DONE 2026-08-23. NOTE the roster is a DIFFERENT six: Legitimacy replaces Mandate in the base set.
       - systems/factions/faction_behavior_v30.md   # :400 "faction-level L/PS ... which do not exist" -- DONE 2026-08-23, the strongest surviving denial. Its MAIN claim (Mandate is not derived from faction L/PS) still stands.

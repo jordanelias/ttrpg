@@ -1,0 +1,38 @@
+== P5.1/2 two men, different interiors, SAME matter (bears trade +1, tolls -1, law +0.5)
+  merchant  bearing(want, hold, bond) = (0.9, 0.1, 0.0); care = (0.9, 0.2, 0.5); holds = ((0, 'trade', 0.9, 1.0), (1, 'law', 0.2, 0.5))
+  tollman   bearing(want, hold, bond) = (-0.9, 0.5, 0.0); care = (0.9, 1.0, 0.5); holds = ((0, 'tolls', 0.9, -1.0), (1, 'law', 1, 0.5))
+  stranger  bearing(want, hold, bond) = (0.0, 0.0, 0.0); care = (0.9, 0.5, 0.5); holds = ((0, 'music', 0.9, 0.0),)
+  -> which ground each one's automatic policy argues on, as the `for` speaker (trial, 300 sittings):
+     merchant  moves {'press': 711, 'rest': 179, 'argue': 265, 'concede': 25} grounds argued {'solidarity': 97, 'authority': 27, None: 0, 'consequence': 141}
+     tollman   moves {'press': 665, 'argue': 336, 'rest': 154, 'concede': 35} grounds argued {'solidarity': 86, 'authority': 186, 'consequence': 64, None: 0}
+     stranger  moves {'press': 651, 'argue': 287, 'concede': 95, 'rest': 155} grounds argued {'solidarity': 85, 'authority': 79, 'consequence': 123, None: 0}
+  -> a press on each, by ground (b presses every turn; target automatic; trial), rattles per press, n=500
+     on merchant : consequence 0.579 authority 0.230 solidarity 0.371
+     on tollman  : consequence 0.582 authority 0.662 solidarity 0.375
+     on stranger : consequence 0.586 authority 0.383 solidarity 0.377
+  -> is the press's bite read from the MATTER? the merchant pressed on consequence when the matter bears on trade vs on nothing he wants
+     matter bears trade              : rattles per press 0.585 (n presses 2000)
+     matter bears music-free 'grain' : rattles per press 0.587 (n presses 2000)
+
+== P5.1 a pressing need changes a concession (negotiation; N p3:139 seed 'need' n=300, then fresh n)
+  n=300: [shipped] need0 0.247 need.9 0.490 | [flat] need0 0.253 need.9 0.253
+  n=1000: [shipped] need0 0.251 need.9 0.491 | [flat] need0 0.219 need.9 0.219
+
+== P5.4 a judge partial through a TIE (trial, mid people, bench j1 alone); `for`=a; n=1000
+  neutral                  stake (0.0, 0.0, 0.0) start +0.00 | carried 0.322 | onlooker holds `partial` 0.00 | sum legitimacy +0.033 | regard toward judge +0.127
+  patron of b              stake (0.0, 0.0, -0.5) start -0.33 | carried 0.290 | onlooker holds `partial` 1.00 | sum legitimacy +0.030 | regard toward judge +0.126
+  patron of a              stake (0.0, 0.0, 0.5) start +0.33 | carried 0.330 | onlooker holds `partial` 1.00 | sum legitimacy +0.031 | regard toward judge +0.123
+  tie to a stranger        stake (0.0, 0.0, 0.0) start +0.00 | carried 0.322 | onlooker holds `partial` 0.00 | sum legitimacy +0.033 | regard toward judge +0.127
+  want for + bond against  stake (1.0, 0.0, -0.5) start +0.33 | carried 0.369 | onlooker holds `partial` 1.00 | sum legitimacy +0.036 | regard toward judge +0.123
+  recusal: any code path? -> False
+
+== P5.3/5 the same record credited by two hearers by tie to its SOURCE; an item that implicates a man's patron
+  credit(judge    ) = +0.40  bonds to clerk +0.00, to bully +0.00
+  credit(toll_men ) = -0.10  bonds to clerk +0.00, to bully +0.50
+  credit(guildsmen) = +0.40  bonds to clerk +0.00, to bully +0.00
+  credit(clerk    ) = +0.40  bonds to clerk +0.00, to bully -0.20
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user-ttrpg/2a1f4990-cd7a-5bdc-982c-435886385374/scratchpad/sc_model_v2/pc_run4/p5.py", line 91, in <module>
+    print(f"  a source-only record (about nobody): judge3 neutral {E.credit(pr['judge3'], src):+.2f} vs judge3 a friend of the clerk {E.credit(pr2['judge3'], src):+.2f}")
+                                                                            ~~^^^^^^^^^^
+KeyError: 'judge3'

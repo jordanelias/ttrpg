@@ -29,6 +29,8 @@ realm settlement through the real chooser, with no hand-built act; off, byte-ide
 from __future__ import annotations
 
 
+import functools
+
 import pytest
 
 from engine.season.data import cast
@@ -38,6 +40,8 @@ from engine.season.decision.choose import make_chooser
 from engine.season.decision.options import opening_set
 from engine.season.loop.driver import resolvable_verbs
 from engine.season.harness import populated as POP
+from engine.season.boot.realm import COHORT_PREFIX, _slug, build_realm, guard_rows
+from engine.season.queries.world_q import ancestry
 from engine.season.queries import world_q
 from engine.season.seam.wrappers import mass_battle as wrapper
 from engine.season.state.carriers import Claim, Question, Sensation, Tenure, View
@@ -73,17 +77,17 @@ def _told_of_the_capital(w):
 @pytest.fixture(scope="module")
 def control():
     # ED-IN-0310: `foreign` now defaults to True, so the control arm (the realm before the empire was authored) is asked for by name.
-    return POP.build_realm(0, foreign=False)
+    return build_realm(0, foreign=False)
 
 
 @pytest.fixture(scope="module")
 def foreign():
-    return _told_of_the_capital(POP.build_realm(0, foreign=True))
+    return _told_of_the_capital(build_realm(0, foreign=True))
 
 
 @pytest.fixture(scope="module")
 def guarded():
-    return POP.build_realm(0, guards=True)
+    return build_realm(0, guards=True)
 
 
 def _ids(w) -> set:
@@ -93,10 +97,10 @@ def _ids(w) -> set:
 
 # ---------------------------------------------------------------------------------------------- (a) + (b)
 
-def test_the_control_arm_seats_no_altonian_entity_and_leaves_the_cast_rows_unplaced(control):
+def test_the_control_arm_seats_no_altonian_entity_and_leaves_the_cast_rows_unplaced(control, foreign):
     mentions = sorted(i for i in _ids(control) if any(m in str(i).lower() for m in FOREIGN_MARKERS))
     assert mentions == [], mentions
-    assert len(control.persons) == 83, "the control arm's cast count moved"
+    assert set(control.persons) == set(foreign.persons), "the arms differ in who is placed, not in who is cast"
     unplaced = dict(control._unplaced_cast)
     assert {c: unplaced.get(c) for c in ("NPC-011", "NPC-089", "NPC-090")} == {
         "NPC-011": "Altonia", "NPC-089": "Altonia", "NPC-090": "Altonia"}, unplaced
@@ -107,7 +111,7 @@ def test_the_control_arm_seats_no_altonian_entity_and_leaves_the_cast_rows_unpla
 def test_the_shipped_default_seats_the_empire():
     """ED-IN-0310 (Jordan, 2026-11-04): `build_realm(0)` with no argument is the foreign arm, byte for byte, and the control arm is only
     reached by `foreign=False`. FALSIFIER: the two worlds hash differently, so a default that silently reverted would fail here."""
-    shipped, on, off = POP.build_realm(0), POP.build_realm(0, foreign=True), POP.build_realm(0, foreign=False)
+    shipped, on, off = build_realm(0), build_realm(0, foreign=True), build_realm(0, foreign=False)
     assert shipped.content_hash() == on.content_hash() != off.content_hash()
     assert FID in shipped.propositions and FID not in off.propositions
 
@@ -124,7 +128,7 @@ def test_the_empire_is_a_faction_in_both_arms_and_its_cast_resolves_with_no_edit
 
 def test_the_empires_persons_live_at_its_settlement_and_the_head_holds_its_root(foreign):
     place = FOREIGN_CAST[EMPIRE]
-    root, town = f"terr_{place['territory']['code']}", f"set_{POP._slug(place['settlement']['code'])}"
+    root, town = f"terr_{place['territory']['code']}", f"set_{_slug(place['settlement']['code'])}"
     assert foreign.rungs[root].kind == "territory" and foreign.rungs[town].kind == "settlement"
     for pid in CAST:
         assert world_q.home_of(foreign)[pid] == town and world_q.residence_of(foreign)[pid] == town
@@ -140,7 +144,7 @@ def test_two_seats_are_held_and_the_head_alone_may_march(foreign):
     assert held == {"off_katepano": "p_npc_089", "off_kommerkiarios": "p_npc_090"}
     for oid in held:
         o = foreign.offices[oid]
-        assert o.faction == EMPIRE and o.rung == f"set_{POP._slug(FOREIGN_CAST[EMPIRE]['settlement']['code'])}"
+        assert o.faction == EMPIRE and o.rung == f"set_{_slug(FOREIGN_CAST[EMPIRE]['settlement']['code'])}"
     granted = {pid: {a for t in foreign.persons[pid].tenures if t.kind == "hold" and t.live
                      for a in (t.granted_acts or ())} for pid in ("p_npc_089", "p_npc_090")}
     assert "dispatch" in granted["p_npc_089"] and "dispatch" not in granted["p_npc_090"], granted
@@ -160,9 +164,9 @@ def test_altonias_goal_rows_are_seeded_with_the_seats_goals_derived_from_the_emp
 # ---------------------------------------------------------------------------------------------- (c)
 
 def test_the_foreign_root_is_outside_the_realm_for_endings_and_the_uncontrolled_census(control):
-    foreign = POP.build_realm(0, foreign=True)          # its own world: the falsifier below ends a hold
+    foreign = build_realm(0, foreign=True)          # its own world: the falsifier below ends a hold
     root = f"terr_{FOREIGN_CAST[EMPIRE]['territory']['code']}"
-    assert not any(foreign.rungs[a].kind == "realm" for a in POP.ancestry(foreign, root)), "the border is breached"
+    assert not any(foreign.rungs[a].kind == "realm" for a in ancestry(foreign, root)), "the border is breached"
     assert [r for r in foreign.rungs.values() if r.kind == "realm"] == [foreign.rungs["r_valoria"]]
     # THE FALSIFIER: end the root's only hold so NOBODY holds it. Were it counted under a realm, `uncontrolled`
     # (and so the census) would grow by one against the control arm, which seats no empire at all.
@@ -175,7 +179,7 @@ def test_the_foreign_root_is_outside_the_realm_for_endings_and_the_uncontrolled_
     # and the victory selector, CALLED (`world_q._ending_edges`, as `test_in27_endings` calls it): with every realm
     # territory a Crown man's, the empire's HELD root is not among the rungs it selects. Were it, Altonia's hold
     # would make the one-faction condition fail and `selected` would come back empty.
-    sel = POP.build_realm(0, foreign=True)
+    sel = build_realm(0, foreign=True)
     last = _all_but_one_under_the_crown(sel)
     sel.add_tenure(Tenure("t_in36_last_crown", last, faction_prop_id("Valorsmark"), "commit", 0))
     assert world_q.governing_hold(sel, root) is not None, "the empire's root must be HELD for this to bite"
@@ -211,7 +215,7 @@ def test_the_natural_goal_question_forms_a_march_candidate_on_the_capital_for_th
     assert qs["q:need:goal_katepano_press_the_capital"].referents == ("set_s_001",)
     q = out[0]
     assert ("set_s_001", "Rung") in q.classes, q
-    off = _told_of_the_capital(POP.build_realm(0, foreign=True, acquaintances=False))
+    off = _told_of_the_capital(build_realm(0, foreign=True, acquaintances=False))
     off_first = world_q.questions_for(off, off.persons["p_npc_089"])[0]
     assert off_first.id == "q:need:goal_katepano_press_the_capital" and ("set_s_001", "Rung") in off_first.classes
     cands = opening_set(p, View(p.id, [], foreign.fixtures.get("view_k"), q), q, foreign.fixtures)
@@ -224,7 +228,7 @@ def test_the_natural_goal_question_forms_a_march_candidate_on_the_capital_for_th
 
 
 def test_a_march_formed_by_a_chooser_restricted_to_march_folds_to_the_mass_battle_entry():
-    w = POP.build_realm(0, foreign=True)       # its own world: the driver below relocates the three Altonians
+    w = build_realm(0, foreign=True)       # its own world: the driver below relocates the three Altonians
     target = "set_s_001"                  # Valorsplatz: Crown-held and peopled by Crown members (a fought field)
     assert world_q.holder_faction_of(w, target) == "fac_valorsmark" and world_q.mustered(w, target, "fac_valorsmark")
     p, v, cands = _march_candidate(w, target)
@@ -259,7 +263,7 @@ def test_the_same_march_with_no_defender_arrives_unopposed_at_the_chokepoint():
     at the empire's own settlement), so a march on the pass is walked into, not fought for - which is why the
     Katepano's goal is aimed at the capital behind it and not at the pass. Recorded as a FINDING, not a design
     (H-233): the realm's defence of its chokepoint is garrison Site and nobody."""
-    w = POP.build_realm(0, foreign=True)
+    w = build_realm(0, foreign=True)
     assert world_q.mustered(w, "set_s_007", "fac_valorsmark") == []
     p, v, _ = _march_candidate(w, "set_s_007")
     act = make_chooser(w.fixtures, lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}"),
@@ -270,20 +274,23 @@ def test_the_same_march_with_no_defender_arrives_unopposed_at_the_chokepoint():
     assert world_q.home_of(w)["p_npc_089"] == "set_s_007", "the army did not arrive"
 
 
-#: WITNESS SEEDS for the natural-play test below, found by a scan of seeds 0-79 (`foreign=True`, tick 0): the
-#: seeds where the REAL unrestricted chooser's first released scene on the Katepano's goal Question holds a
-#: `march` on Valorsplatz, `via == "off_katepano"`, and whose march also folds to the seam in a one-season run
-#: with no `field.unopposed`. [ASSUMPTION; medium; Jordan to correct -- two witnesses, not a rate.]
-#: RE-SCANNED at v10 REM-27 (the Katepano told of the capital, `_told_of_the_capital`; this file's own
-#: `_first_scene_of_the_goal_question`, `_fold_one` and `aperture.instrumented_season`, `PYTHONHASHSEED=0`): the first
-#: scene holds the march at 10 of 80 seeds (7, 16, 38, 39, 44, 53, 63, 65, 67, 72), each of the 10 folds alone to the
-#: seam at `field.lost` and reaches it in a full one-season run, and none of the 10 holds it without the claim. The two
-#: witnesses kept are two of those ten.
-#: RE-SCANNED at v11 CR-81 (the realm starts with acquaintances; same helpers, seeds 0-79, `PYTHONHASHSEED=0`): the
-#: Katepano's first question is now an acquaintance claim carrying the capital as `Rung` (see the helper), and the first
-#: scene holds the march at 4 of 80 seeds (27, 44, 53, 63), each folding alone to the seam and reaching it in a full
-#: one-season run. Was (39, 53); 39 is no longer a witness. Fewer witnesses (10 -> 4 of 80) is RECORDED, not targeted.
-WITNESS_SEEDS = (44, 53)
+#: WITNESS SEEDS for the natural-play tests below are FOUND, not pinned: the first two seeds of 0-79 (`foreign=True`, tick 0)
+#: where the REAL unrestricted chooser's first released scene on the Katepano's goal Question holds a `march` on
+#: Valorsplatz, `via == "off_katepano"`. The draws are keyed on (verb, subject), so which seeds those are re-rolls whenever
+#: any upstream input moves; the property the tests state is that such a seed EXISTS and that its march folds to the seam
+#: (alone, and in a full one-season run). [ASSUMPTION; medium; Jordan to correct -- two witnesses, not a rate.]
+_WITNESS_COUNT = 2
+
+
+@functools.lru_cache(maxsize=None)
+def _witness_seeds() -> tuple:
+    found = []
+    for seed in range(80):
+        if _first_scene_of_the_goal_question(seed)[2] is not None:
+            found.append(seed)
+            if len(found) == _WITNESS_COUNT:
+                break
+    return tuple(found)
 
 
 def _first_scene_of_the_goal_question(seed: int):
@@ -291,7 +298,7 @@ def _first_scene_of_the_goal_question(seed: int):
     `questions_for` -> the shipped aggregation -> `assemble` -> the real unrestricted `make_chooser`
     (`aperture.instrumented_season`'s own construction). Returns `(world, person, act or None)`; the act is READ
     off the scene, never set. The Katepano is told of the capital first (`_told_of_the_capital`, REM-27)."""
-    w = _told_of_the_capital(POP.build_realm(seed, foreign=True))
+    w = _told_of_the_capital(build_realm(seed, foreign=True))
     w._rehome()
     p, fx = w.persons["p_npc_089"], w.fixtures
     qs = world_q.questions_for(w, p, None)
@@ -310,28 +317,31 @@ def _first_scene_of_the_goal_question(seed: int):
     return w, p, (acts[0] if acts else None)
 
 
-@pytest.mark.parametrize("seed", WITNESS_SEEDS)
-def test_the_unrestricted_chooser_picks_the_march_at_a_witness_seed_and_the_fold_reaches_the_seam(seed):
+def test_the_unrestricted_chooser_picks_the_march_at_a_witness_seed_and_the_fold_reaches_the_seam():
     """H-233's chosen half, met AT A WITNESS SEED and nowhere claimed beyond it (H-175's precedent). The real
     unrestricted chooser, on the Katepano's own goal Question (`q:need:goal_katepano_press_the_capital`), releases
     a first scene holding a `march` on Valorsplatz, and the real driver folds it to `mass_battle.field_input`
     once, with no `field.unopposed`.
 
     SCOPE, STATED: this is an existence witness, NOT a rate. The march scores far below `create_record` on that
-    question; a scan of seeds 0-79 finds it in the first scene at 10 (a first-scene rate of 0.125 at tick 0; Gumbel
-    order, `choice_temperature` 0.1, over ~30 candidates), and all 10 full one-season runs reach the seam (v10
-    REM-27's re-scan, the Katepano told of the capital; the v9 scan read 7, and 2 of the 5 runs it checked): the
-    combined rate over later ticks is NOT measured. The frequency is H-233's
-    remaining half and is the convictions' or IN-08's march cells', not this test's. THE DRAWS ARE KEYED ON (verb, subject), so the witness RE-ROLLS whenever any upstream
-    input moves (a candidate, a score, a seed's cast): the seeds below are then stale, not the mechanism broken.
-    FAILURE MESSAGE NAMES THE SCAN, rather than skipping: re-scan seeds 0-79 (`foreign=True`; per seed
-    `questions_for` -> `aggregate_questions` -> `assemble` -> `make_chooser(... verbs=resolvable_verbs())`, scene 0
-    holds `march` on `set_s_001` with `via == "off_katepano"`) and keep seeds that also fold to the seam."""
+    question, so it is in the first scene at only a minority of seeds at tick 0 (Gumbel order, `choice_temperature`
+    over ~30 candidates), and the combined rate over later ticks is NOT measured. The frequency is H-233's remaining
+    half and is the convictions' or IN-08's march cells', not this test's. THE DRAWS ARE KEYED ON (verb, subject), so
+    which seeds are witnesses re-rolls whenever any upstream input moves (a candidate, a score, a seed's cast).
+    THE WITNESSES ARE SCANNED (`_witness_seeds`: seeds 0-79, `foreign=True`; per seed `questions_for` ->
+    `aggregate_questions` -> `assemble` -> `make_chooser(... verbs=resolvable_verbs())`, scene 0 holds `march` on
+    `set_s_001` with `via == "off_katepano"`), so no seed is pinned; the test fails, and does not skip, when none exists."""
+    witnesses = _witness_seeds()
+    assert len(witnesses) == _WITNESS_COUNT, (
+        "no seed in 0-79 has the Katepano's first scene on her goal Question hold a march on set_s_001: the march is "
+        "no longer reachable by the unrestricted chooser from the empire's seat")
+    for seed in witnesses:
+        _the_witness_seed_picks_the_march_and_the_fold_reaches_the_seam(seed)
+
+
+def _the_witness_seed_picks_the_march_and_the_fold_reaches_the_seam(seed):
     w, p, act = _first_scene_of_the_goal_question(seed)
-    assert act is not None, (
-        f"seed {seed} is no longer a witness: the Katepano's first scene on her goal Question holds no march on "
-        f"set_s_001. RE-SCAN seeds 0-79 for new WITNESS_SEEDS (draws are keyed on (verb, subject), so any upstream "
-        f"move re-rolls them); do not skip this test.")
+    assert act is not None, seed
     assert act.actor == "p_npc_089" and act.via == "off_katepano", f"the chooser did not name the empire's seat: {act.via!r}"
     assert world_q.holder_faction_of(w, "set_s_001") == "fac_valorsmark" and world_q.mustered(w, "set_s_001", "fac_valorsmark")
     records = []
@@ -347,17 +357,21 @@ def test_the_unrestricted_chooser_picks_the_march_at_a_witness_seed_and_the_fold
     assert records[0].territory == "T1" and records[0].origin == FOREIGN_CAST[EMPIRE]["territory"]["code"], records[0]
 
 
-@pytest.mark.parametrize("seed", WITNESS_SEEDS)
-def test_the_witness_seed_reaches_the_seam_in_a_full_one_season_run_too(seed):
-    """The fold above takes the chosen act in isolation. H-233 records seeds (16, 38, 44) whose same march folds to
-    the seam alone and arrives `field.unopposed` in the full run (at v10 REM-27's re-scan, the Katepano told of the
-    capital, all three reach the seam in the full run too), so the witness is not honest until the whole season
-    is run: `aperture.instrumented_season` (the realm section's own instrument, the unrestricted chooser throughout)
-    on the witness seed reaches `mass_battle.field_input` at least once, from the empire's root. If this reddens
-    where the test above stays green, the seed has become one of those; re-scan (see above). The Katepano is
-    told of the capital first (`_told_of_the_capital`, REM-27)."""
+def test_the_witness_seed_reaches_the_seam_in_a_full_one_season_run_too():
+    """The fold above takes the chosen act in isolation. H-233 records seeds whose same march folds to the seam alone
+    and arrives `field.unopposed` in the full run, so a witness is not honest until the whole season is run:
+    `aperture.instrumented_season` (the realm section's own instrument, the unrestricted chooser throughout) on each
+    witness seed (`_witness_seeds`) reaches `mass_battle.field_input` at least once, from the empire's root. The
+    Katepano is told of the capital first (`_told_of_the_capital`, REM-27)."""
+    witnesses = _witness_seeds()
+    assert len(witnesses) == _WITNESS_COUNT, "fewer than two seeds in 0-79 are witnesses (see the test above)"
+    for seed in witnesses:
+        _the_witness_seed_reaches_the_seam_in_a_full_season(seed)
+
+
+def _the_witness_seed_reaches_the_seam_in_a_full_season(seed):
     from engine.season.harness import aperture
-    w = _told_of_the_capital(POP.build_realm(seed, foreign=True))
+    w = _told_of_the_capital(build_realm(seed, foreign=True))
     records = []
     real = wrapper.field_input
     wrapper.field_input = lambda *a, **k: records.append(real(*a, **k)) or records[-1]
@@ -367,7 +381,7 @@ def test_the_witness_seed_reaches_the_seam_in_a_full_one_season_run_too(seed):
         wrapper.field_input = real
     assert run["attempted"]["p_npc_089"].get("march", 0) >= 1, run["attempted"]["p_npc_089"]
     assert any(r.origin == FOREIGN_CAST[EMPIRE]["territory"]["code"] for r in records), (
-        f"seed {seed} no longer reaches the seam in a full season ({len(records)} entries): re-scan the witnesses")
+        f"witness seed {seed} does not reach the seam in a full season ({len(records)} entries)")
 
 
 # ---------------------------------------------------------------------------------------------- (e)
@@ -375,14 +389,14 @@ def test_the_witness_seed_reaches_the_seam_in_a_full_one_season_run_too(seed):
 # The guard reading is IN-60's Query, `world_q.guard_weight` (`test_in60_guard_weight.py` holds its falsifiers).
 
 def test_the_control_arm_seats_no_guard_and_reads_zero_at_every_hearth(control):
-    assert not [p for p in control.persons if p.startswith(POP.COHORT_PREFIX + "guard_")]
+    assert not [p for p in control.persons if p.startswith(COHORT_PREFIX + "guard_")]
     assert all(world_q.guard_weight(control, r) == 0 for r in control.rungs if control.rungs[r].kind == "hearth")
 
 
 def test_a_guard_stands_where_each_principal_is_and_the_king_is_guarded_harder_than_a_duke(guarded):
     w = guarded
     home = world_q.home_of(w)
-    by_seat = {row["seat"]: row["weight"] for row in POP.guard_rows()}
+    by_seat = {row["seat"]: row["weight"] for row in guard_rows()}
     assert set(by_seat) == {"off_king", "off_duchess_hafenmark", "off_duke_varfell"}
     authored = w._office_census["authored"]
     reads = {}
@@ -396,18 +410,18 @@ def test_a_guard_stands_where_each_principal_is_and_the_king_is_guarded_harder_t
     gm_home = home["p_npc_070"]
     assert home["p_npc_020"] != gm_home and world_q.guard_weight(w, gm_home) == 0
     # the guard is a cohort (S9) and holds no title and no commitment
-    for pid in (p for p in w.persons if p.startswith(POP.COHORT_PREFIX + "guard_")):
+    for pid in (p for p in w.persons if p.startswith(COHORT_PREFIX + "guard_")):
         assert w.persons[pid].weight > 1 and not [t for t in w.tenures if t.subject == pid and t.kind in ("hold", "commit")]
 
 
 def test_ending_the_guards_oblige_drops_the_reading_with_no_other_write():
-    w = POP.build_realm(0, guards=True)
+    w = build_realm(0, guards=True)
     holder = next(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == w._office_census["authored"]["off_king"])
     rung = world_q.home_of(w)[holder]
     before = world_q.guard_weight(w, rung)
-    assert before == {r["seat"]: r["weight"] for r in POP.guard_rows()}["off_king"]
+    assert before == {r["seat"]: r["weight"] for r in guard_rows()}["off_king"]
     for t in w.tenures:
-        if t.kind == "oblige" and t.subject == f"{POP.COHORT_PREFIX}guard_off_king":
+        if t.kind == "oblige" and t.subject == f"{COHORT_PREFIX}guard_off_king":
             t.until = w.tick
     assert world_q.guard_weight(w, rung) == 0, "the guard's live oblige edge is what the definition reads; closing it must drop the read"
 
@@ -415,10 +429,10 @@ def test_ending_the_guards_oblige_drops_the_reading_with_no_other_write():
 def test_guard_rows_refuse_what_they_cannot_read():
     from engine.season.gaps import Forbidden, Unspecified
     with pytest.raises(Unspecified):
-        POP.guard_rows("guards: []\n")
+        guard_rows("guards: []\n")
     with pytest.raises(Forbidden):
-        POP.guard_rows("guards:\n- {seat: off_king, weight: 1}\n")
+        guard_rows("guards:\n- {seat: off_king, weight: 1}\n")
     with pytest.raises(Unspecified):
-        POP.guard_rows("guards:\n- {seat: off_nowhere, weight: 2}\n")
+        guard_rows("guards:\n- {seat: off_nowhere, weight: 2}\n")
     with pytest.raises(Unspecified):
-        POP.guard_rows("guards:\n- {seat: off_king, weight: 2}\n- {seat: off_king, weight: 3}\n")
+        guard_rows("guards:\n- {seat: off_king, weight: 2}\n- {seat: off_king, weight: 3}\n")

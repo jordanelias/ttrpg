@@ -1,6 +1,6 @@
 # THE SEASON LOOP — AN **EXECUTABLE** HOLONIC ARCHITECTURE
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`.**
+## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/` and the modules it reaches by composition row (`modules/<name>/`). ⚠ AMENDED 2026-10-03 (Jordan-directed, ED-IN-0284; corrected by ED-IN-0285): the clause after `engine/season/` is new; before it, Layer 1 claimed `engine/season/` alone. ⚠ AMENDED 2026-10-28 (Jordan-directed, ED-IN-0302, ED-IN-0303): Godot's words name Godot constructs, so a registered module's playable form is a *scene* (a run of it, a *scene instance*), and *rung* is the world side (a *container* left in a quotation, a field name or a plan title predates this); the scene tree lives in `game/`, not `port/`. ⚠ AMENDED 2026-11-12 (Jordan-directed, A-97, ED-IN-0358): pointers appended in place — L1-A92 (write matrix `convictions` row) · L1-A12 (office row) · L1-A9/L1-A64 (H-30). ⚠ AMENDED 2026-11-12 (Jordan, A-115; A-97, ED-IN-0361): pointer appended in place — L1-A115 (write matrix `(Rung, envelope)` row: deleted with the field, `04` §B.3).**
 ## Under `CLAUDE.md` §0.05 this document is **REFERENCE, never mechanism.** Under §0.2 **nothing in
 ## it runs.** Part X says what would make each claim done and which steps cannot be satisfied by writing.
 
@@ -318,7 +318,7 @@ Event has an antecedent to cite and `causes[]` stops being `[ROOT]` for everythi
 | `(DocketItem, matter)` | **y** | · | · | **y** | · | · | CALENDAR/ACTS | **false** | DR-3 · §24 *"dockets form"*, no actor | `docket.formed` |
 | `(ConveningCondition, attached)` | **y** | · | · | **y** | · | · | CALENDAR/ACTS | **false** | DR-3 | `condition.attached` |
 | `(Rung, stores)` | · | **y** | · | **y** | · | · | MATTER/ACTS | **false** | DR-1 | `stores.changed` |
-| `(Rung, envelope)` | · | **y** | · | · | · | **y** | MATTER | **false** | DR-1 | `envelope.changed` |
+| `(Rung, envelope)` | · | **y** | · | · | · | **y** | MATTER | **false** | DR-1 | `envelope.changed` ⚠ AMENDED 2026-11-12 (Jordan, A-115; A-97, node L1-A115): row deleted with the field, `04` §B.3 |
 | `(Rung, yield)` | · | **y** | · | · | · | · | MATTER | **false** | DR-1 | `yield.taken` |
 | `(Rung, dates)` | **y** | · | · | **y** | · | · | CALENDAR/ACTS | **false** | DR-3 | `date.scheduled` |
 | `(Rung, stake)` | · | · | · | **y** | · | · | ACTS | **true** | DR-2 | `stake.changed` |
@@ -327,7 +327,7 @@ Event has an antecedent to cite and `causes[]` stops being `[ROOT]` for everythi
 | `(Person, body)` | · | **y** | · | **y** | · | · | MATTER/ACTS | **false** | DR-1 | `body.changed` · `person.died` |
 | `(Person, exists)` ⊕ | · | **y** | · | **y** | · | **y** | MATTER/ACTS | **false** | DR-1, **D8**; bounded by §15.3's causation rule | `person.died` · `person.individuated` |
 | `(Person, stance)` | · | · | · | **y** | · | · | ACTS | **true** | DR-2 | `stance.moved` |
-| `(Person, convictions)` ⊕ | · | · | · | **y** | · | · | ACTS | **true** | DR-2; §9.3 — moved by **argument and consequence**, never by evidence | `conviction.moved` |
+| `(Person, convictions)` ⊕ | · | · | · | **y** | · | · | ACTS | **true** | DR-2; §9.3 — moved by **argument and consequence**, never by evidence (⚠ AMENDED 2026-11-12, Jordan, A-92; node L1-A92: never by a direct write of evidence; evidence may be a term in the person's own drawn act at RESOLVE, `04` PART D row 18) | `conviction.moved` |
 | `(Person, beliefs)` ⊕ | · | · | · | **y** | · | · | ACTS | **true** | DR-2; §9.3 | `belief.revised` |
 | `(Person, scar[axis])` | · | · | · | **y** | · | · | ACTS | **true** | **stated in chain** — §54 item 21 | `scar.taken` |
 | `(Person, axis_count[axis])` ⊕ | · | · | · | **y** | · | · | ACTS | **true** | **D6**. L3 clause 1's counter. `axis` on D6's registry | `axis.incremented` |
@@ -443,7 +443,7 @@ claimant on an emptied granary gets a DIFFERENT Event"* — only works if a fail
 | property | § | how |
 |---|---|---|
 | **capability gates no verb** | §9.2 | `eligibility` admits `own`, `remit:`, `hold:`, `presence:` — **and never `capability`.** Rank supplies dice at the seam and appears in no row |
-| **an office adds no verb and no modifier** | §11.1 | `remit:` makes an **ordinary** verb eligible. Every verb in the table is available to `own` or via a remit; **none exists only for office-holders**, and no row carries a modifier |
+| **an office adds no verb and no modifier** (⚠ AMENDED 2026-11-12, Jordan, A-12; node L1-A12: save one optional `modifier?` that gates nothing, `04` §B.7) | §11.1 | `remit:` makes an **ordinary** verb eligible. Every verb in the table is available to `own` or via a remit; **none exists only for office-holders**, and no row carries a modifier |
 | **scarcity falls out of the fold** | §27.1 | `requires` is checked against the world **its predecessors left**, and failure **emits** rather than raising. No act knows another existed |
 | **no second resolver** | §27.2 | the table is **data**. One `resolve` reads it. A verb needing behaviour the columns cannot express is **`grade: absent`**, never a special case |
 
@@ -750,7 +750,7 @@ row (§1.4). Until every one is `ruled`, `measured` or `assumption`-with-a-defau
 | **H-27** | travel-leg ownership | SCHEMA_ROW | **Person, as the Tenure's subject** | **ruled** — §D4, by precedent | §15.1 | 1 |
 | **H-28** | `budget`'s placement | RULING — **answered by the type** | **PERSON-side** *(corrected by W1's adversarial pass)* | **ruled** — #353 `:877` | `budget : (Person, View) -> int` PERSON-SIDE, reading own `hold` Tenures, own body band, own travel legs. ⚠ THE UNIT IS THE SCENE BY JORDAN'S 2026-09-02 RULING AND THE INSTRUMENT STILL COUNTS ACTS — `W17` owns the scene; this row must not be read as claiming it, and said so only after the `W5` adversarial pass caught it asserting a behaviour its own `site:` does not have | every "wounded duke" |
 | **H-29** | `standing`'s formula | FORMULA | Person | **assumption** | the gap between `told_by` claims about p and p's OWN `firsthand` claims about p, paired by predicate on the `person_predicates` roster; maximum gap when nothing is paired | 2 |
-| **H-30** | person-order vs global canonical order | RULING — **answered by architecture** | the resolver | **assumption** | composite key `(stratum, actor-hash, intra-person position)` — honours both | 2 |
+| **H-30** | person-order vs global canonical order | RULING — **answered by architecture** | the resolver | **assumption** | composite key `(stratum, actor-hash, intra-person position)` — honours both (⚠ AMENDED 2026-11-12, Jordan, A-9, A-64; A-97, nodes L1-A9, L1-A64: the key now orders scenes, a scene keeps its chooser's act order, and rank weighs a keyed precedence draw, `04` §C.4, PART D row 36) | 2 |
 | **H-31** | the degree ladder's margin model | FORMULA | params (the one ladder) | **absent** | none. ⚠ **every contest is blocked** | every contest |
 | **H-32** | `judging_set_rule` | RULING | Rung | **absent** | none. ⚠ **nothing is decided at a sitting** | 2 |
 | **H-33** | the five witness channel predicates | FORMULA ×5 | the presence index (Nobody) | **absent** | none. ⚠ **fan-out is total; nothing said in private is private** | 1 |

@@ -1,6 +1,4 @@
-I already displayed the full content via the Read tool above. Here is the complete YAML output:
-
-```yaml
+# NPC-088 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Propagation mechanism. Hand-copied manuscripts increase Church AP. Lollard copyist archetype — each copy takes weeks, possession is a heresy charge, no press to seize."
 - id: NPC-088
   name: Carin Vedel
   one_line: A copyist with no institutional position who hand-reproduces suppressed Einhir cultural texts
@@ -89,6 +87,7 @@ I already displayed the full content via the Read tool above. Here is the comple
   - whether other Restoration Movement members know the location of her copies
   ends_when: never automatically -- only by discovery, arrest, or death, or by a player-driven resolution;
     the source names no natural conclusion.
+# NPC-087 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Illegal Einhir education in southwest. Player discovery → protect/report/leverage. Josef Dobrovský archetype."
 - id: NPC-087
   name: Uwe Askeland
   one_line: A hedge-school teacher running illegal Einhir education in the southwest, holding no post
@@ -166,6 +165,7 @@ I already displayed the full content via the Read tool above. Here is the comple
   - whether Restoration Movement leadership is aware of or directing him
   ends_when: never automatically; only via a discovery-driven resolution (protect/report/leverage), or
     unremarked continuation.
+# NPC-086 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Has data proving southern sea route is physically blocked, not politically. Undermines Varfell conspiracy narrative. Fra Mauro archetype."
 - id: NPC-086
   name: Joren Bergvall
   one_line: A Guild surveyor holding a technical, non-leadership office who has assembled physical evidence
@@ -237,6 +237,7 @@ I already displayed the full content via the Read tool above. Here is the comple
   - whether Guild leadership is aware of what he has found
   ends_when: never explicitly stated; presumably when the conspiracy narrative is durably dispelled or
     the data is destroyed or discredited.
+# NPC-075 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Arc C: death-Mending seals one Gap permanently (RS +5). 31 years at the Southernmost. Chernobyl liquidator archetype."
 - id: NPC-075
   name: Orm
   one_line: The second-ranking Warden at the dying Southernmost outpost, thirty-one years into an unrewarded
@@ -316,6 +317,7 @@ I already displayed the full content via the Read tool above. Here is the comple
   - whether a player has earned enough demonstrated competence to be acknowledged by him
   ends_when: his death (possibly a deliberate death-in-service act), the outpost's fall, or -- per the
     sourcing gap above -- an undefined further state.
+# NPC-005 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Risk-averse on Thread collateral despite Riskbreaker doctrine — TS lets her perceive damage colleagues can't."
 - id: NPC-005
   name: Sigrid Torsvald
   one_line: A covert military-order operative whose official record and personal reality have diverged
@@ -404,6 +406,7 @@ I already displayed the full content via the Read tool above. Here is the comple
   ends_when: never explicitly stated; presumably her exposure and its institutional fallout, her death,
     or a resolution of the archive-connection arc -- none of which the source specifies as a defined final
     mechanical state.
+# NPC-010 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Personal loyalty to partners vs family directives. Third conflict with family triggers enforcement."
 - id: NPC-010
   name: Dalla Virke
   one_line: An independent broker in illicit antiquities and information who profits from relationships
@@ -481,6 +484,7 @@ I already displayed the full content via the Read tool above. Here is the comple
   - whether her family knows she shields certain clients from their operations
   - whether any faction has discovered her broker role
   ends_when: never explicitly named; presumably her exposure or recall event, or indefinite continuation.
+# NPC-012 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "STABILITY-SEEKING — natural ally for peace, obstacle for escalation. Motivated by homesickness (discoverable via Read Ob 2)."
 - id: NPC-012
   name: Rikard Solberg
   one_line: A foreign trade official whose homesickness has been unconsciously steering an entire nation's
@@ -550,6 +554,7 @@ I already displayed the full content via the Read tool above. Here is the comple
   - whether any offer made to him is verifiably real
   ends_when: his recall, by his own nation or via a player-brokered genuine stability treaty, or indefinite
     continuation of the status quo.
+# NPC-002 arc sentence (moved from references/npc_registry.yaml, B04.12; prose, never a key): "Dual loyalty — personal sympathy vs professional duty. If Vaynard eliminated, takes Varfell leadership (PP-486)."
 - id: NPC-002
   name: Maret Uln
   one_line: A practitioner and intelligence operative whose lived perception of the population she surveils
@@ -634,4 +639,3 @@ I already displayed the full content via the Read tool above. Here is the comple
     what she knows and what she tells
   ends_when: never explicitly named as a terminus; presumably resolved only when she defects, successfully
     compartmentalizes, or her patron falls and she inherits.
-```

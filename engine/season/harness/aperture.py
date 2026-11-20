@@ -96,6 +96,17 @@ whether the practice addend (`faculty`) separates persons in one verb, beside th
 `practice_cap` swept to 0, where every pool reads `pool_default`. Read where the record passes
 (`watched_fold`), never recomputed from `faculty`.
 
+**BUILT OUT (IS-A-06).** A verb is *built out* when it has a CLEAN execution (an act `made` and not `refused`,
+whose Events the driver's `act_of` ties to it) whose Events hold every kind of `emits_at` for the band it
+folded, and, where its row declares writes, whose Events carry a `Receipt` (the gate mints one only for
+state that moved). The block prints one line per verb with its clean count and its `via` count (clean
+executions through a seat), then `built out <k> of <len(VERB_TABLE)>` and a `FOUGHT FIELDS` line. It is a
+reading, never a threshold.
+
+**NULL SCENES (IS-A-07).** After BUILT OUT, the acts none of whose Events carries a durable write, by verb
+and by outcome class (made, refused, graded loss), then the line `storybar --null-scenes` prints.
+`harness/storybar.py::null_scenes` owns the count and the definition; this module prints it.
+
 **WHAT THIS DOES NOT DO.** It grades nothing, pins nothing and is wired into no gate. Its output is a
 measurement of one seeded season, re-runnable: `python -m engine.season.harness.aperture [seasons]
 [seed]` or `... <seasons> --seeds S [S ...]`.
@@ -106,24 +117,27 @@ from __future__ import annotations
 import sys
 from bisect import bisect_right
 from collections import Counter, defaultdict
+from typing import Any, Callable
 
+from ...substrate import composition
 from ..data.matrix import MATRIX
 from ..data.requires import UNKNOWN, binding_from_act, evaluate
 from ..data.rosters import (CLAIM_SOURCES, QUESTION_AGGREGATION, QUESTION_SOURCES, RECORD_KINDS,
                             TENURE_KINDS)
 from ..data.verbs import COUNTERPARTY_CLAUSE, EMITTED_KINDS, VERB_TABLE, WRITE_CLAUSE
-from ..decision import (aggregate_questions, assemble, make_chooser, opening_set,
-                        person_side_eligible)
+from ..decision import aggregate_questions, assemble, opening_set, person_side_eligible
 from ..gaps import Unspecified
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..queries.world_q import DOCKET_KIND
-from ..state.carriers import subject_of
+from ..state.carriers import Receipt, subject_of
 from ..state.gate import PERSON_DIED
-from ..state.ids import H, draw_factory
 from ..state.world import World
 from . import governance_spine, populated
-from .corpus_run import attempts, graded_loss, graded_losses, unrowed_acts
+from ..boot.realm import build_realm
+from . import probes as P
+from .corpus_run import attempts, graded_loss, graded_losses, seats, unrowed_acts
+from .storybar import NULL_CLASSES, null_line, null_scenes
 from .decision_spread import goal_class
 
 
@@ -133,16 +147,6 @@ def seat_gated(row) -> bool:
     (`decision/options.py::_admitted_through`). Parsed exactly as that walk parses it."""
     kinds = [alt.partition(":")[0].strip() for alt in row.eligibility]
     return "remit" in kinds and "own" not in kinds
-
-
-def seats(w) -> dict:
-    """`{person id: [office id, ...]}` — every live `hold` whose object is an OFFICE and whose
-    subject is a person. A `hold` on a Record or a Rung is not a seat and is not counted."""
-    out: dict = defaultdict(list)
-    for t in w.tenures:
-        if t.kind == "hold" and t.live and t.object in w.offices and t.subject in w.persons:
-            out[t.subject].append(t.object)
-    return dict(out)
 
 
 def seat_depth(w, oid: str):
@@ -482,6 +486,99 @@ def scene_sources(d) -> dict:
             "need_goal": rows.get(("need", "org goal"), 0)}
 
 
+# ---------------------------------------------------------------------------------------------
+# BUILT OUT (IS-A-06) -- which verbs have a clean execution that emits every kind of its band and,
+# where the row declares writes, wrote. A reader over a finished run: it writes nothing and reads the
+# one act -> Events index (`_events_by_act`) the wrong-kind and refusal readers read.
+
+#: The Events a fought field leaves, and the one an unopposed march leaves: the kinds `FOUGHT FIELDS` counts.
+#: The verbs that emit them are read off the table (`fought_fields`), not named.
+FIELD_FOUGHT = ("field.won", "field.lost")
+FIELD_UNOPPOSED = "field.unopposed"
+#: The `Receipt.field` a stance write carries (`write_matrix.yaml`: `(Person, stance)`).
+STANCE_FIELD = "stance"
+
+
+def _carries_a_receipt(events) -> bool:
+    """Does any of `events` carry a `Receipt`? The gate mints one only for a subject whose state moved
+    (`World.write`: before and after read, `NoOpReceipt` when none did), so a Receipt on the Event IS the
+    before ≠ after. Its `delta` is not read: `Receipt.delta` is `None` for every write in the tree (a
+    `StateChange.delta` the fold never fills), so a test on it would read no execution as having written."""
+    return any(isinstance(c, Receipt) for e in events for c in e.changes)
+
+
+def _kinds_held(row, events) -> bool:
+    """Do `events` hold every kind of `row.emits_at(band)` for the band the act folded: the `degree` of its
+    LAST Event that carries a degree the row keys (`march`'s `Declared` at RESOLVE, then the field's band at
+    ENCOUNTER), or the row's one undivided list when it keys none. A keyed row whose Events name no declared
+    band cannot say which band it folded and reads False, which is the polarity `emits_at` itself keeps."""
+    got = {e.kind for e in events}
+    if not row.emits_by_degree:
+        return set(row.emits_at(None)) <= got
+    bands = [e.degree for e in events if e.degree in row.emits_by_degree]
+    return bool(bands) and set(row.emits_at(bands[-1])) <= got
+
+
+def built_out(w, d, rows) -> dict:
+    """`{verb: {"clean", "kinds", "wrote", "one", "via"}}` for EVERY verb of `VERB_TABLE`, sorted, zeros included.
+    `rows` is `corpus_run.attempts(w, n)`; a CLEAN execution is an act `made` and not `refused` (the
+    instrument's `ex - both`) whose Events `d.act_of` ties to it -- an act and an Event placed in the log
+    by hand are never tied, so a hand-built execution never counts. Per verb:
+
+      clean   the count of clean executions
+      kinds   True where the Events caused by ONE clean act include every kind of `emits_at` for its band
+      wrote   True where the row writes nothing in any band (`not row.writes`, the union over its bands), or where one clean act's
+              Events carry a Receipt (`_carries_a_receipt`)
+      one     True where ONE clean act did both: its Events hold every kind AND (the row writes nothing, or
+              its Events carry a Receipt). `kinds` and `wrote` are each read over any clean act, so they
+              can be True through two different acts; `one` cannot
+      via     the clean executions whose `Act.via` is set (a seat exercised)
+
+    A verb is BUILT OUT when `is_built_out`: `clean >= 1` and `one` (a made, kinds-holding, writing act)."""
+    by_act = _events_by_act(w, d)
+    out = {v: {"clean": 0, "kinds": False, "wrote": not row.writes, "one": False, "via": 0}
+           for v, row in sorted(VERB_TABLE.items())}
+    for a, made, no in rows:
+        events = [e for _, e in by_act.get(a.id, ())]
+        if not made or no or not events:
+            continue
+        row, c = VERB_TABLE[a.verb], out[a.verb]
+        c["clean"] += 1
+        kinds, receipt = _kinds_held(row, events), _carries_a_receipt(events)
+        c["kinds"] = c["kinds"] or kinds
+        c["wrote"] = c["wrote"] or receipt
+        c["one"] = c["one"] or (kinds and (receipt or not row.writes))
+        c["via"] += a.via is not None
+    return out
+
+
+def is_built_out(c: dict) -> bool:
+    """One `built_out` verb row's verdict: a clean execution that, itself, held its kinds and wrote."""
+    return c["clean"] >= 1 and c["one"]
+
+
+def fought_fields(w, d, rows) -> dict:
+    """`{"won_lost", "unopposed", "stance"}` over the acts of `rows` whose verb emits a fought field (the
+    table's own: `FIELD_FOUGHT` in its `emits:`), through the Events `d.act_of` ties to each: the field
+    Events it left (`won_lost`), its `field.unopposed` Events, and -- for an act that left a fought field --
+    the `Person.stance` Receipts across ALL its Events (`stance`: the losing side's grudge and morale
+    write, `write_matrix.yaml`)."""
+    by_act = _events_by_act(w, d)
+    fielders = {v for v, r in VERB_TABLE.items() if set(FIELD_FOUGHT) & set(r.emits)}
+    won_lost = unopposed = stance = 0
+    for a, _, _ in rows:
+        if a.verb not in fielders:
+            continue
+        events = [e for _, e in by_act.get(a.id, ())]
+        fought = sum(1 for e in events if e.kind in FIELD_FOUGHT)
+        won_lost += fought
+        unopposed += sum(1 for e in events if e.kind == FIELD_UNOPPOSED)
+        if fought:
+            stance += sum(1 for e in events for c in e.changes
+                          if isinstance(c, Receipt) and c.field == STANCE_FIELD)
+    return {"won_lost": won_lost, "unopposed": unopposed, "stance": stance}
+
+
 def instrumented_season(w, seasons: int) -> dict:
     """Run `seasons` seasons on `w` with the chooser and the question barrier WATCHED, never
     steered. The driver/chooser construction is `populated.run`'s, line for line, so the control
@@ -490,8 +587,7 @@ def instrumented_season(w, seasons: int) -> dict:
     fx = w.fixtures
     cast = frozenset(w.persons)          # the persons BEFORE the season, for the wrong-kind columns
     foldable = resolvable_verbs()
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    real = make_chooser(fx, mint, verbs=foldable, draw=draw_factory(w.world_seed, lambda: w.tick))
+    real = P.chooser(w, verbs=foldable)
 
     delivered: dict = {}                 # person id -> the Question[] this barrier handed them
     q_count: dict = defaultdict(Counter)  # source -> Counter(person id -> questions)
@@ -573,7 +669,8 @@ def instrumented_season(w, seasons: int) -> dict:
             both[a.verb] += 1
         if not (made or no):
             neither[a.verb] += 1
-    graded = Counter(a.verb for a in graded_losses(w, seasons))
+    graded_acts = graded_losses(w, seasons)
+    graded = Counter(a.verb for a in graded_acts)
     why = refusal_reading(w, d, rows)
     census = kind_census(w, d)
     told = census["counts"].get("news.told", {}).get("events", 0)
@@ -583,6 +680,8 @@ def instrumented_season(w, seasons: int) -> dict:
             "formed": dict(formed), "attempted": dict(attempted),
             "executed": dict(executed), "refused": dict(refused), "neither": dict(neither),
             "both": dict(both), "graded": dict(graded), "unrowed": unrowed_acts(w),
+            "built_out": built_out(w, d, rows), "fought": fought_fields(w, d, rows),
+            "null_scenes": null_scenes(w, seasons, rows=rows, graded=frozenset(a.id for a in graded_acts)),
             "pools": {v: {a: dict(c) for a, c in per.items()} for v, per in pools.items()},
             "refusal_kinds": {v: dict(c) for v, c in refusal_kinds.items()},
             "wrong_kind": wrong_kind(w, d, rows, why["post_acts"], cast),
@@ -592,6 +691,147 @@ def instrumented_season(w, seasons: int) -> dict:
             "questions": {s: dict(c) for s, c in q_count.items()}, "per_rule": dict(per_rule),
             "shipped_rule": shipped, "rule_mismatch": mismatch, "foldable": foldable,
             "hash": w.content_hash()}
+
+
+#: The `sys.monitoring` tool id `engines_entered` takes. `PROFILER_ID` is the slot the interpreter
+#: reserves for a profiler, which is what an entry count is; `coverage` holds `COVERAGE_ID` and a debugger
+#: `DEBUGGER_ID`, so a coverage run does not take it.
+_TOOL = getattr(getattr(sys, "monitoring", None), "PROFILER_ID", None)
+#: What the ENGINES block prints for a `kind: value` row: it names a constant, has no code object, and so
+#: has no entry to count.
+VALUE_ROW = "value"
+
+
+def monitoring_blocked() -> str | None:
+    """Why `engines_entered` cannot count here, or `None` when it can: `sys.monitoring` is Python 3.12's,
+    and its tool id may be held by another tool. Read at the moment of the call, so the answer is the
+    run's, not the import's."""
+    if _TOOL is None:
+        return f"sys.monitoring needs Python 3.12 or later (this is {sys.version_info.major}.{sys.version_info.minor})"
+    if sys.monitoring.get_tool(_TOOL) is not None:
+        return f"the monitoring tool id is held by {sys.monitoring.get_tool(_TOOL)!r}"
+    return None
+
+
+def engines_entered(run: Callable[[], Any]) -> tuple[Any, dict | None]:
+    """`run()`'s value, and `{role: entries}` for every row of `engine.substrate.composition.ROLES`: the
+    number of times the row's resolved target began executing during `run()` (`PY_START`, enabled on that
+    code object alone, so nothing else is watched and the world is not touched). A `kind: value` row has no
+    code object and reads `VALUE_ROW`. Where the interpreter is older than 3.12 or the tool id is taken,
+    `run()` is still run and the counts are `None` (`monitoring_blocked` says why).
+
+    The rows are resolved BEFORE the watching starts, so an import is never counted as an entry; and
+    the tool id is freed in a `finally`, so a `run()` that raises leaves it free."""
+    if monitoring_blocked() is not None:
+        return run(), None
+    mon = sys.monitoring
+    counts: dict = {}
+    roles_of: dict = defaultdict(list)           # code object -> the roles that resolve to it
+    for role in sorted(composition.ROLES):
+        code = getattr(composition.require(role), "__code__", None)
+        if code is None:
+            counts[role] = VALUE_ROW
+        else:
+            counts[role] = 0
+            roles_of[code].append(role)
+
+    def entered(code, _offset):
+        for role in roles_of[code]:
+            counts[role] += 1
+
+    try:
+        mon.use_tool_id(_TOOL, "valoria-aperture")
+    except ValueError:                           # taken between the check above and here
+        return run(), None
+    try:
+        mon.register_callback(_TOOL, mon.events.PY_START, entered)
+        for code in roles_of:
+            mon.set_local_events(_TOOL, code, mon.events.PY_START)
+        value = run()
+    finally:
+        for code in roles_of:
+            mon.set_local_events(_TOOL, code, 0)
+        mon.register_callback(_TOOL, mon.events.PY_START, None)
+        mon.free_tool_id(_TOOL)
+    return value, counts
+
+
+def engine_lines(m: dict) -> list:
+    """The ENGINES block of one world's `report`: every composition row, zeros included, sorted by role,
+    then the total. A world measured without the counts says why instead of printing zeros."""
+    head = "\n  ENGINES (composition rows entered in this run)"
+    counts = m["engines"]
+    if counts is None:
+        return [head, f"    not counted: {m['engines_why']}"]
+    rows = sorted(counts.items())
+    out = [head] + [f"    {r:<28}{c:>6}" for r, c in rows]
+    counted = [c for _, c in rows if c != VALUE_ROW]
+    out.append(f"    rows entered {sum(1 for c in counted if c)} of {len(counted)}")
+    return out
+
+
+def pooled_engine_lines(ms: list) -> list:
+    """Per row, the number of seeds whose run entered it (`m["engines"]` of each world in `ms`); a seed
+    measured without the counts is named and left out of the denominator."""
+    head = "\n  ENGINES, POOLED — per composition row, the seeds whose run entered it"
+    have = [m for m in ms if m["engines"] is not None]
+    if not have:
+        return [head, f"    not counted: {ms[0]['engines_why']}"]
+    roles = sorted(have[0]["engines"])
+    out = [head]
+    for r in roles:
+        if have[0]["engines"][r] == VALUE_ROW:
+            out.append(f"    {r:<28}{VALUE_ROW:>6}")
+        else:
+            n = sum(1 for m in have if m["engines"][r])
+            out.append(f"    {r:<28}{n:>3} of {len(have)} seeds")
+    skipped = [m["seed"] for m in ms if m["engines"] is None]
+    if skipped:
+        out.append(f"    seeds not counted: {skipped} ({ms[0]['engines_why']})")
+    return out
+
+
+def built_out_lines(m: dict) -> list:
+    """The BUILT OUT block of one world's `report`: one line per verb of `VERB_TABLE`, zeros included,
+    sorted, then the total and the FOUGHT FIELDS line. A reading, never a threshold."""
+    rows = m["built_out"]
+    out = ["\n  BUILT OUT (a verb with a clean execution -- made, not refused -- whose Events hold every kind "
+           "of its band and which wrote where its row declares writes, in ONE execution (`one`: `kinds` and `wrote` can each be yes through different acts); `via` = clean executions through a seat)"]
+    for v in sorted(rows):
+        c = rows[v]
+        out.append(f"    {v:<16} clean {c['clean']:>4}  kinds {'yes' if c['kinds'] else 'no ':<3}  "
+                   f"wrote {'yes' if c['wrote'] else 'no ':<3}  one {'yes' if c['one'] else 'no ':<3}  via {c['via']:>4}  "
+                   f"{'BUILT OUT' if is_built_out(c) else '-'}")
+    out.append(f"    built out {sum(1 for c in rows.values() if is_built_out(c))} of {len(VERB_TABLE)}")
+    f = m["fought"]
+    out.append(f"  FOUGHT FIELDS  won+lost {f['won_lost']}  unopposed {f['unopposed']}  "
+               f"stance receipts on the losing side {f['stance']}")
+    return out
+
+
+def null_scene_lines(m: dict) -> list:
+    """The NULL SCENES block of one world's `report`, after BUILT OUT: the acts none of whose Events carries
+    a durable write (`storybar.null_scenes` owns the definition and the count), by verb and by outcome
+    class, then the line `storybar --null-scenes` prints. The scene budget's debit is a Query and writes no
+    cell, so it is not counted (A-81). A reading, never a threshold."""
+    r = m["null_scenes"]
+    out = ["\n  NULL SCENES (acts whose Events carry no durable write)"]
+    for v in sorted({v for v, _ in r["null"]}):
+        out.append(f"    {v:<16}" + "  ".join(f"{c.replace('_', ' ')} {r['null'].get((v, c), 0):>4}"
+                                                for c in NULL_CLASSES))
+    out.append("    " + null_line(r))
+    return out
+
+
+def pooled_built_out_lines(ms: list) -> list:
+    """Per verb, the number of seeds of `ms` in which it is built out, and the pooled total: the verbs built
+    out in at least one seed."""
+    out = ["\n  BUILT OUT, POOLED — per verb, the seeds in which it is built out"]
+    per = {v: sum(1 for m in ms if is_built_out(m["built_out"][v])) for v in sorted(ms[0]["built_out"])}
+    for v, n in per.items():
+        out.append(f"    {v:<16}{n:>3} of {len(ms)} seeds")
+    out.append(f"    built out in at least one seed {sum(1 for n in per.values() if n)} of {len(VERB_TABLE)}")
+    return out
 
 
 def measure_world(build, seed: int = 0, seasons: int = 1) -> dict:
@@ -611,10 +851,12 @@ def measure_world(build, seed: int = 0, seasons: int = 1) -> dict:
     granted = {pid: sorted({a for t in w.persons[pid].tenures
                             if t.kind == "hold" and t.live and t.object in w.offices
                             for a in t.granted_acts}) for pid in held}
-    run = instrumented_season(w, seasons)
+    # THE ENGINES READING wraps the seasons alone: the control arm and the build are outside it.
+    run, engines = engines_entered(lambda: instrumented_season(w, seasons))
     return {"seed": seed, "seasons": seasons, "persons": persons, "survivors": len(w.persons),
             "seats": held, "depth": depth, "posts": posts, "granted": granted,
-            "eligible": elig, **run,
+            "eligible": elig, **run, "engines": engines,
+            "engines_why": None if engines is not None else monitoring_blocked() or "the tool id was taken",
             "control": {"acts": control["acts"], "claim_sources": control["claim_sources"],
                         "hash": wc.content_hash()}}
 
@@ -623,7 +865,7 @@ def measure(seed: int = 0, seasons: int = 1) -> dict:
     """The populated realm (`populated.build_realm`) and the thirteen-seat spine
     (`governance_spine.build`), each measured with its own control."""
     return {"verbs": sorted(VERB_TABLE), "resolvable": sorted(resolvable_verbs()),
-            "realm": measure_world(populated.build_realm, seed, seasons),
+            "realm": measure_world(build_realm, seed, seasons),
             "spine": measure_world(governance_spine.build, seed, seasons)}
 
 
@@ -971,6 +1213,8 @@ def pooled_report(results: list) -> list:
     for v in verbs:
         out.append(_verb_line(v, vc[v], foldable))
     out.append(_verb_total_line(vc))
+    out.extend(pooled_engine_lines(ms))
+    out.extend(pooled_built_out_lines(ms))
     pm = pool_worlds(ms)
     out.extend(_refusal_blocks(pm))
     out.extend(cr14_blocks(pm))
@@ -1043,6 +1287,9 @@ def report(res: dict) -> list:
             out.append(_verb_line(v, vc[v], foldable))
         out.append(_verb_total_line(vc))
         out.extend(pools_lines(m))
+        out.extend(engine_lines(m))
+        out.extend(built_out_lines(m))
+        out.extend(null_scene_lines(m))
         # -- why each refusal refused (REM-11) ----------------------------------------------
         out.extend(_refusal_blocks(m))
         # -- questions by source ----------------------------------------------------------

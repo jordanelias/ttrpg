@@ -7,7 +7,7 @@ records what went wrong without them, and re-tightened here:
      verdict is a keyword routing over prose, and keyword routing is crude.
   2. **A row that does not route is reported UNMAPPED, never passed.** Silence is not a pass.
   3. **A case more than half of whose `core` rows fail to route is NOT-ASSESSED**, not graded.
-     Grading it PLAYABLE would be the instrument flattering the shape by failing to aim at it.
+     Grading it DECLARED-PRESENT would be the instrument flattering the shape by failing to aim at it.
   4. **Every route matches on WORD BOUNDARIES with explicit negative guards.** #351's most
      expensive correction was a bare substring `ambient` catching ambient-MATERIAL rows (8 -> 3)
      and a bare `counter` matching inside "counter-productive" (10 -> 8). Both are guarded here.
@@ -19,8 +19,6 @@ from __future__ import annotations
 import re
 
 from ..data.matrix import MATRIX
-from ..data.rosters import PURSUITS
-from ..state.ids import H
 from ..data.verbs import VERB_TABLE
 from ..loop.driver import resolvable_verbs
 from ..data import files
@@ -28,104 +26,7 @@ from ..gaps import ShapeGap
 from ..trace_log import TRACE
 from . import exercises as EX
 from . import probes as P
-
-
-# ===========================================================================
-# WHAT A CASE SAYS ABOUT THE PERSON IT SEATS. Two derivations, one home.
-#
-# ⚠ THEY LIVED IN TWO DIFFERENT HARNESSES AND THAT WAS THE DEFECT (§8). `wants_of` was in
-# `populated.py` and `seed_pursuits` in `corpus_run.py`, so the two instruments that build a
-# world from a case reached across each other to share them -- and `corpus_run` could not read
-# `wants_of` at all without an import cycle. Both are PURE FUNCTIONS OF A CASE DICT, which is what
-# this module already owns (`load_cases`), so this is where they belong and neither harness now
-# imports the other.
-# ===========================================================================
-
-def seed_pursuits(seed: int, case_id: str, pid: str) -> dict:
-    """WHAT ONE PERSON BELIEVES, DRAWN FROM THE CASE ID. `{conviction: weight}`, 1-3 entries.
-
-    ⚠ **THE SINGLE OWNER OF THIS DRAW (`CLAUDE.md` §8), AND IT BECAME ONE BY BEING COPIED.**
-    `harness/populated.py` seats 46 people and reproduced this formula verbatim -- the same radix,
-    the same `axis:` purpose strings, the same `(0.9, 0.5, 0.3)` ladder -- which is TWO OWNERS OF
-    WHICH PEOPLE ARE ALIKE. Free to drift, and drifting invisibly: `stance` is empty in these
-    worlds, so this draw ALONE orders every candidate, and two copies differing by one weight would give two instruments two different
-    populations while both reported on "the corpus".
-
-    ⚠ THE PURPOSE STRING STAYS `axis:` THOUGH IT PICKS A CONVICTION. Changing it would re-draw
-    every person in the corpus and move every golden for a reason that is a rename, not a
-    behaviour -- `04 PART D row 35` cares about purpose UNIQUENESS, not spelling. The SET it
-    indexes changed from 4 to 13, which moves the draw on its own and is `U3`'s.
-
-    ⚠⚠ **ONE TO THREE CONVICTIONS, NOT ONE, AND #353 §14 IS WHERE THE RANGE COMES FROM:**
-    *"`convictions` | weights over the closed 13 | **1-3 primary + distributed**"*. Seeding exactly
-    one was the harness's simplification and it was load-bearing in the wrong direction. MEASURED
-    2026-09-11 over 86 corpus-shaped seeds, counting DISTINCT axis directions the projection
-    produces: **1 conviction -> 13 · 2 -> 66 · 3 -> 80.** With one, the count is capped at the size
-    of the roster by construction, and worse than that suggests: 9 of the 13 convictions point
-    within 60° of a common direction (`traditional+ sacred+ hierarchical+ instrumental-`), so a
-    single-conviction person is one of about five characters however the draw falls. Two or three
-    COMBINE into vectors that are genuinely apart.
-
-    ⚠ THE COUNT ITSELF IS DRAWN, so cases differ in how many things their people care about rather
-    than all holding exactly N. Weights descend 0.9 / 0.5 / 0.3: "primary" is §14's own word for
-    the first, and the rest are the "distributed" remainder.
-
-    ⚠ THE WEIGHTS ARE OVER THE PURSUIT ROSTER, NOT OVER THE AXES. Seeding from `PURSUIT_AXES`
-    would hand every person a weight on `hierarchical_equal`, which is a basis vector and not
-    something anybody believes.
-    """
-    pursuits = sorted(PURSUITS)
-    # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s blake2b hexdigest -- same as combat_seam.py:153. The `3` is #353 §14's own upper bound: "1-3 primary + distributed"]
-    n_conv = 1 + int(H(seed, 0, case_id, f"axis:{pid}:n"), 16) % 3
-    # [JUSTIFIED: a DESCENDING ladder, not three chosen magnitudes -- #353 §14 distinguishes the "primary" conviction from the "distributed" remainder and supplies no numbers. What the corpus needs is that the first outweighs the rest; 0.9 matches the single-conviction weight this replaced, so a 1-conviction case is unchanged by the ladder]
-    chosen, weights = {}, (0.9, 0.5, 0.3)
-    for k in range(n_conv):
-        purpose = f"axis:{pid}" if k == 0 else f"axis:{pid}:{k}"
-        # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s hex digest -- same as combat_seam.py:153]
-        # ⚠⚠ A REPEATED PICK SILENTLY SHORTENS THE DRAW, AND THE FIX IS DELIBERATELY NOT APPLIED.
-        # `setdefault` is a no-op when the hash lands on a conviction already held, so an intended
-        # 3 becomes a 2 or a 1 and slot `k`'s weight is discarded. MEASURED over the 46 live cases
-        # x 20 seeds: 94 of 920 draws (10.2%) lose one -- 67 of the intended 3s, 27 of the 2s. That
-        # puts a tenth of the corpus back in the regime this docstring says the change exists to
-        # escape, where "a single-conviction person is one of about five characters".
-        #
-        # THE FIX IS SIX LINES -- re-salt the purpose until the pick is not already held, bounded by
-        # the roster size -- AND IT WAS BUILT, RUN AND REVERTED 2026-09-16. It works: the
-        # distribution moves {1:312, 2:373, 3:235} -> {1:283, 2:335, 3:302}, exactly the 94
-        # recovered, and the full suite stays green. It is reverted because it MOVES THE WORLD:
-        # `build_realm(0).content_hash()` goes `e5df63a767a4f38a` -> `9db4676abf6bb53d`, so
-        # `build_realm` reaches this draw rather than being fully covered by the authored roster,
-        # and PR #404's creed-sweep table (+47%/+43% on acts naming another person) was measured
-        # under the current draw and would no longer reproduce.
-        #
-        # RULED by Jordan, 2026-09-16: *"Conviction will be getting overhauled."* The overhaul is
-        # where this belongs -- it re-records whatever it moves, which this change on its own does
-        # not. Take it THEN, not before, and re-run the creed sweep when you do.
-        pick = int(H(seed, 0, case_id, purpose), 16) % len(pursuits)  # [JUSTIFIED: 16 is int()'s RADIX for H()'s blake2b hexdigest, stated in full above -- unchanged by this rename]
-        chosen.setdefault(pursuits[pick], weights[k])
-    return chosen
-
-def wants_of(case: dict) -> str:
-    """WHAT THIS LOOP WANTS, in the case's own words.
-
-    ⚠ THE CASES CARRY THIS AND THE FIRST CUT OF THIS MODULE IGNORED IT, giving all 143 people the
-    string *"a standing ambition"* -- 143 identical wants, which is `build_at`'s three-identical-
-    people defect re-created at scale. `season_requires` is a list of `{need, why, hardness}` and
-    the corpus declares **427 `core` needs across the 143 cases** (median 7 needs each). The first
-    `core` need is what the case says it cannot do without.
-
-    Falls back through `important` and then to the one-line summary, because a case with no `core`
-    row is a corpus gap and a person with no want does not act at all -- and an ambition invented
-    here would be the fabrication this module refuses everywhere else.
-    """
-    rows = [r for r in (case.get("season_requires") or []) if isinstance(r, dict)]
-    for hardness in ("core", "important", "flavour"):
-        for r in rows:
-            if r.get("hardness") == hardness and r.get("need"):
-                return str(r["need"])
-    return str(case.get("one_line") or case.get("name") or case.get("id"))
-
-CHAIN = files.CHAIN_CASES_DIR
+from ..boot.realm import CORPUS_DEFECTS, load_cases   # moved to `boot/` (B03c.01); the builder reads both
 
 
 # ---------------------------------------------------------------------------
@@ -200,119 +101,6 @@ def run_probe(pid: str) -> dict:
 # CASES
 # ---------------------------------------------------------------------------
 
-def _tolerant_yaml(text: str, fname: str):
-    """The in-chain #351 corpus is COMMITTED WITH AN AGENT-TRANSCRIPT PREAMBLE AND MARKDOWN
-    FENCES: six of its seven case files do not load with `yaml.safe_load`, and one
-    (`ARC3.yaml`) is TRUNCATED AT ITS HEAD -- its first record's `- id:` line was lost when
-    committed, leaving an ORPHANED FRAGMENT of a third emergent case above `EMG-10`.
-
-    Both are real defects in the chain's own evidence base. They are RECORDED (CORPUS_DEFECTS)
-    and worked around at LOAD time, never fixed in place: the committed files are the chain's
-    evidence and this instrument does not edit evidence.
-
-    The orphan's rows are NOT DROPPED. Dropping them would silently delete real `season_requires`
-    needs; they are recovered under a synthetic id that says what happened."""
-    import yaml
-    fenced = re.search(r"```(?:yaml)?\n(.*?)```", text, re.S)
-    body = fenced.group(1) if fenced else text
-    notes: list[str] = []
-    if fenced:
-        notes.append(f"{fname}: committed inside a markdown fence with transcript preamble")
-    try:
-        return yaml.safe_load(body) or [], notes
-    except yaml.YAMLError:
-        pass
-    lines = body.splitlines()
-    first = next((i for i, ln in enumerate(lines) if ln.startswith("- id:")), None)
-    if first is None:
-        notes.append(f"{fname}: UNPARSEABLE and holds no `- id:` record")
-        return [], notes
-    cases = yaml.safe_load("\n".join(lines[first:])) or []
-    head = "\n".join(lines[:first]).strip()
-    if head:
-        notes.append(
-            f"{fname}: TRUNCATED AT HEAD -- {first} lines of a record above the first `- id:`; "
-            "its identity is unrecoverable from the file")
-        # ⚠ REV 5. The reconstruction below FAILED SILENTLY for four revisions -- the fragment
-        # begins mid block-scalar, `yaml` raised, the except branch returned [], and TWO `core`
-        # ROWS WERE LOST while this function's docstring said "NOT DROPPED" and the regression
-        # test asserted only that a NOTE existed. The recovery now starts at the fragment's
-        # first parseable `- need:` and REPORTS how many rows it could not reach.
-        rows, lost = [], 0
-        head_lines = lines[:first]
-        start = next((i for i, ln in enumerate(head_lines)
-                      if ln.lstrip().startswith("- need:")), None)
-        if start is None:
-            lost = len(head_lines)
-        else:
-            lost = start
-            try:
-                indent = len(head_lines[start]) - len(head_lines[start].lstrip())
-                body = "\n".join(ln[indent:] if len(ln) > indent else ln
-                                  for ln in head_lines[start:])
-                rows = yaml.safe_load(body) or []
-                rows = [r for r in rows if isinstance(r, dict) and "need" in r]
-            except yaml.YAMLError:
-                rows, lost = [], len(head_lines)
-        notes.append(f"{fname}: recovered {len(rows)} row(s) from the truncated head; "
-                     f"{lost} line(s) above the first parseable `- need:` are UNRECOVERABLE")
-        if rows:
-            cases = [dict(id=f"{fname.split('.')[0]}-ORPHAN",
-                          name="[IDENTITY LOST] headless fragment recovered from a truncated file",
-                          one_line="A third emergent case whose `- id:` header was lost when the corpus was committed.",
-                          scale="world", season_requires=rows,
-                          ends_when="unrecoverable -- the record's tail is present, its head is not")] + cases
-    return cases, notes
-
-
-CORPUS_DEFECTS: list[str] = []
-
-# CASE_SERIES -- series name -> the regex a case id of that series must fully match.
-# THE RULE: an id is its series prefix plus a label. A bare arc number is never an identifier
-# (two series once both numbered their cases 16-18, and the loader dropped the second set with
-# no trace). A colliding series takes a NEW PREFIX, never a new number; bare `ARC-19` is never
-# allocated; a new id needs a row here FIRST. `ARC\d-ORPHAN` is the loader's own synthetic id
-# for a headless fragment (`_tolerant_yaml`). Neither of the two 16-18 series is canonical
-# (both are evidence), and no cited id is renumbered.
-CASE_SERIES: dict[str, str] = {
-    "arc": r"ARC-\d{2}",
-    "arc_recovered": r"ARC-R\d{2}",
-    "arc_meta_collision": r"ARC-META-COLLISION",
-    "nsc": r"NSC-\d{2}",
-    "scn": r"SCN-\d{2}|SCN-LOOP-[A-D]",
-    "emg": r"EMG-\d{2}|EMG-[CX]\d",
-    "npc": r"NPC-\d{3}",
-    "orphan": r"ARC\d-ORPHAN",
-}
-
-
-def load_cases(kind: str) -> list[dict]:
-    """`kind` in {NPC, ARC}. NPC cases come from BOTH the in-chain #351 corpus (27) and this
-    session's completion of it (19) -- together the full 46 in the registry. ARC cases are
-    the in-chain corpus in full."""
-    out: list[dict] = []
-    seen: dict[str, str] = {}      # case id -> the file it was first loaded from
-    sources = []
-    if kind == "NPC":
-        sources = sorted(CHAIN.glob("NPC*.yaml")) + sorted(files.CASES_DIR.glob("NPC*.yaml"))
-    else:
-        sources = sorted(CHAIN.glob("ARC*.yaml")) + sorted(files.CASES_DIR.glob("ARC*.yaml"))
-    for f in sources:
-        data, notes = _tolerant_yaml(f.read_text(), f.name)
-        CORPUS_DEFECTS.extend(notes)
-        for c in data or []:
-            cid = str(c["id"])
-            if cid in seen:
-                CORPUS_DEFECTS.append(
-                    f"{f.name}: duplicate case id {cid!r} (first in {seen[cid]}); "
-                    "second not loaded")
-                continue
-            if not any(re.fullmatch(p, cid) for p in CASE_SERIES.values()):
-                CORPUS_DEFECTS.append(f"{f.name}: case id {cid!r} is in no CASE_SERIES row")
-            seen[cid] = f.name
-            c["_source"] = f.name
-            out.append(c)
-    return out
 
 
 def _probe_view() -> dict:
@@ -368,7 +156,7 @@ def grade(case: dict) -> dict:
         # The row's verdict is the WORST of its declarations. A row resting on four things is
         # blocked if any one of them is missing, which is what "rests on" means.
         # ⚠ THREE OUTCOMES. A row every one of whose declarations RESTS ON AN INJECTED DEFAULT
-        # is not a pass: `ASSUMED` carries into the case verdict as DEGRADED, never PLAYABLE.
+        # is not a pass: `ASSUMED` carries into the case verdict as DEGRADED, never DECLARED-PRESENT.
         # Publishing those as PASS is what put seven false passes in the caselog.
         # ⚠ AN UNBOUND TOKEN IS AN AUTHORING ERROR, NOT A DESIGN FINDING, AND CONFLATING THEM
         # PUBLISHED THE SECOND WEARING THE FIRST'S CLOTHES. `resolve()` distinguishes them --
@@ -402,7 +190,7 @@ def grade(case: dict) -> dict:
     # verdict because until it is fixed nothing the row says can be believed.
     broken = [r for r in routed if r["verdict"]["verdict"] == "INSTRUMENT-ERROR"]
 
-    # HONESTY RULE 3: **a case with ANY unmapped `core` row may not be graded PLAYABLE.**
+    # HONESTY RULE 3: **a case with ANY unmapped `core` row may not be graded DECLARED-PRESENT.**
     #
     # ⚠ THE `more than half` CLAUSE THAT STOOD HERE IS DELETED, AS INERT. It read
     # `elif core and len(core_unmapped) * 2 > len(core): NOT-ASSESSED`, and it could never be the
@@ -413,9 +201,9 @@ def grade(case: dict) -> dict:
     # it named -- which is `CLAUDE.md` §0.1 pt 2 exactly: an assertion that cannot observe the
     # failure it excludes. Found by the `W10` adversarial pass.
     #
-    # The strict clause was added after reading the first PLAYABLE list. Five of the twelve PLAYABLE verdicts in
+    # The strict clause was added after reading the first DECLARED-PRESENT list. Five of the twelve DECLARED-PRESENT verdicts in
     # the first run rested on one or two routed core rows with other core rows sitting
-    # unmapped beside them -- one case reached PLAYABLE on a single distinct probe with three
+    # unmapped beside them -- one case reached DECLARED-PRESENT on a single distinct probe with three
     # rows unrouted. That is the instrument certifying a season it never aimed at, which is the
     # flattering direction and the one nobody notices.
     #
@@ -429,18 +217,18 @@ def grade(case: dict) -> dict:
     elif not core_routed:
         # THE ZERO-CORE AND ZERO-DECLARED CASE. This is the only branch the strict clause below
         # cannot reach: a case with NO core rows at all has an empty `core_unmapped`, so nothing
-        # else would stop it reaching PLAYABLE on its non-core rows alone.
+        # else would stop it reaching DECLARED-PRESENT on its non-core rows alone.
         verdict = "NOT-ASSESSED"
     elif core_unmapped:
         verdict = "NOT-ASSESSED"
     # ⚠ `ASSUMED` LANDS HERE, WITH GAP. A row resting on an injected default nobody ratified is
     # a real dependency, and a case built entirely on such rows is DEGRADED — playable only if
-    # the defaults happen to be right. Grading it PLAYABLE is the flattering direction, and it is
+    # the defaults happen to be right. Grading it DECLARED-PRESENT is the flattering direction, and it is
     # what seven rows did until the `W10` adversarial pass read the `detail` strings.
     elif any(r["verdict"]["verdict"] in ("GAP", "NOT-REFUSED", "ASSUMED") for r in routed):
         verdict = "DEGRADED"
     else:
-        verdict = "PLAYABLE"
+        verdict = "DECLARED-PRESENT"
 
     return dict(
         id=case["id"], name=case.get("name", ""), scale=case.get("scale", ""),
@@ -460,6 +248,7 @@ def grade(case: dict) -> dict:
     )
 
 
+@TRACE.recording()      # `_gaps` and `_trace_counts` below are read off the trace this call keeps
 def main(kinds=("NPC", "ARC")) -> dict:
     report: dict = {}
     for kind in kinds:

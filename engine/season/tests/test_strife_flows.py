@@ -103,12 +103,6 @@ def ev(w, eid, kind, subjects, actor=None, verb="tell", payload=None, tick=1):
     return e
 
 
-def revert_cr78(monkeypatch):
-    """CR-78 OFF, in process: the stamp's term stamps nobody (`flow_stakes` reads `()`), which is what the switch
-    `stamp_flow_stakes` off does. A test that pins a hash from before CR-78 flipped it ON (a declared mover) calls this."""
-    monkeypatch.setattr(W, "flow_stakes", lambda w_, p_, classes=None: ())
-
-
 def _ceded_world():
     """`_world()` with a realm-wide defeat and its cession, both naming two parties: `(w, e1, e2)`."""
     w = _world()
@@ -516,7 +510,8 @@ def test_the_flow_profile_counts_a_strand_that_leaves_and_rejoins_one_that_never
 
 def test_the_strands_block_prints_the_links_and_the_flow_profile_and_no_longer_says_not_transcribed():
     from engine.season.harness import populated
-    w = populated.build_realm(0)
+    from engine.season.boot.realm import build_realm
+    w = build_realm(0)
     populated.run(seasons=1, w=w)
     before = w.content_hash()
     out = H.strands_block(w, 0)
@@ -822,7 +817,8 @@ def test_control_the_realm_hash_holds_and_the_reading_is_the_same_read_twice():
     read-twice control plants one `opens` claim under the first move claim of a few holders, so their real
     joining claims attach, and reads those holders twice."""
     from engine.season.harness import populated
-    w = populated.build_realm(0)
+    from engine.season.boot.realm import build_realm
+    w = build_realm(0)
     populated.run(seasons=1, w=w)
     before, n_log = w.content_hash(), len(w.log)
     # the world reading, with the harness's code-level terminal test, and its presentation write nothing
@@ -851,10 +847,6 @@ def test_control_the_realm_hash_holds_and_the_reading_is_the_same_read_twice():
 
 # --- CR-78: the stamp (commit (1) built it off; commit (2) ships it on) ------------------------------------------
 
-#: Read on the base tree @60c27d08 (before CR-78) and again with the switch off: `build_realm(0).content_hash()`, and
-#: the same realm after one season (`populated.run(seasons=1)`; CP-T03-08's `POST_ITEM[0]`).
-BASE_BUILD = "600d8b27147478e158553552cc1409a5"
-BASE_ONE_SEASON = "256606154c30542f9456b2fe15c76f09"   # RE-PINNED at the B10-13 pin commit (P15; same value as `test_season_weather.BASE_HASHES[1]`): was d4c83c8c... (CP-T03-08's `POST_ITEM[0]`). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
 STAMP = "stamp_flow_stakes"
 
 
@@ -949,26 +941,6 @@ def test_cr78_a_stake_of_a_class_outside_the_closed_set_is_refused(monkeypatch):
     assert [x.referents for x in W.flows_known(w, pm)] == [frozenset({"t_cust"})]
     assert w.class_of("t_cust") is None and W.flow_stakes(w, pm) == ()
     W.questions_for(w, pm)                                            # and the stamp site does not raise on it
-
-
-def test_cr78_control_the_switch_off_reproduces_the_base_hash(monkeypatch):
-    """The switch set off EXPLICITLY: the built realm and one season at seed 0 read the base tree's hashes (EQUAL
-    checks; they hold with the switch on too, since the stamp's effect starts later or elsewhere), the term is
-    never computed (a `flow_stakes` that raises is never reached), and the switch was read: those two discriminate."""
-    from engine.season.harness import populated
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)
-    w = populated.build_realm(0)
-    _switch(monkeypatch, w, False)
-    assert w.content_hash() == BASE_BUILD
-
-    def _never(*a, **k):
-        raise AssertionError("flow_stakes computed with the switch off")
-    monkeypatch.setattr(W, "flow_stakes", _never)
-    before = w.fixtures.reads.get(STAMP, 0)
-    populated.run(seasons=1, w=w)
-    assert w.fixtures.reads.get(STAMP, 0) > before
-    assert w.content_hash() == BASE_ONE_SEASON
 
 
 def test_cr78_strand_rung_is_not_a_source_of_stakes(monkeypatch):

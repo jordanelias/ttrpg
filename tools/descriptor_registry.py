@@ -30,9 +30,9 @@ def load(text=None):
 
 
 def all_attributes(reg):
-    """Flatten the 3 categories into entries with category / domain / kind annotated."""
+    """Flatten the 4 categories into entries with category / domain / kind annotated."""
     out = []
-    for cat in ('body', 'mind', 'social'):
+    for cat in ('body', 'mind', 'spirit', 'social'):
         for e in reg['attributes'][cat]:
             out.append({**e, 'category': cat, 'domain': 'actor', 'kind': 'attribute_scalar'})
     return out
@@ -60,7 +60,7 @@ def resolve(reg, name_or_key):
 
 
 def aggregate_members(reg, agg_key):
-    """Member keys of a placeholder aggregate (agg.body/agg.mind/agg.social), or None."""
+    """Member keys of a placeholder aggregate (agg.body/agg.mind/agg.spirit/agg.social), or None."""
     for a in reg['aggregates']['entries']:
         if a['key'] == agg_key:
             return list(a['members'])
@@ -73,7 +73,7 @@ def by_domain(reg, domain):
 
 
 def by_category(reg, category):
-    """Attribute keys in a category (body/mind/social)."""
+    """Attribute keys in a category (body/mind/spirit/social)."""
     return [e['key'] for e in all_attributes(reg) if e['category'] == category]
 
 

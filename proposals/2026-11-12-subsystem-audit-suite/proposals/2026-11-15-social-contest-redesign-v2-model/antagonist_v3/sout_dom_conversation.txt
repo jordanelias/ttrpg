@@ -1,0 +1,1 @@
+conversation (for, vs automatic; n=800, se~0.017): auto 0.351 | argue 0.333 | press 0.290 | rest 0.318 | concede 0.022 | answer_else_rest 0.275 | press_then_argue 0.312

@@ -25,11 +25,12 @@ a bespoke botch-free success-counter for this one check (that would be a scale-l
 CLAUDE.md §10 guardrail violation). Hold rate rising monotonically with Discipline is the invariant."""
 import importlib
 import os
-import random
 import sys
 
 
 import pytest  # noqa: E402
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 
 def _reload(on):
@@ -56,26 +57,29 @@ class _Stub:
 
 
 def test_discipline_check_rate_matches_engine_convention():
-    """Hold rate is ~40% at Disc-1 (matches PP-256 exactly) and rises with Discipline under the shared
-    roll_pool convention. Disc-4 realizes ~74.5% (engine net-roll), not the doc's no-botch 87%."""
+    """Hold rate rises with Discipline under the shared roll_pool convention.
+    B05.99 RE-PIN (B05.03: `roll_pool` draws the one continuous sampler, so a whole-die check reads lower at one die, P(net >= 1)
+    4/10 -> P(z >= 0.75)): Disc-1 realizes 0.226 (was ~40%, which matched PP-256 exactly; PP-256's figure is no longer met and
+    is B19's field calibration, B05.03's body), Disc-2 0.430, Disc-4 0.642 (was ~74.5%). Each window keeps its old half-width
+    (0.04, 0.045), re-centred on the engine's reading at this seed."""
     _, O = _reload(on=True)
-    random.seed(20260723)
-    rates = {}
-    for disc in (1, 2, 4):
-        holds = sum(O.feigned_retreat_check(_Stub(discipline=disc)) for _ in range(20000)) / 20000
-        rates[disc] = holds
-    assert 0.36 <= rates[1] <= 0.44, f"Disc-1 hold ~40% (PP-256), got {rates[1]:.3f}"
-    assert 0.70 <= rates[4] <= 0.79, f"Disc-4 hold ~74.5% (engine convention), got {rates[4]:.3f}"
-    assert rates[1] < rates[2] < rates[4], f"hold rate must rise with Discipline: {rates}"
+    with rngsource.using(draw.seeded(draw.H2("test_feigned_retreat", 20260723))):
+        rates = {}
+        for disc in (1, 2, 4):
+            holds = sum(O.feigned_retreat_check(_Stub(discipline=disc)) for _ in range(20000)) / 20000
+            rates[disc] = holds
+        assert 0.186 <= rates[1] <= 0.266, f"Disc-1 hold ~22.6% (the one sampler; PP-256's 40% is B19's), got {rates[1]:.3f}"
+        assert 0.597 <= rates[4] <= 0.687, f"Disc-4 hold ~64.2% (engine convention), got {rates[4]:.3f}"
+        assert rates[1] < rates[2] < rates[4], f"hold rate must rise with Discipline: {rates}"
 
 
 def test_recognize_rate_rises_with_command():
     """The Ob-2 recognise roll: a higher-Command general recognises the feint more often."""
     _, O = _reload(on=True)
-    random.seed(11)
-    low = sum(O.feigned_retreat_recognized(_Stub(command=1)) for _ in range(20000)) / 20000
-    high = sum(O.feigned_retreat_recognized(_Stub(command=6)) for _ in range(20000)) / 20000
-    assert low < high, f"recognise rate must rise with Command: {low:.3f} vs {high:.3f}"
+    with rngsource.using(draw.seeded(draw.H2("test_feigned_retreat", 11))):
+        low = sum(O.feigned_retreat_recognized(_Stub(command=1)) for _ in range(20000)) / 20000
+        high = sum(O.feigned_retreat_recognized(_Stub(command=6)) for _ in range(20000)) / 20000
+        assert low < high, f"recognise rate must rise with Command: {low:.3f} vs {high:.3f}"
 
 
 def test_resolve_marks_overextended_only_when_deceived_and_failing():
@@ -90,26 +94,26 @@ def test_resolve_marks_overextended_only_when_deceived_and_failing():
     """
     _, O = _reload(on=True)
     # A recognised feint never overextends (high Command recognises, so overextended stays False).
-    random.seed(3)
-    ever_over_when_recognized = False
-    n_recognized = 0
-    for _ in range(2000):
-        p = _Stub(discipline=1, command=8)
-        r = O.resolve_feigned_retreat(p, _Stub(feigned=True))
-        if r and r['recognized']:
-            n_recognized += 1
-            assert not p.overextended and not r['overextended']
-        if p.overextended and r['recognized']:
-            ever_over_when_recognized = True
-    assert n_recognized >= 1000, (
-        f"only {n_recognized}/2000 pursuers recognised the feint (measured 1560) -- the "
-        f"recognised-never-overextends assertion above is not being exercised")
-    assert not ever_over_when_recognized, "a recognised feint must never overextend the pursuer"
-    # Over many low-Disc low-Command pursuers, SOME overextend (deceived + failed the check).
-    random.seed(4)
-    n_over = sum(1 for _ in range(2000)
-                 if (O.resolve_feigned_retreat(_Stub(discipline=1, command=1), _Stub(feigned=True)) or {}).get('overextended'))
-    assert n_over > 0, "deceived low-discipline pursuers must sometimes overextend"
+    with rngsource.using(draw.seeded(draw.H2("test_feigned_retreat", 3))):
+        ever_over_when_recognized = False
+        n_recognized = 0
+        for _ in range(2000):
+            p = _Stub(discipline=1, command=8)
+            r = O.resolve_feigned_retreat(p, _Stub(feigned=True))
+            if r and r['recognized']:
+                n_recognized += 1
+                assert not p.overextended and not r['overextended']
+            if p.overextended and r['recognized']:
+                ever_over_when_recognized = True
+        assert n_recognized >= 1000, (
+            f"only {n_recognized}/2000 pursuers recognised the feint (measured 1560) -- the "
+            f"recognised-never-overextends assertion above is not being exercised")
+        assert not ever_over_when_recognized, "a recognised feint must never overextend the pursuer"
+        # Over many low-Disc low-Command pursuers, SOME overextend (deceived + failed the check).
+        with rngsource.using(draw.seeded(draw.H2("test_feigned_retreat", 4))):
+            n_over = sum(1 for _ in range(2000)
+                         if (O.resolve_feigned_retreat(_Stub(discipline=1, command=1), _Stub(feigned=True)) or {}).get('overextended'))
+            assert n_over > 0, "deceived low-discipline pursuers must sometimes overextend"
 
 
 def test_non_feigning_target_returns_none():
@@ -168,33 +172,33 @@ def test_feign_retreat_is_a_recognized_order_safe_field():
 
 
 def test_feign_retreat_order_sets_the_unit_flag_not_the_subunit():
-    """Must land on the ISSUING UNIT's `.feigned` (PP-256 is a Unit-wide tactic, not per-subunit),
-    and must never leak onto the Subunit as a real attribute -- same discipline as fire_signal's
+    """Must land on the ISSUING ARMY's `.feigned` (PP-256 is an Army-wide tactic, not per-subunit),
+    and must never leak onto the Unit as a real attribute -- same discipline as fire_signal's
     own leak test in test_mass_battle_signals.py."""
     _reload(on=True)
     from modules.mass_battle.core.contact import check_orders
-    from modules.mass_battle.hierarchy.units import Order, Subunit, Unit
-    su = Subunit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
+    from modules.mass_battle.hierarchy.units import Order, Unit, Army
+    su = Unit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
                  advance_dir=1, stance='balanced', unit_type='melee',
                  orders=(Order('tick:1', {'feign_retreat': True}),))
-    u = Unit(name='u', faction='A', power=4, command=4, discipline=5, discipline_start=5,
-             morale=6, morale_start=6, subunits=[su])
+    u = Army(name='u', faction='A', power=4, command=4, discipline=5, discipline_start=5,
+             morale=6, morale_start=6, units=[su])
     assert u.feigned is False
     check_orders(u, 1, [])
     assert u.feigned is True
     assert su._order_idx == 1
-    assert not hasattr(su, 'feign_retreat'), "'feign_retreat' must not leak onto the Subunit"
+    assert not hasattr(su, 'feign_retreat'), "'feign_retreat' must not leak onto the Unit"
 
 
 def test_feign_retreat_order_does_not_fire_before_its_own_trigger():
     _reload(on=True)
     from modules.mass_battle.core.contact import check_orders
-    from modules.mass_battle.hierarchy.units import Order, Subunit, Unit
-    su = Subunit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
+    from modules.mass_battle.hierarchy.units import Order, Unit, Army
+    su = Unit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
                  advance_dir=1, stance='balanced', unit_type='melee',
                  orders=(Order('tick:5', {'feign_retreat': True}),))
-    u = Unit(name='u', faction='A', power=4, command=4, discipline=5, discipline_start=5,
-             morale=6, morale_start=6, subunits=[su])
+    u = Army(name='u', faction='A', power=4, command=4, discipline=5, discipline_start=5,
+             morale=6, morale_start=6, units=[su])
     check_orders(u, 1, [])
     assert u.feigned is False, "must not pre-declare a feint before the order's own trigger fires"
     assert su._order_idx == 0
@@ -206,20 +210,20 @@ def test_feign_retreat_end_to_end_through_resolve_feigned_retreat():
     ratified mechanic was reachable before this order-writable path existed)."""
     _, O = _reload(on=True)
     from modules.mass_battle.core.contact import check_orders
-    from modules.mass_battle.hierarchy.units import Order, Subunit, Unit
-    su = Subunit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
+    from modules.mass_battle.hierarchy.units import Order, Unit, Army
+    su = Unit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
                  advance_dir=1, stance='balanced', unit_type='melee',
                  orders=(Order('immediate', {'feign_retreat': True}),))
-    feigning_unit = Unit(name='feigner', faction='A', power=4, command=4, discipline=1,
-                          discipline_start=1, morale=6, morale_start=6, subunits=[su])
+    feigning_unit = Army(name='feigner', faction='A', power=4, command=4, discipline=1,
+                          discipline_start=1, morale=6, morale_start=6, units=[su])
     pursuer = _Stub(discipline=1, command=1)
     assert O.resolve_feigned_retreat(pursuer, feigning_unit) is None, \
         "must be a no-op before the order fires -- .feigned still False"
     check_orders(feigning_unit, 1, [])
     assert feigning_unit.feigned is True
-    random.seed(4)
-    r = O.resolve_feigned_retreat(pursuer, feigning_unit)
-    assert r is not None, "resolve_feigned_retreat must now engage once the order has set .feigned"
+    with rngsource.using(draw.seeded(draw.H2("test_feigned_retreat", 4))):
+        r = O.resolve_feigned_retreat(pursuer, feigning_unit)
+        assert r is not None, "resolve_feigned_retreat must now engage once the order has set .feigned"
 
 
 def teardown_module(module):

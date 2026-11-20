@@ -1,12 +1,11 @@
 """`season.data.cast` — THE CAST, READ FROM CANON INSTEAD OF DERIVED FROM A HASH.
 
 `references/npc_registry.yaml` declares itself *"Canonical source of truth for ALL named
-characters"* and carries 46 rows. MEASURED 2026-09-13: its ids are an EXACT 1:1 MATCH with
-`run_cases.load_cases("NPC")` — 46 for 46, zero symmetric difference — and every row carries an
-authored `faction` and `role`, 31 a `territory`, 30 `goals`, 29 `stats`, 32 `ts`, and 7 a `title`.
-Every weighted `conviction:` entry across the 46 names one of the canonical fifteen pursuits since
-IN-08's cells commit migrated them (`references/descriptor_registry.yaml: pursuit_roster`); not one
-is invalid, and `pursuits_of` raises on the first that would be.
+characters"*. Its ids are an EXACT 1:1 MATCH with `boot/realm.py::load_cases("NPC")`, and every
+row carries an authored `faction` and `role`, some a `territory`, `goals`, `stats`, `ts` or
+`title`. Every weighted `conviction:` entry names one of the canonical fifteen pursuits
+(`references/descriptor_registry.yaml: pursuit_roster`), and `pursuits_of` raises on the first that
+does not.
 
 ⚠ NOTHING THAT EXECUTES HAD EVER OPENED IT. The only two Python files naming it are a test that
 checks it PARSES (`tests/valoria/test_references_yaml_parse.py`, a regression guard from when it
@@ -35,10 +34,11 @@ import re
 from typing import Optional
 
 from . import files
-from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_TEMPLATES, load_yaml
+from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_RANKS, LIFEPATH_TEMPLATES, load_yaml, roster
 from ..gaps import Unspecified
 from ...substrate.descriptors import (
-    ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, HERITAGES, PRACTITIONER_STATS, attribute_key,
+    ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, CAPABILITIES, HERITAGES, PRACTITIONER_STATS, TRAIT_BY_SEATING,
+    attribute_key, rank_in_scale,
 )
 
 NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
@@ -69,8 +69,7 @@ NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
 # caller's, downstream), so raising here would turn a counted gap into a crash at import.
 # `{alias: canonical}` over every `token_class: faction` row is `rosters.FACTION_ALIAS` (imported above), built ONCE
 # at import from the naming leaf: both readers below run per row (46 cast rows, and the geography file's
-# per-province `faction:` column). Schoenland was invisible to it until 2026-09-16: its `names_index.yaml` row is
-# filed with the PLACES and simply never carried `token_class: faction`; the class is set now and the eighth resolves.
+# per-province `faction:` column). A faction resolves only if its `names_index.yaml` row carries `token_class: faction`.
 
 
 
@@ -82,6 +81,26 @@ NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
 _PAREN = re.compile(r"^(?P<base>[^(]+?)\s*\((?P<inner>[^)]*)\)?(?P<tail>.*)$")
 
 _CACHE: Optional[dict] = None
+
+#: THE ONE LIST OF KEYS AUTHORED ON A ROW THAT NO ENGINE CODE READS BY NAME (B04.12, CAP A7 / DEF Edit 4), authored in
+#: `rosters.yaml: cast_unread_keys` (a literal roster in a module is refused, `test_season_shape`): the person's name
+#: parts, age, birthplace, territory, goals, notes and source (reference prose) and threadwork's tracks (`certainty`, `coherence`,
+#: no reader until that lane builds one). The registry's `schema: required` + `optional` list only keys a reader takes (`row_keys`).
+#: A key leaves this tuple by gaining a reader (and joining the registry's `schema:` block) or by leaving the registry. `_rows()`
+#: refuses a row carrying a key in neither, so a fact authored on a row that nothing reads cannot sit there undeclared.
+UNREAD_KEYS = roster("cast_unread_keys", ordered=True)         # `rosters.yaml: cast_unread_keys`, the list authored once
+
+
+def row_keys(data: dict) -> frozenset:
+    """The keys a cast row may carry: the registry's `schema: required` + `optional`, read from the parsed file. Raises
+    `Unspecified` if either list is missing -- a registry that declares no keys would let every key through."""
+    schema = (data or {}).get("schema") or {}
+    lists = [schema.get(name) for name in ("required", "optional")]
+    if not all(isinstance(v, list) and v for v in lists):
+        raise Unspecified("the cast registry's `schema:` block", "references/npc_registry.yaml",
+                          needs="`schema: required` and `optional` as lists of row keys",
+                          law="CAP A7 / DEF Edit 4 -- the loader refuses a key it cannot check against a declared set")
+    return frozenset(str(k) for v in lists for k in v)
 
 
 def _rows() -> dict:
@@ -101,7 +120,16 @@ def _rows() -> dict:
                 law="a cast read from nothing is a cast invented from a hash, which is the "
                     "behaviour this loader replaces") from exc
         data = load_yaml(text) or {}
-        _CACHE = {str(r["id"]): r for r in (data.get("characters") or []) if r.get("id")}
+        rows = {str(r["id"]): r for r in (data.get("characters") or []) if r.get("id")}
+        allowed = row_keys(data) | set(UNREAD_KEYS)
+        for cid, r in rows.items():
+            stray = [k for k in r if k not in allowed]
+            if stray:
+                raise Unspecified(
+                    f"cast row {cid} carries {stray}, which the registry's `schema:` block does not declare and `UNREAD_KEYS` does not list",
+                    "references/npc_registry.yaml", needs="a key in `schema: required`/`optional` (the keys a reader takes) or in `cast.UNREAD_KEYS` (declared unread), or no key",
+                    law="CAP A7 / DEF Edit 4 -- a cast row carries only keys the registry's schema lists as read or that `UNREAD_KEYS` declares unread")
+        _CACHE = rows
     return _CACHE
 
 
@@ -113,17 +141,6 @@ def load() -> dict:
 def row(case_id: str) -> Optional[dict]:
     """The registry row for a case, or `None` where the registry does not carry one."""
     return _rows().get(str(case_id))
-
-
-def name_of(r: dict) -> str:
-    """`first_name last_name`, with a one-name person spelled as their one name.
-
-    ⚠ `last_name: None` IS REAL DATA AND NOT A HOLE — Edeyja (NPC-001) and Orm (NPC-075) have one
-    name each, and the corpus cases agree. Formatting it through `str()` would produce the literal
-    string "Edeyja None", which is what a first cut of this function did."""
-    first = str(r.get("first_name") or "").strip()
-    last = str(r.get("last_name") or "").strip() if r.get("last_name") else ""
-    return f"{first} {last}".strip() if last else first
 
 
 def faction_of(r: dict) -> tuple[Optional[str], Optional[str], str]:
@@ -206,7 +223,7 @@ def pursuits_of(r: dict) -> dict:
     must have a fully populated and coherent 15x7 pursuit-axis matrix"*). The roster is the leaf's
     `PURSUITS` (through `rosters`), never a count typed here. An EMPTY mapping is "no row" -- the
     caller's `cast.row(cid) or {}` for a corpus case added ahead of its registry row, the normal
-    authoring order -- and returns `{}`, so `harness/populated.py` still falls back to
+    authoring order -- and returns `{}`, so `boot/realm.py` still falls back to
     `seed_pursuits` there."""
     from .pursuits import pursuit
     from .rosters import PURSUITS
@@ -217,7 +234,12 @@ def pursuits_of(r: dict) -> dict:
     if isinstance(block, dict):
         for group, rows in block.items():
             if not isinstance(rows, list):
-                continue                # `cultural_label` / `self_other_initial` sit here too
+                # A KEY IN `convictions:` THAT HOLDS NO LIST OF ENTRIES IS REFUSED, NOT SKIPPED (B04.12): the two nested unread
+                # keys it deleted (`cultural_label`, `self_other_initial`) sat here as scalars, and a skip would load them again.
+                raise Unspecified(f"{r.get('id')!r} carries `convictions: {group}: {rows!r}`, which is not a list of "
+                                  "conviction entries", "references/npc_registry.yaml -- convictions",
+                                  needs="a list of `{conviction, weight}` entries under each group (`primary`)",
+                                  law="B04.12 -- a key nothing reads is declared unread or deleted, at every level")
             for entry in rows:
                 if isinstance(entry, dict) and entry.get("conviction") is not None:
                     out[pursuit(str(entry["conviction"]))] = float(entry.get("weight") or 0.0)
@@ -285,7 +307,7 @@ def thread_sensitivity_of(r: dict) -> Optional[int]:
     The two non-numeric shapes the registry authors are read by `_TS_RANGE` / `_TS_APPROX` (above);
     ANY OTHER SHAPE REFUSES, naming the row, rather than being coerced to a plausible number -- this
     module reads and validates, it does not guess (its docstring). `conviction_of`'s precedent: one
-    reader, called once per person at world build (`harness/populated.py::build_realm`)."""
+    reader, called once per person at world build (`boot/realm.py::build_realm`)."""
     v = (r or {}).get("ts")
     if v is None:
         return None
@@ -374,6 +396,58 @@ def heritage_of(r: dict) -> Optional[str]:
         law="CR-30 -- a heritage outside the registry's roster is refused at build")
 
 
+def traits_of(r: dict) -> frozenset:
+    """`Person.traits`' authored source (B04.07, A-107): the row's `resonant_style:` value, read lowercase through
+    `descriptors.TRAITS[*].seated_by` -- the one trait that value seats -- as a one-member frozenset, or `frozenset()`
+    where nothing is authored (the key absent, `resonant_style: null`, or no row at all). No second roster is made, and
+    nothing is written into `Person.capability` (the skill map holds skills only). A value no trait row seats REFUSES,
+    naming the row (`heritage_of`'s shape)."""
+    v = (r or {}).get("resonant_style")
+    if v is None:
+        return frozenset()
+    seats = TRAIT_BY_SEATING
+    if isinstance(v, str) and v.strip().lower() in seats:
+        return frozenset({seats[v.strip().lower()]})
+    raise Unspecified(
+        f"cast row {(r or {}).get('id', '?')}: resonant_style {v!r} seats no trait; the traits seat {sorted(seats)}",
+        "references/descriptor_registry.yaml", needs=f"one of {sorted(seats)} (any case), or no key",
+        law="A-107 -- a resonant_style no trait row names is refused at build")
+
+
+def capabilities_of(r: dict) -> dict:
+    """`Person.capability`'s AUTHORED-SCORE source (B04.09, CAP A7): the row's `capabilities:` mapping, as `{skill id: whole
+    number}`, or `{}` where nothing is authored -- the key absent, `capabilities: null`, or no row at all. Each id must be a
+    skill `substrate.descriptors.CAPABILITIES` defines (a trait, an attribute or a typo is none) and each value a whole
+    number inside THAT row's own `floor`..`ceiling`; a bool, a fraction, a numeric string, a non-mapping, or a value off the
+    scale REFUSES, naming the row (`attributes_of`'s shape). `capability_of` (the lifepath expansion) is unchanged; the builder
+    merges the two with this one winning. The case overlay's `cast: capability:` is checked through this same function
+    (`harness/corpus_run.py::_check_capability`), so the two surfaces cannot disagree about what a skill score is."""
+    raw = (r or {}).get("capabilities")
+    if raw is None:
+        return {}
+    who = (r or {}).get("id", "?")
+    if not isinstance(raw, dict):
+        raise Unspecified(f"cast row {who}: capabilities {raw!r} is no mapping", "references/npc_registry.yaml",
+                          needs="a mapping of skill id to a whole number, or null",
+                          law="CAP A7 -- an authored value this reader cannot parse refuses")
+    out: dict = {}
+    for name, v in raw.items():
+        row = CAPABILITIES.get(name) if isinstance(name, str) else None
+        if row is None:
+            raise Unspecified(
+                f"cast row {who}: capabilities key {name!r} names no defined skill",
+                "references/descriptor_registry.yaml", needs=f"one of {', '.join(CAPABILITIES)}",
+                law="CAP A7 -- a score under an id no definition row carries is refused")
+        if not rank_in_scale(name, v):
+            raise Unspecified(
+                f"cast row {who}: capabilities {name!r}: {v!r} -- magnitudes must be whole numbers from {row.floor} to "
+                f"{row.ceiling}", "references/npc_registry.yaml",
+                needs=f"a whole number {row.floor}-{row.ceiling} (the row's own scale)",
+                law="CAP A7 -- the scale is the definition row's, and an out-of-scale value refuses")
+        out[name] = v
+    return out
+
+
 def capability_of(r: dict, pool_default: int) -> dict:
     """`Person.capability`'s authored source (v10 CR-33): the row's `lifepath:` key EXPANDED through
     `rosters.yaml: tables: lifepath_templates` into `{capability key: pool_default}`, or `{}` where nothing is
@@ -382,7 +456,8 @@ def capability_of(r: dict, pool_default: int) -> dict:
 
     THE LIFEPATH ID IS READ AND DROPPED: it is stored on no `Person`, so no reader in play can ask for it (the
     keys it grants are the hook, `Person.capability`, which `faculty` and `train` already read). Each key is
-    held AT `pool_default` (H-126's fixture), the value `faculty` already falls to, so the grant changes no pool;
+    held AT `pool_default` (H-126's fixture), the value `faculty` already falls to, so the grant changes no pool -- except a
+    `{<id>: <rank>}` entry of the template (B04.11), which is held AT that rank, checked at load against the skill's own scale;
     it makes the key one `train` can raise (`loop/effects_combat.py::_eff_train` raises only a held key). A
     value that names no template REFUSES, naming the row (`heritage_of`'s shape): a typo'd id would otherwise
     read as a lifepath that grants nothing."""
@@ -390,7 +465,7 @@ def capability_of(r: dict, pool_default: int) -> dict:
     if v is None:
         return {}
     if isinstance(v, str) and v in LIFEPATH_TEMPLATES:
-        return {key: pool_default for key in LIFEPATH_TEMPLATES[v]}
+        return {key: LIFEPATH_RANKS[v].get(key, pool_default) for key in LIFEPATH_TEMPLATES[v]}
     raise Unspecified(
         f"cast row {(r or {}).get('id', '?')}: lifepath {v!r} names no template of `lifepath_templates`",
         "references/npc_registry.yaml", needs=f"one of the 34 ids of `rosters.yaml: lifepaths` (3-CR1 ... 3-CF6), or no key",
@@ -427,20 +502,10 @@ def defects() -> list[str]:
 # SCALE is his; the SHAPE is read off canon rather than drawn, because a varying quantity makes a
 # better game than a constant and canon supplies the material for one.
 #
-# ⚠ **THERE WAS A SECOND LOYALTY IN THE TREE AND IT WAS NOT THIS ONE — SAID HERE SO NOBODY HAS TO
-# REDISCOVER IT COLD.** `systems/world/sim/npe.py:70` declared `LOYALTY_MIN = 0` / `LOYALTY_MAX = 3`
-# for a generated NPC's `affiliation_loyalty`, and `tools/link_values_pointers.py` linked both to the
-# same `ppt.loyalty` pointer, which is how it was found — by the link map, not by reading. Plan
-# position `29d` (2026-10-01) deleted `npe.py`; it is at `FORK:5c5d8ec6` in `restructure_ledger.md`.
-#
-# They were not two ladders for one quantity (`CLAUDE.md` §0.06's S test), and the reason was
-# structural rather than a judgment call. MEASURED by AST 2026-09-14: `npe` had exactly ONE
-# importer in the whole tree, `systems/overview/sim/accounting.py` (deleted at `29a`), and nothing
-# under `engine/` names `affiliation_loyalty` at all — so the two never met at runtime. `npe` was
-# in the superseded tree; Jordan's 0-100 ruling is newer and names this scale explicitly.
-#
-# **So: do not read `npe`'s 0-3, wherever you meet it in old text, as a prior bound on this one.** If the
-# season engine ever needs an affiliation strength, it comes from here.
+# ⚠ **AN OLD `affiliation_loyalty` BOUND OF 0-3 (`systems/world/sim/npe.py`, deleted; `FORK:5c5d8ec6`
+# in `restructure_ledger.md`) IS NOT A PRIOR BOUND ON THIS SCALE.** The two never met at runtime and
+# were not two ladders for one quantity (`CLAUDE.md` §0.06's S test); Jordan's 0-100 ruling names
+# this scale explicitly. If the season engine needs an affiliation strength, it comes from here.
 LOYALTY_SCALE = 100   # [JUSTIFIED: Jordan's ruled 0-100 scale, ED-IN-0229 — the unit's definition, not a tunable]
 # Orthogonal ethics: neither aligned with the creed nor against it. DERIVED from the scale and
 # not written as a second number — the cosine's `[-1,+1]` maps onto `[0, LOYALTY_SCALE]`, so

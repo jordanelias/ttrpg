@@ -2,13 +2,10 @@
 
 Status: [live, 2026-09-16]
 
-WHY. `references/names_index.yaml` has called itself *"the one place a definition's name lives"*
-since 2026-06-28, and for executable code it was not. MEASURED: one arrow reached runtime --
-`engine/season/data/cast.py`, which opened the YAML itself and built a private alias map over
-`token_class: faction` rows. `alias_registry`'s two apparent reads in `descriptors.py` are a
-COMMENT and a DOCSTRING. Nothing under `systems/` read any naming register at all, which is why a
-ruling could land in `references/` and never arrive: `systems/world/sim/npe.py` was still minting
-NPCs affiliated to `'Church'` after Jordan ruled the name is `Church of Solmund`.
+WHY. `references/names_index.yaml` calls itself *"the one place a definition's name lives"*; for
+executable code this module is what makes it so. A subsystem reading no naming register is how a
+ruling lands in `references/` and never arrives (Jordan ruled the name is `Church of Solmund`, not
+`'Church'`).
 
 `tools/export_names.py` cooks the index into `engine/engine_params/names.json` behind a blocking
 `--check`; this is its single runtime reader. Same shape as `descriptors.py` and `composition.py`.
@@ -18,15 +15,12 @@ IT IS A LEAF. This MODULE imports stdlib only -- `json`, `os` -- exactly as
 read it without either naming the other: a name propagates in one direction, from the authored
 index outward, and a subsystem wanting the canonical spelling asks instead of spelling it.
 
-⚠ THE PACKAGE `__init__.py` USED TO NOT BE A LEAF, AND THE DISTINCTION MATTERED WHILE IT LASTED.
-Until 2026-09-16 it imported `keys.py` and re-exported it, so `import engine.substrate.names`
-pulled `keys` and `descriptors` in with it. `keys.py` retired under ED-IN-0232 and the re-export
-went with it -- `engine/substrate/__init__.py` now imports nothing. `from engine.substrate.names
-import FACTIONS` costs exactly what it names; it is not a hidden dependency edge.
+⚠ THE PACKAGE `__init__.py` IMPORTS NOTHING (the Key substrate is retired, ED-IN-0232), so
+`from engine.substrate.names import FACTIONS` costs exactly what it names; it is not a hidden
+dependency edge.
 
 ⚠ AMBIGUOUS NAMES RAISE. They are not resolved to whichever row was met first. One display string
-is claimed twice in the index and the collision is a real pair of quantities, not a typo (it was
-three until plan position `29b` retired the `fac.*` rows):
+is claimed twice in the index and the collision is a real pair of quantities, not a typo:
 
     Order      -- `conv.order` (a Conviction) and `set.order` (a settlement stat)
     Reason     -- `conv.reason` (a Conviction) and `attr.mind.acuity` (an attribute; CR-84)

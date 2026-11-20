@@ -161,29 +161,30 @@ def test_the_shares_follow_the_trackers_not_the_sign_of_the_result():
     trackers' tally EXACTLY, (2) the result's sign disagrees with the trackers on at least one scene, so the
     exclusion this asserts is one the stream can show (`wrapper.fight` flips the sign in `UPSET_FLOOR` of the
     decided fights and leaves the trackers alone)."""
-    import random
     from ..seam.wrappers._entry import entry_for
-    from ..state.ids import H
+    from ..state.ids import draw_factory
     w = _world((4, 1))
     got = _estimate(w)
     entry, refusal = entry_for(combat._PRIZE, combat._PROVIDER)
     assert entry is not None, refusal
     inp = _ran("combat_input", combat.combat_input, w, [ACTOR, SUBJECT], "fight")
-    rng = random.Random(int(H(w.world_seed, w.tick, ACTOR, "estimate"), 16))
+    rng = draw_factory(w.world_seed, lambda: w.tick)(ACTOR, "estimate")
     n = w.fixtures.get("estimate_samples")
     by_trackers = dict.fromkeys(combat.ESTIMATE_OUTCOMES, 0)
     disagree = scenes = 0
     for _ in range(n):
         r = _ran("entry.fn", entry.fn, inp, rng)
-        a, b = bool(r["wound_state"][ACTOR]["felled"]), bool(r["wound_state"][SUBJECT]["felled"])
-        if combat.surrender_of(r["trace"]) is not None:
+        a, b = bool(r.wounds[ACTOR].felled), bool(r.wounds[SUBJECT].felled)
+        # the sign `wrapper.fight` returned is not lifted into the record; the engine's own `fight_result` event names it
+        sign = next(e["result"] for e in r.trace if e["kind"] == "fight_result")
+        if r.surrender is not None:
             by_trackers["yielded"] += 1
         elif a and not b:
             by_trackers["actor_felled"] += 1
-            disagree += r["result"] != -1
+            disagree += sign != -1
         elif b and not a:
             by_trackers["subject_felled"] += 1
-            disagree += r["result"] != 1
+            disagree += sign != 1
         else:
             by_trackers["undecided"] += 1
         scenes += 1
@@ -205,9 +206,11 @@ def test_odds_of_returns_the_shares_for_a_row_contesting_the_body_and_nothing_fo
     assert odds == _shares(_estimate(w)), (odds, _shares(_estimate(w)))
     assert math.isclose(sum(odds), 1.0, abs_tol=1e-12), odds
     believer = w.persons[ACTOR]
-    # mode (b) is not built for a fight: the believer's figure is None, and so is the chooser's query
+    # `odds_of`'s mode (b) is still not a fight's: the believer's figure there is None. The chooser's query is (B14.24): a figure, the fight
+    # sampled on the believer's own picture of the opponent (`test_combat_module.py` reads it).
     assert _ran("odds_of (b)", sigma.odds_of, w, act, believer=believer) is None
-    assert _ran("believed_chance", sigma.believed_chance, w, believer, act, ("Wounded", "Felled")) is None
+    believed = _ran("believed_chance", sigma.believed_chance, w, believer, act, ("Wounded", "Felled"))
+    assert believed is not None and 0.0 <= believed <= 1.0, believed
 
 
 def test_the_estimate_consumes_no_season_draw_and_writes_nothing():

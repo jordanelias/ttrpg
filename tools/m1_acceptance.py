@@ -84,6 +84,7 @@ try:
     from engine.season.harness import headless as _headless
     from engine.season.harness import invariants as _invariants
     from engine.season.harness import populated as _populated
+    from engine.season.boot.realm import build_realm
     from engine.substrate import stubwire as _stubwire
     _ENGINE_IMPORT_ERROR = None
 except Exception as _exc:  # pragma: no cover - defensive; surfaced via row detail, not raised
@@ -295,10 +296,11 @@ def row_nine_requirements():
     board (every plan under `workplans/` was retired that day, `FORK:0671283`), to the nine rows
     master workplan v7 §1 named M1's companion instrument.
 
-    ⚠ STILL DOC-DERIVED, AND SAYS SO. It counts `status:` strings in `requirements.yaml`. That is
-    stronger than the board it replaces -- `register --requirements` refuses a `met`/`partial` row
-    with no `measured:` and resolves every `measure:` command statically -- but nothing here
-    executes the game. Rows 1, 2 and 4 do; this one must not read like them.
+    ⚠ STILL DOC-DERIVED, AND SAYS SO. It counts `status:` strings in `requirements.yaml`, and the
+    conjuncts at `holds: yes` beside them (`conjuncts held <h> of <m>`). That is stronger than the
+    board it replaces -- `register --requirements` refuses a `met` row any conjunct of which is
+    not `yes`, and resolves each read conjunct's `argv` statically -- but nothing here executes the
+    game. Rows 1, 2 and 4 do; this one must not read like them.
     """
     path = _repo(REQUIREMENTS)
     try:
@@ -310,6 +312,8 @@ def row_nine_requirements():
     for r in rows:
         states[r.get('status', '?')] = states.get(r.get('status', '?'), 0) + 1
     met = states.get('met', 0)
+    conjuncts = [c for r in rows for c in (r.get('conjuncts') or [])]
+    held = sum(1 for c in conjuncts if c.get('holds') == 'yes')
     return {
         'row': 'nine_requirements',
         'label': 'The nine requirements met',
@@ -320,6 +324,7 @@ def row_nine_requirements():
         'passes': met == len(rows),
         'unblocked_by': None,
         'detail': (' · '.join(f'{k}: {v}' for k, v in sorted(states.items()))
+                   + f' · conjuncts held {held} of {len(conjuncts)}'
                    + '  ⚠ DOC-DERIVED: counts `status:` in engine/season/requirements.yaml, each'
                      ' validated by `register --requirements`; not execution.'),
     }
@@ -374,7 +379,7 @@ def row_invariant_violations():
     # either, so it is swept too — narrow (2 seeds x 1 season) because it costs ~3.2s a seed
     # against headless's 0.13s, but swept.
     def _pop(seed):
-        w = _populated.build_realm(seed)
+        w = build_realm(seed)
         _populated.run(M1_POP_SEASONS, seed, None, w=w)
         return w
     p = _invariants.sweep(_pop, range(M1_POP_SEEDS))

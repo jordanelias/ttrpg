@@ -1,0 +1,33 @@
+
+== C4.1 the grid: debate, `a` presses every turn, b rests whenever he may: share broke / mean rattles / b's beats at zero rattles marked broke (n=200)
+   Grace->  G1              G2              G4              G7            
+   Will 1: 0.99/2.4/0      0.94/2.1/0      0.89/1.8/0      0.27/1.4/0    
+   Will 2: 0.97/2.2/0      0.95/2.0/0      0.61/1.7/0      0.06/1.3/0    
+   Will 4: 0.96/1.9/0      0.57/1.7/0      0.24/1.2/0      0.00/0.9/0    
+   Will 7: 0.24/1.3/0      0.02/1.0/0      0.00/0.5/0      0.00/0.5/0    
+
+== C4.2 temper by rattles in a row and cooling (Will+Grace 3, 8, 14): temper after k quick rattles; then after each beat he makes
+   W1 G2: by rattles 0..3 [0.0, 1.0, 1.0, 1.0]; after 3 rattles, then cooling at each of his beats [1.0, 1.0, 1.0, 0.67]
+   W4 G4: by rattles 0..3 [0.0, 0.5, 1.0, 1.0]; after 3 rattles, then cooling at each of his beats [1.0, 1.0, 0.5, 0.25]
+   W7 G7: by rattles 0..3 [0.0, 0.29, 0.57, 0.86]; after 3 rattles, then cooling at each of his beats [1.0, 0.57, 0.29, 0.14]
+
+== C4.3 the record: 'lost his temper' claims per break per witness; zero-rattle breaks (trial, `a` presses every turn; n=400)
+   W1 G2: sittings with a break 384; the judge's 'lost his temper' claims 385 (one per break); beats broken at zero rattles 0
+
+== C4.4 A-136: a composed NPC is the view-best chooser: decisions where auto != top-worth, by temper below / at the break (trial, both auto, n=400)
+   W4 G4: composed identical 1594, differ 0; broken identical 5, differ 0
+   W2 G2: composed identical 1223, differ 0; broken identical 241, differ 133
+   W1 G2: composed identical 1170, differ 0; broken identical 192, differ 234
+   W6 G1: composed identical 1591, differ 0; broken identical 7, differ 1
+
+== C4.5 does provoking PAY, by temperament (trial; b automatic; `a`: press twice then best / argue only / automatic), rule on vs off (n=400)
+   W2 G2        [on] press2 0.340 argue 0.527 auto 0.497 | [off] press2 0.287 argue 0.527 auto 0.475
+   W4 G4        [on] press2 0.115 argue 0.280 auto 0.273 | [off] press2 0.113 argue 0.280 auto 0.273
+   W6 G1 proud  [on] press2 0.270 argue 0.588 auto 0.565 | [off] press2 0.253 argue 0.588 auto 0.565
+   W7 G7        [on] press2 0.050 argue 0.203 auto 0.188 | [off] press2 0.050 argue 0.203 auto 0.188
+
+== C4.6 what a broken man does, by temperament (trial, `a` presses every turn, b automatic): share of b's broken beats by move (n=400)
+   hot proud W6 G1      broken beats   200: argue 0.14 press 0.81 concede 0.06 rest 0.00 | composed beats  1400: argue 0.16 press 0.32 concede 0.10 rest 0.43
+   hot timid W1 G2      broken beats  1160: argue 0.36 press 0.03 concede 0.61 rest 0.00 | composed beats   440: argue 0.16 press 0.39 concede 0.06 rest 0.39
+   orator W2 G2 Pres7   broken beats  1036: argue 0.49 press 0.02 concede 0.49 rest 0.00 | composed beats   564: argue 0.19 press 0.41 concede 0.06 rest 0.34
+   ordinary W4 G4       broken beats   109: argue 0.38 press 0.25 concede 0.38 rest 0.00 | composed beats  1491: argue 0.28 press 0.42 concede 0.05 rest 0.25

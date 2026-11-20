@@ -13,7 +13,7 @@ handed in per rung: `ProduceInput.factor`, v10 CL-EVENTS (1)). EVERY
 WRITE STAYS HOST, in MATTER: the `yield` write, the `stores` credit write and their `last_emission_of`
 causes. Site WEAR stays host too (design A10).
 
-THE RULE (moved here from MATTER's per-rung loop; unchanged clause for clause):
+THE RULE:
   * THE YIELD: per rung in id order, per Site in id order whose own `rung` is that rung (the maintained
     side, never a back-reference), per `(kind, base)` in the Site kind's table order, add
     `int(base * (max(0, condition) / scale) * factor)` -- the float expression operand for operand, since

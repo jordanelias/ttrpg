@@ -216,7 +216,7 @@ def test_the_liars_number_and_the_channels_lossy_copy_are_one_rule(monkeypatch):
 # ---- the knowledge-model fold's second falsifier (ED-IN-0327) -----------------------------------
 
 def _two_hear_a_lie(competence_gain):
-    from ..decision.options import COMPETENCE_ATTRIBUTE
+    from ..data.rosters import capability_uses
     w = _world()
     w.fixtures = w.fixtures.sweep("competence_gain", competence_gain)
     w.persons[T].ledger.clear()
@@ -224,7 +224,7 @@ def _two_hear_a_lie(competence_gain):
     for pid in (HOLDER, KNOWNOT):
         w.persons[pid].ledger.clear()
     for pid, a in ((HOLDER, 2), (KNOWNOT, 6)):
-        w.persons[pid].attributes = {COMPETENCE_ATTRIBUTE: a}
+        w.persons[pid].attributes = {next(r.key for r in capability_uses() if r.use == "told_claim_credit"): a}
     act = Act(id="a_lie_cr27", actor=T, verb="lie",
               payload={"subject": "Hh", "said": lie_said_of(w.persons[T].ledger, "Hh", w.fixtures)})
     w.acts.append(act)

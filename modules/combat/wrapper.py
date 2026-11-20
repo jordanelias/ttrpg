@@ -1,15 +1,17 @@
-"""CombatWrapper — owns the state graph and the A/B identity. The driver assigns aggressor/defender ONCE per
-beat and passes Combatant objects to every subsystem. Initialization is the only toggle. This is the structural
-cure for the role-inversion bug class: no subsystem and no resolution step ever indexes raw 'A'/'B'."""
-import sys, os; sys.path.insert(0, os.path.dirname(__file__))
-import core, combat_systems as S, tradition as TR, contact as CT
-import vocabulary as V   # the token ALPHABET, owned once (ED-PC-0042)
-from config import CFG
+"""wrapper.py — the personal-combat engine's orchestrator: `fight(A, B, ...)` runs a scene of up to `max_bouts`
+engagements and returns +1 / -1 / 0 (A won / B won / unresolved); `engagement(...)` is one burst of beats inside it.
+Inputs: two `combatant.Combatant` objects, `config.CFG` (or a `cfg` passed in) and the caller's `rng`; the host
+reaches it through `fight.py`. Here `engagement`
+assigns aggressor/defender ONCE per beat and passes Combatant objects to every subsystem (`combat_systems`, `core`,
+`contact`, `tradition`), the structural cure for the role-inversion bug class: nothing ever indexes raw 'A'/'B'."""
+from . import core, combat_systems as S, tradition as TR, contact as CT
+from . import vocabulary as V   # the token ALPHABET, owned once (ED-PC-0042)
+from .config import CFG
 
 # ── TRACE SEAM (workbench / branch-explorer hook) ──────────────────────────────────────────────
 # _TRACE is None by default: every _emit() is a single is-None check, so the seam adds ~zero cost
-# and CANNOT change behavior (no rng draw, no state mutation). The workbench sets wrapper._TRACE to a
-# callable(event: dict) before a run and resets it to None after. Events carry the INPUTS each decision
+# and CANNOT change behavior (no rng draw, no state mutation). `fight(..., trace=f)` binds _TRACE to the
+# callable(event: dict) for the call and restores it after, so no caller assigns the module attribute (B14.11). Events carry the INPUTS each decision
 # node consumed (read margins, the commit distribution, the roll's pool/net_sigma) so the narrator and
 # the branch explorer can reconstruct the local probability of every alternate branch without re-deriving
 # engine internals. The engine emits facts; probability math lives in the workbench (probabilities.py).
@@ -43,24 +45,38 @@ def _init_live(c, cfg):
     c.initiative=0.0
     c.poise=1.0
 
+def _select(c, opp, closed, cfg, measure_gap):
+    """The ONE write of `S.select_mode`'s record onto `c` (the wrapper owns the mutation): the six `sel_*` fields by NAME (ED-PC-0042/I3),
+    then the selected element's per-arm magnitudes (ED-PC-0037.1). Called at every beat's head AND after the half-sword swap: a partial
+    thread leaves a post-swap `c.w` resolved against a pre-swap-selected element (R-7's object confusion)."""
+    _sel = S.select_mode(c, opp.armor, closed, cfg, measure_gap=measure_gap)
+    c.sel_dmg, c.sel_head, c.sel_gap, c.sel_perc, c.sel_pc, c.sel_eff = _sel.dm, _sel.head, _sel.gap, _sel.perc, _sel.pc, _sel.eff
+    c.sel_eff_cut, c.sel_eff_thrust = S.selected_arm_magnitudes(c, c.sel_head, cfg)
+
 def _carry(ready, cfg):
     """Phase-transition readiness: keep each fighter's RESIDUAL cadence phase, drop any banked whole action.
 
-    [ED-PC-0037, F16] These transitions used to hard-zero `ready` for both fighters — 'the closed phase starts fair
-    (no banked approach tempo)'. The intent was fairness; the effect was the opposite. Zeroing RE-SYNCHRONISES the
-    cadence race, and a synchronised race is won by the same fighter every single time, so a weapon with a 1.5% tempo
-    edge did not act 1.5% more often — it acted FIRST always, converting a rounding-error advantage into a 2:1 action
-    economy. Keeping the residual (ready mod ACT_THRESHOLD) preserves the real intent — nobody carries a free
-    completed action across the transition — while leaving each fighter where their own cadence actually left them.
+    [ED-PC-0037, F16] A hard zero of `ready` would RE-SYNCHRONISE the cadence race, and a synchronised race is won by
+    the same fighter every single time, so a weapon with a 1.5% tempo edge would act FIRST always — a 2:1 action
+    economy. Keeping the residual (ready mod ACT_THRESHOLD) means nobody carries a free completed action across the
+    transition, while each fighter stays where their own cadence actually left them.
     A fighter mid-recovery when the measure closes is genuinely a beat behind one who had just recovered."""
     # [ED-PC-0037.1] max(0.0, r) BEFORE the modulo. Python's `%` maps a NEGATIVE readiness — recovery DEBT, which
-    # overcommit can drive deeply negative (recoverability_factor spans 0.3-67.8, so a committed guandao can owe
-    # ~-30) — onto a near-CREDIT: -1.0 % 2.5 = 1.5, and -30.5 wraps to ~2.0, granting the most over-committed
-    # fighter 80% of a banked action at a phase transition. That inverts this function's own contract ('a fighter
-    # mid-recovery is genuinely a beat behind'). Latent when found (0 occurrences in ~3300 instrumented fights,
-    # because separations end engagements before a transition catches a debtor) but one reopen-timing change from
-    # going live. Debt now clamps to 0 — no banked action, and no free one either.
+    # overcommit can drive deeply negative (recoverability_factor spans 0.3-67.8) — onto a near-CREDIT: -1.0 % 2.5 = 1.5,
+    # which would grant the most over-committed fighter a banked action at a phase transition and invert this
+    # function's own contract ('a fighter mid-recovery is genuinely a beat behind'). Debt clamps to 0 — no banked
+    # action, and no free one either.
     return {c: (max(0.0, r) % cfg['ACT_THRESHOLD']) for c, r in ready.items()}
+
+def _pool_dice(c, cfg):
+    """THE POOL A COMBATANT ROLLS (B05.57, `UPR` §2 edit 3): `core.resolution_pool(c.faculty, c.pool_addends, add, floor)` at the
+    three roll sites (the pursuit, the stop-hit, the exchange). `c.faculty` is his skill score; `c.pool_addends` his registered
+    pool addends, set by the module entry (a `Combatant` built by the workbench has none and reads 0). `add` and `floor` are the
+    record's `pool_add` and `pool_floor` when the entry carried them in `cfg` as `BASE_POOL` and `POOL_FLOOR`, else the owner's
+    own defaults (the bounds are read nowhere else, so this spells no pool constant)."""
+    kw = {k: cfg[name] for k, name in (("add", "BASE_POOL"), ("floor", "POOL_FLOOR")) if name in cfg}
+    return core.resolution_pool(c.faculty, getattr(c, "pool_addends", 0), **kw)
+
 
 def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
     """One engagement (the exchange inside a bout). `first` is the initiating Combatant object. `prev_closed` is the
@@ -77,6 +93,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
     # the opening geometry is the honest open-measure one (grip_target re-derives per-beat inside the loop anyway).
     for c in (A, B):
         c.grip_position = 0.0; c.lunge_depth = 0.0
+        c.weapon = S.base_form(c)   # B14.13 (F-PC-16): the half-sword form is the same kind of state; it is re-taken at the first closed exchange that calls for it
     erA=S.reach_base(A,cfg); erB=S.reach_base(B,cfg)
     er={A:erA, B:erB}
     # FAIRNESS: on EXACTLY equal reach the longer/shorter label is a coin-flip — not always A. The label feeds the
@@ -84,15 +101,12 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
     # matchups), which the attacker-favouring mechanics amplified. Different reach is deterministic as before.
     longer = A if erA>erB else (B if erB>erA else (A if rng.random()<0.5 else B)); shorter = B if longer is A else A
     measure_gap=max(0.0, er[longer]-er[shorter])
-    # SOFT CLOSED-LATCH (ED-PC-0037, F17). This used to be the hard step `closed = measure_gap <= 0.3`, and that step
-    # was a CLIFF: a synthetic reach ladder read 51/48/51/55% at gaps 0.00-0.28 and then 63.8% at gap 0.32 — +9pp across
-    # two centimetres — because the latch decides whether an APPROACH PHASE EXISTS AT ALL (stop-hits, arrest, true-time)
-    # rather than scaling anything. Live casualties: katana (gap 0.22 -> starts closed) 28.7% vs the near-identical
-    # tachi (gap 0.44 -> starts open) 62.5%; goedendag (reach 6.29) 80.0% vs mace (5.14) 17.8%, the same weapon concept
-    # on opposite sides of the line. Whether two fighters find themselves AT MEASURE or ALREADY ENGAGED when their reach
-    # differs marginally is genuinely uncertain — it turns on the approach, the ground, who committed first — so the
-    # latch is now a probabilistic BAND: certainly closed well inside the threshold, certainly open well outside, and a
-    # smooth ramp between. Beyond the band this is exactly the old behaviour.
+    # SOFT CLOSED-LATCH (ED-PC-0037, F17). A hard step `closed = measure_gap <= 0.3` would be a CLIFF: the latch
+    # decides whether an APPROACH PHASE EXISTS AT ALL (stop-hits, arrest, true-time) rather than scaling anything.
+    # Whether two fighters find themselves AT MEASURE or ALREADY ENGAGED when their reach differs marginally is
+    # genuinely uncertain — it turns on the approach, the ground, who committed first — so the
+    # latch is a probabilistic BAND: certainly closed well inside the threshold, certainly open well outside, and a
+    # smooth ramp between.
     _lo, _hi = cfg['CLOSE_GAP_REF']-cfg['CLOSE_LATCH_BAND'], cfg['CLOSE_GAP_REF']+cfg['CLOSE_LATCH_BAND']
     if measure_gap<=_lo:   closed=True
     elif measure_gap>=_hi: closed=False
@@ -111,15 +125,13 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
         _rep = S.represent_measure_p(longer, shorter, cfg, TR, measure_gap=measure_gap)
         if _rep < 1.0 and rng.random() >= _rep:   # short-circuit: represent_p==1.0 (none/light) draws NO rng — the gate is inert on the stream off-plate
             closed=True; measure_gap=0.0
-    # Pre-contact seizure CUT 2026-06-05 (Jordan; verified inert - ablation ~0, washed out by per-beat dynamics):
-    # initiatives start even (0.0 from _init_live); the ongoing Vor (hit-gains/steals/decay) decides who holds it.
+    # No pre-contact seizure contest (Jordan 2026-06-05): initiatives start even (0.0 from _init_live); the ongoing
+    # Vor (hit-gains/steals/decay) decides who holds it.
     A.initiative, B.initiative = 0.0, 0.0
     # tempo is CONDITIONAL (grip/stance/fatigue), recomputed per-beat below — not a static pre-loop property.
-    # ARBITRARY CADENCE PHASE AT ENGAGEMENT START (ED-PC-0037, F16 — the root of the first-actor monopoly).
-    # This was `{A:0.0, B:0.0}`: both fighters began every engagement in LOCKSTEP. A synchronised race between two
-    # metronomes is won by the same fighter every single time, so a weapon with a 1.5% cadence edge did not act 1.5%
-    # more often — it acted FIRST always, in all twelve engagements of every fight, which is how a 0.0002 tempo delta
-    # bought a 2:1 action economy and how a 20 g mass step flipped a mirror 57% <-> 42%.
+    # ARBITRARY CADENCE PHASE AT ENGAGEMENT START (ED-PC-0037, F16 — the first-actor monopoly).
+    # Both fighters beginning in LOCKSTEP would let the same fighter act first every time (a synchronised race between
+    # two metronomes is won by the same fighter), so a 1.5% cadence edge would buy a 2:1 action economy.
     # The fix is NOT noise on the physics: cadence stays exactly as derived. What is genuinely unknown is the INITIAL
     # CONDITION — where in his own rhythm each fighter happens to be at the instant the blades cross. Nobody enters a
     # measure on a shared downbeat. Drawing that phase uniformly across the cycle is the honest statement of that
@@ -145,32 +157,25 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
         # CONDITIONAL TEMPO (correction 2): recompute each beat with current fatigue — grip/stance/fatigue change
         # cadence; it is not a static weapon property. Approach uses general cadence; closed uses close-cadence.
         ffat={A:max(0.0,1-A.stamina/max(1,A.stamina_max)), B:max(0.0,1-B.stamina/max(1,B.stamina_max))}
-        # INITIATIVE DECAY (damper) — per-tradition HOLD: high measure (destreza) decays slower, holding the Vor longer.
-        A.initiative=S.clamp_initiative(A.initiative*S.init_hold_decay(A,cfg,TR), cfg)
-        B.initiative=S.clamp_initiative(B.initiative*S.init_hold_decay(B,cfg,TR), cfg)
-        # DISPOSITION (initiative lever): aggressive temperament drifts the Vor UP (pressing builds Vor), cautious DOWN
-        # (cedes it) — the standing pressure that makes both poles cost. Neutral (lean 0) = no drift; bounded by clamp.
-        A.initiative=S.clamp_initiative(A.initiative + cfg['DISP_INIT_K']*S.disp_lean(A), cfg)
-        B.initiative=S.clamp_initiative(B.initiative + cfg['DISP_INIT_K']*S.disp_lean(B), cfg)
-        # STRUCTURE recovery (the kuzushi damper): balance regathers toward 1.0 each beat.
-        A.poise=S.clamp_poise(S.poise_regen(A,cfg), cfg)   # Focus speeds structure recovery (Jordan 2026-06-03); regen formula -> systems.poise_regen
-        B.poise=S.clamp_poise(S.poise_regen(B,cfg), cfg)
         for c in (A,B):
+            # INITIATIVE DECAY (damper) — per-tradition HOLD: high measure (destreza) decays slower, holding the Vor longer.
+            c.initiative=S.clamp_initiative(c.initiative*S.init_hold_decay(c,cfg,TR), cfg)
+            # DISPOSITION (initiative lever): aggressive temperament drifts the Vor UP (pressing builds Vor), cautious DOWN
+            # (cedes it) — the standing pressure that makes both poles cost. Neutral (lean 0) = no drift; bounded by clamp.
+            c.initiative=S.clamp_initiative(c.initiative + cfg['DISP_INIT_K']*S.disp_lean(c), cfg)
+            # STRUCTURE recovery (the kuzushi damper): balance regathers toward 1.0 each beat.
+            c.poise=S.clamp_poise(S.poise_regen(c,cfg), cfg)   # Focus speeds structure recovery (Jordan 2026-06-03); regen formula -> systems.poise_regen
             c.grip_position=S.grip_target(c, closed, cfg)   # GRIP/STANCE (The Approach): a closing pole GATHERS IN (grip_position 0->1) to fight the close; else 0 (full reach). CONTINUOUS, derived. The lunge is set at the attack below.
             c.range_avail=S.range_utilization(c, measure_gap, cfg)   # SWING-ROOM (I5, D4): measure-derived, not form-derived — a single per-beat write suffices (no post-swap refresh needed, unlike er/sel_*). Shapes commit_depth's Beta window + the swing-room legibility term + the approach stop-hit; also threaded into THIS beat's select_mode/afforded_heads below (percussion's Phi_room).
             c.facing=S.facing_target(c, closed, cfg)   # FACING (I6, D6): near-neutral per-beat state, keyed ONLY on stance/measure/grip (C2 — never weapon class). Feeds the lateral-void close_rate term + reach_sigma's small profile term.
             c.lunge_depth=0.0                                # reset the body-extension each beat; a deep thrust re-sets it below
-            opp = B if c is A else A
-            _sel = S.select_mode(c, opp.armor, closed, cfg, measure_gap=measure_gap)
-            c.sel_dmg, c.sel_head, c.sel_gap, c.sel_perc, c.sel_pc, c.sel_eff = _sel.dm, _sel.head, _sel.gap, _sel.perc, _sel.pc, _sel.eff   # ED-PC-0042 (I3): the pairing is SPELLED, not positional — a reordered ModeSelection now fails on a field name instead of silently transposing gap into perc
-            c.sel_eff_cut, c.sel_eff_thrust = S.selected_arm_magnitudes(c, c.sel_head)   # [ED-PC-0037.1] element-local per-arm magnitudes for core.strike's cut_thrust contest (wrapper owns the mutation, as with every other sel_*)   # USE-MODE: greedily pick the afforded head with the best damage-coupling vs the opponent's armour (a weapon that affords >1 mode, e.g. the poleaxe's blunt+spike, shifts with armour). Per-beat, DERIVED, pure; the wrapper owns the mutation (mirrors grip_position). Widened I2/D2b to the 5-tuple (sel_gap/sel_perc/sel_pc — R-7/capstone M2), then to 6 (sel_eff — U2/ED-PC-0011): the SELECTED element's own gap/percussion/point_concentration/cut-thrust-magnitude, the canonical source for core.strike/adef_cap/D5's arc-vs-thrust (M-02). I4/D5: measure_gap threads the close-efficacy factor into the greedy comparator. Refreshed after the half-sword form-switch below.
-            er[c]=S.reach_base(c,cfg)   # er REFRESH #1 (I3, D3, two-recompute contract — designs/audit/2026-07-02-scene-combat-closing-distance-redesign/): re-derives ONLY er[c] on the grip-aware CURRENT (pre-swap) form; NEVER measure_gap (the running approach decrement, below) or `closed` (latched); longer/shorter LABELS stay frozen at engagement start (JD-2 plan default). Feeds reopen (below) and close_tempo/tempo (next line) via reach-derived close_unwieldiness.
+            _select(c, B if c is A else A, closed, cfg, measure_gap)   # USE-MODE: the afforded head with the best damage-coupling vs the opponent's armour (S.select_mode); refreshed after the half-sword form-switch below.
+            er[c]=S.reach_base(c,cfg)   # er REFRESH #1 (I3, D3, two-recompute contract — the 2026-07-02-scene-combat-closing-distance-redesign audit): re-derives ONLY er[c] on the grip-aware CURRENT (pre-swap) form; NEVER measure_gap (the running approach decrement, below) or `closed` (latched); longer/shorter LABELS stay frozen at engagement start (JD-2 plan default). Feeds reopen (below) and close_tempo/tempo (next line) via reach-derived close_unwieldiness.
         if not closed: rate={c:S.weapon_tempo(c,cfg,ffat[c]) for c in (A,B)}
         else:          rate={c:S.close_tempo(c,cfg,ffat[c]) for c in (A,B)}
-        # WHO ACTS FIRST = CADENCE x ANTICIPATION (ED-PC-0037, F16). `ready` used to accumulate at exactly `rate`, so
-        # weapon cadence ALONE decided the fight's most important question, deterministically: the marginally faster
-        # weapon crossed ACT_THRESHOLD first every time (jian's +1.5% edge -> a 2:1 action economy; a 20 g mass step
-        # flipped a mirror 57% <-> 42% on a cadence delta of 0.0002). systems.tempo_pressure supplies the missing half —
+        # WHO ACTS FIRST = CADENCE x ANTICIPATION (ED-PC-0037, F16). Weapon cadence ALONE would decide the fight's most
+        # important question deterministically: the marginally faster weapon would cross ACT_THRESHOLD first every time
+        # (a 1.5% edge -> a 2:1 action economy). systems.tempo_pressure supplies the other half —
         # the VOR and the READ, i.e. anticipation. Cadence proposes; initiative and reading dispose.
         for c in (A,B): ready[c]+=rate[c]*S.tempo_pressure(c, (B if c is A else A), cfg, TR)
         # REACH RE-OPENING (corrections: a created moment, not just balance+reach). The longer weapon can make
@@ -204,8 +209,8 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                     _emit('disengage', longer=longer.label, shorter=shorter.label, ok=True, gap=round(base_gap,2))
                     continue
                 else:                                            # READ -> the closer pursues into the withdrawal (Nachreisen)
-                    pool=max(1, core.resolution_pool(shorter.faculty))
-                    deg,net=core.resolve(pool, S.pursuit_sigma(shorter, longer, ffat[shorter], ffat[longer], cfg, TR), rng, core.ob_from_defender(longer))   # ED-PC-0036: was a FLAT cfg['DISENGAGE_PURSUIT_NSIG'], bypassing the whole sigma-assembly (no armour, no wounds, no attribute of the withdrawer — every pair resolved identically). systems.pursuit_sigma owns the formula. Ob-from-defender (ED-PC-0058): `longer` is struck if the pursuit lands, so `longer` is the defender this roll is against.
+                    pool=max(1, _pool_dice(shorter, cfg))
+                    deg,net=core.resolve(pool, S.pursuit_sigma(shorter, longer, ffat[shorter], ffat[longer], cfg, TR), rng, core.ob_from_defender(longer, cfg))   # ED-PC-0036: systems.pursuit_sigma owns the formula (the whole sigma-assembly: armour, wounds, the withdrawer's attributes). Ob-from-defender (ED-PC-0058): `longer` is struck if the pursuit lands, so `longer` is the defender this roll is against.
                     _emit('disengage', longer=longer.label, shorter=shorter.label, ok=False, pursued=True, degree=deg)
                     if deg in ('success','overwhelming'):
                         d=core.strike(shorter, longer, deg, cfg, net=net, pool=pool)
@@ -227,15 +232,15 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             # threaten the harness lands fewer meaningful stop-hits); it is NOT re-counted in the arrest magnitude. The
             # beat's net movement is the closer's advance MINUS that arrest (systems.approach_step): a long braced pole
             # nets the closer backward (driven out -> reach controls); a short/whippy/cutting weapon arrests little and
-            # the closer walks in. (A fable physics/HEMA audit retired the prior recoil = K*damage: damage is wound, not
-            # impulse; keying arrest on it crowned big CUTTERS and stranded the staff Silver's Paradoxes crowns.)
+            # the closer walks in. (Arrest is not keyed on damage: damage is wound, not impulse; keying it on damage
+            # would crown big CUTTERS and strand the staff Silver's Paradoxes crowns.)
             close_rate=S.close_rate(shorter, ffat[shorter], displ, rt, cfg)   # TA-02 fatigued closer + displace point + walk through un-threatening reach (FIX-1)
             recoil = 0.0
             stophit_p = cfg['STOPHIT_CHANCE'] * min(1.0, measure_gap/cfg['STOPHIT_FULL_GAP']) * (1-displ) * rt  # FIX-1: a stop-hit that can't pierce the armour deters less
             if measure_gap > 0.0 and rng.random() < stophit_p:
-                pool=max(1, core.resolution_pool(longer.faculty))
+                pool=max(1, _pool_dice(longer, cfg))
                 nsig=S.stophit_sigma(longer, shorter, measure_gap, cfg)
-                _ob=core.ob_from_defender(shorter)
+                _ob=core.ob_from_defender(shorter, cfg)
                 deg, net = core.resolve(pool, nsig, rng, _ob)   # Ob-from-defender (ED-PC-0058): `shorter` is struck if the stop-thrust lands.
                 _emit('stophit', longer=longer.label, shorter=shorter.label, gap=round(measure_gap,2),
                       pool=pool, net_sigma=round(nsig,3), ob=_ob, net=round(net,2), degree=deg)   # `ob`: the workbench bands its distribution at it (PC-03)
@@ -259,7 +264,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
         actors=[c for c in (A,B) if ready[c]>=cfg['ACT_THRESHOLD']]
         if not actors: continue
         if len(actors)==2:
-            aggressor = max(actors, key=lambda c: ready[c]) if ready[A]!=ready[B] else actors[rng.randrange(2)]   # stdlib uniform int (ED-1085)
+            aggressor = max(actors, key=lambda c: ready[c]) if ready[A]!=ready[B] else actors[rng.below(2)]   # uniform int
         else:
             aggressor = actors[0]
         defender = B if aggressor is A else A
@@ -267,15 +272,9 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
         # half-sword auto-switch (mit dem kurzen Schwert): adopt the form fitting the current range/armour
         aggressor.weapon = S.halfsword_target(aggressor, closed, defender.armor)   # wrapper owns the mutation
         defender.weapon  = S.halfsword_target(defender, closed, aggressor.armor)
-        # re-select the use-mode on the (possibly just-switched) form, so sel_* match the current weapon (I2/D2b:
-        # BOTH call sites must write all six sel_* fields — c.w flips at :120 above, so a partial thread would
-        # leave a post-swap c.w resolved against a pre-swap-selected element, the same object-confusion bug R-7
-        # closed for select_mode's own return).
-        for _c, _opp in ((aggressor, defender), (defender, aggressor)):   # ED-PC-0042 (I3): ONE spelled pairing for both roles — the two lines used to be a copy-pair, and a copy-pair over a positional 6-tuple is the transposition-bug class twice over (aggressor is still resolved FIRST, exactly as before)
-            _sel = S.select_mode(_c, _opp.armor, closed, cfg, measure_gap=measure_gap)
-            _c.sel_dmg, _c.sel_head, _c.sel_gap, _c.sel_perc, _c.sel_pc, _c.sel_eff = _sel.dm, _sel.head, _sel.gap, _sel.perc, _sel.pc, _sel.eff
-        aggressor.sel_eff_cut, aggressor.sel_eff_thrust = S.selected_arm_magnitudes(aggressor, aggressor.sel_head)   # [ED-PC-0037.1] refreshed with the post-swap form, like sel_*
-        defender.sel_eff_cut,  defender.sel_eff_thrust  = S.selected_arm_magnitudes(defender, defender.sel_head)
+        # re-select the use-mode on the (possibly just-switched) form, so sel_* match the current weapon (aggressor resolved FIRST, as before)
+        for _c, _opp in ((aggressor, defender), (defender, aggressor)):
+            _select(_c, _opp, closed, cfg, measure_gap)
         er[aggressor]=S.reach_base(aggressor,cfg); er[defender]=S.reach_base(defender,cfg)   # er REFRESH #2 (I3, D3): re-derives er for aggressor/defender on the grip+FORM-aware POST-SWAP weapon — so a half-sworded longsword reads its shorter reach everywhere in the closed exchange (reach_sigma below), not the frozen pre-swap #1 value. Consistency-proven: at open measure (grip=0, no swap) this equals #1 exactly.
         ready[aggressor]-=cfg['ACT_THRESHOLD']
         # COMMIT DEPTH — disposition lean + wariness skew a Beta over [2,5] (the commitment-recovery spectrum). The
@@ -328,8 +327,8 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             defender.initiative=S.clamp_initiative(defender.initiative+steal, cfg)
             aggressor.initiative=S.clamp_initiative(aggressor.initiative-steal, cfg)
             counter_attempt=S.counter_select(defender, cfg, rng, TR)
-        pool=max(1, core.resolution_pool(aggressor.faculty))
-        _ob=core.ob_from_defender(defender)
+        pool=max(1, _pool_dice(aggressor, cfg))
+        _ob=core.ob_from_defender(defender, cfg)
         deg, net = core.resolve(pool, net_sigma, rng, _ob)   # Ob-from-defender (ED-PC-0058)
         _emit('roll', aggressor=_agg0, pool=pool, net_sigma=round(net_sigma,3), ob=_ob, net=round(net,2), degree=deg, mode=mode)   # `ob`: the workbench bands its distribution at it (PC-03)
         # OVERCOMMIT EXPOSURE — systems computes it; the wrapper applies the initiative/poise loss.
@@ -357,7 +356,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             if rng.random()<max(0.0,neutralize-cfg['NEUTRALIZE_OVERWHELM_DROP']): hit=0
             else: hit=core.strike(aggressor, defender, 'overwhelming', cfg, net=net, pool=pool)
         if counter_attempt:
-            # SUCCESS scales with reflex (the training term read `history` and went with it, CR-85/ED-IN-0330); the untrained single-time counter mostly fails — a
+            # SUCCESS scales with reflex (CR-85/ED-IN-0330); the untrained single-time counter mostly fails — a
             # desperate-idiot move. Tradition abilities will modulate this upward (added later). (systems.counter_success_prob)
             if rng.random() < S.counter_success_prob(defender, cfg, TR):
                 hit=0; bind=False; riposte=True            # LANDS: committed attack voided in-tempo, defender ripostes (keeps the seized Vor)
@@ -510,11 +509,11 @@ class Yield:
 #   - 'blood' : stops at the first WOUND (a wound gate crossed, `wt.wounds >= 1`), not at the first point of damage.
 #   - 'yield' : stops when Health falls to `CFG['YIELD_HEALTH_FRAC']` of full (`wt.health_remaining`).
 # The stop rides the result exactly as an accepted `Yield` does: a `yield` trace event (with `terms` beside it), the
-# opponent's result, and no further roll -- so `seam/wrappers/combat.py::surrender_of` lifts it unchanged, and no
+# opponent's result, and no further roll -- so `fight.py::_surrender` lifts it unchanged, and no
 # band is added (H-98). ⚠ What a term does NOT do: it does not reshape a blow. A strike that fells a fighter on the
 # beat it lands (a decisive blow crossing every gate, or the gate past the threshold) is a felling under any term;
 # the stop is read between beats, never inside a strike.
-DUEL_TERMS = ('yield', 'blood', 'death')   # closed set, this module's: a season roster (PC-10b, unbuilt) will name these and must be checked against this tuple, not re-declared unchecked
+DUEL_TERMS = ('yield', 'blood', 'death')   # closed set, this module's: the season's `duel_terms` and `challenge_terms` rosters are checked against it through the composition row `combat.duel_terms`, never re-declared
 LETHAL_TERMS = 'death'
 
 def _terms_crossed(c, terms, cfg):
@@ -540,11 +539,11 @@ def _terms_yielder(A, B, terms, cfg):
     return A if fa < fb else B if fb < fa else None
 
 # ── THE PER-TURN CHOICE (v10 REM-31, IN-46: the grid mode's suspension) ──────────────────────────────────────────────
-# A PLAYABLE fight hands each turn's choice to a DECIDER, a parameter (never a module attribute: `_TRACE`'s rebinding is
-# the precedent not to follow). `decide(turn)` is called at the top of each turn, before every draw of that turn and after
+# A PLAYABLE fight hands each turn's choice to a DECIDER, a parameter (never a module attribute: the way `_TRACE` was
+# rebound by its callers is the precedent not to follow; `fight`'s `trace` argument replaced it). `decide(turn)` is called at the top of each turn, before every draw of that turn and after
 # a declared `Yield` of the same turn (the declaration is the earlier fact), and returns one member of this closed set:
 #   - 'engage'   : the turn is fought. Today's loop engages every turn, so `decide=None` (the default, AUTOMATED) is
-#                  exactly 'engage' every turn, and the call is byte-identical to the one before this parameter.
+#                  exactly 'engage' every turn.
 #   - 'withdraw' : the loop's existing UNRESOLVED exit, taken early -- no further turn, no UPSET_FLOOR draw (the fight is
 #                  undecided, result 0, the ruled outcome). A `withdraw` trace event names the turn.
 # [ASSUMPTION; the set is {engage, withdraw}, Jordan's "you choose to attack" (#445 `05:8-11`); PC's Plan layer (M-4) may
@@ -553,8 +552,21 @@ def _terms_yielder(A, B, terms, cfg):
 ENGAGE, WITHDRAW = 'engage', 'withdraw'
 TURN_CHOICES = (ENGAGE, WITHDRAW)   # closed set, this module's: the host's decider is checked against this tuple
 
-def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None, terms=LETHAL_TERMS, decide=None):
-    import random
+def fight(A, B, cfg, rng, max_bouts=12, yield_decl=None, terms=LETHAL_TERMS, decide=None, trace=None):
+    """One scene (`_fight`, below). `cfg` and `rng` take no default: a missing stream is a signature error at the call site,
+    not a branch (B14.20); `cfg=None` is passed on purpose and means the engine's own `CFG`; pass a keyed
+    `Draw` (`draw.seeded(...)`) for `rng`. `trace` is a callable(event: dict) the engine binds to `_TRACE` for the call and
+    restores after it, on every exit; `None` leaves `_TRACE` as it stands (a caller that still holds it bound is not undone)."""
+    global _TRACE
+    prev = _TRACE
+    if trace is not None:
+        _TRACE = trace
+    try:
+        return _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide)
+    finally:
+        _TRACE = prev
+
+def _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide):
     if terms not in DUEL_TERMS:
         raise ValueError(f"terms {terms!r} is not one of {DUEL_TERMS}")
     stop = None if terms == LETHAL_TERMS else terms   # None: the lethal fight takes neither the check nor its read
@@ -563,11 +575,11 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None, terms=LETHAL_
             raise ValueError("Yield.by must be the A or B Combatant passed to fight (compared by identity)")
         if not (1 <= yield_decl.turn <= max_bouts):
             raise ValueError(f"Yield.turn {yield_decl.turn} is outside 1..max_bouts ({max_bouts}): it would never fire")
-    cfg=cfg or CFG; rng=rng or random.Random()   # stdlib RNG (ED-1085 numpy de-leak; pass random.Random(seed) for determinism)
+    cfg=cfg or CFG   # `None`: the engine's own CFG. The stream is the caller's keyed `Draw`; never built here
     # A FIGHT BEGINS UNWOUNDED: zero each tracker's damage here, at the fight's own start (PC-13's `wound` events sum to
-    # the tracker within one fight). The maxima are NOT rebuilt by a mirrored constructor call any more: `_init_live`
-    # calls `Combatant.rederive(cfg)`, the one derivation path (PC-14), which reads the fighter's attributes as they
-    # stand now (an attribute edited after construction is followed) and itself never touches damage.
+    # the tracker within one fight). `_init_live` calls `Combatant.rederive(cfg)`, the one derivation path (PC-14),
+    # which reads the fighter's attributes as they stand now (an attribute edited after construction is followed) and
+    # itself never touches damage.
     A.wt.cumulative_damage = 0; B.wt.cumulative_damage = 0
     _init_live(A,cfg); _init_live(B,cfg)
     _emit('fight_start', A=A.label, B=B.label, weapon_A=A.weapon, weapon_B=B.weapon,
@@ -600,7 +612,7 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12, yield_decl=None, terms=LETHAL_
             break
         if stop is not None and _terms_met(A, B, stop, cfg):
             # THE TERMS ARE MET (RS-25): the fighter who crossed them yields, standing. It is the accepted-`Yield` ending
-            # -- the same `yield` event `surrender_of` lifts, the opponent's result, NO UPSET_FLOOR draw (a lucky blow
+            # -- the same `yield` event `fight._surrender` lifts, the opponent's result, NO UPSET_FLOOR draw (a lucky blow
             # cannot steal a fight the terms have already closed) -- read at the END of the turn the terms were met in,
             # where a declared `Yield` is read at the start of its turn. An exact tie yields nobody: UNRESOLVED.
             yielder = _terms_yielder(A, B, stop, cfg)

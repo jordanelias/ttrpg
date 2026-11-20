@@ -464,7 +464,7 @@ mechanics:
     scale: thread
     faction: universal
     canon_sources: ["systems/threadwork/threadwork_v30.md#part-4"]
-    sim_module: systems/threadwork/sim/co_movement.py
+    sim_module: null
     test_status: not_implemented
     notes: "Version C with 15 cards. Inseparability P-01 enforcement."
 
@@ -482,7 +482,7 @@ mechanics:
     scale: thread
     faction: universal
     canon_sources: ["systems/threadwork/threadwork_v30.md#part-6"]
-    sim_module: systems/threadwork/sim/threadcut.py
+    sim_module: null
     test_status: not_implemented
     notes: "P-06 - no layer-2 self-rendering."
 

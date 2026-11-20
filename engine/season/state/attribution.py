@@ -1,60 +1,34 @@
 """`season.state.attribution` -- WHO ACTED, and WHAT THE EVENT IS ABOUT, without `Event.subject`.
 
-`04:402` states the end position as STRUCTURAL: *"No `actor`, no `target`, no `subject` on
-`Event` -- the fields do not exist"*, and `changes[]` carries the changed things individually.
-**As of G1b (plan position 4, 2026-09-26) that claim is true of the code: the field is deleted.**
-This module is what replaced it, and G1a is what made it possible: attribution reads `causes[]`
-against the act store, and the changed thing reads `changes[]`, which now carries verified
-receipts rather than assertions.
+`04:402`: *"No `actor`, no `target`, no `subject` on `Event` -- the fields do not exist"*, and
+`changes[]` carries the changed things individually. Attribution reads `causes[]` against the act
+store, and the changed thing reads `changes[]`, which carries verified receipts rather than
+assertions (`state/gate.py`).
 
-⚠ WHY THE FIELD HAS TO GO RATHER THAN BE TIDIED. `Event.subject` is OVERLOADED, and the two
-senses are set by different emitters:
+⚠ `Event.subject` WOULD BE OVERLOADED, which is why no such field exists: the fold would set it to
+`a.actor` (THE ONE WHO ACTED), `state/world.py` and `loop/matter.py` to THE THING WRITTEN, and every
+reader would have to guess which it got (`epistemic._event_place` once guessed by asking whether the
+id is a person, a site or a rung).
 
-  * `loop/resolve.py` sets it to `a.actor`        -- THE ONE WHO ACTED
-  * `state/world.py` and `loop/matter.py` set it  -- THE THING WRITTEN
-
-Every reader then has to guess which it got. `epistemic._event_place` guesses by asking whether
-the id is a person, a site or a rung, in an order its own docstring calls "the whole of this
-function's correctness" -- because getting it wrong once made almost every Event private to its
-own subject and `P15` could not tell a working channel from one broken closed. That hazard is a
-consequence of the overload, not of the lookup.
-
-THREE TIERS, IN ORDER. There were four, and the fourth was the field:
+THREE TIERS, IN ORDER (`anchor_of`):
 
     1. the ACT channel   -- `causes[]` -> act store -> `actor`
     2. the CHANGE channel-- the first `changes[]` entry carrying a subject
     3. the CAUSE channel -- a consequence inherits the anchor of the Event that caused it
-    (4. `Event.subject`  -- DELETED by G1b; an Event reaching none of 1-3 now anchors on `None`)
 
-MEASURED, and the sequence of measurements matters more than any one of them. A first sweep of
-1,428 events over 5 headless seeds found tiers 1-2 sufficient: 201 by act with 0 disagreements,
-1,227 by change, 0 unrecovered. A wider sweep -- 3,411 events, 18 headless configurations --
-agreed. **Both were the wrong population.** Running the PROBE CORPUS with tiers 1-2 only put 90
-events through with no anchor at all and moved real behaviour: WITNESS deposits 9 -> 8, gate
-writes 10,556 -> 10,477, four committed artifacts off byte-identity. Headless never crosses a
-condition band, so the class that breaks this never appeared in it.
-
-The two classes the corpus found:
+An Event reaching none of 1-3 anchors on `None`.
 
   * `condition.band_crossed` -- `loop/matter.py` emits it with NO changes, caused by the PRIOR
     EVENT that wrote the condition. Tier 3 recovers it exactly: the crossing is about whatever
     its cause was about.
-  * `plague.struck` -- `causes=[ROOT]`, no changes, no act, subject a rung. **Nothing in the
-    Event held what it concerned** except the field, so tier 4 was the only thing that answered
-    and this class was why the field could not go.
+  * Every `causes=[ROOT]`-and-no-`changes` Event in the tree is APPARATUS, never production: the
+    fold's four emitters carry `[a.id]` (tier 1), the gate's emission carries a minted receipt
+    (tier 2), and MATTER's `condition.band_crossed` names the write that crossed the floor
+    (tier 3). The probe corpus's `Ev()`, `probes.py`'s P15 speech and `corpus_run`'s
+    `planted_control` each carry a bare change naming what it is about
+    (`harness/probes.py::about`), which is tier 2.
 
-HOW THAT BLOCKER CLOSED, AND WHERE THE CLASS TURNED OUT TO LIVE. Every `causes=[ROOT]`-and-no-
-`changes` Event in the tree was APPARATUS, never production: the fold's four emitters carry
-`[a.id]` (tier 1), the gate's emission carries a minted receipt (tier 2), and MATTER's
-`condition.band_crossed` names the write that crossed the floor (tier 3). The probe corpus's
-`Ev()` -- `plague.struck` among its callers -- `probes.py`'s P15 speech and `corpus_run`'s
-`planted_control` were the whole population, and each now carries a bare change naming what it
-is about (`harness/probes.py::about`), which is tier 2. So the field went with no production
-emitter changing, and one corpus Event MOVED IN THE RIGHT DIRECTION: A2's `sitting.decided`
-(subject `D`, caused by a petition about `p_low`) had anchored on `p_low` through tier 3 while
-the field said `D`; its own change now says `D`, the field's answer.
-
-⚠ `None` IS NOW A REAL, REACHABLE ANSWER FROM `anchor_of`, AND IT MEANS "NOBODY CAN SAY WHAT
+⚠ `None` IS A REAL, REACHABLE ANSWER FROM `anchor_of`, AND IT MEANS "NOBODY CAN SAY WHAT
 THIS IS ABOUT". Every reader treats it as the absence it is: `_event_place` returns no place,
 `_ch_witness_key` admits nobody, `last_emission_of` matches nothing. That makes a regression
 here SILENT -- an emitter that drops its change vacates its witness channel and nothing raises.
@@ -76,13 +50,12 @@ def actor_of(w, e: "Event") -> Optional[str]:
     `None` IS A REAL ANSWER AND MUST NOT BE READ AS A GAP. MATTER's wear, the calendar's
     crossings and the clock's own emissions have no actor -- nobody did them -- and that is the
     distinction `Event.subject` could not express, because it held the written thing in exactly
-    those cases and an actor everywhere else. A caller wanting "the one who did this" now gets
-    nothing when nobody did it, instead of a rung id that reads like a person.
+    those cases and an actor everywhere else. A caller wanting "the one who did this" gets
+    nothing when nobody did it, not a rung id that reads like a person.
 
     THE FIRST CAUSE THAT RESOLVES TO AN ACT WINS. `causes[]` may name prior Events as well as
-    acts (§39.2), and the order is the fold's: `resolve.py:309` puts `[a.id]` first and appends
-    the occasion ids after it. Measured: 201 of 201 act-caused events agree with the field this
-    replaces, so the first-match rule is the field's own rule rather than a new one.
+    acts (§39.2), and the order is the fold's: `loop/resolve.py` puts `[a.id]` first and appends
+    the occasion ids after it.
     """
     a = causing_act(w, e)
     return a.actor if a is not None else None
@@ -92,7 +65,7 @@ def causing_act(w, e: "Event"):
     """THE ACT THAT CAUSED THIS EVENT, or `None` -- `actor_of`'s first-match rule, returning the
     whole `Act` rather than its actor. `actor_of` reads it here, so the rule lives once (§8).
 
-    Plan position `17a`: the obligee channel (`epistemic._ch_post_remit`) asks which SEAT an act was
+    The obligee channel (`epistemic._ch_post_remit`) asks which SEAT an act was
     exercised through -- `Act.via`, `04 §B.9`'s *"a seat enters through `Act.via`"* -- and a person
     id cannot carry that. `None` is the same real answer it is for `actor_of`: nobody acted."""
     for c in e.causes:
@@ -103,12 +76,11 @@ def causing_act(w, e: "Event"):
 
 
 def anchor_of(w, e: "Event") -> Optional[str]:
-    """WHAT THE EVENT IS ABOUT. Three tiers, in order; see the module header for the measurement.
+    """WHAT THE EVENT IS ABOUT. Three tiers, in order; see the module header.
 
-    This is the function `Event.subject` was performing, with the overload made explicit instead
-    of left for each reader to disentangle. It returns `None` for an Event that reaches none of
+    It returns `None` for an Event that reaches none of
     the three tiers -- no act among its causes, no change naming anything, no antecedent that
-    anchors -- and since the field is gone, that `None` is final: nothing else in the Event says
+    anchors -- and that `None` is final: nothing else in the Event says
     what it concerns.
     """
     who = actor_of(w, e)
@@ -123,33 +95,25 @@ def anchor_of(w, e: "Event") -> Optional[str]:
         # actor and not by this anchor, so where the Event happened does not move.
         return _cover_for(w, e, who) or who
     for c in e.changes:
-        # `changes[0].subject` in 1,058 of 1,058 measured, and no event spans two subjects --
-        # but written as "the first change carrying a subject" rather than `e.changes[0].subject`
+        # Written as "the first change carrying a subject" rather than `e.changes[0].subject`
         # so that a future change with an empty leading subject degrades to the next one instead
         # of returning None and silently vacating the channel.
         if c.subject:
             return c.subject
-    # TIER 3 -- A CONSEQUENCE INHERITS ITS CAUSE'S ANCHOR, and the corpus is why this tier
-    # exists. `loop/matter.py` emits `condition.band_crossed` with NO changes, caused by the
-    # PRIOR EVENT that wrote the condition; neither tier above reaches it, so the first two
-    # tiers alone vacated the channel for every crossing in the corpus -- 90 events on one run,
-    # deposits 9 -> 8, gate writes 10,556 -> 10,477. A headless sweep of 3,411 events reported
-    # zero, because headless never crosses a band. That gap is the whole lesson of this tier:
-    # the first measurement was of the wrong population.
+    # TIER 3 -- A CONSEQUENCE INHERITS ITS CAUSE'S ANCHOR. `loop/matter.py` emits
+    # `condition.band_crossed` with NO changes, caused by the PRIOR EVENT that wrote the condition;
+    # neither tier above reaches it.
     #
     # The reading is that a consequence is ABOUT whatever its cause was about -- the crossing
-    # concerns the site whose condition moved -- and it reproduces the field exactly on that
-    # population rather than approximating it.
+    # concerns the site whose condition moved.
     for c in e.causes:
         prior = event_by_id(w, c)
         if prior is not None and prior is not e:
             got = anchor_of(w, prior)
             if got is not None:
                 return got
-    # NO TIER 4. It read `Event.subject`, and G1b deleted the field once the only class that
-    # needed it -- `plague.struck` and its kin, `causes=[ROOT]` with no change and no act -- was
-    # shown to be apparatus and given a change of its own (module header). An Event arriving
-    # here has no channel left that names what it concerns, and `None` says so.
+    # NO TIER 4: an Event arriving here has no channel left that names what it concerns, and
+    # `None` says so.
     return None
 
 
@@ -159,12 +123,12 @@ def _cover_for(w, e: "Event", who: str) -> Optional[str]:
     `cover_at_logging`) -- never re-read, so a logged Event's anchor does not move when the cover later
     lapses, leaves his hand, or a second one is taken (`_on_logged`'s invariant, which
     `test_in56_last_emission_index.py` holds the index to). For an Event not yet logged (a reader
-    inside RESOLVE, before the round's Events are appended), the live read (`live_cover`).
+    inside RESOLVE, before the lap's Events are appended), the live read (`live_cover`).
 
     ⚠ WHEN "LOGGED" IS [ASSUMPTION; medium; Jordan to correct; revert: the act's own moment, which
-    needs the fold to record it]: the driver appends a round's Events after the round's whole fold
-    (`loop/driver.py`), so a cover taken in a round covers every act of its taker logged with it, those
-    resolved before the `conceal` in that round included, and `cover.assumed` itself anchors on the
+    needs the fold to record it]: the driver appends a lap's Events after the lap's whole fold
+    (`loop/driver.py`), so a cover taken in a lap covers every act of its taker logged with it, those
+    resolved before the `conceal` in that lap included, and `cover.assumed` itself anchors on the
     alias. A hand-built world without the log or the map reads live."""
     log = getattr(w, "log", None)
     has_id = getattr(log, "has_id", None)
@@ -191,8 +155,7 @@ def live_cover(w, actor: Optional[str]) -> Optional[str]:
     while that man holds it; (3) A STAGE IS UNMATURED (`_a_stage_unmatured`). Several at once answer the first by
     Record id, so the read is deterministic. A second cover is REACHABLE in computed play: `opening_set`
     declines it only through the holder's `content:cover` LEDGER claim (`held_document_declines`), which the
-    ledger cap can evict and which two `conceal`s packed into one scene precede (MEASURED at B-Q's close:
-    `build_realm(0)`, 2 seasons, one person holds two live covers).
+    ledger cap can evict and which two `conceal`s packed into one scene precede.
 
     ⚠ A LIVE READ -- THE WORLD AS IT STANDS NOW. `anchor_of` asks it once per Event, as the Event is
     logged (`cover_at_logging`, kept in `World._covers_logged`), and never again for a logged Event:
@@ -249,8 +212,8 @@ def matured_terms(w, rid: str, stop: Optional[int] = None) -> int:
     would answer the MAKER, not the Record (`H-129`'s shape). `matter.py`'s own `prior` lookup reads
     the receipt the same way.
 
-    ⚠ MOVED HERE FROM `queries/world_q.py` AT v9 IN-12 step 10, UNCHANGED, which re-exports it for
-    `ceiling`: `live_cover` (above) asks it from `anchor_of`, and `state/` imports nothing from
+    ⚠ IT LIVES HERE, NOT IN `queries/world_q.py` (which re-exports it for
+    `ceiling`): `live_cover` (above) asks it from `anchor_of`, and `state/` imports nothing from
     `queries/` (`world_q` imports this module), so the one owner moved down rather than gaining a copy."""
     # `stop`: a caller that asks only whether the count REACHES a number (`_a_stage_unmatured`: every
     # declared stage) ends the scan there; the answer is `min(count, stop)`, which is all it reads.

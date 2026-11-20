@@ -48,16 +48,19 @@ from types import SimpleNamespace
 
 import pytest
 
+from ...substrate import composition
 from ..data.matrix import Step, WriteClass
 from ..data.verbs import VERB_TABLE
 from ..harness import aperture as A
-from ..harness import governance_spine, populated
+from ..harness import governance_spine
+from ..boot.realm import build_realm
 from ..harness import probes as P
-from ..harness.corpus_run import (_attribute_acts, attempts, attribute, foreign_kinds,
+from ..harness.corpus_run import (_attribute_acts, _emission_id, attempts, attribute, foreign_kinds,
                                   graded_loss, graded_losses, unrowed_acts)
 from ..loop.driver import SeasonDriver, mint_token
+from ..queries.inputs import FortInput
 from ..seam import Resolution
-from ..state.carriers import Act, Claim, Said
+from ..state.carriers import Act, Claim, Event, Said
 from .test_fi01_graded_inquiries import ACTOR as FI_ACTOR
 from .test_fi01_graded_inquiries import REC as FI_REC
 from .test_fi01_graded_inquiries import _resolve as _fi_resolve
@@ -67,7 +70,7 @@ from .test_u7_remit import _fold, _world
 
 @pytest.fixture(scope="module")
 def realm():
-    return A.measure_world(populated.build_realm, 0, 1)
+    return A.measure_world(build_realm, 0, 1)
 
 
 def test_aperture_the_measured_season_is_the_populated_season(realm):
@@ -107,7 +110,7 @@ def test_aperture_seats_agrees_with_the_builders_own_census():
     """SEATS, not persons: `build_realm` seats NPC-020 twice since `13d-iii` (the King and the Duke
     of Valorsmark), so the per-holder table has fewer keys than the census has seats -- the SUM of
     its lists is what must equal `seated`."""
-    w = populated.build_realm(0)
+    w = build_realm(0)
     table = A.seats(w)
     seats = sum(len(offs) for offs in table.values())
     assert seats == w._office_census["seated"], (
@@ -314,10 +317,15 @@ def _reading(w, d) -> dict:
 
 
 def _restore_on_a_person():
-    """`tiny_world`: a `restore` aimed at a PERSON (`p_mid`) where a Site belongs, beside a `transfer`
-    refused for want of grain -- a refusal whose deciding read is not `exists:<Kind>=0`."""
+    """`tiny_world`: a `restore` aimed at a PERSON (`p_mid`) where a Site belongs, an `interview` aimed at a
+    rung (`S`) where a Person belongs, beside a `transfer` refused for want of grain -- a refusal whose
+    deciding read is not `exists:<Kind>=0`.
+    B07.01: `restore` keys its refusals by clause now (`exists`, `present`, `write`, `draw`), and the
+    instrument reports a keyed row's clause, not its last read (`aperture.py` `clause:<name>`); the
+    last-read `exists:<Kind>=0` reading is observed on `interview`, a flat row with one existence cell."""
     w, d = _world()
     _fold(w, d, Act(id="a_rem11_restore", actor="p_low", verb="restore", payload={"site": "p_mid"}))
+    _fold(w, d, Act(id="a_rem11_iv", actor="p_low", verb="interview", payload={"subject": "S"}))
     _fold(w, d, Act(id="a_rem11_tr", actor="p_low", verb="transfer",
                     payload={"from": "S", "to": "Hh", "kind": "grain", "amount": 10 ** 6}))
     return w, d
@@ -346,15 +354,18 @@ def _migrate_into_a_full_rung():
 
 
 def test_rem11_a_restore_on_a_person_id_reads_exists_site_zero():
-    """The deciding read of a `restore` aimed at a person is `exists:Site` = 0: the subject is not a
-    Site. The `transfer` beside it is the control: it is refused on `stores:grain`, so only the
-    `restore` is counted by `exists_zero`, and neither is a post-admission refusal (a read FAILED).
+    """The deciding read of an `interview` aimed at a rung is `exists:Person` = 0: the subject is not a
+    Person. The `restore` aimed at a person is refused on its keyed `exists` clause (B07.01 keyed it), which
+    `exists_zero` does not count (only a `last-read` carries it). The `transfer` beside them is the control:
+    it is refused on `stores:grain`, so only the `interview` is counted by `exists_zero`, and none is a
+    post-admission refusal (a read FAILED).
 
     MUTATION (run 2026-10-26, reverted): `_observed_of` returning `()` -- this test and the
     post-admission test below both red."""
     w, d = _restore_on_a_person()
     rd = _reading(w, d)
-    assert rd["reasons"]["restore"] == {"last-read exists:Site=0": 1}, rd["reasons"]
+    assert rd["reasons"]["interview"] == {"last-read exists:Person=0": 1}, rd["reasons"]
+    assert rd["reasons"]["restore"] == {"clause:exists": 1}, rd["reasons"]
     assert list(rd["reasons"]["transfer"]) == ["last-read stores:grain=>0"], rd["reasons"]
     assert A.exists_zero(rd["reasons"]) == 1
     assert rd["post_admission"] == {}, rd["post_admission"]
@@ -377,15 +388,19 @@ def test_rem11_a_migrate_into_a_full_rung_is_a_post_admission_refusal():
 
 def test_rem11_dropping_the_observed_read_blinds_both_readings(monkeypatch):
     """THE MUTATION, IN THE SUITE: with the instrument's one read of `Event.observed` returning
-    nothing, the `restore` has no deciding read and the `migrate` is no longer provably
-    post-admission. Each reading is taken first with the read intact, so the change is what is
+    nothing, the `interview` has no deciding read and the `migrate` is no longer provably
+    post-admission (the keyed `restore` is the control: its reading is a clause, not a read). Each reading is taken first with the read intact, so the change is what is
     observed and not the absence of a baseline."""
     wr, dr = _restore_on_a_person()
     wm, dm = _migrate_into_a_full_rung()
-    assert _reading(wr, dr)["reasons"]["restore"] == {"last-read exists:Site=0": 1}
+    assert _reading(wr, dr)["reasons"]["interview"] == {"last-read exists:Person=0": 1}
     assert _reading(wm, dm)["post_admission"] == {"migrate": 1}
     monkeypatch.setattr(A, "_observed_of", lambda event: ())
-    assert _reading(wr, dr)["reasons"]["restore"] == {"no-read": 1}
+    assert _reading(wr, dr)["reasons"]["interview"] == {"no-read": 1}
+    # the keyed `restore` is blinded too, in its own way: with no read to replay, `_replayed` cannot name the clause
+    # that failed, and the reason is every clause keying the kind it emitted, which is more than one (so, not `exists`)
+    (blind,) = _reading(wr, dr)["reasons"]["restore"]
+    assert blind.startswith("clause:") and "|" in blind and "exists" in blind, blind
     assert A.exists_zero(_reading(wr, dr)["reasons"]) == 0
     assert _reading(wm, dm)["post_admission"] == {}
 
@@ -503,7 +518,10 @@ def _wk_world():
     from .test_in45_carry import DUKE, PARTY, SEAT, _filed
     from .test_u7_remit import JUDGE
     from ..data.fixtures import DEFAULT_FIXTURES
-    w, d = _filed(DEFAULT_FIXTURES.sweep("pool_default", JUDGE["pool_default"]))
+    fixtures = DEFAULT_FIXTURES
+    for name, value in JUDGE.items():                 # B05.99: `JUDGE` is the pool floor 60 now (its own note), read by key
+        fixtures = fixtures.sweep(name, value)
+    w, d = _filed(fixtures)
     cast = frozenset(w.persons)
     for key, verb, who, payload in (
             ("a_wk_restore_person", "restore", DUKE, {"subject": PARTY, "site": PARTY}),
@@ -748,5 +766,202 @@ def test_cr18_the_pools_line_reads_the_rolled_pool_and_separates_persons_not_sea
     assert not A.persons_separated({"a": {(0, 2): 1}, "b": {(1, 3): 1}})
     assert "no pooled roll" in "\n".join(A.pools_lines({"pools": {}}))
     assert realm["pools"], "the fold's records never reached the pools reader"
-    default = populated.build_realm(0).fixtures.get("pool_default")
-    assert {p for per in realm["pools"].values() for c in per.values() for _, p in c} == {default}
+    default = build_realm(0).fixtures.get("pool_default")
+    # B11 lane A: `cast_attributes` ships on, so NPC-001's authored Reason (5) is her `inquiry` pool and the realm's rolls
+    # read two pools in season one (was `{default}` alone); every unauthored person then held `pool_default` on every key.
+    # B01a.99 (every person's attributes are drawn, 1 to 6 by `generated_attribute_range`, a population change): the realm's
+    # season-one rolls read every pool 1 to 6 (was `{default, 5}`), so the reader separates persons, not seasons.
+    # B05.99 re-pin (B05.09, B05.25, B05.23: the pool is `pool_of(the governing attributes' mean + rank, addends, pool_add 6,
+    # pool_floor 5)`, so pools are tenths from 7 up; was {1, 2, 3, 4, 5, 6}): still many pools in one season, persons apart.
+    # B06.99 re-pin (B06.04: the uniform's source changes from CPython's generator to the keyed mix, so the drawn attributes
+    # differ; a stream change, not a balance change): was {7.0, 7.7, 8.5, 9.0, 9.3, 9.5, 9.7, 10.0, 10.3, 10.5, 10.7, 11.0, 11.5, 12.0}.
+    assert {p for per in realm["pools"].values() for c in per.values() for _, p in c} == {
+        7.5, 8.0, 8.5, 9.0, 9.3, 9.5, 10.0, 10.5, 10.7, 11.0, 11.5, 12.0}
+
+@pytest.mark.skipif(A.monitoring_blocked() is not None,
+                    reason="engines_entered needs Python 3.12 or later and a free monitoring tool id")
+def test_the_engines_reading_counts_an_entry_it_can_see():
+    """CI-11. One composition row is entered once, through its role, inside `engines_entered`: that role
+    reads 1, another row reads 0, and the counts exist on this interpreter. Remove the
+    `set_local_events` call and the entered role reads 0, which is the falsifier."""
+    seen = []
+
+    def one_wall():
+        seen.append(composition.require("settlements.fortification")(FortInput((1,), 2)))
+        return "ran"
+
+    value, counts = A.engines_entered(one_wall)
+    assert value == "ran" and seen == [0.5], "the run was not made, or not returned"
+    assert counts is not None, f"the counts are None on a Python that supports them: {A.monitoring_blocked()}"
+    assert counts["settlements.fortification"] == 1
+    assert counts["settlements.housing"] == 0
+    assert set(counts) == set(composition.ROLES), "every composition row is printed, zeros included"
+    assert A.monitoring_blocked() is None, "the tool id was not freed"
+    # the block prints every row and the total
+    lines = A.engine_lines({"engines": counts, "engines_why": None})
+    assert sum(1 for ln in lines if ln.startswith("    settlements.")) == sum(
+        1 for r in counts if r.startswith("settlements."))
+    # a `kind: value` row (`combat.duel_terms`) has no code object to enter, so it is printed and not counted
+    callable_rows = sum(1 for c in counts.values() if c != A.VALUE_ROW)
+    assert callable_rows < len(counts), "the composition has a value row, and the total must leave it out"
+    assert lines[-1].strip() == f"rows entered 1 of {callable_rows}"
+
+
+def _built(w, d) -> dict:
+    """`built_out` over every act the world's store holds, as the instrument reads a run."""
+    return A.built_out(w, d, attempts(w, w.tick + 1))
+
+
+def test_built_out_counts_a_clean_execution_with_its_kinds_and_its_receipt():
+    """IS-A-06. One planted `utter` through the fold is a clean execution that emits its kind and wrote (the
+    gate's Receipt): built out, clean 1. The same shape refused (a `transfer` of more than the actor holds)
+    reads clean 0. A `transfer` that executes cleanly but leaves out `term.renewed`, a kind of its row, is
+    clean 1 and NOT built out (the kinds clause). An act and an Event placed by hand, never folded, reads 0
+    (a hand-built execution never counts), though `attempts` reads it as made. An `utter` whose Events lost
+    their Receipts is clean 1 and NOT built out (the write clause: remove the Receipt test from `wrote` and
+    this reads built out).
+
+    MUTATION (run 2026-11-15, reverted): `wrote` set True for every clean act -- the Receipt-less arm
+    reads built out and this test reds."""
+    w, d = _world()
+    _fold(w, d, Act(id="a_b18_utter", actor="p_low", verb="utter"))
+    got = _built(w, d)
+    assert got["utter"] == {"clean": 1, "kinds": True, "wrote": True, "one": True, "via": 0}, got["utter"]
+    assert A.is_built_out(got["utter"])
+    assert set(got) == set(VERB_TABLE), "every verb of the table is a row, zeros included"
+    assert [v for v, c in got.items() if c["clean"]] == ["utter"], "no other verb executed"
+    # the same shape refused reads 0
+    wr, dr = _world()
+    _fold(wr, dr, Act(id="a_b18_tr_no", actor="p_low", verb="transfer",
+                      payload={"from": "S", "to": "Hh", "kind": "grain", "amount": 10 ** 6}))
+    assert _rows(wr)["a_b18_tr_no"] == ((), ("transfer.refused",)), "fixture: the transfer was not refused"
+    refused = _built(wr, dr)["transfer"]
+    assert refused["clean"] == 0 and not A.is_built_out(refused), refused
+    # a clean execution missing one kind of its row is not built out
+    wt, dt = _world()
+    _fold(wt, dt, Act(id="a_b18_tr_ok", actor="p_low", verb="transfer",
+                      payload={"from": "S", "to": "Hh", "kind": "grain", "amount": 3}))
+    clean = _built(wt, dt)["transfer"]
+    assert clean["clean"] == 1 and clean["wrote"] and not clean["kinds"], clean
+    assert not A.is_built_out(clean)
+    # a hand-built execution never counts: `attempts` reads it as made, the driver never tied it to an Event
+    wh, dh = _world()
+    hand = Act(id="a_b18_hand", actor="p_low", verb="utter")
+    wh.acts.append(hand)
+    wh.log.append(Event(_emission_id(wh, wh.tick, hand, "proposition.uttered"), "proposition.uttered",
+                        [], [hand.id], wh.tick))
+    assert _rows(wh)["a_b18_hand"] == (("proposition.uttered",), ()), "fixture: the hand-built act is not read as made"
+    assert _built(wh, dh)["utter"]["clean"] == 0
+    # the write clause: the same clean `utter` with its Events' Receipts removed has not written
+    for e in w.log:
+        e.changes = []
+    bare = _built(w, d)["utter"]
+    assert bare["clean"] == 1 and bare["kinds"] and not bare["wrote"], bare
+    assert not A.is_built_out(bare)
+
+
+def test_built_out_needs_one_act_that_held_its_kinds_and_wrote():
+    """Two clean `utter`s of one verb: the first holds its kind but its Events lost their Receipts, the
+    second keeps its Receipts but its Event is no longer of the row's kind. Read apart, `kinds` is True
+    (the first) and `wrote` is True (the second); no ONE execution did both, so the verb is not built out.
+    FALSIFIER: `one` replaced by `kinds and wrote` in `is_built_out` reads this verb built out and this reds."""
+    w, d = _world()
+    first = Act(id="a_b18_one_a", actor="p_low", verb="utter")
+    second = Act(id="a_b18_one_b", actor="p_low", verb="utter")
+    _fold(w, d, first)
+    _fold(w, d, second)
+    ev = A._events_by_act(w, d)
+    assert ev[first.id] and ev[second.id], "fixture: both acts left Events"
+    for _, e in ev[first.id]:
+        e.changes = []
+    for _, e in ev[second.id]:
+        e.kind = "proposition.not_of_the_row"
+    got = _built(w, d)["utter"]
+    assert got["clean"] == 2 and got["kinds"] and got["wrote"] and not got["one"], got
+    assert not A.is_built_out(got)
+
+
+def test_built_out_reads_a_write_less_band_as_not_having_written_and_a_seat_as_via():
+    """`not row.writes` is true only where NO band writes anything (`tell` keys four bands, all empty), so
+    `march`, whose `Declared` band writes nothing and whose `Won` band writes, does not read as write-less
+    through its empty band. `kinds` takes the LAST keyed band an act's Events name and every kind of it.
+    `via` counts the clean executions that exercised a seat."""
+    assert not VERB_TABLE["tell"].writes and not VERB_TABLE["comply"].writes
+    assert VERB_TABLE["march"].writes and VERB_TABLE["utter"].writes
+    row = VERB_TABLE["tell"]
+    ev = lambda kind, degree: SimpleNamespace(kind=kind, degree=degree)
+    for band, kinds in row.emits_by_degree.items():
+        assert A._kinds_held(row, [ev(k, band) for k in kinds]), band
+        assert not A._kinds_held(row, [ev(k, band) for k in kinds[:-1]] or [ev("x", band)]), band
+    assert not A._kinds_held(row, [ev("news.told", None)]), "no declared band: it cannot say which it folded"
+    march = VERB_TABLE["march"]
+    assert A._kinds_held(march, [ev("march.declared", "Declared"), ev("field.unopposed", "Unopposed"),
+                                 ev("army.arrived", "Unopposed")])
+    # the LAST band decides: the field's own kinds are owed, `army.arrived` is missing
+    assert not A._kinds_held(march, [ev("march.declared", "Declared"), ev("field.unopposed", "Unopposed")])
+    assert A._kinds_held(march, [ev("march.declared", "Declared")]), "a march that only declared folded `Declared`"
+    from .test_u7_remit import DUKE, SEAT
+    w, d = _world()
+    _fold(w, d, Act(id="a_b18_seat", actor=DUKE, verb="utter", via=SEAT))
+    _fold(w, d, Act(id="a_b18_own", actor=DUKE, verb="utter"))
+    got = _built(w, d)["utter"]
+    assert got["clean"] == 2 and got["via"] == 1, got
+
+
+def test_fought_fields_counts_stance_receipts_only_of_an_act_that_left_a_fought_field():
+    """Planted: a `march` whose Events are `field.lost` (carrying a `stance` and a `body` Receipt) and
+    `march.declared`, a `march` that arrived `field.unopposed` and wrote a stance Receipt (not counted: no
+    field was fought), and a stance Receipt on a verb that leaves no field (not counted). `won_lost` counts
+    the field Events, `unopposed` the unopposed ones, `stance` the stance Receipts of the first act alone."""
+    from ..state.carriers import Receipt
+    from ..state.ids import ROOT
+    rec = lambda field: Receipt("p_x", "set", "Act", field)
+    ev = lambda i, kind, *fields: Event(i, kind, [rec(f) for f in fields], [ROOT], 0)
+    lost, quiet, other = (Act(id=i, actor="p_low", verb=v) for i, v in
+                          (("a_lost", "march"), ("a_quiet", "march"), ("a_other", "utter")))
+    log = [ev("e1", "march.declared"), ev("e2", "field.lost", "stance", "body"), ev("e3", "stance.moved", "stance"),
+           ev("e4", "field.unopposed", "stance"), ev("e5", "proposition.uttered", "stance")]
+    d = SimpleNamespace(act_of={"e1": lost, "e2": lost, "e3": lost, "e4": quiet, "e5": other})
+    rows = [(lost, (), ()), (quiet, (), ()), (other, (), ())]
+    assert A.fought_fields(SimpleNamespace(log=log), d, rows) == {"won_lost": 1, "unopposed": 1, "stance": 2}
+    assert A.fought_fields(SimpleNamespace(log=log), d, []) == {"won_lost": 0, "unopposed": 0, "stance": 0}
+
+
+def test_the_built_out_block_prints_every_verb_and_the_fought_fields_line(realm):
+    """The realm fixture's block: one line per verb of the table, the total as many as the verbs that
+    read built out, the FOUGHT FIELDS line, and the pooled block's per-verb seed counts."""
+    lines = A.built_out_lines(realm)
+    verb_lines = [ln for ln in lines if ln.startswith("    ") and not ln.strip().startswith("built out")]
+    assert len(verb_lines) == len(VERB_TABLE)
+    assert all(ln.startswith(f"    {v:<16}") for ln, v in zip(verb_lines, sorted(VERB_TABLE)))
+    total = sum(1 for c in realm["built_out"].values() if A.is_built_out(c))
+    assert lines[-2].strip() == f"built out {total} of {len(VERB_TABLE)}"
+    assert sum("BUILT OUT" in ln for ln in verb_lines) == total
+    assert lines[-1].startswith("  FOUGHT FIELDS  won+lost ") and "stance receipts on the losing side" in lines[-1]
+    pooled = A.pooled_built_out_lines([realm, realm])
+    assert sum(1 for ln in pooled if ln.endswith("of 2 seeds")) == len(VERB_TABLE)
+    assert pooled[-1].strip() == f"built out in at least one seed {total} of {len(VERB_TABLE)}"
+
+
+def test_the_engines_reading_says_why_it_did_not_count(monkeypatch):
+    """Where the monitoring is unavailable the run is still made, the counts are `None` and the block
+    says why instead of printing a column of zeros."""
+    monkeypatch.setattr(A, "_TOOL", None)
+    value, counts = A.engines_entered(lambda: 7)
+    assert (value, counts) == (7, None)
+    why = A.monitoring_blocked()
+    assert why and "3.12" in why
+    lines = A.engine_lines({"engines": None, "engines_why": why})
+    assert any(why in ln for ln in lines)
+
+
+def test_the_engines_reading_frees_its_tool_id_when_the_run_raises():
+    if A.monitoring_blocked() is not None:
+        pytest.skip("engines_entered needs Python 3.12 or later and a free monitoring tool id")
+
+    def boom():
+        raise RuntimeError("the run failed")
+
+    with pytest.raises(RuntimeError):
+        A.engines_entered(boom)
+    assert A.monitoring_blocked() is None

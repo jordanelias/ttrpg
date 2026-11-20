@@ -12,23 +12,17 @@ The mapping decision is asserted too: a yielder is read by the EXISTING `combat_
 `Untouched`/`Wounded` (never `Felled`), and the surrender rides on the seam's result.
 """
 import functools
-import os
 import random
-import sys
+from engine.dice_engine import draw
 
 import pytest
 
-_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-_ENGINE = os.path.join(_ROOT, 'modules', 'combat')
-for _p in (_ROOT, _ENGINE):
-    if _p not in sys.path:
-        sys.path.insert(0, _p)
 
 from valoria import _draw_stream as DS          # noqa: E402  the single owner of the draw instrument (CLAUDE.md §8)
 
-import combatant as C                            # noqa: E402
-import wrapper                                   # noqa: E402
-from config import CFG                           # noqa: E402
+from modules.combat import combatant as C                            # noqa: E402
+from modules.combat import wrapper                                   # noqa: E402
+from modules.combat.config import CFG                           # noqa: E402
 
 
 def _fight(seed, by=None, max_bouts=12, **yield_kw):
@@ -97,11 +91,12 @@ def test_a_yield_the_opponent_refuses_still_ends_the_fight_with_no_further_roll(
     resolves anything further and the fight ends exactly as an accepted yield does. The engine has no
     decider and no free-strike resolver (that would be a fourth resolver); the opponent's disposition
     is the caller's, carried on the `yield` event. Pinned so the two cannot drift apart unnoticed."""
-    from engine.season.seam.wrappers.combat import surrender_of
+    from engine.season.queries.inputs import Surrender
+    from modules.combat.fight import _surrender as surrender_of    # the module's one lift of the yield event (B14.01)
     result, trace, rng, A, B = _fight(7, by='A', turn=1, accepted=False)
     assert len(rng.trace) == 0 and _bouts(trace) == 0
     assert result == -1 and not A.felled
-    assert surrender_of(trace) == dict(by='A', turn=1, accepted=False)
+    assert surrender_of(trace) == Surrender(by='A', round=1, accepted=False)
     ok_result, _, ok_rng, _, _ = _fight(7, by='A', turn=1, accepted=True)
     assert (result, len(rng.trace)) == (ok_result, len(ok_rng.trace))
 
@@ -113,7 +108,7 @@ def test_a_yield_that_could_never_fire_is_refused_loudly():
                 wrapper.Yield(by=A, turn=13),            # after max_bouts
                 wrapper.Yield(by='A', turn=1)):          # not a combatant at all
         with pytest.raises(ValueError):
-            wrapper.fight(A, B, CFG, random.Random(0), max_bouts=12, yield_decl=bad)
+            wrapper.fight(A, B, CFG, draw.seeded(draw.H2("test_combat_yield", 0)), max_bouts=12, yield_decl=bad)
 
 
 def test_a_yield_while_the_objective_is_contested_in_the_zone_is_refused():
@@ -134,11 +129,12 @@ def test_a_yielder_is_read_by_the_existing_bands_never_a_fourth():
     `Untouched` (no wounds) or `Wounded`; the surrender is on the result, not in the band."""
     from engine.season.data.rosters import COMBAT_BANDS, WOUND_QUANTITIES
     from engine.season.seam.ladder import combat_degree
-    from engine.season.seam.wrappers.combat import surrender_of
+    from engine.season.queries.inputs import Surrender
+    from modules.combat.fight import _surrender as surrender_of    # the module's one lift of the yield event (B14.01)
     assert len(COMBAT_BANDS) == 3
     for turn in (1, 3):
         _, trace, _, _, B = _fight(_seed_lasting(turn), by='B', turn=turn, accepted=True)
         st = dict(available=True, **{q: getattr(B.wt, q) for q in WOUND_QUANTITIES})
         assert combat_degree(dict(wound_state={'B': st}), 'B') in COMBAT_BANDS[1:]
-        assert surrender_of(trace) == dict(by='B', turn=turn, accepted=True)
+        assert surrender_of(trace) == Surrender(by='B', round=turn, accepted=True)
     assert surrender_of([{'kind': 'turn_start'}]) is None

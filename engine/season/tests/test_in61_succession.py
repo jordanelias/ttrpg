@@ -24,7 +24,7 @@ from ..data.matrix import Step, WriteClass
 from ..data.rosters import CONFERRAL_BASES, SUCCESSIONS
 from ..decision import choose as CH
 from ..gaps import Unspecified
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 from ..loop.driver import SeasonDriver, mint_token
 from ..loop.matter import _die
 from ..state import gate as G
@@ -183,7 +183,8 @@ def test_a_throne_released_by_its_holder_reaches_the_heir_and_he_forms_the_claim
     naming the vacant throne (CR-26's chain) and FORMS `succeed` on it (`confer`'s `referent_class: Office`
     machinery, narrowed by `own_title_declines`). NO OTHER PERSON forms it (the narrowing: everybody heard
     of the throne by the chronicle). Whether he then executes it is the scorer's draw; it is recorded,
-    and if he did, his title is closed and the throne is his."""
+    not asserted: the execution half was asserted only `if claimed:`, and this fixture's season does
+    not claim, so it was deleted (the claim's execution is asserted in the tests around this one)."""
     w, d, king, heir = _realm()
     w.step = Step.RESOLVE
     w.frozen = False
@@ -208,8 +209,6 @@ def test_a_throne_released_by_its_holder_reaches_the_heir_and_he_forms_the_claim
     claimed = _holder(w, THRONE) == heir
     print(f"\nIN-61 RELEASE ARM: heir {heir} formed `succeed` on {THRONE} {formed.count((heir, THRONE))} "
           f"time(s); executed in the season: {'yes' if claimed else 'no'}")
-    if claimed:
-        assert not _live_hold(w, heir, TITLE)
 
 
 # --- B10-09 CLOSE (antagonist, Phase 1): THE CLAIM'S REMAINING GUARDS ---------------------------------

@@ -6,7 +6,7 @@ Four acceptance suites each open-coded the same loop, and each of the four opene
 UNCOUNTED skip::
 
     for unit in (a, b):
-        if unit.routed or unit.broken:
+        if unit.routed or unit.disordered:
             continue
         assert math.isclose(_unit_troops(unit), unit.hp, ...)
 
@@ -71,13 +71,13 @@ ABS_TOL = 1e-3
 
 
 def unit_troops(unit):
-    """Sum of live per-cell troop counts across a unit's subunits (the cell-side ledger).
+    """Sum of live per-cell troop counts across a unit's units (the cell-side ledger).
 
-    Composes on Subunit.troop_total() — the engine's own single owner of "a subunit's live
+    Composes on Unit.troop_total() — the engine's own single owner of "a subunit's live
     troops" (hierarchy/units.py) — rather than re-summing cell_troops here. Sibling invariant
     home: tests/valoria/test_hp_cell_ledger.py (per-exchange drift; this module checks end-state).
     """
-    return sum(su.troop_total() for su in unit.subunits)
+    return sum(su.troop_total() for su in unit.units)
 
 
 def assert_troop_conservation(*units, context=''):
@@ -99,7 +99,7 @@ def assert_troop_conservation(*units, context=''):
         assert math.isclose(troops, unit.hp, rel_tol=REL_TOL, abs_tol=ABS_TOL), (
             f"{where}{getattr(unit, 'name', unit)}"
             f"{' [routed]' if getattr(unit, 'routed', False) else ''}"
-            f"{' [broken]' if getattr(unit, 'broken', False) else ''}"
+            f"{' [broken]' if getattr(unit, 'disordered', False) else ''}"
             f": Sum(cell_troops)={troops} != hp={unit.hp}")
         checked += 1
     return checked

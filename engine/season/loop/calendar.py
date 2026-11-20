@@ -2,11 +2,8 @@
 
 ⚠ **THE BODY IS THE DRIVER'S OWN, BOUND BACK ONTO THE CLASS -- NOT A DELEGATING STUB.**
 `loop/driver.py` ends with `SeasonDriver.calendar = calendar`, so `SeasonDriver.calendar` IS this
-function and `inspect.getsource(SeasonDriver.calendar)` returns THIS SOURCE. Eight tests read a
-step's body that way -- three of them `witness`'s, one of those a pure NEGATIVE assertion --
-and a stub would fail two and silently vacate the third, which is why step 9 of the
-decomposition (ED-IN-0203) refused to delegate. Step 5 established the technique when
-`class Query` bound module functions as staticmethods.
+function and `inspect.getsource(SeasonDriver.calendar)` returns THIS SOURCE, which the tests that
+read a step's body rely on (ED-IN-0203 step 9).
 
 ⚠ **THE TOKEN IS HANDED IN BY THE DRIVER (G2).** `SeasonDriver.season` mints a CALENDAR `Token`
 through `loop/driver.py::mint_token` and passes it as `token`; every gate write below presents
@@ -41,7 +38,7 @@ def calendar(self, token: Token) -> list[Event]:
     # ⚠ RETURNS ITS OWN EMISSIONS, SO `season()` CAN HAND THEM TO WITNESS BESIDE MATTER'S (IN-29).
     # `World.write` buffers an emission for fan-out ONLY at `Step.MATTER` (`state/world.py`, the
     # `_emitted_by_write` guard, which exists to keep WITNESS's own `claim.deposited` from looping),
-    # so CALENDAR's `date.fired` reached `w.log` and nothing else. The log tail since this mark is
+    # so CALENDAR's `date.fired` would reach `w.log` and nothing else. The log tail since this mark is
     # exactly what this barrier's writes emitted -- nothing else writes between here and the return.
     _mark = len(w.log)
     for did, d in list(w.dates.items()):
@@ -65,8 +62,8 @@ def calendar(self, token: Token) -> list[Event]:
                 emits=FIRED_KIND, subject=d.get("venue"),
                 causes=[prior] if prior else [ROOT])
         if not vacant:
-            # `04 §A.2` and `write_matrix.yaml`'s (DocketItem, matter) row give CALENDAR `docket.formed`; the write
-            # emitted nothing, the same defect `11b` closed for `date.fired`. Chained on the `date.fired` just emitted
+            # `04 §A.2` and `write_matrix.yaml`'s (DocketItem, matter) row give CALENDAR `docket.formed`.
+            # Chained on the `date.fired` just emitted
             # at this venue, under the same subject, so the antecedent is the firing that put the matter on the docket.
             fired = w.last_emission_of(FIRED_KIND, d.get("venue"))
             w.write("DocketItem", token,

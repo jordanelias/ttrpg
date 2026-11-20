@@ -4,34 +4,26 @@
 Everything that turns a subsystem's return into the token `writes_at` / `emits_at` key on:
 `degree_of` (the dispatcher, which decides nothing), `combat_degree` (the fight's band read off the
 scene, the worst over its parties) and `party_degree` (one party's band, the walk both read),
-and the deferred import of the tree's single-owner ladder -- `_LADDER`, `_LADDER_ERROR`,
-`degree_ladder()`, `ladder_error()`.
+and the tree's single-owner ladder -- `_LADDER`, `degree_ladder()`, `ladder_error()`.
 
-⚠ **`_LADDER` AND `_LADDER_ERROR` ARE NOT RE-EXPORTED FROM `seam/__init__.py`, AND THAT IS
-DELIBERATE.** `degree_ladder()` rebinds both through `global`, so a re-export would bind a snapshot
-in the package namespace that is permanently stale the moment the first call fires. Step 8
-established this and it holds one directory down: a test that swaps the ladder must name
-`seam.ladder._LADDER`, not `seam._LADDER`.
+⚠ **`_LADDER` IS NOT RE-EXPORTED FROM `seam/__init__.py`, AND THAT IS DELIBERATE.** `degree_ladder()` reads
+it as this module's global, so a re-export would bind a snapshot in the package namespace that goes stale
+the moment a test swaps the ladder: a test that swaps the ladder must name `seam.ladder._LADDER`, not
+`seam._LADDER`.
 
-⚠ **`04`'s T-k IS READ NARROWLY HERE, AND THIS IS WHERE THE READING IS RECORDED (plan position `31b`).**
+⚠ **`04`'s T-k IS READ NARROWLY HERE (ED-IN-0206).**
 T-k (`04:122`) says *"the ladder lives once, in the seam"*. Read narrowly: `degree_from_net`
 (`engine/dice_engine/dice_engine.py`) is the ONE margin ladder and `degree_of` (below) its ONE dispatcher.
-`combat_degree` and `field_degree` STAY in the seam and are not ladders in that sense: each grades a
+`combat_degree` and `field_degree` are not ladders in that sense: each grades a
 provider's own result against roster edges (`combat_band_edges` over `wound_quantities`;
-`field_degree_bands`) and holds no band table of its own. So when `31b` and `31c` move the personal-combat
-and mass-battle engines into `modules/`, these two reads do not travel with them, and neither position
-touches the deferred dice-engine import (`degree_ladder()`, below).
-
-Moved whole from the flat `seam.py` by unit L2 of
-`workplans/2026-09-09-layer1-conformance-plan.md` (ED-IN-0206).
+`field_degree_bands`) and holds no band table of its own, so they stay in the seam when the
+personal-combat and mass-battle engines live in `modules/`.
 """
 
 from __future__ import annotations
 
-import sys
-
 from typing import Any, Optional
-from ..data import files
+from engine.dice_engine.dice_engine import DEGREE_LABEL, degree_from_net
 from ..data.rosters import (
     COMBAT_BANDS, COMBAT_EDGES, INVESTED, LOST, UNOPPOSED, WON, WOUND_QUANTITIES, WOUNDED,
     check_edge_above)
@@ -41,12 +33,6 @@ from ..gaps import Unspecified
 # ---------------------------------------------------------------------------
 # S39.4 -- THE DEGREE. TWO SOURCES, BOTH ALREADY RULED, NEITHER RE-DERIVED HERE.
 #
-# ⚠ THIS BLOCK IS `W-E`, AND IT EXISTS BECAUSE A PARTIAL SUCCESS AND AN OVERWHELMING ONE WERE
-# THE SAME EVENT. Three links were broken at once and each hid the next: `_fold` hardcoded
-# `_degree_for_writes = None`; `emits_at` had ZERO callers anywhere in the tracer (`H-113`), so a
-# contested verb reported the FLAT UNION of every band; and `Event.degree` was a field nothing
-# ever assigned. Closing any one alone changes nothing observable.
-#
 # THE TWO SOURCES, AND WHY THIS FILE MAY NOT CHOOSE BETWEEN THEM:
 #
 #   1. THE LADDER, for a contest whose subsystem returns a MARGIN. `S39.4` -- one ladder for
@@ -55,26 +41,11 @@ from ..gaps import Unspecified
 #      ladder. Single owner for every scale of the game (Jordan ruling, 2026-08-14)"*.
 #      ⚠ IT IS IMPORTED AND CALLED, NOT MIRRORED. `S27.2` names a second resolver as its
 #      highest-value refusal, and a band table copied into this file WOULD BE ONE -- it would go
-#      on answering after the owner changed its mind, which is exactly what happened to
-#      `params_tables.yaml`'s captured ladder (retired since; it showed the
-#      PRE-RULING bands). The falsifier that this is a call and not a copy is
-#      `test_we_the_ladder_is_the_trees_and_not_a_copy_of_it`, which monkeypatches
+#      on answering after the owner changed its mind. The falsifier that this is a call and not a
+#      copy is `test_we_the_ladder_is_the_trees_and_not_a_copy_of_it`, which monkeypatches
 #      `degree_from_net` and requires every margin here to follow it.
-#      ⚠ SUPERSEDED (plan position `8`'s record sweep; `31a` moved the roll): a `net` is produced for
-#      `fight`, `tell` and `march` by the MODULES (`modules/social_contest/roll.py`), not by
+#      A `net` is produced by the MODULES (`modules/social_contest/roll.py`), not by
 #      `seam/wrappers/sigma.py`, which only builds the record and calls the entry.
-#      `test_we_only_a_verb_that_declares_contests_can_be_graded_today` asserts the season package's
-#      producer set is EMPTY and that a scan of the module code roots finds `roll.py` (a superset
-#      check); what follows is the original rationale.
-#      ⚠ AND ITS OPERAND DOES NOT EXIST YET, WHICH IS SAID HERE RATHER THAN DISCOVERED LATER.
-#      `degree_from_net` reads `net - ob`. NOTHING IN THIS TRACER PRODUCES A `net`: there is no
-#      roll anywhere in `shape.py`, `Act.pool` / `Act.obstacle` are read only by `S27.4`'s
-#      refusal gate, and no subsystem the seam can call returns one. So this branch is a READER
-#      WITH NO PRODUCER today. It is written anyway, and recorded on `H-98` -- whose own `cite:` lists
-#      *give the ladder a margin the subsystem can supply* as one of its three options -- because the
-#      alternative is worse in a specific way: without it the shape of the missing thing is a
-#      guess, and with it the gap is exactly *"no subsystem returns a margin"* -- which is one of
-#      the three options `H-98`'s own `cite:` lists.
 #
 #   2. THE SCENE, for a contest that routes to personal combat. JORDAN, 2026-09-03, VERBATIM:
 #      *"kill/wound degrees should be directly taken from scene combat, which is what actually
@@ -83,17 +54,12 @@ from ..gaps import Unspecified
 #      So combat is EXEMPT from the ladder by ruling, and its bands are a READ of the
 #      `WoundTracker` the engine computed -- `combat_seam.resolve`'s `wound_state`.
 #
-# ⚠ THE BAND IS READ OFF **THE ACT'S SUBJECT**, NOT OFF "THE LOSER", AND THAT CORRECTS THE TABLE.
-# `verb_table.yaml`'s `writes_source_note:` cell (`writes_source:` until 2026-09-25) said `wound_state[loser]`. `kill / wound` writes on
-# `payload["subject"]` (`_eff_kill`), so reading the LOSER kills the wrong person whenever the
+# ⚠ EACH PARTY IS WRITTEN BY HIS OWN BAND, NOT BY "THE LOSER"'S. `kill / wound` writes on
+# `payload["subject"]` (`_eff_kill`), so reading the LOSER would kill the wrong person whenever the
 # ACTOR is the one felled: A attacks B, B fells A, `wound_state[A].felled` is True, and the fold
-# would delete B. The subject is the person the writes land on, so the subject is the person
-# whose state decides which branch of the writes applies. The table's cell is corrected there.
-# ⚠ CP-T03-00 (`-08` AM-C-01) CORRECTS THE CORRECTION'S REACH, NOT ITS POINT: reading the SUBJECT ALONE
-# left the felled ACTOR unwritten (A attacks B, B fells A: the band read off B, and A stood). Each
-# party is now written by HIS OWN band (`party_degree`, read in `_eff_kill`), so the loser-reading
-# defect stays closed -- B is never deleted for A's felling -- and the act's band, which the cells key
-# on, is the WORST over both (`combat_degree`).
+# would delete B. Each party is written by HIS OWN band (`party_degree`, read in `_eff_kill`), so B
+# is never deleted for A's felling, and the act's band, which the cells key on, is the WORST over
+# both (`combat_degree`; CP-T03-00, `-08` AM-C-01).
 # ---------------------------------------------------------------------------
 
 # ⚠ THE THREE BANDS AND THE HARM MODEL ARE DATA, NOT LITERALS HERE — `rosters.yaml:
@@ -104,39 +70,21 @@ from ..gaps import Unspecified
 # ⚠ AND SO IS WHERE THE BANDS FALL: `rosters.yaml: combat_band_edges` (plan position `8`), over the
 # quantities `wound_quantities` lists, with the `Wounded` threshold the one swept fixture
 # (`Fixtures.combat_wounded_above`, `H-184`).
-# ⚠ A FOURTH BAND (decisive vs narrow) HAS NO SOURCE IN THE DATA and is NOT invented -- that is
-# the whole of what survives in `H-98` after the 2026-09-03 ruling.
+# ⚠ A FOURTH BAND (decisive vs narrow) HAS NO SOURCE IN THE DATA and is NOT invented (`H-98`).
 
-_LADDER: Optional[tuple] = None
-_LADDER_ERROR: str = ""
+# The owner's ladder is imported at module scope: `seam/wrappers/sigma.py` imports the same dice engine at module
+# scope, so a tree without it already fails `import seam`, and a named-gap path here would never run.
+_LADDER: tuple = (degree_from_net, DEGREE_LABEL)
 
 
-def degree_ladder() -> Optional[tuple]:
-    """`(degree_from_net, DEGREE_LABEL)` from the tree's owner, or `None` with a NAMED reason.
-
-    Deferred and by path, which is `seam/wrappers/combat.py::engine()`'s shape and for its reason: the tracer
-    still runs where the engine tree is absent, degrading to a named gap rather than an
-    ImportError at import. The repo root carries no top-level modules, so putting it on
-    `sys.path` shadows none of this directory's bare-name imports."""
-    global _LADDER, _LADDER_ERROR
-    if _LADDER is not None or _LADDER_ERROR:
-        return _LADDER
-    root = files.REPO_ROOT
-    try:
-        if str(root) not in sys.path:
-            sys.path.insert(0, str(root))
-        from engine.dice_engine.dice_engine import (  # noqa: E402
-            DEGREE_LABEL as _L, degree_from_net as _d)
-        _LADDER = (_d, _L)
-        return _LADDER
-    except Exception as e:                        # a real import failure is a NAMED gap
-        _LADDER_ERROR = f"{type(e).__name__}: {e}"
-        return None
+def degree_ladder() -> tuple:
+    """`(degree_from_net, DEGREE_LABEL)` from the tree's owner (read at call time, so a test may swap `_LADDER`)."""
+    return _LADDER
 
 
 def ladder_error() -> str:
-    degree_ladder()
-    return _LADDER_ERROR
+    """Why the ladder is unavailable: `""`, always (the owner is imported above). Kept for the callers that import it."""
+    return ""
 
 
 def party_degree(st: Optional[dict], wounded_above=None) -> str:
@@ -161,7 +109,7 @@ def party_degree(st: Optional[dict], wounded_above=None) -> str:
     edge, on the `Wounded` band; `None` is the roster's own value. The `Felled` edge is the engine's
     verdict accepted, never swept (`combat_band_edges`' note).
 
-    CP-T03-00 (`-08` AM-C-01): SPLIT OUT OF `combat_degree`, UNCHANGED, so the walk lives once and both
+    CP-T03-00 (`-08` AM-C-01): the walk lives once and both
     readers ask it: `combat_degree` (the act's band, the worst over every party) and
     `loop/effects_combat.py::_eff_kill` (each party written by his own band)."""
     if st is None or not st.get("available"):
@@ -200,10 +148,8 @@ def combat_degree(result: dict, subject: Optional[str], wounded_above=None) -> s
     kind) is reached only when every party is untouched. Who is written by which band is not this
     function's: `_eff_kill` reads `party_degree` per party.
 
-    ⚠ THE SUBJECT IS STILL REQUIRED TO BE A PARTY. Before CP-T03-00 this read `states.get(subject)`
-    alone, so a felled ACTOR left the fight graded by his standing target and was never written; the
-    refusal for a subject the scene never fought is kept, unchanged, because the act's writes land on
-    him and a scene without him is not the act's scene."""
+    ⚠ THE SUBJECT IS REQUIRED TO BE A PARTY: the refusal for a subject the scene never fought
+    stands, because the act's writes land on him and a scene without him is not the act's scene."""
     states = result.get("wound_state") or {}
     st = states.get(subject)
     if not subject or st is None or not st.get("available"):
@@ -217,7 +163,7 @@ def combat_degree(result: dict, subject: Optional[str], wounded_above=None) -> s
 
 
 def field_degree(result: dict) -> str:
-    """M4 (`ED-IN-0279` clause (a)). THE BAND `march` FOLDS ON, READ OFF THE MASS-BATTLE
+    """THE BAND `march` FOLDS ON (`ED-IN-0279` clause (a)), READ OFF THE MASS-BATTLE
     PROVIDER'S OWN RESULT -- the shape `combat_degree` reads off a scene's `wound_state`, one
     function above. `seam/wrappers/mass_battle.py` lifts `attacker_wins`/`unopposed` to the TOP
     level of what it returns for exactly this read.
@@ -232,8 +178,8 @@ def field_degree(result: dict) -> str:
     ⚠ DOES NOT GRADE `massbattle.py`'s OWN NON-CANONICAL `result['degree']`
     (Overwhelming/Success/Partial/Failure) -- that classification is disclosed as *"NOT the
     canonical degree ladder... a bespoke post-hoc classification"* by its own module header, and
-    reconciling the two remains open MB-lane work, not M4's. `march` writes on its graded bands (Won, Lost, Unopposed and, since CP-T04-06, Invested)
-    (Won/Lost/Unopposed); the engine's finer four-way split is available under
+    reconciling the two remains open MB-lane work. `march` writes on its graded bands (Won, Lost,
+    Unopposed and, CP-T04-06, Invested); the engine's finer four-way split is available under
     `result['result']['degree']` for introspection and stays there."""
     if result.get("unopposed"):
         return UNOPPOSED
@@ -241,6 +187,12 @@ def field_degree(result: dict) -> str:
     if result.get("invested"):
         return INVESTED
     return WON if result.get("attacker_wins") else LOST
+
+
+def is_margin_result(result: Any) -> bool:
+    """A margin provider's result (B05 close): a dict that is neither a scene (`wound_state`) nor a field (`attacker_wins`) and carries the
+    pair `net`, `ob`. The one test `degree_of` takes its third branch on and `loop/resolve.py::_margin_ending` reads an `Event.ending` by."""
+    return isinstance(result, dict) and "wound_state" not in result and "attacker_wins" not in result and "net" in result and "ob" in result
 
 
 def degree_of(result: Any, subject: Optional[str] = None, fixtures: Any = None) -> str:
@@ -253,8 +205,8 @@ def degree_of(result: Any, subject: Optional[str] = None, fixtures: Any = None) 
     ⚠ IT DECIDES NOTHING. Each branch hands the question to whoever already owns it -- the scene
     for combat, `field_degree` for a mass battle, `degree_from_net` for a margin -- and a result
     carrying NONE OF THE THREE refuses by name.
-    ⚠ `mass_battle` WAS THE UNGRADABLE THIRD SHAPE UNTIL M4 (`ED-IN-0279` clause (a)); it is not
-    any more. Its provider's result is still a survivor-ratio classification, not a margin -- see
+    ⚠ `mass_battle` IS THE THIRD SHAPE (`ED-IN-0279` clause (a)). Its provider's result is a
+    survivor-ratio classification, not a margin -- see
     `seam/wrappers/mass_battle.py`'s own docstring -- and `field_degree` does not grade THAT
     classification either; it reads the top-level `attacker_wins`/`unopposed` markers the provider
     lifts for exactly this purpose, onto the bands `march` writes on
@@ -269,29 +221,19 @@ def degree_of(result: Any, subject: Optional[str] = None, fixtures: Any = None) 
         return combat_degree(
             result, subject,
             None if fixtures is None else fixtures.get("combat_wounded_above"))
-    # M4 (`ED-IN-0279` clause (a)). `attacker_wins` is `mass_battle`'s own top-level marker,
+    # `attacker_wins` is `mass_battle`'s own top-level marker (`ED-IN-0279` clause (a)),
     # present on every RESOLVED result including the `unopposed` bypass -- neither a `wound_state`
-    # nor a `net`/`ob` pair, so it needed a third branch rather than fitting either existing one.
+    # nor a `net`/`ob` pair, so it takes a third branch rather than fitting either of the others.
     if "attacker_wins" in result:
         return field_degree(result)
-    if "net" in result and "ob" in result:
-        lad = degree_ladder()
-        if lad is None:
-            raise Unspecified(
-                f"a contest returned a margin and the tree's degree ladder is unavailable: "
-                f"{ladder_error()}", "S39.4",
-                needs="engine/dice_engine/dice_engine.py",
-                law="S27.2 -- the ladder is imported from its single owner. A band table copied "
-                    "into this file would be the second resolver, and would keep answering "
-                    "after the owner changed its mind")
-        degree_from_net, label = lad
-        # CP-T01-04: a record carrying `settled_margin` (the provider settled the margin's fraction by
-        # the act's own draw) is graded on it, against a zero obstacle -- integers on both sides, so
-        # the ladder's no-epsilon comparison is exact. A pair without one (a planted result, a caller
-        # that never settled) is graded as it always was.
+    if is_margin_result(result):
+        ladder, label = degree_ladder()
+        # B05.02: a record carrying `settled_margin` (the provider's real margin, `net - ob`) is graded on it, against
+        # a zero obstacle; the ladder quantises it once (`MARGIN_SCALE`), so the grade is the pair's own. A pair
+        # without one (a planted result, a caller that never wrote it) is graded on `net` and `ob`.
         if "settled_margin" in result:
-            return label[degree_from_net(result["settled_margin"], 0)]
-        return label[degree_from_net(result["net"], result["ob"])]
+            return label[ladder(result["settled_margin"], 0)]
+        return label[ladder(result["net"], result["ob"])]
     raise Unspecified(
         f"a contest for {result.get('prize', result.get('module'))!r} resolved and returned "
         f"neither a scene to read nor a margin to grade (keys: {sorted(result)})",

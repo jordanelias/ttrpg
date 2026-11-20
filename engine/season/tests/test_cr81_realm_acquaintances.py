@@ -39,25 +39,15 @@ import pytest
 from ..data.rosters import OFFICES_SEATS
 from ..decision import assemble
 from ..decision.options import opening_set
-from ..harness import populated
-from ..harness.populated import build_realm
+from ..boot import realm as boot_realm
+from ..boot.realm import _first_holder
+from ..boot.realm import build_realm
 from ..queries import world_q
 from ..queries.person_q import KNOWN_PERSON_CLAIM, known_persons
 from ..queries.world_q import faction_holding
+from ._realm_goldens import BUILD
 
 SEEDS = (0, 1, 2)
-# `build_realm(s, acquaintances=False).content_hash()`, the control arm = the parent tree's build with CR-86's rename and vassals (read 2026-11-05; before CR-86 the PARENT tree 67f5b086 read 70ea49cb... / af5f8b97... / b836647f...): the control arm reproduces them.
-# CR-20+CR-30 re-pin, ONCE (Person.attributes / Person.heritage in the repr; four authored heritage rows): was 87682033... / ca9698d7... / c77d3b27... (CR-86 re-pin: was 70ea49cb... / af5f8b97... / b836647f...)
-# CR-33 re-pin, ONCE (NPC-088's `lifepath: 3-CF4` holds `inquiry`, a Person repr; the event list is the parent's): was 070b68df... / 54809a8a... / 27f94244...
-# CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr) re-pin, ONCE (a build hash, NPC-004 is seated at build in every seed): was bfee1369... / 00ca7145... / 030e020f...
-# v11 CR-87 re-pin, ONCE (a build hash: the loyalty rows name the creed, never its head, no lower than -1; CR-87's full revert
-# reproduces the shipped seed-0 build, `test_cr87_violence_contexts.py`'s control -- not read on this arm): was 7a9778bc... /
-# c62eca62... / 6ea6e6bf...
-# v11 CP-T03-07 re-pin, ONCE (a build hash: `Person.body_ceiling` joins every Person's canonical encoding; seed 0's
-# move, e6a40e18... -> b9928b27..., is the one `test_go07_canonical_digest.py` records and reproduces with the old
-# encoding; seeds 1 and 2 read the same way, not separately reverted): was e6a40e18... / c846864a... / f1894dbf...
-PARENT_HASHES = {0: "b9928b271a022bb49e4a743859bcb386", 1: "d58a1395e28fea7a13783bbcb16cc4fd",
-                 2: "cb800549cffe280834caa31a08bb78ee"}
 KNOW_NONE_AT_BUILD = 41          # of 83, every seed (read, see the docstring)
 JORDANS_EXAMPLE = frozenset({"King", "Queen", "Duke", "Duchess"})   # his words, an independent pin on the floor
 
@@ -120,7 +110,7 @@ def test_the_high_status_set_is_the_throne_its_consort_and_the_duchy_seats(world
     on, _ = worlds[0]
     rows = [r for r in OFFICES_SEATS if r["post"] in JORDANS_EXAMPLE]
     assert {r["post"] for r in rows} == JORDANS_EXAMPLE and len(rows) == 5   # two Dukes (Valorsmark, Varfell)
-    holders = {populated._first_holder(on, r["id"]) for r in rows}
+    holders = {_first_holder(on, r["id"]) for r in rows}
     assert len(holders) == 4                     # the King also holds Valorsmark's ducal seat
     for a in holders:
         assert holders - {a} <= set(known_persons(on.persons[a].ledger, a)), a
@@ -134,13 +124,15 @@ def test_tell_forms_for_persons_it_formed_for_none(worlds):
 
 
 def test_control_the_step_off_is_the_parent_realm_and_no_base_claim_is_pushed_out(worlds):
-    """CONTROL: `acquaintances=False` reproduces the parent tree's hashes; and on every person the arm's
-    ledger, less the claims the step wrote, equals the control's claim by claim (none pushed out, none
-    altered), every added claim is a truthy `exists:Person` reading, and no ledger exceeds `ledger_cap`."""
+    """CONTROL: `acquaintances=False` is a different realm from the shipped one (its hash differs; the shipped seed-0
+    build is `_realm_goldens.py`'s); and on every person the arm's ledger, less the claims the step wrote,
+    equals the control's claim by claim (none pushed out, none altered), every added claim is a truthy
+    `exists:Person` reading, and no ledger exceeds `ledger_cap`."""
     persons = 0
     for s, (on, off) in worlds.items():
-        assert off.content_hash() == PARENT_HASHES[s], s
-        assert on.content_hash() != PARENT_HASHES[s], s
+        assert on.content_hash() != off.content_hash(), s
+        if s == 0:
+            assert on.content_hash() == BUILD[0]
         cap = on.fixtures.get("ledger_cap")
         added = set(on._acquaintances)
         for pid, p in on.persons.items():
@@ -157,9 +149,9 @@ def test_control_the_step_off_is_the_parent_realm_and_no_base_claim_is_pushed_ou
 def test_planted_failure_the_step_a_no_op_reproduces_the_base_and_reddens_the_exit(monkeypatch):
     """PLANTED FAILURE: with `seed_acquaintances` writing nothing, 83 of 83 know no one again and the
     exit's own assertion goes red."""
-    monkeypatch.setattr(populated, "seed_acquaintances", lambda w, pairs: [])
+    monkeypatch.setattr(boot_realm, "seed_acquaintances", lambda w, pairs: [])
     w = build_realm(0)
     assert _know_none(w) == 83
-    assert w.content_hash() == PARENT_HASHES[0]
+    assert w.content_hash() == build_realm(0, acquaintances=False).content_hash()
     with pytest.raises(AssertionError):
         _assert_acquainted(w)

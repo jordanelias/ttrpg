@@ -135,6 +135,7 @@ def test_another_arrangement_loads_with_no_code_change():
             proofs:             [testimony]
             disposes:           oblige
             disposal_reach:     room
+            standard:     plain
     """)
     arrangements, _ = _reload_with(extra)
     # v9 SC-03a: the seeded count is read, not pinned (it was `== 4` at three seeded rows).
@@ -157,6 +158,7 @@ def test_a_fifteenth_key_fails_naming_the_row():
             proofs:             []
             disposes:           none
             disposal_reach:     room
+            standard:     plain
             scale:              settlement
     """)
     with pytest.raises(SystemExit, match=r"bad_row.*unknown key.*scale"):
@@ -179,6 +181,7 @@ def test_a_declared_disposal_row_with_no_quorum_fails_the_load():
             proofs:             []
             disposes:           none
             disposal_reach:     room
+            standard:     plain
     """)
     with pytest.raises(SystemExit, match=r"vote.*no `quorum:`"):
         _reload_with(extra)
@@ -200,6 +203,7 @@ def test_a_declared_disposal_row_with_a_quorum_loads():
             proofs:             []
             disposes:           none
             disposal_reach:     room
+            standard:     plain
             quorum:             0.5
     """)
     arrangements, _ = _reload_with(extra)
@@ -222,6 +226,7 @@ def test_quorum_on_a_non_declared_row_fails_the_load():
             proofs:             []
             disposes:           none
             disposal_reach:     room
+            standard:     plain
             quorum:             0.5
     """)
     with pytest.raises(SystemExit, match=r"stray_quorum.*quorum"):
@@ -313,6 +318,7 @@ def test_a_hold_disposing_row_is_reported_by_c1_until_determine_can_open_a_hold(
             proofs:             [record, testimony]
             disposes:           hold
             disposal_reach:     realm
+            standard:     plain
     """)
     arrangements, _ = _reload_with(extra)
     row = arrangements["succession"]

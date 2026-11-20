@@ -7,20 +7,16 @@ landing and were ACTIVATED to small grounded baselines in U10/ED-PC-0022 (routed
 These tests pin (1) the reader FORMULAE, (2) that the constants are now active + tradition-modulable, (3) the
 authored data's CI invariants, and (4) the grounded ordering of known blades.
 """
-import os
-import sys
 
 import pytest
 
-ENGINE = os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'combat')
-sys.path.insert(0, ENGINE)
 
-import weapon_physics as WP  # noqa: E402
-import combat_systems as S  # noqa: E402
-import ability_primitives as ABIL  # noqa: E402
-import tradition as TR  # noqa: E402
-from combatant import WEAPONS, Combatant  # noqa: E402
-from config import CFG  # noqa: E402
+from modules.combat import weapon_physics as WP  # noqa: E402
+from modules.combat import combat_systems as S  # noqa: E402
+from modules.combat import ability_primitives as ABIL  # noqa: E402
+from modules.combat import tradition as TR  # noqa: E402
+from modules.combat.combatant import WEAPONS, Combatant  # noqa: E402
+from modules.combat.config import CFG  # noqa: E402
 
 
 def _w(*edge_dicts):

@@ -1,0 +1,249 @@
+
+######## checks_v7_core
+
+== D1 bench reads the sitting (trial, all-mid, effort 3)
+  shipped                <=-3 n=55 0.055  <0 n=62 0.226  <3 n=93 0.323  >=3 n=90 0.611
+  control track_step 0   <=-3 n=55 0.236  <0 n=62 0.290  <3 n=93 0.226  >=3 n=90 0.244
+  excommunication (declared, quorum 2): carried 0.227
+
+== D2 the centre (the tell, equals rank 1)
+  v2 shipped, routine 0.5: fail 0.576 half 0.147 carried 0.278 | at controls: fail 0.576 half 0.147 carried 0.278 | routine 0.8: fail 0.619 half 0.149 carried 0.232
+  the PLAN's plain roll (B05.25 pool, skill-score-only opposition): fail 0.350 half 0.171 carried 0.479  [A-79: .59/.16/.25]
+  at control the abridged margin == the one roll under A-137's rule (opposition = Will + rank): 200/200
+
+== D3 / F2 the rattle and the concession
+  trial vs a Will-2 Grace-2 respondent who plays AUTOMATICALLY, `for` one press then argue   carried 0.530; a rattle that does nothing 0.480
+  trial vs a Will-2 Grace-2 respondent who plays AUTOMATICALLY, `for` argue only             carried 0.463; a rattle that does nothing 0.463
+  trial vs a Will-2 Grace-2 respondent who plays AUTOMATICALLY, `for` press every turn       carried 0.507; a rattle that does nothing 0.363
+  questioning: the questioner gets what he asks (the questioned man's accept) when the questioned: {'concedes at once': 0.7866666666666666, 'automatic': 0.42, 'never concedes': 0.38}
+  trial: `for` carried when the ACCUSED: {'concedes at once': 0.7666666666666667, 'automatic': 0.33, 'never concedes': 0.39}  (conceding walks the ladder: fact, definition, justification, then the matter)
+  trial: `for` carried when the ACCUSER: {'concedes at once': 0.02, 'automatic': 0.33, 'never concedes': 0.32666666666666666}; debate, the mover: {'concedes at once': 0.0033333333333333335, 'automatic': 0.27, 'never concedes': 0.27}
+  a full confession (the accused concedes the last rung): convicted 229/300 = 0.763 (the close is still the bench's draw: A-14)
+
+== D5 / D6
+  trial, `for` opens 0.325; `against` opens 0.250; diff +0.075 +- 0.054
+  negotiation (consent): {(None, 'budget'): 224, (None, 'rested'): 21, ('success', 'yielded'): 37, ('failure', 'yielded'): 18}: Success only where the party addressed accepted
+
+== F7 speaking at a formal venue (trial, all-mid, `for` chooser against the automatic other side)
+  argue every turn: 0.253; automatic: 0.353; rest every turn: 0.260
+
+== F8 the judge's own three in a FULL TRIAL, each with the sign the ruling gives, and with its setting off
+  judge's reason     `for` is sound but plain (Reason 7, Grace 2), the other polished (Reason 1, Grace 7): up 0.060->0.760 (+0.700, z +24.8) | setting off 0.363->0.363 (+0.000, z +0.0)
+  judge's reason     the other way round: down                                  0.673->0.030 (-0.643, z -22.3) | setting off 0.263->0.263 (+0.000, z +0.0)
+  judge's focus      `for` wanders (Focus 1, a famine): down                    0.473->0.270 (-0.203, z -5.3) | setting off 0.477->0.477 (+0.000, z +0.0)
+  judge's focus      the OTHER side wanders: up                                 0.147->0.367 (+0.220, z +6.4) | setting off 0.140->0.140 (+0.000, z +0.0)
+  judge's attunement `for` argues what he knows to be false: down               0.487->0.123 (-0.363, z -10.5) | setting off 0.510->0.510 (+0.000, z +0.0)
+  judge's attunement the OTHER side argues what he knows false: up              0.190->0.593 (+0.403, z +11.1) | setting off 0.177->0.177 (+0.000, z +0.0)
+
+== ROLES the speaker's six, and the restored carriers (carried at attribute 1 -> 7)
+  tell   focu 0.330->0.330 (+0.000, z +0.0) | reas 0.140->0.560 (+0.420, z +12.0) | attu 0.310->0.367 (+0.057, z +1.5) | pres 0.243->0.410 (+0.167, z +4.4) | grac 0.157->0.330 (+0.173, z +5.1) | will 0.330->0.330 (+0.000, z +0.0)
+  trial  focu 0.357->0.363 (+0.007, z +0.2) | reas 0.297->0.437 (+0.140, z +3.6) | attu 0.310->0.420 (+0.110, z +2.8) | pres 0.280->0.440 (+0.160, z +4.1) | grac 0.210->0.430 (+0.220, z +5.9) | will 0.247->0.377 (+0.130, z +3.5)
+  rally  focu 0.293->0.300 (+0.007, z +0.2) | reas 0.267->0.410 (+0.143, z +3.8) | attu 0.300->0.337 (+0.037, z +1.0) | pres 0.237->0.567 (+0.330, z +8.8) | grac 0.243->0.300 (+0.057, z +1.6) | will 0.290->0.300 (+0.010, z +0.3)
+  Reason accounts for the other side's circumstances: vs a power-6.0 respondent, `for` at Presence-dice only (solidarity ground, k=0): Reason 0.063->0.427 (+0.363, z +11.4) [shipped]
+  Reason accounts for the other side's circumstances: vs a power-6.0 respondent, `for` at Presence-dice only (solidarity ground, k=0): Reason 0.153->0.427 (+0.273, z +7.7) [gap_step 0]
+  Presence, the share heard: before a crowd, arguing on the proof (k high): Presence 0.360->0.663 (+0.303, z +7.8) [shipped]
+  Presence, the share heard: before a crowd, arguing on the proof (k high): Presence 0.613->0.663 (+0.050, z +1.3) [heard_step 0]
+  Will, staying power: arguing all five turns of a trial, nobody pressing: Will 0.373->0.560 (+0.187, z +4.7) [shipped]
+  Will, staying power: arguing all five turns of a trial, nobody pressing: Will 0.560->0.560 (+0.000, z +0.0) [weary_step 0]
+  Grace, esteem in the room: trial against an ordinary man: Grace 0.130->0.370 (+0.240, z +7.1) [shipped]
+  Grace, esteem in the room: trial against an ordinary man: Grace 0.280->0.277 (-0.003, z -0.1) [esteem_step 0]
+  Attunement reads intent: corr(believed stake of the man opposite, his true stake) at Attunement 1: +0.45
+  Attunement reads intent: corr(believed stake of the man opposite, his true stake) at Attunement 7: +0.97
+  R11 the venue arm: the same ground (consequence) before one seat, venue lean +0.3: {'scholar-like (Reason 7, Presence 2)': 0.4766666666666667, 'orator-like (Presence 7, Reason 2)': 0.12}
+  R11 the venue arm: the same ground (consequence) before one seat, venue lean -0.3: {'scholar-like (Reason 7, Presence 2)': 0.3566666666666667, 'orator-like (Presence 7, Reason 2)': 0.19333333333333333}
+
+== F1 / B-3 the view
+  poor readers (acc < 0.3, n=212): correlation of the errors of two perceived numbers: argue consequence, argue authority -0.009; an option, the mood -0.079; mood, their point +0.022; intent, mood +0.007
+  View fields: ['n', 'mover', 'side', 'issue', 'live_theirs', 'live_own', 'options', 'own', 'esteem', 'weary', 'awe', 'broke', 'visible', 'mood', 'odds', 'intent', 'turns_left', 'acc']
+  F3 card odds 0.277 vs delivered with both sides silent 0.263; consent: card odds None, band when both rest: None; abridged: card odds None (the option's own chance is shown)
+  abridged: the menu's believed chance to land (mean) 0.424 vs delivered 0.437
+
+== F4 resume, F5 refusals, the nemo rule
+  first sitting 2 turns each -> spoken [('a', 2), ('b', 2)]; resumed under 4 turns: 4 more beats, spoken [('a', 4), ('b', 4)]; beats continue at n=5
+  refused: resuming a sitting that ended yielded: a sitting that ended `yielded` is not resumed (an adjourned one is)
+  refused: a rally with nobody on the floor: a sitting with one character is refused (A-139)
+  refused: an abridged rally with nobody addressed: a sitting with one character is refused (A-139)
+  refused: a cohort of weight 0: a person or cohort of no weight
+  refused: a sitting with one character: a sitting with one character is refused (A-139)
+  a played judge: sees JudgeView('id', 'track', 'odds', 'points', 'tells'); chooses for / against / leave it to the draw; ruling against his own track +1.72 is returned as a departure (('j1', 1.72),) (the fold deposits it as a claim)
+
+== A-136 the NPC's temper (one seat played by the view-only best chooser against the SAME man automatic; other side automatic)
+  flat, composed (Will 4, Grace 4)           trial: auto 0.348 best 0.348 (+0.000) press share 0.57 concede 0.05 | inquisition: auto 0.342 best 0.342 (+0.000) press share 0.55 concede 0.00 | debate: auto 0.262 best 0.262 (+0.000) press share 0.60 concede 0.00
+  cool (Will 6, Grace 7, a grudge)           trial: auto 0.425 best 0.425 (+0.000) press share 0.66 concede 0.00 | inquisition: auto 0.498 best 0.498 (+0.000) press share 0.64 concede 0.00 | debate: auto 0.363 best 0.365 (+0.002) press share 0.67 concede 0.00
+  hot and proud (Will 6, Grace 1, a grudge)  trial: auto 0.155 best 0.157 (+0.002) press share 0.78 concede 0.01 | inquisition: auto 0.180 best 0.185 (+0.005) press share 0.63 concede 0.00 | debate: auto 0.077 best 0.070 (-0.007) press share 0.84 concede 0.00
+  hot and timid (Will 1, Grace 2)            trial: auto 0.093 best 0.140 (+0.047) press share 0.12 concede 0.45 | inquisition: auto 0.112 best 0.197 (+0.085) press share 0.19 concede 0.00 | debate: auto 0.023 best 0.052 (+0.028) press share 0.31 concede 0.00
+  (2 s.e. of a difference at n=600: 0.055); control temper off (grain, grudge, pride 0): the automatic policy IS the best chooser by construction
+  the man in a trial [shipped]: orator: press 0.67 proof 0.00 fellowship 0.37 concede 0.01 | scholar: press 0.34 proof 0.26 fellowship 0.09 concede 0.03 | bully: press 0.56 proof 0.00 fellowship 0.25 concede 0.01 | diplomat: press 0.67 proof 0.00 fellowship 0.21 concede 0.01 | fox: press 0.66 proof 0.00 fellowship 0.11 concede 0.01
+  the man in a trial [temper off]: orator: press 0.69 proof 0.00 fellowship 0.35 concede 0.01 | scholar: press 0.36 proof 0.30 fellowship 0.11 concede 0.04 | bully: press 0.54 proof 0.00 fellowship 0.24 concede 0.02 | diplomat: press 0.67 proof 0.00 fellowship 0.22 concede 0.01 | fox: press 0.66 proof 0.00 fellowship 0.11 concede 0.00
+
+== BEARING (B-5 fit reads the matter; R12 sincerity; ties), each with a control
+  a consequence argument FOR remitting the tolls fits: guildsmen +1.00, toll men -0.50, townsfolk -0.05; flattened: +0.00
+  a press on what he wants: rattled 0.150 at pursuit 0.1, 0.553 at 0.9 [shipped]
+  a press on what he wants: rattled 0.317 at pursuit 0.1, 0.317 at 0.9 [flattened]
+  before an attuned crowd: an honest plea 0.267; a SELF-SERVING lie (it helps him and he knows it false) 0.137; an argument on a claim he knows false 0.177 [shipped]
+  before an attuned crowd: an honest plea 0.267; a SELF-SERVING lie (it helps him and he knows it false) 0.267; an argument on a claim he knows false 0.363 [ploy_step 0]
+  a press made with a forged writ before an attuned judge: `for` carried 0.047 [shipped]
+  a press made with a forged writ before an attuned judge: `for` carried 0.333 [ploy_step 0]
+  [shipped] petition before the respondent's client 0.490, a neutral seat 0.590 | the ledger credited: neutral judge +0.80, the respondent's client +0.30 | the diplomat accepts with need 0 / 0.9: 0.247 / 0.490
+  [flattened] petition before the respondent's client 0.637, a neutral seat 0.623 | the ledger credited: neutral judge +0.80, the respondent's client +0.80 | the diplomat accepts with need 0 / 0.9: 0.253 / 0.253
+
+== CONTEXT and POWER (toll trial; `for` carried)
+  crown/peace 0.527; theocracy 0.520; commune 0.507; famine 0.510; war 0.433; age of faith 0.507; mercantile 0.557; all three FLATTENED 0.527
+  fair                     tilt 0.00 turns 4 bench ('judge',) floor 3 | accuser carried 0.527 | legitimacy {'Crown': -0.04999999999999999} appeal False
+  firm                     tilt 0.47 turns 3 bench ('judge',) floor 3 | accuser carried 0.457 | legitimacy {'Crown': -0.8200000000000001} appeal True
+  rigged                   tilt 0.94 turns 2 bench ('judge2',) floor 0 | accuser carried 0.327 | legitimacy {'Crown': -0.13999999999999996} appeal True
+  rigged, power flattened  tilt 0.00 turns 4 bench ('judge',) floor 3 | accuser carried 0.577 | legitimacy {'Crown': 0.2} appeal False
+
+== F6 the fold performs every write; regard moves both ways; three seasons
+  300 conversations: regard writes up 646, down 1302; write kinds {'case_file:stage': 300, 'regard+': 646, 'reception': 300, 'regard-': 1302, 'strain_carried': 389, 'strife': 300, 'grievance': 127}
+  300 trials: bands {'overwhelming': 79, 'success': 70, 'failure': 119, 'partial': 32}; write kinds {'case_file:stage': 300, 'tenure:detain': 149, 'office:stripped': 79, 'precedent': 268, 'legitimacy+': 149, 'regard-': 3833, 'appeal_weight': 300, 'reception': 300, 'regard+': 855, 'strain_carried': 449, 'strife': 300, 'record:acquittal': 119, 'tenure:oblige': 32, 'docket:adjourned': 32}
+  160 runs (seeds 100..259): the recurring trial carried 0.38 (rigged), 0.46, 0.51; season 3 after a season-1 win 0.48 (n=61), after a loss 0.53 (n=99); appeal returned 99/160; famine after 1.11 (0.50..2.00); greatest strain carried 1.00
+  regard after three seasons: the diplomat toward the reeve mean -0.03 (began +0.20; the grain terms accepted in 10/480 sittings), share of runs where it ROSE 0.03; the scholar toward the reeve mean -0.58 (began 0), range -1.00..-0.05
+
+== TYPES in play, typical outcomes, and the invariants (the cast, effort 3; half automatic, half random choosers)
+  conversation moves {'argue': 308, 'press': 494, 'rest': 36, 'concede': 28} | answers 83 raises 225 | ends {'budget': 119, 'yielded': 28, 'rested': 3} | beats 5.8 | bands {'failure': 68, 'partial': 16, 'success': 32, 'overwhelming': 34}
+  negotiation  moves {'press': 465, 'argue': 326, 'concede': 21, 'rest': 64} | answers 94 raises 232 | ends {'budget': 125, 'yielded': 21, 'rested': 4} | beats 5.8 | bands {None: 129, 'failure': 4, 'success': 17}
+  questioning  moves {'press': 297, 'rest': 132, 'argue': 650, 'concede': 39} | answers 238 raises 412 | ends {'yielded': 39, 'budget': 109, 'rested': 2} | beats 7.5 | bands {'success': 35, 'failure': 66, 'partial': 19, 'overwhelming': 30}
+  inquisition  moves {'press': 284, 'rest': 127, 'argue': 733, 'concede': 56} | answers 305 raises 428 | ends {'budget': 150} | beats 8.0 | bands {'success': 46, 'overwhelming': 62, 'partial': 21, 'failure': 21}
+  trial        moves {'argue': 535, 'press': 500, 'concede': 67, 'rest': 90} | answers 218 raises 317 | ends {'budget': 143, 'rested': 7} | beats 7.9 | bands {'failure': 60, 'partial': 18, 'overwhelming': 39, 'success': 33}
+  debate       moves {'argue': 479, 'press': 577, 'rest': 122} | answers 136 raises 343 | ends {'budget': 140, 'rested': 10} | beats 7.9 | bands {'success': 26, 'partial': 34, 'failure': 64, 'overwhelming': 26}
+  rally        moves {'argue': 388, 'rest': 35} | answers 0 raises 388 | ends {'budget': 115, 'rested': 35} | beats 2.8 | bands {'failure': 62, 'success': 35, 'partial': 31, 'overwhelming': 22}
+  audience     moves {'argue': 290, 'rest': 7} | answers 0 raises 290 | ends {'budget': 143, 'rested': 7} | beats 2.0 | bands {'success': 52, 'partial': 16, 'failure': 34, 'overwhelming': 48}
+  every move {'argue': 3709, 'press': 2617, 'rest': 613, 'concede': 211}; every end {'budget': 1044, 'yielded': 88, 'rested': 68}
+  beats checked 13280; violations {'chain': 0, 'no point': 0, 'answers nothing': 0, 'item not held': 0, 'item not admitted': 0, 'closed issue re-argued': 0, 'move not on the card': 0, 'evasion unpriced': 0, 'a non-deciding speaker moved his own track': 0, "over the card's turns": 0, "verdicts != the card's adjudicators": 0, 'track != start + beats': 0, 'consent with a verdict': 0}
+  settings: 54; inert under perturbation over the battery: ['admit_step', 'gap_step', 'bias_step', 'relevance']
+
+######## checks_v4
+
+== A-139 the invariant
+  refused: a sitting with one character is refused (A-139)
+  an audience with a noble who speaks and then decides both cells: ['j1']; adjudicators ('j1',); verdicts ['j1']; band overwhelming
+  an inquisitor who questions and judges               both cells: ['c1']; adjudicators ('c1',); verdicts ['c1']; band success
+  a questioned man who decides whether to give way     both cells: ['b']; adjudicators ('b',); verdicts ['b']; band failure
+  a seat who speaks in debate and votes                both cells: ['j1']; adjudicators ('j1', 'j2', 'j3'); verdicts ['j1', 'j2', 'j3']; band partial
+
+== the three types re-decided on the merits (before = the consent version of the last pass)
+  conversation (close: the man addressed, a draw on him): bands {'overwhelming': 61, 'failure': 136, 'partial': 37, 'success': 66}; carried 0.423   [before: accepted or impasse, no band in 63%]
+  questioning, the questioned concedes at once   the questioner gets it 0.787; the questioned man's beats charged as evasion 0/300   [before: 1.000 / 0.255 / 0.000; evasion could not fire]
+  questioning, the questioned automatic          the questioner gets it 0.423; the questioned man's beats charged as evasion 6/1057   [before: 1.000 / 0.255 / 0.000; evasion could not fire]
+  questioning, the questioned never concedes     the questioner gets it 0.317; the questioned man's beats charged as evasion 13/1168   [before: 1.000 / 0.255 / 0.000; evasion could not fire]
+  negotiation (consent, kept on the merits): {None: 227, 'success': 50, 'failure': 23}
+
+== a party who decides is steered by his own stake, and the room reads it
+  the noble (speaks against, decides; the plea would cost him his tolls) [shipped]: start -0.60; petitioner carried 0.240; `partial` claims an onlooker (j2) holds: [('partial', 'j1', -0.3)]
+  the noble (speaks against, decides; the plea would cost him his tolls) [bearing flattened]: start +0.00; petitioner carried 0.287; `partial` claims an onlooker (j2) holds: []
+  a played noble (a side AND the adjudicator) rules against his own mind: band success; departure from his own track returned (('j1', 3.76),)
+
+== invariants over the eight rites (cast, effort 3; automatic and random choosers)
+  conversation bands {'failure': 48, 'partial': 10, 'success': 19, 'overwhelming': 23} ends {'budget': 78, 'yielded': 21, 'rested': 1}
+  negotiation  bands {None: 86, 'failure': 3, 'success': 11} ends {'budget': 82, 'yielded': 14, 'rested': 4}
+  questioning  bands {'success': 27, 'failure': 43, 'partial': 11, 'overwhelming': 19} ends {'yielded': 28, 'budget': 70, 'rested': 2}
+  inquisition  bands {'overwhelming': 35, 'partial': 14, 'failure': 22, 'success': 29} ends {'budget': 91, 'rested': 9}
+  trial        bands {'failure': 40, 'partial': 12, 'overwhelming': 26, 'success': 22} ends {'budget': 95, 'rested': 5}
+  debate       bands {'success': 16, 'partial': 24, 'failure': 46, 'overwhelming': 14} ends {'budget': 90, 'rested': 10}
+  rally        bands {'failure': 41, 'success': 22, 'partial': 20, 'overwhelming': 17} ends {'budget': 77, 'rested': 23}
+  audience     bands {'failure': 46, 'success': 21, 'partial': 12, 'overwhelming': 21} ends {'budget': 100}
+  beats 9287; sittings in which someone held both cells 800/1600; violations {'chain': 0, 'no point': 0, 'closed issue re-argued': 0, 'move not on the card': 0, 'evasion unpriced': 0, 'a non-deciding speaker moved his own track': 0, 'one character': 0, "verdicts != the card's adjudicators": 0, 'track != start + beats': 0}
+
+######## checks_v5
+
+== (a) the VALUE of Attunement: the same people and menu; the chooser takes his perceived-best option; carried
+  trial            shipped: 1/4/7 = 0.327/0.360/0.440, 7-1 +0.113 (se 0.039) | control: perceived = true: 1/4/7 = 0.390/0.390/0.390, 7-1 +0.000 (se 0.040)
+  conversation     shipped: 1/4/7 = 0.367/0.387/0.460, 7-1 +0.093 (se 0.040) | control: perceived = true: 1/4/7 = 0.377/0.380/0.383, 7-1 +0.007 (se 0.040)
+  audience         shipped: 1/4/7 = 0.323/0.330/0.347, 7-1 +0.023 (se 0.039) | control: perceived = true: 1/4/7 = 0.373/0.373/0.373, 7-1 +0.000 (se 0.039)
+  tell (abridged)  shipped: 1/4/7 = 0.157/0.180/0.223, 7-1 +0.067 (se 0.032) | control: perceived = true: 1/4/7 = 0.227/0.227/0.227, 7-1 +0.000 (se 0.034)
+
+== (b) calibration: correlation of perceived with true worth over the options of first-turn menus, by Attunement
+  Attunement 1: corr +0.36; mean error +0.01; s.d. of error 1.75
+  Attunement 4: corr +0.56; mean error +0.00; s.d. of error 1.01
+  Attunement 7: corr +0.96; mean error -0.00; s.d. of error 0.21
+
+== (c) the bias is a character (Attunement 2; trial; share of his beats)
+  an optimist                                argue 0.34 press 0.60 rest 0.03 concede 0.03 | carried 0.373
+  no bias                                    argue 0.29 press 0.54 rest 0.11 concede 0.06 | carried 0.353
+  a pessimist                                argue 0.20 press 0.40 rest 0.31 concede 0.09 | carried 0.367
+  an optimist who reads well (Attunement 7)  argue 0.16 press 0.64 rest 0.09 concede 0.10 | carried 0.393
+  a pessimist who reads well                 argue 0.13 press 0.61 rest 0.16 concede 0.11 | carried 0.380
+
+== (e) no leak
+  View fields ['n', 'mover', 'side', 'issue', 'live_theirs', 'live_own', 'options', 'own', 'esteem', 'weary', 'awe', 'broke', 'visible', 'mood', 'odds', 'intent', 'turns_left', 'acc']
+  poor readers (n=212): correlation of the errors of two options: argue consequence vs argue authority -0.009; argue vs press on one ground -0.054; an option vs the mood -0.077
+
+== A-142 FRAMING: the frame is picked from his believed reading and lands on the listener's true interior
+  [shipped] frame is the listener's true best at Attunement 1/4/7: 0.66/0.82/0.99; realised fit +0.67/+0.83/+0.99; carried (arguing consequence throughout) 1 -> 7: 0.550 -> 0.627 (+0.077, se 0.040)
+  [control: a perfect reading (read_blur 0)] frame is the listener's true best at Attunement 1/4/7: 1.00/1.00/1.00; realised fit +1.00/+1.00/+1.00; carried (arguing consequence throughout) 1 -> 7: 0.627 -> 0.627 (+0.000, se 0.039)
+  [control: no reading (read_blur 40)] frame is the listener's true best at Attunement 1/4/7: 0.38/0.40/0.56; realised fit +0.34/+0.36/+0.56; carried (arguing consequence throughout) 1 -> 7: 0.477 -> 0.530 (+0.053, se 0.041)
+  the same reason (consequence) to two listeners: framed on `grain` for the hungry man (lands +1.00) and on `coin` for the money-minded seat (lands +1.00); the wrong way round they land +0.10 and -0.30; a frame he does not hold at all -0.50
+  a split room dilutes: rally to the guild alone              framed on `trade`: mean landing +1.00; by body [('guildsmen', 1.0)]
+  a split room dilutes: rally to the guild and the toll men   framed on `trade`: mean landing +0.50; by body [('guildsmen', 1.0), ('toll_men', -0.5)]
+  a split room dilutes: rally to guild, toll men, townsfolk   framed on `trade`: mean landing +0.10; by body [('guildsmen', 1.0), ('toll_men', -0.5), ('townsfolk', -0.5)]
+  no leak: `frame` is called with his accuracy and his own normals; the View shows the frame chosen and its perceived worth, never a listener's weights
+
+######## checks_v6
+== each attribute's own operand on the speech: carried at 1 -> 7, arguing consequence; and with its own operand off
+  reason     a private exchange (the tell): 0.313->0.847 (+0.533); off +0.223; the operand's own share +0.310 | before a bench: 0.387->0.810 (+0.423); off +0.190; the operand's own share +0.233 | before a crowd: 0.297->0.533 (+0.237); off +0.060; the operand's own share +0.177   (se of a difference 0.039)
+  attunement a private exchange (the tell): 0.587->0.680 (+0.093); off +0.000; the operand's own share +0.093 | before a bench: 0.657->0.740 (+0.083); off +0.000; the operand's own share +0.083 | before a crowd: 0.383->0.457 (+0.073); off +0.000; the operand's own share +0.073   (se of a difference 0.039)
+  presence   a private exchange (the tell): 0.600->0.693 (+0.093); off +0.080; the operand's own share +0.013 | before a bench: 0.683->0.713 (+0.030); off +0.010; the operand's own share +0.020 | before a crowd: 0.247->0.617 (+0.370); off +0.217; the operand's own share +0.153   (se of a difference 0.039)
+  grace      a private exchange (the tell): 0.573->0.650 (+0.077); off +0.000; the operand's own share +0.077 | before a bench: 0.640->0.730 (+0.090); off +0.000; the operand's own share +0.090 | before a crowd: 0.307->0.433 (+0.127); off +0.000; the operand's own share +0.127   (se of a difference 0.039)
+== four strengths, the SAME argument (consequence) to the SAME listener (the hungry man), the same key: the beat record
+  (key 1: the first of 0..49 on which a poor reader frames differently from a good one; he does so on 18 of 50)
+  ordinary      relevance 1.00 | framed on grain  | heard 0.85 | esteem -1.00 | margin with the judge -2.67
+  Reason 7      relevance 2.00 | framed on grain  | heard 0.85 | esteem -1.00 | margin with the judge -1.24
+  Attunement 7  relevance 1.00 | framed on grain  | heard 0.85 | esteem -1.00 | margin with the judge -2.67
+  Attunement 1  relevance 1.00 | framed on coin   | heard 0.85 | esteem -1.00 | margin with the judge -4.69
+  Presence 7    relevance 1.00 | framed on grain  | heard 1.00 | esteem -1.00 | margin with the judge -1.91
+  Grace 7       relevance 1.00 | framed on grain  | heard 0.85 | esteem +0.00 | margin with the judge -2.35
+
+######## checks_v7_adj
+
+== A-144 A. the judge's REASON validates: `for` is plain but sound (Reason 7, Grace 2), `against` polished but unsound (Reason 1, Grace 7); both argue consequence; `for` carried
+  judge's Reason 1 -> 7: 0.607 -> 0.793 (+0.187, z +5.1) | control sense_step 0 (he cannot tell): 0.787 -> 0.787 (+0.000, z +0.0)
+== B. the judge's FOCUS filters: the same merits (`for` argues), with and without noise (the other side only presses; `for` is Focus 1 in a famine)
+  no noise (the other side rests, peace): judge's Focus 1 -> 7: 0.697 -> 0.687 (-0.010, z -0.3)
+  theatre alone (the other side presses a Will-2 `for` every turn; his wandering not counted): 0.570 -> 0.527 (-0.043, z -1.1) | control: a rattle and a failed press move no room: 0.527 -> 0.527 (+0.000, z +0.0)
+  theatre and the wandering it causes, together (shipped): 0.570 -> 0.500 (-0.070, z -1.7)
+  `for` wanders (Focus 1, famine): 0.653 -> 0.453 (-0.200, z -5.0) | control off_step 0: 0.670 -> 0.670 (+0.000, z +0.0)
+== C. the judge's ATTUNEMENT perceives the participant: `for` carried
+  a strained liar (knows it false; carries two fresh rattles) judge's Attunement 1 -> 7: 0.673 -> 0.270 (-0.403, z -10.8) | control ploy_step 0: 0.693 -> 0.693 (+0.000, z +0.0)
+  a comfortable honest man                                   judge's Attunement 1 -> 7: 0.693 -> 0.693 (+0.000, z +0.0) | control ploy_step 0: 0.693 -> 0.693 (+0.000, z +0.0)
+  a played judge of Attunement 4 is shown tells (('a', 0.5), ('b', 0.25))
+== D. the judge's PRESENCE and STATION intimidate: the petitioner's carried at an audience; his View.awe
+  a Will-2 petitioner before a Presence-7 judge of rung 5            awe 2.26; audience carried 0.397; in a trial where the other side presses him: rattles a sitting 2.31, carried 0.500
+  a Will-7 peer (rung 5) before the same judge                       awe 0.00; audience carried 0.500; in a trial where the other side presses him: rattles a sitting 0.42, carried 0.747
+  the Will-2 petitioner, the judge's Presence and office FLATTENED   awe 0.26; audience carried 0.500; in a trial where the other side presses him: rattles a sitting 2.18, carried 0.557
+  the Will-2 petitioner, awe_step 0                                  awe 0.00; audience carried 0.450; in a trial where the other side presses him: rattles a sitting 2.05, carried 0.660
+  the venue: the same Will-2 man before a gallery of commoner peers who decide (a rally): awe 0.01
+== E. the judge's GRACE is how his verdict is RECEIVED: (accurate, wrong) x (gracious, brutish); a rung-5 judge; means over sittings
+  accurate x gracious (Grace 7) played judge: n=300: legitimacy +0.02, compliance 0.83, appeal weight 0.17, the crowd's regard for him +0.05, his faction's standing -0.03
+  wrong    x gracious (Grace 7) played judge: n=300: legitimacy -0.03, compliance 0.77, appeal weight 0.29, the crowd's regard for him +0.02, his faction's standing -0.03
+  accurate x brutish (Grace 1)  played judge: n=300: legitimacy -0.47, compliance 0.00, appeal weight 1.17, the crowd's regard for him -0.23, his faction's standing -0.23
+  wrong    x brutish (Grace 1)  played judge: n=300: legitimacy -0.83, compliance 0.00, appeal weight 2.07, the crowd's regard for him -0.41, his faction's standing -0.23
+  accurate x brutish, a SIMULATED judge (his own draw): n=171: legitimacy -0.47, compliance 0.00, appeal weight 1.17, the crowd's regard for him -0.23, his faction's standing -0.23
+  control, Grace flattened to 4 (accurate): n=300: legitimacy -0.23, compliance 0.33, appeal weight 0.67, the crowd's regard for him -0.10, his faction's standing -0.13; (wrong): n=300: legitimacy -0.44, compliance 0.31, appeal weight 1.18, the crowd's regard for him -0.20, his faction's standing -0.13
+== the critic's rows: `for` chooser against the automatic other side; and a party who decides arguing against resting
+  trial: argue every turn 0.243; rest every turn 0.300; automatic 0.353
+  debate: argue every turn 0.180; rest every turn 0.182; automatic 0.280
+  rally: argue every turn 0.297; rest every turn 0.293; automatic 0.278
+  debate, all-mid, automatic: moves {'press': 944, 'argue': 411, 'rest': 223}
+  conversation: the man addressed                `for` carried when he argues every turn 0.355, rests 0.312 (+0.043)
+  questioning: the questioned man                `for` carried when he argues every turn 0.402, rests 0.367 (+0.035)
+  audience: the noble who is the other party     `for` carried when he argues every turn 0.248, rests 0.273 (-0.025)
+  control: the accused in a trial (not a decider) `for` carried when he argues every turn 0.485, rests 0.408 (+0.077)
+  relevance is magnitude, not sign: the tell on consequence, the matter helps the listener: Reason 1/4/7 = 0.288/0.642/0.857
+  relevance is magnitude, not sign: the tell on consequence, the matter hurts him: Reason 1/4/7 = 0.027/0.113/0.352
+  refused: one person as both parties: ValueError: the two parties to a matter are one character: refused (A-139)
+  refused: an abridged act whose only decider is the speaker: ValueError: an abridged act needs someone addressed other than the speaker
+  leak: a poor reader's View.esteem against an opponent of Grace 1: mean +2.97, s.d. 0.41 (true +3.00)
+  leak: a poor reader's View.esteem against an opponent of Grace 4: mean -0.03, s.d. 0.41 (true +0.00)
+  leak: a poor reader's View.esteem against an opponent of Grace 7: mean -1.03, s.d. 0.41 (true -1.00)
+== A-145 SILENCE: the same matter and persons (trial, all-mid); `for` carried when the accused ...
+  crown     (silence: refusal) [shipped] rests 0.400, argues 0.428, automatic 0.327 | [silence rule off] rests 0.298, argues 0.435, automatic 0.313
+  theocracy (silence: admits) [shipped] rests 0.415, argues 0.423, automatic 0.328 | [silence rule off] rests 0.300, argues 0.423, automatic 0.315
+  commune   (silence: free) [shipped] rests 0.300, argues 0.423, automatic 0.315 | [silence rule off] rests 0.300, argues 0.423, automatic 0.315
+  recorded: contumacy claims the judge holds 0; the judge's regard for the silent man +0.00
+  a rally (nothing to answer): rest costs tempo only: card.silence = free
+  a party who decides and stays silent (the questioned man): the questioner gets it 0.418 when he is silent, 0.407 when he answers
+== A-146 a broken temper cannot hold its tongue: a debate; `for` presses his first two turns then argues; the other man rests whenever he may
+  the provoked man ordinary (Will 4, Grace 4) [rule on] provoker carried 0.257; his beats made with temper broken 0.16; rested 0.84 | [rule off] provoker carried 0.223; his beats made with temper broken 0.00; rested 1.00   (2 s.e. of a difference 0.053)
+  the provoked man low (Will 2, Grace 2)      [rule on] provoker carried 0.565; his beats made with temper broken 0.84; rested 0.16 | [rule off] provoker carried 0.425; his beats made with temper broken 0.00; rested 1.00   (2 s.e. of a difference 0.053)
+  the provoked man high (Will 7, Grace 7)     [rule on] provoker carried 0.093; his beats made with temper broken 0.00; rested 1.00 | [rule off] provoker carried 0.093; his beats made with temper broken 0.00; rested 1.00   (2 s.e. of a difference 0.053)

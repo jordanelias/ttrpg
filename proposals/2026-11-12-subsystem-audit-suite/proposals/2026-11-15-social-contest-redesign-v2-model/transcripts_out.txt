@@ -1,0 +1,61 @@
+CARD trial | judicial | a charge borne by `for` | reply {'for': 'must', 'against': 'must'} | issues ('fact', 'definition', 'justification') | silence: refusal | standard 5.0 | Reason's share by ground {'evidence': 0.8, 'consequence': 0.7, 'authority': 0.4, 'solidarity': 0.2}
+     arranged by scholar (tilt 0.0) | stake detain | room (('scholar', 'speaks for', 0.0), ('diplomat', 'speaks against', 0.0), ('judge', 'judges', 6.0), ('guildsmen', 'attends', 0.0), ('toll_men', 'attends', 0.0), ('clerk', 'attends', 0.0)) | barred () | admits ('record', 'testimony', 'oath', 'deed', 'precedent', 'law') | close bench by ('judge',) | 4 turns | odds before an unmoved bench 0.277
+[trial: a judicial proceeding on a charge, arranged by scholar; decided by judge; 4 turn(s) each]
+  1. [fact] scholar presses diplomat from what is owed: diplomat holds. (room -0.14)
+  2. [fact] diplomat presses scholar from what is owed: scholar is rattled. (room -0.40)
+  3. [fact] scholar concedes fact. (room -0.48)
+  4. [definition] diplomat presses scholar from what it will bring: scholar holds. (room -0.31)
+  5. [definition] scholar raises point 0 on definition from what is owed (framed on law): it falls flat; he wanders from the point. (room -0.65)
+  6. [definition] diplomat presses scholar from what is owed: scholar is rattled. (room -0.71)
+  7. [definition] (he can hold his tongue no longer) scholar presses diplomat as one of their own: diplomat is rattled. (room -1.00)
+  8. [definition] diplomat rests. (room -1.00)
+  -> ended budget
+  => band failure; verdicts [('judge', -5.89)]; rattles [('scholar', 2), ('diplomat', 1)]
+
+CARD negotiation | dyadic | a offer borne by `for` | reply {'for': 'must', 'against': 'must'} | issues ('the terms',) | silence: free | standard 4.0 | Reason's share by ground {'evidence': 0.8, 'consequence': 0.7, 'authority': 0.4, 'solidarity': 0.2}
+     arranged by orator (tilt 0.0) | stake oblige | room (('orator', 'speaks for', 0.0), ('diplomat', 'speaks against', 0.0)) | barred () | admits ('record', 'debt', 'oath', 'title', 'treaty', 'state_of_realm') | close consent by accept | 3 turns | odds before an unmoved bench None
+[negotiation: a dyadic proceeding on a offer, arranged by orator; decided by each party`s own accept; 3 turn(s) each]
+  1. [the terms] orator raises point 0 on the terms as one of their own: it half lands. (room +0.15)
+  2. [the terms] diplomat presses orator from what it will bring: orator is rattled. (room -0.00)
+  3. [the terms] orator raises point 1 on the terms as one of their own: it lands. (room +0.29)
+  4. [the terms] diplomat concedes the terms and yields. (room +1.00)
+  -> ended yielded by diplomat
+  => band success; verdicts []; rattles [('orator', 1)]
+
+CARD rally | deliberative | a theme borne by `for` | reply {'for': 'raise'} | issues ('the theme',) | silence: free | standard 4.0 | Reason's share by ground {'evidence': 0.3, 'consequence': 0.2, 'authority': 0.0, 'solidarity': 0.0}
+     arranged by orator (tilt 0.0) | stake none | room (('orator', 'speaks for', 0.0), ('guildsmen', 'judges', 0.0), ('toll_men', 'judges', 0.0), ('townsfolk', 'judges', 0.0)) | barred (('for', 'press'), ('for', 'concede')) | admits ('deed', 'rumour', 'state_of_realm', 'oath') | close hearers by ('guildsmen', 'toll_men', 'townsfolk') | 3 turns | odds before an unmoved bench 0.277
+[rally: a deliberative proceeding on a theme, arranged by orator; decided by guildsmen, toll_men, townsfolk; 3 turn(s) each]
+  1. [the theme] orator raises point 0 on the theme from what it will bring (framed on grain): it falls flat. (room -0.07)
+  2. [the theme] orator raises point 1 on the theme as one of their own: it half lands. (room -0.04)
+  3. [the theme] orator rests. (room -0.04)
+  -> ended rested
+  => band failure; verdicts [('guildsmen', -1.34), ('toll_men', 1.39), ('townsfolk', -1.03)]; rattles []
+
+CARD debate | deliberative | a motion borne by `for` | reply {'for': 'may', 'against': 'may'} | issues ('the question',) | silence: free | standard 5.0 | Reason's share by ground {'evidence': 0.5, 'consequence': 0.4, 'authority': 0.1, 'solidarity': 0.0}
+     arranged by orator (tilt 0.0) | stake decree | room (('orator', 'speaks for', 0.0), ('diplomat', 'speaks against', 0.0), ('judge', 'judges', 6.0), ('judge2', 'judges', 4.0), ('judge3', 'judges', 4.0), ('guildsmen', 'attends', 0.0)) | barred () | admits ('precedent', 'law', 'treaty', 'record', 'state_of_realm', 'rumour') | close declared by ('judge', 'judge2', 'judge3') | 4 turns | odds before an unmoved bench 0.277
+[debate: a deliberative proceeding on a motion, arranged by orator; decided by judge, judge2, judge3; 4 turn(s) each]
+  1. [the question] orator presses diplomat as one of their own: diplomat holds. (room -0.09)
+  2. [the question] diplomat presses orator from what it will bring: orator holds. (room +0.10)
+  3. [the question] orator presses diplomat from what is owed: diplomat holds. (room -0.09)
+  4. [the question] diplomat presses orator from what it will bring: orator holds. (room +0.10)
+  5. [the question] orator presses diplomat from what is owed: diplomat is rattled. (room +0.37)
+  6. [the question] diplomat rests. (room +0.37)
+  7. [the question] orator presses diplomat as one of their own: diplomat holds. (room +0.19)
+  8. [the question] diplomat presses orator from what it will bring: orator holds. (room +0.37)
+  -> ended budget
+  => band failure; verdicts [('judge', -3.61), ('judge2', 0.39), ('judge3', -4.09)]; rattles [('diplomat', 1)]
+
+CARD questioning | judicial | a question borne by `for` | reply {'for': 'may', 'against': 'must'} | issues ('the question',) | silence: refusal | standard 4.0 | Reason's share by ground {'evidence': 0.8, 'consequence': 0.7, 'authority': 0.4, 'solidarity': 0.2}
+     arranged by fox (tilt 0.0) | stake none | room (('fox', 'speaks for', 0.0), ('bully', 'speaks against', 3.5)) | barred (('for', 'concede'), ('against', 'press')) | admits ('testimony', 'record', 'deed', 'rumour', 'confession') | close hearers by ('bully',) | 4 turns | odds before an unmoved bench 0.277
+[questioning: a judicial proceeding on a question, arranged by fox; decided by bully; 4 turn(s) each]
+  1. [the question] fox presses bully from what it will bring: bully holds. (room -0.37)
+  2. [the question] bully raises point 0 on the question as one of their own: it lands. (room -1.00)
+  3. [the question] fox answers bully's point 0 (solidarity) as one of their own: it half lands. (room -0.97)
+  4. [the question] bully raises point 1 on the question from what is owed (framed on faith): it falls flat. (room -0.90)
+  5. [the question] fox presses bully from what it will bring: bully is rattled. (room -0.60)
+  6. [the question] bully raises point 2 on the question from what it will bring (framed on tolls): it lands. (room -1.00)
+  7. [the question] fox answers bully's point 2 (consequence) as one of their own: it falls flat. (room -1.00)
+  8. [the question] bully raises point 3 on the question as one of their own: it falls flat. (room -1.00)
+  -> ended budget
+  => band success; verdicts [('bully', 1.21)]; rattles [('bully', 1)]
+

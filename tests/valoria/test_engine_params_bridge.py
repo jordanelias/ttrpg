@@ -32,8 +32,11 @@ tree at large — that generality is what made the old checker apparatus about a
 """
 from __future__ import annotations
 
+import ast
 import collections
 import functools
+import importlib
+import json
 import pathlib
 import re
 
@@ -54,8 +57,9 @@ PARAMS = REPO / 'engine' / 'engine_params'
 ENGINE_READERS = {
     'composition.json': {'engine/substrate/composition.py'},
     'descriptors.json': {'engine/substrate/descriptors.py'},
-    # CP-T03-03: the `kit` section (weapon keys, armour tiers, the Combatant's default kit) has one leaf reader.
-    # The other sections (`cfg`, `core`, `attributes`) are read by no engine module and stay that way.
+    # CP-T03-03: the `kit` section (weapon keys, armour tiers, the Combatant's default kit) and `attributes.end.default`
+    # (a fight's Endurance default, B04.14) have one leaf reader. The other sections (`cfg`, `core`) and the rest of
+    # `attributes` are read by no engine module and stay that way.
     'combat_engine_v1.json': {'engine/substrate/combat_kit.py'},
     # ⚠ `world_initial_state.json` STOOD HERE and is GONE (plan position `29d-ii`, 2026-10-01): its one
     # reader, `engine/substrate/world_initial_state.py`, lost its last production importer when
@@ -106,7 +110,8 @@ AUTHORED_PARSERS = {
 _PATHISH = re.compile(r"(os\.path\.join|Path\(|open\(|load_yaml|safe_load|read_text|/ ['\"])")
 #: A name bound to a string literal — `_PATHS = ('references/x.yaml',)`, `SRC = '...'`.
 _BINDING = re.compile(r"[A-Za-z_][A-Za-z0-9_]*\s*(?::[^=]+)?=\s*[\(\[]?\s*['\"]")
-_OUT_BINDING = re.compile(r"^\s*(?:OUT|OUT_PATH|DEST|TARGET)\s*=.*$", re.M)
+# B03.68: `export_engine_params.py` has a second output, bound as `THREADWORK_OUT_PATH`; a `<NAME>_OUT_PATH` is one too.
+_OUT_BINDING = re.compile(r"^\s*(?:[A-Z_]+_OUT_PATH|OUT|OUT_PATH|DEST|TARGET)\s*=.*$", re.M)
 
 
 def _artifacts():
@@ -295,3 +300,69 @@ def test_the_target_state_is_recorded_as_distance_not_as_a_claim():
         f'readers outside engine/substrate/ are now {non_leaf}. Every cooked artifact must be read '
         f'by exactly one leaf under engine/substrate/; a reader anywhere else is the shape '
         f'`key_types.json` had before ED-IN-0232 removed it.')
+
+
+# ── B14.12: the export carries the weapons, the derived quantities and the module constants ──────────────────────
+#: The five modules whose DEFINED constants the exporter collects into sections of the same name, by the syntax tree.
+_CONSTANT_MODULES = ('weapon_physics', 'combat_systems', 'combatant', 'ability_primitives', 'traditions')
+
+
+def _combat_export():
+    return json.loads((PARAMS / 'combat_engine_v1.json').read_text(encoding='utf-8'))['sections']
+
+
+def _defined_uppercase_names(module):
+    """Public UPPERCASE names bound by an assignment in the module's OWN body (not `dir()`, which would sweep in
+    what a module merely imports). Written here by its own walk, not borrowed from the exporter under test."""
+    tree = ast.parse((REPO / 'modules' / 'combat' / f'{module}.py').read_text(encoding='utf-8'))
+    names = set()
+    for node in tree.body:
+        targets = node.targets if isinstance(node, ast.Assign) else [node.target] if isinstance(node, ast.AnnAssign) else []
+        for target in targets:
+            names |= {n.id for n in ast.walk(target) if isinstance(n, ast.Name)}
+    return {n for n in names if n.isupper() and not n.startswith('_')}
+
+
+def _plain(value):
+    """A constant as JSON holds it: tuples are arrays, dict keys are strings, a set is a sorted array (the order JSON
+    cannot give a set; `traditions.ADJACENT` is a set of frozensets)."""
+    if isinstance(value, dict):
+        return {str(k): _plain(v) for k, v in value.items()}
+    if isinstance(value, (set, frozenset)):
+        return sorted((_plain(v) for v in value), key=lambda v: json.dumps(v, sort_keys=True))
+    if isinstance(value, (list, tuple)):
+        return [_plain(v) for v in value]
+    return value
+
+
+def test_kit_weapons_lists_no_halfsword_form():
+    """`kit.weapons` is the records without a `base` and `kit.forms` maps each form to its base: a form is a grip the
+    engine switches into, never a thing a person is armed with (`rosters.yaml: arms_kinds` is validated against
+    `combat_kit.WEAPONS`). Forms are read off the ORACLE's records, so the test can observe the export listing one."""
+    from engine.substrate import combat_kit
+    from modules.combat import weapons as W
+    forms = {n: r['base'] for n, r in W.WEAPONS.items() if 'base' in r}
+    assert len(forms) >= 4 and 'longsword_halfsword' in forms, f'the oracle holds no half-sword form to test against: {forms}'
+    kit = _combat_export()['kit']
+    assert set(kit['weapons']).isdisjoint(forms), f"forms listed as kit weapons: {sorted(set(kit['weapons']) & set(forms))}"
+    assert set(kit['weapons']) == set(W.WEAPONS) - set(forms)
+    assert kit['forms'] == forms
+    assert combat_kit.WEAPONS == frozenset(kit['weapons']) and dict(combat_kit.FORMS) == forms
+    assert combat_kit.FIELDS['weapon'].isdisjoint(combat_kit.FORMS)
+
+
+def test_every_constant_defined_in_the_five_modules_is_exported():
+    """The falsifier's second clause: a constant defined in one of the five modules and absent from its section. Each
+    section is exactly the module's own public uppercase assignments, and every one carries its live value."""
+    sections = _combat_export()
+    checked = 0
+    for module in _CONSTANT_MODULES:
+        defined = _defined_uppercase_names(module)
+        exported = sections[module]
+        assert set(exported) == defined, (
+            f'{module}: missing {sorted(defined - set(exported))}, not defined there {sorted(set(exported) - defined)}')
+        live = importlib.import_module(f'modules.combat.{module}')
+        for name in sorted(defined):
+            assert exported[name] == _plain(getattr(live, name)), f'{module}.{name} exported with a stale value'
+            checked += 1
+    assert checked >= 50, f'only {checked} constants were graded; the walk collapsed'

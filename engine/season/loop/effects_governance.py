@@ -1,7 +1,7 @@
 """`season.loop.effects_governance` -- office/seat lifecycle: confer, establish, release, revoke,
 pardon, convene, oblige, requisition.
 
-EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds every effect that opens or
+Holds every effect that opens or
 closes a `hold`/`oblige` Tenure on an Office or Seat, schedules a sitting, or moves a requisition into a
 seat's own treasury -- the governance slice of the verb table. `_closing` (`release`/`revoke`'s one
 shared write) stays local here rather than in `effects_shared.py`: nothing outside this file's own
@@ -23,7 +23,7 @@ from ..state.gate import (NO_CHANGE, TENURE_CLOSED, Change, Subject, claimable_s
                           revocation_disposal)
 from ..state.ids import H
 
-from .effects_shared import _exercised_office, _new_oblige_term, _operand, _shift, effect_for
+from .effects_shared import _exercised_office, _new_oblige_term, _operand, _scaled, _shift, effect_for
 
 # --- THE GOVERNANCE SLICE'S EFFECTS. `dispatch` needs none: Part E gives it `writes: []`, so an
 # order is an EMISSION and nothing else, which is `L1` in one row -- a dispatch does not move a
@@ -59,16 +59,14 @@ def _declared_term(w: "World", a: "Act") -> "Optional[Term]":
 def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """Seats an office: a new `hold` Tenure opens, and any prior holder's closes.
 
-    ⚠ IT DOES NOT CALL `w.write`, AND IT NO LONGER MUTATES WHERE IT DECIDES. Before G4 the fold
-    called it INSIDE the gate's `apply()` and it returned the ids it had touched; a nested
-    `w.write` there was a write inside a write, which the fold refused (my first version did both).
-    Now it returns a `Change` and the gate applies it.
+    ⚠ IT DOES NOT CALL `w.write`, AND IT DOES NOT MUTATE WHERE IT DECIDES: it returns a `Change` and
+    the gate applies it (a nested `w.write` would be a write inside a write, which the fold
+    refuses).
 
     G4 -- WHAT IT NAMES: THE EDGES, EACH WITH THE KIND IT EARNS. Every live `hold` on the office
-    (`tenure.closed`) and the new one (`tenure.opened`), opened-first as the old mapping reported
-    them. Each is an `edge` subject, judged by G3's diff: a closed hold's `until` moves, the new
-    hold appears. So conferring onto an UNHELD office names no closure and earns no
-    `tenure.closed`, which the old per-kind mapping did by hand. It cannot be a no-op in practice
+    (`tenure.closed`) and the new one (`tenure.opened`), opened first. Each is an `edge` subject,
+    judged by G3's diff: a closed hold's `until` moves, the new hold appears. So conferring onto an
+    UNHELD office names no closure and earns no `tenure.closed`. It cannot be a no-op in practice
     -- the new hold always opens -- but if it were, it would refuse like any other.
 
     ⚠ G3 -- BOTH ITS WRITES ARE ON EDGES SOMEBODY ELSE OWNS, AND EACH IS DECLARED. The write gate's
@@ -78,23 +76,15 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     seat's revocation basis exercised through the same `via` (or `T-m`, where the incumbent is the
     actor). Without them the gate raises `NotYours` and puts both edges back. `_req_confer` asks the
     same two predicates first, so the shipped fold refuses (and emits) before this ever runs."""
-    # ⚠ `to` WAS `d.get("to") or a.actor` -- a silent default that seated the ACTOR whenever the
-    # act named nobody, which is the same class as `_eff_transfer`'s four and is deleted with
-    # them. A conferral onto nobody is a malformed act, not a self-conferral.
-    # ⚠ THIS CHANGE IS A DELIBERATE EXTRA AND NOT A PATH `H-94` MADE REACHABLE; RECLASSIFIED BY
-    # THE `W-C` ADVERSARIAL PASS, because filing it as a consequence overstates what closing the
-    # operand channel did. NO COMPUTED ACT CAN REACH THIS EFFECT: `confer` is untyped, `office`
-    # is not in `rosters.yaml: requires_operands` so `operands_for` can never derive one, and
-    # `_req_confer` returns False when the payload names none -- `corpus_run`'s own output lists
-    # `confer` among the verbs "foldable but never even attempted". The improvement is real (a
-    # silent self-conferral becomes a loud `InstrumentDefect`) and nothing measurable moved.
-    # ⚠ IN-53 MAKES THAT STALE: a computed `confer` names its office on `subject` (`office_named_by`,
-    # formed on a vacant seat the question he answers carries) and its conferee on `to` -- the
-    # row's `counterparty: to`, a person the conferrer knows or the conferrer himself (D2,
-    # `counterparty_may_be_self`: an EXPLICIT self-conferral, named on `to`, which this body seats
-    # like any other; what stays deleted is the silent default for an act naming nobody). `_operand`
-    # still raises for a hand-built act naming none, but the fold's counterparty clause refuses that
-    # act first (`confer.refused`), so the raise is only the backstop.
+    # ⚠ THERE IS NO SILENT DEFAULT FOR `to`: seating the ACTOR whenever the act named nobody would
+    # be the same class as `_eff_transfer`'s defaulted operands. A conferral onto nobody is a
+    # malformed act, not a self-conferral. A computed `confer` names its office on `subject`
+    # (`office_named_by`, formed on a vacant seat the question he answers carries) and its
+    # conferee on `to` -- the row's `counterparty: to`, a person the conferrer knows or the
+    # conferrer himself (D2, `counterparty_may_be_self`: an EXPLICIT self-conferral, named on
+    # `to`, which this body seats like any other). `_operand` still raises for a hand-built act
+    # naming none, but the fold's counterparty clause refuses that act first (`confer.refused`),
+    # so the raise is only the backstop.
     obj, to = office_named_by(a), _operand(a, "to")
     if not obj or obj not in w.offices:
         return NO_CHANGE
@@ -118,23 +108,20 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
         for t in closed:
             t.until = w.tick
         w.add_tenure(nt)
-    # ⚠ PER-KIND. Conferring onto an UNHELD office closes nothing, and returning a flat list made
-    # the fold publish `tenure.closed` anyway -- a state change that did not happen, which is the
-    # fabricated-`person.died` class committed inside the fix for it. Each subject now carries the
-    # kind it earns, and a kind no moved subject earned is not emitted (`loop/resolve.py::_fold`).
+    # ⚠ PER-KIND. Conferring onto an UNHELD office closes nothing, and a flat list would make the
+    # fold publish `tenure.closed` anyway -- a state change that did not happen (the
+    # fabricated-`person.died` class). Each subject carries the kind it earns, and a kind no moved
+    # subject earned is not emitted (`loop/resolve.py::_fold`).
     #
-    # ⚠ `nt.id`, NOT `[obj, to]` -- KEPT AS THE TENURE'S OWN ID, DELIBERATELY, AFTER A REJECTED
-    # ALTERNATIVE. A first version of this fix reported `[obj, to]` (the office and the new
-    # holder) so a witness's claim would name something legible. It was wrong: `_apply_write`
-    # mints a Receipt against THIS write pair's field (`Tenure.until`, `verb_table.yaml`'s first
-    # `writes:` entry for `confer`) for every id an effect reports, so `[obj, to]` minted
-    # `(off_dicastery, set, Act, until)` and `(p_mid, set, Act, until)` -- Receipts asserting that
-    # an OFFICE and a PERSON each had a `Tenure.until` write, which did not happen to either; only
-    # the new Tenure did. That is the ID-9 class of defect this file's other comments name --
-    # "an Event reporting a state change that did not happen" -- one seam over, in the Receipt
-    # rather than the Event. Found by an adversarial critique of the first version. The Receipt
-    # must name what was ACTUALLY written; H-71's others-half is closed at the READER instead --
-    # see `epistemic.claim_subjects`'s Tenure-lifecycle expansion, which turns a `tenure.opened`/
+    # ⚠ `nt.id`, NOT `[obj, to]`: reporting the office and the new holder would read legibly, but
+    # `_apply_write` mints a Receipt against THIS write pair's field (`Tenure.until`,
+    # `verb_table.yaml`'s first `writes:` entry for `confer`) for every id an effect reports, so
+    # `[obj, to]` would mint `(off_dicastery, set, Act, until)` and `(p_mid, set, Act, until)` --
+    # Receipts asserting that an OFFICE and a PERSON each had a `Tenure.until` write, which did not
+    # happen to either. That is the ID-9 class of defect ("an Event reporting a state change that
+    # did not happen") in the Receipt rather than the Event. The Receipt must name what was
+    # ACTUALLY written; H-71's others-half is closed at the READER instead -- see
+    # `epistemic.claim_subjects`'s Tenure-lifecycle expansion, which turns a `tenure.opened`/
     # `tenure.closed` Receipt naming a Tenure into claims about the two entities that Tenure
     # connects, on the same read `_ch_document_key` already does. One reader rule serves `confer`,
     # `revoke` and `release` alike, rather than three effects each inventing their own legible id.
@@ -192,21 +179,17 @@ def _eff_establish(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     precondition, the constructor's raise is the backstop and is left loud. `None` (an operand
     missing) is `NO_CHANGE`, and the fold emits `establish.refused`.
 
-    A NEW id: the office is stored as the precondition admitted it. (It carried `establishment` at
-    its default until plan position `17a` deleted that field, its matrix row and this row's
-    `writes:` entry together: who serves a seat is `world_q.establishment_of`, a Query over live
-    `oblige` Tenures, which no `establish` writes.) An
+    A NEW id: the office is stored as the precondition admitted it (who serves a seat is
+    `world_q.establishment_of`, a Query over live `oblige` Tenures, which no `establish` writes). An
     EXISTING id: `remit_acts` is rewritten in place and nothing else is touched (the precondition
     refused any other difference). It earns `remit.changed` only if the remit actually moved.
 
     G4 -- WHAT IT NAMES: THE OFFICE (whole, as the content hash sees it) earning `office.established`
-    or `remit.changed`, then every live `hold` on it earning `tenure.payload_set` -- the order the
-    old mapping reported. THE GATE NOW DECIDES WHAT THIS EFFECT USED TO DECIDE BY HAND: the old
-    body compared the remits itself (`moved`) and read `_grant_remit`'s boolean to filter which
-    holds it reported, two private answers to *did this write happen*. Both are the gate's before-
-    and-after now: an equal remit leaves the office's digest where it was (no `remit.changed`), a
-    hold already carrying this grant is not in the tenure diff (no `tenure.payload_set`), and an
-    establish that moves neither is `NoOpReceipt` -> `establish.refused`, as it was.
+    or `remit.changed`, then every live `hold` on it earning `tenure.payload_set`. THE GATE DECIDES
+    WHETHER THE WRITE HAPPENED, NOT THIS EFFECT: an equal remit leaves the office's digest where it
+    was (no `remit.changed`), a hold already carrying this grant is not in the tenure diff (no
+    `tenure.payload_set`), and an establish that moves neither is `NoOpReceipt` ->
+    `establish.refused`.
 
     ⚠ THE RE-STAMP, AND WHY IT IS HERE AND ROUTED THROUGH `_grant_remit`. The grant on a `hold` is
     a SNAPSHOT (`Tenure.granted_acts`): a hand-mutation of `w.offices[x].remit_acts` reaches no
@@ -222,10 +205,9 @@ def _eff_establish(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     holder's (S15.1), so re-writing its grant is a Tenure write by a non-owner -- a fourth live one
     beside `revoke`, `confer` and `kill / wound`, which G3's plan text did not list. The gate admits
     it under the CONFERRAL basis (the seat exercised may fill this office, so it may re-grant it);
-    `_req_establish`'s clause 5 asks that first. ⚠ *"or `T-m` for the actor's own `hold`"* STOOD
-    HERE AND IS FALSE SINCE G3's OWN ANTAGONIST FIX: `T-m` never admits re-granting a seat-hold,
-    not even the actor's own (`state/gate.py::tenure_write_basis`) -- a sole holder re-stamping
-    his own seat is exactly the exploit that fix closed. Corrected at G4, which rewrote this body."""
+    `_req_establish`'s clause 5 asks that first. ⚠ `T-m` NEVER ADMITS RE-GRANTING A SEAT-HOLD, not
+    even the actor's own (`state/gate.py::tenure_write_basis`): a sole holder re-stamping his own
+    seat is the exploit that rule closes."""
     # v11 CR-25: the SAME reader `_req_establish` asks (the overlay keys, else the derivation from `subject` and
     # `Act.via`), so the precondition never admits an office this effect does not write.
     off = office_founded_by(w, a)
@@ -264,9 +246,8 @@ def _eff_release(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     the design."* `hold` is in the domain for exactly this reason.
 
     ⚠ NO `w.write` HERE, AND NOTHING TO RELEASE IS A REFUSAL, NOT A RAISE (§E2: *failure emits,
-    never raises*). Before G4 an empty returned list was how the fold learned nothing was closed;
-    now the `Change` names no edge, the gate finds nothing moved, and `NoOpReceipt` is what emits
-    `release.refused` -- the same refusal, through the one channel every effect shares.
+    never raises*): the `Change` names no edge, the gate finds nothing moved, and `NoOpReceipt` is
+    what emits `release.refused` -- through the one channel every effect shares.
 
     G4 -- WHAT IT NAMES: each live releasable edge the actor owns on `subject`, as an `edge`
     subject; the whole of what it writes. A closure always moves `until` (live means `until is
@@ -278,9 +259,8 @@ def _eff_release(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     observes both halves: the release admitted, and a write by the same actor on another's edge
     refused.
 
-    v9 IN-11 (#453 §10.4 step 2, R-3 (b)) -- A CLOSED `commit` EARNS `commitment.ended`, AND
-    `repudiate` IS CUT. `release` was already the second closer of a `commit` (its domain), so the
-    row that did nothing else is deleted and the vow-break stays witnessable here: WHOLE-ACT
+    v9 IN-11 (#453 §10.4 step 2, R-3 (b)) -- A CLOSED `commit` EARNS `commitment.ended`. `release`
+    is the second closer of a `commit` (its domain), so the vow-break stays witnessable here: WHOLE-ACT
     earning -- when any edge it closes is a `commit`, every edge earns every kind. A release that
     closes no `commit` names each edge earning `tenure.closed` only, exactly as before; one that
     closes a `commit` names every edge it closes earning the row's whole `emits:` (`earns=None`),
@@ -304,8 +284,7 @@ def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     the pair that proves the slice — one opens what the other closes, on the same row.
 
     G4 -- WHAT IT NAMES: every live `hold` on the office, as an `edge` subject -- exactly what it
-    closes and what it always reported. An office nobody holds names nothing, and the gate's
-    `NoOpReceipt` emits `revoke.refused` where the empty list used to.
+    closes. An office nobody holds names nothing, and the gate's `NoOpReceipt` emits `revoke.refused`.
 
     ⚠ G3: A `T-o` WRITE, AND `via` MUST BE PRESENT. The `hold` it closes is the incumbent's, so the
     write gate admits it only as `04 §C.2`'s third clause -- `Act.via` names a seat the actor sits
@@ -414,7 +393,7 @@ def _eff_convene(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     writes, both done by this one effect because the fold calls it once for the row.
 
     ⚠ A DATE IS A DICT HERE, not a class: `w.dates` is read as `d.get("due_at")` / `d.get("fired")`
-    at CALENDAR. The first version built a `Date(...)` that does not exist.
+    at CALENDAR.
 
     ⚠ WHAT THE SITTING THEN DECIDES IS `H-32` AND IS NOT HERE. `convene` puts a date on the
     calendar and stops, which is `L5`: a clock may not produce an outcome. `W7` is the item that
@@ -422,10 +401,8 @@ def _eff_convene(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
 
     G4 -- WHAT IT NAMES: THE DATE, whole. Its id is `H(seed, tick, actor, venue)`, so a SECOND
     identical convening by the same person at the same venue in the same season finds the date
-    already due when it says and already attached -- it moves nothing, and is now
-    `convene.refused` where it used to publish a second `date.scheduled` for a date that was
-    scheduled once. A different `when` moves `due_at` and is a real reschedule. Measured before
-    this position on `build_realm(0)`: no convening in four seasons repeats one, so no run moves.
+    already due when it says and already attached -- it moves nothing, and is `convene.refused`.
+    A different `when` moves `due_at` and is a real reschedule.
 
     ⚠ THE VENUE RIDES `subject` NOW, NOT `venue` (plan position `18`/PROC-A, 2026-09-29; C-11,
     `21_RECONCILIATION.md:379`: *"subject already binds the rung"*). `w.dates[...]["venue"]` is
@@ -434,13 +411,12 @@ def _eff_convene(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
 
     v9 SC-01 FIRED-SLOT STEP (#453 pass-1 step 4; H-163 limit 2): THE DATE IS BORN WITH A HOLDER,
     THE SEAT THE CONVENER EXERCISED (`Act.via`) -- the `holder` key holds that SEAT ID, not a person. CALENDAR forms a docket slot only for a date with a
-    holder (`loop/calendar.py`: a vacant date fires and lapses), and until this step nothing set one,
-    so every convened date in every computed world lapsed and no slot ever formed for `open_case` to
+    holder (`loop/calendar.py`: a vacant date fires and lapses), so a date born without one forms no slot for `open_case` to
     fill. [ASSUMPTION; medium; Jordan to correct -- Jordan names another holder rule] No #453 step
     says who holds a convened date; W26's proof (`architecture/PLAN.md` W26, intent only) names the
     holder as what separates a sitting from a lapse, and the convener's seat is the one seat the act
     already carries. A convening with no seat (`via` None: a hand-built act; a computed `convene` is
-    `remit:`-eligible and always carries one) gives a vacant date that lapses, as before. Set at
+    `remit:`-eligible and always carries one) gives a vacant date that lapses. Set at
     construction beside `venue` (neither is a Part D row; `due_at` and `fired` are), so a second
     identical convening still moves nothing. REVERT: drop the `holder` key -- every convened date
     fires vacant again and no computed slot forms."""
@@ -463,21 +439,19 @@ def _eff_oblige(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     """§E3 `oblige`: the actor takes a duty to a seat -- a new `oblige` Tenure opens, subject the
     actor, object the seat the act names (`Act.subject`). Plan position `17a` (r2 item 9, `03` §A.9:
     *"`@effect_for("oblige")`: mint the Tenure the row already declares"*). `oblige` is a
-    `tenure_kinds` member with no opener until this effect, so `resolvable_verbs()` excluded it
-    for want of one, per its `writes: ["Tenure.since"]` with nothing to perform it.
+    `tenure_kinds` member and this effect is its opener (`resolvable_verbs()`), per its
+    `writes: ["Tenure.since"]`.
 
     ⚠ `_eff_commit`'s SHAPE, EXACTLY -- the barest opener: no seat EXERCISED (`oblige` is
     `own`-eligible, `via` is `None`), no closure, no per-kind branch. The edge names the actor as
     its own subject and is admitted under `T-m` (`state/gate.py::tenure_write_basis`). The id salts
-    on the object AND the act, `f"oblige:{seat}:{a.id}"` (`_eff_give`'s pattern, and `_eff_commit`'s
-    since the same antagonist pass) -- BATCH-CLOSE FINDING (methodology-close Phase 1), corrected
-    from the plain `f"oblige:{seat}"` this shipped with: an actor who releases their `oblige` to a
-    seat and re-obliges to the SAME seat within the same tick would otherwise mint the identical id
-    as the now-closed one. `oblige` has no such path reachable today (untyped, chooser-
-    unreachable), but the fix is one token.
+    on the object AND the act, `f"oblige:{seat}:{a.id}"` (`_eff_give`'s pattern, and `_eff_commit`'s):
+    an actor who releases their `oblige` to a seat and re-obliges to the SAME seat within the same
+    tick would otherwise mint the identical id as the now-closed one. `oblige` has no such path
+    reachable today (untyped, chooser-unreachable), but the salt is one token.
 
-    ⚠ IT WAS WRITTEN AND REVERTED ONCE (`ED-IN-0211`): it opened a Tenure to `einhir_texts`, a bare
-    string naming no entity. What changed is not this body but that `_req_oblige` now asks first --
+    ⚠ `_req_oblige` ASKS FIRST (`ED-IN-0211`: opening a Tenure to a bare string naming no entity,
+    `einhir_texts`, is what this effect must never do) --
     the subject is a seat, its `binds` admits the joiner, the actor does not sit in it, and no live
     `oblige` from him to it -- so by the time this runs there is nothing left to decline, and the
     edge it opens always moves (absent -> present), never a no-op.
@@ -498,7 +472,7 @@ def _eff_oblige(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     shape), and `declared_by` is THIS act, so an unpaid lapse at MATTER cites the oblige that wound
     it. Only `oblige` is given one: `commit`, `tie` and the rest carry `term=None`, which `04 §B.8`
     makes lawful (`term?`) and which no MATTER branch matures. The fixture's control arm `None`
-    opens the edge exactly as `17a` did, with no term. A service nobody pays for now ENDS -- which
+    opens the edge with no term. A service nobody pays for ENDS -- which
     is `F.18`'s *"no economic pressure on any office"* answered, and `release` is still the obligee's
     own way out before then."""
     seat = _operand(a, "subject")
@@ -545,5 +519,7 @@ def _eff_requisition(w: "World", a: "Act", res: "Resolution | None" = None) -> C
     kind, amount = _operand(a, "kind"), _operand(a, "amount")
     if src is None or dst is None:
         return NO_CHANGE
+    # B07.02 (18-A edit 5): "the share of `amount` taken" is the band's (`_scaled`; no band, or a full one, takes it all).
+    amount = _scaled(amount, res) if isinstance(amount, int) else amount
     return Change((Subject.entity("rungs", src.id), Subject.entity("rungs", dst.id)),
                   lambda: _shift(src, dst, kind, amount))

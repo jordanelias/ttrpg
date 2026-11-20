@@ -28,6 +28,8 @@ from ..data.rosters import CHANNEL_CLAIM_SOURCE, CLAIM_SOURCES, WITNESS_CHANNELS
 from .. import epistemic as EP
 from ..epistemic import CHANNEL_PREDICATES, SEEN_PREDICATE, observers_for
 from ..harness import populated
+from ..boot import realm as boot_realm
+from ..boot.realm import build_realm
 from ..harness import probes as P
 from ..loop import witness as WITNESS_MODULE
 from ..loop.driver import SeasonDriver, mint_token
@@ -231,89 +233,27 @@ def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):
     `told_by` whatever the map says (the told branch sets its source itself). So each arm counts the
     map's `told_by` (no `chain`) apart from the told channel's (a `chain`), the control asserts the
     map's is zero, and the told channel's is asserted UNMOVED by neutralising the map."""
-    # ⚠ RE-PINNED SEED 0 -> 5 AT `13d-iii` (2026-10-01): at seed 0 the first season stopped depositing
-    # any chained told claim (3 before), and the precondition below needs one.
-    # WHAT TWO TEN-SEED TABLES SHOW (Batch C close, fix lane 4, 2026-10-02). THE QUANTITY IS THIS
-    # TEST'S OWN -- chained `told_by` claims (`live_channel`) after `populated.build_realm(s)` and
-    # `populated.run(1, s)` -- measured on tree `5519cf52` (position 17, before `13d-iii`, and that
-    # commit's own PARENT) and on the tree after it, one run per seed, the same script on both. The
-    # tree after is `13d-iii` itself (`294a152d`), and the later commits to HEAD agree with it at every
-    # seed on all three columns (chained, unchained, total), so the comparison is one commit's:
-    #   seed                0   1   2   3   4   5   6   7    8   9
-    #   chained, before     3   0   3   0   1   6   4   0    7   0
-    #   chained, after      0   0   0   0   1   6   3   0   12   0
-    # `13d-iii` LOWERED the chained count in 3 of the 10 seeds (0, 2 and 6 -- to 0 at seeds 0 and 2),
-    # left it unchanged in 6 (seeds 1, 3, 7 and 9 at 0; 4 at 1; 5 at 6) and RAISED it in 1 (seed 8,
-    # 7 -> 12); the ten sum to 24 before and 22 after. SEED 5 IS A SEED WHERE THE CHANNEL IS STILL
-    # LIVE, AND ITS COUNT IS THE SAME ON BOTH TREES. THE MECHANISM BY WHICH `13d-iii` LOWERED THE
-    # COUNT IN THE THREE SEEDS IS NOT ISOLATED. `told_by` claims WITHOUT a chain rose in all 10
-    # seeds (1,113 -> 2,807 at seed 0; 79 -> 750 at seed 9), as did every seed's total claims.
-    # SEED 0 ONLY, from the control run before these tables (one season, `5519cf52` against
-    # `8b03e518`): executed `tell` acts 4 -> 6, so FEWER TELLINGS IS NOT THE CAUSE; the unchained
-    # rise there includes `dispensation.issued` 0 -> 598 and `order.given` 75 -> 586 (binding-decision
-    # Events, the kind `rosters.yaml: witness_channels` gives the public record `chronicle`; the
-    # channel of each claim was not read; offices 24 -> 30 on the same change). The cause first
-    # stated here -- *giving every seat a rung widened what `chronicle`/`post_remit` hand a hearer*
-    # -- is PARTLY WRONG: `post_remit` mints `inferred`, not `told_by` (`rosters.yaml:
-    # witness_channels`, since `17a`), `inferred` is 0 in the first season on BOTH trees, and
-    # `chronicle` reads no seat; what grew is the number of binding-decision Events, because more
-    # seats execute. THAT `loop/witness.py`'s dedup guard ("ALREADY SAW") is what eats the chained
-    # deposits IS NOT ISOLATED EITHER.
-    # SEED 5 IS A CHOICE, NOT THE LOWEST SEED STRONG ENOUGH: seed 4's one deposit already passes the
-    # `live_channel > 0` guard below; 5 is the lowest seed with more than one, so the control's `==`
-    # compares a count that is neither 0 nor 1. The assertions below are unmoved.
-    # ⚠ RE-PINNED SEED 5 -> 4 AT IN-08's CELLS COMMIT (B-G), BY THE SAME RULE: at seed 5 the first
-    # season stopped depositing any chained told claim (6 before). The chooser is re-scored on the
-    # 15x7 basis, the cast's pursuits migrated and `challenge`/`accept` form, so the realm's act mix
-    # moved. The same quantity, the same script, on the tree after:
-    #   seed                0   1   2   3   4   5   6   7    8   9
-    #   chained, after      0   0   0   0   4   0   0   0    7   0
-    # Seed 4 is the lowest seed with more than one; the mechanism by which the count moved per seed
-    # is NOT isolated, as before. The assertions below are unmoved.
-    # ⚠ RE-PINNED SEED 4 -> 18 AT `H-160` LIMIT 1 (IN-22's paying half), BY THE SAME RULE. THIS TIME
-    # THE MECHANISM IS ISOLATED: seed 4's four chained claims were all one telling of
-    # `(b_s_036_cathedral, stores:grain, 0)` by `p_npc_037`, a read he held from his OWN REFUSED
-    # `transfer` out of that hearth. `transfer`'s first alternative is now `remit:issue`, so a seated
-    # holder gives through his seat out of its rung -- his refused transfer reads `terr_T1` instead,
-    # and the hearth-stores telling is gone. Seed 4's acts are otherwise the same list (604 resolved,
-    # 7 rows differ, every one a seated holder's `transfer`, still refused). The same quantity, the
-    # same script, on the tree after:
-    #   seed                0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17  18
-    #   chained, after      0  0  0  0  0  0  0  0  0  0   0  0  0  0  0  0  0  0   9
-    # Seed 18 is the lowest seed with more than one, and reads 9 on the tree before too. Unchained
-    # `told_by` is unchanged at seeds 0-9. The assertions below are unmoved.
-    # ⚠ RE-PINNED SEED 18 -> 20 AT v9 IN-57, BY THE SAME RULE: the attention-tier key moved the act
-    # mix and seed 18's first season minted no chained told claim (9 before). The same quantity over
-    # seeds 0-39, on the tree after (the tiers with the own-act screen): chained > 0 at seeds 20 (3),
-    # 21 (7), 25 (13), 28 (3), 32 (7), 33 (7); before, 18 (9), 20 (3), 25 (7), 28 (3). Seed 20 is the
-    # lowest with more than one. The assertions below are unmoved.
-    # ⚠ RE-PINNED SEED 20 -> 28 AT v9 IN-12 step 9 (`argue`, `sabotage`, `tend`, `train`), BY THE SAME RULE:
-    # four new rows join the realm's option sets and are attempted (every attempt refused in the first two
-    # seasons; `test_season_weather.py`'s `BASE_HASHES` note), so the act mix moved and seed 20's first
-    # season minted no chained told claim (it passes at 664986ee). The same quantity over seeds 0-39, on
-    # the tree after: chained > 0 at seeds 28 (3) and 38 (4) only. Seed 28 is the lowest with more than
-    # one; the mechanism per seed is NOT isolated. The assertions below are unmoved.
-    # ⚠ RE-PINNED SEED 28 -> 0 AT v11 CR-17 (B10-09 close two; `choice_temperature` 0.1 -> 0.05, H-96), BY THE SAME RULE: the sampler's
-    # change moved the act mix and seed 28's first season minted no chained told claim. The same quantity, this test's own (chained
-    # `told_by` claims after `build_realm(s)` and `run(1, s)`), over seeds 0-39 on this tree: chained > 0 at seeds 0 (5), 1 (9), 2 (2), 3 (5), 5 (15),
-    # 6 (2), 8 (8), 9 (2), 11 (11), 12 (8), 14 (3), 17 (7), 18 (3), 19 (7), 20 (7), 21 (6), 22 (11), 23 (1), 25 (7), 27 (6), 30 (10), 31 (7), 32 (9), 35 (6),
-    # 36 (6), 37 (6), 39 (6). Seed 0 is the lowest with more than one; the mechanism per seed is NOT isolated. The assertions below are unmoved.
-    SEED = 0
-
-    def told_by_count() -> tuple:
-        w = populated.build_realm(SEED)
-        out = populated.run(1, SEED, w=w)
+    # THE SEED IS FOUND, NOT PINNED. The quantity is this test's own: chained `told_by` claims (`live_channel`) after
+    # `populated.build_realm(s)` and `populated.run(1, s)`. Whether a given seed's first season deposits any depends on the
+    # realm's act mix, which every upstream change re-rolls, so the test takes the lowest seed of 0-39 that does: the
+    # precondition is that the told channel is live where the control compares, not that one seed is.
+    def told_by_count(seed) -> tuple:
+        w = build_realm(seed)
+        out = populated.run(1, seed, w=w)
         told_by = [c for p in w.persons.values() for c in p.ledger if c.source == "told_by"]
         channel = sum(1 for c in told_by if c.chain)
         return len(told_by) - channel, channel, sum(out["claim_sources"].values())
 
-    live, live_channel, total = told_by_count()
-    assert live > 0, f"every one of {total} deposits is still firsthand -- no hearsay was minted"
+    for SEED in range(40):
+        live, live_channel, total = told_by_count(SEED)
+        if live_channel > 0:
+            break
     # `control_channel == live_channel` below passes at 0 == 0 and would then observe nothing (§0.1 pt 2)
-    assert live_channel > 0, "the told channel minted nothing in the realm: the control below is vacuous"
+    assert live_channel > 0, "the told channel minted nothing in the realm at any of seeds 0-39: the control below is vacuous"
+    assert live > 0, f"every one of {total} deposits is still firsthand -- no hearsay was minted"
     monkeypatch.setattr(WITNESS_MODULE, "CHANNEL_CLAIM_SOURCE",
                         {c: "firsthand" for c in CHANNEL_CLAIM_SOURCE})
-    control, control_channel, control_total = told_by_count()
+    control, control_channel, control_total = told_by_count(SEED)
     assert control == 0 and control_total == total, (
         f"with the map neutralised the season still holds {control} map-sourced told_by claims (of "
         f"{control_total}, against {total}) -- the hearsay above is not the channel map's")
@@ -504,8 +444,8 @@ def test_t3_unplanted_members_with_opposite_loyalty_reach_different_verdicts(mon
     # leader, so no unplanted row toward a leader exists on the shipped build; this test's subject is the told channel's
     # regard, so it reads the build with that one fixture at its revert, where the loyalty rows still name the leader.
     from ..data.fixtures import DEFAULT_FIXTURES as _DF
-    monkeypatch.setattr(populated, "DEFAULT_FIXTURES", _DF.sweep("loyalty_toward_creed", False))
-    w = populated.build_realm(0)
+    monkeypatch.setattr(boot_realm, "DEFAULT_FIXTURES", _DF.sweep("loyalty_toward_creed", False))
+    w = build_realm(0)
     toward = defaultdict(dict)
     for pid, p in w.persons.items():
         for r in p.stance:
@@ -1771,7 +1711,7 @@ def test_t7_intent_disclosure_zero_is_the_control_on_the_realm(monkeypatch):
     hashes, carried = {}, {}
     for arm, fn in (("shipped", spy), ("excised", lambda p, scenes, fx, draw=None: scenes)):
         monkeypatch.setattr(CH, "declare_intents", fn)
-        w = populated.build_realm(0)
+        w = build_realm(0)
         populated.run(1, 0, w=w)
         hashes[arm] = w.content_hash()
         carried[arm] = [(a.id, a.payload.get("said")) for a in w.acts
@@ -1977,7 +1917,7 @@ def test_r07_realm_regard_differs_between_hearers_by_claim_not_stance_alone():
     out = {}
     for arm, fx in (("control", _g1_fx(0.0, 0.0)),
                     ("live", DEFAULT_FIXTURES)):
-        w = populated.build_realm(0)
+        w = build_realm(0)
         w.fixtures = fx
         populated.run(2, 0, w=w)
         out[arm] = _r07_pairs(w, fx)

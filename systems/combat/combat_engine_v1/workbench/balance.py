@@ -13,18 +13,18 @@ single source) — not re-declared. CLI:  python workbench/balance.py [weapon|at
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
-import random
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
+from engine.dice_engine import draw
 import zlib
-import wrapper, config
+from modules.combat import config
+import fight_record as FR   # a spec becomes a PersonalCombatInput, fought by the entry the loop calls (B14.11)
 
 
 def _seed(key):
     """Deterministic per-cell seed (run-to-run reproducible). `hash()` is PYTHONHASHSEED-salted, so a matrix used as
     the re-baseline reference must NOT seed from it (audit finding). crc32 of the repr is stable across processes."""
     return zlib.crc32(repr(key).encode()) % 9999
-from combatant import Combatant
-import attributes   # the combat attribute spec (PC-14)
+from modules.combat import attributes   # the combat attribute spec (PC-14)
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../../tests/sim/v32-combat-balance'))  # measurement harness reaches into the FROZEN v32 validation station BY DESIGN (dev tooling; doctrine container-hygiene exclusion, ED-1085)
 import r8_parity_harness as r8   # Class-M method constants: FINAL_TRIALS, WILSON_Z, BAND_LO/HI
 
@@ -55,14 +55,14 @@ def _wilson(w, n, z=r8.WILSON_Z):
 
 def winrate(specA, specB, cfg, n, seed=0):
     """Position-swapped decisive win-rate of A vs B (cancels first-mover). Returns (p, lo, hi, decided, draws)."""
-    rng = random.Random(seed)   # stdlib RNG (engine contract post ED-1085)
+    rng = draw.seeded(draw.H2("balance", seed))
     aw = dec = draws = 0
     half = n // 2
+    A, B = FR.party_of_spec(specA, 'A'), FR.party_of_spec(specB, 'B')
+    fwd, rev = FR.record_of(A, B), FR.record_of(B, A)   # the two seats, built once: a record is read, never written
     for i in range(n):
         swap = i >= half
-        X = _mk(specB if swap else specA)
-        Y = _mk(specA if swap else specB)
-        r = wrapper.fight(X, Y, cfg, rng)
+        r = FR.fight_result(rev if swap else fwd, rng, cfg)
         if swap:
             r = -r
         if r == 1:
@@ -73,12 +73,6 @@ def winrate(specA, specB, cfg, n, seed=0):
             draws += 1
     p, lo, hi = _wilson(aw, dec)
     return p, lo, hi, dec, draws
-
-
-def _mk(spec):
-    attrs = {k: spec[k] for k in ATTRS if k in spec}   # an absent attribute takes the spec's default in Combatant
-    return Combatant(spec.get('label', '?'), attrs=attrs, weapon=spec.get('weapon', 'arming'),
-                     armor=spec.get('armor', 'light'), tradition=spec.get('tradition', 'none'))
 
 
 def weapon_matchup_table(cfg=None, n=600, baseline='arming'):

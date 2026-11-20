@@ -1,0 +1,53 @@
+n=800
+FOCUS (speaker): a's Focus 1 vs 7
+  rally, crowd hostile to a, heckle 1 (shipped)              F1 0.226 F7 0.237 d=+0.011±0.021
+  rally, crowd hostile, heckle 0 (CONTROL)                   F1 0.231 F7 0.231 d=+0.000±0.021
+  rally, crowd hostile, heckle 3                             F1 0.206 F7 0.228 d=+0.021±0.021
+  rally, crowd friendly (no heat)                            F1 0.393 F7 0.396 d=+0.004±0.024
+  trial, b presses every turn                                F1 0.396 F7 0.401 d=+0.005±0.024
+  trial, b presses every turn, press_pull=rattle_pull=0      F1 0.384 F7 0.381 d=-0.003±0.024
+  trial famine (unrest .75)                                  F1 0.276 F7 0.287 d=+0.011±0.022
+  tell famine (unrest .75)                                   F1 0.152 F7 0.206 d=+0.054±0.019
+REASON (speaker): a forced to argue on consequence; Reason 1/4/7
+  tell         tell, matter HELPS listener b (b pursues trade .9, trade +1)   R1 0.241 R4 0.590 R7 0.820 d=+0.579±0.020
+  conversation tell, matter HELPS listener b (b pursues trade .9, trade +1)   R1 0.307 R4 0.554 R7 0.696 d=+0.389±0.023
+  tell         tell, matter HURTS listener b (b pursues tolls .9, tolls -1)   R1 0.046 R4 0.175 R7 0.407 d=+0.361±0.019
+  conversation tell, matter HURTS listener b (b pursues tolls .9, tolls -1)   R1 0.125 R4 0.210 R7 0.410 d=+0.285±0.021
+  tell         tell, matter hurts b strongly (tolls .9, conv law 5 bears -1)  R1 0.016 R4 0.099 R7 0.274 d=+0.258±0.016
+  conversation tell, matter hurts b strongly (tolls .9, conv law 5 bears -1)  R1 0.107 R4 0.188 R7 0.388 d=+0.280±0.020
+  standing gap: trial, b holds office rung 5 (power ~6); a Reason 1/4/7; CONTROL gap_step=0
+    shipped    R1 0.261 R4 0.269 R7 0.370 d=+0.109±0.023
+    gap_step=0 R1 0.289 R4 0.305 R7 0.370 d=+0.081±0.023
+ATTUNEMENT (speaker): listener b holds trade .8 (helped) and tolls .3 (hurt); tag a's best frame = trade
+  tell         shipped                carried A1 1.000 A4 1.000 A7 1.000 d=+0.000±0.000 | frame==listeners' best (trade): 0.00 1.00 1.00
+  tell         CONTROL read_blur=0    carried A1 0.000 A4 0.000 A7 0.000 d=+0.000±0.000 | frame==listeners' best (trade): 1.00 1.00 1.00
+  conversation shipped                carried A1 1.000 A4 1.000 A7 1.000 d=+0.000±0.000 | frame==listeners' best (trade): 0.50 1.00 1.00
+  conversation CONTROL read_blur=0    carried A1 0.000 A4 0.000 A7 0.000 d=+0.000±0.000 | frame==listeners' best (trade): 1.00 1.00 1.00
+  rally        shipped                carried A1 0.000 A4 0.000 A7 0.000 d=+0.000±0.000 | frame==listeners' best (trade): 0.50 0.50 1.00
+  rally        CONTROL read_blur=0    carried A1 0.000 A4 0.000 A7 0.000 d=+0.000±0.000 | frame==listeners' best (trade): 1.00 1.00 1.00
+  trial        shipped                carried A1 0.000 A4 0.000 A7 0.000 d=+0.000±0.000 | frame==listeners' best (trade): 0.50 0.50 0.00
+  trial        CONTROL read_blur=0    carried A1 1.000 A4 1.000 A7 1.000 d=+0.000±0.000 | frame==listeners' best (trade): 0.00 0.00 0.00
+  gauge: auto chooser (the NPC) in the trial, blank cast; CONTROL read_blur=bias_step=0
+    shipped    A1 0.292 A4 0.300 A7 0.301 d=+0.009±0.023
+    CONTROL    A1 0.304 A4 0.304 A7 0.304 d=+0.000±0.023
+PRESENCE (speaker): Presence 1 vs 7
+  rally (crowd 30)                         P1 0.221 P7 0.426 d=+0.205±0.023
+  rally, CONTROL heard_step=0              P1 0.261 P7 0.449 d=+0.188±0.023
+  conversation (no crowd)                  P1 0.312 P7 0.430 d=+0.117±0.024
+  trial (crowd watching)                   P1 0.258 P7 0.374 d=+0.116±0.023
+  tell                                     P1 0.189 P7 0.403 d=+0.214±0.022
+GRACE (speaker): venue standard plain 4 / formal 5 / solemn 6; Grace 1..7; b mid
+  tell, conversation (plain)     G1:0.138 G2:0.188 G3:0.233 G4:0.309 G5:0.309 G6:0.309 G7:0.309
+  tell, audience (formal)        G1:0.094 G2:0.129 G3:0.154 G4:0.214 G5:0.275 G6:0.275 G7:0.275
+  tell, inquisition (solemn)     G1:0.072 G2:0.092 G3:0.117 G4:0.158 G5:0.206 G6:0.268 G7:0.268
+WILL: the questioned man b (questioning; a presses every turn), b's Will 1/4/7
+  shipped                                Will 1: questioner carried 0.586  b rattled 0.82/sitting  b broke 0.54 of beats  b yielded 0.642  b rests 0.15
+  shipped                                Will 4: questioner carried 0.364  b rattled 0.70/sitting  b broke 0.06 of beats  b yielded 0.184  b rests 0.36
+  shipped                                Will 7: questioner carried 0.279  b rattled 0.41/sitting  b broke 0.00 of beats  b yielded 0.083  b rests 0.37
+  CONTROL temper_break=99 weary=0 awe=0  Will 1: questioner carried 0.551  b rattled 0.85/sitting  b broke 0.00 of beats  b yielded 0.579  b rests 0.26
+  CONTROL temper_break=99 weary=0 awe=0  Will 4: questioner carried 0.333  b rattled 0.70/sitting  b broke 0.00 of beats  b yielded 0.116  b rests 0.42
+  CONTROL temper_break=99 weary=0 awe=0  Will 7: questioner carried 0.269  b rattled 0.41/sitting  b broke 0.00 of beats  b yielded 0.051  b rests 0.39
+WILL: trial, b presses a every turn; a's Will 1/4/7
+  Will 1: a carried 0.284  a rattled 1.05  a broke 0.24  a yielded 0.000  a rests 0.23
+  Will 4: a carried 0.367  a rattled 0.59  a broke 0.00  a yielded 0.000  a rests 0.21
+  Will 7: a carried 0.401  a rattled 0.28  a broke 0.00  a yielded 0.000  a rests 0.19

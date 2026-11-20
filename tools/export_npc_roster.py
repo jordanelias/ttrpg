@@ -101,9 +101,9 @@ def derive() -> tuple:
     already holding.
     """
     sys.path.insert(0, str(ROOT))
-    from engine.season.harness import populated as POP
+    from engine.season.boot.realm import _slug, build_realm, institution_of, load_cases
 
-    w = POP.build_realm(0, from_roster=False)
+    w = build_realm(0, from_roster=False)
     home_of, name_of = {}, {}
     for t in w.tenures:
         if t.kind == "contain" and t.live and t.subject in w.persons:
@@ -118,22 +118,22 @@ def derive() -> tuple:
     # blocking gate over a case id the corpus may legitimately contain. MEASURED on the 46 live
     # cases: zero are lossy today, so this is latent -- which is exactly when it is cheap to fix.
     # The forward map is built once here and read, so nothing is inverted.
-    cid_of_pid = {f"p_{POP._slug(str(c.get('id')))}": str(c.get("id")) for c in POP.load_cases("NPC")}
+    cid_of_pid = {f"p_{_slug(str(c.get('id')))}": str(c.get("id")) for c in load_cases("NPC")}
 
     rows = []
-    for case in POP.load_cases("NPC"):
+    for case in load_cases("NPC"):
         cid = str(case.get("id"))
-        pid = f"p_{POP._slug(cid)}"
+        pid = f"p_{_slug(cid)}"
         if pid not in w.persons:
             continue
-        prop = w.propositions.get(f"prop_{POP._slug(cid)}")
+        prop = w.propositions.get(f"prop_{_slug(cid)}")
         concerns = None
         if prop is not None and prop.subject in w.persons:
             concerns = cid_of_pid.get(prop.subject)
         rows.append({
             "case": cid,
             "name": name_of[pid],
-            "institution": POP.institution_of(case),
+            "institution": institution_of(case),
             "home": home_of.get(pid),
             "want": prop.predicate if prop is not None else None,
             "concerns": concerns,
@@ -170,8 +170,8 @@ def check() -> int:
     on_disk = load_yaml(ROSTER)
     fresh, w = derive()
     sys.path.insert(0, str(ROOT))
-    from engine.season.harness import populated as POP
-    cases = {str(c.get("id")) for c in POP.load_cases("NPC")}
+    from engine.season.boot.realm import _slug, load_cases
+    cases = {str(c.get("id")) for c in load_cases("NPC")}
 
     hard = []
     for row in on_disk.get("npcs") or []:
@@ -179,7 +179,7 @@ def check() -> int:
             hard.append(f"{row.get('case')}: names no NPC case in the corpus")
         if row.get("home") and row["home"] not in w.rungs:
             hard.append(f"{row.get('case')}: home {row['home']!r} is not a rung in the world")
-        if row.get("concerns") and f"p_{POP._slug(row['concerns'])}" not in w.persons:
+        if row.get("concerns") and f"p_{_slug(row['concerns'])}" not in w.persons:
             hard.append(f"{row.get('case')}: concerns {row['concerns']!r}, who is not seated")
 
     by_case = {r["case"]: r for r in (on_disk.get("npcs") or [])}

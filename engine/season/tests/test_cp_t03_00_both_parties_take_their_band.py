@@ -23,7 +23,7 @@ from __future__ import annotations
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import FELLED, UNTOUCHED, WOUNDED
 from ..harness import probes as P
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import person_q, world_q
 from ..seam import Resolution, combat_degree, degree_of, party_degree
@@ -178,8 +178,11 @@ def test_a_wounded_actor_beside_an_untouched_subject_is_the_one_written():
     """The attacker bled and his target untouched: before this item the fight read `Untouched` off the
     subject and wrote nobody; now the actor's body falls and the subject's does not."""
     w, out, bodies = _fight(WOUNDED, UNTOUCHED)
-    assert [e.kind for e in out] == ["body.changed"]
+    # B05.09 (the survivors of a fight that drew blood are raised in `arms`, a non-holder minted a first rank; was nothing):
+    # B05.99 rewrote the kind list to carry that one `capability.raised`, naming both survivors
+    assert [e.kind for e in out] == ["body.changed", "capability.raised"]
     assert _receipts(out, "body.changed") == [ACTOR]
+    assert _receipts(out, "capability.raised") == [ACTOR, SUBJECT]
     assert w.persons[ACTOR].body < bodies[ACTOR] and w.persons[SUBJECT].body == bodies[SUBJECT]
 
 

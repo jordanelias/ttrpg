@@ -58,10 +58,8 @@ ENGINE = REPO / 'engine'
 # THE ROOTS THIS FILE BANS ARE NOT SPELLED HERE (A-25). `engine/` names no module
 # code by import, and game Python outside `engine/` lives under every root in `ci_common.MODULE_CODE_DIRS`
 # — `modules/` (the A-25 modules) and `systems/` (legacy and unplugged code). A module is reached by a composition row (`references/module_contracts.yaml`)
-# or, for `wrapper` and `combatant` only, through the one declared PATH seam below; never by an import.
-# `PATH_SEAM_ALLOWED` is keyed by the INSERTING FILE, not by the root it names, so
-# `substrate/pc_engine.py` keeps its entry when position `31b` re-points its insert into
-# `modules/combat/` (A-25); any other `sys.path` insert naming either root is a new seam. Typing the
+# never by an import. No path seam remains: `PATH_SEAM_ALLOWED` (keyed by the INSERTING FILE, not by the root it
+# names) is empty, and any `sys.path` insert naming either root is a new seam. Typing the
 # root a second time here is how a scan goes blind the day code lands under the one it forgot.
 sys.path.insert(0, str(REPO / 'tools'))
 import ci_common  # noqa: E402
@@ -225,29 +223,12 @@ def test_this_check_can_observe_its_own_failure(tmp_path):
         'the pattern must not fire on a function-local import — that is a different problem'
 
 
-#: The ONE surviving seam, declared rather than invisible. `engine/substrate/pc_engine.py` (until
-#: 2026-09-25, `engine/cross_scale/combat_bridge.py`'s own loader) inserts
-#: `modules/combat/` (until plan position `31b`, `systems/combat/combat_engine_v1/`) onto `sys.path` and imports `combatant` and `wrapper` by BARE
-#: NAME. It was invisible to every instrument in this file until 2026-08-22: both regexes
-#: look for the literal token `systems`, and the import probe below used to filter `sys.modules` by
-#: the `systems.` prefix — under which those two modules appear as `combatant` and `wrapper`.
-#:
-#: WHY IT IS NOT CONVERTED HERE. `combat_engine_v1/` is a FLAT, self-contained module set with its
-#: own convention: `wrapper.py:4` inserts its own directory on `sys.path` and bare-imports its
-#: siblings, and the workbench and audit harnesses all load it that way. Importing it by dotted path
-#: works, but would give those modules a SECOND identity in any process that also loads them the
-#: flat way — `workbench/balance.py` is the canonical balance harness and does exactly that. That is
-#: a PC-lane convention change with a module-identity hazard, not an IN-lane wiring fix, and it is
-#: out of scope for a step whose subject is the composition registry.
-#:
-#: It can only shrink. Converting it deletes this entry.
-#: A SECOND ENTRY WAS ADDED 2026-09-05 (ED-IN-0204, the adoption): `season/combat_seam.py`, later
-#: `season/seam/wrappers/combat.py`, the SAME seam from the season loop's side. CONSOLIDATED
-#: 2026-09-25: both former loaders now call ONE leaf, `substrate/pc_engine.py`, which owns the only
-#: spelling of the path and the only insert. The seam still cannot be a dotted import, for the
-#: reason above: dotted-path loading would give `wrapper`/`combatant` a second identity in a
-#: process that also loads them flat, which the balance workbench does. Still shrink-only.
-PATH_SEAM_ALLOWED = {'substrate/pc_engine.py'}
+#: The declared `sys.path` seams into a code root: NONE. The last one, `engine/substrate/pc_engine.py`, was deleted when
+#: `modules/combat/` became a package (CI-09); the host reaches it through the composition rows `combat.fight` and
+#: `combat.duel_terms`. A `sys.path` insert in `engine/` naming `systems` or `modules` is a NEW seam of the class that
+#: once hid for two days (it defeats both regexes above and the import probe: the modules it loads are not named
+#: `systems.*`). Keyed by the INSERTING FILE; shrink-only means it stays empty.
+PATH_SEAM_ALLOWED = set()
 
 
 def _chain_hits(expr, assigned, names_re):
@@ -294,10 +275,10 @@ def _relative_module_files(text, path):
     ⚠ THE CONCRETE CASE THIS WAS BUILT FOR IS GONE, AND THE MECHANISM STAYS ANYWAY. `_PC =
     files.PC_ENGINE_DIR` was deleted 2026-09-25 when `combat_bridge.py` and `season/seam/wrappers/
     combat.py`'s loaders were consolidated into `engine/substrate/pc_engine.py`, whose own
-    `PC_ENGINE_DIR` is a LOCAL assignment the chain below catches without this one-hop branch (see
-    `PATH_SEAM_ALLOWED`'s docstring). No file in the current tree exercises the one-hop path, so
-    nothing plants a two-file hop to prove this branch still works if it broke — an honest gap
-    (`CLAUDE.md` §0.1 pt 2), not a claim that it is covered. Kept because the shape it catches
+    `PC_ENGINE_DIR` is a LOCAL assignment the chain below catches without this one-hop branch (that file was
+    deleted at CI-09; its `FORK:` row in `references/restructure_ledger.md` resolves it). No file in the current tree exercises the one-hop path; the only
+    exerciser is the planted pair in `test_the_one_hop_relative_import_resolution_can_observe_the_seam_it_exists_to_catch`
+    (`CLAUDE.md` §0.1 pt 2). Kept because the shape it catches
     (an anchor consolidation moving a seam's literal one hop away) is a correct refactor pattern,
     not a one-time accident, and could recur.
 
@@ -440,7 +421,7 @@ def test_importing_every_engine_module_pulls_in_no_subsystem():
        and were counted as clean. It now asks each loaded module where its FILE is. A module's
        path cannot be spelled around; its import name can.
 
-    `PATH_SEAM_ALLOWED` above is the ceiling for what remains, and it is one entry.
+    `PATH_SEAM_ALLOWED` above is the ceiling for what remains, and it is empty.
     """
     mods = []
     for path in sorted((REPO / 'engine').rglob('*.py')):
@@ -469,21 +450,22 @@ def test_importing_every_engine_module_pulls_in_no_subsystem():
 # §0.4 is the cadence this serves.
 @pytest.mark.slow
 def test_the_one_declared_path_seam_is_still_the_only_one():
-    """`substrate/pc_engine.py` reaches into `systems/` by `sys.path` + bare name — the one leaf
-    both `combat_bridge` and the season combat seam load through. That is a real seam and it
-    is DECLARED here rather than left invisible — the ratchet's own rule is that a seam which cannot
-    move yet is added deliberately, with its reason, never as a drive-by.
+    """`engine/` holds no `sys.path` insert naming a code root: `PATH_SEAM_ALLOWED` is empty (the test keeps
+    its name, kept because `pytest.ini`:25, `valoria-ci.yml`:304 and the IN ledgers cite it in prose; no seam remains: the last, the personal-combat loader, went when `modules/combat/` became a package). A seam that cannot move yet is
+    added to the set deliberately, with its reason, never as a drive-by.
 
     Scans for the mechanism rather than the module: any `sys.path` mutation in `engine/` that names
     a code root (`systems` or `modules`, `ci_common.MODULE_CODE_DIRS`). A second one is a new seam of
     the class that hid for two days. (`PATH_SEAM_ALLOWED` is keyed by the INSERTING FILE; see above.)
     """
     offenders = {}
+    scanned = 0
     for path in sorted((REPO / 'engine').rglob('*.py')):
         rel = path.relative_to(REPO / 'engine').as_posix()
         if rel.startswith('tests/') or '__pycache__' in rel:
             continue
         text = path.read_text(encoding='utf-8')
+        scanned += 1
         # ⚠ TWO DEFECTS FOUND AT THE 2026-09-05 ADOPTION, BOTH IN THIS PREDICATE.
         # (1) It was `"'systems'" in text` — a SINGLE-QUOTED literal only — so
         #     `season/combat_seam.py`'s `_REPO / "systems" / ...` was invisible and this guard
@@ -499,6 +481,7 @@ def test_the_one_declared_path_seam_is_still_the_only_one():
         # `sys.path.insert/append`, following one level of local assignment.
         if _inserts_a_systems_path(text, path):
             offenders[rel] = True
+    assert scanned >= 20, f'only {scanned} engine files scanned: the walk is broken, and an empty offender set would read as clean'
     assert set(offenders) == PATH_SEAM_ALLOWED, (
         f'sys.path seams into a code root (systems/, modules/) are now {sorted(offenders)}, declared {sorted(PATH_SEAM_ALLOWED)}. '
         f'A NEW one is the invisible-seam class: it defeats both regexes above AND the import probe, '
@@ -554,7 +537,61 @@ def test_the_one_hop_relative_import_resolution_can_observe_the_seam_it_exists_t
     )
 
 
-def test_the_import_probe_can_observe_both_kinds_of_leak():
+def _composition_module_file_problems(data):
+    """Everything wrong with `data['module_files']` (a parsed `composition.json`), as strings, and how many
+    paths were checked. The set must equal the one derived from `roles`' targets
+    (`modules.<pkg>.<file>:<attr>` -> `modules/<pkg>/<file>.py`, or `.../__init__.py` for a package), and
+    every path must be a file under `modules/` that exists. A missing block is a problem, not an empty pass."""
+    block = data.get('module_files')
+    if not block:
+        return ['composition.json has no `module_files` block'], 0
+    problems, checked = [], 0
+    if list(block) != sorted(set(block)):
+        problems.append('module_files is not sorted and de-duplicated')
+    for rel in block:
+        checked += 1
+        path = REPO / rel
+        if not rel.startswith('modules/') or not path.is_file():
+            problems.append(f'{rel}: not a file under modules/')
+    derived = set()
+    for row in data['roles'].values():
+        stem = row['target'].split(':', 1)[0].replace('.', '/')
+        derived.add(stem + '.py' if (REPO / (stem + '.py')).is_file() else stem + '/__init__.py')
+    if set(block) != derived:
+        problems.append(f'module_files differs from the files roles name: '
+                        f'only in block {sorted(set(block) - derived)}, only in roles {sorted(derived - set(block))}')
+    return problems, checked
+
+
+def test_every_module_file_the_composition_lists_exists():
+    """GO-05 / B03g.04: the port packs the files `load()` resolves by string, so the list of those files
+    (`composition.json`'s `module_files`, cooked beside `roles` by `tools/export_composition.py`) must be
+    real files. The loop asserts it asserted (§0.1 pt 2); roles may share a file, so the count is the block's."""
+    import json
+    data = json.loads((REPO / 'engine' / 'engine_params' / 'composition.json').read_text(encoding='utf-8'))
+    problems, checked = _composition_module_file_problems(data)
+    assert not problems, problems
+    assert checked >= 1 and checked == len(data['module_files']), (checked, len(data['module_files']))
+
+
+def test_a_planted_path_in_a_copy_of_the_module_files_block_reds_the_check():
+    """The falsifier for the test above: the check can fail. A planted path in a temporary copy of the
+    real block is refused; a block with a path dropped is refused; the real block is not."""
+    import copy
+    import json
+    real = json.loads((REPO / 'engine' / 'engine_params' / 'composition.json').read_text(encoding='utf-8'))
+    assert 'module_files' in real, 'the real block must exist before a copy of it can be planted in'
+    planted = copy.deepcopy(real)
+    planted['module_files'] = sorted(planted['module_files'] + ['modules/combat/no_such_file.py'])
+    problems, _ = _composition_module_file_problems(planted)
+    assert any('no_such_file.py' in p for p in problems), problems
+    short = copy.deepcopy(real)
+    short['module_files'] = short['module_files'][1:]
+    assert _composition_module_file_problems(short)[0], 'a path missing from the block went unseen'
+    assert _composition_module_file_problems(real)[0] == []
+
+
+def test_the_import_probe_can_observe_both_kinds_of_leak(tmp_path):
     """§0.1 pt 2 — the probe must be able to FAIL, and in BOTH the ways it is supposed to catch.
     Its whole result is "the list was empty", which is also what a broken probe returns.
 
@@ -566,9 +603,13 @@ def test_the_import_probe_can_observe_both_kinds_of_leak():
     dotted = _modules_loaded_from_systems('import modules.mass_battle.massbattle\n')
     assert dotted, 'the probe reports NOTHING for a plain dotted import — it is broken'
 
+    # The bare-name plant is hermetic: no module under the real `modules/` is loaded by a path insert any more
+    # (`modules/combat/` is a package), so a flat leaf is planted in a temporary tree whose `modules/` is the root.
+    (tmp_path / 'modules' / 'plant').mkdir(parents=True)
+    (tmp_path / 'modules' / 'plant' / 'combatant.py').write_text('X = 1\n')
     bare = _modules_loaded_from_systems(
-        "sys.path.insert(0, os.path.join(os.path.abspath('.'), 'modules', 'combat'))\n"
-        "import combatant\n")
+        "sys.path.insert(0, os.path.join(os.path.abspath('.'), 'modules', 'plant'))\n"
+        "import combatant\n", cwd=tmp_path)
     assert bare, (
         'the probe reports NOTHING for a module loaded by sys.path + bare name. That is the exact '
         'seam it was rewritten to see; a name-prefix filter cannot, because the module is called '

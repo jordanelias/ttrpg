@@ -1,8 +1,7 @@
 """modules.mass_battle.core.exchange — combat-pool assembly primitives.
-Stage-1 behaviour-frozen extract from orchestration.py (derive_command, command_base_pool,
-subunit_combat_pool, _stamina_pool_penalty). Pure: depends on config + math + duck-typed
-unit/atom attributes only; imports nothing from orchestration (no cycle). Re-imported by
-orchestration via `from modules.mass_battle.core.exchange import *` so every call site is unchanged.
+(derive_command, command_base_pool, subunit_combat_pool, _stamina_pool_penalty). Pure: depends on config +
+math + duck-typed unit/atom attributes only; imports nothing from orchestration (no cycle). Re-imported by
+orchestration via `from modules.mass_battle.core.exchange import *`.
 [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; ED-899 Command-only base -- SUPERSEDED
 for the base pool term by Jordan's 2026-07-08 directive, see config.py's POOL_QUALITY_MODEL;
 `derive_command`/`command_base_pool` below remain live for whatever still reads Command
@@ -21,7 +20,7 @@ __all__ = ['_stamina_pool_penalty', 'derive_command', 'clamp_command', 'command_
 # 2026-07-08] Both magnitudes below are explicitly flagged NOT independently derived, per the
 # proposal doc's own §5 -- reused from the nearest existing precedent rather than invented, and
 # disclosed as such (this repo's anti-fabrication discipline). Both are default-inert: `yielding`
-# defaults False on every Subunit, so neither constant is read unless a 'yield' order fires.
+# defaults False on every Unit, so neither constant is read unless a 'yield' order fires.
 D_YIELD = int(_exch_os.environ.get('D_YIELD', '3'))  # [CALIBRATED-DEBT] reuses this file's OWN
 # existing disc_mult tier break (hierarchy/units.py's advance_cells: disc>=5 full speed, disc>=3
 # 0.7x, else 0.4x severely degraded) rather than inventing a new threshold -- a subunit needs
@@ -42,16 +41,11 @@ def _stamina_pool_penalty(stamina):
 
 
 def clamp_command(value):
-    """[A3, ED-MB-0067 Part A / ED-MB-0073, adversarial-review fix F3/F5] SINGLE OWNER of the Command
-    1-7 clamp (`params/factions/stats_1_7_scale.md`) — extracted from `derive_command`'s own tail so
-    `Officer` and the general's own `command` can share ONE clamp instead of each re-implementing it
-    (§8: never re-implement a rule). Before this fix, `Officer.__post_init__` had its own copy and
-    `Unit`/`build_army` had NONE at all — an unclamped general `command` (e.g. 20) combined with a
-    single, entirely UNREFERENCED officer let `build_army`'s span-of-control check pass an arbitrary
-    number of un-officered subunits, since providing any non-empty `officers` list also skipped the
-    flat `SUBUNIT_CAP` check that used to be the only ceiling. Closed by clamping both sides of every
-    Command comparison through this one function — see `build_army`'s own note."""
-    return max(1, min(7, int(value)))  # [canonical: params/factions/stats_1_7_scale.md — Command clamped 1-7]
+    """[A3, ED-MB-0067 Part A / ED-MB-0073] SINGLE OWNER of the Command
+    1-7 clamp (`FORK:c451bcb:engine/params/factions/stats_1_7_scale.md`) — so `Officer` and the general's own
+    `command` share ONE clamp instead of each re-implementing it (§8: never re-implement a rule). Both sides of
+    every Command comparison in `build_army` go through this one function — see `build_army`'s own note."""
+    return max(1, min(7, int(value)))  # [canonical: FORK:c451bcb:engine/params/factions/stats_1_7_scale.md — Command clamped 1-7]
 
 
 def derive_command(charisma, cognition):
@@ -78,25 +72,24 @@ def subunit_combat_pool(unit, atom):
     """Per-subunit combat pool. Default (POOL_QUALITY_MODEL, Jordan directive 2026-07-08): troop
     TYPE quality (`eff_power`) x NUMBERS (`eff_size`), plus per-subunit Discipline + stamina --
     no Command anywhere. Legacy toggle OFF: SHARED Command (the general) + per-subunit Discipline
-    + cohesion + stamina. Mirrors Unit.base_combat_pool EXACTLY for a single-subunit unit
+    + cohesion + stamina. Mirrors Army.base_combat_pool EXACTLY for a single-subunit unit
     (atom.cohesion fast-paths to unit.hp/hp_max; eff_discipline/eff_power inherit unit) -> byte-exact
     for the homogeneous gauge; differentiates per subunit for mixed units.
     [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; the (5.0-disc)*0.5 discipline penalty
-     mirrors Unit.discipline_penalty 'fix discipline']"""
-    if unit.routed or unit.broken or atom.routed or atom.broken:
+     mirrors Army.discipline_penalty 'fix discipline']"""
+    if unit.routed or unit.disordered or atom.routed or atom.disordered:
         return 0
     disc = atom.eff_discipline
     if disc <= 0:
-        # Per-subunit broken state (ED-1020 fix): this SUBUNIT's formation is gone (Discipline 0,
-        # §A.4 "Formation broken; cannot attack") -> it contributes 0. The UNIT is broken only when
-        # EVERY subunit is broken (the whole formation is gone); a single broken section must NOT zero
-        # its healthy siblings' pools -- that was an unintended intra-unit break cascade, contradicting
-        # §A.12's inter-unit-only cascade decision and the per-subunit "siblings fight on" model.
-        # Single-subunit: the lone subunit broken => all() true => unit.broken set exactly as before
+        # Per-subunit disordered state (ED-1020 fix): this SUBUNIT's formation is gone (Discipline 0,
+        # §A.4 "Formation broken; cannot attack") -> it contributes 0. The UNIT is disordered only when
+        # EVERY subunit is disordered (the whole formation is gone); a single disordered section must NOT zero
+        # its healthy siblings' pools (§A.12's cascade is inter-unit only; per-subunit "siblings fight on").
+        # Single-subunit: the lone subunit disordered => all() true => unit.disordered set exactly as before
         # (byte-exact for the homogeneous gauge).
-        atom.broken = True
-        if all(s.broken for s in unit.subunits):
-            unit.broken = True
+        atom.disordered = True
+        if all(s.disordered for s in unit.units):
+            unit.disordered = True
         return 0
     pen = -max(0.0, min(2.0, (5.0 - disc) * 0.5))
     stam_pen = _stamina_pool_penalty(atom.eff_stamina)
@@ -114,7 +107,7 @@ def subunit_combat_pool(unit, atom):
         # [Jordan follow-up, 2026-07-08: "subunit power is the aggregate or derivation of cell
         # power"] Correct, and this closed form already IS that aggregate: `eff_power * eff_size`
         # equals sum-over-cells(cell_power x cell_troops) / BLOCK_SIZE whenever a subunit's cells
-        # share one troop type/power (true for every Subunit today -- per-cell troop_type doesn't
+        # share one troop type/power (true for every Unit today -- per-cell troop_type doesn't
         # exist yet, see pair_pool_contribution's own docstring on this same gap). Written as the
         # closed form for the SUBUNIT's total score (cheap, no per-cell loop needed here);
         # `pair_pool_contribution`/`_pair_engaged_troops` below are what actually walk `cell_troops`
@@ -131,7 +124,7 @@ def subunit_combat_pool(unit, atom):
     # "stopped fighting") -- gated on discipline (a subunit too disordered to give ground in order
     # just doesn't get the malus removed; it fights at full pool as if not yielding at all, since a
     # low-discipline 'yield' order below D_YIELD is a no-op by design, not a punishment). Default
-    # `yielding=False` on every Subunit -> inert for every existing scenario.
+    # `yielding=False` on every Unit -> inert for every existing scenario.
     # [ED-MB-0024, DG-2 §2.4 pocket exit] A POCKETED yielding body (rearward motion blocked -> holds in
     # place, nowhere left to give ground) fights at FULL pool -- the malus is REMOVED, modeling Cannae's
     # center pinned and fighting for its life. `pocketed` is only ever set when MB_YIELD_POCKET is on
@@ -171,11 +164,9 @@ def pair_pool_contribution(atom, contact_abs_cells, base_pool):
     its actual share, not a blind 50/50 -- solving RC-1(a)'s multi-front asymmetry from the bottom up
     instead of an atom-level fudge factor.
 
-    Known accepted residual (same discipline as Stage A's TOI multi-body approximation, designs/
-    audit/2026-07-01-mass-battle-.../ (see plan file Stage A.5b, finding 3): a single cell
-    simultaneously adjacent to TWO enemy atoms contributes its full troop share to BOTH pairs -- a
-    genuine dogpile edge case, not solved here, not observed to be dense enough to matter in the
-    gauge battery, flagged as a possible future refinement rather than blocking this fix."""
+    Known accepted residual: a single cell simultaneously adjacent to TWO enemy atoms contributes its full
+    troop share to BOTH pairs (a dogpile edge case, not observed to be dense enough to matter in the gauge
+    battery)."""
     if atom.cur_troops <= 0 or base_pool <= 0:
         return 0.0
     weighted_troops = _pair_engaged_troops(atom, contact_abs_cells)
@@ -189,13 +180,11 @@ def _pair_engaged_troops(atom, contact_abs_cells):
     """Troop-weighted engagement magnitude for ONE atom in ONE pair -- the same "actual troops in
     contact, plus depth-weighted support from ranks behind" quantity `pair_pool_contribution`
     needs internally, factored out so a caller can also use it to weigh SEVERAL atoms against a
-    shared target (see orchestration.py's convergence-normalization pass, the fix for the
-    partition-invariance gap this docstring's sibling function's "known accepted residual" para
-    flags on the OTHER axis -- one atom split across enemies vs several atoms sharing one enemy).
+    shared target (see orchestration.py's convergence-normalization pass: one atom split across enemies vs
+    several atoms sharing one enemy).
 
-    [2026-07-04 adversarial-review fix, carried from pair_pool_contribution] Iterates the atom's
-    ACTUAL `cell_troops` directly, not a freshly recomputed CELL_PATTERN_FN[shape](tier) -- see
-    pair_pool_contribution's docstring for why."""
+    Iterates the atom's ACTUAL `cell_troops` directly, not a freshly recomputed CELL_PATTERN_FN[shape](tier)
+    -- see pair_pool_contribution's docstring for why."""
     contact_orig = set(cells_to_orig_coords(atom, set(contact_abs_cells)))
     if not contact_orig:
         return 0.0

@@ -103,7 +103,7 @@ from typing import Dict, List, Optional, Tuple
 from .contract import A, B, other, Move, ContestView, Panel
 from .primitives import Stasis, Appeal, Reserve, Pool, EvidenceItem, Dossier
 from .resolver import (Bout, Contestant, PersuasionTrack, TallyAtClose, ProofBar,
-                       GraceThreshold, VoteAtClose, roll_net)
+                       GraceThreshold, VoteAtClose, roll_net_continuous)
 from .degree_extension import degree   # ED-SC-0032: the contest's own adapter, not the engine's
 from .wrapper import build_contest
 from .policy import POLICIES, logos_spammer
@@ -256,7 +256,7 @@ def print_appraise(bout, judge_position: ArmaturePosition) -> None:
        appraise_armature() primitive (Stage 3 / Gate C). See WORKAROUND 1: no in-kernel Appraise Move
        kind exists to gate this behind the exchange's setup beat, so it prints as free information."""
     pool = Pool.size(bout.c[A].faculty)
-    net = roll_net(pool)
+    net = roll_net_continuous(pool)
     deg = degree(net, bout.v.base_ob, pool)
     reveal = appraise_armature(judge_position, deg)
     print(f"[Appraise -- reading the room: {pool}D, degree {deg} ({_band_name(deg)})]")

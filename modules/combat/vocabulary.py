@@ -63,7 +63,7 @@ MAT_PLATE = 'plate'
 MATERIALS = frozenset({MAT_NONE, MAT_CLOTH, MAT_MAIL, MAT_PLATE})
 
 # ── DEFENCE modes — ORDERED, and the order is load-bearing ─────────────────────────────────────────
-# systems.read_contest picks a missed-read mode with `modes[rng.randrange(3)]`, so this sequence IS part of
+# systems.read_contest picks a missed-read mode with `modes[rng.below(3)]`, so this sequence IS part of
 # the RNG contract: reordering it re-maps every missed-read draw. A tuple, never a set.
 DEF_PARRY = 'parry'
 DEF_DODGE = 'dodge'
@@ -85,9 +85,8 @@ ADEF_MODE_GAP_THRUST = 'gap-thrust'
 ADEF_MODE_CUT = 'cut'
 
 # ── THE GUARDED SET ────────────────────────────────────────────────────────────────────────────────
-# The 18 tokens the ownership guard enforces. This is the set `workbench/structure_scan.py` [D] has always
-# measured (279 occurrences / 18 tokens on the pre-sweep tree); it is declared HERE so the instrument and
-# the test read the same list.
+# The 18 tokens the ownership guard enforces. This is the set `workbench/structure_scan.py` [D] measures; it is
+# declared HERE so the instrument and the test read the same list.
 #
 # DELIBERATE EXCLUSION: HEAD_CUT ('cut') is NOT guarded. The same string is the name of a GEOMETRY primitive
 # field (`geo['cut']`, the derived edge magnitude, alongside `geo['thrust']`/`geo['gap']`), which is a

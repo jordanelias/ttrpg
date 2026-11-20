@@ -36,7 +36,7 @@ def _field(**kw):
 
 
 def _units(monkeypatch, inp, **kw):
-    """The two Units `resolve_field` built, with the battle, the terrain and the crossing stubbed out."""
+    """The two Armies `resolve_field` built, with the battle, the terrain and the crossing stubbed out."""
     seen = {}
     monkeypatch.setattr(_mb(), "river_crossed", lambda *a, **k: False)
     monkeypatch.setattr(_mb(), "terrain_row_for_territory", lambda *a, **k: None)

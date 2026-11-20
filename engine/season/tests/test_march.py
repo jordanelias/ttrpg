@@ -52,7 +52,7 @@ from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.rosters import faction_prop_id
 from engine.season.decision.choose import make_chooser
 from engine.season.decision.options import opening_set
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.loop.effects import EFFECTS
 from engine.season.queries import person_q as PQ
@@ -275,7 +275,7 @@ def test_a_won_field_writes_casualties_and_stance_on_the_defender_only():
     person at weight > 1) against the Church's six individuals, so the attacker's side is the larger one (20 v 6).
     CONTROL, SAME WORLD AND ACT: at the shipped 1 the 20-v-6 attacker still routs on contact and the field is `Lost`
     (`massbattle.py`'s disclosed scale gap, unchanged at k = 1); only the scale differs between the two folds, so
-    the flip to `Won` is the multiplication's, and a `Lost` at 10 would mean it is not reaching the Unit.
+    the flip to `Won` is the multiplication's, and a `Lost` at 10 would mean it is not reaching the Army.
     The band's effects are asserted as the hand-built test asserted them: the defender takes the casualties and the
     stance rows, the winning side is never written."""
     def fold(k):
@@ -357,7 +357,11 @@ def test_the_total_casualty_model_zeroes_the_losing_side():
     w.fixtures = w.fixtures.sweep("field_casualty_model", "total")
     attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
     act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
-    _fold_one(w, act, contest_max_depth=2)
+    assert len(attackers) == 2, f"the fixture no longer musters two attackers here: {attackers}"
+    events = _fold_one(w, act, contest_max_depth=2)
+    kinds = [(e.kind, e.degree) for e in events]
+    assert ("field.lost", "Lost") in kinds, (
+        f"this fixture no longer produces a LOST field battle for the arm to grade: {kinds}")
     for pid in attackers:
         assert pid not in w.persons, f"{pid} still recorded, at body 0, instead of removed"
 
@@ -378,8 +382,12 @@ def test_the_none_casualty_model_writes_stance_only():
     attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
     before_body = {pid: w.persons[pid].body for pid in attackers}
     before_stance = {pid: list(w.persons[pid].stance or []) for pid in attackers}
+    assert len(attackers) == 2, f"the fixture no longer musters two attackers here: {attackers}"
     act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
-    _fold_one(w, act, contest_max_depth=2)
+    events = _fold_one(w, act, contest_max_depth=2)
+    kinds = [(e.kind, e.degree) for e in events]
+    assert ("field.lost", "Lost") in kinds, (
+        f"this fixture no longer produces a LOST field battle for the arm to grade: {kinds}")
     grudge_w = w.fixtures.get("field_grudge_weight")
     morale_w = w.fixtures.get("field_morale_weight")
     for pid in attackers:

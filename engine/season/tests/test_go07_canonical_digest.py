@@ -9,15 +9,11 @@ table above `_OBJECT_HEADS` in `state/world.py`) under the same `blake2b`-128, n
     format move that re-builds every pin. MUTATION, run 2026-10-28 and reverted: `_object_head`
     made to drop a dataclass's last field turns the Tenure vector test RED and the one-field test
     RED on `term`.
-  * THE CONTROL. For seeds 0, 1 and 2 after one season: the event count, the per-collection entity
-    counts, the census and the OLD `repr` digest (copied below as a local function, the base
-    commit's bodies verbatim) equal what the base commit `b9beec9d` read. Its equality says no hashed
-    state, act count, census figure or entity count moved; only the digest did (the old digest was
-    blind to the act store, `tick` and a `Receipt`'s spec and serial, which the counts and the census
-    only partly cover). The new digest is pinned beside it, so running this file under two
-    `PYTHONHASHSEED`s shows the new hash does not depend on the process. AFTER GO-07 THIS CONTROL IS A
-    CHANGE DETECTOR: every later batch that moves the world re-records it beside `BASE_HASHES`
-    (`test_season_weather.py`).
+  * THE CONTROL. For seeds 0, 1 and 2 after one season: the hash, the act count, the census and the
+    length of the Event log equal the shipped world's literals, which `_realm_goldens.py` owns
+    (the one owner of every realm hash; this file's control is the one test that reads the shipped
+    pin). AFTER GO-07 THIS CONTROL IS A CHANGE DETECTOR: a batch that moves the world re-records the
+    owner, in its own commit, and names the mover there.
 """
 
 from __future__ import annotations
@@ -39,9 +35,12 @@ import pytest
 
 from ..data.requires import UNKNOWN, Observation
 from ..harness import populated as POP
+from ..boot.realm import build_realm
 from ..state.carriers import Event, Rung, Site, StateChange, Tenure, Term
 from ..state.gate import Subject
-from ..state.world import World, _canonical, _entity_digest
+from ..data.fixtures import DEFAULT_FIXTURES
+from ..state.world import SnapshotRefused, World, _canonical, _entity_digest, decode, encode
+from ._realm_goldens import BUILD, CENSUS, SHIPPED
 
 ROOT = Path(__file__).resolve().parents[3]
 
@@ -279,420 +278,78 @@ def test_go07_a_type_with_no_rule_raises_rather_than_guessing():
 
 # --- THE CONTROL -----------------------------------------------------------------------------------
 
-def _old_entity_digest(obj):
-    """The base commit's `_entity_digest`, verbatim: the `repr` digest GO-07 replaced."""
-    if hasattr(obj, "__dataclass_fields__"):
-        return repr(obj)
-    if isinstance(obj, dict):
-        return repr(sorted((str(k), repr(v)) for k, v in obj.items()))
-    if hasattr(obj, "__dict__"):
-        return repr(sorted(vars(obj).items()))
-    return repr(obj)
-
-
-def _old_content_hash(w) -> str:
-    """The base commit's `World.content_hash` body, verbatim, over `_old_entity_digest`."""
-    h = hashlib.blake2b(digest_size=16)
-    for name in World._STATE_COLLECTIONS:
-        for k in sorted(getattr(w, name, {}) or {}):
-            h.update(f"{name}|{k}|{_old_entity_digest(getattr(w, name)[k])}".encode())
-    for name in World._STATE_SEQUENCES:
-        for n, item in enumerate(getattr(w, name, ()) or ()):
-            h.update(f"{name}|{n}|{_old_entity_digest(item)}".encode())
-    for t in sorted(w.tenures, key=lambda t: t.id):
-        h.update(f"T|{t.id}|{_old_entity_digest(t)}".encode())
-    for e in w.log:
-        h.update(f"{e.id}|{e.kind}|{e.emitted_at}|{e.degree}|"
-                 f"{','.join(e.causes)}".encode())
-        for c in e.changes:
-            h.update(f"~{c.subject}|{c.mode}|{c.driver}|{c.field}|{c.delta}".encode())
-        for o in (getattr(e, "observed", None) or []):
-            h.update(f"^{o}".encode())
-    return h.hexdigest()
-
-
-def _counts(w) -> dict:
-    out = {n: len(getattr(w, n)) for n in World._STATE_COLLECTIONS + World._STATE_SEQUENCES}
-    out["tenures"] = len(w.tenures)
-    out["log"] = len(w.log)
-    return out
-
-
-#: Read on the base commit `b9beec9d` (the old digest; PYTHONHASHSEED 0 and 1 identical), except
-#: `new`, read on the GO-07 tree. `census` is the sha256 of `populated.run`'s return value as sorted
-#: JSON -- the census plus `acts`, `actors`, `act_subjects` and `claim_sources`.
-#: RE-RECORDED at v10 REM-22 (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `restore`, `work` and `examine`
-#: declare `referent_class: Site`, so the act mix of every seeded realm moves; EVERY value below is the REM-22
-#: tree's, read with this file's own helpers (`_old_content_hash`, `_counts`) and `populated.run`, and the control
-#: still means what it meant -- the digest format changed and the world, at a given tree, did not (the two
-#: digests are read of the SAME run). Was, for seeds 0 / 1 / 2: `old` b2464a6c... / 97d2d92f... / 455cfe8d...,
-#: `new` 947c190b... / 36ef9545... / 7e8df32a..., `acts` 539 / 560 / 588, `log` 7018 / 8128 / 6879.
-#: RE-RECORDED AGAIN at v10 REM-23 (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `commit` declares
-#: `referent_class: Proposition`, so it forms only on a Proposition the question it answers names -- 83 of 83
-#: persons formed it before (attempted 38 / 33 / 34 at seeds 0 / 1 / 2, `aperture 1 s`), 6 / 2 / 1 do now
-#: (attempted 1 / 1 / 1) -- and the act mix of every seeded realm moves with it. EVERY value below is the REM-23
-#: tree's, read with this file's own helpers (`_old_content_hash`, `_counts`) and `populated.run`; CONTROL, run: the
-#: same script on the REM-22 tree (`e66a22ec`) reads the values this block held, so the move is this unit's.
-#: Was, for seeds 0 / 1 / 2: `old` ea5d101c... / 0982d7ba... / 978f8690..., `new` 3c627dea... / 9b9145f7... /
-#: 7619c18e..., `acts` 543 / 588 / 607, `log` 7345 / 10146 / 8132.
-#: RE-RECORDED AGAIN at v10 REM-24 (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `petition` declares
-#: `referent_class: Person`, so it forms only on a person the question it answers names -- formed for 82 / 81 / 82
-#: of 83 persons before (attempted 19 / 17 / 20, refused 9 / 13 / 12, every one on `exists:Person=0`), 40 / 39 / 43
-#: do now (attempted 10 / 4 / 8, refused 0) -- and the act mix of every seeded realm moves with it. EVERY value below
-#: is the REM-24 tree's, read with this file's own helpers (`_old_content_hash`, `_counts`) and `populated.run`;
-#: CONTROL, run: the same script on the REM-23 tree (`409c467b`, a `git worktree`) reads the values this block held
-#: exactly, so the move is this unit's. Was, for seeds 0 / 1 / 2: `old` 26fa3179... / e51b0d83... / c961a57a...,
-#: `new` 290655d8... / 9537c69e... / 43b51550..., `acts` 532 / 582 / 583, `log` 6647 / 8656 / 7196.
-#: RE-RECORDED AGAIN at v10 REM-25 (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `carry`, `found` and `build`
-#: declare `referent_class: Record`, and the `Record` term widens from `writs_held` to `writs_held` plus
-#: `records_held_for_holding_rows`, so they form only on a Record the person holds (a petition, for the realm) --
-#: 83 of 83 persons formed each before (`carry` attempted 15 / 18 / 12, `found` 11 / 14 / 21, `build` 12 / 13 / 12,
-#: all refused on `exists:petition=0` / `exists:works=0`, `aperture 1 s`), 9 / 4 / 9 do now (`carry` attempted
-#: 2 / 0 / 1, executed 2 / 0 / 1; `found` 0 / 0 / 0; `build` 0 / 1 / 1), and `comply` forms on a held petition his
-#: ledger names (attempted 2 / 2 / 1, refused on `exists:dispensation=0`) -- and the act mix of every seeded realm
-#: moves with it. EVERY value below is the REM-25 tree's, read with this file's own helpers (`_old_content_hash`,
-#: `_counts`) and `populated.run`; CONTROL, run: this file's own control test on a detached worktree at the REM-24
-#: tree (`f2381695`) is green against the values this block held, so the move is this unit's. Was, for seeds
-#: 0 / 1 / 2: `old` 9930edaa... / eaa35b59... / 7397b498..., `new` cd0ea7bc... / 3688012e... / 9dde0b7b...,
-#: `acts` 529 / 579 / 578, `log` 6396 / 8662 / 7190.
-#: RE-RECORDED AGAIN at v10 CP-T05-04 (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `argue` declares
-#: `referent_class: Proposition` and `open_case` declares `Person`, and `world_q.docket_question` asks the witness
-#: of a docketing about the matter docketed -- `argue` formed for 37 / 35 / 39 of 83 persons before (attempted 8 / 10 / 5,
-#: every one refused on `exists:Proposition=0`, `aperture 1 s`), for none now; `open_case` formed for 8 / 8 / 8 persons
-#: and 6 / 6 / 8 do (executed 4 / 2 / 1 -> 2 / 1 / 1 with the question, 3 / 1 / 1 with the columns alone: the lost case
-#: is `terr_T13`'s, a rung) -- and the act mix of every seeded realm moves with it (the docket question moves seeds 0 and
-#: 1 and not seed 2). EVERY value below is the CP-T05-04 tree's, read with this file's own helpers (`_old_content_hash`,
-#: `_counts`) and `populated.run`; CONTROL, run: this file's own control test on a detached worktree at the REM-25 tree
-#: (`92892b09`) is green against the values this block held, so the move is this unit's; and in-process on this tree the
-#: columns alone (the docket term stubbed) read `new` 7f36d369... / 43c143d5... / b3e6f82c... and the docket question
-#: alone (the columns blanked) 66a48d9a... / 209b02f9... / 7e87cc54..., so each unit moves the hash by itself (seed 2:
-#: the question moves nothing). Was, for seeds 0 / 1 / 2: `old` 38c7de45... / 233f7e8e... / 09176dd8..., `new`
-#: da1ce5eb... / f80b2949... / 7e87cc54..., `acts` 523 / 575 / 591, `log` 6348 / 8597 / 7724.
-#: RE-RECORDED AGAIN at v10 REM-2C (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `research` declares
-#: `referent_class: Record` and `Record` leaves `rosters.yaml: occasion_only_classes`, so the own-referent term stamps
-#: the question's own Records and `research` forms only on a Record -- formed for 83 / 83 / 83 persons before (attempted
-#: 69 / 66 / 53, refused at admission on `exists:Record=0` 67 / 62 / 53, `aperture 1 s`), 23 / 20 / 25 now (attempted
-#: 5 / 8 / 1, none refused at admission) -- and the act mix of every seeded realm moves with it (the freed scene slots
-#: go to other verbs). EVERY value below is the REM-2C tree's, read with this file's own helpers (`_old_content_hash`,
-#: `_counts`) and `populated.run`; CONTROL, run: this file's own control test on a detached worktree at the CP-T05-04
-#: tree (`ea6f1dba`) is green against the values this block held, so the move is this unit's (each half moves the
-#: one-season hash alone: `test_season_weather.py`'s `BASE_HASHES` note). Was, for seeds 0 / 1 / 2: `old`
-#: 956afe6b... / 508ac507... / 7d9c2981..., `new` 26bcb37d... / 3b43b9fc... / b3e6f82c..., `acts` 524 / 577 / 595,
-#: `log` 6267 / 8493 / 7707.
-#: RE-RECORDED AGAIN at v10 REM-52 (B10-05), A GAME MOVE DECLARED, NO DIGEST MOVE: `body_step` ships at `10`, `H-125`'s
-#: live arm (it was the control `0`), so the first MATTER draw of the realm, which finds every larder empty, falls
-#: the body of each cohort it leaves short by `10` x its unmet units (36 / 32 / 35 of the 37 cohorts from 1000 to 940
-#: at seeds 0 / 1 / 2, 37 `body.changed` Events at seeds 0 / 1 and 38 at seed 2, where the base held 0 / 0 / 1), and
-#: the act mix of every seeded realm moves with it (the mechanism between the Events and the acts is not split here):
-#: `acts` 577 / 637 / 630 -> 576 / 637 / 629, `log` +107 / +110 / +107 Events, `aperture 1 s`: `tend` executed
-#: (attempted less refused) 1 / 0 / 1 -> 2 / 5 / 3, `utter` attempted +1 at seed 0, `challenge` -1 and `release` +1
-#: attempted at seed 1, no other verb row moves. No budget band is crossed at 940. NOBODY DIES OF IT: at
-#: `10` the lowest body is 940, and `person.died` is the same Event set before and after (1 / 0 / 2 at seeds 0 / 1 / 2,
-#: p_npc_050; none; p_npc_034 and p_npc_041, all RESOLVE-written). EVERY value below is the REM-52 tree's, read with
-#: this file's own helpers (`_old_content_hash`, `_counts`) and `populated.run`; CONTROL, run: the same script on a
-#: detached worktree at the REM-2C tree (`a397fa16`, whose game code is `07f46301`'s) reads the values this block
-#: held exactly, and so does the REM-52 tree with `body_step` swept back to `0` in `data/fixtures.py` and
-#: `written=True` left in `loop/matter.py` (a scratch worktree), so the move is `body_step`'s alone and
-#: `written=True` moves nothing at these seeds. Was, for seeds 0 / 1 / 2: `old` 7a9ba50d... / 0418dc12... /
-#: 35e6932d..., `new` 8bec380b... / 82223978... / e707d359..., `acts` 577 / 637 / 630, `log` 6377 / 9117 / 7933.
-#: RE-RECORDED AGAIN at v10 REM-27 (B10-06), A GAME MOVE DECLARED, NO DIGEST MOVE: `march` declares
-#: `referent_class: Rung`, so it forms only on a Rung the question carries as `Rung` (`places_named`,
-#: `larders_in_purview`), and `RUNG_REMIT_ACTS` widens by derivation to `{issue, dispatch}` -- `march` attempted
-#: 10 / 15 / 3 -> 8 / 24 / 10 (`aperture 1 s`, every one still refused), and the act mix of every seeded realm moves
-#: with it. EVERY value below is the REM-27 tree's, read with this file's own helpers (`_old_content_hash`, `_counts`)
-#: and `populated.run`; CONTROL, run in process on this tree: `march`'s column blanked in the shared `VERB_TABLE` and
-#: `RUNG_REMIT_ACTS` narrowed back to `{issue}` reads the values this block held exactly, at all three seeds. Was, for
-#: seeds 0 / 1 / 2: `old` 3d139b32... / 31fa260b... / 3f836210..., `new` 5d2e5f77... / 8a50ca82... / b8678a41...,
-#: `acts` 576 / 637 / 629, `log` 6484 / 9227 / 8040.
-#: RE-RECORDED AGAIN at v10 REM-28 (B10-06), A GAME MOVE DECLARED, NO DIGEST MOVE: `convene` declares `referent_class:
-#: Rung`, so it forms only on a Rung the question carries as `Rung` (`places_named`, `larders_in_purview`) and never on
-#: a person-rung or a Proposition, and `RUNG_REMIT_ACTS` widens by derivation to `{issue, dispatch, convene}` (no offer
-#: moves). `convene` attempted 3 / 0 / 5 -> 4 / 5 / 6 and executed 1 / 0 / 1 -> 4 / 5 / 5 (`aperture 1 s`, realm), and
-#: each convened date carries a holder, so CALENDAR forms docket slots (`dates` 1 / 0 / 1 -> 4 / 5 / 5, `log` +711 /
-#: +1421 / +926). EVERY value below is the REM-28 tree's, read with this file's own helpers (`_old_content_hash`,
-#: `_counts`) and `populated.run`; CONTROL, run in process on this tree: `convene`'s column blanked in the shared
-#: `VERB_TABLE` and `RUNG_REMIT_ACTS` re-derived reads the values this block held exactly, at all three seeds. Was, for
-#: seeds 0 / 1 / 2: `old` ab2da387... / fd4a0315... / 9c74e8d9..., `new` ecb47cd0... / 27e9d231... / 9726db8d...,
-#: `acts` 581 / 641 / 632, `log` 6482 / 9221 / 8096.
-#: RE-RECORDED AGAIN at v10 REM-28 `dispatch` (B10-06), A GAME MOVE DECLARED, SEED 1 UNMOVED: `dispatch` declares
-#: `referent_class: Person`, so it forms only on a person the question names and never on a rung, a Record or a Site
-#: (`names no person the world holds`, 16 of 33 pooled attempts at `aperture 1 s`, all refused), and no derived set
-#: moves. Seeds 0 and 2 re-record (`dispatch` attempted 11 / 8 / 8 -> 2 / 8 / 6, refused 9 / 0 / 2 -> 0, the freed scenes
-#: taken by other acts: `acts` 583 / 642 / 627 unmoved in count, `log` 7193 -> 7196 and 9022 -> 9030); seed 1, where no
-#: `dispatch` was refused, reads the block above exactly. EVERY value below is the REM-28 `dispatch` tree's, read with this
-#: file's own helpers and `populated.run`; CONTROL, run in process on this tree: `dispatch`'s column blanked in the shared
-#: `VERB_TABLE` reads the values this block held exactly, at all three seeds. Was, seed 0: `old` cfc94deb..., `new`
-#: 7d99c0f7..., `census` 0124fffe..., `records` 102, `tenures` 817, `log` 7193; seed 2: `old` c4d68221..., `new`
-#: 7f9c285d..., `census` 9f007552..., `log` 9022.
-#: RE-RECORDED AGAIN at v10 REM-28 `revoke` (B10-06), A GAME MOVE DECLARED, SEED 2 ALONE: `revoke` declares `referent_class:
-#: Office`, so it forms only on a seat the question carries as an Office and never on a person, a rung, a Record or a Site
-#: (`names no office the world holds`, 18 of 18 pooled attempts at `aperture 1 s`, all refused), and it EXECUTES NOTHING
-#: either way (`_req_revoke` reads `office`, a computed act carries `subject`: IN-53 D1, H-207 (A)). No derived set moves.
-#: Only seed 2 had a `revoke` attempted (7 attempts, all refused, 9 -> 7 after the dispatch commit), so seeds 0 and 1 read the
-#: block above exactly; at seed 2 the freed scenes are taken by other acts (`acts` 627 -> 625, `log` 9030 -> 9029). EVERY value
-#: below is the REM-28 `revoke` tree's, read with this file's own helpers and `populated.run`; CONTROL, run in process on
-#: this tree: `revoke`'s column blanked in the shared `VERB_TABLE` reads the values this block held exactly, at all three
-#: seeds. Was, seed 2: `old` 5e120ea4..., `new` e3e9e5a5..., `census` 8bdf5c05..., `acts` 627, `log` 9030.
-#: RE-RECORDED AGAIN at v10 CR-23 (B10-06), A GAME MOVE DECLARED, NO DIGEST MOVE: MATTER's last `stores` write to a rung
-#: carries the stock report (`stores:<kind>`) when `requisitionable` flips across the barrier (`Fixtures stock_report =
-#: crossing`, `H-243`), WITNESS deposits it to the seats over the larder, and the larders they are told of are stamped for
-#: `requisition`, so the act mix of every seeded realm moves (`log` 7196 / 10642 / 9029 -> 9270 / 11955 / 9381: the
-#: deposits and what follows them). EVERY value below is the CR-23 tree's, read with this file's own helpers and
-#: `populated.run`; CONTROL, run in process on this tree: `stock_report = off` reads the values this block held exactly,
-#: at all three seeds. Was, for seeds 0 / 1 / 2: `old` 0e54dc8a... / 25a37ac1... / eff84f40..., `new` 30a95964... /
-#: 79336806... / c39ac83e..., `acts` 583 / 642 / 625, `log` 7196 / 10642 / 9029.
-#: RE-RECORDED AGAIN at v10 REM-29 (B10-06), A GAME MOVE DECLARED, NO DIGEST MOVE: `migrate`'s capacity throttle is a
-#: `room` conjunct (`world_q.has_room`), so a full rung is refused at admission with the read on the Event, WITNESS
-#: deposits it to the migrant and he does not re-form that `migrate` (`aperture 1 s`, realm: attempted 67 / 135 / 88 ->
-#: 41 / 80 / 61); the freed scenes and the deposited claims move the act mix of every seeded realm (`acts` 602 / 644 / 617
-#: -> 598 / 640 / 619, `log` 9270 / 11955 / 9381 -> 9316 / 12278 / 9949). EVERY value below is the REM-29 tree's, read
-#: with this file's own helpers and `populated.run`; CONTROL, run on this tree: the `room` conjunct and its refusal key
-#: deleted from `migrate`'s row reads the values this block held exactly, at all three seeds. Was, for seeds 0 / 1 / 2:
-#: `old` f84cb2d2... / 185bd2be... / 42ac60f1..., `new` 1d402d15... / ce81d904... / 47b0b565..., `census` 3004e5b7... /
-#: c1d5db92... / ba91b58d....
-#: RE-RECORDED AGAIN at v10 REM-2B (B10-06), A GAME MOVE DECLARED, NO DIGEST MOVE: `evade / defy`, `construe` and `exchange`
-#: are typed and resolvable again (v9 IN-09 / IN-33 restored), so the chooser offers them and their attempts (`exchange` 21 /
-#: 36 / 34 at `aperture 1 s`, none executed) take scenes and emit refusals that WITNESS deposits: the act mix of every seeded
-#: realm moves (`acts` 598 / 640 / 619 -> 597 / 643 / 632, `log` 9316 / 12278 / 9949 -> 9319 / 11995 / 9722). EVERY value
-#: below is the REM-2B tree's, read with this file's own helpers and `populated.run`; CONTROL, run in process on this tree: the
-#: three rows put back to their base shape (untyped, unclassed, their decline notes, `exchange` writing one pair with no effect)
-#: read the values this block held exactly, at all three seeds. Was, for seeds 0 / 1 / 2: `old` 1842a06d... / e13520cf... /
-#: e06e57c1..., `new` 4cc07cbe... / 6e72eb59... / 8e5af677..., `census` 7ab6c655... / 26755d2c... / 03428a48....
-#: RE-RECORDED AGAIN at v10 IN-45 (B10-06), A DATA MOVE DECLARED: `venues.yaml: planned_works` authors two works, minted last in
-#: `build_realm` through `create_record`'s own effect, so the build moves (two Records and their masters' `hold` edges: `records`
-#: +2, `tenures` +2) and the seed-0 season takes one more act (597 -> 598, `log` 9319 -> 9334): the masters' `found` and `build`
-#: form on their works and the seed-0 realm's sampled order shifts. Seeds 1 and 2 keep their acts, census and log (a works's terms
-#: first ripen at tick 1, which one season does not reach). EVERY value below is the IN-45 tree's, read with this file's own helpers
-#: and `populated.run`; CONTROL, run in process on this tree: `planned_works` emptied reads the values this block held exactly, at
-#: all three seeds, and the build world's old digest and content hash. Was, for seeds 0 / 1 / 2: `old` 789bc9eb... / 64276910... /
-#: b8031dc3..., `new` 41ffb48b... / 6c52b44c... / 9bb7306d..., `census` ed0c8bac... (seed 0; seeds 1 and 2 unmoved).
-#: (The per-seed ED-IN-0306 re-record notes this block carried before SE-06 are at `git show 4de5f994d:engine/season/tests/test_go07_canonical_digest.py`.)
-#: RE-RECORDED AGAIN at v10 SE-06 (B10-07b), A DATA MOVE DECLARED: the 37 population cohorts hold their territory's temperament as
-#: pursuits (`cohorts.yaml: temperaments:`), so the build moves (the cohorts' `pursuits` only: the counts of persons, rungs, offices and
-#: sites are unchanged) and every seeded season takes another path (`acts` 599 / 638 / 633 -> 598 / 640 / 653, `log` 9378 / 11960 /
-#: 9726 -> 8913 / 11937 / 9718). EVERY value below is this tree's, read with this file's own helpers and `populated.run`; CONTROL,
-#: run in process on this tree: `temperaments:` deleted from a copy of `cohorts.yaml` reads the values this block held exactly, at
-#: all three seeds, and the build world's old digest and content hash. Was, for seeds 0 / 1 / 2: `old` faa7f2b1... / 0be6716a... /
-#: ab260df2..., `new` 873525df... / 3c6c0de3... / 07a0c784..., `census` 89a3fbcd... / b2c3ef40... / 10f3da31....
-#: RE-RECORDED AGAIN at v10 CR-21 (M14, B10-07b), A DATA MOVE DECLARED: `happiness`'s `deontological_instrumental` cell +0.4 -> 0.0 (which
-#: SE-06's cohort vectors read, so the build moves), `restore` celled (P/S -0.2) and the `deed:commitment.ended` cells re-rank candidates,
-#: so every seeded season takes another path (`acts` 598 / 640 / 653 -> 606 / 651 / 655, `log` 8913 / 11937 / 9718 -> 9180 / 10898 / 9946).
-#: A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM. EVERY value below is this tree's, read with this file's own helpers and `populated.run`;
-#: CONTROL: the SE-06 tree (`bcaf1d519`) held the values listed as `Was` (its own pins; the build and two-season hashes of seed 0 were
-#: re-read on an extracted copy of it, see `test_season_weather.BASE_HASHES`). Was, for seeds 0 / 1 / 2: `old` 7d1989f6... / ac68817f... / ed7ce0c1..., `new` 31e39c05... / 301950ee... / 83b98aac...,
-#: `census` fce1b6a7... / 4029aeb0... / 4a8f2001....
-#: RE-RECORDED AGAIN at v10 CR-16 (B10-07b), A BEHAVIOUR MOVE DECLARED: `Fixtures stance_polarity` `legacy` -> `declared`, so a grudge pulls
-#: the contested acts against its object (every contested row whose opponent is its subject; `arrest` never forms in the realm, G-07) UP instead of down and every seeded season takes another path
-#: (`acts` 606 / 651 / 655 -> 597 / 608 / 650, `log` 9180 / 10898 / 9946 -> 9347 / 10636 / 10728). The BUILD is unmoved (`Fixtures` is not
-#: hashed: the build world's old digest and content hash below are the previous pins). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM. EVERY
-#: value below is this tree's, read with this file's own helpers and `populated.run`; CONTROL, run in process on this tree:
-#: `stance_polarity` swept back to `legacy` reads the values this block held exactly, at all three seeds. Was, for seeds 0 / 1 / 2: `old`
-#: a70f7a83... / f51795a7... / 60507c37..., `new` e9f81463... / 4516fc49... / d2138e3a..., `census` 711e456d... / 6d9bd351... / a5adac42....
-#: RE-RECORDED AGAIN at v10 CP-T02-01 (B10-09), A BEHAVIOUR MOVE DECLARED: a death names the seats it empties (one
-#: `tenure.closed` per death write, receipted under the Offices), so every witness holds a claim on each vacated seat and the
-#: seeded first seasons of seeds 0 and 1 take another path (seed 2's first season reads its old values unmoved). CONTROL, run in process on this tree: `World.seat_holds` stubbed to `[]` (the emission
-#: off) reads the values this block held exactly. Was, for seeds 0 / 1: `old` 95068857... / 303810a3..., `new` 056584ed... /
-#: 48e59dc4..., `census` f8f221e0... / f864b5ae..., `acts` 597 / 608, `log` 9347 / 10636. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-RECORDED AGAIN at v10 CP-T02-02 (B10-09), AN ID MOVE DECLARED: a loop-built seat keeps its `offices.yaml` row's id
-#: (`populated._seat_id`: the throne is `off_king`, no longer `off_npc_020`), so every hash that folds an Office id moves, and the ids
-#: seed the draws, so the seeded first seasons of seeds 0 and 1 take another path (`acts` 608 / 616 -> 596 / 621, `log` 9138 / 11007 ->
-#: 9760 / 11149; seed 2 keeps its acts, census, counts and log and re-hashes only). CONTROL, run in process on this tree: `_seat_id` replaced
-#: by the slug rule (`off_<case slug>`) reads the values this block held exactly, at all three seeds, and the build world's old digest and
-#: content hash. Was, for seeds 0 / 1 / 2: `old` e6f28fc9... / 85e94055... / 8a2d9108..., `new` b4aa3024... / 4687d35a... / 31f199ea...,
-#: `census` 3c5fb2de... / 298a3ea5... (seed 2 unmoved). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-RECORDED AGAIN at v10 CP-T03-00 (B10-09), A BEHAVIOUR MOVE DECLARED: both parties of a fight take their band (a felled
-#: attacker dies; each kind's Event carries only its earners' changes), so the first season's deaths and deposits move at all
-#: three seeds (`acts` 596 / 621 / 650 -> 590 / 620 / 651, `log` 9760 / 11149 / 10728 -> 9338 / 11060 / 10125, `persons`
-#: 80 / 81 / 82 -> 77 / 81 / 81). Was, for seeds 0 / 1 / 2: `old` bc4d8440... / d5b68b41... / 3168fab6..., `new` ebe18510... /
-#: 507a9bed... / c38c332d..., `census` bd2b200c... / 54df699b... / b34f3210.... CONTROL: the pre-item tree (`68767e731`) is the
-#: tree this block was green on. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-RECORDED AGAIN at v10 CP-T02-03 (B10-09), A BEHAVIOUR MOVE DECLARED: a `rung` goal whose rung its org's member governs is met
-#: (`world_q.aim_state`) and forms no `need` (`goal_varfell_oastad_gate`, met at build, is the one shipped case), so the first season
-#: moves at all three seeds (`acts` 590 / 620 / 651 -> 589 / 628 / 637, `log` 9338 / 11060 / 10125 -> 9154 / 11338 / 9817, `persons`
-#: 77 / 81 / 81 -> 76 / 81 / 81). Was, for seeds 0 / 1 / 2: `old` 3c66f569... / 2fed7c77... / dd9b3a2a..., `new` 921de777... /
-#: 2453fa53... / 9c7fdb69..., `census` 04e36dfe... / 3e1bbbef... / 8ba7fe46.... CONTROL, run in process on this tree: `aim_state` reading
-#: `open` always (`AIM_RULES` cleared) reads the values this block held exactly, at all three seeds. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: CP-T02-05 (B10-09) added a stamp, `world_q.oughts_named`, and B10-09 close one REVERTED it (falsified on HR-9 control (4),
-#: `Falsified: CP-T02-05`): the pins below are the reading with the stamp reverted; the build is equal throughout.
-#: RE-RECORDED AGAIN at v10 IN-61 (B10-09), A DATA MOVE DECLARED: `off_king` `conferral` `null` -> `inheritance`, `off_heir` `null` ->
-#: `appointed` (RS-27); `Office.conferral` folds into both digests, so `old` and `new` move at all three seeds and NOTHING ELSE DOES
-#: (`acts`, `census` and every count equal). Was, for seeds 0 / 1 / 2: `old` 76409cd0... / f5081f07... / 25fe49f5..., `new`
-#: f699c1d4... / 5c577efd... / 5f914de5.... CONTROL, run in process on this tree: the two seats' `conferral` set back to `None` on the
-#: built world reads the old two-season realm hashes exactly at seeds 0-2. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-RECORDED AGAIN at B10-09 close one (D2 + D3, then the CP-T02-05 revert), A BEHAVIOUR MOVE DECLARED: a felled attacker's own
-#: `person.died` is placed where he fell (`world_q.event_place`), and a second `commit` on a held cause is declined person-side
-#: (`rosters.yaml: held_edge_declines`); the `oughts_named` stamp is reverted, so this is the reading with the stamp reverted (`acts`
-#: 589 / 628 / 637, equal to CP-T02-03's, `log` 9154 / 11338 / 9817 -> 9172 / 11338 / 9831). Was, for seeds 0 / 1 / 2:
-#: `acts` 582 / 617 / 645, `old` 5675a99d... / 31188d9f... / ed1009cd..., `new` 76340255... / c7c14a9f... / e149edb1..., `census` 93eb8633... /
-#: 67cda841... / 149c94a4.... CONTROL, run in process on the pre-revert tree (`f28c3f33c`): `oughts_named` stubbed to `()` reads the
-#: two-season realm hash this block's tree reads, at seeds 0-2. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-RECORDED at ED-IN-0310 (`build_realm`'s `foreign` default True; Jordan, 2026-11-04): the Altonian cast adds persons, rungs and two offices, so
-# every seed's hashes, act count, census and counts move. CONTROL, run in process on this tree: `build_realm(seed, foreign=False)` reads the
-# previous literal below exactly at seeds 0-2 (old/new digests, acts, census, counts). Was seed 0 (one season): old 8504cdb7... / new 53469c5c..., 589 acts.
-# RE-RECORDED at CR-10 (B10-09 close two, arm D2), A BEHAVIOUR MOVE DECLARED: `attention_key` spares a tier-1 own-act echo (A1-05), so the
-# first season moves at all three seeds (`acts` 601 / 637 / 647 -> 623 / 672 / 655, `log` 9929 / 11758 / 10703 -> 9739 / 13356 / 10585, `persons`
-# 76 / 81 / 81 -> 78 / 81 / 81). Was, for seeds 0 / 1 / 2: `old` d04a69b6... / 8d64280c... / 1c7ab31a..., `new` 5e4d77d3... / 0cfcf7ec... /
-# 9fef90dd..., `census` 1268c806... / af7e633b... / 2f6133ea.... CONTROL, run in process on this tree: the tier-1 branch returning tier 4
-# for an own-act claim (the every-tier screen) reads the seed-0 values this block held (via `test_season_weather`'s pins); the build is
-# equal. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-RECORDED at v11 CR-28 (B10-09 close two; CP-T02-05's re-take), A BEHAVIOUR MOVE DECLARED: `questions_for` stamps the Propositions a
-# person heard of from another (`world_q.propositions_heard`), so the first season moves at all three seeds (`acts` 623 / 672 / 655 ->
-# 623 / 672 / 661, `log` 9739 / 13356 / 10585 -> 9741 / 12874 / 10699). Was, for seeds 0 / 1 / 2: `old` 3a3c84a9... / 910d2cf9... /
-# f8077b2c..., `new` a2ff6dfe... / f5b9467f... / 762d314d..., `census` cc0a91a7... / af62fcd4... / 5c15e2da.... CONTROL, run in process
-# on this tree: `propositions_heard` stubbed to `()` reads the seed-0 values this block held (via `test_season_weather`'s pins) and
-# CR-10's two-season hashes at seeds 0-2; the build is equal. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED at v11 CR-81 (ED-IN-0318), A DATA MOVE AND A TRAJECTORY MOVE DECLARED: `build_realm` writes the starting
-# acquaintances, so every seed's one-season world moves (`acts` 623 / 672 / 661 -> 630 / 662 / 663, `log` 9741 / 12874 / 10699
-# -> 10847 / 13169 / 12201). Was, for seeds 0 / 1 / 2: `old` 8d5c403e... / e699f507... / 1dadbb92..., `new` 1f573c4c... /
-# ea12c800... / 96763a69..., `census` f9114b10... / be1e3ddb... / 9c425d11.... CONTROL, run in process on this tree: every
-# `build_realm` forced to `acquaintances=False` reads the old block exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-RECORDED at v11 CR-25 (B10-09 close two), A BEHAVIOUR MOVE DECLARED: a computed `establish` founds an office over a
-# holding (`establish` gains `referent_class: Rung`, `questions_for` stamps `holdings_to_found`), so every seed's first
-# season moves (`acts` 630 / 662 / 663 -> 619 / 659 / 658, `log` 10847 / 13169 / 12201 -> 10316 / 13121 / 12898; seed 0
-# founds one office in the first season, `offices` 34 -> 35). Was, for seeds 0 / 1 / 2: `old` b72b5582... /
-# f0572c69... / d5d3073b..., `new` 5fece5d9... / 19f10a6d... / 5a1f42dc..., `census` 97494bcc... / 299fe1f4... / 7234ba8a....
-# CONTROL, run in process on this tree: `holdings_to_found` stubbed to `()` AND `establish`'s `referent_class` dropped reads the
-# old block exactly at seeds 0-2 (the term alone stubbed does NOT: the column moves formation by itself). A GOLDEN
-# RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED at v11 CR-82 (B10-09 close two, ED-IN-0319), A FIXTURE MOVE DECLARED: `ledger_cap` 200 -> 3200, so a realm
-# ledger that reached the cap in season 1 now keeps what it evicted. Was, seeds 0/1/2: old 3ea197ac... / 1c06b375... /
-# b8925f0e..., new f47dfa8c... / 472f71c9... / 06324657..., census f27fea77... / 38076abd... / e4fd0348...; acts 619/659/658
-# -> 619/657/658; log 10316/13121/12898 -> 10316/13085/12898 (seed 1 alone moves its acts and log in season 1). CONTROL,
-# run in process on this tree: the cap swept back to 200 after `build_realm` reads the old three entries exactly, every
-# field. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED at v11 CR-17 (B10-09 close two), TWO BEHAVIOUR MOVES DECLARED: commit 1 ships `Fixtures odds_weighting` `believed` (H-248)
-# and commit 2 re-derives `choice_temperature` 0.1 -> 0.05 (H-96). AT COMMIT 1 ALONE (measured on a scratch harness) seed 0 reads
-# the block below it held exactly, seed 1 moves (`new` 1081dd4f... -> f9ac3028..., `acts` 657 -> 658, `log` 13085 -> 13083) and seed 2
-# reads the old block. AT COMMIT 2 all three seeds move: for seeds 0 / 1 / 2 `acts` 619 / 657 / 658 -> 685 / 673 / 715, `log`
-# 10316 / 13085 / 12898 -> 11775 / 10540 / 10566, `persons` 79 / 80 / 80 -> 77 / 80 / 80, and seed 0's `offices` 35 -> 34: CR-25's season-1 founding no longer
-# occurs on seed 0 at tau 0.05, so no realm run shows a computed `establish` executing at HEAD (CR-25's falsifier is the
-# hand-built world). Was, for seeds 0 / 1 / 2: `old` e700e9ef... /
-# 4f06a8fe... / 8f4851b1..., `new` bdff0832... / 1081dd4f... / 37db6d14..., `census` bdce26ba... / 264d73dd... / b60a0405....
-# CONTROL, run in process on this tree: `odds_weighting` swept to `none` and `choice_temperature` to 0.1 reads the old three
-# entries' `new`, `acts` and `log` at seeds 0 / 1 / 2 (bdff0832... / 1081dd4f... / 37db6d14...; 619 / 657 / 658; 10316 / 13085 /
-# 12898). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-RECORDED at v11 CR-86 (ED-IN-0342, a declared MOVER of every world hash: Valorsmark a faction and `fac_crown` ->
-# `fac_valorsmark`, the Duchess's and the Duke's sworn `oblige` to `off_king`, the head seats). Was, for seeds 0 / 1 / 2: `old`
-# 5250cd3f... / 0458835b... / 0a3e374e..., `new` 4761e5ca... / 033474f7... / 3217d743..., `census` e3e7b893... / 26d2bc88... /
-# 395fe953..., `tenures` 989 / 1002 / 1003, `log` 11775 / 10540 / 10566; `acts` do not move (685 / 673 / 715).
-# CONTROL, run in process on this tree at seed 0: the two vassals' obligees dropped read the old `log` (11775) and event digest.
-# RE-RECORDED at v10 REM-31 (IN-46), A DECLARED MOVER: `the body` carries `march`'s `step: ENCOUNTER` / `declares: Declared`,
-# so every fight is declared at RESOLVE and fought at ENCOUNTER. Was, for seeds 0 / 1 / 2: `old` da44a46a... / 4e5791b2... /
-# 0f9fd8c4..., `new` 87b9d1f1... / 86ebc984... / 888a08cb..., `census` 64681b46... / 54968fb4... / 041e9f1d...; `acts` 685 / 673 /
-# 715 -> 700 / 688 / 724, `log` 11793 / 10566 / 10584 -> 11846 / 10680 / 10614. CONTROL, run in process on this tree: `the body`'s
-# `step:`/`declares:` popped reads the old three entries exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-RECORDED at v10 REM-30's `verb_capability` rows (`argue`, `inquiry`), A DECLARED MOVER: `train` forms one Candidate per
-# vocation (`copying`, `argue`, `inquiry`) and `train`'s act id carries the vocation (`data/verbs.py::act_key`). Was, for seeds
-# 0 / 1 / 2: `old` 781957cb... / 1e262e0e... / 8f438d3c..., `new` 36378f25... / 8899cdd5... / 048a326b..., `census` dc481e4e... /
-# fced32bd... / a489798b..., `acts` 700 / 688 / 724 -> 705 / 697 / 730, `persons` 77 / 80 / 80 -> 79 / 80 / 81, `log` 11846 /
-# 10680 / 10614 -> 11581 / 10739 / 10985. CONTROL: the rows commit's four files reverted reads the old three entries exactly
-# (the file's tests, run on the parent tree). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at v10 CR-30's commit for CR-20 + CR-30 TOGETHER (`Person.attributes`, `Person.heritage`: two new fields in every
-# Person's repr, and four authored `heritage:` cast rows, which change the `marks` term of the `seen` claims their co-located
-# witnesses hold). Was, for seeds 0 / 1 / 2: `old` 4ace8831... / 65f3ee2b... / fcbfc95b..., `new` 027c7516... / 5b000930... /
-# 891860d4...; `acts`, `census` and `counts` do NOT move (705 / 697 / 730, the same census digests and log lengths). CONTROL: the
-# ordered (kind, id) event list over two seasons equals the parent tree's at seeds 0 / 1 / 2 both with the four `heritage:` rows
-# removed (the ledgers' claim values equal too) and with them present (only the `marks` of `seen` claims differ, 158 / 143 / 124
-# of them) -- so only the repr-derived hashes move. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at v10 CR-33 (the 34 lifepaths as creation templates), A DECLARED MOVER by ONE person: the registry authors four
-# `lifepath:` keys, three that map to no capability key (NPC-002, NPC-005, NPC-080) and NPC-088's `3-CF4`, which holds `inquiry` at
-# `pool_default`, so Carin Vedel's `Person.capability` repr is no longer empty. Was, for seeds 0 / 1 / 2: `old` bf061eff... /
-# cad429d9... / 10959592..., `new` f2e5e265... / 0d25717b... / 05f065f4...; `acts`, `census` and `counts` do NOT move. CONTROL, run
-# in process on this tree: `data/cast.py::capability_of` stubbed to `{}` reads the old `new` three exactly, and the ordered
-# (kind, id) event list over one season equals the parent tree's (`d5358a9a`) at seeds 0 / 1 / 2 (11581 / 10739 / 10985 events).
-# A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at v10 CP-T03-01 (the `individual` conjunct on `fight`/`accept`): the only `old`/`new` movers. `Event.observed` is hashed and every
-# `fight`/`accept` that clears `exists`/`with` now records `individual:<actor>` reads (28 / 24 / 18 at one season). Was, for seeds 0 / 1 / 2: `old`
-# 65f9e76f... / cbbb8e0d... / b7960661..., `new` 69783660... / d81d7a73... / 9ab1a749.... `acts`, `census` and `counts` do NOT move. CONTROL: with those
-# reads left off `observed` (a scratch switch) the old three `new` values read exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at v10 CP-T03-09 (`capture`), A DECLARED MOVER of every realm: the row forms for the seats granting `dispatch` (26 of 34 live
-# holds on `build_realm(0)`), so persons choose it and the act mix, the log and the hash move. Was, for seeds 0 / 1 / 2: `old` 31619119... /
-# 63a729de... / 1a8a1088..., `new` 71ff6e92... / 73af0d1e... / 011a4605...; `acts` 705 / 697 / 730; `tenures` 997 / 1004 / 1014 (seeds 0, 1);
-# `log` 11581 / 10739 / 10985. `build_realm(seed)` itself does not move (the row is chosen in play: 837d0f83... below stands). CONTROL, run in
-# process on this tree: `capture` withheld from `populated.resolvable_verbs` reads the old `new` three exactly (71ff6e92... / 73af0d1e... /
-# 011a4605...). A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at v10 PC-10b (a challenge is a Record; `accept` binds to one), A DECLARED MOVER wherever a challenge forms: every
-# `challenge` mints a `challenge` Record and its maker's `hold`, and `accept` forms only on a `Record`-classed referent. `build_realm(seed)`
-# does not move (837d0f83... below stands). Was, for seeds 0 / 1 / 2: `old` 020f6611... / a7ed3e98... / 53eb44c0..., `new` 009f9f31... /
-# daca4682... / db5bd6f0...; `acts` 703 / 695 / 731; `records` 183 / 194 / 186; `log` 11585 / 10764 / 10582. CONTROL: the base tree
-# (`95f58adb`'s `engine/season`) reads the old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at v11 CR-87 (violence made exceptional), A DECLARED MOVER of every season that fought and of the build: the
-# build-time loyalty row names the creed, never its head, at no lower than -1 (`build_realm(seed)` moves: 837d0f83... ->
-# 7266f56b...), and `fight` forms only in a held context, so the 1-season realm keeps the persons the fights felled (80 -> 83).
-# Was, for seeds 0 / 1 / 2: `old` a0944c1b... / d52e342d... / e6f01019..., `new` 0fb73bc8... / 3b407a74... / 47151656...;
-# `acts` 719 / 721 / 740; `persons` 80 at each. CONTROL: `tests/test_cr87_violence_contexts.py::revert_cr87` reads the old
-# build and one-season hashes exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at v11 CR-85 (`faculty` replaces `history` in combat's pool and Ob, ED-IN-0330; every season fight
-# rolls pool 8 against Ob 1.0, was 9 against 1.5): seed 1 was `old` 18de0fa6... / `new` f89ea45d... (`acts`,
-# `census`, `counts` unmoved); seeds 0 and 2 do not move (seed 0 fights nothing, seed 2's fights land where they
-# did). CONTROL: `test_cr85_faculty_replaces_history.py::revert_cr85` (the seam's faculty at 3 for every party) reads
-# the old value exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at v11 CP-T03-04 (`arms` in `verb_capability`'s range: a FORMATION mover even at control, one more `train`
-# Candidate per `train` formation with nobody holding the key; no roll moves). Was, for seeds 0 / 1 / 2: `old` 7e81a2cf... /
-# ec800435... / ecc848ea..., `new` 20accb03... / 6e25b047... / fe9032ed...; `acts` 744 / 746 / 746; the census and counts in
-# each row's trailing comment. `build_realm(seed)` does not move (7266f56b... stands). CONTROL:
-# `test_cp_t03_04_arms.py::revert_cp_t03_04` (the three roster rows and the vocation off) reads the old three `new` values
-# exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at v11 CP-T03-07 (`Person.body_ceiling`: a SCHEMA mover of every Person, so both the `repr` digest and the
-# canonical one move at build and at every season; and the lasting mark, an outcome mover where a survivor reached the deepest
-# gate -- one person at seed 2, whose body and ceiling moved and nothing else: `acts`, `census` and `counts` do NOT move at any
-# seed). Was, for seeds 0 / 1 / 2: `old` 42847586... / 7e8ccabe... / 6c3fdfa0..., `new` b2dde1fc... / 07634b99... / 1cc4370d...;
-# and the build pins in the test below, each with its `was`. CONTROL: `test_cp_t03_07_body_ceiling.py::revert_cp_t03_07`
-# (`body_mark_model: none` and the field out of the canonical encoding) reads the old three `new` values and the old build
-# `7266f56b...` exactly; the `repr` digest has no in-process revert (a dataclass `repr` carries every field). A GOLDEN
-# RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at v11 CP-T03-08 (`tend` declares `referent_class: Person` and `wounded_with` stamps the wounded: a
-# FORMATION mover of every season and an outcome mover -- a man below his ceiling tends himself whole; `acts`, `census`
-# and `counts` move at every seed). Was, for seeds 0 / 1 / 2: `old` 92e19ffc... / 6cffb790... / aa306a67..., `new`
-# eb2919ae... / fc3201f3... / 6da144ff..., `acts` 744 / 747 / 747, census f970d2ed... / 3b1d0142... / 015989bc..., `log`
-# 13401 / 11767 / 11344. The build pins do not move (the item writes no field). CONTROL:
-# `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` reads the old three `new` values exactly. A GOLDEN RE-RECORDED,
-# NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at the B10-13 pin commit (P15; the batch's recorded movers at these one-season readings are CR-27 `lie`, CR-56 the re-slotted
-# matter, CP-T05-02 the self-plea and CP-T05-03 `tell.refused`; CR-34, CR-55 and CR-31 are recorded EQUAL at one season here (H-161,
-# H-356, H-358) and are not isolated per item: a FORMATION mover and an
-# outcome mover of every season; `acts`, `census` and `counts` move at every seed, `dates` at seed 1). Was, for seeds 0 / 1 / 2: `old`
-# 942102ac... / 9538a881... / a1bc1235..., `new` d4c83c8c... / 7cacc763... / 447ed0d8..., `acts` 755 / 754 / 757, census 4cfb3efe... /
-# 8256042d... / ab2d3aa7..., `log` 13454 / 11955 / 11398. The build pins do not move. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-BASE = {
-    0: {"old": "5926bbb0052e71ad8eb116ca4e49c0fb", "new": "256606154c30542f9456b2fe15c76f09", "acts": 749,   # B10-13 pin commit: was 942102ac... / d4c83c8c... / 755 / census 4cfb3efe... / records 198 / tenures 1024 / log 13454. CP-T03-08: was 92e19ffc... / eb2919ae... / 744 / census f970d2ed... / records 202 / propositions 144 / tenures 1029 / log 13401. CP-T03-07: was 42847586... / b2dde1fc.... CP-T03-04: was 7e81a2cf... / 20accb03... / census 6032506e... / records 203 / propositions 143 / tenures 1028 / log 13400
-        "census": "ddcdefbcf33acaabfd708a34508b5a6ff4f5555451ef16ddd01c807f10bc6d34",
-        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 197, "propositions": 143, "dates": 5, "docket": 8, "tenures": 1023, "log": 13379}},
-    1: {"old": "1e454aa00cdeaca25da1696d8d7ead25", "new": "aa58ef0b71c947ce5ff9f0a75ffd8ca6", "acts": 731,   # B10-13 pin commit: was 9538a881... / 7cacc763... / 754 / census 8256042d... / records 205 / propositions 141 / dates 5 / tenures 1011 / log 11955. B10-11b pin commit (PC-20 (1), the head-weighted strike impact, `K_STR_HEAD`; reading @4b334f2a): was 3caed4cc... / d9f3be70... / census 09f11a01... / log 11937; `acts` and the other counts do not move. CP-T03-08: was 6cffb790... / fc3201f3... / 747 / census 3b1d0142... / records 210 / propositions 146 / docket 9 / tenures 1022 / log 11767. CP-T03-07: was 7e8ccabe... / 07634b99.... CP-T03-04: was ec800435... / 6e25b047... / 746 / census 6282d017... / records 212 / propositions 145 / log 12273. CR-85 (faculty replaces history): was 18de0fa6... / f89ea45d...; `acts`, `census` and `counts` do not move. CP-T03-02 (a fight's `ending` + body Observation): was 327bac57... / f4330aac... / census 321d2548... / log 12271
-        "census": "4f10d9ad4fdbf2e420ca4c97d8fffae43e228891e270160c99144ecabbfb5bcb",
-        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 198, "propositions": 139, "dates": 4, "docket": 10, "tenures": 1005, "log": 11409}},
-    2: {"old": "835d5f7f98c6b49028cee097eb822c78", "new": "a21ab6e12e356ccc4261bec1c93ca3b4", "acts": 751,   # B10-12 pin commit (CR-24 `field_winner_casualties: engine` and MB-07r's support cap, both shipped; both reverted reads the old values; seeds 0 and 1 do not move): was 1dc975ca... / 77a09697... / 758 / census 4519b824... / records 179 / tenures 981 / log 11246. B10-13 pin commit: was a1bc1235... / 447ed0d8... / 757 / census ab2d3aa7... / log 11398. B10-11b pin commit (PC-20 (1), the head-weighted strike impact, `K_STR_HEAD`; reading @4b334f2a): was bb2336b4... / 285fb92a...; `acts`, `census` and `counts` do not move. CP-T03-08: was aa306a67... / 6da144ff... / 747 / census 015989bc... / records 183 / propositions 139 / tenures 984 / log 11344. CP-T03-07: was 6c3fdfa0... / 1cc4370d.... CP-T03-04: was ecc848ea... / fe9032ed... / 746 / census 49f45000... / propositions 141 / docket 8 / tenures 988 / log 11340. CP-T03-02: was 4fb68bcf... / a030141a... / census 414d3ac0... / log 11338; CR-87: was e6f01019... / 47151656... / 740
-        "census": "100052e459d4dc110f0b67015b806cb0550c947ceb5c61bfe8ba92494fe7e610",
-        "counts": {"persons": 83, "rungs": 414, "offices": 34, "sites": 322, "records": 177, "propositions": 138, "dates": 5, "docket": 7, "tenures": 979, "log": 11208}},
-}
+#: The control reads the shipped world only: `BUILD`, `SHIPPED` and `CENSUS` are `_realm_goldens.py`'s, the one
+#: owner of every realm literal. A world move re-records them there, in its own commit, with the mover named in the
+#: message; a revert-stacked control is not kept as a test (that owner's docstring).
 
 
 def test_go07_control_the_build_world_old_digest_is_unmoved():
-    """The base commit's `repr` digest of `build_realm(0)`, before a single act, read this literal
-    (`test_season_weather.BASE_HASHES[0]`'s retired value); the same world now reads the new pin."""
-    w = POP.build_realm(0)
-    c = POP.build_realm(0, foreign=False, acquaintances=False)   # ED-IN-0310 + CR-81: the realm before the empire and the acquaintances
-    assert (_old_content_hash(c), c.content_hash()) == ("a2b12c0d640dd015504b2e622c2ae07b", "e9ec044a5bf7248449fef9e8a28c0896")   # CP-T03-07 (`body_ceiling`, a Person field): was d7b1bb37... / e9611b77...; CR-87 (loyalty toward the creed): was 1808a6f0... / 6717d2d1...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 1dd20ec5... / dfdbd5df...; CR-33 (NPC-088 holds `inquiry`): was b016e338... / a4998422... (CR-20+CR-30: was 970d0b5b... / 060d8901... (CR-86: was 919faacb... / c7ca8d50...)
-    a = POP.build_realm(0, acquaintances=False)                  # CR-81's control arm: the parent tree's build
-    assert (_old_content_hash(a), a.content_hash()) == ("0bfaf18815fedddcfc55b754329a9255", "b9928b271a022bb49e4a743859bcb386")   # CP-T03-07: was 1f53bc11... / e6a40e18...; CR-87: was f37a51c3... / 7a9778bc...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 024abccb... / bfee1369...; CR-33: was d4be83d2... / 070b68df... (CR-20+CR-30: was be420f67... / 87682033... (CR-86: was f78bcaf4... / 70ea49cb...)
-    f = POP.build_realm(0, foreign=False)                        # CR-81: was 919faacb... / c7ca8d50... (acquaintances off reads it)
-    assert (_old_content_hash(f), f.content_hash()) == ("eac2356d678fa882b0e919fc37e67f98", "69dbd3be3b7b0067baffbb2eff10b8fd")   # CP-T03-07: was e5e7812b... / 2c9b523d...; CR-87: was 622e0736... / ccabd3be...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was d1ecf597... / 0b43b49c...; CR-33: was f1c15230... / ebd5e067... (CR-20+CR-30: was a7628b4e... / 7b7992f7... (CR-86: was 42f55a5f... / e12a710b...)
-    assert _old_content_hash(w) == "02997e750e3652605a9872e910d978b3"   # CP-T03-07: was 8018a699...; CR-87: was 3a7025a9...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 42b898c4...; CR-33: was ff134c63... (CR-20+CR-30: was da08203b... CR-86: was 47c172b0... (ED-IN-0342). CR-81: was f78bcaf4... (acquaintances=False reads it); ED-IN-0310: was 919faacb...; v10 IN-61: was 26c255ac...
-    assert w.content_hash() == "600d8b27147478e158553552cc1409a5"   # CP-T03-07 (`body_ceiling`; `revert_cp_t03_07` reads the old): was 7266f56b...; CR-87: was 837d0f83...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 6ad7b832...; CR-33: was d61848d3... (CR-20+CR-30: was b4bc2df0... CR-86: was 3ae970a1... (ED-IN-0342). CR-81: was 70ea49cb... (acquaintances=False reads it); v10 IN-61: was 4ab812ba... (CP-T02-02); before that 3e31638e... (CR-21)
+    """The build world, before a single act, reads the owner's pin."""
+    assert build_realm(0).content_hash() == BUILD[0]
 
 
-def test_go07_control_the_world_did_not_move_only_its_digest(monkeypatch):
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)
+def test_go07_control_the_world_did_not_move_only_its_digest():
+    """The shipped realm at seeds 0, 1 and 2, after one season and after two (the batch gate's reading, B05.99):
+    its hash, its act count, its census digest and the length of its Event log read the owner's literals. Nothing
+    is reverted: this is the shipped world."""
     checked = 0
-    for seed, base in BASE.items():
-        w = POP.build_realm(seed)
-        out = POP.run(1, seed, w=w)
-        got = {"old": _old_content_hash(w), "new": w.content_hash(), "acts": out["acts"],
+    for (seed, seasons), want in SHIPPED.items():
+        w = build_realm(seed)
+        out = POP.run(seasons, seed, w=w)
+        got = {"acts": out["acts"],
                "census": hashlib.sha256(json.dumps(out, sort_keys=True, default=repr)
                                         .encode()).hexdigest(),
-               "counts": _counts(w)}
-        assert got == base, f"seed {seed}: {got}"
-        assert got["old"] != got["new"], "the digest format did not change"
+               "log": len(w.log)}
+        assert got == CENSUS[(seed, seasons)], f"seed {seed}: {got}"
+        assert w.content_hash() == want, f"seed {seed}: {w.content_hash()}"
         checked += 1
-    assert checked >= 3
+    assert checked >= 6
+
+
+# --- THE SNAPSHOT (B06.06: a save is a state snapshot) -----------------------------------------------
+# `encode` and `decode` in `state/world.py` sit beside the GO-07 encoder. These tests compare a world with
+# its own decoded copy and read no pin, so they hold whatever the seeded pins read.
+
+def _after_two_seasons(seed: int) -> World:
+    w = build_realm(seed)
+    POP.run(2, seed, w=w)
+    return w
+
+
+def test_snapshot_round_trip_hash_equal():
+    """`decode(encode(w))` hashes as `w` does, at seeds 0, 1 and 2 after two seasons."""
+    checked = 0
+    for seed in (0, 1, 2):
+        w = _after_two_seasons(seed)
+        back = decode(encode(w))
+        assert isinstance(back, World), f"seed {seed}: the snapshot did not decode: {back!r}"
+        assert back.content_hash() == w.content_hash(), f"seed {seed}: a field of state did not round-trip"
+        assert back.world_seed == w.world_seed and back.tick == w.tick and len(back.acts) == len(w.acts) > 0
+        checked += 1
+    assert checked == 3
+
+
+def test_a_decoded_world_runs_the_same_next_season():
+    """The control that the act store and the tick came back: one more season on the decoded world equals
+    the same season on the original. The snapshot is taken after two seasons; the third is each copy's
+    own control run, compared with the other, and is not a reading of the game past the two-season cap."""
+    seed = 0
+    w = _after_two_seasons(seed)
+    back = decode(encode(w))
+    assert isinstance(back, World), repr(back)
+    out_w, out_back = POP.run(1, seed, w=w), POP.run(1, seed, w=back)
+    assert out_back["acts"] == out_w["acts"] > 0, "the control season did nothing: it observed nothing"
+    assert back.tick == w.tick and len(back.log) == len(w.log) and len(back.acts) == len(w.acts)
+    assert back.content_hash() == w.content_hash(), "the decoded world's next season diverged from the original's"
+
+
+def test_decode_refuses_a_foreign_fixtures_digest():
+    """A snapshot written under other fixtures is REFUSED BY VALUE, not by a raise: the port loads saves,
+    so `decode` hands back a typed `SnapshotRefused` it can read. The control: the same world under the
+    running build's fixtures decodes."""
+    foreign = DEFAULT_FIXTURES.sweep("scene_budget", int(DEFAULT_FIXTURES.get("scene_budget")) + 1)
+    assert foreign.get("scene_budget") != DEFAULT_FIXTURES.get("scene_budget")
+    refused = decode(encode(World(0, foreign)))
+    assert isinstance(refused, SnapshotRefused) and refused.reason == "fixtures_digest", repr(refused)
+    assert refused.found != refused.expected
+    assert isinstance(decode(encode(World(0, DEFAULT_FIXTURES))), World), "the running build's own snapshot was refused"

@@ -4,6 +4,13 @@ Settled entries (dated 2026-07-25 and earlier) are in `tests/coverage_matrix_arc
 which was restored 2026-08-23 after the evacuation deleted it — see that file for why this
 one had drifted to 94% of a blocking cap with no working relief valve.
 
+## 2026-11-18 — B06 (keyed draw): `gauge_mb.py` is re-pointed at `Draw`, not re-run
+
+`tests/sim/gauge_mb.py` changed only in how it builds its streams: `random.Random(seed)` became
+`draw.seeded(draw.H2(stem, seed))` (batch B06-keyed-draw, B06.04/B06.05). No gauge constant, test row or sampling
+default changed, and the gauge was NOT re-run for this change; the uniform's source is the one thing that moved
+(a stream change, not a balance change; the two-arm corpus reading is in the B06.99 commit body).
+
 ## 2026-10-12 — IN-05 (`31c`): the mass-battle sim moves to `modules/mass_battle/`; `gauge_mb.py` is re-pointed, not re-run
 
 The reachable closure of `massbattle.py::resolve_field` left `systems/mass_battle/sim/` for `modules/mass_battle/`
@@ -88,7 +95,7 @@ and both are spatial-integrity mechanics switched off for the same stated reason
 than the audit listed, and the missed pair is the worse one: `cell_offsets` is **accumulated
 displacement**, so `.get(pid, 0)` snaps a drifted body back to its **spawn row** mid-advance.
 
-`Subunit.rekey_cells` is the grid-path analogue of `_rekey_node_state`, mirroring that method's
+`Unit.rekey_cells` is the grid-path analogue of `_rekey_node_state`, mirroring that method's
 already-ratified policy rather than inventing one. Displacement → mean offset (centroid preserved);
 facing → mean committed facing, **not** the `advance_dir` default; `_cell_target` → redistributed
 like `cell_troops`; transient state (halt/merge/speed) → cleared. `cell_morale`,
@@ -243,7 +250,7 @@ landed 2026-07-23 and defaulted ON 2026-07-25 — one day before the audits. (2)
 never fired: `stance='hold'` early-returns from all steering, spawn separation is 19 rows and
 `VOLLEY_MAX_RANGE` is 8 — measured **0 melee engagements AND 0.00 volley loss** over 10 battles, so
 `check_square`'s `inf` was a 0/0 guard. (3) **NEW, found here:** `TRAJ_FLOOR=0.25` stopped the
-trajectory at hp≤25, but `Unit.recalc_size` routs outright at `size==0`, i.e. hp<`BLOCK_SIZE`=100 —
+trajectory at hp≤25, but `Army.recalc_size` routs outright at `size==0`, i.e. hp<`BLOCK_SIZE`=100 —
 the floor was **unreachable** and every trajectory ended in annihilation-rout (measured: side B
 routed at ticks 36/35/36 with hp 97.3/97.1/98.9, agg_morale 1e9, troop_total 400 vs a floor of 80).
 
@@ -279,7 +286,7 @@ becomes a rubber stamp. Grid golden `unit` byte-exact; no engine `.py` touched.
 
 `lanchester_signature.py`'s no-rout pin was a BARE `ua.morale = ua.morale_start = NO_ROUT_MORALE` —
 the silent-no-op class that confounded the retracted `MB_CELL_MORALE` flip. Routed onto
-`Unit.set_morale` (unseeded it reduces exactly to `unit.morale = value`, so byte-identical at the
+`Army.set_morale` (unseeded it reduces exactly to `unit.morale = value`, so byte-identical at the
 shipped default); `morale_start` stays bare and non-cellular. File added to the sweep guard's
 `_ENGINE_FILES`. `test_persubunit_stress.py` deliberately NOT chained in front (A5b, G10).
 
@@ -484,7 +491,7 @@ They moved with the engine; nothing was dropped.
 any gauge scenario exercises it, not a correction to an existing measurement.
 
 Squad-engagement Tier-1 (A1/A2/A4/A6, `ED-MB-0067` Part A) added missile ammunition
-(`Subunit.eff_volleys`, per-subunit, own-else-inherited-Unit). An adversarial review found
+(`Unit.eff_volleys`, per-subunit, own-else-inherited-Army). An adversarial review found
 `engine.build_army` — the live, callable multi-subunit army constructor — never forwarded an
 explicit per-spec `volleys` override and never seeded one for a ranged subunit, so every ranged
 subunit built through it silently shared ONE ammo pool with its melee siblings (F4). `make_mixed_unit`

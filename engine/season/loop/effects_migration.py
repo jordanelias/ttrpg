@@ -1,6 +1,6 @@
 """`season.loop.effects_migration` -- travel and settlement: move, migrate.
 
-EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the presence/residence pair:
+Holds the presence/residence pair:
 `move` re-homes `contain` alone, `migrate` re-homes `contain` AND `reside` in one write. `_relocate`,
 the journey the two share (the traveller's live `contain` legs close, a new one opens, and `dest` is
 appended to `Person.travel_leg`), stays in this file; `move` and `migrate` call it, and since v9 IN-13
@@ -11,13 +11,14 @@ for `effect_for`, `_operand` and the shared §10-ladder refusal `_decline_ascent
 from __future__ import annotations
 
 from ..data.rosters import ARRIVAL_ONLY_KINDS
-from ..queries.world_q import DETAIN_KIND, RESIDE_KIND, has_room, residence_of, restrained
+from ..queries.world_q import DETAIN_KIND, RESIDE_KIND, has_room, place_of, residence_of, restrained
 from ..state.carriers import Tenure
+from ..state.containment import parent_of
 from ..state.gate import NO_CHANGE, Change, Subject
 from ..state.ids import H
 from ..trace_log import TRACE
 
-from .effects_shared import _decline_ascent, _operand, effect_for
+from .effects_shared import _decline_ascent, _operand, _share, effect_for
 
 
 @effect_for("move")
@@ -35,21 +36,13 @@ def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     would put two receipts on every `travel.moved` that has always carried one, which moves a hash
     for a reason that is not a no-op. A traveller who is not a Person (a hand-built act; RESOLVE
     never folds one, `act.ineligible` stops it first) names an absent subject that stays absent,
-    so the move is refused and the legs it opened are put back -- where before G4 it published
-    `travel.moved` about a mover that does not exist."""
+    so the move is refused and the legs it opened are put back."""
     dest = _operand(a, "to")
-    # ⚠ THE GUARD MOVED TO `_operand` AND ITS HISTORY IS KEPT HERE, because the history is what
-    # makes the guard's shape legible. Rev 1 fell through on a missing destination, closed every
-    # live leg and STILL returned `[a.actor]`, so `_fold` saw a non-empty `changed` and published
-    # `travel.moved` for a move that did not happen. Returning `[]` would be quieter and just as
-    # wrong: the caller would report a no-op as a legitimate nothing. §42.2's polarity rule -- no
-    # destination is a refusal, never a silent success. The version of this guard that lived here
-    # was found to pass `needs=`/`law=` to `InstrumentDefect`, which takes no keywords, so it
-    # would have raised `TypeError` if it had ever fired -- a guard that crashes instead of
-    # reporting, unfired because the precondition refuses first. One owner is also one place for
-    # that mistake to be made.
+    # ⚠ NO DESTINATION IS A REFUSAL, NEVER A SILENT SUCCESS (§42.2's polarity), and the guard is
+    # `_operand`'s, the one owner: a `move` that fell through on a missing destination would close
+    # every live leg and publish `travel.moved` for a move that did not happen.
     if restrained(w, a.actor, DETAIN_KIND):
-        return _decline_custody(w, a, dest)
+        return _decline_custody(a, dest)
     # ⚠ A DESTINATION THE LADDER WILL NOT SEAT THE MOVER IN IS A BLOCKED TRAVEL, NOT A CRASH, and
     # this branch is `W-C`'s doing: once `move` carries a real `to`, a person can name any rung
     # their containment path reaches, and `contain.path` asks for a SHARED ANCESTOR -- which a
@@ -68,7 +61,25 @@ def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
             f"a move's destination is not up the §10 ladder -> {a.actor} into {dest!r}")
     # ⚠ PLAN POSITION `19c`: WHAT A `move` LEAVES BEHIND IS THE MOVER'S `reside` EDGE -- it is not
     # touched here, so a traveller still lives where he lived (`_eff_migrate`'s docstring).
-    return Change((Subject.entity("persons", a.actor),), lambda: _relocate(w, a, dest))
+    # B07.02: the band decides how far he gets (`_reached`); no band is `dest`, the move as it was.
+    where = _reached(w, a, dest, res)
+    if where is None:
+        return NO_CHANGE
+    return Change((Subject.entity("persons", a.actor),), lambda: _relocate(w, a, where))
+
+
+def _reached(w: "World", a: "Act", dest: str, res: "Resolution | None") -> "str | None":
+    """B07.02 (18-A edit 5): WHERE THE BAND LETS THE TRAVELLER ARRIVE. Share 1 (or no band): `dest`. No share (Failure): `None`, he stays.
+    Between: ONE LEG SHORT -- the rung that contains `dest` (`containment.parent_of`), where the §10 ladder seats him; `None` where
+    `dest` has no container, or he is there already. [ASSUMPTION: "one leg" is one step up the containment tree from `dest`, the
+    only path the tree states; basis: `state/containment.py::parent_of`, `move` being one write to `dest`]"""
+    f = _share(res)
+    if f == 1:
+        return dest
+    short = parent_of(w, dest) if f else None
+    if short is None or short in (dest, place_of(w, a.actor)) or not w.contain_ascends(a.actor, short):
+        return None
+    return short
 
 
 def _arrival_only(w: "World", dest) -> bool:
@@ -77,7 +88,7 @@ def _arrival_only(w: "World", dest) -> bool:
     return rung is not None and rung.kind in ARRIVAL_ONLY_KINDS
 
 
-def _decline_custody(w: "World", a: "Act", dest: str) -> Change:
+def _decline_custody(a: "Act", dest: str) -> Change:
     """v9 SC-03a (#453 §10.4 step 3, K-53): A PERSON HOLDING A LIVE `detain` DOES NOT TRAVEL OR
     SETTLE -- the custody edge's first reader, shared by `move` and `migrate` because the journey is
     one (`_relocate`). Asked FIRST, before the ladder: a prisoner's road is closed whether or not it
@@ -99,11 +110,10 @@ def _relocate(w: "World", a: "Act", dest: str, mover: "str | None" = None) -> No
     """THE JOURNEY, `move`'s and `migrate`'s one body: the actor's live `contain` legs close, a new
     one opens to `dest`, and `dest` is appended to `Person.travel_leg` -- the movement in progress
     (`ARCHITECTURE_V2.md` §D4) that `loop/matter.py`'s travel pass ends at the next MATTER. Called
-    inside an effect's `perform`, so the gate observes every edge it writes. Extracted UNCHANGED from
-    `_eff_move` at plan position `19c` because `migrate` is a journey too (a settler travels to his new
-    home and pays the same distance penalty the season he goes), and a second copy of *what a journey
-    writes* would let the two verbs disagree about it (§8). The leg's id is `move`'s, byte for byte,
-    so every run that only moves is unmoved by the extraction.
+    inside an effect's `perform`, so the gate observes every edge it writes. One body because
+    `migrate` is a journey too (a settler travels to his new home and pays the same distance penalty
+    the season he goes), and a second copy of *what a journey writes* would let the two verbs
+    disagree about it (§8). The leg's id is `move`'s.
 
     v9 IN-13 (#453 §9.6, the arrival): `mover` -- WHO makes the journey, the actor when omitted. A won
     or unopposed `march` relocates EVERY claimant of its army through this one body (`_eff_march`), so
@@ -116,11 +126,10 @@ def _relocate(w: "World", a: "Act", dest: str, mover: "str | None" = None) -> No
             t.until = w.tick
     w.add_tenure(Tenure(H(w.world_seed, w.tick, who, f"leg:{a.id}"),
                         who, dest, "contain", since=w.tick))
-    # ⚠ THE DECLARED WRITE, NOW ACTUALLY WRITTEN. `verb_table.yaml`'s `move` row names
-    # `(Person, travel_leg)` as its FIRST write and rev 1 never touched the field, so
-    # `Query.budget`'s distance penalty read `len(p.travel_leg)` == 0 in every run and the only
-    # test of it set the field by hand. A declared write that no effect performs is a lie the
-    # write matrix cannot catch, because the matrix gates writes that HAPPEN.
+    # ⚠ THE DECLARED WRITE: `verb_table.yaml`'s `move` row names `(Person, travel_leg)` as its FIRST
+    # write, and `decision/budget.py::budget`'s distance penalty reads `len(p.travel_leg)`. A declared write that
+    # no effect performs is a lie the write matrix cannot catch, because the matrix gates writes
+    # that HAPPEN.
     traveller = w.persons.get(who)
     if traveller is not None:
         traveller.travel_leg = list(traveller.travel_leg) + [dest]
@@ -134,8 +143,7 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     destination, in one write.
 
     ⚠⚠ THE PRESENCE/RESIDENCE SPLIT, DECIDED HERE (plan position `19c`; `CLAUDE.md` §0 step 5 -- part
-    1 `§5` routes it to architecture, not to Jordan). The tree had ONE edge for where you are and where
-    you live, and `move` re-homed it. The split keeps `contain` as PRESENCE and adds `reside` as
+    1 `§5` routes it to architecture, not to Jordan). The split keeps `contain` as PRESENCE and adds `reside` as
     RESIDENCE, and `move` is defined by what it leaves behind: the `reside` edge.
       * WHY `contain` STAYS PRESENCE. It is ratified: `04_CODE_ARCHITECTURE.md` §B, *"LOCATION: ... its
         contain edge is where they are"*, and `ARCHITECTURE_V2.md` §D4, *"A person's location IS their
@@ -193,7 +201,7 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     S defect (*calculations consistent in methodology*)."""
     dest = _operand(a, "to")
     if restrained(w, a.actor, DETAIN_KIND):
-        return _decline_custody(w, a, dest)
+        return _decline_custody(a, dest)
     if _arrival_only(w, dest):
         return _decline_ascent(f"a {a.verb}'s destination is reached only by a march's arrival -> {a.actor} into {dest!r}")
     if not w.contain_ascends(a.actor, dest):
@@ -218,6 +226,12 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
                                      "refuse at every ancestor as well (a second, coarser census)"])
         return NO_CHANGE
     settled = [t for t in w.tenures if t.subject == a.actor and t.kind == RESIDE_KIND and t.live]
+    # B07.02: a band short of the full effect leaves him on the road, one leg short and unsettled (`_reached`); no band is `dest`.
+    where = _reached(w, a, dest, res)
+    if where is None:
+        return NO_CHANGE
+    if where != dest:
+        return Change((Subject.entity("persons", a.actor),), lambda: _relocate(w, a, where))
 
     def perform() -> None:
         _relocate(w, a, dest)

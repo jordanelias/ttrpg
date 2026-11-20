@@ -2,11 +2,10 @@
 
 Status: [live, 2026-08-20]
 
-WHY. `systems/` stems from `engine/` and `references/`. The old campaign driver (deleted at plan position `28-iii`) contradicted that: it imported
-`systems.factions.sim.faction_action` and `systems.overview.sim.season` at module level, so the root named its own dependents and the package graph carried a cycle
-(`faction_action.py` -> `engine.autoload.game_state` -> `systems.factions.sim.treaty`).
+WHY. `systems/` stems from `engine/` and `references/`: `engine/` must not name its own dependents
+at module level, or the package graph carries a cycle.
 
-`engine/` now states WHAT it needs — a role name — and `references/module_contracts.yaml`'s
+`engine/` states WHAT it needs — a role name — and `references/module_contracts.yaml`'s
 `composition_roles:` block states WHICH module provides it. This module is the resolver, reading the
 cooked artifact `engine/engine_params/composition.json` (written by `tools/export_composition.py`,
 blocking `--check`). Adding a subsystem to the campaign loop is a row in the registry, not an import
@@ -43,10 +42,10 @@ _CACHE = {}
 def require(role):
     """Return the module attribute `references/` binds to `role`. Raises if the role is undeclared.
 
-    Almost every role is a CALLABLE — a resolver, a builder, a state class. Two (`contest_side.a`
-    and `contest_side.b`) declare `kind: value` and resolve to a module CONSTANT: the side labels
-    `engine/cross_scale/scene_dispatch.py` compares a contest verdict against, which no callable
-    role could carry and which no authored surface declares. The kind is recorded per row so the
+    Almost every role is a CALLABLE — a resolver, a builder, a state class. One (`combat.duel_terms`)
+    declares `kind: value` and resolves to a module CONSTANT: the closed set of duel terms
+    (`modules/combat/wrapper.py::DUEL_TERMS`) a season roster is checked against, which no callable
+    role could carry. The kind is recorded per row so the
     exporter's callable check stays on for everything that did not opt out; see
     `tools/export_composition.py`'s `_KINDS`.
 

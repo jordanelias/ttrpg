@@ -1,0 +1,14 @@
+judge rung 5 moderate
+  Grace 1 accurate: n=268 (|track|<=1 skipped 132)  legitimacy -0.47  compliance 0.00  appeal 1.17  regard-for-judge -0.233  flagged-wrong 0.00
+  Grace 1 wrong   : n=268 (|track|<=1 skipped 132)  legitimacy -0.93  compliance 0.00  appeal 2.33  regard-for-judge -0.467  flagged-wrong 1.00
+  Grace 4 accurate: n=268 (|track|<=1 skipped 132)  legitimacy -0.23  compliance 0.33  appeal 0.67  regard-for-judge -0.100  flagged-wrong 0.00
+  Grace 4 wrong   : n=268 (|track|<=1 skipped 132)  legitimacy -0.50  compliance 0.30  appeal 1.33  regard-for-judge -0.233  flagged-wrong 1.00
+  Grace 7 accurate: n=268 (|track|<=1 skipped 132)  legitimacy +0.02  compliance 0.83  appeal 0.17  regard-for-judge +0.050  flagged-wrong 0.00
+  Grace 7 wrong   : n=268 (|track|<=1 skipped 132)  legitimacy -0.05  compliance 0.75  appeal 0.33  regard-for-judge +0.017  flagged-wrong 1.00
+judge rung 0 
+  Grace 1 accurate: n=233 (|track|<=1 skipped 167)  legitimacy +0.02  compliance 0.83  appeal 0.17  regard-for-judge +0.050  flagged-wrong 0.00
+  Grace 1 wrong   : n=233 (|track|<=1 skipped 167)  legitimacy -0.05  compliance 0.75  appeal 0.33  regard-for-judge +0.017  flagged-wrong 1.00
+  Grace 4 accurate: n=233 (|track|<=1 skipped 167)  legitimacy +0.10  compliance 1.00  appeal 0.00  regard-for-judge +0.100  flagged-wrong 0.00
+  Grace 4 wrong   : n=233 (|track|<=1 skipped 167)  legitimacy +0.10  compliance 0.90  appeal 0.00  regard-for-judge +0.100  flagged-wrong 1.00
+  Grace 7 accurate: n=233 (|track|<=1 skipped 167)  legitimacy +0.10  compliance 1.00  appeal 0.00  regard-for-judge +0.100  flagged-wrong 0.00
+  Grace 7 wrong   : n=233 (|track|<=1 skipped 167)  legitimacy +0.10  compliance 0.90  appeal 0.00  regard-for-judge +0.100  flagged-wrong 1.00

@@ -19,6 +19,7 @@ knots/ is an island (no campaign callers), so the F7 + seed-0 campaign goldens a
 import os
 import sys
 import random
+from engine.dice_engine import draw
 
 import pytest
 
@@ -54,7 +55,7 @@ def test_ed912_formation_starts_at_tier_gauge_start():
     for seed in range(80):
         knots.reset_knots()
         k = knots.form_knot("A", "B", actor_a_obj=_FormActor(), actor_b_obj=_FormActor(),
-                            rng=random.Random(seed))
+                            rng=draw.seeded(draw.H2("test_knots_ed912", seed)))
         if k is not None:
             formed += 1
             assert k.strain == knots.TIER_START[k.tier], (
@@ -173,3 +174,23 @@ def test_an_unknown_conviction_name_raises_instead_of_scoring_zero():
     # A canonical name still lands a real scar.
     r = conv.apply_conviction_scar("actor-canonical", "src", magnitude=1, conviction="honour")
     assert r.conviction == "honour" and r.magnitude > 0
+
+
+def test_conviction_from_dict_ignores_a_retired_key():
+    # `ConvictionState.pending_belief_revisions` is deleted (written by a function nothing called).
+    # A state stored before the deletion still carries the key and must keep loading: the key is
+    # read past, not kept.
+    from systems.characters.sim import conviction as conv
+
+    stored = {
+        "actor": "actor-old-save",
+        "scars": {"honour": 2},
+        "resonant_active": ["honour"],
+        "in_crisis": [],
+        "pending_belief_revisions": ["belief-1"],
+        "last_scar_season": {"honour": 3},
+        "log": [],
+    }
+    state = conv.ConvictionState.from_dict(stored)
+    assert state.actor == "actor-old-save" and state.scars == {"honour": 2}
+    assert state.resonant_active == {"honour"} and state.last_scar_season == {"honour": 3}

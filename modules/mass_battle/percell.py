@@ -1,7 +1,6 @@
 """modules.mass_battle.percell — per-column density/depth grid, casualty distribution, fatigue,
 envelopment-sigma, defender depth, stamina. Behaviour-frozen P-A extract.
 Depends on config + geometry."""
-import math
 from modules.mass_battle.config import *
 from modules.mass_battle.geometry import *
 
@@ -11,19 +10,9 @@ class _ColBlock:
     """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
     Depth is the reserve queue (refill + fatigue rotation + flank-refusal in later increments).
 
-    [A6, ED-MB-0067 Part A -- squad-engagement synthesis, "Missile ammunition and resupply"] A first
-    version put a `volleys` count HERE, at column-block granularity (matching `stamina`'s own
-    granularity, one interpretation of "the same ledger stamina already uses"). REMOVED after
-    adversarial review found it a genuine structural defect, not just an imprecise precedent claim:
-    a column BLOCK is shared across whatever subunits currently occupy that absolute column (see
-    build_column_grid/sync_col_grid, keyed on column position, not identity), so (a) under
-    MB_CLOSE_RANKS=1 (the shipped default) a ranged sub-unit that shifts files onto a not-yet-seen
-    column gets a BRAND NEW _ColBlock at MB_VOLLEYS_START -- free ammo, not a resupply -- and (b)
-    under MB_CLOSE_RANKS=0 (the golden-pinned config) `_ammo_cols` (the caller's column lookup) can
-    come back empty when col_grid hasn't been re-synced, silently disabling metering entirely rather
-    than gating it. Ammo now lives on Subunit.volleys instead (hierarchy/units.py, mirroring
-    Subunit.stamina's own EXISTING per-subunit ledger and its own-else-inherited-Unit precedent
-    exactly) -- ammo belongs to the shooter, not to a column position other subunits pass through."""
+    [A6, ED-MB-0067 Part A] Ammunition is not held here: a column block is shared by whatever units currently
+    occupy that absolute column (see build_column_grid/sync_col_grid, keyed on column position, not identity),
+    so ammo lives on the shooter (`Unit.volleys`, hierarchy/units.py)."""
     __slots__ = ('col', 'density', 'start_density', 'stamina', 'depth')
     def __init__(self, col, density, depth):
         self.col = col
@@ -41,7 +30,7 @@ def build_column_grid(unit):
     frontage = distinct columns; per column: troops = (#cells in column) * troops/cell; depth = #ranks.
     Returns list[_ColBlock] ordered left->right. State only — resolution wires in at Increment 2."""
     bycol = {}
-    for a in unit.subunits:
+    for a in unit.units:
         for _pid, (r, c), troops in a.iter_cells():
             bycol.setdefault(c, []).append(troops)
     if not bycol:
@@ -57,17 +46,11 @@ def sync_col_grid(unit):
     — carrying each surviving column's fatigue forward.
     [arch: column = emergent view, rebuilt from cells after they change.]
 
-    [ED-MB-0041 Tier-2] Previously this refreshed only `density`, for the columns the grid happened to
-    be BUILT with — and `col_grid` is built exactly once, in `Unit.__post_init__`, from the spawn
-    footprint. So the column *structure* was frozen at spawn. Any body that wheeled or drifted
-    laterally ended up occupying columns absent from its own grid, and then:
-      • every live column read density 0 -> `alive()` False -> `_fatigue_sigma` found no blocks at all
-        and returned 0.0 (no fatigue, ever, for a manoeuvring body), and
-      • `_defender_depth` found no matching columns and returned 0.0 (no depth-based charge absorption).
-    Two mechanics that silently switched themselves off for precisely the units doing the interesting
-    manoeuvres. Rebuilding membership fixes both.
+    [ED-MB-0041 Tier-2] `col_grid` is built once, in `Army.__post_init__`, from the spawn footprint; this
+    rebuilds its membership so a body that wheeled or drifted laterally reads live columns (an empty grid reads
+    `_fatigue_sigma` 0.0 and `_defender_depth` 0.0).
 
-    `depth` now tracks live ranks too: a column ground down from 5 ranks to 1 no longer claims the
+    `depth` tracks live ranks: a column ground down from 5 ranks to 1 does not claim the
     rotation/absorption of a deep file it no longer has. Stamina and start_density are carried over for
     columns that persist (fatigue is a property of the men in that file, not of the grid object); a
     newly-occupied column starts fresh at full stamina with its current density as its reference."""
@@ -75,7 +58,7 @@ def sync_col_grid(unit):
     if grid is None:
         return
     bycol = {}
-    for a in unit.subunits:
+    for a in unit.units:
         for _pid, (r, c), troops in a.iter_cells():
             if troops <= 0:
                 continue   # an emptied cell is not a live rank: it must not pad the column's depth
@@ -96,7 +79,7 @@ def sync_col_grid(unit):
 def _engaged_cols(unit, pairs):
     """Absolute columns of `unit` that are in contact this tick (from find_contacts pairs)."""
     cols = set()
-    sub_ids = {id(a) for a in unit.subunits}
+    sub_ids = {id(a) for a in unit.units}
     for p in pairs:
         if id(p.get("atom_a")) in sub_ids:
             cols.update(c for (r, c) in p.get("a_cells", []))
@@ -111,13 +94,6 @@ def _apply_with_spill(targets, dmg):
     `targets` is a list of (atom, orig_cell, weight). `dmg` is split across them in proportion to
     `weight`, but a cell that cannot absorb its full share (fewer troops than the share) spills the
     remainder onto the still-living cells instead of silently vanishing.
-
-    Why this exists: the three distributors each open-coded `max(0.0, troops - dmg*(troops/tot))`, which
-    DISCARDS any damage beyond what the engaged cells hold. Measured: 5000 damage against a 600-troop
-    front had cells absorb 600 and **4400 silently discarded**, while `unit.hp` took the full 5000 — so
-    the two ledgers diverge exactly in the annihilation cases (encirclement) that matter most. Only
-    `distribute_casualties_cellwise` had the spill loop; `distribute_casualties` and `apply_to_subunit`
-    did not. One rule, one implementation.
 
     Returns the amount actually applied (<= dmg; the shortfall is real — every target was emptied)."""
     remaining = float(dmg)
@@ -147,19 +123,14 @@ def distribute_casualties(unit, dmg, pairs):
     """Increment 2: apply `dmg` troop-casualties across the unit's ENGAGED front columns,
     proportional to each engaged column's current density. Keeps sum(col densities) == hp:
     the same total `dmg` run_battle subtracts from unit.hp is subtracted here across columns.
-    Transparent substrate — does NOT feed back into resolution yet (later increments read this state).
 
-    [D4 fix, 2026-07-05, mass-battle Cannae gauge follow-up audit] The engaged-column filter is now
-    computed PER SUBUNIT, not unioned across the whole Unit. The prior whole-unit union let one
-    subunit's engaged column leak onto an UNRELATED, unengaged subunit's cells that merely happen to
-    share the same absolute column value -- confirmed by direct trace: a wide-placed wheeling wing
-    20+ rows from any enemy absorbed a share of the CENTER subunit's casualties purely because its
-    column briefly overlapped the center's engaged range. A subunit's own cells now only count as
-    engaged against THAT subunit's own contact columns."""
+    [D4] The engaged-column filter is computed PER SUBUNIT, not unioned across the whole Army: a subunit's
+    own cells count as engaged only against THAT subunit's own contact columns, so one subunit's engaged
+    column cannot reach an unengaged subunit's cells that share the same absolute column value."""
     if dmg <= 0:
         return
     eng_by_sub = {}
-    sub_ids = {id(a) for a in unit.subunits}
+    sub_ids = {id(a) for a in unit.units}
     for p in pairs:
         aid = id(p.get("atom_a"))
         if aid in sub_ids:
@@ -167,29 +138,26 @@ def distribute_casualties(unit, dmg, pairs):
         bid = id(p.get("atom_b"))
         if bid in sub_ids:
             eng_by_sub.setdefault(bid, set()).update(c for (_r, c) in p.get("b_cells", []))
-    # `any_engaged` preserves the original degenerate-fallback semantics: if NOTHING in the whole
-    # Unit is in contact this tick (no pairs reference any of its subunits at all), spread dmg over
-    # every living cell exactly as before. Once ANYTHING is engaged, a subunit only contributes cells
-    # if IT SPECIFICALLY has contact this tick -- an uninvolved subunit contributes nothing, closing
-    # the cross-subunit column-leak this fix targets.
+    # `any_engaged`: if NOTHING in the whole Army is in contact this tick (no pairs reference any of its
+    # units at all), spread dmg over every living cell. Once ANYTHING is engaged, a subunit only
+    # contributes cells if IT SPECIFICALLY has contact this tick.
     any_engaged = bool(eng_by_sub)
     cells = []   # (subunit, cell_id, troops) over the ENGAGED front
-    for a in unit.subunits:
+    for a in unit.units:
         eng = eng_by_sub.get(id(a))
         for pid, (r, c), troops in a.iter_cells():
             if troops > 0 and (not any_engaged or (eng and c in eng)):
                 cells.append((a, pid, troops))
     if not cells:                                  # fallback: spread over all living cells
-        for a in unit.subunits:
+        for a in unit.units:
             for pid, (r, c), troops in a.iter_cells():
                 if troops > 0:
                     cells.append((a, pid, troops))
     tot = sum(t for _a, _p, t in cells)
     if tot <= 0:
         return
-    # [ED-MB-0041] Route through the shared spill primitive. Was
-    # `a.cell_troops[pid] = max(0.0, troops - dmg*(troops/tot))`, which silently discarded any damage
-    # exceeding the engaged front's troops while unit.hp took it in full (measured: 4400 of 5000 lost).
+    # [ED-MB-0041] Route through the shared spill primitive: damage beyond the engaged front's troops spills
+    # onto living cells instead of vanishing while unit.hp takes it in full.
     _apply_with_spill([(a, pid, troops) for a, pid, troops in cells], dmg)
     sync_col_grid(unit)                            # refresh emergent column densities from cells
 
@@ -203,9 +171,7 @@ def _erode_cell_morale_from_damage(atom, cid, killed, before):
     """
     # getattr, not attribute access: this helper hangs off `_apply_with_spill`, the SINGLE owner of
     # casualty application, which is deliberately duck-typed — callers pass anything with cell_troops
-    # (including test doubles). Requiring `cell_morale` on every such object would make a morale feature
-    # impose a structural requirement on the damage substrate, which is backwards. CI caught this via
-    # test_hp_cell_ledger's _FakeAtom; the lesson is about the coupling, not the double.
+    # (including test doubles), so `cell_morale` is not required of them.
     if not getattr(atom, 'cell_morale', None) or killed <= 0 or before <= 0:
         return
     frac = min(1.0, killed / before)
@@ -229,10 +195,8 @@ def distribute_casualties_cellwise(unit, dmg, cell_dmg):
         tot += sum(cells.values())
     if tot <= 0:
         return
-    # Resolve to (atom, orig_cell, weight) once, then fill in passes so a cell that cannot absorb its
-    # full share (it has fewer troops than the share) spills the remainder onto the still-living cells
-    # instead of silently vanishing — without this the cells==hp invariant drifts exactly in the
-    # annihilation cases (encirclement) this mechanic exists to model.
+    # Resolve to (atom, orig_cell, weight) once; `_apply_with_spill` fills in passes so a cell that cannot
+    # absorb its full share spills the remainder onto the still-living cells (keeps cells == hp).
     targets = []
     for _k, (atom, cells) in cell_dmg.items():
         amap = _oriented_abs_map(atom)
@@ -242,7 +206,7 @@ def distribute_casualties_cellwise(unit, dmg, cell_dmg):
                 continue
             if atom.cell_troops.get(orig, 0.0) > 0:
                 targets.append((atom, orig, share))
-    _apply_with_spill(targets, dmg)   # [ED-MB-0041] shared primitive — was an inline copy of this loop
+    _apply_with_spill(targets, dmg)   # [ED-MB-0041] shared primitive
     sync_col_grid(unit)
 
 
@@ -281,11 +245,6 @@ def _fatigue_sigma(unit, engaged_cols):
         return 0.0
     frac = sum((b.stamina / STAMINA_MAX) * b.density for b in blocks) / tot
     return MB_STAM_SIGMA * (frac - 1.0)
-
-# [ED-MB-0036 sweep, 2026-07-24] _envelopment_sigma (Increment 6) REMOVED — it was dormant at
-# MB_ENVELOP_SIGMA=0.0 and its unit-level col-grid "wider side" overhang test mis-targeted a split envelop
-# army. Superseded by the octagon flank multiplier + multi-side shock (B6) + perimeter/orbital-wheel
-# envelopment (ED-MB-0035). Removing the always-zero term is byte-exact (see orchestration.py Increment-6 note).
 
 def _defender_depth(unit, contact_cells):
     """Increment 5: representative depth of the defender's engaged columns (charge absorption).

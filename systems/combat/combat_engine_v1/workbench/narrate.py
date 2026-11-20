@@ -7,7 +7,7 @@ it is also runnable standalone:  python -m workbench.narrate  (from the engine d
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'modules', 'combat'))  # the engine, moved at plan position `31b`
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))  # the repository root: `modules.combat` is a package
 import probabilities as P
 
 BANNER = "n = 1  —  ONE OUTCOME, NOT A PROBABILITY"
@@ -105,8 +105,8 @@ if __name__ == '__main__':
         sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     except Exception:
         pass
-    from combatant import Combatant
-    from trace import run_traced_fight
+    from modules.combat.combatant import Combatant
+    from fight_trace import run_traced_fight
     seed = int(sys.argv[1]) if len(sys.argv) > 1 else 3
     A = Combatant('Bryn', weapon='arming', tradition='italian')
     B = Combatant('Halla', weapon='longsword', tradition='german')

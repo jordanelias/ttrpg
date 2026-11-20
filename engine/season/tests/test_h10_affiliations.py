@@ -155,7 +155,7 @@ def test_h10_world_builder_fills_conviction_from_the_authored_row(monkeypatch):
     affiliations are REPLACED by one strained pair at full intensity (each other concern met at 0,
     which strains nothing), and every person the builder seeded from a row must carry exactly that
     vector (and conflict)."""
-    from engine.season.harness import populated
+    from engine.season.boot.realm import build_realm
     a, b = _pairs(True)[0]
     planted = _complete({a: _FULL, b: _FULL})
     real_row = cast.row
@@ -165,7 +165,7 @@ def test_h10_world_builder_fills_conviction_from_the_authored_row(monkeypatch):
         return None if r is None else {**r, "affiliations": dict(planted)}
 
     monkeypatch.setattr(cast, "row", _row)
-    w = populated.build_realm(0)
+    w = build_realm(0)
     filled = [pid for pid, p in w.persons.items() if p.conviction]
     assert filled, "the builder filled no person's conviction from the planted rows"
     for pid in filled:

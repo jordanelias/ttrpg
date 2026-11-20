@@ -1,7 +1,7 @@
 # PART D, AS DATA -- the write matrix keyed on `(kind, field)`.
 #
 # W2 of `architecture/PLAN.md`. `ARCHITECTURE_V2.md` §D3 is the
-# source and this file is the object: `engine/season/shape.py`'s `write()` gate reads it, and six
+# source and this file is the object: `engine/season/state/world.py::World.write` reads it through `data/matrix.py`, and six
 # hand-maintained Python structures -- `WRITE_MATRIX`, `WRITE_CLASS_OF`, `PARTITION`,
 # `PARTITION_ASSUMED`, `MATRIX_FIELD_OF`, `PARTITION_MISSING` -- are replaced by a loader.
 #
@@ -26,8 +26,9 @@
 # here is `scar` / `axis_count`, and the keying is carried in `by:`. The roster of axes is its own
 # hole (`H-20`, and its enumeration is `H-46`), which is where it belongs.
 #
-# PROVENANCE. The 28 rows carried over are extracted mechanically from §D3's markdown table;
-# `python engine/season/register.py --verify-write-matrix` re-extracts and fails on drift. The 10 rows
+# PROVENANCE. The 28 rows carried over were extracted from §D3's markdown table once. This file is now
+# the head (CLAUDE.md §0.05: prose is reference); nothing re-extracts it, and a difference from §D3 is
+# decided here and recorded in the row. The 10 rows
 # W2 ADDS each name the §1.4 hole they carry and the `hole_register.yaml` row that grades it, so
 # no row here is a value nobody can trace.
 
@@ -165,6 +166,13 @@ rows:
     social:  "true"
     by:      "DR-2 -- `establish` is an act. ⚠ RETIRED BY W2, RETURNED BY W3 WITH its producer. V2 named `establish` in THIS ROW while giving it no verb row, which is how the row came to look dead"
     emits:   "`remit.changed`"
+  - kind:    "Office"
+    field:   "modifier"
+    steps:   []
+    class:   "—"
+    social:  "n/a"
+    by:      "B05.20 (U1-D, D-U1-01a): the one `sigma_leverage.LEVEL_SIGMA` name an act exercised through the seat brings to a room its bench sits over, authored as `offices.yaml`'s row key `modifier:` (refused at load if it is no level), seated at world build (`boot/realm.py::build_realm`) and written NOWHERE in play: no step, so the gate refuses any write. Read by `seam/wrappers/sigma.py`'s `office` source alone, FOR the roller: never a die in the pool and never an opposition. `None` is none"
+    emits:   "—"
   - kind:    "Person"
     field:   "body"
     steps:   [MAT, RES, ENC]
@@ -235,8 +243,15 @@ rows:
     steps:   [RES, ENC]
     class:   "ACTS"
     social:  "true"
-    by:      "v9 IN-12 step 9 (#453 §9.4, K-21): RETURNED FROM `retired:` WITH ITS PRODUCER, `train` (`loop/effects_combat.py::_eff_train`), in the same commit -- this file's own rule, *a row exists because a producer produces it*. `{capability key: whole number}` (`state/carriers.py::Person.capability`), the dice a contested act draws (`seam/wrappers/pool.py::faculty`, through `rosters.yaml: verb_capability`); capability GATES NOTHING (#353 §9.2). Written at world build by a `cast:` overlay (`harness/corpus_run.py::build_at`, never through this gate) and in play by TWO writers: `train`, under J-13 (iii)'s interim [medium; Jordan to correct]: only where a case names a vocation; and, since v11 CP-T03-04 (iv), the fight (`loop/effects_combat.py::_grown`, at the ENCOUNTER step: `fight` / `accept` / `capture` at Felled/Wounded raise by one a key a surviving party already holds). `social: true` -- only a person's act raises it; the world does not train anybody"
+    by:      "v9 IN-12 step 9 (#453 §9.4, K-21): RETURNED FROM `retired:` WITH ITS PRODUCER, `train` (`loop/effects_combat.py::_eff_train`), in the same commit -- this file's own rule, *a row exists because a producer produces it*. `{capability key: whole number}` (`state/carriers.py::Person.capability`), the dice a contested act draws (`seam/wrappers/pool.py::faculty`, through the verb table's `capability:` column, `descriptors.CAPABILITIES`); capability GATES NOTHING (#353 §9.2). Written at world build by a `cast:` overlay (`harness/corpus_run.py::build_at`, never through this gate) and in play by TWO writers: `train`, under J-13 (iii)'s interim [medium; Jordan to correct]: only where a case names a vocation; and, since v11 CP-T03-04 (iv), the fight (`loop/effects_combat.py::_grown`, at the ENCOUNTER step: `fight` / `accept` / `capture` at Felled/Wounded raise by one a key a surviving party already holds). `social: true` -- only a person's act raises it; the world does not train anybody"
     emits:   "`capability.raised`"
+  - kind:    "Person"
+    field:   "traits"
+    steps:   []
+    class:   "—"
+    social:  "n/a"
+    by:      "B04.07 (A-107): `frozenset` of `descriptors.TRAITS` ids, seated at world build from the cast row's `resonant_style:` (`data/cast.py::traits_of`, `boot/realm.py::build_realm`) and written NOWHERE in play: no step, so the gate refuses any write (`(Proposition, *)`'s shape). A trait is held or not and never gives dice; it is never a key of `Person.capability`"
+    emits:   "—"
   - kind:    "Person"
     field:   "conviction"
     steps:   [RES, ENC]
@@ -333,7 +348,7 @@ rows:
     by:      "DR-2"
     emits:   "`record.forged`"
     # ⚠ PRODUCED SINCE v9 SC-02 `22b` STEP 25 (B-P), WRITER WITH READER (`H-210`): `forge` writes it
-    # (`loop/effects_information.py::_eff_forge`, `Fixtures.default_forgery_quality`) and an inquiry examining
+    # (`loop/effects_information.py::_eff_forge`, `rosters.yaml: forge_quality`) and an inquiry examining
     # the Record reads it into its obstacle (`seam/wrappers/sigma.py::contest_input` ->
     # `modules/social_contest/roll.py::obstacle`), so the `unproduced: "H-210: ..."` line is struck.
   - kind:    "Record"

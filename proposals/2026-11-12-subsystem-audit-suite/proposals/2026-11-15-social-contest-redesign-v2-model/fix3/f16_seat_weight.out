@@ -1,0 +1,24 @@
+
+== [before] F16a the petitioner is the senior seat
+  audience, bench (a, j1): refused[one_character]
+  audience, bench (a,) alone: refused[one_character]
+
+== [before] F16b weights on the floor of a trial
+  weight 0: refused[no_weight]
+  weight 0.5: refused[no_weight]
+  weight 1.9: ok: [1]
+  weight 30: ok: [30]
+  weight 30.0: ok: [30]
+  weight -3: refused[no_weight]
+
+== [after] F16a the petitioner is the senior seat
+  audience, bench (a, j1): ok: ('j1',)
+  audience, bench (a,) alone: refused[one_character]
+
+== [after] F16b weights on the floor of a trial
+  weight 0: refused[no_weight]
+  weight 0.5: refused[bad_weight]
+  weight 1.9: refused[bad_weight]
+  weight 30: ok: [30]
+  weight 30.0: ok: [30]
+  weight -3: refused[no_weight]

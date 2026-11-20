@@ -1,0 +1,32 @@
+
+== (a) the VALUE of Attunement: the same people and menu; the chooser takes his perceived-best option; carried
+  trial            shipped: 1/4/7 = 0.340/0.377/0.432, 7-1 +0.092 (se 0.028) | control: perceived = true: 1/4/7 = 0.418/0.418/0.418, 7-1 +0.000 (se 0.028)
+  conversation     shipped: 1/4/7 = 0.278/0.302/0.335, 7-1 +0.057 (se 0.027) | control: perceived = true: 1/4/7 = 0.353/0.353/0.353, 7-1 +0.000 (se 0.028)
+  audience         shipped: 1/4/7 = 0.285/0.312/0.303, 7-1 +0.018 (se 0.026) | control: perceived = true: 1/4/7 = 0.288/0.288/0.288, 7-1 +0.000 (se 0.026)
+  tell (abridged)  shipped: 1/4/7 = 0.195/0.217/0.248, 7-1 +0.053 (se 0.024) | control: perceived = true: 1/4/7 = 0.248/0.248/0.248, 7-1 +0.000 (se 0.025)
+
+== (b) calibration: correlation of perceived with true worth over the options of first-turn menus, by Attunement
+  Attunement 1: corr +0.41; mean error +0.01; s.d. of error 1.75
+  Attunement 4: corr +0.63; mean error +0.00; s.d. of error 1.01
+  Attunement 7: corr +0.97; mean error -0.00; s.d. of error 0.21
+
+== (c) the bias is a character (Attunement 2; trial; share of his beats)
+  an optimist                                argue 0.42 press 0.56 rest 0.00 concede 0.03 | carried 0.333
+  no bias                                    argue 0.39 press 0.53 rest 0.03 concede 0.05 | carried 0.340
+  a pessimist                                argue 0.28 press 0.36 rest 0.27 concede 0.09 | carried 0.340
+  an optimist who reads well (Attunement 7)  argue 0.37 press 0.46 rest 0.09 concede 0.08 | carried 0.383
+  a pessimist who reads well                 argue 0.34 press 0.45 rest 0.12 concede 0.09 | carried 0.383
+
+== (e) no leak
+  View fields ['n', 'mover', 'side', 'issue', 'live_theirs', 'live_own', 'options', 'own', 'esteem', 'weary', 'visible', 'mood', 'odds', 'intent', 'turns_left', 'acc']
+  poor readers (n=212): correlation of the errors of two options: argue consequence vs argue authority -0.009; argue vs press on one ground -0.054; an option vs the mood -0.077
+
+== A-142 FRAMING: the frame is picked from his believed reading and lands on the listener's true interior
+  [shipped] frame is the listener's true best at Attunement 1/4/7: 0.64/0.80/1.00; realised fit +0.65/+0.81/+1.00; carried (arguing consequence throughout) 1 -> 7: 0.477 -> 0.602 (+0.125, se 0.029)
+  [control: a perfect reading (read_blur 0)] frame is the listener's true best at Attunement 1/4/7: 1.00/1.00/1.00; realised fit +1.00/+1.00/+1.00; carried (arguing consequence throughout) 1 -> 7: 0.602 -> 0.602 (+0.000, se 0.028)
+  [control: no reading (read_blur 40)] frame is the listener's true best at Attunement 1/4/7: 0.38/0.40/0.54; realised fit +0.33/+0.36/+0.53; carried (arguing consequence throughout) 1 -> 7: 0.345 -> 0.437 (+0.092, se 0.028)
+  the same reason (consequence) to two listeners: framed on `grain` for the hungry man (lands +1.00) and on `coin` for the money-minded seat (lands +1.00); the wrong way round they land +0.10 and -0.30; a frame he does not hold at all -0.50
+  a split room dilutes: rally to the guild alone              framed on `trade`: mean landing +1.00; by body [('guildsmen', 1.0)]
+  a split room dilutes: rally to the guild and the toll men   framed on `trade`: mean landing +0.50; by body [('guildsmen', 1.0), ('toll_men', -0.5)]
+  a split room dilutes: rally to guild, toll men, townsfolk   framed on `trade`: mean landing +0.10; by body [('guildsmen', 1.0), ('toll_men', -0.5), ('townsfolk', -0.5)]
+  no leak: `frame` is called with his accuracy and his own normals; the View shows the frame chosen and its perceived worth, never a listener's weights

@@ -9,7 +9,7 @@ conversion (§2.4) -- only the "collapse to routed" exit, which needs no new cod
 whoever picks up rally/pocket/emergent-entry next should treat them as still-open, not "already
 covered by this file's tests."
 
-Every test constructs Subunit/Unit directly (validators.py's own pattern) for precise control over
+Every test constructs Unit/Army directly (validators.py's own pattern) for precise control over
 `instructions`/`orders`/`yielding`, rather than going through the single-subunit `build_unit`
 adapter (which does not expose `orders`)."""
 import os
@@ -20,27 +20,29 @@ import pytest  # noqa: E402
 
 import modules.mass_battle.hierarchy.units as _hu  # noqa: E402
 import modules.mass_battle.orchestration as _orch  # noqa: E402
-from modules.mass_battle.hierarchy.units import Subunit, Unit, Order, D_YIELD, YIELD_POOL_MULT  # noqa: E402
+from modules.mass_battle.hierarchy.units import Unit, Army, Order, D_YIELD, YIELD_POOL_MULT  # noqa: E402
 from modules.mass_battle.core.exchange import subunit_combat_pool  # noqa: E402
 from systems.mass_battle.sim.engine import run_battle  # noqa: E402
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 
 def _line(faction, row, advance_dir, troops=3000, **kw):
     kw.setdefault('unit_type', 'melee')
-    return Subunit(shape='Line', troop_type='infantry', tier=4,
+    return Unit(shape='Line', troop_type='infantry', tier=4,
                    starting_position=(row, 25), advance_dir=advance_dir,
                    stance='balanced', troops=troops, concentration=120, **kw)
 
 
 def _unit(name, faction, sub, discipline=5, morale=6):
-    return Unit(name=name, faction=faction, power=4, command=4,
+    return Army(name=name, faction=faction, power=4, command=4,
                 discipline=discipline, discipline_start=discipline,
-                morale=morale, morale_start=morale, subunits=[sub], dr=1,
+                morale=morale, morale_start=morale, units=[sub], dr=1,
                 stance='balanced', speed='Standard')
 
 
 def test_yield_default_inert():
-    """`yielding` defaults False -> `yield_active` False for any ordinary Subunit."""
+    """`yielding` defaults False -> `yield_active` False for any ordinary Unit."""
     su = _line('A', 20, -1)
     assert su.yielding is False
     assert su.yield_active is False
@@ -141,31 +143,30 @@ def test_yield_facing_stays_locked_toward_engaged_enemy():
     engaged enemy even as it visibly moves AWAY from it -- the mechanical distinction from a routing
     body (which turns its back). Runs a short real battle and inspects the ATTACKER's own recorded
     facing vector after it has demonstrably moved away from the defender."""
-    import random
-    random.seed(7)
-    atk = _line('A', 20, -1, troops=2000, discipline=D_YIELD,
-                orders=(Order(trigger='immediate', behavior={'yielding': True}),))
-    d = _line('B', 15, 1, troops=3000)
-    a = _unit('A', 'A', atk, discipline=D_YIELD)
-    dd = _unit('D', 'B', d)
-    from modules.mass_battle.core.contact import check_orders
-    check_orders(a, 1, [c for c in dd.subunits[0].cells()])
-    assert atk.yield_active
-    run_battle(a, dd, max_turns=6)
-    # The subunit must have actually moved (yield's flee vector is live, not a no-op).
-    assert atk._moved_this_turn or atk.cell_offsets, "yielding subunit never moved at all"
-    # Facing must point TOWARD the defender's centroid, not away (the flee direction).
-    assert atk.target_atom is not None, "yielding attacker never acquired a target to face"
-    # Reference the yielding subunit's CURRENT centroid, not its hardcoded start (20, 25): a yielding
-    # body flees, so "faces toward the enemy" means toward the target FROM WHERE IT NOW IS. Pinning the
-    # start position made this assertion sensitive to the defender's lateral centroid drift once the
-    # engagement geometry shifted (v2 Stage E's reach change surfaced it); the current-centroid reference
-    # tests the actual intent (facing at the enemy, unlike a rout that turns its back).
-    my = atk.centroid()
-    for (orig_r, orig_c), fv in atk.cell_facing_vec.items():
-        tc = atk.target_atom.centroid()
-        # the raw movement/anchor-relative facing vector should have a non-negative dot product
-        # with the direction toward the target -- i.e. it points roughly AT the enemy, not away.
-        to_target = (tc[0] - my[0], tc[1] - my[1])
-        dot = fv[0] * to_target[0] + fv[1] * to_target[1]
-        assert dot >= 0, f"cell {(orig_r, orig_c)} facing {fv} points away from the target {to_target}"
+    with rngsource.using(draw.seeded(draw.H2("test_mass_battle_yield", 7))):
+        atk = _line('A', 20, -1, troops=2000, discipline=D_YIELD,
+                    orders=(Order(trigger='immediate', behavior={'yielding': True}),))
+        d = _line('B', 15, 1, troops=3000)
+        a = _unit('A', 'A', atk, discipline=D_YIELD)
+        dd = _unit('D', 'B', d)
+        from modules.mass_battle.core.contact import check_orders
+        check_orders(a, 1, [c for c in dd.units[0].cells()])
+        assert atk.yield_active
+        run_battle(a, dd, max_ticks=6)
+        # The subunit must have actually moved (yield's flee vector is live, not a no-op).
+        assert atk._moved_this_turn or atk.cell_offsets, "yielding subunit never moved at all"
+        # Facing must point TOWARD the defender's centroid, not away (the flee direction).
+        assert atk.target_atom is not None, "yielding attacker never acquired a target to face"
+        # Reference the yielding subunit's CURRENT centroid, not its hardcoded start (20, 25): a yielding
+        # body flees, so "faces toward the enemy" means toward the target FROM WHERE IT NOW IS. Pinning the
+        # start position made this assertion sensitive to the defender's lateral centroid drift once the
+        # engagement geometry shifted (v2 Stage E's reach change surfaced it); the current-centroid reference
+        # tests the actual intent (facing at the enemy, unlike a rout that turns its back).
+        my = atk.centroid()
+        for (orig_r, orig_c), fv in atk.cell_facing_vec.items():
+            tc = atk.target_atom.centroid()
+            # the raw movement/anchor-relative facing vector should have a non-negative dot product
+            # with the direction toward the target -- i.e. it points roughly AT the enemy, not away.
+            to_target = (tc[0] - my[0], tc[1] - my[1])
+            dot = fv[0] * to_target[0] + fv[1] * to_target[1]
+            assert dot >= 0, f"cell {(orig_r, orig_c)} facing {fv} points away from the target {to_target}"

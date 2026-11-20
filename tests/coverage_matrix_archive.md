@@ -46,12 +46,12 @@ Reverted: default back OFF, `_PINNED_OFF` back to `'0'`, both goldens back to th
 **Two genuine defects were found by the failing suite and are KEPT** (both real bugs in the phase-1/2b
 work, independent of the flip):
 
-1. **Born-broken subunits.** `seed_cell_morale()` ran in `Subunit.__post_init__`, but a subunit whose
-   morale is `None` inherits from its parent Unit and the `_unit` back-ref is not set until
-   `Unit.__post_init__` — strictly later. So an inheriting subunit seeded every cell at `eff_morale`'s
+1. **Born-broken subunits.** `seed_cell_morale()` ran in `Unit.__post_init__`, but a subunit whose
+   morale is `None` inherits from its parent Army and the `_unit` back-ref is not set until
+   `Army.__post_init__` — strictly later. So an inheriting subunit seeded every cell at `eff_morale`'s
    no-parent fallback of **0**, i.e. every cell broken at birth, emitting no combat weight and never
    recovering (once cells exist, `eff_morale` reads them and never falls back to the correct parent
-   scalar). Now seeded from `Unit.__post_init__` for inheriting subunits. The gauge path passes morale
+   scalar). Now seeded from `Army.__post_init__` for inheriting subunits. The gauge path passes morale
    explicitly, which is exactly why the targeted tests and the measurement were green while ten
    unrelated suite tests were not.
 2. **A 1-ulp aggregate defeating an identity.** The troop-weighted mean of N *equal* values is that
@@ -63,7 +63,7 @@ work, independent of the flip):
 
 **Blocker for re-flipping** is not another gauge run — it is the scalar-write sweep. Known sites:
 `between_turn_recovery` (unit + atom), `reset_morale_between_battles` (unit + atom), the rout write
-`u.morale = 0.0`, `Unit.erode_morale`, and `core/state.py`'s `atom.morale = atom.eff_morale`.
+`u.morale = 0.0`, `Army.erode_morale`, and `core/state.py`'s `atom.morale = atom.eff_morale`.
 ## 2026-07-25 — ED-MB-0042 (RETRACTED, see above): MB_CELL_MORALE flipped ON (archived — condensed)
 
 The same-day flip, retracted hours later — its ON/OFF arms were not comparable (scalar morale
@@ -92,7 +92,7 @@ cell aggregate shadows) — do not cite its numbers. **Full detail:
 `tests/coverage_matrix_archive_part2.md`** (moved 2026-07-29, ED-MB-0053).
 ## 2026-07-25 — ED-MB-0041 phase 1 FIXES: two defects in the per-cell morale wiring (archived — condensed)
 
-Born-broken subunits (seed_cell_morale ran in Subunit.__post_init__ before the _unit back-ref was
+Born-broken subunits (seed_cell_morale ran in Unit.__post_init__ before the _unit back-ref was
 set, so an inheriting subunit seeded every cell at eff_morale's no-parent 0) and the 1-ulp uniform
 aggregate that crossed a DAMAGE_BY_DEGREE boundary via _morale_sigma. Both kept; both independent
 of the retracted flip. **Full detail: `tests/coverage_matrix_archive_part2.md`** (moved 2026-07-29
@@ -145,7 +145,7 @@ the win-share gauge scores it as a **three-row regression**. The reachability sw
 `MB_STOCHASTIC_ROUT=1` "passes C4 and fails H9" and recorded it as a wash; that judgement was made on
 the wrong instrument.
 
-**Root cause of the residual, traced.** `Unit.derive_rout` breaks the army only when **every** subunit
+**Root cause of the residual, traced.** `Army.derive_rout` breaks the army only when **every** subunit
 has routed (`all(a.routed ...)`), and `run_battle` stops only when a UNIT routs. So sections break at
 15-30% each, and then sit on the field absorbing casualties while their siblings fight on — the loser's
 *total* climbs well past any individual section's break-point. Armies do not do this; they come apart
@@ -189,7 +189,7 @@ the register size cap, ED-MB-0048 — nothing was dropped, only relocated).
 ## 2026-07-24 — ED-MB-0041 Tier-1: hp/cell dual-ledger reconciliation
 - **Two ledgers fed DIFFERENT mechanics and could diverge permanently.** `hp` drives
   `_lanchester_strength`, `recalc_size` and the single-subunit cohesion fast path; `cell_troops` drives
-  `pair_pool_contribution` and `troop_total()`'s `SUBUNIT_ROUT_FLOOR` check. Divergence sources fixed:
+  `pair_pool_contribution` and `troop_total()`'s `UNIT_ROUT_FLOOR` check. Divergence sources fixed:
   (a) the **pursuit** and **freed-attacker** paths mutated `hp` with *no cell write at all* — so a unit
   ground down by pursuit still fought at full per-troop pool and could never hit the troop-floor rout;
   (b) `distribute_casualties`/`apply_to_subunit` open-coded a single clamped pass that **discarded** any
@@ -290,7 +290,7 @@ the register size cap, ED-MB-0048 — nothing was dropped, only relocated).
 
 Moved to `tests/coverage_matrix_archive_2026-08-01.md` (cut 2026-08-01, ED-MB-0062) verbatim:
 Fable logic audit Part-A remediation, field-coordinate unification (B1+B2+B3), `perimeter.py` +
-cavalry orbital-wheel envelopment wiring, orphaned `MORALE_EROSION_DAMP`/`SUBUNIT_ROUT_FLOOR`
+cavalry orbital-wheel envelopment wiring, orphaned `MORALE_EROSION_DAMP`/`UNIT_ROUT_FLOOR`
 wiring, and superseded dead-mechanic constant removal.
 ## 2026-07-23 — ED-MB-0022 through ED-MB-0032 (archived — verbatim)
 - Feigned Retreat (PP-256), Reserve Phase-3 commit (PP-MB-04), DG-2 fighting-withdrawal

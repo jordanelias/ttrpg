@@ -3,7 +3,7 @@
 ED-IN-0293's headline expectation (*"I expect all of this to end up generating unique decisions"*) as
 three readings and three arms. Every reading that BUILDS A REALM lives here; `harness/conviction_spread.py`
 is not extended, because it declares that it *"MEASURES THE TABLE, NOT A RUN"* (`:34-37`) and builds no
-world. The score's terms have ONE owner, `decision/choose.py::score_terms` -> `(pursuit, stance)`;
+world. The score's terms have ONE owner, `decision/choose.py::score_terms` -> `(pursuit, stance, fit)`;
 this module calls it (through the module, so a rebind of it reaches every reading) and never
 re-derives a term.
 
@@ -67,7 +67,7 @@ THE DECIDING TERM (`attribute_top`), in the order it is tested:
                  (`field_zero`);
   2. `tiebreak`  the top two scores are within `EPS` at temperature 0 (`(verb, subject)` ordered them);
   3. otherwise the TERMS whose removal leaves the top no longer strictly ahead of the field (it changes, or
-     collapses into a tie): `pursuit`, `stance`, joined by `+`; `overdetermined` if no single
+     collapses into a tie): `pursuit`, `stance`, `fit`, joined by `+`; `overdetermined` if no single
      term's removal does (two terms each separate it alone).
 So the attribution CAN say "no state decided": two persons with nothing separating their candidates read
 `draw` or `tiebreak`, never `pursuit`.
@@ -103,18 +103,19 @@ from ..data import goals as goals_data
 from ..data import verbs as V
 from ..data.rosters import FACTION_BY_PROP, PURSUIT_AXES, faction_prop_id
 from ..data.verbs import alignment_at
-from ..decision import assemble, choose as CH, make_chooser, opening_set
-from ..decision.options import project
+from ..decision import assemble, choose as CH, opening_set
+from ..decision.options import project, subject_is_opponent
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..seam.wrappers.sigma import believed_odds_query
 from ..state.carriers import Question, subject_of
-from ..state.ids import H, draw_factory
-from .populated import build_realm
+from ..state.ids import draw_factory
+from . import probes as P
+from ..boot.realm import build_realm
 
 # [JUSTIFIED: a float-tie tolerance for the attribution (two scores within it are a tie), an instrument constant and not a game number]
 EPS = 1e-9
-TERMS = ("pursuit", "stance")
+TERMS = ("pursuit", "stance", "fit")
 # [JUSTIFIED: the instrument's near-identical bar for a cosine between two persons' vectors (IN-64's EXIT 'pairs above 0.99'), a reading threshold and not a game number]
 COSINE_HIGH = 0.99
 
@@ -205,7 +206,7 @@ def attribute_top(p, cands: list, fx, draw=None, odds=None, terms=None) -> dict:
     memo = CH.deliberation_memo(p, fx)
     if terms is None:            # a reader that already scored `cands` (harness/interactions.py) passes its terms
         terms = [CH.score_terms(p, c, fx, memo, odds) for c in cands]
-    scores = [t[0] + t[1] for t in terms]
+    scores = [CH.score_total(t) for t in terms]
     field_zero = all(abs(s) <= EPS for s in scores)
     if len(cands) == 1:
         return {"top": cands[0], "decider": "sole", "margin": None, "scores": scores, "terms": terms,
@@ -238,18 +239,24 @@ def attribute_top(p, cands: list, fx, draw=None, odds=None, terms=None) -> dict:
 
 def new_split() -> dict:
     """An empty tally of `attribute_top`'s `draw_kind` and `field_zero` (see `tally_split`)."""
-    return {"read": 0, "tie": 0, "outvoted": 0, "outvoted_margins": [], "field_zero": 0, "zero_persons": set()}
+    return {"read": 0, "strict": 0, "strict_outvoted": 0, "tie": 0, "outvoted": 0, "outvoted_margins": [], "field_zero": 0,
+            "zero_persons": set()}
 
 
 def tally_split(split: dict, pid: str, r: dict) -> None:
     """Fold one `attribute_top` result for person `pid` into `split`: one reading counted, the draw's kind
     counted (an outvoted top keeps its margin: the leader's lead over the runner-up, `best - second`, which is
     a LOWER BOUND on the gap the draw overcame, larger when the drawn top is a third or lower candidate),
-    a `field_zero` reading counted
-    and its person remembered. A reading with no candidate (`decider` `none`) is not a reading."""
+    a `field_zero` reading counted and its person remembered. `strict` counts the readings whose leader leads
+    the runner-up by more than `EPS` (a sole candidate has no runner-up), the readings that HAVE a leader for
+    the draw to pass over; `strict_outvoted` is the `outvoted` among them (`outvoted` alone also counts a
+    pick below a tied pair at the top, which has no strict leader to be "not the top candidate"). A reading with no candidate (`decider` `none`) is not a reading."""
     if r["decider"] == "none":
         return
     split["read"] += 1
+    if r["margin"] is not None and r["margin"] > EPS:
+        split["strict"] += 1
+        split["strict_outvoted"] += r["draw_kind"] == "outvoted"
     if r["draw_kind"]:
         split[r["draw_kind"]] += 1
     if r["draw_kind"] == "outvoted":
@@ -263,7 +270,8 @@ def split_figures(split: dict) -> dict:
     """The printable figures of a tally: counts, the outvoted margins' median (None when none), and the
     distinct persons with a `field_zero` reading."""
     m = split["outvoted_margins"]
-    return {"read": split["read"], "tie": split["tie"], "outvoted": split["outvoted"],
+    return {"read": split["read"], "strict": split["strict"],
+            "strict_outvoted": split["strict_outvoted"], "tie": split["tie"], "outvoted": split["outvoted"],
             "outvoted_median_margin": statistics.median(m) if m else None,
             "field_zero": split["field_zero"], "zero_persons": len(split["zero_persons"])}
 
@@ -387,6 +395,16 @@ def formed_set(w, p, q, foldable=None) -> list:
     return [c for c in opening_set(p, view, q, w.fixtures) if c.verb in foldable]
 
 
+def is_self_plea(c, actor: str) -> bool:
+    """WHETHER CANDIDATE `c` IS A SELF-PLEA by `actor`: an act contested against its subject (`options.subject_is_opponent`)
+    whose subject is the actor himself. `opening_set` forms one only on a row declaring `subject_may_be_self` (`speak`);
+    `choose.py`'s polarity (`subject != p.id`) reads the same split. A candidate whose subject is the actor on a row NOT
+    contested against its subject (the referent's own `move`, `train`, ...) is no plea, so the key does not split it: a bare
+    `c.subject == actor` marks every row the referent himself forms and leaves the common set empty."""
+    row = V.VERB_TABLE.get(c.verb)
+    return c.subject == actor and row is not None and subject_is_opponent(row)
+
+
 def read_decisions(w) -> dict:
     """The `--decisions` figures on a built realm (no season is played). Per referent: the persons handed
     the question, those who form any candidate, the common set (intersection of those), the number of
@@ -401,7 +419,7 @@ def read_decisions(w) -> dict:
         q = decision_question(ref)
         split = new_split()
         formed = {pid: formed_set(w, p, q, foldable) for pid, p in sorted(w.persons.items())}
-        keyed = {pid: {(c.verb, c.subject): c for c in cs} for pid, cs in formed.items() if cs}
+        keyed = {pid: {(c.verb, c.subject, is_self_plea(c, pid)): c for c in cs} for pid, cs in formed.items() if cs}
         common = set.intersection(*(set(k) for k in keyed.values())) if keyed else set()
         tops: dict = {}
         deciders: Counter = Counter()
@@ -413,7 +431,7 @@ def read_decisions(w) -> dict:
             deciders[r["decider"]] += 1
             tally_split(split, pid, r)
             tally_split(total, pid, r)
-            tops[pid] = (r["top"].verb, r["top"].subject) if r["top"] else None
+            tops[pid] = (r["top"].verb, r["top"].subject, is_self_plea(r["top"], pid)) if r["top"] else None
         by_faction: dict = {}
         for pid, top in tops.items():
             fac = world_q.faction_holding(w, pid)
@@ -454,10 +472,9 @@ def play_season(w, seasons: int = 1) -> dict:
     entered the fold and was refused there is in them, and a contested act refused at admission, which
     never enters `d.resolved`, is not."""
     d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     foldable = resolvable_verbs()
     draw = draw_factory(w.world_seed, lambda: w.tick)
-    real = make_chooser(w.fixtures, mint, verbs=foldable, draw=draw)
+    real = P.chooser(w, verbs=foldable)
     split = new_split()                    # every deliberation's `draw_kind` / `field_zero`, read beside the chooser
     answered: Counter = Counter()          # (source, goal class) -> deliberations
     by_act: dict = {}                      # (actor, verb, subject) -> (source, goal class)
@@ -559,6 +576,8 @@ def print_season(r: dict, arm: str) -> None:
           + ", ".join(f"{k[0]}/{k[1]} {v}" for k, v in sorted(r["per_act"].items()))
           + f"; unmapped {r['unmapped']}")
     print_split(r["split"], r["tau"])
+    # k = the deliberations whose pick was not the strict leader, n = the deliberations with a strict top (`tally_split`)
+    print(f"  not the top candidate: {r['split']['strict_outvoted']} of {r['split']['strict']}")
     print(f"  content_hash {r['hash']}")
 
 

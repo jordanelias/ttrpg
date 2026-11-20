@@ -23,17 +23,19 @@ from __future__ import annotations
 import dataclasses
 import importlib.util
 import json
-import random
+from engine.dice_engine import draw
 from pathlib import Path
 from unittest import mock
 
 import pytest
 
-from engine.substrate import combat_kit, pc_engine
+from engine.substrate import combat_kit
 
 from ..data.rosters import ARMS_AT_BUILD, ARMS_KINDS, _check_arms_at_build, _check_arms_kinds
 from ..gaps import Unspecified
-from ..harness import populated, probes as P
+from ..harness import probes as P
+from ..boot import realm as boot_realm
+from ..boot.realm import build_realm, seed_arms
 from ..loop.driver import SeasonDriver
 from ..queries import world_q
 from ..seam.wrappers import combat
@@ -84,11 +86,13 @@ def _world():
 # ---------------------------------------------------------------------------------------------------------------
 
 def test_the_export_is_the_engines_own_keys_and_default_kit():
-    engine = pc_engine.load()
-    import vocabulary, weapons    # the flat modules `pc_engine.load()` put on the path
-    assert combat_kit.WEAPONS == frozenset(weapons.WEAPONS) and len(combat_kit.WEAPONS) > 10
+    # by name, inside the function: `test_importing_every_engine_module_pulls_in_no_subsystem` fails on a module-scope import and the ratchet counts a written one
+    combatant, vocabulary, weapons = (importlib.import_module(f"modules.combat.{n}") for n in ("combatant", "vocabulary", "weapons"))
+    startable = frozenset(n for n, r in weapons.WEAPONS.items() if "base" not in r)    # B14.12: a form is a grip, not a kit
+    assert combat_kit.WEAPONS == startable and len(combat_kit.WEAPONS) > 10
+    assert combat_kit.FORMS == {n: r["base"] for n, r in weapons.WEAPONS.items() if "base" in r} and combat_kit.FORMS
     assert combat_kit.ARMOUR_TIERS == vocabulary.ARMOUR_TIERS == {"none", "light", "medium", "heavy"}
-    c = engine.combatant.Combatant("x")
+    c = combatant.Combatant("x")
     assert combat_kit.DEFAULTS == {"weapon": c.weapon, "armor": c.armor}, "the default kit is the Combatant's own"
     assert combat_kit.DEFAULTS["weapon"] in combat_kit.WEAPONS and combat_kit.DEFAULTS["armor"] in combat_kit.ARMOUR_TIERS
 
@@ -227,11 +231,11 @@ def _actor_felled_share(w, n=N, seed=7):
     entry, refusal = entry_for(combat._PRIZE, combat._PROVIDER)
     assert entry is not None, refusal
     inp = combat.combat_input(w, [ACTOR, SUBJECT], "fight")
-    rng = random.Random(seed)
+    rng = draw.seeded(draw.H2("test_cp_t03_03_kit", seed))
     felled = 0
     for _ in range(n):
-        ws = entry.fn(inp, rng)["wound_state"]
-        felled += bool(ws[ACTOR]["felled"]) and not bool(ws[SUBJECT]["felled"])
+        ws = entry.fn(inp, rng).wounds
+        felled += bool(ws[ACTOR].felled) and not bool(ws[SUBJECT].felled)
     return felled / n
 
 
@@ -277,9 +281,9 @@ def test_a_record_built_without_kits_is_fought_at_the_engines_default():
     plain = dataclasses.replace(inp, kits=())
     default = dataclasses.replace(inp, kits=((combat_kit.DEFAULTS["weapon"], combat_kit.DEFAULTS["armor"]),) * 2)
     for seed in range(5):
-        a = entry.fn(plain, random.Random(seed))
-        b = entry.fn(default, random.Random(seed))
-        assert (a["result"], a["ends"], a["wound_state"]) == (b["result"], b["ends"], b["wound_state"])
+        a = entry.fn(plain, draw.seeded(draw.H2("test_cp_t03_03_kit", seed)))
+        b = entry.fn(default, draw.seeded(draw.H2("test_cp_t03_03_kit", seed)))
+        assert a == b
 
 
 def test_mutation_reading_the_actors_kit_for_both_parties_loses_the_asymmetry(armed, monkeypatch):
@@ -298,7 +302,7 @@ def test_mutation_reading_the_actors_kit_for_both_parties_loses_the_asymmetry(ar
 
 def test_the_shipped_rosters_are_empty_so_every_person_fights_at_the_default():
     assert ARMS_KINDS == {} and ARMS_AT_BUILD == {}, "the inventory is Jordan's: nothing is authored here"
-    w = populated.build_realm(0)
+    w = build_realm(0)
     default = (combat_kit.DEFAULTS["weapon"], combat_kit.DEFAULTS["armor"])
     checked = 0
     for pid in w.persons:
@@ -308,13 +312,13 @@ def test_the_shipped_rosters_are_empty_so_every_person_fights_at_the_default():
 
 
 def test_seeding_with_no_arms_changes_nothing_and_seeding_arms_moves_the_hash(monkeypatch):
-    base = populated.build_realm(0)
-    with mock.patch.object(populated, "seed_arms", lambda w, seeds=None: 0):
-        unseeded = populated.build_realm(0)
+    base = build_realm(0)
+    with mock.patch.object(boot_realm, "seed_arms", lambda w, seeds=None: 0):
+        unseeded = build_realm(0)
     assert base.content_hash() == unseeded.content_hash(), "the empty `arms_at_build` is the build without the step"
-    assert populated.seed_arms(base, {}) == 0
+    assert seed_arms(base, {}) == 0
     assert base.content_hash() == unseeded.content_hash()
-    n = populated.seed_arms(base, {"settlement": {"t_plate": 2}})
+    n = seed_arms(base, {"settlement": {"t_plate": 2}})
     assert n > 0 and base.content_hash() != unseeded.content_hash(), "a party that holds arms is a hash mover"
     seeded = [r for r in base.rungs.values() if (r.stores or {}).get("t_plate")]
     assert len(seeded) == n and all(r.kind == "settlement" and r.stores["t_plate"] == 2 for r in seeded)

@@ -23,6 +23,10 @@ itself is a `seam/` item of its own. It lives here, not in a sibling file, becau
 construct it and this leaf is the one host file a module may import
 (`engine/season/tests/test_social_contest_module.py`).
 
+B14.01 adds the combat module's output record, `CombatOutcome` (with `PartyWounds`, `Surrender`, `DecisiveBeat`), beside
+`PersonalCombatInput`: the entry returns it and the host adapter reads it (`seam/wrappers/combat.py::resolve`). It is
+not a `Margin` and carries no winner.
+
 v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`) add the fieldwork scene's pair, at the foot of the file:
 `TrailItem` and `FieldworkInput` in, `Findings` out -- the `inquiry` role's records, for the same reason.
 v9 IN-07 E1 adds the settlements module's larder records after them: `Eater`, `LarderInput` and `Under`
@@ -47,19 +51,25 @@ class SocialContestInput:
 
     Built by `seam/wrappers/sigma.py::contest_input` (the host input builder) from `World`:
       * `pool`      -- dice, from what the actor genuinely has (`sigma.py::faculty`);
-      * `opposition` -- the subject's score on the verb's capability key when the subject is a person
-                       carrying one, else `None`. A RAW OPERAND, not an obstacle;
-      * `obstacle_default` -- the `H-127` stand-in for a subject with no score to halve;
+      * `opposition` -- what a PERSON opposite brings to the act: his score in the opposing attribute the verb row names
+                       (`opposed_attribute:`) PLUS his skill score in the verb's skill (A-79, A-137), or `None` where nobody is
+                       opposite (a docket item, a Record, a site, a self-plea). A RAW OPERAND, not an obstacle;
+      * `difficulty` -- the act's own, the size of its verb row's `difficulty:` level (`Fixtures.difficulty_ob`), raw;
+      * `pool_default` -- the untrained score: the opposition where no person is opposite (`opposed_ob(pool_default, opposition_rate)`);
+      * `pool_add` -- the pool's base, whose even line (`MU_PER_DIE x pool_add`) is the obstacle's first term;
+      * `opposition_rate` -- the share of the opposing score an obstacle takes up, per point;
+      * `obstacle_operands` -- `((name, raw operand, step), ...)` in `rosters.yaml: obstacle_terms` order, for the members that are a
+                       raw operand times a step (`standard`, `stakes`, `regard` where each weighs, `reception`, `capability`; the three that do not need one carry their own field above);
       * `obstacle_ceiling` -- the `H-213` bound on how hard one matter can get; `None` is the
                        uncapped control arm;
       * `ceiling_per_pool` -- the `chance_floor` arm (CP-T01-06): from one die, the module solves the
                        cap for THIS pool from `obstacle_ceiling`'s own chance at one die, and the
-                       fixed value stays the cap below one die. `False` is the fixed arm (the default,
-                       so a record built by hand reads as it always did);
+                       fixed value stays the cap below one die. `False` is the fixed arm (the default);
+      * `ceiling_form` -- the ceiling's form past the per-pool bound (`hard`: a flat bound; `soft`: the excess saturates toward it); `hard` by default, so every hand-built record keeps its reading;
       * `obstacle_refusal_multiple` -- S27.4's multiple, the fixture the host adapter refuses on,
                        on the pair the entry returns;
       * `leverage`  -- the σ-layer μ-shift: the host's `advantage_sigma` sums the act's advantage sources
-                       (`rosters.yaml: advantage_sources`; today `effort`), zero where none is taken.
+                       (`rosters.yaml: advantage_sources`: `effort`, `capability`, `proofs`, `favour`), zero where none is taken.
 
     ⚠ NO `ob` FIELD, ON PURPOSE (v9 SC-01 step 14; ED-SC-0033 clause (3), *the obstacle has a single
     owner*). The obstacle is COMPOSED by the module (`modules/social_contest/roll.py::obstacle`) from
@@ -73,34 +83,45 @@ class SocialContestInput:
                        route erosion inside it); `0.0` where the prize is heard by no room;
       * `reception_gain` -- the `H-215` fixture scaling it into the obstacle;
       * `proofs`    -- the actor's unmirrored proofs against the opponent, each weighed by remove
-                       (`queries/world_q.py::proofs`); `0.0` where no room hears the prize;
-      * `proof_step` -- the `H-216` fixture: how far one firsthand proof moves the obstacle.
-    The module composes them (`roll.py::obstacle`); the host composes nothing. They default to the
-    no-room reading so a record built for a prize no room hears reads exactly as before.
+                       (`queries/world_q.py::proofs`); `0.0` where no room hears the prize.
+    B05.17 (PES-A): THE MODULE READS NONE OF THESE. The host turns them into what they are: the bench's hostile half is the
+    obstacle's `reception` operand (`obstacle_operands`), and a proof or a friendly bench is `leverage` (`advantage_sources`:
+    `proofs`, `favour`). They stay on the record raw, for the trace (SC-P1), and default to the no-room reading, which a record
+    built for a prize no room hears carries.
 
     THE EXAMINED DOCUMENT'S OPERAND (v9 SC-02 `22b` step 25), RAW AS THE OTHERS:
       * `forgery_quality` -- `Record.forgery_quality` of the Record an INQUIRY examines (`sigma.py::
                        contest_input`'s `examined`); `0` for a genuine document, for any subject that
                        is not a Record, and for every contest a prize names. Composed by the module."""
-    pool: int
+    pool: float          # FRACTIONAL (B05.25): the mean of his governing attributes plus his rank, to the tenth (`pool.faculty`)
     opposition: Optional[float]
-    obstacle_default: float
     obstacle_ceiling: Optional[float]
     obstacle_refusal_multiple: float
     leverage: float
+    difficulty: float    # B05.14: raw, no default -- a record built without the act's difficulty is no record of a rolled act
+    pool_default: float
+    pool_add: float
+    opposition_rate: float
     reception: float = 0.0
     reception_gain: float = 0.0
     proofs: float = 0.0
-    proof_step: float = 0.0
     forgery_quality: float = 0.0
     ceiling_per_pool: bool = False
+    ceiling_form: str = "hard"   # B05.53: how the obstacle behaves past its ceiling -- `hard` a flat bound, `soft` the excess saturating toward it; read by `modules/social_contest/roll.py::obstacle`, which refuses any other value
+    obstacle_operands: tuple = ()
 
 
 @dataclass(frozen=True)
 class Margin:
     """What the social contest module's entry returns for one matter's draw: the roll's `net` and the
-    `ob` it was thrown at, and nothing else (v9 SC-01 step 15; `08_SEAM.md`'s provider rule, intent
+    `ob` it was thrown at, and the terms that made that `ob` (v9 SC-01 step 15; `08_SEAM.md`'s provider rule, intent
     only: *a MARGIN, never a winner*).
+
+    `terms` (B05.14; OBS §1, §2; SC-B Edit B) is `((name, value), ...)`: every term of the obstacle in `rosters.yaml:
+    obstacle_terms` order, then lane A's `forgery` where it acted, then `("ceiling", -clip)` and `("floor", +lift)`
+    where a bound acted. THE VALUES SUM TO `ob`. Every roster member is non-negative (nothing lowers the obstacle: the favourable
+    half of a room is leverage, B05.17); only the ceiling's clip is negative. `()` on a margin a
+    stub entry returns with no composition behind it.
 
     ⚠ NO WINNER, NO BAND, NO SIDE. The band is the one ladder's reading of this pair
     (`seam/ladder.py::degree_of` -> `degree_from_net`), and who it favours is the fold's reading of the
@@ -108,6 +129,7 @@ class Margin:
     return of any other type (`seam/wrappers/sigma.py::resolve`)."""
     net: float
     ob: float
+    terms: tuple = ()
 
 
 @dataclass(frozen=True)
@@ -119,42 +141,151 @@ class PersonalCombatInput:
                        result is `+1` when A wins, `-1` when B does, `0` UNRESOLVED (a ruled outcome);
       * `ends`      -- each party's `end`, in `claimants` order (`combat.py::party_end`, `H-97`): the authored
                        `attr.body.endurance` (else the class default) less the body-band penalty, floored at 1;
-      * `wound_quantities` -- the `WoundTracker` fields the host lifts per party after the fight
-                       (`rosters.yaml: wound_quantities`, in roster order). The module reads them off the
-                       trackers and returns what it found; the refusal for one the tracker does not carry
-                       is the host's (`combat.py::_wound_state`);
+      * `wound_quantities` -- the `WoundTracker` fields the host reads per party after the fight
+                       (`rosters.yaml: wound_quantities`, in roster order) and the decider's view lifts. The module
+                       returns `PartyWounds`'s five fixed fields whatever it names; the refusal for a name that
+                       record lacks is the host's (`combat.py::_wound_state`);
       * `terms`     -- the duel's terms (RS-25, PC-10a, CP-T03-09): one of `modules/combat/wrapper.py::DUEL_TERMS`,
                        read by the module entry and handed to `wrapper.fight`. The default is the STRING `'death'`
                        (the engine's `LETHAL_TERMS`, pinned equal by `engine/season/tests/test_cp_t03_09_capture.py`), never `None`:
-                       `wrapper.fight` refuses a term outside `DUEL_TERMS`, so a `None` default would raise, and the
-                       string leaves every record built without the field fighting exactly as before. The ONE path
+                       `wrapper.fight` refuses a term outside `DUEL_TERMS`, so a `None` default would raise. The ONE path
                        a non-lethal term reaches the fight by is `combat.py::combat_input`, from `rosters.yaml:
                        duel_terms` -- and, since v10 PC-10b, from the `stakes` of the `challenge` Record an
                        `accept` is about (`world_q.stakes_of`), into this same field through the same function;
       * `kits`      -- each party's kit, `(weapon, armor)`, in `claimants` order, `ends`' shape (CP-T03-03,
                        `world_q.kit_of`: what the rungs the person holds store, read not consumed). The module
                        passes each to `Combatant(..., weapon=, armor=)`. The default is `()`: a record built
-                       without kits is fought by two Combatants at the engine's own default kit, exactly as before;
-      * `faculties` -- each party's dice score for the fight's verb, in `claimants` order, `ends`' shape (CR-85,
-                       ED-IN-0330: it replaces combat's `history`). Filled by `combat.py::combat_input` from
-                       `seam/wrappers/sigma.py::faculty`, THE ONE POOL READER, and passed to `Combatant(..., faculty=)`,
-                       where it feeds the party's pool and the Ob his opponent rolls against, and nothing else. The
-                       default is `()`: a record built without it is fought at the module's own default (3).
-                       [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] --
-                       `proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md` is UNRATIFIED (ED-IN-0351);
+                       without kits is fought by two Combatants at the engine's own default kit;
+      * `scores`    -- each party's SKILL SCORE for the fight's verb, in `claimants` order, `ends`' shape (CR-85, ED-IN-0330,
+                       B05.57; `seam/wrappers/pool.py::score`: no attribute, no addend; 0 where the skill gives him none). Passed
+                       to `Combatant(..., faculty=)`, where it is the number the opponent's Ob is taken from
+                       (`core.ob_from_defender`) and the base of his own pool. The default is `()`: a record built without it
+                       is fought at the module's own default (3);
+      * `addends`   -- each party's registered pool addends for the verb, the sum of `pool.py::POOL_ADDENDS` (`pool.addends_of`,
+                       whole dice), in `claimants` order. The pool is `pool_of(score, addends, pool_add, pool_floor)`: the addend
+                       raises his pool and never an opposition (A-79). The default is `()`: none;
+      * `pool_add`, `pool_floor` -- the fight's row's two operands, carried raw from the fixtures the `fight` site's `dice` row
+                       names (`rosters.yaml: tables.capability_uses`; `pool_add`, `pool_floor`). `None` is the module's own
+                       constants (`core.BASE_POOL`, `core.POOL_FLOOR`), the workbench's;
+      * `opposition_rate` -- the share of a defender's skill score the obstacle takes per point, carried for
+                       `sigma_leverage.opposed_ob`. `None` is the module's own constant (0.5): in B05 `combat_input` carries
+                       `None`, and the flip to the fixture belongs to B15;
+      * `carried`   -- each party's wound carried into the fight, as a SIGNED net sigma (a level against his own rolls is negative), in
+                       `claimants` order (B05.61, `UPR` §3 edit 2; A-8). The host reads it once, from the `wounds` advantage source alone
+                       (`combat.py::_carried_of`: `levels_to_net_sigma` over that member's against-list for the party's own `body`), and
+                       fills it only under `Fixtures carried_wound_model` `level`; the default `(0.0, 0.0)` is `endurance_cut`, the control,
+                       where the wound rides on `ends` instead. The module adds the aggressor's against his attack and the defender's against
+                       his defence beside `wound_impairment` (`combat_systems.assemble_net_sigma`) and holds no `wound_step` of its own;
       * `attributes` -- each party's authored `Person.attributes`, `{registry key: whole number}`, in `claimants`
                        order (PC-06 K-1, ED-IN-0347). The module maps each key to its `Combatant` field by PC-14's
                        `registry_key` (`modules/combat/attributes.py`); a key absent from the dict leaves its field at
                        the class default, and `end` is carried by `ends`, not read from here. The default is `()`:
-                       `combat_input` fills it only when a claimant has an authored attribute, so an all-absent
-                       record is the record it always was."""
+                       `combat_input` fills it only when a claimant has an authored attribute;
+      * `traditions`, `techniques`, `axes`, `dispositions` -- the WORKBENCH's four fields (B14.11, `03_PC_typed_outcome_one_door`
+                       Part B), each one entry per party in `claimants` order, `ends`' shape, each entry `None` where that party
+                       gives none, each defaulting to `()` so every record built before them is the record it was. The module
+                       passes them to `Combatant(..., tradition=, equipped=, skills=, disp=)` as it passes `kits`:
+                       `traditions` a tradition name; `techniques` `{name: level}` (a list of names is each at level 1.0);
+                       `axes` `{axis: bonus}` (`Combatant`'s own attribute stays `skills`); `dispositions` the `disp` number.
+                       The season fills none of them until a carrier exists (`03_PC_person_inputs_content.md`)."""
     claimants: tuple
     ends: tuple
     wound_quantities: tuple
     terms: str = "death"
     kits: tuple = ()
-    faculties: tuple = ()
+    scores: tuple = ()
+    addends: tuple = ()
+    pool_add: Optional[float] = None
+    pool_floor: Optional[float] = None
+    opposition_rate: Optional[float] = None
+    carried: tuple = (0.0, 0.0)
     attributes: tuple = ()
+    traditions: tuple = ()
+    techniques: tuple = ()
+    axes: tuple = ()
+    dispositions: tuple = ()
+
+
+@dataclass(frozen=True)
+class PartyWounds:
+    """One party's lifted `WoundTracker`: five FIXED fields (B14.01), whatever `wound_quantities` names. The host's
+    `seam/wrappers/combat.py::_wound_state` reads it by that roster and refuses, by name, a roster member this record
+    lacks."""
+    felled: bool
+    wounds: int
+    max_wounds: int
+    health_remaining: int
+    health_full: int
+
+
+@dataclass(frozen=True)
+class Surrender:
+    """The scene's `yield` event, lifted off its trace by the module entry (B14.01). `round` is the round at whose
+    start or end the yield came (A-101; the engine's trace event still names it `turn`)."""
+    by: str
+    round: int
+    accepted: bool
+
+
+@dataclass(frozen=True)
+class DecisiveBeat:
+    """The wound that ended the scene: the trace's last `wound` event that felled its victim (B14.01).
+      * `by`     -- the striker's id;
+      * `victim` -- the felled party's id;
+      * `source` -- the engine's own site name for the wound: exchange | bind | stophit | pursuit | displace_graze;
+      * `weapon` -- the striker's weapon key as the fight opened (the `fight_start` event; the `wound` event carries none);
+      * `round`  -- the round it landed in (A-101; the count of `turn_start` events up to it)."""
+    by: str
+    victim: str
+    source: str
+    weapon: str
+    round: int
+
+
+@dataclass(frozen=True)
+class SceneShape:
+    """WHAT THE SCENE'S TRACE SAYS OF ITS COURSE, folded by the module entry from the trace it already holds (B14.15; a pure
+    fold over `wound`, `turn_start` and `yield`, no new engine event). The host reads it off the result and puts it on the
+    act's Events (`loop/effects_combat.py::_eff_kill`); nothing is kept between scenes.
+      * `rounds`      -- rounds fought: the `turn_start` count (A-101; `CombatOutcome.rounds`);
+      * `blows`       -- wounding blows LANDED, by claimant id (a `wound` event is emitted only for a blow that took Health);
+      * `first_blood` -- who landed the first wounding blow, `None` where none landed;
+      * `lead_changes`-- times the party ahead on Health fraction changed (a tie is no lead and no change);
+      * `nearest`     -- each party's lowest Health remaining during the scene, in points (his Health when no blow reached him).
+    A party whose Combatant carries no tracker has no full Health to read a fraction against: it is absent from `nearest`
+    and the scene's `lead_changes` is `0`."""
+    rounds: int
+    blows: Mapping[str, int]
+    first_blood: Optional[str]
+    lead_changes: int
+    nearest: Mapping[str, int]
+
+
+@dataclass(frozen=True)
+class CombatOutcome:
+    """WHAT THE `combat` MODULE ENTRY RETURNS FOR ONE SCENE (B14.01; the combat entry's output record, as `Margin` is
+    the social contest's).
+
+    ⚠ THIS RECORD IS NOT A `Margin`, AND MUST NOT BE 'FIXED' INTO ONE. Combat's degree is read off its WOUND STATE
+    (`seam/ladder.py::combat_degree` over `wounds`), never off a net and an obstacle; a `net`/`ob` pair here would
+    make the module a second resolver (Jordan, 2026-09-03: *"kill/wound degrees should be directly taken from scene
+    combat"*). Nor does it name a winner: who prevailed is the fold's reading of `wounds` and `surrender`.
+
+      * `claimants` -- `(A, B)`, as the input;
+      * `wounds`    -- `{claimant id: PartyWounds}`; a party whose Combatant carries no tracker is ABSENT (the host
+                       refuses it by name);
+      * `surrender` -- the scene's `yield` event the engine did not refuse, or `None` (a refused declaration is not a surrender);
+      * `beat`      -- the wound that felled a party, or `None` when nobody was felled;
+      * `rounds`    -- rounds fought (A-101; the `turn_start` count);
+      * `shape`     -- the scene's course, folded from its trace (B14.15);
+      * `trace`     -- the scene's events, for a viewer; `shape` and `beat` are the only folds of it."""
+    claimants: tuple
+    wounds: Mapping[str, PartyWounds]
+    surrender: Optional[Surrender]
+    beat: Optional[DecisiveBeat]
+    rounds: int
+    shape: SceneShape
+    trace: tuple
 
 
 @dataclass(frozen=True)
@@ -193,7 +324,7 @@ class PlayHost:
 
 @dataclass(frozen=True)
 class FieldOrder:
-    """CP-T04-02: ONE SIDE'S STANDING ORDER OF BATTLE as the field reads it -- the content of the `order_of_battle`
+    """CP-T04-02: ONE SIDE'S STANDING ORDER as the field reads it -- the content of the `standing_order`
     Record `seam/wrappers/mass_battle.py::field_input` chose (`rosters.yaml: record_kinds`): `role`, a `config.ROLE_SPEC`
     name the module maps onto each subunit of the side's line, and `retreat_at`, one of `ORDER_RETREAT_AT`, which the
     module reads (CP-T04-03) as each subunit's `own_strength` retreat Order. Plain strings: the closed sets are the module's (`engine/substrate/battle_orders.py`)."""
@@ -230,16 +361,16 @@ class MassBattleInput:
       * `loyalty_gain` -- the `field_morale_loyalty_gain` fixture (`H-148`'s site); `0` is the control,
                        battle history only;
       * `troops_per_weight` -- REM-32: the `field_troops_per_weight` fixture (`H-250`), the scale from a side's
-                       weight to its Unit's troops on the headcount path (`massbattle._weighted_unit`). `1`, the
+                       weight to its Army's troops on the headcount path (`massbattle._weighted_unit`). `1`, the
                        default, is `troops = weight`: the field as it was. The host always passes the fixture;
                        the default is the identity of the multiplication, not a value for the scale;
       * `members`   -- CP-T04-01: `(attacker, defender)`, each a tuple of person ids, ONE PER ENTRY OF `weights`, in the
                        same order (`field_input` filters both by the same test). Read only on the `person` arm;
                        `((), ())`, the default, names nobody;
-      * `subunits`  -- CP-T04-01: the `field_subunits` fixture (`H-359`), `side` or `person`. `side`, the default, is
+      * `units`  -- CP-T04-01: the `field_units` fixture (`H-359`), `side` or `person`. `side`, the default, is
                        the side as it was: one subunit sized by Σ weight. `person` is one subunit per member;
-      * `orders`    -- CP-T04-02 (`H-361`): `(attacker, defender)`, each a `FieldOrder` or `None`, the standing order of
-                       battle `field_input` read for that side (the `order_of_battle` Record its faction's seat holds
+      * `orders`    -- CP-T04-02 (`H-361`): `(attacker, defender)`, each a `FieldOrder` or `None`, the standing order
+                       `field_input` read for that side (the `standing_order` Record its faction's seat holds
                        about the side's settlement whose holder edge is newest). `None`, the default, is both sides
                        without one: the field as it was;
       * `geography` -- the parsed geography file (`data/geography.py::geography`, read once per process
@@ -263,7 +394,7 @@ class MassBattleInput:
     orders_of_battle: Optional[tuple] = None
     troops_per_weight: float = 1
     members: tuple = ((), ())
-    subunits: str = "side"
+    units: str = "side"
     orders: Optional[tuple] = None
 
 
@@ -372,7 +503,7 @@ class Under:
 @dataclass(frozen=True)
 class SubsistInput:
     """What `settlements.subsist` reads, and nothing else. Built by `queries/world_q.py::subsist_input`:
-      * `larder`    -- the `LarderInput` the draw reads (`larder_input`'s projection, unchanged);
+      * `larder`    -- the `LarderInput` the draw reads (`larder_input`'s projection);
       * `chains`    -- `((home, (home, parent, ..., root)), ...)` per COHORT home, sorted: each home's whole
                        containment ancestry (`ancestry`), NOT cut at a non-rung as a ladder is. A drained
                        rung's gap counts the eaters whose chain passes through it -- `_subtree`'s
@@ -462,8 +593,8 @@ class ProduceOutcome:
 # `fortification.py`; the public wrappers (`population`, `capacity`, `ceiling`, `share`,
 # `fortification_of`) read the output back. ⚠ A HALF LEFT `None` WAS NOT PROJECTED: one record serves two
 # public names (E4: `population` and `capacity`; E5: `ceiling` and `share`), and each wrapper projects only
-# the half it reads, so it pays the scans, `TRACE.query` rows and fixture reads its old body paid and no
-# more (`residence_of` traces, `presence` traces, `Fixtures.reads` reaches `harness/corpus_run.py`'s
+# the half it reads, so it pays only the scans, `TRACE.query` rows and fixture reads its half needs
+# (`residence_of` traces, `presence` traces, `Fixtures.reads` reaches `harness/corpus_run.py`'s
 # report). The module answers `None` for a half it was not given.
 
 @dataclass(frozen=True)
@@ -496,7 +627,7 @@ class FabricInput:
       * `live_works` -- how many live works name the site (`works_for`; the host refuses two, A6);
       * `declared`   -- that works' declared terms (`len(stages)`), `0` with no live works;
       * `matured`    -- its ripened terms (`matured_terms`, a log scan), counted only when `declared > 0`
-                        (`0` otherwise, unread), so the scan is paid exactly where it was;
+                        (`0` otherwise, unread), so the scan is paid only where a works declares terms;
       * `present`    -- how many persons stand at the site's rung (`len(presence)`); `None` when
                         `ceiling` asks. The first four are `None` when `share` asks."""
     scale: Optional[int]
@@ -518,8 +649,8 @@ class Fabric:
 class FortInput:
     """What `settlements.fortification` reads. Built by `queries/world_q.py::fort_input`:
       * `conditions` -- `(Site.condition, ...)` of every `garrison` Site in the subtree, `World.sites` order;
-      * `scale`      -- the `condition_scale` fixture, read only when `conditions` is non-empty (the old
-                        body's read), else `None`. The entry returns a bare `float`."""
+      * `scale`      -- the `condition_scale` fixture, read only when `conditions` is non-empty,
+                        else `None`. The entry returns a bare `float`."""
     conditions: tuple
     scale: Optional[int]
 

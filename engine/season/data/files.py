@@ -5,10 +5,9 @@ checkable property, though not by a bare grep for the dunder spelling of the mod
 a comment discussing the invariant necessarily matches it too (`harness/governance_spine.py` names
 this paradox at its own site). The narrower, actually-true claim: this module owns every path to a
 REGISTRY the package loads; `tests/test_season_shape.py` legitimately resolves its own `.py` for an
-AST walk, and neither of those is a second anchor. Before this
-module the package carried 29 independent anchors across 10 files, each climbing its own chain of
-`.parent`s, and the length of that chain was a fact about where the file happened to sit rather
-than about the tree. A path anchor fails silently by construction -- the degradation each
+AST walk, and neither of those is a second anchor. An anchor climbing its own chain of `.parent`s
+makes the length of that chain a fact about where the file happens to sit rather than about the
+tree. A path anchor fails silently by construction -- the degradation each
 seam performs on purpose (a named gap rather than an ImportError) is exactly what hides a wrong
 anchor -- so the anchor has to be checked at import, in one place, or not at all.
 
@@ -33,11 +32,8 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 # THE ANCHOR ITSELF. `engine/season/data/files.py` -> data -> season -> engine -> repo.
 #
-# ⚠ THE CHAIN IS ONE LINK SHORTER THAN IT WAS, AND THAT IS THE WHOLE REASON THIS MODULE EXISTS.
-# The package was decomposed while it lived at `proposals/2026-09-01-season-loop-tests/season/`,
-# five levels below the repo root; it is now at `engine/season/`, four. Every path in the package
-# moved by one level in one edit HERE, and the self-check below is what turns a wrong depth into an
-# import-time refusal instead of six silently skipped seam tests.
+# ⚠ A MOVE OF THE PACKAGE MOVES EVERY PATH IN IT IN ONE EDIT HERE, and the self-check below is
+# what turns a wrong depth into an import-time refusal instead of silently skipped seam tests.
 # ---------------------------------------------------------------------------
 DATA_DIR = Path(__file__).resolve().parent
 PACKAGE_DIR = DATA_DIR.parent
@@ -57,31 +53,24 @@ assert (REPO_ROOT / "CLAUDE.md").is_file() and (REPO_ROOT / "engine").is_dir() \
 
 # ---------------------------------------------------------------------------
 # THIS PACKAGE'S OWN DATA. `runs/` is written by `harness/report.py` alone (`W15`, guardrail `G7`).
-# ⚠ THE FIVE YAML REGISTRIES BELOW USED TO LIVE IN A SIBLING PROPOSAL DIRECTORY AND NOW LIVE
-# HERE, co-located with the code that reads them -- the adoption's doing (ED-IN-0204), not the
-# decomposition's. They are listed in this section rather than under SIBLINGS because that is now
-# what they are: files this package owns.
+# ⚠ THE YAML REGISTRIES BELOW ARE CO-LOCATED WITH THE CODE THAT READS THEM (ED-IN-0204): files
+# this package owns.
 # ---------------------------------------------------------------------------
 RUNS_DIR = PACKAGE_DIR / "runs"
 CASES_DIR = PACKAGE_DIR / "cases"
 EXERCISES_DIR = CASES_DIR / "exercises"
 CHAIN_CASES_DIR = CASES_DIR / "chain"
 RESULTS_JSON = RUNS_DIR / "results.json"
-TRACE_TXT = RUNS_DIR / "TRACE.txt"
 
 # The same artifact as a REPO-RELATIVE string, because `harness/delta.py` reads it out of git
 # (`git show <rev>:<path>`) rather than off the disk, and git speaks repo-relative paths only.
 RESULTS_REPO_REL = RESULTS_JSON.relative_to(REPO_ROOT).as_posix()
 
-# ⚠ AND THE SAME ARTIFACT AT ITS PRE-ADOPTION PATH, WHICH IS NOT A HISTORICAL FOOTNOTE. `delta.py`
-# reads a COMMITTED REVISION, so it must be able to name where the file lived AT THAT REVISION --
-# before the adoption commit it existed only under `proposals/`, and naming one path alone made
-# `delta.py <any earlier rev>` a hard refusal. That is this lane's declared `G11` carrier going
-# silent at exactly the commit that needed it. ⚠ THE CONSTANT WAS DROPPED ONCE ALREADY, in the
-# three-way merge that brought the decomposition onto the adopted tree: the DEFINITION sat inside
-# a conflict hunk and the USE sat outside it, so taking one side left `delta.py` raising
-# `NameError` on every `<rev>` argument while `delta.py` with no argument still worked. It lives
-# here now, beside its sibling, which is where a second path for one artifact belongs.
+# ⚠ AND THE SAME ARTIFACT AT ITS PRE-ADOPTION PATH. `delta.py` reads a COMMITTED REVISION, so it
+# must be able to name where the file lived AT THAT REVISION -- before the adoption commit it
+# existed only under `proposals/`, and naming one path alone would make `delta.py <any earlier
+# rev>` a hard refusal (this lane's declared `G11` carrier). It lives here, beside its sibling,
+# which is where a second path for one artifact belongs.
 RESULTS_BEFORE_ADOPTION_REPO_REL = "proposals/2026-09-01-season-loop-tests/runs/results.json"
 
 # ---------------------------------------------------------------------------
@@ -103,29 +92,27 @@ HOLE_REGISTER_YAML = PACKAGE_DIR / "hole_register.yaml"
 REQUIREMENTS_YAML = PACKAGE_DIR / "requirements.yaml"
 ENDINGS_CLASSIFIED_YAML = PACKAGE_DIR / "ENDINGS_CLASSIFIED.yaml"
 # ⚠ A FIXTURE'S REGISTRY, AND IT IS ANCHORED HERE FOR THE SAME REASON THE OTHERS ABOVE ARE.
-# `governance_spine.yaml` declares the 13-seat generic ladder. It was first written with a
-# local `Path(__file__).resolve().parents[1]` inside `harness/governance_spine.py` — a
-# SECOND anchor in the package whose whole point is to have one, and the exact defect
-# `harness/populated.py` records having already removed once. The invariant that catches it
-# is this module's own -- narrower than a bare grep for `__file__` (see the module docstring
-# above): this module owns every path to a registry the package loads.
+# `governance_spine.yaml` declares the 13-seat generic ladder, read by `harness/governance_spine.py`.
+# A local `Path(__file__).resolve().parents[1]` there would be a SECOND anchor in the package
+# whose whole point is to have one. The invariant that catches it is this module's own --
+# narrower than a bare grep for `__file__` (see the module docstring above): this module owns
+# every path to a registry the package loads.
 GOVERNANCE_SPINE_YAML = PACKAGE_DIR / "governance_spine.yaml"
-# `offices.yaml` -- the governance ladder's titles (folded from `rosters.yaml: titles`, plan
-# position `8a`, `13d-i` item 5) and the 31 authored seats. Anchored here for the same reason
-# `GOVERNANCE_SPINE_YAML` is: one path owner, never a local `__file__` a house move rots.
+# `offices.yaml` -- the governance ladder's titles and the authored seats. Anchored here for the
+# same reason `GOVERNANCE_SPINE_YAML` is: one path owner, never a local `__file__` a house move rots.
 OFFICES_YAML = PACKAGE_DIR / "offices.yaml"
-# `arrangements.yaml` -- plan position `18` (PROC-A), `21_RECONCILIATION.md` PHASE 2 step 6 /
+# `arrangements.yaml` -- PROC-A, `21_RECONCILIATION.md` PHASE 2 step 6 /
 # `03_PARAMETERS.md` PART D: THE CLOSED SET of proceeding shapes (`ID-12` -- "changing one is a
 # data edit"), read through `data/arrangements.py`, the ONE loader. Anchored here for the same
 # reason every sibling registry above is: one path owner, never a local `__file__`.
 ARRANGEMENTS_YAML = PACKAGE_DIR / "arrangements.yaml"
-# `cohorts.yaml` -- plan position `24f` (SUBSISTENCE IS TERRITORIAL, `ED-IN-0255`): the AUTHORED
+# `cohorts.yaml` -- SUBSISTENCE IS TERRITORIAL (`ED-IN-0255`): the AUTHORED
 # population synecdoches, one `weight > 1` `Person` per populated rung, read once at world-gen by
-# `harness/populated.py::build_realm` beside the case-derived cast. Anchored here for the same
+# `boot/realm.py::build_realm` beside the case-derived cast. Anchored here for the same
 # reason every sibling registry above is: one path owner, never a local `__file__`.
 COHORTS_YAML = PACKAGE_DIR / "cohorts.yaml"
 # `goals.yaml` -- v9 IN-66 (ED-IN-0293 (8)): the AUTHORED goals of the organizations (faction, body,
-# seat), each an OUGHT Proposition `harness/populated.py` mints at world-gen once IN-68 reads them.
+# seat), each an OUGHT Proposition `boot/realm.py` mints at world-gen.
 # Read through `data/goals.py`, the ONE loader. Anchored here for the same reason every sibling
 # registry above is: one path owner, never a local `__file__`.
 GOALS_YAML = PACKAGE_DIR / "goals.yaml"
@@ -137,31 +124,24 @@ GOALS_YAML = PACKAGE_DIR / "goals.yaml"
 DEGREE_SWEEP_DIR = ENGINE_DIR / "reference" / "degree-sweep"
 
 # ---------------------------------------------------------------------------
-# THE REPOSITORY. The flat personal-combat module set is NOT anchored here: it is loaded by the
-# one path seam, engine/substrate/pc_engine.py (2026-09-25), which seam/wrappers/combat.py calls.
+# THE REPOSITORY. The personal-combat module is NOT anchored here: it is the package `modules.combat`,
+# reached by the composition rows `combat.fight` and `combat.duel_terms` (seam/wrappers/combat.py).
 # ---------------------------------------------------------------------------
 SYSTEMS_DIR = REPO_ROOT / "systems"
 # The world map: `provinces:` (territories, their `anchor`s), `terrain:` polygons and `water:`.
-# CANON, not this package's own. Read at world-gen by `harness/populated.py` and, for the battle
+# CANON, not this package's own. Read at world-gen by `boot/realm.py` and, for the battle
 # field, by `data/geography.py`, which hands it to the `mass_battle` module on its input record --
-# the module no longer names the file (it was `terrain.py`'s `_GEOGRAPHY_YAML` until the host took it).
+# the module does not name the file.
 GEOGRAPHY_YAML = SYSTEMS_DIR / "settlements" / "valoria_geography_v30.yaml"
 REFERENCES_DIR = REPO_ROOT / "references"
 MODULE_CONTRACTS_YAML = REFERENCES_DIR / "module_contracts.yaml"
 CLAUDE_MD = REPO_ROOT / "CLAUDE.md"
 
-# ⚠ THE CAST, AND IT IS CANON RATHER THAN THIS PACKAGE'S OWN. 46 character rows whose ids are an
-# EXACT 1:1 MATCH with `load_cases("NPC")` — measured, zero symmetric difference — carrying an
-# authored `faction`, `role`, weighted `convictions` over the canonical thirteen, and a `title` on
-# seven. It sat unread by anything that executes while `run_cases.seed_pursuits` derived each
-# person's convictions from `blake2b(seed, case_id, pid)`. Named here because `files.py` is the one
-# anchor; read through `data/cast.py`, which is the one reader.
+# ⚠ THE CAST, AND IT IS CANON RATHER THAN THIS PACKAGE'S OWN. Character rows whose ids match
+# `load_cases("NPC")` 1:1, carrying an authored `faction`, `role`, weighted `convictions` over the
+# canonical roster, and a `title` on some. Named here because `files.py` is the one anchor; read
+# through `data/cast.py`, which is the one reader.
 NPC_REGISTRY_YAML = REFERENCES_DIR / "npc_registry.yaml"
-# `names_index.yaml` HAD A CONSTANT HERE AND NO LONGER NEEDS ONE (2026-09-16). `cast.py`
-# opened it directly to build a faction alias map; it now reads `engine/substrate/names.py`,
-# which is fed by `tools/export_names.py`. Nothing under `engine/season/` opens the YAML, so
-# the constant was a declared-but-unread row -- `01_AXIOMS.md` ID-13's "mechanism that does
-# not exist, wearing a schema's clothes". Deleted rather than kept for a caller that is gone.
 
 
 def subsystem_sim_dir(name: str) -> Path:
@@ -175,31 +155,17 @@ def subsystem_sim_dir(name: str) -> Path:
 # -- an AST walk over the write call sites, the roster scan, the margin-producer scan.
 # ---------------------------------------------------------------------------
 LOOP_DIR = PACKAGE_DIR / "loop"
-# The season loop itself, extracted from `shape.py` at step 9. Source-scanning guards that
-# used to read `SHAPE_PY` for `SeasonDriver` code read this instead -- `shape.py` was deleted at
-# step 10, so a scan pointed there fails to open a file rather than passing by finding nothing.
 DRIVER_PY = LOOP_DIR / "driver.py"
-# THE AGGREGATOR, NOT THE WHOLE WALK -- since the Phase-4 per-subsystem split (2026-09-30),
-# `effects.py` itself holds no `@effect_for`-decorated function and no `Tenure(...)` call; those
-# moved into its `effects_*.py` siblings. `data/verbs.py::_derive_openers_from_effects` reads
-# `effects_modules()` below, not this constant alone -- kept because it still names the one file a
-# caller means by "the effects module" (`test_governance_build.py`'s `inspect.getsource` case and
-# similar). Never imported by either reader, so there is no `data` -> `loop` import edge, only a
-# file-level read of `loop`'s own text (`OPENERS-DERIVE`, 2026-09-29).
-EFFECTS_PY = LOOP_DIR / "effects.py"
 
 
 def loop_modules() -> tuple:
     """EVERY `.py` UNDER `loop/`, DISCOVERED. The season loop's source corpus.
 
-    ⚠ **THIS EXISTS BECAUSE `DRIVER_PY` ALONE STOPPED BEING THE LOOP AT UNIT L5 (ED-IN-0206).**
-    `04_CODE_ARCHITECTURE.md` §A.2:134 makes `loop/` *"driver + six steps"*, so the six step bodies
-    left `driver.py` for their own modules -- and six guards read `files.DRIVER_PY` BY FIXED PATH.
-    Four went loudly red on the move and one, `test_w2`'s write-call-site walk, would have NARROWED
-    IN SILENCE: its only floor is `assert pairs`, which `probes.py` satisfies on its own, so it
-    would have reported clean over every write site the six steps took with them. That is the fourth
-    recurrence of one defect in this package (steps 2, 4, 5, now), and the fix is the same one
-    `package_modules` states above: **compute the corpus, never list it.**
+    ⚠ **`DRIVER_PY` ALONE IS NOT THE LOOP (ED-IN-0206).** `04_CODE_ARCHITECTURE.md` §A.2:134 makes
+    `loop/` *"driver + six steps"*, so the six step bodies live in their own modules, and a guard
+    reading `files.DRIVER_PY` by fixed path would NARROW IN SILENCE over every write site the six
+    steps took with them. The fix is the one `package_modules` states below: **compute the
+    corpus, never list it.**
 
     A caller that scans this for a property must also pin a FLOOR or a SUPERSET, because a
     discovery that stops matching passes by finding nothing (`CLAUDE.md` §0.1 pt 2)."""
@@ -214,21 +180,18 @@ def loop_source() -> str:
 
 
 def effects_modules() -> tuple:
-    """EVERY `.py` under `loop/` NAMED `effects*`, DISCOVERED -- the Phase-4 per-subsystem split of
-    `effects.py` (2026-09-30) into the aggregator (`EFFECTS_PY`) plus seven flat siblings
-    (`effects_shared.py`, `effects_governance.py`, `effects_economy.py`, `effects_migration.py`,
-    `effects_founding.py`, `effects_information.py`, `effects_combat.py`), no package and no
-    `__init__.py` barrel -- EIGHT files today, matched by name rather than hand-listed.
+    """EVERY `.py` under `loop/` NAMED `effects*`, DISCOVERED: the aggregator (`effects.py`) plus its
+    flat siblings (`effects_shared.py`, `effects_governance.py`, ...), no package and no
+    `__init__.py` barrel, matched by name rather than hand-listed.
     `data/verbs.py::_derive_openers_from_effects` is the one reader: every `@effect_for(...)`-
-    decorated function and every `Tenure(...)` construction site it walks now lives in one of the
-    seven siblings, none in the aggregator itself (which only imports them), so a walk confined to
-    `EFFECTS_PY` alone finds nothing -- `loop_modules`'s own lesson (`compute the corpus, never
-    list it`) applies a second time, one split down, rather than hand-listing eight names that go
-    stale the day a ninth lands.
+    decorated function and every `Tenure(...)` construction site it walks lives in one of the
+    siblings, none in the aggregator itself (which only imports them), so a walk confined to
+    `effects.py` alone finds nothing -- `loop_modules`'s lesson (`compute the corpus, never list
+    it`) rather than hand-listing names that go stale the day another lands.
 
     A caller that scans this for a property must also pin a FLOOR or a SUPERSET, `loop_modules`'s
-    own warning (`CLAUDE.md` §0.1 pt 2) -- eight today, checked at `_derive_openers_from_effects`'s
-    own call site rather than here, since this function has no opinion on what a caller expects."""
+    own warning (`CLAUDE.md` §0.1 pt 2), checked at `_derive_openers_from_effects`'s own call site
+    rather than here, since this function has no opinion on what a caller expects."""
     return tuple(p for p in loop_modules() if p.name.startswith("effects"))
 
 # ---------------------------------------------------------------------------
@@ -252,34 +215,25 @@ def decision_modules() -> tuple:
     §0.1 pt 2)."""
     return tuple(sorted(DECISION_DIR.rglob("*.py"),
                         key=lambda p: p.relative_to(DECISION_DIR).as_posix()))
-SEAM_DIR = PACKAGE_DIR / "seam"
-# ⚠ THE WRAPPER MOVED UNDER `seam/wrappers/` (L2, ED-IN-0206). `04:135` and §A.2's
-# `seam/wrappers/*` row put one wrapper per deferred subsystem there; it sat at the package root
-# because the step-8 plan read D5's COST as a reason not to perform the rename. The declared
-# `sys.path` seam in `tests/valoria/test_engine_does_not_import_systems.py` is renamed with it.
-COMBAT_SEAM_PY = SEAM_DIR / "wrappers" / "combat.py"
-TRACE_LOG_PY = PACKAGE_DIR / "trace_log.py"
 TEST_PY = TESTS_DIR / "test_season_shape.py"
 
 PROBES_PY = HARNESS_DIR / "probes.py"
-RUN_CASES_PY = HARNESS_DIR / "run_cases.py"
-CORPUS_RUN_PY = HARNESS_DIR / "corpus_run.py"
-EXERCISES_PY = HARNESS_DIR / "exercises.py"
-REGISTER_PY = HARNESS_DIR / "register.py"
-REPORT_PY = HARNESS_DIR / "report.py"
-DELTA_PY = HARNESS_DIR / "delta.py"
 HEADLESS_PY = HARNESS_DIR / "headless.py"
+
+# THE REALM BUILDER'S HOME (A-102): `boot/` builds the World and imports no instrument. It is not a
+# step of the season, so `loop_modules()` does not list it; `package_modules()` finds it by `rglob`.
+BOOT_DIR = PACKAGE_DIR / "boot"
+REALM_PY = BOOT_DIR / "realm.py"
+BOOT_CHOOSER_PY = BOOT_DIR / "chooser.py"
 
 
 def package_modules() -> tuple:
     """EVERY `.py` IN THIS PACKAGE, DISCOVERED AND NEVER LISTED, sorted by package-relative path.
 
-    ⚠ THE DISCOVERY IS THE POINT, and it is this repository's own lesson rather than a preference.
-    Three guards need *every module in the instrument*: the roster scan, the need-taint scan and
-    the margin-producer scan. Each was first written against a hardcoded filename tuple, and each
-    time a module was added it went unscanned BY CONSTRUCTION -- `G2` forbids the shape (a
-    filename roster is a router), so the set is computed. Recursive, because the harness modules
-    now live one directory down and a flat `glob` would silently drop eight of them, which is the
-    same defect in a new spelling."""
+    ⚠ THE DISCOVERY IS THE POINT. Three guards need *every module in the instrument*: the roster
+    scan, the need-taint scan and the margin-producer scan. A hardcoded filename tuple goes
+    unscanned BY CONSTRUCTION when a module is added -- `G2` forbids the shape (a filename roster is
+    a router), so the set is computed. Recursive, because the harness modules live one directory
+    down and a flat `glob` would silently drop them."""
     return tuple(sorted(PACKAGE_DIR.rglob("*.py"),
                         key=lambda p: p.relative_to(PACKAGE_DIR).as_posix()))

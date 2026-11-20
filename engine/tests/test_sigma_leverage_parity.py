@@ -50,6 +50,7 @@ from engine.dice_engine import sigma_leverage as SL  # noqa: E402
 # that owns them. This file still tests the sigma layer; the degree half now addresses the
 # contest package, and that relocation is itself the point of the ruling being executed.
 from systems.social_contest.sim.contest import degree_extension as CD  # noqa: E402
+from engine.dice_engine import draw
 
 # ---------------------------------------------------------------------------
 # Golden table — the parity oracle, committed as data.
@@ -589,31 +590,14 @@ class TestPoolAwareDegree:
         )
 
 
-class TestRollNet:
-    """Structural — dice_engine delegation."""
-
-    def test_returns_int(self):
-        import random as _random
-        assert isinstance(SL.roll_net(5, rng=_random.Random(42)), int)
-
-    def test_pool_floor(self):
-        """Pool <= 0 is treated as pool=1 (no crash)."""
-        import random as _random
-        assert isinstance(SL.roll_net(0, rng=_random.Random(0)), int)
-
-    def test_seeded_deterministic(self):
-        import random as _random
-        assert SL.roll_net(10, rng=_random.Random(7)) == SL.roll_net(10, rng=_random.Random(7))
-
-
 class TestRollNetContinuous:
     """Structural — dice_engine delegation."""
 
     def test_returns_float(self):
         import random as _random
-        assert isinstance(SL.roll_net_continuous(5, rng=_random.Random(99)), float)
+        assert isinstance(SL.roll_net_continuous(5, rng=draw.seeded(draw.H2("test_sigma_leverage_parity", 99))), float)
 
     def test_seeded_deterministic(self):
         import random as _random
-        assert (SL.roll_net_continuous(10, rng=_random.Random(13))
-                == SL.roll_net_continuous(10, rng=_random.Random(13)))
+        assert (SL.roll_net_continuous(10, rng=draw.seeded(draw.H2("test_sigma_leverage_parity", 13)))
+                == SL.roll_net_continuous(10, rng=draw.seeded(draw.H2("test_sigma_leverage_parity", 13))))

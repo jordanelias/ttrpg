@@ -28,7 +28,8 @@ import pytest
 
 from ..data.matrix import WriteClass
 from ..gaps import Unspecified
-from ..harness import populated as POP
+from ..boot import realm as boot_realm
+from ..boot.realm import VENUES, _load, build_realm, mint_planned_works, resolve_anchor
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..state.carriers import Act
@@ -41,7 +42,7 @@ DUKE, STEWARD = "p_npc_020", "p_npc_009"          # off_duke_valorsmark's holder
 def _rows(*mutations):
     """The shipped `planned_works` rows, each passed through `mutations` (callables `row -> row`)."""
     out = []
-    for row in POP._load(POP.VENUES)["planned_works"]:
+    for row in _load(VENUES)["planned_works"]:
         for m in mutations:
             row = m(row)
         out.append(row)
@@ -50,13 +51,13 @@ def _rows(*mutations):
 
 def _build(monkeypatch, rows):
     """`build_realm(0)` with the venues file's `planned_works` replaced by `rows` (`[]` is the control arm)."""
-    real = POP._load
+    real = _load
 
     def load(rel):
         d = real(rel)
-        return {**d, "planned_works": rows} if rel == POP.VENUES else d
-    monkeypatch.setattr(POP, "_load", load)
-    return POP.build_realm(0)
+        return {**d, "planned_works": rows} if rel == VENUES else d
+    monkeypatch.setattr(boot_realm, "_load", load)
+    return build_realm(0)
 
 
 def _tick0(w):
@@ -86,7 +87,7 @@ def test_the_shipped_rows_mint_one_works_each_held_by_the_seat_they_name(monkeyp
     (`b_s_001_court`): each is a `works` Record `{plan, at}` with `at` resolved from its anchor, kept at the
     paying rung, three terms from tick 1 (`record_stage_term`), and held by the person who holds the seat the
     row names -- the maker's `hold`, which is what makes him the master `found` and `build` ask for."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     works = {r.id: r for r in w.records.values() if r.kind == world_q.WORKS_KIND}
     assert sorted(works) == [DWELLING_WORKS, HEARTH_WORKS], sorted(works)
     hearth, dwelling = works[HEARTH_WORKS], works[DWELLING_WORKS]
@@ -109,7 +110,7 @@ def test_control_an_empty_block_changes_nothing_but_the_rows_records_and_their_h
     moved, and the content hash differs."""
     control = _build(monkeypatch, [])
     monkeypatch.undo()
-    shipped = POP.build_realm(0)
+    shipped = build_realm(0)
     assert not [r for r in control.records.values() if r.kind == world_q.WORKS_KIND]
     assert sorted(set(shipped.records) - set(control.records)) == [DWELLING_WORKS, HEARTH_WORKS]
     assert set(control.records) <= set(shipped.records)
@@ -125,12 +126,12 @@ def test_control_an_empty_block_changes_nothing_but_the_rows_records_and_their_h
 def test_the_hearth_anchor_names_a_building_by_its_settlement_and_slug_and_a_ghost_refuses():
     """The fifth anchor form (`{hearth: "<code>:<slug>"}`) is one more line at the building mint site: the
     resolver is unchanged, resolves the Royal Court, and still refuses what is not indexed."""
-    w = POP.build_realm(0)
-    assert POP.resolve_anchor(w, w._anchors, {"hearth": "S-001:court"}) == "b_s_001_court"
-    assert POP.resolve_anchor(w, w._anchors, {"settlement": "S-001"}) == "set_s_001"
+    w = build_realm(0)
+    assert resolve_anchor(w, w._anchors, {"hearth": "S-001:court"}) == "b_s_001_court"
+    assert resolve_anchor(w, w._anchors, {"settlement": "S-001"}) == "set_s_001"
     for ghost in ({"hearth": "S-001:no_such_building"}, {"hearth": "b_s_001_court"}):
         with pytest.raises(Unspecified):
-            POP.resolve_anchor(w, w._anchors, ghost, "a probe")
+            resolve_anchor(w, w._anchors, ghost, "a probe")
 
 
 # ======================================================================================
@@ -143,7 +144,7 @@ def test_the_masters_found_and_build_execute_on_the_planned_works_and_a_stranger
     `set_s_002`); the Steward's `build` stands a `dwelling` Site at the Royal Court at condition 0 (`site.built`,
     the timber consumed out of `set_s_001`). CONTROL: the Steward is not the hearth works' master, the Duke is
     not the dwelling works' -- each is refused on the other's works, and nothing is made."""
-    w = POP.build_realm(0)
+    w = build_realm(0)
     d = _tick0(w)
     assert w.rungs["set_s_002"].stores.get("grain", 0) >= 10 and w.rungs["set_s_001"].stores.get("timber", 0) >= 10
     rungs, sites = len(w.rungs), len(w.sites)
@@ -176,7 +177,7 @@ def test_matter_ripens_a_planned_works_terms_with_root_as_their_cause():
     def ripened(rid):
         return [e for e in w.log if e.kind == "term.matured" and any(c.subject == rid for c in e.changes)]
 
-    w = POP.build_realm(0)
+    w = build_realm(0)
     d = _tick0(w)
     w.tick = 1
     d.matter(mint_token(w, WriteClass.MATTER), [])
@@ -210,7 +211,7 @@ def test_planted_failure_rows_authored_kind_text_mint_records_neither_verb_can_n
     assert world_q.works_for(text, "b_s_001_court", "dwelling") == []
     for master in (DUKE, STEWARD):
         assert world_q.records_held_for_holding_rows(text, text.persons[master]) == ()
-    real = POP.build_realm(0)
+    real = build_realm(0)
     assert world_q.records_held_for_holding_rows(real, real.persons[DUKE]) == (HEARTH_WORKS,)
     assert world_q.records_held_for_holding_rows(real, real.persons[STEWARD]) == (DWELLING_WORKS,)
 
@@ -231,7 +232,7 @@ def _control(monkeypatch):
 
 
 def _mint(w, *rows, **kw):
-    return POP.mint_planned_works(w, list(rows), w._anchors, w._office_census["authored"], **kw)
+    return mint_planned_works(w, list(rows), w._anchors, w._office_census["authored"], **kw)
 
 
 def test_a_well_formed_row_mints_and_each_malformed_one_refuses(monkeypatch):

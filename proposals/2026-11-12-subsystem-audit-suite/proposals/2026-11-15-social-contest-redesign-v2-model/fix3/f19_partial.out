@@ -1,0 +1,20 @@
+
+== [before] F19 partiality by what the judge carries (n=300)
+  nothing                trial   : with a backup, recused - | alone: on a ledger 0.00, priced 0.00
+  nothing                audience: with a backup, recused - | alone: on a ledger 0.00, priced 0.00
+  a conviction: law 4    trial   : with a backup, recused - | alone: on a ledger 1.00, priced 0.39
+  a conviction: law 4    audience: with a backup, recused - | alone: on a ledger 1.00, priced 0.38
+  a pursuit: tolls 0.8   trial   : with a backup, recused ('j1',) | alone: on a ledger 1.00, priced 0.64
+  a pursuit: tolls 0.8   audience: with a backup, recused ('j1',) | alone: on a ledger 1.00, priced 0.66
+  kin of the accuser     trial   : with a backup, recused - | alone: on a ledger 1.00, priced 0.37
+  kin of the accuser     audience: with a backup, recused - | alone: on a ledger 1.00, priced 0.38
+
+== [after] F19 partiality by what the judge carries (n=300)
+  nothing                trial   : with a backup, recused - | alone: on a ledger 0.00, priced 0.00
+  nothing                audience: with a backup, recused - | alone: on a ledger 0.00, priced 0.00
+  a conviction: law 4    trial   : with a backup, recused - | alone: on a ledger 0.00, priced 0.00
+  a conviction: law 4    audience: with a backup, recused - | alone: on a ledger 0.00, priced 0.00
+  a pursuit: tolls 0.8   trial   : with a backup, recused ('j1',) | alone: on a ledger 1.00, priced 0.63
+  a pursuit: tolls 0.8   audience: with a backup, recused ('j1',) | alone: on a ledger 1.00, priced 0.68
+  kin of the accuser     trial   : with a backup, recused - | alone: on a ledger 1.00, priced 0.37
+  kin of the accuser     audience: with a backup, recused - | alone: on a ledger 1.00, priced 0.37

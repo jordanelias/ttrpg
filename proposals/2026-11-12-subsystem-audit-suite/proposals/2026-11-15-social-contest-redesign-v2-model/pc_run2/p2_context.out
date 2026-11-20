@@ -1,0 +1,62 @@
+== lawful rites by regime: {'crown': ('conversation', 'negotiation', 'questioning', 'inquisition', 'trial', 'debate', 'rally', 'audience'), 'theocracy': ('conversation', 'negotiation', 'questioning', 'inquisition', 'trial', 'rally', 'audience'), 'commune': ('conversation', 'negotiation', 'questioning', 'trial', 'debate', 'rally', 'audience')}
+   debate under crown: built
+   inquisition under crown: built
+   debate under theocracy: REFUSED: debate is not lawful under theocracy
+   inquisition under theocracy: built
+   debate under commune: built
+   inquisition under commune: REFUSED: inquisition is not lawful under commune
+
+== trial, accuser holds a precedent (weight 0.9); P(for carried), n=400; se ~0.024
+ regime | strife | era | silence | standard | admits precedent? | turns | stakes | P
+  crown     | peace  | plain        | refusal | 5.0 | True | 4 | 0.0 | 0.445  *
+  crown     | peace  | age_of_faith | refusal | 5.0 | True | 4 | 0.0 | 0.487
+  crown     | peace  | mercantile   | refusal | 5.0 | True | 4 | 0.0 | 0.500
+  crown     | war    | plain        | refusal | 5.0 | True | 3 | 0.5 | 0.333  *
+  crown     | war    | age_of_faith | refusal | 5.0 | True | 3 | 0.5 | 0.355  *
+  crown     | war    | mercantile   | refusal | 5.0 | True | 3 | 0.5 | 0.302  *
+  crown     | famine | plain        | refusal | 5.0 | True | 4 | 0.25 | 0.347  *
+  crown     | famine | age_of_faith | refusal | 5.0 | True | 4 | 0.25 | 0.393  *
+  crown     | famine | mercantile   | refusal | 5.0 | True | 4 | 0.25 | 0.350  *
+  crown     | schism | plain        | refusal | 5.0 | True | 4 | 0.5 | 0.323  *
+  crown     | schism | age_of_faith | refusal | 5.0 | True | 4 | 0.5 | 0.340  *
+  crown     | schism | mercantile   | refusal | 5.0 | True | 4 | 0.5 | 0.393  *
+  theocracy | peace  | plain        | admits  | 6.0 | False | 4 | 0.0 | 0.338  *
+  theocracy | peace  | age_of_faith | admits  | 6.0 | False | 4 | 0.0 | 0.362  *
+  theocracy | peace  | mercantile   | admits  | 6.0 | False | 4 | 0.0 | 0.345  *
+  theocracy | war    | plain        | admits  | 6.0 | False | 3 | 0.5 | 0.307  *
+  theocracy | war    | age_of_faith | admits  | 6.0 | False | 3 | 0.5 | 0.265  *
+  theocracy | war    | mercantile   | admits  | 6.0 | False | 3 | 0.5 | 0.265  *
+  theocracy | famine | plain        | admits  | 6.0 | False | 4 | 0.25 | 0.302  *
+  theocracy | famine | age_of_faith | admits  | 6.0 | False | 4 | 0.25 | 0.295  *
+  theocracy | famine | mercantile   | admits  | 6.0 | False | 4 | 0.25 | 0.290  *
+  theocracy | schism | plain        | admits  | 6.0 | False | 4 | 0.5 | 0.285  *
+  theocracy | schism | age_of_faith | admits  | 6.0 | False | 4 | 0.5 | 0.255  *
+  theocracy | schism | mercantile   | admits  | 6.0 | False | 4 | 0.5 | 0.230  *
+  commune   | peace  | plain        | free    | 4.0 | True | 4 | 0.0 | 0.465  *
+  commune   | peace  | age_of_faith | free    | 4.0 | True | 4 | 0.0 | 0.400  *
+  commune   | peace  | mercantile   | free    | 4.0 | True | 4 | 0.0 | 0.480
+  commune   | war    | plain        | free    | 4.0 | True | 3 | 0.5 | 0.325  *
+  commune   | war    | age_of_faith | free    | 4.0 | True | 3 | 0.5 | 0.315  *
+  commune   | war    | mercantile   | free    | 4.0 | True | 3 | 0.5 | 0.325  *
+  commune   | famine | plain        | free    | 4.0 | True | 4 | 0.25 | 0.365  *
+  commune   | famine | age_of_faith | free    | 4.0 | True | 4 | 0.25 | 0.355  *
+  commune   | famine | mercantile   | free    | 4.0 | True | 4 | 0.25 | 0.375  *
+  commune   | schism | plain        | free    | 4.0 | True | 4 | 0.5 | 0.340  *
+  commune   | schism | age_of_faith | free    | 4.0 | True | 4 | 0.5 | 0.320  *
+  commune   | schism | mercantile   | free    | 4.0 | True | 4 | 0.5 | 0.367  *
+  reference crown/peace/plain = 0.550; '*' = outside 2 se of reference
+  marginal by regime: commune 0.369, crown 0.381, theocracy 0.295 (each mean of 12 arms; se of a marginal ~0.007)
+  marginal by strife: famine 0.341, peace 0.425, schism 0.317, war 0.310 (each mean of 9 arms; se of a marginal ~0.008)
+  marginal by era: age_of_faith 0.345, mercantile 0.352, plain 0.348 (each mean of 12 arms; se of a marginal ~0.007)
+
+== control: context flattened (flat=('context',)) under theocracy/war/age_of_faith
+  flattened 0.443 vs the same unflattened 0.265 vs reference 0.550
+
+== admissibility: accuser argues ONLY on evidence with his precedent; crown vs theocracy (drops precedent)
+  crown: P 0.357+-0.024; precedent cited 4.00 times/sitting
+  theocracy: P 0.282+-0.023; precedent cited 0.00 times/sitting
+
+== regime x power: a Church rung-3 accuser arranges (rig 1) against b (no office): tilt by regime
+  crown: power(a) 3.0 tilt 0.91
+  theocracy: power(a) 5.0 tilt 0.99
+  commune: power(a) 3.0 tilt 0.91

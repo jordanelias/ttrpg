@@ -20,7 +20,8 @@ plus ONE `detain` edge, captive -> the act's `via` seat, where the scene's `surr
 from __future__ import annotations
 
 import dataclasses
-import random
+import importlib
+from engine.dice_engine import draw
 from unittest import mock
 
 import pytest
@@ -135,9 +136,9 @@ def test_person_captured_has_one_emitter_and_it_is_mapped():
 
 def test_duel_terms_names_capture_and_accept_and_is_checked_against_the_engines_tuple_not_redeclared():
     assert DUEL_TERMS_BY_VERB == {"capture": "yield", "accept": "blood"}     # v11 CR-87 added `accept: blood`
-    engine = combat.engine()
-    assert engine is not None, "the combat engine did not load"
-    wrapper = engine[0]
+    assert combat.engine() is not None, "the combat engine did not load"
+    # by name, inside the function: `test_importing_every_engine_module_pulls_in_no_subsystem` fails on a module-scope import and the ratchet counts a written one
+    wrapper = importlib.import_module("modules.combat.wrapper")
     assert all(t in wrapper.DUEL_TERMS for t in DUEL_TERMS_BY_VERB.values())
     w, _ = _world()
     with mock.patch.dict(DUEL_TERMS_BY_VERB, {"capture": "mercy"}):          # a term the engine does not name
@@ -157,17 +158,18 @@ def test_duel_terms_names_capture_and_accept_and_is_checked_against_the_engines_
 # ---------------------------------------------------------------------------------------------------------------
 
 def test_the_default_terms_is_the_string_death_and_a_none_default_would_raise():
-    wrapper = combat.engine()[0]
+    # by name, inside the function: `test_importing_every_engine_module_pulls_in_no_subsystem` fails on a module-scope import and the ratchet counts a written one
+    wrapper = importlib.import_module("modules.combat.wrapper")
     inp = PersonalCombatInput(claimants=(ACTOR, CAPTIVE), ends=(4, 4), wound_quantities=("felled", "wounds"))
     assert inp.terms == "death" == wrapper.LETHAL_TERMS and isinstance(inp.terms, str)
     w, _ = _world()
     entry, refusal = entry_for("the body", combat.PROVIDER)
     assert entry is not None, refusal
-    lethal = entry.fn(combat.combat_input(w, [ACTOR, CAPTIVE], "fight"), random.Random(5))
-    assert lethal["status"] == "RESOLVED"
+    lethal = entry.fn(combat.combat_input(w, [ACTOR, CAPTIVE], "fight"), draw.seeded(draw.H2("test_cp_t03_09_capture", 5)))
+    assert lethal.claimants == (ACTOR, CAPTIVE) and lethal.rounds >= 1
     with pytest.raises(ValueError):                         # CONTROL: the `None` default the string replaces
         entry.fn(dataclasses.replace(combat.combat_input(w, [ACTOR, CAPTIVE], "fight"), terms=None),
-                 random.Random(5))
+                 draw.seeded(draw.H2("test_cp_t03_09_capture", 5)))
 
 
 def test_combat_input_fills_terms_from_the_roster_by_verb_and_nothing_else_does():
@@ -318,14 +320,16 @@ def test_a_scene_with_no_yield_and_no_wound_is_capture_refused_not_contest_undec
 def test_a_wounded_scene_with_no_yield_wounds_and_reports_no_capture():
     w, d = _world()
     out = _fold_at(w, d, _capture(0), "Wounded", _scene(captive=_state(1, 6)))
-    assert _kinds(out) == ["body.changed"] and not _detains(w), _kinds(out)
+    # B05.09: a capture that drew blood raises its survivors in `arms` (a non-holder minted a first rank); B05.99 rewrite, was
+    # the body Event alone
+    assert _kinds(out) == ["body.changed", "capability.raised"] and not _detains(w), _kinds(out)
 
 
 def test_a_yield_by_the_captive_opens_one_detain_and_earns_person_captured_alone_on_the_edge():
     w, d = _world()
     surrender = dict(by=CAPTIVE, turn=3, accepted=True)
     out = _fold_at(w, d, _capture(0), "Wounded", _scene(captive=_state(1, 3), surrender=surrender))
-    assert sorted(_kinds(out)) == ["body.changed", "person.captured"], _kinds(out)
+    assert sorted(_kinds(out)) == ["body.changed", "capability.raised", "person.captured"], _kinds(out)   # B05.09's growth, B05.99
     _assert_held(w, out)
     # the body event does not carry the edge, nor the capture event the wound: each kind its own earners' changes
     by_kind = {e.kind: e for e in out}

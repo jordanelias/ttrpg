@@ -40,7 +40,9 @@ from ..data import verbs as _verbs
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import Step, WriteClass
 from ..data.requires import UNKNOWN, binding_from_act, evaluate
-from ..data.verbs import COUNTERPARTY_CLAUSE, ELIGIBILITY_CLAUSE, VERB_TABLE, WRITE_CLAUSE
+from ..data.rosters import GRADED_TASKS
+from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, VERB_TABLE,
+                          WRITE_CLAUSE)
 from ..epistemic import belief_contradicts
 from ..harness import probes as P
 from ..loop import resolve as _resolve
@@ -61,7 +63,15 @@ REMIT = ("requisition", "open_case", "determine", "issue")
 # business. The tests below that need the disposal to OPEN take a STRONG JUDGE -- `pool_default` 30 against
 # the same obstacle -- and each such test ASSERTS the band it landed on (`_sentenced`, the `OPENS` checks), so a
 # fixture that stopped being strong fails here and does not quietly turn an executes-test into a refusal-test.
-JUDGE = {"pool_default": 30}
+# B11 lane A: AND THE CONTROL OBSTACLE (`obstacle_model: stand_in`). One score has two roles since the lane (`seam/wrappers/
+# pool.py::score`): on the shipped `task` arm the party opposes with the score he rolls, which in this hand-built world is
+# `pool_default` too, so the strong judge's 30 would meet a party at 30 and the disposal tests would stop being about the
+# disposal. These tests are about what a determination opens, not about the obstacle, so they read the control arm.
+# B05.99 rewrite of the device (B05.11, B05.14, B05.16, B05.23): `pool_default` 30 now raises every person's skill score AND his
+# untrained governing score, so the party opposite opposes at 30 + his attribute (A-137) and the strong judge meets an obstacle
+# above his own pool's even line; `obstacle_model` is deleted (B05.14). The judge is made strong by the POOL FLOOR alone (60: Success-or-better 0.998 against the shipped determination, 30 reads 0.89)
+# (`pool_of(.., pool_floor)`, the roller's dice only): every opposition, obstacle and score stays the shipped one.
+JUDGE = {"pool_floor": 60}
 OPENS = ("Overwhelming", "Success")
 
 
@@ -154,8 +164,16 @@ def test_19_the_four_are_resolvable_typed_and_key_every_failable_clause():
         # (`determine`'s party, `issue`'s executor).
         if row.counterparty:
             expected.add(COUNTERPARTY_CLAUSE)
+        # B07.01 (18-A item 4): a `form: task` row (`requisition`) keys a `draw` clause for its lost draw -- a
+        # clause the fold never refuses at, so `emits_on_refusal` (the refusal union) leaves its kind out
+        task = (GRADED_TASKS.get(verb) or {}).get("form") == "task"
+        assert task == (verb == "requisition"), (verb, "the one task row of the four")
+        if task:
+            expected.add(DRAW_CLAUSE)
         assert set(row.refusals_by_clause) == expected, (verb, sorted(row.refusals_by_clause))
-        assert set(row.emits_on_refusal) == {k for v in row.refusals_by_clause.values() for k in v}
+        assert set(row.emits_on_refusal) == {
+            k for c, v in row.refusals_by_clause.items() if c != DRAW_CLAUSE for k in v}
+        assert (DRAW_CLAUSE in row.refusals_by_clause) == task
 
 
 def test_19_a_flat_row_refuses_exactly_as_before():
@@ -573,9 +591,15 @@ def _plant(monkeypatch, verb, mutate):
 def test_19_the_loader_refuses_a_keyed_row_that_does_not_key_exactly_its_clauses(monkeypatch, defect,
                                                                                     match):
     """Each defect planted on `requisition`'s row, and the load fails naming it. The control is the table
-    itself, which loaded to run this file."""
+    itself, which loaded to run this file.
+
+    B07.01: `flat named` is planted on `open_case` (a keyed row that is no `task`). A flat
+    `emits_on_refusal` on `requisition`, a `form: task` row, trips the task rule first (it must key the
+    clause `draw`), so the plant would observe that refusal and not the one this case is named for."""
+    verb = "open_case" if defect == "flat named" else "requisition"
+
     def mutate(r):
-        ref, cell = r["emits_on_refusal"], r["requires_typed"]["all"]
+        ref, cell = r["emits_on_refusal"], r["requires_typed"].get("all")
         if defect == "missing":
             ref.pop("stores")
         elif defect == "extra":
@@ -584,7 +608,7 @@ def test_19_the_loader_refuses_a_keyed_row_that_does_not_key_exactly_its_clauses
             cell[1].pop("conjunct")
             ref.pop("stores")
         elif defect == "flat named":
-            r["emits_on_refusal"] = ["requisition.refused"]
+            r["emits_on_refusal"] = ["case.refused"]
         elif defect == "twice":
             cell[1]["conjunct"] = cell[0]["conjunct"]
         elif defect == "nested":
@@ -594,7 +618,7 @@ def test_19_the_loader_refuses_a_keyed_row_that_does_not_key_exactly_its_clauses
                        "conjunct": "authority"}
         else:
             ref["stores"] = []
-    _plant(monkeypatch, "requisition", mutate)
+    _plant(monkeypatch, verb, mutate)
     with pytest.raises(SystemExit, match=match):
         _verbs._load_verb_table()
 
@@ -1185,11 +1209,13 @@ def test_sc03b_runtime_a_seeded_contested_determination_leaves_the_degree_on_the
       * Partial -- `matter.determined` and the edge carries `degree == Partial` (the row declares the same
         three pairs as Success, `writes_note`: the gate admits a degree only on an edge the write opens).
       * Failure -- `matter.undetermined`, NO edge, the matter still docketed, no change on the Event.
-    CONTROL (assert-that-asserted): all four bands were seen, and the counts add up to the folds made."""
+    CONTROL (assert-that-asserted): all four bands were seen, and the counts add up to the folds made.
+    B05.99 rewrite: the judge's strength is set by the pool floor (`JUDGE`'s device; `pool_default` now moves every score and
+    governing score, B05.09/B05.25): the shipped floor (his pool 8) and a floor of 14 (was `pool_default` 2 and 12)."""
     seen: dict = {}
-    for pool in (2, 12):
+    for pool in (DEFAULT_FIXTURES.get("pool_floor"), 14):
         for i in range(40):
-            w, d = _ready("determine", pool_default=pool)
+            w, d = _ready("determine", pool_floor=pool)
             ev, edges = _determined(w, d, f"sc03b_{pool}_{i}")
             band = ev.degree
             assert band in BANDS, band
@@ -1210,9 +1236,10 @@ def test_sc03b_runtime_a_seeded_contested_determination_leaves_the_degree_on_the
 def test_sc03b_runtime_an_undetermined_matter_can_be_heard_again():
     """The Failure band opens nothing, so the matter is not lost: the same bench determines it again on a
     later act (a different draw) and the disposal opens then. Control: an act id that lands on `Failure`
-    at the shipped judge is found first, so the second fold is a real re-hearing, not a first one."""
+    at the shipped judge is found first, so the second fold is a real re-hearing, not a first one. (B05.99: the shipped judge is
+    the shipped pool floor, overriding `JUDGE`'s; was `pool_default` 2.)"""
     for i in range(200):
-        w, d = _ready("determine", pool_default=2)
+        w, d = _ready("determine", pool_floor=DEFAULT_FIXTURES.get("pool_floor"))
         ev, edges = _determined(w, d, f"sc03b_again_{i}")
         if ev.degree == "Failure":
             break
@@ -1233,10 +1260,19 @@ def test_sc03b_runtime_an_undetermined_matter_can_be_heard_again():
 def test_sc03b_a_judge_under_one_die_is_refused_not_a_crash_and_opens_nothing():
     """S27.4 (`Ob > 2 x Pool`) reached by a contested `determine`: a judge whose pool is under 1D comes
     back as the row's one refusal kind with NO degree -- never an aborted season -- exactly as `speak`'s
-    does (`test_sc01_speak.py`), and the matter stays docketed. CONTROL: pool 1 resolves to a band."""
-    for pool, refused in ((0, True), (1, False)):  # `faculty` int()s the pool, so 0.5 would be the 0 arm
-        w, d = _ready("determine", pool_default=pool)
-        out = _fold(w, d, _determine(f"zpool{pool}"))
+    does (`test_sc01_speak.py`), and the matter stays docketed. CONTROL: pool 1 resolves to a band.
+    B05.99 rewrite: no fixture gives a pool under one die since B05.25/B05.23 (`pool_of(governing score + rank, .., 6, 5)`), so the
+    judge's pool is PLANTED at the one pool reader the record reads (`sigma.faculty`), for the judge alone (was `pool_default` 0, 1)."""
+    from ..seam.wrappers import sigma
+    real = sigma.faculty
+    mp = pytest.MonkeyPatch()
+    for pool, refused in ((0, True), (1, False)):
+        w, d = _ready("determine")
+        mp.setattr(sigma, "faculty", lambda w_, p, verb, _pool=pool: _pool if p.id == DUKE else real(w_, p, verb))
+        try:
+            out = _fold(w, d, _determine(f"zpool{pool}"))
+        finally:
+            mp.undo()
         assert bool(out) and (_kinds(out) == ["determine.refused"]) is refused, (pool, _kinds(out))
         if refused:
             assert out[0].degree is None and not _obliges(w) and len(world_q.docketed(w, PARTY)) == 1

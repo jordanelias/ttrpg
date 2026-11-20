@@ -1,9 +1,14 @@
 """[ED-MB-0051 / plan v2 §3 A2] A 1-ulp float error must not move a damage degree.
 
-`compute_degree`'s three comparisons are hard steps into `DAMAGE_BY_DEGREE`, and `net` is
+B05.03: the field grades on the owner's ladder (`dice_engine.degree_label`, which quantises the margin once to
+milli-units, `MARGIN_SCALE`) and boosts with the owner's `sigma_leverage.net_boost`; `resolution.compute_degree`,
+its `_DEGREE_EPS` and `_sigma_net_boost` are gone. This file's claims are unchanged and now observe the owner's
+ladder: the ulp recovery is the quantisation, and its reach is half a milli-unit instead of 1e-9.
+
+The ladder's three comparisons are hard steps into `DAMAGE_BY_DEGREE`, and `net` is
 continuous (fractional pools, the sigma mu-shift). A value that is MATHEMATICALLY on a boundary can
 therefore arrive one ulp on the wrong side of it. The documented consequence:
-`3 + _sigma_net_boost(-1e-16, 9)` returned `Partial` -> 0 damage at the universal `dr=1`, where the
+`3 + net_boost(-1e-16, 9)` returned `Partial` -> 0 damage at the universal `dr=1`, where the
 intended answer is `Success` -> 3.
 
 ⚠ THE PREVIOUS VERSION OF THIS GUARD COULD NOT FAIL, and that is why this file reads the way it
@@ -28,9 +33,16 @@ _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
-from modules.mass_battle.resolution import (                      # noqa: E402
-    compute_degree, _sigma_net_boost, _DEGREE_EPS, _SIGMA_ZERO_SNAP,
-)
+from engine.dice_engine import dice_engine                          # noqa: E402
+from engine.dice_engine.dice_engine import degree_label as compute_degree   # noqa: E402  the owner's ladder, string labels
+from engine.dice_engine.sigma_leverage import net_boost             # noqa: E402
+from modules.mass_battle.resolution import _SIGMA_ZERO_SNAP, _snap_sigma   # noqa: E402
+
+# One milli-unit: the margin the ladder resolves (`round(MARGIN_SCALE * margin)`); the ladder's reach is half of it.
+_MILLI = 1 / dice_engine.MARGIN_SCALE
+
+
+from modules.mass_battle.resolution import _net_boost as _sigma_net_boost   # noqa: E402  -- the field's chokepoint itself, as the orchestration calls it
 
 _OBS = (1, 3, 6, 9)
 
@@ -48,7 +60,7 @@ def test_the_documented_repro_no_longer_zeroes_an_exchange():
     ⚠ AND THE ORIGINAL REPRO NO LONGER CONTAINS ANY DUST, which an adversarial pass caught. The
     `_SIGMA_ZERO_SNAP` chokepoint (asserted below) snaps `_sigma_net_boost(-1e-16, 9)` to exactly
     0.0, so `3 + that` is exactly 3.0 and the margin is exactly 0 — the case passes with
-    `_DEGREE_EPS` set to zero, i.e. it exercises the BAND, not the epsilon. Both forms are kept and
+    the ladder's quantisation removed, i.e. it exercises the BAND, not the epsilon. Both forms are kept and
     labelled: the historical repro as a band case, and a genuine one-ulp-below margin as the
     epsilon case.
     """
@@ -127,35 +139,34 @@ def test_the_epsilon_cannot_promote_a_real_decrement():
     """The ceiling, which is the half of this that stops the fix becoming a balance change.
 
     A tolerance that recovers lost boundaries can also invent them. Pin the reach: a net a
-    thousandfold further below the boundary than the epsilon must still be demoted. The smallest
-    DESIGNED sigma decrement in this engine is a morale step through `_morale_sigma` (~1e-1), eight
-    orders above `_DEGREE_EPS`, so nothing designed lives in the guarded band.
+    full milli-unit below the boundary (twice the ladder's reach) must still be demoted. The smallest
+    DESIGNED sigma decrement in this engine is a morale step through `_morale_sigma` (~1e-1), orders
+    above the ladder's half milli-unit, so nothing designed lives in the guarded band.
     """
-    assert _DEGREE_EPS == 1e-9
     for ob in _OBS:
         # Each assertion names the band IMMEDIATELY below the boundary it is testing, never a
         # distant one. `!= "Success"` at a margin of -1e-6 would be true however far the epsilon
         # reached — Success is three bands away — so it would exclude nothing. Under the ruled
         # ladder the adjacent pairs are Failure/Partial at margin 0 and Partial/Success at 1.
-        assert compute_degree(ob - 1000 * _DEGREE_EPS, ob) == "Failure", ob
-        assert compute_degree(ob + 1 - 1000 * _DEGREE_EPS, ob) == "Partial", ob
-        assert compute_degree(ob + 3 - 1000 * _DEGREE_EPS, ob) == "Success", ob
+        assert compute_degree(ob - _MILLI, ob) == "Failure", ob
+        assert compute_degree(ob + 1 - _MILLI, ob) == "Partial", ob
+        assert compute_degree(ob + 3 - _MILLI, ob) == "Success", ob
         # ...and the epsilon DOES reach at one ulp, so the pair above is a ceiling, not a floor.
         assert compute_degree(math.nextafter(float(ob), -math.inf), ob) == "Partial", ob
     # and a genuinely small-but-designed sigma still moves the verdict
     designed = _sigma_net_boost(-0.1, 9)
-    assert abs(designed) > _DEGREE_EPS * 1000, (
+    assert abs(designed) > 10 * _MILLI, (
         f"a designed sigma decrement ({designed}) must sit far outside the guarded band")
 
 
 def test_sigma_chokepoint_snaps_dust_but_not_a_designed_modifier():
     """`|sigma| < 1e-12 -> exactly 0.0`, stated once where every producer's value passes through.
 
-    The snap threshold is three orders TIGHTER than `_DEGREE_EPS` on purpose: it says "this value is
+    The snap threshold is far TIGHTER than the ladder's half milli-unit on purpose: it says "this value is
     arithmetically zero", not "this value is small enough to ignore". One tolerance doing both jobs
     is how the next confound gets built.
     """
-    assert _SIGMA_ZERO_SNAP < _DEGREE_EPS
+    assert _SIGMA_ZERO_SNAP < 0.5 * _MILLI
     for pool in (1, 9, 25):
         assert _sigma_net_boost(-1e-16, pool) == 0.0
         assert _sigma_net_boost(1e-16, pool) == 0.0

@@ -50,7 +50,7 @@ from ..data.verbs import _OPENERS_FROM_EFFECTS, VERB_TABLE
 from ..decision import make_chooser
 from ..decision.options import opening_set
 from ..gaps import Unspecified
-from ..harness import populated
+from ..boot.realm import build_realm
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.effects import EFFECTS
@@ -573,7 +573,7 @@ def test_in45_forge_mints_a_sheet_true_but_for_its_head_into_the_forgers_hand():
     """`_eff_forge` through the real fold: `survey`'s document (`faction_q.resolve` of the faction the
     subject coheres under, at the moment of writing) with the FORGER as its head, and the forger's
     `hold`; the one kind is `record.forged`. Since v9 SC-02 `22b` step 25 the sheet carries the shipped
-    `default_forgery_quality` (`H-210`; its reader, the examination's obstacle, landed with it --
+    `rosters.yaml: forge_quality` `Success` row (`H-210`; its reader, the examination's obstacle, landed with it --
     `test_sc02_22b_consequence_and_forgery.py`). CONTROL: in the same world a forge on a subject
     under no single faction is `forge.refused` and mints nothing -- so the mint is the subject's,
     not a verb that always writes."""
@@ -587,7 +587,8 @@ def test_in45_forge_mints_a_sheet_true_but_for_its_head_into_the_forgers_hand():
     truth = dataclasses.asdict(faction_q.resolve(w, FAC))
     assert rec.kind == SHEET and rec.subject_matter == {**truth, "head": "p_other"}, rec
     assert truth["head"] != "p_other", "the fixture: the forger is not the true head"
-    assert rec.forgery_quality == w.fixtures.get("default_forgery_quality") != 0, rec.forgery_quality
+    from ..data.rosters import forge_quality_at
+    assert rec.forgery_quality == forge_quality_at(None) != 0, rec.forgery_quality
     assert world_q.hold_force(w, rec.id).subject == "p_other"
     assert "record.forged" in _kinds(w.log) and "record.created" not in _kinds(w.log)
 
@@ -642,7 +643,7 @@ def test_20iii_every_sheet_the_populated_realm_makes_says_what_its_holder_holds(
     realm): its two execution counts -- `faction.surveyed >= 1` and `checked >= 4` -- were DELETED,
     not skipped. What stays is an invariant over whatever sheets the season makes; that a survey
     executes and its sheet is held is asserted on hand-built worlds (sections 1-5 above)."""
-    w = populated.build_realm(0)
+    w = build_realm(0)
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
@@ -681,3 +682,4 @@ def test_20iii_every_sheet_the_populated_realm_makes_says_what_its_holder_holds(
         assert [c.value for c in _content_claims(w.persons[holder], rec.id)] == [
             content_value(rec.subject_matter)], (holder, rec.id)
     assert checked + skipped == len(sheets), (checked, skipped, len(sheets))
+    assert checked >= 1, (checked, skipped, len(sheets))  # the loop saw a sheet (no count pin)

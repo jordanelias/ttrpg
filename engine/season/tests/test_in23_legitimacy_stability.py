@@ -151,8 +151,8 @@ def test_in23_the_writes_nothing_snapshot_sees_a_write_planted_in_the_read_path(
     """THE PLANTED CONTROL (`test_revolt_query.py`'s precedent): `storybar.stability`, bound by name, is
     replaced by a reader that also appends a claim to the asking person's ledger. The snapshot the
     writes-nothing test takes must MOVE, or that test could not have observed a write."""
-    from ..harness import populated as POP
-    w = POP.build_realm(SEED, CAP)
+    from ..boot.realm import build_realm
+    w = build_realm(SEED, CAP)
     fired = []
 
     def writing(p, rung, window):

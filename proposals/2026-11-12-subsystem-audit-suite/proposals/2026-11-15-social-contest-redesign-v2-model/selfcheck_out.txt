@@ -1,0 +1,87 @@
+PASS  B.2a k(evidence, bias +0.2) == 10                                                                         k=10
+PASS  B.2a k(solidarity, bias -0.3) == 0                                                                        k=0
+PASS  B.2a k(authority, bias +0.0) == 4                                                                         k=4
+PASS  B.2(i) judicial: Reason 2->6 pool diff = 4 x heard [attention 0] (spec: 'exactly', float ==)              diff=4.0 want=4.0 (heard 1.0, 1.0)
+PASS  B.2(i) judicial: Reason 2->6 pool diff = 4 x heard [attention 0] (within 1e-9)                            diff=4.0
+FAIL  B.2(i) judicial: Reason 2->6 pool diff = 4 x heard [attention 5] (spec: 'exactly', float ==)              diff=3.6000000000000005 want=3.6 (heard 0.9, 0.9)
+PASS  B.2(i) judicial: Reason 2->6 pool diff = 4 x heard [attention 5] (within 1e-9)                            diff=3.6000000000000005
+PASS  B.2(i') crowd: Reason 2->6 equal pools [attention 0] (spec: 'exactly', float ==)                          diff=0.0 want=0.0 (heard 1.0, 1.0)
+PASS  B.2(i') crowd: Reason 2->6 equal pools [attention 0] (within 1e-9)                                        diff=0.0
+PASS  B.2(i') crowd: Reason 2->6 equal pools [attention 5] (spec: 'exactly', float ==)                          diff=0.0 want=0.0 (heard 0.9, 0.9)
+PASS  B.2(i') crowd: Reason 2->6 equal pools [attention 5] (within 1e-9)                                        diff=0.0
+FAIL  B.2(i') balanced: Reason 2->6 pool diff = 1.6 x heard [attention 0] (spec: 'exactly', float ==)           diff=1.6000000000000014 want=1.6 (heard 1.0, 1.0)
+PASS  B.2(i') balanced: Reason 2->6 pool diff = 1.6 x heard [attention 0] (within 1e-9)                         diff=1.6000000000000014
+FAIL  B.2(i') balanced: Reason 2->6 pool diff = 1.6 x heard [attention 5] (spec: 'exactly', float ==)           diff=1.4400000000000013 want=1.4400000000000002 (heard 0.9, 0.9)
+PASS  B.2(i') balanced: Reason 2->6 pool diff = 1.6 x heard [attention 5] (within 1e-9)                         diff=1.4400000000000013
+PASS  B.4(o) crowd k=0: Presence 2->6 pool diff = 4 [attention 0] (spec: 'exactly', float ==)                   diff=4.0 want=4.0 (heard 1.0, 1.0)
+PASS  B.4(o) crowd k=0: Presence 2->6 pool diff = 4 [attention 0] (within 1e-9)                                 diff=4.0
+PASS  B.4(o) crowd k=0: Presence 2->6 pool diff = 4 [attention 5] (spec: 'exactly', float ==)                   diff=4.0 want=4.0 (heard 0.7, 1.0)
+PASS  B.4(o) crowd k=0: Presence 2->6 pool diff = 4 [attention 5] (within 1e-9)                                 diff=4.0
+PASS  B.4(o) judicial k=10: Presence 2->6 equal pools [attention 0] (spec: 'exactly', float ==)                 diff=0.0 want=0.0 (heard 1.0, 1.0)
+PASS  B.4(o) judicial k=10: Presence 2->6 equal pools [attention 0] (within 1e-9)                               diff=0.0
+PASS  B.4(o) judicial k=10: Presence 2->6 equal pools [attention 5] (spec: 'exactly', float ==)                 diff=0.0 want=0.0 (heard 0.7, 1.0)
+PASS  B.4(o) judicial k=10: Presence 2->6 equal pools [attention 5] (within 1e-9)                               diff=0.0
+FAIL  B24p.18: k=4 Presence 2->6 pool-before-heard diff = 2.4 [attention 0] (spec: 'exactly', float ==)         diff=2.3999999999999986 want=2.4 (heard 1.0, 1.0)
+PASS  B24p.18: k=4 Presence 2->6 pool-before-heard diff = 2.4 [attention 0] (within 1e-9)                       diff=2.3999999999999986
+FAIL  B24p.18: k=4 Presence 2->6 pool-before-heard diff = 2.4 [attention 5] (spec: 'exactly', float ==)         diff=2.3999999999999986 want=2.4 (heard 0.7, 1.0)
+PASS  B24p.18: k=4 Presence 2->6 pool-before-heard diff = 2.4 [attention 5] (within 1e-9)                       diff=2.3999999999999986
+PASS  B.2(ii) five proofs, Reason 2: usable 1.0                                                                 usable=1.0
+PASS  B.2(ii) five proofs, Reason 6: usable 3.0                                                                 usable=3.0
+PASS  B.2(ii) no proofs: source 0                                                                               
+PASS  B.2(iii) rank_gap term falls strictly with Reason when known                                              [0.85, 0.55, 0.25]
+PASS  B.2(iii) rank_gap equal across Reason when unknown                                                        [1.0, 1.0]
+PASS  B.2 table: Reason 7 discounts a known circumstance by 0.9                                                 
+PASS  B.4(i) delivery at Presence 2 = -0.5                                                                      (0.0, 0.5)
+PASS  B.4(i) delivery at Presence 6 = +0.5                                                                      (0.5, 0.0)
+PASS  B.4(ii) attention 5: pool(P2) == pool(P6) x 0.7 exactly                                                   7.0 vs 7.0
+PASS  B.4(ii) ... within 1e-12                                                                                  7.0 vs 7.0
+PASS  B.4(iii) written_only: heard and delivery equal across Presence                                           
+PASS  B.5(i) hard: venue_standard 1.5 at Grace 2, 0 at 5/6/7                                                    {2: 1.5, 5: 0.0, 6: 0.0, 7: 0.0}
+PASS  B.5(i) plain: obstacle equal at Grace 2 and 6                                                             [3.7, 3.7]
+PASS  B.5(ii) esteem starts -0.16 / +0.16                                                                       [-0.16, 0.16]
+PASS  B.6(ii) resolve_0 = 3.0 / 5.0                                                                             [3.0, 5.0]
+PASS  B.6 table: Will 1 speaks 2.5 exchanges, Will 6 five                                                       [2.5, 5.0]
+PASS  B.6(iii) 1.0 sigma against at Will 2: net sigma -0.9                                                      leverage=-0.9
+PASS  B.6(iii) 1.0 sigma against at Will 6: net sigma -0.5                                                      leverage=-0.5
+PASS  B.6(iv) hearer Will 6: resist against                                                                     (0.0, 0.3)
+PASS  B.6(iv) hearer Will 2: resist for                                                                         (0.3, 0.0)
+PASS  B.6(iii) hostile hearer term (regard, eased_by will) lower at Will 6                                      [0.9, 0.5]
+PASS  B.6 table: Will 7 discounts what is against him by 0.6                                                    
+PASS  B.9 zero: sense == 0 exactly at a decider of Reason mid (pw_d = pw)                                       
+PASS  B.9 zero: sense == 0 exactly at sense_step 0                                                              
+PASS  B.9 table: Reason 7 before a bench: 0.75 -> 0.90                                                          pw=0.75 pw_d=0.9
+PASS  B.9 table: f_d Focus 1 -> 0.25, Focus 7 -> 1.75                                                           [0.25, 1.75]
+PASS  B.9(ii) relevance vs `for` = f_d x level x 2 at Focus 2                                                   rel=-0.25 want=-0.25
+PASS  B.9(ii) relevance vs `for` = f_d x level x 2 at Focus 6                                                   rel=-0.75 want=-0.75
+PASS  B24p.08: a reading takes len(grounds) + 2 normals                                                         6
+PASS  A.4: G+5 = 9 normals per exchange, 3 per decider (argue)                                                  count=30 exchanges=3 ballots=3
+PASS  A.4: G+5 = 9 normals per exchange, 3 per decider (press)                                                  count=30 exchanges=3 ballots=3
+PASS  A.4: G+5 = 9 normals per exchange, 3 per decider (divert)                                                 count=30 exchanges=3 ballots=3
+PASS  A.4: G+5 = 9 normals per exchange, 3 per decider (concede)                                                count=30 exchanges=3 ballots=3
+PASS  A.4: G+5 = 9 normals per exchange, 3 per decider (rest)                                                   count=21 exchanges=2 ballots=3
+PASS  A.5/B.9: ballots drawn in decider id order                                                                ['crowd', 'h1', 'h2']
+PASS  A.4: the track stays within +/- track_clip                                                                max |track| 3.0
+PASS  B.7/B24p.07 control (model-internal): at control a speech == the single roll on contest_input's record    0/200 differ
+FAIL  B.7 control vs LIVE modules/social_contest/roll.py::roll (same key, same record)                          0/200 equal margins; mean ob(model) - ob(live) = +2.200; live roll consumed up to 15 rng calls per speech (d10 faces) vs the model's 1 normal; max |band_odds diff| = 0.460
+PASS  B24p.11 control: one speaker, one exchange, decide=None: verdict == _speech's margin                      Margin(net=10.446057272128467, ob=3.7, terms=(('even', 2.4000000000000004), ('difficulty', 0.5), ('opposition', 0.8), ('reception', 0.0), ('regard', 0.0), ('off_topic', 0.0), ('venue_standard', 0.0))) vs Margin(net=10.446057272128467, ob=3.7, terms=(('even', 2.4000000000000004), ('difficulty', 0.5), ('opposition', 0.8), ('reception', 0.0), ('regard', 0.0), ('off_topic', 0.0), ('venue_standard', 0.0)))
+PASS  B24p.11: abridged form never asks `decide`... (the plan passes decide=None; with a callable it IS asked)  asked 1x; the module asks any `decide` it is handed; the 'never asked' test holds only because the host passes None (G40)
+PASS  B24p.12 control: track_step 0, end levels None: ballot record == the decider's own record                 0.25 vs 0.25
+PASS  C.5: full conversation and abridged tell read `none`; abridged speak under legal_trial `bench`            none, none, bench, addressed j
+PASS  B.1 control: pull 0, distraction 0: Focus 2 and 6 give identical margins                                  
+PASS  B.3(i) ground forced: Attunement 2 and 6 give identical margins                                           
+PASS  B24p.11: '1 - steady_odds at least 0.406 at zero strain'                                                  0.4063
+READ  B.3 read_ob: 'an Attunement at the population's middle reads at even odds'                                P(read >= 0) at Attunement 4, guard at mid = 0.532
+READ  B.9 ploy_ob: 'a mid Attunement sees at about even odds'                                                   P(seen) = 0.532
+READ  A.5 track_step: 'a fully carried track reads 0.9 sigma'                                                   0.90
+READ  A.5 ends reached by automatic sittings (400 keys x conversation + legal_trial, effort 4)                  {'budget': 501, 'broken': 40, 'yielded': 259, 'struck(planted)': 1}
+PASS  A.5 struck end reachable with struck_ends=True, strikes=1                                                 struck
+PASS  B.1 share on topic higher at Focus 6 by >= 4 SE (pull 1.0, n=4000)                                        0.461 -> 0.696
+PASS  B.3(ii) share choosing the peaked ground higher at Attunement 6 by >= 4 SE (n=4000)                       0.792 -> 0.878
+PASS  B.3(iii) target Grace 2 -> 6: the share is lower at 6 (n=4000)                                            0.909 -> 0.838
+PASS  B.6(i) share marked lower at Will 6 by >= 4 SE (blow 1.5, n=4000)                                         0.627 -> 0.380
+PASS  B.6(ii) a decider that always argues: the Will 2 side's resolve is spent first in every sitting           200/200
+PASS  B.9: in automatic sittings relevance and sincerity read 0 and _auto never diverts                         nonzero ballots 0, diverts 0
+FAIL  C.6: every case_rows row can be named by row_for_case                                                     never named: ['parliamentary_debate'] (named: ['arbitration', 'audience', 'inquisition_hearing', 'legal_trial'])
+FAIL  C.3/B24p.14: a declared row's quorum can be met by its filtered bench                                     quorum 2, church seats 1
+
+73 PASS, 8 FAIL, 4 READ

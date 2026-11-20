@@ -2,25 +2,20 @@
 
 The data half of the weapon split (the derivation half is weapon_physics.py). A weapon is a bundle of primitives;
 behaviour EMERGES upward through weapon_physics, never from a per-weapon behaviour table. Each weapon is a SINGLE
-record here — to add / remove / edit a weapon you touch exactly one entry. Weapon roster, morphology-rearch
-Phase B (2026-07-02): every weapon's MASS DISTRIBUTION is now a positional sum over LOCATED, MATERIALED PARTS
-(elements/guards/haft/pommel/butt — specimen-grounded, designs/audit/2026-07-02-morphology-rearch-phase0/), not a
-whole-weapon lump at a wclass-centroid. weapon_physics.derive() sums them; see its STAGE-1 docstring.
+record here — to add / remove / edit a weapon you touch exactly one entry. Every weapon's MASS DISTRIBUTION is a
+positional sum over LOCATED, MATERIALED PARTS (elements/guards/haft/pommel/butt — specimen-grounded,
+the 2026-07-02-morphology-rearch-phase0 audit), not a whole-weapon lump at a wclass-centroid.
+weapon_physics.derive() sums them; see its STAGE-1 docstring.
 
 RECORD SCHEMA (per weapon):
-  PHYSICAL   mass(kg, = Σ part masses) · head_len · grip_len (METRES — U0 units honesty, ED-PC-0002, 2026-07-05:
-             the old 0.30m length-unit is retired; every stored length ×0.30, consumers rescaled, byte-identical
-             vs tests/valoria/r3_identity_golden.json) · hands(1/2) ·
+  PHYSICAL   mass(kg, = Σ part masses) · head_len · grip_len (METRES — U0 units honesty, ED-PC-0002) · hands(1/2) ·
              head{point,cut_thrust,straight_cut,curved_cut,blunt} (native/default combat mode — afforded_heads
              derives the full afforded SET) · reach_adj (a SMALL per-weapon residual in reach-POINTS — the same
-             unit as systems.reach_base's output, added OUTSIDE the geometric scale; NOT a length, NOT rescaled
-             at U0). (`clinch` DELETED, I7b/D9, 2026-07-03 — a single
-             forced 1-10 grappling-affinity scalar with zero readers; contact.py's grab_sigma derives grab
-             affinity from free-hand availability + systems.leverage instead — see its docstring.)
+             unit as systems.reach_base's output, added OUTSIDE the geometric scale; NOT a length). Grab affinity is
+             derived by contact.py's grab_sigma from free-hand availability + systems.leverage (see its docstring).
              `hand_guard`/`blade_guard`
              are NOT authored in a record: the bake loop at the bottom of this file ADDS both from
-             weapon_physics.hand_guard()/blade_guard() (a saturating sum over the record's own located `guards` —
-             morphology-rearch Phase B4). PC-11 deleted the 54 pairs of stale pre-Phase-B4 literals the bake overwrote.
+             weapon_physics.hand_guard()/blade_guard() (a saturating sum over the record's own located `guards`).
   COMPOSITE  wclass{bladed,hafted_tip,hafted_block} · hilt{compound,simple,none}
   PARTS      elements=[{x_m, mass_kg, extent_m, orient_deg, material, [edge_undulation]}] (the located striking
              element(s) — one for a plain blade/point/haft-tip, several for a composite head like the bec de
@@ -31,7 +26,7 @@ RECORD SCHEMA (per weapon):
              bladed weapon; the full shaft for a hafted one) · pommel/butt={x_m, mass_kg} (omitted when absent).
              All positions in METRES, x=0 at the working hand, +toward the tip, −toward the butt
              (weapon_physics.derive()'s axis). **`orient_deg`** (schema restoration, I0/D0, 2026-07-03,
-             `designs/audit/2026-07-02-scene-combat-closing-distance-redesign/`) — sign encodes FORE/AFT ONLY
+             the 2026-07-02-scene-combat-closing-distance-redesign audit) — sign encodes FORE/AFT ONLY
              (source: phase0_morphology_combined.json); does NOT cleanly gate arc-vs-thrust (cutting blades and
              thrust spikes both sit at orient=0 — see D5, which keys arc-vs-thrust on the SELECTED element's
              strike mode instead). **`type`** (guards only, I0/D0) — Phase-0 per-guard type string
@@ -60,14 +55,11 @@ RECORD SCHEMA (per weapon):
              OPPONENT's tactile read in a bind via weapon_physics.edge_vibration(), wired into systems.bind_sigma/
              init_steal_factor). Absent/zero on every other weapon -> both DERIVE to 0 (identity, no behaviour
              change).
-DERIVED, NOT STORED (morphology-rearch Phase B6, 2026-07-02 — the last fiat aggregates retired): `reach` — dead,
-superseded by systems.reach_base. `wt` — superseded by weapon_physics.heft() (striking mass × forward-balance),
-read by core.heft_resp. `spd` — superseded by systems._recovery_mode_commitment (the SAME grip-aware point-of-
-balance/head-mass/how-it's-held physics recoverability_factor models — point of balance, head mass, and grip
-position all matter to balance recovery, not a static geometry ratio), read by systems.weapon_tempo. `hand` —
-superseded by weapon_physics.handling() (PoB_frac/hand_guard), read by systems.str_demand; the skill-ceiling
-half of the old category relocates to the future competence layer (plan
-decision 4/6), not reconstructed here. `gap`/`geo` are DERIVED by the bake below.
+DERIVED, NOT STORED: `reach` — systems.reach_base. `wt` — weapon_physics.heft() (striking mass × forward-balance), read
+by core.heft_resp. `spd` — systems._recovery_mode_commitment (the SAME grip-aware point-of-balance/head-mass/how-it's-
+held physics recoverability_factor models), read by systems.weapon_tempo. `hand` — weapon_physics.handling()
+(PoB_frac/hand_guard), read by systems.str_demand; the skill-ceiling half of the old category relocates to the
+future competence layer (plan decision 4/6). `gap`/`geo` are DERIVED by the bake below.
 """
 
 WEAPONS = {
@@ -75,9 +67,9 @@ WEAPONS = {
    mass=1.368, head_len=0.96, grip_len=0.18, hands=1, head='point', reach_adj=0.15,
    wclass='bladed', hilt='compound',
    elements=[
-     # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): blade 0.62->0.455kg, counterweight pommel 0.348->0.513kg
-     # (same 1.368kg total) — brings PoB from 17.0cm to 9.0cm, into the ratified rapier band (3-11cm): a duelling
-     # rapier's heavy counterweight pommel keeps the balance close to the hand for point control (arms-scholarship).
+     # Blade 0.455kg, counterweight pommel 0.513kg (1.368kg total) — PoB 9.0cm, in the ratified rapier band (3-11cm): a
+     # duelling rapier's heavy counterweight pommel keeps the balance close to the hand for point control
+     # (arms-scholarship).
      dict(x_m=0.48, mass_kg=0.455, extent_m=0.96, orient_deg=0, material='steel'),  # blade
     ],
    guards=[
@@ -90,8 +82,7 @@ WEAPONS = {
    mass=1.2, head_len=0.72, grip_len=0.24, hands=1, head='cut_thrust', reach_adj=-0.1,
    wclass='bladed', hilt='simple',
    elements=[
-     # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): blade 0.78->0.645kg, pommel 0.234->0.369kg (same
-     # 1.2kg total) — brings PoB from 17.8cm to 11.0cm, into the ratified 1H band (6-14cm).
+     # Blade 0.645kg, pommel 0.369kg (1.2kg total) — PoB 11.0cm, in the ratified 1H band (6-14cm).
      dict(x_m=0.36, mass_kg=0.645, extent_m=0.72, orient_deg=0, material='steel'),  # blade
     ],
    guards=[
@@ -104,13 +95,11 @@ WEAPONS = {
    mass=1.408, head_len=0.84, grip_len=0.255, hands=2, head='cut_thrust',
    wclass='bladed', hilt='simple',
    elements=[
-     # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): blade 0.87->0.755kg, pommel 0.3->0.415kg (same
-     # 1.408kg total) — brings PoB from 19.4cm to 13.9cm, into the ratified 1H band (6-14cm; a longsword's
+     # Blade 0.755kg, pommel 0.415kg (1.408kg total) — PoB 13.9cm, in the ratified 1H band (6-14cm; a longsword's
      # hand-and-a-half grip and blade mass sit at the upper end of the single-hand-sword family), chosen so
      # systems.recoverability_factor(longsword) lands at 0.98 (within test_anchor_is_near_one's existing 0.03
-     # tolerance of the REC_I_REF/REC_S_REF anchors — those [SIM-CALIBRATE] constants are UNCHANGED, deferred
-     # to Phase C per that test's own docstring; U1 only corrects the mass that feeds them). heft()'s HEFT_REF
-     # anchor is re-derived from this weapon below (weapon_physics.py) to preserve heft(longsword)==1.0.
+     # tolerance of the REC_I_REF/REC_S_REF anchors). heft()'s HEFT_REF anchor is derived from this weapon
+     # (weapon_physics.py) so heft(longsword)==1.0.
      dict(x_m=0.42, mass_kg=0.755, extent_m=0.84, orient_deg=0, material='steel', grippable=True),  # blade — a safe forward gripping zone (attested gauntleted half-swording of a sharp longsword blade); grants the half-sword affordance emergently (P3/JD-3, ED-PC-0014)
     ],
    guards=[
@@ -123,8 +112,7 @@ WEAPONS = {
    mass=2.751, head_len=1.26, grip_len=0.39, hands=2, head='straight_cut', reach_adj=-0.05,
    wclass='bladed', hilt='simple',
    elements=[
-     # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): blade 1.75->1.414kg, pommel 0.548->0.884kg (same
-     # 2.751kg total) — brings PoB from 30.4cm to 18.0cm, into the ratified greatsword band (8-20cm).
+     # Blade 1.414kg, pommel 0.884kg (2.751kg total) — PoB 18.0cm, in the ratified greatsword band (8-20cm).
      dict(x_m=0.63, mass_kg=1.414, extent_m=1.26, orient_deg=0, material='steel', grippable=True),  # blade — the ricasso (flanked by parrying lugs) is the attested half-sword grip zone; grants the half-sword affordance emergently (PC-2/JD-3, ED-PC-0016)
     ],
    guards=[
@@ -475,11 +463,9 @@ WEAPONS = {
  'bec_de_corbin': dict(
    mass=2.4534, head_len=0.86169, grip_len=0.93831, hands=2, head='blunt', reach_adj=-0.05,
    wclass='hafted_tip', hilt='none',
-   # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): the hammer/beak/spike head was under-massed relative to
-   # its own haft (0.58kg head vs poleaxe's comparable 1.18kg for the same head_len/grip_len shape) — a war-hammer
-   # head is a solid steel forging, not a thin fitting. Head elements scaled 2.098x (steel head 0.58->1.217kg),
-   # haft correspondingly lightened 1.5834->0.947kg (same 2.4534kg total) — brings PoB from 5.1cm to 22.0cm, into
-   # the ratified poleaxe-class band (20-55cm forward), consistent with poleaxe's own 37.1cm.
+   # A war-hammer head is a solid steel forging, not a thin fitting: the hammer/beak/spike head is 1.217kg steel with
+   # the haft at 0.947kg (2.4534kg total) — PoB 22.0cm, in the poleaxe-class band (20-55cm forward), consistent with
+   # poleaxe's own 37.1cm.
    elements=[
      dict(x_m=0.5478, mass_kg=0.462, extent_m=0.06, orient_deg=90, material='steel'),  # hammer face
      dict(x_m=0.587, mass_kg=0.546, extent_m=0.09, orient_deg=-90, material='steel'),  # curved beak (bec de corbin)
@@ -500,10 +486,8 @@ WEAPONS = {
  'lucerne_hammer': dict(
    mass=2.4834, head_len=0.86151, grip_len=0.93849, hands=2, head='blunt', reach_adj=-0.05,
    wclass='hafted_tip', hilt='none',
-   # U1 PoB recalibration (JD-1, ED-PC-0010, 2026-07-08): same under-massed-head correction as bec_de_corbin
-   # (its own record, above) — the hammer/fluke/spike head scaled ~1.92x (0.70->1.344kg steel), haft correspondingly
-   # lightened 1.5834->0.939kg (same 2.4834kg total) — brings PoB from 7.2cm to 24.0cm, into the ratified
-   # poleaxe-class band (20-55cm forward).
+   # The hammer/fluke/spike head is a solid steel forging, scaled ~1.92x (1.344kg steel) with the haft lightened to
+   # 0.939kg (2.4834kg total) — PoB 24.0cm, in the poleaxe-class band (20-55cm forward), as bec_de_corbin's own record.
    elements=[
      dict(x_m=0.4825, mass_kg=0.384, extent_m=0.06, orient_deg=90, material='steel'),  # hammer face (4-tine fluke, striking side)
      dict(x_m=0.5938, mass_kg=0.672, extent_m=0.11, orient_deg=-90, material='steel'),  # 3-4 tine fluke (rear beak)
@@ -825,7 +809,7 @@ WEAPONS = {
 
 # Bake the geometry coefficient surface ONCE at import (zero runtime cost): geometry derives `gap` (and
 # thrust/cut/perc_conc/halfsword for downstream wiring) from each weapon's nested geometry.
-import geometry as _geo
+from . import geometry as _geo
 for _w, _rec in WEAPONS.items():
     _b = _geo.bake(_rec['geometry'])
     _rec['gap'] = _b['gap']
@@ -840,8 +824,8 @@ for _w, _rec in WEAPONS.items():
 # each wired K=0 until the U9 recal. Per-element order matches each record's `elements=[...]`; None = a blunt/omit
 # element with no cutting edge. CI invariants (test_combat_edges): sides==0 ⇒ element edge_keenness ≤ 0.1;
 # false_edge_frac>0 ⇒ sides==1. JD-2 (Jordan data sign-off) resolved bottom-up-from-morphology per the ED-PC-0009
-# ruling pattern; two S3 catch-element calls were adversarially corrected from the first draft (voulge heel-spike and
-# dangpa flank-tines: sides 2->1 — a thrusting spike / catch-lug is not a symmetric double-edged blade).
+# ruling pattern; a thrusting spike / catch-lug (voulge heel-spike, dangpa flank-tines) is single-edged, not a
+# symmetric double-edged blade.
 def _E(sides, false_edge_frac=0.0): return dict(sides=sides, false_edge_frac=false_edge_frac)
 _EDGES = {
   # double-edged (sides=2) — straight knightly/thrusting swords, jian-family, European spear/leaf heads, dagger-class
@@ -863,10 +847,10 @@ _EDGES = {
   'poleaxe':[None,_E(0),_E(0)], 'bec_de_corbin':[None,_E(0),_E(0)], 'lucerne_hammer':[None,_E(0),_E(0)],
   'goedendag':[None,_E(0)],
   'kama_yari':[_E(2),_E(1),_E(1)],   # main_point double (su-yari), two kama cross-blades single
-  'dangpa':[_E(2),_E(1),_E(1)],      # center prong double; flank tines single (corrected from S3 draft double — catch-lugs, not blades)
+  'dangpa':[_E(2),_E(1),_E(1)],      # center prong double; flank tines single (catch-lugs, not blades)
   'spetum':[_E(2),_E(1),_E(1)],   # central blade double; sharpened wing-lugs single
   'guandao':[_E(1),_E(0)], 'fauchard':[_E(1),_E(0)], 'guisarme':[_E(1),_E(0)], 'hook_sword':[_E(1),_E(0)],
-  'voulge':[_E(1),_E(1),_E(1)],      # cleaver + heel-spike (corrected from S3 draft double) + rear-fluke, all single
+  'voulge':[_E(1),_E(1),_E(1)],      # cleaver + heel-spike + rear-fluke, all single
   'ji':[_E(2),_E(1)],                # straight jian-like spearhead double; yueyadao crescent single
   'flamberge':[_E(2),_E(2),None],    # continuous double edge (flame-ground + plain tip); ricasso (grip zone) no edge
 }
@@ -881,14 +865,14 @@ assert set(_EDGES) == {n for n, r in WEAPONS.items() if 'base' not in r}, 'every
 # Bake each MULTI-MODE composite's per-element combat geometry ONCE at import (morphology-rearch Phase B2:
 # the located mass elements now have a parallel combat-geometry view for weapons whose parts afford genuinely
 # different fight-modes — a bec de corbin's hammer face vs beak vs spike — grounded per-element against Phase 0
-# geom_notes, see designs/audit/2026-07-02-morphology-rearch-phase0/. Single-mode weapons carry no
+# geom_notes, see the 2026-07-02-morphology-rearch-phase0 audit. Single-mode weapons carry no
 # `mode_elements` key; systems._mode_elements() already defaults them to the whole-weapon head+geo.
 for _w, _rec in WEAPONS.items():
     for _me in _rec.get('mode_elements', ()):
         _me['geo'] = _geo.bake(_me.pop('geometry'))
 
 # D0 BUILD ASSERTION (I0, schema restoration, 2026-07-03 —
-# designs/audit/2026-07-02-scene-combat-closing-distance-redesign/plan_r1_RATIFIED.md): every mode_element's
+# the 2026-07-02-scene-combat-closing-distance-redesign audit): every mode_element's
 # element_ref must index a REAL element in the SAME record (not list order — an explicit index), the mapping
 # this restores for D2b's per-element percussion mass lookup (I2) and the emitted sel_gap/sel_perc/sel_pc (I2).
 for _w, _rec in WEAPONS.items():
@@ -903,7 +887,7 @@ for _w, _rec in WEAPONS.items():
 # located parts are static, so the result is too). weapon_physics.derive returns the cached '_derived' when
 # present; a record mutated after bake is OUT OF CONTRACT, exactly as it already is for the baked geo/gap
 # above. Cycle-free: weapon_physics imports only math at module scope.
-import weapon_physics as _wp
+from . import weapon_physics as _wp
 for _w, _rec in WEAPONS.items():
     _rec['_derived'] = _wp.derive(_rec)
 
@@ -925,10 +909,9 @@ GEOMETRY = {_w: _rec['geometry'] for _w, _rec in WEAPONS.items()}
 # inverse is DERIVED (not a second hand-maintained dict). Read by systems.halfsword_target + capabilities.
 HALFSWORD_FORM = {'longsword': 'longsword_halfsword', 'estoc': 'estoc_halfsword',
                   'greatsword': 'greatsword_halfsword', 'flamberge': 'flamberge_halfsword'}
-# ED-PC-0016 (built): greatsword/flamberge carry attested ricassos (grippable=True on their records), so they afford the
-# half-sword, and the switch is now WIRED like the longsword's and estoc's — the ruling (ED-PC-0014: any weapon with a
-# ricasso + the required geometry half-swords) applied without a conditional. The 2026-07-22 hold rested on a measured
-# liability (an unconditional switch losing ~40pp at medium) that did not reproduce when the decision was taken; the
-# switched weapons' effect vs arming at medium/heavy is re-measured with workbench/armour_participation.py when this
-# table changes, never quoted here (the records were authored in pc2_halfsword_expansion.md).
+# ED-PC-0016: greatsword/flamberge carry attested ricassos (grippable=True on their records), so they afford the
+# half-sword, and the switch is WIRED like the longsword's and estoc's — the ruling (ED-PC-0014: any weapon with a
+# ricasso + the required geometry half-swords) applied without a conditional. The switched weapons' effect vs arming at
+# medium/heavy is measured with workbench/armour_participation.py when this table changes, never quoted here (the
+# records were authored in pc2_halfsword_expansion.md).
 HALFSWORD_BASE = {_form: _base for _base, _form in HALFSWORD_FORM.items()}

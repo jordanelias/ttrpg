@@ -1,13 +1,12 @@
 """`season.loop.effects_combat` -- casualties and morale: fight (renamed from "kill / wound") and
-the duel's `accept`, march; and the person raised (v9 IN-12 step 9, G15): tend, train; and the
+the duel's `accept`, capture, march; and the person raised (v9 IN-12 step 9, G15): tend, train; and the
 grudge's closer (v9 IN-12 step 13, G15): forgive.
 
-EXTRACTED from `effects.py` at the per-subsystem split (Phase 4). Holds the two effects that read a
+Holds the two effects that read a
 severity off a scene the seam already resolved rather than choosing one (Jordan, 2026-09-04: *"the
 combat engine determines the result there. your code just has to accept the result."*) -- personal
-combat's `fight` and mass battle's `march`. `_scar` and `_SCAR_DP` (the moral-layer write on the
-wounded person) are RETIRED at IN-08 H3: the scar is now written by the fold on the act's OBSERVERS
-(`loop/resolve.py::_scar_witnesses`), not by an effect. See `effects_shared.py` for `effect_for`
+combat's `fight` and mass battle's `march`. The moral-layer scar is written by the fold on the
+act's OBSERVERS (`loop/resolve.py::_scar_witnesses`), not by an effect. See `effects_shared.py` for `effect_for`
 and `_operand`, the helpers `march` takes from `effects_shared.py`; its arrival also calls
 `effects_migration.py::_relocate`, the journey `move` shares (v9 IN-13).
 """
@@ -16,27 +15,33 @@ from __future__ import annotations
 
 from dataclasses import replace
 
+from engine.dice_engine.dice_engine import Degree, degree_from_net
+from engine.dice_engine.sigma_leverage import levels_to_net_sigma, pool_of
+from engine.substrate import composition, descriptors
+
 from ..data.rosters import (
-    DECLARED, ENDING_FELLED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, FIELD_WINNER_CASUALTY_ARMS, INVESTED, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
-    VERB_CAPABILITY, WOUND_HARM_MODELS, BODY_MARK_MODELS, require_member,
+    DECLARED, ENDING_FELLED, ENDING_PREVAILED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, FIELD_WINNER_CASUALTY_ARMS, INVESTED, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
+    WOUND_HARM_MODELS, BODY_MARK_MODELS, require_member,
 )
 from ..data.matrix import matrix_row
 from ..data.requires import Observation
-from ..data.verbs import VERB_TABLE, VOCATION_SOURCED, VOCATIONS
+from ..data.verbs import VERB_CAPABILITY, VERB_TABLE, VOCATION_SOURCED, VOCATIONS
 from ..gaps import Unspecified
-from ..queries.person_q import held_against
+from ..queries.person_q import HAND_PREDICATE, held_against
 from ..queries.world_q import BODY_STEM, DETAIN_KIND, ancestry, garrison_sites, holder_faction_of, home_of, restrained
 from ..seam.ladder import party_degree
+from ..seam.wrappers.pool import pool_pair, untrained
+from ..seam.wrappers.sigma import ADVANTAGE_SOURCES, WOUNDS
 from ..state.carriers import Tenure
 from ..state.gate import (
     NO_CHANGE, PERSON_DIED, Change, Subject, death_subjects, may_muster, may_warrant, own_kinds, seat_faction,
 )
-from ..state.ids import H
+from ..state.ids import H, draw_factory
 
 from .effects_economy import _fall
 from .effects_information import _may_close_custody
 from .effects_migration import _relocate
-from .effects_shared import _debit, _operand, effect_for
+from .effects_shared import _debit, _operand, _scaled, effect_for
 
 
 # `accept` (the duel pair's second half) is the same contest over the same prize, `contests: "the
@@ -50,7 +55,7 @@ CEILING = "body_ceiling"          # v11 CP-T03-07: the cell the lasting mark wri
 
 
 def _yielder(res: "Resolution") -> "str | None":
-    """THE PARTY THE SCENE'S `surrender` NAMES (`seam/wrappers/combat.py::surrender_of`, lifted onto the result), or
+    """THE PARTY THE SCENE'S `surrender` NAMES (`modules/combat/fight.py::_surrender`, lifted onto the result), or
     `None`. The one reader both effects ask. `_eff_kill` refuses a `res` with no dict result only AFTER its
     opponent-not-a-person early return, so `_eff_capture` reaches this with such a `res` in a hand call: `None`."""
     if res is None or not isinstance(res.result, dict):
@@ -78,11 +83,9 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         (`state/gate.py::death_subjects`), so the death names the seats it empties. The other edges
         are still not named.
       * the dead person's own `person`-kind rung, popped by the same owner -- the same reasoning.
-    THE NEW NO-OP THIS MAKES VISIBLE: a `Wounded` outcome under `scene_fraction` whose fraction
+    THE NO-OP THIS MAKES VISIBLE: a `Wounded` outcome under `scene_fraction` whose fraction
     rounds back to the body it started from (`max(1, body * left // full)` at `body == 1`, or a
-    scene that took no health) used to emit `body.changed` over an unchanged body and is now
-    `kill.refused`. MEASURED BEFORE THIS POSITION on `build_realm(0)`, four seasons: every
-    `kill / wound` that reached this effect moved its subject, so no run moves.
+    scene that took no health) is `kill.refused`, not `body.changed` over an unchanged body.
 
     ⚠ AND THE TWO `Unspecified` RAISES COME BEFORE ANYTHING IS WRITTEN: both are read while the
     `Change` is built, which touches nothing.
@@ -92,18 +95,13 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT." A wound that does not kill writes only
     the band, so the same verb covers both -- which is why the table's row is `kill / wound`.
 
-    ⚠ `W-E`, 2026-09-04. THE EFFECT NOW TAKES THE RESOLUTION, AND `harm` IS GONE. Register row
-    `H-114` measured what the old signature cost: the effect could not honour the branch
-    `writes_at` had just selected, and the payload's `harm` key was read with the person's ENTIRE
-    body as its fallback -- so a fold at degree `Wounded` reached `p.body == 0`, passed
-    `if p.body > 0`, and DELETED THE PERSON. Both halves are closed here, and the `W-C` carve-out
-    that named `harm` as `W-E`'s to own is retired with its subject rather than widened.
-    ⚠ THE OLD SPELLING IS DELIBERATELY NOT QUOTED IN THIS DOCSTRING. `W-C`'s guard
+    ⚠ `W-E`: THE EFFECT TAKES THE RESOLUTION, AND THERE IS NO `harm` OPERAND (`H-114`): an effect
+    that read `harm` with the person's ENTIRE body as its fallback would, at degree `Wounded`,
+    reach `p.body == 0`, pass `if p.body > 0`, and DELETE THE PERSON.
+    ⚠ THE `harm` SPELLING IS DELIBERATELY NOT QUOTED IN THIS DOCSTRING: `W-C`'s guard
     (`test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_eff_kill`) scans
-    RAW SOURCE TEXT, so quoting the deleted line here would keep its carve-out "used" and leave
-    an open licence on the name `harm` -- the exact staleness that test's own `used == EXEMPT`
-    assertion exists to catch, satisfied by prose describing the defect rather than by the defect.
-    Found while running that test against this change.
+    RAW SOURCE TEXT, so quoting it would keep a carve-out "used" and leave an open licence on the
+    name `harm`.
 
     WHERE THE MAGNITUDE COMES FROM NOW, AND WHY IT IS NOT INVENTED. JORDAN, 2026-09-04, VERBATIM:
     *"the combat engine determines the result there. your code just has to accept the result."*
@@ -114,21 +112,11 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     THE THREE ARMS (`wound_harm_model`, registered at `H-123`, injected at `DEFAULT_FIXTURES`):
       `scene_fraction`  body <- body x health_remaining / health_full. The scene decides.
-      `total`           any wound is lethal. ⚠ THIS IS THE CONTROL AND IT IS THE BEHAVIOUR THIS
-                        FUNCTION HAD BEFORE `W-E` (`harm` defaulting to full body), so the arm
-                        that shows what the degree is worth is the code as it stood.
+      `total`           any wound is lethal. ⚠ THIS IS THE CONTROL: it is the arm that shows what
+                        the degree is worth.
       `none`            a wound writes nothing. The fold's own write-nothing guard then emits the
                         REFUSAL rather than the success -- the second control, and it isolates
                         "the band selected a different write set" from "the band changed a value".
-
-    ⚠ AND THIS SUPERSEDES ONE HARNESS TECHNIQUE, WHICH IS SAID HERE SO ITS OUTPUT IS NOT
-    MISREAD. `proposals/2026-09-04-degree-sweep/arm3_tree.py` injects a degree by monkeypatching
-    `VerbRow.writes_at` / `emits_at` and then calls `_fold` bare. That reached the effect while
-    the effect took no degree; it cannot now, because the degree travels on the `Resolution` the
-    SEAM returns and a patched READER is invisible from here. Re-run after `W-E`, its `Felled` and
-    `Wounded` nodes report REFUSED with the message below. That is the closure of `H-114` seen
-    from the probe's side -- the probe measured a world in which the degree could not reach the
-    effect -- and not a new defect.
 
     ⚠ A WOUND CANNOT KILL, AND THE FLOOR IS STRUCTURAL RATHER THAN NUMERIC. The `Wounded` band
     means the engine did NOT fell this person; a model that took their body to 0 would contradict
@@ -143,8 +131,8 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         return NO_CHANGE
     # ⚠ NO SCENE, NO HARM -- AND THIS IS A REFUSAL TO INVENT, NOT A MISSING FEATURE. `kill / wound`
     # declares `contests: the body`, so the only lawful route into this effect is through the
-    # seam; an act folded without one has no scene to read a severity off, and the pre-`W-E`
-    # answer to that was to kill. `writes_at(None)` already refuses one line earlier for the same
+    # seam; an act folded without one has no scene to read a severity off, and killing would invent one.
+    # `writes_at(None)` already refuses one line earlier for the same
     # reason, so this is the second gate on the same road rather than a new rule.
     if res is None or not isinstance(res.result, dict):
         raise Unspecified(
@@ -166,8 +154,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # CP-T03-00 (`-08` AM-C-01): BOTH PARTIES TAKE THEIR BAND. The actor and the subject are each read
     # off the scene by his OWN band (`seam/ladder.py::party_degree`, the walk `combat_degree` takes the
     # worst of) and written by it: `Felled` -> body 0 and `World.remove_person`; `Wounded` ->
-    # `wound_harm_model`; `Untouched` -> nothing. Before this item only the subject was read, so an
-    # attacker his target felled walked away and `person.died` was never his. A party who is no
+    # `wound_harm_model`; `Untouched` -> nothing. A party who is no
     # longer a person is not written (the subject's case is the `NO_CHANGE` above).
     above = w.fixtures.get("combat_wounded_above")
     bands = {}
@@ -198,19 +185,13 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         w.persons[pid].body = body
         if body > 0:
             return
-        # ⚠ `w.tenures`, NOT `p.tenures + w._unowned`, AND THAT IS A FIX `W-E`'s OWN TEST FOUND.
-        # `p.tenures` is the tenures this person is the SUBJECT of (§15.1 -- a Tenure is owned by
-        # its subject), so the old scan could not see an edge ANOTHER PERSON owns that names the
-        # dead one as its OBJECT. Measured in `tiny_world`: `t10`, a live `tie` from `p_low` to
-        # `p_mid`, survived `p_mid`'s death and then DANGLED, because `del w.persons[who]` had
-        # already removed the person it pointed at. §15.3 is explicit that the tenure ends THROUGH
-        # THE DEATH; this is the write the `Felled` branch declares (`Tenure.until`) actually
-        # reaching every edge it names. `w.tenures` is owner-first over every person plus
-        # `_unowned`, so it is a WIDENING of the same scan and not a second rule.
-        # ⚠ THE CASCADE MOVED TO `World.remove_person` (item 3b) AND THE COMMENT ABOVE IS ITS
-        # PROVENANCE. It is unchanged in behaviour — the same `w.tenures` scan, for the same `W-E`
-        # reason — and it moved because MATTER is now a SECOND way to die (a body reaching 0 from
-        # an empty larder), and two sites closing tenures by hand is how the two drift apart (§8).
+        # ⚠ `w.tenures`, NOT `p.tenures + w._unowned`: `p.tenures` is the tenures this person is the
+        # SUBJECT of (§15.1 -- a Tenure is owned by its subject), so a scan of it cannot see an edge
+        # ANOTHER PERSON owns that names the dead one as its OBJECT, which would DANGLE once
+        # `remove_person` deletes the person it points at. §15.3: the tenure ends THROUGH THE
+        # DEATH. `w.tenures` is owner-first over every person plus `_unowned`. The cascade lives in
+        # `World.remove_person` because MATTER is a SECOND way to die (a body reaching 0 from an
+        # empty larder), and two sites closing tenures by hand is how the two drift apart (§8).
         # ⚠ G3: THESE CLOSURES ARE `destroy's cascade`, AND THE GATE RECOGNISES THEM BY
         # OBSERVATION. They run inside this act's own gated write (the `(Person, body)` pair, the
         # first in the `Felled` band), `remove_person` takes `who` out of `w.persons` in the same
@@ -222,22 +203,28 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # (`own_kinds`: `body.changed` on `Wounded`), plus `person.died` where this write takes his body to
     # 0; each seat his death empties earns `tenure.closed`, its receipt naming the Office
     # (`death_subjects`). A band that does not declare a kind still does not emit it (`_fold`).
-    # CP-T03-00: A FELLED PARTY EARNS THE DEATH'S KINDS ALONE, as before this item. The `Felled` cell's
+    # CP-T03-00: A FELLED PARTY EARNS THE DEATH'S KINDS ALONE. The `Felled` cell's
     # `body.changed` is there for the OTHER party of a mixed fight -- the cell is the ACT's band, the
     # worst over both, so it must license what a Wounded party earns beside a felled one -- and is not
     # the felled man's own kind. And because `_fold` gives each kind's Event only its earners' changes,
     # the person.died Event of a felled actor names him, never the standing subject.
     # v10 PC-10b: `duel.yielded` IS EARNED BY THE YIELDER ALONE -- the party the scene's `surrender`
-    # (`seam/wrappers/combat.py::surrender_of`, lifted off the trace) names. A band declaring it (`accept`'s
+    # (`modules/combat/fight.py::_surrender`, lifted off the trace) names. A band declaring it (`accept`'s
     # `Wounded`) would otherwise hand it to every wounded party, a yield nobody made (ID-9). Read off the
     # result, never the verb: a row whose band does not declare the kind emits nothing of it (`_fold`).
     yielder = _yielder(res)
+    ending = fight_ending(w, (a.actor, who), res, above)      # read once, before the write: the Change's and `hand_observed`'s
     named: tuple = ()
     for pid, band in bands.items():
         own = () if band == FELLED else own_kinds(row.emits_at(band))
         own = tuple(k for k in own if (k != DUEL_YIELDED or pid == yielder) and k not in GROWN_KINDS)
         if bodies[pid] == 0:
-            named += death_subjects(w, pid, own, fields=("body",))
+            # B14.03: THE FELLED PARTY'S OWN SUBJECT (the first `death_subjects` names; the seats follow) carries the
+            # wound that felled him, a source and a weapon and no doer, on the death Event WITNESS deposits.
+            dead = death_subjects(w, pid, own, fields=("body",))
+            # B14.16: A FELLED ACTOR'S death also names the party left standing (`hand_observed`).
+            named += (replace(dead[0], observed=fell_observed(pid, res.result.get("beat"))
+                              + hand_observed(pid, a.actor, ending)),) + dead[1:]
             continue
         # CP-T03-02 (ii): A WOUNDED PARTY'S SUBJECT CARRIES WHAT HIS BODY NOW IS -- `(pid, "body", v)`, `v` the
         # value `perform` WRITES (`bodies`), never `w.persons[pid].body` read here, which is the pre-fight body
@@ -247,11 +234,13 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         # (`bodies[pid] is None`) writes nothing and observes nothing.
         # [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]
         named += (Subject.entity("persons", pid, earns=own, fields=(BODY_STEM, CEILING),
-                                 observed=body_observed(pid, bodies[pid])),)
+                                 observed=body_observed(pid, bodies[pid]) + marked_observed(w, pid, marks)),)
     # CP-T03-04 (iv): EACH GROWN PARTY IS ITS OWN SUBJECT ON `capability`, earning the `(Person, capability)` cell's
     # kind alone -- never a body subject's kind, and never on a party who did not grow (the filter above).
     named += tuple(Subject.entity("persons", pid, earns=GROWN_KINDS, fields=("capability",)) for pid in grown)
-    return Change(named, perform, fight_ending(w, (a.actor, who), res, above))
+    # B14.15: THE SCENE'S SHAPE rides each success Event once (`scene_observed`, `carry_scene`).
+    named = carry_scene(named, scene_observed(tuple(dict.fromkeys((a.actor, who))), res.result.get("shape")))
+    return Change(named, perform, ending)
 
 
 # CP-T03-04 (iv): THE KINDS A GROWN PARTY EARNS -- the `(Person, capability)` matrix row's own `emits:`
@@ -261,22 +250,32 @@ GROWN_KINDS = matrix_row("Person", "capability").emits
 
 def raised_capability(p: "Person", key: str) -> "dict | None":
     """`p.capability` with `key` raised by ONE whole point, the unit of a dice count -- `_eff_train`'s write and
-    `_grown`'s, one body. `None` where `p` does not already hold `key`: a key is NEVER MINTED, because a minted
-    `{arms: 1}` would replace `pool_default` in `faculty` and LOWER the pool of the man it meant to reward."""
-    if key not in (p.capability or {}):
+    `_grown`'s, one body.
+
+    B05.09 (CORE Edit 9) -- A FIRST RANK IS MINTED: a person who holds no `key` is written `{key: 1}`, and his opposition
+    and his fight score do not move, because `pool.score` is `max(untrained score, rank)`: a rank below `pool_default` gives no dice and takes
+    none there. HIS SOCIAL POOL DOES GAIN A DIE (`pool.faculty` adds the raw rank: "a first rank always adds a die"; B05 close, K4). The rule that kept
+    a key from being minted, `{arms: 1}` replacing `pool_default`, no longer holds. [ASSUMPTION; medium; Jordan
+    to correct; revert: restore the never-minted rule, `None` for a key `p` does not hold].
+
+    B04.15 -- A RANK NEVER PASSES ITS ROW'S CEILING: `None` where the raised rank would pass
+    `descriptors.capability(key).ceiling`, the ceiling of the skill row's `scale` (7 for every row shipped); a rank at its
+    ceiling is not raised, by `train` or by `_grown`."""
+    held = p.capability or {}
+    raised = int(held[key]) + 1 if key in held else 1
+    if raised > descriptors.capability(key).ceiling:
         return None
-    return {**p.capability, key: int(p.capability[key]) + 1}
+    return {**p.capability, key: raised}
 
 
 def _grown(w: "World", a: "Act", parties, bands: dict, bodies: dict) -> dict:
     """v11 CP-T03-04 (iv), BUILD-BY-DOING: `{pid: raised capability}` for each party of a fight THAT DREW BLOOD (some
-    party `Wounded` or `Felled`, i.e. `bands` is not empty) who SURVIVES it (his written body is not 0) and ALREADY
-    HOLDS the key the verb draws on (`VERB_CAPABILITY[a.verb]`, `rosters.yaml: verb_capability` -- `arms` for the
+    party `Wounded` or `Felled`, i.e. `bands` is not empty) who SURVIVES it (his written body is not 0), for the key the verb draws on (`VERB_CAPABILITY[a.verb]`, derived from the verb table's `capability:` column over `descriptors.CAPABILITIES` -- `arms` for the
     three verbs contesting `the body`; the name is read there, never spelt here). Raised by ONE whole point,
     `_eff_train`'s unit.
 
-    ⚠ NEVER MINTED (`_eff_train`'s rule and its reason): a minted `{arms: 1}` would replace `pool_default` 2 in
-    `faculty` and LOWER the pool of the man it meant to reward. A party holding no key gains nothing.
+    ⚠ A FIRST RANK IS MINTED (B05.09, `raised_capability`): a surviving party who holds no `arms` key is written `{arms: 1}`,
+    and his opposition and fight score do not move (`pool.score` is `max(untrained score, rank)`); his social pool gains a die (`pool.faculty` adds the raw rank).
     ⚠ ONLY WHERE BLOOD WAS DRAWN, AND THE REASON IS THE FOLD, NOT TASTE: `fight`'s and `accept`'s `Untouched` band
     writes nothing, so the fold never runs this effect there (`loop/resolve.py`, `_pairs`); declaring a
     `Person.capability` write on it would turn every untouched fight between non-holders into `kill.refused`
@@ -308,25 +307,103 @@ BROKE_STEM = "broke"
 def broke_observed(pid: str, broke: "str | None") -> tuple:
     """CP-T04-01: the Observation the loser whose subunit BROKE FIRST carries on the field's band Event --
     `(pid, "broke", True)` -- or `()` for every other loser and for a field that names nobody (the `side` arm, or a
-    side whose subunits did not break on their own account). An Event carries no payload (`Event.ending`'s note), so the
+    side whose units did not break on their own account). An Event carries no payload (`Event.ending`'s note), so the
     cause rides `Event.observed`, deposited by WITNESS as `body_observed` is. [ASSUMPTION; medium; Jordan to correct;
     revert: the Observation, and the field's cause is unnamed]"""
     return (Observation(pid, BROKE_STEM, True),) if pid == broke else ()
 
 
+FELL_TO_STEM = "fell_to"
+
+
+def fell_observed(pid: str, beat: "dict | None") -> tuple:
+    """B14.03 (D-U1-06, C3-L5): the Observation a felled party's Subject carries -- `(pid, "fell_to", "<source>:<weapon>")`,
+    read off the scene's `DecisiveBeat` (lifted onto the result as a dict) -- or `()` where the scene names no beat or the
+    beat's victim is another party. It names the engine's site of the wound and the weapon, NEVER the striker (`beat["by"]`
+    is not read): a deed others can hold without a doer. An Event carries no payload, so the cause rides `Event.observed`
+    as `broke_observed`'s does. [ASSUMPTION; medium; Jordan to correct; revert: drop the Observation]"""
+    if not beat or beat.get("victim") != pid:
+        return ()
+    return (Observation(pid, FELL_TO_STEM, f"{beat['source']}:{beat['weapon']}"),)
+
+
+def hand_observed(pid: str, actor: str, ending: tuple) -> tuple:
+    """B14.16 (D-U1-06; `16_PESSIMIST_PC_C` 2): the Observation a felled party's Subject carries where he is the act's ACTOR --
+    `(pid, "fell_to_hand", <the party left standing>)` -- or `()` for a felled subject (the `seen.who` pairing names the actor his
+    killer there), and where no party prevailed (both felled; a yield). `ending` is `fight_ending`'s `(party, ending)` pairs;
+    the standing party is the one it reads `prevailed`, the scene's own verdict, so no second reading of the bands is made here.
+    Unlike `fell_to` it NAMES A PERSON: `queries/person_q.py::deed_doer` reads it before the pairing, which cannot name the
+    killer of an attacker felled by his target (it sees the attacker as `who` of his own death). It rides `Event.observed` as
+    `fell_to` does, and which witness holds it is WITNESS's mode, not a filter here. [ASSUMPTION; medium; Jordan to correct;
+    revert: drop the Observation and `deed_doer`'s read]"""
+    if pid != actor:
+        return ()
+    standing = [p for p, e in ending if e == ENDING_PREVAILED and p != pid]
+    return (Observation(pid, HAND_PREDICATE, standing[0]),) if len(standing) == 1 else ()
+
+
+# B14.15's four scene predicates, spelt once here (the writer) and read by `harness/chronicle.py`; none is an `observation_terms` member.
+BLOWS_LANDED, FIGHT_ROUNDS, FIRST_BLOOD, LEAD_CHANGES = "blows_landed", "fight_rounds", "first_blood", "lead_changes"
+
+
+def scene_observed(parties: tuple, shape: "dict | None") -> tuple:
+    """B14.15 (D-U1-06; `16_PESSIMIST_PC_C` 1): the Observations a fight's success Events carry of the scene's course, read off
+    the `shape` the seam lifted onto the result (`SceneShape` as a dict), or `()` where the result carries none. For each party
+    `p`, `(p, "blows_landed", n)`; once per scene, `(actor, "fight_rounds", n)`, `(first_blood, "first_blood", True)` where a
+    blow landed, and `(actor, "lead_changes", n)` -- `parties[0]` the actor. Numbers and one name, never a doer of a killing:
+    `first_blood` names who struck first, which is not who prevailed. They ride `Event.observed` as `fell_to` does (the
+    predicates are not `observation_terms` members, B14.03's reading). [ASSUMPTION; medium; Jordan to correct; revert: drop
+    the Observations]"""
+    if not shape:
+        return ()
+    blows = shape.get("blows") or {}
+    actor = parties[0]
+    out = [Observation(p, BLOWS_LANDED, blows[p]) for p in parties if p in blows]
+    out.append(Observation(actor, FIGHT_ROUNDS, shape["rounds"]))
+    if shape.get("first_blood") is not None:
+        out.append(Observation(shape["first_blood"], FIRST_BLOOD, True))
+    out.append(Observation(actor, LEAD_CHANGES, shape["lead_changes"]))
+    return tuple(out)
+
+
+def carry_scene(named: tuple, obs: tuple) -> tuple:
+    """`named` with `obs` placed on the subjects so that each success Event carries them ONCE. `_fold` gives a kind's Event the
+    `observed` of every subject riding it, and a subject rides the kinds it earns (every kind, where it names none), so `obs` goes
+    to a subject only if none of its kinds is already ridden by an earlier one that carries them: a kind two subjects earn
+    (both parties wounded) carries them once, and a subject that would double a covered kind is passed over (its other kind
+    is left without them, for the sake of no repeated Observation)."""
+    if not obs:
+        return named
+    everything, covered, out = object(), set(), []
+    for s in named:
+        kinds = set(s.kinds) or {everything}
+        fresh = not (covered & kinds) and everything not in covered and (everything not in kinds or not covered)
+        out.append(replace(s, observed=tuple(s.observed) + obs) if fresh else s)
+        covered |= kinds
+    return tuple(out)
+
+
 def fight_ending(w: "World", parties, res: "Resolution", above) -> tuple:
-    """CP-T03-02 (i): `Event.ending` -- `(pid, felled | yielded | undecided)` for each party still a person, in
-    party order, read off the scene's lifted `wound_state` (`party_degree`, the walk `_eff_kill` writes by) and
+    """CP-T03-02 (i): `Event.ending` -- `(pid, felled | yielded | prevailed | undecided)` for each party still a person,
+    in party order, read off the scene's lifted `wound_state` (`party_degree`, the walk `_eff_kill` writes by) and
     `surrender` (`_yielder`). Read BEFORE the write, which is right: it reports the scene, not the world.
-    [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]"""
+
+    B14.02 (A-81, D-U1-11a): a party who is neither felled nor the yielder is `prevailed` where the OTHER party is felled or
+    the yielder -- the one left standing -- and `undecided` only where neither is. A party is read down from the scene
+    whether or not he is still a person, so a felled opponent already removed from the world still makes the survivor
+    `prevailed`. [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation]"""
     states = res.result.get("wound_state") or {}
     yielder = _yielder(res)
+    held = tuple(dict.fromkeys(parties))
+    felled = {pid: party_degree(states.get(pid), above) == FELLED for pid in held}
+    down = {pid: felled[pid] or pid == yielder for pid in held}
     out = []
-    for pid in dict.fromkeys(parties):
+    for pid in held:
         if pid not in w.persons:
             continue
-        out.append((pid, ENDING_FELLED if party_degree(states.get(pid), above) == FELLED
-                    else ENDING_YIELDED if pid == yielder else ENDING_UNDECIDED))
+        out.append((pid, ENDING_FELLED if felled[pid]
+                    else ENDING_YIELDED if pid == yielder
+                    else ENDING_PREVAILED if any(down[o] for o in held if o != pid) else ENDING_UNDECIDED))
     return tuple(out)
 
 
@@ -340,7 +417,7 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     Record is `accept`'s, not `capture`'s).
 
     WHAT LICENSES THE EDGE, EACH ONE OWNER OF ITS RULE (`_eff_arrest`'s tests, minus the warrant): (1) the scene's
-    `surrender` (`seam/wrappers/combat.py::surrender_of`, lifted off the trace) names the SUBJECT as the one who
+    `surrender` (`modules/combat/fight.py::_surrender`, lifted off the trace) names the SUBJECT as the one who
     yielded -- a yield by the actor, or none, opens nothing, and a scene in which either party was felled opens
     nothing (a felled actor holds no seat to take him into); (2) the subject is a person other than the actor and
     not already in custody (`restrained`, one live `detain` per prisoner); (3) the exercised seat may take him
@@ -367,7 +444,8 @@ def _eff_capture(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     # (every arm), and a WOUNDED one under `wound_harm_model: total` (`_harm` writes body 0 there, so `_wound`
     # removes him). Read off the base's subjects, the one owner, never recomputed from the band: an edge on a man
     # the same write removes -- or opened by a seat whose holder it removes -- is refused at the gate
-    # (`NotYours`), and nothing in the fold catches that, so the season would end.
+    # (`NotYours`); the fold catches that and emits the row's refusal (B03.76), which would refuse the whole
+    # act; returning `base` keeps the capture.
     if any(PERSON_DIED in s.kinds for s in base.subjects) or restrained(w, prisoner, DETAIN_KIND):
         return base
     if a.via is None or not may_warrant(w, a.actor, a.via, prisoner) or not _may_close_custody(w, a.via, prisoner):
@@ -391,11 +469,45 @@ def marked_ceiling(ceiling: int, floors) -> int:
     return max(below) - 1 if below else ceiling
 
 
+MARKED_STEM = "marked"
+MARK_ROLE = "combat.resolve"                    # the composition row whose module rolls the mark: `roll_net + net_boost`, one owner
+QUERY_ENTRIES = ((MARK_ROLE, "query"),)         # the host's declared need, held at driver construction (`registrar.require_entries`)
+
+
+def marked_observed(w: "World", pid: str, marks: dict) -> tuple:
+    """B14.23: the Observation a DRAWN mark carries -- `(pid, "marked", the ceiling it left)` -- or `()` where no mark fell on `pid`, and at every arm but
+    `drawn` (`deepest_gate` and `none` tell no mark, so the shipped arm's Events are the pre-item ones). Rides `Event.observed` as `broke` and
+    `fell_to` do: an Observation predicate is not a member of `rosters.yaml: observation_terms`, which is `epistemic.Seen`'s field list."""
+    if pid not in marks or w.fixtures.get("body_mark_model") != "drawn":
+        return ()
+    return (Observation(pid, MARKED_STEM, marks[pid]),)
+
+
+def _mark_degree(w: "World", pid: str, body: int, ceiling: int) -> Degree:
+    """B14.23 (`U5b_PC_residue` section 7; A-5 to A-8, A-30): THE BAND OF ONE SURVIVOR'S MARK ROLL. The pool is the one pool rule on the
+    untrained default -- `pool_of(pool_default, 0, pool_add, pool_floor)`, no skill being authored for mending clean -- and his body band enters as
+    LEVELS through the `wounds` source (`ADVANTAGE_SOURCES[WOUNDS]`, the roller's own wound against him, as `combat._carried_of` reads it), summed by
+    `levels_to_net_sigma` and applied as `net_boost`, never a die and never an obstacle term. The roll is the module's (`combat.resolve`, reached by role: `roll_net_continuous` plus `net_boost`, the one sampler); the
+    obstacle is the fixture `mark_ob`, graded on the one ladder (`degree_from_net`). The stream is the survivor's own, keyed
+    `(world_seed, tick, victim, "fight.mark")` (`state.ids.draw_factory`, A-30): never a position in the scene's stream and never the season's draw,
+    so the roll reads `World` and writes nothing. [ASSUMPTION; medium; Jordan to correct; revert: `body_mark_model: deepest_gate`]"""
+    fx = w.fixtures
+    add, floor = pool_pair(fx)
+    pool = pool_of(untrained(fx), 0, add, floor)
+    _for, against = ADVANTAGE_SOURCES[WOUNDS](fx, {"body": body, "body_ceiling": ceiling})
+    sigma = levels_to_net_sigma(_for, against)
+    rng = draw_factory(w.world_seed, lambda: w.tick)(pid, "fight.mark")
+    ob = fx.get("mark_ob")
+    return degree_from_net(composition.require(MARK_ROLE)(pool, sigma, rng, ob)[1], ob)
+
+
 def _marks(w: "World", bodies: dict, states: dict) -> dict:
     """v11 CP-T03-07: `{pid: new body_ceiling}` for each party of a fight who SURVIVES it (his written body is above 0;
     a `none`-arm party, written nothing, is not marked) at the engine's DEEPEST GATE SHORT OF FELLING -- `wounds >=
     max_wounds` on his lifted tracker (`rosters.yaml: wound_quantities`) -- and whose ceiling the mark lowers
     (`marked_ceiling`). `body_mark_model: none` (`H-258`, the control) marks nobody.
+    `drawn` (B14.23, `H-567`; not shipped): each such survivor rolls ONCE (`_mark_degree`, keyed `fight.mark`) and Failure lowers the ceiling
+    twice (`marked_ceiling` applied twice), Partial once as `deepest_gate` does, Success and better not at all.
     [ASSUMPTION; medium; Jordan to correct; revert: `body_mark_model: none`]"""
     mode = w.fixtures.get("body_mark_model")
     require_member(
@@ -419,6 +531,12 @@ def _marks(w: "World", bodies: dict, states: dict) -> dict:
             continue
         p = w.persons[pid]
         after = marked_ceiling(p.body_ceiling, floors)
+        if mode == "drawn":
+            degree = _mark_degree(w, pid, body, p.body_ceiling)
+            if degree in (Degree.SUCCESS, Degree.OVERWHELMING):
+                continue
+            if degree is Degree.FAILURE:
+                after = marked_ceiling(after, floors)
         if after != p.body_ceiling:
             out[pid] = after
     return out
@@ -456,7 +574,7 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     ⚠ CR-24 (`field_winner_casualties`, `H-360`, M4 Ask B (b)): UNDER `engine` (SHIPPED) THE WINNERS TAKE THEIR OWN
     ENGINE CASUALTIES, ON `body` ONLY -- each winner at his own side's survivor ratio (`attacker_size_pct` /
-    `defender_size_pct`) or, under `field_subunits: person`, his own subunit's (CP-T04-01's `subunits` record), never
+    `defender_size_pct`) or, under `field_units: person`, his own subunit's (CP-T04-01's `subunits` record), never
     the loser's, and never above 1 (a winner is not raised). A winner is NOT a loser: he is not appended to `touched`,
     so he earns no grudge against his own faction and no morale hit, and he gets no stance row. A winner who also
     marches is one Subject (the mover's). Under `field_casualty_model: total` ("any wound is lethal") a winner who took a
@@ -489,8 +607,7 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     re-running "losing costs everything" deliberately), `none` (body is not written at all -- the
     second control, isolating the write from the band). The default is settled by Jordan's
     2026-09-04 ruling on `wound_harm_model` -- *"the combat engine determines the result there"*
-    -- applied to this magnitude too, not by a fresh measurement; `tools/balance_oracle.py` was
-    a campaign-driver instrument and could not observe an `engine/season`-only mechanic (`rosters.yaml`'s
+    -- applied to this magnitude too, not by a fresh measurement (`rosters.yaml`'s
     `field_casualty_models` note).
 
     ⚠ THE STANCE ROWS FOLLOW THE SEEDED-LOYALTY SHAPE (`harness/data/cast.py`'s own
@@ -551,7 +668,7 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     if drawn is not None and res.degree != UNOPPOSED:
         losers = list(drawn)             # cohorts do not stand beside their army: they are the people at home
     pct = engine_result.get("attacker_size_pct" if attacker_lost else "defender_size_pct")
-    # CP-T04-01 (`field_subunits: person`): the module's record then carries each person's own subunit ratio, and a
+    # CP-T04-01 (`field_units: person`): the module's record then carries each person's own subunit ratio, and a
     # loser is scaled by HIS, not the side's. A person it does not name (a side fought as an order of battle, or the
     # `side` arm, which carries no `subunits` at all) keeps the side's `pct`, so the `side` arm is today's write.
     per_person = engine_result.get("subunits") or {}
@@ -604,14 +721,14 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # *every* declared kind, a non-empty one means *only* those). So the kinds are earned as a whole:
     # with an army that moves, the band publishes both its kind and the arrival; with nobody moving
     # (`Lost`, or a `Won` whose army already stood there), the losers earn the band's own kind alone and
-    # no arrival is published. Before CP-T02-01 every subject earned `None` beside a moving army.
+    # no arrival is published.
     # CP-T02-01 / HR-1: THE SAME RULE WITH EVERY SUBJECT'S KINDS NAMED. `Won` and `Lost` declare
     # `person.died` and `tenure.closed` too, so a subject earning `None` (every declared kind) would
     # publish a death on every fought field; and a dead loser naming `person.died` beside subjects
     # earning `None` would silence the band's kind and the arrival (`_fold` keeps only named kinds once
     # any is named). So a mover earns the band's own kinds (`own_kinds`: the band's kind and the
     # arrival), a loser and a treasury the same beside a moving army and the band's kind alone when
-    # nobody moves -- the kinds `None` and `_band_kind` earned before -- and a loser the `total` arm
+    # nobody moves, and a loser the `total` arm
     # kills earns `person.died` beside them, his seats `tenure.closed` (`death_subjects`).
     own = own_kinds(VERB_TABLE["march"].emits_at(res.degree))
     loser_earns = own if movers else (_band_kind(res.degree),)
@@ -642,14 +759,11 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
             if loser_faction:
                 rows.append((loser_faction, -1.0, morale_w))
             p.stance = rows
-            # ⚠ `remove_person` ON THE `total` ARM'S OWN body==0, `_eff_kill`'s PRECEDENT
-            # (`_eff_kill` above: "the body goes to 0 ... `w.remove_person(who)`" whenever a write
-            # leaves `p.body <= 0`) -- found missing by `/code-review` on the M4 diff. Without it,
-            # `total` left a living person recorded at body 0, a state no other path in this
-            # engine produces (`_eff_kill` never does), and ED-IN-0279's own first row named
-            # `Person.exists` on participants as the recommended option this omitted.
-            # `scaled_by_degree` floors at 1 and never reaches this, on `wound_harm_model`'s own
-            # precedent that a wound (never total) cannot kill.
+            # ⚠ `remove_person` ON THE `total` ARM'S OWN body==0, `_eff_kill`'s PRECEDENT (whenever a
+            # write leaves `p.body <= 0`): without it `total` would leave a living person recorded at
+            # body 0, a state no other path in this engine produces, and ED-IN-0279's own first row
+            # named `Person.exists` on participants. `scaled_by_degree` floors at 1 and never reaches
+            # this, on `wound_harm_model`'s own precedent that a wound (never total) cannot kill.
             if p.body <= 0:
                 w.remove_person(pid)
         # CR-24: the winners' casualty is `body` ONLY -- no stance row (the loop above is the only place one is written).
@@ -783,7 +897,8 @@ def _eff_tend(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     if p is None:
         return NO_CHANGE
     # v11 CP-T03-07: HEALS TOWARD THE PERSON'S OWN CEILING, never `condition_scale`: a marked man is restored to his mark.
-    whole = max(p.body, p.body_ceiling)
+    # B07.02 (18-A edit 5, D-05): the band lets a share of the headroom land (`_scaled`; share 1, or no band, is the whole).
+    whole = p.body + _scaled(max(p.body, p.body_ceiling) - p.body, res)
 
     def perform() -> None:
         p.body = whole
@@ -795,22 +910,25 @@ def _eff_train(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """v9 IN-12 step 9 (#453 §9.4; K-20, K-21) -- `train` RAISES ONE CAPABILITY OF THE SUBJECT BY ONE.
 
     THE CAPABILITY IS THE VOCATION THE ACT CARRIES on the operand `rosters.yaml: vocation_sourced` names
-    for its verb (`kind` for `train`), one Candidate per vocation in `verb_capability`'s range
+    for its verb (`kind` for `train`), one Candidate per vocation in `VOCATIONS` (the skills the verb table's `capability:` column names)
     (`decision/options.py::opening_set`). ⚠ J-13 ANSWERED (iii) AS THE INTERIM [medium; Jordan to
     correct]: it writes `Person.capability` ONLY WHERE A CASE NAMES A VOCATION -- so the key must be a
-    `verb_capability` value (K-20's range: Thread Sensitivity has no carrier, H-85, P-08) and the SUBJECT
-    must ALREADY hold it: a key is never minted, because a minted `{copying: 1}` would replace
-    `pool_default` and LOWER his pool (`seam/wrappers/sigma.py::faculty`). The ACTOR's own capability is
+    `VOCATIONS` member (K-20's range: Thread Sensitivity has no carrier, H-85, P-08) and the SUBJECT
+    need not hold it: a non-holder is minted `{key: 1}` (B05.09, `raised_capability`), his opposition and fight score unchanged until the rank
+    passes `pool_default` (`seam/wrappers/pool.py::score`), his social pool one die up (`::faculty`). The ACTOR's own capability is
     NOT read: capability gates nothing (#353 §9.2), here as at formation. ONE whole point, the unit of a
     dice count [ASSUMPTION; medium; Jordan to correct; revert: a swept fixture step].
 
-    DECLINES (`NO_CHANGE` -> `train.refused`): no such subject; a key that is no vocation; a subject who
-    holds none in it (a pupil whose case names no vocation)."""
+    DECLINES (`NO_CHANGE` -> `train.refused`): no such subject; a key that is no vocation; a rank at its
+    row's ceiling."""
     who = _operand(a, "subject")
     key = _operand(a, VOCATION_SOURCED[a.verb])
     p = w.persons.get(who)
     raised = raised_capability(p, key) if p is not None and key in VOCATIONS else None
-    if raised is None:
+    # B07.02: the ONE whole point is `_scaled` by the band, so a band short of the full effect lands no point (floor of one half is
+    # nothing). [ASSUMPTION: 18-A's "a `practice` mark the practice addend already reads" is not written -- `train` names no skill
+    # (`capability: none`), so `world_q.practice` keys nothing on it; basis: `VERB_CAPABILITY['train']` is empty]
+    if raised is None or not _scaled(1, res):
         return NO_CHANGE
 
     def perform() -> None:

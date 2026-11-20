@@ -1,0 +1,18 @@
+
+== [before] F11a a third party t (r5M) arranges a trial between a and b (both r2) at rig 1
+  no tie           tilt 0.99 arranged_by t against against | P(for) 0.325 +-0.047
+  tied to b +0.6   tilt 0.99 arranged_by t against for | P(for) 0.278 +-0.045
+  tied to a +0.6   tilt 0.99 arranged_by t against against | P(for) 0.325 +-0.047
+
+== [before] F11b a rally: a (r5M) urges, b (r2) the opposing party with no moves; b's regard for the arranger after a loss
+  arranger a: rig 0.0: regard(b->a) +0.079 | rig 0.5: regard(b->a) +0.084 | rig 1.0: regard(b->a) +0.083
+  arranger b: rig 0.0: regard(a->b) +0.021 | rig 0.5: regard(a->b) -0.070 | rig 1.0: regard(a->b) -0.189
+
+== [after] F11a a third party t (r5M) arranges a trial between a and b (both r2) at rig 1
+  no tie           tilt 0.0 arranged_by None against None | P(for) 0.312 +-0.046
+  tied to b +0.6   tilt 0.99 arranged_by t against for | P(for) 0.212 +-0.041
+  tied to a +0.6   tilt 0.99 arranged_by t against against | P(for) 0.420 +-0.049
+
+== [after] F11b a rally: a (r5M) urges, b (r2) the opposing party with no moves; b's regard for the arranger after a loss
+  arranger a: rig 0.0: regard(b->a) +0.079 | rig 0.5: regard(b->a) +0.017 | rig 1.0: regard(b->a) -0.067
+  arranger b: rig 0.0: regard(a->b) +0.039 | rig 0.5: regard(a->b) -0.067 | rig 1.0: regard(a->b) -0.192

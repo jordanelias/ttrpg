@@ -1,0 +1,35 @@
+== reproduce N p3:48/121 (seed 'sil', n=600, crown): accused b; `for` carried
+  [shipped] rest 0.400, argue 0.428, auto 0.327
+  [rule off] rest 0.298, argue 0.435, auto 0.313
+
+== P4.1-3 CHARGED side (accused b, `against`), fresh seed, n=1500; lower `for` carried = better for him
+  trial FORMAL(5)        crown     silence=refusal  std=5.0 | rest 0.379 argue(best) 0.448 answer-only 0.362 answer-else-best 0.362 press 0.435 auto 0.317 off:rest 0.311 off:auto 0.310
+  trial FORMAL(5)        theocracy silence=admits   std=6.0 | rest 0.407 argue(best) 0.439 answer-only 0.357 answer-else-best 0.357 press 0.451 auto 0.315 off:rest 0.309 off:auto 0.312
+  trial FORMAL(5)        commune   silence=free     std=4.0 | rest 0.309 argue(best) 0.447 answer-only 0.357 answer-else-best 0.357 press 0.390 auto 0.312 off:rest 0.309 off:auto 0.312
+  arbitration PLAIN(4)   crown     silence=refusal  std=4.0 | rest 0.395 argue(best) 0.453 answer-only 0.369 answer-else-best 0.369 press 0.432 auto 0.335 off:rest 0.329 off:auto 0.335
+  arbitration PLAIN(4)   theocracy silence=admits   std=5.0 | rest 0.411 argue(best) 0.441 answer-only 0.366 answer-else-best 0.366 press 0.443 auto 0.330 off:rest 0.323 off:auto 0.330
+  arbitration PLAIN(4)   commune   silence=free     std=3.0 | rest 0.297 argue(best) 0.427 answer-only 0.349 answer-else-best 0.349 press 0.381 auto 0.314 off:rest 0.297 off:auto 0.314
+  inquisition SOLEMN(6)  crown     silence=admits   std=6.0 | rest 0.413 argue(best) 0.425 answer-only 0.384 answer-else-best 0.384 press 0.350 auto 0.350 off:rest 0.323 off:auto 0.348
+  inquisition SOLEMN(6)  theocracy silence=admits   std=7.0 | rest 0.428 argue(best) 0.440 answer-only 0.387 answer-else-best 0.387 press 0.353 auto 0.353 off:rest 0.331 off:auto 0.351
+  inquisition SOLEMN(6)  commune   refused: inquisition is not lawful under commune
+  interrogation PLAIN(4) crown     silence=admits   std=4.0 | rest 0.397 argue(best) 0.437 answer-only 0.383 answer-else-best 0.383 press 0.355 auto 0.355 off:rest 0.317 off:auto 0.355
+  interrogation PLAIN(4) theocracy silence=admits   std=5.0 | rest 0.399 argue(best) 0.427 answer-only 0.377 answer-else-best 0.377 press 0.353 auto 0.353 off:rest 0.312 off:auto 0.354
+  interrogation PLAIN(4) commune   refused: inquisition is not lawful under commune
+
+== P4 UNCHARGED / bearer side (accuser a, `for`), other side automatic, n=1500; higher = better for him
+  trial                      silence=refusal  odds(unmoved)=0.277 | rest 0.245 argue(best) 0.240 answer-only 0.326 answer-else-best 0.326 press 0.327 auto 0.335
+  debate                     silence=free     odds(unmoved)=0.277 | rest 0.179 argue(best) 0.182 answer-only 0.253 answer-else-best 0.253 press 0.285 auto 0.269
+  questioning(bearer asks)   silence=refusal  odds(unmoved)=0.277 | rest 0.299 argue(best) 0.385 answer-only 0.390 answer-else-best 0.390 press 0.455 auto 0.440
+  conversation               silence=free     odds(unmoved)=0.277 | rest 0.277 argue(best) 0.360 answer-only 0.365 answer-else-best 0.365 press 0.401 auto 0.382
+
+== mean track move per draw-move between FLAT people (trial, both automatic vs both argue), n=1500
+  [both argue(best)] ('argue', 'answers', False): n=5319 mean toward speaker -0.02; ('argue', 'raises', False): n=6681 mean toward speaker +0.32
+  [auto] ('argue', 'answers', False): n=1059 mean toward speaker -0.45; ('argue', 'raises', False): n=2066 mean toward speaker +0.11; ('concede', 'concedes', False): n=983 mean toward speaker +1.39; ('press', 'presses', False): n=6304 mean toward speaker -0.40; ('press', 'presses', True): n=12 mean toward speaker -3.13; ('rest', 'rests', False): n=1445 mean toward speaker +0.00; ('rest', 'rests', True): n=3 mean toward speaker -2.50
+
+== PARTY-DECIDER silence (questioning: the questioned man b decides; conversation: b addressed decides), n=1500
+  questioning  silence=refusal decided_by=('b',) | rest 0.377 argue 0.399 concede 0.806 auto 0.421 off:rest 0.329 off:argue 0.399 off:concede 0.806 off:auto 0.420
+  conversation silence=free decided_by=('b',) | rest 0.343 argue 0.361 concede 0.792 auto 0.377 off:rest 0.343 off:argue 0.361 off:concede 0.792 off:auto 0.377
+
+== the fold: contumacy and regard after a silent sitting (trial crown, accused rests; and commune)
+  crown: contumacy claims in the judge's ledger per sitting 0.58; judge's regard for the silent man -0.058
+  commune: contumacy claims in the judge's ledger per sitting 0.00; judge's regard for the silent man +0.000

@@ -20,8 +20,8 @@ WHAT LIVES HERE, AND WHY ONLY HERE (CLAUDE.md §8 — every rule lives once):
   · `static_draw_sites()`  — AST inventory of every `rng.<method>(...)` call site in the engine.
     DETERMINISTIC and reachability-independent, so it catches a new draw site even on a branch no
     sweep exercises. This is the recurrence guard.
-  · `RecordingRandom`      — a `random.Random` subclass that records the ordered ENGINE-LEVEL draw
-    sites actually consumed, and separately counts underlying `random()` consumption.
+  · `RecordingRandom`      — a keyed `Draw` subclass that records the ordered ENGINE-LEVEL draw
+    sites actually consumed, and separately counts underlying `u()` consumption.
   · `underlying_random_calls()` / `engine_draw_sites()` — the two projections guards assert on.
 
 Any future batch that wants to claim "ablated at K=0 reproduces the prior engine" pins
@@ -34,12 +34,10 @@ TWO MEASURED FACTS THIS MODULE EXISTS TO KEEP TRUE (both verified 2026-07-30, `8
  1. **Draw count is input-conditional, strongly.** One fixed seed, longsword vs arming: 57
     underlying `random()` draws at `armour='none'` and **168 at `'heavy'`** — 2.9x. Seed parity
     across armour contexts is not experimental control.
- 2. **`random.Random.gauss` carries a parity latch.** It caches the second Box-Muller variate in
-    `self.gauss_next`, so k `gauss` calls consume `2*ceil(k/2)` underlying draws — 2 on odd calls,
-    0 on even. `core.resolve` -> `sigma_leverage.roll_net_continuous` -> `dice_engine` calls `gauss`
-    on the SAME object the engine draws `random()` from, so the bare-`random()` sub-stream is
-    shifted by 0 or 2 depending on how many resolutions happened first. The interleaving is
-    non-uniform, which is why "off by a constant number of draws" is not a usable correction.
+ 2. **`Draw.normal` always consumes two uniforms** (Box-Muller, no cache), so there is no parity latch: the
+    stdlib `gauss` that consumed 2 on odd calls and 0 on even is gone (B06.04). `core.resolve` ->
+    `sigma_leverage.roll_net_continuous` -> `dice_engine` calls `normal` on the SAME object the engine draws
+    `random()` from, and each call moves the sub-stream by exactly two.
 
 NOT A BEHAVIOUR CHANGE. This module is test-side only: `wrapper.fight(A, B, cfg, rng)` already
 accepts the RNG as a parameter, so nothing in the engine is touched, no golden can move, and the
@@ -47,15 +45,17 @@ instrument cannot perturb what it measures beyond the draws the engine itself re
 """
 import ast
 import os
-import random
 import sys
 
-# The complete set of `random.Random` methods the engine calls. Verified exhaustive by grep over the
-# engine package (`rng.<method>(`): random, randrange, uniform, betavariate — plus `gauss`, which the
-# engine reaches indirectly through core.resolve -> sigma_leverage.roll_net_continuous -> dice_engine.
+from engine.dice_engine import draw as _keyed
+
+# The complete set of `Draw` methods the engine calls. Verified exhaustive by grep over the
+# engine package (`rng.<method>(`): random, below, beta — plus `die` and `normal`, which the engine reaches
+# indirectly through core.resolve -> sigma_leverage.roll_net_continuous -> dice_engine; `pick` is the one the
+# season's `world_q` calls (not under the static scan's roots, listed so the recorder records it).
 # A method absent from this tuple is invisible to the recorder, so `test_draw_site_inventory_is_pinned`
 # cross-checks the STATIC scan (which needs no such list) against the dynamic trace.
-RNG_METHODS = ('random', 'randrange', 'uniform', 'betavariate', 'gauss')
+RNG_METHODS = ('random', 'below', 'die', 'pick', 'normal', 'beta')
 
 _ENGINE_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
@@ -78,7 +78,7 @@ def static_draw_sites(paths=None):
     (basename, lineno, method).
 
     AST-based rather than regex-based so a mention inside a comment or string cannot register as a
-    draw (`vocabulary.py:67` names `rng.randrange(3)` in prose — a regex counts it, this does not).
+    draw (`vocabulary.py:67` names `rng.below(3)` in prose — a regex counts it, this does not).
 
     Reachability-independent BY DESIGN. The dynamic sweep reaches `wrapper.py:363`/`:367` only 3 and
     1 times in 256 fights, so a dynamic-only pin would be one tuning change away from missing a new
@@ -123,24 +123,25 @@ def static_site_shape(paths=None):
 _THIS_FILE = os.path.basename(__file__)
 
 
-class RecordingRandom(random.Random):
-    """`random.Random` that records the ordered ENGINE-LEVEL draw sites it is asked for.
+class RecordingRandom(_keyed.Draw):
+    """A keyed `Draw` that records the ordered ENGINE-LEVEL draw sites it is asked for.
 
     Two counters, deliberately distinct — conflating them is what made the first version of this
     instrument report 31 sites, one of which was the instrument itself:
 
       · `trace`      — one entry per draw the ENGINE requested, as (module, lineno, method). Nested
-                       draws that a stdlib method makes internally (`gauss` calling `random()`,
-                       `betavariate` calling `gammavariate`) are NOT separate entries; they belong to
-                       the outer engine site. Enforced by `_depth`, not by frame heuristics.
-      · `underlying` — every `random()` consumed, including those nested calls. This is the quantity
+                       draws that a `Draw` method makes internally (`die` calling `below`, `normal` and
+                       `beta` calling `u()`) are NOT separate entries; they belong to the outer engine
+                       site. Enforced by `_depth`, not by frame heuristics.
+      · `underlying` — every `u()` consumed, including those nested calls. This is the quantity
                        that determines whether two runs are the same experiment.
 
-    Subclassing (rather than wrapping) is required: `dice_engine` calls `rng.gauss(...)`, and
-    `random.Random.gauss` calls `self.random()` — only a subclass sees that inner call."""
+    Subclassing (rather than wrapping) is required: `dice_engine` calls `rng.normal(...)`, which
+    calls `self.u()` — only a subclass sees that inner call. The stream is the keyed one: the seed
+    is spelled as `draw.H2("_draw_stream", seed)`, the key form of a caller with an integer seed."""
 
     def __init__(self, seed):
-        super().__init__(seed)
+        super().__init__(_keyed.H2("_draw_stream", seed))
         self.trace = []
         self.underlying = 0
         self._depth = 0
@@ -154,17 +155,15 @@ class RecordingRandom(random.Random):
         which silently attributed 6,470 draws to a single wrapper line. Hence the cross-check against
         the static scan; an off-by-one here is not visibly wrong on its own."""
         f = sys._getframe(2)
-        while f is not None and os.path.basename(f.f_code.co_filename) in ('random.py', _THIS_FILE):
+        while f is not None and os.path.basename(f.f_code.co_filename) in ('draw.py', _THIS_FILE):
             f = f.f_back
         return (os.path.basename(f.f_code.co_filename), f.f_lineno) if f is not None else ('?', 0)
 
 
 def _make_recorder(method_name):
-    base = getattr(random.Random, method_name)
+    base = getattr(_keyed.Draw, method_name)
 
     def wrapped(self, *args, **kwargs):
-        if method_name == 'random':
-            self.underlying += 1
         if self._depth == 0:
             self.trace.append(self._site() + (method_name,))
         self._depth += 1
@@ -179,6 +178,16 @@ def _make_recorder(method_name):
 for _m in RNG_METHODS:
     setattr(RecordingRandom, _m, _make_recorder(_m))
 del _m
+
+_draw_u = _keyed.Draw.u
+
+
+def _counted_u(self):
+    self.underlying += 1
+    return _draw_u(self)
+
+
+RecordingRandom.u = _counted_u
 
 
 # ---------------------------------------------------------------------------

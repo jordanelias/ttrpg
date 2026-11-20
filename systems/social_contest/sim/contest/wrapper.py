@@ -397,7 +397,7 @@ def _stage3_resolution_invocation_check():
             tot = 0.0; lev = _Lv.net(5, on_ground=True)
             for s in range(N):
                 _r.seed(s); pool = _Pl.size(5) + bonus
-                from .resolver import roll_net as _rnet
+                from .resolver import roll_net_continuous as _rnet
                 tot += _rnet(pool) + _nbst(lev, pool)
             return tot / N
         if not (_mean_net(1.0) > _mean_net(0.0) + 0.05):

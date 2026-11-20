@@ -23,6 +23,7 @@ from __future__ import annotations
 import dataclasses
 import inspect
 import random
+from engine.dice_engine import draw
 import re
 
 import yaml
@@ -55,7 +56,7 @@ def _sweep_of(hid):
     reading): the arms come from the register, never from this file."""
     rows = yaml.safe_load(files.HOLE_REGISTER_YAML.read_text())["rows"]
     (row,) = [r for r in rows if r["id"] == hid]
-    return row["sweep"], row["site"].split(",")[0].split()[-1]
+    return row["sweep"], (row["site"] if hid == "H-210" else row["site"].split(",")[0].split()[-1])
 
 
 def _lean(e):
@@ -234,6 +235,17 @@ def test_step24_the_matrix_row_has_its_producer_and_the_lean_has_one_owner():
 # STEP 25 -- the forgery's quality: written by forging, contested by examination
 # ======================================================================================
 
+DEFAULT_QUALITY = 1   # `forge_quality`'s `Success` row, the shipped value (the old `default_forgery_quality`)
+
+
+def _quality(q):
+    """B07.02: `Fixtures.default_forgery_quality` is retired; a flat `forge` reads `rosters.yaml: forge_quality`'s `Success` row, so
+    the swept point `H-210` names is that row's value, patched for the world built inside the `with`."""
+    from unittest import mock
+    from ..data.rosters import FORGE_QUALITY, UNROUTED_BAND
+    return mock.patch.dict(FORGE_QUALITY, {UNROUTED_BAND: q})
+
+
 def _fx(**kv):
     f = DEFAULT_FIXTURES
     for k, v in kv.items():
@@ -241,10 +253,11 @@ def _fx(**kv):
     return f
 
 
-def _research_out(n, **fx):
+def _research_out(n, quality=None, **fx):
     """`trail_world` at `fx`, then the investigator's chooser-formed `research` `n` on the forged Record,
     resolved and witnessed. Returns `(w, rid, finding Event)`."""
-    w, d, rid = trail_world(fixtures=_fx(**fx))
+    with _quality(DEFAULT_QUALITY if quality is None else quality):
+        w, d, rid = trail_world(fixtures=_fx(**fx))
     cand = chooser_research(w, rid)
     assert cand is not None
     (finding,) = step(w, d, research(n, cand))
@@ -254,10 +267,11 @@ def _research_out(n, **fx):
 def test_step25_forge_writes_the_quality_and_survey_does_not():
     """THE WRITER, through the fold, at each of `H-210`'s declared points: the forged Record carries the
     arm's quality; a SURVEY (the same body, `_mint_sheet`, the same id and hand) carries `0`."""
-    points, fixture = _sweep_of("H-210")
-    assert fixture == "default_forgery_quality" and 0 in points and len(points) == 3, (fixture, points)
+    points, site = _sweep_of("H-210")
+    assert "rosters.yaml: forge_quality" in site and 0 in points and len(points) == 3, (site, points)
     for point in points:
-        w, _d, rid = trail_world(fixtures=_fx(**{fixture: point}))
+        with _quality(point):
+            w, _d, rid = trail_world()
         assert w.records[rid].forgery_quality == point, (point, w.records[rid].forgery_quality)
     w, _d, rid = trail_world(verb="survey", kind="faction.surveyed")
     assert w.records[rid].forgery_quality == 0
@@ -265,10 +279,10 @@ def test_step25_forge_writes_the_quality_and_survey_does_not():
 
 def test_step25_falsifier_the_examination_reads_the_quality_into_its_obstacle():
     """THE READER, through the real adapter and module entry: an inquiry (no prize) on the forged Record
-    rolls against `obstacle_default + quality` where the ceiling allows it (the uncapped `None` arm),
-    and against the default at quality `0`. A CONTEST naming a prize on the same Record reads no quality
+    rolls against `base + quality` where the ceiling allows it (the uncapped `None` arm), and against `base` at quality `0`, `base` being
+    what no person opposite composes: the act's level plus `opposed_ob(pool_default)` (B05.14; it was `obstacle_default`). A CONTEST naming a prize on the same Record reads no quality
     (only an examination contests it; the gate is observed by
-    `test_step25_a_prize_contest_examines_nothing...`). At the SHIPPED ceiling (2, `= obstacle_default`) the forgery is
+    `test_step25_a_prize_contest_examines_nothing...`). At the SHIPPED ceiling (2) the forgery is
     bounded to the default -- the stated limit, pinned so a ceiling change shows here -- ON THE FIXED ARM.
     CP-T01-06 ships the per-pool arm (`ceiling_per_pool`): a pool whose solved cap is above the default lets
     the quality bite (`pool_default` 30 below: the cap is far above 5), so there the forgery reads in full."""
@@ -276,15 +290,22 @@ def test_step25_falsifier_the_examination_reads_the_quality_into_its_obstacle():
     for q in (0, 1, 3):
         for ceiling, per_pool in ((None, False), (DEFAULT_FIXTURES.get("obstacle_ceiling"), False),
                                   (DEFAULT_FIXTURES.get("obstacle_ceiling"), True)):
-            w, _d, rid = trail_world(fixtures=_fx(default_forgery_quality=q, obstacle_ceiling=ceiling,
-                                                  ceiling_per_pool=per_pool, pool_default=30))
+            with _quality(q):
+                w, _d, rid = trail_world(fixtures=_fx(obstacle_ceiling=ceiling,
+                                                      ceiling_per_pool=per_pool, pool_default=30))
             out = sigma.resolve(w, [INVESTIGATOR], ["root"], None, verb="research", subject=rid,
-                                rng=random.Random(0), module_entry="social_contest.roll")
+                                rng=draw.seeded(draw.H2("test_sc02_22b_consequence_and_forgery", 0)), module_entry="social_contest.roll")
             assert out["status"] == "RESOLVED", out
             obs[(q, ceiling, per_pool)] = out["ob"]
             inp = sigma.contest_input(w, [INVESTIGATOR], verb="research", subject=rid)
             assert inp.forgery_quality == 0.0, "a contest with no `examined` read the quality"
-    base = DEFAULT_FIXTURES.get("obstacle_default")
+    # B05.99 re-pin (B05.14's even line, B05.23's sizes): the even line + `research`'s level + the stand-in `opposed_ob(30, rate)`,
+    # folded left to right as the module folds; was `routine + 0.5 x 30` at the control sizes
+    from engine.dice_engine.sigma_leverage import even_line, opposed_ob
+    base = 0.0
+    for term in (even_line(DEFAULT_FIXTURES.get("pool_add")), DEFAULT_FIXTURES.get("difficulty_ob")[VERB_TABLE["research"].difficulty],
+                 opposed_ob(30, DEFAULT_FIXTURES.get("opposition_rate"))):
+        base += term
     shipped = DEFAULT_FIXTURES.get("obstacle_ceiling")
     assert [obs[(q, None, False)] for q in (0, 1, 3)] == [base, base + 1, base + 3], obs
     assert [obs[(q, shipped, False)] for q in (0, 1, 3)] == [min(base, shipped)] * 3, obs
@@ -294,20 +315,20 @@ def test_step25_falsifier_the_examination_reads_the_quality_into_its_obstacle():
 def test_step25_a_prize_contest_examines_nothing_and_an_inquiry_examines_its_subject(monkeypatch):
     """The adapter's gate, `examined = subject if prize is None else None`: an inquiry (no prize) hands the
     Record to the input builder, a contest a prize names hands it nothing, so a `speak` on the same
-    Record reads no forgery quality. Observed through a spy on `contest_input`'s `examined` (the
+    Record reads no forgery quality. Observed through a spy on `_read_social_roll`'s `examined` (the
     gate is a branch in `resolve`, and the builder's own default is not it)."""
     w, _d, rid = trail_world(fixtures=_fx(obstacle_ceiling=None))
     seen = []
-    real = sigma.contest_input
+    real = sigma._read_social_roll
 
     def spy(*args, **kw):
         seen.append(kw.get("examined"))
         return real(*args, **kw)
-    monkeypatch.setattr(sigma, "contest_input", spy)
+    monkeypatch.setattr(sigma, "_read_social_roll", spy)
     sigma.resolve(w, [INVESTIGATOR], ["root"], "a matter", verb="speak", subject=rid,
-                  rng=random.Random(0), rung=None)
+                  rng=draw.seeded(draw.H2("test_sc02_22b_consequence_and_forgery", 0)), rung=None)
     sigma.resolve(w, [INVESTIGATOR], ["root"], None, verb="research", subject=rid,
-                  rng=random.Random(0))
+                  rng=draw.seeded(draw.H2("test_sc02_22b_consequence_and_forgery", 0)))
     assert seen == [None, rid], seen
 
 
@@ -319,8 +340,8 @@ def test_step25_a_better_forgery_is_found_less_and_finding_it_deposits_the_forge
     finds nothing and leaves him holding no such claim: *finding nothing leaves it standing*."""
     flipped = compared = 0
     for n in range(SWEEP):
-        w0, _r0, f0 = _research_out(n, default_forgery_quality=0, obstacle_ceiling=None)
-        w1, _r1, f1 = _research_out(n, default_forgery_quality=1, obstacle_ceiling=None)
+        w0, _r0, f0 = _research_out(n, quality=0, obstacle_ceiling=None)
+        w1, _r1, f1 = _research_out(n, quality=1, obstacle_ceiling=None)
         assert DEGREE_STEP[f1.degree] <= DEGREE_STEP[f0.degree], (n, f0.degree, f1.degree)
         compared += 1
         if f0.kind == "finding.made" and forged_claims(w0, INVESTIGATOR) and f1.kind == "finding.none":

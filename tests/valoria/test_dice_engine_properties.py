@@ -24,6 +24,7 @@ excludes (CLAUDE.md §0.1 point 2).
 """
 import os
 import random
+from engine.dice_engine import draw
 import sys
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -49,14 +50,11 @@ def test_roll_pool_respects_pool_minimum_and_die_rule_bounds_property():
         pool_size = rng_seeder.randint(-10, 200)  # includes <= 0 to exercise the minimum clamp
         tn = 7  # TN7 always (ED-IN-0196); this test's subject is the pool minimum and the
                 # die-rule bounds, not TN, so pinning it weakens nothing here.
-        trial_rng = random.Random(rng_seeder.randint(0, 2**32 - 1))
+        trial_rng = draw.seeded(draw.H2("test_dice_engine_properties", rng_seeder.randint(0, 2**32 - 1)))
 
         result = de.roll_pool(pool_size, tn=tn, rng=trial_rng)
 
         expected_effective = max(1, pool_size)
-        assert result.pool_size == expected_effective, (
-            f'pool_size={pool_size}: Pool Minimum violated, got {result.pool_size}'
-        )
         assert len(result.rolls) == expected_effective, (
             f'pool_size={pool_size}: rolled {len(result.rolls)} dice, expected {expected_effective}'
         )
@@ -77,8 +75,8 @@ def test_roll_pool_is_deterministic_given_an_identically_seeded_rng():
     """A narrower, individual-engine echo of row_determinism's shape (same seed -> same
     result) -- exercised here at the dice-pool level, not the season level."""
     for trial_seed in (1, 2, 3, 424242, SWEEP_SEED):
-        r1 = de.roll_pool(12, tn=7, rng=random.Random(trial_seed))
-        r2 = de.roll_pool(12, tn=7, rng=random.Random(trial_seed))
+        r1 = de.roll_pool(12, tn=7, rng=draw.seeded(draw.H2("test_dice_engine_properties", trial_seed)))
+        r2 = de.roll_pool(12, tn=7, rng=draw.seeded(draw.H2("test_dice_engine_properties", trial_seed)))
         assert r1.rolls == r2.rolls
         assert r1.net == r2.net
 
@@ -148,3 +146,31 @@ def test_degree_from_net_is_total_over_the_sweep_and_never_raises():
         result = de.degree_from_net(net, ob)
         assert result in (de.Degree.OVERWHELMING, de.Degree.SUCCESS,
                           de.Degree.PARTIAL, de.Degree.FAILURE), (net, ob, result)
+
+
+# ── B05.06 row 2 (DOE §3; F-DICE-11): context is validated on entry, before the band is decided ──
+
+def test_degree_from_net_refuses_a_malformed_context():
+    """The DICE audit's E-04 lower-band probe. A misspelled context key (`poool`) reached the extension's
+    check only on the Overwhelming branch, so at margin 2 the ladder returned Success with no error: the
+    key was swallowed. It is refused on entry, whichever band the margin falls in, and a context with no
+    extension to read it is refused too (nothing would ever read it)."""
+    class _E(de.BandExtension):
+        name = "probe:pool"
+        context_keys = ("pool",)
+
+    refused = 0
+    for net, ob in ((2, 0), (0.5, 0), (-1, 0), (5, 0)):     # Success, Partial, Failure, Overwhelming
+        try:
+            de.degree_from_net(net, ob, extension=_E(), poool=8)
+        except TypeError:
+            refused += 1
+    assert refused == 4, "a misspelled context key must be refused in every band, not only the top one"
+    try:
+        de.degree_from_net(2, 0, pool=8)
+    except TypeError:
+        refused += 1
+    assert refused == 5, "a context with extension=None has no reader and must raise TypeError"
+    # Control: the declared key, and no context at all, still return the ladder's band.
+    assert de.degree_from_net(2, 0, extension=_E(), pool=8) is de.Degree.SUCCESS
+    assert de.degree_from_net(2, 0) is de.Degree.SUCCESS

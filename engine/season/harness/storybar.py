@@ -15,6 +15,19 @@ Entry point: `python -m engine.season.harness.storybar --base-seed S --n N --sea
 `--base-seed S --seasons K --draw-seeds D D ...` (REM-15) replaces `--n`/`--arms`: one realm built from `S`,
 deep-copied per draw seed, only the chooser's draw varied (`draw_seed_arm`, which states the two residues).
 
+`--base-seed S [S ...] --seasons K --remove [PERSON] [--at SEASON LAP]` (the removal test, `removal_arm`):
+one realm per seed, one person's choice suppressed at one lap, the others' acts that differ counted. With no
+PERSON it takes `most_cited`'s and prints the name. Each seed's report ends on two verdict lines,
+`R-01.c  others' acts differing: <n>  (replay <0>)` and `R-02.b  differing at a later (season, round): <m>`
+(`removal_verdict`, which also says what each reading is expected to be). This is the only mode that takes
+several seeds.
+
+`--base-seed S [S ...] --seasons K --null-scenes` (`null_scenes`, IS-A-07, A-81): one realm per seed under the
+shipped arm, and per seed, per season and pooled the count of acts that left no durable write, as `null_scenes
+total=<n> null=<n> | <verb/class=n, ...>`. Report-only: it asserts no zero. Takes no `--n` or `--arms`;
+`harness/aperture.py` prints the same reading as its NULL SCENES block. `null_scenes` owns the definitions of
+a durable write and of a null scene.
+
 THE READING (`read`, a pure function over the log and `SeasonDriver.act_of`, so a test can plant on
 it). For each Event in the log its act is `act_of[e.id]`; an act's antecedents are, over every cause
 `c` of every Event of that act:
@@ -42,8 +55,8 @@ the forcing-off control, and the two arms must read equal. A forcing position ad
 and applies it to the freshly built World before the chooser is made, the idiom `harness/arms.py` and
 `harness/soak.py` use for a fixture sweep.
 
-THE COMPOSITION is `populated.run`'s (`build_realm`, `SeasonDriver`, `make_chooser` over
-`resolvable_verbs()`, `draw_factory`, the caller-passed `contest_max_depth`),
+THE COMPOSITION is `populated.run`'s (`build_realm`, `SeasonDriver`, `probes.chooser` over
+`resolvable_verbs()`, the caller-passed `contest_max_depth`),
 repeated here rather than called because `populated.run` exposes no per-season boundary in the log
 -- the same reason `harness/soak.py` gives for keeping its own driver.
 
@@ -55,8 +68,9 @@ as refused and is reported apart (`corpus_run.graded_losses`); `attribute`'s `ma
 counts a graded loss as made). `executed_summary` is its own small summary, not `summarise`'s four
 classes. Without the flag the CLI prints exactly what it printed before. It mints no carrier.
 
-ARCS ARE OUT OF SCOPE BY DECISION (`ED-IN-0225`): this reads the cause graph the loop already writes
-and mints no carrier, field, Event kind or register row for an arc, story or thread.
+AN ARC HAS NO CARRIER (`ED-IN-0225`, 2026-09-13: no type, no rung, no tenure kind; the carrier is not
+to be built): this reads the cause graph the loop already writes and mints no carrier, field, Event
+kind or register row for an arc, story or thread.
 
 THE ESTIMATES (`estimates`, v9 IN-23 CARRY-STABILITY), read after each season beside the reading above
 and changing none of it: every person's own `queries/person_q.py::legitimacy` of every live seat-holder
@@ -72,19 +86,27 @@ import argparse
 import copy
 import os
 import sys
-from collections import Counter
+from collections import Counter, defaultdict
 
-from ..decision import make_chooser
+from ..data.matrix import MATRIX, Step
 from ..loop.driver import SeasonDriver, resolvable_verbs
+from ..data.verbs import opportunity_key
 from ..queries.person_q import legitimacy, stability
-from ..state.ids import H, ROOT, draw_factory
-from .aperture import seats
-from .corpus_run import attempts, graded_losses
-from .populated import build_realm
+from ..state.carriers import Receipt, subject_of
+from ..state.gate import TENURE_CLOSED
+from ..state.ids import ROOT
+from .arc import _Records
+from .corpus_run import attempts, graded_losses, refusal_sets, seats
+from . import probes as P
+from ..boot.realm import COHORT_PREFIX, build_realm
 
 #: Every forcing setting this tree can run. `off` is the shipped loop; no `on` is built (see the
 #: module docstring). A forcing position adds its own arm here.
 ARMS = ("off",)
+
+#: What `--remove` with no person names: the sentinel `main` swaps for `most_cited`'s person. Not a
+#: person id of any realm (a person is `p_...`).
+MOST_CITED = "<most-cited>"
 
 #: The four antecedent classes, in precedence order (highest first).
 CLASSES = ("cross", "own", "world", "none")
@@ -212,17 +234,6 @@ def per_season(acts, seasons: int) -> list:
 # THE EXECUTED READING (CR-15). Beside the one above, never instead of it.
 # ---------------------------------------------------------------------------------------------
 
-def refusal_sets(w, n: int) -> tuple:
-    """`(refused, graded)`, two frozensets of act ids over the ACT STORE of `w` after `n` seasons.
-    An act is REFUSED when `corpus_run.attempts`' `refused` tuple for it is non-empty -- any Event of
-    one of its row's `emits_on_refusal` kinds is in the log, the driver's rule (`loop/driver.py`), so a
-    graded loss counts as refused. `graded` is `corpus_run.graded_losses`: the refused acts that are
-    losses of a contest rather than refusals (every one of them is also in `refused`). Neither reads
-    `attribute`'s `made`, which counts a graded loss as made too. Reads only."""
-    refused = frozenset(a.id for a, _made, ref in attempts(w, n) if ref)
-    return refused, frozenset(a.id for a in graded_losses(w, n))
-
-
 def executed_items(acts: dict, executed: dict, refused, graded) -> list:
     """`[(default_row, executed_row_or_None, is_refused, is_graded_loss)]` per act of `read`'s `"acts"`,
     `executed` its `"executed"`. A plain list, so a season's slice or several seeds' rows pool by
@@ -260,6 +271,136 @@ def executed_per_season(items, seasons: int) -> list:
              executed_summary(i for i in rows if i[0]["season"] <= s)) for s in range(seasons)]
 
 
+# ---------------------------------------------------------------------------------------------
+# THE NULL SCENES READING (IS-A-07, A-81). Report-only; beside the reading above, never instead of it.
+# ---------------------------------------------------------------------------------------------
+
+#: The `(kind, field)` cell a claim deposit writes (`write_matrix.yaml`), and the one write the count
+#: restricts to a holder who matters to the act.
+CLAIM_CELL = ("Person", "claim_ledger")
+
+#: The outcome classes of `null_scenes`, in print order. An act none of whose row's kinds is in the log
+#: (`attempts` gives it neither `made` nor `refused`) is classed `neither` and counted, not dropped.
+NULL_CLASSES = ("made", "refused", "graded_loss", "neither")
+
+
+def _seat_holders(w, subject: str) -> frozenset:
+    """Who an act's `subject` stands for: the person himself, or the live holders of the office it names
+    (`corpus_run.seats`' inverse); nobody for anything else."""
+    if subject in w.persons:
+        return frozenset({subject})
+    if subject in w.offices:
+        return frozenset(pid for pid, oids in seats(w).items() if subject in oids)
+    return frozenset()
+
+
+def null_scenes(w, n: int, scope=None, rows=None, graded=None) -> dict:
+    """`{"total": int, "null": Counter((verb, cls))}` over `corpus_run.attempts(w, n)`, the one owner of
+    made and refused: how many acts there are, and which of them left no durable write.
+
+    A *durable write* is a Receipt on a `write_matrix.yaml` cell whose `steps` include `RES` or `WIT`,
+    other than the scene budget's own cell; a claim deposited in the actor's or a counterparty's ledger
+    counts; a sighting in a bystander's ledger alone does not (the act must matter to someone in it).
+    `[ASSUMPTION; medium; Jordan to correct; revert: any claim counts]`. A-62: the budget is a Query and
+    writes no cell, so nothing is excluded for it; if a later build makes the debit a write, that cell is
+    excluded by name here. A *null scene* is an act none of whose Events carries a durable write.
+
+    An act's Events are those that name it in `causes[]` and, for a claim deposit, those caused by one of
+    them (`loop/witness.py` gives a deposit the witnessed Event as its cause, not the act). A Receipt is
+    read as the cell it wrote by `arc._Records.of`, the one reader of that, and a seat Receipt on a
+    `tenure.closed` Event is skipped as `arc.read_arcs` skips it. The deposit's holder is read off the
+    ledgers as the world ends, so a claim evicted from its ledger has no holder and does not count.
+    The counterparty is `subject_of(act)` when it is a person, or the live holder of the office it names.
+
+    `cls` is `graded_loss` where `corpus_run.graded_losses` has the act, else `refused` where the act has
+    a refusal kind in the log (so a `march` that both declared and was refused is `refused`), else `made`,
+    else `neither`.
+
+    `scope`, `None` by default, is a predicate over an attempt of `attempts` (`(act, made, refused)`) that
+    narrows WHICH acts are counted and changes nothing in what counts as a write [ASSUMPTION: the scope is
+    an argument of this function, not a filter each caller writes -- basis: one owner of the count,
+    CLAUDE.md §8; it adds no rule]. `rows` and `graded`, `None` by default, are `attempts(w, n)` and the ids
+    of `graded_losses(w, n)` where a caller already holds them (`null_by_season` asks once per season over the
+    same world); with `None` each is read here. Reads only."""
+    records = _Records(w)
+    named: dict = defaultdict(list)    # act id -> the Events naming it in `causes[]`
+    by_event: dict = defaultdict(set)  # Event id -> the ids of the acts naming it
+    events = list(w.log)
+    for e in events:
+        for c in e.causes:
+            if w.acts.get(c) is not None:
+                named[c].append(e)
+                by_event[e.id].add(c)
+    for e in events:
+        if any(isinstance(r, Receipt) and (records.of(r, e)[0] == CLAIM_CELL) for r in e.changes):
+            for c in e.causes:
+                for aid in by_event.get(c, ()):
+                    if aid not in by_event.get(e.id, ()):
+                        named[aid].append(e)
+    rows = attempts(w, n) if rows is None else rows
+    graded = frozenset(a.id for a in graded_losses(w, n)) if graded is None else graded
+    total, null = 0, Counter()
+    for attempt in rows:
+        a, made, refused = attempt
+        if scope is not None and not scope(attempt):
+            continue
+        total += 1
+        mine = {a.actor} | _seat_holders(w, subject_of(a))
+        durable = False
+        for e in named.get(a.id, ()):
+            for r in e.changes:
+                if not isinstance(r, Receipt) or (e.kind == TENURE_CLOSED and r.subject in w.offices):
+                    continue
+                pair, owner = records.of(r, e)
+                row = MATRIX.get(pair)
+                if row is None or not (Step.RESOLVE in row.steps or Step.WITNESS in row.steps):
+                    continue
+                if pair == CLAIM_CELL and owner not in mine:
+                    continue
+                durable = True
+                break
+            if durable:
+                break
+        if not durable:
+            null[(a.verb, "graded_loss" if a.id in graded else "refused" if refused
+                  else "made" if made else "neither")] += 1
+    return {"total": total, "null": null}
+
+
+def pool_null(readings) -> dict:
+    """`null_scenes`' return summed over `readings`, an iterable of such returns (one per seed)."""
+    out = {"total": 0, "null": Counter()}
+    for r in readings:
+        out["total"] += r["total"]
+        out["null"].update(r["null"])
+    return out
+
+
+def null_line(r: dict) -> str:
+    """`null_scenes total=<n> null=<n> | <verb/cls=n, ...>`, the largest count first, one owner of the
+    line `--null-scenes` prints and `aperture`'s NULL SCENES block ends on."""
+    parts = ", ".join(f"{v}/{c}={k}" for (v, c), k in sorted(r["null"].items(),
+                                                           key=lambda kv: (-kv[1], kv[0])))
+    return f"null_scenes total={r['total']} null={sum(r['null'].values())} | {parts or 'none'}"
+
+
+def null_by_season(seed: int, seasons: int, cap=None) -> tuple:
+    """`([season reading, ...], whole-run reading)` of `null_scenes` over one seeded realm run `seasons`
+    seasons under the shipped arm. A season's reading is `null_scenes` with the `scope` of the acts the
+    act store took in that season (the store is append-only, so the lengths at each season's end cut it)."""
+    ends: list = []
+    w, _d, _bounds = drive(seed, seasons, "off", cap, on_season=lambda w_, _s, _n: ends.append(len(w_.acts)))
+    store, per, lo = tuple(w.acts), [], 0
+    rows = attempts(w, seasons)
+    graded = frozenset(a.id for a in graded_losses(w, seasons))
+    for hi in ends:
+        ids = frozenset(a.id for a in store[lo:hi])
+        per.append(null_scenes(w, seasons, scope=lambda attempt, ids=ids: attempt[0].id in ids,
+                               rows=rows, graded=graded))
+        lo = hi
+    return per, null_scenes(w, seasons, rows=rows, graded=graded)
+
+
 def _spread(values) -> dict:
     vals = list(values)
     n = len(vals)
@@ -286,7 +427,7 @@ def estimates(w) -> dict:
 # ---------------------------------------------------------------------------------------------
 
 def drive(seed: int, seasons: int, arm: str, cap=None, on_season=None, world=None,
-          draw_seed=None) -> tuple:
+          draw_seed=None, wrap_chooser=None) -> tuple:
     """Build the realm, run `seasons` seasons under `arm`; return `(world, driver, bounds)`.
 
     `on_season(world, season summary, events logged this season)`, when given, is called after each
@@ -296,15 +437,21 @@ def drive(seed: int, seasons: int, arm: str, cap=None, on_season=None, world=Non
     to nothing, which is the shipped reading unchanged: `world`, when given, is a built World this
     call runs instead of building one (`seed` and `cap` are then unused); `draw_seed`, when given,
     replaces `w.world_seed` as the seed of the CHOOSER'S `draw_factory` and of nothing else -- the
-    act-id mint below and every draw inside the driver keep `w.world_seed`."""
+    act-id mint below and every draw inside the driver keep `w.world_seed`.
+
+    `wrap_chooser` is the removal test's seam (`removal_arm`), `None` by default, which is the shipped
+    reading unchanged: `wrap_chooser(chooser) -> chooser` is applied once to the chooser before the
+    first season. A wrapper must know which lap it is in, a fact only the driver holds (`SeasonDriver.
+    lap`, a driver local by D-21), so when a wrapper is given the chooser it receives carries the
+    driver as `.driver`; with `None` the chooser is handed to the loop untouched."""
     if arm not in ARMS:
         raise ValueError(f"forcing arm {arm!r} is not built; this tree runs {ARMS}")
     w = build_realm(seed, cap) if world is None else world
     d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                      draw=draw_factory(w.world_seed if draw_seed is None else draw_seed,
-                                        lambda: w.tick))
+    ch = P.chooser(w, verbs=resolvable_verbs(), draw_seed=draw_seed)
+    if wrap_chooser is not None:
+        ch.driver = d
+        ch = wrap_chooser(ch)
     bounds = []
     for _ in range(seasons):
         bounds.append(len(w.log))
@@ -448,6 +595,175 @@ def chain_difference(a: Counter, b: Counter) -> int:
     return sum(abs(a.get(k, 0) - b.get(k, 0)) for k in set(a) | set(b))
 
 
+# ---------------------------------------------------------------------------------------------
+# THE `--remove` ARM: suppress one person's choice at one lap, on one built world.
+# ---------------------------------------------------------------------------------------------
+
+def _removing(who, when, stamps: dict, fired: list):
+    """The `wrap_chooser` of `removal_arm`: a chooser that returns nothing for person `who` when
+    `(tick, lap) == when`, and records, for every act any other call returns, the `(tick, lap)` it was
+    chosen at (`stamps[id(act)] = (at, act)`; the act is kept so its `id()` is not reused). `who=None`
+    removes nobody: the stamping alone, the replay control."""
+    def wrap(chooser):
+        d = chooser.driver
+
+        def choose(p, v, s, ask_budget):
+            at = (d.w.tick, d.lap)
+            if who is not None and p.id == who and at == when:
+                fired.append(at)
+                return []
+            out = chooser(p, v, s, ask_budget)
+            for item in out:
+                for a in getattr(item, "acts", (item,)):
+                    stamps[id(a)] = (at, a)
+            return out
+        return choose
+    return wrap
+
+
+def _removal_run(base, seasons: int, who, when, draw_seed=None) -> tuple:
+    """`(multiset, fired, end_hash)` of ONE copy of `base` run `seasons` seasons with `who`'s choice
+    suppressed at `when`. The multiset is over EVERY person's attempted acts (the act store), keyed
+    `(actor, tick, lap, verb, opportunity, "executed" | "refused")`, the tick and lap being those the
+    act was CHOSEN at; a refusal is `corpus_run.attempts`' (the one owner of the made/refused rule).
+    `fired` is how many times the wrapper suppressed a call: 0 means the removal never happened and the
+    reading is a replay's, not a removal's."""
+    stamps: dict = {}
+    fired: list = []
+    w = fork(base)
+    w, _d, bounds = drive(w.world_seed, seasons, "off", world=w, draw_seed=draw_seed,
+                          wrap_chooser=_removing(who, when, stamps, fired))
+    read_ = Counter()
+    for a, _made, refused in attempts(w, len(bounds)):
+        (tick, lap), _a = stamps[id(a)]
+        read_[(a.actor, tick, lap, a.verb, opportunity_key(a.verb, subject_of(a), a.payload),
+               "refused" if refused else "executed")] += 1
+    return read_, len(fired), w.content_hash()
+
+
+def _others(acts: Counter, who) -> Counter:
+    """`acts` without person `who`'s keys (`who=None`: all of them)."""
+    return Counter({k: n for k, n in acts.items() if who is None or k[0] != who})
+
+
+def removal_arm(base, seasons: int, who: str, when: tuple) -> dict:
+    """THE REMOVAL TEST (CLAUDE.md §4: the word and its definition). *Suppress one person's choice at
+    one lap and count how many of the other persons' acts differ from the unperturbed copy.*
+
+    ONE built world `base`, deep-copied (`fork`, as `draw_seed_arm` does), run `seasons` seasons through
+    `drive` with the chooser wrapped (`drive(wrap_chooser=...)`) to return no scene for person `who`
+    at `(tick, lap) == when` -- `when` is `(season index, lap index)`, the tick and `SeasonDriver.lap`
+    (named `lap` since the rename `PCR-4`; a lap is one pass of the season's scene budget).
+    Returns the multiset of the OTHER persons' `(actor, tick, lap, verb, opportunity, executed |
+    refused)`; `chain_difference` of two such multisets is the acts that differ. `who=None` removes
+    nobody and returns every person's acts. `base` is never run, so it stays unmutated; every draw is
+    keyed `H(seed, tick, subject, purpose)`, so removing one choice shifts no other person's draw."""
+    return _others(_removal_run(base, seasons, who, when)[0], who)
+
+
+def citation_counts(acts: dict) -> Counter:
+    """`{person: n}` over `read`'s `acts`: `n` is how many (act, antecedent act) pairs name an act of that
+    person as a CROSS-person antecedent of another person's act, i.e. the actor of the most antecedents
+    of other persons' acts is the person whose acts others' acts most answer. Counted per antecedent
+    ACT, as `read` classes them (a cause Event of the same act twice is one antecedent), not per cause
+    Event [ASSUMPTION: the act is the unit `read` already uses; revert: count the cross causes]."""
+    out: Counter = Counter()
+    for row in acts.values():
+        for b in row["cross"]:
+            if b in acts:
+                out[acts[b]["actor"]] += 1
+    return out
+
+
+def most_cited(base, seasons: int = 1) -> tuple:
+    """`(person, n)`: the person who is the actor of the most `Event.causes` antecedents of OTHER persons'
+    acts in the unperturbed copy of `base`'s first `seasons` season(s) (`citation_counts`), ties by the
+    smallest person id. `(None, 0)` when no act has a cross-person antecedent. `base` is never run."""
+    w, d, bounds = drive(base.world_seed, seasons, "off", world=fork(base))
+    counts = citation_counts(read(w.log, d.act_of, bounds)["acts"])
+    if not counts:
+        return None, 0
+    who = min(counts, key=lambda p: (-counts[p], p))
+    return who, counts[who]
+
+
+def removal_verdict(res: dict, when: tuple) -> dict:
+    """The two readings `--remove` ends on, over `removal_report`'s result and the lap removed at:
+    `n` the OTHER persons' acts differing in the `removed` arm (the removed person's own acts are cut
+    from both sides by `_others`, so none counts), `m` those of them chosen at a LATER `(season, lap)`
+    than `when` (the same lap's differences are the within-lap order's, not a consequence), and `replay`
+    the `replay` arm's differing, the control that MUST read 0: a replay above 0 voids `n` and `m`.
+
+    WHAT IS EXPECTED. `replay` exactly 0 and the unwrapped hash equal to the unperturbed one are the two
+    controls that read zero. `removed` is expected ABOVE 0 for a person who forms a scene at `when`
+    (`fired` 1), and exactly 0 where the unperturbed copy shows him forming none. The `cohort` arm is NOT
+    a zero control: it removes one more person and reads that removal's own consequences, which is why
+    it is printed apart and carries no expectation of 0; `draw-seed` re-draws everybody and is the
+    floor a single removal is read beside."""
+    arm = res["arms"]["removed"]
+    return {"n": arm["differing"],
+            "m": sum(v for k, v in arm["by_lap"].items() if tuple(k) > tuple(when)),
+            "replay": res["arms"]["replay"]["differing"]}
+
+
+def removal_report(base, seasons: int, who: str, when: tuple, cohort) -> dict:
+    """What `--remove` prints: the unperturbed copy, then each arm against it.
+    `{"base_hash_before", "base_hash_after", "unperturbed": (acts, end hash), "unwrapped_hash", "arms"}`.
+    `unwrapped_hash` is the end hash of a copy run through `drive` with no wrapper: the control that the
+    wrapper perturbs nothing (it must equal the unperturbed copy's, else every figure is void). `arms`
+    maps, in print order, `replay` (nobody removed, MUST read 0), `removed` (`who`), `cohort` (the named
+    cohort person's choice, a SECOND removal read beside the first: it is not a zero control, see
+    `removal_verdict`) and `draw-seed` (every person's chooser draw
+    re-seeded, `--draw-seeds`' arm: the floor) to `{"acts", "differing", "persons", "by_lap", "fired",
+    "hash", "who"}`. `differing` is the multiset difference (as `chain_difference`) over the persons
+    other than the one removed; `by_lap` counts it per `(tick, lap)` of the act."""
+    before = base.content_hash()
+    ref, _f, ref_hash = _removal_run(base, seasons, None, when)
+    plain = drive(0, seasons, "off", world=fork(base))[0].content_hash()
+    out = {"base_hash_before": before, "unperturbed": (sum(ref.values()), ref_hash),
+           "unwrapped_hash": plain, "arms": {}}
+    specs = (("replay", None, None), ("removed", who, None), ("cohort", cohort, None),
+             ("draw-seed", None, base.world_seed + 1))
+    for name, gone, ds in specs:
+        got, fired, h = _removal_run(base, seasons, gone, when, draw_seed=ds)
+        a, b = _others(ref, gone), _others(got, gone)
+        diff = {k: abs(a.get(k, 0) - b.get(k, 0)) for k in set(a) | set(b) if a.get(k, 0) != b.get(k, 0)}
+        by_lap = Counter()
+        for k, n in diff.items():
+            by_lap[(k[1], k[2])] += n
+        out["arms"][name] = {"acts": sum(b.values()), "differing": sum(diff.values()),
+                             "persons": len({k[0] for k in diff}), "by_lap": dict(sorted(by_lap.items())),
+                             "fired": fired, "hash": h, "who": gone}
+    out["base_hash_after"] = base.content_hash()
+    return out
+
+
+def _print_removal(base_seed: int, seasons: int, cap, when, res: dict) -> None:
+    print(f"storybar --remove base-seed={base_seed} seasons={seasons} cap={cap} at={tuple(when)} "
+          f"PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")
+    print(f"base world hash before={res['base_hash_before']} after={res['base_hash_after']} "
+          f"({'unmutated' if res['base_hash_before'] == res['base_hash_after'] else 'MUTATED'})")
+    n, h = res["unperturbed"]
+    print(f"[unperturbed] acts={n} end_hash={h}")
+    print(f"[control: drive with no wrapper] end_hash={res['unwrapped_hash']} "
+          f"({'EQUAL' if res['unwrapped_hash'] == h else 'DIFFER'} to the unperturbed; DIFFER means "
+          f"the wrapper perturbs the run and every figure below is void)")
+    for name, r in res["arms"].items():
+        who = f" {r['who']}" if r["who"] else ""
+        removes = name in ("removed", "cohort")
+        note = ("  NOT FIRED: the person was not asked at that lap; this is a replay's reading"
+                if removes and not r["fired"] else "")
+        print(f"[{name}{who}] differing={r['differing']} persons_affected={r['persons']} "
+              f"fired={r['fired']} end_hash={r['hash']} "
+              f"({'EQUAL' if r['hash'] == h else 'DIFFER'} to the unperturbed){note}")
+        if r["by_lap"]:
+            print("  by (season, lap): " + " ".join(f"{k}:{v}" for k, v in r["by_lap"].items()))
+    v = removal_verdict(res, when)
+    print(f"R-01.c  others' acts differing: {v['n']}  (replay {v['replay']})"
+          f"{'' if v['replay'] == 0 else '  REPLAY NOT 0: every figure is void'}")
+    print(f"R-02.b  differing at a later (season, round): {v['m']}")
+
+
 def _print_draw_seeds(base_seed: int, seasons: int, cap, draw_seeds, res: dict) -> None:
     print(f"storybar --draw-seeds base-seed={base_seed} seasons={seasons} cap={cap} "
           f"draw-seeds={list(draw_seeds)} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")
@@ -496,7 +812,9 @@ def _fmt_est(e: dict) -> str:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--base-seed", type=int, required=True)
+    ap.add_argument("--base-seed", type=int, nargs="+", required=True, metavar="S",
+                    help="the realm's seed; with --remove several may be named and each is run in turn, "
+                         "printing its own report; every other mode takes exactly one")
     ap.add_argument("--n", type=int, help="seeded realms per arm (required without --draw-seeds)")
     ap.add_argument("--seasons", type=int, required=True)
     ap.add_argument("--arms", nargs=2, choices=ARMS,
@@ -515,7 +833,75 @@ def main(argv=None) -> int:
                          "per draw seed D, and vary only the chooser's draw (see `draw_seed_arm` for "
                          "the two residues); prints the chain-depth distribution and the verb-chain "
                          "multiset per draw seed. Takes no --n or --arms")
+    ap.add_argument("--remove", metavar="PERSON", nargs="?", const=MOST_CITED,
+                    help="the removal test: suppress PERSON's choice at one lap (--at; the first when "
+                         "omitted) on ONE built world, and count how many of the OTHER persons' acts "
+                         "differ from the unperturbed copy. With no PERSON it takes the person who is "
+                         "the actor of the most antecedents of other persons' acts in the unperturbed "
+                         "copy's first season (ties by person id) and prints the name. Prints the "
+                         "acts differing, the persons affected and the (season, lap) of each, beside "
+                         "controls: replay (nobody removed, MUST read 0), a cohort's choice (a second "
+                         "removal, expected above 0, not a zero control), and the chooser's draw "
+                         "re-seeded for everybody (`--draw-seeds`' arm, the floor); it ends on two "
+                         "lines, `R-01.c` (the others' acts differing, beside the replay) and "
+                         "`R-02.b` (those at a later lap). Takes no --n or --arms; one arm is a "
+                         "full copy of the run")
+    ap.add_argument("--at", type=int, nargs=2, metavar=("SEASON", "LAP"),
+                    help="with --remove: the (season index, lap index) whose choice is suppressed")
+    ap.add_argument("--null-scenes", action="store_true",
+                    help="instead of the arm comparison: run one realm per --base-seed under the shipped "
+                         "arm and print, per seed and per season and pooled, how many acts left no "
+                         "durable write (`null_scenes`, which owns the definition): `null_scenes "
+                         "total=<n> null=<n> | <verb/class=n, ...>`. A reading, never a threshold. "
+                         "Takes no --n, --arms, --draw-seeds, --remove or --executed-only; several "
+                         "--base-seed values may be named")
     args = ap.parse_args(argv)
+
+    if args.at is not None and args.remove is None:
+        ap.error("--at belongs to --remove")
+    if args.remove is None and not args.null_scenes and len(args.base_seed) != 1:
+        ap.error("several --base-seed values belong to --remove and --null-scenes; every other mode "
+                 "takes one")
+    if args.null_scenes:
+        if args.n is not None or args.arms is not None or args.draw_seeds is not None \
+                or args.remove is not None or args.executed_only:
+            ap.error("--null-scenes takes no --n, --arms, --draw-seeds, --remove or --executed-only")
+        print(f"storybar --null-scenes base-seeds={args.base_seed} seasons={args.seasons} cap={args.cap} "
+              f"PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")
+        got = {seed: null_by_season(seed, args.seasons, args.cap) for seed in args.base_seed}
+        for seed, (per, whole) in got.items():
+            for s, r in enumerate(per):
+                print(f"[seed {seed}] season {s}: {null_line(r)}")
+            print(f"[seed {seed}] all seasons: {null_line(whole)}")
+        if len(got) > 1:
+            for s in range(args.seasons):
+                print(f"[pooled] season {s}: {null_line(pool_null(per[s] for per, _ in got.values()))}")
+            print(f"[pooled] all seasons: {null_line(pool_null(whole for _, whole in got.values()))}")
+        return 0
+    if args.remove is not None:
+        if args.n is not None or args.arms is not None or args.draw_seeds is not None \
+                or args.executed_only:
+            ap.error("--remove takes no --n, --arms, --draw-seeds or --executed-only")
+        when = tuple(args.at) if args.at is not None else (0, 0)
+        for seed in args.base_seed:
+            base = build_realm(seed, args.cap)
+            who = args.remove
+            if who == MOST_CITED:
+                who, cited = most_cited(base)
+                if who is None:
+                    ap.error(f"--base-seed {seed}: no act of the first season has a cross-person "
+                             f"antecedent, so no person is the most cited; name one")
+                print(f"storybar --remove names {who}: the actor of {cited} antecedents of other "
+                      f"persons' acts in the unperturbed first season (base-seed={seed})")
+            elif who not in base.persons:
+                ap.error(f"--remove {who!r} is not a person of the realm built from --base-seed {seed}")
+            cohort = next((p for p in sorted(base.persons)
+                           if p.startswith(COHORT_PREFIX) and p != who), None)
+            _print_removal(seed, args.seasons, args.cap, when,
+                           removal_report(base, args.seasons, who, when, cohort))
+        return 0
+
+    base_seed = args.base_seed[0]
 
     if args.draw_seeds is not None:
         if args.n is not None or args.arms is not None:
@@ -525,14 +911,14 @@ def main(argv=None) -> int:
         if len(set(args.draw_seeds)) != len(args.draw_seeds):
             ap.error("--draw-seeds names a seed twice: the run is keyed by draw seed, so the repeat "
                      "would silently collapse into one")
-        res = draw_seed_arm(build_realm(args.base_seed, args.cap), args.seasons, args.draw_seeds)
-        _print_draw_seeds(args.base_seed, args.seasons, args.cap, args.draw_seeds, res)
+        res = draw_seed_arm(build_realm(base_seed, args.cap), args.seasons, args.draw_seeds)
+        _print_draw_seeds(base_seed, args.seasons, args.cap, args.draw_seeds, res)
         return 0
     missing = [f for f, v in (("--n", args.n), ("--arms", args.arms)) if v is None]
     if missing:
         ap.error(f"the following arguments are required: {', '.join(missing)}")
 
-    seeds = list(range(args.base_seed, args.base_seed + args.n))
+    seeds = list(range(base_seed, base_seed + args.n))
     res = compare(args.arms, seeds, args.seasons, args.cap, args.executed_only)
     print(f"storybar seeds={seeds[0]}..{seeds[-1]} seasons={args.seasons} arms={list(args.arms)} "
           f"cap={args.cap} PYTHONHASHSEED={os.environ.get('PYTHONHASHSEED')}")

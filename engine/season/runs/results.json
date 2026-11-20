@@ -706,17 +706,16 @@
      "resolved": [
       {
        "ok": true,
-       "assumed": true,
        "bound": true,
        "kind": "hole",
-       "grade": "assumption",
-       "detail": "H-31: assumption -- rests on an injected default"
+       "detail": "H-31: ruled",
+       "grade": "ruled"
       }
      ],
      "unbound": [],
      "verdict": {
-      "verdict": "ASSUMED",
-      "detail": "H-31: assumption -- rests on an injected default",
+      "verdict": "PASS",
+      "detail": "H-31: ruled",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -1416,17 +1415,16 @@
       },
       {
        "ok": true,
-       "assumed": true,
        "bound": true,
        "kind": "hole",
-       "grade": "assumption",
-       "detail": "H-31: assumption -- rests on an injected default"
+       "detail": "H-31: ruled",
+       "grade": "ruled"
       }
      ],
      "unbound": [],
      "verdict": {
-      "verdict": "ASSUMED",
-      "detail": "P31: PASS \u00b7 H-31: assumption -- rests on an injected default",
+      "verdict": "PASS",
+      "detail": "P31: PASS \u00b7 H-31: ruled",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -9230,7 +9228,7 @@
   "P11": {
    "id": "P11",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now COMPUTED from the verb table, so this observes that zeroing capability removes none of the 17 verbs it computes. Rev 2 compared a caller's authored roster with itself, which no capability gate could have changed either. `capability` appears in no clause of \u00a7F1 and the eligibility roster FORBIDS it as a fifth kind",
+   "detail": "PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now COMPUTED from the verb table, so this observes that zeroing capability removes none of the 16 verbs it computes. Rev 2 compared a caller's authored roster with itself, which no capability gate could have changed either. `capability` appears in no clause of \u00a7F1 and the eligibility roster FORBIDS it as a fifth kind",
    "kind": null,
    "section": "S9.2",
    "title": "capability gates no verb",
@@ -9240,7 +9238,7 @@
   "P12": {
    "id": "P12",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION. `opening_set('p', 'v', 'q', 'fx')` -- THE ROSTER PARAMETER IS GONE, which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the property the type protects was not, because S61 left `q` with no producer so there was nothing to compute from. `questions_for()` is that producer. 40 candidates over 17 verbs, every one a verb-table row",
+   "detail": "PASS BY CONSTRUCTION. `opening_set('p', 'v', 'q', 'fx')` -- THE ROSTER PARAMETER IS GONE, which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the property the type protects was not, because S61 left `q` with no producer so there was nothing to compute from. `questions_for()` is that producer. 38 candidates over 16 verbs, every one a verb-table row",
    "kind": null,
    "section": "S17",
    "title": "opening_set returns Candidate[], not Act[]",
@@ -9442,7 +9440,7 @@
   "P31": {
    "id": "P31",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION: 'create_record' at stability +0.9, 'challenge' at -0.9. The motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO branch in the resolver and nothing stored about the bias -- nobody, the holder and his superiors included, has a signature that reads it out. \u26a0 THE MAGNITUDES ARE `H-66`'s declared default and are swept; the SIGN structure is what this observes",
+   "detail": "PASS BY CONSTRUCTION: 'create_record' at stability +0.9, 'utter' at -0.9. The motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO branch in the resolver and nothing stored about the bias -- nobody, the holder and his superiors included, has a signature that reads it out. \u26a0 THE MAGNITUDES ARE `H-66`'s declared default and are swept; the SIGN structure is what this observes",
    "kind": null,
    "section": "S9",
    "title": "a hidden motive biases every decision",
@@ -9496,7 +9494,7 @@
   "P36": {
    "id": "P36",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 20 candidates were OFFERED from the computed option set and only 66 of 67 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['challenge', 'exchange', 'forge', 'move', 'reconstruct', 'sabotage', 'utter'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 19 candidates were OFFERED from the computed option set and only 66 of 67 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['sabotage', 'survey', 'train', 'transfer'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",
@@ -9910,7 +9908,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 899 == 899 and the LOG CONTENT HASH matches (c1793c17de31...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 899 == 899 and the LOG CONTENT HASH matches (77117e5d6108...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -10010,7 +10008,7 @@
   "A14": {
    "id": "A14",
    "verdict": "PASS",
-   "detail": "PASS: within ONE season, p_mid's ledger reads 0 claims in round 0 and 3 in round 1 after p_low's round-0 `utter`, against 0 in the control arm where p_low does nothing. R-03's channel: a deposit at one round's WITNESS is read by the next round's DELIBERATE. NOT SHOWN: a DELIBERATE nested inside RESOLVE (`H-56`'s other half)",
+   "detail": "PASS: within ONE season, p_mid's ledger reads 0 claims in lap 0 and 3 in lap 1 after p_low's lap-0 `utter`, against 0 in the control arm where p_low does nothing. R-03's channel: a deposit at one lap's WITNESS is read by the next lap's DELIBERATE. NOT SHOWN: a DELIBERATE nested inside RESOLVE (`H-56`'s other half)",
    "kind": null,
    "section": "S40.2",
    "title": "a person reacts within the season to what another just did",
@@ -10368,16 +10366,6 @@
    "title": "the five strata order the fold before the content hash does",
    "by": "construction",
    "tests": "movement, binding decisions and social acts must be able to resolve in a fixed order relative to each other"
-  },
-  "A38": {
-   "id": "A38",
-   "verdict": "PASS",
-   "detail": "PASS: at Ob = 2xPool+1 the attempt was REFUSED and the act was spent; at exactly 2xPool it resolved. An uncontested attempt routes to A GATE, never to an Ob=0 roll. Rev 2 had the branch and no probe ever set `obstacle` or `pool`, so both defaulted to 0 and the guard never ran -- while its regression test asserted only that two strings appeared in the source",
-   "kind": null,
-   "section": "S27.4",
-   "title": "an attempt at Ob > 2 x Pool is refused and the season is spent",
-   "by": "construction",
-   "tests": "an attempt far beyond a character's ability must be refused rather than rolled"
   },
   "A31c": {
    "id": "A31c",
@@ -10763,6 +10751,33 @@
    "needs": "a second standing scalar, or an owner for an audience-scoped one",
    "law": "04 \u00a7B.10 (REM-44, ED-IN-0300; S18.2 and S46.1 predate it) -- Sensation is ONE scalar, `standing`, which `sense()` computes (P14), and 04 grades widening it STRUCTURAL in Godot. A second, audience-scoped standing has NO CARRIER and S22 gives NO OWNER for one",
    "case": "probe:P35",
+   "expected": false
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "a (Record, exists) write by p_mid changed nothing: it named no subject",
+   "where": "F9",
+   "needs": "a write that moves at least one subject it names",
+   "law": "04 \u00a7C.2 / PART D row 5 (F9) -- `before == after` is refused AT THE WRITE, so the receipt is never minted: a success Event for a write that did not happen is ID-9, and a receipt minted by the gate for it passes every append-side check",
+   "case": "probe:P36",
+   "expected": false
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "a (Rung, stores) write by p_mid changed nothing: every subject it named reads the same after it -- Hh, Hh",
+   "where": "F9",
+   "needs": "a write that moves at least one subject it names",
+   "law": "04 \u00a7C.2 / PART D row 5 (F9) -- `before == after` is refused AT THE WRITE, so the receipt is never minted: a success Event for a write that did not happen is ID-9, and a receipt minted by the gate for it passes every append-side check",
+   "case": "probe:P36",
+   "expected": false
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "a (Rung, stores) write by p_mid changed nothing: every subject it named reads the same after it -- Hh, Hh",
+   "where": "F9",
+   "needs": "a write that moves at least one subject it names",
+   "law": "04 \u00a7C.2 / PART D row 5 (F9) -- `before == after` is refused AT THE WRITE, so the receipt is never minted: a success Event for a write that did not happen is ID-9, and a receipt minted by the gate for it passes every append-side check",
+   "case": "probe:P36",
    "expected": false
   },
   {
@@ -11217,25 +11232,16 @@
   }
  ],
  "_trace_counts": {
-  "STEP": 7231,
-  "BARRIER": 1904,
-  "DECISION": 1948,
-  "QUERY": 30300,
-  "WRITE": 15297,
-  "EVENT": 15323,
-  "ACT": 98,
-  "CLAIM": 1772,
-  "GAP": 88,
+  "STEP": 7185,
+  "BARRIER": 1892,
+  "DECISION": 1937,
+  "QUERY": 30082,
+  "WRITE": 15258,
+  "EVENT": 15283,
+  "ACT": 95,
+  "CLAIM": 1739,
+  "GAP": 91,
   "NOTE": 203
  },
- "_corpus_defects": [
-  "ARC1.yaml: committed inside a markdown fence with transcript preamble",
-  "ARC2.yaml: committed inside a markdown fence with transcript preamble",
-  "ARC3.yaml: TRUNCATED AT HEAD -- 37 lines of a record above the first `- id:`; its identity is unrecoverable from the file",
-  "ARC3.yaml: committed inside a markdown fence with transcript preamble",
-  "ARC3.yaml: recovered 0 row(s) from the truncated head; 37 line(s) above the first parseable `- need:` are UNRECOVERABLE",
-  "NPC1.yaml: committed inside a markdown fence with transcript preamble",
-  "NPC2.yaml: committed inside a markdown fence with transcript preamble",
-  "NPC3.yaml: committed inside a markdown fence with transcript preamble"
- ]
+ "_corpus_defects": []
 }

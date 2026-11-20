@@ -121,7 +121,7 @@ th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercas
 <section class="step">
   <header><div class="kicker">Step 1 · the edge</div><h2>The season hands over data; the battle runs on its own</h2></header>
   <figure>
-    <svg viewBox="0 0 460 518" role="img" aria-label="Three bands. Top: the season loop builds a typed input record from the world. Middle: the mass battle module takes that record, builds two Units, runs the battle and grades it. Bottom: the season loop folds the returned shares and degree into the world.">
+    <svg viewBox="0 0 460 518" role="img" aria-label="Three bands. Top: the season loop builds a typed input record from the world. Middle: the mass battle module takes that record, builds two Armies, runs the battle and grades it. Bottom: the season loop folds the returned shares and degree into the world.">
       <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
       <g color="var(--fg)">
         <rect class="s-field" x="8" y="4" width="444" height="142"/>
@@ -133,9 +133,9 @@ th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercas
         <text class="s-mono" x="244" y="166">typed input record: data in</text>
         <rect class="s-hi" x="8" y="180" width="444" height="250" fill="var(--surface)"/>
         <text class="s-mono" x="20" y="196">MASS BATTLE MODULE · runs on its own, holds no state</text>
-        <rect class="s-box" x="20" y="206" width="420" height="46"/><text class="s-t" x="34" y="225">resolve_field</text><text class="s-m" x="34" y="243">one Unit per side; terrain modifiers written onto the Units</text><text class="s-mono" x="426" y="225" text-anchor="end">massbattle.py</text>
+        <rect class="s-box" x="20" y="206" width="420" height="46"/><text class="s-t" x="34" y="225">resolve_field</text><text class="s-m" x="34" y="243">one Army per side; terrain modifiers written onto the Armies</text><text class="s-mono" x="426" y="225" text-anchor="end">massbattle.py</text>
         <line class="s-line" x1="230" y1="252" x2="230" y2="266" marker-end="url(#ar)"/>
-        <rect class="s-hi" x="20" y="268" width="420" height="46"/><text class="s-t" x="34" y="287">run_battle(max_turns=18)</text><text class="s-m" x="34" y="305">18 ticks = 3 phases of 6. Steps 3 to 7 live here</text><text class="s-mono" x="426" y="287" text-anchor="end">orchestration.py</text>
+        <rect class="s-hi" x="20" y="268" width="420" height="46"/><text class="s-t" x="34" y="287">run_battle(max_ticks=18)</text><text class="s-m" x="34" y="305">18 ticks = 3 phases of 6. Steps 3 to 7 live here</text><text class="s-mono" x="426" y="287" text-anchor="end">orchestration.py</text>
         <line class="s-line" x1="230" y1="314" x2="230" y2="328" marker-end="url(#ar)"/>
         <rect class="s-box" x="20" y="330" width="420" height="44"/><text class="s-t" x="34" y="349">_run_and_grade</text><text class="s-m" x="34" y="366">survivor share of each side → degree (step 8)</text>
         <text class="s-m" x="20" y="396">Also in the module, not used at this edge:</text>
@@ -151,7 +151,7 @@ th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercas
   </figure>
   <div class="text">
     <p>The season loop supplies the data, content and context as one record: who stands on each side, each side’s army record, the terrain row from the territory and its fortification, and each side’s morale from stance and loyalty. It runs no part of the fight and the battle writes nothing to the world.</p>
-    <p>The module takes that record, builds one Unit per side, fights it and returns survivor shares and a degree. It never reads the world and keeps nothing between calls. The season loop then writes the new state from what comes back.</p>
+    <p>The module takes that record, builds one Army per side, fights it and returns survivor shares and a degree. It never reads the world and keeps nothing between calls. The season loop then writes the new state from what comes back.</p>
     <p>Which battle entry runs is the module’s own matter. The season edge calls <code>resolve_field</code>, which fights one engagement of at most 18 ticks. The module also has <code>run_multi_turn_battle</code> and <code>run_multi_unit_battle</code>; the workbench and the <code>bat.py</code> battery exercise those directly. This page follows the single-engagement path.</p>
     <p>A side with an army record fights as that order of battle. If neither side has one, each fights as a single line sized by its headcount; if only one does, the other fights as one line of light infantry.</p>
     <p class="note">Code: <code>modules/mass_battle/massbattle.py</code> (<code>resolve_field</code>, <code>_run_and_grade</code>); host side <code>engine/season/seam/wrappers/mass_battle.py</code>. A lost field’s consequence, “casualties only, decrease in morale, and a grudge token”, is quoted from the <code>massbattle.py</code> docstring (ED-IN-0279 clause b) and written by the season’s <code>_eff_march</code>.</p>
@@ -194,7 +194,7 @@ th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercas
       <li><b>Movement is simultaneous.</b> Every subunit’s target position is read before anyone moves, so A is not steering toward B’s already-moved position (a code comment cites a first-argument bias of about 10% before this fix).</li>
       <li><b>Damage is simultaneous.</b> Melee and volley losses for both sides are computed, then subtracted together. Size is recalculated only afterward.</li>
     </ul>
-    <p>The loop stops early the moment either Unit has routed. If neither does, the battle ends at tick 18 and the grade decides.</p>
+    <p>The loop stops early the moment either Army has routed. If neither does, the battle ends at tick 18 and the grade decides.</p>
     <p class="note">Code: <code>run_battle</code>, <code>volley_phase</code>, <code>resolve_engagements_cascading</code>, <code>phase_boundary</code> in <code>modules/mass_battle/orchestration.py</code>. The rout check at stage 9 runs every tick; the casualty-based break check runs only in stage 10.</p>
   </div>
 </section>
@@ -261,7 +261,7 @@ th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercas
     <figcaption>The degree ladder. P is the attacking subunit’s Power; DR is subtracted from the damage value afterwards.</figcaption>
   </figure>
   <div class="text">
-    <p id="m-lead">For every pair of subunits in contact, each side rolls a pool, adds a modifier, and compares nets. The two rolls are compared against each other, so a side can fail outright even with a decent roll.</p>
+    <p id="m-lead">For every pair of units in contact, each side rolls a pool, adds a modifier, and compares nets. The two rolls are compared against each other, so a side can fail outright even with a decent roll.</p>
     <div class="ledger" id="ledger-melee" role="table" aria-label="Worked melee arithmetic"></div>
     <p style="margin-top:12px">The modifier shift folds in flanking arcs, charge shock, morale, fatigue, encirclement and intent. Casualties scale with the <b>enemy’s</b> strength in contact, capped by frontage (the Lanchester linear law, <code>K_LINEAR</code> = 12). Surrounded bodies take more: ×1.5 from two sides, ×2.0 from three.</p>
     <p class="note">Not traced: where each pool comes from. The trace records pools, not their derivation (<code>subunit_combat_pool</code>, <code>pair_pool_contribution</code>). [GAP: pool derivation not read]</p>
@@ -282,10 +282,10 @@ th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercas
     <p>A subunit breaks one of three ways:</p>
     <ul>
       <li><b>Morale at zero.</b> At each phase boundary, a subunit with under 50% of its strength left loses 1 morale, and under 25% loses another; exhaustion costs more. The loss is scaled by 0.7.</li>
-      <li><b>Too few left.</b> Fewer than 80 troops (<code>SUBUNIT_ROUT_FLOOR</code>).</li>
+      <li><b>Too few left.</b> Fewer than 80 troops (<code>UNIT_ROUT_FLOOR</code>).</li>
       <li><b>A drawn break-point.</b> Each subunit draws one casualty fraction between 15% and 30% (skewed later for disciplined, high-morale troops) and breaks at the next phase boundary after crossing it. <code>MB_STOCHASTIC_ROUT</code> is on by default.</li>
     </ul>
-    <p>The whole Unit routs when its general is gone, its troop-weighted morale reaches zero, or the broken subunits held 60% of its <i>starting</i> strength (<code>ROUT_CASCADE_FRAC</code>).</p>
+    <p>The whole Army routs when its general is gone, its troop-weighted morale reaches zero, or the broken units held 60% of its <i>starting</i> strength (<code>ROUT_CASCADE_FRAC</code>).</p>
   </div>
 </section>
 
@@ -319,7 +319,7 @@ th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercas
     <p style="margin-top:12px"><span id="grade-text"></span> These bands are the older adapter’s own, not the canonical margin ladder in step 6, and the code says so; reconciling them is open lane work.</p>
   </div>
   <div class="text">
-    <p>Terrain is a single row chosen from the territory and its fortification, and it changes the Units before tick 1:</p>
+    <p>Terrain is a single row chosen from the territory and its fortification, and it changes the Armies before tick 1:</p>
     <div class="scroll"><table>
       <tr><th>Row</th><th>Effect</th></tr>
       <tr><td>Walls</td><td>Defender DR +3</td></tr>
@@ -410,8 +410,8 @@ function nodesSVG(det, side) {
 /* header */
 (function () {
   function army(sd, who) {
-    var parts = sd.subformations.map(function (f) { return num(f.troops) + ' ' + nm(f.type) + (f.role ? ' (' + f.role + ')' : ''); });
-    var tot = sd.subformations.reduce(function (a, f) { return a + f.troops; }, 0);
+    var parts = sd.units.map(function (f) { return num(f.troops) + ' ' + nm(f.type) + (f.role ? ' (' + f.role + ')' : ''); });
+    var tot = sd.units.reduce(function (a, f) { return a + f.troops; }, 0);
     return '<span><b>' + who + '</b> ' + num(tot) + ': ' + parts.join(', ') + ' · <i>' + sd.strategy + '</i></span>';
   }
   document.getElementById('meta').innerHTML = army(ARM.a, 'A') + army(ARM.b, 'B') +
@@ -535,7 +535,7 @@ function lost(all, faction, source) { var s = 0; all.forEach(function (e) { if (
   var con = contactsAt(f.t), d = TICKS[String(f.t)].detail;
   var who = con.length ? 'A ' + nm(d.a.subs[con[0][0]].type) + ' vs B ' + nm(d.b.subs[con[0][1]].type) : 'the first pair in contact';
   document.getElementById('m-h').textContent = 'One exchange, tick ' + f.t + ': first contact';
-  document.getElementById('m-lead').textContent = 'For every pair of subunits in contact, each side rolls a pool, adds a modifier, and compares nets. The first exchange of this battle, ' + who + ':';
+  document.getElementById('m-lead').textContent = 'For every pair of units in contact, each side rolls a pool, adds a modifier, and compares nets. The first exchange of this battle, ' + who + ':';
   var dmgA = lost(f.all, 'A', 'melee'), dmgB = lost(f.all, 'B', 'melee');
   ledger('ledger-melee', [
     ['pools', who, e[1] + ' vs ' + e[2]],
@@ -632,7 +632,7 @@ function lost(all, faction, source) { var s = 0; all.forEach(function (e) { if (
     return 100 * r / tot;
   }
   document.getElementById('band-text2').textContent = whole
-    ? sideName(whole) + '’s whole army routed at tick ' + wt + ': its general is gone, its morale reached zero, or the broken subunits held ' + Math.round(CONST.cascade_frac * 100) + '% of its starting strength. The trace does not say which. The tick before, the subunits already routed held ' +
+    ? sideName(whole) + '’s whole army routed at tick ' + wt + ': its general is gone, its morale reached zero, or the broken units held ' + Math.round(CONST.cascade_frac * 100) + '% of its starting strength. The trace does not say which. The tick before, the units already routed held ' +
       startShare(TICKS['0'].detail[whole], TICKS[String(wt - 1)].detail[whole]).toFixed(0) + '% of its starting troops.'
     : 'Neither army routed before the loop ended.';
 })();

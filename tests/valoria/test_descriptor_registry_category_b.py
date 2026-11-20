@@ -78,5 +78,3 @@ def test_category_b_note_flags_registrations_not_schema_bindings():
     reg = descriptor_registry.load()
     note = reg['category_b_scalars'].get('note', '')
     assert note  # present
-    section_comment_present = True  # the section header comment is verified via the file read above
-    assert section_comment_present

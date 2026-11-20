@@ -12,13 +12,13 @@ import ast, os, sys, collections, json, re
 # (test_no_dead_exported_engine_params), so an absolute machine path here would error on every
 # other checkout — CI runs at /home/runner/work/..., the exact /home/claude-hardcode failure
 # class CLAUDE.md §8 retired tools for (caught by the E0 adversarial gate, 2026-07-29).
-# Plan position `31b` moved the engine's reachable set to `modules/combat/` (flat names kept); what was not
+# Plan position `31b` moved the engine's reachable set to `modules/combat/` (a package since CI-09); what was not
 # reached from `wrapper`/`combatant` (`capabilities.py`, `state_graph.py`) and this workbench stayed here. The
 # scan reads both: ENG is the moved engine, LEFT the directory this workbench sits in.
 LEFT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REPO = os.path.abspath(os.path.join(LEFT, '..', '..', '..'))
 ENG = os.path.join(REPO, 'modules', 'combat')
-_PATHS = {f: os.path.join(d, f) for d in (LEFT, ENG) for f in os.listdir(d) if f.endswith('.py')}
+_PATHS = {f: os.path.join(d, f) for d in (LEFT, ENG) for f in os.listdir(d) if f.endswith('.py') and f != '__init__.py'}
 FILES = sorted(_PATHS)
 WB = os.path.join(LEFT, 'workbench')
 WBF = [os.path.join('workbench', f) for f in sorted(os.listdir(WB)) if f.endswith('.py')]
@@ -130,8 +130,8 @@ for name in CORE:
 # The token list is READ FROM THE OWNER (vocabulary.GUARDED_TOKENS, ED-PC-0042) instead of being re-listed
 # here, so this measurement and the CI guard that enforces it cannot drift apart. Same 18 tokens the
 # pre-sweep tree measured at 279 occurrences.
-sys.path.insert(0, ENG)
-from vocabulary import GUARDED_TOKENS as _GUARDED
+sys.path.insert(0, REPO)
+from modules.combat.vocabulary import GUARDED_TOKENS as _GUARDED
 VOCAB = sorted(_GUARDED)
 vocab_count = collections.Counter()
 for name in CORE:

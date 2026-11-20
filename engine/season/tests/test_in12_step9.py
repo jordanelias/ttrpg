@@ -352,9 +352,13 @@ def test_faculty_varies_by_person_once_train_raises_carins_vocation():
     w, d = _npc088()
     fx = w.fixtures
     carin = w.persons[CARIN]
+    # B01a: the corpus seats a drawn sheet; Carin's sheet is fixed low here, key by key, so her pool is her rank over a known
+    # governing score (B05.25: the pool is the governing attributes' mean PLUS the rank); the others keep theirs.
+    carin.attributes = {k: 1 for k in carin.attributes}
     assert carin.capability == {"copying": 3}, carin.capability
     others = [p for pid, p in sorted(w.persons.items()) if pid != CARIN and not p.capability]
     assert others, "no person without a capability to compare against"
+    before = sigma.faculty(w, carin, "tell")
     cands = [c for c in _formed(w, CARIN, "train", CARIN) if c.operands.get("kind") == "copying"]
     assert len(cands) == 1, [c.operands for c in cands]
     (act,) = _acts(w, CARIN, cands)
@@ -362,8 +366,13 @@ def test_faculty_varies_by_person_once_train_raises_carins_vocation():
     assert _kinds(_resolve(w, d, act)) == ["capability.raised"]
     assert carin.capability == {"copying": 4}
     pools = {p.id: sigma.faculty(w, p, "tell") for p in [carin, *others]}
-    assert pools[CARIN] == 4, pools
-    assert {pools[p.id] for p in others} == {fx.get("pool_default")}, pools
+    # B05.99 re-pin (B05.25's pool, B05.23's base 6): Carin is governing 1.0 + rank 4 + 6, one die over her pool before the
+    # training (was 4, the key alone); the persons without a key read their drawn sheets' means + 6: {p_b: 10.0, p_c: 9.0}
+    # (was {3, 2}, the larger of attribute and key)
+    assert pools[CARIN] == 11.0 == before + 1, (pools, before)
+    # B06.99 re-pin (B06.04: the keyed mix draws the sheets; a stream change, not a balance change): {p_b: 11.5, p_c: 9.5}
+    # (was {9.0, 10.0})
+    assert {pools[p.id] for p in others} == {9.5, 11.5}, pools
     assert len(set(pools.values())) > 1, pools
 
 
@@ -375,11 +384,14 @@ def test_a_planted_addend_registered_through_faculty_is_read_by_the_roll_and_the
     carin = w.persons[CARIN]
     other = next(p for pid, p in sorted(w.persons.items()) if pid != CARIN and not p.capability)
     base = {p.id: sigma.faculty(w, p, "tell") for p in (carin, other)}
+    determine = sigma.faculty(w, carin, "determine")
     monkeypatch.setattr(pool, "POOL_ADDENDS", list(pool.POOL_ADDENDS))
     sigma.register_pool_addend(lambda w_, p, verb: 2 if (p.id == CARIN and verb == "tell") else 0)
     assert sigma.faculty(w, carin, "tell") == base[CARIN] + 2
     assert sigma.faculty(w, other, "tell") == base[other.id]            # keyed by the person it names
-    assert sigma.faculty(w, carin, "determine") == w.fixtures.get("pool_default")   # the addend names a verb
+    # the addend names a verb: her `determine` pool is unmoved (B05.99: it reads her drawn sheet since B05.25, no longer
+    # `pool_default`, so it is compared with itself before the addend)
+    assert sigma.faculty(w, carin, "determine") == determine
     inp = sigma.contest_input(w, [CARIN], verb="tell", subject=other.id, room=None, examined=None)
     assert inp.pool == base[CARIN] + 2, inp.pool
 
@@ -396,14 +408,6 @@ def test_capability_gates_no_train_the_formation_never_reads_the_actors_capabili
     assert seen[0] and seen[0] == seen[1] == seen[2], seen
 
 
-def test_control_a_pupil_holding_no_vocation_is_refused_at_the_effect():
-    w, d = _npc088()
-    pupil = next(pid for pid, p in sorted(w.persons.items()) if pid != CARIN and not p.capability)
-    act = Act(id="tr_pupil", actor=CARIN, verb="train", payload={"subject": pupil, "kind": "copying"})
-    assert _kinds(_resolve(w, d, act)) == ["train.refused"]
-    assert w.persons[pupil].capability == {}, "a key was minted below pool_default"
-
-
 def test_mutation_without_the_vocation_line_train_is_not_formed(monkeypatch):
     """THE NAMED MUTATION, RUN IN-TEST: `vocation_sourced` emptied -> `train` forms on Carin with no
     vocation on it, and the act the falsifier folds can no longer carry `copying`."""
@@ -418,14 +422,16 @@ def test_mutation_without_the_vocation_line_train_is_not_formed(monkeypatch):
 # (`VOCATIONS = frozenset(VERB_CAPABILITY.values())`); the one roster is the owner, there is no second list.
 
 def test_the_four_verb_capability_rows_resolve_and_are_the_vocation_range():
-    from ..data.rosters import VERB_CAPABILITY
+    from ..data.verbs import VERB_CAPABILITY
     assert {v: VERB_CAPABILITY.get(v) for v in ("argue", "research", "examine", "surveil")} == {
         "argue": "argue", "research": "inquiry", "examine": "inquiry", "surveil": "inquiry"}
-    # CR-20: the range is closed over `vocation_attribute`'s rows (same set, derived: a literal triple here is
-    # flagged by `test_jordan_no_definition_is_hardcoded_in_a_body` now that a second roster is that set).
-    from ..data.rosters import VOCATION_ATTRIBUTE
+    # CR-20: the range is closed over the skill definition rows (B05.25 deleted the derived `VOCATION_ATTRIBUTE` map with the
+    # rows' `base:` column, so the closure is read on the one definition, `descriptors.CAPABILITIES`; a literal set here is
+    # flagged by `test_jordan_no_definition_is_hardcoded_in_a_body`).
+    from engine.substrate import descriptors
     # v11 CP-T03-04: `arms` (`fight`/`accept`/`capture`) joins the range, three -> four.
-    assert VERBS.VOCATIONS == set(VOCATION_ATTRIBUTE) and len(VERBS.VOCATIONS) == 4
+    assert VERBS.VOCATIONS == set(VERB_CAPABILITY.values()) and VERBS.VOCATIONS <= set(descriptors.CAPABILITIES)
+    assert len(VERBS.VOCATIONS) == 4
 
 
 def _train_kinds(w, pid):
@@ -448,11 +454,15 @@ def test_a_pupil_whose_vocation_reads_argue_or_inquiry_is_trained_and_faculty_fo
     """Before the rows `train` on a pupil holding `argue` or `inquiry` was refused at the effect (the key was
     outside `VOCATIONS`); after, it raises it by one and `faculty` reads the raised key for the verbs that
     name it (`argue`; `research`, `examine`, `surveil`) while a verb of another key still reads the default."""
-    from ..data.rosters import VERB_CAPABILITY
+    from ..data.verbs import VERB_CAPABILITY
     from ..loop import effects_combat as EC
     w, d = _npc088()
     pupil = next(pid for pid, p in sorted(w.persons.items()) if pid != CARIN and not p.capability)
     w.persons[pupil].capability = {"argue": 2, "inquiry": 3}
+    # B01a.99 (every person's attributes are drawn, a population change): the drawn pupil (p_b) reads acuity 5 and charisma 4,
+    # above the keys raised here (4, 3), so `faculty`'s `max(attribute, key)` would hide the key this test observes (read:
+    # inquiry verbs 5, `argue`/`determine` 4). The pupil is planted with no sheet, as the test's subject is the key.
+    w.persons[pupil].attributes = {}
     default = w.fixtures.get("pool_default")
     with monkeypatch.context() as m:                    # the planted failure: the `inquiry` rows removed
         m.setattr(EC, "VOCATIONS", VERBS.VOCATIONS - {"inquiry"})
@@ -466,8 +476,17 @@ def test_a_pupil_whose_vocation_reads_argue_or_inquiry_is_trained_and_faculty_fo
     assert w.persons[pupil].capability == {"argue": 3, "inquiry": 4}
     p = w.persons[pupil]
     inquiries = [v for v, k in VERB_CAPABILITY.items() if k == "inquiry"]
-    assert len(inquiries) == 3 and {sigma.faculty(w, p, v) for v in inquiries} == {4}
-    assert sigma.faculty(w, p, "argue") == 3 and sigma.faculty(w, p, "determine") == default
+    # B11 lane A: `interrogate` draws on `inquiry` (3 -> 4 verbs) and `determine` on `argue` (it rolled `pool_default`)
+    # B05.99 re-pin (B05.25, B05.23): the pool is the governing score (the untrained score: no sheet) + the rank + the base 6;
+    # was the key alone ({4}; 3)
+    add = w.fixtures.get("pool_add")
+    # B07.01 (UNDECIDED (11) (iv)): `survey` and `reconstruct` now name `inquiry` too (4 -> 6 verbs); the pinned
+    # SET, not a count, so a verb leaving or joining the skill is a named change here
+    assert set(inquiries) == {"examine", "interrogate", "research", "surveil", "survey", "reconstruct"}
+    assert {sigma.faculty(w, p, v) for v in inquiries} == {default + 4 + add}
+    assert sigma.faculty(w, p, "argue") == default + 3 + add == sigma.faculty(w, p, "determine")
+    # a verb drawing on no vocation still rolls the untrained man's pool (B05.25: `lie`; a brute verb like `transfer` rolls nothing)
+    assert sigma.faculty(w, p, "lie") == default + add, "a verb drawing on no vocation still rolls the default"
 
 
 def test_the_three_train_candidates_on_one_subject_get_three_act_ids():

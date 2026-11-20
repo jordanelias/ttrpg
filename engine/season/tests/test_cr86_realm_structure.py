@@ -17,7 +17,7 @@ import pytest
 from engine.season.data import cast
 from engine.season.gaps import Forbidden
 from engine.season.data.rosters import FACTION_BY_PROP, FACTIONS, HEAD_SEAT, office_faction
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.queries import faction_q
 from engine.season.state.gate import _ground_reaches, purview_reaches
 

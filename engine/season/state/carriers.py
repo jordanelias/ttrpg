@@ -1,11 +1,9 @@
 """`season.state.carriers` -- THE PRIMITIVES. The sixteen things the model is made of.
 
-Extracted from `shape.py` at step 4 of the decomposition (ED-IN-0203), a PURE MOVE: `Tenure`,
-`StateChange`, `Event`, `Claim`, `Sensation`, `View`, `Question`, `Candidate`, `Scene`, `Act`,
-`Person`, `Site`, `Record`, `Proposition`, `Office`, `Rung` -- and `matrix_rows_without_a_field`,
-which is not a carrier and is here for a reason given below. `shape.py` re-exports every name, so
-importers name this module directly (`from ..state.carriers import Person`). The `shape.py`
-facade that used to re-export these was deleted at step 10 of the decomposition.
+`Tenure`, `StateChange`, `Event`, `Claim`, `Sensation`, `View`, `Question`, `Candidate`, `Scene`,
+`Act`, `Person`, `Site`, `Record`, `Proposition`, `Office`, `Rung` -- and
+`matrix_rows_without_a_field`, which is not a carrier and is here for a reason given below.
+Importers name this module directly (`from ..state.carriers import Person`; ED-IN-0203).
 
 ⚠ WHY `matrix_rows_without_a_field` IS IN THIS MODULE AND NOT IN `data/`. It answers *does this
 matrix row's `fieldname` name a real field of its `record_kind`* by looking the KIND UP AS A NAME
@@ -13,9 +11,8 @@ matrix row's `fieldname` name a real field of its `record_kind`* by looking the 
 module it is written in, so it has to be written where the classes are -- and `season.data` cannot
 import this module, because the carriers read `data.rosters` and `data.fixtures` and the arrow
 would reverse. Put it in `data/matrix.py` and it silently reports every kind `unmodelled`: no
-exception, no red test, just a clean bill over a check that stopped looking. Recorded because that
-is the same shape as the two instrument failures step 0b hit -- a reflective lookup and a glob both
-answer about the FILE THEY RUN IN, and moving the file moves the answer without moving the code.
+exception, no red test, just a clean bill over a check that stopped looking. A reflective lookup answers
+about the FILE IT RUNS IN, and moving the file moves the answer without moving the code.
 
 ⚠ THIS MODULE IMPORTS NOTHING FROM `world` OR ABOVE, AND THE DIRECTION IS THE POINT. A carrier is
 a thing the world holds; it may not know about the store that holds it. `state/world.py` imports
@@ -26,24 +23,25 @@ these nine classes and this module imports nothing back, so the two files togeth
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, NamedTuple, Optional
+from types import MappingProxyType
+from typing import Any, Mapping, NamedTuple, Optional
 
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import MATRIX
 from ..data.rosters import (
-    BINDS_BASES, BODY_FUNCTION, CONFERRAL_BASES, QUESTION_SOURCES, RECORD_KIND_KEYS, RECORD_KINDS,
+    BINDS_BASES, CONFERRAL_BASES, QUESTION_SOURCES, RECORD_KIND_KEYS, RECORD_KINDS,
     REFERENT_CLASSES, REMIT_ACTS, REVOCATION_BASES, RUNG_KINDS, office_faction, require_member,
     title_domain,
 )
 from ..gaps import Forbidden, Unowned, Unspecified
-from .ids import SeatId
+from ...substrate.descriptors import ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES
+from .ids import SeatId, draw_factory
 
 
 @dataclass(frozen=True)
 class Term:
     """`04 §B.8`'s `term?` -- A DECLARED END ON A TENURE, and the field `T-n` has always needed.
-    Plan position `17b` (`workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` §3.2 row 10 and
-    its "Contradiction 1" box; `04` §F's `F.3` row: *"`Tenure.term`; MATTER matures it"*).
+    `04` §F's `F.3` row: *"`Tenure.term`; MATTER matures it"*.
 
     `matures_at` is the tick at whose MATTER barrier the term matures -- `loop/matter.py`'s tenure-
     term branch closes the edge there, through the gate's `T-n` basis, with `causes[] =
@@ -60,9 +58,9 @@ class Term:
     ⚠ `closer` IS NOT CARRIED, AND THAT IS `ID-13`, NOT AN OMISSION. `04 §B.8` spells `term?
     (matures_at, declared_by, closer)` and then says of `closer` itself: *"`Seat.revocation` is
     authoritative and `term.closer` names a basis, not a second authority"*. Ending a hold early is
-    already `T-o`, the seat's revocation basis through `Act.via`, and nothing at `17b` reads a
-    per-term closer -- a field declared for a reader that does not exist is the defect the deleted
-    `Tenure.conferrer` (below) was. The day a term needs a closer the seat's own basis cannot
+    already `T-o`, the seat's revocation basis through `Act.via`, and nothing reads a
+    per-term closer -- a field declared for a reader that does not exist is the defect a
+    `Tenure.conferrer` would be (see the note in `Tenure`). The day a term needs a closer the seat's own basis cannot
     express, it is added with that reader."""
     matures_at: int
     declared_by: str
@@ -82,28 +80,20 @@ class Tenure:
     kind: str
     since: int
     until: Optional[int] = None
-    # ⚠ `conferrer: Optional[str]` WAS DECLARED HERE AND IS DELETED (2026-09-03). It occurred
-    # EXACTLY ONCE in the whole tracer — this line — and reached no reader, which by `ID-13` is
-    # not a weak field but one that does not exist, wearing a schema's clothes. The same field
-    # was deleted from the meta-architecture's own `Tenure` on the same grounds and the same day;
-    # this is that ruling applied where the type actually runs.
-    #
-    # ⚠ AND THE DELETION OPENS NOTHING, which is the half worth stating. WHO MAY REVOKE is the
+    # NO `conferrer` FIELD: it would reach no reader, which by `ID-13` is not a weak field but one that
+    # does not exist, wearing a schema's clothes. WHO MAY REVOKE is the
     # Seat's declared `revocation` basis (`T-o`), not the identity of whoever conferred; WHAT
     # CONFERRED a Tenure is the opening Act, in an append-only log with `causes[]`. A field here
     # would be a second home for a fact the act already holds — `ID-2`.
     degree: Optional[str] = None
     payload: Any = None
-    # `04 §B.8`'s `term?` -- plan position `17b`; `Term`'s own docstring says what it is and who
-    # writes it. ⚠ ADDED BESIDE `payload`, NOT IN ITS PLACE, WHATEVER `04 §B.8`'s *"Replaces
-    # payload?"* AND `write_matrix.yaml`'s 2026-09-03 note ASKED. Both were written while `payload`
-    # had no writer; it has had one since `H-71` (`World._grant_remit`, the remit grant a seat confers
-    # on its holder), a reader in `granted_acts` below, and the gate's `conferral` re-grant clause
-    # (`moved == {"payload"}`). A grant and a declared end are two facts, so they are two fields --
-    # the plan's own §3.2 row 12 says the same: *"Not `Tenure.payload`, which is live."*
-    # ⚠ `Tenure`'s ENCODING FOLDS INTO `World.content_hash` AND CARRIES EVERY FIELD NAME, so this line
-    # alone moves the digest of every world holding a Tenure -- a declared, structural hash move,
-    # the `Office.establishment` deletion's shape in reverse, not a behaviour change.
+    # `04 §B.8`'s `term?`; `Term`'s own docstring says what it is and who
+    # writes it. ⚠ BESIDE `payload`, NOT IN ITS PLACE, WHATEVER `04 §B.8`'s *"Replaces
+    # payload?"* AND `write_matrix.yaml`'s 2026-09-03 note ASKED: `payload` has a writer (`World._grant_remit`,
+    # the remit grant a seat confers on its holder), a reader in `granted_acts` below, and the gate's
+    # `conferral` re-grant clause (`moved == {"payload"}`). A grant and a declared end are two facts, so
+    # they are two fields. ⚠ `Tenure`'s ENCODING FOLDS INTO `World.content_hash` AND CARRIES EVERY FIELD
+    # NAME, so a field here moves the digest of every world holding a Tenure.
     term: Optional[Term] = None
 
     # THE VERSION OF THIS EDGE: it counts every attribute assignment, so `World._tenure_snapshot` and
@@ -133,10 +123,7 @@ class Tenure:
     def granted_acts(self) -> tuple:
         """THE GRANT THIS TENURE CARRIES -- `H-71` arm 2, and the ONE owner of the payload's shape.
 
-        ⚠ `payload` HAD ZERO WRITERS AND ZERO READERS UNTIL THIS LANDED, which by the same test
-        the deleted `conferrer` field failed (above) made it a field that *"does not exist, wearing
-        a schema's clothes"*. This property and `World._grant_remit` are its first reader and its
-        first writer; `World._grant_remit` is the ONLY writer of the grant (`remit_acts`); its readers are this
+`World._grant_remit` is the ONLY writer of the grant (`remit_acts`); its readers are this
         property and `seat_rung` below: §8 -- the shape of a payload is a
         rule, so it lives once. (An `oblige` a determination imposes carries one other key,
         `DETERMINED_BY`, read through `imposed` above, so that `purview_reaches` does not read it
@@ -150,14 +137,13 @@ class Tenure:
         has**. So this is a SNAPSHOT taken when the Tenure opened, and an office whose `remit_acts`
         change later does not retroactively re-grant its sitting holders -- *"an office whose
         remit changes does so by an ACT, which is how everything else in this engine changes."*
-        `_grant_remit` carries the same statement from the writing side. ⚠ SINCE `13f`
-        (2026-09-25) THAT ACT EXISTS: `establish` re-stamps every live `hold` on the office it
+        `_grant_remit` carries the same statement from the writing side. ⚠ THAT ACT EXISTS: `establish` re-stamps every live `hold` on the office it
         writes, through `_grant_remit(force=True)` -- so a hand-mutation still reaches nobody and
         the act reaches every sitting holder.
 
         Returns `()` for every Tenure that carries no grant, which is every kind but `hold` and
         every `hold` on a non-office. A tuple rather than a set: it keeps the order the grants were
-        made in (and, before GO-07, a set's `repr` order would have reached `content_hash()`).
+        made in.
         """
         p = self.payload
         if not isinstance(p, dict):
@@ -174,8 +160,7 @@ class Tenure:
 
     @property
     def seat_rung(self) -> Optional[str]:
-        """THE SEAT'S RUNG AS GRANTED -- where the seat's TREASURY is (the retirement plan's G2,
-        *"treasury = `Rung.stores` at the office's own rung"*), read off the grant the holder owns.
+        """THE SEAT'S RUNG AS GRANTED -- where the seat's TREASURY is (*"treasury = `Rung.stores` at the office's own rung"*), read off the grant the holder owns.
         `H-160` limit 1 / `H-158`: a holder paying out of his seat's rung gives FROM it
         (`decision/options.py::treasury_of`), and the person-side reader has no `World` (`AX-2`),
         so the rung rides on the Tenure beside `remit_acts`, `H-71` arm 2's own shape and writer
@@ -184,7 +169,7 @@ class Tenure:
         no act can change: `_req_establish` refuses a rung difference on an existing id
         (`loop/predicates.py`; MECHANICAL for `establish`). Layer-1 grade of the stamp itself
         (`04` §B.8's `Tenure :=` lists no payload field; it is a second home for `Office.rung`):
-        CONVENTION, an untyped dict key with no per-property guard; ruled defensible at B-E close.
+        CONVENTION, an untyped dict key with no per-property guard.
 
         `None` for every Tenure carrying no grant, and for the grant of a rungless seat -- which has
         no treasury, so a payment through it is not formed."""
@@ -214,18 +199,13 @@ class Receipt(StateChange):
     Event's `changes[]` was a set of assertions with no provenance: any caller could construct
     `StateChange(...)` naming a write that never happened, append the Event, and every reader
     downstream -- the witness fold, `claim_subjects`, the content hash -- would take it. That is
-    `ID-9` with no instrument against it, and `ID-9` is not hypothetical here: `loop/matter.py`
-    emitted `term.matured` carrying a change to `Record.stages` while nothing in the package
-    mutated it (see `Record.matured`'s own note, ruled 2026-09-10).
+    `ID-9` with no instrument against it.
 
     ⚠ `serial` IS PROVENANCE, NOT DATA, AND THE CONTENT HASH DOES NOT FOLD IT. `World.content_hash`
     reads five named fields off each change -- `subject|mode|driver|field|delta` -- which this
-    inherits unchanged, so introducing the type moves NO hash and `runs/` stays byte-identical.
-    That is deliberate: a provenance token is a fact about who wrote, not about what the world is,
+    inherits unchanged. That is deliberate: a provenance token is a fact about who wrote, not about what the world is,
     and folding it would make two worlds with identical state hash differently because their
-    receipts were minted in a different order. Adding a SIXTH hashed field would also have moved
-    every golden, which #417 measured the hard way -- a carrier gaining a field moves every digest
-    that reprs it.
+    receipts were minted in a different order.
 
     ⚠ IT IS FORGEABLE IN PYTHON AND THE GUARD IS NOT THE CONSTRUCTOR. Nothing stops
     `Receipt(..., serial=7)`; what stops it counting is `state/log.py`, which checks the minting
@@ -257,12 +237,11 @@ class Event:
     mistake the three absences exist to prevent. Defined at both sites per `CLAUDE.md` §4:
     `architecture/meta/01_AXIOMS.md` §D.9 is the prose home (ED-IN-0220).
 
-    ⚠ `subject` WAS DECLARED HERE AND IS DELETED (G1b, plan position 4, 2026-09-26) -- `04:402`'s
-    *"No `actor`, no `target`, no `subject` on `Event`"* is now true of this class. The field was
-    OVERLOADED: the fold set it to the ACTOR, `World.write` and MATTER to the THING WRITTEN, and
-    every reader had to guess which it got. Both senses are now read off the channels that already
-    held them, through `state/attribution.py` -- `actor_of` walks `causes[]` into the act store,
-    `anchor_of` falls back to `changes[]` and then to the cause's own anchor. An emitter with no
+    ⚠ THERE IS NO `subject` ON `Event` -- `04:402`'s
+    *"No `actor`, no `target`, no `subject` on `Event`"*. Both the actor and the thing written are read
+    off the channels that already hold them, through `state/attribution.py` -- `actor_of` walks
+    `causes[]` into the act store, `anchor_of` falls back to `changes[]` and then to the cause's own
+    anchor. An emitter with no
     act, no change and no antecedent has NOTHING that says what it concerns, and `anchor_of`
     answers `None` for it; `test_g1b_attribution.py` plants one and asserts WITNESS deposits
     nothing, so that channel going quiet is observed rather than assumed. A hand-built Event that
@@ -291,16 +270,19 @@ class Event:
     # `Observation` channel. A verb on `REQUIRES_PREDICATES` reads the world through a hand-written
     # predicate that records nothing, so it too carries `()` -- that is a gap in the OLD channel,
     # not a claim that nothing was read, and it closes when the verb is typed.
+    #
+    # B14.03: and the outcomes an effect derives from the scene it wrote (a felling's source, a body that broke
+    # first, a named draw), as Observations WITNESS deposits. `fell_to` and the scene's numbers name no one as a doer; `fell_to_hand` (B14.16) names the standing party, and `first_blood` the one who struck first.
     observed: tuple = ()
     # CP-T03-02. HOW A FIGHT ENDED, PER PARTY -- a tuple of `(person id, "felled" | "yielded" |
-    # "undecided")` pairs, read off the scene's lifted `wound_state` and `surrender` by the effect that
+    # "prevailed" | "undecided")` pairs, read off the scene's lifted `wound_state` and `surrender` by the effect that
     # wrote the band (`loop/effects_combat.py::fight_ending`). Stamped on every success Event of
     # `fight`/`accept` at Felled/Wounded, and of `capture` at any band where an edge is opened (its
     # Untouched band runs the effect: a clean yield's `person.captured` carries it). Empty on every other
     # Event, which is nearly all of them.
     # THE ORDER is the `claimants` order, actor first -- the convention `PersonalCombatInput`'s `ends`,
-    # `kits` and `faculties` follow -- a convention, NOT a role field.
-    # ⚠ NO PRODUCTION READER EXISTS AT THIS COMMIT. The plan gives it as the band Event's payload (the
+    # `kits`, `scores` and `addends` follow -- a convention, NOT a role field.
+    # ⚠ NO PRODUCTION READER EXISTS YET. The plan gives it as the band Event's payload (the
     # CP-T03-02 home: with the body Observation, it is what CP-T03-05 (mode b) and CP-T03-08 "get their
     # lawful input" from); until one of them reads it, only the tests and `World.content_hash` do.
     # ⚠ NOT AN `actor`/`target` FIELD UNDER ANOTHER NAME (S19.3): it names no doer and no recipient --
@@ -309,6 +291,17 @@ class Event:
     # [ASSUMPTION; medium; Jordan to correct; revert: the field and the Observation] -- the carrier is
     # a new Event field rather than a payload key, since an Event carries no payload; a carrier+hash
     # schema mover, folded by `World.content_hash` only where non-empty.
+    # B05.18 (SC-P1, H-284). TWO SHAPES, BY PROVIDER: (1) a SCENE provider (personal combat) -- the per-party
+    # endings above, `rosters.yaml: fight_endings`' words, `data/rosters.py::ENDING_*`; (2) a MARGIN provider
+    # (the social contest) -- `((key, value), ...)` in `rosters.yaml: margin_endings`' order (`data/rosters.py::
+    # MARGIN_ENDING`: pool, ob, net, margin, terms, levels, leverage), the roll that graded the act, built in
+    # `loop/resolve.py::_fold` from what `seam/wrappers/sigma.py::resolve` returned, on every Event of the act
+    # (the Failure band's too); a refusal carries none (no dice were dealt). No act is both.
+    # ⚠ A DEPARTURE FROM `04` §B.9, NAMED HERE: its `Event` record names `degree?` and no `ending`; the field already
+    # ships for combat (H-266), and its use for a margin provider's tuple is a departure (`skills/layer-conformance`
+    # B4, third disposition; C3-C16). Its readers: `harness/chronicle.py` and the GO surface's account. It carries
+    # no actor, target or subject (`04` PART D row 9) and is no `Observation`, so no hearer learns the speaker's
+    # pool from being in the room (D-U1-06; `test_sc01_provider.py::test_no_claim_predicate_is_a_margin_ending_after_witness`).
     ending: tuple = ()
 
     def __post_init__(self) -> None:
@@ -324,20 +317,20 @@ class Event:
 class Claim:
     """S20. Lives in the HOLDER'S OWN ledger.
 
-    ⚠ `round` IS THE ONLY CARRIER FIELD `U2` ADDS, AND THE ONLY ONE IT MAY ADD. The scene tick
-    subdivides a season into rounds, and §F1's Q2 asks for *a claim LANDING in the holder's ledger*
+    ⚠ `lap` IS THE ONLY CARRIER FIELD `U2` ADDS, AND THE ONLY ONE IT MAY ADD. The scene tick
+    subdivides a season into laps, and §F1's Q2 asks for *a claim LANDING in the holder's ledger*
     — which was readable off `when` alone while a season was one pass, and is not once a season is
     several. `when` still says WHICH SEASON and is what eviction and decay read
-    (`p.ledger.sort(key=lambda c: c.confidence * (c.when + 1))`); `round` says WHICH ROUND WITHIN
-    it, so `questions_for(w, p, since=(tick, round))` can ask *since I last deliberated* rather
+    (`p.ledger.sort(key=lambda c: c.confidence * (c.when + 1))`); `lap` says WHICH LAP WITHIN
+    it, so `questions_for(w, p, since=(tick, lap))` can ask *since I last deliberated* rather
     than *since last season*.
     ⚠ IT DEFAULTS TO `0` AND EVERY EXISTING CONSTRUCTION IS POSITIONAL, so a Claim built anywhere
-    that predates the tick reads as round 0 — which is exactly what a claim from the one-pass loop
+    that predates the tick reads as lap 0 — which is exactly what a claim from the one-pass loop
     WAS. The generalisation is therefore exact at `R = 1`: `since == (tick - 1, 0)` selects the
     same claims `c.when == w.tick - 1` did.
-    ⚠ AND NO OTHER CARRIER GETS ONE (`D-21`, and U2's falsifier (d)). The round index is a DRIVER
-    LOCAL — `SeasonDriver.round` — because it is a fact about where the loop is, not about any
-    thing in the world. A `round` on `Act` or `Event` would make it world state and put a fourth
+    ⚠ AND NO OTHER CARRIER GETS ONE (`D-21`, and U2's falsifier (d)). The lap index is a DRIVER
+    LOCAL — `SeasonDriver.lap` — because it is a fact about where the loop is, not about any
+    thing in the world. A `lap` on `Act` or `Event` would make it world state and put a fourth
     clock in the model."""
     id: str
     holder: str
@@ -354,7 +347,7 @@ class Claim:
     # a circle to someone outside it emits `confidence.broken`. It binds what a holder may RETELL,
     # never who hears (§10 decision 1). Every other deposit is `"own"`.
     visibility: str | tuple
-    round: int = 0
+    lap: int = 0
     # ⚠ `chain` -- WHO PASSED THIS CLAIM ON, ORIGIN FIRST, AS IT WAS PRESENTED (telling workplan `T3b`,
     # `ED-IN-0282`; closes `RULINGS.yaml` CAT-3, *"STORE THE TELLER... The edit is one argument, not a
     # lookup"*). `()` for every claim nobody told (firsthand, seen, inferred, content-deposit, and a
@@ -365,9 +358,8 @@ class Claim:
     # and `queries/person_q.py::LedgerReader` counts support over distinct ORIGINS. Nothing is
     # frozen at deposit: the chain records WHO told, and the grade is the reader's, so a revised
     # regard re-grades every claim a teller ever passed on. `chain` replaces the `teller` field
-    # this class carried until `T3b`; `teller` and `hops` are now derived (below). KEYWORD-ONLY:
-    # it took the old positional slot of `teller`, and a stray string passed there would read as a
-    # chain of one-character hops.
+    # `teller` and `hops` are derived (below). KEYWORD-ONLY:
+    # a stray string passed positionally would read as a chain of one-character hops.
     chain: tuple = field(default=(), kw_only=True)
     # `doer` (v9 IN-57, ED-IN-0294: Layer 1 amended by the user, `04` §B.9) -- the holder's own id
     # when the claim records HIS OWN act, else `None`. WITNESS stamps it only where the witness is
@@ -421,9 +413,8 @@ class Said(NamedTuple):
 class Sensation:
     """S18.2 -- the bridge from world truth into `choose`; it carries ONE scalar, `standing`.
 
-    REM-44 deleted `subsistence`: its only reader, `urgency`, had no candidate in it and moved no
-    ranking (`H-73`). A need is now a Query (`world_q.hunger` for a settlement) plus the shortfall
-    claims a person holds about it. The type stays: `sense()` computes `standing` via `standing_of`,
+    It carries no `subsistence` (`H-73`): a need is a Query (`world_q.hunger` for a settlement)
+    plus the shortfall claims a person holds about it. `sense()` computes `standing` via `standing_of`,
     and reading it on a Sensation built without it raises rather than answering 0. 04 §B.10 grades the
     Python one-scalar shape `convention`."""
 
@@ -436,13 +427,10 @@ class Sensation:
 
     @property
     def standing(self) -> int:
-        """S18.2's scalar. COMPUTED as of `W5`; see `standing_of`.
-
-        Rev 3 raised `Unspecified` here and its reason was half right. It said the direct route --
-        reading a value off every other person -- is barred by S22.4 clause 2. V2 §F4 corrected
-        that: clause 2 governs RESOLVER-SIDE Queries and `sense()` is explicitly not one, so the
-        real bar is §20, "Claims live in the holder's own ledger... Nobody else may read or write
-        it." Same conclusion, right law, and it points at the answer rather than at a wall."""
+        """S18.2's scalar. COMPUTED; see `standing_of`. The direct route -- reading a value off every
+        other person -- is barred by §20, "Claims live in the holder's own ledger... Nobody else may
+        read or write it" (S22.4 clause 2 governs RESOLVER-SIDE Queries and `sense()` is explicitly not
+        one)."""
         if self._standing is None:
             raise Unspecified(
                 "Sensation.standing", "S18.2",
@@ -459,10 +447,8 @@ class View:
 
     # roster-exempt: MECHANISM. `__slots__` is a PYTHON LANGUAGE CONSTRUCT — it names this
     # class's own attributes and the interpreter reads it, so changing it changes how the code
-    # works, never what the game is. It crossed the guard's three-element threshold only when W5
-    # added `question`, which is the guard behaving correctly on a shape it cannot distinguish.
-    # CP-T02-07 added `questions` as a FOURTH element of the SAME tuple: the guard counts the
-    # tuple once, as one declared site (`EXEMPT_CEILING` in `test_season_shape.py` is unmoved).
+    # works, never what the game is. The guard counts the tuple once, as one declared site
+    # (`EXEMPT_CEILING` in `test_season_shape.py`).
     __slots__ = ("holder", "claim_ids", "question", "questions", "odds")
 
     def __init__(self, holder: str, claim_ids: list[str], k: int, question: Any = None,
@@ -472,8 +458,7 @@ class View:
                             law="S18 -- at most K claim ids from the holder's OWN ledger")
         object.__setattr__(self, "holder", holder)
         object.__setattr__(self, "claim_ids", list(claim_ids))
-        # ⚠ W5: THE VIEW CARRIES ITS QUESTION, and this is a defect found in §F2 rather than a
-        # convenience. §F2 types `choose(p, view, sensation, ask_budget)` -- FOUR parameters --
+        # ⚠ THE VIEW CARRIES ITS QUESTION. §F2 types `choose(p, view, sensation, ask_budget)` -- FOUR parameters --
         # and its body then reads `candidates = opening_set(p, view, q)`, where `q` IS FREE: the
         # pseudocode uses a variable its own signature does not bind. Widening `choose` to five
         # would break the signature §26 states, so the binding goes where §F1 already put it --
@@ -495,7 +480,7 @@ class View:
         # CR-17: THE PERSON'S BELIEVED-ODDS QUERY, `(act, bands) -> chance or None`, BOUND TO `holder`
         # (`seam/wrappers/sigma.py::believed_chance`, closed by `loop/deliberate.py` over the frozen
         # store). It is a QUERY the person asks, as `choose` asks `ask_budget`, not a store the View
-        # holds: `choose` keeps its four parameters (`test_choose_receives_no_world`), the View keeps
+        # holds: `choose` keeps its four parameters (`test_decision_package_never_names_world_anywhere_under_it`), the View keeps
         # ids and questions and one callable, and `decision/` still names no World. `None` -- a View
         # built by hand, a test, a seated person's callback -- is "he cannot say", and the chooser then
         # leaves the pursuit term as it was (`Fixtures.odds_weighting`, H-248).
@@ -530,13 +515,13 @@ class Question:
     (`docket_question`, CP-T05-04), and the question's OWN referents of every other class a row declares
     (`own_referents_of_class`, REM-21: `Site`, `Proposition`, `Person`, and `Record` since REM-2C, a writ
     excepted), each stamped with its collection's name. A verb row declaring
-    `referent_class: C` forms ONLY on the ids carried here as `C`; a row declaring none forms ONLY on `referents`, exactly as before IN-53 (`referents_for`, read
+    `referent_class: C` forms ONLY on the ids carried here as `C`; a row declaring none forms ONLY on `referents` (`referents_for`, read
     by `VerbRow.referents_of`). Kept apart rather than spliced into `referents` so the partition is
     exact: an id may be BOTH a plain referent (a claim about the seat) and a classed one (the seat
     as a vacancy), and neither side's formations move the other's. It rides per referent, not on
     `source`, because `decision/questions.py::aggregate_questions` folds several questions under ONE
     source and unions the pairs. A Question is not in `World._STATE_COLLECTIONS` and is never
-    hashed, so the field moves no `content_hash`; `()` is every question before IN-53."""
+    hashed, so the field moves no `content_hash`; `()` carries none."""
     id: str
     source: str
     referents: tuple
@@ -573,12 +558,10 @@ class Question:
 class Candidate:
     """S17 -- `opening_set` RETURNS Candidate[], NOT Act[].
 
-    ⚠ `operands` IS THE STRUCTURAL HALF OF `H-94`, AND IT IS NOT A FIELD BOLTED ON. S17 TYPED the
-    Candidate `(verb, subject, why)` (`why` is since removed, below, so the fields are now `(verb,
-    subject, operands)`), and `H-94` measured what that cost: `transfer`'s
-    `stores(hearth(giver), kind) >= amount` has no `kind` and no `amount` that any part of the
-    deliberation-to-resolution pipeline can carry, so the verb was attempted and refused in every
-    world in the corpus. The row asked WHERE OPERANDS LIVE. They live here, on the Candidate,
+    ⚠ `operands` IS THE STRUCTURAL HALF OF `H-94`, AND IT IS NOT A FIELD BOLTED ON. Without it
+    `transfer`'s `stores(hearth(giver), kind) >= amount` has no `kind` and no `amount` that any part of
+    the deliberation-to-resolution pipeline can carry, so the verb would be attempted and refused in
+    every world. The row asked WHERE OPERANDS LIVE. They live here, on the Candidate,
     because the person is who derives them -- `hearth(giver)` is the giver's own Tenure and the
     referent is the person's own question -- and a channel anywhere further down (the Act, the
     Scene, the payload) would have to be filled by something that is not the person, which is L2.
@@ -588,11 +571,9 @@ class Candidate:
     fold for a reason that is about the INSTRUMENT, and once `W-B` deposits observations that
     refusal becomes a FALSE BELIEF held by everyone who witnessed it.
 
-    ⚠ S17's THIRD FIELD, `why`, IS GONE (plan position `14`, CANDIDATE-WHY). `opening_set` wrote the
-    question's source into it and nothing ever read it: `pack_scenes` dropped it, and the question
-    that occasioned an act is recovered from `Scene.occasion` instead (`epistemic._term_why`'s
-    docstring). `04` licenses a reader or a removal, never a hole row; with no reader in sight, it
-    is removed -- a field nothing reads is the dead carrier `ID-13` refuses."""
+    ⚠ THERE IS NO `why` (S17 typed one). Nothing read it, and the question that occasioned an act is
+    recovered from `Scene.occasion` (`epistemic._term_why`'s docstring). `04` licenses a reader or a
+    removal, never a hole row -- a field nothing reads is the dead carrier `ID-13` refuses."""
     verb: str
     subject: Optional[str] = None
     operands: dict = field(default_factory=dict)
@@ -620,9 +601,8 @@ class Scene:
     actor: str
     acts: list = field(default_factory=list)
     # ⚠ `occasion` IS THE QUESTION THE SCENE IS ABOUT, and it is the field that binds DELIBERATE
-    # into the causal graph. `N3` (PR #357) measured the absence: *60 act-Events, 0 resolving to
-    # a question* — an act never cited what made it, so `causes[]` could not walk from one
-    # person's act back to another's, and `R3` scored 0 of 30 while every other check passed.
+    # into the causal graph: without it an act never cites what made it, so `causes[]` cannot walk from one
+    # person's act back to another's.
     # The meta-architecture types it here rather than on the Act: `Scene := (id, person,
     # occasion : Question, place : RungId, interactions : Act[])`, because the occasion is what
     # the person is spending the scene ON and the interactions are what they do in it.
@@ -692,26 +672,20 @@ class Act:
     # (`a.stratum != Act.__dataclass_fields__["stratum"].default`), so an act that deliberately
     # declares `stratum=4` is indistinguishable from one that declared nothing and is routed to
     # the verb table instead -- against `stratum_of`'s own promise that "a caller that sets it
-    # explicitly is taken at its word". MEASURED: 19 of the 32 verb-table rows carry a stratum
-    # other than `social`, so a declared 4 would be silently overridden on 19 of 32 verbs.
-    # LATENT, NOT LIVE, and only by coincidence: the sole explicit call site is
-    # `probes.py:2339`, verb `speak`, whose row is `social` -- so the override lands on the same
-    # value and the A37 arm cannot tell "set" from "unset". Found by the step-4 adversarial pass.
-    # NOT fixed here: step 4 is a pure move, and the fix changes `Act`'s schema.
+    # explicitly is taken at its word". 19 of the 32 verb-table rows carry a stratum
+    # other than `social`, so a declared 4 would be silently overridden on those verbs.
+    # LATENT, NOT LIVE, and only by coincidence: the sole explicit call site (`probes.py`) is
+    # verb `speak`, whose row is `social` -- so the override lands on the same
+    # value and the A37 arm cannot tell "set" from "unset".
     # [JUSTIFIED: an INDEX into the `strata` roster (#353 §27), inherited -- `social` is index 4 and `stratum_of` returns `STRATA.index(row.stratum)`. NOT `[canonical:]`: this 4 is also the "caller declared nothing" sentinel `stratum_of` tests against, so it is a fitted default doing two jobs, not a ratified value -- see the ⚠ below]
     stratum: int = 4
-    # ⚠ S27.4 refuses an attempt at Ob > 2 x Pool and routes an UNCONTESTED attempt to A GATE,
-    # "never to an Ob = 0 roll". `None` means UNCONTESTED (no obstacle was declared); 0 would
-    # be the Ob=0 roll the section names, which is why it is not the default.
-    obstacle: Optional[int] = None
-    pool: Optional[int] = None
     # ⚠ WHICH SCENE THIS INTERACTION BELONGS TO. The meta-architecture's `Act` carries `scene`,
     # and it is what lets the fold ask what occasioned an act without the Act itself carrying a
     # Question — the Scene owns the occasion, the Act names its Scene. Stamped by the driver as
     # it flattens scenes into the produced list, so a caller that returns bare Acts (the
     # pre-`W17` accounting, still lawful under `as_scenes`) simply has none.
     scene: Optional[str] = None
-    # G3 -- THE SEAT EXERCISED. `04 §B.9`: `Act := (id, actor : PersonId, via : SeatId?, ...)`, and
+    # THE SEAT EXERCISED. `04 §B.9`: `Act := (id, actor : PersonId, via : SeatId?, ...)`, and
     # `04:120` (AX-1): *"only a person acts ... a seat enters through `Act.via`"*. An office id, or
     # `None` for a person acting as themselves. It is what `_eligible`'s `remit:` branch, `_req_revoke`,
     # `_req_confer`, `_req_establish` and the write gate's F3 clause (T-o and the conferral basis)
@@ -733,25 +707,56 @@ class Act:
 # S27: FIVE STRATA. movement / binding decisions / contested physical / uncontested material / social
 
 
+def generated_attributes(world_seed: int, pid: str, span: Any) -> dict:
+    """AN ATTRIBUTE VALUE DRAWN FOR A PERSON NOBODY AUTHORED (B01a.01; Jordan, 2026-11-13/14: every person's attributes
+    drawn, so every later pin and calibration records against a varied world). THE ONE OWNER of what a person holds on
+    an attribute no cast row authors: it fills `Person.attributes`, and lane A's flat seating at `pool_default`
+    (B01) is gone.
+
+    (1) WHAT IS DRAWN. All ten of `engine/substrate/descriptors.py::ATTRIBUTES` (B01a.06: Spirit is its own group, `attr.spirit.will`), each uniform on the whole numbers `lo`
+    to `hi` of `span` -- `Fixtures generated_attribute_range`, shipped `(1, 6)`, inside the attribute scale
+    (`ATTRIBUTE_FLOOR` to `ATTRIBUTE_CEILING`). `span` None returns `{}` (nothing generated: the world before B01, a
+    fighter reads its class defaults and a roll reads `pool_default`); two whole numbers `lo <= hi` inside the scale
+    are the range; anything else is `Forbidden`, naming the setting and H-856.
+    (2) THE KEY. One keyed draw per (person, attribute) through `state/ids.py::draw_factory`, `lambda: 0` as the clock,
+    purpose `attr.generated:<key>`, one `die(lo, hi)` taken from each stream: a sheet is a function of (seed,
+    person id, attribute) alone, whenever and wherever the person is minted. No wall clock, no `random.Random(` here.
+    (3) AUTHORED OVERRIDES. The caller lays an authored value over this dict key by key (`{**generated, **authored}`),
+    so an authored key replaces its own draw and no other: all ten draws are taken whatever a person authors.
+    (6) PROVISIONAL. [ASSUMPTION; medium; Jordan to correct] -- replaced by BA1's authored cast and the later
+    generator; H-856 is graded `assumption` and swept `(1, 6)` SHIPPED / `(2, 2)` B01's flat seating, the control /
+    `None` nothing generated. A sweep applied AFTER the build does not reach a seated sheet."""
+    if span is None:
+        return {}
+    ok = (isinstance(span, (tuple, list)) and len(span) == 2
+          and all(type(v) is int for v in span)
+          and ATTRIBUTE_FLOOR <= span[0] <= span[1] <= ATTRIBUTE_CEILING)
+    if not ok:
+        raise Forbidden(
+            f"`Fixtures generated_attribute_range` is {span!r}: it must be two whole numbers lo <= hi inside the attribute "
+            f"scale {ATTRIBUTE_FLOOR}..{ATTRIBUTE_CEILING}, or None",
+            "engine/season/hole_register.yaml H-856",
+            needs="(lo, hi) whole numbers, ATTRIBUTE_FLOOR <= lo <= hi <= ATTRIBUTE_CEILING; None generates nothing",
+            law="B01a.01 -- one keyed draw per person and attribute, uniform on the declared range")
+    lo, hi = span
+    draw = draw_factory(world_seed, lambda: 0)
+    return {key: draw(pid, f"attr.generated:{key}").die(lo, hi) for key in ATTRIBUTES}
+
+
 @dataclass
 class Person:
     """S9. A COHORT IS A PERSON AT weight > 1. ONE CLASS (S9.1)."""
     id: str
     name: str = ""
     weight: int = 1
-    # ⚠ `marks` DELETED 2026-09-24 (`ED-IN-0261` item 1). A retired `write_matrix.yaml` field
-    # (see its `retired:` list) with zero readers/writers repo-wide, measured by grep before
-    # deletion; the row's history stays in that ledger, only the dead carrier field is gone.
     capability: dict = field(default_factory=dict)
     stance: list[tuple] = field(default_factory=list)
     pursuits: dict = field(default_factory=dict)
-    # ⚠ `beliefs` DELETED 2026-09-25 with its `write_matrix.yaml` row (now on that file's
-    # `retired:` list): `04:179` / `04:980` (PART D row 44) -- a belief is a `commit` to an OUGHT,
-    # not a field. Zero readers and zero writers in engine/season, measured by grep before deletion.
+    # A belief is a `commit` to an OUGHT, not a field (`04:179` / `04:980`, PART D row 44): `Person`
+    # carries no `beliefs`.
     ledger: list[Claim] = field(default_factory=list)
-    # W5. Part D carries `(Person, body)` and `(Person, travel_leg)` and this class had NEITHER,
-    # so both rows named a field that did not exist — the `(Record, held_by)` defect, at scale
-    # (see `matrix_rows_without_a_field`). `budget` reads both, person-side, which is PLAN §3.3's
+    # Part D carries `(Person, body)` and `(Person, travel_leg)`; a row naming a field the class lacks is
+    # the `(Record, held_by)` defect (see `matrix_rows_without_a_field`). `budget` reads both, person-side, which is PLAN §3.3's
     # smaller amendment: a Person owns every Tenure whose subject they are, so office-holding,
     # body and travel are all the person's own state and `sense()` keeps §18.2's "the ONE".
     # `condition_scale`, not a literal 1000: a person at full body is at the top of the same
@@ -780,8 +785,7 @@ class Person:
     # AFFILIATION name (`affiliation_roster`, the keys of `conviction` below; the two rosters are
     # refused a shared name). One count per act this person OBSERVED that violated that element,
     # written at RESOLVE by the act (`loop/resolve.py::_scar_witnesses`), never at WITNESS (S9.3).
-    # The pre-H3 shape -- a signed float per AXIS, written on the wounded person by `_eff_kill` --
-    # is retired with `_scar` and `scar_step`. Keys are never literals here and the dict is never
+    # Keys are never literals here and the dict is never
     # pre-seeded: a pursuit nobody has been scarred on is absent, not 0, so an unscarred person's
     # `repr` is unchanged. READERS: `person_q.crisis_weights` (threshold 2, H9), `conviction_after_crisis` (3, H13).
     scar: dict = field(default_factory=dict)
@@ -806,13 +810,13 @@ class Person:
     thread_sensitivity: Optional[int] = None
     # v10 CR-20 (M2): THE ATTRIBUTE CARRIER -- `{registry key: whole number 1-7}` over Jordan's ten
     # (`references/descriptor_registry.yaml: attributes`, ED-IN-0328; `engine/substrate/descriptors.py::
-    # ATTRIBUTES`). A person's INPUT is `faculty`, derived at read; these are what it reads. ABSENT WHERE
-    # UNAUTHORED: a key nobody authored is missing, never the registry's `default` and never 0 -- the pool
-    # then falls to `pool_default` (`seam/wrappers/sigma.py::faculty`), so an all-absent realm rolls what it
-    # rolled. Filled ONCE at world build, by a cast row's `stats:` (`harness/populated.py::build_realm`'s
-    # `cast_attributes` switch, which SHIPS OFF; `data/cast.py::attributes_of`, `thread_sensitivity_of`'s
-    # precedent) -- `decision/sheet.py`'s creation sheet only READS it and writes nothing, so no shipped writer
-    # exists until that switch flips: the carrier SHIPS EMPTY, and CR-20 and CR-19 are latent in every shipped realm -- and NEVER WRITTEN IN PLAY: no `write_matrix.yaml` row, so the gate refuses any write to it. READERS:
+    # ATTRIBUTES`). A person's INPUT is `faculty`, derived at read; these are what it reads. Filled ONCE, at world
+    # build (`boot/realm.py::build_realm`) and at an in-play mint (`loop/census.py::_individuate`), by
+    # `generated_attributes` (above) under any value a cast row's `stats:` authors (`data/cast.py::attributes_of`,
+    # key by key), and NEVER WRITTEN IN PLAY: no `write_matrix.yaml` row, so the gate refuses any write to it. A key
+    # nobody holds is missing, never the registry's `default` and never 0 -- the pool then falls to `pool_default`
+    # (`seam/wrappers/sigma.py::faculty`): that is `boot/realm.py::build_realm(cast_attributes=False)`, or `Fixtures
+    # generated_attribute_range` None. `decision/sheet.py`'s creation sheet only READS it. READERS:
     # `seam/wrappers/sigma.py::faculty` (the pool's base) and `_opposition_of` (the score the obstacle halves), and
     # (PC-06 K-1) `seam/wrappers/combat.py::combat_input`/`party_end`, which pass them to the fight on `PersonalCombatInput.attributes`.
     attributes: dict = field(default_factory=dict)
@@ -824,17 +828,20 @@ class Person:
     # write. ONE READER: `epistemic.py::_term_marks`, which deposits it TRUE and verbatim to every co-located
     # witness beside `who` (AX-7: no competence or prior-belief mediation).
     heritage: Optional[str] = None
+    # B04.07 (A-107): TRAITS -- what this person is MOVED BY, the members of `descriptors.TRAITS` he holds, each held or
+    # not and never giving dice. Filled ONCE at world build from a cast row's `resonant_style:`
+    # (`data/cast.py::traits_of`; `frozenset()` where unauthored), held APART from `capability` (the skill map holds
+    # skills only), and written at build only (`write_matrix.yaml`'s `Person.traits` row has no step). No reader reads it
+    # yet: the `edge` reader that will (U1-B step 4) reads 1 if the subject holds the trait, else 0.
+    traits: frozenset = frozenset()
     travel_leg: list[str] = field(default_factory=list)
-    # ⚠ W5 MOVED THE TENURE STORE HERE, and `Tenure`'s OWN DOCSTRING already said this: "S15 --
-    # THE ONE EDGE. Owned by its SUBJECT (S15.1)." The class asserted the ownership and the
-    # storage contradicted it -- every Tenure lived in one flat `World.tenures` list. That was
-    # survivable until `budget : (Person, View) -> int` had to read "own `hold` Tenures" WITH NO
-    # WORLD (#353 `:877`, `:912-913`; `H-28`). With a flat world list that signature is
-    # UNSATISFIABLE, which is why V2 §F3 gave `budget` a `World` and became a SECOND non-decision
-    # function taking one -- breaking `:634`'s "the ONE non-decision function permitted a World".
-    # PLAN §3.3 takes the smaller amendment instead: #353 `:730` gives Person "every Tenure whose
-    # subject they are", so the store was in the wrong place all along and no signature had to
-    # change. `World.tenures` is now a READ-ONLY VIEW over these; see `_TenureView`.
+    # ⚠ THE TENURE STORE IS HERE, as `Tenure`'s OWN DOCSTRING says: "S15 -- THE ONE EDGE. Owned by its
+    # SUBJECT (S15.1)." `budget : (Person, View) -> int` reads "own `hold` Tenures" WITH NO WORLD
+    # (#353 `:877`, `:912-913`; `H-28`), which a flat world list would make UNSATISFIABLE and would make
+    # `budget` a SECOND non-decision function taking a `World` -- breaking `:634`'s "the ONE
+    # non-decision function permitted a World". PLAN §3.3 takes the smaller amendment: #353 `:730` gives
+    # Person "every Tenure whose subject they are". `World.tenures` is a READ-ONLY VIEW over these; see
+    # `_TenureView`.
     tenures: list = field(default_factory=list)
 
     def __post_init__(self) -> None:
@@ -844,12 +851,64 @@ class Person:
     @property
     def is_cohort(self) -> bool:
         """S9's own sentence as a predicate: *"A COHORT IS A PERSON AT weight > 1"*. One owner for
-        the test, because plan position `24f` (`ED-IN-0255`) made it decide something: the larder
+        the test, because `ED-IN-0255` makes it decide something: the larder
         draw feeds cohorts and exempts the individual (`queries/world_q.py::subsistence_draw`).
         A PROPERTY, NOT A FIELD: it is read off `weight` every time, so it can never disagree with
         the field it is about, and it is not state (`matrix_rows_without_a_field` reads fields,
         and no write-matrix row names it)."""
         return self.weight > 1
+
+
+@dataclass(frozen=True, eq=False)
+class PersonInterior:
+    """WHAT `choose` IS HANDED OF A PERSON: `04` §B.2 row 2 *"a frozen copy with no store handle"*, §C.3 *"In: a
+    frozen `PersonInterior`"*. A person interior is what is inside the person, copied out at the barrier: no
+    assignment to the interior's own fields, and no item assignment into its mappings, reaches the `Person`.
+    That is NOT "nothing the interior holds can change the store": `ledger` and `tenures` share the
+    LIVE carriers (below; a stance row is a tuple, so `stance` is not a route), so an assignment THROUGH one of them (`interior.tenures[0].until = ...`) lands on the store.
+
+    THE FIELDS ARE THE ONES `decision/` READS, derived by an `ast` walk of attribute reads on the person
+    parameter there (and in the `queries/person_q.py` and `epistemic.py` callees it hands the whole person to), plus
+    `loop/deliberate.py`'s own `p.id`; the walk found no write to any of them. Mappings are `MappingProxyType`
+    over a copy, sequences are tuples. `ledger` and `tenures` hold the carrier objects themselves
+    (`Claim`, `Tenure`), not copies of them: a `Tenure` counts its own assignments
+    (`_v`, `World._tenure_changes`), so a copy would be a different object to the diff. The reader a
+    caller wants over the ledger is `queries/person_q.py::LedgerReader(interior.ledger)` -- built there, because
+    this module may not import `queries/`.
+
+    `eq=False`: identity equality, so an interior with mappings in it is hashable. Not stored anywhere."""
+    id: str
+    name: str
+    capability: Mapping
+    pursuits: Mapping
+    conviction: Mapping
+    scar: Mapping
+    attributes: Mapping
+    body: int
+    thread_sensitivity: Optional[int]
+    stance: tuple
+    travel_leg: tuple
+    tenures: tuple
+    ledger: tuple
+    weight: int = 1       # S9: a cohort is a Person at weight > 1; a chooser's callback may ask (harness/probes.py P21)
+    heritage: Optional[str] = None   # B04.13: read by `decision/sheet.py`'s development sheet, as `thread_sensitivity` is.
+    # 04 §B.2 calls `heritage?` a read-off field whose resolver is WITNESS's `marks` term, and §A.2 / §B.2 make this
+    # record the person's own state; the two rows meet here. The pick: admitted, as his OWN field -- §B.2 excludes only
+    # "anything about another person", and another person's heritage is still read only through a held claim.
+
+
+def frozen(d) -> Mapping:
+    """A read-only copy of a mapping (`None` reads as empty): what a handed-down record holds in place of the store's dict."""
+    return MappingProxyType(dict(d or {}))
+
+
+def interior_of(p: Person) -> PersonInterior:
+    """THE ONE BUILDER of a `PersonInterior`: copy the fields `decision/` reads out of `p`, mappings read-only."""
+    return PersonInterior(
+        p.id, p.name, frozen(p.capability), frozen(p.pursuits), frozen(p.conviction), frozen(p.scar),
+        frozen(p.attributes),
+        p.body, p.thread_sensitivity, tuple(p.stance), tuple(p.travel_leg), tuple(p.tenures), tuple(p.ledger),
+        p.weight, p.heritage)
 
 
 @dataclass
@@ -859,11 +918,6 @@ class Site:
     rung: str
     kind: str
     condition: int
-    # ⚠ `drawers: list[str]` WAS HERE AND IS DELETED (plan position `18a`, r2 item 14). Its matrix
-    # row was retired at W2 (no verb produced `drawers.changed`); `01_AXIOMS.md` §D.3 names it
-    # *"retired as a dead row with `Rung.stake`"*, and it had zero readers and zero writers. The
-    # `retired:` entry in `write_matrix.yaml` now says the carrier went too. `Site`'s encoding folds into
-    # `World.content_hash`, so this is a declared hash move, not a behaviour change.
 
 
 @dataclass
@@ -871,11 +925,10 @@ class Record:
     """S13 -- a LIVE CARRIER. S30.1: it has NO Partition row, so every Record write is an
     unmarked cell -- which this instrument reports rather than papering over.
 
-    ⚠ PETITIONS AND DISPENSATIONS ARE KINDS OF THIS CLASS, NOT CLASSES OF THEIR OWN (plan position
-    `15`; `04_CODE_ARCHITECTURE.md` §B.5's synthesis call, PART A row 11). `World` carried them as
-    two plain dicts beside `records`, which no production code read -- so `forge`, `destroy_record`,
-    `hold` and `carry` could not reach them, and a `hold` on a dispensation had nothing to point at.
-    `kind` is now a `record_kinds` member and `subject_matter` is that kind's EXACT key set; both
+    ⚠ PETITIONS AND DISPENSATIONS ARE KINDS OF THIS CLASS, NOT CLASSES OF THEIR OWN
+    (`04_CODE_ARCHITECTURE.md` §B.5's synthesis call, PART A row 11), so `forge`, `destroy_record`,
+    `hold` and `carry` reach them, and a `hold` on a dispensation has something to point at.
+    `kind` is a `record_kinds` member and `subject_matter` is that kind's EXACT key set; both
     are refused at construction (`__post_init__`, below)."""
     id: str
     rung: str
@@ -890,13 +943,10 @@ class Record:
     # GAME and the field should exist. `write_matrix.yaml`'s `(Record, matured)` row has named this
     # field since it was written: `steps: [MAT]`, `class: MATTER`, `emits: term.matured`,
     # `by: "D7 — MATTER matures a term the act declared; causes[] names that act"`.
-    # ⚠ **WHAT IT REPAIRS IS `ID-9` LIVE, NOT A TIDINESS.** `loop/matter.py` emitted `term.matured`
-    # carrying `StateChange(rid, "set", "MATTER", "stages", label)` and applied NO WRITE — nothing
-    # in the package mutated `rec.stages`; `matter.py` and `probes.py` only read it. An Event
-    # reported a state change that did not happen, which is ID-9's own worked example. It also
-    # named the WRONG ROW: `(Record, stages)` is `steps: [RES]`, `class: ACTS`, *"terms are
-    # act-declared, never MATTER-advanced"* — a MATTER-step Event claiming a change to the one
-    # field the matrix forbids MATTER to touch.
+    # ⚠ `(Record, stages)` is `steps: [RES]`, `class: ACTS`, *"terms are act-declared, never
+    # MATTER-advanced"*: a MATTER-step Event claiming a change to it would name the one field the
+    # matrix forbids MATTER to touch, and report a change nothing wrote (`ID-9`). So MATTER writes
+    # `matured`.
     matured: bool = False
 
     def __post_init__(self) -> None:
@@ -953,12 +1003,12 @@ def subject_of(a: "Act") -> str:
     STRING payload. `loop/effects.py::_operand` guards the same way and for the same reason; it is
     a DIFFERENT rule (it raises on any missing named operand) and is deliberately not folded here.
 
-    ⚠⚠ **IT LIVES HERE BECAUSE THREE CALLERS HAD IT AND TWO OF THEM DISAGREED — IN THE COMMIT THAT
-    CREATED THEM.** `loop/deliberate.py` returned `""` for a subject-less act; `loop/driver.py` and
-    `loop/predicates.py` each inlined
-    `(a.payload or {}).get("subject") if isinstance(a.payload, dict) else None` and returned
-    `None`. `""` and `None` are both falsy, so nothing broke and nothing would have — until a
-    caller wrote `subj is None` or put the result in a set beside a `""`. `carriers` is the leaf
+    ⚠⚠ **IT LIVES HERE BECAUSE THREE CALLERS NEED IT AND INLINE COPIES DISAGREE.**
+    `loop/deliberate.py` would return `""` for a subject-less act; `loop/driver.py` and
+    `loop/predicates.py` would each inline
+    `(a.payload or {}).get("subject") if isinstance(a.payload, dict) else None` and return
+    `None`. `""` and `None` are both falsy, so nothing breaks until a
+    caller writes `subj is None` or puts the result in a set beside a `""`. `carriers` is the leaf
     all three already reach, and neither `deliberate` nor `predicates` imports the other, so this
     is the only home that costs no new edge."""
     d = a.payload if isinstance(getattr(a, "payload", None), dict) else {}
@@ -968,7 +1018,7 @@ def subject_of(a: "Act") -> str:
 @dataclass(frozen=True)
 class Proposition:
     """S14. IDENTITY-BEARING AND IMMUTABLE. Fixed at utterance, never destroyed.
-    REV 2: `frozen=True` makes the immutability structural rather than asserted."""
+    `frozen=True` makes the immutability structural rather than asserted."""
     id: str
     mood: str
     subject: str
@@ -979,33 +1029,20 @@ class Proposition:
 
 
 def refuse_a_title_in_a_body(office_id: str, post: Optional[str], body: Optional[str]) -> None:
-    """THE TITLE-IN-A-BODY REFUSAL, AS A FUNCTION OF ITS OWN (plan position `13d-i`, item 4).
+    """THE TITLE-IN-A-BODY REFUSAL, AS A FUNCTION OF ITS OWN.
 
     ⚠ A TITLE IS NOT AN OFFICE, AND CONFLATING THEM PUT A KING IN THE CHURCH. `titles` carries
     the governance ladder Jordan ruled, so a `post` that names a TITLE is a seat on that ladder and
     cannot also be an organ of a faction. The overlay `{post: "King", body: "Cardinal of Justice"}`
-    was ACCEPTED before this check and produced a realm title whose Church affiliation existed
+    would be ACCEPTED without this check and produce a realm title whose Church affiliation exists
     nowhere in canon.
 
-    WHY IT IS A FUNCTION NOW. r2 `03_SEATS_AND_CONTENT.md` §A.8 re-homes this clause from the
-    constructor to `offices.yaml`'s loader as a CONTENT rule, "same refusal, same law string". That
-    loader did not exist yet when this was written (the deferred `offices.yaml` unit), so the rule
-    was given a name the loader could call once built, and `Office.__post_init__` went on calling
-    it meanwhile -- MOVED, never dropped: every office is still refused on construction exactly as
-    before. ⚠ THE LOADER NOW EXISTS (plan position `8a`, 2026-09-29, `data/rosters.py::_load_offices`)
-    -- this paragraph is kept as the history of why the function-not-inline shape was chosen, not as
-    a live "not built yet" note.
+    WHY IT IS A FUNCTION. r2 `03_SEATS_AND_CONTENT.md` §A.8 homes this clause in `offices.yaml`'s loader
+    as a CONTENT rule, "same refusal, same law string"; the loader (`data/rosters.py::_load_offices`)
+    and `Office.__post_init__` both call it.
 
-    ⚠ IT STILL ASKS `title_domain`, AND IT HAS TO -- CORRECTED (methodology close, terminal
-    critique, 2026-09-29): *Is this post a title?* has exactly one owner in the tree, but it is no
-    longer `rosters.yaml: titles`. Position `8a` folded that roster into
-    `offices.yaml: titles: domains:` and physically deleted the `rosters.yaml` copy (methodology
-    close, same day); `title_domain`/`TITLE_DOMAINS` (`data/rosters.py`) now read the survivor. The
-    plan's OLD instruction to delete `titles` and `title_domain` outright, described below as
-    blocked by this refusal, was itself superseded by the fold: the roster moved rather than being
-    deleted, so this refusal never had to become unstatable. r2 `03` §A.12's and r2 `05`'s RULED (c)
-    are both about the now-superseded shape; a reader should not re-derive a "cannot be carried out"
-    blocker from them today."""
+    ⚠ IT ASKS `title_domain`: *Is this post a title?* has exactly one owner in the tree,
+    `title_domain`/`TITLE_DOMAINS` (`data/rosters.py`), which reads `offices.yaml: titles: domains:`."""
     if body is not None and title_domain(post) is not None:
         raise Forbidden(
             f"office {office_id!r} names the TITLE {post!r} and the body {body!r}",
@@ -1026,39 +1063,34 @@ class Office:
     binds: str = "members_by_admission"
     conferral: Optional[str] = None
     revocation: Optional[str] = None
-    # ⚠ `establishment: list[str]` WAS HERE AND IS DELETED (plan position `17a`, r2 item 9). `ARCH
-    # §B.7` call 2: *"`establishment` is a Query over `oblige`, not a field. A set of persons on a
-    # seat is two homes for one fact."* It was `[]` on every office in every world -- `establish`
-    # declared it and never wrote it -- and `queries/world_q.py::establishment_of` now answers the
-    # same question over live `oblige` Tenures. Its matrix row went with it (`write_matrix.yaml`
-    # `retired:`), and so did `establish`'s `writes:` entry. ⚠ `Office`'s encoding folds into
-    # `World.content_hash` and carries every field NAME, so this deletion alone moves the digest of
-    # every world holding an office -- a declared, controlled hash move, not a behaviour change.
-    # ⚠ `dates: list[str]` WAS HERE AND IS DELETED (plan position `18a`, r2 item 14, `05` §A.1.1(e)
-    # row 21). Zero readers and zero writers anywhere in the tree -- every `.dates` in the package
-    # is `World.dates`, the calendar's dict, never this -- and no matrix row. `04 §B.7`'s `Seat :=`
-    # spells `dates[]`; Jordan's `RR-B` ruling (limb `B-1`, 2026-09-17,
-    # `proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml`) AMENDS that line for `dates[]`,
-    # and `04:314` carries the amendment inline. Same declared hash move as `establishment`'s.
+    # NO `establishment` FIELD: `ARCH §B.7` call 2: *"`establishment` is a Query over `oblige`, not a
+    # field. A set of persons on a seat is two homes for one fact."* `queries/world_q.py::establishment_of`
+    # answers it over live `oblige` Tenures. NO `dates[]` FIELD: it has no reader and no writer (every
+    # `.dates` in the package is `World.dates`, the calendar's dict) and no matrix row; `04 §B.7`'s `Seat :=`
+    # spells `dates[]`, which Jordan's `RR-B` ruling (limb `B-1`, 2026-09-17) AMENDS, and `04:314` carries
+    # the amendment inline. `Office`'s encoding folds into `World.content_hash` and carries every field NAME,
+    # so a field added or removed here moves the digest of every world holding an office.
     # `04 §B.7`'s RATIFIED `Seat := ( …, upkeep, dates[], exists )` -- WHAT THE SEAT PAYS EACH
     # PERSON OBLIGED TO IT, PER TERM, out of its own rung's stores (`holonic_ARCHITECTURE.md:428`:
-    # *"what the post pays its establishment out of the office's stake"*). Plan position `17b` typed
-    # it (it was `Any`, declared and unread, and r2 `05:1659` refused deleting it on `F.18`'s own
-    # resolution, *"the repair is a verb"*) and gave it its reader: `queries/world_q.py::upkeep_of`,
-    # which `_eff_transfer` asks when a seated holder pays an obligee. `None` -- every seat any
+    # *"what the post pays its establishment out of the office's stake"*). Its reader is
+    # `queries/world_q.py::upkeep_of` (`F.18`: *"the repair is a verb"*), which `_eff_transfer` asks when a seated holder pays an obligee. `None` -- every seat any
     # builder makes today -- is not "free": it defers to the fixture `default_upkeep` (`H-158`),
     # read at that one owner, so no caller substitutes a number of its own. Units of whatever matter
     # the paying `transfer` carries; see `upkeep_of` for the limit that states.
     upkeep: Optional[int] = None
-    # ⚠ `H-99`, AND THESE FIELDS EXIST BECAUSE THE FIRST VERSION VALIDATED THEM AND THREW THEM
-    # AWAY. `corpus_run._check_office` called `office_faction(...)` at overlay load and DISCARDED
-    # the return; `Office` had no faction and no body, so nothing downstream could read either.
-    # That is exactly the criterion on which `governance_modes` and `power_bases` were deleted
-    # from `rosters.yaml` in the same session -- an artifact nothing reads -- applied to two
-    # rosters and not to the schema that motivated them. Found by the adversarial pass.
+    # ⚠ `H-99`: `body` AND `faction` ARE FIELDS BECAUSE A VALUE VALIDATED AND DISCARDED
+    # (`office_faction`'s return at overlay load) CAN BE READ BY NOTHING DOWNSTREAM -- the criterion on
+    # which `governance_modes` and `power_bases` were deleted from `rosters.yaml`: an artifact nothing
+    # reads.
     body: Optional[str] = None
     faction: Optional[str] = None
-    body_function: Optional[str] = None
+    # B05.20 (U1-D, D-U1-01a): THE ONE LEVEL AN ACT EXERCISED THROUGH THIS SEAT BRINGS TO A ROOM ITS BENCH SITS OVER -- a
+    # `sigma_leverage.LEVEL_SIGMA` name, authored as `offices.yaml`'s row key `modifier:` (refused at load if it is no level)
+    # and read by `seam/wrappers/sigma.py`'s `office` source alone. `None` -- every seat today -- is *none*: *"a seat declaring
+    # none behaves as today"*. Written at build only (`write_matrix.yaml`'s `(Office, modifier)` row has no step): never a die in
+    # the pool and never an opposition. THE FIELD NAME FOLDS INTO `World.content_hash` (see the encoding note above), so adding
+    # it moved the digest of every world holding an office, by name alone: a declared encoding mover, not a behaviour one.
+    modifier: Optional[str] = None
 
     def __post_init__(self):
         # `04` §B.1: A SEAT'S ID IS A `SeatId` -- the same string, tagged (`state/ids.py`), so the fold
@@ -1075,21 +1107,16 @@ class Office:
         # The three canon axes, resolved ONCE, at construction, on the object the world holds.
         # `office_faction` refuses an unknown body, an unknown faction, a body/faction mismatch
         # and an office that belongs to nothing.
-        # ⚠ REQUIRED ON EVERY OFFICE, AND THE ARGUMENT FOR MAKING IT OPTIONAL WAS WRONG. Rev 1
-        # made it optional on the reasoning that requiring it "would break every test fixture and
-        # import canon into the substrate". Both halves fail on inspection. There are FOUR Office
-        # construction sites in the whole chain, not "every fixture"; and `shape.py` already reads
-        # the canon factions from `rosters.yaml` at import, so the substrate knew about them
-        # either way. Jordan, 2026-09-02, put the real question: *"Why would requiring a faction on
-        # every office break canon? Wouldn't it just imply that we don't have enough factions?"*
+        # ⚠ REQUIRED ON EVERY OFFICE: requiring it neither breaks every fixture (there are FOUR Office
+        # construction sites in the whole chain) nor imports canon into the substrate (the canon factions
+        # are read from `rosters.yaml` at import either way). Jordan, 2026-09-02: *"Why would requiring a
+        # faction on every office break canon? Wouldn't it just imply that we don't have enough factions?"*
         #
         # ⚠ THAT IS §42.2's POLARITY RULE, AND IT CUTS THE RIGHT WAY. Optional turns an office
         # nobody can place into a silent `None`; required turns it into a REFUSAL that names the
         # gap -- either the roster is missing a faction, or the office is mis-conceived, and both
         # are findings worth having. An office belongs to something or we do not know what it is.
         self.faction = office_faction(self.body, self.faction)
-        if self.body is not None:
-            self.body_function = BODY_FUNCTION[self.body]
         # HOW THE SEAT IS FILLED AND WHO MAY STRIP IT -- ED-IN-0256 rulings (2) and (3), `13d-i`.
         # The remit clause's shape, one field along: a typo in a declared basis would otherwise
         # make a seat nobody can ever fill or strip, and look like a working precondition while
@@ -1109,8 +1136,7 @@ class Office:
                 "rosters.yaml -- revocation_bases",
                 law="ED-IN-0256 (3) -- who may strip a seat is a CLOSED set of rules; an "
                     "off-roster basis would admit no revocation, silently, forever")
-        # HOW THE SEAT TAKES ON THOSE WHO SERVE IT -- r2 `05` RULED (b), `ARCH F.17`, plan position
-        # `17a`. The two clauses above, one field along. Never `None`: the field has a default, so
+        # HOW THE SEAT TAKES ON THOSE WHO SERVE IT -- r2 `05` RULED (b), `ARCH F.17`. The two clauses above, one field along. Never `None`: the field has a default, so
         # every seat declares one, and an off-roster value would make a seat nobody can join while
         # `_req_oblige` looked like a working precondition.
         require_member(
@@ -1119,7 +1145,7 @@ class Office:
             "rosters.yaml -- binds_bases",
             law="ARCH F.17 -- how a person joins a seat is a CLOSED set; an off-roster basis "
                 "would admit no `oblige`, silently, forever")
-        # WHAT THE SEAT PAYS EACH OBLIGEE -- plan position `17b`. `None` defers to the fixture (see
+        # WHAT THE SEAT PAYS EACH OBLIGEE. `None` defers to the fixture (see
         # the field); a declared value must be a whole, non-negative amount, because `upkeep_of`'s
         # reader divides a payment by it and a negative or fractional upkeep would renew a number
         # of terms nobody could state. `bool` is refused by name: `True` is an `int` to Python and
@@ -1133,23 +1159,16 @@ class Office:
                 law="ARCH §B.7 `Seat := ( …, upkeep, … )` / F.18 -- upkeep is what the seat pays "
                     "each person obliged to it; `_eff_transfer` counts how many a payment covers")
         # A TITLE IS NOT AN OFFICE -- the refusal and its reasoning live in the function
-        # (`refuse_a_title_in_a_body`'s own docstring has the fuller history; `offices.yaml`'s
-        # loader, position `8a`, now exists too, and calls `title_domain` the same way).
+        # (`refuse_a_title_in_a_body`'s own docstring has the fuller account; `offices.yaml`'s
+        # loader calls `title_domain` the same way).
         refuse_a_title_in_a_body(self.id, self.post, self.body)
         # A titled post must sit at the rung its title governs. Otherwise a Duke seated at the
         # realm has realm-wide purview (`under_purview` walks up to the SEAT), which is the
         # governance canon inverted by a data-entry slip.
-        # ⚠ (`13d-i`, 2026-09-26) `under_purview` IS DELETED. `scope_rung` had NO READER in the game
-        # at that date -- only `test_season_shape.py`'s populated-realm assertion -- but GAINED ONE
-        # 2026-09-29 (plan position `18`/PROC-A, `H-32`): `queries/world_q.py::judging_set` reads
-        # `off.scope_rung` directly as the whole mechanism by which a bench's purview reaches a
-        # venue. CORRECTED (methodology close, antagonist pass, 2026-09-29): this comment and
-        # `state/gate.py::purview_reaches`'s docstring both said the opposite and were cited, as
-        # written, by the plan's own "Contradiction 1" resolution as the reason position `18a` may
-        # safely delete this field -- `18a` MAY NOT delete `scope_rung` as things stand; doing so
-        # would silently reopen `H-32`. r2 `03` §A.8's deletion call needs re-deciding against this.
-        # `18a` (2026-09-29) re-derived it and KEPT the field: `judging_set` still reads it, and
-        # Jordan's `RR-B` ruling (limb `B-1`) KEEPS `scope?` in the ratified `Seat :=` besides.
+        # ⚠ `scope_rung` HAS A READER IN THE GAME: `queries/world_q.py::judging_set` reads `off.scope_rung`
+        # directly as the whole mechanism by which a bench's purview reaches a venue (`H-32`), and Jordan's
+        # `RR-B` ruling (limb `B-1`) KEEPS `scope?` in the ratified `Seat :=`; deleting the field would
+        # silently reopen `H-32`.
         dom = title_domain(self.post)
         if dom is not None and self.scope_rung is None and self.rung is not None:
             self.scope_rung = self.rung
@@ -1160,25 +1179,23 @@ class Office:
 class Rung:
     """S10 -- THE HOLON. Eight kinds, ONE type. A Rung owns NO SOCIAL AGGREGATE (S10.1).
 
-    REV 2: rev 1 blacklisted six spellings, so `r.morale` and `r.stability` passed. This is a
-    WHITELIST over S10's declared field set -- a concept check rather than a term check.
+    A WHITELIST over S10's declared field set -- a concept check rather than a term check (a
+    blacklist of spellings would pass `r.morale` and `r.stability`).
     Any attribute not in S10's record raises, whatever it is called."""
 
-    # ⚠ `stake`, `transmission` AND `judging_set_rule` ARE DELETED (plan position `18a`, r2 item
-    # 14), each by name in `04 §B.3`: *"DELETED: stake (retired, no producer) · judging_set_rule ·
-    # transmission"*. None had a reader or a writer. The judging set is a Query over seats
-    # (`04:176`), `queries/world_q.py::judging_set`, built at position `18`; transmission is
-    # `succeed`, owned by the holder (`04:177`). Each whitelist entry went WITH its `__init__`
-    # line (r2 `05`'s ⊕ L40 coupling): the `object.__setattr__` calls bypass the whitelist, so a
-    # half-deletion would have kept writing a field `__setattr__` then refuses. A caller passing
-    # any of the three now meets the undeclared-fields refusal in `__init__`.
+    # NO `stake`, `transmission` OR `judging_set_rule`: `04 §B.3` deletes each by name, *"DELETED: stake
+    # (retired, no producer) · judging_set_rule · transmission"*. The judging set is a Query over seats
+    # (`04:176`), `queries/world_q.py::judging_set`; transmission is `succeed`, owned by the holder
+    # (`04:177`). The `object.__setattr__` calls in `__init__` bypass the whitelist, so a field is
+    # added or removed in both places at once. A caller passing any of the three meets the
+    # undeclared-fields refusal in `__init__`.
     #
     # ⚠ `sites`, `records` AND `dates` STAY, THOUGH r2's LIST DELETES THEM. `04 §B.3`'s RATIFIED
     # `Rung := ( id, kind, matter(stores, sites[], records[]), dates[], envelope, exists )` declares
     # all three (and `01_AXIOMS.md` §D.2 has a Rung OWN "its Sites, its Records ... dates"). Jordan's
     # `RR-B` ruling amended `04` limb by limb and none of its eight limbs is this line, so deleting
     # them would overwrite ratified text no ruling amends -- the ground on which `Office.upkeep` was
-    # kept (the one-order plan's contradiction 1, *"Layer 1 has the field"*). Zero readers each
+    # kept (*"Layer 1 has the field"*). Zero readers each
     # (`loop/matter.py` calls `sites` a back-reference nothing maintains): ID-13's defect, stated
     # here rather than resolved by overwriting the ratified line.
     #
@@ -1187,9 +1204,8 @@ class Rung:
     # ⚠ `yield` IS PART D's FIELD NAME AND IT IS A PYTHON KEYWORD, so it is reached with
     # `getattr`/`setattr` rather than dotted access. Renaming it here would break the
     # `(record_kind, fieldname)` key the write gate, the write class and the emission all share
-    # (§8) — the key is the same string Part D uses, and Part D says `yield`. `W8` added it: the
-    # row existed in the matrix from the start and named a field the class did not have, which
-    # `matrix_rows_without_a_field` now reports because it reads `_DECLARED` (see that function).
+    # (§8) — the key is the same string Part D uses, and Part D says `yield`. A matrix row naming a
+    # field the class lacks is reported by `matrix_rows_without_a_field`, which reads `_DECLARED`.
     _DECLARED = {"id", "kind", "stores", "sites", "records", "dates", "envelope", "yield"}
 
     def __init__(self, id: str, kind: str, **kw: Any):
@@ -1219,24 +1235,19 @@ class Rung:
 def matrix_rows_without_a_field() -> dict:
     """Every matrix row whose `(kind, field)` names no field of that kind's model.
 
-    ⚠ THE W2 ADVERSARIAL PASS NAMED THIS GAP: *"nothing checks that a matrix row's `fieldname` is
-    a real field of its `record_kind` — which is exactly how `(Record, held_by)` survived four
-    revisions."* It reports rather than raising, because a row can legitimately outrun the model:
+    ⚠ NOTHING ELSE CHECKS THAT A MATRIX ROW'S `fieldname` IS A REAL FIELD OF ITS `record_kind` (the
+    `(Record, held_by)` defect). It reports rather than raising, because a row can legitimately outrun the model:
     Part D is the SPECIFICATION and this file is one implementation of it, so a row naming a field
     the instrument has not built yet is a TODO for the instrument, not a defect in Part D.
 
     Kinds the instrument models as DICTS rather than classes — `Date`, `DocketItem`,
     `ConveningCondition` — cannot be checked at all and are reported separately, so the number is
-    never mistaken for a clean bill. (`Petition` and `Dispensation` were two more until plan
-    position `15` folded both into `Record` kinds and deleted their matrix rows.)
+    never mistaken for a clean bill.
 
-    ⚠ `Rung` WAS IN THAT SECOND BUCKET AND DOES NOT BELONG THERE. The test was `is_dataclass`, and
-    `Rung` is a plain class with an explicit `_DECLARED` field set — the whitelist S10 gives it, so
-    that an undeclared attribute raises. Five rows, `(Rung, yield)` among them, were reported as
-    *uncheckable* while the class carries the exact declaration needed to check them; and
-    `(Rung, yield)` is the row `W8` exists to build, so the one instrument that could have said
-    *the field does not exist yet* was excusing itself from the answer. A declared field set is a
-    field set whatever shape it is stored in. Found while opening `W8`."""
+    ⚠ `Rung` IS CHECKED THROUGH ITS `_DECLARED` SET, NOT `is_dataclass`: it is a plain class with an
+    explicit `_DECLARED` field set — the whitelist S10 gives it, so that an undeclared attribute
+    raises — and `is_dataclass` alone would report its five rows, `(Rung, yield)` among them, as
+    *uncheckable*. A declared field set is a field set whatever shape it is stored in."""
     import dataclasses as _dc
     out = {"absent": [], "unmodelled": []}
     for (kind, fld) in sorted(MATRIX):

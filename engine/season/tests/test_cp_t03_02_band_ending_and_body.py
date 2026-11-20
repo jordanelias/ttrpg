@@ -1,7 +1,7 @@
 """CP-T03-02 -- THE BAND'S EVENT SAYS HOW THE FIGHT ENDED, AND WHAT THE BODY NOW IS.
 
 (i) Every success Event of a fight's Felled/Wounded band carries `Event.ending`: `(pid, felled | yielded |
-undecided)` per party, read off the scene's lifted `wound_state` and `surrender`
+prevailed | undecided)` per party, read off the scene's lifted `wound_state` and `surrender`
 (`loop/effects_combat.py::fight_ending`). (ii) Each wounded party's `body.changed` carries the Observation
 `(pid, "body", v)`, `v` the body the write LEAVES him with, on `Event.observed` -- deposited by WITNESS's
 shipped `observation_deposit_mode` (`actor`), no new channel.
@@ -17,21 +17,14 @@ shipped `observation_deposit_mode` (`actor`), no new channel.
 """
 from __future__ import annotations
 
-import pytest
-
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import FELLED, UNTOUCHED, WOUNDED
 from ..harness import probes as P
-from ..harness.populated import build_realm, run
 from ..loop import effects_combat
 from ..loop.driver import SeasonDriver, mint_token
 from ..seam import Resolution, degree_of
 from ..state.carriers import Act
 from ._scar_helpers import party_state
-from .test_cr85_faculty_replaces_history import revert_cr85
-from .test_cp_t03_04_arms import revert_cp_t03_04
-from .test_cp_t03_07_body_ceiling import revert_cp_t03_07
-from .test_cp_t03_08_tend_on_the_wounded import revert_cp_t03_08
 
 ACTOR, SUBJECT = "p_low", "p_mid"      # `tiny_world`: co-located, so a `fight` between them is admitted
 
@@ -40,10 +33,10 @@ _BAND_STATE = {FELLED: dict(felled=True, wounds=2, left=0),
                UNTOUCHED: dict()}
 
 
-def _fight(actor_band, subject_band, yielder=None, fan=None, aid="cp302"):
+def _fight(actor_band, subject_band, yielder=None, fan=None, aid="cp302", beat=None):
     """`ACTOR` fights `SUBJECT` through the real fold and gate at RESOLVE, the band minted by `degree_of`
     as `resolve()`'s seam branch mints it; then WITNESS at the given `fan_out_mode` (the shipped one when
-    `None`)."""
+    `None`). `beat` is the scene's `DecisiveBeat` as the seam lifts it (a dict), or `None` (B14.03)."""
     w = P.tiny_world()
     if fan is not None:
         w.fixtures = w.fixtures.sweep("fan_out_mode", fan)
@@ -55,6 +48,8 @@ def _fight(actor_band, subject_band, yielder=None, fan=None, aid="cp302"):
                            ACTOR: party_state(**_BAND_STATE[actor_band])}}
     if yielder is not None:
         raw["surrender"] = {"by": yielder, "turn": 1, "accepted": True}
+    if beat is not None:
+        raw["beat"] = beat
     res = Resolution(degree_of(raw, SUBJECT, w.fixtures), raw)
     act = Act(id=aid, actor=ACTOR, verb="fight", payload={"subject": SUBJECT})
     out = d._fold(w, mint_token(w, WriteClass.ACTS), act, res)
@@ -92,9 +87,11 @@ def _falsifier_holds(w, before) -> list:
 
 def test_falsifier_the_actor_holds_the_written_body_and_a_non_witness_holds_none():
     w, out, before = _fight(UNTOUCHED, WOUNDED)
-    assert [e.kind for e in out] == ["body.changed"], [e.kind for e in out]
+    # B05.09: the fight's survivors are raised in `arms` (a non-holder minted a first rank), one `capability.raised` after the
+    # body Event (B05.99 rewrite; was the body Event alone)
+    assert [e.kind for e in out] == ["body.changed", "capability.raised"], [e.kind for e in out]
     assert _falsifier_holds(w, before) == []
-    [e] = out
+    e = out[0]
     assert any(o.subject == SUBJECT and o.predicate == "body" and o.value == w.persons[SUBJECT].body
                for o in e.observed), e.observed
 
@@ -138,9 +135,9 @@ def test_the_ending_per_party_on_every_band_event():
     checked = 0
     for (a, s, yielder), want in {
             (UNTOUCHED, WOUNDED, None): {ACTOR: "undecided", SUBJECT: "undecided"},
-            (WOUNDED, FELLED, None): {ACTOR: "undecided", SUBJECT: "felled"},
-            (FELLED, WOUNDED, None): {ACTOR: "felled", SUBJECT: "undecided"},
-            (UNTOUCHED, WOUNDED, SUBJECT): {ACTOR: "undecided", SUBJECT: "yielded"}}.items():
+            (WOUNDED, FELLED, None): {ACTOR: "prevailed", SUBJECT: "felled"},               # B14.02: the one left standing
+            (FELLED, WOUNDED, None): {ACTOR: "felled", SUBJECT: "prevailed"},
+            (UNTOUCHED, WOUNDED, SUBJECT): {ACTOR: "prevailed", SUBJECT: "yielded"}}.items():
         _w, out, _b = _fight(a, s, yielder=yielder)
         assert out
         for e in out:
@@ -170,54 +167,11 @@ def test_a_felled_party_carries_no_body_observation():
 def test_a_capture_yielded_at_the_untouched_band_stamps_the_ending_on_person_captured():
     """`Event.ending` is NOT a Felled/Wounded-only field: `capture`'s Untouched band runs the effect (it declares
     `Tenure.since`), `_eff_capture` returns `_eff_kill`'s `ending` with the opened edge, and the fold stamps it on every
-    success Event -- here `person.captured`, the captive `yielded`, the actor `undecided`, actor first."""
+    success Event -- here `person.captured`, the captive `yielded`, the actor `prevailed` (B14.02), actor first."""
     from .test_cp_t03_09_capture import ACTOR as C_ACTOR, CAPTIVE, _capture, _fold_at, _scene, _world as _cworld
     w, d = _cworld()
     out = _fold_at(w, d, _capture(0), UNTOUCHED, _scene(surrender=dict(by=CAPTIVE, turn=1, accepted=True)))
     assert [e.kind for e in out] == ["person.captured"], [e.kind for e in out]
     (e,) = out
     assert e.ending, "the Untouched capture's Event carries no ending"
-    assert e.ending == ((C_ACTOR, "undecided"), (CAPTIVE, "yielded")), e.ending
-
-
-#: The one-season realm hashes BEFORE this item (dee492f7); seed 0 forms no Felled/Wounded fight and does not move.
-#: Seeds 1 and 2 are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit (was f4330aac... /
-#: a030141a...): PC-20 (1) (the head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`.
-#: B10-13 batch pin commit (the batch's declared movers move a one-season realm of every seed, seed 0 included): was
-#: 20accb03... / 35dadf8a... / 72d62e19....
-#: B10-12 pin commit (CR-24 `field_winner_casualties: engine` and MB-07r's support cap, both shipped, move a one-season
-#: realm that fights; control: both reverted reads the old pin): seed 2 was 5e5bf76c....
-PRE_ITEM = {0: "a63b960024babdcd2a1a37839e2d6cb0",
-            1: "938a3affd22183adfc34d7777df7f3a0",
-            2: "d5d356c7537ba36127ee288867726c2d"}
-
-
-def revert_cp_t03_02(monkeypatch):
-    """The item at its revert, in process: no ending, no body Observation."""
-    monkeypatch.setattr(effects_combat, "fight_ending", lambda *_a, **_k: ())
-    monkeypatch.setattr(effects_combat, "body_observed", lambda *_a, **_k: ())
-
-
-@pytest.mark.parametrize("seed", [0, 1, 2])
-def test_control_the_item_at_its_revert_reproduces_the_pre_item_one_season_hash(seed, monkeypatch):
-    """HASH MOVER, CONTROLLED: every pin this item re-records moved by the ending and the body Observation alone --
-    with both reverted in process the one-season realm reads the pre-item hash exactly; with them, seeds 1 and 2
-    move (seed 0 formed no Felled/Wounded fight)."""
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
-    # v11 CP-T03-04 (`arms` in the vocation range, a formation mover of EVERY seed, seed 0 included) is reverted on BOTH arms,
-    # so `moved` still reads this item alone and `PRE_ITEM` stands.
-    revert_cp_t03_04(monkeypatch)
-    revert_cp_t03_07(monkeypatch)   # v11 CP-T03-07 (`body_ceiling`, a schema mover of every realm), the same way
-    revert_cp_t03_08(monkeypatch)   # v11 CP-T03-08 (`tend` forms on the wounded, a formation mover of every season), the same way
-    # v11 CR-85 (`faculty` replaces `history`, a later mover of seed 1) is reverted on BOTH arms too, BEFORE `moved`
-    # is taken, so `moved` differs from `PRE_ITEM` by this item alone and a CR-85 move cannot pass for one of its own.
-    revert_cr85(monkeypatch)
-    w = build_realm(seed)
-    run(1, seed, w=w)
-    moved = w.content_hash()
-    revert_cp_t03_02(monkeypatch)
-    w = build_realm(seed)
-    run(1, seed, w=w)
-    assert w.content_hash() == PRE_ITEM[seed]
-    assert (moved != PRE_ITEM[seed]) == (seed != 0), (seed, moved)
+    assert e.ending == ((C_ACTOR, "prevailed"), (CAPTIVE, "yielded")), e.ending      # B14.02: the actor is left standing

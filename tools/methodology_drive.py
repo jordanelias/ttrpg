@@ -6,7 +6,7 @@ TERMS, defined at the call site (CLAUDE.md §4):
     and so is not the self-scheduling CLAUDE.md §11 denies; it starts the next process only after
     the previous one has exited.
   * **a fresh process is the clear** — `claude -p` starts with an empty context window, which is
-    the reset `skills/methodology-execute/SKILL.md` §BATCH BOUNDARY asks for. What carries across
+    the reset `skills/methodology-execute/SKILL.md` RUN ORDER step 8 (BOUNDARY) asks for. What carries across
     is what is on disk: commits, the plan, the lane handoff. (Context is fresh, not state-free:
     CLAUDE.md and auto memory still load.) The in-flight row is deleted at each boundary; it is
     what resumes a batch whose process was KILLED partway.

@@ -8,7 +8,7 @@ fought yet. This step selects the acts that declaration produced and calls `_con
 now that `w.step` is ENCOUNTER, the SAME deferral check inside `_contest` takes the other branch:
 dispatch to the seam, fold at the degree the subsystem's own result decides.
 
-⚠ HOLDS NO STATE BETWEEN STEPS. The declaration is an Event in the round's own list (this step's
+⚠ HOLDS NO STATE BETWEEN STEPS. The declaration is an Event in the lap's own list (this step's
 one input, alongside what `self.act_of` already maps it to); the act is already in `w.acts`
 (RESOLVE appended it before folding). No new carrier, no field, no Tenure kind, no clock -- the
 seven ratified Tenure kinds are closed and none of them needed touching to build this.
@@ -16,7 +16,7 @@ seven ratified Tenure kinds are closed and none of them needed touching to build
 ⚠ SELECTS BY THE DECLARATION EVENT, NEVER BY RE-RUNNING `_admits`. A contest refused at RESOLVE
 (ineligible, or its `requires` unmet) has no declaration Event, so it is invisible here BY
 CONSTRUCTION -- `_contest`'s own docstring: ENCOUNTER's admission is the ONE RESOLVE already
-gave, never re-checked against a world the whole round has since moved. This is load-bearing, not
+gave, never re-checked against a world the whole lap has since moved. This is load-bearing, not
 incidental: `state/log.py::EventLog.append` does not refuse a duplicate Event id, so re-running
 admission and re-emitting a refusal here on a contest RESOLVE already refused would risk a SILENT
 DOUBLE EMISSION rather than a raise -- the declaration filter is what prevents it ever being
@@ -42,9 +42,9 @@ from ..trace_log import TRACE
 
 def encounter(self, token: Token, events: list,
               contest_max_depth: Optional[int], host: Optional[Any] = None) -> list:
-    """M4's seventh step. `events` is the SAME round's own -- the driver passes what RESOLVE
+    """M4's seventh step. `events` is the SAME lap's own -- the driver passes what RESOLVE
     just produced, before it is appended to `w.log` (`loop/driver.py::season`), so this step's
-    own events join the same fan-out WITNESS sees for the round.
+    own events join the same fan-out WITNESS sees for the lap.
 
     `host` (v10 REM-31, IN-46): THE ONE STEP THE DRIVER MAY SUSPEND AT. Every fight is deferred here
     (`the body`'s `step: ENCOUNTER`, `rosters.yaml`), in both modes, and the host is handed to each
@@ -58,7 +58,7 @@ def encounter(self, token: Token, events: list,
     w.discard_caches()
     # THE SELECTION. `self.act_of` is cumulative across the whole season (never reset,
     # `loop/resolve.py`'s own note on why), so this reads only the ACTS THIS ROUND'S EVENTS
-    # NAME -- never an earlier round's declaration, which would already have been fought.
+    # NAME -- never an earlier lap's declaration, which would already have been fought.
     declared: dict = {}
     for e in events:
         if e.degree == DECLARED:

@@ -32,14 +32,13 @@ import argparse
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.pursuits import pursuit as _pursuit
 from ..data.verbs import VERB_TABLE
-from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries.world_q import RESIDE_KIND
 from ..state.attribution import anchor_of
-from ..state.carriers import Person, Proposition, Rung, Site, Tenure
-from ..state.ids import H, draw_factory
+from ..state.carriers import Person, Proposition, Rung, Site, Tenure, generated_attributes
 from ..state.world import World
 from ..trace_log import TRACE
+from . import probes as P
 
 CASE = "NPC-088"
 
@@ -68,7 +67,9 @@ def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> World:
 
     for pid, name in ((CARIN, "Carin Vedel"), (BAILIFF, "Uwe the bailiff"),
                       (WARDEN, "the warden")):
-        w.persons[pid] = Person(pid, name)
+        # B01a.03: each of the three holds a DRAWN SHEET (`state/carriers.py::generated_attributes`, the owner `build_realm` seats by).
+        w.persons[pid] = Person(pid, name, attributes=generated_attributes(
+            w.world_seed, pid, w.fixtures.get("generated_attribute_range")))
     w.add_tenure(Tenure("t_carin_in", CARIN, "hearth_ostvik", "contain", since=0))
     w.add_tenure(Tenure("t_bailiff_in", BAILIFF, "hearth_ostvik", "contain", since=0))
     w.add_tenure(Tenure("t_warden_in", WARDEN, "ostvik", "contain", since=0))
@@ -135,7 +136,6 @@ def run(seasons: int = 2, seed: int = 0) -> dict:
     """Run Carin's season(s) and return the artifact. NOTHING HERE CHOOSES AN ACT."""
     w = build_world(seed)
     d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     out = []
     for _ in range(seasons):
         # ⚠ NARROWED TO WHAT THE FOLD CAN EXECUTE, AND THE NARROWING IS COMPUTED, NOT AUTHORED.
@@ -156,8 +156,7 @@ def run(seasons: int = 2, seed: int = 0) -> dict:
         # `H-87`: the contest depth cap is the CALLER's to supply (S39.3 refuses a default), and
         # artifact 2 never had to decide until Part E's `contests:` column became real and the
         # seam started firing on `kill / wound`.
-        out.append(d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                                         draw=draw_factory(w.world_seed, lambda: w.tick)),
+        out.append(d.season(P.chooser(w, verbs=resolvable_verbs()),
                             None,
                             contest_max_depth=w.fixtures.get("contest_max_depth")))
     return dict(seasons=out, hash=w.content_hash(), world=w,
@@ -178,8 +177,8 @@ def main() -> int:
     r = run(a.seasons, a.seed)
     print(f"{a.case} · {a.seasons} season(s) · seed {a.seed}")
     for n, s in enumerate(r["seasons"]):
-        # `rounds` since `U2`: a ticked season and a one-pass one are indistinguishable in this
-        # line without it. See `SeasonDriver.season`'s return for why no Event carries a round.
+        # `rounds=` (the lap count, its key kept) since `U2`: a ticked season and a one-pass one are indistinguishable in this
+        # line without it. See `SeasonDriver.season`'s return for why no Event carries a lap.
         print(f"  season {n}: rounds={s['rounds']} acts={s['acts']} events={s['events']} "
               f"deposits={s['deposits']}")
     if a.log:

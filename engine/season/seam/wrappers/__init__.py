@@ -3,39 +3,33 @@ the §A.2 table's row for them is the shortest in the document: they own **"noth
 read the projection, and they emit a `Margin`.
 
 Three wrappers: `combat.py`, the IN-side of the personal-combat call `seam/contest.py` dispatches
-to; `sigma.py`, the social contest scene's provider (`social_contest`; was interim `sigma_leverage`,
-`ED-SC-0037`, until v9 SC-01 steps 13+15);
-and `mass_battle.py`, wired M3 of the driver-retirement plan (`ED-IN-0279`) -- `rosters.yaml`'s
-"a field" row now has a `provider:`, closing the gap this docstring used to describe. A fourth, under a
+to; `sigma.py`, the social contest scene's provider (`social_contest`, `ED-SC-0037`);
+and `mass_battle.py` (`ED-IN-0279`). A fourth, under a
 second role: `fieldwork.py`, `@provider("inquiry", "fieldwork")` (v9 FI-02 + FI-03, `SM-3`) -- not a
 contest provider; its own docstring adjudicates the §A.2 row it deviates from.
-⚠⚠ **THIS PACKAGE IMPORTS ITS OWN WRAPPERS, AND THAT IS WHAT REGISTERS THEM.
-`manifest/registry.py` USED TO, AND IT WAS AN IMPORT CYCLE.** `U1` had
-`registry._load_providers()` import `seam/wrappers/*` so `@provider` would run; the wrappers import
-the decorator back, and `combat.py` reaches `...decision`, which reaches `state/world.py`, whose
-`boot()` imports `..manifest`. The loop closed:
+⚠⚠ **THIS PACKAGE IMPORTS ITS OWN WRAPPERS, AND THAT IS WHAT REGISTERS THEM.** The manifest
+importing `seam/wrappers/*` would be an import cycle: the wrappers import the `@provider` decorator
+back, and `combat.py` reaches `...decision`, which reaches `state/world.py`, whose
+`boot()` imports `..manifest`:
 
     manifest.registry -> seam.wrappers.combat -> decision -> ... -> state.world
                       -> manifest -> manifest.registry
 
-`registry.py` made that import LAZY and its own docstring called the cycle *"genuine"*. Laziness
-hides a cycle from the interpreter, not from the instrument:
-`tests/valoria/test_import_cycle_game_state_npe.py` counted 3 cycles before `U1` and 4 after, and
-that test says why in its own words -- *"A deferred or bare-named import hides a cycle from an
-instrument; it does not remove it."*
+A lazy import hides a cycle from the interpreter, not from the instrument:
+`tests/valoria/test_import_cycle_game_state_npe.py` says why -- *"A deferred or bare-named import hides
+a cycle from an instrument; it does not remove it."*
 
-**THE LAYERING WAS INVERTED AND THE CUT RESTORES IT: the manifest owns ROWS (data), the seam owns
-PROVIDERS (code).** A manifest importing seam code is the inversion; a seam importing its own
-wrappers is a package importing its own modules. Nothing in the `decision -> queries -> state`
-chain imports `seam/` -- checked by grep, not assumed -- so this edge closes no loop. Both
+**THE MANIFEST OWNS ROWS (data), THE SEAM OWNS PROVIDERS (code).** A manifest importing seam code is the
+inversion; a seam importing its own wrappers is a package importing its own modules. Nothing in the
+`decision -> queries -> state` chain imports `seam/`, so this edge closes no loop. Both
 `loop/driver.py` and `loop/resolve.py` import `..seam`, so by the time `SeasonDriver` construction
-asks `manifest.has(...)` (`check_contest_prizes`, plan position `30`) or `contest()` dispatches, every
+asks `manifest.has(...)` (`check_contest_prizes`) or `contest()` dispatches, every
 provider is registered.
 
 
 ⚠ **A WRAPPER'S IMPORTS STAY RELATIVE.** `tests/valoria/test_engine_does_not_import_systems.py`'s
-`_relative_module_files` follows relative imports only, so an absolute import here makes the
-declared `sys.path` seam invisible to the scan that bounds it.
+`_relative_module_files` follows relative imports only, so an absolute import here would hide from
+that scan any `sys.path` seam a wrapper's relative sibling declared.
 """
 
 # Importing them IS the registration: each module carries `@provider(role, module)` on its
@@ -43,5 +37,5 @@ declared `sys.path` seam invisible to the scan that bounds it.
 from . import combat as _combat            # noqa: F401,E402
 from . import sigma as _sigma              # noqa: F401,E402
 from . import mass_battle as _mass_battle  # noqa: F401,E402
-# v9 FI-02 + FI-03 (`SM-3`): the `inquiry` role's provider, the fieldwork scene's adapter.
+# The `inquiry` role's provider, the fieldwork scene's adapter (v9 FI-02 + FI-03, `SM-3`).
 from . import fieldwork as _fieldwork      # noqa: F401,E402

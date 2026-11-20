@@ -29,6 +29,8 @@ import sys
 
 import pytest  # noqa: E402
 
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 import modules.mass_battle.hierarchy.units as _hu  # noqa: E402
 import modules.mass_battle.orchestration as _orch  # noqa: E402
 import modules.mass_battle.core.contact as _contact  # noqa: E402
@@ -76,10 +78,10 @@ def _cross_side_bodies(unit_a, unit_b):
     """Every (bodyA, bodyB) cross-side cell-body pair, built exactly as contact and the collision step build them
     (circle, front reach = reach_for(troop_type), heading = cell facing)."""
     a_bodies = []
-    for atom in unit_a.subunits:
+    for atom in unit_a.units:
         a_bodies.extend(_hu.cell_bodies_for(atom, _hu.reach_for(atom.troop_type)))
     b_bodies = []
-    for atom in unit_b.subunits:
+    for atom in unit_b.units:
         b_bodies.extend(_hu.cell_bodies_for(atom, _hu.reach_for(atom.troop_type)))
     for ba in a_bodies:
         for bb in b_bodies:
@@ -128,12 +130,12 @@ def test_head_on_contact_fires_at_reach_touch(field_path):
     for gap, want in [(thr - 0.02, True), (thr + 0.02, False), (thr + 0.4, False)]:
         b = build_unit('Line', 3, 'B', 'B', 9)
         # pin both single cells head-on `gap` apart on the same column (node path floats).
-        a_cid = next(iter(a.subunits[0]._node_pos))
-        b_cid = next(iter(b.subunits[0]._node_pos))
-        a.subunits[0]._node_pos[a_cid] = (0.0, 0.0)
-        b.subunits[0]._node_pos[b_cid] = (gap, 0.0)
-        a.subunits[0].cell_facing_vec[a_cid] = (1.0, 0.0)   # A faces +row toward B
-        b.subunits[0].cell_facing_vec[b_cid] = (-1.0, 0.0)  # B faces -row toward A
+        a_cid = next(iter(a.units[0]._node_pos))
+        b_cid = next(iter(b.units[0]._node_pos))
+        a.units[0]._node_pos[a_cid] = (0.0, 0.0)
+        b.units[0]._node_pos[b_cid] = (gap, 0.0)
+        a.units[0].cell_facing_vec[a_cid] = (1.0, 0.0)   # A faces +row toward B
+        b.units[0].cell_facing_vec[b_cid] = (-1.0, 0.0)  # B faces -row toward A
         pairs = find_contacts(a, b)
         fired = len(pairs) > 0
         assert fired == want, f"gap={gap}: contact fired={fired}, expected {want}"
@@ -145,13 +147,11 @@ def test_head_on_no_interpenetration_no_stall(field_path):
     """A head-on Line-vs-Line closes to contact, exchanges casualties (no stall), and at no committed
     tick do opposing cell BODIES interpenetrate (circular bodies stay disjoint-or-touching; the
     reach bodies MAY overlap -- that is the engagement, checked by the casualties below)."""
-    import random
-    random.seed(4242)
     a = build_unit('Line', 3, 'A', 'A', 9)
     b = build_unit('Line', 3, 'B', 'B', 9)
     hp_a0, hp_b0 = a.hp, b.hp
-    with _CommitProbe() as probe:
-        _orch.run_battle(a, b, max_turns=18)
+    with rngsource.using(draw.seeded(draw.H2("test_body_contact_toi", 4242))), _CommitProbe() as probe:
+        _orch.run_battle(a, b, max_ticks=18)
     assert probe.commits > 0, "the end-of-tick pass never ran -> not on the field path"
     assert not probe.body_interpenetration, "opposing cell BODIES interpenetrated after a commit"
     # no stall: contact was reached and combat resolved -> at least one side lost troops.
@@ -162,13 +162,11 @@ def test_cavalry_charge_reaches_contact(field_path):
     """A fast cavalry cell charging a standing infantry line must REACH contact (no freeze short) and
     resolve. Cavalry = 'Fast'; the BODY stop must not halt it short of the enemy body -- it drives to
     body contact and its weapons engage across the closing gap (bodies must still never interpenetrate)."""
-    import random
-    random.seed(77)
     cav = build_unit('Line', 3, 'CAV', 'A', 9, troop_type='cavalry', speed='Fast')
     inf = build_unit('Line', 3, 'INF', 'B', 9, troop_type='infantry')
     hp_c0, hp_i0 = cav.hp, inf.hp
-    with _CommitProbe() as probe:
-        _orch.run_battle(cav, inf, max_turns=18)
+    with rngsource.using(draw.seeded(draw.H2("test_body_contact_toi", 77))), _CommitProbe() as probe:
+        _orch.run_battle(cav, inf, max_ticks=18)
     assert probe.commits > 0
     assert not probe.body_interpenetration, "charge drove bodies into interpenetration"
     assert (cav.hp < hp_c0) or (inf.hp < hp_i0), "cavalry charge stalled short of contact"
@@ -180,7 +178,6 @@ def test_grid_path_never_calls_body_code(grid_path, monkeypatch):
     """FIELD_MOVEMENT=0: the frozen grid path must not run any body code. Poison the primitive so ANY
     call raises, then run a full grid battle -- it must complete untouched (proves the body geometry is
     entirely field-gated; complements the byte-exact digest gate)."""
-    import random
 
     def _poison(*a, **k):
         raise AssertionError("body primitive called on the FIELD_MOVEMENT=0 grid path")
@@ -191,10 +188,10 @@ def test_grid_path_never_calls_body_code(grid_path, monkeypatch):
     monkeypatch.setattr(_hu, 'reach_reaches', _poison, raising=False)
     monkeypatch.setattr(_hu, 'cell_bodies_for', _poison)
     monkeypatch.setattr(_hu, 'separate_all_bodies', _poison)
-    random.seed(1)
     a = build_unit('Line', 3, 'A', 'A', 9)
     b = build_unit('Line', 3, 'B', 'B', 9)
-    res = _orch.run_battle(a, b, max_turns=18)  # must NOT raise
+    with rngsource.using(draw.seeded(draw.H2("test_body_contact_toi", 1))):
+        res = _orch.run_battle(a, b, max_ticks=18)  # must NOT raise
     assert res['winner'] in ('A', 'B', 'draw')
 
 
@@ -208,11 +205,10 @@ def test_conservation_over_short_battle(field_path):
     old open-coded loop skipped routed/broken units without counting the skip, so it could assert
     nothing and still pass.
     """
-    import random
-    random.seed(2026)
     a = build_unit('Line', 3, 'A', 'A', 9)
     b = build_unit('Line', 3, 'B', 'B', 9)
-    _orch.run_battle(a, b, max_turns=18)
+    with rngsource.using(draw.seeded(draw.H2("test_body_contact_toi", 2026))):
+        _orch.run_battle(a, b, max_ticks=18)
     checked = assert_troop_conservation(a, b, context='body seed=2026')
     assert checked >= 2, f"conservation checked {checked} units, expected both"
 
@@ -221,13 +217,12 @@ def test_conservation_over_short_battle(field_path):
 
 def test_determinism_same_seed(field_path):
     """Same seed twice -> identical public outcome (winner, turns, final hp)."""
-    import random
 
     def _run():
-        random.seed(9001)
         a = build_unit('Line', 3, 'A', 'A', 9)
         b = build_unit('Line', 3, 'B', 'B', 9)
-        res = _orch.run_battle(a, b, max_turns=18)
+        with rngsource.using(draw.seeded(draw.H2("test_body_contact_toi", 9001))):
+            res = _orch.run_battle(a, b, max_ticks=18)
         return (res['winner'], res['turns'], round(a.hp, 6), round(b.hp, 6))
 
     assert _run() == _run()

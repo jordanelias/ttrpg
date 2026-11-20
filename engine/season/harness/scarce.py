@@ -57,14 +57,14 @@ from __future__ import annotations
 
 from collections import Counter
 
+from ..boot.realm import place_person   # the one placing of a person; `boot/` never imports the harness
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.requires import SHORTFALL_PREDICATE
-from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
-from ..state.carriers import Office, Person, Rung, Site, Tenure
-from ..state.ids import H, draw_factory
+from ..state.carriers import Office, Rung, Site, Tenure
 from ..state.world import World
+from . import probes as P
 
 # THE TWO SETTLEMENTS AND THE TWO PEOPLE. Test-fixture ids, not definitions the game resolves from.
 GRANARY, HUNGRY = "set_granary", "set_hungry"
@@ -104,11 +104,8 @@ def build(seed: int = 0, fixtures=DEFAULT_FIXTURES, steward_holds: bool = True) 
     for pid, name, weight, home in ((STEWARD, "the steward", 1, GRANARY),
                                     (POPULACE, "the people of the hungry town", COHORT_WEIGHT,
                                      HUNGRY)):
-        w.persons[pid] = Person(pid, name, weight=weight)
-        w.rungs[pid] = Rung(pid, "person")
-        w.add_tenure(Tenure(f"t_{pid}_in", pid, home, "contain", 0))
-        # Plan position `19c`: and they live there (`populated.build_realm`'s rule).
-        w.add_tenure(Tenure(f"t_{pid}_home", pid, home, world_q.RESIDE_KIND, 0))
+        # Plan position `19c`: they stand and live there (`boot/realm.py::place_person`, `build_realm`'s rule).
+        place_person(w, pid, name, home, weight=weight)
     if steward_holds:
         w.add_tenure(Tenure("t_steward_holds_hungry", STEWARD, HUNGRY, "hold", 0))
     return w
@@ -161,10 +158,7 @@ def governed(seed: int = 0, fixtures=DEFAULT_FIXTURES, steward_holds: bool = Tru
         w.offices[seat] = Office(seat, post, rung, list(REEVE_REMIT), faction=GOVERNING_FACTION)
     for pid, name, home, seat in ((REEVE, "the reeve of the march", REEVE_HEARTH, REEVE_SEAT),
                                   (FAR_REEVE, "the far reeve", FAR_HEARTH, FAR_SEAT)):
-        w.persons[pid] = Person(pid, name)
-        w.rungs[pid] = Rung(pid, "person")
-        w.add_tenure(Tenure(f"t_{pid}_in", pid, home, "contain", 0))
-        w.add_tenure(Tenure(f"t_{pid}_home", pid, home, world_q.RESIDE_KIND, 0))
+        place_person(w, pid, name, home)
         w.add_tenure(Tenure(f"t_{pid}_seat", pid, seat, "hold", 0))
     return w
 
@@ -213,9 +207,7 @@ def run(seasons: int = 3, seed: int = 0, w: World | None = None,
     skip `d.resolved`; the outcomes read here are per fold, which is what the set holds."""
     w = build(seed) if w is None else w
     d = SeasonDriver(w)
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                      draw=draw_factory(w.world_seed, lambda: w.tick))
+    ch = P.chooser(w, verbs=resolvable_verbs())
     out = []
     for _ in range(seasons):
         need, got = world_q.demanded(w, HUNGRY), world_q.delivered(w, HUNGRY)

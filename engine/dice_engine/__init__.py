@@ -1,17 +1,17 @@
 """
 engine.dice_engine — the DICE ENGINE: the d10 chain, degree_from_net and sigma leverage, which the host and
 every system read. It is not "the engine" (that is the season loop, engine/season/).
-The package holds exactly three files: __init__.py, dice_engine.py, sigma_leverage.py.
+The package holds exactly five files: __init__.py, dice_engine.py, sigma_leverage.py, fmath.py, draw.py.
 ⚠ NOT a Godot autoload and never to become one — the port's [autoload] table holds no simulation state or
 service (architecture/holonic_ARCHITECTURE.md §47).
 
-Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
+Status: the ruled owner of the d10 chain, the one sampler and the degree ladder; not a provisional stub. The code is the mechanism, this text is reference.
 
 Modules:
   - dice_engine: d10 chain rule, TN values, degree of success
   - sigma_leverage: continuous sigma-leverage resolution
-  (game_state, the global mutable state container, was deleted at plan position `29b`, 2026-10-01: the
-   season's World is engine/season/state/world.py and its realm is harness/populated.build_realm.)
-  (season_manager, scene_slate, npc_ai, victory and engine_clock were deleted at plan position
-   `28-iii`, 2026-10-01; the season loop is engine/season/loop/.)
+  - fmath: the float operations with one owner (a float sum goes through `ltr_sum`)
+  - draw: the one draw, a function of a key and an index (`Draw`, `H2`, `seeded`)
+  (the season's World is engine/season/state/world.py, its realm is built by
+   engine/season/boot/realm.py::build_realm, and the season loop is engine/season/loop/.)
 """

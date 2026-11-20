@@ -62,7 +62,7 @@ it.
 
 **Relation to `/close` and to `methodology-execute`.** This pipeline runs *before* `/close`, on a
 diff that is otherwise ready to commit — whether that diff already existed, or
-`methodology-execute` just built it. `/close` step 4 also runs `layer-conformance`; Phase 2 below
+`methodology-execute` just built it. `/close` step 3 also runs `layer-conformance`; Phase 2 below
 is not a duplicate of that step, it is why that step should find nothing new by the time it runs.
 `methodology-execute`'s BATCH-CLOSE **is** this file's Phases 1–3, invoked by reference, not
 copied, run once against a whole batch's cumulative diff rather than once per item; a change to
@@ -73,11 +73,14 @@ end of a batch, correct whatever is required then, implement all fixes and chang
 per the closing sequence, and then we run CI again to confirm that we successfully did it"*).** Twice,
 and inside no phase: the first run starts as Phase 1 opens, on the diff under review, and its reds are
 reconciled beside Phases 1–3's findings (1.5, 3.7); the second runs on the commit carrying every fix,
-after Phase 3 and `/close`, and confirms. Neither run replaces a phase, and a green run is not evidence
-about any of them. Which commits start no run is `methodology-execute`'s CHECKPOINTS AND BASELINES.
+after Phase 3 and `/close`, and confirms. The ruling's own order decides the first run's place: CI
+*first*, then "correct whatever is required then" together with the closing sequence's fixes, then CI
+again — so a first run after Phase 3 would read a tree the closing sequence had already corrected, and
+the ruling would have no first run to correct from. Neither run replaces a phase, and a green run is
+not evidence about any of them. Which commits start no run, which commit is the confirming head, and
+what happens to a result not yet reported are `methodology-execute`'s CHECKPOINTS AND BASELINES.
 **Which tests the close runs is `python tools/tests_for_diff.py`'s answer for the diff under review** (a subsystem-confined
 diff runs that subsystem's `-m` suite; anything else, the full gates of `CLAUDE.md` §0.4), not a fixed command.
-[ASSUMPTION; medium; the user to correct — the first run's place; revert: it runs after Phase 3.]
 
 ---
 
@@ -177,7 +180,7 @@ they queue.
 2. **`/simplify`** — reuse, simplification, efficiency, on the now-correct tree. It applies its own
    fixes by contract; no flag needed.
 3. **`layer-conformance`** — placement and Layer-1 conformance, last. Its own doc places it at
-   `/close` step 4 for the same reason: it wants the tree to have stopped moving before it grades
+   `/close` step 3 for the same reason: it wants the tree to have stopped moving before it grades
    placement.
 
 ### 2.3 Apply before the next stage reads the tree
@@ -188,9 +191,10 @@ the next.
 
 ### 2.4 layer-conformance's own trigger, not re-derived here
 
-Run its Lens B always — by the time this phase runs, the diff is Layer-2 code by definition. Run
-Lens A too if Phase 1 or `/code-review` added a tool, a guard, a hook, or a governance rule. Its
-own A1–A5 decide anything finer; this skill does not restate them.
+Run its Lens B when the diff touches `engine/season/` or `modules/`, the trees Lens B checks; a diff
+confined to prose, ledgers, skills or tools has nothing for it, and the report says Lens B was
+skipped for that reason. Run Lens A too if Phase 1 or `/code-review` added a tool, a guard, a hook,
+or a governance rule. Its own A1–A5 decide anything finer; this skill does not restate them.
 
 ---
 

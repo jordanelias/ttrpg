@@ -90,10 +90,9 @@ def test_st08_the_scale_key_invariant_10_now_actually_fails_for_convene():
     without complaint, and the ordinal replacement was inexpressible for want of a `venue`
     operand. ALL THREE REVERSE: the key is gone from the loaded row, and the replacement needed
     NO new operand -- `subject` already binds the rung (C-11, `21_RECONCILIATION.md:379`)."""
-    convene = VERB_TABLE["convene"]
-    assert not hasattr(convene, "scale") or True   # `VerbRow.scale` still exists as a dataclass
-    # field (every row has one, defaulted); what ST-08 actually tested is the RAW YAML CELL, which
-    # is what the loader reads BEFORE defaulting -- assert that directly.
+    # `VerbRow.scale` still exists as a dataclass field (every row has one, defaulted); what ST-08
+    # actually tested is the RAW YAML CELL, which is what the loader reads BEFORE defaulting --
+    # assert that directly.
     from ..data.files import VERB_TABLE_YAML
     from ..data.rosters import load_yaml
     raw = load_yaml(VERB_TABLE_YAML.read_text())
@@ -116,7 +115,8 @@ def test_st23_the_loaders_schema_is_the_thirteen_keys_19_plan_step_11_derives():
     question that IS an execution: does the LOADER's own declared schema carry the count
     `19_PLAN.md` step 11 derives (fifteen minus `registers`/`verdict_reasons`/`stakes_grade`, plus
     `quorum` = thirteen), and does a row missing one of them fail to load."""
-    assert len(A._ARRANGEMENT_KEYS - {"id"}) == 13, sorted(A._ARRANGEMENT_KEYS)
+    # the thirteen plus B05.21's `standard:` (T13 edit 2), the one key added since: the room's `difficulty_levels` member
+    assert len(A._ARRANGEMENT_KEYS - {"id"} - {"standard"}) == 13 and "standard" in A._ARRANGEMENT_KEYS, sorted(A._ARRANGEMENT_KEYS)
     for stale in ("registers", "verdict_reasons", "stakes_grade"):
         assert stale not in A._ARRANGEMENT_KEYS, (
             f"{stale!r} is a DELETED key (19_PLAN.md step 11) and must not be schema-legal")

@@ -3,8 +3,11 @@
 ## Date: 2026-04-11
 ## Engine: Godot 4.x (GDScript)
 ## Status: STALE REFERENCE — predates the d+σ resolution model (canonized 2026-05-15) and the
-v40 consolidation; retained for its pipeline/procedure structure, not its numbers. The GOVERNING
-spec for the port is `godot/godot_conversion_strategy_v1.md`. Lane: GO (activated 2026-08-14,
+v40 consolidation; retained for its extraction procedure (Part Seven) only. The ratified Godot
+mapping is `architecture/meta/04_CODE_ARCHITECTURE.md` §C.12, which this document contradicts at
+three points: one autoload holding all state (rejection 1), container signals as the consequence
+stream (rejection 3), and one seeded generator for the campaign (rejection 4).
+`godot/godot_conversion_strategy_v1.md` is PROPOSED, intent only. Lane: GO (activated 2026-08-14,
 Jordan ruling — ED-GO-0001).
 
 ---

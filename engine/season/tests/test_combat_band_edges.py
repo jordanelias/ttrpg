@@ -48,7 +48,7 @@ from engine.season.state.carriers import Act
 @pytest.fixture
 def engine_available():
     if C.engine() is None:
-        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+        pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     # Plan position `31b`: the adapter calls the module entry through `MODULE_ENTRIES`, which the
     # registrar fills at driver construction; a direct `contest()` needs one constructed in the process.
     SeasonDriver(P.tiny_world())
@@ -206,7 +206,7 @@ def test_an_edge_at_max_wounds_grades_the_standing_subject_below_the_cap_untouch
     THE UNIVERSAL CLAIM: the universal one (every STANDING fought subject, over the 24 real ones) is
     `test_an_unreachable_arm_grades_every_standing_fought_subject_untouched`, and the cap case is
     `test_a_standing_subject_at_the_wound_cap_still_reads_wounded_at_max_wounds`."""
-    raw = _scene("we0")
+    raw = _scene("we3")   # seed re-picked at B06.99: the stream changed (was we0; the docstring's `we0` reads `we3` now)
     fx = DEFAULT_FIXTURES.sweep("combat_wounded_above", "max_wounds")
     standing = 0
     for subject, st in raw["wound_state"].items():
@@ -332,7 +332,8 @@ def test_the_swept_fixture_reaches_the_fold():
         # v10 REM-31: RESOLVE declares the fight (`the body`'s `step: ENCOUNTER`); the fight's Events are ENCOUNTER's.
         evs = d.encounter(mint_token(d.w, WriteClass.ACTS),
                           d.resolve(mint_token(d.w, WriteClass.ACTS),
-                                    [Act(id="we0", actor="p_low", verb="fight", payload={"subject": "p_mid"})], 2), 2)
+                                    # seed re-picked at B06.99: the stream changed (was we0)
+                                    [Act(id="we3", actor="p_low", verb="fight", payload={"subject": "p_mid"})], 2), 2)
         degrees[arm] = {e.degree for e in evs}
         kinds[arm] = {e.kind for e in evs}
         assert w.fixtures.reads.get("combat_wounded_above", 0) >= 1, "the fixture was never read"

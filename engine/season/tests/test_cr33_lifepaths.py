@@ -2,10 +2,10 @@
 
 FALSIFIER (the plan's): a cast row whose lifepath maps to `inquiry` builds with `capability == {"inquiry":
 pool_default}`, rolls the same pool on `research` as a row with no lifepath, and `train` on `inquiry` executes for
-it and is refused for the other; a template naming a key outside `verb_capability`'s values is refused at import;
+it and is refused for the other; a template naming a key outside `descriptors.CAPABILITIES` is refused at import;
 `repr(Person)` contains no lifepath id. PLANTED FAILURE: the expansion skipped reddens the `train` assertion (run
-in-test below, `test_the_planted_failure_...`). CONTROL: the expansion skipped reproduces the pre-commit hash with
-the registry's authored rows in place (the shipped state's movers are NPC-004's and NPC-088's `inquiry`).
+in-test below, `test_the_planted_failure_...`). CONTROL: the one-season hash with the expansion skipped differs from the
+shipped one (the shipped state's movers are NPC-004's and NPC-088's `inquiry`); the shipped hash is `_realm_goldens.py`'s.
 
 Built on `build_realm` with a PLANTED `lifepath:` on a row that authors none (NPC-087), so the falsifier does not
 read the registry's own authoring; the registry's authored set is pinned separately.
@@ -14,58 +14,20 @@ import dataclasses
 
 import pytest
 
+from engine.dice_engine.sigma_leverage import pool_of
 from engine.season.data import cast
 from engine.season.data import rosters as R
-from engine.season.data import verbs as VERBS
+from engine.substrate.descriptors import CAPABILITIES
 from engine.season.decision import assemble
 from engine.season.decision.options import opening_set
 from engine.season.gaps import Unspecified
-from engine.season.harness import populated as PO
+from engine.season.boot.realm import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
-from engine.season.seam.wrappers import sigma
+from engine.season.seam.wrappers import pool, sigma
 from engine.season.state.carriers import Act, Person, Question
 from engine.season.state.gate import WriteClass
 from .test_in10_record_operands import _resolve
 from .test_rem30_character_sheet import _run
-
-#: The 1-season hashes with the expansion stubbed out (`PYTHONHASHSEED=0`), as of CP-T03-01's `individual` reads in
-#: `Event.observed` (the parent tree's, `d5358a9a`, were the previous values: `f2e5e265...`, `0d25717b...`, `05f065f4...`).
-#: RE-PINNED ONCE at v10 CP-T03-09 (`capture`, a declared mover of every one-season realm): was `662a7847...`, `af5ba681...`, `6c3e0c17...`.
-#: CONTROL: `capture` withheld from the chooser's verbs (in process) reads the old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-PINNED ONCE at v10 PC-10b (a challenge is a Record; `accept` binds to one; a declared mover wherever a challenge forms):
-#: was `7cde746e...`, `971e3d03...`, `0c28be95...`. CONTROL: the base tree (`95f58adb`'s `engine/season`) reads the old three.
-#: A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-PINNED ONCE at v11 CR-87 (violence made exceptional: the build's loyalty rows and `fight`'s contexts, a declared mover
-#: of the build and of every season that fought): was `f9c01c27...`, `086d1092...`, `6312b4a1...`. CONTROL:
-#: `test_cr87_violence_contexts.py::revert_cr87` reads the pre-item hashes exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-PINNED ONCE at v10 CP-T03-02 (a fight band's `Event.ending` and the wounded party's body Observation, a declared
-#: mover wherever a Felled/Wounded fight lands): seeds 1, 2 were `9e1bb7c2...`, `fe7b5f49...`; seed 0 fights nothing and
-#: does not move. CONTROL: `test_cp_t03_02_band_ending_and_body.py::revert_cp_t03_02` reads the pre-item one-season
-#: realm exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-PINNED ONCE at v11 CR-85 (`faculty` replaces `history` in combat's pool and Ob, ED-IN-0330; every season fight
-#: rolls pool 8 against Ob 1.0, was 9 against 1.5): seed 1 was `ce8c74e7...`; seeds 0 and 2 do not move (seed 0
-#: fights nothing, seed 2's fights land where they did). CONTROL:
-#: `test_cr85_faculty_replaces_history.py::revert_cr85` (the seam's faculty at 3 for every party) reads the old value
-#: exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-PINNED ONCE at v11 CP-T03-04 (`arms` in `verb_capability`'s range: a FORMATION mover even at control, one more `train`
-#: Candidate per `train` formation with nobody holding the key): seeds 0 / 1 / 2 were e9d7c897... / ae97a48b... / 831dc047...; no roll moves (nobody
-#: holds `arms`). CONTROL: `test_cp_t03_04_arms.py::revert_cp_t03_04` (the three roster rows and the vocation off) reads the
-#: old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-PINNED ONCE at v11 CP-T03-07 (`Person.body_ceiling`, a SCHEMA mover of every Person, and the lasting mark, an outcome
-#: mover where a survivor reached the deepest gate): seeds 0 / 1 / 2 were 0036bb2e... / 3b30d0ea... / 4856e80a....
-#: CONTROL: `test_cp_t03_07_body_ceiling.py::revert_cp_t03_07` (`body_mark_model: none` and the field out of the canonical
-#: encoding) reads the old three exactly under this control's stub. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: RE-PINNED ONCE at v11 CP-T03-08 (`tend` declares `referent_class: Person` and `wounded_with` stamps the wounded: a
-#: FORMATION mover of every season, and an outcome mover -- a man below his ceiling tends himself whole): seeds 0 / 1 / 2
-#: were 39f53dad... / 82310267... / 3cba88e4.... CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` (the
-#: column emptied, the term returning `()`) is the item's own control. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-#: Seeds 1 and 2 are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit: PC-20 (1) (the
-#: head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`; seed 0 calls none.
-BASE = {
-    0: "a64160d4fd7ddb590b2dca62868d5991",   # B10-13 batch pin commit: was cd42982b...; CP-T03-08: was 39f53dad...; CP-T03-07: was 0036bb2e...; CP-T03-04: was e9d7c897...
-    1: "2f6a308e46df71672f33c9f311d0c8f1",   # B10-13 batch pin commit: was d8698ba8...; B10-11b pin commit: was 242dac65...; CP-T03-08: was 82310267...; CP-T03-07: was 3b30d0ea...; CP-T03-04: was ae97a48b...; CR-85: was ce8c74e7...
-    2: "6b7e5242a03af5c26802cc9773b0609b",   # B10-12 pin commit (CR-24 + MB-07r): was 7d0f47a9...; B10-13 batch pin commit: was af8700b7...; B10-11b pin commit: was 174db5fe...; CP-T03-08: was 3cba88e4...; CP-T03-07: was 4856e80a...; CP-T03-04: was 831dc047...
-}
 
 #: The four Niflhel ids the archived file STRIKES (it prints no row for them): never members.
 STRUCK = ("3-NI1", "3-NI2", "3-NI3", "3-NI4")
@@ -91,8 +53,8 @@ def test_the_roster_is_the_34_and_the_struck_niflhel_ids_are_not_members():
     assert set(R.LIFEPATH_TEMPLATES) == set(R.LIFEPATHS)
 
 
-def test_every_template_names_only_verb_capability_values():
-    names = set(VERBS.VOCATIONS)
+def test_every_template_names_only_defined_skills():
+    names = set(CAPABILITIES)
     held = [k for keys in R.LIFEPATH_TEMPLATES.values() for k in keys]
     assert held and set(held) <= names
     assert any(not keys for keys in R.LIFEPATH_TEMPLATES.values()), "no row maps to none: the cut invented one"
@@ -103,7 +65,7 @@ def _cells():
 
 
 @pytest.mark.parametrize("mutate", [
-    lambda c: c["3-CR4"].update(holds=["no_such_vocation"]),        # a key outside `verb_capability`'s values (v11 CP-T03-04: was `arms`, now a vocation)
+    lambda c: c["3-CR4"].update(holds=["no_such_vocation"]),        # a key outside `descriptors.CAPABILITIES` (B04.04: a skill no verb names is still a defined skill)
     lambda c: c.update({"3-NI1": {"holds": [], "ground": "x"}}),    # an id outside the 34 (a struck one)
     lambda c: c.pop("3-CF6"),                                       # a lifepath with no row
     lambda c: c["3-CR1"].update(holds=["argue", "argue"]),          # a key held twice
@@ -114,11 +76,11 @@ def test_a_template_outside_the_closed_set_is_refused_at_import(mutate):
     cells = {k: dict(v) for k, v in _cells().items()}
     mutate(cells)
     with pytest.raises(Unspecified):
-        R._load_lifepath_templates(cells, R.LIFEPATHS, set(VERBS.VOCATIONS))
+        R._load_lifepaths(cells, R.LIFEPATHS, frozenset(CAPABILITIES))
 
 
 def test_the_shipped_cells_pass_the_same_loader():
-    assert R._load_lifepath_templates(_cells(), R.LIFEPATHS, set(VERBS.VOCATIONS)) == R.LIFEPATH_TEMPLATES
+    assert R._load_lifepaths(_cells(), R.LIFEPATHS, frozenset(CAPABILITIES)) == (R.LIFEPATH_TEMPLATES, R.LIFEPATH_RANKS)
 
 
 # ======================================================================================
@@ -158,7 +120,7 @@ def _planted_cache():
 
 def _world(monkeypatch, planted=True):
     monkeypatch.setattr(cast, "_CACHE", _planted_cache() if planted else cast._CACHE)
-    w = PO.build_realm(0)
+    w = build_realm(0)
     d = SeasonDriver(w)
     d.matter(mint_token(w, WriteClass.MATTER), [])
     return w, d
@@ -180,19 +142,32 @@ def test_a_planted_lifepath_builds_the_key_held_at_pool_default_and_rolls_the_sa
     default = w.fixtures.get("pool_default")
     p, q = w.persons[P_ID], w.persons[Q_ID]
     assert p.capability == {"inquiry": default} and q.capability == {}
-    assert sigma.faculty(w, p, "research") == sigma.faculty(w, q, "research") == default
+    # B05.99 rewrite (B05.25: the pool is `pool_of(governing score + rank, addends, pool_add, pool_floor)`; was the larger of the
+    # attribute and the key): the key held at `pool_default` ADDS its rank over the person's governing score; the holder of
+    # nothing reads his governing score alone.
+    att = lambda x: pool.governing_attribute(x, "research")
+    assert att(p) is not None and att(q) is not None, "the drawn sheets seat the verb's governing attributes on both"
+    fx = w.fixtures
+    rolled = lambda x, rank: pool_of(pool.governing_score(w, x, "research") + rank, pool.addends_of(w, x, "research"),
+                                     fx.get("pool_add"), fx.get("pool_floor"))
+    assert pool.rank(p, "research") == default and pool.rank(q, "research") == 0
+    assert sigma.faculty(w, p, "research") == rolled(p, default)
+    assert sigma.faculty(w, q, "research") == rolled(q, 0)
     holders = {pid: x.capability for pid, x in w.persons.items() if x.capability}
     assert holders == {P_ID: {"inquiry": default}, "p_npc_004": {"inquiry": default},
                        "p_npc_088": {"inquiry": default}}, holders
 
 
-def test_train_on_inquiry_executes_for_the_holder_and_is_refused_for_the_other(planted_world):
+def test_train_on_inquiry_raises_the_holder_and_mints_the_other_a_first_rank(planted_world):
+    """B05.09 (CORE Edit 9; B05.99 rewrite): `train` on a non-holder mints a first rank (was `train.refused`); the holder's key
+    rises by one, and so does his pool (B05.25: every rank is a die over his governing score)."""
     w, d = planted_world
     default = w.fixtures.get("pool_default")
-    assert _train(w, d, Q_ID) == ["train.refused"] and w.persons[Q_ID].capability == {}
+    before = sigma.faculty(w, w.persons[P_ID], "research")
+    assert _train(w, d, Q_ID) == ["capability.raised"] and w.persons[Q_ID].capability == {"inquiry": 1}
     assert _train(w, d, P_ID) == ["capability.raised"]
     assert w.persons[P_ID].capability == {"inquiry": default + 1}
-    assert sigma.faculty(w, w.persons[P_ID], "research") == default + 1, "the raised key is the pool"
+    assert sigma.faculty(w, w.persons[P_ID], "research") == before + 1, "the raised key is not in the pool"
 
 
 def test_the_lifepath_id_is_stored_nowhere_on_a_person(planted_world):
@@ -209,24 +184,21 @@ def test_the_lifepath_id_is_stored_nowhere_on_a_person(planted_world):
 
 def test_the_planted_failure_the_expansion_skipped_reddens_the_train_assertion(monkeypatch):
     """The assertion above can observe the failure it excludes: with the expansion skipped the planted person
-    holds nothing and `train` on `inquiry` is refused, not raised."""
+    holds nothing, so `train` on `inquiry` MINTS his first rank (B05.09) where the expansion would have raised the key to
+    `pool_default + 1` (B05.99 rewrite: was `train.refused`)."""
     monkeypatch.setattr(cast, "capability_of", lambda r, pool_default: {})
     w, d = _world(monkeypatch)
+    default = w.fixtures.get("pool_default")
     assert w.persons[P_ID].capability == {}
-    assert _train(w, d, P_ID) == ["train.refused"] != ["capability.raised"]
+    assert _train(w, d, P_ID) == ["capability.raised"]
+    assert w.persons[P_ID].capability == {"inquiry": 1} != {"inquiry": default + 1}
 
 
-@pytest.mark.parametrize("seed", sorted(BASE))
-def test_control_the_expansion_skipped_reproduces_the_pre_commit_hash(monkeypatch, seed):
-    """With the registry's authored rows in place and the expansion skipped, the 1-season hash is the parent
-    tree's: the lifepath id is read and dropped, so a row that maps to nothing moves nothing, and NPC-004's and NPC-088's
-    `inquiry` are the whole mover (`test_rem30_character_sheet.PRE_BUILD` carries the moved hash)."""
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)    # v11 CR-79 (the credit term, a later mover of the told deposit): reverted, so this pin reads its own item
-    monkeypatch.setattr(cast, "capability_of", lambda r, pool_default: {})
-    assert _run(PO.build_realm(seed), 1) == BASE[seed]
-
-
-def test_the_shipped_expansion_is_the_mover_by_the_one_row_that_maps_to_a_key():
-    """The same hash with the expansion ON differs from the parent's at seed 0 (the other arm of the control)."""
-    assert _run(PO.build_realm(0), 1) != BASE[0]
+def test_the_shipped_expansion_is_the_mover_by_the_one_row_that_maps_to_a_key(monkeypatch):
+    """At seed 0 the one-season hash with the expansion ON differs from the same run with it skipped, both read in
+    process (the shipped hash is `_realm_goldens.py`'s)."""
+    shipped = _run(build_realm(0), 1)
+    with monkeypatch.context() as m:
+        m.setattr(cast, "capability_of", lambda r, pool_default: {})
+        skipped = _run(build_realm(0), 1)
+    assert shipped != skipped

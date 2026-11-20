@@ -13,8 +13,7 @@ the client offers the second; none alive, the run ends. Also: the offer is in `c
 Query iterating `_TIE_READERS` (declared sworn-first) instead of the roster reddens
 `test_the_reading_is_in_continuation_ties_order` and the three tests that read heir_title before sworn, and
 `test_the_roster_not_the_reader_table_fixes_the_order` (its table is declared heir-first, the roster sworn-first).
-CONTROL: no seated person dies in a run -> `carry_on` touches nothing and `build_realm(s)` after 1 season equals
-the pre-build hash (`test_rem30_character_sheet.py::PRE_BUILD`, the same three pins).
+The realm hash is `_realm_goldens.py`'s; a no-death control that pinned the pre-build hash is not kept here.
 """
 from __future__ import annotations
 
@@ -26,52 +25,12 @@ from ..gaps import Forbidden, Unspecified
 from ..harness.heir_hears import HEIR_SEAT, THRONE
 from ..harness.heir_hears import holder as _holder
 from ..harness.play_surface import carry_on, dispatching_chooser
-from ..harness.populated import build_realm
+from ..boot.realm import build_realm
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.matter import _die
 from ..queries import world_q
 from ..state.carriers import DETERMINED_BY, Tenure
 from ..state.ids import H, draw_factory
-
-# Re-recorded by CR-33 (it lands after this item, in one batch): carin's `capability` now holds {inquiry: 2},
-# so every Person repr moved. Old (this item's own commit) -> new:
-#   f2e5e265012d1d96333a43ff514d2b13 -> 69783660ea3ca2163bd346ee7e29e711
-#   0d25717b85d52c4f156136fa724ae46e -> d81d7a7377008ddbe4000624e259f4b2
-#   05f065f4c917faf3d970f2c50cfd792f -> 43d2c5249670a51c24c1a102517e9567
-# the same three pins as `test_rem30_character_sheet.py::PRE_BUILD`. The values pinned below are those after CP-T03-01
-# (the `individual` conjunct's reads ride `Event.observed`), not the ones this list ends on.
-# RE-PINNED ONCE at v10 CP-T03-09 (`capture`, a declared mover of the one-season realm): was 71ff6e92... / 73af0d1e... / 011a4605.... CONTROL: `capture` withheld
-# from `populated.resolvable_verbs` reads the old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at v10 PC-10b (a challenge is a Record; `accept` binds to one; a declared mover wherever a challenge forms): was
-# 009f9f31... / daca4682... / db5bd6f0.... CONTROL: the base tree (`95f58adb`'s `engine/season`) reads the old three. A GOLDEN
-# RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at v11 CR-87 (violence made exceptional: a declared mover of the build and of every season that fought): was
-# 0fb73bc8... / 3b407a74... / 47151656.... CONTROL: `test_cr87_violence_contexts.py::revert_cr87` reads the old seed-0 pin
-# exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at v10 CP-T03-02 (a fight band's `Event.ending` and the body Observation): seeds 1, 2 were f4330aac... /
-# a030141a...; seed 0 does not move. CONTROL: `test_cp_t03_02_band_ending_and_body.py::revert_cp_t03_02` reads the old
-# three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at v11 CR-85 (`faculty` replaces `history` in combat's pool and Ob, ED-IN-0330; every season fight
-# rolls pool 8 against Ob 1.0, was 9 against 1.5): seed 1 was f89ea45d...; seeds 0 and 2 do not move (seed 0 fights
-# nothing, seed 2's fights land where they did). CONTROL: `test_cr85_faculty_replaces_history.py::revert_cr85` (the
-# seam's faculty at 3 for every party) reads the old value exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at v11 CP-T03-04 (`arms` in `verb_capability`'s range: a FORMATION mover even at control, one more `train`
-# Candidate per `train` formation with nobody holding the key): seeds 0 / 1 / 2 were 20accb03... / 6e25b047... / fe9032ed...; no roll moves (nobody
-# holds `arms`). CONTROL: `test_cp_t03_04_arms.py::revert_cp_t03_04` (the three roster rows and the vocation off) reads the
-# old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at v11 CP-T03-07 (`Person.body_ceiling`, a SCHEMA mover of every realm, and the lasting mark, an outcome
-# mover where a survivor reached the deepest gate -- one person at seed 2): seeds 0 / 1 / 2 were b2dde1fc... / 07634b99... /
-# 1cc4370d.... CONTROL: `test_cp_t03_07_body_ceiling.py::revert_cp_t03_07` (`body_mark_model: none` and the field out of
-# the canonical encoding) reads the old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# RE-PINNED ONCE at v11 CP-T03-08 (`tend` declares `referent_class: Person` and `wounded_with` stamps the wounded: a
-# FORMATION mover of every season, and an outcome mover -- a man below his ceiling tends himself whole): seeds 0 / 1 / 2
-# were eb2919ae... / fc3201f3... / 6da144ff.... CONTROL: `test_cp_t03_08_tend_on_the_wounded.py::revert_cp_t03_08` (the
-# column emptied, the term returning `()`) reads the old three exactly. A GOLDEN RE-RECORDED, NOT A BALANCE CLAIM.
-# Seeds 1 and 2 are the post-B10-11b reading (`reading @4b334f2a`), re-recorded by the batch pin commit (was d9f3be70... /
-# 285fb92a...): PC-20 (1) (the head-weighted strike impact, `K_STR_HEAD`) moves a one-season run that reaches `strike_impact`.
-PRE_BUILD = {0: "256606154c30542f9456b2fe15c76f09",   # B10-13 batch pin commit: was d4c83c8c...; CP-T03-08: was eb2919ae...; CP-T03-07: was b2dde1fc...; CP-T03-04: was 20accb03...
-             1: "aa58ef0b71c947ce5ff9f0a75ffd8ca6",   # B10-13 batch pin commit: was 7cacc763...; CP-T03-08: was fc3201f3...; CP-T03-07: was 07634b99...; CP-T03-04: was 6e25b047...; CR-85: was f89ea45d...
-             2: "a21ab6e12e356ccc4261bec1c93ca3b4"}  # B10-12 pin commit (CR-24 + MB-07r): was 77a09697...; B10-13 batch pin commit: was 447ed0d8...; CP-T03-08: was 6da144ff...; CP-T03-07: was 1cc4370d...; CP-T03-04: was fe9032ed...; CR-33 verify pass (NPC-004's `lifepath: 3-CH5` holds `inquiry`, a Person repr): was 43d2c524... (seeds 0 and 1: NPC-004 has left the world by season 1)
 
 
 def _realm(retainers=2):
@@ -280,29 +239,3 @@ def test_the_rebound_callback_plays_the_successor_through_a_real_season():
     SeasonDriver(w).season(dispatching_chooser(auto, overrides), None, contest_max_depth=w.fixtures.get("contest_max_depth"))
     assert heir in called and king not in called, called
 
-
-# --- THE CONTROL ---------------------------------------------------------------------------------
-
-@pytest.mark.parametrize("seed", sorted(PRE_BUILD))
-def test_no_death_means_no_behaviour_change_and_the_realm_hash_is_the_pre_build_hash(seed, monkeypatch):
-    from .test_strife_credit import revert_cr79
-    revert_cr79(monkeypatch)
-    w = build_realm(seed)
-    king = _holder(w, THRONE)
-    calls = []
-
-    def cb(p, v, s, ask_budget, auto):
-        calls.append(p.id)
-        return auto(p, v, s, ask_budget)
-
-    overrides = {king: cb}
-    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    auto = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(), draw=draw_factory(w.world_seed, lambda: w.tick))
-    choose = dispatching_chooser(auto, overrides)
-    last = ()
-    now, last = carry_on(w, overrides, king, last, None)
-    SeasonDriver(w).season(choose, None, contest_max_depth=w.fixtures.get("contest_max_depth"))
-    assert king in w.persons, "the control needs the seated person to live"
-    now, last = carry_on(w, overrides, king, last, lambda offer: pytest.fail("rebound with no death"))
-    assert now == king and overrides == {king: cb} and calls, "carry_on touched a run with no death"
-    assert w.content_hash() == PRE_BUILD[seed]

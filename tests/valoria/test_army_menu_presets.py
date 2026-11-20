@@ -11,6 +11,7 @@ built them would have.
 from __future__ import annotations
 
 import random
+from engine.dice_engine import draw
 import re
 from pathlib import Path
 from types import SimpleNamespace
@@ -20,14 +21,14 @@ import pytest
 from engine.season.harness import army_presets as AP
 from engine.season.harness import military_menu as MM
 from engine.season.harness.play_surface import dispatching_chooser
-from engine.season.harness.populated import build_realm
+from engine.season.boot.realm import build_realm
 from engine.season.manifest.registrar import MODULE_ENTRIES
 from engine.season.queries import world_q
 from engine.season.queries.inputs import ArmyOptionsQuery, ArmyPresetQuery
 from engine.season.seam.wrappers import mass_battle as MB
 from engine.season.state.carriers import Site
 from modules.mass_battle import armyrecord as A
-from modules.mass_battle.config import BLOCK_SIZE, SUBUNIT_ROUT_FLOOR
+from modules.mass_battle.config import BLOCK_SIZE, UNIT_ROUT_FLOOR
 from modules.mass_battle.troop_types import presets as PR
 from modules.mass_battle.troop_types import recruitment as R
 from modules.mass_battle.troop_types.registry import roles_for
@@ -94,11 +95,11 @@ def test_advisories_name_the_routs():
     rec = A.raised(rec, "c1", "spearmen", 50)
     rec = A.assign(rec, "tiny", "c1", 50)
     kinds = {a[0]: a for a in _opts(rec, ())["advisories"]}
-    assert kinds["subformation_routs"][1:] == ("tiny", 50, SUBUNIT_ROUT_FLOOR)
+    assert kinds["unit_routs"][1:] == ("tiny", 50, UNIT_ROUT_FLOOR)
     assert kinds["army_routs"][2:] == (50, BLOCK_SIZE)
-    # CONTROL, one change: a body the size of a unit has neither warning
+    # CONTROL, one change: a unit of a full block (400 men) has neither warning
     rec2 = A.assign(A.form(A.raised(A.new("fac_x"), "c1", "spearmen", 400), "line", "spearmen"), "line", "c1", 400)
-    assert not {a[0] for a in _opts(rec2, ())["advisories"]} & {"subformation_routs", "army_routs"}
+    assert not {a[0] for a in _opts(rec2, ())["advisories"]} & {"unit_routs", "army_routs"}
     rec3 = A.form(A.raised(A.new("fac_x"), "c1", "levy", 90), "pool", "levy")
     assert "unassigned" in {a[0] for a in _opts(rec3, ())["advisories"]}
 
@@ -231,7 +232,7 @@ def test_plan_without_sites_is_levy_alone_and_without_people_is_empty():
     p = _plan(_cohorts(10))
     assert {c["troop_type"] for v, c in p if v == "recruit"} == {"levy"}, "no Site, no trained troops"
     assert _plan(()) == () and _plan(_cohorts(1, weight=1)) == ()
-    assert _plan(_cohorts(1, weight=3)) == (), "90 troops clear a subformation's floor but not a unit's block: it would rout at once"
+    assert _plan(_cohorts(1, weight=3)) == (), "90 troops clear a unit's floor but not the army's block: it would rout at once"
     assert _plan(_cohorts(1, weight=4))[0][0] == "recruit", "control: 120 troops clear the block"
 
 
@@ -239,7 +240,7 @@ def test_plan_drops_a_group_that_would_rout_and_gives_its_room_to_the_levy():
     # six cohorts of weight 10, a stable in one only: its horse is one cohort's fifth of its cap, under the floor
     share = dict((c, s) for c, s, _t in PR.ARM_SHARES)["mounted"]
     horse = int(R.under_arms_cap(10) * share)
-    assert horse < SUBUNIT_ROUT_FLOOR <= 2 * horse, "fixture: one cohort's horse routs, two cohorts' do not"
+    assert horse < UNIT_ROUT_FLOOR <= 2 * horse, "fixture: one cohort's horse routs, two cohorts' do not"
     one = _cohorts(5, 10) + (("c99", 10, {"barracks": FULL, "stable": FULL}),)
     types = {c["troop_type"] for v, c in _plan(one) if v == "recruit"}
     assert "cavalry" not in types and "heavy_infantry" in types
@@ -267,16 +268,16 @@ def test_install_raises_a_whole_organised_army_through_the_real_fold():
     kinds = got[CROWN]
     assert kinds[0] == "record.created" and not [k for k in kinds if k.endswith(".refused")], kinds
     rec = w.records[world_q.army_of(w, CROWN)].subject_matter
-    assert rec["strategy"] == "advance" and not rec["trained"], "everything raised is in a subformation"
-    sizes = {sf["name"]: sum(n for _c, n in sf["assigned"]) for sf in rec["subformations"]}
+    assert rec["strategy"] == "advance" and not rec["trained"], "everything raised is in a unit"
+    sizes = {sf["name"]: sum(n for _c, n in sf["assigned"]) for sf in rec["units"]}
     assert set(sizes) == {"heavy_infantry", "crossbow", "cavalry", "levy"}, sizes
-    assert min(sizes.values()) >= SUBUNIT_ROUT_FLOOR and sum(sizes.values()) == 15 * R.under_arms_cap(2) == 900
+    assert min(sizes.values()) >= UNIT_ROUT_FLOOR and sum(sizes.values()) == 15 * R.under_arms_cap(2) == 900
     for c in _governed_cohorts(w, CROWN):
         assert sum(A.by_type(rec, c).values()) <= R.under_arms_cap(2), "no cohort over its cap"
     # the menu agrees: nothing left to raise, and the army is sound
     cmd = next(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == world_q.army_of(w, CROWN))
     m = MM.menu(w, cmd)
-    assert m.commands and not m.raise_ and not {a[0] for a in m.advisories} & {"subformation_routs", "army_routs", "unassigned"}
+    assert m.commands and not m.raise_ and not {a[0] for a in m.advisories} & {"unit_routs", "army_routs", "unassigned"}
 
 
 def test_install_is_deterministic_idempotent_and_leaves_other_factions_alone():
@@ -294,11 +295,11 @@ def test_install_is_deterministic_idempotent_and_leaves_other_factions_alone():
 
 
 def test_a_realm_without_sites_gets_a_levy_army_that_holds_and_does_not_press():
-    """The shipped realm seats no barracks, range or stable, so its preset army is levy alone: 900 troops, one subformation.
+    """The shipped realm seats no barracks, range or stable, so its preset army is levy alone: 900 troops, one unit.
     A NAMED LIMIT, not a hidden one: the menu says the levy does not close, and the doctrine is what unlocks the rest."""
     w, got = _realm_crown_army(sites=False)
     rec = w.records[world_q.army_of(w, CROWN)].subject_matter
-    assert [sf["troop_type"] for sf in rec["subformations"]] == ["levy"]
+    assert [sf["troop_type"] for sf in rec["units"]] == ["levy"]
     cmd = next(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == world_q.army_of(w, CROWN))
     assert "levy_never_closes" in {a[0] for a in MM.menu(w, cmd).advisories}
 
@@ -311,9 +312,9 @@ def _wins_vs_the_churchs_territory(sites):
     assert cmd in att, "fixture: the army's commander is mustered where the army is"
     inp = MB.field_input(w, att, world_q.mustered(w, DEFENDED_TERR, CHURCH), DEFENDED_TERR, factions=(CROWN, CHURCH))
     oob = inp.orders_of_battle[0]
-    assert oob is not None and sum(s.troops for s in oob.subformations) == 900
+    assert oob is not None and sum(s.troops for s in oob.units) == 900
     fn = MODULE_ENTRIES["mass_battle.resolve_field"].fn
-    return sum(bool(fn(inp, random.Random(s))["attacker_wins"]) for s in range(1, 9))
+    return sum(bool(fn(inp, draw.seeded(draw.H2("test_army_menu_presets", s)))["attacker_wins"]) for s in range(1, 9))
 
 
 def test_a_preset_army_with_sites_beats_a_town_s_levy_and_the_sites_are_why():

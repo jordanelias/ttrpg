@@ -11,7 +11,6 @@ correct — see config.py's note at the flag. The on/off toggle below is unchang
 both paths; only the assertion about which way it points has moved.
 """
 import os
-import random
 import statistics
 import sys
 
@@ -24,6 +23,8 @@ if _SIM not in sys.path:
 import modules.mass_battle.config as C  # noqa: E402
 import modules.mass_battle.core.state as S  # noqa: E402
 from systems.mass_battle.sim.engine import build_army, resolve_battle, SIDE_A_START_ROW, SIDE_B_START_ROW  # noqa: E402
+from engine.dice_engine import draw  # noqa: E402
+from modules.mass_battle import rngsource  # noqa: E402
 
 
 def _unit(faction, disc=5, mor=6):
@@ -53,19 +54,19 @@ def test_band_is_historical():
 
 
 def test_breakpoint_in_band():
-    random.seed(12345)
-    for disc in (2, 3, 4, 5):
-        su = _unit('A', disc=disc).subunits[0]
-        assert getattr(su, '_rout_breakpoint', None) is None
-        S._stochastic_break(su, 0.0)  # draws the break-point lazily
-        bp = su._rout_breakpoint
-        assert C.ROUT_ONSET_FRAC <= bp <= C.ROUT_CAP_FRAC, f"break-point {bp} outside the 15-30% band"
+    with rngsource.using(draw.seeded(draw.H2("test_stochastic_rout", 12345))):
+        for disc in (2, 3, 4, 5):
+            su = _unit('A', disc=disc).units[0]
+            assert getattr(su, '_rout_breakpoint', None) is None
+            S._stochastic_break(su, 0.0)  # draws the break-point lazily
+            bp = su._rout_breakpoint
+            assert C.ROUT_ONSET_FRAC <= bp <= C.ROUT_CAP_FRAC, f"break-point {bp} outside the 15-30% band"
 
 
 def test_resilience_orders_by_discipline():
     # a steady, disciplined body should be at least as resilient as a loose one
-    lo = S._rout_resilience(_unit('A', disc=2).subunits[0])
-    hi = S._rout_resilience(_unit('A', disc=5).subunits[0])
+    lo = S._rout_resilience(_unit('A', disc=2).units[0])
+    hi = S._rout_resilience(_unit('A', disc=5).units[0])
     assert hi > lo
 
 
@@ -73,17 +74,17 @@ def test_disciplined_skews_breakpoint_higher():
     # averaged over many draws, higher discipline -> break-point skewed toward the cap (holds longer)
     def mean_bp(disc, n=200):
         bps = []
-        random.seed(999)
-        for _ in range(n):
-            su = _unit('A', disc=disc).subunits[0]
-            S._stochastic_break(su, 0.0)
-            bps.append(su._rout_breakpoint)
-        return statistics.mean(bps)
+        with rngsource.using(draw.seeded(draw.H2("test_stochastic_rout", 999))):
+            for _ in range(n):
+                su = _unit('A', disc=disc).units[0]
+                S._stochastic_break(su, 0.0)
+                bps.append(su._rout_breakpoint)
+            return statistics.mean(bps)
     assert mean_bp(5) > mean_bp(2) + 0.01, "disciplined units must break later on average"
 
 
 def test_break_fires_when_casualties_cross():
-    su = _unit('A', disc=5).subunits[0]
+    su = _unit('A', disc=5).units[0]
     su._rout_breakpoint = 0.20  # pin a known break-point
     assert S._stochastic_break(su, 0.10) is False   # 10% losses -> below the point -> no break
     assert S._stochastic_break(su, 0.25) is True    # 25% losses -> past the point -> break
@@ -96,19 +97,19 @@ def _mean_loser_casualties(on, n=16, cells=False):
     prev = S.MB_STOCHASTIC_ROUT
     prev_cells = U.MB_CELL_MORALE
     S.MB_STOCHASTIC_ROUT = on
-    U.MB_CELL_MORALE = cells       # read by Subunit.__post_init__ to decide whether to seed cells
+    U.MB_CELL_MORALE = cells       # read by Unit.__post_init__ to decide whether to seed cells
     try:
         loser = []
         for s in range(n):
-            random.seed(3_000_000 + s)
-            ua, ub = _unit('A'), _unit('B')
-            a0, b0 = ua.hp_max, ub.hp_max
-            r = resolve_battle(ua, ub, 'Line', 'Line', {}, kind='multi', max_battle_turns=40)
-            w = r.get('winner')
-            if w == 'A':
-                loser.append(100 * (b0 - ub.hp) / b0)
-            elif w == 'B':
-                loser.append(100 * (a0 - ua.hp) / a0)
+            with rngsource.using(draw.seeded(draw.H2("test_stochastic_rout", 3_000_000 + s))):
+                ua, ub = _unit('A'), _unit('B')
+                a0, b0 = ua.hp_max, ub.hp_max
+                r = resolve_battle(ua, ub, 'Line', 'Line', {}, kind='multi', max_battle_turns=40)
+                w = r.get('winner')
+                if w == 'A':
+                    loser.append(100 * (b0 - ub.hp) / b0)
+                elif w == 'B':
+                    loser.append(100 * (a0 - ua.hp) / a0)
         return statistics.mean(loser) if loser else 0.0
     finally:
         S.MB_STOCHASTIC_ROUT = prev
@@ -154,9 +155,9 @@ def test_per_cell_break_subsumes_the_body_level_one():
     inverted.** It inherited the same mistaken premise as the docstring above — that per-cell morale
     ships ON. It does not (`config.py:100`, default `'0'`, RETRACTED 2026-07-25). In the SHIPPED
     configuration `atom.cell_morale` is empty, so the entire per-cell break block at
-    `core/state.py:137-149` (`check_cell_breaks` / `propagate_cell_breaks` / `cohere_cells` /
-    `CELL_BREAK_ROUT_FRAC`) is skipped, and `MB_STOCHASTIC_ROUT` at `core/state.py:150` — itself
-    defaulted ON (`config.py:167`) — is the ONLY early break-point the engine ships. Far from being a
+    `core/state.py:124-134` (`check_cell_breaks` / `propagate_cell_breaks` / `cohere_cells` /
+    `CELL_BREAK_ROUT_FRAC`) is skipped, and `MB_STOCHASTIC_ROUT` at `core/state.py:135` — itself
+    defaulted ON (`config.py:128`) — is the ONLY early break-point the engine ships. Far from being a
     retirement candidate, it is the single mechanism keeping shipped battles out of the ~90% grind;
     the subsumption measured below is what WOULD happen if the cell flag were flipped back on, which
     is why it is worth pinning, not evidence that the body-level flag is dead.

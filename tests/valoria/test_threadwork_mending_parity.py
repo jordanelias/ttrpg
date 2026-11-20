@@ -14,8 +14,9 @@ delta, restorative term) and `operations.apply_mending_feedback` (the term, thro
     to a pre-stressed mender. Falsifier: a planted change at ONE site alone (re-pricing collective's
     Mending off the unfallen scale, say) reddens it.
   * THE CONTROL (`test_collective_and_opposing_unchanged_outside_mending`, `test_attempt_mending_unchanged`): every op_type EXCEPT Mending, in both
-    collective and opposing, and every `attempt_mending` output, equals the base commit dd91783a
-    at the shipped `RESILIENCE_GAIN` (0). The captured values are inlined as one sha256 per
+    collective and opposing, and every `attempt_mending` output, equals the pinned digests
+    at the shipped `RESILIENCE_GAIN` (0): captured at the base commit dd91783a until B06.99, since then the
+    current tree's own values on the keyed stream (see the note above `BASE_DIGESTS`). The captured values are inlined as one sha256 per
     (site, op_type) over a canonical JSON of every result field and every resulting Coherence
     state, log included; on a mismatch the failure prints the recomputed first record.
   * R-14 ROUTING (`test_collective_and_opposing_route_cost_through_resilience`): collective and
@@ -25,6 +26,7 @@ import hashlib
 import json
 import os
 import random
+from engine.dice_engine import draw
 import sys
 from types import SimpleNamespace
 
@@ -57,7 +59,10 @@ class _Practitioner:
 
 # ─── The control grid (captured at dd91783a, before WR-03) ───────────────────────────────────────
 
-CONTROL_SEEDS = range(12)
+# seed count re-picked at B06.99: the stream changed (was range(12): the opposed grid then reached 8 of the 9 (A, B) degree pairs,
+# never ('Partial', 'Meets'); 12..15 seeds reach 8, 16 is the smallest count that reaches all nine). Every digest below is
+# re-recorded at 16 seeds.
+CONTROL_SEEDS = range(16)
 CONTROL_SCALES = ("Object", "Personal", "Relational", "Field", "Territorial", "Structural",
                   "Foundational")
 
@@ -86,7 +91,7 @@ def collective_records(op_type):
         for seed in CONTROL_SEEDS:
             w = _World()
             r = col.attempt_collective_operation(_collective_actors(), op_type, {"scale": scale},
-                                                 world=w, rng=random.Random(seed))
+                                                 world=w, rng=draw.seeded(draw.H2("test_threadwork_mending_parity", seed)))
             out.append({"scale": scale, "seed": seed, "op_type": r.op_type, "anchor": r.anchor,
                         "helpers": r.helpers, "leap_results": r.leap_results,
                         "lattice_formed": r.lattice_formed,
@@ -103,7 +108,7 @@ def opposing_records(op_type):
             r = opp.resolve_opposing_operations(_Practitioner("a", spirit=3, ts=50),
                                                 _Practitioner("b", spirit=2, ts=40),
                                                 op_type, {"scale": scale}, world=w,
-                                                rng=random.Random(seed))
+                                                rng=draw.seeded(draw.H2("test_threadwork_mending_parity", seed)))
             out.append({"scale": scale, "seed": seed, **{k: getattr(r, k) for k in (
                 "actor_a", "actor_b", "op_type", "a_net", "b_net", "a_degree", "b_degree",
                 "outcome", "ms_delta", "a_consequences", "b_consequences")}, "states": _states(w)})
@@ -122,7 +127,7 @@ def mending_records():
                     if configuration_of is not None:
                         target["configuration_of"] = configuration_of
                     r = ops.attempt_mending(_Practitioner("prac", spirit=2), target, world=w,
-                                            rng=random.Random(seed), environment_in_equilibrium=env)
+                                            rng=draw.seeded(draw.H2("test_threadwork_mending_parity", seed)), environment_in_equilibrium=env)
                     out.append({"scale": scale, "configuration_of": configuration_of, "env": env,
                                 "seed": seed, "result": _op_record(r), "states": _states(w)})
     return out
@@ -133,25 +138,30 @@ def digest(records):
 
 # sha256 of `digest(<site>_records(op_type))`, captured at dd91783a (WR-02, before WR-03) with
 # RESILIENCE_GAIN = 0. Mending in collective/opposing is NOT here: it is the declared mover.
-# 10 digests x 84 records (7 scales x 12 seeds) here, plus BASE_MENDING_DIGEST over 288 records = 1128
+# 10 digests x 112 records (7 scales x 16 seeds) here, plus BASE_MENDING_DIGEST over 384 records = 1504
 # pinned. TO RE-DERIVE (the SHA will not survive a squash merge, so the recipe is the provenance): check
 # out systems/threadwork/sim/{operations,collective,opposing,coherence}.py from the last commit before
 # WR-03's owner existed (the parent of the commit that added `price_mending`), set RESILIENCE_GAIN = 0,
 # and run `digest(collective_records(op))` / `digest(opposing_records(op))` / `digest(mending_records())`
 # from this file.
+# RE-RECORDED at B06.99: the uniform's source changed from CPython's generator to the keyed mix (B06.04, A-30), so
+# every digest below reads the keyed stream of `draw.seeded(draw.H2(..., seed))`, not the dd91783a values (a stream
+# change, not a balance change). PARITY WITH dd91783a IS NO LONGER OBSERVED: the recipe above recomputes the
+# pre-keyed-draw values only on a tree whose `opposing.py` calls `rng.randint`, and `Draw` has no `randint`. These digests
+# pin the current behaviour, so they catch a later change at one site, not a drift from the base commit.
 BASE_DIGESTS = {
-    ("collective", "Weaving"): "12c54575a96ea3181cbbee8a028fa1b409a2661b33de49b9d3a629e22691fe6a",
-    ("collective", "Pulling"): "0565bff6080038a7b630a023a584d6e3bf8ad177ca2c8d1bd7541c27d519efd2",
-    ("collective", "Locking"): "a3c11b29c120ab2026c8ca92b3c9fe088396ceedddcfc8b21e8c8fca18a979bd",
-    ("collective", "Dissolution"): "3b852e5019baf6fd816086076270dad746288296798702ad5ad296af05c7180c",
-    ("collective", "POP"): "17d862b60771da29bf8fa94d2fda28e296fd114e69eaa27a22e2bbf27d13a02f",
-    ("opposing", "Weaving"): "6cc3f6df33081ea65dce96be96cfd672805e60f696f13f5dfb900e86a41be660",
-    ("opposing", "Pulling"): "5c994c7a4809ceb1b140e03fe7f8987574afd11368339765c254fa91f9e7283c",
-    ("opposing", "Locking"): "aa9bf523a8ca0d37ae25c1dc76051620dddd0f07fedf846145bee8851fc5cff2",
-    ("opposing", "Dissolution"): "a4470b6deb3d04455d27a2d1068c0d5ce69e906c21fbf5252ba4b71c14ded393",
-    ("opposing", "POP"): "763e3426cdce3033c8f4c6c5694bad57fdef03816b237dcbcd8a3c1410cdd7e4",
+    ("collective", "Weaving"): "32d0b2703eaa6a62b4df21ce5a6b21f7912462c1364e683d6bdb6a218b137c96",
+    ("collective", "Pulling"): "d3d9f3fea3637663137f34c1b9655786b22c79c456611506b5709e3df2806352",
+    ("collective", "Locking"): "094ece0a4da8390c7aeb4685847bd6e026781781a9873a8087541f52108f195b",
+    ("collective", "Dissolution"): "1c3997bb40d941ec7a4697fcfa00f206608120ee506ceb8f83027728865ecf4f",
+    ("collective", "POP"): "c7ec7f1c03ed9ea2469b06647227b0300d09f9bc92c79432960970b68d413264",
+    ("opposing", "Weaving"): "7d141e8c9b363fc091835dc6dca9ef9b93e6472fb621d72de3506b036d86cbf8",
+    ("opposing", "Pulling"): "84f0137f7bbf0790590db4cb5427ce6342045da017f5cab2d6ec86d72406440b",
+    ("opposing", "Locking"): "db6802912123559a4402a2caddeed88926b5a1e1ca58c5f1c4b1825cd824a8ed",
+    ("opposing", "Dissolution"): "b2acdfecd6245df550ded5e60078a9cf9ab012e63a8bd4120f82eb7cc8a8df0d",
+    ("opposing", "POP"): "c146f5e82efb9af05b47ae4500bf59d61f22e01f2b8d599aa8bbe3d34354aa42",
 }
-BASE_MENDING_DIGEST = "df54b6f5164d89f7a83b17299772622546f35598b3568dcf2da0cc14455d97a2"
+BASE_MENDING_DIGEST = "6a506f3d11bda2c8f9abb6ac109def2712b39039eac79be02e5c29b8c13105c1"
 
 
 @pytest.mark.parametrize("site,op_type", sorted(BASE_DIGESTS))
@@ -204,7 +214,7 @@ def _single(scale, degree, monkeypatch, env=True):
     w = _World()
     _pre_stressed(w)
     r = ops.attempt_mending(_Practitioner("prac"), {"scale": scale}, world=w,
-                            rng=random.Random(0), environment_in_equilibrium=env)
+                            rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)), environment_in_equilibrium=env)
     return (r.ob, r.coherence_delta, r.mending_stability_delta, r.coherence_restored, _elastic(w))
 
 
@@ -218,7 +228,7 @@ def _collective(scale, degree, monkeypatch, env=True):
     _pre_stressed(w, "second")
     r = col.attempt_collective_operation([_Practitioner("prac", ts=60), _Practitioner("second")],
                                          "Mending", {"scale": scale}, world=w,
-                                         rng=random.Random(0), environment_in_equilibrium=env)
+                                         rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)), environment_in_equilibrium=env)
     op = r.operation_result
     assert op.degree == degree and not r.lattice_fractured
     # Every participant whose Leap took is priced alike, not only the Anchor.
@@ -235,7 +245,7 @@ def _opposing(scale, degree, monkeypatch, env=True):
     _pre_stressed(w)
     a, b = _Practitioner("prac"), _Practitioner("other")
     r = opp.resolve_opposing_operations(a, b, "Mending", {"scale": scale}, world=w,
-                                        rng=random.Random(0), environment_in_equilibrium=env)
+                                        rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)), environment_in_equilibrium=env)
     assert r.a_degree == _THREE_BAND[degree]
     cons = r.a_consequences
     # OpposingResult reports no Ob, so the opposed site is compared on the price alone.
@@ -279,10 +289,10 @@ def test_collective_and_opposed_mending_refuse_own_configuration_aim(aim):
     w = _World()
     with pytest.raises(ValueError, match="OWN configuration"):
         col.attempt_collective_operation([_Practitioner("prac", ts=60), _Practitioner("other")],
-                                         "Mending", target, world=w, rng=random.Random(0))
+                                         "Mending", target, world=w, rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)))
     with pytest.raises(ValueError, match="OWN configuration"):
         opp.resolve_opposing_operations(_Practitioner("prac"), _Practitioner("other"), "Mending",
-                                        target, world=w, rng=random.Random(0))
+                                        target, world=w, rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)))
     assert w.practitioners == {}, "a refused Mending must not have touched any state"
 
 
@@ -290,9 +300,9 @@ def test_a_non_mending_working_ignores_configuration_of():
     """The refusal is Mending's: the field means nothing to a Weaving."""
     target = {"scale": "Relational", "configuration_of": "self"}
     col.attempt_collective_operation([_Practitioner("prac", ts=60), _Practitioner("other")],
-                                     "Weaving", target, world=_World(), rng=random.Random(0))
+                                     "Weaving", target, world=_World(), rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)))
     opp.resolve_opposing_operations(_Practitioner("prac"), _Practitioner("other"), "Weaving",
-                                    target, world=_World(), rng=random.Random(0))
+                                    target, world=_World(), rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)))
 
 
 def test_owner_refuses_an_unpriced_scale_and_an_unknown_degree():
@@ -310,7 +320,7 @@ def test_rolled_collective_and_opposed_mending_never_cost_coherence():
         w = _World()
         r = col.attempt_collective_operation(_collective_actors(), "Mending",
                                              {"scale": "Structural"}, world=w,
-                                             rng=random.Random(seed))
+                                             rng=draw.seeded(draw.H2("test_threadwork_mending_parity", seed)))
         if r.operation_result is not None:
             seen.add(("collective", r.operation_result.degree))
             assert r.operation_result.coherence_delta == 0
@@ -323,7 +333,7 @@ def test_rolled_collective_and_opposed_mending_never_cost_coherence():
         o = opp.resolve_opposing_operations(_Practitioner("a", spirit=3, ts=50),
                                             _Practitioner("b", spirit=2, ts=40), "Mending",
                                             {"scale": "Structural"}, world=w,
-                                            rng=random.Random(seed))
+                                            rng=draw.seeded(draw.H2("test_threadwork_mending_parity", seed)))
         seen.add(("opposing", o.a_degree))
         assert o.a_consequences["coherence_delta"] == o.b_consequences["coherence_delta"] == 0
         assert o.ms_delta == 0
@@ -350,7 +360,7 @@ def test_collective_and_opposing_route_cost_through_resilience(gain, monkeypatch
     r = col.attempt_collective_operation(
         [_Practitioner("plain", spirit=3, ts=60), _Practitioner("steady", spirit=3, ts=60 - 1,
                                                                 resilience=1)],
-        "Weaving", _STRUCTURAL, world=w, rng=random.Random(0))
+        "Weaving", _STRUCTURAL, world=w, rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)))
     assert r.leap_results == {"plain": True, "steady": True}, "the planted pair did not both Leap"
     plain, steady = _taken(w, "plain"), _taken(w, "steady")
     assert plain > 0, "the planted working must cost something"
@@ -361,7 +371,7 @@ def test_collective_and_opposing_route_cost_through_resilience(gain, monkeypatch
         w2 = _World()
         o = opp.resolve_opposing_operations(_Practitioner("a", spirit=3, ts=50, resilience=res),
                                             _Practitioner("b", spirit=2, ts=40), "Weaving",
-                                            _STRUCTURAL, world=w2, rng=random.Random(0))
+                                            _STRUCTURAL, world=w2, rng=draw.seeded(draw.H2("test_threadwork_mending_parity", 0)))
         taken[label] = (o.a_degree, o.b_degree, _taken(w2, "a"), o.a_consequences["coherence_delta"])
     assert taken["plain"][:2] == taken["steady"][:2], "resilience must not touch the roll"
     assert taken["plain"][2] > 0
