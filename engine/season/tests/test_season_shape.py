@@ -12695,7 +12695,10 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # B06.99 re-pin: 3 -> 4, the stream change (the uniform's source, CPython's generator -> the keyed mix: a stream change, not a balance
     # change), read off this test's own `got` on the new stream: `none` 3/3, `actor` 4/4, `total` 2/2 (genuine 28 in every arm); `wide`
     # still equals `verbonly` (4 both), and not 0. Only `actor` moved. The B05.99 values were `none` 3/3, `actor` 3/3, `total` 2/2.
-    assert got["actor"]["verbonly"] == 4, (
+    # B07.99 re-pin: 4 -> 6, the task draw on (B07.05; a refusal carries no band, B07.10; `reconstruct` routine, B07.11), read off this test's
+    # own `got`: `none` 6/6, `actor` 6/6, `total` 5/5 (genuine 28 in every arm); `wide` still equals `verbonly`, and not 0. The B06.99 values were
+    # `none` 3/3, `actor` 4/4, `total` 2/2.
+    assert got["actor"]["verbonly"] == 6, (
         f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
         "means the clause-4 producers the six investigation acts opened are gone again and the "
         "2026-09-07 loss is back; any other number means the population moved and must be "
@@ -12788,7 +12791,8 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # this test's own `got` on e075e511b: `none` 31/3, `actor` 28/3, `total` 28/2 (unmoved).
     # B06.99 re-pin: 31/3 -> 28/3, the stream change (the uniform's source: CPython's generator -> the keyed mix; not a balance change), read off this
     # test's own `got` on the new stream: `none` 28/3, `actor` 28/4, `total` 28/2 (unmoved). The genuine-fork population is 28 in every arm.
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (28, 3), got
+    # B07.99 re-pin: 28/3 -> 28/6 (the task draw on; read off `got`, the same population move as `actor` below)
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (28, 6), got
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
     # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject
@@ -12805,7 +12809,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # ⚠⚠ **33/10 -> 31/7, PLAN POSITION `7a`, 2026-09-29 -- SAME MECHANISM AS THE `none`-ARM BLOCK
     # ABOVE, AND `wide` STILL EQUALS `verbonly` (7 both).**
     # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- shipped arm genuine 31, wide 7]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (28, 4), got     # B06.99 re-pin: 28/3 -> 28/4 (the stream change; read off `got`, the `none` note above); B05.99 re-pin: 28/2 -> 28/3 (the batch's movers, the `none` note above); v10 PC-10b: -> 28/2 (the sibling test's move); v11 CR-17: -> 24/1 (the sibling test's move); v11 CR-28: -> 34/8 (the sibling test's move); v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 34/7 (the sibling test's move); v10 REM-23: -> 34/5 (the sibling test's move); IN-12 `give` + Rung: -> 36/8 (the `verbonly` note); `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note); FI-01: -> 36/9 (the `verbonly` note); IN-12 step 9: -> 36/10 (the `verbonly` note)
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (28, 6), got     # B07.99 re-pin: 28/4 -> 28/6 (read off `got`); B06.99 re-pin: 28/3 -> 28/4 (the stream change; read off `got`, the `none` note above); B05.99 re-pin: 28/2 -> 28/3 (the batch's movers, the `none` note above); v10 PC-10b: -> 28/2 (the sibling test's move); v11 CR-17: -> 24/1 (the sibling test's move); v11 CR-28: -> 34/8 (the sibling test's move); v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 34/7 (the sibling test's move); v10 REM-23: -> 34/5 (the sibling test's move); IN-12 `give` + Rung: -> 36/8 (the `verbonly` note); `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note); FI-01: -> 36/9 (the `verbonly` note); IN-12 step 9: -> 36/10 (the `verbonly` note)
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- `total` 5 of 19 under the widened (verb, subject) fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (28, 3) at the `total` arm]
@@ -12836,7 +12840,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # formed wherever `move` is. `wide` still equals `verbonly` (11 both); 32/10 with `migrate`
     # unresolvable.
     # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` genuine 32, wide 11 (= verbonly 11); 32/10 with `migrate`'s `@effect_for` removed]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (28, 2), got    # v10 PC-10b: -> 28/2 (the sibling test's move); v11 CR-17: -> 22/1 (the sibling test's move); v11 CR-28: -> 33/8 (the sibling test's move); v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 33/7 (the sibling test's move); v10 REM-23: -> 33/6 (the sibling test's move); IN-12 `give` + Rung: -> 36/7 (the `verbonly` note); `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6; IN-57: -> 36/10; IN-45 `carry`: -> 36/11; FI-01: -> 36/8
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (28, 5), got    # B07.99 re-pin: 28/2 -> 28/5 (read off `got`); v10 PC-10b: -> 28/2 (the sibling test's move); v11 CR-17: -> 22/1 (the sibling test's move); v11 CR-28: -> 33/8 (the sibling test's move); v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 33/7 (the sibling test's move); v10 REM-23: -> 33/6 (the sibling test's move); IN-12 `give` + Rung: -> 36/7 (the `verbonly` note); `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6; IN-57: -> 36/10; IN-45 `carry`: -> 36/11; FI-01: -> 36/8
 
 
 # ===========================================================================
