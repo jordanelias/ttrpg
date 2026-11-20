@@ -48,9 +48,12 @@ from ..state.carriers import Act, Claim, Record, Site
 # one prompt, two waiting, and the rest graded -- derived, so the graded set is not a second copy of
 # `graded_inquiries` (`test_season_shape.py::test_jordan_no_definition_is_hardcoded_in_a_body`).
 INQUIRIES = ("examine", "interview", "research", "surveil", "thread_read", "reconstruct")
-WAITING = {"reconstruct": "K-37 (no value space)", "thread_read": "K-37 (no value space; its H-85 carrier landed at v9 PC-06 K-3)"}
+WAITING = {"thread_read": "K-37 (no value space; its H-85 carrier landed at v9 PC-06 K-3)"}
+# B07 (UNDECIDED (2)): `reconstruct` is `form: inquiry` and band-keyed, routed only with `task_draw_arm` on, so with the arm off (the
+# three CARRIED inquiries' world) it is neither graded nor waiting-and-flat: its K-37 limit is superseded by that ruling.
+ARMED = {"reconstruct": "form: inquiry since B07 (UNDECIDED (2)), routed only with the arm on"}
 PROMPT = "interview"
-GRADED = {v for v in INQUIRIES if v != PROMPT and v not in WAITING}
+GRADED = {v for v in INQUIRIES if v != PROMPT and v not in WAITING and v not in ARMED}
 REC, ACTOR = "rec_fi01", "p_low"
 
 
@@ -95,9 +98,12 @@ def test_the_rosters_name_three_graded_and_the_skip_names_finding_none():
         row = VERB_TABLE[verb]
         assert set(row.emits_by_degree) == {"Overwhelming", "Success", "Partial", "Failure"}, verb
         assert row.emits_at("Failure") == ("finding.none",) and "finding.none" in row.emits_on_refusal
+    off = DEFAULT_FIXTURES.sweep("task_draw_arm", "off")
     for verb in (PROMPT, *WAITING):
-        assert graded_route(verb, DEFAULT_FIXTURES) is None and not VERB_TABLE[verb].emits_by_degree, (
+        assert graded_route(verb, off) is None and not VERB_TABLE[verb].emits_by_degree, (
             f"{verb!r} is graded, and it is a prompt or waits ({WAITING.get(verb, 'K-36')})")
+    for verb in ARMED:       # armed: not routed with the arm off, graded (band-keyed) by the row once armed
+        assert graded_route(verb, off) is None and graded_route(verb, DEFAULT_FIXTURES) is not None, verb
 
 
 def test_a_failed_inquiry_deposits_no_claim_and_news_untold_still_does():
