@@ -39,8 +39,8 @@ CLAUDE_MD = os.path.join(ROOT, 'CLAUDE.md')
 
 # Every self-scheduling primitive known as of ED-IN-0084. `send_later` is the one that
 # produced all 116 measured firings; `create_trigger` is its underlying Routine API and
-# therefore the obvious route-around; ScheduleWakeup and CronCreate are the /loop pacing
-# and fixed-interval equivalents.
+# therefore the obvious route-around; CronCreate is the fixed-interval equivalent
+# (ScheduleWakeup was the /loop pacing one: ALLOWED 2026-11-20, see "DELIBERATELY NOT DENIED").
 #
 # WIDENED 2026-07-28 (ED-IN-0087). ED-IN-0084 wrote its own falsifier as: "if it ever passes
 # while a session is still arming wake-ups, the guard is wrong and the mechanism has moved —
@@ -50,7 +50,6 @@ CLAUDE_MD = os.path.join(ROOT, 'CLAUDE.md')
 REQUIRED_DENY = (
     'send_later',
     'create_trigger',
-    'ScheduleWakeup',
     'CronCreate',
     'update_trigger',  # re-arms an EXISTING Routine — reachable without create_trigger
     'fire_trigger',    # fires a Routine now; its prompt can re-arm, so it re-enters the chain
@@ -76,6 +75,11 @@ REQUIRED_DENY = (
 #     state), which re-sends the whole conversation for no new local state. Waiting on our own
 #     agents and local processes (a background job's log or CPU time) does neither. Do not re-add
 #     it to REQUIRED_DENY because it "is a polling loop": §11 now scopes the ban to external services.
+#   * `ScheduleWakeup` — ALLOWED 2026-11-20 (Jordan: "Allow 20 minute timers for Claude.md"), for ONE
+#     use: a 20-minute checkpoint timer while a methodology-execute run is in flight (§11). It is
+#     one-shot, so the session re-arms it only as part of a checkpoint, never to ask an external
+#     service anything. Do not re-add it to REQUIRED_DENY; `CronCreate` stays denied (recurring, and
+#     torn down by nothing but the session that armed it).
 
 # LIMIT OF THE Skill(loop) ENTRY, stated rather than assumed (CLAUDE.md §0.1 point 3):
 # the MCP entries match a fully-qualified tool name, a format this repo has already seen
