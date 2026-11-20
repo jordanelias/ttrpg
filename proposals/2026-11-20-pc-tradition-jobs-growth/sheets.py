@@ -36,6 +36,8 @@ from modules.combat import traditions as TR                  # noqa: E402  roste
 from modules.combat import combat_systems as S               # noqa: E402  reflex, lean, afforded heads, half-sword
 from modules.combat import weapon_physics as WP              # noqa: E402  spine, edge lines, defence affinities
 from modules.combat import fight as FIGHT                    # noqa: E402  the module entry
+from modules.combat import contact as CT                     # noqa: E402  the grab gate
+from modules.combat import attributes as SPEC                # noqa: E402  the attribute defaults
 from modules.combat.combatant import Combatant, WEAPONS      # noqa: E402
 from modules.combat.config import CFG                        # noqa: E402
 from engine.dice_engine import draw                          # noqa: E402  the keyed draw the host passes
@@ -47,7 +49,8 @@ KD = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(KD)
 
 # ── Proposal data ──────────────────────────────────────────────────────────────────────────────────────────────
-LIVE_LEVERS = frozenset(KD.LEVERS_LIVE)                      # the fifteen read sites (verified in Part 2's table)
+LIVE_LEVERS = frozenset(KD.LEVERS_LIVE)                      # TYPED, not computed: the draft's list of the fifteen read
+                                                             # sites, each checked by grep in Part 2 §2.3.1's table
 
 COLUMN_OF_LEVER = {                                          # Part 2 §2.3.1: a technique's column follows its lever
     'measure': 'Distance', 'balance': 'Distance', 'facing_regime': 'Distance',
@@ -364,7 +367,9 @@ def sheet(b, n_measure):
     if b.get('secondary'):
         P(f"- Also carried: {b['secondary']}. *A second weapon is planned (workplan v12 B18.08) and is not an engine input today.*")
     P("")
-    P("**Attributes** (1 to 7; 4 is ordinary for Strength, Agility and Endurance, 3 for the rest) **and fighting skill.**")
+    d = SPEC.DEFAULT
+    P(f"**Attributes and fighting skill** (the engine's default fighter has Strength {d['strength']}, Agility {d['agi']}, "
+      f"Endurance {d['end']}, Perception {d['att']}, Spirit {d['spirit']}, Focus {d['focus']}, skill score {d['faculty']}).")
     P("")
     a = b['attributes']
     P("| Strength | Agility | Endurance | Perception | Spirit | Focus | Fighting skill score |")
@@ -446,22 +451,25 @@ def sheet(b, n_measure):
     P(f"| Wound interval | {c.wt.wi} | damage that makes one wound |")
     P(f"| Wounds before the last | {c.wt.max_wounds} | wounds he can carry before the next one fells him |")
     P(f"| Stamina | {fmt(c.stamina_max)} | his reserve for effort in a bout |")
-    P(f"| Concentration | {fmt(c.conc_max)} | his reserve of focus in a bout (3 × Focus + 2 × Spirit) |")
+    P(f"| Concentration | {fmt(c.conc_max)} | his reserve of focus in a bout ({fmt(CFG['CONC_FOCUS'])} × Focus + "
+      f"{fmt(CFG['CONC_SPIRIT'])} × Spirit) |")
     P(f"| Reflex | {fmt(S.reflex(c, CFG))} | speed of his defensive response (Agility and Perception) |")
     P(f"| Reading | {fmt(S.reading(c, CFG))} | how well he reads an attack (Perception) |")
     heads = sorted({HEAD_PLAIN.get(h, h) for h in S.afforded_heads(w, CFG)})
     aff = WP.defense_affinities(w)
     P(f"| Weapon strikes with | {', '.join(heads)} | the striking modes his weapon allows |")
     P(f"| Can half-sword | {'yes' if S.affords_halfsword(w) else 'no'} | grip the blade to thrust into armour gaps |")
-    P(f"| Short enough to grab without an opening | {'yes' if w['head_len'] <= CFG['GRAB_SHORT_REACH_M'] else 'no'} | dagger-short reach |")
+    P(f"| Can grab without an opening | {'yes' if CT.grab_available(c, c, False, CFG) else 'no'} | the engine's grab gate with no opening made |")
     P(f"| Blade back (single edge) | {fmt(WP.spine(w))} | 0 means the ridge technique (shinogi) does nothing |")
     P(f"| Edge lines (double or false edge) | {fmt(WP.edge_lines(w))} | 0 means hidden-return techniques do nothing |")
-    P(f"| Defence suits the weapon | parry {fmt(aff['parry'])}, dodge {fmt(aff['dodge'])}, wind {fmt(aff['wind'])} | ceiling on each defence, 0.4 to 1 |")
+    P(f"| Defence suits the weapon | parry {fmt(aff['parry'])}, dodge {fmt(aff['dodge'])}, wind {fmt(aff['wind'])} | ceiling the weapon puts on each defence (higher is better) |")
     if b['tradition'] != 'none':
         fam = ", ".join(f"{t} {TR.familiarity(b['tradition'], t):.2f}" for t in TR.TRADITIONS if t != b['tradition'])
         P(f"| How well he reads other schools | {fam} | 1.00 = as well as his own |")
     else:
-        P("| How well he reads other schools | 1.00 against everyone | a fighter with no school has none to misread, and none to be misread by (`traditions.py:43-44`) |")
+        vals = sorted({TR.familiarity('none', t) for t in TR.TRADITIONS} | {TR.familiarity(t, 'none') for t in TR.TRADITIONS})
+        P(f"| How well he reads other schools | {', '.join(f'{v:.2f}' for v in vals)} against every school, both ways | "
+          f"a fighter with no school has none to misread, and none to be misread by (`traditions.py:44-45`) |")
     P("")
     non_neutral = []
     for lever in sorted(LIVE_LEVERS):
@@ -562,7 +570,7 @@ BUILDS = [
          techniques={},
          next=["Today: nothing to learn. A fighter with no school can be taught no technique (the engine's tradition gate "
                "admits none).",
-               "Proposed (Part 3 §3.5, decision D-F): the plain drill techniques (the 21 generics) become open to anyone, "
+               "Proposed (Part 3 §3.5, decision D-8): the plain drill techniques (the 21 generics) become open to anyone, "
                "so Odo could learn *keen eye* or *footing* from any teacher who has them."],
          note=None),
 ]
@@ -606,18 +614,23 @@ def check():
     odo = build_combatant(BUILDS[-1], {'keen_eye_basic': 3})
     assert AP.ability_factor(odo, 'visual') == 1.0
     checked += 1
-    # 4. An empty board fights byte-identically to a fighter built with no technique argument at all.
+    # 4. A German fighter with an empty board fights byte-identically to the same German fighter given no technique
+    #    argument at all; and (the positive control, so the instrument can see a difference) the same fighter with
+    #    one taught technique at level 4 changes at least one of the same 20 seeds.
     b = BUILDS[0]
+
+    def run(tech, seed):
+        kw = {} if tech is None else dict(techniques=(tech, None))
+        inp = PersonalCombatInput(claimants=('x', 'y'), ends=(4, 4), wound_quantities=('felled',),
+                                  kits=((b['weapon'], b['armour']), ('arming', 'light')), traditions=('german', None), **kw)
+        return FIGHT.fight(inp, draw.seeded(draw.H2('pc_tradition_check', seed))).trace
+    moved = 0
     for seed in range(20):
-        base = PersonalCombatInput(claimants=('x', 'y'), ends=(4, 4), wound_quantities=('felled',),
-                                   kits=((b['weapon'], b['armour']), ('arming', 'light')))
-        empty = PersonalCombatInput(claimants=('x', 'y'), ends=(4, 4), wound_quantities=('felled',),
-                                    kits=((b['weapon'], b['armour']), ('arming', 'light')),
-                                    traditions=('none', None), techniques=({}, None))
-        t0 = FIGHT.fight(base, draw.seeded(draw.H2('pc_tradition_check', seed))).trace
-        t1 = FIGHT.fight(empty, draw.seeded(draw.H2('pc_tradition_check', seed))).trace
-        assert t0 == t1, f"seed {seed}: an empty board changed the fight"
+        t_none = run(None, seed)
+        assert run({}, seed) == t_none, f"seed {seed}: an empty board changed the fight"
+        moved += run({'staerke_schwaeche': 4}, seed) != t_none
         checked += 1
+    assert moved >= 1, "positive control: a taught technique changed no fight, so check 4 could not fail"
     # 5. Every build composes within its own budget (the composer refuses, by name, otherwise).
     for bb in BUILDS:
         compose_board(bb, build_combatant(bb, {}).conc_max)

@@ -15,7 +15,7 @@
 - In hand: longsword (engine record `longsword`). Armour: medium (mail) (engine tier `medium`).
 - Also carried: a dagger. *A second weapon is planned (workplan v12 B18.08) and is not an engine input today.*
 
-**Attributes** (1 to 7; 4 is ordinary for Strength, Agility and Endurance, 3 for the rest) **and fighting skill.**
+**Attributes and fighting skill** (the engine's default fighter has Strength 4, Agility 4, Endurance 4, Perception 3, Spirit 3, Focus 3, skill score 3).
 
 | Strength | Agility | Endurance | Perception | Spirit | Focus | Fighting skill score |
 |---|---|---|---|---|---|---|
@@ -74,10 +74,10 @@ Fixed foundation, outside the columns: Strong and weak (Stärke-Schwäche).
 | Reading | 4 | how well he reads an attack (Perception) |
 | Weapon strikes with | blunt blow, cut and thrust | the striking modes his weapon allows |
 | Can half-sword | yes | grip the blade to thrust into armour gaps |
-| Short enough to grab without an opening | no | dagger-short reach |
+| Can grab without an opening | no | the engine's grab gate with no opening made |
 | Blade back (single edge) | 0 | 0 means the ridge technique (shinogi) does nothing |
 | Edge lines (double or false edge) | 1 | 0 means hidden-return techniques do nothing |
-| Defence suits the weapon | parry 0.58, dodge 0.5, wind 0.72 | ceiling on each defence, 0.4 to 1 |
+| Defence suits the weapon | parry 0.58, dodge 0.5, wind 0.72 | ceiling the weapon puts on each defence (higher is better) |
 | How well he reads other schools | italian 0.93, spanish 0.85, japanese 0.85, chinese 0.85, filipino 0.85, english 0.93, none 1.00 | 1.00 = as well as his own |
 
 **Everything his board changes in the engine, all at once:** reach for a counter ×2.744; counter landing +0.450; cut taken grabbing a blade ×0.400; bind odds ×2.074; feel in the bind ×1.728.
@@ -94,7 +94,7 @@ Fixed foundation, outside the columns: Strong and weak (Stärke-Schwäche).
 
 - In hand: rapier (engine record `rapier`). Armour: none (engine tier `none`).
 
-**Attributes** (1 to 7; 4 is ordinary for Strength, Agility and Endurance, 3 for the rest) **and fighting skill.**
+**Attributes and fighting skill** (the engine's default fighter has Strength 4, Agility 4, Endurance 4, Perception 3, Spirit 3, Focus 3, skill score 3).
 
 | Strength | Agility | Endurance | Perception | Spirit | Focus | Fighting skill score |
 |---|---|---|---|---|---|---|
@@ -149,10 +149,10 @@ Fixed foundation, outside the columns: Measure (misura).
 | Reading | 4 | how well she reads an attack (Perception) |
 | Weapon strikes with | cut, thrust | the striking modes her weapon allows |
 | Can half-sword | no | grip the blade to thrust into armour gaps |
-| Short enough to grab without an opening | no | dagger-short reach |
+| Can grab without an opening | no | the engine's grab gate with no opening made |
 | Blade back (single edge) | 0 | 0 means the ridge technique (shinogi) does nothing |
 | Edge lines (double or false edge) | 1 | 0 means hidden-return techniques do nothing |
-| Defence suits the weapon | parry 0.7, dodge 0.66, wind 0.71 | ceiling on each defence, 0.4 to 1 |
+| Defence suits the weapon | parry 0.7, dodge 0.66, wind 0.71 | ceiling the weapon puts on each defence (higher is better) |
 | How well she reads other schools | german 0.93, spanish 0.93, japanese 0.85, chinese 0.85, filipino 0.85, english 0.93, none 1.00 | 1.00 = as well as her own |
 
 **Everything her board changes in the engine, all at once:** reach for a counter ×1.400; distance contest ×1.150.
@@ -169,7 +169,7 @@ Fixed foundation, outside the columns: Measure (misura).
 
 - In hand: katana (engine record `katana`). Armour: light (padded) (engine tier `light`).
 
-**Attributes** (1 to 7; 4 is ordinary for Strength, Agility and Endurance, 3 for the rest) **and fighting skill.**
+**Attributes and fighting skill** (the engine's default fighter has Strength 4, Agility 4, Endurance 4, Perception 3, Spirit 3, Focus 3, skill score 3).
 
 | Strength | Agility | Endurance | Perception | Spirit | Focus | Fighting skill score |
 |---|---|---|---|---|---|---|
@@ -227,10 +227,10 @@ Fixed foundation, outside the columns: The ridge (shinogi).
 | Reading | 5 | how well he reads an attack (Perception) |
 | Weapon strikes with | blunt blow, curved cut, thrust | the striking modes his weapon allows |
 | Can half-sword | no | grip the blade to thrust into armour gaps |
-| Short enough to grab without an opening | no | dagger-short reach |
+| Can grab without an opening | no | the engine's grab gate with no opening made |
 | Blade back (single edge) | 0.85 | 0 means the ridge technique (shinogi) does nothing |
 | Edge lines (double or false edge) | 0.15 | 0 means hidden-return techniques do nothing |
-| Defence suits the weapon | parry 0.43, dodge 0.58, wind 0.43 | ceiling on each defence, 0.4 to 1 |
+| Defence suits the weapon | parry 0.43, dodge 0.58, wind 0.43 | ceiling the weapon puts on each defence (higher is better) |
 | How well he reads other schools | german 0.85, italian 0.85, spanish 0.85, chinese 0.93, filipino 0.93, english 0.85, none 1.00 | 1.00 = as well as his own |
 
 **Everything his board changes in the engine, all at once:** reading early ×1.587; blade-back pressure ×26.844; initiative ×1.360; reading the body ×1.419.
@@ -249,7 +249,7 @@ Fixed foundation, outside the columns: The ridge (shinogi).
 
 - In hand: rapier (engine record `rapier`). Armour: light (padded) (engine tier `light`).
 
-**Attributes** (1 to 7; 4 is ordinary for Strength, Agility and Endurance, 3 for the rest) **and fighting skill.**
+**Attributes and fighting skill** (the engine's default fighter has Strength 4, Agility 4, Endurance 4, Perception 3, Spirit 3, Focus 3, skill score 3).
 
 | Strength | Agility | Endurance | Perception | Spirit | Focus | Fighting skill score |
 |---|---|---|---|---|---|---|
@@ -308,10 +308,10 @@ Fixed foundation, outside the columns: Occupying the line (atajo).
 | Reading | 5 | how well she reads an attack (Perception) |
 | Weapon strikes with | cut, thrust | the striking modes her weapon allows |
 | Can half-sword | no | grip the blade to thrust into armour gaps |
-| Short enough to grab without an opening | no | dagger-short reach |
+| Can grab without an opening | no | the engine's grab gate with no opening made |
 | Blade back (single edge) | 0 | 0 means the ridge technique (shinogi) does nothing |
 | Edge lines (double or false edge) | 1 | 0 means hidden-return techniques do nothing |
-| Defence suits the weapon | parry 0.7, dodge 0.66, wind 0.71 | ceiling on each defence, 0.4 to 1 |
+| Defence suits the weapon | parry 0.7, dodge 0.66, wind 0.71 | ceiling the weapon puts on each defence (higher is better) |
 | How well she reads other schools | german 0.85, italian 0.93, japanese 0.85, chinese 0.85, filipino 0.85, english 0.85, none 1.00 | 1.00 = as well as her own |
 
 **Everything her board changes in the engine, all at once:** footing ×1.260; reach for a counter ×1.960; bind odds ×1.939; distance contest ×1.125.
@@ -333,7 +333,7 @@ Fixed foundation, outside the columns: Occupying the line (atajo).
 - In hand: arming sword (engine record `arming`). Armour: light (padded) (engine tier `light`).
 - Also carried: a dagger. *A second weapon is planned (workplan v12 B18.08) and is not an engine input today.*
 
-**Attributes** (1 to 7; 4 is ordinary for Strength, Agility and Endurance, 3 for the rest) **and fighting skill.**
+**Attributes and fighting skill** (the engine's default fighter has Strength 4, Agility 4, Endurance 4, Perception 3, Spirit 3, Focus 3, skill score 3).
 
 | Strength | Agility | Endurance | Perception | Spirit | Focus | Fighting skill score |
 |---|---|---|---|---|---|---|
@@ -393,10 +393,10 @@ Fixed foundation, outside the columns: Measure (misura).
 | Reading | 5 | how well she reads an attack (Perception) |
 | Weapon strikes with | cut and thrust | the striking modes her weapon allows |
 | Can half-sword | no | grip the blade to thrust into armour gaps |
-| Short enough to grab without an opening | no | dagger-short reach |
+| Can grab without an opening | no | the engine's grab gate with no opening made |
 | Blade back (single edge) | 0 | 0 means the ridge technique (shinogi) does nothing |
 | Edge lines (double or false edge) | 1 | 0 means hidden-return techniques do nothing |
-| Defence suits the weapon | parry 0.56, dodge 0.68, wind 0.57 | ceiling on each defence, 0.4 to 1 |
+| Defence suits the weapon | parry 0.56, dodge 0.68, wind 0.57 | ceiling the weapon puts on each defence (higher is better) |
 | How well she reads other schools | german 0.93, spanish 0.93, japanese 0.85, chinese 0.85, filipino 0.85, english 0.93, none 1.00 | 1.00 = as well as her own |
 
 **Everything her board changes in the engine, all at once:** reach for a counter ×3.842; counter landing +0.360; bind odds ×1.728; distance contest ×2.011.
@@ -417,7 +417,7 @@ Fixed foundation, outside the columns: Measure (misura).
 
 - In hand: arming sword (engine record `arming`). Armour: none (engine tier `none`).
 
-**Attributes** (1 to 7; 4 is ordinary for Strength, Agility and Endurance, 3 for the rest) **and fighting skill.**
+**Attributes and fighting skill** (the engine's default fighter has Strength 4, Agility 4, Endurance 4, Perception 3, Spirit 3, Focus 3, skill score 3).
 
 | Strength | Agility | Endurance | Perception | Spirit | Focus | Fighting skill score |
 |---|---|---|---|---|---|---|
@@ -446,7 +446,7 @@ Attention: 0 of 5 [ASSUMPTION; low: attention = ⌊Concentration 15 ÷ 3⌋; a t
 ### Growth path
 
 - Today: nothing to learn. A fighter with no school can be taught no technique (the engine's tradition gate admits none).
-- Proposed (Part 3 §3.5, decision D-F): the plain drill techniques (the 21 generics) become open to anyone, so Odo could learn *keen eye* or *footing* from any teacher who has them.
+- Proposed (Part 3 §3.5, decision D-8): the plain drill techniques (the 21 generics) become open to anyone, so Odo could learn *keen eye* or *footing* from any teacher who has them.
 
 ### What the engine derives for him (computed by `modules.combat`, not typed)
 
@@ -461,11 +461,11 @@ Attention: 0 of 5 [ASSUMPTION; low: attention = ⌊Concentration 15 ÷ 3⌋; a t
 | Reading | 3 | how well he reads an attack (Perception) |
 | Weapon strikes with | cut and thrust | the striking modes his weapon allows |
 | Can half-sword | no | grip the blade to thrust into armour gaps |
-| Short enough to grab without an opening | no | dagger-short reach |
+| Can grab without an opening | no | the engine's grab gate with no opening made |
 | Blade back (single edge) | 0 | 0 means the ridge technique (shinogi) does nothing |
 | Edge lines (double or false edge) | 1 | 0 means hidden-return techniques do nothing |
-| Defence suits the weapon | parry 0.56, dodge 0.68, wind 0.57 | ceiling on each defence, 0.4 to 1 |
-| How well he reads other schools | 1.00 against everyone | a fighter with no school has none to misread, and none to be misread by (`traditions.py:43-44`) |
+| Defence suits the weapon | parry 0.56, dodge 0.68, wind 0.57 | ceiling the weapon puts on each defence (higher is better) |
+| How well he reads other schools | 1.00 against every school, both ways | a fighter with no school has none to misread, and none to be misread by (`traditions.py:44-45`) |
 
 **Everything his board changes in the engine, all at once:** nothing (every lever at its neutral value).
 
