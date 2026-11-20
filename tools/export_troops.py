@@ -46,7 +46,9 @@ def build() -> dict:
     from modules.mass_battle.troop_types import table
     with open(SRC, encoding='utf-8') as fh:
         src = load_yaml(fh.read())
-    table.check(src)
+    from dataclasses import fields
+    from modules.mass_battle import config
+    table.check(src, config_names=frozenset(f.name for f in fields(config.EngineConfig)))   # a value has one owner, never the file and `EngineConfig`
     unknown = sorted(set(src['site_kinds']) - SITE_KINDS)
     if unknown:
         raise ValueError(f'site_kinds {unknown} are not members of the season\'s site_kinds')

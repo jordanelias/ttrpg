@@ -32,7 +32,7 @@ import json
 import os
 from typing import Optional
 
-__all__ = ['TroopFileError', 'check', 'engine_config_names', 'combat_weapon_keys', 'COMBAT_EXPORT_PATH', 'troop_types', 'row_of',
+__all__ = ['TroopFileError', 'check', 'combat_weapon_keys', 'COMBAT_EXPORT_PATH', 'troop_types', 'row_of',
            'stats_for', 'is_mounted', 'roles_for', 'training_site_for', 'loadout_for_names', 'cell_cap_of',
            'charge_of', 'wheels_fast', 'default_role_of', 'reach_of', 'support_ranks_of', 'stats_table', 'mounted_types', 'role_menus', 'role_spec_table', 'training_sites']
 
@@ -76,21 +76,12 @@ def combat_weapon_keys(path: str = COMBAT_EXPORT_PATH) -> frozenset:
         return frozenset(json.load(fh)['sections']['weapons'])
 
 
-def engine_config_names() -> frozenset:
-    """The field names of the engine's `EngineConfig` (`config.py`), the other owner of a named value. Imported where it is
-    called, never at the top: `config.py` imports this module."""
-    from dataclasses import fields
-    from modules.mass_battle import config
-    return frozenset(f.name for f in fields(config.EngineConfig))
-
-
-def check(data: dict, combat_weapons=None, config_names=None) -> None:
+def check(data: dict, combat_weapons=None, config_names=()) -> None:
     """Refuse a troop file that breaks a rule above. `combat_weapons` is the roster's key set (read from the export by
-    default), `config_names` the `EngineConfig` field names (likewise). Raises `TroopFileError`."""
+    default); `config_names` is the `EngineConfig` field names, which the caller supplies (`tools/export_troops.py` reads them:
+    this module cannot import `config.py`, which imports it, without making the two an import cycle). Raises `TroopFileError`."""
     if combat_weapons is None:
         combat_weapons = combat_weapon_keys()
-    if config_names is None:
-        config_names = engine_config_names()
     for column in HEADER_KEYS + ROLE_COLUMNS + ARM_COLUMNS + CLASS_COLUMNS + TROOP_COLUMNS:
         if column.upper() in config_names:
             raise TroopFileError(f"troop file: the name {column!r} is a column here and a field of `EngineConfig` "
