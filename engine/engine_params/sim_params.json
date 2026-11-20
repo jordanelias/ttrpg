@@ -5,7 +5,7 @@
     "cited": 121,
     "total": 396,
     "uncited": 275,
-    "of_which_assumption_grade": 8
+    "of_which_assumption_grade": 7
   },
   "count": 396,
   "by_module": {
@@ -1697,13 +1697,13 @@
     {
       "key": "mass_battle.TROOPS_PER_WEIGHT",
       "name": "TROOPS_PER_WEIGHT",
-      "value": 300,
+      "value": 10000,
       "kind": "scalar",
       "module": "mass_battle",
       "file": "modules/mass_battle/troop_types/recruitment.py",
-      "note": "[canonical: ED-IN-0306 -- ASSUMPTION, Jordan: \"you can invent one\"; sized to the engine's 100-troop unit floor and 100..800 field armies, ED-IN-0306 phase 5]",
-      "citation": "ED-IN-0306 -- ASSUMPTION, Jordan: \"you can invent one\"; sized to the engine's 100-troop unit floor and 100..800 field armies, ED-IN-0306 phase 5",
-      "citation_grade": "assumption"
+      "note": "[canonical: ED-MB-0101 -- Jordan, 2026-11-20: an army is at least 1,000 troops; sized so one weight at MUSTER_FRACTION raises that floor]",
+      "citation": "ED-MB-0101 -- Jordan, 2026-11-20: an army is at least 1,000 troops; sized so one weight at MUSTER_FRACTION raises that floor",
+      "citation_grade": "source"
     },
     {
       "key": "mass_battle.REACH_MELEE_DEFAULT",

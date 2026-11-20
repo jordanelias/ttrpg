@@ -4,14 +4,20 @@
 THE FIELD IS HAND-BUILT, NOT NATURAL. One season of the shipped realm fights almost no field (seed 0: `field.unopposed`
 3, `march.declared` 6; seed 1: unopposed 2, declared 3; seed 2: `field.lost` 1), so the falsifier runs on a real fold of
 `set_s_014` marching on `set_s_036` with the Crown's two marchers at `Person.weight` `WEIGHT` and the Church's six at
-`DEFENDER_WEIGHT`. A weight is 30 troops (`under_arms_cap`, B17.01's one scale), so a weight-1 person is 30 troops, under
-`UNIT_ROUT_FLOOR = 80`, and every subunit of the shipped realm routs on tick 1 (a `Drawn` field nobody is hurt in); a marcher
-of weight 3 is 90. The realm at `SEED` loses the field with ONE marcher's subunit routed and the other's untouched (the preconditions
+`DEFENDER_WEIGHT`. A weight is 1,000 troops (`under_arms_cap`, ED-MB-0101, B17.16: an army is at least 1,000 troops), and a person's
+troops are cut into units (`massbattle._cut`: a side is at least three units, so the two marchers are three units, the first
+marcher's two). The realm at `SEED` loses the field with ONE marcher's units cut and the other's untouched (the preconditions
 are asserted below, so a moved fixture reads as a precondition, not a pass). RE-PICKED by B17.01 (the scale, the placement
 by `orderofbattle._place` and the three-way grade moved every fight): of a grid of marcher weights 3 to 8, defender weights 3
 to 10 and seeds 0 to 13, the case the claims need (the first marcher untouched at his full body, the second cut and named
 by the band Event) is read at marcher weight 3 only: (3, 7, seed 3), (3, 8, seed 7), (3, 10, seeds 4 and 7). Seed and weights
 are the helper's own knobs; the claims below are unchanged.
+
+RE-CUT by B17.16 (the scale 30 -> 1,000 troops a weight, the cell band and a side's units moved every fight): of marcher weights
+1 to 6, defender weights 1 to 5 and seeds 0 to 39 no case leaves the SECOND marcher cut and the first untouched (the first marcher
+holds two units and the front of the line; the second's one unit stands behind), and the case the claims need, one marcher cut and
+named by the band Event and the other untouched at his full body, is read with the FIRST marcher the cut one: (marchers 1, defenders 3,
+seed 9). `CUT` and `UNTOUCHED` name them; no assertion about who is cut changed, only which of the two is.
 
 The cases: the falsifier (different bodies under `person`, identical under `side`), its planted failure (the side's ratio
 fed to every person: the same check reddens), the control (`side` writes today's bodies and carries no per-person
@@ -31,10 +37,10 @@ from engine.season.tests.test_march import _fold_one, _march_act, _weigh
 from engine.season.tests._field_outcomes import SCALE
 
 # B17.01 RE-PICKED (see the docstring): was seed 7, weight 1, scale 200 (B05.99: seed 8 before it).
-# Seed re-picked again at the B06/B17 merge: the keyed draw changed the stream (was 3: p_npc_033 cut to 870, both marchers cut). Weights
-# (3, 7) kept; seeds 0..99 scanned for the case (p_npc_033 untouched, p_npc_035 cut, `broke` Event naming him): seed 81 is the first (1000 / 90).
-SEED, WEIGHT, DEFENDER_WEIGHT = 81, 3, 7      # the hand-built fold's three knobs
+# B17.16 RE-CUT (see the docstring): was (3, 7, seed 81) at 30 troops a weight, p_npc_033 untouched and p_npc_035 cut.
+SEED, WEIGHT, DEFENDER_WEIGHT = 9, 1, 3      # the hand-built fold's three knobs
 MARCHERS = ("p_npc_033", "p_npc_035")
+CUT, UNTOUCHED = MARCHERS                    # the fold at `SEED` cuts the first marcher's units; the second's one is never reached
 
 
 def _mb():
@@ -72,7 +78,7 @@ def test_falsifier_two_losers_one_routed_one_not_end_with_different_bodies_under
     kinds = [e.kind for e in events]
     assert "field.lost" in kinds, f"precondition: the field is lost by the attacker ({kinds})"
     assert after[MARCHERS[0]] != after[MARCHERS[1]], "person arm: the two losers ended with the same body"
-    assert after[MARCHERS[0]] == before[MARCHERS[0]] and after[MARCHERS[1]] < before[MARCHERS[1]], (
+    assert after[UNTOUCHED] == before[UNTOUCHED] and after[CUT] < before[CUT], (
         "person arm: the unrouted marcher should be untouched and the routed one cut")
 
     _w, events_s, after_s, before_s = _fold("side")
@@ -88,8 +94,8 @@ def test_planted_failure_the_sides_ratio_fed_to_every_person_reddens_the_falsifi
     mb = _mb()
     real = mb._person_namer
 
-    def side_share_for_all(members):
-        namer = real(members)
+    def side_share_for_all(members, owners):
+        namer = real(members, owners)
 
         def name(army, scale):
             parts, credit = namer(army, scale)
@@ -128,16 +134,17 @@ def test_the_band_event_names_the_loser_whose_subunit_broke_first():
     _w, events, after, before = _fold("person")
     cut = [pid for pid in MARCHERS if after[pid] < before[pid]]
     named = _broke(events)
-    assert cut == [MARCHERS[1]] and named == [("field.lost", MARCHERS[1])], (named, after)
+    assert cut == [CUT] and named == [("field.lost", CUT)], (named, after)
 
 
 def test_the_engines_order_of_breaking_names_each_unit_once_and_not_a_unit_swept_with_its_army():
     """B17.03: `run_battle` returns `broke`, `(side, unit index)` in the order units broke on their own account while their army
-    stood (`_PersonSubunit`'s setter that logged a person is deleted). Three-person sides of weight 3 (90 troops a unit, above
+    stood (`_PersonSubunit`'s setter that logged a person is deleted). Three-person sides of weight 4 (4,000 troops a unit, above
     `UNIT_ROUT_FLOOR`) are fought over seeds 0 to 7: every name is `A` or `B` and a unit of that army, none is named twice, and
-    the fields that broke a unit are most of them (the loop asserts that it asserted). CONTROL, the same fight with weight 1 (30
-    troops, under the floor): the army routs whole, every unit is swept with it and NOBODY is named, which is what keeps a swept
-    unit from being credited with a break it did not make."""
+    the fields that broke a unit are most of them (the loop asserts that it asserted; re-cut by B17.16 from weight 3 over 7 seeds of 8, a weight read
+    off a sweep of 0.3 to 6: 7 at weight 4, 1 to 3 elsewhere). CONTROL, the same fight with weight 0.03 (30
+    troops a unit, under the floor, and a side under the army's 1,000 is not cut further): the army routs whole, every unit is swept
+    with it and NOBODY is named, which is what keeps a swept unit from being credited with a break it did not make."""
     mb = _mb()
     rngsource = importlib.import_module("modules.mass_battle.rngsource")
     run_battle = importlib.import_module("modules.mass_battle.battle_loop").run_battle     # by string: `engine/` imports no module code
@@ -150,24 +157,24 @@ def test_the_engines_order_of_breaking_names_each_unit_once_and_not_a_unit_swept
 
     named = 0
     for seed in range(8):
-        got, a, b = fight(3, seed)
+        got, a, b = fight(4, seed)
         assert len(set(got)) == len(got) and all(side in "AB" and 0 <= i < 3 for side, i in got), got
         named += bool(got)
     assert named >= 6, named
     for seed in range(8):
-        got, a, b = fight(1, seed)
+        got, a, b = fight(0.03, seed)
         assert got == [] and a.routed and b.routed, (seed, got)
 
 
 def test_the_person_arm_builds_one_subunit_per_member_sized_by_his_own_weight():
     mb = _mb()
     unit = mb._person_unit("side_x", (1, 3, 2), ("p0", "p1", "p2"), "A", 5)
-    assert [s.troops for s in unit.units] == [30.0, 90.0, 60.0]     # `under_arms_cap`: 30 troops a weight
-    assert unit.total_troops() == 180.0
+    assert [s.troops for s in unit.units] == [1000.0, 3000.0, 2000.0]     # `under_arms_cap`: 1,000 troops a weight
+    assert unit.total_troops() == 6000.0
     side = mb._weighted_unit("side_x", 6, "A", 5)
     assert side.total_troops() == unit.total_troops()    # the side's total is the same either way
-    fed = mb._person_unit("side_x", (1, 3), ("p0", "p1"), "A", 5, fed=2.0)
-    assert [s.troops for s in fed.units] == [15.0, 45.0]      # provisioned troops spread by weight, then capped
+    fed = mb._person_unit("side_x", (1, 3, 2), ("p0", "p1", "p2"), "A", 5, fed=3.0)
+    assert [s.troops for s in fed.units] == [500.0, 1500.0, 1000.0]      # provisioned troops spread by weight, then capped
 
 
 def test_an_unknown_arm_is_refused():

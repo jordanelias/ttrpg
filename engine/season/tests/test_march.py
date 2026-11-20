@@ -82,8 +82,9 @@ def _fold_one(w, act, contest_max_depth=2):
 
 
 def _weigh(w, pids, weight):
-    """B17.01: a person's weight IS his troops now (`under_arms_cap`: 30 a weight, the one weight -> troops owner), and a unit
-    under `UNIT_ROUT_FLOOR` (80) routs on tick 1 untouched. A world that wants a fought field says how heavy each side is."""
+    """B17.01: a person's weight IS his troops now (`under_arms_cap`: 1,000 a weight at ED-MB-0101, the one weight -> troops owner),
+    and the shipped realm's weight-1 persons are a thousand troops each, cut into the units a side is (`massbattle._cut`). A world
+    that wants a decided field says how heavy each side is."""
     for pid in pids:
         w.persons[pid].weight = weight
     return w
@@ -91,8 +92,8 @@ def _weigh(w, pids, weight):
 
 def _contested(w, attacker_weight=3, defender_weight=10):
     """The realm's Crown pair on `set_s_014` (two persons) marching on the Church's six at `set_s_036`, made a FIGHT the attacker
-    loses: each marcher 90 troops (above the rout floor, so the battle reaches him) against six of 300. The shipped realm's weight-1
-    persons are 30 troops and break on tick 1 on both sides, which is a `Drawn` field nobody is hurt in."""
+    loses: each marcher 3,000 troops against six of 10,000. (B17.16: at the shipped weights of 1 and 2 a field is a thousand or
+    two thousand troops a side and is fought, not routed on contact.)"""
     _weigh(w, world_q.mustered(w, "set_s_014", "fac_valorsmark"), attacker_weight)
     return _weigh(w, world_q.mustered(w, "set_s_036", "fac_church_of_solmund"), defender_weight)
 
@@ -285,14 +286,16 @@ def test_a_march_on_an_unheld_settlement_arrives_rather_than_crashing_the_season
 def test_a_won_field_writes_casualties_and_stance_on_the_defender_only():
     """`Won` (the ATTACKER wins, defenders lose) THROUGH A REAL FOLD. This test used to construct the `Resolution` by hand,
     because a corpus-scale force routed on contact whoever was stronger (`H-250`); a side is now `under_arms_cap(weight)` troops,
-    so the weights say who is stronger. The Crown's two marchers are cohorts (`Person.weight` 10, 600 troops) against the
-    Church's six individuals at weight 3 (90 troops each, above the rout floor so each is fought and cut).
-    The world is realm seed 3 (the draw is the act's, so the seed is a fight's dice): at seeds 1 to 3 these weights read `Won`,
-    at seed 0 `Drawn`. CONTROL, SAME WORLD AND ACT: with the two sides' weights swapped (3 against 10) the field is `Lost`, so
-    the flip to `Won` is the weights' and not a fold that always reads one band. The band's effects are asserted as the hand-built test
-    asserted them: the defender takes the casualties and the stance rows, the winning side is never written."""
+    so the weights say who is stronger. The Crown's two marchers are weight 4 (4,000 troops each) against the Church's six individuals
+    at weight 1.5 (1,500 troops each, each fought and cut).
+    The world is realm seed 1 (the draw is the act's, so the seed is a fight's dice; B17.16 re-cut it from seed 3 and weights 10 against
+    3, the 30-a-weight scale): of seeds 0 to 5 and the weight pairs 1 v 3, 1.5 v 4 and 2 v 5 each way, seeds 1, 2 and 4 read the pair
+    (1.5, 4) `Lost` and (4, 1.5) `Won`; seed 1 is the first. CONTROL, SAME WORLD AND ACT: with the two sides' weights swapped (1.5
+    against 4) the field is `Lost`, so the flip to `Won` is the weights' and not a fold that always reads one band. The band's
+    effects are asserted as the hand-built test asserted them: the defender takes the casualties and the stance rows, the winning side
+    is never written."""
     def fold(attacker_weight, defender_weight):
-        w = build_realm(3)
+        w = build_realm(1)
         attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
         defenders = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
         assert attackers == ["p_npc_033", "p_npc_035"] and len(defenders) == 6, (
@@ -305,11 +308,11 @@ def test_a_won_field_writes_casualties_and_stance_on_the_defender_only():
         events = _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_spymaster"), contest_max_depth=2)
         return w, attackers, defenders, before_a, before_d, before_s, [(e.kind, e.degree) for e in events]
 
-    kinds_lost = fold(3, 10)[-1]
+    kinds_lost = fold(1.5, 4)[-1]
     assert ("field.lost", "Lost") in kinds_lost and not any(k == "field.won" for k, _ in kinds_lost), (
         f"the weaker attacker no longer loses: {kinds_lost}")
 
-    w, attackers, defenders, before_a, before_d, before_s, kinds = fold(10, 3)
+    w, attackers, defenders, before_a, before_d, before_s, kinds = fold(4, 1.5)
     assert ("field.won", "Won") in kinds, f"the weights did not carry the fold to Won: {kinds}"
 
     for pid in attackers:

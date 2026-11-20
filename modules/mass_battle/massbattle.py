@@ -16,7 +16,9 @@ from dataclasses import asdict
 from engine.season.queries.inputs import FieldOutcome, PartOutcome, SideOutcome
 from modules.mass_battle import rngsource
 from modules.mass_battle import config as _config
-from modules.mass_battle.config import CELL_CAP, MAX_TROOPS_PER_UNIT, ROLE_SPEC
+from modules.mass_battle.config import (CELL_CAP, MAX_TROOPS_PER_UNIT, MIN_ARMY_TROOPS, MIN_UNITS_PER_ARMY,
+                                        ROLE_SPEC)
+from modules.mass_battle.armies import UNIT_CAP
 from modules.mass_battle.hierarchy.units import Order, Unit, Army, unit_conceded
 from modules.mass_battle.orchestration import run_battle
 from modules.mass_battle.orderofbattle import (OrderOfBattle, UnitRow, _SIDE_DIR, _place, class_of,
@@ -204,8 +206,34 @@ def _line_spec(role, troops):
     return {**_MVP_SUBUNIT_SHAPE, **_role_fields(role), 'troops': troops, 'concentration': float(CELL_CAP)}
 
 
+def _unit_counts(troops):
+    """B17.16 (ED-MB-0101): HOW MANY UNITS EACH OF A SIDE'S PERSONS' TROOPS IS CUT INTO, `troops` being each person's (a `side`
+    arm and an order's headcount line are one). Each is the fewest equal units none of which passes `MAX_TROOPS_PER_UNIT` (unless that would be more than `UNIT_CAP` units, and then `_refusal` refuses the field); and a
+    side that raises at least `MIN_ARMY_TROOPS` is at least `MIN_UNITS_PER_ARMY` units in all, the extra cuts going to the largest
+    unit first (the tie to the earlier person). A side below the army's floor is not cut further: it is under the ruled minimum
+    and `armyrecord`'s form-time warning is where that is said, as `geometry.footprint_for` leaves a unit below its own."""
+    counts = [max(1, math.ceil(t / MAX_TROOPS_PER_UNIT)) for t in troops]
+    if sum(troops) >= MIN_ARMY_TROOPS:
+        while sum(counts) < MIN_UNITS_PER_ARMY:
+            counts[max(range(len(counts)), key=lambda i: (troops[i] / counts[i], -i))] += 1
+    while sum(counts) > UNIT_CAP and max(counts) > 1:      # an army holds at most `UNIT_CAP` units: past it a unit passes the
+        counts[max(range(len(counts)), key=lambda i: (counts[i], -i))] -= 1       # ceiling and `_refusal` reads it (`SCALE-GAP`)
+    return counts
+
+
+def _cut(troops):
+    """B17.16: `troops`, one value per person, as the specs' troops and the index of the person owning each: `(sizes, owners)`.
+    A person's units are equal, so his troops are what they were (to the float)."""
+    sizes, owners = [], []
+    for i, (t, n) in enumerate(zip(troops, _unit_counts(troops))):
+        sizes += [t / n] * n
+        owners += [i] * n
+    return sizes, owners
+
+
 def _weighted_unit(name, weight, side, morale_start=_MORALE_START_BASE, role=None, retreat_at=None):
-    """One `Army`, one `Unit`, sized by `troops=` (the Jordan-directed continuous-scale field,
+    """One `Army`, its troops cut into units by `_cut` (B17.16: at least `MIN_UNITS_PER_ARMY` once the side is at the army's
+    floor, none past `MAX_TROOPS_PER_UNIT`), each sized by `troops=` (the Jordan-directed continuous-scale field,
     `hierarchy/units.py`: "when `troops` is set the footprint is generated from (troops,
     concentration) ... `tier` becomes vestigial") rather than by `tier`'s fixed lookup table.
 
@@ -224,12 +252,13 @@ def _weighted_unit(name, weight, side, morale_start=_MORALE_START_BASE, role=Non
 
     CP-T04-02: `role`, the side's standing order (`_role_fields`); `None` is the side as it was. CP-T04-03: `retreat_at`,
     the order's second key (`_retreat_orders`); `None` or `'none'` is the side as it was."""
-    spec = _line_spec(role, max(float(under_arms_cap(weight)), _MIN_TROOPS))
-    _place([spec], [class_of(spec['troop_type'])], side)
-    sub = Unit(**spec, advance_dir=_SIDE_DIR[side], orders=_retreat_orders(retreat_at))
+    sizes, _owners = _cut([max(float(under_arms_cap(weight)), _MIN_TROOPS)])
+    specs = [_line_spec(role, t) for t in sizes]
+    _place(specs, [class_of(sp['troop_type']) for sp in specs], side)
+    subs = [Unit(**spec, advance_dir=_SIDE_DIR[side], orders=_retreat_orders(retreat_at)) for spec in specs]
     return Army(name=name, faction=side, power=_SEASON_FORCE_POWER, **_MVP_UNIT_COMMAND,
                 morale=morale_start, morale_start=morale_start,
-                units=[sub])
+                units=subs)
 
 
 #: CP-T04-01 (`H-359`): the two shapes a headcount side takes, the fixture `field_units`' closed set. `side` is the
@@ -237,19 +266,32 @@ def _weighted_unit(name, weight, side, morale_start=_MORALE_START_BASE, role=Non
 SUBUNIT_ARMS = ('side', 'person')
 
 
-def _person_unit(name, weights, members, side, morale_start=_MORALE_START_BASE, fed=None, role=None,
-                 retreat_at=None):
-    """CP-T04-01: the `person` arm of a headcount side -- ONE `Army`, ONE `Unit` PER COMMANDING PERSON, each sized by
-    `under_arms_cap` of that person's own weight (B17.01's one scale, floored at `_MIN_TROOPS` as `_weighted_unit`
-    floors the side) and the line placed by `orderofbattle._place` for `side`. `fed`, when the host provisioned the field
-    (v9 IN-52), is the side's fielded troops standing in for Σ weight: it is spread over the persons in proportion to their
-    weights, so the side's total is what it was. Every unit has `_weighted_unit`'s shape and the Army its command and
-    morale. The unit at index `i` is `members[i]`'s (B17.03: `_person_parts` and the engine's order of breaking name him by
-    that index; the unit carries no person of its own). CP-T04-02: `role`, the side's standing order, is every unit's
-    (`_role_fields`). CP-T04-03: so is `retreat_at` (`_retreat_orders`): each unit retreats on its OWN strength."""
+def _person_troops(weights, fed):
+    """CP-T04-01: each commanding person's troops, `under_arms_cap` of his own weight (B17.01's one scale), floored at `_MIN_TROOPS`
+    as `_weighted_unit` floors the side. `fed`, when the host provisioned the field (v9 IN-52), is the side's fielded troops
+    standing in for Σ weight, spread over the persons in proportion to their weights, so the side's total is what it was."""
     total = float(sum(weights))
     share = (float(fed) / total) if (fed is not None and total > 0) else 1.0
-    specs = [_line_spec(role, max(float(under_arms_cap(float(wt) * share)), _MIN_TROOPS)) for wt in weights]
+    return [max(float(under_arms_cap(float(wt) * share)), _MIN_TROOPS) for wt in weights]
+
+
+def _person_owners(weights, fed=None):
+    """B17.16: which person owns each unit of the side `_person_unit` builds, the person's index per unit in unit order
+    (`_cut`'s owners): a person's troops are one or several units, kept together and named as one part (`_person_namer`)."""
+    return tuple(_cut(_person_troops(weights, fed))[1])
+
+
+def _person_unit(name, weights, members, side, morale_start=_MORALE_START_BASE, fed=None, role=None,
+                 retreat_at=None):
+    """CP-T04-01: the `person` arm of a headcount side -- ONE `Army`, its units CUT PER COMMANDING PERSON (`_cut`: one unit,
+    or the several his troops need under `MAX_TROOPS_PER_UNIT`, and a side at the army's floor is at least `MIN_UNITS_PER_ARMY` in all),
+    each person's troops `_person_troops` and the line placed by `orderofbattle._place` for `side`. Every unit has `_weighted_unit`'s
+    shape and the Army its command and morale. The unit at index `i` is `members[_person_owners(...)[i]]`'s (B17.03:
+    `_person_namer` and the engine's order of breaking name him by that index; the unit carries no person of its own).
+    CP-T04-02: `role`, the side's standing order, is every unit's (`_role_fields`). CP-T04-03: so is `retreat_at`
+    (`_retreat_orders`): each unit retreats on its OWN strength."""
+    sizes, _owners = _cut(_person_troops(weights, fed))
+    specs = [_line_spec(role, t) for t in sizes]
     _place(specs, [class_of(sp['troop_type']) for sp in specs], side)
     subs = [Unit(**spec, advance_dir=_SIDE_DIR[side], orders=_retreat_orders(retreat_at)) for spec in specs]
     return Army(name=name, faction=side, power=_SEASON_FORCE_POWER, **_MVP_UNIT_COMMAND,
@@ -272,13 +314,19 @@ def _cohort_share(drawn, left, cohort, scale):
     return _share(sum(troops * left[unit] for unit, troops in gave), sum(troops for _unit, troops in gave), scale)
 
 
-def _person_namer(members):
-    """B17.03: how the `person` arm names the parts of its side, for `_run_and_grade`. A part is one member and his unit, so
-    `members[i]` is the unit at index `i`: `(parts, credit)`, the parts in input order and the id the engine's `(side, unit index)`
-    order of breaking credits for each unit index."""
+def _person_namer(members, owners):
+    """B17.03: how the `person` arm names the parts of its side, for `_run_and_grade`. A part is one member and his unit or units
+    (B17.16: `owners[i]` is the index into `members` of the person the unit at index `i` is), named by the cohort rule
+    (`_cohort_namer`): his share is his units' survivors over his units' start, and he is routed when every unit of his routed.
+    `(parts, credit)`, the parts in `members`' order and the id the engine's `(side, unit index)` order of breaking credits for each
+    unit index."""
     def name(army, scale):
-        return (tuple(PartOutcome(pid, _share(sub.cur_troops, sub._start_troops, scale), bool(sub.routed))
-                      for sub, pid in zip(army.units, members)), tuple(members))
+        parts = []
+        for k, pid in enumerate(members):
+            mine = [sub for sub, o in zip(army.units, owners) if o == k]
+            parts.append(PartOutcome(pid, _share(sum(sub.cur_troops for sub in mine), sum(sub._start_troops for sub in mine), scale),
+                                     all(bool(sub.routed) for sub in mine)))
+        return tuple(parts), tuple(members[o] for o in owners)
     return name
 
 
@@ -318,8 +366,10 @@ def _oob_unit(oob, weight, side, morale_start):
     Built with `faction` 'A'/'B', the engine's deployment convention, rather than `_weighted_unit`'s side names:
     the sides must start on opposite rows, which the single-line path's shared (8, 12) never needed."""
     if oob is None:
-        oob = OrderOfBattle((UnitRow('line', _HEADCOUNT_LINE_TYPE,
-                                     max(float(under_arms_cap(weight)), _MIN_TROOPS)),))
+        # B17.16: the headcount line is cut into units as every headcount side is (`_cut`), named `line`, `line_2`, ...
+        sizes, _owners = _cut([max(float(under_arms_cap(weight)), _MIN_TROOPS)])
+        oob = OrderOfBattle(tuple(UnitRow('line' if i == 0 else f'line_{i + 1}', _HEADCOUNT_LINE_TYPE, t)
+                                  for i, t in enumerate(sizes)))
     return _build_oob_unit(oob, f'side_{side.lower()}', side, morale_start=morale_start)
 
 
@@ -517,7 +567,8 @@ def resolve_field(inp, rng=None, *, cfg=None, troops_a=None, troops_b=None, deci
         # his weight. A provisioned side (`troops_a`/`troops_b`) is spread over its persons by weight.
         unit_a = _person_unit("side_a", inp.weights[0], inp.members[0], 'A', morale_a, troops_a, role_a, retreat_a)
         unit_b = _person_unit("side_b", inp.weights[1], inp.members[1], 'B', morale_b, troops_b, role_b, retreat_b)
-        namers = (_person_namer(inp.members[0]), _person_namer(inp.members[1]))
+        namers = (_person_namer(inp.members[0], _person_owners(inp.weights[0], troops_a)),
+                  _person_namer(inp.members[1], _person_owners(inp.weights[1], troops_b)))
     elif not armies:
         unit_a = _weighted_unit("side_a", weight_a, 'A', morale_a, role_a, retreat_a)
         unit_b = _weighted_unit("side_b", weight_b, 'B', morale_b, role_b, retreat_b)

@@ -20,8 +20,9 @@ from modules.mass_battle import config
 from systems.mass_battle.sim import variant
 
 _GEO = yaml.safe_load(open(files.GEOGRAPHY_YAML, encoding='utf-8'))
-# Sides large enough that the field is fought for ticks rather than routing on contact (the module test's own field).
-_FIELD = MassBattleInput(weights=((180.0, 120.0), (240.0,)), territory="T9", fort_level=1.0, stances=(-1.0, 0.5),
+# Sides large enough that the field is fought for ticks rather than routing on contact (the module test's own field; B17.16: weights
+# at 1,000 troops a weight, 5,000 against 4,000).
+_FIELD = MassBattleInput(weights=((3.0, 2.0), (4.0,)), territory="T9", fort_level=1.0, stances=(-1.0, 0.5),
                          walls_dr=None, origin=None, loyalties=(1.5, -0.5), loyalty_gain=0.4, geography=_GEO,
                          condition_scale=1000)
 _LEGACY = dict(PER_CELL=False, FIELD_MOVEMENT=False, MB_NODE_COHESION=False, MB_FRICTION=False)

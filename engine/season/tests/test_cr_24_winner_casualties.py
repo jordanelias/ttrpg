@@ -5,9 +5,9 @@
 THE FIELD IS A REAL FOLD OF A HAND-BUILT SITUATION. One season of the shipped realm fights almost no field (seed 0:
 `field.unopposed` 3, `march.declared` 6), so the falsifier folds ONE `march` through the real driver (RESOLVE then
 ENCOUNTER, `test_march._fold_one`) -- the engine fights it; no `Resolution` is hand-built -- with the Crown's two
-marchers made cohorts (`Person.weight` `WEIGHT`) against the Church's six (`DEFENDER_WEIGHT`), 30 troops a weight (B17.01 retired REM-32's
-`field_troops_per_weight`: `under_arms_cap` is the one scale) and `field_units: person` (CP-T04-01). Realm seed 0: the attacker
-WINS (`field.won`), one marcher's subunit is cut (survivor ratio 0.982) and the other's is not. The preconditions are
+marchers made cohorts (`Person.weight` `WEIGHT`) against the Church's six (`DEFENDER_WEIGHT`), 1,000 troops a weight (ED-MB-0101, B17.16; B17.01 retired REM-32's
+`field_troops_per_weight`: `under_arms_cap` is the one scale) and `field_units: person` (CP-T04-01). Realm seed `SEED`: the attacker
+WINS (`field.won`), one marcher's units are cut (a survivor ratio just under 1) and the other's are not. The preconditions are
 asserted, so a moved fixture reads as a precondition, not a pass.
 
 Why `person`: under `side` a winning headcount side's ratio reads 1.0 or above (`effective_size / size_max` floors
@@ -36,7 +36,11 @@ from engine.season.tests.test_march import _fold_one, _march_act, _weigh
 # SEED 0, SCALE 10 (the docstring's 0.982 is the old reading).
 # Seed re-picked again at the B06/B17 merge (the keyed draw is the stream; was 3, where the attacker drew): seeds 0..79 at
 # weights 10 / 3 scanned for a won field with p_npc_033 at the full scale and p_npc_035 cut; seed 9 is the first (1000 / 970), 45 the next.
-SEED, WEIGHT, DEFENDER_WEIGHT = 9, 10, 3
+# B17.16 RE-CUT (30 -> 1,000 troops a weight, the 50-to-100 cell, a side cut into at least three units): of marcher weights 1 / 1.5 / 4 / 6
+# against defender weights 1 / 2 / 3 / 5 over seeds 0..39 (one scan, `person` arm), the case the claims need (a WON field with
+# p_npc_033 at the full scale and p_npc_035 cut) is read at marcher weight 6 against defender weight 2: seeds 1 and 32 (p_npc_035 at
+# 989 and 990); seed 1 is the first. Was (9, 10, 3).
+SEED, WEIGHT, DEFENDER_WEIGHT = 1, 6, 2
 MARCHERS = ("p_npc_033", "p_npc_035")
 
 
@@ -174,7 +178,7 @@ def test_total_casualty_arm_kills_a_winner_who_took_a_casualty_by_the_same_death
     arrive; a winner at ratio 1 took no casualty and is untouched, so he still arrives."""
     w, events, before, _stance, _ = _fold("engine", model="total")
     kinds = [e.kind for e in events]
-    # the fold's two marchers carry ratios 1.0 and 0.982 (see the falsifier)
+    # the fold's two marchers carry ratios 1.0 and just under it (see the falsifier)
     assert "p_npc_033" in w.persons and w.persons["p_npc_033"].body == before["p_npc_033"]
     assert "p_npc_035" not in w.persons, "the winner who took a casualty should have died by the loser's rule"
     assert "field.won" in kinds and "person.died" in kinds and "army.arrived" in kinds

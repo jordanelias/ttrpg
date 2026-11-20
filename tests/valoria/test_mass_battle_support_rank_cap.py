@@ -232,16 +232,18 @@ def _engaged_by_resolve_field(monkeypatch, weight):
 
 
 def test_resolve_field_at_3000_troops_engages_the_capped_troops(monkeypatch):
-    """B17.01: a side of weight 100 is 3000 troops (`under_arms_cap`, 30 a weight; the retired scale was 1). RE-CUT at B17.15
-    (ED-MB-0101, a cell holds 50 to 100): the 3000 troops are 30 cells of 100, a line of 5 ranks of 6 (before: 3 ranks
+    """B17.16: a side of weight 9 is 9,000 troops (`under_arms_cap`, 1,000 a weight), cut into three units of 3,000 (`massbattle._cut`), and
+    the first of them is the unit read: the same 3000 troops this test has read since B17.01 (then a side of weight 100 at 30 a weight).
+    RE-CUT at B17.15
+    (ED-MB-0101, a cell holds 50 to 100): a unit of 3000 troops is 30 cells of 100, a line of 5 ranks of 6 (before: 3 ranks
     of 200-troop cells, 2700 and 2000). Measured: the line engages 2100 troops uncapped (the contact rank, then ranks at
     1.0, 0.7, 0.5 and 0.3: `SUPPORT_WEIGHTS` and its floor) and 1200 with the cap ON (infantry reaches one rank past
     contact, so the third rank and the rest weigh 0). The OFF arm is the control: it reads the uncapped stack and the
     weight is unchanged."""
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', False)
-    troops_off, engaged_off = _engaged_by_resolve_field(monkeypatch, 100)
+    troops_off, engaged_off = _engaged_by_resolve_field(monkeypatch, 9)
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', True)
-    troops_on, engaged_on = _engaged_by_resolve_field(monkeypatch, 100)
+    troops_on, engaged_on = _engaged_by_resolve_field(monkeypatch, 9)
     assert troops_off == troops_on == 3000.0
     assert engaged_off == 2100.0, repr(engaged_off)
     assert engaged_on == 1200.0, repr(engaged_on)

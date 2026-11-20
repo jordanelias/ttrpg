@@ -48,22 +48,25 @@ def _units(monkeypatch, inp, **kw):
 def test_the_cap_sizes_both_headcount_sides(monkeypatch):
     a, b, _ = _units(monkeypatch, _field(units="side"))
     assert (a.total_troops(), b.total_troops()) == (float(under_arms_cap(15.0)), float(under_arms_cap(6.0)))
-    assert (a.total_troops(), b.total_troops()) == (450.0, 180.0)        # 15 * 30 and 6 * 30
+    assert (a.total_troops(), b.total_troops()) == (15000.0, 6000.0)     # 15 * 1,000 and 6 * 1,000 (B17.16: a weight is 1,000 troops)
     assert (a.faction, b.faction) == ("A", "B")                          # the engine's deployment convention, as an army's
 
 
 def test_the_cap_applies_after_the_provisioning_bound(monkeypatch):
     """Fed troops (`troops_a`) stand in the weight's place and are then capped: the bound is in weight units."""
     a, b, _ = _units(monkeypatch, _field(units="side"), troops_a=4.0)
-    assert (a.total_troops(), b.total_troops()) == (float(under_arms_cap(4.0)), 180.0)
+    assert (a.total_troops(), b.total_troops()) == (float(under_arms_cap(4.0)), 6000.0)
     a, _, _ = _units(monkeypatch, _field(units="side"), troops_a=0.0)
     assert a.total_troops() == 1.0                                       # the crash floor still applies
 
 
 def test_a_person_side_is_the_same_cap_person_by_person(monkeypatch):
-    """The `person` arm sizes each person by `under_arms_cap` of his own weight, so the side's total is the side arm's."""
+    """The `person` arm sizes each person by `under_arms_cap` of his own weight, so the side's total is the side arm's (B17.16: a
+    side is at least three units, `massbattle._cut`: two persons make three units, the larger person's 10,000 cut in two of 5,000, and
+    one person of 6,000 makes three of 2,000)."""
     a, b, _ = _units(monkeypatch, _field(units="person", members=(("a0", "a1"), ("b0",))))
-    assert [s.troops for s in a.units] == [300.0, 150.0] and [s.troops for s in b.units] == [180.0]
+    assert [s.troops for s in a.units] == [5000.0, 5000.0, 5000.0] and [s.troops for s in b.units] == [2000.0, 2000.0, 2000.0]
+    assert sum(s.troops for s in a.units) == under_arms_cap(10.0) + under_arms_cap(5.0) and sum(s.troops for s in b.units) == under_arms_cap(6.0)
 
 
 def test_a_side_with_an_order_of_battle_and_the_headcount_side_facing_it_are_sized_by_the_same_owner(monkeypatch):

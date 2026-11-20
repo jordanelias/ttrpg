@@ -4,8 +4,8 @@ shared pin.
 
 THE FIELD IS HAND-BUILT, NOT NATURAL. One season of the shipped realm fights almost no field (seed 0: unopposed 3;
 seed 1: unopposed 2; seed 2: lost 1), so the falsifier runs on a hand fold of `set_s_014` (the Crown's two marchers,
-made cohorts of `WEIGHT`) on `set_s_036` (the Church's six, `DEFENDER_WEIGHT`), at the one scale of 30 troops a weight
-(B17.01 retired the scale fixture: `under_arms_cap`). The record is `field_input`'s own, so the line under test is the one
+made cohorts of `WEIGHT`) on `set_s_036` (the Church's six, `DEFENDER_WEIGHT`), at the one scale of 1,000 troops a weight
+(B17.01 retired the scale fixture: `under_arms_cap`; ED-MB-0101 set it). The record is `field_input`'s own, so the line under test is the one
 that builds `walls_dr`; two fields of it are this test's, as `tests/valoria/test_mass_battle_terrain.py` does: the place
 (`territory='T3'`, an OPEN_FLAT polygon, so fort 0 is a plain field and a fort above 0 is WALLS) and no origin (no river
 crossing to confound the steps).

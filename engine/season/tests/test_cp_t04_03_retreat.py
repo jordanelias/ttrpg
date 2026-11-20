@@ -5,7 +5,7 @@ without rout's facing flip, and `_grade` never calls it the winner. No new band;
 This file is the item's own; nothing here is a shared pin.
 
 THE FIELD is `test_cp_t04_02_marshal.py`'s (its helpers are reused, not re-invented): the Crown's two marchers against the
-Church's six at the one scale (30 troops a weight) on an open field, the record `field_input`'s own, and the order a real `marshal` act folded
+Church's six at the one scale (1,000 troops a weight, B17.16) on an open field, the record `field_input`'s own, and the order a real `marshal` act folded
 through the driver (`marshal` ships WITHHELD, so the act is hand-minted). Both sides name the role `Screen`, whose one
 instruction is wired to no primitive, so the order changes the field by its `retreat_at` alone (the control below checks
 that `Screen`/`none` is the field as it was).
@@ -35,10 +35,17 @@ from engine.season.tests.test_march import _fold_one
 
 SEEDS, PERSON_SEEDS = range(200), range(100)
 ROLE = "Screen"            # a role with no wired primitive: the order is its `retreat_at` and nothing else
-# B17.01: the sides start `_APPROACH_ROWS` apart, as an army's do, and an even field (20 a side) is then decided in one burst: the
-# loser routs before its retreat line is read (0 of 40 seeds fire it). A retreat is read on a field the attacker is losing slowly,
-# so the Crown's marchers are weight 7 (420 troops) against the Church's 20 weight (600): 17 of 40 seeds fire at 0.5.
-ATT_WEIGHT, WEAK_ATTACKER, DEFENDER_WEAKER = 7, 14, 12
+# B17.01: the sides start `_APPROACH_ROWS` apart, as an army's do, and an even field is decided in one burst: the loser routs before its
+# retreat line is read. A retreat is read on a field the attacker is losing slowly, so the Crown's marchers are weight 1.75 (3,500 troops)
+# against the Church's 5 weight (5,000): 23 of 200 seeds fire at 0.5 on the side arm. B17.16 re-cut these from 7 / 14 / 12 (the
+# 30-a-weight scale, 420 against 600 troops) by the factor of a quarter `test_cp_t04_02_marshal`'s Church took (20 to 5 weight); the person arm
+# is read at 1.25 (42 of 100 seeds fire; at 1.75 none do).
+# B17.16 READING, REPORTED AND NOT WEAKENED: at 1,000 troops a weight a side routs (an army's morale break, about half its strength)
+# on the tick its retreat line (0.5) is read, so the retreat saves nothing the arm without it does not: over attacker weights
+# 0.5 to 6 against defenders of 3, 5 and 10 weight, `_fewer_losses` reads False at every one (mean loss within 0.003 of `none`), and
+# `unit_conceded` of a side raised by `_weighted_unit` is false in 0 to 2 of 60 seeds at 2 to 8 weight (the test of the stop below
+# needs 5). The falsifier of the retreat's saving and the stop test below cannot observe their failure at this scale; B19's recalibration owns it.
+ATT_WEIGHT, PERSON_ATT_WEIGHT, WEAK_ATTACKER, DEFENDER_WEAKER = 1.75, 1.25, 3.5, 3
 
 
 def _mb():
@@ -130,7 +137,8 @@ def test_falsifier_an_attacker_who_retreats_at_half_loses_fewer_troops_and_never
 
 
 def test_falsifier_on_the_person_arm_a_side_concedes_when_every_subunit_has_retreated_or_routed():
-    none, half = _arm("none", arm="person", n=len(PERSON_SEEDS))[1], _arm("0.5", arm="person", n=len(PERSON_SEEDS))[1]
+    none = _arm("none", arm="person", n=len(PERSON_SEEDS), att_weight=PERSON_ATT_WEIGHT)[1]
+    half = _arm("0.5", arm="person", n=len(PERSON_SEEDS), att_weight=PERSON_ATT_WEIGHT)[1]
     fired, fired_wins = _fired_wins(half)
     assert fired >= 5, fired
     assert fired_wins == 0, fired_wins
@@ -139,7 +147,7 @@ def test_falsifier_on_the_person_arm_a_side_concedes_when_every_subunit_has_retr
 
 
 def test_a_defender_who_retreats_leaves_the_field_to_the_attacker():
-    rows = _arm("none", "0.5", att_weight=DEFENDER_WEAKER)[1]      # the Crown's 28 against the Church's 20: the defender is the thinner side
+    rows = _arm("none", "0.5", att_weight=DEFENDER_WEAKER)[1]      # the Crown's 6 against the Church's 5: the defender is the thinner side
     d_fired = [g for g, _, d_conceded in rows if d_conceded]
     assert len(d_fired) >= 3      # rare: the thinner defender usually routs in the first burst before its retreat line is read
     assert all(field_degree(g) == WON for g in d_fired)            # the defender gave the field up; the attacker holds it
@@ -149,9 +157,11 @@ def test_a_defender_who_retreats_leaves_the_field_to_the_attacker():
 def test_a_retreat_at_a_quarter_is_the_same_primitive_and_a_side_this_thin_has_routed_before_it():
     inp = replace(M._record(_world("0.25")), units="side")
     assert inp.orders[0].retreat_at == "0.25"
-    (sub,) = _mb()._weighted_unit("a", 20, "A", 5, None, "0.25").units
-    (order,) = sub.orders
-    assert (order.trigger, order.behavior) == ("own_strength:0.25", {"stance": "retreat", "conceded": True})
+    subs = _mb()._weighted_unit("a", 5, "A", 5, None, "0.25").units
+    assert len(subs) >= 3                                            # B17.16: a side of 5,000 is at least three units, each carries the order
+    for sub in subs:
+        (order,) = sub.orders
+        assert (order.trigger, order.behavior) == ("own_strength:0.25", {"stance": "retreat", "conceded": True})
     # on a single-subunit side the UNIT_ROUT_FLOOR / morale rout comes first, so it fires in no seed (a limit, not a defect)
     assert _fired_wins(_arm("0.25")[1])[1] == 0
 
@@ -215,7 +225,7 @@ def test_the_battle_stops_for_a_conceding_side_without_routing_it():
     stopped = checked = early = 0
     for s in range(60):
         a = mb._weighted_unit("side_a", WEAK_ATTACKER, "A", 5, None, "0.5")
-        b = mb._weighted_unit("side_b", 20, "B", 5)
+        b = mb._weighted_unit("side_b", 5, "B", 5)
         with rngsource.using(draw.seeded(draw.H2("test_cp_t04_03_retreat", s))):
             res = bl.run_battle(a, b, max_ticks=18)
         checked += 1
@@ -229,7 +239,7 @@ def test_the_battle_stops_for_a_conceding_side_without_routing_it():
 
 def test_a_side_with_no_retreating_subunit_is_never_conceded_and_the_function_moved_by_name():
     mb, units = _mb(), _units()
-    assert not units.unit_conceded(mb._weighted_unit("a", 20, "A", 5))
+    assert not units.unit_conceded(mb._weighted_unit("a", 5, "A", 5))
     assert not units.unit_conceded(SimpleNamespace(units=[SimpleNamespace(routed=True, conceded=False)]))  # routed is not conceded
     assert units.unit_conceded(SimpleNamespace(units=[SimpleNamespace(routed=True, conceded=False),
                                                          SimpleNamespace(routed=False, conceded=True)]))
@@ -238,7 +248,7 @@ def test_a_side_with_no_retreating_subunit_is_never_conceded_and_the_function_mo
     # Keyed on the ORDER's mark, not the stance or `yielding`: a DG-2 fighting withdrawal (`yielding` + stance retreat,
     # no `conceded`) is not a concession, and an emergent `yielding` on a subunit whose `retreat_at` order fired does not
     # hide one. Real units, so the field's default and the order-settable set are observed too.
-    wd = mb._weighted_unit("a", 20, "A", 5)
+    wd = mb._weighted_unit("a", 5, "A", 5)
     for s_ in wd.units:
         s_.stance, s_.yielding = "retreat", True
     assert not units.unit_conceded(wd)
@@ -267,4 +277,4 @@ def test_control_a_retreat_at_outside_the_closed_set_is_refused_and_none_is_no_o
     assert [o.trigger for o in mb._retreat_orders("0.5")] == ["own_strength:0.5"]
     with pytest.raises(ValueError):
         mb._retreat_orders("0.1")
-    assert mb._weighted_unit("a", 20, "A", 5).units[0].orders == ()
+    assert mb._weighted_unit("a", 5, "A", 5).units[0].orders == ()

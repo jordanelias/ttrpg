@@ -7,7 +7,7 @@ shares of `Won`, `Lost`, `Drawn` and `Unopposed`. `sigma.odds_of`, mode (a), ret
 through the ESTIMATE provider role (`@provider("estimate", ...)`), as it now finds combat's: it imports neither wrapper.
 
 THE FIELD IS HAND-BUILT, NOT NATURAL. A natural season fights no field (the aperture reading; `test_cp_t04_02_marshal.py`),
-so the pairs are that file's: the Crown's two marchers (`set_s_014`) against the Church's six (`set_s_036`) at the one scale (30 troops a weight),
+so the pairs are that file's: the Crown's two marchers (`set_s_014`) against the Church's six (`set_s_036`) at the one scale (1,000 troops a weight, B17.16),
 the garrison worn (an open field) or kept (WALLS), each side's order a real `marshal` act folded through the driver.
 
   FALSIFIER (1): over HELD-OUT seeds the realised `Won` share lies within the estimate's sampling interval at

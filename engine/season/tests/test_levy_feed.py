@@ -211,13 +211,14 @@ def test_the_field_eats_its_ration_from_the_treasury_only_when_on(on, monkeypatc
     fought = {"field.lost", "field.won", "field.drawn"}
     assert len(seen) == 1, seen
     if on:
-        # B17.01: the realm's weight-1 persons are 30 troops each, under the rout floor, so the field is a `Drawn` one nobody is
-        # hurt in; it is told because the ration it ate is a durable write (`Drawn` debits as `Won` and `Lost` do)
+        # B17.01: a field is told because the ration it ate is a durable write (`Drawn` debits as `Won` and `Lost` do)
         assert kinds & fought, sorted(kinds)
         assert seen[0][1] == {"troops_a": 1, "troops_b": 0}, seen
         assert w.rungs[TREASURY_A].stores == {"grain": 2, "salt": 0}, w.rungs[TREASURY_A].stores
     else:
-        assert not kinds & fought and "march.refused" in kinds, sorted(kinds)     # nobody hurt, nothing eaten: nothing to write
+        # B17.16: at 1,000 troops a weight the realm's two against six are fought and told whatever the arm (at 30 a weight they were
+        # under the rout floor and the march was refused); what OFF changes is what is eaten, asserted below
+        assert kinds & fought, sorted(kinds)
         assert seen[0][1] == {"troops_a": 2, "troops_b": 6}, seen
         assert w.rungs[TREASURY_A].stores == {"grain": 4, "salt": 1}, w.rungs[TREASURY_A].stores
     assert dict(w.rungs[TREASURY_B].stores or {}) == before_b

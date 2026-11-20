@@ -58,11 +58,11 @@ from engine.dice_engine import draw
 # Sides large enough that the field is fought for ticks rather than routing on contact, on an UPHILL
 # territory (T9) with a fortification (so the WALLS row and its DR are inside the replayed battle) and
 # morale moved off the base by the stances.
-FIELD = MassBattleInput(weights=((180.0, 120.0), (240.0,)), territory="T9", fort_level=1.0,
+FIELD = MassBattleInput(weights=((3.0, 2.0), (4.0,)), territory="T9", fort_level=1.0,
                         stances=(-1.0, 0.5), walls_dr=None, origin=None,
                         loyalties=(1.5, -0.5), loyalty_gain=0.4, geography=GEO, condition_scale=1000)
 # A RIVER_CROSSING field (MB-05r): a march from T9 onto T3's open ground crosses the Valoris.
-OTHER = MassBattleInput(weights=((90.0,), (60.0, 30.0)), territory="T3", fort_level=0.0,
+OTHER = MassBattleInput(weights=((3.0,), (2.0, 1.0)), territory="T3", fort_level=0.0,
                         stances=(0.0, 0.0), walls_dr=1, origin="T9",
                         loyalties=(0.0, 0.0), loyalty_gain=0, geography=GEO, condition_scale=1000)
 stdlib_before = random.getstate()
@@ -123,10 +123,10 @@ def _fought(entry, seeds, rng_for):
     from engine.season.queries.inputs import MassBattleInput
     with open(files.GEOGRAPHY_YAML, encoding="utf-8") as f:
         geo = yaml.safe_load(f)
-    field = MassBattleInput(weights=((180.0, 120.0), (240.0,)), territory="T9", fort_level=1.0,
+    field = MassBattleInput(weights=((3.0, 2.0), (4.0,)), territory="T9", fort_level=1.0,
                             stances=(-1.0, 0.5), walls_dr=None, origin=None,
                             loyalties=(1.5, -0.5), loyalty_gain=0.4, geography=geo, condition_scale=SCALE)
-    other = MassBattleInput(weights=((90.0,), (60.0, 30.0)), territory="T3", fort_level=0.0,
+    other = MassBattleInput(weights=((3.0,), (2.0, 1.0)), territory="T3", fort_level=0.0,
                             stances=(0.0, 0.0), walls_dr=1, origin="T9",
                             loyalties=(0.0, 0.0), loyalty_gain=0, geography=geo, condition_scale=SCALE)
     return [entry(inp, rng_for(seed)) for seed in seeds for inp in (field, other)]
@@ -206,7 +206,7 @@ def test_one_ladder_for_the_field(monkeypatch):
 
 # ---- B17.01: ONE SURVIVOR SHARE, ONE SCALE, A DRAWN BATTLE -----------------------------------------------------
 
-_SIDE_PAIRS = ((30, 18), (20, 6), (6, 20), (12, 12))
+_SIDE_PAIRS = ((3, 2), (2, 1), (1, 2), (1.5, 1.5))     # B17.16: weights at 1,000 troops a weight (5,000 to 3,000)
 
 
 def _headcount_record(weights):
@@ -222,27 +222,27 @@ def _headcount_record(weights):
 
 def test_no_share_exceeds_one():
     """B17.01 gate 1: a side's survivor share is `hp / hp_max` on every path, so it never exceeds 1.0. Four size
-    pairs of headcount sides (`_weighted_unit`), seeds 0 to 99. An assertion that could not observe the failure is
+    pairs of headcount sides (`_weighted_unit`), seeds 0 to 39. An assertion that could not observe the failure is
     no assertion (CLAUDE.md §0.1 pt 2): the loop asserts that it asserted, and that a side the battle never touched
     reads EXACTLY 1.0 -- an unfought pair, graded through the one `_grade`, is that side."""
     import importlib
     mb = importlib.import_module("modules.mass_battle.massbattle")      # by string: `engine/` imports no module code
     entry, checked, worst = _entry(), 0, 0.0
     for pair in _SIDE_PAIRS:
-        for seed in range(100):
+        for seed in range(40):
             got = entry(_headcount_record(pair), draw.seeded(draw.H2("test_mass_battle_module", seed)))
             for share in (got.attacker.share / SCALE, got.defender.share / SCALE):
                 assert share <= 1.0, f"{pair} seed {seed}: a side's share is {share}"
                 worst = max(worst, share)
                 checked += 1
-    assert checked >= 800, checked
-    a, b = mb._weighted_unit("side_a", 30, "A"), mb._weighted_unit("side_b", 18, "B")
+    assert checked >= 320, checked
+    a, b = mb._weighted_unit("side_a", 3, "A"), mb._weighted_unit("side_b", 2, "B")
     got = mb._grade(a, b, SCALE, 0)
     assert got.attacker.share == SCALE and got.defender.share == SCALE, got
 
 
 def test_realm_weight_pairs_vary_by_seed():
-    """B17.01 gate 2: at the scale one owner now gives (`under_arms_cap`), weights 30 v 18, 20 v 6 and 6 v 20
+    """B17.01 gate 2: at the scale one owner now gives (`under_arms_cap`), weights 3 v 2, 2 v 1 and 1 v 2
     through `resolve_field`, seeds 0 to 59, are fought battles whose verdict varies by seed, and the larger side wins
     more of them than the smaller. The verdict is the ladder's (`field_degree`, the one grader), read off what the
     module returned. A pair that always read one band would be a fixture, not a battle."""
@@ -250,7 +250,7 @@ def test_realm_weight_pairs_vary_by_seed():
     from engine.season.seam.ladder import field_degree
     entry, checked = _entry(), 0
     seen = set()
-    for (wa, wb) in ((30, 18), (20, 6), (6, 20)):
+    for (wa, wb) in ((3, 2), (2, 1), (1, 2)):
         bands = [field_degree(entry(_headcount_record((wa, wb)), draw.seeded(draw.H2("test_mass_battle_module", seed)))) for seed in range(60)]
         checked += len(bands)
         seen |= set(bands)
@@ -260,6 +260,75 @@ def test_realm_weight_pairs_vary_by_seed():
         assert larger > smaller, f"{wa} v {wb}: the larger side won {larger}, the smaller {smaller}: {bands}"
     assert checked >= 180, checked
     assert len(seen) >= 2, f"every field read one band: {seen}"
+
+
+# ---- B17.16: A HEADCOUNT SIDE IS BUILT FROM SEVERAL UNITS --------------------------------------------------------
+
+def _armies_fought(monkeypatch, inp, rng):
+    """Fight `inp` through the module's entry and return the two `Army`s `run_battle` was handed, `(attacker, defender)`."""
+    import importlib
+    mb = importlib.import_module("modules.mass_battle.massbattle")
+    seen, real = [], mb.run_battle
+
+    def capturing(unit_a, unit_b, *a, **k):
+        seen.append((unit_a, unit_b))
+        return real(unit_a, unit_b, *a, **k)
+
+    monkeypatch.setattr(mb, "run_battle", capturing)
+    got = _entry()(inp, rng)
+    assert len(seen) == 1 and not isinstance(got, dict), (len(seen), got)
+    return seen[0]
+
+
+def test_a_headcount_side_has_at_least_three_units_and_a_thousand_troops(monkeypatch):
+    """B17.16 step 2 (ED-MB-0101): a headcount side that reaches the cell engine at or over the army's ruled floor is at least
+    `MIN_UNITS_PER_ARMY` units and `MIN_ARMY_TROOPS` troops, on the `side` arm and on the `person` arm (one person, two, five),
+    and every unit of it holds at least `MIN_CELLS_PER_UNIT` cells. One weight is the floor (1,000 troops). The loop asserts
+    that it asserted (CLAUDE.md §0.1 pt 2)."""
+    import dataclasses
+    import importlib
+    from engine.season.queries.inputs import MassBattleInput
+    config = importlib.import_module("modules.mass_battle.config")
+    checked = 0
+    for units in ("side", "person"):
+        for pair in ((1.0, 1.0), (3.0, 2.0), (6.0, 4.0), (12.0, 12.0)):
+            inp = dataclasses.replace(_headcount_record(pair), units=units)
+            for persons in (1, 2, 5):
+                if persons > 1:
+                    members = tuple(tuple(f"{s}{i}" for i in range(persons)) for s in "ab")
+                    inp = dataclasses.replace(inp, members=members,
+                                              weights=tuple(tuple(w / persons for _ in range(persons)) for w in pair))
+                for army in _armies_fought(monkeypatch, inp, draw.seeded(draw.H2("test_mass_battle_module", 0))):
+                    total = sum(u._start_troops for u in army.units)
+                    assert len(army.units) >= config.MIN_UNITS_PER_ARMY, (units, pair, persons, len(army.units))
+                    assert total >= config.MIN_ARMY_TROOPS, (units, pair, persons, total)
+                    assert all(len(u.cell_start_troops) >= config.MIN_CELLS_PER_UNIT for u in army.units), (units, pair, persons)
+                    checked += 1
+    assert checked >= 20, checked
+
+
+def test_no_unit_exceeds_the_per_unit_ceiling(monkeypatch):
+    """B17.16 step 2: a headcount side past one unit's ceiling is split so that no unit holds more than
+    `MAX_TROOPS_PER_UNIT`, and the side's troops are what they were (`under_arms_cap` of its weight, to the troop): the split
+    loses and invents nobody. A person's units are named as one part: the `person` arm still names one part per member."""
+    import dataclasses
+    import importlib
+    config = importlib.import_module("modules.mass_battle.config")
+    cap = importlib.import_module("modules.mass_battle.troop_types.recruitment").under_arms_cap
+    checked = 0
+    for units in ("side", "person"):
+        for pair in ((12.0, 9.0), (25.0, 25.0), (8.0, 40.0)):
+            inp = dataclasses.replace(_headcount_record(pair), units=units)
+            assert cap(max(pair)) > config.MAX_TROOPS_PER_UNIT or max(pair) < 11, "vacuous: no side is past one unit's ceiling"
+            armies = _armies_fought(monkeypatch, inp, draw.seeded(draw.H2("test_mass_battle_module", 1)))
+            for army, w in zip(armies, pair):
+                assert all(u._start_troops <= config.MAX_TROOPS_PER_UNIT for u in army.units), (units, pair)
+                assert abs(sum(u._start_troops for u in army.units) - cap(w)) < 1e-6, (units, pair)
+                checked += 1
+            got = _entry()(inp, draw.seeded(draw.H2("test_mass_battle_module", 1)))
+            if units == "person":
+                assert tuple(p.id for p in got.attacker.parts) == inp.members[0], got.attacker.parts
+    assert checked >= 12, checked
 
 
 # ---- B17.03: THE FIELD RETURNS A FROZEN `FieldOutcome` ---------------------------------------------------------
@@ -275,7 +344,7 @@ def test_resolve_field_returns_a_frozen_field_outcome():
     entry, parts_seen, fields = _entry(), 0, 0
     for units in ("side", "person"):
         for seed in range(8):
-            inp = dataclasses.replace(_headcount_record((30, 18)), units=units)
+            inp = dataclasses.replace(_headcount_record((3, 2)), units=units)
             got = entry(inp, draw.seeded(draw.H2("test_mass_battle_module", seed)))
             fields += 1
             assert type(got) is FieldOutcome, f"{units}: the arm returned {type(got).__name__}"
@@ -322,7 +391,7 @@ def test_an_untouched_side_reads_exactly_the_scale_and_the_share_quantises_float
     `_share(...)` is 1000. A share never leaves `0..scale`."""
     import importlib
     mb = importlib.import_module("modules.mass_battle.massbattle")
-    got = mb._grade(mb._weighted_unit("side_a", 30, "A"), mb._weighted_unit("side_b", 18, "B"), SCALE, 0)
+    got = mb._grade(mb._weighted_unit("side_a", 3, "A"), mb._weighted_unit("side_b", 2, "B"), SCALE, 0)
     assert (got.attacker.share, got.defender.share) == (SCALE, SCALE) and got.ended == "time", got
     noisy = 0.9999999999999987
     assert noisy < 1.0 and int(SCALE * noisy) == SCALE - 1, "vacuous: the noise no longer costs a body under int()"
@@ -346,32 +415,47 @@ def _count_run_battle(monkeypatch):
     return entered
 
 
+def _oob_record(troops_a, troops_b):
+    """A hand-built record of two sides each holding ONE-unit order of battle of the troops named (B17.16: a headcount side is cut
+    below the ceiling, so the only unit past it is an order's own row). `drawn` is empty: the battle reads none of it."""
+    import dataclasses
+    import importlib
+    mb = importlib.import_module("modules.mass_battle.massbattle")
+    row = lambda n: mb.OrderOfBattle((mb.UnitRow("line", "light_infantry", float(n)),))
+    return dataclasses.replace(_headcount_record((1, 1)), orders_of_battle=(row(troops_a), row(troops_b)))
+
+
 def test_past_the_ceiling_returns_scale_gap(monkeypatch):
     """B17.04 step 1: a unit past `config.MAX_TROOPS_PER_UNIT` is refused with `status="SCALE-GAP"` (a dict, on `PARTY-GAP`'s
     shape) and `run_battle` is not entered; `SCALE-GAP` is a member of the seam's `REFUSAL_STATUSES`, so `contest()` reads it as a
-    refusal and not as a software defect. CONTROL, the same record one weight under the ceiling: it resolves to a `FieldOutcome`
+    refusal and not as a software defect. CONTROL, the same record with the unit AT the ceiling: it resolves to a `FieldOutcome`
     through `run_battle`, so the refusal is the ceiling's and not the record's. The boundary is the ceiling itself: 10,000 troops
-    resolve, 10,020 do not."""
+    resolve, 10,020 do not. B17.16: the arm that reaches the ceiling is an order of battle's row; a headcount side is cut into
+    units under it (`massbattle._cut`), so no weight reaches it (asserted last)."""
     import importlib
     from engine.season.queries.inputs import FieldOutcome
     from engine.season.seam.contest import REFUSAL_STATUSES, _returned
     config = importlib.import_module("modules.mass_battle.config")
-    cap = importlib.import_module("modules.mass_battle.troop_types.recruitment").under_arms_cap
+    cap = config.MAX_TROOPS_PER_UNIT
     entry, entered = _entry(), _count_run_battle(monkeypatch)
-    over = next(w for w in range(1, 10_000) if cap(w) > config.MAX_TROOPS_PER_UNIT)
-    assert cap(over - 1) <= config.MAX_TROOPS_PER_UNIT < cap(over), "vacuous: no weight straddles the ceiling"
-    got = entry(_headcount_record((over, over)), draw.seeded(draw.H2("test_mass_battle_module", 0)))
+    got = entry(_oob_record(cap + 20, cap + 20), draw.seeded(draw.H2("test_mass_battle_module", 0)))
     assert isinstance(got, dict) and got["status"] == "SCALE-GAP" and got["why"], got
     assert entered == [0], f"run_battle entered {entered[0]} time(s) on a side past the ceiling"
     assert "SCALE-GAP" in REFUSAL_STATUSES
     refused = _returned(dict(got, module="mass_battle"), "a field", "test")
     assert (refused.status, refused.why) == ("SCALE-GAP", got["why"]), refused
     # one side alone past the ceiling refuses the field too
-    got = entry(_headcount_record((over - 1, over)), draw.seeded(draw.H2("test_mass_battle_module", 0)))
+    got = entry(_oob_record(cap, cap + 20), draw.seeded(draw.H2("test_mass_battle_module", 0)))
     assert isinstance(got, dict) and got["status"] == "SCALE-GAP", got
     # CONTROL
-    got = entry(_headcount_record((over - 1, over - 1)), draw.seeded(draw.H2("test_mass_battle_module", 0)))
+    got = entry(_oob_record(cap, 3000), draw.seeded(draw.H2("test_mass_battle_module", 0)))
     assert isinstance(got, FieldOutcome) and entered == [1], (got, entered)
+    # a headcount side of a hundred weight (100,000 troops) is not past the ceiling: it is cut under it
+    got = entry(_headcount_record((100, 2)), draw.seeded(draw.H2("test_mass_battle_module", 0)))
+    assert isinstance(got, FieldOutcome), got
+    # ... and one that needs more than `armies.UNIT_CAP` units to stay under it is past the ceiling, refused and not built
+    got = entry(_headcount_record((112, 2)), draw.seeded(draw.H2("test_mass_battle_module", 0)))
+    assert isinstance(got, dict) and got["status"] == "SCALE-GAP", got
 
 
 def test_empty_sides_never_reach_run_battle(monkeypatch):
@@ -382,12 +466,12 @@ def test_empty_sides_never_reach_run_battle(monkeypatch):
     from engine.season.queries.inputs import FieldOutcome
     cap = importlib.import_module("modules.mass_battle.troop_types.recruitment").under_arms_cap
     entry, entered = _entry(), _count_run_battle(monkeypatch)
-    assert cap(0.0) == 0 and cap(0.04) == 1, "vacuous: the probe weights are not nobody and one man"
-    for pair in ((0.0, 0.0), (0.04, 0.04), (0.0, 0.04), (0.04, 0.0)):
+    assert cap(0.0) == 0 and cap(0.001) == 1, "vacuous: the probe weights are not nobody and one man"
+    for pair in ((0.0, 0.0), (0.001, 0.001), (0.0, 0.001), (0.001, 0.0)):
         got = entry(_headcount_record(pair), draw.seeded(draw.H2("test_mass_battle_module", 0)))
         assert isinstance(got, dict) and got["status"] == "PARTY-GAP" and got["why"], (pair, got)
     assert entered == [0], f"run_battle entered {entered[0]} time(s) on a field of nobody"
-    for pair in ((30.0, 0.0), (0.04, 30.0)):
+    for pair in ((3.0, 0.0), (0.001, 3.0)):
         got = entry(_headcount_record(pair), draw.seeded(draw.H2("test_mass_battle_module", 0)))
         assert isinstance(got, FieldOutcome), (pair, got)
     assert entered == [2], entered

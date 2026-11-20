@@ -77,8 +77,9 @@ def test_equal_headcount_of_different_troop_types_fights_differently():
 
 
 def test_an_order_of_battle_side_and_a_headcount_side_both_deploy():
-    """A side with no order of battle, once the other has one, is a deployed light-infantry line, not a crash."""
-    r = massbattle.resolve_field(_record(oobs=(_line('archers', 400), None), weights=((10,), (300,))),
+    """A side with no order of battle, once the other has one, is a deployed light-infantry line, not a crash. (B17.16: the headcount
+    side is weight 9, 9,000 troops, the line it was at 30 a weight and weight 300; at 1,000 a weight it is cut into three units.)"""
+    r = massbattle.resolve_field(_record(oobs=(_line('archers', 400), None), weights=((10,), (9,))),
                                  draw.seeded(draw.H2("test_mass_battle_order_of_battle", 3)))
     assert type(r).__name__ == 'FieldOutcome' and r.attacker.parts == () and r.defender.parts == ()
 
