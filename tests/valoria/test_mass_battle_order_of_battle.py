@@ -78,7 +78,7 @@ def test_equal_headcount_of_different_troop_types_fights_differently():
 
 def test_an_order_of_battle_side_and_a_headcount_side_both_deploy():
     """A side with no order of battle, once the other has one, is a deployed light-infantry line, not a crash."""
-    r = massbattle.resolve_field(_record(oobs=(_line('archers', 400), None), weights=((10,), (400,))),
+    r = massbattle.resolve_field(_record(oobs=(_line('archers', 400), None), weights=((10,), (300,))),
                                  random.Random(3))
     assert type(r).__name__ == 'FieldOutcome' and r.attacker.parts == () and r.defender.parts == ()
 
@@ -155,9 +155,9 @@ def test_strategy_sets_the_posture_of_each_class_and_an_explicit_posture_wins():
 
 
 def test_tactic_fields_reach_the_subunit():
-    o = _oob(('w', 'light_cavalry', 300, {'target': 'weakest', 'fall_back_at': 0.4, 'role': 'Pursue'}))
+    o = _oob(('w', 'light_cavalry', 300, {'target': 'weakest', 'fall_back_at': 0.4, 'role': 'Flanker'}))
     s = build_unit(o, 'u', 'A', morale_start=5).units[0]
-    assert s.target_condition == 'weakest' and s.role == 'Pursue'
+    assert s.target_condition == 'weakest' and s.role == 'Flanker'
     assert [(od.trigger, od.behavior) for od in s.orders] == [('own_strength:0.4', {'stance': 'retreat'})]
 
 
@@ -168,8 +168,9 @@ def test_a_mounted_archers_body_with_no_role_stands_off_as_kite_and_any_other_ty
     assert kite.role == 'Kite' and kite.instructions, (kite.role, kite.instructions)
     plain = build_unit(_oob(('c', 'light_cavalry', 300, {})), 'u', 'A', morale_start=5).units[0]
     assert plain.role is None and not plain.instructions
-    named = build_unit(_oob(('m', 'mounted_archers', 300, {'role': 'Harass'})), 'u', 'A', morale_start=5).units[0]
-    assert named.role == 'Harass', "an explicit role still wins"
+    # B17.07: `Harass` is off every menu, so naming it for mounted archers is refused (the menu is Kite alone)
+    with pytest.raises(ValueError):
+        build_unit(_oob(('m', 'mounted_archers', 300, {'role': 'Harass'})), 'u', 'A', morale_start=5)
 
 
 def test_side_morale_reaches_every_subunit_and_the_type_stats_still_differ():

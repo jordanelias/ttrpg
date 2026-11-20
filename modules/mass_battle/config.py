@@ -493,13 +493,17 @@ TROOP_TYPE_ROLES = {
     # taxonomy grounded in the historical troop-roles research (Research_Report.md) + design §3.5
     "heavy_infantry":  ["ShieldWall", "Hold", "Anvil", "Push"],
     "pike":            ["ShieldWall", "Hold", "Anvil"],   # [v2 Stage E, ED-MB-0014] pike block: defensive/anti-cavalry braced formation (its reach 0.3 is the edge, not mobility)
-    "light_infantry":  ["Skirmish", "Screen", "Pursue"],
-    "cavalry":         ["Shock", "Flanker", "Feint", "Screen", "Pursue"],
-    "archers":         ["VolleyLine", "Harass"],
+    # [B17.07] `Pursue`, `Screen`, `Harass` and `Feint` are on no menu: a choice of one reads identical to no role in 60 of 60
+    # fields (its keyword has no primitive, or only one no season path reaches). A role returns to a menu when a primitive
+    # exists for it: `pursue` with `16_PESSIMIST_MB_rout_has_two_exits` (`may_pursue`), `screen` and `harass` with a primitive
+    # of their own, `feint` with `26_MASS_BATTLE_maneuver_orders`. Their names stay in `ROLE_SPEC`: a standing order ranges over all.
+    "light_infantry":  ["Skirmish"],
+    "cavalry":         ["Shock", "Flanker"],
+    "archers":         ["VolleyLine"],
     "spearmen":        ["ShieldWall", "Hold", "Anvil"],   # [ED-IN-0306] the pike's lighter sibling: a braced spear line, reach 0.2
-    "skirmishers":     ["Skirmish", "Harass", "Screen"],   # [ED-IN-0306] javelin screen: loose order, harass, cover the line
-    "light_cavalry":   ["Flanker", "Feint", "Screen", "Pursue"],   # [ED-IN-0306] cavalry's menu without Shock: no lance, so no charge role
-    "mounted_archers": ["Kite", "Harass", "Feint"],   # report's #1 troop type; Kite blocked on the kiting primitive (gap)
+    "skirmishers":     ["Skirmish"],   # [ED-IN-0306] javelin screen: loose order (the shape's gaps)
+    "light_cavalry":   ["Flanker"],   # [ED-IN-0306] cavalry's menu without Shock: no lance, so no charge role
+    "mounted_archers": ["Kite"],   # report's #1 troop type; Kite blocked on the kiting primitive (gap)
     # generic fallbacks for the engine's current coarse troop_type values ('infantry'/'cavalry')
     "infantry":        ["Hold", "Push", "ShieldWall"],
     "any":             ["Support", "Reserve"],
@@ -513,17 +517,17 @@ TROOP_TYPE_ROLES = {
 ROLE_SPEC = {
     "ShieldWall": {"shape": "Line",       "instructions": ("brace", "hold")},
     "Hold":       {"shape": "Line",       "instructions": ("hold",)},
-    "Anvil":      {"shape": "Line",       "instructions": ("brace", "pin")},
+    "Anvil":      {"shape": "Line",       "instructions": ("brace",)},
     "Push":       {"shape": "Line",       "instructions": ("push",)},
-    "Skirmish":   {"shape": "GappedLine", "instructions": ("loose", "harass")},
-    "Screen":     {"shape": "Line",       "instructions": ("screen",)},
-    "Pursue":     {"shape": "Line",       "instructions": ("pursue",)},
+    "Skirmish":   {"shape": "GappedLine", "instructions": ()},   # [B17.07] open order is the shape's gaps: `loose` and `harass` have no primitive
+    "Screen":     {"shape": "Line",       "instructions": ()},   # [B17.07] `screen` has no primitive; on no menu
+    "Pursue":     {"shape": "Line",       "instructions": ()},   # [B17.07] `pursue` has no primitive; on no menu
     "Shock":      {"shape": "Arrowhead",  "instructions": ("charge",)},
     "Flanker":    {"shape": "Line",       "instructions": ("envelop",)},   # Column shape not yet defined; Line placeholder
     "Feint":      {"shape": "Line",       "instructions": ("lure",)},
-    "VolleyLine": {"shape": "Line",       "instructions": ("volley",)},   # [MB-04] not "hold": hold freezes archers (STANCE_SPEED_MOD -99) and braces them against shock; see units.ROLE_INSTRUCTION_PRIMITIVES
-    "Harass":     {"shape": "GappedLine", "instructions": ("loose", "shoot_move")},
-    "Kite":       {"shape": "GappedLine", "instructions": ("kite", "shoot_move")},   # blocked on the kiting primitive
+    "VolleyLine": {"shape": "Line",       "instructions": ()},   # [B17.07] a shape: `volley` has no primitive. Not "hold": hold freezes archers (STANCE_SPEED_MOD -99) and braces them against shock; see units.ROLE_INSTRUCTION_PRIMITIVES
+    "Harass":     {"shape": "GappedLine", "instructions": ()},   # [B17.07] `loose` and `shoot_move` have no primitive; on no menu
+    "Kite":       {"shape": "GappedLine", "instructions": ("kite",)},   # blocked on the kiting primitive
     "Support":    {"shape": "Line",       "instructions": ("reserve",)},
     "Reserve":    {"shape": "Line",       "instructions": ("reserve",)},
 }
