@@ -149,7 +149,7 @@ class SeasonDriver:
         # precondition twin: a precondition nothing evaluates and no `requires_decline_note:` (and
         # its converse). `manifest/registrar.py` and `manifest/registry.py` hold the rules.
         from ..manifest import (
-            check_contest_prizes, check_effects, check_graded_inquiries, check_inquiry_modules,
+            check_contest_prizes, check_effects, check_graded_tasks, check_inquiry_modules,
             check_preconditions, check_rows, register_module_entries, require_entries,
         )
         register_module_entries(VERB_TABLE)
@@ -160,7 +160,7 @@ class SeasonDriver:
         require_entries(world_q.QUERY_ENTRIES + sigma.QUERY_ENTRIES + effects_combat.QUERY_ENTRIES + MATTER_STEP_CALLS)
         check_rows()
         check_contest_prizes(VERB_TABLE)
-        check_graded_inquiries(VERB_TABLE)
+        check_graded_tasks(VERB_TABLE)
         # v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`): the `inquiry` role's rows -- provider registered, entry
         # agreeing with its composition row; the declaration that `fieldwork.find`'s row must exist.
         check_inquiry_modules(VERB_TABLE)

@@ -13231,8 +13231,10 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # and `thread_read` (K-37, H-85) wait and are not graded. So the title's *only a verb that declares
     # contests* is now *only a verb that declares contests, or a route*; the name is kept because the
     # plan and `seam/ladder.py` cite the test by it.
-    from ..data.rosters import GRADED_INQUIRIES
-    graded = {v for v in VERB_TABLE if v in GRADED_INQUIRIES}
+    # B07.01: the roster is `graded_tasks`; the routes it holds unarmed (live today) are still these three -- the
+    # armed rows (`armed_by: task_draw_arm`, the 18 tasks and `reconstruct`) are taken only with that arm on.
+    from ..data.rosters import GRADED_TASKS
+    graded = {v for v in VERB_TABLE if v in GRADED_TASKS and not GRADED_TASKS[v].get("armed_by")}
     assert graded == {"research", "examine", "surveil"}, sorted(graded)
     assert not graded & set(contested), "a graded inquiry declares `contests:` -- it was made a prize"
 

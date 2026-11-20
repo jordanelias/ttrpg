@@ -458,7 +458,7 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     with no room terms.
 
     `examined` is the subject an INQUIRY examines, or `None`: the adapter passes
-    the act's subject when there is no prize (an inquiry, `graded_inquiries`' route), and nothing
+    the act's subject when there is no prize (an inquiry or a task, `graded_tasks`' route), and nothing
     otherwise. Where it names a Record, the record carries that Record's `forgery_quality` (read from
     `w.records`, the one read this builder adds), which the module adds to the obstacle; a site, a
     person, or a contest a prize names carries `0`."""
@@ -813,11 +813,11 @@ def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
     """`(claimants, subject, room, examined)` exactly as the fold hands the act to `resolve`, or `None`
     when `owner`'s roll does not deal it (an uncontested act, another provider's prize, a party
     gap; `owner` is the social roll's unless `odds_of` asks for combat's). The derivation is the fold's
-    own: `loop/sides.py::_contests_of` and `::sides_of` and the prize row's `heard_by:` for a contest; the verb's `graded_inquiries` route for an inquiry. `loop.sides`
+    own: `loop/sides.py::_contests_of` and `::sides_of` and the prize row's `heard_by:` for a contest; the verb's `graded_tasks` route (`data/rosters.py::graded_route`, armed or live) for an inquiry or a task. `loop.sides`
     imports nothing that imports `seam` (`loop/__init__.py` imports nothing), so this module imports it at module
     level; `loop.resolve` would close a cycle the census counts (`tests/valoria/test_import_cycle_game_state_npe.py`),
     which is why the contest-of-an-act helper lives in `sides.py`."""
-    from ...data.rosters import GRADED_INQUIRIES
+    from ...data.rosters import graded_route
     row = VERB_TABLE.get(act.verb)
     payload = act.payload if isinstance(act.payload, dict) else {}
     contests = _contests_of(act, row)
@@ -830,7 +830,7 @@ def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
         if not parties:
             return None
         return parties, subject, (rung if prize.get("heard_by") == BENCH else None), None
-    route = GRADED_INQUIRIES.get(act.verb)
+    route = graded_route(act.verb, w.fixtures)          # B07.01: the fold's own reading of the route (`task_draw_arm`)
     if route is not None and route.get("provider") == owner:
         subject = payload.get("subject")
         return [act.actor], subject, None, subject
@@ -1033,7 +1033,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
     never refused here; only a pool below the floor is.
 
     ⚠ `module_entry` IS THE INQUIRIES' ROUTE (`ED-FI-0009`, J-22 (A)): `seam/contest.py::grade`
-    passes the role a `graded_inquiries` row names, with `prize=None`, and everything else here is the
+    passes the role a `graded_tasks` row names, with `prize=None`, and everything else here is the
     same body -- the same input builder, the same entry table, the same `Margin` hold and the same
     S27.4 -- so an inquiry is rolled by the one owner and graded on the one ladder, with no prize."""
     if not claimants:

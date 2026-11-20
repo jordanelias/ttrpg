@@ -6829,6 +6829,19 @@ rows:
     cite:      "MEASURED at B05.99 on `e075e511b` plus the B05.99 edits, `PYTHONHASHSEED=0`: the guard written at the event-kind deposit (a `told_by` source, a held copy with an empty chain and a source other than `told_by`) takes `SCN-LOOP-C`'s redeposits from 2 to 0 AND MOVES THE SHIPPED REALM: one season, seed 0 `ce765e35b9f59de3aa6f3485f0286772` -> `b29fdcb70114a6d66923f79326ef3849`, seed 1 `d35b4a0fd228d90c99c4e1622defc383` -> `4b8b0618c3fc5b6220a99aae6aa54405`, seed 2 `2a1a02ead7fb913459c76a141d0307ed` -> `a1682886d7cba2c522f8cea4ef602287`. So the guard is an output-moving change to season-reachable code and is not landed in the close that has just re-pinned the batch's movers; it is reverted in the tree. REPRODUCE: the corpus redeposit count through `engine/season/harness/corpus_run.py::told_redeposits_in` over `SCN-LOOP-C` at seed 0."
     source:    "workplan v12 B05.99 (the close's red-set classification; `ED-IN-0222`)"
 
+  - id:        H-445
+    tier:      1
+    hole:      "WHETHER AN UNCONTESTED CONSEQUENTIAL ACT IS DRAWN -- `task_draw_arm`, an arm switch (B07.01; 18-A edit 7, UNDECIDED (11) (iii)): `off` folds each `graded_tasks` row carrying `armed_by: task_draw_arm` (the 18 `task` rows and `reconstruct`) flat, as before B07; `on` draws it through `seam.grade` (the one roll owner) and folds it at its band. The standing rule (\"we do not do deterministic\") and A-24 ask the draw; 18-A ships the arm `on` only once its gate 5 (throughput) reads."
+    kind:      "NUMBER"
+    owner:     "`engine/season/data/fixtures.py::Fixtures.task_draw_arm` the one home. READER: `engine/season/data/rosters.py::graded_route` (from `loop/resolve.py`'s `_route` and `seam/wrappers/sigma.py::_rolled_as`); the loader (`data/verbs.py`) refuses an `armed_by:` naming no `Fixtures` member or one whose value is neither `on` nor `off`"
+    grade:     "assumption"
+    default:   "off -- SHIPPED (the control) until B07.05 reads 18-A gate 5 and flips it to `on`. Recorded as kind NUMBER, the nearest existing kind for an arm switch (`carried_wound_model`, H-434, is filed so)"
+    site:      "Fixtures task_draw_arm, read ONLY by `data/rosters.py::graded_route`, per act of a verb whose route carries `armed_by: task_draw_arm`"
+    sweep:     ["off (control, SHIPPED until B07.05)", "on", "on at `difficulty_ob`'s control sizes (`data/fixtures.py::DIFFICULTY_OB_CONTROL`)"]
+    unblocks:  "R-09.a and R-09.d (with B07.05): every converted verb resolves in more than one band; the `<verb>.failed` kinds an Event can carry"
+    cite:      "[ASSUMPTION: the third point is this row's, on `proof_admission`'s precedent (H-427: off, on, on at the next level) -- basis: 18-A names the two arms only; the converted rows ship `difficulty: plain`, so the third reads the draw at the control obstacle sizes.] [ASSUMPTION: a swept fixture needs its `assumption` row, as `default_forgery_quality`'s H-210 has -- basis: `data/fixtures.py`'s `[JUSTIFIED: ... H-210 ...]` tag; workplan v12 B07-task-draw IDS, H block slot 1]. CONTROL: `off` is the realm before B07 -- `engine/season/tests/test_task_draw.py::test_task_draw_arm_off_reproduces_the_pinned_hash` reads `_realm_goldens.SHIPPED` at seeds 0, 1, 2 (one season) with the arm `off`. THE LIVE ARM'S READINGS are B07.05's (18-A gates 1, 3, 5)."
+    source:    "workplan v12 B07.01 (`proposals/2026-11-12-subsystem-audit-suite/proposals/18_DETERMINISM_task_draw_for_uncontested_verbs.md` edit 7; UNDECIDED (11) (iii))"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

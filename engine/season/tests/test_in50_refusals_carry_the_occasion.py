@@ -331,4 +331,4 @@ def test_rem13_emits_and_writes_nothing_tags_the_ruled_and_leaves_the_rest_untag
     assert out == {"zz_ruled": "deposit-only by ruling", "zz_bare": "untagged"}, out
     # the default rulings are the code's: `tell` and the graded inquiries, read from the roster
     assert C.deposit_only_rulings()["tell"] == "G1"
-    assert set(C.deposit_only_rulings()) - {"tell"} == set(C.GRADED_INQUIRIES)
+    assert set(C.deposit_only_rulings()) - {"tell"} == {v for v, r in C.GRADED_TASKS.items() if r["form"] == "inquiry"}
