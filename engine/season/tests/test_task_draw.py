@@ -250,14 +250,22 @@ def gate1_verdict(per_seed: list) -> tuple:
                                "refusals_checked": refusals_checked, "banded_refusals": banded_refusals}
 
 
+#: The number of converted verbs gate 1 must have examined (a non-vacuity floor, CLAUDE.md section 0.1 pt 2: the loop asserted something).
+#: 18-A's text said ten; ten was reached only because `raze`'s REFUSALS carried a band and counted as resolved acts (premise-check F1,
+#: UNDECIDED (13)). With a refusal carrying no band, nine verbs reach ten resolved acts at seeds 0 to 2, two seasons (reconstruct, tend,
+#: forge, conceal, move, survey, migrate, train, carry: read @ B07.10), `carry` at exactly ten, so the floor is the honest count (UNDECIDED (14)).
+#: [ASSUMPTION; medium; Jordan ruled 9, 2026-11-20; revert: 10 once a tenth verb is built out and reaches ten resolved acts at these fixtures]
+GATE1_VERBS_FLOOR = 9
+
+
 def test_converted_verb_resolves_in_at_least_two_bands():
     """18-A gate 1, at the SHIPPED fixtures: seeds 0 to 2, two seasons. Every converted verb with ten or more RESOLVED acts
     (acts whose Events carry a `degree`, UNDECIDED (12) (ii)) resolves in at least two bands and is not 100 % one band
-    (`checked >= 10` verbs), and Events carrying a degree are at least 90 % of the success Events of non-bookkeeping acts
+    (`checked >= GATE1_VERBS_FLOOR` verbs), and Events carrying a degree are at least 90 % of the success Events of non-bookkeeping acts
     (a `contest_owed` row's left out, `gate1_counts`); no task row's refusal Event carries a degree (B07.10). RED with `task_draw_arm` `off` (no converted act carries a degree)."""
     failures, checked, t = gate1_verdict([gate1_counts(_realm(seed, 2)) for seed in (0, 1, 2)])
     assert not failures, failures
-    assert checked >= 10, (checked, t["resolved"])
+    assert checked >= GATE1_VERBS_FLOOR, (checked, t["resolved"])
     assert set(t["unbuilt"]) <= UNBUILT_OK, t["unbuilt"]                        # B07.10: not built out, not failed
     assert t["refusals_checked"] >= 1, t["refusals_checked"]                   # B07.10: a task refusal carries no band
     assert not t["banded_refusals"], t["banded_refusals"]
