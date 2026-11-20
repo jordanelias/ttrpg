@@ -107,11 +107,16 @@ def test_task_row_without_a_route_is_refused_at_load():
     task row (`tend`), whose `draw` clause no route then admits."""
     def unrouted(verb):
         """The row as it stood before its route: the columns only a rolled row may carry removed too, so what refuses it
-        is the class, not the orphaned `capability:`/`difficulty:` (which refuses first, also naming it)."""
+        is the class, not the orphaned `capability:`/`difficulty:` (which refuses first, also naming it), nor a band-keyed
+        `emits:` no route grades (B07.05 keyed `reconstruct`'s: flattened to the band an undrawn act reads)."""
+        from ..data.rosters import UNROUTED_BAND
+
         def mutate(doc):
             row = _row(doc, verb)
             for k in [k for k in row if k.startswith(("capability", "difficulty"))]:
                 row.pop(k)
+            if isinstance(row.get("emits"), dict):
+                row["emits"] = row["emits"][UNROUTED_BAND]
         return mutate
 
     for verb in ("reconstruct", "tend"):
@@ -207,10 +212,33 @@ def test_trained_tender_fails_less_than_default_and_neither_is_zero():
     """18-A gate 3: odds respond to state -- `tend` by a tender trained in its skill against one at `pool_default`, 200 planted
     acts each: the trained tender's Failure share is lower, and neither is 0. RED UNTIL B07.05, and then until `tend` names a
     skill: UNDECIDED (11) (iv) gives it `capability: none` (no defined skill covers it), so no tender can be trained in it."""
+    from dataclasses import replace
+
+    from .test_in10_record_operands import _resolve
+    from .test_in12_step9 import PATIENT, TENDER, _tend_acts, _world
+
     key = VERB_TABLE["tend"].capability
     assert key and key != "none", (
         "`tend` names no skill (`capability: none`, UNDECIDED (11) (iv)): there is no trained tender to compare")
     assert DEFAULT_FIXTURES.get("task_draw_arm") == "on", "the task draw ships off (B07.05 flips it)"
+
+    def failure_share(rank) -> float:
+        w, d = _world()
+        if rank is not None:
+            w.persons[TENDER].capability = {**(w.persons[TENDER].capability or {}), key: rank}
+        low = w.fixtures.get("condition_scale") * 2 // 5
+        (act,) = _tend_acts(w)
+        bands: Counter = Counter()
+        for i in range(200):                     # 200 planted acts, each its own id and so its own keyed draw
+            w.persons[PATIENT].body = low
+            graded = [e.degree for e in _resolve(w, d, replace(act, id=f"{act.id}#{i}")) if e.degree is not None]
+            assert len(graded) == 1, graded      # each act was drawn, and reports one band
+            bands[graded[0]] += 1
+        assert sum(bands.values()) == 200, bands
+        return bands["Failure"] / 200
+
+    trained, untrained = failure_share(3), failure_share(None)
+    assert 0 < trained < untrained and untrained > 0, (trained, untrained)
 
 
 # --------------------------------------------------------------------------------------------------------------------------

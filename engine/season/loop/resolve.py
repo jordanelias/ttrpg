@@ -17,14 +17,14 @@ from __future__ import annotations
 import random
 from dataclasses import replace
 from ..gaps import InstrumentDefect
-from ..data.rosters import (PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, graded_route,
-                            MARGIN_ENDING, STRATA)
+from ..data.rosters import (PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_TASKS, graded_route,
+                            MARGIN_ENDING, STRATA, UNROUTED_BAND, task_share)
 
 from typing import Any, Optional
 from ..data.matrix import Step, matrix_row
 from ..data.requires import UNKNOWN, Verdict, binding_from_act, evaluate
-from ..data.verbs import (COUNTERPARTY_CLAUSE, ELIGIBILITY_CLAUSE, EVENT_KINDS, VERB_TABLE,
-                          WRITE_CLAUSE, VerbRow)
+from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, EVENT_KINDS, FORM_TASK,
+                          VERB_TABLE, WRITE_CLAUSE, VerbRow)
 from ..gaps import Forbidden, Unspecified
 from ..loop.effects import EFFECTS
 from ..loop.predicates import REQUIRES_PREDICATES
@@ -398,6 +398,13 @@ def _fold(self, w: "World", token: Token, a: Act,
     _ok, _refusal_kinds, verdict = self._admits(w, a, row)
     if not _ok:
         return ev(_refusal_kinds)
+    # B07.05 (18-A "The resolution, decided" 4, A-81): A LOST DRAW WRITES NOTHING AND EMITS THE ROW'S `draw` CLAUSE. A drawn
+    # `task` row at a band whose share is zero (`task_share`, `rosters.yaml: task_fraction`; no band named here) folds to its
+    # keyed `emits_on_refusal` clause `draw` (`<verb>.failed`), stamped with the band, before any effect runs: the act was
+    # admitted and went against the actor, which is neither a refusal nor a no-op write. A row with no `draw` clause, and an
+    # act with no degree (the arm `off`, a bookkeeping row), never reaches it.
+    if _degree is not None and row.draw_kinds and task_share(_degree) == 0:
+        return ev(row.refusal_for(DRAW_CLAUSE))
 
     # Each `writes:` through the gate. The gate is the only writer; the fold never assigns.
     changed: list = []
@@ -509,7 +516,12 @@ def _fold(self, w: "World", token: Token, a: Act,
     # was wounded, or walked away untouched. That is `ID-9`'s class (a success report for
     # something that did not happen) inside the epistemic layer, where every witness then mints a
     # claim from it. The `earned` intersection still runs, against the band's own kinds.
-    _declared = row.emits_at(_degree)
+    # B07.05: an act whose ARMED route was not taken (`armed_by:` set, its fixture `off`) was never drawn, and reads its
+    # band-keyed `emits:` at `UNROUTED_BAND` -- the band an undrawn act reads, as `forge_quality_at` does -- with
+    # `Event.degree` still `None` (`reconstruct` emits `finding.made` as before B07, so the arm-off control holds and the
+    # revert is the one fixture value). Any other band-keyed row folded with no degree still raises (`H-115`).
+    _undrawn = _degree is None and row.emits_by_degree and (GRADED_TASKS.get(a.verb) or {}).get("armed_by")
+    _declared = row.emits_at(UNROUTED_BAND if _undrawn else _degree)
     kinds = tuple(k for k in _declared if k in earned) if earned else _declared
     # v9 IN-18 `G6` (`H-197`): `confidence.broken` IS EARNED BY THE ACT, NOT BY THE BAND -- declared on
     # `tell`'s told bands, emitted only when the act breaks a circle (`_confidence_broken`).
@@ -870,7 +882,11 @@ def _grade(self, w: "World", token: Token, a: Act, route: dict) -> list:
     shape with the verb where a prize would be (there is none), so adding a graded inquiry moves no
     other act's draw (`04 PART D row 35`)."""
     _subject = a.payload.get("subject") if isinstance(a.payload, dict) else None
-    _rng = draw_factory(w.world_seed, lambda: w.tick)(a.actor, f"roll:{a.verb}:{a.id}")
+    # B07.05 (18-A item 3, A-30): a `form: task` route draws on `H(seed, tick, actor, "task:" + a.id)`; an inquiry keeps
+    # `roll:<verb>:<act id>` (the three carried inquiries' draws do not move). [ASSUMPTION: `reconstruct`, armed but
+    # `form: inquiry`, takes the inquiry key -- basis: UNDECIDED (2) makes it an inquiry; 18-A's key names the task draw.]
+    _purpose = f"task:{a.id}" if route.get("form") == FORM_TASK else f"roll:{a.verb}:{a.id}"
+    _rng = draw_factory(w.world_seed, lambda: w.tick)(a.actor, _purpose)
     r = grade(w, [a.actor], [a.id], route, verb=a.verb, subject=_subject, rng=_rng,
               effort=effort_of(a))
     if isinstance(r, ContestRefused):

@@ -1033,20 +1033,14 @@ def _load_verb_table() -> dict:
                 "ever be reported -- and unlike the `writes:` case this used to load clean and "
                 "raise at the first fold.")
         # B07.01 (18-A item 2): THE ROUTE REFUSAL, BY `form:`. An `inquiry` keys `emits:` by Degree and writes nothing, as
-        # before. ⚠ An inquiry route that is ARMED (`armed_by:`) and whose arm ships `off` keeps a FLAT `emits:`: with the arm
-        # off the act folds with no degree, and `emits_at(None)` on a degree-keyed row raises (`reconstruct`, executed today);
-        # its emits are keyed in the commit that ships its arm `on`, and the load refuses the other pairing either way.
-        # [ASSUMPTION: the band-keyed `emits:` of `reconstruct` lands with the flip (B07.05), not here -- basis: the arm-off
-        # fold cannot read a degree-keyed `emits:` (`VerbRow.emits_at`), so landing it here would raise at its first act.]
-        _route_row = GRADED_TASKS.get(name) or {}
-        _armed_off = bool(_route_row.get("armed_by")) and _arm_default(_route_row["armed_by"]) != "on"
-        if _form == FORM_INQUIRY and (row.writes or (not emits_by_degree) != _armed_off):
+        # before. B07.05: an ARMED inquiry (`reconstruct`) too, whatever its arm's value -- with the arm `off` the fold reads its
+        # keyed `emits:` at `UNROUTED_BAND` (`loop/resolve.py::_fold`), so the load no longer reads a fixture's shipped value.
+        if _form == FORM_INQUIRY and (row.writes or not emits_by_degree):
             raise SystemExit(
                 f"verb_table.yaml: {name!r} has a `graded_tasks` route of `form: inquiry` and "
-                f"{'a non-empty `writes:`' if row.writes else 'a FLAT `emits:`' if not emits_by_degree else 'a degree-keyed `emits:` while its arm ships off'}. "
+                f"{'a non-empty `writes:`' if row.writes else 'a FLAT `emits:`'}. "
                 "A graded inquiry keys its emissions by Degree and writes nothing (a flat write applies on every band), "
-                "or the roll decides nothing it reports; an armed one keeps a flat `emits:` while its arm ships `off`, "
-                "since the flat fold reads no degree.")
+                "or the roll decides nothing it reports.")
         # A `task` carries a FLAT `writes:` and `emits:` (04 §B.13 invariant 12: a degree-keyed column belongs to a
         # `contests:` row) and keys `emits_on_refusal:` with the clause `draw`, its lost draw (the keyed half below checks it).
         if _form == FORM_TASK and (by_degree or emits_by_degree or DRAW_CLAUSE not in by_clause):

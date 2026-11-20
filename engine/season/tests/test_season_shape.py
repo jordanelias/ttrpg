@@ -1944,7 +1944,7 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
 
     # AND THE CONTROL: the shipped table loads. Without this the two arms above would pass on a
     # loader that refused everything. The count is not pinned here: R-05's denominator (`len(VERB_TABLE)`) is
-    # asserted once, in `test_we_only_a_verb_that_declares_contests_can_be_graded_today`.
+    # asserted once, in `test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else`.
     assert VERBS._load_verb_table()
 
 
@@ -13060,7 +13060,7 @@ def test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it():
 
     ⚠ AND THE OPERAND DOES NOT EXIST YET, WHICH THIS TEST DOES NOT PRETEND OTHERWISE ABOUT.
     Nothing in the tracer produces a `net`; the branch is a READER WITH NO PRODUCER and is
-    recorded on `H-98`. `test_we_only_a_verb_that_declares_contests_can_be_graded_today` is
+    recorded on `H-98`. `test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else` is
     where that is measured rather than asserted."""
     lad = degree_ladder()
     assert lad is not None, f"the tree's degree ladder is unavailable: {ladder_error()}"
@@ -13095,8 +13095,15 @@ def test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it():
     assert degree_of({"net": 5, "ob": 2}) == "Overwhelming", "the ladder was not restored"
 
 
-def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
-    """PER VERB, MEASURED RATHER THAN CLAIMED -- and the answer is TWO of thirty-eight.
+def test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else():
+    """IS-A-10 (workplan v12 B07.05; 18-A): A DEGREE HAS TWO SOURCES AND NO THIRD. A verb is graded by its `contests:` prize
+    (the contest half, below, unchanged in kind) or by its `rosters.yaml: graded_tasks` route as the shipped fixtures take it
+    (`data/rosters.py::graded_route`: the three inquiries, and with `task_draw_arm` on the 18 `task` rows and `reconstruct`),
+    and by nothing else: a `bookkeeping` row is graded by neither, and a writing row in no class is refused at load.
+    FALSIFIER: with `task_draw_arm: off` the task-draw half fails (the armed routes are not taken) and the contest half passes.
+    Renamed from `test_we_only_a_verb_that_declares_contests_can_be_graded_today`; the history below is that test's.
+
+    PER VERB, MEASURED RATHER THAN CLAIMED -- and the answer is TWO of thirty-eight.
 
     A degree exists only where something RESOLVES a contest. 36 of the 38 rows in
     `verb_table.yaml` declare no `contests:` at all, so no degree is even ASKABLE for them: they
@@ -13231,8 +13238,8 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # and `thread_read` (K-37, H-85) wait and are not graded. So the title's *only a verb that declares
     # contests* is now *only a verb that declares contests, or a route*; the name is kept because the
     # plan and `seam/ladder.py` cite the test by it.
-    # B07.01: the roster is `graded_tasks`; the routes it holds unarmed (live today) are still these three -- the
-    # armed rows (`armed_by: task_draw_arm`, the 18 tasks and `reconstruct`) are taken only with that arm on.
+    # B07.01: the roster is `graded_tasks`; the routes it holds unarmed are still these three -- the armed rows
+    # (`armed_by: task_draw_arm`, the 18 tasks and `reconstruct`) are taken only with that arm on.
     from ..data.rosters import GRADED_TASKS
     graded = {v for v in VERB_TABLE if v in GRADED_TASKS and not GRADED_TASKS[v].get("armed_by")}
     assert graded == {"research", "examine", "surveil"}, sorted(graded)
@@ -13385,6 +13392,29 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     assert module_producers >= {moved}, (
         f"{moved!r} produces no margin: `U1`'s provider is gone (A-25 moved it to the module) and "
         "`H-98`'s `the ladder branch has no producer` is true again")
+
+    # IS-A-10 (B07.05): THE TASK-DRAW HALF, LAST, so the contest half above has run whole when it fails. The verbs a route
+    # grades at the SHIPPED fixtures are the three inquiries and every armed row (the arm ships `on`); a bookkeeping row is
+    # graded by neither source; no verb has both.
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..data.rosters import BOOKKEEPING_VERBS, graded_route
+    from .test_task_draw import _load
+    armed = {v for v, r in GRADED_TASKS.items() if r.get("armed_by") == "task_draw_arm"}
+    assert len(armed) == 19 and "reconstruct" in armed, sorted(armed)
+    drawn = {v for v in VERB_TABLE if graded_route(v, DEFAULT_FIXTURES)}
+    assert not drawn & set(contested), "a routed verb declares `contests:` -- one degree, one source"
+    checked = 0
+    for v in BOOKKEEPING_VERBS:
+        assert v not in contested and v not in drawn, f"the bookkeeping row {v!r} is graded"
+        checked += 1
+    assert checked >= 10, checked
+    # Planted: a writing row in no class is refused at load (the loader's class refusal, 18-A gate 6).
+    unclassed = next(v for v in BOOKKEEPING_VERBS if VERB_TABLE[v].writes)
+    msg = _load(BOOKKEEPING_VERBS={v: r for v, r in BOOKKEEPING_VERBS.items() if v != unclassed})
+    assert msg is not None and repr(unclassed) in msg and "no class" in msg, msg
+    assert drawn == graded | armed, (
+        f"the verbs a route grades at the shipped fixtures are {sorted(drawn)}: the task draw is not on "
+        f"(`task_draw_arm` = {DEFAULT_FIXTURES.get('task_draw_arm')!r}), or a route was added or lost")
 
 
 def _code_only_lines(path: Path) -> list:

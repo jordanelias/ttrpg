@@ -13,7 +13,7 @@ THE FALSIFIERS (the position's, `workplans/valoria_master_workplan_v9_part6.md` 
   * the route is not readable as a prize (`test_the_route_is_not_readable_as_a_prize`);
   * the degree follows the one owner: the module entry replaced, the inquiry's band moves with it; and
     the host producer scan returns a planted inquiry resolver
-    (`test_season_shape.py::test_we_only_a_verb_that_declares_contests_can_be_graded_today`, where the
+    (`test_season_shape.py::test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else`, where the
     scan's own helper is run over the plant).
 """
 
