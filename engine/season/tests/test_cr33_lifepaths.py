@@ -121,6 +121,7 @@ def _planted_cache():
 def _world(monkeypatch, planted=True):
     monkeypatch.setattr(cast, "_CACHE", _planted_cache() if planted else cast._CACHE)
     w = build_realm(0)
+    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: these tests ask train's effect (a first rank); under the arm a drawn train can fail first
     d = SeasonDriver(w)
     d.matter(mint_token(w, WriteClass.MATTER), [])
     return w, d
