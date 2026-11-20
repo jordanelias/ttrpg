@@ -3,7 +3,7 @@
 Split out of troop_types per Jordan's directive (2026-06-30): "armour and weapons ... should be their own
 modules so that they can be cleanly adjusted to map better onto scene combat if it changes." A troop type
 NAMES a weapon and an armour from these catalogues; it no longer embeds equipment facts. The catalogues
-are DYNAMIC (register/override at runtime) and ADAPTABLE (open records — add fields as the model grows),
+are DYNAMIC (register at runtime) and ADAPTABLE (open records — add fields as the model grows),
 so the eventual primitive grounding + the cross-scale (mass <-> personal) mapping can land here without a
 schema migration and without touching the troop taxonomy.
 

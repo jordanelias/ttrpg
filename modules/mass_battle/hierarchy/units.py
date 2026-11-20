@@ -17,11 +17,9 @@ from modules.mass_battle.troop_types.registry import *
 from modules.mass_battle.percell import *
 from modules.mass_battle.resolution import *
 
-import os as _hu_os
-# Consumer-local maneuver toggles (read by advance_cells; runtime-togglable by validators on this
-# module).
-MB_ENVELOP_PATH = (_hu_os.environ.get("MB_ENVELOP_PATH", "1") == "1")  # [canonical: mass_battle_v30.md §A.8 — directed envelop maneuver toggle]
-MB_SWEEP = (_hu_os.environ.get("MB_SWEEP", "1") == "1")  # [canonical: mass_battle_v30.md §A.8 — lateral sweep maneuver toggle]
+# The maneuver, movement, contact and facing toggles this module reads (MB_ENVELOP_PATH, MB_SWEEP, FIELD_MOVEMENT,
+# FIELD_CONTACT, CONTACT_REACH, MB_FACING_*, MB_ROLE_INSTRUCTIONS) are EngineConfig fields (B17.12), star-imported from
+# config.py; the notes on their meaning stay here, beside the code that reads them.
 # [movement-substrate review 06 — finding 2] Continuous-speed toggle. ON: a per-cell fractional-speed
 # accumulator, so a discipline-degraded body advances at its TRUE average rate instead of flooring to 0
 # each turn (floor(1*0.7)=0 freezes a slow degraded unit). Consumer-local here (advance_cells), like
@@ -29,14 +27,11 @@ MB_SWEEP = (_hu_os.environ.get("MB_SWEEP", "1") == "1")  # [canonical: mass_batt
 # [ED-1089, Jordan-ratified 2026-07-02: "yes, field movement is default."] The coordinate field is what runs
 # by default; the integer grid remains available (FIELD_MOVEMENT=0 MB_NODE_COHESION=0) and stays the frozen
 # byte-exact regression oracle, with those toggles pinned explicitly OFF in bat.py's grid digests.
-FIELD_MOVEMENT = (_hu_os.environ.get("FIELD_MOVEMENT", "1") == "1")
 # [movement-substrate review 06 — coordinate-field migration] FIELD_MOVEMENT is the continuous COORDINATE
 # FIELD master toggle. Continuous positions require the node float path (MB_NODE_COHESION stores true floats
 # in _node_pos): the field toggle therefore UNIFIES with it — field-ON implies the node path is active. A
 # FIELD-ON / NODE-OFF run would silently half-migrate (legacy integer branch never emits floats), so
 # run_battle enforces FIELD_MOVEMENT ⇒ MB_NODE_COHESION at setup (see run_battle).
-FIELD_CONTACT = (_hu_os.environ.get("FIELD_CONTACT", "1") == "1")  # default OFF -> byte-exact contact path
-CONTACT_REACH = float(_hu_os.environ.get("CONTACT_REACH", "0.0"))  # 0.0 => ON contact predicate == OFF adjacency (exempt value)
 COL_WIDTH = 1.0  # inter-file column pitch = 1 lattice unit; file = round(x/COL_WIDTH). At 1.0, round(int)==int -> OFF byte-exact.
 
 # ─── FACING PHYSICS (anti-hyper-reactivity; movement-substrate review 06, facing-heading cluster) ───
@@ -45,11 +40,6 @@ COL_WIDTH = 1.0  # inter-file column pitch = 1 lattice unit; file = round(x/COL_
 # attention, an FOV blind arc, and rout-away facing. DEFAULT-OFF; F2 is NOT enabled — magnitudes below are
 # ungrounded placeholders (calibrated debt), not ratified. Exported in __all__ so orchestration's
 # star-import of units sees them.
-MB_FACING_MODEL = (_hu_os.environ.get('MB_FACING_MODEL', '1') == '1')   # master gate; OFF -> today's raw-vector facing
-MB_FACING_ATTENTION = (_hu_os.environ.get('MB_FACING_ATTENTION', '1') == '1')  # (a) engaged cell faces its ENGAGED target; no-op unless MB_FACING_MODEL
-MB_FACING_SLEW_BASE = float(_hu_os.environ.get('MB_FACING_SLEW_BASE', '60'))  # [CALIBRATED-DEBT, Stage-5: ungrounded placeholder pivot rate deg/tick; NOT ratified — do not enable]
-MB_FACING_FOV_GATE = (_hu_os.environ.get('MB_FACING_FOV_GATE', '1') == '1')  # (c) rear blind arc GATES reaction/targeting; reuses REAR_BLIND_DEG/FOV_HALF_DEG
-MB_FACING_ROUT = (_hu_os.environ.get('MB_FACING_ROUT', '1') == '1')  # (d) routed body faces AWAY from the enemy
 
 # ─── ROLE INSTRUCTIONS → PRIMITIVES (MB-04, A5 role instincts; #445 U-3) ──────────────────────────────
 # config.ROLE_SPEC gives each role a shape and an instruction package. This table is the SINGLE OWNER of
@@ -64,7 +54,6 @@ MB_FACING_ROUT = (_hu_os.environ.get('MB_FACING_ROUT', '1') == '1')  # (d) route
 #   * 'literal' rows were wired before MB-04 and are read by their keyword at the named site; listed so
 #     the table covers the whole vocabulary, not re-routed (byte-exact).
 # MB_ROLE_INSTRUCTIONS=0 restores the pre-MB-04 reading, where only the literal rows did anything.
-MB_ROLE_INSTRUCTIONS = (_hu_os.environ.get('MB_ROLE_INSTRUCTIONS', '1') == '1')
 ROLE_INSTRUCTION_PRIMITIVES = {
     # literal (pre-MB-04)
     'brace':   ('literal: brace', 'resolution._subunit_braced/_unit_braced (charge-shock floor, recoil); core.contact.check_orders (setup delay)'),

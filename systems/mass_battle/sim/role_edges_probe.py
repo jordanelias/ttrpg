@@ -27,7 +27,9 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
-os.environ["MB_FRICTION"] = "0"   # friction off, read by `config` at import: set before it is imported
+import dataclasses  # noqa: E402
+from systems.mass_battle.sim import variant  # noqa: E402
+variant.install(dataclasses.replace(variant.DEFAULT, MB_FRICTION=False))   # friction off: the engine is built from this config, before it is imported
 
 from engine.dice_engine import draw  # noqa: E402
 from modules.mass_battle import config, rngsource  # noqa: E402

@@ -7,28 +7,27 @@ run_multi_unit_battle: a reserve pair is benched turn 1 and re-activates at the 
 
 GATED behind MB_RESERVE_COMMIT (default OFF): the `reserve` instruction stays inert and every pair is
 active from turn 1 (byte-exact; run_multi_unit_battle is not in the bat.py golden battery anyway)."""
-import importlib
-import os
-import sys
+import dataclasses
+
+from systems.mass_battle.sim import variant
 
 
 import pytest  # noqa: E402
 from engine.dice_engine import draw  # noqa: E402
-from modules.mass_battle import rngsource  # noqa: E402
+
+
+def _using(rng):
+    """Scope `rng` on the engine tree that is installed NOW (B17.12: `variant.install` evicts and rebuilds `modules.mass_battle.*`,
+    so a `rngsource` imported at module level is the shipped tree's and is not the one the variant's engine reads)."""
+    import importlib
+    return importlib.import_module('modules.mass_battle.rngsource').using(rng)
 
 
 def _reload(on):
-    os.environ['MB_RESERVE_COMMIT'] = '1' if on else '0'
+    """The engine built from a config with the reserve-commit switch `on` (B17.12: the module reads no process variable)."""
+    variant.install(dataclasses.replace(variant.DEFAULT, MB_RESERVE_COMMIT=on))
     import modules.mass_battle.config as C
-    importlib.reload(C)
-    import modules.mass_battle.resolution as R
-    importlib.reload(R)
-    import modules.mass_battle.hierarchy.units as U
-    importlib.reload(U)
     import systems.mass_battle.sim.engine as E
-    importlib.reload(E)
-    import modules.mass_battle.orchestration as O
-    importlib.reload(O)
     import systems.mass_battle.sim.multi as M   # B17.05: the loops moved out of the module; reads O's constants at call time
     return C, E, M
 
@@ -36,7 +35,7 @@ def _reload(on):
 def _pair(on, a_instructions=(), b_instructions=()):
     """Build a single-pair multi-unit battle: A vs B. Returns (config, log)."""
     C, E, O = _reload(on)
-    with rngsource.using(draw.seeded(draw.H2("test_reserve_commit", 77))):
+    with _using(draw.seeded(draw.H2("test_reserve_commit", 77))):
         ua = E.build_unit('Line', 3, 'A0', 'A', 20, instructions=a_instructions)
         ub = E.build_unit('Line', 3, 'B0', 'B', 20, instructions=b_instructions)
         anchor_map = {('Line', 3): 20}
@@ -89,5 +88,4 @@ def test_no_reserve_units_unaffected():
 
 
 def teardown_module(module):
-    os.environ.pop('MB_RESERVE_COMMIT', None)
-    _reload(on=False)
+    variant.restore()

@@ -7,7 +7,7 @@ Run:  python systems/mass_battle/sim/workbench/server.py   then open http://loca
       oracle instead: FIELD_MOVEMENT=0 MB_NODE_COHESION=0 python systems/mass_battle/sim/workbench/server.py
 
 IMPORTANT — mode is fixed at process start. PER_CELL / FIELD_MOVEMENT / MB_NODE_COHESION are read
-from os.environ once at import time and star-imported into every consumer module as INDEPENDENT
+from os.environ once, by `variant.cfg_from_environ`, when the engine is built, and star-imported into every consumer module as INDEPENDENT
 copies (Python's `from X import *` binds a value, not a live reference) — so there is no way to
 switch modes for a single running server. To compare grid vs field, run two server instances (two
 ports) with different env. GET /api/mode reports what THIS process is actually running.
@@ -30,6 +30,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))  # tests/sim
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
+if __name__ == '__main__':   # [B17.12] the engine is built once, from the toggles this process was started with
+    from systems.mass_battle.sim import variant
+    variant.install(variant.cfg_from_environ(os.environ))
 from trace import run_traced_battle
 from modules.mass_battle import config as _cfg
 from modules.mass_battle.hierarchy import units as _units

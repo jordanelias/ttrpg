@@ -19,7 +19,8 @@ for a reader that iterates a table; none is a second copy.
 
 IT REFUSES, by name (`TroopFileError`): an unknown or missing column; a troop row naming an arm, armour tier, role or
 site kind that is not a member of its closed set; an arm whose mass is stated both here (`mass_kg`) and in personal
-combat's export; a `secondary` equal to the `primary`. The mass check reads
+combat's export; a `secondary` equal to the `primary`; a column (or section) name that is also a field of `config.EngineConfig`
+(B17.12: a value is the troop file's or the config's, never both). The mass check reads
 `engine/engine_params/combat_engine_v1.json` (its `weapons` section) as DATA, never an import of `modules/combat/`.
 `check` is the one validator. It opens that export, so it runs where a file may be opened -- the exporter, on what it
 derives from the YAML, before either artifact is written -- and never inside a field.
@@ -31,7 +32,7 @@ import json
 import os
 from typing import Optional
 
-__all__ = ['TroopFileError', 'check', 'combat_weapon_keys', 'COMBAT_EXPORT_PATH', 'troop_types', 'row_of',
+__all__ = ['TroopFileError', 'check', 'engine_config_names', 'combat_weapon_keys', 'COMBAT_EXPORT_PATH', 'troop_types', 'row_of',
            'stats_for', 'is_mounted', 'roles_for', 'training_site_for', 'loadout_for_names', 'cell_cap_of',
            'charge_of', 'wheels_fast', 'default_role_of', 'reach_of', 'support_ranks_of', 'stats_table', 'mounted_types', 'role_menus', 'role_spec_table', 'training_sites']
 
@@ -75,11 +76,25 @@ def combat_weapon_keys(path: str = COMBAT_EXPORT_PATH) -> frozenset:
         return frozenset(json.load(fh)['sections']['weapons'])
 
 
-def check(data: dict, combat_weapons=None) -> None:
+def engine_config_names() -> frozenset:
+    """The field names of the engine's `EngineConfig` (`config.py`), the other owner of a named value. Imported where it is
+    called, never at the top: `config.py` imports this module."""
+    from dataclasses import fields
+    from modules.mass_battle import config
+    return frozenset(f.name for f in fields(config.EngineConfig))
+
+
+def check(data: dict, combat_weapons=None, config_names=None) -> None:
     """Refuse a troop file that breaks a rule above. `combat_weapons` is the roster's key set (read from the export by
-    default). Raises `TroopFileError`."""
+    default), `config_names` the `EngineConfig` field names (likewise). Raises `TroopFileError`."""
     if combat_weapons is None:
         combat_weapons = combat_weapon_keys()
+    if config_names is None:
+        config_names = engine_config_names()
+    for column in HEADER_KEYS + ROLE_COLUMNS + ARM_COLUMNS + CLASS_COLUMNS + TROOP_COLUMNS:
+        if column.upper() in config_names:
+            raise TroopFileError(f"troop file: the name {column!r} is a column here and a field of `EngineConfig` "
+                                 f"(`config.py`); a value has one owner, never both")
     for k in data:
         if k not in HEADER_KEYS and k not in META_KEYS:
             raise TroopFileError(f"troop file: unknown section {k!r} (allowed: {', '.join(HEADER_KEYS)})")

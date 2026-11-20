@@ -23,26 +23,27 @@ that shared convention the realized hold rates are Disc-1 ~40% (matches PP-256 e
 ~74.5%. PP-256's "~87%" is the no-botch binomial idealization 1-0.6^4; we deliberately DO NOT introduce
 a bespoke botch-free success-counter for this one check (that would be a scale-local dialect — a
 CLAUDE.md §10 guardrail violation). Hold rate rising monotonically with Discipline is the invariant."""
-import importlib
-import os
-import sys
+import dataclasses
+
+from systems.mass_battle.sim import variant
 
 
 import pytest  # noqa: E402
 from engine.dice_engine import draw  # noqa: E402
-from modules.mass_battle import rngsource  # noqa: E402
+
+
+def _using(rng):
+    """Scope `rng` on the engine tree that is installed NOW (B17.12: `variant.install` evicts and rebuilds `modules.mass_battle.*`,
+    so a `rngsource` imported at module level is the shipped tree's and is not the one the variant's engine reads)."""
+    import importlib
+    return importlib.import_module('modules.mass_battle.rngsource').using(rng)
 
 
 def _reload(on):
-    os.environ['MB_FEIGNED_RETREAT'] = '1' if on else '0'
+    """The engine built from a config with the feigned-retreat switch `on` (B17.12: the module reads no process variable)."""
+    variant.install(dataclasses.replace(variant.DEFAULT, MB_FEIGNED_RETREAT=on))
     import modules.mass_battle.config as C
-    importlib.reload(C)
-    import modules.mass_battle.resolution as R
-    importlib.reload(R)
-    import modules.mass_battle.hierarchy.units as U
-    importlib.reload(U)
     import modules.mass_battle.orchestration as O
-    importlib.reload(O)
     return C, O
 
 
@@ -63,7 +64,7 @@ def test_discipline_check_rate_matches_engine_convention():
     is B19's field calibration, B05.03's body), Disc-2 0.430, Disc-4 0.642 (was ~74.5%). Each window keeps its old half-width
     (0.04, 0.045), re-centred on the engine's reading at this seed."""
     _, O = _reload(on=True)
-    with rngsource.using(draw.seeded(draw.H2("test_feigned_retreat", 20260723))):
+    with _using(draw.seeded(draw.H2("test_feigned_retreat", 20260723))):
         rates = {}
         for disc in (1, 2, 4):
             holds = sum(O.feigned_retreat_check(_Stub(discipline=disc)) for _ in range(20000)) / 20000
@@ -76,7 +77,7 @@ def test_discipline_check_rate_matches_engine_convention():
 def test_recognize_rate_rises_with_command():
     """The Ob-2 recognise roll: a higher-Command general recognises the feint more often."""
     _, O = _reload(on=True)
-    with rngsource.using(draw.seeded(draw.H2("test_feigned_retreat", 11))):
+    with _using(draw.seeded(draw.H2("test_feigned_retreat", 11))):
         low = sum(O.feigned_retreat_recognized(_Stub(command=1)) for _ in range(20000)) / 20000
         high = sum(O.feigned_retreat_recognized(_Stub(command=6)) for _ in range(20000)) / 20000
         assert low < high, f"recognise rate must rise with Command: {low:.3f} vs {high:.3f}"
@@ -94,7 +95,7 @@ def test_resolve_marks_overextended_only_when_deceived_and_failing():
     """
     _, O = _reload(on=True)
     # A recognised feint never overextends (high Command recognises, so overextended stays False).
-    with rngsource.using(draw.seeded(draw.H2("test_feigned_retreat", 3))):
+    with _using(draw.seeded(draw.H2("test_feigned_retreat", 3))):
         ever_over_when_recognized = False
         n_recognized = 0
         for _ in range(2000):
@@ -110,7 +111,7 @@ def test_resolve_marks_overextended_only_when_deceived_and_failing():
             f"recognised-never-overextends assertion above is not being exercised")
         assert not ever_over_when_recognized, "a recognised feint must never overextend the pursuer"
         # Over many low-Disc low-Command pursuers, SOME overextend (deceived + failed the check).
-        with rngsource.using(draw.seeded(draw.H2("test_feigned_retreat", 4))):
+        with _using(draw.seeded(draw.H2("test_feigned_retreat", 4))):
             n_over = sum(1 for _ in range(2000)
                          if (O.resolve_feigned_retreat(_Stub(discipline=1, command=1), _Stub(feigned=True)) or {}).get('overextended'))
             assert n_over > 0, "deceived low-discipline pursuers must sometimes overextend"
@@ -145,8 +146,8 @@ def _build_unit(on):
 def test_overextended_pool_penalty_applies_only_when_gated_on():
     """multi.base_combat_pool: an overextended pursuer's pool is cut by OVEREXTEND_PENALTY when the toggle is
     ON; the flag is inert when OFF (byte-exact)."""
-    from systems.mass_battle.sim.multi import base_combat_pool   # B17.05: a function of the army, moved out of Army
     C, u = _build_unit(on=True)
+    from systems.mass_battle.sim.multi import base_combat_pool   # B17.05: a function of the army; read from the tree just built
     base = base_combat_pool(u)
     u.overextended = True
     penalized = base_combat_pool(u)
@@ -155,6 +156,7 @@ def test_overextended_pool_penalty_applies_only_when_gated_on():
 
     # OFF: the flag is inert.
     _, u2 = _build_unit(on=False)
+    from systems.mass_battle.sim.multi import base_combat_pool   # the OFF tree is a new build: its own function
     off_base = base_combat_pool(u2)
     u2.overextended = True
     assert base_combat_pool(u2) == off_base, "OFF: overextended flag must be inert (byte-exact)"
@@ -222,11 +224,10 @@ def test_feign_retreat_end_to_end_through_resolve_feigned_retreat():
         "must be a no-op before the order fires -- .feigned still False"
     check_orders(feigning_unit, 1, [])
     assert feigning_unit.feigned is True
-    with rngsource.using(draw.seeded(draw.H2("test_feigned_retreat", 4))):
+    with _using(draw.seeded(draw.H2("test_feigned_retreat", 4))):
         r = O.resolve_feigned_retreat(pursuer, feigning_unit)
         assert r is not None, "resolve_feigned_retreat must now engage once the order has set .feigned"
 
 
 def teardown_module(module):
-    os.environ.pop('MB_FEIGNED_RETREAT', None)
-    _reload(on=False)
+    variant.restore()

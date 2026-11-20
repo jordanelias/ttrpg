@@ -7,33 +7,36 @@ ED-MB-0005 shipped the yield STATE + COMMANDED entry. This covers the three expl
 
 All three are GATED OFF by default (MB_YIELD_EMERGENT / MB_YIELD_RALLY / MB_YIELD_POCKET) -> inert and
 byte-exact; the emergent path in particular has the largest blast radius (§4.3)."""
-import importlib
-import os
-import sys
+import dataclasses
 
 
 import pytest  # noqa: E402
 
-from systems.mass_battle.sim import multi as M  # noqa: E402  (B17.05: the multi-battle loops moved out of the module)
+from systems.mass_battle.sim import variant  # noqa: E402
+from systems.mass_battle.sim import multi as M  # noqa: E402  (B17.05: the loops moved out of the module; `_reload` rebinds it to the variant's)
 from engine.dice_engine import draw  # noqa: E402
-from modules.mass_battle import rngsource  # noqa: E402
+
+
+def _using(rng):
+    """Scope `rng` on the engine tree that is installed NOW (B17.12: `variant.install` evicts and rebuilds `modules.mass_battle.*`,
+    so a `rngsource` imported at module level is the shipped tree's and is not the one the variant's engine reads)."""
+    import importlib
+    return importlib.import_module('modules.mass_battle.rngsource').using(rng)
 
 
 def _reload(**flags):
-    for k in ('MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'MB_YIELD_POCKET'):
-        os.environ[k] = '1' if flags.get(k) else '0'
+    """The engine built from a config whose three yield switches are `flags` (each unnamed one off; B17.12: the module reads
+    no process variable). `M` is rebound to the variant's multi-battle loops, since the module-level one is the shipped tree's."""
+    global M
+    off = {k: bool(flags.get(k)) for k in ('MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'MB_YIELD_POCKET')}
+    variant.install(dataclasses.replace(variant.DEFAULT, **off))
     import modules.mass_battle.config as C
-    importlib.reload(C)
     import modules.mass_battle.core.exchange as X
-    importlib.reload(X)
     import modules.mass_battle.core.state as S
-    importlib.reload(S)
     import modules.mass_battle.hierarchy.units as U
-    importlib.reload(U)
     import systems.mass_battle.sim.engine as E
-    importlib.reload(E)
     import modules.mass_battle.orchestration as O
-    importlib.reload(O)
+    import systems.mass_battle.sim.multi as M
     return C, X, S, U, E, O
 
 
@@ -50,7 +53,7 @@ def test_emergent_entry_on_disciplined_subunit():
     _, _, S, _, E, _ = _reload(MB_YIELD_EMERGENT=True)
     ua, ub = _pressured_pair(E, discipline=5)
     assert not ua.units[0].yielding
-    with rngsource.using(draw.seeded(draw.H2("test_dg2_yield_residuals", 0))):
+    with _using(draw.seeded(draw.H2("test_dg2_yield_residuals", 0))):
         S.morale_check_phase(ua, ub, 0)
     assert ua.units[0].yielding is True, "disciplined pressured subunit must enter yielding"
 
@@ -59,7 +62,7 @@ def test_emergent_skips_low_discipline():
     """ON: a subunit below D_YIELD erodes/routs exactly as today — it does NOT enter yielding."""
     _, X, S, _, E, _ = _reload(MB_YIELD_EMERGENT=True)
     ua, ub = _pressured_pair(E, discipline=X.D_YIELD - 1)
-    with rngsource.using(draw.seeded(draw.H2("test_dg2_yield_residuals", 0))):
+    with _using(draw.seeded(draw.H2("test_dg2_yield_residuals", 0))):
         S.morale_check_phase(ua, ub, 0)
     assert ua.units[0].yielding is False, "sub-D_YIELD subunit must not auto-yield"
 
@@ -68,7 +71,7 @@ def test_emergent_gate_off_is_inert():
     """OFF (default): the casualty trigger never sets yielding — rout dynamics unchanged (byte-exact)."""
     _, _, S, _, E, _ = _reload(MB_YIELD_EMERGENT=False)
     ua, ub = _pressured_pair(E, discipline=5)
-    with rngsource.using(draw.seeded(draw.H2("test_dg2_yield_residuals", 0))):
+    with _using(draw.seeded(draw.H2("test_dg2_yield_residuals", 0))):
         S.morale_check_phase(ua, ub, 0)
     assert ua.units[0].yielding is False, "OFF: emergent entry must be inert"
 
@@ -148,6 +151,4 @@ def test_pocket_removes_pool_malus():
 
 
 def teardown_module(module):
-    for k in ('MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'MB_YIELD_POCKET'):
-        os.environ.pop(k, None)
-    _reload()
+    variant.restore()

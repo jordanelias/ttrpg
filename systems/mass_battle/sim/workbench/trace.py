@@ -15,6 +15,9 @@ win-rate statistics across many seeds, use gauge_mb.py, never this."""
 import sys, os
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))  # tests/sim on path
+if __name__ == '__main__':   # [B17.12] run as a script, the engine is built from the toggles its caller exported
+    from systems.mass_battle.sim import variant
+    variant.install(variant.cfg_from_environ(os.environ))
 from systems.mass_battle.sim.engine import (  # noqa: E402
     build_unit, build_army, build_envelopment, build_refused_flank, resolve_battle,
     SIDE_A_START_ROW, SIDE_B_START_ROW)

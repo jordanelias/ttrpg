@@ -149,3 +149,24 @@ def test_the_transcribed_rows_read_as_the_old_tables_did():
     assert registry.roles_for('levy') == ['Support', 'Reserve'] == registry.roles_for('no_such_type')
     assert table.row_of('infantry')['power'] == 4 and table.row_of('infantry')['discipline'] == 5
     assert all(r['secondary'] is None for r in _artifact()['troops'].values())
+
+
+def test_a_name_in_both_owners_is_refused():
+    """B17.12: a switch or coefficient is a field of the engine's `EngineConfig` (exported to `mass_battle_v1.json`) OR a
+    column of a troop-file row, never both. Control: the real file and the real config share no name (`check` accepts it, and
+    the config's fields are named, so the claim is not vacuous); each section and column name, upper-cased, is then planted
+    as a config field and refused by name."""
+    from dataclasses import fields
+    from modules.mass_battle import config
+    names = {f.name for f in fields(config.EngineConfig)}
+    assert len(names) >= 90 and 'PER_CELL' in names
+    data = _artifact()
+    table.check(data, config_names=names)                       # the control: no shared name
+    schema = (table.HEADER_KEYS + table.ROLE_COLUMNS + table.ARM_COLUMNS + table.CLASS_COLUMNS + table.TROOP_COLUMNS)
+    checked = 0
+    for column in schema:
+        with pytest.raises(table.TroopFileError) as e:
+            table.check(data, config_names=names | {column.upper()})
+        assert repr(column) in str(e.value) and 'EngineConfig' in str(e.value), column
+        checked += 1
+    assert checked == len(schema) >= 30

@@ -172,10 +172,7 @@ def rally_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     """Empty hook — rally lands in a future cycle (G-7)."""
     pass
 
-import os as _reform_os
-# G-8 reform flag kept in-engine (not config.py) to avoid the sim_fabrication ledger drift on
-# config's pre-existing constants; default OFF preserves the calibrated byte-exact baseline.
-REFORM_CHECK_ENABLED = _reform_os.environ.get('REFORM_CHECK_ENABLED', '1') == '1'
+# G-8 reform flag: `REFORM_CHECK_ENABLED` (EngineConfig; default ON).
 
 def reform_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     # [canonical: mass_battle_v30.md §A.5; PP-241 — Reform Phase Discipline restoration:]
@@ -185,7 +182,7 @@ def reform_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     # [canonical: mass_battle_v30.md §A.7 Phase Reform — non-engaged units restore Discipline.]
     """G-8 Reform: an unengaged unit restores one step of Discipline toward its start,
     gated by the general's Command. Flag-gated (REFORM_CHECK_ENABLED, which defaults
-    '1', so the check runs unless the environment sets it otherwise). Canon Reform also recovers Morale and merges sub-units —
+    to True, so the check runs unless a variant EngineConfig turns it off). Canon Reform also recovers Morale and merges sub-units —
     not implemented here (separate, morale/lifecycle-touching).
     [ASSUMPTION: cadence — fires per phase-boundary, bounded by discipline_start so a unit
      only recovers what it lost. Canon Reform is once-per-turn (the Reform Phase); the sim's
@@ -292,7 +289,6 @@ def _cascade_depth_key(pair):
     return -max(r for r, c in a_cells)
 
 # === SIGMA-LEVERAGE HEAD constants + helpers (prototype, sim-tunable) ===
-import os as _sigma_os
 # === GRADED MORALE / DAMPED ROUT (Jordan directive 2026-05-31: damp rout, more attrition; morale = inspiration not fact) ===
 
 # Perception model (Jordan 2026-05-31; grounded in visual physiology + military scholarship):
@@ -308,31 +304,20 @@ import os as _sigma_os
 # local superiority rolls the cell up. Fires ONLY where neither wrap nor pocket fired (no double-count) and only
 # in contact (a recessed/refused cell that no one is yet in contact with is not rolled up -- this protects a
 # deliberately thin Cannae centre). Mirror-safe: equal formations have equal depth, so excess <= 0 everywhere.
-MB_ROLLUP_PER_RANK = float(_sigma_os.environ.get('MB_ROLLUP_PER_RANK', '0.4'))  # penalty per rank of depth excess past the margin
-MB_ROLLUP_MARGIN   = float(_sigma_os.environ.get('MB_ROLLUP_MARGIN', '1.0'))    # local depth superiority needed before roll-up bites
-MB_ROLLUP_REACH    = float(_sigma_os.environ.get('MB_ROLLUP_REACH', '1.6'))     # contact distance (~adjacent incl. diagonal) to be rollable
-MB_ROLLUP_CAP      = float(_sigma_os.environ.get('MB_ROLLUP_CAP', '-1.0'))      # floor on the roll-up penalty (octagon RED scale)
 # A roll-up is a FLANK phenomenon: you concentrate a wing and roll the enemy line up FROM ITS END (Leuthen,
 # Leuctra). The interior of a line is not directly rolled up -- its collapse is a downstream morale consequence.
 # So the roll-up penalty bites only on cells at the defender's lateral extreme; a recessed/penetrated centre
 # (e.g. a Cannae concave) is handled by the pocket, not the roll-up.
-MB_ROLLUP_FLANK_REACH = float(_sigma_os.environ.get('MB_ROLLUP_FLANK_REACH', '1.0'))  # cols from a lateral edge to count as a wing
 # A roll-up breaks a still-FORMED but out-massed wing (a deep wing rolling a thinner one by design); it must not
 # mop up a cell already attrited to a single rank -- that cell is already losing on troop count, and penalising it
 # again double-counts attrition. So the defender cell must retain real depth (>= floor) to be rollable.
-MB_ROLLUP_MIN_DEPTH = float(_sigma_os.environ.get('MB_ROLLUP_MIN_DEPTH', '2.0'))  # defender must still have this depth
 
 from modules.mass_battle.percell import *  # P-A stage 3: percell extracted
-import os
-MB_FIXING_FLANK = (os.environ.get("MB_FIXING_FLANK", "1") == "1")
-MB_ENVELOP_SHOCK = (os.environ.get("MB_ENVELOP_SHOCK", "1") == "1")  # B: envelopment moral-shock on a fixed unit struck flank/rear (toggle; default ON)
-MB_VOLLEY_TARGETING = (os.environ.get("MB_VOLLEY_TARGETING", "1") == "1")  # E: atomized archer volley targeting -- an ordered archer fires at + concentrates casualties on its target subunit (toggle; default ON)
 # [partition-invariance fix, 2026-07-08, Jordan-ruled "genuine defect -- fix it"] renormalizes a
 # convergence group -- >=2 of ONE side's atoms simultaneously, independently fully engaging the
 # SAME single opposing atom (e.g. a pinning body plus wings all converging on one Line defender)
 # -- back down to what ONE merged atom of the group's combined troops would contribute. Toggle OFF
 # reproduces the pre-fix (multiplicative-per-attacker) behaviour byte-exact, for ablation/compare.
-MB_CONVERGENCE_NORM = (os.environ.get("MB_CONVERGENCE_NORM", "1") == "1")
 
 
 def _convergence_scale(unit_a, unit_b, pairs):
