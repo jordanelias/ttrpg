@@ -39,6 +39,14 @@ _IMPORTS_PRESETS = re.compile(r"import .*army_presets|army_presets .*import|army
 FULL = 1000.0                                 # an arbitrary condition scale for the pure-module tests
 
 
+
+def _flat(w):
+    """The army tests ask the army FOLD (the cap, the menu's install, provisioning): `recruit` lands its whole count. Under
+    `task_draw_arm: on` (B07.05) `recruit` is a drawn task and a Failure or Partial lands none or half, so these worlds run the
+    flat fold, as the arm `off` control does; whether a menu install is drawn is the military lane's (B22; B07.02's assumption 3)."""
+    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")
+    return w
+
 def _sites(w, faction, kinds=("barracks", "archery_range", "stable")):
     """One full Site of each kind in every cohort of `faction`, as a faction that had built them would have."""
     res, full = world_q.residence_of(w), w.fixtures.get("condition_scale")
@@ -106,7 +114,7 @@ def test_advisories_name_the_routs():
 
 # ---------------------------------------------------------------------------------------- the menu on the realm
 def test_menu_follows_the_army_through_mint_and_command():
-    w = build_realm(0)
+    w = _flat(build_realm(0))
     who = _commander(w, CROWN)
     assert who and MM.menu(w, who).mint and not MM.menu(w, who).commands
     assert MM.menu(w, "no_such_person") == MM.MilitaryMenu("no_such_person", None, None, False, False)
@@ -119,7 +127,7 @@ def test_menu_follows_the_army_through_mint_and_command():
 
 
 def _fresh():
-    w = build_realm(0)
+    w = _flat(build_realm(0))
     _sites(w, CROWN)
     who = _commander(w, CROWN)
     _mint(w, who)
@@ -143,7 +151,7 @@ def test_every_listed_raise_bound_is_the_fold_s_bound():
 
 def test_a_menu_driven_army_reaches_the_battle():
     """The menu is a surface for the real chain: acts it builds raise, organise and order an army the battle reads."""
-    w = build_realm(0)
+    w = _flat(build_realm(0))
     who = _commander(w, CROWN)
     _mint(w, who)
     cohorts = _governed_cohorts(w, CROWN)
@@ -170,7 +178,7 @@ def test_a_menu_driven_army_reaches_the_battle():
 
 
 def test_act_for_refuses_what_is_not_an_army_command():
-    w = build_realm(0)
+    w = _flat(build_realm(0))
     who = _commander(w, CROWN)
     with pytest.raises(ValueError):
         MM.act_for(w, who, "march", subject="x")
@@ -182,7 +190,7 @@ def test_act_for_refuses_what_is_not_an_army_command():
 
 
 def test_callback_hands_the_menu_to_the_client_and_returns_its_acts():
-    w = build_realm(0)
+    w = _flat(build_realm(0))
     who = _commander(w, CROWN)
     seen = []
 
@@ -257,7 +265,7 @@ def test_plan_counts_the_claims_of_other_armies():
 
 
 def _realm_crown_army(strategy="line", sites=True):
-    w = build_realm(0)
+    w = _flat(build_realm(0))
     if sites:
         _sites(w, CROWN)
     return w, AP.install(w, [CROWN], strategy=strategy)
@@ -288,7 +296,7 @@ def test_install_is_deterministic_idempotent_and_leaves_other_factions_alone():
     assert world_q.army_of(w1, HAFEN) is None and world_q.army_of(w1, CHURCH) is None
     assert AP.install(w1, ["fac_no_such_faction"]) == {}
     # the step and freeze it borrowed are put back
-    w3 = build_realm(0)
+    w3 = _flat(build_realm(0))
     step, frozen = w3.step, w3.frozen
     assert AP.install(w3, [HAFEN])[HAFEN][0] == "record.created", "control: it did act"
     assert (w3.step, w3.frozen) == (step, frozen)

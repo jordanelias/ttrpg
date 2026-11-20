@@ -25,7 +25,8 @@ FACTION, COHORT, HOME, COMMANDER = "fac_valorsmark", "c1", "Hh", "p_high"
 
 
 def _world():
-    w = P.tiny_world(DEFAULT_FIXTURES)
+    # flat: these tests ask the recruit FOLD (limits, refusals); under `task_draw_arm: on` a drawn Partial lands half (B07.02, B22 owns the map)
+    w = P.tiny_world(DEFAULT_FIXTURES.sweep("task_draw_arm", "off"))
     w.propositions[FACTION] = Proposition(FACTION, "HOLDS", "Crown", "is a faction of this world", True, 0)
     P.plant_cohort(w, COHORT, HOME, weight=12)
     w.add_tenure(Tenure("t_c1_commit", COHORT, FACTION, "commit", since=0))
