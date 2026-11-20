@@ -56,9 +56,6 @@
 | `S/tests/test_sc_calibration_targets.py` | B05.22 | S7 |
 | `S/tests/test_sc_tuning_tables.py` | B05.23 | S7 |
 | `S/tests/test_h199_one_spacing.py` | B05.64 | S7 |
-| `engine/tests/test_fmath.py` | B06.01 | S8 |
-| `S/tests/valoria/test_fmath_one_owner.py` | B06.02 | S8 |
-| `engine/tests/test_draw.py` | B06.03 | S8 |
 | `S/tests/test_task_draw.py` | B07.01 | S9 |
 | `S/tests/test_vres_task_and_prize.py` | B07.04, B11.83 **(two creators: C-03)** | S9 |
 | `S/tests/valoria/test_export_troops.py` | B17.10 | S9 |
@@ -305,8 +302,6 @@
 
 | path created | item | caller the item names (searched in the item's own text) |
 |---|---|---|
-| `engine/dice_engine/fmath.py` | B06.01 | code: imported by the items that consume it (a library file, no CI caller owed) |
-| `engine/dice_engine/draw.py` | B06.03 | code: imported by the items that consume it (a library file, no CI caller owed) |
 | `engine/engine_params/troops.json` | B17.10 | a `ci_checks_registry.yaml` row; the local tier; its exporter's `--check` (named in the item) |
 | `tools/export_troops.py` | B17.10 | a `ci_checks_registry.yaml` row; the local tier; a gate command |
 | `modules/mass_battle/troop_types/table.py` | B17.10 | a `ci_checks_registry.yaml` row; the local tier |
@@ -475,7 +470,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | batch | lane | ED block (declared + spare) | H block (declared + spare) | against H1 §12 |
 |---|---|---|---|---|
 | B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-939 (79+0; H-940 unused) | added 2026-11-14 after the table's last block (B01a's H-856..H-860, on top of B99's); `references/id_reservations.yaml` SC `next_free` 54 → 57 at the batch's opening, not by this plan; the hole register's next id after this block H-941 (the block grew from 54 at the V2 fold: V2's 55 settings, the fold's counted table of 24 and the `speech_blend` pointer row, then fell to 79 at the V2 stress-test pass, which cut `sympathy_step`; `case_rows`' note row and the `audience_room` pointer row cut). The fold map's own range H-856..H-909 assumed H-855 as the last allocated id: B01a had taken H-856..H-860 first |
-| B06-keyed-draw | IN | ED-IN-0381..0382 (0+2) | H-440..H-444 (0+5) | ED shifted |
 | B07-task-draw | IN | ED-IN-0383..0384 (0+2) | H-445..H-450 (1+5) | ED shifted |
 | B08-scene-order | IN | ED-IN-0385..0386 (0+2) | H-451..H-455 (0+5) | ED shifted |
 | B09-memory | IN | ED-IN-0387..0388 (0+2) | H-456..H-463 (3+5) | ED shifted |
@@ -533,7 +527,7 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | milestone | closes at (step now) | its batches, with their step now | a batch of it closing after the close? | rows the closing batch reads |
 |---|---|---|---|---|
 | M0 · ground | B04 (S6; §2.3 S6) | B00 S0, B01 S1, B02 S2, B03 S3, B04 S6 | none | R-01, R-02, R-03, R-04, R-09 |
-| M1 · every outcome is drawn | B08 (S13; §2.3 S13) | B05 S7, B06 S8, B07 S9, B08 S13 | none | R-01, R-03, R-09 |
+| M1 · every outcome is drawn | B08 (S13; §2.3 S13) | B05 S7, B07 S9, B08 S13 | none | R-01, R-03, R-09 |
 | M2 · persons | BA1 (S12; §2.3 S12) | B09 S10, B10 S11, BA1 S12 | none | R-06, R-07, R-08, R-09 |
 | M3 · every verb | B35 (S18; §2.3 S18) | B11 S12, B12a S13, B12b S14, B12c S15, B15 S12, B21 S12, B21b S13, B21c S14, B22 S17, B23 S18, B24a S15, B25 S16, B26 S17, B27 S16, B28 S17, B29 S14, B32 S17, B35 S18 | none | R-01, R-04, R-05, R-07, R-08, R-09 |
 | M4 · every scale | B36 (S19; §2.3 S19) | B16 S13, B17 S9, B19a S14, B19 S15, B20 S16, B24 S13, B30 S18, B34 S14, B36 S19 | none | R-04 |

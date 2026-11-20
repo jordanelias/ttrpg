@@ -1237,7 +1237,7 @@ rosters:
   # | personal combat     | RESOLVE (S39)      | claimants, prize, causes | a degree | BUILT — `modules/combat/fight.py`, called by `seam/wrappers/combat.py`. Jordan: "combat engine isn't done" |
   # | social contest      | RESOLVE (S39)      | claimants, prize, causes | a degree | BUILT, σ-LEVERAGE MODE — `a standing`/`a matter` are rolled by `modules/social_contest/roll.py` (a `Margin`), called by `seam/wrappers/sigma.py`, provider `social_contest` (v9 SC-01 steps 13 + 15); the proceedings nested run is unbuilt |
   # | mass battle         | ENCOUNTER (`a field`) | claimants, prize, causes | a degree | BUILT — `modules/mass_battle/massbattle.py`, called by `seam/wrappers/mass_battle.py` (the `contest_subsystems` row `a field`) |
-  # | investigation       | RESOLVE (FI-01)    | actor, subject (`examine`: site) | a degree | ITS OWN KIND — not a contest: GRADED, by the roll the `graded_inquiries` row names (below), with no prize |
+  # | investigation       | RESOLVE (FI-01)    | actor, subject (`examine`: site) | a degree | ITS OWN KIND — not a contest: GRADED, by the roll the `graded_tasks` row names (below), with no prize |
   # | settlement mgmt     | MATTER (+ ENCOUNTER: `provision`) | stores, sites, residents | stores, yield, a draw | CALLED — `modules/settlements/` (`settlements.subsist` and `settlements.produce`, `step_call`s MATTER makes; the `query` entries `world_q` makes), v9 IN-07 |
   # | faction mgmt        | UNRULED            | UNRULED | UNRULED | absent from the loop entirely |
   # | character dev       | UNRULED            | UNRULED | UNRULED | no creation, no progression, no chronicle |
@@ -1261,7 +1261,7 @@ rosters:
   # `contests:` cell and that is CORRECT — they are not ungraded contests but a different kind of
   # resolution whose seam is unbuilt. Giving them a prize so the existing machinery can grade them
   # is scripting drift: forcing one mechanism's shape onto another because it is the one that exists.
-  # ⚠ v9 FI-01 (`ED-FI-0009`, J-22 option (A)) GRADES THEM WITHOUT A PRIZE: `graded_inquiries`, below,
+  # ⚠ v9 FI-01 (`ED-FI-0009`, J-22 option (A)) GRADES THEM WITHOUT A PRIZE: `graded_tasks`, below,
   # is a ROUTING row -- verb -> the provider and module entry that roll it -- read by the loop
   # (`loop/resolve.py::_grade`), never by `contest()` and never by `manifest.resolve("contest", …)`.
   # It carries no `module:` and no prize key, so no `contest_subsystems` reader can see it.
@@ -1269,7 +1269,7 @@ rosters:
   # Nothing below declares a seam that does not exist. Declaring one would be the dead-carrier
   # defect this file names elsewhere — a carrier built before its reader.
 
-  graded_inquiries:
+  graded_tasks:
     source: >-
       v9 FI-01 (`ED-FI-0009`; J-22 answered option (A)): the inquiries are graded by degree, as
       ladder step 3 answered (RESOLVE -> WITNESS, "Claims graded by degree; Failure emits
@@ -1283,7 +1283,7 @@ rosters:
       (the verb's `capability:` column, `descriptors.CAPABILITIES`, else the swept `pool_default`) and the obstacle the module's own
       (`modules/social_contest/roll.py::obstacle`: the row's `difficulty:` level plus `opposed_ob(pool_default)` where no person is opposite, or
       plus `opposed_ob` of the person's skill score and resisting attribute, `sigma.py::_opposing` -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already
-      binds (`manifest/registry.py::check_graded_inquiries`), so this row adds no roll and no
+      binds (`manifest/registry.py::check_graded_tasks`), so this row adds no roll and no
       resolver. the verb table's `capability:` column now names `inquiry` for the three (REM-30, B10-10; the rows were deferred at
       CP-T01-01): an inquirer who HOLDS an `inquiry` key rolls it, and one who holds none still rolls
       `pool_default` (`seam/wrappers/sigma.py::faculty`).
@@ -1293,11 +1293,143 @@ rosters:
       waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent
       from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its
       flat `emits:` and is not counted as graded.
+      ⚠ B07.01 (18-A edits 1-2; workplan v12 part 10 cont. 2, UNDECIDED (10), (11)): RENAMED from
+      `graded_inquiries` for what it now holds -- the route of every `task`-class row (an act a person
+      attempts alone, drawn against the job's difficulty), beside the three inquiries. Each row carries
+      `form: inquiry | task` (`data/verbs.py` refuses each shape's other columns by form). `reconstruct`
+      joins as `form: inquiry` (UNDECIDED (2)). Every row B07 adds carries `armed_by: task_draw_arm`:
+      the loop takes it only while that `Fixtures` member reads `on` (`data/rosters.py::graded_route`),
+      so with the arm `off` (the control, shipped) each such verb folds flat as it did before; the key
+      leaves with the arm (B98). The three carried inquiries carry no key and route as before.
     keys: [verb_table]
     values:
-      research: {provider: "social_contest", module_entry: "social_contest.roll"}
-      examine:  {provider: "social_contest", module_entry: "social_contest.roll"}
-      surveil:  {provider: "social_contest", module_entry: "social_contest.roll"}
+      research: {provider: "social_contest", module_entry: "social_contest.roll", form: inquiry}
+      examine:  {provider: "social_contest", module_entry: "social_contest.roll", form: inquiry}
+      surveil:  {provider: "social_contest", module_entry: "social_contest.roll", form: inquiry}
+      reconstruct: {provider: "social_contest", module_entry: "social_contest.roll", form: inquiry, armed_by: task_draw_arm}
+      tend:        {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+      train:       {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+      recruit:     {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+      work:        {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+      restore:     {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+      build:       {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+      found:       {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+      raze:        {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+      sabotage:    {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+      requisition: {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+      forge:       {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+      conceal:     {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+      survey:      {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+      thread_read: {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+      move:        {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+      migrate:     {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+      carry:       {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+      marshal:     {provider: "social_contest", module_entry: "social_contest.roll", form: task, armed_by: task_draw_arm}
+
+  # B07.01 (18-A edit 1 item 1, item 5; UNDECIDED (10)): THE `bookkeeping` CLASS -- an act that only records, utters or
+  # schedules and changes no one else's body, holding or stores. A row that writes or emits `finding.made` is `contest`
+  # (it has `contests:`), `task` (it has a `graded_tasks` route), `bookkeeping` (a member here) or owed a contest
+  # (`contest_owed`, below), exactly one, or `data/verbs.py` refuses it at load naming it. A member whose `writes:` touch
+  # another's body, a seat-`hold` Tenure, a Tenure the actor does not hold or `Rung.stores` is refused unless its row
+  # declares `brute:` (the loader's existing column for a write with no roll, its `brute_note:` validated at load).
+  # Rows writing nothing and finding nothing (`comply`, `construe`, `evade / defy`) are outside the refusal.
+  bookkeeping_verbs:
+    source: >-
+      `proposals/2026-11-12-subsystem-audit-suite/proposals/18_DETERMINISM_task_draw_for_uncontested_verbs.md`
+      "The resolution, decided" 1 and 5; workplan v12 B07.01, UNDECIDED (10) (`open_case`, `issue`, `destroy_record`
+      are brute rows and join this class). A row's `why:` names what keeps it from moving anyone else.
+    keys: [verb_table]
+    values:
+      create_record:    {why: "a person writes his own record; nothing of anyone else's moves [ASSUMPTION: the producer's sentence, 18-A gives none]"}
+      utter:            {why: "a word said aloud is recorded; its hearers' uptake is their own act [ASSUMPTION: the producer's sentence, 18-A gives none]"}
+      commit:           {why: "`brute: own` -- the row's `brute_note:` says what authorises the write"}
+      oblige:           {why: "`brute: seat` -- the row's `brute_note:` says what authorises the write"}
+      convene:          {why: "a sitting is scheduled; what it decides is its members' acts [ASSUMPTION: the producer's sentence, 18-A gives none]"}
+      dispatch:         {why: "an order is sent; its addressee's compliance is his act [ASSUMPTION: the producer's sentence, 18-A gives none]"}
+      petition:         {why: "filing; the addressee's answer is his act"}
+      give:             {why: "consent is each side's sampled choice; `brute: own` -- the row's `brute_note:`"}
+      transfer:         {why: "consent is each side's sampled choice; `brute: own` -- the row's `brute_note:`"}
+      exchange:         {why: "consent is each side's sampled choice; `brute: counterparty` -- the row's `brute_note:`"}
+      form_unit:        {why: "a commander records a unit of his own army [ASSUMPTION: the producer's sentence, 18-A gives none]"}
+      assign_troops:    {why: "a commander records an assignment within his own army [ASSUMPTION: the producer's sentence, 18-A gives none]"}
+      disband_unit:     {why: "a commander records the end of a unit of his own army [ASSUMPTION: the producer's sentence, 18-A gives none]"}
+      discharge_troops: {why: "a commander records a discharge from his own army [ASSUMPTION: the producer's sentence, 18-A gives none]"}
+      order_unit:       {why: "a commander records an order to his own unit; the field resolves it [ASSUMPTION: the producer's sentence, 18-A gives none]"}
+      forgive:          {why: "a person releases his own grievance; nothing of anyone else's moves [ASSUMPTION: the producer's sentence, 18-A gives none]"}
+      "tie / knot":     {why: "a person records a tie he holds himself [ASSUMPTION: the producer's sentence, 18-A gives none]"}
+      open_case:        {why: "`brute: seat` -- the row's `brute_note:` says what authorises the write (UNDECIDED (10))"}
+      issue:            {why: "`brute: seat` -- the row's `brute_note:` says what authorises the write (UNDECIDED (10))"}
+      destroy_record:   {why: "`brute: own` -- the row's `brute_note:` says what authorises the write (UNDECIDED (10))"}
+
+  # B07.01 (18-A item 1): THE `Person` CELLS A `bookkeeping` ROW MAY NOT WRITE WITHOUT `brute:` -- another's body or being.
+  # Read by `data/verbs.py::_bookkeeping_cells_touched` beside the two Tenure cases and `Rung.stores` it reads off the row.
+  bookkeeping_forbidden_cells:
+    source: >-
+      18-A "The resolution, decided" 1 (`Person.body`, `Person.capability`, `Person.exists`, `Person.body_ceiling`); workplan
+      v12 B07.01 INSTRUCTION 1.
+    keys: [verb_table]
+    values: [Person.body, Person.capability, Person.exists, Person.body_ceiling]
+
+  # B07.01 (UNDECIDED (1), reading (ii)): THE ROWS 18-A CLASSES `contest`, OWED TO THE LANE NAMED -- each writes (or, for
+  # `interview`, emits a finding) and declares no `contests:` yet. Read by the loader as that class; a member that declares
+  # `contests:` is refused naming it, so the roster cannot go stale: the item that adds the row's `contests:` deletes its
+  # verb here in the same commit (B21, B23, B25, B28, B32).
+  contest_owed:
+    source: >-
+      18-A "The resolution, decided" 5 ("contest (owed to the lane named)"); workplan v12 B07-task-draw UNDECIDED (1)
+      reading (ii). [ASSUMPTION: which `14_VERBS_BINDING_*` file carries `seize` and `release` -- basis: a grep of
+      the verb over `proposals/2026-11-12-subsystem-audit-suite/proposals/14_VERBS_BINDING_*.md` (`seize` is named
+      only in `_E`; `release` in `_A`, not `_B`); each other verb's file is the one naming it most]
+    keys: [verb_table]
+    values:
+      confer:    "14_VERBS_BINDING_C_turnover"
+      revoke:    "14_VERBS_BINDING_C_turnover"
+      succeed:   "14_VERBS_BINDING_C_turnover"
+      establish: "14_VERBS_BINDING_A_formation"
+      pardon:    "14_VERBS_BINDING_B_sittings"
+      release:   "14_VERBS_BINDING_A_formation"
+      surrender: "14_VERBS_BINDING_E_war_seats"
+      seize:     "14_VERBS_BINDING_E_war_seats"
+      covenant:  "14_VERBS_SOCIAL1_A_formation"
+      challenge: "14_VERBS_SOCIAL1_D_grievance_and_settlement"
+      interview: "14_VERBS_SOCIAL2_C_case_question_confession"
+
+  # B07.02 (18-A edit 5; `U5c_VERBS_residue` §1 edit 3): THE ONE SHARE TABLE A DRAWN ACT'S BAND READS -- band -> the fraction of
+  # the effect that lands. Every magnitude effect (`tend`, `work`, `restore`, `requisition`, `train`, `recruit`) and the
+  # travel rows read it through `data/rosters.py::task_share`, and no effect names a band (`test_no_effect_names_a_band`).
+  # KEYED BY BAND (`bands:`, not `values:`, for `finding_terms`' reason: the ladder's labels are not this file's).
+  task_fraction:
+    source: >-
+      `proposals/2026-11-12-subsystem-audit-suite/proposals/18_DETERMINISM_task_draw_for_uncontested_verbs.md` "The resolution,
+      decided" 4: `{Failure: 0, Partial: 0.5, Success: 1, Overwhelming: 1}`; `U5c_VERBS_residue` §1 edit 3 (one name, one set
+      of first values).
+    row: H-164
+    note: >-
+      [ASSUMPTION; medium; Jordan to correct; revert: Partial 1, which makes the middle band as good as a success]. An act
+      with no band (the arm `off`, or a flat un-routed act) reads the full effect, share 1 (`task_share(None)`), so the
+      arm `off` folds as it always did. A band absent here is refused at load.
+    bands:
+      Failure:      0
+      Partial:      0.5
+      Success:      1
+      Overwhelming: 1
+
+  # B07.02 (18-A edit 1; UNDECIDED (9)): HOW GOOD THE DOCUMENT OR COVER A DRAWN `forge` / `conceal` MAKES IS, by band --
+  # `Record.forgery_quality`, which the examining draw reads as obstacle (`seam/wrappers/sigma.py::contest_input`).
+  # REPLACES `Fixtures.default_forgery_quality` (H-210). A band with no row makes no document (Failure).
+  forge_quality:
+    source: >-
+      18-A "Exact edits" 1 (`forge_quality`, a roster replacing the constant `default_forgery_quality`); workplan v12
+      B07-task-draw UNDECIDED (9).
+    row: H-210
+    note: >-
+      [ASSUMPTION; medium; Jordan to correct; revert: Partial 1, a flawed document as good as a sound one]. Success and
+      Overwhelming carry the shipped `default_forgery_quality` (1, "as today"); Partial `0` is a flawed document that adds
+      nothing to the examiner's obstacle (found as easily as a true one is read); Failure has no row: no Record is made.
+    bands:
+      Overwhelming: 1
+      Success:      1
+      Partial:      0
 
   undeposited_kinds:
     source: >-
@@ -3150,7 +3282,7 @@ rosters:
       fieldwork as host): the second role in `manifest/registry.py::_ROLE_ROSTERS`, `inquiry`.
     cite: "SM-3; ED-FI-0002"
     note: >-
-      ⚠ KEYED BY THE KIND A FINDING EMITS, NEVER BY THE VERB. `graded_inquiries` is already the
+      ⚠ KEYED BY THE KIND A FINDING EMITS, NEVER BY THE VERB. `graded_tasks` is already the
       verb-keyed table, and FI-01 rules it a ROUTE that may carry nothing but `{provider,
       module_entry}` (`data/verbs.py`), so a second verb-keyed table would be two tables on one key.
       A prize is what is contested; the inquiry analogue is what is FOUND, so the key is the Event

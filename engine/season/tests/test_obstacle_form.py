@@ -182,14 +182,15 @@ def _load_with(monkeypatch, tmp_path, verb, **cell):
 
 
 def test_a_rolled_row_with_no_difficulty_is_refused(monkeypatch, tmp_path):
-    assert set(V.social_roll_verbs()) == set(ROLLED), sorted(V.social_roll_verbs())              # the ten rows, derived from the prizes and routes
+    armed = {v for v, r in V.GRADED_TASKS.items() if r.get("armed_by")}                            # B07.01: the task rows, dealt once their arm is on
+    assert set(V.social_roll_verbs()) == set(ROLLED) | armed, sorted(V.social_roll_verbs())      # the ten rows and the armed routes, derived from the prizes and routes
     assert _load_with(monkeypatch, tmp_path, "tell", difficulty="routine")["tell"].difficulty == "routine"       # CONTROL: the shipped cell loads
     for verb in ROLLED:                                                                           # contested rows and graded rows both
         with pytest.raises(SystemExit, match=f"{verb!r} is dealt by the social roll and declares no `difficulty:`"):
             _load_with(monkeypatch, tmp_path, verb, difficulty=None)
     with pytest.raises(SystemExit, match="not a member of `rosters.yaml: difficulty_levels`"):
         _load_with(monkeypatch, tmp_path, "tell", difficulty="easy")
-    assert V.GRADED_INQUIRIES and set(V.GRADED_INQUIRIES) <= set(ROLLED)             # the graded rows are among the ten, and were refused above
+    assert set(V.GRADED_TASKS) - armed and set(V.GRADED_TASKS) - armed <= set(ROLLED)  # the live graded rows are among the ten, and were refused above
     unrolled = next(v for v, r in V.VERB_TABLE.items() if v not in ROLLED and r.brute)
     with pytest.raises(SystemExit, match=f"{unrolled!r} declares `difficulty: 'routine'` and the social roll does not deal it"):
         _load_with(monkeypatch, tmp_path, unrolled, difficulty="routine")

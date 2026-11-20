@@ -30,14 +30,14 @@ from typing import Optional
 
 from . import files
 from ...substrate.descriptors import ATTRIBUTES, CAPABILITIES
-from ..gaps import Forbidden, InstrumentDefect, Unspecified
+from ..gaps import Forbidden, InstrumentDefect, Ungraded, Unspecified
 from .matrix import MATRIX, Step
 from .requires import (
     KNOWN_PERSON_OPERANDS, RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS, VIA, AllOf, Existence, Relation,
     TypedRequires, build_typed_requires,
 )
 from .rosters import (
-    COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, FOLD_KINDS, LOGGED_KINDS, GRADED_INQUIRIES, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STRIFE_KINDS,
     is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
@@ -251,7 +251,7 @@ class VerbRow:
     brute: Optional[str] = None
     brute_note: str = ""
     # B05.14 (SC-B Edit A; D-U1-04): HOW HARD THE ACT ITSELF IS -- a member of `rosters.yaml: difficulty_levels` (`Fixtures.difficulty_ob` sizes it),
-    # on every row the social roll deals (a `contests:` prize its provider resolves, or a `graded_inquiries` route to it) and on no other: the
+    # on every row the social roll deals (a `contests:` prize its provider resolves, or a `graded_tasks` route to it) and on no other: the
     # loader refuses a rolled row with none and any other row with one (`social_rolled`). `None` is the declared absence, a row nothing rolls.
     difficulty: Optional[str] = None
 
@@ -336,6 +336,11 @@ class VerbRow:
         conjuncts that did not fail, which is `ID-9` inside the scarcity channel."""
         if not self.refusals_by_clause:
             return self.emits_on_refusal
+        # B07.01: a keyed row whose precondition is unnamed (a `task` row keyed only because its `draw` clause must be,
+        # whose cell's own-ledger conjunct may not be named without carrying `said`, `decision/options.py`) declares ONE
+        # refusal kind, which the loader requires; the unnamed precondition's refusal is that kind, as on a flat row.
+        if clause is None and len(self.emits_on_refusal) == 1:
+            return self.emits_on_refusal
         if clause not in self.refusals_by_clause:
             raise InstrumentDefect(
                 f"{self.verb!r} keys its refusals on {sorted(self.refusals_by_clause)} and was "
@@ -343,6 +348,14 @@ class VerbRow:
                 f"failable clause, so a clause arriving here unkeyed is a refusal point the fold "
                 f"added without declaring it (04 §B.13 #4, F7)")
         return self.refusals_by_clause[clause]
+
+    @property
+    def draw_kinds(self) -> tuple:
+        """B07.01 (18-A item 4): the kinds a `task` row emits when its draw is lost -- its keyed `emits_on_refusal:` clause
+        `draw` (`DRAW_CLAUSE`). A lost draw, not a refusal (04 §C.4: a refusal is a precondition failed), so these kinds are
+        NOT in `emits_on_refusal` (the refusal union) and every reader of *is this a refusal* is unchanged; empty on every
+        other row."""
+        return tuple(self.refusals_by_clause.get(DRAW_CLAUSE, ()))
 
     def eligibility_kinds(self) -> tuple:
         return tuple(a.split(":")[0].strip() for a in self.eligibility)
@@ -362,7 +375,7 @@ class VerbRow:
         if not self.emits_by_degree:
             return self.emits
         if degree is None:
-            src = f"`contests: {self.contests}`" if self.contests else "a `graded_inquiries` route"
+            src = f"`contests: {self.contests}`" if self.contests else "a `graded_tasks` route"
             raise Unspecified(
                 f"{self.verb!r} keys `emits:` by degree "
                 f"({src}) "
@@ -438,6 +451,17 @@ WRITE_CLAUSE = "write"
 # and it replaces the per-effect copies (`_eff_petition`'s self-address decline) with one owner.
 # Derived like the other two: a keyed row keys it iff it names a counterparty.
 COUNTERPARTY_CLAUSE = "counterparty"
+# B07.01 (18-A item 2, item 4): THE FOURTH KEY, AND NOT A REFUSAL -- a `form: task` row's lost draw. A row keys it iff its
+# `graded_tasks` route is `form: task`; its kinds are the row's `draw_kinds`, kept out of the refusal union.
+DRAW_CLAUSE = "draw"
+# B07.01 (18-A item 2): THE TWO SHAPES OF A `graded_tasks` ROUTE. `inquiry` keys `emits:` by Degree and writes nothing (FI-01, as
+# before); `task` carries a flat `writes:` and `emits:` and keys `emits_on_refusal:` with `DRAW_CLAUSE`. The loader branches on them.
+FORM_INQUIRY = "inquiry"
+FORM_TASK = "task"
+ROUTE_FORMS = (FORM_INQUIRY, FORM_TASK)
+# B07.01 (18-A item 1): the `Person` cells a `bookkeeping` row may not write without `brute:` (another's body or being) --
+# `rosters.yaml: bookkeeping_forbidden_cells`, a closed set the refusal reads, so not spelled here (CLAUDE.md §0.05).
+BOOKKEEPING_FORBIDDEN_CELLS = frozenset(roster("bookkeeping_forbidden_cells"))
 
 
 def _derive_openers_from_effects() -> dict:
@@ -575,17 +599,77 @@ BRUTE_KINDS = roster("brute_kinds")
 PERSON_INPUTS = roster("person_inputs_kinds")
 
 #: The provider name the social roll's prize rows and inquiry routes carry (`rosters.yaml: contest_subsystems`,
-#: `graded_inquiries`; `seam/wrappers/sigma.py::_PROVIDER`).
+#: `graded_tasks`; `seam/wrappers/sigma.py::_PROVIDER`).
 SOCIAL_ROLL_PROVIDER = "social_contest"
 
 
 def social_rolled(verb: str, row, prizes: dict) -> bool:
     """IS `row` ONE THE SOCIAL ROLL DEALS? Its `contests:` prize is resolved by the `social_contest` provider
-    (`prizes` is `rosters.yaml: contest_subsystems.prizes`), or a `graded_inquiries` route sends it there. THE ONE TEST: the loader's
+    (`prizes` is `rosters.yaml: contest_subsystems.prizes`), or a `graded_tasks` route sends it there (armed or not: the row's shape does not depend on a fixture's value). THE ONE TEST: the loader's
     `difficulty:` refusal and `social_roll_verbs()` both ask it, and no verb is named."""
     if row.contests and (prizes.get(row.contests) or {}).get("provider") == SOCIAL_ROLL_PROVIDER:
         return True
-    return (GRADED_INQUIRIES.get(verb) or {}).get("provider") == SOCIAL_ROLL_PROVIDER
+    return (GRADED_TASKS.get(verb) or {}).get("provider") == SOCIAL_ROLL_PROVIDER
+
+
+def _arm_default(name: str):
+    """B07.01 (UNDECIDED (11) (iii)): the SHIPPED value of the `Fixtures` member a route's `armed_by:` names, or `None` where
+    no such member is registered (the route check after the loop refuses it, naming the verb). Imported here, not at module
+    level: `data/fixtures.py` reads `data/rosters.py` only, so this import closes no cycle."""
+    from .fixtures import DEFAULT_FIXTURES
+    try:
+        return DEFAULT_FIXTURES.get(name)
+    except Ungraded:
+        return None
+
+
+def _bookkeeping_cells_touched(row) -> list:
+    """The cells of a `bookkeeping` row's `writes:` that move another's body, holding or stores (18-A item 1): a
+    `BOOKKEEPING_FORBIDDEN_CELLS` member; a `Tenure` field where the edge is not the actor's own (`beneficiary:` other than
+    `actor`) or is a seat's `hold` (an `Office` referent); `Rung.stores` (whose rung the loader cannot tell the actor
+    holds). [ASSUMPTION: the two Tenure cases are read off `beneficiary:` and `referent_class: Office` -- basis: the
+    loader holds no act, so whose Tenure a write touches is what the row declares of its edge.]"""
+    return [w for w in row.writes
+            if w in BOOKKEEPING_FORBIDDEN_CELLS or w == "Rung.stores"
+            or (w.startswith("Tenure.") and (row.beneficiary != "actor" or row.referent_class == "Office"))]
+
+
+def _check_resolution_classes(rows: dict) -> None:
+    """B07.01 (18-A item 1; UNDECIDED (1), (10)): THREE RESOLUTION CLASSES, ONE PER WRITING ROW, DERIVED -- `contest` (the
+    row has `contests:`), `task` (a `graded_tasks` route), `bookkeeping` (a `bookkeeping_verbs` member), and the fourth,
+    `contest` owed to the lane named (`contest_owed`). A row that writes or emits a finding (a kind `rosters.yaml:
+    inquiry_modules.findings` keys) and is in none, or any row in two, is refused naming it; so is a `contest_owed` member
+    that declares `contests:` (its verb leaves the roster in that commit), a roster member that is no verb row, a
+    `bookkeeping` row with no `why:`, and a `bookkeeping` row whose `writes:` touch another's body, holding or stores
+    (`_bookkeeping_cells_touched`) unless it declares `brute:` (UNDECIDED (10): the loader's column for a write with no roll),
+    or that emits a finding. The loader's refusal per data family (CLAUDE.md §0.05), not a tree-wide guard."""
+    findings = frozenset(roster_map("inquiry_modules", "findings"))
+    bad = [f"`{name}` names {v!r}, which is no verb row"
+           for name, members in (("bookkeeping_verbs", BOOKKEEPING_VERBS), ("contest_owed", CONTEST_OWED))
+           for v in members if v not in rows]
+    bad += [f"`bookkeeping_verbs` {v!r} has no `why:` line" for v, r in BOOKKEEPING_VERBS.items()
+            if not (isinstance(r, dict) and str(r.get("why") or "").strip())]
+    bad += [f"`contest_owed` {v!r} names no carrying proposal" for v, p in CONTEST_OWED.items() if not str(p or "").strip()]
+    for verb, row in rows.items():
+        classes = [c for c, held in (("contest", bool(row.contests)), ("task", verb in GRADED_TASKS),
+                                     ("bookkeeping", verb in BOOKKEEPING_VERBS), ("contest owed", verb in CONTEST_OWED)) if held]
+        finds = sorted(findings & set(row.emits))
+        if verb in CONTEST_OWED and row.contests:
+            bad.append(f"{verb!r} is in `contest_owed` and declares `contests: {row.contests}`: delete it from the roster")
+        elif len(classes) > 1:
+            bad.append(f"{verb!r} is in {len(classes)} classes {classes}; a row is in exactly one")
+        elif not classes and (row.writes or finds):
+            bad.append(f"{verb!r} writes or emits a finding and is in no class (`contests:`, a `graded_tasks` route, "
+                       "`bookkeeping_verbs`, `contest_owed`)")
+        if verb in BOOKKEEPING_VERBS:
+            touched = [] if row.brute else _bookkeeping_cells_touched(row)
+            if touched or finds:
+                bad.append(f"{verb!r} is `bookkeeping` and {'writes ' + str(touched) if touched else 'emits ' + str(finds)}"
+                           f"{' with no `brute:`' if touched else ''}: bookkeeping moves no one else's body, holding or stores")
+    if bad:
+        raise SystemExit(
+            "verb_table.yaml / rosters.yaml: " + "; ".join(bad) + ". 18-A item 1 (B07.01) -- every writing row is "
+            "`contest`, `task` or `bookkeeping` (or owed a contest by its lane), derived from its row and the rosters.")
 
 
 def _check_governing_attributes(rows: dict, prizes: dict) -> None:
@@ -593,7 +677,7 @@ def _check_governing_attributes(rows: dict, prizes: dict) -> None:
     `prizes` is `rosters.yaml: contest_subsystems.prizes`. (a) `brute` (a member of `BRUTE_KINDS`, with a `brute_note`; `seat` only where the eligibility carries `remit:`
     or the referent class is `Office`); (b) `governing` (one to three distinct `descriptors.ATTRIBUTES` keys); (c) the exemption:
     the row's prize reads `person_inputs: own`. A brute row never rolls, so it also carries no `opposed_attribute`, no `contests:`
-    prize, no `graded_inquiries` route and no `difficulty:` cell; a row contested on a `pool` prize takes
+    prize, no `graded_tasks` route and no `difficulty:` cell; a row contested on a `pool` prize takes
     (b) and names the `opposed_attribute` of the person opposite; a prize row names its `person_inputs`. A row of kind (b) that
     nothing yet rolls (no prize, no route) is inert and is not refused: its draw is B07's."""
     bad = []
@@ -614,7 +698,7 @@ def _check_governing_attributes(rows: dict, prizes: dict) -> None:
             if row.brute == "seat" and not (any(e.startswith("remit:") for e in row.eligibility) or row.referent_class == "Office"):
                 bad.append(f"{verb!r}: `brute: seat` with no `remit:` eligibility and no Office referent")
             for what, present in (("governing", row.governing), ("opposed_attribute", row.opposed_attribute),
-                                  ("a `contests:` prize", row.contests), ("a `graded_inquiries` route", verb in GRADED_INQUIRIES),
+                                  ("a `contests:` prize", row.contests), ("a `graded_tasks` route", verb in GRADED_TASKS),
                                   ("a `difficulty:` cell", getattr(row, "difficulty", None) is not None)):
                 if present:
                     bad.append(f"{verb!r} is brute and carries {what}: a brute verb never rolls")
@@ -682,7 +766,8 @@ def _load_verb_table() -> dict:
         by_clause: dict = {}
         if isinstance(raw_refusals, dict):
             by_clause = {str(k): tuple(v or ()) for k, v in raw_refusals.items()}
-            flat_refusals = tuple(dict.fromkeys(k for v in by_clause.values() for k in v))
+            # B07.01: the `draw` clause's kinds are a lost draw, not a refusal (`VerbRow.draw_kinds`), so not in the union.
+            flat_refusals = tuple(dict.fromkeys(k for c, v in by_clause.items() if c != DRAW_CLAUSE for k in v))
         else:
             flat_refusals = tuple(raw_refusals)
         row = VerbRow(name, r["stratum"], tuple(r["eligibility"]), r["requires"],
@@ -869,14 +954,16 @@ def _load_verb_table() -> dict:
                 f"verb_table.yaml: {name!r} keys `writes` on {sorted(by_degree)} and `emits` on "
                 f"{sorted(emits_by_degree)}. A band in one and not the other is an outcome that "
                 "either changes the world silently or reports a change it did not make.")
-        # v9 FI-01: a `graded_inquiries` route beside a `contests:` is refused FIRST, before the
+        # v9 FI-01: a `graded_tasks` route beside a `contests:` is refused FIRST, before the
         # shape checks below would refuse it for a reason that is not the defect (see the emits arm).
-        _graded = name in GRADED_INQUIRIES
+        _graded = name in GRADED_TASKS
+        # B07.01 (18-A item 2): the route's `form:` (validated after the loop, with the route's other fields).
+        _form = (GRADED_TASKS.get(name) or {}).get("form") if _graded else None
         if _graded and row.contests:
             raise SystemExit(
                 f"verb_table.yaml: {name!r} declares `contests: {row.contests}` and has a "
-                "`graded_inquiries` route. The route is NOT a prize (`rosters.yaml`: giving an "
-                "inquiry a prize is scripting drift); one degree has one source.")
+                "`graded_tasks` route. The route is NOT a prize (`rosters.yaml`: giving an "
+                "inquiry or a task a prize is scripting drift); one degree has one source.")
         # B04.03 (U1-A step 2): THE `capability:` COLUMN, REQUIRED ON A ROW THAT CONTESTS OR IS GRADED AND ON NO OTHER --
         # as `beneficiary:` is required below. "No default by omission; `none` is spelled": a missing key, a value that
         # is neither a `CAPABILITIES` id nor `none`, `none` with no `capability_note:`, and a column on a row nothing
@@ -936,20 +1023,38 @@ def _load_verb_table() -> dict:
         # acts (ED-FI-0009) have `writes: []` by design -- a finding is a Claim minted at WITNESS,
         # not a typed write -- and ship with a FLAT `emits:` because nothing grades them yet; this
         # check is what makes that a decision rather than a habit.
-        # ⚠ v9 FI-01 (J-22 option (A)): THE ARM ACCEPTS A SECOND SOURCE OF A DEGREE, a `graded_inquiries`
+        # ⚠ v9 FI-01 (J-22 option (A)): THE ARM ACCEPTS A SECOND SOURCE OF A DEGREE, a `graded_tasks`
         # ROUTE (`rosters.yaml`; `loop/resolve.py::_grade` rolls it). A routed row keys `emits:` by degree
         # and writes nothing (both refused below), so its roll has no band-blind write to apply.
         if emits_by_degree and not (row.contests or _graded):
             raise SystemExit(
                 f"verb_table.yaml: {name!r} has a degree-keyed `emits:` and no `contests:` or "
-                "`graded_inquiries` route. Nothing resolves a degree for it, so no branch could "
+                "`graded_tasks` route. Nothing resolves a degree for it, so no branch could "
                 "ever be reported -- and unlike the `writes:` case this used to load clean and "
                 "raise at the first fold.")
-        if _graded and (not emits_by_degree or row.writes):
+        # B07.01 (18-A item 2): THE ROUTE REFUSAL, BY `form:`. An `inquiry` keys `emits:` by Degree and writes nothing, as
+        # before. ⚠ An inquiry route that is ARMED (`armed_by:`) and whose arm ships `off` keeps a FLAT `emits:`: with the arm
+        # off the act folds with no degree, and `emits_at(None)` on a degree-keyed row raises (`reconstruct`, executed today);
+        # its emits are keyed in the commit that ships its arm `on`, and the load refuses the other pairing either way.
+        # [ASSUMPTION: the band-keyed `emits:` of `reconstruct` lands with the flip (B07.05), not here -- basis: the arm-off
+        # fold cannot read a degree-keyed `emits:` (`VerbRow.emits_at`), so landing it here would raise at its first act.]
+        _route_row = GRADED_TASKS.get(name) or {}
+        _armed_off = bool(_route_row.get("armed_by")) and _arm_default(_route_row["armed_by"]) != "on"
+        if _form == FORM_INQUIRY and (row.writes or (not emits_by_degree) != _armed_off):
             raise SystemExit(
-                f"verb_table.yaml: {name!r} has a `graded_inquiries` route and a FLAT `emits:` or a "
-                "non-empty `writes:`. A graded verb keys its emissions by Degree and writes nothing "
-                "(a flat write applies on every band), or the roll decides nothing it reports.")
+                f"verb_table.yaml: {name!r} has a `graded_tasks` route of `form: inquiry` and "
+                f"{'a non-empty `writes:`' if row.writes else 'a FLAT `emits:`' if not emits_by_degree else 'a degree-keyed `emits:` while its arm ships off'}. "
+                "A graded inquiry keys its emissions by Degree and writes nothing (a flat write applies on every band), "
+                "or the roll decides nothing it reports; an armed one keeps a flat `emits:` while its arm ships `off`, "
+                "since the flat fold reads no degree.")
+        # A `task` carries a FLAT `writes:` and `emits:` (04 §B.13 invariant 12: a degree-keyed column belongs to a
+        # `contests:` row) and keys `emits_on_refusal:` with the clause `draw`, its lost draw (the keyed half below checks it).
+        if _form == FORM_TASK and (by_degree or emits_by_degree or DRAW_CLAUSE not in by_clause):
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} has a `graded_tasks` route of `form: task` and "
+                f"{'a degree-keyed `writes:` or `emits:`' if by_degree or emits_by_degree else 'no `emits_on_refusal:` clause `draw`'}. "
+                "A task row keeps its flat `writes:` and `emits:` and reports a lost draw under `emits_on_refusal:` clause "
+                "`draw` (18-A item 4); a verb whose bands write different cells declares `contests:` (shape (b)).")
 
         if row.contests and not emits_by_degree:
             raise SystemExit(
@@ -1041,9 +1146,15 @@ def _load_verb_table() -> dict:
                 _expected.add(WRITE_CLAUSE)
             if row.counterparty:
                 _expected.add(COUNTERPARTY_CLAUSE)
+            if _form == FORM_TASK:
+                _expected.add(DRAW_CLAUSE)      # B07.01: a `task` row's lost draw (18-A item 4)
             if not by_clause:
                 _defects.append(f"names conjuncts {list(_names)} and keys no refusal to them")
-            if row.has_precondition and (
+            # B07.01 (UNDECIDED (11) (ii)): a precondition may stay UNNAMED where the row declares ONE refusal kind -- its
+            # refusal is then that kind whichever conjunct failed (`VerbRow.refusal_for(None)`), as on a flat row. The case is
+            # a `task` row keyed only for its `draw` clause whose cell is an own-ledger conjunct (`forge`, `survey`): naming
+            # it would make it carry `said` (`requires.TypedRequires.named_own_ledger_operands`), moving its formation.
+            if row.has_precondition and len(row.emits_on_refusal) != 1 and (
                     row.requires_typed is None or not row.requires_typed.names
                     or None in row.requires_typed.names):
                 _defects.append("keys its refusals, so its precondition must be a typed cell with "
@@ -1059,14 +1170,18 @@ def _load_verb_table() -> dict:
             # still binds a contested or graded row that keys no counterparty. ⚠ S27.4's refusal (a
             # pool under 1D) reaches the same point and takes the counterparty kind too [ASSUMPTION;
             # medium; Jordan to correct; revert: this line without the `COUNTERPARTY_CLAUSE` test].
+            # B07.01 (UNDECIDED (11) (i)): the count is of REFUSAL kinds (`emits_on_refusal`, which holds no `draw` kind), and a
+            # `form: task` row -- nobody opposite, so no counterparty clause -- names the kind its refused roll emits by keying
+            # `write`: its party gap emits that key's kinds (`loop/resolve.py::_refuse_party_gap`), as an act that did not take.
             if ((row.contests or _graded) and len(row.emits_on_refusal) > 1
-                    and COUNTERPARTY_CLAUSE not in by_clause):
-                _defects.append("declares `contests:` or a `graded_inquiries` route, whose "
+                    and COUNTERPARTY_CLAUSE not in by_clause
+                    and not (_form == FORM_TASK and WRITE_CLAUSE in by_clause)):
+                _defects.append("declares `contests:` or a `graded_tasks` route, whose "
                                 "party-gap refusal no clause names, keys no `counterparty` "
-                                "refusal for it, "
+                                "refusal for it (nor, as a task, a `write` one), "
                                 "and keys more than one refusal kind, so that refusal would emit "
                                 "kinds for conjuncts that did not fail")
-            _after_fold = set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE, COUNTERPARTY_CLAUSE}
+            _after_fold = set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE, COUNTERPARTY_CLAUSE, DRAW_CLAUSE}
             if _after_fold:
                 _defects.append(f"names a conjunct after a fold clause ({sorted(_after_fold)})")
             _missing = sorted(_expected - set(by_clause)) if by_clause else []
@@ -1197,18 +1312,27 @@ def _load_verb_table() -> dict:
     # verb row, a route carrying anything but its two fields (a `module:` would make it read as a
     # prize row), or a skipped kind no row declares is refused naming it: a misspelled skip would
     # skip nothing and report the deposit half built.
+    # B07.01: the route carries `form:` (one of `ROUTE_FORMS`) and may carry `armed_by:`, a `Fixtures` member shipped
+    # `on` or `off` (UNDECIDED (11) (iii)); nothing else.
     _declared_kinds = {k for v in out.values() for k in (*v.emits, *v.emits_on_refusal)}
     _bad = sorted(
-        [f"route {v!r}: no verb row" for v in GRADED_INQUIRIES if v not in out]
+        [f"route {v!r}: no verb row" for v in GRADED_TASKS if v not in out]
         + [f"route {v!r}: fields {sorted(r) if isinstance(r, dict) else r!r}"
-           for v, r in GRADED_INQUIRIES.items()
-           if not isinstance(r, dict) or set(r) != {"provider", "module_entry"}]
+           for v, r in GRADED_TASKS.items()
+           if not isinstance(r, dict) or "form" not in r or not {"provider", "module_entry"} <= set(r)
+           or not set(r) - {"provider", "module_entry"} <= {"form", "armed_by"}]
+        + [f"route {v!r}: `form: {r.get('form')!r}` is none of {list(ROUTE_FORMS)}"
+           for v, r in GRADED_TASKS.items() if isinstance(r, dict) and r.get("form") not in ROUTE_FORMS]
+        + [f"route {v!r}: `armed_by: {r['armed_by']!r}` names no `Fixtures` member shipped `on` or `off`"
+           for v, r in GRADED_TASKS.items()
+           if isinstance(r, dict) and "armed_by" in r and _arm_default(str(r["armed_by"])) not in ("on", "off")]
         + [f"undeposited kind {k!r}: no verb row declares it"
            for k in UNDEPOSITED_KINDS if k not in _declared_kinds])
     if _bad:
-        raise SystemExit(f"rosters.yaml: `graded_inquiries` / `undeposited_kinds`: {_bad}. A route is "
-                         "a verb row's `{provider, module_entry}` and nothing else; a skipped kind is "
-                         "one some row emits.")
+        raise SystemExit(f"rosters.yaml: `graded_tasks` / `undeposited_kinds`: {_bad}. A route is "
+                         "a verb row's `{provider, module_entry, form[, armed_by]}` and nothing else; a skipped "
+                         "kind is one some row emits.")
+    _check_resolution_classes(out)
     # LOADER INVARIANT 2 (`04 §B.13 #2`, `04:459`): EVERY MATRIX ROW WITH `RES` HAS A PRODUCING
     # VERB -- or DECLARES that it has none, and why, in its `unproduced:` column. `04:1025` (PART
     # E step 2) records the literal invariant as unsatisfiable today; the column is what lets the
@@ -1532,13 +1656,13 @@ ROLE_TEMPLATE_PURSUITS = _load_role_template_pursuits()
 def _derive_kind_verb() -> tuple:
     """`(KIND_VERB, EMITTED_KINDS)`, derived from every row's `emits:` and `emits_on_refusal:`.
 
-    `EMITTED_KINDS` is every event kind some verb row can emit, success or refusal. `KIND_VERB`
+    `EMITTED_KINDS` is every event kind some verb row can emit, success, lost draw (`VerbRow.draw_kinds`) or refusal. `KIND_VERB`
     maps a kind to its verb ONLY where exactly one row emits it: a kind several rows emit names no
     single verb, so it maps to nothing rather than to whichever row happened to sort first. Both
     are read off the table once at load -- no kind or verb is listed here."""
     emitters: dict = {}
     for verb, row in VERB_TABLE.items():
-        for kind in set(row.emits) | set(row.emits_on_refusal):
+        for kind in set(row.emits) | set(row.emits_on_refusal) | set(row.draw_kinds):   # B07.01: a lost draw is emitted too
             emitters.setdefault(kind, set()).add(verb)
     kind_verb = {k: next(iter(vs)) for k, vs in emitters.items() if len(vs) == 1}
     return kind_verb, frozenset(emitters)
@@ -1983,7 +2107,7 @@ OPPOSED_WITHOUT_PRIZE = _load_opposed_without_prize(roster("opposed_without_priz
 
 def social_roll_verbs() -> frozenset:
     """THE VERBS THE SOCIAL ROLL DEALS: the rows `social_rolled` says it deals (a `contests:` prize the `social_contest`
-    provider resolves, a `graded_inquiries` route to it). Read off the rows and the two rosters, no verb named."""
+    provider resolves, a `graded_tasks` route to it). Read off the rows and the two rosters, no verb named."""
     prizes = _PRIZES
     return frozenset(v for v, r in VERB_TABLE.items() if social_rolled(v, r, prizes))
 

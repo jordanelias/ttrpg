@@ -664,11 +664,27 @@ def _load_lifepaths(cells: dict, lifepaths, vocations) -> tuple:
 
 LIFEPATHS = roster("lifepaths")
 LIFEPATH_TEMPLATES, LIFEPATH_RANKS = _load_lifepaths(table("lifepath_templates"), LIFEPATHS, frozenset(_CAPABILITIES))
-# v9 FI-01 (`ED-FI-0009`, J-22 (A)): inquiry verb -> `{provider, module_entry}`, the roll that grades
-# it with no prize. Validated against the verb table at load (`data/verbs.py`) and against the prize
-# rows at driver construction (`manifest/registry.py::check_graded_inquiries`); read by
-# `loop/resolve.py::_grade`.
-GRADED_INQUIRIES = roster_map("graded_inquiries", "values")
+# v9 FI-01 (`ED-FI-0009`, J-22 (A)); B07.01 (18-A edit 2): verb -> `{provider, module_entry, form[, armed_by]}`, the roll
+# that grades it with no prize -- the three inquiries and every `task`-class row. Validated against the verb table at load
+# (`data/verbs.py`) and against the prize rows at driver construction (`manifest/registry.py::check_graded_tasks`); the
+# loop reads a route through `graded_route` alone.
+GRADED_TASKS = roster_map("graded_tasks", "values")
+# B07.01 (18-A item 1; UNDECIDED (10)): `{verb: {why}}`, the `bookkeeping` class; refused at load by `data/verbs.py`.
+BOOKKEEPING_VERBS = roster_map("bookkeeping_verbs", "values")
+# B07.01 (UNDECIDED (1) (ii)): `{verb: carrying proposal}`, the rows 18-A classes `contest`, owed to the lane named.
+CONTEST_OWED = roster_map("contest_owed", "values")
+
+
+def graded_route(verb: str, fixtures) -> Optional[dict]:
+    """THE ROUTE THE LOOP TAKES FOR `verb`, or `None`: its `graded_tasks` row, except that a row carrying `armed_by:` is
+    taken only while that `Fixtures` member reads `on` (B07.01, UNDECIDED (11) (iii): `task_draw_arm` ships `off`, so each
+    such verb folds flat as before). The ONE reader for the fold (`loop/resolve.py`) and the believer's odds
+    (`seam/wrappers/sigma.py::_rolled_as`), so the two cannot disagree on whether an act is drawn. The loader reads the
+    whole roster (`GRADED_TASKS`), armed or not: a row's shape does not depend on a fixture's value."""
+    route = GRADED_TASKS.get(verb)
+    if route is not None and route.get("armed_by") and fixtures.get(route["armed_by"]) != "on":
+        return None
+    return route
 # RS-21 item 1 (H-111): the Event kinds WITNESS deposits nothing for (`loop/witness.py::witness`).
 UNDEPOSITED_KINDS = roster("undeposited_kinds")
 # ED-IN-0306 phase 2: the verbs that change an `army` Record (`loop/effects_army.py`); `data/fixtures.py` withholds them from formation.
@@ -1102,6 +1118,48 @@ DEGREE_BANDS = frozenset(_DEGREE_LABEL.values())
 DEGREE_STEP = {_DEGREE_LABEL[d]: _DEGREE_ORDINAL[d] - _DEGREE_ORDINAL[_Degree.PARTIAL]
                for d in _DEGREE_LABEL}
 FINDING_TERMS = _load_finding_terms(roster_map("finding_terms", "bands"), DEGREE_BANDS, OBSERVATION_TERMS)
+
+
+def _load_band_numbers(name: str, mapping: dict, bands, *, whole: bool, complete: bool) -> dict:
+    """B07.02: `rosters.yaml: <name>.bands` -- degree band -> a non-negative number, refused at import naming the row when a key
+    is no band of the one ladder, a value is not a number (or, `whole`, not an integer), or (`complete`) a band is missing.
+    A function so a test can plant a bad row and watch it refuse (`_load_finding_terms`' reason). Values come back as
+    `Fraction`s (`str` first, so `0.5` is one half and not a float's neighbour) or, `whole`, as `int`."""
+    from fractions import Fraction
+    bad = sorted([f"band {b!r}: not on the degree ladder {sorted(bands)}" for b in mapping if b not in bands]
+                 + [f"band {b!r}: {v!r} is not a non-negative {'integer' if whole else 'number'}" for b, v in mapping.items()
+                    if isinstance(v, bool) or not isinstance(v, (int,) if whole else (int, float)) or v < 0]
+                 + ([f"band {b!r}: no row" for b in sorted(bands) if b not in mapping] if complete else []))
+    if bad:
+        raise Unspecified(
+            f"`{name}` rows {bad}", f"rosters.yaml -- {name}",
+            needs="key each row by a band `engine/dice_engine/dice_engine.py::DEGREE_LABEL` names, with a non-negative number"
+                  + (" for every band" if complete else ""),
+            law="B07.02 (18-A edit 5) -- what a drawn act's band yields is one table read by every effect through "
+                "`task_share` / `forge_quality_at`; a band off the ladder is never reached and a missing one would be read as nothing")
+    return {b: (v if whole else Fraction(str(v))) for b, v in mapping.items()}
+
+
+# B07.02 (18-A edit 5): THE ONE SHARE TABLE (`rosters.yaml: task_fraction`, every band) and the quality table a drawn `forge` /
+# `conceal` writes (`forge_quality`, a band with no row makes no document). Read through the two functions below, never by key.
+TASK_FRACTION = _load_band_numbers("task_fraction", roster_map("task_fraction", "bands"), DEGREE_BANDS, whole=False, complete=True)
+FORGE_QUALITY = _load_band_numbers("forge_quality", roster_map("forge_quality", "bands"), DEGREE_BANDS, whole=True, complete=False)
+# The band an act that was never drawn reads as -- `Success`, "as today" (`DEGREE_LABEL` names it; no label is spelt here).
+UNROUTED_BAND = _DEGREE_LABEL[_Degree.SUCCESS]
+
+
+def task_share(degree: Optional[str]):
+    """THE FRACTION OF AN EFFECT A BAND LETS LAND, as a `Fraction`. `None` -- the arm `off`, or a flat un-routed act, which has
+    no degree -- reads the full effect, share 1, so a fold with no draw is the fold before the draw existed (B07.02 control).
+    A band the table lacks cannot occur (`TASK_FRACTION` is complete at load); a token that is no band raises `KeyError`."""
+    from fractions import Fraction
+    return Fraction(1) if degree is None else TASK_FRACTION[degree]
+
+
+def forge_quality_at(degree: Optional[str]) -> Optional[int]:
+    """THE `Record.forgery_quality` A DRAWN DOCUMENT CARRIES AT `degree`, or `None` where the band makes none (Failure). `None` for
+    the degree -- an act never drawn -- reads the `Success` row, the shipped value (`default_forgery_quality`'s, 1) before the draw."""
+    return FORGE_QUALITY.get(UNROUTED_BAND if degree is None else degree)
 # v9 FI-03: the deed kinds whose Events an inquiry can uncover (`epistemic.trail_of`). Checked against
 # the verb table's deed kinds at import, in `data/verbs.py::_check_covert_kinds` (the table loads there).
 COVERT_KINDS = roster("covert_kinds")

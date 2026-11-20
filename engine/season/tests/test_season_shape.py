@@ -3137,7 +3137,7 @@ def test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kin
     # The rule recomputed from the table independently of `_derive_kind_verb`.
     emitters = {}
     for verb, row in VERB_TABLE.items():
-        for kind in set(row.emits) | set(row.emits_on_refusal):
+        for kind in set(row.emits) | set(row.emits_on_refusal) | set(row.draw_kinds):   # B07.01: a lost draw's `<verb>.failed` is emitted too
             emitters.setdefault(kind, set()).add(verb)
     assert set(EMITTED_KINDS) == set(emitters) and EMITTED_KINDS
     assert KIND_VERB == {k: next(iter(vs)) for k, vs in emitters.items() if len(vs) == 1}
@@ -13231,8 +13231,10 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # and `thread_read` (K-37, H-85) wait and are not graded. So the title's *only a verb that declares
     # contests* is now *only a verb that declares contests, or a route*; the name is kept because the
     # plan and `seam/ladder.py` cite the test by it.
-    from ..data.rosters import GRADED_INQUIRIES
-    graded = {v for v in VERB_TABLE if v in GRADED_INQUIRIES}
+    # B07.01: the roster is `graded_tasks`; the routes it holds unarmed (live today) are still these three -- the
+    # armed rows (`armed_by: task_draw_arm`, the 18 tasks and `reconstruct`) are taken only with that arm on.
+    from ..data.rosters import GRADED_TASKS
+    graded = {v for v in VERB_TABLE if v in GRADED_TASKS and not GRADED_TASKS[v].get("armed_by")}
     assert graded == {"research", "examine", "surveil"}, sorted(graded)
     assert not graded & set(contested), "a graded inquiry declares `contests:` -- it was made a prize"
 

@@ -445,12 +445,8 @@ DEFAULT_FIXTURES = Fixtures(
     # _eff_determine`. `0` is the CONTROL: no consequence write, every determination as before.
     # [JUSTIFIED: engine/season/hole_register.yaml H-221 -- `site: Fixtures pursuit_shift`, graded `assumption`; no document gives how far a consequence moves a conviction, so it is injected and swept 0 / 0.1 / 0.25]
     pursuit_shift=0.1,                 # `H-221`, swept 0 (control) / 0.1 (SHIPPED) / 0.25
-    # v9 SC-02 `22b` step 25 (`19_PLAN.md` step 25): THE FORGERY QUALITY A `forge` WRITES on the Record it
-    # mints (`loop/effects_information.py::_eff_forge`), read by the examination's obstacle (`seam/wrappers/
-    # sigma.py::contest_input` -> `modules/social_contest/roll.py::obstacle`). `0` is the CONTROL: a forgery
-    # the examiner's roll reads as it reads a genuine document -- the obstacle as before this step.
-    # [JUSTIFIED: engine/season/hole_register.yaml H-210 -- `site: Fixtures default_forgery_quality`, graded `assumption`; no document gives a forgery's quality, so `default_transfer_amount`'s shape: an injected integer, swept 0 / 1 / 3]
-    default_forgery_quality=1,         # `H-210`, swept 0 (control) / 1 (SHIPPED) / 3
+    # B07.02 (18-A edit 5): `default_forgery_quality` (H-210) is RETIRED -- the forgery quality a drawn `forge` / `conceal` writes is
+    # `rosters.yaml: forge_quality`'s, by band (`data/rosters.py::forge_quality_at`).
     # v9 SC-02 `22b` step 23 (`19_PLAN.md` step 23): THE STANDING BANDS -- floors on `decision/options.py::
     # standing_of`'s gap (on `condition_scale`), read by `loop/matter.py::_standing_crossings`. A band is
     # `budget.body_band_penalty`'s reading (the floors a value is below), and the crossing is the band of
@@ -1166,6 +1162,11 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: every kind 0.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-428 -- site: Fixtures stakes_ob, graded `assumption`; T13 T4 gives the live `oblige` 0, `detain` 0.5, `ban` 1.0 and no document derives them, so it is injected at the control and swept 0 / 0.5x / 1x / 2x of those]
     stakes_ob={kind: 0 for kind in roster("tenure_kinds")},   # `H-428`, swept 0 (control, SHIPPED) / 0.5x / 1x / 2x
+    # `H-445` (B07.01; 18-A edit 7, UNDECIDED (11) (iii)). WHETHER THE LOOP TAKES A `graded_tasks` ROUTE THAT CARRIES `armed_by: task_draw_arm`
+    # (`data/rosters.py::graded_route`, read by `loop/resolve.py` and `seam/wrappers/sigma.py::_rolled_as`): `off` -- each such verb (the 18 `task`
+    # rows and `reconstruct`) folds flat, as before B07 (the control); `on` -- it is drawn through `seam.grade` and folded at its band. B07.05 flips it.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-445 -- site: Fixtures task_draw_arm, graded `assumption`; 18-A ships it `on` only once its gate 5 reads, so it is injected at the control and swept off / on]
+    task_draw_arm="off",               # `H-445`, swept off (control, SHIPPED until B07.05) / on
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

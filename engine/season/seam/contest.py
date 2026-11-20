@@ -114,7 +114,7 @@ def grade(w: World, claimants: list[str], causes: list[str], route: dict, *,
           verb: str, subject: Optional[str] = None, rng: Optional[Any] = None, effort: int = 0):
     """v9 FI-01 (`ED-FI-0009`, J-22 option (A)): AN INQUIRY'S ROLL, ROUTED WITHOUT A PRIZE.
 
-    `route` is the verb's `graded_inquiries` row (`rosters.yaml`): the provider registered under
+    `route` is the verb's `graded_tasks` row (`rosters.yaml`): the provider registered under
     `@provider("contest", …)` and the module entry it calls. Not `contest()`: an inquiry is not a
     contest (`rosters.yaml`'s ruling -- a prize here is scripting drift), so no prize is resolved, no
     depth is spent and no sides are derived; the actor is the one claimant and the inquiry's object
@@ -122,7 +122,7 @@ def grade(w: World, claimants: list[str], causes: list[str], route: dict, *,
     provider (`seam/wrappers/sigma.py::resolve`, the host input builder and adapter), the module entry
     (`modules/social_contest/roll.py`, reached by its composition row) and the status reading
     (`_returned`). The degree is `seam/ladder.py::degree_of`'s, read by the caller as for a contest.
-    `manifest/registry.py::check_graded_inquiries` refuses construction unless the route's pair is one
+    `manifest/registry.py::check_graded_tasks` refuses construction unless the route's pair is one
     a prize row already binds, so a route cannot name a roll no contest makes."""
     from ..manifest import call as _provider_for
     _run = _provider_for("contest", route.get("provider"))
@@ -130,9 +130,9 @@ def grade(w: World, claimants: list[str], causes: list[str], route: dict, *,
         raise Unspecified(
             f"the inquiry {verb!r} routes to provider {route.get('provider')!r}, which nobody "
             f"registered", "S43",
-            needs="the `graded_inquiries` row's `provider:` naming a registered provider",
+            needs="the `graded_tasks` row's `provider:` naming a registered provider",
             law="S43 -- a missing provider is a STARTUP FAILURE WITH A NAME IN IT; "
-                "`check_graded_inquiries` refuses it at driver construction")
+                "`check_graded_tasks` refuses it at driver construction")
     out = _run(w, claimants, causes, None, verb=verb, subject=subject, rng=rng,
                module_entry=route.get("module_entry"), effort=effort)
     return _returned(out, f"the inquiry {verb!r}", f"inquiry {verb!r}")

@@ -239,7 +239,7 @@ GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B03g-go-early-landings @048724cd545117255e71d04a583d99c6cb5fe3a9
-GATE: Batch B06-keyed-draw
+GATE: Batch B06-keyed-draw @bcbe3ed5e595ff465e12dbe246c29f1216d14f3a
 GATE: Batch B34-go-surface
 GATE: Batch B17-mb-scale
 GATE: Batch B20-mb-orders

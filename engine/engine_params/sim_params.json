@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 122,
-    "total": 394,
-    "uncited": 272,
+    "total": 396,
+    "uncited": 274,
     "of_which_assumption_grade": 8
   },
-  "count": 394,
+  "count": 396,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 25,
@@ -3802,17 +3802,6 @@
       "citation_grade": null
     },
     {
-      "key": "engine.season.settings.default_forgery_quality",
-      "name": "default_forgery_quality",
-      "value": 1,
-      "kind": "scalar",
-      "module": "engine.season.settings",
-      "file": "engine/season/data/fixtures.py",
-      "note": "`H-210`, swept 0 (control) / 1 (SHIPPED) / 3",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
       "key": "engine.season.settings.standing_band_floors",
       "name": "standing_band_floors",
       "value": [
@@ -4672,6 +4661,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-427`, swept off (control) / on (live, SHIPPED, B05.23)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.task_draw_arm",
+      "name": "task_draw_arm",
+      "value": "off",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-445`, swept off (control, SHIPPED until B07.05) / on",
       "citation": null,
       "citation_grade": null
     },

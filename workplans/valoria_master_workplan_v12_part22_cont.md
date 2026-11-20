@@ -15,7 +15,7 @@ The batch block's head, its position table and items B24.01 to B24.28 are in `va
 - FALSIFIER and CONTROL: "a turn view that shows any seat's true lean with certainty (share 1.0), or that reads a seat's lean from World rather than from the viewer's own claim" (HCAP). Control: "Hash EQUAL at the shipped cast (no holder)": realm hashes equal to B24.28's (no seat holds a public commit at the shipped cast, so no reading is deposited).
 - GATE: `PYTHONHASHSEED=0 python -m pytest engine/season/tests/test_sc_hearing_capabilities.py -q` → pass; realm hash (`HASH READING`) at seed 0 → equal.
 - HASH MOVERS: "None at the shipped cast" (HCAP).
-- DEPENDS ON: V12 B24.10 (`proceeding_input`), B24.13; V12 B24p.07 (the view's reading: `acc`), B24p.22 (the witness deposit path for a proceeding's ending); V12 Batch B04-capability-home (`insight` row); V12 Batch B06-keyed-draw (the A-30 keyed draw).
+- DEPENDS ON: V12 B24.10 (`proceeding_input`), B24.13; V12 B24p.07 (the view's reading: `acc`), B24p.22 (the witness deposit path for a proceeding's ending); V12 Batch B04-capability-home (`insight` row); V12 Batch B06-keyed-draw @bcbe3ed5e595ff465e12dbe246c29f1216d14f3a (the A-30 keyed draw).
 - IDS: none (H block slots 9, 10 are returned, unused: named at the expunge).
 - GLOSSARY: none.
 - COST and TIER: small build; `sonnet`, `high`.

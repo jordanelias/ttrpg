@@ -157,8 +157,8 @@ def _row(doc, verb):
 def test_the_shipped_table_declares_the_column_on_every_contested_or_graded_row():
     """The control: `capability` is a `VerbRow` field; every contested or graded row carries a skill or `none`."""
     from engine.season.data.verbs import VERB_TABLE
-    from engine.season.data.rosters import GRADED_INQUIRIES
-    owed = [v for v, r in VERB_TABLE.items() if r.contests or v in GRADED_INQUIRIES]
+    from engine.season.data.rosters import GRADED_TASKS
+    owed = [v for v, r in VERB_TABLE.items() if r.contests or v in GRADED_TASKS]
     assert len(owed) >= 12, owed
     for v in owed:
         cap = VERB_TABLE[v].capability
@@ -228,12 +228,15 @@ def test_derived_vocation_maps_equal_the_retired_rosters():
     so they are asserted gone, not compared."""
     from engine.season.data import verbs as V
     verb_capability, vocations = _derived_maps()
-    assert verb_capability == dict(_RETIRED_VERB_CAPABILITY)
+    # B07.01 (UNDECIDED (11) (iv)): the armed `graded_tasks` rows (the 18 tasks and `reconstruct`) gained the column; the
+    # retired roster is the rest, exactly.
+    armed = {v for v, r in V.GRADED_TASKS.items() if r.get("armed_by")}
+    assert {v: c for v, c in verb_capability.items() if v not in armed} == dict(_RETIRED_VERB_CAPABILITY)
     assert vocations == frozenset(c for _, c in _RETIRED_VERB_CAPABILITY) and vocations <= set(descriptors.CAPABILITIES)
     assert not hasattr(V, "VOCATION_ATTRIBUTE") and not hasattr(V, "VOCATION_OPPOSED_BY")
-    # the two rows with no skill are spelled `none` and are in no map
+    # the two rows with no skill outside the armed routes are spelled `none` and are in no map
     from engine.season.data.verbs import VERB_TABLE
-    assert [v for v, r in VERB_TABLE.items() if r.capability == "none"] == ["lie", "march"] \
+    assert [v for v, r in VERB_TABLE.items() if r.capability == "none" and v not in armed] == ["lie", "march"] \
         and "lie" not in verb_capability and "march" not in verb_capability
 
 

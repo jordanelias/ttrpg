@@ -28,7 +28,7 @@ from ..queries import world_q
 from ..queries.world_q import faction_holding
 from ..queries.inputs import ArmyCommand
 from ..state.gate import NO_CHANGE, Change, Subject
-from .effects_shared import _operand, effect_for
+from .effects_shared import _operand, _scaled, effect_for
 
 
 def _army(w: "World", a: "Act"):
@@ -83,6 +83,10 @@ def _eff_recruit(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     if (len(args) != 3 or cohort is None or not cohort.weight > 1
             or not world_q.raisable_by(w, cohort.id, rec.subject_matter["faction"])):
         return NO_CHANGE
+    # B07.02 (18-A edit 5): the turnout is the band's share of the `count` asked for (`_scaled`; no band, or a full one, is all of it).
+    # [ASSUMPTION: `14_VERBS_MILITARY`'s own recruit map is B22's; until it lands the one `task_fraction` table reads here]
+    if isinstance(args["count"], int):
+        args = dict(args, count=_scaled(args["count"], res))
     args = dict(args, weight=cohort.weight, sites=world_q.training_sites(w, cohort.id),
                 full=w.fixtures.get("condition_scale"), others=world_q.other_army_records(w, rec.id))
     return _apply(w, a, "recruit", args, "army.recruited")

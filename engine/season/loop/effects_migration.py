@@ -11,13 +11,14 @@ for `effect_for`, `_operand` and the shared §10-ladder refusal `_decline_ascent
 from __future__ import annotations
 
 from ..data.rosters import ARRIVAL_ONLY_KINDS
-from ..queries.world_q import DETAIN_KIND, RESIDE_KIND, has_room, residence_of, restrained
+from ..queries.world_q import DETAIN_KIND, RESIDE_KIND, has_room, place_of, residence_of, restrained
 from ..state.carriers import Tenure
+from ..state.containment import parent_of
 from ..state.gate import NO_CHANGE, Change, Subject
 from ..state.ids import H
 from ..trace_log import TRACE
 
-from .effects_shared import _decline_ascent, _operand, effect_for
+from .effects_shared import _decline_ascent, _operand, _share, effect_for
 
 
 @effect_for("move")
@@ -60,7 +61,25 @@ def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
             f"a move's destination is not up the §10 ladder -> {a.actor} into {dest!r}")
     # ⚠ PLAN POSITION `19c`: WHAT A `move` LEAVES BEHIND IS THE MOVER'S `reside` EDGE -- it is not
     # touched here, so a traveller still lives where he lived (`_eff_migrate`'s docstring).
-    return Change((Subject.entity("persons", a.actor),), lambda: _relocate(w, a, dest))
+    # B07.02: the band decides how far he gets (`_reached`); no band is `dest`, the move as it was.
+    where = _reached(w, a, dest, res)
+    if where is None:
+        return NO_CHANGE
+    return Change((Subject.entity("persons", a.actor),), lambda: _relocate(w, a, where))
+
+
+def _reached(w: "World", a: "Act", dest: str, res: "Resolution | None") -> "str | None":
+    """B07.02 (18-A edit 5): WHERE THE BAND LETS THE TRAVELLER ARRIVE. Share 1 (or no band): `dest`. No share (Failure): `None`, he stays.
+    Between: ONE LEG SHORT -- the rung that contains `dest` (`containment.parent_of`), where the §10 ladder seats him; `None` where
+    `dest` has no container, or he is there already. [ASSUMPTION: "one leg" is one step up the containment tree from `dest`, the
+    only path the tree states; basis: `state/containment.py::parent_of`, `move` being one write to `dest`]"""
+    f = _share(res)
+    if f == 1:
+        return dest
+    short = parent_of(w, dest) if f else None
+    if short is None or short in (dest, place_of(w, a.actor)) or not w.contain_ascends(a.actor, short):
+        return None
+    return short
 
 
 def _arrival_only(w: "World", dest) -> bool:
@@ -207,6 +226,12 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
                                      "refuse at every ancestor as well (a second, coarser census)"])
         return NO_CHANGE
     settled = [t for t in w.tenures if t.subject == a.actor and t.kind == RESIDE_KIND and t.live]
+    # B07.02: a band short of the full effect leaves him on the road, one leg short and unsettled (`_reached`); no band is `dest`.
+    where = _reached(w, a, dest, res)
+    if where is None:
+        return NO_CHANGE
+    if where != dest:
+        return Change((Subject.entity("persons", a.actor),), lambda: _relocate(w, a, where))
 
     def perform() -> None:
         _relocate(w, a, dest)

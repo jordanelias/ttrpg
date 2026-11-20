@@ -480,7 +480,10 @@ def test_a_pupil_whose_vocation_reads_argue_or_inquiry_is_trained_and_faculty_fo
     # B05.99 re-pin (B05.25, B05.23): the pool is the governing score (the untrained score: no sheet) + the rank + the base 6;
     # was the key alone ({4}; 3)
     add = w.fixtures.get("pool_add")
-    assert len(inquiries) == 4 and {sigma.faculty(w, p, v) for v in inquiries} == {default + 4 + add}
+    # B07.01 (UNDECIDED (11) (iv)): `survey` and `reconstruct` now name `inquiry` too (4 -> 6 verbs); the pinned
+    # SET, not a count, so a verb leaving or joining the skill is a named change here
+    assert set(inquiries) == {"examine", "interrogate", "research", "surveil", "survey", "reconstruct"}
+    assert {sigma.faculty(w, p, v) for v in inquiries} == {default + 4 + add}
     assert sigma.faculty(w, p, "argue") == default + 3 + add == sigma.faculty(w, p, "determine")
     # a verb drawing on no vocation still rolls the untrained man's pool (B05.25: `lie`; a brute verb like `transfer` rolls nothing)
     assert sigma.faculty(w, p, "lie") == default + add, "a verb drawing on no vocation still rolls the default"
