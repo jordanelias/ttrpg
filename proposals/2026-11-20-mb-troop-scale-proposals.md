@@ -79,11 +79,13 @@ Recommend A now, B when the army verbs ship. A third reading to take then: the s
 
 Arithmetic at the ruled band: a unit of t troops has between ceil(t/100) and floor(t/50) cells (never under 4 for t of 200 or more). 1,667 troops (a third of a 5,000 side): 17 to 33 cells. 3,333 (a third of 10,000): 34 to 66. Lightest allowed unit 200 troops; heaviest 10,000 (100 to 200 cells).
 
+Terms: `cell_cap` is the MAXIMUM troops one cell holds (foot 100, horse 50); `CELL_FLOOR` is the MINIMUM a cell starts with (50, ED-MB-0101). For horse the two are both 50, so the band is exactly 50.
+
 The conflict (observed, `geometry.py:123-127`): horse rows carry `cell_cap: 50` (P-DEC-3, "a horse and rider take more ground"), and 50 is also `CELL_FLOOR`. A horse unit whose troops are not a multiple of 50 starts under 50 a cell: 333 troops give 7 cells of 47.6; 201 give 5 of 40.2 (reproduced by running `footprint_for`).
 
 | option | effect |
 |---|---|
-| **A. Horse cap 75** | horse band 50 to 75 satisfies both rulings (333 troops: 6 cells of 55.5); 75 is an invented value, flagged assumption; it moves every mounted unit's footprint and the golden modes that field horse |
+| **A. Horse maximum 75** | horse band 50 to 75 satisfies both rulings (333 troops: 6 cells of 55.5); 75 is an invented value, flagged assumption; it moves every mounted unit's footprint and the golden modes that field horse |
 | B. Floor yields for horse | horse cells 25 to 50; the 50 to 100 ruling is true of foot only; no number invented; the cell-band test says so |
 | C. Round horse units to multiples of 50 | cap 50 and floor 50 both hold; the muster and `_cut` round each person's horse troops, and the lost troops are unaccounted |
 | D. Horse cap 100, with each horse cell counting two grid cells | one density, a doubled footprint; changes frontage and contact geometry |
