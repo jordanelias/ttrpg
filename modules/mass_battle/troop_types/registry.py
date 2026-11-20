@@ -73,6 +73,7 @@ REACH_SHORT = 0.5  # [canonical: params/core.md §Reach Terminology (PP-290) —
 REACH_MELEE_DEFAULT = 0.1   # non-pole melee (P-DEC-1); the fallthrough for unmapped/bare 'infantry'
 
 
+@_functools.lru_cache(maxsize=None)   # pure in troop_type and the static troop file; read per atom per tick
 def reach_for(troop_type):
     """[v2 Stage E, ED-MB-0014] Front-face weapon reach in lattice units (COL_WIDTH=1.0 pitch) of the arm the troop
     type carries (the troop file's class row, P-DEC-1). A type with no arm, including bare 'infantry' (a real call-site

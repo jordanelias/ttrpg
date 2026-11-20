@@ -79,13 +79,11 @@ def _build_side(spec, faction):
 def _field_record(spec_a, spec_b):
     """A hand-built `MassBattleInput`: two headcount sides on open ground, as the module's own tests build one. A side's
     spec is its weight (a number), or `{'weight': w, 'stance': s}` (`stance` defaults to 0.0, the base morale-start)."""
-    import yaml
-    from engine.season.data import files
     from engine.season.data.fixtures import DEFAULT_FIXTURES
+    from engine.season.data.geography import geography
     from engine.season.queries.inputs import MassBattleInput
     sides = [s if isinstance(s, dict) else {'weight': s} for s in (spec_a, spec_b)]
-    with open(files.GEOGRAPHY_YAML, encoding='utf-8') as f:
-        geo = yaml.safe_load(f)
+    geo = geography()
     return MassBattleInput(weights=((float(sides[0]['weight']),), (float(sides[1]['weight']),)), territory=None,
                            fort_level=0.0, stances=tuple(float(s.get('stance', 0.0)) for s in sides), walls_dr=None,
                            origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography=geo,

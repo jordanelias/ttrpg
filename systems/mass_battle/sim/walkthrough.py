@@ -173,10 +173,8 @@ def fight(example: dict, seed: int, role=None) -> dict:
         v['contacts'] = rec.contacts.get(k, [])
     stages = {k: _collapse(v) for k, v in rec.stages.items()}
     graded = _grade(a, b, _SCALE, result['turns'])
-    # the page reads the two sides as fractions and four flags (`walkthrough_template.html`); B17.03's `FieldOutcome` carries shares
+    # the page reads the two sides as fractions and the band (`walkthrough_template.html`); B17.03's `FieldOutcome` carries shares
     grade = {'attacker_size_pct': graded.attacker.share / _SCALE, 'defender_size_pct': graded.defender.share / _SCALE,
-             'attacker_routed': graded.attacker.routed, 'attacker_conceded': graded.attacker.conceded,
-             'defender_routed': graded.defender.routed, 'defender_conceded': graded.defender.conceded,
              'degree': field_degree(graded)}
     return {'result': result, 'ticks': ticks, 'hpmax': hpmax, 'stages': stages, 'grade': grade}
 

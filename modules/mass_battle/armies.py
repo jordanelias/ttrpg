@@ -256,7 +256,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
         if instructions is None:
             instructions = role_spec['instructions'] if role_spec is not None else ()
         # [movement audit gate 2, ED-MB-0001] unit_type derives from tt's assigned weapon
-        # (unit_type_for/TROOP_LOADOUT) rather than a hardcoded 'melee' -- an explicit spec value
+        # (unit_type_for/the troop file's `primary` arm) rather than a hardcoded 'melee' -- an explicit spec value
         # still always wins. See build_unit's docstring for the byte-exact-preservation argument
         # (unmapped troop types, including the 'infantry' default, still resolve to 'melee').
         #

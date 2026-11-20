@@ -105,7 +105,7 @@ def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry',
     [movement audit gate 2, ED-MB-0001, Jordan-ruled 2026-07-02: "Ranged is troop type as per the
     weapon assigned to troop."] `unit_type` now defaults to None and, when not explicitly given by
     the caller, derives from troop_type's assigned weapon via troop_types.registry.unit_type_for
-    (TROOP_LOADOUT/loadout_for) instead of the prior hardcoded 'melee'. An unmapped troop_type
+    (the troop file's `primary` arm/loadout_for) instead of the prior hardcoded 'melee'. An unmapped troop_type
     (e.g. the 'infantry' default) resolves to 'melee' either way, so every existing call site that
     relies on the default is byte-exact; only troop_type='archers'/'crossbow'/'sling'/'artillery'/
     'mounted_archers' (or a future loadout-mapped type) with no explicit unit_type now change."""

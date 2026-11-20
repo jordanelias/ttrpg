@@ -33,7 +33,7 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
         STAMINA_DRAIN_PER_CONTACT_CELL, UNIT_ROUT_FLOOR, TICKS_PER_PHASE, VOLLEY_LETHALITY_SCALE, _draw_friction,
         _engaged_cols, _is_moving_atom, _oriented, _unit_snapshot, apply_to_subunit, assign_targets,
         attribute_hp_loss, check_orders, discipline_check_cascade, distribute_casualties,
-        distribute_casualties_cellwise, find_contacts, phase_boundary, reach_for, resolve_cross_side_contention,
+        distribute_casualties_cellwise, find_contacts, phase_boundary, resolve_cross_side_contention,
         resolve_engagements, resolve_engagements_cascading, resolve_toi_and_commit, separate_all_bodies,
         sync_col_grid, trace_event, tracing_on, turn_to_face_aggressors, update_stamina, volley_phase,
     )
@@ -166,7 +166,7 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
                 cached_centroids[id(atom)] = (_ex + _dr * _fr - _dc * _fc, _ey + _dr * _fc + _dc * _fr)
 
         def _cells_float_of(unit):
-            return [(r, c, reach_for(sub.troop_type)) for sub in unit.units for (r, c) in sub.cells_float()]
+            return any(sub.cells_float() for sub in unit.units)      # consulted for truthiness only (below)
 
         # [TOI refactor] b_cells_float/a_cells_float are consulted by _node_advance ONLY for truthiness -- a
         # non-empty list signals "defer to the cross-side TOI resolve rather than commit immediately" (see

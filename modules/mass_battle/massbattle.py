@@ -255,7 +255,13 @@ def _weighted_unit(name, weight, side, morale_start=_MORALE_START_BASE, role=Non
 
     CP-T04-02: `role`, the side's standing order (`_role_fields`); `None` is the side as it was. CP-T04-03: `retreat_at`,
     the order's second key (`_retreat_orders`); `None` or `'none'` is the side as it was."""
-    sizes, _owners = _cut([max(float(under_arms_cap(weight)), _MIN_TROOPS)])
+    return _line_army(name, _cut([max(float(under_arms_cap(weight)), _MIN_TROOPS)])[0], side, morale_start, role, retreat_at)
+
+
+def _line_army(name, sizes, side, morale_start, role, retreat_at):
+    """The one Army a headcount side is: a line unit of each of `sizes` troops, placed by `orderofbattle._place` for `side`, every
+    unit with the side's standing order (`role`) and retreat order (`retreat_at`), the Army with its command and morale.
+    `_weighted_unit` and `_person_unit` differ only in where `sizes` comes from."""
     specs = [_line_spec(role, t) for t in sizes]
     _place(specs, [class_of(sp['troop_type']) for sp in specs], side)
     subs = [Unit(**spec, advance_dir=_SIDE_DIR[side], orders=_retreat_orders(retreat_at)) for spec in specs]
@@ -293,12 +299,7 @@ def _person_unit(name, weights, members, side, morale_start=_MORALE_START_BASE, 
     `_person_namer` and the engine's order of breaking name him by that index; the unit carries no person of its own).
     CP-T04-02: `role`, the side's standing order, is every unit's (`_role_fields`). CP-T04-03: so is `retreat_at`
     (`_retreat_orders`): each unit retreats on its OWN strength."""
-    sizes, _owners = _cut(_person_troops(weights, fed))
-    specs = [_line_spec(role, t) for t in sizes]
-    _place(specs, [class_of(sp['troop_type']) for sp in specs], side)
-    subs = [Unit(**spec, advance_dir=_SIDE_DIR[side], orders=_retreat_orders(retreat_at)) for spec in specs]
-    return Army(name=name, faction=side, power=_SEASON_FORCE_POWER, **_MVP_UNIT_COMMAND,
-                morale=morale_start, morale_start=morale_start, units=subs)
+    return _line_army(name, _cut(_person_troops(weights, fed))[0], side, morale_start, role, retreat_at)
 
 
 def _share(left, start, scale):

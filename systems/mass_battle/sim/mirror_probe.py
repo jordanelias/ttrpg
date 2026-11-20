@@ -26,6 +26,8 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))
 from engine.dice_engine import draw
 
+from engine.season.data.rosters import LOST, WON  # noqa: E402
+from engine.season.seam.ladder import field_degree  # noqa: E402
 from modules.mass_battle import massbattle  # noqa: E402
 from modules.mass_battle.orderofbattle import OrderOfBattle, UnitRow  # noqa: E402
 from modules.mass_battle.terrain import OPEN_FLAT  # noqa: E402
@@ -50,13 +52,7 @@ def one_field(seed):
     """`'A'`, `'B'` or `'drawn'` for the mirror fought on `draw.seeded(draw.H2("mirror_probe", seed))`."""
     a, b = _body("A"), _body("B")
     got = massbattle._run_and_grade(a, b, OPEN_FLAT, draw.seeded(draw.H2("mirror_probe", seed)), _SCALE)
-    a_out = got.attacker.routed or got.attacker.conceded
-    b_out = got.defender.routed or got.defender.conceded
-    if b_out and not a_out:
-        return "A"
-    if a_out and not b_out:
-        return "B"
-    return "drawn"
+    return {WON: "A", LOST: "B"}.get(field_degree(got), "drawn")      # the band rule has one owner, `seam/ladder.py::field_degree`
 
 
 # [JUSTIFIED: the probe's own sample count, a trial number and not a game magnitude]

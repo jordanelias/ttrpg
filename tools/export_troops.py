@@ -37,23 +37,17 @@ if REPO not in sys.path:
 SRC = os.path.join(REPO, 'references', 'troops.yaml')
 OUT = os.path.join(REPO, 'engine', 'engine_params', 'troops.json')
 OUT_PY = os.path.join(REPO, 'modules', 'mass_battle', 'troop_types', 'troops_data.py')
-SEASON_REGISTRIES = os.path.join(REPO, 'engine', 'engine_params', 'season_registries.json')
 SCHEMA_VERSION = 1
-
-
-def _season_site_kinds() -> set:
-    with open(SEASON_REGISTRIES, encoding='utf-8') as fh:
-        return set(json.load(fh)['files']['engine/season/rosters.yaml']['rosters']['site_kinds']['values'])
 
 
 def build() -> dict:
     """The artifact: the file's sections in the loader's order, behind the loader's own refusals."""
-    from engine.season.data.rosters import load_yaml          # refuses a duplicate key: two rows of one name are an error
+    from engine.season.data.rosters import SITE_KINDS, load_yaml   # load_yaml refuses a duplicate key: two rows of one name are an error
     from modules.mass_battle.troop_types import table
     with open(SRC, encoding='utf-8') as fh:
         src = load_yaml(fh.read())
     table.check(src)
-    unknown = sorted(set(src['site_kinds']) - _season_site_kinds())
+    unknown = sorted(set(src['site_kinds']) - SITE_KINDS)
     if unknown:
         raise ValueError(f'site_kinds {unknown} are not members of the season\'s site_kinds')
     out = {

@@ -395,7 +395,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
         # defending force MEANS is eligibility policy for whichever verb calls this."* This
         # wrapper is that caller's derivation half: it does not decide what an unopposed march
         # means for the game, but it does not launder "nobody mustered" into a fabricated fight
-        # against a floor-sized phantom unit either. `attacker_wins`/`unopposed` are top-level so
+        # against a floor-sized phantom unit either. `unopposed` (B17.01 deleted `attacker_wins`) is top-level so
         # `seam/ladder.py::field_degree` can grade this without opening `result`.
         return dict(status="RESOLVED", module=_PROVIDER, resolver="d_sigma",
                     **_NO_FLAGS, unopposed=True,

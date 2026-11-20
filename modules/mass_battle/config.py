@@ -231,7 +231,7 @@ MAX_TROOPS_PER_UNIT = 10000 # design ceiling on a single unit's troop count  # [
 #  density factor (attrition `min(tpc,CELL_CAP)`) drops naturally via the higher ncells, no attrition edit.
 MB_TROOP_DENSITY_CAP = DEFAULT.MB_TROOP_DENSITY_CAP
 # [B17.10] The per-type cap is the troop file's `cell_cap` column (`references/troops.yaml`, read by `troop_types/table.py`):
-# 50 (half of `CELL_CAP`) for the four horse types, `CELL_CAP` for every other row. `TROOP_TYPE_DENSITY_CAP` is deleted; the function stays.
+# 50 (half of `CELL_CAP`) for the four horse types, `CELL_CAP` for every other row. The `cell_cap` column of `references/troops.yaml` is the one owner (B17.10; `TROOP_TYPE_DENSITY_CAP` is deleted).
 def cell_cap_for(troop_type):
     """Max fighting troops per 1x1 cell for a troop type (P-DEC-3). A mounted row packs looser (its `cell_cap`); every
     other type, a type the troop file does not name, and the whole engine when MB_TROOP_DENSITY_CAP is OFF use CELL_CAP -> byte-exact."""
@@ -635,7 +635,7 @@ POOL_QUALITY_MODEL = DEFAULT.POOL_QUALITY_MODEL  # default ON per 2026-07-08 dir
 # gaps on the 16-seed braced-charge fixture of test_mass_battle_support_rank_cap.py are the same size
 # as that fixture's seed noise, so the ordering assertion is not independent evidence for 0.8 over
 # 0.875. It is the default of every non-golden fight; it bites a season field once
-# `field_troops_per_weight` rises above 1 (at 1 every subunit routs on tick 1, H-361).
+# the troops a weight (B17.01 deleted `field_troops_per_weight`; `TROOPS_PER_WEIGHT`, B17.16) are under the unit floor (at 1 every subunit routs on tick 1, H-361).
 POOL_QUALITY_SCALE = DEFAULT.POOL_QUALITY_SCALE
 
 # ─── P-C COMPOSITIONAL-FORMATION ROLES (data; the instruction→primitive wiring is
