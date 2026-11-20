@@ -2954,7 +2954,10 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # `_realm_goldens.CENSUS[(0, 1)]` records the 749). The arms still part in the ledgers, asserted below.
     # ⚠⚠ B06/B14 merge re-pin: (749, 749) -> (750, 750), A RE-RECORD WITH THE UNITS THAT MOVED IT: B14's combat record was pinned against
     # the old stream and now reads against the keyed one (seed 0, one season; `_realm_goldens.CENSUS[(0, 1)]` records the 750).
-    assert (out["acts"], cout["acts"]) == (750, 750), (
+    # ⚠⚠ B07.99 re-pin: (750, 750) -> (630, 628), A RE-RECORD WITH THE UNITS THAT MOVED IT: the task draw is on (B07.05; a refusal carries
+    # no band, B07.10; `reconstruct` is `routine`, B07.11), so a failed draw feeds back into what the realm forms next (seed 0, one season;
+    # `_realm_goldens.CENSUS[(0, 1)]` records the 630); the two arms no longer read the same count, since the dwellings' wear claims part them.
+    assert (out["acts"], cout["acts"]) == (630, 628), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
         "ledgers (not a question answered first, which is asserted above) and part the arms at one "
         "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")
