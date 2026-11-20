@@ -313,13 +313,15 @@
    "name": "Uwe Askeland",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "DEGRADED",
+   "verdict": "BLOCKED",
    "rows": 8,
    "core": 4,
    "core_routed": 4,
    "core_unmapped": 0,
-   "core_blocked": 0,
-   "blockers": [],
+   "core_blocked": 1,
+   "blockers": [
+    "probe:P36"
+   ],
    "unbound": [],
    "routed": [
     {
@@ -394,18 +396,18 @@
      ],
      "resolved": [
       {
-       "ok": true,
+       "ok": false,
        "bound": true,
        "kind": "probe",
-       "detail": "P36: PASS",
+       "detail": "P36: INSTRUMENT-ERROR",
        "probe": "P36",
-       "verdict": "PASS"
+       "verdict": "INSTRUMENT-ERROR"
       }
      ],
      "unbound": [],
      "verdict": {
-      "verdict": "PASS",
-      "detail": "P36: PASS",
+      "verdict": "GAP",
+      "detail": "P36: INSTRUMENT-ERROR",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -9493,8 +9495,8 @@
   },
   "P36": {
    "id": "P36",
-   "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 19 candidates were OFFERED from the computed option set and only 66 of 67 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['sabotage', 'survey', 'train', 'transfer'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "verdict": "INSTRUMENT-ERROR",
+   "detail": "assertion failed: AssertionError(\"only 2 distinct options were open: ['survey', 'transfer', 'transfer']\")",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",
@@ -9908,7 +9910,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 899 == 899 and the LOG CONTENT HASH matches (77117e5d6108...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 895 == 895 and the LOG CONTENT HASH matches (49ede25f0365...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -10953,24 +10955,6 @@
   },
   {
    "kind": "FORBIDDEN",
-   "what": "a (Site, condition) write by p_low changed nothing: it named no subject",
-   "where": "F9",
-   "needs": "a write that moves at least one subject it names",
-   "law": "04 \u00a7C.2 / PART D row 5 (F9) -- `before == after` is refused AT THE WRITE, so the receipt is never minted: a success Event for a write that did not happen is ID-9, and a receipt minted by the gate for it passes every append-side check",
-   "case": "probe:A5",
-   "expected": false
-  },
-  {
-   "kind": "FORBIDDEN",
-   "what": "a (Site, condition) write by p_low changed nothing: it named no subject",
-   "where": "F9",
-   "needs": "a write that moves at least one subject it names",
-   "law": "04 \u00a7C.2 / PART D row 5 (F9) -- `before == after` is refused AT THE WRITE, so the receipt is never minted: a success Event for a write that did not happen is ID-9, and a receipt minted by the gate for it passes every append-side check",
-   "case": "probe:A5",
-   "expected": false
-  },
-  {
-   "kind": "FORBIDDEN",
    "what": "'The Church excommunicates'",
    "where": "S3-L1",
    "needs": "'the Confessor, at a venue, issues'",
@@ -11234,13 +11218,13 @@
  "_trace_counts": {
   "STEP": 7185,
   "BARRIER": 1892,
-  "DECISION": 1937,
-  "QUERY": 30082,
-  "WRITE": 15258,
-  "EVENT": 15283,
+  "DECISION": 1947,
+  "QUERY": 30088,
+  "WRITE": 15248,
+  "EVENT": 15277,
   "ACT": 95,
-  "CLAIM": 1739,
-  "GAP": 91,
+  "CLAIM": 1733,
+  "GAP": 89,
   "NOTE": 203
  },
  "_corpus_defects": []
