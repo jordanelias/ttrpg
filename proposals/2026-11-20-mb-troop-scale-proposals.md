@@ -9,7 +9,7 @@ Ruled (Jordan, 2026-11-20, `registers/editorial_ledger_mb.jsonl` ED-MB-0101), ve
 - "cells can hold 50-100 troops each. a unit is a minimum of 4 cells. this means that the minimum number of units for an army would be 3."
 - "i want the battles to typically be between armies with like 5000 to 10000 troops"
 
-Open, in the order this file takes them: (1) what the floor does when a side falls below it; (2) the troops-per-weight constant; (3) what makes a typical army 5,000 to 10,000; (4) the cell band, which two of your rulings cannot both meet for horse; (5) how many troops may move between cells per tick, and what that does to the unit minimum.
+Open, in the order this file takes them: (1) what the floor does when a side falls below it; (2) the troops-per-weight constant (no decision owed; see P2); (3) what makes a typical army 5,000 to 10,000; (4) the cell band, which two of your rulings cannot both meet for horse; (5) how many troops may move between cells per tick, and what that does to the unit minimum.
 
 ## 1. The chain, as built at B17.16 (read from the tree; every number can be re-run)
 
@@ -61,7 +61,7 @@ Weights present: 1, 2, 3, 4, 6. Troops a side raises under each option:
 - T and S satisfy the band by the constant, so they stop the floor from meaning anything (every place above 5,000). T makes a weight-6 side 30,000: well over the typical band. S breaks additivity (two weight-1 people at one place sum to 7,071, not 10,000) and `_eff_march`'s per-person share assumes the linear form; I have not tested what S moves.
 - H needs no change to the constant. A cohort is 2,000 troops under F; an army of 3 to 5 cohorts is 6,000 to 10,000, which is the ruled typical size, reached by assembly. It needs the withheld army verbs to run in the season, which is not B17's work.
 
-Recommend F plus H: keep 10,000 a weight, and treat the band as what assembled armies reach, not what one place raises. The question for you is the one B17.99 carries: does the floor or the typical size set the constant? If you want the constant to do both, S is the only candidate here that does, at the price of additivity.
+Recommend F plus H: keep 10,000 a weight, and treat the band as what assembled armies reach, not what one place raises. **No decision is owed on the constant.** An earlier draft of this file, and B17.99's commit body, asked whether the floor or the typical size "sets" it; that was a mis-framing, since the floor is a minimum and the typical size is an outcome of composition, and both hold at 10,000 (Jordan, 2026-11-20: the question "doesn't make actually sense"). S (sublinear) is only for a reader who wants one place to raise the typical size by itself, at the price of additivity.
 
 ### P3. Typical army size (5,000 to 10,000)
 
