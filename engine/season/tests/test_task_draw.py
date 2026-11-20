@@ -4,11 +4,7 @@ Three resolution classes, one per writing row, derived at load (`data/verbs.py::
 row has `contests:`), `task` (a `rosters.yaml: graded_tasks` route), `bookkeeping` (`bookkeeping_verbs`), and the rows owed a
 contest by their lane (`contest_owed`). The 18 task rows and `reconstruct` route through `graded_tasks` with `armed_by:
 task_draw_arm`, so `Fixtures.task_draw_arm` decides whether the loop takes the route (`data/rosters.py::graded_route`); it
-ships `off` (the control) until B07.05 flips it on 18-A gate 5's reading.
-
-GREEN HERE (B07.01): gates 2, 4 and 6 and the `contest_owed` refusal. EXPECTED RED UNTIL B07.05 (the arm ships `off`):
-gate 1 (`test_converted_verb_resolves_in_at_least_two_bands`) and gate 3
-(`test_trained_tender_fails_less_than_default_and_neither_is_zero`).
+shipped `off` (the control) until B07.05 flipped it `on` on 18-A gate 5's reading; gate 2 still reads the control `off`.
 """
 
 from __future__ import annotations
@@ -107,11 +103,16 @@ def test_task_row_without_a_route_is_refused_at_load():
     task row (`tend`), whose `draw` clause no route then admits."""
     def unrouted(verb):
         """The row as it stood before its route: the columns only a rolled row may carry removed too, so what refuses it
-        is the class, not the orphaned `capability:`/`difficulty:` (which refuses first, also naming it)."""
+        is the class, not the orphaned `capability:`/`difficulty:` (which refuses first, also naming it), nor a band-keyed
+        `emits:` no route grades (B07.05 keyed `reconstruct`'s: flattened to the band an undrawn act reads)."""
+        from ..data.rosters import UNROUTED_BAND
+
         def mutate(doc):
             row = _row(doc, verb)
             for k in [k for k in row if k.startswith(("capability", "difficulty"))]:
                 row.pop(k)
+            if isinstance(row.get("emits"), dict):
+                row["emits"] = row["emits"][UNROUTED_BAND]
         return mutate
 
     for verb in ("reconstruct", "tend"):
@@ -166,51 +167,117 @@ def test_loader_accepts_shapes_a_and_b_and_refuses_a_band_keyed_route_row():
 
 
 # --------------------------------------------------------------------------------------------------------------------------
-# gates 1 and 3 -- EXPECTED RED UNTIL B07.05 (the arm ships `off`)
+# gates 1 and 3 -- the arm `on` (B07.05)
 # --------------------------------------------------------------------------------------------------------------------------
 
-def test_converted_verb_resolves_in_at_least_two_bands():
-    """18-A gate 1, at the SHIPPED fixtures: seeds 0 to 2, two seasons. Every converted verb with ten or more resolved acts
-    resolves in at least two bands and is not 100 % one band (`checked >= 10` verbs), and Events carrying a degree are at
-    least 90 % of the success Events of non-bookkeeping acts. RED while `task_draw_arm` ships `off` (no converted act carries
-    a degree); B07.05 flips it."""
+def gate1_counts(w) -> dict:
+    """18-A gate 1's reading of one run world: "counts each Event carrying a `degree` by the verb of the act in its `causes`".
+    `bands[verb][band]` counts those Events for a converted verb; `resolved[verb]` its RESOLVED acts, the acts whose Events carry
+    a `degree` (UNDECIDED (12) (ii): a row refused before any draw is no resolved act); `success` the success Events of
+    non-bookkeeping acts (a kind the row emits, not a refusal kind), `graded_success` those carrying a degree. A `contest_owed`
+    row's success Events are counted apart (`owed_success`), outside the share: its degree is its owning lane's contest.
+    [ASSUMPTION: the 90 % share's denominator leaves out `contest_owed` rows -- basis: UNDECIDED (1) (owed to the lane named,
+    each owner deletes its verb from the roster as it adds `contests:`, so the row then joins the count) and UNDECIDED (4)'s
+    precedent ("their gate is their own batch's"); read as written the share is 722 of 827 at seeds 0-2, every ungraded Event
+    an owed row's.]"""
     bands: dict = defaultdict(Counter)
-    acts_by_verb: Counter = Counter()
-    graded_success = success = 0
-    for seed in (0, 1, 2):
-        w = _realm(seed, 2)
-        act_of = {a.id: a for a in w.acts}
-        for e in w.log:
-            a = next((act_of[c] for c in e.causes if c in act_of), None)
-            if a is None or a.verb not in VERB_TABLE or a.verb in BOOKKEEPING_VERBS:
-                continue
-            row = VERB_TABLE[a.verb]
-            if e.kind in row.emits and e.kind not in row.emits_on_refusal:
-                success += 1
-                graded_success += e.degree is not None
-            if a.verb in CONVERTED and e.degree is not None:
-                bands[a.verb][e.degree] += 1
-        for a in w.acts:
-            if a.verb in CONVERTED:
-                acts_by_verb[a.verb] += 1
-    checked = 0
-    for v in CONVERTED:
-        if acts_by_verb[v] < 10:
+    resolved_ids: dict = defaultdict(set)
+    graded_success = success = owed_success = 0
+    act_of = {a.id: a for a in w.acts}
+    for e in w.log:
+        a = next((act_of[c] for c in e.causes if c in act_of), None)
+        if a is None or a.verb not in VERB_TABLE or a.verb in BOOKKEEPING_VERBS:
             continue
-        assert len(bands[v]) >= 2, (v, dict(bands[v]), acts_by_verb[v])
+        row = VERB_TABLE[a.verb]
+        if a.verb in CONTEST_OWED:
+            owed_success += e.kind in row.emits and e.kind not in row.emits_on_refusal
+        elif e.kind in row.emits and e.kind not in row.emits_on_refusal:
+            success += 1
+            graded_success += e.degree is not None
+        if a.verb in CONVERTED and e.degree is not None:
+            bands[a.verb][e.degree] += 1
+            resolved_ids[a.verb].add(a.id)
+    return {"bands": {v: dict(c) for v, c in bands.items()}, "resolved": {v: len(s) for v, s in resolved_ids.items()},
+            "success": success, "graded_success": graded_success, "owed_success": owed_success}
+
+
+def gate1_verdict(per_seed: list) -> tuple:
+    """`(failures, checked, totals)` over the seeds' `gate1_counts`: a failure is a converted verb with ten or more resolved
+    acts that resolves in fewer than two bands or is 100 % one band."""
+    bands: dict = defaultdict(Counter)
+    resolved: Counter = Counter()
+    success = graded_success = owed_success = 0
+    for c in per_seed:
+        for v, b in c["bands"].items():
+            bands[v].update(b)
+        resolved.update(c["resolved"])
+        success += c["success"]
+        graded_success += c["graded_success"]
+        owed_success += c["owed_success"]
+    failures, checked = [], 0
+    for v in CONVERTED:
+        if resolved[v] < 10:
+            continue
+        n = sum(bands[v].values())
+        if len(bands[v]) < 2 or max(bands[v].values()) == n:
+            failures.append((v, dict(bands[v]), resolved[v]))
         checked += 1
-    assert checked >= 10, (checked, dict(acts_by_verb))
-    assert success and graded_success >= 0.9 * success, (graded_success, success)
+    return failures, checked, {"resolved": dict(resolved), "success": success, "graded_success": graded_success,
+                               "owed_success": owed_success}
 
 
-def test_trained_tender_fails_less_than_default_and_neither_is_zero():
-    """18-A gate 3: odds respond to state -- `tend` by a tender trained in its skill against one at `pool_default`, 200 planted
-    acts each: the trained tender's Failure share is lower, and neither is 0. RED UNTIL B07.05, and then until `tend` names a
-    skill: UNDECIDED (11) (iv) gives it `capability: none` (no defined skill covers it), so no tender can be trained in it."""
-    key = VERB_TABLE["tend"].capability
-    assert key and key != "none", (
-        "`tend` names no skill (`capability: none`, UNDECIDED (11) (iv)): there is no trained tender to compare")
-    assert DEFAULT_FIXTURES.get("task_draw_arm") == "on", "the task draw ships off (B07.05 flips it)"
+def test_converted_verb_resolves_in_at_least_two_bands():
+    """18-A gate 1, at the SHIPPED fixtures: seeds 0 to 2, two seasons. Every converted verb with ten or more RESOLVED acts
+    (acts whose Events carry a `degree`, UNDECIDED (12) (ii)) resolves in at least two bands and is not 100 % one band
+    (`checked >= 10` verbs), and Events carrying a degree are at least 90 % of the success Events of non-bookkeeping acts
+    (a `contest_owed` row's left out, `gate1_counts`). RED with `task_draw_arm` `off` (no converted act carries a degree)."""
+    failures, checked, t = gate1_verdict([gate1_counts(_realm(seed, 2)) for seed in (0, 1, 2)])
+    assert not failures, failures
+    assert checked >= 10, (checked, t["resolved"])
+    assert t["success"] and t["graded_success"] >= 0.9 * t["success"], (t["graded_success"], t["success"])
+
+
+#: The skill gate 3 plants on `tend` for its own duration (UNDECIDED (12) (i)): any of the five registered skills; `tend` ships
+#: `capability: none` (a sixth skill moves the arm-off hashes; the skill is the `tend` lane's, B12c).
+#: [ASSUMPTION: `inquiry`, one the hearth's two persons hold none of -- basis: UNDECIDED (12) (i) names no member of the five.]
+PLANTED_SKILL = "inquiry"
+
+
+def test_trained_tender_fails_less_than_default_and_neither_is_zero(rank_trained=3):
+    """18-A gate 3, as UNDECIDED (12) (i) reads it: the odds respond to the pool the one rule reads. `tend` names no skill as
+    shipped, so the test PLANTS one for its own duration (`tend`'s row `capability:` and `VERB_CAPABILITY`, the map `pool.py`
+    reads, both monkeypatched to `PLANTED_SKILL`), with the arm `on` in the world's fixtures: a tender holding it at 3 against
+    the same tender untrained (his score `pool_default`, D-U1-11j), 200 planted `tend` acts each -- the trained tender's
+    Failure share is lower, and neither is 0. FALSIFIER: `rank_trained=0` (the plant reads nothing) fails the assertion."""
+    from dataclasses import replace
+
+    from .test_in10_record_operands import _resolve
+    from .test_in12_step9 import PATIENT, TENDER, _tend_acts, _world
+
+    assert VERB_TABLE["tend"].capability == "none" and "tend" not in VERBS.VERB_CAPABILITY   # CONTROL: shipped, no skill
+    key = PLANTED_SKILL
+    on = DEFAULT_FIXTURES.sweep("task_draw_arm", "on")
+
+    def failure_share(rank) -> float:
+        w, d = _world(on)
+        assert key not in (w.persons[PATIENT].capability or {}) and key not in (w.persons[TENDER].capability or {})
+        if rank is not None:
+            w.persons[TENDER].capability = {**(w.persons[TENDER].capability or {}), key: rank}
+        low = w.fixtures.get("condition_scale") * 2 // 5
+        (act,) = _tend_acts(w)
+        bands: Counter = Counter()
+        for i in range(200):                     # 200 planted acts, each its own id and so its own keyed draw
+            w.persons[PATIENT].body = low
+            graded = [e.degree for e in _resolve(w, d, replace(act, id=f"{act.id}#{i}")) if e.degree is not None]
+            assert len(graded) == 1, graded      # each act was drawn, and reports one band
+            bands[graded[0]] += 1
+        assert sum(bands.values()) == 200, bands
+        return bands["Failure"] / 200
+
+    with mock.patch.dict(VERB_TABLE, {"tend": replace(VERB_TABLE["tend"], capability=key)}), \
+            mock.patch.dict(VERBS.VERB_CAPABILITY, {"tend": key}):
+        trained, untrained = failure_share(rank_trained), failure_share(None)
+    assert 0 < trained < untrained and untrained > 0, (trained, untrained)
 
 
 # --------------------------------------------------------------------------------------------------------------------------

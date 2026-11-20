@@ -2076,7 +2076,12 @@ verbs:
     requires_typed_note: "`fieldwork_v30.md:298` -- *Reconstruct · Recall · Assemble existing evidence into a coherent picture. No new information gathered — this action synthesises.* The precondition is that there IS assembled evidence, and `fieldwork_v30.md:256`'s Evidence Track is a count over what the investigator holds -- which in this loop is the actor's own ledger, the one ledger `04 §B.2`'s F8 carve-out lets the fold read. Same form and same cell shape as `tell`. ⚠ WHAT THIS CELL DOES NOT CARRY IS THE OBSTACLE, AND CANON GIVES ONE: `Ob = (threshold − current progress), min 1` (:298), where the threshold is 3 / 5 / 8 by investigation scope (`:262-264`) chosen at opening BY A GM (`:266`) -- a role this engine does not have. A `Question` carries `(id, source, referents, about)` and no scope, so there is nothing to read a threshold off; picking one is §42.2.1's invented number. ED-FI-0009."
     writes:      []
     writes_note: "— (as `examine`. ⚠ AND CANON WANTS MORE THAN A CLAIM HERE: `:278` makes a FAILED Reconstruct produce a plausible but WRONG conclusion the player acts on. A Claim carries `value` and `confidence` (`state/carriers.py:121-131`), so the carrier exists -- what is missing is the degree that would decide which to mint, which is the same ruling)"
-    emits:       ["finding.made"]
+    emits:
+      Overwhelming: ["finding.made"]
+      Success:      ["finding.made"]
+      Partial:      ["finding.made"]
+      Failure:      ["finding.none"]
+    emits_note: "B07.05 (workplan v12 B07-task-draw UNDECIDED (2); 18-A): degree-keyed as the three inquiries are, graded by its armed `graded_tasks` route (`task_draw_arm`). `Failure` emits `finding.none`, which WITNESS deposits nothing for; the WRONG conclusion of `:278` is still not minted (see `writes_note`). With the arm `off` the fold reads the `Success` row (`UNROUTED_BAND`) with no degree, as before B07."
     emits_on_refusal: ["finding.none"]
     grade:       "ruled"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:298 (§4.2), :256-280 (§4.1), :323 (§4.3)"
