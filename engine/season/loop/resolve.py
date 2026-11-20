@@ -329,6 +329,13 @@ def _margin_ending(resolution: "Resolution | None") -> tuple:
     return tuple(zip(MARGIN_ENDING, (r[k] for k in src))) if all(k in r for k in src) else ()
 
 
+def _refusal_degree(row: "VerbRow", degree):
+    """B07.10: the band a REFUSAL Event carries. A task row (`draw_kinds` set) is drawn before its write is known, so a
+    refusal after the draw is a precondition failed, not an outcome: `None`, as `_admits`'s and `_refuse_party_gap`'s refusals
+    carry none. A contested row keeps its band (unchanged). The `draw` clause's `<verb>.failed` keeps its band (an outcome)."""
+    return None if row.draw_kinds else degree
+
+
 def _fold(self, w: "World", token: Token, a: Act,
           resolution: "Resolution | None" = None) -> list[Event]:
     """ONE act through the table: the SAME code for every act and every caller.
@@ -390,6 +397,10 @@ def _fold(self, w: "World", token: Token, a: Act,
     def ev(kinds, changes=None):
         return _act_events(self, w, a, kinds, changes, _degree, verdict.observed)
 
+    def refuse(kinds):
+        # B07.10: a refusal is a precondition failed, never an outcome (04 §C.4), so a task act's refusal carries no band.
+        return _act_events(self, w, a, kinds, None, _refusal_degree(row, _degree), verdict.observed)
+
     # §E2's first two steps, THROUGH THE ONE OWNER (`_admits`): `resolve()`'s contest branch never
     # enters this function, so written out here they would be skipped there.
     # ⚠ `verdict` IS REBOUND, and `ev` reads it at CALL time by closing over the NAME -- so a
@@ -397,7 +408,7 @@ def _fold(self, w: "World", token: Token, a: Act,
     # honest (eligibility reads tenures, not the requirement).
     _ok, _refusal_kinds, verdict = self._admits(w, a, row)
     if not _ok:
-        return ev(_refusal_kinds)
+        return refuse(_refusal_kinds)
     # B07.05 (18-A "The resolution, decided" 4, A-81): A LOST DRAW WRITES NOTHING AND EMITS THE ROW'S `draw` CLAUSE. A drawn
     # `task` row at a band whose share is zero (`task_share`, `rosters.yaml: task_fraction`; no band named here) folds to its
     # keyed `emits_on_refusal` clause `draw` (`<verb>.failed`), stamped with the band, before any effect runs: the act was
@@ -478,7 +489,7 @@ def _fold(self, w: "World", token: Token, a: Act,
                            chose="emit the refusal, not the success",
                            alternatives=["emit `emits:` anyway (publishes an event for a "
                                          "state change that did not happen)"])
-            return ev(_demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,))
+            return refuse(_demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,))
         # ⚠ H-143 (B03.76): THE GATE'S REFUSAL EMITS TOO, `04 §C`'s row *"a refusal emits, never
         # raises"* (MECHANICAL). `NotYours` is F3's judgment that the write is not the actor's; a
         # precondition that admitted what the gate then refuses would end the season here, where
@@ -493,7 +504,7 @@ def _fold(self, w: "World", token: Token, a: Act,
             TRACE.decision(f"{a.verb}: the gate refused the write", "C.4",
                            chose="emit the refusal, not raise",
                            alternatives=["raise NotYours (ends the season)"])
-            return ev(_demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,))
+            return refuse(_demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,))
     # The act's proposed changes ride on the success Events -- §27.3's accumulator sums
     # them across the fold and clamps ONCE, which is order-independent as a fact.
     # ⚠ `[a.id]`, NOT `[ROOT]`. §19.4: "an Event with NO ANTECEDENT declares `causes: [ROOT]`" --
@@ -1227,7 +1238,7 @@ def _refuse_after_the_fact(self, w: "World", out: list, act_ids: list) -> None:
         # refusal one step later -- the same clause a declining effect refuses at.
         refusal = _act_events(self, w,
                               a, _demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,),
-                              degree=first.degree, observed=first.observed)
+                              degree=_refusal_degree(row, first.degree), observed=first.observed)
         for i in at:
             self.act_of.pop(out[i].id, None)
             # v9 FI-03: a find keyed on a replaced Event would outlive it (WITNESS pops by the ids it

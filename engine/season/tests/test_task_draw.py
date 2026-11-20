@@ -182,7 +182,9 @@ def gate1_counts(w) -> dict:
     an owed row's.]"""
     bands: dict = defaultdict(Counter)
     resolved_ids: dict = defaultdict(set)
-    graded_success = success = owed_success = 0
+    graded_success = success = owed_success = refusals_checked = 0
+    verb_success: Counter = Counter()
+    banded_refusals: list = []
     act_of = {a.id: a for a in w.acts}
     for e in w.log:
         a = next((act_of[c] for c in e.causes if c in act_of), None)
@@ -194,47 +196,99 @@ def gate1_counts(w) -> dict:
         elif e.kind in row.emits and e.kind not in row.emits_on_refusal:
             success += 1
             graded_success += e.degree is not None
+        if a.verb in TASKS and e.kind in row.emits_on_refusal and e.kind not in row.emits:
+            refusals_checked += 1                    # B07.10: a task act's refusal is no outcome and carries no band
+            if e.degree is not None:
+                banded_refusals.append((a.verb, e.kind, e.degree))
+        if a.verb in CONVERTED and e.kind in row.emits and e.kind not in row.emits_on_refusal:
+            verb_success[a.verb] += 1
         if a.verb in CONVERTED and e.degree is not None:
             bands[a.verb][e.degree] += 1
             resolved_ids[a.verb].add(a.id)
     return {"bands": {v: dict(c) for v, c in bands.items()}, "resolved": {v: len(s) for v, s in resolved_ids.items()},
-            "success": success, "graded_success": graded_success, "owed_success": owed_success}
+            "success": success, "graded_success": graded_success, "owed_success": owed_success,
+            "verb_success": dict(verb_success), "refusals_checked": refusals_checked, "banded_refusals": banded_refusals}
+
+
+#: UNDECIDED (4)'s nine converted verbs refused or unexecuted before B07, built out by B12c, B22, B23 and B26 (a literal: the
+#: test reads no prose). A converted verb with ten or more resolved acts and no success Event is `unbuilt`, and must be one.
+UNBUILT_OK = {"train", "recruit", "work", "restore", "build", "found", "raze", "sabotage", "marshal"}
 
 
 def gate1_verdict(per_seed: list) -> tuple:
     """`(failures, checked, totals)` over the seeds' `gate1_counts`: a failure is a converted verb with ten or more resolved
-    acts that resolves in fewer than two bands or is 100 % one band."""
+    acts that resolves in fewer than two bands or is 100 % one band. B07.10 (UNDECIDED (4)): one with ten or more resolved acts
+    and zero success Events in the run is not built out, reported in the totals as `unbuilt` and neither failed nor checked."""
     bands: dict = defaultdict(Counter)
     resolved: Counter = Counter()
+    verb_success: Counter = Counter()
+    refusals_checked, banded_refusals = 0, []
     success = graded_success = owed_success = 0
     for c in per_seed:
         for v, b in c["bands"].items():
             bands[v].update(b)
         resolved.update(c["resolved"])
+        verb_success.update(c["verb_success"])
+        refusals_checked += c["refusals_checked"]
+        banded_refusals += c["banded_refusals"]
         success += c["success"]
         graded_success += c["graded_success"]
         owed_success += c["owed_success"]
-    failures, checked = [], 0
+    failures, checked, unbuilt = [], 0, []
     for v in CONVERTED:
         if resolved[v] < 10:
+            continue
+        if not verb_success[v]:
+            unbuilt.append(v)
             continue
         n = sum(bands[v].values())
         if len(bands[v]) < 2 or max(bands[v].values()) == n:
             failures.append((v, dict(bands[v]), resolved[v]))
         checked += 1
     return failures, checked, {"resolved": dict(resolved), "success": success, "graded_success": graded_success,
-                               "owed_success": owed_success}
+                               "owed_success": owed_success, "unbuilt": sorted(unbuilt), "verb_success": dict(verb_success),
+                               "refusals_checked": refusals_checked, "banded_refusals": banded_refusals}
 
 
 def test_converted_verb_resolves_in_at_least_two_bands():
     """18-A gate 1, at the SHIPPED fixtures: seeds 0 to 2, two seasons. Every converted verb with ten or more RESOLVED acts
     (acts whose Events carry a `degree`, UNDECIDED (12) (ii)) resolves in at least two bands and is not 100 % one band
     (`checked >= 10` verbs), and Events carrying a degree are at least 90 % of the success Events of non-bookkeeping acts
-    (a `contest_owed` row's left out, `gate1_counts`). RED with `task_draw_arm` `off` (no converted act carries a degree)."""
+    (a `contest_owed` row's left out, `gate1_counts`); no task row's refusal Event carries a degree (B07.10). RED with `task_draw_arm` `off` (no converted act carries a degree)."""
     failures, checked, t = gate1_verdict([gate1_counts(_realm(seed, 2)) for seed in (0, 1, 2)])
     assert not failures, failures
     assert checked >= 10, (checked, t["resolved"])
+    assert set(t["unbuilt"]) <= UNBUILT_OK, t["unbuilt"]                        # B07.10: not built out, not failed
+    assert t["refusals_checked"] >= 1, t["refusals_checked"]                   # B07.10: a task refusal carries no band
+    assert not t["banded_refusals"], t["banded_refusals"]
     assert t["success"] and t["graded_success"] >= 0.9 * t["success"], (t["graded_success"], t["success"])
+
+
+def test_a_refused_task_act_carries_no_band():  # [ASSUMPTION: test name]
+    """B07.10 (UNDECIDED (13) (i)): a drawn `tend` act on a patient already at his ceiling is drawn, then its write declines. A
+    refusal is a precondition failed, never an outcome (04 section C.4): every Event is `tend.refused` with no degree, or
+    `tend.failed` (the `draw` clause, an outcome) at `Failure`. 200 planted acts, each its own keyed draw. FALSIFIER:
+    `_refusal_degree` returning `degree` stamps the band on the refusal and this fails."""
+    from dataclasses import replace
+
+    from .test_in10_record_operands import _resolve
+    from .test_in12_step9 import PATIENT, _tend_acts, _world
+
+    on = DEFAULT_FIXTURES.sweep("task_draw_arm", "on")
+    w, d = _world(on)
+    ceiling = w.fixtures.get("condition_scale")
+    (act,) = _tend_acts(w)
+    refused = failed = 0
+    for i in range(200):
+        w.persons[PATIENT].body = ceiling
+        for e in _resolve(w, d, replace(act, id=f"{act.id}#{i}")):
+            if e.kind == "tend.refused":
+                assert e.degree is None, (i, e.degree)
+                refused += 1
+            else:
+                assert e.kind == "tend.failed" and e.degree == "Failure", (i, e.kind, e.degree)
+                failed += 1
+    assert refused >= 1 and failed >= 1, (refused, failed)
 
 
 #: The skill gate 3 plants on `tend` for its own duration (UNDECIDED (12) (i)): any of the five registered skills; `tend` ships
