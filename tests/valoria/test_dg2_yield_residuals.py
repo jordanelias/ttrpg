@@ -7,31 +7,28 @@ ED-MB-0005 shipped the yield STATE + COMMANDED entry. This covers the three expl
 
 All three are GATED OFF by default (MB_YIELD_EMERGENT / MB_YIELD_RALLY / MB_YIELD_POCKET) -> inert and
 byte-exact; the emergent path in particular has the largest blast radius (§4.3)."""
-import importlib
-import os
-import sys
+import dataclasses
 
 
 import pytest  # noqa: E402
 
-from systems.mass_battle.sim import multi as M  # noqa: E402  (B17.05: the multi-battle loops moved out of the module)
+from systems.mass_battle.sim import variant  # noqa: E402
+from systems.mass_battle.sim import multi as M  # noqa: E402  (B17.05: the loops moved out of the module; `_reload` rebinds it to the variant's)
 
 
 def _reload(**flags):
-    for k in ('MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'MB_YIELD_POCKET'):
-        os.environ[k] = '1' if flags.get(k) else '0'
+    """The engine built from a config whose three yield switches are `flags` (each unnamed one off; B17.12: the module reads
+    no process variable). `M` is rebound to the variant's multi-battle loops, since the module-level one is the shipped tree's."""
+    global M
+    off = {k: bool(flags.get(k)) for k in ('MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'MB_YIELD_POCKET')}
+    variant.install(dataclasses.replace(variant.DEFAULT, **off))
     import modules.mass_battle.config as C
-    importlib.reload(C)
     import modules.mass_battle.core.exchange as X
-    importlib.reload(X)
     import modules.mass_battle.core.state as S
-    importlib.reload(S)
     import modules.mass_battle.hierarchy.units as U
-    importlib.reload(U)
     import systems.mass_battle.sim.engine as E
-    importlib.reload(E)
     import modules.mass_battle.orchestration as O
-    importlib.reload(O)
+    import systems.mass_battle.sim.multi as M
     return C, X, S, U, E, O
 
 
@@ -143,6 +140,4 @@ def test_pocket_removes_pool_malus():
 
 
 def teardown_module(module):
-    for k in ('MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'MB_YIELD_POCKET'):
-        os.environ.pop(k, None)
-    _reload()
+    variant.restore()

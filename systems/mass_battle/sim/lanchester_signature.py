@@ -24,8 +24,11 @@ import contextlib
 import os, random, statistics
 
 # Lanchester must be ON for the signatures to hold (default ON; assert explicitly).
-os.environ.setdefault('LANCHESTER_ENABLED', '1')
-os.environ.setdefault('PER_CELL', '0')
+import dataclasses  # noqa: E402
+from systems.mass_battle.sim import variant  # noqa: E402
+# [B17.12] the engine is built from a config: this script's own defaults (the per-cell layer off), over any variable its caller
+# exported, over the shipped config. The engine reads no process variable.
+variant.install(variant.cfg_from_environ(os.environ, base=dataclasses.replace(variant.DEFAULT, PER_CELL=False)))
 
 from modules.mass_battle.config import BLOCK_SIZE, TROOPS_PER_TIER   # [ED-MB-0050 / A6a] the annihilation threshold
 from systems.mass_battle.sim.engine import (Unit, Army, run_battle,
@@ -378,7 +381,8 @@ def check_law_exponents():
 def run():
     assert LANCHESTER_ENABLED, "signatures require LANCHESTER_ENABLED=1"
     results = [check_linear(), check_square(), check_no_annihilation(), check_law_exponents()]
-    print("=== P-L Lanchester signature tests (PER_CELL=%s) ===" % os.environ.get('PER_CELL'))
+    from modules.mass_battle import config as _mb_cfg
+    print("=== P-L Lanchester signature tests (PER_CELL=%s) ===" % _mb_cfg.PER_CELL)
     allok = True
     for row in results:
         name, ok, detail = row[0], row[1], row[2]

@@ -15,75 +15,48 @@ not a dice-pool penalty. Three requirements, each asserted here:
 The legacy -2-dice path (MB_OCTAGON_DMG=0) is preserved and asserted byte-unchanged by the existing
 bat.py digest + persubunit stress suite; this module exercises only the ON (default) model.
 """
-import os
-import sys
-
-
 import contextlib  # noqa: E402
-import importlib  # noqa: E402
+import dataclasses  # noqa: E402
 import random  # noqa: E402
 
 import pytest  # noqa: E402
 
+from systems.mass_battle.sim import variant  # noqa: E402
 
-_MB_ENV = {'PER_CELL': '1', 'MB_REFUSE': '1', 'LANCHESTER_ENABLED': '1',
-           'MB_OCTAGON_DMG': '1', 'MB_FRACTIONAL_POOL': '1'}
+_MB_CFG = {'PER_CELL': True, 'MB_REFUSE': True, 'LANCHESTER_ENABLED': True,
+           'MB_OCTAGON_DMG': True, 'MB_FRACTIONAL_POOL': True}
 
 
 def _load_mb(**overrides):
-    """Reload the mass_battle modules under an explicit flag set, honouring os.environ as it
-    stands. Callers own the env; this only rebuilds the modules from it."""
+    """Build the mass_battle engine from an explicit `EngineConfig` (B17.12: the modules read no process variable; the old
+    fixture set variables and reloaded modules). An override is a field name and a switch, `True`/`False` or `'1'`/`'0'`."""
+    cfg = dict(_MB_CFG)
+    cfg.update({k: v in (True, 1, '1') for k, v in overrides.items()})
+    variant.install(dataclasses.replace(variant.DEFAULT, **cfg))
     import modules.mass_battle.config as C
-    importlib.reload(C)
     import modules.mass_battle.hierarchy.units as U
-    importlib.reload(U)
     U.FIELD_MOVEMENT = False
     import modules.mass_battle.orchestration as orch
-    importlib.reload(orch)
     import modules.mass_battle.core.contact as contact
-    importlib.reload(contact)
     return orch, contact, C
 
 
 @contextlib.contextmanager
 def _mb_modules(**overrides):
-    """Load the mass_battle modules under a flag set AND PUT THEM BACK afterwards.
+    """Build the mass_battle engine under a flag set AND PUT THE SHIPPED ONE BACK afterwards.
 
     [ED-MB-0063] THE LEAK THIS CLOSES. The old fixture reloaded `modules.mass_battle.config` under its own
-    env and set `units.FIELD_MOVEMENT = False`, with **no teardown**. `monkeypatch` restores the
-    environment VARIABLES, but a reloaded module keeps the values it was built from — so every test
-    that ran after this module in the same worker inherited this module's flags and a disabled
-    FIELD_MOVEMENT. That is a write with no matching restore: §0.1 #1's read/write asymmetry, in
-    test scaffolding rather than engine code.
-
-    IT IS OBSERVABLE, which is why it is worth fixing rather than noting. Measured on `main`, with
-    nothing changed: `pytest tests/valoria/test_stochastic_rout.py` alone fails
-    `test_per_cell_break_subsumes_the_body_level_one`, while
-    `pytest tests/valoria/test_octagon_damage.py tests/valoria/test_stochastic_rout.py` fails
-    `test_loser_breaks_near_historical_band` instead — the same two files, a different verdict,
-    decided by nothing but order. Under `-n auto` the distribution across workers varies run to
-    run, which is why that pair contributes an unstable 0-2 failures to the suite total on an
-    unchanged tree (measured 9, then 8, on two `main` runs of the identical command).
-
-    This does NOT claim to fix the flaky pair — those tests have their own coupling through
-    `S.MB_STOCHASTIC_ROUT` / `U.MB_CELL_MORALE`, and this module is only one of several leaking
-    into them. It removes THIS module from the set of contributors, which is the part I own.
+    flags and set `units.FIELD_MOVEMENT = False`, with **no teardown**: a reloaded module keeps the values it was
+    built from, so every test that ran after this module in the same worker inherited this module's flags and a
+    disabled FIELD_MOVEMENT. That is a write with no matching restore (§0.1 #1), in test scaffolding. It was
+    observable: `pytest tests/valoria/test_stochastic_rout.py` alone and after this file reached different verdicts,
+    decided by nothing but order. A built variant leaves the shipped modules untouched and `variant.restore()` puts
+    them back by name, so there is nothing left to leak (B17.12).
     """
-    saved_env = {k: os.environ.get(k) for k in {**_MB_ENV, **overrides}}
-    os.environ.update(_MB_ENV)
-    os.environ.update({k: str(v) for k, v in overrides.items()})
     try:
-        yield _load_mb()
+        yield _load_mb(**overrides)
     finally:
-        for k, v in saved_env.items():
-            if v is None:
-                os.environ.pop(k, None)
-            else:
-                os.environ[k] = v
-        # Rebuild from the RESTORED environment so the next test sees ambient state, not ours.
-        _load_mb()
-        import modules.mass_battle.hierarchy.units as U
-        importlib.reload(U)   # last word: undo the FIELD_MOVEMENT override too
+        variant.restore()
 
 
 @pytest.fixture

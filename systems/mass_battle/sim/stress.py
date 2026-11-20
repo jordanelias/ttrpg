@@ -49,7 +49,8 @@ M = {}   # the module's names, filled by _load() AFTER the arm's flags and the g
 
 
 def _load(arm_env: dict, grid) -> None:
-    os.environ.update(arm_env)
+    from systems.mass_battle.sim import variant
+    variant.install(variant.cfg_from_environ({**os.environ, **arm_env}))   # B17.12: the engine is built from the arm's config
     import modules.mass_battle.config as cfg
     if grid:
         cfg.BATTLEFIELD_SIZE = grid            # before anything else star-imports it

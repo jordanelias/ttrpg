@@ -30,6 +30,9 @@ import sys, os, random, statistics
 
 # import the package exactly as bat.py (the G5 digest harness) does
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # tests/sim on path
+if __name__ == '__main__':   # [B17.12] a run from the command line builds the engine from the toggles its caller exported
+    from systems.mass_battle.sim import variant
+    variant.install(variant.cfg_from_environ(os.environ))
 from systems.mass_battle.sim.engine import (  # noqa: E402
     Unit, Army, SIDE_A_START_ROW, SIDE_B_START_ROW,
     run_battle, run_multi_turn_battle, build_unit, build_army, build_envelopment, build_refused_flank,

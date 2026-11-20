@@ -2,7 +2,7 @@
 
 A tiny, dependency-free building block the weapons and armour modules share: an OPEN record (any field
 set is allowed, so the schema can evolve as the primitive grounding is worked out) plus a mutable
-Registry (define / override / extend / remove entries at runtime). No engine import and no resolution
+Registry (define and extend entries). No engine import and no resolution
 logic — equipment is a DATA surface the rest of the engine will read from once it is wired.
 
 Design intent (Jordan 2026-06-30): weapons and armour are their OWN modules so they can be adjusted to
@@ -47,7 +47,7 @@ class EquipmentRecord:
 class Registry:
     """A mutable, ordered, case-insensitive name -> EquipmentRecord catalogue.
 
-    DYNAMIC: register / override / extend / remove at import OR at runtime, so a later grounding pass, a
+    DYNAMIC: register / extend at import OR at runtime, so a later grounding pass, a
     mod, or a campaign can reshape the catalogue without editing the seed file. Lookups are tolerant
     (`get` returns a default for an unknown name instead of raising), so the catalogue can grow
     incrementally while callers degrade gracefully."""
@@ -70,17 +70,6 @@ class Registry:
         """Insert an already-built record (e.g. a `.variant(...)`)."""
         self._by_name[self._key(record.name)] = record
         return record
-
-    def override(self, name, **fields):
-        """Patch fields on an existing entry, or create it if absent. Returns the record."""
-        rec = self.get(name)
-        if rec is None:
-            return self.register(name, **fields)
-        rec.__dict__.update(fields)
-        return rec
-
-    def remove(self, name):
-        self._by_name.pop(self._key(name), None)
 
     def get(self, name, default=None):
         if name is None:

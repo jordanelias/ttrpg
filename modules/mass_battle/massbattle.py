@@ -11,9 +11,11 @@ each side and the part that broke first.
 from __future__ import annotations
 
 import math
+from dataclasses import asdict
 
 from engine.season.queries.inputs import FieldOutcome, PartOutcome, SideOutcome
 from modules.mass_battle import rngsource
+from modules.mass_battle import config as _config
 from modules.mass_battle.config import CELL_CAP, MAX_TROOPS_PER_UNIT, ROLE_SPEC
 from modules.mass_battle.hierarchy.units import Order, Unit, Army, unit_conceded
 from modules.mass_battle.orchestration import run_battle
@@ -401,7 +403,7 @@ def _side_outcome(unit, scale, parts, broke_first):
                        conceded=bool(unit_conceded(unit)), parts=parts, broke_first=broke_first)
 
 
-def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
+def resolve_field(inp, rng=None, *, cfg=None, troops_a=None, troops_b=None, decide=None, duel=None):
     """THE SEASON-FACING ENTRY POINT, AND THE `mass_battle` MODULE'S ENTRY (A-25, plan position `31c`) --
     `04 §C.5.1`'s roster contract, reconciled with this module's OWN requirement for an `Army` to hand
     `run_battle`.
@@ -480,7 +482,16 @@ def resolve_field(inp, rng=None, *, troops_a=None, troops_b=None):
 
     B17.03: returns a frozen `FieldOutcome` on every arm (`_run_and_grade`'s), each share an integer on `inp.condition_scale`.
     B17.04: or a refusal dict (`_refusal`: `SCALE-GAP` past `MAX_TROOPS_PER_UNIT`, `PARTY-GAP` for two sides of nobody) on which
-    `run_battle` is never entered."""
+    `run_battle` is never entered.
+
+    B17.12: `cfg` is the engine's `EngineConfig`, stated, never found: `None` is the shipped one (`config.DEFAULT`). The
+    module's constants are read off the config this tree was built from, so a config that is not this tree's own is
+    refused here by name, not run as if it were: a variant is a tree built from it
+    (`systems/mass_battle/sim/variant.py`), whose own `resolve_field` accepts it. `decide` and `duel` are the seams
+    for a decision hook and a duel resolver, `None` and passed by nothing yet (B20, B30)."""
+    if cfg is not None and asdict(cfg) != asdict(_config.DEFAULT):
+        raise ValueError("resolve_field: cfg is not this engine's config; build the engine from it "
+                         "(systems/mass_battle/sim/variant.py) and call that engine's resolve_field")
     weight_a, weight_b = (sum(side) for side in inp.weights)
     if troops_a is not None:
         weight_a = troops_a

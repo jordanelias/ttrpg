@@ -23,25 +23,20 @@ that shared convention the realized hold rates are Disc-1 ~40% (matches PP-256 e
 ~74.5%. PP-256's "~87%" is the no-botch binomial idealization 1-0.6^4; we deliberately DO NOT introduce
 a bespoke botch-free success-counter for this one check (that would be a scale-local dialect — a
 CLAUDE.md §10 guardrail violation). Hold rate rising monotonically with Discipline is the invariant."""
-import importlib
-import os
+import dataclasses
 import random
-import sys
+
+from systems.mass_battle.sim import variant
 
 
 import pytest  # noqa: E402
 
 
 def _reload(on):
-    os.environ['MB_FEIGNED_RETREAT'] = '1' if on else '0'
+    """The engine built from a config with the feigned-retreat switch `on` (B17.12: the module reads no process variable)."""
+    variant.install(dataclasses.replace(variant.DEFAULT, MB_FEIGNED_RETREAT=on))
     import modules.mass_battle.config as C
-    importlib.reload(C)
-    import modules.mass_battle.resolution as R
-    importlib.reload(R)
-    import modules.mass_battle.hierarchy.units as U
-    importlib.reload(U)
     import modules.mass_battle.orchestration as O
-    importlib.reload(O)
     return C, O
 
 
@@ -144,8 +139,8 @@ def _build_unit(on):
 def test_overextended_pool_penalty_applies_only_when_gated_on():
     """multi.base_combat_pool: an overextended pursuer's pool is cut by OVEREXTEND_PENALTY when the toggle is
     ON; the flag is inert when OFF (byte-exact)."""
-    from systems.mass_battle.sim.multi import base_combat_pool   # B17.05: a function of the army, moved out of Army
     C, u = _build_unit(on=True)
+    from systems.mass_battle.sim.multi import base_combat_pool   # B17.05: a function of the army; read from the tree just built
     base = base_combat_pool(u)
     u.overextended = True
     penalized = base_combat_pool(u)
@@ -154,6 +149,7 @@ def test_overextended_pool_penalty_applies_only_when_gated_on():
 
     # OFF: the flag is inert.
     _, u2 = _build_unit(on=False)
+    from systems.mass_battle.sim.multi import base_combat_pool   # the OFF tree is a new build: its own function
     off_base = base_combat_pool(u2)
     u2.overextended = True
     assert base_combat_pool(u2) == off_base, "OFF: overextended flag must be inert (byte-exact)"
@@ -227,5 +223,4 @@ def test_feign_retreat_end_to_end_through_resolve_feigned_retreat():
 
 
 def teardown_module(module):
-    os.environ.pop('MB_FEIGNED_RETREAT', None)
-    _reload(on=False)
+    variant.restore()

@@ -7,27 +7,20 @@ run_multi_unit_battle: a reserve pair is benched turn 1 and re-activates at the 
 
 GATED behind MB_RESERVE_COMMIT (default OFF): the `reserve` instruction stays inert and every pair is
 active from turn 1 (byte-exact; run_multi_unit_battle is not in the bat.py golden battery anyway)."""
-import importlib
-import os
+import dataclasses
 import random
-import sys
+
+from systems.mass_battle.sim import variant
 
 
 import pytest  # noqa: E402
 
 
 def _reload(on):
-    os.environ['MB_RESERVE_COMMIT'] = '1' if on else '0'
+    """The engine built from a config with the reserve-commit switch `on` (B17.12: the module reads no process variable)."""
+    variant.install(dataclasses.replace(variant.DEFAULT, MB_RESERVE_COMMIT=on))
     import modules.mass_battle.config as C
-    importlib.reload(C)
-    import modules.mass_battle.resolution as R
-    importlib.reload(R)
-    import modules.mass_battle.hierarchy.units as U
-    importlib.reload(U)
     import systems.mass_battle.sim.engine as E
-    importlib.reload(E)
-    import modules.mass_battle.orchestration as O
-    importlib.reload(O)
     import systems.mass_battle.sim.multi as M   # B17.05: the loops moved out of the module; reads O's constants at call time
     return C, E, M
 
@@ -88,5 +81,4 @@ def test_no_reserve_units_unaffected():
 
 
 def teardown_module(module):
-    os.environ.pop('MB_RESERVE_COMMIT', None)
-    _reload(on=False)
+    variant.restore()

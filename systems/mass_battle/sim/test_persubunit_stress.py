@@ -12,8 +12,13 @@ Exit 0 = all pass.  [canonical: designs/provincial/mass_battle_v30.md §A.4, §A
 # Regression for the per-subunit work -- ED entries logged in the ledger.  [canonical: canon/editorial_ledger.jsonl]
 import os, sys
 
-for _k in ('PER_CELL', 'LANCHESTER_ENABLED', 'COMMAND_SIGMA_ENABLED', 'MB_BRACE_ENABLED'):
-    os.environ.setdefault(_k, '1')
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))   # repo root
+import dataclasses  # noqa: E402
+from systems.mass_battle.sim import variant  # noqa: E402
+# [B17.12] the four switches this script runs under (all on, the shipped values) stated as a config, over any variable its
+# caller exported; the engine reads no process variable.
+variant.install(variant.cfg_from_environ(os.environ, base=dataclasses.replace(
+    variant.DEFAULT, PER_CELL=True, LANCHESTER_ENABLED=True, COMMAND_SIGMA_ENABLED=True, MB_BRACE_ENABLED=True)))
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + '/sim')
 # allow direct in-package run too:
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

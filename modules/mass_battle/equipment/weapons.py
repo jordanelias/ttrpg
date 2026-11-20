@@ -12,7 +12,7 @@ percussion, armour-defeat mode) — that grounding and the cross-scale mapping a
 when they land they slot into these OPEN records (just add fields) without a schema migration and without
 touching the resolver.
 
-DYNAMIC: register / override / extend ARSENAL at import or runtime. ADAPTABLE: records are open;
+DYNAMIC: register / extend ARSENAL at import or runtime. ADAPTABLE: records are open;
 `.variant()` spins regional/quality variants off a base. No engine import, no resolution logic — a data
 surface. `troop_types.registry.unit_type_for` reads a weapon's `reach` through `equipment.loadout_for`.
 [provisional source: mass_battle_v30.md §B.2 — TTRPG Weapon column + Anti-Armour / Volley keywords]
