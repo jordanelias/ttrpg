@@ -87,6 +87,13 @@ def test_the_total_arm_actually_changes_the_casualty_write():
         assert len(attackers) == 2 and len(defenders) == 6, (
             f"the fixture no longer gives a 2-v-6 mismatch here ({attackers}, {defenders}); "
             "pick an origin/target pair that still does")
+        # B17.01: a person's weight IS his troops (30 a weight) and a unit under the 80-troop rout floor routs on tick 1, so
+        # the shipped weight-1 realm folds a `Drawn` field (refused, nobody hurt). Weigh each marcher 3 (90 troops) against
+        # six of weight 10 (300), `test_march.py::_contested`'s sides, so the battle reaches him and the attacker loses.
+        for pid in attackers:
+            w.persons[pid].weight = 3
+        for pid in defenders:
+            w.persons[pid].weight = 10
         if attackers_before is None:
             attackers_before = {pid: w.persons[pid].body for pid in attackers}
         act = _march_act("p_npc_033", "set_s_036", "off_spymaster")
