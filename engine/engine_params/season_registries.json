@@ -2400,6 +2400,27 @@
             "interview": "14_VERBS_SOCIAL2_C_case_question_confession"
           }
         },
+        "task_fraction": {
+          "source": "`proposals/2026-11-12-subsystem-audit-suite/proposals/18_DETERMINISM_task_draw_for_uncontested_verbs.md` \"The resolution, decided\" 4: `{Failure: 0, Partial: 0.5, Success: 1, Overwhelming: 1}`; `U5c_VERBS_residue` \u00a71 edit 3 (one name, one set of first values).",
+          "row": "H-164",
+          "note": "[ASSUMPTION; medium; Jordan to correct; revert: Partial 1, which makes the middle band as good as a success]. An act with no band (the arm `off`, or a flat un-routed act) reads the full effect, share 1 (`task_share(None)`), so the arm `off` folds as it always did. A band absent here is refused at load.",
+          "bands": {
+            "Failure": 0,
+            "Partial": 0.5,
+            "Success": 1,
+            "Overwhelming": 1
+          }
+        },
+        "forge_quality": {
+          "source": "18-A \"Exact edits\" 1 (`forge_quality`, a roster replacing the constant `default_forgery_quality`); workplan v12 B07-task-draw UNDECIDED (9).",
+          "row": "H-210",
+          "note": "[ASSUMPTION; medium; Jordan to correct; revert: Partial 1, a flawed document as good as a sound one]. Success and Overwhelming carry the shipped `default_forgery_quality` (1, \"as today\"); Partial `0` is a flawed document that adds nothing to the examiner's obstacle (found as easily as a true one is read); Failure has no row: no Record is made.",
+          "bands": {
+            "Overwhelming": 1,
+            "Success": 1,
+            "Partial": 0
+          }
+        },
         "undeposited_kinds": {
           "source": "RS-21 item 1 (H-111 ANSWERED [medium; Jordan to correct]): SKIP at WITNESS, except keyed kinds a verb declares (`news.untold` and `tell.refused` stay, T4; CP-T05-03 split the one kind in two) -- a refused inquiry deposits nothing, and no `finding.none` is deposited. Built by v9 FI-01 as the deposit half of `ED-FI-0009`.",
           "row": "H-111",
@@ -5521,7 +5542,7 @@
             "Record.exists",
             "Record.forgery_quality"
           ],
-          "writes_note": "one mint, `survey`'s: `_mint_document` writes the Record whole -- the sheet `faction_q.resolve` gives, with the forger as its `head` -- with the forger's `hold` riding on its receipt (`T-m`). `Record.forgery_quality` (check-only, the same mint), declared with its reader (`H-210`, v9 SC-02 `22b` step 25): the Record carries `Fixtures.default_forgery_quality`, and an inquiry examining it carries that quality into its roll's obstacle (`seam/wrappers/sigma.py::contest_input` -> `modules/social_contest/roll.py::obstacle`). A pair written and read by nothing is `ID-13`'s defect, so the pair, its writer and its reader stand or go together. [ASSUMPTION; medium; Jordan to correct; revert: drop the pair, the writer and the reader together.]",
+          "writes_note": "one mint, `survey`'s: `_mint_document` writes the Record whole -- the sheet `faction_q.resolve` gives, with the forger as its `head` -- with the forger's `hold` riding on its receipt (`T-m`). `Record.forgery_quality` (check-only, the same mint), declared with its reader (`H-210`, v9 SC-02 `22b` step 25): the Record carries `rosters.yaml: forge_quality`'s value for its band (B07.02; `Fixtures.default_forgery_quality` is retired), and an inquiry examining it carries that quality into its roll's obstacle (`seam/wrappers/sigma.py::contest_input` -> `modules/social_contest/roll.py::obstacle`). A pair written and read by nothing is `ID-13`'s defect, so the pair, its writer and its reader stand or go together. [ASSUMPTION; medium; Jordan to correct; revert: drop the pair, the writer and the reader together.]",
           "emits": [
             "record.forged"
           ],

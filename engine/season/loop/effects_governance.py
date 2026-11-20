@@ -23,7 +23,7 @@ from ..state.gate import (NO_CHANGE, TENURE_CLOSED, Change, Subject, claimable_s
                           revocation_disposal)
 from ..state.ids import H
 
-from .effects_shared import _exercised_office, _new_oblige_term, _operand, _shift, effect_for
+from .effects_shared import _exercised_office, _new_oblige_term, _operand, _scaled, _shift, effect_for
 
 # --- THE GOVERNANCE SLICE'S EFFECTS. `dispatch` needs none: Part E gives it `writes: []`, so an
 # order is an EMISSION and nothing else, which is `L1` in one row -- a dispatch does not move a
@@ -519,5 +519,7 @@ def _eff_requisition(w: "World", a: "Act", res: "Resolution | None" = None) -> C
     kind, amount = _operand(a, "kind"), _operand(a, "amount")
     if src is None or dst is None:
         return NO_CHANGE
+    # B07.02 (18-A edit 5): "the share of `amount` taken" is the band's (`_scaled`; no band, or a full one, takes it all).
+    amount = _scaled(amount, res) if isinstance(amount, int) else amount
     return Change((Subject.entity("rungs", src.id), Subject.entity("rungs", dst.id)),
                   lambda: _shift(src, dst, kind, amount))

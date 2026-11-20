@@ -211,3 +211,54 @@ def test_trained_tender_fails_less_than_default_and_neither_is_zero():
     assert key and key != "none", (
         "`tend` names no skill (`capability: none`, UNDECIDED (11) (iv)): there is no trained tender to compare")
     assert DEFAULT_FIXTURES.get("task_draw_arm") == "on", "the task draw ships off (B07.05 flips it)"
+
+
+# --------------------------------------------------------------------------------------------------------------------------
+# B07.02 -- each magnitude and quality effect reads the band through one fraction
+# --------------------------------------------------------------------------------------------------------------------------
+
+def test_no_effect_names_a_band():
+    """18-A edit 5, the falsifier: no `loop/effects_*.py` carries a string literal that is a band, so an effect reads the band
+    only through `task_share` / `forge_quality_at` (`data/rosters.py`). `ast`, so a comment or a docstring does not count."""
+    import ast
+    from pathlib import Path
+
+    from ..data.rosters import DEGREE_BANDS
+    files = sorted((Path(__file__).resolve().parent.parent / "loop").glob("effects_*.py"))
+    assert len(files) >= 4, files
+    named = [(f.name, n.lineno, n.value) for f in files for n in ast.walk(ast.parse(f.read_text()))
+             if isinstance(n, ast.Constant) and isinstance(n.value, str) and n.value in DEGREE_BANDS]
+    assert not named, named
+
+
+def test_the_band_scales_each_magnitude_through_one_share():
+    """`task_share` is the one table: a flat act (`None`) is share 1 and every band reads the `task_fraction` roster; the effects
+    that scale a magnitude (`tend`, `_rise`) land the share of it, and with no band the whole -- the control the realm hash rests on."""
+    from fractions import Fraction
+
+    from ..data.rosters import DEGREE_BANDS, FORGE_QUALITY, TASK_FRACTION, forge_quality_at, task_share
+    from ..loop.effects_economy import _rise
+    from ..loop.effects_shared import EFFECTS
+    from ..seam.contest import Resolution
+    from .test_in12_step9 import PATIENT, _tend_acts, _world
+
+    assert task_share(None) == 1 and set(TASK_FRACTION) == set(DEGREE_BANDS)
+    assert {task_share(b) for b in DEGREE_BANDS} == set(TASK_FRACTION.values()) and Fraction(1, 2) in TASK_FRACTION.values()
+    checked = 0
+    for band, share in TASK_FRACTION.items():
+        w, _d = _world()
+        scale = w.fixtures.get("condition_scale")
+        low = scale * 2 // 5
+        w.persons[PATIENT].body = low
+        (act,) = _tend_acts(w)
+        EFFECTS["tend"](w, act, Resolution(band, {})).apply()
+        assert w.persons[PATIENT].body == low + (scale - low) * share.numerator // share.denominator, (band, share)
+        checked += 1
+    assert checked == len(DEGREE_BANDS)
+    # the flat act: no `res` is the whole headroom, `Failure` none, `Partial` strictly between
+    w, _d = _world()
+    site = next(s for s in w.sites.values() if s.condition < w.fixtures.get("condition_scale"))
+    whole, half, none = _rise(w, site), _rise(w, site, Resolution("Partial", {})), _rise(w, site, Resolution("Failure", {}))
+    assert whole > 0 and none == 0 and 0 < half < whole and _rise(w, site, Resolution("Success", {})) == whole, (whole, half, none)
+    # the quality table: the unrouted act reads Success's row, Failure makes no document
+    assert forge_quality_at(None) == FORGE_QUALITY["Success"] and forge_quality_at("Failure") is None

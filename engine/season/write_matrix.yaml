@@ -348,7 +348,7 @@ rows:
     by:      "DR-2"
     emits:   "`record.forged`"
     # ⚠ PRODUCED SINCE v9 SC-02 `22b` STEP 25 (B-P), WRITER WITH READER (`H-210`): `forge` writes it
-    # (`loop/effects_information.py::_eff_forge`, `Fixtures.default_forgery_quality`) and an inquiry examining
+    # (`loop/effects_information.py::_eff_forge`, `rosters.yaml: forge_quality`) and an inquiry examining
     # the Record reads it into its obstacle (`seam/wrappers/sigma.py::contest_input` ->
     # `modules/social_contest/roll.py::obstacle`), so the `unproduced: "H-210: ..."` line is struck.
   - kind:    "Record"

@@ -23,7 +23,7 @@ from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
 from ..data.rosters import (
     CHALLENGE_KIND, CHALLENGE_TERMS, CHALLENGER_KEY, COVER_KEY, COVER_KIND, FACTION_BY_PROP, ORDER_AT_KEY, ORDER_KIND,
     ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, RECORD_CONTENT, RECORD_KIND_KEYS, STAKES_KEY,
-    SUBTREE_OCCUPATION_KINDS,
+    SUBTREE_OCCUPATION_KINDS, forge_quality_at,
 )
 from ..gaps import Forbidden
 from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
@@ -290,7 +290,12 @@ def _eff_conceal(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
 
     What the cover DOES is not here: `state/attribution.py::anchor_of` reads it (`live_cover`)."""
     d = a.payload if isinstance(a.payload, dict) else {}
-    return _mint_document(w, a, COVER_KIND, {COVER_KEY: a.actor}, d.get("rung") or a.actor)
+    # B07.02 (18-A edit 5): a DRAWN cover carries its band's `forge_quality` (the examining draw reads it as obstacle); an act with
+    # no band writes the `0` it always did, and a band with no row (Failure) makes no cover.
+    quality = 0 if res is None else forge_quality_at(res.degree)
+    if quality is None:
+        return NO_CHANGE
+    return _mint_document(w, a, COVER_KIND, {COVER_KEY: a.actor}, d.get("rung") or a.actor, forgery_quality=quality)
 
 
 @effect_for("challenge")
@@ -775,17 +780,20 @@ def _eff_survey(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     return _mint_sheet(w, a)
 
 
-def _mint_sheet(w: "World", a: "Act", forged: bool = False) -> Change:
+def _mint_sheet(w: "World", a: "Act", forged: bool = False, res: "Resolution | None" = None) -> Change:
     """THE BODY `survey` AND `forge` SHARE: the resolved sheet (`NO_CHANGE` where the subject coheres
-    under no faction), with one key falsified and `default_forgery_quality` written if `forged` (v9
-    SC-02 `22b` step 25; a survey's sheet carries `0`), minted through `_mint_document` where the
-    maker stands. `"hold"` still opens inside `_mint_document`, so the opener derivation reaches it."""
+    under no faction), with one key falsified and the band's `rosters.yaml: forge_quality` written if `forged` (v9
+    SC-02 `22b` step 25; B07.02: the roster replaced `default_forgery_quality`, and an act with no band reads its
+    `Success` row, the shipped 1; a survey's sheet carries `0`; a band with no row, Failure, makes no document), minted
+    through `_mint_document` where the maker stands. `"hold"` still opens inside `_mint_document`, so the opener derivation reaches it."""
     sheet = _resolved_sheet(w, a)
     if sheet is None:
         return NO_CHANGE
+    quality = forge_quality_at(None if res is None else res.degree) if forged else 0
+    if quality is None:
+        return NO_CHANGE
     if forged:
         sheet[_FORGED_SHEET_KEY] = a.actor
-    quality = w.fixtures.get("default_forgery_quality") if forged else 0
     return _mint_document(w, a, faction_q.SHEET_KIND, sheet, place_of(w, a.actor) or a.actor,
                           forgery_quality=quality)
 
@@ -836,7 +844,7 @@ def _eff_forge(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     which a computed act cannot carry (`H-94`).]
 
     ⚠ v9 SC-02 `22b` STEP 25: `Record.forgery_quality` IS WRITTEN HERE, WITH ITS READER IN THE SAME
-    CHANGE (`H-210`): the minted sheet carries `Fixtures.default_forgery_quality` (`_mint_sheet`, through
+    CHANGE (`H-210`): the minted sheet carries `rosters.yaml: forge_quality`'s value for its band (`_mint_sheet`, through
     `_mint_document`), and an EXAMINATION contests it -- an inquiry's roll on the Record (`research`,
     rolled through `graded_tasks`' route) carries the quality into its obstacle
     (`seam/wrappers/sigma.py::contest_input` -> `modules/social_contest/roll.py::obstacle`), so a better
@@ -845,7 +853,7 @@ def _eff_forge(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     executor's ledger -- by construction, not by a flag"* (r2 §A.15) -- so the content deposit
     (`loop/witness.py`) hands a holder the same claim either way; what this forgery does downstream is
     its false `head`, and how hard it is to find out. [ASSUMPTION; medium; Jordan to correct; revert:
-    `default_forgery_quality = 0`, the control, and the examination reads every Record alike.]
+    every `forge_quality` row `0`, the control, and the examination reads every Record alike.]
 
     DECLINES (`NO_CHANGE` -> `forge.refused`, the `write` clause) exactly where `survey` does: the
     subject coheres under no single faction. (So a forge on a RUNG mints since v9 IN-12, as a survey
@@ -856,7 +864,7 @@ def _eff_forge(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     would any holder: the instrument does not know he wrote it (the deposit carries no attribution,
     r2 §A.9). His own petition on it would be addressed to himself and is declined person-side
     (`counterparty:`), so the lie misleads others, not him, on the one decision that reads it."""
-    return _mint_sheet(w, a, forged=True)
+    return _mint_sheet(w, a, forged=True, res=res)
 
 
 # The kind each half of `give` earns: the `give` row's `emits:` in its declared order (`verb_table.yaml`,

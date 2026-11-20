@@ -17,7 +17,7 @@ from ..state.carriers import Term
 from ..state.gate import NO_CHANGE, Change, Subject, may_renew
 from ..trace_log import TRACE
 
-from .effects_shared import _exercised_office, _oblige_term, _operand, _shift, effect_for
+from .effects_shared import _exercised_office, _oblige_term, _operand, _share, _shift, effect_for
 
 
 @effect_for("work")
@@ -99,12 +99,12 @@ def _eff_work(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # `sum((0,))`, so testing the summed value would also replace a hand-built act's declared `0`
     # with the works' rise, which is not what "the act declares none" (above) says.
     if not site_deltas and fabric is not None and works_for(w, fabric.rung, fabric.kind):
-        delta = _rise(w, fabric)
+        delta = _rise(w, fabric, res)
     cell = Subject.staged("Site", site, "condition")
     return Change((cell,), lambda: w.stage(cell.ref[1], a.id, delta))
 
 
-def _rise(w: "World", site) -> int:
+def _rise(w: "World", site, res: "Resolution | None" = None) -> int:
     """HOW FAR ONE ACT RAISES A FABRIC -- the ONE owner of `restore`'s formula, which `work` also
     reads when it advances a works (plan position `24e`). `verb_table.yaml`'s `restore` row:
     `Δ = +(1 − condition) × f(degree) × share` (§54 item 7's mirror), in fixed point:
@@ -116,15 +116,11 @@ def _rise(w: "World", site) -> int:
       * `× share` IS `queries/world_q.py::share`, `(1, n)` for `n` persons standing at the fabric --
         r2 §A.6.4's commons: at a harbour forty stand at, one act moves a fortieth of the headroom.
         Multiply first, divide last, so the fraction is exact to the int.
-      * ⚠ `× f(degree)` IS NOT BUILT, AND THE REASON IS THE FOLD'S, NOT THE FORMULA'S. r2 §A.6.5 reads
-        it off `res.degree` (*"the existing degree ladder, not a new one"*), but `restore` and `work`
-        are UNCONTESTED -- no `contests:` -- and `_fold` hands every such act `resolution=None`
-        (*"`None` on every uncontested act, which is honest: no contest graded it"*), so r2's own
-        body would raise on `None.degree`. The term is therefore the IDENTITY: an act no contest
-        graded is taken whole. REJECTED: a fixture factor (an invented number standing where the
-        design says a degree goes) and routing `restore` through a contest (a prize no subsystem
-        claims, `rosters.yaml: contest_subsystems`). `H-164` carries the term, and the sweep r2
-        declares for `share`.
+      * `× f(degree)` (B07.02, `H-164`'s hook) IS `rosters.yaml: task_fraction` read off `res.degree` through
+        `effects_shared._share` -- the one table, no band named here. An act with no `res` -- `restore` and `work`
+        fold flat while `task_draw_arm` is `off`, and `_fold` hands every such act `resolution=None` -- is
+        taken whole (share 1), the identity it was before the draw. Multiply first, divide last: the share's
+        numerator and denominator ride the same product, so the int is exact.
 
     So the pace of a works is its TERMS (the ceiling) and its COMMONS (the share), never a rate:
     one hand alone at a fabric raises it to its ceiling in one act, and then nobody can raise it
@@ -133,7 +129,8 @@ def _rise(w: "World", site) -> int:
     if not headroom:
         return 0
     num, den = share(w, site)
-    return (headroom * num) // den
+    f = _share(res)
+    return (headroom * num * f.numerator) // (den * f.denominator)
 
 
 def _fall(w: "World", site) -> int:
@@ -180,7 +177,7 @@ def _eff_restore(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     """PLAN POSITION `24e` -- `restore` RAISES A FABRIC. The row is TYPED (`verb_table.yaml`, W3's
     cell: *the site exists and the actor is present at it*) and this is its effect: without one
     `resolvable_verbs()` excludes the verb. r2 `04` §A.6.2's moment 4, *"BUILD IT UP"*, and §A.6.5's body, built as
-    specified but for the degree term (`_rise` says why that is the identity).
+    specified; its degree term is `_rise`'s (B07.02: the identity while the act folds flat).
 
     `work`'s ACCUMULATOR SHAPE, EXACTLY (G4, `_eff_work`'s docstring): the act STAGES its delta on
     `(Site, condition)` through `World.stage`, named as a `staged` subject, and `resolve()` sums every
@@ -203,7 +200,7 @@ def _eff_restore(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     site = w.sites.get(sid)
     if site is None:
         return NO_CHANGE
-    delta = _rise(w, site)
+    delta = _rise(w, site, res)
     cell = Subject.staged("Site", sid, "condition")
     return Change((cell,), lambda: w.stage(cell.ref[1], a.id, delta))
 

@@ -3137,7 +3137,7 @@ def test_t2_align_kind_reads_the_one_emitter_and_a_deed_key_needs_an_emitted_kin
     # The rule recomputed from the table independently of `_derive_kind_verb`.
     emitters = {}
     for verb, row in VERB_TABLE.items():
-        for kind in set(row.emits) | set(row.emits_on_refusal):
+        for kind in set(row.emits) | set(row.emits_on_refusal) | set(row.draw_kinds):   # B07.01: a lost draw's `<verb>.failed` is emitted too
             emitters.setdefault(kind, set()).add(verb)
     assert set(EMITTED_KINDS) == set(emitters) and EMITTED_KINDS
     assert KIND_VERB == {k: next(iter(vs)) for k, vs in emitters.items() if len(vs) == 1}

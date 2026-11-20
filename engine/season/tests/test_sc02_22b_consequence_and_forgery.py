@@ -56,7 +56,7 @@ def _sweep_of(hid):
     reading): the arms come from the register, never from this file."""
     rows = yaml.safe_load(files.HOLE_REGISTER_YAML.read_text())["rows"]
     (row,) = [r for r in rows if r["id"] == hid]
-    return row["sweep"], row["site"].split(",")[0].split()[-1]
+    return row["sweep"], (row["site"] if hid == "H-210" else row["site"].split(",")[0].split()[-1])
 
 
 def _lean(e):
@@ -235,6 +235,17 @@ def test_step24_the_matrix_row_has_its_producer_and_the_lean_has_one_owner():
 # STEP 25 -- the forgery's quality: written by forging, contested by examination
 # ======================================================================================
 
+DEFAULT_QUALITY = 1   # `forge_quality`'s `Success` row, the shipped value (the old `default_forgery_quality`)
+
+
+def _quality(q):
+    """B07.02: `Fixtures.default_forgery_quality` is retired; a flat `forge` reads `rosters.yaml: forge_quality`'s `Success` row, so
+    the swept point `H-210` names is that row's value, patched for the world built inside the `with`."""
+    from unittest import mock
+    from ..data.rosters import FORGE_QUALITY, UNROUTED_BAND
+    return mock.patch.dict(FORGE_QUALITY, {UNROUTED_BAND: q})
+
+
 def _fx(**kv):
     f = DEFAULT_FIXTURES
     for k, v in kv.items():
@@ -242,10 +253,11 @@ def _fx(**kv):
     return f
 
 
-def _research_out(n, **fx):
+def _research_out(n, quality=None, **fx):
     """`trail_world` at `fx`, then the investigator's chooser-formed `research` `n` on the forged Record,
     resolved and witnessed. Returns `(w, rid, finding Event)`."""
-    w, d, rid = trail_world(fixtures=_fx(**fx))
+    with _quality(DEFAULT_QUALITY if quality is None else quality):
+        w, d, rid = trail_world(fixtures=_fx(**fx))
     cand = chooser_research(w, rid)
     assert cand is not None
     (finding,) = step(w, d, research(n, cand))
@@ -255,10 +267,11 @@ def _research_out(n, **fx):
 def test_step25_forge_writes_the_quality_and_survey_does_not():
     """THE WRITER, through the fold, at each of `H-210`'s declared points: the forged Record carries the
     arm's quality; a SURVEY (the same body, `_mint_sheet`, the same id and hand) carries `0`."""
-    points, fixture = _sweep_of("H-210")
-    assert fixture == "default_forgery_quality" and 0 in points and len(points) == 3, (fixture, points)
+    points, site = _sweep_of("H-210")
+    assert "rosters.yaml: forge_quality" in site and 0 in points and len(points) == 3, (site, points)
     for point in points:
-        w, _d, rid = trail_world(fixtures=_fx(**{fixture: point}))
+        with _quality(point):
+            w, _d, rid = trail_world()
         assert w.records[rid].forgery_quality == point, (point, w.records[rid].forgery_quality)
     w, _d, rid = trail_world(verb="survey", kind="faction.surveyed")
     assert w.records[rid].forgery_quality == 0
@@ -277,8 +290,9 @@ def test_step25_falsifier_the_examination_reads_the_quality_into_its_obstacle():
     for q in (0, 1, 3):
         for ceiling, per_pool in ((None, False), (DEFAULT_FIXTURES.get("obstacle_ceiling"), False),
                                   (DEFAULT_FIXTURES.get("obstacle_ceiling"), True)):
-            w, _d, rid = trail_world(fixtures=_fx(default_forgery_quality=q, obstacle_ceiling=ceiling,
-                                                  ceiling_per_pool=per_pool, pool_default=30))
+            with _quality(q):
+                w, _d, rid = trail_world(fixtures=_fx(obstacle_ceiling=ceiling,
+                                                      ceiling_per_pool=per_pool, pool_default=30))
             out = sigma.resolve(w, [INVESTIGATOR], ["root"], None, verb="research", subject=rid,
                                 rng=draw.seeded(draw.H2("test_sc02_22b_consequence_and_forgery", 0)), module_entry="social_contest.roll")
             assert out["status"] == "RESOLVED", out
@@ -326,8 +340,8 @@ def test_step25_a_better_forgery_is_found_less_and_finding_it_deposits_the_forge
     finds nothing and leaves him holding no such claim: *finding nothing leaves it standing*."""
     flipped = compared = 0
     for n in range(SWEEP):
-        w0, _r0, f0 = _research_out(n, default_forgery_quality=0, obstacle_ceiling=None)
-        w1, _r1, f1 = _research_out(n, default_forgery_quality=1, obstacle_ceiling=None)
+        w0, _r0, f0 = _research_out(n, quality=0, obstacle_ceiling=None)
+        w1, _r1, f1 = _research_out(n, quality=1, obstacle_ceiling=None)
         assert DEGREE_STEP[f1.degree] <= DEGREE_STEP[f0.degree], (n, f0.degree, f1.degree)
         compared += 1
         if f0.kind == "finding.made" and forged_claims(w0, INVESTIGATOR) and f1.kind == "finding.none":
