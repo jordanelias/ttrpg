@@ -144,7 +144,7 @@ def test_mode_a_speak_into_a_bench_shows_the_odds_the_room_deals():
         w.persons[HEARER].ledger.append(_deed(f"fav{i}", HEARER, SPEAKER, kind))
     assert _kinds(_fold_acts(w, d, _open_case("oc"))) == ["case.opened"]
     room = world_q.place_of(w, SPEAKER)
-    assert world_q.reception(w, SPEAKER, room) > 0.0, "the fixture's bench does not receive the speaker"
+    assert world_q.reception(w, SPEAKER, world_q.judging_set(w, room)) > 0.0, "the fixture's bench does not receive the speaker"
     act = Act(id="a:speak", actor=SPEAKER, verb="speak", payload={"subject": PARTY})
     odds = sigma.odds_of(w, act)
     with_room = sigma.contest_input(w, [SPEAKER, PARTY], verb="speak", subject=PARTY, room=room)

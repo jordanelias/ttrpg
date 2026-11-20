@@ -64,7 +64,7 @@ import math
 import sys
 from dataclasses import asdict
 from types import SimpleNamespace
-from typing import Any, Optional
+from typing import Any, NamedTuple, Optional
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
 from engine.dice_engine.draw import Draw
@@ -84,10 +84,11 @@ from ...queries.person_q import believed_capability, stance_toward
 # `manifest/registry.py` imports only `data/` and `gaps` and `queries/` is below `seam/`, so the
 # two imports below close none either.
 from ...manifest.providers import provider
-from ...manifest.registry import BELIEVED_ESTIMATE_ROLE, BENCH, call as _provider_for, resolve as _prize_row
+from ...manifest.registry import (BELIEVED_ESTIMATE_ROLE, BENCH, HEARD_BY_ROOMS, RESIDENTS, SEAT_BODY, TOWARD_TO, call as _provider_for,
+                                  resolve as _prize_row)
 from ...queries.inputs import Margin, SocialContestInput
 # The room's two resolver-side reads. The host READS them; the module composes the obstacle they move.
-from ...queries.world_q import docketed_under, proofs, reception
+from ...queries.world_q import docketed_under, hold_force, judging_set, proofs, reception, residence_of
 from ...state.carriers import EFFORT, effort_of
 from ...state.gate import UNDECLARED_DISPOSAL, sits_over
 from ._entry import entry_for
@@ -298,9 +299,58 @@ def _favour_levels(fx: Any, operands: dict) -> tuple:
 
 
 # ---------------------------------------------------------------------------------------------
+# THE AUDIENCE A ROOM MEANS (B07.04, `U5c_VERBS_residue` §2 edit 2): ONE TABLE KEYED BY ROOM AND NOTHING ELSE. A prize row's `heard_by:` names a
+# room (`manifest/registry.py::HEARD_BY_ROOMS`); `audience_of` answers the persons who hear an act in it, and `world_q.reception` and `proofs` take
+# that tuple. No row of the table, and no branch around it, names a verb: the room is the prize row's, the act supplies only who acts, through
+# which seat, and where.
+# ---------------------------------------------------------------------------------------------
+class HeardAct(NamedTuple):
+    """The act as a room reads it: its actor, the seat it is exercised through (`Act.via`) and its place (the rung the seam hands the
+    provider: the actor's own, or the venue a hand-built roll names)."""
+    actor: str
+    via: Optional[str]
+    place: Optional[str]
+
+
+def _bench(w: Any, act: HeardAct) -> tuple:
+    """`bench`: who sits over the act's place -- `world_q.judging_set`, today's read."""
+    return tuple(judging_set(w, act.place))
+
+
+def _seat_body(w: Any, act: HeardAct) -> tuple:
+    """`seat_body`: the seated persons of the body the act's seat belongs to (`Office.body`); a seat of no body, the seated persons at that
+    seat's rung. A seat the world lacks, or no seat, hears nobody."""
+    seat = w.offices.get(act.via) if act.via is not None else None
+    if seat is None:
+        return ()
+    peers = [oid for oid, o in w.offices.items()
+             if (o.body == seat.body if seat.body is not None else seat.rung is not None and o.rung == seat.rung)]
+    held = (hold_force(w, oid) for oid in peers)
+    return tuple(dict.fromkeys(t.subject for t in held if t is not None and t.subject in w.persons))
+
+
+def _residents(w: Any, act: HeardAct) -> tuple:
+    """`residents`: the persons whose live `reside` edge is the act's place (`world_q.residence_of`, RESIDENTS, not persons present)."""
+    return () if act.place is None else tuple(p for p, at in residence_of(w).items() if at == act.place)
+
+
+_AUDIENCES = {BENCH: _bench, SEAT_BODY: _seat_body, RESIDENTS: _residents}
+if set(_AUDIENCES) != HEARD_BY_ROOMS:
+    raise Unspecified(
+        f"`audience_of`'s table keys {sorted(_AUDIENCES)} are not `HEARD_BY_ROOMS` {sorted(HEARD_BY_ROOMS)}", "04 PART E step 10",
+        needs="one row of the table for each room a prize row may name",
+        law="a room `_check_heard_by` admits and no reader answers would hear nobody, silently")
+
+
+def audience_of(w: Any, act: HeardAct, room: str) -> tuple:
+    """The persons who hear `act` in `room`: the one reader of what a room name means, by room alone."""
+    return _AUDIENCES[room](w, act)
+
+
+# ---------------------------------------------------------------------------------------------
 # THE `office` SOURCE (B05.20, U1-D, D-U1-01 and D-U1-01a; OBS §3): a seat's `modifier:` is ONE named level for an act exercised THROUGH that seat
 # (`Act.via`), in a room its bench sits over. `_seat_modifier` is the one reader of the seat's row value: it answers only where the
-# prize row says `heard_by: bench` (`room` is that rung, else `None`) and `state/gate.py::sits_over` holds (the bench's own containment
+# prize row names a room (`heard_by:`; `room` is the act's rung, else `None`) and `state/gate.py::sits_over` holds (the bench's own containment
 # test, the one `world_q.judging_set` asks). It is FOR the roller only (OBS §3: the defender column is struck) and enters the sigma
 # term alone: never a die in the pool, never a term of the opposition. A seat declaring none (`None`), an act through no seat and a
 # prize no bench hears bring no level, so the roll is as it was.
@@ -418,15 +468,18 @@ def _levels_count(levels: tuple) -> tuple:
 
 def contest_input(w: Any, claimants: list, *, verb: str = "",
                   subject: Optional[str] = None, room: Optional[str] = None,
-                  examined: Optional[str] = None, effort: int = 0, via: Optional[str] = None) -> SocialContestInput:
+                  examined: Optional[str] = None, effort: int = 0, via: Optional[str] = None,
+                  heard_by: str = BENCH, toward: Optional[str] = None) -> SocialContestInput:
     """THE HOST INPUT BUILDER's record alone: `_read_social_roll`'s first return (see it for the body, for the
     rows' reads and for the levels, which `resolve` takes from the same call)."""
-    return _read_social_roll(w, claimants, verb=verb, subject=subject, room=room, examined=examined, effort=effort, via=via)[0]
+    return _read_social_roll(w, claimants, verb=verb, subject=subject, room=room, examined=examined, effort=effort, via=via,
+                             heard_by=heard_by, toward=toward)[0]
 
 
 def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
                       subject: Optional[str] = None, room: Optional[str] = None,
-                      examined: Optional[str] = None, effort: int = 0, via: Optional[str] = None) -> tuple:
+                      examined: Optional[str] = None, effort: int = 0, via: Optional[str] = None,
+                      heard_by: str = BENCH, toward: Optional[str] = None) -> tuple:
     """THE HOST INPUT BUILDER (plan position `31a`, A-25): `World` -> the frozen record the roll reads. Returns
     `(record, reads, levels)`: the record `contest_input` hands out, for each `social_roll` row of `tables.capability_uses`
     (table order), `(row, value)` -- the value the row's reader read, so the record `resolve` returns names what fed the
@@ -450,9 +503,11 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     The obstacle's operands are carried RAW (`even`'s `pool_add`,
     `difficulty`, `opposition` with `pool_default` and `opposition_rate`, `obstacle_ceiling`: `obstacle_operands` below); the module composes them.
 
-    `room` is the rung whose bench hears the contest, or `None`: the adapter passes the
-    act's rung when the prize row says `heard_by: bench` (`manifest.resolve`), and nothing otherwise.
-    With a room, the record carries the bench's `reception` of the actor and the actor's unmirrored
+    `room` is the act's rung where a room hears the contest, or `None`: the adapter passes the
+    act's rung when the prize row names a `heard_by:` (`manifest.resolve`), and nothing otherwise. `heard_by` is that room's name
+    (a hand-built roll that names a rung and no room is heard by the bench, as before) and `toward` the prize row's `toward:`; the audience
+    is `audience_of`'s answer for the room, never a branch on the verb.
+    With a room, the record carries the audience's `reception` of the actor (of the receiver, `toward: to`) and the actor's unmirrored
     `proofs` against the subject (`queries/world_q.py`, both read raw) and their two gains; without
     one they stay at the record's no-room defaults, so a `tell`, a `determine` or an inquiry rolls
     with no room terms.
@@ -466,9 +521,11 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     docketed = _docketed_row(w, subject)                                        # the arrangement row the act's matter is heard under, if one is docketed (B05.21)
     room_terms = {}
     if room is not None:
-        room_terms = dict(reception=reception(w, claimants[0], room),
+        audience = audience_of(w, HeardAct(claimants[0], via, room), heard_by)
+        # `toward: to` (U5c §2 edit 4): the room is asked about the receiver, here the act's person counterparty [ASSUMPTION: `to` is the roll's `subject`; no row declares it until `a holding`'s verb lands].
+        room_terms = dict(reception=reception(w, subject if toward == TOWARD_TO else claimants[0], audience),
                           reception_gain=fx.get("reception_gain"),
-                          proofs=proofs(w, claimants[0], subject, room, admitted=_admitted_proofs(fx, docketed)))
+                          proofs=proofs(w, claimants[0], subject, audience, admitted=_admitted_proofs(fx, docketed)))
     doc = w.records.get(examined) if examined is not None else None
     # NOBODY OPPOSES HIMSELF (v10 CP-T05-02 (ii), AM-D-02): a subject who IS the actor (the self-plea,
     # `speak {subject: himself}`) brings no opposition -- his own score is not an obstacle to himself --
@@ -810,7 +867,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
 
 
 def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
-    """`(claimants, subject, room, examined)` exactly as the fold hands the act to `resolve`, or `None`
+    """`(claimants, subject, room, examined, prize)` exactly as the fold hands the act to `resolve` (`prize` the contested prize's row, or `None`), or `None`
     when `owner`'s roll does not deal it (an uncontested act, another provider's prize, a party
     gap; `owner` is the social roll's unless `odds_of` asks for combat's). The derivation is the fold's
     own: `loop/sides.py::_contests_of` and `::sides_of` and the prize row's `heard_by:` for a contest; the verb's `graded_tasks` route (`data/rosters.py::graded_route`, armed or live) for an inquiry or a task. `loop.sides`
@@ -829,11 +886,11 @@ def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
         parties, subject, rung = sides_of(w, act, target, contests[0])
         if not parties:
             return None
-        return parties, subject, (rung if prize.get("heard_by") == BENCH else None), None
+        return parties, subject, (rung if prize.get("heard_by") else None), None, prize
     route = graded_route(act.verb, w.fixtures)          # B07.01: the fold's own reading of the route (`task_draw_arm`)
     if route is not None and route.get("provider") == owner:
         subject = payload.get("subject")
-        return [act.actor], subject, None, subject
+        return [act.actor], subject, None, subject, None
     return None
 
 
@@ -913,15 +970,16 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
     called = _rolled_as(w, act)
     if called is None:
         return None
-    parties, subject, room, examined = called
+    parties, subject, room, examined, prize = called
     effort = effort_of(act)                 # the act's own, as the fold hands it to `resolve`
     if w.persons.get(parties[0]) is None:
         return None
     if believer is not None and believer.id != act.actor:
         return None                     # another's pool is not his own to know
     if believer is None:
+        hearing = {} if prize is None else dict(heard_by=prize.get("heard_by") or BENCH, toward=prize.get("toward"))
         return _odds_of_input(contest_input(w, parties, verb=act.verb, subject=subject, room=room,
-                                            examined=examined, effort=effort, via=act.via))
+                                            examined=examined, effort=effort, via=act.via, **hearing))
     inp = believed_input(believer, act.verb, subject, w.fixtures,
                          pool=faculty(w, believer, act.verb),
                          person_subject=bool(subject) and subject in w.persons,
@@ -1011,8 +1069,8 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
 
     ⚠ `rung` IS READ FOR A PRIZE A ROOM HEARS, AND ONLY THERE. The seam passes the actor's place
     (`loop/sides.py`, `world_q.place_of`), so the venue is the act's own; a prize row
-    declaring `heard_by: bench` (`a matter`, `speak`'s) has the bench sitting over it read the speaker
-    (`contest_input`'s `room`). Every other prize still derives its obstacle from the parties alone.
+    declaring `heard_by:` (`a matter`, `speak`'s: the bench) has the room it names read the speaker
+    (`audience_of`, by the room alone; `contest_input`'s `room`). Every other prize still derives its obstacle from the parties alone.
 
     ⚠ THE RNG IS A REQUIRED PARAMETER: THE DRIVER'S GENERATOR IS PASSED ON EVERY SHIPPED PATH (`loop/resolve.py`), A
     HAND CALL WITH NO `rng` IS A `TypeError` AT THE CALL (the parameter has no default), AND ONE PASSING NONE IS
@@ -1045,11 +1103,12 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
     # The room that hears this prize, off its row (`heard_by:`); an inquiry has no prize
     # and so no room. `rung` is the act's place (`loop/sides.py`), which the bench sits over.
     row = _prize_row("contest", prize) if prize is not None else None
-    heard = rung if row is not None and row.get("heard_by") == BENCH else None
+    heard = rung if row is not None and row.get("heard_by") else None
     # An inquiry (no prize) examines its subject; a Record's forgery quality
     # enters the obstacle (`contest_input`'s `examined`). A prize names a contest, which examines nothing.
     inp, reads, levels = _read_social_roll(w, claimants, verb=verb, subject=subject, room=heard,
-                                   examined=subject if prize is None else None, effort=effort, via=via)
+                                   examined=subject if prize is None else None, effort=effort, via=via,
+                                   heard_by=(row or {}).get("heard_by") or BENCH, toward=(row or {}).get("toward"))
     entry, refusal = entry_for(prize, _PROVIDER, module_entry)
     if entry is None:
         return refusal

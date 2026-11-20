@@ -168,11 +168,11 @@ def resolve(role: str, key: Any) -> Optional[dict]:
     # is what runs the prize; `step`/`declares` (M4, `ED-IN-0279` (a)) are WHEN it is fought (absent = RESOLVE,
     # `ENCOUNTER` defers to the seventh phase) and the band RESOLVE's fold writes while deferred; `module_entry`
     # (`31a`, A-25) is the composition role the provider calls, held to its row by `check_contest_prizes()`;
-    # `heard_by` (v9 SC-02 `22a`) names the room that hears the contest (`bench`) or is absent, and
-    # `_check_heard_by` refuses any other value at boot.
+    # `heard_by` (v9 SC-02 `22a`) names the room that hears the contest (`HEARD_BY_ROOMS`) or is absent, `toward` (B07.04) whom that
+    # room is asked about (`TOWARD_SIDES`) or is absent, and `_check_heard_by` refuses any other value of either at boot.
     cell = row.get if isinstance(row, dict) else (lambda k: None)
     cells = dict(provider=cell("provider"), step=cell("step"), declares=cell("declares"),
-                 module_entry=cell("module_entry"), heard_by=cell("heard_by"))
+                 module_entry=cell("module_entry"), heard_by=cell("heard_by"), toward=cell("toward"))
     contracts = files.MODULE_CONTRACTS_YAML
     if not contracts.exists():
         return dict(module=name, resolver="unknown", doc="module_contracts.yaml not found", **cells)
@@ -228,6 +228,7 @@ def check_rows() -> list:
             resolve(role, key)
             _check_step_declares(role, key, row)
             _check_heard_by(role, key, row)
+            _check_toward(role, key, row)
             checked.append((role, key))
     return checked
 
@@ -266,11 +267,15 @@ def _check_step_declares(role: str, key: Any, row: Any) -> None:
             law="04 PART E step 10 -- a misspelled manifest row fails at boot naming the row")
 
 
-# v9 SC-02 `22a`: the rooms a prize row's `heard_by:` may name. One: the bench (`world_q.judging_set`
-# at the act's rung). A second room is a new reader in `seam/wrappers/sigma.py`, added with it.
-# `BENCH` is the name the reader (`seam/wrappers/sigma.py`) and the set share.
-BENCH = "bench"
-HEARD_BY_ROOMS = frozenset({BENCH})
+# v9 SC-02 `22a`: the rooms a prize row's `heard_by:` may name. B07.04 (`U5c_VERBS_residue` §2): three, each one row of
+# `seam/wrappers/sigma.py::audience_of`'s table -- the bench (`world_q.judging_set` at the act's rung), the body the act's seat
+# belongs to, the residents of the act's place. A fourth room is a new row of that table, added with it. The names are the ones the
+# reader and the set share.
+BENCH, SEAT_BODY, RESIDENTS = "bench", "seat_body", "residents"
+HEARD_BY_ROOMS = frozenset({BENCH, SEAT_BODY, RESIDENTS})
+# B07.04 edit 4: whom the room is asked about. Absent = the actor; `to` = the receiver of the act (`sigma.py::_read_social_roll`).
+TOWARD_TO = "to"
+TOWARD_SIDES = frozenset({TOWARD_TO})
 
 
 def _check_heard_by(role: str, key: Any, row: Any) -> None:
@@ -287,6 +292,17 @@ def _check_heard_by(role: str, key: Any, row: Any) -> None:
             needs=f"one of {sorted(HEARD_BY_ROOMS)}",
             law="04 PART E step 10 -- a misspelled manifest row fails at boot naming the row; a room "
                 "no provider reads would be a declared-but-unread column")
+
+
+def _check_toward(role: str, key: Any, row: Any) -> None:
+    """B07.04 edit 4: a prize row's `toward:`, if present, names a side the host reads (`TOWARD_SIDES`), refused at boot
+    naming the row -- a direction no reader knows would be taken for the default, silently."""
+    toward = row.get("toward") if isinstance(row, dict) else None
+    if toward is not None and toward not in TOWARD_SIDES:
+        raise Unspecified(
+            f"{role}:{key!r} declares `toward: {toward!r}`", "04 PART E step 10",
+            needs=f"one of {sorted(TOWARD_SIDES)}, or no `toward:`",
+            law="04 PART E step 10 -- a misspelled manifest row fails at boot naming the row")
 
 
 def unclaimed_contest_prizes(verb_table: dict) -> list:
