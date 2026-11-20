@@ -69,15 +69,21 @@ def _realm(seed: int, seasons: int, fixtures=DEFAULT_FIXTURES):
 # gate 2 -- the control
 # --------------------------------------------------------------------------------------------------------------------------
 
+#: The realm pins current at B07's base, the S9 base (B14's after-reading on the merged tree, `_realm_goldens.SHIPPED` until B07.99
+#: re-recorded it with the arm on): the world with `task_draw_arm: off` reads these. The only owner of the arm-off reading once
+#: `SHIPPED` is the arm-on world; each read at `PYTHONHASHSEED=0`, one season, `reading @e629f6445` (and again at B07.10's tree).
+ARM_OFF_PINS = {0: "10934f0f516cad26f9c85625268d971e", 1: "6593d8b0c1cc0a7f7931d450df96b1e1", 2: "ad10b3c876f3d9f19e27fe8e84e52dd6"}
+
+
 def test_task_draw_arm_off_reproduces_the_pinned_hash():
-    """`task_draw_arm: off` reproduces the realm pins current at B07 (`_realm_goldens.SHIPPED`, one season, seeds 0 to 2;
-    C3-N27: the pins, not 18-A's strings). The arm is set explicitly, so the reading holds whatever the shipped value is."""
+    """`task_draw_arm: off` reproduces the realm pins current at B07's base (`ARM_OFF_PINS`, one season, seeds 0 to 2; C3-N27: the
+    pins, not 18-A's strings). The arm is set explicitly, so the reading holds whatever the shipped value is, and it is the
+    control the flip is read against: `SHIPPED` reads the arm-on world."""
     off = DEFAULT_FIXTURES.sweep("task_draw_arm", "off")
     checked = 0
-    for (seed, seasons), pin in sorted(SHIPPED.items()):
-        if seasons != 1:
-            continue
-        assert _realm(seed, seasons, off).content_hash() == pin, (seed, seasons)
+    for seed, pin in sorted(ARM_OFF_PINS.items()):
+        assert _realm(seed, 1, off).content_hash() == pin, seed
+        assert pin != SHIPPED[(seed, 1)], seed      # the arm-on pin moved: the control is not vacuous
         checked += 1
     assert checked == 3, checked
 
