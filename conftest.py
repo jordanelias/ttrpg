@@ -43,3 +43,20 @@ def pytest_collection_modifyitems(config, items):
         for marker, pat in SUBSYSTEM_FILES.items():
             if pat.match(base):
                 item.add_marker(getattr(pytest.mark, marker))
+
+
+@pytest.fixture(autouse=True)
+def _flat_fold_arm(request):
+    """`@pytest.mark.flat_fold` (file or test): the task draw is off for the test, so a world built from the default fixtures folds flat.
+    `DEFAULT_FIXTURES` is one shared object whose `sweep` copies its values at call time, so setting the one value covers every world
+    the test builds, `build_realm`'s and `tiny_world`'s alike. Undone after the test; a test with no mark is untouched."""
+    if request.node.get_closest_marker("flat_fold") is None:
+        yield
+        return
+    from engine.season.data.fixtures import DEFAULT_FIXTURES
+    prior = DEFAULT_FIXTURES._v["task_draw_arm"]
+    DEFAULT_FIXTURES._v["task_draw_arm"] = "off"
+    try:
+        yield
+    finally:
+        DEFAULT_FIXTURES._v["task_draw_arm"] = prior

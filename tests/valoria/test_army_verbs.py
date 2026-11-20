@@ -20,13 +20,17 @@ from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.queries import world_q
 from engine.season.state.carriers import Act, Proposition, Site, Tenure
+import pytest
+
+#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
+pytestmark = pytest.mark.flat_fold
 
 FACTION, COHORT, HOME, COMMANDER = "fac_valorsmark", "c1", "Hh", "p_high"
 
 
 def _world():
     # flat: these tests ask the recruit FOLD (limits, refusals); under `task_draw_arm: on` a drawn Partial lands half (B07.02, B22 owns the map)
-    w = P.tiny_world(DEFAULT_FIXTURES.sweep("task_draw_arm", "off"))
+    w = P.tiny_world(DEFAULT_FIXTURES)
     w.propositions[FACTION] = Proposition(FACTION, "HOLDS", "Crown", "is a faction of this world", True, 0)
     P.plant_cohort(w, COHORT, HOME, weight=12)
     w.add_tenure(Tenure("t_c1_commit", COHORT, FACTION, "commit", since=0))

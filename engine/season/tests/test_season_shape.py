@@ -28,6 +28,7 @@ from pathlib import Path
 
 import pytest
 
+from ._flat_fold import flat_fold, flat_fold_fixtures
 from .. import decision
 from .. import seam
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
@@ -5663,8 +5664,7 @@ def _w8_work(acts_deltas, site_id="site_seam", condition=None):
     """Fold `work` acts through the REAL `resolve()` -- the fold AND §27.3's accumulator, which is
     where `work`'s change actually lands -- one act per `(act id, delta)`; `delta=None` declares
     none. Returns `(events, condition before, condition after, the site id)`."""
-    w = P.tiny_world()
-    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: the arms ask work's fold and accumulator; under the arm a drawn work can read work.failed first
+    w = flat_fold(P.tiny_world())
     site = w.sites[site_id]
     if condition is not None:
         site.condition = condition
@@ -6347,7 +6347,7 @@ def _h79_bailiff_subjects() -> dict:
     for rule in sorted(CLAIM_SUBJECT_RULES):
         # B07.99: the relation is read with `task_draw_arm` swept off (the REM-2C precedent above: evaluated in process, assertion unchanged);
         # with the arm on the act mix moves again (actor 13 / both 12 / per_change 10) and the shipped-table test below reads the shipped arm.
-        w = HL.build_world(0, DEFAULT_FIXTURES.sweep("claim_subject_rule", rule).sweep("task_draw_arm", "off"))
+        w = HL.build_world(0, flat_fold_fixtures(DEFAULT_FIXTURES.sweep("claim_subject_rule", rule)))
         d = SeasonDriver(w)
         mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         for _ in range(2):

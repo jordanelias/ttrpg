@@ -23,6 +23,10 @@ from engine.season.seam.wrappers import mass_battle as MB
 from engine.season.state.carriers import Act, Site, Tenure
 from modules.mass_battle import armyrecord as A
 from modules.mass_battle.troop_types import recruitment as R
+import pytest
+
+#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
+pytestmark = pytest.mark.flat_fold
 
 ACTOR, SEAT, ORIGIN = "p_npc_033", "off_spymaster", "set_s_014"
 CROWN, CHURCH, HAFEN = "fac_valorsmark", "fac_church_of_solmund", "fac_hafenmark"
@@ -34,7 +38,6 @@ def _flat(w):
     """The army tests ask the army FOLD (the cap, the menu's install, provisioning): `recruit` lands its whole count. Under
     `task_draw_arm: on` (B07.05) `recruit` is a drawn task and a Failure or Partial lands none or half, so these worlds run the
     flat fold, as the arm `off` control does; whether a menu install is drawn is the military lane's (B22; B07.02's assumption 3)."""
-    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")
     return w
 
 def _fold(w, *acts):

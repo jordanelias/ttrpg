@@ -72,6 +72,9 @@ from ._closure_scan import branches_on_ids, game_code
 from ._fresh_process import probe
 from .test_information_cluster import _hear
 
+#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
+pytestmark = pytest.mark.flat_fold
+
 FAC = faction_prop_id("Valorsmark")
 FORGER, INVESTIGATOR, ABOUT = "p_other", "p_high", "p_mid"
 FORGE_ID = "fi03_forge"
@@ -110,7 +113,6 @@ def trail_world(verb="forge", kind="record.forged", second=None, fixtures=None):
     if fixtures is None:
         fixtures = DEFAULT_FIXTURES.sweep("ceiling_per_pool", False)
     w = P.tiny_world(fixtures)
-    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: the trail's closure and deposits are asked of the acts landing; under the arm a drawn forge, move or survey can fail first
     w.propositions[FAC] = Proposition(FAC, "HOLDS", "Valorsmark", "is a faction of this world", True, 0)
     for pid in (INVESTIGATOR, ABOUT):
         w.add_tenure(Tenure(f"t_commit_{pid}", pid, FAC, "commit", since=0))

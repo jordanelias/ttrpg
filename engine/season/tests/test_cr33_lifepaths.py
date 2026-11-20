@@ -29,6 +29,9 @@ from engine.season.state.gate import WriteClass
 from .test_in10_record_operands import _resolve
 from .test_rem30_character_sheet import _run
 
+#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
+pytestmark = pytest.mark.flat_fold
+
 #: The four Niflhel ids the archived file STRIKES (it prints no row for them): never members.
 STRUCK = ("3-NI1", "3-NI2", "3-NI3", "3-NI4")
 
@@ -121,7 +124,6 @@ def _planted_cache():
 def _world(monkeypatch, planted=True):
     monkeypatch.setattr(cast, "_CACHE", _planted_cache() if planted else cast._CACHE)
     w = build_realm(0)
-    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: these tests ask train's effect (a first rank); under the arm a drawn train can fail first
     d = SeasonDriver(w)
     d.matter(mint_token(w, WriteClass.MATTER), [])
     return w, d

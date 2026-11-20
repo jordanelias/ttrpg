@@ -34,6 +34,10 @@ from ..queries import world_q
 from ..state.carriers import Claim, Tenure
 from .test_in10_record_operands import _acts, _resolve
 from .test_in12_step9 import _world
+import pytest
+
+#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
+pytestmark = pytest.mark.flat_fold
 
 A, B = "p_low", "p_mid"            # `tiny_world`: both stand at the hearth (`with` each other)
 FAR = "p_high"                     # elsewhere
@@ -68,7 +72,6 @@ def test_tend_declares_person():
 
 def test_case_5_a_detained_man_below_his_ceiling_forms_tend_on_himself_and_is_raised_to_it():
     w, d = _world()
-    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: this test asks the flat fold; under the arm a drawn task can fail before the effect it observes
     p = w.persons[B]
     seat = next(iter(w.offices))
     w.add_tenure(Tenure("t_det_case5", B, seat, DETAIN_KIND, since=w.tick))
@@ -84,7 +87,6 @@ def test_case_5_a_detained_man_below_his_ceiling_forms_tend_on_himself_and_is_ra
 
 def test_control_a_whole_man_is_stamped_for_nobody_and_forms_no_tend_on_himself():
     w, _ = _world()
-    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: this test asks the flat fold; under the arm a drawn task can fail before the effect it observes
     for pid in w.persons:
         assert world_q.wounded_with(w, w.persons[pid]) == (), pid
     assert not [c for c in _tends(w, B) if c.subject == B]
@@ -96,7 +98,6 @@ def _lawful_input_violations(stamper) -> list:
     """The rule as a check, by moving TRUE bodies and BELIEFS independently. Empty = the rule holds."""
     bad = []
     w = P.tiny_world()
-    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: this test asks the flat fold; under the arm a drawn task can fail before the effect it observes
     scale = w.fixtures.get("condition_scale")
     assert world_q.place_of(w, A) == world_q.place_of(w, B) != world_q.place_of(w, FAR), "setup: who stands with whom"
     # 1. B truly wounded, nobody saw it: B is stamped for himself only.
@@ -107,13 +108,11 @@ def _lawful_input_violations(stamper) -> list:
         bad.append(f"the wounded man is not stamped for himself: {stamper(w, w.persons[B])}")
     # 2. A believes B below whole but B is truly whole: the belief, not the body, stamps.
     w = P.tiny_world()
-    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: this test asks the flat fold; under the arm a drawn task can fail before the effect it observes
     _believe(w, A, B, scale // 4)
     if B not in stamper(w, w.persons[A]):
         bad.append("a believed wound beside him is not stamped")
     # 3. A's NEWEST belief is whole while B is truly wounded: not stamped.
     w = P.tiny_world()
-    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: this test asks the flat fold; under the arm a drawn task can fail before the effect it observes
     w.persons[B].body = scale // 4
     _believe(w, A, B, scale // 4, cid="c_old", when=0)
     _believe(w, A, B, scale, cid="c_new", when=1)
@@ -121,7 +120,6 @@ def _lawful_input_violations(stamper) -> list:
         bad.append("a stale belief, or the true body, outranks his newest belief")
     # 4. a believed wound on someone not with him: not stamped.
     w = P.tiny_world()
-    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: this test asks the flat fold; under the arm a drawn task can fail before the effect it observes
     _believe(w, A, FAR, scale // 4)
     if FAR in stamper(w, w.persons[A]):
         bad.append("a believed wound elsewhere is stamped")
@@ -145,7 +143,6 @@ def test_mutation_a_stamper_reading_true_bodies_is_red():
 
 def test_a_believed_wound_beside_him_forms_tend_on_the_other_through_questions_for():
     w, d = _world()
-    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: this test asks the flat fold; under the arm a drawn task can fail before the effect it observes
     scale = w.fixtures.get("condition_scale")
     w.persons[B].body = scale // 4
     assert not [c for c in _tends(w, A) if c.subject == B], "CONTROL: no belief, no tend on another"
@@ -163,7 +160,6 @@ def test_rem52s_fall_is_tended_whole_the_same_season():
     every short person stands whole at the season's end, each named by a `body.tended`. A finding about `_eff_tend`'s
     whole-headroom magnitude (CP-T10-04's `tend_share`, unbuilt), not a claim that it is right."""
     w = build_realm(0)
-    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")   # B07.99: this test asks the flat fold; under the arm a drawn task can fail before the effect it observes
     run(1, 0, w=w)
     short = {pid for pid in w._subsistence_shortfall if pid in w.persons}
     tended = {c.subject for e in w.log if e.kind == "body.tended" for c in e.changes}

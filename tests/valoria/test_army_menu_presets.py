@@ -35,6 +35,9 @@ from modules.mass_battle.troop_types.registry import roles_for
 
 from tests.valoria.test_army_phase5 import CHURCH, CROWN, DEFENDED_TERR, HAFEN, _fold, _governed_cohorts
 
+#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
+pytestmark = pytest.mark.flat_fold
+
 _IMPORTS_PRESETS = re.compile(r"import .*army_presets|army_presets .*import|army_presets\.install")
 FULL = 1000.0                                 # an arbitrary condition scale for the pure-module tests
 
@@ -44,7 +47,6 @@ def _flat(w):
     """The army tests ask the army FOLD (the cap, the menu's install, provisioning): `recruit` lands its whole count. Under
     `task_draw_arm: on` (B07.05) `recruit` is a drawn task and a Failure or Partial lands none or half, so these worlds run the
     flat fold, as the arm `off` control does; whether a menu install is drawn is the military lane's (B22; B07.02's assumption 3)."""
-    w.fixtures = w.fixtures.sweep("task_draw_arm", "off")
     return w
 
 def _sites(w, faction, kinds=("barracks", "archery_range", "stable")):
