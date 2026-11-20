@@ -20,7 +20,7 @@ for a reader that iterates a table; none is a second copy.
 IT REFUSES, by name (`TroopFileError`): an unknown or missing column; a troop row naming an arm, armour tier, role or
 site kind that is not a member of its closed set; an arm whose mass is stated both here (`mass_kg`) and in personal
 combat's export; a `secondary` equal to the `primary`; a column (or section) name that is also a field of `config.EngineConfig`
-(B17.12: a value is the troop file's or the config's, never both). The mass check reads
+(B17.12: a NAME is the troop file's or the config's, never both; a value copied under another name is not seen). The mass check reads
 `engine/engine_params/combat_engine_v1.json` (its `weapons` section) as DATA, never an import of `modules/combat/`.
 `check` is the one validator. It opens that export, so it runs where a file may be opened -- the exporter, on what it
 derives from the YAML, before either artifact is written -- and never inside a field.
@@ -123,7 +123,7 @@ def check(data: dict, combat_weapons=None, config_names=()) -> None:
 
 @functools.lru_cache(maxsize=None)
 def _data() -> dict:
-    """The exported document, imported once, on first use (so the exporter can import `check` before the literal exists).
+    """The exported document, imported once, on first use (`config.py` imports it at its own import, so `config` cannot be imported before the literal exists).
     The exporter checked it before writing it; `--check` pins it equal to the JSON."""
     from modules.mass_battle.troop_types.troops_data import DATA
     return DATA

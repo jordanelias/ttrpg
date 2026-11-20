@@ -667,8 +667,8 @@
       "kind": "scalar",
       "module": "mass_battle",
       "file": "modules/mass_battle/config.py",
-      "note": "design ceiling on a single unit's troop count  # [canonical: tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]",
-      "citation": "tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000",
+      "note": "design ceiling on a single unit's troop count  # [canonical: tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000; the cell band is CELL_FLOOR=50/CELL_CAP=100 since ED-MB-0101]",
+      "citation": "tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000; the cell band is CELL_FLOOR=50/CELL_CAP=100 since ED-MB-0101",
       "citation_grade": "source"
     },
     {
@@ -1294,8 +1294,8 @@
       "kind": "scalar",
       "module": "mass_battle",
       "file": "modules/mass_battle/config.py",
-      "note": "a subunit routs when its aggregate total falls below this  # [canonical: tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000]",
-      "citation": "tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants CELL_FLOOR=40/CELL_CAP=200/UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000",
+      "note": "a subunit routs when its aggregate total falls below this  # [canonical: tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000; the cell band is CELL_FLOOR=50/CELL_CAP=100 since ED-MB-0101]",
+      "citation": "tests/coverage_matrix_archive.md §\"2026-06-03 continuous-scale rework - step 1a\" — footprint generator constants UNIT_ROUT_FLOOR=80/MAX_TROOPS_PER_UNIT=10000; the cell band is CELL_FLOOR=50/CELL_CAP=100 since ED-MB-0101",
       "citation_grade": "source"
     },
     {

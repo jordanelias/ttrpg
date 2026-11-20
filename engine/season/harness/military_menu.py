@@ -174,7 +174,7 @@ def describe(m: MilitaryMenu) -> str:
     if m.discharge:
         out.append("Trained, in no unit: " + "; ".join(f"{n} {t} of {c}" for c, t, n in m.discharge) + ".")
     for kind, subject, have, floor in m.advisories:
-        out.append({"unit_routs": f"Warning: {subject} has {have} troops; a unit is at least {floor} (four cells of fifty).",
+        out.append({"unit_routs": f"Warning: {subject} has {have} troops; a unit is at least {floor}.",
                     "army_units": f"Warning: the army is {have} units; an army is at least {floor}.",
                     "army_troops": f"Warning: the army fields {have} troops; an army is at least {floor}.",
                     "army_routs": f"Warning: the army fields {have} troops; under {floor} it routs at once.",

@@ -273,6 +273,9 @@ def new_rows(monkeypatch):
     def clear():
         for f in (table._stats, table._mounted, table._menus, table._sites):
             f.cache_clear()
+        from modules.mass_battle.troop_types import registry as _reg
+        _reg.reach_for.cache_clear()
+        _reg.support_ranks_for.cache_clear()
     monkeypatch.setattr(table, '_data', lambda: doc)
     clear()
     yield doc

@@ -22,6 +22,7 @@ Usage:
 """
 from __future__ import annotations
 
+import ast
 import json
 import os
 import pprint
@@ -40,15 +41,23 @@ OUT_PY = os.path.join(REPO, 'modules', 'mass_battle', 'troop_types', 'troops_dat
 SCHEMA_VERSION = 1
 
 
+def _engine_config_names() -> frozenset:
+    """The field names of `config.EngineConfig`, read from `config.py`'s syntax and never by import: `config` imports the troop
+    literal this exporter writes, so importing it here would stop the exporter regenerating a missing or stale literal."""
+    path = os.path.join(REPO, 'modules', 'mass_battle', 'config.py')
+    with open(path, encoding='utf-8') as fh:
+        tree = ast.parse(fh.read())
+    cls = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == 'EngineConfig')
+    return frozenset(n.target.id for n in cls.body if isinstance(n, ast.AnnAssign) and isinstance(n.target, ast.Name))
+
+
 def build() -> dict:
     """The artifact: the file's sections in the loader's order, behind the loader's own refusals."""
     from engine.season.data.rosters import SITE_KINDS, load_yaml   # load_yaml refuses a duplicate key: two rows of one name are an error
     from modules.mass_battle.troop_types import table
     with open(SRC, encoding='utf-8') as fh:
         src = load_yaml(fh.read())
-    from dataclasses import fields
-    from modules.mass_battle import config
-    table.check(src, config_names=frozenset(f.name for f in fields(config.EngineConfig)))   # a value has one owner, never the file and `EngineConfig`
+    table.check(src, config_names=_engine_config_names())      # a name has one owner, never the file and `EngineConfig`
     unknown = sorted(set(src['site_kinds']) - SITE_KINDS)
     if unknown:
         raise ValueError(f'site_kinds {unknown} are not members of the season\'s site_kinds')

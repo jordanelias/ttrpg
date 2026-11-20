@@ -364,7 +364,7 @@ def _oob_unit(oob, weight, side, morale_start):
     """The Army for a side when the field carries orders of battle (ED-IN-0306). `oob` None -> a single
     `_HEADCOUNT_LINE_TYPE` `UnitRow`, so both sides deploy by the same rule. Its size is the most the side's
     `weight` could put under arms, `under_arms_cap(weight)` (`troop_types/recruitment.py`), NOT the bare weight:
-    an order of battle counts troops (a weight-12 cohort raises up to 120) and a season weight counts households,
+    an order of battle counts troops (a weight-12 cohort raises up to 12,000) and a season weight counts households,
     so a side left at its weight would meet a hundred troops with twelve. [ASSUMPTION; medium; Jordan to correct;
     revert: `max(float(weight), _MIN_TROOPS)`, and a headcount side is a tenth the army it could muster.]
     Built with `faction` 'A'/'B', the engine's deployment convention, rather than `_weighted_unit`'s side names:

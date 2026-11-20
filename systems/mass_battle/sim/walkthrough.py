@@ -208,7 +208,7 @@ def build_page(run: dict, out: str, example: dict, seed: int, role=None) -> None
     sweep = []
     for sd in example['sweep_seeds']:
         r = fight(example, sd, role)
-        sweep.append({'seed': sd, 'winner': r['result']['winner'], 'ticks': r['result']['turns'],
+        sweep.append({'seed': sd, 'winner': {'Won': 'A', 'Lost': 'B'}.get(r['grade']['degree'], 'draw'), 'ticks': r['result']['turns'],
                       'a': r['result']['a_hp_pct'], 'b': r['result']['b_hp_pct'], 'degree': r['grade']['degree']})
     armies = _summary(example)
     armies['seed'] = seed

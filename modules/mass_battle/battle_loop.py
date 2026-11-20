@@ -169,7 +169,7 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
             return any(sub.cells_float() for sub in unit.units)      # consulted for truthiness only (below)
 
         # [TOI refactor] b_cells_float/a_cells_float are consulted by _node_advance ONLY for truthiness -- a
-        # non-empty list signals "defer to the cross-side TOI resolve rather than commit immediately" (see
+        # truthy value signals "defer to the cross-side TOI resolve rather than commit immediately" (see
         # _node_advance's toi_deferred). The cross-side standoff computation (reach- and facing-asymmetric, exact
         # time-of-impact) runs once, after both sides have proposed, in resolve_toi_and_commit below. None when
         # FIELD_MOVEMENT is off -> zero cost, byte-exact.

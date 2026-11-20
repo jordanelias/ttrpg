@@ -1761,7 +1761,7 @@ inert today.
     def advance_cells(self, discipline, target_centroid, enemy_cells=None, enemy_cells_float=None):
         """
         enemy_cells: set of abs (r,c) positions of all enemy cells.
-        enemy_cells_float: [Stage A, additive] list of (r,c,reach) true-float enemy-cell triples --
+        enemy_cells_float: [Stage A, additive] truthy when the enemy has any true-float cell (B17: a bool; it was a list of (r,c,reach) triples) --
         see _node_advance's docstring. Ignored on the legacy (non-node) path below.
         Cap each cell's advance to bring it to adjacency (distance=1) but not past the nearest enemy cell.
         Prevents over-run that produces paradoxical angles.
