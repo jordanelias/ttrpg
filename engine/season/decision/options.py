@@ -49,6 +49,7 @@ from ..queries.person_q import (
     is_cell as _is_cell, lie_said_of, projected_axes, regard, said_of,
 )
 from ..state.carriers import Candidate, Claim, Person, Question, Record, View, fade_of
+from ..state.ledgers import present_confidence
 from ..trace_log import TRACE
 from ...substrate.descriptors import about_mid, scale_of
 
@@ -1543,8 +1544,19 @@ def ledger_weigh(p: Person, fx: "Fixtures", tick: int = 0):
     or `None` for a ledger holding no told claim (`T3a`: such a ledger weighs 1.0 everywhere, which is
     the unweighted order exactly, tested, so it takes the plain reader). One owner for both askers:
     `opening_set` (*may I do this*) and `dissents`' act-level term (*could the actor have done this*,
-    `H-201`), so a person reads one ledger one way whichever question they put to it."""
-    return teller_weight(p, fx, tick) if any(c.chain for c in p.ledger) else None
+    `H-201`), so a person reads one ledger one way whichever question they put to it.
+
+    ⚠ B09.06: AT `Fixtures.weigh_confidence` (`H-183`) THE CLOSURE ALSO WEIGHS HOW SURE HE STILL IS, so a ledger of his own
+    claims takes it as soon as ANY claim has faded below `confidence_default` -- a ledger of fresh, full-confidence claims
+    still weighs 1.0 everywhere and takes the plain reader, which reads as before. At `False` (the control, shipped until
+    B09.08) the condition is today's: any told claim."""
+    if any(c.chain for c in p.ledger):
+        return teller_weight(p, fx, tick)
+    if fx.get("weigh_confidence"):
+        full, decay = fx.get("confidence_default"), fx.claim_decay()
+        if any(present_confidence(c.confidence, c.when, tick, decay) < full for c in p.ledger):
+            return teller_weight(p, fx, tick)
+    return None
 
 
 def dissents(p: Person, c: Claim, act=None, weigh=None, decay: int = 0) -> bool:
@@ -1781,8 +1793,13 @@ def teller_weight(p: Person, fx: "Fixtures", tick: int = 0) -> Callable[[Claim],
     hearer's to the one who told THEM, the last hop. A claim with an empty chain -- firsthand,
     seen, inferred, or a `told_by` deposit through a channel with no speaking actor -- weighs 1.0.
 
+    ⚠ B09.06 `weigh_confidence` (`H-183`): AT `True` EVERY WEIGHT ABOVE IS MULTIPLIED BY HOW SURE HE STILL IS,
+    `present_confidence(c) / confidence_default`, for a claim nobody told as for one somebody did (the empty-chain branch
+    returns that share instead of 1.0), so a sighting he has half forgotten weighs half and a teller can outweigh it.
+    Refraction sets the deposit-time `confidence`; this reads it once, here, at `tick`. At `False` (the control, shipped
+    until B09.08) the closure is the one above, exactly, and reads neither `confidence` nor the decay rate.
     ⚠ THE FIXTURES ARE READ ON THE FIRST TOLD CLAIM, NOT AT BUILD. A ledger with no teller in it
-    reads none of them.
+    reads none of them (`weigh_confidence`, `confidence_default` and the decay rate are read once, at the closure's build).
     ⚠ AT THE CONTROL VALUES (`told_weight` 1.0, `rank_gain`, `regard_gain` and `record_gain` all
     0) EVERY CLAIM WEIGHS EXACTLY 1.0.
     ⚠ THE ONE-HOP BOUND. `told_weight` x `relation` x `record` is clamped at 1.0, and a one-hop claim
@@ -1799,10 +1816,19 @@ def teller_weight(p: Person, fx: "Fixtures", tick: int = 0) -> Callable[[Claim],
     gains: list = []
     relation_of: dict = {}      # `relation` depends on the teller alone: one stance scan per teller
     record_of: dict = {}        # `record` too: one ledger scan per teller
+    # B09.06: read ONCE per closure. At `False` (the control) `sure` is never called and every weight is the one above.
+    on = fx.get("weigh_confidence")
+    full = fx.get("confidence_default") if on else 0
+    decay = fx.claim_decay() if on else 0
+
+    def sure(c: Claim) -> float:
+        """How sure he still is of `c`: its present confidence (`state/ledgers.py::present_confidence`, read at `tick`) as a
+        share of `confidence_default`. The one factor `weigh_confidence` adds; refraction set the deposit-time value."""
+        return present_confidence(c.confidence, c.when, tick, decay) / full
 
     def weigh(c: Claim) -> float:
         if not c.chain:
-            return 1.0
+            return sure(c) if on else 1.0
         teller = c.teller
         if not gains:
             gains.extend((fx.get("told_weight"), fx.get("rank_gain"), fx.get("regard_gain")))
@@ -1817,6 +1843,7 @@ def teller_weight(p: Person, fx: "Fixtures", tick: int = 0) -> Callable[[Claim],
         rec = record_of.get(teller)
         if rec is None:
             rec = record_of[teller] = record(p, teller, fx, tick)
-        return _clamp(told_weight ** c.hops * relation * rec, 0.0, 1.0)
+        w = _clamp(told_weight ** c.hops * relation * rec, 0.0, 1.0)
+        return w * sure(c) if on else w
 
     return weigh

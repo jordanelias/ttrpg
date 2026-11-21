@@ -1174,6 +1174,13 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `none`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-111 -- site: Fixtures finding_none_deposit, graded `assumption`; the skip's own note names the narrower arm as the alternative Jordan would name, so it is injected at the control and swept none / actor]
     finding_none_deposit="none",       # `H-111`, swept none (control, SHIPPED) / actor
+    # `H-183` (B09.06; `16_PESSIMIST_SC_B_one_reader_of_a_ledger` edit 1). WHETHER THE ONE COMPARATOR WEIGHS HOW SURE THE HOLDER STILL IS:
+    # `decision/options.py::teller_weight` multiplies every claim's weight by `present_confidence(c) / confidence_default`, and
+    # `ledger_weigh` takes the closure for any ledger holding a claim below full confidence. `False` is the CONTROL and ships here (the
+    # closure and the condition are today's, exactly); B09.08 ships `True`. A switch on an existing magnitude, `claim_decay_per_season`.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `False`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-183 -- the row that weighs a told claim by its teller's `record`; this switch adds the claim's own present confidence to that one product, injected at the control and swept False / True]
+    weigh_confidence=False,            # `H-183`, swept False (control, SHIPPED until B09.08) / True
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

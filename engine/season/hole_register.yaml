@@ -4237,11 +4237,16 @@ rows:
       `build_realm(0)` holds 3 told claims after 1 season and 0 after 3, none with a pair [RE-CITED at `13d-iii`, 2026-10-01 - 0 told claims with a chain after 1 season at seed 0 on the tree after, see `H-157`]
       (0 teller-hearers with a pair), and the realm hash and `corpus_run 0` md5 are identical at
       `record_gain` 0.5 and 0, so the shipped arm moves neither artifact -- a NULL (no pair exists in
-      either arm), not a control; the falsifiers plant their pairs"
+      either arm), not a control; the falsifiers plant their pairs. ⚠ B09.06 ADDS A SECOND CONTROL TO THE SAME PRODUCT, `weigh_confidence` (a switch on an existing magnitude,
+      `claim_decay_per_season`, not a new row): `False` ships (today's weights exactly; B09.08 ships `True`), and at `True` the product is
+      multiplied by `present_confidence(c) / confidence_default` for every claim, told or not, so the empty-chain branch returns that
+      share instead of 1.0 and `ledger_weigh` takes the closure for a ledger holding any claim below full confidence. Its falsifier
+      is `engine/season/tests/test_one_reader_of_a_ledger.py::test_weigh_confidence_false_reproduces_today`"
     site:      "Fixtures record_gain, read by `decision/options.py::record` (called from
       `teller_weight`, once per teller, on the first claim naming that teller), whose pairing
       step `_pair` is `agreement`'s; consumed by `queries/person_q.py::LedgerReader._support`
-      inside `epistemic.belief_contradicts`"
+      inside `epistemic.belief_contradicts`; and Fixtures weigh_confidence (B09.06), read once per closure by
+      `teller_weight` and by `ledger_weigh`"
     sweep:     [0.0, 0.5, 1.0]
     unblocks:  "deception: a teller caught in a lie is credited less on the next cell (gated
       `G7`), and intent reconciliation (`T7`), which will pair a teller's claims by the same
