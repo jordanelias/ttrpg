@@ -43,6 +43,9 @@ from ..manifest.providers import PROVIDERS
 from .test_cp_t04_02_marshal import (ATT_FACTION, CARDINAL, CARDINAL_SEAT, DEF_FACTION, HOME, KING, KING_SEAT, MARCHERS,
                                      TARGET, _fold_one, _marshal, _mb, _world)
 
+#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
+pytestmark = pytest.mark.flat_fold
+
 SHOWN = 50                       # `estimate_samples`, the entry's figure
 REALISED = 200                   # scenes `resolve` deals per pair: its standard error (<= 0.035) is a fraction of the interval's half-width
 Z = 1.96                         # the interval is a 95% one, so one pair of twenty may miss (the entry's 19 of 20)

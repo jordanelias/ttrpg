@@ -31,6 +31,9 @@ import pytest
 from engine.season.tests import test_cp_t04_02_marshal as M
 from engine.season.tests.test_march import _fold_one
 
+#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
+pytestmark = pytest.mark.flat_fold
+
 SEEDS, PERSON_SEEDS = range(200), range(100)
 ROLE = "Screen"            # a role with no wired primitive: the order is its `retreat_at` and nothing else
 

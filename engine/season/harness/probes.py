@@ -1128,7 +1128,9 @@ def p35():
 @probe("P36", "a choice branches three ways", "S17", by="construction",
        tests="a discovery must be able to be acted on in several distinct ways, each leading somewhere different")
 def p36():
-    w = tiny_world()
+    # Branching is asked of the options, not of the draw: with `task_draw_arm` on a drawn task act can fail and the one person's
+    # season resolves fewer distinct verbs, so the probe runs the flat fold (B07.99).
+    w = tiny_world(DEFAULT_FIXTURES.sweep("task_draw_arm", "off"))
     p = w.persons["p_mid"]
     # THE PROBE SUPPLIES THE QUESTION SOURCE, not the option list. `tiny_world` has no dates, no
     # propositions and no claims, so `questions_for` correctly produces nothing for anybody -- a

@@ -44,6 +44,10 @@ from .test_fi03_trail import (
 )
 from .test_sc01_obstacle_ceiling import _module
 from .test_u7_remit import DUKE, JUDGE, PARTY, _determine, _fold, _kinds, _open, _world
+import pytest
+
+#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
+pytestmark = pytest.mark.flat_fold
 
 # [JUSTIFIED: authored test character, not a game value -- three pursuits whose leans on `determine` differ in sign, so a move is visible in both directions]
 HELD = {pursuit("honour"): 0.5, pursuit("liberty"): 0.3, pursuit("stability"): 0.2}

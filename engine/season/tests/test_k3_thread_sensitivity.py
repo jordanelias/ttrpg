@@ -38,6 +38,9 @@ from ..state.carriers import Question, View
 from ..state.gate import WriteClass
 from ..state.world import Step
 
+#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
+pytestmark = pytest.mark.flat_fold
+
 VERB = "thread_read"
 ACTOR = "p_low"
 #: The shipped gate, read from the fixture rather than typed: the test is about the cell, not the 30.

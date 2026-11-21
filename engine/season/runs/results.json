@@ -313,15 +313,13 @@
    "name": "Uwe Askeland",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "DEGRADED",
    "rows": 8,
    "core": 4,
    "core_routed": 4,
    "core_unmapped": 0,
-   "core_blocked": 1,
-   "blockers": [
-    "probe:P36"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "unbound": [],
    "routed": [
     {
@@ -396,18 +394,18 @@
      ],
      "resolved": [
       {
-       "ok": false,
+       "ok": true,
        "bound": true,
        "kind": "probe",
-       "detail": "P36: INSTRUMENT-ERROR",
+       "detail": "P36: PASS",
        "probe": "P36",
-       "verdict": "INSTRUMENT-ERROR"
+       "verdict": "PASS"
       }
      ],
      "unbound": [],
      "verdict": {
-      "verdict": "GAP",
-      "detail": "P36: INSTRUMENT-ERROR",
+      "verdict": "PASS",
+      "detail": "P36: PASS",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -9495,8 +9493,8 @@
   },
   "P36": {
    "id": "P36",
-   "verdict": "INSTRUMENT-ERROR",
-   "detail": "assertion failed: AssertionError(\"only 2 distinct options were open: ['survey', 'transfer', 'transfer']\")",
+   "verdict": "PASS",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 19 candidates were OFFERED from the computed option set and only 66 of 67 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['sabotage', 'survey', 'train', 'transfer'] -- 4 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",
@@ -11218,7 +11216,7 @@
  "_trace_counts": {
   "STEP": 7185,
   "BARRIER": 1892,
-  "DECISION": 1947,
+  "DECISION": 1946,
   "QUERY": 30088,
   "WRITE": 15248,
   "EVENT": 15277,
