@@ -21,7 +21,7 @@ from ..data.rosters import (BINDS_BASES, FOUNDED_CONFERRAL, FOUNDED_REVOCATION, 
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..queries.person_q import ABOUT_KEYS
 from ..queries.world_q import BAN_KIND, DETAIN_KIND, DOCKET_PETITION, docketed, founds_over, restrained
-from ..state.carriers import Office, subject_of
+from ..state.carriers import Office, operand_of, subject_of
 from ..trace_log import TRACE
 # G3: THE SEAT-AUTHORITY RULES LIVE WITH THE GATE THAT ENFORCES THEM. The write gate's F3 clause
 # evaluates `seated_on_the_rung_above` and `REVOCATION_RULES` (T-o) and `has_conferral_basis` (the
@@ -109,9 +109,8 @@ def _req_confer(w: "World", a: "Act") -> bool:
     # `_admits` refuses only a missing or self `to`, and the gate admits the hold under the
     # conferral basis, which reads `via` alone. `tell` gets this from its `hearer` conjunct; this row
     # is untyped, so it is asked here -- before `may_fill`'s purview walk, the dearer conjunct.
-    conferee = binding_from_act(a).get("to")
-    if not isinstance(conferee, str) or conferee not in w.persons:
-        # (a list `to` is unhashable: refuse, never raise)
+    conferee = operand_of(a, "to")         # a non-string `to` (a list is unhashable) reads as "": refused, never raised
+    if conferee not in w.persons:
         return _refuse("a confer on a conferee who is no living person the world holds",
                        f"{a.actor} to {conferee!r}")
     if not may_fill(w, a.actor, a.via, off):
@@ -157,11 +156,12 @@ def _req_succeed(w: "World", a: "Act") -> bool:
     gate's own `may_claim`, asked with the seats the actor holds live -- so a claim the gate would refuse
     is refused here first and EMITS (`succession.refused`) rather than raising `NotYours` out of the fold.
     Untyped: the closed grammar has no cell for *no live `hold` on the subject* nor for a roster lookup."""
-    seat = binding_from_act(a).get("subject")
-    if not isinstance(seat, str) or seat not in w.offices:
-        return False                       # (a list `subject` is unhashable: refuse, never raise)
+    seat = subject_of(a)                   # a non-string `subject` (a list is unhashable) reads as "": refused, never raised
+    if seat not in w.offices:
+        return _refuse("operand", f"{a.actor} on {seat!r}")
     if restrained(w, a.actor, BAN_KIND):
-        return False                       # a banned man is seated by no route (`confer` declines him, `_req_oblige` 5)
+        # a banned man is seated by no route (`confer` declines him, `_req_oblige` 5)
+        return _refuse("banned", f"{a.actor} on {seat!r}")
     titles = {t.object for t in w.seat_holds(a.actor)}
     return may_claim(w, a.actor, w.offices[seat], titles)
 
@@ -480,15 +480,22 @@ def _req_oblige(w: "World", a: "Act") -> bool:
     seat = subject_of(a)
     off = w.offices.get(seat) if seat else None
     if off is None:
-        return False                       # 1. an opener takes a SEAT's id (ED-IN-0211)
+        # 1. an opener takes a SEAT's id (ED-IN-0211)
+        return _refuse("seat", f"{a.actor} on {seat!r}")
     if off.binds not in BINDS_BASES:
-        return False                       # 2. ARCH F.17: the seat's `binds` admits the joiner
+        # 2. ARCH F.17: the seat's `binds` admits the joiner
+        return _refuse("binds", f"{a.actor} on {seat!r}")
     mine = [t for t in w.tenures if t.subject == a.actor and t.object == seat and t.live]
     if any(t.kind == "hold" for t in mine):
-        return False                       # 3. the occupant is not his own seat's obligee
+        # 3. the occupant is not his own seat's obligee
+        return _refuse("own_seat", f"{a.actor} on {seat!r}")
     if any(t.kind == "oblige" for t in mine):
-        return False                       # 4. one edge per (person, seat)
-    return not restrained(w, a.actor, BAN_KIND)   # 5. v9 SC-03a: a banned man serves no seat
+        # 4. one edge per (person, seat)
+        return _refuse("one_edge", f"{a.actor} on {seat!r}")
+    if restrained(w, a.actor, BAN_KIND):
+        # 5. v9 SC-03a: a banned man serves no seat
+        return _refuse("banned", f"{a.actor} on {seat!r}")
+    return True
 
 
 @requires_predicate("interrogate")
@@ -515,8 +522,8 @@ def _req_interrogate(w: "World", a: "Act") -> bool:
          route reads the accused alone.
     The record kind is not compared: a Record named under the docket's petition key is one `carry`
     docketed, and `carry` docketed only a petition (`_eff_carry`)."""
-    subj = subject_of(a)
-    if not isinstance(subj, str) or subj not in w.persons:      # (a list `subject` is unhashable: refuse, never raise)
+    subj = subject_of(a)                   # a non-string `subject` reads as "": refused, never raised
+    if subj not in w.persons:
         return _refuse("an interrogation of no person the world holds", f"{a.actor} on {subj!r}")
     if not restrained(w, subj, DETAIN_KIND):
         return _refuse("an interrogation of a man held in no custody", f"{a.actor} on {subj!r}")
@@ -554,8 +561,7 @@ def _req_revoke(w: "World", a: "Act") -> bool:
     *"so long as"* made PURVIEW sufficient while Part E kept the remit necessary. Ruling (3) is
     silent on the remit, so the same question now reads *is the seat above sufficient?* -- still
     `H-91`'s, still not resolved by editing the transcribed `eligibility:` column."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    obj = d.get("office")
+    obj = operand_of(a, "office")          # a non-string `office` (a list is unhashable) reads as "": refused, never raised
     if not obj or obj not in w.offices:
         return _refuse("a revoke names no office the world holds", f"{a.actor} on {obj!r}")
     off = w.offices[obj]
@@ -582,10 +588,10 @@ def _req_revoke(w: "World", a: "Act") -> bool:
 @requires_predicate("dispatch")
 def _req_dispatch(w: "World", a: "Act") -> bool:
     """Part E: *the named person exists*."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    if d.get("subject") in w.persons:
+    subject = subject_of(a)                # a non-string `subject` (a list is unhashable) reads as "": refused, never raised
+    if subject in w.persons:
         return True
-    return _refuse("a dispatch names no person the world holds", f"{a.actor} to {d.get('subject')!r}")
+    return _refuse("a dispatch names no person the world holds", f"{a.actor} to {subject!r}")
 
 
 @requires_predicate("convene")
@@ -623,10 +629,10 @@ def _req_convene(w: "World", a: "Act") -> bool:
     exists to forbid. The `rank` STEM is real, general infrastructure (`REQUIRES_STEMS`,
     `WorldReader.read`) for whatever next needs it typed; this predicate reads the same roster
     ordinal directly rather than smuggling a second stem in to dodge the constant."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    subject = d.get("subject")
-    if subject is None:
-        return True                        # §6.2's carve-out
+    d = a.payload if isinstance(a.payload, dict) else {}
+    if d.get("subject") is None:
+        return True                        # §6.2's carve-out: tested on the RAW key, before the read below
+    subject = subject_of(a)                # a non-string `subject` (a list is unhashable) reads as "": refused, never raised
     r = w.rungs.get(subject)
     if r is None:
         return _refuse("a convene at a venue that is no rung the world holds",

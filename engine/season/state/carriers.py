@@ -1025,8 +1025,19 @@ def subject_of(a: "Act") -> str:
     caller writes `subj is None` or puts the result in a set beside a `""`. `carriers` is the leaf
     all three already reach, and neither `deliberate` nor `predicates` imports the other, so this
     is the only home that costs no new edge."""
+    return operand_of(a, "subject")
+
+
+def operand_of(a: "Act", name: str) -> str:
+    """The act's payload operand `name` (`office`, `to`, `subject`), or `""` where it is absent or is not a string.
+
+    B09.18: THE ONE REFERRING READ, AND IT CANNOT RETURN AN UNHASHABLE. A hand-built or client-returned act may
+    carry a list under an operand; every caller looks the result up in a dict or a set, and the fold calls a
+    predicate with no catch, so a list handed back raises `TypeError` out of the season. A value that is not a
+    `str` reads as `""`, which every caller already treats as no operand. Same payload guard as `subject_of`."""
     d = a.payload if isinstance(getattr(a, "payload", None), dict) else {}
-    return d.get("subject") or ""
+    v = d.get(name)
+    return v if isinstance(v, str) else ""
 
 
 @dataclass(frozen=True)
