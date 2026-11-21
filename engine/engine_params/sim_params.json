@@ -5026,11 +5026,11 @@
     {
       "key": "engine.season.settings.weigh_confidence",
       "name": "weigh_confidence",
-      "value": false,
+      "value": true,
       "kind": "scalar",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-183`, swept False (control, SHIPPED until B09.08) / True",
+      "note": "`H-183`, swept False (control; revert) / True (SHIPPED since B09.08)",
       "citation": null,
       "citation_grade": null
     },
