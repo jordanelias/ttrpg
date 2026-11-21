@@ -33,7 +33,7 @@ from modules.mass_battle.armies import DEPLOY_GAP, UNIT_CAP, _centered_line_cols
 from modules.mass_battle.config import BATTLEFIELD_SIZE, ROLE_SPEC, cell_cap_for
 from modules.mass_battle.geometry import footprint_for
 from modules.mass_battle.hierarchy.units import Order, _INSTRUCTION_STANCE
-from modules.mass_battle.troop_types.registry import is_mounted, roles_for, stats_for, unit_type_for
+from modules.mass_battle.troop_types.registry import default_role_for, is_mounted, roles_for, stats_for, unit_type_for
 
 __all__ = ['UnitRow', 'OrderOfBattle', 'STRATEGIES', 'POSTURES', 'TARGETINGS', 'class_of', 'build_unit',
            'validate']
@@ -95,12 +95,18 @@ class UnitRow:
 
 @dataclass(frozen=True)
 class OrderOfBattle:
-    """An army: its units, in line order, and one strategy for the whole. `drawn_from` is the host's, not the
-    battle's: the ids of the cohorts the troops were drawn from, so the host writes a fight's casualties to the people
-    who fought and not to everybody standing nearby. The battle never reads it."""
+    """An army: its units, in line order, and one strategy for the whole. `drawn` is the host's, not the battle's:
+    `((unit name, cohort id, troops), ...)`, the troops each cohort gave each unit (its assigned count scaled by how fit the
+    cohort was), so a fight's casualties are written to the people who fought, each cohort by the unit it fed, and not to
+    everybody standing nearby (B17.03). The battle never reads it; `massbattle.resolve_field` reads it to cut each cohort."""
     units: Tuple[UnitRow, ...]
     strategy: str = 'line'
-    drawn_from: Tuple[str, ...] = ()
+    drawn: Tuple[Tuple[str, str, float], ...] = ()
+
+    @property
+    def cohorts(self) -> Tuple[str, ...]:
+        """The cohorts the troops were drawn from, each once, in the order `drawn` first names them."""
+        return tuple(dict.fromkeys(cohort for _unit, cohort, _troops in self.drawn))
 
 
 def class_of(troop_type: str) -> str:
@@ -146,7 +152,7 @@ def _spec_for(sf: UnitRow, strategy: str) -> dict:
     # Reserve body does not advance. Roles are chosen on purpose, by the host or the menu. THE ONE RULED EXCEPTION is
     # `build_army`'s (ED-1095, Jordan: mounted archers "shouldn't be closing in on the enemy"): a mounted_archers body
     # with no role stands off as Kite, and naming a shape here would opt it out of that.
-    role = sf.role or ('Kite' if sf.troop_type == 'mounted_archers' else None)
+    role = sf.role or default_role_for(sf.troop_type)   # [B17.11] the troop file's `default_role` (`Kite` for `mounted_archers`)
     spec = dict(troop_type=sf.troop_type, troops=float(sf.troops),
                 concentration=float(cell_cap_for(sf.troop_type)))
     # POSTURE PRECEDENCE: the unit's own, then the one its role's instructions set (ShieldWall and Hold hold,

@@ -27,7 +27,7 @@ from __future__ import annotations
 from typing import Callable, Optional
 
 from modules.mass_battle.armies import UNIT_CAP
-from modules.mass_battle.config import BLOCK_SIZE, UNIT_ROUT_FLOOR
+from modules.mass_battle.config import BLOCK_SIZE, CELL_FLOOR, MIN_ARMY_TROOPS, MIN_CELLS_PER_UNIT, MIN_UNITS_PER_ARMY
 from modules.mass_battle.orderofbattle import POSTURES, STRATEGIES, TARGETINGS, OrderOfBattle, UnitRow
 from modules.mass_battle.troop_types.recruitment import TRAINING_SITE, recruit_limit
 from modules.mass_battle.troop_types.registry import TROOP_TYPE_STATS, roles_for, stats_for
@@ -257,13 +257,15 @@ def to_order_of_battle(record: dict, fitness: Optional[Callable[[str], float]] =
     """The `OrderOfBattle` the battle fights with. Each unit's strength is the sum over its assigned cohorts
     of `count * fitness(cohort)`; `fitness` is the share of a cohort still fit to fight (1.0 for a whole one; the
     season passes its body fraction). A unit left with no strength is dropped; an army with none left
-    raises ValueError, since there is nothing to field."""
+    raises ValueError, since there is nothing to field. `OrderOfBattle.drawn` is `((unit, cohort, troops), ...)`, the strength
+    each cohort gave each fielded unit (B17.03), so the battle's casualties can be cut cohort by cohort."""
     fit = fitness or (lambda _c: 1.0)
     parts, drawn = [], []
     for sf in record['units']:
-        strength = sum(n * max(0.0, min(1.0, float(fit(c)))) for c, n in sf['assigned'])
+        gave = [(c, n * max(0.0, min(1.0, float(fit(c))))) for c, n in sf['assigned']]
+        strength = sum(t for _c, t in gave)
         if strength > 0:
-            drawn += [c for c, n in sf['assigned'] if n > 0 and float(fit(c)) > 0 and c not in drawn]
+            drawn += [(sf['name'], c, t) for c, t in gave if t > 0]
             parts.append(UnitRow(sf['name'], sf['troop_type'], strength, role=sf['role'], posture=sf['posture'],
                                  target=sf['target'], fall_back_at=sf['fall_back_at']))
     if not parts:
@@ -344,9 +346,11 @@ def options(q) -> dict:
       strategies, postures, targets  the vocabulary `order` accepts
       troop_types   ((type, roles, site kind or None), ...), the types `recruit` and `form` accept
       raise         ((cohort, type, room), ...), for each cohort and type with room above 0
-      advisories    ((kind, subject, have, floor), ...) -- a unit under `UNIT_ROUT_FLOOR` routs at the first
-                    check (`unit_routs`), a record fielding under one `BLOCK_SIZE` block routs at once
-                    (`army_routs`), trained troops in no unit do not fight (`unassigned`), and a levy
+      advisories    ((kind, subject, have, floor), ...) -- a unit under `MIN_CELLS_PER_UNIT` x `CELL_FLOOR`
+                    troops is under the ruled minimum of four cells (`unit_routs`, the kind's name kept), a record
+                    fielding under one `BLOCK_SIZE` block routs at once (`army_routs`), under `MIN_UNITS_PER_ARMY`
+                    units (`army_units`) or `MIN_ARMY_TROOPS` troops (`army_troops`) is under the ruled army
+                    minimum (ED-MB-0101: warnings, never refusals), trained troops in no unit do not fight (`unassigned`), and a levy
                     unit never closes to contact (`levy_never_closes`, HANDOFF_MB)."""
     r = q.record
     validate(r)
@@ -361,12 +365,16 @@ def options(q) -> dict:
     for sf in r['units']:
         n = sum(k for _c, k in sf['assigned'])
         fielded_total += n
-        if n < UNIT_ROUT_FLOOR:
-            notes.append(('unit_routs', sf['name'], n, UNIT_ROUT_FLOOR))
+        if n < MIN_CELLS_PER_UNIT * CELL_FLOOR:
+            notes.append(('unit_routs', sf['name'], n, MIN_CELLS_PER_UNIT * CELL_FLOOR))
         if sf['troop_type'] == 'levy':
             notes.append(('levy_never_closes', sf['name'], n, 0))
     if r['units'] and fielded_total < BLOCK_SIZE:
         notes.append(('army_routs', None, fielded_total, BLOCK_SIZE))
+    if r['units'] and len(r['units']) < MIN_UNITS_PER_ARMY:
+        notes.append(('army_units', None, len(r['units']), MIN_UNITS_PER_ARMY))
+    if r['units'] and fielded_total < MIN_ARMY_TROOPS:
+        notes.append(('army_troops', None, fielded_total, MIN_ARMY_TROOPS))
     idle = sum(n for _c, _t, n in r['trained'])
     if idle:
         notes.append(('unassigned', None, idle, 0))

@@ -38,6 +38,10 @@ green, so "the maneuver works now" is never claimed again without something actu
 import statistics
 from collections import namedtuple
 
+if __name__ == '__main__':   # [B17.12] run as a script, the engine is built from the toggles its caller exported (see the `Run:` line)
+    import os
+    from systems.mass_battle.sim import variant
+    variant.install(variant.cfg_from_environ(os.environ))
 import modules.mass_battle.orchestration as _orch
 import modules.mass_battle.hierarchy.units as _hu
 from systems.mass_battle.sim.engine import Unit, Army, run_battle

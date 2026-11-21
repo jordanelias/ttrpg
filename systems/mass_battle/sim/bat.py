@@ -33,6 +33,12 @@ import os, sys, hashlib
 # only since this same fix). Fixing it here, at the source, fixes every caller, present and future,
 # rather than adding a THIRD independent copy of the same workaround.
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
+# [B17.12] The engine reads no process variable. This script states the toggles its caller exports (the pin vector of
+# tools/ci_golden_modes_check.py, a mode selector, or nothing: the shipped config) as an EngineConfig and builds the
+# engine from it, before the engine is imported below. Imported as a module it builds nothing and runs the shipped tree.
+if __name__ == '__main__':
+    from systems.mass_battle.sim import variant  # noqa: E402
+    variant.install(variant.cfg_from_environ(os.environ))
 from systems.mass_battle.sim.engine import (  # noqa: E402
     build_unit, build_envelopment, build_refused_flank, resolve_battle,
     SIDE_A_START_ROW, SIDE_B_START_ROW)

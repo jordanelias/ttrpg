@@ -9,10 +9,15 @@ order's `role` ranging over the module's whole `ROLE_SPEC` and NOT gated by `reg
 [ASSUMPTION; medium; Jordan to correct; revert: gate it]. `test_the_role_is_not_gated_by_role_allowed` pins the bypass.
 
 THE FIELD IS HAND-SIZED, NOT NATURAL. One shipped season fights no `field.won` or `field.lost` (the aperture reading), and
-at the shipped `field_troops_per_weight` of 1 every subunit routs at tick 1, so no role could matter. The falsifier runs on
-a real fold of `set_s_014` (the Crown's two marchers, weight 10 each) and `set_s_036` (the Church's six, weights 4,4,3,3,3,3)
-at `SCALE` 30, the garrison worn to condition 0 (an open field) or kept (WALLS); the record is `field_input`'s own, as
+the shipped realm's persons are one or two weight (a thousand or two thousand troops: a side of one is the army's floor), so
+the falsifier runs on a real fold of `set_s_014` (the Crown's two marchers, weight 3 each, 6,000 troops) and `set_s_036` (the Church's
+six, weights 1, 1, .75, .75, .75, .75, 5,000 troops) at the one scale (`under_arms_cap`, 1,000 troops a weight: ED-MB-0101, B17.16),
+the garrison worn to condition 0 (an open field) or kept (WALLS); the record is `field_input`'s own, as
 `test_cp_t04_05_graded_walls.py` builds it, with the place (`territory='T3'`, an OPEN_FLAT polygon) and no origin (no river).
+B17.16 RE-CUT these from marchers of 10 and a Church of 4, 4, 3, 3, 3, 3 (the 30-a-weight scale, 600 against 600 troops) by a factor of a
+quarter, so a side is the 5,000 to 10,000 troops a typical battle is; the marchers' 3 and not 2.5 is the weight at which a defender's
+Shock order moves a defended field beyond the noise (at 2.5 the win share moves 3 points, at 2 and 3 over 30: the field is as
+sensitive to how a side is cut into units, `massbattle._cut`, as to the order).
 The ORDERS in it are not hand-set: each is a real `marshal` act folded through the driver by a seat that grants `dispatch`
 and whose purview reaches the place (the King at `set_s_014`, the Cardinal of Justice at `set_s_036`).
 
@@ -26,7 +31,6 @@ the exporter's `--check` passes, and a planted drift is seen."""
 from __future__ import annotations
 
 import importlib
-import random
 from engine.dice_engine import draw
 import subprocess
 import sys
@@ -42,7 +46,9 @@ from engine.season.decision.options import operand_bags
 from engine.season.gaps import Forbidden
 from engine.season.boot.realm import build_realm
 from engine.season.queries import world_q
+from engine.season.data.rosters import DRAWN, LOST, WON
 from engine.season.queries.inputs import FieldOrder
+from engine.season.seam.ladder import field_degree
 from engine.season.seam.wrappers import mass_battle as wrapper
 from engine.season.state.carriers import Act, Question
 from engine.season.tests.test_march import _fold_one
@@ -53,9 +59,9 @@ ATT_FACTION, DEF_FACTION = "fac_valorsmark", "fac_church_of_solmund"
 KING, KING_SEAT = "p_npc_020", "off_king"                          # Valorsmark; dispatch; reaches HOME and TARGET
 CARDINAL, CARDINAL_SEAT = "p_npc_038", "off_cardinal_justice"      # Church; dispatch; reaches TARGET only
 MARCHERS = ("p_npc_033", "p_npc_035")
-ATT_WEIGHT, DEF_WEIGHTS, SCALE, SEEDS = 10, (4, 4, 3, 3, 3, 3), 30, range(200)
+ATT_WEIGHT, DEF_WEIGHTS, SEEDS = 3, (1, 1, 0.75, 0.75, 0.75, 0.75), range(200)
 NOISE = 0.07            # the entry's band: +-7 points
-DEGREES = ("Overwhelming", "Success", "Partial", "Failure")
+BANDS = (WON, LOST, DRAWN)      # the field's end states (`field_degree`); the module's four-way `degree` is gone (B17.01)
 
 
 def _mod(name):
@@ -73,15 +79,14 @@ def _marshal(actor, via, place, role, retreat="none", aid="mz"):
                via=via)
 
 
-def _world(orders=(), worn=True):
+def _world(orders=(), worn=True, att_weight=ATT_WEIGHT):
     """The shipped realm resized so the sides are even, plus each `(actor, via, place, role, act id, tick)` order folded
     through the real driver. `worn` wears the target's garrison to 0 (an open field); else it stays (WALLS)."""
     w = build_realm(0)
     for pid in MARCHERS:
-        w.persons[pid].weight = ATT_WEIGHT
+        w.persons[pid].weight = att_weight
     for pid, wt in zip(world_q.mustered(w, TARGET, DEF_FACTION), DEF_WEIGHTS):
         w.persons[pid].weight = wt
-    w.fixtures = w.fixtures.sweep("field_troops_per_weight", SCALE)
     if worn:
         for s in w.sites.values():
             if s.kind == "garrison" and s.rung == TARGET:
@@ -105,15 +110,14 @@ def _bands(inp):
     c, wins = Counter(), 0
     for s in SEEDS:
         g = _mb().resolve_field(inp, draw.seeded(draw.H2("test_cp_t04_02_marshal", s)))
-        c[g["degree"]] += 1
-        wins += g["attacker_wins"]
-    return wins / len(SEEDS), {k: c[k] / len(SEEDS) for k in DEGREES}
+        c[field_degree(g)] += 1
+    return c[WON] / len(SEEDS), {k: c[k] / len(SEEDS) for k in BANDS}
 
 
 def _differs(a, b):
     """THE FALSIFIER'S PREDICATE (one function, so a planted failure is judged by the very check the real arm is): the
     band distributions differ by more than the noise band in at least one band."""
-    return max(abs(a[1][k] - b[1][k]) for k in DEGREES) > NOISE
+    return max(abs(a[1][k] - b[1][k]) for k in BANDS) > NOISE
 
 
 @lru_cache(maxsize=None)
@@ -283,14 +287,14 @@ def test_the_role_is_not_gated_by_role_allowed():
     ROLE_SPEC, role_allowed = _mod("config").ROLE_SPEC, _mod("troop_types.registry").role_allowed
     mb = _mb()
     assert not role_allowed("infantry", "Shock") and "Shock" in ROLE_SPEC
-    ordered = mb._weighted_unit("a", 20, 5, SCALE, "Shock").units[0]
-    plain = mb._weighted_unit("a", 20, 5, SCALE).units[0]
+    ordered = mb._weighted_unit("a", 5, "A", 5, "Shock").units[0]
+    plain = mb._weighted_unit("a", 5, "A", 5).units[0]
     assert (ordered.role, ordered.shape, ordered.instructions) == ("Shock", "Arrowhead", ("charge",))
     assert (plain.role, plain.shape, plain.instructions) == (None, "Line", ())
-    persons, _ = mb._person_unit("a", (5, 5), ("x", "y"), 5, SCALE, None, "ShieldWall")
-    assert [(s.role, s.shape) for s in persons.units] == [("ShieldWall", "Line")] * 2   # on the `person` arm too
+    persons = mb._person_unit("a", (5, 5, 5), ("x", "y", "z"), "A", 5, None, "ShieldWall")      # B17.16: three persons, three units (a side is at least three)
+    assert [(s.role, s.shape) for s in persons.units] == [("ShieldWall", "Line")] * 3   # on the `person` arm too
     with pytest.raises(ValueError):
-        mb._weighted_unit("a", 20, 5, SCALE, "Berserker")
+        mb._weighted_unit("a", 20, "A", 5, "Berserker")
 
 
 def test_create_record_does_not_mint_a_standing_order_marshal_alone_does():

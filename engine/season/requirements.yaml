@@ -124,9 +124,12 @@ scales:
     conjunct:  R-04.c4
     subsystem: [mass_battle]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: RETAINED
-    in_loop:   "seam built; reached via a constructed `Question` (`test_march.py`) AND, measured,
-      via natural computed play in `build_realm(0)`/`populated.run` (`harness/aperture.py`); not
-      yet reached naturally in `corpus_run`'s separate 143-case NPC/ARC corpus"
+    in_loop:   "seam built; reached via a constructed `Question` (`test_march.py`) AND `march` executes in
+      `build_realm(0)`/`populated.run` (`harness/aperture.py`); a fought field does not, as the instrument
+      reads it at `c32198f` (`python -m engine.season.harness.aperture 1 s`, `PYTHONHASHSEED=0`, seeds 0 to 2:
+      `mass_battle.resolve_field` entered 0, 0, 2 times; `march` attempted 6, 4, 5; `march.refused` 3, 2, 4;
+      no `field.won`, `field.lost` or `field.drawn` told: the two fought fields of seed 2 fold Drawn and are
+      refused); not yet reached naturally in `corpus_run`'s separate 143-case NPC/ARC corpus"
     note: >-
       The seam exists (`ecacb57`, PR #436): `march` declares `contests: a field` and resolves
       through `seam/wrappers/mass_battle.py` → the `mass_battle.resolve_field` composition role.

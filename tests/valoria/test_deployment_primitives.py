@@ -20,9 +20,12 @@ def test_density_bounds_cell_count():
             cells = footprint_for('Line', troops, density, None)
             per = troops / len(cells)
             # achieved per-cell density is within the [CELL_FLOOR, CELL_CAP] band and near the target
-            assert 40 <= per <= 200, f"{troops}@{density}: {per:.0f}/cell out of band"
-    # the specific regression: 133 troops must now spread beyond 1 cell at a low density
-    assert len(footprint_for('Line', 133, 40, None)) >= 3, "133 troops @ 40/cell must span >=3 cells"
+            assert 50 <= per <= 100, f"{troops}@{density}: {per:.0f}/cell out of band"
+    # the specific regression: a small unit must spread beyond 1 cell at a low density. RE-CUT at B17.15 (ED-MB-0101: a cell
+    # holds 50 to 100, a unit is at least four cells): 200 troops is the smallest unit of four cells; 133 is below the ruled
+    # minimum and keeps two cells
+    assert len(footprint_for('Line', 200, 50, None)) >= 4, "200 troops @ 50/cell must span >=4 cells"
+    assert len(footprint_for('Line', 133, 40, None)) == 2, "133 troops is below the ruled minimum: its old two cells"
 
 
 def test_density_monotonic_in_cells():

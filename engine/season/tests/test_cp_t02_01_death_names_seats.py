@@ -38,6 +38,7 @@ from ..queries import world_q
 from ..seam.contest import Resolution
 from ..state.carriers import Act, Person, Rung, Tenure
 from ..state.world import World
+from ._field_outcomes import field_outcome
 from ._scar_helpers import party_state
 
 HOLDER, OFFICE = "p_high", "off_duke"          # `tiny_world`: p_high holds off_duke and stands at S
@@ -224,7 +225,7 @@ def _won_total(w):
     attackers = world_q.mustered(w, "set_s_014", CROWN)
     seats = sorted(t.object for pid in defenders for t in w.seat_holds(pid))
     res = Resolution("Won", {"parties": {"claimants": attackers, "subject_members": defenders},
-                             "result": {"attacker_size_pct": 1.0, "defender_size_pct": 0.0}})
+                             "result": field_outcome(1.0, 0.0, defender_out=True)})
     return defenders, attackers, seats, _march(w, res)
 
 
@@ -259,7 +260,7 @@ def test_c_a_total_lost_emits_field_lost_and_a_person_died_naming_each_pid_remov
     seats = sorted(t.object for pid in attackers for t in w.seat_holds(pid))
     res = Resolution("Lost", {"parties": {"claimants": attackers,
                                           "subject_members": world_q.mustered(w, "set_s_036", CHURCH)},
-                              "result": {"attacker_size_pct": 0.0, "defender_size_pct": 1.0}})
+                              "result": field_outcome(0.0, 1.0, attacker_out=True)})
     out = _march(w, res)
     kinds = [e.kind for e in out]
     assert kinds[:2] == ["field.lost", "person.died"], kinds
@@ -288,6 +289,6 @@ def test_c_control_a_scaled_won_with_no_death_publishes_what_it_did_before():
     defenders = world_q.mustered(w, "set_s_036", CHURCH)
     res = Resolution("Won", {"parties": {"claimants": world_q.mustered(w, "set_s_014", CROWN),
                                          "subject_members": defenders},
-                             "result": {"attacker_size_pct": 1.0, "defender_size_pct": 0.5}})
+                             "result": field_outcome(1.0, 0.5, defender_out=True)})
     assert [e.kind for e in _march(w, res)] == ["field.won", "army.arrived"]
     assert all(pid in w.persons for pid in defenders)

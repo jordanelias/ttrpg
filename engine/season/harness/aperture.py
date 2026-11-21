@@ -493,7 +493,7 @@ def scene_sources(d) -> dict:
 
 #: The Events a fought field leaves, and the one an unopposed march leaves: the kinds `FOUGHT FIELDS` counts.
 #: The verbs that emit them are read off the table (`fought_fields`), not named.
-FIELD_FOUGHT = ("field.won", "field.lost")
+FIELD_FOUGHT = ("field.won", "field.lost", "field.drawn")
 FIELD_UNOPPOSED = "field.unopposed"
 #: The `Receipt.field` a stance write carries (`write_matrix.yaml`: `(Person, stance)`).
 STANCE_FIELD = "stance"
@@ -804,7 +804,7 @@ def built_out_lines(m: dict) -> list:
                    f"{'BUILT OUT' if is_built_out(c) else '-'}")
     out.append(f"    built out {sum(1 for c in rows.values() if is_built_out(c))} of {len(VERB_TABLE)}")
     f = m["fought"]
-    out.append(f"  FOUGHT FIELDS  won+lost {f['won_lost']}  unopposed {f['unopposed']}  "
+    out.append(f"  FOUGHT FIELDS  won+lost+drawn {f['won_lost']}  unopposed {f['unopposed']}  "
                f"stance receipts on the losing side {f['stance']}")
     return out
 

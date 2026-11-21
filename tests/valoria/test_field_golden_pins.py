@@ -1,21 +1,21 @@
 """Drift guard for the field-golden CI gate's pin vector (plan-v2 A1b, §0.1 #5).
 
 tools/ci_golden_modes_check.py is the single owner of the golden-mode pin list.
-Its values are the goldens' recorded values — which today equal the source-level
-`environ.get` defaults. The hazard this guards: someone flips a default in
-config.py (a golden-moving change) without deliberately updating the pin list
+Its values are the goldens' recorded values — which today equal the fields of the engine's
+`EngineConfig` (`config.DEFAULT`, B17.12: the engine reads no process variable, so there is no
+source-level `environ.get` default to compare with any more). The hazard this guards: someone flips
+a default in config.py (a golden-moving change) without deliberately updating the pin list
 and re-recording; the CI gate would then silently check the new-default battle
 against the old-default golden pin — or vice versa. Either way THIS test goes
 red first, naming the drifted flag.
 
-Also guards the name mapping (every pinned name is genuinely read via
-os.environ somewhere under systems/mass_battle/sim — catches renames like
-SIGMA_HEAD_ENABLED's env name being SIGMA_HEAD, and pins that rot when a flag
-is retired).
+Also guards the name mapping (every pinned name is genuinely a field of the config — catches renames
+like SIGMA_HEAD_ENABLED's variable name being SIGMA_HEAD, and pins that rot when a flag is retired),
+and that the engine's modules read no process variable at all (test_the_engine_reads_no_process_variable).
 
-Mutation-verified at introduction: editing MB_WHEEL's default '1'→'0' in the
-source (or the pin '1'→'0' in the tool) fails test_pins_match_source_defaults;
-deleting a pinned flag's environ.get read fails test_every_pin_is_read.
+Mutation-verified at introduction: editing MB_WHEEL's default True→False in
+EngineConfig (or the pin '1'→'0' in the tool) fails test_pins_match_source_defaults;
+renaming a pinned field fails test_every_pin_is_read.
 """
 import os
 import re
@@ -30,9 +30,11 @@ _ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 # what those clauses are for — without them this file would have gone green over an empty
 # directory, which is the exact failure it was written to prevent.
 _MB = os.path.join(_ROOT, 'systems', 'mass_battle', 'sim')
+if _ROOT not in __import__('sys').path:
+    __import__('sys').path.insert(0, _ROOT)
 # PLAN POSITION `31c` split the engine in two: the reachable closure of `massbattle.py` moved to
 # `modules/mass_battle/`, and `bat.py`, `engine.py` and the harnesses stayed here. Every walk below reads
-# BOTH roots (`_MB_ROOTS`), or the env reads the closure owns would fall out of the scan.
+# BOTH roots (`_MB_ROOTS`). B17.12: only the second may read a process variable.
 _MB_ROOTS = (os.path.join(_ROOT, 'modules', 'mass_battle'), _MB)
 
 import importlib.util
@@ -45,13 +47,13 @@ _spec.loader.exec_module(_mod)
 FIELD_PINS = _mod.FIELD_PINS
 MODES = _mod.MODES
 
-# pins that deliberately do NOT mirror an environ.get default:
+# pins that deliberately do NOT mirror a config field:
 _NON_SOURCE_PINS = {'PYTHONHASHSEED'}
 
 # The provably battery-inert residue (critic-verified, each with the reason it cannot
 # move a bat.py digest at the FIELD_PINS values). This set is load-bearing:
-# test_no_unclassified_env_reads asserts every engine env read is pinned, a mode
-# selector, or listed HERE — so a new env-read flag added to the engine and left
+# test_no_unclassified_env_reads asserts every EngineConfig field is pinned, a mode
+# selector, or listed HERE — so a new flag added to the config and left
 # unpinned fails that test until someone classifies it deliberately (§0.1 #5; the
 # missing direction the A1b critic pass named B1).
 _KNOWN_INERT = {
@@ -101,25 +103,20 @@ _KNOWN_INERT = {
 # needs classifying here. An earlier version added a standalone MB_SIGHT_RANGE distance constant;
 # removed as provably dead by construction (see config.py's own comment), not merely inert-by-value.
 
-_ENV_READ = re.compile(r"environ\.(?:get|setdefault)\(\s*['\"](\w+)['\"](?:\s*,\s*['\"]([^'\"]*)['\"])?")
-
-
 def _source_defaults():
-    """{env_name: default_string} for every simple environ.get under the MB tree,
-    excluding standalone harnesses that bat.py never imports."""
-    skip = {'lanchester_signature.py', 'test_persubunit_stress.py'}
-    out = {}
-    for dirpath, _dirs, files in (step for root in _MB_ROOTS for step in os.walk(root)):
-        for f in files:
-            if not f.endswith('.py') or f in skip:
-                continue
-            text = open(os.path.join(dirpath, f), encoding='utf-8').read()
-            for m in _ENV_READ.finditer(text):
-                name, dflt = m.group(1), m.group(2)
-                if dflt is not None:
-                    # first definition wins; conflicting defaults are their own defect
-                    out.setdefault(name, dflt)
-    return out
+    """{variable_name: shipped value} for every field of `config.EngineConfig`, read off `config.DEFAULT` and keyed by the
+    name the pin vector spells (the field's own, but SIGMA_HEAD for SIGMA_HEAD_ENABLED)."""
+    from dataclasses import fields
+    from modules.mass_battle import config
+    from systems.mass_battle.sim import variant
+    return {variant.ENV_NAME.get(f.name, f.name): getattr(config.DEFAULT, f.name) for f in fields(config.EngineConfig)}
+
+
+def _same(pin, value):
+    """Whether the pin's text spells the shipped value: a switch as '1'/'0', a number as the number."""
+    if isinstance(value, bool):
+        return pin == ('1' if value else '0')
+    return float(pin) == float(value)
 
 
 # [ED-MB-0061, 2026-07-30] THE ONE LEGITIMATE PIN/DEFAULT DIVERGENCE, AND WHY IT IS DECLARED RATHER
@@ -153,7 +150,7 @@ def test_pending_rebase_set_is_exactly_the_transition():
     This is what keeps the exemption from becoming a place to park drift."""
     defaults = _source_defaults()
     actually_diverging = {n for n, pinned in FIELD_PINS.items()
-                          if n not in _NON_SOURCE_PINS and n in defaults and defaults[n] != pinned}
+                          if n not in _NON_SOURCE_PINS and n in defaults and not _same(pinned, defaults[n])}
     stale = _PENDING_REBASE - actually_diverging
     undeclared = actually_diverging - _PENDING_REBASE
     assert not stale, (
@@ -178,10 +175,10 @@ def test_pins_match_source_defaults():
         if name in _PENDING_REBASE:
             continue   # [ED-MB-0061] declared divergence; see the block above and its own guard
         assert name in defaults, (
-            f"pin {name} has no environ.get default in systems/mass_battle/sim — "
+            f"pin {name} is not a field of config.EngineConfig — "
             f"renamed or retired? Update tools/ci_golden_modes_check.py deliberately.")
-        if defaults[name] != pinned:
-            mismatches.append(f"{name}: pinned {pinned!r} vs source default {defaults[name]!r}")
+        if not _same(pinned, defaults[name]):
+            mismatches.append(f"{name}: pinned {pinned!r} vs config default {defaults[name]!r}")
         checked += 1
     assert not mismatches, (
         "pin/default drift — a default flip is a golden-moving change and must "
@@ -192,29 +189,63 @@ def test_pins_match_source_defaults():
 
 
 def test_no_unclassified_env_reads():
-    """The completeness direction (critic B1): every env read in the engine must be a
-    pin, a mode selector, or an explicitly-classified inert flag. A new environ.get
-    added to the engine fails here until deliberately classified."""
+    """The completeness direction (critic B1): every field of the engine's config must be a
+    pin, a mode selector, or an explicitly-classified inert flag. A new field
+    added to EngineConfig fails here until deliberately classified."""
     defaults = _source_defaults()
     unclassified = set(defaults) - set(FIELD_PINS) - {'PER_CELL', 'FIELD_MOVEMENT',
                                                       'MB_NODE_COHESION'} - _KNOWN_INERT
     assert not unclassified, (
         f"env reads with no classification (pin it, or add to _KNOWN_INERT with the "
         f"reason it cannot move a digest): {sorted(unclassified)}")
-    # and the inert list must not rot: every member still read somewhere
+    # and the inert list must not rot: every member is still a field of the config
     ghost = {n for n in _KNOWN_INERT if n not in defaults}
-    # non-literal-default reads (e.g. YIELD_POOL_MULT's str(MB_SHOCK_HOLD_BRACE)) are
-    # invisible to the regex — verify those by raw-text presence instead of dropping them
-    for n in sorted(ghost):
-        found = False
-        for dirpath, _dirs, files in (step for root in _MB_ROOTS for step in os.walk(root)):
-            for f in files:
-                if f.endswith('.py') and n in open(os.path.join(dirpath, f), encoding='utf-8').read():
-                    found = True
-                    break
-            if found:
-                break
-        assert found, f"_KNOWN_INERT member {n} no longer appears anywhere in the engine (rot)"
+    assert not ghost, f"_KNOWN_INERT members that are no longer config fields (rot): {sorted(ghost)}"
+    assert len(defaults) >= 90 and _KNOWN_INERT <= set(defaults)     # the sweep is not vacuous
+
+
+def test_the_engine_reads_no_process_variable():
+    """B17.12 (04_MB_typed_outcome_and_one_path §3): `os.environ` is read only under `systems/mass_battle/sim/`. The first
+    root is the module's own, and the scan observes the failure it excludes (a planted read is found, below)."""
+    module_root = _MB_ROOTS[0]
+    pat = re.compile(r"\benviron\b|\bgetenv\b")
+    scanned, hits = 0, []
+    for dirpath, _dirs, files in os.walk(module_root):
+        for f in files:
+            if f.endswith('.py'):
+                scanned += 1
+                for i, line in enumerate(open(os.path.join(dirpath, f), encoding='utf-8').read().split('\n'), 1):
+                    if pat.search(line):
+                        hits.append(f"{f}:{i}")
+    assert scanned >= 20, "the scan found no module tree"
+    assert not hits, f"the engine reads a process variable: {hits}"
+    assert pat.search("x = os.environ.get('PER_CELL', '1')") and pat.search("os.getenv('PER_CELL')")   # the control
+
+
+def test_an_exported_variable_moves_no_constant():
+    """The falsifier of §3 ("a run whose outcome changes when an MB_* variable is exported"): a fresh process with EVERY
+    field's variable exported at a flipped value reads the shipped constants, and the variant reader, given the same
+    variables, does see them (the control: the variables are not inert, the module is deaf to them)."""
+    import subprocess
+    import sys
+    from dataclasses import fields
+    from modules.mass_battle import config
+    from systems.mass_battle.sim import variant
+    flipped = {}
+    for f in fields(config.EngineConfig):
+        v = getattr(config.DEFAULT, f.name)
+        flipped[variant.ENV_NAME.get(f.name, f.name)] = ('0' if v else '1') if isinstance(v, bool) else str(v + 1)
+    code = ("import dataclasses, json; import modules.mass_battle.config as C; "
+            "print(json.dumps({f.name: getattr(C, f.name) for f in dataclasses.fields(C.EngineConfig)}))")
+    env = dict(os.environ, PYTHONPATH=_ROOT, **flipped)
+    out = subprocess.run([sys.executable, '-c', code], capture_output=True, text=True, env=env, cwd=_ROOT, check=True)
+    import json
+    read = json.loads(out.stdout)
+    shipped = {f.name: getattr(config.DEFAULT, f.name) for f in fields(config.EngineConfig)}
+    assert read == shipped
+    seen = variant.cfg_from_environ(flipped)
+    moved = [f.name for f in fields(config.EngineConfig) if getattr(seen, f.name) != shipped[f.name]]
+    assert len(moved) == len(shipped) >= 90, "the control: the variant reader takes every variable"
 
 
 def test_mode_selectors_cover_every_out_of_budget_golden_mode():
@@ -252,7 +283,7 @@ def test_every_pin_is_read():
     defaults = _source_defaults()
     unread = [n for n in FIELD_PINS
               if n not in _NON_SOURCE_PINS and n not in defaults]
-    assert not unread, f"pins never read by the engine (rot): {unread}"
+    assert not unread, f"pins that name no config field (rot): {unread}"
 
 
 def test_known_inert_reasons_are_not_self_referential():
@@ -282,7 +313,7 @@ def test_known_inert_reasons_are_not_self_referential():
     # and was over-broad — a guard that fires on correct code teaches people to silence guards.
     _FLIPPED_BY_THE_RULING = {'MB_FEIGNED_RETREAT', 'MB_RESERVE_COMMIT',
                               'MB_YIELD_EMERGENT', 'MB_YIELD_POCKET', 'MB_YIELD_RALLY'}
-    on_and_inert = {n for n in _KNOWN_INERT & _FLIPPED_BY_THE_RULING if defaults.get(n) == '1'}
+    on_and_inert = {n for n in _KNOWN_INERT & _FLIPPED_BY_THE_RULING if defaults.get(n) is True}
     assert on_and_inert, (
         "scope collapsed — none of the ruling-flipped flags is both ON and claimed inert, so this "
         "guard is now vacuous (§0.1 point 2). Re-derive the scope set against _KNOWN_INERT.")

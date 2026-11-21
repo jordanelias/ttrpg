@@ -20,7 +20,7 @@ GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B07-task-draw
 GATE: Batch B12c-material-verbs-and-valley
-GATE: Batch B17-mb-scale
+GATE: Batch B17-mb-scale @5377bd99c0ab3823d2ed9870bddf6f3e37999c0e
 GATE: Batch B19-mb-field-calibration
 GATE: Batch B20-mb-orders
 GATE: Batch B21-fa-governance

@@ -13148,8 +13148,8 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # ⚠⚠ THE THIRD ENTRY, AND IT IS THE REAL WIDENING THE ASSERTION ABOVE WARNED ABOUT (M4,
     # `ED-IN-0279` clause (a), 2026-09-28). `march.contests == "a field"` is gradable, not merely
     # declared: `seam/ladder.py::field_degree` (M4 build step 3) reads `mass_battle`'s own
-    # top-level `attacker_wins`/`unopposed` onto `Won`/`Lost`/`Unopposed`, and `degree_of`'s third
-    # dispatch branch (`if "attacker_wins" in result`) routes to it. `test_march.py::
+    # top-level `FIELD_FLAGS`/`unopposed` onto `Won`/`Lost`/`Drawn`/`Unopposed` (B17.01), and `degree_of`'s third
+    # dispatch branch (`if FIELD_FLAGS[0] in result`) routes to it. `test_march.py::
     # test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only` is the falsifier this
     # comment's own demand for "its own measurement" asked for -- a real fight, through the real
     # driver, whose degree actually selects `_eff_march`'s write set.

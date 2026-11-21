@@ -10,18 +10,21 @@ weight 2; the Church's `set_s_036` is defended by six individuals; `terr_T7` is 
 
 from __future__ import annotations
 
-import random
 from engine.dice_engine import draw
 
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.boot.realm import build_realm
+from engine.season.data.rosters import WON
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.loop.sides import sides_of
 from engine.season.manifest.registrar import MODULE_ENTRIES
 from engine.season.queries import world_q
+from engine.season.seam.ladder import field_degree
+from engine.season.tests._field_outcomes import SCALE
 from engine.season.seam.wrappers import mass_battle as MB
 from engine.season.state.carriers import Act, Site, Tenure
 from modules.mass_battle import armyrecord as A
+from modules.mass_battle.config import MIN_ARMY_TROOPS
 from modules.mass_battle.troop_types import recruitment as R
 
 ACTOR, SEAT, ORIGIN = "p_npc_033", "off_spymaster", "set_s_014"
@@ -58,10 +61,14 @@ def _crown_levy(w, strategy="advance", troop_type="levy"):
     for i, c in enumerate(cohorts):
         _fold(w, Act(id=f"r{i}", actor=ACTOR, verb="recruit",
                      payload={"subject": "crown_army", "cohort": c, "troop_type": troop_type, "count": R.under_arms_cap(2)}))
-    _fold(w, Act(id="f", actor=ACTOR, verb="form_unit", payload={"subject": "crown_army", "name": "host", "troop_type": troop_type}))
+    # B17.16: at 1,000 troops a weight the whole levy is 30,000 troops and one unit may hold 10,000 (`MAX_TROOPS_PER_UNIT`), so it is
+    # three units of five cohorts each; one unit of the lot is a field the module refuses (`SCALE-GAP`).
+    names = ("host", "host_2", "host_3")
+    for name in names:
+        _fold(w, Act(id=f"f_{name}", actor=ACTOR, verb="form_unit", payload={"subject": "crown_army", "name": name, "troop_type": troop_type}))
     for i, c in enumerate(cohorts):
         _fold(w, Act(id=f"a{i}", actor=ACTOR, verb="assign_troops",
-                     payload={"subject": "crown_army", "name": "host", "cohort": c, "count": R.under_arms_cap(2)}))
+                     payload={"subject": "crown_army", "name": names[i % 3], "cohort": c, "count": R.under_arms_cap(2)}))
     _fold(w, Act(id="o", actor=ACTOR, verb="order_unit", payload={"subject": "crown_army", "strategy": strategy}))
     return cohorts
 
@@ -78,24 +85,26 @@ def _troops(oob):
 
 # ---------------------------------------------------------------------------------------- M1, M2, M3: the chain runs
 def test_the_shipped_realm_can_raise_field_and_win_with_an_army():
-    """One shipped cohort cannot field an army (weight 2 = 60 troops, under the engine's 100-troop army floor); the faction's
-    whole levy, under its commander, can: 15 cohorts = 900, recruited from cohorts that are committed to nobody."""
-    assert R.under_arms_cap(2) < 100, "control: a single shipped cohort is below the engine's army floor"
+    """B17.16 (ED-MB-0101): a shipped cohort is weight 2 = 2,000 troops, over the army's floor of 1,000 (`MIN_ARMY_TROOPS`; at 30 a
+    weight it was 60, under the engine's 100-troop floor, and this test's premise was that one cohort could not field an army); the
+    faction's whole levy, under its commander, is 15 cohorts = 30,000 troops in three units, recruited from cohorts that are
+    committed to nobody."""
+    assert R.under_arms_cap(2) >= MIN_ARMY_TROOPS, "control: a single shipped cohort is over the army's floor"
     w = build_realm(0)
     cohorts = _governed_cohorts(w, CROWN)
     assert len(cohorts) == 15 and not set(cohorts) & set(world_q.members(w, CROWN)), "fixture: governed, not committed"
     _crown_levy(w, troop_type="spearmen")
     rec = w.records["crown_army"].subject_matter
-    assert sum(n for sf in rec["units"] for _c, n in sf["assigned"]) == 15 * R.under_arms_cap(2) >= 900
+    assert sum(n for sf in rec["units"] for _c, n in sf["assigned"]) == 15 * R.under_arms_cap(2) == 30_000 and len(rec["units"]) == 3
     # The Church's territory, not its walled town: slow infantry cannot storm walls (A.9, WALLS), which is a rule and
     # not a defect, and a field AT a territory is an open one.
     inp = _input(w, DEFENDED_TERR)
-    assert _troops(inp.orders_of_battle[0]) >= 900 and inp.orders_of_battle[1] is None
+    assert _troops(inp.orders_of_battle[0]) == 30_000 and inp.orders_of_battle[1] is None
     assert inp.fort_level == 0.0
     fn = MODULE_ENTRIES["mass_battle.resolve_field"].fn
     seen = [fn(inp, draw.seeded(draw.H2("test_army_phase5", s))) for s in range(1, 9)]
-    assert sum(bool(r["attacker_wins"]) for r in seen) >= 5, [(r["degree"], r["attacker_size_pct"]) for r in seen]
-    assert min(r["attacker_size_pct"] for r in seen) > 0.5, "an army of 900 must not be routed by a town's levy"
+    assert sum(field_degree(r) == WON for r in seen) >= 5, [(field_degree(r), r.attacker.share) for r in seen]
+    assert min(r.attacker.share for r in seen) > 0.5 * SCALE, "an army of 30,000 must not be routed by a town's levy"
 
 
 def test_an_army_is_where_its_commander_is():
@@ -190,8 +199,12 @@ def test_an_army_is_provisioned_by_the_cohorts_it_drew_from(monkeypatch):
 # ----------------------------------------------------------------------------------- M2 again: who bleeds, at home
 def test_a_lost_army_costs_the_cohorts_at_home_their_bodies():
     """The people an army drew from bleed, wherever they live, and only they. A Crown army of spearmen takes the field
-    against a Hafenmark levy raised from its ten cohorts and commanded by a member standing in the territory."""
-    w = build_realm(0)
+    against a Hafenmark levy raised from its ten cohorts and commanded by a member standing in the territory.
+    The realm seed is 8: at the B06/B17 merge the keyed draw is the stream (it was 1); B17.16's scale (30,000 troops against 20,000, three
+    units and two) re-picked it: of seeds 0 to 9, 1 to 3, 5 to 7 and 9 draw the field (nobody bleeds), 0 and 4 decide it but leave a
+    cohort of the losing side whole (its unit untouched, and the assertion that every cohort of the loser bleeds fails), and 8 is the one
+    that passes every assertion."""
+    w = build_realm(8)
     cohorts = _crown_levy(w, strategy="advance", troop_type="spearmen")
     hafen = _governed_cohorts(w, HAFEN)
     cmdr = world_q.members(w, HAFEN)[0]
@@ -206,10 +219,11 @@ def test_a_lost_army_costs_the_cohorts_at_home_their_bodies():
     for i, c in enumerate(hafen):
         _fold(w, Act(id=f"rh{i}", actor=cmdr, verb="recruit",
                      payload={"subject": "hafen_army", "cohort": c, "troop_type": "levy", "count": R.under_arms_cap(2)}))
-    _fold(w, Act(id="fh", actor=cmdr, verb="form_unit", payload={"subject": "hafen_army", "name": "g", "troop_type": "levy"}))
+    for name in ("g", "g_2"):       # B17.16: ten cohorts are 20,000 troops, two units at most 10,000 each
+        _fold(w, Act(id=f"fh_{name}", actor=cmdr, verb="form_unit", payload={"subject": "hafen_army", "name": name, "troop_type": "levy"}))
     for i, c in enumerate(hafen):
         _fold(w, Act(id=f"ah{i}", actor=cmdr, verb="assign_troops",
-                     payload={"subject": "hafen_army", "name": "g", "cohort": c, "count": R.under_arms_cap(2)}))
+                     payload={"subject": "hafen_army", "name": ("g", "g_2")[i % 2], "cohort": c, "count": R.under_arms_cap(2)}))
     before = {c: w.persons[c].body for c in cohorts + hafen}
     kinds = _fold(w, Act(id="mm", actor=ACTOR, verb="march", payload={"subject": UNDEFENDED}, via=SEAT))
     assert {"field.won", "field.lost"} & set(kinds), kinds

@@ -15,76 +15,56 @@ not a dice-pool penalty. Three requirements, each asserted here:
 The legacy -2-dice path (MB_OCTAGON_DMG=0) is preserved and asserted byte-unchanged by the existing
 bat.py digest + persubunit stress suite; this module exercises only the ON (default) model.
 """
-import os
-import sys
-
-
 import contextlib  # noqa: E402
-import importlib  # noqa: E402
+import dataclasses  # noqa: E402
 
 import pytest  # noqa: E402
 from engine.dice_engine import draw  # noqa: E402
-from modules.mass_battle import rngsource  # noqa: E402
+
+from systems.mass_battle.sim import variant  # noqa: E402
 
 
-_MB_ENV = {'PER_CELL': '1', 'MB_REFUSE': '1', 'LANCHESTER_ENABLED': '1',
-           'MB_OCTAGON_DMG': '1', 'MB_FRACTIONAL_POOL': '1'}
+def _using(rng):
+    """Scope `rng` on the engine tree that is installed NOW (B17.12: `variant.install` evicts and rebuilds `modules.mass_battle.*`,
+    so a `rngsource` imported at module level is the shipped tree's and is not the one the variant's engine reads)."""
+    import importlib
+    return importlib.import_module('modules.mass_battle.rngsource').using(rng)
+
+
+_MB_CFG = {'PER_CELL': True, 'MB_REFUSE': True, 'LANCHESTER_ENABLED': True,
+           'MB_OCTAGON_DMG': True, 'MB_FRACTIONAL_POOL': True}
 
 
 def _load_mb(**overrides):
-    """Reload the mass_battle modules under an explicit flag set, honouring os.environ as it
-    stands. Callers own the env; this only rebuilds the modules from it."""
+    """Build the mass_battle engine from an explicit `EngineConfig` (B17.12: the modules read no process variable; the old
+    fixture set variables and reloaded modules). An override is a field name and a switch, `True`/`False` or `'1'`/`'0'`."""
+    cfg = dict(_MB_CFG)
+    cfg.update({k: v in (True, 1, '1') for k, v in overrides.items()})
+    variant.install(dataclasses.replace(variant.DEFAULT, **cfg))
     import modules.mass_battle.config as C
-    importlib.reload(C)
     import modules.mass_battle.hierarchy.units as U
-    importlib.reload(U)
     U.FIELD_MOVEMENT = False
     import modules.mass_battle.orchestration as orch
-    importlib.reload(orch)
     import modules.mass_battle.core.contact as contact
-    importlib.reload(contact)
     return orch, contact, C
 
 
 @contextlib.contextmanager
 def _mb_modules(**overrides):
-    """Load the mass_battle modules under a flag set AND PUT THEM BACK afterwards.
+    """Build the mass_battle engine under a flag set AND PUT THE SHIPPED ONE BACK afterwards.
 
     [ED-MB-0063] THE LEAK THIS CLOSES. The old fixture reloaded `modules.mass_battle.config` under its own
-    env and set `units.FIELD_MOVEMENT = False`, with **no teardown**. `monkeypatch` restores the
-    environment VARIABLES, but a reloaded module keeps the values it was built from — so every test
-    that ran after this module in the same worker inherited this module's flags and a disabled
-    FIELD_MOVEMENT. That is a write with no matching restore: §0.1 #1's read/write asymmetry, in
-    test scaffolding rather than engine code.
-
-    IT IS OBSERVABLE, which is why it is worth fixing rather than noting. Measured on `main`, with
-    nothing changed: `pytest tests/valoria/test_stochastic_rout.py` alone fails
-    `test_per_cell_break_subsumes_the_body_level_one`, while
-    `pytest tests/valoria/test_octagon_damage.py tests/valoria/test_stochastic_rout.py` fails
-    `test_loser_breaks_near_historical_band` instead — the same two files, a different verdict,
-    decided by nothing but order. Under `-n auto` the distribution across workers varies run to
-    run, which is why that pair contributes an unstable 0-2 failures to the suite total on an
-    unchanged tree (measured 9, then 8, on two `main` runs of the identical command).
-
-    This does NOT claim to fix the flaky pair — those tests have their own coupling through
-    `S.MB_STOCHASTIC_ROUT` / `U.MB_CELL_MORALE`, and this module is only one of several leaking
-    into them. It removes THIS module from the set of contributors, which is the part I own.
+    flags and set `units.FIELD_MOVEMENT = False`, with **no teardown**: a reloaded module keeps the values it was
+    built from, so every test that ran after this module in the same worker inherited this module's flags and a
+    disabled FIELD_MOVEMENT. That is a write with no matching restore (§0.1 #1), in test scaffolding. It was
+    observable: `pytest tests/valoria/test_stochastic_rout.py` alone and after this file reached different verdicts,
+    decided by nothing but order. A built variant leaves the shipped modules untouched and `variant.restore()` puts
+    them back by name, so there is nothing left to leak (B17.12).
     """
-    saved_env = {k: os.environ.get(k) for k in {**_MB_ENV, **overrides}}
-    os.environ.update(_MB_ENV)
-    os.environ.update({k: str(v) for k, v in overrides.items()})
     try:
-        yield _load_mb()
+        yield _load_mb(**overrides)
     finally:
-        for k, v in saved_env.items():
-            if v is None:
-                os.environ.pop(k, None)
-            else:
-                os.environ[k] = v
-        # Rebuild from the RESTORED environment so the next test sees ambient state, not ours.
-        _load_mb()
-        import modules.mass_battle.hierarchy.units as U
-        importlib.reload(U)   # last word: undo the FIELD_MOVEMENT override too
+        variant.restore()
 
 
 @pytest.fixture
@@ -115,7 +95,7 @@ def _mk(orch, pos, adv, fac):
 
 
 def _dmg_b(orch, contact, def_adv, seed, t=5, def_face=None):
-    with rngsource.using(draw.seeded(draw.H2("test_octagon_damage", 2000 + seed))):
+    with _using(draw.seeded(draw.H2("test_octagon_damage", 2000 + seed))):
         ub, subB = _mk(orch, (BROW, BCOL), def_adv, 'B')
         if def_face is not None:
             for cid in list(subB.cell_troops):
@@ -325,7 +305,7 @@ def test_visible_flank_refuses_after_delay(mb):
         subB.cell_facing_vec[cid] = (0, 1)   # face east; attacker due north = seen left flank (<=105deg FOV)
     ua, _ = _mk(orch, (BROW - 3, BCOL), +1, 'A')
     for t in range(1, C.FACING_REACTION_TICKS + 3):
-        with rngsource.using(draw.seeded(draw.H2("test_octagon_damage", 900 + t))):
+        with _using(draw.seeded(draw.H2("test_octagon_damage", 900 + t))):
             orch.resolve_engagements(ua, ub, contact.find_contacts(ua, ub), t=t)
     rs = getattr(subB, '_react_since', {})
     # the clock stores (last_tick, consecutive_count); after > FACING_REACTION_TICKS consecutive ticks the
@@ -338,7 +318,7 @@ def test_visible_flank_refuses_after_delay(mb):
 
 def _pincer_dmgb(orch, contact, attackers, seed=13, t=5):
     """Defender B (faces north) struck by a list of attacker bodies at (row_offset, advance_dir)."""
-    with rngsource.using(draw.seeded(draw.H2("test_octagon_damage", 2000 + seed))):
+    with _using(draw.seeded(draw.H2("test_octagon_damage", 2000 + seed))):
         ub, subB = _mk(orch, (BROW, BCOL), -1, 'B')
         subs = [orch.Unit(shape='Line', troop_type='infantry', tier=2,
                              starting_position=(BROW + dr, BCOL), advance_dir=adv) for dr, adv in attackers]
@@ -401,8 +381,9 @@ def test_reaction_clock_resets_between_battles(mb):
     for cid in list(subB.cell_troops):
         subB.cell_facing_vec[cid] = (0, 1)   # face east -> a seen flank stamps the clock
     ua, _ = _mk(orch, (BROW - 3, BCOL), +1, 'A')
-    with rngsource.using(draw.seeded(draw.H2("test_octagon_damage", 5))):
+    with _using(draw.seeded(draw.H2("test_octagon_damage", 5))):
         orch.resolve_engagements(ua, ub, contact.find_contacts(ua, ub), t=3)
         assert getattr(subB, '_react_since', {}), "a seen-flank engagement should stamp the reaction clock"
-        orch.reset_morale_between_battles(ub)
+        from systems.mass_battle.sim import multi   # B17.05: the loops moved out of the module
+        multi.reset_morale_between_battles(ub)
         assert not subB._react_since, "reset_morale_between_battles must CLEAR the reaction clock (R1 leak fix)"

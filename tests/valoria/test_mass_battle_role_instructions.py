@@ -117,13 +117,18 @@ def test_a_volley_line_is_not_frozen_by_its_role(wired):
     assert su.eff_stance == 'balanced'
 
 
+# B17.07: `Feint` is on no menu (no season path reaches the feint), so a body that carries the `lure` keyword is built
+# by its package, not by naming the role: the primitive is still read live at `unit_lures`.
+_FEINT_SPEC = {'shape': 'Line', 'instructions': ('lure',), 'troop_type': 'cavalry'}
+
+
 def test_lure_declares_the_feigned_retreat(wired, monkeypatch):
     """Feint = lure -> PP-256's Feigned Retreat: a pursuer of a routing lure unit faces the
     recognise/hold checks; without the keyword (and no order) there is no feint to resolve."""
     monkeypatch.setattr(_orch, 'MB_FEIGNED_RETREAT', True)
     with rngsource.using(draw.seeded(draw.H2("test_mass_battle_role_instructions", 5))):
         pursuer = build_unit('Line', 3, 'P', 'A', 25, troop_type='cavalry', speed='Fast')
-        lure = build_army([{'role': 'Feint', 'troop_type': 'cavalry'}], 'L', 'B')
+        lure = build_army([_FEINT_SPEC], 'L', 'B')
         plain = build_army([{'role': 'Shock', 'troop_type': 'cavalry'}], 'S', 'B')
         assert lure.feigned is False, "the keyword is read at the pursuit site, not written onto the Army"
         assert _orch.resolve_feigned_retreat(pursuer, lure) is not None
@@ -133,14 +138,53 @@ def test_lure_declares_the_feigned_retreat(wired, monkeypatch):
 def test_lure_is_inert_unwired(unwired, monkeypatch):
     monkeypatch.setattr(_orch, 'MB_FEIGNED_RETREAT', True)
     pursuer = build_unit('Line', 3, 'P', 'A', 25, troop_type='cavalry', speed='Fast')
-    lure = build_army([{'role': 'Feint', 'troop_type': 'cavalry'}], 'L', 'B')
+    lure = build_army([_FEINT_SPEC], 'L', 'B')
     assert _orch.resolve_feigned_retreat(pursuer, lure) is None
+
+
+_OFF_EVERY_MENU = ('Pursue', 'Screen', 'Harass', 'Feint')   # B17.07: each has no primitive a season path reaches
+
+
+def test_no_menu_offers_a_role_without_a_primitive():
+    """B17.07 (`U5b_MB_residue` §1): a role stands on a troop type's menu only if a choice of it can matter.
+    The four roles whose package no primitive reads (and whose one wired keyword, `lure`, no season path reaches)
+    are on no menu; and every keyword a menu role hands out is read by a primitive (a row of
+    `ROLE_INSTRUCTION_PRIMITIVES` that is not `None`). A role with an EMPTY package is a shape (VolleyLine,
+    Skirmish) and stays. The role names themselves stay in `ROLE_SPEC`: a standing order ranges over all of them."""
+    table = _hu.ROLE_INSTRUCTION_PRIMITIVES
+    checked = 0
+    for troop_type, menu in C.TROOP_TYPE_ROLES.items():
+        for role in menu:
+            assert role not in _OFF_EVERY_MENU, f"{troop_type!r} still offers {role!r}"
+            unwired = [k for k in C.ROLE_SPEC[role]['instructions'] if table[k][0] is None]
+            assert not unwired, f"{troop_type!r} offers {role!r}, whose keyword(s) {unwired} drive nothing"
+            checked += 1
+    assert checked >= 20
+    assert set(_OFF_EVERY_MENU) <= set(C.ROLE_SPEC), "an order may still name them (the bypass of role_allowed)"
 
 
 def test_every_role_keyword_is_classified():
     """Every keyword ROLE_SPEC hands out has a row in the mapping: a primitive, or None with the
     reason it is unwired. A keyword added to ROLE_SPEC without a row fails here."""
     vocab = {k for spec in C.ROLE_SPEC.values() for k in spec['instructions']}
-    assert len(vocab) >= 10
+    assert len(vocab) >= 8   # B17.07 cut seven unwired keywords from the 15 the menus carried: the eight left each have a row
     table = _hu.ROLE_INSTRUCTION_PRIMITIVES
     assert vocab <= set(table), f"unclassified: {sorted(vocab - set(table))}"
+
+
+def test_every_gapped_line_role_keeps_its_shape_past_tick_one(field_path):
+    """R-24: `MIN_DISCIPLINE['GappedLine']` is the Discipline of the lightest troop type whose menu offers a
+    GappedLine role, so no menu offers a role its own type cannot hold. After one tick every GappedLine role
+    still reads GappedLine on each type that offers it."""
+    checked = 0
+    for troop_type, roles in C.TROOP_TYPE_ROLES.items():
+        for role in roles:
+            if C.ROLE_SPEC[role]['shape'] != 'GappedLine':
+                continue
+            with rngsource.using(draw.seeded(draw.H2("test_mass_battle_role_instructions", 11))):
+                a = build_army([{'role': role, 'troop_type': troop_type}], 'R', 'A')
+                b = build_unit('Line', 3, 'E', 'B', 25)
+                _orch.run_battle(a, b, max_ticks=2)
+            assert a.units[0].shape == 'GappedLine', (troop_type, role, a.units[0].shape)
+            checked += 1
+    assert checked >= 3

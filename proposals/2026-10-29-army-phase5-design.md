@@ -22,7 +22,7 @@ phase 5 builds. Every number is an ASSUMPTION Jordan may correct.
 | M8 | **An army side is provisioned, and the treasury debited, by the whole mustered weight**, though the battle ignores it. | The ration is billed on the weight of the cohorts the army drew its troops from. |
 | M9 | **An army cannot shrink**: no way to disband a subformation or discharge troops, so a wrong type takes a slot for good and the cap counts it forever (NERS R: a mechanism that breaks at its extremes). | Two verbs, `disband_unit` (the subformation's troops return to the trained pool) and `discharge_troops` (trained troops return home). |
 | M10 | Untagged assumptions (fall-back point read as a fraction of own strength; troop-type morale presets overridden by the side's morale; stat mirrors "provisional"). | Tagged `[ASSUMPTION; medium; Jordan to correct]` at the site, with the revert. |
-| M11 | Winners are never depleted (the casualty ruling writes the loser only); casualties are uniform across a cohort's subformations. | **Not changed — RULED** (Jordan, 2026-09, clause (b): *casualties only on the losing side*). Recorded so it is not rediscovered as a defect. |
+| M11 | Winners are never depleted (the casualty ruling writes the loser only); casualties are uniform across a cohort's subformations. | Superseded by CR-24 (`field_winner_casualties: engine` shipped; `engine/season/hole_register.yaml` H-360); the code governs. |
 
 ## 2. What phase 5 itself builds
 

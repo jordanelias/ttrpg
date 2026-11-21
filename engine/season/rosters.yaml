@@ -990,7 +990,7 @@ rosters:
       it is the band ENCOUNTER's own declaration fold writes at RESOLVE (`04 §A.2`, amended
       2026-09-28) -- the seventh-phase design's own deferral token, not a band any subsystem
       grades. `Won` / `Lost` / `Unopposed` are read off `seam/wrappers/mass_battle.py`'s lifted
-      `attacker_wins`/`unopposed` fields, the shape `combat_degree` reads off a scene's own
+      `unopposed` marker and each side's `routed` / `conceded` flags, the shape `combat_degree` reads off a scene's own
       `wound_state` one row above.
       ⚠ `Declared` COSTS SOMETHING AND THE COST IS STATED HERE, NOT HIDDEN. `04 §C.4:621` fixes a
       verb at five columns, none conditional on the outcome except through `contests:`; a prize row
@@ -1003,7 +1003,11 @@ rosters:
       relocates, nobody is hurt, and the garrison Sites in the target's subtree lose condition
       (`loop/effects_combat.py::_eff_march`). It is read off the provider's `invested` marker
       (`seam/wrappers/mass_battle.py`), as `Unopposed` is read off `unopposed`.
-    values: [Declared, Won, Lost, Unopposed, Invested]
+      B17.01 APPENDS `Drawn` LAST, AFTER `Invested`, so the five positions above do not move: the band of a fought field in
+      which both sides are out (routed or conceded) or neither is when the ticks ran down (`seam/ladder.py::field_degree`,
+      the one owner of the rule). It writes each side's `body` by its own share and the ration debit, no stance row, and
+      leaves every army at its station (`loop/effects_combat.py::_eff_march`).
+    values: [Declared, Won, Lost, Unopposed, Invested, Drawn]
 
   field_casualty_models:
     source: "M4, `ED-IN-0279` clause (a). How much `Person.body` a lost field costs -- `wound_harm_models`'s question above, asked of mass_battle's survivor-ratio result instead of a scene's `WoundTracker`."

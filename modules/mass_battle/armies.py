@@ -3,11 +3,11 @@ per-subunit spec dicts (`build_army`), with the frontage-aware deployment geomet
 
 `modules/mass_battle/` is the reachable closure and the canon tree (`references/module_contracts.yaml`, the
 `mass_battle` row's note); a season-facing order-of-battle builder (`orderofbattle.py`) needs this constructor,
-and a module may not import from `systems/` (the harness and workbench tree), so this module is its one owner
+and a module may not reach into `systems/` (the harness and workbench tree), so this module is its one owner
 (`systems/mass_battle/sim/engine.py` re-imports every name below)."""
 from modules.mass_battle.config import BATTLEFIELD_SIZE, MB_VOLLEYS_START, ROLE_SPEC, SIDE_A_START_ROW, SIDE_B_START_ROW
 from modules.mass_battle.core.exchange import clamp_command
-from modules.mass_battle.troop_types.registry import role_allowed, roles_for, unit_type_for
+from modules.mass_battle.troop_types.registry import default_role_for, role_allowed, roles_for, unit_type_for
 from modules.mass_battle.hierarchy.units import Officer, Unit, Army
 from modules.mass_battle.geometry import CELL_PATTERN_FN, footprint_for
 
@@ -234,14 +234,14 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
         role = sp.pop('role', None)
         # [ED-1095, Jordan-ruled 2026-07-02: "mounted archers shouldn't be closing in on the enemy--
         # they should be flying by and taking advantage of their range advantage with their bows."]
-        # A mounted_archers spec with NO explicit role AND no explicit shape/instructions defaults to
-        # the Kite role (kiting/stand-off posture) instead of silently closing to melee like any other
+        # A spec of a type whose troop-file row names a `default_role` (`mounted_archers`: Kite) with NO explicit role AND
+        # no explicit shape/instructions takes that role (kiting/stand-off posture) instead of silently closing to melee like any other
         # troop type. Checked BEFORE 'shape'/'instructions' are popped below so an explicit caller
         # choice of either is detected and always wins (matches every other precedence rule in this
         # function: explicit beats default). Mirrors the existing role->shape/instructions defaulting
         # immediately below, just with an implicit role instead of a caller-supplied one.
-        if role is None and tt == 'mounted_archers' and 'shape' not in sp and 'instructions' not in sp:
-            role = 'Kite'
+        if role is None and default_role_for(tt) is not None and 'shape' not in sp and 'instructions' not in sp:
+            role = default_role_for(tt)   # [B17.11] the troop file's `default_role` column (`Kite` for `mounted_archers`)
         if role is not None and not role_allowed(tt, role):
             raise ValueError(f"role {role!r} not allowed for troop_type {tt!r} "
                               f"(allowed: {roles_for(tt)})")
@@ -256,7 +256,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
         if instructions is None:
             instructions = role_spec['instructions'] if role_spec is not None else ()
         # [movement audit gate 2, ED-MB-0001] unit_type derives from tt's assigned weapon
-        # (unit_type_for/TROOP_LOADOUT) rather than a hardcoded 'melee' -- an explicit spec value
+        # (unit_type_for/the troop file's `primary` arm) rather than a hardcoded 'melee' -- an explicit spec value
         # still always wins. See build_unit's docstring for the byte-exact-preservation argument
         # (unmapped troop types, including the 'infantry' default, still resolve to 'melee').
         #
@@ -295,7 +295,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
             kw['morale_start'] = kw['morale'] if morale_start is None else morale_start
         # [A6, ED-MB-0067 Part A, F4] `volleys` is forwarded per subunit, seeded for unit_type=='ranged' (the exact
         # gate volley_phase.fire() checks before reading eff_volleys): a ranged subunit left at Unit.volleys=None
-        # would inherit the ONE shared parent Army pool, which between_turn_recovery's per-subunit resupply_volleys
+        # would inherit the ONE shared parent Army pool, which multi.between_turn_recovery's per-subunit resupply_volleys
         # would resupply once per sibling per turn, with its drain not isolated from its siblings'. Same fix shape as
         # the morale defaulting immediately above (DG-4); a melee subunit's ammo count is never read for combat, so
         # only the SHOOTER's own pool is isolated.

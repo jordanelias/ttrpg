@@ -30,48 +30,38 @@ from __future__ import annotations
 import math
 from typing import Mapping, Optional
 
+from modules.mass_battle.troop_types import table as _table
 from modules.mass_battle.troop_types.registry import stats_for
 
 __all__ = ['TROOPS_PER_WEIGHT', 'MUSTER_FRACTION', 'TRAINING_SITE', 'training_site_for', 'under_arms_cap',
            'recruit_limit']
 
-#: People per unit of `Person.weight`. One weight is a hamlet of three hundred. It is set by what the engine can fight
-#: with, not by a census: a unit under `Army.recalc_size`'s 100-troop block routs at once, `config.TROOPS_PER_TIER` runs
-#: 100..800 for a field army, and the shipped realm holds 120 weight in all (the Crown 30, Hafenmark and Varfell 20 each,
-#: the Church 2). At 300 and a tenth under arms the Crown can raise 900, a middling faction 600, and the Church 60 --
-#: a garrison, which routs in the open and should. [ASSUMPTION; medium; Jordan to correct; revert: 100.]
-TROOPS_PER_WEIGHT = 300  # [canonical: ED-IN-0306 -- ASSUMPTION, Jordan: "you can invent one"; sized to the engine's 100-troop unit floor and 100..800 field armies, ED-IN-0306 phase 5]
+#: People per unit of `Person.weight`. One weight is ten thousand people, so a tenth under arms (`MUSTER_FRACTION`) is a
+#: thousand troops a weight: `config.MIN_ARMY_TROOPS`, the least an army is (ED-MB-0101, Jordan, 2026-11-20: "i expect
+#: armies to be a minimum of 1000 troops"; "typically ... 5000 to 10000"). The weight is the floor and a heavier side is
+#: a multiple of it; `massbattle` splits what a side raises into units of at most `config.MAX_TROOPS_PER_UNIT`. A weight
+#: under one is a place that cannot raise an army: it fields fewer than the floor and the form-time warning says so.
+#: [ASSUMPTION; medium; Jordan to correct; revert: 300 (the 100-troop unit floor's scale, ED-IN-0306).] The ruling fixes the floor, not this constant.
+TROOPS_PER_WEIGHT = 10_000  # [ASSUMPTION: sized so one weight at MUSTER_FRACTION raises ED-MB-0101's 1,000-troop floor; whether the floor or the typical battle sets it is Jordan's open question, ED-MB-0101's last row]
 
 #: The share of a place's people that can be under arms at once. A tenth is the usual ceiling of pre-industrial
 #: mobilisation (the able-bodied men of military age are about a fifth of a population, and half of those is a hard
-#: draw on it), and at `TROOPS_PER_WEIGHT` it lands a weight-12 cohort at 360 troops, well clear of `config.UNIT_ROUT_FLOOR`.
+#: draw on it), and at `TROOPS_PER_WEIGHT` it lands a weight-12 cohort at 12,000 troops, clear of `config.UNIT_ROUT_FLOOR` and over one unit's ceiling, so it is several units.
 MUSTER_FRACTION = 0.10  # [canonical: ED-IN-0306 -- ASSUMPTION, pre-industrial mobilisation ceiling; Jordan to correct]
 
 #: troop type -> (the Site kind it is trained at, the least condition fraction at which that Site trains it at all).
 #: Drawn from the unit classes Romance of the Three Kingdoms and Total War share: foot soldiers drill at a barracks,
 #: missile troops at a range, horse at a stable, engines at a workshop. The elite entries need a Site at least half
-#: built. A type absent from this table (levy) needs no Site.
-TRAINING_SITE = {
-    'light_infantry':  ('barracks',       0.0),
-    'spearmen':        ('barracks',       0.0),
-    'heavy_infantry':  ('barracks',       0.0),
-    'pike':            ('barracks',       0.0),
-    'archers':         ('archery_range',  0.0),
-    'crossbow':        ('archery_range',  0.0),
-    'sling':           ('archery_range',  0.0),
-    'skirmishers':     ('archery_range',  0.0),
-    'cavalry':         ('stable',         0.0),
-    'light_cavalry':   ('stable',         0.0),
-    'mounted_archers': ('stable',         0.0),
-    'knights_templar': ('stable',         0.5),
-    'artillery':       ('siege_workshop', 0.5),
-}  # [canonical: ED-IN-0306 -- ASSUMPTION: the type -> site pairing and the 0.5 elite floor are this module's, from the RTK / Total War unit classes; Jordan to correct]
+#: built. A type absent from this table (levy) needs no Site. [B17.10] The pairing is the troop file's `training_site` and
+#: `min_site_condition` columns (`references/troops.yaml`, read by `troop_types/table.py`); this table is that file read as one.
+#: [canonical: ED-IN-0306 -- ASSUMPTION: the type -> site pairing and the 0.5 elite floor are the troop file's, from the RTK / Total War unit classes; Jordan to correct]
+TRAINING_SITE = _table.training_sites()
 
 
 def training_site_for(troop_type: str) -> Optional[tuple]:
     """`(site_kind, min_condition_fraction)` the type is trained at, or `None` for a type needing no Site (levy).
     Case-insensitive, as `stats_for`."""
-    return TRAINING_SITE.get(str(troop_type).strip().lower())
+    return _table.training_site_for(troop_type)
 
 
 def under_arms_cap(weight: float) -> int:

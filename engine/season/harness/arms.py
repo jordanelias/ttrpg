@@ -112,7 +112,7 @@ import collections.abc
 import inspect
 import math
 
-from ..data.rosters import FIELD_CASUALTY_MODELS, LOST, WON
+from ..data.rosters import DRAWN, FIELD_CASUALTY_MODELS, LOST, WON
 from . import populated
 from ..boot.realm import build_realm
 
@@ -237,10 +237,10 @@ def run_arm(model, n: int, base_seed: int, seasons: int) -> dict:
 
 
 def fought_fields(w) -> int:
-    """The field Events at a fought band: `field.*` Events whose degree is `Won` or `Lost`
-    (`FIELD_BANDS`' two graded members; `Declared` is the fold's deferral token, `Unopposed` no battle,
+    """The field Events at a fought band: `field.*` Events whose degree is `Won`, `Lost` or `Drawn`
+    (`FIELD_BANDS`' three graded members; `Declared` is the fold's deferral token, `Unopposed` no battle,
     `Invested` a siege's wear). Read off the finished world's log."""
-    return sum(1 for e in w.log if e.kind.startswith('field.') and e.degree in (WON, LOST))
+    return sum(1 for e in w.log if e.kind.startswith('field.') and e.degree in (WON, LOST, DRAWN))
 
 
 def _fixture_arms(spec: str) -> dict:

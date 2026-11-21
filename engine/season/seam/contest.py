@@ -34,10 +34,11 @@ class ContestError:
 
 
 # The provider statuses that are a GAME refusal -- the act is refused and the season spent, never
-# aborted: `PARTY-GAP` (every wrapper's word for a missing party) and `REFUSED` (`sigma.py`'s S27.4,
-# `Ob > 2 x Pool`). Any other non-`RESOLVED` status (`ENGINE-UNAVAILABLE`, an unknown one) is a
+# aborted: `PARTY-GAP` (every wrapper's word for a missing party), `REFUSED` (`sigma.py`'s S27.4,
+# `Ob > 2 x Pool`) and `SCALE-GAP` (B17.04: `mass_battle`'s refusal of a unit past the module's ceiling, a shape the
+# cell engine cannot hold). Any other non-`RESOLVED` status (`ENGINE-UNAVAILABLE`, an unknown one) is a
 # software defect and still raises.
-REFUSAL_STATUSES = frozenset({"PARTY-GAP", "REFUSED"})
+REFUSAL_STATUSES = frozenset({"PARTY-GAP", "REFUSED", "SCALE-GAP"})
 
 
 class ContestRefused:

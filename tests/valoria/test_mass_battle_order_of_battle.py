@@ -11,12 +11,13 @@ record's `orders_of_battle`. What this proves, and the control beside each claim
   * Refusals at the boundary, deployment without overlap, strategy and tactic fields reaching the Unit, and the
     new generic roster (spearmen, skirmishers, light cavalry) carrying what makes it a different type.
 """
-import random
 from engine.dice_engine import draw
 
 import pytest
 
+from engine.season.data.rosters import WON
 from engine.season.queries.inputs import MassBattleInput
+from engine.season.seam.ladder import field_degree
 from modules.mass_battle import massbattle
 from modules.mass_battle.config import TROOP_TYPE_ROLES
 from modules.mass_battle.equipment import loadout_for
@@ -25,12 +26,14 @@ from modules.mass_battle.orderofbattle import (STRATEGIES, OrderOfBattle, UnitRo
 from modules.mass_battle.troop_types.registry import (MOUNTED_TYPES, is_mounted, reach_for, stats_for,
                                                       support_ranks_for, unit_type_for)
 
+from engine.season.tests._field_outcomes import SCALE
+
 SEEDS = tuple(range(40, 52))     # twelve: the engine's losses are one-sided per seed, so a type's effect shows in the aggregate
 
 
 def _record(oobs=None, **kw):
     base = dict(weights=((10,), (10,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None,
-                origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={})
+                origin=None, loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, condition_scale=SCALE)
     base.update(kw)
     return MassBattleInput(**base, **({} if oobs is None else {'orders_of_battle': oobs}))
 
@@ -48,7 +51,7 @@ def test_no_orders_of_battle_is_the_field_as_it_was():
     plain = massbattle.resolve_field(_record(), draw.seeded(draw.H2("test_mass_battle_order_of_battle", 5)))
     explicit = massbattle.resolve_field(_record(oobs=(None, None)), draw.seeded(draw.H2("test_mass_battle_order_of_battle", 5)))
     assert plain == explicit
-    assert massbattle._weighted_unit("side_a", 10).units[0].troop_type == 'infantry', (
+    assert massbattle._weighted_unit("side_a", 10, 'A').units[0].troop_type == 'infantry', (
         "the control is vacuous if the headcount line stopped being the single infantry subunit")
 
 
@@ -60,7 +63,7 @@ def _fight(oob_a, seed):
 def _tally(troop_type):
     rs = [_fight(_line(troop_type), s) for s in SEEDS]
     assert len(rs) == len(SEEDS)
-    return sum(r['attacker_wins'] for r in rs), sum(r['attacker_size_pct'] for r in rs) / len(rs)
+    return sum(field_degree(r) == WON for r in rs), sum(r.attacker.share for r in rs) / len(rs) / SCALE
 
 
 def test_equal_headcount_of_different_troop_types_fights_differently():
@@ -74,10 +77,11 @@ def test_equal_headcount_of_different_troop_types_fights_differently():
 
 
 def test_an_order_of_battle_side_and_a_headcount_side_both_deploy():
-    """A side with no order of battle, once the other has one, is a deployed light-infantry line, not a crash."""
-    r = massbattle.resolve_field(_record(oobs=(_line('archers', 400), None), weights=((10,), (400,))),
+    """A side with no order of battle, once the other has one, is a deployed light-infantry line, not a crash. (B17.16: the headcount
+    side is weight 9, 9,000 troops, the line it was at 30 a weight and weight 300; at 1,000 a weight it is cut into three units.)"""
+    r = massbattle.resolve_field(_record(oobs=(_line('archers', 400), None), weights=((10,), (9,))),
                                  draw.seeded(draw.H2("test_mass_battle_order_of_battle", 3)))
-    assert set(r) >= {'attacker_wins', 'degree', 'attacker_size_pct', 'defender_size_pct'}
+    assert type(r).__name__ == 'FieldOutcome' and r.attacker.parts == () and r.defender.parts == ()
 
 
 # ---------------------------------------------------------------------------------------- refusals
@@ -152,9 +156,9 @@ def test_strategy_sets_the_posture_of_each_class_and_an_explicit_posture_wins():
 
 
 def test_tactic_fields_reach_the_subunit():
-    o = _oob(('w', 'light_cavalry', 300, {'target': 'weakest', 'fall_back_at': 0.4, 'role': 'Pursue'}))
+    o = _oob(('w', 'light_cavalry', 300, {'target': 'weakest', 'fall_back_at': 0.4, 'role': 'Flanker'}))
     s = build_unit(o, 'u', 'A', morale_start=5).units[0]
-    assert s.target_condition == 'weakest' and s.role == 'Pursue'
+    assert s.target_condition == 'weakest' and s.role == 'Flanker'
     assert [(od.trigger, od.behavior) for od in s.orders] == [('own_strength:0.4', {'stance': 'retreat'})]
 
 
@@ -165,8 +169,9 @@ def test_a_mounted_archers_body_with_no_role_stands_off_as_kite_and_any_other_ty
     assert kite.role == 'Kite' and kite.instructions, (kite.role, kite.instructions)
     plain = build_unit(_oob(('c', 'light_cavalry', 300, {})), 'u', 'A', morale_start=5).units[0]
     assert plain.role is None and not plain.instructions
-    named = build_unit(_oob(('m', 'mounted_archers', 300, {'role': 'Harass'})), 'u', 'A', morale_start=5).units[0]
-    assert named.role == 'Harass', "an explicit role still wins"
+    # B17.07: `Harass` is off every menu, so naming it for mounted archers is refused (the menu is Kite alone)
+    with pytest.raises(ValueError):
+        build_unit(_oob(('m', 'mounted_archers', 300, {'role': 'Harass'})), 'u', 'A', morale_start=5)
 
 
 def test_side_morale_reaches_every_subunit_and_the_type_stats_still_differ():
@@ -193,11 +198,13 @@ def test_the_generic_roster_is_complete_and_distinct():
 
 def test_every_stat_preset_has_a_loadout_and_a_reach():
     """The tables a troop type must appear in agree, so a type cannot be half-registered. A role menu is NOT one of
-    them: levy, the missile troops and artillery fall to the 'any' menu by design (`config.TROOP_TYPE_ROLES`)."""
-    from modules.mass_battle.troop_types.registry import TROOP_TYPE_REACH, TROOP_TYPE_STATS
+    them: levy, the missile troops and artillery fall to the 'any' menu by design (`config.TROOP_TYPE_ROLES`). Reach
+    is no table of its own (B17.11): it is the class of the primary arm, so a type has one exactly when it has an arm."""
+    from modules.mass_battle.troop_types import table
+    from modules.mass_battle.troop_types.registry import TROOP_TYPE_STATS
     for t in TROOP_TYPE_STATS:
         assert loadout_for(t)[0] is not None, f"{t}: no loadout"
-        assert t in TROOP_TYPE_REACH, f"{t}: no reach"
+        assert table.reach_of(t) is not None, f"{t}: no reach"
 
 
 def test_the_unit_baseline_matches_the_season_adapters():
@@ -210,15 +217,15 @@ def test_the_unit_baseline_matches_the_season_adapters():
 def test_survivor_shares_of_an_order_of_battle_never_exceed_one():
     """A side's survivor share is its troops left over its troops at the start. Counted as `effective_size /
     size_max` it passed 1.0 for an army that is not a whole number of 100-troop blocks (120 troops: 1.2 blocks against
-    a floored 1), and `march` then RAISED a loser's body. FALSIFIER: set `by_troops=False` in `resolve_field` and the
-    120-troop seeds below read above 1."""
+    a floored 1), and `march` then RAISED a loser's body. B17.01 made `hp / hp_max` the one reading on every path (the
+    `by_troops` switch is gone). FALSIFIER: read `effective_size / size_max` in `_grade` and the 120-troop seeds below read above 1."""
     seen = []
     for seed in range(12):
         r = massbattle.resolve_field(_record(oobs=(_line('heavy_infantry', 120), _line('heavy_infantry', 120))),
                                      draw.seeded(draw.H2("test_mass_battle_order_of_battle", seed)))
-        seen += [r['attacker_size_pct'], r['defender_size_pct']]
-    assert max(seen) <= 1.0 and min(seen) >= 0.0, seen
-    assert min(seen) < 1.0, "vacuous if no side took a casualty in twelve fields"
+        seen += [r.attacker.share, r.defender.share]
+    assert max(seen) <= SCALE and min(seen) >= 0, seen
+    assert min(seen) < SCALE, "vacuous if no side took a casualty in twelve fields"
 
 
 def _stance_of(sf, strategy='line'):
@@ -247,3 +254,95 @@ def test_one_site_is_shared_by_every_type_trained_at_it():
     assert R.recruit_limit('spearmen', 12, sites, {'heavy_infantry': first}, 1000) == 0, "the barracks is spent"
     assert R.recruit_limit('archers', 12, {**sites, 'archery_range': 250}, {'heavy_infantry': first}, 1000) == cap // 4, (
         "control: a different kind of site is not spent by the barracks's troops")
+
+
+# ------------------------------------------------------------ a troop type is a row (B17.11): no name is spelled in code
+@pytest.fixture
+def new_rows(monkeypatch):
+    """The loaded troop file with two rows added that no code names: `cataphracts` (the `cavalry` row under another name:
+    mounted, charge 3, wheel) and `steppe_archers` (the `mounted_archers` row under another name: default role Kite). The
+    loader's tables are cleared on the way in and out, so the doc is the only thing that changed."""
+    import copy
+    from modules.mass_battle.troop_types import table
+    doc = copy.deepcopy(table._data())
+    doc['troops']['cataphracts'] = dict(doc['troops']['cavalry'])
+    doc['troops']['cataphracts_unlanced'] = dict(doc['troops']['cavalry'], charge=0)
+    doc['troops']['steppe_archers'] = dict(doc['troops']['mounted_archers'])
+    table.check(doc)
+
+    def clear():
+        for f in (table._stats, table._mounted, table._menus, table._sites):
+            f.cache_clear()
+        from modules.mass_battle.troop_types import registry as _reg
+        _reg.reach_for.cache_clear()
+        _reg.support_ranks_for.cache_clear()
+    monkeypatch.setattr(table, '_data', lambda: doc)
+    clear()
+    yield doc
+    monkeypatch.undo()
+    clear()
+
+
+def test_a_new_row_charges_and_wheels_with_no_code_edit(new_rows):
+    """A row `cataphracts` with `mounted: true, charge: 3, wheel: true` charges, recoils and wheels with no code edit; the
+    same row with `charge: 0` is the control that each of the three reads is the column and not the spelling of a name.
+    FALSIFIER: restore `troop_type == 'cavalry'` at `Unit.charge_pen` or at either recoil site, or the name tuple at
+    `_envelop_goal`, and the matching assertion below reads the old answer."""
+    from types import SimpleNamespace
+    from modules.mass_battle import rngsource
+    import modules.mass_battle.hierarchy.units as hu
+    import modules.mass_battle.orchestration as orch
+    from systems.mass_battle.sim import validators as val
+    from systems.mass_battle.sim.engine import build_unit as sim_unit
+
+    # charges: the penetration is the column
+    assert sim_unit('Line', 3, 'A', 'A', 9, troop_type='cataphracts').units[0].charge_pen == 3
+    assert sim_unit('Line', 3, 'A', 'A', 9, troop_type='cataphracts_unlanced').units[0].charge_pen == 0
+    assert sim_unit('Line', 3, 'A', 'A', 9, troop_type='pike').units[0].charge_pen == 0
+
+    # wheels: the fast enveloping wheel is the column (the control takes the infantry's flank face instead)
+    enemy = [(r, c) for r in range(10, 13) for c in range(10, 13)]
+
+    def goal(tt):
+        me = SimpleNamespace(troop_type=tt, unit_type='melee', _node_anchor=(30.0, 11.0),
+                             _envelop_wheel_goal=lambda cells: 'WHEEL', _envelop_goal_legacy=lambda cells: 'LEGACY')
+        return hu.Unit._envelop_goal(me, enemy)
+    assert goal('cataphracts') == 'WHEEL' and goal('cavalry') == 'WHEEL' and goal('light_cavalry') == 'WHEEL'
+    assert goal('cataphracts_unlanced') == 'WHEEL', "wheel is its own column, not charge"
+    assert goal('pike') not in ('WHEEL', 'LEGACY')
+
+    # recoils: a braced pike wall repels a charge from the new row exactly as it repels the `cavalry` row's, and not at all
+    # when the new row's charge is 0 (same seeds, same everything else)
+    saved = [(m, m.FIELD_MOVEMENT, m.MB_NODE_COHESION) for m in (hu, orch)]
+    val._set_movement_path('node')
+    try:
+        def wall_hp(charger, seeds=(700, 701, 702)):
+            tot = 0.0
+            for s in seeds:
+                with rngsource.using(draw.seeded(draw.H2("test_mass_battle_order_of_battle", s))):
+                    d = sim_unit('Line', 3, 'DEF', 'A', 9, troop_type='pike', stance='hold', instructions=('brace', 'hold'))
+                    c = sim_unit('Line', 3, 'CAV', 'B', 9, troop_type=charger, speed='Fast', instructions=('charge',))
+                    h0 = d.hp
+                    orch.run_battle(d, c, max_ticks=18)
+                tot += d.hp / h0
+            return tot / len(seeds)
+        lanced, named, unlanced = wall_hp('cavalry'), wall_hp('cataphracts'), wall_hp('cataphracts_unlanced')
+    finally:
+        for m, fm, nc in saved:
+            m.FIELD_MOVEMENT = fm
+            m.MB_NODE_COHESION = nc
+    assert named == lanced, "the renamed row recoils as `cavalry` does"
+    assert unlanced != lanced, "control: with charge 0 the wall does not repel it, so the read is the column"
+
+
+def test_a_new_row_with_a_default_role_stands_off_with_no_code_edit(new_rows):
+    """`default_role: Kite` on a row of another name stands the body off as Kite on both build paths (`build_army` and the
+    order-of-battle path) when no role, shape or instructions are named; a row without it stays a plain line."""
+    from systems.mass_battle.sim.engine import build_army
+    kite = build_unit(_oob(('s', 'steppe_archers', 300, {})), 'u', 'A', morale_start=5).units[0]
+    assert kite.role == 'Kite' and kite.instructions, (kite.role, kite.instructions)
+    assert build_army([dict(troop_type='steppe_archers', troops=300.0, concentration=200.0)], 'u', 'A').units[0].role == 'Kite'
+    assert build_army([dict(troop_type='steppe_archers', troops=300.0, concentration=200.0, shape='Line')], 'u', 'A').units[0].role is None, (
+        "an explicit shape still wins")
+    plain = build_unit(_oob(('c', 'cataphracts', 300, {})), 'u', 'A', morale_start=5).units[0]
+    assert plain.role is None and not plain.instructions

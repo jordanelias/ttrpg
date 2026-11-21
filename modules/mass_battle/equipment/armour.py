@@ -11,7 +11,7 @@ model, coverage, per-damage-type DR) are PROVISIONAL placeholders; the physical 
 cross-scale mapping are still being worked out and slot into these OPEN records without a schema
 migration.
 
-DYNAMIC: register / override / extend ARMOURY at import or runtime. ADAPTABLE: records are open;
+DYNAMIC: register / extend ARMOURY at import or runtime. ADAPTABLE: records are open;
 `.variant()` spins regional/quality variants off a base. No engine import, no resolution logic — a data
 surface; resolution does not read DR from it.
 [canonical: params/mass_combat.md §Ranged DR Table — None=0 / Light=1 / Medium=2 / Heavy=3 vs Piercing]

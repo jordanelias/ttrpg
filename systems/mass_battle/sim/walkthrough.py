@@ -30,6 +30,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(_HERE))))   #
 from engine.dice_engine import draw
 
 from modules.mass_battle import rngsource                                      # noqa: E402
+
+_SCALE = 1000   # the body scale a share is read on (the world's `condition_scale`); the page shows a share as a fraction of it
+from engine.season.seam.ladder import field_degree                            # noqa: E402
 from modules.mass_battle.massbattle import _grade                              # noqa: E402
 from modules.mass_battle.geometry import _oriented                             # noqa: E402
 from modules.mass_battle.orchestration import run_battle                       # noqa: E402
@@ -169,7 +172,11 @@ def fight(example: dict, seed: int, role=None) -> dict:
         v['detail'] = rec.snaps[k]
         v['contacts'] = rec.contacts.get(k, [])
     stages = {k: _collapse(v) for k, v in rec.stages.items()}
-    return {'result': result, 'ticks': ticks, 'hpmax': hpmax, 'stages': stages, 'grade': _grade(a, b, by_troops=True)}
+    graded = _grade(a, b, _SCALE, result['turns'])
+    # the page reads the two sides as fractions and the band (`walkthrough_template.html`); B17.03's `FieldOutcome` carries shares
+    grade = {'attacker_size_pct': graded.attacker.share / _SCALE, 'defender_size_pct': graded.defender.share / _SCALE,
+             'degree': field_degree(graded)}
+    return {'result': result, 'ticks': ticks, 'hpmax': hpmax, 'stages': stages, 'grade': grade}
 
 
 def table(run: dict) -> str:
@@ -201,7 +208,7 @@ def build_page(run: dict, out: str, example: dict, seed: int, role=None) -> None
     sweep = []
     for sd in example['sweep_seeds']:
         r = fight(example, sd, role)
-        sweep.append({'seed': sd, 'winner': r['result']['winner'], 'ticks': r['result']['turns'],
+        sweep.append({'seed': sd, 'winner': {'Won': 'A', 'Lost': 'B'}.get(r['grade']['degree'], 'draw'), 'ticks': r['result']['turns'],
                       'a': r['result']['a_hp_pct'], 'b': r['result']['b_hp_pct'], 'degree': r['grade']['degree']})
     armies = _summary(example)
     armies['seed'] = seed

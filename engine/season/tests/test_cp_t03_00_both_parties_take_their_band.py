@@ -28,6 +28,7 @@ from ..loop.driver import SeasonDriver, mint_token
 from ..queries import person_q, world_q
 from ..seam import Resolution, combat_degree, degree_of, party_degree
 from ..state.carriers import Act, Tenure
+from ._field_outcomes import field_outcome
 from ._scar_helpers import party_state
 from .test_cp_t02_01_death_names_seats import CHURCH, CROWN, _march, _won_total
 
@@ -249,7 +250,7 @@ def test_march_control_the_shipped_arm_publishes_one_receipt_list_on_every_kind(
     assert w.fixtures.get("field_casualty_model") == "scaled_by_degree", "the shipped arm moved"
     res = Resolution("Won", {"parties": {"claimants": world_q.mustered(w, "set_s_014", CROWN),
                                          "subject_members": world_q.mustered(w, "set_s_036", CHURCH)},
-                             "result": {"attacker_size_pct": 1.0, "defender_size_pct": 0.5}})
+                             "result": field_outcome(1.0, 0.5, defender_out=True)})
     out = _march(w, res)
     assert [e.kind for e in out] == ["field.won", "army.arrived"]
     assert out[0].changes and out[0].changes == out[1].changes
