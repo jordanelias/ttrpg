@@ -20,7 +20,7 @@ from ..state.gate import Token
 from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN, WORLD_ONLY_STEMS, binding_from_act
 from ..data.rosters import (
     CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, OBSERVATION_TERMS, READ_TO_ADDRESSEE, RECORD_CONTENT,
-    UNDEPOSITED_KINDS, WITNESS_CHANNELS, require_member,
+    UNDEPOSITED_KINDS, WITNESS_CHANNELS, require_member, roster,
 )
 from ..data.verbs import VERB_TABLE
 # ⚠ `04:178` lists WITNESS's reads as the log, the presence cache, the channel predicates and the act
@@ -52,6 +52,9 @@ from ..state.carriers import Claim, Event
 from ..state import ledgers
 from ..state.ids import H, draw_factory
 from ..trace_log import TRACE
+
+# B09.04 (`H-111`): the arms of the `finding_none_deposit` fixture (`none` | `actor`), bound at import like the roster beside it.
+FINDING_NONE_DEPOSIT_ARMS = roster("finding_none_deposit_arms")
 
 # v9 IN-22: THE SEAT CHANNEL -- the obligee channel (`epistemic._ch_post_remit`), borrowed for its
 # `inferred` source and its live/off switch; this route's recipients are seat holders
@@ -359,11 +362,26 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # no `seen`, no content -- and stays in the log and its act's causes. Keyed on the kind, not on a band
     # or an empty `changes[]`: `news.untold`, `tell.refused` and `matter.undetermined` keep depositing. Rebinding `events`
     # covers every pass below that reads it; the trace still counts every Event handed in.
+    # B09.04 (`H-111`): THE ACTOR ARM. `finding_none_deposit` is `none` (the CONTROL, shipped: the skip above stands) or `actor`: such an
+    # Event is still skipped by every pass below that reads `events`, and enters the FAN for its own doer alone (`actor_of`, the person
+    # `witness_key` anchors on) -- so a search he failed is a claim he holds, and no non-actor ever receives it at either arm.
+    # Read once per barrier, and refused outside `rosters.yaml: finding_none_deposit_arms`, as `obs_mode` below is.
+    none_arm = w.fixtures.get("finding_none_deposit")
+    require_member(
+        none_arm,
+        FINDING_NONE_DEPOSIT_ARMS,
+        f"finding.none deposit arm {none_arm!r} is not in the roster",
+        "H-111",
+        law="`observers_for`'s precedent: an unrecognised arm silently falling back to the skip would make every measurement "
+            "of the actor arm read the control")
     n_handed = len(events)
-    events = [e for e in events if e.kind not in UNDEPOSITED_KINDS]
+    handed, events = events, [e for e in events if e.kind not in UNDEPOSITED_KINDS]
+    actor_only = {e.id for e in handed if e.kind in UNDEPOSITED_KINDS} if none_arm == "actor" else frozenset()
     fan: list[tuple[str, Event, str]] = [
-        (pid, e, ch) for e in events if not changes_only_held_claims(w, e, held, mode)
-        for pid, ch in observers_for(w, e, mode, everyone)]
+        (pid, e, ch) for e in handed
+        if (e.kind not in UNDEPOSITED_KINDS or e.id in actor_only) and not changes_only_held_claims(w, e, held, mode)
+        for pid, ch in observers_for(w, e, mode, everyone)
+        if e.id not in actor_only or pid == actor_of(w, e)]
     # (this count is the FAN alone: IN-22's purview extension below appends after it)
     TRACE.decision(f"fan-out over {n_handed} events -> {len(fan)} deposits", "S28/S61",
                    chose=f"mode={mode} over {len(everyone)} persons "

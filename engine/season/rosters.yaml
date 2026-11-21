@@ -1454,9 +1454,23 @@ rosters:
       THE SKIP IS STRICT, AND ITS CONSEQUENCE IS THE THING TO CORRECT: the plan's words ("a refused
       inquiry deposits nothing") drop the actor's own observation reads and `seen` claims as well as the
       event-kind claim, so a refused or failed inquiry teaches its actor nothing and the same person
-      re-forms it. The narrower arm -- skip only the `finding.none` event-kind claim -- is the
-      alternative Jordan would name.
+      re-forms it. The narrower arm is `finding_none_deposit_arms` below (B09.04): at `actor` the
+      Event is deposited to its own doer and to nobody else; `none` (shipped) is the skip as written here.
     values: ["finding.none"]
+
+  finding_none_deposit_arms:
+    source: >-
+      B09.04 (`U5a_DICE_owed_edits` §4; H-111, `undeposited_kinds`' own note: "the narrower arm ... is the alternative
+      Jordan would name"): who receives a `finding.none` Event at WITNESS, the one kind `undeposited_kinds` skips.
+    row: H-111
+    note: >-
+      `none` is THE CONTROL and ships: the Event fans to nobody, as `undeposited_kinds` says. `actor` deposits it to
+      its own doer alone -- the `witness_key` channel's rule, *change claims about self* -- so a person who failed a
+      search holds the claim `(subject, finding.none, doer = himself)` that `person_q.refused_before` reads
+      (`finding.none` is in `emits_on_refusal` of the inquiry rows) and `decision/choose.py::admission_weight`
+      discounts, until it fades or news of the subject lands. No non-actor receives it at either arm, and no other
+      reader is added. Read once per barrier by `loop/witness.py::witness`; a value outside the roster refuses.
+    values: [none, actor]
 
   fold_kinds:
     source: >-
