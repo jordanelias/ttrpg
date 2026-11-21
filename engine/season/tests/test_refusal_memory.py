@@ -5,16 +5,17 @@ that nothing in `decision/` read. `refused_before(p, kinds, subject)` is the one
 confidence of his NEWEST such claim, or 0 when there is none or when he holds ANY newer claim about the subject.
 Its caller is `decision/choose.py::admission_weight` (B09.03, the factor at the control `refusal_memory = 0.0`).
 
-TWO OF THE FIVE ARE GREEN HERE AND THREE ARE RED UNTIL B09.03, BY DESIGN (the plan's EXPECTED RED, `[skip ci]`):
+THIS FILE WAS WRITTEN WITH TWO OF THE FIVE GREEN AND THREE RED, BY DESIGN (the plan's EXPECTED RED, `[skip ci]`), AND ALL
+FIVE ARE GREEN SINCE B09.03 (which built `admission_weight` and the `refusal_memory` fixture):
 
-  green  test_newer_claim_about_subject_supersedes_the_memory
-  green  test_reader_takes_the_person_not_a_ledger
-  red    test_control_value_zero_leaves_hash_equal        -- no `refusal_memory` fixture, no `admission_weight`
-  red    test_factor_never_reaches_zero_below_one          -- no `admission_weight`
-  red    test_unwired_verb_has_factor_one                  -- no `admission_weight`
+  green at B09.02  test_newer_claim_about_subject_supersedes_the_memory
+  green at B09.02  test_reader_takes_the_person_not_a_ledger
+  red at B09.02, green at B09.03  test_control_value_zero_leaves_hash_equal       -- no fixture, no `admission_weight`
+  red at B09.02, green at B09.03  test_factor_never_reaches_zero_below_one         -- no `admission_weight`
+  red at B09.02, green at B09.03  test_unwired_verb_has_factor_one                 -- no `admission_weight`
 
-The reader has no caller until B09.03, so the realm content hash is today's (the batch's control reading, quoted in
-the commit body); the red hash test is the equality B09.03 makes true by the factor being exactly 1.0 at the control.
+At B09.02 the reader had no caller, so the realm content hash was the batch's control reading; the hash test is the
+equality B09.03 made true by the factor being exactly 1.0 at the control.
 """
 from __future__ import annotations
 
@@ -114,7 +115,7 @@ def test_reader_takes_the_person_not_a_ledger():
 
 
 # ---------------------------------------------------------------------------------------------
-# RED UNTIL B09.03: the factor, its fixture and its control.
+# WRITTEN RED AT B09.02, GREEN AT B09.03: the factor, its fixture and its control.
 
 
 def _fx(memory: float):
@@ -123,7 +124,7 @@ def _fx(memory: float):
 
 def test_control_value_zero_leaves_hash_equal(monkeypatch):
     """At `refusal_memory = 0.0` the factor is exactly 1.0, so a season's content hash is the one a chooser with no
-    admission factor reaches. Read two ways: the fixture is registered (cheap, and red until B09.03 builds it), and
+    admission factor reaches. Read two ways: the fixture is registered (cheap; it was red at B09.02, before B09.03 built it), and
     one season played at the control equals one played with `admission_weight` replaced by the constant 1.0."""
     from ..boot.realm import build_realm
     from ..harness import populated

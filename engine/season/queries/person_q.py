@@ -1102,7 +1102,9 @@ class LedgerReader:
     (`decision/options.py::teller_weight`) because this module may not import `decision/`. With
     a `weigh`, the comparator ranks a claim by `(support, when, confidence)`, where `support` is
     the noisy-OR over the DISTINCT ORIGINS asserting the same value (below). `None` is today's
-    comparator, unchanged; B09.07's callers (`belief_contradicts`, `said_of`, `lie_said_of`, `decision/sheet.py::chronicle`, `world_q.current_stage`) pass `ledger_weigh`'s closure.
+    comparator, unchanged; B09.07's callers (`belief_contradicts`, `said_of`, `lie_said_of`, `decision/sheet.py::chronicle`) pass
+    `ledger_weigh`'s closure. `world_q.current_stage` takes the parameter and NO CALLER SUPPLIES IT YET (`open_stages`' callers
+    pass none; `world_q.py`'s `current_stage` docstring says the reader is dormant), so a stage is still read by the plain comparator.
     `confidence` is read at the reader's `tick` and `decay` (`present`) either way: a claim stores what it was
     deposited at and fading is computed here, where it is read (`state/ledgers.py::present_confidence`);
     weighing never rewrites a claim."""

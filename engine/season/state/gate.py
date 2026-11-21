@@ -1778,7 +1778,8 @@ class Gate:
 
     # -- the window -----------------------------------------------------------------------
     def opening(self, record_kind: str, fieldname: str, wclass: str, tick: int) -> None:
-        """Called by `World.write` as it begins an authorized write."""
+        """Called by `World.write` as it begins an authorized write, and by the harness's
+        `probes.py::apparatus_receipt`, which opens a window only when none is open."""
         self._open = _Window(record_kind, fieldname, wclass, tick)
 
     def close(self) -> None:

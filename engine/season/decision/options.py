@@ -1541,8 +1541,9 @@ def channel_remove(channel: str) -> float:
 
 def ledger_weigh(p: Person, fx: "Fixtures", tick: int = 0):
     """THE `weigh` `p` READS THEIR OWN LEDGER BY when asking `belief_contradicts` -- `teller_weight`,
-    or `None` for a ledger holding no told claim (`T3a`: such a ledger weighs 1.0 everywhere, which is
-    the unweighted order exactly, tested, so it takes the plain reader). One owner for both askers:
+    or `None` for a ledger holding no told claim AND no claim faded below `confidence_default` (`T3a`: such
+    a ledger weighs 1.0 everywhere, which is the unweighted order exactly, tested, so it takes the plain
+    reader; since B09.06 a ledger holding any faded claim gets the closure, told or not). One owner for both askers:
     `opening_set` (*may I do this*) and `dissents`' act-level term (*could the actor have done this*,
     `H-201`), so a person reads one ledger one way whichever question they put to it.
 
@@ -1798,8 +1799,9 @@ def teller_weight(p: Person, fx: "Fixtures", tick: int = 0) -> Callable[[Claim],
     returns that share instead of 1.0), so a sighting he has half forgotten weighs half and a teller can outweigh it.
     Refraction sets the deposit-time `confidence`; this reads it once, here, at `tick`. At `False` (the control, shipped
     until B09.08) the closure is the one above, exactly, and reads neither `confidence` nor the decay rate.
-    ⚠ THE FIXTURES ARE READ ON THE FIRST TOLD CLAIM, NOT AT BUILD. A ledger with no teller in it
-    reads none of them (`weigh_confidence`, `confidence_default` and the decay rate are read once, at the closure's build).
+    ⚠ THE TELLER FIXTURES (`told_weight`, `rank_gain`, `regard_gain`) ARE READ ON THE FIRST TOLD CLAIM, NOT AT BUILD. A
+    ledger with no teller in it reads none of them. `weigh_confidence` and, when it is on, `confidence_default` and the
+    decay rate are read once, at the closure's build.
     ⚠ AT THE CONTROL VALUES (`told_weight` 1.0, `rank_gain`, `regard_gain` and `record_gain` all
     0) EVERY CLAIM WEIGHS EXACTLY 1.0.
     ⚠ THE ONE-HOP BOUND. `told_weight` x `relation` x `record` is clamped at 1.0, and a one-hop claim

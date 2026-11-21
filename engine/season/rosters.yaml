@@ -1162,7 +1162,7 @@ rosters:
       member, the actor's `Person.heritage` (descent): `(heritage,)` where it is authored and `()`
       where it is not (`epistemic._term_marks`), public at co-location and deposited true and
       verbatim, as `who` is. `()` means *seen, and nothing describable*, and `None` means *this
-      channel does not show a body at all*. `who` is the actor's id. `why` is the motive.
+      channel does not show a body at all*. `who` is the actor's id. `why` is an antecedent claim the witness holds (below), not a motive.
       ⚠ `supplied_by:` IS WHAT EACH CHANNEL SHOWS, and a witness's struct is the UNION over the
       channels that admit them under the live `fan_out_mode` (`epistemic.live_channels`). The
       `total` arm is `H-33`'s control and shows EVERY term to every witness, so this table is read

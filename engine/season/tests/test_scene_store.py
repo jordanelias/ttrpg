@@ -10,7 +10,9 @@ The question an act answered used to live in `SeasonDriver.scenes`, a dict that 
   3. A FRESH DRIVER ANSWERS A SEASON-0 ACT'S QUESTION: `chronicle.occasion_line(w, act_id)` on a world the first driver
      has gone from. `None`/an unrecorded line falsifies edit 1-2.
   4. THE CONTENT HASH DOES NOT FOLD THE STORE (edit 3, `[ASSUMPTION; medium; Jordan to correct; revert: fold it]`):
-     adding a Scene moves no hash; and the realm's two-season hash equals B09.15's reading.
+     adding a Scene moves no hash (`test_hash_equal_with_the_scene_store_unfolded`, the falsifier of this claim). The
+     realm's two-season hash is also read against the shipped realm pin (`test_the_realm_two_season_hash_is_the_shipped_pin_and_the_run_stores_scenes`):
+     that is the realm pin, which B09.99 re-recorded, and not a reading taken at B09.15.
 """
 from __future__ import annotations
 
@@ -23,9 +25,10 @@ from ..harness import probes as P
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.carriers import Act, Question, Scene
 
-# B09.15's reading (`reading @e6cfe8cd4`), seed 0, two seasons, `build_realm(0)` played by `populated.run`'s composition
-# (`test_choose_watch._play`). B09.99 re-pinned it with the other realm pins (it equals `_realm_goldens.SHIPPED[(0, 2)]`: the same world).
-B0915_READING_SEED_0 = "4c83fef7e3c96957752c1cd932c8de8c"
+# The realm pin at seed 0, two seasons: `build_realm(0)` played by `populated.run`'s composition (`test_choose_watch._play`).
+# It is `_realm_goldens.SHIPPED[(0, 2)]` (B09.99 re-recorded it with the other realm pins; B09.15 took the first reading of
+# this world), the same world, held here as a literal.
+REALM_PIN_SEED_0_TWO_SEASONS = "4c83fef7e3c96957752c1cd932c8de8c"
 
 
 def _play_headless(seasons: int = 2):
@@ -120,9 +123,12 @@ def test_hash_equal_with_the_scene_store_unfolded():
     assert w.content_hash() == before, "the content hash folds the Scene store (edit 3 says it is left out)"
 
 
-def test_hash_equal_to_b09_15s_reading_at_seed_0_two_seasons():
+def test_the_realm_two_season_hash_is_the_shipped_pin_and_the_run_stores_scenes():
+    """What this observes at HEAD: the seed-0 two-season realm hash equals the realm pin, and that run stores Scenes
+    (so the store is populated while the pin holds). It does NOT show the store is unfolded -- the planted
+    `test_hash_equal_with_the_scene_store_unfolded` is that falsifier; this is the realm pin read from this file."""
     from .test_choose_watch import _play
     w, d = _play(0, 2)
     assert not hasattr(d, "scenes")
     assert len(w.acts.scenes()) > 100, "the realm run stored too few Scenes for this to mean anything"
-    assert w.content_hash() == B0915_READING_SEED_0
+    assert w.content_hash() == REALM_PIN_SEED_0_TWO_SEASONS
