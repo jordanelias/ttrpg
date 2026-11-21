@@ -1168,6 +1168,12 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `0.0`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-456 -- site: Fixtures refusal_memory, graded `assumption`; the source gives no number for the weight, so it is injected at the control and swept 0.0 / 0.5 / 1.0]
     refusal_memory=0.0,                # `H-456`, swept 0.0 (control, SHIPPED here) / 0.5 / 1.0
+    # `H-111` (B09.04; `U5a_DICE_owed_edits` §4). WHO RECEIVES A `finding.none` EVENT AT WITNESS (`rosters.yaml: undeposited_kinds` skips it for everyone):
+    # `none` -- nobody (the CONTROL, and what ships; B98 sets the arm); `actor` -- its own doer alone, so a search he failed is a claim he remembers and
+    # `decision/choose.py::admission_weight` discounts (a no-op while `refusal_memory` is 0.0). The arms are `rosters.yaml: finding_none_deposit_arms`.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `none`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-111 -- site: Fixtures finding_none_deposit, graded `assumption`; the skip's own note names the narrower arm as the alternative Jordan would name, so it is injected at the control and swept none / actor]
+    finding_none_deposit="none",       # `H-111`, swept none (control, SHIPPED) / actor
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
