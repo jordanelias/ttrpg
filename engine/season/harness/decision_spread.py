@@ -11,6 +11,7 @@ re-derives a term.
     python -m engine.season.harness.decision_spread --decisions [--control | --null]
     python -m engine.season.harness.decision_spread --season    [--control | --null]
     python -m engine.season.harness.decision_spread --arms
+    python -m engine.season.harness.decision_spread --retries [--seed N] [--seasons K]
 
 WHAT EACH MODE READS, AND WHETHER IT PLAYS A SEASON (each prints the answer in its own header):
 
@@ -36,6 +37,10 @@ WHAT EACH MODE READS, AND WHETHER IT PLAYS A SEASON (each prints the answer in i
                `stance_polarity` {legacy, declared} (§J.2's ask-then row, H-54 / H-194). Each arm prints
                the `--season` reading and the `--decisions` attribution counts under that arm.
 
+  --retries    PLAYS `--seasons` SEASONS (default 2) as `populated.run` plays them, and prints the FIVE READINGS of
+               `16_PESSIMIST_CORE_a_refusal_is_remembered` (A-81, "a refusal is remembered"): what a person does
+               with an opportunity he was refused. `play_retries`' docstring defines each row; `retry_rows` computes
+               them from the attempts, a pure function.
   --control    ARM 0: every holder of a pursuit vector gets the realm-mean vector AND the realm-mean
                `conviction` (the score projects `crisis_weights`, which scales `doctrine` by conviction,
                IN-71); since SE-06 the 37 population cohorts hold a vector too (their territory's
@@ -101,16 +106,19 @@ from engine.substrate.descriptors import PURSUITS
 
 from ..data import goals as goals_data
 from ..data import verbs as V
+from ..data.requires import WORLD_ONLY_STEMS
 from ..data.rosters import FACTION_BY_PROP, PURSUIT_AXES, faction_prop_id
 from ..data.verbs import alignment_at
 from ..decision import assemble, choose as CH, opening_set
 from ..decision.options import project, subject_is_opponent
+from ..gaps import Ungraded
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..seam.wrappers.sigma import believed_odds_query
 from ..state.carriers import Question, subject_of
 from ..state.ids import draw_factory
 from . import probes as P
+from .corpus_run import attempts
 from ..boot.realm import build_realm
 
 # [JUSTIFIED: a float-tie tolerance for the attribution (two scores within it are a tie), an instrument constant and not a game number]
@@ -516,6 +524,147 @@ def play_season(w, seasons: int = 1) -> dict:
 
 
 # ---------------------------------------------------------------------------------------------
+# --retries
+
+
+RETRY_CLASSES = ("world-only", "unobserved", "taught")
+
+
+def refusal_class(events: list) -> str:
+    """THE CLASS OF ONE REFUSED ATTEMPT, by what the fold recorded on its refusal Event (`Event.observed`: the reads the fold made, the
+    last of which decided). `unobserved` -- the Event holds no read; `world-only` -- the last read's stem is one a ledger never answers
+    (`data/requires.py::WORLD_ONLY_STEMS`, `with` chiefly, which `loop/witness.py` rules *"observed, never deposited"*); `taught`
+    otherwise (a read WITNESS deposits, so the teaching channel reaches it). The first two are the classes outside that channel."""
+    obs = tuple(events[0].observed or ()) if events else ()
+    if not obs:
+        return "unobserved"
+    return "world-only" if obs[-1].predicate.partition(":")[0] in WORLD_ONLY_STEMS else "taught"
+
+
+def retry_attempts(w, d, season_ends: list) -> list:
+    """`[{"season", "actor", "verb", "subject", "cohort", "refused", "ok", "class", "key"}]` -- EVERY ATTEMPT, in resolution order: every act
+    that entered RESOLVE (the act store, `corpus_run.attempts`, not only the acts the fold resolved), one row per act whose verb is a
+    table row. `refused` is True when a kind of the row's `emits_on_refusal` stands in the log for it (`corpus_run`'s one made/refused
+    rule); `ok` when it is not refused and an `emits` kind of the row stands there. A graded loss (a lost `examine`, whose refusal
+    kind is also an `emits` kind) is REFUSED here. `season_ends[i]` is `len(w.acts)` after season `i`, so an act's season is read off
+    its position in the store. The OPPORTUNITY an attempt belongs to is `key = (actor, verb, subject)`."""
+    refusals: dict = {}
+    for e in w.log:
+        a = d.act_of.get(e.id)
+        if a is not None:
+            refusals.setdefault(a.id, []).append(e)
+    place = {a.id: j for j, a in enumerate(w.acts)}
+    out = []
+    for a, made, refused in attempts(w, len(season_ends)):
+        season = next(k for k, end in enumerate(season_ends) if place[a.id] < end)
+        evs = [e for e in refusals.get(a.id, ()) if e.kind in refused]
+        out.append({"season": season, "actor": a.actor, "verb": a.verb, "subject": subject_of(a),
+                    "cohort": a.actor in w.persons and w.persons[a.actor].is_cohort,
+                    "refused": bool(refused), "ok": bool(made) and not refused,
+                    "class": refusal_class(evs) if refused else "", "key": (a.actor, a.verb, subject_of(a))})
+    return out
+
+
+def retry_rows(attempts_: list, seasons: int) -> dict:
+    """THE FIVE ROWS' FIGURES from `retry_attempts`' rows (a pure function, so a test may hand it rows), over INDIVIDUALS (`Person.weight == 1`;
+    a cohort's act is a mass and not a person's choice):
+
+      (b) `again[class]` -- of the REFUSED attempts of each class, how many have a LATER attempt on the same opportunity (the source's "41%
+          of refused opportunities are attempted again by the same person"); `again_ok` the same over the EXECUTED attempts, the control
+          the source's bar names ("about 20%");
+      (c) `share[season]` -- the refusal share of acts: attempts refused over all attempts, per season (C3-N13: acts by individuals, not
+          cohorts, refused, over all acts by individuals);
+      (d) `stuck_pairs`, `stuck_acts` -- `(actor, verb)` pairs attempted three or more times and refused EVERY time, and their acts;
+      (e) `retries_ok` -- attempts that succeed on an opportunity refused at an EARLIER attempt."""
+    solo = [r for r in attempts_ if not r["cohort"]]
+    last_at: dict = {}
+    first_refused: dict = {}
+    for j, r in enumerate(solo):
+        last_at[r["key"]] = j
+        if r["refused"]:
+            first_refused.setdefault(r["key"], j)
+    again = {c: [0, 0] for c in RETRY_CLASSES}
+    again_ok = [0, 0]
+    for j, r in enumerate(solo):
+        later = last_at[r["key"]] > j
+        if r["refused"]:
+            again[r["class"]][1] += 1
+            again[r["class"]][0] += later
+        elif r["ok"]:
+            again_ok[1] += 1
+            again_ok[0] += later
+    share = []
+    for s in range(seasons):
+        mine = [r for r in solo if r["season"] == s]
+        share.append((sum(r["refused"] for r in mine), len(mine)))
+    pairs: dict = {}
+    for r in solo:
+        pairs.setdefault((r["actor"], r["verb"]), []).append(r["refused"])
+    stuck = [v for v in pairs.values() if len(v) >= 3 and all(v)]
+    return {"again": {c: tuple(v) for c, v in again.items()}, "again_ok": tuple(again_ok), "share": share,
+            "stuck_pairs": len(stuck), "stuck_acts": sum(len(v) for v in stuck),
+            "retries_ok": sum(1 for j, r in enumerate(solo) if r["ok"] and first_refused.get(r["key"], j) < j)}
+
+
+def _bind_control_arm(w) -> bool:
+    """Bind `refusal_memory = 0.0` on `w`; say whether the fixture is registered. Before B09.03 it is not and there is no arm to bind: the
+    shipped tree IS the control (the reader has no caller), and `play_retries` reads one play for both."""
+    try:
+        w.fixtures.get("refusal_memory")
+    except Ungraded:
+        return False
+    w.fixtures = w.fixtures.sweep("refusal_memory", 0.0)
+    return True
+
+
+def play_retries(seed: int, seasons: int) -> dict:
+    """THE FIVE READINGS of `16_PESSIMIST_CORE_a_refusal_is_remembered` ("Gate") over `seasons` seasons of `build_realm(seed)`, played as
+    `populated.run` plays them (so a content hash here is the one the plan's HASH READING prints), the chooser watched by nobody.
+
+      (a) the CONTROL ARM's content hash, `refusal_memory = 0.0` (the factor is exactly 1.0), beside the shipped arm's; while the fixture
+          is unregistered the shipped tree is the control and the two are one play;
+      (b) refused opportunities attempted again, the world-only and unobserved classes (`refusal_class`), against the executed-act control;
+      (c) individuals' refusal share of acts, by season; (d) `(actor, verb)` pairs attempted three or more times and refused every time;
+      (e) retries that succeed -- (b) to (e) by `retry_rows`, over the SHIPPED arm."""
+    def play(control: bool):
+        w = build_realm(seed)
+        if control and not _bind_control_arm(w):
+            return None
+        d = SeasonDriver(w)
+        ch = P.chooser(w, verbs=resolvable_verbs())
+        ends = []
+        for _ in range(seasons):
+            d.season(ch, question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+            ends.append(len(w.acts))
+        return w, d, ends
+
+    w, d, ends = play(False)
+    arm = play(True)
+    out = retry_rows(retry_attempts(w, d, ends), seasons)
+    out.update({"seed": seed, "seasons": seasons, "attempts": len(w.acts), "hash": w.content_hash(),
+                "control_registered": arm is not None,
+                "control_hash": w.content_hash() if arm is None else arm[0].content_hash()})
+    return out
+
+
+def print_retries(r: dict) -> None:
+    def pct(k: int, n: int) -> str:
+        return "-" if n == 0 else f"{100.0 * k / n:.1f}% ({k} of {n})"
+    ag = r["again"]
+    unteachable = (ag["world-only"][0] + ag["unobserved"][0], ag["world-only"][1] + ag["unobserved"][1])
+    arm = "refusal_memory = 0.0" if r["control_registered"] else "refusal_memory is no fixture yet: the shipped tree is the control"
+    print(f"--retries  seed {r['seed']}, {r['seasons']} SEASON(S), {r['attempts']} attempts in the act store")
+    print(f"  (a) control arm [{arm}] content_hash {r['control_hash']}; shipped arm {r['hash']}")
+    print(f"  (b) refused opportunities attempted again, world-only and unobserved classes: {pct(*unteachable)} "
+          f"[world-only {pct(*ag['world-only'])}; unobserved {pct(*ag['unobserved'])}]; "
+          f"control, executed acts' opportunities attempted again: {pct(*r['again_ok'])}; taught class {pct(*ag['taught'])}")
+    print("  (c) individuals' refusal share of acts: " + "; ".join(f"season {i} {pct(*v)}" for i, v in enumerate(r["share"])))
+    print(f"  (d) (actor, verb) pairs of individuals attempted 3+ times and refused every time: "
+          f"{r['stuck_pairs']} pairs, {r['stuck_acts']} acts")
+    print(f"  (e) retries that succeed (executed, on an opportunity refused at an earlier attempt): {r['retries_ok']}")
+
+
+# ---------------------------------------------------------------------------------------------
 # PRINTING
 
 
@@ -617,8 +766,15 @@ def main(argv=None) -> int:
     ap.add_argument("--arms", action="store_true", help="PLAYS four seasons, one per arm")
     ap.add_argument("--control", action="store_true", help="arm 0: pursuits = realm mean")
     ap.add_argument("--null", action="store_true", help="alignment 'uniform' (H-66)")
+    ap.add_argument("--retries", action="store_true", help="PLAYS --seasons seasons: the five readings of a remembered refusal")
+    ap.add_argument("--seasons", type=int, default=2, help="seasons --retries plays (default 2)")
     ap.add_argument("--seed", type=int, default=0)
     a = ap.parse_args(argv)
+    if a.retries:
+        if a.arms or a.control or a.null or a.persons or a.decisions or a.season:
+            ap.error("--retries is its own mode: it takes no other reading or arm flag")
+        print_retries(play_retries(a.seed, a.seasons))
+        return 0
     if a.arms and (a.control or a.null or a.persons or a.decisions or a.season):
         ap.error("--arms is its own mode: it takes no other reading or arm flag")
     if a.control and a.null:
