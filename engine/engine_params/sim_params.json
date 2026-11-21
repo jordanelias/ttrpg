@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 121,
-    "total": 395,
-    "uncited": 274,
+    "total": 398,
+    "uncited": 277,
     "of_which_assumption_grade": 7
   },
-  "count": 395,
+  "count": 398,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 25,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 105,
+    "engine.season.settings": 108,
     "engine.season.realm": 8
   },
   "params": [
@@ -4998,6 +4998,39 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-445`, swept off (control) / on (SHIPPED since B07.05; revert: `off`)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.refusal_memory",
+      "name": "refusal_memory",
+      "value": 0.5,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-456`, swept 0.0 (control; revert) / 0.5 (SHIPPED since B09.05) / 1.0",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.finding_none_deposit",
+      "name": "finding_none_deposit",
+      "value": "none",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-111`, swept none (control, SHIPPED) / actor",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.weigh_confidence",
+      "name": "weigh_confidence",
+      "value": false,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-183`, swept False (control, SHIPPED until B09.08) / True",
       "citation": null,
       "citation_grade": null
     },
