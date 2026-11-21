@@ -1313,7 +1313,7 @@ BODY_MARK_MODELS = roster("body_mark_models")     # v11 CP-T03-07 (`H-258`): `_e
 # fought. `FIELD_CASUALTY_MODELS`/`MARCH_TARGET_KINDS` bound here for `TITLE_DOMAINS`' reason: an
 # unbound roster is the one whose absence goes unnoticed.
 FIELD_BANDS = roster("field_degree_bands", ordered=True)
-DECLARED, WON, LOST, UNOPPOSED, INVESTED = FIELD_BANDS     # CP-T04-06: `Invested` is appended, the four above do not move
+DECLARED, WON, LOST, UNOPPOSED, INVESTED, DRAWN = FIELD_BANDS     # CP-T04-06 appends `Invested`, B17.01 `Drawn`: the positions before them do not move
 FIELD_CASUALTY_MODELS = roster("field_casualty_models")
 FIELD_WINNER_CASUALTY_ARMS = roster("field_winner_casualty_arms")     # CR-24 (`H-360`)
 MARCH_TARGET_KINDS = roster("march_target_kinds")

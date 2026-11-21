@@ -939,7 +939,7 @@ def test_the_built_out_block_prints_every_verb_and_the_fought_fields_line(realm)
     total = sum(1 for c in realm["built_out"].values() if A.is_built_out(c))
     assert lines[-2].strip() == f"built out {total} of {len(VERB_TABLE)}"
     assert sum("BUILT OUT" in ln for ln in verb_lines) == total
-    assert lines[-1].startswith("  FOUGHT FIELDS  won+lost ") and "stance receipts on the losing side" in lines[-1]
+    assert lines[-1].startswith("  FOUGHT FIELDS  won+lost+drawn ") and "stance receipts on the losing side" in lines[-1]
     pooled = A.pooled_built_out_lines([realm, realm])
     assert sum(1 for ln in pooled if ln.endswith("of 2 seeds")) == len(VERB_TABLE)
     assert pooled[-1].strip() == f"built out in at least one seed {total} of {len(VERB_TABLE)}"

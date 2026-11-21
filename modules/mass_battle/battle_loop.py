@@ -16,7 +16,13 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
      engagement per turn"]
 
     Returns:
-      {"winner": "A"|"B"|"draw", "turns": int, "phases": int, "tick_in_phase": int}
+      {"winner": "A"|"B"|"draw", "turns": int, "phases": int, "tick_in_phase": int, ..., "broke": [(side, unit index), ...]}
+
+    `broke` (B17.03) is the engine's own ORDER OF BREAKING: `(side, unit index)`, `side` 'A' or 'B' and the index into that army's
+    `units`, appended the first time a unit is seen routed while its army still stands. A unit routed by its army's own rout (the
+    whole body fleeing, `Army.derive_rout`, or destroyed, `recalc_size`) is the sweep after the break, not a break, and is not
+    named. It is read at two points -- the tick's own rout check (before `derive_rout` sweeps) and after the phase boundary --
+    so a unit that broke and an army that was swept inside ONE phase boundary is named only if the army stood after it.
     """
     # ED-1043: the names this function reads are resolved from `orchestration` AT CALL TIME, as the globals they were
     # while it lived there (a patch on `orchestration.<name>` is still seen), and so that this module need not
@@ -27,7 +33,7 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
         STAMINA_DRAIN_PER_CONTACT_CELL, UNIT_ROUT_FLOOR, TICKS_PER_PHASE, VOLLEY_LETHALITY_SCALE, _draw_friction,
         _engaged_cols, _is_moving_atom, _oriented, _unit_snapshot, apply_to_subunit, assign_targets,
         attribute_hp_loss, check_orders, discipline_check_cascade, distribute_casualties,
-        distribute_casualties_cellwise, find_contacts, phase_boundary, reach_for, resolve_cross_side_contention,
+        distribute_casualties_cellwise, find_contacts, phase_boundary, resolve_cross_side_contention,
         resolve_engagements, resolve_engagements_cascading, resolve_toi_and_commit, separate_all_bodies,
         sync_col_grid, trace_event, tracing_on, turn_to_face_aggressors, update_stamina, volley_phase,
     )
@@ -57,6 +63,16 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
     trunc_groups = trunc_pairs = 0
     trunc_troops = 0.0
     max_groups = 0
+    broke, _named = [], set()
+
+    def _note_breaks(side, army):
+        """Name each unit of a STANDING army that is routed now and was not named before, in unit order."""
+        if army.routed:
+            return
+        for i, atom in enumerate(army.units):
+            if atom.routed and (side, i) not in _named:
+                _named.add((side, i))
+                broke.append((side, i))
     for t in range(1, max_ticks + 1):
         ticks = t
         trace_event('tick', t=t)
@@ -150,10 +166,10 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
                 cached_centroids[id(atom)] = (_ex + _dr * _fr - _dc * _fc, _ey + _dr * _fc + _dc * _fr)
 
         def _cells_float_of(unit):
-            return [(r, c, reach_for(sub.troop_type)) for sub in unit.units for (r, c) in sub.cells_float()]
+            return any(sub.cells_float() for sub in unit.units)      # consulted for truthiness only (below)
 
         # [TOI refactor] b_cells_float/a_cells_float are consulted by _node_advance ONLY for truthiness -- a
-        # non-empty list signals "defer to the cross-side TOI resolve rather than commit immediately" (see
+        # truthy value signals "defer to the cross-side TOI resolve rather than commit immediately" (see
         # _node_advance's toi_deferred). The cross-side standoff computation (reach- and facing-asymmetric, exact
         # time-of-impact) runs once, after both sides have proposed, in resolve_toi_and_commit below. None when
         # FIELD_MOVEMENT is off -> zero cost, byte-exact.
@@ -194,9 +210,6 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
         # directly.
         if FIELD_MOVEMENT:
             resolve_toi_and_commit(unit_a.units, unit_b.units)
-        # v11: vector halt-at-contact — prevent over-run that creates paradoxical angles
-        for atom in unit_a.units: atom.halt_before_enemy(unit_b)
-        for atom in unit_b.units: atom.halt_before_enemy(unit_a)
         # Cross-side cell contention (speed → size → random priority).
         # After both sides have advanced, cells from opposing sides may occupy the
         # same abs position. Resolve per Jordan design 2026-05-12: higher-speed
@@ -372,10 +385,10 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
         # [ED-MB-0075 option (2), C2/C3, ED-MB-0067 Part C] Envelopment-shock damage-to-morale coupling. C2 ruled
         # the rear/flank damage multiplier (ED-MB-0018) a CONTRIBUTING CAUSE of morale collapse; C3 ruled it
         # "checked against Discipline". This is that check, at the scale run_battle already commits damage at
-        # (above, dmg_a/dmg_b — NOT run_multi_unit_battle's cross-pair post-processing). A unit flagged shocked
+        # (above, dmg_a/dmg_b — NOT the multi-unit loop's cross-pair post-processing (`systems/mass_battle/sim/multi.py`)). A unit flagged shocked
         # this tick (result["shocked_a"/"shocked_b"], OR-accumulated over every engaged pair/sub-phase) rolls
         # discipline_check_cascade (Ob 1); on FAIL (does not resist), the damage it received this tick erodes
-        # morale by the SAME formula run_multi_unit_battle's freed_attacker path uses (erosion = dmg /
+        # morale by the SAME formula the multi-unit loop's freed_attacker path uses (erosion = dmg /
         # (agg_discipline x command), via cascade_morale_hit). The sibling CHARGE-shock branches in
         # resolve_engagements are a different mechanism. MB_ENVELOP_SHOCK-gated defensively (shocked_a/b can
         # only be True when it is already on) — byte-exact OFF, same convention as every other MB_ flag here.
@@ -400,12 +413,15 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
                 if not atom.routed and (atom.eff_morale <= 0
                                         or atom.troop_total() < UNIT_ROUT_FLOOR):
                     atom.routed = True
+            _note_breaks('A' if u is unit_a else 'B', u)       # B17.03: named BEFORE `derive_rout` sweeps the rest
             u.derive_rout()   # single-subunit: fires iff old `u.morale<=0` did (byte-exact)
         # v15: phase boundary — stamina_check, morale_check_phase, rout_resolution
         # are now populated (G-1 + G-2). rally/reform/threadwork remain empty.
         if t % TICKS_PER_PHASE == 0:
             current_phase += 1
             phase_boundary(unit_a, unit_b, current_phase)
+            _note_breaks('A', unit_a)
+            _note_breaks('B', unit_b)
         # A cell with enemies on it turns toward them (per cell, rate-limited); then no two bodies interpenetrate at the
         # end of any tick, whatever step last wrote a position.
         turn_to_face_aggressors(unit_a, unit_b)
@@ -425,5 +441,7 @@ def run_battle(unit_a, unit_b, max_ticks=18):  # [canonical: mass_battle_v30.md 
             # cannot move a golden; readable by any harness that wants to know whether the
             # MAX_SUB_PHASES bound bit during a run.
             "truncated_groups": trunc_groups, "truncated_pairs": trunc_pairs,
-            "truncated_troops": trunc_troops, "max_groups": max_groups}
+            "truncated_troops": trunc_troops, "max_groups": max_groups,
+            # B17.03: the order the units broke in, `(side, unit index)` -- read by `massbattle` for `SideOutcome.broke_first`.
+            "broke": broke}
 

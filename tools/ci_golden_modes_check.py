@@ -11,7 +11,7 @@ bisected and re-recorded in plan-v2 A1a).
 
 PIN DOCTRINE (ED-1089, ED-MB-0045 A1b): every pin below is the value the field
 goldens were RECORDED at — mostly the shipped defaults, pinned explicitly so an
-ambient env var in the runner can't silently check a different battle against
+ambient variable in the runner can't silently check a different battle against
 the golden (minimal pinning is how ED-1089 went wrong). The pin list covers
 every env read classified digest-relevant OR default-inert-but-reachable by the
 A1b inventory + its adversarial critic pass (85 unique env names swept twice,
@@ -21,8 +21,10 @@ completeness direction is asserted there, not claimed here. Re-classify before
 trusting this if bat.py's battery ever grows a yield/feign/ordered-volley row.
 
 DRIFT GUARD: tests/valoria/test_field_golden_pins.py asserts every pin here
-equals the source-level environ.get default — a default flip in config.py
-without a deliberate, golden-re-recording edit here fails that test loudly.
+equals the default of the `EngineConfig` field of that name (`config.DEFAULT`, B17.12) — a default
+flip in config.py without a deliberate, golden-re-recording edit here fails that test loudly.
+The engine reads no process variable: `bat.py`, run as a script, turns the pins below into an
+EngineConfig (`systems/mass_battle/sim/variant.py`) and builds the engine from it.
 
 Mutation check: `--perturb NAME=VALUE` overrides one pin so the job's ability
 to fail can be demonstrated (a gate that cannot fail is not a gate, G2).
@@ -48,11 +50,11 @@ REPO = ci_common.REPO
 BAT = os.path.join(REPO, 'systems', 'mass_battle', 'sim', 'bat.py')
 
 # ── The single owner of the field-mode pin vector ──────────────────────────────
-# Keyed by ENV NAME (note SIGMA_HEAD, not SIGMA_HEAD_ENABLED — config.py:292).
+# Keyed by VARIABLE NAME (note SIGMA_HEAD, not SIGMA_HEAD_ENABLED, the config field — `variant.ENV_NAME`).
 # Sources: _PINNED_OFF's non-mode members (test_mass_battle_byte_exact.py:74-89)
 # + the A1b inventory's digest-relevant groups A (shared code, all modes),
 # B (PER_CELL-gated) and C (field/node-gated) + the critic pass's five
-# default-inert-but-reachable flags, values = environ.get defaults.
+# default-inert-but-reachable flags, values = the EngineConfig defaults.
 FIELD_PINS = {
     # determinism (empirically hash-order-independent per A1a's runs; pinned anyway)
     'PYTHONHASHSEED': '0',

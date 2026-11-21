@@ -185,19 +185,21 @@ def test_a_fought_field_costs_the_loser_its_bodies_and_so_its_next_army():
     assert len(others) >= 3, "vacuous without bystanders mustered beside the two cohorts"
     events = _fold(w, _march_act())
     kinds = {e.kind for e in events}
-    assert kinds & {"field.won", "field.lost"}, sorted(kinds)
+    assert kinds & {"field.won", "field.lost", "field.drawn"}, sorted(kinds)
     bodies = {CA: w.persons[CA].body if CA in w.persons else 0, CD: w.persons[CD].body if CD in w.persons else 0}
     hurt = [c for c, b in bodies.items() if b < scale]
-    assert len(hurt) == 1, ("exactly one side loses", bodies)
-    loser, rid = (CA, "army_a") if hurt == [CA] else (CD, "army_d")
-    assert w.records[rid].subject_matter == _army(ATTACKER if loser == CA else DEFENDER, loser,
-                                                         role=None), (
-        "the fight must not rewrite the Record")
-    if bodies[loser] > 0:
-        oob = _input(w).orders_of_battle[0 if loser == CA else 1]
-        assert abs(_troops(oob) - 120 * bodies[loser] / scale) < 1e-6, (_troops(oob), bodies)
-    else:
-        assert _input(w).orders_of_battle[0 if loser == CA else 1] is None
+    # B17.01: two plain lines of 120 that neither routed nor conceded are a `Drawn` field, which costs BOTH sides their own share
+    # (a won or lost one costs the loser, and the winner its own share too); the claim is per side that bled
+    assert hurt, ("somebody bleeds", bodies)
+    for loser, rid in ((c, "army_a" if c == CA else "army_d") for c in hurt):
+        assert w.records[rid].subject_matter == _army(ATTACKER if loser == CA else DEFENDER, loser,
+                                                             role=None), (
+            "the fight must not rewrite the Record")
+        if bodies[loser] > 0:
+            oob = _input(w).orders_of_battle[0 if loser == CA else 1]
+            assert abs(_troops(oob) - 120 * bodies[loser] / scale) < 1e-6, (_troops(oob), bodies)
+        else:
+            assert _input(w).orders_of_battle[0 if loser == CA else 1] is None
 
     # WHO BLEEDS IS WHO FOUGHT: the people mustered beside the cohorts, in neither army, are not scaled by a fight
     # they were not in. (They were, before `parties["fielded"]`: the headcount path writes every mustered loser.)

@@ -23,6 +23,9 @@ itself is a `seam/` item of its own. It lives here, not in a sibling file, becau
 construct it and this leaf is the one host file a module may import
 (`engine/season/tests/test_social_contest_module.py`).
 
+B17.03 adds the mass-battle module's output record, `FieldOutcome` (with `SideOutcome`, `PartOutcome`), after `MassBattleInput`: the
+entry returns it and the host adapter reads it (`seam/wrappers/mass_battle.py::resolve`). It carries no verdict.
+
 B14.01 adds the combat module's output record, `CombatOutcome` (with `PartyWounds`, `Surrender`, `DecisiveBeat`), beside
 `PersonalCombatInput`: the entry returns it and the host adapter reads it (`seam/wrappers/combat.py::resolve`). It is
 not a `Margin` and carries no winner.
@@ -360,10 +363,6 @@ class MassBattleInput:
                        names the creed Proposition), so this reads 0 whatever `loyalty_gain` is (H-256);
       * `loyalty_gain` -- the `field_morale_loyalty_gain` fixture (`H-148`'s site); `0` is the control,
                        battle history only;
-      * `troops_per_weight` -- REM-32: the `field_troops_per_weight` fixture (`H-250`), the scale from a side's
-                       weight to its Army's troops on the headcount path (`massbattle._weighted_unit`). `1`, the
-                       default, is `troops = weight`: the field as it was. The host always passes the fixture;
-                       the default is the identity of the multiplication, not a value for the scale;
       * `members`   -- CP-T04-01: `(attacker, defender)`, each a tuple of person ids, ONE PER ENTRY OF `weights`, in the
                        same order (`field_input` filters both by the same test). Read only on the `person` arm;
                        `((), ())`, the default, names nobody;
@@ -377,6 +376,9 @@ class MassBattleInput:
                        and SHARED by every record: read-only). The module's terrain lookup and river test
                        read it here and open no file. `repr=False`: a record in an assertion message
                        prints its facts, not a 37 KB map;
+      * `condition_scale` -- B17.03: the body scale (`Fixtures condition_scale`) the module quantises each survivor share onto
+                       (`FieldOutcome`): a share is `round(condition_scale x hp_left / hp_start)`, so a side the battle never
+                       touched reads exactly the scale. The host's, handed on unread;
       * `orders_of_battle` -- ED-IN-0306: `(attacker, defender)`, each an `OrderOfBattle` (the module's own typed
                        record, `modules/mass_battle/orderofbattle.py`, held here as an opaque value: `engine/`
                        imports no module code) or `None`. `None` on both sides -- the default -- is the field as
@@ -391,11 +393,56 @@ class MassBattleInput:
     loyalties: tuple
     loyalty_gain: float
     geography: Mapping = field(repr=False)
+    condition_scale: int
     orders_of_battle: Optional[tuple] = None
-    troops_per_weight: float = 1
     members: tuple = ((), ())
     units: str = "side"
     orders: Optional[tuple] = None
+
+
+# B17.03: THE FIELD'S OUTPUT RECORD, on every arm. `modules/mass_battle/massbattle.py::resolve_field` returns one; the host adapter
+# (`seam/wrappers/mass_battle.py::resolve`) lifts it, `seam/ladder.py::field_degree` reads the band off its two sides' flags and
+# `loop/effects_combat.py::_eff_march` writes each person's casualty from the share of the part he is, else of his side.
+# FIELD_ENDED is the one closed set of how a field stopped; the base fields are declared HERE and the other fields of the one
+# `FieldOutcome` land each with its own proposal and are declared nowhere else (D-U1-11e).
+FIELD_ENDED = ("rout", "concession", "time")
+
+
+@dataclass(frozen=True)
+class PartOutcome:
+    """One part of a side: a member's person id (the headcount `person` arm) or a cohort's (the army path). `share` is its
+    survivors on the body scale, `round(condition_scale x hp_left / hp_start)`, `0..scale`; `routed` is whether its unit broke."""
+    id: str
+    share: int
+    routed: bool
+
+
+@dataclass(frozen=True)
+class SideOutcome:
+    """One side of a finished field. `share` is the side's survivors on the same scale; `parts` are its `PartOutcome`s in
+    input order, `()` on the headcount `side` arm; `broke_first` is the part id that broke on its own account first (the engine's
+    own order of breaking, `battle_loop.run_battle`), or `None`."""
+    share: int
+    routed: bool
+    conceded: bool
+    parts: tuple
+    broke_first: Optional[str]
+
+
+@dataclass(frozen=True)
+class FieldOutcome:
+    """What the mass-battle module's field returns (B17.03; A-3: no `verdict`, the host's `field_degree` reads the band off the two
+    sides' flags). `ended` is `FIELD_ENDED`: `rout` when a side's army routed, `concession` when a side gave the field up,
+    `time` when the ticks ran down; `ticks` is the field's ticks run. Shares are integers on the body scale, quantised at this seam
+    (A-29: the engine's floats are declared floats now; this is not an integer-state commitment)."""
+    ended: str
+    ticks: int
+    attacker: SideOutcome
+    defender: SideOutcome
+
+    def __post_init__(self) -> None:
+        if self.ended not in FIELD_ENDED:
+            raise ValueError(f"FieldOutcome.ended {self.ended!r} is not one of {FIELD_ENDED}")
 
 
 # ---------------------------------------------------------------------------

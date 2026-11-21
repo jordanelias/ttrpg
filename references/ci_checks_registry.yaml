@@ -289,7 +289,7 @@ ci_checks:
     level: 5
     subject: compliance
     posture: harden
-    role: "Oracle -> typed-JSON round-trip: engine/engine_params/combat_engine_v1.json must match modules/combat/config.py and attributes.py, and threadwork_params.json must match systems/threadwork/sim/params.py (--check mode, both outputs)."
+    role: "Oracle -> typed-JSON round-trip: engine/engine_params/combat_engine_v1.json must match modules/combat/config.py and attributes.py, threadwork_params.json must match systems/threadwork/sim/params.py, and mass_battle_v1.json must match modules/mass_battle/config.py::DEFAULT (--check mode, every output)."
     ci_job: validators
     notes: "BLOCKING from day one (deterministic, self-consistent, no external pins). ED-1050/ED-1052. Also runs locally via valoria_local.py --staged --check (blocking)."
 
@@ -316,6 +316,14 @@ ci_checks:
     role: "Module -> typed-JSON: engine/engine_params/battle_orders.json must match modules/mass_battle/massbattle.py's ORDER_ROLES (config.ROLE_SPEC's names) and ORDER_RETREAT_AT (--check mode). It is the writer for engine/substrate/battle_orders.py, the sole runtime reader, which engine/season/rosters.yaml's order_roles and order_retreat_at point at (from_battle_orders) so the season spells no role."
     ci_job: ""
     notes: "WIRED locally (valoria_local.py --staged, blocking) and by engine/season/tests/test_cp_t04_02_marshal.py in the season job, NOT by a workflow line; the CI workflow line is Jordan's file (.github/CODEOWNERS owns /.github/workflows/) and is NOT edited by CP-T04-02 -- add `v python3 tools/export_battle_orders.py --check` beside export_game_constants there. Falsifier: engine/season/tests/test_cp_t04_02_marshal.py pins the artifact current and equal to ROLE_SPEC's names."
+
+  - path: tools/export_troops.py
+    level: 5
+    subject: game
+    posture: harden
+    role: "Authored file -> typed-JSON: engine/engine_params/troops.json must match references/troops.yaml (the troop file: every troop type's row, the arms, their classes and the role specs; --check mode). It is the writer for modules/mass_battle/troop_types/table.py, the sole runtime reader, and it runs the loader's own refusals (an unknown column, a name outside its closed set, a mass stated here and in personal combat's export, a secondary equal to the primary) plus one of its own: a site kind the season does not have."
+    ci_job: ""
+    notes: "WIRED locally (valoria_local.py --staged, blocking) and by tests/valoria/test_export_troops.py::test_round_trip, NOT by a workflow line; the CI workflow line is Jordan's file (.github/CODEOWNERS owns /.github/workflows/) and is NOT edited by B17.10 -- add `python3 tools/export_troops.py --check` beside export_game_constants there. Falsifier: test_round_trip reds a hand-edited artifact and passes the untouched copy; test_unknown_arm_key_refused_by_name and test_mass_stated_twice_refused show each refusal against a one-key mutation of the real file."
 
   - path: tools/export_npc_roster.py
     level: 5

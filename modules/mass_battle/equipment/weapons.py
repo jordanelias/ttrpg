@@ -12,7 +12,7 @@ percussion, armour-defeat mode) — that grounding and the cross-scale mapping a
 when they land they slot into these OPEN records (just add fields) without a schema migration and without
 touching the resolver.
 
-DYNAMIC: register / override / extend ARSENAL at import or runtime. ADAPTABLE: records are open;
+DYNAMIC: register / extend ARSENAL at import or runtime. ADAPTABLE: records are open;
 `.variant()` spins regional/quality variants off a base. No engine import, no resolution logic — a data
 surface. `troop_types.registry.unit_type_for` reads a weapon's `reach` through `equipment.loadout_for`.
 [provisional source: mass_battle_v30.md §B.2 — TTRPG Weapon column + Anti-Armour / Volley keywords]
@@ -37,8 +37,8 @@ def _seed():
     R("light_cut",  damage_type="cut",   weight="light", reach="melee",  keywords=(),                          provisional=True)
     R("heavy_cut",  damage_type="cut",   weight="heavy", reach="melee",  keywords=(),                          provisional=True)
     R("heavy_blunt",damage_type="blunt", weight="heavy", reach="melee",  keywords=("anti_armour",),            provisional=True)  # §B.2 Anti-Armour keyword
-    R("pike",       damage_type="pierce",weight="heavy", reach="melee",  keywords=("pole", "anti_cavalry"),    provisional=True)  # [v2 Stage E, ED-MB-0014 / P-DEC-1] the pike: a pole weapon, longest melee reach (0.3, TROOP_TYPE_REACH)
-    R("spear",      damage_type="pierce",weight="light", reach="melee",  keywords=("pole", "anti_cavalry"),    provisional=True)  # [ED-IN-0306] generic spearmen: a one-handed pole weapon, reach 0.2 (TROOP_TYPE_REACH); the pike's lighter sibling
+    R("pike",       damage_type="pierce",weight="heavy", reach="melee",  keywords=("pole", "anti_cavalry"),    provisional=True)  # [v2 Stage E, ED-MB-0014 / P-DEC-1] the pike: a pole weapon, longest melee reach (0.3, the troop file's arm classes)
+    R("spear",      damage_type="pierce",weight="light", reach="melee",  keywords=("pole", "anti_cavalry"),    provisional=True)  # [ED-IN-0306] generic spearmen: a one-handed pole weapon, reach 0.2 (the troop file's arm classes); the pike's lighter sibling
     R("javelin",    damage_type="pierce",weight="light", reach="ranged", keywords=("volley",),                 provisional=True)  # [ED-IN-0306] generic skirmishers: thrown pierce, the lightest volley
     R("bow",        damage_type="pierce",weight="light", reach="ranged", keywords=("volley",),                 provisional=True)
     R("crossbow",   damage_type="pierce",weight="light", reach="ranged", keywords=("volley", "armour_piercing"),provisional=True)  # §B.2 +1 vs med/heavy post-DR

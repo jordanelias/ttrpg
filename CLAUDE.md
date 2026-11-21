@@ -624,11 +624,17 @@ for the READS.
 of an EXTERNAL service (GitHub merge or CI state, a URL) — by any mechanism. **Polling our own agents
 and local processes is permitted** (RULED: `Monitor` on a background job's log or
 CPU time; the waste class is re-asking an outside service, not watching our own work). Enforced:
-`.claude/settings.json`'s `permissions.deny` blocks `send_later`, `create_trigger`, `ScheduleWakeup`,
-`CronCreate`, `update_trigger`, `fire_trigger`, `Skill(loop)`, `watch_url` and `subscribe_pr_activity`
+`.claude/settings.json`'s `permissions.deny` blocks `send_later`, `create_trigger`, `CronCreate`,
+`update_trigger`, `fire_trigger`, `Skill(loop)`, `watch_url` and `subscribe_pr_activity`
 (RULED). **The deny-list is the single owner of the rule**; `tests/valoria/test_no_polling_triggers.py`
 fails on recurrence — it asserts every primitive in its own `REQUIRED_DENY` tuple and that this section
-survives. **Deliberately NOT denied:** `create_session`, `Monitor`.
+survives. **Deliberately NOT denied:** `create_session`, `Monitor`, `ScheduleWakeup`.
+
+**One timer is permitted (RULED, Jordan: *"Allow 20 minute timers"*): a `ScheduleWakeup` of 20 minutes,
+armed while a `methodology-execute` run is in flight, whose wake does one thing: checkpoint every
+producer worktree and the working branch (`methodology-execute` §CHECKPOINTS), then re-arm.** It is
+one-shot, never asks an external service anything, and is not re-armed once the run's row is expunged.
+Any other use of it is the ban above.
 
 **The falsifier:** delete a deny entry and that test fails. If it ever passes while a session is still
 arming wake-ups, the mechanism has moved — find the new primitive and add it to `REQUIRED_DENY`.

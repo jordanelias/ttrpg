@@ -214,11 +214,12 @@ _BODY_WRITES = {
     "w.persons[pid].body = body": "lowers",
     # `_eff_march`: the losing side's casualties, `total` and `scaled_by_degree` arms.
     "p.body = 0": "lowers",
-    # (B10-12 pin commit: CP-T04-01 changed `pct` to `mine`, the loser's own subunit ratio under `field_units: person`.)
-    "p.body = max(1, int(p.body * max(0.0, mine or 0.0)))": "lowers",
-    # `_eff_march` (CR-24, `field_winner_casualties: engine`): the winners' own casualties, `body` only; `win_ratio` is clamped
-    # to [0, 1] at its one write (`min(1.0, max(0.0, mine))`), so the write can only hold or lower a body.
-    'p.body = 0 if model == "total" else max(1, int(p.body * win_ratio[pid]))': "lowers",
+    # (B17.03: the loser's own part's share, an integer on `condition_scale` clamped to `0..scale` at the write, so it can only hold
+    # or lower a body.)
+    "p.body = max(1, int(p.body) * min(scale, max(0, share_of(loser_side, pid))) // scale)": "lowers",
+    # `_eff_march` (CR-24, `field_winner_casualties: engine`): the winners' own casualties, `body` only; `win_share` is clamped
+    # to `0..scale` at its one write (`min(scale, max(0, mine))`), so the write can only hold or lower a body.
+    'p.body = 0 if model == "total" else max(1, int(p.body) * win_share[pid] // scale)': "lowers",
     # `_eff_tend`: the one raiser at HEAD; `whole` is `max(p.body, p.body_ceiling)`.
     "p.body = whole": "raises",
     # `loop/matter.py`'s subsistence fall (`fall.body_after`, a loss), in the `setattr` form a `.body =` grep misses.

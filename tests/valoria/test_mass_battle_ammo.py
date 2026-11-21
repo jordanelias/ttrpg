@@ -36,7 +36,8 @@ from modules.mass_battle.config import (SIDE_A_START_ROW, SIDE_B_START_ROW, MB_V
                                              MB_VOLLEYS_RESUPPLY, MB_KITE_STANDOFF, VOLLEY_MAX_RANGE)
 from systems.mass_battle.sim.engine import build_army
 from modules.mass_battle.hierarchy.units import Unit, Army
-from modules.mass_battle.orchestration import volley_phase, between_turn_recovery
+from modules.mass_battle.orchestration import volley_phase
+from systems.mass_battle.sim.multi import between_turn_recovery  # B17.05: moved out of the module
 from engine.dice_engine import draw  # noqa: E402
 from modules.mass_battle import rngsource  # noqa: E402
 

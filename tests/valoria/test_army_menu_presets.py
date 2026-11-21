@@ -10,7 +10,6 @@ built them would have.
 
 from __future__ import annotations
 
-import random
 from engine.dice_engine import draw
 import re
 from pathlib import Path
@@ -22,13 +21,15 @@ from engine.season.harness import army_presets as AP
 from engine.season.harness import military_menu as MM
 from engine.season.harness.play_surface import dispatching_chooser
 from engine.season.boot.realm import build_realm
+from engine.season.data.rosters import WON
 from engine.season.manifest.registrar import MODULE_ENTRIES
 from engine.season.queries import world_q
 from engine.season.queries.inputs import ArmyOptionsQuery, ArmyPresetQuery
+from engine.season.seam.ladder import field_degree
 from engine.season.seam.wrappers import mass_battle as MB
 from engine.season.state.carriers import Site
 from modules.mass_battle import armyrecord as A
-from modules.mass_battle.config import BLOCK_SIZE, UNIT_ROUT_FLOOR
+from modules.mass_battle.config import BLOCK_SIZE, CELL_FLOOR, MIN_ARMY_TROOPS, MIN_CELLS_PER_UNIT, MIN_UNITS_PER_ARMY, UNIT_ROUT_FLOOR
 from modules.mass_battle.troop_types import presets as PR
 from modules.mass_battle.troop_types import recruitment as R
 from modules.mass_battle.troop_types.registry import roles_for
@@ -98,7 +99,7 @@ def test_advisories_name_the_routs():
     rec = A.raised(rec, "c1", "spearmen", 50)
     rec = A.assign(rec, "tiny", "c1", 50)
     kinds = {a[0]: a for a in _opts(rec, ())["advisories"]}
-    assert kinds["unit_routs"][1:] == ("tiny", 50, UNIT_ROUT_FLOOR)
+    assert kinds["unit_routs"][1:] == ("tiny", 50, MIN_CELLS_PER_UNIT * CELL_FLOOR)   # B17.15: the unit's ruled minimum of four cells
     assert kinds["army_routs"][2:] == (50, BLOCK_SIZE)
     # CONTROL, one change: a unit of a full block (400 men) has neither warning
     rec2 = A.assign(A.form(A.raised(A.new("fac_x"), "c1", "spearmen", 400), "line", "spearmen"), "line", "c1", 400)
@@ -234,21 +235,23 @@ def test_the_doctrine_names_only_roles_each_type_has():
 def test_plan_without_sites_is_levy_alone_and_without_people_is_empty():
     p = _plan(_cohorts(10))
     assert {c["troop_type"] for v, c in p if v == "recruit"} == {"levy"}, "no Site, no trained troops"
-    assert _plan(()) == () and _plan(_cohorts(1, weight=1)) == ()
-    assert _plan(_cohorts(1, weight=3)) == (), "90 troops clear a unit's floor but not the army's block: it would rout at once"
-    assert _plan(_cohorts(1, weight=4))[0][0] == "recruit", "control: 120 troops clear the block"
+    # B17.16: a weight is 1,000 troops, so these sub-block cohorts are the fractions of one that the old 30-a-weight premise meant
+    assert _plan(()) == () and _plan(_cohorts(1, weight=0.03)) == ()                       # 30 troops
+    assert _plan(_cohorts(1, weight=0.09)) == (), "90 troops clear a unit's floor but not the army's block: it would rout at once"
+    assert _plan(_cohorts(1, weight=0.12))[0][0] == "recruit", "control: 120 troops clear the block"
 
 
 def test_plan_drops_a_group_that_would_rout_and_gives_its_room_to_the_levy():
-    # six cohorts of weight 10, a stable in one only: its horse is one cohort's fifth of its cap, under the floor
+    # six cohorts of weight 0.3 (300 troops: the premise's weight 10 at 30 a weight, B17.16), a stable in one only: its horse is one
+    # cohort's fifth of its cap, under the floor
     share = dict((c, s) for c, s, _t in PR.ARM_SHARES)["mounted"]
-    horse = int(R.under_arms_cap(10) * share)
+    horse = int(R.under_arms_cap(0.3) * share)
     assert horse < UNIT_ROUT_FLOOR <= 2 * horse, "fixture: one cohort's horse routs, two cohorts' do not"
-    one = _cohorts(5, 10) + (("c99", 10, {"barracks": FULL, "stable": FULL}),)
+    one = _cohorts(5, 0.3) + (("c99", 0.3, {"barracks": FULL, "stable": FULL}),)
     types = {c["troop_type"] for v, c in _plan(one) if v == "recruit"}
     assert "cavalry" not in types and "heavy_infantry" in types
     # CONTROL, one change: a second stable brings the horse over the floor
-    two = _cohorts(4, 10) + (("c98", 10, {"stable": FULL}), ("c99", 10, {"barracks": FULL, "stable": FULL}))
+    two = _cohorts(4, 0.3) + (("c98", 0.3, {"stable": FULL}), ("c99", 0.3, {"barracks": FULL, "stable": FULL}))
     assert "cavalry" in {c["troop_type"] for v, c in _plan(two) if v == "recruit"}
 
 
@@ -259,8 +262,18 @@ def test_plan_counts_the_claims_of_other_armies():
     assert free and _plan(cohorts, others=held) == (), "every cohort is already raised in full by another army"
 
 
+#: B17.16: the Crown is eight cohorts of weight 1.2 (1,200 troops each, 9,600 in all) and not the shipped fifteen of weight 2 (30,000:
+#: the preset's heavy-infantry unit alone would be 13,500 troops and its levy-only army one unit of 30,000, past `MAX_TROOPS_PER_UNIT`,
+#: and the module refuses the field: a gap of `troop_types/presets.py` and `armyrecord`, which cut no unit to the ceiling, reported). A
+#: cohort is a person of weight over 1 (`Person.is_cohort`), so 1.2 is the least a cohort weighs here; the seven the fixture drops
+#: are weight-1 individuals, raised by nobody. The preset's largest unit, and the levy-only army, are then under the ceiling.
+CROWN_COHORT_WEIGHT, CROWN_COHORTS = 1.2, 8
+
+
 def _realm_crown_army(strategy="line", sites=True):
     w = build_realm(0)
+    for i, c in enumerate(_governed_cohorts(w, CROWN)):
+        w.persons[c].weight = CROWN_COHORT_WEIGHT if i < CROWN_COHORTS else 1
     if sites:
         _sites(w, CROWN)
     return w, AP.install(w, [CROWN], strategy=strategy)
@@ -274,13 +287,18 @@ def test_install_raises_a_whole_organised_army_through_the_real_fold():
     assert rec["strategy"] == "advance" and not rec["trained"], "everything raised is in a unit"
     sizes = {sf["name"]: sum(n for _c, n in sf["assigned"]) for sf in rec["units"]}
     assert set(sizes) == {"heavy_infantry", "crossbow", "cavalry", "levy"}, sizes
-    assert min(sizes.values()) >= UNIT_ROUT_FLOOR and sum(sizes.values()) == 15 * R.under_arms_cap(2) == 900
+    assert min(sizes.values()) >= UNIT_ROUT_FLOOR and sum(sizes.values()) == CROWN_COHORTS * R.under_arms_cap(CROWN_COHORT_WEIGHT) == 9600
     for c in _governed_cohorts(w, CROWN):
-        assert sum(A.by_type(rec, c).values()) <= R.under_arms_cap(2), "no cohort over its cap"
-    # the menu agrees: nothing left to raise, and the army is sound
+        assert sum(A.by_type(rec, c).values()) <= R.under_arms_cap(CROWN_COHORT_WEIGHT), "no cohort over its cap"
+    # the menu agrees: nothing left to raise, and its advisories are exactly what the ruled minimums say of these sizes
+    # (B17.15: a unit under four cells, an army under 1,000 troops; the shipped scale is B17.16's)
     cmd = next(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == world_q.army_of(w, CROWN))
     m = MM.menu(w, cmd)
-    assert m.commands and not m.raise_ and not {a[0] for a in m.advisories} & {"unit_routs", "army_routs", "unassigned"}
+    assert m.commands and not m.raise_ and not {a[0] for a in m.advisories} & {"army_routs", "unassigned"}
+    small = {n for n, k in sizes.items() if k < MIN_CELLS_PER_UNIT * CELL_FLOOR}
+    assert {a[1] for a in m.advisories if a[0] == "unit_routs"} == small
+    assert any(a[0] == "army_troops" for a in m.advisories) == (sum(sizes.values()) < MIN_ARMY_TROOPS)
+    assert any(a[0] == "army_units" for a in m.advisories) == (len(sizes) < MIN_UNITS_PER_ARMY)
 
 
 def test_install_is_deterministic_idempotent_and_leaves_other_factions_alone():
@@ -298,13 +316,18 @@ def test_install_is_deterministic_idempotent_and_leaves_other_factions_alone():
 
 
 def test_a_realm_without_sites_gets_a_levy_army_that_holds_and_does_not_press():
-    """The shipped realm seats no barracks, range or stable, so its preset army is levy alone: 900 troops, one unit.
+    """The shipped realm seats no barracks, range or stable, so its preset army is levy alone: one unit.
     A NAMED LIMIT, not a hidden one: the menu says the levy does not close, and the doctrine is what unlocks the rest."""
     w, got = _realm_crown_army(sites=False)
     rec = w.records[world_q.army_of(w, CROWN)].subject_matter
     assert [sf["troop_type"] for sf in rec["units"]] == ["levy"]
     cmd = next(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == world_q.army_of(w, CROWN))
     assert "levy_never_closes" in {a[0] for a in MM.menu(w, cmd).advisories}
+
+
+#: B17.16 RE-PICKED: of seeds 1 to 24 at the Crown's 9,600 troops, the preset with sites wins 4 of the first eight (the old window, 1 to 8) and
+#: 6 of seeds 17 to 24; the levy-only army draws every one of the 24.
+SEEDS = range(17, 25)
 
 
 def _wins_vs_the_churchs_territory(sites):
@@ -315,15 +338,15 @@ def _wins_vs_the_churchs_territory(sites):
     assert cmd in att, "fixture: the army's commander is mustered where the army is"
     inp = MB.field_input(w, att, world_q.mustered(w, DEFENDED_TERR, CHURCH), DEFENDED_TERR, factions=(CROWN, CHURCH))
     oob = inp.orders_of_battle[0]
-    assert oob is not None and sum(s.troops for s in oob.units) == 900
+    assert oob is not None and sum(s.troops for s in oob.units) == CROWN_COHORTS * R.under_arms_cap(CROWN_COHORT_WEIGHT)
     fn = MODULE_ENTRIES["mass_battle.resolve_field"].fn
-    return sum(bool(fn(inp, draw.seeded(draw.H2("test_army_menu_presets", s)))["attacker_wins"]) for s in range(1, 9))
+    return sum(field_degree(fn(inp, draw.seeded(draw.H2("test_army_menu_presets", s)))) == WON for s in SEEDS)
 
 
 def test_a_preset_army_with_sites_beats_a_town_s_levy_and_the_sites_are_why():
     with_sites, levy_only = _wins_vs_the_churchs_territory(True), _wins_vs_the_churchs_territory(False)
     assert with_sites >= 5, with_sites
-    assert with_sites > levy_only, ("CONTROL: the same 900 troops as levy alone", with_sites, levy_only)
+    assert with_sites > levy_only, ("CONTROL: the same troops as levy alone", with_sites, levy_only)
 
 
 def test_the_presets_are_off_by_construction():

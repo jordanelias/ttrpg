@@ -25,6 +25,8 @@ cares about fortification now passes `fort_level` explicitly rather than reading
 """
 import pytest
 
+from engine.season.tests._field_outcomes import SCALE
+
 # The geography file, as the season hands it to the module (`MassBattleInput.geography`): the HOST's one
 # read (`engine/season/data/geography.py`). The module opens no file, so every lookup below passes it.
 from engine.season.data.geography import geography as _geography
@@ -280,7 +282,7 @@ def test_open_ground_resolves_unmodified(monkeypatch):
 
 def _units():
     from modules.mass_battle.massbattle import _weighted_unit
-    return _weighted_unit('side_a', 10), _weighted_unit('side_b', 10)
+    return _weighted_unit('side_a', 10, 'A'), _weighted_unit('side_b', 10, 'B')
 
 
 def test_run_and_grade_accepts_every_row_without_crashing():
@@ -291,8 +293,8 @@ def test_run_and_grade_accepts_every_row_without_crashing():
 
     for row in (NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT, 'river_crossing', None):
         a, b = _units()
-        r = _run_and_grade(a, b, row, draw.seeded(draw.H2("test_mass_battle_terrain", 0)))
-        assert 'attacker_wins' in r
+        r = _run_and_grade(a, b, row, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE)
+        assert r.attacker.routed in (True, False)
 
 
 def test_forest_broken_forces_a_fast_side_to_standard_speed():
@@ -310,7 +312,7 @@ def test_forest_broken_forces_a_fast_side_to_standard_speed():
         "if this ever changes, the FOREST_BROKEN branch stops being vacuous on the season path " \
         "and the patching below becomes unnecessary -- not a failure, but worth noticing"
     a.speed = 'Fast'
-    _run_and_grade(a, b, FOREST_BROKEN, draw.seeded(draw.H2("test_mass_battle_terrain", 0)))
+    _run_and_grade(a, b, FOREST_BROKEN, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE)
     assert a.speed == 'Standard', "a Fast side must be forced to Standard when terrain is forest_broken"
 
 
@@ -324,13 +326,13 @@ def test_walls_raise_the_defenders_dr_and_only_the_defenders_dr():
 
     a, b = _units()
     a0, b0 = a.dr, b.dr
-    _run_and_grade(a, b, WALLS, draw.seeded(draw.H2("test_mass_battle_terrain", 0)))
+    _run_and_grade(a, b, WALLS, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE)
     assert b.dr == b0 + WALLS_DEFENDER_DR, "the defender (unit_b) must take A.9's walls bonus, once"
     assert a.dr == a0, "the attacker (unit_a) must not take the walls bonus"
 
     a, b = _units()
     a0, b0 = a.dr, b.dr
-    _run_and_grade(a, b, OPEN_FLAT, draw.seeded(draw.H2("test_mass_battle_terrain", 0)))
+    _run_and_grade(a, b, OPEN_FLAT, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE)
     assert (a.dr, b.dr) == (a0, b0), "OPEN_FLAT must not touch DR (control)"
 
 
@@ -346,14 +348,14 @@ def test_walls_dr_override_replaces_a9s_number_only_on_a_walls_field():
     for label, walls_dr in (('none', None), ('a9', WALLS_DEFENDER_DR), ('zero', 0), ('one', 1)):
         a, b = _units()
         a0, b0 = a.dr, b.dr
-        _run_and_grade(a, b, WALLS, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), walls_dr=walls_dr)
+        _run_and_grade(a, b, WALLS, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE, walls_dr=walls_dr)
         seen[label] = b.dr - b0
         assert a.dr == a0, f"{label}: the attacker must never take the walls bonus"
     assert seen == {'none': WALLS_DEFENDER_DR, 'a9': WALLS_DEFENDER_DR, 'zero': 0, 'one': 1}, seen
 
     a, b = _units()
     a0, b0 = a.dr, b.dr
-    _run_and_grade(a, b, OPEN_FLAT, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), walls_dr=1)
+    _run_and_grade(a, b, OPEN_FLAT, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE, walls_dr=1)
     assert (a.dr, b.dr) == (a0, b0), "walls_dr must be inert off a WALLS field (control)"
 
 
@@ -364,7 +366,7 @@ def test_open_flat_does_not_touch_speed():
 
     a, b = _units()
     a.speed = 'Fast'
-    _run_and_grade(a, b, OPEN_FLAT, draw.seeded(draw.H2("test_mass_battle_terrain", 0)))
+    _run_and_grade(a, b, OPEN_FLAT, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE)
     assert a.speed == 'Fast', "OPEN_FLAT must not touch speed (control)"
 
 
@@ -387,7 +389,7 @@ def test_each_row_puts_its_a9_dice_on_the_right_side_once(row, attacker, defende
 
     a, b = _units()
     assert _terrain_dice(a) == _terrain_dice(b) == (0, 0), "a fresh unit already carries terrain dice"
-    _run_and_grade(a, b, row, draw.seeded(draw.H2("test_mass_battle_terrain", 0)))
+    _run_and_grade(a, b, row, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE)
     assert _terrain_dice(a) == attacker and _terrain_dice(b) == defender, (row, _terrain_dice(a), _terrain_dice(b))
 
 
@@ -400,7 +402,7 @@ def test_river_crossing_steps_the_crosser_one_speed_tier_slower(before, after):
 
     a, b = _units()
     a.speed = before
-    _run_and_grade(a, b, RIVER_CROSSING, draw.seeded(draw.H2("test_mass_battle_terrain", 0)))
+    _run_and_grade(a, b, RIVER_CROSSING, draw.seeded(draw.H2("test_mass_battle_terrain", 0)), SCALE)
     assert (a.speed, b.speed) == (after, 'Standard')
 
 
@@ -413,22 +415,23 @@ def test_a_dice_row_resolves_differently_from_open_flat_and_identically_with_its
     """MB-05's falsifier, both arms in one run. The same two units and seeds fought on the row and on
     OPEN_FLAT: with the row's A.9 dice zeroed (the pre-MB-05 world, where the row was identified and not
     applied) the two are EQUAL on every seed; with canon's dice they DIFFER on at least one, and the
-    defender never ends with fewer survivors. Measured 2026-10-08 (Python 3.11): 0/16 differ before
+    defender ends with no fewer survivors on average (B17.01: the fights are one-burst and a seed's first contact decides them,
+    so a paired seed is no longer monotone in the row; the row's effect is the mean over the seeds, as the control shows). Measured 2026-10-08 (Python 3.11): 0/16 differ before
     MB-05, 3/16 after, for both rows at these weights; at B05.99, after the one sampler (B05.03), river_crossing first differs at seed 89
     (58 of 1000) and uphill at seed 1, so the seed range is 256 -- one-off figures, not asserted. RIVER_CROSSING's
     speed step is inert here (see the test above), so the zeroed arm is equal for it too."""
-    import random
     from modules.mass_battle import massbattle as MB
 
     def fight(r, seed):
         a, b = _units()
-        return MB._run_and_grade(a, b, r, draw.seeded(draw.H2("test_mass_battle_terrain", seed)))
+        return MB._run_and_grade(a, b, r, draw.seeded(draw.H2("test_mass_battle_terrain", seed)), SCALE)
 
     checked = differs = 0
+    row_share = flat_share = 0.0
     for seed in range(256):
         on_row, flat = fight(row, seed), fight(OPEN_FLAT, seed)
-        assert on_row['defender_size_pct'] >= flat['defender_size_pct'], (
-            f"{row} seed {seed}: the row left the defender FEWER survivors: {on_row} vs {flat}")
+        row_share += on_row.defender.share
+        flat_share += flat.defender.share
         differs += on_row != flat
         with monkeypatch.context() as m:
             for name in zeroed:
@@ -437,6 +440,7 @@ def test_a_dice_row_resolves_differently_from_open_flat_and_identically_with_its
         checked += 1
     assert checked == 256
     assert differs >= 1, f"{row} resolved identically to OPEN_FLAT on every seed"
+    assert row_share >= flat_share, f"{row} left the defender FEWER survivors on average: {row_share / 256} vs {flat_share / 256}"
 
 
 def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
@@ -444,10 +448,9 @@ def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
     `origin`. The provider's own fixture sides (the 2-man Crown army mustered at `set_s_014` against
     the Church at `set_s_036`), fought over T3 (OPEN_FLAT by polygon) marched on from T9, across the
     Valoris, and with no origin: they differ on at least one of 256 seeds (the first is seed 89 since B05.03), and the defenders never end
-    with fewer survivors. (Before MB-05r the same pair was fought over T1 with the old boolean set and
+    with fewer survivors on average. (Before MB-05r the same pair was fought over T1 with the old boolean set and
     unset -- 3 seeds of 16 differed, 2026-10-08; T1's anchor lies on the river, so no origin crosses
     to it, and the field moved to T3, the same OPEN_FLAT row.)"""
-    import random
     from engine.season.boot.realm import build_realm
     from dataclasses import replace
     from engine.season.queries import world_q
@@ -464,13 +467,21 @@ def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
     att = world_q.mustered(w, 'set_s_014', 'fac_valorsmark')
     dfn = world_q.mustered(w, 'set_s_036', 'fac_church_of_solmund')
     assert att and dfn, "the provider's fixture sides no longer muster"
+    # B17.01: a weight is 30 troops now and the shipped realm's weight-1 persons (30 troops) are under the rout floor, so both sides
+    # break on tick 1 whatever the ground; the sides are weight 5 (150 troops each) so the river is fought over
+    for pid in att + dfn:
+        w.persons[pid].weight = 5
     assert terrain_row_for_territory('T3', fort_level=0, geography=_geography()) == OPEN_FLAT, "T3's polygon row moved"
     checked = differs = 0
+    crossed_share = dry_share = 0.0
     for seed in range(256):
         crossed = resolve_field(record(origin='T9'), rng=draw.seeded(draw.H2("test_mass_battle_terrain", seed)))
         dry = resolve_field(record(origin=None), rng=draw.seeded(draw.H2("test_mass_battle_terrain", seed)))
-        assert crossed['defender_size_pct'] >= dry['defender_size_pct'], (seed, crossed, dry)
+        crossed_share += crossed.defender.share
+        dry_share += dry.defender.share
         differs += crossed != dry
         checked += 1
     assert checked == 256
     assert differs >= 1, "the river_crossing signal never reached the engine"
+    # B17.01: on average, not seed by seed (the fights are one-burst and a paired seed is not monotone in the crossing)
+    assert crossed_share >= dry_share, (crossed_share / 256, dry_share / 256)

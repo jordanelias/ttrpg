@@ -20,7 +20,7 @@ from engine.dice_engine.sigma_leverage import levels_to_net_sigma, pool_of
 from engine.substrate import composition, descriptors
 
 from ..data.rosters import (
-    DECLARED, ENDING_FELLED, ENDING_PREVAILED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, FIELD_WINNER_CASUALTY_ARMS, INVESTED, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
+    DECLARED, DRAWN, ENDING_FELLED, ENDING_PREVAILED, ENDING_UNDECIDED, ENDING_YIELDED, FELLED, FIELD_CASUALTY_MODELS, FIELD_WINNER_CASUALTY_ARMS, INVESTED, LOST, SUBTREE_OCCUPATION_KINDS, UNOPPOSED, UNTOUCHED, WON,
     WOUND_HARM_MODELS, BODY_MARK_MODELS, require_member,
 )
 from ..data.matrix import matrix_row
@@ -305,10 +305,12 @@ BROKE_STEM = "broke"
 
 
 def broke_observed(pid: str, broke: "str | None") -> tuple:
-    """CP-T04-01: the Observation the loser whose subunit BROKE FIRST carries on the field's band Event --
-    `(pid, "broke", True)` -- or `()` for every other loser and for a field that names nobody (the `side` arm, or a
-    side whose units did not break on their own account). An Event carries no payload (`Event.ending`'s note), so the
-    cause rides `Event.observed`, deposited by WITNESS as `body_observed` is. [ASSUMPTION; medium; Jordan to correct;
+    """CP-T04-01, B17.03: the Observation the person whose part BROKE FIRST on his side carries on the field's band Event --
+    `(pid, "broke", True)` -- or `()` for every other person and for a side that names nobody (the `side` arm, or a side
+    whose units did not break on their own account). Written for BOTH sides (`SideOutcome.broke_first`), the winning side's too.
+    An Event carries no payload (`Event.ending`'s note), so the cause rides `Event.observed`, deposited by WITNESS as
+    `body_observed` is. It is a named predicate (`BROKE_STEM`), NOT a member of `rosters.yaml: observation_terms`, which is
+    `epistemic.Seen`'s field list (`FELL_TO_STEM`'s precedent below). [ASSUMPTION; medium; Jordan to correct;
     revert: the Observation, and the field's cause is unnamed]"""
     return (Observation(pid, BROKE_STEM, True),) if pid == broke else ()
 
@@ -572,10 +574,14 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     only, decrease in morale, and a grudge token"* and nothing else -- the ruling specifies nothing
     for the winner.
 
+    ⚠ B17.03 (THE FIELD'S TYPED OUTCOME): the magnitude is read off the module's frozen `FieldOutcome` (`res.result["result"]`), each
+    share an integer on `condition_scale` (a body is cut `body x share // scale`, exact: a side the battle never touched reads the
+    scale and loses nothing). A person the side's `parts` name -- a member of the `person` arm, a cohort of an army -- is cut by HIS
+    part's share, anyone else by the side's; `broke_observed` rides the part that broke first on each side, winners' too.
+
     ⚠ CR-24 (`field_winner_casualties`, `H-360`, M4 Ask B (b)): UNDER `engine` (SHIPPED) THE WINNERS TAKE THEIR OWN
-    ENGINE CASUALTIES, ON `body` ONLY -- each winner at his own side's survivor ratio (`attacker_size_pct` /
-    `defender_size_pct`) or, under `field_units: person`, his own subunit's (CP-T04-01's `subunits` record), never
-    the loser's, and never above 1 (a winner is not raised). A winner is NOT a loser: he is not appended to `touched`,
+    ENGINE CASUALTIES, ON `body` ONLY -- each winner at his own side's share (`SideOutcome.share`) or, where the side's `parts`
+    name him, his own part's, never the loser's, and never above the scale (a winner is not raised). A winner is NOT a loser: he is not appended to `touched`,
     so he earns no grudge against his own faction and no morale hit, and he gets no stance row. A winner who also
     marches is one Subject (the mover's). Under `field_casualty_model: total` ("any wound is lethal") a winner who took a
     casualty (his ratio below 1) takes the loser's body-to-0 and the same death write (`death_subjects`,
@@ -600,10 +606,18 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     that correction was about a payload naming ONE person; a field battle genuinely has two
     candidate losing SIDES and `res.degree` already names which one.
 
+    ⚠ B17.01 (A-67, A-68, A-70, A-80, A-81), `Drawn`: A FIELD IN WHICH BOTH SIDES ARE OUT OR NEITHER IS HAS NO LOSER. Every member
+    of both sides (or the drawn cohorts of a side that fought as an order of battle) has his `body` scaled by his own side's, or
+    his own subunit's, share under `field_casualty_model` exactly as a winner's is above (`win_share` holds them), and the ration is debited
+    as on `Won` and `Lost`. No stance row is written, and nobody is relocated: a drawn army stands at its station, the
+    aggressor where the march began and the defender at its own base, so there is no journey for `_relocate` to write (it
+    would only close a `contain` edge and open another at the same place). The winners' arm `field_winner_casualties` is the
+    winner's switch and a drawn field has none, so it does not gate this write. The fatigue half of A-69 is `27_MB_E`'s (B22).
+
     ⚠ THE MAGNITUDE IS READ FROM THE ENGINE, NOT INVENTED, ON `wound_harm_model`'s OWN PRECEDENT.
     `field_casualty_model` (`H-148`) names three arms: `scaled_by_degree` (the default -- each
-    loser's body scales by the SAME survivor fraction the engine computed for their whole side,
-    `attacker_size_pct`/`defender_size_pct`), `total` (every loser's body to 0 -- the control,
+    loser's body scales by the survivor fraction the engine computed for his part, else for his whole side,
+    `SideOutcome.share` over `condition_scale`), `total` (every loser's body to 0 -- the control,
     re-running "losing costs everything" deliberately), `none` (body is not written at all -- the
     second control, isolating the write from the band). The default is settled by Jordan's
     2026-09-04 ruling on `wound_harm_model` -- *"the combat engine determines the result there"*
@@ -638,7 +652,15 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     parties = res.result.get("parties") or {}
     attackers = list(parties.get("claimants") or [])
     defenders = list(parties.get("subject_members") or [])
-    engine_result = res.result.get("result") or {}
+    # B17.03: the module's frozen `FieldOutcome`, `None` where no field was fought (`Unopposed`; `Invested` returned above).
+    outcome = res.result.get("result")
+    if outcome is None and res.degree != UNOPPOSED:
+        raise Unspecified(
+            f"`march` on {_operand(a, 'subject')!r} was folded as {res.degree!r} with no field outcome to read a casualty from",
+            "S39.4/H-98", needs="a `FieldOutcome` under `Resolution.result['result']` (the mass_battle provider's)",
+            law="B17.03 -- the magnitude is READ from the engine's own outcome, never invented here")
+    sides = (None, None) if outcome is None else (outcome.attacker, outcome.defender)
+    scale = w.fixtures.get("condition_scale")
     target = _operand(a, "subject")
     # v9 IN-13 (#453 §9.6, THE ARRIVAL): on `Won` and `Unopposed` every claimant is relocated to the
     # destination through `move`'s one journey body (`_relocate`, keyed on the mover), and the band
@@ -660,19 +682,25 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     # hand-built `Resolution`; he stays where he is. The actor's own legs are `T-m`'s.
     movers = (_not_yet_under(w, attackers, target, a.actor, a.via) if arrive else [])
     attacker_lost = res.degree == LOST
-    losers = [] if res.degree == UNOPPOSED else (attackers if attacker_lost else defenders)
+    drawn_field = res.degree == DRAWN
+    losers = [] if res.degree in (UNOPPOSED, DRAWN) else (attackers if attacker_lost else defenders)
     # ED-IN-0306: a side that fought as an order of battle bleeds only where it fought -- the cohorts its troops were
     # drawn from (`parties["fielded"]`, the provider's) -- not everybody who happened to be mustered beside them. A
     # side that fought as a headcount (None) loses all its mustered people, as before.
     drawn = (parties.get("fielded") or (None, None))[0 if attacker_lost else 1]
-    if drawn is not None and res.degree != UNOPPOSED:
+    if drawn is not None and res.degree not in (UNOPPOSED, DRAWN):
         losers = list(drawn)             # cohorts do not stand beside their army: they are the people at home
-    pct = engine_result.get("attacker_size_pct" if attacker_lost else "defender_size_pct")
-    # CP-T04-01 (`field_units: person`): the module's record then carries each person's own subunit ratio, and a
-    # loser is scaled by HIS, not the side's. A person it does not name (a side fought as an order of battle, or the
-    # `side` arm, which carries no `subunits` at all) keeps the side's `pct`, so the `side` arm is today's write.
-    per_person = engine_result.get("subunits") or {}
-    broke = (engine_result.get("broke_first") or (None, None))[0 if attacker_lost else 1]
+    loser_side = 0 if attacker_lost else 1
+
+    def share_of(side_ix: int, pid: str) -> int:
+        """B17.03: the share (an integer on `scale`) a person is cut by -- his own part's where his side's `parts` name him (a
+        member of the `person` arm, a cohort of an army), else his side's. The `side` arm names no part, so it is the side's
+        one share for everyone, as it was."""
+        side = sides[side_ix]
+        return next((part.share for part in side.parts if part.id == pid), side.share)
+
+    # B17.03: the part that broke first on EACH side (`SideOutcome.broke_first`), whichever side lost: `broke_observed` rides it.
+    side_broke = tuple(None if side is None else side.broke_first for side in sides)
     touched = [pid for pid in losers if pid in w.persons]
     model = w.fixtures.get("field_casualty_model")
     require_member(
@@ -686,26 +714,36 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         "make every measurement of this switch read the control")
     # CR-24: THE WINNERS, A SEPARATE LIST -- NEVER `touched` (which feeds the stance rows below), so a winner earns no
     # grudge against his own faction and no morale hit. The winning side is the one `losers` is not; a side that fought as
-    # an order of battle bleeds only its drawn cohorts (`fielded`), as the loser does. Each carries his own ratio: his
-    # subunit's under `person`, else his side's, capped at 1 (the casualty can only lower a body). A winner with no ratio
-    # to read (a hand-built result that carries none) is left unwritten; under `total` only a winner below 1 dies.
-    win_ratio: dict = {}                     # winner pid -> his ratio; its keys ARE the winners, in win_side order
-    if winner_arm == "engine" and model != "none" and res.degree != UNOPPOSED:
-        win_drawn = (parties.get("fielded") or (None, None))[1 if attacker_lost else 0]
-        win_side = win_drawn if win_drawn is not None else (defenders if attacker_lost else attackers)
-        win_pct = engine_result.get("defender_size_pct" if attacker_lost else "attacker_size_pct")
+    # an order of battle bleeds only its drawn cohorts (`fielded`), as the loser does. Each carries his own share: his part's
+    # (a person the side names, or a cohort), else his side's, an integer on `scale` so a winner is never raised. Under `total`
+    # only a winner who took a casualty (his share below the scale) dies.
+    win_share: dict = {}                     # pid -> his share; its keys ARE the winners (both sides, on `Drawn`), in side order
+    win_side: dict = {}                      # pid -> which side he is on (0 the attacker's, 1 the defender's), for `broke_observed`
+    fielded = parties.get("fielded") or (None, None)
+    if drawn_field:
+        # B17.01: nobody lost, so both sides are written as a winner is, each by its own share.
+        take = ((0, fielded[0] if fielded[0] is not None else attackers),
+                (1, fielded[1] if fielded[1] is not None else defenders))
+    elif winner_arm == "engine" and res.degree != UNOPPOSED:
+        win_ix = 1 - loser_side
+        win_drawn = fielded[win_ix]
+        take = ((win_ix, win_drawn if win_drawn is not None else (attackers if win_ix == 0 else defenders)),)
+    else:
+        take = ()
+    if model != "none":
         loser_set = set(losers)
-        for pid in win_side:
-            if pid not in w.persons or pid in loser_set or pid in win_ratio:
-                continue
-            mine = per_person[pid][0] if pid in per_person else win_pct
-            if mine is None or (model == "total" and mine >= 1.0):
-                continue            # no ratio, no write; under `total` only a winner who took a casualty dies
-            win_ratio[pid] = min(1.0, max(0.0, mine))
-        if model == "total":
-            movers = [pid for pid in movers if pid not in win_ratio]     # a winner the arm kills does not arrive
+        for side_ix, win_side_pids in take:
+            for pid in win_side_pids:
+                if pid not in w.persons or pid in loser_set or pid in win_share:
+                    continue
+                mine = share_of(side_ix, pid)
+                if model == "total" and mine >= scale:
+                    continue            # under `total` only a winner who took a casualty dies
+                win_share[pid], win_side[pid] = min(scale, max(0, mine)), side_ix
+    if model == "total":
+        movers = [pid for pid in movers if pid not in win_share]     # a winner the arm kills does not arrive
     debits = _ration_debits(w, res)
-    if not touched and not movers and not debits and not win_ratio:
+    if not touched and not movers and not debits and not win_share:
         return NO_CHANGE
     attacker_faction = seat_faction(w, a.via)
     defender_faction = holder_faction_of(w, target)
@@ -750,8 +788,8 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
             if model == "total":
                 p.body = 0
             elif model == "scaled_by_degree":
-                mine = per_person[pid][0] if pid in per_person else pct
-                p.body = max(1, int(p.body * max(0.0, mine or 0.0)))
+                # B17.01: capped as the winner's is, a loss never raises; B17.03: exact integer arithmetic on the body scale
+                p.body = max(1, int(p.body) * min(scale, max(0, share_of(loser_side, pid))) // scale)
             # `none`: the control arm -- body is not written at all.
             rows = list(p.stance or [])
             if winner_faction:
@@ -767,9 +805,9 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
             if p.body <= 0:
                 w.remove_person(pid)
         # CR-24: the winners' casualty is `body` ONLY -- no stance row (the loop above is the only place one is written).
-        for pid in win_ratio:
+        for pid in win_share:
             p = w.persons[pid]
-            p.body = 0 if model == "total" else max(1, int(p.body * win_ratio[pid]))
+            p.body = 0 if model == "total" else max(1, int(p.body) * win_share[pid] // scale)
             if p.body <= 0:
                 w.remove_person(pid)       # the `total` arm's own death rule, as the loser's above
     fields = ("stance",) if model == "none" else ("body", "stance")
@@ -783,16 +821,18 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         s for pid in touched
         for s in (death_subjects(w, pid, loser_earns, fields=fields) if dies
                   else (Subject.entity("persons", pid, earns=loser_earns, fields=fields,
-                                       observed=broke_observed(pid, broke)),)))
+                                       observed=broke_observed(pid, side_broke[loser_side])),)))
     # CR-24: a winner who also moves is ONE Subject -- the mover's, whole-entity -- so only a winner who stays is named
     # here, by `body` alone (the field he is written by); under `total` a dying winner is named by his death.
     movers_set = set(movers)
     winners_named = tuple(
-        s for pid in win_ratio if pid not in movers_set
+        s for pid in win_share if pid not in movers_set
         for s in (death_subjects(w, pid, loser_earns, fields=("body",)) if dies
-                  else (Subject.entity("persons", pid, earns=loser_earns, fields=("body",)),)))
+                  else (Subject.entity("persons", pid, earns=loser_earns, fields=("body",),
+                                       observed=broke_observed(pid, side_broke[win_side[pid]])),)))
     return Change(losers_named + winners_named
-                  + tuple(Subject.entity("persons", pid, earns=own) for pid in movers)
+                  + tuple(Subject.entity("persons", pid, earns=own, observed=broke_observed(pid, side_broke[0]))
+                          for pid in movers)
                   + tuple(Subject.entity("rungs", rid, earns=loser_earns, fields=("stores",))
                           for rid in dict.fromkeys(rid for rid, _ in debits)), perform)
 

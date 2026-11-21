@@ -99,7 +99,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | B12c-material-verbs-and-valley | SE+WR | W15 | S15 | 0 | 28, 28_cont | 36 (B29 P2 R3 H1 DF1) | MOVER (behaviour 13, conditional 1; R2c) | 16.9 | B12b, B15 +R1, B34 +R1 |
 | B15-pc-calibration | PC | W12 | S12 | 0 | 18 | 16 (B13 R2 DF1) | MOVER (behaviour 10) | 10.9 | B00, B01, B01a (B01a.05), B02, B04, B05, B10, B14 |
 | B16-pc-round | PC | W13 | S13 | 0 | 23 | 13 (B11 P1 R1) | MOVER (behaviour 1) | 7.7 | B00, B01, B01a (B01a.05), B02, B06, B07, B10, B11 +R, B15 |
-| B17-mb-scale | MB | W9 | S9 | 4 | 11 | 15 (B12 P1 R1 H1; +R2a B17.14) | MOVER (behaviour 3) | 8.5 | B00, B01, B02, B16L, B16M, B05, B14 |
 | B18-pc-content | PC | W14 | S15 | 7 | 28_cont2 | 10 (B9 C1) | MOVER (behaviour 4) | 6.5 | B00, B01, B01a (B01a.05), B02, B14, B15, B16, B17 |
 | B19a-mb-contact-instrument | MB | W14 | S14 | 0 | 24_cont | 4 (B4) | EQUAL | 6.1 | B00, B01, B01a (B01a.05), B02, B16M, B14, B15, B16, B17 |
 | B19-mb-field-calibration | MB | W15 | S15 | 0 | 26, 26_cont, 27, 27_cont | 49 (B44 P1 R1 H2 BL1) | MOVER (behaviour 15; B19.60 counted, K6 F1) | 24.1 | B00, B01, B02, B16L, B04, B05, B06, B15, B16, B17, B19a, B29 +R |
@@ -207,7 +206,6 @@ One row per batch in schedule order: the position handles (the part after the do
 | step | batch | behaviour movers (position handles) | encoding movers | conditional movers | the re-pin position and what its text says | merge position in its step |
 |---|---|---|---|---|---|---|
 | S9 | B07 | 05 | — | — | `B07.99` | 1 of 2 movers |
-| S9 | B17 | 01, 03, 08 | — | — | `B17.99` | 2 of 2 movers |
 | S10 | B09 | 01, 05, 07, 08, 10, 11, 12, 21 | — | — | `B09.99` | 1 of 1 movers |
 | S11 | B10 | 32, 59, 60, 65, 66, 70, 71, 72, 73 | 58 | — | `B10.99` | 1 of 1 movers |
 | S12 | B24p | 19, 24, 20, 22, 23 | — | — | `B24p.99` | 1 of 5 movers |

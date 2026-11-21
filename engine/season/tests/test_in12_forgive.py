@@ -61,6 +61,7 @@ from ..queries.world_q import holder_faction_of
 from ..state.attribution import causing_act
 from ..state.carriers import Act, Question
 from ..state.gate import seat_faction
+from .test_march import _contested
 
 LOSER, OTHER_LOSER = "p_npc_033", "p_npc_035"     # Crown, mustered at set_s_014: the 2 of the 2-v-6
 TARGET, VIA = "set_s_036", "off_spymaster"          # the Church of Solmund holds it with 6 defenders
@@ -85,8 +86,10 @@ def _fold(w, *acts, encounter=False):
 
 def _lost_field():
     """`build_realm(0)` with the grudge weight swept off the morale weight (so the two rows differ by
-    value, `test_march.py`'s reason), after `LOSER` marches on `TARGET` and loses."""
-    w = build_realm(0)
+    value, `test_march.py`'s reason), after `LOSER` marches on `TARGET` and loses. B17.01: the two sides are weighed
+    (`test_march.py::_contested`, 90 troops a marcher against six of 300), because the shipped realm's weight-1 persons
+    (30 troops, under the rout floor) fold a `Drawn` field, which writes no grudge and is refused."""
+    w = _contested(build_realm(0))
     w.fixtures = w.fixtures.sweep("field_grudge_weight", 3)
     out = _fold(w, Act(id="m1", actor=LOSER, verb="march", payload={"subject": TARGET}, via=VIA),
                 encounter=True)

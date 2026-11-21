@@ -308,15 +308,14 @@ th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercas
 <section class="step">
   <header><div class="kicker">Step 8 · grading and terrain</div><h2>What the battle returns</h2></header>
   <div class="text">
-    <p>The engine produces survivor shares, not a winner’s margin. <code>_run_and_grade</code> turns them into the degree the season receives, with the attacker as side A:</p>
+    <p>The engine produces survivor shares and which sides broke, not a winner’s margin. <code>seam/ladder.py::field_degree</code> turns the two sides’ flags into the band the season receives, with the attacker as side A. A side is out when it routed or conceded:</p>
     <div class="scroll"><table>
       <tr><th>Degree</th><th>Condition</th></tr>
-      <tr><td>Overwhelming</td><td>A wins, keeps ≥ 75%, B left with ≤ 25%</td></tr>
-      <tr><td>Success</td><td>A wins: A has not routed, and B routed or A’s share is higher</td></tr>
-      <tr><td>Partial</td><td>A not routed, no win, A’s share ≥ 50%</td></tr>
-      <tr><td>Failure</td><td>anything else, including any A rout</td></tr>
+      <tr><td>Won</td><td>B is out and A is not</td></tr>
+      <tr><td>Lost</td><td>A is out and B is not</td></tr>
+      <tr><td>Drawn</td><td>both are out, or neither is when the ticks run down</td></tr>
     </table></div>
-    <p style="margin-top:12px"><span id="grade-text"></span> These bands are the older adapter’s own, not the canonical margin ladder in step 6, and the code says so; reconciling them is open lane work.</p>
+    <p style="margin-top:12px"><span id="grade-text"></span></p>
   </div>
   <div class="text">
     <p>Terrain is a single row chosen from the territory and its fortification, and it changes the Armies before tick 1:</p>

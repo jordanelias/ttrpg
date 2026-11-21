@@ -23,7 +23,7 @@ GATE: Batch B05-one-roll @928dccc9a68232d1afb041c9a1c422d8cfdb690e
 GATE: Batch B07-task-draw
 GATE: Batch B10-character
 GATE: Batch B12c-material-verbs-and-valley
-GATE: Batch B17-mb-scale
+GATE: Batch B17-mb-scale @5377bd99c0ab3823d2ed9870bddf6f3e37999c0e
 GATE: Batch B19-mb-field-calibration
 GATE: Batch B20-mb-orders
 GATE: Batch B21-fa-governance

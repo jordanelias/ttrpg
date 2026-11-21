@@ -37,6 +37,7 @@ from engine.season.state.carriers import Act
 from engine.substrate import composition
 
 pytestmark = pytest.mark.flat_fold
+from ._field_outcomes import field_outcome
 
 # `build_realm(0)`'s fixture facts this file stands on (each re-asserted where it is used): the Crown's two
 # at `set_s_014` march through `off_spymaster` (rung `terr_T1`, the treasury `requisition` fills) on
@@ -208,12 +209,17 @@ def test_the_field_eats_its_ration_from_the_treasury_only_when_on(on, monkeypatc
     before_b = dict(w.rungs[TREASURY_B].stores or {})
     events = _fold(w, _march_act())
     kinds = {e.kind for e in events}
-    assert kinds & {"field.lost", "field.won"}, sorted(kinds)
+    fought = {"field.lost", "field.won", "field.drawn"}
     assert len(seen) == 1, seen
     if on:
+        # B17.01: a field is told because the ration it ate is a durable write (`Drawn` debits as `Won` and `Lost` do)
+        assert kinds & fought, sorted(kinds)
         assert seen[0][1] == {"troops_a": 1, "troops_b": 0}, seen
         assert w.rungs[TREASURY_A].stores == {"grain": 2, "salt": 0}, w.rungs[TREASURY_A].stores
     else:
+        # B17.16: at 1,000 troops a weight the realm's two against six are fought and told whatever the arm (at 30 a weight they were
+        # under the rout floor and the march was refused); what OFF changes is what is eaten, asserted below
+        assert kinds & fought, sorted(kinds)
         assert seen[0][1] == {"troops_a": 2, "troops_b": 6}, seen
         assert w.rungs[TREASURY_A].stores == {"grain": 4, "salt": 1}, w.rungs[TREASURY_A].stores
     assert dict(w.rungs[TREASURY_B].stores or {}) == before_b
@@ -248,7 +254,7 @@ def _patch_won_recording(monkeypatch):
 
     def fn(inp, rng, **kw):
         seen.append(kw)
-        return dict(attacker_wins=True, degree="Success", attacker_size_pct=1.0, defender_size_pct=0.5)
+        return field_outcome(1.0, 0.5, defender_out=True)
     monkeypatch.setattr(MB, "entry_for", lambda prize, module: (SimpleNamespace(fn=fn), None))
     return seen
 

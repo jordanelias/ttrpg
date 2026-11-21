@@ -27,6 +27,7 @@ import modules.mass_battle.config as _cfg  # noqa: E402
 import modules.mass_battle.core.exchange as _exch  # noqa: E402
 import modules.mass_battle.hierarchy.units as _hu  # noqa: E402
 import modules.mass_battle.orchestration as _orch  # noqa: E402
+from systems.mass_battle.sim import multi as _multi  # noqa: E402  (B17.05: the multi-battle loops moved out of the module)
 from systems.mass_battle.sim.engine import build_unit, build_army  # noqa: E402
 from systems.mass_battle.sim import validators as _val  # noqa: E402
 
@@ -71,7 +72,7 @@ def _ratio_winrate(ratio, base, n, seed0=9000):
         with rngsource.using(draw.seeded(draw.H2("test_friction", seed0 + s))):
             a = build_army([{'shape': 'Line', 'troops': int(base * ratio), 'concentration': 100}], 'A', 'A')
             b = build_army([{'shape': 'Line', 'troops': base, 'concentration': 100}], 'B', 'B')
-            r = _orch.run_multi_turn_battle(a, b, 'Line', 'Line', {'A': 9, 'B': 9}, max_battle_turns=20)
+            r = _multi.run_multi_turn_battle(a, b, 'Line', 'Line', {'A': 9, 'B': 9}, max_battle_turns=20)
             w = r.get('winner')
             if w == 'A':
                 aw += 1

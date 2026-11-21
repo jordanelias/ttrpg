@@ -86,7 +86,7 @@ def _advance_free(exclusion, ticks=6):
             # park B at the far edge; A advances toward it and cannot reach it in `ticks`
             for atom in ub.units:
                 atom.starting_position = (_hu.BATTLEFIELD_SIZE - 1, atom.starting_position[1])
-            # same shape orchestration's nested _cells_float_of builds; _node_advance consults it only
+            # same truthiness battle_loop's nested _cells_float_of returns; _node_advance consults it only
             # for truthiness (it is the toi_deferred signal), so building it here is not a second owner
             # of any rule — just the same list.
             b_float = [(r, c, _hu.reach_for(sub.troop_type))

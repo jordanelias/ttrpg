@@ -7,7 +7,6 @@ for the base pool term by Jordan's 2026-07-08 directive, see config.py's POOL_QU
 `derive_command`/`command_base_pool` below remain live for whatever still reads Command
 (morale, formation-hold speed, order-issuing, derive_rout), just no longer the combat pool]"""
 import math
-import os as _exch_os
 from modules.mass_battle.config import *
 from modules.mass_battle.troop_types.registry import support_weight
 from modules.mass_battle.geometry import cells_to_orig_coords
@@ -21,11 +20,9 @@ __all__ = ['_stamina_pool_penalty', 'derive_command', 'clamp_command', 'command_
 # proposal doc's own §5 -- reused from the nearest existing precedent rather than invented, and
 # disclosed as such (this repo's anti-fabrication discipline). Both are default-inert: `yielding`
 # defaults False on every Unit, so neither constant is read unless a 'yield' order fires.
-D_YIELD = int(_exch_os.environ.get('D_YIELD', '3'))  # [CALIBRATED-DEBT] reuses this file's OWN
 # existing disc_mult tier break (hierarchy/units.py's advance_cells: disc>=5 full speed, disc>=3
 # 0.7x, else 0.4x severely degraded) rather than inventing a new threshold -- a subunit needs
 # enough order to give ground at all (the 0.7x tier), not the severely-degraded 0.4x tier.
-YIELD_POOL_MULT = float(_exch_os.environ.get('YIELD_POOL_MULT', str(MB_SHOCK_HOLD_BRACE)))  # [CALIBRATED-DEBT]
 # reuses MB_SHOCK_HOLD_BRACE (0.35, the brace/shock discount idiom) verbatim, exactly as the
 # proposal doc's §5 suggested -- "traded ground at a cost", a reduced-but-nonzero combat pool.
 
@@ -72,7 +69,7 @@ def subunit_combat_pool(unit, atom):
     """Per-subunit combat pool. Default (POOL_QUALITY_MODEL, Jordan directive 2026-07-08): troop
     TYPE quality (`eff_power`) x NUMBERS (`eff_size`), plus per-subunit Discipline + stamina --
     no Command anywhere. Legacy toggle OFF: SHARED Command (the general) + per-subunit Discipline
-    + cohesion + stamina. Mirrors Army.base_combat_pool EXACTLY for a single-subunit unit
+    + cohesion + stamina. Mirrors multi.base_combat_pool EXACTLY for a single-subunit unit
     (atom.cohesion fast-paths to unit.hp/hp_max; eff_discipline/eff_power inherit unit) -> byte-exact
     for the homogeneous gauge; differentiates per subunit for mixed units.
     [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; the (5.0-disc)*0.5 discipline penalty

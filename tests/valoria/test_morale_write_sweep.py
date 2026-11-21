@@ -35,6 +35,7 @@ import pytest
 _ENGINE_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 import modules.mass_battle.orchestration as O  # noqa: E402
+import systems.mass_battle.sim.multi as M  # noqa: E402  (B17.05: the between-turn and between-battle writers moved here)
 from systems.mass_battle.sim.engine import build_army  # noqa: E402
 
 
@@ -87,7 +88,7 @@ def test_battle_reset_restores_a_damaged_body(unit_and_atom):
     u, a = unit_and_atom
     a.erode_morale(4.0)
     assert a.eff_morale == pytest.approx(2.0), "precondition: the body is damaged"
-    O.reset_morale_between_battles(u)
+    M.reset_morale_between_battles(u)
     assert a.eff_morale == pytest.approx(a.eff_morale_start), \
         "a battle reset that cannot reach the cells leaves the body permanently shaken"
 
@@ -103,7 +104,7 @@ def test_between_turn_recovery_does_not_re_inflate_a_damaged_body(unit_and_atom)
     u, a = unit_and_atom
     a.erode_morale(4.0)
     before = a.eff_morale
-    O.between_turn_recovery(u)
+    M.between_turn_recovery(u)
     expected = min(a.eff_morale_start, before + O.BETWEEN_TURN_MORALE_RECOVERY)
     assert a.eff_morale == pytest.approx(expected), \
         f"recovery moved morale {before} -> {a.eff_morale}, expected {expected}"
@@ -137,6 +138,8 @@ def test_subunit_absolute_write_reaches_the_cells(unit_and_atom):
 # ── the guard that makes the sweep durable ──────────────────────────────────────────────────────
 
 _ENGINE_FILES = ['modules/mass_battle/orchestration.py',
+                 # B17.05 moved `between_turn_recovery` and `reset_morale_between_battles` (morale writers) here; the sweep follows them.
+                 'systems/mass_battle/sim/multi.py',
                  # CP-T04-03 (B10-12, ED-1043) moved `run_battle` -- the tick loop, with the Command=0 morale write and
                  # the per-subunit rout loop -- out of `orchestration.py` into this file; the sweep follows it.
                  'modules/mass_battle/battle_loop.py', 'modules/mass_battle/core/state.py',
@@ -185,11 +188,11 @@ _CELL_OWNED = {
             # units.py: the owners themselves.
             'self.morale = value',
             'self.morale -= amount',
-            # orchestration.py between_turn_recovery: the vestigial unit pool, kept current for the
+            # multi.py between_turn_recovery: the vestigial unit pool, kept current for the
             # unseeded path. Deliberately NOT broadcast downward — recovery is a bounded increment and
             # the pool is stale once cells own the state; see
             # test_between_turn_recovery_does_not_re_inflate_a_damaged_body.
-            'unit.morale = min(unit.morale_start, unit.morale + BETWEEN_TURN_MORALE_RECOVERY)',
+            'unit.morale = min(unit.morale_start, unit.morale + _orch.BETWEEN_TURN_MORALE_RECOVERY)',
             # core/state.py: materializes the scalar so the stochastic-rout punch is local to one
             # subunit. The cells already hold this value; rewriting them would flatten genuine
             # per-cell divergence.

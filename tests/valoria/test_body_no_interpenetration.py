@@ -41,8 +41,10 @@ def params():
 
 @pytest.fixture(scope='module')
 def loaded(params):
+    from systems.mass_battle.sim import variant
     stress._load({}, None)          # the flags as shipped; the grid as shipped
-    return stress.M['cfg'].BATTLEFIELD_SIZE
+    yield stress.M['cfg'].BATTLEFIELD_SIZE
+    variant.restore()               # `_load` installs a variant tree: leave the shipped one for the next module
 
 
 def _tolerance(params):

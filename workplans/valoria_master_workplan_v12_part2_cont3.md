@@ -58,10 +58,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | 27 | `max_bouts` → `max_rounds` | B14.11 | B16.02 |
 | 28 | `rng.randrange(3)` → `rng.below(3)` | B14.28 | — |
 | 29 | `Unit` → `Army` | B17.01 | B19.01, B19.04, B19.05, B19.06, B19.07, B19.28 and 6 more |
-| 30 | `drawn: ((subformation, cohort, troops), ...)` → `((unit, cohort, troops), ...)` | B17.03 | — |
-| 31 | `(side, subunit index)` → `(side, unit index)` | B17.03 | — |
-| 32 | `Unit.base_combat_pool` → `Army.base_combat_pool` | B17.05 | — |
-| 33 | `Subunit.halt_before_enemy` → `Unit.halt_before_enemy` | B17.05 | — |
 | 34 | `(when, round)` → `(when, lap)` | B09.02 | B11.08, B12a.69, B38.04 |
 | 35 | `_bond(p, patient, lean)` → `_bond(p, counterparty, lean)` | B10.20 | — |
 | 36 | `TURN_CHOICES` → `ROUND_CHOICES` | B10.57 | B16.02, B34.07, B34.15, B18.09 |
@@ -163,15 +159,6 @@ These are the two tables `V12_STRUCTURE_part3.md` §7.2 asks of part 2 and lane 
 | 62 | `engine/season/tests/test_h199_one_spacing.py` | test file | B05.64 | — |
 | 73 | `engine/season/tests/test_task_draw.py` | test file | B07.01 | — |
 | 74 | `engine/season/tests/test_vres_task_and_prize.py` | test file | B07.04 | B11.83 |
-| 75 | `systems/mass_battle/sim/extremes_probe.py` | module | B17.04 | — |
-| 76 | `systems/mass_battle/sim/multi.py` | module | B17.05 | — |
-| 77 | `systems/mass_battle/sim/role_edges_probe.py` | module | B17.07 | — |
-| 78 | `engine/engine_params/troops.json` | data file | B17.10 | — |
-| 79 | `modules/mass_battle/troop_types/table.py` | module | B17.10 | — |
-| 80 | `references/troops.yaml` | data file | B17.10 | — |
-| 81 | `tests/valoria/test_export_troops.py` | test file | B17.10 | — |
-| 82 | `tools/export_troops.py` | tool | B17.10 | — |
-| 83 | `engine/engine_params/mass_battle_v1.json` | data file | B17.12 | — |
 | 84 | `engine/season/tests/test_claim_fade_as_read.py` | test file | B09.01 | — |
 | 85 | `engine/season/tests/test_refusal_memory.py` | test file | B09.02 | — |
 | 86 | `engine/season/tests/test_one_reader_of_a_ledger.py` | test file | B09.06 | — |
@@ -688,7 +675,6 @@ Reading (hand-read): all seven are notes, not dependencies — each clause says 
 
 | U3 row (missing symbol or file) | U3's carrier | v12's carrier item |
 |---|---|---|
-| `references/troops.yaml`, `tools/export_troops.py`, `modules/mass_battle/troop_types/table.py` | B17 | B17.10 |
 | `engine/season/harness/field_scene.py` | B20 | B20.11 |
 | `tools/export_oracle_pins.py`, `harness/port_oracle.py` | B41 | B41.06 |
 | `engine/dice_engine/draw.py` (`Draw`), the A-30 key function | B06 | B06.03 |

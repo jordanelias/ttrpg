@@ -959,7 +959,7 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
     mode (a): the display is the player's.
 
     A ROW CONTESTING `a field` (CP-T04-08, MODE (a) ONLY, AQ-X1: no NPC reads it) IS MASS BATTLE'S: the answer is
-    `mass_battle.field_estimate`'s shares as `(Won, Lost, Unopposed)` (`mass_battle.ESTIMATE_BANDS`), the field's three
+    `mass_battle.field_estimate`'s shares as `(Won, Lost, Drawn, Unopposed)` (`mass_battle.ESTIMATE_BANDS`), the field's four
     graded bands. BOTH FIGHTS ARE REACHED THE SAME WAY, through the provider each prize row names, registered under the
     ESTIMATE role (`@provider("estimate", <provider>)`, `_estimated`): this function imports neither wrapper and holds
     no second odds function."""

@@ -148,11 +148,13 @@ def test_table_follows_the_weapon_classes():
     assert _cap('infantry') < _cap('heavy_infantry') < _cap('pike')
     assert _cap('heavy_infantry') == _cap('cavalry')
     assert _cap('no_such_type') == _cap('infantry') == 1
-    # derived from the reach map, so EVERY mapped type is covered and a reach edit moves its rank
-    from modules.mass_battle.troop_types.registry import TROOP_TYPE_REACH
+    # derived from the primary arm's class, so EVERY troop row is covered and a class edit moves its rank
+    from modules.mass_battle.troop_types import table
+    from modules.mass_battle.troop_types.registry import reach_for
     expect = {0.1: 1, 0.2: 2, 0.3: 3}
-    assert len(TROOP_TYPE_REACH) == 15      # 12 + spearmen, skirmishers, light_cavalry (ED-IN-0306)
-    assert {t: _cap(t) for t in TROOP_TYPE_REACH} == {t: expect[r] for t, r in TROOP_TYPE_REACH.items()}
+    rows = table.troop_types()
+    assert len(rows) == 15      # 12 + spearmen, skirmishers, light_cavalry (ED-IN-0306)
+    assert {t: _cap(t) for t in rows} == {t: expect[reach_for(t)] for t in rows}
 
 
 # ── what the cap does to play (measured, Python 3.11.18, POOL_QUALITY_SCALE 0.8) ─────────────────────────────────────────
@@ -213,16 +215,15 @@ def _engaged_by_resolve_field(monkeypatch, weight):
     """The troops `resolve_field` would bring to bear on contact for a headcount side of `weight`: the Army it builds
     is captured at `_run_and_grade` (no battle is fought), and its one subunit is read through the same
     `_pair_engaged_troops` the battle's pools use, with the front rank (orig row 0) as the contact."""
-    import random
-
     from engine.season.queries.inputs import MassBattleInput
+    from engine.season.tests._field_outcomes import SCALE
     from modules.mass_battle import massbattle
 
     seen = []
     monkeypatch.setattr(massbattle, '_run_and_grade', lambda unit_a, unit_b, *a, **k: seen.append(unit_a) or {})
     massbattle.resolve_field(MassBattleInput(
         weights=((weight,), (10,)), territory=None, fort_level=0.0, stances=(0.0, 0.0), walls_dr=None, origin=None,
-        loyalties=(0.0, 0.0), loyalty_gain=0, geography={}), draw.seeded(draw.H2("test_mass_battle_support_rank_cap", 1)))
+        loyalties=(0.0, 0.0), loyalty_gain=0, geography={}, condition_scale=SCALE), draw.seeded(draw.H2("test_mass_battle_support_rank_cap", 1)))
     assert len(seen) == 1
     atom = seen[0].units[0]
     front = {ab for ab, orig in _oriented_abs_map(atom).items() if orig[0] == 0}
@@ -230,15 +231,20 @@ def _engaged_by_resolve_field(monkeypatch, weight):
     return atom.cur_troops, _pair_engaged_troops(atom, front)
 
 
-def test_resolve_field_at_weight_3000_engages_the_capped_troops(monkeypatch):
-    """Measured (Python 3.11.18): a 3000-troop infantry line of 3 ranks engages 2700 troops uncapped (the contact rank
-    plus depth 1 at weight 1.0 and depth 2 at 0.7: `SUPPORT_WEIGHTS`) and 2000 with the cap ON (infantry reaches one rank past contact, so the
-    third rank weighs 0). The OFF arm is the control: it reads the uncapped stack and the weight is unchanged."""
+def test_resolve_field_at_3000_troops_engages_the_capped_troops(monkeypatch):
+    """B17.16: a side of weight 9 is 9,000 troops (`under_arms_cap`, 1,000 a weight), cut into three units of 3,000 (`massbattle._cut`), and
+    the first of them is the unit read: the same 3000 troops this test has read since B17.01 (then a side of weight 100 at 30 a weight).
+    RE-CUT at B17.15
+    (ED-MB-0101, a cell holds 50 to 100): a unit of 3000 troops is 30 cells of 100, a line of 5 ranks of 6 (before: 3 ranks
+    of 200-troop cells, 2700 and 2000). Measured: the line engages 2100 troops uncapped (the contact rank, then ranks at
+    1.0, 0.7, 0.5 and 0.3: `SUPPORT_WEIGHTS` and its floor) and 1200 with the cap ON (infantry reaches one rank past
+    contact, so the third rank and the rest weigh 0). The OFF arm is the control: it reads the uncapped stack and the
+    weight is unchanged."""
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', False)
-    troops_off, engaged_off = _engaged_by_resolve_field(monkeypatch, 3000)
+    troops_off, engaged_off = _engaged_by_resolve_field(monkeypatch, 9)
     monkeypatch.setattr(C, 'MB_SUPPORT_RANK_CAP', True)
-    troops_on, engaged_on = _engaged_by_resolve_field(monkeypatch, 3000)
+    troops_on, engaged_on = _engaged_by_resolve_field(monkeypatch, 9)
     assert troops_off == troops_on == 3000.0
-    assert engaged_off == 2700.0, repr(engaged_off)
-    assert engaged_on == 2000.0, repr(engaged_on)
+    assert engaged_off == 2100.0, repr(engaged_off)
+    assert engaged_on == 1200.0, repr(engaged_on)
     assert engaged_on < engaged_off
