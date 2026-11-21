@@ -321,7 +321,7 @@ def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cfx
                for n, subj in enumerate(subjects)]
         subj = seen_subject(w, f, pid, mode)
         if subj is not None:
-            masked = seen_showing(w, f, act_f, terms)
+            masked = seen_showing(w, f, act_f, pid, terms)
             out.append(Claim(H(w.world_seed, w.tick, pid, f"found_seen:{e.id}:{fid}"), pid, subj,
                              SEEN_PREDICATE, masked, w.tick, src, conf, "own", self.lap, doer=None))
         for c in out:
