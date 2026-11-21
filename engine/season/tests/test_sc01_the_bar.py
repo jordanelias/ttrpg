@@ -305,7 +305,7 @@ def _proceeding(conviction: str, seed: int, seasons: int) -> str:
               and any(c in acts and (acts[c].verb, acts[c].via, acts[c].payload.get("subject"))
                       == ("open_case", SEAT, PARTY) for c in x.causes)]
     assert opened, "no open_case put the clerk before the sitting after it fired"
-    occ = d.scenes[det.scene].occasion
+    occ = w.acts.scene_of(det.id).occasion
     assert occ.id.startswith(f"q:sitting:{did}:") and PARTY in occ.referents, occ
     # ... AND THE CONVENE THAT SCHEDULED IT WAS CHOSEN, NOT INJECTED.
     sched, = [x for x in w.log if x.kind == "date.scheduled" and any(ch.subject == did for ch in x.changes)]

@@ -363,7 +363,7 @@ def test_in53v_d_an_act_on_a_classed_referent_cites_no_unrelated_occasion():
     w.log.append(Event("ev_v_deposit", "claim.deposited",
                        [P.apparatus_receipt(w, "claim_v", "set", "Act")], [origin.id], w.tick))
     q = Question("q:claim:claim_v", "claim_landed", ("S",), "claim_v", (("off_reeve", "Office"),))
-    d.scenes["sc_v"] = Scene("sc_v", "p_king", [], occasion=q)
+    w.acts.add_scene(Scene("sc_v", "p_king", [], occasion=q))
     assert world_q.occasioned_by(w, q) == [origin.id]          # the scene HAS an occasion
     a = Act(id="cf_v", actor="p_king", verb="confer", via="off_crown", scene="sc_v",
             payload={"subject": "off_reeve", "to": "p_king"})
@@ -372,11 +372,13 @@ def test_in53v_d_an_act_on_a_classed_referent_cites_no_unrelated_occasion():
     assert "tenure.opened" in [e.kind for e in out], [e.kind for e in out]
     assert not [e for e in out if origin.id in e.causes], [(e.kind, e.causes) for e in out]
     plain = Act(id="pl_v", actor="p_king", verb="work", scene="sc_v", payload={"subject": "S"})
+    w.acts.append(plain)
     assert d._occasion_ids(w, plain) == [origin.id]
     both = Question("q:claim:claim_v", "claim_landed", ("off_reeve",), "claim_v",
                     (("off_reeve", "Office"),))
-    d.scenes["sc_v2"] = Scene("sc_v2", "p_king", [], occasion=both)
-    assert d._occasion_ids(w, dataclasses.replace(a, id="cf_v2", scene="sc_v2")) == [origin.id]
+    w.acts.add_scene(Scene("sc_v2", "p_king", [], occasion=both))
+    cf2 = w.acts.append(dataclasses.replace(a, id="cf_v2", scene="sc_v2"))
+    assert d._occasion_ids(w, cf2) == [origin.id]
 
 
 def test_in53v_d_a_confer_onto_no_living_person_is_refused():
@@ -494,7 +496,7 @@ def _the_heir_claims(w, heir, n="cause"):
     from engine.season.state.carriers import Scene
     d = SeasonDriver(w)
     q = Question("q:need:throne", "need", (), "", ((_THRONE, "Office"),))
-    d.scenes["sc_" + n] = Scene("sc_" + n, heir, [], occasion=q)
+    w.acts.add_scene(Scene("sc_" + n, heir, [], occasion=q))
     a = Act(id="in53_" + n, actor=heir, verb="succeed", scene="sc_" + n, payload={"subject": _THRONE})
     w.step = Step.RESOLVE
     w.frozen = False

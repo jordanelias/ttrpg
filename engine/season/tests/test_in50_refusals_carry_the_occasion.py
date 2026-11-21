@@ -53,7 +53,7 @@ def _world_with_occasion(scene_actor=ACTOR):
     w.log.append(origin)
     w.log.append(deposit)
     q = Question("q_in50", "claim_landed", (), about="claim_in50")
-    d.scenes[SCENE] = Scene(SCENE, scene_actor, [], occasion=q)
+    w.acts.add_scene(Scene(SCENE, scene_actor, [], occasion=q))      # B09.16: the Scene is kept beside its acts
     return w, d, origin.id
 
 
@@ -78,6 +78,7 @@ def test_in50_route_1_act_ineligible_cites_the_occasion():
     w, d, occ = _world_with_occasion()
     a = Act(id="a_gone", actor="p_removed", verb="work", scene=SCENE)
     assert a.actor not in w.persons
+    w.acts.append(a)                 # `scene_of` answers for a STORED act (RESOLVE's loop stores it before `_survives`)
     out = d._survives(w, a)
     _check_route(out, a, occ, ("act.ineligible",))
 
@@ -139,7 +140,7 @@ def test_in50_route_5b_a_refusal_on_a_standing_occasion_cites_the_event_that_ope
         opened = _the_tenure_closed_naming(w, _THRONE)
         assert len(opened) == 1
         d = SeasonDriver(w)
-        d.scenes[SCENE] = Scene(SCENE, ACTOR, [], occasion=Question("q:need:throne", "need", (), "", ((_THRONE, "Office"),)))
+        w.acts.add_scene(Scene(SCENE, ACTOR, [], occasion=Question("q:need:throne", "need", (), "", ((_THRONE, "Office"),))))
         assert ACTOR in w.persons and ACTOR != heir
         a = Act(id="a_refused_claim", actor=ACTOR, verb="succeed", payload={"subject": _THRONE}, scene=SCENE)
         refused = [e for e in _resolve(w, d, a) if e.kind == "succession.refused"]
@@ -158,11 +159,13 @@ def test_in50_control_an_act_with_no_scene_keeps_its_own_id_alone():
     # A SCENE THAT EXISTS AND CARRIES NO OCCASION (`occasion=None`), and one whose occasion is a
     # `need` Question about the same claim the occasioned fixture's question names: `occasioned_by`
     # returns nothing for either, so the act keeps `[a.id]` -- the scene's presence alone adds nothing.
-    d.scenes["sc_in50_none"] = Scene("sc_in50_none", ACTOR, [], occasion=None)
-    d.scenes["sc_in50_need"] = Scene("sc_in50_need", ACTOR, [],
-                                     occasion=Question("q_in50_need", "need", (), about="claim_in50"))
+    w.acts.add_scene(Scene("sc_in50_none", ACTOR, [], occasion=None))
+    w.acts.add_scene(Scene("sc_in50_need", ACTOR, [],
+                           occasion=Question("q_in50_need", "need", (), about="claim_in50")))
     no_occ = Act(id="a_no_occ", actor="p_removed", verb="work", scene="sc_in50_none")
     need = Act(id="a_need", actor="p_removed", verb="work", scene="sc_in50_need")
+    for a in (bare, unknown, no_occ, need):
+        w.acts.append(a)         # `scene_of` answers for a STORED act: the control must reach the store, as RESOLVE's loop does
     checked = 0
     for a, out in ((bare, d._survives(w, bare)), (unknown, d._survives(w, unknown)),
                    (no_occ, d._survives(w, no_occ)), (need, d._survives(w, need))):
@@ -180,6 +183,7 @@ def test_in50_act_events_cites_the_act_then_the_occasion_one_list_per_event():
     # TWO DECLARED KINDS (`rosters.yaml: fold_kinds`): since SC-02 `23` the fold refuses a kind no
     # emission column declares (loader invariant 7), so the made-up `k.one`/`k.two` this used to pass
     # are refused -- `test_sc02_typed_ids_and_loader.py` plants exactly that.
+    w.acts.append(a)                 # B09.16: the Scene is kept beside the STORED act
     out = _act_events(d, w, a, ("act.refused", "act.ineligible"))
     assert [e.kind for e in out] == ["act.refused", "act.ineligible"]
     assert [e.causes for e in out] == [[a.id, occ]] * 2, [e.causes for e in out]

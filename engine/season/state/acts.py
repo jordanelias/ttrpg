@@ -29,18 +29,19 @@ bearing rather than theoretical.
 """
 from typing import Iterator, Optional
 
-from .carriers import Act
+from .carriers import Act, Scene
 from ..gaps import Unspecified
 
 
 class ActStore:
     """The acts this world has resolved, in resolution order. Append-only."""
 
-    __slots__ = ("_acts", "_by_id")
+    __slots__ = ("_acts", "_by_id", "_scenes")
 
     def __init__(self) -> None:
         self._acts: list[Act] = []
         self._by_id: dict[str, Act] = {}
+        self._scenes: dict[str, Scene] = {}
 
     def append(self, act: Act) -> Act:
         """Record `act`. Returns it, so a caller can append inline in the fold.
@@ -91,6 +92,44 @@ class ActStore:
         self._acts.append(act)
         self._by_id[act.id] = act
         return act
+
+    def add_scene(self, sc: Scene) -> None:
+        """Keep the Scene an act was released in, beside the acts (B09.16, `01_CORE_reason_trail_in_the_act_store`).
+
+        APPEND-ONLY, AND A REPEATED ID IS REFUSED, as `append` refuses a differing act: two Scenes on one id make
+        `scene_of` ambiguous with both readings available. Unlike `append`, an EQUAL repeat is refused too -- a Scene
+        is stored once, by RESOLVE, before the acts it carries, so a second store of one is a second writer.
+
+        WRITTEN BY RESOLVE ONLY, as `append` is: this store has no token of its own, the discipline is where it is
+        reached from (`loop/resolve.py::resolve`, the ACTS step) and that `loop/deliberate.py` holds none and stores
+        nothing (`test_g2_token.py::test_g2_deliberate_mutates_no_store_by_any_route` measures the world around it).
+        NOT IN THE CONTENT HASH (`World.content_hash`'s frames name `acts`, not this): the port carries it as data."""
+        if not isinstance(sc, Scene):
+            raise Unspecified(
+                f"the scene store holds Scene, not {type(sc).__name__}", "S27",
+                needs="a Scene",
+                law="the store holds the question an act answered; an Act goes in `append`")
+        if sc.id in self._scenes:
+            raise Unspecified(
+                f"scene id {sc.id!r} is already in the store", "S27",
+                needs="one Scene per id",
+                law="two Scenes on one id make `scene_of` ambiguous, and the ambiguity is silent")
+        self._scenes[sc.id] = sc
+
+    def scene_of(self, act_id: str) -> Optional[Scene]:
+        """The Scene a STORED act was released in -- through the act's own `scene` id -- or `None`: an act the store
+        never held, an act with no scene (a hand-built act, the pre-`W17` bare `Act`), or one naming a Scene not stored.
+        Never raises: an absent question is the honest answer for those, and `loop/resolve.py::_occasion_ids` keeps
+        `[a.id]` alone for it."""
+        act = self._by_id.get(act_id)
+        if act is None:
+            return None
+        sid = getattr(act, "scene", None)
+        return self._scenes.get(sid) if sid else None
+
+    def scenes(self) -> tuple:
+        """Every Scene stored, in release order. A tuple copy: the caller cannot reach the backing map."""
+        return tuple(self._scenes.values())
 
     def __contains__(self, act_id: object) -> bool:
         return act_id in self._by_id
