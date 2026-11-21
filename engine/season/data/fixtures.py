@@ -1197,6 +1197,15 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `0.0`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-458 -- site: Fixtures connection_chance, graded `assumption`; the source proposes 0.6 and gives no derivation, so it is injected at the control and swept 0.0 / 0.6 / 1.0]
     connection_chance=0.0,             # `H-458`, swept 0.0 (control, SHIPPED) / 0.6 (proposed) / 1.0
+    # `H-459` (B09.20, lane D4; IN-58's sworn-to half). HOW FAR AN OATH TO THE VICTIM'S SEAT BINDS A JUDGE TO THE VICTIM: for a judge who holds a live,
+    # un-`imposed` `oblige` to a seat S and whose own ledger holds `(S, hold, patient)` (B09.22's claim: a seat closed by a death names its holder),
+    # `queries/person_q.py::_bond` adds this to the allegiance `a` before its clamp, so a sworn judge weighs a deed done to the patient as the patient's ally
+    # does. It reaches only `deeds_judged`'s paired-deed term (`lean * bond`) and so only the regard a judge forms of a doer. `0.0` is the CONTROL and
+    # SHIPS ("it ships OFF"): `_bond` is the stored half alone, and every content hash is the one before B09.20. At the shipped `observation_deposit_mode`
+    # (`actor`) only the killer holds `(S, hold, patient)`, so the arm is reached by few judges until a mode or a teller carries it.
+    # [ASSUMPTION; medium; Jordan to correct -- the sweep's points; basis: `stance_toward` is bounded in [-1, 1] once normalised, so the oath is weighed on the stance's own scale; revert: 0.0, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-459 -- site: Fixtures sworn_bond, graded `assumption`; the entry states no value, so it is injected at the control and swept 0.0 / 0.5 / 1.0]
+    sworn_bond=0.0,                    # `H-459`, swept 0.0 (control, SHIPPED) / 0.5 / 1.0
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

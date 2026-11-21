@@ -164,7 +164,7 @@ def relation(w, a: str, t: str, authored: dict, heads: dict) -> dict:
     sf = same_faction(w, a, t)
     offs_a, offs_t = held_offices(w, a), held_offices(w, t)
     stance = person_q.stance_toward(p, t)
-    judged, told = person_q.deeds_judged(p, t, fx.get("scar_weight_shift"))
+    judged, told = person_q.deeds_judged(p, t, fx.get("scar_weight_shift"), fx.get("sworn_bond"))
     via = known_via(p, t)
     # `Office.faction` is the faction NAME (`office_faction`); `faction_holding` answers the Proposition id
     off_in_tf = bool(ft) and any(w.offices[o].faction and faction_prop_id(w.offices[o].faction) == ft

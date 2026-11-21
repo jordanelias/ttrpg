@@ -175,3 +175,126 @@ def test_control_a_death_with_no_seat_leaves_no_pairing():
         assert not [c for c in w.persons[pid].ledger if c.predicate == HOLD]
         checked += 1
     assert checked >= 3
+
+
+# ======================================================================================================================
+# B09.20 -- THE SWORN-TO HALF OF GRIEVANCE AT READ (IN-58's reader; lane D4; `sworn_bond`, H-459)
+#
+# `queries/person_q.py::_bond` is the judge's allegiance to a deed's PATIENT. A judge who holds a live, un-`imposed`
+# `oblige` to a seat S AND whose own ledger holds B09.22's claim `(S, hold, patient)` is sworn to the patient: at
+# `sworn_bond` b the allegiance `a` gains b before its clamp, and `deeds_judged`'s paired-deed term (`lean * bond`) moves.
+# PERSON-SIDE: the tests below build a `Person` and read `regard` -- no World is read (AX-2).
+# ======================================================================================================================
+from ..data.rosters import PURSUITS, SEEN_PREDICATE      # noqa: E402
+from ..data.pursuits import to_axes                       # noqa: E402
+from ..epistemic import Seen                              # noqa: E402
+from ..queries import person_q as PQ                      # noqa: E402
+from ..state.carriers import Claim                        # noqa: E402
+
+V_SEAT = OFFICE                       # the victim's seat S
+VICTIM, DOER = HOLDER, KILLER         # the patient and the hand `deed_doer` pairs to the death
+
+
+def _condemning_pursuit(kind="person.died"):
+    """A pursuit whose lean on `kind` is NEGATIVE, so the patient's allegiance (`_bond` = 1 + a) moves the term."""
+    for e in sorted(PURSUITS):
+        if PQ._lean(to_axes({e: 1.0}), kind) < 0:
+            return e
+    raise AssertionError(f"no pursuit condemns {kind!r}: allegiance could not be shown to matter")
+
+
+def _judge(pid, *, oath=False, imposed=False, closed=False, hold_claim=True, hold_value=VICTIM, hold_seat=V_SEAT,
+           oath_seat=V_SEAT, stance=()):
+    """A judge with the death's two ordinary claims -- `(victim, person.died, True)` and the sighting naming the killer
+    (so `deed_doer` pairs it) -- and, where asked: the `oblige` Tenure sworn to `oath_seat` (`imposed`: a sentence;
+    `closed`: no longer live), B09.22's claim `(hold_seat, hold, hold_value)`. Pursuits and stance are the same for
+    every judge built here, whatever else differs."""
+    p = Person(pid, pid)
+    p.pursuits = {_condemning_pursuit(): 1.0}
+    p.stance = list(stance)
+    p.ledger = [
+        Claim(f"c_died_{pid}", pid, VICTIM, "person.died", True, 0, "firsthand", 100, "own", 0),
+        Claim(f"c_seen_{pid}", pid, VICTIM, SEEN_PREDICATE,
+              Seen(stratum="contested_physical", marks=(), who=DOER), 0, "firsthand", 100, "own", 0),
+        # the seat's own `tenure.closed`, deposited at the same `when` and `lap` as the death: a pairing nobody may guess
+        Claim(f"c_closed_{pid}", pid, V_SEAT, "tenure.closed", True, 0, "firsthand", 100, "own", 0),
+    ]
+    if hold_claim:
+        p.ledger.append(Claim(f"c_hold_{pid}", pid, hold_seat, HOLD, hold_value, 0, "firsthand", 100, "own", 0))
+    if oath:
+        t = Tenure(f"t_oath_{pid}", pid, oath_seat, "oblige", 0)
+        if imposed:
+            t.payload = {"determined_by": "a_determination"}
+        if closed:
+            t.until = 1
+        p.tenures.append(t)
+    return p
+
+
+def _regard_of_the_killer(p, b):
+    fx = DEFAULT_FIXTURES.sweep("sworn_bond", b)
+    return PQ.regard(p, DOER, fx)
+
+
+def test_a_sworn_judge_reads_the_killer_differently():
+    """THE ENTRY'S FALSIFIER: two judges with EQUAL stance and pursuits, one sworn to the victim's seat (a live oblige
+    on S, and the ledger claim `(S, hold, victim)`), read DIFFERENT regard for the killer at `sworn_bond` 0.5 -- and the
+    oath weighs as the victim's ally does: a condemned death condemns the killer the more."""
+    sworn, unsworn = _judge("j_sworn", oath=True), _judge("j_free")
+    assert sworn.pursuits == unsworn.pursuits and sworn.stance == unsworn.stance
+    for b in (0.5, 1.0):
+        s, u = _regard_of_the_killer(sworn, b), _regard_of_the_killer(unsworn, b)
+        assert s < u < 0, (b, s, u)
+    # the oath is a sum before the clamp: 0.5 then 1.0 move it further, and 1.0 doubles the condemnation (a = 1)
+    r0, r5, r10 = (_regard_of_the_killer(sworn, b) for b in (0.0, 0.5, 1.0))
+    assert r10 < r5 < r0
+    # and the same claims, unsworn, are what the control reads: the oath is what moved it
+    assert _regard_of_the_killer(unsworn, 0.5) == r0
+
+
+def test_sworn_bond_zero_is_todays_regard():
+    """The CONTROL: at the shipped `sworn_bond` (0.0, "it ships OFF") the sworn judge reads exactly what the unsworn
+    one reads, and exactly what the same judge reads with the oath and the claim removed -- `_bond` adds nothing."""
+    assert DEFAULT_FIXTURES.get("sworn_bond") == 0.0
+    sworn, unsworn = _judge("j_sworn", oath=True), _judge("j_free")
+    bare = _judge("j_bare", hold_claim=False)
+    fx = DEFAULT_FIXTURES
+    assert PQ.regard(sworn, DOER, fx) == PQ.regard(unsworn, DOER, fx) == PQ.regard(bare, DOER, fx) != 0.0
+    assert PQ.deeds_judged(sworn, DOER) == PQ.deeds_judged(sworn, DOER, sworn_bond=0.0) == PQ.deeds_judged(bare, DOER)
+    assert PQ.deeds_judged(sworn, DOER, sworn_bond=0.5) != PQ.deeds_judged(sworn, DOER)
+
+
+def test_a_sworn_judge_with_no_claim_naming_the_victim_in_the_seat_does_not_move():
+    """THE ITEM'S FALSIFIER: the pairing is the CLAIM `(S, hold, victim)`, never a shared `when`/`lap` (`deed_doer` does
+    not guess). Every judge below holds the death, the sighting and the seat's `tenure.closed` at one `when` and `lap`,
+    and each lacks one of the sworn arm's conditions; each must read what an unsworn judge reads at `sworn_bond` 1.0."""
+    control = _regard_of_the_killer(_judge("j_free"), 1.0)
+    assert control == _regard_of_the_killer(_judge("j_free"), 0.0), "fixture: the control must not read the arm"
+    cases = {
+        "no hold claim at all":                      _judge("a", oath=True, hold_claim=False),
+        "a hold claim in another seat":              _judge("b", oath=True, hold_seat="off_other"),
+        "a hold claim naming another holder":        _judge("c", oath=True, hold_value="p_someone_else"),
+        "an oath to another seat":                   _judge("d", oath=True, oath_seat="off_other"),
+        "an imposed oblige (a sentence, no oath)":   _judge("e", oath=True, imposed=True),
+        "an oath no longer live":                    _judge("f", oath=True, closed=True),
+        "the claim and no oath":                     _judge("g", oath=False),
+    }
+    checked = 0
+    for name, judge in cases.items():
+        assert _regard_of_the_killer(judge, 1.0) == control, f"{name}: the sworn arm read without its conditions"
+        checked += 1
+    assert checked == len(cases)
+    # and the case that satisfies them moves, so the loop above could have failed
+    assert _regard_of_the_killer(_judge("h", oath=True), 1.0) != control
+
+
+def test_the_oath_scales_only_the_paired_term_and_never_the_stored_stance():
+    """The entry's LIMITS: the arm only scales a paired deed -- a judge whose pursuits do not lean on the death has no
+    term for it to scale -- and the stored stance half is untouched at any `sworn_bond`."""
+    inert = _judge("j_inert", oath=True, stance=[(VICTIM, 3, 2)])
+    inert.pursuits = {}
+    assert PQ.deeds_judged(inert, DOER, sworn_bond=1.0) == (0.0, 0.0)
+    assert PQ.stance_toward(inert, VICTIM) == 6.0
+    sworn = _judge("j_sworn", oath=True)
+    assert PQ.stance_toward(sworn, DOER) == 0.0
+    assert PQ.stance_toward(sworn, VICTIM) == 0.0

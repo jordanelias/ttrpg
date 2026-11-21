@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 121,
-    "total": 400,
-    "uncited": 279,
+    "total": 401,
+    "uncited": 280,
     "of_which_assumption_grade": 7
   },
-  "count": 400,
+  "count": 401,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 25,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 110,
+    "engine.season.settings": 111,
     "engine.season.realm": 8
   },
   "params": [
@@ -5053,6 +5053,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-458`, swept 0.0 (control, SHIPPED) / 0.6 (proposed) / 1.0",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.sworn_bond",
+      "name": "sworn_bond",
+      "value": 0.0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-459`, swept 0.0 (control, SHIPPED) / 0.5 / 1.0",
       "citation": null,
       "citation_grade": null
     },

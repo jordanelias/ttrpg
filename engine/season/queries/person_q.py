@@ -92,7 +92,7 @@ def held_against(p: Person, referent: str) -> tuple:
                  if len(row) >= 3 and row[0] == referent and float(row[1]) < 0)
 
 
-def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
+def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0) -> tuple:
     """`(judged, told)`: WHAT `p` MAKES OF THE DEEDS THEY HOLD ABOUT `referent`, by `p`'s OWN
     pursuits (v9 IN-18 `G1`, telling workplan §3's `regard` row). A deed claim is an event-kind
     claim `(referent, <kind>, True)` -- WITNESS's first deposit, or a told copy of one -- with
@@ -116,13 +116,19 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     the killer is counted once; an unpaired claim (no `seen`, `who` withheld, ambiguous) scores
     nothing, so a hidden actor stays hidden. A paired deed lands in `judged` or `told` by the deed
     claim's own `firsthand`, as every deed does.
-    ⚠ THE SWORN-TO HALF IS NOT BUILT (IN-58, narrowed at B10-09 close two). Its edge IS person-side: a
-    judge's own live, un-`imposed` `oblige` to a seat is in `p.tenures` and outlives the victim. What is
-    missing is the PAIRING, not the edge: a death's seat reaches a ledger as `(seat, tenure.closed, True)`
-    (`state/gate.py::Subject.seat`) beside `(victim, person.died, True)`, two claims that share only
-    `when` and `lap`, which this module never reads as a pairing (`deed_doer`: it does not guess), so
-    no claim a judge holds says the victim sat in that seat. FACTION-LEVEL grievance is v9 IN-70's: `opinion` here,
-    its World half and its referents in `world_q` (`opinion_of`, `opinion_referents`).
+    THE SWORN-TO HALF IS BUILT, AT CONTROL (IN-58, B09.20; `sworn_bond`, H-459, shipped 0.0: "it ships OFF").
+    A judge's own live, un-`imposed` `oblige` to a seat `S` is in `p.tenures` and outlives the victim, and
+    the PAIRING that was missing -- a claim saying the victim sat in `S` -- is B09.22's: a seat closed by a
+    death reaches the ledger of whoever WITNESS deposits it to (`observation_deposit_mode`) as `(S, hold,
+    <the dead holder>)` (`state/gate.py::Subject.seat`), beside `(S, tenure.closed, True)` and `(victim,
+    person.died, True)`. That claim is the pairing, never the two claims' shared `when` and `lap`, which this
+    module does not read as one (`deed_doer`: it does not guess). `_bond` adds `sworn_bond` to the allegiance
+    `a` for a patient the judge is so sworn to (`sworn_to_holder`), and only for the paired-deed term
+    (`lean · bond`), so it scales a pursuit's lean and nothing else; a caller that holds `fx` passes
+    `fx.get("sworn_bond")`, one holding none reads the control. At the shipped `actor` mode only the killer
+    holds `(S, hold, victim)`, so the arm is reached by few judges until another mode or a telling carries the
+    claim. FACTION-LEVEL grievance is v9 IN-70's: `opinion` here, its World half and its referents in
+    `world_q` (`opinion_of`, `opinion_referents`).
     [ASSUMPTION, H-192: a deed's claim subject is read as its doer for every other kind; the sum is
     unnormalised.] Person-side, no World (AX-2).
     ⚠ v9 SC-02 `22a`: WHICH claims are `referent`'s deeds is `attributed_deeds`' and WHAT each is worth
@@ -133,7 +139,7 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     for c in attributed_deeds(p.ledger, referent):
         if axis_w is None:
             axis_w = projected_axes(p, scar_shift)
-        v = deed_term(p, axis_w, c)
+        v = deed_term(p, axis_w, c, sworn_bond)
         # FIRSTHAND only is judged (`dissents`' and `record`'s precedent, `decision/options.py`):
         # a `told_by` claim whose chain is empty is still hearsay, and lands in `told`.
         if c.firsthand:
@@ -143,13 +149,13 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     return judged, told
 
 
-def holds_dispute(p: Person, referent: str, scar_shift: float = 0.0) -> bool:
+def holds_dispute(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0) -> bool:
     """v11 CR-87 (the DISPUTE, `challenge`'s conjunct; `data/requires.py`'s `dispute` stem): DOES `p` HOLD A DEED CLAIM
     OF `referent`'s THAT HIS OWN JUDGEMENT SCORES AGAINST HIM -- `deeds_judged`' two parts summed below zero (what he
     saw and what he was told, each by his own pursuits). Person-side; the fold asks it of the actor's own ledger.
     CR-88 re-points the conjunct to `grievance_against`. [ASSUMPTION; medium; Jordan to correct; revert: drop the
     conjunct from `challenge`'s cell.]"""
-    judged, told = deeds_judged(p, referent, scar_shift)
+    judged, told = deeds_judged(p, referent, scar_shift, sworn_bond)
     return judged + told < 0
 
 
@@ -172,14 +178,15 @@ def attributed_deeds(ledger, referent: str):
         yield c
 
 
-def deed_term(p: Person, axis_w: dict, c) -> float:
+def deed_term(p: Person, axis_w: dict, c, sworn_bond: float = 0.0) -> float:
     """WHAT ONE OF `attributed_deeds`' CLAIMS IS WORTH TO `p`, whose projected pursuits are `axis_w`:
     a paired deed `lean · bond` (`_lean`, `_bond` on the claim's patient, IN-58), any other
     `deed_valence`. The same numbers `paired_deed_term` and `deed_valence` give; `deeds_judged` and
-    `world_q.reception` both read it here. Person-side (AX-2)."""
+    `world_q.reception` both read it here. `sworn_bond` (B09.20, the control 0.0) is `deeds_judged`'s and reaches
+    only a paired deed; `reception` and `legitimacy` read the control. Person-side (AX-2)."""
     if c.predicate in PAIRED_KINDS:
         lean = _lean(axis_w, c.predicate)
-        return _paired_weight(p, c, lean) if lean else 0.0
+        return _paired_weight(p, c, lean, sworn_bond) if lean else 0.0
     return deed_valence(axis_w, c)
 
 
@@ -394,13 +401,25 @@ def paired_deed_term(p: Person, axis_w: dict, c, seen_of) -> tuple:
     return doer, _paired_weight(p, c, lean)
 
 
-def _paired_weight(p: Person, c, lean: float) -> float:
+def _paired_weight(p: Person, c, lean: float, sworn_bond: float = 0.0) -> float:
     """A paired deed's term, `lean · bond` on the claim's patient: the one formula `deed_term` and
     `paired_deed_term` share (`CLAUDE.md` §8, the rule lives once)."""
-    return lean * _bond(p, c.subject, lean)
+    return lean * _bond(p, c.subject, lean, sworn_bond)
 
 
-def _bond(p: Person, patient: str, lean: float) -> float:
+def sworn_to_holder(p: Person, patient: str) -> bool:
+    """IS `p` SWORN TO THE SEAT `patient` HELD (B09.20, IN-58's sworn-to half): does `p` hold a live, un-`imposed`
+    `oblige` Tenure whose object is a seat `S`, AND hold the claim `(S, hold, patient)` that B09.22's seat writes when
+    a death closes the hold (`state/gate.py::Subject.seat`)? The CLAIM is the pairing: a `tenure.closed` claim on `S`
+    and a `person.died` claim on `patient` that merely share a `when` and `lap` pair nothing (`deed_doer` does not
+    guess), and an oath `p` does not hold a claim for names no victim. An `imposed` oblige is a sentence, not an
+    oath (`Tenure.imposed`). Person-side, `p.tenures` and `p.ledger` only (AX-2)."""
+    seats = {t.object for t in p.tenures if t.kind == "oblige" and t.live and not t.imposed}
+    return bool(seats) and any(c.predicate == "hold" and c.value == patient and c.subject in seats
+                               for c in p.ledger)
+
+
+def _bond(p: Person, patient: str, lean: float, sworn_bond: float = 0.0) -> float:
     """v9 IN-58's FACTOR: how `p`'s allegiance to the deed's PATIENT weighs the deed,
     `1 - a · sign(lean)`, `a = clamp(stance_toward(p, patient) / STANCE_MAX, -1, 1)` -- the stored
     half only, normalised as `teller_weight` normalises regard. In `[0, 2]`, and the deed term
@@ -409,8 +428,18 @@ def _bond(p: Person, patient: str, lean: float) -> float:
     condemnation; no stance (`a = 0`) judges the deed by pursuits alone. The judge who IS the
     patient is his own full ally (`a = 1`): no stance row names oneself, and reading it would judge
     his own attacker as a stranger's. [ASSUMPTION; medium;
-    Jordan to correct -- the form of the factor; revert: no factor and the two cells unauthored.]"""
-    a = 1.0 if patient == p.id else max(-1.0, min(1.0, stance_toward(p, patient) / STANCE_MAX))
+    Jordan to correct -- the form of the factor; revert: no factor and the two cells unauthored.]
+    THE SWORN-TO ARM (B09.20, `sworn_bond`, H-459): for a judge `sworn_to_holder` of the patient, `sworn_bond` is
+    ADDED to `a` before the clamp, so an oath binds on the stance's own scale and a full stance plus an oath is
+    still `a = 1`. `0.0` (the control, and every caller holding no `fx`) reads no ledger and no tenure: the stored
+    half exactly."""
+    if patient == p.id:
+        a = 1.0
+    else:
+        a = stance_toward(p, patient) / STANCE_MAX
+        if sworn_bond and sworn_to_holder(p, patient):
+            a += sworn_bond
+        a = max(-1.0, min(1.0, a))
     return 1.0 - a if lean > 0 else 1.0 + a
 
 
@@ -462,7 +491,7 @@ def regard(p: Person, referent: str, fx=None) -> float:
     if not (jg >= 0 and tg >= 0):
         raise ValueError(f"judged_gain {jg} / told_valence_gain {tg} must be >= 0 (H-192/H-193)")
     if jg or tg:
-        judged, told = deeds_judged(p, referent, fx.get("scar_weight_shift"))
+        judged, told = deeds_judged(p, referent, fx.get("scar_weight_shift"), fx.get("sworn_bond"))
         stored = stored + jg * judged + tg * told
     # v11 CR-31: the caste estimate, `heritage_regard`, a third term at its own gain (0 reads nothing, so the
     # sum above is returned untouched: the control). It reads `p`'s own ledger and own convictions only.
