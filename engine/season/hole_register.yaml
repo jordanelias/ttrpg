@@ -6842,6 +6842,19 @@ rows:
     cite:      "[ASSUMPTION: the third point is this row's, on `proof_admission`'s precedent (H-427: off, on, on at the next level) -- basis: 18-A names the two arms only; the converted rows ship `difficulty: plain`, so the third reads the draw at the control obstacle sizes.] [ASSUMPTION: a swept fixture needs its `assumption` row, as `default_forgery_quality`'s H-210 has -- basis: `data/fixtures.py`'s `[JUSTIFIED: ... H-210 ...]` tag; workplan v12 B07-task-draw IDS, H block slot 1]. CONTROL: `off` is the realm before B07 -- `engine/season/tests/test_task_draw.py::test_task_draw_arm_off_reproduces_the_pinned_hash` reads its own `ARM_OFF_PINS` (the S9 base's pins, each asserted unequal to `_realm_goldens.SHIPPED`) at seeds 0, 1, 2 (one season and two) with the arm `off`. THE LIVE ARM'S READINGS are B07.05's (18-A gates 1, 3, 5)."
     source:    "workplan v12 B07.01 (`proposals/2026-11-12-subsystem-audit-suite/proposals/18_DETERMINISM_task_draw_for_uncontested_verbs.md` edit 7; UNDECIDED (11) (iii))"
 
+  - id:        H-456
+    tier:      1
+    hole:      "HOW HARD A REMEMBERED REFUSAL PUSHES A PERSON OFF RETRYING THE SAME OPPORTUNITY -- `refusal_memory`, the weight on the factor `decision/choose.py::admission_weight` puts on a candidate's pursuit term (B09.03; `16_PESSIMIST_CORE_a_refusal_is_remembered` edits 2-3). A person refused an opportunity holds a firsthand claim `(subject, <the verb row's emits_on_refusal kind>, doer = himself)` that nothing in `decision/` read, so he retried a refused act at the same odds every season. The factor is `1 - refusal_memory * refused_before / confidence_default`, `refused_before` (`queries/person_q.py`, B09.02) the present confidence of his newest such claim, 0 where there is none or he holds news of the subject newer than it."
+    kind:      "NUMBER"
+    owner:     "`engine/season/data/fixtures.py::Fixtures.refusal_memory` the one home. READER: `engine/season/decision/choose.py::admission_weight`, called by `score_terms` (the one owner of the formula) after `odds_weight`; the remembered confidence is `engine/season/queries/person_q.py::refused_before`, faded through `engine/season/state/ledgers.py::present_confidence`"
+    grade:     "assumption"
+    default:   "0.0 -- THE CONTROL, shipped by B09.03: the factor is exactly 1.0 for every candidate and no ledger is read, so the realm's content hash is the one before the factor. The shipped value is its own mover, set by B09.05 on the source's five readings"
+    site:      "Fixtures refusal_memory, read ONLY by `decision/choose.py::admission_weight`, per candidate whose pursuit term is non-zero"
+    sweep:     [0.0, 0.5, 1.0]
+    unblocks:  "R-07.a and R-08's 'not perfectly rational': a refused act is retried at lower odds, until the claim fades or news of the subject lands; a person refused at full confidence keeps a positive factor at every setting below 1.0, so he is never stuck"
+    cite:      "[ASSUMPTION: the weight's range [0, 1] and its three sweep points -- basis: the source gives the factor's shape and no number; at 1.0 a fresh full-confidence refusal zeroes the term, so values above 1 would invert it and `admission_weight` refuses them.] FALSIFIER `engine/season/tests/test_refusal_memory.py::test_factor_never_reaches_zero_below_one` (a hand-built refusal: the factor is 0.5 at `refusal_memory` 0.5 and below 1.0 wherever it is above 0; 0.0 at 1.0) and `::test_unwired_verb_has_factor_one`; CONTROL `::test_control_value_zero_leaves_hash_equal` (one season at 0.0 equals one with the factor replaced by the constant 1.0), and the realm content hash at seed 0, two seasons, equal to B09.02's. THE SHIPPED VALUE'S READINGS are B09.05's."
+    source:    "workplan v12 B09.03 (`proposals/16_PESSIMIST_CORE_a_refusal_is_remembered.md` edits 2-3; A-81; B09's H block slot 1)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

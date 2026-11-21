@@ -41,7 +41,7 @@ from ..gaps import Unspecified
 # imports `person_q` and `data/`); `_stance_arm` calls it, and `confliction` (IN-08 6f,
 # the derived Query's caller, ID-13).
 from ..queries.person_q import (
-    believed_capability, confliction, intent_named, intent_said, regard, stance_toward,
+    believed_capability, confliction, intent_named, intent_said, refused_before, regard, stance_toward,
 )
 from ..state.carriers import EFFORT, Act, Candidate, Person, Question, Scene, Sensation, View, fade_of
 # `project` is DEFINED in `options.py` (see this module's docstring) and imported here because
@@ -191,6 +191,32 @@ def odds_weight(p: Person, c: Candidate, fx: "Fixtures", odds: Optional[Callable
     return 1.0 if chance is None else float(chance)
 
 
+def admission_weight(p: Person, c: Candidate, fx: "Fixtures") -> float:
+    """THE FACTOR A REMEMBERED REFUSAL PUTS ON A CANDIDATE'S PURSUIT TERM (B09.03; `H-456`):
+    `1 - refusal_memory * refused_before(...) / confidence_default`, so a person refused this opportunity retries it at lower odds,
+    never at none below `refusal_memory` 1.0.
+
+      * `refusal_memory` `0.0` (CONTROL) -- exactly 1.0 for every candidate, and no ledger is read;
+      * a verb whose row declares no refusal kind (`VERB_TABLE[verb].emits_on_refusal`, empty), an opportunity with no subject, and
+        one where nothing is remembered (`person_q.refused_before` is 0: no such claim, or news of the subject newer than it) -- 1.0.
+
+    The remembered confidence is read at the person's own tick and the fixture's decay (`carriers.fade_of`, what `decision/`'s other
+    readers take), so a refusal fades as any claim does; the own-ledger reader takes the person and no World (AX-2).
+    A `refusal_memory` outside `[0, 1]` (or NaN) raises: above 1 the factor goes negative and would invert the pursuit term."""
+    memory = fx.get("refusal_memory")
+    if not 0.0 <= memory <= 1.0:     # `not <= ... <=`, so a NaN is refused too
+        raise ValueError(f"refusal_memory {memory} is not in [0, 1]: above 1 the factor goes negative and would invert the "
+                         "pursuit term it weighs (H-456)")
+    if memory == 0.0:
+        return 1.0
+    row = VERB_TABLE.get(c.verb)
+    if row is None or not row.emits_on_refusal or not c.subject:
+        return 1.0
+    tick, decay = fade_of(p)
+    remembered = refused_before(p, row.emits_on_refusal, c.subject, tick, decay)
+    return 1.0 if not remembered else 1.0 - memory * remembered / fx.get("confidence_default")
+
+
 def fit_term(p: Person, c: Candidate, fx: "Fixtures") -> float:
     """THE CONFERRER'S VIEW OF A CANDIDATE, at `Fixtures.confer_fit_weight` (B04.22; `H-414`): `weight * (regard(p, to) +
     the skill his own ledger holds of `to`)`, over a row that SEATS a person -- the row's shape, never a verb name: a
@@ -232,7 +258,8 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
       * `pursuit` -- `damp * Σ_axis axis_w[axis] * align(c.verb, axis) * odds_weight(...)`, `axis_w` the
         person's projected pursuits, `damp` the `confliction_weight` arm's factor (exactly 1.0 at 0) and
         `odds_weight` CR-17's believed-chance factor on a contested candidate (exactly 1.0 at
-        `odds_weighting` `none`, for an uncontested candidate, and when `odds` is `None`);
+        `odds_weighting` `none`, for an uncontested candidate, and when `odds` is `None`), and
+        `admission_weight` the factor a remembered refusal puts on it (exactly 1.0 at `refusal_memory` `0.0`, B09.03);
       * `stance` -- `stance_term(p, c, fx, memo)`, by `Fixtures.stance_polarity`, at gain `1 + g`;
       * `fit` -- `fit_term(p, c, fx)`: the conferrer's view of the candidate a seating row names in `to`.
 
@@ -250,6 +277,7 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
     pursuit = damp * ltr_sum(axis_w[ax] * align(c.verb, ax) for ax in _AXES)
     if pursuit != 0.0:
         pursuit *= odds_weight(p, c, fx, odds)
+        pursuit *= admission_weight(p, c, fx)
     else:
         _odds_arm(fx)           # a zero term is zero whatever the factor: the query is not asked (it scans the log), the arm is still checked.
                                 # Value-equal; the one difference is an error the query would raise on this candidate, which is no longer raised
