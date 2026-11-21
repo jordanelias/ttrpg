@@ -3769,10 +3769,10 @@ def disputes_held(w: World, p: Person) -> tuple:
     conjuncts: a population neither calls out nor is called out)."""
     if p.is_cohort:                       # a population calls no man out (`challenge`'s `individual` of `actor`)
         return ()
-    shift = w.fixtures.get("scar_weight_shift")
+    shift, sworn = w.fixtures.get("scar_weight_shift"), w.fixtures.get("sworn_bond")
     named = (set(ledger_names(p.ledger)) | set(known_persons(p.ledger, p.id))) - {p.id}
     held = [r for r in sorted(named)
-            if r in w.persons and not w.persons[r].is_cohort and holds_dispute(p, r, shift)]
+            if r in w.persons and not w.persons[r].is_cohort and holds_dispute(p, r, shift, sworn)]
     if not held:
         return ()
     homes = home_map(w)
@@ -4468,7 +4468,7 @@ class WorldReader:
             p = w.persons.get(self._actor)
             if p is None or arg != self._actor or subject not in w.persons:
                 return UNKNOWN
-            return holds_dispute(p, subject, w.fixtures.get("scar_weight_shift"))
+            return holds_dispute(p, subject, w.fixtures.get("scar_weight_shift"), w.fixtures.get("sworn_bond"))
         if stem == "rank":
             # `21_RECONCILIATION.md` PHASE 2 step 9 / `03_PARAMETERS.md` §C.1 -- THE ORDINAL, NOT
             # A KIND CHECK. `rung_kinds` is an ORDERED roster (`person` first), so a rung's rank
