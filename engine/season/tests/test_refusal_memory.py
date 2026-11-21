@@ -161,6 +161,15 @@ def test_factor_never_reaches_zero_below_one():
     assert CH.admission_weight(p, c, _fx(1.0)) == 0.0
     assert checked >= 5
 
+    # THE FACTOR IS OBSERVABLE (the hash test above plays one season and cannot see it): at `refusal_memory` 1.0 a
+    # hand-built remembered refusal puts a factor strictly below 1.0, and it is read at the person's own tick and decay.
+    assert CH.admission_weight(p, c, _fx(1.0)) < 1.0
+    from ..state.carriers import interior_of
+    decay = 5
+    for tick, remembered in ((0, FULL), (4, FULL - 4 * decay), (FULL // decay, 0)):
+        seen = interior_of(p, tick, decay)
+        assert CH.admission_weight(seen, c, _fx(1.0)) == pytest.approx(1.0 - remembered / FULL), tick
+
 
 def test_unwired_verb_has_factor_one():
     """A verb whose row declares no refusal kind, and an opportunity with no memory, are 1.0 at every setting."""

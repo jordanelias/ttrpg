@@ -1160,6 +1160,14 @@ DEFAULT_FIXTURES = Fixtures(
     # rows and `reconstruct`) folds flat, as before B07 (the control); `on` -- it is drawn through `seam.grade` and folded at its band. B07.05 flipped it (gate 5 read); the revert is the one value.
     # [JUSTIFIED: engine/season/hole_register.yaml H-445 -- site: Fixtures task_draw_arm, graded `assumption`; 18-A ships it `on` only once its gate 5 reads, so it was injected at the control and is swept off / on]
     task_draw_arm="on",                # `H-445`, swept off (control) / on (SHIPPED since B07.05; revert: `off`)
+    # `H-456` (B09.03; `16_PESSIMIST_CORE_a_refusal_is_remembered` edit 3). HOW HARD A REMEMBERED REFUSAL PUSHES A PERSON OFF RETRYING THE SAME
+    # OPPORTUNITY: `decision/choose.py::admission_weight` puts `1 - refusal_memory * refused_before / confidence_default` on a candidate's
+    # pursuit term, `refused_before` the present confidence of his newest firsthand refusal of that subject (`queries/person_q.py`). `0.0` is
+    # the CONTROL and is what ships here: the factor is exactly 1.0 and no ledger is read. `0.5` and `1.0` are the sweep (1.0 zeroes the term
+    # at a fresh full-confidence refusal); the shipped value is its own mover, set by B09.05.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0.0`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-456 -- site: Fixtures refusal_memory, graded `assumption`; the source gives no number for the weight, so it is injected at the control and swept 0.0 / 0.5 / 1.0]
+    refusal_memory=0.0,                # `H-456`, swept 0.0 (control, SHIPPED here) / 0.5 / 1.0
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
