@@ -4238,7 +4238,7 @@ rows:
       (0 teller-hearers with a pair), and the realm hash and `corpus_run 0` md5 are identical at
       `record_gain` 0.5 and 0, so the shipped arm moves neither artifact -- a NULL (no pair exists in
       either arm), not a control; the falsifiers plant their pairs. ⚠ B09.06 ADDS A SECOND CONTROL TO THE SAME PRODUCT, `weigh_confidence` (a switch on an existing magnitude,
-      `claim_decay_per_season`, not a new row): `False` ships (today's weights exactly; B09.08 ships `True`), and at `True` the product is
+      `claim_decay_per_season`, not a new row): `True` SHIPS since B09.08 (revert: `False`, the control, today's weights exactly), and at `True` the product is
       multiplied by `present_confidence(c) / confidence_default` for every claim, told or not, so the empty-chain branch returns that
       share instead of 1.0 and `ledger_weigh` takes the closure for a ledger holding any claim below full confidence. Its falsifier
       is `engine/season/tests/test_one_reader_of_a_ledger.py::test_weigh_confidence_false_reproduces_today`"
