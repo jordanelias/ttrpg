@@ -154,6 +154,131 @@ def test_the_probes_apparatus_changes_are_receipts_the_world_gate_issued():
     assert len(w.log) == 1
 
 
+# -- the receipt carries the value the gate saw (B09.10) ------------------------------------
+
+def _write_one(w, subject, perform, *, field="body", kind="Person", **kw):
+    """One `Change` through `World.write` with an ACTS token, returning its `(subject, receipt)` pairs."""
+    from engine.season.data.matrix import WriteClass
+    from engine.season.loop.driver import mint_token
+    from engine.season.state.gate import Change
+    return w.write(field, mint_token(w, WriteClass.ACTS), None, record_kind=kind, fieldname=field,
+                   driver="Act", actor="p_low", change=Change((subject,), perform), **kw)
+
+
+def test_receipt_delta_decodes_before_after_for_fields_subject():
+    """B09.10, the planted 940 -> 1000 case: a `Change` raising one person's `body` from 940 to 1000
+    gives a receipt whose `delta` is the (before, after) the gate read, each side decoded from the
+    canonical reading `World.state_of` takes (`(True, <body>)`, `(False,)` for an absent entity).
+    Falsifier: a fields-naming receipt with `delta is None`, which is what the gate minted before.
+    Controls: the receipt still names the field and mode `set`; a whole-entity subject's delta stays
+    `None` (no named attribute to decode); and the delta is encodable, so the Event carrying it
+    folds into `content_hash` (the first reading of the delta was bytes, which `_canonical` refuses)."""
+    from engine.season.data.matrix import Step
+    from engine.season.data.verbs import EVENT_KINDS
+    from engine.season.harness import probes as P
+    from engine.season.state.gate import Subject
+    w = P.tiny_world()
+    w.step = Step.RESOLVE
+    p = w.persons["p_mid"]
+    p.body = 940
+
+    def raise_it():
+        p.body = 1000
+
+    (subj, r), = _write_one(w, Subject.entity("persons", "p_mid", fields=("body",)), raise_it)
+    assert isinstance(r, Receipt) and w.gate.issued(r)
+    assert (r.subject, r.mode, r.driver, r.field) == ("p_mid", "set", "Act", "body")
+    assert r.delta is not None, "a fields-naming receipt minted with no delta"
+    before, after = r.delta
+    assert (before, after) == ((True, 940), (True, 1000))
+
+    # the control: a whole-entity subject names no attribute, so its delta is None (its mode is the next test's)
+    (_, whole), = _write_one(w, Subject.entity("persons", "p_mid"), lambda: setattr(p, "body", 5))
+    assert whole.mode == "set" and whole.delta is None
+
+    # encodable: the receipt rides an Event and the world still hashes (it raised on a bytes delta)
+    h0 = w.content_hash()
+    w.log.append(Event(id="e_d", kind=sorted(EVENT_KINDS)[0], changes=[r], causes=[ROOT], emitted_at=w.tick))
+    assert w.content_hash() != h0
+
+
+def test_a_whole_entity_receipt_names_its_mode_and_a_fields_receipt_stays_set():
+    """B09.10, `mode` told honestly for a whole-entity digest subject: `create` when it was absent,
+    `delete` when it is absent after, else `set`. A subject naming `fields` keeps `set` even across
+    a creation, its delta carrying the `(False,)` reading instead. Each arm is planted, so a
+    constant `set` fails three of the four assertions."""
+    from engine.season.data.matrix import Step, WriteClass
+    from engine.season.harness import probes as P
+    from engine.season.loop.driver import mint_token
+    from engine.season.state.carriers import Rung
+    from engine.season.state.gate import Change, Subject
+    w = P.tiny_world()
+    w.step = Step.MATTER
+
+    def at_matter(subject, perform):
+        return w.write("stores", mint_token(w, WriteClass.MATTER), None, record_kind="Rung",
+                       fieldname="stores", driver="MATTER", change=Change((subject,), perform),
+                       emits="stores.changed", subject="r_new", causes=[ROOT])
+
+    def make():
+        w.rungs["r_new"] = Rung("r_new", "settlement", stores={"grain": 1})
+
+    def unmake():
+        del w.rungs["r_new"]
+
+    def regrain():
+        w.rungs["r_new"].stores = {"grain": 2}
+
+    whole = Subject.entity("rungs", "r_new", earns="stores.changed")
+    (_, created), = at_matter(whole, make)
+    assert (created.mode, created.delta) == ("create", None)
+    (_, set_), = at_matter(whole, regrain)
+    assert (set_.mode, set_.delta) == ("set", None)
+    (_, deleted), = at_matter(whole, unmake)
+    assert (deleted.mode, deleted.delta) == ("delete", None)
+
+    named = Subject.entity("rungs", "r_new", earns="stores.changed", fields=("stores",))
+    (_, born), = at_matter(named, make)
+    assert born.mode == "set" and born.delta[0] == (False,) and born.delta[1][0] is True
+
+
+def test_every_minted_receipt_is_in_an_event(monkeypatch):
+    """B09.10 (red until B09.11 BY DESIGN): every receipt the world's gate minted sits in some Event of
+    the log. The scene is `test_h11_affiliation_scar`'s -- a fight observed by persons whose
+    holdings the rebound engagement table says it violates -- and its `(Person, scar)` write mints a
+    receipt per scarred observer with NO `emits`, so they land in no Event (the `_scar_witnesses`
+    docstring says "Nothing is emitted"). The fold's Events are appended as the driver does
+    (`loop/driver.py`, S19.5). It can observe what it excludes: the scar receipts are asserted
+    minted first, and the control is that every OTHER minted receipt is logged."""
+    from engine.season.data import affiliations as A
+    from engine.season.data.matrix import Step
+    from engine.season.data.rosters import AFFILIATIONS
+    from engine.season.harness import probes as P
+    from engine.season.state.carriers import Tenure
+    from engine.substrate.descriptors import AFFILIATION_CEILING
+    from ._scar_helpers import fight, rebound
+    holding = {a: AFFILIATION_CEILING for a in sorted(AFFILIATIONS)[:2]}
+    monkeypatch.setattr(A, "ENGAGEMENT", rebound(**{A.SHARED_COLUMN: {"fight": -0.3}}))
+    w = P.tiny_world()
+    for q in w.persons.values():
+        q.pursuits = {}
+        q.conviction = dict(holding)
+    w.add_tenure(Tenure("t_g1a_knot", "p_low", "p_high", "knot", since=0))
+    w.step = Step.RESOLVE
+    w.acts.append(Act(id="g1a_fight", actor="p_low", verb="fight", payload={"subject": "p_mid"}))
+    for e in fight(w, "g1a_fight"):
+        w.log.append(e)
+    minted = list(w.gate._minted.values())
+    scar = [r for r in minted if r.field == "scar"]
+    assert scar, "no scar receipt was minted, so the assertion below would be vacuous"
+    logged = {id(c) for e in w.log for c in e.changes}
+    unlogged = [r for r in minted if id(r) not in logged]
+    assert {r.field for r in minted} - {"scar"}, "the control has nothing but scar receipts in it"
+    assert not [r for r in unlogged if r.field != "scar"], "a non-scar receipt is in no Event too"
+    assert not unlogged, (f"{len(unlogged)} of {len(minted)} minted receipts are in no Event: "
+                          f"{sorted({(r.field, r.subject) for r in unlogged})}")
+
+
 # -- the log: FALSIFIER -------------------------------------------------------------------
 
 def test_an_act_caused_event_fails_while_the_act_store_is_empty():
