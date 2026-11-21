@@ -106,9 +106,17 @@ def test_eviction_ranks_on_the_present_value():
     assert [c.id for c in ledgers.evict_over_cap([old, new], 1, tick=4, decay=0)] == ["c_old"]
 
 
+def _realm(seed: int):
+    """`build_realm(seed)` at `refusal_memory = 0.0`: the before-reading above was read on a tree with no remembered-refusal factor, so
+    the log count it pins is the control's, not the shipped value's (B09.05 flipped it)."""
+    w = build_realm(seed)
+    w.fixtures = w.fixtures.sweep("refusal_memory", 0.0)
+    return w
+
+
 @lru_cache(maxsize=None)
 def _run(seed: int, seasons: int):
-    w = build_realm(seed)
+    w = _realm(seed)
     d = SeasonDriver(w)
     ch = P.chooser(w, verbs=resolvable_verbs())
     lens = []
@@ -145,7 +153,7 @@ def test_season_one_log_holds_no_fade_events():
 
 def test_two_runs_at_one_seed_give_one_hash():
     w1, _ = _run(0, 1)
-    w2 = build_realm(0)
+    w2 = _realm(0)
     d = SeasonDriver(w2)
     d.season(P.chooser(w2, verbs=resolvable_verbs()), question=None,
              contest_max_depth=w2.fixtures.get("contest_max_depth"))
