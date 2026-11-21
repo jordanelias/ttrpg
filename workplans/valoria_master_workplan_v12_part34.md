@@ -20,7 +20,7 @@ GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B04-capability-home @109c80648cddfa2b6b87a4642287b9079a6abc62
 GATE: Batch B05-one-roll @928dccc9a68232d1afb041c9a1c422d8cfdb690e
-GATE: Batch B07-task-draw
+GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
 GATE: Batch B20-mb-orders
 GATE: Batch B21-fa-governance
 GATE: Batch B21b-fa-war

@@ -22,7 +22,7 @@ GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
 GATE: Batch B04-capability-home @109c80648cddfa2b6b87a4642287b9079a6abc62
 GATE: Batch B05-one-roll @928dccc9a68232d1afb041c9a1c422d8cfdb690e
 GATE: Batch B06-keyed-draw @bcbe3ed5e595ff465e12dbe246c29f1216d14f3a
-GATE: Batch B07-task-draw
+GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1 unless the gate names two (never more before B99, D-17); per item `<s>` = 0, at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`.
 REQUIREMENT: none of its own. Re-read R-09.c → `python -m engine.season.harness.corpus_run --seasons 2`'s `DEGREES RESOLVED BY VERB` block and R-08.b → `python -m pytest engine/season/tests -q -k test_u4_the_choice_is_sampling`, each unchanged in verdict from B07's close; it supplies the entry R-04.c3's hearing runs on (B24). No `status:` is edited (A-114).
 BATCH GATE (read once, on the closing tree, B24p.99's commit; `PYTHONHASHSEED=0` on every seeded command; no command past two seasons):

@@ -66,7 +66,6 @@ Three sources, as `H2_DECISIONS.md` Appendix A's script reads them, re-run here 
 | step | open at once (the first named merges first among movers, §3) |
 |---|---|
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every row from B02 down moves one step later (S2 → S3, …, S24 → S25), membership unchanged |
-| S9 | B07 (IN), B17 (MB) |
 | S10 · S11 | B09 · B10 (IN) |
 | S12 | B24p (SC), BA1 (IN), B11 (FI), B15 (PC), B21 (FA); ⚠ 2026-11-14: B24p is held to S12 by a schedule floor (it opens after B10 has closed: its block's UNDECIDED (1)), not by an edge |
 | S13 | B08 (IN), B12a (SE+WR), B16 (PC), B21b (FA), B24 (SC) |
@@ -86,7 +85,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 
 | batch | lane | wave (§2.1 → now) | step (§2.1 → now) | slack | part files | positions: total (by state) | hash, from the position rows (§2.2 said) | est. h (E-15) | after: every `GATE: Batch` it needs (`+G` a part's GATE line §2.1 lacked; `+R` an edge H2 adopts) |
 |---|---|---|---|---|---|---|---|---|---|
-| B07-task-draw | IN | W9 | S9 | 0 | 10_cont2 | 10 (B5 P5) | MOVER (behaviour 1) | 6.5 | B00, B01, B02, B05, B06 |
 | B08-scene-order | IN | W6 → **W9** | S13 | 9 | 23 | 7 (B7) | MOVER (behaviour 3) | 5.3 | B00, B01, B02, B03a, B04 +R, B05 +R, B06 +R |
 | B09-memory | IN | W10 | S10 | 0 | 11_cont | 22 (B21 BL1) | MOVER (behaviour 8; B09.10 relabelled from encoding, R2a) | 11.3 | B00, B01, B02, B05, B07 |
 | B10-character | IN | W11 | S11 | 0 | 12, 12_cont, 13, 13_cont | 67 (B48 P8 R2 H3 BL2 C1 DF3) | MOVER (behaviour 9, encoding 1) | 29.3 | B00, B01, B01a (B01a.05), B02, B04, B05, B09 |
@@ -146,7 +144,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 
 | batch | its boundary row (part:line) | exact text | `GATE: Batch` lines | equal to its after-list in §1 | names a batch closing at or after its own step | H2 added |
 |---|---|---|---|---|---|---|
-| B07-task-draw | 10_cont2:173 | yes | 5 | yes | none | — |
 | B08-scene-order | 23:484 | yes | 7 | yes | none | — |
 | B09-memory | 11_cont:523 | yes | 5 | yes | none | — |
 | B10-character | 13_cont:200 | yes | 7 | yes | none | B01a (B01a.05) |
@@ -205,7 +202,6 @@ One row per batch in schedule order: the position handles (the part after the do
 
 | step | batch | behaviour movers (position handles) | encoding movers | conditional movers | the re-pin position and what its text says | merge position in its step |
 |---|---|---|---|---|---|---|
-| S9 | B07 | 05 | — | — | `B07.99` | 1 of 2 movers |
 | S10 | B09 | 01, 05, 07, 08, 10, 11, 12, 21 | — | — | `B09.99` | 1 of 1 movers |
 | S11 | B10 | 32, 59, 60, 65, 66, 70, 71, 72, 73 | 58 | — | `B10.99` | 1 of 1 movers |
 | S12 | B24p | 19, 24, 20, 22, 23 | — | — | `B24p.99` | 1 of 5 movers |
