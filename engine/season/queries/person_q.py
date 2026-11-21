@@ -54,6 +54,7 @@ from ..data.rosters import (
     roster_map,
 )
 from ..state.carriers import Person, Said
+from ..state.ledgers import present_confidence
 from ..trace_log import TRACE
 
 # B14.16: THE OBSERVATION THAT NAMES THE HAND OF A FELLED ACTOR'S DEATH. `loop/effects_combat.py::hand_observed` puts
@@ -477,11 +478,12 @@ def regard(p: Person, referent: str, fx=None) -> float:
 CAPABILITY_CLAIM = "capability:"
 
 
-def believed_capability(p: Person, other: str, capability: str):
+def believed_capability(p: Person, other: str, capability: str, tick: int = 0, decay: int = 0):
     """WHAT `p` BELIEVES `other`'s SCORE IN `capability` IS, from his OWN ledger alone: the value of his latest claim
     about `other` at `CAPABILITY_CLAIM + capability` (latest by `(when, lap, confidence)`), else `None` -- unknown, never a
-    figure. Person-side (AX-2): it reads `p`'s ledger and nothing else."""
-    return _latest_claim(p, other, CAPABILITY_CLAIM + capability)
+    figure. Person-side (AX-2): it reads `p`'s ledger and nothing else. `tick` and `decay` are the reader's (`LedgerReader`'s):
+    two claims of one `(when, lap)` are ranked by the confidence each is held at now."""
+    return _latest_claim(p, other, CAPABILITY_CLAIM + capability, tick, decay)
 
 
 # B14.24: THE CLAIMS A PERSON HOLDS ABOUT ANOTHER'S ARMS AND WOUNDS, the capability claim's own shape (`Claim(subject=<that person>,
@@ -493,22 +495,22 @@ KIT_CLAIM = "kit:"
 BODY_CLAIM = "condition:body"
 
 
-def _latest_claim(p: Person, other: str, predicate: str):
-    """The value of `p`'s latest claim about `other` at `predicate` (latest by `(when, lap, confidence)`), else `None`; `p`'s ledger alone."""
+def _latest_claim(p: Person, other: str, predicate: str, tick: int = 0, decay: int = 0):
+    """The value of `p`'s latest claim about `other` at `predicate` (latest by `(when, lap, present confidence)`), else `None`; `p`'s ledger alone."""
     held = [c for c in p.ledger if c.subject == other and c.predicate == predicate]
-    return max(held, key=lambda c: (c.when, c.lap, c.confidence)).value if held else None
+    return max(held, key=lambda c: (c.when, c.lap, present_confidence(c.confidence, c.when, tick, decay))).value if held else None
 
 
-def believed_kit(p: Person, other: str, field: str):
+def believed_kit(p: Person, other: str, field: str, tick: int = 0, decay: int = 0):
     """The key `p` believes `other` carries in the Combatant `field` (`weapon` or `armor`), from his OWN ledger alone: the value of his latest claim
     at `KIT_CLAIM + field`, else `None` -- unknown, never a figure. Person-side (AX-2)."""
-    return _latest_claim(p, other, KIT_CLAIM + field)
+    return _latest_claim(p, other, KIT_CLAIM + field, tick, decay)
 
 
-def believed_body(p: Person, other: str):
+def believed_body(p: Person, other: str, tick: int = 0, decay: int = 0):
     """The condition `p` believes `other`'s body is at, from his OWN ledger alone: the value of his latest `BODY_CLAIM` about `other`, else `None`.
     Person-side (AX-2)."""
-    return _latest_claim(p, other, BODY_CLAIM)
+    return _latest_claim(p, other, BODY_CLAIM, tick, decay)
 
 
 def has_seen(p: Person, other: str) -> bool:
@@ -1051,11 +1053,23 @@ class LedgerReader:
     a `weigh`, the comparator ranks a claim by `(support, when, confidence)`, where `support` is
     the noisy-OR over the DISTINCT ORIGINS asserting the same value (below). `None` is today's
     comparator, unchanged, and every caller but `epistemic.belief_contradicts` passes `None`.
-    `confidence` is read RAW either way: weighing never rewrites a claim."""
+    `confidence` is read at the reader's `tick` and `decay` (`present`) either way: a claim stores what it was
+    deposited at and fading is computed here, where it is read (`state/ledgers.py::present_confidence`);
+    weighing never rewrites a claim."""
 
-    def __init__(self, claims, weigh=None):
+    def __init__(self, claims, weigh=None, *, tick: int = 0, decay: int = 0):
         self._claims = list(claims or [])
         self._weigh = weigh
+        self._tick = tick
+        self._decay = decay
+
+    def present(self, c) -> int:
+        """`c`'s confidence AS THIS READER HOLDS IT, at the `tick` it was constructed with: the deposit less
+        `decay` per season elapsed (`state/ledgers.py::present_confidence`, the one owner of the fade). A
+        claim's stored `confidence` is what it was deposited at and is never rewritten, so every
+        comparison below reads here. A reader built with no `tick` and no `decay` (a hand-built ledger in
+        a test) reads the stored value, which is the present one at the deposit's own tick."""
+        return present_confidence(c.confidence, c.when, self._tick, self._decay)
 
     def _support(self, matches) -> list:
         """`support(v) = 1 - PROD over distinct origins (1 - weigh(c))`, one entry per match, in
@@ -1107,13 +1121,13 @@ class LedgerReader:
             best = None
             for c in self._claims:
                 if match(c) and (best is None
-                                 or (c.when, c.confidence) > (best.when, best.confidence)):
+                                 or (c.when, self.present(c)) > (best.when, self.present(best))):
                     best = c
             return best
         matches = [c for c in self._claims if match(c)]
         best, best_key = None, None
         for c, s in zip(matches, self._support(matches)):
-            key = (s, c.when, c.confidence)
+            key = (s, c.when, self.present(c))
             if best is None or key > best_key:
                 best, best_key = c, key
         return best
@@ -1222,7 +1236,7 @@ def _slant(fx) -> str:
     return arm
 
 
-def said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None":
+def said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 0) -> "Said | None":
     """WHAT THIS PERSON WOULD SAY ABOUT `subject`, as the `Said` a telling carries -- or `None` for
     nothing to say. Asked of the TELLER'S OWN claims at CHOOSE (`decision/options.py::opening_set`),
     never at WITNESS: what a telling passes on is decided when it is chosen, and rides the Act.
@@ -1251,13 +1265,13 @@ def said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None
         top = max(strength.values())
         if top > 0:
             pool = [c for c in pool if strength[id(c)] == top]
-    reader = LedgerReader(pool)
+    reader = LedgerReader(pool, tick=tick, decay=0 if fx is None else fx.claim_decay())
     # ABSENT: H-198 deception  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
     c = (reader._best(lambda c: c.subject == subject and c.predicate != SEEN_PREDICATE)
          or reader.latest_about(subject))
     if c is None:
         return None
-    return Said(c.subject, c.predicate, c.value, c.confidence, c.chain)
+    return Said(c.subject, c.predicate, c.value, reader.present(c), c.chain)
 
 
 def drifted(before, band: float, sel: int, whole_band: bool = False):
@@ -1292,7 +1306,7 @@ def is_cell(c) -> bool:
     return str(c.predicate).partition(":")[0] in CELL_STEMS
 
 
-def lie_said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None":
+def lie_said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 0) -> "Said | None":
     """WHAT THIS PERSON WOULD SAY FALSELY ABOUT `subject`: `said_of`'s pick, over the teller's CELL claims
     only, with its value made false -- or `None` where there is no false value to say (v11 CR-27, M9 taken
     (a), the cell lie; H-198 rule (i)). Asked of the LIAR'S OWN claims at CHOOSE
@@ -1317,7 +1331,7 @@ def lie_said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | 
     drop the deposit for a hearer who holds the cell firsthand: his claim and the lie then DISAGREE, which
     is the pair `decision/options.py::record` counts against the liar (`H-183`)."""
     cells = [c for c in claims if c.subject == subject and is_cell(c)]
-    said = said_of(cells, subject, fx, teller)
+    said = said_of(cells, subject, fx, teller, tick=tick)
     if said is None:
         return None
     held = said.value

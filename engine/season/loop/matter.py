@@ -224,6 +224,7 @@ def _standing_crossings(w: "World") -> list:
     NARROW the gap, so a downward-only rule could never fire on the step's own artifact. Not composed
     on `_crossings` for that reason, and because these floors key no verb."""
     floors = tuple(w.fixtures.get("standing_band_floors"))
+    decay = w.fixtures.claim_decay()
     out: list = []
     if not floors:
         return out                        # the control arm: one band, nothing can cross
@@ -235,15 +236,15 @@ def _standing_crossings(w: "World") -> list:
         past = [c for c in p.ledger if (c.when, c.lap) < floor]
         if len(past) == len(p.ledger):
             continue                      # nothing landed since: the same claims, the same gap
-        before = standing_of(_HeldBefore(pid, past), w.fixtures)
-        after = standing_of(p, w.fixtures)
+        before = standing_of(_HeldBefore(pid, past), w.fixtures, w.tick)
+        after = standing_of(p, w.fixtures, w.tick)
         if bands_below(before, floors) == bands_below(after, floors):
             continue
         own = [c for c in p.ledger if c.subject == pid and c.source == "firsthand"]
         made: list = []
         for c in p.ledger:
-            if c.subject == pid and c.source == "told_by" and agreement([c], own)[2]:
-                mate = LedgerReader([o for o in own if o.predicate == c.predicate]).belief_among()
+            if c.subject == pid and c.source == "told_by" and agreement([c], own, w.tick, decay)[2]:
+                mate = LedgerReader([o for o in own if o.predicate == c.predicate], tick=w.tick, decay=decay).belief_among()
                 made.extend(x for x in (c, mate) if x not in made)
         causes = [d for d in (w.last_emission_of("claim.deposited", c.id) for c in made) if d]
         ev = Event(id=world_q.standing_crossing_id(w, pid), kind=STANDING_CROSSED, changes=[],
@@ -354,8 +355,8 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
             # act-declared, never MATTER-advanced"* -- so a MATTER-step Event would claim a change
             # to the one field the matrix forbids MATTER to touch. The row to name is
             # `(Record, matured)`.
-            # ⚠ THE GATE EMITS, AND THAT IS THIS FILE'S OWN PRECEDENT: `claim.decayed` and
-            # `stores.changed` route this way, `H-12` is `ruled` that *"MATTER emits an Event per
+            # ⚠ THE GATE EMITS, AND THAT IS THIS FILE'S OWN PRECEDENT: `stores.changed` and
+            # `condition.worn` route this way, `H-12` is `ruled` that *"MATTER emits an Event per
             # write so crossings have an antecedent"*, and `04 §C.2` has the gate apply the write
             # and emit. A hand-built Event beside a gate that emits is a second emitter.
             # ⚠ NO `emitted.append` AND NO `TRACE.event` HERE, AND BOTH OMISSIONS ARE LOAD-BEARING.
@@ -429,44 +430,12 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
                 emits="matter.lapsed", subject=subject,
                 causes=[docketed_by_ev] if docketed_by_ev else [ROOT])
 
-    # -- CLAIM CONFIDENCE DECAY (`W4` / `H-40`) --------------------------
-    # THE THIRD LICENSED CLOCK (#353 `:864`); `(Claim, confidence)` is its Part D row.
-    #
-    # ⚠ L4 IS NOT VIOLATED AND THE REASON IS WORTH STATING: a Claim's confidence is
-    # `social:false` in Part D, so the world may move it. What the world may NOT do is decide
-    # anything with it — the decay emits and stops, exactly as a band crossing does.
-    #
-    # THE ANTECEDENT IS THE CLAIM'S OWN PREVIOUS DECAY, chaining to `[ROOT]` on the first one,
-    # for the same reason wear does: a licensed clock's genuine first emission is the only
-    # place `[ROOT]` belongs.
-    decay = w.fixtures.claim_decay()
-    for pid in sorted(w.persons):
-        p_ = w.persons[pid]
-        for c in list(p_.ledger):
-            if c.confidence <= 0:
-                continue
-            # The claim's own previous decay, else the deposit that created it. NEVER
-            # `[ROOT]`: a claim is not a clock, it is a thing a witness deposited, and the
-            # deposit has an Event. `[ROOT]` here would say the campaign seed caused it.
-            prior = (w.last_emission_of("claim.decayed", c.id)
-                     or w.last_emission_of("claim.deposited", c.id))
-            if prior is None:
-                TRACE.note(f"{c.id} has no deposit Event to chain its decay to; skipped "
-                           "rather than rooted at the campaign seed")
-                continue
-            # ⚠ AN EFFECT THAT TOUCHED NOTHING DID NOT DO THE THING, AND MUST NOT EMIT THE
-            # SUCCESS. `_fold` applies that rule to a verb whose effect wrote nothing, and
-            # `rosters.yaml`'s `conditional_emission_rows` uses the same argument to exempt
-            # `(Record, ttl)`. At `H-40`'s OWN DECLARED `0` SWEEP POINT, `claim_decay_per_season = 0`,
-            # `max(0, c.confidence - 0)` changes nothing, so emitting `claim.decayed` would have the
-            # control arm publish a decay that did not happen.
-            after = max(0, c.confidence - decay)
-            if after == c.confidence:
-                continue
-            w.write("confidence", token,
-                    lambda c=c, after=after: setattr(c, "confidence", after),
-                    record_kind="Claim", fieldname="confidence", driver="Event",
-                    emits="claim.decayed", subject=c.id, causes=[prior])
+    # -- CLAIM CONFIDENCE DECAY IS NOT WRITTEN HERE (B09.01; `W4` / `H-40`) ---------------------------
+    # MATTER stops walking ledgers. A claim fades as it is READ: `state/ledgers.py::present_confidence` (the deposit,
+    # less `Fixtures.claim_decay()` per season elapsed) is asked by every reader of a held claim's confidence, so
+    # `Claim.confidence` holds the value it was deposited at, nothing writes it, and no `claim.decayed` Event marks
+    # a claim's fall: "it reached zero" is a function of `present_confidence`, and a reader that wants the moment
+    # calls it at two ticks (`(Claim, confidence)` in `write_matrix.yaml` names no step and no kind).
 
     # -- PRESSURE: A PERSON'S STANDING CROSSES A BAND (v9 SC-02 `22b` step 23) ----
     # Logged and kept out of `emitted` (nobody witnesses another's standing): see the docstring.
@@ -822,7 +791,7 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     w._in_parallel_map = False
     # ⚠ THE EMISSIONS `write()` MADE ARE PART OF WHAT MATTER PRODUCED. `emitted` is built by hand
     # from explicit `append`s, and `write()` appends to `w.log` and to this buffer but not to the
-    # list `season()` hands to WITNESS; left out, `condition.worn` and `claim.decayed` would be
+    # list `season()` hands to WITNESS; left out, `condition.worn` would be
     # events that exist and that nobody could witness, in a design whose §61 fan-out is TOTAL.
     #
     # ⚠ AND `claim.deposited` IS DELIBERATELY NOT HERE. It is emitted during WITNESS, about a

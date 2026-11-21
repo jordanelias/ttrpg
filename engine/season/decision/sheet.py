@@ -55,7 +55,7 @@ from ...substrate.descriptors import ATTRIBUTE_GLOSSES, CAPABILITIES, attribute_
 from ..data.rosters import AFFILIATIONS
 from ..gaps import Forbidden
 from ..queries.person_q import LedgerReader
-from ..state.carriers import Person, PersonInterior, Question, View, frozen
+from ..state.carriers import Person, PersonInterior, Question, View, fade_of, frozen
 from .choose import make_ranker, release
 
 def describe(key: str) -> str:
@@ -213,7 +213,8 @@ class Chronicle:
 def chronicle(p: Person) -> Chronicle:
     """The chronicling space over one person. Reads `p`'s own `ledger`, `scar` and `conviction`; writes
     nothing, emits nothing, and leaves `content_hash` unchanged whether or not it is called."""
-    reader = LedgerReader(p.ledger)
+    tick, decay = fade_of(p)                        # B09.01: the claims he would offer are ranked as he holds them now
+    reader = LedgerReader(p.ledger, tick=tick, decay=decay)
     subjects = list(dict.fromkeys(c.subject for c in p.ledger))     # first held first, each once
     aff = {k: n for k, n in (p.scar or {}).items() if k in AFFILIATIONS}
     held = set(p.conviction or {})

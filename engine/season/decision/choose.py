@@ -43,7 +43,7 @@ from ..gaps import Unspecified
 from ..queries.person_q import (
     believed_capability, confliction, intent_named, intent_said, regard, stance_toward,
 )
-from ..state.carriers import EFFORT, Act, Candidate, Person, Question, Scene, Sensation, View
+from ..state.carriers import EFFORT, Act, Candidate, Person, Question, Scene, Sensation, View, fade_of
 # `project` is DEFINED in `options.py` (see this module's docstring) and imported here because
 # `make_chooser`'s score calls it; `options` never imports this module.
 # `seat_of` is `options.py`'s own G3 helper (`via=seat_of(...)`, below).
@@ -211,7 +211,7 @@ def fit_term(p: Person, c: Candidate, fx: "Fixtures") -> float:
         return 0.0
     fit = regard(p, to, fx)
     capability = seat_capability(c.subject)
-    skill = believed_capability(p, to, capability) if capability else None
+    skill = believed_capability(p, to, capability, *fade_of(p)) if capability else None
     return weight * (fit + (0 if skill is None else float(skill)))
 
 

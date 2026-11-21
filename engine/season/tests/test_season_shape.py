@@ -67,6 +67,7 @@ from ..state.carriers import (
     Act, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene, Sensation, Site, StateChange, Tenure, View, matrix_rows_without_a_field,
 )
 from ..state.ids import H, ROOT, draw_factory
+from ..state.ledgers import present_confidence
 from ..state.world import World
 from ..trace_log import TRACE
 from ..data import files
@@ -1820,8 +1821,10 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
     # ⚠ MEASURED, NOT WRITTEN FROM MEMORY. A first draft of this pin listed eleven pairs and six of
     # them were wrong -- `(Rung, exists)`, `(Rung, dates)`, `(Site, exists)` and `(Person, weight)`
     # are not in the corpus at all, and four real ones were missing. Derived by running the walk.
+    # B09.01 DELETED A WRITE, NAMED HERE: `("Claim", "confidence")` left this pin with MATTER's per-claim decay write (a claim's
+    # fade is read, `state/ledgers.py::present_confidence`, and nothing writes the field; `write_matrix.yaml`'s row has no step).
     _PAIRS_AT_L5 = {
-        ("Claim", "confidence"), ("Date", "fired"), ("DocketItem", "matter"),
+        ("Date", "fired"), ("DocketItem", "matter"),
         ("Person", "claim_ledger"), ("Person", "pursuits"), ("Person", "exists"),
         ("Person", "scar"), ("Person", "stance"), ("Record", "matured"),
         ("Record", "stages"), ("Record", "ttl"), ("Rung", "envelope"),
@@ -2900,7 +2903,9 @@ def test_person_q_cannot_reach_the_world_side():
     # `queries.faction_q` (imports `World`), `queries.cache` (imports `world_q`), `epistemic`
     # (imports `World`) and any new `queries/*.py` -- the same flaw the AX-2 scan over `decision/`
     # was rewritten to avoid, and that scan relies on this one for the other half of the edge.
-    ALLOWED = ("data", "state.carriers", "trace_log")
+    # B09.01: `state.ledgers` too -- `present_confidence`, the one owner of how a claim fades, lives beside the eviction
+    # comparator in that import-free leaf (it holds no store and reaches nothing), and `LedgerReader` reads a claim through it.
+    ALLOWED = ("data", "state.carriers", "state.ledgers", "trace_log")
     PKG = "engine.season"
 
     def _absolute(node):
@@ -4005,28 +4010,9 @@ def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_cond
                 emits="condition.worn", causes=[ROOT])
 
 
-def test_w4_a_claims_decay_walks_back_to_the_act_that_was_witnessed():
-    """The third clock. `(Claim, confidence)` decays at MATTER and emits `claim.decayed`, chained
-    to the claim's own previous decay and ultimately to the `claim.deposited` Event — which is
-    chained to the Event that was witnessed. #353 §19.4 calls `causes[]` the substrate of the
-    entire emergent-narrative claim; before `W4` a claim entered the world uncaused."""
-    w = _w4_run(3)
-    by_id = {e.id: e for e in w.log}
-    decays = [e for e in w.log if e.kind == "claim.decayed"]
-    assert decays, "no claim decayed — the third licensed clock is not running"
-    walked = 0
-    for d in decays:
-        chain, cur = [], d
-        while cur.causes and cur.causes[0] in by_id:
-            cur = by_id[cur.causes[0]]
-            chain.append(cur.kind)
-            if len(chain) > 40:
-                break
-        assert "claim.deposited" in chain, (
-            f"a decay's chain is {chain} — it never reaches the deposit that created the claim")
-        if chain[chain.index("claim.deposited") + 1:]:
-            walked += 1
-    assert walked, "no decay chain reaches past its deposit to the Event that was witnessed"
+# B09.01: `test_w4_a_claims_decay_walks_back_to_the_act_that_was_witnessed` is RETIRED WITH ITS SUBJECT. A claim's fade is
+# no longer a MATTER write that emits `claim.decayed`; it is `state/ledgers.py::present_confidence`, computed where a claim is
+# read, so no decay Event exists to walk back. Its successor is `test_claim_fade_as_read.py` (no `claim.decayed` in a log).
 
 
 def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate():
@@ -4051,13 +4037,13 @@ def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate(
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
                      None,
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
-        confs = [c.confidence for p in w.persons.values() for c in p.ledger]
+        # B09.01: the confidence he holds each claim at NOW (`present_confidence`), a stored value being the deposit's
+        confs = [present_confidence(c.confidence, c.when, w.tick, rate) for p in w.persons.values() for c in p.ledger]
         seen[rate] = (Counter(e.kind for e in w.log)["claim.decayed"], min(confs), max(confs))
     print(f"\n  H-40 sweep — (decay events, min confidence, max) by rate: {seen}")
-    assert seen[0][0] == 0, (
-        f"the 0 arm emitted {seen[0][0]} `claim.decayed` Events — a decay that did not happen")
+    assert all(seen[r][0] == 0 for r in seen), (
+        f"a `claim.decayed` Event stands in the log: {seen}. B09.01: a fade is computed where a claim is read, never written")
     assert seen[0][1] == seen[0][2], "confidence moved at rate 0"
-    assert seen[5][0] and seen[20][0], "the live arms emitted no decay at all"
     assert seen[20][1] < seen[5][1] < seen[0][1], (
         f"confidence does not fall faster at a higher rate: {seen} — then the rate is inert and "
         "this sweep is measuring nothing")
@@ -4252,9 +4238,17 @@ def test_w6_h33s_declared_sweep_runs_and_the_deposit_count_falls():
     assert got["presence_only"][1] < got["total"][1], (
         f"narrowing the channels did not reduce deposits: {got} — then no predicate EXCLUDES and "
         "`S61`'s debt is not discharged")
-    assert got["presence_only"][1] * 4 < got["total"][1], (
-        f"the reduction is marginal: {got}. §1.4 hole 16 is about an order of magnitude, and a "
-        "few percent would mean the predicates are not the thing bounding the fan-out")
+    # ⚠⚠ B09.01 (`reading @c765c86`, `PYTHONHASHSEED=0`): THE ORDER OF MAGNITUDE WAS THE DECAY EVENTS', AND IT IS GONE WITH THEM. At
+    # `total` every witness was fanned every `claim.decayed` Event (one per live claim per season, `W4`/`D22`: §1.4 hole 16's
+    # "MATTER emits per write" half), so the control arm's deposits were mostly fades. A claim's fade is now read, not written
+    # (`state/ledgers.py::present_confidence`), no Event carries it, and `total` reads 794 deposits against `presence_only`'s 412
+    # in this fixture (ledgers [263, 265, 266] against [0, 205, 207]). The narrowing still bites -- `presence_only` is below `total`
+    # above, by half -- and what is asserted is that margin, not the ratio the fades supplied.
+    # [GROUNDED: measured at B09.01 on `_w6_run`, three seasons -- `total` 794 deposits, `presence_only` 412, `all_five` 412]
+    assert got["presence_only"][1] * 1.5 < got["total"][1], (
+        f"the reduction is marginal: {got}. The fan-out narrowing should still take a third off `total`'s deposits "
+        "(B09.01: the order of magnitude the decay Events supplied is gone), and less would mean the predicates are "
+        "not the thing bounding the fan-out")
     # AND THE TWO NARROW ARMS ARE NOT THE SAME ARM WEARING TWO NAMES. If `chronicle` matched
     # everyone, `all_five` would BE `total` and the sweep would have a redundant point.
     #
@@ -4296,8 +4290,8 @@ def test_w6_h33s_declared_sweep_runs_and_the_deposit_count_falls():
     # now (no ledger reaches it), which is why the exactness arm no longer rides the shipped cap.
     cap = DEFAULT_FIXTURES.get("ledger_cap")
     assert max(got["total"][2]) <= cap, f"the control arm's fullest ledger is {max(got['total'][2])}, above `L = {cap}`"
-    assert max(got["total"][2]) >= 10 * max(got["all_five"][2]), (
-        f"the control arm's fullest ledger {max(got['total'][2])} is within 10x of the shipped arm's "
+    assert max(got["total"][2]) > max(got["all_five"][2]), (       # B09.01: was `>= 10 *`; the decay Events' flood is gone (above)
+        f"the control arm's fullest ledger {max(got['total'][2])} is no fuller than the shipped arm's "
         f"{max(got['all_five'][2])}: the flood this item exists to bound has gone away and the item should be re-argued")
     w200, _ = _w6_run("total", cap=200)
     assert max(len(p.ledger) for p in w200.persons.values()) == 200, (
@@ -4610,8 +4604,10 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
         print(f"    {m:15} deposits={dep:5} ledgers={led} questions={qs} acts={len(acts)}")
 
     # LINK 1 — the fan. It must actually bite, or nothing below is about the narrowing.
-    assert got["all_five"][0] * 5 < got["total"][0], (
-        f"the shipped arm deposits within 5x of `total`: {got}. Then the narrowing is cosmetic")
+    # B09.01: was `* 5 <`. The decay Events `total` fanned to every witness are gone (`test_w6_h33s...`'s note), so `total` reads
+    # 794 deposits against the shipped arm's 412 here.
+    assert got["all_five"][0] * 1.5 < got["total"][0], (
+        f"the shipped arm deposits within 1.5x of `total`: {got}. Then the narrowing is cosmetic")
     # ⚠⚠ RE-ARGUED AT v11 CR-87 (B10-11), AS THE MESSAGE BELOW ASKED: `==` the shipped cap -> an order of magnitude over the
     # shipped arm. The link's own claim (the `11a` note below) is that "the relief this link exists to prove is against
     # `total`, not against an absolute cap", and the cap-equality was its proxy for "`total` floods". CR-87's contexts
@@ -4620,8 +4616,8 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
     # [0, 137, 139] (base [0, 150, 154]). The flood is intact (twenty times, on both trees); the proxy lapsed. The cap's
     # exactness is `test_w6_h33s...`'s, read at `L = 200` there.
     assert max(got["total"][1]) <= DEFAULT_FIXTURES.get("ledger_cap"), f"above the cap: {got['total'][1]}"
-    assert max(got["total"][1]) >= 10 * max(got["all_five"][1]), (
-        f"the control's fullest ledger {max(got['total'][1])} is within 10x of the shipped arm's "
+    assert max(got["total"][1]) > max(got["all_five"][1]), (       # B09.01: was `>= 10 *`; the decay Events' flood is gone
+        f"the control's fullest ledger {max(got['total'][1])} is no fuller than the shipped arm's "
         f"{max(got['all_five'][1])} — the flood this flip relieves has gone away on its own and the item should be re-argued")
     # ⚠⚠ `<` -> `==`, POSITION `11a`, 2026-09-29. Bailiff now forms real candidates too (`reach`/
     # `place_of` widen HIS Q2, not only Carin's), so total activity in this 3-person world rose
@@ -10866,8 +10862,8 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     def drops(fx):
         hits = []
         original = decision.options.belief_contradicts
-        def counted(p_, row, subject, operands, seat=None, weigh=None, actor=None):
-            out = original(p_, row, subject, operands, seat, weigh=weigh, actor=actor)
+        def counted(p_, row, subject, operands, seat=None, weigh=None, actor=None, **fade):     # B09.01: `tick`, `decay`
+            out = original(p_, row, subject, operands, seat, weigh=weigh, actor=actor, **fade)
             # a WITNESS's act-level prior (`dissents`, H-201) passes `actor=`; only the chooser's own
             # clause-4 drop (`opening_set`, no actor) is what this counts
             if out and actor is None:
@@ -10898,8 +10894,8 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
         hits = []
         who = []                            # v10 REM-2C: the same drops with the person dropping them
         original = decision.options.belief_contradicts
-        def counted(p_, row, subject, operands, seat=None, weigh=None, actor=None):
-            out = original(p_, row, subject, operands, seat, weigh=weigh, actor=actor)
+        def counted(p_, row, subject, operands, seat=None, weigh=None, actor=None, **fade):     # B09.01: `tick`, `decay`
+            out = original(p_, row, subject, operands, seat, weigh=weigh, actor=actor, **fade)
             # a WITNESS's act-level prior (`dissents`, H-201) passes `actor=`; only the chooser's own
             # clause-4 drop (`opening_set`, no actor) is what this counts
             if out and actor is None:
@@ -11845,7 +11841,7 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
                          None,
                          contest_max_depth=w.fixtures.get("contest_max_depth"))
-            confs = [c.confidence for p in w.persons.values() for c in p.ledger]
+            confs = [present_confidence(c.confidence, c.when, w.tick, rate) for p in w.persons.values() for c in p.ledger]
             ev = Counter(e.kind for e in w.log)
             occ = sum(len(p.ledger) for p in w.persons.values())
             seen[rate] = (ev["claim.decayed"], min(confs), ev["claim.deposited"] - occ)

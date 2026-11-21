@@ -48,7 +48,7 @@ from ..queries.person_q import (
     held_against, known_persons, ledger_names,
     is_cell as _is_cell, lie_said_of, projected_axes, regard, said_of,
 )
-from ..state.carriers import Candidate, Claim, Person, Question, Record, View
+from ..state.carriers import Candidate, Claim, Person, Question, Record, View, fade_of
 from ..trace_log import TRACE
 from ...substrate.descriptors import about_mid, scale_of
 
@@ -103,7 +103,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     out: list[Candidate] = []
     axis = fx.get("refusal_axis")
     tolerance = refusal_tolerance(p, axis)
-    weigh = ledger_weigh(p, fx)
+    tick, decay = fade_of(p)     # B09.01: his claims are read at his tick, faded (`state/ledgers.py::present_confidence`)
+    weigh = ledger_weigh(p, fx, tick)
     # Own-ledger reads every row asks alike, computed at most once per call and only when a row
     # needs one: `ledger_names` for a `referent_named` row, `known_persons` for a fanned row's bags.
     named: Optional[frozenset] = None
@@ -170,7 +171,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             writs = q.referents_for(_HELD_WRIT_CLASS)
             if writs:
                 if records is None:
-                    records = held_record_claims(p)
+                    records = held_record_claims(p, tick, decay)
                 # v10 IN-12 step 5a: ONLY A DOCUMENT ADDRESSED TO HIM (`person_q.addressed_to`, the one
                 # owner `writs_held` asks too) -- a petitioner holding his own petition is not who it
                 # asks, and forms nothing on its `terms`. A writ reached here only through `writs_held`'s
@@ -200,7 +201,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         contexts = VIOLENCE_CONTEXTS.get(verb)
         if contexts and refs:
             if records is None:
-                records = held_record_claims(p)
+                records = held_record_claims(p, tick, decay)
             memo: dict = {}          # what a reader derives from the actor alone, once per call, not once per referent
             refs = tuple(r for r in refs if violence_context_of(p, q, r, contexts, records, memo) is not None)
         # v9 IN-26 (`rosters.yaml: own_hold_declines`, `A-13`): A VERB A PERSON FORMS ONLY ON A REFERENT HE
@@ -261,7 +262,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         warranted = None
         if warrant_kind is not None:
             if records is None:
-                records = held_record_claims(p)
+                records = held_record_claims(p, tick, decay)
             warranted = {_content_answer(c, "subject") for c in records
                          if content_kind(c) == warrant_kind}
         # `19`: the seat(s) this row's act would exercise -- the untraced walk `pack_scenes` names
@@ -329,10 +330,10 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             if people is None and row.known_person_operands():
                 people = known_persons(p.ledger, p.id)
                 if records is None:
-                    records = held_record_claims(p)
+                    records = held_record_claims(p, tick, decay)
             bagged = [(st, ops) for st in (seats or (None,))
                       for ops in operand_bags(p, row, q, subject, fx, seat=st, people=people,
-                                              records=records)]
+                                              records=records, tick=tick)]
             if vocations:                   # IN-12 step 9: one bag per vocation carried (above)
                 bagged = [(st, {**ops, voc_operand: k}) for st, ops in bagged for k in vocations]
             for st, ops in bagged:
@@ -358,7 +359,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 # onto `Act.via` (`pack_scenes`), so a `basis` conjunct is asked of the same seat both
                 # sides. `st` is the seat this Candidate is formed for.
                 # `T3a`: and the person reads their own ledger WEIGHING hearsay by its teller.
-                if belief_contradicts(p, row, subject, ops, st, weigh=weigh):
+                if belief_contradicts(p, row, subject, ops, st, weigh=weigh, tick=tick, decay=decay):
                     continue
                 # WHAT THE TELLER WILL SAY IS DECIDED HERE, AT CHOOSE, AND RIDES THE ACT (`T1`,
                 # `workplans/2026-10-01-telling-workplan.md`): a row whose typed cell holds a NAMED
@@ -380,7 +381,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                         # CR-27: a row in `lie_verbs` says the claim FALSELY (`lie_said_of`), every other row
                         # says it as held (`said_of`); both are the actor's own ledger and nothing else.
                         said_of_entity[entity] = (lie_said_of if verb in LIE_VERBS else said_of)(
-                            p.ledger, entity, fx, teller=p)
+                            p.ledger, entity, fx, teller=p, tick=tick)
                     said = said_of_entity[entity]
                     if said is None:
                         continue
@@ -925,7 +926,7 @@ def _held_objects(p: Person) -> frozenset:
     return frozenset(t.object for t in p.tenures if t.kind == "hold" and t.live)
 
 
-def held_record_claims(p: Person) -> list:
+def held_record_claims(p: Person, tick: int = 0, decay: int = 0) -> list:
     """THE CONTENT CLAIMS OF THE RECORDS `p` HOLDS -- plan position IN-10, #453 §10.1's *"held
     Records"*: for each of `p`'s OWN live `hold` Tenures, the newest `content:<kind>` claim on its
     object in `p`'s OWN ledger, where `rosters.yaml: record_sourced_operands` maps that kind. In
@@ -945,18 +946,18 @@ def held_record_claims(p: Person) -> list:
     out = []
     for o in dict.fromkeys(held):
         c = LedgerReader([c for c in pool if c.subject == o and content_said(c) is not None
-                          and content_kind(c) in RECORD_SOURCED_OPERANDS]).belief_among()
+                          and content_kind(c) in RECORD_SOURCED_OPERANDS], tick=tick, decay=decay).belief_among()
         if c is not None:
             out.append(c)
     return out
 
 
-def document_read(p: Person, rid) -> Optional["Claim"]:
+def document_read(p: Person, rid, tick: int = 0, decay: int = 0) -> Optional["Claim"]:
     """`p`'s OWN READING OF DOCUMENT `rid`: the newest `content:<kind>` claim on it in his ledger (`LedgerReader`'s
     comparator, `held_record_claims`' rule), whether he holds the Record or only read it made before him; `None`
     where he holds no reading. Person-side and World-free (AX-2)."""
     return LedgerReader([c for c in p.ledger if c.subject == rid and content_said(c) is not None
-                         and content_kind(c) in RECORD_SOURCED_OPERANDS]).belief_among()
+                         and content_kind(c) in RECORD_SOURCED_OPERANDS], tick=tick, decay=decay).belief_among()
 
 
 def documents_known_as(p: Person) -> dict:
@@ -1267,7 +1268,7 @@ def operands_for(p: Person, row: "VerbRow", q: "Question", subject,
 
 def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
                  fx: "Fixtures", seat: Optional[str] = None,
-                 people: Optional[tuple] = None, records: Optional[list] = None) -> list[dict]:
+                 people: Optional[tuple] = None, records: Optional[list] = None, tick: int = 0) -> list[dict]:
     """EVERY OPERAND BAG `p` CAN FORM FOR `row` ON `subject` -- `[]` when none (telling workplan
     `T4`, `ED-IN-0282`). One bag for every row whose operands all come from `_derive_operand`
     (`operands_for`'s rule, unchanged); for a row whose cell binds a known-person operand beside
@@ -1299,7 +1300,7 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     and a Record about anything else forms nothing here. A Record whose kind maps none of the fan's
     operands, or whose addressee is a known person's bag already, adds nothing (same act id,
     `data/verbs.py::act_key`). A row with no fan is untouched: its operands are what it is about."""
-    return _fanned_choices(row, _person_bags(p, row, q, subject, fx, seat, people, records))
+    return _fanned_choices(row, _person_bags(p, row, q, subject, fx, seat, people, records, tick))
 
 
 def _fanned_choices(row: "VerbRow", bags: list) -> list:
@@ -1324,7 +1325,7 @@ def _fanned_choices(row: "VerbRow", bags: list) -> list:
 
 
 def _person_bags(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures", seat: Optional[str] = None,
-                 people: Optional[tuple] = None, records: Optional[list] = None) -> list[dict]:
+                 people: Optional[tuple] = None, records: Optional[list] = None, tick: int = 0) -> list[dict]:
     """`operand_bags`' body before the choice fan: one bag, or one per known person / held Record (its docstring)."""
     fan = row.known_person_operands()
     if not fan:
@@ -1336,7 +1337,7 @@ def _person_bags(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixture
     # per person known: `accept` is fought against the challenge's `challenger`; a Candidate per
     # acquaintance would be refused by the fold's `names:to` for all but one. `subject` stays the document (no `held=`: the act answers the Record itself).
     if row.referent_class == _HELD_WRIT_CLASS:
-        doc = document_read(p, subject)
+        doc = document_read(p, subject, tick, fx.claim_decay())
         given = {n: _content_answer(doc, n) for n in fan}
         if doc is not None and None not in given.values():
             ops = _operands(p, row, q, subject, fx, given, seat)
@@ -1355,7 +1356,7 @@ def _person_bags(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixture
         if ops is not None:
             out.append(ops)
     if records is None:
-        records = held_record_claims(p)
+        records = held_record_claims(p, tick, fx.claim_decay())
     formed = {tuple(b.get(n) for n in fan) for b in out}
     for c in records:
         # The Record's own `terms` must BE the referent; a Record saying nothing about it (no
@@ -1435,7 +1436,7 @@ def _operands(p: Person, row: "VerbRow", q: "Question", subject, fx: "Fixtures",
     return out
 
 
-def agreement(told: list[Claim], own: list[Claim]) -> tuple:
+def agreement(told: list[Claim], own: list[Claim], tick: int = 0, decay: int = 0) -> tuple:
     """§F4's `agreement`, DEFINED -- and defined over TWO CLAIM SETS, not over claims and
     convictions. Returns `(agreements, disagreements, paired_predicates)`.
 
@@ -1457,12 +1458,12 @@ def agreement(told: list[Claim], own: list[Claim]) -> tuple:
 
     Claims are paired BY PREDICATE, on the `person_predicates` roster -- PLAN `W5`'s "defined
     predicate vocabulary". Without one, "pairing by predicate" is pairing on a free string."""
-    agree, dis = _pair(told, own, lambda c: c.predicate, PERSON_PREDICATES)
+    agree, dis = _pair(told, own, lambda c: c.predicate, PERSON_PREDICATES, tick, decay)
     return agree, dis, agree + dis
 
 
 def _pair(told: list[Claim], own: list[Claim], key: Callable[[Claim], Any],
-          admit=None) -> tuple:
+          admit=None, tick: int = 0, decay: int = 0) -> tuple:
     """THE ONE PAIRING STEP: each `told` claim against `own`'s belief at the same `key`, `(agree, dis)`.
 
     `agreement` pairs by predicate on the `person_predicates` roster (`admit`); `record` pairs by
@@ -1487,13 +1488,13 @@ def _pair(told: list[Claim], own: list[Claim], key: Callable[[Claim], Any],
         if k not in by_key:
             continue                    # nothing of your own to compare it against
         if k not in belief:
-            belief[k] = LedgerReader(by_key[k]).belief_among()
+            belief[k] = LedgerReader(by_key[k], tick=tick, decay=decay).belief_among()
         mate = belief[k]
         (agree, dis) = (agree + 1, dis) if c.value == mate.value else (agree, dis + 1)
     return agree, dis
 
 
-def standing_of(p: Person, fx: "Fixtures") -> int:
+def standing_of(p: Person, fx: "Fixtures", tick: int = 0) -> int:
     """S18.2's scalar, PERSON-SIDE, as a fixed-point int on `condition_scale` (S48).
 
         standing(p) = gap( told_by claims about p , p's own firsthand claims about p )
@@ -1512,7 +1513,7 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
     scale = fx.get("condition_scale")
     told = [c for c in p.ledger if c.subject == p.id and c.source == "told_by"]
     own = [c for c in p.ledger if c.subject == p.id and c.source == "firsthand"]
-    _agree, dis, paired = agreement(told, own)
+    _agree, dis, paired = agreement(told, own, tick, fx.claim_decay())
     return scale if paired == 0 else (dis * scale) // paired
 
 
@@ -1537,16 +1538,16 @@ def channel_remove(channel: str) -> float:
     return remove_distance(CHANNEL_CLAIM_SOURCE[channel])
 
 
-def ledger_weigh(p: Person, fx: "Fixtures"):
+def ledger_weigh(p: Person, fx: "Fixtures", tick: int = 0):
     """THE `weigh` `p` READS THEIR OWN LEDGER BY when asking `belief_contradicts` -- `teller_weight`,
     or `None` for a ledger holding no told claim (`T3a`: such a ledger weighs 1.0 everywhere, which is
     the unweighted order exactly, tested, so it takes the plain reader). One owner for both askers:
     `opening_set` (*may I do this*) and `dissents`' act-level term (*could the actor have done this*,
     `H-201`), so a person reads one ledger one way whichever question they put to it."""
-    return teller_weight(p, fx) if any(c.chain for c in p.ledger) else None
+    return teller_weight(p, fx, tick) if any(c.chain for c in p.ledger) else None
 
 
-def dissents(p: Person, c: Claim, act=None, weigh=None) -> bool:
+def dissents(p: Person, c: Claim, act=None, weigh=None, decay: int = 0) -> bool:
     """DOES WHAT `p` ALREADY HOLDS DISAGREE WITH `c`? REFRACTION's prior-belief term.
 
     `c` is a claim about to land in `p`'s ledger and not yet in it. Two priors, either of which
@@ -1575,11 +1576,12 @@ def dissents(p: Person, c: Claim, act=None, weigh=None) -> bool:
        `opening_set` passes it -- so this prior reads the whole ledger, hearsay graded, unlike
        (1): it is the person's belief about the world, the one they choose by. [ASSUMPTION, `H-201`]"""
     own = [x for x in p.ledger if x.firsthand]
+    tick = c.when                     # `c` lands now: the tick its holder reads his own claims at
     if c.subject == p.id and c.predicate in PERSON_PREDICATES:
-        if agreement([c], [x for x in own if x.subject == p.id])[1] > 0:
+        if agreement([c], [x for x in own if x.subject == p.id], tick, decay)[1] > 0:
             return True
     elif _is_cell(c):
-        if _pair([c], [x for x in own if _is_cell(x)], lambda x: (x.subject, x.predicate))[1] > 0:
+        if _pair([c], [x for x in own if _is_cell(x)], lambda x: (x.subject, x.predicate), None, tick, decay)[1] > 0:
             return True
     if act is None:
         return False
@@ -1588,7 +1590,7 @@ def dissents(p: Person, c: Claim, act=None, weigh=None) -> bool:
         return False
     pay = act.payload if isinstance(act.payload, dict) else {}
     return belief_contradicts(p, row, pay.get("subject"), pay, act.via, weigh=weigh,
-                              actor=act.actor)
+                              actor=act.actor, tick=tick, decay=decay)
 
 
 # v10 CR-19 / `H-200`: THE ATTRIBUTE `AX-7`'S COMPETENCE READS is a ROW, not a name here: `rosters.yaml: tables.capability_uses`'s
@@ -1694,7 +1696,8 @@ def refracted_confidence(p: Person, c: Claim, channel: str, gain: float,
     if not 0.0 <= gain <= 1.0:
         raise ValueError(f"refraction_gain {gain!r} is outside [0, 1] (H-199): a factor below 0 "
                          "would turn a deposit's confidence negative")
-    factor = ((1.0 - gain * channel_remove(channel)) * (1.0 - gain * dissents(p, c, act, weigh))
+    decay = 0 if fx is None else fx.claim_decay()
+    factor = ((1.0 - gain * channel_remove(channel)) * (1.0 - gain * dissents(p, c, act, weigh, decay))
               * (1.0 if fx is None else competence(p, fx)))
     return int(c.confidence * factor + 0.5)
 
@@ -1716,7 +1719,7 @@ def rank(p: Person, teller: str) -> int:
     return 0
 
 
-def record(p: Person, teller: str, fx: "Fixtures") -> float:
+def record(p: Person, teller: str, fx: "Fixtures", tick: int = 0) -> float:
     """A TELLER'S RECORD WITH `p`: how often what `teller` told `p` matched what `p` holds firsthand
     (telling workplan `T6`, `ED-IN-0282`; E5).
 
@@ -1752,14 +1755,14 @@ def record(p: Person, teller: str, fx: "Fixtures") -> float:
     gain = fx.get("record_gain")
     told = [c for c in p.ledger if c.teller == teller and _is_cell(c)]
     own = [c for c in p.ledger if c.firsthand and _is_cell(c)]
-    agree, dis = _pair(told, own, lambda c: (c.subject, c.predicate))
+    agree, dis = _pair(told, own, lambda c: (c.subject, c.predicate), None, tick, fx.claim_decay())
     # ABSENT: H-191 intent reconciliation  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
     if agree + dis == 0:
         return 1.0
     return 1.0 + gain * (agree - dis) / (agree + dis)
 
 
-def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
+def teller_weight(p: Person, fx: "Fixtures", tick: int = 0) -> Callable[[Claim], float]:
     """THE `weigh` CLOSURE `LedgerReader` RANKS `p`'S CLAIMS BY (telling workplan `T3a`,
     `ED-IN-0282`; the reader `H-157` recorded as missing for `Claim.teller`).
 
@@ -1813,7 +1816,7 @@ def teller_weight(p: Person, fx: "Fixtures") -> Callable[[Claim], float]:
         # ABSENT: H-180 stake  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
         rec = record_of.get(teller)
         if rec is None:
-            rec = record_of[teller] = record(p, teller, fx)
+            rec = record_of[teller] = record(p, teller, fx, tick)
         return _clamp(told_weight ** c.hops * relation * rec, 0.0, 1.0)
 
     return weigh

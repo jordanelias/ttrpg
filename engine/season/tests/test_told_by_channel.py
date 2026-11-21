@@ -550,9 +550,9 @@ def test_t3_opening_set_hands_clause_4_the_teller_weight(monkeypatch):
     seen = []
     real = O.belief_contradicts
 
-    def spy(pp, row, subject, operands, via=None, weigh=None, actor=None):
+    def spy(pp, row, subject, operands, via=None, weigh=None, actor=None, **fade):
         seen.append(weigh)
-        return real(pp, row, subject, operands, via, weigh=weigh, actor=actor)
+        return real(pp, row, subject, operands, via, weigh=weigh, actor=actor, **fade)    # B09.01: `tick`, `decay`
 
     monkeypatch.setattr(O, "belief_contradicts", spy)
 
