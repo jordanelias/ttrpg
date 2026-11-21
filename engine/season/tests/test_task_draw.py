@@ -317,6 +317,35 @@ def test_a_band_short_of_success_never_seats_a_traveller_where_success_is_refuse
     assert refused >= 1 and seated >= 1, (refused, seated)
 
 
+def test_a_band_short_of_success_settles_no_migrant_and_publishes_no_residence_change():
+    """The close's Phase 3 (B07.02): a `migrate` writes one thing, the residence. A Partial that moved the migrant one leg short still
+    emitted `residence.changed` over a residence that did not change (the false success `_fold` calls a defect, H-113 / ID-9; WITNESS
+    deposits it, `strife_moves.yaml` reads it as flight). The effect at Partial is `NO_CHANGE`; with no band it still settles him (control).
+    MUTATION (run, reverted): the effect settling at Partial again returns a `Change` and the first assertion reds."""
+    from types import SimpleNamespace
+
+    from ..loop.effects_migration import _eff_migrate as eff
+    from ..queries.world_q import residence_of
+    from ..state.gate import NO_CHANGE
+
+    w = build_realm(0)
+    full, partial = None, SimpleNamespace(degree="Partial")
+    res_of = residence_of(w)
+    pairs = 0
+    for pid in sorted(p for p, x in w.persons.items() if not x.is_cohort)[:40]:
+        for dest in sorted(r for r, x in w.rungs.items() if x.kind == "hearth" and res_of.get(pid) != r)[:12]:
+            act = SimpleNamespace(id=f"m_{pid}_{dest}", actor=pid, verb="migrate", payload={"to": dest}, via=None)
+            ctrl = eff(w, act, full)
+            if ctrl is NO_CHANGE:
+                continue                                       # a pair the ladder, custody or capacity refuses: not this test's
+            assert eff(w, act, partial) is NO_CHANGE, (pid, dest)   # a band short of the full effect settles nobody
+            pairs += 1
+            break
+        if pairs >= 3:
+            break
+    assert pairs >= 1, pairs
+
+
 def test_a_refused_task_act_carries_no_band():  # [ASSUMPTION: test name]
     """B07.10 (UNDECIDED (13) (i)): a drawn `tend` act on a patient already at his ceiling is drawn, then its write declines. A
     refusal is a precondition failed, never an outcome (04 section C.4): every Event is `tend.refused` with no degree, or

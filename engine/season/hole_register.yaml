@@ -2118,7 +2118,7 @@ rows:
   - id:        "H-113"
     tier:      0
     hole:      >-
-      CLOSED (B05.19), INDEX STATUS: `loop/resolve.py` reads `_declared = row.emits_at(_degree)` (resolve.py:511, in `_fold`), pinned by `test_we_emits_at_has_a_caller_and_the_band_selects_the_kind`. The text that follows is the row's history.
+      CLOSED (B05.19), INDEX STATUS: `loop/resolve.py` reads `_declared = row.emits_at(_degree)` (in `_fold`), pinned by `test_we_emits_at_has_a_caller_and_the_band_selects_the_kind`. The text that follows is the row's history.
       `VerbRow.emits_at` (`engine/season/data/verbs.py::VerbRow.emits_at`) HAS ZERO CALLERS ANYWHERE IN THE TRACER, so a contested
       verb's degree-keyed emissions are never selected. The fold emits `row.emits` at
       engine/season/loop/driver.py::SeasonDriver._fold (the `emits_at` union) - the FLAT UNION of all branches - so all three of `kill / wound`'s degrees

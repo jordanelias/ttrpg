@@ -142,7 +142,8 @@ def _fall(w: "World", site) -> int:
         accumulator's own lower clamp, `loop/resolve.py`), so the footroom is the condition itself.
       * `× share`, the SAME commons `_rise` reads (`queries/world_q.py::share`): at a harbour forty stand
         at, one saboteur takes a fortieth of it. Multiply first, divide last, as `_rise` does.
-      * `× f(degree)` IS THE IDENTITY, for `_rise`'s reason: the row is uncontested (`H-164`).
+      * `× f(degree)` IS THE IDENTITY here: `_rise` reads the band's share since B07.02, `_fall` does not, because no item names `sabotage` and
+        it is not built out (UNDECIDED (4)); a day it draws, this and `_rise` read one fraction.
 
     So one saboteur alone at a fabric brings it to 0 in one act, exactly as one hand alone raises it to
     its ceiling -- one formula, two signs (§0.06 S) [ASSUMPTION; medium; Jordan to correct; revert: a
