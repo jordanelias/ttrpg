@@ -523,9 +523,62 @@ def score_order(cands: list, scores: dict) -> list:
     return sorted(cands, key=lambda c: (-scores[id(c)], c.verb, c.subject or ""))
 
 
+# [JUSTIFIED: a float-tie tolerance for the attribution (two scores within it are a tie), an instrument constant and not a game number]
+ATTRIBUTION_EPS = 1e-9
+TERM_NAMES = ("pursuit", "stance", "fit")      # `score_terms`' tuple, in order: what `deciding_term` names
+
+
+def deciding_term(cands: list, terms: list, actual: Optional[Candidate], tau: float) -> dict:
+    """WHICH TERM DECIDED A TOP: THE ONE OWNER OF THE ATTRIBUTION RULE (B09.13; it was `harness/decision_spread.py::attribute_top`'s,
+    moved here beside `score_order` so a reader of what the chooser saw -- the `watch` hook -- and the one that re-scores a
+    candidate set (`attribute_top`) call one rule). Pure: it reads `terms` and `actual` and scores, orders and samples nothing.
+
+    `cands` and `terms` are parallel (`score_terms`' tuples, in `cands`' order); `actual` is the top the SAMPLER chose among them
+    (`sampled[0]`; `None` with no candidate); `tau` is `choice_temperature`. The tests, in order:
+      1. `draw`      the sampler's top is NOT the score's top (the draw outvoted the score), or the top two scores are within
+                     `ATTRIBUTION_EPS` and `tau` > 0 (the draw ordered them);
+      2. `tiebreak`  the top two scores are within `ATTRIBUTION_EPS` at temperature 0 (`(verb, subject)` ordered them);
+      3. otherwise the TERMS (`TERM_NAMES`) whose removal leaves the top no longer strictly ahead of the field, joined by `+`;
+         `overdetermined` if no single term's removal does.
+    Returns `{top, decider, margin, scores, terms, draw_kind, field_zero}`; `scores` and `terms` are parallel to `cands`. `cands`
+    empty -> `top` None, `decider` `none`; one candidate -> `sole`. `draw_kind` splits the `draw` label: `tie` (the draw ordered
+    a tie) against `outvoted` (it overrode a leader); `field_zero` is true when every score is within `ATTRIBUTION_EPS` of 0."""
+    if not cands:
+        return {"top": None, "decider": "none", "margin": None, "scores": [], "terms": [],
+                "draw_kind": None, "field_zero": False}
+    scores = [score_total(t) for t in terms]
+    field_zero = all(abs(s) <= ATTRIBUTION_EPS for s in scores)
+    if len(cands) == 1:
+        return {"top": cands[0], "decider": "sole", "margin": None, "scores": scores, "terms": terms,
+                "draw_kind": None, "field_zero": field_zero}
+    by_id = {id(c): s for c, s in zip(cands, scores)}
+    ranked = score_order(cands, by_id)                  # the chooser's own ordering, not a second copy
+    index_of = {id(c): i for i, c in enumerate(cands)}
+    order = [index_of[id(c)] for c in ranked]
+    ai = next(i for i, c in enumerate(cands) if c is actual)
+    best, second = scores[order[0]], scores[order[1]]
+    margin = best - second
+    if ai != order[0]:
+        decider = "draw"
+    elif margin <= ATTRIBUTION_EPS:
+        decider = "draw" if tau > 0 else "tiebreak"
+    else:
+        deciding = []
+        for k, name in enumerate(TERM_NAMES):
+            rest = [scores[j] - terms[j][k] for j in range(len(cands))]
+            if rest[ai] - max(r for j, r in enumerate(rest) if j != ai) <= ATTRIBUTION_EPS:
+                deciding.append(name)
+        decider = "+".join(deciding) if deciding else "overdetermined"
+    draw_kind = None if decider != "draw" else (
+        "tie" if margin <= ATTRIBUTION_EPS and tau > 0 and scores[ai] >= best - ATTRIBUTION_EPS else "outvoted")
+    return {"top": actual, "decider": decider, "margin": margin, "scores": scores, "terms": terms,
+            "draw_kind": draw_kind, "field_zero": field_zero}
+
+
 def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
                  verbs: Optional[frozenset] = None,
-                 draw: Optional[Callable[[str, str], Any]] = None) -> Callable[..., list[Act]]:
+                 draw: Optional[Callable[[str, str], Any]] = None,
+                 watch: Optional[Callable[..., None]] = None) -> Callable[..., list[Act]]:
     """§F2's decision policy as a FACTORY, so `choose(p, view, sensation, ask_budget)` keeps the
     FOUR-parameter signature §26 states while still reaching its params.
 
@@ -552,8 +605,15 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
 
     v10 REM-30 (IN-47): the body is two halves with one owner each -- `make_ranker` (what the person
     would do, in order) and `release` (that order packed into scenes and intents) -- so the player's
-    development space (`decision/sheet.py`) shares both and differs only in who picks the order."""
-    rank = make_ranker(fx, verbs, draw)
+    development space (`decision/sheet.py`) shares both and differs only in who picks the order.
+
+    B09.13, THE OBSERVER HOOK: `watch(p, q, ranked, terms, sampled) -> None` is called once per deliberation that has a
+    question, after the order is sampled and before it is packed. `ranked` is `score_order`'s list, `terms` the parallel
+    `score_terms` tuples the chooser itself scored with, `sampled` `_sample_order`'s list -- COPIES of the lists, so a
+    watcher that reorders or empties them changes nothing that is packed -- and the return value is ignored (the observer
+    rule of ED-IN-0225). `None` (the default) is the chooser as it was. It exists so a reader of "what the chooser saw"
+    (`harness/decision_spread.py`, `harness/interactions.py`) is handed it, not a second scoring of the same set."""
+    rank = make_ranker(fx, verbs, draw, watch)
 
     def choose(p: Person, v: View, s: Sensation, ask_budget) -> list[Act]:
         q = getattr(v, "question", None)
@@ -564,14 +624,16 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
 
 
 def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
-                draw: Optional[Callable[[str, str], Any]] = None) -> Callable[..., list]:
+                draw: Optional[Callable[[str, str], Any]] = None,
+                watch: Optional[Callable[..., None]] = None) -> Callable[..., list]:
     """`rank(p, v) -> list[Candidate]`: THE SHIPPED POLICY'S ORDER over the person's own candidate set
     -- `opening_set`, narrowed to `verbs`, scored, effort-settled and sampled -- and nothing packed.
 
     v10 REM-30 (IN-47): split out of `make_chooser` unchanged, so the automated chooser and the player's
     development space (`decision/sheet.py::development_space`) read ONE candidate set in ONE order: the
     player's sheet offers exactly this list, and a player who takes it whole is the automated chooser
-    (the space's control). `[]` when the View carries no question. Person-side only, as `make_chooser`."""
+    (the space's control). `[]` when the View carries no question. Person-side only, as `make_chooser`.
+    `watch` is `make_chooser`'s observer hook (B09.13); the sheet builds its ranker without one."""
     def rank(p: Person, v: View) -> list:
         q = getattr(v, "question", None)
         if q is None:
@@ -591,9 +653,11 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
         # CR-17: the person's believed-odds query rides his View (`View.odds`); a View built without one
         # (a test's, a callback's) answers None and the pursuit term stays as it was.
         odds = getattr(v, "odds", None)
+        _terms: dict = {}                # id(c) -> the `score_terms` tuple `score(c)` summed: what `watch` is handed
         def score(c: Candidate) -> float:
             # IN-62: the terms have ONE owner, `score_terms`; the score is `score_total` of them.
-            return score_total(score_terms(p, c, fx, memo, odds))
+            _terms[id(c)] = t = score_terms(p, c, fx, memo, odds)
+            return score_total(t)
         # ⚠ SCORED ONCE, NOT TWICE. `score` is pure in `c` given the closure, so each candidate is
         # scored once here and `_sample_order` reads it back from `_scores`.
         _scores = {id(c): score(c) for c in cands}
@@ -604,7 +668,12 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
         # for the whole of this call, so no id can be recycled underneath the dict. A Candidate is
         # not guaranteed hashable and `(verb, subject)` is not guaranteed unique, so neither is a
         # key this can use.
-        return _sample_order(ranked, lambda c: _scores[id(c)], p, fx, draw)
+        sampled = _sample_order(ranked, lambda c: _scores[id(c)], p, fx, draw)
+        if watch is not None:
+            # B09.13: an OBSERVER. Copies, so a watcher that mutates what it is handed changes nothing packed; the return is ignored.
+            # `_terms[id(c)]` is the entry `score(c)` last wrote for a LIVE `c` (a kept effort variant stays alive, so its id is not reused).
+            watch(p, q, list(ranked), [_terms[id(c)] for c in ranked], list(sampled))
+        return sampled
     return rank
 
 
