@@ -1188,6 +1188,15 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; shipped `True`; revert: `False`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-457 -- site: Fixtures standing_occasion_cause, graded `assumption`; the proposal ships the arm `True` and gives no derivation for the opening kinds it reads, so it is injected and swept False (control, the revert) / True / True with `Office`'s two kinds in the other order]
     standing_occasion_cause=True,      # `H-457`, swept False (control; revert) / True (SHIPPED, B09.12) / True with `Office` read the other way
+    # `H-458` (B09.17; `16_PESSIMIST_GO_a_witness_may_connect_what_he_holds`). HOW OFTEN A WITNESS CONNECTS WHAT HE WITNESSED TO WHAT HE ALREADY HOLDS: for a
+    # witness whose channel supplies `why` (`rosters.yaml: observation_terms.supplied_by`) who holds a claim deposited from an antecedent Event of the one he
+    # witnessed, the chance that `Seen.why` names that claim (`epistemic._term_why`, one draw keyed `(pid, "why:<event id>")`, so no other stream moves);
+    # the actor of the Event is not drawn for (he always knows the occasion he acted on) and reads it at any chance above 0. `0.0` is the CONTROL and SHIPS:
+    # no draw is taken, no `why` is read, and every content hash is the one before B09.17 (the raise is B98's, one commit and one re-pin). The proposed on-value is
+    # 0.6, +0.2 where his claim on the antecedent carries a `who` (the +0.2 half is NOT built here: it has no home but a second fixture, B98's to add).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0.0`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-458 -- site: Fixtures connection_chance, graded `assumption`; the source proposes 0.6 and gives no derivation, so it is injected at the control and swept 0.0 / 0.6 / 1.0]
+    connection_chance=0.0,             # `H-458`, swept 0.0 (control, SHIPPED) / 0.6 (proposed) / 1.0
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

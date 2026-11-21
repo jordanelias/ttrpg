@@ -110,6 +110,25 @@ def presence_index(w: "World") -> dict:
     return w.cache_at_barrier("presence", build)
 
 
+def deposit_index(w: "World") -> dict:
+    """The barrier-scoped `{Event id: (claim ids deposited from it, in log order)}` map (B09.17), built once per barrier from one
+    scan of the log: each `claim.deposited` Event's `causes[0]` is the witnessed Event (`loop/witness.py::_deposit`) and its one
+    receipt's subject is the claim. It exists for `epistemic._antecedent_claim`, which asks it per (witness, Event) and so would
+    otherwise scan the log each time; it is the look-up through the record the tree already writes, not a second copy of how WITNESS
+    mints a claim's id. Holder-blind on purpose (ids only): the caller tests each against the witness's OWN ledger.
+
+    VALID FOR THE SAME REASON AND ONLY WHERE `presence_index` IS: WITNESS asks it BEFORE its own deposits of the barrier (the fan's
+    `seen` terms are read ahead of the parallel map), so the log it scanned is the log the question is about; a direct caller that
+    deposits between two asks must `w.discard_caches()`. Built only when asked, and `connection_chance` 0.0 never asks."""
+    def build() -> dict:
+        out: dict = {}
+        for ev in w.log:
+            if ev.kind == "claim.deposited" and ev.causes and ev.changes:
+                out.setdefault(ev.causes[0], []).append(ev.changes[0].subject)
+        return {k: tuple(v) for k, v in out.items()}
+    return w.cache_at_barrier("deposits", build)
+
+
 def home_index(w: "World") -> dict:
     """The barrier-scoped `{person id: containing rung id}` map, built once per barrier: `containment.home_of`'s
     map, filed the way `presence_index` is. It exists for WITNESS, whose co-location channel asks

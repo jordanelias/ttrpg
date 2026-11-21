@@ -1172,9 +1172,12 @@ rosters:
       (the claim's subject still says WHERE something happened). `witness_key`, `post_remit` and
       `chronicle` are unruled: they withhold rather than invent, and are an injected default in
       `H-33`'s sense, exactly as the channel predicates themselves are.
-      ⚠ NO CHANNEL SUPPLIES `why`: `Candidate.why` is dropped at `pack_scenes` and `Act` carries no
-      motive, so the engine forgets it before the act executes and no witness can learn it. Case 4
-      (*no discernible reason*) is therefore every deposit. `Person.heritage` has ONE writer, the
+      `why` IS THE ANTECEDENT A WITNESS HOLDS AND MAY CONNECT, NOT THE ACTOR'S MOTIVE (B09.17, `R8.4` narrowed; the engine
+      keeps no motive: `Candidate.why` is dropped at `pack_scenes` and `Act` carries none): the id of a claim in the witness's
+      OWN ledger that was deposited from an antecedent Event of the one he witnessed (`epistemic._term_why`). A channel that
+      supplies `why` (`co_located`, `witness_key`) makes the witness ELIGIBLE; whether he connects them is one keyed draw at
+      `Fixtures connection_chance` (`H-458`), which ships 0.0, so no deposit carries `why` until B98 raises it, and case 4 (*no
+      discernible reason*) is still every deposit. `document_key` never supplies it (`R8.5`, ruled). `Person.heritage` has ONE writer, the
       world build (`data/cast.py::heritage_of`), and `marks` shows it wherever `who` is shown -- so
       case 2 (*someone looking like y*, `who=None`) is supported by the struct and reached by
       nothing until a recognition producer exists (`R8.2`).
@@ -1182,8 +1185,8 @@ rosters:
     deposit:
       predicate: seen
     supplied_by:
-      co_located:   [stratum, marks, who]
-      witness_key:  [stratum, who]
+      co_located:   [stratum, marks, who, why]
+      witness_key:  [stratum, who, why]
       document_key: []
       post_remit:   [stratum]
       chronicle:    [stratum]
@@ -3352,7 +3355,7 @@ rosters:
       WITNESS'S anchor claim is NOT masked: a witness admitted by any channel holds `(actor, kind,
       True)` under `claim_subject_rule: both` whatever its channel shows of `who`. So the two
       quantities differ BY DESIGN -- a finder's knowledge of a hand is graded, a witness's event-kind
-      claim is not. `why` is never shown: no reader supplies it (`epistemic._term_why`, R8.4). The
+      claim is not. `why` is never shown to a finder: no band lists it (`epistemic._term_why`'s antecedent is a witness's). The
       better bands are identical: depth has no carrier (FI-01's own note on the finding bands).
       ⚠ `bands:`, NOT `values:`: the mapping's keys are the ladder's labels, which this file does not
       own, and a `values:` row is read as a roster of its keys (`test_season_shape.py`'s duplicate-roster

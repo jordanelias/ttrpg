@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 121,
-    "total": 399,
-    "uncited": 278,
+    "total": 400,
+    "uncited": 279,
     "of_which_assumption_grade": 7
   },
-  "count": 399,
+  "count": 400,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 25,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 109,
+    "engine.season.settings": 110,
     "engine.season.realm": 8
   },
   "params": [
@@ -243,6 +243,17 @@
       "citation_grade": null
     },
     {
+      "key": "engine.season.ATTRIBUTION_EPS",
+      "name": "ATTRIBUTION_EPS",
+      "value": 1e-09,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/decision/choose.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
       "key": "engine.season.Z_THRESHOLD",
       "name": "Z_THRESHOLD",
       "value": 1.96,
@@ -279,17 +290,6 @@
       "key": "engine.season.COSINE_HIGH",
       "name": "COSINE_HIGH",
       "value": 0.99,
-      "kind": "scalar",
-      "module": "engine.season",
-      "file": "engine/season/harness/decision_spread.py",
-      "note": "",
-      "citation": null,
-      "citation_grade": null
-    },
-    {
-      "key": "engine.season.EPS",
-      "name": "EPS",
-      "value": 1e-09,
       "kind": "scalar",
       "module": "engine.season",
       "file": "engine/season/harness/decision_spread.py",
@@ -5042,6 +5042,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-457`, swept False (control; revert) / True (SHIPPED, B09.12) / True with `Office` read the other way",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.connection_chance",
+      "name": "connection_chance",
+      "value": 0.0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-458`, swept 0.0 (control, SHIPPED) / 0.6 (proposed) / 1.0",
       "citation": null,
       "citation_grade": null
     },
