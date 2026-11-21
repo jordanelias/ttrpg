@@ -2801,7 +2801,7 @@ def _goal_referents(w: World, p: Person, goal, prop, path: frozenset) -> tuple:
     return deed_doers(p.ledger, obj, p.id, against)
 
 
-def current_stage(w: World, p: Person, ambition) -> Optional[dict]:
+def current_stage(w: World, p: Person, ambition, weigh=None) -> Optional[dict]:
     """WHERE `p` STANDS ON AN AMBITION'S STAGES, READ FROM WHAT HE HOLDS (CL-THRUST B3.1, R1): for each
     referent of the ambition (`goal_referents`), the FIRST stage of its `goal_stages` row whose `predicate`
     is not TRUE of that referent -- `{referent: Stage}`, in the referents' order, a referent that has
@@ -2813,7 +2813,7 @@ def current_stage(w: World, p: Person, ambition) -> Optional[dict]:
     COMPUTED WHEN ASKED AND STORED NOWHERE (`ambitions`' discipline): no stage counter, no progress
     field, no TRACE row (Q4 calls `goal_referents` once per ambition per person, and so would this).
     ITS ONE CALLER IS `open_stages` (CL-THRUST B3.2, R2), which `stage_referents` (the question's classed
-    referents) and `attention_key`'s `salience` (the stage's pursuits) both read; B3.2 passes no closure in.
+    referents) and `attention_key`'s `salience` (the stage's pursuits) both read.
 
     ⚠ PERSON-SIDE, AND THAT IS THE POINT (AX-2): the stage's cell is evaluated through `data/requires.py::
     evaluate` against `LedgerReader(p.ledger)` -- the reader `epistemic.belief_contradicts` asks the same
@@ -2824,10 +2824,12 @@ def current_stage(w: World, p: Person, ambition) -> Optional[dict]:
     operand a cell names that the binding does not carry reads UNKNOWN. ⚠ UNKNOWN IS NOT TRUE: a stage
     is passed only on a cell that evaluates to TRUE, so a ledger with no claim on the cell's predicate
     leaves the stage open (`belief_contradicts` declines a candidate on known-FALSE alone; a stage is
-    passed on known-TRUE alone). The reader takes no `weigh`: `decision/options.py::teller_weight` is a
-    `decision` import this module may not make, so hearsay is not graded here as it is at clause 4.
-    [ASSUMPTION; medium; Jordan to correct -- B3.1; revert: pass the closure in from the one caller
-    B3.2 adds.]
+    passed on known-TRUE alone). B09.07 `weigh`: the closure the ONE comparator reads his ledger by
+    (`decision/options.py::ledger_weigh`, a `decision` import this module may not make, so the caller passes it in, as
+    `LedgerReader` takes it), handed to the reader, so the stage he thinks he has passed is the belief he acts on and says.
+    `None` is the plain comparator. It comes from `open_stages`, its one caller; `open_stages`' own callers
+    (`stage_referents`, `attention_key`) pass none yet -- the shipped state has no `goal_stages` row, so this reader is
+    dormant, and where the season loop would supply the closure is B09.07's open question.
 
     ⚠ A STAGE ASKING `claim.held` (an `own_ledger` cell) CAN NEVER BE PASSED HERE: `LedgerReader.read`
     answers a stem from a claim whose predicate IS that stem and WITNESS deposits no `claim.held` claim
@@ -2837,7 +2839,7 @@ def current_stage(w: World, p: Person, ambition) -> Optional[dict]:
     prop = w.propositions.get(ambition)
     if goal is None or goal.stages is None or prop is None:
         return None
-    reader = _reader_at(w, p.ledger)
+    reader = _reader_at(w, p.ledger, weigh)
     out: dict = {}
     for referent in goal_referents(w, p, prop):
         if referent is None:
@@ -3667,13 +3669,13 @@ def _of_stamped_class(w: World, referents: tuple, classes: Optional[frozenset] =
                  and not (r in w.records and w.records[r].kind in RECORD_REFERENT_KINDS))
 
 
-def open_stages(w: World, p: Person, ambition) -> dict:
+def open_stages(w: World, p: Person, ambition, weigh=None) -> dict:
     """THE STAGES `p` HAS NOT PASSED ON AN AMBITION HE STILL HAS WORK ON (CL-THRUST B3.2, R2): `current_stage`'s
     `{referent: Stage}`, or `{}` where it reads `None` or the ambition's aim is met (`aim_state` gates first:
     a met aim asks nothing, so it carries no stage either). The ONE read both consumers below take, so the
     referents a stage adds and the pursuits it weighs are never of two different stages. Person-side
-    (`current_stage`'s reader): no World fact beyond the aim rule Q4 already asks."""
-    cur = current_stage(w, p, ambition)
+    (`current_stage`'s reader): no World fact beyond the aim rule Q4 already asks. `weigh` is `current_stage`'s (B09.07)."""
+    cur = current_stage(w, p, ambition, weigh)
     if not cur or aim_state(w, p, w.propositions[ambition]) == "met":
         return {}
     return cur

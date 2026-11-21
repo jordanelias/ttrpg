@@ -1073,7 +1073,7 @@ class LedgerReader:
     (`decision/options.py::teller_weight`) because this module may not import `decision/`. With
     a `weigh`, the comparator ranks a claim by `(support, when, confidence)`, where `support` is
     the noisy-OR over the DISTINCT ORIGINS asserting the same value (below). `None` is today's
-    comparator, unchanged, and every caller but `epistemic.belief_contradicts` passes `None`.
+    comparator, unchanged; B09.07's callers (`belief_contradicts`, `said_of`, `lie_said_of`, `decision/sheet.py::chronicle`, `world_q.current_stage`) pass `ledger_weigh`'s closure.
     `confidence` is read at the reader's `tick` and `decay` (`present`) either way: a claim stores what it was
     deposited at and fading is computed here, where it is read (`state/ledgers.py::present_confidence`);
     weighing never rewrites a claim."""
@@ -1097,8 +1097,8 @@ class LedgerReader:
         match order. Grouped by `(predicate, value)` -- `read`'s matches share one predicate, so
         for `read` that is grouping by value. Under a `weigh`, `latest_about` therefore ranks
         ACROSS predicates by support, so a firsthand claim on any predicate outranks hearsay on
-        another; no caller weighs `latest_about` today, and the position that weighs `said_of`
-        (G3) decides it. An origin is `c.chain[0]` for a told claim and the holder for
+        another; `said_of` and `chronicle` weigh `latest_about` since B09.07, which decided it
+        (a person passes on what he is surest of). An origin is `c.chain[0]` for a told claim and the holder for
         anything else; one origin counts once per value, at its highest
         weight, so a teller repeating himself adds nothing. Grouped by `==`, not by hash: a
         claim's `value` need not be hashable.
@@ -1257,7 +1257,7 @@ def _slant(fx) -> str:
     return arm
 
 
-def said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 0) -> "Said | None":
+def said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 0, weigh=None) -> "Said | None":
     """WHAT THIS PERSON WOULD SAY ABOUT `subject`, as the `Said` a telling carries -- or `None` for
     nothing to say. Asked of the TELLER'S OWN claims at CHOOSE (`decision/options.py::opening_set`),
     never at WITNESS: what a telling passes on is decided when it is chosen, and rides the Act.
@@ -1278,7 +1278,13 @@ def said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 
     where no claim carries valence (every one 0) the pick is the unslanted one exactly. A teller
     passes on the deed that matters most to THEM, not the newest thing they hold. At `newest` (the
     CONTROL, shipped), with no `teller`, or with no `fx`, it is the unslanted pick and reads no
-    pursuits."""
+    pursuits.
+
+    ⚠ B09.07 `weigh`: the closure the one comparator ranks by (`decision/options.py::ledger_weigh`, passed in because this
+    module may not import `decision/`), handed to `LedgerReader` as `epistemic.belief_contradicts` hands it, so a person
+    passes on the belief he acts on. `None` (a hand-built read) is the plain comparator. ⚠ `LedgerReader._support`
+    under a `weigh` ranks `latest_about` ACROSS predicates: a person passes on what he is SUREST of about a subject, not
+    the newest thing he holds (decided at B09.07, `16_PESSIMIST_SC_B`)."""
     pool = [c for c in claims if c.subject == subject] if claims else []
     if teller is not None and fx is not None and pool and _slant(fx) == "valence":
         axis_w = projected_axes(teller, fx.get("scar_weight_shift"))
@@ -1286,7 +1292,7 @@ def said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 
         top = max(strength.values())
         if top > 0:
             pool = [c for c in pool if strength[id(c)] == top]
-    reader = LedgerReader(pool, tick=tick, decay=0 if fx is None else fx.claim_decay())
+    reader = LedgerReader(pool, weigh, tick=tick, decay=0 if fx is None else fx.claim_decay())
     # ABSENT: H-198 deception  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
     c = (reader._best(lambda c: c.subject == subject and c.predicate != SEEN_PREDICATE)
          or reader.latest_about(subject))
@@ -1327,7 +1333,7 @@ def is_cell(c) -> bool:
     return str(c.predicate).partition(":")[0] in CELL_STEMS
 
 
-def lie_said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 0) -> "Said | None":
+def lie_said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 0, weigh=None) -> "Said | None":
     """WHAT THIS PERSON WOULD SAY FALSELY ABOUT `subject`: `said_of`'s pick, over the teller's CELL claims
     only, with its value made false -- or `None` where there is no false value to say (v11 CR-27, M9 taken
     (a), the cell lie; H-198 rule (i)). Asked of the LIAR'S OWN claims at CHOOSE
@@ -1350,9 +1356,11 @@ def lie_said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: in
 
     ⚠ A FALSE VALUE IS NEVER THE HELD ONE, so the hearer's exact-triple guard (`loop/witness.py`) does not
     drop the deposit for a hearer who holds the cell firsthand: his claim and the lie then DISAGREE, which
-    is the pair `decision/options.py::record` counts against the liar (`H-183`)."""
+    is the pair `decision/options.py::record` counts against the liar (`H-183`).
+
+    `weigh` (B09.07) is `said_of`'s: the one comparator the liar reads the cell he lies about by."""
     cells = [c for c in claims if c.subject == subject and is_cell(c)]
-    said = said_of(cells, subject, fx, teller, tick=tick)
+    said = said_of(cells, subject, fx, teller, tick=tick, weigh=weigh)
     if said is None:
         return None
     held = said.value

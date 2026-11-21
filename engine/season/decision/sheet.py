@@ -24,8 +24,8 @@ an act's, folded at RESOLVE (and the fold's two post-outcome writes, `_scar_witn
                      the automated chooser's own packing step. **It ranks and selects; it never forms**:
                      an index outside the set is refused, so there is no second option generator. A pick
                      of every index in order IS `make_chooser` (the control); any other pick is a mover.
-  CHRONICLING        `chronicle(p)` -- **no act, no write**: the person's own `ledger` as held, his belief
-                     per subject through `LedgerReader` (its comparator, not a copy), and the PRESENT
+  CHRONICLING        `chronicle(p, fx=None)` -- **no act, no write**: the person's own `ledger` as held, his belief
+                     per subject through `LedgerReader` (its comparator, not a copy; weighed when `fx` is given, B09.07), and the PRESENT
                      values of `scar` and `conviction`. **It shows no scar or crisis as an event**: both
                      writers call `World.write` without `emits` (`loop/resolve.py::_scar_witnesses`,
                      `_conviction_crisis`), and `verb_table.yaml`'s `fight` row withholds `scar.taken`
@@ -57,6 +57,7 @@ from ..gaps import Forbidden
 from ..queries.person_q import LedgerReader
 from ..state.carriers import Person, PersonInterior, Question, View, fade_of, frozen
 from .choose import make_ranker, release
+from .options import ledger_weigh
 
 def describe(key: str) -> str:
     """The gloss of a skill or an attribute: the leaf's text, no `World` (B04.02, DEF Edit 1). A skill is read by
@@ -210,11 +211,15 @@ class Chronicle:
     scar_affiliations_history: Mapping
 
 
-def chronicle(p: Person) -> Chronicle:
+def chronicle(p: Person, fx: Any = None) -> Chronicle:
     """The chronicling space over one person. Reads `p`'s own `ledger`, `scar` and `conviction`; writes
-    nothing, emits nothing, and leaves `content_hash` unchanged whether or not it is called."""
+    nothing, emits nothing, and leaves `content_hash` unchanged whether or not it is called.
+
+    B09.07: given the `fx` the caller already holds, `beliefs` reads through the ONE comparator -- `LedgerReader` with
+    `decision/options.py::ledger_weigh(p, fx, tick)`, the `weigh` `opening_set` and `belief_contradicts` read his ledger by --
+    so the sheet shows what he acts on and says. Without `fx` (a hand-built read) it is the plain comparator, as before."""
     tick, decay = fade_of(p)                        # B09.01: the claims he would offer are ranked as he holds them now
-    reader = LedgerReader(p.ledger, tick=tick, decay=decay)
+    reader = LedgerReader(p.ledger, ledger_weigh(p, fx, tick) if fx is not None else None, tick=tick, decay=decay)
     subjects = list(dict.fromkeys(c.subject for c in p.ledger))     # first held first, each once
     aff = {k: n for k, n in (p.scar or {}).items() if k in AFFILIATIONS}
     held = set(p.conviction or {})
