@@ -25,7 +25,6 @@ from modules.mass_battle import armyrecord as A
 from modules.mass_battle.troop_types import recruitment as R
 import pytest
 
-#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
 pytestmark = pytest.mark.flat_fold
 
 ACTOR, SEAT, ORIGIN = "p_npc_033", "off_spymaster", "set_s_014"

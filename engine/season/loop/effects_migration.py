@@ -225,13 +225,13 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
                        alternatives=["admit him anyway (capacity bounds nothing)",
                                      "refuse at every ancestor as well (a second, coarser census)"])
         return NO_CHANGE
-    settled = [t for t in w.tenures if t.subject == a.actor and t.kind == RESIDE_KIND and t.live]
     # B07.02: a band short of the full effect leaves him on the road, one leg short and unsettled (`_reached`); no band is `dest`.
     where = _reached(w, a, dest, res)
     if where is None:
         return NO_CHANGE
     if where != dest:
         return Change((Subject.entity("persons", a.actor),), lambda: _relocate(w, a, where))
+    settled = [t for t in w.tenures if t.subject == a.actor and t.kind == RESIDE_KIND and t.live]
 
     def perform() -> None:
         _relocate(w, a, dest)

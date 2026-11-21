@@ -22,7 +22,6 @@ from engine.season.queries import world_q
 from engine.season.state.carriers import Act, Proposition, Site, Tenure
 import pytest
 
-#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
 pytestmark = pytest.mark.flat_fold
 
 FACTION, COHORT, HOME, COMMANDER = "fac_valorsmark", "c1", "Hh", "p_high"

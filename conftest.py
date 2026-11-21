@@ -46,7 +46,7 @@ def pytest_collection_modifyitems(config, items):
 
 
 @pytest.fixture(autouse=True)
-def _flat_fold_arm(request, monkeypatch):
+def _flat_fold_arm(request):
     """`@pytest.mark.flat_fold` (file or test): the task draw is off for the test, so a world built from the default fixtures folds flat.
     `DEFAULT_FIXTURES` is one shared object whose `sweep` copies its values at call time, so setting the one value covers every world
     the test builds, `build_realm`'s and `tiny_world`'s alike; `monkeypatch` undoes it. A MODULE- or SESSION-scoped fixture is set up
@@ -54,4 +54,4 @@ def _flat_fold_arm(request, monkeypatch):
     if request.node.get_closest_marker("flat_fold") is not None:
         from engine.season.data.fixtures import DEFAULT_FIXTURES
         from engine.season.tests._flat_fold import ARM
-        monkeypatch.setitem(DEFAULT_FIXTURES._v, ARM, "off")
+        request.getfixturevalue("monkeypatch").setitem(DEFAULT_FIXTURES._v, ARM, "off")

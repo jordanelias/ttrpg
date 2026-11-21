@@ -59,7 +59,6 @@ from ..queries import faction_q, world_q
 from ..state.carriers import Act, Claim, Proposition, Question, Record, Tenure, View
 from ..state.ids import H, draw_factory
 
-#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
 pytestmark = pytest.mark.flat_fold
 
 FAC = faction_prop_id("Valorsmark")

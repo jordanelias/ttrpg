@@ -36,7 +36,6 @@ from .test_in10_record_operands import _acts, _resolve
 from .test_in12_step9 import _world
 import pytest
 
-#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
 pytestmark = pytest.mark.flat_fold
 
 A, B = "p_low", "p_mid"            # `tiny_world`: both stand at the hearth (`with` each other)

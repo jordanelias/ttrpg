@@ -35,7 +35,6 @@ from modules.mass_battle.troop_types.registry import roles_for
 
 from tests.valoria.test_army_phase5 import CHURCH, CROWN, DEFENDED_TERR, HAFEN, _fold, _governed_cohorts
 
-#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
 pytestmark = pytest.mark.flat_fold
 
 _IMPORTS_PRESETS = re.compile(r"import .*army_presets|army_presets .*import|army_presets\.install")

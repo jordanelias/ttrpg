@@ -48,7 +48,6 @@ from engine.season.state.carriers import Act, Question
 from engine.season.tests.test_march import _fold_one
 from engine.substrate import battle_orders
 
-#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
 pytestmark = pytest.mark.flat_fold
 
 HOME, TARGET = "set_s_014", "set_s_036"

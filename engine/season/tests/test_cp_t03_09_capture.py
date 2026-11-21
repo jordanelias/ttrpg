@@ -43,7 +43,6 @@ from ..state.carriers import Act, Office, Person, Rung, Tenure
 from ..state.gate import Change, Subject, death_subjects
 from ..loop import resolve as R
 
-#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
 pytestmark = pytest.mark.flat_fold
 
 ACTOR, CAPTIVE = "p_low", "p_mid"          # tiny_world: both live at the hearth `Hh`, inside `S`, inside `D`

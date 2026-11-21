@@ -71,7 +71,6 @@ from ..state.carriers import Act, Question, Tenure
 from ..epistemic import _ch_witness_key
 from .test_in10_record_operands import _resolve
 
-#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
 pytestmark = pytest.mark.flat_fold
 
 DUKE, SEAT = "p_high", "off_duke"          # seated at S; the seat grants `convene`

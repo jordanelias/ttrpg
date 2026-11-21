@@ -17,7 +17,7 @@ from __future__ import annotations
 import random
 from dataclasses import replace
 from ..gaps import InstrumentDefect
-from ..data.rosters import (PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_TASKS, graded_route,
+from ..data.rosters import (PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_TASKS, armed_route_off, graded_route,
                             MARGIN_ENDING, STRATA, UNROUTED_BAND, task_share)
 
 from typing import Any, Optional
@@ -531,8 +531,7 @@ def _fold(self, w: "World", token: Token, a: Act,
     # band-keyed `emits:` at `UNROUTED_BAND` -- the band an undrawn act reads, as `forge_quality_at` does -- with
     # `Event.degree` still `None` (`reconstruct` emits `finding.made` as before B07, so the arm-off control holds and the
     # revert is the one fixture value). Any other band-keyed row folded with no degree still raises (`H-115`).
-    _undrawn = (_degree is None and row.emits_by_degree and (GRADED_TASKS.get(a.verb) or {}).get("armed_by")
-                and graded_route(a.verb, w.fixtures) is None)
+    _undrawn = _degree is None and row.emits_by_degree and armed_route_off(a.verb, w.fixtures)
     _declared = row.emits_at(UNROUTED_BAND if _undrawn else _degree)
     kinds = tuple(k for k in _declared if k in earned) if earned else _declared
     # v9 IN-18 `G6` (`H-197`): `confidence.broken` IS EARNED BY THE ACT, NOT BY THE BAND -- declared on

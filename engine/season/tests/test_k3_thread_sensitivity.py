@@ -38,7 +38,6 @@ from ..state.carriers import Question, View
 from ..state.gate import WriteClass
 from ..state.world import Step
 
-#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
 pytestmark = pytest.mark.flat_fold
 
 VERB = "thread_read"

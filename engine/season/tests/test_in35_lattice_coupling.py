@@ -49,7 +49,6 @@ from ..state.carriers import Act, Person, Rung, Site, Tenure
 from ..state.world import World
 from ..trace_log import TRACE
 
-#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
 pytestmark = pytest.mark.flat_fold
 
 @pytest.fixture(autouse=True)

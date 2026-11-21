@@ -35,7 +35,6 @@ from ..queries import world_q
 from ..state.carriers import Act
 from ..state.ids import ROOT
 
-#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
 pytestmark = pytest.mark.flat_fold
 
 HEARTH_WORKS, DWELLING_WORKS = "works_hearth_auerheim", "works_dwelling_court"

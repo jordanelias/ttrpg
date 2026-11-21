@@ -30,7 +30,6 @@ from ._flat_fold import flat_fold
 from .test_in10_record_operands import _resolve
 from .test_rem30_character_sheet import _run
 
-#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
 pytestmark = pytest.mark.flat_fold
 
 #: The four Niflhel ids the archived file STRIKES (it prints no row for them): never members.

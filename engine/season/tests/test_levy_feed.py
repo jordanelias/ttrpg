@@ -36,7 +36,6 @@ from engine.season.queries.inputs import ProvisionInput
 from engine.season.state.carriers import Act
 from engine.substrate import composition
 
-#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
 pytestmark = pytest.mark.flat_fold
 
 # `build_realm(0)`'s fixture facts this file stands on (each re-asserted where it is used): the Crown's two

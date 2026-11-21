@@ -59,7 +59,6 @@ from ..seam.wrappers import pool, sigma
 from ..state.carriers import Act, Person, Question, StateChange
 from .test_in10_record_operands import _acts, _resolve
 
-#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
 pytestmark = pytest.mark.flat_fold
 
 NEW = ("argue", "sabotage", "tend", "train")

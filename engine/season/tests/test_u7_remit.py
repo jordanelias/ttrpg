@@ -54,7 +54,6 @@ from ..state import gate as G
 from ..state.carriers import Act, Claim, Tenure, Term
 from ..state.gate import DETERMINATION, NotYours
 
-#: this file asks the verbs' FOLD (what they write, refuse, that the write executes), not the task draw: the arm is off (root conftest.py)
 pytestmark = pytest.mark.flat_fold
 
 SEAT, DUKE, TREASURY = "off_duke", "p_high", "D"
