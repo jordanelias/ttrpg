@@ -77,8 +77,8 @@ def _reached(w: "World", a: "Act", dest: str, res: "Resolution | None") -> "str 
     if f == 1:
         return dest
     short = parent_of(w, dest) if f else None
-    if short is None or short in (dest, place_of(w, a.actor)) or not w.contain_ascends(a.actor, short):
-        return None
+    if short is None or short in (dest, place_of(w, a.actor)) or not w.contain_ascends(a.actor, short) or _arrival_only(w, short):
+        return None      # a band short of the full effect never seats him where the full one is refused: `_arrival_only` is read at the rung he lands on
     return short
 
 

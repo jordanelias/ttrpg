@@ -1292,7 +1292,8 @@ rosters:
       `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read`
       waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent
       from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its
-      flat `emits:` and is not counted as graded.
+      flat `emits:` and is not counted as graded. [B07.01: `reconstruct` and `thread_read` are routed now, under `armed_by: task_draw_arm`; arm `off`
+      they fold flat as above.]
       ⚠ B07.01 (18-A edits 1-2; workplan v12 part 10 cont. 2, UNDECIDED (10), (11)): RENAMED from
       `graded_inquiries` for what it now holds -- the route of every `task`-class row (an act a person
       attempts alone, drawn against the job's difficulty), beside the three inquiries. Each row carries
@@ -3300,8 +3301,8 @@ rosters:
     cite: "SM-3; ED-FI-0002"
     note: >-
       ⚠ KEYED BY THE KIND A FINDING EMITS, NEVER BY THE VERB. `graded_tasks` is already the
-      verb-keyed table, and FI-01 rules it a ROUTE that may carry nothing but `{provider,
-      module_entry}` (`data/verbs.py`), so a second verb-keyed table would be two tables on one key.
+      verb-keyed table, and FI-01 rules it a ROUTE that carries `{provider,
+      module_entry}` and, from B07.01, `form` and `armed_by` (`data/verbs.py`), so a second verb-keyed table would be two tables on one key.
       A prize is what is contested; the inquiry analogue is what is FOUND, so the key is the Event
       kind -- `undeposited_kinds`' keying, for its reason. A `Failure` inquiry emits `finding.none`,
       which no row claims, so `manifest.resolve("inquiry", ...)` answers `None` and nothing is found,

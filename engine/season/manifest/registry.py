@@ -481,7 +481,7 @@ def check_graded_tasks(verb_table: dict) -> list:
     """v9 FI-01 (`ED-FI-0009`, J-22 option (A)): **an inquiry's route names a roll a prize row already
     binds, and is not itself a prize** -- at driver construction, naming the verb.
 
-    `rosters.yaml: graded_tasks` (B07.01; was `graded_tasks`) maps an inquiry or task verb to `{provider, module_entry, form}`, which
+    `rosters.yaml: graded_tasks` (B07.01; was `graded_inquiries`) maps an inquiry or task verb to `{provider, module_entry, form}` (and `armed_by`, on the 19 rows the task draw arms), which
     `seam/contest.py::grade` calls with no prize. Three refusals, each a way the route could become a
     second resolver (a route that is also a contest is the loader's refusal, `data/verbs.py`):
       1. the provider is not registered (`has`, the code, as `check_contest_prizes` half 2 asks);

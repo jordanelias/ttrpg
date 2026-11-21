@@ -785,8 +785,8 @@ rows:
     conjuncts:
       - id: R-09.a
         text: >-
-          a verb that draws is graded: `pytest engine/season/tests/test_task_draw.py -q` (six tests; `checked >= 10`
-          verbs). `IS-A-10` (B07.05) re-pointed it from `test_we_only_a_verb_that_declares_contests_can_be_graded_today`,
+          a verb that draws is graded: `pytest engine/season/tests/test_task_draw.py -q` (ten tests; `checked >= GATE1_VERBS_FLOOR`, 9 verbs,
+          UNDECIDED (14)). `IS-A-10` (B07.05) re-pointed it from `test_we_only_a_verb_that_declares_contests_can_be_graded_today`,
           whose premise B07 retires (an uncontested verb is graded by the task draw); that test is now
           `test_season_shape.py::test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else`
         argv: ["python", "-m", "pytest", "engine/season/tests/test_task_draw.py", "-q"]

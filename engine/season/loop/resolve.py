@@ -531,7 +531,8 @@ def _fold(self, w: "World", token: Token, a: Act,
     # band-keyed `emits:` at `UNROUTED_BAND` -- the band an undrawn act reads, as `forge_quality_at` does -- with
     # `Event.degree` still `None` (`reconstruct` emits `finding.made` as before B07, so the arm-off control holds and the
     # revert is the one fixture value). Any other band-keyed row folded with no degree still raises (`H-115`).
-    _undrawn = _degree is None and row.emits_by_degree and (GRADED_TASKS.get(a.verb) or {}).get("armed_by")
+    _undrawn = (_degree is None and row.emits_by_degree and (GRADED_TASKS.get(a.verb) or {}).get("armed_by")
+                and graded_route(a.verb, w.fixtures) is None)
     _declared = row.emits_at(UNROUTED_BAND if _undrawn else _degree)
     kinds = tuple(k for k in _declared if k in earned) if earned else _declared
     # v9 IN-18 `G6` (`H-197`): `confidence.broken` IS EARNED BY THE ACT, NOT BY THE BAND -- declared on
@@ -1049,7 +1050,7 @@ def resolve(self, token: Token, acts: list[Act],
         # loader refuses beside a `contests:` on the VERB ROW (one degree, one source); an act carrying its own
         # `contests` (`_contests_of`, hand-built acts only) takes the contest branch below and the route is unread.
         # B07.01 (18-A edit 6): `graded_route` -- a route carrying `armed_by: task_draw_arm` is taken only with the arm `on`;
-        # `off` (shipped, the control) folds the act flat below, as before B07.
+        # `off` (the control) folds the act flat below, as before B07.
         _route = graded_route(a.verb, w.fixtures)
         if _contests or _route:
             # ⚠⚠ §E2's ORDER: ELIGIBILITY AND `requires` BEFORE THE SEAM, NOT AFTER IT. `_fold`, which

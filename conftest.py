@@ -1,4 +1,4 @@
-"""Subsystem markers: `pytest -m combat`, `-m mass_battle`, `-m social_contest`.
+"""Subsystem markers: `pytest -m combat`, `-m mass_battle`, `-m social_contest`; and the `flat_fold` mark's fixture (`_flat_fold_arm`, below).
 
 WHY. A change to mass battle does not need the personal-combat tests and the reverse, and most test files say
 what they test in their name. This file assigns the marker from the file name, in one place, to every test
@@ -46,17 +46,12 @@ def pytest_collection_modifyitems(config, items):
 
 
 @pytest.fixture(autouse=True)
-def _flat_fold_arm(request):
+def _flat_fold_arm(request, monkeypatch):
     """`@pytest.mark.flat_fold` (file or test): the task draw is off for the test, so a world built from the default fixtures folds flat.
     `DEFAULT_FIXTURES` is one shared object whose `sweep` copies its values at call time, so setting the one value covers every world
-    the test builds, `build_realm`'s and `tiny_world`'s alike. Undone after the test; a test with no mark is untouched."""
-    if request.node.get_closest_marker("flat_fold") is None:
-        yield
-        return
-    from engine.season.data.fixtures import DEFAULT_FIXTURES
-    prior = DEFAULT_FIXTURES._v["task_draw_arm"]
-    DEFAULT_FIXTURES._v["task_draw_arm"] = "off"
-    try:
-        yield
-    finally:
-        DEFAULT_FIXTURES._v["task_draw_arm"] = prior
+    the test builds, `build_realm`'s and `tiny_world`'s alike; `monkeypatch` undoes it. A MODULE- or SESSION-scoped fixture is set up
+    before this one: it builds its own world through `engine/season/tests/_flat_fold.py::flat_fold`. A test with no mark is untouched."""
+    if request.node.get_closest_marker("flat_fold") is not None:
+        from engine.season.data.fixtures import DEFAULT_FIXTURES
+        from engine.season.tests._flat_fold import ARM
+        monkeypatch.setitem(DEFAULT_FIXTURES._v, ARM, "off")

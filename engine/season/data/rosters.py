@@ -677,8 +677,8 @@ CONTEST_OWED = roster_map("contest_owed", "values")
 
 def graded_route(verb: str, fixtures) -> Optional[dict]:
     """THE ROUTE THE LOOP TAKES FOR `verb`, or `None`: its `graded_tasks` row, except that a row carrying `armed_by:` is
-    taken only while that `Fixtures` member reads `on` (B07.01, UNDECIDED (11) (iii): `task_draw_arm` ships `off`, so each
-    such verb folds flat as before). The ONE reader for the fold (`loop/resolve.py`) and the believer's odds
+    taken only while that `Fixtures` member reads `on` (B07.01, UNDECIDED (11) (iii): `task_draw_arm` ships `on` since B07.05; `off` folds each
+    such verb flat, as before B07). The ONE reader for the fold (`loop/resolve.py`) and the believer's odds
     (`seam/wrappers/sigma.py::_rolled_as`), so the two cannot disagree on whether an act is drawn. The loader reads the
     whole roster (`GRADED_TASKS`), armed or not: a row's shape does not depend on a fixture's value."""
     route = GRADED_TASKS.get(verb)

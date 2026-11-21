@@ -34,12 +34,6 @@ DEFENDED_TOWN, UNDEFENDED, DEFENDED_TERR = "set_s_036", "terr_T7", "terr_T9"
 
 
 
-def _flat(w):
-    """The army tests ask the army FOLD (the cap, the menu's install, provisioning): `recruit` lands its whole count. Under
-    `task_draw_arm: on` (B07.05) `recruit` is a drawn task and a Failure or Partial lands none or half, so these worlds run the
-    flat fold, as the arm `off` control does; whether a menu install is drawn is the military lane's (B22; B07.02's assumption 3)."""
-    return w
-
 def _fold(w, *acts):
     d = SeasonDriver(w)
     w.step = Step.RESOLVE
@@ -92,7 +86,7 @@ def test_the_shipped_realm_can_raise_field_and_win_with_an_army():
     """One shipped cohort cannot field an army (weight 2 = 60 troops, under the engine's 100-troop army floor); the faction's
     whole levy, under its commander, can: 15 cohorts = 900, recruited from cohorts that are committed to nobody."""
     assert R.under_arms_cap(2) < 100, "control: a single shipped cohort is below the engine's army floor"
-    w = _flat(build_realm(0))
+    w = build_realm(0)
     cohorts = _governed_cohorts(w, CROWN)
     assert len(cohorts) == 15 and not set(cohorts) & set(world_q.members(w, CROWN)), "fixture: governed, not committed"
     _crown_levy(w, troop_type="spearmen")
@@ -110,7 +104,7 @@ def test_the_shipped_realm_can_raise_field_and_win_with_an_army():
 
 
 def test_an_army_is_where_its_commander_is():
-    w = _flat(build_realm(0))
+    w = build_realm(0)
     _crown_levy(w)
     assert _input(w, DEFENDED_TOWN).orders_of_battle[0] is not None, "control: the commander is here"
     # CONTROL, one change: the Record passes to a Crown member who is not at the origin, and the army stays with him
@@ -123,7 +117,7 @@ def test_an_army_is_where_its_commander_is():
 
 
 def test_a_faction_raises_only_the_people_it_governs():
-    w = _flat(build_realm(0))
+    w = build_realm(0)
     _fold(w, Act(id="mk", actor=ACTOR, verb="create_record",
                  payload={"record": "crown_army", "kind": "army", "rung": ORIGIN, "subject_matter": A.new(CROWN)}))
     foreign = _governed_cohorts(w, HAFEN)[0]
@@ -135,7 +129,7 @@ def test_a_faction_raises_only_the_people_it_governs():
 
 # --------------------------------------------------------------------------------------------------- M4: the cap
 def test_a_cohort_cannot_be_raised_to_its_cap_into_two_armies():
-    w = _flat(build_realm(0))
+    w = build_realm(0)
     cohort = _governed_cohorts(w, CROWN)[0]
     hafen_member = world_q.members(w, HAFEN)[0]
     w.add_tenure(Tenure("t_dual", cohort, HAFEN, "commit", since=0))          # raisable by both factions now
@@ -155,7 +149,7 @@ def test_a_cohort_cannot_be_raised_to_its_cap_into_two_armies():
 
 # ---------------------------------------------------------------------------- M5, M6, M7: territories and arrival
 def test_a_move_cannot_seat_a_person_at_a_territory():
-    w = _flat(build_realm(0))
+    w = build_realm(0)
     up = next(r for r in world_q.ancestry(w, world_q.home_of(w)[ACTOR]) if w.rungs[r].kind == "territory")
     town = next(r for r in world_q.ancestry(w, world_q.home_of(w)[ACTOR]) if w.rungs[r].kind == "settlement")
     to_town = _fold(w, Act(id="mv1", actor=ACTOR, verb="move", payload={"to": town}))
@@ -165,7 +159,7 @@ def test_a_move_cannot_seat_a_person_at_a_territory():
 
 
 def test_an_army_parked_at_a_territory_can_march_on():
-    w = _flat(build_realm(0))
+    w = build_realm(0)
     kinds = _fold(w, Act(id="m1", actor=ACTOR, verb="march", payload={"subject": UNDEFENDED}, via=SEAT))
     assert "army.arrived" in kinds and world_q.standing_at(w, UNDEFENDED, CROWN)
     nxt = Act(id="m2", actor=ACTOR, verb="march", payload={"subject": DEFENDED_TOWN}, via=SEAT)
@@ -175,7 +169,7 @@ def test_an_army_parked_at_a_territory_can_march_on():
 
 
 def test_a_territory_field_is_not_a_walled_assault():
-    w = _flat(build_realm(0))
+    w = build_realm(0)
     terr = next(r for r in world_q.ancestry(w, DEFENDED_TOWN) if w.rungs[r].kind == "territory")
     assert world_q.fortification_of(w, terr) > 0, "fixture: the territory's subtree holds garrisons"
     assert MB.field_input(w, [ACTOR], [], terr).fort_level == 0.0
@@ -184,7 +178,7 @@ def test_a_territory_field_is_not_a_walled_assault():
 
 # ------------------------------------------------------------------------------------------------ M8: the ration
 def test_an_army_is_provisioned_by_the_cohorts_it_drew_from(monkeypatch):
-    w = _flat(build_realm(0))
+    w = build_realm(0)
     w.fixtures = w.fixtures.sweep("field_provisioning", True)
     cohorts = _crown_levy(w)
     seen = []
@@ -202,7 +196,7 @@ def test_an_army_is_provisioned_by_the_cohorts_it_drew_from(monkeypatch):
 def test_a_lost_army_costs_the_cohorts_at_home_their_bodies():
     """The people an army drew from bleed, wherever they live, and only they. A Crown army of spearmen takes the field
     against a Hafenmark levy raised from its ten cohorts and commanded by a member standing in the territory."""
-    w = _flat(build_realm(0))
+    w = build_realm(0)
     cohorts = _crown_levy(w, strategy="advance", troop_type="spearmen")
     hafen = _governed_cohorts(w, HAFEN)
     cmdr = world_q.members(w, HAFEN)[0]

@@ -72,20 +72,22 @@ def _realm(seed: int, seasons: int, fixtures=DEFAULT_FIXTURES):
 #: The realm pins current at B07's base, the S9 base (B14's after-reading on the merged tree, `_realm_goldens.SHIPPED` until B07.99
 #: re-recorded it with the arm on): the world with `task_draw_arm: off` reads these. The only owner of the arm-off reading once
 #: `SHIPPED` is the arm-on world; each read at `PYTHONHASHSEED=0`, one season, `reading @e629f6445` (and again at B07.10's tree).
-ARM_OFF_PINS = {0: "10934f0f516cad26f9c85625268d971e", 1: "6593d8b0c1cc0a7f7931d450df96b1e1", 2: "ad10b3c876f3d9f19e27fe8e84e52dd6"}
+ARM_OFF_PINS = {(0, 1): "10934f0f516cad26f9c85625268d971e", (1, 1): "6593d8b0c1cc0a7f7931d450df96b1e1", (2, 1): "ad10b3c876f3d9f19e27fe8e84e52dd6",
+                (0, 2): "ec41cc8d78ccbe9c5c7fe834e7ae9239", (1, 2): "fded13c6f6ed2f42f0b2c57cc5dc67b4", (2, 2): "bbe99b7804e53b607bcc56f90605a48b"}
 
 
 def test_task_draw_arm_off_reproduces_the_pinned_hash():
-    """`task_draw_arm: off` reproduces the realm pins current at B07's base (`ARM_OFF_PINS`, one season, seeds 0 to 2; C3-N27: the
+    """`task_draw_arm: off` reproduces the realm pins current at B07's base (`ARM_OFF_PINS`, seeds 0 to 2 at one season and at two: the
+    plan's falsifier line names two seasons, where an arm-off divergence that only a second season shows would otherwise pass; C3-N27: the
     pins, not 18-A's strings). The arm is set explicitly, so the reading holds whatever the shipped value is, and it is the
     control the flip is read against: `SHIPPED` reads the arm-on world."""
     off = DEFAULT_FIXTURES.sweep("task_draw_arm", "off")
     checked = 0
-    for seed, pin in sorted(ARM_OFF_PINS.items()):
-        assert _realm(seed, 1, off).content_hash() == pin, seed
-        assert pin != SHIPPED[(seed, 1)], seed      # the arm-on pin moved: the control is not vacuous
+    for (seed, seasons), pin in sorted(ARM_OFF_PINS.items()):
+        assert _realm(seed, seasons, off).content_hash() == pin, (seed, seasons)
+        assert pin != SHIPPED[(seed, seasons)], (seed, seasons)      # the arm-on pin moved: the control is not vacuous
         checked += 1
-    assert checked == 3, checked
+    assert checked == 6, checked
 
 
 # --------------------------------------------------------------------------------------------------------------------------
@@ -276,6 +278,43 @@ def test_converted_verb_resolves_in_at_least_two_bands():
     assert t["refusals_checked"] >= 1, t["refusals_checked"]                   # B07.10: a task refusal carries no band
     assert not t["banded_refusals"], t["banded_refusals"]
     assert t["success"] and t["graded_success"] >= 0.9 * t["success"], (t["graded_success"], t["success"])
+
+
+def test_a_band_short_of_success_never_seats_a_traveller_where_success_is_refused():
+    """B07.02's `_reached`: a Partial `move` or `migrate` seats the traveller ONE LEG SHORT of `dest`, the rung that contains it. `dest`
+    is refused when it is arrival-only (`rosters.yaml: arrival_only_kinds`: a person seated at a territory walks onto it and seizes it
+    with no field), and so is the rung one leg short of it: every settlement sits directly in a territory (`boot/realm.py`), so a Partial
+    to a settlement would seat the mover at the territory. Every other condition of `_reached` holds for the pair found (the control),
+    so only `_arrival_only` decides; the same band to a hearth, whose container is no territory, still seats him at the container.
+    MUTATION (run, reverted): `_reached` without its `_arrival_only(w, short)` returns the territory and the first assertion reds."""
+    from types import SimpleNamespace
+
+    from ..data.rosters import ARRIVAL_ONLY_KINDS
+    from ..loop.effects_migration import _reached
+    from ..queries.world_q import place_of
+    from ..state.containment import parent_of
+
+    w = build_realm(0)
+    partial = SimpleNamespace(degree="Partial")
+    refused = seated = 0
+    for dest, rung in sorted(w.rungs.items()):
+        short = parent_of(w, dest)
+        if short is None or short not in w.rungs or rung.kind not in ("settlement", "hearth"):
+            continue
+        for pid in sorted(p for p, x in w.persons.items() if not x.is_cohort):
+            act = SimpleNamespace(actor=pid)
+            if short in (dest, place_of(w, pid)) or not w.contain_ascends(pid, short):
+                continue                                      # a pair `_reached` refuses on another ground: not this test's
+            got = _reached(w, act, dest, partial)
+            if w.rungs[short].kind in ARRIVAL_ONLY_KINDS:
+                assert got is None, (pid, dest, short, got)   # the only ground left is `_arrival_only(short)`
+                refused += 1
+            else:
+                assert got == short, (pid, dest, short, got)  # control: any other container still seats him there
+                seated += 1
+            assert _reached(w, act, dest, None) == dest       # no band: `dest`, as before B07
+            break
+    assert refused >= 1 and seated >= 1, (refused, seated)
 
 
 def test_a_refused_task_act_carries_no_band():  # [ASSUMPTION: test name]
