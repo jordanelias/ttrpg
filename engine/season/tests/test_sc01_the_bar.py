@@ -186,8 +186,13 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # (its sweep: the 15 convictions at 7 seasons, seed blocks 0-160, stopped at the first hit), meets every assertion on this tree
 # (858b7a77...) and on the batch base. The bar is an existence claim on SELECTED seeds (above), not a rate.
 # [ASSUMPTION; medium; Jordan to correct; revert: restore stability/35/7 with `revert_b11a`.]
+# B09.05 (`refusal_memory` 0.0 -> 0.5): stability/95/7 stopped meeting `_proceeding` ("no slot names the raising date", the docket holds the
+# matter with no date) -- the remembered refusal moves this three-person world's act mix. ATTRIBUTION, in process on the batch tree (scratch, not
+# kept): `BAR_FIXTURES` with `refusal_memory` swept back to 0.0, the parent tree's value, meets every assertion at stability/95/7 again, and the
+# test passes at B09.04's head. NOT RE-TRACED (a search over thousands of runs, as above): the bar is run at the control for the factor.
+# [ASSUMPTION; medium; Jordan to correct; revert: drop the `refusal_memory` sweep and re-trace at 0.5.]
 PROCEEDINGS = (("stability", 95, 7),)
-BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_floor", 60)   # B05.99: `test_u7_remit.JUDGE`'s device, rewritten there (was `pool_default` 30 with the deleted `obstacle_model: stand_in`)       # v9 SC-03b: a judge whose finding opens
+BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_floor", 60).sweep("refusal_memory", 0.0)   # B05.99: `test_u7_remit.JUDGE`'s device, rewritten there (was `pool_default` 30 with the deleted `obstacle_model: stand_in`)       # v9 SC-03b: a judge whose finding opens
 # v9 IN-12 step 9: RE-TRACED, the conviction and season count unchanged -- `argue`/`sabotage`/`tend`/`train`
 # are new members of the Duke's and the clerk's option sets, so doctrine/8's trajectory moved (it now fires
 # TWO dates). A sweep of the 15 convictions x seeds 0..23 at 5 seasons for a run meeting every assertion of
