@@ -276,8 +276,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
         # scored them with and the order it sampled -- not a second scoring of the opening set.
         (cands, terms, sampled), = heard
         scores = {id(c): CH.score_total(t) for c, t in zip(cands, terms)}
-        ranked = cands
-        rank = {id(c): i for i, c in enumerate(ranked)}
+        rank = {id(c): i for i, c in enumerate(cands)}
         srank = {id(c): i for i, c in enumerate(sampled)}
         if cands and tau > 0:
             top = max(scores.values())

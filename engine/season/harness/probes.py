@@ -52,7 +52,7 @@ from ..queries.world_q import questions_for
 from ..seam import ContestError, contest
 from ..state.attribution import anchor_of
 from ..state.carriers import (
-    Candidate, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene, Sensation, Site, StateChange, Tenure, View,
+    Candidate, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene, Sensation, Site, Tenure, View,
 )
 from ..state.ids import H, ROOT, draw_factory
 from ..boot.realm import place_person   # the one placing of a person (B03c.02)

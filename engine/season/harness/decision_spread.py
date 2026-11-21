@@ -112,7 +112,6 @@ from ..data.rosters import FACTION_BY_PROP, PURSUIT_AXES, faction_prop_id
 from ..data.verbs import alignment_at
 from ..decision import assemble, choose as CH, opening_set
 from ..decision.options import project, subject_is_opponent
-from ..gaps import Ungraded
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
 from ..seam.wrappers.sigma import believed_odds_query
@@ -584,30 +583,18 @@ def retry_rows(attempts_: list, seasons: int) -> dict:
             "retries_ok": sum(1 for j, r in enumerate(solo) if r["ok"] and first_refused.get(r["key"], j) < j)}
 
 
-def _bind_control_arm(w) -> bool:
-    """Bind `refusal_memory = 0.0` on `w`; say whether the fixture is registered. Before B09.03 it is not and there is no arm to bind: the
-    shipped tree IS the control (the reader has no caller), and `play_retries` reads one play for both."""
-    try:
-        w.fixtures.get("refusal_memory")
-    except Ungraded:
-        return False
-    w.fixtures = w.fixtures.sweep("refusal_memory", 0.0)
-    return True
-
-
 def play_retries(seed: int, seasons: int) -> dict:
     """THE FIVE READINGS of `16_PESSIMIST_CORE_a_refusal_is_remembered` ("Gate") over `seasons` seasons of `build_realm(seed)`, played as
     `populated.run` plays them (so a content hash here is the one the plan's HASH READING prints), the chooser watched by nobody.
 
-      (a) the CONTROL ARM's content hash, `refusal_memory = 0.0` (the factor is exactly 1.0), beside the shipped arm's; while the fixture
-          is unregistered the shipped tree is the control and the two are one play;
+      (a) the CONTROL ARM's content hash, `refusal_memory = 0.0` (the factor is exactly 1.0), beside the shipped arm's;
       (b) refused opportunities attempted again, the world-only and unobserved classes (`refusal_class`), against the executed-act control;
       (c) individuals' refusal share of acts, by season; (d) `(actor, verb)` pairs attempted three or more times and refused every time;
       (e) retries that succeed -- (b) to (e) by `retry_rows`, over the SHIPPED arm."""
     def play(control: bool):
         w = build_realm(seed)
-        if control and not _bind_control_arm(w):
-            return None
+        if control:
+            w.fixtures = w.fixtures.sweep("refusal_memory", 0.0)
         d = SeasonDriver(w)
         ch = P.chooser(w, verbs=resolvable_verbs())
         ends = []
@@ -617,11 +604,10 @@ def play_retries(seed: int, seasons: int) -> dict:
         return w, d, ends
 
     w, d, ends = play(False)
-    arm = play(True)
+    control = play(True)[0]
     out = retry_rows(retry_attempts(w, d, ends), seasons)
     out.update({"seed": seed, "seasons": seasons, "attempts": len(w.acts), "hash": w.content_hash(),
-                "control_registered": arm is not None,
-                "control_hash": w.content_hash() if arm is None else arm[0].content_hash()})
+                "control_hash": control.content_hash()})
     return out
 
 
@@ -630,9 +616,8 @@ def print_retries(r: dict) -> None:
         return "-" if n == 0 else f"{100.0 * k / n:.1f}% ({k} of {n})"
     ag = r["again"]
     unteachable = (ag["world-only"][0] + ag["unobserved"][0], ag["world-only"][1] + ag["unobserved"][1])
-    arm = "refusal_memory = 0.0" if r["control_registered"] else "refusal_memory is no fixture yet: the shipped tree is the control"
     print(f"--retries  seed {r['seed']}, {r['seasons']} SEASON(S), {r['attempts']} attempts in the act store")
-    print(f"  (a) control arm [{arm}] content_hash {r['control_hash']}; shipped arm {r['hash']}")
+    print(f"  (a) control arm [refusal_memory = 0.0] content_hash {r['control_hash']}; shipped arm {r['hash']}")
     print(f"  (b) refused opportunities attempted again, world-only and unobserved classes: {pct(*unteachable)} "
           f"[world-only {pct(*ag['world-only'])}; unobserved {pct(*ag['unobserved'])}]; "
           f"control, executed acts' opportunities attempted again: {pct(*r['again_ok'])}; taught class {pct(*ag['taught'])}")

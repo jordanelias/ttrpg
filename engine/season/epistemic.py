@@ -50,7 +50,7 @@ from .state.gate import purview_reaches
 from .state.ids import ROOT, draw_factory
 from .queries import cache, world_q
 from .queries.person_q import LedgerReader
-from .state.carriers import Event, Person
+from .state.carriers import Event, Person, subject_of
 from .state.world import World, register_snapshot_type
 
 
@@ -882,8 +882,7 @@ def _occasion_claim(w: "World", e: "Event", act, pid: str) -> Optional[str]:
     a = act if act is not None else causing_act(w, e)
     sc = w.acts.scene_of(a.id) if a is not None else None
     occ = getattr(sc, "occasion", None)
-    if (occ is None or occ.source != "claim_landed" or not isinstance(a.payload, dict)
-            or a.payload.get("subject") not in occ.referents):
+    if occ is None or occ.source != "claim_landed" or subject_of(a) not in occ.referents:
         return None
     p = w.persons.get(pid)
     return occ.about if p is not None and any(c.id == occ.about for c in p.ledger) else None

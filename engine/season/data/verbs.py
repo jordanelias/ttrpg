@@ -1195,7 +1195,7 @@ def _load_verb_table() -> dict:
                                 "refusal for it (nor, as a task, a `write` one), "
                                 "and keys more than one refusal kind, so that refusal would emit "
                                 "kinds for conjuncts that did not fail")
-            _after_fold = set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE, COUNTERPARTY_CLAUSE, DRAW_CLAUSE}
+            _after_fold = set(_names) & FOLD_CLAUSES
             if _after_fold:
                 _defects.append(f"names a conjunct after a fold clause ({sorted(_after_fold)})")
             _missing = sorted(_expected - set(by_clause)) if by_clause else []
