@@ -193,3 +193,26 @@ def test_decision_spread_counts_equal_through_hook_and_wrapper():
         DS.tally_split(split_old, pid, r)
     split_new = DS.play_season(build_realm(0), 1)["split"]
     assert split_new == DS.split_figures(split_old)
+
+
+def _first_scene_subject(rename):
+    """`pack_scenes` at `by_subject` over two subjects ranked z-first by score (the ranked list is the order handed in);
+    `rename` maps each subject to the ID it carries. Returns the subject (by its role) of the first scene's first act."""
+    verb = sorted(VERB_TABLE)[0]
+    ranked = [Candidate(verb, rename["first"]), Candidate(verb, rename["second"]),
+              Candidate(verb, rename["first"])]
+    fx = DEFAULT_FIXTURES.sweep("scene_packing_rule", "by_subject").sweep("interactions_per_scene", 1)
+    p = Person(id="p_pack", name="p_pack")
+    scenes = CH.pack_scenes(p, ranked, 5, fx, lambda *a: "|".join(a))
+    assert len(scenes) == 3
+    return [(a.payload or {}).get("subject") for s in scenes for a in s.acts]
+
+
+def test_by_subject_packing_ignores_id_names():
+    # the subject ranked first is named to sort LAST, then FIRST: the scene that runs first must not change
+    late = _first_scene_subject({"first": "z_subject", "second": "a_subject"})
+    early = _first_scene_subject({"first": "a_subject", "second": "z_subject"})
+    assert late[0] == "z_subject" and early[0] == "a_subject"
+    # the first-ranked subject fills its scenes, in rank order, before the other's: [first, first, second]
+    assert late == ["z_subject", "z_subject", "a_subject"]
+    assert early == ["a_subject", "a_subject", "z_subject"]

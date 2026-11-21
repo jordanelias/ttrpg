@@ -887,7 +887,9 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
         seen: dict = {}
         for c in ranked:
             seen.setdefault(c.subject or "", []).append(c)
-        chunks = [run for subj in sorted(seen) for run in fill(seen[subj])]
+        # first appearance in the ranked list, never the subject's ID: a name is not a rank (U4 removed the alphabet
+        # as a tie-break for verbs; this is the same defect for subjects)
+        chunks = [run for subj in seen for run in fill(seen[subj])]
     else:
         chunks = fill(ranked)
     return take(chunks)
