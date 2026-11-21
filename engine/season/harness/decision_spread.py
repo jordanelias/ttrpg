@@ -210,9 +210,6 @@ def attribute_top(p, cands: list, fx, draw=None, odds=None) -> dict:
     believed_odds_query`), handed to `score_terms` as the chooser hands it: `None` reads the score without
     the believed-chance factor, which is also what `odds_weighting` `none` reads whatever is passed."""
     if not cands:
-        return {"top": None, "decider": "none", "margin": None, "scores": [], "terms": [],
-                "draw_kind": None, "field_zero": False}
-    if not cands:
         return CH.deciding_term([], [], None, 0.0)
     memo = CH.deliberation_memo(p, fx)
     terms = [CH.score_terms(p, c, fx, memo, odds) for c in cands]

@@ -154,6 +154,28 @@ def test_a_zero_wear_write_emits_no_condition_worn():
     assert len(logged) == 2 and {anchor_of(w, e) for e in logged} == {"site_harbour", "site_seam"}
 
 
+def test_a_site_already_at_condition_zero_is_not_written_and_emits_no_condition_worn():
+    """H-135 (B09.21), the second half: a Site that wears but whose condition is already 0 would write
+    `max(0, 0 - wear)` = 0, move nothing and still emit `condition.worn`. It is not written. CONTROL, in
+    the same MATTER pass: a Site of the same kind with condition above 0, which still writes once."""
+    w = P.tiny_world()
+    scale = w.fixtures.get("condition_scale")
+    w.sites["s_b0921_ruin"] = Site("s_b0921_ruin", "Hh", "harbour", condition=0)
+    w.sites["s_b0921_sound"] = Site("s_b0921_sound", "Hh", "harbour", condition=scale)
+    assert w.fixtures.wear("harbour") > 0 and scale > 0, "the fixture's rates are not what the test reads"
+    worn = _worn(w, _matter(w))
+    assert "s_b0921_ruin" not in worn, "a Site already at condition 0 still emitted `condition.worn`"
+    assert w.sites["s_b0921_ruin"].condition == 0
+    checked = 0
+    for sid in ("s_b0921_sound", "site_harbour", "site_seam"):       # the control and the fixture's own wearers
+        assert len(worn.get(sid, [])) == 1, (sid, sorted(worn))
+        assert w.sites[sid].condition < (scale if sid == "s_b0921_sound" else w.sites[sid].condition + 1)
+        checked += 1
+    assert checked == 3
+    logged = [e for e in w.log if e.kind == "condition.worn"]
+    assert len(logged) == 3 and "s_b0921_ruin" not in {anchor_of(w, e) for e in logged}
+
+
 def test_a_realm_season_emits_no_condition_worn_for_a_site_whose_wear_is_zero():
     """The same arm on the shipped realm, where `dwelling` and `garrison` wear 0: one MATTER pass writes
     one `condition.worn` per Site that wears and none for the rest."""

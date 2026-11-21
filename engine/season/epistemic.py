@@ -674,8 +674,10 @@ def changes_only_held_claims(w: "World", e: "Event", held: frozenset, mode: str)
     it -- the Event `observers_for` answers `[]` for under `mode`, so the fan need not be asked?
 
     DERIVED PER EVENT, FROM WHAT THE EVENT CARRIES AND WHAT THE LEDGERS HOLD -- never a kind list
-    (scripting drift): today `claim.decayed` meets it (`loop/matter.py`'s decay pass writes a held
-    claim's confidence), and so would any later emitter that writes a held claim and nothing else.
+    (scripting drift): no emitter meets it today -- `claim.decayed` did, until B09.01 retired
+    `loop/matter.py`'s decay pass (a claim fades where it is read, `state/ledgers.py::present_confidence`,
+    and nothing writes `Claim.confidence`) -- but any emitter that writes a held claim and nothing else
+    would.
     Why the channels cannot admit it, one by one: no act caused it, so `post_remit` (reads
     `Act.via`) and the actor tier of `anchor_of` have nothing to read; every change subject is a
     claim id, a hash (`state/ids.py::H`) that is no person, site, record, date or rung, so the

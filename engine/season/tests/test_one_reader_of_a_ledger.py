@@ -7,8 +7,9 @@ person acts on one belief and says and shows another. The weight the comparator 
 a sighting nine seasons old weighs as much as one made this season.
 
 B09.06 lands the control and the weight's new factor, `present_confidence(c) / confidence_default`, behind the fixture
-`weigh_confidence`; at `False` (the control and the revert) every weight is today's. B09.07 re-points `said_of`, the sheet
-and the stage reader at the one comparator; B09.08 ships `True`.
+`weigh_confidence`; at `False` (the control and the revert) every weight is today's. B09.07 re-points `said_of` and the sheet
+at the one comparator, and gives the stage reader (`world_q.current_stage`) the parameter, which no caller supplies yet
+(the reader is dormant); B09.08 ships `True`.
 
   test_weigh_confidence_false_reproduces_today                     reads the `False` arm (`FX_OFF`), and asserts `True` ships
   test_said_of_sheet_and_belief_contradicts_agree_on_every_cell    planted ledger, the SHIPPED fixtures

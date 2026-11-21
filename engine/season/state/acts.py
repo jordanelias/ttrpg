@@ -103,7 +103,8 @@ class ActStore:
         WRITTEN BY RESOLVE ONLY, as `append` is: this store has no token of its own, the discipline is where it is
         reached from (`loop/resolve.py::resolve`, the ACTS step) and that `loop/deliberate.py` holds none and stores
         nothing (`test_g2_token.py::test_g2_deliberate_mutates_no_store_by_any_route` measures the world around it).
-        NOT IN THE CONTENT HASH (`World.content_hash`'s frames name `acts`, not this): the port carries it as data."""
+        NOT IN THE CONTENT HASH (`World.content_hash`'s frames name `acts`, not this): it is NOT in `encode`/`decode`
+        (`state/world.py`), so a decoded world holds no Scenes and its `scene_of` answers `None`."""
         if not isinstance(sc, Scene):
             raise Unspecified(
                 f"the scene store holds Scene, not {type(sc).__name__}", "S27",

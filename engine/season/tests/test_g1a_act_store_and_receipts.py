@@ -243,7 +243,7 @@ def test_a_whole_entity_receipt_names_its_mode_and_a_fields_receipt_stays_set():
 
 
 def test_every_minted_receipt_is_in_an_event(monkeypatch):
-    """B09.10 (red until B09.11 BY DESIGN): every receipt the world's gate minted sits in some Event of
+    """B09.10 (written red, by design, and green at B09.11): every receipt the world's gate minted sits in some Event of
     the log. The scene is `test_h11_affiliation_scar`'s -- a fight observed by persons whose
     holdings the rebound engagement table says it violates -- and its `(Person, scar)` write mints a
     receipt per scarred observer with NO `emits`, so they land in no Event (the `_scar_witnesses`

@@ -771,8 +771,9 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         # `H-135`. A SITE WHOSE WEAR THIS SEASON IS 0 IS NOT WRITTEN: the closure branch of `World.write`
         # judges nothing, so a write that moved nothing would still trace as written and emit
         # `condition.worn` -- a fabricated success (`ID-9`). `before == s.condition` here, so no crossing
-        # could fire either. (`dwelling` and `garrison` wear 0, `rosters.yaml`.)
-        if wear == 0:
+        # could fire either. (`dwelling` and `garrison` wear 0, `rosters.yaml`.) THE SAME HOLDS FOR A SITE
+        # ALREADY AT CONDITION 0: `max(0, 0 - wear)` writes 0, moves nothing, and would still emit.
+        if wear == 0 or s.condition == 0:
             continue
         # `W4`. WEAR IS A LICENSED CLOCK, AND A CLOCK CHAINS TO ITSELF. `[ROOT]` is for the
         # campaign seed and a licensed clock's GENUINE FIRST emission (#353 `:682-685`); every

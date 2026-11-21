@@ -1410,10 +1410,11 @@ class World:
         A closure is every other writer's -- MATTER's clocks, CALENDAR, WITNESS's deposits, the
         probes, and the fold's check-only pairs after its first. It is applied unjudged, and its return
         value is returned. ⚠ THAT IS A BOUND, NOT AN OVERSIGHT: `04 §C.2`
-        puts the no-op check on EVERY write, and the closure path does not apply it. A MATTER write that moves nothing still traces as written and still emits its
-        declared kind -- and that is LIVE, not hypothetical: `dwelling` wears at 0
-        (`rosters.yaml`), so every dwelling's `condition.worn` every season is exactly F9's shape.
-        MATTER has no refusal kind for a no-op to become.
+        puts the no-op check on EVERY write, and the closure path does not apply it. A MATTER write that
+        moves nothing would still trace as written and still emit its declared kind; the one live instance, `dwelling` wearing at 0 (`rosters.yaml`), is CLOSED at B09.21
+        (`H-135`): `loop/matter.py` does not write a Site whose wear is 0 or whose condition is already 0. The
+        closure branch's F9 judgment REMAINS UNDONE, so a later MATTER writer that moves nothing would be
+        fabricated again. MATTER has no refusal kind for a no-op to become.
 
         `G3`. `actor` AND `via` ARE WHO IS WRITING AND THROUGH WHICH SEAT -- `04 §C.2`'s
         `gate.write(token, kind, field, id, change, actor?, via?)`. Both default to `None`, which
@@ -1758,8 +1759,9 @@ class World:
             # by this ONE `finally`, not by a call mirrored at each exit, so a new exit cannot leak it
             # (`gate.is_open` stays False between writes, which `remove_person`'s bare-call guard
             # reads). `is_open` has exactly one production reader (that guard) and `mint()` has
-            # exactly one caller (`World.write` itself, both calls inside this `try`, so nothing after
-            # it still needs the window). Narrower than H-131's own open question (closing at ORDINARY
+            # two callers: `World.write` itself (both calls inside this `try`, so nothing after it
+            # still needs the window) and the harness's `probes.py::apparatus_receipt`, which opens
+            # its own window and closes it again for a hand-built Event's receipt. Narrower than H-131's own open question (closing at ORDINARY
             # BARRIER TRANSITIONS independent of any write) -- this closes only the window THIS call
             # opened.
             self.gate.close()

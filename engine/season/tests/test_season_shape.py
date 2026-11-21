@@ -11800,7 +11800,8 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
     supports `actor`; what does NOT follow is that the default should flip, which would be a second
     design change on a measurement that has only just moved. Recorded on `H-122`, not decided here.
 
-    ⚠ AND ONE THING THE FLIP DID NOT CHANGE: the rate is STILL behaviourally inert in all three
+    ⚠ AND ONE THING THE FLIP DID NOT CHANGE (as measured when this was written; see the last paragraph for the
+    reader that has since been added): the rate is STILL behaviourally inert in all three
     arms (`inert` below is all-True at both fan-outs). Rate 5 and rate 20 still leave the same
     claims in the same ledgers and produce the same acts. That is `H-40`'s own finding and it
     survives its cause being removed, which is worth more than the reading that did not.
@@ -11832,9 +11833,12 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
     ASSERTION WAS GREEN AND IS RECORDED RATHER THAN REPLACED SILENTLY**: decaying by
     `rate * (1 + c.when)` scales BOTH rates by the same factor, so the eviction ordering — which
     is what membership depends on — does not change, and the assertion could not see it. That is
-    the shape of the defect, not a failure of the assertion: the rate is inert because nothing
-    downstream READS a confidence except the eviction sort's product, and only a reader that
-    separates 95 from 80 can make it live."""
+    the shape of the defect, not a failure of the assertion: when this was written the rate was inert because
+    nothing downstream READ a confidence except the eviction sort's product, and only a reader that separates 95
+    from 80 could make it live. ⚠ THAT CAUSE NO LONGER HOLDS: since B09.06/B09.08 `weigh_confidence` is shipped `True`
+    and `decision/options.py::teller_weight` reads `present_confidence`, so a claim's confidence is read by the
+    comparator the person acts on. The assertion below observes whether the rate changes the run; it does not
+    observe, and this docstring no longer states, why."""
     from ..harness import headless as HL
     from collections import Counter
     out, inert = {}, {}
