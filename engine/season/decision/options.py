@@ -382,7 +382,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                         # CR-27: a row in `lie_verbs` says the claim FALSELY (`lie_said_of`), every other row
                         # says it as held (`said_of`); both are the actor's own ledger and nothing else.
                         said_of_entity[entity] = (lie_said_of if verb in LIE_VERBS else said_of)(
-                            p.ledger, entity, fx, teller=p, tick=tick)
+                            p.ledger, entity, fx, teller=p, tick=tick, weigh=weigh)
                     said = said_of_entity[entity]
                     if said is None:
                         continue
