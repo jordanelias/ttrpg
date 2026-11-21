@@ -519,6 +519,27 @@ def has_seen(p: Person, other: str) -> bool:
     return any(c.predicate == SEEN_PREDICATE and not c.chain and getattr(c.value, "who", None) == other for c in p.ledger)
 
 
+def refused_before(p: Person, kinds: tuple, subject: str, tick: int = 0, decay: int = 0) -> int:
+    """THE PRESENT CONFIDENCE (`0..confidence_default`) OF THE NEWEST CLAIM IN WHICH `p` WAS HIMSELF REFUSED THIS OPPORTUNITY, else `0`.
+
+    The claim is one `p` holds firsthand in his OWN ledger -- untold, `doer == p.id` -- whose predicate is in `kinds` (the verb row's
+    `emits_on_refusal`) and whose subject is `subject`. The newest is the greatest `(when, lap, present confidence)`, the order
+    `_latest_claim` ranks by. It is `0` when there is none, or when `p` holds ANY claim about `subject` NEWER than it by `(when, lap)`: news of the
+    subject supersedes the memory, the thing may have changed. A claim at the refusal's own `(when, lap)` is not newer (the refusal's own
+    deposits share it).
+
+    ⚠ IT TAKES THE PERSON, NOT A LEDGER AND A HOLDER: the holder cannot differ from the asker (AX-2; `04` §B.2's own-ledger carve-out), and no
+    World is read. Confidence is read through `state/ledgers.py::present_confidence` at the `tick` and `decay` given -- the one owner of fading
+    -- never the stored deposit value; with neither given (a hand-built ledger) the stored value is read, as `LedgerReader` does."""
+    refused = [c for c in p.ledger if c.subject == subject and c.predicate in kinds and c.doer == p.id and c.firsthand]
+    if not refused:
+        return 0
+    newest = max(refused, key=lambda c: (c.when, c.lap, present_confidence(c.confidence, c.when, tick, decay)))
+    if any(c.subject == subject and (c.when, c.lap) > (newest.when, newest.lap) for c in p.ledger):
+        return 0
+    return present_confidence(newest.confidence, newest.when, tick, decay)
+
+
 def conviction_stand(p: Person, affiliation: str) -> float:
     """HOW FAR `p` STANDS FOR (+1) OR AGAINST (-1) ONE AFFILIATION, on `[-1, +1]`: `p.conviction[affiliation]`
     centred on the affiliation scale's midpoint and scaled by its half-range, `(v - mid) / half`. An ABSENT key
