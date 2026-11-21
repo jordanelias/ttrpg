@@ -40,6 +40,9 @@ from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..state.carriers import DETERMINED_BY, Act, Claim, Office, Tenure
 from .test_in10_record_operands import _hold_document
+import pytest
+
+pytestmark = pytest.mark.flat_fold
 
 COURT, SEAT, DUKE = "S", "off_duke", "p_high"
 MOVER = "p_mid"                                  # seatless, sworn to nobody, at `Hh`

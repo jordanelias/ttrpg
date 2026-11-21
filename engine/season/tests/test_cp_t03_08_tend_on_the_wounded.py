@@ -34,6 +34,9 @@ from ..queries import world_q
 from ..state.carriers import Claim, Tenure
 from .test_in10_record_operands import _acts, _resolve
 from .test_in12_step9 import _world
+import pytest
+
+pytestmark = pytest.mark.flat_fold
 
 A, B = "p_low", "p_mid"            # `tiny_world`: both stand at the hearth (`with` each other)
 FAR = "p_high"                     # elsewhere

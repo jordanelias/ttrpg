@@ -20,6 +20,9 @@ from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.queries import world_q
 from engine.season.state import gate as G
 from engine.season.state.carriers import Act
+import pytest
+
+pytestmark = pytest.mark.flat_fold
 
 CROWN = "fac_valorsmark"
 TOWN = "set_s_016"            # Hafenmark-held; no Crown member stands there at build

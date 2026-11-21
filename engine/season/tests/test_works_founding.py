@@ -37,6 +37,8 @@ from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..state.carriers import Act
 
+pytestmark = pytest.mark.flat_fold
+
 HARBOUR, SETTLEMENT, HEARTH = "site_harbour", "S", "Hh"
 PRESENT, ABSENT = "p_high", "p_low"          # at `S`, the harbour's rung / at `Hh`, below it
 

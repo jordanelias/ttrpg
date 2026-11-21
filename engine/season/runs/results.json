@@ -9908,7 +9908,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 899 == 899 and the LOG CONTENT HASH matches (77117e5d6108...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 895 == 895 and the LOG CONTENT HASH matches (49ede25f0365...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -10953,24 +10953,6 @@
   },
   {
    "kind": "FORBIDDEN",
-   "what": "a (Site, condition) write by p_low changed nothing: it named no subject",
-   "where": "F9",
-   "needs": "a write that moves at least one subject it names",
-   "law": "04 \u00a7C.2 / PART D row 5 (F9) -- `before == after` is refused AT THE WRITE, so the receipt is never minted: a success Event for a write that did not happen is ID-9, and a receipt minted by the gate for it passes every append-side check",
-   "case": "probe:A5",
-   "expected": false
-  },
-  {
-   "kind": "FORBIDDEN",
-   "what": "a (Site, condition) write by p_low changed nothing: it named no subject",
-   "where": "F9",
-   "needs": "a write that moves at least one subject it names",
-   "law": "04 \u00a7C.2 / PART D row 5 (F9) -- `before == after` is refused AT THE WRITE, so the receipt is never minted: a success Event for a write that did not happen is ID-9, and a receipt minted by the gate for it passes every append-side check",
-   "case": "probe:A5",
-   "expected": false
-  },
-  {
-   "kind": "FORBIDDEN",
    "what": "'The Church excommunicates'",
    "where": "S3-L1",
    "needs": "'the Confessor, at a venue, issues'",
@@ -11234,13 +11216,13 @@
  "_trace_counts": {
   "STEP": 7185,
   "BARRIER": 1892,
-  "DECISION": 1937,
-  "QUERY": 30082,
-  "WRITE": 15258,
-  "EVENT": 15283,
+  "DECISION": 1946,
+  "QUERY": 30088,
+  "WRITE": 15248,
+  "EVENT": 15277,
   "ACT": 95,
-  "CLAIM": 1739,
-  "GAP": 91,
+  "CLAIM": 1733,
+  "GAP": 89,
   "NOTE": 203
  },
  "_corpus_defects": []

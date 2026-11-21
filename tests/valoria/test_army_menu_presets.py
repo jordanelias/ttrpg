@@ -36,8 +36,11 @@ from modules.mass_battle.troop_types.registry import roles_for
 
 from tests.valoria.test_army_phase5 import CHURCH, CROWN, DEFENDED_TERR, HAFEN, _fold, _governed_cohorts
 
+pytestmark = pytest.mark.flat_fold
+
 _IMPORTS_PRESETS = re.compile(r"import .*army_presets|army_presets .*import|army_presets\.install")
 FULL = 1000.0                                 # an arbitrary condition scale for the pure-module tests
+
 
 
 def _sites(w, faction, kinds=("barracks", "archery_range", "stable")):

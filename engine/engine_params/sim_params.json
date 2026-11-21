@@ -4993,11 +4993,11 @@
     {
       "key": "engine.season.settings.task_draw_arm",
       "name": "task_draw_arm",
-      "value": "off",
+      "value": "on",
       "kind": "other",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-445`, swept off (control, SHIPPED until B07.05) / on",
+      "note": "`H-445`, swept off (control) / on (SHIPPED since B07.05; revert: `off`)",
       "citation": null,
       "citation_grade": null
     },

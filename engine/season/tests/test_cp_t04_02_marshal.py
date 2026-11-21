@@ -54,6 +54,8 @@ from engine.season.state.carriers import Act, Question
 from engine.season.tests.test_march import _fold_one
 from engine.substrate import battle_orders
 
+pytestmark = pytest.mark.flat_fold
+
 HOME, TARGET = "set_s_014", "set_s_036"
 ATT_FACTION, DEF_FACTION = "fac_valorsmark", "fac_church_of_solmund"
 KING, KING_SEAT = "p_npc_020", "off_king"                          # Valorsmark; dispatch; reaches HOME and TARGET

@@ -2166,7 +2166,7 @@
         "graded_tasks": {
           "source": "v9 FI-01 (`ED-FI-0009`; J-22 answered option (A)): the inquiries are graded by degree, as ladder step 3 answered (RESOLVE -> WITNESS, \"Claims graded by degree; Failure emits `finding.none` and deposits nothing\"), through a declared routing column that is NOT a prize and NOT a `contests:` shape. A-21: one roll owner (S27.2) -- the `social_contest` module's entry, with the obstacle at the host input builder's non-person default.",
           "row": "H-111",
-          "note": "\u26a0 A ROUTE, NOT A PRIZE. Each row names the provider registered under `@provider(\"contest\", \u2026)` and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::faculty` (the verb's `capability:` column, `descriptors.CAPABILITIES`, else the swept `pool_default`) and the obstacle the module's own (`modules/social_contest/roll.py::obstacle`: the row's `difficulty:` level plus `opposed_ob(pool_default)` where no person is opposite, or plus `opposed_ob` of the person's skill score and resisting attribute, `sigma.py::_opposing` -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already binds (`manifest/registry.py::check_graded_tasks`), so this row adds no roll and no resolver. the verb table's `capability:` column now names `inquiry` for the three (REM-30, B10-10; the rows were deferred at CP-T01-01): an inquirer who HOLDS an `inquiry` key rolls it, and one who holds none still rolls `pool_default` (`seam/wrappers/sigma.py::faculty`). \u26a0 THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the questioned person answers by their own `tell`, so there is no degree on the asker); `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read` waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its flat `emits:` and is not counted as graded. \u26a0 B07.01 (18-A edits 1-2; workplan v12 part 10 cont. 2, UNDECIDED (10), (11)): RENAMED from `graded_inquiries` for what it now holds -- the route of every `task`-class row (an act a person attempts alone, drawn against the job's difficulty), beside the three inquiries. Each row carries `form: inquiry | task` (`data/verbs.py` refuses each shape's other columns by form). `reconstruct` joins as `form: inquiry` (UNDECIDED (2)). Every row B07 adds carries `armed_by: task_draw_arm`: the loop takes it only while that `Fixtures` member reads `on` (`data/rosters.py::graded_route`), so with the arm `off` (the control, shipped) each such verb folds flat as it did before; the key leaves with the arm (B98). The three carried inquiries carry no key and route as before.",
+          "note": "\u26a0 A ROUTE, NOT A PRIZE. Each row names the provider registered under `@provider(\"contest\", \u2026)` and the composition role that provider calls; the pool is `seam/wrappers/sigma.py::faculty` (the verb's `capability:` column, `descriptors.CAPABILITIES`, else the swept `pool_default`) and the obstacle the module's own (`modules/social_contest/roll.py::obstacle`: the row's `difficulty:` level plus `opposed_ob(pool_default)` where no person is opposite, or plus `opposed_ob` of the person's skill score and resisting attribute, `sigma.py::_opposing` -- an inquiry's subject can be a person-kind Rung). The pair must be one a `contest_subsystems` prize row already binds (`manifest/registry.py::check_graded_tasks`), so this row adds no roll and no resolver. the verb table's `capability:` column now names `inquiry` for the three (REM-30, B10-10; the rows were deferred at CP-T01-01): an inquirer who HOLDS an `inquiry` key rolls it, and one who holds none still rolls `pool_default` (`seam/wrappers/sigma.py::faculty`). \u26a0 THREE ROWS, AND THE OTHER THREE ARE NOT GRADED: `interview` is a PROMPT (#453 K-36: the questioned person answers by their own `tell`, so there is no degree on the asker); `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read` waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its flat `emits:` and is not counted as graded. [B07.01: `reconstruct` and `thread_read` are routed now, under `armed_by: task_draw_arm`; arm `off` they fold flat as above.] \u26a0 B07.01 (18-A edits 1-2; workplan v12 part 10 cont. 2, UNDECIDED (10), (11)): RENAMED from `graded_inquiries` for what it now holds -- the route of every `task`-class row (an act a person attempts alone, drawn against the job's difficulty), beside the three inquiries. Each row carries `form: inquiry | task` (`data/verbs.py` refuses each shape's other columns by form). `reconstruct` joins as `form: inquiry` (UNDECIDED (2)). Every row B07 adds carries `armed_by: task_draw_arm`: the loop takes it only while that `Fixtures` member reads `on` (`data/rosters.py::graded_route`), so with the arm `off` (the control, shipped) each such verb folds flat as it did before; the key leaves with the arm (B98). The three carried inquiries carry no key and route as before.",
           "keys": [
             "verb_table"
           ],
@@ -2695,6 +2695,23 @@
               "module_entry": "social_contest.roll",
               "heard_by": "bench",
               "cite": "v9 SC-01 step 12 (B-N): `speak`'s prize (`proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` \u00a7B.1, `08_SEAM.md`: `a matter` -> the proceedings provider). Routed to the interim provider at step 12; ED-SC-0033 clause (2)'s repoint (steps 13 + 15, ONE change) reached THIS row too, so it was three rows, not the two the plan names [ASSUMPTION; medium; revert: no row, and `speak` declares no `contests:`]."
+            },
+            "a seat": {
+              "module": "social_contest",
+              "person_inputs": "pool",
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "heard_by": "seat_body",
+              "cite": "U5c_VERBS_residue \u00a72 edit 3 (B07.04): the audience is a cell of the prize row, read by one host function and by no verb's name."
+            },
+            "a holding": {
+              "module": "social_contest",
+              "person_inputs": "pool",
+              "provider": "social_contest",
+              "module_entry": "social_contest.roll",
+              "heard_by": "residents",
+              "toward": "to",
+              "cite": "U5c_VERBS_residue \u00a72 edits 3 and 4 (B07.04)."
             }
           }
         },
@@ -3597,7 +3614,7 @@
         "inquiry_modules": {
           "source": "v9 FI-02 (`SM-3`, Jordan 2026-09-05: *\"investigation is not a contest seam. it is its own thing.\"*), built in one landing with FI-03 (`ED-FI-0002`, the counter-espionage loop with fieldwork as host): the second role in `manifest/registry.py::_ROLE_ROSTERS`, `inquiry`.",
           "cite": "SM-3; ED-FI-0002",
-          "note": "\u26a0 KEYED BY THE KIND A FINDING EMITS, NEVER BY THE VERB. `graded_tasks` is already the verb-keyed table, and FI-01 rules it a ROUTE that may carry nothing but `{provider, module_entry}` (`data/verbs.py`), so a second verb-keyed table would be two tables on one key. A prize is what is contested; the inquiry analogue is what is FOUND, so the key is the Event kind -- `undeposited_kinds`' keying, for its reason. A `Failure` inquiry emits `finding.none`, which no row claims, so `manifest.resolve(\"inquiry\", ...)` answers `None` and nothing is found, with no branch on a band anywhere in the host. An ungraded `finding.made` (`interview`, `reconstruct`, `thread_read`) reaches the row and finds nothing: it carries no degree, and `finding_terms` keys on the degree. Each row names `module:` (the module's one identity, its directory, A-25), `provider:` (`@provider(\"inquiry\", ...)`, `seam/wrappers/fieldwork.py`) and `module_entry:` (the composition row the provider calls through `MODULE_ENTRIES`). Refused at driver construction by `manifest/registry.py::check_inquiry_modules`, and at boot by `check_rows()` naming the row.",
+          "note": "\u26a0 KEYED BY THE KIND A FINDING EMITS, NEVER BY THE VERB. `graded_tasks` is already the verb-keyed table, and FI-01 rules it a ROUTE that carries `{provider, module_entry}` and, from B07.01, `form` and `armed_by` (`data/verbs.py`), so a second verb-keyed table would be two tables on one key. A prize is what is contested; the inquiry analogue is what is FOUND, so the key is the Event kind -- `undeposited_kinds`' keying, for its reason. A `Failure` inquiry emits `finding.none`, which no row claims, so `manifest.resolve(\"inquiry\", ...)` answers `None` and nothing is found, with no branch on a band anywhere in the host. An ungraded `finding.made` (`interview`, `reconstruct`, `thread_read`) reaches the row and finds nothing: it carries no degree, and `finding_terms` keys on the degree. Each row names `module:` (the module's one identity, its directory, A-25), `provider:` (`@provider(\"inquiry\", ...)`, `seam/wrappers/fieldwork.py`) and `module_entry:` (the composition row the provider calls through `MODULE_ENTRIES`). Refused at driver construction by `manifest/registry.py::check_inquiry_modules`, and at boot by `check_rows()` naming the row.",
           "findings": {
             "finding.made": {
               "module": "fieldwork",
@@ -5054,7 +5071,7 @@
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
-          "refusal_note": "#453 \u00a79.3: no precondition, so an empty `emits_on_refusal` is lawful (`create_record`'s shape); a mint that moves nothing (a hand-built act naming the id of an identical Record) is the fold's flat `act.refused`.",
+          "refusal_note": "#453 \u00a79.3: no precondition; a mint that moves nothing (a hand-built act naming the id of an identical Record) is the `write` clause's `conceal.refused` (B07.01; it was the fold's flat `act.refused`).",
           "grade": "assumption",
           "grade_note": "an argued addition (#453 \u00a710.4 step 10): the matrix row `(Record, exists)` is the tree's; the row, the `cover` kind and the `anchor_of` cover read are v9 IN-12's, on #453 \u00a78.2 `:1486-1495`, \u00a79.3 `:1826-1863`, K-19 `:2722-2727`.",
           "source": "v9 IN-12 step 10 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) \u00a79.3 `:1826-1863`"
@@ -6975,7 +6992,7 @@
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "grade": "ruled",
-          "effect_formula_note": "\u0394 = +(1 \u2212 condition) \u00d7 f(degree) \u00d7 share (\u00a754 it. 7's mirror). \u26a0 BUILT AT PLAN POSITION `24e` as `loop/effects.py::_rise`, the one owner `work` also reads when it advances a works: `(1 \u2212 condition)` is the headroom to the works' ceiling (`queries/world_q.py::ceiling`, the full scale where no works names the site), `share` is `queries/world_q.py::share` (one over those standing at the fabric), and `f(degree)` is the IDENTITY because this row is uncontested and `_fold` hands it no degree (`H-164`). Staged on `(Site, condition)` and clamped once under the ceiling, `work`'s G4 shape.",
+          "effect_formula_note": "\u0394 = +(1 \u2212 condition) \u00d7 f(degree) \u00d7 share (\u00a754 it. 7's mirror). \u26a0 BUILT AT PLAN POSITION `24e` as `loop/effects.py::_rise`, the one owner `work` also reads when it advances a works: `(1 \u2212 condition)` is the headroom to the works' ceiling (`queries/world_q.py::ceiling`, the full scale where no works names the site), `share` is `queries/world_q.py::share` (one over those standing at the fabric), and `f(degree)` is `task_fraction`'s share of the band (B07.02, `_rise`; the whole headroom with no band: the arm `off`, or Success) -- it was the identity while `_fold` handed it no degree (`H-164`). Staged on `(Site, condition)` and clamped once under the ceiling, `work`'s G4 shape.",
           "effect_note": "An effect formula is not a precondition: a precondition is a question the fold asks of the world, an effect is what the write does, and conflating them is how a resolver grows a second body.",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed"
         },
@@ -7357,7 +7374,7 @@
           "writes": [
             "Person.body"
           ],
-          "writes_note": "v9 IN-12 step 9 (#453 \u00a79.4): `loop/effects_combat.py::_eff_tend` (beside the body's other writers) RAISES THE SUBJECT'S `Person.body` -- the first code path that raises it (`fight`, `march` and MATTER's subsistence only lower it). THE MAGNITUDE IS `restore`'s FORMULA ON THE BODY'S OWN SCALE: the headroom to `condition_scale` (a person is built at full body, `state/carriers.py::Person.body`), taken whole, the `_rise` precedent (*'one hand alone at a fabric raises it to its ceiling in one act'*); the `share` term is the identity because a body has no commons [ASSUMPTION; medium; Jordan to correct; revert: a swept fixture fraction of the headroom, #453's *'fast partial and slow full form'* (C-48)]. A body already full moves nothing and is `tend.refused` at its write (`NoOpReceipt`). The row admits RES (`write_matrix.yaml`'s `(Person, body)`, `[MAT, RES, ENC]`).",
+          "writes_note": "v9 IN-12 step 9 (#453 \u00a79.4): `loop/effects_combat.py::_eff_tend` (beside the body's other writers) RAISES THE SUBJECT'S `Person.body` -- the first code path that raises it (`fight`, `march` and MATTER's subsistence only lower it). THE MAGNITUDE IS `restore`'s FORMULA ON THE BODY'S OWN SCALE: the headroom to `condition_scale` (a person is built at full body, `state/carriers.py::Person.body`), taken whole at Success and Overwhelming and scaled by `task_fraction` at Partial (B07.02), the `_rise` precedent (*'one hand alone at a fabric raises it to its ceiling in one act'*); the `share` term is the identity because a body has no commons [ASSUMPTION; medium; Jordan to correct; revert: a swept fixture fraction of the headroom, #453's *'fast partial and slow full form'* (C-48)]. A body already full moves nothing and is `tend.refused` at its write (`NoOpReceipt`). The row admits RES (`write_matrix.yaml`'s `(Person, body)`, `[MAT, RES, ENC]`).",
           "emits": [
             "body.tended"
           ],
@@ -7730,7 +7747,7 @@
             "comparator": ">=",
             "conjunct": "sensitivity"
           },
-          "requires_typed_note": "v9 PC-06 K-3 (`H-85`; `proposals/2026-10-07-unplugged-systems-replug.md` \u00a73.3, re-reviewed at the B-S opener) TYPES THE GATE WITH NO NEW OPERAND: a `scalar_threshold` (\u00a7F.24a form 2) `of: actor` over the STEM `thread_sensitivity` -- the actor's own `Person.thread_sensitivity`, set once at world build from the cast's authored `ts:` (`data/cast.py::thread_sensitivity_of`) and never written in play -- against the SECOND READ `thread_sensitivity.gate`, `Fixtures thread_sensitivity_gate` (`work`'s `floor` and `determine`'s `quorum` shape), so `requires_operands` stays closed. The `30` of `fieldwork_v30.md` \u00a74.2 (the Thread-Read row) is that fixture's SOURCE (`H-239`), not the reason it is correct. Both stems are `OWN_STATE_STEMS` (`data/requires.py`), answered by `queries/person_q.py::OwnStateReader` for the fold and for the person alike: a person with no authored value reads UNKNOWN and is refused, never 0, and `decision/options.py::opening_set` forms the Candidate only for a person his own reading admits -- canon's *'TS >= 30 required'* (\u00a74.2; declining at formation is this change's own reasoning, not \u00a72.2's *cannot attempt*, which governs the attribute gates: ED-FI-0009's retraction). \u26a0 STILL NOT EXPRESSED: what the act reads (the Depth \u00a71 gates on the same number, K-37) and its Coherence cost (`source:`), so it stays ungraded and its `writes:` stay `[]`. [ASSUMPTION; medium; Jordan to correct.]",
+          "requires_typed_note": "v9 PC-06 K-3 (`H-85`; `proposals/2026-10-07-unplugged-systems-replug.md` \u00a73.3, re-reviewed at the B-S opener) TYPES THE GATE WITH NO NEW OPERAND: a `scalar_threshold` (\u00a7F.24a form 2) `of: actor` over the STEM `thread_sensitivity` -- the actor's own `Person.thread_sensitivity`, set once at world build from the cast's authored `ts:` (`data/cast.py::thread_sensitivity_of`) and never written in play -- against the SECOND READ `thread_sensitivity.gate`, `Fixtures thread_sensitivity_gate` (`work`'s `floor` and `determine`'s `quorum` shape), so `requires_operands` stays closed. The `30` of `fieldwork_v30.md` \u00a74.2 (the Thread-Read row) is that fixture's SOURCE (`H-239`), not the reason it is correct. Both stems are `OWN_STATE_STEMS` (`data/requires.py`), answered by `queries/person_q.py::OwnStateReader` for the fold and for the person alike: a person with no authored value reads UNKNOWN and is refused, never 0, and `decision/options.py::opening_set` forms the Candidate only for a person his own reading admits -- canon's *'TS >= 30 required'* (\u00a74.2; declining at formation is this change's own reasoning, not \u00a72.2's *cannot attempt*, which governs the attribute gates: ED-FI-0009's retraction). \u26a0 STILL NOT EXPRESSED: what the act reads (the Depth \u00a71 gates on the same number, K-37) and its Coherence cost (`source:`), so it is graded only as a B07.01 `task_draw_arm` route and its `writes:` stay `[]`. [ASSUMPTION; medium; Jordan to correct.]",
           "writes": [],
           "writes_note": "\u2014 (as `examine`)",
           "emits": [
@@ -7753,8 +7770,8 @@
         },
         {
           "verb": "reconstruct",
-          "difficulty": "plain",
-          "difficulty_note": "B07.01 (18-A, The resolution, decided, 3): `plain`, 18-A's default where the owning verb lane has stated no level; read by the draw only (`task_draw_arm` `on`).",
+          "difficulty": "routine",
+          "difficulty_note": "B07.11 (premise-check F3, UNDECIDED (13) (ii)): `routine`, the inquiries' level (B05.23, T13 edit 7: the inquiries stay `routine`); 18-A's `plain` applies only where no verb lane has stated a level. Read by the draw only (`task_draw_arm` `on`). [ASSUMPTION; medium; Jordan to correct; revert: `plain`]",
           "capability": "inquiry",
           "stratum": "uncontested_material",
           "eligibility": [
@@ -7774,9 +7791,21 @@
           "requires_typed_note": "`fieldwork_v30.md:298` -- *Reconstruct \u00b7 Recall \u00b7 Assemble existing evidence into a coherent picture. No new information gathered \u2014 this action synthesises.* The precondition is that there IS assembled evidence, and `fieldwork_v30.md:256`'s Evidence Track is a count over what the investigator holds -- which in this loop is the actor's own ledger, the one ledger `04 \u00a7B.2`'s F8 carve-out lets the fold read. Same form and same cell shape as `tell`. \u26a0 WHAT THIS CELL DOES NOT CARRY IS THE OBSTACLE, AND CANON GIVES ONE: `Ob = (threshold \u2212 current progress), min 1` (:298), where the threshold is 3 / 5 / 8 by investigation scope (`:262-264`) chosen at opening BY A GM (`:266`) -- a role this engine does not have. A `Question` carries `(id, source, referents, about)` and no scope, so there is nothing to read a threshold off; picking one is \u00a742.2.1's invented number. ED-FI-0009.",
           "writes": [],
           "writes_note": "\u2014 (as `examine`. \u26a0 AND CANON WANTS MORE THAN A CLAIM HERE: `:278` makes a FAILED Reconstruct produce a plausible but WRONG conclusion the player acts on. A Claim carries `value` and `confidence` (`state/carriers.py:121-131`), so the carrier exists -- what is missing is the degree that would decide which to mint, which is the same ruling)",
-          "emits": [
-            "finding.made"
-          ],
+          "emits": {
+            "Overwhelming": [
+              "finding.made"
+            ],
+            "Success": [
+              "finding.made"
+            ],
+            "Partial": [
+              "finding.made"
+            ],
+            "Failure": [
+              "finding.none"
+            ]
+          },
+          "emits_note": "B07.05 (workplan v12 B07-task-draw UNDECIDED (2); 18-A): degree-keyed as the three inquiries are, graded by its armed `graded_tasks` route (`task_draw_arm`). `Failure` emits `finding.none`, which WITNESS deposits nothing for; the WRONG conclusion of `:278` is still not minted (see `writes_note`). With the arm `off` the fold reads the `Success` row (`UNROUTED_BAND`) with no degree, as before B07.",
           "emits_on_refusal": [
             "finding.none"
           ],

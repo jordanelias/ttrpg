@@ -26,10 +26,14 @@ from engine.season.state.carriers import Act, Site, Tenure
 from modules.mass_battle import armyrecord as A
 from modules.mass_battle.config import MIN_ARMY_TROOPS
 from modules.mass_battle.troop_types import recruitment as R
+import pytest
+
+pytestmark = pytest.mark.flat_fold
 
 ACTOR, SEAT, ORIGIN = "p_npc_033", "off_spymaster", "set_s_014"
 CROWN, CHURCH, HAFEN = "fac_valorsmark", "fac_church_of_solmund", "fac_hafenmark"
 DEFENDED_TOWN, UNDEFENDED, DEFENDED_TERR = "set_s_036", "terr_T7", "terr_T9"
+
 
 
 def _fold(w, *acts):

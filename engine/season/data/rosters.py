@@ -17,6 +17,7 @@ beside `write_matrix.yaml`'s loader because `season.data.matrix` needs it and
 from __future__ import annotations
 
 from dataclasses import MISSING as _MISSING, dataclass as _dataclass, fields as _fields
+from fractions import Fraction
 from typing import Optional
 
 from . import files
@@ -677,14 +678,19 @@ CONTEST_OWED = roster_map("contest_owed", "values")
 
 def graded_route(verb: str, fixtures) -> Optional[dict]:
     """THE ROUTE THE LOOP TAKES FOR `verb`, or `None`: its `graded_tasks` row, except that a row carrying `armed_by:` is
-    taken only while that `Fixtures` member reads `on` (B07.01, UNDECIDED (11) (iii): `task_draw_arm` ships `off`, so each
-    such verb folds flat as before). The ONE reader for the fold (`loop/resolve.py`) and the believer's odds
+    taken only while that `Fixtures` member reads `on` (B07.01, UNDECIDED (11) (iii): `task_draw_arm` ships `on` since B07.05; `off` folds each
+    such verb flat, as before B07). The ONE reader for the fold (`loop/resolve.py`) and the believer's odds
     (`seam/wrappers/sigma.py::_rolled_as`), so the two cannot disagree on whether an act is drawn. The loader reads the
     whole roster (`GRADED_TASKS`), armed or not: a row's shape does not depend on a fixture's value."""
     route = GRADED_TASKS.get(verb)
-    if route is not None and route.get("armed_by") and fixtures.get(route["armed_by"]) != "on":
-        return None
-    return route
+    return None if armed_route_off(verb, fixtures) else route
+
+
+def armed_route_off(verb: str, fixtures) -> bool:
+    """`verb`'s route carries `armed_by:` and that `Fixtures` member does not read `on`: the act is NOT drawn and folds flat (B07.05's
+    `UNROUTED_BAND` read). `graded_route` answers `None` exactly for these, so the fold asks this, the one place the predicate lives."""
+    route = GRADED_TASKS.get(verb)
+    return bool(route and route.get("armed_by") and fixtures.get(route["armed_by"]) != "on")
 # RS-21 item 1 (H-111): the Event kinds WITNESS deposits nothing for (`loop/witness.py::witness`).
 UNDEPOSITED_KINDS = roster("undeposited_kinds")
 # ED-IN-0306 phase 2: the verbs that change an `army` Record (`loop/effects_army.py`); `data/fixtures.py` withholds them from formation.
@@ -1125,7 +1131,6 @@ def _load_band_numbers(name: str, mapping: dict, bands, *, whole: bool, complete
     is no band of the one ladder, a value is not a number (or, `whole`, not an integer), or (`complete`) a band is missing.
     A function so a test can plant a bad row and watch it refuse (`_load_finding_terms`' reason). Values come back as
     `Fraction`s (`str` first, so `0.5` is one half and not a float's neighbour) or, `whole`, as `int`."""
-    from fractions import Fraction
     bad = sorted([f"band {b!r}: not on the degree ladder {sorted(bands)}" for b in mapping if b not in bands]
                  + [f"band {b!r}: {v!r} is not a non-negative {'integer' if whole else 'number'}" for b, v in mapping.items()
                     if isinstance(v, bool) or not isinstance(v, (int,) if whole else (int, float)) or v < 0]
@@ -1148,12 +1153,14 @@ FORGE_QUALITY = _load_band_numbers("forge_quality", roster_map("forge_quality", 
 UNROUTED_BAND = _DEGREE_LABEL[_Degree.SUCCESS]
 
 
+_WHOLE = Fraction(1)
+
+
 def task_share(degree: Optional[str]):
     """THE FRACTION OF AN EFFECT A BAND LETS LAND, as a `Fraction`. `None` -- the arm `off`, or a flat un-routed act, which has
     no degree -- reads the full effect, share 1, so a fold with no draw is the fold before the draw existed (B07.02 control).
     A band the table lacks cannot occur (`TASK_FRACTION` is complete at load); a token that is no band raises `KeyError`."""
-    from fractions import Fraction
-    return Fraction(1) if degree is None else TASK_FRACTION[degree]
+    return _WHOLE if degree is None else TASK_FRACTION[degree]
 
 
 def forge_quality_at(degree: Optional[str]) -> Optional[int]:

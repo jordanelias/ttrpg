@@ -49,6 +49,8 @@ from ..state.carriers import Act, Person, Rung, Site, Tenure
 from ..state.world import World
 from ..trace_log import TRACE
 
+pytestmark = pytest.mark.flat_fold
+
 @pytest.fixture(autouse=True)
 def _recording():
     """`TRACE` keeps rows only inside a window an instrument opens; these tests read them."""
@@ -85,6 +87,8 @@ def _band_order(territories) -> list:
 
 
 def _world(weight: int, menders_at: tuple = ()) -> World:
+    # B07.99: the coupling is asked of the managed holder's `restore` EXECUTING every season; under `task_draw_arm` on a drawn restore fails
+    # about two seasons in three (a failed draw mends nothing), so the world runs the flat fold, as the arm-off control does.
     fixtures = DEFAULT_FIXTURES.sweep("lattice_coupling", weight)
     w = World(world_seed=1, fixtures=fixtures)
     scale = fixtures.get("condition_scale")

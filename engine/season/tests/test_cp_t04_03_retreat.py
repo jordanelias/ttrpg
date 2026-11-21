@@ -33,6 +33,8 @@ from engine.season.tests import test_cp_t04_02_marshal as M
 from engine.season.tests._field_outcomes import SCALE
 from engine.season.tests.test_march import _fold_one
 
+pytestmark = pytest.mark.flat_fold
+
 SEEDS, PERSON_SEEDS = range(200), range(100)
 ROLE = "Screen"            # a role with no wired primitive: the order is its `retreat_at` and nothing else
 # B17.01: the sides start `_APPROACH_ROWS` apart, as an army's do, and an even field is decided in one burst: the loser routs before its

@@ -2118,7 +2118,7 @@ rows:
   - id:        "H-113"
     tier:      0
     hole:      >-
-      CLOSED (B05.19), INDEX STATUS: `loop/resolve.py` reads `_declared = row.emits_at(_degree)` (resolve.py:511, in `_fold`), pinned by `test_we_emits_at_has_a_caller_and_the_band_selects_the_kind`. The text that follows is the row's history.
+      CLOSED (B05.19), INDEX STATUS: `loop/resolve.py` reads `_declared = row.emits_at(_degree)` (in `_fold`), pinned by `test_we_emits_at_has_a_caller_and_the_band_selects_the_kind`. The text that follows is the row's history.
       `VerbRow.emits_at` (`engine/season/data/verbs.py::VerbRow.emits_at`) HAS ZERO CALLERS ANYWHERE IN THE TRACER, so a contested
       verb's degree-keyed emissions are never selected. The fold emits `row.emits` at
       engine/season/loop/driver.py::SeasonDriver._fold (the `emits_at` union) - the FLAT UNION of all branches - so all three of `kill / wound`'s degrees
@@ -4700,7 +4700,7 @@ rows:
     tier:      1
     hole:      "WHAT AN INVESTIGATION ACT DEPOSITS, BY DEGREE, AND WHETHER ITS SUBJECT LEARNS HE WAS ASKED (proceedings `19_PLAN.md` step 19, intent: each of `interview`, `examine`, `research`, `reconstruct`, `surveil` gains a `product` column -- a stance, a retention, a record, an inference, a presence -- deposited at WITNESS at a confidence keyed on the degree, a misread at the SAME confidence with the WRONG value, and the subject's ledger recording that he was asked). STOPPED at v9 SC-02 `22a`, not built: the step's two load-bearing halves are decided the other way by the later design, and its remaining content is already built in that design's form."
     kind:      "PRODUCER"
-    owner:     "the investigation rows (`verb_table.yaml`) and their deposit at WITNESS: `rosters.yaml` `graded_inquiries` (the roll route), `inquiry_modules` + `finding_terms` (what a graded finding uncovers, keyed on the degree), and `loop/witness.py::_found_claims` (the found deposit) -- the owners a `product` column would sit beside"
+    owner:     "the investigation rows (`verb_table.yaml`) and their deposit at WITNESS: `rosters.yaml` `graded_tasks` (the roll route; `graded_inquiries` until B07.01), `inquiry_modules` + `finding_terms` (what a graded finding uncovers, keyed on the degree), and `loop/witness.py::_found_claims` (the found deposit) -- the owners a `product` column would sit beside"
     grade:     "absent"
     default:   "none"
     site:      ""
@@ -6835,11 +6835,11 @@ rows:
     kind:      "NUMBER"
     owner:     "`engine/season/data/fixtures.py::Fixtures.task_draw_arm` the one home. READER: `engine/season/data/rosters.py::graded_route` (from `loop/resolve.py`'s `_route` and `seam/wrappers/sigma.py::_rolled_as`); the loader (`data/verbs.py`) refuses an `armed_by:` naming no `Fixtures` member or one whose value is neither `on` nor `off`"
     grade:     "assumption"
-    default:   "off -- SHIPPED (the control) until B07.05 reads 18-A gate 5 and flips it to `on`. Recorded as kind NUMBER, the nearest existing kind for an arm switch (`carried_wound_model`, H-434, is filed so)"
-    site:      "Fixtures task_draw_arm, read ONLY by `data/rosters.py::graded_route`, per act of a verb whose route carries `armed_by: task_draw_arm`"
-    sweep:     ["off (control, SHIPPED until B07.05)", "on", "on at `difficulty_ob`'s control sizes (`data/fixtures.py::DIFFICULTY_OB_CONTROL`)"]
+    default:   "on -- SHIPPED since B07.05 (18-A gate 5 read: no verb with ten or more off-arm successes sits at zero Success-or-better on-arm; revert: `off`, the one value). Recorded as kind NUMBER, the nearest existing kind for an arm switch (`carried_wound_model`, H-434, is filed so)"
+    site:      "Fixtures task_draw_arm, read ONLY by `data/rosters.py::graded_route` and `::armed_route_off`, per act of a verb whose route carries `armed_by: task_draw_arm`"
+    sweep:     ["off (the control: the S9 base's pins)", "on", "on at `difficulty_ob`'s control sizes (`data/fixtures.py::DIFFICULTY_OB_CONTROL`)"]
     unblocks:  "R-09.a and R-09.d (with B07.05): every converted verb resolves in more than one band; the `<verb>.failed` kinds an Event can carry"
-    cite:      "[ASSUMPTION: the third point is this row's, on `proof_admission`'s precedent (H-427: off, on, on at the next level) -- basis: 18-A names the two arms only; the converted rows ship `difficulty: plain`, so the third reads the draw at the control obstacle sizes.] [ASSUMPTION: a swept fixture needs its `assumption` row, as `default_forgery_quality`'s H-210 has -- basis: `data/fixtures.py`'s `[JUSTIFIED: ... H-210 ...]` tag; workplan v12 B07-task-draw IDS, H block slot 1]. CONTROL: `off` is the realm before B07 -- `engine/season/tests/test_task_draw.py::test_task_draw_arm_off_reproduces_the_pinned_hash` reads `_realm_goldens.SHIPPED` at seeds 0, 1, 2 (one season) with the arm `off`. THE LIVE ARM'S READINGS are B07.05's (18-A gates 1, 3, 5)."
+    cite:      "[ASSUMPTION: the third point is this row's, on `proof_admission`'s precedent (H-427: off, on, on at the next level) -- basis: 18-A names the two arms only; the converted rows ship `difficulty: plain`, so the third reads the draw at the control obstacle sizes.] [ASSUMPTION: a swept fixture needs its `assumption` row, as `default_forgery_quality`'s H-210 has -- basis: `data/fixtures.py`'s `[JUSTIFIED: ... H-210 ...]` tag; workplan v12 B07-task-draw IDS, H block slot 1]. CONTROL: `off` is the realm before B07 -- `engine/season/tests/test_task_draw.py::test_task_draw_arm_off_reproduces_the_pinned_hash` reads its own `ARM_OFF_PINS` (the S9 base's pins, each asserted unequal to `_realm_goldens.SHIPPED`) at seeds 0, 1, 2 (one season and two) with the arm `off`. THE LIVE ARM'S READINGS are B07.05's (18-A gates 1, 3, 5)."
     source:    "workplan v12 B07.01 (`proposals/2026-11-12-subsystem-audit-suite/proposals/18_DETERMINISM_task_draw_for_uncontested_verbs.md` edit 7; UNDECIDED (11) (iii))"
 
 discharges:

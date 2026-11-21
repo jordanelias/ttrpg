@@ -1296,7 +1296,8 @@ rosters:
       `reconstruct` waits on a value space nothing supplies (K-37: no invented number); `thread_read`
       waits on that (its H-85 Thread Sensitivity carrier and gate landed at v9 PC-06 K-3). `surveil`'s Person case is absent
       from its row (one cell binds one kind) and waits on ED-FI-0009. A verb that waits keeps its
-      flat `emits:` and is not counted as graded.
+      flat `emits:` and is not counted as graded. [B07.01: `reconstruct` and `thread_read` are routed now, under `armed_by: task_draw_arm`; arm `off`
+      they fold flat as above.]
       ⚠ B07.01 (18-A edits 1-2; workplan v12 part 10 cont. 2, UNDECIDED (10), (11)): RENAMED from
       `graded_inquiries` for what it now holds -- the route of every `task`-class row (an act a person
       attempts alone, drawn against the job's difficulty), beside the three inquiries. Each row carries
@@ -1724,6 +1725,23 @@ rosters:
         module_entry: "social_contest.roll"   # as `a standing`'s
         heard_by: "bench"   # the bench at the act's rung hears this prize (`world_q.reception`, `world_q.proofs`; `manifest/registry.py::_check_heard_by`).
         cite:     "v9 SC-01 step 12 (B-N): `speak`'s prize (`proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` §B.1, `08_SEAM.md`: `a matter` -> the proceedings provider). Routed to the interim provider at step 12; ED-SC-0033 clause (2)'s repoint (steps 13 + 15, ONE change) reached THIS row too, so it was three rows, not the two the plan names [ASSUMPTION; medium; revert: no row, and `speak` declares no `contests:`]."
+      # B07.04 (`U5c_VERBS_residue` §2 edit 3): the two governance prizes, with the room each is heard in (`seam/wrappers/sigma.py::audience_of`'s table
+      # keyed by room). No verb row names either yet: a row naming one lands with its verb (`a seat`: confer, revoke, succeed, establish; `a holding`: surrender).
+      "a seat":
+        module:   "social_contest"
+        person_inputs: "pool"
+        provider: "social_contest"   # as `a proposition`'s
+        module_entry: "social_contest.roll"   # as `a proposition`'s
+        heard_by: "seat_body"   # the members of the body the act's seat belongs to, else the seated persons at that seat's rung (`audience_of`).
+        cite:     "U5c_VERBS_residue §2 edit 3 (B07.04): the audience is a cell of the prize row, read by one host function and by no verb's name."
+      "a holding":
+        module:   "social_contest"
+        person_inputs: "pool"
+        provider: "social_contest"   # as `a proposition`'s
+        module_entry: "social_contest.roll"   # as `a proposition`'s
+        heard_by: "residents"   # the persons residing at the act's place (`audience_of`).
+        toward: "to"   # the residents' stance toward whoever would hold the place: the room is asked about the receiver, not the actor (`sigma.py::_read_social_roll`).
+        cite:     "U5c_VERBS_residue §2 edits 3 and 4 (B07.04)."
     # NO `values:` — the members ARE the `prizes:` mapping above, read with `roster_map()`. A `values: []` would be a declared-but-unread key (`04 §B.13` ID-12) and `roster()` would return an EMPTY frozenset, which is the silent-false this file's own header forbids.
 
   # titles: DELETED -- its domains live in `engine/season/offices.yaml: titles:`
@@ -3287,8 +3305,8 @@ rosters:
     cite: "SM-3; ED-FI-0002"
     note: >-
       ⚠ KEYED BY THE KIND A FINDING EMITS, NEVER BY THE VERB. `graded_tasks` is already the
-      verb-keyed table, and FI-01 rules it a ROUTE that may carry nothing but `{provider,
-      module_entry}` (`data/verbs.py`), so a second verb-keyed table would be two tables on one key.
+      verb-keyed table, and FI-01 rules it a ROUTE that carries `{provider,
+      module_entry}` and, from B07.01, `form` and `armed_by` (`data/verbs.py`), so a second verb-keyed table would be two tables on one key.
       A prize is what is contested; the inquiry analogue is what is FOUND, so the key is the Event
       kind -- `undeposited_kinds`' keying, for its reason. A `Failure` inquiry emits `finding.none`,
       which no row claims, so `manifest.resolve("inquiry", ...)` answers `None` and nothing is found,

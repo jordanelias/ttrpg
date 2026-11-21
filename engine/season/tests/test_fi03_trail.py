@@ -46,6 +46,7 @@ import pytest
 
 from engine.substrate import composition
 
+from ._flat_fold import flat_fold
 from .. import epistemic
 from ..data import files, rosters, verbs
 from ..data.fixtures import DEFAULT_FIXTURES
@@ -71,6 +72,8 @@ from ..state.carriers import Act, Claim, Event, Proposition, Tenure, View
 from ._closure_scan import branches_on_ids, game_code
 from ._fresh_process import probe
 from .test_information_cluster import _hear
+
+pytestmark = pytest.mark.flat_fold
 
 FAC = faction_prop_id("Valorsmark")
 FORGER, INVESTIGATOR, ABOUT = "p_other", "p_high", "p_mid"
@@ -109,7 +112,7 @@ def trail_world(verb="forge", kind="record.forged", second=None, fixtures=None):
     act, and the 60-id sweep, being seeded, does not reach one."""
     if fixtures is None:
         fixtures = DEFAULT_FIXTURES.sweep("ceiling_per_pool", False)
-    w = P.tiny_world(fixtures)
+    w = flat_fold(P.tiny_world(fixtures))   # the builder owns the flat fold: test_odds_of and test_sc02_22b build this world too, unmarked or on their own
     w.propositions[FAC] = Proposition(FAC, "HOLDS", "Valorsmark", "is a faction of this world", True, 0)
     for pid in (INVESTIGATOR, ABOUT):
         w.add_tenure(Tenure(f"t_commit_{pid}", pid, FAC, "commit", since=0))

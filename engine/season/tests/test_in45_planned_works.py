@@ -35,6 +35,8 @@ from ..queries import world_q
 from ..state.carriers import Act
 from ..state.ids import ROOT
 
+pytestmark = pytest.mark.flat_fold
+
 HEARTH_WORKS, DWELLING_WORKS = "works_hearth_auerheim", "works_dwelling_court"
 DUKE, STEWARD = "p_npc_020", "p_npc_009"          # off_duke_valorsmark's holder; off_lord_steward's
 

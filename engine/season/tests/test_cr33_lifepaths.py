@@ -26,8 +26,11 @@ from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.seam.wrappers import pool, sigma
 from engine.season.state.carriers import Act, Person, Question
 from engine.season.state.gate import WriteClass
+from ._flat_fold import flat_fold
 from .test_in10_record_operands import _resolve
 from .test_rem30_character_sheet import _run
+
+pytestmark = pytest.mark.flat_fold
 
 #: The four Niflhel ids the archived file STRIKES (it prints no row for them): never members.
 STRUCK = ("3-NI1", "3-NI2", "3-NI3", "3-NI4")
@@ -120,7 +123,7 @@ def _planted_cache():
 
 def _world(monkeypatch, planted=True):
     monkeypatch.setattr(cast, "_CACHE", _planted_cache() if planted else cast._CACHE)
-    w = build_realm(0)
+    w = flat_fold(build_realm(0))      # module-scoped callers build before the function-scoped mark applies
     d = SeasonDriver(w)
     d.matter(mint_token(w, WriteClass.MATTER), [])
     return w, d

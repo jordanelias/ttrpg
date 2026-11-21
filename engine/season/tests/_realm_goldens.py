@@ -22,34 +22,39 @@ read equal at B06.04, B06.05 and B06.06: `7ccf4abe89d508d4221e0a0c7cbcbfaf`). RE
 B06/B14 MERGE (every value below except BUILD): B14's combat record (the scene's shape, the hand, `prevailed`,
 `fell_to`) had been pinned against the old stream, so the merged tree reads a third value (seed 0, one season:
 `7ccf4abe89d508d4221e0a0c7cbcbfaf` -> `10934f0f516cad26f9c85625268d971e`; the build hash did not move; each
-reading equal under `PYTHONHASHSEED` 0 and 1). The shipped world, `DEFAULT_FIXTURES` as they stand, with no revert applied. A test support
+reading equal under `PYTHONHASHSEED` 0 and 1). RE-PINNED A THIRD TIME AT B07.99 (every value below except BUILD): the task draw ships on (B07.05), a refused task act carries no band (B07.10) and `reconstruct` reads the inquiries' `routine` level (B07.11); seed 0, one season: `10934f0f516cad26f9c85625268d971e` -> `88224913106d91e81ed815cd6114497c` (arm on; with `task_draw_arm` swept off the world reads the previous pins, gate 2), read at `PYTHONHASHSEED=0` and equal under `1` at seed 0. The shipped world, `DEFAULT_FIXTURES` as they stand, with no revert applied. A test support
 module beside `_scar_helpers.py`, not a registry: nothing but tests reads it.
+
+THE B07 CLOSE'S ONE FURTHER MOVER (B07.02's `_reached`, found by the close's CORRECTNESS pass): a `move` or `migrate` drawn Partial seated its
+mover at the rung one leg short of `dest`, and every settlement sits directly in a territory, which is arrival-only; `_reached` now reads
+`_arrival_only` at that rung too. Seeds 0 and 1 moved (one season `88224913..` -> `c5cbd61a..`, `a7b49d60..` -> `ef37fc05..`; two seasons
+`f39e02de..` -> `5b2b3c93..`, `33bf9f9b..` -> `94a4896b..`), seed 2 read equal at both spans, the arm `off` is unmoved (`ARM_OFF_PINS`).
 """
 
 BUILD = {0: "d691552fcd4931573c465bbc341bdcad"}                      # build_realm(seed), unplayed
 
-SHIPPED = {(0, 1): "10934f0f516cad26f9c85625268d971e",                # (seed, seasons) at DEFAULT_FIXTURES; was 7ccf4abe89d508d4221e0a0c7cbcbfaf (B06.99)
-           (1, 1): "6593d8b0c1cc0a7f7931d450df96b1e1",                # was 8c038011362cc69a17e964f0bfd3735f
-           (2, 1): "ad10b3c876f3d9f19e27fe8e84e52dd6",                # was 61af70f40c67f8972a416b8c59612789
-           (0, 2): "ec41cc8d78ccbe9c5c7fe834e7ae9239",                # two seasons; was d20ef860170ebe0d96001935bdd5e1d3
-           (1, 2): "fded13c6f6ed2f42f0b2c57cc5dc67b4",                # was 709e1f8a879ace385ee79200aae7d65b
-           (2, 2): "bbe99b7804e53b607bcc56f90605a48b"}               # was b6d80014c71394b100192f629aeb8cbb
+SHIPPED = {(0, 1): "c5cbd61a8c0aba51b0e1585b9fbbc0b1",      # (seed, seasons) at DEFAULT_FIXTURES; was 10934f0f516cad26f9c85625268d971e (merge)
+           (1, 1): "ef37fc05d82dc1696ff4ebb4bce0e3df",      # was 6593d8b0c1cc0a7f7931d450df96b1e1 (merge)
+           (2, 1): "7ed1fee3f535a08d87638dce09eb3edd",      # was ad10b3c876f3d9f19e27fe8e84e52dd6 (merge)
+           (0, 2): "5b2b3c93b16e791f1adae0efb1c83e64",      # was ec41cc8d78ccbe9c5c7fe834e7ae9239 (merge)
+           (1, 2): "94a4896be8fdef059f640d163d0ce026",      # was fded13c6f6ed2f42f0b2c57cc5dc67b4 (merge)
+           (2, 2): "85c6ebfd6041d72348f787d61440c7c2"}      # was bbe99b7804e53b607bcc56f90605a48b (merge)
 
 #: What the run leaves, beside its hash: `acts` is `populated.run`'s act count, `log` the
 #: length of the world's Event log, `census` the sha256 of `populated.run`'s return value as sorted
 #: JSON (the census plus `acts`, `actors`, `act_subjects` and `claim_sources`).
 CENSUS = {
-    # was (acts, log) at B06.99: (0,1) 749/12603  (1,1) 780/11299  (2,1) 766/11715  (0,2) 1621/35807  (1,2) 1548/31651  (2,2) 1617/35704
-    (0, 1): dict(acts=750, log=12583,
-                 census="c587f66cb2336d983f6661a7aa39d1a225f0766206af22edde2e0be8af7bc6b0"),
-    (1, 1): dict(acts=780, log=11316,
-                 census="58490fceaa4c103557cb6d6a0369a7da904ff65ccbb0b732ca753c00924ec1f0"),
-    (2, 1): dict(acts=766, log=11751,
-                 census="2fe65ec52faac082eb4210bcfd16f39e5490602e0440191377ce4f202cfc5c7f"),
-    (0, 2): dict(acts=1627, log=35771,
-                 census="ee0c956493156cc6c98796fbf6384fd8c49f5c745dbe026bbe16b0515d193af7"),
-    (1, 2): dict(acts=1552, log=31803,
-                 census="204f74accad83acd305a24bae8bcf43c378d540168aa6904d1a9c05a323292f8"),
-    (2, 2): dict(acts=1608, log=36974,
-                 census="9c48547ee19014e6a007a45b81b48cf90da2b491ce1165774b1050a2c430bd5c"),
+    # was (acts, log) at the B06/B14 merge: (0,1) 750/12583  (1,1) 780/11316  (2,1) 766/11751  (0,2) 1627/35771  (1,2) 1552/31803  (2,2) 1608/36974
+    (0, 1): dict(acts=630, log=11936,
+                 census="4a961c0491c1a1b1b13ab870b683570dcb0aba35ebec3f969b50f827625fd6e8"),
+    (1, 1): dict(acts=669, log=11404,
+                 census="81b7911ca7cfee146add067d4dc61ac0552fcb39a177cd4a13a2470de381c486"),
+    (2, 1): dict(acts=652, log=10913,
+                 census="722fb1d4ae772f822df4d7e01ed292ca334e367edcb5e529b013024737bd7c58"),
+    (0, 2): dict(acts=1385, log=36560,
+                 census="bb65c68c03f628fde736badc616ba2ed5c009b2dd050d5f76132974418f73e56"),
+    (1, 2): dict(acts=1368, log=30736,
+                 census="d04c8f1715482286243c274576f9f0789aa5c024fccca0a8ac3525533fc38e92"),
+    (2, 2): dict(acts=1422, log=33919,
+                 census="5eb6cb2efe740a503408c1cdf48af8128aec1aa7a894827624aaf7a784b8eec2"),
 }

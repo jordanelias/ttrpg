@@ -43,6 +43,8 @@ from ..state.carriers import Act, Office, Person, Rung, Tenure
 from ..state.gate import Change, Subject, death_subjects
 from ..loop import resolve as R
 
+pytestmark = pytest.mark.flat_fold
+
 ACTOR, CAPTIVE = "p_low", "p_mid"          # tiny_world: both live at the hearth `Hh`, inside `S`, inside `D`
 SEAT = "off_watch"
 TRIES = 80                                 # act ids scanned for a scene the subject yields in

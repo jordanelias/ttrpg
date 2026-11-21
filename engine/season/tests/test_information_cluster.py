@@ -59,6 +59,8 @@ from ..queries import faction_q, world_q
 from ..state.carriers import Act, Claim, Proposition, Question, Record, Tenure, View
 from ..state.ids import H, draw_factory
 
+pytestmark = pytest.mark.flat_fold
+
 FAC = faction_prop_id("Valorsmark")
 OTHER_FAC = faction_prop_id("Hafenmark")
 SHEET = faction_q.SHEET_KIND

@@ -1157,9 +1157,9 @@ DEFAULT_FIXTURES = Fixtures(
     stakes_ob={kind: 0 for kind in roster("tenure_kinds")},   # `H-428`, swept 0 (control, SHIPPED) / 0.5x / 1x / 2x
     # `H-445` (B07.01; 18-A edit 7, UNDECIDED (11) (iii)). WHETHER THE LOOP TAKES A `graded_tasks` ROUTE THAT CARRIES `armed_by: task_draw_arm`
     # (`data/rosters.py::graded_route`, read by `loop/resolve.py` and `seam/wrappers/sigma.py::_rolled_as`): `off` -- each such verb (the 18 `task`
-    # rows and `reconstruct`) folds flat, as before B07 (the control); `on` -- it is drawn through `seam.grade` and folded at its band. B07.05 flips it.
-    # [JUSTIFIED: engine/season/hole_register.yaml H-445 -- site: Fixtures task_draw_arm, graded `assumption`; 18-A ships it `on` only once its gate 5 reads, so it is injected at the control and swept off / on]
-    task_draw_arm="off",               # `H-445`, swept off (control, SHIPPED until B07.05) / on
+    # rows and `reconstruct`) folds flat, as before B07 (the control); `on` -- it is drawn through `seam.grade` and folded at its band. B07.05 flipped it (gate 5 read); the revert is the one value.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-445 -- site: Fixtures task_draw_arm, graded `assumption`; 18-A ships it `on` only once its gate 5 reads, so it was injected at the control and is swept off / on]
+    task_draw_arm="on",                # `H-445`, swept off (control) / on (SHIPPED since B07.05; revert: `off`)
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

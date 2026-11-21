@@ -7,7 +7,7 @@ MEASURED at four and eight seasons (`build_realm(s)`, the cap swept after build,
 236 acquaintance claims `seed_acquaintances` writes still held at season 4: seed 1, 6 at cap 200 and 208 at
 3200; through eight seasons (two years at four seasons to the year, `ED-IN-0332`) 202 and 196 of 236 at 3200
 on seeds 0 and 1, 0 and 0 at 200. H-09's `cite:` carries the whole sweep and the cost. ⚠ The bounds asserted
-below are deliberately loose (above 200 at the shipped cap, below 170 at 200): the test is about the lever,
+below are deliberately loose (above 200 at the shipped cap, below 180 at 200): the test is about the lever,
 not a golden, and every pin that does reach the cap is re-recorded where it lives.
 
 ⚠ TWO SEASONS, NOT EIGHT OR FOUR: this directory no longer builds a four-season realm (the user's v9 section 0.5
@@ -27,8 +27,8 @@ from ..boot.realm import build_realm
 SEED = 1
 SEASONS = 2
 CONTROL_CAP = 200          # the value before CR-82; the fade is read at it
-HELD_FLOOR = 200           # at the shipped cap, held at season 2 (measured 221)
-FADED_CEILING = 170        # at the control cap, held at season 2 (measured 147)
+HELD_FLOOR = 200           # at the shipped cap, held at season 2 (measured 221; 217 with the task draw on)
+FADED_CEILING = 180        # at the control cap, held at season 2 (measured 147; 172 with the task draw on, B07.99: fewer acts deposit claims, so fewer are evicted)
 
 
 def _held_after(cap: int) -> tuple[int, int]:

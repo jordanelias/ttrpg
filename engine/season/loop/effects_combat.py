@@ -923,8 +923,9 @@ def _eff_tend(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     THE MAGNITUDE IS `restore`'s FORMULA READ ON A BODY (`loop/effects_economy.py::_rise`): the headroom
     to the ceiling -- the person's own `Person.body_ceiling` (v11 CP-T03-07), built at `condition_scale` and lowered
-    only by a fight's lasting mark (`_marks`) -- taken whole, because the `share` term is the commons of a fabric and a body has none, and `f(degree)`
-    is the identity on an uncontested row (`H-164`). So one tender restores a person whole in one act, as
+    only by a fight's lasting mark (`_marks`) -- taken whole at a full band, because the `share` term is the commons of a fabric and a body has none, and
+    `f(degree)` is `rosters.yaml: task_fraction`'s share of it (B07.02, `H-164`; the identity with no band, share 1; a share whose floored headroom is
+    nothing writes the body to itself, which the gate reads as no change -> `tend.refused`). So one tender restores a person whole in one act, as
     one hand raises a fabric to its ceiling [ASSUMPTION; medium; Jordan to correct; revert: a swept
     fixture fraction of the headroom -- #453's *'fast partial and slow full form'*, C-48].
 

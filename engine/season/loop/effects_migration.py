@@ -77,8 +77,8 @@ def _reached(w: "World", a: "Act", dest: str, res: "Resolution | None") -> "str 
     if f == 1:
         return dest
     short = parent_of(w, dest) if f else None
-    if short is None or short in (dest, place_of(w, a.actor)) or not w.contain_ascends(a.actor, short):
-        return None
+    if short is None or short in (dest, place_of(w, a.actor)) or not w.contain_ascends(a.actor, short) or _arrival_only(w, short):
+        return None      # a band short of the full effect never seats him where the full one is refused: `_arrival_only` is read at the rung he lands on
     return short
 
 
@@ -94,7 +94,7 @@ def _decline_custody(a: "Act", dest: str) -> Change:
     one (`_relocate`). Asked FIRST, before the ladder: a prisoner's road is closed whether or not it
     exists. Declines (`NO_CHANGE`), so the fold emits the row's own refusal: `move`'s FLAT
     `emits_on_refusal`, `travel.blocked` (a prisoner's journey IS blocked, the fact a witness learns;
-    `move` keys no clause), and `migrate`'s `write`-clause refusal, `migrate.refused` (the only one of
+    `move`'s refusal is its one `write` kind), and `migrate`'s `write`-clause refusal, `migrate.refused` (the only one of
     the two whose refusal is keyed per clause). ⚠ A person's OTHER acts are not refused by custody here: which
     acts a prisoner may still take (speak, petition, commit) is unruled, and #453 names only these
     readers. ⚠ AN [ASSUMPTION], STATED: the custody holds wherever the detaining seat is
@@ -225,13 +225,13 @@ def _eff_migrate(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
                        alternatives=["admit him anyway (capacity bounds nothing)",
                                      "refuse at every ancestor as well (a second, coarser census)"])
         return NO_CHANGE
-    settled = [t for t in w.tenures if t.subject == a.actor and t.kind == RESIDE_KIND and t.live]
-    # B07.02: a band short of the full effect leaves him on the road, one leg short and unsettled (`_reached`); no band is `dest`.
-    where = _reached(w, a, dest, res)
-    if where is None:
+    # B07.02: a migration writes one thing, the residence, and a settler is settled or he is not. A band short of the full effect lands none
+    # of it, so `residence.changed` is never published over a residence that did not change (the false success `_fold` calls a defect,
+    # H-113 / ID-9); `move` alone has a road to stop on (`_reached`). Close-pass 3: the half-way seating this replaced was a Partial `migrate`
+    # that moved the migrant one leg short and still emitted `residence.changed`. [ASSUMPTION; medium; Jordan to correct; revert: `_reached`]
+    if _share(res) != 1:
         return NO_CHANGE
-    if where != dest:
-        return Change((Subject.entity("persons", a.actor),), lambda: _relocate(w, a, where))
+    settled = [t for t in w.tenures if t.subject == a.actor and t.kind == RESIDE_KIND and t.live]
 
     def perform() -> None:
         _relocate(w, a, dest)

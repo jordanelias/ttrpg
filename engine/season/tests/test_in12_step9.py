@@ -59,6 +59,8 @@ from ..seam.wrappers import pool, sigma
 from ..state.carriers import Act, Person, Question, StateChange
 from .test_in10_record_operands import _acts, _resolve
 
+pytestmark = pytest.mark.flat_fold
+
 NEW = ("argue", "sabotage", "tend", "train")
 
 

@@ -109,7 +109,7 @@ def test_accept_forms_on_a_heard_challenge(monkeypatch):
                         if e.kind in ("duel.yielded", "body.changed") and d.act_of.get(e.id) is act]
                 assert ends, (seed, kinds, offered)
                 # a challenge names no stakes, so the one fight was built under the roster's `accept` line, `blood`
-                assert terms == ["blood"], (seed, terms)
+                assert terms and set(terms) == {"blood"}, (seed, terms)   # every fight the scene built, not their number: the draw moves how many a seed plays
                 # CONTROL: B's opening set has `accept` while the stamp stands, and none with the stamp's reader at `()`
                 assert _accepts_formed(w, B), (seed, "the challenged holds an `accept` with the stamp")
                 m.setattr(world_q, "challenges_heard", lambda w, p, named=None: ())

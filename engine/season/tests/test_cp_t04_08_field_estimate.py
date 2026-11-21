@@ -27,6 +27,7 @@ from dataclasses import replace
 
 import pytest
 
+from ._flat_fold import flat_fold
 from ..data.rosters import DRAWN, LOST, WON
 from ..gaps import Forbidden
 from ..harness.play_surface import dispatching_chooser
@@ -43,6 +44,8 @@ from ..manifest import registry
 from ..manifest.providers import PROVIDERS
 from .test_cp_t04_02_marshal import (ATT_FACTION, CARDINAL, CARDINAL_SEAT, DEF_FACTION, HOME, KING, KING_SEAT, MARCHERS,
                                      TARGET, _fold_one, _marshal, _mb, _world)
+
+pytestmark = pytest.mark.flat_fold
 
 SHOWN = 50                       # `estimate_samples`, the entry's figure
 REALISED = 200                   # scenes `resolve` deals per pair: its standard error (<= 0.035) is a fraction of the interval's half-width
@@ -300,7 +303,7 @@ def _season(call):
     chooser. With `call` the callback asks `field_estimate` BEFORE every act it passes on: for each `march` the chooser
     chose, and (so that sampling is exercised though a natural season fights no field) for each person marching on the
     Church's settlement through the Crown's seat. Returns `(content_hash, draw counter, calls, sampled)`."""
-    w = build_realm(0)
+    w = flat_fold(build_realm(0))      # the module-scoped `season_pair` builds before the function-scoped mark: both arms of the pair share ONE task-draw state
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     auto = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(), draw=draw_factory(w.world_seed, lambda: w.tick))

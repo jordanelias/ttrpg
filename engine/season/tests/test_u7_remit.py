@@ -54,6 +54,8 @@ from ..state import gate as G
 from ..state.carriers import Act, Claim, Tenure, Term
 from ..state.gate import DETERMINATION, NotYours
 
+pytestmark = pytest.mark.flat_fold
+
 SEAT, DUKE, TREASURY = "off_duke", "p_high", "D"
 PARTY, OUTSIDER = "p_mid", "p_king"          # inside the duchy (Hh) / outside it (R)
 REMIT = ("requisition", "open_case", "determine", "issue")

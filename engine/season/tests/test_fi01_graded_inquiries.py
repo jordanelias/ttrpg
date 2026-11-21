@@ -13,7 +13,7 @@ THE FALSIFIERS (the position's, `workplans/valoria_master_workplan_v9_part6.md` 
   * the route is not readable as a prize (`test_the_route_is_not_readable_as_a_prize`);
   * the degree follows the one owner: the module entry replaced, the inquiry's band moves with it; and
     the host producer scan returns a planted inquiry resolver
-    (`test_season_shape.py::test_we_only_a_verb_that_declares_contests_can_be_graded_today`, where the
+    (`test_season_shape.py::test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else`, where the
     scan's own helper is run over the plant).
 """
 
@@ -48,9 +48,12 @@ from ..state.carriers import Act, Claim, Record, Site
 # one prompt, two waiting, and the rest graded -- derived, so the graded set is not a second copy of
 # `graded_inquiries` (`test_season_shape.py::test_jordan_no_definition_is_hardcoded_in_a_body`).
 INQUIRIES = ("examine", "interview", "research", "surveil", "thread_read", "reconstruct")
-WAITING = {"reconstruct": "K-37 (no value space)", "thread_read": "K-37 (no value space; its H-85 carrier landed at v9 PC-06 K-3)"}
+WAITING = {"thread_read": "K-37 (no value space; its H-85 carrier landed at v9 PC-06 K-3)"}
+# B07 (UNDECIDED (2)): `reconstruct` is `form: inquiry` and band-keyed, routed only with `task_draw_arm` on, so with the arm off (the
+# three CARRIED inquiries' world) it is neither graded nor waiting-and-flat: its K-37 limit is superseded by that ruling.
+ARMED = {"reconstruct": "form: inquiry since B07 (UNDECIDED (2)), routed only with the arm on"}
 PROMPT = "interview"
-GRADED = {v for v in INQUIRIES if v != PROMPT and v not in WAITING}
+GRADED = {v for v in INQUIRIES if v != PROMPT and v not in WAITING and v not in ARMED}
 REC, ACTOR = "rec_fi01", "p_low"
 
 
@@ -87,16 +90,20 @@ def test_the_rosters_name_three_graded_and_the_skip_names_finding_none():
     skip arm is keyed on the one kind. A row that waits keeps a flat `emits:`, so it cannot be graded."""
     # B07.01: the roster is `graded_tasks`; the routes LIVE at the shipped fixtures are the three (the armed rows,
     # `reconstruct` and `thread_read` among them, are taken only with `task_draw_arm` on, `graded_route`).
-    live = {v for v in GRADED_TASKS if graded_route(v, DEFAULT_FIXTURES) is not None}
+    # B07.05 ships the arm on, so every armed route is live at the shipped fixtures; the three CARRIED inquiries are the routes live with it off.
+    live = {v for v in GRADED_TASKS if graded_route(v, DEFAULT_FIXTURES.sweep("task_draw_arm", "off")) is not None}
     assert live == set(GRADED), sorted(live)
     assert UNDEPOSITED_KINDS == frozenset({"finding.none"}), UNDEPOSITED_KINDS
     for verb in GRADED:
         row = VERB_TABLE[verb]
         assert set(row.emits_by_degree) == {"Overwhelming", "Success", "Partial", "Failure"}, verb
         assert row.emits_at("Failure") == ("finding.none",) and "finding.none" in row.emits_on_refusal
+    off = DEFAULT_FIXTURES.sweep("task_draw_arm", "off")
     for verb in (PROMPT, *WAITING):
-        assert graded_route(verb, DEFAULT_FIXTURES) is None and not VERB_TABLE[verb].emits_by_degree, (
+        assert graded_route(verb, off) is None and not VERB_TABLE[verb].emits_by_degree, (
             f"{verb!r} is graded, and it is a prompt or waits ({WAITING.get(verb, 'K-36')})")
+    for verb in ARMED:       # armed: not routed with the arm off, graded (band-keyed) by the row once armed
+        assert graded_route(verb, off) is None and graded_route(verb, DEFAULT_FIXTURES) is not None, verb
 
 
 def test_a_failed_inquiry_deposits_no_claim_and_news_untold_still_does():
