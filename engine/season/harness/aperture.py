@@ -472,13 +472,13 @@ def class_label(q) -> str:
 
 
 def scene_sources(d) -> dict:
-    """SCENES BY OCCASION SOURCE (CR-14 (ii), P2's unit): each Scene of `d.scenes`, read at the season's
+    """SCENES BY OCCASION SOURCE (CR-14 (ii), P2's unit): each Scene of the store (`d.w.acts.scenes()`, B09.16), read at the season's
     end, by its `occasion`'s source (`harness/soak.py::_occasion_row` reads it the same way; a scene
     with no occasion is `none`), and a `need` scene by `class_label`. Returns
     `{"scenes": n, "rows": {(source, label): n}, "need": n, "need_goal": n}` where `need_goal` is the
     need scenes about a goal Proposition (an `org goal` row) and the rest of `need` are the others."""
     rows: Counter = Counter()
-    for sc in d.scenes.values():
+    for sc in d.w.acts.scenes():
         q = getattr(sc, "occasion", None)
         rows[source_key(q)] += 1
     need = sum(n for (s, _), n in rows.items() if s == "need")
@@ -1154,7 +1154,7 @@ def _answered_blocks(m: dict) -> list:
     # (`watched_choose`), so this fails only if the shipped rule is off `QUESTION_AGGREGATION`
     out.append(f"      rows + none = {total} vs the PER AGGREGATION RULE deliberation count "
                f"{m['deliberations']} -> {'OK' if total == m['deliberations'] else 'DIFFERENT'}")
-    out.append("    SCENES by occasion source (`d.scenes` read at the season's end; P2's unit)")
+    out.append("    SCENES by occasion source (`d.w.acts.scenes()` read at the season's end; P2's unit)")
     out.extend(rows_in(sc["rows"]))
     out.append(f"      scenes {sc['scenes']} · need {sc['need']}, of them about a goal Proposition "
                f"{sc['need_goal']} · other {sc['need'] - sc['need_goal']}")

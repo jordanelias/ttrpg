@@ -851,8 +851,8 @@ def _term_why(w: "World", e: "Event", act) -> Optional[str]:
     *"forgets the motive before the act executes"*, and that overstates it: the Candidate carries no
     motive, but the question that
     occasioned an act survives one hop away --
-    `Act.scene` names the Scene, the driver's `scenes[...]` holds it, and `Scene.occasion.source`
-    is the question source (the same lookup `loop/resolve.py`'s `_occasion_ids` makes). It is not
+    `Act.scene` names the Scene, the act store keeps it beside the act (`w.acts.scene_of(act.id)`, B09.16) and
+    `Scene.occasion.source` is the question source (the same lookup `loop/resolve.py`'s `_occasion_ids` makes). It is not
     on the Act, and these readers take `(w, e, act)` with no driver, so recovering it means
     passing the Scene in -- and deciding what a witness may infer of a motive is its own unit of
     work. No channel lists `why` in `supplied_by` today (`total` shows every term, and gets this

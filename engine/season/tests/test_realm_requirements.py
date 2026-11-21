@@ -51,7 +51,7 @@ def _occasioned_by_another(w: World, d: SeasonDriver) -> tuple[int, int]:
     emitted by an act of a different person, resolved acts whose occasion is `claim_landed`)."""
     hit = landed = 0
     for a in d.resolved:
-        occ = getattr(d.scenes.get(getattr(a, "scene", None) or ""), "occasion", None)
+        occ = getattr(w.acts.scene_of(a.id), "occasion", None)
         if getattr(occ, "source", None) != "claim_landed":
             continue
         landed += 1

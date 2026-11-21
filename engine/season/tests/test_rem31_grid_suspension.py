@@ -85,7 +85,7 @@ def _season(played=None, decider=None, callback=_scripted, shuffle=False):
         d.season(choose, None, contest_max_depth=w.fixtures.get("contest_max_depth"), host=host)
     finally:
         driver_mod.mint_token, deliberate_mod.deliberation_order = real_mint, real_order
-    scenes = frozenset((sc.id, sc.actor, tuple((a.id, a.verb) for a in sc.acts)) for sc in d.scenes.values())
+    scenes = frozenset((sc.id, sc.actor, tuple((a.id, a.verb) for a in sc.acts)) for sc in d.w.acts.scenes())
     return w.content_hash(), scenes, record["mints"], record
 
 
@@ -116,7 +116,7 @@ def _round(played=None, decider=None):
     record["declared"], record["fought"] = [e.kind for e in declared], [e.kind for e in fought]
     # the draw ordinal is not hashed, and no later draw follows one round; a suspension that consumed one is seen here
     record["draw_after"] = w.draw
-    scenes = frozenset((sc.id, sc.actor, tuple((a.id, a.verb) for a in sc.acts)) for sc in d.scenes.values())
+    scenes = frozenset((sc.id, sc.actor, tuple((a.id, a.verb) for a in sc.acts)) for sc in d.w.acts.scenes())
     return w.content_hash(), scenes, record["mints"], record
 
 

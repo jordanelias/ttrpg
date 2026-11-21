@@ -158,7 +158,7 @@ def _open_the_case(w, d, bailiff, q, cands):
     acts = []
     for sc in pack_scenes(bailiff, cands[:1], 5, w.fixtures, lambda pid, verb, s: f"s23:{verb}:{s}",
                           occasion=q):
-        d.scenes[sc.id] = sc
+        w.acts.add_scene(sc)
         for a in sc.acts:
             a.scene = sc.id
             acts.append(a)

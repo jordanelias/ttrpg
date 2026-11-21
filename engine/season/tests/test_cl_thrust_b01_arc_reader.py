@@ -76,7 +76,7 @@ def _chain(*, link=True, self_write=True, world_write=True, world_subject="site_
                    [_rc(world_subject, world_field, serial + 1)] if world_write else [],
                    [e1.id] if link else [ROOT], 0)
         log += [e1, e2]
-    return w, NS(scenes={}), log, ids
+    return w, NS(w=w), log, ids
 
 
 def _read(w, d, log, on, **kw):
@@ -125,8 +125,8 @@ def _petition_answered(*, link=True):
     if link:
         w.log.append(Event("ev_dep", "claim.deposited", [P.apparatus_receipt(w, "claim_x", "set", "Act")],
                            [filed.id], w.tick))
-        d.scenes["sc_x"] = Scene("sc_x", "p_king", [], occasion=Question("q_x", "claim_landed", (),
-                                                                          about="claim_x"))
+        w.acts.add_scene(Scene("sc_x", "p_king", [], occasion=Question("q_x", "claim_landed", (),
+                                                                       about="claim_x")))
         scene = "sc_x"
     conferred = fold(Act(id="cf1", actor="p_king", verb="confer", via="off_crown", scene=scene,
                          payload={"subject": "off_reeve", "to": "p_mid"}))

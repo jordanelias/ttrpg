@@ -59,6 +59,10 @@ types and NO classification into war / succession / ruin / grudge; no pass bar, 
 (it reads `read`'s `executed` rows, as the pick does) and changes no existing result. A reading, never a
 guard. Kinds are counted here once, raw, over the chain ends only: `harness/strife.py` maps Event kinds to
 its move codes over the whole log and owns that tabulation; this block maps nothing to a code.
+
+THE REASON FOR EACH ACT (B09.16, `--chains`). Before the chain-end block, one line per act of the printed chain, `<act id> | for: <occasion.source>
+<occasion.about>` (`occasion_line`): the question the act answered, read from the Scene the act store keeps beside the act
+(`World.acts.scene_of`), never from the driver. It is the store's first reader. The deciding term is not printed (`occasion_line`).
 [ASSUMPTION; medium; Jordan to correct; revert: delete the reader]
 
 THE PROPAGATION READING (B02.16, behind `--propagation`; CLAUDE.md §4: the word and its definition). *How
@@ -265,6 +269,29 @@ def consequence_chains(w, act_of: dict, bounds: list, min_depth: int, log=None) 
     ends = chain_ends(rows, min_depth)
     hist = Counter(k for aid in ends for k in made[aid])
     return {"consequence_acts": len(made), "chain_ends": len(ends), "kinds": dict(sorted(hist.items()))}
+
+
+def occasion_line(w, act_id: str) -> str:
+    """`for: <occasion.source> <occasion.about>` -- the question the act answered, read from the Scene the act store
+    keeps beside the act (`World.acts.scene_of`, B09.16), so a second driver on the same world, or a world with no
+    driver, prints the same line. `for: (no scene)` for an act the store does not hold, or one released in no Scene
+    (a hand-built act); `for: (no occasion)` for a Scene that carried no question. Reads only.
+
+    NOT PRINTED: the deciding term (pursuit, stance or the draw). `make_chooser(watch=...)` (B09.13) supplies it while
+    the process runs, to a watcher the chooser was built with; `SB.drive` builds the chooser with none, and a watcher
+    here would be a second `deciding_term` scoring beside the one `harness/decision_spread.py` already makes. Not built."""
+    sc = w.acts.scene_of(act_id)
+    if sc is None:
+        return "for: (no scene)"
+    q = getattr(sc, "occasion", None)
+    if q is None:
+        return "for: (no occasion)"
+    return f"for: {q.source} {q.about}".rstrip()
+
+
+def render_for(w, act_ids) -> str:
+    """One `occasion_line` per act, `<act id> | for: <source> <about>`, in the order given."""
+    return "\n".join(f"{aid} | {occasion_line(w, aid)}" for aid in act_ids)
 
 
 def render_chains(seed, min_depth: int, res: dict) -> str:
@@ -521,6 +548,8 @@ def main(argv=None) -> int:
     else:
         print(render(w.log, d.act_of, rows, w.persons))
     if args.chains:
+        if chain:                       # B09.16: what each act of the printed chain was for, read off the act store
+            print(render_for(w, chain))
         print(render_chains(args.seed, args.min_depth,
                             consequence_chains(w, d.act_of, bounds, args.min_depth)))
     return 0

@@ -450,9 +450,9 @@ def _need(about: str, qid: str = "q", source: str = "need"):
 
 
 def _scene_world(*occasions):
-    """A stand-in for a driver after a season: only `scenes` is read by `scene_sources`."""
-    return SimpleNamespace(scenes={f"sc{i}": SimpleNamespace(occasion=q)
-                                   for i, q in enumerate(occasions)})
+    """A stand-in for a driver after a season: only `d.w.acts.scenes()` (the Scene store, B09.16) is read by `scene_sources`."""
+    scenes = tuple(SimpleNamespace(occasion=q) for q in occasions)
+    return SimpleNamespace(w=SimpleNamespace(acts=SimpleNamespace(scenes=lambda: scenes)))
 
 
 def _a_goal_id() -> str:

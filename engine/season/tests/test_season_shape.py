@@ -8625,13 +8625,13 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     #     A bare Act built by hand has neither and is not asserted over.
     assert d.resolved, "no acts resolved — the rest of this test would pass vacuously"
     assert all(a.scene for a in d.resolved), "an act came out of DELIBERATE with no scene"
-    assert all(sc.occasion is not None for sc in d.scenes.values()), "a scene carries no occasion"
+    assert all(sc.occasion is not None for sc in w.acts.scenes()), "a scene carries no occasion"
 
     # 2 — THE WALK RETURNS AN ANTECEDENT FOR A `claim_landed` QUESTION, and the antecedent is a
     #     real Event id in the log. `occasioned_by` is callable without a driver, which is the
     #     property `ID-10` asks for: the check can observe the failure it excludes.
     ids = {e.id for e in w.log}
-    landed = [sc.occasion for sc in d.scenes.values()
+    landed = [sc.occasion for sc in w.acts.scenes()
               if getattr(sc.occasion, "source", None) == "claim_landed"]
     assert landed, "no claim_landed question formed — the transport never reached anybody"
     walked = [x for q in landed for x in occasioned_by(w, q)]
@@ -8640,7 +8640,7 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
 
     # 3 — `need` RETURNS EMPTY ON PURPOSE, and this asserts the refusal rather than assuming it.
     #     A standing ambition has no antecedent Event; `ID-5`'s polarity forbids inventing one.
-    for q in (sc.occasion for sc in d.scenes.values()):
+    for q in (sc.occasion for sc in w.acts.scenes()):
         if getattr(q, "source", None) == "need":
             assert occasioned_by(w, q) == [], "a `need` question was given a fabricated cause"
 
@@ -8803,7 +8803,7 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
         act = d.act_of.get(e.id)
         if act is None:
             continue
-        sc = d.scenes.get(getattr(act, "scene", None) or "")
+        sc = w.acts.scene_of(act.id)
         allowed = {act.id} | set(occasioned_by(w, getattr(sc, "occasion", None)))
         # B09.12: an act on a CLASSED referent of its scene's occasion also names the Event that OPENED that standing
         # occasion (`loop/resolve.py::_occasion_ids`): an Event of a kind `rosters.yaml: standing_occasion_opened_by` lists for

@@ -159,7 +159,7 @@ def _occasion_ids(self, w: "World", a: Act) -> list:
     ⚠ **AND IT NEVER RETURNS THE ACT'S OWN EVENT.** The ids here are antecedents already in
     the log when the act folds; an Event cannot cause itself, and `causes[]` must name ids
     that exist."""
-    sc = self.scenes.get(getattr(a, "scene", None) or "")
+    sc = w.acts.scene_of(a.id)                    # B09.16: the Scene is kept beside its acts, not on the driver
     if sc is None:
         return []
     occ = getattr(sc, "occasion", None)
@@ -1023,7 +1023,7 @@ def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, ef
     return [r for _s, r in got]
 
 def resolve(self, token: Token, acts: list[Act],
-            contest_max_depth: Optional[int] = None) -> list[Event]:
+            contest_max_depth: Optional[int] = None, scenes: Optional[dict] = None) -> list[Event]:
     w = self.w
     w.step = Step.RESOLVE
     w.frozen = False
@@ -1044,6 +1044,12 @@ def resolve(self, token: Token, acts: list[Act],
                    chose="five strata, then a content-derived hash key over one global array",
                    alternatives=["completion order", "rank", "per-container sort (voids the fold)"])
 
+    # B09.16: THE SCENES DELIBERATE RETURNED (`{scene id: Scene}`, release order) ARE KEPT BESIDE THEIR ACTS, HERE, BEFORE
+    # ANY OF THEM IS APPENDED -- this step holds the ACTS token and the act store; DELIBERATE holds neither and stores
+    # nothing. Added ahead of the sort's loop, in release order, so `ActStore.scenes()` is release order and every act
+    # the loop below appends already answers `scene_of`. A bare-act caller (a test, a probe) passes none.
+    for _sc in (scenes or {}).values():
+        w.acts.add_scene(_sc)
     out: list[Event] = []
     # S27.3 SUM-THEN-CLAMP-ONCE accumulator. ⚠ G4: IT IS `World._staged` NOW, NOT A LOCAL HERE,
     # because an act's `work` WRITES to it through the gate (`_eff_work`'s docstring). Anything
@@ -1119,7 +1125,7 @@ def resolve(self, token: Token, acts: list[Act],
         # for an Event that wrote nothing: an act that changes no state has an empty
         # `changes[]`, and the only thing that knows what it named is the act.
         # ⚠ **RESOLVER-SIDE AND CUMULATIVE ACROSS SEASONS — NOT season-local, and the
-        # difference is load-bearing.** `resolved`, `scenes` and `act_of` are never reset by
+        # difference is load-bearing.** `resolved`, `act_of` and the Scene store (`w.acts`) are never reset by
         # `season()`, and `R3` REQUIRES that: a claim deposited at WITNESS in season *t* is
         # read at DELIBERATE in *t+1*, so the act that occasioned this one is a PREVIOUS
         # season's act and must still be reachable. A session that makes these three

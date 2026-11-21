@@ -324,13 +324,13 @@ def test_g2_deliberate_mutates_no_store_by_any_route(monkeypatch):
 
     def spy(self, *a, **k):
         before = _store_digest(self.w)
-        acts = real(self, *a, **k)
+        scenes = real(self, *a, **k)        # B09.16: DELIBERATE returns its Scene map, `{scene id: Scene}`, and stores nothing
         after = _store_digest(self.w)
         moved = sorted(key for key in set(before) | set(after) if before.get(key) != after.get(key))
         assert not moved, f"DELIBERATE mutated World.{moved} at tick {self.w.tick}"
         checked["calls"] += 1
-        checked["acts"] += len(acts)
-        return acts
+        checked["acts"] += sum(len(sc.acts) for sc in scenes.values())
+        return scenes
 
     monkeypatch.setattr(SeasonDriver, "deliberate", spy)
 
