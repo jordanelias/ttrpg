@@ -209,7 +209,7 @@ def test_in31_the_ban_bars_seating_and_service(basis, banned):
     else:
         assert "tenure.opened" in kinds and ("hold", DUKE, "off_reeve") in opened, (kinds, opened)
     serve = Act(id="ob_bite", actor=DUKE, verb="oblige", payload={"subject": "off_mayor"})
-    assert _preds._req_oblige(w, serve) is (not banned)
+    assert bool(_preds._req_oblige(w, serve)) is (not banned)
 
 
 # 6, 7 -- NO SELF-BAN; NO SECOND BAN ---------------------------------------------------------------------

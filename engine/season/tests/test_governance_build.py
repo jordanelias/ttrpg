@@ -1811,7 +1811,7 @@ def test_13d_i_the_conferral_basis_is_roster_membership_not_a_nonempty_string():
     for basis in sorted(CONFERRAL_BASES):
         off.conferral = basis
         assert _preds.has_conferral_basis(off), basis
-        assert _preds._req_confer(w, conf) == (CONFERRAL in FILLED_BY[basis]), basis
+        assert bool(_preds._req_confer(w, conf)) is (CONFERRAL in FILLED_BY[basis]), basis
         checked += 1
         refused += CONFERRAL not in FILLED_BY[basis]
     assert checked == len(CONFERRAL_BASES) >= 4 and refused == 1, (checked, refused)
