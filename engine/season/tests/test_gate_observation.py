@@ -12,13 +12,19 @@ What each block proves, and the control that stops it passing vacuously:
      refusal Event, not a raise. Control (same host, actor, field, value): the same assignment
      deferred into `Change.apply`, which the gate admits and judges, is a success and stands.
   2. AN ENTITY ADDED OR REMOVED IN THE BODY is refused and the collection put back.
+
+H-135 (B09.21) -- `loop/matter.py`'s wear loop does not write a Site whose wear this season is 0, so
+no `condition.worn` reports a condition that did not move (`test_a_zero_wear_write_emits_no_condition_worn`,
+whose control is a Site that wears and still writes).
 """
 import dataclasses
 
-from engine.season.data.matrix import WriteClass
+from engine.season.boot.realm import build_realm
+from engine.season.data.matrix import Step, WriteClass
 from engine.season.harness import probes as P
-from engine.season.loop.driver import mint_token
-from engine.season.state.carriers import Act, Tenure
+from engine.season.loop.driver import SeasonDriver, mint_token
+from engine.season.state.attribution import anchor_of
+from engine.season.state.carriers import Act, Site, Tenure
 from engine.season.state.containment import edges_of
 from engine.season.state.gate import Change, Subject
 
@@ -106,3 +112,61 @@ def test_the_live_edge_view_follows_a_membership_change_that_keeps_the_counts():
     assert [t.id for t in edges_of(w, "contain", "Hh")] == ["t_swap", "t_open"]
     w._restore_tenures([(next(t for t in w.tenures if t.id == "t_open"), None)])
     assert [t.id for t in edges_of(w, "contain", "Hh")] == ["t_swap"]
+
+
+def _matter(w):
+    """MATTER alone, through the real barrier and a real MATTER token; returns what it emitted."""
+    w.step = Step.MATTER
+    return SeasonDriver(w).matter(mint_token(w, WriteClass.MATTER), [])
+
+
+def _worn(w, evs) -> dict:
+    """`{site id: [condition.worn Events]}` among the Events MATTER returned."""
+    out: dict = {}
+    for e in evs:
+        if e.kind == "condition.worn":
+            out.setdefault(anchor_of(w, e), []).append(e)
+    return out
+
+
+def test_a_zero_wear_write_emits_no_condition_worn():
+    """H-135: a Site whose wear this season is 0 is not written and emits nothing. The falsifier is a
+    `condition.worn` whose Site's condition did not move; the CONTROL, in the same MATTER pass, is a Site
+    that wears (harbour, seam), which still writes, emits one and moves."""
+    w = P.tiny_world()
+    scale = w.fixtures.get("condition_scale")
+    w.sites["s_h135_dwelling"] = Site("s_h135_dwelling", "Hh", "dwelling", condition=scale)
+    assert w.fixtures.wear("dwelling") == 0 and w.fixtures.wear("harbour") > 0, "the fixture's rates are not what the test reads"
+    before = {sid: s.condition for sid, s in w.sites.items()}
+    worn = _worn(w, _matter(w))
+    # THE ARM: the zero-wear Site emits nothing and its condition stays put
+    assert "s_h135_dwelling" not in worn, "a zero-wear Site still emitted `condition.worn`"
+    assert w.sites["s_h135_dwelling"].condition == scale
+    # THE CONTROL: the wearing Sites each wrote once, emitted once, and moved
+    checked = 0
+    for sid in ("site_harbour", "site_seam"):
+        assert len(worn.get(sid, [])) == 1, (sid, sorted(worn))
+        assert w.sites[sid].condition == max(0, before[sid] - w.fixtures.wear(w.sites[sid].kind)) != before[sid]
+        checked += 1
+    assert checked == 2
+    # every `condition.worn` the pass logged is for a Site that wears
+    logged = [e for e in w.log if e.kind == "condition.worn"]
+    assert len(logged) == 2 and {anchor_of(w, e) for e in logged} == {"site_harbour", "site_seam"}
+
+
+def test_a_realm_season_emits_no_condition_worn_for_a_site_whose_wear_is_zero():
+    """The same arm on the shipped realm, where `dwelling` and `garrison` wear 0: one MATTER pass writes
+    one `condition.worn` per Site that wears and none for the rest."""
+    w = build_realm(0)
+    wearing = sorted(sid for sid, s in w.sites.items() if w.fixtures.wear(s.kind) > 0)
+    still = sorted(sid for sid, s in w.sites.items() if w.fixtures.wear(s.kind) == 0)
+    assert wearing and still, "the realm holds no wearing or no zero-wear Site, so this proves nothing"
+    before = {sid: w.sites[sid].condition for sid in w.sites}
+    worn = _worn(w, _matter(w))
+    assert not (set(worn) & set(still)), sorted(set(worn) & set(still))[:3]
+    checked = 0
+    for sid in wearing:
+        assert len(worn.get(sid, [])) == 1, sid
+        checked += 1
+    assert checked == len(wearing) > 0
+    assert all(w.sites[sid].condition == before[sid] for sid in still)
