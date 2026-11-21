@@ -1886,8 +1886,8 @@ rosters:
       ⚠ `dwelling: 0` IS THE CONTROL ARM, SHIPPED DELIBERATELY, and it is `H-07`'s own
       *"no wear at all"* sweep point applied to one kind. ⚠ **NOT THE SAME SHAPE AS `body_step = 0`**:
       that arm `continue`s past the write itself (`loop/matter.py`), so nothing is emitted at its
-      control arm. `wear_per_season` carries no such skip — MATTER writes every Site every
-      season whatever its rate, so `dwelling: 0` still emits (see below). A dwelling sits AT a
+      control arm. `wear_per_season` skips the same way since `H-135` (B09.21): MATTER does not
+      write a Site whose wear is 0, so `dwelling: 0` emits nothing (see below). A dwelling sits AT a
       hearth and persons live in hearths. A non-zero rate
       together with any floor in `band_floors.dwelling` would let a dwelling's condition cross it;
       the crossing Event is witnessed `co_located`, and the claim it deposits (subject = the
@@ -1898,10 +1898,10 @@ rosters:
       `test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_season`'s
       control-arm identity pins against. Either half at its control arm blocks the crossing; both
       ship there. At 0 no dwelling's condition moves.
-      ⚠ ZERO IS NOT SILENT. `loop/matter.py`'s wear loop still WRITES every Site every season,
-      and `World.write` emits one `condition.worn` per write (`H-12`), so every dwelling emits
-      one wear Event a season, and its residents witness it (`co_located`) as a claim. A non-zero
-      rate is chosen with a consumer in front of it, at `24e`/`24f`, never here.
+      ⚠ ZERO IS SILENT SINCE `H-135` (B09.21). `loop/matter.py`'s wear loop writes a Site only
+      where its wear this season is non-zero, and `World.write` emits one `condition.worn` per
+      write (`H-12`), so a dwelling emits no wear Event and its residents witness no claim of it.
+      A non-zero rate is chosen with a consumer in front of it, at `24e`/`24f`, never here.
       ⚠ `garrison: 0` IS `dwelling`'s CONTROL ARM FOR THE SAME REASON (M4, `ED-IN-0279` clause (a)):
       a non-zero rate would erode every garrison's condition every season, silently drifting every
       field battle's fortification term toward zero over a long campaign. The rate is a pacing

@@ -1357,8 +1357,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # at full `condition_scale`. Iterating `buildings_at` covers every hearth this function builds,
     # because the building loop above is its only `hearth` constructor.
     # `wear_per_season.dwelling` is 0 and `band_floors.dwelling` empty (`rosters.yaml`, which says
-    # why), so a dwelling wears nothing and crosses no band; it still emits one `condition.worn`
-    # per dwelling per season, because MATTER writes every Site.
+    # why), so a dwelling wears nothing and crosses no band; MATTER does not write a Site whose wear
+    # is 0 (`H-135`), so it emits no `condition.worn` either.
     # ⚠ `governance_spine.build` mints dwellings by the same rule. `corpus_run.build_at`,
     # `probes.tiny_world` and `headless.build_world` do not.
     for sid in geo["settlements"]:

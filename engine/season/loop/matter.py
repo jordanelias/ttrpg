@@ -768,6 +768,12 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
         # NO SILENT DEFAULT -- unregistered kind raises. Plus the coupling's pull: ONE wear write, so
         # one `condition.worn` and one crossing check per Site whatever moved it.
         wear = w.fixtures.wear(s.kind) + pull.get(s.id, 0)
+        # `H-135`. A SITE WHOSE WEAR THIS SEASON IS 0 IS NOT WRITTEN: the closure branch of `World.write`
+        # judges nothing, so a write that moved nothing would still trace as written and emit
+        # `condition.worn` -- a fabricated success (`ID-9`). `before == s.condition` here, so no crossing
+        # could fire either. (`dwelling` and `garrison` wear 0, `rosters.yaml`.)
+        if wear == 0:
+            continue
         # `W4`. WEAR IS A LICENSED CLOCK, AND A CLOCK CHAINS TO ITSELF. `[ROOT]` is for the
         # campaign seed and a licensed clock's GENUINE FIRST emission (#353 `:682-685`); every
         # later tick of the same clock names the tick before it, so the number of `[ROOT]`
