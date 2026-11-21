@@ -32,6 +32,7 @@ from engine.season.boot.realm import build_realm
 from engine.season.data.verbs import VERB_TABLE
 from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from engine.season.loop.resolve import _act_events
+from engine.season.harness import probes as P
 from engine.season.state.carriers import Act, Event, Question, Scene, StateChange
 from engine.season.state.ids import H, ROOT, draw_factory
 
@@ -48,7 +49,7 @@ def _world_with_occasion(scene_actor=ACTOR):
     d = SeasonDriver(w)
     origin = Event("ev_in50_origin", "news.told", [], [ROOT], w.tick)
     deposit = Event("ev_in50_deposit", "claim.deposited",
-                    [StateChange("claim_in50", "set", "Act")], [origin.id], w.tick)
+                    [P.apparatus_receipt(w, "claim_in50", "set", "Act")], [origin.id], w.tick)
     w.log.append(origin)
     w.log.append(deposit)
     q = Question("q_in50", "claim_landed", (), about="claim_in50")

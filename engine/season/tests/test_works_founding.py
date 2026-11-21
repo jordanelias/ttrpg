@@ -250,7 +250,7 @@ def test_24e_the_declared_delta_still_wins_and_the_ceiling_bounds_its_rise_but_n
         harbour = w.sites[HARBOUR]
         harbour.condition = 900
         out = _fold(w, d, Act(id="wd", actor=ABSENT, verb="work", payload={"site": HARBOUR},
-                              changes=[StateChange(HARBOUR, "alter", "Act", "condition", 5)]))
+                              changes=[P.apparatus_receipt(w, HARBOUR, "alter", "Act", "condition", 5)]))
         assert _kinds(out) == kinds and harbour.condition == expect, (with_works, _kinds(out),
                                                                         harbour.condition)
 

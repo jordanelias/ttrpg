@@ -355,12 +355,13 @@ def test_in53v_d_an_act_on_a_classed_referent_cites_no_unrelated_occasion():
     STANDING one, `[ROOT]` as a Q4 `need` has (plan IN-53 step 3; batch B-I close, F1), never the
     unrelated claim's originating Event. Control: an act on the same scene's PLAIN referent still
     cites it, and so does one whose subject is both plain and classed."""
-    from engine.season.state.carriers import Event, Scene, StateChange
+    from engine.season.harness import probes as P
+    from engine.season.state.carriers import Event, Scene
     w, d = _gov_world()
     origin = Event("ev_v_origin", "news.told", [], [ROOT], w.tick)
     w.log.append(origin)
     w.log.append(Event("ev_v_deposit", "claim.deposited",
-                       [StateChange("claim_v", "set", "Act")], [origin.id], w.tick))
+                       [P.apparatus_receipt(w, "claim_v", "set", "Act")], [origin.id], w.tick))
     q = Question("q:claim:claim_v", "claim_landed", ("S",), "claim_v", (("off_reeve", "Office"),))
     d.scenes["sc_v"] = Scene("sc_v", "p_king", [], occasion=q)
     assert world_q.occasioned_by(w, q) == [origin.id]          # the scene HAS an occasion

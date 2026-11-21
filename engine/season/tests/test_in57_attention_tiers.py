@@ -46,6 +46,7 @@ from ..boot.realm import build_realm
 from ..loop import driver as DRV
 from ..queries import world_q
 from ..queries.person_q import deed_valence
+from ..harness import probes as P
 from ..state.carriers import (Claim, Event, Person, Proposition, Question, StateChange,
                               Tenure)
 from ..state.containment import home_of, parent_of
@@ -333,7 +334,7 @@ def _other_state(w: World) -> World:
     q.ledger += [_claim("c_q", "p_q", "X"), _claim("c9", "p_q", "X", "bond.formed", True)]
     w2.persons[q.id] = q
     w2.log.append(Event(id="e_other", kind="body.changed",
-                        changes=[StateChange("p_q", "set", "MATTER", "f")],
+                        changes=[P.apparatus_receipt(w2, "p_q", "set", "MATTER", "f")],
                         causes=[ROOT], emitted_at=0))
     return w2
 

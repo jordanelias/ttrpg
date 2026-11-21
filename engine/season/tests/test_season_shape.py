@@ -1269,7 +1269,7 @@ def test_r4_event_ids_are_unique_per_draw_and_reproducible():
             # distinct, which is the property this test is about — one person, one tick, three
             # acts, three DIFFERENT Event ids.
             return ([P.Act_(w, p, "work", key=str(i),
-                            changes=[StateChange("site_harbour", "alter", "Act",
+                            changes=[P.apparatus_receipt(w, "site_harbour", "alter", "Act",
                                                    "condition", i + 1)])
                      for i in range(3)] if p.id == "p_low" else [])
         P._run(w, P.once(choose))
@@ -5668,7 +5668,7 @@ def _w8_work(acts_deltas, site_id="site_seam", condition=None):
     d = SeasonDriver(w); w.step = Step.RESOLVE
     acts = [Act(id=aid, actor="p_low", verb="work", payload={"site": site.id},
                 changes=([] if dv is None else
-                         [StateChange(site.id, "alter", "Act", "condition", dv)]))
+                         [P.apparatus_receipt(w, site.id, "alter", "Act", "condition", dv)]))
             for aid, dv in acts_deltas]
     evs = d.resolve(mint_token(d.w, WriteClass.ACTS), acts)
     return evs, before, site.condition, site.id
@@ -9225,7 +9225,7 @@ def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
     assert bare == ["work.unavailable"], (
         f"a `work` naming no site emitted {bare}. It cannot have checked a condition against a "
         "floor, because it was never told whose condition")
-    one = lambda sid: [StateChange(sid, "alter", "Act", "condition", 1)]
+    one = lambda sid: [P.apparatus_receipt(w, sid, "alter", "Act", "condition", 1)]
     # AND IT STILL ADMITS A NAMED, WORKABLE SITE -- otherwise the refusal above is not the
     # polarity rule, it is the verb being broken (§0.1 point 2: the control the first arm needs).
     ok = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), Act(id="wa_w1", actor="p_low", verb="work",
