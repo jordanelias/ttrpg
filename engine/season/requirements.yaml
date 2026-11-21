@@ -250,42 +250,38 @@ rows:
         expects: "three seeds green; the witness-cut control reads 0"
         holds: "yes"
         reading:
-          tree: "f22b1b606c1569f749cad8403e2caba8ee4b42b8"
-          date: "2026-11-17"
+          tree: "caacde342474d73311a799a12194e9b514fc6fa1"
+          date: "2026-11-21"
           seed: "0, 1, 2"
           seasons: 1
-          line: "4 passed, 7 deselected in 24.95s"
+          line: "4 passed, 8 deselected in 29.84s"
           control: >-
-            `test_r01_control_with_witness_cut_no_act_is_so_occasioned` (seed 0, witness cut): its
-            assertions `landed > 0` (a `claim_landed` question still forms with the cut, so the zero is not by
-            construction) and `hit == 0` passed, one of the four
+            `test_r01_control_with_witness_cut_no_act_is_so_occasioned` (seed 0, witness cut) is one of the four and passed
+            (its `landed > 0` and `hit == 0` assertions held); read on the code tree of `072d6f921` (B09.21); B09.99 edits test pin literals and this file only
           does_not_show: >-
-            one season a seed; the shipped policy `probes.chooser` and not the game's play; a count
-            above 0, not a share; run with `-p no:cacheprovider` added
+            one season a seed; the shipped policy `probes.chooser` and not the game's play; a count above 0, not a share;
+            run with `-p no:cacheprovider` added; 12 tests in the file, 8 deselected by `-k r01` (the earlier reading deselected 7)
       - id: R-01.c
         text: >-
           removing one person's choice changes other persons' acts: the person named is the actor
           of the most `Event.causes` antecedents of other persons' acts in the unperturbed first
-          season (`IS-A-03`), here p_npc_005 at seed 0, p_npc_020 at seeds 1 and 2
+          season (`IS-A-03`), here p_npc_005 at seed 0, p_npc_020 at seeds 1 and 2 (the B09.99 reading's removal is p_npc_013, p_npc_013 and p_npc_050: the instrument picks it)
         argv: ["python", "-m", "engine.season.harness.storybar", "--remove", "--base-seed", "0", "1", "2", "--seasons", "2"]
         expects: "replay line `0`; removed line above 0 (`R-01.c  others' acts differing: <n>  (replay 0)`, n at least 1)"
         holds: "yes"
         reading:
-          tree: "f22b1b606c1569f749cad8403e2caba8ee4b42b8"
-          date: "2026-11-17"
+          tree: "caacde342474d73311a799a12194e9b514fc6fa1"
+          date: "2026-11-21"
           seed: "0, 1, 2"
           seasons: 2
-          line: "R-01.c  others' acts differing: 277  (replay 0)"
+          line: "R-01.c  others' acts differing: 307  (replay 0)"
           control: >-
-            seed 0 shown (n 277); seeds 1 and 2 read n 303 and 227, each `(replay 0)`; at each
-            seed the `[replay]` arm reads `differing=0 ... (EQUAL to the unperturbed)` and the
-            no-wrapper drive ends on the unperturbed hash; the `[draw-seed]` arm reads 2885, 2853,
-            2892 differing (seed 0 read 2891 at 1c9238db and 2885 at efc9eb0, B04's open: the change
-            predates B04)
+            seed 0 shown (n 307); seeds 1 and 2 read n 318 and 1385, each `(replay 0)`; at each seed the `[replay]` arm reads `differing=0 ... (EQUAL to the unperturbed)`,
+            its `end_hash` the realm pin (`4c83fef7..`, `5e59be44..`, `45fb01e3..`); the `[draw-seed]` arm reads 2731, 2741, 2808 differing.
+            The person removed is now p_npc_013 at seeds 0 and 1 and p_npc_050 at seed 2 (the conjunct's `text` names the earlier three). the code tree of `072d6f921` (B09.21); B09.99 edits test pin literals and this file only
           does_not_show: >-
-            one removed person a seed; an act "differing" is not an act caused by the removed
-            choice, and a removal that touches 16 to 25 antecedents is not a tick-by-tick account;
-            run on `PYTHONHASHSEED=0`
+            one removed person a seed; an act "differing" is not an act caused by the removed choice; the seed 2 figure (1385 of the season's acts)
+            is the removal of a person whose choices most other acts follow, not a count of acts that one choice caused; run on `PYTHONHASHSEED=0`
     blocks: [IN-10, IN-11, IN-13, H-116, IN-50]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1: regard is computed at read; the cross-person half is IN-10's, IN-11's, IN-13's); H-111 is FI-01's deposit half
 
@@ -303,18 +299,17 @@ rows:
         expects: "seeds 0-2 differ after a common prefix; the same seed twice is one sequence"
         holds: "yes"
         reading:
-          tree: "f22b1b606c1569f749cad8403e2caba8ee4b42b8"
-          date: "2026-11-17"
+          tree: "caacde342474d73311a799a12194e9b514fc6fa1"
+          date: "2026-11-21"
           seed: "0, 1, 2"
           seasons: 1
-          line: "4 passed, 7 deselected in 50.27s"
+          line: "4 passed, 8 deselected in 64.76s (0:01:04)"
           control: >-
-            `test_r02_control_one_seed_played_twice_is_one_sequence` (seed 0 twice at the shipped
-            fixtures reads one sequence): passed, one of the four
+            `test_r02_control_one_seed_played_twice_is_one_sequence` (seed 0 twice at the shipped fixtures reads one sequence) is one of the four and passed;
+            read on the code tree of `072d6f921` (B09.21); B09.99 edits test pin literals and this file only
           does_not_show: >-
-            the played sequence parts when observation deposits are cut (T3 row 2); the
-            fork-and-follow test shows divergence in both arms and attributes nothing to the
-            deposit channel
+            the played sequence parts when observation deposits are cut (T3 row 2); the fork-and-follow test shows divergence in both arms
+            and attributes nothing to the deposit channel
       - id: R-02.b
         text: >-
           a removed choice changes acts in a *later* lap or season: the R-01.c command, at least one
@@ -323,19 +318,17 @@ rows:
         expects: "`R-02.b  differing at a later (season, round): <m>`, m at least 1"
         holds: "yes"
         reading:
-          tree: "f22b1b606c1569f749cad8403e2caba8ee4b42b8"
-          date: "2026-11-17"
+          tree: "caacde342474d73311a799a12194e9b514fc6fa1"
+          date: "2026-11-21"
           seed: "0, 1, 2"
           seasons: 2
-          line: "R-02.b  differing at a later (season, round): 277"
+          line: "R-02.b  differing at a later (season, round): 307"
           control: >-
-            the R-01.c replay arm reads 0 at each seed (a replay that parts would void m); seed 0
-            shown (m 277), seeds 1 and 2 read m 303 and 227; the removal is at `(0, 0)`, and the
-            by-lap line puts differing acts at `(0, 1)` onward and in season 1
+            the R-01.c replay arm reads 0 at each seed (a replay that parts would void m); seed 0 shown (m 307), seeds 1 and 2 read m 318 and 1385;
+            read on the code tree of `072d6f921` (B09.21); B09.99 edits test pin literals and this file only
           does_not_show: >-
-            one removed person a seed; m counts differing acts after `(0, 0)` and does not say the
-            removed choice caused each one; m equals n of R-01.c at every seed, so the verdict line
-            adds no act that R-01.c's does not count
+            one removed person a seed; m counts differing acts after the removal and does not say the removed choice caused each one;
+            m equals n of R-01.c at every seed, so the verdict line adds no act that R-01.c's does not count
     blocks: []
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); H-111 is FI-01's deposit half
 
@@ -646,19 +639,17 @@ rows:
         expects: "seven tests selected, all pass"
         holds: "yes"
         reading:
-          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
-          date: "2026-11-15"
+          tree: "caacde342474d73311a799a12194e9b514fc6fa1"
+          date: "2026-11-21"
           seed: "per test"
           seasons: "per test"
-          line: "7 passed in 48.46s"
+          line: "7 passed in 53.87s"
           control: >-
-            `wa_a_planted_claim` is the test in which a person holding a false belief about a
-            granary declines `transfer` while the world holds the grain; the expression selects no
-            test of effort (`test_a_view_with_no_query_forms_no_effort`)
+            `wa_a_planted_claim` is the test in which a person holding a false belief about a granary declines `transfer` while the world holds the grain;
+            the expression selects no test of effort (`test_a_view_with_no_query_forms_no_effort`); read on the code tree of `072d6f921` (B09.21); B09.99 edits test pin literals and this file only
           does_not_show: >-
-            the falsifier of the first name (delete `View.__getattr__`'s refusal, `a_view_raises`
-            must redden) was not run here; seven passing tests are not the whole of imperfect
-            knowledge (R-07.b to .d); run with `-n 2` and `-p no:cacheprovider` added
+            the falsifier of the first name (delete `View.__getattr__`'s refusal, `a_view_raises` must redden) was not run here; seven passing tests are not the whole of
+            imperfect knowledge (R-07.b to .d); run with `-n 2` and `-p no:cacheprovider` added
       - id: R-07.b
         text: >-
           two hearers with different claims about one subject read different regard after two realm
