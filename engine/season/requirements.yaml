@@ -788,22 +788,25 @@ rows:
           a verb that draws is graded: `pytest engine/season/tests/test_task_draw.py -q` (six tests; `checked >= 10`
           verbs). `IS-A-10` (B07.05) re-pointed it from `test_we_only_a_verb_that_declares_contests_can_be_graded_today`,
           whose premise B07 retires (an uncontested verb is graded by the task draw); that test is now
-          `test_season_shape.py::test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else`. The
-          `reading:` below is the old argv's, kept until B07.99 records this one's
+          `test_season_shape.py::test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else`
         argv: ["python", "-m", "pytest", "engine/season/tests/test_task_draw.py", "-q"]
         expects: "the test passes"
         holds: "yes"
         reading:
-          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
-          date: "2026-11-15"
+          tree: "39afebb43c8c6819908bc67807d91afd4e7acb75"
+          date: "2026-11-21"
           seed: "per test"
-          seasons: "per test"
-          line: "1 passed, 218 deselected in 1.29s"
-          control: "none"
+          seasons: "per test (gate 1 and 5: seeds 0 to 2, two seasons)"
+          line: "10 passed in 154.78s (0:02:34)"
+          control: >-
+            gate 2 (the arm `off` reproduces the S9 base's realm pins, each asserted unequal to the arm-on pin so the control is not
+            vacuous); gate 1 read at the arm `off` in a scratch run on the same tree: no converted verb carries a band, `checked` 0,
+            Events carrying a degree 305 of 981 success Events (arm on: 703 of 703), so the test is red with the arm off
           does_not_show: >-
-            that an uncontested verb is graded by a draw: the test reads that only a verb declaring
-            `contests:` is graded today, the premise B07 retires; run with `-p no:cacheprovider`
-            added
+            that the draw is BALANCED (a verb at two bands and not 100 % one band is not a verb at the right odds; 18-A gate 5's table
+            reads throughput, not balance); that any of the nine verbs not built out (`build`, `found`, `marshal`, `recruit`,
+            `restore`, `sabotage`, `work`; `raze` 9 resolved acts, all Failure; `requisition` 1) draws in play, UNDECIDED (4);
+            CI's python 3.11; run with `-p no:cacheprovider` and `PYTHONHASHSEED=0`
       - id: R-09.b
         text: >-
           two persons resolve the same verb at different pools because they differ:
@@ -854,7 +857,29 @@ rows:
           can then read met at B07 plus BA1.]`
         argv: ["python", "-m", "pytest", "engine/season/tests/test_task_draw.py::test_converted_verb_resolves_in_at_least_two_bands", "-q"]
         expects: "the test passes (every converted verb with ten or more resolved acts at two bands or more, none 100 % one band; degrees on at least 90 % of non-bookkeeping success Events)"
-        holds: "unread"
+        holds: "yes"
+        reading:
+          tree: "39afebb43c8c6819908bc67807d91afd4e7acb75"
+          date: "2026-11-21"
+          seed: "0 1 2"
+          seasons: 2
+          line: >-
+            1 passed in 112.61s; gate 1 over seeds 0 to 2: `failures` [], `checked` 9 converted verbs of ten or more resolved acts
+            (carry 12, conceal 85, forge 128, migrate 19, move 54, reconstruct 328, survey 37, tend 169, train 18; floor
+            `GATE1_VERBS_FLOOR` 9, Jordan ruled 2026-11-20), Events carrying a degree 703 of 703 non-bookkeeping success Events
+            (`contest_owed` rows' 105 left out), 598 task refusals checked, 0 carrying a band
+          control: >-
+            the arm `off`, scratch run on the same tree: no converted verb carries a band, `checked` 0, 305 of 981 success Events
+            carry a degree: the test is red there; gate 5's rule read on the arm-on and arm-off throughput, seeds 0 to 2, two seasons:
+            no verb with ten or more off-arm successes sits at zero Success-or-better on-arm (reconstruct 105 of 276, tend 69 of 114,
+            forge 44 of 87, conceal 36 of 82, move 17 of 35, survey 18 of 33, migrate 6 of 15, carry 5 of 8, thread_read 5 of 5,
+            train 4 of 20)
+          does_not_show: >-
+            that the odds are the right odds (R-09.d asks that outcomes can go either way, not how often); that the corpus lane draws the
+            same way: `corpus_run --seasons 2` at seed 0 reads `forge` 186 of 186 Failure and `survey` 145 of 145 Failure
+            (`DEGREES RESOLVED BY VERB`), which is R-09.c's lane, not this conjunct's; the nine verbs not built out (UNDECIDED (4)); `status:`
+            is not edited, R-09 stays `partial` (R-09.b is unread, R-09.e is not this batch's)
+
       - id: R-09.e
         text: >-
           the draw is one owner's, keyed: `pytest engine/tests/test_draw.py -q`; same seed twice,
