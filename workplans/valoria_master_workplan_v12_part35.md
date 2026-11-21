@@ -22,7 +22,7 @@ GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01a-attributes-generated @cbca1ad4fcee656f908d8a75e99bf79213ddeeab (B01a.05: PROVISIONAL until re-read with `harness/pairs.py social`: every obstacle, commitment or persuasion value this batch tunes against persons is read as a curve over generated pairs, never one even-matchup number; `valoria_master_workplan_v12.md` §3.B, "generated attributes, and curves not centres")
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B05-one-roll @928dccc9a68232d1afb041c9a1c422d8cfdb690e
-GATE: Batch B07-task-draw
+GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
 GATE: Batch B08-scene-order
 GATE: Batch B11-fi-readers
 GATE: Batch B15-pc-calibration

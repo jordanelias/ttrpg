@@ -20,7 +20,7 @@ GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B16L-mb-words @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
 GATE: Batch B04-capability-home @109c80648cddfa2b6b87a4642287b9079a6abc62
 GATE: Batch B05-one-roll @928dccc9a68232d1afb041c9a1c422d8cfdb690e
-GATE: Batch B07-task-draw
+GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
 GATE: Batch B10-character
 GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B17-mb-scale @5377bd99c0ab3823d2ed9870bddf6f3e37999c0e

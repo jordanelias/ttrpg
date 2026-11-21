@@ -18,7 +18,7 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_FA.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
-GATE: Batch B07-task-draw
+GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
 GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B17-mb-scale @5377bd99c0ab3823d2ed9870bddf6f3e37999c0e
 GATE: Batch B19-mb-field-calibration

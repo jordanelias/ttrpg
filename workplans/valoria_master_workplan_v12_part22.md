@@ -21,7 +21,7 @@ GATE: Batch B01a-attributes-generated @cbca1ad4fcee656f908d8a75e99bf79213ddeeab 
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
 GATE: Batch B04-capability-home @109c80648cddfa2b6b87a4642287b9079a6abc62
-GATE: Batch B07-task-draw
+GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
 GATE: Batch B10-character
 GATE: Batch B11-fi-readers
 GATE: Batch B24p-sc-proceeding
