@@ -870,7 +870,7 @@ def _rolled_as(w: Any, act: Any, owner: str = _PROVIDER) -> Optional[tuple]:
     """`(claimants, subject, room, examined, prize)` exactly as the fold hands the act to `resolve` (`prize` the contested prize's row, or `None`), or `None`
     when `owner`'s roll does not deal it (an uncontested act, another provider's prize, a party
     gap; `owner` is the social roll's unless `odds_of` asks for combat's). The derivation is the fold's
-    own: `loop/sides.py::_contests_of` and `::sides_of` and the prize row's `heard_by:` for a contest; the verb's `graded_tasks` route (`data/rosters.py::graded_route`, armed or live) for an inquiry or a task. `loop.sides`
+    own: `loop/sides.py::_contests_of` and `::sides_of` and the prize row's `heard_by:` for a contest; the verb's `graded_tasks` route (`data/rosters.py::graded_route`: `None` for a route armed by a fixture that reads `off`) for an inquiry or a task. `loop.sides`
     imports nothing that imports `seam` (`loop/__init__.py` imports nothing), so this module imports it at module
     level; `loop.resolve` would close a cycle the census counts (`tests/valoria/test_import_cycle_game_state_npe.py`),
     which is why the contest-of-an-act helper lives in `sides.py`."""

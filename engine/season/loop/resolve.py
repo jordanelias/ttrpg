@@ -17,7 +17,7 @@ from __future__ import annotations
 import random
 from dataclasses import replace
 from ..gaps import InstrumentDefect
-from ..data.rosters import (PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, GRADED_TASKS, armed_route_off, graded_route,
+from ..data.rosters import (PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, graded_route,
                             MARGIN_ENDING, STRATA, UNROUTED_BAND, task_share)
 
 from typing import Any, Optional

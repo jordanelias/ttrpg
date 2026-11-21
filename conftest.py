@@ -54,4 +54,5 @@ def _flat_fold_arm(request):
     if request.node.get_closest_marker("flat_fold") is not None:
         from engine.season.data.fixtures import DEFAULT_FIXTURES
         from engine.season.tests._flat_fold import ARM
+        DEFAULT_FIXTURES.get(ARM)      # a renamed arm raises `Ungraded` here instead of setting a dead key and leaving the draw on
         request.getfixturevalue("monkeypatch").setitem(DEFAULT_FIXTURES._v, ARM, "off")
