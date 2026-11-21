@@ -24,8 +24,8 @@ from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.carriers import Act, Question, Scene
 
 # B09.15's reading (`reading @e6cfe8cd4`), seed 0, two seasons, `build_realm(0)` played by `populated.run`'s composition
-# (`test_choose_watch._play`). B09.99 re-pins it with the other realm pins: this literal is one of them.
-B0915_READING_SEED_0 = "160778998cadd35f73f09edb9ae15e3a"
+# (`test_choose_watch._play`). B09.99 re-pinned it with the other realm pins (it equals `_realm_goldens.SHIPPED[(0, 2)]`: the same world).
+B0915_READING_SEED_0 = "4c83fef7e3c96957752c1cd932c8de8c"
 
 
 def _play_headless(seasons: int = 2):
