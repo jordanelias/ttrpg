@@ -253,8 +253,8 @@ def test_every_logged_event_in_the_probe_corpus_anchors(monkeypatch):
         f"{len(anonymous)} logged probe Event(s) anchor on NOTHING: {anonymous[:5]} -- an "
         "emitter built an Event with no act, no change and no anchored antecedent. Give it "
         "`harness/probes.py::about(...)`, or it is witnessed by nobody")
-    # [JUSTIFIED: A VACUITY FLOOR, not a game value -- measured 2026-09-26 at 10,559 logged Events over 111 Worlds (76 by act, 10,469 by change, 14 by cause); 5,000 is half that, and a corpus that stopped building Worlds or logging Events fails here instead of passing on an empty loop]
-    assert anchored >= 5000, f"only {anchored} anchored Events -- this check is near-vacuous"
+    # [JUSTIFIED: A VACUITY FLOOR, not a game value -- measured 2026-09-26 at 10,559 logged Events over 111 Worlds (76 by act, 10,469 by change, 14 by cause), then re-measured at B09.01 at 2,514 anchored Events, because `claim.decayed` is no longer written (a claim's fading is read, not logged); 1,250 is half the re-measure, and a corpus that stopped building Worlds or logging Events fails here instead of passing on an empty loop]
+    assert anchored >= 1250, f"only {anchored} anchored Events -- this check is near-vacuous"
 
 
 # -- FALSIFIER 3: live runs, against records the accessors do not read ---------------------
