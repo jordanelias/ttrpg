@@ -6848,7 +6848,7 @@ rows:
     kind:      "NUMBER"
     owner:     "`engine/season/data/fixtures.py::Fixtures.refusal_memory` the one home. READER: `engine/season/decision/choose.py::admission_weight`, called by `score_terms` (the one owner of the formula) after `odds_weight`; the remembered confidence is `engine/season/queries/person_q.py::refused_before`, faded through `engine/season/state/ledgers.py::present_confidence`"
     grade:     "assumption"
-    default:   "0.0 -- THE CONTROL, shipped by B09.03: the factor is exactly 1.0 for every candidate and no ledger is read, so the realm's content hash is the one before the factor. The shipped value is its own mover, set by B09.05 on the source's five readings"
+    default:   "0.5 -- SHIPPED by B09.05 as an ASSUMPTION FOR JORDAN (`[ASSUMPTION; medium; Jordan to correct]`; the source proposes it, no derivation): half the pursuit weight is withheld at a fresh full-confidence refusal and returns as the claim fades. REVERT: 0.0, THE CONTROL (B09.03's value): the factor is exactly 1.0 for every candidate and no ledger is read, so the realm's content hash is the one before the factor"
     site:      "Fixtures refusal_memory, read ONLY by `decision/choose.py::admission_weight`, per candidate whose pursuit term is non-zero"
     sweep:     [0.0, 0.5, 1.0]
     unblocks:  "R-07.a and R-08's 'not perfectly rational': a refused act is retried at lower odds, until the claim fades or news of the subject lands; a person refused at full confidence keeps a positive factor at every setting below 1.0, so he is never stuck"

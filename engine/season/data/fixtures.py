@@ -1160,17 +1160,17 @@ DEFAULT_FIXTURES = Fixtures(
     # rows and `reconstruct`) folds flat, as before B07 (the control); `on` -- it is drawn through `seam.grade` and folded at its band. B07.05 flipped it (gate 5 read); the revert is the one value.
     # [JUSTIFIED: engine/season/hole_register.yaml H-445 -- site: Fixtures task_draw_arm, graded `assumption`; 18-A ships it `on` only once its gate 5 reads, so it was injected at the control and is swept off / on]
     task_draw_arm="on",                # `H-445`, swept off (control) / on (SHIPPED since B07.05; revert: `off`)
-    # `H-456` (B09.03; `16_PESSIMIST_CORE_a_refusal_is_remembered` edit 3). HOW HARD A REMEMBERED REFUSAL PUSHES A PERSON OFF RETRYING THE SAME
+    # `H-456` (B09.03; B09.05; `16_PESSIMIST_CORE_a_refusal_is_remembered` edit 3). HOW HARD A REMEMBERED REFUSAL PUSHES A PERSON OFF RETRYING THE SAME
     # OPPORTUNITY: `decision/choose.py::admission_weight` puts `1 - refusal_memory * refused_before / confidence_default` on a candidate's
-    # pursuit term, `refused_before` the present confidence of his newest firsthand refusal of that subject (`queries/person_q.py`). `0.0` is
-    # the CONTROL and is what ships here: the factor is exactly 1.0 and no ledger is read. `0.5` and `1.0` are the sweep (1.0 zeroes the term
-    # at a fresh full-confidence refusal); the shipped value is its own mover, set by B09.05.
-    # [ASSUMPTION; medium; Jordan to correct; revert: `0.0`.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-456 -- site: Fixtures refusal_memory, graded `assumption`; the source gives no number for the weight, so it is injected at the control and swept 0.0 / 0.5 / 1.0]
-    refusal_memory=0.0,                # `H-456`, swept 0.0 (control, SHIPPED here) / 0.5 / 1.0
+    # pursuit term, `refused_before` the present confidence of his newest firsthand refusal of that subject (`queries/person_q.py`). `0.5` SHIPS
+    # (B09.05): half the pursuit weight is withheld at a fresh full-confidence refusal and returns as the claim fades at `claim_decay_per_season`.
+    # `0.0` is the CONTROL (the factor is exactly 1.0 and no ledger is read; the revert); `1.0` zeroes the term at a fresh full-confidence refusal.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0.0`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-456 -- site: Fixtures refusal_memory, graded `assumption`; the source proposes 0.5 and gives no derivation, so it ships as an assumption for Jordan and is swept 0.0 / 0.5 / 1.0]
+    refusal_memory=0.5,                # `H-456`, swept 0.0 (control; revert) / 0.5 (SHIPPED since B09.05) / 1.0
     # `H-111` (B09.04; `U5a_DICE_owed_edits` §4). WHO RECEIVES A `finding.none` EVENT AT WITNESS (`rosters.yaml: undeposited_kinds` skips it for everyone):
     # `none` -- nobody (the CONTROL, and what ships; B98 sets the arm); `actor` -- its own doer alone, so a search he failed is a claim he remembers and
-    # `decision/choose.py::admission_weight` discounts (a no-op while `refusal_memory` is 0.0). The arms are `rosters.yaml: finding_none_deposit_arms`.
+    # `decision/choose.py::admission_weight` discounts (a no-op only at `refusal_memory` 0.0, the control). The arms are `rosters.yaml: finding_none_deposit_arms`.
     # [ASSUMPTION; medium; Jordan to correct; revert: `none`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-111 -- site: Fixtures finding_none_deposit, graded `assumption`; the skip's own note names the narrower arm as the alternative Jordan would name, so it is injected at the control and swept none / actor]
     finding_none_deposit="none",       # `H-111`, swept none (control, SHIPPED) / actor
