@@ -1181,6 +1181,13 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; shipped `True`; revert: `False`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-183 -- the row that weighs a told claim by its teller's `record`; this switch adds the claim's own present confidence to that one product, shipped `True` and swept False (control, the revert) / True]
     weigh_confidence=True,             # `H-183`, swept False (control; revert) / True (SHIPPED since B09.08)
+    # `H-457` (B09.12; `16_PESSIMIST_GAME_standing_occasions_carry_their_cause`). WHETHER AN ACT FORMED ON A STANDING OCCASION NAMES THE EVENT THAT
+    # OPENED IT: `loop/resolve.py::_occasion_ids` adds to `causes[]` the id of the first kind `rosters.yaml: standing_occasion_opened_by` lists for
+    # the act's classed referent that the log holds as written about it (a `succession.claimed` cites the `tenure.closed` that emptied the seat).
+    # `False` is the CONTROL and the revert (today's `[]`: the act's Events cite the act alone); `True` SHIPS.
+    # [ASSUMPTION; medium; Jordan to correct; shipped `True`; revert: `False`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-457 -- site: Fixtures standing_occasion_cause, graded `assumption`; the proposal ships the arm `True` and gives no derivation for the opening kinds it reads, so it is injected and swept False (control, the revert) / True / True with `Office`'s two kinds in the other order]
+    standing_occasion_cause=True,      # `H-457`, swept False (control; revert) / True (SHIPPED, B09.12) / True with `Office` read the other way
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

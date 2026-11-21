@@ -38,7 +38,7 @@ from .requires import (
 )
 from .rosters import (
     COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
-    RESTRAINT_KINDS, STRIFE_KINDS,
+    RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS,
     is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
@@ -1740,8 +1740,26 @@ def _check_strife_kinds(lists, event_kinds) -> dict:
     return lists
 
 
+def _check_standing_occasion_opened_by(by_class, event_kinds) -> dict:
+    """B09.12 (`rosters.yaml: standing_occasion_opened_by`): every listed kind is an Event kind the loop declares
+    (`EVENT_KINDS`: a verb row's `emits`, the fold's kinds, and the MATTER and CALENDAR kinds), by the same test
+    `_check_strife_kinds` makes, or import refuses naming the members -- a kind no one emits would be an opening Event
+    `World.last_emission_of` never finds, and the roster would read as built. The class keys and shape are
+    `data/rosters.py::_load_standing_occasion_opened_by`'s. A function, so a test can plant a bad kind. Returns it."""
+    unknown = sorted({k for ks in by_class.values() for k in ks if k not in event_kinds})
+    if unknown:
+        raise Unspecified(
+            f"`standing_occasion_opened_by` names {unknown}, which are not Event kinds the loop declares",
+            "rosters.yaml -- standing_occasion_opened_by",
+            needs="name kinds in `data/verbs.py::EVENT_KINDS`",
+            law="04 §B.13 invariant 7 -- the Event-kind roster is derived from every emission column; a kind "
+                "outside it is one the log accepts from no one, and no opening Event would ever be found")
+    return by_class
+
+
 _check_covert_kinds(COVERT_KINDS, DEED_KINDS)
 _check_strife_kinds(STRIFE_KINDS, EVENT_KINDS)
+_check_standing_occasion_opened_by(STANDING_OCCASION_OPENED_BY, EVENT_KINDS)
 _check_dominance_kinds(DOMINANCE_KINDS, DEED_KINDS)
 
 

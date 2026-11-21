@@ -8805,6 +8805,16 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
             continue
         sc = d.scenes.get(getattr(act, "scene", None) or "")
         allowed = {act.id} | set(occasioned_by(w, getattr(sc, "occasion", None)))
+        # B09.12: an act on a CLASSED referent of its scene's occasion also names the Event that OPENED that standing
+        # occasion (`loop/resolve.py::_occasion_ids`): an Event of a kind `rosters.yaml: standing_occasion_opened_by` lists for
+        # the referent's class, whose receipts name the referent. Only those are admitted here, so padding still reads red.
+        from ..data.rosters import STANDING_OCCASION_OPENED_BY
+        from ..state.carriers import subject_of
+        subj = subject_of(act)
+        cls = dict(getattr(getattr(sc, "occasion", None), "classes", ())).get(subj)
+        if cls:
+            allowed |= {x.id for x in w.log if x.kind in STANDING_OCCASION_OPENED_BY.get(cls, ())
+                        and any(c.subject == subj for c in x.changes)}
         assert set(e.causes) <= allowed, (
             f"{e.kind} cites {sorted(set(e.causes) - allowed)}, which is neither its act nor an "
             "antecedent of its occasion — causes[] is being padded, and a padded causes[] scores "

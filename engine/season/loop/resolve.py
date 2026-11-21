@@ -18,7 +18,7 @@ import random
 from dataclasses import replace
 from ..gaps import InstrumentDefect
 from ..data.rosters import (PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, graded_route,
-                            MARGIN_ENDING, STRATA, UNROUTED_BAND, task_share)
+                            MARGIN_ENDING, STANDING_OCCASION_OPENED_BY, STRATA, UNROUTED_BAND, task_share)
 
 from typing import Any, Optional
 from ..data.matrix import Step, matrix_row
@@ -169,9 +169,22 @@ def _occasion_ids(self, w: "World", a: Act) -> list:
     # question's own occasion -- a `claim_landed` question's originating Event -- is unrelated to
     # an act formed on the classed referent. Such an act gets `[ROOT]`, as a Q4 `need` does (plan
     # IN-53 step 3); one whose subject is ALSO a plain referent keeps the question's occasion.
+    #
+    # B09.12 (H-457): THE STANDING OCCASION HAS AN OPENING EVENT, AND THAT EVENT IS THE ACT'S REASON. The question's occasion
+    # is still unrelated, but the vacancy, writ, wound or detention the act answers was opened by an Event the log holds: the
+    # first kind `rosters.yaml: standing_occasion_opened_by` lists for the referent's class that was WRITTEN about it
+    # (`World.last_emission_of`, the chaining primitive MATTER's clocks use). ONE id at most, so `causes[]` does not fan; none
+    # where the log holds none (a seat vacant since the build). `standing_occasion_cause` False is the control: `[]`.
     subj = subject_of(a)
     if (subj and subj not in getattr(occ, "referents", ())
             and any(r == subj for r, _ in getattr(occ, "classes", ()))):
+        if not w.fixtures.get("standing_occasion_cause"):
+            return []
+        cls = next(c for r, c in occ.classes if r == subj)
+        for kind in STANDING_OCCASION_OPENED_BY.get(cls, ()):
+            eid = w.last_emission_of(kind, subj, written=True)
+            if eid is not None and eid != a.id:
+                return [eid]
         return []
     return [c for c in occasioned_by(w, occ) if c != a.id]
 
