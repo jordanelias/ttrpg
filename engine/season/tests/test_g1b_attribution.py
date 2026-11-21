@@ -39,14 +39,17 @@ from engine.season.state import world as world_mod
 from engine.season.state.acts import ActStore
 from engine.season.state.attribution import actor_of, anchor_of
 from engine.season.state.carriers import Act, Event, StateChange
+from engine.season.state.gate import Gate
 from engine.season.state.ids import H, ROOT
 
 
 class _W:
-    """The two attributes the accessors touch, and nothing else."""
+    """The two attributes the accessors touch, and the gate and tick `harness/probes.py::about` mints on."""
     def __init__(self, acts=None):
         self.acts = acts or ActStore()
         self.log = []
+        self.gate = Gate()
+        self.tick = 1
 
 
 def _ev(causes, changes=None):
@@ -144,7 +147,7 @@ def test_an_event_reaching_no_tier_at_all_returns_None():
     # and a ROOT-caused Event with a change naming what it is about still anchors -- the carrier
     # `harness/probes.py::about` gives every apparatus Event, so the None above is the change's
     # absence and nothing else.
-    assert anchor_of(w, Event(id="e_q", kind="plague.struck", changes=[P.about("R")],
+    assert anchor_of(w, Event(id="e_q", kind="plague.struck", changes=[P.about(w, "R")],
                               causes=[ROOT], emitted_at=1)) == "R"
 
 

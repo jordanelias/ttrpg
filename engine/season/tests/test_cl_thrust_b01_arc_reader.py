@@ -123,7 +123,7 @@ def _petition_answered(*, link=True):
     assert filed.kind == "petition.filed"
     scene = None
     if link:
-        w.log.append(Event("ev_dep", "claim.deposited", [StateChange("claim_x", "set", "Act")],
+        w.log.append(Event("ev_dep", "claim.deposited", [P.apparatus_receipt(w, "claim_x", "set", "Act")],
                            [filed.id], w.tick))
         d.scenes["sc_x"] = Scene("sc_x", "p_king", [], occasion=Question("q_x", "claim_landed", (),
                                                                           about="claim_x"))

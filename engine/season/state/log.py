@@ -26,13 +26,11 @@ and would break `reversed(self.log)` in `world.py` silently -- `reversed` needs
 `__reversed__` or the `__len__`+`__getitem__` pair, and a class with only `__iter__` raises. Both
 are implemented for that reason, not for completeness.
 
-⚠ WHAT IS DELIBERATELY NOT REFUSED: an Event carrying a bare `StateChange`. Refusing it outright
-is the correct end state and it is not reachable -- `harness/probes.py` builds
-one outside any gate write. So a bare
-`StateChange` is admitted and a `Receipt` is verified: the type you reach for when you mean "the
-gate wrote this" is checked, and the one that predates the distinction is not. **This is a
-transitional asymmetry and it is the file's weakest seam** -- anyone wanting to forge provenance
-today simply uses the older class. What it stops is the accident, not the adversary.
+⚠ AN EVENT CARRYING A BARE `StateChange` IS REFUSED (B09.09, H-145). It was admitted while
+`harness/probes.py` built one outside any gate write; the probes now mint their changes through
+the world's gate (`probes.py::apparatus_receipt`), so the log verifies every change and the
+older class is no route round it. It is still Python: a determined author with the gate in hand
+can open a window and mint. What it stops is the accident, not the adversary.
 """
 from typing import Any, Callable, Iterator, Optional
 
@@ -85,7 +83,16 @@ class EventLog:
 
         if self._gate is not None:
             for c in ev.changes:
-                if isinstance(c, Receipt) and not self._gate.issued(c):
+                if not isinstance(c, Receipt):
+                    # H-145 / B09.09: a bare `StateChange` is no receipt, so no gate vouches for it.
+                    raise Forbidden(
+                        f"Event {ev.id!r} ({ev.kind}) carries a bare {type(c).__name__} "
+                        f"(subject {c.subject!r}, field {c.field!r}), not a receipt", "S16",
+                        needs="a receipt from `Gate.mint`, obtained during a real gate write "
+                              "(an apparatus builds one with `harness/probes.py::apparatus_receipt`)",
+                        law="a change on an Event is one the gate wrote; a bare StateChange is an "
+                            "assertion with no provenance, ID-9's own worked example")
+                if not self._gate.issued(c):
                     raise Forbidden(
                         f"Event {ev.id!r} ({ev.kind}) carries a receipt this gate did not mint "
                         f"(serial {c.serial}, subject {c.subject!r}, field {c.field!r})", "S16",

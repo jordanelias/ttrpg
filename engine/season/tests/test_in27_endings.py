@@ -243,7 +243,7 @@ def test_in27_a_condition_planted_with_no_act_is_true_and_reports_nothing(monkey
     assert Q._ending_edges(w, REEVE_ROW["crowned_reeve"]), "control: the planted condition does not hold"
     # an Event NAMING the planted hold, caused by `[ROOT]` (no act): the walk reaches it, `causing_act`
     # answers `None`, and it is neither an opening nor a raise (A-F6)
-    w.log.append(Event("ev_in27_root", "tenure.opened", [P.about("t_reeve_planted")], [ROOT], w.tick))
+    w.log.append(Event("ev_in27_root", "tenure.opened", [P.about(w, "t_reeve_planted")], [ROOT], w.tick))
     assert Q.causing_act(w, w.log[-1]) is None, "fixture: the planted Event has a causing act"
     assert Q.endings_reached(w) == [], "an ending fired with no person's act among its antecedents"
     checked += 1
