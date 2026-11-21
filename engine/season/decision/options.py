@@ -49,6 +49,8 @@ from ..queries.person_q import (
     is_cell as _is_cell, lie_said_of, projected_axes, regard, said_of,
 )
 from ..state.carriers import Candidate, Claim, Person, Question, Record, View, fade_of
+# 04 §C.3 says `decision/` does not import `state/`; the AX-2 scan (`test_season_shape.py`) forbids `state.world` only and has admitted `state.carriers` since
+# before B09. `state/ledgers.py` is a leaf that imports nothing and `present_confidence` is a pure function of a Claim: admitted on that precedent (B09.01).
 from ..state.ledgers import present_confidence
 from ..trace_log import TRACE
 from ...substrate.descriptors import about_mid, scale_of
