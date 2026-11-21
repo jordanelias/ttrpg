@@ -4700,7 +4700,7 @@ rows:
     tier:      1
     hole:      "WHAT AN INVESTIGATION ACT DEPOSITS, BY DEGREE, AND WHETHER ITS SUBJECT LEARNS HE WAS ASKED (proceedings `19_PLAN.md` step 19, intent: each of `interview`, `examine`, `research`, `reconstruct`, `surveil` gains a `product` column -- a stance, a retention, a record, an inference, a presence -- deposited at WITNESS at a confidence keyed on the degree, a misread at the SAME confidence with the WRONG value, and the subject's ledger recording that he was asked). STOPPED at v9 SC-02 `22a`, not built: the step's two load-bearing halves are decided the other way by the later design, and its remaining content is already built in that design's form."
     kind:      "PRODUCER"
-    owner:     "the investigation rows (`verb_table.yaml`) and their deposit at WITNESS: `rosters.yaml` `graded_inquiries` (the roll route), `inquiry_modules` + `finding_terms` (what a graded finding uncovers, keyed on the degree), and `loop/witness.py::_found_claims` (the found deposit) -- the owners a `product` column would sit beside"
+    owner:     "the investigation rows (`verb_table.yaml`) and their deposit at WITNESS: `rosters.yaml` `graded_tasks` (the roll route; `graded_inquiries` until B07.01), `inquiry_modules` + `finding_terms` (what a graded finding uncovers, keyed on the degree), and `loop/witness.py::_found_claims` (the found deposit) -- the owners a `product` column would sit beside"
     grade:     "absent"
     default:   "none"
     site:      ""

@@ -103,7 +103,7 @@ scales:
     subsystem: [social_contest]   # `rosters.yaml` `modules:` entries -- the one owner of where each lives (A-25, plan position `30`)
     retention: RETAINED
     in_loop:   "the roll is in the loop: `social_contest.roll`, through the prize-routed `contests:` rows
-      (`a standing`, `a proposition`, `a matter`) and the `graded_inquiries` route's three inquiries; READING, not a count:
+      (`a standing`, `a proposition`, `a matter`) and the `graded_tasks` route's three inquiries (`graded_inquiries` until B07.01); READING, not a count:
       `PYTHONHASHSEED=0 python -m engine.season.harness.corpus_run --seasons 2 <seed>` at seeds 0 and 1 -- its `DEGREES RESOLVED BY
       VERB` block names the social verbs that rolled and the bands they resolved at"
     note: >-
@@ -114,7 +114,7 @@ scales:
       (`engine/dice_engine/sigma_leverage.py`). ⚠ REWRITTEN (B05.19): this note used to say the loop does NOT reach the
       roll, and that "4 of 45 verb rows declare `contests:`" (`fight`, `accept`, `march`, `tell`). Read the verb table instead:
       `python -c "import yaml; [print(r['verb'], r['contests']) for r in yaml.safe_load(open('engine/season/verb_table.yaml'))['verbs'] if r.get('contests')]"`
-      lists every row that declares a prize, and `rosters.yaml: contest_subsystems.prizes` / `graded_inquiries` say which
+      lists every row that declares a prize, and `rosters.yaml: contest_subsystems.prizes` / `graded_tasks` (was `graded_inquiries`) say which
       route each reaches. The reading of the loop at seeds 0 and 1, two seasons each, `PYTHONHASHSEED=0` (B05.19, `16946bbf8`):
       by verb, from `DEGREES RESOLVED BY VERB` -- seed 0: argue 294, lie 74, speak 35, tell 119, research 638, surveil 68;
       seed 1: argue 344, arrest 1, lie 93, speak 45, tell 153, research 571, surveil 63 (`determine` formed in neither).
