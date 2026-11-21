@@ -271,13 +271,26 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
                     law="§E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the "
                         "same defect `resolve` had, one column along: a rule the code cannot "
                         "read")
-            ok = bool(pred(w, a))
+            # B09.19: a predicate that declares `clauses=` answers `(ok, clause)` and a bare-bool one `ok`. The clause rides
+            # `Verdict.failed`, no `observed` reads with it (WITNESS deposits nothing new from the read itself), so a KEYED
+            # predicate row emits the kind of the clause that refused and a flat row is unchanged.
+            answer = pred(w, a)
+            if isinstance(answer, tuple):
+                ok, failed = bool(answer[0]), answer[1]
+                declared = getattr(pred, "clauses", None)    # None: a wrapper or stand-in that declared nothing
+                if declared is not None and failed is not None and failed not in declared:
+                    raise InstrumentDefect(
+                        f"{a.verb!r}'s predicate refused at {failed!r}, which it does not declare "
+                        f"({list(declared)}); a name a refusal carries is one `requires_predicate(clauses=)` owns")
+                verdict = Verdict(UNKNOWN, (), failed)
+            else:
+                ok = bool(answer)
         if not ok:
             TRACE.decision(f"{a.verb} by {a.actor}: precondition unmet", "E2/S27.1",
                            chose="emit the refusal -- scarcity falls out of the fold",
                            alternatives=["raise (no Event, no witness, no arc)"])
-            # `verdict.failed` is the conjunct that decided it (`data/requires.py::evaluate`); a
-            # predicate row and an unnamed cell carry `None`, which only a flat row reaches.
+            # `verdict.failed` is the conjunct that decided it (`data/requires.py::evaluate`) or the clause a
+            # naming predicate refused at; an unnamed cell and a bare-bool predicate carry `None`, which only a flat row reaches.
             return (False, _demand_earned(w, a, row.refusal_for(verdict.failed), True)
                     or (FOLD_REFUSED,), verdict)
     # ⚠ PLAN POSITION `14` (U7-own): THE SECOND PARTY, ASKED HERE AND NOWHERE ELSE. `ED-IN-0210`
