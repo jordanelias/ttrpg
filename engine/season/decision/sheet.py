@@ -1,6 +1,6 @@
 """`decision/` -- THE CHARACTER SHEET AS THREE SPACES (v10 REM-30, plan position IN-47): creation,
 development, chronicling. Design: `proposals/2026-10-07-character-sheet-spaces.md` and its
-`## Review at B-H` -- reference, PROPOSED and HELD BACK (ED-1094); nothing here ratifies it.
+`## Review at B-H` -- reference, RATIFIED (Jordan, 2026-11-05, ED-IN-0349); nothing here ratifies it.
 
 A management space *"reads the player's own `View`/`Question`/`Candidate` and emits acts, owning no
 game state"* (A-25). In code each space is at most a `choose` callable, or a part of the one handed
@@ -26,12 +26,14 @@ an act's, folded at RESOLVE (and the fold's two post-outcome writes, `_scar_witn
                      of every index in order IS `make_chooser` (the control); any other pick is a mover.
   CHRONICLING        `chronicle(p, fx=None)` -- **no act, no write**: the person's own `ledger` as held, his belief
                      per subject through `LedgerReader` (its comparator, not a copy; weighed when `fx` is given, B09.07), and the PRESENT
-                     values of `scar` and `conviction`. **It shows no scar or crisis as an event**: both
-                     writers call `World.write` without `emits` (`loop/resolve.py::_scar_witnesses`,
-                     `_conviction_crisis`), and `verb_table.yaml`'s `fight` row withholds `scar.taken`
-                     on purpose -- so no `Event`, `causes[]` edge or WITNESS deposit records when or by
-                     whose act a count rose or a creed folded. Giving it that history is a writer's
-                     change (the row's `emits:`), never a space's.
+                     values of `scar` and `conviction`. **It shows a scar as no event of its own, and a crisis as none**:
+                     `_scar_witnesses` records its write in one `scar.taken` Event, appended to the
+                     log and kept out of the list WITNESS reads (so no deposit), and the `fight`
+                     row still withholds `scar.taken` from its own `emits:`; `_conviction_crisis`
+                     writes `conviction` with no Event at all. So the sheet reads the PRESENT
+                     values, never a history: no `causes[]` edge or WITNESS deposit records when or
+                     by whose act a count rose or a creed folded. Giving it that history is a
+                     writer's change (`loop/resolve.py`), never a space's.
 
 THE SHEET HOLDS COPIES, SHALLOW EXCEPT WHERE IT MATTERS. Every field a sheet carries is a read-only copy of the
 person's own carrier (`MappingProxyType`, tuples), so a client's `pick` is never handed a `Person` and cannot reach
