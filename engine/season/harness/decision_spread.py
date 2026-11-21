@@ -63,7 +63,8 @@ THERE IS NO `--cells`: per-cell leverage needs a projection rebind the tree does
 cast producer questioned go to the cell-value and cosine pass with `--decisions`' deciding-term reading as
 evidence, and no cell is edited here.
 
-THE DECIDING TERM (`attribute_top`), in the order it is tested:
+THE DECIDING TERM (`decision/choose.py::deciding_term`, the one owner; `attribute_top` scores a candidate set and calls it,
+`play_season` takes it over what the chooser itself ranked), in the order it is tested:
   1. `draw`      the sampler's top is NOT the score's top (the draw outvoted the score), or the top two
                  scores are within `EPS` and `choice_temperature` > 0 (the draw ordered them). The label
                  stays one; `draw_kind` splits it: `tie` (the draw ordered a tie) against `outvoted` (the
@@ -89,8 +90,8 @@ SEAMS AND KNOWN LIMITS (the code is the mechanism; these are what the code does 
     tick, not a distribution over ticks.
   * Absent in `--season`: a resolved act whose `(actor, verb, subject)` the watch did not see leave a
     deliberation (a re-minted id) is counted `unmapped`, printed, and not attributed.
-  * `--season`'s draw split scores each deliberation a second time through `attribute_top` on the
-    chooser's own opening set (the draw is keyed by candidate, so the second reading consumes nothing).
+  * `--season`'s draw split is read off the chooser's own deliberation through `make_chooser(watch=...)`
+    (B09.13): the ranking, terms and sampled order the chooser used, not a second scoring of its opening set.
 """
 from __future__ import annotations
 
@@ -121,9 +122,7 @@ from . import probes as P
 from .corpus_run import attempts
 from ..boot.realm import build_realm
 
-# [JUSTIFIED: a float-tie tolerance for the attribution (two scores within it are a tie), an instrument constant and not a game number]
-EPS = 1e-9
-TERMS = ("pursuit", "stance", "fit")
+EPS = CH.ATTRIBUTION_EPS      # the attribution's float-tie tolerance: one value, owned beside the rule that reads it (`choose.deciding_term`)
 # [JUSTIFIED: the instrument's near-identical bar for a cosine between two persons' vectors (IN-64's EXIT 'pairs above 0.99'), a reading threshold and not a game number]
 COSINE_HIGH = 0.99
 
@@ -192,11 +191,13 @@ def null_alignment():
 # THE ATTRIBUTION
 
 
-def attribute_top(p, cands: list, fx, draw=None, odds=None, terms=None) -> dict:
-    """Rank `cands` for `p` as the chooser does and say WHICH TERM decided the top (the module docstring
-    lists the tests in order). Returns `{top, decider, margin, scores, terms, draw_kind, field_zero}`;
-    `scores` and `terms` are parallel to `cands`. `cands` empty -> `top` None, `decider` `none`; one
-    candidate -> `sole`.
+def attribute_top(p, cands: list, fx, draw=None, odds=None) -> dict:
+    """Rank `cands` for `p` as the chooser does and say WHICH TERM decided the top: it SCORES, ORDERS and SAMPLES `cands`
+    (a second scoring, for a reader that has no chooser's deliberation to watch: `read_decisions`' common set) and hands the
+    result to `choose.deciding_term`, the one owner of the rule (the module docstring lists its tests in order). Returns
+    `{top, decider, margin, scores, terms, draw_kind, field_zero}`; `scores` and `terms` are parallel to `cands`. `cands` empty
+    -> `top` None, `decider` `none`; one candidate -> `sole`. A reading of a deliberation the chooser itself ran does not call
+    this: it takes `make_chooser(watch=...)`'s lists and calls `deciding_term` (`play_season`).
 
     `draw_kind` SPLITS THE `draw` LABEL (the `decider` label itself is unchanged): `None` when the draw
     decided nothing; `tie` when the top two scores are within `EPS` and `choice_temperature` > 0 (the draw
@@ -211,38 +212,14 @@ def attribute_top(p, cands: list, fx, draw=None, odds=None, terms=None) -> dict:
     if not cands:
         return {"top": None, "decider": "none", "margin": None, "scores": [], "terms": [],
                 "draw_kind": None, "field_zero": False}
+    if not cands:
+        return CH.deciding_term([], [], None, 0.0)
     memo = CH.deliberation_memo(p, fx)
-    if terms is None:            # a reader that already scored `cands` (harness/interactions.py) passes its terms
-        terms = [CH.score_terms(p, c, fx, memo, odds) for c in cands]
-    scores = [CH.score_total(t) for t in terms]
-    field_zero = all(abs(s) <= EPS for s in scores)
-    if len(cands) == 1:
-        return {"top": cands[0], "decider": "sole", "margin": None, "scores": scores, "terms": terms,
-                "draw_kind": None, "field_zero": field_zero}
-    by_id = {id(c): s for c, s in zip(cands, scores)}
+    terms = [CH.score_terms(p, c, fx, memo, odds) for c in cands]
+    by_id = {id(c): CH.score_total(t) for c, t in zip(cands, terms)}
     ranked = CH.score_order(cands, by_id)               # the chooser's own ordering, not a second copy
-    index_of = {id(c): i for i, c in enumerate(cands)}
-    order = [index_of[id(c)] for c in ranked]
     actual = CH.sample_order(ranked, lambda c: by_id[id(c)], p, fx, draw)[0]
-    ai = next(i for i, c in enumerate(cands) if c is actual)
-    best, second = scores[order[0]], scores[order[1]]
-    margin = best - second
-    tau = float(fx.get("choice_temperature"))
-    if ai != order[0]:
-        decider = "draw"
-    elif margin <= EPS:
-        decider = "draw" if tau > 0 else "tiebreak"
-    else:
-        deciding = []
-        for k, name in enumerate(TERMS):
-            rest = [scores[j] - terms[j][k] for j in range(len(cands))]
-            if rest[ai] - max(r for j, r in enumerate(rest) if j != ai) <= EPS:
-                deciding.append(name)
-        decider = "+".join(deciding) if deciding else "overdetermined"
-    draw_kind = None if decider != "draw" else (
-        "tie" if margin <= EPS and tau > 0 and scores[ai] >= best - EPS else "outvoted")
-    return {"top": actual, "decider": decider, "margin": margin, "scores": scores, "terms": terms,
-            "draw_kind": draw_kind, "field_zero": field_zero}
+    return CH.deciding_term(cands, terms, actual, float(fx.get("choice_temperature")))
 
 
 def new_split() -> dict:
@@ -480,26 +457,30 @@ def play_season(w, seasons: int = 1) -> dict:
     entered the fold and was refused there is in them, and a contested act refused at admission, which
     never enters `d.resolved`, is not."""
     d = SeasonDriver(w)
-    foldable = resolvable_verbs()
-    draw = draw_factory(w.world_seed, lambda: w.tick)
-    real = P.chooser(w, verbs=foldable)
+    tau = float(w.fixtures.get("choice_temperature"))
     split = new_split()                    # every deliberation's `draw_kind` / `field_zero`, read beside the chooser
     answered: Counter = Counter()          # (source, goal class) -> deliberations
     by_act: dict = {}                      # (actor, verb, subject) -> (source, goal class)
+    heard: list = []                       # the key of the deliberation the hook just reported (empty: it had no question)
+
+    def watch(p, q, ranked, terms, sampled):
+        # `make_chooser`'s observer hook: what the chooser itself ranked, scored and sampled (B09.13). Nothing is
+        # scored again and nothing is steered; `choose.deciding_term` is the one owner of the attribution rule.
+        tally_split(split, p.id, CH.deciding_term(ranked, terms, sampled[0] if sampled else None, tau))
+        key = (q.source, goal_class(q))
+        answered[key] += 1
+        heard.append(key)
+
+    real = P.chooser(w, verbs=resolvable_verbs(), watch=watch)
 
     def watched(p, v, s, ask_budget):
+        # only to see the SCENES the chooser returned (the hook is handed the ranking, not the acts packed from it)
+        heard.clear()
         scenes = real(p, v, s, ask_budget)
-        q = getattr(v, "question", None)
-        if q is not None:
-            # the chooser's own opening set, narrowed as it narrows, scored again by `attribute_top` (pure in
-            # its inputs: the draw is keyed by the candidate, not consumed); nothing is steered
-            cands = [c for c in opening_set(p, v, q, w.fixtures) if c.verb in foldable]
-            tally_split(split, p.id, attribute_top(p, cands, w.fixtures, draw, getattr(v, "odds", None)))
-            key = (q.source, goal_class(q))
-            answered[key] += 1
+        if heard:
             for sc in scenes:
                 for a in sc.acts:
-                    by_act[(p.id, a.verb, subject_of(a))] = key
+                    by_act[(p.id, a.verb, subject_of(a))] = heard[0]
         return scenes
 
     for _ in range(seasons):

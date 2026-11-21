@@ -11,13 +11,14 @@ from ..decision import make_chooser
 from ..state.ids import H, draw_factory
 
 
-def chooser(w, only=None, verbs=None, draw_seed=None):
+def chooser(w, only=None, verbs=None, draw_seed=None, watch=None):
     """§F2's default policy, built the way the barrier builds it -- the composition of
     `make_chooser` over a world (act-id mint, `verbs`, the per-candidate draw) that every instrument
     which plays a season on the shipped policy calls: `populated`, `soak` and `storybar` through
-    here. `interactions` alone still composes it by hand, because its `run` reads `mint` and `draw`
-    again below the composition (`CH.sample_order(..., draw)`, `mint(p.id, ...)`,
-    `attribute_top(..., draw, ...)`), so it needs the parts and not only the chooser. `only`
+    here. `interactions` alone still composes it by hand, because its `run` reads `mint` again below
+    the composition (`mint(p.id, ...)`, to match the chooser's acts to its table), so it needs the
+    part and not only the chooser. `watch` is `make_chooser`'s observer hook (B09.13), passed through
+    untouched: `None` is the chooser as it was. `only`
     narrows to one person so a probe can watch a single decision; `verbs` narrows the option set to
     the ones under test; `draw_seed`, when given, replaces `w.world_seed` as the seed of the
     CHOOSER'S `draw_factory` and of nothing else (the act-id mint keeps `w.world_seed`) -- the
@@ -28,7 +29,8 @@ def chooser(w, only=None, verbs=None, draw_seed=None):
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     inner = make_chooser(w.fixtures, mint, verbs=verbs,
                          draw=draw_factory(w.world_seed if draw_seed is None else draw_seed,
-                                           lambda: w.tick))
+                                           lambda: w.tick),
+                         watch=watch)
     def choose(p, v, s, ask_budget):
         return inner(p, v, s, ask_budget) if (only is None or p.id == only) else []
     return choose

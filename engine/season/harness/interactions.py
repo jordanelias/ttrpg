@@ -5,18 +5,16 @@ behaviour is occurring"*). It DIAGNOSES; it changes no choice.
 
     python -m engine.season.harness.interactions <seasons> <seed> [--no-acquaintances] [--out PATH] [--audit]
 
-THE OBSERVER, NOT A CARRIER (`harness/chronicle.py`'s precedent, CR-68/CR-69). The chooser is WRAPPED, never
-steered: the wrapper calls the real `make_chooser` chooser, returns its scenes untouched, and then re-reads
-the deliberation through the chooser's OWN single owners -- `opening_set` (narrowed to `resolvable_verbs()`
-exactly as `make_chooser(verbs=...)` narrows), `choose.deliberation_memo` + `choose.score_terms` (the score's
-terms), `choose.score_order` + `choose.sample_order` (the ranking and the Gumbel order), and
-`decision_spread.attribute_top` (the deciding term). `harness/decision_spread.py::play_season` is the same
-shape. NO HOOK IS ADDED TO `decision/choose.py`: the draw is keyed per candidate (`state/ids.py::draw_factory`
-re-seeds from `(seed, tick, person, purpose)`), so a second reading consumes nothing. Whether the
-re-read table IS the chooser's table is checked for MEMBERSHIP, not assumed: every act the chooser returned must match a
-candidate of the re-read table by its minted id (`table_check`), and `test_interactions_log.py` asserts zero
-misses. The SCORES are the reader's own composition of the same owners (it reads `View.odds` as the chooser does); a
-test pins that they respond to the believed-odds query, not that they equal the chooser's, which exposes no score. `World.content_hash()` with the observer on equals the hash with it off (same test).
+THE OBSERVER, NOT A CARRIER (`harness/chronicle.py`'s precedent, CR-68/CR-69). The chooser is OBSERVED, never
+steered: `make_chooser(watch=...)` (B09.13) hands this module, once per deliberation with a question, what the
+chooser itself saw -- the candidates in score order, the `score_terms` tuples it scored them with and the order it
+sampled -- and the `choose.deciding_term` rule says which term decided. NOTHING IS SCORED A SECOND TIME. A thin wrapper
+remains because the hook is handed the ranking and not the View or the scenes packed from it: it reads the person's
+question list off the View, the acts the chooser returned off its scenes, and a row for a person with no question (the
+hook does not fire for one). Whether the table IS the chooser's is still checked for MEMBERSHIP, not assumed: every act the
+chooser returned must match a candidate of its table by its minted id (`table_check`), and `test_interactions_log.py`
+asserts zero misses. The candidate table is in the chooser's own SCORE ORDER (`score_rank` is the row's index).
+`World.content_hash()` with the observer on equals the hash with it off (same test).
 
 ROWS (JSONL, one object per line, `kind` first):
   * `deliberation` -- every call of `choose` (a person with no question gets a row with `question: null`):
@@ -74,7 +72,7 @@ from collections import Counter
 
 from ..data.rosters import FACTION_BY_PROP, faction_prop_id
 from ..data.verbs import VERB_TABLE, act_key
-from ..decision import choose as CH, make_chooser, opening_set
+from ..decision import choose as CH, make_chooser
 from ..decision.options import refusal_tolerance, refuses, subject_is_opponent
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import faction_q, person_q, world_q
@@ -82,7 +80,6 @@ from ..state.gate import seated_on_the_rung_above_structure
 from ..state.ids import H, draw_factory
 from . import corpus_run
 from .chronicle import _kinds
-from .decision_spread import attribute_top
 from ..boot.realm import build_realm
 
 HOSTILE = tuple(sorted(v for v, r in VERB_TABLE.items() if subject_is_opponent(r)))
@@ -238,7 +235,12 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     foldable = resolvable_verbs()
     draw = draw_factory(w.world_seed, lambda: w.tick)
-    real = make_chooser(w.fixtures, mint, verbs=foldable, draw=draw)
+    heard: list = []                       # what `make_chooser`'s hook reported for the deliberation in flight
+
+    def watch(p, q, ranked, terms, sampled):
+        heard.append((ranked, terms, sampled))
+
+    real = make_chooser(w.fixtures, mint, verbs=foldable, draw=draw, watch=watch if observe else None)
     acq = set(getattr(w, "_acquaintances", ()) or ())
     authored = {pid: {row[0] for row in p.stance if person_q.held_against(p, row[0])}
                 for pid, p in w.persons.items()}
@@ -253,6 +255,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
     names = {pid: p.name for pid, p in w.persons.items()}     # every Person seen; grows at each deliberation
 
     def watched(p, v, s, ask_budget):
+        heard.clear()
         scenes = real(p, v, s, ask_budget)
         for pid, x in w.persons.items():
             names.setdefault(pid, x.name)
@@ -269,13 +272,11 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
         delibs.append(row)
         if q is None:
             return scenes
-        cands = [c for c in opening_set(p, v, q, fx) if c.verb in foldable]
-        memo = CH.deliberation_memo(p, fx)
-        odds = getattr(v, "odds", None)          # CR-17: the View's believed-odds query, as the chooser reads it
-        terms = [CH.score_terms(p, c, fx, memo, odds) for c in cands]
+        # THE CHOOSER'S OWN TABLE, as `make_chooser(watch=...)` handed it (B09.13): the candidates in score order, the terms it
+        # scored them with and the order it sampled -- not a second scoring of the opening set.
+        (cands, terms, sampled), = heard
         scores = {id(c): CH.score_total(t) for c, t in zip(cands, terms)}
-        ranked = CH.score_order(cands, scores)
-        sampled = CH.sample_order(ranked, lambda c: scores[id(c)], p, fx, draw)
+        ranked = cands
         rank = {id(c): i for i, c in enumerate(ranked)}
         srank = {id(c): i for i, c in enumerate(sampled)}
         if cands and tau > 0:
@@ -306,7 +307,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
                 "pursuit": t[0], "stance": t[1], "fit": t[2], "score": CH.score_total(t), "p_first": prob[id(c)],
                 "score_rank": rank[id(c)], "sample_rank": srank[id(c)],
                 "chosen": k in chosen, "act": chosen.get(k)})
-        r = attribute_top(p, cands, fx, draw, odds, terms=terms)
+        r = CH.deciding_term(cands, terms, sampled[0] if sampled else None, tau)
         row["decider"] = {"decider": r["decider"], "margin": r["margin"], "draw_kind": r["draw_kind"]}
         tol = refusal_tolerance(p, axis)
         row["refusal_gate"] = ("unarmed (refusal_axis unset)" if tol is None else
