@@ -292,6 +292,9 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
 # `G6` (`H-197`): declared on `tell`'s told bands; kept only when `_confidence_broken` says so.
 CONFIDENCE_BROKEN = "confidence.broken"
 
+# B09.11: the kind `(Person, scar)` declares (`write_matrix.yaml`), emitted by `_scar_witnesses` beside its write.
+SCAR_TAKEN = "scar.taken"
+
 # v9 SE-01 (`24g`) / `H-51`: `PERSON_DEMANDED` (`data/rosters.py`) is declared on `dispatch`'s refusal; kept
 # only when `_demand_earned` says so, and the loader's flat-row rule exempts exactly that kind.
 
@@ -637,10 +640,11 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
     ⚠ THE VIOLATION PREDICATE IS A CANDIDATE READING, NOT A RULING: `person_q.elements_violated_by`
     (a sign test of the pursuit's projection against the verb's alignment, asked once per act and
     intersected with each person's holdings by `person_q.broken_by`). WHETHER THE ACTOR
-    COUNTS is `scar_excludes_actor`, a swept `Fixtures` arm. Nothing is emitted: `scar.taken` is
-    declared on the row and no reader consumes it, and putting the receipts on the act's Event
-    would deposit claims about every scarred observer at WITNESS -- a propagation change H3 does
-    not license. Its readers are listed once, on the field (`state/carriers.py`, `Person.scar`).
+    COUNTS is `scar_excludes_actor`, a swept `Fixtures` arm. B09.11: the write is recorded by one
+    `scar.taken` Event, appended to the log and kept out of the list `resolve` returns (see the
+    call below), so the receipts are in an Event and WITNESS deposits nothing about them; putting
+    them on the act's own Event would deposit claims about every scarred observer. Its readers are
+    listed once, on the field (`state/carriers.py`, `Person.scar`).
 
     IN-08 H11 -- THE SAME MECHANISM OVER THE AFFILIATION TABLE (J-5's C4). An element is a pursuit
     OR a held religious affiliation: the affiliation half of `person_q.elements_violated_by` (the
@@ -686,10 +690,23 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
             # does not read it (GO-07 folds a mapping sorted by its encoded keys).
             p.scar = {k: counts[k] for k in sorted(counts)}
 
-    w.write("scar", token, None, record_kind="Person", fieldname="scar", driver="Act",
-            actor=a.actor, via=a.via,
-            change=Change(tuple(Subject.entity("persons", pid, fields=("scar",))
-                                for pid, _b in hits), perform))
+    got = w.write("scar", token, None, record_kind="Person", fieldname="scar", driver="Act",
+                  actor=a.actor, via=a.via,
+                  change=Change(tuple(Subject.entity("persons", pid, fields=("scar",), earns=SCAR_TAKEN)
+                                      for pid, _b in hits), perform))
+    # B09.11: THE SCAR IS RECORDED, ONE `scar.taken` EVENT PER WRITE, CARRYING EXACTLY THE RECEIPTS THE
+    # GATE MINTED (one per scarred person, who is named by no other field: `Event` has no actor, target
+    # or subject). It is appended to the LOG HERE and is NOT in the list `resolve` returns, so WITNESS
+    # (which reads that list, as `claim.deposited` relies on) fans it to nobody: the deposit count per
+    # season is the observer (`test_g4_no_op_receipt.py::test_scar_taken_event_deposits_no_claim`).
+    # BUILT HERE, NOT BY `World.write`'s `emits=`: that path puts ONE fresh receipt on the write's own
+    # kind's Event and the per-subject receipts only on a kind OTHER than `emits` (`extra`), so a write
+    # whose every subject earns the row's one declared kind would leave its per-person receipts in no
+    # Event -- which is the defect this closes. The kind is the row's declared one (`write_matrix.yaml`).
+    ev = Event(id=H(w.world_seed, w.tick, a.id, f"emit:{SCAR_TAKEN}#{w.new_draw()}"), kind=SCAR_TAKEN,
+               changes=[r for _s, r in got], causes=[a.id], emitted_at=w.tick)
+    w.log.append(ev)
+    TRACE.event(ev.id, ev.kind, ev.causes)
     _conviction_crisis(w, token, a, dict(hits))
 
 
