@@ -143,7 +143,7 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         # own) cannot assign to the interior's own fields or into its mappings and reach the person it decides for;
         # `ledger`, `tenures` and `stance` share the LIVE carriers, so a write THROUGH them lands on the store. `sense`, `believed_odds_query` and the act-actor check
         # below keep `p`: they are the host's, not `decision/`'s.
-        me = interior_of(p)
+        me = interior_of(p, w.tick, w.fixtures.claim_decay())
         v = decision.assemble(me, q_p, k_view, questions=qs, odds=believed_odds_query(w, p))
         # S26.3: the PERSON asks their own budget. `choose` receives the QUERY, not the answer.
         # ⚠ `U2`: THE REMAINDER, NOT THE WHOLE. The budget is the SEASON's and the season is now
@@ -402,7 +402,7 @@ def sense(p: Person, w: World) -> Sensation:
     signature actually exercised. Reading `.standing` raises where the design fails to supply
     it. `standing_of` computes it person-side (`H-29`); REM-44 deleted the other scalar, `subsistence`."""
     TRACE.query("sense", "bridge")
-    return Sensation(standing_of(p, w.fixtures))
+    return Sensation(standing_of(p, w.fixtures, w.tick))
 
 
 def as_scenes(produced: list, actor: str, w: "World") -> list:

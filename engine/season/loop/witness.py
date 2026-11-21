@@ -309,7 +309,7 @@ def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cfx
         act_f = self.act_of.get(fid) or causing_act(w, f)
         refracting = bool(gain) and actor_of(w, f) != pid
         prior_act = _happened(act_f, f) if refracting else None
-        prior_weigh = ledger_weigh(p, w.fixtures) if prior_act is not None else None
+        prior_weigh = ledger_weigh(p, w.fixtures, w.tick) if prior_act is not None else None
         subjects = claim_subjects(w, f, claim_rule, act_refs(act_f))
         if HAND_TERM not in terms:
             subjects = non_anchor_subjects(subjects, anchor_of(w, f))
@@ -544,7 +544,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
             # State-wise the two are identical. The second positional argument to `w.write` is the
             # driver's own `Token` for this step (`token`, this function's own parameter).
             def _evict(p=p):
-                ledgers.evict_over_cap(p.ledger, len(p.ledger) - 1)
+                ledgers.evict_over_cap(p.ledger, len(p.ledger) - 1, w.tick, w.fixtures.claim_decay())
             w.write("claim_ledger", token, _evict,
                     record_kind="Person", fieldname="claim_ledger", driver="Event")
 
@@ -599,7 +599,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
         if refracting:
             prior_act = _happened(self.act_of.get(e.id), e)
             if prior_act is not None:
-                prior_weigh = ledger_weigh(p, w.fixtures)
+                prior_weigh = ledger_weigh(p, w.fixtures, w.tick)
         # v9 IN-22: a governor reached by purview (above) receives only the reads about the rungs
         # his seat contains, and none of the other deposits. `None` for every fan witness.
         only = reported.get((pid, e.id)) if channel == SEAT_CHANNEL else None

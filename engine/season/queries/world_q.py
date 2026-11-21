@@ -90,6 +90,7 @@ from ..state.gate import holdings_of, in_holdings, seat_faction, seat_on_parent_
 # (below) composes on it.
 from ..state.gate import sworn_to
 from ..state.ids import H, ROOT, draw_factory
+from ..state.ledgers import present_confidence
 from ..state.world import World, rung_kind_ascends
 from ..trace_log import TRACE
 # v9 IN-07 E1: the `settlements` module's records (the one host leaf a module imports) and the
@@ -240,6 +241,12 @@ def _is_person_id(w: World, x) -> bool:
     return isinstance(x, str) and x in w.persons
 
 
+def _reader_at(w: World, claims, weigh=None) -> LedgerReader:
+    """A `LedgerReader` over `claims` read AT THE WORLD'S TICK: the one construction a resolver-side query makes, so a
+    held claim's confidence is its present value (`state/ledgers.py::present_confidence`) and never the stored one."""
+    return LedgerReader(claims, weigh, tick=w.tick, decay=w.fixtures.claim_decay())
+
+
 def open_slots(w: World, venue: Optional[str]) -> list[dict]:
     """THE EMPTY SLOTS A SITTING AT `venue` HAS ON THE DOCKET, oldest first -- the items CALENDAR formed
     (`{"date": <id>, "matter": None}`, `loop/calendar.py`, for a date that fired WITH a holder) whose
@@ -319,7 +326,7 @@ def sittings_before(w: World, p: Person) -> list[tuple]:
         heard = [c for c in p.ledger if c.subject == venue and c.predicate == FIRED_KIND
                  and c.when == due]
         if heard and p.id in judging_set(w, venue):
-            out.append((did, LedgerReader(heard).belief_among(), tuple(dict.fromkeys(matters))))
+            out.append((did, _reader_at(w, heard).belief_among(), tuple(dict.fromkeys(matters))))
     return out
 
 
@@ -411,7 +418,7 @@ def docket_question(w: World, p: Person) -> Optional[Question]:
     found = {m for _, ms in reached for m in ms}
     matters = tuple(m for m in dict.fromkeys(d["matter"] for d in w.docket if d.get("matter") is not None)
                     if m in found)
-    about = LedgerReader([c for c, _ in reached]).belief_among()
+    about = _reader_at(w, [c for c, _ in reached]).belief_among()
     return Question(f"q:docket:{'|'.join(matters)}", "claim_landed", matters, about.id)
 
 
@@ -747,7 +754,7 @@ def reception(w: World, speaker: str, audience: tuple) -> float:
     """HOW THE `audience` RECEIVES `speaker` -- `19_PLAN.md` step 17, the room reading the person
     who rises in it. Signed: above zero the bench is disposed toward him, below it against him.
 
-        reception = Σ_h∈bench Σ_c∈deeds_h(speaker)  remove_weight(c.source) · c.confidence/full · v_h(c)
+        reception = Σ_h∈bench Σ_c∈deeds_h(speaker)  remove_weight(c.source) · present_confidence(c)/full · v_h(c)
 
       * the AUDIENCE is the tuple of persons `seam/wrappers/sigma.py::audience_of` names for the room
         the prize row says hears the act (B07.04; the bench is `judging_set(w, venue)`, the one owner of
@@ -781,6 +788,7 @@ def reception(w: World, speaker: str, audience: tuple) -> float:
     if speaker not in w.persons:
         return 0.0
     full = float(w.fixtures.get("confidence_default"))
+    decay = w.fixtures.claim_decay()
     shift = w.fixtures.get("scar_weight_shift")
     total = 0.0
     for hid in dict.fromkeys(audience):
@@ -798,7 +806,7 @@ def reception(w: World, speaker: str, audience: tuple) -> float:
                     continue
             if axis_w is None:
                 axis_w = projected_axes(h, shift)
-            total += remove_weight(c.source) * (c.confidence / full) * deed_term(h, axis_w, c)
+            total += remove_weight(c.source) * (present_confidence(c.confidence, c.when, w.tick, decay) / full) * deed_term(h, axis_w, c)
     return total
 
 
@@ -2829,7 +2837,7 @@ def current_stage(w: World, p: Person, ambition) -> Optional[dict]:
     prop = w.propositions.get(ambition)
     if goal is None or goal.stages is None or prop is None:
         return None
-    reader = LedgerReader(p.ledger)
+    reader = _reader_at(w, p.ledger)
     out: dict = {}
     for referent in goal_referents(w, p, prop):
         if referent is None:

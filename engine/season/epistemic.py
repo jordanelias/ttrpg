@@ -55,7 +55,7 @@ from .state.world import World, register_snapshot_type
 
 def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
                        via: "str | None" = None, weigh=None,
-                       actor: "str | None" = None) -> bool:
+                       actor: "str | None" = None, tick: int = 0, decay: int = 0) -> bool:
     """§F1 clause 4 -- is `requires(verb)` KNOWN-FALSE from `p`'s OWN claims?
 
     ⚠ THE ASYMMETRY IS THE WHOLE POINT AND MUST NOT BE SOFTENED TO "requires holds". This returns
@@ -108,10 +108,14 @@ def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
     different question -- *could THE ACTOR have done this, on what I hold* -- and answering it with
     `p.id` bound reads the witness's own granary instead of the actor's. The ledger stays `p`'s
     (the belief is the witness's); only the operand moves. `actor=None` is `p.id`, never "no
-    actor": an empty binding would make every actor-bound form UNKNOWN, i.e. contradict nothing."""
+    actor": an empty binding would make every actor-bound form UNKNOWN, i.e. contradict nothing.
+
+    ⚠ B09.01: `tick` AND `decay` ARE WHAT HE READS HIS CLAIMS AT (`LedgerReader`'s; `state/ledgers.py::present_confidence`):
+    a stored `confidence` is what a claim was deposited at, and its fade is computed here, where it is read. Omitted, a
+    hand-built ledger reads as deposited."""
     if (row.requires or "").strip() in NO_PRECONDITION:
         return False
-    return evaluate(row.requires_typed, LedgerReader(p.ledger, weigh),
+    return evaluate(row.requires_typed, LedgerReader(p.ledger, weigh, tick=tick, decay=decay),
                     binding_of(p.id if actor is None else actor, operands, via)).value is False
 
 
