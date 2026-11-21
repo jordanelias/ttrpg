@@ -390,7 +390,9 @@ def test_trained_tender_fails_less_than_default_and_neither_is_zero(rank_trained
     from .test_in10_record_operands import _resolve
     from .test_in12_step9 import PATIENT, TENDER, _tend_acts, _world
 
-    assert VERB_TABLE["tend"].capability == "none" and "tend" not in VERBS.VERB_CAPABILITY   # CONTROL: shipped, no skill
+    from ..seam.wrappers import pool as POOL   # patched WHERE IT IS READ: `test_governance_build` reloads `data.verbs`, rebinding `VERBS.VERB_CAPABILITY`
+    #                                            while `pool.py` keeps the dict it imported, so a patch on `VERBS` reads nothing in a worker that ran it first
+    assert VERB_TABLE["tend"].capability == "none" and "tend" not in POOL.VERB_CAPABILITY   # CONTROL: shipped, no skill
     key = PLANTED_SKILL
     on = DEFAULT_FIXTURES.sweep("task_draw_arm", "on")
 
@@ -411,7 +413,7 @@ def test_trained_tender_fails_less_than_default_and_neither_is_zero(rank_trained
         return bands["Failure"] / 200
 
     with mock.patch.dict(VERB_TABLE, {"tend": replace(VERB_TABLE["tend"], capability=key)}), \
-            mock.patch.dict(VERBS.VERB_CAPABILITY, {"tend": key}):
+            mock.patch.dict(POOL.VERB_CAPABILITY, {"tend": key}):
         trained, untrained = failure_share(rank_trained), failure_share(None)
     assert 0 < trained < untrained and untrained > 0, (trained, untrained)
 
