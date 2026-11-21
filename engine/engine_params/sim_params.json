@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 121,
-    "total": 398,
-    "uncited": 277,
+    "total": 399,
+    "uncited": 278,
     "of_which_assumption_grade": 7
   },
-  "count": 398,
+  "count": 399,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 25,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 108,
+    "engine.season.settings": 109,
     "engine.season.realm": 8
   },
   "params": [
@@ -5031,6 +5031,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-183`, swept False (control; revert) / True (SHIPPED since B09.08)",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.standing_occasion_cause",
+      "name": "standing_occasion_cause",
+      "value": true,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-457`, swept False (control; revert) / True (SHIPPED, B09.12) / True with `Office` read the other way",
       "citation": null,
       "citation_grade": null
     },

@@ -1048,6 +1048,33 @@ for _c in sorted(FLOW_STAKE_CLASSES):
                    "rosters.yaml -- flow_stake_classes",
                    law="v11 CR-78 -- the stamp's class test; a misspelt member would refuse its namesake")
 del _c
+
+
+def _load_standing_occasion_opened_by(by_class: dict) -> dict:
+    """`rosters.yaml: standing_occasion_opened_by.values`, SHAPE-CHECKED: each key a `REFERENT_CLASSES` member, each value a
+    non-empty list of distinct strings (order is semantic, most specific first). Returns `{class: tuple of kinds}`. The check
+    that needs the Event-kind roster (every kind an Event the log accepts) is `data/verbs.py::_check_standing_occasion_opened_by`,
+    run where `EVENT_KINDS` is built, as `_load_strife_kinds`' is. A function, so a test can plant a bad shape."""
+    out = {}
+    for cls, kinds in by_class.items():
+        require_member(cls, REFERENT_CLASSES,
+                       f"rosters.yaml `standing_occasion_opened_by` keys {cls!r}, which is no referent class",
+                       "rosters.yaml -- standing_occasion_opened_by",
+                       law="B09.12 -- an opening Event is asked of a classed referent, by its class; a misspelt class is never asked")
+        if (not isinstance(kinds, list) or not kinds or not all(isinstance(k, str) for k in kinds)
+                or len(set(kinds)) != len(kinds)):
+            raise Unspecified(
+                f"rosters.yaml `standing_occasion_opened_by.{cls}` is not a non-empty list of distinct kind names",
+                "rosters.yaml -- standing_occasion_opened_by",
+                needs="a non-empty list of Event kind names, each once, most specific first",
+                law="rosters.yaml's header -- an empty list makes the lookup silently answer nothing, so it REFUSES")
+        out[cls] = tuple(kinds)
+    return out
+
+
+#: B09.12: `{referent class: Event kinds that OPEN a standing occasion of it, most specific first}`, read by
+#: `loop/resolve.py::_occasion_ids`; held to `EVENT_KINDS` at import (`data/verbs.py::_check_standing_occasion_opened_by`).
+STANDING_OCCASION_OPENED_BY = _load_standing_occasion_opened_by(roster_map("standing_occasion_opened_by", "values"))
 PERSON_PREDICATES = roster("person_predicates")
 VIEW_BUILDER_RULES = roster("view_builder_rules")
 QUESTION_AGGREGATION = roster("question_aggregation", ordered=True)

@@ -123,6 +123,33 @@ def test_in50_route_5_the_folds_own_refusal_cites_the_occasion():
     _check_route(refusals, a, occ, {e.kind for e in refusals})
 
 
+# -- 5b (B09.12: the mirror) ------------------------------------------------------------------------
+def test_in50_route_5b_a_refusal_on_a_standing_occasion_cites_the_event_that_opened_it():
+    """THE MIRROR OF `test_in53_vacancy_need.py::test_a_succession_names_the_tenure_closed_that_opened_it`: a REFUSED
+    act on a classed referent names the opening Event as an accepted one does (`_act_events` is the one emission owner).
+    A person who holds no `off_heir` title claims the vacant throne and is refused (`succession.refused`); the refusal
+    cites `[act, the tenure.closed naming the throne]`. With `standing_occasion_cause` False it cites the act alone."""
+    from engine.season.state.carriers import Scene
+    from .test_in53_vacancy_need import _THRONE, _the_king_dies, _the_tenure_closed_naming
+    checked = 0
+    for arm in (True, False):
+        w, heir = _the_king_dies("plant")
+        if not arm:
+            w.fixtures = w.fixtures.sweep("standing_occasion_cause", False)
+        opened = _the_tenure_closed_naming(w, _THRONE)
+        assert len(opened) == 1
+        d = SeasonDriver(w)
+        d.scenes[SCENE] = Scene(SCENE, ACTOR, [], occasion=Question("q:need:throne", "need", (), "", ((_THRONE, "Office"),)))
+        assert ACTOR in w.persons and ACTOR != heir
+        a = Act(id="a_refused_claim", actor=ACTOR, verb="succeed", payload={"subject": _THRONE}, scene=SCENE)
+        refused = [e for e in _resolve(w, d, a) if e.kind == "succession.refused"]
+        assert refused, "the claim was not refused; the fixture no longer reaches a refusal on the classed seat"
+        for e in refused:
+            assert e.causes == ([a.id, opened[0].id] if arm else [a.id]), (arm, e.causes)
+            checked += 1
+    assert checked >= 2
+
+
 # -- 6 ---------------------------------------------------------------------------------------------
 def test_in50_control_an_act_with_no_scene_keeps_its_own_id_alone():
     w, d, _occ = _world_with_occasion()
