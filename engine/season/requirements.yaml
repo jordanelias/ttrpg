@@ -793,20 +793,24 @@ rows:
         expects: "the test passes"
         holds: "yes"
         reading:
-          tree: "39afebb43c8c6819908bc67807d91afd4e7acb75"
+          tree: "bb7c6456899576080958a55a49145e722ea4670b"
           date: "2026-11-21"
           seed: "per test"
           seasons: "per test (gate 1 and 5: seeds 0 to 2, two seasons)"
-          line: "10 passed in 154.78s (0:02:34)"
+          line: "12 passed in 251.22s (0:04:11)"
           control: >-
-            gate 2 (the arm `off` reproduces the S9 base's realm pins, each asserted unequal to the arm-on pin so the control is not
-            vacuous); gate 1 read at the arm `off` in a scratch run on the same tree: no converted verb carries a band, `checked` 0,
-            Events carrying a degree 305 of 981 success Events (arm on: 703 of 703), so the test is red with the arm off
+            gate 2 (the arm `off` reproduces the S9 base's six realm pins, seeds 0 to 2 at one season and at two, each asserted unequal
+            to the arm-on pin so the control is not vacuous); gate 1 read at the arm `off` in a scratch run on the same tree: no converted
+            verb carries a band, `checked` 0, Events carrying a degree 305 of 981 success Events (arm on: 698 of 698), so the test is red
+            with the arm off; the close's planted tests (a Partial `move` never seats a traveller at an arrival-only rung, a Partial
+            `migrate` settles no one) are red when their fix is reverted
           does_not_show: >-
-            that the draw is BALANCED (a verb at two bands and not 100 % one band is not a verb at the right odds; 18-A gate 5's table
-            reads throughput, not balance); that any of the nine verbs not built out (`build`, `found`, `marshal`, `recruit`,
-            `restore`, `sabotage`, `work`; `raze` 9 resolved acts, all Failure; `requisition` 1) draws in play, UNDECIDED (4);
-            CI's python 3.11; run with `-p no:cacheprovider` and `PYTHONHASHSEED=0`
+            that the draw is BALANCED (a verb at two bands and not 100 % one band is not a verb at the right odds; 18-A gate 5's table reads
+            throughput, not balance); that any of the nine verbs not built out (`build`, `found`, `marshal`, `recruit`, `restore`, `sabotage`,
+            `work`; `raze` 9 resolved acts, all Failure; `requisition` 1) draws in play, UNDECIDED (4); that a Partial lands what its band says:
+            a Partial whose fraction floors to nothing (`train`, `tend` at one point, `recruit` at one) and a Partial `move` to a settlement
+            or any Partial `migrate` read as a bandless refusal (held for Jordan, the batch's PR body); CI's python 3.11; run with
+            `-p no:cacheprovider` and `PYTHONHASHSEED=0`
       - id: R-09.b
         text: >-
           two persons resolve the same verb at different pools because they differ:
@@ -859,27 +863,28 @@ rows:
         expects: "the test passes (every converted verb with ten or more resolved acts at two bands or more, none 100 % one band; degrees on at least 90 % of non-bookkeeping success Events)"
         holds: "yes"
         reading:
-          tree: "39afebb43c8c6819908bc67807d91afd4e7acb75"
+          tree: "bb7c6456899576080958a55a49145e722ea4670b"
           date: "2026-11-21"
           seed: "0 1 2"
           seasons: 2
           line: >-
-            1 passed in 112.61s; gate 1 over seeds 0 to 2: `failures` [], `checked` 9 converted verbs of ten or more resolved acts
-            (carry 12, conceal 85, forge 128, migrate 19, move 54, reconstruct 328, survey 37, tend 169, train 18; floor
-            `GATE1_VERBS_FLOOR` 9, Jordan ruled 2026-11-20), Events carrying a degree 703 of 703 non-bookkeeping success Events
-            (`contest_owed` rows' 105 left out), 598 task refusals checked, 0 carrying a band
+            gate 1 over seeds 0 to 2: `failures` [], `checked` 9 converted verbs of ten or more resolved acts (carry 11, conceal 88, forge 127,
+            migrate 17, move 51, reconstruct 327, survey 38, tend 168, train 19; floor `GATE1_VERBS_FLOOR` 9, Jordan ruled 2026-11-20), Events
+            carrying a degree 698 of 698 non-bookkeeping success Events of rows outside `contest_owed`, 602 task refusals checked, 0 carrying a band.
+            AS WRITTEN, with the 107 success Events of `contest_owed` rows (none carries a degree: their draw is their owning lane's contest, UNDECIDED
+            (1)) in the denominator, the share is 698 of 805, 86.7 %, below the plan's 90 %: the test leaves them out on UNDECIDED (1) and (4)'s
+            precedent ("their gate is their own batch's"), and that reading is the batch's, named in the PR body
           control: >-
-            the arm `off`, scratch run on the same tree: no converted verb carries a band, `checked` 0, 305 of 981 success Events
-            carry a degree: the test is red there; gate 5's rule read on the arm-on and arm-off throughput, seeds 0 to 2, two seasons:
-            no verb with ten or more off-arm successes sits at zero Success-or-better on-arm (reconstruct 105 of 276, tend 69 of 114,
-            forge 44 of 87, conceal 36 of 82, move 17 of 35, survey 18 of 33, migrate 6 of 15, carry 5 of 8, thread_read 5 of 5,
-            train 4 of 20)
+            the arm `off`, scratch run on the same tree: no converted verb carries a band, `checked` 0, 305 of 981 success Events carry a degree: the
+            test is red there; gate 5's rule read on the arm-on and arm-off throughput, seeds 0 to 2, two seasons: no verb with ten or more off-arm
+            successes sits at zero Success-or-better on-arm (Success-or-better on / off successes: reconstruct 104/276, tend 70/114, forge 42/87,
+            conceal 38/82, move 15/35, survey 18/33, migrate 7/15, carry 4/8, thread_read 5/5, train 5/20)
           does_not_show: >-
-            that the odds are the right odds (R-09.d asks that outcomes can go either way, not how often); that the corpus lane draws the
-            same way: `corpus_run --seasons 2` at seed 0 reads `forge` 186 of 186 Failure and `survey` 145 of 145 Failure
-            (`DEGREES RESOLVED BY VERB`), which is R-09.c's lane, not this conjunct's; the nine verbs not built out (UNDECIDED (4)); `status:`
-            is not edited, R-09 stays `partial` (R-09.b is unread, R-09.e is not this batch's)
-
+            that the odds are the right odds (R-09.d asks that outcomes can go either way, not how often); that the corpus lane draws the same
+            way: `corpus_run --seasons 2` at seed 0 reads `forge` 186 of 186 Failure and `survey` 145 of 145 Failure (`DEGREES RESOLVED BY VERB`,
+            read before the close's two arrival fixes), which is R-09.c's lane, not this conjunct's; the nine verbs not built out (UNDECIDED (4));
+            `migrate` shows no Partial band and `move` one: a Partial that lands nothing reads as a refusal and carries none (held for Jordan);
+            `status:` is not edited, R-09 stays `partial` (R-09.b is unread, R-09.e is not this batch's)
       - id: R-09.e
         text: >-
           the draw is one owner's, keyed: `pytest engine/tests/test_draw.py -q`; same seed twice,
