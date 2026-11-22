@@ -304,7 +304,9 @@ jobs:
     # `test_engine_does_not_import_systems.py::test_the_one_declared_path_seam_is_still_the_only_one` (about 3 minutes,
     # a subprocess import). A real hang now costs 24 minutes
     # before CI goes red; read the step's own timings before raising this again.
-    timeout-minutes: 24
+    # [RAISED 24 -> 40, 2026-11-22, Jordan: "Caps should be 40 minutes."] Run 44988774829 (PR #627 @9d24f935) cancelled this
+    # step at the 24-minute cap with no test failing; main's whole run took about 10 minutes on 2026-11-17 and 18 and about 31 on 11-21.
+    timeout-minutes: 40
     permissions:
       contents: read
     steps:
@@ -387,7 +389,9 @@ jobs:
     # exit tests, their shared 4-season fixture and `--dist loadgroup` are gone, so no test here
     # builds a 4-season realm. 30 is now a stale margin, set on a run that included them: re-derive
     # it from the next hosted run of this job.
-    timeout-minutes: 30
+    # [RAISED 30 -> 40, 2026-11-22, Jordan: "Caps should be 40 minutes."] Run 44988774829 (PR #627 @9d24f935) cancelled both
+    # shards at 30 minutes with no test failing; the heavy shard on @2381202 took 1506 s.
+    timeout-minutes: 40
     # TWO SHARDS, 2026-11-06 (B10-10b's card ran 12.5 h; this job was the CI critical path at 724 s of
     # pytest against 390 s locally, for the same 2148 tests). `heavy` is the five files that weigh
     # about half the suite (per-file call+setup+teardown from one `--durations=0` run; the five are
