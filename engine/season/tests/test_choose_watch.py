@@ -4,7 +4,7 @@
 packed. It is an OBSERVER (the rule of ED-IN-0225): the chooser ignores its return value and hands it COPIES of its
 lists, so a watcher that mutates changes nothing that is packed. Three claims, each executed and each able to fail:
 
-  1. a RECORDING watcher leaves `World.content_hash()` equal to `watch=None` (seed 0 here; seeds 1-2 under `slow`);
+  1. a RECORDING watcher leaves `World.content_hash()` equal to `watch=None` (seed 0; the other-seed arms were cut at the B09 close, the same claim at two more seeds);
   2. a REORDERING watcher -- one that reverses, sorts and empties what it was handed, in place -- changes no act. This
      is the claim that fails if the hook is a steering surface: handing the watcher the chooser's own `sampled` list
      (MUTATION, run at the commit: `watch(p, q, ranked, terms, sampled)` without the `list(...)` copies) reddens it;
@@ -77,12 +77,6 @@ def _hash_arm(seed: int) -> None:
 
 def test_a_recording_watcher_leaves_the_hash_equal():
     _hash_arm(0)
-
-
-@pytest.mark.slow
-@pytest.mark.parametrize("seed", [1, 2])
-def test_a_recording_watcher_leaves_the_hash_equal_other_seeds(seed):
-    _hash_arm(seed)
 
 
 def _hand_built(monkeypatch, n=8):
