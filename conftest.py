@@ -23,6 +23,12 @@ import re
 import pytest
 
 # marker -> a pattern over the test file's base name (without `.py`). One owner of the table.
+#
+# EVERY TEST BELONGS TO ONE LANE (Jordan, 2026-11-22: "each lane/subsystem is to have its own test suite ... no test
+# suite that doesn't concern a specific subsystem or the season loop or engine"): the SEASON LOOP (`engine/season/tests/`
+# whole, plus the `tests/valoria` files below), the ENGINE (`engine/tests/` whole, plus the dice engine, substrate and
+# exporters), or one subsystem. The tree decides first; in `tests/valoria` the first matching pattern decides. `process`
+# marks the files that concern none of them (tool and ledger checks): it exists so they are findable, not as a suite.
 SUBSYSTEM_FILES = {
     "combat": re.compile(
         r"^test_(combat_|band_extension_seam|coherence_elastic_plastic|dice_engine_properties|tn7_)"),
@@ -34,15 +40,28 @@ SUBSYSTEM_FILES = {
         r"casualty_attribution|march|territory_march|sides$|levy_feed)"),
     "social_contest": re.compile(
         r"^test_(sc0\d_|social_contest|stress_proceedings|settle_margin|contest_kernel)"),
+    "threadwork": re.compile(r"^test_threadwork_"),
+    "season_loop": re.compile(
+        r"^test_(axis_roster|balance_oracle|conviction_roster|export_season_registries|import_cycle|m1_acceptance|"
+        r"module_registrar|modules_reachable|season_)"),
+    "engine": re.compile(
+        r"^test_(degree_|descriptor|engine_does_not_import|engine_params|export_(game_constants|sim_params|troops)|"
+        r"field_golden|fmath_|names_chain|per_die|wiring)"),
+    "process": re.compile(
+        r"^test_(claim_provenance|design_prose|module_shape|references_yaml|names$|no_polling|pathres|stubwire)"),
 }
+TREE_LANE = {"engine/season/tests/": "season_loop", "engine/tests/": "engine"}
 
 
 def pytest_collection_modifyitems(config, items):
     for item in items:
-        base = os.path.basename(str(item.fspath))[:-3]
-        for marker, pat in SUBSYSTEM_FILES.items():
-            if pat.match(base):
-                item.add_marker(getattr(pytest.mark, marker))
+        path = str(item.fspath).replace(os.sep, "/")
+        lane = next((l for t, l in TREE_LANE.items() if t in path), None)
+        if lane is None:
+            base = os.path.basename(path)[:-3]
+            lane = next((m for m, pat in SUBSYSTEM_FILES.items() if pat.match(base)), None)
+        if lane:
+            item.add_marker(getattr(pytest.mark, lane))
 
 
 @pytest.fixture(autouse=True)

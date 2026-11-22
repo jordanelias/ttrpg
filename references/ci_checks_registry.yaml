@@ -192,7 +192,7 @@ ci_checks:
     posture: harden
     role: "Blocking quarantine gate: QUARANTINE means a design document is kept, readable and resolvable, but moved OUT of the game trees and out of the default search path — it is not deleted and not deprecated-in-place. No tracked .md may sit under systems/** or engine/** except engine/season/**; the archive is .designs/, hidden so ripgrep and glob.glob skip it."
     ci_job: validators
-    notes: "ED-IN-0231 (Jordan, 2026-09-16). Zero is the invariant, not a ratchet — the count was driven to 0 in the same commit. Falsifier: tests/valoria/test_design_prose_quarantine.py. Also runs locally via valoria_local.py (blocking)."
+    notes: "ED-IN-0231 (Jordan, 2026-09-16). Zero is the invariant, not a ratchet — the count was driven to 0 in the same commit. Also runs locally via valoria_local.py (blocking)."
 
   # Second row for ci_naming_check.py: its two tiers (block / warn) are wired to different CI jobs with different
   # policies, and `args:` selects the tier.

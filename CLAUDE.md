@@ -498,9 +498,7 @@ re-implement a rule.** Known live violations, treated as bugs rather than propag
   Single-owned: what a `FORK:` row resolves to (`pathres.fork_pointer()`, with `FORK_PREFIX`).
 - ⚠ **`pathres.resolve()` MATCHES DIRECTORY PREFIXES; never use it to ask "is this exact file
   retired".** A `FORK:` target has no existence check, so it returns FORKED for *any* invented filename
-  under a forked directory. Ask `load_alias_map()` for an exact row. Falsifier:
-  `test_a_fabricated_path_under_a_forked_directory_still_violates` in
-  `tests/valoria/test_claim_provenance_fields.py`.
+  under a forked directory. Ask `load_alias_map()` for an exact row.
 - **The dependency-free primitives** (repo root, the nine-lane roster, token estimate, id regexes) are
   owned by `tools/ci_common.py`, which forwards to nothing else. Reuse it; do not re-derive them.
 

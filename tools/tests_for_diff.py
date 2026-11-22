@@ -3,24 +3,22 @@
 
 An INNER-LOOP ACCELERATOR, not a gate: CI runs everything and is the full-suite tier (`CLAUDE.md` section 8).
 It reads the files this session changed (committed since the branch left `origin/main`, staged, unstaged,
-untracked) and prints the narrowest honest command. A test belongs to the SEASON LOOP (`engine/season/tests/`, and
-the `tests/valoria` files that name `engine.season`) or to ONE SUBSYSTEM (combat, mass battle, social contest:
-the file-name markers `conftest.py` owns); a change runs its own group and no other:
+untracked) and prints the narrowest honest command. Every test belongs to one LANE: the season loop, the engine, or
+one subsystem (combat, mass battle, social contest, threadwork); `conftest.py` owns the assignment, as a marker. A
+change runs its own lane and no other:
 
   * a test file edited                                    ->  that file alone;
-  * `engine/season/` edited (the loop, its data, its test helpers)  ->  the season suite and the `tests/valoria`
-    files that run it, and NOT the subsystem suites (they execute `modules/` and the dice engine, nothing in
-    `engine/season/`);
-  * `modules/<s>/` or `systems/<s>/` edited               ->  `pytest -m <s>` over all three test trees;
+  * `engine/season/` edited                               ->  `pytest -m season_loop`; no subsystem lane (their
+    tests execute `modules/` and the dice engine, nothing in `engine/season/`);
+  * `modules/<s>/` or `systems/<s>/` edited               ->  `pytest -m <s>`;
   * anything else (engine/dice_engine/, engine/substrate/, exporters, registries, tools/)  ->  no narrowing: it
-    prints the full-gate commands of `CLAUDE.md` section 0.4, because every suite reaches it;
+    prints the full-gate commands of `CLAUDE.md` section 0.4, because every lane reaches it;
   * only prose changed (.md and the like)                 ->  nothing to run beyond the validators.
 
 WHAT THE NARROW ANSWER DOES NOT COVER, said here because it is the cost of skipping: the season suite builds a whole
-realm, so its tests execute the combat, mass-battle and contest modules too (measured 2026-11-04: a `modules/combat/`
-edit is reached by tests costing about three quarters of the suite). A subsystem edit that changes what a realm
-does shows up there, and in the realm-hash goldens, only when the full season suite runs; with this tool that is
-CI's run. If your edit could change a realm (a module's output the season loop reads), run the season suite as well.
+realm, so its tests execute the combat, mass-battle and contest modules too. A subsystem edit that changes what a realm
+does shows up there, and in the realm-hash goldens, only when the season lane runs; with this tool that is CI's run.
+If your edit could change a realm (a module's output the season loop reads), run `-m season_loop` as well.
 
 Usage:  python tools/tests_for_diff.py [--base REF] [--run]
 """
@@ -31,11 +29,13 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# source directory -> marker. The marker names and the test-file patterns have ONE owner: the root conftest.py.
+# source directory -> lane marker. The lanes and the test-file patterns have ONE owner: the root conftest.py.
 SOURCE_PREFIXES = {
     "modules/combat/": "combat", "systems/combat/": "combat",
     "modules/mass_battle/": "mass_battle", "systems/mass_battle/": "mass_battle",
     "modules/social_contest/": "social_contest", "systems/social_contest/": "social_contest",
+    "systems/threadwork/": "threadwork",
+    "engine/season/": "season_loop",
 }
 PROSE_SUFFIXES = (".md", ".txt", ".rst")
 TREES = ["tests/valoria", "engine/season/tests", "engine/tests"]
@@ -57,65 +57,40 @@ def changed_files(base):
     return sorted(n for n in names if n and os.path.exists(os.path.join(ROOT, n)))
 
 
-SEASON_PREFIX = "engine/season/"
-SEASON_TESTS = "engine/season/tests/"
-
-
 def _is_test_file(f):
-    return f.endswith(".py") and os.path.basename(f).startswith("test_")
+    return f.endswith(".py") and os.path.basename(f).startswith("test_") and (
+        f.startswith("tests/valoria/") or f.startswith("engine/season/tests/") or f.startswith("engine/tests/"))
 
 
 def classify(files):
-    """-> (markers touched, season loop touched, test files edited, files that forbid narrowing, prose-only files).
+    """-> (lanes touched, test files edited, files that forbid narrowing, prose-only files).
 
-    Groups, in the order a file is tried: a subsystem source tree (`SOURCE_PREFIXES`) -> its marker; a test file ->
-    that file alone; anything under `engine/season/` (the season loop and its data; its test helpers too) -> the
-    season loop; prose -> nothing; everything else (dice engine, substrate, exporters, registries, tools) reaches
-    every suite and is wide."""
-    markers, season, tests, wide, prose = set(), False, [], [], []
+    Every test belongs to one LANE (the season loop, the engine, or one subsystem; `conftest.py` assigns it) and a
+    change runs its own lane. A test file edited -> that file alone; a source tree with a lane (`SOURCE_PREFIXES`)
+    -> `-m <lane>`; anything else (the dice engine, substrate, exporters, registries, tools) reaches every lane and is
+    wide; prose runs nothing."""
+    lanes, tests, wide, prose = set(), [], [], []
     for f in files:
-        hit = next((m for p, m in SOURCE_PREFIXES.items() if f.startswith(p)), None)
-        if hit:
-            markers.add(hit)
-        elif _is_test_file(f) and (f.startswith(SEASON_TESTS) or f.startswith("tests/valoria/") or f.startswith("engine/tests/")):
+        hit = next((m for p, m in SOURCE_PREFIXES.items() if f.startswith(p) and not f.startswith("engine/season/tests/")), None)
+        if _is_test_file(f):
             tests.append(f)
-        elif f.startswith(SEASON_PREFIX):
-            season = True
+        elif hit:
+            lanes.add(hit)
         elif f.endswith(PROSE_SUFFIXES):
             prose.append(f)
         else:
             wide.append(f)
-    return sorted(markers), season, sorted(tests), wide, prose
+    return sorted(lanes), sorted(tests), wide, prose
 
 
-def _valoria_files_that_run_the_season():
-    """The `tests/valoria` files that import or name `engine.season`: the only ones a season-loop edit can reach (the
-    combat and mass-battle files there execute `modules/` and the dice engine and nothing in `engine/season/`,
-    `conftest.py`'s measurement of 2026-11-04). Found by grep at call time, so a new file is picked up."""
-    out = []
-    d = os.path.join(ROOT, "tests", "valoria")
-    for name in sorted(os.listdir(d)):
-        if name.startswith("test_") and name.endswith(".py"):
-            with open(os.path.join(d, name), errors="ignore") as fh:
-                if "engine.season" in fh.read():
-                    out.append(f"tests/valoria/{name}")
-    return out
-
-
-def commands(markers, season, tests, wide):
+def commands(lanes, tests, wide):
     # `--durations=30` is the reading a `--timeout=<budget>` is a multiple of; the budget itself is a reading, not a
     # constant, so the caller adds `--timeout` (`.claude/commands/close.md` step 4).
     if wide:
         return [f"python -m pytest {' '.join(TREES[:1])} -q -n auto --durations=30",
                 "python -m pytest engine/season/tests -q -n auto --dist worksteal --durations=30",
                 "python -m pytest engine/tests -q --durations=30"]
-    cmds = []
-    if season:
-        # A season-loop edit: the season suite and the `tests/valoria` files that run it. Not the subsystem suites.
-        cmds.append("python -m pytest engine/season/tests " + " ".join(_valoria_files_that_run_the_season())
-                    + " -q -n auto --dist worksteal --durations=30")
-        tests = [t for t in tests if not t.startswith(SEASON_TESTS)]
-    cmds += [f"python -m pytest {' '.join(TREES)} -m {m} -q -n auto --dist worksteal --durations=30" for m in markers]
+    cmds = [f"python -m pytest {' '.join(TREES)} -m {m} -q -n auto --dist worksteal --durations=30" for m in lanes]
     if tests:
         cmds.append("python -m pytest " + " ".join(tests) + " -q --durations=30")
     return cmds
@@ -128,12 +103,12 @@ def main(argv=None):
                     help="run every command and report each one's verdict (exit 1 if any is red)")
     a = ap.parse_args(argv)
     files = changed_files(a.base)
-    markers, season, tests, wide, prose = classify(files)
-    print(f"changed files: {len(files)}  | subsystems touched: {markers or 'none'}  | season loop: "
-          f"{'yes' if season else 'no'}  | test files: {len(tests)}  | wide: {len(wide)}  | prose only: {len(prose)}")
+    lanes, tests, wide, prose = classify(files)
+    print(f"changed files: {len(files)}  | lanes touched: {lanes or 'none'}  | test files: {len(tests)}  | "
+          f"wide: {len(wide)}  | prose only: {len(prose)}")
     if wide:
         print("no narrowing, because of: " + ", ".join(wide[:6]) + (" ..." if len(wide) > 6 else ""))
-    cmds = commands(markers, season, tests, wide)
+    cmds = commands(lanes, tests, wide)
     if not cmds:
         print("nothing to run beyond the validators (`python tools/valoria_local.py --staged`).")
         return 0
