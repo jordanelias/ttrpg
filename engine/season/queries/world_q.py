@@ -90,6 +90,7 @@ from ..state.gate import holdings_of, in_holdings, seat_faction, seat_on_parent_
 # (below) composes on it.
 from ..state.gate import sworn_to
 from ..state.ids import H, ROOT, draw_factory
+from ..state.ledgers import present_confidence
 from ..state.world import World, rung_kind_ascends
 from ..trace_log import TRACE
 # v9 IN-07 E1: the `settlements` module's records (the one host leaf a module imports) and the
@@ -240,6 +241,12 @@ def _is_person_id(w: World, x) -> bool:
     return isinstance(x, str) and x in w.persons
 
 
+def _reader_at(w: World, claims, weigh=None) -> LedgerReader:
+    """A `LedgerReader` over `claims` read AT THE WORLD'S TICK: the one construction a resolver-side query makes, so a
+    held claim's confidence is its present value (`state/ledgers.py::present_confidence`) and never the stored one."""
+    return LedgerReader(claims, weigh, tick=w.tick, decay=w.fixtures.claim_decay())
+
+
 def open_slots(w: World, venue: Optional[str]) -> list[dict]:
     """THE EMPTY SLOTS A SITTING AT `venue` HAS ON THE DOCKET, oldest first -- the items CALENDAR formed
     (`{"date": <id>, "matter": None}`, `loop/calendar.py`, for a date that fired WITH a holder) whose
@@ -319,7 +326,7 @@ def sittings_before(w: World, p: Person) -> list[tuple]:
         heard = [c for c in p.ledger if c.subject == venue and c.predicate == FIRED_KIND
                  and c.when == due]
         if heard and p.id in judging_set(w, venue):
-            out.append((did, LedgerReader(heard).belief_among(), tuple(dict.fromkeys(matters))))
+            out.append((did, _reader_at(w, heard).belief_among(), tuple(dict.fromkeys(matters))))
     return out
 
 
@@ -411,7 +418,7 @@ def docket_question(w: World, p: Person) -> Optional[Question]:
     found = {m for _, ms in reached for m in ms}
     matters = tuple(m for m in dict.fromkeys(d["matter"] for d in w.docket if d.get("matter") is not None)
                     if m in found)
-    about = LedgerReader([c for c, _ in reached]).belief_among()
+    about = _reader_at(w, [c for c, _ in reached]).belief_among()
     return Question(f"q:docket:{'|'.join(matters)}", "claim_landed", matters, about.id)
 
 
@@ -747,7 +754,7 @@ def reception(w: World, speaker: str, audience: tuple) -> float:
     """HOW THE `audience` RECEIVES `speaker` -- `19_PLAN.md` step 17, the room reading the person
     who rises in it. Signed: above zero the bench is disposed toward him, below it against him.
 
-        reception = Σ_h∈bench Σ_c∈deeds_h(speaker)  remove_weight(c.source) · c.confidence/full · v_h(c)
+        reception = Σ_h∈bench Σ_c∈deeds_h(speaker)  remove_weight(c.source) · present_confidence(c)/full · v_h(c)
 
       * the AUDIENCE is the tuple of persons `seam/wrappers/sigma.py::audience_of` names for the room
         the prize row says hears the act (B07.04; the bench is `judging_set(w, venue)`, the one owner of
@@ -781,6 +788,7 @@ def reception(w: World, speaker: str, audience: tuple) -> float:
     if speaker not in w.persons:
         return 0.0
     full = float(w.fixtures.get("confidence_default"))
+    decay = w.fixtures.claim_decay()
     shift = w.fixtures.get("scar_weight_shift")
     total = 0.0
     for hid in dict.fromkeys(audience):
@@ -798,7 +806,7 @@ def reception(w: World, speaker: str, audience: tuple) -> float:
                     continue
             if axis_w is None:
                 axis_w = projected_axes(h, shift)
-            total += remove_weight(c.source) * (c.confidence / full) * deed_term(h, axis_w, c)
+            total += remove_weight(c.source) * (present_confidence(c.confidence, c.when, w.tick, decay) / full) * deed_term(h, axis_w, c)
     return total
 
 
@@ -2793,7 +2801,7 @@ def _goal_referents(w: World, p: Person, goal, prop, path: frozenset) -> tuple:
     return deed_doers(p.ledger, obj, p.id, against)
 
 
-def current_stage(w: World, p: Person, ambition) -> Optional[dict]:
+def current_stage(w: World, p: Person, ambition, weigh=None) -> Optional[dict]:
     """WHERE `p` STANDS ON AN AMBITION'S STAGES, READ FROM WHAT HE HOLDS (CL-THRUST B3.1, R1): for each
     referent of the ambition (`goal_referents`), the FIRST stage of its `goal_stages` row whose `predicate`
     is not TRUE of that referent -- `{referent: Stage}`, in the referents' order, a referent that has
@@ -2805,7 +2813,7 @@ def current_stage(w: World, p: Person, ambition) -> Optional[dict]:
     COMPUTED WHEN ASKED AND STORED NOWHERE (`ambitions`' discipline): no stage counter, no progress
     field, no TRACE row (Q4 calls `goal_referents` once per ambition per person, and so would this).
     ITS ONE CALLER IS `open_stages` (CL-THRUST B3.2, R2), which `stage_referents` (the question's classed
-    referents) and `attention_key`'s `salience` (the stage's pursuits) both read; B3.2 passes no closure in.
+    referents) and `attention_key`'s `salience` (the stage's pursuits) both read.
 
     ⚠ PERSON-SIDE, AND THAT IS THE POINT (AX-2): the stage's cell is evaluated through `data/requires.py::
     evaluate` against `LedgerReader(p.ledger)` -- the reader `epistemic.belief_contradicts` asks the same
@@ -2816,10 +2824,12 @@ def current_stage(w: World, p: Person, ambition) -> Optional[dict]:
     operand a cell names that the binding does not carry reads UNKNOWN. ⚠ UNKNOWN IS NOT TRUE: a stage
     is passed only on a cell that evaluates to TRUE, so a ledger with no claim on the cell's predicate
     leaves the stage open (`belief_contradicts` declines a candidate on known-FALSE alone; a stage is
-    passed on known-TRUE alone). The reader takes no `weigh`: `decision/options.py::teller_weight` is a
-    `decision` import this module may not make, so hearsay is not graded here as it is at clause 4.
-    [ASSUMPTION; medium; Jordan to correct -- B3.1; revert: pass the closure in from the one caller
-    B3.2 adds.]
+    passed on known-TRUE alone). B09.07 `weigh`: the closure the ONE comparator reads his ledger by
+    (`decision/options.py::ledger_weigh`, a `decision` import this module may not make, so the caller passes it in, as
+    `LedgerReader` takes it), handed to the reader, so the stage he thinks he has passed is the belief he acts on and says.
+    `None` is the plain comparator. It comes from `open_stages`, its one caller; `open_stages`' own callers
+    (`stage_referents`, `attention_key`) pass none yet -- the shipped state has no `goal_stages` row, so this reader is
+    dormant, and where the season loop would supply the closure is B09.07's open question.
 
     ⚠ A STAGE ASKING `claim.held` (an `own_ledger` cell) CAN NEVER BE PASSED HERE: `LedgerReader.read`
     answers a stem from a claim whose predicate IS that stem and WITNESS deposits no `claim.held` claim
@@ -2829,7 +2839,7 @@ def current_stage(w: World, p: Person, ambition) -> Optional[dict]:
     prop = w.propositions.get(ambition)
     if goal is None or goal.stages is None or prop is None:
         return None
-    reader = LedgerReader(p.ledger)
+    reader = _reader_at(w, p.ledger, weigh)
     out: dict = {}
     for referent in goal_referents(w, p, prop):
         if referent is None:
@@ -3659,13 +3669,13 @@ def _of_stamped_class(w: World, referents: tuple, classes: Optional[frozenset] =
                  and not (r in w.records and w.records[r].kind in RECORD_REFERENT_KINDS))
 
 
-def open_stages(w: World, p: Person, ambition) -> dict:
+def open_stages(w: World, p: Person, ambition, weigh=None) -> dict:
     """THE STAGES `p` HAS NOT PASSED ON AN AMBITION HE STILL HAS WORK ON (CL-THRUST B3.2, R2): `current_stage`'s
     `{referent: Stage}`, or `{}` where it reads `None` or the ambition's aim is met (`aim_state` gates first:
     a met aim asks nothing, so it carries no stage either). The ONE read both consumers below take, so the
     referents a stage adds and the pursuits it weighs are never of two different stages. Person-side
-    (`current_stage`'s reader): no World fact beyond the aim rule Q4 already asks."""
-    cur = current_stage(w, p, ambition)
+    (`current_stage`'s reader): no World fact beyond the aim rule Q4 already asks. `weigh` is `current_stage`'s (B09.07)."""
+    cur = current_stage(w, p, ambition, weigh)
     if not cur or aim_state(w, p, w.propositions[ambition]) == "met":
         return {}
     return cur
@@ -3759,10 +3769,10 @@ def disputes_held(w: World, p: Person) -> tuple:
     conjuncts: a population neither calls out nor is called out)."""
     if p.is_cohort:                       # a population calls no man out (`challenge`'s `individual` of `actor`)
         return ()
-    shift = w.fixtures.get("scar_weight_shift")
+    shift, sworn = w.fixtures.get("scar_weight_shift"), w.fixtures.get("sworn_bond")
     named = (set(ledger_names(p.ledger)) | set(known_persons(p.ledger, p.id))) - {p.id}
     held = [r for r in sorted(named)
-            if r in w.persons and not w.persons[r].is_cohort and holds_dispute(p, r, shift)]
+            if r in w.persons and not w.persons[r].is_cohort and holds_dispute(p, r, shift, sworn)]
     if not held:
         return ()
     homes = home_map(w)
@@ -4458,7 +4468,7 @@ class WorldReader:
             p = w.persons.get(self._actor)
             if p is None or arg != self._actor or subject not in w.persons:
                 return UNKNOWN
-            return holds_dispute(p, subject, w.fixtures.get("scar_weight_shift"))
+            return holds_dispute(p, subject, w.fixtures.get("scar_weight_shift"), w.fixtures.get("sworn_bond"))
         if stem == "rank":
             # `21_RECONCILIATION.md` PHASE 2 step 9 / `03_PARAMETERS.md` §C.1 -- THE ORDINAL, NOT
             # A KIND CHECK. `rung_kinds` is an ORDERED roster (`person` first), so a rung's rank

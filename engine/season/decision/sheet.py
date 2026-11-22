@@ -1,6 +1,6 @@
 """`decision/` -- THE CHARACTER SHEET AS THREE SPACES (v10 REM-30, plan position IN-47): creation,
 development, chronicling. Design: `proposals/2026-10-07-character-sheet-spaces.md` and its
-`## Review at B-H` -- reference, PROPOSED and HELD BACK (ED-1094); nothing here ratifies it.
+`## Review at B-H` -- reference, RATIFIED (Jordan, 2026-11-05, ED-IN-0349); nothing here ratifies it.
 
 A management space *"reads the player's own `View`/`Question`/`Candidate` and emits acts, owning no
 game state"* (A-25). In code each space is at most a `choose` callable, or a part of the one handed
@@ -24,14 +24,17 @@ an act's, folded at RESOLVE (and the fold's two post-outcome writes, `_scar_witn
                      the automated chooser's own packing step. **It ranks and selects; it never forms**:
                      an index outside the set is refused, so there is no second option generator. A pick
                      of every index in order IS `make_chooser` (the control); any other pick is a mover.
-  CHRONICLING        `chronicle(p)` -- **no act, no write**: the person's own `ledger` as held, his belief
-                     per subject through `LedgerReader` (its comparator, not a copy), and the PRESENT
-                     values of `scar` and `conviction`. **It shows no scar or crisis as an event**: both
-                     writers call `World.write` without `emits` (`loop/resolve.py::_scar_witnesses`,
-                     `_conviction_crisis`), and `verb_table.yaml`'s `fight` row withholds `scar.taken`
-                     on purpose -- so no `Event`, `causes[]` edge or WITNESS deposit records when or by
-                     whose act a count rose or a creed folded. Giving it that history is a writer's
-                     change (the row's `emits:`), never a space's.
+  CHRONICLING        `chronicle(p, fx=None)` -- **no act, no write**: the person's own `ledger` as held, his belief
+                     per subject through `LedgerReader` (its comparator, not a copy; weighed when `fx` is given, B09.07), his `threads`
+                     (B09.17: each `seen` claim paired with the claim its `why` names, where he holds both), and the PRESENT
+                     values of `scar` and `conviction`. **It shows a scar as no event of its own, and a crisis as none**:
+                     `_scar_witnesses` records its write in one `scar.taken` Event, appended to the
+                     log and kept out of the list WITNESS reads (so no deposit), and the `fight`
+                     row still withholds `scar.taken` from its own `emits:`; `_conviction_crisis`
+                     writes `conviction` with no Event at all. So the sheet reads the PRESENT
+                     values, never a history: no `causes[]` edge or WITNESS deposit records when or
+                     by whose act a count rose or a creed folded. Giving it that history is a
+                     writer's change (`loop/resolve.py`), never a space's.
 
 THE SHEET HOLDS COPIES, SHALLOW EXCEPT WHERE IT MATTERS. Every field a sheet carries is a read-only copy of the
 person's own carrier (`MappingProxyType`, tuples), so a client's `pick` is never handed a `Person` and cannot reach
@@ -52,11 +55,12 @@ from dataclasses import dataclass
 from typing import Any, Callable, Iterable, Mapping, Optional, Sequence
 
 from ...substrate.descriptors import ATTRIBUTE_GLOSSES, CAPABILITIES, attribute_key
-from ..data.rosters import AFFILIATIONS
+from ..data.rosters import AFFILIATIONS, SEEN_PREDICATE
 from ..gaps import Forbidden
 from ..queries.person_q import LedgerReader
-from ..state.carriers import Person, PersonInterior, Question, View, frozen
+from ..state.carriers import Person, PersonInterior, Question, View, fade_of, frozen
 from .choose import make_ranker, release
+from .options import ledger_weigh
 
 def describe(key: str) -> str:
     """The gloss of a skill or an attribute: the leaf's text, no `World` (B04.02, DEF Edit 1). A skill is read by
@@ -200,7 +204,11 @@ class Chronicle:
     `scar` is split as the review's display rules require: (a) the pursuit side and the affiliation side
     are two rosters, never one list; (b) a count on a HELD affiliation is live, on an unheld one is
     history (a crisis rewrites only `conviction`). These are PRESENT values: no field records when, or by
-    whose act, a count rose or a creed folded or was destroyed -- see the module docstring."""
+    whose act, a count rose or a creed folded or was destroyed -- see the module docstring.
+
+    B09.17: `threads` is, for each `seen` claim he holds whose `why` names a claim he still holds, the pair `(that claim's id,
+    the id its `why` names)` -- the reader `Seen.why` lacked, what a person saw of one thing as the answer to another he saw. In
+    ledger order. `()` wherever no `why` was deposited, which is every person at `Fixtures connection_chance` 0.0 (the control, shipped)."""
     person_id: str
     ledger: tuple
     beliefs: tuple
@@ -208,19 +216,30 @@ class Chronicle:
     scar_pursuits: Mapping
     scar_affiliations_held: Mapping
     scar_affiliations_history: Mapping
+    threads: tuple
 
 
-def chronicle(p: Person) -> Chronicle:
+def chronicle(p: Person, fx: Any = None) -> Chronicle:
     """The chronicling space over one person. Reads `p`'s own `ledger`, `scar` and `conviction`; writes
-    nothing, emits nothing, and leaves `content_hash` unchanged whether or not it is called."""
-    reader = LedgerReader(p.ledger)
+    nothing, emits nothing, and leaves `content_hash` unchanged whether or not it is called.
+
+    B09.07: given the `fx` the caller already holds, `beliefs` reads through the ONE comparator -- `LedgerReader` with
+    `decision/options.py::ledger_weigh(p, fx, tick)`, the `weigh` `opening_set` and `belief_contradicts` read his ledger by --
+    so the sheet shows what he acts on and says. Without `fx` (a hand-built read) it is the plain comparator, as before.
+    B09.17: `threads` pairs each `seen` claim he holds with the claim its `why` names, where he still holds both."""
+    tick, decay = fade_of(p)                        # B09.01: the claims he would offer are ranked as he holds them now
+    reader = LedgerReader(p.ledger, ledger_weigh(p, fx, tick) if fx is not None else None, tick=tick, decay=decay)
     subjects = list(dict.fromkeys(c.subject for c in p.ledger))     # first held first, each once
     aff = {k: n for k, n in (p.scar or {}).items() if k in AFFILIATIONS}
     held = set(p.conviction or {})
+    held_ids = {c.id for c in p.ledger}
+    threads = tuple((c.id, c.value.why) for c in p.ledger
+                    if c.predicate == SEEN_PREDICATE and getattr(c.value, "why", None) in held_ids)
     return Chronicle(
         p.id, tuple(p.ledger),
         tuple((subj, reader.latest_about(subj)) for subj in subjects),
         frozen(p.conviction),
         frozen({k: n for k, n in (p.scar or {}).items() if k not in AFFILIATIONS}),
         frozen({k: n for k, n in aff.items() if k in held}),
-        frozen({k: n for k, n in aff.items() if k not in held}))
+        frozen({k: n for k, n in aff.items() if k not in held}),
+        threads)

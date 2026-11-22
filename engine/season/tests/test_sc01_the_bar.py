@@ -182,8 +182,13 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # (its sweep: the 15 convictions at 7 seasons, seed blocks 0-160, stopped at the first hit), meets every assertion on this tree
 # (858b7a77...) and on the batch base. The bar is an existence claim on SELECTED seeds (above), not a rate.
 # [ASSUMPTION; medium; Jordan to correct; revert: restore stability/35/7 with `revert_b11a`.]
+# B09.05 (`refusal_memory` 0.0 -> 0.5): stability/95/7 stopped meeting `_proceeding` ("no slot names the raising date", the docket holds the
+# matter with no date) -- the remembered refusal moves this three-person world's act mix. ATTRIBUTION, in process on the batch tree (scratch, not
+# kept): `BAR_FIXTURES` with `refusal_memory` swept back to 0.0, the parent tree's value, meets every assertion at stability/95/7 again, and the
+# test passes at B09.04's head. NOT RE-TRACED (a search over thousands of runs, as above): the bar is run at the control for the factor.
+# [ASSUMPTION; medium; Jordan to correct; revert: drop the `refusal_memory` sweep and re-trace at 0.5.]
 PROCEEDINGS = (("stability", 95, 7),)
-BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_floor", 60)   # B05.99: `test_u7_remit.JUDGE`'s device, rewritten there (was `pool_default` 30 with the deleted `obstacle_model: stand_in`)       # v9 SC-03b: a judge whose finding opens
+BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_floor", 60).sweep("refusal_memory", 0.0)   # B05.99: `test_u7_remit.JUDGE`'s device, rewritten there (was `pool_default` 30 with the deleted `obstacle_model: stand_in`)       # v9 SC-03b: a judge whose finding opens
 
 
 def _world(conviction: str, seed: int):
@@ -258,7 +263,7 @@ def _proceeding(conviction: str, seed: int, seasons: int) -> str:
               and any(c in acts and (acts[c].verb, acts[c].via, acts[c].payload.get("subject"))
                       == ("open_case", SEAT, PARTY) for c in x.causes)]
     assert opened, "no open_case put the clerk before the sitting after it fired"
-    occ = d.scenes[det.scene].occasion
+    occ = w.acts.scene_of(det.id).occasion
     assert occ.id.startswith(f"q:sitting:{did}:") and PARTY in occ.referents, occ
     # ... AND THE CONVENE THAT SCHEDULED IT WAS CHOSEN, NOT INJECTED.
     sched, = [x for x in w.log if x.kind == "date.scheduled" and any(ch.subject == did for ch in x.changes)]

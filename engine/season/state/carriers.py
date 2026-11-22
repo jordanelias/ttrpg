@@ -895,6 +895,12 @@ class PersonInterior:
     # 04 §B.2 calls `heritage?` a read-off field whose resolver is WITNESS's `marks` term, and §A.2 / §B.2 make this
     # record the person's own state; the two rows meet here. The pick: admitted, as his OWN field -- §B.2 excludes only
     # "anything about another person", and another person's heritage is still read only through a held claim.
+    # B09.01 -- THE TICK HIS CLAIMS ARE READ AT, AND THE RATE THEY FADE AT. A claim's stored `confidence` is what it
+    # was deposited at and nothing rewrites it (`state/ledgers.py::present_confidence`), so a reader of the person's
+    # ledger needs both, and `decision/` may not ask the World for either. Not person state: the barrier's own tick and
+    # `Fixtures.claim_decay()`, copied in by `interior_of`. `fade_of` reads them; a hand-built `Person` carries neither.
+    tick: int = 0
+    claim_decay: int = 0
 
 
 def frozen(d) -> Mapping:
@@ -902,13 +908,21 @@ def frozen(d) -> Mapping:
     return MappingProxyType(dict(d or {}))
 
 
-def interior_of(p: Person) -> PersonInterior:
-    """THE ONE BUILDER of a `PersonInterior`: copy the fields `decision/` reads out of `p`, mappings read-only."""
+def interior_of(p: Person, tick: int, claim_decay: int) -> PersonInterior:
+    """THE ONE BUILDER of a `PersonInterior`: copy the fields `decision/` reads out of `p`, mappings read-only, and the
+    `tick` and `claim_decay` his claims are read at (B09.01)."""
     return PersonInterior(
         p.id, p.name, frozen(p.capability), frozen(p.pursuits), frozen(p.conviction), frozen(p.scar),
         frozen(p.attributes),
         p.body, p.thread_sensitivity, tuple(p.stance), tuple(p.travel_leg), tuple(p.tenures), tuple(p.ledger),
-        p.weight, p.heritage)
+        p.weight, p.heritage, tick, claim_decay)
+
+
+def fade_of(p) -> tuple:
+    """`(tick, claim_decay)`, the pair a person's held claims are read at (`state/ledgers.py::present_confidence`): an
+    interior's own (`interior_of`), and `(0, 0)` for a stored `Person` a test or a probe built by hand, whose claims then
+    read as deposited. The one place `decision/` asks, so no site spells the fallback."""
+    return getattr(p, "tick", 0), getattr(p, "claim_decay", 0)
 
 
 @dataclass
@@ -1011,8 +1025,19 @@ def subject_of(a: "Act") -> str:
     caller writes `subj is None` or puts the result in a set beside a `""`. `carriers` is the leaf
     all three already reach, and neither `deliberate` nor `predicates` imports the other, so this
     is the only home that costs no new edge."""
+    return operand_of(a, "subject")
+
+
+def operand_of(a: "Act", name: str) -> str:
+    """The act's payload operand `name` (`office`, `to`, `subject`), or `""` where it is absent or is not a string.
+
+    B09.18: THE ONE REFERRING READ, AND IT CANNOT RETURN AN UNHASHABLE. A hand-built or client-returned act may
+    carry a list under an operand; every caller looks the result up in a dict or a set, and the fold calls a
+    predicate with no catch, so a list handed back raises `TypeError` out of the season. A value that is not a
+    `str` reads as `""`, which every caller already treats as no operand. Same payload guard as `subject_of`."""
     d = a.payload if isinstance(getattr(a, "payload", None), dict) else {}
-    return d.get("subject") or ""
+    v = d.get(name)
+    return v if isinstance(v, str) else ""
 
 
 @dataclass(frozen=True)

@@ -1788,7 +1788,7 @@ def test_13d_i_the_conferral_basis_is_roster_membership_not_a_nonempty_string():
     for basis in sorted(CONFERRAL_BASES):
         off.conferral = basis
         assert _preds.has_conferral_basis(off), basis
-        assert _preds._req_confer(w, conf) == (CONFERRAL in FILLED_BY[basis]), basis
+        assert bool(_preds._req_confer(w, conf)) is (CONFERRAL in FILLED_BY[basis]), basis
         checked += 1
         refused += CONFERRAL not in FILLED_BY[basis]
     assert checked == len(CONFERRAL_BASES) >= 4 and refused == 1, (checked, refused)
@@ -2575,7 +2575,7 @@ def test_24d_i_the_loader_refuses_dwelling_without_its_wear_or_floor_row(monkeyp
     assert checked == 2, checked
 
 
-def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
+def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
     """FALSIFIER (c) -- AND `24d-i`'s `DONE·INERT` MEASUREMENT DOES NOT SURVIVE POSITION `11a`,
     WHICH IS RECORDED HERE RATHER THAN HIDDEN. The name and the back half of this test changed;
     the front half -- what `24d-i` actually built -- did not.
@@ -2651,11 +2651,13 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     scale = w.fixtures.get("condition_scale")
     assert len(dw) >= 1, "no dwelling was built; the zeros below would describe nothing"
     assert qs, "the questions_for spy saw no deliberation; the zero below would be unobserved"
-    worn = Counter(anchor_of(w, e) for e in w.log
-                   if e.kind == "condition.worn" and anchor_of(w, e) in dw)
-    assert worn == Counter(list(dw)), (
-        f"the wear loop did not visit every dwelling exactly once: "
-        f"{len(worn)} of {len(dw)} worn, {sum(worn.values())} Events")
+    # B09.21 (H-135): a Site whose wear is 0 is not written and emits nothing, so the wear loop that once visited every
+    # dwelling once (`condition.worn`, 211 Events a season at seed 0) now emits no Event for one. Observed, not assumed: the
+    # loop still ran (some Site, a harbour or a seam, was worn: a zero here would otherwise describe a loop that never ran).
+    worn = Counter(anchor_of(w, e) for e in w.log if e.kind == "condition.worn")
+    assert sum(worn.values()) >= 1, "no Site was worn at all: the loop did not run, and the zero below would be unobserved"
+    assert not [sid for sid in worn if sid in dw], (
+        f"a dwelling still emits `condition.worn` at wear 0: {sorted(set(worn) & set(dw))[:3]}")
     # `band_crossed` is no longer a question source at all (position `11a` folded it into
     # `claim_landed`, and `w.crossings` is deleted with it -- `AX-4`, one owner). This premise
     # survives the fold unchanged, because it was never about the deleted source's SHAPE: a
@@ -2664,39 +2666,23 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     assert not [e for e in w.log if e.kind == "condition.band_crossed" and anchor_of(w, e) in dw]
     assert all(w.sites[sid].condition == scale for sid in dw), "a dwelling's condition moved at wear 0"
 
-    # ⚠ THE ASSERTION THIS REPLACES USED TO BE `assert not [...]` -- "no question names a
-    # dwelling". `11a` makes that FALSE by design (see the docstring); what is asserted now is
-    # that dwelling questions, where they exist, are the ORDINARY shape: `claim_landed`, and each
-    # one resolves to a real claim in ITS OWN ASKEE's ledger whose subject is a dwelling that
-    # askee actually lives beside.
+    # ⚠ B09.21 (H-135) UNDOES WHAT `11a` HAD MADE OF THIS TEST, AND IT IS RECORDED HERE RATHER THAN HIDDEN. `11a`'s place clause
+    # admitted a resident's own hearth's dwelling wear CLAIM as a `claim_landed` Question (132 of 3,710 at seed 0, one season, then
+    # 86); that claim existed because MATTER wrote and emitted `condition.worn` for a dwelling at wear 0. It is no longer written, so
+    # NO claim about a dwelling exists to be asked about. MEASURED, seed 0, one season, on the B09.21 tree: 211 dwellings, 0
+    # questions name one (asserted below). The place clause is unchanged and the dwelling is again not a source of any Question; what
+    # B09.21 removes is the claim `reach` was admitting, not the clause. The treatment/control Question-id inequality `11a` asserted
+    # (and the arms' act counts, which the history below records) are NOT re-asserted: the arms still part (627 / 626 acts, the
+    # Question ids differ), but only through the deleted Sites themselves, not through any dwelling claim, so it no longer
+    # observes `reach`.
     dwelling_qs = [q for q in qs if {q.about, *q.referents} & set(dw)]
-    assert dwelling_qs, (
-        "no question named a dwelling -- if that is now true, `reach`/`place_of`'s place clause "
-        "regressed, or this world no longer witnesses a dwelling's own wear co-located")
-    assert {q.source for q in dwelling_qs} == {"claim_landed"}, (
-        f"a dwelling question came from a source other than claim_landed: "
-        f"{sorted({q.source for q in dwelling_qs})}")
-    at = {rung: sid for sid, rung in dw.items()}
-    home = world_q.home_of(w)
-    by_id = {c.id: c for p in w.persons.values() for c in p.ledger}
-    for p in w.persons.values():
-        for q in dwelling_qs:
-            if q.id not in {f"q:claim:{c.id}" for c in p.ledger}:
-                continue
-            c = by_id.get(q.about)
-            assert c is not None and c.subject in {at.get(home.get(p.id)),
-                                                   at.get(home_at_build.get(p.id))}, (
-                f"{q.id} for {p.id} does not resolve to that person's own hearth's dwelling: {c}")
-
-    # ⚠ `24d-i`'s TREATMENT == CONTROL IDENTITY DOES NOT SURVIVE `11a`, AND IS NOT RE-ASSERTED.
-    # What is asserted instead is the honest negation, so a future change that silently restores
-    # dwelling-inertness (narrowing `reach` back down, or breaking the co-located witness) is
-    # caught here rather than read as a quiet improvement.
+    assert not dwelling_qs, (
+        f"a question names a dwelling ({len(dwelling_qs)}): a claim about one exists again, which B09.21 stopped writing at wear 0")
+    assert not [c for p in w.persons.values() for c in p.ledger if c.subject in dw], (
+        "a person's ledger holds a claim whose subject is a dwelling: nothing should have deposited one at wear 0")
     cw, cdw, cqs, cout = season(strip=True)
     assert cdw == {}, "the control still has dwellings"
-    assert sorted(q.id for q in qs) != sorted(q.id for q in cqs), (
-        "the two arms' Question sets are identical again -- dwellings are DONE·INERT once more; "
-        "either relabel this test back to `24d-i`'s or find what silently narrowed `reach`")
+
     # ⚠ v9 IN-57 INVERTED THE ACT-COUNT ARM (`out["acts"] != cout["acts"]` became `==`). A dwelling
     # question is tier 4, the lowest, under `world_q.attention_key` -- the dwelling sits on the
     # ladder above the resident's home (`reach`'s limb 3, which is no tier), and below even the
@@ -2912,20 +2898,21 @@ def test_24d_i_dwelling_wear_stops_being_inert_at_11a(monkeypatch):
     # ⚠⚠ B07.99 re-pin: (750, 750) -> (630, 628), A RE-RECORD WITH THE UNITS THAT MOVED IT: the task draw is on (B07.05; a refusal carries
     # no band, B07.10; `reconstruct` is `routine`, B07.11), so a failed draw feeds back into what the realm forms next (seed 0, one season;
     # `_realm_goldens.CENSUS[(0, 1)]` records the 630); the two arms no longer read the same count, since the dwellings' wear claims part them.
-    assert (out["acts"], cout["acts"]) == (630, 628), (
-        f"the two arms' act counts are {(out['acts'], cout['acts'])}: the dwellings' wear claims reach "
-        "ledgers (not a question answered first, which is asserted above) and part the arms at one "
-        "`migrate`; a move here is a move of the act mix -- re-record it with the unit that moved it")
+    # ⚠⚠ B09.99 re-pin: (630, 628) -> (627, 626), THE B09 MOVERS (`_realm_goldens.py`'s list; `CENSUS[(0, 1)]` records the 627), AND A READING THAT CHANGED:
+    # B09.21 stopped writing a dwelling's wear, so no wear claim reaches a ledger and the arms no longer part through one. They still part
+    # (the control deletes 211 Sites, which moves what is drawn and asked), by one act here and by `claim.deposited` 10541 / 10540.
+    assert (out["acts"], cout["acts"]) == (627, 626), (
+        f"the two arms' act counts are {(out['acts'], cout['acts'])}: a move here is a move of the act mix -- "
+        "re-record it with the unit that moved it")
     # v10 REM-2C: with the counts equal, THE PARTING THE COUNTS PROXIED IS ASSERTED DIRECTLY -- the arms' act
     # sequences differ (at act 370 at REM-2C, the note above).
     seq = lambda world: [(a.actor, a.verb, (a.payload or {}).get("subject")) for a in world.acts]
     # ED-IN-0306 phase 5: within ONE season the arms' act sequences no longer part -- the one parting decision was a
     # `migrate` onto a territory, now declined in both arms (`arrival_only_kinds`) -- so the parting is asserted where it
-    # still lives, the ledgers: the wear claims reach the treatment arm's `claim.deposited` and not the control's.
+    # still lives, the ledgers (B09.99: no longer the dwellings' wear claims, which are not written at wear 0).
     deposited = lambda world: sum(1 for e in world.log if e.kind == "claim.deposited")
     assert seq(w) != seq(cw) or deposited(w) != deposited(cw), (
-        "the two arms are identical in acts AND in ledger deposits: the dwellings' wear claims part nothing")
-    assert deposited(w) > deposited(cw), "the dwellings' wear claims deposited nothing the stripped arm lacks"
+        "the two arms are identical in acts AND in ledger deposits: deleting 211 Sites parted nothing")
 # H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-146`. A refusal at `opening_set`, not a score term:
 # the person's projected weight on the gating axis IS the threshold, and a verb that axis engages
 # past it never forms a Candidate. Roster-generic: the axis is whatever `Fixtures refusal_axis`

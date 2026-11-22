@@ -86,7 +86,6 @@ Columns: the wave and step as the structure had them, and now (a change in bold)
 | batch | lane | wave (§2.1 → now) | step (§2.1 → now) | slack | part files | positions: total (by state) | hash, from the position rows (§2.2 said) | est. h (E-15) | after: every `GATE: Batch` it needs (`+G` a part's GATE line §2.1 lacked; `+R` an edge H2 adopts) |
 |---|---|---|---|---|---|---|---|---|---|
 | B08-scene-order | IN | W6 → **W9** | S13 | 9 | 23 | 7 (B7) | MOVER (behaviour 3) | 5.3 | B00, B01, B02, B03a, B04 +R, B05 +R, B06 +R |
-| B09-memory | IN | W10 | S10 | 0 | 11_cont | 22 (B21 BL1) | MOVER (behaviour 8; B09.10 relabelled from encoding, R2a) | 11.3 | B00, B01, B02, B05, B07 |
 | B10-character | IN | W11 | S11 | 0 | 12, 12_cont, 13, 13_cont | 67 (B48 P8 R2 H3 BL2 C1 DF3) | MOVER (behaviour 9, encoding 1) | 29.3 | B00, B01, B01a (B01a.05), B02, B04, B05, B09 |
 | BA1-cast-content | IN | W12 | S12 | 10 | 18_cont | 14 (B2 P1 R1 C10; +BA1.13 C, 2026-11-13) | MOVER (behaviour 10) | 8.1 | B00, B01, B01a (B01a.05), B02, B04, B05, B10 |
 | B11-fi-readers | FI | W12 | S12 | 0 | 16, 16_cont, 17, 17_cont | 58 (B49 P4 R2 H1 DF2) | MOVER (behaviour 29, encoding 2) | 25.7 | B00, B01, B02, B03, B04, B05, B07, B10 |
@@ -145,7 +144,6 @@ Every batch's boundary row with the part and line it sits on, whether its text i
 | batch | its boundary row (part:line) | exact text | `GATE: Batch` lines | equal to its after-list in §1 | names a batch closing at or after its own step | H2 added |
 |---|---|---|---|---|---|---|
 | B08-scene-order | 23:484 | yes | 7 | yes | none | — |
-| B09-memory | 11_cont:523 | yes | 5 | yes | none | — |
 | B10-character | 13_cont:200 | yes | 7 | yes | none | B01a (B01a.05) |
 | BA1-cast-content | 18_cont:266 | yes | 7 | yes | none | B01a (B01a.05) |
 | B11-fi-readers | 17_cont:143 | yes | 8 | yes | none | — |
@@ -202,7 +200,6 @@ One row per batch in schedule order: the position handles (the part after the do
 
 | step | batch | behaviour movers (position handles) | encoding movers | conditional movers | the re-pin position and what its text says | merge position in its step |
 |---|---|---|---|---|---|---|
-| S10 | B09 | 01, 05, 07, 08, 10, 11, 12, 21 | — | — | `B09.99` | 1 of 1 movers |
 | S11 | B10 | 32, 59, 60, 65, 66, 70, 71, 72, 73 | 58 | — | `B10.99` | 1 of 1 movers |
 | S12 | B24p | 19, 24, 20, 22, 23 | — | — | `B24p.99` | 1 of 5 movers |
 | S12 | BA1 | 01, 02, 03, 04, 05, 06, 08, 09, 12 | — | — | `BA1.99` | 2 of 5 movers |

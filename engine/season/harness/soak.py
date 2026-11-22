@@ -137,7 +137,7 @@ def _require_clean_engine() -> str:
 # ---------------------------------------------------------------------------------------------
 
 def _occasion_row(d, a) -> dict | None:
-    sc = d.scenes.get(a.scene) if a.scene else None
+    sc = d.w.acts.scene_of(a.id)
     q = getattr(sc, "occasion", None) if sc is not None else None
     if q is None:
         return None
@@ -260,7 +260,7 @@ def _run_world(args: argparse.Namespace, head: str, world_dir: Path, argv: list)
 
     # -- THE COMPOSITION, EXACTLY `populated.run`'s (`C.1`) -----------------------------------
     # NOT a call to `populated.run`, because that owner builds a NEW `SeasonDriver` every call
-    # (`.resolved`/`.scenes`/`.act_of` would reset every batch, and R3 depends on them crossing
+    # (`.resolved`/`.act_of` would reset every batch, and R3 depends on them crossing
     # seasons). One driver, kept alive across every batch; `season()` resets its own
     # season-local state on its own.
     w = build_realm(seed)                                                  # cap=None: the full realm

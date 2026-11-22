@@ -52,7 +52,7 @@ from ..queries.world_q import questions_for
 from ..seam import ContestError, contest
 from ..state.attribution import anchor_of
 from ..state.carriers import (
-    Candidate, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene, Sensation, Site, StateChange, Tenure, View,
+    Candidate, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene, Sensation, Site, Tenure, View,
 )
 from ..state.ids import H, ROOT, draw_factory
 from ..boot.realm import place_person   # the one placing of a person (B03c.02)
@@ -282,7 +282,25 @@ def Act_(w, p, verb, key: str = "", **kw):
 _Q = Question("q:view-probe", "need", ())
 
 
-def about(subject: str) -> StateChange:
+def apparatus_receipt(w, subject: str, mode: str, driver: str, field=None, delta=None):
+    """A RECEIPT THE WORLD'S OWN GATE MINTED, FOR A CHANGE THE APPARATUS HAND-BUILDS (B09.09).
+
+    `state/log.py` refuses a change that is not a receipt this gate issued, so an Event a probe or a
+    test builds outside a write carries one of these and not a `StateChange`. It opens a window on
+    `w.gate` only when none is open and closes it again, so no window outlives the call (`Gate.close`,
+    H-131). The six fields are exactly what the bare change carried, so `World.content_hash` (five
+    fields; the serial is not folded) reads the same."""
+    g = w.gate
+    if g.is_open:
+        return g.mint(subject, mode, driver, field, delta)
+    g.opening("Event", field or "-", "apparatus", w.tick)
+    try:
+        return g.mint(subject, mode, driver, field, delta)
+    finally:
+        g.close()
+
+
+def about(w, subject: str):
     """THE CHANGE A HAND-BUILT EVENT CARRIES TO SAY WHAT IT IS ABOUT -- G1b's tier-2 carrier for
     apparatus, and the one owner of its shape.
 
@@ -292,12 +310,9 @@ def about(subject: str) -> StateChange:
     `plague.struck` is the class `state/attribution.py` named as the blocker -- so the apparatus
     says what its Events concern the one way the carrier still allows: a change naming it.
 
-    ⚠ A BARE `StateChange`, NOT A `Receipt`, AND THAT IS THE TRANSITIONAL SEAM ON PURPOSE. No gate
-    write is open when a probe builds an Event, so there is no receipt to mint; `state/log.py`
-    admits a bare change and verifies only receipts (`test_a_bare_statechange_is_still_admitted_
-    and_this_is_the_transitional_seam`). When `G4` closes that seam, every Event built through
-    this function stops being admitted -- which is where they should go red, all at once, from
-    one owner, rather than from nine hand-written copies.
+    ⚠ A RECEIPT THE WORLD'S GATE MINTED (B09.09; H-145). It was a bare `StateChange` while the log
+    admitted one; `state/log.py` now refuses a bare change, so this mints through `apparatus_receipt`
+    on the world the Event will be appended to (a receipt of another world's gate is refused too).
 
     `field=None` and `delta=None`: it names the thing and asserts no value, so no reader that
     keys on `field` (`probes.py`'s social-change check, `resolve`'s accumulator) mistakes it for a
@@ -308,9 +323,8 @@ def about(subject: str) -> StateChange:
     change exactly as it would a real write's, because none of them ask `field` at all. Measured
     inert today: `tiny_world`'s only `hold` is `p_high -> off_duke` and nothing in the probe
     corpus reaches those readers through a hand-built Event's `about(...)` in a way that changes
-    a count (`W6` still reads 9 deposits, unmoved). Grows the transitional-seam population `G4`
-    closes; not a new hazard, the SAME one the paragraph above already names."""
-    return StateChange(subject, "set", "Event")
+    a count (`W6` still reads 9 deposits, unmoved)."""
+    return apparatus_receipt(w, subject, "set", "Event")
 
 
 def Ev(w, subj_seed, kind, subject, causes, changes=None, degree=None):
@@ -340,7 +354,7 @@ def Ev(w, subj_seed, kind, subject, causes, changes=None, degree=None):
     cause's anchor would have been wrong -- measured, it was the one corpus Event where tier 3
     disagreed with the field."""
     return Event(H(w.world_seed, w.tick, subj_seed, f"ev:{kind}:{w.new_draw()}"), kind,
-                 [about(subject)] + list(changes or []), causes, w.tick, degree)
+                 [about(w, subject)] + list(changes or []), causes, w.tick, degree)
 
 
 @probe("P2", "the scene budget is ~5 and the PERSON chooses what to leave undone", "S26.3",
@@ -672,7 +686,7 @@ def p15():
     # conflation `witness` had already retracted once. Found by the `W6` adversarial pass.
     # G1b: what the speech is about rides as a change (`about`), since `Event.subject` is gone;
     # without it the Event anchors on nothing and every channel below answers "nobody".
-    e = Event(H(w.world_seed, w.tick, "p_low", "probe:p15"), "speech.made", [about("p_low")],
+    e = Event(H(w.world_seed, w.tick, "p_low", "probe:p15"), "speech.made", [about(w, "p_low")],
               [ROOT], w.tick)
     everyone = list(w.persons)
     # Position `15d`: `observers_for` returns `(person, channel)` pairs; this probe asks only WHO.
@@ -1997,7 +2011,7 @@ def a5():
             # and id-collision assertions below still observe what they claim; the mixed-sign
             # sum-then-clamp-once case lives in `test_in12_step9.py` (a sabotage and a restore).
             return [Act_(w, p, "work", key=str(d), payload={"site": site.id},
-                         changes=[StateChange(site.id, "alter", "Act", "condition", d)])
+                         changes=[apparatus_receipt(w, site.id, "alter", "Act", "condition", d)])
                     for d in order][:ask_budget()]
         r = _run(w, choose)
         # ⚠ THE FALSIFIER THE ID FIX NEEDED AND DID NOT HAVE. Two of the five deltas were both

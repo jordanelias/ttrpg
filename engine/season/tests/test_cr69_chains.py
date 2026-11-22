@@ -136,9 +136,15 @@ def test_chains_prints_its_own_block_and_without_the_flag_nothing_is_added(monke
     plain = _run_main(monkeypatch, capsys)
     out = _run_main(monkeypatch, capsys, "--chains", "--min-depth", "3")
     assert out[:len(plain)] == plain                                 # the render is untouched
-    assert out[len(plain):] == [
+    added = out[len(plain):]
+    # B09.16: before the block, one `<act id> | for: ...` line per act of the printed chain (`chronicle.occasion_line`;
+    # the planted world keeps no Scene, so each reads `(no scene)`).
+    fors, block = added[:-2], added[-2:]
+    assert fors and all(" | for: " in l for l in fors), fors
+    assert len(fors) == len([l for l in plain if l[:1].isdigit()]), (fors, plain)
+    assert block == [
         "chains seed=0 min_depth=3 consequence_acts=14 chain_ends=4",
-        "kinds on the ends' consequence Events: heir.named=2, war.ended=2"], out[len(plain):]
+        "kinds on the ends' consequence Events: heir.named=2, war.ended=2"], block
 
 
 def test_chains_without_min_depth_is_refused(monkeypatch, capsys):

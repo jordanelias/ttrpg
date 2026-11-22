@@ -466,7 +466,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 |---|---|---|---|---|
 | B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-939 (79+0; H-940 unused) | added 2026-11-14 after the table's last block (B01a's H-856..H-860, on top of B99's); `references/id_reservations.yaml` SC `next_free` 54 → 57 at the batch's opening, not by this plan; the hole register's next id after this block H-941 (the block grew from 54 at the V2 fold: V2's 55 settings, the fold's counted table of 24 and the `speech_blend` pointer row, then fell to 79 at the V2 stress-test pass, which cut `sympathy_step`; `case_rows`' note row and the `audience_room` pointer row cut). The fold map's own range H-856..H-909 assumed H-855 as the last allocated id: B01a had taken H-856..H-860 first |
 | B08-scene-order | IN | ED-IN-0385..0386 (0+2) | H-451..H-455 (0+5) | ED shifted |
-| B09-memory | IN | ED-IN-0387..0388 (0+2) | H-456..H-463 (3+5) | ED shifted |
 | B10-character | IN | ED-IN-0389..0390 (0+2) | H-464..H-486 (18+5) | ED shifted |
 | BA1-cast-content | IN | ED-IN-0391..0392 (0+2) | H-487..H-491 (0+5) | ED shifted |
 | B11-fi-readers | FI | ED-FI-0010..0011 (0+2) | H-492..H-498 (2+5) | same |

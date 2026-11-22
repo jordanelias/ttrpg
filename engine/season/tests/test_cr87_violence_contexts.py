@@ -294,7 +294,9 @@ def _realm_fights(seed: int, seasons: int = 1) -> list:
 def _run_realm_fights(seed: int, seasons: int = 1) -> list:
     """Every `fight` Candidate formed, through the audit's own run: (actor, subject, same faction, stance, seats)."""
     box, forms = {}, []
-    rb, ro = I.build_realm, I.opening_set
+    # B09.13: the audit's run no longer re-forms the opening set (it reads the chooser's own table through `make_chooser(watch=...)`),
+    # so the formation is observed where the chooser forms it: `decision.choose.opening_set`, which `make_ranker` reads by bare name.
+    rb, ro = I.build_realm, CH.opening_set
 
     def build(*a, **k):
         box["w"] = rb(*a, **k)
@@ -308,11 +310,11 @@ def _run_realm_fights(seed: int, seasons: int = 1) -> list:
                      for c in out if c.verb == "fight" and c.subject in w.persons)
         return out
 
-    I.build_realm, I.opening_set = build, opening
+    I.build_realm, CH.opening_set = build, opening
     try:
         I.run(seed, seasons)
     finally:
-        I.build_realm, I.opening_set = rb, ro
+        I.build_realm, CH.opening_set = rb, ro
     return forms
 
 

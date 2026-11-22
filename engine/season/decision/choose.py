@@ -41,9 +41,9 @@ from ..gaps import Unspecified
 # imports `person_q` and `data/`); `_stance_arm` calls it, and `confliction` (IN-08 6f,
 # the derived Query's caller, ID-13).
 from ..queries.person_q import (
-    believed_capability, confliction, intent_named, intent_said, regard, stance_toward,
+    believed_capability, confliction, intent_named, intent_said, refused_before, regard, stance_toward,
 )
-from ..state.carriers import EFFORT, Act, Candidate, Person, Question, Scene, Sensation, View
+from ..state.carriers import EFFORT, Act, Candidate, Person, Question, Scene, Sensation, View, fade_of
 # `project` is DEFINED in `options.py` (see this module's docstring) and imported here because
 # `make_chooser`'s score calls it; `options` never imports this module.
 # `seat_of` is `options.py`'s own G3 helper (`via=seat_of(...)`, below).
@@ -191,6 +191,32 @@ def odds_weight(p: Person, c: Candidate, fx: "Fixtures", odds: Optional[Callable
     return 1.0 if chance is None else float(chance)
 
 
+def admission_weight(p: Person, c: Candidate, fx: "Fixtures") -> float:
+    """THE FACTOR A REMEMBERED REFUSAL PUTS ON A CANDIDATE'S PURSUIT TERM (B09.03; `H-456`):
+    `1 - refusal_memory * refused_before(...) / confidence_default`, so a person refused this opportunity retries it at lower odds,
+    never at none below `refusal_memory` 1.0.
+
+      * `refusal_memory` `0.0` (CONTROL) -- exactly 1.0 for every candidate, and no ledger is read;
+      * a verb whose row declares no refusal kind (`VERB_TABLE[verb].emits_on_refusal`, empty), an opportunity with no subject, and
+        one where nothing is remembered (`person_q.refused_before` is 0: no such claim, or news of the subject newer than it) -- 1.0.
+
+    The remembered confidence is read at the person's own tick and the fixture's decay (`carriers.fade_of`, what `decision/`'s other
+    readers take), so a refusal fades as any claim does; the own-ledger reader takes the person and no World (AX-2).
+    A `refusal_memory` outside `[0, 1]` (or NaN) raises: above 1 the factor goes negative and would invert the pursuit term."""
+    memory = fx.get("refusal_memory")
+    if not 0.0 <= memory <= 1.0:     # `not <= ... <=`, so a NaN is refused too
+        raise ValueError(f"refusal_memory {memory} is not in [0, 1]: above 1 the factor goes negative and would invert the "
+                         "pursuit term it weighs (H-456)")
+    if memory == 0.0:
+        return 1.0
+    row = VERB_TABLE.get(c.verb)
+    if row is None or not row.emits_on_refusal or not c.subject:
+        return 1.0
+    tick, decay = fade_of(p)
+    remembered = refused_before(p, row.emits_on_refusal, c.subject, tick, decay)
+    return 1.0 if not remembered else 1.0 - memory * remembered / fx.get("confidence_default")
+
+
 def fit_term(p: Person, c: Candidate, fx: "Fixtures") -> float:
     """THE CONFERRER'S VIEW OF A CANDIDATE, at `Fixtures.confer_fit_weight` (B04.22; `H-414`): `weight * (regard(p, to) +
     the skill his own ledger holds of `to`)`, over a row that SEATS a person -- the row's shape, never a verb name: a
@@ -211,7 +237,7 @@ def fit_term(p: Person, c: Candidate, fx: "Fixtures") -> float:
         return 0.0
     fit = regard(p, to, fx)
     capability = seat_capability(c.subject)
-    skill = believed_capability(p, to, capability) if capability else None
+    skill = believed_capability(p, to, capability, *fade_of(p)) if capability else None
     return weight * (fit + (0 if skill is None else float(skill)))
 
 
@@ -232,7 +258,8 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
       * `pursuit` -- `damp * Σ_axis axis_w[axis] * align(c.verb, axis) * odds_weight(...)`, `axis_w` the
         person's projected pursuits, `damp` the `confliction_weight` arm's factor (exactly 1.0 at 0) and
         `odds_weight` CR-17's believed-chance factor on a contested candidate (exactly 1.0 at
-        `odds_weighting` `none`, for an uncontested candidate, and when `odds` is `None`);
+        `odds_weighting` `none`, for an uncontested candidate, and when `odds` is `None`), and
+        `admission_weight` the factor a remembered refusal puts on it (exactly 1.0 at `refusal_memory` `0.0`, B09.03);
       * `stance` -- `stance_term(p, c, fx, memo)`, by `Fixtures.stance_polarity`, at gain `1 + g`;
       * `fit` -- `fit_term(p, c, fx)`: the conferrer's view of the candidate a seating row names in `to`.
 
@@ -250,6 +277,7 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
     pursuit = damp * ltr_sum(axis_w[ax] * align(c.verb, ax) for ax in _AXES)
     if pursuit != 0.0:
         pursuit *= odds_weight(p, c, fx, odds)
+        pursuit *= admission_weight(p, c, fx)
     else:
         _odds_arm(fx)           # a zero term is zero whatever the factor: the query is not asked (it scans the log), the arm is still checked.
                                 # Value-equal; the one difference is an error the query would raise on this candidate, which is no longer raised
@@ -495,9 +523,62 @@ def score_order(cands: list, scores: dict) -> list:
     return sorted(cands, key=lambda c: (-scores[id(c)], c.verb, c.subject or ""))
 
 
+# [JUSTIFIED: a float-tie tolerance for the attribution (two scores within it are a tie), an instrument constant and not a game number]
+ATTRIBUTION_EPS = 1e-9
+TERM_NAMES = ("pursuit", "stance", "fit")      # `score_terms`' tuple, in order: what `deciding_term` names
+
+
+def deciding_term(cands: list, terms: list, actual: Optional[Candidate], tau: float) -> dict:
+    """WHICH TERM DECIDED A TOP: THE ONE OWNER OF THE ATTRIBUTION RULE (B09.13; it was `harness/decision_spread.py::attribute_top`'s,
+    moved here beside `score_order` so a reader of what the chooser saw -- the `watch` hook -- and the one that re-scores a
+    candidate set (`attribute_top`) call one rule). Pure: it reads `terms` and `actual` and scores, orders and samples nothing.
+
+    `cands` and `terms` are parallel (`score_terms`' tuples, in `cands`' order); `actual` is the top the SAMPLER chose among them
+    (`sampled[0]`; `None` with no candidate); `tau` is `choice_temperature`. The tests, in order:
+      1. `draw`      the sampler's top is NOT the score's top (the draw outvoted the score), or the top two scores are within
+                     `ATTRIBUTION_EPS` and `tau` > 0 (the draw ordered them);
+      2. `tiebreak`  the top two scores are within `ATTRIBUTION_EPS` at temperature 0 (`(verb, subject)` ordered them);
+      3. otherwise the TERMS (`TERM_NAMES`) whose removal leaves the top no longer strictly ahead of the field, joined by `+`;
+         `overdetermined` if no single term's removal does.
+    Returns `{top, decider, margin, scores, terms, draw_kind, field_zero}`; `scores` and `terms` are parallel to `cands`. `cands`
+    empty -> `top` None, `decider` `none`; one candidate -> `sole`. `draw_kind` splits the `draw` label: `tie` (the draw ordered
+    a tie) against `outvoted` (it overrode a leader); `field_zero` is true when every score is within `ATTRIBUTION_EPS` of 0."""
+    if not cands:
+        return {"top": None, "decider": "none", "margin": None, "scores": [], "terms": [],
+                "draw_kind": None, "field_zero": False}
+    scores = [score_total(t) for t in terms]
+    field_zero = all(abs(s) <= ATTRIBUTION_EPS for s in scores)
+    if len(cands) == 1:
+        return {"top": cands[0], "decider": "sole", "margin": None, "scores": scores, "terms": terms,
+                "draw_kind": None, "field_zero": field_zero}
+    by_id = {id(c): s for c, s in zip(cands, scores)}
+    ranked = score_order(cands, by_id)                  # the chooser's own ordering, not a second copy
+    index_of = {id(c): i for i, c in enumerate(cands)}
+    order = [index_of[id(c)] for c in ranked]
+    ai = next(i for i, c in enumerate(cands) if c is actual)
+    best, second = scores[order[0]], scores[order[1]]
+    margin = best - second
+    if ai != order[0]:
+        decider = "draw"
+    elif margin <= ATTRIBUTION_EPS:
+        decider = "draw" if tau > 0 else "tiebreak"
+    else:
+        deciding = []
+        for k, name in enumerate(TERM_NAMES):
+            rest = [scores[j] - terms[j][k] for j in range(len(cands))]
+            if rest[ai] - max(r for j, r in enumerate(rest) if j != ai) <= ATTRIBUTION_EPS:
+                deciding.append(name)
+        decider = "+".join(deciding) if deciding else "overdetermined"
+    draw_kind = None if decider != "draw" else (
+        "tie" if margin <= ATTRIBUTION_EPS and tau > 0 and scores[ai] >= best - ATTRIBUTION_EPS else "outvoted")
+    return {"top": actual, "decider": decider, "margin": margin, "scores": scores, "terms": terms,
+            "draw_kind": draw_kind, "field_zero": field_zero}
+
+
 def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
                  verbs: Optional[frozenset] = None,
-                 draw: Optional[Callable[[str, str], Any]] = None) -> Callable[..., list[Act]]:
+                 draw: Optional[Callable[[str, str], Any]] = None,
+                 watch: Optional[Callable[..., None]] = None) -> Callable[..., list[Act]]:
     """§F2's decision policy as a FACTORY, so `choose(p, view, sensation, ask_budget)` keeps the
     FOUR-parameter signature §26 states while still reaching its params.
 
@@ -524,8 +605,15 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
 
     v10 REM-30 (IN-47): the body is two halves with one owner each -- `make_ranker` (what the person
     would do, in order) and `release` (that order packed into scenes and intents) -- so the player's
-    development space (`decision/sheet.py`) shares both and differs only in who picks the order."""
-    rank = make_ranker(fx, verbs, draw)
+    development space (`decision/sheet.py`) shares both and differs only in who picks the order.
+
+    B09.13, THE OBSERVER HOOK: `watch(p, q, ranked, terms, sampled) -> None` is called once per deliberation that has a
+    question, after the order is sampled and before it is packed. `ranked` is `score_order`'s list, `terms` the parallel
+    `score_terms` tuples the chooser itself scored with, `sampled` `_sample_order`'s list -- COPIES of the lists, so a
+    watcher that reorders or empties them changes nothing that is packed -- and the return value is ignored (the observer
+    rule of ED-IN-0225). `None` (the default) is the chooser as it was. It exists so a reader of "what the chooser saw"
+    (`harness/decision_spread.py`, `harness/interactions.py`) is handed it, not a second scoring of the same set."""
+    rank = make_ranker(fx, verbs, draw, watch)
 
     def choose(p: Person, v: View, s: Sensation, ask_budget) -> list[Act]:
         q = getattr(v, "question", None)
@@ -536,14 +624,16 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
 
 
 def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
-                draw: Optional[Callable[[str, str], Any]] = None) -> Callable[..., list]:
+                draw: Optional[Callable[[str, str], Any]] = None,
+                watch: Optional[Callable[..., None]] = None) -> Callable[..., list]:
     """`rank(p, v) -> list[Candidate]`: THE SHIPPED POLICY'S ORDER over the person's own candidate set
     -- `opening_set`, narrowed to `verbs`, scored, effort-settled and sampled -- and nothing packed.
 
     v10 REM-30 (IN-47): split out of `make_chooser` unchanged, so the automated chooser and the player's
     development space (`decision/sheet.py::development_space`) read ONE candidate set in ONE order: the
     player's sheet offers exactly this list, and a player who takes it whole is the automated chooser
-    (the space's control). `[]` when the View carries no question. Person-side only, as `make_chooser`."""
+    (the space's control). `[]` when the View carries no question. Person-side only, as `make_chooser`.
+    `watch` is `make_chooser`'s observer hook (B09.13); the sheet builds its ranker without one."""
     def rank(p: Person, v: View) -> list:
         q = getattr(v, "question", None)
         if q is None:
@@ -563,9 +653,11 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
         # CR-17: the person's believed-odds query rides his View (`View.odds`); a View built without one
         # (a test's, a callback's) answers None and the pursuit term stays as it was.
         odds = getattr(v, "odds", None)
+        _terms: dict = {}                # id(c) -> the `score_terms` tuple `score(c)` summed: what `watch` is handed
         def score(c: Candidate) -> float:
             # IN-62: the terms have ONE owner, `score_terms`; the score is `score_total` of them.
-            return score_total(score_terms(p, c, fx, memo, odds))
+            _terms[id(c)] = t = score_terms(p, c, fx, memo, odds)
+            return score_total(t)
         # ⚠ SCORED ONCE, NOT TWICE. `score` is pure in `c` given the closure, so each candidate is
         # scored once here and `_sample_order` reads it back from `_scores`.
         _scores = {id(c): score(c) for c in cands}
@@ -576,7 +668,12 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
         # for the whole of this call, so no id can be recycled underneath the dict. A Candidate is
         # not guaranteed hashable and `(verb, subject)` is not guaranteed unique, so neither is a
         # key this can use.
-        return _sample_order(ranked, lambda c: _scores[id(c)], p, fx, draw)
+        sampled = _sample_order(ranked, lambda c: _scores[id(c)], p, fx, draw)
+        if watch is not None:
+            # B09.13: an OBSERVER. Copies, so a watcher that mutates what it is handed changes nothing packed; the return is ignored.
+            # `_terms[id(c)]` is the entry `score(c)` last wrote for a LIVE `c` (a kept effort variant stays alive, so its id is not reused).
+            watch(p, q, list(ranked), [_terms[id(c)] for c in ranked], list(sampled))
+        return sampled
     return rank
 
 
@@ -790,7 +887,9 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
         seen: dict = {}
         for c in ranked:
             seen.setdefault(c.subject or "", []).append(c)
-        chunks = [run for subj in sorted(seen) for run in fill(seen[subj])]
+        # first appearance in the ranked list, never the subject's ID: a name is not a rank (U4 removed the alphabet
+        # as a tie-break for verbs; this is the same defect for subjects)
+        chunks = [run for subj in seen for run in fill(seen[subj])]
     else:
         chunks = fill(ranked)
     return take(chunks)

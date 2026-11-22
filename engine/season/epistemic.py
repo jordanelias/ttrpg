@@ -47,15 +47,16 @@ from .data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
 from .gaps import Unspecified
 from .state.attribution import event_by_id, actor_of, anchor_of, causing_act
 from .state.gate import purview_reaches
+from .state.ids import ROOT, draw_factory
 from .queries import cache, world_q
 from .queries.person_q import LedgerReader
-from .state.carriers import Event, Person
+from .state.carriers import Event, Person, subject_of
 from .state.world import World, register_snapshot_type
 
 
 def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
                        via: "str | None" = None, weigh=None,
-                       actor: "str | None" = None) -> bool:
+                       actor: "str | None" = None, tick: int = 0, decay: int = 0) -> bool:
     """§F1 clause 4 -- is `requires(verb)` KNOWN-FALSE from `p`'s OWN claims?
 
     ⚠ THE ASYMMETRY IS THE WHOLE POINT AND MUST NOT BE SOFTENED TO "requires holds". This returns
@@ -108,10 +109,14 @@ def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
     different question -- *could THE ACTOR have done this, on what I hold* -- and answering it with
     `p.id` bound reads the witness's own granary instead of the actor's. The ledger stays `p`'s
     (the belief is the witness's); only the operand moves. `actor=None` is `p.id`, never "no
-    actor": an empty binding would make every actor-bound form UNKNOWN, i.e. contradict nothing."""
+    actor": an empty binding would make every actor-bound form UNKNOWN, i.e. contradict nothing.
+
+    ⚠ B09.01: `tick` AND `decay` ARE WHAT HE READS HIS CLAIMS AT (`LedgerReader`'s; `state/ledgers.py::present_confidence`):
+    a stored `confidence` is what a claim was deposited at, and its fade is computed here, where it is read. Omitted, a
+    hand-built ledger reads as deposited."""
     if (row.requires or "").strip() in NO_PRECONDITION:
         return False
-    return evaluate(row.requires_typed, LedgerReader(p.ledger, weigh),
+    return evaluate(row.requires_typed, LedgerReader(p.ledger, weigh, tick=tick, decay=decay),
                     binding_of(p.id if actor is None else actor, operands, via)).value is False
 
 
@@ -669,8 +674,10 @@ def changes_only_held_claims(w: "World", e: "Event", held: frozenset, mode: str)
     it -- the Event `observers_for` answers `[]` for under `mode`, so the fan need not be asked?
 
     DERIVED PER EVENT, FROM WHAT THE EVENT CARRIES AND WHAT THE LEDGERS HOLD -- never a kind list
-    (scripting drift): today `claim.decayed` meets it (`loop/matter.py`'s decay pass writes a held
-    claim's confidence), and so would any later emitter that writes a held claim and nothing else.
+    (scripting drift): no emitter meets it today -- `claim.decayed` did, until B09.01 retired
+    `loop/matter.py`'s decay pass (a claim fades where it is read, `state/ledgers.py::present_confidence`,
+    and nothing writes `Claim.confidence`) -- but any emitter that writes a held claim and nothing else
+    would.
     Why the channels cannot admit it, one by one: no act caused it, so `post_remit` (reads
     `Act.via`) and the actor tier of `anchor_of` have nothing to read; every change subject is a
     claim id, a hash (`state/ids.py::H`) that is no person, site, record, date or rung, so the
@@ -808,7 +815,7 @@ if tuple(f.name for f in _dc_fields(Seen)) != tuple(OBSERVATION_TERMS):
             "no witness can hold or a field nothing declares")
 
 
-def _term_stratum(w: "World", e: "Event", act) -> Optional[str]:
+def _term_stratum(w: "World", e: "Event", act, pid: str) -> Optional[str]:
     """The coarse WHAT -- the acted verb's stratum, never the verb TOKEN. Case 3's *doing something
     I can't name*. An actorless Event (MATTER, CALENDAR) has no verb and so no stratum.
 
@@ -824,7 +831,7 @@ def _term_stratum(w: "World", e: "Event", act) -> Optional[str]:
     return getattr(row, "stratum", None)
 
 
-def _term_marks(w: "World", e: "Event", act) -> Optional[tuple]:
+def _term_marks(w: "World", e: "Event", act, pid: str) -> Optional[tuple]:
     """The actor's appearance: `(heritage,)` for an actor whose descent is authored (`Person.heritage`, v10 CR-30),
     `()` for one whose is not -- `()` meaning *seen, and nothing describable* -- and `None` where there is no
     actor to see. Public at co-location, with no concealment, and deposited TRUE and verbatim like `who`.
@@ -837,23 +844,74 @@ def _term_marks(w: "World", e: "Event", act) -> Optional[tuple]:
     return (actor.heritage,) if actor.heritage is not None else ()
 
 
-def _term_who(w: "World", e: "Event", act) -> Optional[str]:
+def _term_who(w: "World", e: "Event", act, pid: str) -> Optional[str]:
     """The actor. An actorless Event has nobody to see."""
     return act.actor if act is not None else None
 
 
-def _term_why(w: "World", e: "Event", act) -> Optional[str]:
-    """ALWAYS `None`, AND THAT IS A SCOPE DECISION, NOT AN IMPOSSIBILITY. `R8.4` says the engine
-    *"forgets the motive before the act executes"*, and that overstates it: the Candidate carries no
-    motive, but the question that
-    occasioned an act survives one hop away --
-    `Act.scene` names the Scene, the driver's `scenes[...]` holds it, and `Scene.occasion.source`
-    is the question source (the same lookup `loop/resolve.py`'s `_occasion_ids` makes). It is not
-    on the Act, and these readers take `(w, e, act)` with no driver, so recovering it means
-    passing the Scene in -- and deciding what a witness may infer of a motive is its own unit of
-    work. No channel lists `why` in `supplied_by` today (`total` shows every term, and gets this
-    `None`); the reader exists so the roster's term has a declared owner."""
+def _antecedent_claim(w: "World", e: "Event", pid: str) -> Optional[str]:
+    """THE CLAIM `pid` HOLDS THAT WAS DEPOSITED FROM AN ANTECEDENT OF `e`, or `None` (B09.17): walk `e.causes` in order, skipping
+    `ROOT` and act ids; for the first cause that is a logged Event and from which his ledger holds a deposit, that claim's id.
+
+    ⚠ FOUND BY LOOK-UP, NOT BY HOW WITNESS MINTS AN ID: `queries/cache.py::deposit_index` is the `claim.deposited` Events' own
+    record (`causes[0]` the witnessed Event, the receipt's subject the claim), and this asks his OWN ledger which of them he holds
+    -- so an id formula that changes cannot make a `why` name a claim he does not have, and a claim the cap evicted since is not
+    named (`Person.ledger` is the only home of a `Claim`). The first held in deposit order, his event-kind claim before his `seen`
+    one for a witness of both. An id in his own ledger leaks nothing: he already holds the thing it points to."""
+    p = w.persons.get(pid)
+    if p is None:
+        return None
+    index = cache.deposit_index(w)
+    held = None
+    for cid in e.causes:
+        if cid == ROOT or cid in w.acts or cid not in index:
+            continue
+        if held is None:
+            held = {c.id for c in p.ledger}
+        for claim_id in index[cid]:
+            if claim_id in held:
+                return claim_id
     return None
+
+
+def _occasion_claim(w: "World", e: "Event", act, pid: str) -> Optional[str]:
+    """THE CLAIM THE ACTOR OF `e` ACTED ON, or `None`: the Scene his act was released in (`w.acts.scene_of`, B09.16) names a
+    `claim_landed` question, `Question.about` is that claim's id, and he still holds it. Only where the act is on the question's own
+    referent: an act on a classed referent (a vacancy, a writ) answers a standing occasion and not the question it was stamped
+    onto (`loop/resolve.py::_occasion_ids`), and naming that claim would join two things the person never joined."""
+    a = act if act is not None else causing_act(w, e)
+    sc = w.acts.scene_of(a.id) if a is not None else None
+    occ = getattr(sc, "occasion", None)
+    if occ is None or occ.source != "claim_landed" or subject_of(a) not in occ.referents:
+        return None
+    p = w.persons.get(pid)
+    return occ.about if p is not None and any(c.id == occ.about for c in p.ledger) else None
+
+
+def _term_why(w: "World", e: "Event", act, pid: str) -> Optional[str]:
+    """`why` -- THE ANTECEDENT HE HOLDS, WHICH HE MAY CONNECT (B09.17; `R8.4` narrowed: not the actor's motive, which the engine does
+    not keep, but the link a witness is entitled to draw between two things he has himself seen). The id of a claim in `pid`'s OWN
+    ledger deposited from an antecedent of `e` (`_antecedent_claim`), or `None` -- and it is `None` for every witness at
+    `Fixtures connection_chance` 0.0 (`H-458`, the control and the shipped value), where nothing is looked up and no draw is taken.
+
+    ⚠ WHETHER HE CONNECTS THEM IS ONE KEYED DRAW, AND ONLY FOR A WITNESS WHO HOLDS AN ANTECEDENT. His channel supplying the term
+    (`supplied_by`: `co_located`, `witness_key`, never `document_key`) makes him eligible, holding the antecedent makes the draw
+    worth taking, and `draw(pid, "why:<event id>")` decides it, keyed so that no other stream moves (`intent_disclosure`'s
+    precedent, `H-190`). A well-placed witness still misses it sometimes. ⚠ THE ACTOR IS NOT DRAWN FOR: *a person always knows his own
+    act* (`state/carriers.py::Claim.doer`) is an eligibility fact and not an outcome, so where `pid` is the actor the answer is the
+    claim his Scene's question rode on (`_occasion_claim`), at any chance above 0. The chance is range-checked here, whenever the
+    term is read, and a value outside [0, 1] raises."""
+    rate = float(w.fixtures.get("connection_chance"))
+    if not 0 <= rate <= 1:           # `not ... <=`, so a NaN is refused too
+        raise ValueError(f"connection_chance {rate} is not a chance in [0, 1] (H-458)")
+    if rate == 0:
+        return None
+    if actor_of(w, e) == pid:
+        return _occasion_claim(w, e, act, pid)
+    held = _antecedent_claim(w, e, pid)
+    if held is None:
+        return None
+    return held if draw_factory(w.world_seed, lambda: w.tick)(pid, f"why:{e.id}").random() < rate else None
 
 
 # ⚠ BUILT FROM THE ROSTER, LIKE `CHANNEL_PREDICATES`: a term with no `_term_<name>` RAISES at
@@ -864,7 +922,7 @@ for _t in OBSERVATION_TERMS:
     if _fn is None:
         raise Unspecified(
             f"observation term {_t!r} is in the roster and has no `_term_{_t}` reader", "R8",
-            needs=f"define `_term_{_t}(w, e, act)`",
+            needs=f"define `_term_{_t}(w, e, act, pid)`",
             law="a term no reader can fill would be `None` for every witness forever, which is "
                 "indistinguishable from a channel honestly withholding it")
     TERM_READERS[_t] = _fn
@@ -958,8 +1016,8 @@ def seen_of(w: "World", e: "Event", act, pid: str, mode: str) -> Seen:
     ⚠ `total` SHOWS EVERY TERM TO EVERY WITNESS. That arm is `H-33`'s control -- *"fans every event
     to every person"*, the maximal-information design as written -- so gating it on the channel
     predicates would make it a fan-out of WHO with the narrow arms' filter on WHAT, and a
-    comparison against it would no longer be against the control. (`why` still reads `None`: no
-    reader supplies it, see `_term_why`.)
+    comparison against it would no longer be against the control. (`why` is shown too, and reads `None` at
+    `connection_chance` 0.0, see `_term_why`.)
 
     ⚠ AN ALL-`None` STRUCT IS RETURNED, NOT DROPPED. *Something happened here and I know nothing
     about it* is information, and it is exactly `R8.5`'s document holder (*"saw only that the
@@ -974,12 +1032,13 @@ def seen_of(w: "World", e: "Event", act, pid: str, mode: str) -> Seen:
     else:
         admitted = [c for c in live_channels(mode) if CHANNEL_PREDICATES[c](w, e, pid)]
         shown = {t for c in admitted for t in TERMS_SUPPLIED_BY[c]}
-    return seen_showing(w, e, act, shown)
+    return seen_showing(w, e, act, pid, shown)
 
 
-def seen_showing(w: "World", e: "Event", act, shown) -> Seen:
-    """The `Seen` struct of `e` with exactly the terms in `shown` read and every other term `None`.
-    The readers are pure, so the mask is the whole of what differs between callers (`seen_of`, and
-    `loop/witness.py::_found_claims`, which shows a finder the terms its band shows)."""
-    return Seen(**{t: (TERM_READERS[t](w, e, act) if t in shown else None)
+def seen_showing(w: "World", e: "Event", act, pid: str, shown) -> Seen:
+    """The `Seen` struct of `e` as `pid` saw it, with exactly the terms in `shown` read and every other term `None`.
+    The readers are pure (`TERM_READERS[t](w, e, act, pid)`; only `why` reads the witness), so the mask is the
+    whole of what differs between callers (`seen_of`, and `loop/witness.py::_found_claims`, which shows a finder the terms its
+    band shows)."""
+    return Seen(**{t: (TERM_READERS[t](w, e, act, pid) if t in shown else None)
                    for t in OBSERVATION_TERMS})

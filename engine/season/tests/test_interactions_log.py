@@ -64,22 +64,35 @@ def test_the_re_read_table_is_the_choosers(season_one):
     assert acts and all(r["deliberation"] is not None for r in acts)
 
 
-def test_the_logged_scores_carry_the_believed_odds_factor(monkeypatch):
-    """The membership check cannot see a score: a reader that dropped `View.odds` would pass it. Planted: the reader's
-    `score_terms` call made with no query (the game's own chooser is left alone) moves the logged scores of some
-    deliberations (28 of 328 at seed 0, one season), so the shipped log is sensitive to the query it reads."""
-    import types
+def test_the_logged_scores_are_the_choosers_own_and_carry_the_believed_odds_factor(monkeypatch):
+    """B09.13: the log scores nothing; its candidate table is what `make_chooser(watch=...)` handed it. The membership
+    check cannot see a score, so this reads them: a transparent spy on the game's own `score_terms` records every tuple the
+    chooser scored for each (actor, verb, subject), and every logged candidate's terms must be one of them. The spy also
+    records the same candidate read WITHOUT the View's believed-odds query; some logged terms equal the first and not the
+    second (28 of 328 deliberations moved at seed 0, one season, under the old reader's plant), so the log is observed to
+    carry the factor the chooser read, not a reading that dropped it."""
     from ..decision import choose as CH
-    shipped = [r for r in I.run(0, 1)[2] if r["kind"] == "deliberation" and r["candidates"]]
     real = CH.score_terms
-    shim = types.SimpleNamespace(**{k: v for k, v in vars(CH).items() if not k.startswith("__")})
-    shim.score_terms = lambda p, c, fx, memo, odds=None: real(p, c, fx, memo, None)
-    monkeypatch.setattr(I, "CH", shim)
-    dropped = [r for r in I.run(0, 1)[2] if r["kind"] == "deliberation" and r["candidates"]]
-    assert len(shipped) == len(dropped) > 0
-    moved = sum(1 for a, b in zip(shipped, dropped)
-                if [c["score"] for c in a["candidates"]] != [c["score"] for c in b["candidates"]])
-    assert moved >= 1, "a reader that dropped the believed-odds query logs the same scores: the log cannot see it"
+    scored: dict = {}
+    odds_free: dict = {}
+
+    def spy(p, c, fx, memo, odds=None):
+        t = real(p, c, fx, memo, odds)
+        scored.setdefault((p.id, c.verb, c.subject), set()).add(t)
+        odds_free.setdefault((p.id, c.verb, c.subject), set()).add(real(p, c, fx, memo, None))
+        return t
+    monkeypatch.setattr(CH, "score_terms", spy)
+    rows = [r for r in I.run(0, 1)[2] if r["kind"] == "deliberation" and r["candidates"]]
+    checked = carried = 0
+    for r in rows:
+        for c in r["candidates"]:
+            key = (r["actor"], c["verb"], c["subject"])
+            t = (c["pursuit"], c["stance"], c["fit"])
+            assert t in scored[key], f"a logged candidate's terms are not any the chooser scored: {key} {t}"
+            checked += 1
+            carried += t not in odds_free[key]
+    assert checked >= 1000, f"the season logged only {checked} candidates"
+    assert carried >= 1, "no logged term differs from its odds-free reading: the log could not show it dropped the query"
 
 
 def _hash_arm(seed: int) -> None:

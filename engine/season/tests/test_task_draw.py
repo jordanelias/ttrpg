@@ -69,15 +69,17 @@ def _realm(seed: int, seasons: int, fixtures=DEFAULT_FIXTURES):
 # gate 2 -- the control
 # --------------------------------------------------------------------------------------------------------------------------
 
-#: The realm pins current at B07's base, the S9 base (B14's after-reading on the merged tree, `_realm_goldens.SHIPPED` until B07.99
-#: re-recorded it with the arm on): the world with `task_draw_arm: off` reads these. The only owner of the arm-off reading once
+#: RE-READ AT B09.99 on the batch's closing tree with the arm `off` (the B09 movers move the arm-off world too; the S9 base's values are in `git log`).
+#: THESE ARE THE ARM-OFF WORLD ON THE B09 TREE, no longer the realm before B07 (the S9 base's pins, B14's after-reading, were `_realm_goldens.SHIPPED` until B07.99
+#: re-recorded it with the arm on, and B09.99 re-read these): the world with `task_draw_arm: off` reads these. The only owner of the arm-off reading once
 #: `SHIPPED` is the arm-on world; each read at `PYTHONHASHSEED=0`, one season, `reading @e629f6445` (and again at B07.10's tree).
-ARM_OFF_PINS = {(0, 1): "10934f0f516cad26f9c85625268d971e", (1, 1): "6593d8b0c1cc0a7f7931d450df96b1e1", (2, 1): "ad10b3c876f3d9f19e27fe8e84e52dd6",
-                (0, 2): "ec41cc8d78ccbe9c5c7fe834e7ae9239", (1, 2): "fded13c6f6ed2f42f0b2c57cc5dc67b4", (2, 2): "bbe99b7804e53b607bcc56f90605a48b"}
+ARM_OFF_PINS = {(0, 1): "62e7a4a96823a019638c2bcf827cef00", (1, 1): "e38ec51518667d739a684a67ae501bb2", (2, 1): "e6db00d5ed6b0f345cf4f2f52dcafeed",
+                (0, 2): "22b9b5bab3c1b615be003452a9bf3b9f", (1, 2): "c1c03660262fcac0c0fb68673bc26e56", (2, 2): "8748c5d72a25a319c68ce8273b86fb7a"}
 
 
 def test_task_draw_arm_off_reproduces_the_pinned_hash():
-    """`task_draw_arm: off` reproduces the realm pins current at B07's base (`ARM_OFF_PINS`, seeds 0 to 2 at one season and at two: the
+    """`task_draw_arm: off` reproduces its own pinned hash on the B09 tree (`ARM_OFF_PINS`; it no longer observes the realm before B07,
+    whose pins B09.99 replaced, so it observes that the arm-off world is stable and distinct from `SHIPPED`; seeds 0 to 2 at one season and at two: the
     plan's falsifier line names two seasons, where an arm-off divergence that only a second season shows would otherwise pass; C3-N27: the
     pins, not 18-A's strings). The arm is set explicitly, so the reading holds whatever the shipped value is, and it is the
     control the flip is read against: `SHIPPED` reads the arm-on world."""

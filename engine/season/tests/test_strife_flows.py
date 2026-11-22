@@ -98,7 +98,7 @@ def ev(w, eid, kind, subjects, actor=None, verb="tell", payload=None, tick=1):
         aid = f"a_{eid}"
         w.acts.append(Act(id=aid, actor=actor, verb=verb, payload=payload or {}))
         causes = [aid]
-    e = Event(eid, kind, [StateChange(s, "set", "Event", "exists") for s in subjects], causes, tick)
+    e = Event(eid, kind, [P.apparatus_receipt(w, s, "set", "Event", "exists") for s in subjects], causes, tick)
     w.log.append(e)
     return e
 
@@ -697,7 +697,7 @@ def test_a_move_reads_each_record_s_about_key_and_no_other():
     assert ABOUT_KEYS["faction_sheet"] != "terms" and "cover" not in ABOUT_KEYS
     rd = W._StrifeReading(w)
     got = {rid: W._move_referents(rd, Event(f"e_{rid}", "record.seized",
-                                            [StateChange(rid, "set", "Event", "exists")], [ROOT], 1), None)
+                                            [P.apparatus_receipt(w, rid, "set", "Event", "exists")], [ROOT], 1), None)
            for rid in ("rec_sheet", "rec_cover", "rec_disp")}
     assert got == {"rec_sheet": {"rec_sheet", "prop_x"}, "rec_cover": {"rec_cover"},
                    "rec_disp": {"rec_disp", "S2"}}, got
@@ -750,7 +750,7 @@ def test_a_succession_deposit_carries_its_seat_and_attaches_only_to_a_strand_he_
     the seat; it joins a strand of his own that names the seat, and opens none."""
     w = _world()
     w.add_tenure(Tenure("t_cr77_claim", "p_mid", "off_duke", "hold", 2))
-    e = Event("e_succ", "succession.claimed", [StateChange("t_cr77_claim", "set", "Tenure", "since")], [ROOT], 2)
+    e = Event("e_succ", "succession.claimed", [P.apparatus_receipt(w, "t_cr77_claim", "set", "Tenure", "since")], [ROOT], 2)
     w.log.append(e)
     assert "off_duke" in witness(w, "p_other", e)                     # the deposit names the seat
     assert W.flows_known(w, w.persons["p_other"]) == ()               # a joining kind alone opens nothing

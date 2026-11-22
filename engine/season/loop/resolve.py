@@ -18,7 +18,7 @@ import random
 from dataclasses import replace
 from ..gaps import InstrumentDefect
 from ..data.rosters import (PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, graded_route,
-                            MARGIN_ENDING, STRATA, UNROUTED_BAND, task_share)
+                            MARGIN_ENDING, STANDING_OCCASION_OPENED_BY, STRATA, UNROUTED_BAND, task_share)
 
 from typing import Any, Optional
 from ..data.matrix import Step, matrix_row
@@ -159,7 +159,7 @@ def _occasion_ids(self, w: "World", a: Act) -> list:
     ⚠ **AND IT NEVER RETURNS THE ACT'S OWN EVENT.** The ids here are antecedents already in
     the log when the act folds; an Event cannot cause itself, and `causes[]` must name ids
     that exist."""
-    sc = self.scenes.get(getattr(a, "scene", None) or "")
+    sc = w.acts.scene_of(a.id)                    # B09.16: the Scene is kept beside its acts, not on the driver
     if sc is None:
         return []
     occ = getattr(sc, "occasion", None)
@@ -169,9 +169,22 @@ def _occasion_ids(self, w: "World", a: Act) -> list:
     # question's own occasion -- a `claim_landed` question's originating Event -- is unrelated to
     # an act formed on the classed referent. Such an act gets `[ROOT]`, as a Q4 `need` does (plan
     # IN-53 step 3); one whose subject is ALSO a plain referent keeps the question's occasion.
+    #
+    # B09.12 (H-457): THE STANDING OCCASION HAS AN OPENING EVENT, AND THAT EVENT IS THE ACT'S REASON. The question's occasion
+    # is still unrelated, but the vacancy, writ, wound or detention the act answers was opened by an Event the log holds: the
+    # first kind `rosters.yaml: standing_occasion_opened_by` lists for the referent's class that was WRITTEN about it
+    # (`World.last_emission_of`, the chaining primitive MATTER's clocks use). ONE id at most, so `causes[]` does not fan; none
+    # where the log holds none (a seat vacant since the build). `standing_occasion_cause` False is the control: `[]`.
     subj = subject_of(a)
     if (subj and subj not in getattr(occ, "referents", ())
             and any(r == subj for r, _ in getattr(occ, "classes", ()))):
+        if not w.fixtures.get("standing_occasion_cause"):
+            return []
+        cls = next(c for r, c in occ.classes if r == subj)
+        for kind in STANDING_OCCASION_OPENED_BY.get(cls, ()):
+            eid = w.last_emission_of(kind, subj, written=True)
+            if eid is not None and eid != a.id:
+                return [eid]
         return []
     return [c for c in occasioned_by(w, occ) if c != a.id]
 
@@ -258,13 +271,26 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
                     law="§E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the "
                         "same defect `resolve` had, one column along: a rule the code cannot "
                         "read")
-            ok = bool(pred(w, a))
+            # B09.19: a predicate that declares `clauses=` answers `(ok, clause)` and a bare-bool one `ok`. The clause rides
+            # `Verdict.failed`, no `observed` reads with it (WITNESS deposits nothing new from the read itself), so a KEYED
+            # predicate row emits the kind of the clause that refused and a flat row is unchanged.
+            answer = pred(w, a)
+            if isinstance(answer, tuple):
+                ok, failed = bool(answer[0]), answer[1]
+                declared = getattr(pred, "clauses", None)    # None: a wrapper or stand-in that declared nothing
+                if declared is not None and failed is not None and failed not in declared:
+                    raise InstrumentDefect(
+                        f"{a.verb!r}'s predicate refused at {failed!r}, which it does not declare "
+                        f"({list(declared)}); a name a refusal carries is one `requires_predicate(clauses=)` owns")
+                verdict = Verdict(UNKNOWN, (), failed)
+            else:
+                ok = bool(answer)
         if not ok:
             TRACE.decision(f"{a.verb} by {a.actor}: precondition unmet", "E2/S27.1",
                            chose="emit the refusal -- scarcity falls out of the fold",
                            alternatives=["raise (no Event, no witness, no arc)"])
-            # `verdict.failed` is the conjunct that decided it (`data/requires.py::evaluate`); a
-            # predicate row and an unnamed cell carry `None`, which only a flat row reaches.
+            # `verdict.failed` is the conjunct that decided it (`data/requires.py::evaluate`) or the clause a
+            # naming predicate refused at; an unnamed cell and a bare-bool predicate carry `None`, which only a flat row reaches.
             return (False, _demand_earned(w, a, row.refusal_for(verdict.failed), True)
                     or (FOLD_REFUSED,), verdict)
     # ⚠ PLAN POSITION `14` (U7-own): THE SECOND PARTY, ASKED HERE AND NOWHERE ELSE. `ED-IN-0210`
@@ -291,6 +317,9 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
 
 # `G6` (`H-197`): declared on `tell`'s told bands; kept only when `_confidence_broken` says so.
 CONFIDENCE_BROKEN = "confidence.broken"
+
+# B09.11: the kind `(Person, scar)` declares (`write_matrix.yaml`), emitted by `_scar_witnesses` beside its write.
+SCAR_TAKEN = "scar.taken"
 
 # v9 SE-01 (`24g`) / `H-51`: `PERSON_DEMANDED` (`data/rosters.py`) is declared on `dispatch`'s refusal; kept
 # only when `_demand_earned` says so, and the loader's flat-row rule exempts exactly that kind.
@@ -637,10 +666,11 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
     ⚠ THE VIOLATION PREDICATE IS A CANDIDATE READING, NOT A RULING: `person_q.elements_violated_by`
     (a sign test of the pursuit's projection against the verb's alignment, asked once per act and
     intersected with each person's holdings by `person_q.broken_by`). WHETHER THE ACTOR
-    COUNTS is `scar_excludes_actor`, a swept `Fixtures` arm. Nothing is emitted: `scar.taken` is
-    declared on the row and no reader consumes it, and putting the receipts on the act's Event
-    would deposit claims about every scarred observer at WITNESS -- a propagation change H3 does
-    not license. Its readers are listed once, on the field (`state/carriers.py`, `Person.scar`).
+    COUNTS is `scar_excludes_actor`, a swept `Fixtures` arm. B09.11: the write is recorded by one
+    `scar.taken` Event, appended to the log and kept out of the list `resolve` returns (see the
+    call below), so the receipts are in an Event and WITNESS deposits nothing about them; putting
+    them on the act's own Event would deposit claims about every scarred observer. Its readers are
+    listed once, on the field (`state/carriers.py`, `Person.scar`).
 
     IN-08 H11 -- THE SAME MECHANISM OVER THE AFFILIATION TABLE (J-5's C4). An element is a pursuit
     OR a held religious affiliation: the affiliation half of `person_q.elements_violated_by` (the
@@ -686,10 +716,26 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
             # does not read it (GO-07 folds a mapping sorted by its encoded keys).
             p.scar = {k: counts[k] for k in sorted(counts)}
 
-    w.write("scar", token, None, record_kind="Person", fieldname="scar", driver="Act",
-            actor=a.actor, via=a.via,
-            change=Change(tuple(Subject.entity("persons", pid, fields=("scar",))
-                                for pid, _b in hits), perform))
+    got = w.write("scar", token, None, record_kind="Person", fieldname="scar", driver="Act",
+                  actor=a.actor, via=a.via,
+                  change=Change(tuple(Subject.entity("persons", pid, fields=("scar",), earns=SCAR_TAKEN)
+                                      for pid, _b in hits), perform))
+    # B09.11: THE SCAR IS RECORDED, ONE `scar.taken` EVENT PER WRITE, CARRYING EXACTLY THE RECEIPTS THE
+    # GATE MINTED (one per scarred person, who is named by no other field: `Event` has no actor, target
+    # or subject). It is appended to the LOG HERE and is NOT in the list `resolve` returns, so WITNESS
+    # (which reads that list, as `claim.deposited` relies on) fans it to nobody: the deposit count per
+    # season is the observer (`test_g4_no_op_receipt.py::test_scar_taken_event_deposits_no_claim`).
+    # BUILT HERE, NOT BY `World.write`'s `emits=`: that path puts ONE fresh receipt on the write's own
+    # kind's Event and the per-subject receipts only on a kind OTHER than `emits` (`extra`), so a write
+    # whose every subject earns the row's one declared kind would leave its per-person receipts in no
+    # Event -- which is the defect this closes. The kind is the row's declared one (`write_matrix.yaml`).
+    # THE ID IS MINTED AS THE FOLD MINTS ITS OWN (`H(seed, tick, actor, "{kind}:{act}")`): one such Event
+    # per act, so no draw ordinal is needed, and `actor_of` (which reads `causes`) agrees with the actor
+    # the id was minted from (`test_g1b_attribution.py` re-derives it).
+    ev = Event(id=H(w.world_seed, w.tick, a.actor, f"{SCAR_TAKEN}:{a.id}"), kind=SCAR_TAKEN,
+               changes=[r for _s, r in got], causes=[a.id], emitted_at=w.tick)
+    w.log.append(ev)
+    TRACE.event(ev.id, ev.kind, ev.causes)
     _conviction_crisis(w, token, a, dict(hits))
 
 
@@ -993,7 +1039,7 @@ def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, ef
     return [r for _s, r in got]
 
 def resolve(self, token: Token, acts: list[Act],
-            contest_max_depth: Optional[int] = None) -> list[Event]:
+            contest_max_depth: Optional[int] = None, scenes: Optional[dict] = None) -> list[Event]:
     w = self.w
     w.step = Step.RESOLVE
     w.frozen = False
@@ -1014,6 +1060,12 @@ def resolve(self, token: Token, acts: list[Act],
                    chose="five strata, then a content-derived hash key over one global array",
                    alternatives=["completion order", "rank", "per-container sort (voids the fold)"])
 
+    # B09.16: THE SCENES DELIBERATE RETURNED (`{scene id: Scene}`, release order) ARE KEPT BESIDE THEIR ACTS, HERE, BEFORE
+    # ANY OF THEM IS APPENDED -- this step holds the ACTS token and the act store; DELIBERATE holds neither and stores
+    # nothing. Added ahead of the sort's loop, in release order, so `ActStore.scenes()` is release order and every act
+    # the loop below appends already answers `scene_of`. A bare-act caller (a test, a probe) passes none.
+    for _sc in (scenes or {}).values():
+        w.acts.add_scene(_sc)
     out: list[Event] = []
     # S27.3 SUM-THEN-CLAMP-ONCE accumulator. ⚠ G4: IT IS `World._staged` NOW, NOT A LOCAL HERE,
     # because an act's `work` WRITES to it through the gate (`_eff_work`'s docstring). Anything
@@ -1089,7 +1141,7 @@ def resolve(self, token: Token, acts: list[Act],
         # for an Event that wrote nothing: an act that changes no state has an empty
         # `changes[]`, and the only thing that knows what it named is the act.
         # ⚠ **RESOLVER-SIDE AND CUMULATIVE ACROSS SEASONS — NOT season-local, and the
-        # difference is load-bearing.** `resolved`, `scenes` and `act_of` are never reset by
+        # difference is load-bearing.** `resolved`, `act_of` and the Scene store (`w.acts`) are never reset by
         # `season()`, and `R3` REQUIRES that: a claim deposited at WITNESS in season *t* is
         # read at DELIBERATE in *t+1*, so the act that occasioned this one is a PREVIOUS
         # season's act and must still be reachable. A session that makes these three

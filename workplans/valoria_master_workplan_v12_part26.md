@@ -20,7 +20,7 @@ GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B16L-mb-words @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
 GATE: Batch B04-capability-home @109c80648cddfa2b6b87a4642287b9079a6abc62
-GATE: Batch B05-one-roll @928dccc9a68232d1afb041c9a1c422d8cfdb690e
+GATE: Batch B05-one-roll @ca3f4bcf76a6b057013c85d1c466b83ef9446470
 GATE: Batch B06-keyed-draw @bcbe3ed5e595ff465e12dbe246c29f1216d14f3a
 GATE: Batch B15-pc-calibration
 GATE: Batch B16-pc-round

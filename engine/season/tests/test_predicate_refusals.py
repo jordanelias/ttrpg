@@ -41,7 +41,7 @@ def test_every_confer_and_establish_refusal_names_a_clause(monkeypatch):
         def wrapped(w, a, _inner=inner, _verb=verb):
             start = len(TRACE.rows)
             answer = _inner(w, a)
-            if answer is False:
+            if not answer:                   # B09.19: `Answer(False, clause)` for these two, a bare `False` before it
                 checked[_verb] += 1
                 clauses = [r.what.split(" -> ")[0].strip() for r in TRACE.rows[start:]
                            if r.channel == "DECISION" and r.detail.get("chose") == "refuse"]

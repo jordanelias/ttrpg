@@ -37,14 +37,17 @@ from engine.season.state import world as world_mod
 from engine.season.state.acts import ActStore
 from engine.season.state.attribution import actor_of, anchor_of
 from engine.season.state.carriers import Act, Event, StateChange
+from engine.season.state.gate import Gate
 from engine.season.state.ids import H, ROOT
 
 
 class _W:
-    """The two attributes the accessors touch, and nothing else."""
+    """The two attributes the accessors touch, and the gate and tick `harness/probes.py::about` mints on."""
     def __init__(self, acts=None):
         self.acts = acts or ActStore()
         self.log = []
+        self.gate = Gate()
+        self.tick = 1
 
 
 def _ev(causes, changes=None):
@@ -132,7 +135,7 @@ def test_an_event_reaching_no_tier_at_all_returns_None():
     # and a ROOT-caused Event with a change naming what it is about still anchors -- the carrier
     # `harness/probes.py::about` gives every apparatus Event, so the None above is the change's
     # absence and nothing else.
-    assert anchor_of(w, Event(id="e_q", kind="plague.struck", changes=[P.about("R")],
+    assert anchor_of(w, Event(id="e_q", kind="plague.struck", changes=[P.about(w, "R")],
                               causes=[ROOT], emitted_at=1)) == "R"
 
 
@@ -238,8 +241,8 @@ def test_every_logged_event_in_the_probe_corpus_anchors(monkeypatch):
         f"{len(anonymous)} logged probe Event(s) anchor on NOTHING: {anonymous[:5]} -- an "
         "emitter built an Event with no act, no change and no anchored antecedent. Give it "
         "`harness/probes.py::about(...)`, or it is witnessed by nobody")
-    # [JUSTIFIED: A VACUITY FLOOR, not a game value -- measured 2026-09-26 at 10,559 logged Events over 111 Worlds (76 by act, 10,469 by change, 14 by cause); 5,000 is half that, and a corpus that stopped building Worlds or logging Events fails here instead of passing on an empty loop]
-    assert anchored >= 5000, f"only {anchored} anchored Events -- this check is near-vacuous"
+    # [JUSTIFIED: A VACUITY FLOOR, not a game value -- measured 2026-09-26 at 10,559 logged Events over 111 Worlds (76 by act, 10,469 by change, 14 by cause), then re-measured at B09.01 at 2,514 anchored Events, because `claim.decayed` is no longer written (a claim's fading is read, not logged); 1,250 is half the re-measure, and a corpus that stopped building Worlds or logging Events fails here instead of passing on an empty loop]
+    assert anchored >= 1250, f"only {anchored} anchored Events -- this check is near-vacuous"
 
 
 # -- FALSIFIER 3: live runs, against records the accessors do not read ---------------------
