@@ -168,13 +168,16 @@ short without saying so.
 5. **Record the starting commit and commit the row, before any dispatch.** `open <sha>` is `HEAD` as
    items 1–3 found it. Write the in-flight row (§THE IN-FLIGHT ROW) — and, for a derived batch, its
    batch rows (§BATCHES, source 5) — and commit them **row-only, `[skip ci]`**, with the assignment
-   plan as the commit body's one paragraph. A death anywhere after this resumes from step 0; a death
+   plan as the commit body's one paragraph, then arm the checkpoint timer (§CHECKPOINTS). A death anywhere after this resumes from step 0; a death
    before it loses nothing but the plan. The batch's diff is the **commit range `<open sha>..HEAD`**;
    every item commits at once, so the tree is clean when BATCH-CLOSE runs.
 
 ### 5. Build, once per item (the producer's work, then the orchestrator's)
 
-For each item in order — **serial: each commits before the next builds; a fan lives inside an item**:
+For each item in order — **serial by default: each commits before the next builds; a fan lives inside an
+item**. The one exception: **items whose WHERE and gate sets are disjoint AND which both declare
+hash-EQUAL may be built in parallel producer worktrees; the orchestrator integrates and commits each as
+its own commit in plan order** (5.3–5.4 per item, unchanged):
 
 **5.1 Read the unit's instruction — never invented here.** A workplan position: read its
 content-owner entry (INSTRUCTION / WHERE / FALSIFIER / GATE) in full. An ad hoc task: the plan
@@ -586,6 +589,12 @@ trailer, then `git revert`ed, and the hole row cites both SHAs (the live plan's 
 a long build in bounded pieces that return in tens of minutes, not one that returns in an hour. A
 pre-commit validator that fails a checkpoint is fixed or reported, never bypassed with `--no-verify`.
 
+**The checkpoint timer (CLAUDE.md §11, RULED: *"Allow 20 minute timers"*).** At BATCH OPEN item 5,
+once the in-flight row is committed, arm a `ScheduleWakeup` of 20 minutes. Its wake does one thing:
+commit a `WIP checkpoint:` on every live producer worktree branch and on the working branch, push them,
+then re-arm. It is one-shot, never asks an external service anything, and is not re-armed once the
+run's row is expunged (BOUNDARY). Any other use of it is CLAUDE.md §11's ban.
+
 **CI cadence — RULED 2026-10-13 (the session's user: *"we don't need a CI run for a WIP checkpoint ...
 A WIP checkpoint is just committing work so we don't lose it"*; *"We run CI at the end of a batch,
 correct whatever is required then, implement all fixes and changes and everything as per the closing
@@ -678,6 +687,7 @@ not "one realm, one season", and it is superlinear in them).
 | "one producer was enough" | the instruction itself named independent, file-disjoint sub-parts, and only one dispatch ran with no stated reason to collapse them |
 | "the build matched the instruction" | the produced diff's scope is broader or narrower than the instruction's own `WHERE`, or silently substitutes a different fix for the one named — what BATCH-CLOSE's FIDELITY TO PLAN lens exists to catch; if it passed anyway, name why |
 | "fanned lanes integrated cleanly" | 5.3's merge resolved a same-file collision instead of stopping and rebuilding that file as one producer |
+| "the parallel items were independent" | two items built in parallel (step 5's exception) shared a file of their WHERE or a gate, or either was a hash mover; or their commits landed out of plan order |
 | "the gate was met before building" | an item's gate (a workplan `GATE`, or the gates an ad hoc plan names) named a position or a Jordan decision that had not actually landed |
 | "the batches were partitioned, not sized" | an item's gate is met only by a later batch, or a link was cut with no stated reason |
 | "the batch size was right" | a linked group was carried whole through BATCH-CLOSE with no stated reason not to cut it along a link, or was cut with no stated reason the whole group would have been too large (a plan's own cut: stated at the approval stop) |

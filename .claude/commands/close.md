@@ -9,8 +9,8 @@ edit (CLAUDE.md §0.4).
    idempotent, installs `pyyaml pytest numpy pytest-xdist pytest-timeout` only if absent. Without it step 4
    cannot run.
 
-2. **Learn the container's known-red before debugging anything.** run the failing file on `main`'s tree
-   first, and `cat .git/shallow` — a shallow clone cannot reach the commits `FORK:` rows name. That is the
+2. **Learn the container's known-red before debugging anything.** run the failing file on `<open sha>`'s tree
+   for a batch close (`main`'s otherwise) first, and `cat .git/shallow` — a shallow clone cannot reach the commits `FORK:` rows name. That is the
    clone, not `main`.
 
 3. **Layer conformance, before the suite or beside it** (its output is code edits: either the suite
@@ -24,7 +24,8 @@ edit (CLAUDE.md §0.4).
    - **First decide whether to run it at all** (`CLAUDE.md` §0.4 cl.1): name what it can observe
      that CI's run on push will not. Prose, ledger, skill or link changes run only the test files
      that read what changed (`grep -rl <path> tests/`); CI is the full gate.
-   - **Run `python tools/tests_for_diff.py`** (add `--run` to execute it): it reads what this session changed and names the
+   - **Run `python tools/tests_for_diff.py`** and use its printed commands, one per tree, adding `--durations=30` and
+     `--timeout=<budget>`; `--run` is an inner-loop convenience, not the close. It reads what this session changed and names the
      narrowest suites. An edit confined to `modules/` or `systems/` of combat, mass battle or social contest runs `-m <subsystem>`
      across all three trees; anything else (engine core, tools, registries) gets the full gates below. It cannot see a
      realm-level effect of a module edit (the season suite executes the modules too); CI's full run is that check.

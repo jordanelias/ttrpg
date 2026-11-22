@@ -427,7 +427,7 @@ The five positions below are the intake entries the B12a authors routed here by 
 - FALSIFIER and CONTROL: a pin that moved and that no item of B12b declared (then the batch moved behaviour it did not declare: the re-pin stops and the batch is `STOPPED`). Control: the readings of the close this batch rebased on (`reading @<sha>`) (filled by repair lane R1 from the batch block).
 - TESTS: none new; after the re-pin every pinned test the RE-PIN line names reads green (filled by repair lane R1 from the batch block).
 - WHERE: the pin files the RE-PIN line names: `engine/season/tests/_realm_goldens.py`; `engine/season/tests/test_go07_canonical_digest.py`; `engine/season/tests/test_season_weather.py`; `tools/ci_golden_modes_check.py`; `engine/season/requirements.yaml` (`reading:` records only) (filled by repair lane R1 from the batch block).
-- GATE: the BATCH GATE above, once, on this commit's tree, with the one full-suite run CLAUDE.md §0.4 allows at the close.
+- GATE: the BATCH GATE above, once, on this commit's tree, with no pytest beyond its covering files and the readings; the one full-suite run CLAUDE.md §0.4 allows is BATCH-CLOSE's, on a snapshot of this commit (head P16 (4), P17 (1)).
 - COST and TIER: a re-pin and the readings; `sonnet`, high; the readings read by `opus` (filled by repair lane R1 from the batch block).
 - GLOSSARY: none (the batch's glossary rows are read against the code at the close, `valoria_master_workplan_v12.md` §4) (filled by repair lane R1 from the batch block).
 - DEPENDS ON: V12 B12b.01 to B12b.47 (every earlier position of the batch) (filled by repair lane R1 from the batch block).
@@ -670,7 +670,7 @@ Not in this batch, and where each is: `14_VERBS_PHYSICAL_A` A0 and A4 (B14.27), 
 - FALSIFIER and CONTROL: a pin that moved and that no item of B29 declared (then the batch moved behaviour it did not declare: the re-pin stops and the batch is `STOPPED`). Control: the readings of the close this batch rebased on (`reading @<sha>`) (filled by repair lane R1 from the batch block).
 - TESTS: none new; after the re-pin every pinned test the RE-PIN line names reads green (filled by repair lane R1 from the batch block).
 - WHERE: the pin files the RE-PIN line names: `engine/season/tests/_realm_goldens.py`; `engine/season/tests/test_cr87_violence_contexts.py`; `engine/season/tests/test_go07_canonical_digest.py`; `engine/season/requirements.yaml` (`reading:` records only) (filled by repair lane R1 from the batch block).
-- GATE: the BATCH GATE above, once, on this commit's tree, with the one full-suite run CLAUDE.md §0.4 allows at the close.
+- GATE: the BATCH GATE above, once, on this commit's tree, with no pytest beyond its covering files and the readings; the one full-suite run CLAUDE.md §0.4 allows is BATCH-CLOSE's, on a snapshot of this commit (head P16 (4), P17 (1)).
 - COST and TIER: a re-pin and the readings; `sonnet`, high; the readings read by `opus` (filled by repair lane R1 from the batch block).
 - GLOSSARY: none (the batch's glossary rows are read against the code at the close, `valoria_master_workplan_v12.md` §4) (filled by repair lane R1 from the batch block).
 - DEPENDS ON: V12 B29.01 to B29.03 (every earlier position of the batch) (filled by repair lane R1 from the batch block).

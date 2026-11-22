@@ -79,11 +79,13 @@ def classify(files):
 
 
 def commands(markers, wide):
+    # `--durations=30` is the reading a `--timeout=<budget>` is a multiple of; the budget itself is a reading, not a
+    # constant, so the caller adds `--timeout` (`.claude/commands/close.md` step 4).
     if wide:
-        return [f"python -m pytest {' '.join(TREES[:1])} -q -n auto",
-                "python -m pytest engine/season/tests -q -n auto --dist worksteal",
-                "python -m pytest engine/tests -q"]
-    return [f"python -m pytest {' '.join(TREES)} -m {m} -q -n auto --dist worksteal" for m in markers]
+        return [f"python -m pytest {' '.join(TREES[:1])} -q -n auto --durations=30",
+                "python -m pytest engine/season/tests -q -n auto --dist worksteal --durations=30",
+                "python -m pytest engine/tests -q --durations=30"]
+    return [f"python -m pytest {' '.join(TREES)} -m {m} -q -n auto --dist worksteal --durations=30" for m in markers]
 
 
 def main(argv=None):

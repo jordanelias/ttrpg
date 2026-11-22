@@ -282,8 +282,8 @@ Timings: `CLAUDE_RATIONALE.md` §0.4 — re-measure rather than quote them.
 
 **This governs EVERY pytest gate** — `engine/season/tests` and `engine/tests` too: at the close, once,
 only the ones your change can reach. ⚠ **Learn your container's known-red BEFORE you debug it:** run
-the failing file on `main`'s tree first; `cat .git/shallow` says whether the clone can reach the commits
-`FORK:` rows name. **NO GUARD MAY BE BUILT FOR THIS SUBSECTION** (§0.1 pt 5).
+the failing file on `<open sha>`'s tree for a batch close (`main`'s otherwise) first; `cat .git/shallow`
+says whether the clone can reach the commits `FORK:` rows name. **NO GUARD MAY BE BUILT FOR THIS SUBSECTION** (§0.1 pt 5).
 
 ---
 
