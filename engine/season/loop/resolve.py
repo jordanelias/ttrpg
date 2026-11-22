@@ -729,7 +729,10 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
     # kind's Event and the per-subject receipts only on a kind OTHER than `emits` (`extra`), so a write
     # whose every subject earns the row's one declared kind would leave its per-person receipts in no
     # Event -- which is the defect this closes. The kind is the row's declared one (`write_matrix.yaml`).
-    ev = Event(id=H(w.world_seed, w.tick, a.id, f"emit:{SCAR_TAKEN}#{w.new_draw()}"), kind=SCAR_TAKEN,
+    # THE ID IS MINTED AS THE FOLD MINTS ITS OWN (`H(seed, tick, actor, "{kind}:{act}")`): one such Event
+    # per act, so no draw ordinal is needed, and `actor_of` (which reads `causes`) agrees with the actor
+    # the id was minted from (`test_g1b_attribution.py` re-derives it).
+    ev = Event(id=H(w.world_seed, w.tick, a.actor, f"{SCAR_TAKEN}:{a.id}"), kind=SCAR_TAKEN,
                changes=[r for _s, r in got], causes=[a.id], emitted_at=w.tick)
     w.log.append(ev)
     TRACE.event(ev.id, ev.kind, ev.causes)
