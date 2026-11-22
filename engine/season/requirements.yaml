@@ -277,8 +277,8 @@ rows:
           line: "R-01.c  others' acts differing: 307  (replay 0)"
           control: >-
             seed 0 shown (n 307); seeds 1 and 2 read n 318 and 1385, each `(replay 0)`; at each seed the `[replay]` arm reads `differing=0 ... (EQUAL to the unperturbed)`,
-            its `end_hash` the realm pin (`4c83fef7..`, `5e59be44..`, `45fb01e3..`); the `[draw-seed]` arm reads 2731, 2741, 2808 differing.
-            The person removed is now p_npc_013 at seeds 0 and 1 and p_npc_050 at seed 2 (the conjunct's `text` names the earlier three). the code tree of `072d6f921` (B09.21); B09.99 edits test pin literals and this file only
+            its `end_hash` the realm pin (`e03202af..`, `fcddd545..`, `2f6a7e76..`); the `[draw-seed]` arm reads 2731, 2741, 2808 differing.
+            The person removed is now p_npc_013 at seeds 0 and 1 and p_npc_050 at seed 2 (the conjunct's `text` names the earlier three). the code tree of `072d6f921` (B09.21); B09.99 edits test pin literals and this file only; the three `end_hash` literals were re-read after the `scar.taken` id was minted as the fold mints it (`f0821359c`), which moves the hash and nothing else (acts, log length and the census digest equal at every seed, `_realm_goldens.CENSUS`), so the counts above are not re-read
           does_not_show: >-
             one removed person a seed; an act "differing" is not an act caused by the removed choice; the seed 2 figure (1385 of the season's acts)
             is the removal of a person whose choices most other acts follow, not a count of acts that one choice caused; run on `PYTHONHASHSEED=0`

@@ -73,8 +73,8 @@ def _realm(seed: int, seasons: int, fixtures=DEFAULT_FIXTURES):
 #: The realm pins current at B07's base, the S9 base (B14's after-reading on the merged tree, `_realm_goldens.SHIPPED` until B07.99
 #: re-recorded it with the arm on): the world with `task_draw_arm: off` reads these. The only owner of the arm-off reading once
 #: `SHIPPED` is the arm-on world; each read at `PYTHONHASHSEED=0`, one season, `reading @e629f6445` (and again at B07.10's tree).
-ARM_OFF_PINS = {(0, 1): "f63e227dfbbac2517bab9c74e761ac94", (1, 1): "707951b5f73b67e486f887cf597cf707", (2, 1): "d80db33920129051699837f07ba5e671",
-                (0, 2): "c2edcd0eccc76d0ff35fb1761b98ea9e", (1, 2): "52fd4168a957e096848bc7d6d21c8073", (2, 2): "a1f82c3119146572b7a27b87e1a5a5ab"}
+ARM_OFF_PINS = {(0, 1): "62e7a4a96823a019638c2bcf827cef00", (1, 1): "e38ec51518667d739a684a67ae501bb2", (2, 1): "e6db00d5ed6b0f345cf4f2f52dcafeed",
+                (0, 2): "22b9b5bab3c1b615be003452a9bf3b9f", (1, 2): "c1c03660262fcac0c0fb68673bc26e56", (2, 2): "8748c5d72a25a319c68ce8273b86fb7a"}
 
 
 def test_task_draw_arm_off_reproduces_the_pinned_hash():

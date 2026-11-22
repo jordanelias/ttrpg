@@ -39,12 +39,12 @@ read once here on the closing tree (`PYTHONHASHSEED=0`; seed 0 one season also e
 
 BUILD = {0: "d691552fcd4931573c465bbc341bdcad"}                      # build_realm(seed), unplayed
 
-SHIPPED = {(0, 1): "c5e175f23ce306d770d5c7b4c3c78bea",
-           (1, 1): "7ec0ba4c7aacb83764e4cd4e66375a62",
-           (2, 1): "6a39a9e96ab8caf14b532cd3cba5ddf7",
-           (0, 2): "4c83fef7e3c96957752c1cd932c8de8c",
-           (1, 2): "5e59be44bb9c9bbb78bc547c9d2d1348",
-           (2, 2): "45fb01e3969bf44d7a12bc7958eae55d"}      # B09.99 re-pin (the docstring); the B07.99 values are in `git log`
+SHIPPED = {(0, 1): "6e3a066a9d4b921bf5258a23b55d0e37",
+           (1, 1): "01f7f9aa0f3d9a52242ea78c8c92cc23",
+           (2, 1): "0a00352e0e9349f8c12d26f8f9e7e467",
+           (0, 2): "e03202af8dcb4480561c78806519418c",
+           (1, 2): "fcddd545810e2b7b0576c2ee2f62d9cc",
+           (2, 2): "2f6a7e7629acad0bac10b075eda7fd2a"}      # B09.99 re-pin (the docstring); the B07.99 values are in `git log`
 
 #: What the run leaves, beside its hash: `acts` is `populated.run`'s act count, `log` the
 #: length of the world's Event log, `census` the sha256 of `populated.run`'s return value as sorted
