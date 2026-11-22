@@ -271,7 +271,7 @@ Timings: `CLAUDE_RATIONALE.md` §0.4 — re-measure rather than quote them.
 1. **The full suite runs AT MOST once per commit, and only when it can observe something CI will not (RULED).**
    CI runs it on every push not marked `[skip ci]`, and §11 bars you from reading that result: for a code change the suite can reach, your close run is the only result before the commit. Name what a local run would catch first; a diff of prose, ledgers, skills
    or links runs only the test files that read what it touched (`grep -rl <path> tests/`).
-2. **Mid-session, run only the file covering what you touched.** If you cannot name it, find it. At the close, `python tools/tests_for_diff.py` names the suites your edits call for (`-m combat|mass_battle|social_contest` when only that subsystem changed).
+2. **Mid-session, run only the file covering what you touched.** If you cannot name it, find it. At the close, `python tools/tests_for_diff.py` names the suites your edits call for (a season-loop edit runs the season suite alone; `-m <subsystem>` when only that subsystem changed).
 3. **Never re-run to re-confirm a green you already hold.**
 4. **A red close run re-runs the FAILING FILE ONLY while you fix it.** The suite comes back once, when you
    believe you are done, over only what the fix diff reaches (`tests_for_diff.py --base`). Red is not a licence to loop the gate.

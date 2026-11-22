@@ -26,8 +26,9 @@ edit (CLAUDE.md §0.4).
      that read what changed (`grep -rl <path> tests/`); CI is the full gate.
    - **Run `python tools/tests_for_diff.py`** and use its printed commands, one per tree, adding `--durations=30` and
      `--timeout=<budget>`; `--run` is an inner-loop convenience, not the close. It reads what this session changed and names the
-     narrowest suites. An edit confined to `modules/` or `systems/` of combat, mass battle or social contest runs `-m <subsystem>`
-     across all three trees; anything else (engine core, tools, registries) gets the full gates below. It cannot see a
+     narrowest suites. A test file edited runs that file alone; an edit confined to `engine/season/` runs the season suite and the
+     `tests/valoria` files that run it, no subsystem suite; one confined to `modules/` or `systems/` of combat, mass battle or
+     social contest runs `-m <subsystem>` across all three trees; anything else (engine core, tools, registries) gets the full gates below. It cannot see a
      realm-level effect of a module edit (the season suite executes the modules too); CI's full run is that check.
    - **Pass `--timeout=<budget>` and `--durations=30`.** A test's budget is a multiple of its last
      `--durations` reading, never a guessed number; the run's `--timeout` is the largest budget among
