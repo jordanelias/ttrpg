@@ -15,8 +15,8 @@ edit (CLAUDE.md §0.4).
 
 3. **Layer conformance, before the suite or beside it** (its output is code edits: either the suite
    runs after them, or it runs on a `git worktree` snapshot of `HEAD` taken before them and only what
-   the edits reach re-runs after, `tests_for_diff.py --base <snapshot sha>`, as `methodology-execute`
-   BATCH-CLOSE does). If the diff touches `engine/season/` or `modules/` code, run the `layer-conformance` skill's
+   the edits reach re-runs after, `tests_for_diff.py --base <snapshot sha>`; `methodology-execute`'s
+   BATCH-CLOSE runs `tests/valoria` and the lanes its plan names instead). If the diff touches `engine/season/` or `modules/` code, run the `layer-conformance` skill's
    Lens B on the files you changed; if it adds a tool, a guard, a hook or a governance rule, run
    Lens A. Its output is edits to this commit, not a document. A diff touching neither skips this.
 
