@@ -25,7 +25,7 @@ GATE: Batch B05-one-roll @ca3f4bcf76a6b057013c85d1c466b83ef9446470
 GATE: Batch B06-keyed-draw @bcbe3ed5e595ff465e12dbe246c29f1216d14f3a
 GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
 GATE: Batch B08-scene-order
-GATE: Batch B09-memory
+GATE: Batch B09-memory @efd6cfb7d636c05e980527c08d49514f203c2bef
 GATE: Batch B10-character
 GATE: Batch BA1-cast-content
 GATE: Batch B11-fi-readers

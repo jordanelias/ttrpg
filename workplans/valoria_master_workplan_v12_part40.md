@@ -20,7 +20,7 @@ GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B05-one-roll @ca3f4bcf76a6b057013c85d1c466b83ef9446470
 GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
-GATE: Batch B09-memory
+GATE: Batch B09-memory @efd6cfb7d636c05e980527c08d49514f203c2bef
 GATE: Batch B10-character
 GATE: Batch B11-fi-readers
 GATE: Batch B11F1-flow-se

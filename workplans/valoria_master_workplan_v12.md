@@ -248,7 +248,7 @@ For a step with one batch the two texts below agree. For a step with several, th
 | S0–S3 | B00 · B01 · B02 · B03, one each (IN); ⚠ 2026-11-14: B01a opens at S2, between B01 and B02, and every later row moves one step (part 2 §1.2) |
 | S6 | B04 (IN) |
 | S7 | B05 (IN), alone: it edits IN, SC, PC and MB code |
-| S10 · S11 | B09 · B10 (IN) |
+| S11 | B10 (IN) |
 | S12 | B24p (SC), BA1 (IN), B11 (FI), B15 (PC), B21 (FA) |
 | S13 | B08 (IN), B12a (SE+WR), B16 (PC), B21b (FA), B24 (SC) |
 | S14 | B12b (SE+WR), B19a (MB), B21c (FA), B29 (PC), B34 (GO) |
@@ -265,7 +265,7 @@ For a step with one batch the two texts below agree. For a step with several, th
 |---|---|---|---|---|
 | **M0 · ground** | B04 | B00, B01, B02, B03, B03a, B13, B16M, B04 | R-01, R-02 (on the new instruments), R-03 | all three hold; the other six print their held counts for the first time |
 | **M1 · every outcome is drawn** | B08 | B05, B08 | R-03 (with R-03.c); R-09.a, .c, .d, .e | R-09 short of R-09.b only |
-| **M2 · persons** | BA1 | B09, B10, BA1 | R-06, R-08, R-09; R-07 if R-07.c reads with its receipt | R-06, R-08, R-09 hold; R-07 holds or is one conjunct short |
+| **M2 · persons** | BA1 | B10, BA1 | R-06, R-08, R-09; R-07 if R-07.c reads with its receipt | R-06, R-08, R-09 hold; R-07 holds or is one conjunct short |
 | **M3 · every verb** | B35 | B11, B12a, B12b, B12c, B15, B21, B21b, B21c, B22, B23, B24a, B25, B26, B27, B28, B29, B32, B35 | R-05; R-07 if still open | `built out n of n` at B35's `n` |
 | **M4 · every scale** | B36 | B16, B19a, B19, B20, B24, B30, B34, B36 | R-04 | every R-04 conjunct holds |
 | **M5 · the rulings beyond the nine, and the carried positions** | B40 | B18, B31, B33, B37, B38, B39, B40, B41, B11F1, B11F2, B21d, B21s, B37p | none new; R-05 re-read at B38, R-06.e and R-09.b at B39, all nine at B40 | all nine hold |
@@ -363,7 +363,6 @@ No engine version is asserted anywhere in v12 (ED-GO-0002 is the owner).
 |---|---|---|---|
 | B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-939 (79+0) (allocated 2026-11-14 after B01a's block, on paper: `id_reservations.yaml` is bumped at the batch's opening, SC `next_free` 54 → 57; the fold map's H-856..H-909 assumed H-855 as the last id and B01a had taken H-856..H-860; 79 NUMBER rows since the V2 stress-test pass: 54 settings (`sympathy_step` cut from the V2 fold's 55), the fold's 24, the `speech_blend` pointer row; H-940 left unused so the next id stays H-941) |
 | B08-scene-order | IN | ED-IN-0385..0386 (0+2) | H-451..H-455 (0+5) |
-| B09-memory | IN | ED-IN-0387..0388 (0+2) | H-456..H-463 (3+5) |
 | B10-character | IN | ED-IN-0389..0390 (0+2) | H-464..H-486 (18+5) |
 | BA1-cast-content | IN | ED-IN-0391..0392 (0+2) | H-487..H-491 (0+5) |
 | B11-fi-readers | FI | ED-FI-0010..0011 (0+2) | H-492..H-498 (2+5) |
@@ -444,7 +443,6 @@ Each is also stated where it is invoked (the batch block's lines, the item's fie
 
 | batch | file(s) under `master/workplan_v12/` |
 |---|---|
-| B09-memory | `valoria_master_workplan_v12_part11_cont.md` |
 | B10-character | `valoria_master_workplan_v12_part12.md`, `_part12_cont.md`, `_part13.md`, `_part13_cont.md` |
 | B21-fa-governance | `valoria_master_workplan_v12_part14.md`, `_part14_cont.md`, `_part15.md`, `_part15_cont.md` |
 | B11-fi-readers | `valoria_master_workplan_v12_part16.md`, `_part16_cont.md`, `_part17.md`, `_part17_cont.md` |
