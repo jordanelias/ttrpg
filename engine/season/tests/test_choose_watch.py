@@ -16,7 +16,6 @@ from __future__ import annotations
 from collections import Counter
 from types import SimpleNamespace
 
-import pytest
 
 from engine.substrate.descriptors import PURSUITS
 
