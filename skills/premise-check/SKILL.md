@@ -197,7 +197,7 @@ with `causes[]`), `play_surface` (`dispatching_chooser`).
 
 **Recipes for a hand-built act** (the test files hold working examples; copy their shape):
 `engine/season/tests/test_in10_record_operands.py` (`_resolve`, `_formed`: drive an act and ask what
-is offered), `test_in18_obligee_report.py` (`_tell`), `test_season_shape.py` (`_we_bands`: a contested
+is offered), `test_aperture.py` (`_lost_or_won_tell`), `test_season_shape.py` (`_we_bands`: a contested
 act through `SeasonDriver.resolve` and `encounter`), `test_fi03_trail.py` (`trail_world`). For
 independent draws vary the act id (`Act(id=f"x{i}")`) and use a fresh world per trial. Some helpers
 live in pytest modules, and pytest may not be installed: run `python tools/session_provision.py`, or
