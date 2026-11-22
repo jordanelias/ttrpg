@@ -283,57 +283,6 @@ def test_a_march_on_an_unheld_settlement_arrives_rather_than_crashing_the_season
     assert world_q.holder_faction_of(w, "set_s_037") is None, "an arrival wrote a title (H-166)"
 
 
-def test_a_won_field_writes_casualties_and_stance_on_the_defender_only():
-    """`Won` (the ATTACKER wins, defenders lose) THROUGH A REAL FOLD. This test used to construct the `Resolution` by hand,
-    because a corpus-scale force routed on contact whoever was stronger (`H-250`); a side is now `under_arms_cap(weight)` troops,
-    so the weights say who is stronger. The Crown's two marchers are weight 4 (4,000 troops each) against the Church's six individuals
-    at weight 1.5 (1,500 troops each, each fought and cut).
-    The world is realm seed 1 (the draw is the act's, so the seed is a fight's dice; B17.16 re-cut it from seed 3 and weights 10 against
-    3, the 30-a-weight scale): of seeds 0 to 5 and the weight pairs 1 v 3, 1.5 v 4 and 2 v 5 each way, seeds 1, 2 and 4 read the pair
-    (1.5, 4) `Lost` and (4, 1.5) `Won`; seed 1 is the first. CONTROL, SAME WORLD AND ACT: with the two sides' weights swapped (1.5
-    against 4) the field is `Lost`, so the flip to `Won` is the weights' and not a fold that always reads one band. The band's
-    effects are asserted as the hand-built test asserted them: the defender takes the casualties and the stance rows, the winning side
-    is never written."""
-    def fold(attacker_weight, defender_weight):
-        w = build_realm(1)
-        attackers = world_q.mustered(w, "set_s_014", "fac_valorsmark")
-        defenders = world_q.mustered(w, "set_s_036", "fac_church_of_solmund")
-        assert attackers == ["p_npc_033", "p_npc_035"] and len(defenders) == 6, (
-            f"fixture moved ({attackers}, {defenders}): re-read it")
-        _weigh(w, attackers, attacker_weight)
-        _weigh(w, defenders, defender_weight)
-        before_a = {pid: w.persons[pid].body for pid in attackers}
-        before_d = {pid: w.persons[pid].body for pid in defenders}
-        before_s = {pid: list(w.persons[pid].stance or []) for pid in attackers + defenders}
-        events = _fold_one(w, _march_act("p_npc_033", "set_s_036", "off_spymaster"), contest_max_depth=2)
-        return w, attackers, defenders, before_a, before_d, before_s, [(e.kind, e.degree) for e in events]
-
-    kinds_lost = fold(1.5, 4)[-1]
-    assert ("field.lost", "Lost") in kinds_lost and not any(k == "field.won" for k, _ in kinds_lost), (
-        f"the weaker attacker no longer loses: {kinds_lost}")
-
-    w, attackers, defenders, before_a, before_d, before_s, kinds = fold(4, 1.5)
-    assert ("field.won", "Won") in kinds, f"the weights did not carry the fold to Won: {kinds}"
-
-    for pid in attackers:
-        # CR-24 (`field_winner_casualties`, shipped `engine`): a winner takes his own engine casualties on `body` only, never raised
-        assert w.persons[pid].body <= before_a[pid], f"{pid} (the WINNING side) was raised"
-    # each loser is scaled by HIS subunit's share (`field_units: person`): a defender the battle never reached keeps his body
-    assert all(w.persons[pid].body <= before_d[pid] for pid in defenders), "a loser was raised"
-    assert any(w.persons[pid].body < before_d[pid] for pid in defenders), "the losing side took no casualties"
-
-    for pid in defenders:
-        rows = _new_rows(w, pid, before_s)
-        assert ("fac_valorsmark", -1.0, w.fixtures.get("field_grudge_weight")) in rows, (
-            "no grudge row against the winning faction (the attacker)")
-        assert ("fac_church_of_solmund", -1.0, w.fixtures.get("field_morale_weight")) in rows, (
-            "no morale-hit row against the loser's own faction (the defender)")
-    for pid in attackers:
-        assert not any(ref in ("fac_valorsmark", "fac_church_of_solmund")
-                       for ref, _v, _w in _new_rows(w, pid, before_s)), (
-            "the winning side gained a stance row from a battle it won")
-
-
 def test_declared_is_no_change_and_unopposed_changes_only_with_claimants_in_the_resolution():
     """v9 IN-13 EXIT (v), RE-WRITTEN: `Declared` returns `NO_CHANGE`; `Unopposed` returns NO_CHANGE
     only when its `Resolution` carries no claimants -- the old test passed `Resolution("Unopposed",

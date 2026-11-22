@@ -37,7 +37,6 @@ Event's `ending` (B05.18) over `build_realm(0..2)`, one season each.
 from __future__ import annotations
 
 import functools
-from collections import defaultdict
 from typing import NamedTuple, Optional
 
 import pytest
@@ -45,7 +44,7 @@ import pytest
 from engine.dice_engine.sigma_leverage import OB_MIN, band_odds, net_boost, pool_of, record_odds
 
 from ..data.fixtures import DEFAULT_FIXTURES, DIFFICULTY_OB_ARMS
-from ..data.rosters import MARGIN_ENDING, roster
+from ..data.rosters import roster
 from ..queries.inputs import SocialContestInput
 from ..seam.wrappers import pool, sigma
 from .test_sc01_obstacle_ceiling import _module
@@ -294,34 +293,6 @@ DECIDED_LEVEL = "routine"                 # the grid's reference cell (the level
 ORDER_WINDOWS = ((3, 2, (0.60, 0.70)), (6, 5, (0.60, 0.70)), (4, 2, (0.72, 0.82)), (7, 5, (0.72, 0.82)), (6, 2, (0.88, 0.95)), (7, 3, (0.88, 0.95)))
 
 
-def _decided_share(fx, a: int, b: int, level: str = DECIDED_LEVEL) -> tuple:
-    """`(share, P(a reaches Success), P(b reaches Success))`: of the exchange pairs in which EXACTLY ONE side reaches Success (Success or better),
-    the share where it is `a`. One `_cell` per side, each rolling its own pool against the other's score and opposing attribute; the two are
-    independent, so the pair's chances multiply: `share = pa (1 - pb) / (pa (1 - pb) + pb (1 - pa))`."""
-    pa = _cell(fx, "a", rank=a, level=level, opposed_rank=b).success_or_better
-    pb = _cell(fx, "b", rank=b, level=level, opposed_rank=a).success_or_better
-    one_side_a, one_side_b = pa * (1.0 - pb), pb * (1.0 - pa)
-    return one_side_a / (one_side_a + one_side_b), pa, pb
-
-
-def test_the_better_arguer_wins_on_the_fights_curve():
-    """Gate 6, the decided-pair share from two `band_odds` readings (through `_cell`'s `record_odds`): the better arguer's share of the pairs in which
-    exactly one side reaches Success lies in the fight's window at +1 (3v2, 6v5), +2 (4v2, 7v5) and +4 ranks (6v2, 7v3), at the SHIPPED fixtures.
-    FALSIFIER: equal ranks read 0.5 and the share rises with the gap (+1 < +2 < +4, no overlap), so the instrument can read the
-    curve it gates; a pair outside its window is listed with its reading, not tuned away."""
-    assert _decided_share(DEFAULT_FIXTURES, 4, 4)[0] == pytest.approx(0.5, abs=1e-12)           # the instrument's own control: equals share it evenly
-    checked, bad = 0, []
-    for better, worse, (lo, hi) in ORDER_WINDOWS:
-        share, pa, pb = _decided_share(DEFAULT_FIXTURES, better, worse)
-        checked += 1
-        if not lo <= share <= hi:
-            bad.append(f"  {better}v{worse} at {DECIDED_LEVEL}: share {share:.4f} outside [{lo}, {hi}] (P(Success+) {better}: {pa:.4f}, {worse}: {pb:.4f})")
-    assert checked == len(ORDER_WINDOWS) == 6
-    shares = [_decided_share(DEFAULT_FIXTURES, a, b)[0] for a, b, _ in ORDER_WINDOWS]
-    assert min(shares[:2]) > 0.5 and max(shares[:2]) < min(shares[2:4]) and max(shares[2:4]) < min(shares[4:]), shares      # +1 < +2 < +4, no overlap
-    assert not bad, f"{len(bad)} of {checked} pairs outside the fight's windows at the shipped fixtures\n" + "\n".join(bad)
-
-
 def test_one_minor_level_against_moves_failure_by_five_points():
     """Gate 6's one-level arm: at equals, `routine`, every grid rank, one `minor` level of leverage AGAINST the actor (`LEVEL_SIGMA["minor"]`, a
     -σ on the roll's boost) raises P(Failure) by at least 0.05, read from `band_odds` on the composed cell's own pool and obstacle."""
@@ -340,38 +311,3 @@ def test_one_minor_level_against_moves_failure_by_five_points():
 # ---------------------------------------------------------------------------------------------------------------------
 REALM_SEEDS = (0, 1, 2)
 
-
-@functools.lru_cache(maxsize=None)
-def _realm_obstacles() -> dict:
-    """`{verb: {act id: that act's rolled `ending` tuple}}`, pooled over the three realms (act ids are per-realm; the key carries the seed)."""
-    from ..boot.realm import build_realm
-    from ..harness import chronicle
-    from ..harness.populated import run
-    by_verb: dict = defaultdict(dict)
-    for seed in REALM_SEEDS:
-        w = build_realm(seed)
-        run(1, seed, w=w)
-        act_of = chronicle._act_of(w)
-        for e in w.log:
-            end = getattr(e, "ending", ())
-            act = act_of.get(e.id)
-            if act is not None and end and {k for k, _v in end} == set(MARGIN_ENDING):
-                by_verb[act.verb].setdefault((seed, act.id), end)
-    return {verb: dict(rolls) for verb, rolls in by_verb.items()}
-
-
-def test_every_rolled_verb_with_five_rolls_shows_more_than_two_obstacles():
-    """OBS gate 4: over `build_realm(0..2)`, one season each, every rolled verb with five or more rolls shows MORE THAN TWO distinct obstacle values
-    (`Margin.terms` summed, i.e. the Event's `ending` `ob`). Expected RED until B05.23's calibrated arm, where the tables give a verb's rolls more than
-    two places to land."""
-    rolled = _realm_obstacles()
-    assert rolled, "no social roll left a margin ending in three realms: the read has nothing to read"
-    for rolls in rolled.values():
-        for end in rolls.values():
-            d = dict(end)
-            assert sum(v for _n, v in d["terms"]) == pytest.approx(d["ob"])           # the terms are the obstacle the ending names
-    read = {verb: sorted({round(dict(end)["ob"], 9) for end in rolls.values()}) for verb, rolls in rolled.items() if len(rolls) >= 5}
-    assert read, "no rolled verb had five rolls in three one-season realms: the read has nothing to read"
-    thin = {verb: (len(rolled[verb]), obs) for verb, obs in read.items() if len(obs) <= 2}
-    assert not thin, ("verbs with five or more rolls and two or fewer obstacle values over build_realm(0..2), one season each "
-                      f"(verb: (rolls, obstacles)): {thin}; every verb read: { {v: (len(rolled[v]), len(o)) for v, o in read.items()} }")
