@@ -502,8 +502,8 @@ STANCE_FIELD = "stance"
 def _carries_a_receipt(events) -> bool:
     """Does any of `events` carry a `Receipt`? The gate mints one only for a subject whose state moved
     (`World.write`: before and after read, `NoOpReceipt` when none did), so a Receipt on the Event IS the
-    before ≠ after. Its `delta` is not read: `Receipt.delta` is `None` for every write in the tree (a
-    `StateChange.delta` the fold never fills), so a test on it would read no execution as having written."""
+    before ≠ after. Its `delta` is not read: B09.10 fills it (`World.write`), and a Receipt on the Event is
+    already the before ≠ after, so a test on the delta would add nothing."""
     return any(isinstance(c, Receipt) for e in events for c in e.changes)
 
 

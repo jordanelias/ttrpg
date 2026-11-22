@@ -3586,7 +3586,7 @@ rosters:
       is every verb row's `emits` plus the fold, MATTER and CALENDAR kinds (`_check_standing_occasion_opened_by`, beside
       `_check_strife_kinds`), and to `referent_classes`. Switched by `Fixtures.standing_occasion_cause` (H-457; `False` is
       the control: no opening Event is named).
-      [ASSUMPTION; medium; Jordan to correct; revert: set `standing_occasion_cause` False, or empty a class's list. The kind lists
+      [ASSUMPTION; medium; Jordan to correct; revert: set `standing_occasion_cause` False (an empty list for a class is refused at import, `data/rosters.py::_load_standing_occasion_opened_by`). The kind lists
       are the proposal's reading of each source's docstring in `queries/world_q.py::questions_for`.]
     values:
       Office:      [tenure.closed, office.established]

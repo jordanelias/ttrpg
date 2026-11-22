@@ -133,7 +133,8 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: 
     unnormalised.] Person-side, no World (AX-2).
     ⚠ v9 SC-02 `22a`: WHICH claims are `referent`'s deeds is `attributed_deeds`' and WHAT each is worth
     is `deed_term`'s; this function sums them by `firsthand`, and `world_q.reception` sums the same two
-    by remove and confidence, so the two readers cannot disagree on either."""
+    by remove and confidence, so the two readers cannot disagree on either at the shipped `sworn_bond` 0.0
+    (`deed_term` itself reads the control: `reception` and this sum part when it is non-zero)."""
     axis_w = None
     judged = told = 0.0
     for c in attributed_deeds(p.ledger, referent):

@@ -246,8 +246,8 @@ def test_every_minted_receipt_is_in_an_event(monkeypatch):
     """B09.10 (written red, by design, and green at B09.11): every receipt the world's gate minted sits in some Event of
     the log. The scene is `test_h11_affiliation_scar`'s -- a fight observed by persons whose
     holdings the rebound engagement table says it violates -- and its `(Person, scar)` write mints a
-    receipt per scarred observer with NO `emits`, so they land in no Event (the `_scar_witnesses`
-    docstring says "Nothing is emitted"). The fold's Events are appended as the driver does
+    receipt per scarred observer with NO `emits`, so they landed in no Event (before B09.11, which
+    records them in one `scar.taken` Event; this scene hands the fold's Events only). The fold's Events are appended as the driver does
     (`loop/driver.py`, S19.5). It can observe what it excludes: the scar receipts are asserted
     minted first, and the control is that every OTHER minted receipt is logged."""
     from engine.season.data import affiliations as A
