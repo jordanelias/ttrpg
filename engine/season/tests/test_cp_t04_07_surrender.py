@@ -41,7 +41,6 @@ from engine.season.data.verbs import CHOICE_RANGES, VERB_TABLE
 from engine.season.decision import assemble
 from engine.season.decision.options import opening_set
 from engine.season.boot.realm import build_realm
-from engine.season.loop import effects_information as eff
 from engine.season.queries import world_q
 from engine.season.state import gate as G
 from engine.season.state.carriers import Act, Tenure
@@ -249,36 +248,6 @@ def test_may_cede_asks_the_belonging_when_a_caller_can_read_the_query():
 
 
 # ---- MUTATIONS ------------------------------------------------------------------------------------------------------
-
-def test_planted_failure_a_threat_reader_that_answers_nothing_yields_no_town(swept, monkeypatch):
-    monkeypatch.setattr(eff, "siege_pressed_by", lambda w, place: None)
-    w = _world(3, 1.0)
-    before = _blood(w)
-    _besiege(w)
-    assert _kinds(_surrender(w)) == ["surrender.refused"]
-    assert not _yielded_without_blood(w, before)                        # the falsifier's predicate is false
-
-
-def test_planted_failure_a_predicate_that_answers_yes_leaves_the_refusal_to_the_gate(swept, monkeypatch):
-    """The effect's belonging test gone, the Crown's seat yields the Church's town to a Crown man: the write is not refused as
-    `surrender.refused` but killed at the gate, because the `cession` clause refuses an opening for the seat's own side."""
-    monkeypatch.setattr(eff, "may_cede", lambda *a, **k: True)
-    w = _world(3, 1.0)
-    _besiege(w)
-    out = _surrender(w, KING, KING_SEAT)
-    assert [e.kind for e in out] == ["surrender.refused"], [e.kind for e in out]   # H-143: emitted, not raised
-    assert world_q.holder_faction_of(w, TARGET) == CHURCH
-
-
-def test_planted_failure_without_the_cession_clause_the_gate_refuses_the_effects_own_write(swept, monkeypatch):
-    """The write gate's predicate answering no (the effect's binding, a different name, is untouched): the surrender the
-    effect admitted is `NotYours` at the gate and the town stays the Church's. The clause is load-bearing, not decorative."""
-    monkeypatch.setattr(G, "may_cede", lambda *a, **k: False)
-    w = _world(3, 1.0)
-    _besiege(w)
-    out = _surrender(w)
-    assert [e.kind for e in out] == ["surrender.refused"], [e.kind for e in out]   # H-143: emitted, not raised
-    assert world_q.holder_faction_of(w, TARGET) == CHURCH
 
 
 # ---- THE CONTROL: SHIPPED WITHHELD ----------------------------------------------------------------------------------

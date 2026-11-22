@@ -129,17 +129,6 @@ def test_the_stamper_reads_no_other_persons_true_body():
     assert _lawful_input_violations(world_q.wounded_with) == []
 
 
-def test_mutation_a_stamper_reading_true_bodies_is_red():
-    def true_bodies(w, p):
-        here = world_q.place_of(w, p.id)
-        return tuple([p.id] if p.body < p.body_ceiling else []) + tuple(
-            q.id for q in sorted(w.persons.values(), key=lambda x: x.id)
-            if q.id != p.id and q.body < q.body_ceiling and world_q.place_of(w, q.id) == here)
-    bad = _lawful_input_violations(true_bodies)
-    assert "an unwitnessed wound is stamped for a stranger" in bad, bad
-    assert len(bad) >= 2, bad
-
-
 def test_a_believed_wound_beside_him_forms_tend_on_the_other_through_questions_for():
     w, d = _world()
     scale = w.fixtures.get("condition_scale")
@@ -150,7 +139,6 @@ def test_a_believed_wound_beside_him_forms_tend_on_the_other_through_questions_f
     assert cands
     assert [e.kind for e in _resolve(w, d, *_acts(w, A, cands[:1]))] == ["body.tended"]
     assert w.persons[B].body == scale
-
 
 
 def test_rem52s_fall_is_tended_whole_the_same_season():
@@ -173,4 +161,3 @@ def test_rem52s_fall_is_tended_whole_the_same_season():
     # read in process at PYTHONHASHSEED=0).
     assert (len(short), len(tended)) == (37, 37)
     assert tended == short
-

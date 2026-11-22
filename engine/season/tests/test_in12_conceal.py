@@ -65,7 +65,6 @@ from ..gaps import Forbidden
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries.world_q import event_place, hold_force, questions_for
-from ..state import attribution
 from ..state.attribution import anchor_of, live_cover, matured_terms
 from ..state.carriers import Act, Question, Tenure
 from ..epistemic import _ch_witness_key
@@ -195,16 +194,6 @@ def test_control_the_same_convening_without_a_cover_anchors_on_the_actor_and_nam
     assert anchor_of(w, e) == DUKE
     assert DUKE in {s for s, _ in _about(w, FAR, e)}
     assert not [r for r in w.records.values() if r.kind == "cover"]
-
-
-def test_mutation_without_the_cover_read_the_falsifier_fails(monkeypatch):
-    """THE NAMED MUTATION, RUN IN-TEST: `live_cover` answering `None` (the cover read removed from tier 1)
-    and the convening anchors on the Duke again, his name in the King's deposit -- the route is that read."""
-    monkeypatch.setattr(attribution, "live_cover", lambda w, actor: None)
-    w, d = _world()
-    anchor, far, _, _ = _falsifier_reading(w, d)
-    assert anchor == DUKE
-    assert DUKE in {s for s, _ in far} and COVER not in {s for s, _ in far}
 
 
 # ======================================================================================

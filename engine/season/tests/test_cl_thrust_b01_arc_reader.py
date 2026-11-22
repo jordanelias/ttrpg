@@ -319,20 +319,6 @@ def test_a_receipt_is_read_as_the_record_it_wrote():
 # THE PLANTED FAILURE AND THE TWO NULLS
 # ---------------------------------------------------------------------------------------------
 
-def test_dropping_the_exclusions_turns_the_witnessed_move_and_tell_true(monkeypatch):
-    """THE PLANTED FAILURE (§0.1 pt 3): the exclusion of `claim_ledger` and `Person.travel_leg` dropped
-    (rosters widened, the loader's refusal bypassed) and (iv) and (v) read TRUE -- v1's "any Receipt"
-    reading. This is what the two tests above would show if the exclusion were absent."""
-    monkeypatch.setattr(A, "validate_roster", lambda pairs: frozenset(pairs))
-    selfs = A.ARC_SELF | {TRAVEL_LEG, CLAIM_LEDGER}
-    worlds = A.ARC_WORLD | {CLAIM_LEDGER}
-    checked = 0
-    for verb in ("move", "tell"):
-        w, d, actor = _witnessed(verb)
-        assert A.read_arcs(w, d, _by(actor), self_fields=selfs, world_fields=worlds).holds(actor), verb
-        checked += 1
-    assert checked == 2
-
 
 def test_the_shuffled_causes_null_reads_below_the_linked_log():
     k = 40

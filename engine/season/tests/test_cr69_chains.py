@@ -122,26 +122,6 @@ def test_the_same_world_read_twice_reads_identically():
 
 # ---- PLANTED FAILURES: the checks above can fail ---------------------------------------------------------
 
-def test_the_mutation_that_counts_every_act_a_consequence_act_misreads_the_plant(monkeypatch):
-    """With the predicate returning every act (and every Event kind), the non-writing depth-4 chain joins and
-    the known number is not read, so the first test can fail."""
-    events, act_of = _plant()
-    kinds = {}
-    for e in events:
-        kinds.setdefault(act_of[e.id].id, []).append(e.kind)
-    monkeypatch.setattr(ARC, "consequence_kinds",
-                        lambda w, act_of, log=None: {a: tuple(k) for a, k in kinds.items()})
-    res = CH.consequence_chains(_world(events), act_of, [0], 3)
-    assert res["chain_ends"] != KNOWN, res
-    assert res["chain_ends"] == KNOWN + 1                           # the depth-4 chain of nothing
-
-
-def test_the_mutation_that_ignores_min_depth_misreads_the_plant(monkeypatch):
-    real = CH.chain_ends
-    monkeypatch.setattr(CH, "chain_ends", lambda rows, min_depth: real(rows, 0))
-    assert _read(3)["chain_ends"] != KNOWN
-    assert _read(4)["chain_ends"] != 0
-
 
 # ---- the CLI: no default for --min-depth ----------------------------------------------------------------
 

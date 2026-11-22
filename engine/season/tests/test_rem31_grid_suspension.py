@@ -134,24 +134,6 @@ def _withdraw_after_first(w, record):
     return decide
 
 
-def _draws(w, record):
-    """MUTATION: a suspension that consumes a draw (the world's per-tick ordinal) at its first turn."""
-    def decide(view):
-        if view.turn == 1:
-            w.new_draw()
-        return "engage"
-    return decide
-
-
-def _mints(w, record):
-    """MUTATION: a suspension that mints ENCOUNTER's write class a second time at its first turn."""
-    def decide(view):
-        if view.turn == 1:
-            driver_mod.mint_token(w, WriteClass.ACTS)
-        return "engage"
-    return decide
-
-
 @functools.lru_cache(maxsize=None)
 def _automated(shuffle=False):
     """A whole AUTOMATED season: the control of the permutation arms."""
@@ -241,15 +223,6 @@ def test_a_differing_scripted_choice_moves_the_hash():
     assert withdraw_hash != auto_hash
 
 
-def test_a_suspension_that_consumes_a_draw_or_mints_a_token_reds_the_first():
-    """The two mutations the falsifier must be able to see: each breaks the equal draw ordinal or the equal mint count
-    (the hash does not carry the ordinal, and one round has no later draw to move)."""
-    _, _, auto_mints, auto = _automated_round()
-    drawn = _round(played=_played(), decider=_draws)[3]
-    assert drawn["draw_after"] != auto["draw_after"], "a consumed draw left the world's draw ordinal unmoved"
-    assert _round(played=_played(), decider=_mints)[2] != auto_mints, "a second mint left the count unmoved"
-
-
 def test_the_deliberation_order_does_not_move_the_scene_set_or_the_hash_playable_on():
     play = _played_season()
     shuffled = _played_season(shuffle=True)
@@ -259,24 +232,6 @@ def test_the_deliberation_order_does_not_move_the_scene_set_or_the_hash_playable
 def test_control_the_same_permutation_with_playable_off():
     auto, shuffled = _automated(), _automated(shuffle=True)
     assert shuffled[1] == auto[1] and shuffled[0] == auto[0]
-
-
-def test_mutation_a_callback_writing_shared_state_reds_the_permutation():
-    """A callback that writes state shared across persons -- here a counter every played person's callback bumps,
-    taking the chooser's pick only on an even count -- makes the map depend on its visit order. Every person is played
-    so the shared state is written on every visit; the permutation must see it."""
-    shared = {"n": 0}
-
-    def writes_shared(p, v, s, ask_budget, auto):
-        shared["n"] += 1
-        return auto(p, v, s, ask_budget) if shared["n"] % 2 == 0 else []
-
-    everyone = tuple(build_realm(SEED).persons)
-    shared["n"] = 0
-    straight = _season(played=everyone, decider=_engage, callback=writes_shared)
-    shared["n"] = 0
-    permuted = _season(played=everyone, decider=_engage, callback=writes_shared, shuffle=True)
-    assert permuted[1] != straight[1] and permuted[0] != straight[0]
 
 
 def test_the_decider_must_answer_from_the_closed_set():

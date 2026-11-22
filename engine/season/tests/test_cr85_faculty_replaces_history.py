@@ -20,7 +20,6 @@ withdrawn by ED-IN-0351).
 """
 from __future__ import annotations
 
-import dataclasses
 import importlib
 from engine.dice_engine import draw
 from collections import Counter
@@ -44,13 +43,6 @@ def _engine_available():
         pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
 
 _KEY = "cr85_test_arms"   # a test-local capability key: no roster row is added
-
-
-def _drop_the_read(monkeypatch):
-    """THE MUTATION: the seam's read dropped -- the record carries no scores, so the module's default stands."""
-    real = C.combat_input
-    monkeypatch.setattr(C, "combat_input",
-                        lambda *a, **k: dataclasses.replace(real(*a, **k), scores=(), addends=()))
 
 
 def _spy(monkeypatch) -> Counter:
@@ -90,14 +82,6 @@ def test_falsifier_every_season_roll_reads_pool_8_against_ob_1(seed, monkeypatch
     revert_b11a_scores(monkeypatch)
     seen, _ = _season_rolls(monkeypatch, seed)
     assert _off_the_reading(seen) == [], dict(seen)
-
-
-def test_mutation_the_seam_read_dropped_reproduces_9_against_1_5_and_reddens(monkeypatch):
-    _drop_the_read(monkeypatch)
-    seen, _ = _season_rolls(monkeypatch, 1)
-    assert set(seen) == {(9, 1.5)}, dict(seen)
-    assert _off_the_reading(seen) != []
-
 
 
 def test_planted_a_party_holding_the_combat_key_at_5_rolls_11_and_is_attacked_at_ob_2_5(monkeypatch):

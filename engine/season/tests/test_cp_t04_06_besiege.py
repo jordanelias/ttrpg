@@ -37,7 +37,6 @@ from engine.season.boot.realm import build_realm
 from engine.season.data.rosters import WON
 from engine.season.queries import world_q
 from engine.season.seam.ladder import field_degree
-from engine.season.seam.wrappers import mass_battle as wrapper
 from engine.season.state.carriers import Act, Question, Tenure
 from engine.season.state.world import World
 from engine.season.tests.test_cp_t04_05_graded_walls import MARCHERS, TARGET, _mb, _record, _world
@@ -129,35 +128,11 @@ def test_the_event_is_siege_pressed_graded_invested_and_a_second_act_on_dead_wal
     assert [e.kind for e in ev] == ["march.declared", "march.refused"], [e.kind for e in ev]
 
 
-def test_planted_failure_ignoring_the_posture_leaves_the_condition_where_it_was(swept, monkeypatch):
-    """MUTATION: the provider reads the posture under a key no act carries, so a `besiege` is a storm. The falsifier's
-    predicate (the condition reads the iterate, i.e. it MOVED) must then fail on the same fold."""
-    monkeypatch.setattr(wrapper, "MARCH_POSTURE_KEY", "not_posture")
-    w = _world(3, 1.0)
-    _crowd(w, TARGET)
-    got = _besiege(w, 1)
-    assert got != [_iterate(w.fixtures.get("condition_scale"), 3, 1)]
-    assert got == [w.fixtures.get("condition_scale")], got           # a storm does not wear the walls
-    with pytest.raises(AssertionError):
-        assert got == [667]
-
-
 def _attacker_share(w):
     """Attacker win share over the paired `SEEDS`, on the record `field_input` builds from the world as it stands."""
     inp = _record(w)
     wins = sum(field_degree(_mb().resolve_field(inp, draw.seeded(draw.H2("test_cp_t04_06_besiege", s)))) == WON for s in SEEDS)
     return wins / len(SEEDS), inp.walls_dr
-
-
-def test_planted_failure_a_siege_that_moved_nothing_leaves_the_storm_at_full_walls(swept, monkeypatch):
-    """MUTATION, on the second half of the falsifier: the posture is ignored, the walls stand, and the storm after it is the
-    storm at full walls -- the same predicate (`after - before >= NOISE`) is false."""
-    before, _ = _attacker_share(_world(3, 1.0))
-    monkeypatch.setattr(wrapper, "MARCH_POSTURE_KEY", "not_posture")
-    w = _world(3, 1.0)
-    _besiege(w, 1)
-    after, dr = _attacker_share(w)
-    assert dr == 3 and not (after - before >= NOISE), (before, after)
 
 
 def test_falsifier_a_storm_after_a_siege_wins_more_often_than_a_storm_at_full_walls(swept):

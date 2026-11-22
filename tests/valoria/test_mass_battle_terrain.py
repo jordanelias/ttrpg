@@ -376,6 +376,24 @@ def _terrain_dice(u):
     return (u.terrain_off_d, u.terrain_def_d)
 
 
+def _terrain_fight(row, seed):
+    """The `_units` pair fought on `row` at `seed`, read through the module attribute so a monkeypatched constant binds."""
+    from modules.mass_battle import massbattle as MB
+    a, b = _units()
+    return MB._run_and_grade(a, b, row, draw.seeded(draw.H2("test_mass_battle_terrain", seed)), SCALE)
+
+
+_OPEN_FLAT_BY_SEED = {}
+
+
+def _open_flat_fight(seed):
+    """The OPEN_FLAT fight per seed is the same in every dice-row case, so it is fought once (a `FieldOutcome` is frozen).
+    OPEN_FLAT reads none of the dice constants a case zeroes, so no case's monkeypatch can reach the cached value."""
+    if seed not in _OPEN_FLAT_BY_SEED:
+        _OPEN_FLAT_BY_SEED[seed] = _terrain_fight(OPEN_FLAT, seed)
+    return _OPEN_FLAT_BY_SEED[seed]
+
+
 @pytest.mark.parametrize('row,attacker,defender', [
     (UPHILL, (-1, 0), (0, 1)),            # A.9: "Defender +1D Def; attacker −1D Off"
     (RIVER_CROSSING, (-1, 0), (0, 0)),    # A.9: "−1D Off", on the crossing side (the attacker)
@@ -417,29 +435,35 @@ def test_a_dice_row_resolves_differently_from_open_flat_and_identically_with_its
     applied) the two are EQUAL on every seed; with canon's dice they DIFFER on at least one, and the
     defender ends with no fewer survivors on average (B17.01: the fights are one-burst and a seed's first contact decides them,
     so a paired seed is no longer monotone in the row; the row's effect is the mean over the seeds, as the control shows). Measured 2026-10-08 (Python 3.11): 0/16 differ before
-    MB-05, 3/16 after, for both rows at these weights; at B05.99, after the one sampler (B05.03), river_crossing first differs at seed 89
-    (58 of 1000) and uphill at seed 1, so the seed range is 256 -- one-off figures, not asserted. RIVER_CROSSING's
-    speed step is inert here (see the test above), so the zeroed arm is equal for it too."""
+    MB-05, 3/16 after, for both rows at these weights. Re-measured 2026-11-22 (Python 3.13): both rows first differ at seed 1
+    (uphill on 138 of 256 seeds, river_crossing on 122), and the defender's summed share leads OPEN_FLAT's by 3086 and 1828
+    (paired z 4.2 and 4.8) at 256 seeds but only z 1.9 and 2.3 at 128, so the seed range stays 256 -- one-off figures, not
+    asserted. The zeroed arm is a structural identity, so it runs on seeds 0-15 and the first seed the row differs on, not on
+    all 256; the OPEN_FLAT fight per seed is fought once for both rows. RIVER_CROSSING's speed step is inert here (see the
+    test above), so the zeroed arm is equal for it too."""
     from modules.mass_battle import massbattle as MB
 
-    def fight(r, seed):
-        a, b = _units()
-        return MB._run_and_grade(a, b, r, draw.seeded(draw.H2("test_mass_battle_terrain", seed)), SCALE)
-
-    checked = differs = 0
+    checked = differs = zeroed_checked = 0
+    first_differs = None
     row_share = flat_share = 0.0
     for seed in range(256):
-        on_row, flat = fight(row, seed), fight(OPEN_FLAT, seed)
+        on_row, flat = _terrain_fight(row, seed), _open_flat_fight(seed)
         row_share += on_row.defender.share
         flat_share += flat.defender.share
         differs += on_row != flat
-        with monkeypatch.context() as m:
-            for name in zeroed:
-                m.setattr(MB, name, 0)
-            assert fight(row, seed) == flat, f"{row} seed {seed}: with its dice zeroed it still differs"
+        if on_row != flat and first_differs is None:
+            first_differs = seed
+        # The zeroed arm is a structural identity, not a mean: the first 16 seeds and the first seed the row moves.
+        if seed < 16 or seed == first_differs:
+            with monkeypatch.context() as m:
+                for name in zeroed:
+                    m.setattr(MB, name, 0)
+                assert _terrain_fight(row, seed) == flat, f"{row} seed {seed}: with its dice zeroed it still differs"
+            zeroed_checked += 1
         checked += 1
     assert checked == 256
     assert differs >= 1, f"{row} resolved identically to OPEN_FLAT on every seed"
+    assert zeroed_checked == 16 + (first_differs >= 16), (zeroed_checked, first_differs)
     assert row_share >= flat_share, f"{row} left the defender FEWER survivors on average: {row_share / 256} vs {flat_share / 256}"
 
 
@@ -447,8 +471,9 @@ def test_resolve_field_carries_the_river_crossing_signal_to_the_engine():
     """MB-05, re-pinned at MB-05r: RIVER_CROSSING at `resolve_field`, now DERIVED from the record's
     `origin`. The provider's own fixture sides (the 2-man Crown army mustered at `set_s_014` against
     the Church at `set_s_036`), fought over T3 (OPEN_FLAT by polygon) marched on from T9, across the
-    Valoris, and with no origin: they differ on at least one of 256 seeds (the first is seed 89 since B05.03), and the defenders never end
-    with fewer survivors on average. (Before MB-05r the same pair was fought over T1 with the old boolean set and
+    Valoris, and with no origin: they differ on at least one of 256 seeds (re-measured 2026-11-22: the first is seed 1, and 115 of 256 differ), and the
+    defenders never end with fewer survivors on average (the summed share leads by 105, paired z 1.2 at 256 seeds; at 64
+    seeds it trails, so the range stays 256). (Before MB-05r the same pair was fought over T1 with the old boolean set and
     unset -- 3 seeds of 16 differed, 2026-10-08; T1's anchor lies on the river, so no origin crosses
     to it, and the field moved to T3, the same OPEN_FLAT row.)"""
     from engine.season.boot.realm import build_realm

@@ -170,24 +170,6 @@ def test_a_retreat_at_a_quarter_is_the_same_primitive_and_a_side_this_thin_has_r
 
 # ----------------------------------------------------------------------------------------------------- planted failures
 
-def test_planted_failure_an_order_not_read_reddens_the_falsifier(monkeypatch):
-    monkeypatch.setattr(_mb(), "_retreat_orders", lambda retreat_at: ())
-    inp = replace(M._record(_world("0.5")), units="side")
-    mutant = _fold(inp, SEEDS)
-    assert not _fewer_losses(mutant, _arm("none")[1])
-    assert _fired_wins(mutant)[0] == 0                              # (and nothing fired: the order is not there)
-    with pytest.raises(AssertionError):
-        assert _fewer_losses(mutant, _arm("none")[1])
-
-
-def test_planted_failure_a_battle_that_does_not_stop_for_a_concession_reddens_the_falsifier(monkeypatch):
-    """The order is read and the retreat fires (its stance is written), but `run_battle` goes on to the end, so the side
-    loses what `none` loses: the stance alone saves nothing."""
-    monkeypatch.setattr(_bl(), "unit_conceded", lambda unit: False)
-    inp = replace(M._record(_world("0.5")), units="side")
-    mutant = _fold(inp, SEEDS)
-    assert not _fewer_losses(mutant, _arm("none")[1])
-
 
 def _fake_unit(share, stance="balanced", routed=False):
     """A unit as `_grade` and `unit_conceded` read it: one subunit, `share` of its size left."""
@@ -206,17 +188,6 @@ def test_grade_a_conceded_attacker_ahead_on_size_is_not_the_winner_and_a_concede
     assert field_degree(g) == WON and g.defender.conceded
     g = mb._grade(_fake_unit(0.8, "retreat"), _fake_unit(0.9, "retreat"), SCALE, 0)   # both gave it up: nobody holds it
     assert field_degree(g) == DRAWN
-
-
-def test_planted_failure_a_grade_blind_to_a_concession_no_longer_reads_the_side_as_out(monkeypatch):
-    """B17.01 took the survivor-share tie-break away, so a grade blind to a concession can no longer hand the retreating side a
-    win. What it still gets wrong is who is out: the retreating attacker reads `Lost` and, blind, reads `Drawn`."""
-    mb = _mb()
-    ahead, behind = _fake_unit(0.8, "retreat"), _fake_unit(0.6)
-    assert field_degree(mb._grade(ahead, behind, SCALE, 0)) == LOST
-    monkeypatch.setattr(mb, "unit_conceded", lambda unit: False)
-    assert field_degree(mb._grade(ahead, behind, SCALE, 0)) == DRAWN           # the grading defect: the concession is not read
-    assert _fired_wins([(mb._grade(ahead, behind, SCALE, 0), True, False)]) == (1, 0)
 
 
 # ---------------------------------------------------------------------------------------- the stop, and no facing flip

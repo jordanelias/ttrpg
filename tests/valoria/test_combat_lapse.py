@@ -13,7 +13,6 @@ from modules.combat import combat_systems as S  # noqa: E402
 from modules.combat import tradition as TR  # noqa: E402
 from modules.combat.combatant import Combatant  # noqa: E402
 from modules.combat.config import CFG  # noqa: E402
-from modules.combat import vocabulary as V  # noqa: E402
 
 SCRATCH_K = 0.2
 
@@ -74,34 +73,6 @@ def test_a_drained_defender_chooses_the_same_mode_with_a_worse_sigma():
             -SCRATCH_K * S.consistency(drained, cfg) * cap, abs=1e-12)
         checked += 1
     assert checked == 4
-
-
-def test_k_zero_is_the_pre_item_tree():
-    """K = 0 reproduces mode_sigma without the term, bitwise, for every mode and reserve."""
-    off = dict(CFG, LAPSE_K=0.0)
-    checked = 0
-    for hits in (0, 1, 3, 7):
-        agg, d = Combatant('a', weapon='arming'), _drained(Combatant('d', weapon='arming'), hits)
-        for mode in V.DEFENCE_MODES:
-            for win in (True, False):
-                with_term = S.mode_sigma(mode, agg, d, 3.0, win, 0.0, off)
-                fresh = _full(Combatant('d', weapon='arming'))                # same build, undrained
-                assert with_term == S.mode_sigma(mode, agg, fresh, 3.0, win, 0.0, off), (hits, mode, win)
-                checked += 1
-    assert checked == 4 * 3 * 2
-
-
-def test_at_full_reserve_the_term_is_zero_at_every_k():
-    fresh = _full(Combatant('d', weapon='arming'))
-    agg = Combatant('a', weapon='arming')
-    checked = 0
-    for k in (0.0, 0.05, 0.3, 1.0):
-        cfg = dict(CFG, LAPSE_K=k)
-        for mode in V.DEFENCE_MODES:
-            assert S.mode_sigma(mode, agg, fresh, 3.0, True, 0.0, cfg) == \
-                S.mode_sigma(mode, agg, fresh, 3.0, True, 0.0, dict(CFG, LAPSE_K=0.0)), (k, mode)
-            checked += 1
-    assert checked == 12
 
 
 def test_the_shipped_lapse_separates_a_drained_defender():

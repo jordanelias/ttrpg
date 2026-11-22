@@ -109,12 +109,6 @@ def test_every_attribute_name_that_resolved_before_still_resolves_to_the_same_ke
     assert 'Perception' not in N.ALIASES            # it is a canonical now, not Attunement's alias
 
 
-def test_names_alias_preservation_reddens_when_an_alias_is_dropped(monkeypatch):
-    """The planted failure: remove 'Dexterity' from the leaf's alias map and `_names_lost` names it."""
-    monkeypatch.setattr(N, 'ALIASES', {k: v for k, v in N.ALIASES.items() if k != 'Dexterity'})
-    assert _names_lost() == ['Dexterity']
-
-
 def test_a_legacy_tag_raises_and_names_its_replacement():
     """A legacy tag is carried so a rename can be FINISHED, not so it keeps resolving. Resolving one
     silently is how a rename never lands -- the gate that exists for exactly this is

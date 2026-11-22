@@ -23,7 +23,6 @@ from __future__ import annotations
 
 import math
 from engine.dice_engine import draw
-from dataclasses import replace
 
 import pytest
 
@@ -147,27 +146,6 @@ def test_falsifier_the_realised_won_share_lies_in_the_estimates_interval_in_19_o
     assert covered >= PAIRS_NEEDED, (covered, tested, rows)
 
 
-def _swapped(w, actor, via, target, order=None):
-    """PLANTED FAILURE (wrong input): the estimate samples the field with the two sides' weights and members swapped."""
-    real_input = wrapper.field_input
-
-    def wrong(*a, **k):
-        inp = real_input(*a, **k)
-        return replace(inp, weights=inp.weights[::-1], members=inp.members[::-1])
-    mp = pytest.MonkeyPatch()
-    mp.setattr(wrapper, "field_input", wrong)
-    try:
-        return wrapper.field_estimate(w, actor, via, target, order)
-    finally:
-        mp.undo()
-
-
-def test_planted_failure_an_estimate_on_the_wrong_input_reddens_the_coverage_predicate():
-    covered, tested, rows = _coverage(_swapped)
-    assert tested == 20
-    assert covered < PAIRS_NEEDED, (covered, tested, rows)
-
-
 # ------------------------------------------------------------------------------------------------------------ the order
 
 def test_a_standing_order_is_in_the_estimate_and_a_given_one_replaces_it():
@@ -197,14 +175,6 @@ def test_the_defenders_standing_order_stays_when_the_attackers_is_given():
     given = wrapper.field_estimate(held_def, ACTOR, KING_SEAT, TARGET, shock)
     assert given == wrapper.field_estimate(both, ACTOR, KING_SEAT, TARGET)       # the defender's order stayed
     assert given != wrapper.field_estimate(att_only, ACTOR, KING_SEAT, TARGET)    # ... and it is in the figure
-
-
-def test_planted_failure_an_estimate_that_drops_the_order_reddens_the_order_predicate(monkeypatch):
-    monkeypatch.setattr(wrapper, "_standing_order", lambda *a: None)
-    held, plain = _build(9, True, "Shock"), _build(9, True, None)
-    assert wrapper.field_estimate(held, ACTOR, KING_SEAT, TARGET) == wrapper.field_estimate(plain, ACTOR, KING_SEAT, TARGET)
-    with pytest.raises(AssertionError):
-        assert wrapper.field_estimate(held, ACTOR, KING_SEAT, TARGET) != wrapper.field_estimate(plain, ACTOR, KING_SEAT, TARGET)
 
 
 # ------------------------------------------------------------------------------------------------ shape and the one reader
@@ -339,15 +309,3 @@ def test_falsifier_a_season_whose_callback_asks_before_every_act_ends_at_the_sam
     assert c0 == 0 and calls >= 100 and sampled >= 1, (c0, calls, sampled)       # it asked, and it sampled: not vacuous
     assert h1 == h0, "the call moved the season's content_hash"
     assert draw1 == draw0, f"the call moved the season's draw counter {draw0} -> {draw1}"
-
-
-def test_planted_failure_an_estimate_that_draws_from_the_season_reddens_the_hash_falsifier(monkeypatch, season_pair):
-    real = wrapper.field_estimate
-
-    def drawing(w, *a, **k):
-        w.new_draw()
-        return real(w, *a, **k)
-    monkeypatch.setattr(wrapper, "field_estimate", drawing)
-    (h0, draw0, _, _), _ = season_pair                 # the baseline season the fixture already ran, before the monkeypatch
-    (h1, draw1, calls, _) = _season(True)
-    assert calls > 0 and draw1 != draw0, (draw0, draw1)

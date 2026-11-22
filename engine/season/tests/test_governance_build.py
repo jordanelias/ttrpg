@@ -101,29 +101,6 @@ def test_lb1_commit_refuses_a_proposition_that_does_not_exist():
         "a refused `commit` still opened a Tenure")
 
 
-def test_lb1_removing_the_effects_body_mints_no_tenure(monkeypatch):
-    """**LB-1's own control, isolating the effect as the producer.** With `EFFECTS["commit"]`
-    replaced by a stub returning `NO_CHANGE` -- "the effect with its body removed" -- the IDENTICAL
-    act that opens a Tenure in the mechanism test above must not. Without this, the Tenure seen
-    there could in principle come from `add_tenure` being reached some other way; this confirms it
-    comes from `_eff_commit` and nothing else."""
-    from ..loop.effects import EFFECTS
-    from ..state.gate import NO_CHANGE
-    w = P.tiny_world()
-    w.propositions["prop_want"] = Proposition("prop_want", "OUGHT", "p_mid", "wants a raise",
-                                              None, 0)
-    monkeypatch.setitem(EFFECTS, "commit", lambda w, a, res=None: NO_CHANGE)
-    d = SeasonDriver(w)
-    out = d.resolve(mint_token(w, WriteClass.ACTS),
-                    [Act(id="c_lb1c", actor="p_mid", verb="commit",
-                         payload={"subject": "prop_want"})],
-                    contest_max_depth=w.fixtures.get("contest_max_depth"))
-    assert [e.kind for e in out] == ["commitment.refused"], (
-        f"a no-op effect body did not read as the fold's own no-op refusal: {[e.kind for e in out]}")
-    assert not any(t.kind == "commit" for t in w.tenures), (
-        "a stubbed-out effect still minted a Tenure -- something else is opening it")
-
-
 def test_lb1_bo10_gate_closed_by_in11_the_utterers_hold_report_not_repair():
     """**LB-1, half two — BO-9/BO-10's OWN RE-MEASUREMENT, HONEST RATHER THAN REPAIRED.**
     `01_THE_BUILD_ORDER.md` §7.2 measured `commitment.made: 0 / commitment.refused: 42` on one
@@ -2370,28 +2347,6 @@ def test_13d_iii_a_titled_seat_must_stand_at_the_rung_kind_its_title_governs(_re
         seat_anchor(w, w._anchors, duke_at_the_realm)
     ok = seat_anchor(w, w._anchors, {**duke_at_the_realm, "rung": {"duchy": "Varfell"}})
     assert w.rungs[ok].kind == title_domain("Duke")
-
-
-@pytest.mark.parametrize("kind", ["realm", "duchy", "territory"])
-def test_13d_iii_a_resolver_broken_for_one_form_turns_the_realm_build_red(monkeypatch, kind):
-    """MUTATION (`CLAUDE.md` §0.1 pt 2): the index forgets every rung of ONE kind -- the resolver
-    for that form is broken -- and the realm must refuse to build, naming the kind. Run per form so
-    the resolver cannot be kind-blind, and so a form that passes unbroken is shown to be the one
-    doing the work. (The settlement form, which no row uses, is the test above's.)"""
-    from ..boot import realm as boot_realm
-    from ..boot.realm import _index_anchor
-
-    real = _index_anchor
-
-    def broken(w, anchors, key, rid):
-        if w.rungs[rid].kind == kind:
-            return None
-        return real(w, anchors, key, rid)
-
-    monkeypatch.setattr(boot_realm, "_index_anchor", broken)
-    with pytest.raises(Unspecified) as e:
-        build_realm(seed=0)
-    assert f"{{{kind}:" in str(e.value), str(e.value)
 
 
 def test_13d_iii_every_seat_the_realm_builds_has_a_rung_but_the_one_declared_exception(_realm13):

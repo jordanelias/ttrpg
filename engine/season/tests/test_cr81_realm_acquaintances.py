@@ -39,7 +39,6 @@ import pytest
 from ..data.rosters import OFFICES_SEATS
 from ..decision import assemble
 from ..decision.options import opening_set
-from ..boot import realm as boot_realm
 from ..boot.realm import _first_holder
 from ..boot.realm import build_realm
 from ..queries import world_q
@@ -144,14 +143,3 @@ def test_control_the_step_off_is_the_parent_realm_and_no_base_claim_is_pushed_ou
                     assert c.holder == pid and c.predicate == KNOWN_PERSON_CLAIM["predicate"] and c.value
             persons += 1
     assert persons == 3 * 83
-
-
-def test_planted_failure_the_step_a_no_op_reproduces_the_base_and_reddens_the_exit(monkeypatch):
-    """PLANTED FAILURE: with `seed_acquaintances` writing nothing, 83 of 83 know no one again and the
-    exit's own assertion goes red."""
-    monkeypatch.setattr(boot_realm, "seed_acquaintances", lambda w, pairs: [])
-    w = build_realm(0)
-    assert _know_none(w) == 83
-    assert w.content_hash() == build_realm(0, acquaintances=False).content_hash()
-    with pytest.raises(AssertionError):
-        _assert_acquainted(w)

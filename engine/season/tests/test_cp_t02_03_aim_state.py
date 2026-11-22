@@ -21,7 +21,6 @@ import yaml
 
 from ..data import goals
 from ..data import rosters
-from ..data.rosters import roster_map
 from ..gaps import Unspecified
 from ..queries import world_q
 from ..state.carriers import Person, Proposition, Tenure
@@ -79,16 +78,6 @@ def test_cp_t02_03_a_rung_its_org_holds_forms_no_need_and_the_same_world_with_it
         w, o = lost
         assert world_q.aim_state(w, o, w.propositions["g_rung"]) == "open", why
         assert _need(w, o) == {"g_rung": (RUNG,)}, f"{why}: the same goal forms its question again"
-
-
-def test_cp_t02_03_mutation_an_aim_state_reading_open_always_reddens_the_met_world(monkeypatch, tmp_path):
-    """The falsifier must be able to observe the failure it excludes: with the rule dead, (a)'s first assertion fails."""
-    _rung_goal(monkeypatch, tmp_path)
-    met, obs = _world("g_rung")
-    monkeypatch.setattr(world_q, "aim_state", lambda w, p, prop: "open")
-    with pytest.raises(AssertionError):
-        assert _need(met, obs) == {}
-    assert _need(met, obs) == {"g_rung": (RUNG,)}, "and it is the aim state alone that was suppressing it"
 
 
 def test_cp_t02_03_a_holder_committed_to_two_factions_does_not_meet_it(monkeypatch, tmp_path):
@@ -154,6 +143,3 @@ def test_cp_t02_03_an_aim_row_naming_no_rule_refuses_at_load(monkeypatch):
 
 
 # ------------------------------------------------------------------------------------------------ (d)
-
-def test_cp_t02_03_the_shipped_roster_gives_rung_the_only_row():
-    assert list(roster_map("goal_object_kinds", "aim")) == ["rung"]

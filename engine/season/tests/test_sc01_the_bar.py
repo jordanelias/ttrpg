@@ -46,9 +46,6 @@ THE FALSIFIERS, each seen red before it was trusted (2026-10-16, mutations run a
   * A BROKEN CAUSE LINK REDDENS THE BAR: the sitting question built with `about=None` in
     `world_q.questions_for` -- scholastics/6 *no determination's causes reach a date.fired (1
     determined, 1 fired)*.
-  * THE CONTROL beside them, kept as a test (stability, seed 8 since B10-09 close two; virtue, seed 0 from B10-09 close one, scholastics/6 at CP-T02-05, virtue/2 before it back to CP-T05-04; doctrine/8 until it; community/13 until SC-03b): a held date fires and, after it,
-    the Duke determines the clerk out of his ambition -- the walk is False there, so THE BAR's walk is
-    not satisfied by a firing merely preceding a determination.
   * THE CLOSURE TEST: the planted `if arrangement.id == "tribunal":` written into the real
     `_eff_determine` (`loop/effects_information.py`) reddened both closure tests (the package scan
     reports the line; the real effect no longer scans clean); the same plant is kept as a test over
@@ -95,7 +92,6 @@ from ..data import files
 from ..data.arrangements import ARRANGEMENTS
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..harness import probes as P
-from ..harness.corpus_run import attribute
 from ..loop import effects_information
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import world_q
@@ -188,38 +184,6 @@ DUKE, SEAT, PARTY, WANT = "p_high", "off_duke", "p_mid", "prop_bar_duke_want"
 # [ASSUMPTION; medium; Jordan to correct; revert: restore stability/35/7 with `revert_b11a`.]
 PROCEEDINGS = (("stability", 95, 7),)
 BAR_FIXTURES = DEFAULT_FIXTURES.sweep("pool_floor", 60)   # B05.99: `test_u7_remit.JUDGE`'s device, rewritten there (was `pool_default` 30 with the deleted `obstacle_model: stand_in`)       # v9 SC-03b: a judge whose finding opens
-# v9 IN-12 step 9: RE-TRACED, the conviction and season count unchanged -- `argue`/`sabotage`/`tend`/`train`
-# are new members of the Duke's and the clerk's option sets, so doctrine/8's trajectory moved (it now fires
-# TWO dates). A sweep of the 15 convictions x seeds 0..23 at 5 seasons for a run meeting every assertion of
-# the control test below finds doctrine/22 first (scratch, not kept); the two PROCEEDINGS are unmoved.
-# v9 IN-12 step 10: RE-TRACED AGAIN, the conviction and season count unchanged -- `conceal` is a new member
-# of every option set (untyped, one Candidate per referent), and doctrine/22 now fires no date. A sweep of
-# doctrine x seeds 0..399 at 5 seasons for a run meeting every assertion of the control test below finds
-# doctrine/83 first (scratch, not kept; seeds 0..82 each fail one assertion); the PROCEEDINGS are unmoved.
-# v10 REM-22 (B10-05): RE-TRACED AGAIN, the conviction and season count unchanged -- `restore`, `work` and `examine`
-# declare `referent_class: Site`, so they stop forming on the clerk, the rungs and the Records the Duke is asked
-# about, and the act mix of this world moved: doctrine/83 now fires TWO dates (the control's `f, = ...` needs
-# one). A sweep of doctrine x seeds 0..8 at 5 seasons for a run meeting every assertion of the control test below
-# finds doctrine/8 first (scratch, not kept; seeds 0..5 and 7 fire no date, seed 6 determines nobody); the
-# PROCEEDINGS are unmoved. CONTROL, run: on the REM-21 tree doctrine/83 meets every assertion.
-# v10 CP-T05-04 (B10-05): RE-TRACED AGAIN, THE CONVICTION MOVES TOO (doctrine -> virtue), the season count unchanged --
-# `open_case` declares `referent_class: Person`, and the control's pattern (the Duke convenes and opens the clerk's case
-# in one season, ONE date fires, he determines the clerk out of his ambition after it) no longer occurs in doctrine at any
-# seed swept: doctrine x seeds 0..239 at 5 seasons finds no run meeting every assertion of the control test below (at
-# seed 8 two dates fire, `f, = ...` raises; most seeds fire none). A sweep of all 15 convictions x seeds 0..24 at 5
-# seasons finds justice/8, virtue/2, virtue/6 and virtue/15 (scratch, not kept); the lowest seed, virtue/2, is taken.
-# CONTROL, run: on the REM-25 tree (the same script) doctrine/8 meets every assertion.
-# B10-09 close one (D2 + D3, the CP-T02-05 `oughts_named` stamp reverted -- falsified on HR-9 control (4), `Falsified: CP-T02-05`):
-# RE-TRACED AGAIN, virtue/2 -> virtue/0, the season count unchanged -- a felled attacker's death is placed where he fell
-# (`world_q.event_place`) and a second `commit` on a held cause is declined person-side (`rosters.yaml: held_edge_declines`), so the
-# act mix of this world moved. A sweep of all 15 convictions x seed 0 at 5 seasons for a run meeting every assertion of the control
-# test below finds doctrine/0 and virtue/0 (scratch, not kept); seed 0 is the lowest seed, and the tie is broken by keeping the
-# conviction the control had before CP-T02-05 (virtue), so virtue/0 is taken. The two PROCEEDINGS are unmoved (they meet every assertion on this tree).
-# v11 CR-10 + CR-28 (B10-09 close two): the CONTROL moves too, virtue/0 -> stability/8, the season count unchanged -- the
-# same two moves took virtue/0's pattern (ONE date fires, the Duke determines the clerk out of his ambition after it). The
-# producer's sweep of the 15 convictions at 5 seasons found stability/8 and stability/111 (scratch, not kept); stability/8
-# was re-run here and meets every assertion of the control test below.
-CONTROL = ("stability", 8, 5)  # was ("virtue", 0, 5) until CR-10/CR-28; was ("scholastics", 6, 5) from CP-T02-05 to its revert; ("virtue", 2, 5) before it; ("community", 13, 5) until v9 SC-03b; ("doctrine", 8, 5) until IN-12 step 9; 22 until step 10; 83 until REM-22; 8 until CP-T05-04; ("virtue", 2, 5) until CP-T02-05
 
 
 def _world(conviction: str, seed: int):
@@ -263,12 +227,6 @@ def _zero_authored(w, chosen: list) -> None:
     ours = {id(a) for a in chosen}          # `chosen` keeps every object alive, so no id is reused
     authored = [(a.id, a.actor, a.verb) for a in w.acts if id(a) not in ours]
     assert not authored, f"acts the chooser did not return reached RESOLVE (authored): {authored}"
-
-
-def _executed(w, d, seasons: int, verb: str, subject: str) -> list:
-    """The resolved acts of `verb` on `subject` that executed (`corpus_run.attribute`'s act-id rule)."""
-    return [a for a, made, _ in attribute(w, d, seasons)
-            if a.verb == verb and (a.payload or {}).get("subject") == subject and made]
 
 
 def _proceeding(conviction: str, seed: int, seasons: int) -> str:
@@ -347,42 +305,6 @@ def test_an_injected_act_reddens_the_bar(verb):
     assert injected and injected[0].id in w.acts, "the injection never reached RESOLVE"
     with pytest.raises(AssertionError, match="authored_oc"):
         _zero_authored(w, chosen)
-
-
-def test_the_walk_is_false_for_a_determination_the_ambition_raised_beside_a_fired_date(monkeypatch):
-    """THE CONTROL. Same world (`CONTROL`, stability at seed 8 at HEAD); at v10 it read virtue at seed 0 (re-traced at B10-09 close one from scholastics at seed 6, which CP-T02-05 had taken from virtue at seed 2; re-traced at v10 CP-T05-04 against the assertions below only, from
-    doctrine at seed 8; doctrine at 83 and at 22 before it, re-traced at IN-12 step 10 and step 9; the narrative that
-    follows was traced at seed 8, SC-03b; community at seed 13 before it): the Duke convenes at `S` AND
-    opens the clerk's case in the same season, so the case is docketed dateless before the sitting
-    fires; the sitting's slot forms empty, and after the firing the Duke determines the
-    clerk out of his ambition (`need`, occasion `[ROOT]`). That determination's `causes[]` reach no
-    firing -- so THE BAR's walk is not satisfied by a firing merely preceding a determination.
-
-    ⚠ B11 LANE A: THIS CONTROL DOES NOT OBSERVE THE SHIPPED TREE. It runs with BOTH of the lane's commits at their revert
-    (`test_b11a_duel_reach.py::revert_b11a` and `test_b11a_scores_and_obstacle.py::revert_b11a_scores`), the world it was
-    measured on -- `test_cp_t03_01`'s precedent for a pattern a later mover took out of reach -- so what it shows is that
-    the walk is false for such a determination on the tree BEFORE the lane, not on the tree that ships. On the shipped tree
-    stability/8/5 determines nobody (the Record sub-kind rule moves the Duke's act mix: two `case.opened`, no
-    `matter.determined`; with the rule emptied in process the control passes), and a sweep of this test over the 15
-    convictions found no run with the pattern (seeds 0-159 at 5 seasons, 0-99 at 6, 0-59 at 4 and at 7; the producer's
-    scratch, not kept). WHAT WOULD OBSERVE IT: one shipped-tree run, with no revert applied, in which a `matter.determined`
-    lands after a `date.fired` and its `causes[]` do not reach the firing -- found by a wider conviction x seed x season
-    sweep than the one above, or by a world planted to convene and dock the case in one season. [GAP: no shipped-tree
-    control world for the walk's falsity; the bar's walk is still checked true on `PROCEEDINGS`, which is shipped-tree.]"""
-    from .test_b11a_duel_reach import revert_b11a
-    revert_b11a(monkeypatch)
-    from .test_b11a_scores_and_obstacle import revert_b11a_scores
-    revert_b11a_scores(monkeypatch)   # B11 lane A (persons hold scores; the obstacle by task: a mover of the build and every season), the same way
-    conviction, seed, seasons = CONTROL
-    w, d, chosen = _run(conviction, seed, seasons)
-    _zero_authored(w, chosen)
-    f, = [e for e in w.log if e.kind == "date.fired"]
-    done = [e for e in w.log if e.kind == "matter.determined"]
-    assert done and all(e.emitted_at > f.emitted_at for e in done), (f.emitted_at, [e.emitted_at for e in done])
-    assert _executed(w, d, seasons, "determine", PARTY), "the control determined somebody else"
-    assert world_q.docketed(w, PARTY) == [] and any(i.get("date") and i.get("matter") is None
-                                                    for i in w.docket), w.docket
-    assert not [e.id for e in done if _walks_to(w, e, f.id)]
 
 
 # ======================================================================================

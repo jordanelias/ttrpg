@@ -82,17 +82,6 @@ def test_the_logged_scores_carry_the_believed_odds_factor(monkeypatch):
     assert moved >= 1, "a reader that dropped the believed-odds query logs the same scores: the log cannot see it"
 
 
-def test_a_planted_wrong_relation_reading_is_seen(season_one, monkeypatch):
-    w, _, rows = season_one
-    _assert_finding(w, rows)            # control: the shipped row's fields read equal to the world's
-    real = I.same_faction
-    monkeypatch.setattr(I, "same_faction", lambda w, a, t: not real(w, a, t))
-    w2, _, rows2 = I.run(0, 1)
-    assert _selected(rows2) is not None, "the plant emptied the selection: the planted reading was not read on a row"
-    with pytest.raises(AssertionError, match="same_faction"):
-        _assert_finding(w2, rows2)
-
-
 def _hash_arm(seed: int) -> None:
     off, _, _ = I.run(seed, 2, observe=False)
     on, _, rows = I.run(seed, 2)

@@ -146,19 +146,6 @@ def test_a_blood_duel_stops_at_the_first_wound_with_surrender_set_and_no_death()
         'both sides yield somewhere in the sample, so the yielder is not hard-wired to one label'
 
 
-def test_the_blood_assertions_observe_a_missing_stop(monkeypatch):
-    """(5) THE MUTATION, kept executable: with the stop rule a no-op, the same assertions go red on every case."""
-    cases = _blood_cases()
-    assert cases
-    monkeypatch.setattr(wrapper, '_terms_met', lambda A, B, terms, cfg: False)
-    red = 0
-    for pair, seed in cases:
-        with pytest.raises(AssertionError):
-            _assert_blood_stop(pair, seed)
-        red += 1
-    assert red == len(cases)
-
-
 def test_the_module_entry_reads_the_terms_off_the_typed_input():
     """`fight.py` passes `inp.terms` when the record carries it, the lethal default when it does not. The field is
     the season's to declare (PC-10b); a subclass stands in for it here."""

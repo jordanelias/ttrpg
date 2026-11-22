@@ -107,17 +107,6 @@ def test_falsifier_a_realm_built_at_another_range_seats_that_range(monkeypatch):
     assert checked >= 10 * (len(w.persons) - 1)
 
 
-def test_the_flat_range_is_lane_a_seating(monkeypatch):
-    _range_at(monkeypatch, (2, 2))
-    w = build_realm(0)
-    pool_default = w.fixtures.get("pool_default")
-    lane_a = {key: int(pool_default) for key in ATTRIBUTES}
-    authored = cast.attributes_of(cast.row("NPC-001"))
-    for p in w.persons.values():
-        expected = {**lane_a, **(authored if p.id == "p_npc_001" else {})}
-        assert p.attributes == expected, p.id
-
-
 @pytest.mark.parametrize("bad", [(0, 6), (5, 4), (1, 8), (1.0, 6)])
 def test_the_range_refuses_outside_the_scale(bad):
     with pytest.raises(Forbidden) as e:

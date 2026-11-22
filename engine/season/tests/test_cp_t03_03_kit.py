@@ -200,19 +200,6 @@ def test_kit_of_falls_back_per_field_the_holdings_armour_and_the_residences_weap
     assert world_q.kit_of(w, ACTOR) == (blade, "heavy")
 
 
-def test_mutation_a_per_person_fallback_loses_the_residences_weapon(armed, monkeypatch):
-    """The rule this item replaced, executed: the residence read ONLY by a man who holds nothing. The holder then
-    fights with the default weapon, and the per-field predicate above goes red."""
-    def per_person(w, pid):
-        p = w.persons[pid]
-        rungs = world_q.holdings_of(w, pid) or tuple(r for r in (world_q.lives_in(p),) if r in w.rungs)
-        kit = {**combat_kit.DEFAULTS, **world_q._top_arms(w, rungs)}
-        return kit["weapon"], kit["armor"]
-    w = _armour_holder_at_an_armoury()
-    blade = world_q.ARMS_KINDS["t_blade"][1]
-    assert per_person(w, ACTOR) == (combat_kit.DEFAULTS["weapon"], "heavy") != (blade, "heavy")
-
-
 def test_kit_of_writes_no_store(armed):
     w = _world()
     before = {rid: dict(r.stores or {}) for rid, r in w.rungs.items()}
@@ -284,16 +271,6 @@ def test_a_record_built_without_kits_is_fought_at_the_engines_default():
         a = entry.fn(plain, draw.seeded(draw.H2("test_cp_t03_03_kit", seed)))
         b = entry.fn(default, draw.seeded(draw.H2("test_cp_t03_03_kit", seed)))
         assert a == b
-
-
-def test_mutation_reading_the_actors_kit_for_both_parties_loses_the_asymmetry(armed, monkeypatch):
-    """Run in the test: the SAME predicate that passes on the shipped seam FAILS when `combat_input` asks the actor's kit
-    of both parties. A predicate that survives the mutant observes nothing."""
-    w = _world()
-    assert _asymmetry_holds(w)                                         # the shipped seam
-    monkeypatch.setattr(combat, "kit_of", lambda world, pid: world_q.kit_of(world, ACTOR))
-    with pytest.raises(AssertionError):
-        _asymmetry_holds(_world())
 
 
 # ---------------------------------------------------------------------------------------------------------------

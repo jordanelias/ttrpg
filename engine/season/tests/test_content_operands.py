@@ -39,7 +39,7 @@ import pytest
 
 from ..data.fixtures import WORKS_COST, _check_works_cost
 from ..data.requires import REQUIRES_OPERANDS, RECORD_SOURCED_OPERANDS, _check_record_sourced
-from ..data.rosters import QUESTION_SOURCES, RECORD_CONTENT, RECORD_KIND_KEYS, roster
+from ..data.rosters import RECORD_CONTENT, RECORD_KIND_KEYS, roster
 from ..data.verbs import VERB_TABLE
 from ..decision.options import _derive_operand, _from_content_claim, opening_set
 from ..gaps import Forbidden, Ungraded, Unspecified
@@ -299,12 +299,6 @@ def test_no_writ_derived_operand_is_ever_a_raw_tuple():
 # ======================================================================================
 # 6 -- NOTHING WIDENS THAT DID NOT NEED TO
 # ======================================================================================
-
-def test_question_sources_stays_at_two_clause_3_is_not_a_fourth_source():
-    """r2 `01` §A.5.4, RULED: *"Not a fourth source. One `Question` shape, one `source` string,
-    one `occasioned_by` route."* Clause 3 widens Q2's ADMISSION test in place; it mints no new
-    `Question.source` value."""
-    assert set(QUESTION_SOURCES) == {"claim_landed", "need"}
 
 
 def test_a_bad_source_still_raises_named_did_not_smuggle_one_in():

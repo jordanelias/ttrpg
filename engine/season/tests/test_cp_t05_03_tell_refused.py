@@ -21,14 +21,12 @@ from __future__ import annotations
 
 import dataclasses
 
-from ..data import verbs as _verbs
 from ..data.verbs import DEED_KINDS, KIND_VERB, REFUSAL_KINDS, VERB_TABLE
 from ..harness import probes as P
 from ..harness.play_surface import dispatching_chooser
 from ..loop.driver import SeasonDriver
 from ..manifest import MODULE_ENTRIES
 from ..queries import person_q as PQ
-from ..queries import world_q
 from ..queries.inputs import Margin
 from ..queries.person_q import said_of
 from ..state.carriers import Act, Claim, Scene
@@ -36,22 +34,6 @@ from ..state.ids import H
 
 TELLER, SUBJECT = "p_low", "Hh"
 PRESENT, ABSENT = "p_mid", "p_king"          # `p_mid` stands in `Hh` with the teller; `p_king` in `R`
-
-
-def revert_cp_t05_03(monkeypatch):
-    """The split OFF, in process: `tell`'s every refusal is `news.untold` again (the one kind both the refusal and
-    the lost telling shared), so a lost telling is a refusal and is not realised. Other tests that pin a pre-item
-    trajectory call it."""
-    row = VERB_TABLE["tell"]
-    monkeypatch.setitem(VERB_TABLE, "tell", dataclasses.replace(
-        row, emits_on_refusal=("news.untold",),
-        refusals_by_clause={k: ("news.untold",) for k in row.refusals_by_clause}))
-    # the two sets derived from the table at import (`is_deed` reads them), and `world_q`'s by-value import of one
-    refusal = (REFUSAL_KINDS - {"tell.refused"}) | {"news.untold"}
-    deeds = DEED_KINDS - {"news.untold"}
-    monkeypatch.setattr(_verbs, "REFUSAL_KINDS", refusal)
-    monkeypatch.setattr(_verbs, "DEED_KINDS", deeds)
-    monkeypatch.setattr(world_q, "DEED_KINDS", deeds)
 
 
 def _season(monkeypatch, hearer, degree_net):
@@ -83,12 +65,6 @@ def _season(monkeypatch, hearer, degree_net):
 def test_a_lost_telling_is_not_formed_again_in_the_season(monkeypatch):
     w, evs = _season(monkeypatch, PRESENT, 0)
     assert [(e.kind, e.degree) for e in evs] == [("news.untold", "Failure")], [(e.kind, e.degree) for e in evs]
-
-
-def test_the_control_with_the_split_off_the_lost_telling_is_retried_each_round(monkeypatch):
-    revert_cp_t05_03(monkeypatch)
-    w, evs = _season(monkeypatch, PRESENT, 0)
-    assert len(evs) >= 2 and {e.kind for e in evs} == {"news.untold"}, [(e.kind, e.degree) for e in evs]
 
 
 def test_a_refused_telling_to_an_absent_hearer_is_refused_and_re_forms_next_round(monkeypatch):

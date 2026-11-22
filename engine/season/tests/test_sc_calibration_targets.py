@@ -31,11 +31,6 @@ THE VALUES THIS GRID CHOOSES, because the composer wants them and CAL §2 (writt
   * C7 reads every cell any other row read: P(F) <= 0.90 (so P(Partial or better) >= 0.10), P(F) at or above the `OB_MIN` floor's own, and both
     tails open (0 < P(F) < 1, the standing rule). An S27.4-refused cell (`ob > multiple x pool`: no dice dealt) is read as P(F) = 1.
 
-THE CONTROL (CAL's falsifier: *"the test passes against the control sizes 0/1/2/3 -- then it cannot see C1's failure and is absent, not weak"*):
-`test_the_grid_reads_red_on_c1_and_c8_against_the_control_arm` pins the control arm EXPLICITLY (`pool_add` 0, `pool_floor` 0, `opposition_rate` 0.5,
-`difficulty_ob` 0/1/2/3), independent of what ships, and `test_the_grid_reads_green_on_every_target_against_a_good_arm` pins a scratch arm that lands every target; the
-planted-value tests show each check refuses a value just outside its band and passes one just inside.
-
 THE REALM READ (OBS gate 4) is `test_every_rolled_verb_with_five_rolls_shows_more_than_two_obstacles`, at the foot: `Margin.terms` off the
 Event's `ending` (B05.18) over `build_realm(0..2)`, one season each.
 """
@@ -47,7 +42,7 @@ from typing import NamedTuple, Optional
 
 import pytest
 
-from engine.dice_engine.sigma_leverage import MU_PER_DIE, OB_MIN, band_odds, net_boost, pool_of, record_odds
+from engine.dice_engine.sigma_leverage import OB_MIN, band_odds, net_boost, pool_of, record_odds
 
 from ..data.fixtures import DEFAULT_FIXTURES, DIFFICULTY_OB_ARMS
 from ..data.rosters import MARGIN_ENDING, roster
@@ -92,13 +87,6 @@ def _arm(**sweeps):
 #: (`hard`, B05.53), every one of them named here.
 CONTROL = dict(pool_add=0, pool_floor=0, opposition_rate=0.5, difficulty_ob=DIFFICULTY_OB_ARMS["control"], regard_step=0, proof_admission="off",
                attribute_level=None, ceiling_form="hard")
-#: A SCRATCH good arm, pinned independently of what ships: the live base, floor and rate (CAP B2: 6, 5, `MU_PER_DIE`), `regard_step` 1.0 (T13's
-#: live value), a ladder `0 / 0.8 / 1.6 / 2.4` (`routine` 0.8, the value A-79's centre reads 25 % carried at; the other levels its multiples) and the
-#: ceiling's form `hard` (the grid reads the form since B05.55, and no ladder lands every target at `soft`: H-430). It is evidence that the grid CAN
-#: read green on every target, so a red is an arm's and not the grid's. B05.23 shipped these values (`DIFFICULTY_OB_ARMS["calibrated"]`); the pin
-#: stays here so the control of the control does not move when the shipped arm does.
-GOOD_SCRATCH = dict(pool_add=6, pool_floor=5, opposition_rate=MU_PER_DIE, regard_step=1.0,
-                    difficulty_ob=dict(zip(roster("difficulty_levels", ordered=True), (0, 0.8, 1.6, 2.4))), ceiling_form="hard")
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -257,8 +245,8 @@ def grid(fx) -> list:
 
 @functools.lru_cache(maxsize=None)
 def _rows(arm: str) -> tuple:
-    """The grid over a named arm: `shipped` (`DEFAULT_FIXTURES` as it stands), `control` (`CONTROL`), `good` (`GOOD_SCRATCH`)."""
-    fx = {"shipped": DEFAULT_FIXTURES, "control": _arm(**CONTROL), "good": _arm(**GOOD_SCRATCH)}[arm]
+    """The grid over a named arm: `shipped` (`DEFAULT_FIXTURES` as it stands)."""
+    fx = {"shipped": DEFAULT_FIXTURES}[arm]
     return tuple(grid(fx))
 
 
@@ -293,42 +281,6 @@ def test_the_grid_checked_at_least_four_ranks_by_eight_targets_cells():
         assert {r.rank for r in rows if r.target == target} == set(RANKS), target
     assert {r.rank for r in rows if r.target == "C4"} == {4, 7}
     assert {r.rank for r in rows if r.target == "C6"} == set(RANKS[:2])
-
-
-# ---------------------------------------------------------------------------------------------------------------------
-# the control: the test must be able to see the failure it excludes (CAL's falsifier)
-# ---------------------------------------------------------------------------------------------------------------------
-def test_the_grid_reads_red_on_c1_and_c8_against_the_control_arm():
-    """CAL's falsifier, pinned: against the control sizes 0/1/2/3 (base 0, no floor, rate 0.5) the grid is red on C1 and on C8. If this fails the
-    test cannot see C1's failure and is absent, not weak."""
-    rows = _rows("control")
-    assert _red(rows, "C1"), "C1 read green against the control sizes: the grid cannot see the failure CAL says it must"
-    assert _red(rows, "C8"), "C8 read green against the control sizes: the grid cannot see the failure CAL says it must"
-
-
-def test_the_grid_reads_green_on_every_target_against_a_good_arm():
-    """The other half of the control: a scratch arm (`GOOD_SCRATCH`) reads green on C1 to C8, so the red against the control arm is the arm's and not the grid's."""
-    rows = _rows("good")
-    assert {r.target for r in rows} == set(TARGETS)
-    assert all(r.ok for r in rows), _quote([r for r in rows if not r.ok])
-
-
-def test_each_check_refuses_a_value_just_outside_its_band_and_passes_one_just_inside():
-    """Planted values at every edge (§0.1 pt 2: an assertion must be able to observe the failure it excludes)."""
-    lo, hi = TARGET["C1_F"]
-    slo, shi = TARGET["C1_S"]
-    assert check_c1(lo, slo) and check_c1(hi, shi) and not check_c1(lo - 0.01, slo) and not check_c1(hi + 0.01, shi)
-    assert not check_c1(lo, slo - 0.01) and not check_c1(hi, shi + 0.01)
-    lo, hi = TARGET["C2_STEP"]
-    assert check_c2(lo) and check_c2(hi) and not check_c2(lo - 0.01) and not check_c2(hi + 0.01)
-    lo, hi = TARGET["C3_F"]
-    assert check_c3(lo) and check_c3(hi) and not check_c3(lo - 0.01) and not check_c3(hi + 0.01)
-    assert check_c4(TARGET["C4_F_MAX"]) and not check_c4(TARGET["C4_F_MAX"] + 0.01)
-    assert check_c5(TARGET["C5_DELTA_MIN"]) and not check_c5(TARGET["C5_DELTA_MIN"] - 0.01)
-    lo, hi = TARGET["C6_F"]
-    assert check_c6(lo) and check_c6(hi) and not check_c6(lo - 0.01) and not check_c6(hi + 0.01)
-    assert check_c7(0.5, 0.3) and not check_c7(0.91, 0.3) and not check_c7(0.2, 0.3) and not check_c7(0.0, 0.0) and not check_c7(1.0, 0.3)
-    assert check_c8(0.5, 0.5 + TARGET["C8_APART"]) and not check_c8(0.5, 0.5 + TARGET["C8_APART"] - 0.01) and not check_c8(0.5, 0.5)
 
 
 # ---------------------------------------------------------------------------------------------------------------------

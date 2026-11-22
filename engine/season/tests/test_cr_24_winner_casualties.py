@@ -49,18 +49,15 @@ def _mb():
     return importlib.import_module("modules.mass_battle.massbattle")
 
 
-def _fold(arm="engine", *, model=None, units="person", spy=None):
+def _fold(arm="engine", *, model=None, units="person"):
     """Fold the one march. Returns `(world, events, bodies before, stance before, the module's per-person record)`: each
-    person's `(his part's share, routed)` on the body scale, read off the `FieldOutcome` `_grade` returns (`spy`, when given, is
-    applied to the outcome first, and the record is read off what it returns)."""
+    person's `(his part's share, routed)` on the body scale, read off the `FieldOutcome` `_grade` returns."""
     mb = _mb()
     real = mb._grade
     seen = {}
 
     def tap(*args, **kwargs):
         out = real(*args, **kwargs)
-        if spy is not None:
-            out = spy(out)
         for side in (out.attacker, out.defender):
             seen.update({part.id: (part.share, part.routed) for part in side.parts})
         return out
@@ -114,23 +111,6 @@ def test_falsifier_each_winning_claimant_falls_by_his_own_ratio_and_earns_no_sta
     defenders = [pid for pid in record if pid not in MARCHERS]
     assert defenders and all(list(w.persons[pid].stance or []) != stance[pid] for pid in defenders), (
         "control: the losing side's stance rows are still written")
-
-
-def test_planted_failure_winners_written_at_the_losers_ratio_reddens_the_falsifier():
-    """MUTATION: every attacking claimant's ratio is the LOSING side's (the defenders' survivor share). The falsifier's
-    check, against the unmutated record, must then fail -- were it to pass, the test could not observe the failure."""
-    _w0, _e0, before0, _s0, record0 = _fold("engine")
-
-    def loser_ratio(out):
-        import dataclasses
-        from engine.season.queries.inputs import PartOutcome
-        parts = tuple(PartOutcome(p.id, out.defender.share, p.routed) for p in out.attacker.parts)
-        return dataclasses.replace(out, attacker=dataclasses.replace(out.attacker, parts=parts))
-
-    w, _events, _before, _stance, _rec = _fold("engine", spy=loser_ratio)
-    assert w.persons[MARCHERS[0]].body < before0[MARCHERS[0]], "the mutant wrote nobody (the loser's ratio is below 1)"
-    with pytest.raises(AssertionError):
-        _check_winners_by_own_ratio(w, before0, record0)
 
 
 def test_control_off_writes_no_winner_and_engine_differs_from_it_in_the_winners_body_alone():

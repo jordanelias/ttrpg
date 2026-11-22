@@ -44,7 +44,6 @@ from ..loop.matter import _die
 from ..queries import world_q
 from ..queries.person_q import ledger_names
 from ..state.carriers import Act
-from ..state.world import World
 
 
 def _failing_link(deposited_at_witness, readings):
@@ -130,20 +129,3 @@ def test_planted_release_of_the_throne_reaches_the_heir_as_a_classed_office_refe
     assert spy.sets and all(not s["throne_held"] for s in spy.sets), "fixture: the throne was held again"
     link = _failing_link(deposited, readings)
     assert link is None, f"the release route fails -- first failing link: {link}; readings {readings}"
-
-
-def test_mutation_with_seat_holds_unread_the_planted_death_goes_red_at_link_i(monkeypatch):
-    """THE FALSIFIER, run: CP-T02-01's emission helper off (`World.seat_holds` -> `[]`, so
-    `death_subjects` names no seat while `remove_person` still closes the holds -- the pre-CP-T02-01
-    death). The planted death then fails at link (i), and the heir's question sets carry 0 classed
-    `off_king` referents: the control H-230 measured at the base."""
-    monkeypatch.setattr(World, "seat_holds", lambda self, who: [])
-    deposited, control, spy, kinds = _plant(monkeypatch, "death")
-    assert "tenure.closed" not in kinds, f"the stub did not switch the emission off: {kinds}"
-    readings = [s["reading"] for s in spy.sets]
-    assert spy.sets, "the heir was handed no question set: the control observed nothing"
-    link = _failing_link(deposited, readings)
-    assert link is not None and link.startswith("(i)"), f"expected red at link (i), got: {link}"
-    assert not any(r["stamped"] or r["answered"] for r in readings), readings
-    assert sum(1 for s in spy.sets if s["reading"]["answered"]) == 0     # 0 classed off_king referents
-

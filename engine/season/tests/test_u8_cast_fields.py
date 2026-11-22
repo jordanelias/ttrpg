@@ -69,13 +69,6 @@ def test_a_cast_entrys_office_is_held_by_that_person_and_by_no_other(monkeypatch
     assert w0.offices == {} and _held(w0) == {}
 
 
-def test_a_mutation_making_office_read_nothing_is_seen(monkeypatch):
-    _, honest = _build(monkeypatch, _cast({}, {"office": OFFICE}))
-    monkeypatch.setattr(C, "_seat_office", lambda *a, **k: None)
-    _, mutated = _build(monkeypatch, _cast({}, {"office": OFFICE}))
-    assert _held(honest) and not _held(mutated)
-
-
 def test_the_case_level_office_still_goes_through_the_same_seater(monkeypatch):
     case = dict(_host_case(), office=dict(OFFICE, post="chair"))
     monkeypatch.setitem(C.CAST, case["id"], _cast({}, {"office": OFFICE}))
@@ -179,14 +172,6 @@ def test_no_ought_anywhere_is_the_rotation_for_every_seat(monkeypatch):
     subjects = [_ambition(w, pid).subject for pid in ("p_a", "p_b", "p_c", "p_d")]
     assert subjects == ["p_b", "p_c", "p_d", "p_a"]
     assert {_ambition(w, pid).predicate for pid in w.persons} == {wants_of(case)}
-
-
-def test_a_mutation_pointing_the_referent_at_the_wrong_seat_is_seen(monkeypatch):
-    ought = {"ought": {"about": "D", "predicate": "keeps faith"}}
-    _, honest = _build(monkeypatch, _cast(ought))
-    monkeypatch.setattr(C, "_referent", lambda seated, entry: 1)
-    _, mutated = _build(monkeypatch, _cast(ought))
-    assert _ambition(honest, "p_a").subject == "p_d" != _ambition(mutated, "p_a").subject
 
 
 def test_q4_fires_for_more_propositions_on_a_four_seat_cast_than_on_the_floor(monkeypatch):

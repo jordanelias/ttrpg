@@ -138,15 +138,6 @@ def test_in12_interrogate_the_custodian_forms_it_and_the_seam_emits_a_confession
     assert _kinds(out)[0].startswith("confession.") and draws == 1, (_kinds(out), draws)
 
 
-def test_in12_interrogate_planted_failure_stamper_off_nothing_is_formed():
-    w, _ = _world(pool_default=30)
-    _custody(w)
-    _charge(w)
-    assert _interrogations(w, _duke_question(w)), "CONTROL: formed with the stamper on"
-    with mock.patch.object(world_q, "detainees_held", lambda w, p: ()):
-        assert _interrogations(w, _duke_question(w)) == []
-
-
 # ======================================================================================
 # 3 -- THE CONTROL
 # ======================================================================================

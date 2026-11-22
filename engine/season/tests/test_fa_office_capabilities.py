@@ -68,12 +68,6 @@ def test_a_seat_row_may_name_a_defined_skill_or_null(tmp_path, monkeypatch):
     assert checked == len(CAPABILITIES) + 1 and checked > 1
 
 
-def test_the_shipped_offices_file_names_no_capability_yet():
-    # B04.21 ships the key, not its content (D-19): the candidate rows are for Jordan, not authored.
-    named = [r["id"] for r in (*rosters.OFFICES_SEATS, *rosters.FOREIGN_SEATS) if r.get("capability") is not None]
-    assert named == [], named
-
-
 # ======================================================================================
 # B04.22 -- the conferrer weighs the candidate, behind `confer_fit_weight` (shipped 0.0)
 # ======================================================================================

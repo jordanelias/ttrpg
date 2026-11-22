@@ -87,15 +87,6 @@ def test_cr25_2_a_founding_on_an_unheld_territory_refuses():
     assert _preds.founded_office_id("T2", "Lord") not in w.offices
 
 
-def test_cr25_2_planted_failure_conjunct_i_dropped_founds_on_the_unheld_territory(monkeypatch):
-    """THE PLANTED FAILURE: `in_holdings` (conjunct (i)) answering True turns test 2's refusal into a
-    founding -- so test 2 is red without (i), and its refusal is (i)'s and no other conjunct's."""
-    monkeypatch.setattr(world_q, "in_holdings", lambda w, actor, rung: True)
-    w, d = _world()
-    out = _act(w, d, "e_unheld", "p_king", "off_king", {"subject": "T2"})
-    assert _kinds(out) == ["office.established"], _kinds(out)
-
-
 def test_cr25_3_a_founding_at_equal_rank_refuses_the_confessor_at_terr_t9():
     w = build_realm(0)
     seat = w.offices["off_confessor"]

@@ -87,29 +87,6 @@ def test_falsifier_two_losers_one_routed_one_not_end_with_different_bodies_under
     assert after_s[MARCHERS[0]] < before_s[MARCHERS[0]], "side arm: the loss cut nobody (the control saw no loss)"
 
 
-def test_planted_failure_the_sides_ratio_fed_to_every_person_reddens_the_falsifier(monkeypatch):
-    """MUTATION: every person's ratio is the side's. The falsifier's `person`-arm check (the two bodies differ) must
-    then fail -- were it to pass, the test could not observe the failure it excludes."""
-    from engine.season.queries.inputs import PartOutcome
-    mb = _mb()
-    real = mb._person_namer
-
-    def side_share_for_all(members, owners):
-        namer = real(members, owners)
-
-        def name(army, scale):
-            parts, credit = namer(army, scale)
-            side = mb._share(army.hp, army.hp_max, scale)
-            return tuple(PartOutcome(part.id, side, part.routed) for part in parts), credit
-        return name
-
-    monkeypatch.setattr(mb, "_person_namer", side_share_for_all)
-    _w, _events, after, _before = _fold("person")
-    assert after[MARCHERS[0]] == after[MARCHERS[1]], "the mutant still wrote two different bodies"
-    with pytest.raises(AssertionError):
-        assert after[MARCHERS[0]] != after[MARCHERS[1]], "the falsifier's person-arm check"
-
-
 def test_the_shipped_arm_is_the_person_arm_and_side_is_the_control_that_carries_no_per_person_record():
     """The unswept fold is the `person` fold (the shipped arm), same bodies and hash; `field_units: side` is the control: the
     module's outcome names no part and no breaker, and no Event names one."""

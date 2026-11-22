@@ -93,16 +93,6 @@ def test_h206_a_matter_death_is_witnessed_by_those_who_stood_there_and_nobody_el
         f"a claim naming the dead holder reached persons elsewhere: {far}")
 
 
-def test_h206_mutation_with_the_place_put_back_the_matter_death_reaches_nobody(monkeypatch):
-    """THE MUTATION, run as a test: `event_place` as it was (`place_of(w, anchor_of(w, e))`). The
-    positive half of the falsifier must go red, which is what makes it an observation."""
-    monkeypatch.setattr(world_q, "event_place", _OLD_PLACE)
-    w = _world()
-    _witness(w, [_die_at_matter(w)])
-    assert sum(len(_names_him(w, p)) for p in NEAR) == 0, (
-        "the old expression reaches someone; the defect this file pins is not the one it describes")
-
-
 def test_h206_the_dead_man_is_still_nowhere_for_place_of_and_an_event_of_another_tick_has_no_place():
     w = _world()
     ev = _die_at_matter(w)

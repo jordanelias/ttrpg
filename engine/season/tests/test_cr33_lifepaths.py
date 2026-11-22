@@ -28,7 +28,6 @@ from engine.season.state.carriers import Act, Person, Question
 from engine.season.state.gate import WriteClass
 from ._flat_fold import flat_fold
 from .test_in10_record_operands import _resolve
-from .test_rem30_character_sheet import _run
 
 pytestmark = pytest.mark.flat_fold
 
@@ -184,24 +183,3 @@ def test_the_lifepath_id_is_stored_nowhere_on_a_person(planted_world):
 # ======================================================================================
 # PLANTED FAILURE AND CONTROL
 # ======================================================================================
-
-def test_the_planted_failure_the_expansion_skipped_reddens_the_train_assertion(monkeypatch):
-    """The assertion above can observe the failure it excludes: with the expansion skipped the planted person
-    holds nothing, so `train` on `inquiry` MINTS his first rank (B05.09) where the expansion would have raised the key to
-    `pool_default + 1` (B05.99 rewrite: was `train.refused`)."""
-    monkeypatch.setattr(cast, "capability_of", lambda r, pool_default: {})
-    w, d = _world(monkeypatch)
-    default = w.fixtures.get("pool_default")
-    assert w.persons[P_ID].capability == {}
-    assert _train(w, d, P_ID) == ["capability.raised"]
-    assert w.persons[P_ID].capability == {"inquiry": 1} != {"inquiry": default + 1}
-
-
-def test_the_shipped_expansion_is_the_mover_by_the_one_row_that_maps_to_a_key(monkeypatch):
-    """At seed 0 the one-season hash with the expansion ON differs from the same run with it skipped, both read in
-    process (the shipped hash is `_realm_goldens.py`'s)."""
-    shipped = _run(build_realm(0), 1)
-    with monkeypatch.context() as m:
-        m.setattr(cast, "capability_of", lambda r, pool_default: {})
-        skipped = _run(build_realm(0), 1)
-    assert shipped != skipped

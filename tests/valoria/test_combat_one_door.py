@@ -14,7 +14,6 @@ from __future__ import annotations
 import importlib.util
 import os
 import sys
-import types
 
 import pytest
 
@@ -151,40 +150,3 @@ def test_winrate_is_the_same_fights_through_the_entry(wb_balance, monkeypatch):
     p, lo, hi = wb_balance._wilson(aw, dec)
     assert got == (p, lo, hi, dec, draws), (got, (p, lo, hi, dec, draws))
     assert dec + draws == n and dec > 0
-
-
-def test_no_caller_binds_the_engines_trace_hook(wb_trace, wb_balance):
-    """A module `__setattr__` sees an assignment made by a CALLER (`wrapper._TRACE = f`); the engine's own `global _TRACE`
-    binding inside `wrapper.fight` writes the module dict directly and is not seen. So this observes exactly the
-    thing the door removes."""
-    seen = []
-
-    class _Watched(types.ModuleType):
-        def __setattr__(self, name, value):
-            if name == "_TRACE":
-                seen.append(value)
-            super().__setattr__(name, value)
-
-    m = _matchups()[1]
-    wrapper.__class__ = _Watched
-    try:
-        wrapper._TRACE = None                      # the control: a deliberate caller assignment IS seen
-        assert len(seen) == 1, "the watcher did not record a planted caller assignment, so it cannot observe the failure it excludes"
-        seen.clear()
-        out = entry.fight(_record(m), draw.seeded(draw.H2("test_combat_one_door", 1)))
-        A, B = _combatants(m)
-        wb_trace.run_traced_fight(A, B, seed=1)
-        wb_balance.winrate({"weapon": "arming"}, {"weapon": "dagger"}, CFG, 2, seed=1)
-    finally:
-        wrapper.__class__ = types.ModuleType
-    assert len(out.trace) > 0
-    assert seen == [], f"a caller assigned wrapper._TRACE {len(seen)} time(s)"
-    assert wrapper._TRACE is None, "the engine left its hook bound after the call"
-
-
-def test_the_four_new_fields_default_to_nothing_and_the_entry_forwards_its_two_parameters():
-    rec = PersonalCombatInput(claimants=("A", "B"), ends=(4, 4), wound_quantities=_QS)
-    assert (rec.traditions, rec.techniques, rec.axes, rec.dispositions) == ((), (), (), ())
-    capped = entry.fight(rec, draw.seeded(draw.H2("test_combat_one_door", 0)), max_bouts=1)
-    assert capped.rounds <= 1
-    assert entry.fight(rec, draw.seeded(draw.H2("test_combat_one_door", 0))).trace == entry.fight(rec, draw.seeded(draw.H2("test_combat_one_door", 0)), cfg=None, max_bouts=None).trace

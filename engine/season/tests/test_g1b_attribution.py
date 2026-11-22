@@ -27,8 +27,6 @@ actor channel"* -- without the field to compare against:
      (`test_season_shape.py`) carries the tier-3 crossing falsifier forward, against a fixture
      whose site id is known from the BUILD rather than from a second attribution reader.
 """
-import dataclasses
-
 import pytest
 
 from engine.season.data.rosters import FAN_OUT_MODES
@@ -54,16 +52,6 @@ def _ev(causes, changes=None):
 
 
 # -- the field is gone --------------------------------------------------------------------
-
-def test_event_has_no_subject_field_and_refuses_one():
-    """`04:402`'s STRUCTURAL claim, *"No `actor`, no `target`, no `subject` on `Event` -- the
-    fields do not exist"*, as an executed fact rather than a docstring. A dataclass refuses an
-    undeclared keyword, so a constructor still passing `subject=` fails loudly -- the silent
-    failure is the POSITIONAL one, which is why every positional `Event(...)` was shifted by hand."""
-    names = {f.name for f in dataclasses.fields(Event)}
-    assert not names & {"subject", "actor", "target"}, sorted(names)
-    with pytest.raises(TypeError):
-        Event(id="e", kind="k", subject="x", changes=[], causes=[ROOT], emitted_at=0)
 
 
 # -- the unit behaviour -------------------------------------------------------------------

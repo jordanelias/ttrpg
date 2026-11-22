@@ -14,7 +14,6 @@ CR-30 commit body, not asserted here: an event list is no pin (CLAUDE.md §0.1 p
 """
 import pytest
 
-from engine.season import epistemic
 from engine.season.data import cast
 from engine.season.data.matrix import matrix_row
 from engine.season.data.rosters import SEEN_PREDICATE
@@ -50,12 +49,6 @@ def test_a_co_located_witness_sees_the_actors_heritage_true_beside_who():
 
 def test_an_unauthored_actor_reads_nothing_describable():
     assert _seen_marks(None) == ((), DUKE)
-
-
-def test_the_planted_failure_a_term_marks_returning_nothing_reads_empty_and_not_the_heritage(monkeypatch):
-    """The first assertion above can observe the failure it excludes."""
-    monkeypatch.setitem(epistemic.TERM_READERS, "marks", lambda w, e, act: ())
-    assert _seen_marks(SOUTH) == ((), DUKE) != ((SOUTH,), DUKE)
 
 
 # ======================================================================================

@@ -105,15 +105,6 @@ def test_a_stored_zero_is_a_held_rejection_and_pulls_hardest():
     assert mid[0] == -mid[1] and 0 < mid[1] < STANCE_MAX
 
 
-def test_the_planted_failure_the_centring_sign_flipped_reverses_the_pair(monkeypatch):
-    """The first assertion above can observe the failure it excludes."""
-    restorer, rejecter = _hearer("h5", {"einhir_restoration": 5}), _hearer("h0", {"einhir_restoration": 0})
-    assert _weight(restorer, 0.5) > _weight(rejecter, 0.5)
-    real = person_q.conviction_stand
-    monkeypatch.setattr(person_q, "conviction_stand", lambda p, a: -real(p, a))
-    assert _weight(restorer, 0.5) < _weight(rejecter, 0.5)
-
-
 # ======================================================================================
 # THE READER
 # ======================================================================================

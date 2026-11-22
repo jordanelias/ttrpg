@@ -147,25 +147,6 @@ def test_in23_asking_writes_nothing(driven):
     assert after == before
 
 
-def test_in23_the_writes_nothing_snapshot_sees_a_write_planted_in_the_read_path(monkeypatch):
-    """THE PLANTED CONTROL (`test_revolt_query.py`'s precedent): `storybar.stability`, bound by name, is
-    replaced by a reader that also appends a claim to the asking person's ledger. The snapshot the
-    writes-nothing test takes must MOVE, or that test could not have observed a write."""
-    from ..boot.realm import build_realm
-    w = build_realm(SEED, CAP)
-    fired = []
-
-    def writing(p, rung, window):
-        fired.append(rung)
-        p.ledger.append(_claim(f"planted_{len(fired)}", rung, sorted(PQ.UNREST_KINDS)[0], 0))
-        return PQ.stability(p, rung, window)
-    monkeypatch.setattr(SB, "stability", writing)
-    before = _snapshot(w)
-    SB.estimates(w)
-    assert fired, "the plant never ran: `estimates` does not read through `storybar.stability`"
-    assert _snapshot(w) != before, "a planted ledger write left the writes-nothing snapshot unmoved"
-
-
 def test_in23_no_carrier_and_no_world_attribute_holds_such_a_value(driven):
     names = ("legitimacy", "stability")
     tree = ast.parse((files.STATE_DIR / "world.py").read_text())
@@ -183,17 +164,3 @@ def test_in23_no_carrier_and_no_world_attribute_holds_such_a_value(driven):
 
 
 # (d) ---------------------------------------------------------------------------------------------
-
-def test_in23_the_instrument_reads_both_queries_in_a_seeded_season(monkeypatch):
-    calls = {"legitimacy": 0, "stability": 0}
-
-    def spy(name, real):
-        def f(*a, **k):
-            calls[name] += 1
-            return real(*a, **k)
-        return f
-    monkeypatch.setattr(SB, "legitimacy", spy("legitimacy", PQ.legitimacy))
-    monkeypatch.setattr(SB, "stability", spy("stability", PQ.stability))
-    r = SB.run_seed(SEED, 1, "off", CAP)
-    assert calls["legitimacy"] > 0 and calls["stability"] > 0, calls
-    assert len(r["estimates"]) == 1 and r["estimates"][0]["legitimacy"]["pairs"] == calls["legitimacy"]

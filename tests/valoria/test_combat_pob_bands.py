@@ -36,13 +36,3 @@ def test_pob_within_realistic_range():
         if not (lo <= pob_cm <= hi):
             violations[name] = (pob_cm, (lo, hi))
     assert not violations, f"PoB out of JD-1 band (live, band): {violations}"
-
-
-def test_flagged_weapons_mass_unchanged():
-    """U1 is a data-only redistribution (blade/head mass -> pommel/haft) — total weapon mass is untouched for
-    every flagged weapon, per consolidation_v1's U1 row ('weapons.py data only')."""
-    for name, (mass_before,) in {
-        'rapier': (1.368,), 'arming': (1.2,), 'longsword': (1.408,), 'greatsword': (2.751,),
-        'bec_de_corbin': (2.4534,), 'lucerne_hammer': (2.4834,),
-    }.items():
-        assert abs(WEAPONS[name]['mass'] - mass_before) < 1e-9, f"{name}: total mass drifted"

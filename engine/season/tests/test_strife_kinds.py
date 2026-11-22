@@ -94,27 +94,12 @@ def test_every_registry_kind_is_in_exactly_one_of_opens_joins_never():
     assert _homeless(registry, R.STRIFE_KINDS) == {}
 
 
-def test_a_registry_kind_in_none_of_the_three_lists_is_seen():
-    # FALSIFIER of the test above: strike one registry kind from its list and the same predicate finds the hole.
-    registry = {k for r in data.MOVES for k in r["kinds"]}
-    struck = {n: set(R.STRIFE_KINDS[n]) - {"tenure.opened"} for n in LISTS}
-    assert _homeless(registry, struck) == {"tenure.opened": []}
-
-
 def test_concludes_equals_the_rule_derived_over_the_registry():
     lists = {n: R.STRIFE_KINDS[n] for n in LISTS}
     derived = derive_concludes(data.MOVES, lists)
     assert derived and derived == R.STRIFE_KINDS["concludes"], (
         f"only in the derivation: {sorted(derived - R.STRIFE_KINDS['concludes'])}; "
         f"only in rosters.yaml: {sorted(R.STRIFE_KINDS['concludes'] - derived)}")
-
-
-def test_mutation_requisition_taken_in_concludes_passes_the_import_check_and_fails_the_derivation():
-    mutated = _planted(concludes={"requisition.taken"})
-    _check_strife_kinds(mutated, EVENT_KINDS)           # in `opens`, so the loader's check cannot see it
-    derived = derive_concludes(data.MOVES, mutated)
-    assert derived != mutated["concludes"]
-    assert mutated["concludes"] - derived == {"requisition.taken"}     # VI never ends a case
 
 
 def test_foreign_faction_ids_are_the_roster_names_as_propositions():

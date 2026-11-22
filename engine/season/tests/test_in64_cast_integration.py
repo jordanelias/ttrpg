@@ -25,10 +25,8 @@ from engine.season.gaps import Unspecified
 from engine.season.harness import decision_spread as DS
 from engine.season.boot import realm as boot_realm
 from engine.season.boot.realm import build_realm, seed_pursuits
-from engine.season.data.rosters import OFFICES_BY_HOLDER, OFFICES_SEATS
+from engine.season.data.rosters import OFFICES_BY_HOLDER
 from engine.substrate.descriptors import AFFILIATION_CONCERNS
-
-from . import test_governance_build as GB
 
 _REPO = pathlib.Path(__file__).resolve().parents[3]
 
@@ -186,28 +184,6 @@ def test_in64_the_cast_holds_no_identical_full_profile(_drawn):
     assert r["pairs_above_cast"] <= 37, r["pairs_above_cast"]
 
 
-def test_in64_the_identical_profile_reading_can_see_a_planted_duplicate(_drawn):
-    """The control the 0 above needs (CLAUDE.md §0.1 pt 2): copy one cast person's pursuits and conviction
-    onto a peer with the same factions and org goals, and the reading finds exactly that one group. Before
-    `profile_key` counted org goals only, each person's own want made every profile differ by construction."""
-    w, _calls = _drawn
-    cast_ids = [pid for pid in sorted(w.persons) if pid.startswith("p_npc_")]
-    by_shape = {}
-    for pid in cast_ids:
-        key = DS.profile_key(w, w.persons[pid])
-        by_shape.setdefault((key[2], key[3]), []).append(pid)
-    pair = next(ids[:2] for ids in by_shape.values() if len(ids) >= 2)
-    a, b = (w.persons[i] for i in pair)
-    saved = (dict(b.pursuits), dict(b.conviction))
-    try:
-        b.pursuits, b.conviction = dict(a.pursuits), dict(a.conviction)
-        r = DS.read_persons(w)
-    finally:
-        b.pursuits, b.conviction = saved
-    assert r["identical_groups_cast"] == 1, (pair, r["identical_groups_cast"])
-    assert r["pairs_above_cast"] >= 1, r["pairs_above_cast"]     # the cast's pair reading sees the planted twin (cosine 1.0)
-
-
 def test_in64_a_case_with_no_row_still_falls_back_to_seed_pursuits(monkeypatch):
     """A case added ahead of its registry row (the normal authoring order) is drawn, not refused.
     The probe hides one row -- a case no seat or leadership names, so nothing else needs the row."""
@@ -225,19 +201,3 @@ def test_in64_a_case_with_no_row_still_falls_back_to_seed_pursuits(monkeypatch):
     assert calls == [(cid, pid)], calls
     assert w.persons[pid].pursuits == real_draw(0, cid, pid) and w.persons[pid].pursuits
     assert w.persons[pid].conviction == {}
-
-
-def test_in64_a_third_unauthored_seat_turns_13d_iii_red(monkeypatch):
-    """MUTATION: drop one Riskbreakers row -- its seat is still built by the loop from the registry
-    cell, now with no row -> unauthored beside `off_npc_084`, and the declared-exception test is red.
-    CONTROL: the same test on the shipped realm is green (it runs in `test_governance_build.py`)."""
-    real = OFFICES_SEATS
-    row = next(r for r in real if r["id"] == "off_riskbreaker_doctrine")
-    monkeypatch.setattr(boot_realm, "OFFICES_SEATS", [r for r in real if r is not row])
-    monkeypatch.setattr(boot_realm, "OFFICES_BY_HOLDER",
-                        {h: v for h, v in OFFICES_BY_HOLDER.items() if h != row["holder"]})
-    w = build_realm(0)
-    assert sorted(w._office_census["unauthored"]) == ["off_npc_080", "off_npc_084"], \
-        w._office_census["unauthored"]
-    with pytest.raises(AssertionError):
-        GB.test_13d_iii_every_seat_the_realm_builds_has_a_rung_but_the_one_declared_exception(w)

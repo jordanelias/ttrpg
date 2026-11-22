@@ -21,8 +21,6 @@ from engine.dice_engine import draw
 from dataclasses import replace
 from functools import lru_cache
 
-import pytest
-
 from engine.season.boot.realm import build_realm
 from engine.season.queries import world_q
 from engine.season.data.rosters import WON
@@ -115,18 +113,6 @@ def test_falsifier_defender_win_share_falls_as_the_garrison_wears_under_paired_s
     assert s[0] > s[1] > s[2], s
     # the base is a contest, not a rout either way (the entry's 45 % +- 7 shape): the steps are not a ceiling or a floor
     assert 0.2 < s[3] < s[0] < 0.8, s
-
-
-def test_planted_failure_a_flat_walls_dr_reaching_the_engine_reddens_the_falsifier():
-    """MUTATION: the record carries the fixture's 3 whatever the garrison's condition (the line this item replaces,
-    one level up). The falsifier's predicate must then fail on the same fold."""
-    def flat(w):
-        return replace(_record(w), walls_dr=w.fixtures.get("field_walls_dr"))
-
-    mutant = _shares(3, builder=flat)
-    assert not _falls(mutant), {lv: mutant[lv][0] for lv in LEVELS}
-    with pytest.raises(AssertionError):
-        assert _falls(mutant)
 
 
 def test_the_grade_is_floored_not_banker_rounded():

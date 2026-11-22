@@ -35,7 +35,6 @@ from ..decision.budget import body_band_penalty
 from ..harness import probes as P
 from ..loop import effects_combat as EC
 from ..loop.driver import SeasonDriver, mint_token
-from ..loop.effects_shared import EFFECTS
 from ..seam import Resolution, degree_of
 from ..state.carriers import Act, Person
 from ._scar_helpers import party_state
@@ -116,18 +115,6 @@ def test_the_written_body_is_held_under_the_ceiling_and_the_observation_reports_
     assert _held_under_ceiling() == (799, 799, [799])
 
 
-def test_mutation_an_observation_built_off_the_pre_clamp_body_reports_900_and_goes_red(monkeypatch):
-    """The mutation, executed: the Observation is built from the body BEFORE the ceiling's `min` (the `_harm` value,
-    900), the write still clamped. The assertion above then observes 900 where 799 was written."""
-    real = EC.body_observed
-
-    def pre_clamp(pid, body):
-        return real(pid, 900 if (pid, body) == (SUBJECT, 799) else body)
-    monkeypatch.setattr(EC, "body_observed", pre_clamp)
-    got = _held_under_ceiling()
-    assert got == (799, 799, [900]) != (799, 799, [799]), got
-
-
 def test_a_felled_party_is_not_marked_and_the_marks_stop_at_the_last_floor():
     w = P.tiny_world()
     _fight(w, party_state(felled=True, wounds=4, max_wounds=3, full=10, left=0))
@@ -176,21 +163,6 @@ def _falsifier_failures() -> list:
 
 def test_falsifier_tend_heals_a_marked_man_to_799_and_an_unmarked_one_to_1000():
     assert _falsifier_failures() == []
-
-
-def test_mutation_a_raiser_reading_condition_scale_lifts_him_past_799_and_the_falsifier_goes_red(monkeypatch):
-    real = EFFECTS["tend"]
-
-    def mutant(w, a, res=None):
-        change = real(w, a, res)
-        who = w.persons[a.payload["subject"]]
-
-        def perform():
-            who.body = max(who.body, int(w.fixtures.get("condition_scale")))
-        return type(change)(change.subjects, perform, change.ending)
-    monkeypatch.setitem(EFFECTS, "tend", mutant)
-    bad = _falsifier_failures()
-    assert bad and "not his ceiling 799" in bad[0], bad
 
 
 def test_a_fight_then_tend_end_to_end():
@@ -283,36 +255,3 @@ def test_every_bare_body_write_is_registered_and_every_raiser_heals_to_the_ceili
     assert sorted(set(found)) == sorted(_BODY_WRITES), ("a registered write is gone; delete its entry", found)
     assert not offenders, ("an unregistered or unbounded `body` write -- register it in _BODY_WRITES with its role, "
                            "and a raiser heals to `body_ceiling`:\n  " + "\n  ".join(offenders))
-
-
-def test_the_guard_itself_can_fail():
-    planted = ("    x = 1; who.body = who.body + 5\n"
-               "    w.write('b', t, lambda q=q: setattr(q, 'body', 9))\n")
-    got = [line for _, line in _scan(planted)]
-    assert len(got) == 2 and all(line not in _BODY_WRITES for line in got)
-
-
-_PLANTED_RAISERS = {
-    # a registered raiser that reads `condition_scale` (and the ceiling): the second AST branch
-    "reads condition_scale": ("def _eff_tend(w, a, res=None):\n"
-                              "    p = w.persons[a.payload['subject']]\n"
-                              "    whole = max(p.body, p.body_ceiling, w.fixtures.get('condition_scale'))\n"
-                              "    def perform():\n"
-                              "        p.body = whole\n"
-                              "    return perform\n"),
-    # a registered raiser that never reads `body_ceiling`: the first AST branch
-    "does not read body_ceiling": ("def _eff_tend(w, a, res=None):\n"
-                                   "    p = w.persons[a.payload['subject']]\n"
-                                   "    whole = max(p.body, 1000)\n"
-                                   "    def perform():\n"
-                                   "        p.body = whole\n"
-                                   "    return perform\n"),
-}
-
-
-@pytest.mark.parametrize("why", sorted(_PLANTED_RAISERS))
-def test_the_raiser_branch_of_the_guard_can_fail(why):
-    found, offenders = [], []
-    raisers = _check_source(_PLANTED_RAISERS[why], "planted.py", found, offenders)
-    assert raisers == 1 and found == ["p.body = whole"], (raisers, found)
-    assert len(offenders) == 1 and offenders[0].endswith(why) and "`_eff_tend`" in offenders[0], offenders

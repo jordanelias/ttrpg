@@ -169,23 +169,6 @@ def test_a_tie_on_the_holder_edge_goes_to_the_later_in_w_tenures():
 
 # ----------------------------------------------------------------------------------------------------- planted failures
 
-def test_planted_failure_an_order_ignored_by_field_input_reddens_the_falsifier(monkeypatch):
-    monkeypatch.setattr(wrapper, "_standing_order", lambda *a: None)
-    mutant = []
-    for role in ("Shock", "ShieldWall"):
-        inp = _record(_world([(KING, KING_SEAT, HOME, role, "mz_att", 3)]))
-        assert inp.orders is None
-        mutant.append(_bands(inp))
-    assert not _differs(*mutant)
-    with pytest.raises(AssertionError):
-        assert _differs(*mutant)
-
-
-def test_planted_failure_a_module_that_ignores_the_role_reddens_the_falsifier(monkeypatch):
-    monkeypatch.setattr(_mb(), "_role_fields", lambda role: {})
-    mutant = [_bands(_record(_world([(KING, KING_SEAT, HOME, role, "mz_att", 3)]))) for role in ("Shock", "ShieldWall")]
-    assert not _differs(*mutant)
-
 
 # ---------------------------------------------------------------------------------------------------------------- controls
 

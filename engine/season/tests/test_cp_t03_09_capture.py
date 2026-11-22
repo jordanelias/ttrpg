@@ -33,14 +33,12 @@ from ..data.verbs import DUEL_TERMS_BY_VERB, KIND_VERB, VERB_TABLE, _OPENERS_FRO
 from ..gaps import Forbidden
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
-from ..loop.effects_combat import _eff_kill
-from ..loop.effects_shared import EFFECTS
 from ..queries.inputs import PersonalCombatInput
 from ..seam.contest import Resolution
 from ..seam.wrappers import combat
 from ..seam.wrappers._entry import entry_for
 from ..state.carriers import Act, Office, Person, Rung, Tenure
-from ..state.gate import Change, Subject, death_subjects
+from ..state.gate import Subject
 from ..loop import resolve as R
 
 pytestmark = pytest.mark.flat_fold
@@ -208,35 +206,6 @@ def test_a_capture_whose_subject_yields_holds_him_in_the_actors_seat_and_a_move_
     move = Act(id="mv", actor=CAPTIVE, verb="move", payload={"to": "S"})
     assert _kinds(_run(w, d, move)) == ["travel.blocked"], "the captive was free to travel"
     assert len(_detains(w)) == 1
-
-
-def test_mutation_routing_the_yield_to_remove_person_fails_the_same_predicate():
-    """The mutant is `_eff_capture` with the yield sent to the grave. The control (the shipped effect) passes
-    `_assert_held` above; the mutant must FAIL it, or the predicate observes nothing."""
-    def mutant(w, a, res=None):
-        base = _eff_kill(w, a, res)
-        who = a.payload["subject"]
-        yielded = res.result.get("surrender")
-        if yielded is None or yielded.get("by") != who or who not in w.persons:
-            return base
-
-        def perform():
-            base.apply()
-            w.persons[who].body = 0
-            w.remove_person(who)
-        return Change(base.subjects + death_subjects(w, who, (), fields=("body",)), perform)
-
-    with mock.patch.dict(EFFECTS, {"capture": mutant}):
-        w, d, out = None, None, None
-        for i in range(TRIES):
-            w, d = _world()
-            out = _run(w, d, _capture(i))
-            if CAPTIVE not in w.persons and ACTOR in w.persons:
-                break
-        else:
-            raise AssertionError("the mutant never removed a yielder: it observed nothing")
-        with pytest.raises(AssertionError):
-            _assert_held(w, out)
 
 
 def test_a_seat_that_could_not_close_the_custody_opens_nothing():

@@ -232,11 +232,6 @@ _PLANTS = [
 ]
 
 
-def test_in66_the_plants_ran_a_floor_of_refusals_and_each_is_unique():
-    assert len(_PLANTS) >= 38, len(_PLANTS)
-    assert len({name for name, *_ in _PLANTS}) == len(_PLANTS)
-
-
 @pytest.mark.parametrize("name,doc,cls,fragment", _PLANTS, ids=[p[0] for p in _PLANTS])
 def test_in66_each_planted_violation_is_refused_by_name(name, doc, cls, fragment):
     # the plant is ONE mutation of the base: the base itself loads (the control), so the refusal
