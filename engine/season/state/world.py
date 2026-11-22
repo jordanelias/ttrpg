@@ -517,6 +517,34 @@ def _decode_into(b: bytes, i: int) -> tuple:
     raise _SnapshotError(f"tag {tag!r} at byte {i - 1} has no decode rule")
 
 
+def _decoded(reading: tuple) -> tuple:
+    """A `World.state_of` reading with each canonical field encoding (`bytes`) decoded to the value it
+    encodes; the existence flag stands as it is. The receipt's `delta` holds THIS, not the bytes: the
+    encoding table has no rule for `bytes`, so a bytes delta could neither be folded by `content_hash`
+    nor written into a snapshot."""
+    return tuple(_decode_into(x, 0)[0] if type(x) is bytes else x for x in reading)
+
+
+def _delta(s: "Subject", before: Any, after: Any) -> Any:
+    """B09.10: THE VALUE THE GATE SAW, for the receipt it mints: `(before, after)`, each `state_of`'s
+    reading of `s` decoded (`_decoded`), when `s` names `fields`. `None` for a subject with no named
+    attribute (a whole-entity digest, an `edge` -- the Tenure is its own record -- a `staged` cell)."""
+    if s.ref[0] != ENTITY or s.ref[3] is None:
+        return None
+    return (_decoded(before), _decoded(after))
+
+
+def _mode(s: "Subject", before: Any, after: Any) -> str:
+    """B09.10: THE RECEIPT'S MODE, told honestly for a whole-entity digest subject: `create` when it was
+    absent before the write, `delete` when it is absent after, else `set`. Every other subject is `set`."""
+    if s.ref[0] == ENTITY and s.ref[3] is None:
+        if before == (False,):
+            return "create"
+        if after == (False,):
+            return "delete"
+    return "set"
+
+
 def decode(data: bytes, fixtures: Fixtures = DEFAULT_FIXTURES) -> "World | SnapshotRefused":
     """Rebuild a `World` from `encode`'s bytes under `fixtures`, the running build's. A snapshot written under
     other fixtures, or one this build cannot read, comes back as a `SnapshotRefused` VALUE: nothing is raised
@@ -1382,10 +1410,11 @@ class World:
         A closure is every other writer's -- MATTER's clocks, CALENDAR, WITNESS's deposits, the
         probes, and the fold's check-only pairs after its first. It is applied unjudged, and its return
         value is returned. ⚠ THAT IS A BOUND, NOT AN OVERSIGHT: `04 §C.2`
-        puts the no-op check on EVERY write, and the closure path does not apply it. A MATTER write that moves nothing still traces as written and still emits its
-        declared kind -- and that is LIVE, not hypothetical: `dwelling` wears at 0
-        (`rosters.yaml`), so every dwelling's `condition.worn` every season is exactly F9's shape.
-        MATTER has no refusal kind for a no-op to become.
+        puts the no-op check on EVERY write, and the closure path does not apply it. A MATTER write that
+        moves nothing would still trace as written and still emit its declared kind; the one live instance, `dwelling` wearing at 0 (`rosters.yaml`), is CLOSED at B09.21
+        (`H-135`): `loop/matter.py` does not write a Site whose wear is 0 or whose condition is already 0. The
+        closure branch's F9 judgment REMAINS UNDONE, so a later MATTER writer that moves nothing would be
+        fabricated again. MATTER has no refusal kind for a no-op to become.
 
         `G3`. `actor` AND `via` ARE WHO IS WRITING AND THROUGH WHICH SEAT -- `04 §C.2`'s
         `gate.write(token, kind, field, id, change, actor?, via?)`. Both default to `None`, which
@@ -1623,10 +1652,15 @@ class World:
             moved: list = []
             if change is not None:
                 # F9, AFTER F3 AND NEVER BEFORE IT (the docstring says why). An `edge` subject moved
-                # iff the diff lists that Tenure -- by identity, changed or opened.
+                # iff the diff lists that Tenure -- by identity, changed or opened. B09.10: the pair
+                # is kept, not the subject alone, so the receipt carries the value the gate saw.
                 edged = {id(t) for t, _ in changes}
-                moved = [s for s, b in zip(change.subjects, was)
-                         if (id(s.ref[1]) in edged if s.ref[0] == EDGE else self.state_of(s) != b)]
+                for s, b in zip(change.subjects, was):
+                    if s.ref[0] == EDGE:
+                        if id(s.ref[1]) in edged:
+                            moved.append((s, b, None))
+                    elif (a := self.state_of(s)) != b:
+                        moved.append((s, b, a))
                 if not moved:
                     # NOTHING IT NAMED MOVED, SO NOTHING IT DID STANDS WHERE THE GATE CAN SEE IT: a
                     # Tenure the closure touched anyway goes back, as on `NotYours` -- otherwise the
@@ -1640,8 +1674,10 @@ class World:
             if change is not None:
                 # THE GATE MINTS, AND ONLY FOR WHAT MOVED -- `04 §C.2`'s `r = Receipt(...)` after the
                 # no-op check, so a receipt for a write that did not happen is never issued at all.
-                # Field and mode are the pair's and `"set"`.
-                before = [(s, self.gate.mint(s.id, "set", driver, fieldname)) for s in moved]
+                # B09.10: the field is the pair's; the mode and the delta are what the gate read
+                # (`_mode`, `_delta`).
+                before = [(s, self.gate.mint(s.id, _mode(s, b, a), driver, fieldname, _delta(s, b, a)))
+                          for s, b, a in moved]
             if emits is not None:
                 # ⚠ THE SUBJECT IS THE RECORD, NOT THE TRACE LABEL. `thing` is a human label for the
                 # trace line (`"condition"`); the emission's subject has to be the RECORD ID or
@@ -1723,8 +1759,9 @@ class World:
             # by this ONE `finally`, not by a call mirrored at each exit, so a new exit cannot leak it
             # (`gate.is_open` stays False between writes, which `remove_person`'s bare-call guard
             # reads). `is_open` has exactly one production reader (that guard) and `mint()` has
-            # exactly one caller (`World.write` itself, both calls inside this `try`, so nothing after
-            # it still needs the window). Narrower than H-131's own open question (closing at ORDINARY
+            # two callers: `World.write` itself (both calls inside this `try`, so nothing after it
+            # still needs the window) and the harness's `probes.py::apparatus_receipt`, which opens
+            # its own window and closes it again for a hand-built Event's receipt. Narrower than H-131's own open question (closing at ORDINARY
             # BARRIER TRANSITIONS independent of any write) -- this closes only the window THIS call
             # opened.
             self.gate.close()

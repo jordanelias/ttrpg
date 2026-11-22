@@ -50,7 +50,7 @@ def _a_dispute_behind_every_challenge(monkeypatch):
     """v11 CR-87 added `challenge`'s DISPUTE conjunct (`dispute`, `person_q.holds_dispute`); this file's subject is the
     Record, the terms and the yield, so every challenger here holds his dispute. `test_cr87_violence_contexts.py` owns
     the conjunct (it reads the real owner, and its control strips the conjunct)."""
-    monkeypatch.setattr(world_q, "holds_dispute", lambda p, referent, scar_shift=0.0: True)
+    monkeypatch.setattr(world_q, "holds_dispute", lambda p, referent, scar_shift=0.0, sworn_bond=0.0: True)
 
 
 def _world():

@@ -1160,6 +1160,52 @@ DEFAULT_FIXTURES = Fixtures(
     # rows and `reconstruct`) folds flat, as before B07 (the control); `on` -- it is drawn through `seam.grade` and folded at its band. B07.05 flipped it (gate 5 read); the revert is the one value.
     # [JUSTIFIED: engine/season/hole_register.yaml H-445 -- site: Fixtures task_draw_arm, graded `assumption`; 18-A ships it `on` only once its gate 5 reads, so it was injected at the control and is swept off / on]
     task_draw_arm="on",                # `H-445`, swept off (control) / on (SHIPPED since B07.05; revert: `off`)
+    # `H-456` (B09.03; B09.05; `16_PESSIMIST_CORE_a_refusal_is_remembered` edit 3). HOW HARD A REMEMBERED REFUSAL PUSHES A PERSON OFF RETRYING THE SAME
+    # OPPORTUNITY: `decision/choose.py::admission_weight` puts `1 - refusal_memory * refused_before / confidence_default` on a candidate's
+    # pursuit term, `refused_before` the present confidence of his newest firsthand refusal of that subject (`queries/person_q.py`). `0.5` SHIPS
+    # (B09.05): half the pursuit weight is withheld at a fresh full-confidence refusal and returns as the claim fades at `claim_decay_per_season`.
+    # `0.0` is the CONTROL (the factor is exactly 1.0 and no ledger is read; the revert); `1.0` zeroes the term at a fresh full-confidence refusal.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0.0`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-456 -- site: Fixtures refusal_memory, graded `assumption`; the source proposes 0.5 and gives no derivation, so it ships as an assumption for Jordan and is swept 0.0 / 0.5 / 1.0]
+    refusal_memory=0.5,                # `H-456`, swept 0.0 (control; revert) / 0.5 (SHIPPED since B09.05) / 1.0
+    # `H-111` (B09.04; `U5a_DICE_owed_edits` §4). WHO RECEIVES A `finding.none` EVENT AT WITNESS (`rosters.yaml: undeposited_kinds` skips it for everyone):
+    # `none` -- nobody (the CONTROL, and what ships; B98 sets the arm); `actor` -- its own doer alone, so a search he failed is a claim he remembers and
+    # `decision/choose.py::admission_weight` discounts (a no-op only at `refusal_memory` 0.0, the control). The arms are `rosters.yaml: finding_none_deposit_arms`.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `none`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-111 -- site: Fixtures finding_none_deposit, graded `assumption`; the skip's own note names the narrower arm as the alternative Jordan would name, so it is injected at the control and swept none / actor]
+    finding_none_deposit="none",       # `H-111`, swept none (control, SHIPPED) / actor
+    # `H-183` (B09.06; `16_PESSIMIST_SC_B_one_reader_of_a_ledger` edit 1). WHETHER THE ONE COMPARATOR WEIGHS HOW SURE THE HOLDER STILL IS:
+    # `decision/options.py::teller_weight` multiplies every claim's weight by `present_confidence(c) / confidence_default`, and
+    # `ledger_weigh` takes the closure for any ledger holding a claim below full confidence. `False` is the CONTROL and the revert (the
+    # closure and the condition are today's, exactly); `True` SHIPS (B09.08). A switch on an existing magnitude, `claim_decay_per_season`.
+    # [ASSUMPTION; medium; Jordan to correct; shipped `True`; revert: `False`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-183 -- the row that weighs a told claim by its teller's `record`; this switch adds the claim's own present confidence to that one product, shipped `True` and swept False (control, the revert) / True]
+    weigh_confidence=True,             # `H-183`, swept False (control; revert) / True (SHIPPED since B09.08)
+    # `H-457` (B09.12; `16_PESSIMIST_GAME_standing_occasions_carry_their_cause`). WHETHER AN ACT FORMED ON A STANDING OCCASION NAMES THE EVENT THAT
+    # OPENED IT: `loop/resolve.py::_occasion_ids` adds to `causes[]` the id of the first kind `rosters.yaml: standing_occasion_opened_by` lists for
+    # the act's classed referent that the log holds as written about it (a `succession.claimed` cites the `tenure.closed` that emptied the seat).
+    # `False` is the CONTROL and the revert (today's `[]`: the act's Events cite the act alone); `True` SHIPS.
+    # [ASSUMPTION; medium; Jordan to correct; shipped `True`; revert: `False`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-457 -- site: Fixtures standing_occasion_cause, graded `assumption`; the proposal ships the arm `True` and gives no derivation for the opening kinds it reads, so it is injected and swept False (control, the revert) / True / True with `Office`'s two kinds in the other order]
+    standing_occasion_cause=True,      # `H-457`, swept False (control; revert) / True (SHIPPED, B09.12) / True with `Office` read the other way
+    # `H-458` (B09.17; `16_PESSIMIST_GO_a_witness_may_connect_what_he_holds`). HOW OFTEN A WITNESS CONNECTS WHAT HE WITNESSED TO WHAT HE ALREADY HOLDS: for a
+    # witness whose channel supplies `why` (`rosters.yaml: observation_terms.supplied_by`) who holds a claim deposited from an antecedent Event of the one he
+    # witnessed, the chance that `Seen.why` names that claim (`epistemic._term_why`, one draw keyed `(pid, "why:<event id>")`, so no other stream moves);
+    # the actor of the Event is not drawn for (he always knows the occasion he acted on) and reads it at any chance above 0. `0.0` is the CONTROL and SHIPS:
+    # no draw is taken, no `why` is read, and every content hash is the one before B09.17 (the raise is B98's, one commit and one re-pin). The proposed on-value is
+    # 0.6, +0.2 where his claim on the antecedent carries a `who` (the +0.2 half is NOT built here: it has no home but a second fixture, B98's to add).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0.0`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-458 -- site: Fixtures connection_chance, graded `assumption`; the source proposes 0.6 and gives no derivation, so it is injected at the control and swept 0.0 / 0.6 / 1.0]
+    connection_chance=0.0,             # `H-458`, swept 0.0 (control, SHIPPED) / 0.6 (proposed) / 1.0
+    # `H-459` (B09.20, lane D4; IN-58's sworn-to half). HOW FAR AN OATH TO THE VICTIM'S SEAT BINDS A JUDGE TO THE VICTIM: for a judge who holds a live,
+    # un-`imposed` `oblige` to a seat S and whose own ledger holds `(S, hold, patient)` (B09.22's claim: a seat closed by a death names its holder),
+    # `queries/person_q.py::_bond` adds this to the allegiance `a` before its clamp, so a sworn judge weighs a deed done to the patient as the patient's ally
+    # does. It reaches only `deeds_judged`'s paired-deed term (`lean * bond`) and so only the regard a judge forms of a doer. `0.0` is the CONTROL and
+    # SHIPS ("it ships OFF"): `_bond` is the stored half alone, and every content hash is the one before B09.20. At the shipped `observation_deposit_mode`
+    # (`actor`) only the killer holds `(S, hold, patient)`, so the arm is reached by few judges until a mode or a teller carries it.
+    # [ASSUMPTION; medium; Jordan to correct -- the sweep's points; basis: `stance_toward` is bounded in [-1, 1] once normalised, so the oath is weighed on the stance's own scale; revert: 0.0, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-459 -- site: Fixtures sworn_bond, graded `assumption`; the entry states no value, so it is injected at the control and swept 0.0 / 0.5 / 1.0]
+    sworn_bond=0.0,                    # `H-459`, swept 0.0 (control, SHIPPED) / 0.5 / 1.0
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

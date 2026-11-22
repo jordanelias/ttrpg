@@ -14,7 +14,8 @@ from __future__ import annotations
 from typing import Any
 from ..data.rosters import QUESTION_AGGREGATION, VIEW_BUILDER_RULES, require_member
 from ..gaps import InstrumentDefect
-from ..state.carriers import Person, Question, View
+from ..state.carriers import Person, Question, View, fade_of
+from ..state.ledgers import present_confidence
 
 
 def assemble(p: Person, question: Any, k: int, rule: str = "recent",
@@ -96,7 +97,8 @@ def view_ids(p: Person, q: Any, k: int, rule: str) -> list:
         law="§18 -- 'at most K ids ... BUILT, not filtered'. WHICH K is `H-53` and is open; "
             "a rule not on the roster is a fourth answer nobody declared")
     if rule == "highest_confidence":
-        ranked = sorted(p.ledger, key=lambda c: (-c.confidence, c.id))
+        tick, decay = fade_of(p)       # B09.01: the confidence he holds each claim at now, not the one it was deposited at
+        ranked = sorted(p.ledger, key=lambda c: (-present_confidence(c.confidence, c.when, tick, decay), c.id))
         return [c.id for c in ranked[:k]]
     if rule == "question_relevant":
         refs = set(getattr(q, "referents", ()) or ())

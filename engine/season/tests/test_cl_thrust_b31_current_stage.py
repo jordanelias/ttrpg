@@ -150,7 +150,7 @@ def test_a_reader_of_the_world_instead_of_the_ledger_reads_the_lacking_person_on
     w = _belief_world()
     want = {"p_hold": {"p_a": "s2"}, "p_lack": {"p_a": "s1"}}
     assert {pid: _stage_ids(w, pid) for pid in want} == want, "the control: the real reader reads belief"
-    monkeypatch.setattr(world_q, "LedgerReader", lambda claims: world_q.WorldReader(w, "p_lack"))
+    monkeypatch.setattr(world_q, "LedgerReader", lambda claims, *a, **fade: world_q.WorldReader(w, "p_lack"))     # B09.01: `weigh`, `tick`, `decay`
     assert _stage_ids(w, "p_lack") == {"p_a": "s2"}, "the swapped reader answers from the world"
     assert _stage_ids(w, "p_lack") != want["p_lack"], "a world read is observable: (a) would redden"
 

@@ -44,7 +44,7 @@ from engine.season.decision import aggregate_questions, assemble
 from engine.season.decision.options import opening_set
 from engine.season.gaps import Forbidden
 from engine.season.loop import predicates as _preds
-from engine.season.loop.driver import mint_token
+from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.queries import world_q
 from engine.season.state.carriers import Act, Claim, Proposition, Question, Tenure
 from engine.season.state.ids import ROOT
@@ -355,14 +355,15 @@ def test_in53v_d_an_act_on_a_classed_referent_cites_no_unrelated_occasion():
     STANDING one, `[ROOT]` as a Q4 `need` has (plan IN-53 step 3; batch B-I close, F1), never the
     unrelated claim's originating Event. Control: an act on the same scene's PLAIN referent still
     cites it, and so does one whose subject is both plain and classed."""
-    from engine.season.state.carriers import Event, Scene, StateChange
+    from engine.season.harness import probes as P
+    from engine.season.state.carriers import Event, Scene
     w, d = _gov_world()
     origin = Event("ev_v_origin", "news.told", [], [ROOT], w.tick)
     w.log.append(origin)
     w.log.append(Event("ev_v_deposit", "claim.deposited",
-                       [StateChange("claim_v", "set", "Act")], [origin.id], w.tick))
+                       [P.apparatus_receipt(w, "claim_v", "set", "Act")], [origin.id], w.tick))
     q = Question("q:claim:claim_v", "claim_landed", ("S",), "claim_v", (("off_reeve", "Office"),))
-    d.scenes["sc_v"] = Scene("sc_v", "p_king", [], occasion=q)
+    w.acts.add_scene(Scene("sc_v", "p_king", [], occasion=q))
     assert world_q.occasioned_by(w, q) == [origin.id]          # the scene HAS an occasion
     a = Act(id="cf_v", actor="p_king", verb="confer", via="off_crown", scene="sc_v",
             payload={"subject": "off_reeve", "to": "p_king"})
@@ -371,11 +372,13 @@ def test_in53v_d_an_act_on_a_classed_referent_cites_no_unrelated_occasion():
     assert "tenure.opened" in [e.kind for e in out], [e.kind for e in out]
     assert not [e for e in out if origin.id in e.causes], [(e.kind, e.causes) for e in out]
     plain = Act(id="pl_v", actor="p_king", verb="work", scene="sc_v", payload={"subject": "S"})
+    w.acts.append(plain)
     assert d._occasion_ids(w, plain) == [origin.id]
     both = Question("q:claim:claim_v", "claim_landed", ("off_reeve",), "claim_v",
                     (("off_reeve", "Office"),))
-    d.scenes["sc_v2"] = Scene("sc_v2", "p_king", [], occasion=both)
-    assert d._occasion_ids(w, dataclasses.replace(a, id="cf_v2", scene="sc_v2")) == [origin.id]
+    w.acts.add_scene(Scene("sc_v2", "p_king", [], occasion=both))
+    cf2 = w.acts.append(dataclasses.replace(a, id="cf_v2", scene="sc_v2"))
+    assert d._occasion_ids(w, cf2) == [origin.id]
 
 
 def test_in53v_d_a_confer_onto_no_living_person_is_refused():
@@ -437,3 +440,143 @@ def test_in53v_f_being_told_of_a_seat_already_carried_moves_the_formed_set():
     assert ids1 == ids0 == ["q:need:prop_k"], (ids0, ids1)
     assert cls1 == cls0, "the classes moved: this arm no longer isolates the told term"
     assert sig1 != sig0 and any("'oblige', 'off_reeve'" in s for s in sig1), sig1
+
+
+# ======================================================================================
+# (g) B09.12 (`16_PESSIMIST_GAME_standing_occasions_carry_their_cause`): AN ACT ON A STANDING OCCASION NAMES THE
+# EVENT THAT OPENED IT. `loop/resolve.py::_occasion_ids` returned `[]` for an act whose subject rides a question as a
+# CLASSED referent, so a `succession.claimed` cited its own act alone and no reader of `causes[]` could say the heir
+# took the throne because the king died. Now it names `rosters.yaml: standing_occasion_opened_by`'s first kind that
+# `World.last_emission_of` finds written about the referent (one id, so `causes[]` does not fan). The control is the
+# fixture `standing_occasion_cause` at `False` (today's `[]`).
+#
+# THE HEIR'S CLAIM IS PLANTED, NOT AWAITED: in the computed play of the shipped realm the heir does not claim within
+# two (or four) seasons at seed 0 (`test_in61_heir_hears_vacancy.py`: "a planted arm passing alone does NOT make
+# `succeed` executed in computed play"), so a test that waited for a `succession.claimed` would observe nothing. The
+# DEATH is the bodies hazard's own (one real season); the CLAIM is a hand-built `succeed` through the real fold, in a
+# Scene whose occasion carries the throne as the `Office` the heir's real question carries it as.
+# ======================================================================================
+
+_THRONE, _HEIR_SEAT = "off_king", "off_heir"
+
+
+def _holder_of(w, seat):
+    held = [t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == seat]
+    assert len(held) <= 1, held
+    return held[0] if held else None
+
+
+def _the_king_dies(route):
+    """`build_realm(0)` with the throne-holder dead and the heir alive. `hazard`: the bodies pass kills him in one real
+    season (his hazard 1, everyone else's at most 0.01 a season); `plant`: MATTER's own death write, no season."""
+    from engine.season.boot.realm import build_realm
+    from engine.season.loop.matter import _die
+    w = build_realm(0)
+    king, heir = _holder_of(w, _THRONE), _holder_of(w, _HEIR_SEAT)
+    assert king and heir and king != heir, "fixture: no distinct throne-holder and heir"
+    if route == "hazard":
+        from engine.season.harness import populated as POP
+        w.persons[king].born = w.tick - 101
+        w.fixtures = w.fixtures.sweep("age_step", 0.01)
+        assert world_q.body_hazard(w, king) == 1.0
+        POP.run(seasons=1, seed=0, w=w)
+    else:
+        w.step = Step.MATTER
+        _die(w, mint_token(w, WriteClass.MATTER), king)          # `World.write` appends its own emission to the log
+    assert king not in w.persons and heir in w.persons and _holder_of(w, _THRONE) is None
+    return w, heir
+
+
+def _the_tenure_closed_naming(w, seat):
+    return [e for e in w.log if e.kind == "tenure.closed" and any(c.subject == seat for c in e.changes)]
+
+
+def _the_heir_claims(w, heir, n="cause"):
+    """The heir's `succeed` on the vacant throne, through the real fold, in a scene whose occasion classes the throne."""
+    from engine.season.state.carriers import Scene
+    d = SeasonDriver(w)
+    q = Question("q:need:throne", "need", (), "", ((_THRONE, "Office"),))
+    w.acts.add_scene(Scene("sc_" + n, heir, [], occasion=q))
+    a = Act(id="in53_" + n, actor=heir, verb="succeed", scene="sc_" + n, payload={"subject": _THRONE})
+    w.step = Step.RESOLVE
+    w.frozen = False
+    out = d.resolve(mint_token(w, WriteClass.ACTS), [a], contest_max_depth=w.fixtures.get("contest_max_depth"))
+    w.log.extend(out)             # the season appends what RESOLVE returns; `content_hash` reads the log, `causes` included
+    return a, out
+
+
+@pytest.mark.parametrize("route", ["hazard", "plant"])
+def test_a_succession_names_the_tenure_closed_that_opened_it(route):
+    """FALSIFIER: the branch returning `[]` (the code before B09.12) leaves `succession.claimed` citing `[act]` alone.
+    The `tenure.closed` naming the throne is the one the death wrote, found by the seat it names; every Event the claim
+    folds cites it after the act, and only it (one id, no fan)."""
+    w, heir = _the_king_dies(route)
+    opened = _the_tenure_closed_naming(w, _THRONE)
+    assert len(opened) == 1, [(e.id, e.causes) for e in opened]
+    a, out = _the_heir_claims(w, heir)
+    assert "succession.refused" not in [e.kind for e in out], [e.kind for e in out]
+    checked = 0
+    for e in out:
+        assert e.causes == [a.id, opened[0].id], f"{e.kind} cites {e.causes}, not [act, the opening tenure.closed]"
+        checked += e.kind == "succession.claimed"
+    assert checked >= 1, "no succession.claimed was folded; the loop asserted nothing about it"
+
+
+def test_the_control_fixture_false_is_todays_act_alone_and_the_hash_is_the_base_with_no_branch(monkeypatch):
+    """CONTROL: `standing_occasion_cause` False -> `causes == [act id]` on every Event, and the world's content hash
+    equals the one a roster that lists no kind gives (the branch with nothing to find, the pre-B09.12 `[]`); the shipped
+    arm's hash is NOT that hash (the control observes something). FALSIFIER: a fixture the branch does not read leaves the
+    False arm citing the opening Event, and the first assertion fails."""
+    from engine.season.loop import resolve as RES
+    hashes = {}
+    for arm in ("off", "off_empty_roster", "on"):
+        w, heir = _the_king_dies("plant")
+        if arm != "on":
+            w.fixtures = w.fixtures.sweep("standing_occasion_cause", False)
+        with monkeypatch.context() as m:
+            if arm == "off_empty_roster":
+                m.setattr(RES, "STANDING_OCCASION_OPENED_BY", {})
+            a, out = _the_heir_claims(w, heir, "ctl")
+        assert [e.kind for e in out], arm
+        if arm != "on":
+            checked = 0
+            for e in out:
+                assert e.causes == [a.id], f"{arm}: {e.kind} cites {e.causes}"
+                checked += 1
+            assert checked >= 1
+        hashes[arm] = w.content_hash()
+    assert hashes["off"] == hashes["off_empty_roster"], hashes
+    assert hashes["on"] != hashes["off"], "the shipped arm's hash equals the control's: nothing moved"
+
+
+def test_a_vacancy_nothing_in_the_log_opened_keeps_its_act_alone():
+    """A seat vacant with no Event written about it has no opening Event: the branch returns `[]`, which is true. A
+    hand-built act on a classed seat the log never closed cites `[act]` only (no id is invented)."""
+    from engine.season.boot.realm import build_realm
+    w = build_realm(0)
+    heir = _holder_of(w, _HEIR_SEAT)
+    assert not _the_tenure_closed_naming(w, _THRONE), "fixture: the throne was already closed in the log"
+    next(t for t in w.tenures if t.kind == "hold" and t.live and t.object == _THRONE).until = w.tick
+    a, out = _the_heir_claims(w, heir, "none")
+    checked = 0
+    for e in out:
+        assert e.causes == [a.id], f"{e.kind} cites {e.causes}"
+        checked += 1
+    assert checked >= 1
+
+
+def test_the_roster_names_only_kinds_the_log_accepts_and_classes_a_question_can_carry():
+    """The loader refuses an off-roster kind and an off-roster class (`data/verbs.py::_check_standing_occasion_opened_by`,
+    beside `_check_strife_kinds`); the shipped roster passes and each class is one `referent_classes` names."""
+    from engine.season.data.rosters import STANDING_OCCASION_OPENED_BY, _load_standing_occasion_opened_by
+    from engine.season.data.verbs import EVENT_KINDS, _check_standing_occasion_opened_by
+    from engine.season.gaps import Unspecified
+    assert _check_standing_occasion_opened_by(STANDING_OCCASION_OPENED_BY, EVENT_KINDS) is STANDING_OCCASION_OPENED_BY
+    assert set(STANDING_OCCASION_OPENED_BY) <= set(REFERENT_CLASSES) and STANDING_OCCASION_OPENED_BY["Office"][0] == "tenure.closed"
+    for bad in ({"Office": ["tenure.closd"]}, {"Office": ["tenure.closed", "tenure.closd"]}):
+        with pytest.raises(Unspecified):
+            _check_standing_occasion_opened_by(bad, EVENT_KINDS)
+    for bad in ({"Offices": ["tenure.closed"]}, {"Office": []}, {"Office": ["tenure.closed", "tenure.closed"]},
+                {"Office": "tenure.closed"}):
+        with pytest.raises(Unspecified):
+            _load_standing_occasion_opened_by(bad)

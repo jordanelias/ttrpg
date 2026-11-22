@@ -13,7 +13,7 @@ a rule lives once, and a verb carrying both would be two readings of one prose c
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import NamedTuple, Optional
 
 from ..data.requires import binding_from_act
 from ..data.rosters import (BINDS_BASES, FOUNDED_CONFERRAL, FOUNDED_REVOCATION, FOUNDER_KEEPS, RELEASABLE_KINDS,
@@ -21,7 +21,7 @@ from ..data.rosters import (BINDS_BASES, FOUNDED_CONFERRAL, FOUNDED_REVOCATION, 
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..queries.person_q import ABOUT_KEYS
 from ..queries.world_q import BAN_KIND, DETAIN_KIND, DOCKET_PETITION, docketed, founds_over, restrained
-from ..state.carriers import Office, subject_of
+from ..state.carriers import Office, operand_of, subject_of
 from ..trace_log import TRACE
 # G3: THE SEAT-AUTHORITY RULES LIVE WITH THE GATE THAT ENFORCES THEM. The write gate's F3 clause
 # evaluates `seated_on_the_rung_above` and `REVOCATION_RULES` (T-o) and `has_conferral_basis` (the
@@ -40,8 +40,29 @@ from ..state.gate import (  # noqa: F401 -- `REVOCATION_RULES`, `in_holdings`, `
 REQUIRES_PREDICATES: dict = {}
 
 
-def requires_predicate(verb: str):
+class Answer(NamedTuple):
+    """B09.19: A NAMING PREDICATE'S ANSWER, `(ok, clause)`. `clause` is the one of the names the predicate declared at
+    `requires_predicate(clauses=...)` that refused it (`None` when admitted). It is truthy exactly when `ok` is, so a caller
+    that asks only *did it pass* (`if pred(w, a)`, `assert not pred(w, a)`) reads it as it read the bool, and a bare tuple's
+    always-true `(False, name)` is not a trap. `loop/resolve.py::_admits` is the reader of `clause`: it becomes
+    `Verdict.failed`, which `row.refusal_for` turns into the kind a KEYED row declares for that clause."""
+    ok: bool
+    clause: Optional[str] = None
+
+    def __bool__(self) -> bool:
+        return self.ok
+
+
+ADMITTED = Answer(True)
+
+
+def requires_predicate(verb: str, clauses: tuple = ()):
+    """Register `fn` as `verb`'s `requires:` predicate. `clauses` are the names a refusal of it can carry, in branch order:
+    THE ONE OWNER OF THEM. A predicate that declares none answers a bare bool, as the others do; one that declares them
+    answers `Answer`, and `data/verbs.py::VerbRow.precondition_evaluable` admits a KEYED row of that verb only when its keys
+    are exactly these (the loader cannot import `loop/`, so the names reach it through the predicate table)."""
     def deco(fn):
+        fn.clauses = tuple(clauses)
         REQUIRES_PREDICATES[verb] = fn
         return fn
     return deco
@@ -51,16 +72,25 @@ def _refuse(clause: str, ids: str) -> bool:
     """REM-14: THE CLAUSE A PREDICATE REFUSED ON, LEFT IN THE TRACE. Returns `False`, so a refusing
     branch reads `return _refuse(...)`. The fold's own row (`loop/resolve.py`, "<verb> by <actor>:
     precondition unmet") says THAT a precondition failed; a predicate with several `return False`
-    lines could not say WHICH, and `Verdict.failed` (the typed cells' answer) is `None` for a
-    predicate row. `"<clause> -> <ids>"` is the cluster-key form `harness/report.py` groups
+    lines could not say WHICH. `"<clause> -> <ids>"` is the cluster-key form `harness/report.py` groups
     DECISION rows by (`what.split(" -> ")[0]`), as `loop/effects_migration.py` writes it.
 
-    ⚠ A TRACE ROW AND NOTHING ELSE. The predicate still answers a bare bool: returning a `Verdict`
-    with observed reads would deposit claims through WITNESS and move the world hash."""
+    ⚠ A TRACE ROW AND NOTHING ELSE. The predicate carries no `observed` reads: returning a `Verdict`
+    with them would deposit claims through WITNESS and move the world hash. What a refusal's NAME can
+    change is its kind, through `_refuse_at`, and only on a keyed row."""
     TRACE.decision(f"{clause} -> {ids}", "E2/S27.1", chose="refuse",
                    alternatives=["admit the act and leave the refusal to the effect or the write "
                                  "gate"])
     return False
+
+
+def _refuse_at(clause: str, ids: str, said: Optional[str] = None) -> Answer:
+    """`_refuse` for a predicate that declares `clauses=`: the same trace row, and the refusal answers `Answer(False, clause)`.
+    `clause` is one of the names the caller declared (`test_predicates_clause.py` walks every call and checks it). `said` is the
+    trace's phrase where it is a sentence rather than the name (the cluster key `harness/report.py` groups by), PAIRED with the
+    name at the branch it describes, so the two cannot drift apart: the name is the owner and the phrase is its gloss."""
+    _refuse(said or clause, ids)
+    return Answer(False, clause)
 
 
 # ---------------------------------------------------------------------------
@@ -75,8 +105,8 @@ def _refuse(clause: str, ids: str) -> bool:
 # ---------------------------------------------------------------------------
 
 
-@requires_predicate("confer")
-def _req_confer(w: "World", a: "Act") -> bool:
+@requires_predicate("confer", clauses=("office", "basis", "conferee", "purview", "held", "displacement"))
+def _req_confer(w: "World", a: "Act") -> Answer:
     """Part E, IN FULL: *"the office's **conferral basis**, and 1-per-object: no live `hold` on the
     object, **or** the holder-Proposition has zero live `commit` (§54 it. 20)"*.
 
@@ -96,31 +126,35 @@ def _req_confer(w: "World", a: "Act") -> bool:
         seat (`may_revoke`: ruling (3)) -- unless the incumbent IS the actor (T-m: his own edge).
     `04 §C.2`'s own F3 note names `confer` beside `revoke` as *"writing `Tenure.until` on an edge
     whose subject is somebody else"*, which is why the displacement is T-o and not a second reading
-    of the conferral basis."""
+    of the conferral basis.
+
+    B09.19: THE ANSWER IS `Answer(ok, clause)`, the clause one of the six declared on the decorator -- `office`, `basis`,
+    `conferee`, `purview` (G3's `may_fill`), `held` (1-per-object: the seat is held and the conferral is to its own holder or
+    displaces one who carries a live `commit`) and `displacement` (T-o over the incumbent). The trace phrase beside each is the
+    sentence the REM-14 rows have always carried."""
     obj = office_named_by(a)
     if not obj or not isinstance(obj, str) or obj not in w.offices:
         # (a list `subject`/`office` is unhashable: refuse, never raise)
-        return _refuse("a confer names no office the world holds", f"{a.actor} on {obj!r}")
+        return _refuse_at("office", f"{a.actor} on {obj!r}", "a confer names no office the world holds")
     off = w.offices[obj]
     if not has_conferral_basis(off):
-        return _refuse("a confer of an office with no conferral basis", f"{a.actor} on {obj!r}")
+        return _refuse_at("basis", f"{a.actor} on {obj!r}", "a confer of an office with no conferral basis")
     # Batch B-I close (C1): THE CONFEREE IS A LIVING PERSON. `to` comes from the conferrer's own
     # claims (`known_persons`), which can name somebody since dead, and nothing downstream asks:
     # `_admits` refuses only a missing or self `to`, and the gate admits the hold under the
     # conferral basis, which reads `via` alone. `tell` gets this from its `hearer` conjunct; this row
     # is untyped, so it is asked here -- before `may_fill`'s purview walk, the dearer conjunct.
-    conferee = binding_from_act(a).get("to")
-    if not isinstance(conferee, str) or conferee not in w.persons:
-        # (a list `to` is unhashable: refuse, never raise)
-        return _refuse("a confer on a conferee who is no living person the world holds",
-                       f"{a.actor} to {conferee!r}")
+    conferee = operand_of(a, "to")         # a non-string `to` (a list is unhashable) reads as "": refused, never raised
+    if conferee not in w.persons:
+        return _refuse_at("conferee", f"{a.actor} to {conferee!r}",
+                          "a confer on a conferee who is no living person the world holds")
     if not may_fill(w, a.actor, a.via, off):
         # G3: the seat exercised does not reach the seat conferred
-        return _refuse("a confer the seat exercised does not reach the office conferred",
-                       f"{a.actor} via {a.via!r} on {obj!r}")
+        return _refuse_at("purview", f"{a.actor} via {a.via!r} on {obj!r}",
+                          "a confer the seat exercised does not reach the office conferred")
     tenures = w.tenures                    # one view for the three scans below
     if not any(t.kind == "hold" and t.object == obj and t.live for t in tenures):
-        return True                        # 1-per-object satisfied
+        return ADMITTED                    # 1-per-object satisfied
     # THE `or` DISJUNCT: a held office is still conferrable when the holder-Proposition carries
     # no live `commit`. §54 item 20.
     # ⚠ READ AGAINST THE ROW AT IN-53 step (4) AND KEPT, WITH THE REASON. §54 item 20 (*"a
@@ -138,32 +172,39 @@ def _req_confer(w: "World", a: "Act") -> bool:
     if holder is None or holder == conferee:
         # B-I close, Phase 3 F1: conferring a seat on its own holder changes nothing but closes and
         # reopens his edge
-        return _refuse("a confer of a seat on its own holder", f"{a.actor} to {conferee!r} on {obj!r}")
+        return _refuse_at("held", f"{a.actor} to {conferee!r} on {obj!r}", "a confer of a seat on its own holder")
     if any(t.kind == "commit" and t.subject == holder and t.live for t in tenures):
-        return _refuse("a confer displacing a holder who carries a live commit",
-                       f"{a.actor} displacing {holder!r} on {obj!r}")
+        return _refuse_at("held", f"{a.actor} displacing {holder!r} on {obj!r}",
+                          "a confer displacing a holder who carries a live commit")
     # G3: displacing the holder CLOSES HIS EDGE -- T-o, through the seat exercised.
     if holder == a.actor or may_revoke(w, a.actor, a.via, off):
-        return True
-    return _refuse("a confer displacing a holder the seat exercised has no revocation authority over",
-                   f"{a.actor} via {a.via!r} displacing {holder!r} on {obj!r}")
+        return ADMITTED
+    return _refuse_at("displacement", f"{a.actor} via {a.via!r} displacing {holder!r} on {obj!r}",
+                      "a confer displacing a holder the seat exercised has no revocation authority over")
 
 
-@requires_predicate("succeed")
-def _req_succeed(w: "World", a: "Act") -> bool:
+@requires_predicate("succeed", clauses=("operand", "banned", "claim"))
+def _req_succeed(w: "World", a: "Act") -> Answer:
     """v10 IN-61 (RS-27): THE HEIR'S CLAIM -- *admitted iff the throne has no live `hold` and the actor
     holds `successions[throne]`*. The seat is the act's `subject` (the classed `Office` referent of the
     question he answers: `world_q.seats_named`, the vacancy he was told of). The whole test is the write
     gate's own `may_claim`, asked with the seats the actor holds live -- so a claim the gate would refuse
     is refused here first and EMITS (`succession.refused`) rather than raising `NotYours` out of the fold.
-    Untyped: the closed grammar has no cell for *no live `hold` on the subject* nor for a roster lookup."""
-    seat = binding_from_act(a).get("subject")
-    if not isinstance(seat, str) or seat not in w.offices:
-        return False                       # (a list `subject` is unhashable: refuse, never raise)
+    Untyped: the closed grammar has no cell for *no live `hold` on the subject* nor for a roster lookup.
+
+    B09.19: THE ANSWER IS `Answer(ok, clause)`: `operand` (the subject is no seat), `banned`, and `claim` -- the gate's own
+    `may_claim` refusing (a live hold on the seat, or no `successions` entry the actor holds), which the declared two did not
+    name and which now leaves its trace row like every other refusing branch."""
+    seat = subject_of(a)                   # a non-string `subject` (a list is unhashable) reads as "": refused, never raised
+    if seat not in w.offices:
+        return _refuse_at("operand", f"{a.actor} on {seat!r}")
     if restrained(w, a.actor, BAN_KIND):
-        return False                       # a banned man is seated by no route (`confer` declines him, `_req_oblige` 5)
+        # a banned man is seated by no route (`confer` declines him, `_req_oblige` 5)
+        return _refuse_at("banned", f"{a.actor} on {seat!r}")
     titles = {t.object for t in w.seat_holds(a.actor)}
-    return may_claim(w, a.actor, w.offices[seat], titles)
+    if may_claim(w, a.actor, w.offices[seat], titles):
+        return ADMITTED
+    return _refuse_at("claim", f"{a.actor} on {seat!r}", "a succeed the heir's claim does not admit")
 
 
 def office_named_by(a: "Act") -> "Optional[str]":
@@ -276,8 +317,9 @@ def office_founded_by(w: "World", a: "Act") -> "Optional[Office]":
                   body=seat.body, faction=seat.faction)
 
 
-@requires_predicate("establish")
-def _req_establish(w: "World", a: "Act") -> bool:
+@requires_predicate("establish", clauses=("office resolves", "rung held", "conferral basis", "filler", "re-founding",
+                                          "may fill", "reduction needs revocation"))
+def _req_establish(w: "World", a: "Act") -> Answer:
     """W3's row: *"the establishing office's conferral basis, and a rung to establish it at"*.
 
     ⚠ THE READING, STATED BECAUSE THE PROSE ADMITS TWO: *the establishing office* is THE OFFICE
@@ -326,41 +368,47 @@ def _req_establish(w: "World", a: "Act") -> bool:
     reduction of a sitting holder's grant also asks `may_revoke` (H-132 (b)), both at the clause. ⚠ It is STRICTER THAN THE GATE by one case, deliberately: a
     re-stamp that changes no grant writes nothing the gate would see, and this still asks for the
     authority -- mirroring `_grant_remit`'s equal-grant test here would be a second copy of it
-    (§8)."""
+    (§8).
+
+    B09.19: THE ANSWER IS `Answer(ok, clause)`, the clause one of the seven declared on the decorator, in branch order:
+    `office resolves` (clause 1: the constructor's refusals, an overlay act `founds_over` refuses, an operand missing),
+    `rung held` (2), `conferral basis` (3), `filler`, `re-founding` (4: a different belonging, and an id some other class
+    holds, which clause 4's *the id is new* also refuses), `may fill` (5) and `reduction needs revocation`."""
     try:
         off = office_founded_by(w, a)      # v11 CR-25: the overlay keys, else the derivation from subject and via
     except (Unowned, Unspecified, Forbidden):
         # the constructor refused it: translated, never filled
-        return _refuse("an establish the office's constructor refused", f"{a.actor} via {a.via!r}")
+        return _refuse_at("office resolves", f"{a.actor} via {a.via!r}", "an establish the office's constructor refused")
     if off is None:
         described = office_described_by(a)
         if described is not None:
             # H-291: an overlay act whose seat does not found over the described rung (clause 1's own refusal)
-            return _refuse("an establish over a rung the seat exercised does not found over",
-                           f"{a.actor} via {a.via!r} at {described.rung!r}")
-        return _refuse("an establish lacking an operand the office needs", f"{a.actor} via {a.via!r}")
+            return _refuse_at("office resolves", f"{a.actor} via {a.via!r} at {described.rung!r}",
+                              "an establish over a rung the seat exercised does not found over")
+        return _refuse_at("office resolves", f"{a.actor} via {a.via!r}", "an establish lacking an operand the office needs")
     if off.rung not in w.rungs:
         # "a rung to establish it at"
-        return _refuse("an establish at no rung the world holds", f"{a.actor} at {off.rung!r}")
+        return _refuse_at("rung held", f"{a.actor} at {off.rung!r}", "an establish at no rung the world holds")
     if not has_conferral_basis(off):
         # "the establishing office's conferral basis"
-        return _refuse("an establish of an office with no conferral basis", f"{a.actor} on {off.id!r}")
+        return _refuse_at("conferral basis", f"{a.actor} on {off.id!r}",
+                          "an establish of an office with no conferral basis")
     if not has_filler(off):
         # a seat only the heir's claim opens, with no title passing it (v10 IN-61)
-        return _refuse("an establish of a seat only the heir's claim opens, with no title passing it",
-                       f"{a.actor} on {off.id!r}")
+        return _refuse_at("filler", f"{a.actor} on {off.id!r}",
+                          "an establish of a seat only the heir's claim opens, with no title passing it")
     held_as = w.class_of(off.id)
     if held_as is not None:
         if held_as != "Office":
             # the id is a person's, a rung's... -- `class_of` ambiguity
-            return _refuse("an establish on an id some other class holds", f"{a.actor} on {off.id!r}")
+            return _refuse_at("re-founding", f"{a.actor} on {off.id!r}", "an establish on an id some other class holds")
         cur = w.offices[off.id]
         if not (off.post == cur.post and off.rung == cur.rung and off.body == cur.body
                 and off.faction == cur.faction and off.conferral == cur.conferral
                 and off.revocation == cur.revocation):
             # re-founding, which `writes:` does not declare
-            return _refuse("an establish naming a different belonging for an existing office "
-                           "(re-founding)", f"{a.actor} on {off.id!r}")
+            return _refuse_at("re-founding", f"{a.actor} on {off.id!r}",
+                              "an establish naming a different belonging for an existing office (re-founding)")
     # 5. G3 -- the re-stamp writes EVERY sitting holder's grant, the actor's own included.
     #
     # ⚠ THE ACTOR'S OWN HOLD IS NOT EXCLUDED: T-m NEVER admits re-granting a seat-hold
@@ -378,8 +426,8 @@ def _req_establish(w: "World", a: "Act") -> bool:
     # anywhere in the realm. A founding is no existing office; its purview check is `founds_over`'s (ii).
     holds = [t for t in w.tenures if t.kind == "hold" and t.object == off.id and t.live]
     if (held_as == "Office" or holds) and not may_fill(w, a.actor, a.via, off):
-        return _refuse("an establish on an existing office the seat exercised does not reach",
-                       f"{a.actor} via {a.via!r} on {off.id!r}")
+        return _refuse_at("may fill", f"{a.actor} via {a.via!r} on {off.id!r}",
+                          "an establish on an existing office the seat exercised does not reach")
     # v11 CR-25, M8 taken, H-132 (b) [ASSUMPTION; medium; Jordan to correct; revert: drop this clause]: A
     # REDUCTION IS A PARTIAL REVOCATION. A re-stamp that drops from a sitting holder's grant
     # (`Tenure.granted_acts`, the snapshot the re-stamp overwrites) an act the new remit does not carry must
@@ -393,9 +441,9 @@ def _req_establish(w: "World", a: "Act") -> bool:
     keeps = set(off.remit_acts)
     if (held_as == "Office" and any(set(t.granted_acts) - keeps for t in holds)
             and not may_revoke(w, a.actor, a.via, w.offices[off.id])):
-        return _refuse("an establish reducing a sitting holder's grant without revocation authority",
-                       f"{a.actor} via {a.via!r} on {off.id!r}")
-    return True
+        return _refuse_at("reduction needs revocation", f"{a.actor} via {a.via!r} on {off.id!r}",
+                          "an establish reducing a sitting holder's grant without revocation authority")
+    return ADMITTED
 
 
 @requires_predicate("release")
@@ -429,8 +477,8 @@ def _req_release(w: "World", a: "Act") -> bool:
                    "(live, of a releasable kind)", f"{a.actor} toward {subj!r}")
 
 
-@requires_predicate("oblige")
-def _req_oblige(w: "World", a: "Act") -> bool:
+@requires_predicate("oblige", clauses=("seat", "binds", "own_seat", "one_edge", "banned"))
+def _req_oblige(w: "World", a: "Act") -> Answer:
     """Plan position `17a` (r2 item 9; `03_SEATS_AND_CONTENT.md` §A.9; `05` §A.1.5 RULED (b)): *the
     subject is a seat whose `binds` admits the joiner, the actor does not hold it, and no live
     `oblige` from the actor to it*. The seat rides `subject`, as `commit`'s Proposition does and as
@@ -476,19 +524,29 @@ def _req_oblige(w: "World", a: "Act") -> bool:
     predicate: on the UNTYPED row no operand is carried, so `opening_set` forms no `oblige`
     Candidate at all -- `give`'s precedent (plan position 16) for a second party the chooser cannot
     yet name -- and no Question's referent is ever a seat in any case (plan position `15` measured
-    it for `petition`). An `oblige` executes from an act that names its seat."""
+    it for `petition`). An `oblige` executes from an act that names its seat.
+
+    B09.19: THE ANSWER IS `Answer(ok, clause)`, the clause being the name each of the five numbered above carries on the
+    decorator (`seat`, `binds`, `own_seat`, `one_edge`, `banned`)."""
     seat = subject_of(a)
     off = w.offices.get(seat) if seat else None
     if off is None:
-        return False                       # 1. an opener takes a SEAT's id (ED-IN-0211)
+        # 1. an opener takes a SEAT's id (ED-IN-0211)
+        return _refuse_at("seat", f"{a.actor} on {seat!r}")
     if off.binds not in BINDS_BASES:
-        return False                       # 2. ARCH F.17: the seat's `binds` admits the joiner
+        # 2. ARCH F.17: the seat's `binds` admits the joiner
+        return _refuse_at("binds", f"{a.actor} on {seat!r}")
     mine = [t for t in w.tenures if t.subject == a.actor and t.object == seat and t.live]
     if any(t.kind == "hold" for t in mine):
-        return False                       # 3. the occupant is not his own seat's obligee
+        # 3. the occupant is not his own seat's obligee
+        return _refuse_at("own_seat", f"{a.actor} on {seat!r}")
     if any(t.kind == "oblige" for t in mine):
-        return False                       # 4. one edge per (person, seat)
-    return not restrained(w, a.actor, BAN_KIND)   # 5. v9 SC-03a: a banned man serves no seat
+        # 4. one edge per (person, seat)
+        return _refuse_at("one_edge", f"{a.actor} on {seat!r}")
+    if restrained(w, a.actor, BAN_KIND):
+        # 5. v9 SC-03a: a banned man serves no seat
+        return _refuse_at("banned", f"{a.actor} on {seat!r}")
+    return ADMITTED
 
 
 @requires_predicate("interrogate")
@@ -515,8 +573,8 @@ def _req_interrogate(w: "World", a: "Act") -> bool:
          route reads the accused alone.
     The record kind is not compared: a Record named under the docket's petition key is one `carry`
     docketed, and `carry` docketed only a petition (`_eff_carry`)."""
-    subj = subject_of(a)
-    if not isinstance(subj, str) or subj not in w.persons:      # (a list `subject` is unhashable: refuse, never raise)
+    subj = subject_of(a)                   # a non-string `subject` reads as "": refused, never raised
+    if subj not in w.persons:
         return _refuse("an interrogation of no person the world holds", f"{a.actor} on {subj!r}")
     if not restrained(w, subj, DETAIN_KIND):
         return _refuse("an interrogation of a man held in no custody", f"{a.actor} on {subj!r}")
@@ -554,8 +612,7 @@ def _req_revoke(w: "World", a: "Act") -> bool:
     *"so long as"* made PURVIEW sufficient while Part E kept the remit necessary. Ruling (3) is
     silent on the remit, so the same question now reads *is the seat above sufficient?* -- still
     `H-91`'s, still not resolved by editing the transcribed `eligibility:` column."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    obj = d.get("office")
+    obj = operand_of(a, "office")          # a non-string `office` (a list is unhashable) reads as "": refused, never raised
     if not obj or obj not in w.offices:
         return _refuse("a revoke names no office the world holds", f"{a.actor} on {obj!r}")
     off = w.offices[obj]
@@ -582,10 +639,10 @@ def _req_revoke(w: "World", a: "Act") -> bool:
 @requires_predicate("dispatch")
 def _req_dispatch(w: "World", a: "Act") -> bool:
     """Part E: *the named person exists*."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    if d.get("subject") in w.persons:
+    subject = subject_of(a)                # a non-string `subject` (a list is unhashable) reads as "": refused, never raised
+    if subject in w.persons:
         return True
-    return _refuse("a dispatch names no person the world holds", f"{a.actor} to {d.get('subject')!r}")
+    return _refuse("a dispatch names no person the world holds", f"{a.actor} to {subject!r}")
 
 
 @requires_predicate("convene")
@@ -623,10 +680,10 @@ def _req_convene(w: "World", a: "Act") -> bool:
     exists to forbid. The `rank` STEM is real, general infrastructure (`REQUIRES_STEMS`,
     `WorldReader.read`) for whatever next needs it typed; this predicate reads the same roster
     ordinal directly rather than smuggling a second stem in to dodge the constant."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    subject = d.get("subject")
-    if subject is None:
-        return True                        # §6.2's carve-out
+    d = a.payload if isinstance(a.payload, dict) else {}
+    if d.get("subject") is None:
+        return True                        # §6.2's carve-out: tested on the RAW key, before the read below
+    subject = subject_of(a)                # a non-string `subject` (a list is unhashable) reads as "": refused, never raised
     r = w.rungs.get(subject)
     if r is None:
         return _refuse("a convene at a venue that is no rung the world holds",

@@ -185,11 +185,8 @@ class SeasonDriver:
         # alongside `resolved`, never read on its own, so the dedup check in `loop/resolve.py::_fold`
         # is a set membership test.
         self._resolved_ids: set = set()
-        # RESOLVER-SIDE, AND CUMULATIVE, like `resolved`. The Scene is the budgeted unit and
-        # carries the `occasion`, so the fold can name what occasioned an act. No person-side Query
-        # reaches it. It is NOT season-local: see the note at the `_fold` call site for why R3
-        # depends on that.
-        self.scenes: dict = {}
+        # B09.16: THE DRIVER HOLDS NO SCENES. The Scene (the budgeted unit, carrying the `occasion`) is kept beside its
+        # acts in `World.acts` (`ActStore.scene_of`), cumulative across seasons as R3 needs and surviving the driver.
         # Event id -> the Act that emitted it. See the note at the `_fold` call site.
         self.act_of: dict = {}
         # v9 FI-03 (`ED-FI-0002`): finding Event id -> `((trail event id, terms shown), ...)`, what the
@@ -207,7 +204,7 @@ class SeasonDriver:
         # would make it world state and put a fourth clock in the model (U2's falsifier (d) is the
         # AST scan that holds this).
         #
-        # SEASON-LOCAL, UNLIKE `resolved` / `scenes` / `act_of` ABOVE: those three are the fold's
+        # SEASON-LOCAL, UNLIKE `resolved` / `act_of` ABOVE (and the Scene store in `World.acts`): those are the fold's
         # cumulative record and R3 depends on them crossing seasons, while a scene budget and a
         # "when did this person last deliberate" stamp reset at the season boundary by definition.
         # `season()` clears them.
@@ -323,9 +320,10 @@ class SeasonDriver:
             # `budget`, `person_side_eligible` and `questions_for` read `p.tenures` directly.
             w._rehome()
             w.frozen = True
-            acts = self.deliberate(choose, question,
-                                   self._questions_at_barrier())        # a MAP: no token
-            events = self.resolve(mint_token(w, WriteClass.ACTS), acts, contest_max_depth)
+            scenes = self.deliberate(choose, question,
+                                     self._questions_at_barrier())      # a MAP: no token; returns {scene id: Scene}
+            acts = [a for sc in scenes.values() for a in sc.acts]       # release order, as the map was built
+            events = self.resolve(mint_token(w, WriteClass.ACTS), acts, contest_max_depth, scenes=scenes)
             # M4 (`ED-IN-0279` clause (a), `04 §A.2:134` as amended 2026-09-28): the SEVENTH
             # step, sharing barrier 3 -- no `TRACE.barrier(...)` call, so "four barriers" stays
             # true. Fights whatever RESOLVE just declared and deferred; appended onto the SAME

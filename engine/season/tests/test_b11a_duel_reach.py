@@ -54,7 +54,7 @@ def revert_b11a(monkeypatch) -> None:
     monkeypatch.setattr(world_q, "disputes_held", lambda w, p: ())
     monkeypatch.setattr(world_q, "challenges_heard", lambda w, p, named=None: ())
     monkeypatch.setattr(O, "RECORD_SUBKINDS_BY_VERB", {})
-    monkeypatch.setattr(O, "document_read", lambda p, rid: None)
+    monkeypatch.setattr(O, "document_read", lambda p, rid, *fade: None)      # B09.01: `tick`, `decay`
     monkeypatch.setattr(O, "OPPOSED_WITHOUT_PRIZE", frozenset())
     if "fight" in O.VIOLENCE_CONTEXTS:       # an earlier item's revert (CR-87's) may have emptied the block: keep it so
         monkeypatch.setattr(O, "VIOLENCE_CONTEXTS", {**O.VIOLENCE_CONTEXTS,

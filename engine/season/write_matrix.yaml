@@ -93,11 +93,11 @@ rows:
     emits:   "—"
   - kind:    "Claim"
     field:   "confidence"
-    steps:   [MAT]
-    class:   "MATTER"
+    steps:   []
+    class:   "—"
     social:  "false"
-    by:      "W2/H-40 -- the THIRD licensed clock (#353 :864). Part D carried NO `Claim` row, so Part D was not total for a clock #353 licenses -- V2's own falsifier at §I1 row 1"
-    emits:   "`claim.decayed`"
+    by:      "B09.01: the value a claim was DEPOSITED at, seated by WITNESS's deposit (a `Claim`'s construction) and written NOWHERE in play: no step, so the gate refuses any write. A claim's fade is computed where it is read, `state/ledgers.py::present_confidence(confidence, when, tick, decay)` (`Fixtures claim_decay_per_season`), so no Event marks it and MATTER no longer walks ledgers (W2/H-40's clock, #353 :864, retired as a write)"
+    emits:   "—"
   - kind:    "ConveningCondition"
     field:   "attached"
     steps:   [CAL, RES]

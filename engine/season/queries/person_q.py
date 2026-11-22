@@ -54,6 +54,7 @@ from ..data.rosters import (
     roster_map,
 )
 from ..state.carriers import Person, Said
+from ..state.ledgers import present_confidence
 from ..trace_log import TRACE
 
 # B14.16: THE OBSERVATION THAT NAMES THE HAND OF A FELLED ACTOR'S DEATH. `loop/effects_combat.py::hand_observed` puts
@@ -91,7 +92,7 @@ def held_against(p: Person, referent: str) -> tuple:
                  if len(row) >= 3 and row[0] == referent and float(row[1]) < 0)
 
 
-def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
+def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0) -> tuple:
     """`(judged, told)`: WHAT `p` MAKES OF THE DEEDS THEY HOLD ABOUT `referent`, by `p`'s OWN
     pursuits (v9 IN-18 `G1`, telling workplan §3's `regard` row). A deed claim is an event-kind
     claim `(referent, <kind>, True)` -- WITNESS's first deposit, or a told copy of one -- with
@@ -115,24 +116,31 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     the killer is counted once; an unpaired claim (no `seen`, `who` withheld, ambiguous) scores
     nothing, so a hidden actor stays hidden. A paired deed lands in `judged` or `told` by the deed
     claim's own `firsthand`, as every deed does.
-    ⚠ THE SWORN-TO HALF IS NOT BUILT (IN-58, narrowed at B10-09 close two). Its edge IS person-side: a
-    judge's own live, un-`imposed` `oblige` to a seat is in `p.tenures` and outlives the victim. What is
-    missing is the PAIRING, not the edge: a death's seat reaches a ledger as `(seat, tenure.closed, True)`
-    (`state/gate.py::Subject.seat`) beside `(victim, person.died, True)`, two claims that share only
-    `when` and `lap`, which this module never reads as a pairing (`deed_doer`: it does not guess), so
-    no claim a judge holds says the victim sat in that seat. FACTION-LEVEL grievance is v9 IN-70's: `opinion` here,
-    its World half and its referents in `world_q` (`opinion_of`, `opinion_referents`).
+    THE SWORN-TO HALF IS BUILT, AT CONTROL (IN-58, B09.20; `sworn_bond`, H-459, shipped 0.0: "it ships OFF").
+    A judge's own live, un-`imposed` `oblige` to a seat `S` is in `p.tenures` and outlives the victim, and
+    the PAIRING that was missing -- a claim saying the victim sat in `S` -- is B09.22's: a seat closed by a
+    death reaches the ledger of whoever WITNESS deposits it to (`observation_deposit_mode`) as `(S, hold,
+    <the dead holder>)` (`state/gate.py::Subject.seat`), beside `(S, tenure.closed, True)` and `(victim,
+    person.died, True)`. That claim is the pairing, never the two claims' shared `when` and `lap`, which this
+    module does not read as one (`deed_doer`: it does not guess). `_bond` adds `sworn_bond` to the allegiance
+    `a` for a patient the judge is so sworn to (`sworn_to_holder`), and only for the paired-deed term
+    (`lean · bond`), so it scales a pursuit's lean and nothing else; a caller that holds `fx` passes
+    `fx.get("sworn_bond")`, one holding none reads the control. At the shipped `actor` mode only the killer
+    holds `(S, hold, victim)`, so the arm is reached by few judges until another mode or a telling carries the
+    claim. FACTION-LEVEL grievance is v9 IN-70's: `opinion` here, its World half and its referents in
+    `world_q` (`opinion_of`, `opinion_referents`).
     [ASSUMPTION, H-192: a deed's claim subject is read as its doer for every other kind; the sum is
     unnormalised.] Person-side, no World (AX-2).
     ⚠ v9 SC-02 `22a`: WHICH claims are `referent`'s deeds is `attributed_deeds`' and WHAT each is worth
     is `deed_term`'s; this function sums them by `firsthand`, and `world_q.reception` sums the same two
-    by remove and confidence, so the two readers cannot disagree on either."""
+    by remove and confidence, so the two readers cannot disagree on either at the shipped `sworn_bond` 0.0
+    (`deed_term` itself reads the control: `reception` and this sum part when it is non-zero)."""
     axis_w = None
     judged = told = 0.0
     for c in attributed_deeds(p.ledger, referent):
         if axis_w is None:
             axis_w = projected_axes(p, scar_shift)
-        v = deed_term(p, axis_w, c)
+        v = deed_term(p, axis_w, c, sworn_bond)
         # FIRSTHAND only is judged (`dissents`' and `record`'s precedent, `decision/options.py`):
         # a `told_by` claim whose chain is empty is still hearsay, and lands in `told`.
         if c.firsthand:
@@ -142,13 +150,13 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0) -> tuple:
     return judged, told
 
 
-def holds_dispute(p: Person, referent: str, scar_shift: float = 0.0) -> bool:
+def holds_dispute(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0) -> bool:
     """v11 CR-87 (the DISPUTE, `challenge`'s conjunct; `data/requires.py`'s `dispute` stem): DOES `p` HOLD A DEED CLAIM
     OF `referent`'s THAT HIS OWN JUDGEMENT SCORES AGAINST HIM -- `deeds_judged`' two parts summed below zero (what he
     saw and what he was told, each by his own pursuits). Person-side; the fold asks it of the actor's own ledger.
     CR-88 re-points the conjunct to `grievance_against`. [ASSUMPTION; medium; Jordan to correct; revert: drop the
     conjunct from `challenge`'s cell.]"""
-    judged, told = deeds_judged(p, referent, scar_shift)
+    judged, told = deeds_judged(p, referent, scar_shift, sworn_bond)
     return judged + told < 0
 
 
@@ -171,14 +179,15 @@ def attributed_deeds(ledger, referent: str):
         yield c
 
 
-def deed_term(p: Person, axis_w: dict, c) -> float:
+def deed_term(p: Person, axis_w: dict, c, sworn_bond: float = 0.0) -> float:
     """WHAT ONE OF `attributed_deeds`' CLAIMS IS WORTH TO `p`, whose projected pursuits are `axis_w`:
     a paired deed `lean · bond` (`_lean`, `_bond` on the claim's patient, IN-58), any other
     `deed_valence`. The same numbers `paired_deed_term` and `deed_valence` give; `deeds_judged` and
-    `world_q.reception` both read it here. Person-side (AX-2)."""
+    `world_q.reception` both read it here. `sworn_bond` (B09.20, the control 0.0) is `deeds_judged`'s and reaches
+    only a paired deed; `reception` and `legitimacy` read the control. Person-side (AX-2)."""
     if c.predicate in PAIRED_KINDS:
         lean = _lean(axis_w, c.predicate)
-        return _paired_weight(p, c, lean) if lean else 0.0
+        return _paired_weight(p, c, lean, sworn_bond) if lean else 0.0
     return deed_valence(axis_w, c)
 
 
@@ -393,13 +402,25 @@ def paired_deed_term(p: Person, axis_w: dict, c, seen_of) -> tuple:
     return doer, _paired_weight(p, c, lean)
 
 
-def _paired_weight(p: Person, c, lean: float) -> float:
+def _paired_weight(p: Person, c, lean: float, sworn_bond: float = 0.0) -> float:
     """A paired deed's term, `lean · bond` on the claim's patient: the one formula `deed_term` and
     `paired_deed_term` share (`CLAUDE.md` §8, the rule lives once)."""
-    return lean * _bond(p, c.subject, lean)
+    return lean * _bond(p, c.subject, lean, sworn_bond)
 
 
-def _bond(p: Person, patient: str, lean: float) -> float:
+def sworn_to_holder(p: Person, patient: str) -> bool:
+    """IS `p` SWORN TO THE SEAT `patient` HELD (B09.20, IN-58's sworn-to half): does `p` hold a live, un-`imposed`
+    `oblige` Tenure whose object is a seat `S`, AND hold the claim `(S, hold, patient)` that B09.22's seat writes when
+    a death closes the hold (`state/gate.py::Subject.seat`)? The CLAIM is the pairing: a `tenure.closed` claim on `S`
+    and a `person.died` claim on `patient` that merely share a `when` and `lap` pair nothing (`deed_doer` does not
+    guess), and an oath `p` does not hold a claim for names no victim. An `imposed` oblige is a sentence, not an
+    oath (`Tenure.imposed`). Person-side, `p.tenures` and `p.ledger` only (AX-2)."""
+    seats = {t.object for t in p.tenures if t.kind == "oblige" and t.live and not t.imposed}
+    return bool(seats) and any(c.predicate == "hold" and c.value == patient and c.subject in seats
+                               for c in p.ledger)
+
+
+def _bond(p: Person, patient: str, lean: float, sworn_bond: float = 0.0) -> float:
     """v9 IN-58's FACTOR: how `p`'s allegiance to the deed's PATIENT weighs the deed,
     `1 - a · sign(lean)`, `a = clamp(stance_toward(p, patient) / STANCE_MAX, -1, 1)` -- the stored
     half only, normalised as `teller_weight` normalises regard. In `[0, 2]`, and the deed term
@@ -408,8 +429,18 @@ def _bond(p: Person, patient: str, lean: float) -> float:
     condemnation; no stance (`a = 0`) judges the deed by pursuits alone. The judge who IS the
     patient is his own full ally (`a = 1`): no stance row names oneself, and reading it would judge
     his own attacker as a stranger's. [ASSUMPTION; medium;
-    Jordan to correct -- the form of the factor; revert: no factor and the two cells unauthored.]"""
-    a = 1.0 if patient == p.id else max(-1.0, min(1.0, stance_toward(p, patient) / STANCE_MAX))
+    Jordan to correct -- the form of the factor; revert: no factor and the two cells unauthored.]
+    THE SWORN-TO ARM (B09.20, `sworn_bond`, H-459): for a judge `sworn_to_holder` of the patient, `sworn_bond` is
+    ADDED to `a` before the clamp, so an oath binds on the stance's own scale and a full stance plus an oath is
+    still `a = 1`. `0.0` (the control, and every caller holding no `fx`) reads no ledger and no tenure: the stored
+    half exactly."""
+    if patient == p.id:
+        a = 1.0
+    else:
+        a = stance_toward(p, patient) / STANCE_MAX
+        if sworn_bond and sworn_to_holder(p, patient):
+            a += sworn_bond
+        a = max(-1.0, min(1.0, a))
     return 1.0 - a if lean > 0 else 1.0 + a
 
 
@@ -461,7 +492,7 @@ def regard(p: Person, referent: str, fx=None) -> float:
     if not (jg >= 0 and tg >= 0):
         raise ValueError(f"judged_gain {jg} / told_valence_gain {tg} must be >= 0 (H-192/H-193)")
     if jg or tg:
-        judged, told = deeds_judged(p, referent, fx.get("scar_weight_shift"))
+        judged, told = deeds_judged(p, referent, fx.get("scar_weight_shift"), fx.get("sworn_bond"))
         stored = stored + jg * judged + tg * told
     # v11 CR-31: the caste estimate, `heritage_regard`, a third term at its own gain (0 reads nothing, so the
     # sum above is returned untouched: the control). It reads `p`'s own ledger and own convictions only.
@@ -477,11 +508,12 @@ def regard(p: Person, referent: str, fx=None) -> float:
 CAPABILITY_CLAIM = "capability:"
 
 
-def believed_capability(p: Person, other: str, capability: str):
+def believed_capability(p: Person, other: str, capability: str, tick: int = 0, decay: int = 0):
     """WHAT `p` BELIEVES `other`'s SCORE IN `capability` IS, from his OWN ledger alone: the value of his latest claim
     about `other` at `CAPABILITY_CLAIM + capability` (latest by `(when, lap, confidence)`), else `None` -- unknown, never a
-    figure. Person-side (AX-2): it reads `p`'s ledger and nothing else."""
-    return _latest_claim(p, other, CAPABILITY_CLAIM + capability)
+    figure. Person-side (AX-2): it reads `p`'s ledger and nothing else. `tick` and `decay` are the reader's (`LedgerReader`'s):
+    two claims of one `(when, lap)` are ranked by the confidence each is held at now."""
+    return _latest_claim(p, other, CAPABILITY_CLAIM + capability, tick, decay)
 
 
 # B14.24: THE CLAIMS A PERSON HOLDS ABOUT ANOTHER'S ARMS AND WOUNDS, the capability claim's own shape (`Claim(subject=<that person>,
@@ -493,28 +525,49 @@ KIT_CLAIM = "kit:"
 BODY_CLAIM = "condition:body"
 
 
-def _latest_claim(p: Person, other: str, predicate: str):
-    """The value of `p`'s latest claim about `other` at `predicate` (latest by `(when, lap, confidence)`), else `None`; `p`'s ledger alone."""
+def _latest_claim(p: Person, other: str, predicate: str, tick: int = 0, decay: int = 0):
+    """The value of `p`'s latest claim about `other` at `predicate` (latest by `(when, lap, present confidence)`), else `None`; `p`'s ledger alone."""
     held = [c for c in p.ledger if c.subject == other and c.predicate == predicate]
-    return max(held, key=lambda c: (c.when, c.lap, c.confidence)).value if held else None
+    return max(held, key=lambda c: (c.when, c.lap, present_confidence(c.confidence, c.when, tick, decay))).value if held else None
 
 
-def believed_kit(p: Person, other: str, field: str):
+def believed_kit(p: Person, other: str, field: str, tick: int = 0, decay: int = 0):
     """The key `p` believes `other` carries in the Combatant `field` (`weapon` or `armor`), from his OWN ledger alone: the value of his latest claim
     at `KIT_CLAIM + field`, else `None` -- unknown, never a figure. Person-side (AX-2)."""
-    return _latest_claim(p, other, KIT_CLAIM + field)
+    return _latest_claim(p, other, KIT_CLAIM + field, tick, decay)
 
 
-def believed_body(p: Person, other: str):
+def believed_body(p: Person, other: str, tick: int = 0, decay: int = 0):
     """The condition `p` believes `other`'s body is at, from his OWN ledger alone: the value of his latest `BODY_CLAIM` about `other`, else `None`.
     Person-side (AX-2)."""
-    return _latest_claim(p, other, BODY_CLAIM)
+    return _latest_claim(p, other, BODY_CLAIM, tick, decay)
 
 
 def has_seen(p: Person, other: str) -> bool:
     """Has `p` SEEN `other`: does his ledger hold an untold `seen` claim whose `who` is `other` (`heritage_regard` reads the same deposit)? The
     reading of a person he has laid eyes on; a person known only by report or not at all is not seen. Person-side (AX-2)."""
     return any(c.predicate == SEEN_PREDICATE and not c.chain and getattr(c.value, "who", None) == other for c in p.ledger)
+
+
+def refused_before(p: Person, kinds: tuple, subject: str, tick: int = 0, decay: int = 0) -> int:
+    """THE PRESENT CONFIDENCE (`0..confidence_default`) OF THE NEWEST CLAIM IN WHICH `p` WAS HIMSELF REFUSED THIS OPPORTUNITY, else `0`.
+
+    The claim is one `p` holds firsthand in his OWN ledger -- untold, `doer == p.id` -- whose predicate is in `kinds` (the verb row's
+    `emits_on_refusal`) and whose subject is `subject`. The newest is the greatest `(when, lap, present confidence)`, the order
+    `_latest_claim` ranks by. It is `0` when there is none, or when `p` holds ANY claim about `subject` NEWER than it by `(when, lap)`: news of the
+    subject supersedes the memory, the thing may have changed. A claim at the refusal's own `(when, lap)` is not newer (the refusal's own
+    deposits share it).
+
+    ⚠ IT TAKES THE PERSON, NOT A LEDGER AND A HOLDER: the holder cannot differ from the asker (AX-2; `04` §B.2's own-ledger carve-out), and no
+    World is read. Confidence is read through `state/ledgers.py::present_confidence` at the `tick` and `decay` given -- the one owner of fading
+    -- never the stored deposit value; with neither given (a hand-built ledger) the stored value is read, as `LedgerReader` does."""
+    refused = [c for c in p.ledger if c.subject == subject and c.predicate in kinds and c.doer == p.id and c.firsthand]
+    if not refused:
+        return 0
+    newest = max(refused, key=lambda c: (c.when, c.lap, present_confidence(c.confidence, c.when, tick, decay)))
+    if any(c.subject == subject and (c.when, c.lap) > (newest.when, newest.lap) for c in p.ledger):
+        return 0
+    return present_confidence(newest.confidence, newest.when, tick, decay)
 
 
 def conviction_stand(p: Person, affiliation: str) -> float:
@@ -1050,20 +1103,34 @@ class LedgerReader:
     (`decision/options.py::teller_weight`) because this module may not import `decision/`. With
     a `weigh`, the comparator ranks a claim by `(support, when, confidence)`, where `support` is
     the noisy-OR over the DISTINCT ORIGINS asserting the same value (below). `None` is today's
-    comparator, unchanged, and every caller but `epistemic.belief_contradicts` passes `None`.
-    `confidence` is read RAW either way: weighing never rewrites a claim."""
+    comparator, unchanged; B09.07's callers (`belief_contradicts`, `said_of`, `lie_said_of`, `decision/sheet.py::chronicle`) pass
+    `ledger_weigh`'s closure. `world_q.current_stage` takes the parameter and NO CALLER SUPPLIES IT YET (`open_stages`' callers
+    pass none; `world_q.py`'s `current_stage` docstring says the reader is dormant), so a stage is still read by the plain comparator.
+    `confidence` is read at the reader's `tick` and `decay` (`present`) either way: a claim stores what it was
+    deposited at and fading is computed here, where it is read (`state/ledgers.py::present_confidence`);
+    weighing never rewrites a claim."""
 
-    def __init__(self, claims, weigh=None):
+    def __init__(self, claims, weigh=None, *, tick: int = 0, decay: int = 0):
         self._claims = list(claims or [])
         self._weigh = weigh
+        self._tick = tick
+        self._decay = decay
+
+    def present(self, c) -> int:
+        """`c`'s confidence AS THIS READER HOLDS IT, at the `tick` it was constructed with: the deposit less
+        `decay` per season elapsed (`state/ledgers.py::present_confidence`, the one owner of the fade). A
+        claim's stored `confidence` is what it was deposited at and is never rewritten, so every
+        comparison below reads here. A reader built with no `tick` and no `decay` (a hand-built ledger in
+        a test) reads the stored value, which is the present one at the deposit's own tick."""
+        return present_confidence(c.confidence, c.when, self._tick, self._decay)
 
     def _support(self, matches) -> list:
         """`support(v) = 1 - PROD over distinct origins (1 - weigh(c))`, one entry per match, in
         match order. Grouped by `(predicate, value)` -- `read`'s matches share one predicate, so
         for `read` that is grouping by value. Under a `weigh`, `latest_about` therefore ranks
         ACROSS predicates by support, so a firsthand claim on any predicate outranks hearsay on
-        another; no caller weighs `latest_about` today, and the position that weighs `said_of`
-        (G3) decides it. An origin is `c.chain[0]` for a told claim and the holder for
+        another; `said_of` and `chronicle` weigh `latest_about` since B09.07, which decided it
+        (a person passes on what he is surest of). An origin is `c.chain[0]` for a told claim and the holder for
         anything else; one origin counts once per value, at its highest
         weight, so a teller repeating himself adds nothing. Grouped by `==`, not by hash: a
         claim's `value` need not be hashable.
@@ -1107,13 +1174,13 @@ class LedgerReader:
             best = None
             for c in self._claims:
                 if match(c) and (best is None
-                                 or (c.when, c.confidence) > (best.when, best.confidence)):
+                                 or (c.when, self.present(c)) > (best.when, self.present(best))):
                     best = c
             return best
         matches = [c for c in self._claims if match(c)]
         best, best_key = None, None
         for c, s in zip(matches, self._support(matches)):
-            key = (s, c.when, c.confidence)
+            key = (s, c.when, self.present(c))
             if best is None or key > best_key:
                 best, best_key = c, key
         return best
@@ -1222,7 +1289,7 @@ def _slant(fx) -> str:
     return arm
 
 
-def said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None":
+def said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 0, weigh=None) -> "Said | None":
     """WHAT THIS PERSON WOULD SAY ABOUT `subject`, as the `Said` a telling carries -- or `None` for
     nothing to say. Asked of the TELLER'S OWN claims at CHOOSE (`decision/options.py::opening_set`),
     never at WITNESS: what a telling passes on is decided when it is chosen, and rides the Act.
@@ -1243,7 +1310,13 @@ def said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None
     where no claim carries valence (every one 0) the pick is the unslanted one exactly. A teller
     passes on the deed that matters most to THEM, not the newest thing they hold. At `newest` (the
     CONTROL, shipped), with no `teller`, or with no `fx`, it is the unslanted pick and reads no
-    pursuits."""
+    pursuits.
+
+    ⚠ B09.07 `weigh`: the closure the one comparator ranks by (`decision/options.py::ledger_weigh`, passed in because this
+    module may not import `decision/`), handed to `LedgerReader` as `epistemic.belief_contradicts` hands it, so a person
+    passes on the belief he acts on. `None` (a hand-built read) is the plain comparator. ⚠ `LedgerReader._support`
+    under a `weigh` ranks `latest_about` ACROSS predicates: a person passes on what he is SUREST of about a subject, not
+    the newest thing he holds (decided at B09.07, `16_PESSIMIST_SC_B`)."""
     pool = [c for c in claims if c.subject == subject] if claims else []
     if teller is not None and fx is not None and pool and _slant(fx) == "valence":
         axis_w = projected_axes(teller, fx.get("scar_weight_shift"))
@@ -1251,13 +1324,13 @@ def said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None
         top = max(strength.values())
         if top > 0:
             pool = [c for c in pool if strength[id(c)] == top]
-    reader = LedgerReader(pool)
+    reader = LedgerReader(pool, weigh, tick=tick, decay=0 if fx is None else fx.claim_decay())
     # ABSENT: H-198 deception  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
     c = (reader._best(lambda c: c.subject == subject and c.predicate != SEEN_PREDICATE)
          or reader.latest_about(subject))
     if c is None:
         return None
-    return Said(c.subject, c.predicate, c.value, c.confidence, c.chain)
+    return Said(c.subject, c.predicate, c.value, reader.present(c), c.chain)
 
 
 def drifted(before, band: float, sel: int, whole_band: bool = False):
@@ -1292,7 +1365,7 @@ def is_cell(c) -> bool:
     return str(c.predicate).partition(":")[0] in CELL_STEMS
 
 
-def lie_said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | None":
+def lie_said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 0, weigh=None) -> "Said | None":
     """WHAT THIS PERSON WOULD SAY FALSELY ABOUT `subject`: `said_of`'s pick, over the teller's CELL claims
     only, with its value made false -- or `None` where there is no false value to say (v11 CR-27, M9 taken
     (a), the cell lie; H-198 rule (i)). Asked of the LIAR'S OWN claims at CHOOSE
@@ -1315,9 +1388,11 @@ def lie_said_of(claims, subject, fx, teller: "Person | None" = None) -> "Said | 
 
     ⚠ A FALSE VALUE IS NEVER THE HELD ONE, so the hearer's exact-triple guard (`loop/witness.py`) does not
     drop the deposit for a hearer who holds the cell firsthand: his claim and the lie then DISAGREE, which
-    is the pair `decision/options.py::record` counts against the liar (`H-183`)."""
+    is the pair `decision/options.py::record` counts against the liar (`H-183`).
+
+    `weigh` (B09.07) is `said_of`'s: the one comparator the liar reads the cell he lies about by."""
     cells = [c for c in claims if c.subject == subject and is_cell(c)]
-    said = said_of(cells, subject, fx, teller)
+    said = said_of(cells, subject, fx, teller, tick=tick, weigh=weigh)
     if said is None:
         return None
     held = said.value

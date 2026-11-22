@@ -27,6 +27,7 @@ from typing import Any, Callable, Optional
 # conformance B4, disposition 3: §C.2 is the later, more specific row, and is the one taken).
 from ..data.arrangements import ARRANGEMENTS
 from ..data.matrix import MATRIX, WriteClass
+from ..data.requires import Observation
 from ..data.rosters import (
     BAN_KIND, CONFERRAL_BASES, DETAIN_KIND, MARCH_TARGET_KINDS, RESTRAINT_KINDS, REVOCATION_BASES, SEAT_ROW_BY_ID,
     PERSON_DIED, SUCCESSIONS, TENURE_KINDS, faction_prop_id,
@@ -1634,8 +1635,17 @@ class Subject:
         dead man's Tenures leave `World.tenures` with him, so a Receipt on a Tenure id cannot be expanded to
         the seat by `_hold_tenure_ends`; that is H-206's option (b), which is not built.
         Its one known misreader is `harness/arc.py::_Records.of`; `read_arcs` skips a seat Receipt on a
-        `tenure.closed` Event (nothing in the game reads it, so no hash depends on it)."""
-        return cls(t.object, (EDGE, t), TENURE_CLOSED)
+        `tenure.closed` Event (nothing in the game reads it, so no hash depends on it).
+
+        B09.22 (IN-58's carrier): THE SEAT CARRIES ONE Observation, `(seat, "hold", <the holder>)`, the value
+        the write leaves (CP-T03-02's rule), so the Event it earns carries it on `Event.observed` and WITNESS
+        deposits it by its shipped mode. It is the pairing IN-58 lacked -- a claim that names the dead holder
+        WITH the seat, which `(seat, tenure.closed, True)` and `(victim, person.died, True)` could not say --
+        carried by the existing channel; no Claim, Event or World field is added. The predicate `hold` is the
+        closed edge's own kind (`t.kind`, `hold` for every seat `World.seat_holds` returns), derived from the
+        form (`data/requires.py::Observation`); no claim reader is keyed on a `hold` predicate (the grep:
+        `person_q.py` and `decision/` compare Tenure kinds only). [ASSUMPTION; medium; Jordan to correct; revert: `observed=` here]"""
+        return cls(t.object, (EDGE, t), TENURE_CLOSED, (Observation(t.object, t.kind, t.subject),))
 
     @classmethod
     def staged(cls, record_kind: str, eid: str, fieldname: str) -> "Subject":
@@ -1768,7 +1778,8 @@ class Gate:
 
     # -- the window -----------------------------------------------------------------------
     def opening(self, record_kind: str, fieldname: str, wclass: str, tick: int) -> None:
-        """Called by `World.write` as it begins an authorized write."""
+        """Called by `World.write` as it begins an authorized write, and by the harness's
+        `probes.py::apparatus_receipt`, which opens a window only when none is open."""
         self._open = _Window(record_kind, fieldname, wclass, tick)
 
     def close(self) -> None:

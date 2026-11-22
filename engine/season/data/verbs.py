@@ -38,7 +38,7 @@ from .requires import (
 )
 from .rosters import (
     COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
-    RESTRAINT_KINDS, STRIFE_KINDS,
+    RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS,
     is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
@@ -303,10 +303,23 @@ class VerbRow:
         `predicates` (`loop/predicates.py::REQUIRES_PREDICATES`) entry. The ONE answer
         `resolvable_verbs()`'s first gate and `check_preconditions` both read (`CLAUDE.md` §8);
         `loop/resolve.py::_admits` (which `_fold` calls) branches the same three ways. `predicates`
-        is a parameter because this loader may not import `loop/`."""
-        return (not self.has_precondition
-                or self.requires_typed is not None
-                or self.verb in predicates)
+        is a parameter because this loader may not import `loop/`.
+
+        B09.19: A KEYED PREDICATE ROW IS ADMITTED ONLY WHEN ITS PREDICATE KEYS ARE EXACTLY THE CLAUSES THE PREDICATE DECLARES
+        (`requires_predicate(clauses=)`), the loader's rule *a keyed row keys exactly its failable clauses* for the one kind of
+        clause it cannot see. A key the predicate never answers is read by nothing (`ID-13`); a declared clause left unkeyed is
+        a refusal the fold would reach `refusal_for` with and raise on. A FLAT row is unchanged."""
+        if not self.has_precondition or self.requires_typed is not None:
+            return True
+        if self.verb not in predicates:
+            return False
+        if not self.refusals_by_clause:
+            return True
+        return self.predicate_keys() == frozenset(getattr(predicates[self.verb], "clauses", ()))
+
+    def predicate_keys(self) -> frozenset:
+        """The keys of a keyed untyped row that the fold does not own: the clauses its predicate must declare."""
+        return frozenset(self.refusals_by_clause) - FOLD_CLAUSES
 
     @property
     def has_precondition(self) -> bool:
@@ -454,6 +467,10 @@ COUNTERPARTY_CLAUSE = "counterparty"
 # B07.01 (18-A item 2, item 4): THE FOURTH KEY, AND NOT A REFUSAL -- a `form: task` row's lost draw. A row keys it iff its
 # `graded_tasks` route is `form: task`; its kinds are the row's `draw_kinds`, kept out of the refusal union.
 DRAW_CLAUSE = "draw"
+# B09.19: THE FOUR THE FOLD OWNS. Any other key of a keyed UNTYPED row with a precondition is a clause its PREDICATE declared
+# (`loop/predicates.py::requires_predicate(clauses=)`), which this loader may not import: `VerbRow.precondition_evaluable` checks
+# those against the predicate table, and the loader below lets them through as keys it cannot judge.
+FOLD_CLAUSES = frozenset({ELIGIBILITY_CLAUSE, WRITE_CLAUSE, COUNTERPARTY_CLAUSE, DRAW_CLAUSE})
 # B07.01 (18-A item 2): THE TWO SHAPES OF A `graded_tasks` ROUTE. `inquiry` keys `emits:` by Degree and writes nothing (FI-01, as
 # before); `task` carries a flat `writes:` and `emits:` and keys `emits_on_refusal:` with `DRAW_CLAUSE`. The loader branches on them.
 FORM_INQUIRY = "inquiry"
@@ -1119,9 +1136,10 @@ def _load_verb_table() -> dict:
         # KEYS EXACTLY ITS FAILABLE CLAUSES. The clause set is DERIVED from the row, never listed:
         #   * `ELIGIBILITY_CLAUSE`  iff an eligibility alternative can decline (anything but `own`);
         #   * every NAMED top-level conjunct of its typed cell (`conjunct:`, `data/requires.py`) --
-        #     and a keyed row with a precondition must be TYPED and name EVERY conjunct, because a
-        #     predicate's conjuncts (`REQUIRES_PREDICATES`) live in `loop/`, which this loader may not
-        #     import, so a keyed predicate row is a set of keys nothing here can check;
+        #     and a keyed row with a precondition must be TYPED and name EVERY conjunct, OR be an untyped PREDICATE row
+        #     (B09.19): a predicate's clauses (`REQUIRES_PREDICATES`) live in `loop/`, which this loader may not
+        #     import, so it lets the keys beyond the fold's own four through and requires at least one; that they are
+        #     exactly the predicate's declared clauses is `VerbRow.precondition_evaluable`'s, asked of the predicate table;
         #   * `WRITE_CLAUSE`         iff the row writes (an effect can decline, F9's `NoOpReceipt`);
         #   * `COUNTERPARTY_CLAUSE`  iff the row names a `counterparty:`.
         # MISSING is a failable clause with no kind -- the fold would reach `refusal_for` and raise;
@@ -1132,6 +1150,8 @@ def _load_verb_table() -> dict:
         # and emits the union, except where the row keys the counterparty clause, whose kinds it emits. ONE refusal names every
         # defect found, so a table edit that breaks three things is told all three.
         _names = row.requires_typed.conjuncts() if row.requires_typed is not None else ()
+        _predicate_keys = (row.predicate_keys() if row.requires_typed is None and row.has_precondition
+                           else frozenset())
         if by_clause or _names:
             _expected, _defects = set(_names), []
             if any(k != "own" for k in row.eligibility_kinds()):
@@ -1149,8 +1169,8 @@ def _load_verb_table() -> dict:
             # a `task` row keyed only for its `draw` clause whose cell is an own-ledger conjunct (`forge`, `survey`): naming
             # it would make it carry `said` (`requires.TypedRequires.named_own_ledger_operands`), moving its formation.
             if row.has_precondition and len(row.emits_on_refusal) != 1 and (
-                    row.requires_typed is None or not row.requires_typed.names
-                    or None in row.requires_typed.names):
+                    (not _predicate_keys) if row.requires_typed is None
+                    else (not row.requires_typed.names or None in row.requires_typed.names)):
                 _defects.append("keys its refusals, so its precondition must be a typed cell with "
                                 "EVERY top-level conjunct named")
             # ⚠ The party-gap refusal emits the UNION, which is `ID-9` only if the union holds more
@@ -1175,11 +1195,11 @@ def _load_verb_table() -> dict:
                                 "refusal for it (nor, as a task, a `write` one), "
                                 "and keys more than one refusal kind, so that refusal would emit "
                                 "kinds for conjuncts that did not fail")
-            _after_fold = set(_names) & {ELIGIBILITY_CLAUSE, WRITE_CLAUSE, COUNTERPARTY_CLAUSE, DRAW_CLAUSE}
+            _after_fold = set(_names) & FOLD_CLAUSES
             if _after_fold:
                 _defects.append(f"names a conjunct after a fold clause ({sorted(_after_fold)})")
             _missing = sorted(_expected - set(by_clause)) if by_clause else []
-            _extra = sorted(set(by_clause) - _expected)
+            _extra = sorted(set(by_clause) - _expected - _predicate_keys)
             _empty = sorted(k for k, v in by_clause.items() if not v)
             if _missing:
                 _defects.append(f"keys no refusal for the failable clause(s) {_missing}")
@@ -1740,8 +1760,26 @@ def _check_strife_kinds(lists, event_kinds) -> dict:
     return lists
 
 
+def _check_standing_occasion_opened_by(by_class, event_kinds) -> dict:
+    """B09.12 (`rosters.yaml: standing_occasion_opened_by`): every listed kind is an Event kind the loop declares
+    (`EVENT_KINDS`: a verb row's `emits`, the fold's kinds, and the MATTER and CALENDAR kinds), by the same test
+    `_check_strife_kinds` makes, or import refuses naming the members -- a kind no one emits would be an opening Event
+    `World.last_emission_of` never finds, and the roster would read as built. The class keys and shape are
+    `data/rosters.py::_load_standing_occasion_opened_by`'s. A function, so a test can plant a bad kind. Returns it."""
+    unknown = sorted({k for ks in by_class.values() for k in ks if k not in event_kinds})
+    if unknown:
+        raise Unspecified(
+            f"`standing_occasion_opened_by` names {unknown}, which are not Event kinds the loop declares",
+            "rosters.yaml -- standing_occasion_opened_by",
+            needs="name kinds in `data/verbs.py::EVENT_KINDS`",
+            law="04 §B.13 invariant 7 -- the Event-kind roster is derived from every emission column; a kind "
+                "outside it is one the log accepts from no one, and no opening Event would ever be found")
+    return by_class
+
+
 _check_covert_kinds(COVERT_KINDS, DEED_KINDS)
 _check_strife_kinds(STRIFE_KINDS, EVENT_KINDS)
+_check_standing_occasion_opened_by(STANDING_OCCASION_OPENED_BY, EVENT_KINDS)
 _check_dominance_kinds(DOMINANCE_KINDS, DEED_KINDS)
 
 

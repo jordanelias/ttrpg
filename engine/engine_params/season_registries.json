@@ -2134,7 +2134,7 @@
           "cite": "R8",
           "open": true,
           "ordered": true,
-          "note": "`values:` IS THE STRUCT, IN FIELD ORDER -- `epistemic.Seen` refuses at import if its fields and this list differ, and every term needs a `_term_<name>` reader there (the `CHANNEL_PREDICATES` precedent: a named member with no reader RAISES, never quietly reads `None`). `stratum` is the coarse WHAT (`strata`), never the verb TOKEN -- a witness can say *someone was doing something social* without naming `tell`. \u26a0 Not never the INFORMATION: `movement` has two members (`move`, `migrate`), so a `movement` witness does not know which (`epistemic._term_stratum`'s docstring). `marks` is the actor's appearance and carries ONE member, the actor's `Person.heritage` (descent): `(heritage,)` where it is authored and `()` where it is not (`epistemic._term_marks`), public at co-location and deposited true and verbatim, as `who` is. `()` means *seen, and nothing describable*, and `None` means *this channel does not show a body at all*. `who` is the actor's id. `why` is the motive. \u26a0 `supplied_by:` IS WHAT EACH CHANNEL SHOWS, and a witness's struct is the UNION over the channels that admit them under the live `fan_out_mode` (`epistemic.live_channels`). The `total` arm is `H-33`'s control and shows EVERY term to every witness, so this table is read only by the narrow arms. Two cells are ruled: `R8.5` quotes the ratified line *\"a co-located witness saw who acted; a document holder saw only that the document changed\"* -- so `document_key` shows NOTHING, and its witness holds an all-`None` struct, which IS deposited (the claim's subject still says WHERE something happened). `witness_key`, `post_remit` and `chronicle` are unruled: they withhold rather than invent, and are an injected default in `H-33`'s sense, exactly as the channel predicates themselves are. \u26a0 NO CHANNEL SUPPLIES `why`: `Candidate.why` is dropped at `pack_scenes` and `Act` carries no motive, so the engine forgets it before the act executes and no witness can learn it. Case 4 (*no discernible reason*) is therefore every deposit. `Person.heritage` has ONE writer, the world build (`data/cast.py::heritage_of`), and `marks` shows it wherever `who` is shown -- so case 2 (*someone looking like y*, `who=None`) is supported by the struct and reached by nothing until a recognition producer exists (`R8.2`).",
+          "note": "`values:` IS THE STRUCT, IN FIELD ORDER -- `epistemic.Seen` refuses at import if its fields and this list differ, and every term needs a `_term_<name>` reader there (the `CHANNEL_PREDICATES` precedent: a named member with no reader RAISES, never quietly reads `None`). `stratum` is the coarse WHAT (`strata`), never the verb TOKEN -- a witness can say *someone was doing something social* without naming `tell`. \u26a0 Not never the INFORMATION: `movement` has two members (`move`, `migrate`), so a `movement` witness does not know which (`epistemic._term_stratum`'s docstring). `marks` is the actor's appearance and carries ONE member, the actor's `Person.heritage` (descent): `(heritage,)` where it is authored and `()` where it is not (`epistemic._term_marks`), public at co-location and deposited true and verbatim, as `who` is. `()` means *seen, and nothing describable*, and `None` means *this channel does not show a body at all*. `who` is the actor's id. `why` is an antecedent claim the witness holds (below), not a motive. \u26a0 `supplied_by:` IS WHAT EACH CHANNEL SHOWS, and a witness's struct is the UNION over the channels that admit them under the live `fan_out_mode` (`epistemic.live_channels`). The `total` arm is `H-33`'s control and shows EVERY term to every witness, so this table is read only by the narrow arms. Two cells are ruled: `R8.5` quotes the ratified line *\"a co-located witness saw who acted; a document holder saw only that the document changed\"* -- so `document_key` shows NOTHING, and its witness holds an all-`None` struct, which IS deposited (the claim's subject still says WHERE something happened). `witness_key`, `post_remit` and `chronicle` are unruled: they withhold rather than invent, and are an injected default in `H-33`'s sense, exactly as the channel predicates themselves are. `why` IS THE ANTECEDENT A WITNESS HOLDS AND MAY CONNECT, NOT THE ACTOR'S MOTIVE (B09.17, `R8.4` narrowed; the engine keeps no motive: `Candidate.why` is dropped at `pack_scenes` and `Act` carries none): the id of a claim in the witness's OWN ledger that was deposited from an antecedent Event of the one he witnessed (`epistemic._term_why`). A channel that supplies `why` (`co_located`, `witness_key`) makes the witness ELIGIBLE; whether he connects them is one keyed draw at `Fixtures connection_chance` (`H-458`), which ships 0.0, so no deposit carries `why` until B98 raises it, and case 4 (*no discernible reason*) is still every deposit. `document_key` never supplies it (`R8.5`, ruled). `Person.heritage` has ONE writer, the world build (`data/cast.py::heritage_of`), and `marks` shows it wherever `who` is shown -- so case 2 (*someone looking like y*, `who=None`) is supported by the struct and reached by nothing until a recognition producer exists (`R8.2`).",
           "values": [
             "stratum",
             "marks",
@@ -2148,11 +2148,13 @@
             "co_located": [
               "stratum",
               "marks",
-              "who"
+              "who",
+              "why"
             ],
             "witness_key": [
               "stratum",
-              "who"
+              "who",
+              "why"
             ],
             "document_key": [],
             "post_remit": [
@@ -2425,9 +2427,18 @@
         "undeposited_kinds": {
           "source": "RS-21 item 1 (H-111 ANSWERED [medium; Jordan to correct]): SKIP at WITNESS, except keyed kinds a verb declares (`news.untold` and `tell.refused` stay, T4; CP-T05-03 split the one kind in two) -- a refused inquiry deposits nothing, and no `finding.none` is deposited. Built by v9 FI-01 as the deposit half of `ED-FI-0009`.",
           "row": "H-111",
-          "note": "\u26a0 THE EVENT KINDS WITNESS FANS TO NOBODY (`loop/witness.py::witness`): an Event of one of these kinds stays in the log and in its act's causes, and no ledger receives any claim from it. Keyed on the KIND, never on a band or on an empty `changes[]`: those would also swallow `matter.undetermined`, `news.untold` and `tell.refused`, which keep depositing. [ASSUMPTION; medium; Jordan to correct] the six inquiry rows' `finding.none` only, not every refusal kind -- a widening would move every refusal-bearing row's deposits, which nothing here measured. Revert: Jordan rules deposit at WITNESS, and this roster is deleted. Each member must be a kind some verb row declares (`data/verbs.py` refuses one that is not, so a misspelling cannot skip nothing). THE SKIP IS STRICT, AND ITS CONSEQUENCE IS THE THING TO CORRECT: the plan's words (\"a refused inquiry deposits nothing\") drop the actor's own observation reads and `seen` claims as well as the event-kind claim, so a refused or failed inquiry teaches its actor nothing and the same person re-forms it. The narrower arm -- skip only the `finding.none` event-kind claim -- is the alternative Jordan would name.",
+          "note": "\u26a0 THE EVENT KINDS WITNESS FANS TO NOBODY (`loop/witness.py::witness`): an Event of one of these kinds stays in the log and in its act's causes, and no ledger receives any claim from it. Keyed on the KIND, never on a band or on an empty `changes[]`: those would also swallow `matter.undetermined`, `news.untold` and `tell.refused`, which keep depositing. [ASSUMPTION; medium; Jordan to correct] the six inquiry rows' `finding.none` only, not every refusal kind -- a widening would move every refusal-bearing row's deposits, which nothing here measured. Revert: Jordan rules deposit at WITNESS, and this roster is deleted. Each member must be a kind some verb row declares (`data/verbs.py` refuses one that is not, so a misspelling cannot skip nothing). THE SKIP IS STRICT, AND ITS CONSEQUENCE IS THE THING TO CORRECT: the plan's words (\"a refused inquiry deposits nothing\") drop the actor's own observation reads and `seen` claims as well as the event-kind claim, so a refused or failed inquiry teaches its actor nothing and the same person re-forms it. The narrower arm is `finding_none_deposit_arms` below (B09.04): at `actor` the Event is deposited to its own doer and to nobody else; `none` (shipped) is the skip as written here.",
           "values": [
             "finding.none"
+          ]
+        },
+        "finding_none_deposit_arms": {
+          "source": "B09.04 (`U5a_DICE_owed_edits` \u00a74; H-111, `undeposited_kinds`' own note: \"the narrower arm ... is the alternative Jordan would name\"): who receives a `finding.none` Event at WITNESS, the one kind `undeposited_kinds` skips.",
+          "row": "H-111",
+          "note": "`none` is THE CONTROL and ships: the Event fans to nobody, as `undeposited_kinds` says. `actor` deposits it to its own doer alone -- the `witness_key` channel's rule, *change claims about self* -- so a person who failed a search holds the claim `(subject, finding.none, doer = himself)` that `person_q.refused_before` reads (`finding.none` is in `emits_on_refusal` of the inquiry rows) and `decision/choose.py::admission_weight` discounts, until it fades or news of the subject lands. No non-actor receives it at either arm, and no other reader is added. Read once per barrier by `loop/witness.py::witness`; a value outside the roster refuses.",
+          "values": [
+            "none",
+            "actor"
           ]
         },
         "fold_kinds": {
@@ -2776,7 +2787,7 @@
         "wear_per_season": {
           "source": "#353 \u00a722 assigns `wear per site kind` to params; no in-chain table exists. `H-07`.",
           "row": "H-07",
-          "note": "\u26a0 `W8`: per-kind wear and floors are registry rows rather than `DEFAULT_FIXTURES` literals. `DEFAULT_FIXTURES` READS this mapping, so the declaration lives once. \u26a0 `dwelling: 0` IS THE CONTROL ARM, SHIPPED DELIBERATELY, and it is `H-07`'s own *\"no wear at all\"* sweep point applied to one kind. \u26a0 **NOT THE SAME SHAPE AS `body_step = 0`**: that arm `continue`s past the write itself (`loop/matter.py`), so nothing is emitted at its control arm. `wear_per_season` carries no such skip \u2014 MATTER writes every Site every season whatever its rate, so `dwelling: 0` still emits (see below). A dwelling sits AT a hearth and persons live in hearths. A non-zero rate together with any floor in `band_floors.dwelling` would let a dwelling's condition cross it; the crossing Event is witnessed `co_located`, and the claim it deposits (subject = the dwelling) would then reach every co-located resident as a live `claim_landed` question, once `reach`/`place_of` (`queries/world_q.py`) admit a claim about a place through a person's own ledger. That would put a dwelling-condition Question in front of every resident every season, which is exactly what `test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_season`'s control-arm identity pins against. Either half at its control arm blocks the crossing; both ship there. At 0 no dwelling's condition moves. \u26a0 ZERO IS NOT SILENT. `loop/matter.py`'s wear loop still WRITES every Site every season, and `World.write` emits one `condition.worn` per write (`H-12`), so every dwelling emits one wear Event a season, and its residents witness it (`co_located`) as a claim. A non-zero rate is chosen with a consumer in front of it, at `24e`/`24f`, never here. \u26a0 `garrison: 0` IS `dwelling`'s CONTROL ARM FOR THE SAME REASON (M4, `ED-IN-0279` clause (a)): a non-zero rate would erode every garrison's condition every season, silently drifting every field battle's fortification term toward zero over a long campaign. The rate is a pacing decision (where every fabric sits at rest), registered rather than taken -- `H-165` and `H-07` (the rate). `restore` executes on the populated realm's SETTLEMENT fabrics (harbour, seam -- rate 10, a cohort stands beside them), so `H-165`'s limit is the DWELLING/GARRISON rate specifically, both `0`.",
+          "note": "\u26a0 `W8`: per-kind wear and floors are registry rows rather than `DEFAULT_FIXTURES` literals. `DEFAULT_FIXTURES` READS this mapping, so the declaration lives once. \u26a0 `dwelling: 0` IS THE CONTROL ARM, SHIPPED DELIBERATELY, and it is `H-07`'s own *\"no wear at all\"* sweep point applied to one kind. \u26a0 **NOT THE SAME SHAPE AS `body_step = 0`**: that arm `continue`s past the write itself (`loop/matter.py`), so nothing is emitted at its control arm. `wear_per_season` skips the same way since `H-135` (B09.21): MATTER does not write a Site whose wear is 0, so `dwelling: 0` emits nothing (see below). A dwelling sits AT a hearth and persons live in hearths. A non-zero rate together with any floor in `band_floors.dwelling` would let a dwelling's condition cross it; the crossing Event is witnessed `co_located`, and the claim it deposits (subject = the dwelling) would then reach every co-located resident as a live `claim_landed` question, once `reach`/`place_of` (`queries/world_q.py`) admit a claim about a place through a person's own ledger. That would put a dwelling-condition Question in front of every resident every season, which is exactly what `test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_season`'s control-arm identity pins against. Either half at its control arm blocks the crossing; both ship there. At 0 no dwelling's condition moves. \u26a0 ZERO IS SILENT SINCE `H-135` (B09.21). `loop/matter.py`'s wear loop writes a Site only where its wear this season is non-zero, and `World.write` emits one `condition.worn` per write (`H-12`), so a dwelling emits no wear Event and its residents witness no claim of it. A non-zero rate is chosen with a consumer in front of it, at `24e`/`24f`, never here. \u26a0 `garrison: 0` IS `dwelling`'s CONTROL ARM FOR THE SAME REASON (M4, `ED-IN-0279` clause (a)): a non-zero rate would erode every garrison's condition every season, silently drifting every field battle's fortification term toward zero over a long campaign. The rate is a pacing decision (where every fabric sits at rest), registered rather than taken -- `H-165` and `H-07` (the rate). `restore` executes on the populated realm's SETTLEMENT fabrics (harbour, seam -- rate 10, a cohort stands beside them), so `H-165`'s limit is the DWELLING/GARRISON rate specifically, both `0`.",
           "rates": {
             "harbour": 10,
             "seam": 10,
@@ -3626,7 +3637,7 @@
         "finding_terms": {
           "source": "v9 FI-03 (`ED-FI-0002`): what a graded finding learns of a trail, by its degree. The terms are `observation_terms`' (`epistemic.Seen`'s fields): the finder holds what a witness of the act would have held, through the same deposit shapes, masked to these terms.",
           "cite": "ED-FI-0002",
-          "note": "[ASSUMPTION; medium; Jordan to correct; revert: every finding band shows the hand (the partial band gains `who`)]. KEYED BY DEGREE BAND (`engine/dice_engine/dice_engine.py::DEGREE_LABEL`, the one owner; a key off the ladder is refused at load, `data/rosters.py::_load_finding_terms`) and valued in `observation_terms` members (a term outside them is refused). A band with no row uncovers nothing: the failing band has none, and an ungraded finding has no band. In words: a partial finding learns THAT the deed was done to the thing, and a better one also learns WHOSE HAND did it. \u26a0 A PARTIAL FINDING WITHHOLDS `who` FROM THE FINDER (an inference is less than a sight) -- both the `seen` claim's `who` term and the event-kind claim anchored on the actor. A WITNESS'S anchor claim is NOT masked: a witness admitted by any channel holds `(actor, kind, True)` under `claim_subject_rule: both` whatever its channel shows of `who`. So the two quantities differ BY DESIGN -- a finder's knowledge of a hand is graded, a witness's event-kind claim is not. `why` is never shown: no reader supplies it (`epistemic._term_why`, R8.4). The better bands are identical: depth has no carrier (FI-01's own note on the finding bands). \u26a0 `bands:`, NOT `values:`: the mapping's keys are the ladder's labels, which this file does not own, and a `values:` row is read as a roster of its keys (`test_season_shape.py`'s duplicate-roster scan), so the ladder would have read as declared twice.",
+          "note": "[ASSUMPTION; medium; Jordan to correct; revert: every finding band shows the hand (the partial band gains `who`)]. KEYED BY DEGREE BAND (`engine/dice_engine/dice_engine.py::DEGREE_LABEL`, the one owner; a key off the ladder is refused at load, `data/rosters.py::_load_finding_terms`) and valued in `observation_terms` members (a term outside them is refused). A band with no row uncovers nothing: the failing band has none, and an ungraded finding has no band. In words: a partial finding learns THAT the deed was done to the thing, and a better one also learns WHOSE HAND did it. \u26a0 A PARTIAL FINDING WITHHOLDS `who` FROM THE FINDER (an inference is less than a sight) -- both the `seen` claim's `who` term and the event-kind claim anchored on the actor. A WITNESS'S anchor claim is NOT masked: a witness admitted by any channel holds `(actor, kind, True)` under `claim_subject_rule: both` whatever its channel shows of `who`. So the two quantities differ BY DESIGN -- a finder's knowledge of a hand is graded, a witness's event-kind claim is not. `why` is never shown to a finder: no band lists it (`epistemic._term_why`'s antecedent is a witness's). The better bands are identical: depth has no carrier (FI-01's own note on the finding bands). \u26a0 `bands:`, NOT `values:`: the mapping's keys are the ladder's labels, which this file does not own, and a `values:` row is read as a roster of its keys (`test_season_shape.py`'s duplicate-roster scan), so the ladder would have read as declared twice.",
           "bands": {
             "Overwhelming": [
               "stratum",
@@ -3791,6 +3802,39 @@
             "dissolve",
             "mend"
           ]
+        },
+        "standing_occasion_opened_by": {
+          "source": "`16_PESSIMIST_GAME_standing_occasions_carry_their_cause` edit 1 (workplan v12 B09.12; A-33, A-47)",
+          "cite": "H-457",
+          "note": "THE EVENT KINDS THAT OPEN A STANDING OCCASION OF EACH REFERENT CLASS, most specific first -- a mapping, `{class: [kinds]}`, each class a `referent_classes` member. A standing occasion is a classed referent a person's question carries (`state/carriers.py::Question.classes`: a vacancy, a writ held, a wounded person, a detainee, a larder, a flow stake); the OPENING Event is the first kind listed here that `World.last_emission_of(kind, referent, written=True)` finds in the log, and `loop/resolve.py::_occasion_ids` puts its id after the act's own in `causes[]` of every Event the act folds (one id, so `causes[]` does not fan; nothing when the log holds none, as for a seat vacant since the build). Read by `data/rosters.py::STANDING_OCCASION_OPENED_BY`; held at import to `data/verbs.py::EVENT_KINDS`, which is every verb row's `emits` plus the fold, MATTER and CALENDAR kinds (`_check_standing_occasion_opened_by`, beside `_check_strife_kinds`), and to `referent_classes`. Switched by `Fixtures.standing_occasion_cause` (H-457; `False` is the control: no opening Event is named). [ASSUMPTION; medium; Jordan to correct; revert: set `standing_occasion_cause` False (an empty list for a class is refused at import, `data/rosters.py::_load_standing_occasion_opened_by`). The kind lists are the proposal's reading of each source's docstring in `queries/world_q.py::questions_for`.]",
+          "values": {
+            "Office": [
+              "tenure.closed",
+              "office.established"
+            ],
+            "Record": [
+              "dispensation.issued",
+              "petition.filed",
+              "record.created"
+            ],
+            "Person": [
+              "body.changed"
+            ],
+            "Detainee": [
+              "person.captured",
+              "arrest.made"
+            ],
+            "Rung": [
+              "stores.changed",
+              "rung.seized"
+            ],
+            "Site": [
+              "condition.band_crossed"
+            ],
+            "Proposition": [
+              "proposition.uttered"
+            ]
+          }
         }
       },
       "tables": {
@@ -6164,7 +6208,7 @@
           "refusal_note": "FLAT: one kind for every failable clause. Refusal conditions: the challenged is no living person, or is not where the challenger is (the cell's two conjuncts), or -- for a hand-built act only, a computed one never being formed -- he is the challenger (the fold's `counterparty` clause), or the mint moved nothing (the write clause, v10 PC-10b).",
           "grade": "assumption",
           "grade_note": "the VERB is ruled (ED-IN-0261: *fight, challenge, accept are* verbs); its row -- the cell, writing nothing, the kinds -- is IN-08's reading, graded as `found` and `survey` are.",
-          "source": "ED-IN-0261 (2026-09-20; as narrowed 2026-10-06); `proposals/2026-09-20-pursuit-basis-worksheet.yaml` \u00a74 (*`challenge` / `accept` -- the duel pair*)"
+          "source": "ED-IN-0261 (2026-09-20; as narrowed 2026-10-06); the verb pair is ruled there, and the pursuit-basis worksheet that first listed it is forked (`FORK:f672c8414`), its values owned by `references/descriptor_registry.yaml` (`pursuit_roster`, `axis_roster`) and `engine/season/rosters.yaml`"
         },
         {
           "verb": "accept",
@@ -8304,13 +8348,11 @@
         {
           "kind": "Claim",
           "field": "confidence",
-          "steps": [
-            "MAT"
-          ],
-          "class": "MATTER",
+          "steps": [],
+          "class": "\u2014",
           "social": "false",
-          "by": "W2/H-40 -- the THIRD licensed clock (#353 :864). Part D carried NO `Claim` row, so Part D was not total for a clock #353 licenses -- V2's own falsifier at \u00a7I1 row 1",
-          "emits": "`claim.decayed`"
+          "by": "B09.01: the value a claim was DEPOSITED at, seated by WITNESS's deposit (a `Claim`'s construction) and written NOWHERE in play: no step, so the gate refuses any write. A claim's fade is computed where it is read, `state/ledgers.py::present_confidence(confidence, when, tick, decay)` (`Fixtures claim_decay_per_season`), so no Event marks it and MATTER no longer walks ledgers (W2/H-40's clock, #353 :864, retired as a write)",
+          "emits": "\u2014"
         },
         {
           "kind": "ConveningCondition",

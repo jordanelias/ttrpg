@@ -17,9 +17,9 @@ store byte-identical -- by ANY route, not only through the gate.
 rather than left for a reader to find under a header that reads like conformance (`ED-IN-0206`):
 
 - it sets `w.step` and `w._in_parallel_map` -- barrier bookkeeping, not a store -- and writes the
-  DRIVER's own `self.scenes` / `self._spent` and each released `a.scene` / `a.id`,
-  all on objects that are not `World` stores (the acts are this step's RETURN, the matrix's
-  `(Act[], returned)` row, and enter the act store only at RESOLVE).
+  DRIVER's own `self._spent` and each released `a.scene` / `a.id`, all on objects that are not `World`
+  stores (the Scenes, with the acts they carry, are this step's RETURN -- `{scene id: Scene}`, `04` §C.1's
+  map -- and enter the act store only at RESOLVE, which stores each Scene beside its acts: B09.16).
 
 ⚠ **`w._rehome()` AND `questions_for(w, p, since)` ARE NOT CALLED HERE (G2, `ED-IN-0206`).**
 `_rehome()` mutates the tenure store during a barrier that owns nothing and holds no token, and
@@ -62,7 +62,7 @@ def deliberation_order(w: World) -> list[Person]:
 
 
 def deliberate(self, choose: Callable[..., list[Act]], question: Any,
-               questions: dict) -> list[Act]:
+               questions: dict) -> dict:
     w = self.w
     if not w.frozen:
         raise Forbidden("DELIBERATE entered on an unfrozen world", "S26.2",
@@ -73,7 +73,9 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
     # `questions_for` read `p.tenures` DIRECTLY, so a Tenure added before its subject existed must be
     # homed before any person-side read -- but the repair is a store mutation and this step owns no
     # store (04:158). MATTER runs it before the freeze (04:155). See the module docstring.
-    acts: list[Act] = []
+    # B09.16 (`04` §C.1: `scenes = deliberate(frozen)` is a MAP): the Scenes released this lap, `{scene id: Scene}` in
+    # release order -- RETURNED, and stored nowhere. RESOLVE, which holds the ACTS token, stores each (`ActStore.add_scene`).
+    released_scenes: dict = {}
     k_view = w.fixtures.get("view_k")
     # ⚠⚠ `scene_budget` HAS TWO READERS AND THEY READ IT AS TWO DIFFERENT QUANTITIES. Here it is the
     # BASE a person's own budget starts from, before `H-70`'s office/condition/leg modifiers --
@@ -143,7 +145,7 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         # own) cannot assign to the interior's own fields or into its mappings and reach the person it decides for;
         # `ledger`, `tenures` and `stance` share the LIVE carriers, so a write THROUGH them lands on the store. `sense`, `believed_odds_query` and the act-actor check
         # below keep `p`: they are the host's, not `decision/`'s.
-        me = interior_of(p)
+        me = interior_of(p, w.tick, w.fixtures.claim_decay())
         v = decision.assemble(me, q_p, k_view, questions=qs, odds=believed_odds_query(w, p))
         # S26.3: the PERSON asks their own budget. `choose` receives the QUERY, not the answer.
         # ⚠ `U2`: THE REMAINDER, NOT THE WHOLE. The budget is the SEASON's and the season is now
@@ -246,12 +248,12 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
             # ⚠ THE RELEASE RECORDS WHAT WAS *ATTEMPTED*; `season()` PROMOTES ONLY WHAT WAS
             # *REALISED*. See `_drop_what_was_already_done` and `SeasonDriver.season` for why a
             # refused attempt must not bar its own retry.
-            # ⚠ THE SCENE IS REGISTERED AND THE ACT IS STAMPED WITH IT. Season-local, beside
-            # `resolved`, and for the same reason: the fold needs to ask what occasioned an
-            # act, and nothing else in the loop knows. Without this the Scene is built,
-            # carries its occasion, and is dropped one line later — which is what `N3`
-            # measured as *an act never cites its question*.
-            self.scenes[sc.id] = sc
+            # ⚠ THE SCENE IS RETURNED AND THE ACT IS STAMPED WITH IT. The fold needs to ask what occasioned an
+            # act, and nothing else in the loop knows. Without this the Scene is built, carries its occasion,
+            # and is dropped one line later — which is what `N3` measured as *an act never cites its question*.
+            # B09.16: THIS STEP STORES NOTHING (it holds no token, `04` §A.2); the map below is what it hands
+            # RESOLVE, which keeps each Scene beside the acts it appends (`World.acts.scene_of`).
+            released_scenes[sc.id] = sc
             for n, a in enumerate(sc.acts):
                 TRACE.scene_act(p.id, a.verb, left, n + 1, len(sc.acts))
                 a.scene = sc.id
@@ -266,10 +268,9 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
                     f"an Act returned by {p.id}'s choose() carries actor '{a.actor}'",
                     "S3-L1", needs="a named person, and the person deciding is that person",
                     law="L1 -- NO INSTITUTION ACTS, NO FACTION ACTS, NO THRESHOLD ACTS. An institution acts BY A NAMED PERSON AT A VENUE. Without this check the id is a free string and the law is a convention")
-            acts.append(a)
     w._in_parallel_map = False
     TRACE.step("DELIBERATE", "leave")
-    return acts
+    return released_scenes
 
 
 # ---------------------------------------------------------------------------
@@ -402,7 +403,7 @@ def sense(p: Person, w: World) -> Sensation:
     signature actually exercised. Reading `.standing` raises where the design fails to supply
     it. `standing_of` computes it person-side (`H-29`); REM-44 deleted the other scalar, `subsistence`."""
     TRACE.query("sense", "bridge")
-    return Sensation(standing_of(p, w.fixtures))
+    return Sensation(standing_of(p, w.fixtures, w.tick))
 
 
 def as_scenes(produced: list, actor: str, w: "World") -> list:

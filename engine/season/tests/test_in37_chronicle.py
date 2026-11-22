@@ -186,7 +186,7 @@ def _rc(subject, field="capability"):
 
 def _world(log):
     """The slice of `World` that `arc.consequence_acts` and `chronicle.main` read."""
-    return NS(log=log, persons={}, tenures=[], offices={},
+    return NS(log=log, persons={}, tenures=[], offices={}, acts=NS(scene_of=lambda act_id: None),
               class_of=lambda sub: "Person" if sub.startswith("p") else None)
 
 

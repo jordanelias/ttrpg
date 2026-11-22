@@ -176,9 +176,9 @@ def test_a_sabotage_a_restore_cancels_is_refused_after_the_fact():
     assert w2.sites[SITE].condition < half
 
 
-def _work(delta, key):
+def _work(w, delta, key):
     return Act(id=key, actor=SABOTEUR, verb="work", payload={"site": SITE, "subject": SITE},
-               changes=[StateChange(SITE, "alter", "Act", "condition", delta)])
+               changes=[P.apparatus_receipt(w, SITE, "alter", "Act", "condition", delta)])
 
 
 def test_k09_works_declared_delta_is_restricted_to_non_negative():
@@ -187,9 +187,9 @@ def test_k09_works_declared_delta_is_restricted_to_non_negative():
     delta on a site below the scale still stages and raises it."""
     w, d = _world()
     before = w.sites[SITE].condition
-    assert _kinds(_resolve(w, d, _work(-50, "wk_neg"))) == ["work.unavailable"]
+    assert _kinds(_resolve(w, d, _work(w, -50, "wk_neg"))) == ["work.unavailable"]
     assert w.sites[SITE].condition == before
-    assert _kinds(_resolve(w, d, _work(+50, "wk_pos"))) == ["site.worked"]
+    assert _kinds(_resolve(w, d, _work(w, +50, "wk_pos"))) == ["site.worked"]
     assert w.sites[SITE].condition == before + 50
 
 

@@ -54,7 +54,7 @@ def test_an_unauthored_actor_reads_nothing_describable():
 
 def test_the_planted_failure_a_term_marks_returning_nothing_reads_empty_and_not_the_heritage(monkeypatch):
     """The first assertion above can observe the failure it excludes."""
-    monkeypatch.setitem(epistemic.TERM_READERS, "marks", lambda w, e, act: ())
+    monkeypatch.setitem(epistemic.TERM_READERS, "marks", lambda w, e, act, pid: ())
     assert _seen_marks(SOUTH) == ((), DUKE) != ((SOUTH,), DUKE)
 
 

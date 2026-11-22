@@ -67,6 +67,7 @@ from ..state.carriers import (
     Act, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene, Sensation, Site, StateChange, Tenure, View, matrix_rows_without_a_field,
 )
 from ..state.ids import H, ROOT, draw_factory
+from ..state.ledgers import present_confidence
 from ..state.world import World
 from ..trace_log import TRACE
 from ..data import files
@@ -1268,7 +1269,7 @@ def test_r4_event_ids_are_unique_per_draw_and_reproducible():
             # distinct, which is the property this test is about — one person, one tick, three
             # acts, three DIFFERENT Event ids.
             return ([P.Act_(w, p, "work", key=str(i),
-                            changes=[StateChange("site_harbour", "alter", "Act",
+                            changes=[P.apparatus_receipt(w, "site_harbour", "alter", "Act",
                                                    "condition", i + 1)])
                      for i in range(3)] if p.id == "p_low" else [])
         P._run(w, P.once(choose))
@@ -1820,8 +1821,10 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
     # ⚠ MEASURED, NOT WRITTEN FROM MEMORY. A first draft of this pin listed eleven pairs and six of
     # them were wrong -- `(Rung, exists)`, `(Rung, dates)`, `(Site, exists)` and `(Person, weight)`
     # are not in the corpus at all, and four real ones were missing. Derived by running the walk.
+    # B09.01 DELETED A WRITE, NAMED HERE: `("Claim", "confidence")` left this pin with MATTER's per-claim decay write (a claim's
+    # fade is read, `state/ledgers.py::present_confidence`, and nothing writes the field; `write_matrix.yaml`'s row has no step).
     _PAIRS_AT_L5 = {
-        ("Claim", "confidence"), ("Date", "fired"), ("DocketItem", "matter"),
+        ("Date", "fired"), ("DocketItem", "matter"),
         ("Person", "claim_ledger"), ("Person", "pursuits"), ("Person", "exists"),
         ("Person", "scar"), ("Person", "stance"), ("Record", "matured"),
         ("Record", "stages"), ("Record", "ttl"), ("Rung", "envelope"),
@@ -2900,7 +2903,9 @@ def test_person_q_cannot_reach_the_world_side():
     # `queries.faction_q` (imports `World`), `queries.cache` (imports `world_q`), `epistemic`
     # (imports `World`) and any new `queries/*.py` -- the same flaw the AX-2 scan over `decision/`
     # was rewritten to avoid, and that scan relies on this one for the other half of the edge.
-    ALLOWED = ("data", "state.carriers", "trace_log")
+    # B09.01: `state.ledgers` too -- `present_confidence`, the one owner of how a claim fades, lives beside the eviction
+    # comparator in that import-free leaf (it holds no store and reaches nothing), and `LedgerReader` reads a claim through it.
+    ALLOWED = ("data", "state.carriers", "state.ledgers", "trace_log")
     PKG = "engine.season"
 
     def _absolute(node):
@@ -4005,28 +4010,9 @@ def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_cond
                 emits="condition.worn", causes=[ROOT])
 
 
-def test_w4_a_claims_decay_walks_back_to_the_act_that_was_witnessed():
-    """The third clock. `(Claim, confidence)` decays at MATTER and emits `claim.decayed`, chained
-    to the claim's own previous decay and ultimately to the `claim.deposited` Event — which is
-    chained to the Event that was witnessed. #353 §19.4 calls `causes[]` the substrate of the
-    entire emergent-narrative claim; before `W4` a claim entered the world uncaused."""
-    w = _w4_run(3)
-    by_id = {e.id: e for e in w.log}
-    decays = [e for e in w.log if e.kind == "claim.decayed"]
-    assert decays, "no claim decayed — the third licensed clock is not running"
-    walked = 0
-    for d in decays:
-        chain, cur = [], d
-        while cur.causes and cur.causes[0] in by_id:
-            cur = by_id[cur.causes[0]]
-            chain.append(cur.kind)
-            if len(chain) > 40:
-                break
-        assert "claim.deposited" in chain, (
-            f"a decay's chain is {chain} — it never reaches the deposit that created the claim")
-        if chain[chain.index("claim.deposited") + 1:]:
-            walked += 1
-    assert walked, "no decay chain reaches past its deposit to the Event that was witnessed"
+# B09.01: `test_w4_a_claims_decay_walks_back_to_the_act_that_was_witnessed` is RETIRED WITH ITS SUBJECT. A claim's fade is
+# no longer a MATTER write that emits `claim.decayed`; it is `state/ledgers.py::present_confidence`, computed where a claim is
+# read, so no decay Event exists to walk back. Its successor is `test_claim_fade_as_read.py` (no `claim.decayed` in a log).
 
 
 def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate():
@@ -4051,13 +4037,13 @@ def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate(
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
                      None,
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
-        confs = [c.confidence for p in w.persons.values() for c in p.ledger]
+        # B09.01: the confidence he holds each claim at NOW (`present_confidence`), a stored value being the deposit's
+        confs = [present_confidence(c.confidence, c.when, w.tick, rate) for p in w.persons.values() for c in p.ledger]
         seen[rate] = (Counter(e.kind for e in w.log)["claim.decayed"], min(confs), max(confs))
     print(f"\n  H-40 sweep — (decay events, min confidence, max) by rate: {seen}")
-    assert seen[0][0] == 0, (
-        f"the 0 arm emitted {seen[0][0]} `claim.decayed` Events — a decay that did not happen")
+    assert all(seen[r][0] == 0 for r in seen), (
+        f"a `claim.decayed` Event stands in the log: {seen}. B09.01: a fade is computed where a claim is read, never written")
     assert seen[0][1] == seen[0][2], "confidence moved at rate 0"
-    assert seen[5][0] and seen[20][0], "the live arms emitted no decay at all"
     assert seen[20][1] < seen[5][1] < seen[0][1], (
         f"confidence does not fall faster at a higher rate: {seen} — then the rate is inert and "
         "this sweep is measuring nothing")
@@ -4252,9 +4238,17 @@ def test_w6_h33s_declared_sweep_runs_and_the_deposit_count_falls():
     assert got["presence_only"][1] < got["total"][1], (
         f"narrowing the channels did not reduce deposits: {got} — then no predicate EXCLUDES and "
         "`S61`'s debt is not discharged")
-    assert got["presence_only"][1] * 4 < got["total"][1], (
-        f"the reduction is marginal: {got}. §1.4 hole 16 is about an order of magnitude, and a "
-        "few percent would mean the predicates are not the thing bounding the fan-out")
+    # ⚠⚠ B09.01 (`reading @c765c86`, `PYTHONHASHSEED=0`): THE ORDER OF MAGNITUDE WAS THE DECAY EVENTS', AND IT IS GONE WITH THEM. At
+    # `total` every witness was fanned every `claim.decayed` Event (one per live claim per season, `W4`/`D22`: §1.4 hole 16's
+    # "MATTER emits per write" half), so the control arm's deposits were mostly fades. A claim's fade is now read, not written
+    # (`state/ledgers.py::present_confidence`), no Event carries it, and `total` reads 794 deposits against `presence_only`'s 412
+    # in this fixture (ledgers [263, 265, 266] against [0, 205, 207]). The narrowing still bites -- `presence_only` is below `total`
+    # above, by half -- and what is asserted is that margin, not the ratio the fades supplied.
+    # [GROUNDED: measured at B09.01 on `_w6_run`, three seasons -- `total` 794 deposits, `presence_only` 412, `all_five` 412]
+    assert got["presence_only"][1] * 1.5 < got["total"][1], (
+        f"the reduction is marginal: {got}. The fan-out narrowing should still take a third off `total`'s deposits "
+        "(B09.01: the order of magnitude the decay Events supplied is gone), and less would mean the predicates are "
+        "not the thing bounding the fan-out")
     # AND THE TWO NARROW ARMS ARE NOT THE SAME ARM WEARING TWO NAMES. If `chronicle` matched
     # everyone, `all_five` would BE `total` and the sweep would have a redundant point.
     #
@@ -4296,8 +4290,8 @@ def test_w6_h33s_declared_sweep_runs_and_the_deposit_count_falls():
     # now (no ledger reaches it), which is why the exactness arm no longer rides the shipped cap.
     cap = DEFAULT_FIXTURES.get("ledger_cap")
     assert max(got["total"][2]) <= cap, f"the control arm's fullest ledger is {max(got['total'][2])}, above `L = {cap}`"
-    assert max(got["total"][2]) >= 10 * max(got["all_five"][2]), (
-        f"the control arm's fullest ledger {max(got['total'][2])} is within 10x of the shipped arm's "
+    assert max(got["total"][2]) > max(got["all_five"][2]), (       # B09.01: was `>= 10 *`; the decay Events' flood is gone (above)
+        f"the control arm's fullest ledger {max(got['total'][2])} is no fuller than the shipped arm's "
         f"{max(got['all_five'][2])}: the flood this item exists to bound has gone away and the item should be re-argued")
     w200, _ = _w6_run("total", cap=200)
     assert max(len(p.ledger) for p in w200.persons.values()) == 200, (
@@ -4610,8 +4604,10 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
         print(f"    {m:15} deposits={dep:5} ledgers={led} questions={qs} acts={len(acts)}")
 
     # LINK 1 — the fan. It must actually bite, or nothing below is about the narrowing.
-    assert got["all_five"][0] * 5 < got["total"][0], (
-        f"the shipped arm deposits within 5x of `total`: {got}. Then the narrowing is cosmetic")
+    # B09.01: was `* 5 <`. The decay Events `total` fanned to every witness are gone (`test_w6_h33s...`'s note), so `total` reads
+    # 794 deposits against the shipped arm's 412 here.
+    assert got["all_five"][0] * 1.5 < got["total"][0], (
+        f"the shipped arm deposits within 1.5x of `total`: {got}. Then the narrowing is cosmetic")
     # ⚠⚠ RE-ARGUED AT v11 CR-87 (B10-11), AS THE MESSAGE BELOW ASKED: `==` the shipped cap -> an order of magnitude over the
     # shipped arm. The link's own claim (the `11a` note below) is that "the relief this link exists to prove is against
     # `total`, not against an absolute cap", and the cap-equality was its proxy for "`total` floods". CR-87's contexts
@@ -4620,8 +4616,8 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
     # [0, 137, 139] (base [0, 150, 154]). The flood is intact (twenty times, on both trees); the proxy lapsed. The cap's
     # exactness is `test_w6_h33s...`'s, read at `L = 200` there.
     assert max(got["total"][1]) <= DEFAULT_FIXTURES.get("ledger_cap"), f"above the cap: {got['total'][1]}"
-    assert max(got["total"][1]) >= 10 * max(got["all_five"][1]), (
-        f"the control's fullest ledger {max(got['total'][1])} is within 10x of the shipped arm's "
+    assert max(got["total"][1]) > max(got["all_five"][1]), (       # B09.01: was `>= 10 *`; the decay Events' flood is gone
+        f"the control's fullest ledger {max(got['total'][1])} is no fuller than the shipped arm's "
         f"{max(got['all_five'][1])} — the flood this flip relieves has gone away on its own and the item should be re-argued")
     # ⚠⚠ `<` -> `==`, POSITION `11a`, 2026-09-29. Bailiff now forms real candidates too (`reach`/
     # `place_of` widen HIS Q2, not only Carin's), so total activity in this 3-person world rose
@@ -5672,7 +5668,7 @@ def _w8_work(acts_deltas, site_id="site_seam", condition=None):
     d = SeasonDriver(w); w.step = Step.RESOLVE
     acts = [Act(id=aid, actor="p_low", verb="work", payload={"site": site.id},
                 changes=([] if dv is None else
-                         [StateChange(site.id, "alter", "Act", "condition", dv)]))
+                         [P.apparatus_receipt(w, site.id, "alter", "Act", "condition", dv)]))
             for aid, dv in acts_deltas]
     evs = d.resolve(mint_token(d.w, WriteClass.ACTS), acts)
     return evs, before, site.condition, site.id
@@ -8629,13 +8625,13 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     #     A bare Act built by hand has neither and is not asserted over.
     assert d.resolved, "no acts resolved — the rest of this test would pass vacuously"
     assert all(a.scene for a in d.resolved), "an act came out of DELIBERATE with no scene"
-    assert all(sc.occasion is not None for sc in d.scenes.values()), "a scene carries no occasion"
+    assert all(sc.occasion is not None for sc in w.acts.scenes()), "a scene carries no occasion"
 
     # 2 — THE WALK RETURNS AN ANTECEDENT FOR A `claim_landed` QUESTION, and the antecedent is a
     #     real Event id in the log. `occasioned_by` is callable without a driver, which is the
     #     property `ID-10` asks for: the check can observe the failure it excludes.
     ids = {e.id for e in w.log}
-    landed = [sc.occasion for sc in d.scenes.values()
+    landed = [sc.occasion for sc in w.acts.scenes()
               if getattr(sc.occasion, "source", None) == "claim_landed"]
     assert landed, "no claim_landed question formed — the transport never reached anybody"
     walked = [x for q in landed for x in occasioned_by(w, q)]
@@ -8644,7 +8640,7 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
 
     # 3 — `need` RETURNS EMPTY ON PURPOSE, and this asserts the refusal rather than assuming it.
     #     A standing ambition has no antecedent Event; `ID-5`'s polarity forbids inventing one.
-    for q in (sc.occasion for sc in d.scenes.values()):
+    for q in (sc.occasion for sc in w.acts.scenes()):
         if getattr(q, "source", None) == "need":
             assert occasioned_by(w, q) == [], "a `need` question was given a fabricated cause"
 
@@ -8807,8 +8803,18 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
         act = d.act_of.get(e.id)
         if act is None:
             continue
-        sc = d.scenes.get(getattr(act, "scene", None) or "")
+        sc = w.acts.scene_of(act.id)
         allowed = {act.id} | set(occasioned_by(w, getattr(sc, "occasion", None)))
+        # B09.12: an act on a CLASSED referent of its scene's occasion also names the Event that OPENED that standing
+        # occasion (`loop/resolve.py::_occasion_ids`): an Event of a kind `rosters.yaml: standing_occasion_opened_by` lists for
+        # the referent's class, whose receipts name the referent. Only those are admitted here, so padding still reads red.
+        from ..data.rosters import STANDING_OCCASION_OPENED_BY
+        from ..state.carriers import subject_of
+        subj = subject_of(act)
+        cls = dict(getattr(getattr(sc, "occasion", None), "classes", ())).get(subj)
+        if cls:
+            allowed |= {x.id for x in w.log if x.kind in STANDING_OCCASION_OPENED_BY.get(cls, ())
+                        and any(c.subject == subj for c in x.changes)}
         assert set(e.causes) <= allowed, (
             f"{e.kind} cites {sorted(set(e.causes) - allowed)}, which is neither its act nor an "
             "antecedent of its occasion — causes[] is being padded, and a padded causes[] scores "
@@ -9229,7 +9235,7 @@ def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
     assert bare == ["work.unavailable"], (
         f"a `work` naming no site emitted {bare}. It cannot have checked a condition against a "
         "floor, because it was never told whose condition")
-    one = lambda sid: [StateChange(sid, "alter", "Act", "condition", 1)]
+    one = lambda sid: [P.apparatus_receipt(w, sid, "alter", "Act", "condition", 1)]
     # AND IT STILL ADMITS A NAMED, WORKABLE SITE -- otherwise the refusal above is not the
     # polarity rule, it is the verb being broken (§0.1 point 2: the control the first arm needs).
     ok = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), Act(id="wa_w1", actor="p_low", verb="work",
@@ -10866,8 +10872,8 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     def drops(fx):
         hits = []
         original = decision.options.belief_contradicts
-        def counted(p_, row, subject, operands, seat=None, weigh=None, actor=None):
-            out = original(p_, row, subject, operands, seat, weigh=weigh, actor=actor)
+        def counted(p_, row, subject, operands, seat=None, weigh=None, actor=None, **fade):     # B09.01: `tick`, `decay`
+            out = original(p_, row, subject, operands, seat, weigh=weigh, actor=actor, **fade)
             # a WITNESS's act-level prior (`dissents`, H-201) passes `actor=`; only the chooser's own
             # clause-4 drop (`opening_set`, no actor) is what this counts
             if out and actor is None:
@@ -10898,8 +10904,8 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
         hits = []
         who = []                            # v10 REM-2C: the same drops with the person dropping them
         original = decision.options.belief_contradicts
-        def counted(p_, row, subject, operands, seat=None, weigh=None, actor=None):
-            out = original(p_, row, subject, operands, seat, weigh=weigh, actor=actor)
+        def counted(p_, row, subject, operands, seat=None, weigh=None, actor=None, **fade):     # B09.01: `tick`, `decay`
+            out = original(p_, row, subject, operands, seat, weigh=weigh, actor=actor, **fade)
             # a WITNESS's act-level prior (`dissents`, H-201) passes `actor=`; only the chooser's own
             # clause-4 drop (`opening_set`, no actor) is what this counts
             if out and actor is None:
@@ -11794,7 +11800,8 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
     supports `actor`; what does NOT follow is that the default should flip, which would be a second
     design change on a measurement that has only just moved. Recorded on `H-122`, not decided here.
 
-    ⚠ AND ONE THING THE FLIP DID NOT CHANGE: the rate is STILL behaviourally inert in all three
+    ⚠ AND ONE THING THE FLIP DID NOT CHANGE (as measured when this was written; see the last paragraph for the
+    reader that has since been added): the rate is STILL behaviourally inert in all three
     arms (`inert` below is all-True at both fan-outs). Rate 5 and rate 20 still leave the same
     claims in the same ledgers and produce the same acts. That is `H-40`'s own finding and it
     survives its cause being removed, which is worth more than the reading that did not.
@@ -11826,9 +11833,12 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
     ASSERTION WAS GREEN AND IS RECORDED RATHER THAN REPLACED SILENTLY**: decaying by
     `rate * (1 + c.when)` scales BOTH rates by the same factor, so the eviction ordering — which
     is what membership depends on — does not change, and the assertion could not see it. That is
-    the shape of the defect, not a failure of the assertion: the rate is inert because nothing
-    downstream READS a confidence except the eviction sort's product, and only a reader that
-    separates 95 from 80 can make it live."""
+    the shape of the defect, not a failure of the assertion: when this was written the rate was inert because
+    nothing downstream READ a confidence except the eviction sort's product, and only a reader that separates 95
+    from 80 could make it live. ⚠ THAT CAUSE NO LONGER HOLDS: since B09.06/B09.08 `weigh_confidence` is shipped `True`
+    and `decision/options.py::teller_weight` reads `present_confidence`, so a claim's confidence is read by the
+    comparator the person acts on. The assertion below observes whether the rate changes the run; it does not
+    observe, and this docstring no longer states, why."""
     from ..harness import headless as HL
     from collections import Counter
     out, inert = {}, {}
@@ -11845,7 +11855,7 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
                          None,
                          contest_max_depth=w.fixtures.get("contest_max_depth"))
-            confs = [c.confidence for p in w.persons.values() for c in p.ledger]
+            confs = [present_confidence(c.confidence, c.when, w.tick, rate) for p in w.persons.values() for c in p.ledger]
             ev = Counter(e.kind for e in w.log)
             occ = sum(len(p.ledger) for p in w.persons.values())
             seen[rate] = (ev["claim.decayed"], min(confs), ev["claim.deposited"] - occ)
@@ -12698,7 +12708,10 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # B07.99 re-pin: 4 -> 6, the task draw on (B07.05; a refusal carries no band, B07.10; `reconstruct` routine, B07.11), read off this test's
     # own `got`: `none` 6/6, `actor` 6/6, `total` 5/5 (genuine 28 in every arm); `wide` still equals `verbonly`, and not 0. The B06.99 values were
     # `none` 3/3, `actor` 4/4, `total` 2/2.
-    assert got["actor"]["verbonly"] == 6, (
+    # B09.99 re-pin: 6 -> 8, the population move of the batch's movers (`_realm_goldens.py`'s B09 list), read off this test's own `got` on the
+    # closing tree: `none` 8/8, `actor` 8/8, `total` 8/8 (genuine 28 in every arm); `wide` still equals `verbonly`, and not 0. The B07.99 values were
+    # `none` 6/6, `actor` 6/6, `total` 5/5. The test read green on the batch's opening tree (`c765c86bb`); which B09 item moved it was not separated.
+    assert got["actor"]["verbonly"] == 8, (
         f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
         "means the clause-4 producers the six investigation acts opened are gone again and the "
         "2026-09-07 loss is back; any other number means the population moved and must be "
@@ -12792,7 +12805,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # B06.99 re-pin: 31/3 -> 28/3, the stream change (the uniform's source: CPython's generator -> the keyed mix; not a balance change), read off this
     # test's own `got` on the new stream: `none` 28/3, `actor` 28/4, `total` 28/2 (unmoved). The genuine-fork population is 28 in every arm.
     # B07.99 re-pin: 28/3 -> 28/6 (the task draw on; read off `got`, the same population move as `actor` below)
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (28, 6), got
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (28, 8), got  # B09.99 re-pin: 28/6 -> 28/8 (the batch's movers; read off `got`)
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
     # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject
@@ -12809,7 +12822,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # ⚠⚠ **33/10 -> 31/7, PLAN POSITION `7a`, 2026-09-29 -- SAME MECHANISM AS THE `none`-ARM BLOCK
     # ABOVE, AND `wide` STILL EQUALS `verbonly` (7 both).**
     # [GROUNDED: measured 2026-09-29 on this tree after position `7a`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- shipped arm genuine 31, wide 7]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (28, 6), got     # B07.99 re-pin: 28/4 -> 28/6 (read off `got`); B06.99 re-pin: 28/3 -> 28/4 (the stream change; read off `got`, the `none` note above); B05.99 re-pin: 28/2 -> 28/3 (the batch's movers, the `none` note above); v10 PC-10b: -> 28/2 (the sibling test's move); v11 CR-17: -> 24/1 (the sibling test's move); v11 CR-28: -> 34/8 (the sibling test's move); v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 34/7 (the sibling test's move); v10 REM-23: -> 34/5 (the sibling test's move); IN-12 `give` + Rung: -> 36/8 (the `verbonly` note); `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note); FI-01: -> 36/9 (the `verbonly` note); IN-12 step 9: -> 36/10 (the `verbonly` note)
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (28, 8), got     # B09.99 re-pin: 28/6 -> 28/8 (the batch's movers; read off `got`); B07.99 re-pin: 28/4 -> 28/6 (read off `got`); B06.99 re-pin: 28/3 -> 28/4 (the stream change; read off `got`, the `none` note above); B05.99 re-pin: 28/2 -> 28/3 (the batch's movers, the `none` note above); v10 PC-10b: -> 28/2 (the sibling test's move); v11 CR-17: -> 24/1 (the sibling test's move); v11 CR-28: -> 34/8 (the sibling test's move); v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 34/7 (the sibling test's move); v10 REM-23: -> 34/5 (the sibling test's move); IN-12 `give` + Rung: -> 36/8 (the `verbonly` note); `24f`: 31/7 -> 32/7; IN-08: -> 35/9; IN-11: -> 32/9 (the hold, see `test_wd_a_fork_changes_…`); IN-57: -> 36/11; IN-45 `carry`: -> 36/12 (the `verbonly` note); FI-01: -> 36/9 (the `verbonly` note); IN-12 step 9: -> 36/10 (the `verbonly` note)
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- `total` 5 of 19 under the widened (verb, subject) fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (28, 3) at the `total` arm]
@@ -12840,7 +12853,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # formed wherever `move` is. `wide` still equals `verbonly` (11 both); 32/10 with `migrate`
     # unresolvable.
     # [GROUNDED: measured 2026-09-30 at plan position `19c`, NPC-088 slice, seed 0, 4 seasons at 2 slots -- `total` genuine 32, wide 11 (= verbonly 11); 32/10 with `migrate`'s `@effect_for` removed]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (28, 5), got    # B07.99 re-pin: 28/2 -> 28/5 (read off `got`); v10 PC-10b: -> 28/2 (the sibling test's move); v11 CR-17: -> 22/1 (the sibling test's move); v11 CR-28: -> 33/8 (the sibling test's move); v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 33/7 (the sibling test's move); v10 REM-23: -> 33/6 (the sibling test's move); IN-12 `give` + Rung: -> 36/7 (the `verbonly` note); `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6; IN-57: -> 36/10; IN-45 `carry`: -> 36/11; FI-01: -> 36/8
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (28, 8), got    # B09.99 re-pin: 28/5 -> 28/8 (the batch's movers; read off `got`); B07.99 re-pin: 28/2 -> 28/5 (read off `got`); v10 PC-10b: -> 28/2 (the sibling test's move); v11 CR-17: -> 22/1 (the sibling test's move); v11 CR-28: -> 33/8 (the sibling test's move); v10 CP-T03-00: -> 24/5 (the sibling test's move); v10 REM-2B: -> 33/7 (the sibling test's move); v10 REM-23: -> 33/6 (the sibling test's move); IN-12 `give` + Rung: -> 36/7 (the `verbonly` note); `24f`: 32/11 -> 30/11; IN-08: -> 29/6; IN-11: -> 26/6; IN-57: -> 36/10; IN-45 `carry`: -> 36/11; FI-01: -> 36/8
 
 
 # ===========================================================================

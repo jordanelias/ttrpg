@@ -257,3 +257,82 @@ def test_g4_a_transfer_from_a_rung_to_itself_is_refused_and_a_real_one_is_made()
     assert [e.kind for e in evs] == ["transfer.made"], [e.kind for e in evs]
     assert (w.rungs["Hh"].stores, w.rungs["S"].stores) == ({"grain": 7}, {"grain": 41})
     assert len(_set_receipts_on(evs, "Hh")) == 1 and len(_set_receipts_on(evs, "S")) == 1
+
+
+# ======================================================================================
+# 6 -- B09.11: A SCAR IS RECORDED AND WITNESSED BY NOBODY
+# ======================================================================================
+
+def _scarring_fight(monkeypatch, aid="g4_scar"):
+    """`test_h11_affiliation_scar`'s scene: a fight seen by persons whose held affiliations the rebound
+    engagement table says it violates, so `_scar_witnesses` writes `(Person, scar)` for each observer.
+    The act is in the act store, as at the driver, so the Events it causes resolve. Returns the world and
+    the Events the fold RETURNS (what WITNESS reads); the log holds those and whatever else was emitted."""
+    from ..data import affiliations as A
+    from ..data.rosters import AFFILIATIONS
+    from engine.substrate.descriptors import AFFILIATION_CEILING
+    from ._scar_helpers import fight, rebound
+    monkeypatch.setattr(A, "ENGAGEMENT", rebound(**{A.SHARED_COLUMN: {"fight": -0.3}}))
+    w = P.tiny_world()
+    for q in w.persons.values():
+        q.pursuits = {}
+        q.conviction = {a: AFFILIATION_CEILING for a in sorted(AFFILIATIONS)[:2]}
+    w.add_tenure(Tenure("t_g4_knot", "p_low", "p_high", "knot", since=0))
+    w.step = Step.RESOLVE
+    w.acts.append(Act(id=aid, actor="p_low", verb="fight", payload={"subject": "p_mid"}))
+    out = fight(w, aid)
+    for e in out:
+        w.log.append(e)
+    return w, out
+
+
+def test_scar_taken_event_deposits_no_claim(monkeypatch):
+    """B09.11. The `scar.taken` Event is in the log and is NOT in the list RESOLVE returns, which is
+    what WITNESS reads, so it deposits no claim about a scarred observer. The observer: after WITNESS
+    over the returned list, no `claim.deposited` Event names the scar Event among its causes. CONTROL, in
+    the same test: handing WITNESS the scar Event as well DOES deposit about it, so the assertion can
+    observe the failure it excludes (a gate-emitted Event reaching WITNESS by a path nobody saw)."""
+    w, out = _scarring_fight(monkeypatch)
+    scar_evs = [e for e in w.log if e.kind == "scar.taken"]
+    assert len(scar_evs) == 1, [e.kind for e in w.log]
+    (scar,) = scar_evs
+    returned = {e.id for e in out}
+    assert scar.id not in returned, "the scar Event rides RESOLVE's returned list"
+    d = SeasonDriver(w)
+    act = Act(id="g4_scar", actor="p_low", verb="fight", payload={"subject": "p_mid"})
+    for e in out:
+        d.act_of[e.id] = act
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
+    deposits = [e for e in w.log if e.kind == "claim.deposited"]
+    assert [e for e in deposits if returned & set(e.causes)], (
+        "the act's own Events deposited nothing, so the assertion below would be vacuous")
+    assert not [e for e in deposits if scar.id in e.causes], "WITNESS deposited about the scar Event"
+    d.act_of[scar.id] = act
+    d.witness(mint_token(w, WriteClass.INTERIOR), [scar])
+    assert [e for e in w.log if e.kind == "claim.deposited" and scar.id in e.causes], (
+        "the control: handed the scar Event, WITNESS deposits nothing, so the arm above cannot fail")
+
+
+def test_gate_emitted_event_names_persons_only_in_changes(monkeypatch):
+    """B09.11. An `Event` has no `actor`, `target` or `subject` field (`state/carriers.py::Event`); the
+    persons scarred are named by the receipts in `changes[]` and nowhere else. The one `scar.taken`
+    Event carries exactly the receipts the gate minted for the scarred, one per person, each on
+    `(Person, scar)`, and those persons are exactly the ones whose `scar` the write moved. Its cause
+    is the act. CONTROL: a person who holds no scar is named by no receipt."""
+    import dataclasses
+    from ..state.carriers import Event
+    from ._scar_helpers import scars
+    w, _out = _scarring_fight(monkeypatch, "g4_scar2")
+    fields = {f.name for f in dataclasses.fields(Event)}
+    assert not fields & {"actor", "target", "subject"}, fields
+    (scar,) = [e for e in w.log if e.kind == "scar.taken"]
+    assert scar.causes == ["g4_scar2"]
+    assert all(isinstance(c, Receipt) and w.gate.issued(c) for c in scar.changes)
+    assert {c.field for c in scar.changes} == {"scar"}
+    named = [c.subject for c in scar.changes]
+    assert len(named) == len(set(named)) and named, named
+    scarred = set(scars(w))
+    assert set(named) == scarred, (named, scarred)
+    unscarred = set(w.persons) - scarred
+    assert unscarred, "everyone is scarred, so the control below names nobody"
+    assert not unscarred & set(named)

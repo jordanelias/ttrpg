@@ -48,7 +48,7 @@ def test_removing_the_witness_fan_out_makes_its_declared_loops_underived(shipped
 def test_a_loop_row_with_no_cycle_key_is_a_mismatch_not_a_silent_pass(shipped):
     _, signs, derived = shipped
     res = L.compare(derived, {**signs, "H-999": "+"}, L.DECLARED_CYCLES)
-    assert not res["equal"] and res["unmapped"] == ["H-999"]
+    assert not res["equal"] and "H-999" in res["unmapped"]       # H-103 (retired, B09.01) is mapped to none too
 
 
 def test_sign_algebra_damping_and_unknown():

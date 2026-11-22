@@ -28,9 +28,9 @@ THE PROCESSES, AND WHERE EACH EDGE COMES FROM (`build_processes`):
     degree bands) at polarity `?` -- THE GRAMMAR TYPES WHICH CELL A VERB WRITES AND NOT WHICH WAY -- and
     `Event` at `+` when its row declares any emission.
   * THE STEP READERS `H-106` NAMES -- the question sources, the witness channel predicates and the
-    eviction comparator -- plus WITNESS's fan-out over the log and MATTER's claim decay, which
-    `H-103` and `H-112` are about. Their reads are not typed anywhere in the tree, so they are
-    declared here in `QUESTION_SOURCE_READS`, `CHANNEL_READS` and `STEP_READS`. Each is tied to an
+    eviction comparator -- plus WITNESS's fan-out over the log, which `H-112` is about (MATTER's claim
+    decay, which `H-103` was about, was retired at B09.01: a claim fades where it is read). Their
+    reads are not typed anywhere in the tree, so they are declared here in `QUESTION_SOURCE_READS`, `CHANNEL_READS` and `STEP_READS`. Each is tied to an
     owner and is reported as DRIFT when it falls out of step: a stem in `REQUIRES_STEMS` with no
     entry in `STEM_READS`, a question source with none, or a step write to a cell whose row does not
     list that step.
@@ -159,9 +159,6 @@ STEP_READS = (
     # loop/witness.py::witness -- `evict_over_cap`; emits nothing
     Process("WITNESS: eviction comparator", (("Person.claim_ledger", "+"),),
             (("Person.claim_ledger", "-"),), "WIT"),
-    # loop/matter.py::matter -- `claim_decay`; emits `claim.decayed`
-    Process("MATTER: claim decay", (("Claim.confidence", "+"),),
-            (("Claim.confidence", "-"), (EVENT, "+")), "MAT"),
     # loop/matter.py::_lattice_strain (v9 IN-35) -- a LOWER neighbour means MORE pull (`-`), and the
     # pull is wear (`-`); emits through the wear write's `condition.worn`
     Process("MATTER: lattice coupling", (("Site.condition", "-"),),
@@ -173,7 +170,6 @@ DECLARED_CYCLES = {
     # claim lands -> question -> act -> Event -> witnessed -> claim; and the `own_ledger` reader
     # (`tell`, `reconstruct`, `survey`) on the same ledger, which `H-106` names as part of it.
     "H-102": ((ACTS, EVENT, "Person.claim_ledger"), (EVENT, "Person.claim_ledger")),
-    "H-103": (("Claim.confidence",),),
     "H-104": (("Person.claim_ledger",),),
     "H-112": ((EVENT,),),
     # the lattice coupling: a worn Site wears its neighbours, which wear theirs (v9 IN-35)
@@ -312,14 +308,9 @@ def _ledger_max(w):
     return max((len(p.ledger) for p in w.persons.values()), default=None)
 
 
-def _confidence_max(w):
-    return max((c.confidence for p in w.persons.values() for c in p.ledger), default=None)
-
-
 #: `quantity -> reader(world, season summary, events logged this season)`, read after each season.
 QUANTITY_READERS = {
     "Person.claim_ledger": lambda w, summary, n_logged: _ledger_max(w),
-    "Claim.confidence":    lambda w, summary, n_logged: _confidence_max(w),
     EVENT:                 lambda w, summary, n_logged: n_logged,
     ACTS:                  lambda w, summary, n_logged: summary.get("acts"),
 }
@@ -434,7 +425,7 @@ def build_processes() -> tuple:
     declared = {_STEP_OF[p.step] for p in procs if p.step}
     blind = {"untyped_requires": untyped, "drift": drift,
              "undeclared_step_reads": sorted(writing_steps - declared)
-             + ["MATTER (every pass but claim decay and the lattice coupling)", "DELIBERATE (all but its question sources)",
+             + ["MATTER (every pass but the lattice coupling)", "DELIBERATE (all but its question sources)",
                 f"WITNESS channels as one union, not per channel ({len(WITNESS_CHANNELS)} rostered)"]}
     return tuple(procs), blind
 

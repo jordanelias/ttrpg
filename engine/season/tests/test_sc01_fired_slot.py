@@ -277,7 +277,7 @@ def _w26_run():
     # ... released as DELIBERATE releases a scene (`loop/deliberate.py`: registered, act stamped) ...
     acts = []
     for sc in pack_scenes(duke, [det], 5, w.fixtures, lambda pid, verb, s: f"w26:{verb}:{s}", occasion=q):
-        d.scenes[sc.id] = sc
+        w.acts.add_scene(sc)
         for a in sc.acts:
             a.scene = sc.id
             acts.append(a)

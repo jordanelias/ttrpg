@@ -784,7 +784,8 @@ def _ordinary_score(fx: Any, verb: str) -> Optional[float]:
 def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
                    pool: float, person_subject: bool, examined_record: bool = False,
                    room: Optional[dict] = None, heard: bool = False,
-                   effort: int = 0, office: Optional[str] = None, docketed: Optional[dict] = None) -> Optional[SocialContestInput]:
+                   effort: int = 0, office: Optional[str] = None, docketed: Optional[dict] = None,
+                   tick: int = 0) -> Optional[SocialContestInput]:
     """THE PERSON'S RECORD (mode (b)): the same `SocialContestInput`, filled only from what `p` holds.
 
     AX-2: it reads `p` (his own ledger) and the fixtures, never the World; the
@@ -815,6 +816,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
     never a figure; at 0 the term reads nothing, so the answer is as it was; AT THE `ordinary` PRIOR it is read neutral (regard 0, an ordinary
     person's), so he gets a figure."""
     roles = {r.role for r in _social_rows()}
+    decay = fx.claim_decay()        # B09.01: his claims are read at `tick`, faded (`state/ledgers.py::present_confidence`), never as stored
     ordinary = fx.get("believed_prior") == "ordinary"        # B05.62 (H-435): a person he holds no claim about is taken for an ordinary one
     key = VERB_CAPABILITY.get(verb)
     opposition = None
@@ -826,7 +828,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
     # never a figure (B05.14; before it the keyless verb's believed obstacle was known and the dealt one).
     if "opposes" in roles and person_subject and subject != p.id:
         if key:
-            said = believed_capability(p, subject, key)
+            said = believed_capability(p, subject, key, tick, decay)
             if said is None and not ordinary:
                 return None
             skill = float(said) if said is not None else _ordinary_score(fx, verb)
@@ -835,7 +837,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
         attribute = 0.0
         resisted = VERB_TABLE[verb].opposed_attribute if verb in VERB_TABLE else None
         if resisted and skill is not None:
-            said = believed_capability(p, subject, resisted)
+            said = believed_capability(p, subject, resisted, tick, decay)
             if said is None and not ordinary:
                 return None
             attribute = float(opposing_attribute(fx, _ORDINARY, verb) if said is None else said)     # an ordinary person's: the scale's mid-point
@@ -847,7 +849,7 @@ def believed_input(p: Any, verb: str, subject: Optional[str], fx: Any, *,
     def believed_subject(row, key):
         if not person_subject or subject == p.id:
             return None
-        said = believed_capability(p, subject, key)
+        said = believed_capability(p, subject, key, tick, decay)
         if said is None:
             return (_ORDINARY, _held_at(_ORDINARY, row, key, verb)) if ordinary else _UNKNOWN      # an ordinary person holds nothing
         return SimpleNamespace(capability={row.key: said}), said
@@ -985,7 +987,7 @@ def odds_of(w: Any, act: Any, *, believer: Any = None,
                          person_subject=bool(subject) and subject in w.persons,
                          examined_record=examined is not None and examined in w.records,
                          room=believed_room, heard=room is not None, effort=effort, office=_seat_modifier(w, act.via, room),
-                         docketed=_docketed_row(w, subject))
+                         docketed=_docketed_row(w, subject), tick=w.tick)
     return None if inp is None else _odds_of_input(inp)
 
 

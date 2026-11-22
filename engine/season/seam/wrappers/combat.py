@@ -229,8 +229,9 @@ def believed_picture(w: Any, believer: Any, pid: str) -> tuple:
     other = w.persons[pid]
     seen = person_q.has_seen(believer, pid)
     held = dict(zip(("weapon", "armor"), kit_of(w, pid))) if seen else dict(combat_kit.DEFAULTS)
-    kit = tuple(held[f] if (said := person_q.believed_kit(believer, pid, f)) is None else said for f in ("weapon", "armor"))
-    wound = person_q.believed_body(believer, pid)
+    at = (w.tick, w.fixtures.claim_decay())          # B09.01: his claims are read faded at this tick, never as stored
+    kit = tuple(held[f] if (said := person_q.believed_kit(believer, pid, f, *at)) is None else said for f in ("weapon", "armor"))
+    wound = person_q.believed_body(believer, pid, *at)
     scale = w.fixtures.get("condition_scale")
     if wound is not None:
         body, ceiling = wound, scale
