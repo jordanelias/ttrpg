@@ -203,8 +203,8 @@ ALL DIRECTIONS  top-down · bottom-up · vertical · diagonal · lateral · hori
    claim is not a weak test but an absent one. A loop that asserts conditionally must assert that it
    asserted (`assert checked >= N`).
 3. **Name the falsifier, or you have not attacked the result.** A result claim carries, in the same
-   commit, the test that would have shown it wrong and that test's outcome. A result claim is wider than
-   a number, and **the claim and its support are different objects; check the support.**
+   commit, the test that would have shown it wrong and that test's outcome; the commit is the record, so a
+   build-verification test retires at its batch close (`methodology-execute`). A result claim is wider than a number, and **the claim and its support are different objects; check the support.**
 
    | claiming | observe this first |
    |---|---|
@@ -260,7 +260,7 @@ line.** This is the one claim here a session **cannot satisfy by writing**.
 ### 0.3 No SessionStart banner (RULED)
 
 **A SessionStart hook that PRINTS is the regression; one that is silent is not. Do not build a
-replacement banner.** `tools/session_provision.py` is the allowed shape: it installs the four packages
+replacement banner.** `tools/session_provision.py` is the allowed shape: it installs the packages
 §8 documents and writes zero bytes to stdout. Retiring the banner is a closed experiment, not one to
 re-run from a hunch; reasoning in `CLAUDE_RATIONALE.md` §0.3.
 
@@ -273,8 +273,8 @@ Timings: `CLAUDE_RATIONALE.md` §0.4 — re-measure rather than quote them.
    or links runs only the test files that read what it touched (`grep -rl <path> tests/`).
 2. **Mid-session, run only the file covering what you touched.** If you cannot name it, find it. At the close, `python tools/tests_for_diff.py` names the suites your edits call for (`-m combat|mass_battle|social_contest` when only that subsystem changed).
 3. **Never re-run to re-confirm a green you already hold.**
-4. **A red close run re-runs the FAILING FILE ONLY while you fix it.** The full suite comes back once,
-   when you believe you are done. Red is not a licence to loop the gate.
+4. **A red close run re-runs the FAILING FILE ONLY while you fix it.** The suite comes back once, when you
+   believe you are done, over only what the fix diff reaches (`tests_for_diff.py --base`). Red is not a licence to loop the gate.
 5. **`tools/valoria_local.py --staged` does not run pytest** (local-green ≠ CI-green). It is cheap; run
    it freely. The expensive thing is pytest, and only pytest.
 6. **SIZE THE RUN TO THE QUESTION.** Whether a verb fires or a rule binds needs ONE season (or a hand-built world calling the
@@ -505,7 +505,7 @@ re-implement a rule.** Known live violations, treated as bugs rather than propag
   owned by `tools/ci_common.py`, which forwards to nothing else. Reuse it; do not re-derive them.
 
 ```sh
-python tools/session_provision.py                # installs pyyaml pytest numpy pytest-xdist if absent; silent
+python tools/session_provision.py                # installs pyyaml pytest numpy pytest-xdist pytest-timeout if absent; silent
 python -m pytest tests/valoria -q -n auto        # the gate; CI runs it on a push not marked [skip ci] (§0.4)
 python -m pytest tests/valoria/test_<x>.py -q    # the inner loop: seconds. This is the mid-session run.
 ```

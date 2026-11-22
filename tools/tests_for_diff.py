@@ -89,7 +89,8 @@ def commands(markers, wide):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--base", default="origin/main")
-    ap.add_argument("--run", action="store_true", help="run the commands (stops at the first failure)")
+    ap.add_argument("--run", action="store_true",
+                    help="run every command and report each one's verdict (exit 1 if any is red)")
     a = ap.parse_args(argv)
     files = changed_files(a.base)
     markers, wide, prose = classify(files)
@@ -104,9 +105,11 @@ def main(argv=None):
     for c in cmds:
         print("  " + c)
     if a.run:
-        for c in cmds:
-            if subprocess.run(c.split(), cwd=ROOT).returncode:
-                return 1
+        # Every tree runs and reports, so a red in the first does not hide the others' verdicts.
+        verdicts = [(c, subprocess.run(c.split(), cwd=ROOT).returncode) for c in cmds]
+        for c, rc in verdicts:
+            print(("green        " if rc == 0 else f"RED (exit {rc})  ") + c)
+        return 1 if any(rc for _, rc in verdicts) else 0
     return 0
 
 
