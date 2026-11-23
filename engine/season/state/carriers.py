@@ -521,12 +521,18 @@ class Question:
     as a vacancy), and neither side's formations move the other's. It rides per referent, not on
     `source`, because `decision/questions.py::aggregate_questions` folds several questions under ONE
     source and unions the pairs. A Question is not in `World._STATE_COLLECTIONS` and is never
-    hashed, so the field moves no `content_hash`; `()` carries none."""
+    hashed, so the field moves no `content_hash`; `()` carries none.
+
+    `mandatory` (B10.71, A-47): the question a person may not pass over for another -- `questions_for` sorts it first, ahead of
+    `attention_key`, and sets it only on the `need` question of an ambition whose `goal_stages` row says `opens: mandatory`
+    while he stands on the row's last stage. It opens a scene and DECIDES NOTHING: which act he takes is the chooser's draw.
+    Not hashed, as the rest of a Question is not."""
     id: str
     source: str
     referents: tuple
     about: str = ""
     classes: tuple = ()
+    mandatory: bool = False
 
     def referents_for(self, cls: Optional[str]) -> tuple:
         """THE REFERENTS A ROW DECLARING `cls` FORMS ON: the plain `referents` for `None` (a row
@@ -596,7 +602,23 @@ class Scene:
 
     A scene filling more than one interaction slot (`slots`) costs more than one scene action
     (`H-77`, swept). Both that cost and the interactions bound are FIXTURES and register rows --
-    Jordan ruled the UNIT and the NUMBER and ruled neither of these."""
+    Jordan ruled the UNIT and the NUMBER and ruled neither of these.
+
+    ⚠ LAYER 1 DEPARTURE, NAMED HERE (B4's third disposition; C3-C16): `04` §B.9's `Scene` record is `(id, person, occasion, place,
+    interactions)` and has no `decided`. `decided` is not in it and `04` is not edited. Its one reader is `harness/chronicle.py`
+    (ID-13: `lines`' per-act line). THE DECIDING TERM: the term of the score, or the draw, that put the Scene's FIRST act on top
+    of the candidates still unspent when it was taken -- `choose.deciding_term`'s label for it (`pursuit`, `stance`, `fit`, a `+`
+    of them, `draw`, `tiebreak`, `sole` or `overdetermined`). `decision/` stamps it (`choose.pack_scenes`); the Scene is its own
+    return value, so this is no write, and nothing is hashed from it. `""` is a Scene packed from a list no chooser ranked (a
+    hand-built one, or a player's pick), where no deliberation said what decided it.
+
+    A SECOND DEPARTURE, NAMED THE SAME WAY (B10.24; B4's third disposition; `04` not edited): `forgone`, `((verb, subject, margin), ...)`,
+    the candidates his scruple (`decision/options.py::scruple`) struck that he ranked above what he did -- the struck candidates whose
+    score exceeded the one that leads this Scene -- and, once a strike can be a draw, the candidates it left standing at a positive
+    margin that this Scene carries. It is the chooser's record of what was given up, NOT a belief the person holds about himself.
+    `choose.pack_scenes` stamps it from the ranker; its one reader is the fold (`loop/resolve.py::_scruple_overridden`), which
+    emits `scruple.overridden` where the act's own `(verb, subject)` stands in it at a positive margin. `()` is a Scene whose
+    deliberation struck nothing (the gate unarmed, the shipped control) or that no chooser ranked."""
     id: str
     actor: str
     acts: list = field(default_factory=list)
@@ -610,6 +632,8 @@ class Scene:
     # nothing here reads a scene's place; `place_of(w, event)` already answers that question from
     # the Event. Adding it to match a type signature would be the defect the idiom names.
     occasion: Optional["Question"] = None
+    decided: str = ""      # the deciding term of the Scene's first act; the docstring names it (a Layer 1 departure)
+    forgone: tuple = ()    # `((verb, subject, margin), ...)`: what his scruple struck that he ranked above his lead act; the docstring names it
 
     # roster-exempt: MECHANISM. `PLAIN_COST` is the DEFINITION OF THE UNIT -- one ordinary scene
     # is one scene action -- not a tunable value. `H-77` tunes what an EXTENDED scene costs
@@ -834,6 +858,11 @@ class Person:
     # skills only), and written at build only (`write_matrix.yaml`'s `Person.traits` row has no step). No reader reads it
     # yet: the `edge` reader that will (U1-B step 4) reads 1 if the subject holds the trait, else 0.
     traits: frozenset = frozenset()
+    # B10.58 (A-108): A PERSON'S OWN MANNER OFFSET -- `{axis: float}` over `rosters.yaml: manner_offset_axes`, how far his way of going about things sits from what
+    # his pursuits alone would make it, on that axis (each within `+-Fixtures.manner_offset_bound`). Filled ONCE at world build from a cast row's `manner:`
+    # (`data/cast.py::manner_offset_of`), written at build only (`write_matrix.yaml`'s `Person.manner_offset` row has no step), and EMPTY where unauthored: an axis nobody
+    # holds is absent, never 0.0. ONE READER: `queries/person_q.py::projected_axes` adds it to the projected axis; the refusal gate asks for the projection without it.
+    manner_offset: Mapping[str, float] = field(default_factory=dict)
     travel_leg: list[str] = field(default_factory=list)
     # ⚠ THE TENURE STORE IS HERE, as `Tenure`'s OWN DOCSTRING says: "S15 -- THE ONE EDGE. Owned by its
     # SUBJECT (S15.1)." `budget : (Person, View) -> int` reads "own `hold` Tenures" WITH NO WORLD
@@ -884,6 +913,7 @@ class PersonInterior:
     conviction: Mapping
     scar: Mapping
     attributes: Mapping
+    manner_offset: Mapping
     body: int
     thread_sensitivity: Optional[int]
     stance: tuple
@@ -902,6 +932,12 @@ class PersonInterior:
     tick: int = 0
     claim_decay: int = 0
 
+    @property
+    def is_cohort(self) -> bool:
+        """`Person.is_cohort`, the one owner of the test (B10.59: `OwnStateReader` asks it of the person forming, who is an
+        interior here). A property reading `weight`, so it is no field and no second copy of the predicate."""
+        return Person.is_cohort.fget(self)
+
 
 def frozen(d) -> Mapping:
     """A read-only copy of a mapping (`None` reads as empty): what a handed-down record holds in place of the store's dict."""
@@ -913,7 +949,7 @@ def interior_of(p: Person, tick: int, claim_decay: int) -> PersonInterior:
     `tick` and `claim_decay` his claims are read at (B09.01)."""
     return PersonInterior(
         p.id, p.name, frozen(p.capability), frozen(p.pursuits), frozen(p.conviction), frozen(p.scar),
-        frozen(p.attributes),
+        frozen(p.attributes), frozen(p.manner_offset),
         p.body, p.thread_sensitivity, tuple(p.stance), tuple(p.travel_leg), tuple(p.tenures), tuple(p.ledger),
         p.weight, p.heritage, tick, claim_decay)
 

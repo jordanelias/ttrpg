@@ -35,7 +35,7 @@ also unions in members' `contain` presence and the faction-Proposition's OWN dir
 §B.6.1 asks a different, more literal question than `footprint` does, so this does not reuse it.
 
 ⚠ **THE VIEW HAS A DOCUMENT FORM, AND ITS SHAPE IS OWNED HERE (plan position `20-iii`, THE
-INFORMATION CLUSTER).** `survey` (`loop/effects.py::_eff_survey`) resolves a `Faction` at the moment
+INFORMATION CLUSTER).** `survey` (`loop/effects_information.py::_eff_survey`) resolves a `Faction` at the moment
 of writing and freezes it into a `Record` of kind `SHEET_KIND` -- proposal 14's *"a faction sheet is
 those Queries, resolved at the moment of writing and frozen into a `Record`"*
 (`proposals/2026-09-12-emergent-narrative-primitives-v2/01_THE_TEN.md`). That kind's key list lives in

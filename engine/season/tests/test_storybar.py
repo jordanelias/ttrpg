@@ -351,8 +351,9 @@ def test_removal_changes_another_persons_later_act():
     every figure would be void), and the removed person's own acts are not in `n`. The second control is
     a person removed at a lap in which the unperturbed copy shows him forming no scene: `n` reads 0."""
     base = _small_world()
-    who, cited = SB.most_cited(base)
-    assert who is not None and cited >= 1, "nobody is cited by another person; the removal observed nothing"
+    who, cited = SB.most_cited(base)        # the instrument's own default, which names an individual (a cohort's removal reads n = 0 since B10.60)
+    assert who is not None and cited >= 1, "no individual is cited by another person; the removal observed nothing"
+    assert not base.persons[who].is_cohort
     res = SB.removal_report(base, SEASONS, who, WHEN, None)
     v = SB.removal_verdict(res, WHEN)
     assert v["replay"] == 0, "the replay arm moved: every figure below is void"

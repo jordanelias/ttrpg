@@ -812,8 +812,8 @@ def test_concluded_known_refuses_a_strand_of_the_world_reading():
 def test_control_the_realm_hash_holds_and_the_reading_is_the_same_read_twice():
     """The two readings over a REAL season: a hand-built world would miss the real log, act store and witness
     pipeline (ledgers ordered by landing, evicted, told at second hand), and the harness's code-level terminal
-    test on a real log. At seed 0, one season, no ledger holds an `opens` claim (the world opens its strands by
-    side and content only, `strife-01` §3 item 3), so every person reading is `()` as shipped (asserted); the
+    test on a real log. At seed 0, one season, a person's reading is `()` exactly when his ledger holds no `opens`
+    claim (asserted both ways; the world opens its strands by side and content only, `strife-01` §3 item 3); the
     read-twice control plants one `opens` claim under the first move claim of a few holders, so their real
     joining claims attach, and reads those holders twice."""
     from engine.season.harness import populated
@@ -825,8 +825,11 @@ def test_control_the_realm_hash_holds_and_the_reading_is_the_same_read_twice():
     fl = W.flows_in(w, H.terminal_for(w))
     W.presented(w, fl)
     assert fl.strands and w.content_hash() == before and len(w.log) == n_log
-    # the measurement, asserted: no ledger holds an `opens` claim, so every person reading is `()`
-    assert len(w.persons) > 10 and all(W.flows_known(w, p) == () for p in w.persons.values())
+    # the measurement, asserted: a person's reading is `()` exactly when his ledger holds no `opens` claim (B10.99 re-read: since
+    # B10.72 a season at seed 0 holds a real `requisition.taken`, an `opens` kind, so nine persons now know a strand; none did)
+    opened = {pid for pid, p in w.persons.items() if any(c.predicate in W.OPENS_KINDS and c.value is True for c in p.ledger)}
+    assert len(w.persons) > 10
+    assert {pid for pid, p in w.persons.items() if W.flows_known(w, p) != ()} == opened
     holders = []
     for pid, p in sorted(w.persons.items()):
         first_move = next((c for c in p.ledger if c.predicate in W.MOVE_KINDS and c.value is True), None)

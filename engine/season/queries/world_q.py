@@ -29,11 +29,11 @@ from engine.dice_engine.fmath import ltr_sum
 
 from ..data.arrangements import ARRANGEMENTS      # v11 CR-34: `declared_sitting` reads a row's `disposal`/`quorum`
 from ..data.requires import (
-    OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, UNKNOWN, binding_from_act, binding_of, evaluate,
+    RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE, UNKNOWN, binding_from_act, binding_of, evaluate,
 )
 from ..data.rosters import (
     CONTINUATION_TIES, SUCCESSIONS,
-    ARMS_KINDS, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
+    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
     INVESTED,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
@@ -789,7 +789,7 @@ def reception(w: World, speaker: str, audience: tuple) -> float:
         return 0.0
     full = float(w.fixtures.get("confidence_default"))
     decay = w.fixtures.claim_decay()
-    shift = w.fixtures.get("scar_weight_shift")
+    shift, hold, mass = w.fixtures.get("scar_weight_shift"), w.fixtures.get("scar_hold"), w.fixtures.get("scar_primary_mass")
     total = 0.0
     for hid in dict.fromkeys(audience):
         h = w.persons.get(hid)
@@ -805,7 +805,7 @@ def reception(w: World, speaker: str, audience: tuple) -> float:
                 if called is not None and (c.when, c.lap) <= called:
                     continue
             if axis_w is None:
-                axis_w = projected_axes(h, shift)
+                axis_w = projected_axes(h, shift, hold=hold, mass=mass)
             total += remove_weight(c.source) * (present_confidence(c.confidence, c.when, w.tick, decay) / full) * deed_term(h, axis_w, c)
     return total
 
@@ -1653,7 +1653,7 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
 # ===========================================================================
 
 # THE `tenure_kinds` MEMBER A RESIDENCE IS, named once for its readers here and for the builders that
-# mint one per person (`WORKS_KIND`'s shape). `loop/effects.py::_eff_migrate` spells the literal at
+# mint one per person (`WORKS_KIND`'s shape). `loop/effects_migration.py::_eff_migrate` spells the literal at
 # its one `Tenure(...)` construction, because `data/verbs.py::_derive_openers_from_effects` reads a
 # kind off that call as a string CONSTANT. Refused at import if the roster stops carrying it: every
 # residence Query would otherwise match nothing and read as a world where nobody lives anywhere.
@@ -2852,6 +2852,48 @@ def current_stage(w: World, p: Person, ambition, weigh=None) -> Optional[dict]:
     return out or None
 
 
+def believed_met(w: World, p: Person, ambition) -> bool:
+    """B10.71 (U5a `CHAR` owed amendments §3 (a)): DOES `p` BELIEVE THE AMBITION MET -- his OWN ledger reads every stage of
+    its `goal_stages` row as passed, for every referent (`current_stage` reads `None` with a row and a referent: nothing
+    left to climb). A want with no row has no content a ledger can read, so it reads `False` and Q4 is unchanged for it;
+    so does one naming no referent (nothing is passed on nobody). Person-side (`current_stage`'s reader), so a want he
+    believes met that the world does not hold met reads `True`: a false belief at work, which the source intends. It
+    stands BESIDE `aim_state`, which reads the world (a rung its org holds), and neither reads the other. Stored nowhere."""
+    goal = _goals.goal(ambition)
+    prop = w.propositions.get(ambition)
+    if goal is None or goal.stages is None or prop is None:
+        return False
+    return any(r is not None for r in goal_referents(w, p, prop)) and current_stage(w, p, ambition) is None
+
+
+def commitment_kept(w: World, tenure) -> bool:
+    """B10.72 (U5a `CHAR` owed amendments §3 (b), the D-48 precedent: a reading computed where read, never a second
+    emission): WAS THE WANT HE LAID DOWN KEPT -- the closed `commit` `tenure`'s Proposition content (the goal's `goal_stages`
+    row) held true in the RELEASER'S OWN ledger at the tick the edge closed (`Tenure.until`)? It is `believed_met` over the
+    ledger as it stood then: a claim that reached him after he let the want go does not count, and neither does the world's
+    own state or another person's ledger. A want with no stage row has no content a ledger can read and reads `False`,
+    `believed_met`'s refusal; a live edge reads at the world's tick. Read at the world's tick for confidence (the one reader
+    `current_stage` builds), and `goal_referents`' world read of a seat's holder is as it stands, not as it stood.
+    Stored nowhere; the person closed his own edge (T-m), and nothing here closes it."""
+    p = w.persons.get(tenure.subject)
+    if p is None or tenure.kind != "commit":
+        return False
+    at = w.tick if tenure.until is None else tenure.until
+    return believed_met(w, replace(p, ledger=[c for c in p.ledger if c.when <= at]), tenure.object)
+
+
+def opens_mandatory(w: World, p: Person, ambition) -> bool:
+    """B10.71 (A-47): IS `p`'S QUESTION ON THIS AMBITION ONE HE MAY NOT PASS OVER FOR ANOTHER -- its `goal_stages` row says
+    `opens: mandatory` and, for some referent, the stage `current_stage` stands him on is the row's LAST. `False` for an
+    ambition with no row, a row that opens `ordinary`, a person who has not reached the last stage, and one who has passed
+    it (that is `believed_met`: no question is raised). It reads where he stands and chooses no act."""
+    goal = _goals.goal(ambition)
+    if goal is None or goal.stages is None or goal.stages.opens != _goals.OPENS_MANDATORY:
+        return False
+    cur = current_stage(w, p, ambition)
+    return cur is not None and any(s.id == goal.stages.stages[-1].id for s in cur.values())
+
+
 def _aim_held_by_org_member(w: World, goal) -> bool:
     """`rung`'s aim rule: the goal's rung is governed (`governing_hold`, the nearest held rung at or above it) by a
     person committed to the goal's organization's faction (`faction_holding`, the one owner of *which faction a person
@@ -3003,7 +3045,7 @@ def opinion_referents(w: World, p: Person, c, memo: Optional[dict] = None) -> tu
     if memo is None:
         memo = {}
     if "axes" not in memo:
-        memo["axes"] = projected_axes(p, w.fixtures.get("scar_weight_shift"))
+        memo["axes"] = projected_axes(p, w.fixtures.get("scar_weight_shift"), hold=w.fixtures.get("scar_hold"), mass=w.fixtures.get("scar_primary_mass"))
 
     def _seen():                           # built once, and only if some claim's lean asks for it
         if "seen" not in memo:
@@ -3770,9 +3812,10 @@ def disputes_held(w: World, p: Person) -> tuple:
     if p.is_cohort:                       # a population calls no man out (`challenge`'s `individual` of `actor`)
         return ()
     shift, sworn = w.fixtures.get("scar_weight_shift"), w.fixtures.get("sworn_bond")
+    arm, hold, mass = w.fixtures.get("deed_counterparty"), w.fixtures.get("scar_hold"), w.fixtures.get("scar_primary_mass")
     named = (set(ledger_names(p.ledger)) | set(known_persons(p.ledger, p.id))) - {p.id}
     held = [r for r in sorted(named)
-            if r in w.persons and not w.persons[r].is_cohort and holds_dispute(p, r, shift, sworn)]
+            if r in w.persons and not w.persons[r].is_cohort and holds_dispute(p, r, shift, sworn, arm, hold, mass)]
     if not held:
         return ()
     homes = home_map(w)
@@ -3812,7 +3855,7 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
          `goal_referents`, the one owner of what an ambition is about -- its subject, or v9 IN-67's
          goal referents);
       1. a referent among `p`'s own live-tenure objects or inside a seat's purview (`own_purview`,
-         `reach`'s limbs 2 and 4);
+         `reach`'s limbs 2 and 4), the larger recorded shortfall first (B10.70, below);
       2. a question whose `about` is a deed claim in `p`'s own ledger with nonzero valence under
          `p`'s pursuits, ordered by -|valence|: an unpaired kind by `deed_valence(projected_axes(p,
          scar_weight_shift), c)`; a `PAIRED_KINDS` claim (a death or wound -- `deed_valence` is 0 for
@@ -3836,12 +3879,19 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
     -> `0.0`, indifference. A `need` question takes its own ambition's salience, a tier-0 claim the
     maximum over the ambitions whose `goal_referents` contain its referent. So a member whose pursuits
     point with his faction answers the org goal that fits him best first, and one who points against it
-    answers his own want first. Tier 2 keeps -|valence|; tiers 1 and 4 carry 0. Salience is `p`'s own
+    answers his own want first. Tier 2 keeps -|valence|; tier 4 carries 0. Salience is `p`'s own
     state against the stores his edges name (AX-2). An org that expects nothing (no template, no goal)
     reads `0.0`.
 
+    INSIDE TIER 1 AN UNMET NEED IS ATTENDED FIRST, THE LARGER FIRST (B10.70): the key's second slot is
+    `-need`, where `need` is the held claim's value when its predicate's stem is
+    `data/requires.py::SHORTFALL_PREDICATE` (MATTER writes it; `decision/options.py::_from_shortfall_claim`
+    reads it) and `0.0` otherwise, so a steward who holds a shortfall claim about his own granary answers
+    it before a routine claim about the same store, and the 15 short before the 8. The other tier-1
+    claims tie at `0.0`. [ASSUMPTION; medium; Jordan to correct; revert: `(1, 0.0)`.]
+
     `(order[source], q.id)` stays the final tiebreak, so within a tier
-    (and a salience) the old order holds; magnitudes inside tier 1 are not ranked (LIMIT). A source added later
+    (and a salience, and a need) the old order holds. A source added later
     takes its tier from its referents, so `question_sources`' order is not edited. `ambs` is
     `ambitions(w, p)` where the caller already holds it (`questions_for`); `None` computes it.
 
@@ -3877,9 +3927,19 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
     mine = own_purview(w, p)
     held_by_id = {c.id: c for c in p.ledger}
 
+    def unmet_need(held) -> float:
+        """The size of an unmet need `held` records -- the value of a claim whose predicate's stem is
+        `SHORTFALL_PREDICATE` (the amount short, MATTER's write) -- else `0.0`: no claim, another
+        predicate, or a value that is no positive number (the reading `options._from_shortfall_claim`
+        gives its `amount`)."""
+        if held is None or str(held.predicate).partition(":")[0] != SHORTFALL_PREDICATE:
+            return 0.0
+        v = held.value
+        return float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) and v > 0 else 0.0
+
     @functools.cache
     def axis_w() -> dict:
-        return projected_axes(p, w.fixtures.get("scar_weight_shift"))
+        return projected_axes(p, w.fixtures.get("scar_weight_shift"), hold=w.fixtures.get("scar_hold"), mass=w.fixtures.get("scar_primary_mass"))
 
     @functools.cache
     def seen_of() -> tuple:
@@ -3926,7 +3986,7 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
             return (0, -max(salience(pid) for pid, refs in refs_of.items()
                             if any(r in refs for r in q.referents))) + tie
         if any(r in mine for r in q.referents):
-            return (1, 0.0) + tie
+            return (1, -unmet_need(held)) + tie
         if own or held is None:
             return (4, 0.0) + tie
         # IN-72: a paired claim (death, wound) scores `|lean · bond|` for the doer its `seen.who`
@@ -4098,8 +4158,11 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
         refs_of[pid] = set(refs) - {None}
         # CP-T02-03: a MET aim (a rung goal whose rung its org already governs) has no work to ask for. Its
         # referents stay in `refs_of`: they still orient `attention_key`; only the standing question is not formed.
-        if refs and aim_state(w, p, w.propositions[pid]) != "met":
-            out.append(Question(f"q:need:{pid}", "need", refs, pid))
+        # B10.71 (U5a `CHAR` §3 (a)): nor has a want he BELIEVES met (`believed_met`, his own ledger), where either reads met
+        # [ASSUMPTION; medium; Jordan to correct; revert: drop `believed_met` -- the world's aim state alone gates it].
+        # And a row opening `mandatory` marks the question of its last stage (`opens_mandatory`; sorted first below).
+        if refs and aim_state(w, p, w.propositions[pid]) != "met" and not believed_met(w, p, pid):
+            out.append(Question(f"q:need:{pid}", "need", refs, pid, mandatory=opens_mandatory(w, p, pid)))
 
     # v9 SC-01 FIRED-SLOT STEP (H-163 limit 2, #453 pass-1 step 4): A JUDGE IS ASKED ABOUT THE
     # MATTERS BEFORE A SITTING HE SITS ON. One question per fired sitting (`sittings_before`: a docket
@@ -4134,7 +4197,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
 
     # v9 IN-57: the order is `attention_key`'s tiered read of the person's own state; the
     # `(source, q.id)` key is its final tiebreak (hole_register H-54).
-    out.sort(key=attention_key(w, p, ambs, refs_of))
+    # B10.71 (A-47): a MANDATORY question sorts ahead of every other, `attention_key` ordering within each side; with none
+    # marked the key is `False` throughout and the order is `attention_key`'s alone.
+    order = attention_key(w, p, ambs, refs_of)
+    out.sort(key=lambda q: (not q.mandatory, order(q)))
     # IN-53 (H-207, DECISION 2026-10-13 D1): A VACANT SEAT THE PERSON MAY FILL IS A STANDING
     # OCCASION, AND IT RIDES ON WHATEVER QUESTION HE ANSWERS. After the sort, so it displaces
     # nothing: `out[0]` -- the question every aggregation rule delivers (`first` returns it; `all`/
@@ -4468,7 +4534,8 @@ class WorldReader:
             p = w.persons.get(self._actor)
             if p is None or arg != self._actor or subject not in w.persons:
                 return UNKNOWN
-            return holds_dispute(p, subject, w.fixtures.get("scar_weight_shift"), w.fixtures.get("sworn_bond"))
+            return holds_dispute(p, subject, w.fixtures.get("scar_weight_shift"), w.fixtures.get("sworn_bond"),
+                                 w.fixtures.get("deed_counterparty"), w.fixtures.get("scar_hold"), w.fixtures.get("scar_primary_mass"))
         if stem == "rank":
             # `21_RECONCILIATION.md` PHASE 2 step 9 / `03_PARAMETERS.md` §C.1 -- THE ORDINAL, NOT
             # A KIND CHECK. `rung_kinds` is an ORDERED roster (`person` first), so a rung's rank
@@ -4521,7 +4588,7 @@ class WorldReader:
             if row is UNKNOWN:
                 return UNKNOWN
             return declared_votes(w, subject, row) if stem == "declared.votes" else row["quorum"]
-        if stem in OWN_STATE_STEMS:
+        if stem in SENSITIVITY_STEMS:     # B10.59: `held_by`, `dispute` and `individual` are answered above, from the world
             # v9 PC-06 K-3 (`H-85`): `thread_sensitivity` and its gate, through
             # `person_q.OwnStateReader` -- the one answerer, which the person's own formation asks
             # too, so the fold and the person cannot read it apart. ⚠ BUILT ON THIS READER'S OWN
@@ -4555,6 +4622,9 @@ def practice(w: World, p: Person, verb: str) -> int:
     choice and its roll (what else can, `odds_of` lists). The window is
     `[w.tick - practice_window, w.tick - 1]`.
 
+    ⚠ A `conviction.moved` EVENT IS NEVER COUNTED: it names the scarring act in `causes` and carries the OBSERVER'S crisis band as `degree` (`resolve._drawn_crisis`), so
+    credited here an observer's Success would raise the scarring actor's pool.
+
     ⚠ IT RAISES THE ACTOR'S POOL ONLY. `_opposition_of` reads the held key and never `faculty`, so the Ob
     against a practised person does not move. `practice_cap` 0 is the control and answers 0 before the log is
     read: the realm is then byte-equal to the tree without this reader. The three fixtures are assumptions
@@ -4574,7 +4644,7 @@ def practice(w: World, p: Person, verb: str) -> int:
     first, good = w.tick - window, DEGREE_STEP["Success"]
     acts: set = set()
     for e in w.log:
-        if not first <= e.emitted_at < w.tick or DEGREE_STEP.get(e.degree, 0) < good:
+        if not first <= e.emitted_at < w.tick or e.kind == CONVICTION_MOVED or DEGREE_STEP.get(e.degree, 0) < good:
             continue
         a = causing_act(w, e)
         if a is not None and a.actor == p.id and VERB_CAPABILITY.get(a.verb) == key:

@@ -437,6 +437,23 @@ def _refusing_poles() -> dict:
     return {axis: int(pole) for axis, pole in marks.items()}
 
 
+def refusable(axis: str) -> frozenset:
+    """THE VERBS A PERSON'S SCRUPLE ON `axis` CAN FORBID HIM (B10.21): `rosters.yaml: pursuit_axes.refusable[axis]`, a closed
+    set -- ED-IN-0261's "certain actions". `decision/options.py::refuses` asks it first and answers False for a verb outside it.
+
+    An axis with no authored refusing pole REFUSES here (`refusing_pole`'s own refusal, asked first), and so does one with a
+    pole and no list: a gate with no named verbs is a refusal nobody ruled, not an empty set. The members' being verbs, and
+    engaged on the axis, is `check_refusable`'s, run once at load; this reads the roster afresh, as `refusing_pole` does."""
+    refusing_pole(axis)
+    marks = roster_map("pursuit_axes", "refusable")
+    if axis not in marks:
+        raise Unspecified(
+            f"pursuit_axes.refusable authors no refusable verb for {axis!r}", "rosters.yaml",
+            needs=f"a `{axis}: [verb, ...]` line, ruled; or gate on an axis that has one ({sorted(marks)})",
+            law="ED-IN-0261 -- the gate refuses certain actions, a listed set: an axis with a pole and no list names none")
+    return frozenset(marks[axis])
+
+
 def table(name: str) -> dict:
     """A MAPPING from `rosters.yaml`'s `tables:`, returned as `{outer: {inner: float}}`.
 
@@ -457,6 +474,9 @@ def table(name: str) -> dict:
     return {outer: dict(inner) for outer, inner in (t.get("cells") or {}).items()}
 
 
+_FACTION_PROP_PREFIX = "fac_"  # [JUSTIFIED: an id SPELLING, not a game value -- the faction half of the id relations `faction_prop_id` and `is_faction_id` own]
+
+
 def faction_prop_id(name: str) -> str:
     """`'Valorsmark'` -> `'fac_valorsmark'`. THE ONE OWNER OF THE FACTION-ID RELATION.
 
@@ -466,7 +486,7 @@ def faction_prop_id(name: str) -> str:
     §0.1 pt 1 shape: a getter's source changes while its readers go on reading the old one, and the
     wrong answer (`[]`) is a PLAUSIBLE answer, so nothing raises.
     """
-    return "fac_" + "".join(c if c.isalnum() else "_" for c in str(name).lower()).strip("_")
+    return _FACTION_PROP_PREFIX + "".join(c if c.isalnum() else "_" for c in str(name).lower()).strip("_")
 
 
 # The prefix of a territory RUNG id, and nothing else. Named so the relation below has one spelling.
@@ -786,7 +806,7 @@ def _check_scale_of_rung(mapping: dict, kinds) -> None:
 SCALE_OF_RUNG = roster_map("scale_of_rung", "scale")
 _check_scale_of_rung(SCALE_OF_RUNG, RUNG_KINDS)
 # The kinds `build` may make -- a works' `plan` is a Site only if it is one of
-# these (`loop/effects.py::_eff_build`). Bound beside `RUNG_KINDS`, `found`'s twin roster, rather
+# these (`loop/effects_founding.py::_eff_build`). Bound beside `RUNG_KINDS`, `found`'s twin roster, rather
 # than read by a bare `roster(...)` at the one call site. `data/fixtures.py` reads the same row for
 # its both-direction table checks, so a kind here always has a wear and a band-floor row.
 SITE_KINDS = roster("site_kinds")
@@ -1088,6 +1108,23 @@ OBSERVATION_DEPOSIT_MODES = roster("observation_deposit_modes")
 # on one pipeline, both data (Jordan 2026-09-02, quoted at the head of this file). Bound at
 # import: an unbound roster is the one whose absence goes unnoticed.
 FAN_OUT_MODES = roster("fan_out_modes")
+# `H-465`. THE ARMS OF `Fixtures.scar_season_cap`, bound at import like the roster above; `None` (the control) is not a member.
+SCAR_SEASON_CAPS = roster("scar_season_caps")
+# `H-466`, `H-469`. THE ARMS OF `Fixtures.scar_hold` and `Fixtures.scar_vindication`, bound at import; unlike the cap, each control (`any`, `off`) is a member.
+SCAR_HOLDS = roster("scar_holds")
+SCAR_VINDICATIONS = roster("scar_vindications")
+# `H-470`. THE ARMS OF `Fixtures.regard_unit`, bound at import; the control `raw` is a member.
+REGARD_UNITS = roster("regard_units")
+# `H-481` (B10.58). THE AXES A CAST ROW'S `manner:` MAY NAME (`data/cast.py::manner_offset_of`), bound at import; each is an axis `projected_axes` projects onto.
+MANNER_OFFSET_AXES = roster("manner_offset_axes")
+if not MANNER_OFFSET_AXES <= PURSUIT_AXES:
+    raise Unspecified(f"`rosters.yaml: manner_offset_axes` names {sorted(MANNER_OFFSET_AXES - PURSUIT_AXES)}, which are none of `pursuit_axes`", "rosters.yaml",
+                      needs=f"members of {sorted(PURSUIT_AXES)}",
+                      law="B10.58 (A-108) -- a stored offset is added to a projected axis, so it can sit only on one the projection has")
+# B10.62. THE GROUNDS A CAST ROW'S `relations:` MAY NAME (`data/cast.py::relations_of`), bound at import; each is the suffix of a `bond:<ground>` claim.
+RELATION_GROUNDS = roster("relation_grounds")
+# B10.64. THE KEYS A CAST ROW MAY MARK `unaware:` (`data/cast.py::unaware_of`): the roster's own members and the pursuit roster, joined here, once.
+SELF_BELIEVED = roster("self_believed") | roster("pursuits")
 # `R8.1`. THE `seen` CLAIM -- its four terms (ordered: they are the struct's fields), the one
 # predicate it is deposited under, and which terms each witness channel shows. Bound at import for
 # `TITLE_DOMAINS`' reason; the terms are cross-validated against `WITNESS_CHANNELS` and
@@ -1097,6 +1134,9 @@ OBSERVATION_TERMS = roster("observation_terms", ordered=True)
 # `queries/person_q.py::deed_doer` must read it and `person_q` may not import the write path: a name two modules
 # need, below both. `state/gate.py` imports it back, so `gate.PERSON_DIED` still resolves for every importer.
 PERSON_DIED = "person.died"
+# The `conviction.moved` Event kind (B10.15), spelt here for the same reason: `loop/resolve.py::_drawn_crisis` tells it, and `queries/world_q.py::practice` must not credit it.
+SCRUPLE_OVERRIDDEN = "scruple.overridden"   # [canonical: engine/season/verb_table.yaml `emits:` on every row `pursuit_axes.refusable` lists; B10.24]
+CONVICTION_MOVED = "conviction.moved"     # [canonical: engine/season/write_matrix.yaml §(Person, conviction) emits]
 OBSERVATION_DEPOSIT = roster_map("observation_terms", "deposit")
 # THE ONE NAME THE `seen` CLAIM IS DEPOSITED UNDER. It lives here and not in `epistemic.py` (where
 # it was bound) because `queries/person_q.py::said_of` must read it and `epistemic` imports
@@ -1176,6 +1216,57 @@ def _load_band_numbers(name: str, mapping: dict, bands, *, whole: bool, complete
 # `conceal` writes (`forge_quality`, a band with no row makes no document). Read through the two functions below, never by key.
 TASK_FRACTION = _load_band_numbers("task_fraction", roster_map("task_fraction", "bands"), DEGREE_BANDS, whole=False, complete=True)
 FORGE_QUALITY = _load_band_numbers("forge_quality", roster_map("forge_quality", "bands"), DEGREE_BANDS, whole=True, complete=False)
+def _load_crisis_bands(mapping: dict, bands, kinds) -> dict:
+    """B10.13: `rosters.yaml: tables.crisis_bands.bands` -- degree band -> an ordered tuple of typed writes `(kind, value)`, refused at import
+    naming the row when a key is no band of the one ladder, a band has no row, a row is not a list of one-key mappings, a write's kind is outside
+    `kinds` (`rosters: crisis_write_kinds`), or its value is not the kind's type (`intensity`: a whole number; any other kind: a non-empty name), or the Overwhelming row writes no `scar` (the
+    reader names the creed in crisis through it).
+    A function so a test can plant a bad table and watch it refuse. What a NAME means (`zero`, `threshold_less_one`, a branch) is the reader's,
+    `person_q.conviction_after_crisis` from B10.14: this loader keeps the table's shape and nothing else."""
+    bad = [f"band {b!r}: not on the degree ladder {sorted(bands)}" for b in mapping if b not in bands]
+    bad += [f"band {b!r}: no row" for b in sorted(bands) if b not in mapping]
+    out: dict = {}
+    for b, row in mapping.items():
+        if b not in bands:
+            continue
+        if not isinstance(row, list) or not row:
+            bad.append(f"band {b!r}: {row!r} is not a non-empty list of writes")
+            continue
+        writes = []
+        for w in row:
+            if not isinstance(w, dict) or len(w) != 1:
+                bad.append(f"band {b!r}: write {w!r} is not a one-key mapping")
+                continue
+            (kind, val), = w.items()
+            if kind not in kinds:
+                bad.append(f"band {b!r}: write {kind!r} is not one of {sorted(kinds)}")
+            elif kind == "intensity" and (isinstance(val, bool) or not isinstance(val, int)):
+                bad.append(f"band {b!r}: intensity {val!r} is not a whole number")
+            elif kind != "intensity" and not (isinstance(val, str) and val):
+                bad.append(f"band {b!r}: {kind} {val!r} is not a name")
+            else:
+                writes.append((kind, val))
+        out[b] = tuple(writes)
+    # `loop/resolve.py::_creed_in_crisis` names the creed in crisis through THE OVERWHELMING ROW'S `scar` WRITE (the one key of the `scar_delta` it returns), so a table
+    # whose Overwhelming row writes none would leave nobody to roll and say nothing: refused here, naming the row.
+    top = _DEGREE_LABEL[_Degree.OVERWHELMING]
+    if top in out and not any(kind == "scar" for kind, _v in out[top]):
+        bad.append(f"band {top!r}: writes no `scar` reset, which `_creed_in_crisis` reads to name the creed in crisis")
+    if bad:
+        raise Unspecified(
+            f"`crisis_bands` rows {sorted(bad)}", "rosters.yaml -- tables.crisis_bands",
+            needs="key each row by a band `engine/dice_engine/dice_engine.py::DEGREE_LABEL` names, every band once, each a list of "
+                  "one-key writes whose kind `rosters: crisis_write_kinds` names",
+            law="B10.13 (`16_PESSIMIST_CHAR_A` item 3) -- what a crisis does is one table read by one reader through the one ladder; "
+                "a band off the ladder is never reached and a write it does not know would be read as nothing")
+    return out
+
+
+# B10.13: THE CRISIS TABLE AND ITS ARMS. `CRISIS_ARMS` bounds `Fixtures.crisis_arm` (`H-472`, checked by `data/fixtures.py::load`); `CRISIS_BANDS` is
+# read by `person_q.conviction_after_crisis` from B10.14 and by nothing at `crisis_arm: rule`.
+CRISIS_ARMS = roster("crisis_arms")
+CRISIS_BANDS = _load_crisis_bands(table_meta("crisis_bands").get("bands") or {}, DEGREE_BANDS, roster("crisis_write_kinds"))
+
 # The band an act that was never drawn reads as -- `Success`, "as today" (`DEGREE_LABEL` names it; no label is spelt here).
 UNROUTED_BAND = _DEGREE_LABEL[_Degree.SUCCESS]
 
@@ -1895,6 +1986,14 @@ ENDINGS = _load_endings(roster_map("endings", "members"), FACTIONS, RUNG_KINDS, 
 #: `{alias: canonical}` over the `token_class: faction` rows -- the naming leaf's map, read where an authored
 #: `faction:` string meets the roster (`cast.py` reads this same relation for a cast cell).
 from engine.substrate import names as _faction_names  # noqa: E402
+
+# #353 `:333` types a stance row `(referent, valence -5..+5, weight 0..5)`, and `queries/person_q.py
+# ::stance_toward` sums `valence * weight` over the rows naming a candidate's subject. Five is that
+# type's own bound, read off the row rather than chosen here.
+STANCE_VALENCE_SCALE = 5   # [JUSTIFIED: #353 `:333` types the row `(referent, valence -5..+5, weight 0..5)` — the type's own bound, not a tuning; ED-IN-0229]
+# The largest `valence * weight` one stance row can contribute (the weight's bound is the valence's):
+# a bound derived from the row type, held beside the type's own constant. `regard` is normalised by it.
+STANCE_MAX = STANCE_VALENCE_SCALE ** 2
 FACTION_ALIAS = {a: c for a, c in _faction_names.ALIASES.items() if c in _faction_names.FACTIONS}
 
 

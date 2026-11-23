@@ -112,7 +112,7 @@ def test_the_hook_runs_once_per_deliberation_with_parallel_lists_and_the_packed_
         assert pid == p.id and q is not None
         assert len(ranked) == len(terms) == len(sampled) == 8
         assert sorted(map(id, ranked)) == sorted(map(id, sampled))
-        assert all(len(t) == 3 for t in terms)
+        assert all(len(t) == 5 for t in terms)       # `score_terms`: (pursuit, stance, fit, aim, risk)
         # the terms are the ranked candidates' own, in rank order: the score is their sum, descending
         totals = [CH.score_total(t) for t in terms]
         assert totals == sorted(totals, reverse=True)

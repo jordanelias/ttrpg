@@ -767,7 +767,7 @@ def binding_from_act(a) -> dict:
 # ASK -- not the game's vocabulary; `rosters.yaml` says what the world contains.
 # ⚠ v9 PC-06 K-3 (`H-85`): TWO STEMS, NOT OPERANDS (`requires_operands` stays closed): `thread_sensitivity`, the actor's own `Person.thread_sensitivity`, and `thread_sensitivity.gate`,
 # the SECOND READ it is held against (`Fixtures thread_sensitivity_gate`) -- `determine`'s `bench.size`
-# against `quorum`, `work`'s `floor` shape. Both are `OWN_STATE_STEMS` (below).
+# against `quorum`, `work`'s `floor` shape. Both are `SENSITIVITY_STEMS` (below).
 # THE STEMS A PERSON ANSWERS OF HIMSELF, WITH NO LEDGER AND NO WORLD (v9 PC-06 K-3): his own Thread
 # Sensitivity and the gate it is held against. `queries/person_q.py::OwnStateReader` is their ONE
 # answerer; the fold's `WorldReader` delegates to it for the person the act names, and the person's
@@ -776,7 +776,14 @@ def binding_from_act(a) -> dict:
 # reading sees the act, never the number, and the gate is a constant nobody needs told.
 # MECHANISM, as `REQUIRES_STEMS` is -- which of the grammar's own predicates a person answers of
 # himself, not vocabulary the world contains.
-OWN_STATE_STEMS = frozenset({"thread_sensitivity", "thread_sensitivity.gate"})
+# [ASSUMPTION; medium; Jordan to correct; revert: `OWN_STATE_STEMS = SENSITIVITY_STEMS`] B10.59 (the offer's reader): the two
+# stems above are `SENSITIVITY_STEMS`, the ones with no other reader at all. `OWN_STATE_STEMS` is every stem `OwnStateReader`
+# answers: those two, and three the world's reader answers too, which the person answers of himself where he is the actor --
+# `held_by` (his own live `hold` Tenures), `dispute` (his own judgement of a man's deeds, `person_q.holds_dispute`) and
+# `individual` (asked of the actor). Their classification is unchanged: `held_by` stays a CELL stem, `dispute` and
+# `individual` stay WORLD-ONLY. There is no `capability` stem and none is added: a skill never gates an act.
+SENSITIVITY_STEMS = frozenset({"thread_sensitivity", "thread_sensitivity.gate"})
+OWN_STATE_STEMS = SENSITIVITY_STEMS | frozenset({"held_by", "dispute", "individual"})
 
 # ⚠ v9 IN-59 (b) (RS-26, the AUDIENCE half of the access gate): `audience`: `relation` (form 5)
 # asked of a DESTINATION RUNG and the actor, `with`'s shape -- *may the actor enter this place* --
@@ -855,7 +862,7 @@ OPERAND_NAMED_STEMS = frozenset({"names"})
 # Candidate (UNKNOWN never contradicts) and the fold refuses a Record that does not name the pair.
 # roster-exempt: MECHANISM. The grammar's own predicate stems a ledger never answers, not the game's vocabulary.
 WORLD_ONLY_STEMS = frozenset({"with", "audience", "individual", "names", "dispute",
-                              "declared.votes", "declared.quorum"}) | OWN_STATE_STEMS
+                              "declared.votes", "declared.quorum"}) | SENSITIVITY_STEMS
 
 # THE STEMS A LEDGER CLAIM IS A *CELL* OF -- one `(subject, predicate)` slot that holds one value at a
 # time and can be re-asserted, so two claims on it agree or disagree (`decision/options.py::record`).
@@ -1071,10 +1078,10 @@ def build_typed_requires(verb: str, cell) -> Optional[TypedRequires]:
     # row only where `OwnStateReader` reads the WHOLE cell True, so a conjunct it cannot answer (a
     # ledger's or the world's) would read UNKNOWN and silently decline the row for everybody. Refused
     # here, at load, rather than discovered as a verb nobody forms.
-    own = set(req.stems()) & OWN_STATE_STEMS
-    if own and not set(req.stems()) <= OWN_STATE_STEMS:
+    own = set(req.stems()) & SENSITIVITY_STEMS
+    if own and not set(req.stems()) <= SENSITIVITY_STEMS:
         raise SystemExit(
             f"verb_table.yaml: {verb!r} asks own-state stem(s) {sorted(own)} beside "
-            f"{sorted(set(req.stems()) - OWN_STATE_STEMS)}; a cell over `OWN_STATE_STEMS` asks only "
+            f"{sorted(set(req.stems()) - SENSITIVITY_STEMS)}; a cell over `SENSITIVITY_STEMS` asks only "
             "those, because the person's own reading of it decides whether the row forms at all")
     return req

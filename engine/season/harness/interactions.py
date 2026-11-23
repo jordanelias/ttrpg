@@ -22,7 +22,7 @@ ROWS (JSONL, one object per line, `kind` first):
     position in the person's question list and that list's sources, the CLAIM behind a question whose
     `about` is a claim the person holds (id, subject, predicate, source, chain, and its origin: an
     acquaintance claim written at build by CR-81 is recognised by membership in `w._acquaintances`, the ids
-    `seed_acquaintances` returned), the candidate table (verb, subject, `to`, `pursuit`, `stance`, `fit`, score,
+    `seed_acquaintances` returned), the candidate table (verb, subject, `to`, `pursuit`, `stance`, `fit`, `aim`, `risk`, score,
     softmax probability of being sampled first at `choice_temperature`, score rank, sampled rank, chosen),
     the deciding term, the refusal gate's reading, and the relation facts toward every PERSON a chosen act
     names as `subject` or `to`.
@@ -73,7 +73,7 @@ from collections import Counter
 from ..data.rosters import FACTION_BY_PROP, faction_prop_id
 from ..data.verbs import VERB_TABLE, act_key
 from ..decision import choose as CH, make_chooser
-from ..decision.options import refusal_tolerance, refuses, subject_is_opponent
+from ..decision.options import refusal_tolerance, scruple, subject_is_opponent
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import faction_q, person_q, world_q
 from ..state.gate import seated_on_the_rung_above_structure
@@ -164,7 +164,7 @@ def relation(w, a: str, t: str, authored: dict, heads: dict) -> dict:
     sf = same_faction(w, a, t)
     offs_a, offs_t = held_offices(w, a), held_offices(w, t)
     stance = person_q.stance_toward(p, t)
-    judged, told = person_q.deeds_judged(p, t, fx.get("scar_weight_shift"), fx.get("sworn_bond"))
+    judged, told = person_q.deeds_judged(p, t, fx.get("scar_weight_shift"), fx.get("sworn_bond"), fx.get("deed_counterparty"), fx.get("scar_hold"), fx.get("scar_primary_mass"))
     via = known_via(p, t)
     # `Office.faction` is the faction NAME (`office_faction`); `faction_holding` answers the Proposition id
     off_in_tf = bool(ft) and any(w.offices[o].faction and faction_prop_id(w.offices[o].faction) == ft
@@ -246,7 +246,6 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
                 for pid, p in w.persons.items()}
     heads = faction_heads(w)
     fx = w.fixtures
-    tau = float(fx.get("choice_temperature"))
     axis = fx.get("refusal_axis")
     delibs: list = []
     by_act: dict = {}                      # id(Act) -> (deliberation index, candidate index)
@@ -275,6 +274,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
         # THE CHOOSER'S OWN TABLE, as `make_chooser(watch=...)` handed it (B09.13): the candidates in score order, the terms it
         # scored them with and the order it sampled -- not a second scoring of the opening set.
         (cands, terms, sampled), = heard
+        tau = CH.own_temperature(p, fx)        # THIS person's temperature, the one `choose._sample_order` draws at
         scores = {id(c): CH.score_total(t) for c, t in zip(cands, terms)}
         rank = {id(c): i for i, c in enumerate(cands)}
         srank = {id(c): i for i, c in enumerate(sampled)}
@@ -303,14 +303,14 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
             row["candidates"].append({
                 "verb": c.verb, "subject": c.subject, "to": ops.get("to"),
                 "hostile": is_hostile(c.verb, ("subject",)) and c.subject in w.persons,
-                "pursuit": t[0], "stance": t[1], "fit": t[2], "score": CH.score_total(t), "p_first": prob[id(c)],
+                "pursuit": t[0], "stance": t[1], "fit": t[2], "aim": t[3], "risk": t[4], "score": CH.score_total(t), "p_first": prob[id(c)],
                 "score_rank": rank[id(c)], "sample_rank": srank[id(c)],
                 "chosen": k in chosen, "act": chosen.get(k)})
         r = CH.deciding_term(cands, terms, sampled[0] if sampled else None, tau)
         row["decider"] = {"decider": r["decider"], "margin": r["margin"], "draw_kind": r["draw_kind"]}
         tol = refusal_tolerance(p, axis)
         row["refusal_gate"] = ("unarmed (refusal_axis unset)" if tol is None else
-                               {c["verb"]: refuses(c["verb"], axis, tol)
+                               {c["verb"]: scruple(c["verb"], axis, tol)
                                 for c in row["candidates"] if c["chosen"]})
         for a in returned:
             for t in person_targets(w.persons, p.id, a.payload):

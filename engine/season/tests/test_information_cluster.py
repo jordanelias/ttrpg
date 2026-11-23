@@ -604,7 +604,8 @@ def test_in45_forges_emits_agree_with_the_matrix_row_of_the_field_it_forges():
     row no longer declares `unproduced:` (the loader's invariant 2 refuses a stale one)."""
     from ..data.matrix import matrix_row
     row = VERB_TABLE["forge"]
-    assert row.emits == matrix_row("Record", "forgery_quality").emits == ("record.forged",), (
+    own = tuple(k for k in row.emits if k != "scruple.overridden")      # B10.24: `forge` is a refusable row, so it also declares the act's own kind
+    assert own == matrix_row("Record", "forgery_quality").emits == ("record.forged",), (
         row.emits, matrix_row("Record", "forgery_quality").emits)
     assert row.writes == ("Record.exists", "Record.forgery_quality"), row.writes
     assert "record.forged" in matrix_row("Record", "exists").emits

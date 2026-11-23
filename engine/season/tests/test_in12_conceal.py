@@ -136,8 +136,10 @@ def test_conceal_is_a_resolvable_own_verb_that_opens_hold_and_is_declared_uncell
     # row keys `write` -> `conceal.refused` (was `emits_on_refusal: []`) and a lost draw under `draw` -> `conceal.failed`,
     # which `emits_on_refusal` (the refusal union) leaves out (`VerbRow.draw_kinds`)
     assert row.emits == ("cover.assumed",) and tuple(row.emits_on_refusal) == ("conceal.refused",)
-    assert row.refusals_by_clause == {"write": ("conceal.refused",), "draw": ("conceal.failed",)}
-    assert row.requires_typed is None, "no precondition (#453 §9.3)"
+    # B10.60: its one precondition is `fight`'s `individual` conjunct of the actor (a population does not take it)
+    assert row.refusals_by_clause == {"individual": ("conceal.refused",), "write": ("conceal.refused",),
+                                      "draw": ("conceal.failed",)}
+    assert row.requires_typed.conjuncts() == ("individual",) and row.requires_typed.stems() == ("individual",)
     assert "conceal" in resolvable_verbs()
     assert "conceal" in _OPENERS_FROM_EFFECTS["hold"], _OPENERS_FROM_EFFECTS["hold"]
     cells, uncelled = table("alignment"), table_meta("alignment")["uncelled"]

@@ -57,9 +57,9 @@ from typing import Any, Callable, Iterable, Mapping, Optional, Sequence
 from ...substrate.descriptors import ATTRIBUTE_GLOSSES, CAPABILITIES, attribute_key
 from ..data.rosters import AFFILIATIONS, SEEN_PREDICATE
 from ..gaps import Forbidden
-from ..queries.person_q import LedgerReader
+from ..queries.person_q import LedgerReader, decisiveness, recognised
 from ..state.carriers import Person, PersonInterior, Question, View, fade_of, frozen
-from .choose import make_ranker, release
+from .choose import Ranked, make_ranker, release
 from .options import ledger_weigh
 
 def describe(key: str) -> str:
@@ -101,7 +101,7 @@ def creation_sheet(persons: Iterable[Person]) -> tuple:
     """The creation sheet: one `CreationRow` per seated person, in id order (a pick list, not a ranking).
     `persons` is what the caller already holds (`w.persons.values()` before the first season); this
     function takes no `World` and writes nothing."""
-    return tuple(CreationRow(p.id, p.name, frozen(p.capability), frozen(p.pursuits),
+    return tuple(CreationRow(p.id, p.name, frozen(p.capability), frozen(recognised(p, p.pursuits)),
                              frozen(p.conviction), frozen(p.attributes))
                  for p in sorted(persons, key=lambda q: q.id))
 
@@ -131,7 +131,10 @@ class DevelopmentSheet:
     season remainder (`ask_budget()`). The own-field copies are the inputs `make_chooser` admits
     (`pursuits`, `stance`, `conviction`, `scar`) plus `body` and `capability`, and (B04.13) `attributes`, `thread_sensitivity`, `heritage` and `tenures` (his live edges as
     `(kind, object)`: seats, oaths, commits, residence); derived lines
-    (`confliction`, `crisis_weights`' shifted weights) stay derived and are not stored here."""
+    (`confliction`, `crisis_weights`' shifted weights) stay derived and are not stored here, with one line SHOWN
+    that the person does not hold: `decisiveness`, `person_q.decisiveness(p, scar_weight_shift)` read once when the
+    sheet is built -- how firmly his pursuits point one way, the length of his projected pursuit vector, which the
+    draw's temperature is read against. The person stores nothing."""
     person_id: str
     view: View
     question: Question
@@ -149,6 +152,7 @@ class DevelopmentSheet:
     thread_sensitivity: Optional[int]
     heritage: Optional[str]
     tenures: tuple
+    decisiveness: float          # derived, B10.27: `person_q.decisiveness(p, fx.get("scar_weight_shift"))`
 
 
 def development_space(fx: Any, mint: Callable[[str, str, str], str],
@@ -173,14 +177,19 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
         cands = rank(p, v)
         n = ask_budget()
         sheet = DevelopmentSheet(p.id, v, q, tuple(copy.deepcopy(c) for c in cands), n, frozen(p.capability),
-                                 frozen(p.pursuits), tuple(p.stance), frozen(p.conviction),
+                                 frozen(recognised(p, p.pursuits)), tuple(p.stance), frozen(p.conviction),
                                  frozen(p.scar), p.body, frozen(p.attributes), p.thread_sensitivity, p.heritage,
-                                 tuple((t.kind, t.object) for t in p.tenures if t.live))
+                                 tuple((t.kind, t.object) for t in p.tenures if t.live),
+                                 decisiveness(p, fx.get("scar_weight_shift"), hold=fx.get("scar_hold"), mass=fx.get("scar_primary_mass")))
         chosen = [int(i) for i in pick(sheet)]
         if len(set(chosen)) != len(chosen) or any(not 0 <= i < len(cands) for i in chosen):
             raise Forbidden(f"{p.id}'s pick {chosen} is not a selection from the {len(cands)} candidates "
                             f"his opening set formed", "IN-47 rule 1", law=_LAW)
-        return release(p, [cands[i] for i in chosen], n, fx, mint, q, draw)
+        # The pick carries what the ranker's strike kept (`Ranked.forgone_of`, B10.24), so a Scene the player's pick packs names what his scruple struck as the
+        # automated chooser's does; `decide` stays off (a pick is no sampled order, `Ranked`'s note).
+        picked = Ranked(cands[i] for i in chosen)
+        picked.forgone_of = getattr(cands, "forgone_of", None)
+        return release(p, picked, n, fx, mint, q, draw)
     return space
 
 
@@ -239,7 +248,7 @@ def chronicle(p: Person, fx: Any = None) -> Chronicle:
         p.id, tuple(p.ledger),
         tuple((subj, reader.latest_about(subj)) for subj in subjects),
         frozen(p.conviction),
-        frozen({k: n for k, n in (p.scar or {}).items() if k not in AFFILIATIONS}),
+        frozen(recognised(p, {k: n for k, n in (p.scar or {}).items() if k not in AFFILIATIONS})),
         frozen({k: n for k, n in aff.items() if k in held}),
         frozen({k: n for k, n in aff.items() if k not in held}),
         threads)

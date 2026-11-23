@@ -24,9 +24,10 @@ import pathlib
 
 import pytest
 
+from ..boot.realm import seed_self_knowledge
 from ..data import cast, files
 from ..data.matrix import matrix_row
-from ..data.requires import OWN_STATE_STEMS, UNKNOWN, WORLD_ONLY_STEMS, binding_of, evaluate
+from ..data.requires import SENSITIVITY_STEMS, UNKNOWN, WORLD_ONLY_STEMS, binding_of, evaluate
 from ..data.verbs import VERB_TABLE
 from ..decision.options import opening_set
 from ..gaps import Unspecified
@@ -49,6 +50,7 @@ GATE = P.DEFAULT_FIXTURES.get("thread_sensitivity_gate")
 def _world(ts, fixtures=None):
     w = P.tiny_world(fixtures) if fixtures is not None else P.tiny_world()
     w.persons[ACTOR].thread_sensitivity = ts
+    seed_self_knowledge(w)       # B10.65: he holds the gift and knows he does, as the realm builds him
     return w
 
 
@@ -101,7 +103,7 @@ def test_k3_a_a_person_reads_nobody_elses_sensitivity_and_no_ledger_answers_it()
     other = w.persons["p_mid"]
     assert OwnStateReader(other, w.fixtures).read(ACTOR, "thread_sensitivity") is UNKNOWN
     assert OwnStateReader(w.persons[ACTOR], w.fixtures).read(ACTOR, "thread_sensitivity") == GATE + 10
-    assert OWN_STATE_STEMS <= WORLD_ONLY_STEMS
+    assert SENSITIVITY_STEMS <= WORLD_ONLY_STEMS
     from ..state.carriers import Claim
     lie = Claim("c_lie", ACTOR, ACTOR, "thread_sensitivity", 99, 0, "firsthand", 100, "own")
     assert LedgerReader([lie]).read(ACTOR, "thread_sensitivity") is UNKNOWN, (
@@ -188,7 +190,7 @@ def test_k3_c_a_cell_mixing_an_own_state_stem_with_any_other_is_refused_at_load(
     `build_typed_requires` refuses the mix at load. CONTROL: the shipped cell alone builds."""
     from ..data.requires import build_typed_requires
     own = _authored_cell()
-    assert set(build_typed_requires("x", own).stems()) == OWN_STATE_STEMS, "the control did not build"
+    assert set(build_typed_requires("x", own).stems()) == SENSITIVITY_STEMS, "the control did not build"
     mixed = {"all": [own, {"form": "existence", "of": "subject", "kind": "Person"}]}
     with pytest.raises(SystemExit, match=r"asks own-state stem\(s\)"):
         build_typed_requires("x", mixed)
@@ -199,7 +201,7 @@ def test_k3_d_thread_read_is_resolvable_and_its_precondition_evaluable():
     assert row.precondition_evaluable(REQUIRES_PREDICATES), "the fold cannot evaluate its precondition"
     assert VERB in resolvable_verbs(), "`thread_read` is still in the no-predicate set"
     assert not getattr(row, "requires_decline_note", None), "a decline note on an evaluable row"
-    assert set(row.requires_typed.stems()) == OWN_STATE_STEMS
+    assert set(row.requires_typed.stems()) == SENSITIVITY_STEMS
     assert "actor" in row.requires_typed.operands(), "the gate is not read of the actor"
 
 

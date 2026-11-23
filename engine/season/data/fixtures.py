@@ -21,7 +21,7 @@ from typing import Any
 from engine.dice_engine.dice_engine import MU_PER_DIE
 
 from ..gaps import Forbidden, Ungraded
-from .rosters import ARMY_VERBS, DIFFICULTY_LEVELS, roster, roster_map, table
+from .rosters import ARMY_VERBS, CRISIS_ARMS, DIFFICULTY_LEVELS, STANCE_MAX, roster, roster_map, table
 
 class Fixtures:
     """S42.2.1: never invent a constant. Inject it, declare it a harness fixture at
@@ -287,6 +287,9 @@ DEFAULT_FIXTURES = Fixtures(
     # OPTIMUM: most contested rows score alike at stance 0, so the share is a function of how tau
     # compares to the score gaps. It goes stale under any later mover of those gaps (B10-18's,
     # CL-PERSON's first non-neutral value).
+    # ⚠ THE TEMPERATURE IS IN SCORE UNITS, AND SCORE MARGINS SCALE WITH `person_q.decisiveness` (the length of the
+    # person's projected pursuit vector, shown on `decision/sheet.py::DevelopmentSheet`): the 46 persons holding a
+    # question at round 0 of `build_realm(0)` read 0.14 to 0.89, so one temperature is a different draw for each.
     # [ASSUMPTION; medium; Jordan to correct; revert: choice_temperature 0.1, one re-pin]
     # [JUSTIFIED: engine/season/hole_register.yaml H-96 -- `site: Fixtures choice_temperature`, graded `measured`; the alphabetical tie-break is the measured defect and this is the injected magnitude of its remedy, swept 0 / 0.01 / 0.02 / 0.03 / 0.05 / 0.1 / 0.25 / 0.5 / 1.0, the row's own `sweep:`]
     choice_temperature=0.05,
@@ -778,6 +781,12 @@ DEFAULT_FIXTURES = Fixtures(
     # is an unruled design choice, not because the axis is unavailable -- `H6` has landed (IN-08);
     # arming waits on G-3's ruling (H-146 unarmed), not on this row.
     refusal_axis=None,                 # `H-146`, control None (SHIPPED)
+    # `H-475` (B10.25; `16_PESSIMIST_CHAR_C` "The resolution, decided" 4, A-24). HOW SURELY A SCRUPLE STOPS A MAN: `decision/choose.py::make_ranker` strikes a candidate whose
+    # `options.scruple` margin is positive; at `0` that is the THRESHOLD (every positive margin is struck, today's gate) and at `T > 0` the candidate is struck with probability
+    # `1 - exp(-margin / T)` on the person's own draw `scruple:<verb>:<subject>`, so a large margin stops him nearly always and never certainly and a small one usually gives way.
+    # `0` is the CONTROL and SHIPS; the gate is armed nowhere (`refusal_axis` None); B10.32 read the arming (H-146, H-475) and did NOT ship it: `0.2` is B98's, after BA1's cells. Must be >= 0. [ASSUMPTION; medium; Jordan to correct; revert: 0, the threshold.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-475 -- site: Fixtures scruple_temperature, graded `assumption`; the proposal's own gate arm is 0.2 and Jordan gave no value, so it is injected at the control and swept 0 / 0.1 / 0.2 / 0.4]
+    scruple_temperature=0.0,           # `H-475`, swept 0 (control, SHIPPED) / 0.1 / 0.2 (the arm B10.32 read and did not ship) / 0.4
     # `H-153` (D-6, `19_PLAN.md:952-955`) -- THE ONE CORPUS FAULT THAT DOES NOT RECONCILE WITH
     # FAIL-FORWARD: *"whoever touches it is killed"* has no corpus-supplied next move. Swept
     # fixture, in the `H-128` shape: nothing reads it (the speech-kind resolution ladder this
@@ -843,6 +852,11 @@ DEFAULT_FIXTURES = Fixtures(
     # a stranger, one who was always wrong half as much.
     # [JUSTIFIED: engine/season/hole_register.yaml H-183 -- record's gain on a teller's weight; no document gives the gain, so it is injected and swept 0 / 0.5 / 1.0]
     record_gain=0.5,                   # `H-183`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # `H-180` (B10.63; `02_CHAR_relations_have_a_ground` edit 5). HOW MUCH LESS A HEARER CREDITS A CLAIM ABOUT A MAN TOLD HIM BY THAT MAN'S RIVAL:
+    # `teller_weight` multiplies by `clamp(1 - rival_gain, 0, 1)` when the hearer holds the teller's own `bond:rivalry` claim on the claim's
+    # subject, told to him (`chain[0]` the teller). `0` is the CONTROL and is SHIPPED [ASSUMPTION], so every claim weighs what it weighed before.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-180 -- the discount on a rival's report; no document states the magnitude, so it is injected at the control and swept 0 / 0.5 / 1.0]
+    rival_gain=0.0,                    # `H-180`, swept 0 (control, SHIPPED) / 0.5 / 1.0
     # `H-190` (telling `T7`, G9 declared intent; v9 IN-16, `ED-IN-0282`). HOW OFTEN A TELLER DECLARES
     # AN INTENT: the chance that a telling whose teller has CHOSEN a later act naming the telling's
     # topic (in a later scene of the same `choose` return) passes on that intent instead of what the
@@ -1019,7 +1033,7 @@ DEFAULT_FIXTURES = Fixtures(
     # from where the term STOOD, so a payment made early buys the next term rather than being lost).
     # `H-80`'s shape exactly, and `record_stage_term` above is its precedent: the ACT declares the
     # term, a computed act carries no operands to declare one with, so this is the instrument's
-    # declared stand-in. Injection sites: `loop/effects.py::_eff_oblige` and `_eff_transfer`.
+    # declared stand-in. Injection sites: `loop/effects_governance.py::_eff_oblige` and `loop/effects_economy.py::_eff_transfer`.
     # ⚠ `None` IS THE CONTROL AND IT IS THE PRE-`17b` TREE EXACTLY: no `oblige` carries a term,
     # nothing matures at MATTER, no payment renews anything, and an establishment persists until
     # released -- `F.18`'s own *"assumed"* column. `1` is the shortest term the loop can express, and
@@ -1138,7 +1152,7 @@ DEFAULT_FIXTURES = Fixtures(
     difficulty_ob=dict(zip(DIFFICULTY_LEVELS, (0, 0.8, 1.6, 2.4), strict=True)),   # `H-424`, swept control (`DIFFICULTY_OB_CONTROL`) / half / three-quarter / calibrated (SHIPPED)
     # `H-426` (B05.21; T13 edit 1, T3). HOW FAR A HEARER'S HOSTILITY MOVES THE OBSTACLE, per full clamp: the obstacle term `regard` is
     # `regard_step x clamp(-stance / STANCE_MAX, 0, 1)` over the stance rows the counterparty holds toward the actor (`person_q.stance_toward`,
-    # `data/cast.py::STANCE_MAX`), for one person counterparty and no audience (`sigma.py::_regard_term`); the favourable half of the same clamp is
+    # `data/rosters.py::STANCE_MAX`), for one person counterparty and no audience (`sigma.py::_regard_term`); the favourable half of the same clamp is
     # `favour` leverage, at the same step. `0` is the CONTROL: the term reads nothing and is not listed, and no stance brings a level.
     # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-426 -- site: Fixtures regard_step, graded `assumption`; T13 T3 gives the live 1.0 and no document derives it, so it is injected and swept 0 / 0.5 / 1.0 / 2.0]
@@ -1206,6 +1220,118 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct -- the sweep's points; basis: `stance_toward` is bounded in [-1, 1] once normalised, so the oath is weighed on the stance's own scale; revert: 0.0, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-459 -- site: Fixtures sworn_bond, graded `assumption`; the entry states no value, so it is injected at the control and swept 0.0 / 0.5 / 1.0]
     sworn_bond=0.0,                    # `H-459`, swept 0.0 (control, SHIPPED) / 0.5 / 1.0
+    # `H-464` (B10.04; `U5a_CHAR_owed_amendments` §2). HOW MUCH A FULL REGARD WEIGHS IN THE STANCE TERM: `decision/choose.py::stance_term` reads the arm's
+    # value times `stance_scale / STANCE_MAX`, before either gain, so regard counts as a share of the stance bound. `STANCE_MAX` (25) is the CONTROL and
+    # SHIPS: the quotient is exactly 1.0 and the term is today's. Swept 0.2 / 0.4 / 0.8, so that a full loyalty sits 4, 8 and 16 temperatures from zero at
+    # `choice_temperature` 0.05; the flip is B98's, after a reading.
+    # [ASSUMPTION; medium; Jordan to correct; revert: the control (`STANCE_MAX`).]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-464 -- site: Fixtures stance_scale, graded `assumption`; the source gives no live value, so it is injected at the control (`STANCE_MAX`, read at import) and swept 25 / 0.2 / 0.4 / 0.8]
+    stance_scale=STANCE_MAX,           # `H-464`, swept 25 = STANCE_MAX (control, SHIPPED) / 0.2 / 0.4 / 0.8
+    # `H-465` (B10.06; `02_CHAR_scar_cap_and_regard_unit` edit 1, `02_CHAR_scar_is_a_wound` row 3). THE SCAR'S RATE: `loop/resolve.py::_scar_witnesses` drops, before
+    # its write, every count an observer already took this season: `element` keeps one count per person per element, `person` one count per person, on the element
+    # he holds most violated (largest weight x |lean|, ties by name). `None` is the CONTROL and SHIPS: uncapped, today's counts exactly, and every content hash
+    # is the one before B10.06 (the flip to `person` is B98's). A value outside `rosters.yaml: scar_season_caps` is refused where it is read.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `None`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-465 -- site: Fixtures scar_season_cap, graded `assumption`; the sources give the domain and not a live value, so it is injected at the control and swept None / element / person]
+    scar_season_cap=None,              # `H-465`, swept None (control, SHIPPED) / element / person
+    # `H-466` (B10.07; `02_CHAR_scar_is_a_wound` row 1). WHO CAN BE SCARRED: `person_q.broken_by` reads it. `any` is the CONTROL and SHIPS: every held element
+    # an act violates is counted, today's rule exactly. `primary` counts only a person's primary elements: the fewest top-weighted pursuits whose weights
+    # sum to `scar_primary_mass`, and the affiliations he stands for (`person_q.stands_for`, intensity 3 or more of 5). A value outside `rosters.yaml: scar_holds` is refused where
+    # it is read. [ASSUMPTION; medium; Jordan to correct; revert: `any`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-466 -- site: Fixtures scar_hold, graded `assumption`; the source proposes `primary` and no derivation of the arm, so it is injected at the control and swept any / primary]
+    scar_hold="any",                   # `H-466`, swept any (control, SHIPPED) / primary (proposed)
+    # `H-469` (B10.07). HOW MUCH OF A PERSON'S WEIGHT HIS PRIMARY PURSUITS MAKE UP: read only at `scar_hold: primary`, by `person_q.broken_by` and `upheld_by`. 0.6 is PP-684's
+    # lower bound for the primary band, so it SHIPS (it moves nothing while `scar_hold` is `any`). [ASSUMPTION; medium; Jordan to correct; revert: none, it is inert at the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-469 -- site: Fixtures scar_primary_mass, graded `assumption`; PP-684's lower bound is the one value the source gives; the sweep points 0.4 and 0.8 are an assumption (a step of 0.2 either side), swept 0.4 / 0.6 / 0.8]
+    scar_primary_mass=0.6,             # `H-469`, swept 0.4 / 0.6 (SHIPPED, PP-684's lower bound) / 0.8
+    # `H-467` (B10.07). HOW FAR AN ACT MUST POINT AGAINST A PURSUIT TO VIOLATE IT (and for the vindication, how far it must point with one to honour it): `person_q._pursuits_violated_by`
+    # counts a pursuit violated only when `pursuit_lean(verb, e) < -floor`, and `_pursuits_upheld_by` honoured when the lean is above `+floor`. `0.0` is the CONTROL and SHIPS: the
+    # sign test, today's. [ASSUMPTION; medium; Jordan to correct; revert: `0.0`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-467 -- site: Fixtures scar_lean_floor, graded `assumption`; the source proposes 0.2, swept 0 / 0.2 / 0.4, so it is injected at the control]
+    scar_lean_floor=0.0,               # `H-467`, swept 0.0 (control, SHIPPED) / 0.2 (proposed) / 0.4
+    # `H-468` (B10.07). WHETHER SEEING A THING ONE LIVES FOR HONOURED TAKES A SCAR AWAY: under `on`, `loop/resolve.py::_scar_witnesses` writes `-1` on the primary pursuit an act upholds
+    # most (above `+scar_lean_floor`) that the observer holds a count on, never below 0, at most once per person per season, before the act's own violations. `off` is the CONTROL and
+    # SHIPS: no count ever falls. A value outside `rosters.yaml: scar_vindications` is refused where it is read. [ASSUMPTION; medium; Jordan to correct; revert: `off`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-468 -- site: Fixtures scar_vindication, graded `assumption`; the source proposes `on`, so it is injected at the control and swept off / on]
+    scar_vindication="off",            # `H-468`, swept off (control, SHIPPED) / on (proposed)
+    # `H-471` (B10.10; `U5a_CHAR_owed_amendments` §2). WHETHER THE STANCE TERM'S REGARD IS BOUND TO THE ROW TYPE'S OWN BOUND: `decision/choose.py::_stance_arm` clamps the
+    # value it reads (`regard`, and `legacy`'s `stance_toward`) to `+-STANCE_MAX` (`data/rosters.py`) before the polarity sign, so B10.04's `stance_scale` factor in `stance_term`
+    # reads the clamped value. `False` is the CONTROL and SHIPS: today's unbounded sum, the realm hash the one before B10.10; the flip is B98's, after a reading.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `False`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-471 -- site: Fixtures stance_clamp, graded `assumption`; the source proposes the clamp and no live reading, so it is injected at the control and swept False / True]
+    stance_clamp=False,                # `H-471`, swept False (control, SHIPPED) / True (proposed)
+    # `H-470` (B10.09; `02_CHAR_scar_cap_and_regard_unit` edits 1 (`regard_unit`), 3). THE UNIT `person_q.regard` COUNTS ITS JUDGED AND TOLD HALVES IN, an arm of `rosters.yaml: regard_units`:
+    # `raw` is the CONTROL and SHIPS (today's sum of `deed_term`, a pursuit weight times an alignment cell, in no unit the stance row's valence step shares); `stance` sums
+    # `person_q.deed_steps`, each deed's worth as the cosine of the holder's projected pursuits against the deed kind's alignment row (a paired deed's times its `_bond`), so one deed
+    # is at most one valence step before `judged_gain` / `told_valence_gain`. A value outside the roster is refused where it is read. The flip is B98's, a declared mover read against the control.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `raw`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-470 -- site: Fixtures regard_unit, graded `assumption`; the source proposes `stance` as the live arm and ships no flip, so it is injected at the control and swept raw / stance]
+    regard_unit="raw",                 # `H-470`, swept raw (control, SHIPPED) / stance (proposed)
+    # `H-474` (B10.20; `U5a_CHAR_owed_amendments` §4, F-PES-CHAR-08). WHETHER A DEED DONE TO A PERSON IS WEIGHED BY THE JUDGE'S BOND TO THE ONE IT WAS DONE TO: `paired_only` is the
+    # CONTROL and SHIPS (today: a `PAIRED_KINDS` deed carries `person_q._bond`, an unpaired deed is its pursuits' reading alone); `person_subject` gives the factor to an unpaired
+    # deed whose verb row takes a Person as its subject (`referent_class: Person`), read by `person_q.regard` through `deed_term` and `deed_steps`. A value outside
+    # `rosters.yaml: deed_counterparties` is refused where it is read. The flip is B98's. [ASSUMPTION; medium; Jordan to correct; revert: `paired_only`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-474 -- site: Fixtures deed_counterparty, graded `assumption`; the source proposes `person_subject` as the live arm and ships no flip, so it is injected at the control and swept paired_only / person_subject / person_subject at regard_unit stance]
+    deed_counterparty="paired_only",   # `H-474`, swept paired_only (control, SHIPPED) / person_subject (proposed) / person_subject at regard_unit stance
+    # `H-476` (B10.28; `02_CHAR_resolve_and_temper` edit 2; CR-93 item 2, AR-23). THE GAIN OF A PERSON'S OWN FACTOR ON THE CHOICE TEMPERATURE: `decision/choose.py::temper`
+    # reads it through the `choice_temper` row of `rosters.yaml: tables.capability_uses` (key `attr.mind.focus`, role `judgement`), and `_sample_order` multiplies
+    # `choice_temperature` by the factor. ⚠ THE SIGN: `about_mid` rises with the attribute, so a temperature that falls with Focus is a NEGATIVE gain; the value the flip (B98)
+    # sets is -0.5 (CR-93 §2's sweep, the least magnitude at which the low-Focus group strays more and the high-Focus group less at seeds 0 to 2). Must lie in (-1, 0].
+    # `0` is the CONTROL and SHIPS: the factor is exactly 1.0 for every person and the draw is today's. [ASSUMPTION; medium; Jordan to correct; revert: the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-476 -- site: Fixtures temper_gain, graded `assumption`; the design names no live value to ship, so it is injected at the control and swept 0 / -0.5 / -0.75]
+    temper_gain=0.0,                   # `H-476`, swept 0 (control, SHIPPED) / -0.5 (proposed) / -0.75
+    # `H-477` (B10.30; `02_CHAR_goal_lean_on_its_own_question` edit 3). THE GAIN ON `aim`, THE SCORE TERM THAT IS THE GOAL'S OWN LEAN ON THE QUESTION IT RAISED:
+    # `decision/choose.py::score_terms` adds `aim_gain * damp * Σ_axis to_axes(goal.pursuits)[axis] * align(verb, axis) * odds_weight` on a `need` question whose
+    # `about` is a goal in `goals.yaml` that the person holds a live `commit` to, and 0.0 on every other question. Must be >= 0 (a negative gain would
+    # score a goal's business AGAINST the goal). `0` is the CONTROL and SHIPS: `aim` is exactly 0.0 for every candidate and the query is never asked. The flip is B98's.
+    # [ASSUMPTION; medium; Jordan to correct; revert: 0, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-477 -- site: Fixtures aim_gain, graded `assumption`; the design ships no live value, so it is injected at the control and swept 0 / 0.5 / 1 / 2]
+    aim_gain=0.0,                      # `H-477`, swept 0 (control, SHIPPED) / 0.5 / 1 / 2
+    # `H-478` (B10.31; `02_CHAR_what_an_act_risks` edit 4). THE GAIN ON `risk`, THE SCORE TERM FOR WHAT AN ACT MIGHT COST THE PERSON WHO DOES IT IN BODY OR FIELD:
+    # `decision/choose.py::score_terms` adds `- risk_gain * exposed * (1 - chance) * (1 + body_band_penalty) * nerve` on a candidate whose row contests a prize
+    # `rosters.yaml: bodily_prizes` lists, and 0.0 on every other. Must be >= 0 (a negative gain would pull a person toward danger). `0` is the CONTROL and SHIPS:
+    # `risk` is exactly 0.0 for every candidate and the chance is never asked. The flip is B98's. The source's sweep points 0.5 and 1.0 are about ten times
+    # the choice temperature's margins (CR-93 / B10.53 measured it): the readings that separate persons sit nearer 0.05 and 0.1.
+    # [ASSUMPTION; medium; Jordan to correct; revert: 0, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-478 -- site: Fixtures risk_gain, graded `assumption`; the design ships no live value, so it is injected at the control and swept 0 / 0.05 / 0.1 / 1]
+    risk_gain=0.0,                     # `H-478`, swept 0 (control, SHIPPED) / 0.05 / 0.1 / 1 (the source's top point)
+    # `H-479` (B10.31). THE CHANCE `risk` READS WHERE THE ONE ODDS QUERY CANNOT SAY: an answer of `None` (a row whose prize provider carries no believed estimate, a band
+    # its ladder lacks, another's act), and no query at all, read this in place of the believed chance. A fixture, not his belief: it is not a figure he holds, so no later
+    # error on his belief (B10.80) is put on it. In [0, 1]. Read only at `risk_gain` > 0. [ASSUMPTION; low; Jordan to correct; revert: none needed, read only where the gain is live.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-479 -- site: Fixtures risk_unknown_chance, graded `assumption`; no document gives the chance of coming through a danger he cannot estimate, so the even chance is injected and swept 0.25 / 0.5 / 0.75]
+    risk_unknown_chance=0.5,           # `H-479`, swept 0.25 / 0.5 (SHIPPED) / 0.75
+    # `H-480` (B10.31). THE GAIN OF `nerve`, A PERSON'S OWN FACTOR ON THE `risk` TERM: `decision/choose.py::nerve` reads it through the `choice_exposure` row of
+    # `rosters.yaml: tables.capability_uses` (role `judgement`, Spirit) and `risk` is multiplied by the factor; NO ROW SHIPS, so the factor is 1.0 for every person whatever
+    # this holds. ⚠ THE SIGN, as `temper_gain`'s: `about_mid` rises with the attribute, so a danger that weighs LESS on the high-Spirit needs a NEGATIVE gain. Must lie in [-1, 0].
+    # `0` is the CONTROL and SHIPS. [ASSUMPTION; medium; Jordan to correct; revert: the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-480 -- site: Fixtures nerve_gain, graded `assumption`; the design names no live value to ship, so it is injected at the control and swept 0 / -0.25 / -0.5]
+    nerve_gain=0.0,                    # `H-480`, swept 0 (control, SHIPPED) / -0.25 / -0.5
+    # `H-472` (B10.13; `16_PESSIMIST_CHAR_A` "The resolution, decided" 3; U1 F-43). HOW A CRISIS OF FAITH COMES OUT: `rule` is the CONTROL and SHIPS (today's
+    # `person_q.conviction_after_crisis`: the branch is chosen by a rule over state the crisis already reads, nothing is rolled); `drawn` rolls one draw per
+    # scarring act and reads the band from `rosters.yaml: tables.crisis_bands` (B10.14, B10.15). A value outside `rosters.yaml: crisis_arms` is refused at load.
+    # A-24 rules that `drawn` ships; it ships once `crisis_obstacle` is calibrated, and the flip is B98's. [ASSUMPTION; medium; Jordan to correct; revert: `rule`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-472 -- site: Fixtures crisis_arm, graded `assumption`; A-24 rules `drawn` and its obstacle has no shipped literal, so the arm is injected at the control and swept rule / drawn at the lightest obstacle / drawn at the heaviest]
+    crisis_arm="rule",                 # `H-472`, swept rule (control, SHIPPED) / drawn at the lightest obstacle level / drawn at the heaviest
+    # `H-473` (B10.13; same source, "no shipped literal"). THE OBSTACLE A CRISIS IS ROLLED AGAINST, a level of `rosters.yaml: difficulty_levels` (sized by
+    # `difficulty_ob`), read by the emitter at `crisis_arm: drawn` (B10.15). `None` is the SHIPPED value: its number is set by the joint calibration of A-5, A-6, A-7
+    # and A-26 (B98), and until then the term is absent; at `drawn` with `None` the emitter raises, naming B98. [ASSUMPTION; medium; Jordan to correct; revert: `None`, absent.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-473 -- site: Fixtures crisis_obstacle, graded `assumption`; no document gives a level, so it is absent at the control and swept over B05's four difficulty levels]
+    crisis_obstacle=None,              # `H-473`, swept plain / routine / demanding / hard; None (SHIPPED, absent until B98)
+    # B10.57 (`IS-B2-CHAR-02` step 5). THE COMPOSITION ROLES WHOSE NPC PARTY DECIDES A CHOICE BY `decision/decider.py::make_decider`: a wrapper passes that decider as its module's
+    # `decide=` only for a role named here and a party the host does not play (`decider.decides_for`); for any other role the module runs its interim policy as it does
+    # today. Each name is a role of `references/module_contracts.yaml`'s `composition_roles:` (refused at load otherwise). `()` is the CONTROL and SHIPS: no role is named, no
+    # wrapper passes a decider. The first role is listed by the batch that makes its module accept `decide=` (B16 the duel round, B20 the field's commander, B24 the hearing), each a declared mover there.
+    npc_decider_roles=(),
+    # `H-481` (B10.58; `IS-B2-CHAR-07`, A-108). THE LARGEST STORED MANNER OFFSET A CAST ROW MAY AUTHOR: `data/cast.py::manner_offset_of` refuses a `manner:` value outside
+    # `+-` this, at build (the seeder hands it in: `cast` cannot import this module). 0.15 is CL-PERSON's draft (`proposals/2026-10-24-character-layers-v2.md` section 2). It moves nothing
+    # while no row authors an offset, which is every shipped row. [ASSUMPTION; medium; Jordan to correct; revert: none needed, no row authors an offset.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-481 -- site: Fixtures manner_offset_bound, graded `assumption`; CL-PERSON drafts +-0.15 and no live reading fixes it, so it is injected and swept 0.1 / 0.15 / 0.3]
+    manner_offset_bound=0.15,          # `H-481`, swept 0.1 / 0.15 (SHIPPED, CL-PERSON's draft) / 0.3
+    # `H-483` (B10.65; `U5a_CHAR_self_knowledge_is_a_belief` edit 6 (a)). THE LEAST A TOLD `self:<key>` CLAIM MUST WEIGH FOR HIM TO TAKE IT UP: `queries/person_q.py::knows_self` reads a
+    # told claim by `teller_weight` (his regard for the teller, in `[0, 1]`) and counts it only at or above this; a claim he made of himself (no chain) is never weighed. `0.0` is the
+    # CONTROL and SHIPS: every told claim is taken up, as an unweighed read does, and the fixture is read only where a told self-claim is the best he holds. [ASSUMPTION; medium; Jordan to correct; revert: 0.0.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-483 -- site: Fixtures self_told_floor, graded `assumption`; no document gives how far he must credit a teller before he believes a thing of himself, so it is injected at the control and swept 0 / 0.5 / 0.75]
+    self_told_floor=0.0,               # `H-483`, swept 0 (control, SHIPPED) / 0.5 / 0.75
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
@@ -1217,6 +1343,17 @@ def load() -> None:
     It lives here and not in `rosters.py` because this module imports `rosters` (the other way would close an import cycle)."""
     from .rosters import check_capability_fixtures
     check_capability_fixtures(dict(DEFAULT_FIXTURES._v))
+    arm, obstacle = DEFAULT_FIXTURES.get("crisis_arm"), DEFAULT_FIXTURES.get("crisis_obstacle")
+    if arm not in CRISIS_ARMS or (obstacle is not None and obstacle not in DIFFICULTY_LEVELS):
+        raise Forbidden(f"`Fixtures crisis_arm` is {arm!r} and `crisis_obstacle` is {obstacle!r}", "data/fixtures.py",
+                        needs=f"an arm of `rosters.yaml: crisis_arms` {sorted(CRISIS_ARMS)} and an obstacle that is None or a level of `difficulty_levels` {list(DIFFICULTY_LEVELS)}",
+                        law="B10.13 (H-472, H-473) -- the arm is a closed set and the obstacle is a level the ladder names, never a number made up here")
+    from engine.substrate import composition
+    unknown = [r for r in DEFAULT_FIXTURES.get("npc_decider_roles") if r not in composition.ROLES]
+    if unknown:
+        raise Forbidden(f"`Fixtures npc_decider_roles` names {unknown}, which `references/module_contracts.yaml: composition_roles` does not register", "data/fixtures.py",
+                        needs=f"roles of the composition registry {sorted(composition.ROLES)}",
+                        law="B10.57 -- a role no wrapper carries is a setting read by nothing, and the decider would never be passed")
     levels, sized = DIFFICULTY_LEVELS, tuple(DEFAULT_FIXTURES.get("difficulty_ob"))
     if sized != levels:
         raise Forbidden(f"`Fixtures difficulty_ob` sizes {list(sized)}, and `rosters.yaml: difficulty_levels` names {list(levels)}", "data/fixtures.py",

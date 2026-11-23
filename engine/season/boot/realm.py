@@ -22,12 +22,13 @@ from collections import Counter, defaultdict
 
 from ..data import cast, files
 from ..data import goals as goals_data
+from ..queries.person_q import BOND_STEM, SELF_STEM, holds_self_key
 from ..queries.world_q import (RESIDE_KIND, WORKS_KIND, ancestry, capacity, enclosing_territory,
-                               home_of as home_of_q, members)
+                               home_of as home_of_q, landing_floor, members)
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
-                            OFFICES_SEATS, PURSUITS, ROLE_TEMPLATE_OF, RUNG_KINDS, authored_remit,
+                            OFFICES_SEATS, PURSUITS, ROLE_TEMPLATE_OF, RUNG_KINDS, SELF_BELIEVED, authored_remit,
                             faction_prop_id, load_yaml, refuse_a_titled_post_off_its_rung,
                             remit_or_default, territory_id_of, territory_rung_id, title_domain)
 from ..data.geography import geography
@@ -790,6 +791,52 @@ def seed_acquaintances(w: World, pairs) -> list:
     return written
 
 
+def seed_relations(w: World, relations) -> list:
+    """SEED EACH AUTHORED RELATION ON THE SIDE THAT HOLDS IT (B10.62). For each `(holder, other, ground, valence, weight)` the holder takes the stance row
+    `(other, valence, weight)` -- the row type `queries/person_q.py::regard` already sums with judged and told deeds, and `decision/choose.py::stance_term` reads --
+    and his own firsthand claim `(other, "bond:<ground>", True)` at `confidence_default`, season 0 (`queries/person_q.py::BOND_STEM`): his knowledge of what
+    the other is to him, which can be told, doubted and lied about like any claim. NO READER IS ADDED. A symmetric relation is two rows, one on each person.
+    Returns the claim ids written, in row order. The ledger rules of `seed_acquaintances` hold: a claim at `when` 0 is the first evicted at `ledger_cap`
+    and wears like any build-time claim. `relations` comes from `data/cast.py::relations_of`, read per case row by `build_realm`; no row ships one."""
+    conf = w.fixtures.get("confidence_default")
+    written = []
+    for holder, other, ground, valence, weight in relations:
+        w.persons[holder].stance.append((other, valence, weight))
+        cid = f"c_bond_{holder}_{other}_{ground}"
+        w.persons[holder].ledger.append(Claim(cid, holder, other, BOND_STEM + ground, True, 0, "firsthand", conf, "own"))
+        written.append(cid)
+    return written
+
+
+def seed_self_knowledge(w: World, unaware=None) -> list:
+    """SEED WHAT EACH PERSON BELIEVES OF HIMSELF (B10.65; `U5a_CHAR_self_knowledge_is_a_belief` edit 3, the one seeder). For every person in the world and every
+    key of `data/rosters.py::SELF_BELIEVED` he holds (`queries/person_q.py::holds_self_key`: a pursuit he has a weight on, the gated gift's field authored) that his
+    row does NOT mark, one firsthand claim in his own ledger, `(himself, "self:<key>", True)`, at `confidence_default`. A marked key seeds none: the mark IS the
+    absence of the claim, so `knows_self` reads one ledger for everybody. `unaware` maps a person id to the keys his cast row marks (`data/cast.py::unaware_of`);
+    a person absent from it, and every person who is no cast row (the population, the guards), is marked for nothing. Returns the claim ids written, in person then key order.
+    Every person who holds a key is seated one, the cohorts too, because the sheet and the reason trail ask `knows_self` of them as of anyone and a person with no claim
+    would read as one who does not know himself.
+
+    ⚠ `when` IS ONE SEASON BEFORE THE FIRST DELIBERATION'S FLOOR (`world_q.landing_floor(w)`), NOT 0, AND THAT IS WHAT KEEPS THE SEEDING OUT OF THE LOOP. `questions_for` Q2 raises a
+    `claim_landed` question on every claim of his own that landed at or after the floor and whose subject is within his reach, and he is within his own: a claim seeded at `when` 0
+    (as `seed_acquaintances`' are) would be news to him in season one, fifteen questions about himself each, and every one a scene he could spend on it. What a person has always
+    known of himself is not news. [ASSUMPTION; medium; Jordan to correct; revert: `when` 0, which moves every season's tallies]. The claim still ranks lowest under
+    `state/ledgers.py::eviction_key` (the ledger cap is never reached early, `tests/test_cr82_ledger_retention.py`), and `knows_self` reads the stored value. ⚠ AT `when` -2 THE KEY IS NEGATIVE (`confidence * (recency + 1)`), so at `ledger_cap` it is the FIRST claim evicted and `knows_self` then reads False: a latent defect past about eight seasons at the shipped cap, no durable carrier ruled (B10.99's close)."""
+    conf = w.fixtures.get("confidence_default")
+    when = landing_floor(w)[0] - 1
+    unaware = unaware or {}
+    written = []
+    for pid in sorted(w.persons):
+        p = w.persons[pid]
+        for key in sorted(SELF_BELIEVED):
+            if key in unaware.get(pid, ()) or not holds_self_key(p, key):
+                continue
+            cid = f"c_self_{pid}_{key}"
+            p.ledger.append(Claim(cid, pid, pid, SELF_STEM + key, True, when, "firsthand", conf, "own"))
+            written.append(cid)
+    return written
+
+
 def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> None:
     """SEAT THE GUARD COHORTS IN A BUILT WORLD. Each row becomes a
     Person at the row's weight, its `person` rung, a `contain` edge (where it IS) at the exact rung its seat's
@@ -1410,6 +1457,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     commons = [(sid, bid) for sid in geo["settlements"]
                for bid, b in buildings_at[sid] if not b["serves"]]
     n_common = 0
+    marks: dict = {}        # B10.65: `{person id: the keys his row marks unaware}`, read by `seed_self_knowledge` once everybody is seated
     for case in cases:
         cid = str(case.get("id"))
         pid = f"p_{_slug(cid)}"
@@ -1474,6 +1522,11 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         # B04.07 (A-107): the traits the row's `resonant_style:` seats, set here and NEVER written in play; a row with
         # no `resonant_style:` holds none (`frozenset()`). Held beside, never in, `Person.capability`.
         w.persons[pid].traits = cast.traits_of(cast.row(cid) or {})
+        # B10.58 (A-108): the row's `manner:` offsets, within `Fixtures.manner_offset_bound`, set here and NEVER written in play; a row with no `manner:` holds none (`{}`).
+        w.persons[pid].manner_offset = cast.manner_offset_of(cast.row(cid) or {}, w.fixtures.get("manner_offset_bound"))
+        # B10.64, B10.65 (`U5a` edits 2, 3): the keys the row marks `unaware:`, handed to `seed_self_knowledge` once the cast is seated; none ships. A mark is the claim NOT written.
+        if unaware := cast.unaware_of(cast.row(cid) or {}):
+            marks[pid] = unaware
         # v10 CR-33: the row's `lifepath:` EXPANDED into the capability keys its template names, each at
         # `pool_default` (the grant changes no POOL; it makes the key one `train` can raise, and it LOWERS the
         # obstacle the holder presents: a held key at 2 is opposed at `opposed_ob(2, opposition_rate)`, a person
@@ -1486,6 +1539,12 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         held = {**cast.capability_of(cast_row, w.fixtures.get("pool_default")), **cast.capabilities_of(cast_row)}
         if held:
             w.persons[pid].capability = {**held, **w.persons[pid].capability}
+    # B10.62: each authored `relations:` entry, on the side that holds it, once every person is seated (a `to` seated later in the cast is then a person).
+    # A relation toward a case a `cap` left unseated is dropped with the case (`seat_guards`' partial skip); no shipped row authors one.
+    seed_relations(w, [(f"p_{_slug(cid)}", f"p_{_slug(to)}", ground, valence, weight)
+                       for cid in (str(c.get("id")) for c in cases)
+                       for to, ground, valence, weight in cast.relations_of(cast.row(cid) or {})
+                       if f"p_{_slug(to)}" in w.persons])
 
     # -- WHO BELONGS TO WHAT ----------------------------------------------------
     #
@@ -2017,6 +2076,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # `acquaintances=False` is the control arm.
     if acquaintances:
         w._acquaintances = seed_acquaintances(w, acquaintance_pairs(w, seat_rows, w._office_census["authored"]))
+    # B10.65 (`U5a` edit 3): WHAT EACH PERSON BELIEVES OF HIMSELF, once everybody and every acquaintance is seated; a cast row's `unaware:` marks are the claims left out.
+    seed_self_knowledge(w, marks)
     # v11 CP-T03-03: THE ARMS A RUNG IS BUILT HOLDING (`rosters.yaml: arms_at_build`), the last-but-one write. The
     # shipped roster is empty (the inventory is Jordan's).
     seed_arms(w)

@@ -29,7 +29,7 @@ with a declared `writes:` cell and no opener is *"a real, disclosed hole, not an
 A row failing C-1 today is disclosed by that function, not silently admitted and not blocked.
 
 ⚠ SUPERSEDED IN ITS PREMISE AT PLAN POSITION `19` (U7-remit), 2026-09-29, AND LEFT A REPORT: the
-paragraph above is true of `18`'s commit and no longer of the tree -- `loop/effects.py::_eff_determine`
+paragraph above is true of `18`'s commit and no longer of the tree -- `loop/effects_information.py::_eff_determine`
 EXISTS and opens an `oblige` (the disposal), the derived opener map reads `determine` beside
 `oblige`'s own opener, and the report is EMPTY over the seeded rows (`test_arrangements.py`,
 `test_u7_remit.py`). So the reason given for reporting rather than refusing -- *"`determine` opens

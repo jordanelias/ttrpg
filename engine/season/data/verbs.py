@@ -25,7 +25,7 @@ by name at module scope would be a stale snapshot.
 from __future__ import annotations
 
 import ast
-from dataclasses import dataclass, field, fields
+from dataclasses import dataclass, field, fields, replace
 from typing import Optional
 
 from . import files
@@ -39,7 +39,7 @@ from .requires import (
 from .rosters import (
     COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS,
-    is_event_kind,
+    SCRUPLE_OVERRIDDEN, is_event_kind, refusing_pole,
     RUNG_KINDS, STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
     table,
@@ -49,6 +49,7 @@ from .rosters import (
 VERB_TABLE_YAML = files.VERB_TABLE_YAML
 
 ELIGIBILITY_KINDS = roster("eligibility_kinds")
+REGARD_SIGNS = roster("regard_signs")          # B10.11: the closed set of a row's `regard_sign:` (`VerbRow.regard_sign`)
 
 # The "no cell" prose sentinel `requires` and `requires_typed` use. Defined ABOVE the loader because
 # loader invariant 4 reads it at load.
@@ -254,6 +255,14 @@ class VerbRow:
     # on every row the social roll deals (a `contests:` prize its provider resolves, or a `graded_tasks` route to it) and on no other: the
     # loader refuses a rolled row with none and any other row with one (`social_rolled`). `None` is the declared absence, a row nothing rolls.
     difficulty: Optional[str] = None
+    # B10.11 (`02_CHAR_scar_cap_and_regard_unit` Addendum; H-337, H-282): THE SIGN OF REGARD -- whether a person's liking for the act's subject pulls him
+    # toward the act (+1), away from it (-1) or not at all (0); a `rosters.yaml: regard_signs` member, read by `decision/choose.py::_stance_arm`
+    # under `stance_polarity: declared`. The loader fills the absence (`None`) with the sign the table read before the column: `-1` where
+    # `opposed_to_subject(...)` (`contested_against_subject()` and the `opposed_without_prize` rows), else `+1`, so a row with no cell reads as it always did and every row carries a sign after the load.
+    # ⚠ LAYER 1, NAMED AT THE SITE: a verb column meets `04` §B.13 (*a property of a roster member travels with the roster*) against §C.4 (*a
+    # verb needing more columns is one the design has not finished thinking about*). The column is picked, as U1 §1 picks `capability:`,
+    # because a loader default makes a missing value explicit and refusable (B4's third disposition); `04` is not edited.
+    regard_sign: Optional[int] = None
 
     def referents_of(self, q) -> tuple:
         """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
@@ -279,6 +288,14 @@ class VerbRow:
         opponent operand is `subject`. The one owner of the test `decision/options.py::subject_is_opponent` and the
         loader's `subject_may_be_self` refusal both ask."""
         return bool(self.contests) and self.opponent_operand() == "subject"
+
+    def opposed_to_subject(self, opposed_without_prize) -> bool:
+        """WHETHER AN ACT OF THIS ROW IS DONE AGAINST ITS `subject`: it is contested against it, or it names no prize and is listed in
+        `opposed_without_prize` (`rosters.yaml`, B11 lane A) with the subject for its second side. The one owner of the test
+        `decision/options.py::subject_is_opponent` (the roster module-global it passes) and the loader's `regard_sign` default (the roster,
+        read before the module-global exists) both ask."""
+        return self.contested_against_subject() or (
+            self.verb in opposed_without_prize and self.opponent_operand() == "subject")
 
     def known_person_operands(self) -> tuple:
         """THE OPERANDS A CANDIDATE OF THIS ROW TAKES FROM SOMEBODY THE PERSON KNOWS, one bag per
@@ -810,7 +827,16 @@ def _load_verb_table() -> dict:
                       opposed_attribute=str(r["opposed_attribute"]).strip() if r.get("opposed_attribute") else None,
                       brute=str(r["brute"]).strip() if r.get("brute") else None,
                       brute_note=str(r.get("brute_note") or "").strip(),
-                      difficulty=str(r["difficulty"]).strip() if r.get("difficulty") else None)
+                      difficulty=str(r["difficulty"]).strip() if r.get("difficulty") else None,
+                      regard_sign=r.get("regard_sign"))
+        # B10.11: THE `regard_sign:` COLUMN, A `regard_signs` MEMBER OR THE LOAD REFUSES (a `True` is no sign: it equals 1 in a set). An absent
+        # cell is the declared default -- `-1` on a row done against its subject (`opposed_to_subject`), else `+1` -- the sign `_stance_arm` read before the column.
+        if row.regard_sign is None:
+            row = replace(row, regard_sign=-1 if row.opposed_to_subject(roster("opposed_without_prize")) else 1)
+        elif isinstance(row.regard_sign, bool) or row.regard_sign not in REGARD_SIGNS:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares `regard_sign: {row.regard_sign!r}`, which is not a member of "
+                f"`rosters.yaml: regard_signs` ({sorted(REGARD_SIGNS)}).")
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.
@@ -1785,9 +1811,9 @@ _check_dominance_kinds(DOMINANCE_KINDS, DEED_KINDS)
 
 def _asks_subject_held(row: "VerbRow") -> bool:
     """WHETHER THE ROW'S TYPED CELL ASKS THE ACTOR TO HOLD ITS `subject` -- a `relation` conjunct of
-    `subject`, `held_by`. The ONE reader of that conjunct: `OWN_HOLD_DECLINES` is refused at load
-    against it (below), and the two derivations of the Record kinds a held document is an occasion for
-    (`RECORD_REFERENT_KINDS`, `HOLDING_RECORD_KINDS`) are told apart by it."""
+    `subject`, `held_by`. The ONE reader of that conjunct: the two derivations of the Record kinds a held
+    document is an occasion for (`RECORD_REFERENT_KINDS`, `HOLDING_RECORD_KINDS`) are told apart by it. (The person's own
+    reading of the conjunct at formation is `OwnStateReader`'s `held_by`, B10.59.)"""
     if row.requires_typed is None:
         return False
     req = row.requires_typed.requirement
@@ -2013,33 +2039,8 @@ def _load_lie_verbs(values) -> frozenset:
 LIE_VERBS = _load_lie_verbs(roster("lie_verbs"))
 
 
-# v9 IN-26 (BOUND-PAPER, `A-13`): the verbs a person forms only on a referent he himself holds -- the
-# object of one of his OWN live `hold` Tenures (`rosters.yaml: own_hold_declines`, read in `opening_set`;
-# `destroy_record`). `own_stance_declines`' shape one field over: the decline is the person-side reading of
-# the row's own `held_by` conjunct, so it is REFUSED AT IMPORT when a member names a verb the table lacks or
-# one whose typed cell asks no `relation` of `subject` `held_by` -- a decline on a holding the fold never
-# checks would narrow formation by a fact the act does not require.
-# (`_asks_subject_held`, the reader of that conjunct, is defined above `RECORD_REFERENT_KINDS`: the
-# derivation of the Record kinds a person's holding answers reads it too -- the one owner.)
-def _load_own_hold_declines(values) -> frozenset:
-    """`rosters.yaml: own_hold_declines`' `values`, checked and frozen -- refused per member (above)."""
-    out = frozenset(str(v or "") for v in (values or ()))
-    for v in sorted(out):
-        row = VERB_TABLE.get(v)
-        if row is None or not _asks_subject_held(row):
-            raise Forbidden(
-                f"`rosters.yaml: own_hold_declines` names {v!r}, and the verb table carries no such verb "
-                "or its typed cell asks no `relation` of `subject` `held_by`", "rosters.yaml",
-                needs="a `verb_table.yaml` verb whose cell requires the actor to hold its subject",
-                law="IN-26 -- an own-hold decline reads the holding the act requires")
-    return out
-
-
-OWN_HOLD_DECLINES = _load_own_hold_declines(roster("own_hold_declines"))
-
-
 # v10 IN-61 (RS-27): the verbs a person forms only on a seat whose `successions` title he himself holds
-# (`rosters.yaml: own_title_declines`, read in `opening_set`; `succeed`). `own_hold_declines`' shape one read
+# (`rosters.yaml: own_title_declines`, read in `opening_set`; `succeed`). `own_stance_declines`' shape one read
 # over, REFUSED AT IMPORT when a member names a verb the table lacks or one whose row declares no
 # `referent_class: Office` -- a title is a seat's, so a row forming on anything but a seat has no title.
 _TITLE_CLASS = "Office"
@@ -2083,6 +2084,26 @@ def _load_held_edge_declines(values: dict) -> dict:
 HELD_EDGE_DECLINES = _load_held_edge_declines(roster_map("held_edge_declines", "values"))
 
 
+# B10.72: `{verb: tenure kind}` -- the verbs that ALSO form on the object of a live Tenure of that kind the person holds
+# (`rosters.yaml: held_edge_sourced`, read in `opening_set`; `release` on a `commit` he holds). `held_edge_declines`' shape
+# and loader rule, its mirror. REFUSED AT IMPORT for a verb the table lacks or a kind `tenure_kinds` does not carry: either
+# would form for nobody, and a stale line must not read as a live route.
+def _load_held_edge_sourced(values: dict) -> dict:
+    """`rosters.yaml: held_edge_sourced`' `values`, checked and frozen -- refused per line (above)."""
+    out = {v: str(k or "") for v, k in (values or {}).items()}
+    for v, k in out.items():
+        if v not in VERB_TABLE or k not in TENURE_KINDS:
+            raise Forbidden(
+                f"`rosters.yaml: held_edge_sourced` names {v!r}: {k!r}, and the verb table carries no "
+                f"such verb, or {k!r} is no `tenure_kinds` member ({sorted(TENURE_KINDS)})", "rosters.yaml",
+                needs="a `verb_table.yaml` verb, and a Tenure kind an edge can be",
+                law="B10.72 -- a verb sourced from a held edge forms on the object of an edge of a kind that exists")
+    return out
+
+
+HELD_EDGE_SOURCED = _load_held_edge_sourced(roster_map("held_edge_sourced", "values"))
+
+
 # v11 CR-87 (ED-IN-0337): `{verb: (context, ...)}` -- the verbs a person forms only on a subject he holds a context
 # of violence against (`rosters.yaml: violence_contexts`, read in `opening_set`; `fight`). `held_edge_declines`'
 # shape, a list of contexts per verb. REFUSED AT IMPORT for a verb the table lacks or a context list that is not a
@@ -2121,6 +2142,25 @@ def _derive_violent_verbs(prizes) -> frozenset:
 
 
 VIOLENT_VERBS = _derive_violent_verbs(roster("violent_prizes"))
+
+
+# B10.31: THE PRIZES THE ACTOR HIMSELF STAKES IN BODY OR FIELD (`rosters.yaml: bodily_prizes`); `decision/choose.py::score_terms`' `risk` prices a
+# candidate whose row's `contests:` is one of them. Closed against the `contests:` values the verb table declares, so a prize no row contests
+# (a renamed one) refuses here and cannot leave the term reading nobody.
+def _load_bodily_prizes(prizes) -> frozenset:
+    """The `bodily_prizes` roster, refused at import if a member is no prize any verb row contests."""
+    prizes = frozenset(prizes or ())
+    declared = frozenset(r.contests for r in VERB_TABLE.values() if r.contests)
+    if not prizes or not prizes <= declared:
+        raise Forbidden(
+            f"`rosters.yaml: bodily_prizes` names {sorted(prizes - declared)}, no `contests:` value a verb row declares"
+            if prizes else "`rosters.yaml: bodily_prizes` is empty", "rosters.yaml",
+            needs=f"a prize of {sorted(declared)}",
+            law="B10.31 -- an exposed candidate is one whose row contests a listed prize")
+    return prizes
+
+
+BODILY_PRIZES = _load_bodily_prizes(roster("bodily_prizes"))
 
 
 def _load_opposed_without_prize(values) -> frozenset:
@@ -2236,6 +2276,11 @@ FOUNDING_REMIT_ACTS = _remit_acts_of(VERB_TABLE["establish"])
 # kind no verb emits is a weight on an event nobody can see. The authored ones are the `deed:` keys of
 # `rosters.yaml: tables.alignment` (a list here would be a second copy).
 DEED_PREFIX = "deed:"
+# B10.56 (`02_CHAR_choice_alignment` edits 1-2): an authored alignment cell for a CHOICE VALUE (`retreat_at` `early`, not the verb
+# `marshal`) is keyed `choice:<key>=<value>` in the same axis row, so `ALIGNMENT` stays the ONE binding the `H-66` sweep rebinds and
+# `align_choice` reads it where `align` does. The authored ones are `rosters.yaml: tables.alignment`'s optional `choices:` block (absent is
+# the shipped state; the cells are content for `BA1-cast-content`), read by `_load_alignment` and refused by `_check_choice_cells`.
+CHOICE_PREFIX = "choice:"
 
 
 _DENSITY_LAW = ("IN-08 (`workplans/valoria_master_workplan_v9_part5.md`) -- every table verb carries "
@@ -2287,7 +2332,33 @@ def _check_alignment_density(cells: dict, uncelled: dict) -> None:
                 law=_DENSITY_LAW)
 
 
-def _load_alignment(cells: Optional[dict] = None, uncelled: Optional[dict] = None) -> dict:
+def _check_choice_cells(choices: Optional[dict]) -> dict:
+    """`tables.alignment.choices`, `{key: {value: {axis: cell}}}`, checked and returned as axis rows `{axis: {choice:<key>=<value>: cell}}`.
+    Refused at load, each for a cell nothing would read: a key no verb's `choice_sourced` line carries (no candidate holds it in its
+    operands), a value outside that key's `CHOICE_RANGES` (no candidate holds it), an axis off the roster (`axis_weight` never reaches it)
+    and a cell that is not a number. No value is required to carry a cell: a value the block does not name scores as the table's default.
+    A value is spelt as `CHOICE_RANGES` spells it (`retreat_at`'s `0.5` is quoted in the YAML, and compared as the string it is)."""
+    sourced = {k for ks in CHOICE_SOURCED.values() for k in ks}
+    law = ("B10.56 / `02_CHAR_choice_alignment` -- a choice cell scores a value a candidate's operands can carry, on a rostered axis; "
+           "a cell nothing reads is never reported")
+    out: dict = {}
+    for key, values in (choices or {}).items():
+        if key not in sourced or not isinstance(values, dict):
+            raise Forbidden(f"alignment `choices:` names {key!r}, which no `choice_sourced` line carries (keys: {sorted(sourced)})",
+                            "rosters.yaml", needs="a key a verb's `choice_sourced` line names, with `{value: {axis: cell}}` under it", law=law)
+        for value, row in values.items():
+            if str(value) not in {str(v) for v in CHOICE_RANGES[key]}:
+                raise Forbidden(f"alignment `choices:` {key!r} names value {value!r}, outside its range {list(CHOICE_RANGES[key])}",
+                                "rosters.yaml", needs="a value of the key's closed set (`data/verbs.py::CHOICE_RANGES`)", law=law)
+            for ax, cell in (row or {}).items():
+                if ax not in PURSUIT_AXES or isinstance(cell, bool) or not isinstance(cell, (int, float)):
+                    raise Forbidden(f"alignment `choices:` {key!r}={value!r} cells {ax!r}: {cell!r}, not a number on a rostered axis",
+                                    "rosters.yaml", needs=f"a number on one of {sorted(PURSUIT_AXES)}", law=law)
+                out.setdefault(ax, {})[f"{CHOICE_PREFIX}{key}={value}"] = cell
+    return out
+
+
+def _load_alignment(cells: Optional[dict] = None, uncelled: Optional[dict] = None, choices: Optional[dict] = None) -> dict:
     """§F2's `alignment(c.verb, axis)`, from `rosters.yaml`, with FOUR load-time checks.
 
     Each check exists because the corresponding failure would be SILENT. A cell naming a verb the
@@ -2305,11 +2376,16 @@ def _load_alignment(cells: Optional[dict] = None, uncelled: Optional[dict] = Non
 
     An explicit `null` cell is a considered zero: it satisfies the density rule and is DROPPED
     from the returned table, so every reader (`align`, the sweep, the scar) sees the sparse numeric
-    table it always saw and reads `default_cell` for it."""
+    table it always saw and reads `default_cell` for it.
+
+    `choices` is the table's optional `choices:` block (B10.56; `_check_choice_cells`), read from the roster when `cells` is, and merged
+    into the returned axis rows under `choice:<key>=<value>`: absent or empty, the table is what it was."""
     if cells is None:
         cells = table("alignment")
         if uncelled is None:
             uncelled = table_meta("alignment").get("uncelled") or {}
+        if choices is None:
+            choices = table_meta("alignment").get("choices")
     admitted = set(VERB_TABLE) | {DEED_PREFIX + k for k in EMITTED_KINDS}
     checked = _check_sparse_table(
         "alignment", cells, PURSUIT_AXES, "axis", admitted, "verb or `deed:<kind>`",
@@ -2320,7 +2396,10 @@ def _load_alignment(cells: Optional[dict] = None, uncelled: Optional[dict] = Non
                  "kind no verb emits is a weight on an event nobody can see"))
     if uncelled is not None:
         _check_alignment_density(checked, uncelled)
-    return {ax: {k: v for k, v in row.items() if v is not None} for ax, row in checked.items()}
+    out = {ax: {k: v for k, v in row.items() if v is not None} for ax, row in checked.items()}
+    for ax, row in _check_choice_cells(choices).items():
+        out.setdefault(ax, {}).update(row)
+    return out
 
 ALIGNMENT = _load_alignment()
 
@@ -2342,6 +2421,14 @@ def align(verb: str, axis: str) -> float:
     return float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL))
 
 
+def align_choice(key: str, value, axis: str) -> float:
+    """B10.56: the alignment of a CHOICE VALUE on an axis -- `align`'s reading for a `choice_sourced` payload key (`marshal`'s `retreat_at`
+    `0.5`), the `choice:<key>=<value>` cell of `rosters.yaml: tables.alignment.choices`, else the table's `default_cell`. ⚠ IT READS
+    `ALIGNMENT`, THE ONE BINDING (`align`'s warning): an `H-66` sweep point rebinds it, and a point built from the verb and deed cells alone
+    (`uniform`) carries no choice cell, so a choice value scores `default_cell` there -- no value preferred, which is that control's claim."""
+    return float(ALIGNMENT.get(axis, {}).get(f"{CHOICE_PREFIX}{key}={value}", ALIGNMENT_DEFAULT_CELL))
+
+
 def celled_verbs() -> frozenset:
     """The verbs with AT LEAST ONE CELLED AXIS: a non-zero cell in the live `ALIGNMENT` binding.
 
@@ -2352,7 +2439,7 @@ def celled_verbs() -> frozenset:
     break. Read off `ALIGNMENT`, the binding the sweep rebinds, so under `uniform` every verb is
     celled -- the control arm's own answer."""
     return frozenset(v for row in ALIGNMENT.values() for v, val in row.items()
-                     if val and not str(v).startswith(DEED_PREFIX))
+                     if val and not str(v).startswith((DEED_PREFIX, CHOICE_PREFIX)))
 
 
 def align_kind(kind: str, axis: str) -> float:
@@ -2434,4 +2521,45 @@ def alignment_at(point: str) -> dict:
                      **{DEED_PREFIX + k: 1.0 for k in EMITTED_KINDS}} for ax in PURSUIT_AXES}
     return {ax: {v: (1.0 if w > 0 else -1.0 if w < 0 else 0.0) for v, w in row.items()}
             for ax, row in ALIGNMENT_DECLARED.items()}
+
+
+def check_refusable(rows: Optional[dict] = None) -> dict:
+    """`rosters.yaml: pursuit_axes.refusable`, CHECKED AT LOAD (B10.21), returned as `{axis: frozenset(verb)}`. `rows` is the
+    table under test (default: the shipped one).
+
+    Five refusals: a key off the axis roster or with no refusing pole (a list nobody can arm); a list that is not a list of
+    distinct strings; a verb off `VERB_TABLE` (an act nobody can do); a verb with a ZERO cell on its axis (`data.verbs.align`
+    is `0` -- the act the axis does not engage, which `refuses` could never refuse, so the listing would be a claim the gate
+    cannot keep; the sparse default cell reads `0` too); a verb whose row emits no `scruple.overridden` in any band (B10.24: the kind is declared
+    on every refusable row, or giving way on that verb leaves no Event).
+
+    ⚠ IT LIVES HERE, NOT IN `data/rosters.py`, and is called from the foot of this module: `VERB_TABLE` and `align` live here, and
+    `rosters` imports no `verbs` (this module imports it)."""
+    out = {}
+    for axis, verbs in (roster_map("pursuit_axes", "refusable") if rows is None else rows).items():
+        require_member(axis, PURSUIT_AXES, f"pursuit_axes.refusable names {axis!r}, which is not on the roster",
+                       "rosters.yaml", "ED-IN-0261 -- the refusable set is about a ROSTERED axis")
+        refusing_pole(axis)
+        if (not isinstance(verbs, (list, tuple)) or any(not isinstance(v, str) for v in verbs)
+                or len(set(verbs)) != len(verbs)):
+            raise Unspecified(f"pursuit_axes.refusable[{axis!r}] is {verbs!r}", "rosters.yaml",
+                              needs="a list of distinct verb names", law="ED-IN-0261 -- the refusable set is a closed list of acts")
+        for v in verbs:
+            require_member(v, VERB_TABLE, f"pursuit_axes.refusable[{axis!r}] names {v!r}, which is not a verb",
+                           "rosters.yaml", "a scruple forbids an act somebody can do",
+                           needs="a `verb_table.yaml` key, spelled as it spells it")
+            if not align(v, axis):
+                raise Unspecified(f"pursuit_axes.refusable[{axis!r}] names {v!r}, which has no cell on {axis!r}", "rosters.yaml",
+                                  needs=f"a non-zero `tables.alignment` cell for {v!r} on {axis!r}, or drop the verb",
+                                  law="ED-IN-0261 -- only a verb the axis engages is one of the certain actions; a zero cell is never refused")
+            row = VERB_TABLE[v]
+            if not any(SCRUPLE_OVERRIDDEN in kinds for kinds in (row.emits, *row.emits_by_degree.values())):
+                raise Unspecified(f"pursuit_axes.refusable[{axis!r}] names {v!r}, whose row emits no `{SCRUPLE_OVERRIDDEN}`", "rosters.yaml",
+                                  needs=f"`{SCRUPLE_OVERRIDDEN}` in {v!r}'s `emits:` (a band of it, where it is band-keyed), or drop the verb",
+                                  law="B10.24 -- a refusable verb done against his scruple is told: a row that cannot emit the kind leaves the giving way untold")
+        out[axis] = frozenset(verbs)
+    return out
+
+
+check_refusable()      # B10.21: refuse a refusable verb off the table, or with no cell on its axis, at load (its owner imports this module)
 

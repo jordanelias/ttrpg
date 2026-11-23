@@ -35,7 +35,7 @@ from engine.dice_engine.fmath import ltr_sum
 from ..gaps import Unspecified
 from engine.substrate.descriptors import resolve_pursuit
 
-from .rosters import PURSUITS, PURSUIT_AXES, require_member
+from .rosters import AFFILIATIONS, PURSUITS, PURSUIT_AXES, require_member, table
 
 
 def pursuit(name: str) -> str:
@@ -170,3 +170,36 @@ def pursuit_cosine(weights_a: dict, weights_b: dict) -> Optional[float]:
     module and `cast.loyalty` holds a registry row, not a Person. (Named for what it computes: `decision/`
     has a verb-axis table called `alignment`, a different quantity.)"""
     return pursuit_cosine_axes(to_axes(weights_a), to_axes(weights_b))
+
+
+_SIGNATURE_KEYS = ("favours", "opposes")
+
+
+def _load_signatures(rows: Optional[dict] = None, name: str = "pursuit_signatures", roster=PURSUITS,
+                     what: str = "a canonical pursuit") -> dict:
+    """`rosters.yaml: tables.<name>`, CHECKED AT LOAD (B10.17; B10.19 for the creeds): what each member's NAME must mean in acts.
+
+    A row is `{favours: [verb, ...], opposes: [verb, ...]}`. The refusals are the roster-membership refusal
+    (`require_member`), once per name: a row for a member off `roster` (`PURSUITS`, or `AFFILIATIONS` for
+    `affiliation_signatures`) is a signature nobody holds, and a verb off `VERB_TABLE` is one nobody can do. A verb with NO
+    cell (`tables.alignment` for a pursuit, `tables.affiliation_engagement` for a creed) is lawful here: it reads lean 0 and
+    `harness/conviction_spread.py::signature_breaks` reports it. `rows` is the table under test (default: the shipped one)."""
+    from .verbs import VERB_TABLE      # inside: `verbs` imports this module, so a module-level import here is a cycle
+    out = {}
+    for p, row in (table(name) if rows is None else rows).items():
+        require_member(p, roster, f"{name} names {p!r}, which is not {what}",
+                       f"rosters.yaml: tables.{name}", "a signature is read for a member somebody can hold")
+        if sorted(row) != sorted(_SIGNATURE_KEYS):
+            raise Unspecified(f"{name}[{p}] carries {sorted(row)}", f"rosters.yaml: tables.{name}",
+                              needs=f"exactly {list(_SIGNATURE_KEYS)}", law="a signature is the verbs favoured and the verbs opposed")
+        for key in _SIGNATURE_KEYS:
+            for v in row[key]:
+                require_member(v, VERB_TABLE, f"{name}[{p}].{key} names {v!r}, which is not a verb",
+                               f"rosters.yaml: tables.{name}", "a signature is read as the lean of a verb the table resolves",
+                               needs="a `verb_table.yaml` key, spelled as it spells it")
+        out[p] = {key: tuple(row[key]) for key in _SIGNATURE_KEYS}
+    return out
+
+
+PURSUIT_SIGNATURES = _load_signatures()
+AFFILIATION_SIGNATURES = _load_signatures(None, "affiliation_signatures", AFFILIATIONS, "a rostered affiliation")

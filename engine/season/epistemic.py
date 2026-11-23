@@ -549,12 +549,12 @@ def _ch_post_remit(w: "World", e, pid) -> bool:
     Tenure (`boot/realm.py` mints `off_restoration_leader` and opens its authored obligee, NPC-041,
     as a term-less `oblige`), and at the Batch C close `populated.run(n, 0)` measured no `inferred` claim in any ledger after 1 season or after 4 (re-measure before citing: the IN-22 limb above post-dates it); WHY it stays 0 with an
     obligee present is NOT isolated here. The channel is exercised by acts
-    that name their seat (`tests/test_obligees.py`, through the real fold and WITNESS).
+    that name their seat (the test that showed it, `tests/test_obligees.py`, was dropped at `FORK:217340fc`, ED-IN-0314).
 
     ⚠ NOT CACHED AT THE BARRIER, THOUGH `establishment_of` RE-SCANS `w.tenures` ON EVERY CALL.
     r2 `05` §A.1.5 RULED (d) is
     in words, not only in the call: *"the Query has a caller, and the channel has no second copy of
-    the set"* -- `test_obligees.py::test_17a_the_channel_reads_the_obligee_set_through_establishment_of`
+    the set"* -- `test_obligees.py::test_17a_the_channel_reads_the_obligee_set_through_establishment_of` (dropped with its file, `FORK:217340fc`)
     is that ruling as a falsifier, monkeypatching `establishment_of` mid-test and asserting this
     channel's answer moves with it. A barrier-scoped cache is a second copy by exactly the
     definition the ruling excludes: it would hold the Query's answer from the first call in the

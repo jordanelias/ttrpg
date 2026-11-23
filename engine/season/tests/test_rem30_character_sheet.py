@@ -118,10 +118,11 @@ def test_rem30_chronicle_splits_scar_by_roster_and_by_holding():
     p.conviction = {held: 4}
     old = Claim("c_old", "p_plant", "p_x", "at", "here", 0, "seen", 9, "own")
     new = Claim("c_new", "p_plant", "p_x", "at", "there", 1, "seen", 5, "own")
-    p.ledger = [old, new]
+    mine = Claim("c_self", "p_plant", "p_plant", "self:wealth", True, 0, "firsthand", 100, "own")     # B10.65: he recognises the pursuit he is scarred on
+    p.ledger = [old, new, mine]
     c = chronicle(p)
     assert dict(c.scar_pursuits) == {"wealth": 2}
     assert dict(c.scar_affiliations_held) == {held: 3}
     assert dict(c.scar_affiliations_history) == {unheld: 1}
-    assert c.beliefs == (("p_x", new),)
-    assert c.ledger == (old, new)
+    assert c.beliefs == (("p_x", new), ("p_plant", mine))
+    assert c.ledger == (old, new, mine)

@@ -847,7 +847,7 @@ _LEVY_ROW = _row_head("requisition")
 # -- untyped (`requires: —`, `create_record`'s shape: no precondition, so no cell) and `beneficiary: actor`,
 # the shape the plant needs. The two tests above keep `requisition`: a missing or off-roster beneficiary is
 # refused whatever the row's cell.
-_UNTYPED_ROW = _row_head("conceal")
+_UNTYPED_ROW = _row_head("succeed")
 
 
 def test_lb6d_every_verb_declares_a_rostered_beneficiary():
@@ -917,7 +917,7 @@ def test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load():
         _UNTYPED_ROW, _UNTYPED_ROW.replace('beneficiary: "actor"', 'beneficiary: "to"'), 1)
     assert unbindable != src, "the substitution did not apply -- this test is asserting nothing"
     from ..data.verbs import VERB_TABLE
-    assert VERB_TABLE["conceal"].requires_typed is None, "the planted row is typed now"
+    assert VERB_TABLE["succeed"].requires_typed is None, "the planted row is typed now"
     with pytest.raises(SystemExit, match="neither binds nor admits"):
         _load_with(unbindable)
 
@@ -1018,6 +1018,25 @@ def test_lb6d_the_column_resolves_on_candidates_the_engine_actually_forms():
     assert resolved > len(seen) // 4, (
         f"only {resolved} of {len(seen)} candidates resolve any beneficiary -- the column is "
         "declared but inert, which is the failure this test exists to see")
+
+def test_the_beneficiary_arm_scores_a_regarded_beneficiary_higher():
+    """B10.69 (`17_CENSUS_C1A_02` W4 (b)): at `stance_polarity="beneficiary"` a person holding regard for A and none for B scores a
+    `beneficiary: to` candidate bound to A above the same candidate bound to B; at `declared` (shipped) the term reads the act's subject,
+    so the two read alike. The falsifier is the pair scoring equal: the arm would read nothing."""
+    from ..decision import choose as CH
+    from ..state.carriers import Candidate
+    a, b = "p_mid", "p_low"
+    w = P.tiny_world()
+    me = w.persons["p_high"]
+    me.stance = [(a, 1, 5)] * 3                              # +15 toward A, nothing toward B
+    assert VERB_TABLE["transfer"].beneficiary == "to"
+    to_a = Candidate("transfer", "r1", operands={"to": a})
+    to_b = Candidate("transfer", "r1", operands={"to": b})
+    fx = w.fixtures.sweep("stance_polarity", "beneficiary")
+    assert CH.stance_term(me, to_a, fx) > CH.stance_term(me, to_b, fx)
+    shipped = w.fixtures.sweep("stance_polarity", "declared")
+    assert CH.stance_term(me, to_a, shipped) == CH.stance_term(me, to_b, shipped)
+
 
 # LB-6e -- `(Person, scar[axis])`, THE MORAL LAYER'S MISSING MOTION (§54 item 21, `H-128`)
 #
@@ -2901,19 +2920,15 @@ def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
     # ⚠⚠ B09.99 re-pin: (630, 628) -> (627, 626), THE B09 MOVERS (`_realm_goldens.py`'s list; `CENSUS[(0, 1)]` records the 627), AND A READING THAT CHANGED:
     # B09.21 stopped writing a dwelling's wear, so no wear claim reaches a ledger and the arms no longer part through one. They still part
     # (the control deletes 211 Sites, which moves what is drawn and asked), by one act here and by `claim.deposited` 10541 / 10540.
-    assert (out["acts"], cout["acts"]) == (627, 626), (
+    # ⚠⚠ B10.99 re-pin: (627, 626) -> (563, 561), THE B10 MOVERS (`_realm_goldens.py`'s B10.99 paragraph; `CENSUS[(0, 1)]` records the 563).
+    assert (out["acts"], cout["acts"]) == (563, 561), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: a move here is a move of the act mix -- "
         "re-record it with the unit that moved it")
-    # v10 REM-2C: with the counts equal, THE PARTING THE COUNTS PROXIED IS ASSERTED DIRECTLY -- the arms' act
-    # sequences differ (at act 370 at REM-2C, the note above).
-    seq = lambda world: [(a.actor, a.verb, (a.payload or {}).get("subject")) for a in world.acts]
-    # ED-IN-0306 phase 5: within ONE season the arms' act sequences no longer part -- the one parting decision was a
-    # `migrate` onto a territory, now declined in both arms (`arrival_only_kinds`) -- so the parting is asserted where it
-    # still lives, the ledgers (B09.99: no longer the dwellings' wear claims, which are not written at wear 0).
-    deposited = lambda world: sum(1 for e in world.log if e.kind == "claim.deposited")
-    assert seq(w) != seq(cw) or deposited(w) != deposited(cw), (
-        "the two arms are identical in acts AND in ledger deposits: deleting 211 Sites parted nothing")
-# H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-146`. A refusal at `opening_set`, not a score term:
+    # B10.99: the counts above DIFFER (563 / 561), and that is the parting this test polices -- deleting 211 Sites moves what
+    # is drawn and asked. The act sequences and the `claim.deposited` totals are equal in both arms at B10.99 (11776 each; the
+    # B10.72 release fix removed the one difference those two read), so they no longer observe a parting the pinned counts do not.
+    assert out["acts"] != cout["acts"], "the two arms' act counts are equal: deleting 211 Sites parted nothing"
+# H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-146`. A refusal after scoring, in `make_ranker` (B10.24; it was `opening_set`'s), not a score term:
 # the person's projected weight on the gating axis IS the threshold, and a verb that axis engages
 # past it never forms a Candidate. Roster-generic: the axis is whatever `Fixtures refusal_axis`
 # names, so these tests take the axis that `pursuit_axes.refusing_pole` authors (`_h2_axis`).
@@ -2952,15 +2967,28 @@ from .test_cr21_cells import _deontological_axis as _h2_axis    # noqa: E402 -- 
 
 def _h2_inject(p, axis, weight, cells):
     """Rebind the projection and the alignment to synthetic tables; return a restore callable."""
+    import math
     from ..data import verbs as _verbs
-    saved = (_verbs.PURSUIT_PROJECTION, _verbs.ALIGNMENT, dict(p.pursuits))
-    _verbs.PURSUIT_PROJECTION = {"h2_synthetic": {axis: weight}}
+    from ..data.rosters import _ROSTERS, PURSUIT_AXES
+    saved =(_verbs.PURSUIT_PROJECTION, _verbs.ALIGNMENT, dict(p.pursuits), _ROSTERS["pursuit_axes"]["refusable"])
+    # The tolerance is the axis's SHARE of the projected vector (B10.22), so a lone axis would put it at ±1: a second
+    # axis of the roster carries the rest of a unit vector and leaves the share at `weight`.
+    other = next(a for a in sorted(PURSUIT_AXES) if a != axis)
+    _verbs.PURSUIT_PROJECTION = {"h2_synthetic": {axis: weight, other: math.sqrt(1.0 - weight ** 2)}}
     _verbs.ALIGNMENT = {axis: dict(cells)}
+    _ROSTERS["pursuit_axes"]["refusable"] = {axis: sorted(cells)}      # B10.21: the gate refuses a listed verb only
     p.pursuits = {"h2_synthetic": 1.0}
 
     def restore():
-        _verbs.PURSUIT_PROJECTION, _verbs.ALIGNMENT, p.pursuits = saved
+        _verbs.PURSUIT_PROJECTION, _verbs.ALIGNMENT, p.pursuits, _ROSTERS["pursuit_axes"]["refusable"] = saved
     return restore
+
+
+def _h2_ranked(fx, p, v):
+    """The candidates the chooser orders: `opening_set`'s, less what his scruple struck. The gate moved there from `opening_set` (B10.24), so the set
+    a gate test reads is the ranker's; `choice_temperature` 0 takes the score order and needs no draw."""
+    from ..decision import choose as _choose
+    return _choose.make_ranker(fx.sweep("choice_temperature", 0))(p, v)
 
 
 def test_h2_the_shipped_arm_is_the_control_and_refuses_nothing():
@@ -2986,8 +3014,6 @@ def test_h2_a_verb_past_the_persons_weight_never_forms():
     """THE FALSIFIER. Person weight `-0.4` on the axis (the NEG, refusing pole). Three engaged
     verbs: `+0.3` and `-0.2` sit past `-0.4` toward the POS pole and are refused; `-0.6` does not
     and survives. Every verb the axis does not engage survives -- only *certain actions* gate."""
-    from ..decision import options as _options
-
     w, p, q, v, base, verbs = _h2_base()
     refused_pos, refused_neg, tolerated = verbs[0], verbs[1], verbs[2]
     axis = _h2_axis()
@@ -2995,7 +3021,7 @@ def test_h2_a_verb_past_the_persons_weight_never_forms():
     restore = _h2_inject(p, axis, -0.4,
                          {refused_pos: 0.3, refused_neg: -0.2, tolerated: -0.6})
     try:
-        got = {(c.verb, c.subject) for c in _options.opening_set(p, v, q, fx)}
+        got = {(c.verb, c.subject) for c in _h2_ranked(fx, p, v)}
     finally:
         restore()
 
@@ -3061,4 +3087,4 @@ def test_h2_an_unrostered_axis_refuses_rather_than_gating_on_nothing():
 
     w, p, q, v = _h2_setup()
     with pytest.raises(Unspecified):
-        _options.opening_set(p, v, q, w.fixtures.sweep("refusal_axis", "h2_not_an_axis"))
+        _h2_ranked(w.fixtures.sweep("refusal_axis", "h2_not_an_axis"), p, v)

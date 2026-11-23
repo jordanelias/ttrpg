@@ -34,7 +34,7 @@ import re
 from typing import Optional
 
 from . import files
-from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_RANKS, LIFEPATH_TEMPLATES, load_yaml, roster
+from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_RANKS, LIFEPATH_TEMPLATES, MANNER_OFFSET_AXES, RELATION_GROUNDS, SELF_BELIEVED, STANCE_VALENCE_SCALE, load_yaml, roster
 from ..gaps import Unspecified
 from ...substrate.descriptors import (
     ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, CAPABILITIES, HERITAGES, PRACTITIONER_STATS, TRAIT_BY_SEATING,
@@ -129,6 +129,13 @@ def _rows() -> dict:
                     f"cast row {cid} carries {stray}, which the registry's `schema:` block does not declare and `UNREAD_KEYS` does not list",
                     "references/npc_registry.yaml", needs="a key in `schema: required`/`optional` (the keys a reader takes) or in `cast.UNREAD_KEYS` (declared unread), or no key",
                     law="CAP A7 / DEF Edit 4 -- a cast row carries only keys the registry's schema lists as read or that `UNREAD_KEYS` declares unread")
+        for cid, r in rows.items():
+            raw = str(r.get("faction") or "")
+            if raw.count("(") != raw.count(")"):
+                raise Unspecified(
+                    f"{cid}: faction cell {raw!r} has an unbalanced parenthesis", "references/npc_registry.yaml",
+                    needs="the cell quoted, so an unquoted `#` is not read as a comment",
+                    law="ID-5 -- refuse, don't default: a truncated cell resolves to a faction with its seat lost")
         _CACHE = rows
     return _CACHE
 
@@ -162,8 +169,8 @@ def faction_of(r: dict) -> tuple[Optional[str], Optional[str], str]:
     `faction: Hafenmark (Inner Council #4)` (NPC-081) and `Varfell (Jarl Council #5)` (NPC-082) are
     UNQUOTED, so YAML reads `#4)` and `#5)` as comments and the seat numbers are destroyed on load
     — the value arrives as `Hafenmark (Inner Council`, with an unbalanced paren. The regex tolerates
-    the missing `)` so the faction still resolves, and the lost seat number is reported by
-    `defects()` rather than reconstructed here. Quoting the two cells is a fix to the registry,
+    the missing `)` so the faction still resolves, and the lost seat number is refused by
+    `_rows()` at load rather than reconstructed here. Quoting the two cells is a fix to the registry,
     which is canon and not this module's to edit."""
     raw = str(r.get("faction") or "").strip()
     base, inner = raw, None
@@ -414,6 +421,114 @@ def traits_of(r: dict) -> frozenset:
         law="A-107 -- a resonant_style no trait row names is refused at build")
 
 
+def manner_offset_of(r: dict, bound: float) -> dict:
+    """`Person.manner_offset`'s authored source (B10.58, A-108): the row's `manner:` mapping, as `{axis: float}`, or `{}` where nothing is authored
+    -- the key absent, `manner: null`, or no row at all. An axis the row leaves out is left out of the result: ABSENT, never 0.0. An axis outside
+    `rosters.yaml: manner_offset_axes`, a value that is no number (a bool and a numeric string included) or lies outside `+-bound`
+    (`Fixtures.manner_offset_bound`, handed in because `data/fixtures.py` imports this module), or a `manner:` that is no mapping, REFUSES, naming the row
+    (`attributes_of`'s shape). The ONE caller is `boot/realm.py::build_realm`."""
+    raw = (r or {}).get("manner")
+    if raw is None:
+        return {}
+    who = (r or {}).get("id", "?")
+    if not isinstance(raw, dict):
+        raise Unspecified(f"cast row {who}: manner {raw!r} is no mapping", "references/npc_registry.yaml",
+                          needs="a mapping of manner axis to a number, or null",
+                          law="A-108 -- an authored value this reader cannot parse refuses")
+    out: dict = {}
+    for axis, v in raw.items():
+        if axis not in MANNER_OFFSET_AXES:
+            raise Unspecified(f"cast row {who}: manner axis {axis!r} is none of {sorted(MANNER_OFFSET_AXES)}", "rosters.yaml",
+                              needs=f"one of {sorted(MANNER_OFFSET_AXES)}",
+                              law="A-108 -- a stored offset sits only on the axes `manner_offset_axes` names")
+        if isinstance(v, bool) or not isinstance(v, (int, float)) or not -bound <= v <= bound:
+            raise Unspecified(f"cast row {who}: manner {axis!r}: {v!r} is no number within +-{bound}", "references/npc_registry.yaml",
+                              needs=f"a number from {-bound} to {bound}", law="A-108 -- a stored offset lies within `Fixtures.manner_offset_bound`")
+        out[axis] = float(v)
+    return out
+
+
+# B10.62: the keys of one `relations:` entry, and the two signs its `valence` may take.
+RELATION_FIELDS = frozenset({"to", "ground", "valence", "weight"})   # [JUSTIFIED: B10.62 edit 2 -- the four fields the entry names; the stance row it seeds is (referent, valence, weight) and `ground` names the bond claim]
+RELATION_VALENCES = (-1, 1)   # [JUSTIFIED: B10.62 edit 2 -- "valence is -1 or +1": a relation's side, its size is the weight's; STANCE_VALENCE_SCALE bounds the row type, not this]
+
+
+def relations_of(r: dict) -> tuple:
+    """The row's authored `relations:` (B10.62), as a tuple of `(to, ground, valence, weight)` -- `to` still a registry CASE id (`NPC-050`), which
+    `boot/realm.py::build_realm` maps to the seated person id by the one `_slug` mapping it seats the cast with -- or `()` where nothing is
+    authored: the key absent, `relations: null`, or no row at all. A relation is authored on the side that holds it, so a symmetric one is two
+    rows and they need not agree. A `relations:` that is no list, an entry that is no mapping of exactly `RELATION_FIELDS`, a `to` the registry
+    carries no row for, a `ground` outside `rosters.yaml: relation_grounds`, a `valence` that is not -1 or +1, a `weight` that is no whole
+    number from 0 to `STANCE_VALENCE_SCALE` (the stance row's own weight bound; the valence is +-1 here, so the row never passes `STANCE_MAX`),
+    a repeated `(to, ground)` and a `to` that is the row's own id REFUSE, naming the row (`attributes_of`'s shape). A bool is no number."""
+    raw = (r or {}).get("relations")
+    if raw is None:
+        return ()
+    who = (r or {}).get("id", "?")
+    if not isinstance(raw, list):
+        raise Unspecified(f"cast row {who}: relations {raw!r} is no list", "references/npc_registry.yaml",
+                          needs="a list of `{to, ground, valence, weight}` entries, or null",
+                          law="B10.62 -- an authored value this reader cannot parse refuses")
+    known = _rows()
+    out = []
+    for e in raw:
+        if not isinstance(e, dict) or set(e) != RELATION_FIELDS:
+            raise Unspecified(f"cast row {who}: relation {e!r} is not a mapping of exactly {sorted(RELATION_FIELDS)}", "references/npc_registry.yaml",
+                              needs=f"`{{to, ground, valence, weight}}`", law="B10.62 -- a relation names its four fields and no other")
+        to, ground, valence, weight = e["to"], e["ground"], e["valence"], e["weight"]
+        if not isinstance(to, str) or to not in known:
+            raise Unspecified(f"cast row {who}: relation `to: {to!r}` is no case id this registry carries", "references/npc_registry.yaml",
+                              needs="a registry case id (`NPC-050`)", law="B10.62 -- a relation names a person the cast seats")
+        if to == who:
+            raise Unspecified(f"cast row {who}: relation `to: {to!r}` is the row's own id", "references/npc_registry.yaml",
+                              needs="a case id other than the holder's own", law="B10.62 -- a relation is what ANOTHER person is to the holder")
+        if not isinstance(ground, str) or ground not in RELATION_GROUNDS:
+            raise Unspecified(f"cast row {who}: relation ground {ground!r} is none of {sorted(RELATION_GROUNDS)}", "rosters.yaml",
+                              needs=f"one of {sorted(RELATION_GROUNDS)}", law="B10.62 -- a ground is a `relation_grounds` member")
+        if isinstance(valence, bool) or valence not in RELATION_VALENCES:
+            raise Unspecified(f"cast row {who}: relation valence {valence!r} is not -1 or +1", "references/npc_registry.yaml",
+                              needs="-1 or 1", law="B10.62 -- a relation is toward or against, and its size is the weight's")
+        if isinstance(weight, bool) or not isinstance(weight, int) or not 0 <= weight <= STANCE_VALENCE_SCALE:
+            raise Unspecified(f"cast row {who}: relation weight {weight!r} is no whole number from 0 to {STANCE_VALENCE_SCALE}", "references/npc_registry.yaml",
+                              needs=f"a whole number 0-{STANCE_VALENCE_SCALE}, the stance row's own weight bound",
+                              law="B10.62 -- the weight is the stance row's, bounded as the loyalty row's is")
+        if any(o[0] == to and o[1] == ground for o in out):
+            raise Unspecified(f"cast row {who}: relation `(to: {to!r}, ground: {ground!r})` is authored twice", "references/npc_registry.yaml",
+                              needs="one entry per (to, ground): the bond claim `c_bond_{holder}_{other}_{ground}` is minted once",
+                              law="B10.62 -- a repeated pair would mint the one claim id twice")
+        out.append((to, ground, valence, weight))
+    return tuple(out)
+
+
+def unaware_of(r: dict) -> frozenset:
+    """THE KEYS A CAST ROW MARKS UNAWARE (B10.64, `U5a` edit 2): the row's `unaware:` list, as a frozenset of the keys `boot/realm.py::seed_self_knowledge` seeds no `self:` claim for, or
+    `frozenset()` where nothing is authored -- the key absent, `unaware: null`, or no row at all. Each key must be a `data/rosters.py::SELF_BELIEVED` member
+    (`rosters.yaml: self_believed` and the pursuit roster) AND a key the row actually holds: a pursuit its `convictions:` names (`pursuits_of`), the gift its
+    `ts:` authors (`thread_sensitivity_of`). A `unaware:` that is no list, a key outside the roster, a key the row does not hold and a repeat REFUSE, naming
+    the row (`attributes_of`'s shape). The ONE caller is `boot/realm.py::build_realm`."""
+    raw = (r or {}).get("unaware")
+    if raw is None:
+        return frozenset()
+    who = (r or {}).get("id", "?")
+    if not isinstance(raw, list):
+        raise Unspecified(f"cast row {who}: unaware {raw!r} is no list", "references/npc_registry.yaml",
+                          needs="a list of `self_believed` keys the row holds, or null",
+                          law="B10.64 -- an authored value this reader cannot parse refuses")
+    if len(set(map(str, raw))) != len(raw):
+        raise Unspecified(f"cast row {who}: unaware {raw!r} names a key twice", "references/npc_registry.yaml",
+                          needs="each key once", law="B10.64 -- a mark is a set")
+    for key in raw:
+        if not isinstance(key, str) or key not in SELF_BELIEVED:
+            raise Unspecified(f"cast row {who}: unaware key {key!r} is none of {sorted(SELF_BELIEVED)}", "rosters.yaml",
+                              needs=f"one of {sorted(SELF_BELIEVED)}", law="B10.64 -- only a `self_believed` key may be marked unaware")
+        held = (thread_sensitivity_of(r) is not None if key == "prac.thread_sensitivity" else key in pursuits_of(r))
+        if not held:
+            raise Unspecified(f"cast row {who}: unaware key {key!r} is one the row does not hold", "references/npc_registry.yaml",
+                              needs="a key the row holds (a pursuit in `convictions:`, a value in `ts:`)",
+                              law="B10.64 -- a person cannot be unaware of what he has not got")
+    return frozenset(raw)
+
+
 def capabilities_of(r: dict) -> dict:
     """`Person.capability`'s AUTHORED-SCORE source (B04.09, CAP A7): the row's `capabilities:` mapping, as `{skill id: whole
     number}`, or `{}` where nothing is authored -- the key absent, `capabilities: null`, or no row at all. Each id must be a
@@ -478,24 +593,6 @@ def title_of(r: dict) -> Optional[str]:
     them onto the eight-rung ladder would invent a placement canon does not make."""
     t = r.get("title")
     return str(t).strip() if t else None
-
-
-def defects() -> list[str]:
-    """What is wrong with the registry AS DATA, reported rather than repaired.
-
-    §0.1 pt 3: a result claim carries the thing that would show it wrong. This is the standing
-    list for a caller that wants to know how far to trust a row, and it is computed from the file
-    rather than remembered from the session that first read it."""
-    out = []
-    for cid, r in sorted(_rows().items()):
-        raw = str(r.get("faction") or "")
-        if raw.count("(") != raw.count(")"):
-            out.append(f"{cid}: faction cell {raw!r} has an unbalanced paren — an unquoted "
-                       f"`#` in the source was eaten as a YAML comment, destroying a seat number")
-        fac, _sub, _raw = faction_of(r)
-        if fac is None:
-            out.append(f"{cid}: faction {raw!r} resolves to no name on `rosters.yaml: factions`")
-    return out
 
 
 # ⭐ RULED by Jordan, 2026-09-13: *"Loyalty can be invented. Just do it on a scale of 0-100."* The
@@ -563,13 +660,7 @@ def loyalty(r: dict, faction: Optional[str]) -> Optional[int]:
     return round(LOYALTY_INDIFFERENT * (cosine + 1))
 
 
-# #353 `:333` types a stance row `(referent, valence -5..+5, weight 0..5)`, and `queries/person_q.py
-# ::stance_toward` sums `valence * weight` over the rows naming a candidate's subject. Five is that
-# type's own bound, read off the row rather than chosen here.
-STANCE_VALENCE_SCALE = 5   # [JUSTIFIED: #353 `:333` types the row `(referent, valence -5..+5, weight 0..5)` — the type's own bound, not a tuning; ED-IN-0229]
-# The largest `valence * weight` one stance row can contribute (the weight's bound is the valence's):
-# a bound derived from the row type, held beside the type's own constant. `regard` is normalised by it.
-STANCE_MAX = STANCE_VALENCE_SCALE ** 2
+# `STANCE_VALENCE_SCALE` and `STANCE_MAX` live in `data/rosters.py` (the row type's bounds; `data/fixtures.py` reads `STANCE_MAX` and cannot import this module).
 
 
 def stance_from_loyalty(value: Optional[int]) -> Optional[tuple]:

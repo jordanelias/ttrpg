@@ -28,7 +28,7 @@ from ..state.carriers import Act, Question, Scene
 # The realm pin at seed 0, two seasons: `build_realm(0)` played by `populated.run`'s composition (`test_choose_watch._play`).
 # It is `_realm_goldens.SHIPPED[(0, 2)]` (B09.99 re-recorded it with the other realm pins; B09.15 took the first reading of
 # this world), the same world, held here as a literal.
-REALM_PIN_SEED_0_TWO_SEASONS = "e03202af8dcb4480561c78806519418c"
+REALM_PIN_SEED_0_TWO_SEASONS = "f18fd036890fe21095976493fabc155d"        # B10.99 re-pin (`_realm_goldens.SHIPPED[(0, 2)]`); was e03202af..
 
 
 def _play_headless(seasons: int = 2):
@@ -132,3 +132,46 @@ def test_the_realm_two_season_hash_is_the_shipped_pin_and_the_run_stores_scenes(
     assert not hasattr(d, "scenes")
     assert len(w.acts.scenes()) > 100, "the realm run stored too few Scenes for this to mean anything"
     assert w.content_hash() == REALM_PIN_SEED_0_TWO_SEASONS
+
+
+def test_scene_decided_counts_equal_decision_spread():
+    """B10.05: the stamp on each Scene's first act and `decision_spread --decisions` count ONE rule (`choose.deciding_term`).
+    The `--decisions` reading is taken as it takes it (`read_decisions`: `attribute_top` over each person's common set);
+    the stamp is read off the chooser's own Scenes (`make_chooser`, the opening set narrowed to that same common set, the
+    same draw and the same believed-odds query), so a second owner of the rule on either side makes the two counts differ."""
+    from collections import Counter
+
+    from ..boot.realm import build_realm
+    from ..decision import assemble, choose as CH
+    from ..harness import decision_spread as DS
+    from ..seam.wrappers.sigma import believed_odds_query
+    from ..state.ids import draw_factory
+
+    w = build_realm(0)
+    spread: Counter = Counter()
+    for row in DS.read_decisions(w)["rows"]:                 # also `w._rehome()`s, as the reading does
+        spread.update(row["deciders"])
+    fx, draw, foldable = w.fixtures, draw_factory(w.world_seed, lambda: w.tick), resolvable_verbs()
+    held: dict = {}
+    stamped: Counter = Counter()
+    chooser = CH.make_chooser(fx, lambda *a: "|".join(a), verbs=foldable, draw=draw)
+    real_opening_set = CH.opening_set
+    CH.opening_set = lambda p, view, q, fx_: list(held[p.id])
+    try:
+        for _label, ref in DS.common_referents(w):
+            q = DS.decision_question(ref)
+            formed = {pid: DS.formed_set(w, p, q, foldable) for pid, p in sorted(w.persons.items())}
+            keyed = {pid: {(c.verb, c.subject, DS.is_self_plea(c, pid)): c for c in cs} for pid, cs in formed.items() if cs}
+            common = set.intersection(*(set(k) for k in keyed.values())) if keyed else set()
+            order = sorted(common, key=lambda k: (k[0], k[1] or ""))
+            for pid in keyed:
+                held[pid] = [keyed[pid][k] for k in order]
+                p = w.persons[pid]
+                view = assemble(p, q, fx.get("view_k"), odds=believed_odds_query(w, p))
+                scenes = chooser(p, view, None, lambda: 99)
+                stamped[scenes[0].decided if scenes else "none"] += 1
+    finally:
+        CH.opening_set = real_opening_set
+    assert sum(spread.values()) >= 200, f"only {sum(spread.values())} readings: the claim is vacuous"
+    assert len(spread) >= 2 and "" not in stamped, (spread, stamped)       # the stamp was set, and it says more than one thing
+    assert stamped == spread, f"two owners of the rule: stamp {dict(stamped)} against decision_spread {dict(spread)}"

@@ -76,10 +76,10 @@ def test_the_logged_scores_are_the_choosers_own_and_carry_the_believed_odds_fact
     scored: dict = {}
     odds_free: dict = {}
 
-    def spy(p, c, fx, memo, odds=None):
-        t = real(p, c, fx, memo, odds)
+    def spy(p, c, fx, memo, odds=None, q=None):
+        t = real(p, c, fx, memo, odds, q)
         scored.setdefault((p.id, c.verb, c.subject), set()).add(t)
-        odds_free.setdefault((p.id, c.verb, c.subject), set()).add(real(p, c, fx, memo, None))
+        odds_free.setdefault((p.id, c.verb, c.subject), set()).add(real(p, c, fx, memo, None, q))
         return t
     monkeypatch.setattr(CH, "score_terms", spy)
     rows = [r for r in I.run(0, 1)[2] if r["kind"] == "deliberation" and r["candidates"]]
@@ -87,7 +87,7 @@ def test_the_logged_scores_are_the_choosers_own_and_carry_the_believed_odds_fact
     for r in rows:
         for c in r["candidates"]:
             key = (r["actor"], c["verb"], c["subject"])
-            t = (c["pursuit"], c["stance"], c["fit"])
+            t = (c["pursuit"], c["stance"], c["fit"], c["aim"], c["risk"])
             assert t in scored[key], f"a logged candidate's terms are not any the chooser scored: {key} {t}"
             checked += 1
             carried += t not in odds_free[key]

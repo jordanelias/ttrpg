@@ -21,7 +21,7 @@ GATE: Batch B01a-attributes-generated @cbca1ad4fcee656f908d8a75e99bf79213ddeeab 
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B06-keyed-draw @bcbe3ed5e595ff465e12dbe246c29f1216d14f3a
 GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
-GATE: Batch B10-character
+GATE: Batch B10-character @7f520d7a59d254e4056f8dd47f481ff0f4ca6a7f
 GATE: Batch B15-pc-calibration
 GATE: Batch B11-fi-readers   (added by this part: B16.11 registers in `harness/scenarios.py::SCENARIOS`, which `IS-B2-CORE-01` creates in B11; §2.1's `after` list lacks the edge. It points backward in the schedule (B11 closes at S12, B16 opens at S13), so no wave or step moves; see UNDECIDED)
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
@@ -314,7 +314,7 @@ GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B03a-prose @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
-GATE: Batch B04-capability-home @109c80648cddfa2b6b87a4642287b9079a6abc62   (added by this part: the items are written with `lap` and `scenes_per_lap`, which B04.01 (PCR-4) makes; §2.1's `after` list lacks the edge)
+GATE: Batch B04-capability-home @74910ca78a3ed2afb8898679a8142031c974223b   (added by this part: the items are written with `lap` and `scenes_per_lap`, which B04.01 (PCR-4) makes; §2.1's `after` list lacks the edge)
 GATE: Batch B05-one-roll @ca3f4bcf76a6b057013c85d1c466b83ef9446470   (added: B08.05's draw is "the one sampler (A-5, `roll_net_continuous`), pool from the one pool rule" — `RIVAL`'s "Depends on: … the one sampler (B05)")
 GATE: Batch B06-keyed-draw @bcbe3ed5e595ff465e12dbe246c29f1216d14f3a   (added: B08.05's draw is keyed "through the one `Draw` owner (A-30; B06)" — `RIVAL`'s "and the keyed draw (B06)")
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").

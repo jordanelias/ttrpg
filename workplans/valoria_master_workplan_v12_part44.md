@@ -26,13 +26,13 @@ GATE: Batch B16L-mb-words @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
 GATE: Batch B03a-prose @ae7955b7ad09ccd08df79409bed53ac0cfafc05e
 GATE: Batch B13-pc-package @acab52098d2a8ae6b145d84331e152a1cfd59daf
 GATE: Batch B16M-mb-engine-words @bc1397322
-GATE: Batch B04-capability-home @109c80648cddfa2b6b87a4642287b9079a6abc62
+GATE: Batch B04-capability-home @74910ca78a3ed2afb8898679a8142031c974223b
 GATE: Batch B05-one-roll @ca3f4bcf76a6b057013c85d1c466b83ef9446470
 GATE: Batch B06-keyed-draw @bcbe3ed5e595ff465e12dbe246c29f1216d14f3a
 GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
 GATE: Batch B08-scene-order
-GATE: Batch B09-memory @efd6cfb7d636c05e980527c08d49514f203c2bef
-GATE: Batch B10-character
+GATE: Batch B09-memory @2e95f6736718140bb817f325ec3ae5c2b90e5a23
+GATE: Batch B10-character @7f520d7a59d254e4056f8dd47f481ff0f4ca6a7f
 GATE: Batch BA1-cast-content
 GATE: Batch B11-fi-readers
 GATE: Batch B11F1-flow-se
@@ -210,7 +210,8 @@ The position table, in landing order (the handles follow part 2 §4's rows, UNDE
 | B98.85 | the age of majority, if B39 did not set it | row 104; B39.27, B39.28; `STORY_B` gate 4; A-15 | BUILD (flip, conditional) | MOVER(behaviour) | Batch B39 |
 | B98.86 | an empty founded place may be abandoned | row 105; B39.30; `STORY_C` gates 2, 3; A-55 | BUILD (flip) | MOVER(behaviour) | Batch B39 |
 | B98.87 | the six roles' fifty-five settings are re-read on the finished realm | row 106; B24p.23; V2 p2 §K | READING | EQUAL | Batch B24p-sc-proceeding |
-| B98.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | MOVER (the re-pin) | B98.01 to B98.87 |
+| B98.88 | a man will not do what he holds wrong, and gives way by a draw: `refusal_axis` and `scruple_temperature` leave control | no row of §4; B10.32 (the reading only); B10.22 gate 2; `U5a_CHAR_owed_amendments` §8 item 2; `16_PESSIMIST_CHAR_C` | BUILD (flip, two settings) | MOVER(behaviour) | Batch B10; Batch BA1 |
+| B98.99 | re-pin and close readings | `V12_STRUCTURE_part4.md` E-1 | BUILD | MOVER (the re-pin) | B98.01 to B98.88 |
 
 ---
 
@@ -304,7 +305,7 @@ The position table, in landing order (the handles follow part 2 §4's rows, UNDE
 - LANDS IT: B98's producer; `Item: B98.06`, `[skip ci]`.
 
 ### B98.07 — a strong loyalty restrains, rarely not always: `stance_scale` takes its swept value · row 7; B10.04; `U5a_CHAR_owed_amendments` §2 · BUILD (flip) · HASH MOVER(behaviour)
-- SOURCE: part 2 §4 row 7; `valoria_master_workplan_v12_part12.md` B10.04 (U5a §2: "`stance_scale`, control `STANCE_MAX` (25 …), swept so that a full loyalty sits 4, 8 and 16 temperatures from zero (0.2, 0.4, 0.8 at `choice_temperature` 0.05)"; "The live value is flipped only after a reading; none is proposed here"); the source's test, `test_a_strong_loyalty_makes_acting_against_rare_not_impossible` ("he takes an act the row treats as against that subject in some draws and in fewer than half") and its falsifier ("0 of 200 at every swept value …, or more than half"). Decided by the ladder, step 3 (lane D1): the source states the sweep and the reading in its own test; the realm reading below is that test's sentence read on `build_realm`.
+- SOURCE: part 2 §4 row 7; `FORK:7f520d7a5:workplans/valoria_master_workplan_v12_part12.md` B10.04 (U5a §2: "`stance_scale`, control `STANCE_MAX` (25 …), swept so that a full loyalty sits 4, 8 and 16 temperatures from zero (0.2, 0.4, 0.8 at `choice_temperature` 0.05)"; "The live value is flipped only after a reading; none is proposed here"); the source's test, `test_a_strong_loyalty_makes_acting_against_rare_not_impossible` ("he takes an act the row treats as against that subject in some draws and in fewer than half") and its falsifier ("0 of 200 at every swept value …, or more than half"). Decided by the ladder, step 3 (lane D1): the source states the sweep and the reading in its own test; the realm reading below is that test's sentence read on `build_realm`.
 - SETTING: `engine/season/data/fixtures.py` (`stance_scale`) = `STANCE_MAX` (25; B10.04). New value: the smallest of `{0.2, 0.4, 0.8}` the rule passes `[ASSUMPTION; medium; Jordan to correct; revert: STANCE_MAX]` (the source's own mark).
 - INSTRUCTION:
   1. Probe (no commit): seeds 0 to 2, two seasons, in-process at 25, 0.2, 0.4, 0.8: over the chosen acts whose subject is a person the actor holds regard of 10 or more for (`person_q.regard`, read at the choice through the chooser's `watch` hook, B09 Part A), print per seed `LOYAL acts <n> against <k>` (k: those whose `_stance_arm` sign reads against that subject).
@@ -319,7 +320,7 @@ The position table, in landing order (the handles follow part 2 §4's rows, UNDE
 - LANDS IT: B98's producer; `Item: B98.07`, `[skip ci]`.
 
 ### B98.08 — the scar's live arms and `scar_weight_shift` stay at control: their target is eight seasons out · rows 8, 9; B10.06, B10.07, B10.08, B10.33; `02_CHAR_scar_is_a_wound` gates (b), (c); `U5a_CHAR_owed_amendments` §8 item 1 · BLOCKED (A-114: target past two seasons) · HASH EQUAL
-- SOURCE: part 2 §4 rows 8, 9 (HD-26); `valoria_master_workplan_v12_part12.md` B10's `DIALS AT CONTROL` lines and UNDECIDED 2; `valoria_master_workplan_v12.md` §6 ("written in B98 as `BLOCKED (target reading beyond two seasons; A-114)`, and B99 quotes its reading on the tree as left").
+- SOURCE: part 2 §4 rows 8, 9 (HD-26); `FORK:7f520d7a5:workplans/valoria_master_workplan_v12_part12.md` B10's `DIALS AT CONTROL` lines and UNDECIDED 2; `valoria_master_workplan_v12.md` §6 ("written in B98 as `BLOCKED (target reading beyond two seasons; A-114)`, and B99 quotes its reading on the tree as left").
 - SETTINGS: (row 8) `engine/season/data/fixtures.py` (`scar_season_cap` = `None`, `scar_hold` = `any`, `scar_lean_floor` = `0.0`, `scar_vindication` = `off`; `scar_primary_mass` 0.6), shipped by B10.06, B10.07; (row 9) `scar_weight_shift` = 0, shipped by B10.08, armed by no item (B10.33 is a POINTER here).
 - TARGETS, copied: row 8, `02_CHAR_scar_is_a_wound` gate (b), "at the four live arms together, the share of cast persons with some element at 3 or more after eight seasons lies strictly between 0 and 1 at every seed", and (c) "at least one count falls by vindication"; 0 by construction at two seasons (HD-26). Row 9, §8 item 1, "the realm's per-person conduct … moves for persons at threshold 2 and not for persons below it, seeds 0–2", licensed only "after `02_CHAR_scar_is_a_wound.md`'s gate (b) reads a share strictly between 0 and 1".
 - INSTRUCTION: none; flip nothing (B98 is capped at two seasons, B99 is hash-EQUAL; `valoria_master_workplan_v12.md` §6).
@@ -378,7 +379,7 @@ The position table, in landing order (the handles follow part 2 §4's rows, UNDE
 - HASH MOVERS: "every run in which a crisis fires re-records" (the source). EXPECTED RED UNTIL B98.99: the `_realm_goldens` readers and the NPC-088 headless pin if a crisis fires in its run.
 - REVERT: `crisis_arm` → `rule`, `crisis_obstacle` → `None` (one commit).
 - DEPENDS ON: V12 Batch B10, B10.13, B10.14, B10.15; Batch B05 (the obstacle ladder).
-- STOPS IF: the emitter at `drawn` raises with `crisis_obstacle` set (B10.15's guard not keyed on `None`).
+- STOPS IF: the emitter at `drawn` raises with `crisis_obstacle` set (B10.15's guard not keyed on `None`); `loop/resolve.py::_refuse_after_the_fact` replaces a refused staged act's Events, a drawn crisis's `conviction.moved` among them, so a crisis moves a conviction untold: fix before the flip; `queries/world_q.py::practice` skips `conviction.moved` only as a kind literal (`CONVICTION_MOVED`) and `Event.degree` carries the OBSERVER's crisis band there, while the harness readers `corpus_run.py` (its degree histogram), `aperture.py`, `obligee_report.py` and `soak.py` read `degree` over `w.log`: carry the band on `Event.observed`, or exclude the kind in those readers, before the flip.
 - COST and TIER: calibration; `sonnet`, high; `opus` reads gate 2 and 3 per level.
 - LANDS IT: B98's producer; `Item: B98.12`, `[skip ci]`.
 

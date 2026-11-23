@@ -1,7 +1,7 @@
 """v9 IN-62 -- ONE OWNER OF THE SCORE'S TERMS, AND THE READING THAT ATTRIBUTES A DECISION TO ONE OF THEM.
 
-`decision/choose.py::score_terms(p, c, fx, memo) -> (pursuit, stance, fit)` owns the formula and
-`make_chooser`'s `score` adds its three terms (`fit` is 0.0 at `confer_fit_weight`'s shipped 0.0); `harness/decision_spread.py::attribute_top` says which
+`decision/choose.py::score_terms(p, c, fx, memo) -> (pursuit, stance, fit, aim, risk)` owns the formula and
+`make_chooser`'s `score` adds its five terms (`fit` is 0.0 at `confer_fit_weight`'s shipped 0.0, `aim` at `aim_gain`'s, `risk` at `risk_gain`'s); `harness/decision_spread.py::attribute_top` says which
 term decided a top. Five claims, each executed and each able to fail:
 
   1. `score(c) == sum(score_terms(...))` for EVERY candidate a seeded realm season forms (observed
@@ -231,8 +231,8 @@ def season_pairs():
     pairs: list = []
     real_terms, real_order = CH.score_terms, CH._sample_order
 
-    def terms_spy(p, c, fx, memo, odds=None):         # CR-17: the View's believed-odds query is the fifth argument
-        t = real_terms(p, c, fx, memo, odds)
+    def terms_spy(p, c, fx, memo, odds=None, q=None):         # CR-17: the View's believed-odds query is the fifth argument; B10.30: the question the sixth
+        t = real_terms(p, c, fx, memo, odds, q)
         pending.append((id(c), t))
         return t
 
@@ -254,8 +254,10 @@ def season_pairs():
 
 def test_in62_score_is_the_sum_of_score_terms_for_every_candidate_a_season_forms(season_pairs):
     checked = 0
-    for score, (pursuit, stance, fit) in season_pairs:
+    for score, (pursuit, stance, fit, aim, risk) in season_pairs:
         assert fit == 0.0, fit      # `confer_fit_weight` ships 0.0 (B04.22)
+        assert aim == 0.0, aim      # `aim_gain` ships 0 (B10.30)
+        assert risk == 0.0, risk    # `risk_gain` ships 0 (B10.31)
         assert score == pursuit + stance, (score, pursuit, stance)
         checked += 1
     assert checked >= 1000, f"a seeded realm season formed only {checked} candidates"
@@ -315,3 +317,13 @@ def test_in62_arm_0_holds_one_vector_one_conviction_and_reads_no_goals_file():
         assert goals_data.expected("faction", "Valorsmark") != with_goals, (
             "the creed's expected vector still sums the file's goal pursuits under the control")
     assert goals_data.goals(), "no_goals() did not restore the cache"
+
+
+def test_in62_under_control_the_temperature_zero_column_reads_fewer_distinct_multisets_than_the_shipped_arm():
+    """B10.29 (CHAR resolve-and-temper, Gate): the instrument's failing arm. If the control's score-order-only count is not
+    strictly below the shipped arm's, the instrument still cannot fail and the edit is wrong."""
+    shipped = DS.play_season(build_realm(0), 1)
+    with DS.no_goals():
+        control = DS.play_season(DS._build(0, True), 1, rebuild=lambda: DS._build(0, True))
+    assert shipped["acts"] >= 500 and control["acts"] >= 500, (shipped["acts"], control["acts"])
+    assert control["distinct_multisets_t0"] < shipped["distinct_multisets"], (control["distinct_multisets_t0"], shipped["distinct_multisets"])

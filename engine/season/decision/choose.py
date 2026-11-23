@@ -33,9 +33,11 @@ from typing import Any, Callable, Optional
 
 from engine.dice_engine import fmath
 from engine.dice_engine.fmath import ltr_sum
-from ..data.pursuits import _AXES   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
-from ..data.rosters import SCENE_PACKING_RULES, require_member, roster, seat_capability
-from ..data.verbs import VERB_TABLE, act_key, align
+from ..data import goals as goals_data
+from ..data.rosters import STANCE_MAX
+from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
+from ..data.rosters import SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
+from ..data.verbs import BODILY_PRIZES, CHOICE_SOURCED, VERB_TABLE, act_key, align, align_choice
 from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
 # imports `person_q` and `data/`); `_stance_arm` calls it, and `confliction` (IN-08 6f,
@@ -44,14 +46,26 @@ from ..queries.person_q import (
     believed_capability, confliction, intent_named, intent_said, refused_before, regard, stance_toward,
 )
 from ..state.carriers import EFFORT, Act, Candidate, Person, Question, Scene, Sensation, View, fade_of
+from ..trace_log import TRACE
 # `project` is DEFINED in `options.py` (see this module's docstring) and imported here because
 # `make_chooser`'s score calls it; `options` never imports this module.
 # `seat_of` is `options.py`'s own G3 helper (`via=seat_of(...)`, below).
-from .options import VIOLENT_OPPONENT_VERBS, opening_set, project, seat_of, subject_is_opponent
+from .options import VIOLENT_OPPONENT_VERBS, opening_set, project, refusal_tolerance, scruple, seat_of
+# `options.py`'s one reader of a `judgement` row (`competence` is its other caller), under public names here: a call, not a copy (B10.28; CR-93 premise correction 2).
+from .options import _judgement_factor as judgement_factor, _judgement_rows as judgement_rows
+from .budget import body_band_penalty
 
 STANCE_POLARITIES = roster("stance_polarities")
 ODDS_WEIGHTINGS = roster("odds_weightings")
 NPC_EFFORTS = roster("npc_efforts")
+# B10.28: the use row that carries a person's own factor on the choice temperature (`rosters.yaml: tables.capability_uses`); a site
+# renamed there refuses here at import, so `temper` cannot read no row and pass silently as 1.0.
+CHOICE_TEMPER = require_use_site("choice_temper")
+# B10.31: the use row that carries a person's own factor on the `risk` term (`nerve`); no row ships, and a site renamed there refuses here at import.
+CHOICE_EXPOSURE = require_use_site("choice_exposure")
+
+
+_STANCE_SCALE_LOW = 0.2   # [canonical: engine/season/data/fixtures.py §stance_scale (H-464): the gentlest swept value; 0 and STANCE_MAX are the arm's off and its control]
 
 
 def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = None) -> float:
@@ -60,10 +74,10 @@ def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = 
       * `legacy` (CONTROL; shipped until CR-16, which ships `declared`): `stance_toward(p, c.subject)` -- the pre-G2 term, verbatim.
       * `regard`: `regard(p, c.subject, fx)` with `+` on every row -- G1's regard and no polarity,
         the midpoint that separates what regard adds from what the sign adds.
-      * `declared`: `regard(p, c.subject, fx)`, NEGATED where the subject is the act's opponent
-        (`options.subject_is_opponent`): a grudge makes `fight` on its object score higher, where
-        `legacy` scored it lower. Every other row keeps `+`, so the arms differ on contested rows
-        only. `regard` is G1's, so its judged and told halves enter at their own gains
+      * `declared`: `regard(p, c.subject, fx)` times the row's `regard_sign` (B10.11; `+1`, `-1` or `0`), whose default
+        is `-1` where the subject is the act's opponent (`options.subject_is_opponent`) and `+1` elsewhere: a grudge makes
+        `fight` on its object score higher, where `legacy` scored it lower. With no cell authored the arms differ on
+        contested rows only. `regard` is G1's, so its judged and told halves enter at their own gains
         (0.5 each, shipped).
 
     A Rung subject reads 0 at G1's control; at live gains it reads the deed claims held about it
@@ -85,7 +99,14 @@ def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = 
     if not g >= 0:                   # `not >=`, so a NaN is refused too
         raise ValueError(f"stance_gain {g} is not >= 0: it would damp or invert §F2's stance "
                          f"term, and inverting it is G2's polarity, not this gain (H-202)")
-    t = _stance_arm(p, c, fx, memo)
+    # B10.04 (`U5a_CHAR_owed_amendments` §2, H-464): regard read as a share of `STANCE_MAX` times `Fixtures stance_scale`, applied to
+    # the arm's value BEFORE either gain. At the control (`stance_scale == STANCE_MAX`) the quotient is `25 / 25 == 1.0` and
+    # `t * 1.0 == t` for every float, so the term is today's exactly. The clamp to the bound is B10.10's (`stance_clamp`), inside `_stance_arm`, so this factor reads the clamped value.
+    scale = fx.get("stance_scale")
+    if not (scale == 0 or _STANCE_SCALE_LOW <= scale <= STANCE_MAX):    # `not (...)`, so a NaN is refused too
+        raise ValueError(f"stance_scale {scale} is outside 0 and [{_STANCE_SCALE_LOW}, {STANCE_MAX}] (H-464): above the stance bound regard would outweigh itself, "
+                         "and between 0 and the gentlest swept value no sweep reads it")
+    t = _stance_arm(p, c, fx, memo) * (scale / STANCE_MAX)
     # v11 CR-87 (THE GRUDGE'S BOUND): on a VIOLENT row (`data/verbs.py::VIOLENT_VERBS`, off `rosters.yaml:
     # violent_prizes`) whose subject is its opponent, the term is read at `Fixtures hostile_stance_gain` in place of
     # `1 + g`, so a grudge's pull on violence is bounded apart from its pull on every other act; `declared`'s sign
@@ -99,33 +120,50 @@ def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = 
     return (1.0 + g) * t             # at g == 0 this is 1.0 * t: exact for every float
 
 
+def _bounded(v: float, clamp: bool) -> float:
+    """`v` held to `+-STANCE_MAX` at `Fixtures.stance_clamp`, else `v` itself (the control)."""
+    return max(-STANCE_MAX, min(STANCE_MAX, v)) if clamp else v
+
+
 def _stance_arm(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict]) -> float:
     """`stance_term`'s value at §F2's weight (gain 0): the arm `Fixtures.stance_polarity` names (H-194)."""
     subject = c.subject or ""
     arm = fx.get("stance_polarity")
+    # B10.10 (`U5a_CHAR_owed_amendments` §2, H-471): at `stance_clamp` the value read is bound to the row type's own bound before the polarity sign, so a sum past
+    # it (`stance_toward` has no ceiling) is read at `STANCE_MAX`. `False` is the control: the value is returned untouched.
+    clamp = fx.get("stance_clamp")
     if arm == "legacy":
-        return stance_toward(p, subject)
+        return _bounded(stance_toward(p, subject), clamp)
     require_member(arm, STANCE_POLARITIES, f"stance polarity {arm!r} is not in the roster", "H-194",
                    law="§G -- declare it, default it, sweep it; an unknown arm silently reading "
                        "`legacy` would make the sweep report the control twice")
+    row = VERB_TABLE.get(c.verb)
+    # B10.69 (`17_CENSUS_C1A_02` W4, carrying B10.11's omission): at `beneficiary` the regard is read toward the person the act is done FOR
+    # (`beneficiary_of`: the row's `beneficiary:` carrier, `to` reading the candidate's `to` operand), not its subject. A row declaring `none`,
+    # one whose carrier did not bind, and one whose beneficiary is the actor himself (`actor`) read the subject, so those rows are `declared`'s.
+    if arm == "beneficiary" and row is not None:
+        subject = beneficiary_of(p, c) or subject
+        if subject == p.id:
+            subject = c.subject or ""
     if memo is None:
         memo = {}
     if subject not in memo:
         memo[subject] = regard(p, subject, fx)
-    r = memo[subject]
+    r = _bounded(memo[subject], clamp)
     if arm == "regard":
         return r
-    row = VERB_TABLE.get(c.verb)
     # CP-T05-02 (B10-13): self-regard is read here as `regard(p, p.id)` (stored stance plus his own deeds), while `_bond`
     # treats a judge as his own full ally; the two are not routed together. `subject_is_opponent` encodes 'a person is not his own adversary'; a self-plea
-    # (`subject_may_be_self`) is an act FOR himself, so the polarity flips only where the subject is somebody else.
-    return -r if row is not None and subject_is_opponent(row) and subject != p.id else r
+    # (`subject_may_be_self`) is an act FOR himself, so the sign applies only where the subject is somebody else.
+    # B10.11: the sign is the row's own column (`VerbRow.regard_sign`: +1, -1 or 0), whose default is `-1` where the act is contested
+    # against its subject (`subject_is_opponent`), else `+1` -- so a row with no cell reads exactly as it did.
+    return row.regard_sign * r if row is not None and subject != p.id else r
 
 
 # IN-62: the keys under which `make_chooser` hoists a deliberation's candidate-independent factors
 # into the `memo` `score_terms` reads. TUPLES, because `_stance_arm` keys the same dict by subject id
 # (a string), so no subject can collide with one of these.
-_AXIS_W, _DAMP = ("axis_w",), ("damp",)
+_AXIS_W, _DAMP, _AIM = ("axis_w",), ("damp",), ("aim",)
 
 
 def deliberation_memo(p: Person, fx: "Fixtures") -> dict:
@@ -133,13 +171,16 @@ def deliberation_memo(p: Person, fx: "Fixtures") -> dict:
     the projected axis weights (with the swept `scar_weight_shift`) and the `confliction` damp (the
     swept `confliction_weight`, H-188), hoisted once because neither depends on the candidate.
     Exists so a reading that scores a person outside `choose` (`harness/decision_spread.py`) takes
-    the SAME two factors from the same arms rather than copying them."""
+    the SAME two factors from the same arms rather than copying them. A third key, `_AIM`, holds the goal's projected lean for the
+    question being answered (B10.30): empty here, filled by `aim_term` the first time a candidate is scored on a question, so a
+    deliberation projects each goal's pursuits once however many candidates it scores."""
     k = float(fx.get("confliction_weight"))
     if not k >= 0:                   # `not >=`, so a NaN is refused too
         raise ValueError(f"confliction_weight {k} is not >= 0: it would invert, divide by zero "
                          f"or poison the score (H-188)")
-    return {_AXIS_W: project(p, fx.get("scar_weight_shift")),
-            _DAMP: 1.0 if k == 0 else 1.0 / (1.0 + k * confliction(p))}
+    return {_AXIS_W: project(p, fx.get("scar_weight_shift"), hold=fx.get("scar_hold"), mass=fx.get("scar_primary_mass")),
+            _DAMP: 1.0 if k == 0 else 1.0 / (1.0 + k * confliction(p)),
+            _AIM: {}}
 
 
 def _odds_arm(fx: "Fixtures") -> str:
@@ -181,14 +222,27 @@ def odds_weight(p: Person, c: Candidate, fx: "Fixtures", odds: Optional[Callable
     `seam/wrappers/sigma.py::believed_chance`): `decision/` holds a callable and the act's shape, never the
     store behind it. A candidate is probed as the act it would become (`pack_scenes`' payload and seat), so
     the figure is the one for the roll the fold would deal that act."""
-    arm = _odds_arm(fx)
-    if arm == "none" or odds is None:
+    return weigh_by_chance(fx, None if odds is None else (lambda: _believed_chance(p, c, odds)))
+
+
+def weigh_by_chance(fx: "Fixtures", ask: Optional[Callable[[], Optional[float]]]) -> float:
+    """THE ONE RULE OF `odds_weighting` (B10.57: `odds_weight` and `decider.make_decider`'s choice score both call it, so a choice inside a contest is
+    priced by the factor a candidate is): `ask`, a no-argument call for the believed chance, is read only at the arm `believed`; the arm `none`, no `ask`
+    and an answer of `None` are 1.0, and the arm is checked first whatever the rest holds."""
+    if _odds_arm(fx) == "none" or ask is None:
         return 1.0
+    chance = ask()
+    return 1.0 if chance is None else float(chance)
+
+
+def _believed_chance(p: Person, c: Candidate, odds: Callable) -> Optional[float]:
+    """THE ONE ASK OF THE ODDS QUERY (B10.31: `odds_weight` and `risk_term` both read it here, so no second site builds the probe): `odds(act, bands)`
+    for the candidate probed as the act it would become, over the bands its row writes in (`_writing_bands`); `None` for a candidate with no such
+    bands (nothing a chance can price) and for the query's own `None` (a factor he cannot know)."""
     bands = _writing_bands(c)
     if bands is None:
-        return 1.0
-    chance = odds(Act(f"odds:{c.verb}", p.id, c.verb, payload=_payload_of(c), via=seat_of(p, c)), bands)
-    return 1.0 if chance is None else float(chance)
+        return None
+    return odds(Act(f"odds:{c.verb}", p.id, c.verb, payload=_payload_of(c), via=seat_of(p, c)), bands)
 
 
 def admission_weight(p: Person, c: Candidate, fx: "Fixtures") -> float:
@@ -241,47 +295,152 @@ def fit_term(p: Person, c: Candidate, fx: "Fixtures") -> float:
     return weight * (fit + (0 if skill is None else float(skill)))
 
 
+def aim_term(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional[Callable], q: Optional[Question]) -> float:
+    """THE GOAL'S OWN LEAN ON THE QUESTION IT RAISED (B10.30; `H-477`): `aim_gain * damp * Σ_axis to_axes(goal.pursuits)[axis] *
+    align(c.verb, axis) * odds_weight`, the pursuit term's own dot over the GOAL's pursuits instead of the person's, in the same
+    axis order (`_AXES`), with the same believed-odds factor. The goal is the one `q` is about: it applies where `q.source` is `need`,
+    `q.about` is a row of `goals.yaml` and `p` holds a LIVE `commit` to it; otherwise 0.0. A person's own want (`prop_<cid>`) and a
+    creed are not rows of `goals.yaml` and carry no `pursuits:`, so they read 0.0 -- a limit, until a want carries a lean.
+
+    Exactly `0.0` at `aim_gain` 0, the CONTROL, and nothing is read there (the odds query is not asked). The gain is refused below 0:
+    a negative gain would score a goal's own business against the goal. `odds_weight` is asked only for a candidate the lean scores
+    (`score_terms`' pursuit term does the same: the query scans the log)."""
+    gain = fx.get("aim_gain")
+    if not gain >= 0:                # `not >=`, so a NaN is refused too
+        raise ValueError(f"aim_gain {gain} is not >= 0: a negative gain would score a goal's business against the goal (H-477)")
+    if gain == 0.0 or q is None or q.source != "need":
+        return 0.0
+    lean = memo[_AIM]
+    if q.about not in lean:
+        goal = goals_data.goal(q.about)
+        live = goal is not None and any(t.kind == "commit" and t.live and t.object == q.about for t in p.tenures)
+        lean[q.about] = to_axes(goal.pursuits) if live else None
+    axes = lean[q.about]
+    if axes is None:
+        return 0.0
+    aim = gain * memo[_DAMP] * ltr_sum(axes[ax] * align(c.verb, ax) for ax in _AXES)
+    return aim * odds_weight(p, c, fx, odds) if aim != 0.0 else aim
+
+
+def nerve(p: Person, fx: "Fixtures") -> float:
+    """HOW FAR A PERSON'S SPIRIT LETS HIM BEAR A DANGER (B10.31; `H-480`): his own factor on `risk`, the `judgement` rows of site `choice_exposure` read by
+    `options._judgement_factor` as `temper` and `competence` read theirs: `about_mid(held, floor, ceiling, nerve_gain)`, exactly 1 at the scale's mid-point and at
+    gain 0, and 1.0 where no row is authored (none ships) or `p` holds no value at the row's key (a READ, never a default). `decision/` names no attribute (U1 §8):
+    the key is the row's.
+
+    ⚠ THE SIGN, as `temper`'s. `about_mid` RISES with the attribute, so a danger that weighs LESS on the high-Spirit person needs a NEGATIVE `nerve_gain`; a gain
+    above 0 would make the bold fear more, and below -1 the factor goes negative at the top of the scale and `risk` becomes a pull toward danger. Both are refused
+    where read."""
+    rows = judgement_rows(CHOICE_EXPOSURE)
+    for row in rows:
+        gain = fx.get(row.gain)
+        if not -1.0 <= gain <= 0.0:
+            raise ValueError(f"{row.gain} {gain!r} is outside [-1, 0] (H-480): above 0 the bold fear more, and below -1 the factor is negative at the "
+                             "scale's ceiling and `risk` would pull toward danger")
+    factor = judgement_factor(p, rows, fx)
+    return 1.0 if factor is None else factor
+
+
+def risk_term(p: Person, c: Candidate, fx: "Fixtures", odds: Optional[Callable]) -> float:
+    """WHAT AN ACT MIGHT COST THE PERSON WHO DOES IT, IN BODY OR IN THE FIELD (B10.31; `H-478`, `H-479`, `H-480`):
+
+        risk = - risk_gain * exposed * (1 - chance) * (1 + body_band_penalty) * nerve
+
+      * `exposed` -- 1 where the candidate's row contests a prize `rosters.yaml: bodily_prizes` lists (`BODILY_PRIZES`), else 0. Read off the row's own
+        `contests:` column, never a verb name; a candidate that is not exposed reads exactly `0.0`;
+      * `chance` -- his believed chance, asked of the ONE odds query (`View.odds`, `_believed_chance`: the bands the row writes in, as `odds_weight` asks), and
+        `Fixtures.risk_unknown_chance` where the query answers `None` or there is none. The believed chance is read, never made here: a later error on his
+        belief (B10.80, `misjudged`) wraps the query once and reaches this term through the argument, with no second owner of it. ⚠ WHAT THE QUERY SAYS OF A
+        BODILY ROW: for a row whose prize provider registered a `believed_estimate` (`personal_combat`'s) it is the chance the SUBJECT ends in the bands the row
+        writes (the combat module's own, `Felled`, `Wounded` ...), the figure `odds_weight` prices a gain by; it does not say which party fell, so it is the
+        nearest figure the one query carries for his chance of coming through, not that chance [ASSUMPTION; low; Jordan to correct: H-478's cite]. A row whose
+        provider has none (`march`, the field's) answers `None` and reads `risk_unknown_chance`;
+      * `body_band_penalty` -- `decision/budget.py`'s count of the bands his body has fallen below the top: 0 at full health, so `1 + 0` is 1;
+      * `nerve` -- `nerve(p, fx)`, his Spirit's factor; 1.0 where no row ships.
+
+    Exactly `0.0` at `risk_gain` 0, the CONTROL, and nothing is read there: the odds query is not asked. The gain is refused below 0 (a negative gain would pull a
+    person toward danger), and `risk_unknown_chance` outside [0, 1] where it is read."""
+    gain = fx.get("risk_gain")
+    if not gain >= 0:                # `not >=`, so a NaN is refused too
+        raise ValueError(f"risk_gain {gain} is not >= 0: a negative gain would pull a person toward danger (H-478)")
+    if gain == 0.0:
+        return 0.0
+    row = VERB_TABLE.get(c.verb)
+    if row is None or row.contests not in BODILY_PRIZES:
+        return 0.0
+    chance = None if odds is None else _believed_chance(p, c, odds)
+    if chance is None:
+        chance = fx.get("risk_unknown_chance")
+        if not 0.0 <= chance <= 1.0:
+            raise ValueError(f"risk_unknown_chance {chance} is not in [0, 1]: it stands for a chance (H-479)")
+    return 0.0 - gain * (1.0 - float(chance)) * (1 + body_band_penalty(p, fx)) * nerve(p, fx)     # `0.0 -`: a sure chance reads 0.0, not -0.0
+
+
 def score_total(terms: tuple) -> float:
     """A candidate's score from its `score_terms`, the one sum (`make_chooser`, `harness/interactions.py` and
-    `harness/decision_spread.py` read it here). A `fit` of `0.0` -- every candidate at the shipped weight -- adds nothing,
-    not even a sign of zero, so the score is the two-term sum exactly."""
+    `harness/decision_spread.py` read it here), left to right. A `fit`, an `aim` or a `risk` of `0.0` -- every candidate at the shipped
+    weight and gains -- adds nothing, not even a sign of zero, so the score is the two-term sum exactly."""
     s = terms[0] + terms[1]
-    return s + terms[2] if terms[2] else s
+    if terms[2]:
+        s = s + terms[2]
+    if terms[3]:
+        s = s + terms[3]
+    return s + terms[4] if terms[4] else s
 
 
-def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional[Callable] = None) -> tuple:
-    """§F2's score, term by term: `(pursuit, stance, fit)`, and `score(c)` is `score_total` of them (IN-62; the sum, `fit`
-    being `0.0` at `confer_fit_weight`'s shipped `0.0`).
+def chosen_values(c) -> tuple:
+    """`(key, value)` for each CHOICE VALUE the candidate's operands carry (`choice_sourced` keys, B10.56): the one reader, for `score_terms` and `score_parts`."""
+    return tuple((k, c.operands[k]) for k in CHOICE_SOURCED.get(c.verb, ()) if k in (c.operands or {}))
+
+
+def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional[Callable] = None,
+                q: Optional[Question] = None) -> tuple:
+    """§F2's score, term by term: `(pursuit, stance, fit, aim, risk)`, and `score(c)` is `score_total` of them (IN-62; the sum, `fit`
+    being `0.0` at `confer_fit_weight`'s shipped `0.0`, `aim` at `aim_gain`'s and `risk` at `risk_gain`'s). `aim` is appended after `fit`, not set before it:
+    `fit` was the tuple's third element before `aim` landed (B04.22), and every reader of it by index keeps it. `risk` follows `aim`, fifth, for the same reason
+    (the entry's `(pursuit, stance, aim, risk)` cannot hold: slot 3 is `fit`); `TERM_NAMES` is this tuple's names in order.
     The ONE owner of the formula (`CLAUDE.md` §8): `make_chooser`'s `score` calls this and adds, and
     a reading that wants to know WHICH TERM decided a ranking calls this and never re-derives one.
 
-      * `pursuit` -- `damp * Σ_axis axis_w[axis] * align(c.verb, axis) * odds_weight(...)`, `axis_w` the
+      * `pursuit` -- `damp * Σ_axis axis_w[axis] * (align(c.verb, axis) + Σ_(key, value) align_choice(key, value, axis)) * odds_weight(...)` (the
+        parenthesised sum over the candidate's `choice_sourced` operands, B10.56; empty where no cell is authored), `axis_w` the
         person's projected pursuits, `damp` the `confliction_weight` arm's factor (exactly 1.0 at 0) and
         `odds_weight` CR-17's believed-chance factor on a contested candidate (exactly 1.0 at
         `odds_weighting` `none`, for an uncontested candidate, and when `odds` is `None`), and
         `admission_weight` the factor a remembered refusal puts on it (exactly 1.0 at `refusal_memory` `0.0`, B09.03);
       * `stance` -- `stance_term(p, c, fx, memo)`, by `Fixtures.stance_polarity`, at gain `1 + g`;
-      * `fit` -- `fit_term(p, c, fx)`: the conferrer's view of the candidate a seating row names in `to`.
+      * `fit` -- `fit_term(p, c, fx)`: the conferrer's view of the candidate a seating row names in `to`;
+      * `aim` -- `aim_term(p, c, fx, memo, odds, q)`: the lean of the goal `q` was raised by, on that goal's own question only (B10.30);
+      * `risk` -- `risk_term(p, c, fx, odds)`: what a bodily candidate might cost its doer, by the same `odds` query (B10.31; not asked at `risk_gain` 0).
 
+    `q` is the question being answered (`View.question`); `None` -- a reading that scores a person outside `choose` -- reads `aim` 0.0.
     `odds` is the believed-odds query a View carries (`View.odds`); a reading that scores a person outside
     `choose` passes the same query or leaves it `None` and reads the score without CR-17's factor.
     `memo` is a `deliberation_memo(...)` (it also caches `regard` per subject for the call). A memo
-    without the two hoisted factors is refused, not defaulted: a missing factor read as 0 or 1
+    without the hoisted factors is refused, not defaulted: a missing factor read as 0 or 1
     would score a different person than the one asked about."""
     try:
-        axis_w, damp = memo[_AXIS_W], memo[_DAMP]
+        axis_w, damp, _ = memo[_AXIS_W], memo[_DAMP], memo[_AIM]
     except KeyError:
         raise ValueError("score_terms needs a memo from `deliberation_memo(p, fx)` "
                          "(or `make_chooser`'s): the pursuit weights and damp are "
                          "hoisted per deliberation") from None
     pursuit = damp * ltr_sum(axis_w[ax] * align(c.verb, ax) for ax in _AXES)
+    # B10.56: the candidate's CHOICE VALUES (`choice_sourced` keys its operands carry), scored by their own alignment cells through the same
+    # weights and damp, so `odds_weight` below prices them with the verb's. Added only where a cell moves it: no cell authored (the shipped
+    # roster) leaves `pursuit` the very float above, not that float plus a signed zero.
+    chosen = chosen_values(c)
+    if chosen:
+        by_choice = damp * ltr_sum(axis_w[ax] * ltr_sum(align_choice(k, v, ax) for k, v in chosen) for ax in _AXES)
+        if by_choice != 0.0:
+            pursuit += by_choice
     if pursuit != 0.0:
         pursuit *= odds_weight(p, c, fx, odds)
         pursuit *= admission_weight(p, c, fx)
     else:
         _odds_arm(fx)           # a zero term is zero whatever the factor: the query is not asked (it scans the log), the arm is still checked.
                                 # Value-equal; the one difference is an error the query would raise on this candidate, which is no longer raised
-    return (pursuit, stance_term(p, c, fx, memo), fit_term(p, c, fx))
+    return (pursuit, stance_term(p, c, fx, memo), fit_term(p, c, fx), aim_term(p, c, fx, memo, odds, q), risk_term(p, c, fx, odds))
 
 
 def _npc_effort_arm(fx: "Fixtures") -> str:
@@ -382,6 +541,34 @@ def beneficiary_of(p: Person, c: Candidate) -> Optional[str]:
     return c.operands.get(kind)
 
 
+def temper(p: Person, fx: "Fixtures") -> float:
+    """THE PERSON'S OWN FACTOR ON THE CHOICE TEMPERATURE (B10.28; CR-93 item 2, AR-23: a high-Focus person is less distracted, so
+    his draw strays less from what he most values). The `judgement` rows of site `choice_temper`, read by `options._judgement_factor`
+    as `competence` reads its own: `about_mid(held, floor, ceiling, gain)`, exactly 1 at the scale's mid-point and at gain 0, and
+    1.0 where no row is authored or `p` holds no value at the row's key (a READ, never a default). `decision/` names no attribute
+    (U1 §8): the key is the row's.
+
+    ⚠ THE SIGN. `about_mid` RISES with the attribute, so a temperature that FALLS with Focus needs a NEGATIVE `temper_gain`; the
+    shipped value is the control, 0 (H-476). A gain above 0 would make a focused person the more distracted, and a gain at or
+    below -1 would take the factor to 0 at the top of the scale, where `_sample_order`'s `tau == 0` short-circuit would hand him
+    the score order and its `(verb, subject)` tie-break, the alphabet H-96's sampler removes. Both are refused where read."""
+    rows = judgement_rows(CHOICE_TEMPER)
+    for row in rows:
+        gain = fx.get(row.gain)
+        if not -1.0 < gain <= 0.0:
+            raise ValueError(f"{row.gain} {gain!r} is outside (-1, 0] (H-476): above 0 a focused person draws more widely, and at -1 "
+                             "the factor reaches 0 at the scale's ceiling and the draw is lost")
+    factor = judgement_factor(p, rows, fx)
+    return 1.0 if factor is None else factor
+
+
+def own_temperature(p: Person, fx: "Fixtures") -> float:
+    """A PERSON'S OWN CHOICE TEMPERATURE (B10.28): the realm's `choice_temperature` times his `temper` factor, exactly `choice_temperature` at the shipped gain 0 (x 1.0).
+    THE ONE OWNER: `_sample_order` draws at it, `make_ranker`'s `decide` attributes at it, and `harness/decision_spread.py` and
+    `harness/interactions.py`'s softmax read it, so the person's temperature is one quantity however many readers ask."""
+    return float(fx.get("choice_temperature")) * temper(p, fx)
+
+
 def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
     """`U4` / `H-96`: the triage stops being decided by the SPELLING of a verb.
 
@@ -469,7 +656,7 @@ def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
     candidate-keyed replay this function depends on — the noise must be a property of the candidate,
     not of the order it was reached in. Recorded here because a declaration that a mechanism is
     missing, made without naming the adjacent one, is the defect this lane keeps finding."""
-    tau = float(fx.get("choice_temperature"))
+    tau = own_temperature(p, fx)
     if tau == 0 or len(ranked) < 2:
         return ranked
     if draw is None:
@@ -525,7 +712,7 @@ def score_order(cands: list, scores: dict) -> list:
 
 # [JUSTIFIED: a float-tie tolerance for the attribution (two scores within it are a tie), an instrument constant and not a game number]
 ATTRIBUTION_EPS = 1e-9
-TERM_NAMES = ("pursuit", "stance", "fit")      # `score_terms`' tuple, in order: what `deciding_term` names
+TERM_NAMES = ("pursuit", "stance", "fit", "aim", "risk")      # `score_terms`' tuple, in order: what `deciding_term` names
 
 
 def deciding_term(cands: list, terms: list, actual: Optional[Candidate], tau: float) -> dict:
@@ -573,6 +760,20 @@ def deciding_term(cands: list, terms: list, actual: Optional[Candidate], tau: fl
         "tie" if margin <= ATTRIBUTION_EPS and tau > 0 and scores[ai] >= best - ATTRIBUTION_EPS else "outvoted")
     return {"top": actual, "decider": decider, "margin": margin, "scores": scores, "terms": terms,
             "draw_kind": draw_kind, "field_zero": field_zero}
+
+
+class Ranked(list):
+    """A deliberation's SAMPLED ORDER (`make_ranker`'s return), a plain list that also carries `decide(c)`: the deciding term
+    (`deciding_term`'s label) of candidate `c` among the candidates still unspent when `c` was taken (`c` and those after
+    it in the order), `""` for a candidate not in the order. `pack_scenes` reads it by `getattr` to stamp `Scene.decided`, so
+    a list that is not a `Ranked` (a hand-built list) packs Scenes stamped `""`; the player's pick is a `Ranked` that carries `forgone_of` only (`decision/sheet.py`). It scores nothing: `decide`
+    is a closure over the terms the ranker itself summed (the ones `watch` is handed).
+
+    It carries `forgone_of(lead, chunk)` beside it (B10.24; `Scene.forgone`'s docstring): the `((verb, subject, margin), ...)` a Scene
+    led by `lead` and carrying `chunk` keeps of what his scruple struck, `pack_scenes` reading it by `getattr` as it reads `decide`.
+    The ranker's strike is the carrier's one writer; a list that is not a `Ranked` packs Scenes whose `forgone` is `()`; a `Ranked` without `forgone_of` does the same."""
+    decide: Optional[Callable[[Candidate], str]] = None
+    forgone_of: Optional[Callable[[Candidate, list], tuple]] = None
 
 
 def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
@@ -623,11 +824,59 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
     return choose
 
 
+def _scruple_strikes(p: Person, c: Candidate, margin: float, fx: "Fixtures", draw) -> bool:
+    """B10.25 (`Fixtures scruple_temperature`, H-475): is a candidate whose `options.scruple` is `margin` > 0 struck from his order?
+    At temperature 0 it is the THRESHOLD, every positive margin (today's gate, no draw read). At `T > 0` it is struck with probability
+    `1 - exp(-margin / T)` on the person's own draw `scruple:<verb>:<subject>`, keyed by the candidate as `choice:` is so a fork stays
+    attributable: a large margin stops him nearly always and never certainly, a small one usually gives way (and giving way is the
+    fold's `scruple.overridden`). A missing `draw` at `T > 0` RAISES, as `_sample_order`'s does: it would answer with the threshold."""
+    t = float(fx.get("scruple_temperature"))
+    if t < 0:
+        raise ValueError(f"scruple_temperature {t!r} is below 0 (H-475): a negative temperature would make a larger margin the less likely to stop him")
+    if t == 0:
+        return True
+    if draw is None:
+        raise Unspecified(
+            "the scruple draw", "H-475",
+            needs=f"`make_chooser(fx, mint, verbs, draw)` with a draw at scruple_temperature={t}",
+            law="B10.25 -- at a nonzero temperature the strike is DRAWN, and a chooser built without a draw would silently fall back to the "
+                "threshold while every instrument reported the draw as live")
+    return draw(p.id, f"scruple:{c.verb}:{c.subject or '-'}").random() < 1.0 - fmath.exp(-margin / t)
+
+
+def strike_scruples(p: Person, cands: list, fx: "Fixtures", draw, score_of: Callable[[Any], float]) -> tuple:
+    """B10.24: THE ONE STRIKE. `(kept, marked)` for `cands` under `p`'s scruple (`Fixtures refusal_axis`, his `refusal_tolerance`): a candidate whose verb's `options.scruple` margin
+    is positive is struck by `_scruple_strikes` (the threshold at `scruple_temperature` 0, a draw above it) and left out of `kept`; `marked` is every candidate with a positive margin as
+    `(candidate, margin, score_of(candidate), struck)`, the struck and the standing alike (`make_ranker` keeps them for `Ranked.forgone_of` and the fold's `scruple.overridden`).
+    No axis armed: `cands` itself and `[]`. `make_ranker` calls it after scoring; `harness/decision_spread.py::formed_set` calls it on the formed set, so the instrument reads the
+    chooser's candidate set and not the one before his scruple."""
+    axis = fx.get("refusal_axis")
+    tolerance = refusal_tolerance(p, axis)
+    marked: list = []
+    if tolerance is None:
+        return cands, marked
+    kept = []
+    for c in cands:
+        margin = scruple(c.verb, axis, tolerance)
+        if margin <= 0.0:
+            kept.append(c)
+            continue
+        struck = _scruple_strikes(p, c, margin, fx, draw)
+        marked.append((c, margin, score_of(c), struck))
+        if struck:
+            TRACE.note(f"{p.id} refuses {c.verb!r}: its `{axis}` alignment lies {margin:.3f} past his tolerance "
+                       f"{tolerance:+.3f} toward the refused pole (ED-IN-0261)", "H-146")
+        else:
+            kept.append(c)
+    return kept, marked
+
+
 def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
                 draw: Optional[Callable[[str, str], Any]] = None,
                 watch: Optional[Callable[..., None]] = None) -> Callable[..., list]:
     """`rank(p, v) -> list[Candidate]`: THE SHIPPED POLICY'S ORDER over the person's own candidate set
-    -- `opening_set`, narrowed to `verbs`, scored, effort-settled and sampled -- and nothing packed.
+    -- `opening_set`, narrowed to `verbs`, scored, struck by his scruple (the armed gate, B10.24), effort-settled and sampled -- and
+    nothing packed.
 
     v10 REM-30 (IN-47): split out of `make_chooser` unchanged, so the automated chooser and the player's
     development space (`decision/sheet.py::development_space`) read ONE candidate set in ONE order: the
@@ -656,11 +905,17 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
         _terms: dict = {}                # id(c) -> the `score_terms` tuple `score(c)` summed: what `watch` is handed
         def score(c: Candidate) -> float:
             # IN-62: the terms have ONE owner, `score_terms`; the score is `score_total` of them.
-            _terms[id(c)] = t = score_terms(p, c, fx, memo, odds)
+            _terms[id(c)] = t = score_terms(p, c, fx, memo, odds, q)
             return score_total(t)
         # ⚠ SCORED ONCE, NOT TWICE. `score` is pure in `c` given the closure, so each candidate is
         # scored once here and `_sample_order` reads it back from `_scores`.
         _scores = {id(c): score(c) for c in cands}
+        # B10.24 (ED-IN-0261's deontological gate, moved here from `opening_set`: AFTER scoring, BEFORE the sample, so a struck
+        # candidate's score is known): a candidate whose verb his scruple forbids (`options.scruple` > 0 at his `refusal_tolerance`)
+        # is struck from the order. The strike is `_scruple_strikes`: the threshold at `scruple_temperature` 0, a draw on the margin above
+        # it (B10.25). What is struck, with its margin and score, is kept (`Ranked.forgone_of`); a candidate with a positive margin
+        # the strike leaves standing is kept too, for the fold's `scruple.overridden` (`loop/resolve.py::_scruple_overridden`).
+        cands, marked = strike_scruples(p, cands, fx, draw, lambda c: _scores[id(c)])   # (Candidate, margin, score, struck): every candidate with a positive margin
         # CP-T01-05 NPC half: the person may put effort behind a contested act (`npc_effort`); `off` is a no-op.
         cands, _scores = settle_efforts(cands, _scores, score, fx)
         ranked = score_order(cands, _scores)
@@ -673,7 +928,33 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
             # B09.13: an OBSERVER. Copies, so a watcher that mutates what it is handed changes nothing packed; the return is ignored.
             # `_terms[id(c)]` is the entry `score(c)` last wrote for a LIVE `c` (a kept effort variant stays alive, so its id is not reused).
             watch(p, q, list(ranked), [_terms[id(c)] for c in ranked], list(sampled))
-        return sampled
+        # `Scene.decided`: the rule is `deciding_term`'s, over the unspent tail the candidate heads, on the terms summed above (lazy:
+        # `pack_scenes` asks once per Scene it builds, so a deliberation's candidates are not all attributed). The first
+        # Scene's first act heads the whole order, which is the reading `harness/decision_spread.py` takes of it.
+        order = tuple(sampled)
+        at = {id(c): i for i, c in enumerate(order)}
+        tau = own_temperature(p, fx)
+
+        def decide(c: Candidate) -> str:
+            i = at.get(id(c))
+            if i is None:
+                return ""
+            tail = order[i:]
+            return deciding_term(list(tail), [_terms[id(x)] for x in tail], c, tau)["decider"]
+
+        def forgone_of(lead: Candidate, chunk: list) -> tuple:
+            # B10.24: a STRUCK candidate that out-scored the Scene's lead (what he gave up for what he did), and a standing one with a
+            # positive margin that this Scene carries (the act the fold looks for). `(verb, subject, margin)`, in the order struck.
+            if not marked or id(lead) not in _scores:
+                return ()
+            lead_score = _scores[id(lead)]           # the kept candidates' (effort-settled) scores: what the Scene's lead scored
+            carried = {(c.verb, c.subject) for c in chunk} | {(lead.verb, lead.subject)}
+            return tuple((c.verb, c.subject or "", margin) for c, margin, score, struck in marked
+                         if (score > lead_score if struck else (c.verb, c.subject) in carried))
+        out = Ranked(sampled)
+        out.decide = decide
+        out.forgone_of = forgone_of
+        return out
     return rank
 
 
@@ -806,7 +1087,11 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
     per = fx.get("interactions_per_scene")
     width = 1 if rule == "one_per_scene" else (len(ranked) if per is None else per)
 
-    def scene(n: int, chunk: list) -> "Scene":
+    decide = getattr(ranked, "decide", None)        # a `Ranked`'s: what decided a candidate (`Scene.decided`); `None` of any other list
+    forgone_of = getattr(ranked, "forgone_of", None)    # a `Ranked`'s: what his scruple struck (`Scene.forgone`, B10.24); `None` of any other list
+
+    def scene(n: int, chunk: list, lead: Optional["Candidate"] = None) -> "Scene":
+        # `lead` is the candidate the Scene's first act was taken from, where `chunk` holds a rebuilt copy of it (the unaffordable effort below)
         # ⚠ `occasion=` IS NOT DECORATION. `choose` already holds the question — it refuses to
         # produce anything without one — and dropping it here is what left the act with no route
         # back to what raised it (`N3`).
@@ -838,7 +1123,9 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                           payload=_payload_of(c),
                           via=seat_of(p, c)) for c in chunk],
                      # `H-77`: `Scene.cost` prices the scene from the `slots` it fills.
-                     occasion=occasion)
+                     occasion=occasion,
+                     decided="" if decide is None else decide(chunk[0] if lead is None else lead),
+                     forgone=() if forgone_of is None else forgone_of(chunk[0] if lead is None else lead, chunk))
 
     # ⚠ THE BOUND IS THE COST, NOT THE SCENE COUNT: once `extended` is set, five greedy scenes
     # cost ten against a budget of five, so a packer bounded by count would overspend by
@@ -878,7 +1165,7 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                 if sc.cost(ext) > left:
                     c0 = chunk[0]
                     sc = scene(len(out), [Candidate(c0.verb, c0.subject,
-                                                    {k: v for k, v in (c0.operands or {}).items() if k != EFFORT})])
+                                                    {k: v for k, v in (c0.operands or {}).items() if k != EFFORT})], lead=c0)
             out.append(sc)
             left -= sc.cost(ext)
         return out

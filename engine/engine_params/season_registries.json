@@ -930,6 +930,43 @@
           },
           "source": "NPC-090's own row: \"Enforces ancient trade treaties\"; stability .80, wealth .10 (the instrument of the empire's aim \"pressed here through the ancient trade treaties\", ED-IN-0293 (10)). An orientation: it mints no Proposition. [ASSUMPTION; medium; Jordan to correct -- the weights.]"
         }
+      ],
+      "goal_stages": [
+        {
+          "id": "stages_lowenritter_throne_security",
+          "for": [
+            "goal_lowenritter_throne_security"
+          ],
+          "opens": "mandatory",
+          "stages": [
+            {
+              "id": "watch",
+              "term": "short",
+              "predicate": {
+                "form": "existence",
+                "of": "subject",
+                "kind": "DocketItem"
+              },
+              "pursuits": {
+                "honour": 0.5,
+                "stability": 0.5
+              }
+            },
+            {
+              "id": "resolve",
+              "term": "medium",
+              "predicate": {
+                "form": "relation",
+                "of": "subject",
+                "relation": "held_by"
+              },
+              "pursuits": {
+                "honour": 0.7,
+                "stability": 0.3
+              }
+            }
+          ]
+        }
       ]
     },
     "engine/season/offices.yaml": {
@@ -1815,6 +1852,14 @@
           "refusing_pole": {
             "deontological_instrumental": -1
           },
+          "refusable": {
+            "deontological_instrumental": [
+              "forge",
+              "lie",
+              "evade / defy",
+              "construe"
+            ]
+          },
           "note": "\u26a0\u26a0 **SEVEN BIPOLAR AXES (`ED-IN-0261`).** Convictions (now pursuits) and axes are different index sets: the roster above holds the fifteen pursuits, this row holds the seven axes, and `tables.pursuit_projection` is the 15\u00d77 between them. V2 \u00a7F2's `conviction[axis]` is computed rather than looked up -- `\u03a3_conv conviction[conv] \u00b7 projection[conv][axis]`. \u26a0 `exposure` IS FORBIDDEN AS A BARE AXIS NAME and the loader RAISES on it \u2014 #353 `:1897` names \"The Exposure collision \u2014 three senses of one word, including a need scalar and a per-person tally\". Spell the sense you mean. \u26a0\u26a0 **THERE IS NO `values:` LIST, AND THAT IS THE REPAIR (ED-IN-0230).** A literal copy here could disagree in silence with `engine/substrate/keys.py::AXES` (nothing under `engine/season/` read it), so a fifth axis in one place would leave the other scoring on four. \u26a0 **`from_descriptor:` IS THE `conviction_roster` PRECEDENT.** The roster lives in `references/descriptor_registry.yaml` with `engine/substrate/descriptors.py` as the one code-side reader, so a fifth axis or a rename is ONE edit -- `axis_roster.names`.",
           "from_descriptor": "axis_roster"
         },
@@ -2535,7 +2580,10 @@
           "fight": "seam/wrappers/combat.py::combat_input -> PersonalCombatInput (applied by the module: the fight's attribute input is the six attributes on `PersonalCombatInput.attributes`, sigma-assembled in `modules/combat`, so the site carries no host-side `edge` row and `advantage_sigma` adds no second attribute term to a fight)",
           "kit": "combat_systems.act_cost's caller -- no reader of this row on this tree; B05 (CAP B1, B7) builds it",
           "told_claim_credit": "decision/options.py::competence",
-          "own_state_gate": "queries/person_q.py::OwnStateReader"
+          "choice_temper": "decision/choose.py::temper",
+          "choice_exposure": "decision/choose.py::nerve",
+          "own_state_gate": "queries/person_q.py::OwnStateReader",
+          "crisis": "loop/resolve.py::_crisis_net_sigma"
         },
         "capability_site_reads": {
           "social_roll": {
@@ -2595,6 +2643,13 @@
           "values": [
             "own_state_gate",
             "told_retain"
+          ]
+        },
+        "self_believed": {
+          "source": "B10.64 (`U5a_CHAR_self_knowledge_is_a_belief`, A-34: a belief, built narrowly): the one gated gift, plus the pursuit roster.",
+          "note": "THE NON-PURSUIT MEMBERS. A cast row's `unaware:` may name only a member of `data/rosters.py::SELF_BELIEVED`, which is these values JOINED TO the `pursuits` roster at the one binding (a roster carries a `values:` or an owner pointer, never both, so the pursuit half is not copied here). `data/cast.py::unaware_of` refuses any other key, and any key the row does not hold. For such a key the person-side answer is his own claim `self:<key>` (`queries/person_q.py::knows_self`); every other own-state stem is answered from the field as before. [ASSUMPTION; medium; Jordan to correct -- basis: the source's own roster; revert: the roster is empty.]",
+          "values": [
+            "prac.thread_sensitivity"
           ]
         },
         "difficulty_levels": {
@@ -3142,7 +3197,7 @@
         },
         "choice_sourced": {
           "source": "v11 CP-T04-02 (B10-12): `decision/options.py::operand_bags` *\"ranges `role` and `retreat_at` over their closed sets, or no NPC marshals\"*, after `confer`'s `to` (a known person) and `train`'s vocation (`vocation_sourced`).",
-          "note": "WHICH VERBS CARRY A CHOICE, AND OVER WHICH PAYLOAD KEYS -- `verb: [key, ...]`. A verb named here forms ONE bag per COMBINATION of its keys' closed sets (`data/verbs.py::CHOICE_RANGES`: `role` is `order_roles`, `retreat_at` is `order_retreat_at`), each value riding on the act's payload under its own name. \u26a0 THE KEYS ARE NOT `requires_operands` MEMBERS and a cell never binds them: the closed operand vocabulary stays closed (`challenge`'s `stakes` is the precedent for a payload key the effect reads). \u26a0 THE CHOOSER IS CONTENT-BLIND: Candidates score on `(verb, subject)` (`decision/choose.py`), so the fan is a draw among equally scored orders, not a judgement of which role suits the field. \u26a0 THE FAN IS A COST, MEASURED AT ITS LANDING (`hole_register.yaml` `H-361`): 15 roles x 3 `retreat_at` values = 45 bags per settlement a marshal forms on. ONE LOADER, `data/verbs.py::CHOICE_SOURCED`, refused at import for a verb the table lacks, a key without a range, or a key whose carrier the verb's row does not write (`role`, `retreat_at`: `Record.exists`; `posture`: `Site.condition`). \u26a0 A KEY WHOSE RANGE HAS ONE MEMBER IS NOT FANNED (`decision/options.py::_fanned_choices`): CP-T04-06's `march` ranges `posture` over `march_postures`, shipped `[storm]`, so no `march` Candidate carries a `posture` and the shipped season does not move. [ASSUMPTION; medium; Jordan to correct; revert: delete the row, and `marshal` forms one Candidate with no order.]",
+          "note": "WHICH VERBS CARRY A CHOICE, AND OVER WHICH PAYLOAD KEYS -- `verb: [key, ...]`. A verb named here forms ONE bag per COMBINATION of its keys' closed sets (`data/verbs.py::CHOICE_RANGES`: `role` is `order_roles`, `retreat_at` is `order_retreat_at`), each value riding on the act's payload under its own name. \u26a0 THE KEYS ARE NOT `requires_operands` MEMBERS and a cell never binds them: the closed operand vocabulary stays closed (`challenge`'s `stakes` is the precedent for a payload key the effect reads). \u26a0 THE CHOOSER IS CONTENT-BLIND UNTIL A CELL IS AUTHORED: Candidates score on `(verb, subject)` (`decision/choose.py`), so the fan is a draw among equally scored orders, not a judgement of which role suits the field. CONTENT ENTERS AT ONE PLACE, `tables.alignment`'s optional `choices:` block (B10.56, shipped absent): a cell there on a key this table names scores that value in `score_terms`' `pursuit`, through the person's own axis weights. \u26a0 THE FAN IS A COST, MEASURED AT ITS LANDING (`hole_register.yaml` `H-361`): 15 roles x 3 `retreat_at` values = 45 bags per settlement a marshal forms on. ONE LOADER, `data/verbs.py::CHOICE_SOURCED`, refused at import for a verb the table lacks, a key without a range, or a key whose carrier the verb's row does not write (`role`, `retreat_at`: `Record.exists`; `posture`: `Site.condition`). \u26a0 A KEY WHOSE RANGE HAS ONE MEMBER IS NOT FANNED (`decision/options.py::_fanned_choices`): CP-T04-06's `march` ranges `posture` over `march_postures`, shipped `[storm]`, so no `march` Candidate carries a `posture` and the shipped season does not move. [ASSUMPTION; medium; Jordan to correct; revert: delete the row, and `marshal` forms one Candidate with no order.]",
           "values": {
             "marshal": [
               "role",
@@ -3162,21 +3217,21 @@
         },
         "held_document_declines": {
           "source": "#453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) \u00a79.3, the `conceal` row's producer line, *\"a person-side decline while the actor holds a live cover\"*, and \u00a710.4 step 10 (the same words); its open-questions table, *\"`decision/options.py::opening_set` | person-side own-state declines: ... plus `conceal`'s (a live cover)\"*; plan position IN-12 step 10 (`workplans/valoria_master_workplan_v9_part5.md`).",
-          "note": "WHICH VERBS A PERSON DOES NOT FORM WHILE HE HOLDS A DOCUMENT OF A NAMED KIND ABOUT HIMSELF -- `verb: record kind`. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): the person's OWN live `hold` Tenures and the `content:<kind>` claims his OWN ledger holds on their objects (`loop/witness.py`'s content deposit to a new holder), declining the verb when one such claim's content names him. \u26a0 \"LIVE\" IS READ AS \"HELD\", AND THAT IS THE NARROWEST PERSON-SIDE READING: whether a cover's stages have matured is world state (`Record.stages`, the log's `term.matured`, `state/attribution.py::live_cover`) that no ledger carries, so a person holding a cover whose stages have all matured still declines a new one until it leaves his hand (`destroy_record`, `give`). [ASSUMPTION; medium; Jordan to correct; revert: decline only while a stage is unmatured, which first needs a person-side carrier for maturity.] ONE LOADER, `data/verbs.py::HELD_DOCUMENT_DECLINES`, refused at import when a line names a verb the table lacks or a kind `record_kinds` does not carry.",
+          "note": "WHICH VERBS A PERSON DOES NOT FORM WHILE HE HOLDS A DOCUMENT OF A NAMED KIND ABOUT HIMSELF -- `verb: record kind`. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): the person's OWN live `hold` Tenures and the `content:<kind>` claims his OWN ledger holds on their objects (`loop/witness.py`'s content deposit to a new holder), declining the verb when one such claim's content names him. \u26a0 \"LIVE\" IS READ AS \"HELD\", AND THAT IS THE NARROWEST PERSON-SIDE READING: whether a cover's stages have matured is world state (`Record.stages`, the log's `term.matured`, `state/attribution.py::live_cover`) that no ledger carries, so a person holding a cover whose stages have all matured still declines a new one until it leaves his hand (`destroy_record`, `give`). [ASSUMPTION; medium; Jordan to correct; revert: decline only while a stage is unmatured, which first needs a person-side carrier for maturity.] ONE LOADER, `data/verbs.py::HELD_DOCUMENT_DECLINES`, refused at import when a line names a verb the table lacks or a kind `record_kinds` does not carry. B10.61 READING, KEPT: `conceal`'s cell asks `individual` of the actor and no stem reads a held cover, so `OwnStateReader` cannot decline it. Without the roster `conceal` forms again while he holds a cover, in 596, 333 and 0 (person, question) pairs at seeds 0-2, none at lap 0 (a cover is held only once a lap has run).",
           "values": {
             "conceal": "cover"
           }
         },
         "own_stance_declines": {
           "source": "#453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) \u00a79.4, the `forgive` row's requires line, *\"that a negative row naming `subject` exists is a read of the actor's own state (`p.stance`), so it is a person-side decline in `opening_set`, not a stem: one own-state decline, beside the one pass 1 proposed for `release`\"*; \u00a710.4 step 13 (*\"with its own person-side own-state decline\"*); plan position IN-12 step 13 (`workplans/valoria_master_workplan_v9_part5.md`).",
-          "note": "WHICH VERBS A PERSON FORMS ONLY ON A REFERENT HE HOLDS A ROW AGAINST -- a list of verbs. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): his OWN `Person.stance` rows naming the referent with a valence below zero (`queries/person_q.py::held_against`, the one reader the verb's effect reads too); a referent he holds nothing against forms no Candidate, so no scene is spent on a `forgive.refused` he could have known. The roster names the verb and the loader VALIDATES it against the row's `writes:`; no verb name is spelt in code: ONE LOADER, `data/verbs.py::OWN_STANCE_DECLINES`, refused at import when a member names a verb the table lacks or one whose row writes no `Person.stance`. \u26a0 `release`'s hook (#453 Appendix A, pass 1's \u00a74: declined when the actor holds no releasable edge to the referent) is NOT built here: it reads `p.tenures`, not `p.stance`, and plan row 13 builds `forgive`'s decline beside it, not the hook itself. [ASSUMPTION; medium; Jordan to correct; revert: build `release`'s hook in the same position.]",
+          "note": "WHICH VERBS A PERSON FORMS ONLY ON A REFERENT HE HOLDS A ROW AGAINST -- a list of verbs. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): his OWN `Person.stance` rows naming the referent with a valence below zero (`queries/person_q.py::held_against`, the one reader the verb's effect reads too); a referent he holds nothing against forms no Candidate, so no scene is spent on a `forgive.refused` he could have known. The roster names the verb and the loader VALIDATES it against the row's `writes:`; no verb name is spelt in code: ONE LOADER, `data/verbs.py::OWN_STANCE_DECLINES`, refused at import when a member names a verb the table lacks or one whose row writes no `Person.stance`. \u26a0 `release`'s hook (#453 Appendix A, pass 1's \u00a74: declined when the actor holds no releasable edge to the referent) is NOT built here: it reads `p.tenures`, not `p.stance`, and plan row 13 builds `forgive`'s decline beside it, not the hook itself. [ASSUMPTION; medium; Jordan to correct; revert: build `release`'s hook in the same position.] B10.61 READING, KEPT: `forgive` has no typed cell (`requires_typed` is none) and no stem asks a stance row, so `OwnStateReader` cannot decline it. Without the roster `forgive` forms on 5341, 5241 and 5488 more (person, question) pairs at seeds 0-2, 243 of them at lap 0.",
           "values": [
             "forgive"
           ]
         },
         "lie_verbs": {
           "source": "v11 CR-27 (B10-13), M9 taken (a) (`workplans/valoria_master_workplan_v11_part6.md` M9): the cell lie.",
-          "note": "WHICH VERBS SAY A FALSE VALUE OF A CLAIM THE SPEAKER HOLDS -- a list of verbs. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): a listed row copies `queries/person_q.py::lie_said_of` onto the Act where an unlisted row copies `said_of`, and is formed only while `Fixtures lie_offered` is True. The roster names the verb and the loader VALIDATES it against the row's typed cell: no verb name is spelt in code. ONE LOADER, `data/verbs.py::LIE_VERBS`, refused at import when a member names a verb the table lacks or one whose cell names no `own_ledger` conjunct (a row that carries no `said` has nothing to make false). [ASSUMPTION; medium; Jordan to correct; revert: delete this roster and the `lie` row, its alignment cells and `lie_offered`.]",
+          "note": "WHICH VERBS SAY A FALSE VALUE OF A CLAIM THE SPEAKER HOLDS -- a list of verbs. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): a listed row copies `queries/person_q.py::lie_said_of` onto the Act where an unlisted row copies `said_of`, and is formed only while `Fixtures lie_offered` is True. The roster names the verb and the loader VALIDATES it against the row's typed cell: no verb name is spelt in code. ONE LOADER, `data/verbs.py::LIE_VERBS`, refused at import when a member names a verb the table lacks or one whose cell names no `own_ledger` conjunct (a row that carries no `said` has nothing to make false). [ASSUMPTION; medium; Jordan to correct; revert: delete this roster and the `lie` row, its alignment cells and `lie_offered`.] B10.61 READING, KEPT: it is a setting, not a decline (it picks the false-value reader and gates `lie` on `lie_offered`). Without it `lie` forms on 2405, 2394 and 2606 more (person, question) pairs at seeds 0-2 and carries the claim as held, not a false value, on 1858, 1828 and 1884 others (191 pairs at lap 0 on each seed).",
           "values": [
             "lie"
           ]
@@ -3193,34 +3248,30 @@
             "discharge_troops"
           ]
         },
-        "own_hold_declines": {
-          "source": "plan position IN-26 (BOUND-PAPER, `workplans/valoria_master_workplan_v9_part5.md`), `A-13`'s *\"record-holding referent\"* (`_part5`'s A table: `destroy_record` *\"needs a record-holding question referent -- `give`'s shape\"*); `own_stance_declines`' shape (above), one field over.",
-          "note": "WHICH VERBS A PERSON FORMS ONLY ON A REFERENT HE HIMSELF HOLDS -- a list of verbs. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): the objects of his OWN live `hold` Tenures; a referent he does not hold forms no Candidate, so no scene is spent on a refusal of the row's `held_by` conjunct he could have known. It is the person-side reading of that conjunct for the verbs LISTED (six rows carry the conjunct; this roster names the ones whose formation it narrows): ONE LOADER, `data/verbs.py::OWN_HOLD_DECLINES`, refused at import when a member names a verb the table lacks or one whose typed cell asks no `relation` of `subject` `held_by`. What he holds that is no Record (a seat, a Proposition he uttered) still forms and is refused at the row's `existence` conjunct, whose read clause 4 then learns (H-156's decaying shape). [ASSUMPTION; medium; Jordan to correct; revert: drop the member, and `destroy_record` forms on every referent, plan position `14`'s measured shape.] v9 IN-12 (`give` + Rung, #453 \u00a79.6) JOINED `give`: its cell dropped the `existence` conjunct (the grammar has no disjunction, `verb_table.yaml: give`'s `requires_typed_note`), so the held-referent narrowing is what keeps the loosened cell from forming a gift of every referent a question carries. What `give` holds that is neither a Record nor a Rung (a seat) still forms and is declined by the effect (`give.refused`). [ASSUMPTION; medium; Jordan to correct; revert: drop the member, and restore the `existence` conjunct.] B11 lane A JOINED `carry`, `found` AND `build`, the three `Record` rows whose cell asks `held_by` of `subject`: they formed on the question's own Records of every kind and the fold refused each it does not hold. Their own holding is the actor's own state; what the document IS stays the sub-kind rule's (`decision/options.py`, `RECORD_SUBKINDS_BY_VERB`). [ASSUMPTION; medium; Jordan to correct; revert: drop the three members.]",
-          "values": [
-            "destroy_record",
-            "give",
-            "carry",
-            "found",
-            "build"
-          ]
-        },
         "own_title_declines": {
-          "source": "v10 IN-61 (RS-27, B10-09); `own_hold_declines`' shape (above), one read over: the seat's title instead of the seat.",
-          "note": "WHICH VERBS A PERSON FORMS ONLY ON A SEAT WHOSE `successions` TITLE HE HIMSELF HOLDS -- a list of verbs. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): the objects of his OWN live `hold` Tenures, against `successions` (a roster, the law, not world state). It is the person-side reading of the claim's title conjunct (`state/gate.py::may_claim`): without it every person told of any seat would form a claim on it, refused in the fold every time (the always-refused set `test_u7_own.py` polices). It NARROWS the referents a question carries and widens nothing; the seat's vacancy is still the fold's to read. FORMATION IS GATED ON THE TITLE AND THE SEAT BEING NAMED IN THE HEIR'S LEDGER, NOT ON HIS BELIEF IN A VACANCY: an untyped row's refusal does not decay, so an heir told of the throne (any claim naming it) re-forms `succeed` on it while a King sits, and is refused each time. ONE LOADER, `data/verbs.py::OWN_TITLE_DECLINES`, refused at import when a member names a verb the table lacks or one whose row declares no `referent_class: Office`. [ASSUMPTION; medium; Jordan to correct; revert: drop the member, and `succeed` forms on every seat a question carries.]",
+          "source": "v10 IN-61 (RS-27, B10-09); the person-side own-state decline of `own_stance_declines`' shape (above), one read over: the seat's title instead of a stance row.",
+          "note": "WHICH VERBS A PERSON FORMS ONLY ON A SEAT WHOSE `successions` TITLE HE HIMSELF HOLDS -- a list of verbs. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): the objects of his OWN live `hold` Tenures, against `successions` (a roster, the law, not world state). It is the person-side reading of the claim's title conjunct (`state/gate.py::may_claim`): without it every person told of any seat would form a claim on it, refused in the fold every time (the always-refused set `test_u7_own.py` polices). It NARROWS the referents a question carries and widens nothing; the seat's vacancy is still the fold's to read. FORMATION IS GATED ON THE TITLE AND THE SEAT BEING NAMED IN THE HEIR'S LEDGER, NOT ON HIS BELIEF IN A VACANCY: an untyped row's refusal does not decay, so an heir told of the throne (any claim naming it) re-forms `succeed` on it while a King sits, and is refused each time. ONE LOADER, `data/verbs.py::OWN_TITLE_DECLINES`, refused at import when a member names a verb the table lacks or one whose row declares no `referent_class: Office`. [ASSUMPTION; medium; Jordan to correct; revert: drop the member, and `succeed` forms on every seat a question carries.] B10.61 READING, KEPT: the title is read off `successions`, which no cell stem asks, so `OwnStateReader` cannot answer it. Without the roster `succeed` forms on 196, 193 and 299 more (person, question) pairs at seeds 0-2, all at lap 1 or later (none at lap 0, where no heir yet holds a title he was told of).",
           "values": [
             "succeed"
           ]
         },
         "held_edge_declines": {
           "source": "B10-09 close one, D3 (the batch-close antagonist's ruling on the duplicate-commit decline); `held_document_declines`' shape (above), one carrier over: a live Tenure instead of a held document.",
-          "note": "WHICH VERBS A PERSON DOES NOT FORM ON AN OBJECT HE ALREADY HOLDS A LIVE EDGE OF A NAMED KIND ON -- `verb: tenure kind`. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): the objects of his OWN live Tenures of that kind (`p.tenures`), any mood, any route that carried the referent -- the terms-sourced reader (a petition, IN-12 step 5a) and REM-21's own-referent term alike. `_eff_commit` always opens a fresh Tenure, so a repeat would be a duplicate live edge and a spurious `commitment.made`: formation must not outrun feasibility. It NARROWS the referents a question carries and widens nothing; `argue` on the same Proposition is untouched. It is not `world_q.ambitions` (a live commit to an OUGHT, the ambition): it reads a live edge on THIS object, of any mood. ONE LOADER, `data/verbs.py::HELD_EDGE_DECLINES`, refused at import when a line names a verb the table lacks or a kind `tenure_kinds` does not carry. [ASSUMPTION; medium; Jordan to correct; revert: drop the line.]",
+          "note": "WHICH VERBS A PERSON DOES NOT FORM ON AN OBJECT HE ALREADY HOLDS A LIVE EDGE OF A NAMED KIND ON -- `verb: tenure kind`. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): the objects of his OWN live Tenures of that kind (`p.tenures`), any mood, any route that carried the referent -- the terms-sourced reader (a petition, IN-12 step 5a) and REM-21's own-referent term alike. `_eff_commit` always opens a fresh Tenure, so a repeat would be a duplicate live edge and a spurious `commitment.made`: formation must not outrun feasibility. It NARROWS the referents a question carries and widens nothing; `argue` on the same Proposition is untouched. It is not `world_q.ambitions` (a live commit to an OUGHT, the ambition): it reads a live edge on THIS object, of any mood. ONE LOADER, `data/verbs.py::HELD_EDGE_DECLINES`, refused at import when a line names a verb the table lacks or a kind `tenure_kinds` does not carry. [ASSUMPTION; medium; Jordan to correct; revert: drop the line.] B10.61 READING, KEPT: `commit`'s cell is the `existence` of a Proposition and nothing of his own state (the grammar has no `commit` or `oblige` stem), so `OwnStateReader` has nothing to decline on. Without the roster `commit` forms again on a Proposition he already holds an edge on, in 24, 25 and 38 (person, question) pairs at seeds 0-2, all at lap 1 or later.",
           "values": {
             "commit": "commit"
           }
         },
+        "held_edge_sourced": {
+          "source": "B10.72 (`U5a_CHAR_owed_amendments` \u00a73 (b): *\"`release` on his own `commit` forms as an ordinary Candidate\"*); the SITE step's reading: the `need` question names the seat's holder, never the Proposition he is committed to, and `release` takes the question's plain referents, so before this line it formed on a person he held no edge toward. `held_edge_declines`' shape and its mirror: that roster narrows a verb off an object he holds a live edge on, this one adds the object.",
+          "note": "WHICH VERBS FORM, BESIDE THEIR OWN REFERENTS, ON THE OBJECT OF A LIVE EDGE THE PERSON HIMSELF HOLDS -- `verb: tenure kind`. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): the objects of his OWN live Tenures of that kind (`p.tenures`), on every question he answers. `release` is a CLOSER, so what it forms on is what the actor already holds (`_req_release`: a live edge owned by the actor toward the subject); the want he lays down is one he is committed to, and no question is about it. Nothing here chooses the act: whether it ranks is the score's, and a person committed to nothing forms what he formed before. ONE LOADER, `data/verbs.py::HELD_EDGE_SOURCED`, refused at import when a line names a verb the table lacks or a kind `tenure_kinds` does not carry. [ASSUMPTION; medium; Jordan to correct; revert: drop the line, and `release` forms on the question's referents only -- a want is then never offered for laying down.] A FACTION MEMBERSHIP IS NOT AN OBJECT HERE (B10.72's fix): a `commit` whose object is a faction (`data/rosters.py::FACTION_BY_PROP`) is left out of what the verb forms on, because releasing it is leaving the faction; the verb forms on a commit to a Proposition that is no faction.",
+          "values": {
+            "release": "commit"
+          }
+        },
         "violence_contexts": {
           "source": "v11 CR-87 (commit `c7145842` (1); ED-IN-0337, RULED, Jordan 2026-11-05: fighting is exceptional -- it belongs to civil war, criminal contexts and duels, is rare in civil society and is not simply chosen); `held_edge_declines`' shape (above), `verb: [context, ...]`.",
-          "note": "WHICH VERBS A PERSON FORMS ONLY ON A SUBJECT HE HOLDS A CONTEXT OF VIOLENCE AGAINST, AND WHICH CONTEXTS COUNT -- `verb: [context, ...]`. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2), after every widening: a referent no listed context names forms no Candidate. A CONTEXT IS A NAME OF ONE READER IN `options.py::VIOLENCE_CONTEXT_READERS`, the closed set (code, not this file): `war` -- the subject is stamped `Enemy` on the question he answers (`queries/world_q.py::enemies_heard`: a person of a faction `faction_q.at_war` with his own, over a war Proposition he has heard of or committed to); `crime` -- the subject is named by a warrant he holds that is ADDRESSED TO HIM (a held Record of a `warrant_sourced` kind, the reading `arrest` forms on, narrowed by `person_q.addressed_to`: the maker of a writ about a person is not charged with it [ASSUMPTION; medium; Jordan to correct; revert: no addressee test]) or stamped `Detainee` (a live `detain` on his seat: `arrest`'s and `capture`'s custody); `duel` -- he holds a `challenge` Record naming himself and the subject as its two parties (PC-10b's Record, read through `record_sourced_operands`); `defence` -- the subject's own act against him, of a kind a VIOLENT opponent-rule row emits (`options.subject_is_opponent` and `violent_prizes`, below: an attack, not a hard word), that he saw done to him in the newest season his ledger holds (`person_q.attackers_of`: `suffered_deeds`' pairing, `recent_claims`' window) [ASSUMPTION; medium; Jordan to correct; revert: drop `defence`]. ED-IN-0336's \"duels only\" is the line `fight: [duel]`. It NARROWS and widens nothing; the hand-built fold, which never forms, is untouched, and the coercion rows (`arrest`, `detain`, `capture`, `interrogate`, `seize`, `raze`, `march`) keep their own gates. ONE LOADER, `data/verbs.py::VIOLENCE_CONTEXTS`, refused at import when a line names a verb the table lacks or one whose `subject` is not its opponent; `options.py` refuses a context it has no reader for. An empty block is the CONTROL: no decline. [ASSUMPTION; medium; Jordan to correct; revert: `{}`.] B11 lane A (carrying `14_VERBS_PHYSICAL_A` A3's first line): `duel` DROPPED from `fight`. The challenger holds every challenge he issues, so the context licensed him to attack the man he had called out, under `fight`'s lethal terms, without an acceptance. A duel is `accept`'s, fought under its challenge's terms. The `duel` reader stays in the closed set for a later line. [ASSUMPTION; medium; Jordan to correct; revert: restore `duel`.]",
+          "note": "WHICH VERBS A PERSON FORMS ONLY ON A SUBJECT HE HOLDS A CONTEXT OF VIOLENCE AGAINST, AND WHICH CONTEXTS COUNT -- `verb: [context, ...]`. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2), after every widening: a referent no listed context names forms no Candidate. A CONTEXT IS A NAME OF ONE READER IN `options.py::VIOLENCE_CONTEXT_READERS`, the closed set (code, not this file): `war` -- the subject is stamped `Enemy` on the question he answers (`queries/world_q.py::enemies_heard`: a person of a faction `faction_q.at_war` with his own, over a war Proposition he has heard of or committed to); `crime` -- the subject is named by a warrant he holds that is ADDRESSED TO HIM (a held Record of a `warrant_sourced` kind, the reading `arrest` forms on, narrowed by `person_q.addressed_to`: the maker of a writ about a person is not charged with it [ASSUMPTION; medium; Jordan to correct; revert: no addressee test]) or stamped `Detainee` (a live `detain` on his seat: `arrest`'s and `capture`'s custody); `duel` -- he holds a `challenge` Record naming himself and the subject as its two parties (PC-10b's Record, read through `record_sourced_operands`); `defence` -- the subject's own act against him, of a kind a VIOLENT opponent-rule row emits (`options.subject_is_opponent` and `violent_prizes`, below: an attack, not a hard word), that he saw done to him in the newest season his ledger holds (`person_q.attackers_of`: `suffered_deeds`' pairing, `recent_claims`' window) [ASSUMPTION; medium; Jordan to correct; revert: drop `defence`]. ED-IN-0336's \"duels only\" is the line `fight: [duel]`. It NARROWS and widens nothing; the hand-built fold, which never forms, is untouched, and the coercion rows (`arrest`, `detain`, `capture`, `interrogate`, `seize`, `raze`, `march`) keep their own gates. ONE LOADER, `data/verbs.py::VIOLENCE_CONTEXTS`, refused at import when a line names a verb the table lacks or one whose `subject` is not its opponent; `options.py` refuses a context it has no reader for. An empty block is the CONTROL: no decline. [ASSUMPTION; medium; Jordan to correct; revert: `{}`.] B11 lane A (carrying `14_VERBS_PHYSICAL_A` A3's first line): `duel` DROPPED from `fight`. The challenger holds every challenge he issues, so the context licensed him to attack the man he had called out, under `fight`'s lethal terms, without an acceptance. A duel is `accept`'s, fought under its challenge's terms. The `duel` reader stays in the closed set for a later line. [ASSUMPTION; medium; Jordan to correct; revert: restore `duel`.] B10.61 READING, KEPT: it reads the world's contexts (a war, a warrant, a deed done to him), none of them his own state, so `OwnStateReader` cannot answer it. Without it `fight` forms on 4170, 4049 and 4344 more (person, question) pairs at seeds 0-2, 252 of them at lap 0.",
           "values": {
             "fight": [
               "war",
@@ -3241,6 +3292,14 @@
           "note": "THE CONTEST PRIZES WHOSE ROWS ARE VIOLENT -- a list of `contest_subsystems.prizes` keys. A row is violent when its `contests:` is listed (`data/verbs.py::VIOLENT_VERBS`, derived off the table: today `fight`, `capture` and `accept`); `decision/choose.py::stance_term` reads `Fixtures hostile_stance_gain` in place of `1 + stance_gain` on such a row where its subject is its opponent, so a grudge's pull on violence is bounded apart from its pull on every other act. Refused at import when a member is no prize. [ASSUMPTION; medium; Jordan to correct; revert: `hostile_stance_gain` null, which reads `1 + stance_gain`.]",
           "values": [
             "the body"
+          ]
+        },
+        "bodily_prizes": {
+          "source": "v12 B10.31 (`02_CHAR_what_an_act_risks` edit 2): the contest prizes whose loss a person's own body or field pays.",
+          "note": "THE CONTEST PRIZES THE ACTOR HIMSELF STAKES IN BODY OR IN THE FIELD -- a list of `contest_subsystems.prizes` keys. A candidate is EXPOSED when its row's `contests:` is listed (`data/verbs.py::BODILY_PRIZES`; read off the row's own column, never a verb name); `decision/choose.py::score_terms`' `risk` element prices only an exposed candidate. Today `the body` (`fight`, `capture`, `accept`) and `a field` (`march`). Refused at import when a member is no prize any verb row contests (a closed set read against the verb table, so a renamed prize cannot leave the term reading nobody). [ASSUMPTION; medium; Jordan to correct; revert: delete the row, and `risk` reads 0 for every candidate.]",
+          "values": [
+            "the body",
+            "a field"
           ]
         },
         "shortfall_sourced_operands": {
@@ -3278,11 +3337,99 @@
         },
         "stance_polarities": {
           "source": "v9 IN-18 `G2` (telling workplan \u00a75, `ED-IN-0282`): *\"polarity in \u00a7F2 term 2\"* -- the score's regard term read by the ROLE the regarded party plays in the act, with `declared` against `legacy` as the falsifier's two arms.",
-          "note": "THE ARMS OF `Fixtures.stance_polarity` (`H-194`), read by `decision/choose.py::stance_term` (its `_stance_arm`), score term 2. `legacy` is the pre-G2 term, `+ stance_toward(p, c.subject)` for every row -- the CONTROL (shipped until CR-16): an act against a disliked opponent then scores LOWER, the sign \u00a7F2's term never distinguished. `declared` reads `regard(p, c.subject)` (G1's, so its judged and told halves enter at their own gains) and NEGATES it where the subject is the act's OPPONENT (`decision/options.py::subject_is_opponent`: the row contests and its second side is its subject, `VerbRow.opponent_operand()`), so fighting the disliked scores higher. A Rung subject reads 0 at G1's control; at live gains it reads the deed claims held about it (`transfer.made` on a changed rung, under `claim_subject_rule: both`). Its regarded party under the ROLE reading would be its HOLDER, and no ledger holds a `held_by` claim (M0g, `H-195`). `regard` is the midpoint: G1's regard with `+` on every row, so the sweep separates what regard adds from what the sign adds.",
+          "note": "THE ARMS OF `Fixtures.stance_polarity` (`H-194`), read by `decision/choose.py::stance_term` (its `_stance_arm`), score term 2. `legacy` is the pre-G2 term, `+ stance_toward(p, c.subject)` for every row -- the CONTROL (shipped until CR-16): an act against a disliked opponent then scores LOWER, the sign \u00a7F2's term never distinguished. `declared` reads `regard(p, c.subject)` (G1's, so its judged and told halves enter at their own gains) and NEGATES it where the subject is the act's OPPONENT (`decision/options.py::subject_is_opponent`: the row contests and its second side is its subject, `VerbRow.opponent_operand()`), so fighting the disliked scores higher. A Rung subject reads 0 at G1's control; at live gains it reads the deed claims held about it (`transfer.made` on a changed rung, under `claim_subject_rule: both`). Its regarded party under the ROLE reading would be its HOLDER, and no ledger holds a `held_by` claim (M0g, `H-195`). `regard` is the midpoint: G1's regard with `+` on every row, so the sweep separates what regard adds from what the sign adds. `beneficiary` (B10.69, `17_CENSUS_C1A_02` W4) is `declared` with the regard read toward the person the act is done FOR (`choose.beneficiary_of`) in place of its subject; a row with no such person reads the subject. Not shipped: `declared` is.",
           "values": [
             "legacy",
             "regard",
-            "declared"
+            "declared",
+            "beneficiary"
+          ]
+        },
+        "regard_signs": {
+          "source": "B10.11 (`02_CHAR_scar_cap_and_regard_unit` Addendum, H-337, H-282; `17_CENSUS_C1A_02` W4): the sign of regard, a column of the verb row.",
+          "note": "THE VALUES OF `verb_table.yaml: regard_sign`, read by `data/verbs.py::_load_verb_table` (a value outside this set is refused) and by `decision/choose.py::_stance_arm` under `stance_polarity: declared`. `+1`: a person's liking for the act's subject pulls him toward the act; `-1`: away from it; `0`: it reads nothing (regard for a person says nothing about whether to look into him or travel to him). A row naming none is given the sign the table read before the column: `-1` where the act is done against its subject (`VerbRow.opposed_to_subject`: contested against it, or an `opposed_without_prize` row), else `+1`. No cell is authored (BA1's content).",
+          "values": [
+            1,
+            -1,
+            0
+          ]
+        },
+        "scar_season_caps": {
+          "source": "B10.06 (`02_CHAR_scar_cap_and_regard_unit` edit 1, `02_CHAR_scar_is_a_wound` row 3): the arms of the scar's per-season rate.",
+          "note": "THE ARMS OF `Fixtures.scar_season_cap` (`H-465`), read by `loop/resolve.py::_scar_witnesses`; the unset value `None` is the CONTROL and is not a member (uncapped, today's counts). `element` keeps one count per person per element per season; `person` keeps one count per person per season, on the element he holds most violated. [ASSUMPTION: the roster's name and shape -- basis: neither source names one; `stance_polarities` is the tree's form for a swept string arm; Jordan to correct.]",
+          "values": [
+            "element",
+            "person"
+          ]
+        },
+        "scar_holds": {
+          "source": "B10.07 (`02_CHAR_scar_is_a_wound` row 1): the arms of which elements a person can be scarred on.",
+          "note": "THE ARMS OF `Fixtures.scar_hold` (`H-466`), read by `loop/resolve.py::_scar_witnesses` and applied by `queries/person_q.py::broken_by`. `any` is the CONTROL (every held element an act violates, today's rule); `primary` counts only a person's primary pursuits (the fewest top-weighted ones whose weights sum to `Fixtures.scar_primary_mass`) and the affiliations he stands for (`person_q.stands_for`). [ASSUMPTION: the roster's name and shape -- basis: B10.06's `scar_season_caps`; Jordan to correct.]",
+          "values": [
+            "any",
+            "primary"
+          ]
+        },
+        "scar_vindications": {
+          "source": "B10.07 (`02_CHAR_scar_is_a_wound` row 4): whether seeing a thing one lives for honoured takes a scar count away.",
+          "note": "THE ARMS OF `Fixtures.scar_vindication` (`H-468`), read by `loop/resolve.py::_scar_witnesses`. `off` is the CONTROL (no count ever falls). [ASSUMPTION: the roster's name and shape -- basis: B10.06's `scar_season_caps`; Jordan to correct.]",
+          "values": [
+            "off",
+            "on"
+          ]
+        },
+        "regard_units": {
+          "source": "B10.09 (`02_CHAR_scar_cap_and_regard_unit` edit 1 (`regard_unit`), edit 3; U1 \u00a73 *regard*): the unit regard's judged and told halves are counted in.",
+          "note": "THE ARMS OF `Fixtures.regard_unit` (`H-470`), read by `queries/person_q.py::regard`. `raw` is the CONTROL (today's sum of `deed_term`, a pursuit weight times an alignment cell); `stance` counts each deed in valence steps (`person_q.deed_steps`: the cosine of the holder's projected pursuits against the deed kind's alignment row, a paired deed's times its `_bond`), the unit of a stance row's valence, so a deed is at most one step before the gains. [ASSUMPTION: the roster's name and shape -- basis: `scar_holds`, B10.07's two-arm string roster; Jordan to correct.]",
+          "values": [
+            "raw",
+            "stance"
+          ]
+        },
+        "deed_counterparties": {
+          "source": "B10.20 (`U5a_CHAR_owed_amendments` \u00a74, amending `02_CHAR_relations_have_a_ground`; F-PES-CHAR-08): whether a deed done to a person is weighed by the judge's bond to the one it was done to.",
+          "note": "THE ARMS OF `Fixtures.deed_counterparty` (`H-474`), read by `queries/person_q.py::regard`. `paired_only` is the CONTROL (today: only a `PAIRED_KINDS` deed carries `_bond`, the judge's allegiance to the one it was done to); `person_subject` gives the factor too to an unpaired deed whose verb row takes a Person as its subject (`referent_class: Person`, read off the table by `person_q.PERSON_SUBJECT_KINDS`), the one acted on being read off the holder's `seen` claims (`person_q.deed_counterparty`). [ASSUMPTION: the roster's name and shape -- basis: `stance_polarities` is the tree's form for a swept string arm; Jordan to correct.]",
+          "values": [
+            "paired_only",
+            "person_subject"
+          ]
+        },
+        "crisis_arms": {
+          "source": "B10.13 (`16_PESSIMIST_CHAR_A` \"The resolution, decided\" 3; U1 F-43: the switch is `Fixtures.crisis_arm`, values `rule` and `drawn`): the two ways a crisis of faith comes out.",
+          "note": "THE ARMS OF `Fixtures.crisis_arm` (`H-472`), read by `data/fixtures.py::load` (a shipped value outside this set is refused) and, from B10.15, by `loop/resolve.py::_conviction_crisis`. `rule` is the CONTROL (today's function: the branch is chosen by a rule over state the crisis already reads, nothing is rolled) and SHIPS until B98; `drawn` rolls one draw per scarring act and reads the band from `tables.crisis_bands`. [ASSUMPTION: the roster's name and shape -- basis: `stance_polarities` is the tree's form for a swept string arm; Jordan to correct.]",
+          "values": [
+            "rule",
+            "drawn"
+          ]
+        },
+        "crisis_write_kinds": {
+          "source": "B10.13 (`16_PESSIMIST_CHAR_A` item 3, the band table): the writes a crisis band may make.",
+          "note": "THE THREE WRITES A ROW OF `tables.crisis_bands` MAY NAME, read by `data/rosters.py::_load_crisis_bands`, which refuses any other. `intensity` moves the creed in crisis by a whole number of steps on `conviction_map`'s closed spine (an integer; the reader clamps it); `scar` sets the count on the creed in crisis (a named setting); `branch` names the one composite rule the Failure band applies (today's FOLD / DESTROYED branches, with the third arm that replaces the unbuilt RESTABILISE). [ASSUMPTION: the closed set of write names -- basis: the source states the writes in words and names no kinds; the three are the words its table uses; Jordan to correct.]",
+          "values": [
+            "intensity",
+            "scar",
+            "branch"
+          ]
+        },
+        "manner_offset_axes": {
+          "source": "B10.58 (`IS-B2-CHAR-07`; A-108, ED-IN-0261's superseding row, 2026-11-12): the manner axes on which a person may carry a stored offset.",
+          "note": "THE THREE AXES A CAST ROW'S `manner:` MAY NAME, read by `data/cast.py::manner_offset_of`, which refuses any other (and any value beyond `+-Fixtures.manner_offset_bound`); each is a member of `pursuit_axes`. The other axes stay as their pursuits project them (A-108: \"the other axes ... projected\"). `selfish_selfless` is left out by M34's default (spread 0). [ASSUMPTION: the roster's name and shape -- basis: `crisis_write_kinds`' closed set of names read by a loader; Jordan to correct.]",
+          "values": [
+            "rigid_flexible",
+            "grandiose_humble",
+            "deontological_instrumental"
+          ]
+        },
+        "relation_grounds": {
+          "source": "B10.62 (`IS-B2-CHAR-03`): the six edge types of the archived relational-graph design, as plain words (CHAR addendum B).",
+          "note": "THE GROUNDS A CAST ROW'S `relations:` ENTRY MAY NAME, read by `data/cast.py::relations_of`, which refuses any other. A ground is what another person is to the holder, and it is the predicate suffix of the `bond:<ground>` claim `boot/realm.py::seed_relations` deposits in the holder's own ledger (`queries/person_q.py::BOND_STEM`); nothing reads a ground as a rule (kin is no eligibility). [ASSUMPTION: the six names and their closed set -- basis: the design's six edge types; Jordan to correct.]",
+          "values": [
+            "kin",
+            "oath",
+            "service",
+            "patronage",
+            "rivalry",
+            "feud"
           ]
         },
         "odds_weightings": {
@@ -3888,11 +4035,26 @@
               "gain": "competence_gain"
             },
             {
+              "use": "choice_temper",
+              "role": "judgement",
+              "key": "attr.mind.focus",
+              "side": "actor",
+              "gain": "temper_gain"
+            },
+            {
               "use": "own_state_gate",
               "role": "gate",
               "key": "prac.thread_sensitivity",
               "side": "actor",
               "gain": "thread_sensitivity_gate"
+            },
+            {
+              "use": "crisis",
+              "role": "edge",
+              "key": "attr.spirit.will",
+              "side": "actor",
+              "level": "minor",
+              "per": "mid"
             }
           ]
         },
@@ -4193,6 +4355,35 @@
             }
           }
         },
+        "crisis_bands": {
+          "source": "`proposals/2026-11-12-subsystem-audit-suite/proposals/16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` \"The resolution, decided\" 3 (the four-band table, copied), \"Exact edits, by owner\" (row `rosters.yaml`); workplan v12 B10.13.",
+          "note": "Overwhelming -- FAITH RENEWED, the one outflow the count has: `intensity: 1` (the reader clamps at the ceiling) and `scar: zero` (the count on `x` resets to 0). [ASSUMPTION; Jordan to correct: that renewal gives one step and clears the count -- basis: the source's \"faith renewed\"; no figure beyond +1.] Success -- HE HOLDS: nothing on the intensity, and `scar: threshold_less_one` (the count is set to the threshold less one, so it will take another wound to test him again). [ASSUMPTION; Jordan to correct: that one wound, not two, tests him again -- basis: the source's \"another wound to test him again\".] Partial -- HE WAVERS, recoverable by the Overwhelming band of a later test: `intensity: -1` (a creed at 1 goes to a held rejection, 0). [ASSUMPTION; Jordan to correct: one step down, no change to the count -- basis: the source's \"recoverable\".] Failure -- HE BREAKS, TODAY'S BRANCH: `branch: fold_else_destroy_else_minus_two` (FOLD into the highest-intensity incompatible co-held creed, else DESTROYED where nothing else is held, else -- something compatible is held -- intensity -2 floored at 0). The third arm replaces the unbuilt RESTABILISE branch of `conviction_after_crisis`, so no person in crisis is a no-op; `conviction_map`'s closed spine is kept (integers, clamped), so no rounding rule is needed. [ASSUMPTION; Jordan to correct: the -2 and the floor at 0 -- basis: the source's \"intensity -2 floored at 0\".] The write NAMES (`zero`, `threshold_less_one`, `fold_else_destroy_else_minus_two`) are read by B10.14's reader; a name it does not know is its refusal.",
+          "bands": {
+            "Overwhelming": [
+              {
+                "intensity": 1
+              },
+              {
+                "scar": "zero"
+              }
+            ],
+            "Success": [
+              {
+                "scar": "threshold_less_one"
+              }
+            ],
+            "Partial": [
+              {
+                "intensity": -1
+              }
+            ],
+            "Failure": [
+              {
+                "branch": "fold_else_destroy_else_minus_two"
+              }
+            ]
+          }
+        },
         "role_template_pursuits": {
           "source": "systems/factions/reference/faction_canon_v30.md \u00a74 \"Role Templates and Expected Convictions\" (per PP-686 \u00a73.3.1, over the PP-684 13-Conviction taxonomy). TIER 2 \u2014 near-canon, and it survives because `systems/world/` has no competing concept, the same standing `role_templates` itself has.",
           "row": "H-99",
@@ -4394,6 +4585,195 @@
               "deontological_instrumental": -0.1
             }
           }
+        },
+        "pursuit_signatures": {
+          "source": "B10.17 (`16_PESSIMIST_CHAR_B` step 1): what a pursuit's NAME must mean in acts, as verbs. A FLOOR, not the whole character. Read by `harness/conviction_spread.py::signature_breaks` against `queries/person_q.py::pursuit_lean`, which reports and refuses nothing yet.",
+          "keys": [
+            "pursuits",
+            "verbs"
+          ],
+          "note": "[ASSUMPTION; medium; Jordan to correct: every row is content.] `favours`: verbs whose lean on the pursuit should be above zero. `opposes`: verbs whose lean should be below zero, and below every favoured verb's. Verb keys are `verb_table.yaml`'s, spelled as it spells them (`\"evade / defy\"`). The loader refuses a pursuit off the roster and a verb off `VERB_TABLE`; a verb with no `alignment` cell is lawful and reads lean 0.",
+          "cells": {
+            "love": {
+              "favours": [
+                "give",
+                "tend",
+                "forgive"
+              ],
+              "opposes": [
+                "sabotage",
+                "raze",
+                "forge"
+              ]
+            },
+            "justice": {
+              "favours": [
+                "open_case",
+                "determine",
+                "petition"
+              ],
+              "opposes": [
+                "forge",
+                "lie",
+                "conceal"
+              ]
+            },
+            "family": {
+              "favours": [
+                "give",
+                "tend",
+                "succeed"
+              ],
+              "opposes": [
+                "migrate",
+                "sabotage"
+              ]
+            },
+            "wealth": {
+              "favours": [
+                "exchange",
+                "work",
+                "requisition"
+              ],
+              "opposes": [
+                "give",
+                "raze"
+              ]
+            },
+            "reputation": {
+              "favours": [
+                "challenge",
+                "speak",
+                "utter"
+              ],
+              "opposes": [
+                "conceal",
+                "evade / defy"
+              ]
+            },
+            "scholastics": {
+              "favours": [
+                "research",
+                "examine",
+                "reconstruct"
+              ],
+              "opposes": [
+                "destroy_record",
+                "raze"
+              ]
+            },
+            "community": {
+              "favours": [
+                "build",
+                "found",
+                "convene"
+              ],
+              "opposes": [
+                "raze",
+                "migrate"
+              ]
+            },
+            "stewardship": {
+              "favours": [
+                "build",
+                "restore",
+                "work"
+              ],
+              "opposes": [
+                "raze",
+                "sabotage"
+              ]
+            },
+            "honour": {
+              "favours": [
+                "challenge",
+                "accept",
+                "commit"
+              ],
+              "opposes": [
+                "lie",
+                "forge",
+                "evade / defy"
+              ]
+            },
+            "liberty": {
+              "favours": [
+                "evade / defy",
+                "release",
+                "migrate"
+              ],
+              "opposes": [
+                "comply",
+                "arrest",
+                "capture"
+              ]
+            },
+            "stability": {
+              "favours": [
+                "restore",
+                "comply",
+                "create_record"
+              ],
+              "opposes": [
+                "raze",
+                "evade / defy"
+              ]
+            },
+            "virtue": {
+              "favours": [
+                "give",
+                "forgive",
+                "pardon"
+              ],
+              "opposes": [
+                "lie",
+                "forge",
+                "sabotage"
+              ]
+            },
+            "doctrine": {
+              "favours": [
+                "utter",
+                "commit",
+                "oblige"
+              ],
+              "opposes": [
+                "forge",
+                "destroy_record"
+              ]
+            },
+            "happiness": {
+              "favours": [
+                "give",
+                "release",
+                "tend"
+              ],
+              "opposes": [
+                "fight",
+                "arrest"
+              ]
+            },
+            "individuality": {
+              "favours": [
+                "evade / defy",
+                "found",
+                "migrate"
+              ],
+              "opposes": [
+                "comply",
+                "oblige"
+              ]
+            }
+          }
+        },
+        "affiliation_signatures": {
+          "source": "B10.19 (`U5a_CHAR_owed_amendments` \u00a77, extending `16_PESSIMIST_CHAR_B`): what a creed's NAME must mean in acts, as verbs, the shape of `pursuit_signatures`. Read by `harness/conviction_spread.py::signature_breaks` against `data/affiliations.py::engagement` (`tables.affiliation_engagement`), which reports and refuses nothing yet.",
+          "keys": [
+            "affiliations",
+            "verbs"
+          ],
+          "note": "[ASSUMPTION; Jordan to correct: every row is content.] EMPTY: the reader ships first and the rows land with the CHAR content pass (`IS-A-11` stage 1 table (e)). `favours`: verbs whose engagement cell on the creed should be above zero. `opposes`: verbs whose cell should be below zero, and below every favoured verb's. Verb keys are `verb_table.yaml`'s. The loader refuses a creed off `affiliations` and a verb off `VERB_TABLE`; a verb with no engagement cell is lawful and reads 0. A cell is repaired in `affiliation_engagement` and nowhere else.",
+          "cells": {}
         },
         "alignment": {
           "source": "the retired pursuit-cells draft (its `FORK:` row in `references/restructure_ledger.md`) \u00a73 (the re-cell over the seven axes), FOLDED INTO THE BUILD by Jordan 2026-10-06 (RS-1, ED-IN-0291), plus the six table verbs the draft does not cell (`build`, `found`, `give`, `march`, `migrate`, `survey`), celled in IN-08's cells commit by the draft's own method (each cell's reason below). Formula: ARCHITECTURE_V2.md \u00a7F2 \u2014 `score(c) = \u03a3_axis axis_weight[axis] \u00b7 alignment(c.verb, axis)`, the person's axis weights being their pursuits projected through `pursuit_projection`.",
@@ -5096,8 +5476,15 @@
           ],
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
           "beneficiary_note": "v9 IN-12 step 10 (#453 \u00a79.3: *'beneficiary `actor`'*): THE CONCEALER -- the cover is minted into his own hand and hides his own name.",
-          "requires": "\u2014",
-          "requires_note": "#453 \u00a79.3: *'requires: \u2014 (no precondition, so an empty `emits_on_refusal` is lawful)'*. Untyped, `create_record`'s shape: a computed `conceal` forms on its question's referents and carries `subject`, which the effect does not read (the cover names the actor, not the referent). \u26a0 ONE PERSON-SIDE DECLINE, NOT A PRECONDITION: a person holding a cover that names him forms no second one (`rosters.yaml: held_document_declines`, read in `decision/options.py::opening_set`), #453's *'a person-side decline while the actor holds a live cover'*; a hand-built act is not declined by the fold.",
+          "requires": "the actor is an individual, not a population",
+          "requires_typed": {
+            "form": "relation",
+            "of": "actor",
+            "relation": "individual",
+            "conjunct": "individual"
+          },
+          "requires_typed_note": "B10.60 (`proposals/02_CHAR_offer_what_can_be_done.md` edit 3; [ASSUMPTION; medium; Jordan to correct; revert: drop this cell and the `individual` refusal key, which restores `requires: \u2014`): `fight`'s `individual` conjunct of `actor`. A population's heavy moves are petition, migrate, work, tend, comply or refuse and riot (A-56); taking a cover is none of them. A cohort forms none (`queries/person_q.py::OwnStateReader`, B10.59) and a hand-built cohort act is refused with the row's one refusal kind. The cell is the ONLY precondition: the note below states the row as #453 \u00a79.3 had it, with none.",
+          "requires_note": "#453 \u00a79.3: *'requires: \u2014 (no precondition, so an empty `emits_on_refusal` is lawful)'*. Untyped before B10.60, `create_record`'s shape: a computed `conceal` forms on its question's referents and carries `subject`, which the effect does not read (the cover names the actor, not the referent). \u26a0 ONE PERSON-SIDE DECLINE, NOT A PRECONDITION: a person holding a cover that names him forms no second one (`rosters.yaml: held_document_declines`, read in `decision/options.py::opening_set`), #453's *'a person-side decline while the actor holds a live cover'*; a hand-built act is not declined by the fold.",
           "writes": [
             "Record.exists"
           ],
@@ -5107,6 +5494,9 @@
           ],
           "emits_note": "#453 \u00a79.3's kind, emitted by this row alone. \u26a0 NO CHANNEL EXCEPTION (K-19): taking a cover is witnessed as any act is, by `witness_channels`' ordinary precedence -- a per-verb exception there would be scripting drift. `social`, so `_ch_chronicle` does not broadcast it.",
           "emits_on_refusal": {
+            "individual": [
+              "conceal.refused"
+            ],
             "write": [
               "conceal.refused"
             ],
@@ -5115,7 +5505,7 @@
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
-          "refusal_note": "#453 \u00a79.3: no precondition; a mint that moves nothing (a hand-built act naming the id of an identical Record) is the `write` clause's `conceal.refused` (B07.01; it was the fold's flat `act.refused`).",
+          "refusal_note": "#453 \u00a79.3: no precondition (B10.60 adds the actor's `individual` conjunct, refused with this kind too); a mint that moves nothing (a hand-built act naming the id of an identical Record) is the `write` clause's `conceal.refused` (B07.01; it was the fold's flat `act.refused`).",
           "grade": "assumption",
           "grade_note": "an argued addition (#453 \u00a710.4 step 10): the matrix row `(Record, exists)` is the tree's; the row, the `cover` kind and the `anchor_of` cover read are v9 IN-12's, on #453 \u00a78.2 `:1486-1495`, \u00a79.3 `:1826-1863`, K-19 `:2722-2727`.",
           "source": "v9 IN-12 step 10 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) \u00a79.3 `:1826-1863`"
@@ -5240,7 +5630,13 @@
           "brute": "own",
           "brute_note": "his own paper (18_DET `bookkeeping`); a false one is `forge`",
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
-          "requires": "\u2014",
+          "requires": "the actor is an individual, not a population",
+          "requires_typed": {
+            "form": "relation",
+            "of": "actor",
+            "relation": "individual"
+          },
+          "requires_typed_note": "B10.60 (`proposals/02_CHAR_offer_what_can_be_done.md` edit 3; [ASSUMPTION; medium; Jordan to correct; revert: drop this cell and the refusal kind, which restores `requires: \u2014` and `emits_on_refusal: []`): `fight`'s `individual` conjunct of `actor`, on a row that had no cell. A population's heavy moves are petition, migrate, work, tend, comply or refuse and riot (A-56), and keeping its own books is none of them. WORLD-ONLY in the fold (`Person.is_cohort`) and the actor's own state at formation (`queries/person_q.py::OwnStateReader`, B10.59), so a cohort forms none and a hand-built cohort act is refused with the row's one kind (`create_record.refused`).",
           "writes": [
             "Record.exists",
             "Record.stages"
@@ -5248,7 +5644,9 @@
           "emits": [
             "record.created"
           ],
-          "emits_on_refusal": [],
+          "emits_on_refusal": [
+            "create_record.refused"
+          ],
           "grade": "ruled",
           "grade_note": "`ruled`: W2 landed Part D's five `Record` rows, which are the verb's table (V2 \u00a7E3 had a Part B defect id, `D7`, in the grade column).",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed"
@@ -5281,7 +5679,7 @@
               }
             ]
           },
-          "requires_typed_note": "v9 IN-26: `give`'s first two conjuncts, for `give`'s reasons (`A-13`, plan position `14`'s measured shape): `existence` of `subject` kind `Record` (a document, not a seat, a rung or a Proposition -- a Proposition is never destroyed, \u00a714) and `relation` of `subject` `held_by` (the actor holds it). The bound `subject` is what `loop/effects_information.py::_eff_destroy_record` destroys; the `record` payload key it read before is gone, since no Candidate carries it. WHETHER A PERSON FORMS IT is not this cell's: `opening_set` forms it only on a referent the person holds (`rosters.yaml: own_hold_declines`) and not at all while `Fixtures withheld_verbs` names it (H-156 option (a), shipped -- the sink arm OFF).",
+          "requires_typed_note": "v9 IN-26: `give`'s first two conjuncts, for `give`'s reasons (`A-13`, plan position `14`'s measured shape): `existence` of `subject` kind `Record` (a document, not a seat, a rung or a Proposition -- a Proposition is never destroyed, \u00a714) and `relation` of `subject` `held_by` (the actor holds it). The bound `subject` is what `loop/effects_information.py::_eff_destroy_record` destroys; the `record` payload key it read before is gone, since no Candidate carries it. WHETHER A PERSON FORMS IT is not this cell's: `opening_set` forms it only on a referent the person holds (`OwnStateReader`'s `held_by`, asked of this cell) and not at all while `Fixtures withheld_verbs` names it (H-156 option (a), shipped -- the sink arm OFF).",
           "writes": [
             "Record.exists"
           ],
@@ -5293,7 +5691,7 @@
           ],
           "grade": "ruled",
           "grade_note": "`ruled`: W2 landed Part D's five `Record` rows, which are the verb's table (V2 \u00a7E3 had a Part B defect id, `D7`, in the grade column).",
-          "formation_decline_note": "v9 IN-26 (BOUND-PAPER): THE HOLD IS AN ARM, NOT THE ROW. The row is typed and `own`-eligible (above), so a hand-built `destroy_record` executes through the fold; FORMATION is decided in `decision/options.py::opening_set` by two reads: `rosters.yaml: own_hold_declines` (it forms only on a referent the person himself holds -- his own live `hold` edge, never every referent) and `Fixtures withheld_verbs` (H-156 option (a) as a switch: SHIPPED naming this verb, so nobody forms it; `()` is the sink arm, H-156 option (b) for this row). [ASSUMPTION; medium; Jordan to correct; revert: drop the row's `own` and cell and the roster line, and the fixture's member with them.]",
+          "formation_decline_note": "v9 IN-26 (BOUND-PAPER): THE HOLD IS AN ARM, NOT THE ROW. The row is typed and `own`-eligible (above), so a hand-built `destroy_record` executes through the fold; FORMATION is decided in `decision/options.py::opening_set` by two reads: `OwnStateReader`'s `held_by` (it forms only on a referent the person himself holds -- his own live `hold` edge, never every referent) and `Fixtures withheld_verbs` (H-156 option (a) as a switch: SHIPPED naming this verb, so nobody forms it; `()` is the sink arm, H-156 option (b) for this row). [ASSUMPTION; medium; Jordan to correct; revert: drop the row's `own` and cell, and the fixture's member with them.]",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed"
         },
         {
@@ -5520,7 +5918,8 @@
           "requires_typed_note": "v10 REM-2B restores v9 IN-09's typing (`19b`, J-2 arm A: ONE ROW, NOT TWO), `comply`'s cell VERBATIM (\u00a7E3 `:431` \u2014 *as `comply`*): the act's `subject` is a writ (`existence`, kind `dispensation`) and the actor's own ledger holds a claim on it (`own_ledger`); `comply`'s note carries the reading, its operand (no name coined, `H-94` not filled) and its limit (`claim.held` accepts any claim on the writ). #453's K-24 split (`evade` = no transfer before the term matures, `defy` = a public refusal) is not built. It is a declared mover, with no realm execution required (P9); the hand-built proof is `tests/test_in09_dispensation_answer.py`.",
           "writes": [],
           "emits": [
-            "compliance.withheld"
+            "compliance.withheld",
+            "scruple.overridden"
           ],
           "emits_on_refusal": [
             "compliance.impossible"
@@ -5594,19 +5993,29 @@
           ],
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
           "beneficiary_note": "the forgery is minted into the FORGER's hand (`_mint_document`'s maker's `hold`), `survey`'s carrier: he holds it to plant it (`give`).",
-          "requires": "the forger has heard of what he forges a sheet on, and it coheres under one faction",
+          "requires": "the forger has heard of what he forges a sheet on, it coheres under one faction and the forger is an individual",
           "requires_typed": {
-            "form": "own_ledger",
-            "of": "subject"
+            "all": [
+              {
+                "form": "own_ledger",
+                "of": "subject"
+              },
+              {
+                "form": "relation",
+                "of": "actor",
+                "relation": "individual"
+              }
+            ]
           },
-          "requires_typed_note": "v9 IN-45: `survey`'s cell, for `survey`'s reasons (its `requires_typed_note:`) -- #453's row for the verb, *'a faction the forger holds a claim on (`survey`'s cell)'*. `own_ledger` of `subject` carries `subject` onto a computed act, which is what makes the row TYPED: an untyped row carries nothing, so a computed `forge` would have no faction to forge a sheet on. THE KIND IS THE VERB'S, NOT AN OPERAND: a forgery is a `faction_sheet` (`loop/effects_information.py::_eff_forge`), supplied by the verb that knows it as `issue`, `petition` and `survey` supply theirs -- `requires_operands`' `kind` is a MATTER kind and is not bound, and no ninth operand is coined. *It coheres under one faction* is the effect's decline, `survey`'s.",
+          "requires_typed_note": "B10.60 (`proposals/02_CHAR_offer_what_can_be_done.md` edit 3; [ASSUMPTION; medium; Jordan to correct; revert: drop the second conjunct, `relation` `individual` of `actor`, which is `fight`'s spelling): a population does not forge (A-56's heavy moves are petition, migrate, work, tend, comply or refuse and riot); a cohort forms none and a hand-built cohort act is refused with the row's one refusal kind, unnamed as the first conjunct is. v9 IN-45: `survey`'s cell, for `survey`'s reasons (its `requires_typed_note:`) -- #453's row for the verb, *'a faction the forger holds a claim on (`survey`'s cell)'*. `own_ledger` of `subject` carries `subject` onto a computed act, which is what makes the row TYPED: an untyped row carries nothing, so a computed `forge` would have no faction to forge a sheet on. THE KIND IS THE VERB'S, NOT AN OPERAND: a forgery is a `faction_sheet` (`loop/effects_information.py::_eff_forge`), supplied by the verb that knows it as `issue`, `petition` and `survey` supply theirs -- `requires_operands`' `kind` is a MATTER kind and is not bound, and no ninth operand is coined. *It coheres under one faction* is the effect's decline, `survey`'s.",
           "writes": [
             "Record.exists",
             "Record.forgery_quality"
           ],
           "writes_note": "one mint, `survey`'s: `_mint_document` writes the Record whole -- the sheet `faction_q.resolve` gives, with the forger as its `head` -- with the forger's `hold` riding on its receipt (`T-m`). `Record.forgery_quality` (check-only, the same mint), declared with its reader (`H-210`, v9 SC-02 `22b` step 25): the Record carries `rosters.yaml: forge_quality`'s value for its band (B07.02; `Fixtures.default_forgery_quality` is retired), and an inquiry examining it carries that quality into its roll's obstacle (`seam/wrappers/sigma.py::contest_input` -> `modules/social_contest/roll.py::obstacle`). A pair written and read by nothing is `ID-13`'s defect, so the pair, its writer and its reader stand or go together. [ASSUMPTION; medium; Jordan to correct; revert: drop the pair, the writer and the reader together.]",
           "emits": [
-            "record.forged"
+            "record.forged",
+            "scruple.overridden"
           ],
           "emits_note": "v9 IN-45: `record.forged`, the kind the matrix names for a forgery (`write_matrix.yaml`'s `(Record, forgery_quality)` row), so the row and the matrix agree; it joins `(Record, exists)`'s `emits:` as `faction.surveyed` did for `survey`. Its own kind for `survey`'s reason (`faction.surveyed`'s `emits_note:`): a forgery is a private act, and neither broadcast channel reads it. Witnesses learn THAT a document was made; that it is false, nobody learns from the Event.",
           "emits_on_refusal": {
@@ -5670,21 +6079,25 @@
           "emits": {
             "Overwhelming": [
               "news.told",
-              "confidence.broken"
+              "confidence.broken",
+              "scruple.overridden"
             ],
             "Success": [
               "news.told",
-              "confidence.broken"
+              "confidence.broken",
+              "scruple.overridden"
             ],
             "Partial": [
               "news.told",
-              "confidence.broken"
+              "confidence.broken",
+              "scruple.overridden"
             ],
             "Failure": [
-              "news.untold"
+              "news.untold",
+              "scruple.overridden"
             ]
           },
-          "emits_note": "`tell`'s kinds and no other (CR-27): a hearer's deposit is `loop/witness.py`'s `news.told` branch reading the `said` the act carries, so a false value rides the one channel a true one does. \u26a0 A KIND TWO ROWS EMIT HAS NO `KIND_VERB` (`data/verbs.py::_derive_kind_verb`) AND SO JOINS `PAIRED_KINDS`: `news.told`, `news.untold` and `confidence.broken` are now paired kinds (`tell.refused` is a refusal kind, so no deed). None carries an authored `deed:<kind>` cell, so `_lean` reads 0 for each and no judgement moves under the shipped `declared` alignment; under `uniform`/`sign_only`, and in `attributed_deeds`' membership, the three kinds now count only for a `seen`-paired doer; the pairing's other readers are what the realm hash records.",
+          "emits_note": "`tell`'s kinds and no other (CR-27), save `scruple.overridden` (B10.24: kept only where the fold finds the act's own candidate at a positive margin on its Scene's `forgone`, `loop/resolve.py::_scruple_overridden`; declared on every row `rosters.yaml: pursuit_axes.refusable` lists): a hearer's deposit is `loop/witness.py`'s `news.told` branch reading the `said` the act carries, so a false value rides the one channel a true one does. \u26a0 A KIND TWO ROWS EMIT HAS NO `KIND_VERB` (`data/verbs.py::_derive_kind_verb`) AND SO JOINS `PAIRED_KINDS`: `news.told`, `news.untold` and `confidence.broken` are now paired kinds (`tell.refused` is a refusal kind, so no deed). None carries an authored `deed:<kind>` cell, so `_lean` reads 0 for each and no judgement moves under the shipped `declared` alignment; under `uniform`/`sign_only`, and in `attributed_deeds`' membership, the three kinds now count only for a `seen`-paired doer; the pairing's other readers are what the realm hash records.",
           "emits_on_refusal": {
             "holds": [
               "tell.refused"
@@ -5889,7 +6302,7 @@
               }
             ]
           },
-          "requires_typed_note": "v9 IN-12 (`give` + Rung, #453 \u00a79.6): THE CELL HAS NO `existence` CONJUNCT; THE OBJECT'S KIND IS THE EFFECT'S, `seize`'s precedent (v9 IN-13): the typed grammar has no disjunction, and `existence` of `subject` kind `Record` refused every Rung, so *a Record or a Rung* cannot be spelt. The cell keeps the conjuncts that carry the licence (`held_by`, `with`); `_eff_give` declines a subject that is neither a Record nor a Rung (`give.refused`, the `write` clause), and the gate's `handover` still admits only a non-seat `hold`, so a seat handed over is `NotYours`. THAT LOOSENS FORMATION (#453 \u00a79.6 says so): the cell no longer filters on what the subject IS, so `rosters.yaml: own_hold_declines` carries `give` too -- the person-side reading of the `held_by` conjunct, which keeps a person from forming a gift of a referent he does not hold. [ASSUMPTION; medium; Jordan to correct; revert: restore the `existence` conjunct (`kind: Record`) and drop `give` from `own_hold_declines`; the Rung half is then unformable.] The typed cell (plan position `14`, U7-own) is what makes a gift formable, in place of `loop/predicates.py::_req_give`. TWO CONJUNCTS, each on an existing form and stem: `relation` of `subject`, `held_by` (the actor holds it -- `succeed`'s and `found`'s cell; `hold_force`'s raise on two live holders is not asked here because the gate's `handover` makes two unreachable); `relation` of `to`, `with` (the receiver stands where the actor does, UNKNOWN for a receiver who is no person, so *a person* rides here too; `with` is the telling workplan's `T4` stem, `data/requires.py: REQUIRES_STEMS`, `relation` of `to` -- `tell`'s `hearer`). *A person other than the actor* is `ED-IN-0210` ruling 1's second party and is the FOLD's (`loop/resolve.py::_admits`, the `counterparty` clause), not this cell's: the grammar has no negation. THE CELL BINDS `to` BESIDE `subject`, so `TypedRequires.known_person_operands` names `to` and `decision/options.py::operand_bags` forms one Candidate per person the giver KNOWS (`known_persons`, `tell`'s primitive) -- the topic is the referent (the Record) and the receiver is somebody known, never the referent. `with` is WORLD-ONLY, so a giver forms the Candidate on whom he knows and the fold refuses an absent receiver.",
+          "requires_typed_note": "v9 IN-12 (`give` + Rung, #453 \u00a79.6): THE CELL HAS NO `existence` CONJUNCT; THE OBJECT'S KIND IS THE EFFECT'S, `seize`'s precedent (v9 IN-13): the typed grammar has no disjunction, and `existence` of `subject` kind `Record` refused every Rung, so *a Record or a Rung* cannot be spelt. The cell keeps the conjuncts that carry the licence (`held_by`, `with`); `_eff_give` declines a subject that is neither a Record nor a Rung (`give.refused`, the `write` clause), and the gate's `handover` still admits only a non-seat `hold`, so a seat handed over is `NotYours`. THAT LOOSENS FORMATION (#453 \u00a79.6 says so): the cell no longer filters on what the subject IS, so the person-side reading of the `held_by` conjunct (`OwnStateReader`, B10.59; formerly `rosters.yaml: own_hold_declines`, deleted at B10.61) is what keeps a person from forming a gift of a referent he does not hold. [ASSUMPTION; medium; Jordan to correct; revert: restore the `existence` conjunct (`kind: Record`); the Rung half is then unformable.] The typed cell (plan position `14`, U7-own) is what makes a gift formable, in place of `loop/predicates.py::_req_give`. TWO CONJUNCTS, each on an existing form and stem: `relation` of `subject`, `held_by` (the actor holds it -- `succeed`'s and `found`'s cell; `hold_force`'s raise on two live holders is not asked here because the gate's `handover` makes two unreachable); `relation` of `to`, `with` (the receiver stands where the actor does, UNKNOWN for a receiver who is no person, so *a person* rides here too; `with` is the telling workplan's `T4` stem, `data/requires.py: REQUIRES_STEMS`, `relation` of `to` -- `tell`'s `hearer`). *A person other than the actor* is `ED-IN-0210` ruling 1's second party and is the FOLD's (`loop/resolve.py::_admits`, the `counterparty` clause), not this cell's: the grammar has no negation. THE CELL BINDS `to` BESIDE `subject`, so `TypedRequires.known_person_operands` names `to` and `decision/options.py::operand_bags` forms one Candidate per person the giver KNOWS (`known_persons`, `tell`'s primitive) -- the topic is the referent (the Record) and the receiver is somebody known, never the referent. `with` is WORLD-ONLY, so a giver forms the Candidate on whom he knows and the fold refuses an absent receiver.",
           "counterparty": "to",
           "counterparty_note": "THE RECEIVER. The typed cell binds `to`, so every Candidate carries it (from `operand_bags`' known persons) and `opening_set` declines only a gift to oneself, as it does a petition; the FOLD refuses the same case for a hand-built act (`_admits`' `counterparty` clause).",
           "writes": [
@@ -6923,7 +7336,8 @@
           "requires_typed_note": "v10 REM-2B restores v9 IN-09's typing (`19b`) ON A DECLARED READING [ASSUMPTION; medium; Jordan to correct]. \u00a7E3 `:432` \u2014 *as `comply` \u2014 \u26a0 **emitter- or receiver-side is `absent`, D18***. #453 places construal WITNESS-side (`proposals/2026-10-03-verb-coverage-and-gap-fill.md:504`, *'not an act: the content deposit already reads per holder'*); Jordan kept it as a verb (J-2), so it is built as an act whose one effect is THE CONSTRUER'S OWN READING OF A WRIT HE HOLDS -- RECEIVER-side, the side Jordan's 2026-09-02 refraction ruling names (*'the PREMISES AND RATIONALE, minted per receiver'*), which answers `D18` by a reading, not a ruling. So `comply`'s cell VERBATIM (existence of `subject` kind `dispensation`; `own_ledger` of `subject`), no operand coined. THERE IS NO `relation` `held_by` CONJUNCT (*the construer HOLDS the writ, not merely heard of it*): a Record row whose cell asks `held_by` is a HOLDING row (`data/verbs.py::HOLDING_RECORD_KINDS`, REM-25), so that conjunct would move `dispensation` into the set `records_held_for_holding_rows` stamps for every holder, issuer and custodian included -- widening `comply`'s, `evade / defy`'s, `carry`'s, `found`'s and `build`'s formation past the addressee test and breaking the split's rule that a kind is in exactly one set. The holding is therefore carried by the formation (`referent_class` above), and the fold, like `comply`'s, admits a reader of the terms who does not hold the writ (a hand-built act). REVERT: Jordan states `construe` is witness-side only; the row returns to `requires_typed: none` and R-05 counts it witness-side.",
           "writes": [],
           "emits": [
-            "terms.distorted"
+            "terms.distorted",
+            "scruple.overridden"
           ],
           "emits_on_refusal": [
             "construal.impossible"
@@ -7089,7 +7503,7 @@
           ],
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
           "beneficiary_note": "v9 IN-12 step 9 (#453 \u00a79.3; K-04, K-09): THE SABOTEUR -- a damaged fabric benefits whoever wanted it damaged, and a Site cannot be held at all (`rosters.yaml: hold_object_kinds`), so *the fabric's holder* is nobody and the row names NO counterparty (K-04). Its sign and beneficiary are what separate it from `restore`/`work` (K-09).",
-          "requires": "the site exists and the actor is present at it",
+          "requires": "the site exists, the actor is present at it and the actor is an individual",
           "requires_typed": {
             "all": [
               {
@@ -7103,10 +7517,16 @@
                 "of": "site",
                 "relation": "present_at",
                 "conjunct": "present"
+              },
+              {
+                "form": "relation",
+                "of": "actor",
+                "relation": "individual",
+                "conjunct": "individual"
               }
             ]
           },
-          "requires_typed_note": "v9 IN-12 step 9 -- #453 \u00a79.3: *'requires: `restore`'s cell'*, copied whole: the site exists and the actor stands at it.",
+          "requires_typed_note": "v9 IN-12 step 9 -- #453 \u00a79.3: *'requires: `restore`'s cell'*, copied whole: the site exists and the actor stands at it. B10.60 (`proposals/02_CHAR_offer_what_can_be_done.md` edit 3; [ASSUMPTION; medium; Jordan to correct; revert: drop the `individual` conjunct and its refusal key): ADDS `fight`'s `individual` conjunct of `actor`. A population's heavy moves are petition, migrate, work, tend, comply or refuse and riot (A-56); `riot` has no verb row, and the cohort-heavy-moves proposal names no riot on `sabotage` (checked, so `sabotage` stays in the set).",
           "writes": [
             "Site.condition"
           ],
@@ -7122,6 +7542,9 @@
               "sabotage.refused"
             ],
             "present": [
+              "sabotage.refused"
+            ],
+            "individual": [
               "sabotage.refused"
             ],
             "write": [
@@ -7588,13 +8011,22 @@
           "brute": "counterparty",
           "brute_note": "a prompt: the questioned person answers by his own `tell`, which is drawn (`rosters.yaml:1433-1434`, K-36)",
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
-          "requires": "the person questioned exists",
+          "requires": "the person questioned exists and the actor is an individual",
           "requires_typed": {
-            "form": "existence",
-            "of": "subject",
-            "kind": "Person"
+            "all": [
+              {
+                "form": "existence",
+                "of": "subject",
+                "kind": "Person"
+              },
+              {
+                "form": "relation",
+                "of": "actor",
+                "relation": "individual"
+              }
+            ]
           },
-          "requires_typed_note": "`fieldwork_v30.md:294` -- *Interview \u00b7 Attunement \u00b7 Question a witness, informant, or subject*. \u26a0 THE PRECONDITION CANON WOULD PREFER IS UNASKABLE BY CONSTRUCTION, and that is worth stating rather than leaving as a thin cell: a witness is someone who HOLDS a claim on the matter, and `04 \u00a7B.2`'s corrected `F8` carve-out admits a resolver-side ledger read for THE ACTOR'S OWN ledger and no other -- *'a Query taking a ledger and an asker who is not its holder still does not exist'*. So `own_ledger` cannot be pointed at the person being questioned, and existence is the strongest clause the grammar admits here. \u26a0 A SECOND CONSEQUENCE, NAMED SO IT IS NOT DISCOVERED AS A SURPRISE: `questions_for`'s Q2 can raise a question whose referent is the asker themselves (`world_q.py:198` -- `c.subject == p.id`), so this cell admits an act whose subject is its actor. Excluding it needs a negation the closed seven forms do not carry, and `rosters.yaml: requires_forms` rules an eighth form *'a design change, not a table edit'*.",
+          "requires_typed_note": "B10.60 (`proposals/02_CHAR_offer_what_can_be_done.md` edit 3; [ASSUMPTION; medium; Jordan to correct; revert: drop the second conjunct, `fight`'s `individual` of `actor`): a population does not take an individual's acts (A-56), so a cohort forms no `interview` and a hand-built cohort act is refused with the row's one kind.`fieldwork_v30.md:294` -- *Interview \u00b7 Attunement \u00b7 Question a witness, informant, or subject*. \u26a0 THE PRECONDITION CANON WOULD PREFER IS UNASKABLE BY CONSTRUCTION, and that is worth stating rather than leaving as a thin cell: a witness is someone who HOLDS a claim on the matter, and `04 \u00a7B.2`'s corrected `F8` carve-out admits a resolver-side ledger read for THE ACTOR'S OWN ledger and no other -- *'a Query taking a ledger and an asker who is not its holder still does not exist'*. So `own_ledger` cannot be pointed at the person being questioned, and existence is the strongest clause the grammar admits here. \u26a0 A SECOND CONSEQUENCE, NAMED SO IT IS NOT DISCOVERED AS A SURPRISE: `questions_for`'s Q2 can raise a question whose referent is the asker themselves (`world_q.py:198` -- `c.subject == p.id`), so this cell admits an act whose subject is its actor. Excluding it needs a negation the closed seven forms do not carry, and `rosters.yaml: requires_forms` rules an eighth form *'a design change, not a table edit'*.",
           "writes": [],
           "writes_note": "\u2014 (as `examine`)",
           "emits": [
@@ -7727,7 +8159,7 @@
             "attr.mind.focus"
           ],
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
-          "requires": "the place watched exists and the actor is present at it",
+          "requires": "the place watched exists, the actor is present at it and the actor is an individual",
           "requires_typed": {
             "all": [
               {
@@ -7739,10 +8171,15 @@
                 "form": "relation",
                 "of": "subject",
                 "relation": "present_at"
+              },
+              {
+                "form": "relation",
+                "of": "actor",
+                "relation": "individual"
               }
             ]
           },
-          "requires_typed_note": "`fieldwork_v30.md:296` -- *Surveil \u00b7 Cognition \u00b7 Observe a location, person, or faction operation over extended time*. `Rung` is the loop's carrier for a place and for what happens in it, so one clause covers the location and the operation. \u26a0 THE PERSON CASE HAS NO HOME: it is neither `interview`'s (which QUESTIONS a witness, `:294`) nor `examine`'s (which STUDIES physical evidence, `:293`), but COVERT OBSERVATION of a person, a third thing. The grammar cannot express it -- there is no disjunction, and one cell binds one kind -- so it is named as absent rather than reassigned. Same `H-94` shape as everything else in this file. `present_at` answers over a Rung directly (`world_q.py:448`), so no second stem is needed. \u26a0 CANON'S OTHER HALF OF THIS ROW HAS NO HOME: *+2 Exposure (conspicuous activity)*. Exposure is tracked per territory (`fieldwork_v30.md:270`) and `04:237` forbids ANY social aggregate on a `Rung` -- *no norms, unrest, legitimacy, reputation, discipline*. It is not written here and not invented elsewhere; ED-FI-0009 carries it.",
+          "requires_typed_note": "B10.60 (`proposals/02_CHAR_offer_what_can_be_done.md` edit 3; [ASSUMPTION; medium; Jordan to correct; revert: drop the third conjunct, `fight`'s `individual` of `actor`): a population does not take an individual's acts (A-56); a cohort forms no `surveil` and a hand-built cohort act is refused with the row's one kind. `fieldwork_v30.md:296` -- *Surveil \u00b7 Cognition \u00b7 Observe a location, person, or faction operation over extended time*. `Rung` is the loop's carrier for a place and for what happens in it, so one clause covers the location and the operation. \u26a0 THE PERSON CASE HAS NO HOME: it is neither `interview`'s (which QUESTIONS a witness, `:294`) nor `examine`'s (which STUDIES physical evidence, `:293`), but COVERT OBSERVATION of a person, a third thing. The grammar cannot express it -- there is no disjunction, and one cell binds one kind -- so it is named as absent rather than reassigned. Same `H-94` shape as everything else in this file. `present_at` answers over a Rung directly (`world_q.py:448`), so no second stem is needed. \u26a0 CANON'S OTHER HALF OF THIS ROW HAS NO HOME: *+2 Exposure (conspicuous activity)*. Exposure is tracked per territory (`fieldwork_v30.md:270`) and `04:237` forbids ANY social aggregate on a `Rung` -- *no norms, unrest, legitimacy, reputation, discipline*. It is not written here and not invented elsewhere; ED-FI-0009 carries it.",
           "writes": [],
           "writes_note": "\u2014 (as `examine`; and see the Exposure note above, which is the one canon effect of this act that has no carrier at all)",
           "emits": {
@@ -7897,7 +8334,7 @@
           ],
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
           "beneficiary_note": "THE PERSON TRAINED, self or a present pupil (#453 \u00a79.4: *'beneficiary `subject` (self or pupil)'*) -- the subject whose `capability` the act raises.",
-          "requires": "the person trained exists and is with the actor",
+          "requires": "the person trained exists, is with the actor and the actor is an individual",
           "requires_typed": {
             "all": [
               {
@@ -7911,10 +8348,16 @@
                 "of": "subject",
                 "relation": "with",
                 "conjunct": "with"
+              },
+              {
+                "form": "relation",
+                "of": "actor",
+                "relation": "individual",
+                "conjunct": "individual"
               }
             ]
           },
-          "requires_typed_note": "v9 IN-12 step 9 -- #453 \u00a79.4's cell, verbatim in shape and `tend`'s: *`existence` of `subject` kind Person \u2227 `relation` of `subject`, `with` (the pupil present, as `tend`'s cell)*. Two existing forms on existing stems (`with` is `ED-IN-0282`'s, world-only, so the person forms the Candidate and the fold refuses an absent pupil). A person stands with himself (`world_q.place_of` answers one place for both sides), so self-practice is admitted by the same cell.",
+          "requires_typed_note": "B10.60 (`proposals/02_CHAR_offer_what_can_be_done.md` edit 3; [ASSUMPTION; medium; Jordan to correct; revert: drop the `individual` conjunct and its refusal key): a population does not take an individual's acts (A-56), so a cohort forms no `train`; a hand-built cohort act is refused with the row's one kind. v9 IN-12 step 9 -- #453 \u00a79.4's cell, verbatim in shape and `tend`'s: *`existence` of `subject` kind Person \u2227 `relation` of `subject`, `with` (the pupil present, as `tend`'s cell)*. Two existing forms on existing stems (`with` is `ED-IN-0282`'s, world-only, so the person forms the Candidate and the fold refuses an absent pupil). A person stands with himself (`world_q.place_of` answers one place for both sides), so self-practice is admitted by the same cell.",
           "writes": [
             "Person.capability"
           ],
@@ -7927,6 +8370,9 @@
               "train.refused"
             ],
             "with": [
+              "train.refused"
+            ],
+            "individual": [
               "train.refused"
             ],
             "write": [
@@ -8536,6 +8982,15 @@
         },
         {
           "kind": "Person",
+          "field": "manner_offset",
+          "steps": [],
+          "class": "\u2014",
+          "social": "n/a",
+          "by": "B10.58 (A-108, `IS-B2-CHAR-07`): `{axis: float}` over `rosters.yaml: manner_offset_axes`, each within `+-Fixtures.manner_offset_bound`, seated at world build from the cast row's `manner:` (`data/cast.py::manner_offset_of`, `boot/realm.py::build_realm`) and written NOWHERE in play: no step, so the gate refuses any write (`traits`' shape). Empty where unauthored. Read once, by `queries/person_q.py::projected_axes`",
+          "emits": "\u2014"
+        },
+        {
+          "kind": "Person",
           "field": "conviction",
           "steps": [
             "RES",
@@ -8570,8 +9025,8 @@
           ],
           "class": "ACTS",
           "social": "true",
-          "by": "IN-08 H3 (`ED-IN-0261`'s scar model): `{element: count}`, one count per OBSERVER per violated pursuit -- and, from IN-08 H11, per violated held affiliation (`rosters.yaml: tables.affiliation_engagement`) -- written by the act's outcome through `loop/resolve.py::_scar_witnesses` (was V2's `scar[axis]` on the wounded person, \u00a754 item 21)",
-          "emits": "`scar.taken`",
+          "by": "IN-08 H3 (`ED-IN-0261`'s scar model): `{element: count}`, one count per OBSERVER per violated pursuit -- and, from IN-08 H11, per violated held affiliation (`rosters.yaml: tables.affiliation_engagement`) -- written by the act's outcome through `loop/resolve.py::_scar_witnesses` (was V2's `scar[axis]` on the wounded person, \u00a754 item 21) and, at `crisis_arm: drawn`, reset or set on the creed in crisis by `loop/resolve.py::_drawn_crisis` in its own `conviction` write (B10.15: the `scar` subject of that write)",
+          "emits": "`scar.taken` \u00b7 `scar.healed`",
           "unproduced": "H-62 (loader invariant 2 counts verb writes only): no verb row declares it; written by loop/resolve.py::_scar_witnesses after any outcome that moved state"
         },
         {
@@ -8885,7 +9340,10 @@
           "affiliations",
           "title",
           "capabilities",
-          "resonant_style"
+          "resonant_style",
+          "manner",
+          "relations",
+          "unaware"
         ]
       },
       "characters": [

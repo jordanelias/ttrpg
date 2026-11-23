@@ -345,7 +345,7 @@ IN-FLIGHT ROW: registers/handoffs/HANDOFF_FI.md, Open table
 GATE: Batch B00-ids @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B01-laneA @cbca1ad4fcee656f908d8a75e99bf79213ddeeab
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
-GATE: Batch B10-character
+GATE: Batch B10-character @7f520d7a59d254e4056f8dd47f481ff0f4ca6a7f
 GATE: Batch B11-fi-readers
 GATE: Batch B12c-material-verbs-and-valley
 GATE: Batch B24-sc-hearing

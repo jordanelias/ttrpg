@@ -454,6 +454,14 @@
 | 68 | stake cells on any verb row | WR | §4 row 97 (B38) |
 | 69 | `knot`'s effect (a WR design) | WR | B35.28 BLOCKED (B35): `H2_DECISIONS.md` HD-25 decided a DESIGN-FIRST item before it (§11 C-18); written by lane H3 as B35.30, B35.28 now HELD on its merge |
 
+**Held positions a batch's expunge moved here** (the head §2.1 (a): a `HELD` position leaves with its batch's expunge into this table, with its trigger; the text it left is at the batch's `FORK:` row):
+
+| # | intake | lane | id | trigger (quoted from its position) | could fire at | note |
+|---|---|---|---|---|---|---|
+| 70 | `:149` | IN | CR-93's build (was `B10.80`) | "When `B10.51`'s design merges (ED-1094), its build items are written from it into the next batch that edits `decision/` … each a declared mover of every seeded choice" | the merge of Batch B10-character (`B10.51` landed at `8161c473d`) | the design: `proposals/2026-11-12-cr93-attributes-in-a-persons-own-choice.md`; B98.13 reads it |
+| 71 | `:150` | IN | CR-95's build (was `B10.81`) | "When `B10.52`'s design merges, its combat half and its social half are written into the next batch that edits their files (the social half after SC-02's re-source, B24)" | the merge of Batch B10-character (`B10.52` landed at `574a6ff6a`); the social half at B24 | the design: `proposals/2026-11-12-cr95-spirit-against-circumstance-and-influence.md` |
+| 72 | `:148` | IN | CL-PERSON's build less the stored offsets: the risk and horizon terms and the M36 columns (was `B10.82`) | "When `B10.53` merges, its terms are written into 'the next batch sharing `decision/`' … 'EQUAL at neutral values; a declared mover once a value is authored'" | the merge of Batch B10-character (`B10.53` landed at `b227e3457`) | the design: `proposals/2026-10-24-character-layers-v2.md` (B10.53's amendment); the stored offsets were built at `B10.58` |
+
 Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them) and `pool.py::score` (B01) are built by earlier batches (A28's note of what the tree lacked at its read); `world_q.passage_granted` (B23.05 builds it, checked by the patch lane).
 
 ---
@@ -466,7 +474,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 |---|---|---|---|---|
 | B24p-sc-proceeding | SC | ED-SC-0054..0056 (1+2) | H-861..H-939 (79+0; H-940 unused) | added 2026-11-14 after the table's last block (B01a's H-856..H-860, on top of B99's); `references/id_reservations.yaml` SC `next_free` 54 → 57 at the batch's opening, not by this plan; the hole register's next id after this block H-941 (the block grew from 54 at the V2 fold: V2's 55 settings, the fold's counted table of 24 and the `speech_blend` pointer row, then fell to 79 at the V2 stress-test pass, which cut `sympathy_step`; `case_rows`' note row and the `audience_room` pointer row cut). The fold map's own range H-856..H-909 assumed H-855 as the last allocated id: B01a had taken H-856..H-860 first |
 | B08-scene-order | IN | ED-IN-0385..0386 (0+2) | H-451..H-455 (0+5) | ED shifted |
-| B10-character | IN | ED-IN-0389..0390 (0+2) | H-464..H-486 (18+5) | ED shifted |
 | BA1-cast-content | IN | ED-IN-0391..0392 (0+2) | H-487..H-491 (0+5) | ED shifted |
 | B11-fi-readers | FI | ED-FI-0010..0011 (0+2) | H-492..H-498 (2+5) | same |
 | B11F1-flow-se | SE | ED-SE-0057..0058 (0+2) | H-499..H-505 (2+5) | same |

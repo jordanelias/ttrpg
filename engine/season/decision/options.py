@@ -23,20 +23,19 @@ from __future__ import annotations
 
 import itertools
 from typing import Any, Callable, Optional
-from ..data.cast import STANCE_MAX
+from ..data.rosters import STANCE_MAX
 from ..data.requires import (
-    OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, SHORTFALL_PREDICATE,
+    OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE,
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
 )
 from ..data.rosters import (
     CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, SUCCESSIONS,
-    capability_rows, refusing_pole, remove_distance, require_member, require_use_site,
+    capability_rows, FACTION_BY_PROP, refusable, refusing_pole, remove_distance, require_member, require_use_site,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    CHOICE_RANGES, CHOICE_SOURCED, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, LIE_VERBS,
-    OWN_HOLD_DECLINES,
+    CHOICE_RANGES, CHOICE_SOURCED, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LIE_VERBS,
     OPPOSED_WITHOUT_PRIZE, OWN_STANCE_DECLINES, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
     TERMS_SOURCED, VERB_TABLE, VIOLENCE_CONTEXTS, VIOLENT_VERBS, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED,
     align,
@@ -44,8 +43,8 @@ from ..data.verbs import (
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..queries.person_q import (
-    PAIRED_KINDS, LedgerReader, OwnStateReader, addressed_to, attackers_of, content_kind, content_said,
-    held_against, known_persons, ledger_names,
+    BOND_STEM, PAIRED_KINDS, LedgerReader, OwnStateReader, addressed_to, attackers_of, content_kind, content_said,
+    decisiveness, held_against, known_persons, ledger_names,
     is_cell as _is_cell, lie_said_of, projected_axes, regard, said_of,
 )
 from ..state.carriers import Candidate, Claim, Person, Question, Record, View, fade_of
@@ -104,8 +103,6 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     the only eligibility kind that still declines unconditionally (`person_side_eligible`)."""
     TRACE.query("opening_set", "person")
     out: list[Candidate] = []
-    axis = fx.get("refusal_axis")
-    tolerance = refusal_tolerance(p, axis)
     tick, decay = fade_of(p)     # B09.01: his claims are read at his tick, faded (`state/ledgers.py::present_confidence`)
     weigh = ledger_weigh(p, fx, tick)
     # Own-ledger reads every row asks alike, computed at most once per call and only when a row
@@ -147,15 +144,17 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # the world he can be wrong about, the self-contest decline's reasoning below. The SAME cell,
         # asked of the same answerer the fold delegates to (`OwnStateReader`), so the two cannot
         # disagree; `build_typed_requires` refuses a cell mixing these stems with any other.
-        if (row.requires_typed is not None
-                and OWN_STATE_STEMS & set(row.requires_typed.stems())
-                and evaluate(row.requires_typed, OwnStateReader(p, fx),
-                             binding_of(p.id, {})).value is not True):
-            continue
-        if tolerance is not None and refuses(verb, axis, tolerance):
-            TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment lies further toward the "
-                       f"other pole than their own projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
-            continue
+        # B10.59 (`02_CHAR_offer_what_can_be_done` edits 1-2): THE SAME READ, NOW FOR EVERY ROW WHOSE CELL ASKS ANY OWN-STATE STEM
+        # (`held_by`, `dispute`, `individual` of the actor, beside the sensitivity pair), and asked BELOW, once the Candidate's
+        # own operands are bound -- a cell over `subject` cannot be read before there is one. A cell of the sensitivity pair ONLY
+        # (`thread_read`) keeps `is not True` (no authored value is UNKNOWN and declines); every other cell declines on `False`
+        # alone, so a conjunct this reader cannot answer (UNKNOWN) still forms the Candidate, and clause 4 and the fold keep
+        # theirs. Not a decline on a skill: there is no `capability` stem (A-11).
+        own_stems = set(row.requires_typed.stems()) if row.requires_typed is not None else set()
+        own_read = bool(OWN_STATE_STEMS & own_stems)
+        own_only = own_read and own_stems <= SENSITIVITY_STEMS
+        # B10.24: THE DEONTOLOGICAL GATE IS NOT HERE. It moved to `choose.make_ranker`, after scoring and before the sample, so the
+        # struck candidate's score is known and the Scene can keep what was given up (`Scene.forgone`).
         # v9 IN-12 step 10 (`rosters.yaml: held_document_declines`): A VERB A PERSON DOES NOT FORM WHILE HE
         # HOLDS A DOCUMENT OF A NAMED KIND ABOUT HIMSELF -- `conceal` while he holds a cover (#453 §9.3's
         # person-side decline). His own Tenures and own ledger, no World (`holds_own_document`).
@@ -184,6 +183,17 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                         and addressed_to(content_said(c), p.id))
                 refs = tuple(refs) + tuple(t for t in dict.fromkeys(said)
                                            if t is not None and t not in refs)
+        # B10.72 (`rosters.yaml: held_edge_sourced`): A VERB THAT FORMS ALSO ON THE OBJECT OF A LIVE EDGE HE HOLDS -- `release` on a
+        # `commit` of his own, which no question is about (the `need` question names the seat's holder). His own live Tenures, no
+        # World; it ADDS the objects he holds and nothing else, so a person committed to nothing forms what he formed before.
+        sourced_kind = HELD_EDGE_SOURCED.get(verb)
+        if sourced_kind is not None:
+            # NOT A FACTION MEMBERSHIP (a `commit` whose object is a faction, `fac_...`): releasing it is leaving the faction, and
+            # at lap 0 every cast person did, so `holder_faction_of` read None and a march folded `field.unopposed` (B10.99's
+            # bisect of test_in36_foreign and test_task_draw to B10.72). Release stays for a commit to a Proposition.
+            mine = tuple(dict.fromkeys(t.object for t in p.tenures if t.kind == sourced_kind and t.live
+                                       and t.object not in FACTION_BY_PROP))
+            refs = tuple(refs) + tuple(o for o in mine if o not in refs)
         # B10-09 close one, D3 (`rosters.yaml: held_edge_declines`): A VERB A PERSON DOES NOT FORM ON AN OBJECT
         # HE ALREADY HOLDS A LIVE EDGE OF THE NAMED KIND ON -- `commit` on a Proposition he commits to
         # (`_eff_commit` always opens a fresh Tenure). After every widening above, so it covers each route
@@ -207,14 +217,10 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 records = held_record_claims(p, tick, decay)
             memo: dict = {}          # what a reader derives from the actor alone, once per call, not once per referent
             refs = tuple(r for r in refs if violence_context_of(p, q, r, contexts, records, memo) is not None)
-        # v9 IN-26 (`rosters.yaml: own_hold_declines`, `A-13`): A VERB A PERSON FORMS ONLY ON A REFERENT HE
-        # HIMSELF HOLDS -- `destroy_record`, the person-side reading of its own `held_by` conjunct. The
-        # objects of his OWN live `hold` Tenures, no World; computed once per call, only if such a row
-        # is reached. It NARROWS the referents the question carries and widens nothing.
-        if verb in OWN_HOLD_DECLINES:
-            if held is None:
-                held = _held_objects(p)
-            refs = tuple(r for r in refs if r in held)
+        # v9 IN-26 (`A-13`): A VERB A PERSON FORMS ONLY ON A REFERENT HE HIMSELF HOLDS (`destroy_record`, `give`, `carry`,
+        # `found`, `build`) is declined BELOW, with the rest of what he reads off himself: its cell's `held_by` conjunct is
+        # asked of `OwnStateReader` (B10.59), which reads his own live `hold` Tenures. B10.61 deleted the roster that did
+        # it here (`own_hold_declines`): the two readings gave the same candidate set on every person, seeds 0-2.
         # v10 IN-61 (`rosters.yaml: own_title_declines`, RS-27): A VERB A PERSON FORMS ONLY ON A SEAT WHOSE
         # `successions` TITLE HE HIMSELF HOLDS -- `succeed`, the person-side reading of the claim's title
         # conjunct (`state/gate.py::may_claim`). His own live `hold` objects against the roster (the law,
@@ -230,7 +236,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # before him reads it, `loop/witness.py`'s content deposit). It NARROWS and widens
         # nothing; the fold's `existence` conjunct stays for a hand-built act. [ASSUMPTION; medium; Jordan to
         # correct; revert: empty `RECORD_SUBKINDS_BY_VERB`.]
-        # A HOLDING row (`RECORD_SUBKINDS_HELD`: `carry`, `found`, `build`, held by the person, `own_hold_declines`) keeps
+        # A HOLDING row (`RECORD_SUBKINDS_HELD`: `carry`, `found`, `build`, held by the person, whose own `held_by` reading is `OwnStateReader`'s) keeps
         # a document he holds no reading of -- unknown forms, clause 4's polarity -- and declines one his reading says is
         # of another kind.
         kinds_asked = RECORD_SUBKINDS_BY_VERB.get(verb)
@@ -358,6 +364,14 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 # (`VerbRow.self_counterparty_refused`, the one owner the fold asks too).
                 if row.counterparty and row.self_counterparty_refused(ops.get(row.counterparty), p.id):
                     continue
+                # B10.59: WHAT HE CAN READ OFF HIMSELF, ASKED OF THIS CANDIDATE'S OWN BINDING (the K-3 branch above says why).
+                # B10.64, B10.65: `believes=True` -- the PERSON'S answer for a key in `SELF_BELIEVED` is his own `self:<key>` claim (read by `weigh`, so a claim he was told is
+                # graded by his regard for the teller), so the two readers differ for him alone and by design: he does not deliberately read a Thread he does not know he
+                # reads, and a hand-built act still folds.
+                if own_read:
+                    own_verdict = evaluate(row.requires_typed, OwnStateReader(p, fx, believes=True, weigh=weigh), binding_of(p.id, ops)).value
+                    if own_verdict is False or (own_only and own_verdict is not True):
+                        continue
                 # `19`: THE SEAT THE ACT WILL BE EXERCISED THROUGH rides into the belief test as it rides
                 # onto `Act.via` (`pack_scenes`), so a `basis` conjunct is asked of the same seat both
                 # sides. `st` is the seat this Candidate is formed for.
@@ -410,8 +424,7 @@ def subject_is_opponent(row: "VerbRow") -> bool:
     `decision/choose.py`'s score term 2 under `stance_polarity: declared` (v9 IN-18 `G2`: an act
     against a disliked opponent scores higher, not lower). B11 lane A: OR the row is listed in `rosters.yaml: opposed_without_prize` (`challenge`:
     no prize, done against the man it calls out)."""
-    return row.contested_against_subject() or (
-        row.verb in OPPOSED_WITHOUT_PRIZE and row.opponent_operand() == "subject")
+    return row.opposed_to_subject(OPPOSED_WITHOUT_PRIZE)
 
 
 # v11 CR-87: THE VIOLENT ROWS WHOSE SUBJECT IS THEIR OPPONENT (`data/verbs.py::VIOLENT_VERBS`, off `rosters.yaml:
@@ -515,7 +528,7 @@ for _v, _ctx in VIOLENCE_CONTEXTS.items():
 # `project`'s stated single owner is `data/pursuits.to_axes`; it is not moved here.
 
 
-def project(p: Person, scar_shift: float = 0.0) -> dict:
+def project(p: Person, scar_shift: float = 0.0, manner: bool = True, **scar_read) -> dict:
     """A person's fifteen pursuit weights, in the seven-axis basis. `U3` / R-06a.
 
     ⚠⚠ **§F2's `conviction[axis]` IS COMPUTED, NOT LOOKED UP.** V2 §F2 spells
@@ -546,34 +559,57 @@ def project(p: Person, scar_shift: float = 0.0) -> dict:
     `to_axes` projects are `person_q.crisis_weights(p, scar_shift)` -- a pursuit whose scar count has
     reached threshold 2 gives weight to the others. `0`, the shipped control, hands `to_axes` the
     person's own `pursuits` untouched. Only `choose`'s score passes it; `refusal_tolerance` (dormant)
-    reads the unshifted weight."""
-    return projected_axes(p, scar_shift)
+    reads the unshifted weight. `scar_read` is `hold=` and `mass=` (`Fixtures.scar_hold`, `scar_primary_mass`; `person_q.crisis_weights`'s): a reader that holds the
+    fixtures passes both, so the shifted weights keep the shift among a person's primaries at `scar_hold: primary`, as the writer scars them (B10.07).
+
+    ⚠ `manner` (B10.58) IS `person_q.projected_axes`'s: `False` projects his pursuits WITHOUT his stored manner offset, and `refusal_tolerance` alone asks it (M37)."""
+    return projected_axes(p, scar_shift, manner, **scar_read)
 
 
 def refusal_tolerance(p: Person, axis: Optional[str]) -> Optional[float]:
-    """`ED-IN-0261`'s deontological gate, the PERSON half: their projected weight on the gating
-    axis, which IS the threshold (Jordan: *"the weighting is a threshold for certain actions"*).
-    `None` when `refusal_axis` is unset -- the control arm, under which `opening_set` refuses
+    """`ED-IN-0261`'s deontological gate, the PERSON half: their SHARE of the gating axis in the
+    projected vector, `project(p)[axis] / ‖project(p)‖` (0.0 for a zero vector), which IS the
+    threshold (Jordan: *"the weighting is a threshold for certain actions"*). A share lies on ±1 as
+    an alignment cell does, so the two are compared on one scale; the raw weight's size moves with
+    how many pursuits the registry authors and is not. Read through `data.pursuits.to_axes`
+    (`project`), the norm in `_AXES` order (`person_q.decisiveness`).
+    `None` when `refusal_axis` is unset -- the control arm, under which `choose.make_ranker` strikes
     nothing. The axis is whatever `Fixtures` names, checked against the live roster, never a
     literal here.
 
-    ⚠ RUNS `project(p)` A SECOND TIME FOR THE SAME PERSON `choose()` PROJECTS FOR `score`, AND
-    THIS IS KNOWN AND DEFERRED, NOT MISSED. Dormant today -- `refusal_axis` ships unset, and this
-    line short-circuits above before `project` is ever called. Threading the caller's own
-    projection through would need an optional parameter on `opening_set` itself, which breaks
-    every test/harness spy pinned to its current four-parameter arity; worth doing WITH `H6`, when the gate ships live and the
-    cost stops being theoretical, not as a speculative widening now."""
+    ⚠ RUNS `project(p)` TWICE MORE FOR THE SAME PERSON `choose()` PROJECTS FOR `score` (`decisiveness`
+    is the second), AND THIS IS KNOWN AND DEFERRED, NOT MISSED. Dormant today -- `refusal_axis` ships unset, and this
+    line short-circuits above before `project` is ever called. The ranker holds the shifted projection in its memo,
+    but this reads the unshifted weight (the `scar_shift` note above); threading one through is worth doing WITH `H6`,
+    when the gate ships live and the cost stops being theoretical, not as a speculative widening now."""
     if axis is None:
         return None
     require_member(axis, PURSUIT_AXES, f"refusal axis {axis!r} is not on the pursuit_axes roster",
                    "H-146", law="ED-IN-0261 -- the gate reads a ROSTERED axis; an unrostered one "
                                 "would raise `Unspecified` rather than project to a real weight")
     refusing_pole(axis)       # CR-21: an armed axis the roster authors no pole for refuses HERE, not at an engaged verb
-    return project(p)[axis]
+    refusable(axis)           # B10.21: nor an armed axis with a pole and no authored list of refusable verbs: it refuses at arming, not at the first verb `scruple` is asked of
+    # B10.58 / M37: NO MANNER AXIS FEEDS THE GATE. The armed axis can be one a person holds a stored offset on, so both the weight and the length are read from his pursuits alone.
+    reach = decisiveness(p, manner=False)   # the vector's length, `_AXES` order (`person_q.decisiveness`, the one owner of the norm)
+    return project(p, manner=False)[axis] / reach if reach else 0.0
+
+
+def scruple(verb: str, axis: str, tolerance: float) -> float:
+    """HOW FAR `verb`'s cell on `axis` sits PAST `tolerance` toward the refused pole (B10.23): a margin, not a boolean, so a large
+    scruple is an act far past what he allows himself and a small one is near it. `0.0` where the cell does not lie past it, where
+    the axis does not engage the verb (a zero cell, including the sparse default) and for a verb outside `refusable(axis)`.
+
+    The refused pole is `data.rosters.refusing_pole(axis)`'s sign, as `refuses` has always read it: the cell is past the tolerance
+    where `sign * (cell - tolerance) < 0`, and the margin is that gap, `-sign * (cell - tolerance)`. `tolerance` is on the cells' ±1
+    scale (`refusal_tolerance`). Reads `data.verbs.align`, the one `choose`'s score reads too."""
+    if verb not in refusable(axis):
+        return 0.0
+    a = align(verb, axis)
+    return max(0.0, -refusing_pole(axis) * (a - tolerance)) if a else 0.0
 
 
 def refuses(verb: str, axis: str, tolerance: float) -> bool:
-    """Does a person whose weight on `axis` is `tolerance` refuse `verb`? The PERSON-SIDE refusal
+    """Does a person whose weight on `axis` is `tolerance` refuse `verb`? It is `scruple(...) > 0`. The PERSON-SIDE refusal
     `score` cannot express: it ranks, and at `choice_temperature` 0.1 a good enough outcome
     outranks any finite penalty (`ED-IN-0261`).
 
@@ -586,10 +622,12 @@ def refuses(verb: str, axis: str, tolerance: float) -> bool:
     default, is not one of the *"certain actions"* the ruling gates; the scar's
     `person_q.elements_violated_by` reads engagement the same way.
 
+    ONLY A LISTED VERB CAN BE REFUSED (B10.21): `data.rosters.refusable(axis)` is the closed set of *certain actions*
+    (`rosters.yaml: pursuit_axes.refusable`); a verb outside it is never refused, whatever its cell.
+
     Reads `data.verbs.align`, the one `choose`'s score reads too, so a rebind of
     `data.verbs.ALIGNMENT` moves the gate and the ranking together."""
-    a = align(verb, axis)
-    return bool(a) and refusing_pole(axis) * (a - tolerance) < 0
+    return scruple(verb, axis, tolerance) > 0.0
 
 
 def person_side_eligible(p: Person, row: "VerbRow") -> bool:
@@ -1624,7 +1662,7 @@ def _judgement_factor(p: Person, rows: list, fx) -> Optional[float]:
     there are no rows, or `p` holds no value at any row's key (a READ, never a default; the caller reads it as the factor 1). The value is
     `p.attributes` at the row's `key`, on `substrate.descriptors.scale_of(key)`; the form is `about_mid`, its `gain` the Fixture the row
     names (`fx.get(row.gain)`), so a sweep of that Fixture overrides the shipped value through `fx`. `side: actor` is the only side read:
-    `p` is the actor (the loader refuses any other). A site with several rows multiplies them. The one caller is `competence`."""
+    `p` is the actor (the loader refuses any other). A site with several rows multiplies them. Its three callers are `temper`, `nerve` (`decision/choose.py`) and `competence` (here), one per site."""
     factor = None
     for row in rows:
         held = (getattr(p, "attributes", None) or {}).get(row.key)
@@ -1788,6 +1826,10 @@ def teller_weight(p: Person, fx: "Fixtures", tick: int = 0) -> Callable[[Claim],
                      + regard_gain * clamp(regard(p, teller, fx) / STANCE_MAX, -1, 1)
                    (`regard` is G1's: stored stance plus the judged and told halves at their gains)
         record   = `record(p, teller, fx)`: 1.0 with no pair; else 1 + record_gain * balance (`T6`)
+        stake    = `1 - rival_gain` when `p` holds a told `bond:rivalry` claim on `c.subject` whose origin (`chain[0]`) is the teller -- the teller's own
+                   bond to the subject, which `boot/realm.py::seed_relations` deposits for its holder -- else 1.0 (`H-180`, B10.63). It depends on the
+                   claim's SUBJECT, so it is not memoised per teller; the set of `(teller, subject)` pairs is read from `p`'s ledger once, on the
+                   first told claim, and only at `rival_gain` > 0 (the shipped control reads no ledger for it).
 
     `RULINGS.yaml` CAT-3, closed: store the teller and grade the claim WHEN READ, by the hearer's
     belief about their relation to the teller -- so a revised regard re-grades every claim that
@@ -1801,10 +1843,10 @@ def teller_weight(p: Person, fx: "Fixtures", tick: int = 0) -> Callable[[Claim],
     returns that share instead of 1.0), so a sighting he has half forgotten weighs half and a teller can outweigh it.
     Refraction sets the deposit-time `confidence`; this reads it once, here, at `tick`. At `False` (the control, shipped
     until B09.08) the closure is the one above, exactly, and reads neither `confidence` nor the decay rate.
-    ⚠ THE TELLER FIXTURES (`told_weight`, `rank_gain`, `regard_gain`) ARE READ ON THE FIRST TOLD CLAIM, NOT AT BUILD. A
+    ⚠ THE TELLER FIXTURES (`told_weight`, `rank_gain`, `regard_gain`, `rival_gain`) ARE READ ON THE FIRST TOLD CLAIM, NOT AT BUILD. A
     ledger with no teller in it reads none of them. `weigh_confidence` and, when it is on, `confidence_default` and the
     decay rate are read once, at the closure's build.
-    ⚠ AT THE CONTROL VALUES (`told_weight` 1.0, `rank_gain`, `regard_gain` and `record_gain` all
+    ⚠ AT THE CONTROL VALUES (`told_weight` 1.0, `rank_gain`, `regard_gain`, `rival_gain` and `record_gain` all
     0) EVERY CLAIM WEIGHS EXACTLY 1.0.
     ⚠ THE ONE-HOP BOUND. `told_weight` x `relation` x `record` is clamped at 1.0, and a one-hop claim
     at the shipped 0.5 stays strictly below a firsthand claim's 1.0 only while `relation` x `record`
@@ -1820,6 +1862,7 @@ def teller_weight(p: Person, fx: "Fixtures", tick: int = 0) -> Callable[[Claim],
     gains: list = []
     relation_of: dict = {}      # `relation` depends on the teller alone: one stance scan per teller
     record_of: dict = {}        # `record` too: one ledger scan per teller
+    rivals: list = []           # H-180: ONE set of `(teller, subject)` the hearer holds a told `bond:rivalry` claim for, scanned on the first told claim at `rival_gain` > 0
     # B09.06: read ONCE per closure. At `False` (the control) `sure` is never called and every weight is the one above.
     on = fx.get("weigh_confidence")
     full = fx.get("confidence_default") if on else 0
@@ -1835,19 +1878,26 @@ def teller_weight(p: Person, fx: "Fixtures", tick: int = 0) -> Callable[[Claim],
             return sure(c) if on else 1.0
         teller = c.teller
         if not gains:
-            gains.extend((fx.get("told_weight"), fx.get("rank_gain"), fx.get("regard_gain")))
-        told_weight, rank_gain, regard_gain = gains
+            gains.extend((fx.get("told_weight"), fx.get("rank_gain"), fx.get("regard_gain"), fx.get("rival_gain")))
+        told_weight, rank_gain, regard_gain, rival_gain = gains
         relation = relation_of.get(teller)
         if relation is None:
             relation = relation_of[teller] = (
                 1.0
                 + rank_gain * rank(p, teller)
                 + regard_gain * _clamp(regard(p, teller, fx) / STANCE_MAX, -1.0, 1.0))
-        # ABSENT: H-180 stake  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
+        # H-180 (B10.63): a rival's report is discounted as interested. Read from `p`'s own ledger only; at gain 0 the factor is exactly 1.0.
+        stake = 1.0
+        if rival_gain:
+            if not rivals:
+                rivals.append(set((b.chain[0], b.subject) for b in p.ledger
+                                  if b.chain and b.predicate == BOND_STEM + "rivalry" and b.value is True))
+            if (teller, c.subject) in rivals[0]:
+                stake = _clamp(1.0 - rival_gain, 0.0, 1.0)
         rec = record_of.get(teller)
         if rec is None:
             rec = record_of[teller] = record(p, teller, fx, tick)
-        w = _clamp(told_weight ** c.hops * relation * rec, 0.0, 1.0)
+        w = _clamp(told_weight ** c.hops * relation * rec * stake, 0.0, 1.0)
         return w * sure(c) if on else w
 
     return weigh

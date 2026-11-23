@@ -472,7 +472,7 @@ rosters:
     forbidden: [exposure]
     # CR-21 (M14), H-146's repair: WHICH POLE OF AN AXIS A PERSON REFUSES THROUGH, as a sign on the axis's own
     # scale (`axis_roster.scale`: -1 the first-named pole, +1 the second). Read by `data/rosters.py::refusing_pole`,
-    # asked by `decision/options.py::refuses`. Only the ruled axis is authored (ED-IN-0261, Jordan: deontology is a
+    # asked, through `decision/options.py::scruple`, by the ranker's strike (`decision/choose.py::make_ranker`, B10.24). Only the ruled axis is authored (ED-IN-0261, Jordan: deontology is a
     # REFUSAL, "it's a refusal to take certain actions"): the deontological pole, the first-named, refuses. An axis
     # absent here REFUSES at the gate rather than defaulting. The gate is armed nowhere (`Fixtures refusal_axis`
     # ships unset; arming it is H-146's remaining position). [ASSUMPTION; medium; Jordan to correct; revert: restore the
@@ -481,6 +481,16 @@ rosters:
     # `roster_map` raise at import, and every import of `engine.season` fails).]
     refusing_pole:
       deontological_instrumental: -1
+    # B10.21 (16_PESSIMIST_CHAR_C item 1): THE "CERTAIN ACTIONS" ED-IN-0261 GATES, per axis. A verb not listed is never
+    # refused, whatever its cell on the axis. Read by `data/rosters.py::refusable`, asked by `decision/options.py::refuses`;
+    # an axis with a refusing pole authors its list here or the gate refuses (never defaults). Checked at load
+    # (`data/rosters.py::check_refusable`, run at the foot of `data/verbs.py`): a verb off `verb_table.yaml`, or one with
+    # a zero cell on its axis, is refused -- a scruple can only forbid an act the axis engages.
+    # [ASSUMPTION; medium; Jordan to correct: content. `destroy_record`, `sabotage`, `conceal`, `raze`, `seize` join when
+    # they carry a cell on this axis (16_PESSIMIST_CHAR_B, step 2). Revert: delete this key AND the `refusable(axis)` call
+    # in `decision/options.py::refuses` and the `check_refusable()` call at the foot of `data/verbs.py` together.]
+    refusable:
+      deontological_instrumental: [forge, lie, "evade / defy", construe]
     note: >-
       ⚠⚠ **SEVEN BIPOLAR AXES (`ED-IN-0261`).** Convictions (now pursuits) and axes are different
       index sets: the roster above holds the fifteen pursuits, this row holds the seven axes, and
@@ -1529,7 +1539,7 @@ rosters:
   # practitioner stat) changes an outcome -- closed and ordered; `fields` is each role's row of the role-field table (the
   # columns of `tables.capability_uses` that role takes, beside the three every row carries: `use`, `role`, `key`).
   # `capability_use_sites` is a MAP from a site to its ONE reader (U1 §3 item 7); a site string says where its reader is, or says plainly that none reads the row on this tree yet (`fight`, `kit`).
-  # `choice_temper` is absent: its reader `decision/choose.py::temper` does not exist (B10 lands both). The rows are
+  # `choice_temper` reads at `decision/choose.py::temper` (B10.28). The rows are
   # `tables.capability_uses`; the loader is `data/rosters.py::_load_capability_uses`, which refuses a row naming a site no
   # reader registers, an unknown role or key, a field its role does not take, a `circumstance` row with a negative gain, a
   # `gate` row on any key but Thread Sensitivity or at any site but the two gate sites, a `level` outside `LEVEL_SIGMA`, a
@@ -1554,7 +1564,10 @@ rosters:
     fight: "seam/wrappers/combat.py::combat_input -> PersonalCombatInput (applied by the module: the fight's attribute input is the six attributes on `PersonalCombatInput.attributes`, sigma-assembled in `modules/combat`, so the site carries no host-side `edge` row and `advantage_sigma` adds no second attribute term to a fight)"
     kit: "combat_systems.act_cost's caller -- no reader of this row on this tree; B05 (CAP B1, B7) builds it"
     told_claim_credit: decision/options.py::competence
+    choice_temper: decision/choose.py::temper
+    choice_exposure: decision/choose.py::nerve     # B10.31: `nerve`, how far a person's Spirit lets him bear a danger, on the `risk` element; no row ships
     own_state_gate: queries/person_q.py::OwnStateReader
+    crisis: loop/resolve.py::_crisis_net_sigma   # B10.15: the crisis of faith's roll, read only at `Fixtures.crisis_arm: drawn`
 
   # WHAT A SITE'S READER READS OF A ROW, where it reads the row by ROLE and not by the row's other columns (B04 Phase 3): a row
   # of that `role` at that site must carry exactly this `key` and `side`, and the site carries one row of the role. Any other
@@ -1590,6 +1603,17 @@ rosters:
     values: [prac.thread_sensitivity]
   capability_gate_sites:
     values: [own_state_gate, told_retain]
+
+  # B10.64 (`U5a_CHAR_self_knowledge_is_a_belief` edit 1): THE KEYS A PERSON MAY BE UNAWARE OF IN HIMSELF.
+  self_believed:
+    source: >-
+      B10.64 (`U5a_CHAR_self_knowledge_is_a_belief`, A-34: a belief, built narrowly): the one gated gift, plus the pursuit roster.
+    note: >-
+      THE NON-PURSUIT MEMBERS. A cast row's `unaware:` may name only a member of `data/rosters.py::SELF_BELIEVED`, which is these values JOINED TO the `pursuits`
+      roster at the one binding (a roster carries a `values:` or an owner pointer, never both, so the pursuit half is not copied here). `data/cast.py::unaware_of`
+      refuses any other key, and any key the row does not hold. For such a key the person-side answer is his own claim `self:<key>` (`queries/person_q.py::knows_self`);
+      every other own-state stem is answered from the field as before. [ASSUMPTION; medium; Jordan to correct -- basis: the source's own roster; revert: the roster is empty.]
+    values: [prac.thread_sensitivity]
 
   # B05.14 (OBS §1, §2; SC-B Edit A; D-U1-04): THE OBSTACLE'S FORM. `difficulty_levels` is the closed, ordered set of levels a rolled
   # verb row's `difficulty:` names (`data/verbs.py`); `Fixtures.difficulty_ob` sizes each one. `obstacle_terms` is the closed,
@@ -2575,9 +2599,10 @@ rosters:
       per COMBINATION of its keys' closed sets (`data/verbs.py::CHOICE_RANGES`: `role` is `order_roles`, `retreat_at`
       is `order_retreat_at`), each value riding on the act's payload under its own name. ⚠ THE KEYS ARE NOT
       `requires_operands` MEMBERS and a cell never binds them: the closed operand vocabulary stays closed (`challenge`'s
-      `stakes` is the precedent for a payload key the effect reads). ⚠ THE CHOOSER IS CONTENT-BLIND: Candidates score
-      on `(verb, subject)` (`decision/choose.py`), so the fan is a draw among equally scored orders, not a judgement of
-      which role suits the field. ⚠ THE FAN IS A COST, MEASURED AT ITS LANDING (`hole_register.yaml` `H-361`): 15 roles x 3
+      `stakes` is the precedent for a payload key the effect reads). ⚠ THE CHOOSER IS CONTENT-BLIND UNTIL A CELL IS AUTHORED: Candidates
+      score on `(verb, subject)` (`decision/choose.py`), so the fan is a draw among equally scored orders, not a judgement of
+      which role suits the field. CONTENT ENTERS AT ONE PLACE, `tables.alignment`'s optional `choices:` block (B10.56, shipped absent):
+      a cell there on a key this table names scores that value in `score_terms`' `pursuit`, through the person's own axis weights. ⚠ THE FAN IS A COST, MEASURED AT ITS LANDING (`hole_register.yaml` `H-361`): 15 roles x 3
       `retreat_at` values = 45 bags per settlement a marshal forms on. ONE LOADER, `data/verbs.py::CHOICE_SOURCED`,
       refused at import for a verb the table lacks, a key without a range, or a key whose carrier the verb's row does not
       write (`role`, `retreat_at`: `Record.exists`; `posture`: `Site.condition`). ⚠ A KEY WHOSE RANGE HAS ONE MEMBER IS NOT
@@ -2634,6 +2659,9 @@ rosters:
       stage is unmatured, which first needs a person-side carrier for maturity.] ONE LOADER,
       `data/verbs.py::HELD_DOCUMENT_DECLINES`, refused at import when a line names a verb the table
       lacks or a kind `record_kinds` does not carry.
+      B10.61 READING, KEPT: `conceal`'s cell asks `individual` of the actor and no stem reads a held cover, so `OwnStateReader`
+      cannot decline it. Without the roster `conceal` forms again while he holds a cover, in 596, 333 and 0 (person, question)
+      pairs at seeds 0-2, none at lap 0 (a cover is held only once a lap has run).
     values:
       conceal: cover
 
@@ -2655,6 +2683,9 @@ rosters:
       referent) is NOT built here: it reads `p.tenures`, not `p.stance`, and plan row 13 builds
       `forgive`'s decline beside it, not the hook itself. [ASSUMPTION; medium; Jordan to correct;
       revert: build `release`'s hook in the same position.]
+      B10.61 READING, KEPT: `forgive` has no typed cell (`requires_typed` is none) and no stem asks a stance row, so
+      `OwnStateReader` cannot decline it. Without the roster `forgive` forms on 5341, 5241 and 5488 more (person, question)
+      pairs at seeds 0-2, 243 of them at lap 0.
     values: [forgive]
 
   lie_verbs:
@@ -2669,6 +2700,9 @@ rosters:
       member names a verb the table lacks or one whose cell names no `own_ledger` conjunct (a row that carries no
       `said` has nothing to make false). [ASSUMPTION; medium; Jordan to correct; revert: delete this roster and
       the `lie` row, its alignment cells and `lie_offered`.]
+      B10.61 READING, KEPT: it is a setting, not a decline (it picks the false-value reader and gates `lie` on `lie_offered`).
+      Without it `lie` forms on 2405, 2394 and 2606 more (person, question) pairs at seeds 0-2 and carries the claim as held,
+      not a false value, on 1858, 1828 and 1884 others (191 pairs at lap 0 on each seed).
     values: [lie]
 
   army_verbs:
@@ -2682,38 +2716,10 @@ rosters:
       one. Each must be a `verb_table.yaml` verb (`opening_set` refuses a withheld name the table lacks).
     values: [recruit, form_unit, assign_troops, order_unit, disband_unit, discharge_troops]
 
-  own_hold_declines:
-    source: >-
-      plan position IN-26 (BOUND-PAPER, `workplans/valoria_master_workplan_v9_part5.md`), `A-13`'s
-      *"record-holding referent"* (`_part5`'s A table: `destroy_record` *"needs a record-holding question
-      referent -- `give`'s shape"*); `own_stance_declines`' shape (above), one field over.
-    note: >-
-      WHICH VERBS A PERSON FORMS ONLY ON A REFERENT HE HIMSELF HOLDS -- a list of verbs. Read in
-      `decision/options.py::opening_set`, person-side and World-free (AX-2): the objects of his OWN live
-      `hold` Tenures; a referent he does not hold forms no Candidate, so no scene is spent on a refusal of
-      the row's `held_by` conjunct he could have known. It is the person-side reading of that conjunct for the verbs LISTED (six rows carry the conjunct;
-      this roster names the ones whose formation it narrows): ONE LOADER, `data/verbs.py::OWN_HOLD_DECLINES`, refused at import when a member names a
-      verb the table lacks or one whose typed cell asks no `relation` of `subject` `held_by`. What he holds
-      that is no Record (a seat, a Proposition he uttered) still forms and is refused at the row's
-      `existence` conjunct, whose read clause 4 then learns (H-156's decaying shape).
-      [ASSUMPTION; medium; Jordan to correct; revert: drop the member, and `destroy_record` forms on every
-      referent, plan position `14`'s measured shape.]
-      v9 IN-12 (`give` + Rung, #453 §9.6) JOINED `give`: its cell dropped the `existence` conjunct (the
-      grammar has no disjunction, `verb_table.yaml: give`'s `requires_typed_note`), so the held-referent
-      narrowing is what keeps the loosened cell from forming a gift of every referent a question carries.
-      What `give` holds that is neither a Record nor a Rung (a seat) still forms and is declined by the
-      effect (`give.refused`). [ASSUMPTION; medium; Jordan to correct; revert: drop the member, and restore
-      the `existence` conjunct.]
-      B11 lane A JOINED `carry`, `found` AND `build`, the three `Record` rows whose cell asks `held_by` of `subject`: they
-      formed on the question's own Records of every kind and the fold refused each it does not hold. Their own holding
-      is the actor's own state; what the document IS stays the sub-kind rule's (`decision/options.py`,
-      `RECORD_SUBKINDS_BY_VERB`). [ASSUMPTION; medium; Jordan to correct; revert: drop the three members.]
-    values: [destroy_record, give, carry, found, build]
-
   own_title_declines:
     source: >-
-      v10 IN-61 (RS-27, B10-09); `own_hold_declines`' shape (above), one read over: the seat's title instead
-      of the seat.
+      v10 IN-61 (RS-27, B10-09); the person-side own-state decline of `own_stance_declines`' shape (above), one read over: the
+      seat's title instead of a stance row.
     note: >-
       WHICH VERBS A PERSON FORMS ONLY ON A SEAT WHOSE `successions` TITLE HE HIMSELF HOLDS -- a list of
       verbs. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): the objects of
@@ -2727,6 +2733,9 @@ rosters:
       when a member names a verb the table lacks or one whose row declares no `referent_class: Office`.
       [ASSUMPTION; medium; Jordan to correct; revert: drop the member, and `succeed` forms on every seat a
       question carries.]
+      B10.61 READING, KEPT: the title is read off `successions`, which no cell stem asks, so `OwnStateReader` cannot answer
+      it. Without the roster `succeed` forms on 196, 193 and 299 more (person, question) pairs at seeds 0-2, all at lap 1
+      or later (none at lap 0, where no heir yet holds a title he was told of).
     values: [succeed]
 
   held_edge_declines:
@@ -2744,8 +2753,32 @@ rosters:
       live commit to an OUGHT, the ambition): it reads a live edge on THIS object, of any mood. ONE LOADER,
       `data/verbs.py::HELD_EDGE_DECLINES`, refused at import when a line names a verb the table lacks or a
       kind `tenure_kinds` does not carry. [ASSUMPTION; medium; Jordan to correct; revert: drop the line.]
+      B10.61 READING, KEPT: `commit`'s cell is the `existence` of a Proposition and nothing of his own state (the grammar has
+      no `commit` or `oblige` stem), so `OwnStateReader` has nothing to decline on. Without the roster `commit` forms again
+      on a Proposition he already holds an edge on, in 24, 25 and 38 (person, question) pairs at seeds 0-2, all at lap 1 or later.
     values:
       commit: commit
+
+  held_edge_sourced:
+    source: >-
+      B10.72 (`U5a_CHAR_owed_amendments` §3 (b): *"`release` on his own `commit` forms as an ordinary Candidate"*); the
+      SITE step's reading: the `need` question names the seat's holder, never the Proposition he is committed to, and
+      `release` takes the question's plain referents, so before this line it formed on a person he held no edge toward.
+      `held_edge_declines`' shape and its mirror: that roster narrows a verb off an object he holds a live edge on, this
+      one adds the object.
+    note: >-
+      WHICH VERBS FORM, BESIDE THEIR OWN REFERENTS, ON THE OBJECT OF A LIVE EDGE THE PERSON HIMSELF HOLDS -- `verb: tenure
+      kind`. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): the objects of his OWN live
+      Tenures of that kind (`p.tenures`), on every question he answers. `release` is a CLOSER, so what it forms on is what
+      the actor already holds (`_req_release`: a live edge owned by the actor toward the subject); the want he lays down is
+      one he is committed to, and no question is about it. Nothing here chooses the act: whether it ranks is the score's, and
+      a person committed to nothing forms what he formed before. ONE LOADER, `data/verbs.py::HELD_EDGE_SOURCED`, refused at
+      import when a line names a verb the table lacks or a kind `tenure_kinds` does not carry. [ASSUMPTION; medium; Jordan to
+      correct; revert: drop the line, and `release` forms on the question's referents only -- a want is then never offered
+      for laying down.] A FACTION MEMBERSHIP IS NOT AN OBJECT HERE (B10.72's fix): a `commit` whose object is a faction (`data/rosters.py::FACTION_BY_PROP`) is
+      left out of what the verb forms on, because releasing it is leaving the faction; the verb forms on a commit to a Proposition that is no faction.
+    values:
+      release: commit
 
   violence_contexts:
     source: >-
@@ -2779,6 +2812,9 @@ rosters:
       `fight`'s lethal terms, without an acceptance. A duel is `accept`'s, fought under its challenge's
       terms. The `duel` reader stays in the closed set for a later line. [ASSUMPTION; medium; Jordan to correct;
       revert: restore `duel`.]
+      B10.61 READING, KEPT: it reads the world's contexts (a war, a warrant, a deed done to him), none of them his own
+      state, so `OwnStateReader` cannot answer it. Without it `fight` forms on 4170, 4049 and 4344 more
+      (person, question) pairs at seeds 0-2, 252 of them at lap 0.
     values:
       fight: [war, crime, defence]
 
@@ -2808,6 +2844,18 @@ rosters:
       bounded apart from its pull on every other act. Refused at import when a member is no prize.
       [ASSUMPTION; medium; Jordan to correct; revert: `hostile_stance_gain` null, which reads `1 + stance_gain`.]
     values: ["the body"]
+
+  bodily_prizes:
+    source: >-
+      v12 B10.31 (`02_CHAR_what_an_act_risks` edit 2): the contest prizes whose loss a person's own body or field pays.
+    note: >-
+      THE CONTEST PRIZES THE ACTOR HIMSELF STAKES IN BODY OR IN THE FIELD -- a list of `contest_subsystems.prizes` keys. A candidate
+      is EXPOSED when its row's `contests:` is listed (`data/verbs.py::BODILY_PRIZES`; read off the row's own column, never a verb
+      name); `decision/choose.py::score_terms`' `risk` element prices only an exposed candidate. Today `the body` (`fight`, `capture`,
+      `accept`) and `a field` (`march`). Refused at import when a member is no prize any verb row contests (a closed set read against
+      the verb table, so a renamed prize cannot leave the term reading nobody).
+      [ASSUMPTION; medium; Jordan to correct; revert: delete the row, and `risk` reads 0 for every candidate.]
+    values: ["the body", "a field"]
 
   shortfall_sourced_operands:
     source: >-
@@ -2903,7 +2951,112 @@ rosters:
       and no ledger holds a `held_by` claim (M0g, `H-195`). `regard` is the
       midpoint: G1's regard with `+` on every row, so the sweep separates what regard adds from
       what the sign adds.
-    values: [legacy, regard, declared]
+      `beneficiary` (B10.69, `17_CENSUS_C1A_02` W4) is `declared` with the regard read toward the person the act is done FOR (`choose.beneficiary_of`)
+      in place of its subject; a row with no such person reads the subject. Not shipped: `declared` is.
+    values: [legacy, regard, declared, beneficiary]
+
+  regard_signs:
+    source: >-
+      B10.11 (`02_CHAR_scar_cap_and_regard_unit` Addendum, H-337, H-282; `17_CENSUS_C1A_02` W4): the sign of regard, a column of the verb row.
+    note: >-
+      THE VALUES OF `verb_table.yaml: regard_sign`, read by `data/verbs.py::_load_verb_table` (a value outside this set is refused) and by
+      `decision/choose.py::_stance_arm` under `stance_polarity: declared`. `+1`: a person's liking for the act's subject pulls him toward the act;
+      `-1`: away from it; `0`: it reads nothing (regard for a person says nothing about whether to look into him or travel to him). A row naming
+      none is given the sign the table read before the column: `-1` where the act is done against its subject
+      (`VerbRow.opposed_to_subject`: contested against it, or an `opposed_without_prize` row), else `+1`. No cell is authored (BA1's content).
+    values: [1, -1, 0]
+
+  scar_season_caps:
+    source: >-
+      B10.06 (`02_CHAR_scar_cap_and_regard_unit` edit 1, `02_CHAR_scar_is_a_wound` row 3): the arms of the scar's per-season rate.
+    note: >-
+      THE ARMS OF `Fixtures.scar_season_cap` (`H-465`), read by `loop/resolve.py::_scar_witnesses`; the unset value `None` is the
+      CONTROL and is not a member (uncapped, today's counts). `element` keeps one count per person per element per season;
+      `person` keeps one count per person per season, on the element he holds most violated. [ASSUMPTION: the roster's name and
+      shape -- basis: neither source names one; `stance_polarities` is the tree's form for a swept string arm; Jordan to correct.]
+    values: [element, person]
+
+  scar_holds:
+    source: >-
+      B10.07 (`02_CHAR_scar_is_a_wound` row 1): the arms of which elements a person can be scarred on.
+    note: >-
+      THE ARMS OF `Fixtures.scar_hold` (`H-466`), read by `loop/resolve.py::_scar_witnesses` and applied by `queries/person_q.py::broken_by`.
+      `any` is the CONTROL (every held element an act violates, today's rule); `primary` counts only a person's primary pursuits (the fewest
+      top-weighted ones whose weights sum to `Fixtures.scar_primary_mass`) and the affiliations he stands for (`person_q.stands_for`).
+      [ASSUMPTION: the roster's name and shape -- basis: B10.06's `scar_season_caps`; Jordan to correct.]
+    values: [any, primary]
+
+  scar_vindications:
+    source: >-
+      B10.07 (`02_CHAR_scar_is_a_wound` row 4): whether seeing a thing one lives for honoured takes a scar count away.
+    note: >-
+      THE ARMS OF `Fixtures.scar_vindication` (`H-468`), read by `loop/resolve.py::_scar_witnesses`. `off` is the CONTROL (no count ever falls).
+      [ASSUMPTION: the roster's name and shape -- basis: B10.06's `scar_season_caps`; Jordan to correct.]
+    values: ["off", "on"]    # quoted: bare `off` and `on` are YAML 1.1 booleans
+
+  regard_units:
+    source: >-
+      B10.09 (`02_CHAR_scar_cap_and_regard_unit` edit 1 (`regard_unit`), edit 3; U1 §3 *regard*): the unit regard's judged and told halves are counted in.
+    note: >-
+      THE ARMS OF `Fixtures.regard_unit` (`H-470`), read by `queries/person_q.py::regard`. `raw` is the CONTROL (today's sum of `deed_term`, a pursuit
+      weight times an alignment cell); `stance` counts each deed in valence steps (`person_q.deed_steps`: the cosine of the holder's projected pursuits
+      against the deed kind's alignment row, a paired deed's times its `_bond`), the unit of a stance row's valence, so a deed is at most one step before the gains.
+      [ASSUMPTION: the roster's name and shape -- basis: `scar_holds`, B10.07's two-arm string roster; Jordan to correct.]
+    values: [raw, stance]
+
+  deed_counterparties:
+    source: >-
+      B10.20 (`U5a_CHAR_owed_amendments` §4, amending `02_CHAR_relations_have_a_ground`; F-PES-CHAR-08): whether a deed done to a person is weighed by
+      the judge's bond to the one it was done to.
+    note: >-
+      THE ARMS OF `Fixtures.deed_counterparty` (`H-474`), read by `queries/person_q.py::regard`. `paired_only` is the CONTROL (today: only a `PAIRED_KINDS`
+      deed carries `_bond`, the judge's allegiance to the one it was done to); `person_subject` gives the factor too to an unpaired deed whose verb row takes
+      a Person as its subject (`referent_class: Person`, read off the table by `person_q.PERSON_SUBJECT_KINDS`), the one acted on being read off the
+      holder's `seen` claims (`person_q.deed_counterparty`). [ASSUMPTION: the roster's name and shape -- basis: `stance_polarities` is the tree's form for
+      a swept string arm; Jordan to correct.]
+    values: [paired_only, person_subject]
+
+  crisis_arms:
+    source: >-
+      B10.13 (`16_PESSIMIST_CHAR_A` "The resolution, decided" 3; U1 F-43: the switch is `Fixtures.crisis_arm`, values `rule` and `drawn`):
+      the two ways a crisis of faith comes out.
+    note: >-
+      THE ARMS OF `Fixtures.crisis_arm` (`H-472`), read by `data/fixtures.py::load` (a shipped value outside this set is refused) and,
+      from B10.15, by `loop/resolve.py::_conviction_crisis`. `rule` is the CONTROL (today's function: the branch is chosen by a rule over state
+      the crisis already reads, nothing is rolled) and SHIPS until B98; `drawn` rolls one draw per scarring act and reads the band from
+      `tables.crisis_bands`. [ASSUMPTION: the roster's name and shape -- basis: `stance_polarities` is the tree's form for a swept string arm; Jordan to correct.]
+    values: [rule, drawn]
+
+  crisis_write_kinds:
+    source: >-
+      B10.13 (`16_PESSIMIST_CHAR_A` item 3, the band table): the writes a crisis band may make.
+    note: >-
+      THE THREE WRITES A ROW OF `tables.crisis_bands` MAY NAME, read by `data/rosters.py::_load_crisis_bands`, which refuses any other. `intensity`
+      moves the creed in crisis by a whole number of steps on `conviction_map`'s closed spine (an integer; the reader clamps it); `scar` sets the
+      count on the creed in crisis (a named setting); `branch` names the one composite rule the Failure band applies (today's FOLD / DESTROYED
+      branches, with the third arm that replaces the unbuilt RESTABILISE). [ASSUMPTION: the closed set of write names -- basis: the source states
+      the writes in words and names no kinds; the three are the words its table uses; Jordan to correct.]
+    values: [intensity, scar, branch]
+
+  manner_offset_axes:
+    source: >-
+      B10.58 (`IS-B2-CHAR-07`; A-108, ED-IN-0261's superseding row, 2026-11-12): the manner axes on which a person may carry a stored offset.
+    note: >-
+      THE THREE AXES A CAST ROW'S `manner:` MAY NAME, read by `data/cast.py::manner_offset_of`, which refuses any other (and any value beyond
+      `+-Fixtures.manner_offset_bound`); each is a member of `pursuit_axes`. The other axes stay as their pursuits project them (A-108: "the other axes
+      ... projected"). `selfish_selfless` is left out by M34's default (spread 0). [ASSUMPTION: the roster's name and shape -- basis: `crisis_write_kinds`' closed
+      set of names read by a loader; Jordan to correct.]
+    values: [rigid_flexible, grandiose_humble, deontological_instrumental]
+
+  relation_grounds:
+    source: >-
+      B10.62 (`IS-B2-CHAR-03`): the six edge types of the archived relational-graph design, as plain words (CHAR addendum B).
+    note: >-
+      THE GROUNDS A CAST ROW'S `relations:` ENTRY MAY NAME, read by `data/cast.py::relations_of`, which refuses any other. A ground is what another
+      person is to the holder, and it is the predicate suffix of the `bond:<ground>` claim `boot/realm.py::seed_relations` deposits in the holder's
+      own ledger (`queries/person_q.py::BOND_STEM`); nothing reads a ground as a rule (kin is no eligibility). [ASSUMPTION: the six names and their
+      closed set -- basis: the design's six edge types; Jordan to correct.]
+    values: [kin, oath, service, patronage, rivalry, feud]
 
   odds_weightings:
     source: >-
@@ -3616,7 +3769,16 @@ tables:
       - {use: fight,             role: resource,  key: attr.body.endurance, side: each}
       - {use: kit,               role: threshold, key: attr.body.strength,  side: each}
       - {use: told_claim_credit, role: judgement, key: attr.social.attunement,  side: actor, gain: competence_gain}
+      - {use: choice_temper,     role: judgement, key: attr.mind.focus,         side: actor, gain: temper_gain}
       - {use: own_state_gate,    role: gate,      key: prac.thread_sensitivity, side: actor, gain: thread_sensitivity_gate}
+      # B10.15 (`16_PESSIMIST_CHAR_A` "The resolution, decided" 2, A-7): the attribute that governs a crisis of faith, read by `loop/resolve.py::_crisis_net_sigma`
+      # through the one `edge` reader (`sigma.ADVANTAGE_SOURCES["capability"]`) and only at `Fixtures.crisis_arm: drawn`. The source's `side: roller` is not a member of
+      # `capability_sides` (actor, subject, each), so it reads `side: actor`: the one who rolls is the one in crisis. Its key is `attr.spirit.will`, which B01a.06
+      # renamed from the source's `attr.mind.will` (a legacy alias that `capability_uses` does not accept). `level: minor` is the smallest step of `LEVEL_SIGMA`:
+      # each point of Spirit above or below the scale's mid-point is one such step for or against him.
+      # [ASSUMPTION; medium; Jordan to correct: Spirit governs faith, and by one `minor` step a point -- basis: the source's "will governs faith"; the CHAR content pass may
+      # substitute; revert: delete this row, and the crisis reads no attribute.]
+      - {use: crisis,            role: edge,      key: attr.spirit.will, side: actor, level: minor, per: mid}
 
   site_yield:
     source: "`W8` / `H-93`. #353 §25 lists `yield` as written at MATTER and *blocked on `season_factor`'s distribution* (§22.3); it never says what a place produces."
@@ -3879,6 +4041,34 @@ tables:
       thread_truth:
         thread_read:     1      # derived, sign only: the pole that holds the Thread as the ground of being
 
+  # B10.13 (`16_PESSIMIST_CHAR_A` "The resolution, decided" 3, item 3's table): WHAT A CRISIS OF FAITH DOES, BY THE BAND IT IS GRADED AT. Read, from B10.14, by
+  # `queries/person_q.py::conviction_after_crisis` (`band=` not None); at `Fixtures.crisis_arm: rule` nothing reads it. Loaded and refused at import by
+  # `data/rosters.py::_load_crisis_bands`: a key that is no band of the one ladder (`engine/dice_engine/dice_engine.py::DEGREE_LABEL`), a band with no row, and a
+  # write whose name is outside `rosters: crisis_write_kinds` all refuse. Each band is a LIST OF TYPED WRITES, applied in order to the creed `x` in crisis.
+  # ⚠ EVERY ROW IS AN ASSUMPTION: the source states the four rows in words and calls the writes and the lowest-intensity selector "this lane's choices at ladder
+  # step 5". No row is measured. [ASSUMPTION; medium; Jordan to correct; revert: `crisis_arm: rule`, which reads none of it.]
+  crisis_bands:
+    source: >-
+      `proposals/2026-11-12-subsystem-audit-suite/proposals/16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` "The resolution, decided" 3 (the four-band table, copied), "Exact edits, by owner"
+      (row `rosters.yaml`); workplan v12 B10.13.
+    note: >-
+      Overwhelming -- FAITH RENEWED, the one outflow the count has: `intensity: 1` (the reader clamps at the ceiling) and `scar: zero` (the count on `x` resets
+      to 0). [ASSUMPTION; Jordan to correct: that renewal gives one step and clears the count -- basis: the source's "faith renewed"; no figure beyond +1.]
+      Success -- HE HOLDS: nothing on the intensity, and `scar: threshold_less_one` (the count is set to the threshold less one, so it will take another wound
+      to test him again). [ASSUMPTION; Jordan to correct: that one wound, not two, tests him again -- basis: the source's "another wound to test him again".]
+      Partial -- HE WAVERS, recoverable by the Overwhelming band of a later test: `intensity: -1` (a creed at 1 goes to a held rejection, 0). [ASSUMPTION;
+      Jordan to correct: one step down, no change to the count -- basis: the source's "recoverable".]
+      Failure -- HE BREAKS, TODAY'S BRANCH: `branch: fold_else_destroy_else_minus_two` (FOLD into the highest-intensity incompatible co-held creed, else DESTROYED
+      where nothing else is held, else -- something compatible is held -- intensity -2 floored at 0). The third arm replaces the unbuilt RESTABILISE branch of
+      `conviction_after_crisis`, so no person in crisis is a no-op; `conviction_map`'s closed spine is kept (integers, clamped), so no rounding rule is needed.
+      [ASSUMPTION; Jordan to correct: the -2 and the floor at 0 -- basis: the source's "intensity -2 floored at 0".]
+      The write NAMES (`zero`, `threshold_less_one`, `fold_else_destroy_else_minus_two`) are read by B10.14's reader; a name it does not know is its refusal.
+    bands:
+      Overwhelming: [{intensity: 1}, {scar: zero}]
+      Success:      [{scar: threshold_less_one}]
+      Partial:      [{intensity: -1}]
+      Failure:      [{branch: fold_else_destroy_else_minus_two}]
+
   role_template_pursuits:
     source: >-
       systems/factions/reference/faction_canon_v30.md §4 "Role Templates and Expected Convictions"
@@ -4115,6 +4305,48 @@ tables:
         grandiose_humble:             0.5
         deontological_instrumental:  -0.1
 
+  pursuit_signatures:
+    source: >-
+      B10.17 (`16_PESSIMIST_CHAR_B` step 1): what a pursuit's NAME must mean in acts, as verbs. A FLOOR, not the
+      whole character. Read by `harness/conviction_spread.py::signature_breaks` against `queries/person_q.py::pursuit_lean`,
+      which reports and refuses nothing yet.
+    keys: [pursuits, verbs]
+    note: >-
+      [ASSUMPTION; medium; Jordan to correct: every row is content.] `favours`: verbs whose lean on the pursuit
+      should be above zero. `opposes`: verbs whose lean should be below zero, and below every favoured verb's.
+      Verb keys are `verb_table.yaml`'s, spelled as it spells them (`"evade / defy"`). The loader refuses a pursuit
+      off the roster and a verb off `VERB_TABLE`; a verb with no `alignment` cell is lawful and reads lean 0.
+    cells:
+      love:          {favours: [give, tend, forgive],            opposes: [sabotage, raze, forge]}
+      justice:       {favours: [open_case, determine, petition], opposes: [forge, lie, conceal]}
+      family:        {favours: [give, tend, succeed],            opposes: [migrate, sabotage]}
+      wealth:        {favours: [exchange, work, requisition],    opposes: [give, raze]}
+      reputation:    {favours: [challenge, speak, utter],        opposes: [conceal, "evade / defy"]}
+      scholastics:   {favours: [research, examine, reconstruct], opposes: [destroy_record, raze]}
+      community:     {favours: [build, found, convene],          opposes: [raze, migrate]}
+      stewardship:   {favours: [build, restore, work],           opposes: [raze, sabotage]}
+      honour:        {favours: [challenge, accept, commit],      opposes: [lie, forge, "evade / defy"]}
+      liberty:       {favours: ["evade / defy", release, migrate], opposes: [comply, arrest, capture]}
+      stability:     {favours: [restore, comply, create_record], opposes: [raze, "evade / defy"]}
+      virtue:        {favours: [give, forgive, pardon],          opposes: [lie, forge, sabotage]}
+      doctrine:      {favours: [utter, commit, oblige],          opposes: [forge, destroy_record]}
+      happiness:     {favours: [give, release, tend],            opposes: [fight, arrest]}
+      individuality: {favours: ["evade / defy", found, migrate], opposes: [comply, oblige]}
+
+  affiliation_signatures:
+    source: >-
+      B10.19 (`U5a_CHAR_owed_amendments` §7, extending `16_PESSIMIST_CHAR_B`): what a creed's NAME must mean in acts, as verbs,
+      the shape of `pursuit_signatures`. Read by `harness/conviction_spread.py::signature_breaks` against
+      `data/affiliations.py::engagement` (`tables.affiliation_engagement`), which reports and refuses nothing yet.
+    keys: [affiliations, verbs]
+    note: >-
+      [ASSUMPTION; Jordan to correct: every row is content.] EMPTY: the reader ships first and the rows land with the
+      CHAR content pass (`IS-A-11` stage 1 table (e)). `favours`: verbs whose engagement cell on the creed should be above
+      zero. `opposes`: verbs whose cell should be below zero, and below every favoured verb's. Verb keys are
+      `verb_table.yaml`'s. The loader refuses a creed off `affiliations` and a verb off `VERB_TABLE`; a verb with no
+      engagement cell is lawful and reads 0. A cell is repaired in `affiliation_engagement` and nowhere else.
+    cells: {}
+
   alignment:
     source: >-
       the retired pursuit-cells draft (its `FORK:` row in `references/restructure_ledger.md`) §3 (the re-cell
@@ -4220,6 +4452,12 @@ tables:
         not by pursuit (the retired pursuit-cells draft's §3.6, §7.4; G-1, [medium;
         Jordan to correct]). `corpus_run`'s RANKING counts only candidates whose verb has a celled
         axis, so a `tell` is neither a tie nor a discrimination there.
+    # B10.56 (`02_CHAR_choice_alignment` edit 1): AN OPTIONAL `choices:` BLOCK scores a CHOICE VALUE by alignment, and IT SHIPS ABSENT -- a
+    # candidate's `choice_sourced` payload values (`marshal`'s `retreat_at`, `role`) then score as they always did. Its shape is
+    # `choices: {<key>: {<value>: {<axis>: <cell>}}}`; no value is required to carry a cell. `data/verbs.py::_check_choice_cells` refuses a key
+    # no `choice_sourced` line carries, a value outside that key's `CHOICE_RANGES` (a value `0.5` is quoted), an axis off the roster and a
+    # cell that is not a number; `align_choice` reads the cells through `ALIGNMENT`. The cells are Jordan's (`BA1-cast-content`): each
+    # authored cell is a declared mover of the realm hash.
     # §G's third term. ORDER IS SEMANTIC: `declared` is the default and the first arm, and every
     # point is built from it rather than from the previous one. `uniform` is THE CONTROL — every
     # (verb, axis) pair equal, so convictions cannot discriminate at all and a verdict that does

@@ -141,8 +141,8 @@ def test_control_with_nobody_holding_arms_every_season_roll_reads_the_untrained_
     one at the build). B05.99 re-pin: B05.09 took the attribute out of the skill score and B05.57/B05.58 make the fight's pool
     `pool_of(score, addends, 6, 5)` and its Ob `opposed_ob(score, 0.5)`, so every roll is CR-85's (8, 1.0) again (B01a.99 had
     read the drawn attributes: (9, 2.5), (11, 2.0), (11, 1.5)). Since B05.09 a surviving party of a bloodied fight is MINTED a
-    first rank (`_grown`), so after the season the holders are exactly those survivors, each at 1, which is below the untrained
-    score and so reads the same pool (was: no holder after the season)."""
+    first rank (`_grown`), so after the season the holders are exactly those survivors, each at or below the untrained
+    score (1 or 2) and so reading the same pool (was: no holder after the season)."""
     seen = _spy(monkeypatch)
     # seed re-picked at B06.99: the stream changed (was 1; seeds 0,2..8 scanned: a survivor of two bloodied fights holds 2 at 0,3,4,5,6,8;
     # seed 2 is the first where every holder is at 1 and every roll is (8, 1.0))
@@ -150,7 +150,10 @@ def test_control_with_nobody_holding_arms_every_season_roll_reads_the_untrained_
     assert [pid for pid, p in w.persons.items() if KEY in (p.capability or {})] == []
     run(1, 2, w=w)
     held = {pid: p.capability[KEY] for pid, p in w.persons.items() if KEY in (p.capability or {})}
-    assert held and set(held.values()) == {1}, held
+    # B10.99 re-read: B10.72 moved the season's fights, and a survivor of two bloodied fights now holds 2 here (was: every holder at 1);
+    # what the claim needs is that no holder stands above the untrained score (`pool_default`), so a held rank adds nothing to a roll
+    from ..seam.wrappers.pool import untrained
+    assert held and max(held.values()) <= untrained(w.fixtures), held
     assert seen and set(seen) == {(8, 1.0)}, dict(seen)
 
 

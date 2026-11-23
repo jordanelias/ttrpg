@@ -124,14 +124,14 @@ def test_24e_a_works_is_a_record_minted_by_create_record_with_its_makers_hold():
 
 def test_24e_a_second_live_works_on_one_target_is_declined_and_a_dead_one_frees_it():
     """r2 §A.6.3's *one works per target*, kept at the producer: a second works planning the same
-    thing at the same place is refused (the fold's `act.refused` -- `create_record` declares no kind
-    of its own), because `ceiling` could not say which of two bounds the fabric. CONTROLS: another
+    thing at the same place is refused (`create_record.refused`, the one kind the row declares since B10.60),
+    because `ceiling` could not say which of two bounds the fabric. CONTROLS: another
     target mints; and once the first works' master lets it go (`release` of his own `hold`, T-m) it
     is no longer live, and the target is free."""
     w, d = _world()
     _declare(w, d, "wk1", "harbour", SETTLEMENT)
     second = _declare(w, d, "wk2", "harbour", SETTLEMENT, actor="p_mid")
-    assert _kinds(second) == ["act.refused"] and "wk2" not in w.records, _kinds(second)
+    assert _kinds(second) == ["create_record.refused"] and "wk2" not in w.records, _kinds(second)
     other = _declare(w, d, "wk3", "seam", SETTLEMENT, actor="p_mid")
     assert _kinds(other) == ["record.created"] and "wk3" in w.records
     let_go = _fold(w, d, Act(id="rel", actor=ABSENT, verb="release", payload={"subject": "wk1"}))

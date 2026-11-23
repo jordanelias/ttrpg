@@ -20,7 +20,7 @@ line, `data/pursuits.py` one layer down):
   * CL-THRUST B2.1: an optional `axis:`, a member of `thrust_axes` (`rosters.yaml`), refused on an
     `orientation` row -- it mints no Proposition, so no one can be committed to it;
   * CL-THRUST B2.2: an optional top-level `goal_stages:` list (a missing key reads as `[]`, the shipped
-    state), each row `{id, for, stages}` -- `for:` the goals it climbs (never an `orientation` goal, never
+    state), each row `{id, for, stages}` and an optional `opens: mandatory | ordinary` (B10.71) -- `for:` the goals it climbs (never an `orientation` goal, never
     one claimed by a second row), `stages:` at least two in order, each `{id, term, predicate, pursuits}`:
     `term` a `goal_stage_terms` member that never decreases along the row, `predicate` a
     `requires_typed` cell `data/requires.py::build_typed_requires` accepts (its `SystemExit` is wrapped
@@ -75,13 +75,23 @@ class Stage:
     pursuits: dict
 
 
+# B10.71: THE TWO VALUES OF A `goal_stages` ROW'S `opens:` KEY. `mandatory`: the question of the row's LAST stage may not be
+# passed over for another (`Question.mandatory`; it opens a scene and decides nothing, A-47). `ordinary`: the default.
+# roster-exempt: MECHANISM -- the two spellings `world_q.questions_for` reads, as `_STANCE_SIGNS` is, not game vocabulary.
+OPENS_MANDATORY = "mandatory"
+OPENS_ORDINARY = "ordinary"
+OPENS = (OPENS_MANDATORY, OPENS_ORDINARY)
+
+
 @dataclass(frozen=True)
 class GoalStages:
     """One `goal_stages` row: `stages` in the order authored (at least two, terms never decreasing) and
-    `for_goals` the ids of the goals it climbs for -- each goal is in at most one row."""
+    `for_goals` the ids of the goals it climbs for -- each goal is in at most one row. `opens` is the row's
+    optional `opens:` key, one of `OPENS` (default `ordinary`)."""
     id: str
     for_goals: tuple
     stages: tuple
+    opens: str = OPENS_ORDINARY
 
 
 @dataclass(frozen=True)
@@ -415,7 +425,8 @@ def _goal_stages(doc: dict, goals: tuple) -> tuple:
     """`goals`, each carrying the `goal_stages` row that names it in `for:` (`Goal.stages`). A missing key
     is `[]` and returns `goals` untouched: the shipped state. A row is refused for a repeated id; a `for:`
     that is empty, names no goal of this file, names an `orientation` goal, or names a goal another row
-    already claims (one row per goal); `stages:` that fail `_stages`; or a key outside `{id, for, stages}`."""
+    already claims (one row per goal); `stages:` that fail `_stages`; an `opens:` outside `OPENS`; or a key outside
+    `{id, for, stages, opens}`."""
     if _STAGES_KEY not in doc:
         return goals
     raw = doc[_STAGES_KEY]
@@ -439,10 +450,14 @@ def _goal_stages(doc: dict, goals: tuple) -> tuple:
         left = dict(row)
         left.pop("id")
         for_ids, stages = left.pop("for", None), left.pop("stages", None)
+        opens = left.pop("opens", OPENS_ORDINARY)
         if left:
             _refuse(Forbidden, rid, f"carries {sorted(map(str, left))}, which a row does not read",
-                    "a row is its id, `for:` and `stages:` and nothing else (a key the schema does not "
-                    "read is refused, not dropped)", _STAGES_LAW, _STAGES_KEY)
+                    "a row is its id, `for:`, `stages:` and optionally `opens:` and nothing else (a key the schema "
+                    "does not read is refused, not dropped)", _STAGES_LAW, _STAGES_KEY)
+        if opens not in OPENS:
+            _refuse(Forbidden, rid, f"`opens:` is {opens!r}, not one of {list(OPENS)}",
+                    f"`opens:` one of {list(OPENS)}, or no such key", _STAGES_LAW, _STAGES_KEY)
         if not isinstance(for_ids, list) or not for_ids:
             _refuse(Unspecified, rid, f"`for:` is {for_ids!r}, not a non-empty list of goal ids",
                     "the ids of the goals this row climbs for", _STAGES_LAW, _STAGES_KEY)
@@ -458,7 +473,7 @@ def _goal_stages(doc: dict, goals: tuple) -> tuple:
                 _refuse(Forbidden, rid, f"`for:` names {gid!r}, which row {claimed[gid]!r} already claims",
                         "one row per goal", _STAGES_LAW, _STAGES_KEY)
             claimed[gid] = rid
-        built.append(GoalStages(rid, tuple(for_ids), _stages(rid, stages)))
+        built.append(GoalStages(rid, tuple(for_ids), _stages(rid, stages), opens))
     by_row = {gid: row for row in built for gid in row.for_goals}
     return tuple(replace(g, stages=by_row[g.id]) if g.id in by_row else g for g in goals)
 

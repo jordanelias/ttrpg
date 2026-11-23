@@ -21,7 +21,7 @@ What each block proves, and the control that stops it passing vacuously:
      then this block asserted the row unformable, both eligibility alternatives being placeholders,
      `H-75`). The row is formable now, and `Fixtures withheld_verbs` holds it out of formation (`H-156`
      option (a), SHIPPED): at the shipped arm the holder forms none; at the sink arm (`()`) he forms it
-     on the Record he holds and on nothing he does not hold (`rosters.yaml: own_hold_declines`).
+     on the Record he holds and on nothing he does not hold (`OwnStateReader`'s `held_by`).
      IN-26's corpus reading at the sink arm: the always-refused set did not move (`release` was not
      crowded out); `engine/season/tests/test_in26_record_sink.py` owns the rest.
   6. `give` IS FORMABLE: one Candidate per known receiver (`test_give.py` owns the fan's detail).
@@ -195,7 +195,7 @@ def test_14_destroy_record_is_formed_by_nobody_while_a_13_is_held():
     assert not _formed(w, "p_low", "destroy_record", (rid, "Hh", "p_mid")), (
         "`destroy_record` formed at the shipped arm -- `Fixtures withheld_verbs` no longer holds it, "
         "so every realm hash moves (IN-26's falsifier: the sink arm off must be today's hash)")
-    # THE SINK ARM: formed, on the held Record ONLY (`own_hold_declines`), never on the hearth or a person
+    # THE SINK ARM: formed, on the held Record ONLY (`OwnStateReader`'s `held_by`), never on the hearth or a person
     sink = w.fixtures.sweep("withheld_verbs", ())
     got = _formed(w, "p_low", "destroy_record", (rid, "Hh", "p_mid"), fx=sink)
     assert [c.subject for c in got] == [rid], got

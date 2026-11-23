@@ -1086,7 +1086,7 @@ def main(seed: int = 0, seasons_cap: int | None = None) -> int:
         # this sum lacks; the NONZERO count differs only where a believed chance is exactly 0) -- and
         # it passes the same `scar_weight_shift` arm `make_chooser` does, or a non-zero arm would
         # score here at the unshifted weights while the chooser read the shifted ones.
-        axis_w = decision.project(pr, w2.fixtures.get("scar_weight_shift"))
+        axis_w = decision.project(pr, w2.fixtures.get("scar_weight_shift"), hold=w2.fixtures.get("scar_hold"), mass=w2.fixtures.get("scar_primary_mass"))
         # G-1 [medium; Jordan to correct]: the denominator is the candidates whose verb has a celled
         # axis (`data/verbs.py::celled_verbs`, which holds the reasoning); both figures are printed.
         cc = [x for x in cd if x.verb in celled]

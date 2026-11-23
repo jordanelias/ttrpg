@@ -62,7 +62,8 @@ its move codes over the whole log and owns that tabulation; this block maps noth
 
 THE REASON FOR EACH ACT (B09.16, `--chains`). Before the chain-end block, one line per act of the printed chain, `<act id> | for: <occasion.source>
 <occasion.about>` (`occasion_line`): the question the act answered, read from the Scene the act store keeps beside the act
-(`World.acts.scene_of`), never from the driver. It is the store's first reader. The deciding term is not printed (`occasion_line`).
+(`World.acts.scene_of`), never from the driver. It is the store's first reader. The deciding term (`Scene.decided`, B10.05) is
+printed on the chain's per-act line (`lines`, `render`), where the caller hands in the act store.
 [ASSUMPTION; medium; Jordan to correct; revert: delete the reader]
 
 THE PROPAGATION READING (B02.16, behind `--propagation`; CLAUDE.md §4: the word and its definition). *How
@@ -105,7 +106,9 @@ from ..data.rosters import MARGIN_ENDING
 from ..data.rosters import PERSON_DIED
 from ..data.verbs import VERB_TABLE
 from ..loop.effects_combat import FIGHT_ROUNDS, FIRST_BLOOD, LEAD_CHANGES
-from ..state.attribution import causing_act
+from ..queries.cache import deposit_index
+from ..queries.person_q import regard_parts
+from ..state.attribution import causing_act, event_by_id
 from . import arc as ARC
 from . import storybar as SB
 from .corpus_run import emits_and_writes_nothing
@@ -200,11 +203,13 @@ def rolled_text(ending: tuple) -> str:
             f"leverage {d['leverage']:+.3g}: {lev}")
 
 
-def lines(log, act_of: dict, rows: dict, persons) -> list:
+def lines(log, act_of: dict, rows: dict, persons, acts=None) -> list:
     """The chain as structured lines: `[{"n", "act", "season", "actor", "verb", "kinds", "rolled",
-    "shape", "answers"}]`, `rolled` the margin tuple of a social roll's Events (`()` for every act none graded),
+    "shape", "decided", "answers"}]`, `rolled` the margin tuple of a social roll's Events (`()` for every act none graded),
     `shape` a fight's `(n rounds, first blood X, k lead changes)` (`""` for every act whose Events carry no `fight_rounds`, B14.15),
-    `answers` the earlier line's `n` (None on the first). Root first."""
+    `decided` what decided the act's Scene (`Scene.decided`, read through `acts.scene_of`, the act store; `""` for an act the store
+    does not hold, one with no stamp, or with no `acts` handed in), `answers` the earlier line's `n` (None on the first). Root first.
+    The deciding term is the Scene's FIRST act's: the line prints it for that act and for the others in the Scene as the Scene's."""
     chain = deepest_chain(rows)
     kinds = _kinds(log, act_of)
     rolled = _rolled(log, act_of)
@@ -218,13 +223,20 @@ def lines(log, act_of: dict, rows: dict, persons) -> list:
         out.append({"n": i + 1, "act": aid, "season": r["season"],
                     "actor": _name(persons, r["actor"]), "verb": verb.get(aid, "?"),
                     "kinds": kinds.get(aid, []), "rolled": rolled.get(aid, ()),
-                    "shape": shapes.get(aid, ""), "answers": i if i else None})
+                    "shape": shapes.get(aid, ""), "decided": _decided(acts, aid),
+                    "answers": i if i else None})
     return out
 
 
-def render(log, act_of: dict, rows: dict, persons) -> str:
-    """The deepest cross-person chain as readable text, one line per act in causal order."""
-    ls = lines(log, act_of, rows, persons)
+def _decided(acts, act_id: str) -> str:
+    """`Scene.decided` of the Scene the act store keeps `act_id` in; `""` without a store, or without a Scene or a stamp. Reads only."""
+    sc = None if acts is None else acts.scene_of(act_id)
+    return getattr(sc, "decided", "")
+
+
+def render(log, act_of: dict, rows: dict, persons, acts=None) -> str:
+    """The deepest cross-person chain as readable text, one line per act in causal order (`acts`: see `lines`)."""
+    ls = lines(log, act_of, rows, persons, acts)
     if not ls:
         return "no acts in the log; nothing to chronicle"
     out = []
@@ -238,6 +250,7 @@ def render(log, act_of: dict, rows: dict, persons) -> str:
             tail = f"answers {a['n']}. {a['actor']} {a['verb']}"
         roll = f" (rolled: {rolled_text(l['rolled'])})" if l["rolled"] else ""        # B05.18: beside what it emitted, where a margin graded it
         roll += f" {l['shape']}" if l["shape"] else ""                                                                 # B14.15: and a fight's shape
+        roll += f" (decided by: {l['decided']})" if l["decided"] else ""                                               # B10.05: and what decided the Scene
         out.append(f"{l['n']}. season {l['season']} | {l['actor']} {l['verb']} | "
                    f"emitted {', '.join(l['kinds']) or '(nothing)'}{roll} | {tail}")
     return "\n".join(out)
@@ -271,15 +284,35 @@ def consequence_chains(w, act_of: dict, bounds: list, min_depth: int, log=None) 
     return {"consequence_acts": len(made), "chain_ends": len(ends), "kinds": dict(sorted(hist.items()))}
 
 
+def present_at(w, event_id: str) -> tuple:
+    """THE PERSONS WHO HOLD A CLAIM DEPOSITED FROM `event_id` (B10.55), sorted: the rule the deleted `witnessed` had, read from the Event's side. The
+    ids are `queries/cache.py::deposit_index`'s (the `claim.deposited` Events' `causes[0]` and receipt subject), asked of each person's OWN ledger.
+    World truth, resolver-side, for the chronicle (a harness observer): nothing in `decision/` or the player's surface reads it, and a person's own
+    reading of the room is `person_q.room_as_held`."""
+    ids = frozenset(deposit_index(w).get(event_id, ()))
+    return tuple(sorted(pid for pid, per in w.persons.items() if any(c.id in ids for c in per.ledger)))
+
+
+def witness_regard(w, event_id: str, fx) -> tuple:
+    """FOR THE CHRONICLE ONLY (B10.55): `(id, {"stored", "judged", "told", "heritage"})` for each person present at `event_id` (`present_at`) other
+    than the act's actor, each his regard for the actor split as `person_q.regard` adds it (`regard_parts`, its one owner). `()` for an Event no
+    act caused. THIS IS WORLD TRUTH, the witnesses' own ledgers: never handed to `decision/` or to the player's surface, which read only
+    `person_q.room_as_held`."""
+    e = event_by_id(w, event_id)
+    act = causing_act(w, e) if e is not None else None
+    if act is None:
+        return ()
+    return tuple((pid, regard_parts(w.persons[pid], act.actor, fx)._asdict()) for pid in present_at(w, event_id) if pid != act.actor)
+
+
 def occasion_line(w, act_id: str) -> str:
     """`for: <occasion.source> <occasion.about>` -- the question the act answered, read from the Scene the act store
     keeps beside the act (`World.acts.scene_of`, B09.16), so a second driver on the same world, or a world with no
     driver, prints the same line. `for: (no scene)` for an act the store does not hold, or one released in no Scene
     (a hand-built act); `for: (no occasion)` for a Scene that carried no question. Reads only.
 
-    NOT PRINTED: the deciding term (pursuit, stance or the draw). `make_chooser(watch=...)` (B09.13) supplies it while
-    the process runs, to a watcher the chooser was built with; `SB.drive` builds the chooser with none, and a watcher
-    here would be a second `deciding_term` scoring beside the one `harness/decision_spread.py` already makes. Not built."""
+    NOT PRINTED HERE: the deciding term. It is `Scene.decided` (B10.05), stamped by `decision/` where the Scene is
+    packed and printed on the chain's per-act line (`lines`); this line stays the question alone."""
     sc = w.acts.scene_of(act_id)
     if sc is None:
         return "for: (no scene)"
@@ -546,7 +579,7 @@ def main(argv=None) -> int:
     if not rows and res["acts"]:
         print("no consequence act in the log; --all-acts renders over every act")
     else:
-        print(render(w.log, d.act_of, rows, w.persons))
+        print(render(w.log, d.act_of, rows, w.persons, w.acts))
     if args.chains:
         if chain:                       # B09.16: what each act of the printed chain was for, read off the act store
             print(render_for(w, chain))
