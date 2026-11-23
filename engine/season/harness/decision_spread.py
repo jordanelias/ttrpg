@@ -11,6 +11,7 @@ re-derives a term.
     python -m engine.season.harness.decision_spread --decisions [--control | --null]
     python -m engine.season.harness.decision_spread --season    [--control | --null]
     python -m engine.season.harness.decision_spread --arms
+    python -m engine.season.harness.decision_spread --signatures [--seed N]
     python -m engine.season.harness.decision_spread --retries [--seed N] [--seasons K]
     python -m engine.season.harness.decision_spread --retest  [--control | --null] [--seed N] [--ticks T]
 
@@ -72,6 +73,14 @@ WHAT EACH MODE READS, AND WHETHER IT PLAYS A SEASON (each prints the answer in i
                `projection_at()` (`data/verbs.py:1166-1172`), and under a uniform projection the pursuit
                dot still varies by verb identically for everyone.
 
+  --signatures BUILT REALM, NO SEASON (BA1.05).  For each pursuit with a row in `rosters.yaml: pursuit_signatures`, every
+               person is given that one pursuit at weight 1.0 (a fresh build per pursuit; conviction as built), the
+               common referents are scored as `--decisions` scores them, and the SAMPLED tops are tallied: `SIGNATURE <k>`
+               per pursuit (modal top verb, the tops, any top its row opposes), `SHARED TOP <verb>` for a verb modal for
+               more than two pursuits, and the footer `signature_violations` / `shared_tops_over_two`. A reading: it
+               exits 0 and changes nothing. The tops are the sampled ones, as `--decisions`' are, so a top the draw picked
+               counts; its own flag, refused beside every other mode (`--seed` only).
+
 THERE IS NO `--cells`: per-cell leverage needs a projection rebind the tree does not have; the cells the
 cast producer questioned go to the cell-value and cosine pass with `--decisions`' deciding-term reading as
 evidence, and no cell is edited here.
@@ -120,6 +129,7 @@ from engine.substrate.descriptors import PURSUITS
 
 from ..data import goals as goals_data
 from ..data import verbs as V
+from ..data.pursuits import PURSUIT_SIGNATURES
 from ..data.requires import WORLD_ONLY_STEMS
 from ..data.rosters import FACTION_BY_PROP, PURSUIT_AXES, faction_prop_id
 from ..data.verbs import alignment_at
@@ -179,6 +189,7 @@ def apply_control(w) -> dict:
         if p.pursuits:
             p.pursuits = dict(mean)
             p.conviction = dict(conv)
+            p.manner_offset = {}          # `person_q.projected_axes` adds a person's own offset to his vector: a flat arm holds none
     return mean
 
 
@@ -496,6 +507,63 @@ def read_decisions(w) -> dict:
                      "faction_tops": sum(len(v) for v in by_faction.values()),
                      "deciders": dict(deciders), "tops": tops, "split": split_figures(split)})
     return {"rows": rows, "split": split_figures(total), "tau": float(fx.get("choice_temperature")), "pairwise": pairwise}
+
+
+# ---------------------------------------------------------------------------------------------
+# --signatures
+
+
+def read_signatures(seed: int) -> dict:
+    """The `--signatures` figures (BA1.05; `16_PESSIMIST_CHAR_B` gate 2). BUILT REALM, NO SEASON: a composition of `--decisions`' own
+    steps, no new scoring. For each pursuit `k` with a row in `data/pursuits.py::PURSUIT_SIGNATURES` (roster order), on ONE
+    `_build(seed, False)` (one build: each pursuit overwrites every person's `pursuits` and `manner_offset` whole), every person gets
+    `p.pursuits = {k: 1.0}` (conviction as built); then `common_set` forms each person's set per `common_referents` question and `attribute_top` ranks it
+    exactly as `read_decisions` does, giving each person's SAMPLED top verb, as `--decisions`' tops are.
+
+    Returns `{"pursuits": {k: {"tops": Counter, "modal", "opposed": [verbs]}}, "shared": {verb: [pursuits]}, "violations",
+    "shared_over_two"}`. `modal` is the most frequent top (ties by verb name); `opposed` the tops the row's `opposes:` lists; `shared`
+    every verb modal for more than two pursuits; `violations` the pursuits with an opposed top."""
+    rows = PURSUIT_SIGNATURES
+    foldable = resolvable_verbs()
+    wk = _build(seed, False)
+    wk._rehome()
+    fx = wk.fixtures
+    draw = draw_factory(wk.world_seed, lambda: wk.tick)
+    out: dict = {}
+    for k in PURSUITS:
+        if k not in rows:
+            continue
+        for p in wk.persons.values():
+            p.pursuits = {k: 1.0}
+            p.manner_offset = {}          # a single-pursuit holder: his own manner offset is not part of what the signature reads
+        tops: Counter = Counter()
+        for _label, ref in common_referents(wk):
+            _handed, keyed, order = common_set(wk, ref, foldable)
+            for pid in keyed:
+                r = attribute_top(wk.persons[pid], [keyed[pid][key] for key in order], fx, draw,
+                                  believed_odds_query(wk, wk.persons[pid]), decision_question(ref))
+                if r["top"] is not None:
+                    tops[r["top"].verb] += 1
+        modal = min(tops, key=lambda v: (-tops[v], v)) if tops else None
+        out[k] = {"tops": tops, "modal": modal, "opposed": sorted(v for v in tops if v in rows[k]["opposes"])}
+    by_modal: dict = {}
+    for k, row in out.items():
+        if row["modal"] is not None:
+            by_modal.setdefault(row["modal"], []).append(k)
+    shared = {v: ks for v, ks in sorted(by_modal.items()) if len(ks) > 2}
+    return {"pursuits": out, "shared": shared, "violations": sum(1 for r in out.values() if r["opposed"]),
+            "shared_over_two": len(shared)}
+
+
+def print_signatures(r: dict) -> None:
+    print("--signatures  BUILT REALM, NO SEASON PLAYED  (every person holds one pursuit at 1.0; tops over the common referents)")
+    for k, row in r["pursuits"].items():
+        tops = ", ".join(f"{v}×{n}" for v, n in sorted(row["tops"].items(), key=lambda t: (-t[1], t[0])))
+        opp = ", ".join(row["opposed"]) if row["opposed"] else "none"
+        print(f"SIGNATURE {k}: modal {row['modal']}; tops {tops}; opposed-top {opp}")
+    for v, ks in r["shared"].items():
+        print(f"SHARED TOP {v}: {', '.join(ks)}")
+    print(f"signature_violations: {r['violations']}  shared_tops_over_two: {r['shared_over_two']}")
 
 
 # ---------------------------------------------------------------------------------------------
@@ -886,8 +954,14 @@ def main(argv=None) -> int:
     ap.add_argument("--seasons", type=int, default=2, help="seasons --retries plays (default 2)")
     ap.add_argument("--retest", action="store_true", help="built realm, NO season: self- and between-person agreement of the sampled top")
     ap.add_argument("--ticks", type=int, default=RETEST_TICKS, help="draw ticks --retest redraws over (default %(default)s)")
+    ap.add_argument("--signatures", action="store_true", help="built realm, NO season")
     ap.add_argument("--seed", type=int, default=0)
     a = ap.parse_args(argv)
+    if a.signatures:
+        if a.arms or a.control or a.null or a.retries or a.persons or a.decisions or a.season or a.retest:
+            ap.error("--signatures is its own mode: it takes no other reading or arm flag (--seed only)")
+        print_signatures(read_signatures(a.seed))
+        return 0
     if a.retries:
         if a.arms or a.control or a.null or a.persons or a.decisions or a.season or a.retest:
             ap.error("--retries is its own mode: it takes no other reading or arm flag")
@@ -899,7 +973,7 @@ def main(argv=None) -> int:
         ap.error("--control and --null are separate arms; run them apart")
     if not (a.persons or a.decisions or a.season or a.arms or a.retest):
         if not (a.control or a.null):
-            ap.error("name a reading: --persons, --decisions, --season, --retest or --arms")
+            ap.error("name a reading: --persons, --decisions, --season, --retest, --signatures or --arms")
         a.decisions = True                 # an arm alone reads the cheapest realm reading
         print("(--control/--null alone implies --decisions)")
     if a.arms:

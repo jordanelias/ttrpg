@@ -544,16 +544,16 @@ rows:
         expects: "`RANKING DISCRIMINATION` all carry a nonzero pursuit score, no verb under `RANKING EXCLUDES`"
         holds: "no"
         reading:
-          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
-          date: "2026-11-15"
+          tree: "a9bbec8aff368d5fcdcf7254982f0df99ad04ae0"
+          date: "2026-11-23"
           seed: 0
           seasons: "2 (capped; `temporal.span_seasons` per case)"
           line: "  RANKING EXCLUDES         ['conceal', 'interview', 'sabotage', 'tend', 'train'] (no celled axis: declared `uncelled:` or all-`null`)"
-          control: "none"
+          control: "read at a9bbec8 (the cast's rows in, BA1.02's manner rows too; `corpus_run` was not repeated after they were held back, and its RANKING lines read each verb's celled axes, which no manner offset touches); the earlier recording's lines were `8..13 of 13` at 1c9238db. BA1 landed no verb alignment cell (the draft's table (c) carries none; BA1.04's two `choices:` cells are `choice:` keys, which `celled_verbs` does not count), so the EXCLUDES line is the one the last reading recorded and the DISCRIMINATION numerator and denominator moved with the cast and the verb table, not with a cell"
           does_not_show: >-
-            one seed; the `RANKING DISCRIMINATION` line reads `8..13 (numerator) of 13..13` across
-            the cases, so the verbs it counts are not all verbs; five verbs are excluded, not the
-            eight of the last recorded reading
+            one seed; BA1 authors no verb alignment cell (the draft has none, and none is an agent's to
+            invent), so five verbs stay excluded and `RANKING DISCRIMINATION` reads `8..14 of 14`; the
+            remaining cells are Jordan's or the CHAR content pass's (BA1.05's STOPS IF)
       - id: R-06.b
         text: >-
           the cast tests pass (`-k 'ambitions or cast'`). Recorded, and by v11's own note blind (it
@@ -600,27 +600,24 @@ rows:
         expects: "the strict-top share above one half at the shipped tau at seeds 0, 1, 2, and above the `--control` arm's (pursuits = realm mean) at each seed: one half alone does not separate the two, the flattened arm clears it too"
         holds: "yes"
         reading:
-          tree: "9962cb71ae0779c720fff20ce1c1858cd9f86f29"
+          tree: "8d32955b1365decae113b46aad793c82df1d62fe"
           date: "2026-11-23"
           seed: "0, 1, 2"
           seasons: 0
-          line: "  all referents: {'draw': 243, 'pursuit': 255}; distinct tops 42; distinct tops within a faction, summed over its factions 142"
+          line: "  all referents: {'draw': 243, 'pursuit': 255}; distinct tops 42; distinct tops within a faction, summed over its factions 148"
           control: >-
-            seed 0 shown (255 of 498, 0.512); seeds 1 and 2 read pursuit 265 and 273 of 498 (0.532,
-            0.548) (`--decisions --seed s`, `PYTHONHASHSEED=0`); choice_temperature swept to 0 reads
-            pursuit 450 and tiebreak 48 of 498 at each seed (0.904), by a one-line `read_decisions`
-            call on `build_realm(s)` with `fixtures.sweep("choice_temperature", 0)`; the `--control` arm
-            (pursuits = realm mean) reads pursuit 210, 210, 211 of 498 (0.422, 0.422, 0.424; the flag
-            run at seed 0 reads 210 too), so the shipped arm exceeds it by 45, 55 and 62 at seeds 0, 1,
-            2 (255 v 210, 265 v 210, 273 v 211): the comparison the `yes` rests on. Against the B02.38
-            reading (274, 301, 280 of 498; control 253, 269, 252) the shipped share fell 19, 36 and 7
-            and the control arm's fell 43, 59 and 41: the margin over the control widened while the share
-            at the shipped tau came down to 0.512 at seed 0 (6 of 498 over one half)
+            seed 0 shown (255 of 498, 0.512); seeds 1 and 2 read pursuit 265 and 273 of 498 (0.532, 0.548)
+            (`--decisions --seed s`, `PYTHONHASHSEED=0`); the `--control` arm (pursuits = realm mean, and now no
+            manner offset) reads pursuit 210, 210, 211 of 498 (0.422, 0.422, 0.424), so the shipped arm exceeds it by
+            45, 55 and 62. These are B10's close's figures (c21e451f1) exactly: the batch moves nothing here as landed.
+            BA1.02's ten drafted `manner:` rows are HELD BACK: with them in, seed 0 read 249 of 498 (0.500, not above
+            one half; seeds 1, 2: 259, 266; control 205, 215, 218), bisected over the item commits (BA1.01 alone reads
+            255, 265, 273); the rows are `git show 27ab0bb3b`. The `choice_temperature` swept to 0 arm of the conjunct's
+            text was not re-read
           does_not_show: >-
-            a built realm with no season played; the share is derived from two printed counts and
-            the command prints no share; seed 0 clears one half by 6 of 498 (255 against 249), so one
-            half alone is a thin margin there; how much of the margin over the control arm is the pursuit
-            term and how much the realm-mean projection is not read here
+            a built realm with no season played; the share is derived from two printed counts; seed 0 clears one half
+            by 6 of 498; whether the held-back offsets, once Jordan corrects them, keep the share above one half is not
+            measured here
       - id: R-06.e
         text: >-
           every acting person carries a pursuit vector: `decision_spread --persons`, n of n at the
@@ -629,15 +626,16 @@ rows:
         expects: "n of n persons hold a projected vector"
         holds: "yes"
         reading:
-          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
-          date: "2026-11-15"
-          seed: "0, 1, 2"
+          tree: "8d32955b1365decae113b46aad793c82df1d62fe"
+          date: "2026-11-23"
+          seed: "0"
           seasons: 0
           line: "  persons 83 (cast 46, cohorts 37); 83 hold a projected vector, 0 hold none"
-          control: "the same line at seeds 1 and 2: 83 hold a projected vector, 0 hold none"
+          control: "the same line at the last recording (tree 1c9238db4c46af9c92a842b1b11d0f2b3d499bdf, 2026-11-15): 83 hold a projected vector, 0 hold none; B10's close (c21e451f1) was not read for this line"
           does_not_show: >-
             a built realm with no season played; a vector held is not a vector that moved a choice
-            (R-06.d); the realm of 83 persons, not B39's generated cast
+            (R-06.d); the realm of 83 persons, not B39's generated cast; `--persons` reads projected
+            pursuit vectors, not pools (BA1's UNDECIDED (5))
     blocks: [IN-38, IN-08, IN-18, IN-12]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W27: `17` landed (build_at seats a `cast:`), IN-38 remains; H-62 re-scoped to IN-08, IN-18, IN-12 step 9
 
@@ -751,6 +749,23 @@ rows:
         argv: ["python", "-m", "engine.season.harness.corpus_run", "--seasons", "2"]
         expects: "every tie is between candidates of equal, nonzero choice score (`RANKING DISCRIMINATION`, the tie ordering, and `decision_spread --decisions`)"
         holds: "unread"
+        reading:
+          tree: "8d32955b1365decae113b46aad793c82df1d62fe"
+          date: "2026-11-23"
+          seed: 0
+          seasons: "2 (capped; `temporal.span_seasons` per case); `decision_spread --decisions` at seeds 0 to 2: built realm"
+          line: "  RANKING EXCLUDES         ['conceal', 'interview', 'sabotage', 'tend', 'train'] (no celled axis: declared `uncelled:` or all-`null`)"
+          control: >-
+            `decision_spread --decisions` at seeds 0, 1, 2: `every candidate scores 0: 0 of 498 readings`
+            (no person is handed an all-zero field) and the draw's tops split tie 27, 25, 22 of 243, 233,
+            225. The five verbs under RANKING EXCLUDES carry a zero PURSUIT term only: their stance, fit,
+            aim and risk terms still score (`choose.py`: five terms), and `celled_verbs` (G-1) leaves such
+            candidates out of the tie test, so a tie between candidates of zero choice score is not
+            observed here
+          does_not_show: >-
+            which of the 27 tied tops are between zero-score candidates (the command prints the split, not
+            the score of each tied candidate), so `holds` stays `unread` (A-114: the batch writes the reading, not
+            the verdict); one seed of the corpus; BA1 landed no verb alignment cell
       - id: R-08.b
         text: >-
           the choice is sampling, and the argmax is its zero-temperature control
@@ -859,6 +874,24 @@ rows:
         argv: ["python", "-m", "engine.season.harness.aperture", "2", "0"]
         expects: "`POOLS ROLLED` prints `two actors at different pools: yes` on a non-combat verb, beside the default-pool control"
         holds: "unread"
+        reading:
+          tree: "8d32955b1365decae113b46aad793c82df1d62fe"
+          date: "2026-11-23"
+          seed: 0
+          seasons: 2
+          line: "    `argue`: pools rolled [9.3, 10.0, 10.7, 11.3, 15.7] over 5 actors · two actors at different pools: yes"
+          control: >-
+            the same block reads "yes" on 17 of 18 rolled verbs (`requisition`, one actor, reads "no"); at B10's
+            close (c21e451f1) it read "yes" on 17 of 19 (`determine` and `requisition` read "no"), with
+            `argue` at [8.0, 9.3, 10.0, 10.7] over 4 actors, so the yes predates BA1: B01a's generated
+            attributes already separate persons, and BA1's authored `stats:` and `capabilities:` moved
+            the pools (the `argue` set above; BA1.02's held-back offsets are not in this tree), not the verdict. The conjunct's default-pool control was not
+            run: it is a one-line `measure_world` over a builder with `cast_attributes=False` and the
+            authored `capabilities:` stripped (`build_realm` seats them outside that switch)
+          does_not_show: >-
+            the default-pool control the conjunct names, so `holds` stays `unread` (A-114: the batch writes the reading,
+            not the verdict); that BA1's content, and not B01a's generated
+            attributes, is what makes two actors differ (the pools moved, the verdict did not); one seed
       - id: R-09.c
         text: >-
           a non-combat verb besides `tell` resolves at two bands whose writes differ:

@@ -2,7 +2,7 @@
 `rosters.yaml: self_believed` NAMES. `boot/realm.py::seed_self_knowledge` writes one firsthand `self:<key>` claim for every key a person holds that his cast
 row does not mark `unaware:`; a mark is the ABSENCE of the claim. Lane: the season loop.
 
-Planted persons and a planted mark throughout: the shipped registry marks nobody (the content is BA1's).
+Planted persons and a planted mark throughout: the planted marks are the test's own; the shipped registry marks NPC-004 and NPC-012 (BA1.12) and these tests stay green with them.
 THE FALSIFIER: a person with no `self:` claim forming `thread_read` (the reader answered from the field); a person with the claim ceasing to (the seeder missed a held
 key); a pursuit he holds no claim for changing any `score_terms` term (the score was touched) or still on his sheet; a told claim from a teller he disregards admitting
 the act at the floor (the teller's weight was not read).
