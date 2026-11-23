@@ -57,7 +57,7 @@ C(B32-inst-kit): this batch's entries; the plan's head parts; `unified/U1_GLOSSA
   the closing SHAs of B00, B01, B02, B04, B05, B07, B20, B21, B21b, B21c, B24, B24a, B25, B27; the permanent surface (CLAUDE.md, `CURRENT.md`, `HANDOFF.md`, `registers/handoffs/HANDOFF_FA.md`, the skill and `methodology-close`).
 SERIAL EDGES and FILE CENSUS: at the end of the batch (`V12_STRUCTURE_part4.md` E-11), after B32.99.
 PARALLEL: S17 with B11F2 (IN), B22 (MB), B26 (FI), B28 (SC), B37p (WR); files shared, by census, at the end of the batch.
-PARALLEL ITEMS: B32.06 ‖ B32.07. Built together in producer worktrees, one `Item:` commit each in plan order (§2.1 (f)); every other item of the batch builds alone.
+PARALLEL ITEMS: B32.06 ‖ B32.07; B32.09 ‖ B32.11. Built together in producer worktrees, one `Item:` commit each in plan order (§2.1 (f)); every other item of the batch builds alone.
 COST: small builds and edits, one encoding mover; producer `valoria-author` on `sonnet`, `high`; judgment nodes on `opus`: BYZ_A edit 7's terms (B32.13), BYZ_E's terms (B32.14), the gate readings of SYN_B (B32.07) and PAP_B (B32.20); the close's terminal critique `opus`.
 EST: 16 h [estimate: `V12_STRUCTURE.md` §2.4's formula over 33 positions (0.4 h × 33 + 2.5 h), E-15; §2.2's 7 h counted the members]
 
