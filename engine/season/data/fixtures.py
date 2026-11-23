@@ -1257,6 +1257,12 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `raw`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-470 -- site: Fixtures regard_unit, graded `assumption`; the source proposes `stance` as the live arm and ships no flip, so it is injected at the control and swept raw / stance]
     regard_unit="raw",                 # `H-470`, swept raw (control, SHIPPED) / stance (proposed)
+    # `H-474` (B10.20; `U5a_CHAR_owed_amendments` §4, F-PES-CHAR-08). WHETHER A DEED DONE TO A PERSON IS WEIGHED BY THE JUDGE'S BOND TO THE ONE IT WAS DONE TO: `paired_only` is the
+    # CONTROL and SHIPS (today: a `PAIRED_KINDS` deed carries `person_q._bond`, an unpaired deed is its pursuits' reading alone); `person_subject` gives the factor to an unpaired
+    # deed whose verb row takes a Person as its subject (`referent_class: Person`), read by `person_q.regard` through `deed_term` and `deed_steps`. A value outside
+    # `rosters.yaml: deed_counterparties` is refused where it is read. The flip is B98's. [ASSUMPTION; medium; Jordan to correct; revert: `paired_only`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-474 -- site: Fixtures deed_counterparty, graded `assumption`; the source proposes `person_subject` as the live arm and ships no flip, so it is injected at the control and swept paired_only / person_subject / person_subject at regard_unit stance]
+    deed_counterparty="paired_only",   # `H-474`, swept paired_only (control, SHIPPED) / person_subject (proposed) / person_subject at regard_unit stance
     # `H-476` (B10.28; `02_CHAR_resolve_and_temper` edit 2; CR-93 item 2, AR-23). THE GAIN OF A PERSON'S OWN FACTOR ON THE CHOICE TEMPERATURE: `decision/choose.py::temper`
     # reads it through the `choice_temper` row of `rosters.yaml: tables.capability_uses` (key `attr.mind.focus`, role `judgement`), and `_sample_order` multiplies
     # `choice_temperature` by the factor. ⚠ THE SIGN: `about_mid` rises with the attribute, so a temperature that falls with Focus is a NEGATIVE gain; the value the flip (B98)

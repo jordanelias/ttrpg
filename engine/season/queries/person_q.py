@@ -92,7 +92,7 @@ def held_against(p: Person, referent: str) -> tuple:
                  if len(row) >= 3 and row[0] == referent and float(row[1]) < 0)
 
 
-def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0) -> tuple:
+def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0, counterparty_arm: Optional[str] = None) -> tuple:
     """`(judged, told)`: WHAT `p` MAKES OF THE DEEDS THEY HOLD ABOUT `referent`, by `p`'s OWN
     pursuits (v9 IN-18 `G1`, telling workplan §3's `regard` row). A deed claim is an event-kind
     claim `(referent, <kind>, True)` -- WITNESS's first deposit, or a told copy of one -- with
@@ -134,19 +134,23 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: 
     ⚠ v9 SC-02 `22a`: WHICH claims are `referent`'s deeds is `attributed_deeds`' and WHAT each is worth
     is `deed_term`'s; this function sums them by `firsthand`, and `world_q.reception` sums the same two
     by remove and confidence, so the two readers cannot disagree on either at the shipped `sworn_bond` 0.0
-    (`deed_term` itself reads the control: `reception` and this sum part when it is non-zero)."""
-    return _split_deeds(p, referent, scar_shift, sworn_bond, deed_term)
+    (`deed_term` itself reads the control: `reception` and this sum part when it is non-zero).
+    `counterparty_arm` is `Fixtures deed_counterparty` (B10.20, H-474; `None` is the control, `paired_only`): at `person_subject` a deed
+    whose verb row takes a Person as its subject is weighed by the judge's bond to the one it was done to (`deed_term`)."""
+    return _split_deeds(p, referent, scar_shift, sworn_bond, deed_term, counterparty_arm)
 
 
-def _split_deeds(p: Person, referent: str, scar_shift: float, sworn_bond: float, worth) -> tuple:
-    """`(judged, told)` OF `attributed_deeds(p.ledger, referent)`, each claim worth `worth(p, axis_w, c, sworn_bond)` and split by
-    `firsthand`: the one walk `deeds_judged` (`worth` = `deed_term`, the raw sum) and `regard_steps` (`worth` = `deed_steps`, stance steps) share."""
+def _split_deeds(p: Person, referent: str, scar_shift: float, sworn_bond: float, worth, counterparty_arm: Optional[str] = None) -> tuple:
+    """`(judged, told)` OF `attributed_deeds(p.ledger, referent)`, each claim worth `worth(p, axis_w, c, sworn_bond, counterparty_arm, seen_of)` and split by
+    `firsthand`: the one walk `deeds_judged` (`worth` = `deed_term`, the raw sum) and `regard_steps` (`worth` = `deed_steps`, stance steps) share.
+    `seen_of` is the holder's `_seen_index`, built once for the walk and only if a worth asks for it (B10.20)."""
     axis_w = None
+    seen_of = functools.cache(lambda: _seen_index(p.ledger))
     judged = told = 0.0
     for c in attributed_deeds(p.ledger, referent):
         if axis_w is None:
             axis_w = projected_axes(p, scar_shift)
-        v = worth(p, axis_w, c, sworn_bond)
+        v = worth(p, axis_w, c, sworn_bond, counterparty_arm, seen_of)
         # FIRSTHAND only is judged (`dissents`' and `record`'s precedent, `decision/options.py`):
         # a `told_by` claim whose chain is empty is still hearsay, and lands in `told`.
         if c.firsthand:
@@ -156,10 +160,10 @@ def _split_deeds(p: Person, referent: str, scar_shift: float, sworn_bond: float,
     return judged, told
 
 
-def deeds_judged_steps(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0) -> tuple:
+def deeds_judged_steps(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0, counterparty_arm: Optional[str] = None) -> tuple:
     """`deeds_judged`' `(judged, told)` IN STANCE STEPS (`deed_steps` for `deed_term`; B10.09, `Fixtures regard_unit` `stance`): the same
     claims, the same `firsthand` split, each deed worth a cosine. `regard`'s `stance` arm is the one reader; `deeds_judged` is unchanged."""
-    return _split_deeds(p, referent, scar_shift, sworn_bond, deed_steps)
+    return _split_deeds(p, referent, scar_shift, sworn_bond, deed_steps, counterparty_arm)
 
 
 def holds_dispute(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0) -> bool:
@@ -191,31 +195,40 @@ def attributed_deeds(ledger, referent: str):
         yield c
 
 
-def deed_term(p: Person, axis_w: dict, c, sworn_bond: float = 0.0) -> float:
+def deed_term(p: Person, axis_w: dict, c, sworn_bond: float = 0.0, counterparty_arm: Optional[str] = None, seen_of=None) -> float:
     """WHAT ONE OF `attributed_deeds`' CLAIMS IS WORTH TO `p`, whose projected pursuits are `axis_w`:
     a paired deed `lean · bond` (`_lean`, `_bond` on the claim's patient, IN-58), any other
     `deed_valence`. The same numbers `paired_deed_term` and `deed_valence` give; `deeds_judged` and
     `world_q.reception` both read it here. `sworn_bond` (B09.20, the control 0.0) is `deeds_judged`'s and reaches
-    only a paired deed; `reception` and `legitimacy` read the control. Person-side (AX-2)."""
+    only a paired deed; `reception` and `legitimacy` read the control. Person-side (AX-2).
+    `counterparty_arm` (B10.20, `Fixtures deed_counterparty`, H-474; `None` and `paired_only` are the control: the branch is today's, byte for
+    byte) at `person_subject` multiplies an unpaired deed whose verb row takes a Person as its subject (`PERSON_SUBJECT_KINDS`) by
+    `_bond(p, <the one it was done to>, lean)`, the factor a paired deed already carries (`_toward_counterparty`); a deed whose counterparty
+    `p`'s ledger does not name reads `deed_valence` alone. `reception` and `legitimacy` read the control, as they do `sworn_bond`.
+    `seen_of` is a zero-argument callable answering `_seen_index(p.ledger)`, called only where a counterparty is read."""
     if c.predicate in PAIRED_KINDS:
         lean = _lean(axis_w, c.predicate)
         return _paired_weight(p, c, lean, sworn_bond) if lean else 0.0
-    return deed_valence(axis_w, c)
+    lean = deed_valence(axis_w, c)
+    return lean * _toward_counterparty(p, c, lean, counterparty_arm, seen_of) if lean else lean
 
 
-def deed_steps(p: Person, axis_w: dict, c, sworn_bond: float = 0.0) -> float:
+def deed_steps(p: Person, axis_w: dict, c, sworn_bond: float = 0.0, counterparty_arm: Optional[str] = None, seen_of=None) -> float:
     """WHAT ONE OF `attributed_deeds`' CLAIMS IS WORTH TO `p` IN STANCE STEPS (B10.09, `Fixtures regard_unit` `stance`): `deed_term`'s
     sibling, the deed's alignment as a cosine -- `pursuit_cosine_axes` of the holder's projected pursuits `axis_w` against the deed
     kind's row on the axes (`align_kind`), in `[-1, +1]` -- so an unpaired deed is at most one valence step, the unit of a stance
     row. A paired deed (`PAIRED_KINDS`) is that cosine times `_bond` on the claim's patient (in `[0, 2]`, so at most two steps),
     read off the cosine's sign as `deed_term` reads `lean`'s. `0.0` where either vector is zero (`pursuit_cosine_axes` answers
-    `None`: no direction to compare), and for a claim that is no deed. `sworn_bond` is `deed_term`'s. Person-side (AX-2)."""
+    `None`: no direction to compare), and for a claim that is no deed. `sworn_bond`, `counterparty_arm` and `seen_of` are `deed_term`'s: at
+    `person_subject` an unpaired deed of a Person-subject kind is that cosine times `_bond` on the one it was done to. Person-side (AX-2)."""
     if not is_deed(c):
         return 0.0
     cos = pursuit_cosine_axes(axis_w, {ax: _verbs.align_kind(c.predicate, ax) for ax in _AXES})
     if not cos:
         return 0.0
-    return cos * _bond(p, c.subject, cos, sworn_bond) if c.predicate in PAIRED_KINDS else cos
+    if c.predicate in PAIRED_KINDS:
+        return cos * _bond(p, c.subject, cos, sworn_bond)
+    return cos * _toward_counterparty(p, c, cos, counterparty_arm, seen_of)
 
 
 def suffered_deeds(ledger, patient: str):
@@ -267,17 +280,27 @@ PAIRED_KINDS = frozenset(k for k in _verbs.DEED_KINDS if k not in _verbs.KIND_VE
 # `who` shows `stratum` (`rosters.yaml: observation_terms.supplied_by`), so the test never drops a
 # pairing that `who` alone would have made; it refuses a third party's DIFFERENT act on the patient in
 # the same lap being read as the deed's doer.
+# B10.20 (H-474): THE UNPAIRED DEED KINDS WHOSE VERB ROW TAKES A PERSON AS ITS SUBJECT -- the kinds the single row emitting them
+# (`KIND_VERB`) declares `referent_class: Person`, read off the table, no verb listed. The one acted on is the row's subject, and the claim
+# (subject = its doer, H-192) names no one else, so `deed_counterparty` reads him off the holder's `seen` claims.
+_PERSON_CLASS = "Person"      # [canonical: engine/season/rosters.yaml §referent_classes]
+PERSON_SUBJECT_KINDS = frozenset(k for k in _verbs.DEED_KINDS
+                                 if k in _verbs.KIND_VERB and _verbs.VERB_TABLE[_verbs.KIND_VERB[k]].referent_class == _PERSON_CLASS)
+# `Fixtures deed_counterparty`'s arms (`rosters.yaml: deed_counterparties`), checked where `regard` reads the fixture.
+DEED_COUNTERPARTIES = roster("deed_counterparties")
 _KIND_STRATA = {k: frozenset(r.stratum for r in _verbs.VERB_TABLE.values() if k in r.emits)
-                for k in PAIRED_KINDS}
+                for k in PAIRED_KINDS | PERSON_SUBJECT_KINDS}
 
 
 def _seen_index(ledger) -> tuple:
-    """A holder's own, untold claims, indexed three times: `(subject, when, lap) -> [seen]` and
+    """A holder's own, untold claims, indexed four times: `(subject, when, lap) -> [seen]` and
     `(when, lap) -> {(who, stratum)}` -- who the holder saw acting, and at what, in each lap -- and
-    `(subject, when, lap) -> {value}` for a `fell_to_hand` claim (B14.16: who stood when `subject`, the actor, fell)."""
+    `(subject, when, lap) -> {value}` for a `fell_to_hand` claim (B14.16: who stood when `subject`, the actor, fell), and
+    `(who, when, lap) -> {(subject, stratum)}` -- what the holder saw each actor act on, the inverse of the first (B10.20: `deed_counterparty`)."""
     by_subject: dict = {}
     acting: dict = {}
     hand: dict = {}
+    acted_on: dict = {}
     for s in ledger:
         if s.predicate == HAND_PREDICATE and not s.chain:
             hand.setdefault((s.subject, s.when, s.lap), set()).add(s.value)
@@ -286,7 +309,8 @@ def _seen_index(ledger) -> tuple:
             who = getattr(s.value, "who", None)
             if who is not None:
                 acting.setdefault((s.when, s.lap), set()).add((who, getattr(s.value, "stratum", None)))
-    return by_subject, acting, hand
+                acted_on.setdefault((who, s.when, s.lap), set()).add((s.subject, getattr(s.value, "stratum", None)))
+    return by_subject, acting, hand, acted_on
 
 
 def deed_doer(c, seen: tuple):
@@ -319,7 +343,7 @@ def deed_doer(c, seen: tuple):
     (AX-2)."""
     if c.chain or not is_deed(c) or c.predicate not in PAIRED_KINDS:
         return None
-    by_subject, acting, hand = seen
+    by_subject, acting, hand, _ = seen
     if c.predicate == PERSON_DIED and (c.subject, c.when, c.lap) in hand:
         named = hand[(c.subject, c.when, c.lap)]
         return next(iter(named)) if len(named) == 1 else None
@@ -335,6 +359,34 @@ def deed_doer(c, seen: tuple):
             continue
         whos.add(who)
     return next(iter(whos)) if len(whos) == 1 else None
+
+
+def deed_counterparty(c, seen: tuple):
+    """WHO THE DOER OF THE DEED `c` ACTED ON, as the holder saw it, or `None` (B10.20; `deed_doer`'s inverse).
+
+    `c` is an untold deed claim `(doer, kind, True)` of a `PERSON_SUBJECT_KINDS` kind (an unpaired kind: its claim's subject is its doer, H-192,
+    so the claim names no one else); `seen` is `_seen_index` of the same ledger. A `seen` claim names the counterparty when it was deposited in the
+    claim's own `when` and `lap`, its `who` is the doer and its `stratum` is the kind's row's (`_KIND_STRATA`): its subject is what the doer was seen
+    to act on. The ONE such subject is the answer; none, or two, is `None` -- the pairing never guesses, as `deed_doer` does not, so a channel
+    that withheld `who`, a told copy (it carries no sighting) and an act seen on two things name nobody. The subject is not checked to be a person
+    (a person-side reader holds no World): a rung or a Record names nobody the judge holds a stance toward, so `_bond` reads it as no stance.
+    Holder-side and World-free (AX-2)."""
+    if c.chain or not is_deed(c) or c.predicate not in PERSON_SUBJECT_KINDS:
+        return None
+    strata = _KIND_STRATA[c.predicate]
+    named = {s for s, st in seen[3].get((c.subject, c.when, c.lap), ()) if s != c.subject and st in strata}
+    return next(iter(named)) if len(named) == 1 else None
+
+
+def _toward_counterparty(p: Person, c, lean: float, counterparty_arm: Optional[str], seen_of=None) -> float:
+    """THE FACTOR AN UNPAIRED DEED OF A PERSON-SUBJECT KIND CARRIES FOR WHO IT WAS DONE TO (B10.20, `Fixtures deed_counterparty`): `_bond(p,
+    <the counterparty>, lean)`, the one factor a paired deed carries (`_paired_weight`), at `person_subject`; `1.0` everywhere else -- at the control
+    (`None`, `paired_only`), for a kind no Person-subject row emits, and for a deed whose counterparty `p`'s ledger does not name. `seen_of` answers
+    `_seen_index(p.ledger)`; omitted, it is built here."""
+    if counterparty_arm != "person_subject" or c.predicate not in PERSON_SUBJECT_KINDS:
+        return 1.0
+    who = deed_counterparty(c, seen_of() if seen_of is not None else _seen_index(p.ledger))
+    return 1.0 if who is None else _bond(p, who, lean)
 
 
 def _kind_engages(kind: str, affiliation: str) -> bool:
@@ -447,25 +499,25 @@ def sworn_to_holder(p: Person, patient: str) -> bool:
                                for c in p.ledger)
 
 
-def _bond(p: Person, patient: str, lean: float, sworn_bond: float = 0.0) -> float:
-    """v9 IN-58's FACTOR: how `p`'s allegiance to the deed's PATIENT weighs the deed,
-    `1 - a · sign(lean)`, `a = clamp(stance_toward(p, patient) / STANCE_MAX, -1, 1)` -- the stored
+def _bond(p: Person, counterparty: str, lean: float, sworn_bond: float = 0.0) -> float:
+    """v9 IN-58's FACTOR: how `p`'s allegiance to the deed's COUNTERPARTY (the one it was done to: a paired deed's patient, or at `deed_counterparty: person_subject` the Person an unpaired deed's row takes as subject) weighs the deed,
+    `1 - a · sign(lean)`, `a = clamp(stance_toward(p, counterparty) / STANCE_MAX, -1, 1)` -- the stored
     half only, normalised as `teller_weight` normalises regard. In `[0, 2]`, and the deed term
     `lean · _bond` FALLS as `a` rises whatever the pursuits' sign: full allegiance doubles a
     condemnation and cancels an approval; full enmity doubles an approval and cancels a
     condemnation; no stance (`a = 0`) judges the deed by pursuits alone. The judge who IS the
-    patient is his own full ally (`a = 1`): no stance row names oneself, and reading it would judge
+    counterparty is his own full ally (`a = 1`): no stance row names oneself, and reading it would judge
     his own attacker as a stranger's. [ASSUMPTION; medium;
     Jordan to correct -- the form of the factor; revert: no factor and the two cells unauthored.]
-    THE SWORN-TO ARM (B09.20, `sworn_bond`, H-459): for a judge `sworn_to_holder` of the patient, `sworn_bond` is
+    THE SWORN-TO ARM (B09.20, `sworn_bond`, H-459): for a judge `sworn_to_holder` of the counterparty, `sworn_bond` is
     ADDED to `a` before the clamp, so an oath binds on the stance's own scale and a full stance plus an oath is
     still `a = 1`. `0.0` (the control, and every caller holding no `fx`) reads no ledger and no tenure: the stored
     half exactly."""
-    if patient == p.id:
+    if counterparty == p.id:
         a = 1.0
     else:
-        a = stance_toward(p, patient) / STANCE_MAX
-        if sworn_bond and sworn_to_holder(p, patient):
+        a = stance_toward(p, counterparty) / STANCE_MAX
+        if sworn_bond and sworn_to_holder(p, counterparty):
             a += sworn_bond
         a = max(-1.0, min(1.0, a))
     return 1.0 - a if lean > 0 else 1.0 + a
@@ -522,8 +574,11 @@ def regard(p: Person, referent: str, fx=None) -> float:
         unit = fx.get("regard_unit")
         if unit not in REGARD_UNITS:
             raise ValueError(f"regard_unit {unit!r} is not in rosters.yaml: regard_units {sorted(REGARD_UNITS)} (H-470)")
+        arm = fx.get("deed_counterparty")
+        if arm not in DEED_COUNTERPARTIES:
+            raise ValueError(f"deed_counterparty {arm!r} is not in rosters.yaml: deed_counterparties {sorted(DEED_COUNTERPARTIES)} (H-474)")
         judged, told = (deeds_judged_steps if unit == "stance" else deeds_judged)(
-            p, referent, fx.get("scar_weight_shift"), fx.get("sworn_bond"))
+            p, referent, fx.get("scar_weight_shift"), fx.get("sworn_bond"), arm)
         stored = stored + jg * judged + tg * told
     # v11 CR-31: the caste estimate, `heritage_regard`, a third term at its own gain (0 reads nothing, so the
     # sum above is returned untouched: the control). It reads `p`'s own ledger and own convictions only.

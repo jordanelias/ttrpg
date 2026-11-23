@@ -3326,6 +3326,14 @@
             "stance"
           ]
         },
+        "deed_counterparties": {
+          "source": "B10.20 (`U5a_CHAR_owed_amendments` \u00a74, amending `02_CHAR_relations_have_a_ground`; F-PES-CHAR-08): whether a deed done to a person is weighed by the judge's bond to the one it was done to.",
+          "note": "THE ARMS OF `Fixtures.deed_counterparty` (`H-474`), read by `queries/person_q.py::regard`. `paired_only` is the CONTROL (today: only a `PAIRED_KINDS` deed carries `_bond`, the judge's allegiance to the one it was done to); `person_subject` gives the factor too to an unpaired deed whose verb row takes a Person as its subject (`referent_class: Person`, read off the table by `person_q.PERSON_SUBJECT_KINDS`), the one acted on being read off the holder's `seen` claims (`person_q.deed_counterparty`). [ASSUMPTION: the roster's name and shape -- basis: `stance_polarities` is the tree's form for a swept string arm; Jordan to correct.]",
+          "values": [
+            "paired_only",
+            "person_subject"
+          ]
+        },
         "crisis_arms": {
           "source": "B10.13 (`16_PESSIMIST_CHAR_A` \"The resolution, decided\" 3; U1 F-43: the switch is `Fixtures.crisis_arm`, values `rule` and `drawn`): the two ways a crisis of faith comes out.",
           "note": "THE ARMS OF `Fixtures.crisis_arm` (`H-472`), read by `data/fixtures.py::load` (a shipped value outside this set is refused) and, from B10.15, by `loop/resolve.py::_conviction_crisis`. `rule` is the CONTROL (today's function: the branch is chosen by a rule over state the crisis already reads, nothing is rolled) and SHIPS until B98; `drawn` rolls one draw per scarring act and reads the band from `tables.crisis_bands`. [ASSUMPTION: the roster's name and shape -- basis: `stance_polarities` is the tree's form for a swept string arm; Jordan to correct.]",
