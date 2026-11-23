@@ -18,20 +18,32 @@ plays one seed twice at the shipped fixtures and must read one sequence; a parti
 sequence moves with nothing varied, and the parting above would prove nothing. ⚠ This reads that the
 sequence parts when deposits are cut; it does not read that the fork-and-follow test's divergence is
 caused by deposits (`test_season_shape.py` shows divergence in both arms).
+
+R-07.d, read here: a feeling, attitude or relationship changes a decision. The first person (by id) who holds a
+candidate about another person is ranked by the shipped ranker (`choose.make_ranker`, on his own View), then
+again in a world where one stance row toward that subject was written through the gate (`World.write` on the
+`(Person, stance)` row, with a token minted for the step). The top candidate about that subject must differ
+in at least one seed. Two controls: the unplanted world ranks equal twice, and a row toward a person the
+holder has no candidate about leaves the ranking equal (so the move is the row's term, not a write's side effect).
 """
 from __future__ import annotations
 
 import pytest
 
+from ..data.cast import STANCE_VALENCE_SCALE
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
+from ..data.matrix import Step, WriteClass
 from ..data.verbs import VERB_TABLE
+from ..decision import assemble, choose as CH
 from ..harness import decision_spread as DS
 from ..boot.realm import build_realm
 from ..harness import probes as P
-from ..loop.driver import SeasonDriver, resolvable_verbs
+from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries.world_q import occasioned_by
 from ..seam.wrappers import pool, sigma
 from ..state.carriers import Act, subject_of
+from ..state.gate import Change, Subject
+from ..state.ids import draw_factory
 from ..state.world import World
 
 SEEDS = (0, 1, 2)
@@ -158,3 +170,62 @@ def test_r09_two_persons_of_different_skill_score_read_different_odds_in_the_rea
     assert odds_p != odds_q, f"skill scores 4 and 0 read the same odds {odds_p}: the skill score does not reach the roll"
     w.persons[q].capability = {key: 4}                      # the control: the cause removed
     assert sigma.odds_of(w, _tell(p, r)) == sigma.odds_of(w, _tell(q, r)), "equal skill scores read different odds"
+
+
+def _ranked(w: World, pid: str, q) -> list[tuple[str, str | None]]:
+    """`(verb, subject)` of `pid`'s candidates for `q`, in the shipped ranker's order, read on his own View
+    (the draw is `(seed, tick, person, purpose)`, so the same world ranks the same way twice)."""
+    rank = CH.make_ranker(w.fixtures, resolvable_verbs(), draw_factory(w.world_seed, lambda: w.tick))
+    p = w.persons[pid]
+    return [(c.verb, c.subject) for c in rank(p, assemble(p, q, w.fixtures.get("view_k")))]
+
+
+def _plant_stance(w: World, pid: str, row: tuple) -> None:
+    """One stance row onto `pid`'s own `Person.stance`, through the gate: `World.write` on the `(Person, stance)`
+    row at RESOLVE with a token minted for the step, a `Change` naming the one subject (as `_eff_forgive` builds its own)."""
+    p = w.persons[pid]
+
+    def perform() -> None:
+        p.stance = [*p.stance, row]
+    prior, w.step = w.step, Step.RESOLVE
+    try:
+        w.write("stance", mint_token(w, WriteClass.ACTS), None, record_kind="Person", fieldname="stance",
+                driver="Act", actor=pid, change=Change((Subject.entity("persons", pid, fields=("stance",)),), perform))
+    finally:
+        w.step = prior
+
+
+def _top_about(order: list, subject: str) -> tuple | None:
+    return next((c for c in order if c[1] == subject), None)
+
+
+def test_r07_a_planted_regard_changes_what_a_person_ranks_first():
+    changed, checked = [], 0
+    for seed in SEEDS:
+        w = build_realm(seed)
+        q = DS.decision_question(DS.common_referents(w)[0][1])
+        # the first person, by id, who holds a candidate about another person; his subject is the best-ranked such one's
+        pid, before = next((i, o) for i, o in ((i, _ranked(w, i, q)) for i in sorted(w.persons))
+                           if any(s not in (None, i) for _v, s in o))
+        subject = next(s for _v, s in before if s not in (None, pid))
+        assert _top_about(before, subject) is not None
+        assert _ranked(w, pid, q) == before, f"seed {seed}: the unplanted world ranked {pid} differently on a second read"
+        row = (subject, -float(STANCE_VALENCE_SCALE), float(STANCE_VALENCE_SCALE))     # a grudge at the row type's bound
+        # the falsifier: a row toward a person he holds no candidate about moves nothing
+        held = {s for _v, s in before}
+        elsewhere = next(i for i in sorted(w.persons) if i != pid and i not in held)
+        off = build_realm(seed)
+        _plant_stance(off, pid, (elsewhere, row[1], row[2]))
+        assert off.persons[pid].stance[-1][0] == elsewhere, "the off-subject row did not land"
+        assert _ranked(off, pid, q) == before, f"seed {seed}: a row toward {elsewhere}, about whom {pid} holds no candidate, moved his ranking"
+        planted = build_realm(seed)
+        _plant_stance(planted, pid, row)
+        assert planted.persons[pid].stance[-1] == row, "the planted row did not land"
+        # a grudge also OPENS candidates (`forgive`, `opening_set`'s own-stance declines): the order is read over the ones he held before
+        after = [c for c in _ranked(planted, pid, q) if c in before]
+        checked += 1
+        assert sorted(after) == sorted(before), "planting a regard removed a candidate he held"
+        if _top_about(after, subject) != _top_about(before, subject):
+            changed.append(seed)
+    assert checked >= len(SEEDS), f"{checked} seeds were read, not {len(SEEDS)}"
+    assert changed, "no seed's top candidate about the planted subject moved when a grudge toward him was written"
