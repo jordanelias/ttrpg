@@ -43,7 +43,7 @@ from ..data.verbs import (
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..queries.person_q import (
-    PAIRED_KINDS, LedgerReader, OwnStateReader, addressed_to, attackers_of, content_kind, content_said,
+    BOND_STEM, PAIRED_KINDS, LedgerReader, OwnStateReader, addressed_to, attackers_of, content_kind, content_said,
     decisiveness, held_against, known_persons, ledger_names,
     is_cell as _is_cell, lie_said_of, projected_axes, regard, said_of,
 )
@@ -1810,6 +1810,10 @@ def teller_weight(p: Person, fx: "Fixtures", tick: int = 0) -> Callable[[Claim],
                      + regard_gain * clamp(regard(p, teller, fx) / STANCE_MAX, -1, 1)
                    (`regard` is G1's: stored stance plus the judged and told halves at their gains)
         record   = `record(p, teller, fx)`: 1.0 with no pair; else 1 + record_gain * balance (`T6`)
+        stake    = `1 - rival_gain` when `p` holds a told `bond:rivalry` claim on `c.subject` whose origin (`chain[0]`) is the teller -- the teller's own
+                   bond to the subject, which `boot/realm.py::seed_relations` deposits for its holder -- else 1.0 (`H-180`, B10.63). It depends on the
+                   claim's SUBJECT, so it is not memoised per teller; the set of `(teller, subject)` pairs is read from `p`'s ledger once, on the
+                   first told claim, and only at `rival_gain` > 0 (the shipped control reads no ledger for it).
 
     `RULINGS.yaml` CAT-3, closed: store the teller and grade the claim WHEN READ, by the hearer's
     belief about their relation to the teller -- so a revised regard re-grades every claim that
@@ -1823,10 +1827,10 @@ def teller_weight(p: Person, fx: "Fixtures", tick: int = 0) -> Callable[[Claim],
     returns that share instead of 1.0), so a sighting he has half forgotten weighs half and a teller can outweigh it.
     Refraction sets the deposit-time `confidence`; this reads it once, here, at `tick`. At `False` (the control, shipped
     until B09.08) the closure is the one above, exactly, and reads neither `confidence` nor the decay rate.
-    ⚠ THE TELLER FIXTURES (`told_weight`, `rank_gain`, `regard_gain`) ARE READ ON THE FIRST TOLD CLAIM, NOT AT BUILD. A
+    ⚠ THE TELLER FIXTURES (`told_weight`, `rank_gain`, `regard_gain`, `rival_gain`) ARE READ ON THE FIRST TOLD CLAIM, NOT AT BUILD. A
     ledger with no teller in it reads none of them. `weigh_confidence` and, when it is on, `confidence_default` and the
     decay rate are read once, at the closure's build.
-    ⚠ AT THE CONTROL VALUES (`told_weight` 1.0, `rank_gain`, `regard_gain` and `record_gain` all
+    ⚠ AT THE CONTROL VALUES (`told_weight` 1.0, `rank_gain`, `regard_gain`, `rival_gain` and `record_gain` all
     0) EVERY CLAIM WEIGHS EXACTLY 1.0.
     ⚠ THE ONE-HOP BOUND. `told_weight` x `relation` x `record` is clamped at 1.0, and a one-hop claim
     at the shipped 0.5 stays strictly below a firsthand claim's 1.0 only while `relation` x `record`
@@ -1842,6 +1846,7 @@ def teller_weight(p: Person, fx: "Fixtures", tick: int = 0) -> Callable[[Claim],
     gains: list = []
     relation_of: dict = {}      # `relation` depends on the teller alone: one stance scan per teller
     record_of: dict = {}        # `record` too: one ledger scan per teller
+    rivals: list = []           # H-180: ONE set of `(teller, subject)` the hearer holds a told `bond:rivalry` claim for, scanned on the first told claim at `rival_gain` > 0
     # B09.06: read ONCE per closure. At `False` (the control) `sure` is never called and every weight is the one above.
     on = fx.get("weigh_confidence")
     full = fx.get("confidence_default") if on else 0
@@ -1857,19 +1862,26 @@ def teller_weight(p: Person, fx: "Fixtures", tick: int = 0) -> Callable[[Claim],
             return sure(c) if on else 1.0
         teller = c.teller
         if not gains:
-            gains.extend((fx.get("told_weight"), fx.get("rank_gain"), fx.get("regard_gain")))
-        told_weight, rank_gain, regard_gain = gains
+            gains.extend((fx.get("told_weight"), fx.get("rank_gain"), fx.get("regard_gain"), fx.get("rival_gain")))
+        told_weight, rank_gain, regard_gain, rival_gain = gains
         relation = relation_of.get(teller)
         if relation is None:
             relation = relation_of[teller] = (
                 1.0
                 + rank_gain * rank(p, teller)
                 + regard_gain * _clamp(regard(p, teller, fx) / STANCE_MAX, -1.0, 1.0))
-        # ABSENT: H-180 stake  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
+        # H-180 (B10.63): a rival's report is discounted as interested. Read from `p`'s own ledger only; at gain 0 the factor is exactly 1.0.
+        stake = 1.0
+        if rival_gain:
+            if not rivals:
+                rivals.append(set((b.chain[0], b.subject) for b in p.ledger
+                                  if b.chain and b.predicate == BOND_STEM + "rivalry" and b.value is True))
+            if (teller, c.subject) in rivals[0]:
+                stake = _clamp(1.0 - rival_gain, 0.0, 1.0)
         rec = record_of.get(teller)
         if rec is None:
             rec = record_of[teller] = record(p, teller, fx, tick)
-        w = _clamp(told_weight ** c.hops * relation * rec, 0.0, 1.0)
+        w = _clamp(told_weight ** c.hops * relation * rec * stake, 0.0, 1.0)
         return w * sure(c) if on else w
 
     return weigh

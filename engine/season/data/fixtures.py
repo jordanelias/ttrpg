@@ -853,6 +853,11 @@ DEFAULT_FIXTURES = Fixtures(
     # a stranger, one who was always wrong half as much.
     # [JUSTIFIED: engine/season/hole_register.yaml H-183 -- record's gain on a teller's weight; no document gives the gain, so it is injected and swept 0 / 0.5 / 1.0]
     record_gain=0.5,                   # `H-183`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # `H-180` (B10.63; `02_CHAR_relations_have_a_ground` edit 5). HOW MUCH LESS A HEARER CREDITS A CLAIM ABOUT A MAN TOLD HIM BY THAT MAN'S RIVAL:
+    # `teller_weight` multiplies by `clamp(1 - rival_gain, 0, 1)` when the hearer holds the teller's own `bond:rivalry` claim on the claim's
+    # subject, told to him (`chain[0]` the teller). `0` is the CONTROL and is SHIPPED [ASSUMPTION], so every claim weighs what it weighed before.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-180 -- the discount on a rival's report; no document states the magnitude, so it is injected at the control and swept 0 / 0.5 / 1.0]
+    rival_gain=0.0,                    # `H-180`, swept 0 (control, SHIPPED) / 0.5 / 1.0
     # `H-190` (telling `T7`, G9 declared intent; v9 IN-16, `ED-IN-0282`). HOW OFTEN A TELLER DECLARES
     # AN INTENT: the chance that a telling whose teller has CHOSEN a later act naming the telling's
     # topic (in a later scene of the same `choose` return) passes on that intent instead of what the

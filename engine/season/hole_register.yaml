@@ -4126,25 +4126,20 @@ rows:
 
   - id:        H-180
     tier:      1
-    hole:      "STAKE -- WHETHER THE TELLER HAS A RIVALRY WITH THE SUBJECT, read from the
-      HEARER'S OWN claims of contested acts between the two, is not a factor in `relation`. A
-      teller who is the subject's rival is credited exactly as one who is not."
-    kind:      "WIRING"
-    owner:     "decision/options.py -- `teller_weight`'s `relation` product, at the field-less
-      `ABSENT: H-180 stake` marker"
-    grade:     "absent"
-    default:   "none"
-    site:      ""
-    sweep:     []
+    hole:      "STAKE -- HOW MUCH LESS A HEARER CREDITS A CLAIM ABOUT A MAN TOLD HIM BY THAT MAN'S RIVAL. `teller_weight` multiplies a told claim's weight by `1 - rival_gain` when the hearer holds the teller's own `bond:rivalry` claim on the claim's subject, told to him (`chain[0]` the teller); read from the HEARER'S OWN ledger only. At gain 0 a teller who is the subject's rival is credited exactly as one who is not. Which magnitude, and whether a rival's report should be discounted at all, is not given by a document."
+    kind:      "NUMBER"
+    owner:     "decision/options.py -- `teller_weight`'s `stake` factor, beside `relation` and `record`"
+    grade:     "assumption"
+    default:   "0 -- THE CONTROL, SHIPPED: the factor is exactly 1.0 whoever tells, so every claim weighs what it weighed before B10.63 [ASSUMPTION; medium; Jordan to correct; revert: the factor reads 1.0]"
+    site:      "Fixtures rival_gain, read by `decision/options.py::teller_weight` (with told_weight, rank_gain and regard_gain, on the first claim naming a teller); the pairs are read once from the hearer's ledger, only at a gain above 0"
+    sweep:     ["0 (control, SHIPPED)", "0.5", "1.0"]
     unblocks:  "a rival's report discounted as interested -- the telling workplan's stake-in-the-telling, and
       CAT-3's enemy clause applied to the subject rather than to the hearer. Trigger: a contest
       Event's claim naming both parties (teller and subject) lands in a hearer's ledger"
     cite:      "LADDER RUN at `T3a`, 2026-10-01: not superseded; not irrelevant -- MEASURED at
       `T0` (M0h), contest Events whose claims name a person other than the actor exist, 14 of 116;
-      no design document gives the shape of the factor or which contested acts count; no precedent
-      in the tree reads rivalry off a ledger; the architecture does not make one option clearly
-      right, so nothing is built and building it is not scheduled by the telling workplan."
-    source:    "telling workplan `T3a` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01"
+      no design document gives the shape of the factor or which contested acts count. BUILT at B10.63 on the reading that adds least (workplan v12 part 13, B10.63; `02_CHAR_relations_have_a_ground` edit 5): a held `bond:rivalry` claim, which `boot/realm.py::seed_relations` deposits for its holder (B10.62) and which can be told like any claim. [ASSUMPTION; medium; Jordan to correct: that the told bond claim is the whole of what a rivalry is to a hearer (a contested act between the two is not read), and the gain.] FALSIFIER `engine/season/tests/test_rival_teller.py::test_a_rivals_report_weighs_less_than_a_strangers` (a rival teller's claim on his rival weighs 1 - rival_gain of what it weighs at the control, a stranger's and a claim on another subject do not; red with the factor unread); CONTROL `rival_gain` 0, every weight bit-for-bit as before."
+    source:    "telling workplan `T3a` (`workplans/2026-10-01-telling-workplan.md`, ED-IN-0282), 2026-10-01; workplan v12 B10.63"
 
   - id:        H-181
     tier:      1
