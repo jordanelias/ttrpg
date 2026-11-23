@@ -158,3 +158,23 @@ def test_six_deeds_outweigh_a_loyalty_row_of_weight_two():
     assert one + loyalty > 0 > six + loyalty, (one, six)
     raw_one, _ = _saw(10.0, 1, "raw")
     assert raw_one + loyalty < 0, raw_one
+
+
+def test_sabotage_on_a_hated_person_scores_positive_with_the_cell(monkeypatch):
+    """B10.11 (H-337): at stance -25 the term for `sabotage` on the hated person is negative before a `regard_sign` cell (`sabotage` is
+    no act contested against its subject, so the row's default sign is +1 and a grudge lowers it) and positive once the cell `-1` is
+    planted in this test's own copy of the table (never in `verb_table.yaml`); a cell `0` reads nothing, and `+1` is the default."""
+    from dataclasses import replace
+    from ..state.carriers import Candidate
+    w = P.tiny_world()
+    p = w.persons[A]
+    p.stance = [(B, -1, 5)] * 5                                                  # -25 toward B
+    fx = w.fixtures.sweep("stance_polarity", "declared")
+    cand = Candidate("sabotage", B)
+    before = CH.stance_term(p, cand, fx)
+    got = {}
+    for sign in (-1, 0, 1):
+        monkeypatch.setattr(CH, "VERB_TABLE", {**VERB_TABLE, "sabotage": replace(VERB_TABLE["sabotage"], regard_sign=sign)})
+        got[sign] = CH.stance_term(p, cand, fx)
+    assert before < 0 < got[-1], (before, got)
+    assert got[0] == 0 and got[1] == before, (before, got)

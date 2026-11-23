@@ -406,8 +406,7 @@ def subject_is_opponent(row: "VerbRow") -> bool:
     `decision/choose.py`'s score term 2 under `stance_polarity: declared` (v9 IN-18 `G2`: an act
     against a disliked opponent scores higher, not lower). B11 lane A: OR the row is listed in `rosters.yaml: opposed_without_prize` (`challenge`:
     no prize, done against the man it calls out)."""
-    return row.contested_against_subject() or (
-        row.verb in OPPOSED_WITHOUT_PRIZE and row.opponent_operand() == "subject")
+    return row.opposed_to_subject(OPPOSED_WITHOUT_PRIZE)
 
 
 # v11 CR-87: THE VIOLENT ROWS WHOSE SUBJECT IS THEIR OPPONENT (`data/verbs.py::VIOLENT_VERBS`, off `rosters.yaml:

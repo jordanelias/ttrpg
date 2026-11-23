@@ -49,6 +49,10 @@
 # derived roster (`data/verbs.py::EVENT_KINDS`), which `loop/resolve.py::_act_events` holds the fold to; a
 # flat row with two or more failable clauses may declare ONE refusal kind (`data/rosters.py::PERSON_DEMANDED`,
 # the kind the fold keeps only when earned, is exempt).
+#
+# `regard_sign:` ON A ROW (B10.11; `rosters.yaml: regard_signs`, `data/verbs.py::VerbRow.regard_sign`): `1`, `-1` or `0` -- whether a person's
+# liking for the act's subject pulls him toward the act, away from it or not at all, read by `decision/choose.py::_stance_arm`. A row naming none
+# takes `-1` where the act is done against its subject (`VerbRow.opposed_to_subject`), else `1`; NO ROW AUTHORS ONE YET (cells are BA1's content).
 # =============================================================================================
 
 verbs:

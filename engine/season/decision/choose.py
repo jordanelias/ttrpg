@@ -50,7 +50,7 @@ from ..trace_log import TRACE
 # `project` is DEFINED in `options.py` (see this module's docstring) and imported here because
 # `make_chooser`'s score calls it; `options` never imports this module.
 # `seat_of` is `options.py`'s own G3 helper (`via=seat_of(...)`, below).
-from .options import VIOLENT_OPPONENT_VERBS, opening_set, project, refusal_tolerance, scruple, seat_of, subject_is_opponent
+from .options import VIOLENT_OPPONENT_VERBS, opening_set, project, refusal_tolerance, scruple, seat_of
 # `options.py`'s one reader of a `judgement` row (`competence` is its other caller), under public names here: a call, not a copy (B10.28; CR-93 premise correction 2).
 from .options import _judgement_factor as judgement_factor, _judgement_rows as judgement_rows
 
@@ -68,10 +68,10 @@ def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = 
       * `legacy` (CONTROL; shipped until CR-16, which ships `declared`): `stance_toward(p, c.subject)` -- the pre-G2 term, verbatim.
       * `regard`: `regard(p, c.subject, fx)` with `+` on every row -- G1's regard and no polarity,
         the midpoint that separates what regard adds from what the sign adds.
-      * `declared`: `regard(p, c.subject, fx)`, NEGATED where the subject is the act's opponent
-        (`options.subject_is_opponent`): a grudge makes `fight` on its object score higher, where
-        `legacy` scored it lower. Every other row keeps `+`, so the arms differ on contested rows
-        only. `regard` is G1's, so its judged and told halves enter at their own gains
+      * `declared`: `regard(p, c.subject, fx)` times the row's `regard_sign` (B10.11; `+1`, `-1` or `0`), whose default
+        is `-1` where the subject is the act's opponent (`options.subject_is_opponent`) and `+1` elsewhere: a grudge makes
+        `fight` on its object score higher, where `legacy` scored it lower. With no cell authored the arms differ on
+        contested rows only. `regard` is G1's, so its judged and told halves enter at their own gains
         (0.5 each, shipped).
 
     A Rung subject reads 0 at G1's control; at live gains it reads the deed claims held about it
@@ -137,8 +137,10 @@ def _stance_arm(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict]) -
     row = VERB_TABLE.get(c.verb)
     # CP-T05-02 (B10-13): self-regard is read here as `regard(p, p.id)` (stored stance plus his own deeds), while `_bond`
     # treats a judge as his own full ally; the two are not routed together. `subject_is_opponent` encodes 'a person is not his own adversary'; a self-plea
-    # (`subject_may_be_self`) is an act FOR himself, so the polarity flips only where the subject is somebody else.
-    return -r if row is not None and subject_is_opponent(row) and subject != p.id else r
+    # (`subject_may_be_self`) is an act FOR himself, so the sign applies only where the subject is somebody else.
+    # B10.11: the sign is the row's own column (`VerbRow.regard_sign`: +1, -1 or 0), whose default is `-1` where the act is contested
+    # against its subject (`subject_is_opponent`), else `+1` -- so a row with no cell reads exactly as it did.
+    return row.regard_sign * r if row is not None and subject != p.id else r
 
 
 # IN-62: the keys under which `make_chooser` hoists a deliberation's candidate-independent factors

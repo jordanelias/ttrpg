@@ -25,7 +25,7 @@ by name at module scope would be a stale snapshot.
 from __future__ import annotations
 
 import ast
-from dataclasses import dataclass, field, fields
+from dataclasses import dataclass, field, fields, replace
 from typing import Optional
 
 from . import files
@@ -49,6 +49,7 @@ from .rosters import (
 VERB_TABLE_YAML = files.VERB_TABLE_YAML
 
 ELIGIBILITY_KINDS = roster("eligibility_kinds")
+REGARD_SIGNS = roster("regard_signs")          # B10.11: the closed set of a row's `regard_sign:` (`VerbRow.regard_sign`)
 
 # The "no cell" prose sentinel `requires` and `requires_typed` use. Defined ABOVE the loader because
 # loader invariant 4 reads it at load.
@@ -254,6 +255,14 @@ class VerbRow:
     # on every row the social roll deals (a `contests:` prize its provider resolves, or a `graded_tasks` route to it) and on no other: the
     # loader refuses a rolled row with none and any other row with one (`social_rolled`). `None` is the declared absence, a row nothing rolls.
     difficulty: Optional[str] = None
+    # B10.11 (`02_CHAR_scar_cap_and_regard_unit` Addendum; H-337, H-282): THE SIGN OF REGARD -- whether a person's liking for the act's subject pulls him
+    # toward the act (+1), away from it (-1) or not at all (0); a `rosters.yaml: regard_signs` member, read by `decision/choose.py::_stance_arm`
+    # under `stance_polarity: declared`. The loader fills the absence (`None`) with the sign the table read before the column: `-1` where
+    # `opposed_to_subject(...)` (`contested_against_subject()` and the `opposed_without_prize` rows), else `+1`, so a row with no cell reads as it always did and every row carries a sign after the load.
+    # ⚠ LAYER 1, NAMED AT THE SITE: a verb column meets `04` §B.13 (*a property of a roster member travels with the roster*) against §C.4 (*a
+    # verb needing more columns is one the design has not finished thinking about*). The column is picked, as U1 §1 picks `capability:`,
+    # because a loader default makes a missing value explicit and refusable (B4's third disposition); `04` is not edited.
+    regard_sign: Optional[int] = None
 
     def referents_of(self, q) -> tuple:
         """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
@@ -279,6 +288,14 @@ class VerbRow:
         opponent operand is `subject`. The one owner of the test `decision/options.py::subject_is_opponent` and the
         loader's `subject_may_be_self` refusal both ask."""
         return bool(self.contests) and self.opponent_operand() == "subject"
+
+    def opposed_to_subject(self, opposed_without_prize) -> bool:
+        """WHETHER AN ACT OF THIS ROW IS DONE AGAINST ITS `subject`: it is contested against it, or it names no prize and is listed in
+        `opposed_without_prize` (`rosters.yaml`, B11 lane A) with the subject for its second side. The one owner of the test
+        `decision/options.py::subject_is_opponent` (the roster module-global it passes) and the loader's `regard_sign` default (the roster,
+        read before the module-global exists) both ask."""
+        return self.contested_against_subject() or (
+            self.verb in opposed_without_prize and self.opponent_operand() == "subject")
 
     def known_person_operands(self) -> tuple:
         """THE OPERANDS A CANDIDATE OF THIS ROW TAKES FROM SOMEBODY THE PERSON KNOWS, one bag per
@@ -810,7 +827,16 @@ def _load_verb_table() -> dict:
                       opposed_attribute=str(r["opposed_attribute"]).strip() if r.get("opposed_attribute") else None,
                       brute=str(r["brute"]).strip() if r.get("brute") else None,
                       brute_note=str(r.get("brute_note") or "").strip(),
-                      difficulty=str(r["difficulty"]).strip() if r.get("difficulty") else None)
+                      difficulty=str(r["difficulty"]).strip() if r.get("difficulty") else None,
+                      regard_sign=r.get("regard_sign"))
+        # B10.11: THE `regard_sign:` COLUMN, A `regard_signs` MEMBER OR THE LOAD REFUSES (a `True` is no sign: it equals 1 in a set). An absent
+        # cell is the declared default -- `-1` on a row done against its subject (`opposed_to_subject`), else `+1` -- the sign `_stance_arm` read before the column.
+        if row.regard_sign is None:
+            row = replace(row, regard_sign=-1 if row.opposed_to_subject(roster("opposed_without_prize")) else 1)
+        elif isinstance(row.regard_sign, bool) or row.regard_sign not in REGARD_SIGNS:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares `regard_sign: {row.regard_sign!r}`, which is not a member of "
+                f"`rosters.yaml: regard_signs` ({sorted(REGARD_SIGNS)}).")
         # THE COUNTERPARTY IS AN OPERAND THE ACT CARRIES, OR IT IS NOTHING. `opening_set` compares
         # it with the person; a name the typed cell does not BIND is absent from every Candidate,
         # so the comparison would pass silently and the rule would be a column nothing enforced.

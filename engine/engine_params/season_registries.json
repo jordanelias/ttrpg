@@ -3295,6 +3295,15 @@
             "declared"
           ]
         },
+        "regard_signs": {
+          "source": "B10.11 (`02_CHAR_scar_cap_and_regard_unit` Addendum, H-337, H-282; `17_CENSUS_C1A_02` W4): the sign of regard, a column of the verb row.",
+          "note": "THE VALUES OF `verb_table.yaml: regard_sign`, read by `data/verbs.py::_load_verb_table` (a value outside this set is refused) and by `decision/choose.py::_stance_arm` under `stance_polarity: declared`. `+1`: a person's liking for the act's subject pulls him toward the act; `-1`: away from it; `0`: it reads nothing (regard for a person says nothing about whether to look into him or travel to him). A row naming none is given the sign the table read before the column: `-1` where the act is done against its subject (`VerbRow.opposed_to_subject`: contested against it, or an `opposed_without_prize` row), else `+1`. No cell is authored (BA1's content).",
+          "values": [
+            1,
+            -1,
+            0
+          ]
+        },
         "scar_season_caps": {
           "source": "B10.06 (`02_CHAR_scar_cap_and_regard_unit` edit 1, `02_CHAR_scar_is_a_wound` row 3): the arms of the scar's per-season rate.",
           "note": "THE ARMS OF `Fixtures.scar_season_cap` (`H-465`), read by `loop/resolve.py::_scar_witnesses`; the unset value `None` is the CONTROL and is not a member (uncapped, today's counts). `element` keeps one count per person per element per season; `person` keeps one count per person per season, on the element he holds most violated. [ASSUMPTION: the roster's name and shape -- basis: neither source names one; `stance_polarities` is the tree's form for a swept string arm; Jordan to correct.]",
