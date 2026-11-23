@@ -21,7 +21,7 @@ from typing import Any
 from engine.dice_engine.dice_engine import MU_PER_DIE
 
 from ..gaps import Forbidden, Ungraded
-from .rosters import ARMY_VERBS, CRISIS_ARMS, DIFFICULTY_LEVELS, STANCE_MAX, roster, roster_map, table
+from .rosters import ARMY_VERBS, CRISIS_ARMS, DIFFICULTY_LEVELS, MORTAL_CAUSES, STANCE_MAX, roster, roster_map, table
 
 class Fixtures:
     """S42.2.1: never invent a constant. Inject it, declare it a harness fixture at
@@ -656,6 +656,13 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `body_mark_model: deepest_gate`, which reads no obstacle]
     # [JUSTIFIED: engine/season/hole_register.yaml H-567 -- `site: Fixtures mark_ob`, graded `assumption`; no document gives how hard it is to mend clean at one's limit, so it is injected and swept 1.2 / 2.4 / 4.8]
     mark_ob=2.4,                       # `H-567`, swept 1.2 / 2.4 (seed value, read only under `drawn`) / 4.8
+    # B15.06 (`H-574`). HOW HARD A FELLED BODY IS TO KILL, per cause: the obstacle `queries/world_q.py::mortal_terms` answers for `death`,
+    # `yield` and `blood` (PHY_A A3's three terms; `spell` has none until B37). Fractional like every obstacle (A-5). SHIPPED AT AN UNREACHABLE
+    # CONTROL, 99.0 a cause (no pool can meet it, PC_A's "an obstacle no pool can beat"), so every felled body dies as it does today; B15.07's
+    # sweep sets the shipped values with the draw, and nothing calls `mortal_terms` before it.
+    # [ASSUMPTION; medium; Jordan to correct; revert: none, the control is the shipped value until B15.07]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-574 -- `site: Fixtures mortal_wound_ob`, graded `assumption`; no document gives how hard a felled body is to kill, so it is injected, shipped at its control and swept by B15.07]
+    mortal_wound_ob={_c: 99.0 for _c in MORTAL_CAUSES if _c != "spell"},   # `H-574`, swept 99.0 (control, SHIPPED) / B15.07's arms
     # `H-184` (split out of `H-98`). WHERE THE `Wounded` BAND STARTS: the threshold `wounds` must be
     # strictly above for a standing subject to read `Wounded` rather than `Untouched`. The edge is
     # `rosters.yaml: combat_band_edges` and `None` MEANS ITS VALUE (`0`, any wound), so the number is

@@ -25,6 +25,7 @@ from dataclasses import dataclass, replace
 from fractions import Fraction
 from typing import Callable, NamedTuple, Optional
 
+from engine.dice_engine import sigma_leverage as _sigma_leverage     # B15.06: `mortal_terms`' pool rule, one owner
 from engine.dice_engine.fmath import ltr_sum
 
 from ..data.arrangements import ARRANGEMENTS      # v11 CR-34: `declared_sitting` reads a row's `disposal`/`quorum`
@@ -38,7 +39,7 @@ from ..data.rosters import (
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
     faction_prop_id,
-    remove_distance, require_member,
+    remove_distance, require_member, require_mortal_cause,
     roster_map,
 )
 # IN-09: the Record kinds a held document is an occasion for, derived off the verb table's rows;
@@ -1233,6 +1234,32 @@ def body_hazard(w: World, pid: str) -> float:
     if p.is_cohort or (age_step == 0 and illness == 0):
         return 0.0
     return min(1.0, illness + age_step * max(0, age_of(w, pid)))
+
+
+def mortal_terms(w: World, pid: str, cause: str, endurance: float) -> tuple:
+    """B15.06 (`HAP_A` edit 3): `(pool, obstacle)` OF THE DRAW THAT DECIDES WHETHER A FELLED OR STRICKEN BODY DIES --
+    the one owner of how hard a body is to kill, so a wound and an illness are one ladder for one quantity.
+
+    `pool` is the one pool rule on the untrained default (A-6): `sigma_leverage.pool_of(pool_default, 0, pool_add,
+    pool_floor)` (no addends: the rolled addends are the caller's). `obstacle` is `Fixtures.mortal_wound_ob[cause]`. A `cause` outside `rosters.yaml: mortal_causes` is
+    refused by `data/rosters.py::require_mortal_cause`; `spell` is a member whose obstacle is B37's (`HAP_A` edits 4 and 5),
+    so it raises the closed refusal and the fight's draw never passes it.
+
+    ⚠ `endurance` IS AN OPERAND OF NEITHER NUMBER. It is the caller's `party_end(person, fixtures)` -- the governing attribute
+    the caller turns into a level (A-7) and adds where it rolls -- computed there because this module may import neither
+    `party_end` nor `body_band_penalty` (nothing here imports `seam` or `decision`). It stays in the signature so the fight's
+    caller (B15.07) and the spell's (B37) pass one shape [ASSUMPTION: the endurance argument is the governing attribute's
+    operand -- basis: PHY_A "Standing (R4 7b.0 (4))": "the governing attribute as levels (A-7)"]. `pid` is likewise the
+    caller's: the untrained default reads no one's body. Nothing calls this yet."""
+    require_mortal_cause(cause)
+    if cause == "spell":
+        raise Unspecified(
+            "no obstacle for `spell` until HAP_A edit 5 lands", "queries/world_q.py::mortal_terms",
+            needs="B37 writes the spell branch (`spell_age_every` seasons past `age_onset`) and the fixtures it reads",
+            law="HAP_A \"Lands in batch\": edits 1, 2, 4, 5, 6 in B37; the fight's draw never passes `spell`")
+    fx = w.fixtures
+    return (_sigma_leverage.pool_of(fx.get("pool_default"), 0, fx.get("pool_add"), fx.get("pool_floor")),
+            fx.get("mortal_wound_ob")[cause])
 
 
 def subsistence_draw(w: World) -> dict:

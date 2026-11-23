@@ -925,6 +925,18 @@ rosters:
       terms; revert: no terms, a duel is lethal, as before.]
     values: [yield, blood, death]
 
+  mortal_causes:
+    source: "HAP_A edit 3; PHY_A A3's three terms and the spell of illness"
+    cite: "HAP_A edit 3"
+    note: >-
+      THE CLOSED SET OF CAUSES `queries/world_q.py::mortal_terms` ANSWERS FOR -- the pool and obstacle of the draw that decides
+      whether a felled or stricken body dies, one owner. `death`, `yield` and `blood` are the three terms a fight is fought under
+      (`challenge_terms`' members, PHY_A A3) and each has its obstacle in `Fixtures.mortal_wound_ob`; `spell` is the illness a
+      spell lays, a member now and with NO obstacle until B37 (HAP_A edits 4 and 5) writes its branch, so `mortal_terms` refuses
+      it by name rather than answering. A cause outside this set is refused at `data/rosters.py::require_mortal_cause`.
+      [ASSUMPTION; medium; Jordan to correct; revert: drop the roster and `mortal_terms`]
+    values: [death, yield, blood, spell]
+
   combat_band_edges:
     source: "`H-98`, plan position `8` (closed; `workplans/valoria_master_workplan_v8_part4.md`, retired, at `FORK:7b619328`) -- the edge between the bands was two literals in `seam/ladder.py::combat_degree` (`if st[\"felled\"]` / `st[\"wounds\"] > 0`). Jordan 2026-09-02: *\"I do not want definitions etc to be hardcoded\"*. The bands themselves are `combat_degree_bands`, ruled 2026-09-03/04 as a READ of the scene."
     cite: "H-98"

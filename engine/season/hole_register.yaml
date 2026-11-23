@@ -7157,6 +7157,19 @@ rows:
     cite:      "`proposals/2026-11-12-subsystem-audit-suite/proposals/U5a_CHAR_self_knowledge_is_a_belief.md` Exact edits 6 (a) and Gate 3 (a told claim from a person he holds low regard for leaves his reader at UNKNOWN below the confidence the reader requires; from one he trusts the candidate forms). [ASSUMPTION; medium; Jordan to correct: that the floor is on the teller's weight (`teller_weight`, told_weight to the power of the hops times the relation to the teller) and not on the claim's confidence, which fades for a claim he made himself; that a claim he made of himself is never weighed.] FALSIFIER `engine/season/tests/test_self_knowledge.py::test_a_told_self_claim_is_weighed_by_regard_for_the_teller` (at a planted floor of 0.5 a told claim from a teller he disregards leaves him forming no Thread read and one from a teller he trusts admits it; at the floor 0 both admit it); CONTROL `self_told_floor` 0, every told claim taken up."
     source:    "workplan v12 B10.65 (`U5a_CHAR_self_knowledge_is_a_belief` edit 6 (a); B10's H block slot 19)"
 
+  - id:        H-574
+    tier:      1
+    hole:      "HOW HARD A FELLED BODY IS TO KILL, PER CAUSE -- `mortal_wound_ob` (B15.06; `14_VERBS_PHYSICAL_A_custody_and_force` A3, `HAP_A` edit 3, `U1` P-13). `queries/world_q.py::mortal_terms(w, pid, cause, endurance)` answers `(pool, obstacle)` for a cause of `rosters.yaml: mortal_causes`; the obstacle of `death`, `yield` and `blood` is this fixture's row for it and the draw it meets (B15.07) decides whether the body dies. `spell` has no row until B37. No document gives how hard a felled body is to kill."
+    kind:      "NUMBER"
+    owner:     "`engine/season/queries/world_q.py::mortal_terms`, the one place `mortal_wound_ob` is read"
+    grade:     "assumption"
+    default:   "99.0 on each of `death`, `yield`, `blood` -- THE CONTROL, SHIPPED: an obstacle no pool can meet (PC_A's \"an obstacle no pool can beat\", +99), so a mortal draw, once B15.07 calls one, kills every felled body as the fight does today; nothing calls `mortal_terms` at B15.06, so the shipped value moves nothing [ASSUMPTION; medium; Jordan to correct; revert: none, the control is the shipped value until B15.07]. B15.07's sweep sets the shipped values (target: the gate's reading, PHY_A A3)."
+    site:      "Fixtures mortal_wound_ob, read by `engine/season/queries/world_q.py::mortal_terms` only"
+    sweep:     ["99.0 (control, SHIPPED at B15.06)", "B15.07's sweep, arm 2", "B15.07's sweep, arm 3"]
+    unblocks:  "B15.07's mortal-wound draw (PHY_A A3), and the spell's obstacle (B37)"
+    cite:      "FALSIFIER: PHY_A A3's falsifier, the control at an unreachable value reproducing 200 of 200 deaths in the F-PC-04 probe (B15.07 runs it; at B15.06 nothing calls `mortal_terms`). `engine/season/tests/test_in34_bodies_clock.py::test_mortal_terms_takes_the_endurance_from_its_caller` (the pool is the one pool rule on the untrained default, the obstacle is this row, and the caller's endurance moves neither) and `::test_mortal_terms_refuses_an_unknown_cause`. CONTROL: the seed-0 realm hash after one season is equal before and after B15.06 (no caller). [ASSUMPTION; medium; Jordan to correct: that the control value is 99.0, PC_A's prototype's own.]"
+    source:    "workplan v12 B15.06 (`14_VERBS_PHYSICAL_A_custody_and_force` A3, `22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn` edit 3; B15's H block slot 1)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
