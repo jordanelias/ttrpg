@@ -23,6 +23,7 @@
 | B19.51 | the range-band missile model | MBA-05; MBA §3.1 | BUILD | MOVER(behaviour) | MBA-04 step 0 and `26_MASS_BATTLE_cell_scale_and_time` §2 (first half); Batch B19a |
 | B19.52 | the window and lull actions go through `obey` | `27_MB_A` "Exact edits" row `massbattle.py`, `battle_loop.py` | HELD (Batch B20: `04_MB_manager_battle_one_resolver.md` §4's `CommanderAction`) | — | Batch B20 |
 | B19.53 | the field's outcome carries each part's fight loss, chase loss, captured share, gave-ground and rallied | `26_MASS_BATTLE_rout_pursuit_and_giving_ground` "Exact edits" row `FieldOutcome`; §2; D-U1-11e | BUILD | EQUAL | Batch B17 |
+| B19.62 | the troop class, the matchup reader and the ten ★ rows | MBA-06 steps 1, 4; MBA §3.2 | BUILD | EQUAL | Batch B19a; Batch B17 |
 | B19.54 | the stand draw: one function, its table, its call sites, behind `stand_draw: off` | `26_…rout…` §1 | BUILD | EQUAL | B19.53; 27A-4 (first half); Batch B05, Batch B06 |
 | B19.55 | the four other command reads go through the commander's record | `27_MB_A` §6, item 27A-5 | BUILD | EQUAL | B19.54; 27A-1 to 27A-4 (first half) |
 | B19.56 | who may pursue is read from the troop registry | `16_PESSIMIST_MB_rout_has_two_exits` step 3 (the predicate); "Exact edits" `ROLE_INSTRUCTION_PRIMITIVES` | BUILD | EQUAL | Batch B17 |
@@ -31,7 +32,6 @@
 | B19.59 | the chase inside a bout: hold or chase on `enemy_broken` | `26_…rout…` §3 | BUILD | EQUAL | B19.54, B19.58 |
 | B19.60 | the captured share, and what the season writes | `26_…rout…` §4; `16_PESSIMIST_MB_rout…` step 5 | BUILD | MOVER(behaviour) | B19.53, B19.58; Batch B29 (UNDECIDED 3) |
 | B19.61 | the `stand_draw` flip: `off` → `on` | `26_…rout…` "Cost class" (its one declared flip); A-61 | BUILD | MOVER(behaviour) | B19.54, B19.59, B19.60 |
-| B19.62 | the troop class, the matchup reader and the ten ★ rows | MBA-06 steps 1, 4; MBA §3.2 | BUILD | EQUAL | Batch B19a; Batch B17 |
 | B19.63 | the charge on the contact draw: the situation, whether it closes, its shock to the stand draw | MBA-06 steps 2, 3 | BUILD | MOVER(behaviour), conditional | B19.61, B19.62; MBA-04 (first half) |
 | B19.64 | the chase's casualties are the contact draw under the `pursuit` row | MBA-04 step 5 | BUILD | MOVER(behaviour), conditional | B19.58, B19.62 |
 | B19.65 | one resolver, one fixture, one landing order | `U5b_MB_rulings_in_the_field` §4, §6 | POINTER | — | — |
