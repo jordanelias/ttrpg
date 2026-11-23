@@ -3653,6 +3653,226 @@
             "hand_error_back"
           ]
         },
+        "ground_reads": {
+          "source": "V2 p2 \u00a7A.2 -- what a ground's fit reads: a channel of the bearing reading, or the item's `credit` for `evidence`.",
+          "cite": "B24p.01",
+          "note": "THE CLOSED SET `grounds`' `reads` cell is a member of. `item` -- the proof the speaker shows, through its `credit`; `want` -- what the listener wants; `hold` -- what he holds; `bond` -- whom he stands with. A ground naming any other reading is refused at import.",
+          "values": [
+            "item",
+            "want",
+            "hold",
+            "bond"
+          ]
+        },
+        "proceeding_effects": {
+          "source": "V2 p2 \u00a7B -- a move is read by its `effect`, never by its id.",
+          "cite": "B24p.01",
+          "note": "THE CLOSED SET `proceeding_moves`' `effect` cell is a member of. `track` -- the speech moves each listener's own track; `strike` -- it presses the man who made the point on the table; `yield` -- the speaker concedes the issue; `none` -- he rests. No effect names a winner or a side: the close is each adjudicator's own draw (V2 p2 \u00a7D).",
+          "values": [
+            "track",
+            "strike",
+            "yield",
+            "none"
+          ]
+        },
+        "grounds": {
+          "source": "V2 p2 \u00a7C.2 (`content[g]`, Reason's share of a speech's dice by ground, R11) and \u00a7A.2 (`reads`); V2 p4 \u00a7F 10 (`consequence` is pathos, `evidence` alone logos).",
+          "cite": "B24p.01, R11",
+          "note": "WHAT AN ARGUMENT APPEALS TO: the proof shown, what the listener wants, what he holds, or whom he stands with, in that order. `reason` is Reason's share of a speech's dice on that ground before the venue's lean, a whole number of tenths in [0, 1]; `reads` names what the ground's fit reads (`ground_reads`). AT CONTROL every `reason` is 1.0, so the dice are Reason alone; B24p.23 writes the shipped column of V2's model (`sc2/host.py::GROUNDS`), each cell then marked. [ASSUMPTION; Jordan to correct: every `reason` below is the control value, not V2's shipped one -- basis: B24p.01's INSTRUCTION; revert: none, it is the control.]",
+          "rows": [
+            {
+              "id": "evidence",
+              "reason": 1.0,
+              "reads": "item"
+            },
+            {
+              "id": "consequence",
+              "reason": 1.0,
+              "reads": "want"
+            },
+            {
+              "id": "authority",
+              "reason": 1.0,
+              "reads": "hold"
+            },
+            {
+              "id": "solidarity",
+              "reason": 1.0,
+              "reads": "bond"
+            }
+          ]
+        },
+        "proceeding_moves": {
+          "source": "V2 p2 \u00a7B (a move is read by its `effect`), \u00a7A.1 (`rank`, his rank in the proceeding's skill); V2 p4 \u00a7F 1 (the ploy is carried by `insincerity` on `argue` and `press`; `deceive` and `divert` are not built).",
+          "cite": "B24p.01, R4",
+          "note": "THE MOVES A SPEAKER MAY MAKE, ONE ROW EACH, so that no move id is ever compared in code: the module reads `effect` and `draw`. `draw: true` moves roll the speaker's dice; `capability` is the skill whose rank joins them and is refused on a `draw: false` row. Whom a move is resisted by is not a cell: Will is the resisting attribute of every listener (A-137, V2 p4 \u00a7F 26). B24.03 adds the hearing's moves to THIS roster, never a second one. [ASSUMPTION; Jordan to correct: one skill (`argue`) for both drawing moves -- basis: V2 names \"his rank in the proceeding's skill\", one rank.]",
+          "rows": [
+            {
+              "id": "argue",
+              "effect": "track",
+              "draw": true,
+              "capability": "argue"
+            },
+            {
+              "id": "press",
+              "effect": "strike",
+              "draw": true,
+              "capability": "argue"
+            },
+            {
+              "id": "concede",
+              "effect": "yield",
+              "draw": false
+            },
+            {
+              "id": "rest",
+              "effect": "none",
+              "draw": false
+            }
+          ]
+        },
+        "proceeding_ends": {
+          "source": "V2 p2 \u00a7C.5 -- the three ends of a sitting.",
+          "cite": "B24p.01",
+          "note": "HOW A SITTING ENDS. `budget` -- the turns ran out; `rested` -- every speaker rested, so the close is drawn on what was said; `yielded` -- a side conceded the issue. Ordered as V2 lists them.",
+          "values": [
+            "budget",
+            "rested",
+            "yielded"
+          ]
+        },
+        "issue_rungs": {
+          "source": "V2 p2 \u00a7B's stasis table (A-134): what each issue weighs.",
+          "cite": "B24p.01, A-134",
+          "note": "THE ISSUES A MATTER MAY BE DIVIDED INTO, in the order a sitting takes them; `weighs` maps a ground to the weight it carries on that issue, and a ground a rung does not name weighs 1.0 (so a rung with no `weighs` names none). B24.03 adds `procedure`. [ASSUMPTION; Jordan to correct: each weight below -- basis: V2 p2 \u00a7B's stasis table; the running model is evidence only.]",
+          "rows": [
+            {
+              "id": "fact",
+              "weighs": {
+                "evidence": 1.25,
+                "consequence": 0.75,
+                "solidarity": 0.75
+              }
+            },
+            {
+              "id": "definition",
+              "weighs": {
+                "authority": 1.25,
+                "consequence": 0.75
+              }
+            },
+            {
+              "id": "justification",
+              "weighs": {
+                "consequence": 1.25,
+                "solidarity": 1.25,
+                "evidence": 0.75
+              }
+            }
+          ]
+        },
+        "authorities": {
+          "source": "V2 p2 \u00a7H and \u00a7I -- who sits above a proceeding, and the regime's weight for his authority in `power`.",
+          "cite": "B24p.01",
+          "note": "WHOSE AUTHORITY A VENUE RESTS ON. `parties` -- the parties themselves; `polity` -- the crown and its courts; `church`; `guild`; `none`. `by_faction` maps each faction the realm seats to one member: a person's authority is read off the faction he serves. [ASSUMPTION; Jordan to correct: the whole mapping -- basis: `venues.yaml`'s `serves:` tags (Crown, court and Parliament together; Church; Guild). The Crown (Valorsmark), the duchies and the Restoration Movement, and the two foreign factions, are `polity`; the Church of Solmund is `church`; the Guilds are `guild`. `faction x` is a placeholder naming no polity (`names_index.yaml`), and carries none. `guild` is reached through `Guilds`, which `role_templates.by_faction` does not key -- hence the mapping is checked against the `factions` roster and must cover every `role_templates.by_faction` key.]",
+          "values": [
+            "parties",
+            "polity",
+            "church",
+            "guild",
+            "none"
+          ],
+          "by_faction": {
+            "Valorsmark": "polity",
+            "Hafenmark": "polity",
+            "Varfell": "polity",
+            "L\u00f6wenritter": "polity",
+            "Restoration Movement": "polity",
+            "Church of Solmund": "church",
+            "Guilds": "guild",
+            "Altonia": "polity",
+            "Schoenland": "polity"
+          }
+        },
+        "matters": {
+          "source": "V2 p2 \u00a7G -- the twelve kinds of worldly matter; it absorbs the `proofs` roster (retired at B24p.03).",
+          "cite": "B24p.01",
+          "note": "WHAT AN ITEM MAY BE, ONE ROW PER KIND: a typed reference, never text. `carrier` is the tree's type the item references (`Record`, a ledger `Claim`, a `Tenure` kind, an earlier matter's case-file stages, the strife reading); `brings` is who may bring it; `cost` is what bringing it writes (read by B24p.22 and the fold). `title`'s carrier is a `hold` Tenure; an `Office` is what it holds. `brings` and `cost` are the table's own words as tokens, checked only as present, until a reader names a closed set. [ASSUMPTION; Jordan to correct: the spelling of every `brings` and `cost` token and of the `carrier` suffix after the colon -- basis: V2 p2 \u00a7G's table gives them in prose.]",
+          "rows": [
+            {
+              "id": "record",
+              "carrier": "Record",
+              "brings": "holder",
+              "cost": "disclosure"
+            },
+            {
+              "id": "testimony",
+              "carrier": "Claim:testimony",
+              "brings": "witness_or_caller",
+              "cost": "speaks_and_may_be_pressed"
+            },
+            {
+              "id": "deed",
+              "carrier": "Claim:deed",
+              "brings": "holder",
+              "cost": "names_source"
+            },
+            {
+              "id": "oath",
+              "carrier": "Tenure:oblige",
+              "brings": "party",
+              "cost": "binds_again"
+            },
+            {
+              "id": "debt",
+              "carrier": "Tenure:oblige",
+              "brings": "party",
+              "cost": "spent_when_called"
+            },
+            {
+              "id": "title",
+              "carrier": "Tenure:hold",
+              "brings": "holder",
+              "cost": "puts_title_in_question"
+            },
+            {
+              "id": "precedent",
+              "carrier": "case_file_stages",
+              "brings": "witness",
+              "cost": "none"
+            },
+            {
+              "id": "law",
+              "carrier": "Record:decree",
+              "brings": "anyone",
+              "cost": "disclosure"
+            },
+            {
+              "id": "treaty",
+              "carrier": "Record:covenant",
+              "brings": "party",
+              "cost": "disclosure"
+            },
+            {
+              "id": "rumour",
+              "carrier": "Claim:hearsay",
+              "brings": "holder",
+              "cost": "low_weight"
+            },
+            {
+              "id": "state_of_realm",
+              "carrier": "strife_reading",
+              "brings": "anyone_in_realm",
+              "cost": "none"
+            },
+            {
+              "id": "confession",
+              "carrier": "Record:confession",
+              "brings": "bench_or_questioner",
+              "cost": "none"
+            }
+          ]
+        },
         "module_kinds": {
           "source": "plan v8 `_part5` `### A-25` (`ED-IN-0284`, revised by `ED-IN-0285`) -- the seven headings of its roster paragraph.",
           "cite": "A-25",
