@@ -783,6 +783,26 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
     return choose
 
 
+def _scruple_strikes(p: Person, c: Candidate, margin: float, fx: "Fixtures", draw) -> bool:
+    """B10.25 (`Fixtures scruple_temperature`, H-475): is a candidate whose `options.scruple` is `margin` > 0 struck from his order?
+    At temperature 0 it is the THRESHOLD, every positive margin (today's gate, no draw read). At `T > 0` it is struck with probability
+    `1 - exp(-margin / T)` on the person's own draw `scruple:<verb>:<subject>`, keyed by the candidate as `choice:` is so a fork stays
+    attributable: a large margin stops him nearly always and never certainly, a small one usually gives way (and giving way is the
+    fold's `scruple.overridden`). A missing `draw` at `T > 0` RAISES, as `_sample_order`'s does: it would answer with the threshold."""
+    t = float(fx.get("scruple_temperature"))
+    if t < 0:
+        raise ValueError(f"scruple_temperature {t!r} is below 0 (H-475): a negative temperature would make a larger margin the less likely to stop him")
+    if t == 0:
+        return True
+    if draw is None:
+        raise Unspecified(
+            "the scruple draw", "H-475",
+            needs=f"`make_chooser(fx, mint, verbs, draw)` with a draw at scruple_temperature={t}",
+            law="B10.25 -- at a nonzero temperature the strike is DRAWN, and a chooser built without a draw would silently fall back to the "
+                "threshold while every instrument reported the draw as live")
+    return draw(p.id, f"scruple:{c.verb}:{c.subject or '-'}").random() < 1.0 - fmath.exp(-margin / t)
+
+
 def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
                 draw: Optional[Callable[[str, str], Any]] = None,
                 watch: Optional[Callable[..., None]] = None) -> Callable[..., list]:
@@ -824,8 +844,8 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
         _scores = {id(c): score(c) for c in cands}
         # B10.24 (ED-IN-0261's deontological gate, moved here from `opening_set`: AFTER scoring, BEFORE the sample, so a struck
         # candidate's score is known): a candidate whose verb his scruple forbids (`options.scruple` > 0 at his `refusal_tolerance`)
-        # is struck from the order. The strike is the threshold, `scruple > 0`; a draw on the margin is B10.25's and changes the
-        # `struck` line only. What is struck, with its margin and score, is kept (`Ranked.forgone_of`); a candidate with a positive margin
+        # is struck from the order. The strike is `_scruple_strikes`: the threshold at `scruple_temperature` 0, a draw on the margin above
+        # it (B10.25). What is struck, with its margin and score, is kept (`Ranked.forgone_of`); a candidate with a positive margin
         # the strike leaves standing is kept too, for the fold's `scruple.overridden` (`loop/resolve.py::_scruple_overridden`).
         axis = fx.get("refusal_axis")
         tolerance = refusal_tolerance(p, axis)
@@ -837,7 +857,7 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
                 if margin <= 0.0:
                     kept.append(c)
                     continue
-                struck = True        # B10.25: the draw on `margin`
+                struck = _scruple_strikes(p, c, margin, fx, draw)
                 marked.append((c, margin, _scores[id(c)], struck))
                 if struck:
                     TRACE.note(f"{p.id} refuses {c.verb!r}: its `{axis}` alignment lies {margin:.3f} past his tolerance "

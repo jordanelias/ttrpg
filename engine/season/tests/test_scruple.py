@@ -107,8 +107,8 @@ def test_forgone_scores_exceed_released_lead(monkeypatch):
     inner_terms, inner_release = _choose.score_terms, _choose.release
     seen = {"scenes": 0, "forgone": 0, "struck_persons": 0}
 
-    def spy_terms(p, c, fx, memo, odds=None):
-        t = inner_terms(p, c, fx, memo, odds)
+    def spy_terms(p, c, fx, memo, odds=None, q=None):
+        t = inner_terms(p, c, fx, memo, odds, q)
         scored.append((p.id, c.verb, c.subject or "", _choose.score_total(t)))
         return t
 
@@ -164,3 +164,44 @@ def test_giving_way_to_a_scruple_is_an_event_the_fold_emits():
     for forgone, key in (((), "no_entry"), (((verb, WRIT, 0.0),), "zero_margin"),
                          ((("construe", WRIT, 0.4),), "other_verb"), (((verb, "p_mid", 0.4),), "other_subject")):
         assert [e.kind for e in fold(forgone, key)[1]] == ["compliance.withheld"], key
+
+
+def test_draw_strikes_some_not_all_at_margin_005_and_08():
+    """B10.25: armed, with `scruple_temperature` 0.2, a candidate is struck with probability `1 - exp(-margin / T)` on the person's own draw
+    keyed `scruple:<verb>:<subject>`. One planted person on one situation, 200 draws (the draw factory's seed is the only thing that varies):
+    a candidate at margin 0.05 is struck in some and not all, one at margin 0.8 in most and not all. A candidate the draw leaves standing
+    is kept in the Scene it leads (`Scene.forgone`) at its margin: the branch B10.24's threshold never reaches."""
+    from ..state.ids import draw_factory
+    from .test_governance_build import _h2_base, _h2_inject
+
+    w, p, q, v, base, verbs = _h2_base()
+    axis = _deontological_axis()
+    light, heavy = verbs[:2]
+    fx = w.fixtures.sweep("refusal_axis", axis).sweep("scruple_temperature", 0.2).sweep("choice_temperature", 0)
+    # tolerance -0.4; the refusing pole is the negative one, so a cell lies past it by `cell - tolerance`: 0.05 and 0.8
+    restore = _h2_inject(p, axis, -0.4, {light: -0.35, heavy: 0.4})
+    struck = {c: 0 for c in sorted(base) if c[0] in (light, heavy)}
+    standing = 0
+    checked = 0
+    try:
+        assert _options.scruple(light, axis, -0.4) == pytest.approx(0.05) and _options.scruple(heavy, axis, -0.4) == pytest.approx(0.8)
+        for seed in range(200):
+            rank = _choose.make_ranker(fx, None, draw_factory(seed, lambda: 0))
+            ranked = rank(p, v)
+            formed = {(c.verb, c.subject): c for c in ranked}
+            checked += 1
+            for cand in struck:
+                if cand not in formed:
+                    struck[cand] += 1
+                    continue
+                kept = {(vb, s): m for vb, s, m in ranked.forgone_of(formed[cand], [formed[cand]])}
+                assert kept[(cand[0], cand[1] or "")] == _options.scruple(cand[0], axis, -0.4), (seed, cand, kept)
+                standing += 1
+    finally:
+        restore()
+    assert checked >= 200 and standing >= 1 and len(struck) >= 2
+    for cand, n in struck.items():
+        if cand[0] == light:
+            assert 0 < n < 200, (cand, n)            # a small margin usually gives way, and sometimes does not
+        else:
+            assert 100 < n < 200, (cand, n)          # a large one stops him in most draws and never certainly
