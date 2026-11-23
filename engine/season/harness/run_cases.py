@@ -277,9 +277,8 @@ if __name__ == "__main__":
     # went stale by one fix: FOUR ARC CASES WERE WRONG IN A MERGED PR because the caselogs
     # came from one run and `results.json` from another. `report.py` is now the SOLE emitter.
     # This entrypoint still RUNS the corpus -- it is the fastest way to see the tallies -- and
-    # it writes nothing. The refusal is enforced by execution, not by this comment:
-    # `test_w15_the_run_cases_entrypoint_writes_nothing` runs this file as a script and hashes
-    # `runs/` before and after.
+    # it writes nothing. `test_w15_the_run_cases_entrypoint_writes_nothing`, which ran this file as a
+    # script and hashed `runs/` before and after, is retired: nothing enforces the refusal now.
     rep = main()
     for kind in ("NPC", "ARC"):
         rows = rep[kind]

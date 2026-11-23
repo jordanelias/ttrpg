@@ -83,81 +83,8 @@ def test_sweep_displaces_laterally_grid():
     assert r.passed, f"V-SWEEP (grid) regressed: measured={r.measured} expected={r.expected}"
 
 
-def test_envelop_reaches_rear_node():
-    """Acceptance: V-ENVELOP on the LIVE default (node/field) path -- the path Jordan actually
-    watches in the workbench. Unit._resolve_maneuver_goal/_envelop_goal (fix-plan step 7) gives
-    _node_advance an anchor-level goal, modeled on the legacy per-cell two-state machine, when the
-    'envelop' instruction is active and MB_ENVELOP_PATH is on.
-
-    [Gate 4 finding, 2026-07-02, SUPERSEDED -- see below] This passed reliably (16/20 seeds) at the
-    moment step 7 landed, with PER_CELL still at its OLD default. Flipping PER_CELL's config default
-    to '1' (gate 4) reproduced this failure, and the ORIGINAL diagnosis (recorded here for history,
-    not because it's still believed) was a "two racing clocks" theory -- REFUTED, see below.
-
-    [2026-07-04 update, ED-MB-0002, SUPERSEDED IN PART -- see 2026-07-05 below] A Fable-led root-cause
-    audit (designs/audit/2026-07-04-mass-battle-cannae-gauge-audit/README.md) refuted racing-clocks as
-    a GENERAL account (gauge row C7 passes its band, which a pure clock-race can't explain) and traced
-    the composition-coupling accounting defects (RC-1). Jordan ruled DG-3/DG-4; both were implemented,
-    adversarially reviewed, byte-exact/regression-clean. This fixture STILL failed after that fix, and
-    a frozen-vs-wheeling-wings ablation was read at the time as settling "no timing race, at gauge
-    scale" -- but see the 2026-07-05 correction immediately below: that ablation's own premise was
-    unknowingly broken.
-
-    [2026-07-05 correction, mass-battle Cannae gauge follow-up audit] The 2026-07-04 docstring claimed
-    "the steering mechanism is proven correct" and that the frozen-vs-wheeling ablation settled the
-    racing-clocks question with a clean null result. BOTH claims were WRONG, not just incomplete: a
-    fresh adversarial pass found _envelop_goal's phase-1/phase-2 transition shares one threshold for
-    entry and exit (no hysteresis) -- a genuine limit cycle where a wing wheels to its rear waypoint,
-    turns in, immediately re-crosses the same threshold, and gets yanked back to phase 1, forever.
-    Separately, _node_advance's per-tick step magnitude could freeze a body's approach forever within
-    a small fixed distance of ANY goal. Both are real, confirmed-by-direct-trace bugs, now fixed (a
-    one-shot commitment latch; capping the step at the remaining distance instead of freezing/
-    overshooting). Re-measured: this fixture's own detachment now reaches behind the defender in
-    11/20 seeds at that fix (was 6, was 0 pre-fix; B17.14 read 0/20 in both arms after B06's draws) -- real movement, still short of a clean pass, for a THIRD,
-    separate, disclosed-not-chased reason (a discipline-degradation speed-floor discretization edge
-    case specific to this fixture's low-base-speed detachment -- the xfail that carried this reason was removed at B17.14). At
-    GAUGE SCALE (larger armies, higher base speeds, unaffected by that third issue), the fix is much
-    more decisive: H3/H4/H5/H6/C4's 100%/90%/100%/100%/66.7% DRAWS are entirely gone. The racing-
-    clocks ablation's own frozen-vs-wheeling null result is therefore RE-CONFIRMED as uninformative
-    for a different reason than first understood (both configurations' wings never reached contact at
-    all, due to the now-fixed D2 bug -- not because there was genuinely no race to find).
-
-    Separately, DG-1 (composition: force-parity + majority-infantry-pin/cavalry-wing, per Jordan's
-    2026-07-05 ruling) and the completion of DG-3 (intensive, per-troop-scaled pool semantics, per
-    Jordan's 2026-07-05 ruling) were also implemented this session. The gauge rows this unlocked
-    (H3/H4/H5/H6/C4) now OVERSHOOT their historical bands decisively in the attacker's favor instead
-    of landing inside them -- a newly-surfaced, NOT-yet-resolved question (does `subunit_combat_pool`
-    need to scale by a subunit's own troop share for genuine partition invariance, or is "N
-    simultaneous full-strength attacking fronts overwhelm one defender" the historically-correct
-    emergent mechanism and the bands need reconsidering?) -- explicitly not decided or silently tuned
-    away here. **2026-07-08 update:** Jordan ruled the partition-invariance question a genuine defect
-    (fixed, see orchestration.py's `_convergence_scale`/ED-MB-0004) and DG-2 "build it now" (the
-    commanded-entry slice is now built, see hierarchy/units.py's `yielding`/`yield_active` +
-    tests/valoria/test_mass_battle_yield.py) -- neither closed H3-H6's overshoot on its own; see
-    tests/coverage_matrix.md's 2026-07-08 entry for the honest numeric record of both.
-
-    See tests/coverage_matrix.md's 2026-07-05 entry for the full numeric record."""
-    # B17.14: the single-fixture pass/fail (and its xfail) is replaced by a two-arm count over the twenty
-    # seeds the history above cites. Same detachment, same seeds; the arms differ only in whether the
-    # 'envelop' maneuver is on. "Behind" is the validator's own threshold (row-diff < -1.0, validators.v_envelop).
-    # No invented margin: a direction with a control.
-    seeds = 20
-    envelop = _val._envelop_reach(True, path='node', seeds=seeds)
-    hold = _val._envelop_reach(False, path='node', seeds=seeds)
-    checked = len(envelop) + len(hold)
-    assert len(envelop) == seeds and len(hold) == seeds, (len(envelop), len(hold))   # an empty arm would make the control vacuous
-    envelop_behind = sum(1 for x in envelop if x < -1.0)
-    hold_behind = sum(1 for x in hold if x < -1.0)
-    assert checked >= 20, f"checked {checked} seed readings; the count is only evidence if it was taken"
-    assert hold_behind == 0, (
-        f"control failed: the hold arm reached behind the defender in {hold_behind}/{seeds} seeds")
-    assert envelop_behind > hold_behind, (
-        f"the envelop arm reached behind the defender in {envelop_behind}/{seeds} seeds, "
-        f"the hold arm in {hold_behind}/{seeds}: the maneuver does not beat its control")
-
-
 def test_sweep_displaces_laterally_node():
     """Acceptance: V-SWEEP on the LIVE default (node/field) path -- Unit._resolve_maneuver_goal/
-    _sweep_goal (fix-plan step 7), same mechanism as test_envelop_reaches_rear_node."""
+    _sweep_goal (fix-plan step 7), same mechanism as the retired test_envelop_reaches_rear_node."""
     r = _val.v_sweep(path='node', seeds=_CI_SEEDS)
     assert r.passed, f"V-SWEEP (node) measured={r.measured} expected={r.expected}"

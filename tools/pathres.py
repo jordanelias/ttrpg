@@ -623,8 +623,7 @@ def _cli(argv):
         print(f'{len(edges)} path(s) with traced I/O across {", ".join(scope)}')
         print('  NOTE: a LOWER BOUND. Dynamic paths (open(os.path.join(REPO, rel)) for a loop')
         print('  variable) are invisible without dataflow analysis, and guessing is forbidden.')
-        print('  This is a candidate-finder, not a census. Pinned by')
-        print('  tests/valoria/test_pathres.py::test_the_known_blind_spot_is_a_blind_spot.')
+        print('  This is a candidate-finder, not a census.')
         print(f'  written and read : {len(produced & consumed)}')
         print(f'  WRITTEN, NEVER READ (generated, unconsumed): {len(produced - consumed)}')
         for k in sorted(produced - consumed):

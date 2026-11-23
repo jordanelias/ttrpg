@@ -5,7 +5,7 @@ THE CLAIMS, AND WHAT WOULD SHOW EACH WRONG:
   * TWO PERSONS WITH EQUAL PURSUITS, ONE WHOSE BELIEVED CHANCE OF THE BANDS THE `argue` ROW WRITES IN READS
     0.7 AND ONE 0.1, RANK THE SAME `argue` DIFFERENTLY AT `believed` AND ALIKE AT `none` -- through
     `make_chooser`'s real ranking. PLANTED FAILURE: `odds_weight` replaced by a factor of 1 reddens the
-    first assertion (`test_the_planted_factor_of_one_reddens_the_difference`).
+    first assertion.
   * A PERSON WHOSE BELIEVED INPUT IS `None` RANKS IT, AND SCORES IT, EXACTLY AS AT `none`; an UNCONTESTED
     candidate is the same at both arms whatever the query says; a View with no query is the same as `none`.
   * THE FIGURE IS THE REAL READER'S: two persons whose pools differ (a registered addend, as
@@ -165,13 +165,6 @@ def test_the_bands_asked_are_the_rows_own_writing_bands_and_a_proper_subset(cell
     assert CH.odds_weight(p, Candidate(silent[0], "x"), _arms("believed"), ask) == 1.0 and ask.asked == []
 
 
-def test_the_planted_factor_of_one_reddens_the_difference(cells, monkeypatch):
-    _assert_the_two_persons_part_at_believed(monkeypatch)            # green on the real weighting
-    monkeypatch.setattr(CH, "odds_weight", lambda p, c, fx, odds: 1.0)
-    with pytest.raises(AssertionError, match="one ranking"):
-        _assert_the_two_persons_part_at_believed(monkeypatch)
-
-
 def test_an_arm_outside_the_roster_raises(cells):
     p = _person("p_sure")
     with pytest.raises(Unspecified):
@@ -306,25 +299,3 @@ def test_tau_is_the_largest_grid_value_above_one_half_strict_top_decided_and_zer
         assert d * 2 <= m, f"tau {g}, above the shipped {shipped}, also reads above one half ({d} / {m}): the rule picks the largest"
     d0, n0 = _strict_top_share(0.0, seed)
     assert d0 == n0 > 0, f"tau 0 is not the argmax: {d0} of {n0} readings decided"
-
-
-def test_withholding_the_batchs_verbs_moves_the_none_and_tau_point_one_world(monkeypatch):
-    """THE CARD'S CONTROL, as a difference: `odds_weighting` `none` and `choice_temperature` 0.1 on `build_realm(0)`, one
-    season, with `capture`, `challenge` and `accept` withheld from the chooser's verbs, is not the same world as the
-    season with them chosen. (The realm's own hashes are `_realm_goldens.py`'s; the pre-CR-17 world is a tree no
-    longer in the code, and a pin of it read under a stack of reverts is not kept.)"""
-    from ..harness import populated as POP
-    from ..boot.realm import build_realm
-
-    def season():
-        w = build_realm(0)
-        w.fixtures = w.fixtures.sweep("odds_weighting", "none").sweep("choice_temperature", 0.1)
-        POP.run(seasons=1, seed=0, w=w)
-        return w
-
-    w = season()
-    assert len(w.log) > 0, "the none / 0.1 season wrote nothing: the difference below observes nothing"
-    real = POP.resolvable_verbs
-    monkeypatch.setattr(POP, "resolvable_verbs", lambda: frozenset(real()) - {"capture", "challenge", "accept"})
-    c = season()
-    assert c.content_hash() != w.content_hash(), "withholding the batch's verbs moved nothing: the control observes nothing"

@@ -335,13 +335,13 @@ The batch block's head, its position table and items B98.01 to B98.22 are in `va
   3. Assemble R1 and R2 in the commit body; record each IN-BATCH condition read (B98.18, .20 (row 24, `set by B21.73`), .39, .40, .59, .62, .66, .85), each STOPS IF read (B98.01, .02, .04, .05, .06, .09, .10, .12, .13, .16, .19, .21, .29, .34, .51, .54, .56, .57, .63, .65, .67, .68, .75, .77, .82, .84), the BACKGROUND RUN wall times, and the batch's measured wall time.
   4. Write no `reading:` record and no `status:` in `engine/season/requirements.yaml` (REQUIREMENT: none; B99 writes them).
 - WHERE: `engine/season/tests/_realm_goldens.py`; the other pin files the producer names from `git grep -ln "content_hash\|_GOLDEN" engine/season/tests engine/tests` at the item's open; `engine/engine_params/sim_params.json`, `engine/engine_params/troops.json`, `engine/engine_params/combat_engine_v1.json`, `engine/engine_params/threadwork_params.json` (B98.63, B98.65), `engine/engine_params/battle_orders.json` (B98.40, where B19 exports it) (re-derived, where drifted).
-- TESTS: none new. EXPECTED RED UNTIL B98.99 ends here: every test the flips' lines named is green on this commit's tree.
+- TESTS: none new. EXPECTED RED UNTIL B98.99 ends here: every test the flips' lines named is green on this commit's tree but for reds carried at BATCH-CLOSE step 2 (carried-red rule; head P17 (1)).
 - FALSIFIER and CONTROL: a pin a flip moved and this commit did not re-record (the full suite reds on it); a `status:` line edited; a flip in R1 with no control-arm reading. Control: each BLOCKED position's value read at its control on this tree (R2).
-- GATE: the head's BATCH GATE, read once on this commit's tree; the realm hash (`HASH READING`) at seeds 0 to 2, one season → the re-pinned values, each run twice, equal; the full suite once (`python -m pytest tests/valoria -q -n auto` and the engine suites `python tools/tests_for_diff.py --base <batch-start-sha>` names; CLAUDE.md §0.4: this batch edits engine fixtures, so the local run can observe what CI will).
+- GATE: the head's BATCH GATE, read once on this commit's tree; the realm hash (`HASH READING`) at seeds 0 to 2, one season → the re-pinned values (each run once: the suite's `test_go07_control_the_world_did_not_move_only_its_digest` reads the same `SHIPPED` pins in its own process, head P17 (5)); no pytest beyond the readings: the one full-suite run (`python -m pytest tests/valoria -q -n auto` and the engine suites `python tools/tests_for_diff.py --base <batch-start-sha>` names; CLAUDE.md §0.4: this batch edits engine fixtures, so the local run can observe what CI will) is BATCH-CLOSE's, on a snapshot of this commit (head P16 (4), P17 (1)).
 - HASH MOVERS: the re-pin itself.
 - DEPENDS ON: V12 B98.01 to B98.87.
 - GLOSSARY: none (no term introduced, renamed or retired).
-- COST and TIER: edit (the re-pin) and reading; `sonnet`, high; `opus` reads R1 against each target once more as the batch's judgment node.
+- COST and TIER: edit (the re-pin) and reading; `sonnet`, high (R1 is read by Phase 3's terminal critique, once).
 - LANDS IT: B98's producer; `Item: B98.99`, no `[skip ci]` (the batch's last `Item:` push, which opens BATCH-CLOSE).
 
 SERIAL EDGES (written last, `V12_STRUCTURE_part4.md` E-11):

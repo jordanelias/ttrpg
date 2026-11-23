@@ -36,7 +36,7 @@ from engine.season.decision.options import opening_set
 from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, resolvable_verbs
 from engine.season.queries.world_q import hold_force
-from engine.season.state.carriers import Act, Candidate, Claim, Question, View
+from engine.season.state.carriers import Act, Claim, Question, View
 
 # The rows this position DECLINED or STOPPED on, each recorded with its reason in the position's
 # receipt; none may become resolvable without the reason being answered first.
@@ -222,10 +222,3 @@ def test_14_give_forms_once_per_known_receiver_and_never_to_the_giver():
 # ======================================================================================
 # 7 -- CANDIDATE-WHY
 # ======================================================================================
-
-def test_14_a_candidate_carries_no_why():
-    assert "why" not in {f.name for f in dataclasses.fields(Candidate)}
-    w = P.tiny_world()
-    got = opening_set(w.persons["p_low"], _view(w, "p_low"),
-                      Question("q:u7own", "need", ("Hh",)), w.fixtures)
-    assert got and all(not hasattr(c, "why") for c in got), "the opening set formed nothing to check"

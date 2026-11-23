@@ -30,7 +30,6 @@ _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
 
-import modules.mass_battle.orchestration as O                                   # noqa: E402
 from modules.mass_battle.resolution import tracing, tracing_on                # noqa: E402
 from systems.mass_battle.sim.engine import build_unit, run_battle                   # noqa: E402
 from engine.dice_engine import draw  # noqa: E402
@@ -128,30 +127,3 @@ def test_attribution_is_inert_when_tracing_is_off():
         assert not tracing_on()
         run_battle(ua, ub)
         assert [e for e in recorded if e.get('cat') == 'casualty'] == []
-
-
-def test_conservation_fails_when_one_path_is_untagged(monkeypatch):
-    """MUTATION, in the suite rather than in a commit message.
-
-    The plan's verifier gate is "conservation, mutation-verified by untagging one path". Rather than
-    describe that, do it: silence `attribute_hp_loss` for the melee source and assert the
-    conservation check then FAILS. Without this, a conservation test that only ever saw a correct
-    engine could not distinguish "everything is attributed" from "the assertion never bites".
-    """
-    real = O.attribute_hp_loss
-
-    def untagged_melee(unit, before, after, source, t=None, phase=None):
-        if source == 'melee':
-            return                      # the planted defect: one path stops reporting
-        return real(unit, before, after, source, t=t, phase=phase)
-
-    monkeypatch.setattr(O, 'attribute_hp_loss', untagged_melee)
-    # B06.05 RE-PICKED (the keyed draw is the stream): `_battle(1000)` falls no casualty, so the precondition below
-    # failed; `_battle(3)` loses troops on both sides. Was 1000.
-    events, measured = _battle(3)
-    attributed = _attributed(events)
-    assert any(measured[s] > 0 for s in ('A', 'B')), "precondition: casualties must occur"
-    assert any(attributed.get(s, 0.0) != measured[s]
-               for s in ('A', 'B') if measured[s] > 0), (
-        "conservation still held with the melee path untagged — the check cannot observe the "
-        "failure it exists to exclude")

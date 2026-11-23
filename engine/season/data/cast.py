@@ -8,8 +8,8 @@ row carries an authored `faction` and `role`, some a `territory`, `goals`, `stat
 does not.
 
 ⚠ NOTHING THAT EXECUTES HAD EVER OPENED IT. The only two Python files naming it are a test that
-checks it PARSES (`tests/valoria/test_references_yaml_parse.py`, a regression guard from when it
-was unparseable) and a proposal whose own comment says it is out of scope. Meanwhile
+checked it PARSES (`tests/valoria/test_references_yaml_parse.py`, a regression guard from when it
+was unparseable, retired since) and a proposal whose own comment says it is out of scope. Meanwhile
 `run_cases.seed_pursuits` draws each person's convictions from
 `blake2b(seed, case_id, pid)` — so a corpus of 46 people with authored, weighted, canon-cited
 conviction vectors was being given invented ones, and `R-06`'s *"characters must be robustly built

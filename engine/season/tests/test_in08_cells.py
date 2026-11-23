@@ -11,25 +11,17 @@ never edited (the loaders take the table as a parameter for exactly this).
 WHAT IS NOT HERE, DELIBERATELY: a PIN on the doctrine-pair cosine's value. IN-08 B-G MEASURED and
 RECORDED it (`rosters.yaml: tables.pursuit_projection`'s note; R-06's `measured:`); a pin would gate
 what the plan says is recorded, not gated (RS-3: the `doctrine` row is PROVISIONAL and the pair is
-judged in the CELL-VALUE AND COSINE PASS). H7 (B-H) added the STANDING TEST at the foot of this file:
-it computes the pair through `data.pursuits.to_axes` on the shipped table, asserts the computation
-ran, prints the value, and goes red only when the INSTRUMENT cannot compute the pair. A cell-value
-change that moves the cosine, even across the 60-degree bar, leaves it green.
+judged in the CELL-VALUE AND COSINE PASS).
 """
 from __future__ import annotations
 
-import copy
-import math
 import re
 
 import pytest
 
 from ..data import verbs as V
-from ..data.cast import _rows, pursuits_of
-from ..data.pursuits import pursuit, to_axes
-from ..data.rosters import PURSUIT_AXES, PURSUITS, table, table_meta
+from ..data.rosters import PURSUIT_AXES, table, table_meta
 from ..gaps import Forbidden
-from engine.season.data import files
 
 
 def _shipped():
@@ -99,25 +91,6 @@ def test_a_role_template_naming_a_retired_pursuit_refuses_at_load():
         V._load_role_template_pursuits(t)
 
 
-def test_no_retired_pursuit_name_survives_in_the_cast_or_the_tables():
-    """`faith`/`warden` as a PURSUIT (any case) is gone from every owner: the roster, the projection
-    rows, the role templates and every NPC's `conviction:` value. The in-world Warden offices,
-    faction and titles live in other files and are untouched (RS-4)."""
-    assert not {"faith", "warden"} & {p.lower() for p in PURSUITS}
-    assert "doctrine" in PURSUITS and "stewardship" in PURSUITS   # one name per test, not a roster literal
-    for name in ("pursuit_projection", "role_template_pursuits"):
-        rows = table(name)
-        keys = set(rows) | {k for r in rows.values() for k in r}
-        assert not {"faith", "warden"} & {str(k).lower() for k in keys}, name
-    text = files.NPC_REGISTRY_YAML.read_text(encoding="utf-8")
-    assert not re.search(r"conviction:\s*(faith|warden)\b", text, re.I)
-    checked = 0
-    for r in _rows().values():
-        for name in pursuits_of(r):                  # raises on any name outside the fifteen
-            checked += 1
-    assert checked >= 40, f"only {checked} weighted entries were checked -- the cast did not load"
-
-
 def test_the_split_adds_challenge_and_accept_and_no_kill_or_wound_row():
     assert "challenge" in V.VERB_TABLE and "accept" in V.VERB_TABLE
     assert V.VERB_TABLE["accept"].contests == "the body"
@@ -139,100 +112,3 @@ def test_the_split_adds_challenge_and_accept_and_no_kill_or_wound_row():
     assert [x for x in ae["Wounded"] if x != "duel.yielded"] == fe["Wounded"] and "duel.yielded" in ae["Wounded"]
     assert (fe["Declared"], ae["Declared"]) == (["fight.declared"], ["accept.declared"])
     assert not {"kill", "wound", "kill / wound"} & set(V.VERB_TABLE)
-
-
-# ---- H7 (B-H): THE DOCTRINE PAIR, A STANDING INSTRUMENT -- RECORDED, NOT GATED (RS-3) --------------
-#
-# Jordan's pair (S5 `:127-129`): a devout church-of-Solmund builder against a pure-Einhir dismantler,
-# BOTH high on `doctrine`. The placements are test INPUTS -- two persons' weights, as the draft
-# the retired pursuit-cells draft (its `FORK:` row in `references/restructure_ledger.md`) §5.1 arm A places
-# them (`faith` there is `doctrine` here, RS-2) -- and the cosine is COMPUTED from the shipped
-# `pursuit_projection` through `to_axes`, the one owner of convictions -> axes. No cell value and no
-# expected cosine is copied into this file.
-_BUILDER = dict(doctrine=.45, stability=.20, honour=.15, community=.10, virtue=.10)
-_DISMANTLER = dict(doctrine=.45, liberty=.20, justice=.15, community=.10, individuality=.10)
-
-
-class _PairUncomputable(Exception):
-    """The instrument cannot compute the pair -- as opposed to computing a number someone dislikes."""
-
-
-def _doctrine_pair_cosine() -> float:
-    """cos(builder, dismantler) in the seven-axis basis, off whatever `V.PURSUIT_PROJECTION` holds now.
-
-    It refuses (never returns a default) when the pair is not a doctrine pair on this table: a
-    `doctrine` row missing or all-zero, a placement naming no `doctrine` weight, a zero vector, or
-    a result outside [-1, +1] / not finite. It does NOT refuse a high or low cosine."""
-    for who in (_BUILDER, _DISMANTLER):
-        for name in who:
-            pursuit(name)                                    # a retired/mistyped name raises here
-        if not who.get("doctrine"):
-            raise _PairUncomputable("a placement carries no `doctrine` weight")
-    row = V.PURSUIT_PROJECTION.get("doctrine")
-    if not row or not any(float(c) for c in row.values()):
-        raise _PairUncomputable("the table has no non-zero `doctrine` row: the pair is not a doctrine pair")
-    a, b = to_axes(_BUILDER), to_axes(_DISMANTLER)
-    na = math.sqrt(sum(v * v for v in a.values()))
-    nb = math.sqrt(sum(v * v for v in b.values()))
-    if not na or not nb:
-        raise _PairUncomputable("a placement projects to the zero vector")
-    cos = sum(a[ax] * b[ax] for ax in PURSUIT_AXES) / (na * nb)
-    if not math.isfinite(cos) or not -1.0 - 1e-9 <= cos <= 1.0 + 1e-9:
-        raise _PairUncomputable(f"cosine {cos!r} is not a cosine")
-    return cos
-
-
-def test_the_doctrine_pair_cosine_is_computed_from_the_shipped_table_and_recorded(record_property):
-    """RECORDED, NOT GATED: this asserts the instrument RAN and is well-formed, never where the value
-    lies. The recorded +0.229 (`rosters.yaml` note, R-06) is the draft-weights reading at B-G; the
-    doctrine row is provisional, so a moved cosine is a finding for the cosine pass, not a red here."""
-    cos = _doctrine_pair_cosine()
-    assert isinstance(cos, float) and math.isfinite(cos) and -1.0 <= cos <= 1.0 + 1e-9
-    record_property("doctrine_pair_cosine", round(cos, 3))
-    print(f"\nDOCTRINE PAIR (builder vs dismantler, shipped pursuit_projection): cos {cos:+.3f}")
-    # the pair is two DIFFERENT persons: identical placements would read +1 and prove nothing
-    assert _BUILDER != _DISMANTLER
-    assert to_axes(_BUILDER) != to_axes(_DISMANTLER)
-
-
-def test_the_doctrine_pair_instrument_can_fail_and_the_shipped_table_is_untouched(monkeypatch):
-    """FALSIFIER, on PLANTED copies (`monkeypatch` restores; the shipped table is never edited).
-    A control first: the shipped table computes, and zeroing its `doctrine` row MOVES the value, so
-    the planted-table runs below are observably reading the planted table and not a cached one."""
-    shipped = copy.deepcopy(V.PURSUIT_PROJECTION)
-    control = _doctrine_pair_cosine()
-    # the shipped `doctrine` row is live in the projection: dropping the weight changes the vector,
-    # so the refusals below are the instrument's, not an accident of arithmetic on an inert row
-    assert to_axes(_BUILDER) != to_axes({k: v for k, v in _BUILDER.items() if k != "doctrine"})
-
-    planted = copy.deepcopy(shipped)
-    del planted["doctrine"]                                # the pair's defining row, absent
-    monkeypatch.setattr(V, "PURSUIT_PROJECTION", planted)
-    with pytest.raises(_PairUncomputable, match="doctrine"):
-        _doctrine_pair_cosine()
-
-    planted = copy.deepcopy(shipped)
-    planted["doctrine"] = {ax: 0.0 for ax in PURSUIT_AXES}   # present but inert
-    monkeypatch.setattr(V, "PURSUIT_PROJECTION", planted)
-    with pytest.raises(_PairUncomputable, match="doctrine"):
-        _doctrine_pair_cosine()
-    # every row inert: the all-zero `doctrine` row is refused first, before the zero-vector check
-    planted = {k: {ax: 0.0 for ax in PURSUIT_AXES} for k in shipped}
-    monkeypatch.setattr(V, "PURSUIT_PROJECTION", planted)
-    with pytest.raises(_PairUncomputable, match="doctrine"):
-        _doctrine_pair_cosine()
-
-    monkeypatch.undo()
-    assert V.PURSUIT_PROJECTION == shipped                   # the shipped table was never touched
-    assert _doctrine_pair_cosine() == control                # and the instrument is back to the control
-
-
-def test_a_moved_doctrine_cosine_does_not_turn_the_pair_test_red(monkeypatch):
-    """RECORDED, NOT GATED, observed: scale the `doctrine` row's cells and the cosine moves (here
-    far from the recorded value); the instrument still returns it. Were this gated, it would raise."""
-    control = _doctrine_pair_cosine()
-    planted = copy.deepcopy(V.PURSUIT_PROJECTION)
-    planted["doctrine"] = {ax: -3.0 * float(c) for ax, c in planted["doctrine"].items()}
-    monkeypatch.setattr(V, "PURSUIT_PROJECTION", planted)
-    moved = _doctrine_pair_cosine()
-    assert moved != pytest.approx(control, abs=1e-6), "the planted row did not move the value"

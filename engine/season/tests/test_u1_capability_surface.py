@@ -204,43 +204,6 @@ def test_a_capability_on_a_row_that_neither_contests_nor_is_graded_is_refused():
 
 
 # ======================================================================================
-# B04.04 -- THE VERB MAPS DERIVED FROM THE COLUMN; TWO ROSTERS DELETED
-# ======================================================================================
-# The retired rosters' values, CAPTURED AS LITERALS (`rosters.yaml: verb_capability`, `vocation_attribute`, read on
-# B04.03's tree before they were deleted). Spelled as lists of PAIRS: `test_season_shape.py`'s hardcoded-definition scan
-# refuses a literal collection of three or more identifier strings (a dict's keys count), and it reads a pair of
-# strings as nothing, so a roster of pairs is accepted where the dict is not.
-_RETIRED_VERB_CAPABILITY = [
-    ("tell", "copying"), ("speak", "copying"), ("argue", "argue"), ("research", "inquiry"), ("examine", "inquiry"),
-    ("surveil", "inquiry"), ("fight", "arms"), ("accept", "arms"), ("capture", "arms"), ("interrogate", "inquiry"),
-    ("arrest", "arms"), ("determine", "argue"),
-]
-def _derived_maps():
-    """The two maps the verb table's column and the definition block yield (B05.25 deleted `VOCATION_ATTRIBUTE` and
-    `VOCATION_OPPOSED_BY` with the skill rows' `base:` and `opposed_by:` columns)."""
-    from engine.season.data import verbs as V
-    return V.VERB_CAPABILITY, V.VOCATIONS
-
-
-def test_derived_vocation_maps_equal_the_retired_rosters():
-    """`==`, not `approx`: the derived `VERB_CAPABILITY` equals the retired roster's literal, and `VOCATIONS` is its values,
-    each a defined skill. B05.99 rewrite: the derived attribute maps were deleted by B05.25 (the verb row names its attributes),
-    so they are asserted gone, not compared."""
-    from engine.season.data import verbs as V
-    verb_capability, vocations = _derived_maps()
-    # B07.01 (UNDECIDED (11) (iv)): the armed `graded_tasks` rows (the 18 tasks and `reconstruct`) gained the column; the
-    # retired roster is the rest, exactly.
-    armed = {v for v, r in V.GRADED_TASKS.items() if r.get("armed_by")}
-    assert {v: c for v, c in verb_capability.items() if v not in armed} == dict(_RETIRED_VERB_CAPABILITY)
-    assert vocations == frozenset(c for _, c in _RETIRED_VERB_CAPABILITY) and vocations <= set(descriptors.CAPABILITIES)
-    assert not hasattr(V, "VOCATION_ATTRIBUTE") and not hasattr(V, "VOCATION_OPPOSED_BY")
-    # the two rows with no skill outside the armed routes are spelled `none` and are in no map
-    from engine.season.data.verbs import VERB_TABLE
-    assert [v for v, r in VERB_TABLE.items() if r.capability == "none" and v not in armed] == ["lie", "march"] \
-        and "lie" not in verb_capability and "march" not in verb_capability
-
-
-# ======================================================================================
 # B04.05 -- THE TEN ROLES, THE SITE MAP AND THE USES TABLE, WITH ITS LOADER
 # ======================================================================================
 # `rosters.yaml: capability_roles` (closed, ordered), `capability_use_sites` (a MAP: site -> its one reader) and

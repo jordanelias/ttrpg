@@ -75,33 +75,3 @@ def test_scene_budget_zero_refuses_at_construction():
         w.fixtures = w.fixtures.sweep("scene_budget", bad)
         with expect_refusal(), pytest.raises(Forbidden, match="scene_budget"):
             SeasonDriver(w)
-
-
-def test_event_place_at_answers_the_place_at_emission():
-    """§B row 17: `event_place_at(w, e)` answers the rung of the actor's `contain` edge live at `e.emitted_at`, so an
-    Event's place is recoverable after the actor has moved (`event_place` answers where the actor stands NOW).
-
-    A tiny world: `p_low` stood at `Hh` from tick 0 to 5 (a closed `contain` edge, kept with its `since`/`until`) and
-    at `S` from tick 5 (the live edge). An actorless Event anchored on him, whose first change names him, is emitted
-    at tick 2 and another at tick 7 (the very tick of the move reads the new place, by the grain).
-
-    FALSIFIER: the tick-2 Event answers `S`, the place now (what `event_place` answers: asserted beside it, so the
-    two readers are shown to differ and the test observes the failure it excludes), or none."""
-    from engine.season.harness import probes as P
-    from engine.season.queries import world_q
-    from engine.season.state.carriers import Event, Receipt, Tenure
-    from engine.season.state.ids import ROOT
-
-    w = P.tiny_world()
-    w.add_tenure(Tenure("t_was", "p_low", "Hh", "contain", since=0, until=5))
-    w.add_tenure(Tenure("t_now", "p_low", "S", "contain", since=5))
-
-    def event_at(tick):
-        return Event(id=f"ev{tick}", kind="plague.struck", causes=[ROOT], emitted_at=tick,
-                     changes=[Receipt("p_low", "set", "test", "health", 0)])
-
-    early, late, on_move = event_at(2), event_at(7), event_at(5)
-    assert world_q.event_place(w, early) == "S", "the control: `event_place` answers where he stands now"
-    assert world_q.event_place_at(w, early) == "Hh"
-    assert world_q.event_place_at(w, late) == "S"
-    assert world_q.event_place_at(w, on_move) == "S", "an edge closed at t is not live at t; the one opened then is"

@@ -84,7 +84,7 @@ FR_SURCHARGE = -1
 # shape), so it ships as a SWEPT FIXTURE on H-94's precedent (engine/season/hole_register.yaml,
 # `sweep: [0, 1, 3]`): the gain is whole Coherence units resisted per point of resilience, and the
 # shipped value 0 is THE CONTROL — today's behaviour, byte-for-byte. Arms 1 and 3 are the builder's.
-# The sweep is a tuple here, not a comment, so tests/valoria/test_threadwork_resilience.py runs it.
+# The sweep is a tuple here, not a comment (tests/valoria/test_threadwork_resilience.py ran it; retired).
 RESILIENCE_GAIN_SWEEP = (0, 1, 3)  # [JUSTIFIED: R-14 ruled 2026-09-09 sources the mechanism (resilience resists the cost); magnitude unruled — swept fixture on H-94's precedent, arms are the builder's]
 RESILIENCE_GAIN = 0                # [JUSTIFIED: R-14 ruled 2026-09-09 sources the mechanism; magnitude unruled — shipped arm RESILIENCE_GAIN_SWEEP[0], the control = pre-R-14 behaviour]
 

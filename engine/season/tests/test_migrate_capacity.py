@@ -357,51 +357,6 @@ def test_24d_ii_one_more_dwelling_raises_capacity_at_the_rung_and_every_ancestor
     assert all(after[r] == before[r] for r in chain_a), (before, after)
 
 
-def test_24d_ii_capacity_has_a_caller_outside_the_tests():
-    """`24d-ii`'s third falsifier, *an AST check that `capacity(` has a caller outside `tests/`*
-    (`ID-13`: a Query nobody calls is a declared row nobody reads). Parsed, not grepped, over every
-    module of the season package except its tests and `world_q.py` itself (its own definition and
-    docstring are not callers); and ANTI-VACUITY: the walk must reach `loop/effects_migration.py`,
-    the file the caller is in.
-
-    ⚠ `effects_migration.py`, NOT `effects.py`, SINCE THE PHASE-4 PER-SUBSYSTEM SPLIT (2026-09-30):
-    `migrate` -- `capacity`'s caller (`19c`'s `_eff_migrate`) -- moved out of the monolith into its
-    own domain file; `effects.py` is now a thin aggregator that imports it but calls nothing.
-
-    ⚠ v10 REM-29 (B10-06): THE CHAIN IS ONE LINK LONGER, NOT SHORTER. The throttle moved into
-    `world_q.has_room`, its one owner, so `capacity`'s caller is `has_room` (inside `world_q.py`) and
-    `has_room`'s callers are `_eff_migrate` and `WorldReader.read`'s `room` branch. Asserted link by
-    link: `has_room(` is called from `effects_migration.py`, and inside `world_q.py` the `has_room`
-    function calls `capacity(` and `WorldReader.read` calls `has_room(`."""
-    import ast
-    from ..data import files
-
-    def calls(tree, name):
-        return [n for n in ast.walk(tree) if isinstance(n, ast.Call) and (
-            (isinstance(n.func, ast.Name) and n.func.id == name)
-            or (isinstance(n.func, ast.Attribute) and n.func.attr == name))]
-
-    callers, seen, world_q_src = [], set(), None
-    for f in files.package_modules():
-        if "tests" in f.parts:
-            continue
-        if f.name == "world_q.py":
-            world_q_src = f.read_text(encoding="utf-8")
-            continue
-        seen.add(f.name)
-        if calls(ast.parse(f.read_text(encoding="utf-8")), "has_room"):
-            callers.append(f.name)
-    assert "effects_migration.py" in seen and world_q_src is not None, sorted(seen)
-    assert "effects_migration.py" in callers, (
-        f"`has_room` is called from nowhere outside the tests: {callers}")
-    tree = ast.parse(world_q_src)
-    fn = {n.name: n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
-    reader = next(n for n in ast.walk(tree) if isinstance(n, ast.ClassDef) and n.name == "WorldReader")
-    read = next(n for n in reader.body if isinstance(n, ast.FunctionDef) and n.name == "read")
-    assert calls(fn["has_room"], "capacity"), "`has_room` no longer asks `capacity`"
-    assert calls(read, "has_room"), "`WorldReader.read` no longer answers `room` through `has_room`"
-
-
 # ======================================================================================
 # 5 -- v9 IN-45 `migrate`: THE DESTINATION CHANNEL (H-168 limit 1), THROUGH THE REAL FORMATION
 # ======================================================================================
@@ -570,7 +525,7 @@ def test_in45_a_document_the_question_is_about_does_not_re_aim_a_classed_destina
 #   * `_eff_migrate` keeping its own inline throttle (`ancestry`/`population`/`capacity` imported by
 #     name at module level, the pre-REM-29 code) instead of calling `has_room` -> `test_rem29_b` RED
 #     (the patched leaf reaches the conjunct, and the effect still declines) and
-#     `test_24d_ii_capacity_has_a_caller_outside_the_tests` RED.
+#     `test_24d_ii_capacity_has_a_caller_outside_the_tests` (retired since) RED.
 
 from unittest import mock as _mock
 

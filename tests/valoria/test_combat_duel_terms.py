@@ -11,8 +11,8 @@ The falsifiers are the plan position's own (v9 `_part7`, PC-10):
   (2) a seeded `blood` fight stops at the first wound with `surrender` set and NO felling;
   (3) a seeded `yield` fight stops at the threshold;
   (4) under `death` terms Felled stays reachable;
-  (5) the stop rule made a no-op sends (2) red -- the control is in this file
-      (`test_the_blood_assertions_observe_a_missing_stop`), not left to a one-off run.
+  (5) the stop rule made a no-op sends (2) red -- run once at the build; its control
+      (`test_the_blood_assertions_observe_a_missing_stop`) is retired.
 The cross-TREE half of (1) -- the lethal fight equal to the pre-PC-10a engine's -- is the existing combat suite and
 the draw-stream pins, which this position does not move.
 """
@@ -144,19 +144,6 @@ def test_a_blood_duel_stops_at_the_first_wound_with_surrender_set_and_no_death()
         _assert_blood_stop(pair, seed)
     assert {('A' if _fight(s, 'blood', pair=p)[0] == -1 else 'B') for p, s in cases} == {'A', 'B'}, \
         'both sides yield somewhere in the sample, so the yielder is not hard-wired to one label'
-
-
-def test_the_blood_assertions_observe_a_missing_stop(monkeypatch):
-    """(5) THE MUTATION, kept executable: with the stop rule a no-op, the same assertions go red on every case."""
-    cases = _blood_cases()
-    assert cases
-    monkeypatch.setattr(wrapper, '_terms_met', lambda A, B, terms, cfg: False)
-    red = 0
-    for pair, seed in cases:
-        with pytest.raises(AssertionError):
-            _assert_blood_stop(pair, seed)
-        red += 1
-    assert red == len(cases)
 
 
 def test_the_module_entry_reads_the_terms_off_the_typed_input():

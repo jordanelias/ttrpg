@@ -767,7 +767,7 @@ def acquaintance_pairs(w: World, seat_rows, authored: dict) -> list:
 def seed_acquaintances(w: World, pairs) -> list:
     """WRITE EACH ACQUAINTANCE AS THE HOLDER'S OWN CLAIM (CR-81). For each `(holder, known)` pair the holder's
     ledger takes a truthy `exists:Person` reading of the known person -- the first of `person_q.known_persons`'
-    three sources, the carrier CR-03's arm used (`test_cr03_acquaintance_arm.py::seed_acquaintance_from_concerns`):
+    three sources, the carrier CR-03's arm used (observed by `test_cr81_realm_acquaintances.py`):
     no new carrier, no new Claim field, no roster of acquaintances (AX-2). Season 0, source `firsthand`, at
     `confidence_default`. Returns the claim ids written, in pair order.
     ⚠ A CLAIM AT `when` 0 RANKS LOWEST UNDER `state/ledgers.py::eviction_key` (`confidence * (when + 1)`), so

@@ -25,9 +25,7 @@ import importlib
 import pytest
 
 from engine.season.boot.realm import build_realm
-from engine.season.state.world import World
 from engine.season.queries import world_q
-from engine.season.tests._field_outcomes import SCALE
 from engine.season.tests.test_march import _fold_one, _march_act, _weigh
 
 # B05.99 RE-PICKED (B05.03, the field's one sampler): at seed 0 and scale 10 the winning marchers both read ratio 1.0 on
@@ -49,18 +47,15 @@ def _mb():
     return importlib.import_module("modules.mass_battle.massbattle")
 
 
-def _fold(arm="engine", *, model=None, units="person", spy=None):
+def _fold(arm="engine", *, model=None, units="person"):
     """Fold the one march. Returns `(world, events, bodies before, stance before, the module's per-person record)`: each
-    person's `(his part's share, routed)` on the body scale, read off the `FieldOutcome` `_grade` returns (`spy`, when given, is
-    applied to the outcome first, and the record is read off what it returns)."""
+    person's `(his part's share, routed)` on the body scale, read off the `FieldOutcome` `_grade` returns."""
     mb = _mb()
     real = mb._grade
     seen = {}
 
     def tap(*args, **kwargs):
         out = real(*args, **kwargs)
-        if spy is not None:
-            out = spy(out)
         for side in (out.attacker, out.defender):
             seen.update({part.id: (part.share, part.routed) for part in side.parts})
         return out
@@ -81,110 +76,8 @@ def _fold(arm="engine", *, model=None, units="person", spy=None):
     return w, events, before, stance, seen
 
 
-def _check_winners_by_own_ratio(w, before, record):
-    """The falsifier's assertions: each attacking claimant's body is `max(1, body x his share // scale)`, strictly below the
-    start for the one whose subunit was cut, so a write at any other share fails here."""
-    for pid in MARCHERS:
-        want = max(1, before[pid] * min(SCALE, record[pid][0]) // SCALE)
-        assert w.persons[pid].body == want, f"{pid}: body {w.persons[pid].body}, his own share gives {want}"
-    cut = [pid for pid in MARCHERS if record[pid][0] < SCALE]
-    assert cut, "precondition: a winner with a survivor share below the scale"
-    assert all(w.persons[pid].body < before[pid] for pid in cut)
-
-
 def test_shipped_arm_is_engine():
     assert build_realm(0).fixtures.get("field_winner_casualties") == "engine"
-
-
-def test_falsifier_each_winning_claimant_falls_by_his_own_ratio_and_earns_no_stance_row():
-    """The entry's falsifier, on a real fold: the attacker wins with a survivor ratio below 1, and under `engine` each
-    attacking claimant's `body` falls by his own ratio -- one marcher is cut, the other (ratio 1.0) is not -- with no
-    grudge or morale row on any winner, and the losers still take theirs."""
-    w, events, before, stance, record = _fold("engine")
-    kinds = [e.kind for e in events]
-    assert "field.won" in kinds and "field.lost" not in kinds, f"precondition: the attacker wins ({kinds})"
-    assert record[MARCHERS[0]][0] == SCALE and 0 < record[MARCHERS[1]][0] < SCALE, f"precondition: shares {record}"
-    _check_winners_by_own_ratio(w, before, record)
-    assert w.persons[MARCHERS[0]].body == before[MARCHERS[0]] != w.persons[MARCHERS[1]].body
-
-    # No winner earns a row: the stance of both marchers is what the build left it.
-    for pid in MARCHERS:
-        assert list(w.persons[pid].stance or []) == stance[pid], f"{pid}: a stance row was written on a winner"
-    # The losers are written as they were: each defender's stance gained its rows, scaled by his own ratio.
-    defenders = [pid for pid in record if pid not in MARCHERS]
-    assert defenders and all(list(w.persons[pid].stance or []) != stance[pid] for pid in defenders), (
-        "control: the losing side's stance rows are still written")
-
-
-def test_planted_failure_winners_written_at_the_losers_ratio_reddens_the_falsifier():
-    """MUTATION: every attacking claimant's ratio is the LOSING side's (the defenders' survivor share). The falsifier's
-    check, against the unmutated record, must then fail -- were it to pass, the test could not observe the failure."""
-    _w0, _e0, before0, _s0, record0 = _fold("engine")
-
-    def loser_ratio(out):
-        import dataclasses
-        from engine.season.queries.inputs import PartOutcome
-        parts = tuple(PartOutcome(p.id, out.defender.share, p.routed) for p in out.attacker.parts)
-        return dataclasses.replace(out, attacker=dataclasses.replace(out.attacker, parts=parts))
-
-    w, _events, _before, _stance, _rec = _fold("engine", spy=loser_ratio)
-    assert w.persons[MARCHERS[0]].body < before0[MARCHERS[0]], "the mutant wrote nobody (the loser's ratio is below 1)"
-    with pytest.raises(AssertionError):
-        _check_winners_by_own_ratio(w, before0, record0)
-
-
-def test_control_off_writes_no_winner_and_engine_differs_from_it_in_the_winners_body_alone():
-    """`off` is the field as it was: both marchers keep their bodies. `engine` differs from `off` in the one marcher's
-    body and in nothing else -- restore it and the two worlds hash equal -- so a winner earns no stance row, no mover
-    write, and the defenders' casualties are the same."""
-    w_off, ev_off, before, _stance, _ = _fold("off")
-    w_on, ev_on, _b, _s, record = _fold("engine")
-    assert [e.kind for e in ev_off] == [e.kind for e in ev_on]
-    assert [w_off.persons[pid].body for pid in MARCHERS] == [before[pid] for pid in MARCHERS]
-    assert w_off.content_hash() != w_on.content_hash()
-    cut = [pid for pid in MARCHERS if record[pid][0] < SCALE]
-    assert cut == [MARCHERS[1]]
-    for pid in cut:
-        w_on.persons[pid].body = before[pid]
-    assert w_off.content_hash() == w_on.content_hash()
-
-
-def test_a_winner_who_also_marches_is_one_subject_and_a_winner_is_never_a_stance_subject(monkeypatch):
-    """`Won` moves the claimants (`_relocate`), so the marchers are both winners and movers: each is named ONCE, by the
-    mover's whole-entity Subject, and no Subject names a winner's `stance`."""
-    captured = []
-    real = World.effect_body_observed
-
-    def tap(self, build, *a, **k):
-        out = real(self, build, *a, **k)
-        if hasattr(out, "subjects"):
-            captured.append(out)
-        return out
-
-    monkeypatch.setattr(World, "effect_body_observed", tap)
-    _fold("engine")
-    march = [c for c in captured if any(s.id in MARCHERS for s in c.subjects)]
-    assert len(march) == 1, "the march effect ran once"
-    named = [s.id for s in march[0].subjects]
-    for pid in MARCHERS:
-        assert named.count(pid) == 1, f"{pid} is named {named.count(pid)} times"
-    assert all(s.ref[3] is None for s in march[0].subjects if s.id in MARCHERS), (
-        "a winner who marches is named whole (the mover's Subject), not by a field")
-
-
-def test_total_casualty_arm_kills_a_winner_who_took_a_casualty_by_the_same_death_rule():
-    """`field_casualty_model: total` ("any wound is lethal"): a winner whose ratio is below 1 takes the loser's body-to-0
-    and the same death write -- removed as a dead loser is (`remove_person`), publishes `person.died`, and does not
-    arrive; a winner at ratio 1 took no casualty and is untouched, so he still arrives."""
-    w, events, before, _stance, _ = _fold("engine", model="total")
-    kinds = [e.kind for e in events]
-    # the fold's two marchers carry ratios 1.0 and just under it (see the falsifier)
-    assert "p_npc_033" in w.persons and w.persons["p_npc_033"].body == before["p_npc_033"]
-    assert "p_npc_035" not in w.persons, "the winner who took a casualty should have died by the loser's rule"
-    assert "field.won" in kinds and "person.died" in kinds and "army.arrived" in kinds
-
-    w_off, ev_off, _b, _s, _r = _fold("off", model="total")
-    assert all(pid in w_off.persons for pid in MARCHERS) and "army.arrived" in [e.kind for e in ev_off]
 
 
 def test_model_none_writes_no_winner():

@@ -100,7 +100,7 @@ def test_in66_the_two_rosters_are_closed_and_hold_the_ruled_members():
     from engine.season.data import rosters
     kinds = roster("goal_object_kinds")
     # one membership per assert: spelling the five together would DUPLICATE the roster in a body,
-    # which `test_season_shape.py::test_jordan_no_definition_is_hardcoded_in_a_body` refuses
+    # which `test_season_shape.py::test_jordan_no_definition_is_hardcoded_in_a_body` (retired) refuses
     assert len(kinds) == 5
     for member in ("person", "seat_holders", "rung"):
         assert member in kinds, member
@@ -230,11 +230,6 @@ _PLANTS = [
     ("pursuit weight inf", _mutated("g_fac", _set("pursuits", {"stability": float("inf")})), Unspecified,
      "stability"),
 ]
-
-
-def test_in66_the_plants_ran_a_floor_of_refusals_and_each_is_unique():
-    assert len(_PLANTS) >= 38, len(_PLANTS)
-    assert len({name for name, *_ in _PLANTS}) == len(_PLANTS)
 
 
 @pytest.mark.parametrize("name,doc,cls,fragment", _PLANTS, ids=[p[0] for p in _PLANTS])

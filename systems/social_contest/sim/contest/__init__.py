@@ -10,7 +10,7 @@ ONE canonical σ-kernel (engine.dice_engine.sigma_leverage / dice_engine). The g
 engine.py is NOT copied in — its symbols (roll_net, net_boost, effective_ob, degree,
 level) are imported from engine.dice_engine.sigma_leverage, retiring the "third σ-kernel"
 hazard. This stage is BEHAVIOR-PRESERVING: the 151 groundup tests stay green
-(sim/tests/test_contest_kernel.py runs _kernel_tests.py and gates on "151 passed").
+(test_contest_kernel.py ran _kernel_tests.py and gated on "151 passed"; it is retired).
 
 Module names are KEPT (contract/primitives/resolver/modes/policy/faction/narrative) —
 the v30 surface re-skin and the build_contest/resolve_contest wrapper + appeal

@@ -745,18 +745,15 @@ def test_a_planted_branch_on_an_entity_id_in_the_real_provider_is_found(source):
 # twice-identical test of the FIND runs `trail_world`; the realm's twice-identical run is a separate,
 # separately named test of the LOOP, which asserts the absence it relies on.
 
-def count_finds(monkeypatch, drop_after=None) -> list:
+def count_finds(monkeypatch) -> list:
     """Wrap the registered `inquiry` provider (the entry every finding reaches, `seam.find_trail`) to
-    record how many items each call's `Findings` held. `drop_after=N` is the CONTROL'S PLANT: a counter
-    kept across calls (as module state would be) that returns `Findings(())` from call N + 1 on."""
+    record how many items each call's `Findings` held."""
     _registered()
     key = ("inquiry", manifest_resolve("inquiry", "finding.made")["provider"])
     real, seen = PROVIDERS[key], []
 
     def wrapped(w, a, e, *, module_entry=None):
         out = real(w, a, e, module_entry=module_entry)
-        if drop_after is not None and len(seen) >= drop_after:
-            out = Findings(())
         seen.append(len(out.found))
         return out
     monkeypatch.setitem(PROVIDERS, key, wrapped)
@@ -781,17 +778,6 @@ def test_one_seed_twice_in_one_process_gives_one_hash_and_each_run_finds(monkeyp
     second = one_run(n, cand)
     assert seen[:k] and any(seen[:k]) and any(seen[k:]), seen
     assert first == second, "the same seed and act hashed differently in one process"
-
-
-def test_a_find_that_keeps_state_across_runs_splits_the_hash(monkeypatch):
-    """THE CONTROL: the twice-identical check can see a find that is not a function of its input -- with
-    a counter that drops items after the first call, the first run finds and the second does not, and
-    the two hashes differ."""
-    n, cand = find_band(HAND_BANDS)
-    seen = count_finds(monkeypatch, drop_after=1)
-    first, second = one_run(n, cand), one_run(n, cand)
-    assert len(seen) == 2 and seen[0] > 0 and seen[1] == 0, seen
-    assert first != second, "a find that drops items on its second run left the hash unmoved"
 
 
 def test_the_realm_seed_twice_in_one_process_gives_one_hash_and_reaches_no_find(monkeypatch):

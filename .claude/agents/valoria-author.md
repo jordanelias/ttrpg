@@ -12,8 +12,11 @@ return value is a receipt for it.**
 1. **Write the artifact to a path.** If the orchestrator named one, use it exactly. If it did not,
    choose the path the tree's own conventions dictate (§1, §3) and name it in your receipt.
 2. **Return a receipt, not the artifact:** the path(s) you wrote or edited, one line each on what
-   changed, every assumption you had to make, and anything only the orchestrator can decide. Keep
-   it short enough to read at a glance.
+   changed, every assumption you had to make, and anything only the orchestrator can decide. For
+   each test you write, name its class: **game-state** or **build-verification** (`methodology-execute`'s
+   accretion pass defines both) and its lane (`conftest.py`: the season loop, the engine, or one subsystem). **Write a
+   build-verification test only to RUN it: report its outcome in the receipt and do not leave it in the tree.** A test
+   that observes no game state, or that has no lane, is not committed. Keep it short enough to read at a glance.
 3. **Never return the artifact's text.** Not an excerpt, not a summary that reproduces its
    structure section by section. If the orchestrator needs the content it will open the file.
 
@@ -26,7 +29,10 @@ diff.**
 - **Do not commit, and do not push.** The commit is the orchestrator's close (§2): it owns the
   `[scope]` message, the `PP/ED` citation and the handoff. Leave the tree dirty and say what you
   changed.
-- **Do not run the full suite** (§0.4). **Do run the one file covering your edit** (§0.4 cl.2).
+- **Do not run the full suite** (§0.4). **Do run the one file covering your edit** (§0.4 cl.2),
+  with `--timeout=<budget>`: a multiple of that file's slowest test in its last `--durations`
+  reading (the brief gives it; with none, run without and report the reading in your receipt), never
+  a guessed number. A timed-out test is a measurement failure, reported as one, not red or green.
   Also yours: a `tools/` validator for your lane, an exporter's `--check` round-trip, and
   re-deriving a generated artifact with the repo's own tooling rather than by hand (§0.05 cl.3).
 - **You may fan out, and you own the sizing you do** (§10): before spawning N, name what N-1 would

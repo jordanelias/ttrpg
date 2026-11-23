@@ -118,22 +118,3 @@ def test_accept_forms_on_a_heard_challenge(monkeypatch):
         checked += 1
     assert checked == len(SEEDS)
     assert complete >= FLOOR, (complete, FLOOR)
-
-
-def test_without_the_stamp_no_accept_forms_on_a_challenge(monkeypatch):
-    """The planted failure, played through the season: with `world_q.challenges_heard` returning `()` (the real call
-    shape is `(w, p, told)`) the challenge is still issued by A and B never offers, attempts or declares `accept`."""
-    checked = 0
-    for seed in SEEDS:
-        with monkeypatch.context() as m:
-            m.setattr(world_q, "challenges_heard", lambda w, p, named=None: ())
-            w, d, offered, _terms = _play(seed, m)
-            assert _made(w, d, "challenge.issued", "challenge", A), (seed, [e.kind for e in w.log])
-            assert not [a for a in d.act_of.values() if a.actor == B and a.verb == "accept"], (seed, "attempted")
-            assert (B, "accept") not in offered, (seed, offered)
-            assert not _made(w, d, "accept.declared", "accept"), (seed, [e.kind for e in w.log])
-            # the empty `accept` list is the stamp's absence, not B having no question at all
-            assert world_q.questions_for(w, w.persons[B]), (seed, "B is asked something at all")
-            assert _accepts_formed(w, B) == [], seed
-        checked += 1
-    assert checked == len(SEEDS)

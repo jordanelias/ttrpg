@@ -95,8 +95,8 @@ from typing import Optional
 # the shape is "code's problem". So the MAGNITUDES are this file's to choose — the standing of
 # `engine/season/rosters.yaml`'s `site_yield` (H-93) and `wound_harm_models` (H-123): an injected
 # default, stated as invented rather than left to look derived.
-# ⚠ WHAT IS *NOT* INVENTED is every ORDERING the canon fixes, and tests/valoria/
-# test_coherence_elastic_plastic.py asserts each one so a re-tune cannot break it silently:
+# ⚠ WHAT IS *NOT* INVENTED is every ORDERING the canon fixes (tests/valoria/
+# test_coherence_elastic_plastic.py asserted each one; it is retired, so nothing guards a re-tune now):
 #   ELASTIC_RANGE >= DISPLACEMENT_FRACTURED_LOW — §7.1: a novice at rest "pushed as far as their
 #     range allows" arrives in Fractured, and a veteran resting at Dissonant "arrives deeper".
 #   DISPLACEMENT_DISSONANT_LOW <= HUMAN_BAND_LIMIT — §7.1 names a practitioner RESTING at Dissonant

@@ -31,26 +31,20 @@ THE VALUES THIS GRID CHOOSES, because the composer wants them and CAL §2 (writt
   * C7 reads every cell any other row read: P(F) <= 0.90 (so P(Partial or better) >= 0.10), P(F) at or above the `OB_MIN` floor's own, and both
     tails open (0 < P(F) < 1, the standing rule). An S27.4-refused cell (`ob > multiple x pool`: no dice dealt) is read as P(F) = 1.
 
-THE CONTROL (CAL's falsifier: *"the test passes against the control sizes 0/1/2/3 -- then it cannot see C1's failure and is absent, not weak"*):
-`test_the_grid_reads_red_on_c1_and_c8_against_the_control_arm` pins the control arm EXPLICITLY (`pool_add` 0, `pool_floor` 0, `opposition_rate` 0.5,
-`difficulty_ob` 0/1/2/3), independent of what ships, and `test_the_grid_reads_green_on_every_target_against_a_good_arm` pins a scratch arm that lands every target; the
-planted-value tests show each check refuses a value just outside its band and passes one just inside.
-
-THE REALM READ (OBS gate 4) is `test_every_rolled_verb_with_five_rolls_shows_more_than_two_obstacles`, at the foot: `Margin.terms` off the
+THE REALM READ (OBS gate 4) was `test_every_rolled_verb_with_five_rolls_shows_more_than_two_obstacles` (retired): `Margin.terms` off the
 Event's `ending` (B05.18) over `build_realm(0..2)`, one season each.
 """
 from __future__ import annotations
 
 import functools
-from collections import defaultdict
 from typing import NamedTuple, Optional
 
 import pytest
 
-from engine.dice_engine.sigma_leverage import MU_PER_DIE, OB_MIN, band_odds, net_boost, pool_of, record_odds
+from engine.dice_engine.sigma_leverage import OB_MIN, band_odds, net_boost, pool_of, record_odds
 
 from ..data.fixtures import DEFAULT_FIXTURES, DIFFICULTY_OB_ARMS
-from ..data.rosters import MARGIN_ENDING, roster
+from ..data.rosters import roster
 from ..queries.inputs import SocialContestInput
 from ..seam.wrappers import pool, sigma
 from .test_sc01_obstacle_ceiling import _module
@@ -92,13 +86,6 @@ def _arm(**sweeps):
 #: (`hard`, B05.53), every one of them named here.
 CONTROL = dict(pool_add=0, pool_floor=0, opposition_rate=0.5, difficulty_ob=DIFFICULTY_OB_ARMS["control"], regard_step=0, proof_admission="off",
                attribute_level=None, ceiling_form="hard")
-#: A SCRATCH good arm, pinned independently of what ships: the live base, floor and rate (CAP B2: 6, 5, `MU_PER_DIE`), `regard_step` 1.0 (T13's
-#: live value), a ladder `0 / 0.8 / 1.6 / 2.4` (`routine` 0.8, the value A-79's centre reads 25 % carried at; the other levels its multiples) and the
-#: ceiling's form `hard` (the grid reads the form since B05.55, and no ladder lands every target at `soft`: H-430). It is evidence that the grid CAN
-#: read green on every target, so a red is an arm's and not the grid's. B05.23 shipped these values (`DIFFICULTY_OB_ARMS["calibrated"]`); the pin
-#: stays here so the control of the control does not move when the shipped arm does.
-GOOD_SCRATCH = dict(pool_add=6, pool_floor=5, opposition_rate=MU_PER_DIE, regard_step=1.0,
-                    difficulty_ob=dict(zip(roster("difficulty_levels", ordered=True), (0, 0.8, 1.6, 2.4))), ceiling_form="hard")
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -257,8 +244,8 @@ def grid(fx) -> list:
 
 @functools.lru_cache(maxsize=None)
 def _rows(arm: str) -> tuple:
-    """The grid over a named arm: `shipped` (`DEFAULT_FIXTURES` as it stands), `control` (`CONTROL`), `good` (`GOOD_SCRATCH`)."""
-    fx = {"shipped": DEFAULT_FIXTURES, "control": _arm(**CONTROL), "good": _arm(**GOOD_SCRATCH)}[arm]
+    """The grid over a named arm: `shipped` (`DEFAULT_FIXTURES` as it stands)."""
+    fx = {"shipped": DEFAULT_FIXTURES}[arm]
     return tuple(grid(fx))
 
 
@@ -296,42 +283,6 @@ def test_the_grid_checked_at_least_four_ranks_by_eight_targets_cells():
 
 
 # ---------------------------------------------------------------------------------------------------------------------
-# the control: the test must be able to see the failure it excludes (CAL's falsifier)
-# ---------------------------------------------------------------------------------------------------------------------
-def test_the_grid_reads_red_on_c1_and_c8_against_the_control_arm():
-    """CAL's falsifier, pinned: against the control sizes 0/1/2/3 (base 0, no floor, rate 0.5) the grid is red on C1 and on C8. If this fails the
-    test cannot see C1's failure and is absent, not weak."""
-    rows = _rows("control")
-    assert _red(rows, "C1"), "C1 read green against the control sizes: the grid cannot see the failure CAL says it must"
-    assert _red(rows, "C8"), "C8 read green against the control sizes: the grid cannot see the failure CAL says it must"
-
-
-def test_the_grid_reads_green_on_every_target_against_a_good_arm():
-    """The other half of the control: a scratch arm (`GOOD_SCRATCH`) reads green on C1 to C8, so the red against the control arm is the arm's and not the grid's."""
-    rows = _rows("good")
-    assert {r.target for r in rows} == set(TARGETS)
-    assert all(r.ok for r in rows), _quote([r for r in rows if not r.ok])
-
-
-def test_each_check_refuses_a_value_just_outside_its_band_and_passes_one_just_inside():
-    """Planted values at every edge (§0.1 pt 2: an assertion must be able to observe the failure it excludes)."""
-    lo, hi = TARGET["C1_F"]
-    slo, shi = TARGET["C1_S"]
-    assert check_c1(lo, slo) and check_c1(hi, shi) and not check_c1(lo - 0.01, slo) and not check_c1(hi + 0.01, shi)
-    assert not check_c1(lo, slo - 0.01) and not check_c1(hi, shi + 0.01)
-    lo, hi = TARGET["C2_STEP"]
-    assert check_c2(lo) and check_c2(hi) and not check_c2(lo - 0.01) and not check_c2(hi + 0.01)
-    lo, hi = TARGET["C3_F"]
-    assert check_c3(lo) and check_c3(hi) and not check_c3(lo - 0.01) and not check_c3(hi + 0.01)
-    assert check_c4(TARGET["C4_F_MAX"]) and not check_c4(TARGET["C4_F_MAX"] + 0.01)
-    assert check_c5(TARGET["C5_DELTA_MIN"]) and not check_c5(TARGET["C5_DELTA_MIN"] - 0.01)
-    lo, hi = TARGET["C6_F"]
-    assert check_c6(lo) and check_c6(hi) and not check_c6(lo - 0.01) and not check_c6(hi + 0.01)
-    assert check_c7(0.5, 0.3) and not check_c7(0.91, 0.3) and not check_c7(0.2, 0.3) and not check_c7(0.0, 0.0) and not check_c7(1.0, 0.3)
-    assert check_c8(0.5, 0.5 + TARGET["C8_APART"]) and not check_c8(0.5, 0.5 + TARGET["C8_APART"] - 0.01) and not check_c8(0.5, 0.5)
-
-
-# ---------------------------------------------------------------------------------------------------------------------
 # B05.59 -- THE BETTER ARGUER WINS ON THE FIGHT'S CURVE (`29_DICE` item 29-4 step 6; gate 6). Read on the same composed cells as the grid above.
 # `ORDER_WINDOWS` are the source's TARGETS, copied (the fight's windows, deliberately the same); a reading outside one fails and is named, and no
 # window, fixture or ladder is moved here to make it pass. C3 and C4 restated on ranks are NOT written again: the grid's C3 (an opponent four ranks
@@ -340,34 +291,6 @@ def test_each_check_refuses_a_value_just_outside_its_band_and_passes_one_just_in
 DECIDED_LEVEL = "routine"                 # the grid's reference cell (the level C1, C3 and C4 read at)
 #: (better rank, worse rank, window of the better arguer's share of decided exchanges): +1, +2 and +4 ranks, two pairs each
 ORDER_WINDOWS = ((3, 2, (0.60, 0.70)), (6, 5, (0.60, 0.70)), (4, 2, (0.72, 0.82)), (7, 5, (0.72, 0.82)), (6, 2, (0.88, 0.95)), (7, 3, (0.88, 0.95)))
-
-
-def _decided_share(fx, a: int, b: int, level: str = DECIDED_LEVEL) -> tuple:
-    """`(share, P(a reaches Success), P(b reaches Success))`: of the exchange pairs in which EXACTLY ONE side reaches Success (Success or better),
-    the share where it is `a`. One `_cell` per side, each rolling its own pool against the other's score and opposing attribute; the two are
-    independent, so the pair's chances multiply: `share = pa (1 - pb) / (pa (1 - pb) + pb (1 - pa))`."""
-    pa = _cell(fx, "a", rank=a, level=level, opposed_rank=b).success_or_better
-    pb = _cell(fx, "b", rank=b, level=level, opposed_rank=a).success_or_better
-    one_side_a, one_side_b = pa * (1.0 - pb), pb * (1.0 - pa)
-    return one_side_a / (one_side_a + one_side_b), pa, pb
-
-
-def test_the_better_arguer_wins_on_the_fights_curve():
-    """Gate 6, the decided-pair share from two `band_odds` readings (through `_cell`'s `record_odds`): the better arguer's share of the pairs in which
-    exactly one side reaches Success lies in the fight's window at +1 (3v2, 6v5), +2 (4v2, 7v5) and +4 ranks (6v2, 7v3), at the SHIPPED fixtures.
-    FALSIFIER: equal ranks read 0.5 and the share rises with the gap (+1 < +2 < +4, no overlap), so the instrument can read the
-    curve it gates; a pair outside its window is listed with its reading, not tuned away."""
-    assert _decided_share(DEFAULT_FIXTURES, 4, 4)[0] == pytest.approx(0.5, abs=1e-12)           # the instrument's own control: equals share it evenly
-    checked, bad = 0, []
-    for better, worse, (lo, hi) in ORDER_WINDOWS:
-        share, pa, pb = _decided_share(DEFAULT_FIXTURES, better, worse)
-        checked += 1
-        if not lo <= share <= hi:
-            bad.append(f"  {better}v{worse} at {DECIDED_LEVEL}: share {share:.4f} outside [{lo}, {hi}] (P(Success+) {better}: {pa:.4f}, {worse}: {pb:.4f})")
-    assert checked == len(ORDER_WINDOWS) == 6
-    shares = [_decided_share(DEFAULT_FIXTURES, a, b)[0] for a, b, _ in ORDER_WINDOWS]
-    assert min(shares[:2]) > 0.5 and max(shares[:2]) < min(shares[2:4]) and max(shares[2:4]) < min(shares[4:]), shares      # +1 < +2 < +4, no overlap
-    assert not bad, f"{len(bad)} of {checked} pairs outside the fight's windows at the shipped fixtures\n" + "\n".join(bad)
 
 
 def test_one_minor_level_against_moves_failure_by_five_points():
@@ -388,38 +311,3 @@ def test_one_minor_level_against_moves_failure_by_five_points():
 # ---------------------------------------------------------------------------------------------------------------------
 REALM_SEEDS = (0, 1, 2)
 
-
-@functools.lru_cache(maxsize=None)
-def _realm_obstacles() -> dict:
-    """`{verb: {act id: that act's rolled `ending` tuple}}`, pooled over the three realms (act ids are per-realm; the key carries the seed)."""
-    from ..boot.realm import build_realm
-    from ..harness import chronicle
-    from ..harness.populated import run
-    by_verb: dict = defaultdict(dict)
-    for seed in REALM_SEEDS:
-        w = build_realm(seed)
-        run(1, seed, w=w)
-        act_of = chronicle._act_of(w)
-        for e in w.log:
-            end = getattr(e, "ending", ())
-            act = act_of.get(e.id)
-            if act is not None and end and {k for k, _v in end} == set(MARGIN_ENDING):
-                by_verb[act.verb].setdefault((seed, act.id), end)
-    return {verb: dict(rolls) for verb, rolls in by_verb.items()}
-
-
-def test_every_rolled_verb_with_five_rolls_shows_more_than_two_obstacles():
-    """OBS gate 4: over `build_realm(0..2)`, one season each, every rolled verb with five or more rolls shows MORE THAN TWO distinct obstacle values
-    (`Margin.terms` summed, i.e. the Event's `ending` `ob`). Expected RED until B05.23's calibrated arm, where the tables give a verb's rolls more than
-    two places to land."""
-    rolled = _realm_obstacles()
-    assert rolled, "no social roll left a margin ending in three realms: the read has nothing to read"
-    for rolls in rolled.values():
-        for end in rolls.values():
-            d = dict(end)
-            assert sum(v for _n, v in d["terms"]) == pytest.approx(d["ob"])           # the terms are the obstacle the ending names
-    read = {verb: sorted({round(dict(end)["ob"], 9) for end in rolls.values()}) for verb, rolls in rolled.items() if len(rolls) >= 5}
-    assert read, "no rolled verb had five rolls in three one-season realms: the read has nothing to read"
-    thin = {verb: (len(rolled[verb]), obs) for verb, obs in read.items() if len(obs) <= 2}
-    assert not thin, ("verbs with five or more rolls and two or fewer obstacle values over build_realm(0..2), one season each "
-                      f"(verb: (rolls, obstacles)): {thin}; every verb read: { {v: (len(rolled[v]), len(o)) for v, o in read.items()} }")

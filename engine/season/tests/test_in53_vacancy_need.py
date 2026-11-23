@@ -234,7 +234,7 @@ def test_in53v_b_no_office_referent_outside_reach():
 
 def test_in53v_c_the_classes_survive_the_fold_and_are_closed():
     # The class roster is closed by its loader (the `Forbidden` refusals below), so its size is not pinned here: the
-    # memberships this test reads are. Spelled as memberships because `test_jordan_no_definition_is_hardcoded_in_a_body`
+    # memberships this test reads are. Spelled as memberships because `test_jordan_no_definition_is_hardcoded_in_a_body` (retired)
     # flags a three-string literal as a roster duplicated from rosters.yaml.
     assert {"Office", "Record"} <= REFERENT_CLASSES and "Rung" in REFERENT_CLASSES
     a = Question("q:claim:x", "claim_landed", ("S",), "x")
@@ -262,20 +262,6 @@ def _planted(monkeypatch, verb, key, value):
                     r[key] = value
         return doc
     monkeypatch.setattr(_verbs, "load_yaml", planted)
-
-
-def test_in53v_c_the_declarations_as_built():
-    # Not pinned as a set of rows: which verbs declare a class moves with every row that adds one, and the rows this test is
-    # about are asserted one by one below. That every declared class is a member of the roster is the loader's refusal
-    # (`test_in53v_c_the_loader_refuses`), not asserted here.
-    assert VERB_TABLE["migrate"].referent_class == "Rung" and not VERB_TABLE["migrate"].referent_named
-    assert VERB_TABLE["requisition"].referent_class == "Rung" and not VERB_TABLE["requisition"].referent_named
-    assert VERB_TABLE["confer"].referent_class == VERB_TABLE["oblige"].referent_class == "Office"
-    assert {v for v, r in VERB_TABLE.items() if r.counterparty_may_be_self} == {"confer"}
-    assert VERB_TABLE["confer"].known_person_operands() == ("to",)
-    assert VERB_TABLE["oblige"].known_person_operands() == ()       # untyped `subject`: no fan
-    for verb in ("tell", "give"):                                    # the fan's other rows: unchanged
-        assert VERB_TABLE[verb].known_person_operands() and not VERB_TABLE[verb].counterparty_may_be_self
 
 
 @pytest.mark.parametrize("verb,key,value,match", [

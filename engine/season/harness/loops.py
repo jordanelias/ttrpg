@@ -123,7 +123,7 @@ STEM_READS = {
 #: What each `rosters.yaml: question_sources` member reads (`queries/world_q.py::questions_for`).
 #: Keyed by the members of the `rosters.yaml: question_sources` roster, the same shape the roster scan
 #: refuses for channels (below): it passes that scan only because the scan skips rosters of fewer than
-#: three members (`test_season_shape.py`, `test_jordan_no_definition_is_hardcoded_in_a_body`), and the
+#: three members (`test_season_shape.py`, `test_jordan_no_definition_is_hardcoded_in_a_body` (retired)), and the
 #: roster is `open: true`. A third source forces a matching key here and then trips that scan; at that
 #: point read the sources as ONE union, as `CHANNEL_READS` does, and list them among the blind spots.
 QUESTION_SOURCE_READS = {
@@ -134,7 +134,7 @@ QUESTION_SOURCE_READS = {
 #: What the witness channel predicates read, as ONE reader: the union over every `_ch_<name>` in
 #: `epistemic.py` (presence, `knot`, `hold` and `oblige` tenures; `chronicle` reads who is alive).
 #: Not keyed per channel -- that would restate `rosters.yaml: witness_channels`, which
-#: `test_jordan_no_definition_is_hardcoded_in_a_body` refuses -- so a channel added there with a new
+#: `test_jordan_no_definition_is_hardcoded_in_a_body` (retired) refuses -- so a channel added there with a new
 #: read is NOT caught here; it is listed among the blind spots.
 CHANNEL_READS = _TENURE + (("Person.exists", "?"),)
 

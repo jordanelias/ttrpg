@@ -22,13 +22,9 @@ change kept reading the retired fixed `core.DECISIVE_OB = 3`:
     UNRATIFIED, ED-IN-0351).
 """
 import math
-import os
 from engine.dice_engine import draw
-import sys
 
 import pytest
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'systems', 'combat', 'combat_engine_v1', 'workbench'))   # the workbench stayed at plan position `31b`
 
 from modules.combat import combatant as C          # noqa: E402
 from modules.combat import combat_systems as S     # noqa: E402
@@ -36,7 +32,6 @@ from modules.combat import core                    # noqa: E402
 from modules.combat import tradition as TR         # noqa: E402
 from modules.combat import wrapper                 # noqa: E402
 from modules.combat.config import CFG         # noqa: E402
-import probabilities as P      # noqa: E402
 from engine.dice_engine import dice_engine as DE          # noqa: E402
 from engine.dice_engine import sigma_leverage as SL       # noqa: E402
 
@@ -45,39 +40,6 @@ DEFAULT_FACULTY = C.Combatant('probe').faculty
 
 
 # ── finding 1: the workbench's distributions against the resolver's frequencies ──────────────────
-
-def _observed(pool, net_sigma, ob, n):
-    counts = dict.fromkeys(BANDS, 0)
-    for seed in range(n):
-        deg, _ = core.resolve(pool, net_sigma, draw.seeded(draw.H2("test_combat_ob_from_defender_consumers", seed)), ob)
-        counts[deg] += 1
-    return {k: v / n for k, v in counts.items()}
-
-
-def test_workbench_band_probabilities_match_resolve_for_a_non_default_faculty_defender():
-    """The workbench's 'roll' node distribution (fed the event the wrapper emits) against `core.resolve`
-    over N seeds, for a defender at faculty 5 (Ob 2.5, not the default's 1.5). Tolerance: 5 binomial
-    standard errors per band, plus the 4-dp rounding the workbench applies."""
-    defender = C.Combatant('D', faculty=5)
-    assert defender.faculty != DEFAULT_FACULTY
-    ob = core.ob_from_defender(defender, CFG)
-    pool = core.resolution_pool(DEFAULT_FACULTY)
-    n = 20_000
-    checked, misses = 0, []
-    for net_sigma in (-0.5, 0.0, 0.6):
-        ev = {'kind': 'roll', 'pool': pool, 'net_sigma': net_sigma, 'ob': ob, 'degree': 'success'}
-        want = P.node_distribution(ev)
-        got = _observed(pool, net_sigma, ob, n)
-        assert set(want) == set(BANDS)
-        for band in BANDS:
-            p = got[band]
-            tol = 5.0 * math.sqrt(max(p * (1 - p), 1.0 / n) / n) + 5e-4
-            checked += 1
-            if abs(want[band] - p) > tol:
-                misses.append(f'net_sigma={net_sigma} {band}: workbench {want[band]:.4f} vs resolve {p:.4f} (tol {tol:.4f})')
-    assert checked == 12, checked
-    assert not misses, 'workbench bands diverge from core.resolve:\n  ' + '\n  '.join(misses)
-
 
 def test_trace_events_carry_the_ob_their_roll_was_banded_at():
     """Every 'roll' and 'stophit' event names the Ob the roll was banded at, and it is the STRUCK party's

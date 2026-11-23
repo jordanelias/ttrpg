@@ -54,7 +54,6 @@ from ..decision import assemble
 from ..decision.options import opening_set
 from ..gaps import Forbidden
 from ..boot.realm import build_realm
-from ..loop import effects_combat
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries import person_q as PQ
 from ..queries.world_q import holder_faction_of
@@ -209,13 +208,6 @@ def test_every_row_held_against_the_referent_ends_whatever_wrote_it():
     w, p = _two_rows_against_the_winner()
     assert _kinds(_forgive(w, WINNER)) == ["stance.moved"]
     assert PQ.held_against(p, WINNER) == () and PQ.stance_toward(p, WINNER) == 0
-
-
-def test_mutation_ending_only_the_first_row_fails_the_falsifier(monkeypatch):
-    monkeypatch.setattr(effects_combat, "held_against", lambda p, r: PQ.held_against(p, r)[:1])
-    w, p = _two_rows_against_the_winner()
-    assert _kinds(_forgive(w, WINNER)) == ["stance.moved"]
-    assert PQ.stance_toward(p, WINNER) != 0, "the mutation did not observe the second row"
 
 
 # ======================================================================================

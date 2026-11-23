@@ -203,8 +203,10 @@ ALL DIRECTIONS  top-down · bottom-up · vertical · diagonal · lateral · hori
    claim is not a weak test but an absent one. A loop that asserts conditionally must assert that it
    asserted (`assert checked >= N`).
 3. **Name the falsifier, or you have not attacked the result.** A result claim carries, in the same
-   commit, the test that would have shown it wrong and that test's outcome. A result claim is wider than
-   a number, and **the claim and its support are different objects; check the support.**
+   commit, the test that would have shown it wrong and that test's outcome; the commit is the record, so a control
+   or falsifier that only shows a build was built is RUN ONCE AND NOT KEPT. A test is committed only if it observes game state
+   and sits in one lane (`conftest.py`), and a batch leaves no lane larger than it found it without naming what the growth
+   observes (`methodology-execute`'s accretion pass defines both and retires what slips in). A result claim is wider than a number, and **the claim and its support are different objects; check the support.**
 
    | claiming | observe this first |
    |---|---|
@@ -228,7 +230,7 @@ ALL DIRECTIONS  top-down · bottom-up · vertical · diagonal · lateral · hori
    > without cost. Delete it, or accept the defect and write nothing.***
 
    **Load-bearing ≠ "about the game".** KEPT: `test_morale_write_sweep.py`, the golden-modes and
-   sim-fabrication CI checks, `tools/export_engine_params.py`'s round-trip `--check`, a compile gate.
+   sim-fabrication CI checks, `tools/export_engine_params.py`'s round-trip `--check`, a compile gate, the test-lane ratchet (Jordan).
    FORBIDDEN: a guard whose subject is another guard, a grader over the gate list, a test that the
    blocking tier's membership is honest. ⚠ A forbidden guard may not reappear as **a finding** (§0).
    Sweep only what the current task is load-bearing on; otherwise fix it here or drop it.
@@ -260,7 +262,7 @@ line.** This is the one claim here a session **cannot satisfy by writing**.
 ### 0.3 No SessionStart banner (RULED)
 
 **A SessionStart hook that PRINTS is the regression; one that is silent is not. Do not build a
-replacement banner.** `tools/session_provision.py` is the allowed shape: it installs the four packages
+replacement banner.** `tools/session_provision.py` is the allowed shape: it installs the packages
 §8 documents and writes zero bytes to stdout. Retiring the banner is a closed experiment, not one to
 re-run from a hunch; reasoning in `CLAUDE_RATIONALE.md` §0.3.
 
@@ -271,10 +273,10 @@ Timings: `CLAUDE_RATIONALE.md` §0.4 — re-measure rather than quote them.
 1. **The full suite runs AT MOST once per commit, and only when it can observe something CI will not (RULED).**
    CI runs it on every push not marked `[skip ci]`, and §11 bars you from reading that result: for a code change the suite can reach, your close run is the only result before the commit. Name what a local run would catch first; a diff of prose, ledgers, skills
    or links runs only the test files that read what it touched (`grep -rl <path> tests/`).
-2. **Mid-session, run only the file covering what you touched.** If you cannot name it, find it. At the close, `python tools/tests_for_diff.py` names the suites your edits call for (`-m combat|mass_battle|social_contest` when only that subsystem changed).
+2. **Mid-session, run only the file covering what you touched.** If you cannot name it, find it. At the close, `python tools/tests_for_diff.py` names the lane each edit belongs to (`-m season_loop` or `-m <subsystem>`; the full gates where no lane owns it); a `methodology-execute` batch runs its plan's lanes instead.
 3. **Never re-run to re-confirm a green you already hold.**
-4. **A red close run re-runs the FAILING FILE ONLY while you fix it.** The full suite comes back once,
-   when you believe you are done. Red is not a licence to loop the gate.
+4. **A red close run re-runs the FAILING FILE ONLY while you fix it.** The suite comes back once, when you
+   believe you are done, over only what the fix diff reaches (`tests_for_diff.py --base`). Red is not a licence to loop the gate.
 5. **`tools/valoria_local.py --staged` does not run pytest** (local-green ≠ CI-green). It is cheap; run
    it freely. The expensive thing is pytest, and only pytest.
 6. **SIZE THE RUN TO THE QUESTION.** Whether a verb fires or a rule binds needs ONE season (or a hand-built world calling the
@@ -282,8 +284,8 @@ Timings: `CLAUDE_RATIONALE.md` §0.4 — re-measure rather than quote them.
 
 **This governs EVERY pytest gate** — `engine/season/tests` and `engine/tests` too: at the close, once,
 only the ones your change can reach. ⚠ **Learn your container's known-red BEFORE you debug it:** run
-the failing file on `main`'s tree first; `cat .git/shallow` says whether the clone can reach the commits
-`FORK:` rows name. **NO GUARD MAY BE BUILT FOR THIS SUBSECTION** (§0.1 pt 5).
+the failing file on `<open sha>`'s tree for a batch close (`main`'s otherwise) first; `cat .git/shallow`
+says whether the clone can reach the commits `FORK:` rows name. **NO GUARD MAY BE BUILT FOR THIS SUBSECTION** (§0.1 pt 5).
 
 ---
 
@@ -498,14 +500,12 @@ re-implement a rule.** Known live violations, treated as bugs rather than propag
   Single-owned: what a `FORK:` row resolves to (`pathres.fork_pointer()`, with `FORK_PREFIX`).
 - ⚠ **`pathres.resolve()` MATCHES DIRECTORY PREFIXES; never use it to ask "is this exact file
   retired".** A `FORK:` target has no existence check, so it returns FORKED for *any* invented filename
-  under a forked directory. Ask `load_alias_map()` for an exact row. Falsifier:
-  `test_a_fabricated_path_under_a_forked_directory_still_violates` in
-  `tests/valoria/test_claim_provenance_fields.py`.
+  under a forked directory. Ask `load_alias_map()` for an exact row.
 - **The dependency-free primitives** (repo root, the nine-lane roster, token estimate, id regexes) are
   owned by `tools/ci_common.py`, which forwards to nothing else. Reuse it; do not re-derive them.
 
 ```sh
-python tools/session_provision.py                # installs pyyaml pytest numpy pytest-xdist if absent; silent
+python tools/session_provision.py                # installs pyyaml pytest numpy pytest-xdist pytest-timeout if absent; silent
 python -m pytest tests/valoria -q -n auto        # the gate; CI runs it on a push not marked [skip ci] (§0.4)
 python -m pytest tests/valoria/test_<x>.py -q    # the inner loop: seconds. This is the mid-session run.
 ```

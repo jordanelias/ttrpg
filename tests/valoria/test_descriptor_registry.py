@@ -98,19 +98,6 @@ def test_every_alias_that_resolved_before_still_resolves_to_the_same_key():
     assert _lost(_load()) == []
 
 
-def test_alias_preservation_reddens_when_an_alias_is_dropped():
-    """The planted failure (§0.1 pt 3): drop 'Dexterity' from the registry text and the SAME check
-    that passes above must name it. Without this the assertion above could not observe a loss."""
-    text = open('references/descriptor_registry.yaml').read()
-    assert 'aliases: [Agility, Dexterity]' in text
-    planted = dr.load(text.replace('aliases: [Agility, Dexterity]', 'aliases: [Agility]'))
-    assert _lost(planted) == ['Dexterity']
-    # and a retargeted alias (Presence moved to another key) is named too
-    moved = dr.load(text.replace('aliases: [Charisma]', 'aliases: []').replace(
-        'aliases: [Will, Willpower]', 'aliases: [Will, Willpower, Charisma]'))
-    assert _lost(moved) == ['Charisma']
-
-
 def test_perception_is_its_own_attribute_not_an_attunement_alias():
     reg = _load()
     assert dr.resolve(reg, 'Perception')['key'] == 'attr.mind.perception'

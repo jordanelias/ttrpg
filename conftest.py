@@ -1,21 +1,21 @@
-"""Subsystem markers: `pytest -m combat`, `-m mass_battle`, `-m social_contest`; and the `flat_fold` mark's fixture (`_flat_fold_arm`, below).
+"""Lane markers (`pytest -m <lane>`, the table below); and the `flat_fold` mark's fixture (`_flat_fold_arm`, below).
 
 WHY. A change to mass battle does not need the personal-combat tests and the reverse, and most test files say
 what they test in their name. This file assigns the marker from the file name, in one place, to every test
-collected under the repo root (tests/valoria, engine/season/tests, engine/tests). It is an inner-loop
-accelerator, nothing more:
+collected under the repo root (tests/valoria, engine/season/tests, engine/tests). It selects tests, nothing more: the
+inner loop's (`tools/tests_for_diff.py`) and a batch close's (v12 P18):
 
   * `python -m pytest -m mass_battle -q -n auto` runs the mass-battle files across all three trees.
   * CI runs no `-m` filter, and `pytest.ini` says why it must not (a filter at the gate is a coverage cut).
   * It is NOT a statement of what a change can break. The season suite builds a whole realm, so its tests
     execute the combat, mass-battle and contest modules too (measured: a `modules/combat/` edit is reached by
-    tests costing about three quarters of the whole suite). After a module edit run `-m <subsystem>` for the
-    quick answer, then the full season suite once at the close (`CLAUDE.md` section 0.4).
+    tests costing about three quarters of the whole suite). If a module edit could change a realm, run
+    `-m season_loop` too (`tools/tests_for_diff.py`'s docstring).
 
 MEMBERSHIP IS BY NAME, and was checked against what each file executes (coverage by test, 2026-11-04): every
 `combat` file under tests/valoria executes `modules/combat` or `engine/dice_engine` and nothing in
 `engine/season`; every `mass_battle` file executes `modules/mass_battle`. A file whose name does not say
-which subsystem it tests carries no marker; add its prefix to the table below rather than guessing.
+which lane it tests would carry no marker, and every test has one lane: add its prefix to the table below.
 """
 import os
 import re
@@ -23,6 +23,12 @@ import re
 import pytest
 
 # marker -> a pattern over the test file's base name (without `.py`). One owner of the table.
+#
+# EVERY TEST BELONGS TO ONE LANE (Jordan, 2026-11-22: "each lane/subsystem is to have its own test suite ... no test
+# suite that doesn't concern a specific subsystem or the season loop or engine"): the SEASON LOOP (`engine/season/tests/`
+# whole, plus the `tests/valoria` files below), the ENGINE (`engine/tests/` whole, plus the dice engine, substrate and
+# exporters), or one subsystem. The tree decides first; in `tests/valoria` the first matching pattern decides. `process`
+# marks the files that concern none of them (tool and ledger checks): it exists so they are findable, not as a suite.
 SUBSYSTEM_FILES = {
     "combat": re.compile(
         r"^test_(combat_|band_extension_seam|coherence_elastic_plastic|dice_engine_properties|tn7_)"),
@@ -34,15 +40,28 @@ SUBSYSTEM_FILES = {
         r"casualty_attribution|march|territory_march|sides$|levy_feed)"),
     "social_contest": re.compile(
         r"^test_(sc0\d_|social_contest|stress_proceedings|settle_margin|contest_kernel)"),
+    "threadwork": re.compile(r"^test_threadwork_"),
+    "season_loop": re.compile(
+        r"^test_(axis_roster|balance_oracle|conviction_roster|export_season_registries|import_cycle|m1_acceptance|"
+        r"module_registrar|modules_reachable|season_)"),
+    "engine": re.compile(
+        r"^test_(degree_|descriptor|engine_does_not_import|engine_params|export_(game_constants|sim_params|troops)|"
+        r"field_golden|fmath_|names_chain|per_die|wiring)"),
+    "process": re.compile(
+        r"^test_(claim_provenance|design_prose|module_shape|references_yaml|names$|no_polling|pathres|stubwire)"),
 }
+TREE_LANE = {"engine/season/tests/": "season_loop", "engine/tests/": "engine"}
 
 
 def pytest_collection_modifyitems(config, items):
     for item in items:
-        base = os.path.basename(str(item.fspath))[:-3]
-        for marker, pat in SUBSYSTEM_FILES.items():
-            if pat.match(base):
-                item.add_marker(getattr(pytest.mark, marker))
+        path = str(item.fspath).replace(os.sep, "/")
+        lane = next((l for t, l in TREE_LANE.items() if t in path), None)
+        if lane is None:
+            base = os.path.basename(path)[:-3]
+            lane = next((m for m, pat in SUBSYSTEM_FILES.items() if pat.match(base)), None)
+        if lane:
+            item.add_marker(getattr(pytest.mark, lane))
 
 
 @pytest.fixture(autouse=True)

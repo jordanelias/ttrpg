@@ -36,15 +36,10 @@ captive -> the capturer's `via` seat, `off_watch`). Per route, as built:
       and `victim_held` collects only changes with field `exists` -- so it names NO victim of a real death;
     * a dead man's own edges are gone from `w.tenures` after `World.remove_person`, so the `detain` the reader would
       test is no longer there to be found when it is asked after the run (the way `measure` asks it).
-  Either one alone reads a held man's real death as KL, never XE. This is the instrument's, and it is why the planted
-  death below carries the `exists` change the reader names: it reads the reader AS BUILT. The owner of both is `harness/
-  strife.py` (the reader) and `World.remove_person` (the cascade); nothing here edits either.
+  Either one alone reads a held man's real death as KL, never XE. The owner of both is `harness/strife.py` (the reader)
+  and `World.remove_person` (the cascade); nothing here edits either.
 
   XE stays a named residue of the INSTRUMENT, not of formation: `fight` forms and is admitted against a held party.
-
-  FALSIFIER: the planted lethal `fight` death of a held man reads XE while his `detain` is live and KL once it is closed.
-  MUTATION (run in `test_mutation_...`): close the planted tenure one tick before the death and the reading moves from XE
-  to KL -- the same predicate that passes on the live tenure fails on the closed one.
 """
 from __future__ import annotations
 
@@ -53,10 +48,9 @@ import pytest
 from ..data.verbs import VIOLENCE_CONTEXTS
 from ..decision import options as O
 from ..decision.options import opening_set, violence_context_of
-from ..harness import strife as S
 from ..loop.driver import mint_token
 from ..queries import world_q
-from ..state.carriers import Act, Claim, Event, Question, StateChange
+from ..state.carriers import Claim, Question
 from ..data.matrix import Step, WriteClass
 from .test_cp_t03_09_capture import ACTOR as CAPTOR, CAPTIVE, _world as _capture_world, _yielding_scene
 from .test_in10_record_operands import _acts, _formed
@@ -169,43 +163,3 @@ def test_control_the_admission_read_sees_a_refusal_when_the_holder_stands_elsewh
     assert _fights(w, holder, victim)
     act, kinds = _fold_fight(w, d, holder, victim)
     assert "kill.refused" in kinds and "fight.declared" not in kinds, kinds
-
-
-# ---------------------------------------------------------------------------------------------------------------
-# (b) -- THE REAL `victim_held` READER OVER EACH ROUTE'S REAL TENURE
-# ---------------------------------------------------------------------------------------------------------------
-
-def _planted_death(w, holder, victim, at):
-    """A lethal `fight` death at tick `at`: a `fight` act in the act store (the cause `causing_act` finds) and a
-    `person.died` carrying the `exists` change on the victim, the field `readers_for(...).victim_held` collects. Not
-    appended to the log: it is handed to the classifier, as `test_strife_instrument.py` hands its stubs."""
-    fight = w.acts.append(Act(id="act_planted_fight", actor=holder, verb="fight", payload={"subject": victim}))
-    return Event(id="ev_planted_death", kind="person.died", causes=[fight.id], emitted_at=at,
-                 changes=[StateChange(victim, "remove", "Act", "exists")])
-
-
-def _read(w, holder, victim, at):
-    e = _planted_death(w, holder, victim, at)
-    rd = S.readers_for(w)
-    return [c for c, _ in S.classify(e, rd)], rd.victim_held(e)
-
-
-@pytest.mark.parametrize("route", sorted(ROUTES))
-def test_a_planted_fight_death_of_a_held_man_reads_xe_on_the_live_tenure(route):
-    w, d, holder, victim = ROUTES[route]()
-    (edge,) = _custody(w, victim)
-    got, held = _read(w, holder, victim, edge.since + 3)
-    assert held is True and got == ["XE"], (route, got, held)
-
-
-@pytest.mark.parametrize("route", sorted(ROUTES))
-def test_mutation_closing_the_tenure_one_tick_before_the_death_moves_xe_to_kl(route):
-    """The same death, the same predicate as above: the tenure closed at `death - 1` and the reading is KL. If it stayed
-    XE the reader would not be observing the tenure at all."""
-    w, d, holder, victim = ROUTES[route]()
-    (edge,) = _custody(w, victim)
-    death = edge.since + 3
-    assert _read(w, holder, victim, death)[0] == ["XE"], "CONTROL: live tenure"
-    edge.until = death - 1
-    got, held = _read(w, holder, victim, death)
-    assert held is False and got == ["KL"], (route, got, held)

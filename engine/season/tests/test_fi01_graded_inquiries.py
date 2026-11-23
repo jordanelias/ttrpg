@@ -46,7 +46,7 @@ from ..state.carriers import Act, Claim, Record, Site
 
 # The six acts canon names (`verb_table.yaml`'s block comment), and the position's partition of them:
 # one prompt, two waiting, and the rest graded -- derived, so the graded set is not a second copy of
-# `graded_inquiries` (`test_season_shape.py::test_jordan_no_definition_is_hardcoded_in_a_body`).
+# `graded_inquiries` (`test_season_shape.py::test_jordan_no_definition_is_hardcoded_in_a_body` (retired)).
 INQUIRIES = ("examine", "interview", "research", "surveil", "thread_read", "reconstruct")
 WAITING = {"thread_read": "K-37 (no value space; its H-85 carrier landed at v9 PC-06 K-3)"}
 # B07 (UNDECIDED (2)): `reconstruct` is `form: inquiry` and band-keyed, routed only with `task_draw_arm` on, so with the arm off (the

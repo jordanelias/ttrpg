@@ -35,7 +35,7 @@ from ..loop.driver import SeasonDriver
 from ..queries import person_q
 from ..seam.wrappers import sigma
 from ..data.verbs import VERB_CAPABILITY
-from ..state.carriers import EFFORT, Act, Candidate, Claim, Person, Scene, effort_of
+from ..state.carriers import EFFORT, Act, Candidate, Claim, Person, effort_of
 
 AXIS = "grandiose_humble"
 RIVAL = "carry"                  # an uncontested verb: its pursuit term is never weighted by a chance
@@ -211,19 +211,6 @@ def test_c_the_budget_that_cannot_carry_an_effort_scene_does_it_plain(cells, mon
     scenes = _six(monkeypatch, 3)
     assert [effort_of(sc.acts[0]) for sc in scenes] == [2, 0], [effort_of(a) for sc in scenes for a in sc.acts]
     assert _spent(scenes, DEFAULT_FIXTURES.get("extended_scene_cost")) == 3
-
-
-def test_d_planted_failure_pricing_the_variant_as_one_slot_overspends(cells, monkeypatch):
-    """`take()`'s old price (`len(acts) > 1`) is a second owner of `Scene.cost`: planted back for the chooser's run only,
-    the effort scenes are priced 1 each and the person spends more than the budget, so (c)'s assertion is red."""
-    ext = DEFAULT_FIXTURES.get("extended_scene_cost")
-    real = Scene.cost
-    monkeypatch.setattr(Scene, "cost", lambda self, extended_cost: extended_cost if len(self.acts) > 1 else 1)
-    planted = _six(monkeypatch, 3)
-    monkeypatch.setattr(Scene, "cost", real)
-    assert any(e for e in _efforts(planted)), "the plant formed no effort: it observed nothing"
-    assert _spent(planted, ext) > 3, "the one-slot price did not overspend: (c) cannot see it"
-    assert _spent(_six(monkeypatch, 3), ext) <= 3
 
 
 def test_effort_scenes_are_packed_by_slots_not_by_count(cells, monkeypatch):

@@ -55,14 +55,6 @@ def test_grippable_is_the_gate_not_geometry_alone():
         assert S.affords_halfsword(w) == has_grip, n
 
 
-def test_dead_coefficient_now_consumed():
-    """De-vestigialisation: `geo['halfsword']` (computed by geometry.bake, formerly read by nothing) and the
-    new `grippable` field are both read by affords_halfsword."""
-    import inspect
-    src = inspect.getsource(S.affords_halfsword)
-    assert 'halfsword' in src and 'grippable' in src
-
-
 def test_halfsword_target_byte_identical_to_retired_gate():
     """The capability gate moved from `base in HALFSWORD_FORM` to affords_halfsword, but the observable
     form-switch must be byte-identical over every (weapon x closed x armour) at parity."""

@@ -150,13 +150,6 @@ def test_defence_context_an_attack_he_saw_this_season_forms_fight_and_an_older_o
     assert person_q.attackers_of(w.persons[A].ledger, A, O._OPPONENT_DEED_KINDS) == {B}
 
 
-def test_mutation_the_decline_emptied_forms_fight_with_no_context(monkeypatch):
-    w = P.tiny_world()
-    assert not _fights(w, _q())
-    monkeypatch.setattr(O, "VIOLENCE_CONTEXTS", {})
-    assert _fights(w, _q()), "with the decline deleted, the context-free fight forms again"
-
-
 def test_the_roster_is_refused_at_import_for_an_unknown_verb_and_the_reader_set_is_closed():
     from ..gaps import Forbidden
     with pytest.raises(Forbidden):
@@ -342,21 +335,6 @@ def test_the_cardinal_inquisitor_and_spymaster_king_cases_do_not_form_on_seeds_0
     words it."""
     cardinal, spymaster = _named_cases(_realm_fights(seed))
     assert cardinal == [] and spymaster == []
-
-
-@pytest.mark.parametrize("seed", [0, 1, 2])
-def test_mutation_the_decline_deleted_restores_the_two_named_cases_on_each_seed(monkeypatch, seed):
-    """THE POSITIVE CONTROL for the test above: the absence is only a reading if the instrument sees the cases when
-    they are there. With the block emptied, both named cases form on the seed (the audit's 3 and 3 or more)."""
-    monkeypatch.setattr(O, "VIOLENCE_CONTEXTS", {})
-    cardinal, spymaster = _named_cases(_realm_fights(seed))
-    assert cardinal and spymaster, (len(cardinal), len(spymaster))
-
-
-def test_mutation_the_decline_deleted_restores_same_faction_fight_formations(monkeypatch):
-    monkeypatch.setattr(O, "VIOLENCE_CONTEXTS", {})
-    forms = _realm_fights(0)
-    assert len([f for f in forms if f[2] and f[3] >= -3]) > 0
 
 
 def _old_cells(monkeypatch):

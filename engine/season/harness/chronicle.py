@@ -80,7 +80,7 @@ stores the content hash reads and owns no rule:
       those, how many stand among the causes of another person's executed act.
 Nothing here reads a status, a threshold or `requirements.yaml`; no `measure:` reads it (C3-K5: the removal
 test is R-01's and R-02's instrument, this is a reading beside it). THE CONTROLS, both directions
-(`tests/test_chronicle_propagation.py`): the null arm against itself reads zero in columns 1 and 2 and
+(once `test_chronicle_propagation.py`, retired; run them by hand): the null arm against itself reads zero in columns 1 and 2 and
 answers nothing in column 3; a planted death of one seat-holder is seen in columns 1 and 3. If either
 fails the reading is void. LIMITS: `act_of` is rebuilt from the log (`attribution.causing_act`: the first cause that is an act, which
 is the driver's own map on a played run) because a World holds no driver; a MATTER Event whose first cause is an act id (a term

@@ -80,9 +80,8 @@ silently swallowed:
   resolver answers a term they usually AGREE (they mirror the same YAML), and where they
   genuinely differ this facade DISCLOSES it via the 'disagreement' field rather than
   silently picking a winner — a real, LIVE instance exists today ("Thread Fatigue":
-  names -> thread.thread_fatigue vs quantity_registry -> matched-but-keyless; pinned in
-  test_registry.py, so the mechanism is exercised against real corpus data, not only a
-  synthetic monkeypatch).
+  names -> thread.thread_fatigue vs quantity_registry -> matched-but-keyless; once pinned in
+  test_registry.py, retired).
 
   STRUCTURAL-KEY COVERAGE + COLLISION SURFACING (WS1 antagonist findings ED-IN-0057, closed
   ED-IN-0058):

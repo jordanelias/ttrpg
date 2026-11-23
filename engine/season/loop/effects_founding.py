@@ -100,7 +100,7 @@ def _eff_found(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     WHAT IT MAKES, each choice with the reading it rejects:
       * A RUNG OF WHATEVER KIND THE WORKS PLANS, not a `hearth` written here. The plan's `24e`
         speaks of *"minting a `hearth` Rung"*, which is its example: a kind in a body is a
-        definition the roster owns (`test_jordan_no_definition_is_hardcoded_in_a_body`), and strict
+        definition the roster owns (`test_jordan_no_definition_is_hardcoded_in_a_body` (retired)), and strict
         ascent -- not a literal -- is what decides which kinds may be founded under which. A hearth
         under a settlement, a community under a territory; never a duchy under a hearth.
       * ITS PARENT IS THE WORKS' `at`, the one rung id the works carries. The act carries only its

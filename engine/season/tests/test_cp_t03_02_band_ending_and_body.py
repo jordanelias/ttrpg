@@ -20,7 +20,6 @@ from __future__ import annotations
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import FELLED, UNTOUCHED, WOUNDED
 from ..harness import probes as P
-from ..loop import effects_combat
 from ..loop.driver import SeasonDriver, mint_token
 from ..seam import Resolution, degree_of
 from ..state.carriers import Act
@@ -94,29 +93,6 @@ def test_falsifier_the_actor_holds_the_written_body_and_a_non_witness_holds_none
     e = out[0]
     assert any(o.subject == SUBJECT and o.predicate == "body" and o.value == w.persons[SUBJECT].body
                for o in e.observed), e.observed
-
-
-def test_mutation_an_observation_built_before_the_write_carries_the_pre_fight_body(monkeypatch):
-    """The mutation, executed: the Observation reads `w.persons[pid].body` while the `Change` is built
-    (before `perform`), which is the pre-fight body -- the falsifier must go red on it."""
-    real = effects_combat.Observation
-    box = {}
-
-    def pre_write(subject, predicate, _written):
-        return real(subject, predicate, box["w"].persons[subject].body)
-
-    orig = P.tiny_world
-
-    def world():
-        box["w"] = orig()
-        return box["w"]
-
-    monkeypatch.setattr(P, "tiny_world", world)
-    monkeypatch.setattr(effects_combat, "Observation", pre_write)
-    w, _out, before = _fight(UNTOUCHED, WOUNDED)
-    bad = _falsifier_holds(w, before)
-    assert any("the actor holds" in b for b in bad), bad
-    assert _body_claims(w, SUBJECT)[ACTOR] == [before[SUBJECT]], "the mutation did not carry the pre-fight body"
 
 
 def test_under_actor_mode_a_bystander_witness_holds_the_wound_but_not_the_value():

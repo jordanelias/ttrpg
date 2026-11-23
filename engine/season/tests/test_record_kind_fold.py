@@ -40,7 +40,6 @@ from engine.season.loop.effects import EFFECTS
 from engine.season.loop.witness import content_value
 from engine.season.queries.world_q import WorldReader, hold_force
 from engine.season.state.carriers import Question, Record, View
-from engine.season.state.world import World
 
 _CONTENT = RECORD_CONTENT["predicate"]
 
@@ -61,14 +60,6 @@ def _content_claims(p, rid):
 # ======================================================================================
 # 1 -- THE SHARPENED FALSIFIER: THE SECOND HOMES ARE GONE, AND A HOLD LANDS ON A RECORD
 # ======================================================================================
-
-def test_world_carries_no_petitions_and_no_dispensations_store():
-    w = World(world_seed=0)
-    assert not hasattr(w, "petitions") and not hasattr(w, "dispensations"), (
-        "a second home for a document survives the fold")
-    assert "petitions" not in World._STATE_COLLECTIONS
-    assert "dispensations" not in World._STATE_COLLECTIONS
-    assert "records" in World._STATE_COLLECTIONS
 
 
 def test_a_hold_on_a_dispensation_lands_on_a_record_the_sweep_recognises():

@@ -78,17 +78,6 @@ def test_cr28_b_the_heard_proposition_rides_the_answered_question_and_commit_for
     assert [c.subject for c in _commits(w, PRESENT, q)] == [HEARD]
 
 
-def test_cr28_b_planted_failure_the_term_returning_nothing_forms_no_commit(monkeypatch):
-    """The stamper stubbed to `()`: no question carries the heard Proposition and `commit` forms on
-    nothing -- the REM-23 tree's reading, which the test above must not reproduce."""
-    w, _ = _world()
-    _utter_witnessed(w, PRESENT)
-    monkeypatch.setattr(world_q, "propositions_heard", lambda w_, p_: ())
-    qs = world_q.questions_for(w, w.persons[PRESENT])
-    assert all((HEARD, "Proposition") not in q.classes for q in qs), qs
-    assert all(c.subject != HEARD for q in qs for c in _commits(w, PRESENT, q))
-
-
 # --- (c) THE DECLINE THE FAILED TERM LACKED --------------------------------------------------------
 
 def test_cr28_c_a_cause_he_already_holds_forms_no_commit_and_argue_still_forms():

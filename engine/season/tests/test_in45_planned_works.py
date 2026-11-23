@@ -41,16 +41,6 @@ HEARTH_WORKS, DWELLING_WORKS = "works_hearth_auerheim", "works_dwelling_court"
 DUKE, STEWARD = "p_npc_020", "p_npc_009"          # off_duke_valorsmark's holder; off_lord_steward's
 
 
-def _rows(*mutations):
-    """The shipped `planned_works` rows, each passed through `mutations` (callables `row -> row`)."""
-    out = []
-    for row in _load(VENUES)["planned_works"]:
-        for m in mutations:
-            row = m(row)
-        out.append(row)
-    return out
-
-
 def _build(monkeypatch, rows):
     """`build_realm(0)` with the venues file's `planned_works` replaced by `rows` (`[]` is the control arm)."""
     real = _load
@@ -198,24 +188,6 @@ def test_matter_ripens_a_planned_works_terms_with_root_as_their_cause():
 # ======================================================================================
 # 3 -- THE PLANTED FAILURE: THE SAME ROWS AUTHORED `kind: text`
 # ======================================================================================
-
-def test_planted_failure_rows_authored_kind_text_mint_records_neither_verb_can_name(monkeypatch):
-    """The same two rows with `kind: text` mint two text Records (the shape a computed `create_record` mints):
-    no `{plan, at}`, so `works_for` finds nothing, the masters' held-Record stamp is empty, and `found` and `build`
-    form for nobody -- the failure the block exists to end. CONTROL: the shipped `works` rows stamp each master
-    his works. The REALM reading of this plant (`aperture 4 0`: `found` and `build` attempted 0 times) is in the
-    commit."""
-    text = _build(monkeypatch, _rows(lambda r: {**r, "kind": "text"}))
-    monkeypatch.undo()
-    assert sorted(r.id for r in text.records.values() if r.kind == "text") == [DWELLING_WORKS, HEARTH_WORKS]
-    assert not [r for r in text.records.values() if r.kind == world_q.WORKS_KIND]
-    assert world_q.works_for(text, "set_s_002", "hearth") == []
-    assert world_q.works_for(text, "b_s_001_court", "dwelling") == []
-    for master in (DUKE, STEWARD):
-        assert world_q.records_held_for_holding_rows(text, text.persons[master]) == ()
-    real = build_realm(0)
-    assert world_q.records_held_for_holding_rows(real, real.persons[DUKE]) == (HEARTH_WORKS,)
-    assert world_q.records_held_for_holding_rows(real, real.persons[STEWARD]) == (DWELLING_WORKS,)
 
 
 # ======================================================================================

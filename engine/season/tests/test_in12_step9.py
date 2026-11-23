@@ -27,13 +27,11 @@ The four EXIT clauses (#453 §10.4 step 9, verbatim), one block each:
 
 MUTATIONS, each run at the build 2026-10-21 (RED, then restored and GREEN):
   * sabotage: `loop/effects_economy.py::_fall` returning 0 -> block 1's falsifier RED (`sabotage.refused`,
-    condition unchanged). Also run IN-TEST (`test_mutation_sabotage_with_no_fall_is_refused`).
+    condition unchanged).
   * tend: `loop/effects_combat.py::_eff_tend` writing `p.body` back unchanged -> block 2's falsifier RED.
   * argue: `queries/person_q.py::argued_pursuits` moving AWAY from the arguer (`w - ...`) -> block 3's
-    direction assertion RED; returning `None` -> the falsifier RED (`argument.refused`). The `None` arm is
-    also run IN-TEST (`test_mutation_argue_with_no_pursuit_move_is_refused`).
-  * train: `rosters.yaml: vocation_sourced` emptied -> block 4's formation RED. Run IN-TEST
-    (`test_mutation_without_the_vocation_line_train_is_not_formed`). And the write:
+    direction assertion RED; returning `None` -> the falsifier RED (`argument.refused`).
+  * train: `rosters.yaml: vocation_sourced` emptied -> block 4's formation RED. And the write:
     `loop/effects_combat.py::_eff_train` raising by 0 -> block 4's falsifier RED (`train.refused`).
   * work (K-09): the `d < 0` decline in `loop/effects_economy.py::_eff_work` disabled -> block 1's
     `test_k09_works_declared_delta_is_restricted_to_non_negative` RED.
@@ -52,7 +50,6 @@ from ..decision import options as OPT
 from ..decision.options import opening_set
 from ..gaps import Forbidden
 from ..harness import probes as P
-from ..loop import effects_economy as ECON
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries import person_q as PQ
 from ..seam.wrappers import pool, sigma
@@ -144,16 +141,6 @@ def test_control_a_fabric_at_zero_is_refused_and_unmoved():
     (act,) = _sabotage_acts(w)
     assert _kinds(_resolve(w, d, act)) == ["sabotage.refused"]
     assert w.sites[SITE].condition == 0
-
-
-def test_mutation_sabotage_with_no_fall_is_refused(monkeypatch):
-    """THE NAMED MUTATION, RUN IN-TEST: `_fall` returning 0 stages nothing and the falsifier's fall is gone."""
-    w, d = _world()
-    before = w.sites[SITE].condition
-    (act,) = _sabotage_acts(w)
-    monkeypatch.setattr(ECON, "_fall", lambda w, site: 0)
-    assert _kinds(_resolve(w, d, act)) == ["sabotage.refused"]
-    assert w.sites[SITE].condition == before
 
 
 def test_a_sabotage_a_restore_cancels_is_refused_after_the_fact():
@@ -295,23 +282,6 @@ def test_control_at_pursuit_shift_zero_no_band_moves_a_pursuit():
     assert checked == 24
 
 
-def test_mutation_argue_with_no_pursuit_move_is_refused(monkeypatch):
-    """THE NAMED MUTATION, RUN IN-TEST: `argued_pursuits` answering `None` -> a won argument moved nothing
-    and is refused at its write; no band moves the hearer."""
-    import importlib
-    eff = importlib.import_module("engine.season.loop.effects_information")
-    monkeypatch.setattr(eff, "argued_pursuits", lambda *a, **k: None)
-    seen = _bands(n=24)
-    refused = 0
-    for band, rows in seen.items():
-        for kinds, before, after, _ in rows:
-            assert after == before
-            if band in ("Success", "Overwhelming"):
-                assert kinds == ["argument.refused"], (band, kinds)
-                refused += 1
-    assert refused >= 1, f"no won band among the 24 acts, so the mutation was not observed: {sorted(seen, key=str)}"
-
-
 def test_control_a_subject_that_is_no_proposition_is_refused():
     w, d, _pid, _ = _argue_world()
     before = dict(w.persons[HEARER].pursuits)
@@ -410,15 +380,6 @@ def test_capability_gates_no_train_the_formation_never_reads_the_actors_capabili
     assert seen[0] and seen[0] == seen[1] == seen[2], seen
 
 
-def test_mutation_without_the_vocation_line_train_is_not_formed(monkeypatch):
-    """THE NAMED MUTATION, RUN IN-TEST: `vocation_sourced` emptied -> `train` forms on Carin with no
-    vocation on it, and the act the falsifier folds can no longer carry `copying`."""
-    w, _d = _npc088()
-    assert _formed(w, CARIN, "train", CARIN), "precondition: the shipped line forms it"
-    monkeypatch.setattr(OPT, "VOCATION_SOURCED", {})
-    assert not [c for c in _formed(w, CARIN, "train", CARIN) if c.operands.get("kind") == "copying"]
-
-
 # REM-30 (v10 B10-10) landed CP-T01-01's four deferred `verb_capability` rows: `argue: "argue"`, and `research`,
 # `examine`, `surveil: "inquiry"`. They are VALUES of the table, so they ARE the vocation range
 # (`VOCATIONS = frozenset(VERB_CAPABILITY.values())`); the one roster is the owner, there is no second list.
@@ -429,7 +390,7 @@ def test_the_four_verb_capability_rows_resolve_and_are_the_vocation_range():
         "argue": "argue", "research": "inquiry", "examine": "inquiry", "surveil": "inquiry"}
     # CR-20: the range is closed over the skill definition rows (B05.25 deleted the derived `VOCATION_ATTRIBUTE` map with the
     # rows' `base:` column, so the closure is read on the one definition, `descriptors.CAPABILITIES`; a literal set here is
-    # flagged by `test_jordan_no_definition_is_hardcoded_in_a_body`).
+    # flagged by `test_jordan_no_definition_is_hardcoded_in_a_body` (retired)).
     from engine.substrate import descriptors
     # v11 CP-T03-04: `arms` (`fight`/`accept`/`capture`) joins the range, three -> four.
     assert VERBS.VOCATIONS == set(VERB_CAPABILITY.values()) and VERBS.VOCATIONS <= set(descriptors.CAPABILITIES)

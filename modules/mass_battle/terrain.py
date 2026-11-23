@@ -31,7 +31,7 @@ not this pass's. **A known instance of this exact gap:**
 T3 and T10 each "gate" a mountain pass (`altonian_passes`, geography YAML) but their own `anchor`
 sits inside their OWN territory polygon, south of and outside the pass polygon's y-range entirely —
 not a near-miss, a disjoint region — so neither can resolve to NARROW_PASS via this point-test
-regardless of fortification. `test_mass_battle_terrain.py` covers the "Done when" criterion with a
+regardless of fortification. `test_mass_battle_terrain.py` (retired) covered the "Done when" criterion with a
 synthetic province rather than a real one for exactly this reason.
 
 RIVER_CROSSING is not reachable from the polygon lookup: `_TYPE_TO_ROW` has no entry producing it. It is
@@ -152,7 +152,7 @@ def terrain_row_for_territory(tid, fort_level=0, river_crossing=False, *, geogra
     so a point can legitimately test inside BOTH `terrain-mountain-north` (type mountain) and
     `terrain-pass-lowenskyst` (type mountain_pass) at once; the first list match would pick the enclosing
     mountain rather than the more specific feature actually at that point
-    (`test_mountain_pass_polygon_maps_to_narrow_pass_directly`). Smallest-area-wins matches the
+    (`test_mountain_pass_polygon_maps_to_narrow_pass_directly`, retired). Smallest-area-wins matches the
     geography file's own framing of the pass as embedded IN the mountain (`terrain_cost_matrix`'s
     comment: "Mountain interior is impassable except via embedded mountain_pass polygons") — the
     embedded feature is what's actually underfoot, not "standard GIS convention" (no such external

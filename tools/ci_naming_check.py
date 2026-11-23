@@ -124,7 +124,7 @@ EXCLUDE = (
                                   # in EXCLUDE_ROOTED`), so changing one alone drops this back to a
                                   # substring test and re-exempts `skills/valoria-vector-audit/…`
                                   # from a BLOCKING gate — the precise defect the note above records
-                                  # as already made once. Caught here by
+                                  # as already made once. Once caught by the retired
                                   # test_the_audit_exclusion_is_ROOTED_not_a_substring.
                                   # The audit-report corpus — historical records that quote the
                                   # names they critique, plus GENERATED run data (a vector-audit

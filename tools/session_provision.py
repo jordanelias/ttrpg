@@ -10,13 +10,13 @@ writes zero bytes to stdout and steers nothing. Re-adding a hook that PRINTS is 
 §0.3 names; this one is silent by construction, which is why it is allowed to exist.
 
 WHY IT EARNS ITS PLACE: §0.4 makes `python -m pytest tests/valoria -q -n auto` the close step of
-every commit, and §8 documents `pip install pyyaml pytest numpy pytest-xdist` as the one-time
+every commit, and §8 documents `pyyaml pytest numpy pytest-xdist pytest-timeout` as the one-time
 setup. A fresh remote container has pyyaml only. So the documented close gate was unrunnable on
 arrival, and a session either skipped its own shipping gate or spent its first minutes on pip.
 MEASURED 2026-09-18 on this container: pytest, numpy and pytest-xdist all absent.
 
 This is NOT a guard and not apparatus under §0.1 pt 5 — it asserts nothing, gates nothing and has
-no verdict. It installs up to four packages, or does nothing.
+no verdict. It installs the packages REQUIRED names, or does nothing.
 """
 import importlib.util
 import subprocess
@@ -28,6 +28,7 @@ REQUIRED = {
     'pytest': 'pytest',
     'numpy': 'numpy',
     'xdist': 'pytest-xdist',   # `-n auto`, which is what CI runs and what §0.4 measures
+    'pytest_timeout': 'pytest-timeout',   # `--timeout=<budget>` on the close run (methodology-execute)
 }
 
 

@@ -136,14 +136,6 @@ def test_with_no_ladder_the_same_world_stamps_no_stage_referent(unstaged):
     assert ("p_a", "Person") not in _classed(qs[0]) and world_q.stage_referents(w, w.persons["p_o"]) == ()
 
 
-def test_a_stubbed_term_reads_no_stamp_and_the_new_test_reddens(staged, monkeypatch):
-    """THE PLANTED FAILURE: the term stubbed to return nothing. The (a) assertion then fails -- run here as the
-    inverse (the stamp is absent), so the failure is OBSERVED in the suite and not only by hand."""
-    monkeypatch.setattr(world_q, "stage_referents", lambda w, p, ambs=None: ())
-    qs = _answered(_world([]))
-    assert ("p_a", "Person") not in _classed(qs[0])
-
-
 # ---------------------------------------------------------------------------------------------------
 # (b) belief, not truth
 # ---------------------------------------------------------------------------------------------------

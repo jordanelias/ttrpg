@@ -1,7 +1,7 @@
 """`rosters.yaml: scale_of_rung` -- plan position `20-ii` (U9/R-04)'s vocabulary mapping, problem
 (1) of the two the position's own instruction names. See the roster row's `note:` for problem (2)
 (representability), which this mapping does not solve and which `harness/corpus_run.py::rescales`
-(covered by `test_the_corpus_runs_and_the_ranking_cannot_discriminate` in `test_season_shape.py`)
+(once covered by `test_the_corpus_runs_and_the_ranking_cannot_discriminate` in `test_season_shape.py`, retired)
 does instead.
 
 What each test proves:

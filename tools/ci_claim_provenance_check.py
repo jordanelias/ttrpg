@@ -301,7 +301,7 @@ def check(staged_only=False):
                 # there rather than that a row says it went somewhere, so a fabricated path fails
                 # here exactly as it did before. That distinction is the whole correctness argument
                 # of `_resolves_through_restructure_ledger`, and widening THAT to prefixes is what
-                # `test_a_fabricated_path_under_a_forked_directory_still_violates` exists to stop.
+                # `test_a_fabricated_path_under_a_forked_directory_still_violates` (retired) stopped.
                 if any(os.path.exists(os.path.join(ROOT, c)) for c in _quarantined_paths(target)):
                     continue
                 # RETIRED INSTRUMENTS RESOLVE, THEY DO NOT VIOLATE (2026-08-21, ED-IN-0194).

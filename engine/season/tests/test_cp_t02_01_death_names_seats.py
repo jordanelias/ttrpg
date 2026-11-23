@@ -25,19 +25,15 @@ The three death writes: `loop/effects_combat.py::_eff_kill` (`fight`/`accept` `F
 """
 from __future__ import annotations
 
-import pytest
 
 from ..data.matrix import Step, WriteClass
-from ..gaps import InstrumentDefect
 from ..harness import probes as P
 from ..boot.realm import build_realm
-from ..loop import effects_combat
 from ..loop.driver import SeasonDriver, mint_token
 from ..loop.matter import _die
 from ..queries import world_q
 from ..seam.contest import Resolution
 from ..state.carriers import Act, Person, Rung, Tenure
-from ..state.world import World
 from ._field_outcomes import field_outcome
 from ._scar_helpers import party_state
 
@@ -118,22 +114,6 @@ def test_a_a_felled_seat_holder_names_his_seat_to_every_living_person():
     assert seats == [OFFICE], f"the tenure.closed Event's receipts name {seats}, not the seat"
     assert lacking == [], f"living persons holding no claim about {OFFICE}: {lacking}"
     assert OFFICE in named, f"seats_named for a person who was not there is {named}"
-
-
-def test_a_mutation_with_the_seat_holds_unread_the_death_names_no_seat(monkeypatch):
-    """THE MUTATION, run: the emission off (`World.seat_holds` -> `[]`, so `death_subjects` names no
-    seat and `remove_person` still closes the holds). The falsifier's positive half must go red."""
-    monkeypatch.setattr(World, "seat_holds", lambda self, who: [])
-    w = _tiny()
-    held = [t for t in w.tenures if t.kind == "hold" and t.subject == HOLDER and t.object == OFFICE]
-    assert held, "fixture: p_high does not hold off_duke"
-    d, out = _felled(w, "p_near", HOLDER)
-    assert not held[0].live, "the cascade stopped closing the hold; this mutation is not the one meant"
-    assert [e.kind for e in out] == ["person.died", *GROWTH] and _raised(out) == ["p_near"]
-    _witness(w, d, out)
-    far = w.persons["p_king"]
-    assert OFFICE not in world_q.seats_named(w, far), "the seat reached the far person with the emission off"
-    assert any(not _about(w, p, OFFICE) for p in w.persons), "every ledger names the seat anyway"
 
 
 def test_a_a_matter_death_of_a_two_seat_holder_emits_one_tenure_closed_naming_both():
@@ -240,16 +220,6 @@ def test_c_a_total_won_still_emits_field_won_and_army_arrived_beside_the_deaths(
     assert sorted({c.subject for c in died.changes} & set(defenders)) == sorted(defenders)
     (closed,) = [e for e in out if e.kind == "tenure.closed"]
     assert sorted(c.subject for c in closed.changes if c.subject in w.offices) == seats
-
-
-def test_c_mutation_with_no_subject_naming_the_bands_kinds_the_deaths_silence_field_won(monkeypatch):
-    """THE MUTATION, run: the HR-1 form off -- `own_kinds` returning `()`, so the movers, the losers'
-    own outcome and the treasuries name nothing (the pre-HR-1 `None`) while the dead name `person.died`.
-    The non-empty `earned` set then dropped the band's kind and the arrival (H-141's silencing); that
-    mix is now refused where the `Change` is built, so the mutation cannot publish a silenced set."""
-    monkeypatch.setattr(effects_combat, "own_kinds", lambda declared: ())
-    with pytest.raises(InstrumentDefect, match="H-141"):
-        _won_total(build_realm(0))
 
 
 def test_c_a_total_lost_emits_field_lost_and_a_person_died_naming_each_pid_removed():

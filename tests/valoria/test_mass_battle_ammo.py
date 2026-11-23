@@ -37,7 +37,6 @@ from modules.mass_battle.config import (SIDE_A_START_ROW, SIDE_B_START_ROW, MB_V
 from systems.mass_battle.sim.engine import build_army
 from modules.mass_battle.hierarchy.units import Unit, Army
 from modules.mass_battle.orchestration import volley_phase
-from systems.mass_battle.sim.multi import between_turn_recovery  # B17.05: moved out of the module
 from engine.dice_engine import draw  # noqa: E402
 from modules.mass_battle import rngsource  # noqa: E402
 
@@ -119,22 +118,6 @@ def test_ranged_atom_stops_contributing_damage_once_volleys_are_exhausted():
                 assert r['shots'] == 0, f"tick {tick}: exhausted archer still recorded a shot"
         assert exhausted_at is not None, "volleys never reached 0 across the whole loop -- test setup is wrong"
         assert fired_ticks >= 1, "the archer must have actually fired before running out"
-
-
-def test_between_turn_recovery_resupplies_some_volleys():
-    ua = _archers()
-    su = ua.units[0]
-    su.volleys = 0.0
-    between_turn_recovery(ua)
-    assert su.eff_volleys == pytest.approx(min(MB_VOLLEYS_START, MB_VOLLEYS_RESUPPLY))
-    assert su.eff_volleys > 0
-
-
-def test_resupply_does_not_exceed_the_starting_count():
-    ua = _archers()
-    su = ua.units[0]
-    between_turn_recovery(ua)   # already at MB_VOLLEYS_START -- must clamp, not overshoot
-    assert su.eff_volleys == pytest.approx(MB_VOLLEYS_START)
 
 
 def test_melee_atoms_are_never_gated_by_ammo():

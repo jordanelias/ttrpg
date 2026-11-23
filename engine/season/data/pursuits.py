@@ -8,7 +8,7 @@ AND ONLY ONE OF THEM IS WRONG ABOUT THIS CASE.**
     `references/descriptor_registry.yaml:pursuit_roster` rather than retyped. It is right, and
     it is mutation-verified: three incompatible rosters once shipped at once and silently disabled
     ED-912 §6.1's Conviction Scar.
-  * `test_w9_check4_no_effect_lambda_and_no_roster` asserts the substring `"roster"` never appears
+  * `test_w9_check4_no_effect_lambda_and_no_roster` (retired since) asserted the substring `"roster"` never appears
     in `harness/headless.py`'s CODE, standing in for *artifact 2 must not author a roster*.
 
 READING a roster is not AUTHORING one, and a substring scan cannot tell them apart. Rather than

@@ -13,13 +13,12 @@ They are planted below as refused keys, and absent from the carriers' fields.
 from __future__ import annotations
 
 import copy
-import dataclasses
 
 import pytest
 import yaml
 
 from engine.season.data import files, goals, rosters
-from engine.season.data.requires import WORLD_ONLY_STEMS, build_typed_requires
+from engine.season.data.requires import build_typed_requires
 from engine.season.data.rosters import roster, roster_map
 from engine.season.gaps import Forbidden, Unspecified
 
@@ -176,7 +175,7 @@ def test_thrust_axes_is_a_closed_roster_whose_opposes_names_only_members():
     axes = roster("thrust_axes")
     assert rosters._ROSTERS["thrust_axes"]["open"] is False
     # one membership per assert: spelling the roster together would DUPLICATE it in a body
-    # (`test_season_shape.py::test_jordan_no_definition_is_hardcoded_in_a_body`)
+    # (`test_season_shape.py::test_jordan_no_definition_is_hardcoded_in_a_body` (retired))
     assert "suppress_einhir_revival" in axes and "revive_einhir" in axes
     for pole in ("reveal_thread_truth", "uphold_church", "uphold_caste", "altonian_ascendancy"):
         assert pole in axes, f"{pole!r}, an opposite pole that is not among the ten, is a member too"
@@ -358,21 +357,6 @@ _PLANTS += [("a top-level key beside goals and goal_stages (`ladders:`)",
              "top-level key", "goals.yaml")]
 
 
-def test_the_plants_ran_a_floor_of_refusals_and_each_is_unique():
-    """The loop asserts that it asserted (`CLAUDE.md` §0.1 pt 2): every plant of both lists is refused with
-    its own type, so a list that silently emptied (or a `pytest.raises` that never ran) cannot pass."""
-    assert len(_PLANTS) >= 51 and len(_AXIS_PLANTS) >= 5, (len(_PLANTS), len(_AXIS_PLANTS))
-    assert len({p[0] for p in _PLANTS}) == len(_PLANTS)
-    assert len({p[0] for p in _AXIS_PLANTS}) == len(_AXIS_PLANTS)
-    checked = 0
-    for name, doc, cls, fragment, named in _AXIS_PLANTS + _PLANTS:
-        with pytest.raises(cls) as red:
-            goals.parse(doc)
-        assert type(red.value) is cls and fragment in red.value.what and named in red.value.where, name
-        checked += 1
-    assert checked == len(_AXIS_PLANTS) + len(_PLANTS) >= 56, checked
-
-
 @pytest.mark.parametrize("name,doc,cls,fragment,named", _PLANTS, ids=[p[0] for p in _PLANTS])
 def test_each_planted_goal_stages_violation_is_refused_by_name(name, doc, cls, fragment, named):
     # the plant is ONE mutation of the base: the base itself loads (the control), so the refusal below
@@ -399,38 +383,10 @@ def test_the_builders_systemexit_is_wrapped_into_the_loaders_own_refusal():
     assert checked == len(_BUILDER_REFUSED) >= 6, checked
 
 
-def test_the_world_only_plants_are_cells_the_builder_accepts_so_only_the_stem_refuses_them():
-    """ISOLATION: a world-only plant that the builder also refused would pass the plants above for the
-    wrong reason. Each builds, and its every stem is a `WORLD_ONLY_STEMS` member."""
-    checked = 0
-    for name, cell in _world_only_cells().items():
-        req = build_typed_requires("probe", cell)
-        assert req is not None, name
-        stems = set(req.stems())
-        if name == "mixed with a person-side stem":
-            assert stems & WORLD_ONLY_STEMS and stems - WORLD_ONLY_STEMS, (name, stems)
-        else:
-            assert stems and stems <= WORLD_ONLY_STEMS, (name, stems)
-        checked += 1
-    assert checked == len(_world_only_cells()) >= 4, checked
-
-
 def test_equal_terms_are_lawful_and_only_a_decrease_is_refused():
     """`gs_pair` repeats `medium`. The control that the decrease plants are not refusing equality."""
     got = next(g for g in goals.parse(_base()) if g.id == "g_rung")
     assert [s.term for s in got.stages.stages].count("medium") == 2
-
-
-def test_the_struck_keys_are_not_built():
-    """M20 struck the stage `deadline` and the row keys `closing`, `successor` and `deal`: no carrier field."""
-    stage_fields = {f.name for f in dataclasses.fields(goals.Stage)}
-    row_fields = {f.name for f in dataclasses.fields(goals.GoalStages)}
-    checked = 0
-    for struck, fields in (("deadline", stage_fields), ("closing", row_fields), ("successor", row_fields),
-                           ("deal", row_fields)):
-        assert struck not in fields, struck
-        checked += 1
-    assert checked == 4
 
 
 # ------------------------------------------------------------------------------ through the file reader

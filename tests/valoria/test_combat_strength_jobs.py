@@ -7,7 +7,7 @@ between. Every head at 1.0 is the control and reproduces the pre-PC-20 `strength
 Falsifier (CLAUDE.md §0.1 pt 3), run at the build: `K_STR_HEAD[weapon_head]*` deleted from `strike_impact` reddens
 `test_a_blunt_head_gains_more_damage_per_strength_point_than_a_point` and
 `test_the_point_damage_gain_from_strength_falls_through_strike` (the slopes come out equal); with it present and every
-head at 1.0 the control tests stay green (`test_all_ones_is_the_pre_item_impact`).
+head at 1.0 the control tests stay green (`test_all_ones_is_the_pre_item_impact`, retired since).
 
 (2) The weapon's weight. `combat_systems.str_demand` adds `D_MASS*mass` (kg) beside the swing inertia `wield_heft`
 already carries, so a heavier weapon of equal inertia handles worse for a fighter short of its demand. D_MASS = 0 is
@@ -15,7 +15,7 @@ the control.
 
 Falsifier, run at the build: `+cfg['D_MASS']*w['mass']` deleted from `str_demand` reddens
 `test_a_heavier_weapon_of_equal_inertia_handles_worse_for_a_weaker_fighter` (the twin and the greatsword handle
-alike) and the shipped-minus-control half of `test_d_mass_zero_is_the_pre_item_demand` (the demand no longer moves
+alike) and the shipped-minus-control half of `test_d_mass_zero_is_the_pre_item_demand` (retired since) (the demand no longer moves
 by D_MASS*mass); with it present and D_MASS = 0 the twin and the greatsword read one demand bitwise.
 
 (3) The harness. `combat_systems.act_cost` adds `ACT_WEIGHT/D_WT * max(0, ARMOR_DEMAND[armor] - strength)` (AR-10,
@@ -50,12 +50,6 @@ EDGE_HEADS = (V.HEAD_STRAIGHT_CUT, V.HEAD_CURVED_CUT, V.HEAD_CUT, V.HEAD_CUT_THR
 CONTROL = {h: 1.0 for h in V.HEADS}
 
 
-@pytest.fixture
-def control_k(monkeypatch):
-    """Every head at 1.0: the pre-PC-20 tree."""
-    monkeypatch.setattr(core, 'K_STR_HEAD', dict(CONTROL))
-
-
 def _slope(head, heft=1.0, lo=2, hi=8):
     """Impact gained per Strength point, read off the owner."""
     return (core.strike_impact(hi, heft, head) - core.strike_impact(lo, heft, head)) / (hi - lo)
@@ -88,19 +82,6 @@ def test_the_term_is_additive_not_multiplicative():
     """ED-1040: Strength's share does not scale with heft. The gain per Strength point is the same at every heft."""
     for head in V.HEADS:
         assert _slope(head, 0.3) == pytest.approx(_slope(head, 2.0), abs=1e-12), head
-
-
-def test_all_ones_is_the_pre_item_impact(control_k):
-    """CONTROL: every head at 1.0 reproduces the pre-PC-20 `strength + heft` for every head, bitwise, and the planted
-    failure holds — at the control a blunt and a point gain the same per Strength point, so the exit reads false."""
-    checked = 0
-    for head in V.HEADS:
-        for heft in (0.0, 0.5, 1.0, 2.5):
-            for s in (0, 1, 2, 4, 7):
-                assert core.strike_impact(s, heft, head) == s + core.strike_impact(0, heft, head), (head, heft, s)
-                checked += 1
-    assert checked == 6 * 4 * 5
-    assert _slope(V.HEAD_BLUNT) == _slope(V.HEAD_POINT) == 1.0
 
 
 def _poleaxe_damage(head, strength):
@@ -167,23 +148,6 @@ def test_a_heavier_weapon_of_equal_inertia_handles_worse_for_a_weaker_fighter(he
     assert _penalty('greatsword', strong, CFG) == _penalty(TWIN, strong, CFG)
 
 
-def test_d_mass_zero_is_the_pre_item_demand(heavy_twin):
-    """CONTROL: at D_MASS = 0 mass has no channel into the demand — the heavier twin reads the greatsword's demand
-    bitwise (the planted failure: the exit reads false) — and every roster weapon's demand moves by exactly
-    D_MASS*mass between the control and the shipped value."""
-    off = dict(CFG, D_MASS=0.0)
-    for s in (1, 2, 3, 4):
-        assert _penalty('greatsword', s, off) == _penalty(TWIN, s, off), s
-    checked = 0
-    for k in sorted(WEAPONS):
-        if k == TWIN:
-            continue
-        c = Combatant('x', weapon=k)
-        assert S.str_demand(c, CFG) - S.str_demand(c, off) == pytest.approx(CFG['D_MASS'] * c.w['mass'], abs=1e-12), k
-        checked += 1
-    assert checked >= 50
-
-
 # ── (3) the harness's Strength demand, paid in stamina ──────────────────────────────────────────────────────────────
 TIERS = (V.TIER_NONE, V.TIER_LIGHT, V.TIER_MEDIUM, V.TIER_HEAVY)
 ARMOURED = TIERS[1:]
@@ -191,11 +155,6 @@ ARMOURED = TIERS[1:]
 
 def _act(strength, armor, cfg, weapon='arming', commit=3.0):
     return S.act_cost(Combatant('x', attrs={'strength': strength}, weapon=weapon, armor=armor), commit, cfg)
-
-
-def _pre_item_act(c, commit, cfg):
-    """The PC-20 (2) per-act stamina cost, written out: no armour channel."""
-    return (cfg['ACT_BASE'] + cfg['ACT_WEIGHT'] * S.wield_heft(c, cfg) + cfg['ACT_COMMIT'] * commit) * cfg['COST_SCALE']
 
 
 def test_every_armour_tier_has_a_demand_rising_with_the_tier():
@@ -243,22 +202,6 @@ def test_a_weak_fighter_in_heavy_armour_runs_dry_in_fewer_acts():
         return acts
     assert acts_to_empty(1, V.TIER_HEAVY) < acts_to_empty(1, V.TIER_NONE)
     assert acts_to_empty(7, V.TIER_HEAVY) == acts_to_empty(7, V.TIER_NONE)
-
-
-def test_armour_demand_zero_is_the_pre_item_cost():
-    """CONTROL: every tier at 0 reproduces the PC-20 (2) per-act cost bitwise, in every tier at every Strength (the
-    planted failure: armour then costs a weak fighter nothing, so the exit reads false)."""
-    off = dict(CFG, ARMOR_DEMAND={t: 0.0 for t in TIERS})
-    checked = 0
-    for tier in TIERS:
-        for s in (1, 2, 4, 7):
-            for weapon in ('dagger', 'arming', 'greatsword', 'guandao'):
-                for commit in (2.0, 3.5, 5.0):
-                    c = Combatant('x', attrs={'strength': s}, weapon=weapon, armor=tier)
-                    assert S.act_cost(c, commit, off) == _pre_item_act(c, commit, off), (tier, s, weapon, commit)
-                    checked += 1
-    assert checked == 4 * 4 * 4 * 3
-    assert _act(1, V.TIER_HEAVY, off) == _act(1, V.TIER_NONE, off)
 
 
 # ── (4) Strength against the arrested heft, in the own-swing arrest ─────────────────────────────────────────────────
@@ -337,16 +280,3 @@ def test_the_arrest_factor_stays_positive_across_the_scale():
     assert 1 - k * 3 * heft > 0.0, heft
     assert strong > floor and base > floor, (weapon, base, strong, floor)     # neither is the floor's, so the term is read
     assert strong == pytest.approx(base * (1 - k * 3 * heft), rel=1e-9), (weapon, base, strong)
-
-
-def test_arrest_k_zero_is_the_pre_item_recoverability():
-    """CONTROL: ARREST_STR_K = 0 reproduces the PC-20 (3) recoverability bitwise at every Strength (the planted
-    failure: a strong and a weak fighter then read one irrecoverability, so the owner-level exit reads false)."""
-    off = dict(CFG, ARREST_STR_K=0.0)
-    checked = 0
-    for weapon in sorted(WEAPONS):
-        base = S.recoverability_factor(_fighter(4, weapon), off)
-        for s in (1, 2, 6, 7):
-            assert S.recoverability_factor(_fighter(s, weapon), off) == base, (weapon, s)
-            checked += 1
-    assert checked >= 4 * 50

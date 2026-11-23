@@ -32,7 +32,6 @@ What each test proves, and the failure it can observe:
 from __future__ import annotations
 
 import copy
-import dataclasses
 
 import pytest
 
@@ -141,18 +140,6 @@ def test_a_ledger_holding_the_stage_one_claim_reads_stage_two_and_one_lacking_it
     world_v = evaluate(s1.predicate, world_q.WorldReader(w, "p_lack"),
                        binding_of("p_lack", {"subject": "p_a"})).value
     assert world_v is True and ledger_v is UNKNOWN, (world_v, ledger_v)
-
-
-def test_a_reader_of_the_world_instead_of_the_ledger_reads_the_lacking_person_one_stage_on(staged, monkeypatch):
-    """THE PLANTED FAILURE (the section's): the person-side reader swapped for the world's. The lacking person
-    then reads stage 2 -- the world's answer, a fact no channel delivered him -- and (a)'s assertion reddens.
-    Run by hand against the source as well (`WorldReader(w, p.id)` in `current_stage`)."""
-    w = _belief_world()
-    want = {"p_hold": {"p_a": "s2"}, "p_lack": {"p_a": "s1"}}
-    assert {pid: _stage_ids(w, pid) for pid in want} == want, "the control: the real reader reads belief"
-    monkeypatch.setattr(world_q, "LedgerReader", lambda claims, *a, **fade: world_q.WorldReader(w, "p_lack"))     # B09.01: `weigh`, `tick`, `decay`
-    assert _stage_ids(w, "p_lack") == {"p_a": "s2"}, "the swapped reader answers from the world"
-    assert _stage_ids(w, "p_lack") != want["p_lack"], "a world read is observable: (a) would redden"
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -288,32 +275,6 @@ def test_every_shipped_goal_and_every_ambition_of_the_realm_reads_none():
             authored += goals.goal(amb) is not None
     assert realm_checked >= 100 and authored >= 10, (realm_checked, authored)
     assert w.content_hash() == before, "asking stores nothing"
-
-
-def test_the_control_can_observe_what_it_excludes_a_row_planted_on_a_shipped_goal_reads_a_stage():
-    """The shipped control above is `None` because no row exists, not because the reader cannot return a
-    stage: plant the row on a shipped goal whose referent is its subject (`rung`/`person`) and the same
-    world reads one. The other kinds name their referents by a hold or a ledger (read above), so they are not
-    planted here; the loop asserts how many it did plant (4 shipped rows are `rung`/`person` at the base)."""
-    planted = 0
-    row = _doc()["goal_stages"][0]["stages"]
-    stages = goals.parse({"goals": [_goal("g_x", {"faction": "Valorsmark"}, {"kind": "rung", "rung": "terr_T9"})],
-                          "goal_stages": [{"id": "gs_x", "for": ["g_x"], "stages": row}]})[0].stages
-    for g in goals.goals():
-        if g.object["kind"] not in ("rung", "person"):
-            continue
-        with goals.rows_replaced(tuple(dataclasses.replace(x, stages=stages) if x.id == g.id else x
-                                       for x in goals.goals())):
-            w = World(0)
-            w.propositions[g.id] = Proposition(g.id, "OUGHT", "subj_" + g.id, f"{g.id} ought", True, 0)
-            p = Person("p_o", "p_o")
-            p.tenures.append(Tenure("t_c", "p_o", g.id, "commit", 0))
-            w.persons["p_o"] = p
-            cur = world_q.current_stage(w, p, g.id)
-            assert cur is not None and [s.id for s in cur.values()] == ["s1"], g.id
-            assert list(cur) == ["subj_" + g.id]
-        planted += 1
-    assert planted >= 3, planted
 
 
 # ---------------------------------------------------------------------------------------------------

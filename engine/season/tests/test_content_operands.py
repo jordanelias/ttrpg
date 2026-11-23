@@ -39,7 +39,7 @@ import pytest
 
 from ..data.fixtures import WORKS_COST, _check_works_cost
 from ..data.requires import REQUIRES_OPERANDS, RECORD_SOURCED_OPERANDS, _check_record_sourced
-from ..data.rosters import QUESTION_SOURCES, RECORD_CONTENT, RECORD_KIND_KEYS, roster
+from ..data.rosters import RECORD_CONTENT, RECORD_KIND_KEYS, roster
 from ..data.verbs import VERB_TABLE
 from ..decision.options import _derive_operand, _from_content_claim, opening_set
 from ..gaps import Forbidden, Ungraded, Unspecified
@@ -196,7 +196,7 @@ def test_at_is_not_a_requires_operands_member_and_derive_operand_is_never_asked_
     assert "at" not in REQUIRES_OPERANDS
     # A COUNT PIN, NOT THE ROSTER'S CONTENT RESTATED -- BATCH-CLOSE FINDING (methodology-close
     # Phase 1, CODE ARCHITECTURE lens): the prior version spelled all eight names out again,
-    # which `test_jordan_no_definition_is_hardcoded_in_a_body` catches in the corpus as "the same
+    # which `test_jordan_no_definition_is_hardcoded_in_a_body` (retired) catches in the corpus as "the same
     # closed set written out again". The closure's actual content is `rosters.yaml:
     # requires_operands`'s own job to declare; this test's job is only to catch it growing (or
     # shrinking) without `at` in particular joining it, which the length plus the membership
@@ -300,12 +300,6 @@ def test_no_writ_derived_operand_is_ever_a_raw_tuple():
 # 6 -- NOTHING WIDENS THAT DID NOT NEED TO
 # ======================================================================================
 
-def test_question_sources_stays_at_two_clause_3_is_not_a_fourth_source():
-    """r2 `01` §A.5.4, RULED: *"Not a fourth source. One `Question` shape, one `source` string,
-    one `occasioned_by` route."* Clause 3 widens Q2's ADMISSION test in place; it mints no new
-    `Question.source` value."""
-    assert set(QUESTION_SOURCES) == {"claim_landed", "need"}
-
 
 def test_a_bad_source_still_raises_named_did_not_smuggle_one_in():
     with pytest.raises(Forbidden, match="question_sources"):
@@ -334,7 +328,7 @@ def test_record_sourced_operands_refuses_each_planted_mismatch():
         _check_record_sourced({"petition": {"from": "from"}}, ops, RECORD_KIND_KEYS)
     # THE CONTROL -- the real roster, read back through its own binding, never re-typed: a second
     # literal here would be exactly the "roster duplicated from the data file" defect this whole
-    # position exists to fix (`test_jordan_no_definition_is_hardcoded_in_a_body` caught the first
+    # position exists to fix (`test_jordan_no_definition_is_hardcoded_in_a_body` (retired) caught the first
     # draft doing precisely this).
     _check_record_sourced(RECORD_SOURCED_OPERANDS, ops, RECORD_KIND_KEYS)
 
