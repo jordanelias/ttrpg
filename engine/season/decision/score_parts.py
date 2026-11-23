@@ -17,7 +17,7 @@ from typing import Callable, Optional
 from engine.dice_engine.fmath import ltr_sum
 from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
 from ..data.verbs import VERB_TABLE, align, align_kind
-from ..queries.person_q import crisis_weights, is_deed
+from ..queries.person_q import crisis_weights, is_deed, regard_parts
 from ..state.carriers import Candidate, Claim, Question
 from .choose import _DAMP, TERM_NAMES, admission_weight, odds_weight, score_terms
 
@@ -107,10 +107,13 @@ def heard(chosen_parts, total: float, floor: float = HEARD_FLOOR, drew_off: Opti
     return tuple(out)
 
 
-def history(p, part: ScorePart) -> Optional[Citation]:
-    """The history a voice cites, read at the call and stored nowhere: for a pursuit voice, `p.scar[owner]` and the newest deed claim in his
-    ledger whose kind scores (`align_kind`) on an axis the pursuit projects onto -- the deed claims `deeds_judged` scores, by the pursuit's own
-    axes; ties to the later in the ledger. `None` for any other voice (a stance voice's `regard` parts land with B10.55)."""
+def history(p, part: ScorePart, fx=None):
+    """The history a voice cites, read at the call and stored nowhere. For a pursuit voice, a `Citation`: `p.scar[owner]` and the newest deed claim in
+    his ledger whose kind scores (`align_kind`) on an axis the pursuit projects onto -- the deed claims `deeds_judged` scores, by the pursuit's own
+    axes; ties to the later in the ledger. For a stance voice, the `RegardParts` of its subject (`person_q.regard_parts` at `fx`, the four addends
+    `regard` sums: B10.55). `None` for any other voice."""
+    if part.kind == "stance":
+        return regard_parts(p, part.owner, fx)
     if part.kind != "pursuit":
         return None
     axes = [ax for ax, w in to_axes({part.owner: 1.0}).items() if w]

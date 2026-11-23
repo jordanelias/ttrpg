@@ -32,7 +32,7 @@ from __future__ import annotations
 
 import functools
 import math
-from typing import Optional
+from typing import NamedTuple, Optional
 
 from engine.dice_engine.fmath import ltr_sum
 from engine.substrate.descriptors import (
@@ -547,6 +547,42 @@ def _lean(axis_w: dict, kind: str) -> float:
     return ltr_sum(axis_w[ax] * _verbs.align_kind(kind, ax) for ax in _AXES)
 
 
+class RegardParts(NamedTuple):
+    """THE FOUR ADDENDS OF `regard`, in its addition order: `stored` (his own stance rows), `judged` and `told` (`deeds_judged`'s two halves, each
+    at its own gain) and `heritage` (the caste estimate). `regard` is their sum, `((stored + judged) + told) + heritage`, and nothing else."""
+    stored: float
+    judged: float
+    told: float
+    heritage: float
+
+
+def regard_parts(p: Person, referent: str, fx=None) -> RegardParts:
+    """THE ADDENDS OF `regard`, which is their sum (`regard`'s docstring has the formula and the controls; this is its one owner, `CLAUDE.md` §8).
+    With no `fx`, or with the gains at 0, the `judged` and `told` addends are `0.0` and no ledger is read; a `heritage_gain` of 0 makes `heritage`
+    `0.0` and reads none."""
+    stored = stance_toward(p, referent)
+    if fx is None:
+        return RegardParts(stored, 0.0, 0.0, 0.0)
+    jg = float(fx.get("judged_gain"))
+    tg = float(fx.get("told_valence_gain"))
+    if not (jg >= 0 and tg >= 0):
+        raise ValueError(f"judged_gain {jg} / told_valence_gain {tg} must be >= 0 (H-192/H-193)")
+    judged = told = 0.0
+    if jg or tg:
+        unit = fx.get("regard_unit")
+        if unit not in REGARD_UNITS:
+            raise ValueError(f"regard_unit {unit!r} is not in rosters.yaml: regard_units {sorted(REGARD_UNITS)} (H-470)")
+        arm = fx.get("deed_counterparty")
+        if arm not in DEED_COUNTERPARTIES:
+            raise ValueError(f"deed_counterparty {arm!r} is not in rosters.yaml: deed_counterparties {sorted(DEED_COUNTERPARTIES)} (H-474)")
+        raw_judged, raw_told = (deeds_judged_steps if unit == "stance" else deeds_judged)(
+            p, referent, fx.get("scar_weight_shift"), fx.get("sworn_bond"), arm)
+        judged, told = jg * raw_judged, tg * raw_told
+    # v11 CR-31: the caste estimate, `heritage_regard`, a third term at its own gain (0 reads nothing: the control). It reads `p`'s own ledger and
+    # own convictions only.
+    return RegardParts(stored, judged, told, heritage_regard(p, referent, fx))
+
+
 def regard(p: Person, referent: str, fx=None) -> float:
     """HOW `p` REGARDS `referent`, computed when read and never written (telling workplan §1's
     spine):
@@ -562,28 +598,53 @@ def regard(p: Person, referent: str, fx=None) -> float:
     relation gain (`H-179`, shipped 0.5), and zeroing it for G1's control would move every told
     claim's weight -- two decisions on one fixture, `H-121`'s defect. A second name for one sum is
     deliberate: `decision/options.py::teller_weight` asks for REGARD, so when the gains move, the
-    reader does not."""
-    stored = stance_toward(p, referent)
-    if fx is None:
-        return stored
-    jg = float(fx.get("judged_gain"))
-    tg = float(fx.get("told_valence_gain"))
-    if not (jg >= 0 and tg >= 0):
-        raise ValueError(f"judged_gain {jg} / told_valence_gain {tg} must be >= 0 (H-192/H-193)")
-    if jg or tg:
-        unit = fx.get("regard_unit")
-        if unit not in REGARD_UNITS:
-            raise ValueError(f"regard_unit {unit!r} is not in rosters.yaml: regard_units {sorted(REGARD_UNITS)} (H-470)")
-        arm = fx.get("deed_counterparty")
-        if arm not in DEED_COUNTERPARTIES:
-            raise ValueError(f"deed_counterparty {arm!r} is not in rosters.yaml: deed_counterparties {sorted(DEED_COUNTERPARTIES)} (H-474)")
-        judged, told = (deeds_judged_steps if unit == "stance" else deeds_judged)(
-            p, referent, fx.get("scar_weight_shift"), fx.get("sworn_bond"), arm)
-        stored = stored + jg * judged + tg * told
-    # v11 CR-31: the caste estimate, `heritage_regard`, a third term at its own gain (0 reads nothing, so the
-    # sum above is returned untouched: the control). It reads `p`'s own ledger and own convictions only.
-    h = heritage_regard(p, referent, fx)
-    return stored + h if h else stored
+    reader does not.
+    THE SUM OF `regard_parts`, left to right (B10.55): the four addends live there once, so the split a player's surface or the chronicle reads
+    cannot disagree with the number a choice scores."""
+    stored, judged, told, h = regard_parts(p, referent, fx)
+    total = stored + judged + told
+    return total + h if h else total
+
+
+# B10.55: THE CLAIMS A PERSON HOLDS OF A PERSON'S BOND TO HIM, `Claim(subject=<that person>, predicate=BOND_STEM + <ground>, value=True)`: his own
+# knowledge of what the other is to him. NOTHING DEPOSITS ONE TODAY (B10.62 seeds them from an authored relation), so `room_as_held`'s `bond` reads 0.
+BOND_STEM = "bond:"
+
+
+def room_as_held(p: PersonInterior, event_id: str, fx, deposited=()) -> tuple:
+    """THE ROOM `p` BELIEVES HE STOOD IN WHEN HE ACTED (B10.55): for each person `p`'s OWN ledger names as present at the Event `event_id`, `(id,
+    {"told", "seen", "bond"})`, sorted by id -- counts of what `p` holds of him, never what he holds of `p` (that is `world_q.witness_regard`, the
+    chronicle's, which no decision or surface reads). Person-side, asker first, no World (AX-2): nothing about anyone else's ledger.
+
+    `deposited` is the ids of the claims deposited from `event_id`, the host's `queries/cache.py::deposit_index` answer (ids only, holder-blind):
+    the person-side reader holds no log, and a `Claim` carries no Event, so `p` is asked which of those he holds, as `epistemic._antecedent_claim` asks
+    it. The ones he holds are his anchors (his own `when` and `lap`), and he names no one while he holds none. A person is NAMED by:
+
+      * `seen`: his own untold `seen` claims, in an anchor's `when` and `lap`, whose `who` is that person (whom he saw acting there);
+      * `told`: his claims of the SAME subject and predicate as an anchor, deposited from then on, whose teller (`Claim.teller`) is that person.
+
+    `bond` is the count of `bond:<ground>` claims `p` holds of a person so named (`BOND_STEM`); it names no one by itself, since a bond is not a
+    presence. `fx` is the entry's signature and is read by nothing here (`CLAUDE.md` §8: no second copy of any gain)."""
+    ids = frozenset(deposited)
+    anchors = [c for c in p.ledger if c.id in ids]
+    if not anchors:
+        return ()
+    spots = {(c.when, c.lap) for c in anchors}
+    since: dict = {}
+    for a in anchors:
+        key = (a.subject, a.predicate)
+        since[key] = min(a.when, since.get(key, a.when))
+    seen: dict = {}
+    told: dict = {}
+    for c in p.ledger:
+        who = getattr(c.value, "who", None)
+        if c.predicate == SEEN_PREDICATE and not c.chain and who is not None and who != p.id and (c.when, c.lap) in spots:
+            seen[who] = seen.get(who, 0) + 1
+        elif c.chain and c.teller != p.id and (c.subject, c.predicate) in since and c.when >= since[(c.subject, c.predicate)]:
+            told[c.teller] = told.get(c.teller, 0) + 1
+    return tuple((x, {"told": told.get(x, 0), "seen": seen.get(x, 0),
+                      "bond": sum(1 for c in p.ledger if c.subject == x and c.predicate.startswith(BOND_STEM) and c.value is True)})
+                 for x in sorted(seen.keys() | told.keys()))
 
 
 # The claim a person holds about another's skill: `Claim(subject=<that person>, predicate=CAPABILITY_CLAIM + <the skill>,

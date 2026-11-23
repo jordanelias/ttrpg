@@ -1,5 +1,6 @@
 """B10.54 (`02_CHAR_voices_and_the_room` edits 1-4) -- A CHOICE READ BACK AS ITS SCORE PARTS, AND WHICH ARE HEARD:
-`decision/score_parts.py`. Lane: the season loop.
+`decision/score_parts.py`; B10.55 (edit 5) -- THE ROOM A PERSON BELIEVES HE STOOD IN: `person_q.regard_parts`, `room_as_held`,
+`world_q.present_at`, `witness_regard`. Lane: the season loop.
 
 THE FALSIFIER: (a) a `watch` that calls `score_parts` and `heard` on every deliberation moves `World.content_hash()` -- a voice is steering;
 (b) the parts of a candidate do not sum to its `score_terms` -- a player would be shown reasons that did not decide. The realm half
@@ -10,17 +11,23 @@ from __future__ import annotations
 import math
 
 from engine.dice_engine.fmath import ltr_sum
-from engine.substrate.descriptors import PURSUITS
+from engine.substrate.descriptors import AFFILIATION_CONCERNS, HERITAGE_ENGAGES, PURSUITS
 
 from ..data import goals as goals_data
 from ..data import verbs as V
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.pursuits import to_axes
-from ..data.rosters import PURSUIT_AXES
+from ..data.affiliations import AFFILIATION_CEILING
+from ..data.rosters import PURSUIT_AXES, REGARD_UNITS, SEEN_PREDICATE
 from ..data.verbs import VERB_TABLE
 from ..decision import choose as CH
 from ..decision import score_parts as SP
-from ..state.carriers import Candidate, Claim, Person, Question, Tenure
+from ..epistemic import Seen
+from ..harness import probes as P
+from ..queries import person_q as PQ
+from ..queries import world_q
+from ..queries.cache import deposit_index
+from ..state.carriers import Act, Candidate, Claim, Event, Person, Question, Tenure, interior_of
 
 _SUBJECT, _TO = "p_vc_subject", "p_vc_to"
 
@@ -127,4 +134,57 @@ def test_a_pursuit_voice_cites_its_scar_count_and_the_newest_claim_it_scored():
     cite = SP.history(p, SP.ScorePart("pursuit", e, 0.5))
     assert cite.scar == 2 and cite.claim.id == "c2"
     assert SP.history(p, SP.ScorePart("pursuit", sorted(PURSUITS)[1], 0.5)).scar == 0
-    assert SP.history(p, SP.ScorePart("stance", _SUBJECT, 0.5)) is None            # the stance voice's regard parts land with B10.55
+
+
+def _judging_person():
+    """A person who regards `_SUBJECT` by every addend: a stance row, a firsthand deed claim, a told one, and a sighting that names a heritage
+    whose concern he stands wholly for."""
+    p, _ = _person()
+    axis_w = PQ.projected_axes(p, 0.0)
+    kinds = [k for k in sorted(V.DEED_KINDS) if k not in PQ.PAIRED_KINDS
+             and PQ.deed_term(p, axis_w, Claim("k", p.id, _SUBJECT, k, True, 2, "firsthand", 100, "own")) != 0.0]
+    assert len(kinds) >= 2, "the tables moved: fewer than two unpaired deed kinds score for this person"
+    heritage = sorted(HERITAGE_ENGAGES)[0]
+    for a in AFFILIATION_CONCERNS[HERITAGE_ENGAGES[heritage]]:
+        p.conviction[a] = AFFILIATION_CEILING
+    p.ledger += [Claim("d1", p.id, _SUBJECT, kinds[0], True, 2, "firsthand", 100, "own"),
+                 Claim("d2", p.id, _SUBJECT, kinds[1], True, 2, "told_by", 100, "own", chain=(_TO,)),
+                 Claim("s1", p.id, _SUBJECT, SEEN_PREDICATE, Seen(who=_SUBJECT, marks=(heritage,)), 2, "firsthand", 100, "own")]
+    return p
+
+
+def test_regard_parts_sum_to_regard():
+    p = _judging_person()
+    assert PQ.regard_parts(p, _SUBJECT).stored == PQ.regard(p, _SUBJECT) == PQ.stance_toward(p, _SUBJECT)       # no `fx`: the stored half exactly
+    for unit in sorted(REGARD_UNITS):
+        fx = DEFAULT_FIXTURES.sweep("regard_unit", unit)
+        parts = PQ.regard_parts(p, _SUBJECT, fx)
+        judged, told = (PQ.deeds_judged_steps if unit == "stance" else PQ.deeds_judged)(p, _SUBJECT, fx.get("scar_weight_shift"), fx.get("sworn_bond"),
+                                                                                           fx.get("deed_counterparty"))
+        assert parts.judged == fx.get("judged_gain") * judged and parts.told == fx.get("told_valence_gain") * told, unit
+        assert parts.heritage == PQ.heritage_regard(p, _SUBJECT, fx), unit
+        assert 0.0 not in (parts.stored, parts.judged, parts.told, parts.heritage), (unit, parts)           # every addend is observed carrying something
+        assert PQ.regard(p, _SUBJECT, fx) == parts.stored + parts.judged + parts.told + parts.heritage, unit    # exactly, in the one addition order
+        assert SP.history(p, SP.ScorePart("stance", _SUBJECT, 1.0), fx) == parts, unit
+
+
+def test_room_as_held_names_only_what_the_actor_holds():
+    w = P.tiny_world()
+    actor, seen_by, unseen = "p_low", "p_mid", "p_other"
+    w.acts.append(Act("a_vc", actor, "petition", payload={}))
+    w.log.append(Event("ev_act", "petition.filed", [], ["a_vc"], 0))
+    for pid in (actor, seen_by, unseen):                                    # each holds a claim deposited from the act's Event
+        w.persons[pid].ledger.append(Claim(f"c_{pid}", pid, actor, "petition.filed", True, 0, "firsthand", 100, "own"))
+        w.log.append(Event(f"ev_dep_{pid}", "claim.deposited", [P.apparatus_receipt(w, f"c_{pid}", "set", "Event")], ["ev_act"], 0))
+    w.persons[unseen].stance.append((actor, -5, 5))                          # a witness the actor holds nothing of, and who holds him hostile
+    w.persons[actor].ledger.append(Claim("c_saw", actor, "site_harbour", SEEN_PREDICATE, Seen(who=seen_by), 0, "firsthand", 100, "own"))
+    deposited = deposit_index(w)["ev_act"]
+    assert world_q.present_at(w, "ev_act") == tuple(sorted((actor, seen_by, unseen)))        # world truth: all three stood there
+    truth = dict(world_q.witness_regard(w, "ev_act", DEFAULT_FIXTURES))       # the chronicle's reading: what each present person holds of him
+    assert set(truth) == {seen_by, unseen} and truth[unseen]["stored"] == -25.0 and truth[seen_by]["stored"] == 0.0, truth
+    room = dict(PQ.room_as_held(interior_of(w.persons[actor], 0, 0), "ev_act", DEFAULT_FIXTURES, deposited))
+    assert set(room) == {seen_by} and room[seen_by]["seen"] == 1 and room[seen_by]["told"] == room[seen_by]["bond"] == 0, room   # he holds no claim of `unseen`
+    w.persons[actor].ledger.append(Claim("c_told", actor, actor, "petition.filed", True, 1, "told_by", 100, "own", chain=(unseen,)))
+    told = dict(PQ.room_as_held(interior_of(w.persons[actor], 0, 0), "ev_act", DEFAULT_FIXTURES, deposited))
+    assert set(told) == {seen_by, unseen} and told[unseen]["told"] == 1, told         # the control: once he holds one, he names him
+    assert PQ.room_as_held(interior_of(w.persons[actor], 0, 0), "ev_act", DEFAULT_FIXTURES, ()) == ()          # no claim of his is of that Event: no room
