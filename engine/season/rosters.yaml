@@ -2588,9 +2588,10 @@ rosters:
       per COMBINATION of its keys' closed sets (`data/verbs.py::CHOICE_RANGES`: `role` is `order_roles`, `retreat_at`
       is `order_retreat_at`), each value riding on the act's payload under its own name. ⚠ THE KEYS ARE NOT
       `requires_operands` MEMBERS and a cell never binds them: the closed operand vocabulary stays closed (`challenge`'s
-      `stakes` is the precedent for a payload key the effect reads). ⚠ THE CHOOSER IS CONTENT-BLIND: Candidates score
-      on `(verb, subject)` (`decision/choose.py`), so the fan is a draw among equally scored orders, not a judgement of
-      which role suits the field. ⚠ THE FAN IS A COST, MEASURED AT ITS LANDING (`hole_register.yaml` `H-361`): 15 roles x 3
+      `stakes` is the precedent for a payload key the effect reads). ⚠ THE CHOOSER IS CONTENT-BLIND UNTIL A CELL IS AUTHORED: Candidates
+      score on `(verb, subject)` (`decision/choose.py`), so the fan is a draw among equally scored orders, not a judgement of
+      which role suits the field. CONTENT ENTERS AT ONE PLACE, `tables.alignment`'s optional `choices:` block (B10.56, shipped absent):
+      a cell there on a key this table names scores that value in `score_terms`' `pursuit`, through the person's own axis weights. ⚠ THE FAN IS A COST, MEASURED AT ITS LANDING (`hole_register.yaml` `H-361`): 15 roles x 3
       `retreat_at` values = 45 bags per settlement a marshal forms on. ONE LOADER, `data/verbs.py::CHOICE_SOURCED`,
       refused at import for a verb the table lacks, a key without a range, or a key whose carrier the verb's row does not
       write (`role`, `retreat_at`: `Record.exists`; `posture`: `Site.condition`). ⚠ A KEY WHOSE RANGE HAS ONE MEMBER IS NOT
@@ -4407,6 +4408,12 @@ tables:
         not by pursuit (the retired pursuit-cells draft's §3.6, §7.4; G-1, [medium;
         Jordan to correct]). `corpus_run`'s RANKING counts only candidates whose verb has a celled
         axis, so a `tell` is neither a tie nor a discrimination there.
+    # B10.56 (`02_CHAR_choice_alignment` edit 1): AN OPTIONAL `choices:` BLOCK scores a CHOICE VALUE by alignment, and IT SHIPS ABSENT -- a
+    # candidate's `choice_sourced` payload values (`marshal`'s `retreat_at`, `role`) then score as they always did. Its shape is
+    # `choices: {<key>: {<value>: {<axis>: <cell>}}}`; no value is required to carry a cell. `data/verbs.py::_check_choice_cells` refuses a key
+    # no `choice_sourced` line carries, a value outside that key's `CHOICE_RANGES` (a value `0.5` is quoted), an axis off the roster and a
+    # cell that is not a number; `align_choice` reads the cells through `ALIGNMENT`. The cells are Jordan's (`BA1-cast-content`): each
+    # authored cell is a declared mover of the realm hash.
     # §G's third term. ORDER IS SEMANTIC: `declared` is the default and the first arm, and every
     # point is built from it rather than from the previous one. `uniform` is THE CONTROL — every
     # (verb, axis) pair equal, so convictions cannot discriminate at all and a verdict that does

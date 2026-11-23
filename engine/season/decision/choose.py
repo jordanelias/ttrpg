@@ -37,7 +37,7 @@ from ..data import goals as goals_data
 from ..data.cast import STANCE_MAX
 from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
 from ..data.rosters import SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
-from ..data.verbs import BODILY_PRIZES, VERB_TABLE, act_key, align
+from ..data.verbs import BODILY_PRIZES, CHOICE_SOURCED, VERB_TABLE, act_key, align, align_choice
 from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
 # imports `person_q` and `data/`); `_stance_arm` calls it, and `confliction` (IN-08 6f,
@@ -377,7 +377,8 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
     The ONE owner of the formula (`CLAUDE.md` §8): `make_chooser`'s `score` calls this and adds, and
     a reading that wants to know WHICH TERM decided a ranking calls this and never re-derives one.
 
-      * `pursuit` -- `damp * Σ_axis axis_w[axis] * align(c.verb, axis) * odds_weight(...)`, `axis_w` the
+      * `pursuit` -- `damp * Σ_axis axis_w[axis] * (align(c.verb, axis) + Σ_(key, value) align_choice(key, value, axis)) * odds_weight(...)` (the
+        parenthesised sum over the candidate's `choice_sourced` operands, B10.56; empty where no cell is authored), `axis_w` the
         person's projected pursuits, `damp` the `confliction_weight` arm's factor (exactly 1.0 at 0) and
         `odds_weight` CR-17's believed-chance factor on a contested candidate (exactly 1.0 at
         `odds_weighting` `none`, for an uncontested candidate, and when `odds` is `None`), and
@@ -400,6 +401,14 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
                          "(or `make_chooser`'s): the pursuit weights and damp are "
                          "hoisted per deliberation") from None
     pursuit = damp * ltr_sum(axis_w[ax] * align(c.verb, ax) for ax in _AXES)
+    # B10.56: the candidate's CHOICE VALUES (`choice_sourced` keys its operands carry), scored by their own alignment cells through the same
+    # weights and damp, so `odds_weight` below prices them with the verb's. Added only where a cell moves it: no cell authored (the shipped
+    # roster) leaves `pursuit` the very float above, not that float plus a signed zero.
+    chosen = tuple((k, c.operands[k]) for k in CHOICE_SOURCED.get(c.verb, ()) if k in (c.operands or {}))
+    if chosen:
+        by_choice = damp * ltr_sum(axis_w[ax] * ltr_sum(align_choice(k, v, ax) for k, v in chosen) for ax in _AXES)
+        if by_choice != 0.0:
+            pursuit += by_choice
     if pursuit != 0.0:
         pursuit *= odds_weight(p, c, fx, odds)
         pursuit *= admission_weight(p, c, fx)

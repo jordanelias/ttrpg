@@ -2281,6 +2281,11 @@ FOUNDING_REMIT_ACTS = _remit_acts_of(VERB_TABLE["establish"])
 # kind no verb emits is a weight on an event nobody can see. The authored ones are the `deed:` keys of
 # `rosters.yaml: tables.alignment` (a list here would be a second copy).
 DEED_PREFIX = "deed:"
+# B10.56 (`02_CHAR_choice_alignment` edits 1-2): an authored alignment cell for a CHOICE VALUE (`retreat_at` `early`, not the verb
+# `marshal`) is keyed `choice:<key>=<value>` in the same axis row, so `ALIGNMENT` stays the ONE binding the `H-66` sweep rebinds and
+# `align_choice` reads it where `align` does. The authored ones are `rosters.yaml: tables.alignment`'s optional `choices:` block (absent is
+# the shipped state; the cells are content for `BA1-cast-content`), read by `_load_alignment` and refused by `_check_choice_cells`.
+CHOICE_PREFIX = "choice:"
 
 
 _DENSITY_LAW = ("IN-08 (`workplans/valoria_master_workplan_v9_part5.md`) -- every table verb carries "
@@ -2332,7 +2337,33 @@ def _check_alignment_density(cells: dict, uncelled: dict) -> None:
                 law=_DENSITY_LAW)
 
 
-def _load_alignment(cells: Optional[dict] = None, uncelled: Optional[dict] = None) -> dict:
+def _check_choice_cells(choices: Optional[dict]) -> dict:
+    """`tables.alignment.choices`, `{key: {value: {axis: cell}}}`, checked and returned as axis rows `{axis: {choice:<key>=<value>: cell}}`.
+    Refused at load, each for a cell nothing would read: a key no verb's `choice_sourced` line carries (no candidate holds it in its
+    operands), a value outside that key's `CHOICE_RANGES` (no candidate holds it), an axis off the roster (`axis_weight` never reaches it)
+    and a cell that is not a number. No value is required to carry a cell: a value the block does not name scores as the table's default.
+    A value is spelt as `CHOICE_RANGES` spells it (`retreat_at`'s `0.5` is quoted in the YAML, and compared as the string it is)."""
+    sourced = {k for ks in CHOICE_SOURCED.values() for k in ks}
+    law = ("B10.56 / `02_CHAR_choice_alignment` -- a choice cell scores a value a candidate's operands can carry, on a rostered axis; "
+           "a cell nothing reads is never reported")
+    out: dict = {}
+    for key, values in (choices or {}).items():
+        if key not in sourced or not isinstance(values, dict):
+            raise Forbidden(f"alignment `choices:` names {key!r}, which no `choice_sourced` line carries (keys: {sorted(sourced)})",
+                            "rosters.yaml", needs="a key a verb's `choice_sourced` line names, with `{value: {axis: cell}}` under it", law=law)
+        for value, row in values.items():
+            if str(value) not in {str(v) for v in CHOICE_RANGES[key]}:
+                raise Forbidden(f"alignment `choices:` {key!r} names value {value!r}, outside its range {list(CHOICE_RANGES[key])}",
+                                "rosters.yaml", needs="a value of the key's closed set (`data/verbs.py::CHOICE_RANGES`)", law=law)
+            for ax, cell in (row or {}).items():
+                if ax not in PURSUIT_AXES or isinstance(cell, bool) or not isinstance(cell, (int, float)):
+                    raise Forbidden(f"alignment `choices:` {key!r}={value!r} cells {ax!r}: {cell!r}, not a number on a rostered axis",
+                                    "rosters.yaml", needs=f"a number on one of {sorted(PURSUIT_AXES)}", law=law)
+                out.setdefault(ax, {})[f"{CHOICE_PREFIX}{key}={value}"] = cell
+    return out
+
+
+def _load_alignment(cells: Optional[dict] = None, uncelled: Optional[dict] = None, choices: Optional[dict] = None) -> dict:
     """§F2's `alignment(c.verb, axis)`, from `rosters.yaml`, with FOUR load-time checks.
 
     Each check exists because the corresponding failure would be SILENT. A cell naming a verb the
@@ -2350,11 +2381,16 @@ def _load_alignment(cells: Optional[dict] = None, uncelled: Optional[dict] = Non
 
     An explicit `null` cell is a considered zero: it satisfies the density rule and is DROPPED
     from the returned table, so every reader (`align`, the sweep, the scar) sees the sparse numeric
-    table it always saw and reads `default_cell` for it."""
+    table it always saw and reads `default_cell` for it.
+
+    `choices` is the table's optional `choices:` block (B10.56; `_check_choice_cells`), read from the roster when `cells` is, and merged
+    into the returned axis rows under `choice:<key>=<value>`: absent or empty, the table is what it was."""
     if cells is None:
         cells = table("alignment")
         if uncelled is None:
             uncelled = table_meta("alignment").get("uncelled") or {}
+        if choices is None:
+            choices = table_meta("alignment").get("choices")
     admitted = set(VERB_TABLE) | {DEED_PREFIX + k for k in EMITTED_KINDS}
     checked = _check_sparse_table(
         "alignment", cells, PURSUIT_AXES, "axis", admitted, "verb or `deed:<kind>`",
@@ -2365,7 +2401,10 @@ def _load_alignment(cells: Optional[dict] = None, uncelled: Optional[dict] = Non
                  "kind no verb emits is a weight on an event nobody can see"))
     if uncelled is not None:
         _check_alignment_density(checked, uncelled)
-    return {ax: {k: v for k, v in row.items() if v is not None} for ax, row in checked.items()}
+    out = {ax: {k: v for k, v in row.items() if v is not None} for ax, row in checked.items()}
+    for ax, row in _check_choice_cells(choices).items():
+        out.setdefault(ax, {}).update(row)
+    return out
 
 ALIGNMENT = _load_alignment()
 
@@ -2387,6 +2426,14 @@ def align(verb: str, axis: str) -> float:
     return float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL))
 
 
+def align_choice(key: str, value, axis: str) -> float:
+    """B10.56: the alignment of a CHOICE VALUE on an axis -- `align`'s reading for a `choice_sourced` payload key (`marshal`'s `retreat_at`
+    `0.5`), the `choice:<key>=<value>` cell of `rosters.yaml: tables.alignment.choices`, else the table's `default_cell`. ⚠ IT READS
+    `ALIGNMENT`, THE ONE BINDING (`align`'s warning): an `H-66` sweep point rebinds it, and a point built from the verb and deed cells alone
+    (`uniform`) carries no choice cell, so a choice value scores `default_cell` there -- no value preferred, which is that control's claim."""
+    return float(ALIGNMENT.get(axis, {}).get(f"{CHOICE_PREFIX}{key}={value}", ALIGNMENT_DEFAULT_CELL))
+
+
 def celled_verbs() -> frozenset:
     """The verbs with AT LEAST ONE CELLED AXIS: a non-zero cell in the live `ALIGNMENT` binding.
 
@@ -2397,7 +2444,7 @@ def celled_verbs() -> frozenset:
     break. Read off `ALIGNMENT`, the binding the sweep rebinds, so under `uniform` every verb is
     celled -- the control arm's own answer."""
     return frozenset(v for row in ALIGNMENT.values() for v, val in row.items()
-                     if val and not str(v).startswith(DEED_PREFIX))
+                     if val and not str(v).startswith((DEED_PREFIX, CHOICE_PREFIX)))
 
 
 def align_kind(kind: str, axis: str) -> float:
