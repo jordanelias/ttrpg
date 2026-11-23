@@ -24,7 +24,8 @@
 # Jordan to correct]. `engine/season/data/cast.py` refuses a row naming fewer than the fifteen, or
 # holding no member of a concern (`descriptor_registry.yaml: affiliation_roster.concerns`).
 #
-# Stats are deferred per npc_roster_v30 (most rows carry `stats: null`).
+# Stats and skill scores are authored (BA1.01, `IS-A-11` table (a), uncorrected) for the rows the draft grounds;
+# a row it does not ground keeps `stats: null`.
 # History and discussion: references/npc_registry_history.md
 
 schema:
@@ -125,7 +126,8 @@ characters:
     territory: null
     ts: ~50
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred per npc_roster_v30 §Stat Blocks]
+    stats: {perception: 5, attunement: 4}
+    capabilities: {inquiry: 5}
     convictions:
       primary:
         - {conviction: justice, weight: 0.50}
@@ -163,7 +165,8 @@ characters:
     territory: null
     ts: 25
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {charisma: 5, will: 4}
+    capabilities: {argue: 5}
     convictions:
       primary:
         - {conviction: justice, weight: 0.40}
@@ -202,7 +205,8 @@ characters:
     territory: null
     ts: 15
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {perception: 5, will: 4}
+    capabilities: {inquiry: 5, argue: 3, law: 3}
     convictions:
       primary:
         - {conviction: doctrine, weight: 0.60}
@@ -241,7 +245,8 @@ characters:
     territory: null
     ts: 35
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {agility: 5, perception: 4}
+    capabilities: {arms: 5, inquiry: 3}
     convictions:
       primary:
         - {conviction: stewardship, weight: 0.40}
@@ -278,7 +283,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred. npc_roster_v30 notes "high personal combat stats (career soldier)"]
+    stats: {strength: 4, charisma: 4}
+    capabilities: {arms: 5}
     convictions:
       primary:
         - {conviction: honour, weight: 0.35}
@@ -315,7 +321,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {charisma: 5, acuity: 4}
+    capabilities: {argue: 5}
     convictions:
       primary:
         - {conviction: wealth, weight: 0.50}
@@ -351,7 +358,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {focus: 5, acuity: 4}
+    capabilities: {law: 5, copying: 3}
     convictions:
       primary:
         - {conviction: stability, weight: 0.60}
@@ -387,7 +395,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {acuity: 5, grace: 4}
+    capabilities: {law: 3, argue: 3}
     convictions:
       primary:
         - {conviction: stability, weight: 0.30}
@@ -423,7 +432,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {attunement: 5, charisma: 4}
+    capabilities: {argue: 5}
     convictions:
       primary:
         - {conviction: wealth, weight: 0.30}
@@ -461,7 +471,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {grace: 5, charisma: 4}
+    capabilities: {argue: 3, law: 3}
     convictions:
       primary:
         - {conviction: virtue, weight: 0.50}
@@ -498,7 +509,8 @@ characters:
     territory: T16 (Schoenland)
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {acuity: 4, attunement: 4}
+    capabilities: {argue: 3}
     convictions:
       primary:
         - {conviction: wealth, weight: 0.30}
@@ -534,7 +546,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {acuity: 5, will: 4}
+    capabilities: {law: 3, argue: 3}
     convictions:
       primary:
         - {conviction: stability, weight: 0.50}
@@ -576,7 +589,8 @@ characters:
     territory: T1 (Valorsplatz)
     ts: 28
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {charisma: 5, will: 4}
+    capabilities: {argue: 3}
     convictions:
       primary:
         - {conviction: virtue, weight: 0.45}
@@ -615,7 +629,8 @@ characters:
     territory: T9 (Himmelenger)
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP: deferred]
+    stats: {will: 5, charisma: 4}
+    capabilities: {argue: 3}
     convictions:
       primary:
         - {conviction: doctrine, weight: 0.50}
@@ -734,7 +749,8 @@ characters:
     territory: T1 (Valorsplatz)
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {acuity: 5, focus: 4}
+    capabilities: {inquiry: 5, copying: 3, law: 3}
     convictions:
       primary:
         - {conviction: justice, weight: 0.45}
@@ -771,7 +787,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {perception: 5, attunement: 4}
+    capabilities: {inquiry: 5}
     convictions:
       primary:
         - {conviction: liberty, weight: 0.30}
@@ -808,7 +825,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {grace: 4, attunement: 4}
+    capabilities: {argue: 3, inquiry: 3}
     convictions:
       primary:
         - {conviction: doctrine, weight: 0.60}
@@ -844,7 +862,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {agility: 5, strength: 4}
+    capabilities: {arms: 5}
     convictions:
       primary:
         - {conviction: stability, weight: 0.60}
@@ -880,7 +899,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {acuity: 4, charisma: 4}
+    capabilities: {arms: 3}
     convictions:
       primary:
         - {conviction: stability, weight: 0.60}
@@ -916,7 +936,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {acuity: 5, focus: 4}
+    capabilities: {inquiry: 3}
     convictions:
       primary:
         - {conviction: stability, weight: 0.60}
@@ -959,7 +980,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {will: 5, acuity: 4}
+    capabilities: {law: 5, inquiry: 3}
     convictions:
       primary:
         - {conviction: doctrine, weight: 0.60}
@@ -996,7 +1018,10 @@ characters:
     territory: null
     ts: null  # [GAP — "TS exposure via archive work" per faction_canon suggests latent/emerging TS]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {acuity: 4}
+    capabilities:
+      inquiry: 3
+      arms: 3  # [ASSUMPTION: IS-A-11 draft, uncorrected]
     convictions:
       primary:
         - {conviction: scholastics, weight: 0.35}
@@ -1034,7 +1059,7 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {will: 4}
     convictions:
       primary:
         - {conviction: doctrine, weight: 0.50}
@@ -1074,7 +1099,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {charisma: 5}
+    capabilities: {argue: 5}
     convictions:
       primary:  # ED-IN-0293: was null ([GAP]); all fifteen authored
         - {conviction: virtue, weight: 0.06}
@@ -1112,7 +1138,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {charisma: 5, acuity: 4}
+    capabilities: {law: 5, argue: 3}
     convictions:
       primary:
         - {conviction: justice, weight: 0.30}
@@ -1150,7 +1177,8 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: {charisma: 5, acuity: 5}
+    capabilities: {inquiry: 3}
     convictions:
       primary:
         - {conviction: justice, weight: 0.35}
@@ -1184,6 +1212,8 @@ characters:
     faction: Löwenritter
     role: Grandmaster
     status: canonical
+    stats: {will: 5, charisma: 4}
+    capabilities: {arms: 5}
     ts: 0
     certainty: 4
     resonant_style: Consequence
@@ -1216,6 +1246,8 @@ characters:
     faction: Hafenmark (Inner Council)
     role: Legal Advisor to Baralta
     status: canonical
+    stats: {acuity: 5, focus: 4}
+    capabilities: {law: 5, argue: 3}
     certainty: 5
     resonant_style: Evidence
     convictions:
@@ -1247,6 +1279,8 @@ characters:
     faction: Hafenmark (Inner Council)
     role: Military Commander
     status: canonical
+    stats: {endurance: 4, charisma: 4}
+    capabilities: {arms: 5}
     certainty: 4
     resonant_style: Consequence
     convictions:
@@ -1309,6 +1343,10 @@ characters:
     faction: Varfell (Jarl Council)
     role: Skald-Chief
     status: canonical
+    stats: {charisma: 5}
+    capabilities:
+      argue: 3  # [ASSUMPTION: IS-A-11 draft, uncorrected]
+      copying: 3
     certainty: 3
     resonant_style: Solidarity
     convictions:
@@ -1340,6 +1378,7 @@ characters:
     faction: Independent (Southernmost Wardens)
     role: Second Senior Warden
     status: canonical
+    stats: {focus: 5}
     territory: T15 (Southernmost)
     ts: 60
     certainty: 0
@@ -1376,6 +1415,8 @@ characters:
     role: Riskbreaker (doctrine-following — foil to Torsvald)
     lifepath: 3-LO3  # this row's own text: role "Riskbreaker" -> 3-LO3 Riskbreaker (maps to no capability key)
     status: proposed
+    stats: {agility: 5}
+    capabilities: {arms: 5}
     ts: 0
     certainty: 5
     resonant_style: Authority
@@ -1408,6 +1449,8 @@ characters:
     faction: Hafenmark (Inner Council)  # seat #4 (the unquoted `#4)` had eaten the paren)
     role: Commune Representative (Banneret)
     status: proposed
+    stats: {charisma: 4}
+    capabilities: {argue: 3, arms: 3}
     resonant_style: Consequence
     convictions:
       primary:
@@ -1438,6 +1481,8 @@ characters:
     faction: Varfell (Jarl Council)  # seat #5 (the unquoted `#5)` had eaten the paren)
     role: Military Jarl
     status: proposed
+    stats: {strength: 4}
+    capabilities: {arms: 5}
     resonant_style: Solidarity
     convictions:
       primary:
@@ -1468,6 +1513,8 @@ characters:
     faction: Crown
     role: Governor of Ehrenfeld (T14)
     status: proposed
+    stats: {acuity: 4, focus: 4}
+    capabilities: {law: 3}
     territory: T14 (Ehrenfeld)
     resonant_style: Evidence
     convictions:
@@ -1499,6 +1546,8 @@ characters:
     faction: Guilds
     role: Zunftmeisterin (Guildmaster Council)
     status: proposed
+    stats: {charisma: 4}
+    capabilities: {argue: 3}
     resonant_style: Solidarity
     convictions:
       primary:
@@ -1529,6 +1578,8 @@ characters:
     faction: Guilds
     role: Guild Advocate (legal representative at Crown court)
     status: proposed
+    stats: {acuity: 5, charisma: 4}
+    capabilities: {law: 5, argue: 5}
     resonant_style: Evidence
     convictions:
       primary:
@@ -1559,6 +1610,8 @@ characters:
     faction: Guilds
     role: Guild Surveyor (mapping maritime Forgetting boundary)
     status: proposed
+    stats: {perception: 5, focus: 4}
+    capabilities: {inquiry: 5}
     resonant_style: Evidence
     convictions:
       primary:
@@ -1589,6 +1642,8 @@ characters:
     faction: Restoration Movement
     role: Buditel (hedge school teacher)
     status: proposed
+    stats: {acuity: 4, charisma: 4}
+    capabilities: {argue: 3}
     resonant_style: Solidarity
     convictions:
       primary:
@@ -1620,6 +1675,8 @@ characters:
     role: Copyist (hand-copies suppressed Einhir cultural texts)
     lifepath: 3-CF4  # this row's own text: role "Copyist (hand-copies ... texts)" is the trade 3-CF4 Scribe is named for (its Knot: "an author whose work you copied"); maps to inquiry, not copying (the table's 3-CF4 ground)
     status: proposed
+    stats: {focus: 5, agility: 4}
+    capabilities: {copying: 5, inquiry: 3}
     resonant_style: Evidence
     convictions:
       primary:
@@ -1650,6 +1707,10 @@ characters:
     faction: Altonia
     role: Katepano (frontier governor)
     status: proposed
+    stats: {acuity: 4, charisma: 4}
+    capabilities:
+      law: 3
+      arms: 3  # [ASSUMPTION: IS-A-11 draft, uncorrected]
     resonant_style: Consequence
     convictions:
       primary:
@@ -1680,6 +1741,8 @@ characters:
     faction: Altonia
     role: Kommerkiarios (trade prefect at Schoenland interface)
     status: proposed
+    stats: {acuity: 4, focus: 4}
+    capabilities: {law: 3, inquiry: 3}
     resonant_style: Authority
     convictions:
       primary:

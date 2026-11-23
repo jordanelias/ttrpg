@@ -9459,7 +9459,13 @@
           "territory": null,
           "ts": "~50",
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "perception": 5,
+            "attunement": 4
+          },
+          "capabilities": {
+            "inquiry": 5
+          },
           "convictions": {
             "primary": [
               {
@@ -9549,7 +9555,13 @@
           "territory": null,
           "ts": 25,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "charisma": 5,
+            "will": 4
+          },
+          "capabilities": {
+            "argue": 5
+          },
           "convictions": {
             "primary": [
               {
@@ -9640,7 +9652,15 @@
           "territory": null,
           "ts": 15,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "perception": 5,
+            "will": 4
+          },
+          "capabilities": {
+            "inquiry": 5,
+            "argue": 3,
+            "law": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -9731,7 +9751,14 @@
           "territory": null,
           "ts": 35,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "agility": 5,
+            "perception": 4
+          },
+          "capabilities": {
+            "arms": 5,
+            "inquiry": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -9820,7 +9847,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "strength": 4,
+            "charisma": 4
+          },
+          "capabilities": {
+            "arms": 5
+          },
           "convictions": {
             "primary": [
               {
@@ -9909,7 +9942,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "charisma": 5,
+            "acuity": 4
+          },
+          "capabilities": {
+            "argue": 5
+          },
           "convictions": {
             "primary": [
               {
@@ -9997,7 +10036,14 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "focus": 5,
+            "acuity": 4
+          },
+          "capabilities": {
+            "law": 5,
+            "copying": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -10085,7 +10131,14 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "acuity": 5,
+            "grace": 4
+          },
+          "capabilities": {
+            "law": 3,
+            "argue": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -10173,7 +10226,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "attunement": 5,
+            "charisma": 4
+          },
+          "capabilities": {
+            "argue": 5
+          },
           "convictions": {
             "primary": [
               {
@@ -10263,7 +10322,14 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "grace": 5,
+            "charisma": 4
+          },
+          "capabilities": {
+            "argue": 3,
+            "law": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -10353,7 +10419,13 @@
           "territory": "T16 (Schoenland)",
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "acuity": 4,
+            "attunement": 4
+          },
+          "capabilities": {
+            "argue": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -10442,7 +10514,14 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "acuity": 5,
+            "will": 4
+          },
+          "capabilities": {
+            "law": 3,
+            "argue": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -10532,7 +10611,13 @@
           "territory": "T1 (Valorsplatz)",
           "ts": 28,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "charisma": 5,
+            "will": 4
+          },
+          "capabilities": {
+            "argue": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -10620,7 +10705,13 @@
           "territory": "T9 (Himmelenger)",
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "will": 5,
+            "charisma": 4
+          },
+          "capabilities": {
+            "argue": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -10881,7 +10972,15 @@
           "territory": "T1 (Valorsplatz)",
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "acuity": 5,
+            "focus": 4
+          },
+          "capabilities": {
+            "inquiry": 5,
+            "copying": 3,
+            "law": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -10970,7 +11069,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "perception": 5,
+            "attunement": 4
+          },
+          "capabilities": {
+            "inquiry": 5
+          },
           "convictions": {
             "primary": [
               {
@@ -11056,7 +11161,14 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "grace": 4,
+            "attunement": 4
+          },
+          "capabilities": {
+            "argue": 3,
+            "inquiry": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -11141,7 +11253,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "agility": 5,
+            "strength": 4
+          },
+          "capabilities": {
+            "arms": 5
+          },
           "convictions": {
             "primary": [
               {
@@ -11226,7 +11344,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "acuity": 4,
+            "charisma": 4
+          },
+          "capabilities": {
+            "arms": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -11311,7 +11435,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "acuity": 5,
+            "focus": 4
+          },
+          "capabilities": {
+            "inquiry": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -11397,7 +11527,14 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "will": 5,
+            "acuity": 4
+          },
+          "capabilities": {
+            "law": 5,
+            "inquiry": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -11483,7 +11620,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "acuity": 4
+          },
+          "capabilities": {
+            "inquiry": 3,
+            "arms": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -11570,7 +11713,9 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "will": 4
+          },
           "convictions": {
             "primary": [
               {
@@ -11655,7 +11800,12 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "charisma": 5
+          },
+          "capabilities": {
+            "argue": 5
+          },
           "convictions": {
             "primary": [
               {
@@ -11742,7 +11892,14 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "charisma": 5,
+            "acuity": 4
+          },
+          "capabilities": {
+            "law": 5,
+            "argue": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -11833,7 +11990,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "charisma": 5,
+            "acuity": 5
+          },
+          "capabilities": {
+            "inquiry": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -11920,6 +12083,13 @@
           "faction": "L\u00f6wenritter",
           "role": "Grandmaster",
           "status": "canonical",
+          "stats": {
+            "will": 5,
+            "charisma": 4
+          },
+          "capabilities": {
+            "arms": 5
+          },
           "ts": 0,
           "certainty": 4,
           "resonant_style": "Consequence",
@@ -12001,6 +12171,14 @@
           "faction": "Hafenmark (Inner Council)",
           "role": "Legal Advisor to Baralta",
           "status": "canonical",
+          "stats": {
+            "acuity": 5,
+            "focus": 4
+          },
+          "capabilities": {
+            "law": 5,
+            "argue": 3
+          },
           "certainty": 5,
           "resonant_style": "Evidence",
           "convictions": {
@@ -12081,6 +12259,13 @@
           "faction": "Hafenmark (Inner Council)",
           "role": "Military Commander",
           "status": "canonical",
+          "stats": {
+            "endurance": 4,
+            "charisma": 4
+          },
+          "capabilities": {
+            "arms": 5
+          },
           "certainty": 4,
           "resonant_style": "Consequence",
           "convictions": {
@@ -12241,6 +12426,13 @@
           "faction": "Varfell (Jarl Council)",
           "role": "Skald-Chief",
           "status": "canonical",
+          "stats": {
+            "charisma": 5
+          },
+          "capabilities": {
+            "argue": 3,
+            "copying": 3
+          },
           "certainty": 3,
           "resonant_style": "Solidarity",
           "convictions": {
@@ -12321,6 +12513,9 @@
           "faction": "Independent (Southernmost Wardens)",
           "role": "Second Senior Warden",
           "status": "canonical",
+          "stats": {
+            "focus": 5
+          },
           "territory": "T15 (Southernmost)",
           "ts": 60,
           "certainty": 0,
@@ -12408,6 +12603,12 @@
           "role": "Riskbreaker (doctrine-following \u2014 foil to Torsvald)",
           "lifepath": "3-LO3",
           "status": "proposed",
+          "stats": {
+            "agility": 5
+          },
+          "capabilities": {
+            "arms": 5
+          },
           "ts": 0,
           "certainty": 5,
           "resonant_style": "Authority",
@@ -12489,6 +12690,13 @@
           "faction": "Hafenmark (Inner Council)",
           "role": "Commune Representative (Banneret)",
           "status": "proposed",
+          "stats": {
+            "charisma": 4
+          },
+          "capabilities": {
+            "argue": 3,
+            "arms": 3
+          },
           "resonant_style": "Consequence",
           "convictions": {
             "primary": [
@@ -12568,6 +12776,12 @@
           "faction": "Varfell (Jarl Council)",
           "role": "Military Jarl",
           "status": "proposed",
+          "stats": {
+            "strength": 4
+          },
+          "capabilities": {
+            "arms": 5
+          },
           "resonant_style": "Solidarity",
           "convictions": {
             "primary": [
@@ -12647,6 +12861,13 @@
           "faction": "Crown",
           "role": "Governor of Ehrenfeld (T14)",
           "status": "proposed",
+          "stats": {
+            "acuity": 4,
+            "focus": 4
+          },
+          "capabilities": {
+            "law": 3
+          },
           "territory": "T14 (Ehrenfeld)",
           "resonant_style": "Evidence",
           "convictions": {
@@ -12727,6 +12948,12 @@
           "faction": "Guilds",
           "role": "Zunftmeisterin (Guildmaster Council)",
           "status": "proposed",
+          "stats": {
+            "charisma": 4
+          },
+          "capabilities": {
+            "argue": 3
+          },
           "resonant_style": "Solidarity",
           "convictions": {
             "primary": [
@@ -12806,6 +13033,14 @@
           "faction": "Guilds",
           "role": "Guild Advocate (legal representative at Crown court)",
           "status": "proposed",
+          "stats": {
+            "acuity": 5,
+            "charisma": 4
+          },
+          "capabilities": {
+            "law": 5,
+            "argue": 5
+          },
           "resonant_style": "Evidence",
           "convictions": {
             "primary": [
@@ -12885,6 +13120,13 @@
           "faction": "Guilds",
           "role": "Guild Surveyor (mapping maritime Forgetting boundary)",
           "status": "proposed",
+          "stats": {
+            "perception": 5,
+            "focus": 4
+          },
+          "capabilities": {
+            "inquiry": 5
+          },
           "resonant_style": "Evidence",
           "convictions": {
             "primary": [
@@ -12964,6 +13206,13 @@
           "faction": "Restoration Movement",
           "role": "Buditel (hedge school teacher)",
           "status": "proposed",
+          "stats": {
+            "acuity": 4,
+            "charisma": 4
+          },
+          "capabilities": {
+            "argue": 3
+          },
           "resonant_style": "Solidarity",
           "convictions": {
             "primary": [
@@ -13044,6 +13293,14 @@
           "role": "Copyist (hand-copies suppressed Einhir cultural texts)",
           "lifepath": "3-CF4",
           "status": "proposed",
+          "stats": {
+            "focus": 5,
+            "agility": 4
+          },
+          "capabilities": {
+            "copying": 5,
+            "inquiry": 3
+          },
           "resonant_style": "Evidence",
           "convictions": {
             "primary": [
@@ -13123,6 +13380,14 @@
           "faction": "Altonia",
           "role": "Katepano (frontier governor)",
           "status": "proposed",
+          "stats": {
+            "acuity": 4,
+            "charisma": 4
+          },
+          "capabilities": {
+            "law": 3,
+            "arms": 3
+          },
           "resonant_style": "Consequence",
           "convictions": {
             "primary": [
@@ -13202,6 +13467,14 @@
           "faction": "Altonia",
           "role": "Kommerkiarios (trade prefect at Schoenland interface)",
           "status": "proposed",
+          "stats": {
+            "acuity": 4,
+            "focus": 4
+          },
+          "capabilities": {
+            "law": 3,
+            "inquiry": 3
+          },
           "resonant_style": "Authority",
           "convictions": {
             "primary": [
