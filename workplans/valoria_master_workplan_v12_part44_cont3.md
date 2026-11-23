@@ -27,7 +27,7 @@ GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
 GATE: Batch B08-scene-order
 GATE: Batch B09-memory @2e95f6736718140bb817f325ec3ae5c2b90e5a23
 GATE: Batch B10-character @7f520d7a59d254e4056f8dd47f481ff0f4ca6a7f
-GATE: Batch BA1-cast-content
+GATE: Batch BA1-cast-content @ce61cbf3055cd6326cb2f9ea6330af4ce5d4fc45
 GATE: Batch B11-fi-readers
 GATE: Batch B11F1-flow-se
 GATE: Batch B11F2-flow-in

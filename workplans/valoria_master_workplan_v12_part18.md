@@ -1,10 +1,10 @@
-# Workplan v12 — part 18: batches B15-pc-calibration, BA1-cast-content
+# Workplan v12 — part 18: batch B15-pc-calibration
 
 ## Status: RATIFIED, ED-IN-0362 (a body part of workplan v12, drafted under `master/workplan_v12/`; adopted 2026-11-15 as the one active plan; resolves nothing at runtime, CLAUDE.md §0.05; not canon)
 
 ## Written against: the working tree at `aa31fd2` (branch `ccr-62958c70-0kjhsw`), read 2026-11-12; author lane A18 of `master/workplan_v12/V12_STRUCTURE_part2.md` §4.2. Every item is written against the tree as the batches before it leave it: `modules/combat/` a package (B13, CI-09), the pool rule and the opposed rule at their control (B05: `U5b_PC_rulings_in_the_fight` §2–§3, `29_DICE` items 29-1, 29-2), the typed outcome and the weapon export (B14), the keyed `Draw` (B06), the trait and skill rows (B04), the persons' mechanisms (B10). Where a symbol named here does not exist at `aa31fd2`, the item says which batch makes it.
 
-**What this part holds.** Two batches of wave W12, step S12, in §2.1's order: `B15-pc-calibration` (PC lane: a round ends at every separation, then the one combat calibration with one re-record of every combat golden, the armour reference and the export) and `BA1-cast-content` (IN lane: the cast's authored values land in their owners, one re-pin). They run in parallel at S12 (with B11 and B21); they share no item and meet only in `engine/season/verb_table.yaml` and `engine/season/rosters.yaml`, in different rows and keys (each block's PARALLEL line). A part cites another part's batch or item by handle only; the head's index maps a handle to its file.
+**What this part holds.** One batch of wave W12, step S12: `B15-pc-calibration` (PC lane: a round ends at every separation, then the one combat calibration with one re-record of every combat golden, the armour reference and the export). It runs in parallel at S12 (with B11 and B21); `BA1-cast-content` landed first (`ce61cbf3055cd6326cb2f9ea6330af4ce5d4fc45`) and its file is retired (`references/restructure_ledger.md`). A part cites another part's batch or item by handle only; the head's index maps a handle to its file.
 
 **Words.** `unified/U1_GLOSSARY.md`. A person's numbers are an attribute, a skill and its skill score, a martial skill (`arms`), a derived score (A-98). A *round* is one engagement of a fight: the two close, exchange one to four attempts, and separate (A-101); a *lap* is one pass of the season's scene budget (B04, PCR-4). The *riposte* is the counter that turns a deciding blow (code id `finalblow_riposte`, `18_DETERMINISM_no_certain_matchup.md`). Copied source text that says "turn" for the fight's round reads **round** here; the engine's identifiers (`turn_start`, `max_bouts`, `engagement_end`) keep their names until B16's PCR-3 renames them, so every item of B15 uses the tree's names.
 
@@ -374,6 +374,4 @@ The two READING positions: no code and no commit of their own; each is a line of
 - LANDS IT: B15's producer; `Item: B15.99`, without `[skip ci]` (the batch's last `Item:` push, CI run 1 of the batch).
 
 | STOP. Batch B15-pc-calibration closes here |
-
-The next batch of this part, `BA1-cast-content`, is in this part's continuation file (`_cont`, `V12_STRUCTURE_part2.md` §4.1).
 
