@@ -785,9 +785,9 @@ DEFAULT_FIXTURES = Fixtures(
     # `H-475` (B10.25; `16_PESSIMIST_CHAR_C` "The resolution, decided" 4, A-24). HOW SURELY A SCRUPLE STOPS A MAN: `decision/choose.py::make_ranker` strikes a candidate whose
     # `options.scruple` margin is positive; at `0` that is the THRESHOLD (every positive margin is struck, today's gate) and at `T > 0` the candidate is struck with probability
     # `1 - exp(-margin / T)` on the person's own draw `scruple:<verb>:<subject>`, so a large margin stops him nearly always and never certainly and a small one usually gives way.
-    # `0` is the CONTROL and SHIPS; the gate is armed nowhere (`refusal_axis` None), and B10.32 sets `0.2` with it. Must be >= 0. [ASSUMPTION; medium; Jordan to correct; revert: 0, the threshold.]
+    # `0` is the CONTROL and SHIPS; the gate is armed nowhere (`refusal_axis` None); B10.32 read the arming (H-146, H-475) and did NOT ship it: `0.2` is B98's, after BA1's cells. Must be >= 0. [ASSUMPTION; medium; Jordan to correct; revert: 0, the threshold.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-475 -- site: Fixtures scruple_temperature, graded `assumption`; the proposal's own gate arm is 0.2 and Jordan gave no value, so it is injected at the control and swept 0 / 0.1 / 0.2 / 0.4]
-    scruple_temperature=0.0,           # `H-475`, swept 0 (control, SHIPPED) / 0.1 / 0.2 (the arm B10.32 ships) / 0.4
+    scruple_temperature=0.0,           # `H-475`, swept 0 (control, SHIPPED) / 0.1 / 0.2 (the arm B10.32 read and did not ship) / 0.4
     # `H-153` (D-6, `19_PLAN.md:952-955`) -- THE ONE CORPUS FAULT THAT DOES NOT RECONCILE WITH
     # FAIL-FORWARD: *"whoever touches it is killed"* has no corpus-supplied next move. Swept
     # fixture, in the `H-128` shape: nothing reads it (the speech-kind resolution ladder this
