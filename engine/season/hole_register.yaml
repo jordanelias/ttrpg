@@ -6977,7 +6977,7 @@ rows:
     site:      "Fixtures scar_primary_mass, read by `person_q.broken_by` and `upheld_by` only at `scar_hold: primary`, once per person per call"
     sweep:     ["0.4", "0.6 (SHIPPED)", "0.8"]
     unblocks:  "`scar_hold`'s live arm: the size of the set a person can be scarred on"
-    cite:      "`02_CHAR_scar_is_a_wound.md` row 1 (\"0.6, PP-684's lower bound for the primary band\"). [ASSUMPTION; medium; Jordan to correct: the sweep points 0.4 and 0.8 (the source names only 0.6; a step of 0.2 either side), and that the mass is an absolute sum of weights and not a share of the person's total.] FALSIFIER `engine/season/tests/test_scar_stock.py::test_only_what_a_person_chiefly_lives_for_can_be_scarred` (planted `justice` 0.4, `liberty` 0.3, `love` 0.2 at 0.6: the first two are primary and `love` is not); CONTROL the realm content hash at seed 0, one season, equal to B10.06's reading."
+    cite:      "`02_CHAR_scar_is_a_wound.md` row 1 (0.6, PP-684's lower bound for the primary band). [ASSUMPTION; medium; Jordan to correct: the sweep points 0.4 and 0.8 (the source names only 0.6; a step of 0.2 either side), and that the mass is an absolute sum of weights and not a share of the person's total.] FALSIFIER `engine/season/tests/test_scar_stock.py::test_only_what_a_person_chiefly_lives_for_can_be_scarred` (planted `justice` 0.4, `liberty` 0.3, `love` 0.2 at 0.6: the first two are primary and `love` is not); CONTROL the realm content hash at seed 0, one season, equal to B10.06's reading."
     source:    "workplan v12 B10.07 (`02_CHAR_scar_is_a_wound` row 1; B10's H block slot 6)"
 
   - id:        H-470
@@ -7122,6 +7122,19 @@ rows:
     unblocks:  "B10.82 (appetite, a per-person multiplier on the same term); the row's authoring at B98's flip"
     cite:      "`proposals/2026-11-12-subsystem-audit-suite/proposals/02_CHAR_what_an_act_risks.md` \"Exact edits, by file and owner\" 1 and 5; `proposals/2026-11-12-cr93-attributes-in-a-persons-own-choice.md` section 0 premise correction 2 (the reader of a `judgement` row is `options._judgement_factor`, aliased `judgement_factor`; `capability_factor` does not exist) and section 2 (the sign). [ASSUMPTION; medium; Jordan to correct: that the gain is negative and the range [-1, 0] (a gain at -1 reaches 0 at the ceiling and `risk` is then gone for the boldest, not inverted); that the row's key is `attr.spirit.will` (the entry's `attr.mind.will` is a legacy alias that `capability_uses` does not accept; Spirit is its display name).] FALSIFIER `engine/season/tests/test_risk_term.py::test_spirit_moves_exposed_acts_through_the_uses_row` (a low-Spirit person ranks every exposed act strictly lower than a high-Spirit one at a planted row and nerve_gain -0.5, and the two read alike with no row; red with no row read); CONTROL `nerve_gain` 0, the factor exactly 1.0."
     source:    "workplan v12 B10.31 (`02_CHAR_what_an_act_risks` edits 1 and 5; B10's H block slot 17)"
+
+  - id:        H-482
+    tier:      1
+    hole:      "WHICH CONTESTS A PERSON DECIDES A CHOICE IN, BY HIS OWN CELLS -- `npc_decider_roles` (B10.57; IS-B2-CHAR-02). `decision/decider.py::decides_for(fx, role, host_plays)` answers whether a person decides a choice inside a contest for one composition role; the wrappers of the fight (B16), the field (B22) and the social contest (B24) ask it. An empty tuple is the control: every choice inside a contest is resolved as it is today. Which roles, if any, is not given by a document."
+    kind:      "RULING"
+    owner:     "decision/decider.py::decides_for"
+    grade:     "assumption"
+    default:   "() -- THE CONTROL, SHIPPED: no role is decided by the person's own cells, so every content hash is the one before B10.57 [ASSUMPTION; medium; Jordan to correct; revert: ()]"
+    site:      "Fixtures npc_decider_roles, read by `decision/decider.py::decides_for` once per contest wrapper's choice; a role outside `engine.substrate.composition.ROLES` is refused at load (data/fixtures.py)"
+    sweep:     ["() (control, SHIPPED)", "(combat.fight,)", "(combat.fight, mass_battle.army_order)"]
+    unblocks:  "B16's round choices and the wrappers of B22 and B24 deciding a choice by the person's own cells; B98's flip of the roles"
+    cite:      "Workplan v12 B10.57 (IS-B2-CHAR-02 steps 1 to 5) and `decision/decider.py::make_decider` and `::decides_for`; the composition roles are `engine/substrate/composition.py` ROLES. Added by the batch orchestrator after B10.57's commit left `test_season_shape.py::test_w9_check3_every_fixture_read_resolves_to_a_register_site` red (a fixture the run reads names no site on any row). [ASSUMPTION; medium; Jordan to correct: the sweep points are the roles a wrapper could name, not a reading.]"
+    source:    "workplan v12 B10.57; batch B10-character orchestrator, 2026-11-23"
 
 discharges:
   D1:   "row:H-01"
