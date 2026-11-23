@@ -30,6 +30,9 @@ B14.01 adds the combat module's output record, `CombatOutcome` (with `PartyWound
 `PersonalCombatInput`: the entry returns it and the host adapter reads it (`seam/wrappers/combat.py::resolve`). It is
 not a `Margin` and carries no winner.
 
+B24p.02 adds the proceeding's records after `Margin`: `Input` in (with `Present`, `Rite`, `Sitting`, `Point`, `Cond`, `Item`,
+`Beat`), `Outcome` out, `View`/`Option`/`Choice`/`JudgeView` for a played chooser, and `Card` (derived by the host, never authored).
+
 v9 FI-02 + FI-03 (`SM-3`, `ED-FI-0002`) add the fieldwork scene's pair, at the foot of the file:
 `TrailItem` and `FieldworkInput` in, `Findings` out -- the `inquiry` role's records, for the same reason.
 v9 IN-07 E1 adds the settlements module's larder records after them: `Eater`, `LarderInput` and `Under`
@@ -45,7 +48,7 @@ optional argument) and `CombatTurnView` (what its per-turn decider reads, handed
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Callable, Mapping, Optional
+from typing import Callable, Mapping, NamedTuple, Optional
 
 
 @dataclass(frozen=True)
@@ -133,6 +136,365 @@ class Margin:
     net: float
     ob: float
     terms: tuple = ()
+
+
+@dataclass(frozen=True)
+class Item:
+    """A worldly matter one side brings: a typed reference, never text (V2 p2 §G; `rosters.yaml: matters`).
+
+      * `id`      -- the item's own id;
+      * `kind`    -- a member of `rosters.yaml: matters`;
+      * `weight`  -- how much it weighs where it is shown;
+      * `source`  -- whose it is (the holder, the witness, the one implicated), where it has one;
+      * `about`   -- whom or what it bears on, where it has one;
+      * `sincere` -- `False`: its holder knows it false (his own false word, or a forgery)."""
+    id: str
+    kind: str
+    weight: float
+    source: Optional[str] = None
+    about: Optional[str] = None
+    sincere: bool = True
+
+
+@dataclass(frozen=True, kw_only=True)
+class Present:
+    """Everyone in the room: participant, adjudicator, audience (V2 p2 §A.1). Built by the host from `World`; read-only.
+
+    ONE INVARIANT (A-139, as corrected): a sitting has at least two distinct characters (`Input.__post_init__`).
+    `side` and `decides` are independent cells: a party may also decide, and he is partial by the same reading as anyone.
+
+      * `id`, `weight` -- a cohort is a person at weight above one;
+      * `side`         -- `"for"` | `"against"` | `None`   } the role is these two cells;
+      * `decides`      -- he ADJUDICATES                    }
+      * `focus`, `reason`, `attunement`, `presence`, `grace`, `will` -- his six attributes;
+      * `rank`         -- his rank in the proceeding's skill;
+      * `care`         -- `(want, hold, bond)` in 0..1: how much each kind of thing moves him (0.5 where none);
+      * `stake`        -- `(want, hold, bond)` in -1..1: how THIS matter bears on him, toward `for`;
+      * `bonds`        -- `((other person, -1..1), ...)`;
+      * `start`        -- where his track starts (host: `start_step` x mean(stake), plus the arrangement);
+      * `holds`        -- `((channel, tag, weight, how the matter bears on it), ...)`: his wants and convictions, tag by tag;
+      * `believes`     -- what he KNOWS of the matter, -1..1 toward `for` (his own ledger);
+      * `bias`         -- his stable misjudgement of what his options are worth: -1 pessimist .. +1 optimist;
+      * `power`, `precedence` -- his circumstances: seat, office, wealth, influence, faction (host);
+      * `items`        -- the `Item`s he holds;  `strain` -- what he carries in from earlier rattles."""
+    id: str
+    weight: int = 1
+    side: Optional[str] = None
+    decides: bool = False
+    focus: float
+    reason: float
+    attunement: float
+    presence: float
+    grace: float
+    will: float
+    rank: float
+    care: tuple = (0.5, 0.5, 0.5)
+    stake: tuple = (0.0, 0.0, 0.0)
+    bonds: tuple = ()
+    start: float = 0.0
+    holds: tuple = ()
+    believes: float = 0.0
+    bias: float = 0.0
+    power: float = 0.0
+    precedence: int = 0
+    items: tuple = ()
+    strain: float = 0.0
+
+
+@dataclass(frozen=True, kw_only=True)
+class Rite:
+    """The type's cells (V2 p2 §B), read by the module; it compares no row, move or person id (a move is read by its `effect`).
+
+      * `id`; `live` -- what the live thing is called (claim, offer, question, charge, motion, theme, plea);
+        `bears` -- which side bears it: he opens;
+      * `reply`   -- per side, `((side, must | may | raise), ...)`;
+      * `silence` -- what not answering a standing point means here: `admits` | `refusal` | `free` (A-145);
+      * `issues`  -- the stasis rungs it runs through (`rosters.yaml: issue_rungs`);
+      * `weighs`  -- stasis: what each rung is argued from, `((issue, ((ground, weight), ...)), ...)`;
+      * `concede`  -- `descends` | `accepts`;
+      * `moves`   -- per side, `((side, (argue | press | rest | concede, ...)), ...)`;
+      * `close`   -- `bench` | `declared` | `hearers` | `consent` | `exchange` (the abridged form);
+      * `turns`   -- each speaker's turns this sitting; `standard` -- the Grace the occasion asks; `reason_lean` -- the
+        venue's lean on Reason's share of the dice; `admits` -- the kinds of matter shown here;
+      * `difficulty`, `gravity` -- the obstacle the close is drawn against; `gravity` is how grave the times make a change
+        (renamed from `stakes`); `quorum` -- read by a `declared` close; `unrest` -- the pull of the times (Focus holds against it)."""
+    id: str
+    live: str
+    bears: str
+    reply: tuple
+    silence: str
+    issues: tuple
+    weighs: tuple
+    concede: str
+    moves: tuple
+    close: str
+    turns: int
+    standard: float
+    reason_lean: float
+    admits: tuple
+    difficulty: float
+    gravity: float
+    quorum: Optional[int] = None
+    unrest: float
+
+
+@dataclass(frozen=True)
+class Cond:
+    """One person's condition in a sitting (V2 p2 §C.1): `rattles` landed on him, `strain` he carries, `heat` this sitting's
+    provocation (a rattle adds one; it cools at each beat he makes), `spoken` his turns had, `spent` staying power used."""
+    rattles: int = 0
+    strain: float = 0.0
+    heat: float = 0.0
+    spoken: int = 0
+    spent: float = 0.0
+
+
+@dataclass(frozen=True)
+class Point:
+    """A point on the table (V2 p2 §C.1): `id`, `side`, `issue`, `ground`, `item`, `by` (its maker), and `held` -- how far it
+    stands with each listener, `((person, value), ...)`."""
+    id: int
+    side: str
+    issue: str
+    ground: str
+    item: Optional[str]
+    by: str
+    held: tuple
+
+
+@dataclass(frozen=True)
+class Sitting:
+    """A sitting's value (V2 p2 §C.1): `Input.state` is a whole one, so a resume needs no replay.
+
+      * `n` -- beats so far; `issue` -- the rung reached; `points` -- every `Point`, older ones kept;
+      * `live` -- `((side, the side's live point id | None), ...)`: one live point a side;
+      * `tracks` -- `((person, value), ...)`, each person's own running `start + the beats' moves` (never a verdict);
+      * `cond` -- `((person, Cond), ...)`; `used` -- grounds and items used, for staleness;
+      * `last_voice` -- `((side, who spoke last for it), ...)`; `ended` -- `None` | `budget` | `rested` | `yielded`."""
+    n: int = 0
+    issue: int = 0
+    points: tuple = ()
+    live: tuple = (("for", None), ("against", None))
+    tracks: tuple = ()
+    cond: tuple = ()
+    used: tuple = ()
+    last_voice: tuple = (("for", None), ("against", None))
+    ended: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class Option:
+    """One entry of `View.options` (V2 p2 §E): `move`, `ground`, `item`, `relation`; `ev` its PERCEIVED worth and `p` its perceived
+    chance; `frame` -- argue: what of the listeners' it is framed on; press: the held thing it hits."""
+    move: str
+    ground: Optional[str]
+    item: Optional[str]
+    relation: str
+    ev: float
+    p: Optional[float]
+    frame: Optional[str] = None
+
+
+class Choice(NamedTuple):
+    """A chooser's pick for one exchange (V2 p2 §E): the move, and where it takes one the ground, the item and the relation."""
+    move: str
+    ground: Optional[str] = None
+    item: Optional[str] = None
+    relation: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class Beat:
+    """The typed record of one exchange (V2 p2 §C.1); no text field. `terms` (true values) is in the outcome only.
+
+      * `n`, `mover`, `voice`, `side`, `move`, `relation`, `issue`, `ground`, `item`, `point`, `target`;
+      * `margin` -- the speech's margin; `drift` -- how far he was pulled off the point;
+      * `evaded` -- PRICED: a point he must answer left standing, or a matter he bears not put;
+      * `left` -- the other side's point that stood against him and that he did not answer, in any rite, priced or not;
+      * `insincere` -- 0..1; `caught` -- those whose reading of him turned a speech he did not hold;
+      * `rattled` -- whom it rattled; `frame` -- the frame of an argument or the object of a press;
+      * `relevance` (Reason), `heard` (Presence), `esteem` (Grace) -- the operands of the speech;
+      * `broke` -- he spoke with his temper broken; `moved` -- each listener's move; `closed` -- how it ended the sitting;
+      * `mood` -- the room's, named only at the beat that turns it; `terms` -- true values."""
+    n: int
+    mover: str
+    voice: str
+    side: str
+    move: str
+    relation: str
+    issue: str
+    ground: Optional[str]
+    item: Optional[str]
+    point: Optional[int]
+    target: Optional[str]
+    margin: float
+    drift: float
+    evaded: bool
+    left: Optional[int]
+    insincere: float
+    caught: tuple
+    rattled: Optional[str]
+    frame: Optional[str]
+    relevance: float
+    heard: float
+    esteem: float
+    broke: bool
+    moved: tuple
+    closed: Optional[str]
+    mood: float
+    terms: tuple = ()
+
+
+@dataclass(frozen=True)
+class View:
+    """What a chooser sees each exchange (V2 p2 §E): own values true; everything else perceived, each with its own noise, or public.
+
+      * `n`, `mover`, `side`, `issue`, `turns_left`;
+      * `live_theirs`, `live_own` -- `(point, ground, item, perceived strength)` or `None`;
+      * `options` -- `Option`s: perceived worth and chance; `own` -- his `Cond`;
+      * `esteem`, `weary`, `awe` -- his standing, his weariness, how far those who decide cow him;
+      * `broke` -- his temper has broken: he cannot hold his tongue, and `rest` is not on his menu (A-146);
+      * `visible` -- each speaker's rattles; `mood`, `odds` -- the room as he reads it, and P(carried) on that reading before an ordinary bench;
+      * `intent` -- the perceived stake of the man opposite; `acc` -- his accuracy;
+      * `burden` -- he bears the matter and no point of his stands: resting is a charge not pressed."""
+    n: int
+    mover: str
+    side: str
+    issue: str
+    turns_left: int
+    live_theirs: Optional[tuple]
+    live_own: Optional[tuple]
+    options: tuple
+    own: Cond
+    esteem: float
+    weary: float
+    awe: float
+    broke: bool
+    visible: tuple
+    mood: float
+    odds: float
+    intent: float
+    acc: float
+    burden: bool = False
+
+
+@dataclass(frozen=True)
+class JudgeView:
+    """What a played adjudicator has at the close (V2 p2 §D): his OWN mind (he knows it), `track` and `odds`, the `points` as they
+    stood, and `tells` -- `((participant, perceived insincerity, perceived discomfort), ...)` by his Attunement. He rules at the
+    close only and asks nothing during the sitting."""
+    id: str
+    track: float
+    odds: float
+    points: tuple
+    tells: tuple = ()
+
+
+@dataclass(frozen=True)
+class Input:
+    """What the proceeding entry reads, and nothing else (V2 p2 §C): built by the host from `World`.
+
+      * `rite` -- the `Rite`; `matter` -- what is argued;  `room` -- the `Present` records;
+      * `grounds` -- `((ground, reason weight, era weight), ...)`; `dials` -- the settings, a mapping;
+      * `state` -- a whole `Sitting` to resume, or `None` (a resume needs no replay);
+      * `frames` -- `((channel, tag), ...)`: the wants and convictions a speech here can be framed on.
+
+    `__post_init__` holds the one invariant (A-139) and refuses, each a `ValueError` whose message begins `refused[<key>]`:
+    `one_character`, `abridged_self`, `no_weight`, `no_adjudicator`, `nobody_speaks`, `resume_yielded`, and, a resume being
+    lawful only for the same people with a turn left, `abridged_resume`, `closed`, `room_changed`, `spent`."""
+    rite: Rite
+    matter: str
+    room: tuple
+    grounds: tuple
+    dials: Mapping
+    state: Optional[Sitting] = None
+    frames: tuple = ()
+
+    def __post_init__(self):
+        room, rite, state = self.room, self.rite, self.state
+        if len({p.id for p in room}) < 2:
+            raise ValueError("refused[one_character]: a sitting with one character (A-139)")
+        if rite.close == "exchange" and not any(p.decides and not p.side for p in room):
+            raise ValueError("refused[abridged_self]: an abridged act needs someone addressed other than the speaker")
+        if any(p.weight <= 0 for p in room):
+            raise ValueError("refused[no_weight]: a person or cohort of no weight")
+        if rite.close != "consent" and not any(p.decides for p in room):
+            raise ValueError(f"refused[no_adjudicator]: close `{rite.close}` with nobody to adjudicate")
+        if not any(p.side for p in room):
+            raise ValueError("refused[nobody_speaks]: nobody speaks")
+        if state is None:
+            return
+        if state.ended == "yielded":
+            raise ValueError("refused[resume_yielded]: a sitting that ended `yielded` is not resumed (an adjourned one is)")
+        if rite.close == "exchange":
+            raise ValueError("refused[abridged_resume]: an abridged act is one speech; it is not resumed")
+        if state.ended == "rested":
+            raise ValueError("refused[closed]: a sitting that ended `rested` was closed on what was said; its close is not drawn again")
+        if {p.id for p in room} != {i for i, _ in state.tracks}:
+            raise ValueError("refused[room_changed]: a resumed sitting has the same people; a changed room is a new sitting")
+        spoken, moves = {i: c.spoken for i, c in state.cond}, dict(rite.moves)
+        if not any(p.side and moves.get(p.side) and spoken.get(p.id, 0) < rite.turns for p in room):
+            raise ValueError("refused[spent]: no speaker has a turn left; a close once drawn is not drawn again")
+
+
+@dataclass(frozen=True)
+class Outcome:
+    """What the proceeding entry returns (V2 p2 §M): `beats`, the whole `state` (a `Sitting`), `ended` and `ended_by`, `verdicts`,
+    and `ruled` -- `((decider, how far his ruling departed from his own track), ...)` for a played judge.
+
+    `verdicts` is a tuple of `(id, Margin)`: margins, never a band, a side or a winner: the host grades each on the one
+    ladder (`seam/ladder.py::degree_of`)."""
+    beats: tuple
+    state: Sitting
+    ended: str
+    ended_by: Optional[str]
+    verdicts: tuple
+    ruled: tuple = ()
+
+
+@dataclass(frozen=True)
+class Card:
+    """What the proceeding IS (V2 p1 §E): derived by the host from the arranged rite and the room (B24p.13), NEVER authored; every
+    participant reads it before and during a sitting. It holds no true attribute and no true start.
+
+      * `kind`, `genre`; `arranged_by`, `tilt`, `tilted_against` -- who tilted the forum, how far, against whom (named only where there is a tilt);
+      * `stake` -- what is disposed; `outcomes` -- `((band, the typed writes), ...)`;
+      * `room` -- `((person, role, visible circumstances), ...)`;
+      * `live`, `bears`, `reply`; `moves`, `barred`; `admits`;
+      * `close`; `decided_by` -- the adjudicators (none under consent: each party's own accept);
+      * `turns`, `issues`;
+      * `silence` -- what not answering a standing point means here; `unargued` -- what happens to the matter if nobody speaks;
+        `ends` -- when it closes;
+      * `standard` -- the Grace asked; `unrest` -- the pull of the times (Focus); `gravity` -- how grave a change is;
+      * `reason_weight` -- Reason's share of the dice per ground here; `recused` -- seats that stepped down for a conflict;
+      * `odds` -- P(carried) of the close itself where nobody speaks; `None` where nothing is drawn (consent) or the verdict is the speech itself."""
+    kind: str
+    genre: str
+    arranged_by: Optional[str]
+    tilt: float
+    tilted_against: Optional[str]
+    stake: str
+    outcomes: tuple
+    room: tuple
+    live: str
+    bears: str
+    reply: tuple
+    moves: tuple
+    barred: tuple
+    admits: tuple
+    close: str
+    decided_by: tuple
+    turns: int
+    issues: tuple
+    silence: str
+    unargued: str
+    ends: str
+    standard: float
+    unrest: float
+    gravity: float
+    reason_weight: tuple
+    recused: tuple
+    odds: Optional[float]
 
 
 @dataclass(frozen=True)
