@@ -2920,7 +2920,8 @@ def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
     # ⚠⚠ B09.99 re-pin: (630, 628) -> (627, 626), THE B09 MOVERS (`_realm_goldens.py`'s list; `CENSUS[(0, 1)]` records the 627), AND A READING THAT CHANGED:
     # B09.21 stopped writing a dwelling's wear, so no wear claim reaches a ledger and the arms no longer part through one. They still part
     # (the control deletes 211 Sites, which moves what is drawn and asked), by one act here and by `claim.deposited` 10541 / 10540.
-    assert (out["acts"], cout["acts"]) == (627, 626), (
+    # ⚠⚠ B10.99 re-pin: (627, 626) -> (581, 580), THE B10 MOVERS (`_realm_goldens.py`'s B10.99 paragraph; `CENSUS[(0, 1)]` records the 581).
+    assert (out["acts"], cout["acts"]) == (581, 580), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: a move here is a move of the act mix -- "
         "re-record it with the unit that moved it")
     # v10 REM-2C: with the counts equal, THE PARTING THE COUNTS PROXIED IS ASSERTED DIRECTLY -- the arms' act

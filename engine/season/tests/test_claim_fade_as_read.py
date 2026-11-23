@@ -42,7 +42,9 @@ from engine.season.state.carriers import Claim
 # B09.99 RE-PIN, 11936 -> 11848: the batch's later movers (`_realm_goldens.py`'s B09 list) move the season's log, so the equality this
 # constant carried (B09.01 removed only fade events) was true at B09.01 and is not kept on the closing tree; the literal now reads that
 # tree's season-one log (seed 0, `PYTHONHASHSEED=0`, `reading @072d6f921`), which still holds no `claim.decayed`.
-BEFORE_SEASON_ONE_ENTRIES = 11848
+# B10.99 RE-PIN, 11848 -> 24380: the B10 movers (`_realm_goldens.py`'s B10.99 paragraph) move the season's log again; same reading, seed 0,
+# `PYTHONHASHSEED=0`, on the B10.99 closing tree; still no `claim.decayed`.
+BEFORE_SEASON_ONE_ENTRIES = 24380
 BEFORE_SEASON_ONE_DECAYED = 0
 
 

@@ -35,31 +35,37 @@ read once here on the closing tree (`PYTHONHASHSEED=0`; seed 0 one season also e
 `Receipt.delta` and `scar.taken` Events (B09.10, B09.11), the opening Event in `causes` (B09.12), the shipped `refusal_memory` and
 `weigh_confidence` (B09.05, B09.08), the re-pointed belief readers (B09.07), no zero-wear `condition.worn` (B09.21: seed 0, two seasons,
 644 -> 148 of that kind, log 27040 -> 26228), a seat's closing names its holder (B09.22). The B07.99 values these replace are in `git log`.
+
+RE-PINNED AT B10.99 (every value below, BUILD too): encoding (`Person.manner_offset`, B10.58: the build hash moves, the acts and
+Events read identical) and behaviour (B10.60 cohorts take no individual acts, B10.65 the seeded `self:` claims, B10.72 a want can be laid
+down, B10.73 ARC-47's stage row); B10.59, B10.66, B10.70 and B10.71 measured equal at the shipped data and the first half moved nothing.
+Read once on the closing tree (`PYTHONHASHSEED=0`); seed 0, one season, each mover in order: `6e3a066a..` -> `5f2b9826..` (B10.58) ->
+`576272fd..` (B10.60) -> `39d7c1bc..` (B10.65) -> `3ed14dad..` (B10.72) -> `faf327b7..` (B10.73). The B09.99 values these replace are in `git log`.
 """
 
-BUILD = {0: "d691552fcd4931573c465bbc341bdcad"}                      # build_realm(seed), unplayed
+BUILD = {0: "4c6a3a994777d975976bd3874ce74c9b"}                      # build_realm(seed), unplayed
 
-SHIPPED = {(0, 1): "6e3a066a9d4b921bf5258a23b55d0e37",
-           (1, 1): "01f7f9aa0f3d9a52242ea78c8c92cc23",
-           (2, 1): "0a00352e0e9349f8c12d26f8f9e7e467",
-           (0, 2): "e03202af8dcb4480561c78806519418c",
-           (1, 2): "fcddd545810e2b7b0576c2ee2f62d9cc",
-           (2, 2): "2f6a7e7629acad0bac10b075eda7fd2a"}      # B09.99 re-pin (the docstring); the B07.99 values are in `git log`
+SHIPPED = {(0, 1): "faf327b78ebf3132a50ba1319fcad0c3",
+           (1, 1): "9e763785af9c648cd4bacb4890b80af7",
+           (2, 1): "b1489dab34908506b98f4534d5e96e43",
+           (0, 2): "e6eddc5dc4cbcac1d4484cba448b742a",
+           (1, 2): "04586bc49efada683d4095599ff552a1",
+           (2, 2): "34be2cb25f84e72855011ba10282e332"}      # B10.99 re-pin (the docstring); the B09.99 values are in `git log`
 
 #: What the run leaves, beside its hash: `acts` is `populated.run`'s act count, `log` the
 #: length of the world's Event log, `census` the sha256 of `populated.run`'s return value as sorted
 #: JSON (the census plus `acts`, `actors`, `act_subjects` and `claim_sources`).
 CENSUS = {
-    (0, 1): dict(acts=627, log=11820,
-                 census="197ff5da826cf0ffefeeb805fee7fdd8a8fcb32e20bad86b8bb99441123f28af"),
-    (1, 1): dict(acts=666, log=11343,
-                 census="c3e4817f9ec757d7389d9f8e1c79a4bc742503723aede767117a5d429be83ecc"),
-    (2, 1): dict(acts=653, log=11137,
-                 census="84a5593966aa347053edc8369d9eb8cfdcf35976d69051feb77dabf41683a662"),
-    (0, 2): dict(acts=1360, log=26228,
-                 census="ee1167f3b42f46fcb91fb3f72409b48413ae0bdb9f4085703b7ec7bef72c3030"),
-    (1, 2): dict(acts=1348, log=21807,
-                 census="82d407a12fe226f95a5d4abe9cf9e4fe6afb9c6ec1278d00cac980c6f9bc972c"),
-    (2, 2): dict(acts=1428, log=24979,
-                 census="831f449849558b0d619e1e226e4eb277906ca100fce911cfce9d1e694f774f8c"),
+    (0, 1): dict(acts=581, log=24384,
+                 census="cea0d00896fffc38865f9f99759404f5796ed51e9e70aec9049a78fd250b592d"),
+    (1, 1): dict(acts=586, log=24009,
+                 census="eb17b81cdc02db9f773f3ece25308bd65c86ad557dfaf318d6d88a303bd79a5f"),
+    (2, 1): dict(acts=575, log=23231,
+                 census="43b44ab6447678ebbef4097877c8eae15650a5d74483dc12a7f1a87ccb545f66"),
+    (0, 2): dict(acts=1213, log=47771,
+                 census="47ad784c57ae5c0ad56ff3d9c25599c23407219bb4d0d940a16abb2a75e69cf0"),
+    (1, 2): dict(acts=1226, log=41237,
+                 census="0bfad3ef249e086440a52f2040df8c6bc13b73f2784e3e076da2e91dfc53ae46"),
+    (2, 2): dict(acts=1171, log=36741,
+                 census="afd6b54691cdbe5c33435b85188932d6cb2b06081ac6b3c5ca4dc4fff3cc6786"),
 }
