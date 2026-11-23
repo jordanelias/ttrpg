@@ -2930,7 +2930,9 @@ rosters:
       and no ledger holds a `held_by` claim (M0g, `H-195`). `regard` is the
       midpoint: G1's regard with `+` on every row, so the sweep separates what regard adds from
       what the sign adds.
-    values: [legacy, regard, declared]
+      `beneficiary` (B10.69, `17_CENSUS_C1A_02` W4) is `declared` with the regard read toward the person the act is done FOR (`choose.beneficiary_of`)
+      in place of its subject; a row with no such person reads the subject. Not shipped: `declared` is.
+    values: [legacy, regard, declared, beneficiary]
 
   regard_signs:
     source: >-

@@ -847,7 +847,7 @@ _LEVY_ROW = _row_head("requisition")
 # -- untyped (`requires: —`, `create_record`'s shape: no precondition, so no cell) and `beneficiary: actor`,
 # the shape the plant needs. The two tests above keep `requisition`: a missing or off-roster beneficiary is
 # refused whatever the row's cell.
-_UNTYPED_ROW = _row_head("conceal")
+_UNTYPED_ROW = _row_head("succeed")
 
 
 def test_lb6d_every_verb_declares_a_rostered_beneficiary():
@@ -917,7 +917,7 @@ def test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load():
         _UNTYPED_ROW, _UNTYPED_ROW.replace('beneficiary: "actor"', 'beneficiary: "to"'), 1)
     assert unbindable != src, "the substitution did not apply -- this test is asserting nothing"
     from ..data.verbs import VERB_TABLE
-    assert VERB_TABLE["conceal"].requires_typed is None, "the planted row is typed now"
+    assert VERB_TABLE["succeed"].requires_typed is None, "the planted row is typed now"
     with pytest.raises(SystemExit, match="neither binds nor admits"):
         _load_with(unbindable)
 
@@ -1018,6 +1018,25 @@ def test_lb6d_the_column_resolves_on_candidates_the_engine_actually_forms():
     assert resolved > len(seen) // 4, (
         f"only {resolved} of {len(seen)} candidates resolve any beneficiary -- the column is "
         "declared but inert, which is the failure this test exists to see")
+
+def test_the_beneficiary_arm_scores_a_regarded_beneficiary_higher():
+    """B10.69 (`17_CENSUS_C1A_02` W4 (b)): at `stance_polarity="beneficiary"` a person holding regard for A and none for B scores a
+    `beneficiary: to` candidate bound to A above the same candidate bound to B; at `declared` (shipped) the term reads the act's subject,
+    so the two read alike. The falsifier is the pair scoring equal: the arm would read nothing."""
+    from ..decision import choose as CH
+    from ..state.carriers import Candidate
+    a, b = "p_mid", "p_low"
+    w = P.tiny_world()
+    me = w.persons["p_high"]
+    me.stance = [(a, 1, 5)] * 3                              # +15 toward A, nothing toward B
+    assert VERB_TABLE["transfer"].beneficiary == "to"
+    to_a = Candidate("transfer", "r1", operands={"to": a})
+    to_b = Candidate("transfer", "r1", operands={"to": b})
+    fx = w.fixtures.sweep("stance_polarity", "beneficiary")
+    assert CH.stance_term(me, to_a, fx) > CH.stance_term(me, to_b, fx)
+    shipped = w.fixtures.sweep("stance_polarity", "declared")
+    assert CH.stance_term(me, to_a, shipped) == CH.stance_term(me, to_b, shipped)
+
 
 # LB-6e -- `(Person, scar[axis])`, THE MORAL LAYER'S MISSING MOTION (§54 item 21, `H-128`)
 #

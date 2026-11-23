@@ -3293,11 +3293,12 @@
         },
         "stance_polarities": {
           "source": "v9 IN-18 `G2` (telling workplan \u00a75, `ED-IN-0282`): *\"polarity in \u00a7F2 term 2\"* -- the score's regard term read by the ROLE the regarded party plays in the act, with `declared` against `legacy` as the falsifier's two arms.",
-          "note": "THE ARMS OF `Fixtures.stance_polarity` (`H-194`), read by `decision/choose.py::stance_term` (its `_stance_arm`), score term 2. `legacy` is the pre-G2 term, `+ stance_toward(p, c.subject)` for every row -- the CONTROL (shipped until CR-16): an act against a disliked opponent then scores LOWER, the sign \u00a7F2's term never distinguished. `declared` reads `regard(p, c.subject)` (G1's, so its judged and told halves enter at their own gains) and NEGATES it where the subject is the act's OPPONENT (`decision/options.py::subject_is_opponent`: the row contests and its second side is its subject, `VerbRow.opponent_operand()`), so fighting the disliked scores higher. A Rung subject reads 0 at G1's control; at live gains it reads the deed claims held about it (`transfer.made` on a changed rung, under `claim_subject_rule: both`). Its regarded party under the ROLE reading would be its HOLDER, and no ledger holds a `held_by` claim (M0g, `H-195`). `regard` is the midpoint: G1's regard with `+` on every row, so the sweep separates what regard adds from what the sign adds.",
+          "note": "THE ARMS OF `Fixtures.stance_polarity` (`H-194`), read by `decision/choose.py::stance_term` (its `_stance_arm`), score term 2. `legacy` is the pre-G2 term, `+ stance_toward(p, c.subject)` for every row -- the CONTROL (shipped until CR-16): an act against a disliked opponent then scores LOWER, the sign \u00a7F2's term never distinguished. `declared` reads `regard(p, c.subject)` (G1's, so its judged and told halves enter at their own gains) and NEGATES it where the subject is the act's OPPONENT (`decision/options.py::subject_is_opponent`: the row contests and its second side is its subject, `VerbRow.opponent_operand()`), so fighting the disliked scores higher. A Rung subject reads 0 at G1's control; at live gains it reads the deed claims held about it (`transfer.made` on a changed rung, under `claim_subject_rule: both`). Its regarded party under the ROLE reading would be its HOLDER, and no ledger holds a `held_by` claim (M0g, `H-195`). `regard` is the midpoint: G1's regard with `+` on every row, so the sweep separates what regard adds from what the sign adds. `beneficiary` (B10.69, `17_CENSUS_C1A_02` W4) is `declared` with the regard read toward the person the act is done FOR (`choose.beneficiary_of`) in place of its subject; a row with no such person reads the subject. Not shipped: `declared` is.",
           "values": [
             "legacy",
             "regard",
-            "declared"
+            "declared",
+            "beneficiary"
           ]
         },
         "regard_signs": {

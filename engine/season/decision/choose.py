@@ -130,6 +130,14 @@ def _stance_arm(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict]) -
     require_member(arm, STANCE_POLARITIES, f"stance polarity {arm!r} is not in the roster", "H-194",
                    law="§G -- declare it, default it, sweep it; an unknown arm silently reading "
                        "`legacy` would make the sweep report the control twice")
+    row = VERB_TABLE.get(c.verb)
+    # B10.69 (`17_CENSUS_C1A_02` W4, carrying B10.11's omission): at `beneficiary` the regard is read toward the person the act is done FOR
+    # (`beneficiary_of`: the row's `beneficiary:` carrier, `to` reading the candidate's `to` operand), not its subject. A row declaring `none`,
+    # one whose carrier did not bind, and one whose beneficiary is the actor himself (`actor`) read the subject, so those rows are `declared`'s.
+    if arm == "beneficiary" and row is not None:
+        subject = beneficiary_of(p, c) or subject
+        if subject == p.id:
+            subject = c.subject or ""
     if memo is None:
         memo = {}
     if subject not in memo:
@@ -137,7 +145,6 @@ def _stance_arm(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict]) -
     r = _bounded(memo[subject], clamp)
     if arm == "regard":
         return r
-    row = VERB_TABLE.get(c.verb)
     # CP-T05-02 (B10-13): self-regard is read here as `regard(p, p.id)` (stored stance plus his own deeds), while `_bond`
     # treats a judge as his own full ally; the two are not routed together. `subject_is_opponent` encodes 'a person is not his own adversary'; a self-plea
     # (`subject_may_be_self`) is an act FOR himself, so the sign applies only where the subject is somebody else.
