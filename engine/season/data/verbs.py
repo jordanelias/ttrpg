@@ -1811,9 +1811,9 @@ _check_dominance_kinds(DOMINANCE_KINDS, DEED_KINDS)
 
 def _asks_subject_held(row: "VerbRow") -> bool:
     """WHETHER THE ROW'S TYPED CELL ASKS THE ACTOR TO HOLD ITS `subject` -- a `relation` conjunct of
-    `subject`, `held_by`. The ONE reader of that conjunct: `OWN_HOLD_DECLINES` is refused at load
-    against it (below), and the two derivations of the Record kinds a held document is an occasion for
-    (`RECORD_REFERENT_KINDS`, `HOLDING_RECORD_KINDS`) are told apart by it."""
+    `subject`, `held_by`. The ONE reader of that conjunct: the two derivations of the Record kinds a held
+    document is an occasion for (`RECORD_REFERENT_KINDS`, `HOLDING_RECORD_KINDS`) are told apart by it. (The person's own
+    reading of the conjunct at formation is `OwnStateReader`'s `held_by`, B10.59.)"""
     if row.requires_typed is None:
         return False
     req = row.requires_typed.requirement
@@ -2039,33 +2039,8 @@ def _load_lie_verbs(values) -> frozenset:
 LIE_VERBS = _load_lie_verbs(roster("lie_verbs"))
 
 
-# v9 IN-26 (BOUND-PAPER, `A-13`): the verbs a person forms only on a referent he himself holds -- the
-# object of one of his OWN live `hold` Tenures (`rosters.yaml: own_hold_declines`, read in `opening_set`;
-# `destroy_record`). `own_stance_declines`' shape one field over: the decline is the person-side reading of
-# the row's own `held_by` conjunct, so it is REFUSED AT IMPORT when a member names a verb the table lacks or
-# one whose typed cell asks no `relation` of `subject` `held_by` -- a decline on a holding the fold never
-# checks would narrow formation by a fact the act does not require.
-# (`_asks_subject_held`, the reader of that conjunct, is defined above `RECORD_REFERENT_KINDS`: the
-# derivation of the Record kinds a person's holding answers reads it too -- the one owner.)
-def _load_own_hold_declines(values) -> frozenset:
-    """`rosters.yaml: own_hold_declines`' `values`, checked and frozen -- refused per member (above)."""
-    out = frozenset(str(v or "") for v in (values or ()))
-    for v in sorted(out):
-        row = VERB_TABLE.get(v)
-        if row is None or not _asks_subject_held(row):
-            raise Forbidden(
-                f"`rosters.yaml: own_hold_declines` names {v!r}, and the verb table carries no such verb "
-                "or its typed cell asks no `relation` of `subject` `held_by`", "rosters.yaml",
-                needs="a `verb_table.yaml` verb whose cell requires the actor to hold its subject",
-                law="IN-26 -- an own-hold decline reads the holding the act requires")
-    return out
-
-
-OWN_HOLD_DECLINES = _load_own_hold_declines(roster("own_hold_declines"))
-
-
 # v10 IN-61 (RS-27): the verbs a person forms only on a seat whose `successions` title he himself holds
-# (`rosters.yaml: own_title_declines`, read in `opening_set`; `succeed`). `own_hold_declines`' shape one read
+# (`rosters.yaml: own_title_declines`, read in `opening_set`; `succeed`). `own_stance_declines`' shape one read
 # over, REFUSED AT IMPORT when a member names a verb the table lacks or one whose row declares no
 # `referent_class: Office` -- a title is a seat's, so a row forming on anything but a seat has no title.
 _TITLE_CLASS = "Office"

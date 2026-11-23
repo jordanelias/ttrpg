@@ -10,12 +10,12 @@ change away, so the cause is the widened object and nothing else:
   * what is NOT the actor's to cede is refused (`give.refused`, nothing moves): a rung somebody else
     holds, a rung nobody holds, a seat (the gate's `handover` is for non-seat holds), a receiver who is
     not present;
-  * the loosened cell still forms only on what a person holds (`own_hold_declines`), observed through
+  * the loosened cell still forms only on what a person holds (`OwnStateReader`'s `held_by`), observed through
     the real `opening_set` on a held and an unheld rung.
 """
 
 from engine.season.data.matrix import Step, WriteClass
-from engine.season.data.verbs import OWN_HOLD_DECLINES, VERB_TABLE
+from engine.season.data.verbs import VERB_TABLE
 from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.queries.world_q import hold_force
@@ -116,12 +116,11 @@ def _gives(w, pid, referent):
 
 def test_the_loosened_cell_forms_only_on_what_a_person_holds():
     """The cell no longer asks the object's kind, so the person-side `held_by` reading
-    (`own_hold_declines`, `decision/options.py::opening_set`'s narrowing) is what keeps a gift of an
+    (`OwnStateReader`'s `held_by`, asked of the cell in `decision/options.py::opening_set`) is what keeps a gift of an
     unheld referent from forming. OBSERVED THROUGH FORMATION, one change apart: the same question about
     the settlement `S` forms a `give` on it for the man who holds it, and none for the same man once
-    another holds it. MUTATION, run 2026-10-22: `opening_set`'s `if verb in OWN_HOLD_DECLINES` narrowing
-    deleted -> RED (the unheld arm forms a `give` on `S`), restored -> GREEN."""
-    assert "give" in OWN_HOLD_DECLINES
+    another holds it. MUTATION, run at B10.61: `OwnStateReader`'s `held_by` answered UNKNOWN
+    -> RED (the unheld arm forms a `give` on `S`), restored -> GREEN."""
     row = VERB_TABLE["give"]
     assert row.emits == ("record.given", "rung.ceded"), row.emits
     assert row.requires_typed.known_person_operands() == ("to",)

@@ -6568,10 +6568,11 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
                        or r.referent_class)}   # v9 IN-45 `migrate`: a typed row formed only on a
                                                # CLASSED referent, which this question carries none of
     # v9 IN-26: a verb held out of formation by the shipped arm (`Fixtures withheld_verbs`), and a row
-    # formed only on a referent the person himself holds (`rosters.yaml: own_hold_declines`; `p_low`
-    # holds nothing here) -- neither is clause 4. DERIVED FROM THE FIXTURE AND THE ROSTER.
-    from ..data.verbs import OWN_HOLD_DECLINES, VIOLENCE_CONTEXTS
-    needs_held |= set(OWN_HOLD_DECLINES) | set(w.fixtures.get("withheld_verbs"))
+    # formed only on a referent the person himself holds (the cell's `held_by`, which `OwnStateReader` answers of him; `p_low`
+    # holds nothing here) -- neither is clause 4. DERIVED FROM THE FIXTURE AND THE CELL.
+    from ..data.verbs import VIOLENCE_CONTEXTS
+    needs_held |= ({v for v, r in VERB_TABLE.items() if r.requires_typed is not None and "held_by" in r.requires_typed.stems()}
+                   | set(w.fixtures.get("withheld_verbs")))
     # v11 CR-87: a row formed only on a subject the person holds a context of violence against (`rosters.yaml:
     # violence_contexts`; `p_low` holds none here) -- a person-side decline, not clause 4. DERIVED FROM THE ROSTER.
     needs_held |= set(VIOLENCE_CONTEXTS)
@@ -7275,11 +7276,12 @@ def test_wc_the_fold_binds_what_the_person_bound(monkeypatch):
     from ..data.verbs import WARRANT_SOURCED
     WALK_WARRANT: frozenset = frozenset(WARRANT_SOURCED)
     # v9 IN-26: a verb `Fixtures withheld_verbs` holds out of formation forms for nobody at the shipped
-    # arm, and a row in `rosters.yaml: own_hold_declines` forms only on a referent the person himself
-    # holds, which `q` carries none of for `p_low` -- so `destroy_record` is walked below, at the sink
-    # arm, once a document is in his hand. DERIVED FROM THE FIXTURE AND THE ROSTER.
-    from ..data.verbs import OWN_HOLD_DECLINES
-    WALK_HELD: frozenset = frozenset(OWN_HOLD_DECLINES) | frozenset(w.fixtures.get("withheld_verbs"))
+    # arm, and a row whose cell asks `held_by` of its subject forms only on a referent the person himself
+    # holds (`OwnStateReader`), which `q` carries none of for `p_low` -- so `destroy_record` is walked below, at the sink
+    # arm, once a document is in his hand. DERIVED FROM THE FIXTURE AND THE CELL.
+    WALK_HELD: frozenset = (frozenset(v for v, r in VERB_TABLE.items()
+                                      if r.requires_typed is not None and "held_by" in r.requires_typed.stems())
+                            | frozenset(w.fixtures.get("withheld_verbs")))
     # v11 CR-87: `fight` forms only on a subject the person holds a context of violence against (`rosters.yaml:
     # violence_contexts`), and `p_low` holds none on this question. The walk is about BINDING, not formation, so it is read
     # with the block emptied and `fight` stays in it (an exclusion would drop the one combat row from the binding check).
@@ -7348,10 +7350,10 @@ def test_wc_the_fold_binds_what_the_person_bound(monkeypatch):
             f"the fold binds {fold}")
 
     # v9 IN-26: THE HELD WALK, at the sink arm (`withheld_verbs` empty) with a document in `p_low`'s hand,
-    # so every `own_hold_declines` row forms on it and its two bindings are compared, not vacuously.
+    # so every row asking `held_by` forms on it and its two bindings are compared, not vacuously.
     _hold_document(w, p, "petition", {"terms": "p_mid", "to": "p_mid", "from": "Hh"}, rec_id="rec_wc_held")
     sink = w.fixtures.sweep("withheld_verbs", ())
-    # B11 lane A: `carry`, `found` and `build` joined `own_hold_declines` and form only on a `Record`-classed referent, so the
+    # B11 lane A: `carry`, `found` and `build` ask `held_by` of their subject and form only on a `Record`-classed referent, so the
     # held document rides as that class too (the sub-kind rule is emptied for this walk, above).
     qh = Question("q:wc_held", "need", ("rec_wc_held",), classes=(("rec_wc_held", "Record"),))
     held_walk = [c for c in decision.opening_set(p, View(p.id, [], sink.get("view_k"), qh), qh, sink)

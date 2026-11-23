@@ -36,7 +36,6 @@ from ..data.rosters import (
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
     CHOICE_RANGES, CHOICE_SOURCED, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, LIE_VERBS,
-    OWN_HOLD_DECLINES,
     OPPOSED_WITHOUT_PRIZE, OWN_STANCE_DECLINES, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
     TERMS_SOURCED, VERB_TABLE, VIOLENCE_CONTEXTS, VIOLENT_VERBS, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED,
     align,
@@ -207,14 +206,10 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 records = held_record_claims(p, tick, decay)
             memo: dict = {}          # what a reader derives from the actor alone, once per call, not once per referent
             refs = tuple(r for r in refs if violence_context_of(p, q, r, contexts, records, memo) is not None)
-        # v9 IN-26 (`rosters.yaml: own_hold_declines`, `A-13`): A VERB A PERSON FORMS ONLY ON A REFERENT HE
-        # HIMSELF HOLDS -- `destroy_record`, the person-side reading of its own `held_by` conjunct. The
-        # objects of his OWN live `hold` Tenures, no World; computed once per call, only if such a row
-        # is reached. It NARROWS the referents the question carries and widens nothing.
-        if verb in OWN_HOLD_DECLINES:
-            if held is None:
-                held = _held_objects(p)
-            refs = tuple(r for r in refs if r in held)
+        # v9 IN-26 (`A-13`): A VERB A PERSON FORMS ONLY ON A REFERENT HE HIMSELF HOLDS (`destroy_record`, `give`, `carry`,
+        # `found`, `build`) is declined BELOW, with the rest of what he reads off himself: its cell's `held_by` conjunct is
+        # asked of `OwnStateReader` (B10.59), which reads his own live `hold` Tenures. B10.61 deleted the roster that did
+        # it here (`own_hold_declines`): the two readings gave the same candidate set on every person, seeds 0-2.
         # v10 IN-61 (`rosters.yaml: own_title_declines`, RS-27): A VERB A PERSON FORMS ONLY ON A SEAT WHOSE
         # `successions` TITLE HE HIMSELF HOLDS -- `succeed`, the person-side reading of the claim's title
         # conjunct (`state/gate.py::may_claim`). His own live `hold` objects against the roster (the law,
@@ -230,7 +225,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # before him reads it, `loop/witness.py`'s content deposit). It NARROWS and widens
         # nothing; the fold's `existence` conjunct stays for a hand-built act. [ASSUMPTION; medium; Jordan to
         # correct; revert: empty `RECORD_SUBKINDS_BY_VERB`.]
-        # A HOLDING row (`RECORD_SUBKINDS_HELD`: `carry`, `found`, `build`, held by the person, `own_hold_declines`) keeps
+        # A HOLDING row (`RECORD_SUBKINDS_HELD`: `carry`, `found`, `build`, held by the person, whose own `held_by` reading is `OwnStateReader`'s) keeps
         # a document he holds no reading of -- unknown forms, clause 4's polarity -- and declines one his reading says is
         # of another kind.
         kinds_asked = RECORD_SUBKINDS_BY_VERB.get(verb)

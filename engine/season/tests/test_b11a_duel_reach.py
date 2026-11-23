@@ -60,7 +60,6 @@ def revert_b11a(monkeypatch) -> None:
         monkeypatch.setattr(O, "VIOLENCE_CONTEXTS", {**O.VIOLENCE_CONTEXTS,
                                                      "fight": ("war", "crime", "duel", "defence")})
     monkeypatch.setattr(WIT, "addressee_reads", lambda rec, pid: False)
-    monkeypatch.setattr(O, "OWN_HOLD_DECLINES", O.OWN_HOLD_DECLINES - {"carry", "found", "build"})
     monkeypatch.setattr(O, "RECORD_SUBKINDS_HELD", frozenset())
 
 

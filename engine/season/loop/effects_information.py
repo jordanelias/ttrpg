@@ -1183,7 +1183,7 @@ def _eff_destroy_record(w: "World", a: "Act", res: "Resolution | None" = None) -
     payload key this read before no Candidate carried, so it is gone rather than kept as a second
     spelling. It is the SINK for paper the verb-coverage survey found none for (`Record.ttl` has no
     reader): a holder burns what he holds. Whether anybody FORMS it is `opening_set`'s
-    (`Fixtures withheld_verbs`, `rosters.yaml: own_hold_declines`), never this body's. A Proposition
+    (`Fixtures withheld_verbs`, `OwnStateReader`'s `held_by`), never this body's. A Proposition
     is never a subject here: §14 makes it undestroyable, and the cell's `existence` conjunct refuses
     one before this runs."""
     d = a.payload if isinstance(a.payload, dict) else {}

@@ -10,17 +10,19 @@ polarity is untouched). Skill is never a requirement, so no stem for it is answe
 B10.60 adds `relation: individual` of `actor` to eight rows (`challenge` already carried it), so a cohort forms none of them
 and the fold refuses a hand-built one.
 
-GAME STATE, lane `season_loop` (`engine/season/tests/`). The roster test is B10.61's."""
+GAME STATE, lane `season_loop` (`engine/season/tests/`). B10.61 deleted `own_hold_declines`, the one roster the reader made redundant; its reading (the candidate sets
+with and without each decline roster) is in its commit, not kept here."""
 from __future__ import annotations
 
-from ..data.requires import REQUIRES_STEMS, UNKNOWN
+from ..data.requires import REQUIRES_STEMS, UNKNOWN, Existence
+from ..data.rosters import roster_map
 from ..data.verbs import VERB_TABLE
 from ..decision import assemble
 from ..decision.options import opening_set
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
 from ..queries.person_q import OwnStateReader
-from ..state.carriers import Act, Claim, Question
+from ..state.carriers import Act, Claim, Question, Record, Tenure
 
 A, B = "p_mid", "p_low"            # `tiny_world`: both stand at the hearth
 
@@ -107,3 +109,31 @@ def test_a_cohort_forms_none_of_the_individual_rows():
     assert rows <= formed[A], rows - formed[A]
     assert not rows & formed["p_folk"], rows & formed["p_folk"]
     assert formed[A] - formed["p_folk"] == rows, (formed[A] - formed["p_folk"]) ^ rows
+
+
+# --- B10.61: the holding rows are declined by the reader, not by a roster ---------------------------------------------
+
+def test_a_person_forms_a_holding_row_only_on_a_record_he_holds():
+    """Every row whose cell asks the actor to hold its `Record` subject (`carry`, `found`, `build`) forms on the document he
+    holds and on none he does not, handed one question that carries both. The decline is the cell's own `held_by` read
+    (`OwnStateReader`); the roster that did it before B10.61 is gone."""
+    w = P.tiny_world()
+    rows = {v: next(c.kind for c in r.requires_typed.requirement.clauses if isinstance(c, Existence))
+            for v, r in VERB_TABLE.items()
+            if r.referent_class == "Record" and r.requires_typed is not None and "held_by" in r.requires_typed.stems()
+            and v not in set(w.fixtures.get("withheld_verbs") or ())}
+    assert set(rows) == {"carry", "found", "build"}, rows            # the rows the cell reading is asked of
+    sm = {kind: {k: "x" for k in roster_map("record_kinds", "values")[kind]} for kind in set(rows.values())}
+    held, other = {}, {}
+    for kind in sm:
+        held[kind], other[kind] = f"rec_held_{kind}", f"rec_other_{kind}"
+        for rid in (held[kind], other[kind]):
+            w.records[rid] = Record(rid, "S", kind, subject_matter=sm[kind])
+        w.add_tenure(Tenure(f"t_{held[kind]}", A, held[kind], "hold", since=0))
+        w.add_tenure(Tenure(f"t_{other[kind]}", B, other[kind], "hold", since=0))
+    ids = [rid for kind in sm for rid in (held[kind], other[kind])]
+    q = Question("q:holding", "need", tuple(ids), None, tuple((rid, "Record") for rid in ids))
+    p = w.persons[A]
+    formed = {(c.verb, c.subject) for c in opening_set(p, assemble(p, q, 12), q, w.fixtures)}
+    # the kind is the fold's (`existence`), so each row forms on every document he holds and on none another holds
+    assert {(v, s) for v, s in formed if v in rows} == {(v, rid) for v in rows for rid in held.values()}, formed
