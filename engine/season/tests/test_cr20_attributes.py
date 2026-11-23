@@ -269,15 +269,18 @@ def test_the_realm_reads_the_cast_stats_only_on_the_arm_that_is_switched_on():
     assert not [p.id for p in off.persons.values() if p.attributes]
     on = build_realm(0)
     span = on.fixtures.get("generated_attribute_range")
-    checked = 0
+    # BA1.99 re-point (BA1.01 authors `stats:` on 42 rows, not the one): every person's sheet is the drawn one with the row's authored
+    # keys over it, key by key, and a person with no row or a row with no `stats:` holds the drawn sheet alone.
+    checked, authored = 0, 0
     for pid, p in on.persons.items():
         drawn = generated_attributes(0, pid, span)
-        if pid == "p_npc_001":
-            assert p.attributes == {**drawn, **cast.attributes_of(cast.row("NPC-001"))}
-        else:
-            assert p.attributes == drawn, pid
+        row = cast.row(f"NPC-{pid[len('p_npc_'):]}") if pid.startswith("p_npc_") else None
+        stated = cast.attributes_of(row) if row else {}
+        assert p.attributes == {**drawn, **stated}, pid
+        authored += bool(stated)
         checked += 1
     assert checked == len(on.persons) and checked > 1
+    assert authored == 43, authored           # NPC-001 (before the batch) and the 42 BA1.01 states (NPC-001 not among them)
 
 
 # ======================================================================================

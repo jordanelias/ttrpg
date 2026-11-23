@@ -43,6 +43,7 @@ def _engine_available():
         pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
 
 _KEY = "cr85_test_arms"   # a test-local capability key: no roster row is added
+_ARMS = "arms"             # the roster key BA1.01 authors scores on
 
 
 def _spy(monkeypatch) -> Counter:
@@ -65,23 +66,27 @@ def _season_rolls(monkeypatch, seed) -> tuple:
     return seen, w.content_hash()
 
 
-def _off_the_reading(seen: Counter, want=(8, 1.0)) -> list:
-    """The falsifier's check: every roll at `want`, and at least one roll seen (an empty count asserts nothing)."""
-    bad = [k for k in seen if k != want]
-    if not seen:
-        bad.append("setup: no roll was made")
-    return bad
-
-
 @pytest.mark.parametrize("seed", [1, 2])
-def test_falsifier_every_season_roll_reads_pool_8_against_ob_1(seed, monkeypatch):
-    """Every roll the engine makes reads pool 8 against Ob 1.0 -- on the world where every person's score is
-    `pool_default` (B11 lane A's persons-hold-scores at its revert: a drawn sheet moves a pool and an Ob by itself, and
-    the falsifier is about the seam's read, not the sheets). The realm's hash is `_realm_goldens.py`'s."""
+def test_falsifier_every_season_roll_reads_pool_8_against_ob_1_unless_an_authored_holder_is_party(seed, monkeypatch):
+    """BA1.99 re-point (was: every roll reads pool 8 against Ob 1.0). On the world with no attribute seated (B11 lane A's persons-hold-scores
+    at its revert: a drawn sheet moves a pool and an Ob by itself, and the falsifier is about the seam's read, not the sheets), a roll reads
+    pool 8 against Ob 1.0 unless a party holds a key above the untrained score; BA1.01 authors `arms` on 11 persons (3 or 5), so such rolls
+    exist and each reads `pool_of(attacker's score)` against `opposed_ob(defender's score)` for a score the build seats or one `_grown` raises
+    by one -- no other pool or Ob is read. Both halves are observed: the untrained reading (8, 1.0) still occurs for the persons who author
+    nothing, and a pool above 8 occurs for an authored holder. The realm's hash is `_realm_goldens.py`'s."""
+    from engine.dice_engine.sigma_leverage import opposed_ob, pool_of
+    from ..seam.wrappers.pool import FIGHT_DICE_SITE, pool_pair, untrained
     from .test_b11a_scores_and_obstacle import revert_b11a_scores
     revert_b11a_scores(monkeypatch)
+    w0 = build_realm(seed)
+    authored = {p.capability[_ARMS] for p in w0.persons.values() if _ARMS in (p.capability or {})}
+    assert authored == {3, 5}, authored                       # the BA1.01 `arms` scores, read off the build (setup: the world has holders)
+    pool_add, pool_floor = pool_pair(w0.fixtures, FIGHT_DICE_SITE)
+    scores = {untrained(w0.fixtures)} | authored | {v + 1 for v in authored}
+    allowed = {(pool_of(a, 0, pool_add, pool_floor), opposed_ob(b, 0.5)) for a in scores for b in scores}    # 0.5: the module's own constant
     seen, _ = _season_rolls(monkeypatch, seed)
-    assert _off_the_reading(seen) == [], dict(seen)
+    assert (8, 1.0) in allowed and set(seen) <= allowed, sorted(set(seen) - allowed)
+    assert (8, 1.0) in seen and any(pool > 8 for pool, _ob in seen), dict(seen)
 
 
 def test_planted_a_party_holding_the_combat_key_at_5_rolls_11_and_is_attacked_at_ob_2_5(monkeypatch):

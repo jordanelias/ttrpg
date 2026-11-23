@@ -888,7 +888,7 @@ def test_an_authored_capability_wins_over_the_lifepath(monkeypatch):
     from engine.season.data.rosters import LIFEPATH_TEMPLATES
     rows = {cid: dict(r) for cid, r in cast.load().items()}
     lifepath = next(k for k, v in LIFEPATH_TEMPLATES.items() if "inquiry" in v)
-    both, only_path, neither = "NPC-087", "NPC-084", "NPC-086"
+    both, only_path, neither = "NPC-030", "NPC-031", "NPC-040"       # BA1.99: re-picked from NPC-087, NPC-084, NPC-086, which BA1.01 authors `capabilities:` on
     assert not any(rows[c].get("lifepath") or rows[c].get("capabilities") for c in (both, only_path, neither))
     rows[both].update(lifepath=lifepath, capabilities={"inquiry": 5, "arms": 4})
     rows[only_path]["lifepath"] = lifepath
@@ -896,9 +896,9 @@ def test_an_authored_capability_wins_over_the_lifepath(monkeypatch):
     w = build_realm(0)
     default = w.fixtures.get("pool_default")
     assert default != 5
-    assert w.persons["p_npc_087"].capability == {"inquiry": 5, "arms": 4}
-    assert w.persons["p_npc_084"].capability == {"inquiry": default}
-    assert w.persons["p_npc_086"].capability == {}
+    assert w.persons["p_npc_030"].capability == {"inquiry": 5, "arms": 4}
+    assert w.persons["p_npc_031"].capability == {"inquiry": default}
+    assert w.persons["p_npc_040"].capability == {}
 
 
 # ---------------------------------------------------------------------------------------------------------------------

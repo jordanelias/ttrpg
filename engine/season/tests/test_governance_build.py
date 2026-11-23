@@ -2921,7 +2921,9 @@ def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
     # B09.21 stopped writing a dwelling's wear, so no wear claim reaches a ledger and the arms no longer part through one. They still part
     # (the control deletes 211 Sites, which moves what is drawn and asked), by one act here and by `claim.deposited` 10541 / 10540.
     # ⚠⚠ B10.99 re-pin: (627, 626) -> (563, 561), THE B10 MOVERS (`_realm_goldens.py`'s B10.99 paragraph; `CENSUS[(0, 1)]` records the 563).
-    assert (out["acts"], cout["acts"]) == (563, 561), (
+    # ⚠⚠ BA1.99 re-pin: (563, 561) -> (570, 568), THE BA1 MOVERS (`_realm_goldens.py`'s BA1.99 paragraph; `CENSUS[(0, 1)]` records the 570): the cast's
+    # authored scores (BA1.01) and relation rows (BA1.08) move the act mix; the arms still part by two acts.
+    assert (out["acts"], cout["acts"]) == (570, 568), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: a move here is a move of the act mix -- "
         "re-record it with the unit that moved it")
     # B10.99: the counts above DIFFER (563 / 561), and that is the parting this test polices -- deleting 211 Sites moves what

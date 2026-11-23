@@ -7,7 +7,7 @@ it and is refused for the other; a template naming a key outside `descriptors.CA
 in-test below, `test_the_planted_failure_...`). CONTROL: the one-season hash with the expansion skipped differs from the
 shipped one (the shipped state's movers are NPC-004's and NPC-088's `inquiry`); the shipped hash is `_realm_goldens.py`'s.
 
-Built on `build_realm` with a PLANTED `lifepath:` on a row that authors none (NPC-087), so the falsifier does not
+Built on `build_realm` with a PLANTED `lifepath:` on a row that authors none (NPC-030), so the falsifier does not
 read the registry's own authoring; the registry's authored set is pinned separately.
 """
 import dataclasses
@@ -34,8 +34,8 @@ pytestmark = pytest.mark.flat_fold
 #: The four Niflhel ids the archived file STRIKES (it prints no row for them): never members.
 STRUCK = ("3-NI1", "3-NI2", "3-NI3", "3-NI4")
 
-PLANTED, OTHER = "NPC-087", "NPC-084"                   # two rows that author no lifepath
-P_ID, Q_ID = "p_npc_087", "p_npc_084"
+PLANTED, OTHER = "NPC-030", "NPC-031"                   # two rows that author no lifepath and (BA1.99: re-picked from NPC-087, NPC-084, which BA1.01 authors `argue: 3` on) no `capabilities:`
+P_ID, Q_ID = "p_npc_030", "p_npc_031"
 LIFEPATH_TO_INQUIRY = "3-CH5"                           # Church Investigator: `holds: [inquiry]`
 
 #: `{case id: lifepath}` -- the whole authored set, pinned so a key added without its row's own text reddens here.
@@ -155,9 +155,16 @@ def test_a_planted_lifepath_builds_the_key_held_at_pool_default_and_rolls_the_sa
     assert pool.rank(p, "research") == default and pool.rank(q, "research") == 0
     assert sigma.faculty(w, p, "research") == rolled(p, default)
     assert sigma.faculty(w, q, "research") == rolled(q, 0)
+    # BA1.99 re-point (BA1.01 authors `capabilities:` scores on 40 rows, which win over the lifepath expansion): the holders are exactly the
+    # rows whose expansion or authored scores name a key, each at the expansion merged under the authored scores -- so the planted row holds
+    # `inquiry` at `pool_default` and a lifepath row whose `capabilities:` names `inquiry` (NPC-004, NPC-088) holds the authored score.
+    expected = {f"p_{cid.lower().replace('-', '_')}": {**cast.capability_of(r, default), **cast.capabilities_of(r)}
+                for cid, r in _planted_cache().items()}
+    expected = {pid: cap for pid, cap in expected.items() if cap}
     holders = {pid: x.capability for pid, x in w.persons.items() if x.capability}
-    assert holders == {P_ID: {"inquiry": default}, "p_npc_004": {"inquiry": default},
-                       "p_npc_088": {"inquiry": default}}, holders
+    assert len(expected) >= 40 and holders == expected, holders
+    assert holders[P_ID] == {"inquiry": default}
+    assert holders["p_npc_004"]["inquiry"] == cast.capabilities_of(cast.row("NPC-004"))["inquiry"] != default
 
 
 def test_train_on_inquiry_raises_the_holder_and_mints_the_other_a_first_rank(planted_world):
