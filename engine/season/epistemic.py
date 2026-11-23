@@ -41,11 +41,12 @@ from typing import Optional
 
 from .data.requires import binding_of, evaluate
 from .data.rosters import (
-    CLAIM_SUBJECT_RULES, COVERT_KINDS, FAN_OUT_MODES, OBSERVATION_TERMS, SEEN_PREDICATE,
-    TERMS_SUPPLIED_BY, WITNESS_CHANNELS, require_member)
-from .data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
+    CLAIM_SUBJECT_RULES, COVERT_KINDS, EVENT_REACH_ROWS, FAN_OUT_MODES, OBSERVATION_TERMS, REACH_FROM_STRATUM,
+    REACH_ROOM, SEEN_PREDICATE, TERMS_SUPPLIED_BY, WITNESS_CHANNELS, require_member)
+from .data.verbs import EVENT_KINDS, NO_PRECONDITION, VERB_TABLE, VerbRow
 from .gaps import Unspecified
 from .state.attribution import event_by_id, actor_of, anchor_of, causing_act
+from .state.containment import ancestry
 from .state.gate import purview_reaches
 from .state.ids import ROOT, draw_factory
 from .queries import cache, world_q
@@ -600,6 +601,52 @@ def _ch_chronicle(w: "World", e, pid) -> bool:
     before."""
     return any(r.stratum == "binding_decision" for r in VERB_TABLE.values()
                if e.kind in (r.emits or ()))
+
+
+def _ch_reach(w: "World", e, pid) -> bool:
+    """The event-kind reach channel (CR-29): news of an event reaches persons by the event's kind, at a stated reach.
+
+    True where `e.kind` has a reach in `EVENT_REACH` and `pid`'s place (`world_q.place_of`) lies within the rung of that
+    kind that contains the event's place (`world_q.event_place`), or is that place for `room`. A kind with no reach, an
+    unplaced event or an unplaced person admits nobody, so with the map empty (as shipped) this admits nobody."""
+    reach = EVENT_REACH.get(e.kind)
+    if reach is None:
+        return False
+    at, here = world_q.event_place(w, e), world_q.place_of(w, pid)
+    if at is None or here is None:
+        return False
+    if reach == REACH_ROOM:
+        return here == at
+    rung = next((r for r in ancestry(w, at) if getattr(w.rungs.get(r), "kind", None) == reach), None)
+    return rung is not None and rung in ancestry(w, here)
+
+
+def _event_reach(rows: dict) -> dict:
+    """`{event kind: reach}` for the `reach` channel, from `rosters.yaml: witness_channels.event_reach`: an entry
+    `from_stratum: {stratum: reach}` expands to every kind a verb row of that stratum emits (derived, as
+    `_ch_chronicle` derives its kinds, never spelt), and a kind an entry names must be one the loop declares
+    (`EVENT_KINDS`) or import refuses. The reach values are `data/rosters.py::check_event_reach`'s. A function so a
+    test can plant a row."""
+    out = {}
+    for k, v in rows.items():
+        if k == REACH_FROM_STRATUM:
+            for stratum, reach in v.items():
+                for r in VERB_TABLE.values():
+                    if r.stratum == stratum:
+                        out.update({kind: reach for kind in (r.emits or ())})
+        else:
+            if k not in EVENT_KINDS:
+                raise Unspecified(
+                    f"`witness_channels.event_reach` names {k!r}, which is not an Event kind the loop declares",
+                    "rosters.yaml -- event_reach", needs="name a kind in `data/verbs.py::EVENT_KINDS`",
+                    law="04 section B.13 invariant 7 -- a kind outside the derived roster is one the log accepts from "
+                        "no one, and its reach would read as built")
+            out[k] = v
+    return out
+
+
+#: `{event kind: reach}` -- EMPTY AT CR-29 COMMIT (1), so `_ch_reach` admits nobody; a later commit fills the roster row.
+EVENT_REACH = _event_reach(EVENT_REACH_ROWS)
 
 
 # ⚠ BUILT FROM THE ROSTER, NOT TYPED HERE. A dict literal mapping five channel names to five

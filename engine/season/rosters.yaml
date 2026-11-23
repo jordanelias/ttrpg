@@ -377,13 +377,20 @@ rosters:
       knot, the partner's deposits"*) and one channel cannot. A placed actor is credited first by
       presence (`co_located`).
     ordered: true
-    values: [co_located, witness_key, document_key, chronicle, post_remit]
+    values: [co_located, witness_key, document_key, chronicle, reach, post_remit]
     claim_source:
       co_located:   firsthand
       witness_key:  firsthand_via_knot
       document_key: told_by
       chronicle:    told_by
+      reach:        told_by
       post_remit:   inferred
+    # CR-29 commit (1): the `reach` channel's kind -> reach map, SHIPPED EMPTY, so the channel admits nobody until a
+    # later commit fills it. A key is an event kind (held to `EVENT_KINDS` at import, `epistemic.EVENT_REACH`), or
+    # `from_stratum:` naming `{stratum: reach}` for every kind a verb row of that stratum emits (never spelt out, as
+    # `_ch_chronicle` derives its kinds). A value is `room` (the event's place) or a member of `rung_kinds`
+    # (`data/rosters.py::check_event_reach` refuses any other).
+    event_reach: {}
 
   claim_sources:
     source: "#353 §20 — how a Claim came to be held"
@@ -1155,6 +1162,7 @@ rosters:
       witness_key:   "the person IS the Event's anchor (`state/attribution.py::anchor_of` -- the actor where one acted, the written thing otherwise; it read the deleted `Event.subject` until G1b), or shares a live `knot` Tenure with it -- S28's knot deposit, which already reuses the Event id"
       post_remit:    "the person is an OBLIGEE of the seat the Event's act was exercised through (`Act.via`) -- a live `oblige` Tenure to it, read through `queries/world_q.py::establishment_of`, the one owner of that set -- AND stands AT that seat: the seat's rung is where they are or above it (`state/gate.py::purview_reaches`). Plan position `17a`, r2 item 9. ⚠ THIS ROW READ *the person holds a live office Tenure whose remit covers the verb that emitted this kind* until `17a` -- a remit-holder learning of every covered act anywhere in the realm, the place-blind broadcast r2 `02` §A.7 and `01` both delete. An Event no act caused, or an act exercised through no seat, admits nobody through this predicate. ONE other admission rides this channel's source (`inferred`) and its live/off switch, in `loop/witness.py` (v9 IN-22): an ACTORLESS Event's observation READS (MATTER's recorded shortfall) go to the holders of a live seat whose purview reaches the read rung (`queries/world_q.py::governors_of`) -- reads only, never an event-kind, `seen` or `content:` claim"
       chronicle:     "the kind is emitted by a `binding_decision` verb -- a matter of record, and public because the decision is institutional"
+      reach:         "the Event's kind has a reach in `event_reach` and the person stands within it -- in the Event's own place for `room`, else inside the rung of that kind that contains the Event's place (CR-29: news of an event reaches persons by the event's kind, at a stated reach)"
 
   observation_terms:
     source: "`R8.1`, `references/design_rulings_2026-09-06.md` -- Jordan: *\"I saw this person doing y, but I don't know what y is\"*, *\"someone looking like y did x\"*, *\"they saw someone skulking around for no reason they could discern\"*. One `seen` claim per (witness, event), BESIDE the two existing deposits; its value is a frozen struct of these four terms, each `None` where the channel withholds it"
@@ -1200,6 +1208,7 @@ rosters:
       document_key: []
       post_remit:   [stratum]
       chronicle:    [stratum]
+      reach:        [stratum]
 
   # ── WHAT THE SEASON LOOP IS ───────────────────────────────────────────────────────────────────
   # RULED BY JORDAN, 2026-09-05:

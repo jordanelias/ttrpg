@@ -3813,7 +3813,8 @@ def test_w6_every_named_channel_has_a_predicate_and_they_are_data():
     # not tell `chronicle` going dark from `witness_key` going dark, which are different findings
     # (§0.1 pt 2).
     # [GROUNDED: measured 2026-09-11 at `build_world(0)`, 2 seasons -- under `release` alone `chronicle` fired once on a `tenure.closed`; under `U2` the executed verb set in this world is {create_record, move, reconstruct, research, transfer, work} and it admits nobody]
-    assert inert == ["chronicle", "post_remit"], (
+    # B11.03: `reach` is rostered with an EMPTY kind->reach map (CR-29 commit (1)), so it is inert by construction until a later commit fills it.
+    assert inert == ["chronicle", "post_remit", "reach"], (
         f"the inert channels are {inert}, not the two this item published. `post_remit` needs an "
         "obligee standing at the seat an act was exercised through (since `17a`; before it, an "
         "office whose remit covers the emitting verb), and nobody in this world obliges. "

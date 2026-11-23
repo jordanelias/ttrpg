@@ -2281,3 +2281,29 @@ def test_g6_the_privacy_chance_refuses_what_is_not_a_chance():
         w, tell, _ = _g6_world(bad)
         with pytest.raises(ValueError, match="telling_privacy"):
             tell("p_low", "p_mid")
+
+
+def test_reach_channel_with_an_empty_map_admits_nobody(monkeypatch):
+    """CR-29 commit (1): the `reach` channel is rostered after `chronicle`, mints `told_by`, and ships with an empty
+    kind->reach map, so it admits nobody; planting one row shows the predicate can admit (a `reach` that admitted
+    anyone with the map empty, or never admitted with a row, would both fail here)."""
+    assert WITNESS_CHANNELS.index("reach") == WITNESS_CHANNELS.index("chronicle") + 1
+    assert CHANNEL_CLAIM_SOURCE["reach"] == "told_by"
+    w, _d, _out, e = _transfer_into_hh("p_low")
+    assert not EP.EVENT_REACH, "the shipped map is empty at this item"
+    assert [pid for pid in w.persons if CHANNEL_PREDICATES["reach"](w, e, pid)] == []
+    monkeypatch.setitem(EP.EVENT_REACH, e.kind, "room")
+    room = [pid for pid in w.persons if CHANNEL_PREDICATES["reach"](w, e, pid)]
+    assert ACTOR in room and "p_high" not in room, room
+    monkeypatch.setitem(EP.EVENT_REACH, e.kind, "realm")
+    assert "p_king" in [pid for pid in w.persons if CHANNEL_PREDICATES["reach"](w, e, pid)]
+
+
+def test_a_reach_value_outside_the_closed_set_is_refused():
+    import pytest
+    from ..data.rosters import RUNG_KINDS, STRATA, Unspecified, check_event_reach
+    assert check_event_reach({"transfer.made": "room", "tenure.closed": "realm"}, RUNG_KINDS, STRATA)
+    for bad in ({"transfer.made": "everywhere"}, {"transfer": "room"},
+                {"from_stratum": {"no_such_stratum": "room"}}, {"from_stratum": {STRATA[0]: "everywhere"}}):
+        with pytest.raises(Unspecified):
+            check_event_reach(bad, RUNG_KINDS, STRATA)

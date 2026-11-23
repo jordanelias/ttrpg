@@ -1034,6 +1034,38 @@ if set(PROOF_KIND_OF_SOURCE) != set(CLAIM_SOURCES) or not {k for k in PROOF_KIND
 # _check_dominance_kinds`).
 DOMINANCE_KINDS = frozenset(roster_map("standing_routes", "kinds")["dominance"])
 STRATA = roster("strata", ordered=True)
+
+#: The one reach that is no rung kind: the Event's own place (`epistemic._ch_reach`). Every other reach is a member of
+#: `RUNG_KINDS`, the rung of that kind that contains the Event's place.
+REACH_ROOM = "room"
+#: The key of an `event_reach` entry that names a verb-table stratum instead of one kind.
+REACH_FROM_STRATUM = "from_stratum"
+
+
+def check_event_reach(mapping: dict, rung_kinds, strata) -> dict:
+    """CR-29 (`rosters.yaml: witness_channels.event_reach`): THE `reach` CHANNEL'S KIND -> REACH MAP, held to its closed
+    sets at import or refused naming the row. A key is an event kind (`is_event_kind`'s spelling; that it is one the loop
+    declares is `epistemic.py`'s check, where `EVENT_KINDS` is bound) or `from_stratum`, whose value is `{stratum: reach}`
+    over `strata`; a reach is `room` or a member of `rung_kinds`. A function, so a test can plant a bad row. Returns it."""
+    reaches = {REACH_ROOM, *rung_kinds}
+    bad = []
+    for k, v in mapping.items():
+        if k == REACH_FROM_STRATUM:
+            ok = isinstance(v, dict) and all(s in strata and r in reaches for s, r in v.items())
+        else:
+            ok = is_event_kind(k) and v in reaches
+        if not ok:
+            bad.append((k, v))
+    if bad:
+        raise Unspecified(
+            f"`witness_channels.event_reach` has row(s) {bad}", "rosters.yaml -- event_reach",
+            needs=f"a `<noun>.<verb>` kind (or `{REACH_FROM_STRATUM}: {{stratum: reach}}`) mapped to one of "
+                  f"{sorted(reaches)}",
+            law="CR-29 -- a reach is `room` or a rung kind; a value outside that set names a place no Event has")
+    return dict(mapping)
+
+
+EVENT_REACH_ROWS = check_event_reach(roster_map("witness_channels", "event_reach"), RUNG_KINDS, STRATA)
 # The leaf import: the fifteen pursuits are owned one layer out (`references/descriptor_registry.yaml:
 # pursuit_roster`, exported behind a blocking `--check`). `roster("pursuits")` resolves to the same
 # set through `from_descriptor:` -- two routes, one owner; a third route carrying its own literal is
