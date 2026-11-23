@@ -30,7 +30,7 @@ from ..data.requires import (
 )
 from ..data.rosters import (
     CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, SUCCESSIONS,
-    capability_rows, refusing_pole, remove_distance, require_member, require_use_site,
+    capability_rows, refusable, refusing_pole, remove_distance, require_member, require_use_site,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
@@ -586,8 +586,13 @@ def refuses(verb: str, axis: str, tolerance: float) -> bool:
     default, is not one of the *"certain actions"* the ruling gates; the scar's
     `person_q.elements_violated_by` reads engagement the same way.
 
+    ONLY A LISTED VERB CAN BE REFUSED (B10.21): `data.rosters.refusable(axis)` is the closed set of *certain actions*
+    (`rosters.yaml: pursuit_axes.refusable`); a verb outside it is never refused, whatever its cell.
+
     Reads `data.verbs.align`, the one `choose`'s score reads too, so a rebind of
     `data.verbs.ALIGNMENT` moves the gate and the ranking together."""
+    if verb not in refusable(axis):
+        return False
     a = align(verb, axis)
     return bool(a) and refusing_pole(axis) * (a - tolerance) < 0
 

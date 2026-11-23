@@ -437,6 +437,56 @@ def _refusing_poles() -> dict:
     return {axis: int(pole) for axis, pole in marks.items()}
 
 
+def refusable(axis: str) -> frozenset:
+    """THE VERBS A PERSON'S SCRUPLE ON `axis` CAN FORBID HIM (B10.21): `rosters.yaml: pursuit_axes.refusable[axis]`, a closed
+    set -- ED-IN-0261's "certain actions". `decision/options.py::refuses` asks it first and answers False for a verb outside it.
+
+    An axis with no authored refusing pole REFUSES here (`refusing_pole`'s own refusal, asked first), and so does one with a
+    pole and no list: a gate with no named verbs is a refusal nobody ruled, not an empty set. The members' being verbs, and
+    engaged on the axis, is `check_refusable`'s, run once at load; this reads the roster afresh, as `refusing_pole` does."""
+    refusing_pole(axis)
+    marks = roster_map("pursuit_axes", "refusable")
+    if axis not in marks:
+        raise Unspecified(
+            f"pursuit_axes.refusable authors no refusable verb for {axis!r}", "rosters.yaml",
+            needs=f"a `{axis}: [verb, ...]` line, ruled; or gate on an axis that has one ({sorted(marks)})",
+            law="ED-IN-0261 -- the gate refuses certain actions, a listed set: an axis with a pole and no list names none")
+    return frozenset(marks[axis])
+
+
+def check_refusable(rows: Optional[dict] = None) -> dict:
+    """`rosters.yaml: pursuit_axes.refusable`, CHECKED AT LOAD (B10.21), returned as `{axis: frozenset(verb)}`. `rows` is the
+    table under test (default: the shipped one).
+
+    Four refusals: a key off the axis roster or with no refusing pole (a list nobody can arm); a list that is not a list of
+    distinct strings; a verb off `VERB_TABLE` (an act nobody can do); a verb with a ZERO cell on its axis (`data.verbs.align`
+    is `0` -- the act the axis does not engage, which `refuses` could never refuse, so the listing would be a claim the gate
+    cannot keep; the sparse default cell reads `0` too).
+
+    ⚠ IT IS CALLED FROM THE FOOT OF `data/verbs.py`, NOT HERE: `VERB_TABLE` and `align` live there and that module imports this
+    one, so the check reaches them by a function-local import, after both are bound."""
+    from .verbs import VERB_TABLE, align
+    out = {}
+    for axis, verbs in (roster_map("pursuit_axes", "refusable") if rows is None else rows).items():
+        require_member(axis, PURSUIT_AXES, f"pursuit_axes.refusable names {axis!r}, which is not on the roster",
+                       "rosters.yaml", "ED-IN-0261 -- the refusable set is about a ROSTERED axis")
+        refusing_pole(axis)
+        if (not isinstance(verbs, (list, tuple)) or any(not isinstance(v, str) for v in verbs)
+                or len(set(verbs)) != len(verbs)):
+            raise Unspecified(f"pursuit_axes.refusable[{axis!r}] is {verbs!r}", "rosters.yaml",
+                              needs="a list of distinct verb names", law="ED-IN-0261 -- the refusable set is a closed list of acts")
+        for v in verbs:
+            require_member(v, VERB_TABLE, f"pursuit_axes.refusable[{axis!r}] names {v!r}, which is not a verb",
+                           "rosters.yaml", "a scruple forbids an act somebody can do",
+                           needs="a `verb_table.yaml` key, spelled as it spells it")
+            if not align(v, axis):
+                raise Unspecified(f"pursuit_axes.refusable[{axis!r}] names {v!r}, which has no cell on {axis!r}", "rosters.yaml",
+                                  needs=f"a non-zero `tables.alignment` cell for {v!r} on {axis!r}, or drop the verb",
+                                  law="ED-IN-0261 -- only a verb the axis engages is one of the certain actions; a zero cell is never refused")
+        out[axis] = frozenset(verbs)
+    return out
+
+
 def table(name: str) -> dict:
     """A MAPPING from `rosters.yaml`'s `tables:`, returned as `{outer: {inner: float}}`.
 

@@ -481,6 +481,16 @@ rosters:
     # `roster_map` raise at import, and every import of `engine.season` fails).]
     refusing_pole:
       deontological_instrumental: -1
+    # B10.21 (16_PESSIMIST_CHAR_C item 1): THE "CERTAIN ACTIONS" ED-IN-0261 GATES, per axis. A verb not listed is never
+    # refused, whatever its cell on the axis. Read by `data/rosters.py::refusable`, asked by `decision/options.py::refuses`;
+    # an axis with a refusing pole authors its list here or the gate refuses (never defaults). Checked at load
+    # (`data/rosters.py::check_refusable`, run at the foot of `data/verbs.py`): a verb off `verb_table.yaml`, or one with
+    # a zero cell on its axis, is refused -- a scruple can only forbid an act the axis engages.
+    # [ASSUMPTION; medium; Jordan to correct: content. `destroy_record`, `sabotage`, `conceal`, `raze`, `seize` join when
+    # they carry a cell on this axis (16_PESSIMIST_CHAR_B, step 2). Revert: delete this key AND the `refusable(axis)` call
+    # in `decision/options.py::refuses` and the `check_refusable()` call at the foot of `data/verbs.py` together.]
+    refusable:
+      deontological_instrumental: [forge, lie, "evade / defy", construe]
     note: >-
       ⚠⚠ **SEVEN BIPOLAR AXES (`ED-IN-0261`).** Convictions (now pursuits) and axes are different
       index sets: the roster above holds the fifteen pursuits, this row holds the seven axes, and

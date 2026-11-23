@@ -1815,6 +1815,14 @@
           "refusing_pole": {
             "deontological_instrumental": -1
           },
+          "refusable": {
+            "deontological_instrumental": [
+              "forge",
+              "lie",
+              "evade / defy",
+              "construe"
+            ]
+          },
           "note": "\u26a0\u26a0 **SEVEN BIPOLAR AXES (`ED-IN-0261`).** Convictions (now pursuits) and axes are different index sets: the roster above holds the fifteen pursuits, this row holds the seven axes, and `tables.pursuit_projection` is the 15\u00d77 between them. V2 \u00a7F2's `conviction[axis]` is computed rather than looked up -- `\u03a3_conv conviction[conv] \u00b7 projection[conv][axis]`. \u26a0 `exposure` IS FORBIDDEN AS A BARE AXIS NAME and the loader RAISES on it \u2014 #353 `:1897` names \"The Exposure collision \u2014 three senses of one word, including a need scalar and a per-person tally\". Spell the sense you mean. \u26a0\u26a0 **THERE IS NO `values:` LIST, AND THAT IS THE REPAIR (ED-IN-0230).** A literal copy here could disagree in silence with `engine/substrate/keys.py::AXES` (nothing under `engine/season/` read it), so a fifth axis in one place would leave the other scoring on four. \u26a0 **`from_descriptor:` IS THE `conviction_roster` PRECEDENT.** The roster lives in `references/descriptor_registry.yaml` with `engine/substrate/descriptors.py` as the one code-side reader, so a fifth axis or a rename is ONE edit -- `axis_roster.names`.",
           "from_descriptor": "axis_roster"
         },

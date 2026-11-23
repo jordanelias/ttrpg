@@ -39,7 +39,7 @@ from .requires import (
 from .rosters import (
     COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS,
-    is_event_kind,
+    check_refusable, is_event_kind,
     RUNG_KINDS, STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
     table,
@@ -2434,4 +2434,7 @@ def alignment_at(point: str) -> dict:
                      **{DEED_PREFIX + k: 1.0 for k in EMITTED_KINDS}} for ax in PURSUIT_AXES}
     return {ax: {v: (1.0 if w > 0 else -1.0 if w < 0 else 0.0) for v, w in row.items()}
             for ax, row in ALIGNMENT_DECLARED.items()}
+
+
+check_refusable()      # B10.21: refuse a refusable verb off the table, or with no cell on its axis, at load (its owner imports this module)
 

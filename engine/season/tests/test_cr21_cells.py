@@ -113,6 +113,25 @@ def _deontological_axis() -> str:
 
 def _planted_cells(monkeypatch, axis: str):
     monkeypatch.setattr(V, "ALIGNMENT", {axis: {"v_toward_pos": 0.3, "v_toward_neg": -0.6, "v_unengaged": 0.0}})
+    # B10.21: `refuses` gates only a verb the roster lists as refusable, so the synthetic verbs are listed for the gate under test
+    monkeypatch.setitem(R._ROSTERS["pursuit_axes"], "refusable", {axis: ["v_toward_pos", "v_toward_neg", "v_unengaged"]})
+
+
+def test_cr21_a_verb_off_the_refusable_list_is_never_refused_however_far_past_his_tolerance(monkeypatch):
+    """B10.21: the gate refuses a LISTED verb only. One listed verb and one off the list carry the same cell past a
+    person's tolerance: the listed one is refused, the other never; and listing the other makes the same cell refuse
+    (the verdict follows the roster, nothing else)."""
+    axis = _deontological_axis()
+    listed = sorted(R.roster_map("pursuit_axes", "refusable")[axis])
+    assert listed, "the ruled axis lists no refusable verb"
+    off = "v_off_the_list"
+    assert off not in listed
+    monkeypatch.setattr(V, "ALIGNMENT", {axis: {listed[0]: 0.3, off: 0.3}})
+    weight = -0.4
+    assert refuses(listed[0], axis, weight) is True
+    assert refuses(off, axis, weight) is False
+    monkeypatch.setitem(R._ROSTERS["pursuit_axes"], "refusable", {axis: [*listed, off]})
+    assert refuses(off, axis, weight) is True                    # CONTROL: the list, not the cell, was what held it back
 
 
 def test_cr21_refuses_reads_the_pole_from_the_roster_the_shipped_pole_is_the_first_named(monkeypatch):
