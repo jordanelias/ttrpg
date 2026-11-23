@@ -1313,6 +1313,11 @@ DEFAULT_FIXTURES = Fixtures(
     # and A-26 (B98), and until then the term is absent; at `drawn` with `None` the emitter raises, naming B98. [ASSUMPTION; medium; Jordan to correct; revert: `None`, absent.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-473 -- site: Fixtures crisis_obstacle, graded `assumption`; no document gives a level, so it is absent at the control and swept over B05's four difficulty levels]
     crisis_obstacle=None,              # `H-473`, swept plain / routine / demanding / hard; None (SHIPPED, absent until B98)
+    # B10.57 (`IS-B2-CHAR-02` step 5). THE COMPOSITION ROLES WHOSE NPC PARTY DECIDES A CHOICE BY `decision/decider.py::make_decider`: a wrapper passes that decider as its module's
+    # `decide=` only for a role named here and a party the host does not play (`decider.decides_for`); for any other role the module runs its interim policy as it does
+    # today. Each name is a role of `references/module_contracts.yaml`'s `composition_roles:` (refused at load otherwise). `()` is the CONTROL and SHIPS: no role is named, no
+    # wrapper passes a decider. The first role is listed by the batch that makes its module accept `decide=` (B16 the duel round, B20 the field's commander, B24 the hearing), each a declared mover there.
+    npc_decider_roles=(),
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
@@ -1329,6 +1334,12 @@ def load() -> None:
         raise Forbidden(f"`Fixtures crisis_arm` is {arm!r} and `crisis_obstacle` is {obstacle!r}", "data/fixtures.py",
                         needs=f"an arm of `rosters.yaml: crisis_arms` {sorted(CRISIS_ARMS)} and an obstacle that is None or a level of `difficulty_levels` {list(DIFFICULTY_LEVELS)}",
                         law="B10.13 (H-472, H-473) -- the arm is a closed set and the obstacle is a level the ladder names, never a number made up here")
+    from engine.substrate import composition
+    unknown = [r for r in DEFAULT_FIXTURES.get("npc_decider_roles") if r not in composition.ROLES]
+    if unknown:
+        raise Forbidden(f"`Fixtures npc_decider_roles` names {unknown}, which `references/module_contracts.yaml: composition_roles` does not register", "data/fixtures.py",
+                        needs=f"roles of the composition registry {sorted(composition.ROLES)}",
+                        law="B10.57 -- a role no wrapper carries is a setting read by nothing, and the decider would never be passed")
     levels, sized = DIFFICULTY_LEVELS, tuple(DEFAULT_FIXTURES.get("difficulty_ob"))
     if sized != levels:
         raise Forbidden(f"`Fixtures difficulty_ob` sizes {list(sized)}, and `rosters.yaml: difficulty_levels` names {list(levels)}", "data/fixtures.py",

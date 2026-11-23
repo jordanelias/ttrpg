@@ -208,10 +208,16 @@ def odds_weight(p: Person, c: Candidate, fx: "Fixtures", odds: Optional[Callable
     `seam/wrappers/sigma.py::believed_chance`): `decision/` holds a callable and the act's shape, never the
     store behind it. A candidate is probed as the act it would become (`pack_scenes`' payload and seat), so
     the figure is the one for the roll the fold would deal that act."""
-    arm = _odds_arm(fx)
-    if arm == "none" or odds is None:
+    return weigh_by_chance(fx, None if odds is None else (lambda: _believed_chance(p, c, odds)))
+
+
+def weigh_by_chance(fx: "Fixtures", ask: Optional[Callable[[], Optional[float]]]) -> float:
+    """THE ONE RULE OF `odds_weighting` (B10.57: `odds_weight` and `decider.make_decider`'s choice score both call it, so a choice inside a contest is
+    priced by the factor a candidate is): `ask`, a no-argument call for the believed chance, is read only at the arm `believed`; the arm `none`, no `ask`
+    and an answer of `None` are 1.0, and the arm is checked first whatever the rest holds."""
+    if _odds_arm(fx) == "none" or ask is None:
         return 1.0
-    chance = _believed_chance(p, c, odds)
+    chance = ask()
     return 1.0 if chance is None else float(chance)
 
 
