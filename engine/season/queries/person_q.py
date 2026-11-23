@@ -1983,3 +1983,113 @@ def known_persons(claims, actor) -> tuple:
     out.discard(actor)
     out.discard(None)
     return tuple(sorted(out))
+
+
+def _emitted_by(verbs) -> frozenset:
+    """THE EVENT KINDS THE VERB ROWS `verbs` EMIT -- `data/verbs.py`'s own column, read, never spelt."""
+    return frozenset(k for v in verbs for k in _verbs.VERB_TABLE[v].emits)
+
+
+def _kinds_of_tenure(kind: str) -> tuple:
+    """`(opened, exclusive)` FOR THE TENURE KIND `kind`: the kinds its DERIVED OPENERS emit (`data/verbs.py::
+    _OPENERS_FROM_EFFECTS`, the one owner of *which verb opens which kind*), and those of them no verb outside
+    the openers emits -- `confer` and `succeed` also emit the closing kind of the incumbent they displace, which
+    `release` and `revoke` emit alone, so the closing kind is in the first set and not the second."""
+    openers = frozenset(_verbs._OPENERS_FROM_EFFECTS.get(kind, ()))
+    opened = _emitted_by(openers)
+    return opened, opened - _emitted_by(frozenset(_verbs.VERB_TABLE) - openers)
+
+
+#: THE KINDS A CLAIM ABOUT A SEAT OR RUNG CARRIES WHEN SOMEBODY CAME TO HOLD IT, and the one when he ceased to: the
+#: `hold` openers' exclusive kinds, and the kind the opener `confer` shares with the closer `release` (`tenure.closed`).
+#: A death is `PERSON_DIED` (`data/rosters.py`). Derived, so a verb that opens a `hold` joins with no edit here.
+_HOLD_EMITS, HOLD_OPEN_KINDS = _kinds_of_tenure("hold")
+HOLD_CLOSE_KINDS = _HOLD_EMITS & _emitted_by(("release",))
+#: THE KINDS OF A PERSON'S OWN MOVEMENT, derived the same way from the `contain` openers (`move`, `march`, `migrate`, ...).
+MOVE_KINDS = _kinds_of_tenure("contain")[1]
+
+
+def _seat_news(ledger, obj) -> list:
+    """`[(when, lap, predicate)]` OF EVERY CLAIM IN `ledger` ABOUT `obj` THAT SAYS SOMEBODY CAME TO HOLD IT OR CEASED
+    TO, in ledger order. `holders_named` and `vacant_named`'s one read."""
+    return [(c.when, c.lap, c.predicate) for c in ledger
+            if c.subject == obj and (c.predicate in HOLD_OPEN_KINDS or c.predicate in HOLD_CLOSE_KINDS)]
+
+
+def holders_named(ledger, obj) -> tuple:
+    """THE PERSONS THE HOLDER'S OWN CLAIMS NAME AS HOLDING `obj` (a seat or a rung), newest first (v12 B11.08, `08_FI_01`
+    edit 1; ED-IN-0292's last row: a fact about who holds a seat reaches a person as a claim through the channels, never as a
+    world stamp). World-free: it reads `ledger` and the verb table's derived kinds, and nothing else.
+
+    For each claim about `obj` whose predicate is a kind a `hold` opener emits (`HOLD_OPEN_KINDS`), the SUBJECTS of the claims of
+    the same predicate deposited at the same `(when, lap)` -- the pairing key `deed_doer` and `_seen_index` use for a deed
+    and its sighting, since WITNESS deposits every claim of one Event in one pass. A holder is dropped when a NEWER claim about
+    `obj` or about him carries a closing kind (`HOLD_CLOSE_KINDS`) or a death (`PERSON_DIED`); a claim of the same key is not newer,
+    so the seat's new holder survives the `tenure.closed` of the man he displaced.
+    ⚠ OVER-INCLUSIVE, AND IT SAYS SO [ASSUMPTION; medium; Jordan to correct]: it cannot tell a person from another id by the
+    ledger alone, so the seat itself is excluded and every other subject of the Event is named -- the conferrer beside the man
+    conferred on (`claim_subjects`' `both`), and, when one person witnesses two seat changes in one lap, both holders. The reader
+    that needs persons only (`world_q`'s call sites) drops the ids the world knows to be something else; it asks nothing of any
+    person's state. Each holder once."""
+    news = [c for c in ledger if c.predicate in HOLD_OPEN_KINDS or c.predicate in HOLD_CLOSE_KINDS or c.predicate == PERSON_DIED]
+    ends: dict = {}
+    for c in news:
+        if c.predicate in HOLD_CLOSE_KINDS or c.predicate == PERSON_DIED:
+            at = (c.when, c.lap)
+            if at > ends.get(c.subject, (-1 << 60, 0)):
+                ends[c.subject] = at
+    seat_end = ends.get(obj)
+    named: dict = {}
+    for c in ledger:
+        if c.subject != obj or c.predicate not in HOLD_OPEN_KINDS:
+            continue
+        key = (c.when, c.lap)
+        if seat_end is not None and seat_end > key:
+            continue
+        for h in news:
+            if h.predicate != c.predicate or (h.when, h.lap) != key or h.subject == obj:
+                continue
+            if ends.get(h.subject, (-1 << 60, 0)) > key:
+                continue
+            if h.subject not in named or key > named[h.subject]:
+                named[h.subject] = key
+    return tuple(sorted(named, key=lambda x: (-named[x][0], -named[x][1], x)))
+
+
+def vacant_named(ledger, obj) -> bool:
+    """WHETHER THE HOLDER'S OWN NEWEST CLAIM ABOUT `obj` THAT SAYS SOMEBODY CAME TO HOLD IT OR CEASED TO IS A CEASING (v12
+    B11.08, `08_FI_01` edit 1's sibling): he has heard it empty. A seat he has heard nothing of is not named vacant, and at one
+    `(when, lap)` an opening beside a closing reads occupied -- `confer` emits both when it displaces an incumbent."""
+    news = _seat_news(ledger, obj)
+    if not news:
+        return False
+    newest = max((w, l) for w, l, _ in news)
+    return not any(p in HOLD_OPEN_KINDS for w, l, p in news if (w, l) == newest)
+
+
+#: THE ARMS OF `Fixtures.telling_hearers` (`rosters.yaml: telling_hearer_arms`): who a teller offers a telling to.
+TELLING_HEARER_ARMS = roster("telling_hearer_arms")
+
+
+def present_persons(claims, actor) -> tuple:
+    """THE PERSONS THIS HOLDER HAS SEEN SINCE HE LAST MOVED -- the subset of `known_persons` of whom he holds a FIRSTHAND `seen` claim
+    naming (`Seen.who`) deposited at a `(when, lap)` no older than his own newest claim of a movement kind about himself
+    (`MOVE_KINDS`), sorted ids, never `actor` (v12 B11.08, `08_FI_02` edit 5). The one reader of BELIEVED co-location: from his own
+    ledger and nothing else, so a man who walked away this lap is still named and the fold refuses the telling (`tell`'s
+    `hearer` conjunct). With no movement claim, every firsthand sighting counts. A told sighting never does: the person who
+    was told where somebody is has not seen him."""
+    term = KNOWN_PERSON_CLAIM.get("seen_term")
+    moved = max(((c.when, c.lap) for c in claims if c.subject == actor and c.predicate in MOVE_KINDS and not c.chain), default=None)
+    seen = {getattr(c.value, term, None) for c in claims
+            if c.predicate == SEEN_PREDICATE and c.source == "firsthand" and not c.chain
+            and (moved is None or (c.when, c.lap) >= moved)}
+    return tuple(x for x in known_persons(claims, actor) if x in seen)
+
+
+def telling_hearers(claims, actor, fx) -> tuple:
+    """THE PERSONS A TELLER OFFERS A TELLING TO, by `Fixtures.telling_hearers` (held to `rosters.yaml: telling_hearer_arms`; an unknown
+    arm raises, `_slant`'s rule): `known` (the control, SHIPPED) is `known_persons`, `seen_since_move` is `present_persons`."""
+    arm = fx.get("telling_hearers")
+    if arm not in TELLING_HEARER_ARMS:
+        raise ValueError(f"telling_hearers {arm!r} is not in rosters.yaml: telling_hearer_arms {sorted(TELLING_HEARER_ARMS)}")
+    return present_persons(claims, actor) if arm == "seen_since_move" else known_persons(claims, actor)

@@ -3148,6 +3148,18 @@ rosters:
       among those by the same comparator; with no valenced claim it is `newest` exactly.
     values: [newest, valence]
 
+  telling_hearer_arms:
+    source: >-
+      v12 B11.08 (`08_FI_02` edit 5): *"fan over `person_q.present_persons(ledger, actor)` ... Fixture `telling_hearers`:
+      `known` (control) / `seen_since_move`"*.
+    note: >-
+      THE ARMS OF `Fixtures.telling_hearers`, read by `queries/person_q.py::telling_hearers` for a row whose cell carries a `with`
+      conjunct on `to` (`decision/options.py::opening_set`): who a teller offers a telling (or a lie, a gift, an argument, an acceptance) to. `known`
+      is `known_persons` -- everybody he has any claim of -- the CONTROL, shipped. `seen_since_move` is `present_persons`: those
+      he holds a firsthand sighting of since his own newest movement claim. He may still be wrong (the man left this lap); the
+      fold's `hearer` conjunct still refuses that.
+    values: [known, seen_since_move]
+
   stock_reports:
     source: >-
       v10 CR-23 (M17 taken (a), a seat-channel stock report at crossings, [ASSUMPTION; medium;

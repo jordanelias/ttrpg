@@ -19,6 +19,7 @@ from ..decision.options import opening_set
 from ..queries import world_q
 from ..state.carriers import Claim, Person, Proposition, Tenure, View
 from ..state.world import World
+from .test_fi_referents import hears_of
 
 SEAT = "off_king"
 THRONE = "g_throne"
@@ -48,6 +49,7 @@ def _world(ledger) -> World:
     w.persons["p_a"].tenures.append(Tenure("t_hold_p_a", "p_a", SEAT, "hold", 0))
     w.persons["p_o"].tenures.append(Tenure("t_commit_p_o", "p_o", THRONE, "commit", 0))
     w.persons["p_o"].ledger = list(ledger)
+    hears_of(w.persons["p_o"], SEAT, "p_a", when=-2)       # v12 B11.08: who holds the seat is the claims he holds of it, long known
     return w
 
 

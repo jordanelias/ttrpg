@@ -58,7 +58,16 @@ from ..queries import world_q
 from ..state.carriers import Act, Claim, Question, Record, Tenure
 from ..state.ids import H
 
-from .test_g3_not_yours import _gov_world, _hold
+from .test_fi_referents import hears_of
+from .test_g3_not_yours import _gov_world as _gov_world_unheard, _hold
+
+
+def _gov_world():
+    """`_gov_world()` in which `p_king` HAS HEARD that `off_reeve`, the seat it builds unheld, is empty (v12 B11.08: a vacancy is the
+    claims his own ledger holds of it, so `confer` forms on it for the man who heard)."""
+    w, d = _gov_world_unheard()
+    hears_of(w.persons["p_king"], "off_reeve", "p_gone", kind="tenure.closed", when=-2)
+    return w, d
 
 SEAT, DUKE = "off_duke", "p_high"
 _CONTENT = RECORD_CONTENT["predicate"]

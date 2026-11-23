@@ -27,7 +27,7 @@ from ..queries.world_q import (RESIDE_KIND, WORKS_KIND, ancestry, capacity, encl
                                home_of as home_of_q, landing_floor, members)
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
-from ..data.rosters import (BODY_FACTION, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
+from ..data.rosters import (BODY_FACTION, CHANNEL_CLAIM_SOURCE, FACTIONS, FOREIGN_CAST, FOREIGN_SEATS, OFFICES_BY_HOLDER,
                             OFFICES_SEATS, PURSUITS, ROLE_TEMPLATE_OF, RUNG_KINDS, SELF_BELIEVED, authored_remit,
                             faction_prop_id, load_yaml, refuse_a_titled_post_off_its_rung,
                             remit_or_default, territory_id_of, territory_rung_id, title_domain)
@@ -35,7 +35,9 @@ from ..data.geography import geography
 from ..data.pursuits import temperament_pursuits
 from ..loop.effects import EFFECTS
 from ..data.requires import KNOWN_PERSON_CLAIM
-from ..state.carriers import Act, Claim, Office, Person, Proposition, Rung, Site, Tenure, generated_attributes
+from ..epistemic import CHANNEL_PREDICATES, claim_subjects
+from ..state.carriers import (Act, Claim, Event, Office, Person, Proposition, Rung, Site, StateChange, Tenure,
+                              generated_attributes)
 from ..state.gate import NO_CHANGE
 from ..state.ids import H, ROOT
 from ..state.world import World
@@ -788,6 +790,53 @@ def seed_acquaintances(w: World, pairs) -> list:
         cid = f"c_acq_{who}_{other}"
         w.persons[who].ledger.append(Claim(cid, who, other, kind, 1, 0, "firsthand", conf, "own"))
         written.append(cid)
+    return written
+
+
+def _realm_of(w: World, x) -> "str | None":
+    """THE REALM RUNG `x` STANDS IN: the first rung at or above it of kind `realm`, else the outermost (a territory in no realm is
+    its own reach, as `epistemic._ch_reach` reads it), `None` for an id with no place."""
+    chain = ancestry(w, x)
+    return next((r for r in chain if getattr(w.rungs.get(r), "kind", None) == "realm"), chain[-1] if chain else None)
+
+
+def seed_seat_news(w: World) -> list:
+    """THE REALM DOES NOT START BLIND (v12 B11.08, `08_FI_01` edit 6; A-32): FOR EACH SEAT HELD AT BUILD, EVERY PERSON THE `reach`
+    CHANNEL CARRIES ITS OPENING TO HOLDS THE CLAIMS A WITNESS OF IT WOULD. The Event is the one WITNESS would deposit -- `tenure.opened`
+    over the hold's edge and its seat -- and the subjects are `epistemic.claim_subjects`' own (`per_change`: the holder and the seat, no
+    actor at build), so the starting ledger and a played deposit are one shape. Who it reaches is the channel's own answer
+    (`CHANNEL_PREDICATES["reach"]`, `event_reach`'s row for the kind), and the source is the channel's (`told_by`, an empty chain).
+    UNDER `Fixtures seat_news: local` (A-32's arm B) THE CHANNEL ADMITS NOBODY FOR THESE KINDS, so the seeded seats are those of the
+    person's own realm. A seat with no rung reaches nobody. A DEATH IS NOT SEEDED (A-33): nobody is told why a seat was filled.
+
+    ⚠ `when` IS ONE SEASON BEFORE THE FIRST DELIBERATION'S FLOOR, `seed_self_knowledge`'s reason: what a person has always known of who
+    holds what is not news, and a claim at `when` 0 would raise a question on each holder in season one. ⚠ `lap` IS THE SEAT'S OWN
+    INDEX, in seat order: `person_q.holders_named` pairs a seat's holder with the claims deposited at the seat's own `(when, lap)`, and
+    seats opened at one `(when, lap)` would name each other's holders. ⚠ `value` IS `1`, NOT `True` (`seed_acquaintances`' shape): a played deposit
+    carries `True` and so is a DEED claim (`person_q.is_deed`: `value is True`), which every deed reader takes the subject of as the doer of it --
+    seeded so, every seat and every holder of the realm would be the doer of `tenure.opened`, and `goal_inquisitors_find_heresy` and
+    `goal_church_root_out_heresy` (`engaging: einhir_restoration`, which `tenure.opened` engages) would name all of them (60 referents, 31 of them
+    Offices, measured; 0 before). Who holds a seat is no act of the seat's. `holders_named` reads the kind and not the value.
+    Returns the claim ids written, in seat then person order.
+    [ASSUMPTION; medium; Jordan to correct; revert: delete the build step] a seat is held, and so known, from the build."""
+    conf = w.fixtures.get("confidence_default")
+    when = landing_floor(w)[0] - 1
+    local = w.fixtures.get("seat_news") == "local"
+    source = CHANNEL_CLAIM_SOURCE["reach"]
+    written = []
+    held = sorted(((t.object, t) for t in w.tenures if t.kind == "hold" and t.live and t.object in w.offices), key=lambda x: x[0])
+    for lap, (seat, t) in enumerate(held):
+        e = Event(f"e_seat_{seat}", "tenure.opened", [StateChange(t.id, "set", "Event"), StateChange(seat, "set", "Event")], [ROOT], 0)
+        subjects = claim_subjects(w, e, "per_change")
+        rung = w.offices[seat].rung
+        for pid in sorted(w.persons):
+            if (local and (rung is None or _realm_of(w, pid) != _realm_of(w, rung))) or (
+                    not local and not CHANNEL_PREDICATES["reach"](w, e, pid)):
+                continue
+            for n, subject in enumerate(subjects):
+                cid = f"c_seat_{pid}_{seat}_{n}"
+                w.persons[pid].ledger.append(Claim(cid, pid, subject, e.kind, 1, when, source, conf, "own", lap))
+                written.append(cid)
     return written
 
 
@@ -2076,6 +2125,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     # `acquaintances=False` is the control arm.
     if acquaintances:
         w._acquaintances = seed_acquaintances(w, acquaintance_pairs(w, seat_rows, w._office_census["authored"]))
+    # v12 B11.08 (`08_FI_01` edit 6; A-32): WHO HOLDS WHICH SEAT AS THE REALM HEARD IT, beside the acquaintances and after the last seat is seated.
+    w._seat_news = seed_seat_news(w)
     # B10.65 (`U5a` edit 3): WHAT EACH PERSON BELIEVES OF HIMSELF, once everybody and every acquaintance is seated; a cast row's `unaware:` marks are the claims left out.
     seed_self_knowledge(w, marks)
     # v11 CP-T03-03: THE ARMS A RUNG IS BUILT HOLDING (`rosters.yaml: arms_at_build`), the last-but-one write. The

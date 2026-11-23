@@ -3981,6 +3981,62 @@ def test_r7_two_persons_hold_different_things_and_at_total_they_cannot():
         "told something")
 
 
+def test_r7_a_silent_seat_change_moves_no_candidate():
+    """R-07 (`08_FI_01` edit 8; v12 B11.08): `questions_for` hands a person no referent read from ANOTHER's or a seat's current state. Two
+    persons are asked (the `r08_probe.py` P1 and P2, `build_realm(0)`, tick 0): `p_npc_088`, whose goal is about whoever holds
+    `off_cardinal_justice` (a `seat_holders` referent), and `p_npc_020`, the King, who may fill `off_archbishops_rep` (a vacancy). A hold
+    is edited on the World with no Event and no WITNESS -- the subject's ledger and own tenures are byte-identical -- and his candidates
+    (`opening_set` over every question he is given) must not move; the same seat released through the real fold and the real WITNESS must
+    move them; an unrelated seat changing hands silently is the control."""
+    from ..boot.realm import build_realm
+    from ..data.matrix import WriteClass
+    from ..decision import assemble
+    from ..decision.options import opening_set
+    from ..queries import world_q
+    from ..state.carriers import Act
+
+    def cands(w, pid):
+        """What he is asked and what he may do: the referents of his `need` questions (a `seat_holders` goal's are the holders his ledger names)
+        and his candidates over every question -- a released seat's old holder stays a candidate through the claims the release deposits about
+        him, so the goal's referents are what shows the re-aiming."""
+        p = w.persons[pid]
+        qs = world_q.questions_for(w, p)
+        return (frozenset(q.referents for q in qs if q.source == "need"),
+                frozenset((c.verb, c.subject, tuple(sorted((c.operands or {}).items())))
+                          for q in qs for c in opening_set(p, assemble(p, q, 12), q, w.fixtures)))
+
+    def holder(w, seat):
+        return next(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == seat)
+
+    def silently(w, seat):
+        for t in w.tenures:
+            if t.kind == "hold" and t.live and t.object == seat:
+                t.until = w.tick
+
+    def witnessed(w, seat):
+        d = SeasonDriver(w)
+        d.matter(mint_token(w, WriteClass.MATTER), [])
+        out = d.resolve(mint_token(w, WriteClass.ACTS), [Act(id="r7_rel", actor=holder(w, seat), verb="release", payload={"subject": seat})],
+                        contest_max_depth=w.fixtures.get("contest_max_depth"))
+        w.log.extend(out)
+        d.witness(mint_token(w, WriteClass.INTERIOR), out)
+        assert {e.kind for e in out} == {"tenure.closed"}
+
+    base = build_realm(0)
+    moved = 0
+    for who, seat, unrelated in (("p_npc_088", "off_cardinal_justice", "off_grand_master"), ("p_npc_020", "off_archbishops_rep", "off_confessor")):
+        c0 = cands(base, who)
+        assert c0[0] and c0[1], who
+        silent, control, told = build_realm(0), build_realm(0), build_realm(0)
+        silently(silent, seat)
+        silently(control, unrelated)
+        witnessed(told, seat)
+        assert cands(silent, who) == c0, f"{who}: a silent change of {seat} moved his candidates"
+        assert cands(control, who) == c0, f"{who}: the control (an unrelated seat, {unrelated}) moved them"
+        moved += cands(told, who) != c0
+    assert moved == 2, "the same seat released through the fold and witnessed must move both persons' candidates"
+
+
 def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
     """`M-6` — starvation on the narrowed fan-out, run at every arm, reported link by link.
 

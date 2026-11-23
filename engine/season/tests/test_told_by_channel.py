@@ -240,7 +240,8 @@ def test_15d_falsifier_the_realm_holds_hearsay_no_telling_minted(monkeypatch):
     def told_by_count(seed) -> tuple:
         w = build_realm(seed)
         out = populated.run(1, seed, w=w)
-        told_by = [c for p in w.persons.values() for c in p.ledger if c.source == "told_by"]
+        built = set(w._seat_news)      # v12 B11.08: the seat news the realm is BUILT holding is `told_by` by the `reach` channel's own source; no season deposited it
+        told_by = [c for p in w.persons.values() for c in p.ledger if c.source == "told_by" and c.id not in built]
         channel = sum(1 for c in told_by if c.chain)
         return len(told_by) - channel, channel, sum(out["claim_sources"].values())
 
@@ -1627,8 +1628,10 @@ def test_t7_an_intent_names_its_target_into_the_hearers_question():
     for predicate, want in (("intent:fight", ("p_low",)), ("stores:grain", ())):
         w = P.tiny_world()
         low = w.persons["p_low"]
+        # NO `chain` (v12 B11.08): a teller is a person he knows (`known_persons`), and a claim about a known person is admitted as a question of its own;
+        # `x_far` is to be an id this ledger holds NO person by, so that only the intent branch of `named` can raise it.
         c = Claim("c_t7_intent", "p_low", "x_far", predicate, (("subject", "p_low"),), w.tick,
-                  "told_by", 100, "own", 0, chain=("x_far",))
+                  "told_by", 100, "own", 0)
         low.ledger.append(c)
         assert named(c) == want, (predicate, named(c))
         qs = [q for q in questions_for(w, low) if q.about == c.id]

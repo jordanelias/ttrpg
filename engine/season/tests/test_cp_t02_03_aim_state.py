@@ -25,6 +25,7 @@ from ..gaps import Unspecified
 from ..queries import world_q
 from ..state.carriers import Person, Proposition, Tenure
 from ..state.world import World
+from .test_fi_referents import hears_of
 
 RUNG = "terr_T13"
 SEAT = "off_king"
@@ -43,9 +44,10 @@ def _plant(monkeypatch, tmp_path, *rows):
     monkeypatch.setattr(goals, "_CACHE", None)
 
 
-def _world(gid, *, holder_faction="fac_varfell", lost=False, obj=RUNG):
+def _world(gid, *, holder_faction="fac_varfell", lost=False, obj=RUNG, heard=True):
     """An observer committed to the OUGHT `gid`; `p_h` a member of `holder_faction` who holds `obj` (the hold ended
-    at tick 1 when `lost`). The Proposition's id IS the goal's id (`data/goals.py`)."""
+    at tick 1 when `lost`), the observer HAVING HEARD it (`heard`: his own ledger holds who came to hold `obj`, v12 B11.08 --
+    a referent or a met aim is read from his claims, not the world). The Proposition's id IS the goal's id (`data/goals.py`)."""
     w = World(0)
     w.propositions[gid] = Proposition(gid, "OUGHT", RUNG, f"{gid} ought", True, 0)
     obs, holder = Person("p_obs", "p_obs"), Person("p_h", "p_h")
@@ -53,6 +55,8 @@ def _world(gid, *, holder_faction="fac_varfell", lost=False, obj=RUNG):
     holder.tenures.append(Tenure("t_h_commit", "p_h", holder_faction, "commit", 0))
     holder.tenures.append(Tenure("t_h_hold", "p_h", obj, "hold", 0, 1 if lost else None))
     w.persons["p_obs"], w.persons["p_h"] = obs, holder
+    if heard:
+        hears_of(obs, obj, "p_h")
     return w, obs
 
 
@@ -78,6 +82,11 @@ def test_cp_t02_03_a_rung_its_org_holds_forms_no_need_and_the_same_world_with_it
         w, o = lost
         assert world_q.aim_state(w, o, w.propositions["g_rung"]) == "open", why
         assert _need(w, o) == {"g_rung": (RUNG,)}, f"{why}: the same goal forms its question again"
+
+    # v12 B11.08 (`08_FI_01` edit 4): the world holds it and he has not heard -- he keeps working until he hears
+    unheard, o = _world("g_rung", heard=False)
+    assert world_q.aim_state(unheard, o, unheard.propositions["g_rung"]) == "open"
+    assert _need(unheard, o) == {"g_rung": (RUNG,)}
 
 
 def test_cp_t02_03_a_holder_committed_to_two_factions_does_not_meet_it(monkeypatch, tmp_path):

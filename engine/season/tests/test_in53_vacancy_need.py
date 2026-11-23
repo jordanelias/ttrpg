@@ -50,6 +50,7 @@ from engine.season.state.carriers import Act, Claim, Proposition, Question, Tenu
 from engine.season.state.ids import ROOT
 from engine.season.state.gate import may_fill
 
+from .test_fi_referents import hears_of
 from .test_g3_not_yours import _gov_world, _hold
 
 
@@ -58,6 +59,24 @@ def _know(w, pid, *others):
     for i, o in enumerate(others):
         w.persons[pid].ledger.append(Claim(f"c_k{pid}{i}", pid, o, "exists:Person", 1, 0,
                                            "firsthand", 100, "own"))
+
+
+def _heard_world():
+    """`_gov_world()` in which EVERY PERSON HAS HEARD that `off_reeve`, the seat it builds unheld, is empty (v12 B11.08, `08_FI_01` edit 3:
+    a vacancy is his ledger's, not the world's). The `tenure.closed` claims are the ones a witness of the last holder's leaving would hold,
+    older than any floor (`when` -2) so they are not news. `off_dicastery`, also unheld, is left unheard: no seat of his reaches it."""
+    w, d = _gov_world()
+    for p in w.persons.values():
+        hears_of(p, "off_reeve", "p_gone", kind="tenure.closed", when=-2)
+    return w, d
+
+
+def _vacate(w, seat, *hearers):
+    """The seat's hold closes, and `hearers` (every person, none named) HEAR IT: the claims a witness of the closing deposits."""
+    t = _hold(w, seat)
+    t.until = w.tick
+    for pid in hearers or w.persons:
+        hears_of(w.persons[pid], seat, t.subject, kind="tenure.closed", when=-2)
 
 
 def _classed(w):
@@ -84,10 +103,10 @@ def test_in53v_a_a_closed_hold_adds_exactly_its_seat_to_the_one_filler():
     """`off_duke2` (D2) is held by `p_other`. Held, it is nobody's referent. With the hold closed,
     exactly `p_king` (through `off_crown`, purview over R) may fill it -- `p_other`'s own seat is the
     seat itself, `p_high`'s duchy is a sibling -- and exactly his classed referents gain it."""
-    w, _ = _gov_world()
+    w, _ = _heard_world()
     before = _classed(w)
     assert all("off_duke2" not in refs for refs in before.values()), before
-    _hold(w, "off_duke2").until = w.tick
+    _vacate(w, "off_duke2", "p_king")
     after = _classed(w)
     fillers = sorted(p for p in w.persons for t in w.persons[p].tenures
                      if t.kind == "hold" and t.live and t.object in w.offices
@@ -101,7 +120,7 @@ def test_in53v_a_the_first_question_carries_them_and_keeps_its_id_source_and_ref
     """With NO question, one `need` question carrying the vacancies (no plain referent). With two
     ambitions, the FIRST question after the sort carries them, its id/source/plain referents as they
     were without the splice; the second carries none."""
-    w, _ = _gov_world()
+    w, _ = _heard_world()
     p = w.persons["p_king"]
     vac = world_q.vacancies(w, p)
     assert vac and "off_reeve" in vac, vac
@@ -171,7 +190,7 @@ def test_in53v_a_the_partition_moves_no_other_rows_formations():
 # ======================================================================================
 
 def test_in53v_b_confer_forms_on_the_vacancy_with_to_over_known_persons_and_himself():
-    w, _ = _gov_world()
+    w, _ = _heard_world()
     _know(w, "p_king", "p_mid", "p_low")
     p = w.persons["p_king"]
     vac = set(world_q.vacancies(w, p))
@@ -180,7 +199,7 @@ def test_in53v_b_confer_forms_on_the_vacancy_with_to_over_known_persons_and_hims
     assert {c.subject for c in confer} == vac, (sorted({c.subject for c in confer}), vac)
     assert {c.operands.get("to") for c in confer} == {"p_mid", "p_low", "p_king"}, confer
     # Knowing nobody, he may still assume the seat himself (D2) -- and only that.
-    w2, _ = _gov_world()
+    w2, _ = _heard_world()
     q2 = world_q.questions_for(w2, w2.persons["p_king"])
     tos = {c.operands.get("to") for q in q2 for c in _formed(w2, "p_king", q) if c.verb == "confer"}
     assert tos == {"p_king"}, tos
@@ -194,7 +213,7 @@ def test_in53v_b_only_confer_forms_on_a_classed_referent_and_only_on_one():
     (`Person`) now forms here on the person a claim is about, and the rule it is held to is the row's
     (`(subject, row.referent_class)` in the question's classes), `confer`'s unchanged."""
     classed_rows = {v for v, r in VERB_TABLE.items() if r.referent_class}
-    w, _ = _gov_world()
+    w, _ = _heard_world()
     for pid in w.persons:
         _know(w, pid, *[o for o in w.persons if o != pid])
         _ambition(w, pid, f"prop_{pid}", "R")          # plain referents, so other rows form too
@@ -216,8 +235,8 @@ def test_in53v_b_only_confer_forms_on_a_classed_referent_and_only_on_one():
 
 def test_in53v_b_no_office_referent_outside_reach():
     """No person is offered an Office whose rung his `reach` excludes."""
-    w, _ = _gov_world()
-    _hold(w, "off_duke2").until = w.tick
+    w, _ = _heard_world()
+    _vacate(w, "off_duke2", "p_king")
     offered = 0
     for pid, p in w.persons.items():
         R = world_q.reach(w, p)
@@ -297,7 +316,7 @@ def _fold_confer(w, d, payload, via, aid="cf"):
 def test_in53v_d_a_computed_confer_fills_the_vacant_seat(to):
     """The Candidate `opening_set` forms (subject the vacancy, `to` a known person or the conferrer
     himself, the seat it is exercised through) folds to `tenure.opened` and seats the conferee."""
-    w, d = _gov_world()
+    w, d = _heard_world()
     _know(w, "p_king", "p_mid")
     (q,) = world_q.questions_for(w, w.persons["p_king"])
     c = next(c for c in _formed(w, "p_king", q)
@@ -405,27 +424,27 @@ def test_in53v_f_a_vacancy_opening_under_a_standing_question_moves_the_formed_se
     _ambition(w, "p_king", "prop_k", "R")
     w.add_tenure(Tenure("t_seat_reeve", "p_mid", "off_reeve", "hold", since=0))
     ids0, _, sig0 = _classes_and_formed(w, "p_king")
-    _hold(w, "off_reeve").until = w.tick
+    _vacate(w, "off_reeve")
     ids1, _, sig1 = _classes_and_formed(w, "p_king")
     assert ids1 == ids0 == ["q:need:prop_k"], (ids0, ids1)
     assert sig1 != sig0 and any("'confer', 'off_reeve'" in s for s in sig1), sig1
 
 
 def test_in53v_f_being_told_of_a_seat_already_carried_moves_the_formed_set():
-    """`off_reeve` is already `p_king`'s vacancy, so being TOLD of it moves no class and no id -- but
-    `oblige` (`referent_named`) starts forming on it. `since` is past the told claim, so Q2 does not
-    admit it as a question of its own (it would move the ids by itself, and the arm would observe
-    nothing)."""
+    """`off_reeve` is already `p_king`'s vacancy. RE-RECORDED AT v12 B11.08 (`08_FI_01` edit 3): a vacancy is now the claims his OWN
+    ledger holds of it (`vacant_named` over `ledger_names`), so the seat is ALREADY one he was told of -- `oblige` (`referent_named`) forms on it from
+    the claim that made it a vacancy -- and being told of it AGAIN moves no class, no id and no Candidate (it was a told-of term the vacancy
+    did not already carry; the two are now one fact). `since` is past the told claim, so Q2 does not admit it as a question of its own."""
     from .test_in10a_oblige_formable import _told
-    w, _ = _gov_world()
+    w, _ = _heard_world()
     _ambition(w, "p_king", "prop_k", "R")
     since = (w.tick, 1)
     ids0, cls0, sig0 = _classes_and_formed(w, "p_king", since)
     _told(w, "p_king", "off_reeve")
     ids1, cls1, sig1 = _classes_and_formed(w, "p_king", since)
     assert ids1 == ids0 == ["q:need:prop_k"], (ids0, ids1)
-    assert cls1 == cls0, "the classes moved: this arm no longer isolates the told term"
-    assert sig1 != sig0 and any("'oblige', 'off_reeve'" in s for s in sig1), sig1
+    assert cls1 == cls0 and sig1 == sig0, "being told again moved something"
+    assert any("'oblige', 'off_reeve'" in s for s in sig0), "the vacancy's own claim did not make `oblige` form on the seat"
 
 
 # ======================================================================================

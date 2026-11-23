@@ -393,6 +393,7 @@ def test_a_giver_forms_one_give_per_person_known_and_none_to_himself(monkeypatch
     monkeypatch.setitem(VERB_TABLE, "give", dataclasses.replace(VERB_TABLE["give"], counterparty=""))
     from engine.season.decision import options as _opts
     monkeypatch.setattr(_opts, "known_persons", lambda claims, actor: (actor, RECEIVER))
+    monkeypatch.setattr(_opts, "telling_hearers", lambda claims, actor, fx: (actor, RECEIVER))     # v12 B11.08: `give`'s cell has a `with` conjunct on `to`
     got = _give_candidates(w, GIVER, (rid,))
     assert GIVER in {c.operands.get("to") for c in got}, got
     monkeypatch.setitem(VERB_TABLE, "give", dataclasses.replace(VERB_TABLE["give"], counterparty="to"))

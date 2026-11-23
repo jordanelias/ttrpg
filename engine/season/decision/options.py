@@ -25,7 +25,7 @@ import itertools
 from typing import Any, Callable, Optional
 from ..data.rosters import STANCE_MAX
 from ..data.requires import (
-    OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE,
+    OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, Relation, SENSITIVITY_STEMS, SHORTFALL_PREDICATE,
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
 )
 from ..data.rosters import (
@@ -45,7 +45,7 @@ from ..gaps import Forbidden
 from ..queries.person_q import (
     BOND_STEM, PAIRED_KINDS, LedgerReader, OwnStateReader, addressed_to, attackers_of, content_kind, content_said,
     decisiveness, held_against, known_persons, ledger_names,
-    is_cell as _is_cell, lie_said_of, projected_axes, regard, said_of,
+    is_cell as _is_cell, lie_said_of, projected_axes, regard, said_of, telling_hearers,
 )
 from ..state.carriers import Candidate, Claim, Person, Question, Record, View, fade_of
 # 04 §C.3 says `decision/` does not import `state/`; the AX-2 scan (`test_season_shape.py`) forbids `state.world` only and has admitted `state.carriers` since
@@ -58,6 +58,20 @@ from ...substrate.descriptors import about_mid, scale_of
 # what `queries/world_q.py::_stamped` stamps for a document (`World.class_of`) and what
 # `rosters.yaml: referent_classes` declares; read off the type, never spelt.
 _HELD_WRIT_CLASS = Record.__name__
+
+# B11.08: THE `with` STEM, which `data/requires.py::WORLD_ONLY_STEMS` holds (where another person is NOW: only the world answers it).
+_WITH_STEM = "with"
+
+
+def _hears_by_presence(row: "VerbRow") -> bool:
+    """WHETHER `row`'s CELL CARRIES A `with` CONJUNCT ON `to` -- the hearer must be with the actor (`tell`'s, `lie`'s, `give`'s,
+    `argue`'s and `accept`'s cells). Read off the typed cell's clauses, never a verb name; an untyped row has none."""
+    req = row.requires_typed
+    if req is None:
+        return False
+    top = req.requirement
+    return any(isinstance(c, Relation) and c.of == "to" and c.relation == _WITH_STEM
+               for c in (getattr(top, "clauses", None) or (top,)))
 
 
 def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candidate]:
@@ -109,6 +123,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     # needs one: `ledger_names` for a `referent_named` row, `known_persons` for a fanned row's bags.
     named: Optional[frozenset] = None
     people: Optional[tuple] = None
+    hearers: Optional[tuple] = None     # B11.08: `telling_hearers`, for a row whose cell has a `with` conjunct on `to`
     records: Optional[list] = None
     held: Optional[frozenset] = None
     read: Optional[dict] = None         # `documents_known_as`, once per call, only if a sub-kind row is reached
@@ -336,12 +351,23 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # `H-134`: seat-major, each seat's own bags (`from` is that seat's rung). One seat: the
             # one pass `operand_bags` made before.
             # IN-10: and the Records the person holds, whose addressees a fanned row's bags add.
-            if people is None and row.known_person_operands():
-                people = known_persons(p.ledger, p.id)
+            # v12 B11.08 (`08_FI_02` edit 5): A ROW WHOSE CELL CARRIES A `with` CONJUNCT ON `to` (`tell`, `lie`, `give`, `argue`, `accept`) OFFERS
+            # ITS ACT TO THE PERSONS `Fixtures telling_hearers` names -- `known` (the control) or `seen_since_move`; every other fanned
+            # row ranges over everybody he knows.
+            fanned = None
+            if row.known_person_operands():
+                if _hears_by_presence(row):
+                    if hearers is None:
+                        hearers = telling_hearers(p.ledger, p.id, fx)
+                    fanned = hearers
+                else:
+                    if people is None:
+                        people = known_persons(p.ledger, p.id)
+                    fanned = people
                 if records is None:
                     records = held_record_claims(p, tick, decay)
             bagged = [(st, ops) for st in (seats or (None,))
-                      for ops in operand_bags(p, row, q, subject, fx, seat=st, people=people,
+                      for ops in operand_bags(p, row, q, subject, fx, seat=st, people=fanned,
                                               records=records, tick=tick)]
             if vocations:                   # IN-12 step 9: one bag per vocation carried (above)
                 bagged = [(st, {**ops, voc_operand: k}) for st, ops in bagged for k in vocations]

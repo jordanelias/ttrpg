@@ -3479,6 +3479,14 @@
             "valence"
           ]
         },
+        "telling_hearer_arms": {
+          "source": "v12 B11.08 (`08_FI_02` edit 5): *\"fan over `person_q.present_persons(ledger, actor)` ... Fixture `telling_hearers`: `known` (control) / `seen_since_move`\"*.",
+          "note": "THE ARMS OF `Fixtures.telling_hearers`, read by `queries/person_q.py::telling_hearers` for a row whose cell carries a `with` conjunct on `to` (`decision/options.py::opening_set`): who a teller offers a telling (or a lie, a gift, an argument, an acceptance) to. `known` is `known_persons` -- everybody he has any claim of -- the CONTROL, shipped. `seen_since_move` is `present_persons`: those he holds a firsthand sighting of since his own newest movement claim. He may still be wrong (the man left this lap); the fold's `hearer` conjunct still refuses that.",
+          "values": [
+            "known",
+            "seen_since_move"
+          ]
+        },
         "stock_reports": {
           "source": "v10 CR-23 (M17 taken (a), a seat-channel stock report at crossings, [ASSUMPTION; medium; Jordan to correct; revert: stock_report = off]).",
           "note": "THE ARMS OF `Fixtures.stock_report` (`H-243`), read by `loop/matter.py` at MATTER's last actorless `stores` write to a rung in the barrier (the credit write where the rung yields, else the debit write). `crossing` (SHIPPED) attaches `Observation(rung, \"stores:<default_store_kind>\", units after)` to that write only when `queries/world_q.py::requisitionable` before the barrier differs from after; `season` attaches it to every such write; `off` attaches nothing and is the CONTROL, the tree before CR-23 exactly. WITNESS deposits the read to the seats over the rung (`world_q.governors_of`, IN-22's route; the fan's other witnesses of the write take it too). `\"off\"` is QUOTED: bare, YAML reads it as the boolean false.",

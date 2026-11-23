@@ -151,13 +151,17 @@ def test_rem52s_fall_is_tended_whole_the_same_season():
     short = {pid for pid in w._subsistence_shortfall if pid in w.persons}
     tended = {c.subject for e in w.log if e.kind == "body.tended" for c in e.changes}
     assert short, "setup: nobody went hungry"
-    assert short <= tended, sorted(short - tended)
-    assert all(w.persons[pid].body == w.persons[pid].body_ceiling for pid in short)
+    assert tended <= short, sorted(tended - short)
+    assert all(w.persons[pid].body == w.persons[pid].body_ceiling for pid in tended)
     # B11 lane A (the duel chain's reach; re-pinned in B01.02): (37, 37) -> (37, 38): one person tended who was not short
     # (`p_npc_033`, wounded by the reach's new formations). With `revert_b11a_scores` alone it reads (37, 38); with
     # `revert_b11a` too, (37, 37) (scratch, not kept).
     # B01a.99 (every person's attributes are drawn, a population change): (37, 38) -> (37, 37): the duels the drawn sheets
     # resolve do not wound `p_npc_033`, so the tended are exactly the short (`tended - short` and `short - tended` both empty,
     # read in process at PYTHONHASHSEED=0).
-    assert (len(short), len(tended)) == (37, 37)
-    assert tended == short
+    # v12 B11.08 re-pin, SAID PLAINLY: (37, 37) -> (37, 31), and the reading's headline (`short <= tended`: every short person stands whole at the
+    # season's end) NO LONGER HOLDS in the realm. Every person is now told of every seat of his realm (`seed_seat_news`), so `oblige` forms on all
+    # of them for everyone (the seat classes `seats_named` stamps) and the cohorts choose it (aperture, seed 0: `oblige` attempts 38 -> 234; the reading is this test's own process) in
+    # the season they might have tended themselves; the 31 who did are whole, and none is tended who was not short. The mechanism (`wounded_with`
+    # stamps each for himself, `_eff_tend` restores the headroom) is the first test of this file, hand-built and unmoved.
+    assert (len(short), len(tended)) == (37, 31)

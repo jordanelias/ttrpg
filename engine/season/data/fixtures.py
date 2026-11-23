@@ -977,6 +977,12 @@ DEFAULT_FIXTURES = Fixtures(
     # `rosters.yaml: seat_news_arms`). A measurement arm, B of A-32, not a design.
     # [JUSTIFIED: A-32 -- ruled: one reach row for seat changes at `realm` ships, and `local` is kept as the tested alternative, so both are declared and swept realm / local]
     seat_news="realm",                 # A-32, swept realm (SHIPPED) / local (arm B)
+    # v12 B11.08 (`08_FI_02` edit 5). WHO A TELLER OFFERS A TELLING (or a gift, an argument: a row whose cell carries a `with`
+    # conjunct on `to`) TO: `known` (SHIPPED, the control) is every person he has any claim of (`person_q.known_persons`);
+    # `seen_since_move` only those he holds a firsthand sighting of since his own newest movement (`person_q.present_persons`).
+    # The fold's `hearer` conjunct still refuses an absent one (`rosters.yaml: telling_hearer_arms`). Flipped by the batch's flip item.
+    # [JUSTIFIED: v12 B11.08 (08_FI_02 edit 5) -- no document gives who a teller offers a telling to, so both readings are declared and swept known / seen_since_move; shipped at the control]
+    telling_hearers="known",           # B11.08, swept known (control, SHIPPED) / seen_since_move
     # `H-197` (v9 IN-18 `G6`, confidences). HOW OFTEN A TELLING IS MADE IN CONFIDENCE: the chance
     # `loop/witness.py::_circle_of` draws once per telling (its docstring says what a circle is and does).
     # `0` is the CONTROL and is SHIPPED [ASSUMPTION; medium; Jordan to

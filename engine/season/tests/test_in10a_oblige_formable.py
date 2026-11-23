@@ -108,21 +108,21 @@ def test_in10a_a_seat_he_was_told_of_forms_an_oblige_that_executes():
     assert "p_mid" in world_q.establishment_of(w, SEAT)
 
 
-def test_in10a_a_conferrers_vacancy_is_not_a_seat_he_was_told_of():
-    """ONE CLASS, TWO SOURCES (`referent_named`): `p_king` may fill the vacant `off_reeve`, so his
-    question carries it as `Office` and `confer` forms on it -- but no deposit or held document names
-    it to him, so `oblige` does not. Told of it, it does."""
+def test_in10a_a_conferrers_vacancy_is_a_seat_he_was_told_of():
+    """ONE CLASS, ONE SOURCE (`referent_named`): RE-RECORDED AT v12 B11.08 (`08_FI_01` edit 3), which made a vacancy the claims his OWN ledger
+    holds of it -- it was a world read, so `p_king` was offered the empty `off_reeve` as `Office` and `confer` formed with nothing in his ledger
+    naming it, and `oblige` (which needs the seat named) did not until he was told of it. Now a seat he may fill and has heard empty IS one he
+    was told of: `confer` and `oblige` both form on it; one he has heard nothing of forms neither (the control: no question at all)."""
+    from .test_fi_referents import hears_of
     from .test_g3_not_yours import _gov_world
     w, _ = _gov_world()
     p = w.persons["p_king"]
+    assert world_q.questions_for(w, p) == [], "control: he has heard nothing of the seat, so it is no occasion"
+    hears_of(p, "off_reeve", "p_gone", kind="tenure.closed", when=-2)
     (q,) = world_q.questions_for(w, p)
     assert ("off_reeve", "Office") in q.classes, q
     got = opening_set(p, assemble(p, q, 12), q, w.fixtures)
     assert any(c.verb == "confer" and c.subject == "off_reeve" for c in got)
-    assert not [c for c in got if c.verb == "oblige"], "an `oblige` formed on an untold vacancy"
-    _told(w, "p_king", "off_reeve")
-    (q,) = world_q.questions_for(w, p)
-    got = opening_set(p, assemble(p, q, 12), q, w.fixtures)
     assert "off_reeve" in {c.subject for c in got if c.verb == "oblige"}
 
 

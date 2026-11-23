@@ -8,7 +8,7 @@ MEASURED (`PYTHONHASHSEED=0`, this commit's tree against its parent, 67f5b086), 
     persons who know no one at build            83 of 83  ->  41 of 83
     `exists:Person` claims written              236 (226 faction co-member pairs, 10 high-status pairs not
                                                 already co-members), the longest ledger at build 12 of `ledger_cap` 200
-    persons for whom `tell` forms at build      0  ->  37   (CR-03's reader: every question `questions_for`
+    persons for whom `tell` forms at build      0  ->  37 (42 at v12 B11.08)   (CR-03's reader: every question `questions_for`
                                                 delivers him, `opening_set` over `assemble(p, q, 12)`)
 
 THE 41 WHO STILL KNOW NO ONE are the 37 cohorts (no `commit` to a faction, no seat), the 3 cast members
@@ -116,10 +116,13 @@ def test_the_high_status_set_is_the_throne_its_consort_and_the_duchy_seats(world
 
 
 def test_tell_forms_for_persons_it_formed_for_none(worlds):
-    """CR-03's base: `tell` forms for 0 persons at build. With the step it forms for the measured 37."""
+    """CR-03's base: `tell` forms for 0 persons at build. With the step it forms for the measured 42.
+    RE-RECORDED AT v12 B11.08 (said plainly): 37 -> 42. The realm now also starts with the seat news (`seed_seat_news`) and a claim about a
+    person is admitted as a question on what he holds of that person rather than where the World puts him (`questions_for`), so five
+    more persons are asked about someone they have a claim of and form a `tell`; the control (the step off) still forms none."""
     on, off = worlds[0]
     assert _tell_formers(off) == 0
-    assert _tell_formers(on) == 37
+    assert _tell_formers(on) == 42
 
 
 def test_control_the_step_off_is_the_parent_realm_and_no_base_claim_is_pushed_out(worlds):
