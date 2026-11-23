@@ -34,7 +34,7 @@ import re
 from typing import Optional
 
 from . import files
-from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_RANKS, LIFEPATH_TEMPLATES, MANNER_OFFSET_AXES, RELATION_GROUNDS, SELF_BELIEVED, load_yaml, roster
+from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_RANKS, LIFEPATH_TEMPLATES, MANNER_OFFSET_AXES, RELATION_GROUNDS, SELF_BELIEVED, STANCE_MAX, STANCE_VALENCE_SCALE, load_yaml, roster  # noqa: F401 -- STANCE_* re-exported
 from ..gaps import Unspecified
 from ...substrate.descriptors import (
     ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, CAPABILITIES, HERITAGES, PRACTITIONER_STATS, TRAIT_BY_SEATING,
@@ -653,13 +653,7 @@ def loyalty(r: dict, faction: Optional[str]) -> Optional[int]:
     return round(LOYALTY_INDIFFERENT * (cosine + 1))
 
 
-# #353 `:333` types a stance row `(referent, valence -5..+5, weight 0..5)`, and `queries/person_q.py
-# ::stance_toward` sums `valence * weight` over the rows naming a candidate's subject. Five is that
-# type's own bound, read off the row rather than chosen here.
-STANCE_VALENCE_SCALE = 5   # [JUSTIFIED: #353 `:333` types the row `(referent, valence -5..+5, weight 0..5)` — the type's own bound, not a tuning; ED-IN-0229]
-# The largest `valence * weight` one stance row can contribute (the weight's bound is the valence's):
-# a bound derived from the row type, held beside the type's own constant. `regard` is normalised by it.
-STANCE_MAX = STANCE_VALENCE_SCALE ** 2
+# `STANCE_VALENCE_SCALE` and `STANCE_MAX` live in `data/rosters.py` (the row type's bounds; `data/fixtures.py` reads `STANCE_MAX` and cannot import this module).
 
 
 def stance_from_loyalty(value: Optional[int]) -> Optional[tuple]:

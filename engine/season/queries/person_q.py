@@ -614,7 +614,7 @@ BOND_STEM = "bond:"
 
 def room_as_held(p: PersonInterior, event_id: str, fx, deposited=()) -> tuple:
     """THE ROOM `p` BELIEVES HE STOOD IN WHEN HE ACTED (B10.55): for each person `p`'s OWN ledger names as present at the Event `event_id`, `(id,
-    {"told", "seen", "bond"})`, sorted by id -- counts of what `p` holds of him, never what he holds of `p` (that is `world_q.witness_regard`, the
+    {"told", "seen", "bond"})`, sorted by id -- counts of what `p` holds of him, never what he holds of `p` (that is `chronicle.witness_regard`, the
     chronicle's, which no decision or surface reads). Person-side, asker first, no World (AX-2): nothing about anyone else's ledger.
 
     `deposited` is the ids of the claims deposited from `event_id`, the host's `queries/cache.py::deposit_index` answer (ids only, holder-blind):

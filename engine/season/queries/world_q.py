@@ -60,7 +60,6 @@ from .person_q import (
 # v9 SC-02 `22a`: `reception` and `proofs` read which claims record a person's deeds, what each is worth
 # to its holder, and which deeds were done TO him, off the same person-side owners `regard` reads.
 from .person_q import attributed_deeds, deed_term, holds_dispute, known_persons, suffered_deeds   # `holds_dispute`: v11 CR-87, the `dispute` stem's one owner
-from .person_q import regard_parts   # B10.55: `witness_regard`'s split, the one owner of regard's addends
 # v9 IN-69: the one cosine (`cast.loyalty` calls it too).
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 # v9 IN-67: `goal_referents` reads a goal's `object:` off the ONE loader and a `deed_doers` goal's
@@ -1493,28 +1492,6 @@ def presence_map(w: World) -> dict:
         if t.kind == "contain" and t.live and t.subject in w.persons:
             by.setdefault(t.object, []).append(t.subject)
     return {r: by.get(r, []) for r in w.rungs}
-
-
-def present_at(w: World, event_id: str) -> tuple:
-    """THE PERSONS WHO HOLD A CLAIM DEPOSITED FROM `event_id` (B10.55), sorted: the rule the deleted `witnessed` had, read from the Event's side. The
-    ids are `queries/cache.py::deposit_index`'s (the `claim.deposited` Events' `causes[0]` and receipt subject), asked of each person's OWN ledger.
-    World truth, resolver-side, for the chronicle (a harness observer): nothing in `decision/` or the player's surface reads it, and a person's own
-    reading of the room is `person_q.room_as_held`."""
-    from .cache import deposit_index    # `cache` imports this module at the top: the one cycle, broken here
-    ids = frozenset(deposit_index(w).get(event_id, ()))
-    return tuple(sorted(pid for pid, per in w.persons.items() if any(c.id in ids for c in per.ledger)))
-
-
-def witness_regard(w: World, event_id: str, fx) -> tuple:
-    """FOR THE CHRONICLE ONLY (B10.55): `(id, {"stored", "judged", "told", "heritage"})` for each person present at `event_id` (`present_at`) other
-    than the act's actor, each his regard for the actor split as `person_q.regard` adds it (`regard_parts`, its one owner). `()` for an Event no
-    act caused. THIS IS WORLD TRUTH, the witnesses' own ledgers: never handed to `decision/` or to the player's surface, which read only
-    `person_q.room_as_held`."""
-    e = event_by_id(w, event_id)
-    act = causing_act(w, e) if e is not None else None
-    if act is None:
-        return ()
-    return tuple((pid, regard_parts(w.persons[pid], act.actor, fx)._asdict()) for pid in present_at(w, event_id) if pid != act.actor)
 
 
 def guard_weight(w: World, rung_id: str) -> int:

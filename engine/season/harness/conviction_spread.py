@@ -8,7 +8,7 @@ here, because a ledger entry stating measured numbers must name a re-runnable in
     python -m engine.season.harness.conviction_spread [--candidate FILE.json] [--words]
 
 `--words` (B10.17) reads the same table in the other direction: not how far the pursuits sit from each other but whether
-each one MEANS ITS NAME in acts. It prints `data/pursuits.py::signature_breaks()` and, per pursuit, the verbs it leans
+each one MEANS ITS NAME in acts. It prints `signature_breaks()` and, per pursuit, the verbs it leans
 toward most and away from most (`queries/person_q.py::pursuit_lean`) and the verbs an act of which violates it.
 
 TWO QUANTITIES, AND THE SECOND ONE ASKS A DIFFERENT QUESTION FROM THE FIRST.
@@ -48,8 +48,11 @@ from engine.dice_engine import fmath
 import sys
 from typing import Optional
 
+from ..data.affiliations import engagement
+from ..data.pursuits import AFFILIATION_SIGNATURES, PURSUIT_SIGNATURES
 from ..data.rosters import PURSUIT_AXES
 from ..data.verbs import PURSUIT_PROJECTION, PROJECTION_DEFAULT_CELL
+from ..queries.person_q import pursuit_lean
 
 
 def _covariance(rows: dict, axes: list) -> list:
@@ -233,13 +236,44 @@ def _report(s: dict, tag: str) -> None:
     # printing a pass/fail here would be this instrument deciding it.
 
 
+def signature_breaks(signatures: Optional[dict] = None, creeds: Optional[dict] = None) -> dict:
+    """WHERE THE TABLES DO NOT YET MAKE A NAME MEAN ITS ACTS, `{name: [clause, ...]}`, only the names that break.
+
+    A clause is one of three, each a dict `{clause, verb, lean}` (the third adds `over`, the favoured verbs it out-leans):
+    `favoured_not_above_zero` (a favoured verb whose lean is <= 0), `opposed_not_below_zero` (an opposed verb
+    whose lean is >= 0), `opposed_outleans_favoured` (an opposed verb whose lean exceeds some favoured verb's).
+    The lean of a PURSUIT's verb is `person_q.pursuit_lean`, THE ONE OWNER of the verb-on-pursuit dot; the lean of a CREED's
+    verb is `data/affiliations.py::engagement`, the one owner of the verb-on-creed cell (`tables.affiliation_engagement`).
+    Both are read at call time (so a rebound table is what is asked), and this REFUSES NOTHING: it is a reader.
+    `signatures` and `creeds` are the rosters under test (default: the shipped ones, already checked at load). A creed
+    and a pursuit never share a name (`affiliations._load_engagement` refuses it), so one dict holds both; a caller
+    that wants them apart asks `name in AFFILIATIONS`.
+
+    ⚠ IT LIVES HERE, NOT IN `data/pursuits.py`: it asks `queries/person_q.py::pursuit_lean`, and `data/` imports no `queries/`
+    module (`queries/person_q.py` imports `data/`, so the other direction is a cycle). The rosters it reads are `data/pursuits.py`'s."""
+    out = {}
+    for rows, lean in ((PURSUIT_SIGNATURES if signatures is None else signatures, pursuit_lean),
+                       (AFFILIATION_SIGNATURES if creeds is None else creeds, engagement)):
+        for p in sorted(rows):
+            fav = {v: lean(v, p) for v in rows[p]["favours"]}
+            opp = {v: lean(v, p) for v in rows[p]["opposes"]}
+            clauses = [dict(clause="favoured_not_above_zero", verb=v, lean=x) for v, x in fav.items() if not x > 0]
+            clauses += [dict(clause="opposed_not_below_zero", verb=v, lean=x) for v, x in opp.items() if not x < 0]
+            for v, x in opp.items():
+                over = [f for f, y in fav.items() if x > y]
+                if over:
+                    clauses.append(dict(clause="opposed_outleans_favoured", verb=v, lean=x, over=over))
+            if clauses:
+                out[p] = clauses
+    return out
+
+
 def _words(top: int = 5) -> None:
     """`--words`: `signature_breaks()` and, per pursuit, its `top` highest and lowest verbs by lean and its violated set.
 
     The lean is `person_q.pursuit_lean`'s and the violated set `person_q._pursuits_violated_by`'s (the scar's own sign
     test, `Fixtures.scar_lean_floor` left at its `0.0` default), so this prints what the engine reads and computes
     nothing of its own. It judges nothing: a break is a reading, and refusing one is a later position's."""
-    from ..data.pursuits import AFFILIATION_SIGNATURES, PURSUIT_SIGNATURES, signature_breaks
     from ..data.rosters import AFFILIATIONS
     from ..data.verbs import VERB_TABLE
     from ..queries.person_q import _pursuits_violated_by, pursuit_lean

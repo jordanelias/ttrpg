@@ -21,8 +21,7 @@ from typing import Any
 from engine.dice_engine.dice_engine import MU_PER_DIE
 
 from ..gaps import Forbidden, Ungraded
-from .cast import STANCE_MAX
-from .rosters import ARMY_VERBS, CRISIS_ARMS, DIFFICULTY_LEVELS, roster, roster_map, table
+from .rosters import ARMY_VERBS, CRISIS_ARMS, DIFFICULTY_LEVELS, STANCE_MAX, roster, roster_map, table
 
 class Fixtures:
     """S42.2.1: never invent a constant. Inject it, declare it a harness fixture at

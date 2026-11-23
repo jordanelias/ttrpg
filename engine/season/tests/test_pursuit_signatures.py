@@ -8,7 +8,7 @@ import pytest
 
 from engine.season.data import affiliations as A
 from engine.season.data import verbs as V
-from engine.season.data.pursuits import signature_breaks
+from engine.season.harness.conviction_spread import signature_breaks
 from engine.season.data.rosters import AFFILIATIONS
 
 SIGNATURE = {"love": {"favours": ["give"], "opposes": ["forge"]}}

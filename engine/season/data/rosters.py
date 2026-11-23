@@ -454,39 +454,6 @@ def refusable(axis: str) -> frozenset:
     return frozenset(marks[axis])
 
 
-def check_refusable(rows: Optional[dict] = None) -> dict:
-    """`rosters.yaml: pursuit_axes.refusable`, CHECKED AT LOAD (B10.21), returned as `{axis: frozenset(verb)}`. `rows` is the
-    table under test (default: the shipped one).
-
-    Four refusals: a key off the axis roster or with no refusing pole (a list nobody can arm); a list that is not a list of
-    distinct strings; a verb off `VERB_TABLE` (an act nobody can do); a verb with a ZERO cell on its axis (`data.verbs.align`
-    is `0` -- the act the axis does not engage, which `refuses` could never refuse, so the listing would be a claim the gate
-    cannot keep; the sparse default cell reads `0` too).
-
-    ⚠ IT IS CALLED FROM THE FOOT OF `data/verbs.py`, NOT HERE: `VERB_TABLE` and `align` live there and that module imports this
-    one, so the check reaches them by a function-local import, after both are bound."""
-    from .verbs import VERB_TABLE, align
-    out = {}
-    for axis, verbs in (roster_map("pursuit_axes", "refusable") if rows is None else rows).items():
-        require_member(axis, PURSUIT_AXES, f"pursuit_axes.refusable names {axis!r}, which is not on the roster",
-                       "rosters.yaml", "ED-IN-0261 -- the refusable set is about a ROSTERED axis")
-        refusing_pole(axis)
-        if (not isinstance(verbs, (list, tuple)) or any(not isinstance(v, str) for v in verbs)
-                or len(set(verbs)) != len(verbs)):
-            raise Unspecified(f"pursuit_axes.refusable[{axis!r}] is {verbs!r}", "rosters.yaml",
-                              needs="a list of distinct verb names", law="ED-IN-0261 -- the refusable set is a closed list of acts")
-        for v in verbs:
-            require_member(v, VERB_TABLE, f"pursuit_axes.refusable[{axis!r}] names {v!r}, which is not a verb",
-                           "rosters.yaml", "a scruple forbids an act somebody can do",
-                           needs="a `verb_table.yaml` key, spelled as it spells it")
-            if not align(v, axis):
-                raise Unspecified(f"pursuit_axes.refusable[{axis!r}] names {v!r}, which has no cell on {axis!r}", "rosters.yaml",
-                                  needs=f"a non-zero `tables.alignment` cell for {v!r} on {axis!r}, or drop the verb",
-                                  law="ED-IN-0261 -- only a verb the axis engages is one of the certain actions; a zero cell is never refused")
-        out[axis] = frozenset(verbs)
-    return out
-
-
 def table(name: str) -> dict:
     """A MAPPING from `rosters.yaml`'s `tables:`, returned as `{outer: {inner: float}}`.
 
@@ -2007,6 +1974,14 @@ ENDINGS = _load_endings(roster_map("endings", "members"), FACTIONS, RUNG_KINDS, 
 #: `{alias: canonical}` over the `token_class: faction` rows -- the naming leaf's map, read where an authored
 #: `faction:` string meets the roster (`cast.py` reads this same relation for a cast cell).
 from engine.substrate import names as _faction_names  # noqa: E402
+
+# #353 `:333` types a stance row `(referent, valence -5..+5, weight 0..5)`, and `queries/person_q.py
+# ::stance_toward` sums `valence * weight` over the rows naming a candidate's subject. Five is that
+# type's own bound, read off the row rather than chosen here.
+STANCE_VALENCE_SCALE = 5   # [JUSTIFIED: #353 `:333` types the row `(referent, valence -5..+5, weight 0..5)` — the type's own bound, not a tuning; ED-IN-0229]
+# The largest `valence * weight` one stance row can contribute (the weight's bound is the valence's):
+# a bound derived from the row type, held beside the type's own constant. `regard` is normalised by it.
+STANCE_MAX = STANCE_VALENCE_SCALE ** 2
 FACTION_ALIAS = {a: c for a, c in _faction_names.ALIASES.items() if c in _faction_names.FACTIONS}
 
 

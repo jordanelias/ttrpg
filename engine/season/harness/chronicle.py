@@ -106,7 +106,9 @@ from ..data.rosters import MARGIN_ENDING
 from ..data.rosters import PERSON_DIED
 from ..data.verbs import VERB_TABLE
 from ..loop.effects_combat import FIGHT_ROUNDS, FIRST_BLOOD, LEAD_CHANGES
-from ..state.attribution import causing_act
+from ..queries.cache import deposit_index
+from ..queries.person_q import regard_parts
+from ..state.attribution import causing_act, event_by_id
 from . import arc as ARC
 from . import storybar as SB
 from .corpus_run import emits_and_writes_nothing
@@ -280,6 +282,27 @@ def consequence_chains(w, act_of: dict, bounds: list, min_depth: int, log=None) 
     ends = chain_ends(rows, min_depth)
     hist = Counter(k for aid in ends for k in made[aid])
     return {"consequence_acts": len(made), "chain_ends": len(ends), "kinds": dict(sorted(hist.items()))}
+
+
+def present_at(w, event_id: str) -> tuple:
+    """THE PERSONS WHO HOLD A CLAIM DEPOSITED FROM `event_id` (B10.55), sorted: the rule the deleted `witnessed` had, read from the Event's side. The
+    ids are `queries/cache.py::deposit_index`'s (the `claim.deposited` Events' `causes[0]` and receipt subject), asked of each person's OWN ledger.
+    World truth, resolver-side, for the chronicle (a harness observer): nothing in `decision/` or the player's surface reads it, and a person's own
+    reading of the room is `person_q.room_as_held`."""
+    ids = frozenset(deposit_index(w).get(event_id, ()))
+    return tuple(sorted(pid for pid, per in w.persons.items() if any(c.id in ids for c in per.ledger)))
+
+
+def witness_regard(w, event_id: str, fx) -> tuple:
+    """FOR THE CHRONICLE ONLY (B10.55): `(id, {"stored", "judged", "told", "heritage"})` for each person present at `event_id` (`present_at`) other
+    than the act's actor, each his regard for the actor split as `person_q.regard` adds it (`regard_parts`, its one owner). `()` for an Event no
+    act caused. THIS IS WORLD TRUTH, the witnesses' own ledgers: never handed to `decision/` or to the player's surface, which read only
+    `person_q.room_as_held`."""
+    e = event_by_id(w, event_id)
+    act = causing_act(w, e) if e is not None else None
+    if act is None:
+        return ()
+    return tuple((pid, regard_parts(w.persons[pid], act.actor, fx)._asdict()) for pid in present_at(w, event_id) if pid != act.actor)
 
 
 def occasion_line(w, act_id: str) -> str:

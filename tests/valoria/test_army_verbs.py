@@ -81,11 +81,11 @@ def test_an_army_is_minted_whole_one_per_faction_and_held_by_its_maker():
     # CONTROLS, each the same act changed in one thing: a second army for the faction, an unknown faction, and a
     # record that is not well formed (an unknown strategy) are all declined and mint nothing.
     again = _mint(w, d, key="army2")
-    assert _kinds(again) == ["act.refused"] and "army2" not in w.records, _kinds(again)
+    assert _kinds(again) == ["create_record.refused"] and "army2" not in w.records, _kinds(again)
     stranger = _mint(w, d, key="army3", faction="fac_nobody")
-    assert _kinds(stranger) == ["act.refused"] and "army3" not in w.records
+    assert _kinds(stranger) == ["create_record.refused"] and "army3" not in w.records
     bad = _mint(w, d, key="army4", faction=FACTION, content={**_army(w), "strategy": "rout"})
-    assert _kinds(bad) == ["act.refused"] and "army4" not in w.records
+    assert _kinds(bad) == ["create_record.refused"] and "army4" not in w.records
 
 
 # ------------------------------------------------------------------------------------------ recruit and refuse
@@ -196,9 +196,9 @@ def test_an_army_is_minted_empty_so_the_recruiting_rule_cannot_be_skipped():
     w, d = _world()
     full = A.raised(A.new(FACTION), COHORT, "knights_templar", 100000)             # no cap, no stable
     out = _mint(w, d, key="army_full", content=full)
-    assert _kinds(out) == ["act.refused"] and "army_full" not in w.records, _kinds(out)
+    assert _kinds(out) == ["create_record.refused"] and "army_full" not in w.records, _kinds(out)
     formed = A.form(A.new(FACTION), "wall", "levy")
-    assert _kinds(_mint(w, d, key="army_sf", content=formed)) == ["act.refused"]
+    assert _kinds(_mint(w, d, key="army_sf", content=formed)) == ["create_record.refused"]
     assert _kinds(_mint(w, d, key="army_ok")) == ["record.created"], "control: the same mint, empty, is admitted"
 
 
@@ -206,7 +206,7 @@ def test_a_proposition_that_is_not_a_faction_has_no_army():
     w, d = _world()
     w.propositions["prop_idea"] = Proposition("prop_idea", "HOLDS", "Idea", "is just a thought", True, 0)
     out = _mint(w, d, key="army_idea", faction="prop_idea")
-    assert _kinds(out) == ["act.refused"] and "army_idea" not in w.records, _kinds(out)
+    assert _kinds(out) == ["create_record.refused"] and "army_idea" not in w.records, _kinds(out)
 
 
 def test_a_missing_or_mistyped_payload_field_is_a_refusal_not_a_crash():
@@ -230,7 +230,7 @@ def test_an_army_whose_faction_is_no_string_is_refused_not_a_crash():
     from modules.mass_battle import armyrecord as A
     w, d = _world()
     out = _mint(w, d, key="army_list", content={**A.new(FACTION), "faction": [FACTION]})
-    assert _kinds(out) == ["act.refused"] and "army_list" not in w.records, _kinds(out)
+    assert _kinds(out) == ["create_record.refused"] and "army_list" not in w.records, _kinds(out)
 
 
 def test_an_army_whose_holder_is_gone_frees_its_factions_slot():
@@ -252,7 +252,7 @@ def test_only_a_member_of_the_faction_raises_or_commands_its_army():
     it. CONTROLS: the committed commander mints and commands (every other test); here one change each."""
     w, d = _world()
     out = _mint(w, d, key="army_rival", actor="p_mid")                        # p_mid is of no faction
-    assert _kinds(out) == ["act.refused"] and "army_rival" not in w.records, _kinds(out)
+    assert _kinds(out) == ["create_record.refused"] and "army_rival" not in w.records, _kinds(out)
     _mint(w, d)
     for t in w.tenures:                                                       # the Record passes to p_mid by hand
         if t.object == "army1" and t.kind == "hold" and t.live:

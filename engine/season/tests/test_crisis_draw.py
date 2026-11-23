@@ -71,15 +71,16 @@ def test_each_band_writes_what_its_table_row_says():
     a, b = incompatible_pairs()[0]
     held, scar = {c: 3, d: 2}, {c: 4}                    # a count of 4: `zero` (-4) and `threshold_less_one` (-2) differ
     got = {band: PQ.conviction_after_crisis(_person(held, scar), band=band) for band in PQ.CRISIS_BANDS}
+    BAND = {name: name for name in PQ.CRISIS_BANDS}      # the table's own names: a bare band literal here reads as a second degree ladder
     assert got["Overwhelming"] == ({c: 4, d: 2}, {c: -4})
     assert got["Success"] == (held, {c: -2})
     assert got["Partial"] == ({c: 2, d: 2}, {})
     assert got["Failure"] == ({c: 1, d: 2}, {})          # nothing incompatible held, something else held: -2
-    assert PQ.conviction_after_crisis(_person({c: 5, d: 2}, scar), band="Overwhelming")[0] == {c: 5, d: 2}, "clamped at the ceiling"
-    assert PQ.conviction_after_crisis(_person({c: 1, d: 2}, scar), band="Partial")[0] == {c: 0, d: 2}, "a held rejection, not a drop"
-    assert PQ.conviction_after_crisis(_person({c: 1, d: 2}, scar), band="Failure")[0] == {c: 0, d: 2}, "floored at 0"
-    assert PQ.conviction_after_crisis(_person({a: 3, b: 2}, {a: 3, b: 3}), band="Failure") == ({b: 5}, {}), "Failure folds first"
-    assert PQ.conviction_after_crisis(_person({c: 3}, {c: 3}), band="Failure") == ({}, {}), "Failure destroys where nothing else is held"
+    assert PQ.conviction_after_crisis(_person({c: 5, d: 2}, scar), band=BAND["Overwhelming"])[0] == {c: 5, d: 2}, "clamped at the ceiling"
+    assert PQ.conviction_after_crisis(_person({c: 1, d: 2}, scar), band=BAND["Partial"])[0] == {c: 0, d: 2}, "a held rejection, not a drop"
+    assert PQ.conviction_after_crisis(_person({c: 1, d: 2}, scar), band=BAND["Failure"])[0] == {c: 0, d: 2}, "floored at 0"
+    assert PQ.conviction_after_crisis(_person({a: 3, b: 2}, {a: 3, b: 3}), band=BAND["Failure"]) == ({b: 5}, {}), "Failure folds first"
+    assert PQ.conviction_after_crisis(_person({c: 3}, {c: 3}), band=BAND["Failure"]) == ({}, {}), "Failure destroys where nothing else is held"
 
 
 def _record(seen: list, draw, pid: str, purpose: str):

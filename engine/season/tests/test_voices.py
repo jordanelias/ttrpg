@@ -1,6 +1,6 @@
 """B10.54 (`02_CHAR_voices_and_the_room` edits 1-4) -- A CHOICE READ BACK AS ITS SCORE PARTS, AND WHICH ARE HEARD:
 `decision/score_parts.py`; B10.55 (edit 5) -- THE ROOM A PERSON BELIEVES HE STOOD IN: `person_q.regard_parts`, `room_as_held`,
-`world_q.present_at`, `witness_regard`. Lane: the season loop.
+`chronicle.present_at`, `witness_regard`. Lane: the season loop.
 
 THE FALSIFIER: (a) a `watch` that calls `score_parts` and `heard` on every deliberation moves `World.content_hash()` -- a voice is steering;
 (b) the parts of a candidate do not sum to its `score_terms` -- a player would be shown reasons that did not decide. The realm half
@@ -24,9 +24,9 @@ from ..data.verbs import VERB_TABLE
 from ..decision import choose as CH
 from ..decision import score_parts as SP
 from ..epistemic import Seen
+from ..harness import chronicle
 from ..harness import probes as P
 from ..queries import person_q as PQ
-from ..queries import world_q
 from ..queries.cache import deposit_index
 from ..state.carriers import Act, Candidate, Claim, Event, Person, Question, Tenure, interior_of
 
@@ -183,8 +183,8 @@ def test_room_as_held_names_only_what_the_actor_holds():
     w.persons[unseen].stance.append((actor, -5, 5))                          # a witness the actor holds nothing of, and who holds him hostile
     w.persons[actor].ledger.append(Claim("c_saw", actor, "site_harbour", SEEN_PREDICATE, Seen(who=seen_by), 0, "firsthand", 100, "own"))
     deposited = deposit_index(w)["ev_act"]
-    assert world_q.present_at(w, "ev_act") == tuple(sorted((actor, seen_by, unseen)))        # world truth: all three stood there
-    truth = dict(world_q.witness_regard(w, "ev_act", DEFAULT_FIXTURES))       # the chronicle's reading: what each present person holds of him
+    assert chronicle.present_at(w, "ev_act") == tuple(sorted((actor, seen_by, unseen)))        # world truth: all three stood there
+    truth = dict(chronicle.witness_regard(w, "ev_act", DEFAULT_FIXTURES))       # the chronicle's reading: what each present person holds of him
     assert set(truth) == {seen_by, unseen} and truth[unseen]["stored"] == -25.0 and truth[seen_by]["stored"] == 0.0, truth
     room = dict(PQ.room_as_held(interior_of(w.persons[actor], 0, 0), "ev_act", DEFAULT_FIXTURES, deposited))
     assert set(room) == {seen_by} and room[seen_by]["seen"] == 1 and room[seen_by]["told"] == room[seen_by]["bond"] == 0, room   # he holds no claim of `unseen`

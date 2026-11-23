@@ -930,6 +930,43 @@
           },
           "source": "NPC-090's own row: \"Enforces ancient trade treaties\"; stability .80, wealth .10 (the instrument of the empire's aim \"pressed here through the ancient trade treaties\", ED-IN-0293 (10)). An orientation: it mints no Proposition. [ASSUMPTION; medium; Jordan to correct -- the weights.]"
         }
+      ],
+      "goal_stages": [
+        {
+          "id": "stages_lowenritter_throne_security",
+          "for": [
+            "goal_lowenritter_throne_security"
+          ],
+          "opens": "mandatory",
+          "stages": [
+            {
+              "id": "watch",
+              "term": "short",
+              "predicate": {
+                "form": "existence",
+                "of": "subject",
+                "kind": "DocketItem"
+              },
+              "pursuits": {
+                "honour": 0.5,
+                "stability": 0.5
+              }
+            },
+            {
+              "id": "resolve",
+              "term": "medium",
+              "predicate": {
+                "form": "relation",
+                "of": "subject",
+                "relation": "held_by"
+              },
+              "pursuits": {
+                "honour": 0.7,
+                "stability": 0.3
+              }
+            }
+          ]
+        }
       ]
     },
     "engine/season/offices.yaml": {
@@ -4550,7 +4587,7 @@
           }
         },
         "pursuit_signatures": {
-          "source": "B10.17 (`16_PESSIMIST_CHAR_B` step 1): what a pursuit's NAME must mean in acts, as verbs. A FLOOR, not the whole character. Read by `data/pursuits.py::signature_breaks` against `queries/person_q.py::pursuit_lean`, which reports and refuses nothing yet.",
+          "source": "B10.17 (`16_PESSIMIST_CHAR_B` step 1): what a pursuit's NAME must mean in acts, as verbs. A FLOOR, not the whole character. Read by `harness/conviction_spread.py::signature_breaks` against `queries/person_q.py::pursuit_lean`, which reports and refuses nothing yet.",
           "keys": [
             "pursuits",
             "verbs"
@@ -4730,7 +4767,7 @@
           }
         },
         "affiliation_signatures": {
-          "source": "B10.19 (`U5a_CHAR_owed_amendments` \u00a77, extending `16_PESSIMIST_CHAR_B`): what a creed's NAME must mean in acts, as verbs, the shape of `pursuit_signatures`. Read by `data/pursuits.py::signature_breaks` against `data/affiliations.py::engagement` (`tables.affiliation_engagement`), which reports and refuses nothing yet.",
+          "source": "B10.19 (`U5a_CHAR_owed_amendments` \u00a77, extending `16_PESSIMIST_CHAR_B`): what a creed's NAME must mean in acts, as verbs, the shape of `pursuit_signatures`. Read by `harness/conviction_spread.py::signature_breaks` against `data/affiliations.py::engagement` (`tables.affiliation_engagement`), which reports and refuses nothing yet.",
           "keys": [
             "affiliations",
             "verbs"
