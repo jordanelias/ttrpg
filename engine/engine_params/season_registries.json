@@ -9443,6 +9443,9 @@
             "einhir_restoration": 1,
             "altonian_civics": 1
           },
+          "manner": {
+            "rigid_flexible": -0.1
+          },
           "source": "systems/npcs/reference/edeyja_npc.md, npc_roster_v30 \u00a71",
           "notes": "Highest TS of any living practitioner. Survived proximity to a major Gap/tear."
         },
@@ -9539,6 +9542,9 @@
             "thread_truth": 2,
             "einhir_restoration": 4,
             "altonian_civics": 1
+          },
+          "manner": {
+            "deontological_instrumental": 0.1
           },
           "source": "npc_roster_v30 \u00a72",
           "notes": "Vaynard's intelligence operative. Thread-sensitive. RM-adjacent targets consistently 1 season behind. Southern Einhir solidarity."
@@ -9734,6 +9740,10 @@
             "thread_truth": 1,
             "einhir_restoration": 0,
             "altonian_civics": 1
+          },
+          "manner": {
+            "rigid_flexible": -0.15,
+            "deontological_instrumental": -0.1
           },
           "source": "npc_roster_v30 \u00a74",
           "notes": "TS 15. Attributes Thread perception to investigative instinct. Field Inquisitor, NOT Cardinal. Savonarola archetype."
@@ -10117,6 +10127,9 @@
             "einhir_restoration": 0,
             "altonian_civics": 2
           },
+          "manner": {
+            "rigid_flexible": -0.15
+          },
           "source": "npc_roster_v30 \u00a78"
         },
         {
@@ -10211,6 +10224,9 @@
             "solmund_orthodoxy": 2,
             "einhir_restoration": 1,
             "altonian_civics": 1
+          },
+          "manner": {
+            "deontological_instrumental": 0.1
           },
           "source": "npc_roster_v30 \u00a79"
         },
@@ -10404,6 +10420,9 @@
             "einhir_restoration": 1,
             "altonian_civics": 3
           },
+          "manner": {
+            "rigid_flexible": 0.1
+          },
           "source": "npc_roster_v30 \u00a711"
         },
         {
@@ -10594,6 +10613,9 @@
             "solmund_orthodoxy": 3,
             "einhir_restoration": 1,
             "altonian_civics": 1
+          },
+          "manner": {
+            "deontological_instrumental": 0.1
           },
           "source": "npc_roster_v30 \u00a713, npc_character_analyses_v30_infill"
         },
@@ -12073,6 +12095,10 @@
             "einhir_restoration": 5,
             "altonian_civics": 1
           },
+          "manner": {
+            "deontological_instrumental": 0.15,
+            "grandiose_humble": -0.1
+          },
           "source": "npc_behavior_v30 \u00a72.4, npc_character_analyses_infill \u00a75, faction_canon_v30",
           "notes": "PP-650 STRUCK on Cultural Reformation + VTM associations; character active. Reinhardt von Lohengramm archetype per Jordan."
         },
@@ -12593,6 +12619,9 @@
             "einhir_restoration": 2,
             "altonian_civics": 1
           },
+          "manner": {
+            "rigid_flexible": -0.1
+          },
           "source": "arc_expansion_v30"
         },
         {
@@ -12680,6 +12709,10 @@
             "solmund_orthodoxy": 3,
             "einhir_restoration": 1,
             "altonian_civics": 1
+          },
+          "manner": {
+            "rigid_flexible": -0.1,
+            "deontological_instrumental": -0.1
           },
           "source": "proposed"
         },
