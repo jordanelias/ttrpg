@@ -6,7 +6,7 @@
 # the game-state behaviour those tests observe (or, for tools/, the caller). Nothing else raises the cap.
 # Lanes are assigned in conftest.py; `process` is the leftover lane and is meant to reach zero.
 lanes:
-  season_loop:    {base: 2793, warrants: []}
+  season_loop:    {base: 2793, warrants: [{batch: B10-character, added: 1, behaviour: "a strong loyalty makes acting against its object rare in a person's choices and not impossible, across the stance_scale sweep"}]}
   engine:         {base: 1041, warrants: []}
   combat:         {base: 473,  warrants: []}
   mass_battle:    {base: 324,  warrants: []}

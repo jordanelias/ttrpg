@@ -33,6 +33,7 @@ from typing import Any, Callable, Optional
 
 from engine.dice_engine import fmath
 from engine.dice_engine.fmath import ltr_sum
+from ..data.cast import STANCE_MAX
 from ..data.pursuits import _AXES   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
 from ..data.rosters import SCENE_PACKING_RULES, require_member, roster, seat_capability
 from ..data.verbs import VERB_TABLE, act_key, align
@@ -85,7 +86,10 @@ def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = 
     if not g >= 0:                   # `not >=`, so a NaN is refused too
         raise ValueError(f"stance_gain {g} is not >= 0: it would damp or invert §F2's stance "
                          f"term, and inverting it is G2's polarity, not this gain (H-202)")
-    t = _stance_arm(p, c, fx, memo)
+    # B10.04 (`U5a_CHAR_owed_amendments` §2, H-464): regard read as a share of `STANCE_MAX` times `Fixtures stance_scale`, applied to
+    # the arm's value BEFORE either gain. At the control (`stance_scale == STANCE_MAX`) the quotient is `25 / 25 == 1.0` and
+    # `t * 1.0 == t` for every float, so the term is today's exactly. The clamp to the bound is B10.10's (`stance_clamp`), not here.
+    t = _stance_arm(p, c, fx, memo) * (fx.get("stance_scale") / STANCE_MAX)
     # v11 CR-87 (THE GRUDGE'S BOUND): on a VIOLENT row (`data/verbs.py::VIOLENT_VERBS`, off `rosters.yaml:
     # violent_prizes`) whose subject is its opponent, the term is read at `Fixtures hostile_stance_gain` in place of
     # `1 + g`, so a grudge's pull on violence is bounded apart from its pull on every other act; `declared`'s sign

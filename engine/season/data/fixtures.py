@@ -21,6 +21,7 @@ from typing import Any
 from engine.dice_engine.dice_engine import MU_PER_DIE
 
 from ..gaps import Forbidden, Ungraded
+from .cast import STANCE_MAX
 from .rosters import ARMY_VERBS, DIFFICULTY_LEVELS, roster, roster_map, table
 
 class Fixtures:
@@ -1206,6 +1207,13 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct -- the sweep's points; basis: `stance_toward` is bounded in [-1, 1] once normalised, so the oath is weighed on the stance's own scale; revert: 0.0, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-459 -- site: Fixtures sworn_bond, graded `assumption`; the entry states no value, so it is injected at the control and swept 0.0 / 0.5 / 1.0]
     sworn_bond=0.0,                    # `H-459`, swept 0.0 (control, SHIPPED) / 0.5 / 1.0
+    # `H-464` (B10.04; `U5a_CHAR_owed_amendments` §2). HOW MUCH A FULL REGARD WEIGHS IN THE STANCE TERM: `decision/choose.py::stance_term` reads the arm's
+    # value times `stance_scale / STANCE_MAX`, before either gain, so regard counts as a share of the stance bound. `STANCE_MAX` (25) is the CONTROL and
+    # SHIPS: the quotient is exactly 1.0 and the term is today's. Swept 0.2 / 0.4 / 0.8, so that a full loyalty sits 4, 8 and 16 temperatures from zero at
+    # `choice_temperature` 0.05; the flip is B98's, after a reading.
+    # [ASSUMPTION; medium; Jordan to correct; revert: the control (`STANCE_MAX`).]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-464 -- site: Fixtures stance_scale, graded `assumption`; the source gives no live value, so it is injected at the control (`STANCE_MAX`, read at import) and swept 25 / 0.2 / 0.4 / 0.8]
+    stance_scale=STANCE_MAX,           # `H-464`, swept 25 = STANCE_MAX (control, SHIPPED) / 0.2 / 0.4 / 0.8
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

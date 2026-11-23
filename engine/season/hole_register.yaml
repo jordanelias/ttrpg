@@ -6902,6 +6902,19 @@ rows:
     cite:      "[ASSUMPTION: the range [0, 1] and its three sweep points -- basis: `stance_toward` normalised by `STANCE_MAX` is bounded in [-1, 1], so the oath is weighed on the stance's own scale and `a` is clamped after the sum; the entry names no value.] FALSIFIERS `engine/season/tests/test_sworn_grievance.py::test_a_sworn_judge_reads_the_killer_differently` (two judges, equal stance and pursuits, one holding the oblige and the claim, read different regard for the killer at 0.5 and 1.0, ordered 1.0 < 0.5 < 0.0) and `::test_a_sworn_judge_with_no_claim_naming_the_victim_in_the_seat_does_not_move` (seven judges each lacking one condition -- no claim, the claim in another seat, naming another holder, an oath to another seat, an imposed oblige, an oath no longer live, the claim and no oath -- read the control at 1.0); CONTROL `::test_sworn_bond_zero_is_todays_regard`, and the realm content hash at seed 0, one season, equal to B09.22's reading."
     source:    "workplan v12 B09.20 (IN-58, intake `:143`; carrier B09.22; B09's H block slot 4, added by lane D4)"
 
+  - id:        H-464
+    tier:      1
+    hole:      "HOW MUCH A FULL REGARD WEIGHS IN A CHOICE -- `stance_scale`, the size §F2's stance term gives regard once it is read as a share of the stance bound (B10.04; `U5a_CHAR_owed_amendments` §2, F-PES-CHAR-04 (b)). `decision/choose.py::stance_term` reads `_stance_arm`'s value times `stance_scale / STANCE_MAX`, before `stance_gain` or `hostile_stance_gain`, so a regard of `STANCE_MAX` weighs `stance_scale` on the pursuit term's own range. Regard is in the stance unit (valence x weight, up to 25 a row), a scale on which one pursuit term is a few hundredths, so a stance of 10 outweighs every pursuit by orders of magnitude and no draw takes an act against the man it is held for."
+    kind:      "NUMBER"
+    owner:     "decision/choose.py::stance_term"
+    grade:     "assumption"
+    default:   "25 (= STANCE_MAX) -- THE CONTROL, SHIPPED: today's term exactly (`25 / 25 == 1.0` and `t * 1.0 == t` for every float), so the realm hash is EQUAL to the one before B10.04. `stance_scale` is written as `STANCE_MAX` read at import (`data/cast.py`), not a literal. No live value is proposed: the flip is B98's, after a reading, and is `BLOCKED (design: no target reading)` there [ASSUMPTION; medium; Jordan to correct; revert: the control]"
+    site:      "Fixtures stance_scale, read by `decision/choose.py::stance_term` once per scored candidate"
+    sweep:     ["25 (control, SHIPPED)", "0.2", "0.4", "0.8"]
+    unblocks:  "B10.10's clamp (`stance_clamp`), B10.12's planted regard and the regard unit of B10.09 (`regard_unit`), which read this term; R-08 (the departure from the top is a person's own once a loyalty is a few temperatures wide and not several hundred)"
+    cite:      "`U5a_CHAR_owed_amendments` §2 (amends `02_CHAR_scar_cap_and_regard_unit` item 3). [ASSUMPTION: the sweep 0.2, 0.4, 0.8 -- basis: at `choice_temperature` 0.05 a full loyalty then sits 4, 8 and 16 temperatures from zero; the source proposes no live value; Jordan to correct; revert: the control.] FALSIFIER `engine/season/tests/test_regard_unit.py::test_a_strong_loyalty_makes_acting_against_rare_not_impossible` (one person with an authored stance of 10, 200 draws on one question at each swept value: the act the verb row treats as against his subject is taken in some draws at the gentlest value and in fewer than half at each; 0 of 200 at every swept value, or more than half, would show the sweep wrong); CONTROL the realm content hash at seed 0, one season, equal to B09's close."
+    source:    "workplan v12 B10.04 (`U5a_CHAR_owed_amendments` §2; B10's H block slot 1)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
