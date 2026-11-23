@@ -1250,6 +1250,13 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `False`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-471 -- site: Fixtures stance_clamp, graded `assumption`; the source proposes the clamp and no live reading, so it is injected at the control and swept False / True]
     stance_clamp=False,                # `H-471`, swept False (control, SHIPPED) / True (proposed)
+    # `H-470` (B10.09; `02_CHAR_scar_cap_and_regard_unit` edits 1 (`regard_unit`), 3). THE UNIT `person_q.regard` COUNTS ITS JUDGED AND TOLD HALVES IN, an arm of `rosters.yaml: regard_units`:
+    # `raw` is the CONTROL and SHIPS (today's sum of `deed_term`, a pursuit weight times an alignment cell, in no unit the stance row's valence step shares); `stance` sums
+    # `person_q.deed_steps`, each deed's worth as the cosine of the holder's projected pursuits against the deed kind's alignment row (a paired deed's times its `_bond`), so one deed
+    # is at most one valence step before `judged_gain` / `told_valence_gain`. A value outside the roster is refused where it is read. The flip is B98's, a declared mover read against the control.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `raw`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-470 -- site: Fixtures regard_unit, graded `assumption`; the source proposes `stance` as the live arm and ships no flip, so it is injected at the control and swept raw / stance]
+    regard_unit="raw",                 # `H-470`, swept raw (control, SHIPPED) / stance (proposed)
     # `H-476` (B10.28; `02_CHAR_resolve_and_temper` edit 2; CR-93 item 2, AR-23). THE GAIN OF A PERSON'S OWN FACTOR ON THE CHOICE TEMPERATURE: `decision/choose.py::temper`
     # reads it through the `choice_temper` row of `rosters.yaml: tables.capability_uses` (key `attr.mind.focus`, role `judgement`), and `_sample_order` multiplies
     # `choice_temperature` by the factor. ⚠ THE SIGN: `about_mid` rises with the attribute, so a temperature that falls with Focus is a NEGATIVE gain; the value the flip (B98)

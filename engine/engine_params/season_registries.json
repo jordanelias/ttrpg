@@ -3318,6 +3318,14 @@
             "on"
           ]
         },
+        "regard_units": {
+          "source": "B10.09 (`02_CHAR_scar_cap_and_regard_unit` edit 1 (`regard_unit`), edit 3; U1 \u00a73 *regard*): the unit regard's judged and told halves are counted in.",
+          "note": "THE ARMS OF `Fixtures.regard_unit` (`H-470`), read by `queries/person_q.py::regard`. `raw` is the CONTROL (today's sum of `deed_term`, a pursuit weight times an alignment cell); `stance` counts each deed in valence steps (`person_q.deed_steps`: the cosine of the holder's projected pursuits against the deed kind's alignment row, a paired deed's times its `_bond`), the unit of a stance row's valence, so a deed is at most one step before the gains. [ASSUMPTION: the roster's name and shape -- basis: `scar_holds`, B10.07's two-arm string roster; Jordan to correct.]",
+          "values": [
+            "raw",
+            "stance"
+          ]
+        },
         "crisis_arms": {
           "source": "B10.13 (`16_PESSIMIST_CHAR_A` \"The resolution, decided\" 3; U1 F-43: the switch is `Fixtures.crisis_arm`, values `rule` and `drawn`): the two ways a crisis of faith comes out.",
           "note": "THE ARMS OF `Fixtures.crisis_arm` (`H-472`), read by `data/fixtures.py::load` (a shipped value outside this set is refused) and, from B10.15, by `loop/resolve.py::_conviction_crisis`. `rule` is the CONTROL (today's function: the branch is chosen by a rule over state the crisis already reads, nothing is rolled) and SHIPS until B98; `drawn` rolls one draw per scarring act and reads the band from `tables.crisis_bands`. [ASSUMPTION: the roster's name and shape -- basis: `stance_polarities` is the tree's form for a swept string arm; Jordan to correct.]",

@@ -50,7 +50,7 @@ from ..data.requires import (
     UNKNOWN, WORLD_ONLY_STEMS,
 )
 from ..data.rosters import (
-    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, SCAR_HOLDS, SEEN_PREDICATE, capability_rows, require_use_site,
+    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, capability_rows, require_use_site,
     roster, roster_map,
 )
 from ..state.carriers import Person, PersonInterior, Said
@@ -135,12 +135,18 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: 
     is `deed_term`'s; this function sums them by `firsthand`, and `world_q.reception` sums the same two
     by remove and confidence, so the two readers cannot disagree on either at the shipped `sworn_bond` 0.0
     (`deed_term` itself reads the control: `reception` and this sum part when it is non-zero)."""
+    return _split_deeds(p, referent, scar_shift, sworn_bond, deed_term)
+
+
+def _split_deeds(p: Person, referent: str, scar_shift: float, sworn_bond: float, worth) -> tuple:
+    """`(judged, told)` OF `attributed_deeds(p.ledger, referent)`, each claim worth `worth(p, axis_w, c, sworn_bond)` and split by
+    `firsthand`: the one walk `deeds_judged` (`worth` = `deed_term`, the raw sum) and `regard_steps` (`worth` = `deed_steps`, stance steps) share."""
     axis_w = None
     judged = told = 0.0
     for c in attributed_deeds(p.ledger, referent):
         if axis_w is None:
             axis_w = projected_axes(p, scar_shift)
-        v = deed_term(p, axis_w, c, sworn_bond)
+        v = worth(p, axis_w, c, sworn_bond)
         # FIRSTHAND only is judged (`dissents`' and `record`'s precedent, `decision/options.py`):
         # a `told_by` claim whose chain is empty is still hearsay, and lands in `told`.
         if c.firsthand:
@@ -148,6 +154,12 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: 
         else:
             told += v
     return judged, told
+
+
+def deeds_judged_steps(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0) -> tuple:
+    """`deeds_judged`' `(judged, told)` IN STANCE STEPS (`deed_steps` for `deed_term`; B10.09, `Fixtures regard_unit` `stance`): the same
+    claims, the same `firsthand` split, each deed worth a cosine. `regard`'s `stance` arm is the one reader; `deeds_judged` is unchanged."""
+    return _split_deeds(p, referent, scar_shift, sworn_bond, deed_steps)
 
 
 def holds_dispute(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0) -> bool:
@@ -189,6 +201,21 @@ def deed_term(p: Person, axis_w: dict, c, sworn_bond: float = 0.0) -> float:
         lean = _lean(axis_w, c.predicate)
         return _paired_weight(p, c, lean, sworn_bond) if lean else 0.0
     return deed_valence(axis_w, c)
+
+
+def deed_steps(p: Person, axis_w: dict, c, sworn_bond: float = 0.0) -> float:
+    """WHAT ONE OF `attributed_deeds`' CLAIMS IS WORTH TO `p` IN STANCE STEPS (B10.09, `Fixtures regard_unit` `stance`): `deed_term`'s
+    sibling, the deed's alignment as a cosine -- `pursuit_cosine_axes` of the holder's projected pursuits `axis_w` against the deed
+    kind's row on the axes (`align_kind`), in `[-1, +1]` -- so an unpaired deed is at most one valence step, the unit of a stance
+    row. A paired deed (`PAIRED_KINDS`) is that cosine times `_bond` on the claim's patient (in `[0, 2]`, so at most two steps),
+    read off the cosine's sign as `deed_term` reads `lean`'s. `0.0` where either vector is zero (`pursuit_cosine_axes` answers
+    `None`: no direction to compare), and for a claim that is no deed. `sworn_bond` is `deed_term`'s. Person-side (AX-2)."""
+    if not is_deed(c):
+        return 0.0
+    cos = pursuit_cosine_axes(axis_w, {ax: _verbs.align_kind(c.predicate, ax) for ax in _AXES})
+    if not cos:
+        return 0.0
+    return cos * _bond(p, c.subject, cos, sworn_bond) if c.predicate in PAIRED_KINDS else cos
 
 
 def suffered_deeds(ledger, patient: str):
@@ -492,7 +519,11 @@ def regard(p: Person, referent: str, fx=None) -> float:
     if not (jg >= 0 and tg >= 0):
         raise ValueError(f"judged_gain {jg} / told_valence_gain {tg} must be >= 0 (H-192/H-193)")
     if jg or tg:
-        judged, told = deeds_judged(p, referent, fx.get("scar_weight_shift"), fx.get("sworn_bond"))
+        unit = fx.get("regard_unit")
+        if unit not in REGARD_UNITS:
+            raise ValueError(f"regard_unit {unit!r} is not in rosters.yaml: regard_units {sorted(REGARD_UNITS)} (H-470)")
+        judged, told = (deeds_judged_steps if unit == "stance" else deeds_judged)(
+            p, referent, fx.get("scar_weight_shift"), fx.get("sworn_bond"))
         stored = stored + jg * judged + tg * told
     # v11 CR-31: the caste estimate, `heritage_regard`, a third term at its own gain (0 reads nothing, so the
     # sum above is returned untouched: the control). It reads `p`'s own ledger and own convictions only.
