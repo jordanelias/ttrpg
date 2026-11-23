@@ -51,6 +51,15 @@ SUBSYSTEM_FILES = {
         r"^test_(claim_provenance|design_prose|module_shape|references_yaml|names$|no_polling|pathres|stubwire)"),
 }
 TREE_LANE = {"engine/season/tests/": "season_loop", "engine/tests/": "engine"}
+# SUITES (Jordan, 2026-11-23: "specific lane based test suites"): a SECOND marker, beside the lane and never a lane. The subsystems'
+# tests that live in `engine/season/tests/` are `season_loop` by tree, so `-m social_contest` selects none of them; each file below also
+# carries its subsystem's `<lane>_season` marker, and `-m "<lane> or <lane>_season"` is that subsystem's whole suite across the three
+# trees (`tools/tests_for_diff.py --suite`). Not counted by `references/test_lane_caps.yaml`: a test keeps exactly one lane.
+SEASON_SUITES = {
+    "sc_season": re.compile(r"^test_(sc\d|sc_|social_contest|stress_proceedings|settle_margin|contest_kernel)"),
+    "mb_season": re.compile(r"^test_(march|mass_battle_|levy_feed)"),
+    "pc_season": re.compile(r"^test_(combat_|cp_t\d|cl_thrust_|b11a_)"),
+}
 
 
 def pytest_collection_modifyitems(config, items):
@@ -62,6 +71,11 @@ def pytest_collection_modifyitems(config, items):
             lane = next((m for m, pat in SUBSYSTEM_FILES.items() if pat.match(base)), None)
         if lane:
             item.add_marker(getattr(pytest.mark, lane))
+        if "engine/season/tests/" in path:
+            base = os.path.basename(path)[:-3]
+            for suite, pat in SEASON_SUITES.items():
+                if pat.match(base):
+                    item.add_marker(getattr(pytest.mark, suite))
 
 
 @pytest.fixture(autouse=True)

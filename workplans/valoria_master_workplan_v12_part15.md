@@ -41,30 +41,30 @@ UNDECIDED (this half; each reading taken is the one that changes less, `V12_STRU
 | B21.51 | the Duchy of Valorsmark passes with the throne | `16_PESSIMIST_FA_A` edit 1 | BUILD | MOVER(behaviour) | the first half's `22_HAPPENINGS_B` edits 1–2 and BIND_C at control |
 | B21.52 | six council seats anchored one rung below their duchy | `16_PESSIMIST_FA_A` edit 2 | BUILD | MOVER(behaviour) | B21.51 |
 | B21.53 | a dismissing ducal seat may also pardon | `16_PESSIMIST_FA_A` edit 3 | BUILD | MOVER(behaviour) | B21.52 |
-| B21.54 | what a writ orders: a Proposition, and the asker's ambitions | `14_VERBS_BINDING_D` commit D1 | BUILD | MOVER(behaviour) | B21.53 |
-| B21.55 | `issue` and `dispatch` form only on those the seat commands | `14_VERBS_BINDING_D` commit D2 | BUILD | MOVER(behaviour) | B21.54; the first half's `16_PESSIMIST_FA_C` items |
-| B21.56 | the draw on `issue`: a writ at every band, its `force` written | `14_VERBS_BINDING_D` commit D3 | BUILD | MOVER(behaviour) | B21.55; the first half's `06_FA_decree_binds` items; Batch B05 |
+| B21.54 | what a writ orders: a Proposition, and the asker's ambitions | `14_VERBS_BINDING_D` commit D1 | BUILD | MOVER(behaviour; GATE reads aperture counts) | B21.53 |
+| B21.55 | `issue` and `dispatch` form only on those the seat commands | `14_VERBS_BINDING_D` commit D2 | BUILD | MOVER(behaviour; GATE reads aperture counts) | B21.54; the first half's `16_PESSIMIST_FA_C` items |
+| B21.56 | the draw on `issue`: a writ at every band, its `force` written | `14_VERBS_BINDING_D` commit D3 | BUILD | MOVER(behaviour; GATE reads a share by band) | B21.55; the first half's `06_FA_decree_binds` items; Batch B05 |
 | B21.79 | the seat's obligees present are its people: `seat_people_at`, and `sides_of` reads it (Patched: P-24) | CP-T09-07 (b)'s union, with AM-F-13 | BUILD | MOVER(behaviour) | B21.56 |
-| B21.57 | a `dispatch` that sends: the order deposited, the man's `comply` moves him | `IS-B3-FA-05` (closes D4; CP-T09-08; CP-T09-07 (b)'s gate clause) | BUILD | MOVER(behaviour) | B21.79 |
+| B21.57 | a `dispatch` that sends: the order deposited, the man's `comply` moves him | `IS-B3-FA-05` (closes D4; CP-T09-08; CP-T09-07 (b)'s gate clause) | BUILD | MOVER(behaviour; GATE reads aperture counts) | B21.79 |
 | B21.58 | a war lives in the seats that wage it | `06_FA_war_lives_in_seats_B` edits 1–3 | BUILD | EQUAL | B21.57 (U3's order) |
 | B21.59 | men are levied through a seat | `06_FA_levy_through_the_seat_B` edits 1–6 | BUILD | EQUAL | B21.58 |
-| B21.60 | a seat is held by an individual | `16_PESSIMIST_FA_B` edit 1 | BUILD | EQUAL | B21.59 |
+| B21.60 | a seat is held by an individual | `16_PESSIMIST_FA_B` edit 1 | BUILD | EQUAL | — |
 | B21.61 | no self-conferral across chains of seats; `cross_chain` priced | `16_PESSIMIST_FA_B` edit 2 | BUILD | EQUAL | B21.60; the first half's BIND_C C3 |
-| B21.62 | a war has two parties and a declarer who can wage it | `16_PESSIMIST_FA_B` edit 4 | BUILD | EQUAL | B21.61, B21.58 |
-| B21.63 | joining a faction is answered by the faction | `16_PESSIMIST_FA_B` edit 3 | BUILD | MOVER(behaviour) | B21.62 |
+| B21.62 | a war has two parties and a declarer who can wage it | `16_PESSIMIST_FA_B` edit 4 | BUILD | EQUAL | B21.58, B21.60 |
+| B21.63 | joining a faction is answered by the faction | `16_PESSIMIST_FA_B` edit 3 | BUILD | MOVER(behaviour; GATE reads a pooled count) | B21.62 |
 | B21.64 | two register rows closed, as text | `U5d_FA_owed_edits` §7 | BUILD | EQUAL | B21.51 |
-| B21.65 | a person's opinion of a faction regards its present head | `U5d_FA_owed_edits` §8 | BUILD | MOVER(behaviour) | B21.64; the first half's `06_FA_seat_terms_by_body_B` edit 4 |
+| B21.65 | a person's opinion of a faction regards its present head | `U5d_FA_owed_edits` §8 | BUILD | MOVER(behaviour) | the first half's `06_FA_seat_terms_by_body_B` edit 4 |
 | B21.66 | a successor confirms his predecessor's writs or lets them lapse | `IS-B3-FA-06` (replaces `U5d_FA_owed_edits` §9) | BUILD | MOVER(behaviour) | B21.65 |
 | B21.67 | someone may always claim an empty throne: the test | `U5d_FA_owed_edits` §1 | BUILD | EQUAL | B21.66; the first half's REMIT edit 1 and `22_HAPPENINGS_B` edits 1–3 |
 | B21.68 | a faction's weight reads where its members live | `U5d_FA_owed_edits` §4 | BUILD | EQUAL | B21.67 |
 | B21.69 | a reduction of a sitting holder's grant is a revocation | `IS-B3-FA-07` (H-132; A-105) | BUILD | MOVER(behaviour) | B21.68, B21.61 |
 | B21.70 | one purse per rung | `U5d_FA_owed_edits` §6 | HELD (a computed `requisition` on a rung seating two factions) | — | its trigger reading at B21.99 |
 | B21.71 | the governance test world's seats get conferral and revocation bases | `06_FA_playable_scenario` (the fixture edit) | BUILD | MOVER(behaviour): the spine's own build hash only | B21.69 |
-| B21.72 | a governance scenario that plays: situations, digest, menu, `play` | `06_FA_playable_scenario` (the harness edits) | BUILD | EQUAL | B21.71 |
-| B21.73 | BIND_C's flip: a Partial seat-opening is provisional | `14_VERBS_BINDING_C` C1's setting off control, C3's gate | BUILD | MOVER(behaviour) | B21.72 |
-| B21.74 | the shortest playable loop: `recall`, `--world realm`, `loop_closed` | `06_FA_shortest_loop_B` | BUILD | EQUAL | B21.73 |
+| B21.72 | a governance scenario that plays: situations, digest, menu, `play` | `06_FA_playable_scenario` (the harness edits) | BUILD | EQUAL — PROBE: serial barrier, in no set | B21.71 |
+| B21.73 | BIND_C's flip: a Partial seat-opening is provisional | `14_VERBS_BINDING_C` C1's setting off control, C3's gate | BUILD | MOVER(behaviour) — FLIP: serial barrier | B21.72 |
+| B21.74 | the shortest playable loop: `recall`, `--world realm`, `loop_closed` | `06_FA_shortest_loop_B` | BUILD | EQUAL — PROBE: serial barrier, in no set | B21.73 |
 | B21.75 | what an order orders | `U5d_FA_owed_edits` §5 | HELD (`loop_closed` reads `answered > 0` at two dice seeds) | — | B21.74 |
-| B21.76 | the spine's situations and the realm as scenario rows | `IS-B3-FA-01` | BUILD | EQUAL | B21.74; V12 Batch B11 (`STOPS IF`) |
+| B21.76 | the spine's situations and the realm as scenario rows | `IS-B3-FA-01` | BUILD | EQUAL — PROBE: serial barrier, in no set | B21.74; V12 Batch B11 (`STOPS IF`) |
 | B21.77 | a living top-seat holder can be removed (joint concurrence) | the intake M8, §1b-3, A2-14 | POINTER | — | V12 Batch B21c-fa-seats |
 | B21.78 | the marquis question | the intake M38 | POINTER | — | — |
 | B21.80 | a refused `confer` says which clause refused, in its kind (Patched: P-26) | `01_CORE_predicates_name_their_clause` step two, row `confer` | BUILD | MOVER(behaviour) | the first half's B21.14; Batch B09 (B09.18, B09.19) |
@@ -190,7 +190,7 @@ Not in this half, and where each is: `U5d_FA_owed_edits` §2 (the first half, be
 - WHERE: `engine/season/queries/world_q.py` (NEW `seat_people_at`); `engine/season/loop/sides.py` (`sides_of`); `engine/season/loop/effects_shared.py` (`occupying_faction`); `engine/season/tests/test_march.py`.
 - TESTS: in `test_march.py`, written before step 2 and read red: `test_a_seats_obligee_at_home_marches_in_its_army` `[ASSUMPTION: test name; the item creates it, E-3]` — falsifier (2) below.
 - FALSIFIER and CONTROL (copied): "(2) A hand-built settlement march whose marcher's seat has one obligee, not a faction member, at home: the army is one larger than base. Mutation: drop the union → base." Control: a seat with no obligee present reads `mustered(rid, seat_faction(via))` exactly as before.
-- GATE: `python -m pytest engine/season/tests/test_march.py -q` → pass; the realm hash (`HASH READING`) at seed 0, one season → recorded (moved where a seat's obligee stood in an origin's subtree; said which).
+- GATE: `python -m pytest engine/season/tests/test_march.py -q` → pass; the realm hash (`HASH READING`) at seed 0, one season → print n = the count of marches in which a seat's obligee stood in an origin's subtree; n ≥ 1 ⇒ that hash differs from the previous recorded reading; n = 0 ⇒ it equals it; the other outcome fails the item (`reading @<sha>`).
 - HASH MOVERS: "Mover · … the union" (CP-T09-07 "Hash · revert."). Declared; B21's one re-pin (B21.99).
 - DEPENDS ON: EXISTS-IN-TREE `loop/sides.py::sides_of`, `loop/effects_shared.py::occupying_faction`, `queries/world_q.py::mustered`, `::establishment_of`, `state/gate.py::seat_faction`; V12 B21.56.
 - GLOSSARY: none (*obligee*, *sworn* already read "a man with a live `oblige` to a seat").
@@ -274,9 +274,9 @@ Not in this half, and where each is: `U5d_FA_owed_edits` §2 (the first half, be
 - WHERE: `engine/season/state/gate.py` (NEW `may_sit`; `tenure_write_basis`'s `conferral` and `claim` clauses); `engine/season/loop/predicates.py` (`_req_confer`, `_req_succeed`); `engine/season/decision/options.py` (the `confer` counterparty fan); NEW `engine/season/tests/test_fa_eligibility.py`.
 - TESTS: `test_cohort_cannot_be_named_heir`, first, red.
 - FALSIFIER and CONTROL: a cohort opens a seat-`hold` by `confer` or `succeed`. Control: an individual conferee is admitted as before. Movers: "(1) … move no shipped run (nothing computed does either today; … for (1) by `tenure.opened` 0)".
-- GATE: `python -m pytest engine/season/tests/test_fa_eligibility.py engine/season/tests/test_faction_q.py engine/season/tests/test_in61_succession.py -q` → pass; the realm hash (`HASH READING`) at seed 0, one season → equal to B21.59's.
+- GATE: `python -m pytest engine/season/tests/test_fa_eligibility.py engine/season/tests/test_faction_q.py engine/season/tests/test_in61_succession.py -q` → pass; the realm hash (`HASH READING`) at seed 0, one season → equal to the previous commit's recorded reading (`reading @<sha>`, P14/P17 (3)).
 - HASH MOVERS: none in shipped runs.
-- DEPENDS ON: EXISTS-IN-TREE `state/gate.py::tenure_write_basis`, `loop/predicates.py::_req_confer`, `::_req_succeed`, `state/carriers.py::Person.is_cohort`; V12 B21.59 (order).
+- DEPENDS ON: EXISTS-IN-TREE `state/gate.py::tenure_write_basis`, `loop/predicates.py::_req_confer`, `::_req_succeed`, `state/carriers.py::Person.is_cohort`.
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`, `high`.
 - LANDS IT: B21's producer; `Item: B21.60`, `[skip ci]`.
@@ -344,7 +344,7 @@ Not in this half, and where each is: `U5d_FA_owed_edits` §2 (the first half, be
 - FALSIFIER and CONTROL: `register --check` fails G12 (a cite arguing for a grade the row does not carry). Control: `--requirements` loads unchanged.
 - GATE: "`python -m engine.season.harness.register --requirements` still loads" → nine lines; `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`).
 - HASH MOVERS: none.
-- DEPENDS ON: EXISTS-IN-TREE `hole_register.yaml` rows H-91, H-144; V12 B21.51 (CP-T09-06's edit, which the third clause named).
+- DEPENDS ON: EXISTS-IN-TREE `hole_register.yaml` rows H-91, H-144.
 - GLOSSARY: none.
 - COST and TIER: edit (text); `sonnet`, `medium`.
 - LANDS IT: B21's producer; `Item: B21.64`, `[skip ci]`.
@@ -358,9 +358,9 @@ Not in this half, and where each is: `U5d_FA_owed_edits` §2 (the first half, be
 - WHERE: `engine/season/queries/world_q.py` (`opinion_of`); `engine/season/tests/test_faction_q.py`.
 - TESTS: the named test, first, red.
 - FALSIFIER and CONTROL: "A dead leader still regarded as head after his seat is filled." Control: a faction whose head seat is unchanged reads the same opinion as before.
-- GATE: `python -m pytest engine/season/tests/test_faction_q.py -q` → pass; the realm hash (`HASH READING`) at seed 0, one season → moved where a faction's head differs from its creed's subject, recorded.
+- GATE: `python -m pytest engine/season/tests/test_faction_q.py -q` → pass; the realm hash (`HASH READING`) at seed 0, one season → with `opinion_of` reading the creed subject only (scratch revert), the seed-0 one-season hash equals the parent commit's reading; the shipped reading recorded (`reading @<sha>`).
 - HASH MOVERS: "The Restoration Movement and the Löwenritter at build once TERMS-B edit 4 lands; every faction after a succession. Declared." B21.99.
-- DEPENDS ON: EXISTS-IN-TREE `queries/world_q.py::opinion_of`, `queries/faction_q.py::head`; V12 the first half's `06_FA_seat_terms_by_body_B` edit 4 (`head_seat` rows); V12 B21.64.
+- DEPENDS ON: EXISTS-IN-TREE `queries/world_q.py::opinion_of`, `queries/faction_q.py::head`; V12 the first half's `06_FA_seat_terms_by_body_B` edit 4 (`head_seat` rows).
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`.
 - LANDS IT: B21's producer; `Item: B21.65`, `[skip ci]`.
@@ -427,7 +427,7 @@ Not in this half, and where each is: `U5d_FA_owed_edits` §2 (the first half, be
 - WHERE: `engine/season/state/gate.py` (`tenure_write_basis`); `engine/season/loop/predicates.py` (`_req_establish` clause 5, `_req_revoke` for `keeps`); `engine/season/loop/effects_governance.py` (`_eff_revoke`); `engine/season/verb_table.yaml` (`revoke`: the `keeps` operand); `engine/season/rosters.yaml` (`obstacle_terms`: `faction_power`); `engine/season/data/fixtures.py` (`faction_power_step`); `engine/season/hole_register.yaml` (one NUMBER row); NEW `engine/season/tests/test_grant_reduction.py`.
 - TESTS: in the new file, first: "`test_a_gate_write_narrowing_a_sitting_grant_needs_a_revocation_basis` (a bare gate write that narrows `granted_acts`, by an actor whose seat may fill but may not revoke: `None`; red before step 1, which admits it as `CONFERRAL`); `test_an_establish_that_narrows_a_sitting_grant_is_refused_and_a_revoke_with_keeps_carries_it`; `test_a_foreign_holders_reduction_is_harder_against_a_stronger_faction` (200 dice seeds per arm, the holder's faction weight above and below the host's, success shares strictly ordered, `assert checked >= 200`)" — the third at `faction_power_step` set to 1 inside the test only (the shipped value stays 0) `[ASSUMPTION: the test's arm value — basis: at 0 the shares cannot order]`.
 - FALSIFIER and CONTROL: the tests above; "control: the same-faction arm, whose shares do not move with the weights; and `faction_power_step = 0` reproduces the realm hash at seeds 0 to 2."
-- GATE: "`python -m pytest engine/season/tests/test_grant_reduction.py -q`; the realm content hash at seeds 0, 1, 2 equal to B21's base with `faction_power_step = 0`" — read as: equal to B21.68's reading where no `establish` narrowed a sitting grant (step 2's mover, below, is the declared exception, its count quoted); `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `python tools/ci_sim_fabrication_check.py` → exit 0.
+- GATE: "`python -m pytest engine/season/tests/test_grant_reduction.py -q`; the realm content hash at seeds 0, 1, 2 equal to B21's base with `faction_power_step = 0`" — read as: print n = the count of `establish` narrowings of a sitting grant in this run (step 2's mover, below); n ≥ 1 ⇒ the realm hash at seed 0 after one season differs from the previous recorded reading; n = 0 ⇒ it equals it; the other outcome fails the item (`reading @<sha>`); `python -m engine.season.harness.register --check` → each check's violation count (R2, G6 and any other that reports) does not rise from the reading taken at the batch's opening (quote both, `reading @<sha>`); `python tools/ci_sim_fabrication_check.py` → exit 0.
 - HASH MOVERS: "Step 1: none reachable (clause 5 already refuses every write it narrows) `[UNVERIFIED: not run]`. Step 2: every seeded run in which an `establish` narrowed a sitting grant (it is refused and the `revoke` forms instead); declared, B21's one re-pin. `faction_power_step` above 0: a declared mover", set by B98 (DIALS AT CONTROL).
 - DEPENDS ON: V12 the first half's BIND_C items C2, C3 (`revoke` contested, `_eff_revoke` banded); V12 B21.68 (`faction_q.weight`), B21.61 (`cross_chain_step`); Batch B05 (`U5c_SC_one_obstacle_form`: the composer and `obstacle_terms`); EXISTS-IN-TREE `state/gate.py::tenure_write_basis`, `::may_revoke`, `::may_fill`, `T_O`, `CONFERRAL`, `queries/world_q.py::faction_of`, `loop/predicates.py::_req_establish`; `U5d_FA_owed_edits` §3 is B32's and is not read (UNDECIDED (U4)).
 - GLOSSARY: none (*revocation* stands; "reduction" is plain English).

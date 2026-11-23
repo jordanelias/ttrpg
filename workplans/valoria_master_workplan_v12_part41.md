@@ -65,7 +65,7 @@ UNDECIDED (second half):
 | B38.54 | leaving a creed or a head seat is a move of the era (A-46, narrow) | `20_NARRATIVE_D` edit 4 | POINTER (`B12a.05`) | — | Batch B12c |
 | B38.55 | the sway draw at RESOLVE, dial at zero | `31_WR_B` commit 1 (A-92) | BUILD | EQUAL (`sway_gain` 0) | B38.53; B38.19, B38.20, B38.23, B38.24, B38.25 |
 | B38.56 | cohorts may take their holder's regime core at build, switch off | `31_WR_B` commit 2 | BUILD | EQUAL (`cohort_convictions` False) | B38.55 |
-| B38.57 | the era: who rules and whether the realm is troubled; the turn rule | `30_WR_A` commit 1 (A-84, A-86) | BUILD | EQUAL | B38.56 |
+| B38.57 | the era: who rules and whether the realm is troubled; the turn rule | `30_WR_A` commit 1 (A-84, A-86) | BUILD | EQUAL | — |
 | B38.58 | what a person believes the era to be | `30_WR_A` commit 2 | BUILD | EQUAL | B38.57; B38.04, B38.05 |
 | B38.59 | the era's named conditions, each read as its emitter exists; A-103's row; a ruler's conversion is a rule turn | `30_WR_A` commit 4 with the weather's era part (`dearth`) and `30_WR_B` commit 3 (A-86) | BUILD | EQUAL | B38.57; B38.17 |
 | B38.60 | a strand concludes on its closing move's drawn degree | `09_WR_B_draws_not_thresholds` edit 4 | BUILD | MOVER(behaviour) | B38.59; Batch B07, Batch B12c |
@@ -73,16 +73,16 @@ UNDECIDED (second half):
 | B38.62 | a strand is about its subject and its recent moves, switch at `all` | `30_WR_C` commit 1a | BUILD | EQUAL | B38.60 |
 | B38.63 | the bounded link rule is flipped on | `30_WR_C` commit 1b | BUILD | MOVER(behaviour) | B38.62 |
 | B38.64 | a strand's state: open, concluded, dormant, revived | `30_WR_C` commit 2 | BUILD | EQUAL | B38.63 |
-| B38.65 | how far below the bar a failure fell | `23_STORY_A` edit 1 | BUILD | EQUAL | B38.64; Batch B05 |
+| B38.65 | how far below the bar a failure fell | `23_STORY_A` edit 1 | BUILD | EQUAL | Batch B05 |
 | B38.66 | a staked row pays its stake by degree; the stakes roster | `23_STORY_A` edit 2 | BUILD | EQUAL (`shortfall_scale` off, no row staked) | B38.65 |
 | B38.67 | a contested outcome is witnessed as done to its counterparty | `23_STORY_A` edit 3 | BUILD | MOVER(behaviour) | B38.66; Batch B11 |
 | B38.68 | the attempts reader and the chronicle's six words | `23_STORY_A` edits 4–5 | BUILD | EQUAL | B38.67 |
 | B38.69 | the estimate window and the renewed tie in `dues_unmet` | `30_WR_D` commit 1 | POINTER (B38.07) | — | — |
-| B38.70 | nine feedback paths declared as LOOP rows | `30_WR_D` commit 2 | BUILD | EQUAL | B38.68; Batch B11F2 (CR-98's rows) |
+| B38.70 | nine feedback paths declared as LOOP rows | `30_WR_D` commit 2 | BUILD | EQUAL | Batch B11F2 (CR-98's rows) |
 | B38.71 | the cascade census: entrenched arm, fork lift, shapes E-01 to E-13, clauses C7 to C13 | `30_WR_E` | BUILD | EQUAL | B38.70; Batch B36 |
 | B38.72 | a held seat still moves the spine (A-80) | `IS-B3-FA-03` | READING (R-1) | — | B38.71; Batch B21 |
 | B38.73 | the cause gathers: LOOP row L17 and the regime gap words | `31_WR_B` commit 3 | BUILD | EQUAL | B38.71 |
-| B38.74 | the `View` carries what the surfaces read | `30_GO_F` instruction 1 | BUILD | EQUAL | B38.73; Batch B34 |
+| B38.74 | the `View` carries what the surfaces read | `30_GO_F` instruction 1 | BUILD | EQUAL | Batch B34 |
 | B38.75 | the marker, the stories, the portents, the recap, the added fields, standing to another | `30_GO_F` instructions 2–4 | BUILD | EQUAL | B38.74; B38.58, B38.62 |
 | B38.76 | the names table and the chronicle's era, story and what an act left | `30_GO_F` instructions 5, 7 | BUILD | EQUAL | B38.75 |
 | B38.77 | the end reveal, gated on the run's ending | `30_GO_F` instruction 6 with `IS-B3-GO-04` | BUILD | EQUAL | B38.76; Batch B34 |
@@ -90,7 +90,7 @@ UNDECIDED (second half):
 | B38.79 | which affiliations a matter's thrust speaks to | `31_WR_C` commit 2 | BUILD | EQUAL | B38.78; B38.52 |
 | B38.80 | which affiliations a strand's sides divide on; a body's lean | `31_WR_C` commit 3 | BUILD | EQUAL | B38.79; B38.73 |
 | B38.81 | a stand in words, never a number | `31_WR_C` commit 4 | BUILD | EQUAL | B38.80 |
-| B38.82 | the common people's heavy moves, as a roster | `U5d_SE` edit 1 (A-56) | BUILD | EQUAL | B38.81 |
+| B38.82 | the common people's heavy moves, as a roster | `U5d_SE` edit 1 (A-56) | BUILD | EQUAL | — |
 | B38.83 | a cohort forms only those moves, switch off | `U5d_SE` edit 2 | BUILD | EQUAL (`cohort_moves_on` False) | B38.82 |
 | B38.84 | the `riot` row | `U5d_SE` edit 3 | BUILD | MOVER(behaviour) | B38.83; B38.51 (HELD if B38.51 ended STOPPED) |
 | B38.85 | caste practice tiers what a heritage earns, holds and is heard on, at 1.0 | `U5d_SE` edit 4 (A-41) | BUILD | EQUAL | B38.84 |
@@ -194,8 +194,8 @@ UNDECIDED (second half):
   8. Tests (step 8, below).
 - WHERE: `S/rosters.yaml` (`era_rule_standings`, `era_conditions`); `S/data/rosters.py` (`ERA_RULE_STANDINGS`, `ERA_CONDITIONS`); `S/queries/world_q.py` (`Era`; NEW `realm_head_seat`, NEW `era_turns`, NEW `Turn`; `_eras`; `open_era`); `S/harness/strife.py` (`strands_block`); `S/tests/test_strife_flows.py`.
 - TESTS: in `S/tests/test_strife_flows.py` ("the covering file"), written before the edit and read red: `test_an_era_ends_when_the_head_seat_closes` ("planted: a hold on the head seat, a `tenure.closed` naming it; reads two eras, the second `vacant`, `opened_by` the close"); `test_a_second_trouble_does_not_end_a_troubled_era` (R11); `test_a_quiet_reign_ends_when_a_realm_strand_opens_by_force`; `test_two_petitions_do_not_trouble_the_realm`; `test_the_last_condition_closing_ends_the_era` ("today's rule, re-pinned"); `test_there_is_always_one_era` ("an empty log reads one era, `held` or `vacant`, no conditions"); `test_rename_falsifier_for_the_era` ("rename every id in the planted world: equal reading; move the head seat's hold to another person: the reading follows"). "Each planted world asserts it asserted (`assert checked >= 6`)."
-- FALSIFIER and CONTROL: the source's: "An era count that differs between `strands_block` read before and after a no-op season (the reading stored something or read live state): the replay is wrong"; "Two eras with the same `rule` and both with no conditions, adjacent (a cut with no turn)"; "The rename falsifier failing (a key crept in)". Control: "the planted world with no hold on any head seat reads one era, `vacant`, at every length of log"; `build_realm(0)` and the one- and two-season hashes equal to the previous item's.
-- GATE: `PYTHONHASHSEED=0 python -m engine.season.harness.strife 2 0 --strands` → "every era line names `rule=held` and the head seat's holder; the first era has `opened_by=None`; the march strand of P-1 (opening `march.declared`) opens `troubled` and the two petition strands do not" (the source's P-1 strand id is a reading at its SHA, not a target; how many eras the seed prints "is recorded in the commit, not predicted here"); `python -m pytest S/tests/test_strife_flows.py -q` → pass; realm hash (`HASH READING`) at seed 0, one and two seasons → equal to B38.56's.
+- FALSIFIER and CONTROL: the source's: "An era count that differs between `strands_block` read before and after a no-op season (the reading stored something or read live state): the replay is wrong"; "Two eras with the same `rule` and both with no conditions, adjacent (a cut with no turn)"; "The rename falsifier failing (a key crept in)". Control: "the planted world with no hold on any head seat reads one era, `vacant`, at every length of log"; `build_realm(0)` and the one- and two-season hashes equal to the parent commit's readings at seed 0, one and two seasons, taken in the same run (`reading @<parent sha>`, §2.1 (f)).
+- GATE: `PYTHONHASHSEED=0 python -m engine.season.harness.strife 2 0 --strands` → "every era line names `rule=held` and the head seat's holder; the first era has `opened_by=None`; the march strand of P-1 (opening `march.declared`) opens `troubled` and the two petition strands do not" (the source's P-1 strand id is a reading at its SHA, not a target; how many eras the seed prints "is recorded in the commit, not predicted here"); `python -m pytest S/tests/test_strife_flows.py -q` → pass; realm hash (`HASH READING`) at seed 0, one and two seasons → equal to the parent commit's readings at seed 0, one and two seasons, taken in the same run (`reading @<parent sha>`, §2.1 (f)).
 - HASH MOVERS: none ("No step of the loop reads either").
 - DEPENDS ON: EXISTS-IN-TREE `S/queries/world_q.py::Era`, `::_eras`, `::open_era`, `::_concluded`, `::faction_holding`, `::governing_hold`, `CONTENT_OPENING_KINDS`, `REALM_KIND`, `S/data/rosters.py::HEAD_SEAT`, `S/state/gate.py::TENURE_CLOSED`, `S/harness/strife.py::strands_block`; V12 B38.17 (`30_WR_B` commit 1: `creed_bodies`, used by B38.59's A-86 branch); V12 Batch B10 (`16_PESSIMIST_CHAR_A`).
 - GLOSSARY: row *era*: owner column → `world_q.Era`, `world_q.era_turns` (code), "reign" and "realm-rung slot" kept as rejected; *era rule standing*, *era condition* get no row of their own (rosters named in the *era* row).
