@@ -63,7 +63,7 @@ from __future__ import annotations
 import math
 import sys
 from dataclasses import asdict
-from types import SimpleNamespace
+from types import MappingProxyType, SimpleNamespace
 from typing import Any, NamedTuple, Optional
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
@@ -94,6 +94,7 @@ from ...state.gate import UNDECLARED_DISPOSAL, sits_over
 from ._entry import entry_for
 from .pool import (POOL_ADDENDS, _capability, faculty, governing_attribute, governing_score, rank, opposing_attribute, pool_pair, register_pool_addend,  # noqa: F401  (moved: see pool.py)
                    score, untrained)
+from .pool import attribute_midpoint
 
 # The prize rows' `provider:` string (`rosters.yaml` `contest_subsystems`): the module's one identity
 # (A-25), so the row says the social contest module runs its own prizes. Reached by that string only.
@@ -1146,3 +1147,39 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
     return dict(status="RESOLVED", module=_PROVIDER, resolver=_RESOLVER, pool=inp.pool,
                 **asdict(margin), leverage=inp.leverage, settled_margin=settled,
                 levels=levels, fed_by=_fed_by(reads, inp, terms))
+
+
+#: THE PROCEEDING'S OWN FIFTY-FOUR SETTINGS (V2 p2 §K, B24p.04), by group, each a `Fixtures` field with a `hole_register.yaml` row
+#: (`H-861` to `H-914`). `yield_track` and `sympathy_step` are cut (V2 p4 §L 3) and are not names. The fold's table (`fold_*`, 24) is
+#: not here: the module never reads it, the host's fold does (B24p.24, B27.28, B33.51).
+PROCEEDING_SETTINGS = (
+    # the speech
+    "fit_level", "answer_level", "repeat_step", "sense_step", "involve", "esteem_step", "show", "off_step", "admit_step",
+    "contempt_step", "ploy_step", "grain_strain", "heard_step", "heard_floor", "gap_step", "weary_step", "stay_base",
+    "stay_per_will", "awe_step", "comfort_step", "rel_gain", "flop", "invite",
+    # the press
+    "press_ob", "press_pull", "rattle_pull", "wear", "rattle_gain", "rebound", "reactance", "room_level", "heckle",
+    # conceding
+    "concede_step", "consent_at",
+    # the room and the reading
+    "crowd_at", "crowd_lean", "mood_scale", "read_scale", "read_blur", "read_noise", "bias_step", "relevance",
+    # the close
+    "track_step",
+    # the NPC's temper
+    "temper_step", "temper_break", "temper_cool", "grain", "grudge", "pride",
+    # the host
+    "start_step", "presume_step", "power_scale", "strain_fade", "recuse_at",
+)
+
+
+def proceeding_dials(fx: Any) -> Any:
+    """THE ONE PLACE THE PROCEEDING'S SETTINGS ARE NAMED FOR THE MODULE (B24p.04): the fifty-four `PROCEEDING_SETTINGS` read off `fx`,
+    beside the dice settings the proceeding shares with the single roll -- `pool_add` and `pool_floor` (`pool_pair`, the one reader of
+    the `social_roll` site's `dice` row), `pool_default` and `opposition_rate` -- and the attribute scale's three numbers
+    (`descriptors.ATTRIBUTE_FLOOR` and `ATTRIBUTE_CEILING`, and `pool.attribute_midpoint()`, the one mid-point), sixty-one names in all,
+    as a read-only mapping. The fold's `fold_*` coefficients are not in it. Nothing reads this yet (B24p.05 on)."""
+    pool_add, pool_floor = pool_pair(fx)
+    d = {name: fx.get(name) for name in PROCEEDING_SETTINGS}
+    d.update(pool_add=pool_add, pool_floor=pool_floor, pool_default=fx.get("pool_default"), opposition_rate=fx.get("opposition_rate"),
+             attribute_mid=attribute_midpoint(), attribute_floor=descriptors.ATTRIBUTE_FLOOR, attribute_ceiling=descriptors.ATTRIBUTE_CEILING)
+    return MappingProxyType(d)

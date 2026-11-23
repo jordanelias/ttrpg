@@ -174,6 +174,7 @@ def _is_number(x) -> bool:
 
 def _in_tenths(x, lo: float, hi: float) -> bool:
     """A number in `[lo, hi]` that is a whole number of tenths (R11's dials are set in tenths)."""
+    # [canonical: engine/season/data/rosters.py §_load_grounds -- the tenth is the unit R11 sets its dials in, a unit and not a tuned value]
     return _is_number(x) and lo <= x <= hi and abs(x * 10 - round(x * 10)) < 1e-9
 
 
