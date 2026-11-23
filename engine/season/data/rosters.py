@@ -1454,6 +1454,12 @@ MARCH_TARGET_KINDS = roster("march_target_kinds")
 # posture is read under.
 MARCH_POSTURES = roster("march_postures", ordered=True)
 MARCH_POSTURE_KEY = "posture"
+# B15.08 (PHY_A A3): THE PAYLOAD KEY A VIOLENCE DECLINE SETS -- the context of violence that admitted a `fight`'s subject
+# (`decision/options.py::opening_set`), read by `seam/wrappers/combat.py::combat_input` for the terms (`rosters.yaml:
+# context_terms`). Its range is the names of `options.py::VIOLENCE_CONTEXT_READERS` (`data/` imports no `decision/`, so
+# the registry stays there). Not `choice_sourced`: the decline sets it, the chooser does not choose it, so it is in
+# neither `CHOICE_RANGES` nor `CHOICE_CARRIER`, and no roster names it.
+CONTEXT_KEY = "context"
 STORM = "storm"
 BESIEGE = "besiege"
 if STORM not in MARCH_POSTURES or not set(MARCH_POSTURES) <= {STORM, BESIEGE}:

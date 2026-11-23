@@ -173,3 +173,57 @@ def test_a3_a_felling_is_followed_by_a_drawn_death():
              for n in ast.walk(ast.parse(inspect.getsource(CW))) if isinstance(n, ast.Call)}
     planted = calls & {"roll_net_continuous", "roll_net", "net_boost", "degree_from_net", "u", "random", "below", "mortal_wound"}
     assert not planted, f"seam/wrappers/combat.py draws or grades the mortal roll itself: {sorted(planted)}"
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# A3 (B15.08): `fight`'S TERMS FOLLOW ITS CONTEXT (`rosters.yaml: context_terms`, the Candidate's `context` payload key).
+# ---------------------------------------------------------------------------------------------------------------------
+def test_a3_fight_terms_follow_the_context(monkeypatch):
+    """A `fight` formed on a context of violence carries it (`CONTEXT_KEY`, set by `opening_set`), and the scene the host resolves is fought under
+    `context_terms`' line for it: a `crime` fight under `yield`, a `war` fight under `death`; a fight with no context (hand-built) keeps the engine's
+    lethal default, and `accept` keeps `duel_terms`' line whatever its context. A `context_terms` key that is no context reader, a term that is no
+    name, or a term outside the engine's closed set is REFUSED (`options._check_context_terms`, `verbs._load_context_terms` at import,
+    `combat.duel_terms_of` before the call). FALSIFIER: `context_terms` emptied leaves the `crime` fight lethal."""
+    from ..data import verbs as V
+    from ..data.rosters import CONTEXT_KEY
+    from ..gaps import Forbidden
+    from ..state.carriers import Act, Question, View
+    SeasonDriver(P.tiny_world())                                 # registers the module entry the host resolves
+    seen = []
+    real_input = CW.combat_input
+
+    def spy(*a, **k):
+        inp = real_input(*a, **k)
+        seen.append(inp.terms)
+        return inp
+    monkeypatch.setattr(CW, "combat_input", spy)
+
+    def fought_under(stamp, context):
+        w = P.tiny_world()
+        q = Question("q:a3", "need", (B,), B, classes=((B, stamp),))
+        formed = [c for c in O.opening_set(w.persons[A], View(A, [], w.fixtures.get("view_k"), q), q, w.fixtures)
+                  if c.verb == "fight" and c.subject == B]
+        assert len(formed) == 1 and formed[0].operands[CONTEXT_KEY] == context, (stamp, formed)
+        assert context in O.VIOLENCE_CONTEXT_READERS                     # the key's range is the readers' closed set
+        act = w.acts.append(Act(id=f"a3_{context}", actor=A, verb="fight", payload={**formed[0].operands, "subject": B}))
+        res = CW.resolve(w, [A, B], [act.id], CW._PRIZE, verb="fight")
+        assert res["status"] == "RESOLVED", res
+        return seen[-1]
+
+    assert fought_under(V.DETAINEE_CLASS, "crime") == "yield"
+    assert fought_under(V.ENEMY_CLASS, "war") == "death"
+    w = P.tiny_world()
+    assert real_input(w, [A, B], "fight").terms == "death", "a fight with no context keeps the engine's lethal default"
+    assert real_input(w, [A, B], "accept", context="crime").terms == "blood", "`duel_terms` outranks the context"
+    with monkeypatch.context() as m:
+        m.setattr(CW, "CONTEXT_TERMS", {})
+        assert fought_under(V.DETAINEE_CLASS, "crime") == "death", "FALSIFIER: `context_terms` emptied, the crime fight is lethal again"
+    with monkeypatch.context() as m:
+        m.setattr(CW, "CONTEXT_TERMS", {"crime": "mercy"})
+        with pytest.raises(Forbidden):
+            CW.duel_terms_of("fight", None, "crime")
+    with pytest.raises(Forbidden):
+        O._check_context_terms({"no_such_context": "yield"})
+    with pytest.raises(Forbidden):
+        V._load_context_terms({"crime": ""})
+    assert V.CONTEXT_TERMS == {"war": "death", "crime": "yield", "defence": "yield"}
