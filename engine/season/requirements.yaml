@@ -549,7 +549,7 @@ rows:
           seed: 0
           seasons: "2 (capped; `temporal.span_seasons` per case)"
           line: "  RANKING EXCLUDES         ['conceal', 'interview', 'sabotage', 'tend', 'train'] (no celled axis: declared `uncelled:` or all-`null`)"
-          control: "read at a9bbec8 (the cast's rows in, BA1.02's manner rows too; `corpus_run` was not repeated after they were held back, and its RANKING lines read each verb's celled axes, which no manner offset touches); the earlier recording's lines were `8..13 of 13` at 1c9238db. BA1 landed no verb alignment cell (the draft's table (c) carries none; BA1.04's two `choices:` cells are `choice:` keys, which `celled_verbs` does not count), so the EXCLUDES line is the one the last reading recorded and the DISCRIMINATION numerator and denominator moved with the cast and the verb table, not with a cell"
+          control: "read at a9bbec8 (the cast's rows in, BA1.02's manner rows too; `corpus_run` was not repeated after they were held back: its case worlds are built by `build_at`, which seats no manner offset, so the rows cannot reach its RANKING lines); the earlier recording's lines were `8..13 of 13` at 1c9238db. BA1 landed no verb alignment cell (the draft's table (c) carries none; BA1.04's two `choices:` cells are `choice:` keys, which `celled_verbs` does not count), so the EXCLUDES line is the one the last reading recorded; the DISCRIMINATION figures moved since that recording and the cause is not isolated here"
           does_not_show: >-
             one seed; BA1 authors no verb alignment cell (the draft has none, and none is an agent's to
             invent), so five verbs stay excluded and `RANKING DISCRIMINATION` reads `8..14 of 14`; the
@@ -609,10 +609,10 @@ rows:
             seed 0 shown (255 of 498, 0.512); seeds 1 and 2 read pursuit 265 and 273 of 498 (0.532, 0.548)
             (`--decisions --seed s`, `PYTHONHASHSEED=0`); the `--control` arm (pursuits = realm mean, and now no
             manner offset) reads pursuit 210, 210, 211 of 498 (0.422, 0.422, 0.424), so the shipped arm exceeds it by
-            45, 55 and 62. These are B10's close's figures (c21e451f1) exactly: the batch moves nothing here as landed.
+            45, 55 and 62. These are B10's close's figures (c21e451f1) exactly: the share is unmoved as landed (the tops within a faction moved 142 -> 148).
             BA1.02's ten drafted `manner:` rows are HELD BACK: with them in, seed 0 read 249 of 498 (0.500, not above
             one half; seeds 1, 2: 259, 266; control 205, 215, 218), bisected over the item commits (BA1.01 alone reads
-            255, 265, 273); the rows are `git show 27ab0bb3b`. The `choice_temperature` swept to 0 arm of the conjunct's
+            255, 265, 273); the rows are the IS-A-11 draft's table (a) `manner:` column. The `choice_temperature` swept to 0 arm of the conjunct's
             text was not re-read
           does_not_show: >-
             a built realm with no season played; the share is derived from two printed counts; seed 0 clears one half
@@ -753,7 +753,7 @@ rows:
           tree: "8d32955b1365decae113b46aad793c82df1d62fe"
           date: "2026-11-23"
           seed: 0
-          seasons: "2 (capped; `temporal.span_seasons` per case); `decision_spread --decisions` at seeds 0 to 2: built realm"
+          seasons: "`decision_spread --decisions` at seeds 0 to 2: built realm, read at `tree:`; the RANKING EXCLUDES `line:` is R-06.a's `corpus_run --seasons 2` reading, taken at a9bbec8aff368d5fcdcf7254982f0df99ad04ae0 (not repeated)"
           line: "  RANKING EXCLUDES         ['conceal', 'interview', 'sabotage', 'tend', 'train'] (no celled axis: declared `uncelled:` or all-`null`)"
           control: >-
             `decision_spread --decisions` at seeds 0, 1, 2: `every candidate scores 0: 0 of 498 readings`

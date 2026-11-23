@@ -4,8 +4,8 @@
 (ii) a held `arms` key reaches combat's pool and Ob through `seam/wrappers/sigma.py::faculty` -- CR-85's one path,
 `combat_input` -> `PersonalCombatInput.scores` -- and NO second skill input exists; (i) `arms` is a vocation
 (`data/verbs.py::VOCATIONS`), so `train` forms on it and `_eff_train` raises it; (iii) the `cast:` overlay
-(`harness/corpus_run.py::cast_overlay`, checked by `_check_capability` against the roster's values) is the authored
-writer and names NO `arms` value (Jordan's content); (iv) `loop/effects_combat.py::_grown`: a fight that drew blood
+(`harness/corpus_run.py::cast_overlay`, checked by `_check_capability` against the roster's values) names NO `arms`
+value; the registry rows' `capabilities:` write it since BA1.01 (Jordan's content); (iv) `loop/effects_combat.py::_grown`: a fight that drew blood
 raises `arms` by one on each SURVIVING party -- and, since B05.09 (CORE Edit 9, `raised_capability`), MINTS a first rank
 for a survivor who held none (the never-minted rule and its mutation test are retired with it; B05.99 rewrote this file).
 [ASSUMPTION; low; Jordan to correct; revert: rename the roster key] -- `arms` here is the trained skill, not
