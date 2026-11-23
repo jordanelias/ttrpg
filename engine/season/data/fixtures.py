@@ -1324,7 +1324,7 @@ DEFAULT_FIXTURES = Fixtures(
     npc_decider_roles=(),
     # `H-481` (B10.58; `IS-B2-CHAR-07`, A-108). THE LARGEST STORED MANNER OFFSET A CAST ROW MAY AUTHOR: `data/cast.py::manner_offset_of` refuses a `manner:` value outside
     # `+-` this, at build (the seeder hands it in: `cast` cannot import this module). 0.15 is CL-PERSON's draft (`proposals/2026-10-24-character-layers-v2.md` section 2). No row authors an
-    # offset: BA1.02's ten drafted rows are held back for Jordan (they took R-06.d's share at seed 0 to one half; two of them, -0.15, would also refuse at the swept 0.1 point). [ASSUMPTION; medium; Jordan to correct; revert: none needed.]
+    # offset today (`references/npc_registry.yaml`'s `manner:` header says why). [ASSUMPTION; medium; Jordan to correct; revert: none needed.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-481 -- site: Fixtures manner_offset_bound, graded `assumption`; CL-PERSON drafts +-0.15 and no live reading fixes it, so it is injected and swept 0.1 / 0.15 / 0.3]
     manner_offset_bound=0.15,          # `H-481`, swept 0.1 / 0.15 (SHIPPED, CL-PERSON's draft) / 0.3
     # `H-483` (B10.65; `U5a_CHAR_self_knowledge_is_a_belief` edit 6 (a)). THE LEAST A TOLD `self:<key>` CLAIM MUST WEIGH FOR HIM TO TAKE IT UP: `queries/person_q.py::knows_self` reads a

@@ -91,7 +91,7 @@ def test_only_the_authored_capabilities_hold_arms_at_landing_not_the_overlay_or_
     authored = {f"p_{cid.lower().replace('-', '_')}": cast.capabilities_of(r)[KEY]
                 for cid, r in cast.load().items() if KEY in cast.capabilities_of(r)}
     assert len(authored) == 11, authored
-    held, seen = 0, 0
+    seen = 0
     for seed in (0, 1, 2):
         got = {}
         for pid, p in build_realm(seed).persons.items():
@@ -99,8 +99,7 @@ def test_only_the_authored_capabilities_hold_arms_at_landing_not_the_overlay_or_
             if KEY in (p.capability or {}):
                 got[pid] = p.capability[KEY]
         assert got == authored, (seed, got)
-        held += len(got)
-    assert seen >= 3 * 80 and held == 3 * len(authored)
+    assert seen >= 3 * 80
     overlay = [e for entries in cast_overlay().values() for e in entries]
     assert overlay, "setup: the overlay is empty"
     assert [e for e in overlay if KEY in (e.get("capability") or {})] == []

@@ -383,8 +383,9 @@ def test_removal_changes_another_persons_later_act():
     assert quiet is not None, "every person acts at every lap; the quiet control observed nothing"
     p, at = quiet
     reference = SB._others(everyone, p)
-    assert SB._removal_run(base, SEASONS, p, at)[1] == 1, "the quiet person's removal did not fire: the zero below would be a replay's"
-    assert SB.chain_difference(reference, SB.removal_arm(base, SEASONS, p, at)) == 0
+    q, fired, _ = SB._removal_run(base, SEASONS, p, at)
+    assert fired == 1, "the quiet person's removal did not fire: the zero below would be a replay's"
+    assert SB.chain_difference(reference, SB._others(q, p)) == 0
 
 
 def test_the_most_cited_person_is_the_most_cited_with_ties_by_person_id():

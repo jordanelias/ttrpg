@@ -9,7 +9,6 @@ one acted on reads differently at the two arms (the factor guessed a counterpart
 """
 from __future__ import annotations
 
-import pytest
 
 from ..data.pursuits import to_axes
 from ..data.rosters import PURSUITS, SEEN_PREDICATE
@@ -107,15 +106,10 @@ def test_an_authored_relation_gives_its_holder_a_stance_row_and_his_own_bond_cla
     assert low.ledger == [] and low.stance == [] and w.persons["p_king"].ledger == []
 
 
-@pytest.fixture(scope="module")
-def shipped_realm():
-    """`build_realm(0)`: the shipped registry authors the six rows (BA1.08), so none is planted."""
+def test_a_rival_ranks_hostile_acts_higher_than_a_stranger():
+    """On `build_realm(0)`: the shipped registry authors the six rows (BA1.08), so none is planted."""
     from ..boot.realm import build_realm
-    return build_realm(0)
-
-
-def test_a_rival_ranks_hostile_acts_higher_than_a_stranger(shipped_realm):
-    w = shipped_realm
+    w = build_realm(0)
     fx = w.fixtures
     checked = 0
     for holder, to, ground, valence, weight in SIX:

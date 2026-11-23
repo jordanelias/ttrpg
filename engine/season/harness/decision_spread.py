@@ -513,27 +513,26 @@ def read_decisions(w) -> dict:
 # --signatures
 
 
-def read_signatures(w, signatures: Optional[dict] = None) -> dict:
+def read_signatures(seed: int) -> dict:
     """The `--signatures` figures (BA1.05; `16_PESSIMIST_CHAR_B` gate 2). BUILT REALM, NO SEASON: a composition of `--decisions`' own
-    steps, no new scoring. For each pursuit `k` with a row (roster order), on a FRESH `_build(w.world_seed, False)` (`apply_control`
-    mutates a built world in place, so one build per pursuit), every person gets `p.pursuits = {k: 1.0}` (conviction as built); then,
-    per `common_referents` question, `common_set` forms each person's set and `attribute_top` ranks it exactly as `read_decisions`
-    does, giving each person's top verb. `signatures` is `{pursuit: {"favours": [...], "opposes": [...]}}`; `None` reads
-    `rosters.yaml: pursuit_signatures` through `data/pursuits.py::PURSUIT_SIGNATURES` (B10.17's checked loader).
+    steps, no new scoring. For each pursuit `k` with a row in `data/pursuits.py::PURSUIT_SIGNATURES` (roster order), on ONE
+    `_build(seed, False)` (one build: each pursuit overwrites every person's `pursuits` and `manner_offset` whole), every person gets
+    `p.pursuits = {k: 1.0}` (conviction as built); then `common_set` forms each person's set per `common_referents` question and `attribute_top` ranks it
+    exactly as `read_decisions` does, giving each person's SAMPLED top verb, as `--decisions`' tops are.
 
     Returns `{"pursuits": {k: {"tops": Counter, "modal", "opposed": [verbs]}}, "shared": {verb: [pursuits]}, "violations",
-    "shared_over_two"}`. `modal` is the most frequent top verb (ties by verb name); `opposed` the top verbs the row's `opposes:` lists;
-    `shared` every verb modal for more than two pursuits; `violations` the pursuits with an opposed top."""
-    rows = PURSUIT_SIGNATURES if signatures is None else signatures
+    "shared_over_two"}`. `modal` is the most frequent top (ties by verb name); `opposed` the tops the row's `opposes:` lists; `shared`
+    every verb modal for more than two pursuits; `violations` the pursuits with an opposed top."""
+    rows = PURSUIT_SIGNATURES
+    foldable = resolvable_verbs()
+    wk = _build(seed, False)
+    wk._rehome()
+    fx = wk.fixtures
+    draw = draw_factory(wk.world_seed, lambda: wk.tick)
     out: dict = {}
     for k in PURSUITS:
         if k not in rows:
             continue
-        wk = _build(w.world_seed, False)
-        wk._rehome()
-        fx = wk.fixtures
-        draw = draw_factory(wk.world_seed, lambda: wk.tick)
-        foldable = resolvable_verbs()
         for p in wk.persons.values():
             p.pursuits = {k: 1.0}
             p.manner_offset = {}          # a single-pursuit holder: his own manner offset is not part of what the signature reads
@@ -961,7 +960,7 @@ def main(argv=None) -> int:
     if a.signatures:
         if a.arms or a.control or a.null or a.retries or a.persons or a.decisions or a.season or a.retest:
             ap.error("--signatures is its own mode: it takes no other reading or arm flag (--seed only)")
-        print_signatures(read_signatures(_build(a.seed, False)))
+        print_signatures(read_signatures(a.seed))
         return 0
     if a.retries:
         if a.arms or a.control or a.null or a.persons or a.decisions or a.season or a.retest:

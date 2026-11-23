@@ -85,7 +85,7 @@ def test_falsifier_every_season_roll_reads_pool_8_against_ob_1_unless_an_authore
     scores = {untrained(w0.fixtures)} | authored | {v + 1 for v in authored}
     allowed = {(pool_of(a, 0, pool_add, pool_floor), opposed_ob(b, 0.5)) for a in scores for b in scores}    # 0.5: the module's own constant
     seen, _ = _season_rolls(monkeypatch, seed)
-    assert (8, 1.0) in allowed and set(seen) <= allowed, sorted(set(seen) - allowed)
+    assert set(seen) <= allowed, sorted(set(seen) - allowed)
     assert (8, 1.0) in seen and any(pool > 8 for pool, _ob in seen), dict(seen)
 
 

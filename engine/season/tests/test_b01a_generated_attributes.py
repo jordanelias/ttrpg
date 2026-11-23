@@ -67,9 +67,10 @@ def _authored(pid: str) -> dict:
 def test_a_realm_holds_every_value_of_the_range_on_every_key():
     w = build_realm(0)
     lo, hi = SHIPPED
+    authored = {p.id: _authored(p.id) for p in w.persons.values()}
     checked = 0
     for key in ATTRIBUTES:
-        held = {p.attributes[key] for p in w.persons.values() if key not in _authored(p.id)}
+        held = {p.attributes[key] for p in w.persons.values() if key not in authored[p.id]}
         for value in range(lo, hi + 1):
             assert value in held, (key, value)
             checked += 1
