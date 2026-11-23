@@ -6915,6 +6915,19 @@ rows:
     cite:      "`U5a_CHAR_owed_amendments` §2 (amends `02_CHAR_scar_cap_and_regard_unit` item 3). [ASSUMPTION: the sweep 0.2, 0.4, 0.8 -- basis: at `choice_temperature` 0.05 a full loyalty then sits 4, 8 and 16 temperatures from zero; the source proposes no live value; Jordan to correct; revert: the control.] FALSIFIER `engine/season/tests/test_regard_unit.py::test_a_strong_loyalty_makes_acting_against_rare_not_impossible` (one person with an authored stance of 10, 200 draws on one question at each swept value: the act the verb row treats as against his subject is taken in some draws at the gentlest value and in fewer than half at each; 0 of 200 at every swept value, or more than half, would show the sweep wrong); CONTROL the realm content hash at seed 0, one season, equal to B09's close."
     source:    "workplan v12 B10.04 (`U5a_CHAR_owed_amendments` §2; B10's H block slot 1)"
 
+  - id:        H-465
+    tier:      1
+    hole:      "HOW MANY SCAR COUNTS ONE PERSON TAKES IN A SEASON -- `scar_season_cap`, the rate's bound (B10.06; F-CHAR-03, H-128's cap half). `loop/resolve.py::_scar_witnesses` writes one count per observer per violated element per act, so a person who sees the same violating act five times in a season holds five counts and the ladder (1, 2, 3+) is climbed in one season. Before the write it drops every pair already counted this season: at `element` one count per person per element, at `person` one count per person, on the element he holds most violated (largest weight x |lean|, ties by name; an affiliation weighs its intensity as a share of the scale's ceiling). The tally is the driver's per-tick scratch, reset where the draw ordinal is, and no world state; the count written is still `(Person, scar)`."
+    kind:      "NUMBER"
+    owner:     "loop/resolve.py::_scar_witnesses"
+    grade:     "assumption"
+    default:   "None -- THE CONTROL, SHIPPED: uncapped, today (every content hash is the one before B10.06; the flip to `person` is B98's, after a reading) [ASSUMPTION; medium; Jordan to correct; revert: the control]"
+    site:      "Fixtures scar_season_cap, read by `loop/resolve.py::_scar_witnesses` once per act whose observers are scarred; a value outside `rosters.yaml: scar_season_caps` raises"
+    sweep:     ["None (control, SHIPPED)", "element (one count per person per element per season; the first lane's arm, the middle of the sweep)", "person (one count per person per season, on the element most violated; the proposed live arm)"]
+    unblocks:  "B10.07's three fixtures (`scar_hold`, `scar_lean_floor`, `scar_vindication`), which bound the stock at both ends once the rate is bound; B98's flip, so the scar ladder separates persons"
+    cite:      "`proposals/2026-11-12-subsystem-audit-suite/proposals/02_CHAR_scar_cap_and_regard_unit.md` item 1 (`scar_season_cap` only) and `02_CHAR_scar_is_a_wound.md` row 3, under H-128's precedent (declare, default, sweep). [ASSUMPTION; medium; Jordan to correct: the roster `rosters.yaml: scar_season_caps` [element, person], its name and shape (neither file names one; `stance_polarities` is the tree's form for a swept string arm), and an affiliation's weight in `person`'s tie of sizes (intensity / ceiling).] FALSIFIER `engine/season/tests/test_regard_unit.py::test_a_capped_witness_holds_one_count_for_five_sights` (a planted person who sees the same violating act five times in one season holds 1 count at `element` and at `person` and 5 at `None`); CONTROL the realm content hash at seed 0, one season, equal to B10.05's reading."
+    source:    "workplan v12 B10.06 (`02_CHAR_scar_cap_and_regard_unit` edits 1, 2 with `02_CHAR_scar_is_a_wound` row 3; B10's H block slot 2)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

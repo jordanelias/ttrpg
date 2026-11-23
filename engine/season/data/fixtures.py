@@ -1214,6 +1214,13 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: the control (`STANCE_MAX`).]
     # [JUSTIFIED: engine/season/hole_register.yaml H-464 -- site: Fixtures stance_scale, graded `assumption`; the source gives no live value, so it is injected at the control (`STANCE_MAX`, read at import) and swept 25 / 0.2 / 0.4 / 0.8]
     stance_scale=STANCE_MAX,           # `H-464`, swept 25 = STANCE_MAX (control, SHIPPED) / 0.2 / 0.4 / 0.8
+    # `H-465` (B10.06; `02_CHAR_scar_cap_and_regard_unit` edit 1, `02_CHAR_scar_is_a_wound` row 3). THE SCAR'S RATE: `loop/resolve.py::_scar_witnesses` drops, before
+    # its write, every count an observer already took this season: `element` keeps one count per person per element, `person` one count per person, on the element
+    # he holds most violated (largest weight x |lean|, ties by name). `None` is the CONTROL and SHIPS: uncapped, today's counts exactly, and every content hash
+    # is the one before B10.06 (the flip to `person` is B98's). A value outside `rosters.yaml: scar_season_caps` is refused where it is read.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `None`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-465 -- site: Fixtures scar_season_cap, graded `assumption`; the sources give the domain and not a live value, so it is injected at the control and swept None / element / person]
+    scar_season_cap=None,              # `H-465`, swept None (control, SHIPPED) / element / person
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

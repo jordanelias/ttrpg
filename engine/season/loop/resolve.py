@@ -18,7 +18,8 @@ import random
 from dataclasses import replace
 from ..gaps import InstrumentDefect
 from ..data.rosters import (PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, graded_route,
-                            MARGIN_ENDING, STANDING_OCCASION_OPENED_BY, STRATA, UNROUTED_BAND, task_share)
+                            MARGIN_ENDING, SCAR_SEASON_CAPS, STANDING_OCCASION_OPENED_BY, STRATA, UNROUTED_BAND,
+                            require_member, task_share)
 
 from typing import Any, Optional
 from ..data.matrix import Step, matrix_row
@@ -31,8 +32,10 @@ from ..loop.predicates import REQUIRES_PREDICATES
 from ..loop.sides import _contests_of, sides_of     # `_contests_of` lives in sides.py (B10-08 close)
 from .. import manifest
 from ..epistemic import observers_for
+from ..data.affiliations import engagement
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
-                                 elements_violated_by)
+                                 elements_violated_by, pursuit_lean)
+from engine.substrate.descriptors import AFFILIATION_CEILING
 from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
 from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
 from ..seam.ladder import is_margin_result
@@ -605,7 +608,7 @@ def _fold(self, w: "World", token: Token, a: Act,
     # the success Event (`_refuse_after_the_fact`), the scar already written stands -- a candidate
     # reading, rare in computed play, not a Jordan question.
     if changed:
-        _scar_witnesses(w, token, a, out)
+        _scar_witnesses(w, token, a, out, self._scar_tally)
     return out
 
 
@@ -646,7 +649,21 @@ def _confidence_broken(w: "World", a: Act, row: "VerbRow") -> bool:
     return confided_outside(p.ledger, said, hearer)
 
 
-def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
+def _most_violated(p, verb: str, broken: tuple, violated: tuple) -> str:
+    """THE ONE ELEMENT A PERSON HOLDS MOST VIOLATED BY AN ACT OF `verb`, from `broken` (his `broken_by` answer): the largest
+    weight x |lean|, ties by name (`scar_season_cap: person`). A pursuit weighs its held weight times `pursuit_lean`; an affiliation
+    its intensity as a share of the scale's ceiling (so it sits on the pursuit weight's own [0, 1] range) times `|engagement|`.
+    [ASSUMPTION; medium; Jordan to correct: the sources give "largest weight x |lean|" and not the affiliation's weight.]"""
+    pursuits = violated[0]
+
+    def size(e: str) -> float:
+        if e in pursuits:
+            return float(p.pursuits[e]) * abs(pursuit_lean(verb, e))
+        return (float(p.conviction[e]) / AFFILIATION_CEILING) * abs(engagement(verb, e))
+    return min(broken, key=lambda e: (-size(e), e))
+
+
+def _scar_witnesses(w: "World", token: Token, a: Act, events: list, tally: set) -> None:
     """IN-08 H3 -- `(Person, scar)` as `{pursuit: count}`: ONE COUNT PER OBSERVER PER VIOLATED
     PURSUIT, written AT RESOLVE BY THE ACT (`ED-IN-0261`'s scar model).
 
@@ -679,7 +696,13 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
     same observers, same actor arm, same `changed` gate, same token. The two rosters cannot share a
     name (`data/affiliations.py::_load_engagement` refuses it), so a count is never merged across
     them. Its reader is the crisis at threshold 3 (H13, `_conviction_crisis` below, called after
-    this write); H9's reader counts held pursuits only."""
+    this write); H9's reader counts held pursuits only.
+
+    B10.06 -- THE SEASON CAP (`Fixtures.scar_season_cap`, `H-465`; `None` the control, uncapped). `tally` is the driver's per-tick
+    scratch (`SeasonDriver._scar_tally`, cleared where `w.draw` is, at the start of each `season()`): the (observer, element) pairs
+    (`element`) or observers (`person`) already counted this season. Before the write, every pair in it is dropped, and at `person`
+    each observer keeps the one element he holds most violated (`_most_violated`). It is a local of the driver's step, not world
+    state; the count written is still `(Person, scar)`."""
     if not events:
         return
     # Which elements this verb violates is a property of the verb alone, asked once per act; whose
@@ -705,6 +728,28 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
     hits = [(pid, broken_of[pid]) for pid in candidates if pid in seen]
     if not hits:
         return
+    cap = w.fixtures.get("scar_season_cap")
+    spent: set = set()
+    if cap is not None:
+        require_member(cap, SCAR_SEASON_CAPS, f"scar season cap {cap!r} is not in the roster", "H-465",
+                       law="§G -- declare it, default it, sweep it; an unknown arm silently reading uncapped "
+                           "would make the sweep report the control twice")
+        kept = []
+        for pid, broken in hits:
+            if cap == "person":
+                if (pid,) in tally:
+                    continue
+                broken = (_most_violated(w.persons[pid], a.verb, broken, violated),)
+                spent.add((pid,))
+            else:
+                broken = tuple(e for e in broken if (pid, e) not in tally)
+                if not broken:
+                    continue
+                spent.update((pid, e) for e in broken)
+            kept.append((pid, broken))
+        hits = kept
+        if not hits:
+            return
 
     def perform() -> None:
         for pid, broken in hits:
@@ -720,6 +765,7 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list) -> None:
                   actor=a.actor, via=a.via,
                   change=Change(tuple(Subject.entity("persons", pid, fields=("scar",), earns=SCAR_TAKEN)
                                       for pid, _b in hits), perform))
+    tally |= spent
     # B09.11: THE SCAR IS RECORDED, ONE `scar.taken` EVENT PER WRITE, CARRYING EXACTLY THE RECEIPTS THE
     # GATE MINTED (one per scarred person, who is named by no other field: `Event` has no actor, target
     # or subject). It is appended to the LOG HERE and is NOT in the list `resolve` returns, so WITNESS

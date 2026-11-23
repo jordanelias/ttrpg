@@ -3285,6 +3285,14 @@
             "declared"
           ]
         },
+        "scar_season_caps": {
+          "source": "B10.06 (`02_CHAR_scar_cap_and_regard_unit` edit 1, `02_CHAR_scar_is_a_wound` row 3): the arms of the scar's per-season rate.",
+          "note": "THE ARMS OF `Fixtures.scar_season_cap` (`H-465`), read by `loop/resolve.py::_scar_witnesses`; the unset value `None` is the CONTROL and is not a member (uncapped, today's counts). `element` keeps one count per person per element per season; `person` keeps one count per person per season, on the element he holds most violated. [ASSUMPTION: the roster's name and shape -- basis: neither source names one; `stance_polarities` is the tree's form for a swept string arm; Jordan to correct.]",
+          "values": [
+            "element",
+            "person"
+          ]
+        },
         "odds_weightings": {
           "source": "v10 CR-17 (M1, AQ-X1 (b), taken at `CLAUDE.md` section 0's ladder step 5): whether the chooser's pursuit term for a CONTESTED candidate is weighted by the person's own believed chance of the band that writes what the term prices.",
           "note": "THE ARMS OF `Fixtures.odds_weighting` (`H-248`), read by `decision/choose.py::odds_weight`, the factor `score_terms` multiplies the pursuit term by. `none` is the CONTROL: the factor is 1 for every candidate, the term as it stood before CR-17. `believed` multiplies a contested candidate's pursuit term by the sum, over the bands the verb's `writes:` map gives a non-empty write, of the person's believed chance of that band (`seam/wrappers/sigma.py::believed_chance`, CP-T01-03's mode (b), passed to the chooser on the View as `View.odds`); a candidate whose verb contests nothing, whose verb writes in no band, or whose believed chance is `None` (a factor he cannot know, no dice dealt, S27.4 refuses the attempt, a prize another module rolls) keeps the term as it was.",

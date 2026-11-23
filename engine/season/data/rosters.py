@@ -1088,6 +1088,8 @@ OBSERVATION_DEPOSIT_MODES = roster("observation_deposit_modes")
 # on one pipeline, both data (Jordan 2026-09-02, quoted at the head of this file). Bound at
 # import: an unbound roster is the one whose absence goes unnoticed.
 FAN_OUT_MODES = roster("fan_out_modes")
+# `H-465`. THE ARMS OF `Fixtures.scar_season_cap`, bound at import like the roster above; `None` (the control) is not a member.
+SCAR_SEASON_CAPS = roster("scar_season_caps")
 # `R8.1`. THE `seen` CLAIM -- its four terms (ordered: they are the struct's fields), the one
 # predicate it is deposited under, and which terms each witness channel shows. Bound at import for
 # `TITLE_DOMAINS`' reason; the terms are cross-validated against `WITNESS_CHANNELS` and

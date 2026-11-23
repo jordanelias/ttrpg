@@ -185,6 +185,9 @@ class SeasonDriver:
         # alongside `resolved`, never read on its own, so the dedup check in `loop/resolve.py::_fold`
         # is a set membership test.
         self._resolved_ids: set = set()
+        # H-465 (B10.06): `Fixtures scar_season_cap`'s tally, the (observer, element) pairs or observers `loop/resolve.py::_scar_witnesses` has
+        # counted this tick. Driver scratch, not world state (never hashed); `season()` clears it where it resets `w.draw`. Unread at the control.
+        self._scar_tally: set = set()
         # B09.16: THE DRIVER HOLDS NO SCENES. The Scene (the budgeted unit, carrying the `occasion`) is kept beside its
         # acts in `World.acts` (`ActStore.scene_of`), cumulative across seasons as R3 needs and surviving the driver.
         # Event id -> the Act that emitted it. See the note at the `_fold` call site.
@@ -296,6 +299,7 @@ class SeasonDriver:
         # reach a contest passes `contest_max_depth=<world>.fixtures.get("contest_max_depth")`.
         w.draw = 0                 # S33: the draw ordinal is per-TICK, so replay is exact
         w._departed.clear()        # H-206: per-tick scratch (`departed_from` answers only for its own tick)
+        self._scar_tally.clear()   # H-465: the season's scar counts already taken (`_scar_witnesses`), per-tick scratch like the line above
         # `U2`: season-local. See `__init__` for why these reset and the three above it do not.
         self.lap = 0
         self._spent, self._deliberated_at, self._realised = {}, {}, {}
