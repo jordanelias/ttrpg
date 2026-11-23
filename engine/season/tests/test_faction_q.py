@@ -257,3 +257,20 @@ def test_at_war_through_the_real_fold_utter_then_commit_then_release():
     assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is False, (
         "at_war stayed True after the declaring commit was released -- peace is not being read")
     assert faction_q.at_war(w, "fac_guilds", "fac_valorsmark") is False
+
+
+# ---------------------------------------------------------------------------------------------
+# B21.05 -- the Löwenritter and the Restoration Movement get a head (`rosters.yaml: factions.head_seat`).
+# ---------------------------------------------------------------------------------------------
+
+def test_head_is_a_person_for_the_lowenritter_and_the_restoration_movement_and_none_for_the_guilds():
+    """The Grand Master heads the Löwenritter and the Restoration leader heads the Movement; the Guilds (a council),
+    Altonia and Schoenland have no head seat authored and stay `None`. Control: the four heads already authored."""
+    w = build_realm(0)
+    assert faction_q.head(w, "fac_löwenritter") == "p_npc_070"
+    assert faction_q.head(w, "fac_restoration_movement") == "p_npc_003"
+    assert faction_q.resolve(w, "fac_löwenritter").head == "p_npc_070"
+    assert faction_q.head(w, "fac_guilds") is None
+    for prop, who in (("fac_valorsmark", "p_npc_020"), ("fac_hafenmark", "p_npc_050"), ("fac_varfell", "p_npc_052"),
+                      ("fac_church_of_solmund", "p_npc_021")):
+        assert faction_q.head(w, prop) == who, prop

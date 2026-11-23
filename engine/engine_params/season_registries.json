@@ -2984,7 +2984,9 @@
             "Valorsmark": "off_king",
             "Hafenmark": "off_duchess_hafenmark",
             "Varfell": "off_duke_varfell",
-            "Church of Solmund": "off_confessor"
+            "Church of Solmund": "off_confessor",
+            "L\u00f6wenritter": "off_grand_master",
+            "Restoration Movement": "off_restoration_leader"
           }
         },
         "role_templates": {

@@ -2081,13 +2081,16 @@ rosters:
     from_names: faction   # via engine/substrate/names.py. Edit the naming index, not here.
     # CR-86 (ED-IN-0342): the seat whose live holder heads the faction (`queries/faction_q.py::head`). Keyed by the
     # canonical faction name (Valorsmark is the Crown's: "Crown" is its alias). A faction absent here has no head
-    # seat authored (the Löwenritter, the Guilds, the Restoration Movement, Altonia, Schoenland) and `head` is None.
+    # seat authored and `head` is None. HEADLESS, three: the Guilds by design (a council, its seats co-equal), and
+    # Altonia and Schoenland, which are WR's content (a foreign faction's head is authored with its seats, not here).
     # [ASSUMPTION; medium; Jordan to correct; revert: the Church's head a Holy See seat if one is authored]
     head_seat:
       "Valorsmark": off_king
       "Hafenmark": off_duchess_hafenmark
       "Varfell": off_duke_varfell
       "Church of Solmund": off_confessor
+      "Löwenritter": off_grand_master
+      "Restoration Movement": off_restoration_leader
 
   role_templates:
     source: "`systems/factions/reference/faction_canon_v30.md` §4 'Role Templates and Expected Convictions', per PP-686 §3.3.1 over the PP-684 13-Conviction taxonomy."
