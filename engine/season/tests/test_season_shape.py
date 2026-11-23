@@ -2574,7 +2574,12 @@ def test_t2_one_rebind_moves_score_and_gate(monkeypatch):
     from .test_cr21_cells import _deontological_axis
     from ..data.rosters import _ROSTERS as R_ROSTERS
     axis = _deontological_axis()
-    monkeypatch.setattr(data_verbs, "PURSUIT_PROJECTION", {"t2_synthetic": {axis: -0.4}})
+    # The tolerance is the axis's SHARE of the projected vector (B10.22): a second axis of the roster carries the rest of a
+    # unit vector, so the share is -0.4 and not the lone axis's ±1.
+    import math
+    from ..data.rosters import PURSUIT_AXES
+    other = next(a for a in sorted(PURSUIT_AXES) if a != axis)
+    monkeypatch.setattr(data_verbs, "PURSUIT_PROJECTION", {"t2_synthetic": {axis: -0.4, other: math.sqrt(1.0 - 0.4 ** 2)}})
     monkeypatch.setattr(p, "pursuits", {"t2_synthetic": 1.0})
     monkeypatch.setitem(R_ROSTERS["pursuit_axes"], "refusable", {axis: [v0, v1]})   # B10.21: the gate refuses a listed verb only
     fx0 = w.fixtures.sweep("choice_temperature", 0)

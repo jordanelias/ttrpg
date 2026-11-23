@@ -2952,10 +2952,14 @@ from .test_cr21_cells import _deontological_axis as _h2_axis    # noqa: E402 -- 
 
 def _h2_inject(p, axis, weight, cells):
     """Rebind the projection and the alignment to synthetic tables; return a restore callable."""
+    import math
     from ..data import verbs as _verbs
-    from ..data.rosters import _ROSTERS
-    saved = (_verbs.PURSUIT_PROJECTION, _verbs.ALIGNMENT, dict(p.pursuits), _ROSTERS["pursuit_axes"]["refusable"])
-    _verbs.PURSUIT_PROJECTION = {"h2_synthetic": {axis: weight}}
+    from ..data.rosters import _ROSTERS, PURSUIT_AXES
+    saved =(_verbs.PURSUIT_PROJECTION, _verbs.ALIGNMENT, dict(p.pursuits), _ROSTERS["pursuit_axes"]["refusable"])
+    # The tolerance is the axis's SHARE of the projected vector (B10.22), so a lone axis would put it at ±1: a second
+    # axis of the roster carries the rest of a unit vector and leaves the share at `weight`.
+    other = next(a for a in sorted(PURSUIT_AXES) if a != axis)
+    _verbs.PURSUIT_PROJECTION = {"h2_synthetic": {axis: weight, other: math.sqrt(1.0 - weight ** 2)}}
     _verbs.ALIGNMENT = {axis: dict(cells)}
     _ROSTERS["pursuit_axes"]["refusable"] = {axis: sorted(cells)}      # B10.21: the gate refuses a listed verb only
     p.pursuits = {"h2_synthetic": 1.0}

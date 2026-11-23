@@ -45,7 +45,7 @@ from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..queries.person_q import (
     PAIRED_KINDS, LedgerReader, OwnStateReader, addressed_to, attackers_of, content_kind, content_said,
-    held_against, known_persons, ledger_names,
+    decisiveness, held_against, known_persons, ledger_names,
     is_cell as _is_cell, lie_said_of, projected_axes, regard, said_of,
 )
 from ..state.carriers import Candidate, Claim, Person, Question, Record, View, fade_of
@@ -551,14 +551,18 @@ def project(p: Person, scar_shift: float = 0.0) -> dict:
 
 
 def refusal_tolerance(p: Person, axis: Optional[str]) -> Optional[float]:
-    """`ED-IN-0261`'s deontological gate, the PERSON half: their projected weight on the gating
-    axis, which IS the threshold (Jordan: *"the weighting is a threshold for certain actions"*).
+    """`ED-IN-0261`'s deontological gate, the PERSON half: their SHARE of the gating axis in the
+    projected vector, `project(p)[axis] / ‖project(p)‖` (0.0 for a zero vector), which IS the
+    threshold (Jordan: *"the weighting is a threshold for certain actions"*). A share lies on ±1 as
+    an alignment cell does, so the two are compared on one scale; the raw weight's size moves with
+    how many pursuits the registry authors and is not. Read through `data.pursuits.to_axes`
+    (`project`), the norm in `_AXES` order (`person_q.decisiveness`).
     `None` when `refusal_axis` is unset -- the control arm, under which `opening_set` refuses
     nothing. The axis is whatever `Fixtures` names, checked against the live roster, never a
     literal here.
 
-    ⚠ RUNS `project(p)` A SECOND TIME FOR THE SAME PERSON `choose()` PROJECTS FOR `score`, AND
-    THIS IS KNOWN AND DEFERRED, NOT MISSED. Dormant today -- `refusal_axis` ships unset, and this
+    ⚠ RUNS `project(p)` TWICE MORE FOR THE SAME PERSON `choose()` PROJECTS FOR `score` (`decisiveness`
+    is the second), AND THIS IS KNOWN AND DEFERRED, NOT MISSED. Dormant today -- `refusal_axis` ships unset, and this
     line short-circuits above before `project` is ever called. Threading the caller's own
     projection through would need an optional parameter on `opening_set` itself, which breaks
     every test/harness spy pinned to its current four-parameter arity; worth doing WITH `H6`, when the gate ships live and the
@@ -569,7 +573,8 @@ def refusal_tolerance(p: Person, axis: Optional[str]) -> Optional[float]:
                    "H-146", law="ED-IN-0261 -- the gate reads a ROSTERED axis; an unrostered one "
                                 "would raise `Unspecified` rather than project to a real weight")
     refusing_pole(axis)       # CR-21: an armed axis the roster authors no pole for refuses HERE, not at an engaged verb
-    return project(p)[axis]
+    reach = decisiveness(p)   # the vector's length, `_AXES` order (`person_q.decisiveness`, the one owner of the norm)
+    return project(p)[axis] / reach if reach else 0.0
 
 
 def refuses(verb: str, axis: str, tolerance: float) -> bool:
