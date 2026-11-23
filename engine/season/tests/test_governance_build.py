@@ -2920,19 +2920,14 @@ def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
     # ⚠⚠ B09.99 re-pin: (630, 628) -> (627, 626), THE B09 MOVERS (`_realm_goldens.py`'s list; `CENSUS[(0, 1)]` records the 627), AND A READING THAT CHANGED:
     # B09.21 stopped writing a dwelling's wear, so no wear claim reaches a ledger and the arms no longer part through one. They still part
     # (the control deletes 211 Sites, which moves what is drawn and asked), by one act here and by `claim.deposited` 10541 / 10540.
-    # ⚠⚠ B10.99 re-pin: (627, 626) -> (581, 580), THE B10 MOVERS (`_realm_goldens.py`'s B10.99 paragraph; `CENSUS[(0, 1)]` records the 581).
-    assert (out["acts"], cout["acts"]) == (581, 580), (
+    # ⚠⚠ B10.99 re-pin: (627, 626) -> (563, 561), THE B10 MOVERS (`_realm_goldens.py`'s B10.99 paragraph; `CENSUS[(0, 1)]` records the 563).
+    assert (out["acts"], cout["acts"]) == (563, 561), (
         f"the two arms' act counts are {(out['acts'], cout['acts'])}: a move here is a move of the act mix -- "
         "re-record it with the unit that moved it")
-    # v10 REM-2C: with the counts equal, THE PARTING THE COUNTS PROXIED IS ASSERTED DIRECTLY -- the arms' act
-    # sequences differ (at act 370 at REM-2C, the note above).
-    seq = lambda world: [(a.actor, a.verb, (a.payload or {}).get("subject")) for a in world.acts]
-    # ED-IN-0306 phase 5: within ONE season the arms' act sequences no longer part -- the one parting decision was a
-    # `migrate` onto a territory, now declined in both arms (`arrival_only_kinds`) -- so the parting is asserted where it
-    # still lives, the ledgers (B09.99: no longer the dwellings' wear claims, which are not written at wear 0).
-    deposited = lambda world: sum(1 for e in world.log if e.kind == "claim.deposited")
-    assert seq(w) != seq(cw) or deposited(w) != deposited(cw), (
-        "the two arms are identical in acts AND in ledger deposits: deleting 211 Sites parted nothing")
+    # B10.99: the counts above DIFFER (563 / 561), and that is the parting this test polices -- deleting 211 Sites moves what
+    # is drawn and asked. The act sequences and the `claim.deposited` totals are equal in both arms at B10.99 (11776 each; the
+    # B10.72 release fix removed the one difference those two read), so they no longer observe a parting the pinned counts do not.
+    assert out["acts"] != cout["acts"], "the two arms' act counts are equal: deleting 211 Sites parted nothing"
 # H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-146`. A refusal after scoring, in `make_ranker` (B10.24; it was `opening_set`'s), not a score term:
 # the person's projected weight on the gating axis IS the threshold, and a verb that axis engages
 # past it never forms a Candidate. Roster-generic: the axis is whatever `Fixtures refusal_axis`

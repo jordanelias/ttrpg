@@ -74,8 +74,8 @@ def _realm(seed: int, seasons: int, fixtures=DEFAULT_FIXTURES):
 #: re-recorded it with the arm on, and B09.99 re-read these): the world with `task_draw_arm: off` reads these. The only owner of the arm-off reading once
 #: `SHIPPED` is the arm-on world; each read at `PYTHONHASHSEED=0`, one season, `reading @e629f6445` (and again at B07.10's tree).
 #: RE-READ AT B10.99 on the batch's closing tree with the arm `off` (the B10 movers move the arm-off world too; `PYTHONHASHSEED=0`; the B09.99 values are in `git log`).
-ARM_OFF_PINS = {(0, 1): "2db3e6d6b6f882b9a8d39433403031ad", (1, 1): "15d6c02ccd87f0cdfd419022881d3e8b", (2, 1): "87e1fe9ff2ca78b01561dde0e96dabb2",
-                (0, 2): "a94850c4b33cd2928ba7080876975d6d", (1, 2): "e96dadaaa9e3dca14c69be51858f0a17", (2, 2): "d68331944d0918312c343b8850165e88"}
+ARM_OFF_PINS = {(0, 1): "45c46bed5705713d9f2b8ab3a0a547b0", (1, 1): "dda6f927780724e983232d7bb7dceed9", (2, 1): "8e4009059be1cf03a47247f7f21fedc0",
+                (0, 2): "e34d0fec6738070124a753b2dd42d233", (1, 2): "06e59c30cd5f4c39f7b78d3537824759", (2, 2): "f1d2ecb4bf8981974f96e967b082a0f0"}
 
 
 def test_task_draw_arm_off_reproduces_the_pinned_hash():

@@ -38,34 +38,36 @@ read once here on the closing tree (`PYTHONHASHSEED=0`; seed 0 one season also e
 
 RE-PINNED AT B10.99 (every value below, BUILD too): encoding (`Person.manner_offset`, B10.58: the build hash moves, the acts and
 Events read identical) and behaviour (B10.60 cohorts take no individual acts, B10.65 the seeded `self:` claims, B10.72 a want can be laid
-down, B10.73 ARC-47's stage row); B10.59, B10.66, B10.70 and B10.71 measured equal at the shipped data and the first half moved nothing.
+down, with its `release` no longer forming on a faction membership: `4aac919e3`; B10.73 ARC-47's stage row); B10.59, B10.66, B10.70 and B10.71
+measured equal at the shipped data and the first half moved nothing.
 Read once on the closing tree (`PYTHONHASHSEED=0`); seed 0, one season, each mover in order: `6e3a066a..` -> `5f2b9826..` (B10.58) ->
-`576272fd..` (B10.60) -> `39d7c1bc..` (B10.65) -> `3ed14dad..` (B10.72) -> `faf327b7..` (B10.73). The B09.99 values these replace are in `git log`.
+`576272fd..` (B10.60) -> `39d7c1bc..` (B10.65) -> `3ed14dad..` (B10.72, before the release fix) -> `faf327b7..` (B10.73, before the release
+fix) -> `c8e57653..` (B10.72's release fix, on the closing tree). The B09.99 values these replace are in `git log`.
 """
 
 BUILD = {0: "4c6a3a994777d975976bd3874ce74c9b"}                      # build_realm(seed), unplayed
 
-SHIPPED = {(0, 1): "faf327b78ebf3132a50ba1319fcad0c3",
-           (1, 1): "9e763785af9c648cd4bacb4890b80af7",
-           (2, 1): "b1489dab34908506b98f4534d5e96e43",
-           (0, 2): "e6eddc5dc4cbcac1d4484cba448b742a",
-           (1, 2): "04586bc49efada683d4095599ff552a1",
-           (2, 2): "34be2cb25f84e72855011ba10282e332"}      # B10.99 re-pin (the docstring); the B09.99 values are in `git log`
+SHIPPED = {(0, 1): "c8e57653e2a63fcf8bec25e9c4bb48dd",
+           (1, 1): "07dd712c272598c0a39a3517c17c4da7",
+           (2, 1): "29d35e166ab623e66c29067e5281d44d",
+           (0, 2): "f18fd036890fe21095976493fabc155d",
+           (1, 2): "3602c964373e72702b48337c9d5b2233",
+           (2, 2): "811b41d5a110e6732d3584cd67ba16ef"}    # B10.99 re-pin (the docstring); the B09.99 values are in `git log`
 
 #: What the run leaves, beside its hash: `acts` is `populated.run`'s act count, `log` the
 #: length of the world's Event log, `census` the sha256 of `populated.run`'s return value as sorted
 #: JSON (the census plus `acts`, `actors`, `act_subjects` and `claim_sources`).
 CENSUS = {
-    (0, 1): dict(acts=581, log=24384,
-                 census="cea0d00896fffc38865f9f99759404f5796ed51e9e70aec9049a78fd250b592d"),
-    (1, 1): dict(acts=586, log=24009,
-                 census="eb17b81cdc02db9f773f3ece25308bd65c86ad557dfaf318d6d88a303bd79a5f"),
-    (2, 1): dict(acts=575, log=23231,
-                 census="43b44ab6447678ebbef4097877c8eae15650a5d74483dc12a7f1a87ccb545f66"),
-    (0, 2): dict(acts=1213, log=47771,
-                 census="47ad784c57ae5c0ad56ff3d9c25599c23407219bb4d0d940a16abb2a75e69cf0"),
-    (1, 2): dict(acts=1226, log=41237,
-                 census="0bfad3ef249e086440a52f2040df8c6bc13b73f2784e3e076da2e91dfc53ae46"),
-    (2, 2): dict(acts=1171, log=36741,
-                 census="afd6b54691cdbe5c33435b85188932d6cb2b06081ac6b3c5ca4dc4fff3cc6786"),
+    (0, 1): dict(acts=563, log=12966,
+                 census="d2b09fad1328a9fd20066ec5be0113ef2401e2dd4ef6783dbe923b680d7cd357"),
+    (1, 1): dict(acts=596, log=11494,
+                 census="2587f7ec1142427f8277d4b7d3812a125b2f8cb3646b2236353c4a641b68b288"),
+    (2, 1): dict(acts=558, log=12756,
+                 census="74e1ca2073a591982e70ecd3d52a466e338ff4653ee219cde8391bd788534290"),
+    (0, 2): dict(acts=1217, log=26585,
+                 census="8b0d0c70c5bcabac09a6dda4b31145b89797f986e98cbe2bdcea6d2787ffe6dd"),
+    (1, 2): dict(acts=1228, log=27171,
+                 census="66ca82cd710832235b17cd8f49cf9d0f64e92caadf3460cd4f907e81b284cc04"),
+    (2, 2): dict(acts=1251, log=34446,
+                 census="527c8cd24c036001271596602265162e9130c613b2315c215c8079eda515239e"),
 }

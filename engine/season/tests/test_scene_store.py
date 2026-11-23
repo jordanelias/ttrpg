@@ -28,7 +28,7 @@ from ..state.carriers import Act, Question, Scene
 # The realm pin at seed 0, two seasons: `build_realm(0)` played by `populated.run`'s composition (`test_choose_watch._play`).
 # It is `_realm_goldens.SHIPPED[(0, 2)]` (B09.99 re-recorded it with the other realm pins; B09.15 took the first reading of
 # this world), the same world, held here as a literal.
-REALM_PIN_SEED_0_TWO_SEASONS = "e6eddc5dc4cbcac1d4484cba448b742a"        # B10.99 re-pin (`_realm_goldens.SHIPPED[(0, 2)]`); was e03202af..
+REALM_PIN_SEED_0_TWO_SEASONS = "f18fd036890fe21095976493fabc155d"        # B10.99 re-pin (`_realm_goldens.SHIPPED[(0, 2)]`); was e03202af..
 
 
 def _play_headless(seasons: int = 2):
