@@ -20,7 +20,9 @@ else the automatic policy: played and automatic meet in one sitting; an abridged
 (a whole round with nothing to say) or `budget` (every speaker's turns spent): the forum's time is the measure of readiness, no second rule reads
 the deciders' state, and an end is never a verdict. Then the close.
 
-NOT HERE: the close (`_close`, `p_carried`, `view_odds`; B24p.12). `View.odds` is returned as 0.0 until `view_odds` fills it.
+THE CLOSE (B24p.12; V2 p2 §D): `_close` is each adjudicator's own draw on his own track (a `Margin`, never a band or a side), or under `consent` a
+party's accept (an act, nothing drawn), or under `exchange` the one speech's margin with the one addressed; `p_carried`, `view_odds` and
+`card_odds` are its closed form, the chooser's believed odds and the card's. The host reads the verdicts (B24p.13).
 """
 from __future__ import annotations
 
@@ -28,10 +30,11 @@ import math
 from dataclasses import replace
 from typing import Callable, Mapping, Optional
 
-from engine.dice_engine import fmath
-from engine.dice_engine.sigma_leverage import (M_MAX, MU_PER_DIE, SD_PER_DIE, even_line, level, net_boost, pool_of,
+from engine.dice_engine import dice_engine, fmath
+from engine.dice_engine.sigma_leverage import (M_MAX, MU_PER_DIE, SD_PER_DIE, band_odds, even_line, level, net_boost, pool_of,
                                                roll_net_continuous, weighted_tenth)
-from engine.season.queries.inputs import Beat, Choice, Cond, Input, Margin, Option, Outcome, Point, Sitting, SocialContestInput, View
+from engine.season.queries.inputs import (Beat, Choice, Cond, Input, JudgeView, Margin, Option, Outcome, Point, Sitting, SocialContestInput,
+                                          View)
 from .roll import obstacle
 
 
@@ -694,9 +697,9 @@ def view(inp, st, mover, rng) -> View:
     out = View(st.n, mover.id, mover.side, _issue(inp, st), turns_left, live_theirs, live_own, tuple(opts), c,
                round(perceived(esteem(inp, st, mover), acc, 0.25 * xe, 0.0, D), 2), round(weary(inp, mover, c), 2),   # [canonical: V2 p2 §E -- a quarter of the blur]
                round(max(0.0, perceived(awe(inp, mover), acc, 0.25 * xw, 0.0, D)), 2), _broken(inp, mover, c), vis, m_seen,
-               0.0, intent, acc, burden(inp, st, mover))    # `odds`: B24p.12's `view_odds` fills it
+               0.0, intent, acc, burden(inp, st, mover))
     assert rng.n - n0 == 2 * (DRAWS_PER_EXCHANGE(len(G)) - 2), (rng.n - n0)    # normals are two uniforms each (`Draw.normal`)
-    return out
+    return replace(out, odds=view_odds(inp, out))
 
 
 # ------------------------------------------------------------------ one exchange
@@ -903,10 +906,114 @@ def _taken(inp, st, view, me, ch) -> tuple:
     return Choice(o.move, o.ground, o.item, o.relation), o.frame
 
 
+# ------------------------------------------------------------------ the close (B24p.12; V2 p2 §D)
+#: A ruling's margin: the middle of the ladder's Success band, so a ruling carries and is never an Overwhelming; against is its mirror.
+_RULING = (dice_engine.BAND_FLOORS["success"] + dice_engine.BAND_FLOORS["overwhelming"]) / 2.0 / dice_engine.MARGIN_SCALE    # [canonical: the ladder, BAND_FLOORS in MARGIN_SCALE milli-units; the running model's 2.0 (sc2/engine.py:1152)]
+_CARRIED = dice_engine.DEGREE_ORDINAL[dice_engine.Degree.SUCCESS]      # carried is Success or better: the ladder's third band (V2 p3 §B.1 D2: carried = success + overwhelming)
+
+
+def _seats(inp) -> list:
+    """those who decide, the presiding seat first (highest precedence, then id): the close draws in this order and `bench` is the first's."""
+    return sorted((p for p in inp.room if p.decides), key=lambda p: (-p.precedence, p.id))
+
+
+def _close_record(inp, track) -> tuple:
+    """`(pool, record)` of one adjudicator's draw at `track`: the ordinary bench (the middle of the scale for his dice and for what opposes
+    him), his own track as the leverage, the rite's `difficulty` and `gravity` (named in `Margin.terms`) the obstacle. No speaker enters it."""
+    D, r = inp.dials, inp.rite
+    pool = pool_of(D["attribute_mid"], 0, D["pool_add"], D["pool_floor"])
+    return pool, _record(inp, pool, D["attribute_mid"], D["track_step"] * track, r.difficulty, (("gravity", r.gravity, 1.0),))
+
+
+def p_carried(inp, track) -> float:
+    """P(carried) of one adjudicator's draw at `track`: the closed form of the close at that track (`band_odds` on the same record the close
+    rolls), Success or better. Pure."""
+    pool, x = _close_record(inp, track)
+    return _wsum(band_odds(pool, obstacle(x)[0], net_boost(x.leverage, pool))[_CARRIED:])
+
+
+def view_odds(inp, view) -> float:
+    """what a chooser is shown (V2 p2 §E; B05.62): P(carried) before an ordinary bench at the track his believed mood implies; no true attribute
+    and no true start of anyone enters it. A `consent` has no draw, so none."""
+    return 0.0 if inp.rite.close == "consent" else p_carried(inp, view.mood * inp.dials["mood_scale"])
+
+
+def card_odds(inp) -> Optional[float]:
+    """the card's odds (V2 p1 §E; A-133): P(carried) of THE CLOSE ITSELF in a sitting where nobody speaks, each who decides at his own `start`
+    (bearing, the rig's presumption, an appeal's grounds, the bench as packed) less what the burden charges the bearer where he must put the
+    matter and his rest is priced as silence. `bench`: the presiding seat's; `declared`: at least the quorum of the seats' own draws carry (the
+    quorum-th best margin, no veto); `hearers`: the weight-mean margin. `None` where nothing is drawn (`consent`) or the verdict is the speech
+    itself (`exchange`). Pure; the same closed form as `p_carried`, which a silent sitting's close samples."""
+    D, r = inp.dials, inp.rite
+    if r.close in ("consent", "exchange"):
+        return None
+    ds, bearer = _seats(inp), _lead(inp, r.bears)
+    charged = bearer is not None and _reply(inp, _other(r.bears)) == "must"
+    quiet = {d.id: d.start - (_sg(r.bears) * silence_cost(inp, d, None, bearer) if charged else 0.0) for d in ds}
+    if r.close == "bench":
+        return p_carried(inp, quiet[ds[0].id])
+    if r.close == "declared":
+        q = min(len(ds), r.quorum or 1)
+        dist = [1.0]                                                    # P(k seats carry), seat by seat
+        for d in ds:
+            p = p_carried(inp, quiet[d.id])
+            dist = [(dist[k] if k < len(dist) else 0.0) * (1.0 - p) + (dist[k - 1] * p if k > 0 else 0.0) for k in range(len(dist) + 1)]
+        return _wsum(dist[q:])
+    pool, x = _close_record(inp, 0.0)
+    W = _wsum(d.weight for d in ds)
+    mu = MU_PER_DIE * pool - obstacle(x)[0] + _wsum(d.weight * net_boost(D["track_step"] * quiet[d.id], pool) for d in ds) / W
+    sd = SD_PER_DIE * math.sqrt(pool) * math.sqrt(_wsum(d.weight ** 2 for d in ds)) / W
+    return 1.0 - _phi(((dice_engine.BAND_FLOORS["success"] - 0.5) / dice_engine.MARGIN_SCALE - mu) / sd)    # the ladder's edge for Success, as `band_odds` reads it
+
+
+def _judge_view(inp, st, d, track) -> JudgeView:
+    """what a played adjudicator has at the close (V2 p2 §D): his own track and its odds, the points as they stood, and what his Attunement
+    perceives of each participant: `(who, insincerity, discomfort)`, each scaled by how well he reads (0..1 across the attribute scale)."""
+    D = inp.dials
+    read = (d.attunement - D["attribute_floor"]) / (D["attribute_ceiling"] - D["attribute_floor"])
+    cond = _d(st.cond)
+    tells = tuple((p.id, round(read * max(0.0, -_sg(p.side) * p.believes), 2),
+                   round(read * min(1.0, cond[p.id].strain + 0.5 * cond[p.id].rattles), 2))     # [ASSUMPTION; Jordan to correct: discomfort is strain plus half a rattle, as the running model reads it (sc2/engine.py:502)]
+                  for p in inp.room if p.side and p.id != d.id)
+    return JudgeView(d.id, track, p_carried(inp, track), tuple(st.points), tells)
+
+
+def _abridged(inp, beats) -> tuple:
+    """the abridged act's one verdict: the one speech's margin with the one addressed, plus where he started (his net is that margin and the
+    speech's own obstacle, its terms, its `start` added). The host builds the room so that he is the one who heard it."""
+    if not beats:
+        raise ValueError("refused[close]: an abridged close reads the one speech's beat, and there is none")
+    to = min((p for p in inp.room if p.decides and not p.side), key=lambda p: (-p.precedence, p.id))
+    b = beats[-1]
+    ob = _wsum(v for _, v in b.terms)
+    return ((to.id, Margin(net=b.margin + ob + to.start, ob=ob, terms=b.terms)),)
+
+
 def _close(inp, st, rng, rulings=None, *, beats=()) -> tuple:
-    """[B24p.12] THE CLOSE: `(verdicts, ruled)`. Until that item lands, nothing is drawn and no verdict is returned; B24p.12 fills this body
-    (`beats` is where an abridged close reads its one speech's margin)."""
-    return (), ()
+    """THE CLOSE: `(verdicts, ruled)` (V2 p2 §D). `bench`, `declared` and `hearers` take ONE normal for each adjudicator, presiding seat first, and
+    each verdict is `Margin(roll + the boost of his own track - the obstacle)`: a draw on his own track (A-14), never a band or a side. `bench`
+    returns the presiding seat's alone, the other two every seat's; the host reads them (`declared` by the quorum-th best, `hearers` by the
+    weight-mean). `consent` draws nothing and returns `()`: a party's accept is an act. `exchange` draws nothing: the one speech's margin
+    with the one addressed plus his start (`beats`). A played adjudicator (`rulings[id](JudgeView)`, called once, here) rules `"for"`, `"against"`
+    or anything else to leave it to his draw, which is taken whatever he rules; `ruled` is how far each ruling departs from his own track."""
+    r = inp.rite
+    if r.close == "consent":
+        return (), ()
+    if r.close == "exchange":
+        return _abridged(inp, beats), ()
+    T, seats, n0, out, ruled = _d(st.tracks), _seats(inp), rng.n, [], []
+    for k, d in enumerate(seats):
+        pool, x = _close_record(inp, T[d.id])
+        ob, terms = obstacle(x)
+        net = _roll(pool, _z(rng)) + net_boost(x.leverage, pool)
+        if (k == 0 or r.close != "bench") and rulings and d.id in rulings:
+            how = rulings[d.id](_judge_view(inp, st, d, T[d.id]))
+            if how in ("for", "against"):
+                net = ob + _sg(how) * _RULING
+                ruled.append((d.id, round(max(0.0, -_sg(how) * T[d.id]), 2)))
+        out.append((d.id, Margin(net=net, ob=ob, terms=terms)))
+    assert rng.n - n0 == 2 * len(seats), (rng.n - n0)    # a normal each (two uniforms: `Draw.normal`)
+    return tuple(out[:1] if r.close == "bench" else out), tuple(ruled)
 
 
 def proceed(inp: Input, rng, decide: Optional[Callable] = None, deciders: Optional[Mapping] = None, rulings: Optional[Mapping] = None) -> Outcome:

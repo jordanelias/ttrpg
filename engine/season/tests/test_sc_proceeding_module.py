@@ -22,14 +22,13 @@ from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.rosters import roster
 from ..queries.inputs import Choice, Cond, Input, Point, Present, Rite, SocialContestInput, Sitting
 from ..seam.wrappers.sigma import proceeding_dials
-from ._fresh_process import probe
 
 FX = DEFAULT_FIXTURES
 
 
 class _Lazy:
     """A module of `modules/`, loaded when a test first touches it: `engine/` names no module code by import (A-25,
-    `tests/valoria/test_engine_does_not_import_systems.py` reads this directory too), and the proceeding's composition row is B24p.12's."""
+    `tests/valoria/test_engine_does_not_import_systems.py` reads this directory too): the proceeding is reached by its composition row, not an import."""
 
     def __init__(self, name):
         self._name = name
@@ -209,28 +208,6 @@ def test_weighted_tenth_is_the_governing_rule_weighted():
     for bad in (lambda: weighted_tenth((-1, 4), (5, 5)), lambda: weighted_tenth((4, 4), (-1, 11)), lambda: weighted_tenth((4, 4), (5, 4))):
         with pytest.raises(ValueError):
             bad()
-
-
-_IMPORT = """
-import sys, os
-sys.path.insert(0, {root!r})
-before = set(sys.modules)
-import {target}
-print(repr(sorted(os.path.relpath(m.__file__, {root!r}) for n, m in list(sys.modules.items())
-                  if n not in before and getattr(m, "__file__", None) and os.path.abspath(m.__file__).startswith({root!r} + os.sep))))
-"""
-
-
-def test_the_module_imports_the_dice_engine_and_the_record_leaf_only():
-    """A-25 for the proceeding: importing it, in a fresh interpreter, loads the dice engine, the record leaf and its own package and no part of
-    the host (no `World`, no registry): a later import of one would hand the module the world it must not read. (`test_social_contest_module.py`
-    reads this of the entries a prize row names; the proceeding's composition row is B24p.12's.)"""
-    loaded = probe(_IMPORT, "modules.social_contest.proceeding", 300)
-    allowed = {"engine/__init__.py", "engine/season/__init__.py", "engine/season/queries/__init__.py", "engine/season/queries/inputs.py",
-               "modules/__init__.py"}
-    stray = [f for f in loaded if f not in allowed and not f.startswith("engine/dice_engine/") and not f.startswith("modules/social_contest/")]
-    assert not stray, stray
-    assert "engine/season/queries/inputs.py" in loaded and "modules/social_contest/proceeding.py" in loaded
 
 
 # ---------------------------------------------------------------------------------------------------------------- B24p.11: the sitting
@@ -467,3 +444,206 @@ def test_the_speech_lands_on_the_frame_the_chooser_was_shown():
         return Choice(o.move, o.ground, o.item, o.relation)
     out = P.proceed(inp, _key("frame"), decide=decide)
     assert taken[0] in ("t1", "t2") and out.beats[0].frame == taken[0]
+
+
+# ---------------------------------------------------------------------------------------------------------------- B24p.12: the close, the odds
+_NO_SPEECH = (("for", ("argue", "rest")), ("against", ("argue", "rest")))
+
+
+def _bench(close="bench", n=1, quorum=None, weights=None, starts=None, **rite):
+    """a sitting room: `for` and `against` speakers and `n` adjudicators j0.. (precedence falling, so j0 presides), at `starts`."""
+    starts, weights = starts or [0.0] * n, weights or [1] * n
+    ds = [_p(f"j{i}", decides=True, start=starts[i], precedence=n - i, weight=weights[i]) for i in range(n)]
+    return _inp([_p("a", "for"), _p("b", "against")] + ds, _rite(close=close, quorum=quorum, **rite))
+
+
+def _silent(inp, key, **kw):
+    """the sitting where every side rests: nobody speaks, the close is the whole result."""
+    return P.proceed(inp, key, decide=_pick("none"), **kw)
+
+
+def _carried(inp, out) -> bool:
+    """the host's reading of the verdicts (B24p.13 builds it; here it is the plain statement of it): the presiding seat's margin, the
+    quorum-th best seat's, or the weight-mean, graded on the one ladder; carried is Success or better."""
+    from engine.dice_engine.dice_engine import Degree, degree_from_net
+    ms = {i: m.net - m.ob for i, m in out.verdicts}
+    if inp.rite.close == "bench":
+        m = ms[out.verdicts[0][0]]
+    elif inp.rite.close == "declared":
+        m = sorted(ms.values(), reverse=True)[inp.rite.quorum - 1]
+    else:
+        w = {p.id: p.weight for p in inp.room}
+        m = sum(w[i] * x for i, x in ms.items()) / sum(w[i] for i in ms)
+    return degree_from_net(m, 0.0) in (Degree.SUCCESS, Degree.OVERWHELMING)
+
+
+def test_a_drawn_close_takes_one_normal_per_adjudicator():
+    """A drawn close (`bench`, `declared`, `hearers`) takes one normal per adjudicator, after the sitting's own draws, and returns the presiding
+    seat's alone (`bench`) or every seat's; under `consent` nothing is drawn and nothing returned, and under `exchange` the verdict is the
+    speech itself and no normal is drawn."""
+    checked = 0
+    for close, n in (("bench", 1), ("bench", 3), ("declared", 3), ("hearers", 2), ("hearers", 4)):
+        inp = _bench(close, n, quorum=2)
+        rng = _Counting(_key("count", checked).key)
+        out = _silent(inp, rng)
+        assert rng.normals == P.DRAWS_PER_EXCHANGE(len(inp.grounds)) * len(out.beats) + n, (close, n, rng.normals)
+        assert [i for i, _ in out.verdicts] == (["j0"] if close == "bench" else [f"j{i}" for i in range(n)]), (close, n)
+        checked += 1
+    inp = _bench("consent", 0, moves=_NO_SPEECH)
+    rng = _Counting(_key("consent").key)
+    out = _silent(inp, rng)
+    assert out.verdicts == () and out.ruled == () and rng.normals == P.DRAWS_PER_EXCHANGE(len(inp.grounds)) * len(out.beats) > 0
+    rng = _Counting(_key("exchange").key)
+    out = P.proceed(_inp([_p("a", "for"), _p("j", decides=True)], _rite(close="exchange", turns=1, moves=(("for", ("argue",)),))), rng)
+    assert len(out.verdicts) == 1 and rng.normals == P.DRAWS_PER_EXCHANGE(4)     # the one speech's, none for the close
+    assert checked == 5
+
+
+def test_a_close_is_a_draw_on_the_adjudicators_track():
+    """A-14: each adjudicator's verdict is one draw on his OWN track: with the key fixed it moves with his track by exactly the leverage
+    `net_boost(track_step x track)` and by nothing else, and not with any speaker's attribute; it is a `Margin` (never a band or a side) whose
+    terms are the one obstacle's with `gravity` named. A yielded sitting, the room at the floor the close can carry it to, still draws: over
+    200 keys it lands in more than one band (a close that fixed the band is the falsifier)."""
+    from engine.dice_engine.dice_engine import degree_from_net
+    from engine.dice_engine.sigma_leverage import net_boost
+    from ..queries.inputs import Margin
+    inp = _bench("bench", 1, gravity=0.7)
+    D = inp.dials
+    pool = pool_of(D["attribute_mid"], 0, D["pool_add"], D["pool_floor"])
+    got = {}
+    for track in (-3.0, 0.0, 3.0):
+        verdicts, ruled = P._close(inp, _sit(inp, tracks=(("a", 0.0), ("b", 0.0), ("j0", track))), _key("track"))
+        (who, v), = verdicts
+        assert who == "j0" and type(v) is Margin and ruled == ()
+        assert v.terms[-1] == ("gravity", 0.7) and dict(v.terms)["difficulty"] == inp.rite.difficulty and sum(x for _, x in v.terms) == pytest.approx(v.ob)
+        got[track] = v
+    assert got[0.0].ob == got[3.0].ob == got[-3.0].ob
+    for track in (-3.0, 3.0):
+        assert got[track].net - got[0.0].net == pytest.approx(net_boost(D["track_step"] * track, pool) - net_boost(0.0, pool))
+    assert got[3.0].net > got[0.0].net > got[-3.0].net
+    other = _inp([_p("a", "for", reason=7.0, presence=7.0, will=7.0, rank=3.0), _p("b", "against", will=1.0), inp.room[2]], inp.rite)
+    assert P._close(other, _sit(other, tracks=(("a", 5.0), ("b", -5.0), ("j0", 3.0))), _key("track"))[0] == (("j0", got[3.0]),)
+    yielded = _bench("bench", 1)
+    bands, checked = set(), 0
+    for i in range(200):
+        rng = _Counting(_key("yielded", i).key)
+        out = P.proceed(yielded, rng, decide=_pick("yield"))
+        (_, v), = out.verdicts
+        assert out.ended == "yielded" and dict(out.state.tracks)["j0"] == pytest.approx(-M_MAX / D["track_step"])
+        assert rng.normals == P.DRAWS_PER_EXCHANGE(len(yielded.grounds)) + 1
+        bands.add(degree_from_net(v.net, v.ob))
+        checked += 1
+    assert checked == 200 and len(bands) >= 2, bands
+
+
+def test_a_close_at_control_is_the_single_roll_on_the_ordinary_bench():
+    """Control: with `track_step` at 0 and `gravity` 0 a drawn close IS `roll` on the ordinary bench's record (the middle of the scale for pool
+    and opposition, the rite's difficulty) at the same key, whatever the track: the close composes on the one roll and adds nothing."""
+    inp = replace(_bench("bench", 1, difficulty=1.0), dials=_dials(track_step=0.0))
+    D, checked = inp.dials, 0
+    for i in range(50):
+        got = P._close(inp, _sit(inp, tracks=(("a", 0.0), ("b", 0.0), ("j0", float(i - 25)))), _key("control", i))[0][0][1]
+        ref = ROLL.roll(SocialContestInput(pool=pool_of(D["attribute_mid"], 0, D["pool_add"], D["pool_floor"]), opposition=D["attribute_mid"],
+                                           obstacle_ceiling=None, obstacle_refusal_multiple=float("inf"), leverage=0.0, difficulty=1.0,
+                                           pool_default=D["pool_default"], pool_add=D["pool_add"], opposition_rate=D["opposition_rate"],
+                                           obstacle_operands=(("gravity", 0.0, 1.0),)), _key("control", i))
+        assert got == ref, (i, got, ref)
+        checked += 1
+    assert checked == 50
+
+
+def test_declared_carries_by_the_quorum_th_best_seat():
+    """C5: a `declared` close carries when at least `quorum` seats' own draws carry, the presiding seat one vote with no veto: a presiding seat
+    far for against two far against does not carry at quorum 2 (it does at quorum 1), two far for against a presiding seat far against do;
+    and the card's odds are, seat by seat, the sum over every subset of seats of its probability."""
+    far = 30.0     # past the leverage cap: a seat there is as for (or as against) as the close can make it
+    odds = lambda q, ts: P.card_odds(_bench("declared", 3, quorum=q, starts=ts))
+    up, down = P.p_carried(_bench(), far), P.p_carried(_bench(), -far)
+    assert 0.5 < up < 1.0 and 0.0 < down < 0.5
+    assert odds(2, [far, -far, -far]) < up and odds(2, [-far, far, far]) > down      # the presiding seat is one vote: not a veto, not a casting voice
+    assert odds(2, [far, -far, -far]) < odds(2, [-far, far, far]) and odds(1, [far, -far, -far]) > odds(2, [far, -far, -far]) > odds(3, [far, -far, -far])
+    ts, q, total = [4.0, -1.0, 0.5], 2, 0.0
+    inp = _bench("declared", 3, quorum=q, starts=ts, silence="free")     # free: no burden charge on the bearer, each seat at his own start
+    ps =[P.p_carried(inp, t) for t in ts]
+    for mask in range(8):
+        pr = 1.0
+        for i, p in enumerate(ps):
+            pr *= p if mask >> i & 1 else 1 - p
+        total += pr if bin(mask).count("1") >= q else 0.0
+    assert P.card_odds(inp) == pytest.approx(total, abs=1e-12)
+
+
+def test_the_card_odds_are_what_a_silent_sitting_delivers():
+    """A-133, p1 §E: the card's odds are P(carried) of the close itself where nobody speaks: each who decides at his own start (the rig's
+    presumption among them) less what the burden charges the bearer, then the presiding seat's (`bench`), at least the quorum of the seats'
+    own draws (`declared`) or the weight-mean margin (`hearers`). An approximation claim, so a tolerance is honest: 600 keyed sittings in
+    which every side rests sit within three standard errors of it, at rig 0 and rig 1; `consent` and `exchange` have none."""
+    seen = []
+    for close, n, kw in (("bench", 1, {}), ("declared", 3, dict(quorum=2)), ("hearers", 3, dict(weights=[1, 2, 1]))):
+        for rig in (0.0, 1.0):
+            inp = _bench(close, n, starts=[rig * _dials()["presume_step"] + s for s in (0.0, 0.5, -0.5)[:n]], **kw)
+            want = P.card_odds(inp)
+            hits = sum(_carried(inp, _silent(inp, _key(f"silent-{close}-{rig}", i))) for i in range(600))
+            se = (want * (1.0 - want) / 600) ** 0.5
+            assert 0.05 < want < 0.95 and abs(hits / 600 - want) <= 3 * se, (close, rig, want, hits / 600, se)
+            seen.append(want)
+    assert len(set(seen)) == 6 and seen[1] > seen[0]
+    assert P.card_odds(_bench("consent", 0, moves=_NO_SPEECH)) is None
+    assert P.card_odds(_inp([_p("a", "for"), _p("j", decides=True)], _rite(close="exchange", turns=1, moves=(("for", ("argue",)),)))) is None
+
+
+def test_a_played_adjudicator_rules_at_the_close_only():
+    """D7: a played adjudicator is called once, at the close, with his own track, his odds and the points as they stood; he may rule for,
+    against or leave it to his draw (taken whatever he rules, so the stream is the same); how far a ruling departs from his own track is
+    returned; he is never consulted during the sitting."""
+    inp = _bench("declared", 2, quorum=1, starts=[-1.5, 2.0])
+    base = P.proceed(inp, _key("rule"), decide=_pick("track"))
+    assert base.state.points and base.ruled == ()
+    departed = {}
+    for how, want_net in (("for", 2.0), ("against", -2.0), (None, None)):
+        calls = []
+
+        def rule(jv):
+            calls.append(jv)
+            return how
+        rng = _Counting(_key("rule").key)
+        out = P.proceed(inp, rng, decide=_pick("track"), rulings={"j0": rule})
+        assert out.beats == base.beats and rng.normals == len(out.beats) * 35 + 2        # his draw is taken whatever he rules
+        (jv,) = calls
+        assert jv.id == "j0" and jv.points == out.state.points and jv.track == dict(out.state.tracks)["j0"]
+        assert jv.odds == pytest.approx(P.p_carried(inp, jv.track))
+        v = dict(out.verdicts)["j0"]
+        assert out.verdicts[1] == base.verdicts[1]                           # nobody else is touched
+        if how is None:
+            assert out.verdicts == base.verdicts and out.ruled == ()
+        else:
+            assert v.net - v.ob == pytest.approx(want_net) and v.ob == dict(base.verdicts)["j0"].ob
+            assert out.ruled == (("j0", round(max(0.0, -jv.track) if how == "for" else max(0.0, jv.track), 2)),)
+            departed[how] = out.ruled[0][1]
+    assert max(departed.values()) > 0 == min(departed.values())     # he leans one way: ruling the other way departs from his mind, ruling his own way does not
+
+
+def test_one_speaker_one_turn_no_callback_is_the_speech_plus_the_addressed_mans_start():
+    """Control: with one speaker, one turn and no callback, the outcome's one verdict is that speech's margin plus the addressed man's start,
+    its obstacle and terms the speech's, and nothing is drawn for the close."""
+    checked = 0
+    for start in (-0.8, 0.0, 0.4):
+        inp = _inp([_p("a", "for", reason=6.0), _p("b", decides=True, start=start)], _rite(close="exchange", turns=1, moves=(("for", ("argue",)),)))
+        for i in range(10):
+            rng = _Counting(_key("one", i).key)
+            out = P.proceed(inp, rng)
+            (who, v), = out.verdicts
+            assert who == "b" and rng.normals == 35 and len(out.beats) == 1
+            assert v.net - v.ob == pytest.approx(out.beats[0].margin + start) and v.terms == out.beats[0].terms
+            assert v.ob == pytest.approx(sum(x for _, x in v.terms))
+            checked += 1
+    assert checked == 30
+
+
+def test_the_view_shows_the_chooser_the_odds_of_an_ordinary_bench_on_his_reading():
+    """`View.odds` is P(carried) before an ordinary bench at the track his believed mood implies (B05.62), and none under `consent`."""
+    inp = _bench("bench", 1)
+    v = P.view(inp, _sit(inp), inp.room[0], _key("odds"))
+    assert v.odds == P.p_carried(inp, v.mood * inp.dials["mood_scale"]) and 0.0 < v.odds < 1.0
+    assert P.view_odds(inp, replace(v, mood=0.9)) > P.view_odds(inp, replace(v, mood=-0.9))
+    assert P.view_odds(replace(inp, rite=replace(inp.rite, close="consent")), v) == 0.0

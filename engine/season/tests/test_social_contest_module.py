@@ -55,12 +55,24 @@ print(repr((loaded, out)))
 """
 
 
+_IMPORT_ONLY = """
+import sys, os, importlib
+sys.path.insert(0, {root!r})
+before = set(sys.modules)
+importlib.import_module({target!r}.split(":", 1)[0])
+print(repr((sorted(os.path.relpath(m.__file__, {root!r}) for n, m in list(sys.modules.items())
+                   if n not in before and getattr(m, "__file__", None) and os.path.abspath(m.__file__).startswith({root!r} + os.sep)), [])))
+"""
+
+
 def test_the_social_contest_entry_resolves_a_hand_built_record_importing_only_the_dice_engine_and_the_record():
     targets = _entry_targets()
     assert targets, "no prize row names a `module_entry:`; the module entry this test is about is gone"
     checked = 0
-    for role, target in targets:
-        loaded, out = probe(_PROBE, target, 300)
+    proceeding = "social_contest.proceeding"      # a verb's entry, not a prize's (B24p.12): the same import rule, no `roll` to call on a record
+    assert proceeding in composition.ROLES, "the proceeding's composition row is gone"
+    for role, target in targets + [(proceeding, composition.ROLES[proceeding]["target"])]:
+        loaded, out = probe(_IMPORT_ONLY if role == proceeding else _PROBE, target, 300)
         module_dir = target.split(":", 1)[0].rsplit(".", 1)[0].replace(".", "/")
         allowed_files = {"engine/__init__.py", "engine/season/__init__.py",
                          "engine/season/queries/__init__.py", "engine/season/queries/inputs.py"}
