@@ -220,7 +220,7 @@ def test_a_banned_heir_is_refused_the_claim_and_admitted_once_the_ban_ends():
     from ..queries.world_q import BAN_KIND
     w, d, king, heir = _realm()
     _vacate_by_release(w, d, king)
-    ban = Tenure("t_ban_heir", heir, "off_duke_valorsmark", BAN_KIND, 0)
+    ban = Tenure("t_ban_heir", heir, "off_king", BAN_KIND, 0)
     w.add_tenure(ban)
     assert _act(w, d, heir, "succeed", "banned", subject=THRONE) == ["succession.refused"]
     assert _holder(w, THRONE) is None and _live_hold(w, heir, TITLE)

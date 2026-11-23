@@ -157,3 +157,16 @@ def test_a_seat_row_term_is_a_positive_whole_number_or_null_at_load(tmp_path, mo
         assert row["id"] in str(red.value) and "term" in str(red.value), (bad, str(red.value))
         checked += 1
     assert checked == 9
+
+
+# ---- B21.04: a seat ends on a clock only where its body rotates --------------------------------------
+
+def test_only_rotating_body_seats_carry_a_term():
+    """The shipped rows: the Guild's two seats and the commune's representative are termed (4 seasons); the life and
+    heritable seats (Confessor, the Duke of Varfell, the Jarls, the Skald-Chief, the Restoration leader) read `None`."""
+    termed = {s: SEAT_ROW_BY_ID[s].get("term") for s in ("off_guild_comptroller", "off_guild_leader", "off_commune_rep_hm")}
+    assert termed == {s: 4 for s in termed}, termed
+    unterm = ("off_confessor", "off_duke_varfell", "off_senior_jarl_west", "off_military_jarl", "off_skald_chief",
+              "off_restoration_leader")
+    assert [s for s in unterm if SEAT_ROW_BY_ID[s].get("term") is not None] == []
+    assert sorted(s for s, r in SEAT_ROW_BY_ID.items() if r.get("term") is not None) == sorted(termed), "a stray termed row"

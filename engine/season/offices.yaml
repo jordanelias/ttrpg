@@ -116,7 +116,11 @@
 #     and `faction`. Every seat a row stands for, loop-built or minted, is under the row's `id`
 #     (`harness/populated.py::_seat_id`, CP-T02-02); a seat with no row keeps `off_<holder>`.
 #   * A SEAT ROW MAY CARRY `term: <positive int> | null` (seasons; B21.01) -- the DEFAULT length a `confer` onto the seat writes onto
-#     the hold's `term?` where the act declares none (`loop/effects_governance.py::_declared_term`); no shipped row carries one.
+#     the hold's `term?` where the act declares none (`loop/effects_governance.py::_declared_term`). A TERM IS AUTHORED ONLY ON A SEAT
+#     WHOSE BODY ROTATES (B21.04; of the `conferral: elected` rows, three carry one): `off_guild_comptroller`,
+#     `off_guild_leader` and `off_commune_rep_hm`, 4 seasons each (one year, the declared year being four seasons -- a later edit
+#     adds that year; until then the value is read in seasons). A life or heritable seat (Confessor, a Duke, a Jarl, the Skald-Chief,
+#     the Restoration leader) carries no `term:` key. [ASSUMPTION; medium; Jordan to correct; revert: no `term:` keys; swept {4, 8}.]
 
 meta:
   source: "engine/season/offices.yaml -- the governance ladder's titles, and 32 authored seats (29, then the two Riskbreakers rows at v9 IN-64, then NPC-084's at B21.03)."
@@ -472,6 +476,7 @@ seats:
     body:       "Inner Council"
     faction:    null
     remit_acts: []
+    term:       4   # B21.04 [ASSUMPTION; medium; Jordan to correct; revert: null -- the design does not describe this post]
     conferral:  elected
     revocation: rung_above_same_faction
     holder:     "NPC-081"
@@ -485,6 +490,7 @@ seats:
     body:       "Guild"
     faction:    null
     remit_acts: []
+    term:       4   # B21.04 (the Guild rotates) [ASSUMPTION; medium; Jordan to correct; revert: no `term:` key]
     conferral:  elected
     revocation: rung_above_same_faction
     holder:     "NPC-007"
@@ -501,6 +507,7 @@ seats:
     body:       "Guild"
     faction:    null
     remit_acts: [convene]
+    term:       4   # B21.04 (the Guild rotates) [ASSUMPTION; medium; Jordan to correct; revert: no `term:` key]
     conferral:  elected
     revocation: rung_above_same_faction
     holder:     "NPC-084"

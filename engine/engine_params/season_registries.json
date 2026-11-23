@@ -1442,6 +1442,7 @@
           "body": "Inner Council",
           "faction": null,
           "remit_acts": [],
+          "term": 4,
           "conferral": "elected",
           "revocation": "rung_above_same_faction",
           "holder": "NPC-081",
@@ -1458,6 +1459,7 @@
           "body": "Guild",
           "faction": null,
           "remit_acts": [],
+          "term": 4,
           "conferral": "elected",
           "revocation": "rung_above_same_faction",
           "holder": "NPC-007",
@@ -1476,6 +1478,7 @@
           "remit_acts": [
             "convene"
           ],
+          "term": 4,
           "conferral": "elected",
           "revocation": "rung_above_same_faction",
           "holder": "NPC-084",
