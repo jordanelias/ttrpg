@@ -89,9 +89,9 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     # conferee holds a live `ban` (`world_q.restrained`, the restraint's one read), so the act
     # declines and the fold emits the row's refusal. An EFFECT decline and not `may_fill`: that
     # predicate decides the CONFERRER's authority through his seat, never the conferee's standing
-    # (#453 K-53). ANY seat [ASSUMPTION; medium; revert: ask the banning seat's purview of
-    # `obj`'s rung].
-    if restrained(w, to, BAN_KIND):
+    # (#453 K-53). B21.02: the ban bars only a seat within the banning seat's reach -- `restrained`
+    # asked `at` `obj`'s rung [ASSUMPTION; medium; Jordan to correct; revert: drop the argument].
+    if restrained(w, to, BAN_KIND, at=w.offices[obj].rung):
         return NO_CHANGE
     closed = [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live]
     # IN-10 (b) (#453 §7.2/§9.6 `:1382`, `:2071`): A SEAT-HOLD MAY CARRY A TERM -- regency, the

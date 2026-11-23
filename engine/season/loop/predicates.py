@@ -203,8 +203,8 @@ def _req_succeed(w: "World", a: "Act") -> Answer:
     seat = subject_of(a)                   # a non-string `subject` (a list is unhashable) reads as "": refused, never raised
     if seat not in w.offices:
         return _refuse_at("operand", f"{a.actor} on {seat!r}")
-    if restrained(w, a.actor, BAN_KIND):
-        # a banned man is seated by no route (`confer` declines him, `_req_oblige` 5)
+    if restrained(w, a.actor, BAN_KIND, at=w.offices[seat].rung):
+        # a banned man is seated by no route within the banning seat's reach (`confer` declines him, `_req_oblige` 5)
         return _refuse_at("banned", f"{a.actor} on {seat!r}")
     titles = {t.object for t in w.seat_holds(a.actor)}
     if may_claim(w, a.actor, w.offices[seat], titles):
@@ -525,9 +525,9 @@ def _req_oblige(w: "World", a: "Act") -> Answer:
          person (`holonic §15`; probe `P40` holds two), never two to the same seat, which would make
          `establishment_of` list one person twice.
       5. v9 SC-03a (#453 §10.4 step 3, §8.1 Excommunication): the actor holds no live `ban` -- a
-         banned person cannot serve (`world_q.restrained`, the restraint's one read). ANY seat, not
-         only the banning seat's purview [ASSUMPTION; medium; revert: ask the ban's seat's
-         `purview_reaches` of this seat's rung]: #453 states the reader without a scope.
+         banned person cannot serve (`world_q.restrained`, the restraint's one read) a seat within the
+         banning seat's reach: asked `at` this seat's rung (B21.02) [ASSUMPTION; medium; Jordan to
+         correct; revert: drop the argument].
     ⚠ NOT BUILT, AND SAID SO: `03` §A.9's reach clause (*"its `rung` reaches the actor's containing
     rung"*). `05` RULED (b) closes `ARCH F.17` by `binds` *"rather than by a substitute rule"*, and the
     reach clause was part of `03`'s substitute. A person may oblige to a seat from anywhere; what he
@@ -556,7 +556,7 @@ def _req_oblige(w: "World", a: "Act") -> Answer:
     if any(t.kind == "oblige" for t in mine):
         # 4. one edge per (person, seat)
         return _refuse_at("one_edge", f"{a.actor} on {seat!r}")
-    if restrained(w, a.actor, BAN_KIND):
+    if restrained(w, a.actor, BAN_KIND, at=off.rung):
         # 5. v9 SC-03a: a banned man serves no seat
         return _refuse_at("banned", f"{a.actor} on {seat!r}")
     return ADMITTED

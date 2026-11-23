@@ -1717,24 +1717,32 @@ def lives_in(p: Person) -> Optional[str]:
     return found[0] if found else None
 
 
-def restrained(w: World, person: Optional[str], kind: str) -> bool:
+def restrained(w: World, person: Optional[str], kind: str, at: Optional[str] = None) -> bool:
     """DOES `person` OWN A LIVE EDGE OF THE RESTRAINT `kind` -- a `detain` (he is in custody) or a
     `ban` (he is excluded)? v9 SC-03a (#453 §10.4 step 3, K-53): the ONE read behind every reader
     the two kinds ship with, so *is this man a prisoner* cannot mean one thing to `move` and another
     to a muster: `_eff_move`/`_eff_migrate` and `loop/sides.py` ask it of `DETAIN_KIND`,
-    `_req_oblige` and `_eff_confer` of `BAN_KIND`.
+    `_req_oblige`, `_req_succeed` and `_eff_confer` of `BAN_KIND`.
 
-    ⚠ ANY SEAT, AND THAT IS AN [ASSUMPTION; medium; revert: also require the edge's object seat's
-    purview to reach where the restraint is read]: a custody holds a man everywhere (he is not free
-    to travel to a place the detaining seat does not govern), and #453 §8.1 states the ban's readers
-    without a scope (*"a banned person cannot serve or be seated"*). A kind off `RESTRAINT_KINDS` is a
-    caller defect -- every other kind has a reader of its own -- and raises rather than answer False."""
+    `at` (B21.02): a RUNG, asked of `BAN_KIND` only -- with it, the answer is whether some live ban's
+    seat (the edge's object) REACHES that rung (`state/gate.py::purview_reaches`, the one owner), so a
+    ban bars only the seats within the banning seat's reach. Without it the answer is as it was: ANY
+    live edge of the kind. A ban does not close seats already held (no reader here asks it of a hold).
+    [ASSUMPTION; medium; Jordan to correct; revert: drop the argument at the three call sites]
+    A `detain` is never scoped (custody holds a man everywhere: he is not free to travel to a place
+    the detaining seat does not govern), so `at` with `DETAIN_KIND` is a caller defect and raises.
+    A kind off `RESTRAINT_KINDS` is a caller defect -- every other kind has a reader of its own -- and
+    raises rather than answer False."""
     if kind not in RESTRAINT_KINDS:
         raise InstrumentDefect(
             f"`restrained` asked of {kind!r}, not a restraint kind ({sorted(RESTRAINT_KINDS)})")
+    if at is not None and kind != BAN_KIND:
+        raise InstrumentDefect(f"`restrained` scoped `at` {at!r} for {kind!r}: only a ban is scoped to a purview")
     if person is None:
         return False
-    return any(t.kind == kind and t.subject == person and t.live for t in w.tenures)
+    return any(t.kind == kind and t.subject == person and t.live
+               and (at is None or (t.object in w.offices and purview_reaches(w, w.offices[t.object], at)))
+               for t in w.tenures)
 
 
 def population(w: World, rung_id: str, residence: Optional[dict] = None) -> int:
