@@ -11,7 +11,7 @@
 ## Batch B11F2-flow-in · lane IN · wave W17 · step S17 · HASH EQUAL
 INVOCATION: /methodology-execute Batch B11F2-flow-in
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
-GATE: Batch B09-memory @efd6cfb7d636c05e980527c08d49514f203c2bef
+GATE: Batch B09-memory @2e95f6736718140bb817f325ec3ae5c2b90e5a23
 GATE: Batch B10-character
 GATE: Batch B11F1-flow-se
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
