@@ -3014,6 +3014,16 @@ rosters:
       set of names read by a loader; Jordan to correct.]
     values: [rigid_flexible, grandiose_humble, deontological_instrumental]
 
+  relation_grounds:
+    source: >-
+      B10.62 (`IS-B2-CHAR-03`): the six edge types of the archived relational-graph design, as plain words (CHAR addendum B).
+    note: >-
+      THE GROUNDS A CAST ROW'S `relations:` ENTRY MAY NAME, read by `data/cast.py::relations_of`, which refuses any other. A ground is what another
+      person is to the holder, and it is the predicate suffix of the `bond:<ground>` claim `boot/realm.py::seed_relations` deposits in the holder's
+      own ledger (`queries/person_q.py::BOND_STEM`); nothing reads a ground as a rule (kin is no eligibility). [ASSUMPTION: the six names and their
+      closed set -- basis: the design's six edge types; Jordan to correct.]
+    values: [kin, oath, service, patronage, rivalry, feud]
+
   odds_weightings:
     source: >-
       v10 CR-17 (M1, AQ-X1 (b), taken at `CLAUDE.md` section 0's ladder step 5): whether the chooser's pursuit

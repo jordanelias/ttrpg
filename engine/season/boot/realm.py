@@ -22,6 +22,7 @@ from collections import Counter, defaultdict
 
 from ..data import cast, files
 from ..data import goals as goals_data
+from ..queries.person_q import BOND_STEM
 from ..queries.world_q import (RESIDE_KIND, WORKS_KIND, ancestry, capacity, enclosing_territory,
                                home_of as home_of_q, members)
 from ..gaps import Forbidden, Unowned, Unspecified
@@ -790,6 +791,23 @@ def seed_acquaintances(w: World, pairs) -> list:
     return written
 
 
+def seed_relations(w: World, relations) -> list:
+    """SEED EACH AUTHORED RELATION ON THE SIDE THAT HOLDS IT (B10.62). For each `(holder, other, ground, valence, weight)` the holder takes the stance row
+    `(other, valence, weight)` -- the row type `queries/person_q.py::regard` already sums with judged and told deeds, and `decision/choose.py::stance_term` reads --
+    and his own firsthand claim `(other, "bond:<ground>", True)` at `confidence_default`, season 0 (`queries/person_q.py::BOND_STEM`): his knowledge of what
+    the other is to him, which can be told, doubted and lied about like any claim. NO READER IS ADDED. A symmetric relation is two rows, one on each person.
+    Returns the claim ids written, in row order. The ledger rules of `seed_acquaintances` hold: a claim at `when` 0 is the first evicted at `ledger_cap`
+    and wears like any build-time claim. `relations` comes from `data/cast.py::relations_of`, read per case row by `build_realm`; no row ships one."""
+    conf = w.fixtures.get("confidence_default")
+    written = []
+    for holder, other, ground, valence, weight in relations:
+        w.persons[holder].stance.append((other, valence, weight))
+        cid = f"c_bond_{holder}_{other}_{ground}"
+        w.persons[holder].ledger.append(Claim(cid, holder, other, BOND_STEM + ground, True, 0, "firsthand", conf, "own"))
+        written.append(cid)
+    return written
+
+
 def seat_guards(w: World, rows: list, authored: dict, partial: bool = False) -> None:
     """SEAT THE GUARD COHORTS IN A BUILT WORLD. Each row becomes a
     Person at the row's weight, its `person` rung, a `contain` edge (where it IS) at the exact rung its seat's
@@ -1488,6 +1506,12 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         held = {**cast.capability_of(cast_row, w.fixtures.get("pool_default")), **cast.capabilities_of(cast_row)}
         if held:
             w.persons[pid].capability = {**held, **w.persons[pid].capability}
+    # B10.62: each authored `relations:` entry, on the side that holds it, once every person is seated (a `to` seated later in the cast is then a person).
+    # A relation toward a case a `cap` left unseated is dropped with the case (`seat_guards`' partial skip); no shipped row authors one.
+    seed_relations(w, [(f"p_{_slug(cid)}", f"p_{_slug(to)}", ground, valence, weight)
+                       for cid in (str(c.get("id")) for c in cases)
+                       for to, ground, valence, weight in cast.relations_of(cast.row(cid) or {})
+                       if f"p_{_slug(to)}" in w.persons])
 
     # -- WHO BELONGS TO WHAT ----------------------------------------------------
     #

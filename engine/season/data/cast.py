@@ -34,7 +34,7 @@ import re
 from typing import Optional
 
 from . import files
-from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_RANKS, LIFEPATH_TEMPLATES, MANNER_OFFSET_AXES, load_yaml, roster
+from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_RANKS, LIFEPATH_TEMPLATES, MANNER_OFFSET_AXES, RELATION_GROUNDS, load_yaml, roster
 from ..gaps import Unspecified
 from ...substrate.descriptors import (
     ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, CAPABILITIES, HERITAGES, PRACTITIONER_STATS, TRAIT_BY_SEATING,
@@ -439,6 +439,51 @@ def manner_offset_of(r: dict, bound: float) -> dict:
                               needs=f"a number from {-bound} to {bound}", law="A-108 -- a stored offset lies within `Fixtures.manner_offset_bound`")
         out[axis] = float(v)
     return out
+
+
+# B10.62: the keys of one `relations:` entry, and the two signs its `valence` may take.
+RELATION_FIELDS = frozenset({"to", "ground", "valence", "weight"})   # [JUSTIFIED: B10.62 edit 2 -- the four fields the entry names; the stance row it seeds is (referent, valence, weight) and `ground` names the bond claim]
+RELATION_VALENCES = (-1, 1)   # [JUSTIFIED: B10.62 edit 2 -- "valence is -1 or +1": a relation's side, its size is the weight's; STANCE_VALENCE_SCALE bounds the row type, not this]
+
+
+def relations_of(r: dict) -> tuple:
+    """The row's authored `relations:` (B10.62), as a tuple of `(to, ground, valence, weight)` -- `to` still a registry CASE id (`NPC-050`), which
+    `boot/realm.py::build_realm` maps to the seated person id by the one `_slug` mapping it seats the cast with -- or `()` where nothing is
+    authored: the key absent, `relations: null`, or no row at all. A relation is authored on the side that holds it, so a symmetric one is two
+    rows and they need not agree. A `relations:` that is no list, an entry that is no mapping of exactly `RELATION_FIELDS`, a `to` the registry
+    carries no row for, a `ground` outside `rosters.yaml: relation_grounds`, a `valence` that is not -1 or +1, and a `weight` that is no whole
+    number from 0 to `STANCE_VALENCE_SCALE` (the stance row's own weight bound; the valence is +-1 here, so the row never passes `STANCE_MAX`)
+    REFUSE, naming the row (`attributes_of`'s shape). A bool is no number."""
+    raw = (r or {}).get("relations")
+    if raw is None:
+        return ()
+    who = (r or {}).get("id", "?")
+    if not isinstance(raw, list):
+        raise Unspecified(f"cast row {who}: relations {raw!r} is no list", "references/npc_registry.yaml",
+                          needs="a list of `{to, ground, valence, weight}` entries, or null",
+                          law="B10.62 -- an authored value this reader cannot parse refuses")
+    known = _rows()
+    out = []
+    for e in raw:
+        if not isinstance(e, dict) or set(e) != RELATION_FIELDS:
+            raise Unspecified(f"cast row {who}: relation {e!r} is not a mapping of exactly {sorted(RELATION_FIELDS)}", "references/npc_registry.yaml",
+                              needs=f"`{{to, ground, valence, weight}}`", law="B10.62 -- a relation names its four fields and no other")
+        to, ground, valence, weight = e["to"], e["ground"], e["valence"], e["weight"]
+        if not isinstance(to, str) or to not in known:
+            raise Unspecified(f"cast row {who}: relation `to: {to!r}` is no case id this registry carries", "references/npc_registry.yaml",
+                              needs="a registry case id (`NPC-050`)", law="B10.62 -- a relation names a person the cast seats")
+        if not isinstance(ground, str) or ground not in RELATION_GROUNDS:
+            raise Unspecified(f"cast row {who}: relation ground {ground!r} is none of {sorted(RELATION_GROUNDS)}", "rosters.yaml",
+                              needs=f"one of {sorted(RELATION_GROUNDS)}", law="B10.62 -- a ground is a `relation_grounds` member")
+        if isinstance(valence, bool) or valence not in RELATION_VALENCES:
+            raise Unspecified(f"cast row {who}: relation valence {valence!r} is not -1 or +1", "references/npc_registry.yaml",
+                              needs="-1 or 1", law="B10.62 -- a relation is toward or against, and its size is the weight's")
+        if isinstance(weight, bool) or not isinstance(weight, int) or not 0 <= weight <= STANCE_VALENCE_SCALE:
+            raise Unspecified(f"cast row {who}: relation weight {weight!r} is no whole number from 0 to {STANCE_VALENCE_SCALE}", "references/npc_registry.yaml",
+                              needs=f"a whole number 0-{STANCE_VALENCE_SCALE}, the stance row's own weight bound",
+                              law="B10.62 -- the weight is the stance row's, bounded as the loyalty row's is")
+        out.append((to, ground, valence, weight))
+    return tuple(out)
 
 
 def capabilities_of(r: dict) -> dict:

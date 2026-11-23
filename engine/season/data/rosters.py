@@ -1151,6 +1151,8 @@ if not MANNER_OFFSET_AXES <= PURSUIT_AXES:
     raise Unspecified(f"`rosters.yaml: manner_offset_axes` names {sorted(MANNER_OFFSET_AXES - PURSUIT_AXES)}, which are none of `pursuit_axes`", "rosters.yaml",
                       needs=f"members of {sorted(PURSUIT_AXES)}",
                       law="B10.58 (A-108) -- a stored offset is added to a projected axis, so it can sit only on one the projection has")
+# B10.62. THE GROUNDS A CAST ROW'S `relations:` MAY NAME (`data/cast.py::relations_of`), bound at import; each is the suffix of a `bond:<ground>` claim.
+RELATION_GROUNDS = roster("relation_grounds")
 # `R8.1`. THE `seen` CLAIM -- its four terms (ordered: they are the struct's fields), the one
 # predicate it is deposited under, and which terms each witness channel shows. Bound at import for
 # `TITLE_DOMAINS`' reason; the terms are cross-validated against `WITNESS_CHANNELS` and

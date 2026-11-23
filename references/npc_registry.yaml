@@ -29,7 +29,7 @@
 
 schema:
   required: [id, faction, role, status]
-  optional: [heritage, lifepath, ts, stats, convictions, affiliations, title, capabilities, resonant_style, manner]
+  optional: [heritage, lifepath, ts, stats, convictions, affiliations, title, capabilities, resonant_style, manner, relations]
   # B04.12: `engine/season/data/cast.py` reads `required` + `optional` as the keys a row may carry THAT A READER TAKES BY NAME, and
   # REFUSES any other, except the keys it declares unread (`cast.UNREAD_KEYS`, the one list: authored prose and threadwork's tracks
   # that no engine code reads -- `first_name`, `last_name`, `age`, `birthplace`, `territory`, `goals`, `notes`, `source`, `certainty`,
@@ -46,6 +46,11 @@ schema:
   # `manner:` (B10.58, A-108) is `{<axis>: <number>}`, a person's own stored offset on a manner axis, over `engine/season/rosters.yaml: manner_offset_axes`, each within
   # `+-Fixtures.manner_offset_bound`; read by `cast.py::manner_offset_of` into `Person.manner_offset`, which RAISES on any other axis or a value outside the bound. No row
   # authors one yet (the values are the cast content pass's); silence is no key.
+  # `relations:` (B10.62) is a list of `{to: <registry case id>, ground: <a `engine/season/rosters.yaml: relation_grounds` member>, valence: -1 or +1,
+  # weight: <whole number 0-5>}`, read by `engine/season/data/cast.py::relations_of`, which RAISES on an unknown id, ground or valence and on a weight outside the
+  # stance row's own bound. A relation is authored on the side that HOLDS it: a symmetric one is two rows, one on each person, and they need not agree. At build
+  # `boot/realm.py::seed_relations` gives the holder a stance row `(<to's person id>, valence, weight)` and his own `bond:<ground>` claim about `to`. No row authors one
+  # yet (the cast content pass's, BA1); silence is no key.
   # `affiliations:` (IN-08 H10) is `{<affiliation>: <int 0-5>}` over
   # `references/descriptor_registry.yaml: affiliation_roster` -- the person's religious affiliations
   # and, since ED-IN-0293, `altonian_civics` (the political structure they want), read by

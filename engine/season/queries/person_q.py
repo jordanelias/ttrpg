@@ -607,7 +607,7 @@ def regard(p: Person, referent: str, fx=None) -> float:
 
 
 # B10.55: THE CLAIMS A PERSON HOLDS OF A PERSON'S BOND TO HIM, `Claim(subject=<that person>, predicate=BOND_STEM + <ground>, value=True)`: his own
-# knowledge of what the other is to him. NOTHING DEPOSITS ONE TODAY (B10.62 seeds them from an authored relation), so `room_as_held`'s `bond` reads 0.
+# knowledge of what the other is to him. B10.62's `boot/realm.py::seed_relations` deposits one for each authored relation (the shipped registry authors none, so `room_as_held`'s `bond` reads 0 until BA1's content).
 BOND_STEM = "bond:"
 
 
