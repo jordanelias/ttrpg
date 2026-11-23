@@ -129,6 +129,13 @@ def _rows() -> dict:
                     f"cast row {cid} carries {stray}, which the registry's `schema:` block does not declare and `UNREAD_KEYS` does not list",
                     "references/npc_registry.yaml", needs="a key in `schema: required`/`optional` (the keys a reader takes) or in `cast.UNREAD_KEYS` (declared unread), or no key",
                     law="CAP A7 / DEF Edit 4 -- a cast row carries only keys the registry's schema lists as read or that `UNREAD_KEYS` declares unread")
+        for cid, r in rows.items():
+            raw = str(r.get("faction") or "")
+            if raw.count("(") != raw.count(")"):
+                raise Unspecified(
+                    f"{cid}: faction cell {raw!r} has an unbalanced parenthesis", "references/npc_registry.yaml",
+                    needs="the cell quoted, so an unquoted `#` is not read as a comment",
+                    law="ID-5 -- refuse, don't default: a truncated cell resolves to a faction with its seat lost")
         _CACHE = rows
     return _CACHE
 
@@ -162,8 +169,8 @@ def faction_of(r: dict) -> tuple[Optional[str], Optional[str], str]:
     `faction: Hafenmark (Inner Council #4)` (NPC-081) and `Varfell (Jarl Council #5)` (NPC-082) are
     UNQUOTED, so YAML reads `#4)` and `#5)` as comments and the seat numbers are destroyed on load
     — the value arrives as `Hafenmark (Inner Council`, with an unbalanced paren. The regex tolerates
-    the missing `)` so the faction still resolves, and the lost seat number is reported by
-    `defects()` rather than reconstructed here. Quoting the two cells is a fix to the registry,
+    the missing `)` so the faction still resolves, and the lost seat number is refused by
+    `_rows()` at load rather than reconstructed here. Quoting the two cells is a fix to the registry,
     which is canon and not this module's to edit."""
     raw = str(r.get("faction") or "").strip()
     base, inner = raw, None
@@ -579,24 +586,6 @@ def title_of(r: dict) -> Optional[str]:
     them onto the eight-rung ladder would invent a placement canon does not make."""
     t = r.get("title")
     return str(t).strip() if t else None
-
-
-def defects() -> list[str]:
-    """What is wrong with the registry AS DATA, reported rather than repaired.
-
-    §0.1 pt 3: a result claim carries the thing that would show it wrong. This is the standing
-    list for a caller that wants to know how far to trust a row, and it is computed from the file
-    rather than remembered from the session that first read it."""
-    out = []
-    for cid, r in sorted(_rows().items()):
-        raw = str(r.get("faction") or "")
-        if raw.count("(") != raw.count(")"):
-            out.append(f"{cid}: faction cell {raw!r} has an unbalanced paren — an unquoted "
-                       f"`#` in the source was eaten as a YAML comment, destroying a seat number")
-        fac, _sub, _raw = faction_of(r)
-        if fac is None:
-            out.append(f"{cid}: faction {raw!r} resolves to no name on `rosters.yaml: factions`")
-    return out
 
 
 # ⭐ RULED by Jordan, 2026-09-13: *"Loyalty can be invented. Just do it on a scale of 0-100."* The
