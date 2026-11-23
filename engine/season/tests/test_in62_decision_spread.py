@@ -315,3 +315,13 @@ def test_in62_arm_0_holds_one_vector_one_conviction_and_reads_no_goals_file():
         assert goals_data.expected("faction", "Valorsmark") != with_goals, (
             "the creed's expected vector still sums the file's goal pursuits under the control")
     assert goals_data.goals(), "no_goals() did not restore the cache"
+
+
+def test_in62_under_control_the_temperature_zero_column_reads_fewer_distinct_multisets_than_the_shipped_arm():
+    """B10.29 (CHAR resolve-and-temper, Gate): the instrument's failing arm. If the control's score-order-only count is not
+    strictly below the shipped arm's, the instrument still cannot fail and the edit is wrong."""
+    shipped = DS.play_season(build_realm(0), 1)
+    with DS.no_goals():
+        control = DS.play_season(DS._build(0, True), 1, rebuild=lambda: DS._build(0, True))
+    assert shipped["acts"] >= 500 and control["acts"] >= 500, (shipped["acts"], control["acts"])
+    assert control["distinct_multisets_t0"] < shipped["distinct_multisets"], (control["distinct_multisets_t0"], shipped["distinct_multisets"])

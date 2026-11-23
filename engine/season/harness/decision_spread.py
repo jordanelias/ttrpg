@@ -12,6 +12,7 @@ re-derives a term.
     python -m engine.season.harness.decision_spread --season    [--control | --null]
     python -m engine.season.harness.decision_spread --arms
     python -m engine.season.harness.decision_spread --retries [--seed N] [--seasons K]
+    python -m engine.season.harness.decision_spread --retest  [--control | --null] [--seed N] [--ticks T]
 
 WHAT EACH MODE READS, AND WHETHER IT PLAYS A SEASON (each prints the answer in its own header):
 
@@ -26,13 +27,25 @@ WHAT EACH MODE READS, AND WHETHER IT PLAYS A SEASON (each prints the answer in i
                to every person. The common candidate set is the intersection of the opening sets of the
                persons who form any, formed as `harness/corpus_run.py:958-960` forms them (`assemble`,
                `opening_set`), narrowed to `resolvable_verbs()` as the chooser narrows. Per person: the top
-               candidate and its DECIDING TERM (`attribute_top`).
+               candidate and its DECIDING TERM (`attribute_top`). Also THE PAIRWISE TABLE: every two cast persons
+               who both form the common set, binned by the cosine of their projected vectors, and how often the
+               two take a DIFFERENT top by the score alone (`score_order`'s first) and by the sampled order
+               (`sample_order`'s first). A bin's two columns agree at `choice_temperature` 0 by construction; the
+               gap between them is what the draw adds to the score's own separation.
   --season     PLAYS ONE SEASON (`populated.run`'s composition, the chooser watched and never steered).
                Per-person RESOLVED verb multisets (the acts the fold resolved, `d.resolved`: made or refused
                in the fold, not those refused at admission), how many are distinct, and per answered
                question its source and goal class. Also the draw split of every deliberation (below).
                ATTENTION is read here ONLY: `--decisions` hands every person the same question, so it
-               cannot see which question a person answered.
+               cannot see which question a person answered. The distinct-multiset count is printed beside the
+               SAME count at `choice_temperature` 0 on a second build of the same seed (the arm that can fail:
+               a count that reads full under both the shipped draw and a control that flattens every person
+               observes nothing).
+  --retest     BUILT REALM, NO SEASON.  SELF-AGREEMENT is how often the same person, redrawn, takes the same first
+               act (the sampled top, over pairs of draw ticks 0..T-1 on one question); BETWEEN-PERSON agreement is
+               how often two different cast persons take the same first act on the same question at the same tick.
+               Over the cast and `--decisions`' common referents and candidate sets, both as pairs. No threshold: a
+               direction against a control (self above between; `temper_gain` 0 reproduces the draw with no per-person factor).
   --arms       PLAYS FOUR SEASONS, ONE PER ARM, in this process: `question_aggregation_rule` {first, all} x
                `stance_polarity` {legacy, declared} (§J.2's ask-then row, H-54 / H-194). Each arm prints
                the `--season` reading and the `--decisions` attribution counts under that arm.
@@ -124,6 +137,10 @@ from ..boot.realm import build_realm
 EPS = CH.ATTRIBUTION_EPS      # the attribution's float-tie tolerance: one value, owned beside the rule that reads it (`choose.deciding_term`)
 # [JUSTIFIED: the instrument's near-identical bar for a cosine between two persons' vectors (IN-64's EXIT 'pairs above 0.99'), a reading threshold and not a game number]
 COSINE_HIGH = 0.99
+# [JUSTIFIED: `--retest`'s default draw ticks, a reading's sample size and not a game number; U5a §1's own reading redraws at five ticks]
+RETEST_TICKS = 5
+# [JUSTIFIED: the pairwise table's bin names, a reading's own labels; `near-identical` is `COSINE_HIGH`'s bar, `opposed` is a cosine below zero (CR-93's own bins)]
+COSINE_BINS = ("near-identical", "between", "opposed")
 
 
 # ---------------------------------------------------------------------------------------------
@@ -210,12 +227,26 @@ def attribute_top(p, cands: list, fx, draw=None, odds=None) -> dict:
     the believed-chance factor, which is also what `odds_weighting` `none` reads whatever is passed."""
     if not cands:
         return CH.deciding_term([], [], None, 0.0)
+    terms, by_id, ranked = _scored(p, cands, fx, odds)
+    actual = CH.sample_order(ranked, lambda c: by_id[id(c)], p, fx, draw)[0]
+    return CH.deciding_term(cands, terms, actual, own_tau(p, fx))
+
+
+def _scored(p, cands: list, fx, odds=None) -> tuple:
+    """`(terms, by_id, ranked)` for `cands` as the chooser scores and orders them: `score_terms` per candidate, `score_total`
+    keyed by `id(c)`, and `choose.score_order`'s ordering (the chooser's own, not a second copy). `cands` non-empty."""
     memo = CH.deliberation_memo(p, fx)
     terms = [CH.score_terms(p, c, fx, memo, odds) for c in cands]
     by_id = {id(c): CH.score_total(t) for c, t in zip(cands, terms)}
-    ranked = CH.score_order(cands, by_id)               # the chooser's own ordering, not a second copy
-    actual = CH.sample_order(ranked, lambda c: by_id[id(c)], p, fx, draw)[0]
-    return CH.deciding_term(cands, terms, actual, float(fx.get("choice_temperature")))
+    return terms, by_id, CH.score_order(cands, by_id)
+
+
+def own_tau(p, fx) -> float:
+    """A PERSON'S OWN choice temperature: the realm's `choice_temperature` times `choose.temper(p, fx)`, as `_sample_order`
+    forms it (B10.28). The one place the instrument computes it; `deciding_term` reads only whether it is above 0, which
+    `temper` (refused outside (-1, 0] at its gain) never changes, so the labels are the same at every gain and the call keeps
+    the reading honest about whose temperature it is."""
+    return float(fx.get("choice_temperature")) * CH.temper(p, fx)
 
 
 def new_split() -> dict:
@@ -386,25 +417,61 @@ def is_self_plea(c, actor: str) -> bool:
     return c.subject == actor and row is not None and subject_is_opponent(row)
 
 
+def common_set(w, ref: str, foldable=None) -> tuple:
+    """`(handed, keyed, order)` for the `claim_landed`-shaped question about `ref` handed to every person: `handed` the number of
+    persons handed it, `keyed` `{pid: {(verb, subject, is_self_plea): candidate}}` for the persons who form any candidate, and
+    `order` the keys of the COMMON set (the intersection of those) sorted as `read_decisions` hands them to the chooser's ordering.
+    `--decisions` and `--retest` read one common set."""
+    q = decision_question(ref)
+    formed = {pid: formed_set(w, p, q, foldable) for pid, p in sorted(w.persons.items())}
+    keyed = {pid: {(c.verb, c.subject, is_self_plea(c, pid)): c for c in cs} for pid, cs in formed.items() if cs}
+    common = set.intersection(*(set(k) for k in keyed.values())) if keyed else set()
+    return len(formed), keyed, sorted(common, key=lambda k: (k[0], k[1] or ""))
+
+
+def cosine_bin(c: float) -> str:
+    """The pairwise table's bin of a cosine (`COSINE_BINS`): above `COSINE_HIGH`, below 0, else between."""
+    return COSINE_BINS[0] if c > COSINE_HIGH else (COSINE_BINS[2] if c < 0 else COSINE_BINS[1])
+
+
+def pairwise_rows(vecs: dict, score_tops: dict, sampled_tops: dict) -> dict:
+    """THE PAIRWISE TABLE for one referent: `{bin: [pairs, score_differ, sampled_differ]}` over every two persons of `vecs`
+    (`{pid: projected vector}`, the cast who form the common set) with a cosine (a zero vector has none) and a top in both
+    `score_tops` and `sampled_tops` (`{pid: top key}`); `score_differ` counts the pairs whose two score tops differ,
+    `sampled_differ` those whose sampled tops do."""
+    out = {b: [0, 0, 0] for b in COSINE_BINS}
+    ids = sorted(vecs)
+    for i, a in enumerate(ids):
+        for b in ids[i + 1:]:
+            c = _cosine(vecs[a], vecs[b])
+            if c is None or None in (score_tops.get(a), score_tops.get(b), sampled_tops.get(a), sampled_tops.get(b)):
+                continue
+            row = out[cosine_bin(c)]
+            row[0] += 1
+            row[1] += score_tops[a] != score_tops[b]
+            row[2] += sampled_tops[a] != sampled_tops[b]
+    return out
+
+
 def read_decisions(w) -> dict:
     """The `--decisions` figures on a built realm (no season is played). Per referent: the persons handed
     the question, those who form any candidate, the common set (intersection of those), the number of
-    distinct tops, and the deciding-term counts."""
+    distinct tops, and the deciding-term counts. `pairwise` is the pairwise table summed over the referents
+    (`pairwise_rows`, over the cast)."""
     w._rehome()
     fx = w.fixtures
     draw = draw_factory(w.world_seed, lambda: w.tick)
     rows = []
     foldable = resolvable_verbs()
     total = new_split()
+    pairwise = {b: [0, 0, 0] for b in COSINE_BINS}
     for label, ref in common_referents(w):
-        q = decision_question(ref)
         split = new_split()
-        formed = {pid: formed_set(w, p, q, foldable) for pid, p in sorted(w.persons.items())}
-        keyed = {pid: {(c.verb, c.subject, is_self_plea(c, pid)): c for c in cs} for pid, cs in formed.items() if cs}
-        common = set.intersection(*(set(k) for k in keyed.values())) if keyed else set()
+        handed, keyed, order = common_set(w, ref, foldable)
+        common = set(order)
         tops: dict = {}
+        score_tops: dict = {}
         deciders: Counter = Counter()
-        order = sorted(common, key=lambda k: (k[0], k[1] or ""))
         for pid in keyed:
             cands = [keyed[pid][k] for k in order]
             r = attribute_top(w.persons[pid], cands, fx, draw,
@@ -413,16 +480,73 @@ def read_decisions(w) -> dict:
             tally_split(split, pid, r)
             tally_split(total, pid, r)
             tops[pid] = (r["top"].verb, r["top"].subject, is_self_plea(r["top"], pid)) if r["top"] else None
+            if cands:
+                lead = CH.score_order(cands, {id(c): s for c, s in zip(cands, r["scores"])})[0]
+                score_tops[pid] = (lead.verb, lead.subject, is_self_plea(lead, pid))
+        cast = {pid: projected_vector(w.persons[pid], fx) for pid in keyed if not w.persons[pid].is_cohort}
+        for b, row in pairwise_rows(cast, score_tops, tops).items():
+            pairwise[b] = [x + y for x, y in zip(pairwise[b], row)]
         by_faction: dict = {}
         for pid, top in tops.items():
             fac = world_q.faction_holding(w, pid)
             if fac is not None and top is not None:
                 by_faction.setdefault(fac, set()).add(top)
-        rows.append({"referent": label, "handed": len(formed), "forming": len(keyed),
+        rows.append({"referent": label, "handed": handed, "forming": len(keyed),
                      "common": len(common), "distinct_tops": len({t for t in tops.values() if t is not None}),
                      "faction_tops": sum(len(v) for v in by_faction.values()),
                      "deciders": dict(deciders), "tops": tops, "split": split_figures(split)})
-    return {"rows": rows, "split": split_figures(total), "tau": float(fx.get("choice_temperature"))}
+    return {"rows": rows, "split": split_figures(total), "tau": float(fx.get("choice_temperature")), "pairwise": pairwise}
+
+
+# ---------------------------------------------------------------------------------------------
+# --retest
+
+
+def agreement(values: list) -> tuple:
+    """`(same, pairs)`: of every two entries of `values` (compared by `==`), how many are equal."""
+    n = len(values)
+    return sum(values[i] == values[j] for i in range(n) for j in range(i + 1, n)), n * (n - 1) // 2
+
+
+def redraw_tops(ranked: list, score, p, fx, seed: int, ticks: int) -> list:
+    """`p`'s sampled first candidate over `ranked` at each draw tick `0 .. ticks - 1`: `choose.sample_order` (the chooser's own
+    sampler, `temper` and all) under `draw_factory(seed, tick)`. The scores do not move between ticks; only the draw does."""
+    now = [0]
+    draw = draw_factory(seed, lambda: now[0])
+    tops = []
+    for now[0] in range(ticks):
+        tops.append(CH.sample_order(list(ranked), score, p, fx, draw)[0])
+    return tops
+
+
+def read_retest(w, ticks: int = RETEST_TICKS) -> dict:
+    """THE `--retest` FIGURES on a built realm (no season is played), over the cast and `--decisions`' referents and common sets:
+    `self` = `(same, pairs)` over every cast person's sampled first act at two different ticks of `0 .. ticks - 1` on one
+    referent (SELF-AGREEMENT: the same person, redrawn); `between` the same over every two cast persons at one tick on one
+    referent (BETWEEN-PERSON agreement). Acts are keyed `(verb, subject, is_self_plea)` as `read_decisions` keys them."""
+    w._rehome()
+    fx = w.fixtures
+    foldable = resolvable_verbs()
+    self_k = self_n = btw_k = btw_n = readings = 0
+    for _, ref in common_referents(w):
+        _, keyed, order = common_set(w, ref, foldable)
+        tops: dict = {}
+        for pid in keyed:
+            if w.persons[pid].is_cohort:
+                continue
+            p = w.persons[pid]
+            cands = [keyed[pid][k] for k in order]
+            if len(cands) < 2:
+                continue
+            _, by_id, ranked = _scored(p, cands, fx, believed_odds_query(w, p))
+            tops[pid] = [(c.verb, c.subject, is_self_plea(c, pid))
+                         for c in redraw_tops(ranked, lambda c: by_id[id(c)], p, fx, w.world_seed, ticks)]
+            k, n = agreement(tops[pid])
+            self_k, self_n, readings = self_k + k, self_n + n, readings + 1
+        for t in range(ticks):
+            k, n = agreement([tops[pid][t] for pid in sorted(tops)])
+            btw_k, btw_n = btw_k + k, btw_n + n
+    return {"ticks": ticks, "readings": readings, "self": (self_k, self_n), "between": (btw_k, btw_n)}
 
 
 # ---------------------------------------------------------------------------------------------
@@ -443,9 +567,14 @@ def goal_class(q) -> str:
     return q.about if goals_data.goal(q.about) is not None else "other need"   # an org goal, by id
 
 
-def play_season(w, seasons: int = 1) -> dict:
+def play_season(w, seasons: int = 1, rebuild=None) -> dict:
     """Play `seasons` seasons through `populated.run`'s composition with the chooser WATCHED, never
     steered, and read what each person did and which question they answered.
+
+    `rebuild` is a callable returning a fresh world built as `w` was (same seed, same arm): when given, the SAME reading is taken
+    on it with `choice_temperature` swept to 0 (the score order alone, no draw) and its `distinct_multisets`, `largest_shared`
+    and `hash` come back as `distinct_multisets_t0`, `largest_shared_t0` and `hash_t0`; without it they are `None` (a caller
+    that holds no way to build the arm again, as `run_arms`' swept worlds, reads the one column).
 
     WHAT "DID" MEANS (HR-8): the acts the fold RESOLVED (`d.resolved`), not the acts EXECUTED (made, in
     `corpus_run._attribute_acts`'s made/refused rule) and not the acts ATTEMPTED (`corpus_run.attempts`,
@@ -453,7 +582,6 @@ def play_season(w, seasons: int = 1) -> dict:
     entered the fold and was refused there is in them, and a contested act refused at admission, which
     never enters `d.resolved`, is not."""
     d = SeasonDriver(w)
-    tau = float(w.fixtures.get("choice_temperature"))
     split = new_split()                    # every deliberation's `draw_kind` / `field_zero`, read beside the chooser
     answered: Counter = Counter()          # (source, goal class) -> deliberations
     by_act: dict = {}                      # (actor, verb, subject) -> (source, goal class)
@@ -462,7 +590,7 @@ def play_season(w, seasons: int = 1) -> dict:
     def watch(p, q, ranked, terms, sampled):
         # `make_chooser`'s observer hook: what the chooser itself ranked, scored and sampled (B09.13). Nothing is
         # scored again and nothing is steered; `choose.deciding_term` is the one owner of the attribution rule.
-        tally_split(split, p.id, CH.deciding_term(ranked, terms, sampled[0] if sampled else None, tau))
+        tally_split(split, p.id, CH.deciding_term(ranked, terms, sampled[0] if sampled else None, own_tau(p, w.fixtures)))
         key = (q.source, goal_class(q))
         answered[key] += 1
         heard.append(key)
@@ -493,8 +621,16 @@ def play_season(w, seasons: int = 1) -> dict:
         else:
             per_act[key] += 1
     sigs = Counter(tuple(sorted(c.items())) for c in multisets.values())
+    t0 = None
+    if rebuild is not None:
+        w0 = rebuild()
+        w0.fixtures = w0.fixtures.sweep("choice_temperature", 0)
+        t0 = play_season(w0, seasons)
     return {"seasons": seasons, "acts": len(d.resolved), "actors": len(multisets),
             "distinct_multisets": len(sigs), "largest_shared": max(sigs.values(), default=0),
+            "distinct_multisets_t0": None if t0 is None else t0["distinct_multisets"],
+            "largest_shared_t0": None if t0 is None else t0["largest_shared"],
+            "hash_t0": None if t0 is None else t0["hash"],
             "answered": dict(answered), "per_act": dict(per_act), "unmapped": unmapped,
             "split": split_figures(split), "tau": float(w.fixtures.get("choice_temperature")),
             "hash": w.content_hash()}
@@ -665,6 +801,21 @@ def print_decisions(r: dict, arm: str) -> None:
     print(f"  all referents: {dict(sorted(tot.items()))}; distinct tops {sum(r_['distinct_tops'] for r_ in r['rows'])}"
           f"; distinct tops within a faction, summed over its factions {sum(r_['faction_tops'] for r_ in r['rows'])}")
     print_split(r["split"], r["tau"])
+    print("  pairs of cast persons taking a different top, by the cosine of their projected vectors:  "
+          "pairs  score top  sampled top")
+    for b, (n, k_score, k_sampled) in r["pairwise"].items():
+        print(f"    {b:15} {n:6}  {_pct(k_score, n):>9}  {_pct(k_sampled, n):>11}")
+
+
+def _pct(k: int, n: int) -> str:
+    return "-" if n == 0 else f"{100.0 * k / n:.0f}%"
+
+
+def print_retest(r: dict, arm: str) -> None:
+    print(f"--retest [{arm}]  BUILT REALM, NO SEASON PLAYED; {r['ticks']} draw ticks, {r['readings']} person-referent readings")
+    print(f"  self-agreement (same person, redrawn, same first act): {_pct(*r['self'])} ({r['self'][0]} of {r['self'][1]} pairs of ticks)")
+    print(f"  between-person agreement (two cast persons, one tick, same first act): "
+          f"{_pct(*r['between'])} ({r['between'][0]} of {r['between'][1]} pairs)")
 
 
 def print_split(sp: dict, tau: float) -> None:
@@ -679,8 +830,10 @@ def print_split(sp: dict, tau: float) -> None:
 
 def print_season(r: dict, arm: str) -> None:
     print(f"--season [{arm}]  PLAYS {r['seasons']} SEASON(S)")
+    t0 = ("not read (no second build)" if r["distinct_multisets_t0"] is None else
+          f"{r['distinct_multisets_t0']} (largest shared by {r['largest_shared_t0']}) at choice_temperature 0")
     print(f"  acts {r['acts']} by {r['actors']} actors; distinct per-person resolved verb multisets "
-          f"{r['distinct_multisets']} (largest shared by {r['largest_shared']} persons)")
+          f"{r['distinct_multisets']} (largest shared by {r['largest_shared']} persons) at choice_temperature {r['tau']:g}; {t0}")
     print("  answered question (source / goal class): deliberations")
     for k, v in sorted(r["answered"].items()):
         print(f"    {k[0]:14} {k[1]:10} {v}")
@@ -731,20 +884,22 @@ def main(argv=None) -> int:
     ap.add_argument("--null", action="store_true", help="alignment 'uniform' (H-66)")
     ap.add_argument("--retries", action="store_true", help="PLAYS --seasons seasons: the five readings of a remembered refusal")
     ap.add_argument("--seasons", type=int, default=2, help="seasons --retries plays (default 2)")
+    ap.add_argument("--retest", action="store_true", help="built realm, NO season: self- and between-person agreement of the sampled top")
+    ap.add_argument("--ticks", type=int, default=RETEST_TICKS, help="draw ticks --retest redraws over (default %(default)s)")
     ap.add_argument("--seed", type=int, default=0)
     a = ap.parse_args(argv)
     if a.retries:
-        if a.arms or a.control or a.null or a.persons or a.decisions or a.season:
+        if a.arms or a.control or a.null or a.persons or a.decisions or a.season or a.retest:
             ap.error("--retries is its own mode: it takes no other reading or arm flag")
         print_retries(play_retries(a.seed, a.seasons))
         return 0
-    if a.arms and (a.control or a.null or a.persons or a.decisions or a.season):
+    if a.arms and (a.control or a.null or a.persons or a.decisions or a.season or a.retest):
         ap.error("--arms is its own mode: it takes no other reading or arm flag")
     if a.control and a.null:
         ap.error("--control and --null are separate arms; run them apart")
-    if not (a.persons or a.decisions or a.season or a.arms):
+    if not (a.persons or a.decisions or a.season or a.arms or a.retest):
         if not (a.control or a.null):
-            ap.error("name a reading: --persons, --decisions, --season or --arms")
+            ap.error("name a reading: --persons, --decisions, --season, --retest or --arms")
         a.decisions = True                 # an arm alone reads the cheapest realm reading
         print("(--control/--null alone implies --decisions)")
     if a.arms:
@@ -766,8 +921,10 @@ def main(argv=None) -> int:
             print_persons(read_persons(_build(a.seed, a.control)), arm)
         if a.decisions:
             print_decisions(read_decisions(_build(a.seed, a.control)), arm)
+        if a.retest:
+            print_retest(read_retest(_build(a.seed, a.control), a.ticks), arm)
         if a.season:
-            print_season(play_season(_build(a.seed, a.control), 1), arm)
+            print_season(play_season(_build(a.seed, a.control), 1, rebuild=lambda: _build(a.seed, a.control)), arm)
     return 0
 
 
