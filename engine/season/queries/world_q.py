@@ -1676,7 +1676,7 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
 # ===========================================================================
 
 # THE `tenure_kinds` MEMBER A RESIDENCE IS, named once for its readers here and for the builders that
-# mint one per person (`WORKS_KIND`'s shape). `loop/effects.py::_eff_migrate` spells the literal at
+# mint one per person (`WORKS_KIND`'s shape). `loop/effects_migration.py::_eff_migrate` spells the literal at
 # its one `Tenure(...)` construction, because `data/verbs.py::_derive_openers_from_effects` reads a
 # kind off that call as a string CONSTANT. Refused at import if the roster stops carrying it: every
 # residence Query would otherwise match nothing and read as a world where nobody lives anywhere.

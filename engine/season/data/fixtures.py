@@ -1034,7 +1034,7 @@ DEFAULT_FIXTURES = Fixtures(
     # from where the term STOOD, so a payment made early buys the next term rather than being lost).
     # `H-80`'s shape exactly, and `record_stage_term` above is its precedent: the ACT declares the
     # term, a computed act carries no operands to declare one with, so this is the instrument's
-    # declared stand-in. Injection sites: `loop/effects.py::_eff_oblige` and `_eff_transfer`.
+    # declared stand-in. Injection sites: `loop/effects_governance.py::_eff_oblige` and `loop/effects_economy.py::_eff_transfer`.
     # ⚠ `None` IS THE CONTROL AND IT IS THE PRE-`17b` TREE EXACTLY: no `oblige` carries a term,
     # nothing matures at MATTER, no payment renews anything, and an establishment persists until
     # released -- `F.18`'s own *"assumed"* column. `1` is the shortest term the loop can express, and

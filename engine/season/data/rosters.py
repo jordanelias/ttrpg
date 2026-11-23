@@ -836,7 +836,7 @@ def _check_scale_of_rung(mapping: dict, kinds) -> None:
 SCALE_OF_RUNG = roster_map("scale_of_rung", "scale")
 _check_scale_of_rung(SCALE_OF_RUNG, RUNG_KINDS)
 # The kinds `build` may make -- a works' `plan` is a Site only if it is one of
-# these (`loop/effects.py::_eff_build`). Bound beside `RUNG_KINDS`, `found`'s twin roster, rather
+# these (`loop/effects_founding.py::_eff_build`). Bound beside `RUNG_KINDS`, `found`'s twin roster, rather
 # than read by a bare `roster(...)` at the one call site. `data/fixtures.py` reads the same row for
 # its both-direction table checks, so a kind here always has a wear and a band-floor row.
 SITE_KINDS = roster("site_kinds")
