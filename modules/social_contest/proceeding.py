@@ -11,7 +11,8 @@ precedent): `dials["moves"]` is `{move id: (effect, draw)}` (`rosters.yaml: proc
 builder adds the two keys -- basis: the record has no field for a roster and this item may not edit it.]
 
 DRAWS: every exchange takes `DRAWS_PER_EXCHANGE(G)` normals however it goes, in this order: `view` takes all but the last two, `exchange`
-takes the hold and then the speech. `exchange` asserts its two; the sitting asserts the whole (B24p.11).
+takes the hold and then the speech. `exchange` asserts its two and, given `mark` (`rng.n` before the view), the whole count; the sitting
+(B24p.11's `proceed`) passes it.
 
 NOT HERE: the sitting (order, `_start`, the policy, `proceed`; B24p.11) and the close (`_close`, `p_carried`, `view_odds`; B24p.12).
 `View.odds` is returned as 0.0 until `view_odds` fills it.
@@ -31,8 +32,9 @@ from .roll import obstacle
 
 def DRAWS_PER_EXCHANGE(G: int) -> int:
     """THE ONE STATEMENT OF THE EXCHANGE'S DRAW COUNT, in normals, for `G` grounds; every move takes it, `rest` and `concede` included.
-    In order: his accuracy; per ground the worth of arguing on it and of pressing on it, two for the frame, two for the press's object;
-    conceding; resting; the mood; their point; his own point; the other's intent; his esteem; his awe; then the hold and the speech."""
+    In order: his accuracy; the worth of arguing on each ground, then of pressing on each; conceding, the mood, their point, his own
+    point, the other's intent, his esteem, resting, his awe; then, per ground, two for the frame and two for the press's object; then the
+    hold and the speech."""
     return 6 * G + 11   # [canonical: V2 p2 §C.2 -- 6G + 11 normals an exchange]
 
 
@@ -275,7 +277,7 @@ def heard(inp, v) -> float:
     """PRESENCE: the share of him the room listens to, against the man opposite: the better heard of the two is heard whole and the other by
     his share; with nobody opposite, against what an ordinary man of the middle Presence would get from this room (C1)."""
     own = _heard_abs(inp, v)
-    o = _lead(inp, _other(v.side)) if v.side else None
+    o = _foe(inp, v) if v.side else None    # V2 p4 §L 15: in an abridged act the one addressed is the man opposite
     if o is None:
         return min(1.0, own / _heard_abs(inp, replace(v, presence=inp.dials["attribute_mid"])))
     return own / max(own, _heard_abs(inp, o))
@@ -495,7 +497,9 @@ def speech(inp, st, mover, voice, h, ground, it, relation, *, press_on=None, abr
         T = press_on
         sig = _lv(D["fit_level"]) * _weight(inp, st, ground) * aim(inp, T, ground, it, tag) + D["room_level"] * heat(inp, st, T) \
             + D["esteem_step"] * esteem(inp, st, voice)
-        opp = max(0.0, T.will + T.rank - _d(st.cond)[T.id].strain / MU_PER_DIE - awe(inp, T))    # awe as so many points of Will
+        # [ASSUMPTION; Jordan to correct: awe is subtracted as so many points of Will, as the running model does (`sc2/engine.py:642`); V2 p2 §C.4's
+        # text divides it by `MU_PER_DIE` as it does the strain -- basis: the shipped `awe_step` was tuned on the model; no effect while it is 0]
+        opp = max(0.0, T.will + T.rank - _d(st.cond)[T.id].strain / MU_PER_DIE - awe(inp, T))
         return pool, sig, _record(inp, pool, opp, sig, 0.0, _operands(inp, voice, c, foe, pressed=True))
     v = validation(inp, h)
     rl = 1.0 + 2.0 * v * (relevance(inp, voice) - 1.0)    # how sound the speech is, as far as HE can validate it
@@ -691,10 +695,13 @@ def view(inp, st, mover, rng) -> View:
 
 
 # ------------------------------------------------------------------ one exchange
-def exchange(inp, st, mover, choice, rng, framed=None) -> tuple:
+def exchange(inp, st, mover, choice, rng, framed=None, mark=None) -> tuple:
     """one exchange: `(Sitting, Beat)`. The view's draws are already taken (`view`, the choice made on it, `framed` the picked option's frame);
-    this takes the hold and then the speech, whatever the move. Pure but for `rng`; new values by `replace`."""
+    this takes the hold and then the speech, whatever the move. Pure but for `rng`; new values by `replace`. `mark` is `rng.n` before the
+    view: where given, the whole exchange (view and speech) is asserted to have taken `DRAWS_PER_EXCHANGE` normals."""
     new, beat, _ = _exchange(inp, st, mover, choice, rng, framed)
+    if mark is not None:
+        assert rng.n - mark == 2 * DRAWS_PER_EXCHANGE(len(inp.grounds)), (rng.n - mark)    # normals are two uniforms each
     return new, beat
 
 

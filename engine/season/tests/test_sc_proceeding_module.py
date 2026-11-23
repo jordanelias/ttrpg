@@ -132,8 +132,9 @@ def test_an_exchange_takes_exactly_its_draws():
         for mover in (inp.room[0], inp.room[1]):
             rng = _Counting(_key("count", checked).key)
             ground = "consequence" if PROCEEDING_MOVES[mid]["draw"] else None
+            mark = rng.n
             P.view(inp, _sit(inp), mover, rng)
-            P.exchange(inp, _sit(inp), mover, Choice(mid, ground, None, None), rng)
+            P.exchange(inp, _sit(inp), mover, Choice(mid, ground, None, None), rng, mark=mark)
             assert rng.normals == P.DRAWS_PER_EXCHANGE(G) == 35 and rng.n == 2 * 35, (mid, mover.id, rng.normals)
             checked += 1
     assert checked == 2 * len(PROCEEDING_MOVES)
