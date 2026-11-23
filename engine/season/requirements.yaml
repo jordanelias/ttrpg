@@ -573,7 +573,7 @@ rows:
         expects: "passes"
         holds: "unread"
         reading:
-          tree: "fbd22a0e7536fa9224e8d49971f9fc69d659a450"
+          tree: "9962cb71ae0779c720fff20ce1c1858cd9f86f29"
           date: "2026-11-23"
           seed: "none (a roster reading: the 15 pursuits over the 7 axes, no realm built)"
           seasons: 0
@@ -600,7 +600,7 @@ rows:
         expects: "the strict-top share above one half at the shipped tau at seeds 0, 1, 2, and above the `--control` arm's (pursuits = realm mean) at each seed: one half alone does not separate the two, the flattened arm clears it too"
         holds: "yes"
         reading:
-          tree: "fbd22a0e7536fa9224e8d49971f9fc69d659a450"
+          tree: "9962cb71ae0779c720fff20ce1c1858cd9f86f29"
           date: "2026-11-23"
           seed: "0, 1, 2"
           seasons: 0
@@ -680,17 +680,16 @@ rows:
         expects: "the test passes"
         holds: "yes"
         reading:
-          tree: "fbd22a0e7536fa9224e8d49971f9fc69d659a450"
+          tree: "9962cb71ae0779c720fff20ce1c1858cd9f86f29"
           date: "2026-11-23"
           seed: 0
           seasons: 2
-          line: "1 passed in 79.62s (0:01:19)"
+          line: "1 passed in 45.27s"
           control: >-
             the test's own control arm (both gains set to 0, every other fixture shipped) must show
             no pair differing beyond stance (`out["control"][1] == 0`), and passed; seed and
             seasons are the test body's (`build_realm(0)`, `populated.run(2, 0, w=w)`), the log
-            holds pytest's closing line only; the wall time is a shared machine's (the B02 reading
-            took 42.40s)
+            holds pytest's closing line only
           does_not_show: >-
             one seed; a regard that differs between hearers is not a regard that changes a
             decision (R-07.d); run with `-p no:cacheprovider` `--timeout=600` and `PYTHONHASHSEED=0`
@@ -715,11 +714,11 @@ rows:
         expects: "a planted regard changes the top candidate at least once in seeds 0-2; the unplanted seed is equal"
         holds: "unread"
         reading:
-          tree: "fbd22a0e7536fa9224e8d49971f9fc69d659a450"
+          tree: "9962cb71ae0779c720fff20ce1c1858cd9f86f29"
           date: "2026-11-23"
           seed: "0, 1, 2"
           seasons: 0
-          line: "1 passed, 12 deselected in 4.29s"
+          line: "1 passed, 12 deselected in 3.54s"
           control: >-
             the test (`test_r07_a_planted_regard_changes_what_a_person_ranks_first`) reads each seed's built
             realm: the unplanted world ranks the first holder of a person-subject candidate equal on a
@@ -784,17 +783,17 @@ rows:
         expects: "not the top above 0 at the shipped temperature and 0 at temperature 0, at seeds 0, 1, 2"
         holds: "yes"
         reading:
-          tree: "fbd22a0e7536fa9224e8d49971f9fc69d659a450"
+          tree: "9962cb71ae0779c720fff20ce1c1858cd9f86f29"
           date: "2026-11-23"
           seed: "0, 1, 2"
           seasons: 1
-          line: "3 passed, 10 deselected in 96.28s (0:01:36)"
+          line: "3 passed, 10 deselected in 64.02s (0:01:04)"
           control: >-
             the same test plays each seed at `choice_temperature` swept to 0 and asserts 0
             deliberations chose other than the leading candidate, and that both arms deliberated
             over a strict top; the printed line of `decision_spread --season --seed s` (one season,
-            `PYTHONHASHSEED=0`) reads `not the top candidate: 128 of 284` at seed 0, `142 of 302` at
-            seed 1 and `117 of 313` at seed 2 (0.451, 0.470, 0.374), deliberations with a strict top
+            `PYTHONHASHSEED=0`) reads `not the top candidate: 139 of 305` at seed 0, `156 of 307` at
+            seed 1 and `126 of 327` at seed 2 (0.456, 0.508, 0.385), deliberations with a strict top
             and not resolved acts
           does_not_show: >-
             one season a seed; the test's own counts are not printed in this log (pytest's closing
