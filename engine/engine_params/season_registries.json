@@ -3318,6 +3318,23 @@
             "on"
           ]
         },
+        "crisis_arms": {
+          "source": "B10.13 (`16_PESSIMIST_CHAR_A` \"The resolution, decided\" 3; U1 F-43: the switch is `Fixtures.crisis_arm`, values `rule` and `drawn`): the two ways a crisis of faith comes out.",
+          "note": "THE ARMS OF `Fixtures.crisis_arm` (`H-472`), read by `data/fixtures.py::load` (a shipped value outside this set is refused) and, from B10.15, by `loop/resolve.py::_conviction_crisis`. `rule` is the CONTROL (today's function: the branch is chosen by a rule over state the crisis already reads, nothing is rolled) and SHIPS until B98; `drawn` rolls one draw per scarring act and reads the band from `tables.crisis_bands`. [ASSUMPTION: the roster's name and shape -- basis: `stance_polarities` is the tree's form for a swept string arm; Jordan to correct.]",
+          "values": [
+            "rule",
+            "drawn"
+          ]
+        },
+        "crisis_write_kinds": {
+          "source": "B10.13 (`16_PESSIMIST_CHAR_A` item 3, the band table): the writes a crisis band may make.",
+          "note": "THE THREE WRITES A ROW OF `tables.crisis_bands` MAY NAME, read by `data/rosters.py::_load_crisis_bands`, which refuses any other. `intensity` moves the creed in crisis by a whole number of steps on `conviction_map`'s closed spine (an integer; the reader clamps it); `scar` sets the count on the creed in crisis (a named setting); `branch` names the one composite rule the Failure band applies (today's FOLD / DESTROYED branches, with the third arm that replaces the unbuilt RESTABILISE). [ASSUMPTION: the closed set of write names -- basis: the source states the writes in words and names no kinds; the three are the words its table uses; Jordan to correct.]",
+          "values": [
+            "intensity",
+            "scar",
+            "branch"
+          ]
+        },
         "odds_weightings": {
           "source": "v10 CR-17 (M1, AQ-X1 (b), taken at `CLAUDE.md` section 0's ladder step 5): whether the chooser's pursuit term for a CONTESTED candidate is weighted by the person's own believed chance of the band that writes what the term prices.",
           "note": "THE ARMS OF `Fixtures.odds_weighting` (`H-248`), read by `decision/choose.py::odds_weight`, the factor `score_terms` multiplies the pursuit term by. `none` is the CONTROL: the factor is 1 for every candidate, the term as it stood before CR-17. `believed` multiplies a contested candidate's pursuit term by the sum, over the bands the verb's `writes:` map gives a non-empty write, of the person's believed chance of that band (`seam/wrappers/sigma.py::believed_chance`, CP-T01-03's mode (b), passed to the chooser on the View as `View.odds`); a candidate whose verb contests nothing, whose verb writes in no band, or whose believed chance is `None` (a factor he cannot know, no dice dealt, S27.4 refuses the attempt, a prize another module rolls) keeps the term as it was.",
@@ -4231,6 +4248,35 @@
             "thread_truth": {
               "thread_read": 1
             }
+          }
+        },
+        "crisis_bands": {
+          "source": "`proposals/16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` \"The resolution, decided\" 3 (the four-band table, copied), \"Exact edits, by owner\" (row `rosters.yaml`); workplan v12 B10.13.",
+          "note": "Overwhelming -- FAITH RENEWED, the one outflow the count has: `intensity: 1` (the reader clamps at the ceiling) and `scar: zero` (the count on `x` resets to 0). [ASSUMPTION; Jordan to correct: that renewal gives one step and clears the count -- basis: the source's \"faith renewed\"; no figure beyond +1.] Success -- HE HOLDS: nothing on the intensity, and `scar: threshold_less_one` (the count is set to the threshold less one, so it will take another wound to test him again). [ASSUMPTION; Jordan to correct: that one wound, not two, tests him again -- basis: the source's \"another wound to test him again\".] Partial -- HE WAVERS, recoverable by the Overwhelming band of a later test: `intensity: -1` (a creed at 1 goes to a held rejection, 0). [ASSUMPTION; Jordan to correct: one step down, no change to the count -- basis: the source's \"recoverable\".] Failure -- HE BREAKS, TODAY'S BRANCH: `branch: fold_else_destroy_else_minus_two` (FOLD into the highest-intensity incompatible co-held creed, else DESTROYED where nothing else is held, else -- something compatible is held -- intensity -2 floored at 0). The third arm replaces the unbuilt RESTABILISE branch of `conviction_after_crisis`, so no person in crisis is a no-op; `conviction_map`'s closed spine is kept (integers, clamped), so no rounding rule is needed. [ASSUMPTION; Jordan to correct: the -2 and the floor at 0 -- basis: the source's \"intensity -2 floored at 0\".] The write NAMES (`zero`, `threshold_less_one`, `fold_else_destroy_else_minus_two`) are read by B10.14's reader; a name it does not know is its refusal.",
+          "bands": {
+            "Overwhelming": [
+              {
+                "intensity": 1
+              },
+              {
+                "scar": "zero"
+              }
+            ],
+            "Success": [
+              {
+                "scar": "threshold_less_one"
+              }
+            ],
+            "Partial": [
+              {
+                "intensity": -1
+              }
+            ],
+            "Failure": [
+              {
+                "branch": "fold_else_destroy_else_minus_two"
+              }
+            ]
           }
         },
         "role_template_pursuits": {

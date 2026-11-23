@@ -22,7 +22,7 @@ from engine.dice_engine.dice_engine import MU_PER_DIE
 
 from ..gaps import Forbidden, Ungraded
 from .cast import STANCE_MAX
-from .rosters import ARMY_VERBS, DIFFICULTY_LEVELS, roster, roster_map, table
+from .rosters import ARMY_VERBS, CRISIS_ARMS, DIFFICULTY_LEVELS, roster, roster_map, table
 
 class Fixtures:
     """S42.2.1: never invent a constant. Inject it, declare it a harness fixture at
@@ -1257,6 +1257,17 @@ DEFAULT_FIXTURES = Fixtures(
     # `0` is the CONTROL and SHIPS: the factor is exactly 1.0 for every person and the draw is today's. [ASSUMPTION; medium; Jordan to correct; revert: the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-476 -- site: Fixtures temper_gain, graded `assumption`; the design names no live value to ship, so it is injected at the control and swept 0 / -0.5 / -0.75]
     temper_gain=0.0,                   # `H-476`, swept 0 (control, SHIPPED) / -0.5 (proposed) / -0.75
+    # `H-472` (B10.13; `16_PESSIMIST_CHAR_A` "The resolution, decided" 3; U1 F-43). HOW A CRISIS OF FAITH COMES OUT: `rule` is the CONTROL and SHIPS (today's
+    # `person_q.conviction_after_crisis`: the branch is chosen by a rule over state the crisis already reads, nothing is rolled); `drawn` rolls one draw per
+    # scarring act and reads the band from `rosters.yaml: tables.crisis_bands` (B10.14, B10.15). A value outside `rosters.yaml: crisis_arms` is refused at load.
+    # A-24 rules that `drawn` ships; it ships once `crisis_obstacle` is calibrated, and the flip is B98's. [ASSUMPTION; medium; Jordan to correct; revert: `rule`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-472 -- site: Fixtures crisis_arm, graded `assumption`; A-24 rules `drawn` and its obstacle has no shipped literal, so the arm is injected at the control and swept rule / drawn at the lightest obstacle / drawn at the heaviest]
+    crisis_arm="rule",                 # `H-472`, swept rule (control, SHIPPED) / drawn at the lightest obstacle level / drawn at the heaviest
+    # `H-473` (B10.13; same source, "no shipped literal"). THE OBSTACLE A CRISIS IS ROLLED AGAINST, a level of `rosters.yaml: difficulty_levels` (sized by
+    # `difficulty_ob`), read by the emitter at `crisis_arm: drawn` (B10.15). `None` is the SHIPPED value: its number is set by the joint calibration of A-5, A-6, A-7
+    # and A-26 (B98), and until then the term is absent; at `drawn` with `None` the emitter raises, naming B98. [ASSUMPTION; medium; Jordan to correct; revert: `None`, absent.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-473 -- site: Fixtures crisis_obstacle, graded `assumption`; no document gives a level, so it is absent at the control and swept over B05's four difficulty levels]
+    crisis_obstacle=None,              # `H-473`, swept plain / routine / demanding / hard; None (SHIPPED, absent until B98)
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.
@@ -1268,6 +1279,11 @@ def load() -> None:
     It lives here and not in `rosters.py` because this module imports `rosters` (the other way would close an import cycle)."""
     from .rosters import check_capability_fixtures
     check_capability_fixtures(dict(DEFAULT_FIXTURES._v))
+    arm, obstacle = DEFAULT_FIXTURES.get("crisis_arm"), DEFAULT_FIXTURES.get("crisis_obstacle")
+    if arm not in CRISIS_ARMS or (obstacle is not None and obstacle not in DIFFICULTY_LEVELS):
+        raise Forbidden(f"`Fixtures crisis_arm` is {arm!r} and `crisis_obstacle` is {obstacle!r}", "data/fixtures.py",
+                        needs=f"an arm of `rosters.yaml: crisis_arms` {sorted(CRISIS_ARMS)} and an obstacle that is None or a level of `difficulty_levels` {list(DIFFICULTY_LEVELS)}",
+                        law="B10.13 (H-472, H-473) -- the arm is a closed set and the obstacle is a level the ladder names, never a number made up here")
     levels, sized = DIFFICULTY_LEVELS, tuple(DEFAULT_FIXTURES.get("difficulty_ob"))
     if sized != levels:
         raise Forbidden(f"`Fixtures difficulty_ob` sizes {list(sized)}, and `rosters.yaml: difficulty_levels` names {list(levels)}", "data/fixtures.py",

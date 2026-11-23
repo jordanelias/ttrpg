@@ -1231,6 +1231,51 @@ def _load_band_numbers(name: str, mapping: dict, bands, *, whole: bool, complete
 # `conceal` writes (`forge_quality`, a band with no row makes no document). Read through the two functions below, never by key.
 TASK_FRACTION = _load_band_numbers("task_fraction", roster_map("task_fraction", "bands"), DEGREE_BANDS, whole=False, complete=True)
 FORGE_QUALITY = _load_band_numbers("forge_quality", roster_map("forge_quality", "bands"), DEGREE_BANDS, whole=True, complete=False)
+def _load_crisis_bands(mapping: dict, bands, kinds) -> dict:
+    """B10.13: `rosters.yaml: tables.crisis_bands.bands` -- degree band -> an ordered tuple of typed writes `(kind, value)`, refused at import
+    naming the row when a key is no band of the one ladder, a band has no row, a row is not a list of one-key mappings, a write's kind is outside
+    `kinds` (`rosters: crisis_write_kinds`), or its value is not the kind's type (`intensity`: a whole number; any other kind: a non-empty name).
+    A function so a test can plant a bad table and watch it refuse. What a NAME means (`zero`, `threshold_less_one`, a branch) is the reader's,
+    `person_q.conviction_after_crisis` from B10.14: this loader keeps the table's shape and nothing else."""
+    bad = [f"band {b!r}: not on the degree ladder {sorted(bands)}" for b in mapping if b not in bands]
+    bad += [f"band {b!r}: no row" for b in sorted(bands) if b not in mapping]
+    out: dict = {}
+    for b, row in mapping.items():
+        if b not in bands:
+            continue
+        if not isinstance(row, list) or not row:
+            bad.append(f"band {b!r}: {row!r} is not a non-empty list of writes")
+            continue
+        writes = []
+        for w in row:
+            if not isinstance(w, dict) or len(w) != 1:
+                bad.append(f"band {b!r}: write {w!r} is not a one-key mapping")
+                continue
+            (kind, val), = w.items()
+            if kind not in kinds:
+                bad.append(f"band {b!r}: write {kind!r} is not one of {sorted(kinds)}")
+            elif kind == "intensity" and (isinstance(val, bool) or not isinstance(val, int)):
+                bad.append(f"band {b!r}: intensity {val!r} is not a whole number")
+            elif kind != "intensity" and not (isinstance(val, str) and val):
+                bad.append(f"band {b!r}: {kind} {val!r} is not a name")
+            else:
+                writes.append((kind, val))
+        out[b] = tuple(writes)
+    if bad:
+        raise Unspecified(
+            f"`crisis_bands` rows {sorted(bad)}", "rosters.yaml -- tables.crisis_bands",
+            needs="key each row by a band `engine/dice_engine/dice_engine.py::DEGREE_LABEL` names, every band once, each a list of "
+                  "one-key writes whose kind `rosters: crisis_write_kinds` names",
+            law="B10.13 (`16_PESSIMIST_CHAR_A` item 3) -- what a crisis does is one table read by one reader through the one ladder; "
+                "a band off the ladder is never reached and a write it does not know would be read as nothing")
+    return out
+
+
+# B10.13: THE CRISIS TABLE AND ITS ARMS. `CRISIS_ARMS` bounds `Fixtures.crisis_arm` (`H-472`, checked by `data/fixtures.py::load`); `CRISIS_BANDS` is
+# read by `person_q.conviction_after_crisis` from B10.14 and by nothing at `crisis_arm: rule`.
+CRISIS_ARMS = roster("crisis_arms")
+CRISIS_BANDS = _load_crisis_bands(table_meta("crisis_bands").get("bands") or {}, DEGREE_BANDS, roster("crisis_write_kinds"))
+
 # The band an act that was never drawn reads as -- `Success`, "as today" (`DEGREE_LABEL` names it; no label is spelt here).
 UNROUTED_BAND = _DEGREE_LABEL[_Degree.SUCCESS]
 
