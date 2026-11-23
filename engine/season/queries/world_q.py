@@ -29,7 +29,7 @@ from engine.dice_engine.fmath import ltr_sum
 
 from ..data.arrangements import ARRANGEMENTS      # v11 CR-34: `declared_sitting` reads a row's `disposal`/`quorum`
 from ..data.requires import (
-    RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, UNKNOWN, binding_from_act, binding_of, evaluate,
+    RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE, UNKNOWN, binding_from_act, binding_of, evaluate,
 )
 from ..data.rosters import (
     CONTINUATION_TIES, SUCCESSIONS,
@@ -3835,7 +3835,7 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
          `goal_referents`, the one owner of what an ambition is about -- its subject, or v9 IN-67's
          goal referents);
       1. a referent among `p`'s own live-tenure objects or inside a seat's purview (`own_purview`,
-         `reach`'s limbs 2 and 4);
+         `reach`'s limbs 2 and 4), the larger recorded shortfall first (B10.70, below);
       2. a question whose `about` is a deed claim in `p`'s own ledger with nonzero valence under
          `p`'s pursuits, ordered by -|valence|: an unpaired kind by `deed_valence(projected_axes(p,
          scar_weight_shift), c)`; a `PAIRED_KINDS` claim (a death or wound -- `deed_valence` is 0 for
@@ -3859,12 +3859,19 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
     -> `0.0`, indifference. A `need` question takes its own ambition's salience, a tier-0 claim the
     maximum over the ambitions whose `goal_referents` contain its referent. So a member whose pursuits
     point with his faction answers the org goal that fits him best first, and one who points against it
-    answers his own want first. Tier 2 keeps -|valence|; tiers 1 and 4 carry 0. Salience is `p`'s own
+    answers his own want first. Tier 2 keeps -|valence|; tier 4 carries 0. Salience is `p`'s own
     state against the stores his edges name (AX-2). An org that expects nothing (no template, no goal)
     reads `0.0`.
 
+    INSIDE TIER 1 AN UNMET NEED IS ATTENDED FIRST, THE LARGER FIRST (B10.70): the key's second slot is
+    `-need`, where `need` is the held claim's value when its predicate's stem is
+    `data/requires.py::SHORTFALL_PREDICATE` (MATTER writes it; `decision/options.py::_from_shortfall_claim`
+    reads it) and `0.0` otherwise, so a steward who holds a shortfall claim about his own granary answers
+    it before a routine claim about the same store, and the 15 short before the 8. The other tier-1
+    claims tie at `0.0`. [ASSUMPTION; medium; Jordan to correct; revert: `(1, 0.0)`.]
+
     `(order[source], q.id)` stays the final tiebreak, so within a tier
-    (and a salience) the old order holds; magnitudes inside tier 1 are not ranked (LIMIT). A source added later
+    (and a salience, and a need) the old order holds. A source added later
     takes its tier from its referents, so `question_sources`' order is not edited. `ambs` is
     `ambitions(w, p)` where the caller already holds it (`questions_for`); `None` computes it.
 
@@ -3899,6 +3906,16 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
     aims = set().union(*refs_of.values())
     mine = own_purview(w, p)
     held_by_id = {c.id: c for c in p.ledger}
+
+    def unmet_need(held) -> float:
+        """The size of an unmet need `held` records -- the value of a claim whose predicate's stem is
+        `SHORTFALL_PREDICATE` (the amount short, MATTER's write) -- else `0.0`: no claim, another
+        predicate, or a value that is no positive number (the reading `options._from_shortfall_claim`
+        gives its `amount`)."""
+        if held is None or str(held.predicate).partition(":")[0] != SHORTFALL_PREDICATE:
+            return 0.0
+        v = held.value
+        return float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) and v > 0 else 0.0
 
     @functools.cache
     def axis_w() -> dict:
@@ -3949,7 +3966,7 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
             return (0, -max(salience(pid) for pid, refs in refs_of.items()
                             if any(r in refs for r in q.referents))) + tie
         if any(r in mine for r in q.referents):
-            return (1, 0.0) + tie
+            return (1, -unmet_need(held)) + tie
         if own or held is None:
             return (4, 0.0) + tie
         # IN-72: a paired claim (death, wound) scores `|lean · bond|` for the doer its `seen.who`
