@@ -203,8 +203,10 @@ ALL DIRECTIONS  top-down · bottom-up · vertical · diagonal · lateral · hori
    claim is not a weak test but an absent one. A loop that asserts conditionally must assert that it
    asserted (`assert checked >= N`).
 3. **Name the falsifier, or you have not attacked the result.** A result claim carries, in the same
-   commit, the test that would have shown it wrong and that test's outcome; the commit is the record, so a
-   build-verification test retires at its batch close (`methodology-execute`). A result claim is wider than a number, and **the claim and its support are different objects; check the support.**
+   commit, the test that would have shown it wrong and that test's outcome; the commit is the record, so a control
+   or falsifier that only shows a build was built is RUN ONCE AND NOT KEPT. A test is committed only if it observes game state (the
+   nine, the season loop or a subsystem, a pin the output crosses) and sits in one lane (`conftest.py`); `methodology-execute`'s
+   accretion pass retires what slips in. A result claim is wider than a number, and **the claim and its support are different objects; check the support.**
 
    | claiming | observe this first |
    |---|---|

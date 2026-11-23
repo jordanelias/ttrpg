@@ -14,7 +14,9 @@ return value is a receipt for it.**
 2. **Return a receipt, not the artifact:** the path(s) you wrote or edited, one line each on what
    changed, every assumption you had to make, and anything only the orchestrator can decide. For
    each test you write, name its class: **game-state** or **build-verification** (`methodology-execute`'s
-   accretion pass defines both). Keep it short enough to read at a glance.
+   accretion pass defines both) and its lane (`conftest.py`: the season loop, the engine, or one subsystem). **Write a
+   build-verification test only to RUN it: report its outcome in the receipt and do not leave it in the tree.** A test
+   that observes no game state, or that has no lane, is not committed. Keep it short enough to read at a glance.
 3. **Never return the artifact's text.** Not an excerpt, not a summary that reproduces its
    structure section by section. If the orchestrator needs the content it will open the file.
 

@@ -184,6 +184,12 @@ content-owner entry (INSTRUCTION / WHERE / FALSIFIER / GATE) in full. An ad hoc 
 step 1 wrote. Either way that instruction **is** the plan Phase 1 checks fidelity against; hand the
 producer the same text, not a paraphrase or a second draft.
 
+**5.1a The producer is told, in its brief, the rule that stops accretion at the source** (Jordan, 2026-11-23: the
+process must actively prevent unnecessary test and tool accretion): a test is kept only if it observes game state
+and has a lane; a control or falsifier that only shows the item was built is run once, its outcome goes in the
+receipt, and the file is not left behind; a new tool names its caller. `valoria-author.md` holds the contract; the
+brief repeats it in one sentence so a producer that has read nothing else is bound by it.
+
 **5.2 Dispatch what the assignment plan says** for this item, or state the deviation (§THE
 ASSIGNMENT PLAN, *Deviating*). Every producer is `Agent({ subagent_type: "valoria-author", ... })` in
 `isolation: worktree` (RULED 2026-10-13, the session's user: *"just batch the work so the tree is
@@ -204,7 +210,7 @@ catches.
 
 **5.4 Commit the item as one commit**, subject `[scope] …` with the `Item: <handle>` trailer, the
 in-flight row's `built` update, and the producer's receipt in the body (`NOT DONE` included, and each
-new test's class, game-state or build-verification, with each falsifier's outcome). **Never
+new test's class, game-state or build-verification, its lane, and each falsifier's outcome; and each new tool's caller). **Never
 one diff spanning several items.** Subject `[skip ci]` unless this is the batch's last item (§CI
 CADENCE).
 
@@ -319,7 +325,12 @@ working-tree diff. A batch has ONE close (RULED, Jordan 2026-11-06, §BATCHES).
       to the existing owner would serve; dead or retired code), read at that skill. Its DISTIL mode is
       not run per batch.
 
-   The commit body names the paths deleted; no count or running total (CLAUDE.md §1).
+   5. **Growth is read, and must be accounted for.** The close commit body records, per lane the close ran
+      (`reading @<sha>`), the tests collected and the `--durations` total, beside the previous close's. A lane
+      that grew names the game-state behaviour each added test observes; one that grew and cannot is retired
+      here, not carried. These figures live in the commit body only (CLAUDE.md §1).
+
+   The commit body names the paths deleted; no count or running total (CLAUDE.md §1) beyond step 5's readings.
 4. **Phase 3.** Tier, escalation trigger, checklist and the top-down/bottom-up handshake (§3.1–3.7) as
    written there, against the post-Phase-2 diff. INTERDEPENDENCIES and the FORWARD/BACKWARD SWEEPS are
    likelier to find something real here than at single-item scale, because several items have landed
@@ -704,6 +715,7 @@ not "one realm, one season", and it is superlinear in them).
 | "the timeout was a budget" | a `--timeout` value no `--durations` reading names a multiple of; or a timed-out test was reported as red or green rather than as a measurement failure; or the close run carried `--maxfail` |
 | "CI ran twice per batch" | a CI run started on a commit other than the batch's last `Item:` commit or the confirming head (a pushed head commit without `[skip ci]`), no PR existed when the first run was due, or a full CI run was used to find what a covering test file or a one- or two-season probe could show |
 | "the accretion pass ran" | a tool or test file in the batch's added list has no stated caller or observed behaviour and was neither deleted nor given a stated reason; or a build-verification test (or scaffolding) the batch added or edited survives the close, or a deleted one was the only observer of a named game behaviour, or a deletion's class is not in the close commit body; or a test over its budget in the close run's `--durations` reading was left as it was with no statement of what the cheaper form would miss; or the first reading was not recorded `reading @<sha>`; or the pass ran after Phase 3; or it added a file, row or document rather than deleting one |
+| "accretion was stopped at the source" | a producer's brief lacked the 5.1a rule; or an item's commit left a build-verification test, a test with no lane, or a tool with no named caller in the tree; or a close grew a lane's tests or run time with no game-state behaviour named for the growth |
 | every Phase 1–3 claim, at BATCH-CLOSE | `methodology-close`'s own falsifier table, unchanged, checked against the batch's cumulative post-Phase-0 diff |
 
 **If this skill's guidance conflicts with `CLAUDE.md`, `architecture/`, or `methodology-close`, they
