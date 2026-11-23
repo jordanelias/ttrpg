@@ -5,9 +5,24 @@ FALSIFIER: at the shared column the stronger creed is still the one folded, or `
 """
 from __future__ import annotations
 
+from engine.dice_engine.dice_engine import DEGREE_LABEL
+
+from ..data import affiliations as A
+from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.matrix import Step
+from ..harness import probes as P
+from ..loop import resolve as R
 from ..queries import person_q as PQ
 from ..state.carriers import Person
-from ._scar_helpers import compatible_pairs, incompatible_pairs
+from ..state.ids import H
+from ._scar_helpers import compatible_pairs, fight, incompatible_pairs, rebound
+
+MOVED = "conviction.moved"
+LEVEL = "demanding"              # [ASSUMPTION; the test reads a direction, not the calibrated value]
+
+
+def _drawn(fixtures=DEFAULT_FIXTURES):
+    return fixtures.sweep("crisis_arm", "drawn").sweep("crisis_obstacle", LEVEL)
 
 
 def _person(conviction: dict, scar: dict) -> Person:
@@ -65,3 +80,44 @@ def test_each_band_writes_what_its_table_row_says():
     assert PQ.conviction_after_crisis(_person({c: 1, d: 2}, scar), band="Failure")[0] == {c: 0, d: 2}, "floored at 0"
     assert PQ.conviction_after_crisis(_person({a: 3, b: 2}, {a: 3, b: 3}), band="Failure") == ({b: 5}, {}), "Failure folds first"
     assert PQ.conviction_after_crisis(_person({c: 3}, {c: 3}), band="Failure") == ({}, {}), "Failure destroys where nothing else is held"
+
+
+def _record(seen: list, draw, pid: str, purpose: str):
+    seen.append((pid, purpose, draw.key))
+    return draw
+
+
+def test_two_crises_of_one_person_in_one_tick_have_two_keys(monkeypatch):
+    """The key of a crisis roll is `H(seed, tick, person, "crisis:" + act.id)`: a person scarred past the threshold by two acts of one tick is drawn twice,
+    once under each act's key. Planted: the shipped table rebound so `fight` wounds every holding alike, three fights folded through the real fold."""
+    monkeypatch.setattr(A, "ENGAGEMENT", rebound(**{A.SHARED_COLUMN: {"fight": -0.3}}))
+    seen = []
+    real = R.draw_factory
+    monkeypatch.setattr(R, "draw_factory", lambda seed, tick_of: (lambda pid, purpose: _record(seen, real(seed, tick_of)(pid, purpose), pid, purpose)))
+    a, b = compatible_pairs()[0]
+    w = P.tiny_world(_drawn(DEFAULT_FIXTURES.sweep("fan_out_mode", "total")))
+    for p in w.persons.values():
+        p.pursuits, p.conviction, p.scar = {}, {a: 5, b: 5}, {a: 2, b: 2}
+    w.step = Step.RESOLVE
+    acts = ("c_fight_1", "c_fight_2", "c_fight_3")
+    before = {pid: dict(p.conviction) for pid, p in w.persons.items()}
+    events = [e for act in acts for e in fight(w, act)]
+    by_person: dict = {}
+    for pid, purpose, key in seen:
+        if purpose.startswith("crisis:"):
+            by_person.setdefault(pid, []).append((purpose, key))
+    # Every conviction a crisis moved is TOLD: one `conviction.moved` Event naming him, graded on the ladder, with the act that scarred him in `causes`.
+    told = {c.subject for e in events if e.kind == MOVED for c in e.changes}
+    moved = {pid for pid, p in w.persons.items() if p.conviction != before[pid]}
+    assert moved and moved <= told, f"a conviction write went untold: moved {moved}, told {told}"
+    for e in (e for e in events if e.kind == MOVED):
+        (change,) = e.changes
+        assert change.field == "conviction" and change.subject in w.persons and e.degree in DEGREE_LABEL.values()
+        assert any(act in acts for act in e.causes), f"{e.id} names none of the acts that scarred {change.subject}"
+    twice = {pid: drawn for pid, drawn in by_person.items() if len(drawn) >= 2}
+    assert twice, f"no person was drawn twice in one tick: {by_person}"
+    for pid, drawn in twice.items():
+        purposes = [p for p, _k in drawn]
+        assert len(set(purposes)) == len(purposes) and set(purposes) <= {"crisis:" + act for act in acts}, (pid, purposes)
+        assert len({k for _p, k in drawn}) == len(drawn), f"{pid}: two crises shared a key"
+        assert all(k == H(w.world_seed, w.tick, pid, p) for p, k in drawn), f"{pid}: a key is not H(seed, tick, person, purpose)"

@@ -16,10 +16,13 @@ from __future__ import annotations
 
 import random
 from dataclasses import replace
+from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree, degree_from_net
+from engine.dice_engine.sigma_leverage import levels_to_net_sigma, opposed_ob, pool_of
+from engine.substrate import composition
 from ..gaps import InstrumentDefect
-from ..data.rosters import (PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, graded_route,
+from ..data.rosters import (CRISIS_ARMS, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, capability_rows, graded_route,
                             MARGIN_ENDING, SCAR_HOLDS, SCAR_SEASON_CAPS, SCAR_VINDICATIONS, STANDING_OCCASION_OPENED_BY, STRATA, UNROUTED_BAND,
-                            require_member, task_share)
+                            require_member, require_use_site, task_share, when_holds)
 
 from typing import Any, Optional
 from ..data.matrix import Step, matrix_row
@@ -32,7 +35,11 @@ from ..loop.predicates import REQUIRES_PREDICATES
 from ..loop.sides import _contests_of, sides_of     # `_contests_of` lives in sides.py (B10-08 close)
 from .. import manifest
 from ..epistemic import observers_for
+from ..data import affiliations as _aff     # read at call time (`_aff.ENGAGEMENT`, `_aff.INCOMPATIBLE`): a rebound table is what is read
 from ..data.affiliations import engagement
+from .effects_combat import MARK_ROLE
+from ..seam.wrappers.pool import pool_pair
+from ..seam.wrappers.sigma import ADVANTAGE_SOURCES, CAPABILITY, EDGE
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
                                  elements_violated_by, pursuit_lean, upheld_by, _pursuits_upheld_by)
 from engine.substrate.descriptors import AFFILIATION_CEILING
@@ -853,10 +860,10 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list, tally: set) 
                changes=[r for _s, r in got], causes=[a.id], emitted_at=w.tick)
     w.log.append(ev)
     TRACE.event(ev.id, ev.kind, ev.causes)
-    _conviction_crisis(w, token, a, dict(hits))
+    _conviction_crisis(w, token, a, dict(hits), events)
 
 
-def _conviction_crisis(w: "World", token: Token, a: Act, broken_of: dict) -> None:
+def _conviction_crisis(w: "World", token: Token, a: Act, broken_of: dict, events: list) -> None:
     """IN-08 `12e` H13 -- THE CRISIS AT SCAR THRESHOLD 3 (G-Q6), the first writer of `(Person,
     conviction)`. Called only by `_scar_witnesses`, after its write, with the persons that write
     just counted: a crisis is reached only by a scar count moving, and a scar count moves only by an
@@ -865,17 +872,29 @@ def _conviction_crisis(w: "World", token: Token, a: Act, broken_of: dict) -> Non
     and at RESOLVE (or ENCOUNTER, where `march` folds) with the driver's ACTS token; WITNESS's token
     is refused at the row (S9.3, `state/world.py`'s `MATRIX_REFUSAL_LAW`).
 
-    WHAT THE CRISIS DOES is `queries/person_q.py::conviction_after_crisis` (fold, restabilise --
-    not built -- or destroyed, rolling nothing); this function only asks it of each scarred person
+    WHAT THE CRISIS DOES is `queries/person_q.py::conviction_after_crisis`; this function only asks it of each scarred person
     and writes the answers, once, through the gate. A person whose vector it leaves as it was is not
-    named, so the gate's no-op refusal (F9) cannot fire on a crisis that changed nothing. Nothing is
-    emitted, on the scar's precedent: `conviction.moved` is declared on the row and no reader
-    consumes it, and an Event here would deposit claims about every observer at WITNESS.
+    named, so the gate's no-op refusal (F9) cannot fire on a crisis that changed nothing.
 
     `broken_of` maps each scarred person, in the scar write's order, to the elements this act just
     scarred them on, and the crisis is asked only among those (`conviction_after_crisis(p,
     among=...)`): a person already at the threshold on one affiliation and scarred on a pursuit
-    alone has no affiliation count that moved, so no crisis."""
+    alone has no affiliation count that moved, so no crisis.
+
+    B10.15 -- THE TWO ARMS OF `Fixtures.crisis_arm` (`H-472`; `rosters.yaml: crisis_arms`).
+      * `rule` (SHIPPED, the control): TODAY'S FUNCTION. `band=None`, nothing drawn, one write of `conviction`, NOTHING EMITTED (on the scar's precedent: an Event
+        here, in the list WITNESS reads, would deposit claims about every observer).
+      * `drawn` (B98's flip; `_drawn_crisis`): each person in crisis rolls ONE draw keyed `H(seed, tick, person, "crisis:" + act.id)` (A-30), is graded on the one
+        ladder, and has that band's row of `tables.crisis_bands` applied by the reader. The write is ONE `w.write` of `conviction` that also resets the count on the
+        creed in crisis (the reader's `scar_delta`), and it is TOLD: one `conviction.moved` Event per person in crisis, not per scarred observer, appended to
+        `events` (the list `resolve` returns) so WITNESS's ordinary co-located fan carries it to the person and those in the room. At `drawn` with
+        `crisis_obstacle` None this raises, naming the fixture."""
+    arm = w.fixtures.get("crisis_arm")
+    require_member(arm, CRISIS_ARMS, f"crisis arm {arm!r} is not in the roster", "H-472",
+                   law="§G -- declare it, default it, sweep it; an unknown arm silently reading `rule` would make the sweep report the control twice")
+    if arm == CRISIS_DRAWN:
+        _drawn_crisis(w, token, a, broken_of, events)
+        return
     moved = []
     for pid, broken in broken_of.items():
         p = w.persons[pid]
@@ -895,6 +914,100 @@ def _conviction_crisis(w: "World", token: Token, a: Act, broken_of: dict) -> Non
             driver="Act", actor=a.actor, via=a.via,
             change=Change(tuple(Subject.entity("persons", pid, fields=("conviction",))
                                 for pid, _a in moved), perform))
+
+
+# B10.15: THE DRAWN CRISIS. The arm the body branches on, the kind it tells, and the one composition role that rolls (`effects_combat.MARK_ROLE`: `(pool, net_sigma, rng, ob)
+# -> (degree, net)`, the module owning `roll_net + net_boost`; the host rolls nothing, as `test_season_shape.py`'s producer scan holds).
+CRISIS_DRAWN = "drawn"                    # [canonical: engine/season/rosters.yaml §crisis_arms]
+CONVICTION_MOVED = "conviction.moved"     # [canonical: engine/season/write_matrix.yaml §(Person, conviction) emits]
+_CRISIS_ROLL = MARK_ROLE                  # [canonical: references/module_contracts.yaml §composition_roles combat.resolve]
+_CRISIS_SITE = require_use_site("crisis")  # the `capability_use_sites` site whose `edge` row `_crisis_net_sigma` reads
+
+
+def _crisis_net_sigma(w: "World", p: Any) -> float:
+    """THE READER OF `capability_use_sites: crisis` (B10.15, A-7): the net sigma the person in crisis rolls with. The site's `edge` rows (the shipped one keys
+    his Spirit, `per: mid`) are selected as the social roll's are (`when_holds`) and each read at the value he holds, then summed by the ONE `edge` reader
+    (`sigma.ADVANTAGE_SOURCES["capability"]`) into named levels for or against him and by `levels_to_net_sigma` into a sigma. A person who holds no value reads the
+    scale's mid-point: no step. `0.0` where the site has no row."""
+    reads = tuple((r, r.key, (p.attributes or {}).get(r.key)) for r in capability_rows(_CRISIS_SITE) if r.role == "edge" and when_holds(r, p))
+    return levels_to_net_sigma(*ADVANTAGE_SOURCES[CAPABILITY](w.fixtures, {EDGE: reads}))
+
+
+def _crisis_obstacle(w: "World", p: Any, x: str) -> float:
+    """The obstacle `p`'s creed `x` is held against (B10.15, A-25): the size of the level `Fixtures.crisis_obstacle` names (`difficulty_ob`) plus ONE HOSTILE TERM
+    per co-held creed `x` is incompatible with, `opposed_ob(that creed's intensity, opposition_rate)` -- the social roll's own opposition term, the creed held
+    against him standing where a person opposite would. [ASSUMPTION; medium; Jordan to correct: the hostile term's size is the opposition rate on the
+    opposing creed's intensity (the source names the term and no size); revert: the base alone.]"""
+    fx = w.fixtures
+    rate = fx.get("opposition_rate")
+    hostile = sum(opposed_ob(v, rate) for y, v in sorted(p.conviction.items()) if y != x and v > 0 and frozenset((x, y)) in _aff.INCOMPATIBLE)
+    return fx.get("difficulty_ob")[fx.get("crisis_obstacle")] + hostile
+
+
+def _crisis_band(w: "World", pid: str, a: Act, x: str) -> str:
+    """The band (a label of the one ladder) of `pid`'s one crisis roll over the creed `x` (B10.15; A-5 to A-7, A-30). The pool is the one pool rule on the held
+    intensity as the score (`pool_of(intensity, 0, pool_add, pool_floor)`, the social roll's pair); his Spirit enters as levels (`_crisis_net_sigma`); the obstacle is
+    `_crisis_obstacle`. The stream is the person's own, keyed `(world_seed, tick, person, "crisis:" + act.id)`: never `World.new_draw`, never the chooser's, and the
+    act id in the purpose gives two crises of one person in one tick two keys. Reads `World`, writes nothing."""
+    p, fx = w.persons[pid], w.fixtures
+    add, floor = pool_pair(fx)
+    pool = pool_of(p.conviction[x], 0, add, floor)
+    ob = _crisis_obstacle(w, p, x)
+    rng = draw_factory(w.world_seed, lambda: w.tick)(pid, f"crisis:{a.id}")
+    return DEGREE_LABEL[degree_from_net(composition.require(_CRISIS_ROLL)(pool, _crisis_net_sigma(w, p), rng, ob)[1], ob)]
+
+
+def _creed_in_crisis(p: Any, among: frozenset, shared: bool) -> Optional[str]:
+    """The creed `conviction_after_crisis` takes as the one in crisis for `p`, or `None` where none is -- ASKED OF THE READER, never re-derived here (its selector, the
+    highest-held or, `shared`, the lowest, lives once). The Overwhelming band resets the count on that creed, so the one key of the `scar_delta` it returns names it."""
+    _after, reset = conviction_after_crisis(p, among=among, band=DEGREE_LABEL[Degree.OVERWHELMING], shared=shared)
+    return next(iter(reset), None)
+
+
+def _drawn_crisis(w: "World", token: Token, a: Act, broken_of: dict, events: list) -> None:
+    """`_conviction_crisis` at `crisis_arm: drawn` (B10.15; `16_PESSIMIST_CHAR_A` "The resolution, decided" 2 and 4). Each scarred person in crisis rolls once (`_crisis_band`),
+    the reader applies his band's row (`conviction_after_crisis(p, among, band, shared)`), and ONE `w.write` of `conviction` moves every such person's vector and resets the
+    count on the creed in crisis (the reader's `scar_delta`: its subjects name both fields, as the gate reads them). Then one `conviction.moved` Event per receipt the gate
+    minted: `degree` the band, `causes` the act that scarred him, `changes` his receipt (an Event has no subject field, so the receipt is how it names him). It is appended to
+    `events` so WITNESS fans it to the room. `shared`: the act's verb is a cell of `affiliation_engagement`'s shared column, which scars every co-held creed alike. A crisis
+    needs `crisis_obstacle`, which ships None until B98 sets it: a drawn crisis without it raises, before anything is rolled or written."""
+    obstacle = w.fixtures.get("crisis_obstacle")
+    if obstacle is None:
+        raise ValueError("`Fixtures crisis_arm` is 'drawn' and `Fixtures crisis_obstacle` is None: the obstacle of a crisis of faith has no shipped literal, "
+                         "set by B98-dials (D-22); sweep it to a level of `rosters.yaml: difficulty_levels`, or set `crisis_arm` to 'rule'")
+    shared = a.verb in (_aff.ENGAGEMENT.get(_aff.SHARED_COLUMN) or {})
+    told = []                                   # (pid, band, vector after, scar_delta)
+    for pid, broken in broken_of.items():
+        p = w.persons[pid]
+        if not p.conviction:                    # no affiliation held, so none can be in crisis
+            continue
+        among = frozenset(broken)
+        x = _creed_in_crisis(p, among, shared)
+        if x is None:
+            continue
+        band = _crisis_band(w, pid, a, x)
+        after, delta = conviction_after_crisis(p, among=among, band=band, shared=shared)
+        told.append((pid, band, after, delta))
+    if not told:
+        return
+
+    def perform() -> None:
+        for pid, _band, after, delta in told:
+            p = w.persons[pid]
+            p.conviction = after
+            if delta:
+                counts = dict(p.scar)
+                for e, d in delta.items():
+                    counts[e] = counts.get(e, 0) + d
+                p.scar = {k: counts[k] for k in sorted(counts) if counts[k] > 0}     # a spent count leaves no key behind, as a mended one does
+
+    got = w.write("conviction", token, None, record_kind="Person", fieldname="conviction",
+                  driver="Act", actor=a.actor, via=a.via,
+                  change=Change(tuple(Subject.entity("persons", pid, fields=("conviction", "scar")) for pid, _b, _a, _d in told), perform))
+    band_of = {pid: band for pid, band, _a, _d in told}
+    for subject, receipt in got:
+        events.append(Event(id=H(w.world_seed, w.tick, subject.id, f"{CONVICTION_MOVED}:{a.id}"), kind=CONVICTION_MOVED,
+                            changes=[receipt], causes=[a.id], emitted_at=w.tick, degree=band_of[subject.id]))
 
 
 def _refuse_party_gap(self, w: "World", a: Act) -> list:

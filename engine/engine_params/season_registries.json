@@ -2544,7 +2544,8 @@
           "kit": "combat_systems.act_cost's caller -- no reader of this row on this tree; B05 (CAP B1, B7) builds it",
           "told_claim_credit": "decision/options.py::competence",
           "choice_temper": "decision/choose.py::temper",
-          "own_state_gate": "queries/person_q.py::OwnStateReader"
+          "own_state_gate": "queries/person_q.py::OwnStateReader",
+          "crisis": "loop/resolve.py::_crisis_net_sigma"
         },
         "capability_site_reads": {
           "social_roll": {
@@ -3966,6 +3967,14 @@
               "key": "prac.thread_sensitivity",
               "side": "actor",
               "gain": "thread_sensitivity_gate"
+            },
+            {
+              "use": "crisis",
+              "role": "edge",
+              "key": "attr.spirit.will",
+              "side": "actor",
+              "level": "minor",
+              "per": "mid"
             }
           ]
         },
