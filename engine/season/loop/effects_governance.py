@@ -316,9 +316,8 @@ def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     appointed and an elected revocation emit the same Event, and the ban is no event of its own
     (`determine`'s precedent: its disposal edge earns only `matter.determined`). The write gate admits
     the ban under `T-o`, licensed by the closure in the same write (`refuse_unauthored`'s `revoked`)."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    obj = d.get("office")
-    off = w.offices.get(obj)
+    obj = office_named_by(a)               # B21.13: `office`, else the computed act's `subject`
+    off = w.offices.get(obj) if isinstance(obj, str) else None
     if off is not None and not has_revocation_disposal(off):
         return NO_CHANGE
     closed = [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live]

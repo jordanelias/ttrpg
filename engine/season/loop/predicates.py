@@ -231,11 +231,10 @@ def office_named_by(a: "Act") -> "Optional[str]":
     `corpus_run._check_office`); a COMPUTED act carries it as its `subject`, the classed Office
     referent of the question it was formed from (`queries/world_q.py::questions_for`'s vacancies),
     read through `binding_from_act`, the fold's own binding. `office` wins where both are present,
-    so no hand-built act changes meaning; `None` when the act names neither. ⚠ `revoke` IS NOT A CALLER (DECISION 2026-10-13 D1): it keeps the base's `office`-only read of
-    `payload['office']` (since v10 REM-28 it declares `referent_class: Office`, which changes what is
-    offered, not this read), so a computed `revoke` stays refused at its precondition as at the base
-    (H-207 (A): a computed `revoke` is not driven). `establish` is not a caller either:
-    the office it names does not exist yet (`office_described_by`)."""
+    so no hand-built act changes meaning; `None` when the act names neither. `revoke` is a caller
+    too (B21.13, BIND_C commit C2): `_req_revoke` and `_eff_revoke` read the seat through it, so a
+    computed `revoke`, which carries the seat as `subject`, reaches its roll. `establish` is not a
+    caller: the office it names does not exist yet (`office_described_by`)."""
     d = a.payload if isinstance(a.payload, dict) else {}
     return d.get("office") or binding_from_act(a).get("subject")
 
@@ -646,8 +645,8 @@ def _req_revoke(w: "World", a: "Act") -> bool:
     *"so long as"* made PURVIEW sufficient while Part E kept the remit necessary. Ruling (3) is
     silent on the remit, so the same question now reads *is the seat above sufficient?* -- still
     `H-91`'s, still not resolved by editing the transcribed `eligibility:` column."""
-    obj = operand_of(a, "office")          # a non-string `office` (a list is unhashable) reads as "": refused, never raised
-    if not obj or obj not in w.offices:
+    obj = office_named_by(a)               # `office`, else the computed act's `subject` (B21.13)
+    if not obj or not isinstance(obj, str) or obj not in w.offices:   # a list is unhashable: refused, never raised
         return _refuse("a revoke names no office the world holds", f"{a.actor} on {obj!r}")
     off = w.offices[obj]
     # v9 IN-31 (H-100): PROVENANCE UNREADABLE MEANS REFUSE. What the revocation costs is read off the
