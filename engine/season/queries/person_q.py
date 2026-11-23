@@ -50,7 +50,7 @@ from ..data.requires import (
     UNKNOWN, WORLD_ONLY_STEMS,
 )
 from ..data.rosters import (
-    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, capability_rows, require_use_site,
+    AFFILIATIONS, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, capability_rows, require_use_site,
     roster, roster_map,
 )
 from ..state.carriers import Person, PersonInterior, Said
@@ -1171,15 +1171,45 @@ def decisiveness(p: PersonInterior, shift: float = 0.0) -> float:
     return math.sqrt(ltr_sum(v[a] ** 2 for a in _AXES))
 
 
-def conviction_after_crisis(p: Person, among: frozenset | None = None) -> dict:
-    """`p.conviction` as the crisis at scar threshold 3 leaves it -- IN-08 `12e` H13, G-Q6 as the
+# B10.14: the names a `tables.crisis_bands` row may use that are the READER's (`data/rosters.py::_load_crisis_bands` keeps the table's shape only).
+_FAILURE_BRANCH = "fold_else_destroy_else_minus_two"  # [canonical: engine/season/rosters.yaml §tables.crisis_bands (Failure `branch`)]
+_FAILURE_STEP = 2   # [canonical: engine/season/rosters.yaml §tables.crisis_bands (the branch's name: `minus_two`)]
+# `scar` setting name -> the count it sets on the creed in crisis.
+_CRISIS_SCAR_SETTINGS = {"zero": 0, "threshold_less_one": SCAR_CRISIS_AT - 1}  # [canonical: engine/season/rosters.yaml §tables.crisis_bands (`scar` names); the threshold is SCAR_CRISIS_AT]
+
+
+def _step(held: dict, x: str, steps: int) -> None:
+    """Move `held[x]` by `steps` whole steps, clamped to the intensity spine (`AFFILIATION_FLOOR`..`AFFILIATION_CEILING`). A creed already gone is left."""
+    if x in held:
+        held[x] = max(AFFILIATION_FLOOR, min(AFFILIATION_CEILING, held[x] + steps))
+
+
+def _fold_or_destroy(held: dict, x: str) -> bool:
+    """TODAY'S TWO BUILT BRANCHES for the creed `x` in crisis, applied to `held` in place: FOLD into the highest-held incompatible co-held creed
+    (ties to the first by name), else DESTROYED where nothing else is held. False, `held` untouched, where neither applies (RESTABILISE, not built)."""
+    heirs = [y for y in sorted(held)
+             if y != x and held[y] > 0 and frozenset((x, y)) in _aff.INCOMPATIBLE]
+    if heirs:
+        y = max(heirs, key=held.__getitem__)
+        held[y] = min(AFFILIATION_CEILING, held[y] + held[x])
+        del held[x]
+        return True
+    if not any(v > 0 for k, v in held.items() if k != x):
+        del held[x]
+        return True
+    return False
+
+
+def conviction_after_crisis(p: Person, among: frozenset | None = None, band: str | None = None, shared: bool = False,
+                            reading: str = "any") -> tuple:
+    """`(conviction, scar_delta)`: `p.conviction` as the crisis at scar threshold 3 leaves it -- IN-08 `12e` H13, G-Q6 as the
     affiliation draft recommends (folded into the build by Jordan's 2026-10-06 ruling, `ED-IN-0261`'s
     superseding row): THE ENGINE CHOOSES PER CASE, BY A RULE OVER STATE THE CRISIS ALREADY READS, AND
     ROLLS NOTHING (the crisis rewrites the vector, never an outcome). A READER: it returns a new
     vector and writes nothing; the write is `loop/resolve.py::_conviction_crisis`'s, by an act.
 
     A held affiliation is IN CRISIS when `p.scar` for it is `>= SCAR_CRISIS_AT`. ONE CRISIS AT A
-    TIME: where several are, the one taken is the highest-held, ties to the first by name -- the
+    TIME: where several are, the one taken is the highest-held (the lowest-held where `shared`, below), ties to the first by name -- the
     design's own multi-crisis rule (`conviction_track_v1.md` §2 `:62`, quarantined, reference for
     intent: *"the most recent Scar event ... ties resolve to highest-weighted primary"*) with its
     first key dropped, because a count carries no time and one act scars every holding it violates
@@ -1222,30 +1252,59 @@ def conviction_after_crisis(p: Person, among: frozenset | None = None) -> dict:
     counted) again, and a restabilised one is left unwritten. CONVICTION TRACK ONLY: the pursuit
     track has no `incompatible` relation to fold along and `Person.pursuits` has no writer (H-62;
     its first is SC-02 `22b`). Person-side, no World (AX-2). With no held affiliation in crisis it
-    returns `p.conviction` unchanged."""
+    returns `p.conviction` unchanged and no scar delta.
+
+    B10.14 -- ONE COMPOSED SIGNATURE (C3-K2), `(p, among=None, band=None, shared=False, reading="any")`, returning `(conviction, scar_delta)`:
+      * `band=None` is TODAY'S FUNCTION EXACTLY (the control, `Fixtures.crisis_arm: rule`): the branches above, no table read, `scar_delta` `{}`.
+      * `band` (a degree band the one ladder names) applies that band's writes from `rosters.yaml: tables.crisis_bands` (`CRISIS_BANDS`), in order, to the
+        creed `x` in crisis: `intensity` moves it a whole number of steps, clamped to the spine (a creed at 1 stepping down is a held 0, not a drop);
+        `scar` names the count `x` is set to; `branch` names the Failure band's composite (fold, else destroyed, else `intensity` less
+        `_FAILURE_STEP`, floored). A band or a write name this reader does not know is refused, never read as nothing.
+      * `scar_delta` is `{creed: signed change to that creed's count}`, `{}` where the band moves no count: THE READER WRITES NOTHING, so the
+        count is the caller's to set (B10.15). [ASSUMPTION; Jordan to correct: a dict and not the bare int the plan names, because the caller does
+        not know which creed was taken; revert: an int, the caller re-deriving `x`.]
+      * `shared` takes the LOWEST-held creed as the one in crisis (ties to the first by name) where the violation came from the shared column of
+        `affiliation_engagement` and so scarred every co-held creed alike; a per-affiliation cell is `shared=False`, the highest-held, unchanged. This
+        reverses `max` to `min` for the shared column and for nothing else. [ASSUMPTION; medium; Jordan to correct: the lowest-intensity creed is the
+        one a blanket wound breaks first, folding into the creed he holds hardest; revert: `shared=False`.]
+      * `reading` is which held creeds a fold may land on. `"any"` is every creed held above 0, today's reading; `"stands"` (the creeds he stands
+        for, `stands_for`) is `20_NARRATIVE_A` edit 4b's and is refused here, as `stands_for` refuses a reading it has not built."""
+    if reading != "any":
+        raise ValueError(f"conviction_after_crisis reading {reading!r} is not built: only \"any\" is")
+    if band is not None and band not in CRISIS_BANDS:
+        raise ValueError(f"conviction_after_crisis band {band!r} is not a row of `tables.crisis_bands` {sorted(CRISIS_BANDS)}")
     if not p.conviction:
-        return p.conviction
+        return p.conviction, {}
     held = dict(p.conviction)
     scar = p.scar or {}
     # "Held" is above 0 (IN-63): a stored 0 is a rejection, which no count can crisis.
     crisis = [x for x in sorted(held) if held[x] > 0 and scar.get(x, 0) >= SCAR_CRISIS_AT
               and (among is None or x in among)]
     if not crisis:
-        return p.conviction
-    # `crisis` and `heirs` are in name order and `max` keeps the FIRST of equal keys, so a tie on
+        return p.conviction, {}
+    # `crisis` is in name order and `max` / `min` keep the FIRST of equal keys, so a tie on
     # intensity goes to the lowest name.
-    x = max(crisis, key=held.__getitem__)
-    heirs = [y for y in sorted(held)
-             if y != x and held[y] > 0 and frozenset((x, y)) in _aff.INCOMPATIBLE]
-    if heirs:
-        y = max(heirs, key=held.__getitem__)
-        held[y] = min(AFFILIATION_CEILING, held[y] + held[x])
-        del held[x]
-    elif not any(v > 0 for k, v in held.items() if k != x):
-        del held[x]
-    else:                            # RESTABILISE -- not built (above)
-        return p.conviction
-    return conviction_map(held, where=f"{p.id}: conviction after crisis")
+    x = (min if shared else max)(crisis, key=held.__getitem__)
+    where = f"{p.id}: conviction after crisis"
+    if band is None:
+        if not _fold_or_destroy(held, x):          # RESTABILISE -- not built (above)
+            return p.conviction, {}
+        return conviction_map(held, where=where), {}
+    delta: dict = {}
+    for kind, value in CRISIS_BANDS[band]:
+        if kind == "intensity":
+            _step(held, x, value)
+        elif kind == "scar":
+            if value not in _CRISIS_SCAR_SETTINGS:
+                raise ValueError(f"crisis band {band!r}: scar setting {value!r} is not one of {sorted(_CRISIS_SCAR_SETTINGS)}")
+            if _CRISIS_SCAR_SETTINGS[value] != scar.get(x, 0):
+                delta[x] = _CRISIS_SCAR_SETTINGS[value] - scar.get(x, 0)
+        elif kind == "branch" and value == _FAILURE_BRANCH:
+            if not _fold_or_destroy(held, x):      # the third arm, where today's RESTABILISE was not built: no person in crisis is a no-op
+                _step(held, x, -_FAILURE_STEP)
+        else:
+            raise ValueError(f"crisis band {band!r}: write {kind}: {value!r} is not one this reader knows")
+    return (p.conviction if held == p.conviction else conviction_map(held, where=where)), delta
 
 
 # ---------------------------------------------------------------------------

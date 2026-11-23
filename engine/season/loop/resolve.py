@@ -881,7 +881,7 @@ def _conviction_crisis(w: "World", token: Token, a: Act, broken_of: dict) -> Non
         p = w.persons[pid]
         if not p.conviction:         # no affiliation held, so none can be in crisis
             continue
-        after = conviction_after_crisis(p, among=frozenset(broken))
+        after, _scar_delta = conviction_after_crisis(p, among=frozenset(broken))   # B10.14: `band=None`, so `_scar_delta` is `{}` and unread
         if after != p.conviction:
             moved.append((pid, after))
     if not moved:
