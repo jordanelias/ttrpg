@@ -33,8 +33,9 @@ from typing import Any, Callable, Optional
 
 from engine.dice_engine import fmath
 from engine.dice_engine.fmath import ltr_sum
+from ..data import goals as goals_data
 from ..data.cast import STANCE_MAX
-from ..data.pursuits import _AXES   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
+from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
 from ..data.rosters import SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
 from ..data.verbs import VERB_TABLE, act_key, align
 from ..gaps import Unspecified
@@ -143,7 +144,7 @@ def _stance_arm(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict]) -
 # IN-62: the keys under which `make_chooser` hoists a deliberation's candidate-independent factors
 # into the `memo` `score_terms` reads. TUPLES, because `_stance_arm` keys the same dict by subject id
 # (a string), so no subject can collide with one of these.
-_AXIS_W, _DAMP = ("axis_w",), ("damp",)
+_AXIS_W, _DAMP, _AIM = ("axis_w",), ("damp",), ("aim",)
 
 
 def deliberation_memo(p: Person, fx: "Fixtures") -> dict:
@@ -151,13 +152,16 @@ def deliberation_memo(p: Person, fx: "Fixtures") -> dict:
     the projected axis weights (with the swept `scar_weight_shift`) and the `confliction` damp (the
     swept `confliction_weight`, H-188), hoisted once because neither depends on the candidate.
     Exists so a reading that scores a person outside `choose` (`harness/decision_spread.py`) takes
-    the SAME two factors from the same arms rather than copying them."""
+    the SAME two factors from the same arms rather than copying them. A third key, `_AIM`, holds the goal's projected lean for the
+    question being answered (B10.30): empty here, filled by `aim_term` the first time a candidate is scored on a question, so a
+    deliberation projects each goal's pursuits once however many candidates it scores."""
     k = float(fx.get("confliction_weight"))
     if not k >= 0:                   # `not >=`, so a NaN is refused too
         raise ValueError(f"confliction_weight {k} is not >= 0: it would invert, divide by zero "
                          f"or poison the score (H-188)")
     return {_AXIS_W: project(p, fx.get("scar_weight_shift")),
-            _DAMP: 1.0 if k == 0 else 1.0 / (1.0 + k * confliction(p))}
+            _DAMP: 1.0 if k == 0 else 1.0 / (1.0 + k * confliction(p)),
+            _AIM: {}}
 
 
 def _odds_arm(fx: "Fixtures") -> str:
@@ -259,17 +263,48 @@ def fit_term(p: Person, c: Candidate, fx: "Fixtures") -> float:
     return weight * (fit + (0 if skill is None else float(skill)))
 
 
+def aim_term(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional[Callable], q: Optional[Question]) -> float:
+    """THE GOAL'S OWN LEAN ON THE QUESTION IT RAISED (B10.30; `H-477`): `aim_gain * damp * Σ_axis to_axes(goal.pursuits)[axis] *
+    align(c.verb, axis) * odds_weight`, the pursuit term's own dot over the GOAL's pursuits instead of the person's, in the same
+    axis order (`_AXES`), with the same believed-odds factor. The goal is the one `q` is about: it applies where `q.source` is `need`,
+    `q.about` is a row of `goals.yaml` and `p` holds a LIVE `commit` to it; otherwise 0.0. A person's own want (`prop_<cid>`) and a
+    creed are not rows of `goals.yaml` and carry no `pursuits:`, so they read 0.0 -- a limit, until a want carries a lean.
+
+    Exactly `0.0` at `aim_gain` 0, the CONTROL, and nothing is read there (the odds query is not asked). The gain is refused below 0:
+    a negative gain would score a goal's own business against the goal. `odds_weight` is asked only for a candidate the lean scores
+    (`score_terms`' pursuit term does the same: the query scans the log)."""
+    gain = fx.get("aim_gain")
+    if not gain >= 0:                # `not >=`, so a NaN is refused too
+        raise ValueError(f"aim_gain {gain} is not >= 0: a negative gain would score a goal's business against the goal (H-477)")
+    if gain == 0.0 or q is None or q.source != "need":
+        return 0.0
+    lean = memo[_AIM]
+    if q.about not in lean:
+        goal = goals_data.goal(q.about)
+        live = goal is not None and any(t.kind == "commit" and t.live and t.object == q.about for t in p.tenures)
+        lean[q.about] = to_axes(goal.pursuits) if live else None
+    axes = lean[q.about]
+    if axes is None:
+        return 0.0
+    aim = gain * memo[_DAMP] * ltr_sum(axes[ax] * align(c.verb, ax) for ax in _AXES)
+    return aim * odds_weight(p, c, fx, odds) if aim != 0.0 else aim
+
+
 def score_total(terms: tuple) -> float:
     """A candidate's score from its `score_terms`, the one sum (`make_chooser`, `harness/interactions.py` and
-    `harness/decision_spread.py` read it here). A `fit` of `0.0` -- every candidate at the shipped weight -- adds nothing,
-    not even a sign of zero, so the score is the two-term sum exactly."""
+    `harness/decision_spread.py` read it here), left to right. A `fit` or an `aim` of `0.0` -- every candidate at the shipped
+    weight and gain -- adds nothing, not even a sign of zero, so the score is the two-term sum exactly."""
     s = terms[0] + terms[1]
-    return s + terms[2] if terms[2] else s
+    if terms[2]:
+        s = s + terms[2]
+    return s + terms[3] if terms[3] else s
 
 
-def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional[Callable] = None) -> tuple:
-    """§F2's score, term by term: `(pursuit, stance, fit)`, and `score(c)` is `score_total` of them (IN-62; the sum, `fit`
-    being `0.0` at `confer_fit_weight`'s shipped `0.0`).
+def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional[Callable] = None,
+                q: Optional[Question] = None) -> tuple:
+    """§F2's score, term by term: `(pursuit, stance, fit, aim)`, and `score(c)` is `score_total` of them (IN-62; the sum, `fit`
+    being `0.0` at `confer_fit_weight`'s shipped `0.0` and `aim` at `aim_gain`'s). `aim` is appended after `fit`, not set before it:
+    `fit` was the tuple's third element before `aim` landed (B04.22), and every reader of it by index keeps it. `risk` follows `aim`.
     The ONE owner of the formula (`CLAUDE.md` §8): `make_chooser`'s `score` calls this and adds, and
     a reading that wants to know WHICH TERM decided a ranking calls this and never re-derives one.
 
@@ -279,15 +314,17 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
         `odds_weighting` `none`, for an uncontested candidate, and when `odds` is `None`), and
         `admission_weight` the factor a remembered refusal puts on it (exactly 1.0 at `refusal_memory` `0.0`, B09.03);
       * `stance` -- `stance_term(p, c, fx, memo)`, by `Fixtures.stance_polarity`, at gain `1 + g`;
-      * `fit` -- `fit_term(p, c, fx)`: the conferrer's view of the candidate a seating row names in `to`.
+      * `fit` -- `fit_term(p, c, fx)`: the conferrer's view of the candidate a seating row names in `to`;
+      * `aim` -- `aim_term(p, c, fx, memo, odds, q)`: the lean of the goal `q` was raised by, on that goal's own question only (B10.30).
 
+    `q` is the question being answered (`View.question`); `None` -- a reading that scores a person outside `choose` -- reads `aim` 0.0.
     `odds` is the believed-odds query a View carries (`View.odds`); a reading that scores a person outside
     `choose` passes the same query or leaves it `None` and reads the score without CR-17's factor.
     `memo` is a `deliberation_memo(...)` (it also caches `regard` per subject for the call). A memo
-    without the two hoisted factors is refused, not defaulted: a missing factor read as 0 or 1
+    without the hoisted factors is refused, not defaulted: a missing factor read as 0 or 1
     would score a different person than the one asked about."""
     try:
-        axis_w, damp = memo[_AXIS_W], memo[_DAMP]
+        axis_w, damp, _ = memo[_AXIS_W], memo[_DAMP], memo[_AIM]
     except KeyError:
         raise ValueError("score_terms needs a memo from `deliberation_memo(p, fx)` "
                          "(or `make_chooser`'s): the pursuit weights and damp are "
@@ -299,7 +336,7 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
     else:
         _odds_arm(fx)           # a zero term is zero whatever the factor: the query is not asked (it scans the log), the arm is still checked.
                                 # Value-equal; the one difference is an error the query would raise on this candidate, which is no longer raised
-    return (pursuit, stance_term(p, c, fx, memo), fit_term(p, c, fx))
+    return (pursuit, stance_term(p, c, fx, memo), fit_term(p, c, fx), aim_term(p, c, fx, memo, odds, q))
 
 
 def _npc_effort_arm(fx: "Fixtures") -> str:
@@ -564,7 +601,7 @@ def score_order(cands: list, scores: dict) -> list:
 
 # [JUSTIFIED: a float-tie tolerance for the attribution (two scores within it are a tie), an instrument constant and not a game number]
 ATTRIBUTION_EPS = 1e-9
-TERM_NAMES = ("pursuit", "stance", "fit")      # `score_terms`' tuple, in order: what `deciding_term` names
+TERM_NAMES = ("pursuit", "stance", "fit", "aim")      # `score_terms`' tuple, in order: what `deciding_term` names
 
 
 def deciding_term(cands: list, terms: list, actual: Optional[Candidate], tau: float) -> dict:
@@ -710,7 +747,7 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
         _terms: dict = {}                # id(c) -> the `score_terms` tuple `score(c)` summed: what `watch` is handed
         def score(c: Candidate) -> float:
             # IN-62: the terms have ONE owner, `score_terms`; the score is `score_total` of them.
-            _terms[id(c)] = t = score_terms(p, c, fx, memo, odds)
+            _terms[id(c)] = t = score_terms(p, c, fx, memo, odds, q)
             return score_total(t)
         # ⚠ SCORED ONCE, NOT TWICE. `score` is pure in `c` given the closure, so each candidate is
         # scored once here and `_sample_order` reads it back from `_scores`.

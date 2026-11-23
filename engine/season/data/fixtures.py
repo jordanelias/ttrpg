@@ -1270,6 +1270,13 @@ DEFAULT_FIXTURES = Fixtures(
     # `0` is the CONTROL and SHIPS: the factor is exactly 1.0 for every person and the draw is today's. [ASSUMPTION; medium; Jordan to correct; revert: the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-476 -- site: Fixtures temper_gain, graded `assumption`; the design names no live value to ship, so it is injected at the control and swept 0 / -0.5 / -0.75]
     temper_gain=0.0,                   # `H-476`, swept 0 (control, SHIPPED) / -0.5 (proposed) / -0.75
+    # `H-477` (B10.30; `02_CHAR_goal_lean_on_its_own_question` edit 3). THE GAIN ON `aim`, THE SCORE TERM THAT IS THE GOAL'S OWN LEAN ON THE QUESTION IT RAISED:
+    # `decision/choose.py::score_terms` adds `aim_gain * damp * Σ_axis to_axes(goal.pursuits)[axis] * align(verb, axis) * odds_weight` on a `need` question whose
+    # `about` is a goal in `goals.yaml` that the person holds a live `commit` to, and 0.0 on every other question. Must be >= 0 (a negative gain would
+    # score a goal's business AGAINST the goal). `0` is the CONTROL and SHIPS: `aim` is exactly 0.0 for every candidate and the query is never asked. The flip is B98's.
+    # [ASSUMPTION; medium; Jordan to correct; revert: 0, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-477 -- site: Fixtures aim_gain, graded `assumption`; the design ships no live value, so it is injected at the control and swept 0 / 0.5 / 1 / 2]
+    aim_gain=0.0,                      # `H-477`, swept 0 (control, SHIPPED) / 0.5 / 1 / 2
     # `H-472` (B10.13; `16_PESSIMIST_CHAR_A` "The resolution, decided" 3; U1 F-43). HOW A CRISIS OF FAITH COMES OUT: `rule` is the CONTROL and SHIPS (today's
     # `person_q.conviction_after_crisis`: the branch is chosen by a rule over state the crisis already reads, nothing is rolled); `drawn` rolls one draw per
     # scarring act and reads the band from `rosters.yaml: tables.crisis_bands` (B10.14, B10.15). A value outside `rosters.yaml: crisis_arms` is refused at load.

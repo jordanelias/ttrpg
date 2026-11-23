@@ -3,7 +3,7 @@
 ED-IN-0293's headline expectation (*"I expect all of this to end up generating unique decisions"*) as
 three readings and three arms. Every reading that BUILDS A REALM lives here; `harness/conviction_spread.py`
 is not extended, because it declares that it *"MEASURES THE TABLE, NOT A RUN"* (`:34-37`) and builds no
-world. The score's terms have ONE owner, `decision/choose.py::score_terms` -> `(pursuit, stance, fit)`;
+world. The score's terms have ONE owner, `decision/choose.py::score_terms` -> `(pursuit, stance, fit, aim)`;
 this module calls it (through the module, so a rebind of it reaches every reading) and never
 re-derives a term.
 
@@ -86,7 +86,7 @@ THE DECIDING TERM (`decision/choose.py::deciding_term`, the one owner; `attribut
                  (`field_zero`);
   2. `tiebreak`  the top two scores are within `EPS` at temperature 0 (`(verb, subject)` ordered them);
   3. otherwise the TERMS whose removal leaves the top no longer strictly ahead of the field (it changes, or
-     collapses into a tie): `pursuit`, `stance`, `fit`, joined by `+`; `overdetermined` if no single
+     collapses into a tie): `pursuit`, `stance`, `fit`, `aim` (`choose.TERM_NAMES`), joined by `+`; `overdetermined` if no single
      term's removal does (two terms each separate it alone).
 So the attribution CAN say "no state decided": two persons with nothing separating their candidates read
 `draw` or `tiebreak`, never `pursuit`.
@@ -207,7 +207,7 @@ def null_alignment():
 # THE ATTRIBUTION
 
 
-def attribute_top(p, cands: list, fx, draw=None, odds=None) -> dict:
+def attribute_top(p, cands: list, fx, draw=None, odds=None, q=None) -> dict:
     """Rank `cands` for `p` as the chooser does and say WHICH TERM decided the top: it SCORES, ORDERS and SAMPLES `cands`
     (a second scoring, for a reader that has no chooser's deliberation to watch: `read_decisions`' common set) and hands the
     result to `choose.deciding_term`, the one owner of the rule (the module docstring lists its tests in order). Returns
@@ -224,19 +224,23 @@ def attribute_top(p, cands: list, fx, draw=None, odds=None) -> dict:
 
     `odds` (CR-17) is the believed-odds query a View carries (`View.odds`; `seam/wrappers/sigma.py::
     believed_odds_query`), handed to `score_terms` as the chooser hands it: `None` reads the score without
-    the believed-chance factor, which is also what `odds_weighting` `none` reads whatever is passed."""
+    the believed-chance factor, which is also what `odds_weighting` `none` reads whatever is passed.
+
+    `q` (B10.30) is the question the candidates were formed on, handed to `score_terms` as the chooser hands it: `None` reads the
+    score without `aim`, the goal's lean on a `need` question it raised (`aim_gain` 0 reads the same whatever is passed)."""
     if not cands:
         return CH.deciding_term([], [], None, 0.0)
-    terms, by_id, ranked = _scored(p, cands, fx, odds)
+    terms, by_id, ranked = _scored(p, cands, fx, odds, q)
     actual = CH.sample_order(ranked, lambda c: by_id[id(c)], p, fx, draw)[0]
     return CH.deciding_term(cands, terms, actual, own_tau(p, fx))
 
 
-def _scored(p, cands: list, fx, odds=None) -> tuple:
+def _scored(p, cands: list, fx, odds=None, q=None) -> tuple:
     """`(terms, by_id, ranked)` for `cands` as the chooser scores and orders them: `score_terms` per candidate, `score_total`
-    keyed by `id(c)`, and `choose.score_order`'s ordering (the chooser's own, not a second copy). `cands` non-empty."""
+    keyed by `id(c)`, and `choose.score_order`'s ordering (the chooser's own, not a second copy), the terms read on the question `q` the
+    chooser reads them on (`None`: without `aim`). `cands` non-empty."""
     memo = CH.deliberation_memo(p, fx)
-    terms = [CH.score_terms(p, c, fx, memo, odds) for c in cands]
+    terms = [CH.score_terms(p, c, fx, memo, odds, q) for c in cands]
     by_id = {id(c): CH.score_total(t) for c, t in zip(cands, terms)}
     return terms, by_id, CH.score_order(cands, by_id)
 
@@ -475,7 +479,8 @@ def read_decisions(w) -> dict:
         for pid in keyed:
             cands = [keyed[pid][k] for k in order]
             r = attribute_top(w.persons[pid], cands, fx, draw,
-                              believed_odds_query(w, w.persons[pid]))   # CR-17: the query his View carries
+                              believed_odds_query(w, w.persons[pid]),   # CR-17: the query his View carries
+                              decision_question(ref))                   # B10.30: the question the set was formed on
             deciders[r["decider"]] += 1
             tally_split(split, pid, r)
             tally_split(total, pid, r)
@@ -538,7 +543,7 @@ def read_retest(w, ticks: int = RETEST_TICKS) -> dict:
             cands = [keyed[pid][k] for k in order]
             if len(cands) < 2:
                 continue
-            _, by_id, ranked = _scored(p, cands, fx, believed_odds_query(w, p))
+            _, by_id, ranked = _scored(p, cands, fx, believed_odds_query(w, p), decision_question(ref))
             tops[pid] = [(c.verb, c.subject, is_self_plea(c, pid))
                          for c in redraw_tops(ranked, lambda c: by_id[id(c)], p, fx, w.world_seed, ticks)]
             k, n = agreement(tops[pid])
