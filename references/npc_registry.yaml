@@ -621,6 +621,7 @@ characters:
       thread_truth: 1
       einhir_restoration: 2
       altonian_civics: 1
+    relations: [{to: NPC-032, ground: kin, valence: 1, weight: 4}, {to: NPC-050, ground: rivalry, valence: -1, weight: 3}]  # IS-A-11 draft (d), BA1.08; [ASSUMPTION; low; Jordan to correct]
     source: faction_canon_v30 §Crown
     notes: "TS 28 per character_canon — no threshold crossing. Honor enters via valorian_court cultural template."
 
@@ -780,6 +781,7 @@ characters:
       solmund_orthodoxy: 1
       einhir_restoration: 5
       altonian_civics: 1
+    relations: [{to: NPC-020, ground: kin, valence: 1, weight: 4}]  # IS-A-11 draft (d), BA1.08; [ASSUMPTION; low; Jordan to correct]
     source: npc_character_analyses §2, faction_canon_v30 §Crown
     notes: "Queen Lenneth Almqvist. Archivist by training. PP-685 §2.3 ecclesiastical profile was misattribution. Lenneth archive awakened Torsvald's TS (character_analyses_infill §5)."
 
@@ -1169,6 +1171,7 @@ characters:
       solmund_orthodoxy: 2
       einhir_restoration: 0
       altonian_civics: 0
+    relations: [{to: NPC-020, ground: rivalry, valence: -1, weight: 3}]  # IS-A-11 draft (d), BA1.08; [ASSUMPTION; low; Jordan to correct]
     source: npc_behavior_v30 §2.3, npc_character_analyses §6, faction_canon_v30
 
   - id: NPC-052
@@ -1210,6 +1213,7 @@ characters:
       einhir_restoration: 5
       altonian_civics: 1
     manner: {deontological_instrumental: 0.15, grandiose_humble: -0.10}  # IS-A-11 draft cell (BA1.02)
+    relations: [{to: NPC-050, ground: rivalry, valence: -1, weight: 4}]  # IS-A-11 draft (d), BA1.08; [ASSUMPTION; low; Jordan to correct]
     source: npc_behavior_v30 §2.4, npc_character_analyses_infill §5, faction_canon_v30
     notes: "PP-650 STRUCK on Cultural Reformation + VTM associations; character active. Reinhardt von Lohengramm archetype per Jordan."
 
@@ -1246,6 +1250,7 @@ characters:
       solmund_orthodoxy: 2
       einhir_restoration: 1
       altonian_civics: 1
+    relations: [{to: NPC-020, ground: service, valence: 1, weight: 3}]  # IS-A-11 draft (d), BA1.08; [ASSUMPTION; low; Jordan to correct]
     source: behavior_v30 §2.5
 
   - id: NPC-071
