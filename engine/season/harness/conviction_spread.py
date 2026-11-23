@@ -239,16 +239,27 @@ def _words(top: int = 5) -> None:
     The lean is `person_q.pursuit_lean`'s and the violated set `person_q._pursuits_violated_by`'s (the scar's own sign
     test, `Fixtures.scar_lean_floor` left at its `0.0` default), so this prints what the engine reads and computes
     nothing of its own. It judges nothing: a break is a reading, and refusing one is a later position's."""
-    from ..data.pursuits import PURSUIT_SIGNATURES, signature_breaks
+    from ..data.pursuits import AFFILIATION_SIGNATURES, PURSUIT_SIGNATURES, signature_breaks
+    from ..data.rosters import AFFILIATIONS
     from ..data.verbs import VERB_TABLE
     from ..queries.person_q import _pursuits_violated_by, pursuit_lean
-    breaks = signature_breaks()
+    every = signature_breaks()
+    breaks = {p: c for p, c in every.items() if p not in AFFILIATIONS}
+    creeds = {p: c for p, c in every.items() if p in AFFILIATIONS}
+
+    def show(found: dict) -> None:
+        for p, clauses in found.items():
+            for c in clauses:
+                over = f" over {','.join(c['over'])}" if "over" in c else ""
+                print(f"    {p:14} {c['clause']:26} {c['verb']} ({c['lean']:+.2f}){over}")
+
     n = sum(len(c) for c in breaks.values())
     print(f"\nsignature_breaks: {len(breaks)} of {len(PURSUIT_SIGNATURES)} pursuits, {n} clauses")
-    for p, clauses in breaks.items():
-        for c in clauses:
-            over = f" over {','.join(c['over'])}" if "over" in c else ""
-            print(f"    {p:14} {c['clause']:26} {c['verb']} ({c['lean']:+.2f}){over}")
+    show(breaks)
+    m = sum(len(c) for c in creeds.values())
+    print(f"creed signature_breaks: {len(creeds)} of {len(AFFILIATION_SIGNATURES)} creeds with a signature "
+          f"({len(AFFILIATIONS)} creeds on the roster), {m} clauses")
+    show(creeds)
     verbs = sorted(VERB_TABLE)
     hurt = {v: _pursuits_violated_by(v) for v in verbs}
     print("\n  per pursuit: verbs it leans toward most / away from most, and the verbs that violate it")

@@ -4171,6 +4171,20 @@ tables:
       happiness:     {favours: [give, release, tend],            opposes: [fight, arrest]}
       individuality: {favours: ["evade / defy", found, migrate], opposes: [comply, oblige]}
 
+  affiliation_signatures:
+    source: >-
+      B10.19 (`U5a_CHAR_owed_amendments` §7, extending `16_PESSIMIST_CHAR_B`): what a creed's NAME must mean in acts, as verbs,
+      the shape of `pursuit_signatures`. Read by `data/pursuits.py::signature_breaks` against
+      `data/affiliations.py::engagement` (`tables.affiliation_engagement`), which reports and refuses nothing yet.
+    keys: [affiliations, verbs]
+    note: >-
+      [ASSUMPTION; Jordan to correct: every row is content.] EMPTY: the reader ships first and the rows land with the
+      CHAR content pass (`IS-A-11` stage 1 table (e)). `favours`: verbs whose engagement cell on the creed should be above
+      zero. `opposes`: verbs whose cell should be below zero, and below every favoured verb's. Verb keys are
+      `verb_table.yaml`'s. The loader refuses a creed off `affiliations` and a verb off `VERB_TABLE`; a verb with no
+      engagement cell is lawful and reads 0. A cell is repaired in `affiliation_engagement` and nowhere else.
+    cells: {}
+
   alignment:
     source: >-
       the retired pursuit-cells draft (its `FORK:` row in `references/restructure_ledger.md`) §3 (the re-cell

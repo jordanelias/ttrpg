@@ -6,8 +6,10 @@ from __future__ import annotations
 
 import pytest
 
+from engine.season.data import affiliations as A
 from engine.season.data import verbs as V
 from engine.season.data.pursuits import signature_breaks
+from engine.season.data.rosters import AFFILIATIONS
 
 SIGNATURE = {"love": {"favours": ["give"], "opposes": ["forge"]}}
 
@@ -27,3 +29,17 @@ def test_signature_breaks_reports_a_planted_break(monkeypatch):
     _plant(monkeypatch, give=0.5, forge=1.0)
     clauses = {(c["clause"], c["verb"]) for c in signature_breaks(SIGNATURE)["love"]}
     assert clauses == {("opposed_not_below_zero", "forge"), ("opposed_outleans_favoured", "forge")}
+
+
+def test_affiliation_signatures_are_read_against_the_engagement_table(monkeypatch):
+    """B10.19: a creed's signature is read against `tables.affiliation_engagement`, the one table that says what an act does
+    to a held creed; the planted row and the planted cells are copies, never the shipped ones."""
+    creed = sorted(AFFILIATIONS)[0]
+    row = {creed: {"favours": ["give"], "opposes": ["forge"]}}
+    monkeypatch.setattr(A, "ENGAGEMENT", {creed: {"give": 1.0, "forge": -1.0}})
+    assert signature_breaks({}, row) == {}, "control: a favoured verb engaged up and an opposed one down is no break"
+    monkeypatch.setattr(A, "ENGAGEMENT", {creed: {"give": 0.5, "forge": 1.0}})
+    clauses = {(c["clause"], c["verb"]) for c in signature_breaks({}, row)[creed]}
+    assert clauses == {("opposed_not_below_zero", "forge"), ("opposed_outleans_favoured", "forge")}
+    monkeypatch.setattr(A, "ENGAGEMENT", {})
+    assert {c["clause"] for c in signature_breaks({}, row)[creed]} == {"favoured_not_above_zero", "opposed_not_below_zero"}
