@@ -14,19 +14,24 @@ DRAWS: every exchange takes `DRAWS_PER_EXCHANGE(G)` normals however it goes, in 
 takes the hold and then the speech. `exchange` asserts its two and, given `mark` (`rng.n` before the view), the whole count; the sitting
 (B24p.11's `proceed`) passes it.
 
-NOT HERE: the sitting (order, `_start`, the policy, `proceed`; B24p.11) and the close (`_close`, `p_carried`, `view_odds`; B24p.12).
-`View.odds` is returned as 0.0 until `view_odds` fills it.
+THE SITTING (B24p.11; V2 p2 §C.1, §C.5, §F): `proceed` runs rounds of exchanges: each round, every speaker with a turn left and the fewest spoken
+speaks once, the side that bears the live thing first and then by precedence (`_mover`); one callback per person (`deciders[id]`, else `decide`,
+else the automatic policy: played and automatic meet in one sitting; an abridged act asks none). It ends `yielded` (a final concession), `rested`
+(a whole round with nothing to say) or `budget` (every speaker's turns spent): the forum's time is the measure of readiness, no second rule reads
+the deciders' state, and an end is never a verdict. Then the close.
+
+NOT HERE: the close (`_close`, `p_carried`, `view_odds`; B24p.12). `View.odds` is returned as 0.0 until `view_odds` fills it.
 """
 from __future__ import annotations
 
 import math
 from dataclasses import replace
-from typing import Optional
+from typing import Callable, Mapping, Optional
 
 from engine.dice_engine import fmath
 from engine.dice_engine.sigma_leverage import (M_MAX, MU_PER_DIE, SD_PER_DIE, even_line, level, net_boost, pool_of,
                                                roll_net_continuous, weighted_tenth)
-from engine.season.queries.inputs import Beat, Margin, Option, Point, SocialContestInput, View
+from engine.season.queries.inputs import Beat, Choice, Cond, Input, Margin, Option, Outcome, Point, Sitting, SocialContestInput, View
 from .roll import obstacle
 
 
@@ -830,3 +835,107 @@ def _exchange(inp, st, mover, ch, rng, tag) -> tuple:
                 esteem(inp, st, voice), _broken(inp, mover, _d(st.cond)[mover.id]), tuple(moved), closed, mood(inp, new), terms)
     assert rng.n - n0 == 2 * 2, (rng.n - n0)    # the hold and the speech, a normal each (two uniforms: `Draw.normal`)
     return new, beat, tuple(margins)
+
+
+# ------------------------------------------------------------------ the sitting (B24p.11)
+def _speakers(inp) -> list:
+    """who speaks, in the order of a round: the side that bears the live thing opens, then each by precedence (V2 p2 §C.1)."""
+    moves = _d(inp.rite.moves)
+    sp = [p for p in inp.room if p.side and moves.get(p.side)]
+    return sorted(sp, key=lambda p: (0 if p.side == inp.rite.bears else 1, -p.precedence, p.id))
+
+
+def _able(inp, st) -> list:
+    return [p for p in _speakers(inp) if _d(st.cond)[p.id].spoken < inp.rite.turns]
+
+
+def _start(inp) -> Sitting:
+    """the sitting's opening value: a given `Input.state` (refused at `Input` if it cannot be resumed) opened again, else each person at his
+    `start` carrying in his `strain`, the first rung (or the one undivided issue) reached."""
+    if inp.state is not None:
+        return replace(inp.state, ended=None)
+    return Sitting(tracks=tuple((p.id, p.start) for p in inp.room), cond=tuple((p.id, Cond(strain=p.strain)) for p in inp.room))
+
+
+def _mover(inp, st) -> Optional[str]:
+    """who speaks next: of those with a turn left (the rite's `turns` less `cond.spoken`) the one who has spoken least, the bearer's side first
+    and then by precedence; `None` when nobody can move."""
+    able = _able(inp, st)
+    c = _d(st.cond)
+    return min(able, key=lambda p: c[p.id].spoken).id if able else None
+
+
+def policy(inp, view, me) -> Choice:
+    """THE AUTOMATIC POLICY (A-136; V2 p2 §F): below `temper_break` a man takes the option his own reading says is worth most, the same menu and
+    view a player has and no other information; at or past it the man shows: he argues from what he himself holds (and the orator plays to the
+    room), the proud press and will not give way, the timid give way, a grudge goes after its object. The earlier of equal options wins."""
+    D = inp.dials
+    t = temper_of(inp, me, view.own)
+    t = t if t >= D["temper_break"] else 0.0
+    foe = max((i for i, _ in view.visible if i != me.id), key=lambda i: abs(_bond(me, i)), default=None)
+    nerve = (me.will - D["attribute_mid"]) / 3.0    # [canonical: V2 p2 §F -- the temperament, three points of attribute a step]
+    best, bv = None, -math.inf
+    for o in view.options:
+        effect, v = _move(inp, o.move)[0], o.ev
+        if effect == "track" and o.ground is not None and _reads(inp, o.ground) != "item":
+            c = _ix(_reads(inp, o.ground))
+            v += t * D["grain"] * ((2.0 * me.care[c] - 1.0) + ((me.presence - D["attribute_mid"]) / 3.0 if _reads(inp, o.ground) == "bond" else 0.0))   # [canonical: V2 p2 §F]
+        elif effect == "strike":
+            v += t * (D["grudge"] * (-_bond(me, foe)) + D["pride"] * nerve)
+        elif effect == "yield":
+            v -= t * D["pride"] * nerve
+        if v > bv + 1e-12:    # [canonical: sc2/engine.py:931 -- a lead inside float noise is a tie, and the earlier option keeps it]
+            best, bv = o, v
+    if best is None:
+        raise ValueError(f"refused[menu]: {me.id} has nothing legal to do")
+    return Choice(best.move, best.ground, best.item, best.relation)
+
+
+def _taken(inp, st, view, me, ch) -> tuple:
+    """a chooser's pick, checked: his move must be in `_legal` and the pick must be on the menu he was shown; `(Choice, the option's frame)`,
+    the choice with the option's own relation (an answer is offered only to a point that stands)."""
+    legal = _legal(inp, st, me)
+    if ch.move not in legal:
+        raise ValueError(f"refused[choice]: {me.id} may not {ch.move!r} here (legal: {legal})")
+    o = next((o for o in view.options if (o.move, o.ground, o.item) == (ch.move, ch.ground, ch.item) and ch.relation in (None, o.relation)), None)
+    if o is None:
+        raise ValueError(f"refused[choice]: {me.id}: {tuple(ch)} is not on his menu")
+    return Choice(o.move, o.ground, o.item, o.relation), o.frame
+
+
+def _close(inp, st, rng, rulings=None, *, beats=()) -> tuple:
+    """[B24p.12] THE CLOSE: `(verdicts, ruled)`. Until that item lands, nothing is drawn and no verdict is returned; B24p.12 fills this body
+    (`beats` is where an abridged close reads its one speech's margin)."""
+    return (), ()
+
+
+def proceed(inp: Input, rng, decide: Optional[Callable] = None, deciders: Optional[Mapping] = None, rulings: Optional[Mapping] = None) -> Outcome:
+    """THE SITTING: `deciders[person]` (else `decide`) chooses for a speaker with `(view, person)`, and the automatic policy where there is
+    none, so a played and an automatic man meet in one sitting; an abridged act (`close: exchange`) is one speech nobody watches and asks no
+    callback. A resumed sitting (`inp.state`) continues the same sitting: the count of beats, the issue reached and the turns each has had.
+    It ends `yielded`, `rested` or `budget` (see the head); `Outcome.ended_by` is who yielded."""
+    r, G = inp.rite, len(inp.grounds)
+    st, beats, ended_by = _start(inp), [], None
+    while st.ended is None:
+        able = _able(inp, st)
+        if not able:
+            break
+        lo = min(_d(st.cond)[p.id].spoken for p in able)
+        round_, rests = [p for p in able if _d(st.cond)[p.id].spoken == lo], 0
+        for _ in round_:
+            me = _who(inp, _mover(inp, st))
+            n0 = rng.n
+            v = view(inp, st, me, rng)
+            fn = None if r.close == "exchange" else (deciders or {}).get(me.id, decide)
+            ch, frame = _taken(inp, st, v, me, fn(v, me) if fn else policy(inp, v, me))
+            st, beat = exchange(inp, st, me, ch, rng, frame, mark=n0)
+            beats.append(beat)
+            rests += _move(inp, ch.move)[0] == "none"
+            if st.ended:
+                ended_by = me.id
+                break
+        if st.ended is None and rests == len(round_):
+            st = replace(st, ended="rested")
+    st = replace(st, ended=st.ended or "budget")
+    verdicts, ruled = _close(inp, st, rng, rulings, beats=tuple(beats))
+    return Outcome(tuple(beats), st, st.ended, ended_by, verdicts, ruled)

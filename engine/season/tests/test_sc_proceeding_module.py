@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import ast
 import importlib
+from dataclasses import replace
 from fractions import Fraction
 from itertools import product
 from pathlib import Path
@@ -14,7 +15,7 @@ from pathlib import Path
 import pytest
 
 from engine.dice_engine import draw
-from engine.dice_engine.sigma_leverage import governing_mean, pool_of, weighted_tenth
+from engine.dice_engine.sigma_leverage import M_MAX, governing_mean, pool_of, weighted_tenth
 
 from ..data.arrangements import GROUNDS, PROCEEDING_MOVES, RITES
 from ..data.fixtures import DEFAULT_FIXTURES
@@ -69,7 +70,8 @@ def _inp(room, rite=None, dials=None, grounds=None) -> Input:
 
 
 def _sit(inp, **kw) -> Sitting:
-    return Sitting(tracks=tuple((p.id, p.start) for p in inp.room), cond=tuple((p.id, Cond()) for p in inp.room), **kw)
+    base = dict(tracks=tuple((p.id, p.start) for p in inp.room), cond=tuple((p.id, Cond()) for p in inp.room))
+    return Sitting(**{**base, **kw})
 
 
 def _key(label, n=0):
@@ -229,3 +231,239 @@ def test_the_module_imports_the_dice_engine_and_the_record_leaf_only():
     stray = [f for f in loaded if f not in allowed and not f.startswith("engine/dice_engine/") and not f.startswith("modules/social_contest/")]
     assert not stray, stray
     assert "engine/season/queries/inputs.py" in loaded and "modules/social_contest/proceeding.py" in loaded
+
+
+# ---------------------------------------------------------------------------------------------------------------- B24p.11: the sitting
+def _pick(effect):
+    """a played chooser: the first option of the given `effect` cell on his menu."""
+    def decide(view, me):
+        o = next((o for o in view.options if PROCEEDING_MOVES[o.move]["effect"] == effect), view.options[0])
+        return Choice(o.move, o.ground, o.item, o.relation)
+    return decide
+
+
+def _top(view, me):
+    """the view-best chooser: the top perceived option, the earlier of equals."""
+    o = max(view.options, key=lambda o: o.ev)
+    return Choice(o.move, o.ground, o.item, o.relation)
+
+
+def _tracks_are_start_plus_moves(inp, out):
+    """a track is each person's own: its start (or the resumed state's) plus the sum of the beats' moves on him, never a verdict."""
+    base = dict(inp.state.tracks) if inp.state else {p.id: p.start for p in inp.room}
+    T, checked = dict(out.state.tracks), 0
+    for p in inp.room:
+        assert abs(T[p.id] - (base[p.id] + sum(d for b in out.beats for h, d in b.moved if h == p.id))) < 1e-9, p.id    # a running sum: float noise only
+        checked += 1
+    assert checked == len(inp.room)
+
+
+def test_one_turn_under_an_abridged_row_and_no_callback_is_asked():
+    """The abridged act is one speech nobody watches: `proceed` runs it on the automatic policy and asks no callback, played or default."""
+    def boom(view, me):
+        raise AssertionError("a callback was asked in an abridged sitting")
+    inp = _inp([_p("a", "for"), _p("b", decides=True)], _rite(close="exchange", turns=1, moves=(("for", ("argue",)),)))
+    out = P.proceed(inp, _key("abridged"), decide=boom, deciders={"a": boom, "b": boom})
+    assert [b.mover for b in out.beats] == ["a"] and out.ended == "budget" and out.ended_by is None and out.state.ended == "budget"
+
+
+def test_the_bearer_opens_and_the_rest_follow_by_precedence():
+    """The side that bears the live thing opens, its seconds by precedence, then the other side by precedence, each round, until each has
+    spoken the rite's turns; and `_mover` names nobody once all have."""
+    room = [_p("a", "for", precedence=1), _p("b", "for", precedence=5), _p("c", "against", precedence=9), _p("d", "against", precedence=2),
+            _p("j", decides=True)]
+    inp = _inp(room, _rite(turns=2))
+    seen = []
+    track = _pick("track")
+    out = P.proceed(inp, _key("order"), decide=lambda v, me: (seen.append(me.id), track(v, me))[1])
+    assert seen == ["b", "a", "c", "d"] * 2 and [b.mover for b in out.beats] == seen and out.ended == "budget"
+    assert P._mover(inp, out.state) is None and P._mover(inp, _sit(inp)) == "b"
+
+
+def test_every_end_is_reachable_and_is_never_a_verdict():
+    """`budget` (the turns are spent), `rested` (a whole round with nothing to say), `yielded` (the matter given up) each end a sitting from a
+    planted room; none fixes a band or a side: each leaves the tracks as start plus what was said, and a final concession puts the room as
+    far against its maker as the close can carry it and names who yielded."""
+    room = [_p("a", "for", start=0.4), _p("b", "against", start=-0.2), _p("j", decides=True, start=0.1)]
+    inp = _inp(room, _rite(turns=2))
+    ends = {}
+    for name, decide in (("budget", _pick("track")), ("rested", _pick("none")), ("yielded", _pick("yield"))):
+        out = P.proceed(inp, _key("end"), decide=decide)
+        assert out.ended == out.state.ended == name, (name, out.ended)
+        _tracks_are_start_plus_moves(inp, out)
+        ends[name] = out
+    assert len(ends["budget"].beats) == 4 and ends["budget"].ended_by is None
+    assert [b.move for b in ends["rested"].beats] == ["rest", "rest"] and ends["rested"].ended_by is None     # one whole round, then it stops
+    assert len(ends["yielded"].beats) == 1 and ends["yielded"].ended_by == "a"
+    floor, T = -M_MAX / inp.dials["track_step"], dict(ends["yielded"].state.tracks)
+    assert T["j"] == pytest.approx(floor) and T["b"] == pytest.approx(floor)
+
+
+def test_a_broken_temper_cannot_rest():
+    """A-146: at or past `temper_break` the moves that do nothing leave his menu, for a player, the policy, and a party who decides alike;
+    composed, he may rest; with his turns spent, only rest is left."""
+    for decides in (False, True):
+        a = _p("a", "for", decides=decides)
+        inp = _inp([a, _p("b", "against"), _p("j", decides=True)])
+        hot = _sit(inp, cond=tuple((p.id, Cond(heat=2.0 if p.id == "a" else 0.0)) for p in inp.room))
+        assert P._broken(inp, a, dict(hot.cond)["a"]) and not P._broken(inp, a, Cond())
+        assert "rest" not in P._legal(inp, hot, a) and "rest" in P._legal(inp, _sit(inp), a)
+        v = P.view(inp, hot, a, _key("hot", decides))
+        assert v.broke and not any(o.move == "rest" for o in v.options)
+        with pytest.raises(ValueError, match=r"refused\[choice\]: a "):
+            P.proceed(replace(inp, state=hot), _key("hot"), decide=lambda view, me: Choice("rest"))
+        assert P.policy(inp, v, a).move != "rest"
+        spent = _sit(inp, cond=tuple((p.id, Cond(heat=2.0, spoken=inp.rite.turns)) for p in inp.room))
+        assert P._legal(inp, spent, a) == ("rest",)
+
+
+def test_nobody_breaks_unprovoked_and_a_rattle_provokes_and_cools():
+    """C4: with no rattle the temper is 0 at every Will and Grace of 1 to 7; a rattle that lands puts heat 1 on the man pressed, who is then
+    past what a low Will and Grace carry, and each beat he makes cools it by `temper_cool`."""
+    inp = _inp([_p("a", "for"), _p("b", "against"), _p("j", decides=True)])
+    checked = 0
+    for will, grace in product(range(1, 8), repeat=2):
+        p = _p("x", "for", will=float(will), grace=float(grace))
+        assert P.temper_of(inp, p, Cond()) == 0.0 and not P._broken(inp, p, Cond())
+        checked += 1
+    assert checked == 49
+    low, presser = _p("b", "against", will=1.0, grace=1.0), _p("a", "for", reason=7.0, rank=3.0)
+    inp = _inp([presser, low, _p("j", decides=True)])
+    for i in range(60):
+        new, beat = P.exchange(inp, _sit(inp), presser, Choice("press", "consequence", None, "presses"), _key("provoke", i))
+        if beat.rattled:
+            break
+    else:
+        raise AssertionError("no press landed in 60 keys")
+    c = dict(new.cond)["b"]
+    assert beat.rattled == "b" and c.rattles == 1 and c.heat == 1.0 and P._broken(inp, low, c)
+    after, _ = P.exchange(inp, new, low, Choice("argue", "consequence", None, "raises"), _key("cool"))
+    assert dict(after.cond)["b"].heat == pytest.approx(1.0 * (1.0 - inp.dials["temper_cool"]))
+
+
+def test_a_composed_npc_is_the_view_best_chooser():
+    """Below the break the automatic policy takes the top perceived option of the same view a player is shown, no other information: the
+    sitting it plays equals the one a view-best callback plays, key for key (and none of these beats was a broken man's)."""
+    room = [_p("a", "for", will=7.0, grace=7.0), _p("b", "against", will=7.0, grace=7.0), _p("j", decides=True)]
+    inp = _inp(room, _rite(turns=2))
+    checked = 0
+    for i in range(5):
+        auto, played = P.proceed(inp, _key("view-best", i)), P.proceed(inp, _key("view-best", i), decide=_top)
+        assert not any(b.broke for b in auto.beats) and auto == played, i
+        checked += len(auto.beats)
+    assert checked == 5 * 4
+    heated = _sit(inp, cond=tuple((p.id, Cond(heat=1.0)) for p in inp.room))     # provoked, not broken: the temper terms are still not his
+    seen = 0
+    for i in range(12):
+        for who in room[:2]:
+            assert 0.0 < P.temper_of(inp, who, Cond(heat=1.0)) < inp.dials["temper_break"]
+            v = P.view(inp, heated, who, _key("heated", i))
+            assert not v.broke and P.policy(inp, v, who) == _top(v, who), (i, who.id)
+            seen += 1
+    assert seen == 24
+    from engine.season.queries.inputs import Option     # a proud man's temperament pulls toward a press only once the temper breaks
+    v = replace(P.view(inp, heated, room[0], _key("heated")), options=(Option("press", "consequence", None, "presses", 0.0, 0.5, None),
+                                                                       Option("concede", None, None, "concedes", 0.3, None, None)))
+    assert P.policy(inp, v, room[0]).move == "concede"
+
+
+def test_a_sitting_opens_each_man_at_his_start_carrying_his_strain():
+    """What a man carries in from earlier rattles and where his track starts are the sitting's opening values; nothing else is."""
+    inp = _inp([_p("a", "for", start=0.4, strain=1.5), _p("b", "against", start=-0.2), _p("j", decides=True, start=0.1)])
+    st = P._start(inp)
+    assert dict(st.tracks) == {"a": 0.4, "b": -0.2, "j": 0.1} and dict(st.cond)["a"] == Cond(strain=1.5) and dict(st.cond)["b"] == Cond()
+    assert (st.n, st.issue, st.points, st.ended) == (0, 0, (), None)
+
+
+def test_a_broken_man_shows_by_temperament():
+    """Past the break the proud press and will not give way, the timid give way (A-136): the same two options, nearly level, the same temper."""
+    from engine.season.queries.inputs import Option
+    for will, want in ((7.0, "press"), (1.0, "concede")):
+        a = _p("a", "for", will=will, grace=1.0)
+        inp = _inp([a, _p("b", "against"), _p("j", decides=True)])
+        hot = _sit(inp, cond=tuple((p.id, Cond(heat=3.0 if p.id == "a" else 0.0)) for p in inp.room))
+        v = replace(P.view(inp, hot, a, _key("shows")), options=(Option("press", "consequence", None, "presses", 0.0, 0.5, None),
+                                                                   Option("concede", None, None, "concedes", 0.05, None, None)))
+        assert v.broke and P.policy(inp, v, a).move == want, (will, want)
+
+
+def test_a_concession_never_improves_the_conceder():
+    """C5: conceding an issue moves each listener `-side x concede_step x (1 + max|stake|)` from WHERE HE STANDS (never back to his start),
+    keeps the issue conceded and opens the next rung; the last rung ends the sitting `yielded` and names the conceder."""
+    checked = 0
+    for side, other in (("for", "against"), ("against", "for")):
+        sg = 1.0 if side == "for" else -1.0
+        for x in (-3.0, -0.5, 0.0, 0.5, 3.0):
+            a, b = _p("a", side, stake=(0.3, 0.0, 0.0)), _p("b", other)
+            inp = _inp([a, b, _p("j", decides=True, start=0.2)], _rite(turns=1, concede="descends", issues=("r1", "r2", "r3"), bears=side,
+                       reply=((side, "may"), (other, "must")), moves=((side, ("argue", "concede")), (other, ("rest",)))))
+            cost = inp.dials["concede_step"] * (1.0 + 0.3)
+            stands = (("a", x), ("b", x), ("j", x))
+            out = P.proceed(replace(inp, state=_sit(inp, tracks=stands)), _key("concede", checked), decide=_pick("yield"))
+            T = dict(out.state.tracks)
+            assert [x.closed for x in out.beats if x.closed] == ["r1"] and out.state.issue == 1 and out.ended == "budget" and out.ended_by is None
+            for who in ("b", "j"):
+                assert (T[who] - x) * sg == pytest.approx(-cost), (side, x, who)      # against the conceder's side, from where it stood
+            last = P.proceed(replace(inp, state=_sit(inp, issue=2, tracks=stands)), _key("last", checked), decide=_pick("yield"))
+            assert last.ended == "yielded" and last.ended_by == "a" and last.state.issue == 2
+            checked += 1
+    assert checked == 10
+
+
+def test_a_resumed_sitting_keeps_its_count_and_issue():
+    """A two-turn sitting resumed under four turns runs each speaker's two further turns: the beats go on from the count, the issue reached
+    stands, nobody is given a turn he has had."""
+    inp = _inp([_p("a", "for"), _p("b", "against"), _p("j", decides=True)], _rite(turns=2, concede="descends", issues=("r1", "r2", "r3")))
+    first = P.proceed(inp, _key("resume"), decide=lambda v, me: _pick("yield" if (me.id == "a" and v.turns_left == 2) else "track")(v, me))
+    assert first.state.n == 4 and first.state.issue == 1 and first.ended == "budget"
+    again = replace(inp, rite=replace(inp.rite, turns=4), state=first.state)
+    second = P.proceed(again, _key("resume", 1), decide=_pick("track"))
+    assert [b.n for b in second.beats] == [5, 6, 7, 8] and {b.issue for b in second.beats} == {"r2"} and second.state.issue == 1
+    assert {i: c.spoken for i, c in second.state.cond if i != "j"} == {"a": 4, "b": 4}
+    _tracks_are_start_plus_moves(again, second)
+
+
+def test_the_same_key_gives_the_same_sitting():
+    """Determinism: the sitting is a function of the input and the key, so a replay on the same key is the same outcome, and another key is not."""
+    room = [_p("a", "for", will=6.0, grace=2.0), _p("b", "against", will=2.0, grace=2.0), _p("c", "against"), _p("j", decides=True)]
+    inp = _inp(room, _rite(turns=2))
+    one, two, other = P.proceed(inp, _key("replay")), P.proceed(inp, _key("replay")), P.proceed(inp, _key("replay", 1))
+    assert one == two and one != other and len(one.beats) >= 4
+
+
+def test_the_sitting_asserts_every_exchange_takes_its_whole_draw_count():
+    """The stream contract is held per exchange by the sitting: a view that takes a draw too many fails it, so no later draw of the sitting
+    can move silently (`proceed` passes `mark`, `rng.n` before the view)."""
+    inp = _inp([_p("a", "for"), _p("b", "against"), _p("j", decides=True)], _rite(turns=1))
+    mod = importlib.import_module("modules.social_contest.proceeding")
+    real = mod.view
+
+    def greedy(inp_, st, mover, rng):
+        out = real(inp_, st, mover, rng)
+        rng.normal(0.0, 1.0)
+        return out
+    mod.view = greedy
+    try:
+        with pytest.raises(AssertionError):
+            P.proceed(inp, _key("greedy"))
+    finally:
+        mod.view = real
+    assert len(P.proceed(inp, _key("greedy")).beats) == 2
+
+
+def test_the_speech_lands_on_the_frame_the_chooser_was_shown():
+    """The frame is picked from the ground by what the speaker believes of those who decide, shown on the option, and is the one the speech
+    is made on: a beat's `frame` is the frame of the option the chooser took."""
+    holds = (("want", "t1", 0.8, 1.0), ("want", "t2", 0.2, 1.0))
+    inp = replace(_inp([_p("a", "for"), _p("b", "against"), _p("j", decides=True, holds=holds)],
+                       _rite(turns=1, moves=(("for", ("argue",)), ("against", ("rest",))))), frames=(("want", "t1"), ("want", "t2")))
+    taken, rest = [], _pick("none")
+
+    def decide(view, me):
+        if me.id != "a":
+            return rest(view, me)
+        o = next(o for o in view.options if o.ground == "consequence")
+        taken.append(o.frame)
+        return Choice(o.move, o.ground, o.item, o.relation)
+    out = P.proceed(inp, _key("frame"), decide=decide)
+    assert taken[0] in ("t1", "t2") and out.beats[0].frame == taken[0]
