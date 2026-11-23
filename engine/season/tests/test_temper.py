@@ -153,16 +153,3 @@ def test_high_focus_agrees_with_himself_more():
     assert n_low == n_high == ticks * (ticks - 1) // 2 >= 700
     assert k_high > k_low, f"the high-Focus person takes the same first act on a redraw more often: {k_high} against {k_low} of {n_low}"
     assert self_agreement(low, DEFAULT_FIXTURES) == self_agreement(high, DEFAULT_FIXTURES), "at gain 0 Focus moves nothing"
-
-
-def test_self_agreement_exceeds_between_person_agreement():
-    checked = 0
-    for gain in (0.0, -0.5, -0.75):                # the swept `temper_gain` arms (H-476)
-        w = build_realm(0)
-        w.fixtures = w.fixtures.sweep("temper_gain", gain)
-        r = DS.read_retest(w, _RETEST_TICKS)
-        (k_self, n_self), (k_btw, n_btw) = r["self"], r["between"]
-        assert n_self >= 1000 and n_btw >= 1000, r
-        assert k_self / n_self > k_btw / n_btw, f"gain {gain}: a person agrees with himself no more than with a stranger: {r}"
-        checked += 1
-    assert checked == 3

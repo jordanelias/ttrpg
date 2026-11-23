@@ -414,11 +414,11 @@ def estimates(w) -> dict:
     vacant offices' included (`w.offices`, whether or not anyone holds the seat) -- each value one
     person's own estimate. Reads only."""
     window = w.fixtures.get("estimate_window_seasons")
-    shift = w.fixtures.get("scar_weight_shift")
+    shift, hold, mass = w.fixtures.get("scar_weight_shift"), w.fixtures.get("scar_hold"), w.fixtures.get("scar_primary_mass")
     holders = sorted(seats(w))
     rungs = sorted({o.rung for o in w.offices.values() if o.rung is not None})
     people = [w.persons[pid] for pid in sorted(w.persons)]
-    return {"legitimacy": _spread(legitimacy(p, h, window, shift) for p in people for h in holders),
+    return {"legitimacy": _spread(legitimacy(p, h, window, shift, hold, mass) for p in people for h in holders),
             "stability": _spread(stability(p, r, window) for p in people for r in rungs)}
 
 
@@ -678,9 +678,10 @@ def citation_counts(acts: dict) -> Counter:
 def most_cited(base, seasons: int = 1) -> tuple:
     """`(person, n)`: the person who is the actor of the most `Event.causes` antecedents of OTHER persons'
     acts in the unperturbed copy of `base`'s first `seasons` season(s) (`citation_counts`), ties by the
-    smallest person id. `(None, 0)` when no act has a cross-person antecedent. `base` is never run."""
+    smallest person id. A COHORT IS NEVER NAMED: since B10.60 a population forms none of the individual acts, so its removal changes nobody's later act (n = 0), and it is
+    skipped here. `(None, 0)` when no individual's act has a cross-person antecedent. `base` is never run."""
     w, d, bounds = drive(base.world_seed, seasons, "off", world=fork(base))
-    counts = citation_counts(read(w.log, d.act_of, bounds)["acts"])
+    counts = {p: n for p, n in citation_counts(read(w.log, d.act_of, bounds)["acts"]).items() if not getattr(base.persons.get(p), "is_cohort", False)}
     if not counts:
         return None, 0
     who = min(counts, key=lambda p: (-counts[p], p))

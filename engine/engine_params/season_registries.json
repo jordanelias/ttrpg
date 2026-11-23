@@ -2581,7 +2581,7 @@
           "kit": "combat_systems.act_cost's caller -- no reader of this row on this tree; B05 (CAP B1, B7) builds it",
           "told_claim_credit": "decision/options.py::competence",
           "choice_temper": "decision/choose.py::temper",
-          "choice_exposure": "decision/choose.py::score_terms",
+          "choice_exposure": "decision/choose.py::nerve",
           "own_state_gate": "queries/person_q.py::OwnStateReader",
           "crisis": "loop/resolve.py::_crisis_net_sigma"
         },
@@ -3264,7 +3264,7 @@
         },
         "held_edge_sourced": {
           "source": "B10.72 (`U5a_CHAR_owed_amendments` \u00a73 (b): *\"`release` on his own `commit` forms as an ordinary Candidate\"*); the SITE step's reading: the `need` question names the seat's holder, never the Proposition he is committed to, and `release` takes the question's plain referents, so before this line it formed on a person he held no edge toward. `held_edge_declines`' shape and its mirror: that roster narrows a verb off an object he holds a live edge on, this one adds the object.",
-          "note": "WHICH VERBS FORM, BESIDE THEIR OWN REFERENTS, ON THE OBJECT OF A LIVE EDGE THE PERSON HIMSELF HOLDS -- `verb: tenure kind`. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): the objects of his OWN live Tenures of that kind (`p.tenures`), on every question he answers. `release` is a CLOSER, so what it forms on is what the actor already holds (`_req_release`: a live edge owned by the actor toward the subject); the want he lays down is one he is committed to, and no question is about it. Nothing here chooses the act: whether it ranks is the score's, and a person committed to nothing forms what he formed before. ONE LOADER, `data/verbs.py::HELD_EDGE_SOURCED`, refused at import when a line names a verb the table lacks or a kind `tenure_kinds` does not carry. [ASSUMPTION; medium; Jordan to correct; revert: drop the line, and `release` forms on the question's referents only -- a want is then never offered for laying down.]",
+          "note": "WHICH VERBS FORM, BESIDE THEIR OWN REFERENTS, ON THE OBJECT OF A LIVE EDGE THE PERSON HIMSELF HOLDS -- `verb: tenure kind`. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): the objects of his OWN live Tenures of that kind (`p.tenures`), on every question he answers. `release` is a CLOSER, so what it forms on is what the actor already holds (`_req_release`: a live edge owned by the actor toward the subject); the want he lays down is one he is committed to, and no question is about it. Nothing here chooses the act: whether it ranks is the score's, and a person committed to nothing forms what he formed before. ONE LOADER, `data/verbs.py::HELD_EDGE_SOURCED`, refused at import when a line names a verb the table lacks or a kind `tenure_kinds` does not carry. [ASSUMPTION; medium; Jordan to correct; revert: drop the line, and `release` forms on the question's referents only -- a want is then never offered for laying down.] A FACTION MEMBERSHIP IS NOT AN OBJECT HERE (B10.72's fix): a `commit` whose object is a faction (`data/rosters.py::is_faction_id`) is left out of what the verb forms on, because releasing it is leaving the faction; the verb forms on a commit to a Proposition that is no faction.",
           "values": {
             "release": "commit"
           }
@@ -4356,7 +4356,7 @@
           }
         },
         "crisis_bands": {
-          "source": "`proposals/16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` \"The resolution, decided\" 3 (the four-band table, copied), \"Exact edits, by owner\" (row `rosters.yaml`); workplan v12 B10.13.",
+          "source": "`proposals/2026-11-12-subsystem-audit-suite/proposals/16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` \"The resolution, decided\" 3 (the four-band table, copied), \"Exact edits, by owner\" (row `rosters.yaml`); workplan v12 B10.13.",
           "note": "Overwhelming -- FAITH RENEWED, the one outflow the count has: `intensity: 1` (the reader clamps at the ceiling) and `scar: zero` (the count on `x` resets to 0). [ASSUMPTION; Jordan to correct: that renewal gives one step and clears the count -- basis: the source's \"faith renewed\"; no figure beyond +1.] Success -- HE HOLDS: nothing on the intensity, and `scar: threshold_less_one` (the count is set to the threshold less one, so it will take another wound to test him again). [ASSUMPTION; Jordan to correct: that one wound, not two, tests him again -- basis: the source's \"another wound to test him again\".] Partial -- HE WAVERS, recoverable by the Overwhelming band of a later test: `intensity: -1` (a creed at 1 goes to a held rejection, 0). [ASSUMPTION; Jordan to correct: one step down, no change to the count -- basis: the source's \"recoverable\".] Failure -- HE BREAKS, TODAY'S BRANCH: `branch: fold_else_destroy_else_minus_two` (FOLD into the highest-intensity incompatible co-held creed, else DESTROYED where nothing else is held, else -- something compatible is held -- intensity -2 floored at 0). The third arm replaces the unbuilt RESTABILISE branch of `conviction_after_crisis`, so no person in crisis is a no-op; `conviction_map`'s closed spine is kept (integers, clamped), so no rounding rule is needed. [ASSUMPTION; Jordan to correct: the -2 and the floor at 0 -- basis: the source's \"intensity -2 floored at 0\".] The write NAMES (`zero`, `threshold_less_one`, `fold_else_destroy_else_minus_two`) are read by B10.14's reader; a name it does not know is its refusal.",
           "bands": {
             "Overwhelming": [
@@ -9025,7 +9025,7 @@
           ],
           "class": "ACTS",
           "social": "true",
-          "by": "IN-08 H3 (`ED-IN-0261`'s scar model): `{element: count}`, one count per OBSERVER per violated pursuit -- and, from IN-08 H11, per violated held affiliation (`rosters.yaml: tables.affiliation_engagement`) -- written by the act's outcome through `loop/resolve.py::_scar_witnesses` (was V2's `scar[axis]` on the wounded person, \u00a754 item 21)",
+          "by": "IN-08 H3 (`ED-IN-0261`'s scar model): `{element: count}`, one count per OBSERVER per violated pursuit -- and, from IN-08 H11, per violated held affiliation (`rosters.yaml: tables.affiliation_engagement`) -- written by the act's outcome through `loop/resolve.py::_scar_witnesses` (was V2's `scar[axis]` on the wounded person, \u00a754 item 21) and, at `crisis_arm: drawn`, reset or set on the creed in crisis by `loop/resolve.py::_drawn_crisis` in its own `conviction` write (B10.15: the `scar` subject of that write)",
           "emits": "`scar.taken` \u00b7 `scar.healed`",
           "unproduced": "H-62 (loader invariant 2 counts verb writes only): no verb row declares it; written by loop/resolve.py::_scar_witnesses after any outcome that moved state"
         },

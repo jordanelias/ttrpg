@@ -35,7 +35,7 @@ def _weights(sign):
 
 def _plant(monkeypatch, sign, cell=None):
     """A person whose only weight is `sign` on `_AXIS`; `cell` (`{value: weight}`) authored on `_KEY` through the loader, else none."""
-    monkeypatch.setattr(CH, "project", lambda person, shift=0.0: _weights(sign))
+    monkeypatch.setattr(CH, "project", lambda person, shift=0.0, **read: _weights(sign))
     monkeypatch.setattr(V, "ALIGNMENT", V._load_alignment(choices={_KEY: {v: {_AXIS: w} for v, w in cell.items()}} if cell else None))
     return Person(id="p_decider", name="d")
 

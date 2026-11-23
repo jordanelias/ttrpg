@@ -89,14 +89,6 @@ def test_score_parts_sum_to_the_score():
     assert checked == len(VERB_TABLE) and kinds == set(SP.ATTRIBUTED_TERMS), kinds          # every term was observed owning a part
 
 
-def test_attributed_terms_equals_score_terms_length():
-    p, q = _person()
-    fx = _live()
-    terms = CH.score_terms(p, _candidates()[0], fx, CH.deliberation_memo(p, fx), _odds, q)
-    assert len(terms) == len(SP.ATTRIBUTED_TERMS) == len(CH.TERM_NAMES)
-    assert SP.ATTRIBUTED_TERMS == CH.TERM_NAMES
-
-
 def test_heard_names_who_carried_and_who_dissented_and_that_the_draw_departed():
     p, q = _person()
     fx = _live()

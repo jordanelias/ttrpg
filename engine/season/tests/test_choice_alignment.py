@@ -25,7 +25,7 @@ def _rank(p, weights, monkeypatch):
     """`make_ranker`'s real order of the two `marshal` forms (one per `retreat_at` value) for a person whose axis weights are `weights`; temperature 0."""
     forms = [Candidate("marshal", _SUBJECT, {"role": _ROLE, "retreat_at": v}) for v in (_EARLY, _LATE)]
     monkeypatch.setattr(CH, "opening_set", lambda person, view, question, fx: list(forms))
-    monkeypatch.setattr(CH, "project", lambda person, shift=0.0: weights)
+    monkeypatch.setattr(CH, "project", lambda person, shift=0.0, **read: weights)
     fx = DEFAULT_FIXTURES.sweep("choice_temperature", 0).sweep("odds_weighting", "none")
     return [c.operands["retreat_at"] for c in CH.make_ranker(fx)(p, SimpleNamespace(question=object(), odds=None))]
 

@@ -16,7 +16,7 @@ from typing import Callable, Optional
 
 from engine.dice_engine.fmath import ltr_sum
 from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
-from ..data.verbs import VERB_TABLE, align, align_kind
+from ..data.verbs import CHOICE_SOURCED, VERB_TABLE, align, align_choice, align_kind
 from ..queries.person_q import crisis_weights, is_deed, knows_self, regard_parts
 from ..state.carriers import Candidate, Claim, Question
 from .choose import _DAMP, TERM_NAMES, admission_weight, odds_weight, score_terms
@@ -55,14 +55,20 @@ def _order(part: ScorePart) -> tuple:
 
 def _pursuit_parts(p, c: Candidate, fx, memo: dict, odds: Optional[Callable], total: float) -> list:
     """B10.64: a pursuit he does not recognise (`knows_self`) is owned `UNRECOGNISED`; its pull is the same. `damp * Σ_axis to_axes({e: w_e})[axis] * align(c.verb, axis) * odds_weight * admission_weight` for each held pursuit `e`, `w_e` from
-    `crisis_weights(p, scar_weight_shift)`, the weights `choose.project` reads. A candidate whose pursuit term is exactly 0.0 is not asked the
-    two factors (nor is `score_terms`: the odds query scans the log), so its parts carry none."""
+    `crisis_weights(p, scar_weight_shift, scar_hold, scar_primary_mass)`, the weights `choose.project` reads. The candidate's CHOICE VALUES (`choice_sourced` keys its operands carry,
+    B10.56) add their own cells to each pursuit's pull, as `score_terms` adds them to the term. A candidate whose pursuit term is exactly 0.0 is not asked the
+    two factors (nor is `score_terms`: the odds query scans the log), so its parts carry none.
+    The parts sum to the pursuit term at a person with no manner offset: `choose.project` adds his stored `manner_offset` to the axis vector `score_terms` reads, and that offset has
+    no pursuit to own it (a design call, not a part built here)."""
     factor_o, factor_a = (odds_weight(p, c, fx, odds), admission_weight(p, c, fx)) if total != 0.0 else (1.0, 1.0)
-    weights = crisis_weights(p, fx.get("scar_weight_shift"))
+    weights = crisis_weights(p, fx.get("scar_weight_shift"), fx.get("scar_hold"), fx.get("scar_primary_mass"))
+    chosen = tuple((k, c.operands[k]) for k in CHOICE_SOURCED.get(c.verb, ()) if k in (c.operands or {}))
     parts = []
     for e in sorted(weights):
         axes = to_axes({e: weights[e]})
         pull = memo[_DAMP] * ltr_sum(axes[ax] * align(c.verb, ax) for ax in _AXES)
+        if chosen:
+            pull += memo[_DAMP] * ltr_sum(axes[ax] * ltr_sum(align_choice(k, v, ax) for k, v in chosen) for ax in _AXES)
         if pull != 0.0:
             parts.append(ScorePart("pursuit", e if knows_self(p, e) else UNRECOGNISED, pull * factor_o * factor_a))
     return parts
@@ -73,7 +79,7 @@ def score_parts(p, c: Candidate, fx, memo: dict, odds: Optional[Callable] = None
 
     The pursuit term is split by held pursuit (`_pursuit_parts`); the stance term is one part owned by `c.subject`; `fit` one owned by the
     person the row seats (`operands["to"]`); `aim` one owned by the goal the question `q` was raised by; `risk` one owned by the prize the row
-    contests. The parts sum to `score_total` of the terms within summation reorder."""
+    contests. The parts sum to `score_total` of the terms within summation reorder, at a person with no manner offset (`_pursuit_parts`)."""
     terms = score_terms(p, c, fx, memo, odds, q)
     if len(terms) != len(ATTRIBUTED_TERMS) or TERM_NAMES != ATTRIBUTED_TERMS:
         raise ValueError(f"score_terms returns {TERM_NAMES}, but only {ATTRIBUTED_TERMS} name an owner: a new term must name its owner here")

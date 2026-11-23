@@ -20,7 +20,7 @@ from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree, degree_from_net
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma, opposed_ob, pool_of
 from engine.substrate import composition
 from ..gaps import InstrumentDefect
-from ..data.rosters import (CRISIS_ARMS, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, capability_rows, graded_route,
+from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, capability_rows, graded_route,
                             MARGIN_ENDING, SCAR_HOLDS, SCAR_SEASON_CAPS, SCAR_VINDICATIONS, STANDING_OCCASION_OPENED_BY, STRATA, UNROUTED_BAND,
                             require_member, require_use_site, task_share, when_holds)
 
@@ -923,7 +923,6 @@ def _conviction_crisis(w: "World", token: Token, a: Act, broken_of: dict, events
 # B10.15: THE DRAWN CRISIS. The arm the body branches on, the kind it tells, and the one composition role that rolls (`effects_combat.MARK_ROLE`: `(pool, net_sigma, rng, ob)
 # -> (degree, net)`, the module owning `roll_net + net_boost`; the host rolls nothing, as `test_season_shape.py`'s producer scan holds).
 CRISIS_DRAWN = "drawn"                    # [canonical: engine/season/rosters.yaml §crisis_arms]
-CONVICTION_MOVED = "conviction.moved"     # [canonical: engine/season/write_matrix.yaml §(Person, conviction) emits]
 _CRISIS_ROLL = MARK_ROLE                  # [canonical: references/module_contracts.yaml §composition_roles combat.resolve]
 _CRISIS_SITE = require_use_site("crisis")  # the `capability_use_sites` site whose `edge` row `_crisis_net_sigma` reads
 

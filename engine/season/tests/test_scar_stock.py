@@ -9,7 +9,8 @@ from __future__ import annotations
 import pytest
 
 from ..data import affiliations as A
-from ..data.pursuits import pursuit
+from ..data.pursuits import pursuit, to_axes
+from ..decision.choose import _AXIS_W, deliberation_memo
 from ..data.matrix import Step, WriteClass
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token
@@ -97,3 +98,16 @@ def test_the_most_scarred_man_is_not_the_least_changed():
     p.pursuits, p.scar = {j: 0.4, l: 0.3, v: 0.2, wl: 0.1}, {j: 4, l: 2, v: 0, wl: 0}      # primaries j, l (mass .6): both at the threshold
     assert PQ.crisis_weights(p, 0.5, hold="primary", mass=0.6) == pytest.approx({j: 0.2, l: 0.5, v: 0.2, wl: 0.1}), "within the primaries, not to the unscarred"
     assert PQ.crisis_weights(p, 0.5)[v] > 0.2, "at `any` the unscarred are the heirs, as before"
+
+
+def test_the_chooser_reads_the_weights_the_scar_writer_scarred():
+    """B10.07 / B10.08: at `scar_hold` primary the writer scars only a person's primaries, so the weights the chooser reads (`deliberation_memo`) keep the shift
+    among them: his one primary (justice .7 of .7 + .3, mass .6) is at the threshold with nobody else in play, so its weight is not given to the unscarred
+    pursuit; at `any` the unscarred is the heir and the same person reads shifted."""
+    p = P.tiny_world().persons["p_low"]
+    j, l = pursuit("justice"), pursuit("liberty")
+    p.conviction, p.pursuits, p.scar = {}, {j: 0.7, l: 0.3}, {j: 3}
+    fx = P.tiny_world().fixtures.sweep("scar_weight_shift", 0.5)
+    read = lambda hold: deliberation_memo(p, fx.sweep("scar_hold", hold))[_AXIS_W]
+    assert read("primary") == to_axes(p.pursuits), "the primary alone is at the threshold: no weight goes to the unscarred"
+    assert read("any") != to_axes(p.pursuits) and read("any") == pytest.approx(to_axes({j: 0.35, l: 0.65}))

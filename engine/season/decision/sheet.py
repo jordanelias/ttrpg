@@ -59,7 +59,7 @@ from ..data.rosters import AFFILIATIONS, SEEN_PREDICATE
 from ..gaps import Forbidden
 from ..queries.person_q import LedgerReader, decisiveness, recognised
 from ..state.carriers import Person, PersonInterior, Question, View, fade_of, frozen
-from .choose import make_ranker, release
+from .choose import Ranked, make_ranker, release
 from .options import ledger_weigh
 
 def describe(key: str) -> str:
@@ -180,12 +180,16 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
                                  frozen(recognised(p, p.pursuits)), tuple(p.stance), frozen(p.conviction),
                                  frozen(p.scar), p.body, frozen(p.attributes), p.thread_sensitivity, p.heritage,
                                  tuple((t.kind, t.object) for t in p.tenures if t.live),
-                                 decisiveness(p, fx.get("scar_weight_shift")))
+                                 decisiveness(p, fx.get("scar_weight_shift"), hold=fx.get("scar_hold"), mass=fx.get("scar_primary_mass")))
         chosen = [int(i) for i in pick(sheet)]
         if len(set(chosen)) != len(chosen) or any(not 0 <= i < len(cands) for i in chosen):
             raise Forbidden(f"{p.id}'s pick {chosen} is not a selection from the {len(cands)} candidates "
                             f"his opening set formed", "IN-47 rule 1", law=_LAW)
-        return release(p, [cands[i] for i in chosen], n, fx, mint, q, draw)
+        # The pick carries what the ranker's strike kept (`Ranked.forgone_of`, B10.24), so a Scene the player's pick packs names what his scruple struck as the
+        # automated chooser's does; `decide` stays off (a pick is no sampled order, `Ranked`'s note).
+        picked = Ranked(cands[i] for i in chosen)
+        picked.forgone_of = getattr(cands, "forgone_of", None)
+        return release(p, picked, n, fx, mint, q, draw)
     return space
 
 

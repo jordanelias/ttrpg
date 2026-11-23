@@ -474,6 +474,9 @@ def table(name: str) -> dict:
     return {outer: dict(inner) for outer, inner in (t.get("cells") or {}).items()}
 
 
+_FACTION_PROP_PREFIX = "fac_"  # [JUSTIFIED: an id SPELLING, not a game value -- the faction half of the id relations `faction_prop_id` and `is_faction_id` own]
+
+
 def faction_prop_id(name: str) -> str:
     """`'Valorsmark'` -> `'fac_valorsmark'`. THE ONE OWNER OF THE FACTION-ID RELATION.
 
@@ -483,7 +486,13 @@ def faction_prop_id(name: str) -> str:
     §0.1 pt 1 shape: a getter's source changes while its readers go on reading the old one, and the
     wrong answer (`[]`) is a PLAUSIBLE answer, so nothing raises.
     """
-    return "fac_" + "".join(c if c.isalnum() else "_" for c in str(name).lower()).strip("_")
+    return _FACTION_PROP_PREFIX + "".join(c if c.isalnum() else "_" for c in str(name).lower()).strip("_")
+
+
+def is_faction_id(ident: str) -> bool:
+    """WHETHER `ident` IS A FACTION'S PROPOSITION ID (`faction_prop_id`'s image), by the prefix the one relation forms it with: the other half of the relation, so
+    no reader spells the prefix itself (`decision/options.py::opening_set` excludes a faction membership from `held_edge_sourced`'s objects through it)."""
+    return str(ident).startswith(_FACTION_PROP_PREFIX)
 
 
 # The prefix of a territory RUNG id, and nothing else. Named so the relation below has one spelling.
@@ -1131,6 +1140,8 @@ OBSERVATION_TERMS = roster("observation_terms", ordered=True)
 # `queries/person_q.py::deed_doer` must read it and `person_q` may not import the write path: a name two modules
 # need, below both. `state/gate.py` imports it back, so `gate.PERSON_DIED` still resolves for every importer.
 PERSON_DIED = "person.died"
+# The `conviction.moved` Event kind (B10.15), spelt here for the same reason: `loop/resolve.py::_drawn_crisis` tells it, and `queries/world_q.py::practice` must not credit it.
+CONVICTION_MOVED = "conviction.moved"     # [canonical: engine/season/write_matrix.yaml §(Person, conviction) emits]
 OBSERVATION_DEPOSIT = roster_map("observation_terms", "deposit")
 # THE ONE NAME THE `seen` CLAIM IS DEPOSITED UNDER. It lives here and not in `epistemic.py` (where
 # it was bound) because `queries/person_q.py::said_of` must read it and `epistemic` imports
@@ -1213,7 +1224,8 @@ FORGE_QUALITY = _load_band_numbers("forge_quality", roster_map("forge_quality", 
 def _load_crisis_bands(mapping: dict, bands, kinds) -> dict:
     """B10.13: `rosters.yaml: tables.crisis_bands.bands` -- degree band -> an ordered tuple of typed writes `(kind, value)`, refused at import
     naming the row when a key is no band of the one ladder, a band has no row, a row is not a list of one-key mappings, a write's kind is outside
-    `kinds` (`rosters: crisis_write_kinds`), or its value is not the kind's type (`intensity`: a whole number; any other kind: a non-empty name).
+    `kinds` (`rosters: crisis_write_kinds`), or its value is not the kind's type (`intensity`: a whole number; any other kind: a non-empty name), or the Overwhelming row writes no `scar` (the
+    reader names the creed in crisis through it).
     A function so a test can plant a bad table and watch it refuse. What a NAME means (`zero`, `threshold_less_one`, a branch) is the reader's,
     `person_q.conviction_after_crisis` from B10.14: this loader keeps the table's shape and nothing else."""
     bad = [f"band {b!r}: not on the degree ladder {sorted(bands)}" for b in mapping if b not in bands]
@@ -1240,6 +1252,11 @@ def _load_crisis_bands(mapping: dict, bands, kinds) -> dict:
             else:
                 writes.append((kind, val))
         out[b] = tuple(writes)
+    # `loop/resolve.py::_creed_in_crisis` names the creed in crisis through THE OVERWHELMING ROW'S `scar` WRITE (the one key of the `scar_delta` it returns), so a table
+    # whose Overwhelming row writes none would leave nobody to roll and say nothing: refused here, naming the row.
+    top = _DEGREE_LABEL[_Degree.OVERWHELMING]
+    if top in out and not any(kind == "scar" for kind, _v in out[top]):
+        bad.append(f"band {top!r}: writes no `scar` reset, which `_creed_in_crisis` reads to name the creed in crisis")
     if bad:
         raise Unspecified(
             f"`crisis_bands` rows {sorted(bad)}", "rosters.yaml -- tables.crisis_bands",

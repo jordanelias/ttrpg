@@ -5,7 +5,7 @@ FALSIFIER: at the shared column the stronger creed is still the one folded, or `
 """
 from __future__ import annotations
 
-from engine.dice_engine.dice_engine import DEGREE_LABEL
+from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
 
 from ..data import affiliations as A
 from ..data.fixtures import DEFAULT_FIXTURES
@@ -13,7 +13,8 @@ from ..data.matrix import Step
 from ..harness import probes as P
 from ..loop import resolve as R
 from ..queries import person_q as PQ
-from ..state.carriers import Person
+from ..queries import world_q
+from ..state.carriers import Act, Event, Person
 from ..state.ids import H
 from ._scar_helpers import compatible_pairs, fight, incompatible_pairs, rebound
 
@@ -122,3 +123,17 @@ def test_two_crises_of_one_person_in_one_tick_have_two_keys(monkeypatch):
         assert len(set(purposes)) == len(purposes) and set(purposes) <= {"crisis:" + act for act in acts}, (pid, purposes)
         assert len({k for _p, k in drawn}) == len(drawn), f"{pid}: two crises shared a key"
         assert all(k == H(w.world_seed, w.tick, pid, p) for p, k in drawn), f"{pid}: a key is not H(seed, tick, person, purpose)"
+
+
+def test_an_observers_crisis_band_does_not_practise_the_actor_who_scarred_him():
+    """A `conviction.moved` Event names the scarring act in `causes` and carries the OBSERVER'S band: an observer's Overwhelming crisis must not credit the actor's
+    practice in that act's key. Planted: `p_low`'s one `fight` resolved at Failure, then a crisis Event at Overwhelming caused by it; a `body.changed` Event at
+    Overwhelming caused by it is the control that the reader does count a good result of his own act."""
+    w = P.tiny_world(DEFAULT_FIXTURES.sweep("practice_step", 1))
+    w.acts.append(Act(id="a_fight", actor="p_low", verb="fight", payload={"subject": "p_mid"}))
+    w.log.append(Event("ev_own", "body.changed", [P.apparatus_receipt(w, "p_mid", "set", "Person")], ["a_fight"], 0, DEGREE_LABEL[Degree.FAILURE]))
+    w.log.append(Event("ev_crisis", MOVED, [P.apparatus_receipt(w, "p_other", "set", "Person")], ["a_fight"], 0, DEGREE_LABEL[Degree.OVERWHELMING]))
+    w.tick = 1
+    assert world_q.practice(w, w.persons["p_low"], "fight") == 0, "an observer's crisis band credited the actor who scarred him"
+    w.log.append(Event("ev_good", "body.changed", [P.apparatus_receipt(w, "p_mid", "set", "Person")], ["a_fight"], 0, DEGREE_LABEL[Degree.OVERWHELMING]))
+    assert world_q.practice(w, w.persons["p_low"], "fight") == 1, "the reader no longer counts his own act's good result"

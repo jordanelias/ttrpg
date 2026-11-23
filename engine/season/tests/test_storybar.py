@@ -351,14 +351,9 @@ def test_removal_changes_another_persons_later_act():
     every figure would be void), and the removed person's own acts are not in `n`. The second control is
     a person removed at a lap in which the unperturbed copy shows him forming no scene: `n` reads 0."""
     base = _small_world()
-    # B10.99 re-read: since B10.60 the population (a cohort) forms none of the individual acts, and the instrument's default
-    # (`SB.most_cited`) now names a cohort whose removal at the first lap changes none of anybody's later acts (n = 0 at seed 0:
-    # cohort_set_s_025, cited 20 times). The person this test removes is the most-cited INDIVIDUAL, as `most_cited` reads it.
-    w0, d0, bounds0 = SB.drive(base.world_seed, 1, "off", world=SB.fork(base))
-    counts = SB.citation_counts(SB.read(w0.log, d0.act_of, bounds0)["acts"])
-    who = min((p for p in counts if not base.persons[p].is_cohort), key=lambda p: (-counts[p], p), default=None)
-    cited = counts.get(who, 0)
+    who, cited = SB.most_cited(base)        # the instrument's own default, which names an individual (a cohort's removal reads n = 0 since B10.60)
     assert who is not None and cited >= 1, "no individual is cited by another person; the removal observed nothing"
+    assert not base.persons[who].is_cohort
     res = SB.removal_report(base, SEASONS, who, WHEN, None)
     v = SB.removal_verdict(res, WHEN)
     assert v["replay"] == 0, "the replay arm moved: every figure below is void"

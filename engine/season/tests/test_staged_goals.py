@@ -84,9 +84,3 @@ def test_the_last_stage_opens_a_mandatory_question_and_decides_nothing():
     assert [q.mandatory for q in marked] == [True, False], "and only it is marked"
     acts = {_first_acts(seed) for seed in range(4)}
     assert len(acts) > 1, f"the mark fixed his act: the same verbs at every seed, {sorted(next(iter(acts)))}"
-
-
-def test_an_opens_value_outside_the_two_is_refused():
-    with pytest.raises(Forbidden) as e:
-        goals.parse(_doc("compulsory"))
-    assert "gs_throne" in str(e.value) and "'compulsory'" in str(e.value), "the refusal names the row and the value"

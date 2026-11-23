@@ -458,9 +458,9 @@ def relations_of(r: dict) -> tuple:
     `boot/realm.py::build_realm` maps to the seated person id by the one `_slug` mapping it seats the cast with -- or `()` where nothing is
     authored: the key absent, `relations: null`, or no row at all. A relation is authored on the side that holds it, so a symmetric one is two
     rows and they need not agree. A `relations:` that is no list, an entry that is no mapping of exactly `RELATION_FIELDS`, a `to` the registry
-    carries no row for, a `ground` outside `rosters.yaml: relation_grounds`, a `valence` that is not -1 or +1, and a `weight` that is no whole
-    number from 0 to `STANCE_VALENCE_SCALE` (the stance row's own weight bound; the valence is +-1 here, so the row never passes `STANCE_MAX`)
-    REFUSE, naming the row (`attributes_of`'s shape). A bool is no number."""
+    carries no row for, a `ground` outside `rosters.yaml: relation_grounds`, a `valence` that is not -1 or +1, a `weight` that is no whole
+    number from 0 to `STANCE_VALENCE_SCALE` (the stance row's own weight bound; the valence is +-1 here, so the row never passes `STANCE_MAX`),
+    a repeated `(to, ground)` and a `to` that is the row's own id REFUSE, naming the row (`attributes_of`'s shape). A bool is no number."""
     raw = (r or {}).get("relations")
     if raw is None:
         return ()
@@ -479,6 +479,9 @@ def relations_of(r: dict) -> tuple:
         if not isinstance(to, str) or to not in known:
             raise Unspecified(f"cast row {who}: relation `to: {to!r}` is no case id this registry carries", "references/npc_registry.yaml",
                               needs="a registry case id (`NPC-050`)", law="B10.62 -- a relation names a person the cast seats")
+        if to == who:
+            raise Unspecified(f"cast row {who}: relation `to: {to!r}` is the row's own id", "references/npc_registry.yaml",
+                              needs="a case id other than the holder's own", law="B10.62 -- a relation is what ANOTHER person is to the holder")
         if not isinstance(ground, str) or ground not in RELATION_GROUNDS:
             raise Unspecified(f"cast row {who}: relation ground {ground!r} is none of {sorted(RELATION_GROUNDS)}", "rosters.yaml",
                               needs=f"one of {sorted(RELATION_GROUNDS)}", law="B10.62 -- a ground is a `relation_grounds` member")
@@ -489,6 +492,10 @@ def relations_of(r: dict) -> tuple:
             raise Unspecified(f"cast row {who}: relation weight {weight!r} is no whole number from 0 to {STANCE_VALENCE_SCALE}", "references/npc_registry.yaml",
                               needs=f"a whole number 0-{STANCE_VALENCE_SCALE}, the stance row's own weight bound",
                               law="B10.62 -- the weight is the stance row's, bounded as the loyalty row's is")
+        if any(o[0] == to and o[1] == ground for o in out):
+            raise Unspecified(f"cast row {who}: relation `(to: {to!r}, ground: {ground!r})` is authored twice", "references/npc_registry.yaml",
+                              needs="one entry per (to, ground): the bond claim `c_bond_{holder}_{other}_{ground}` is minted once",
+                              law="B10.62 -- a repeated pair would mint the one claim id twice")
         out.append((to, ground, valence, weight))
     return tuple(out)
 

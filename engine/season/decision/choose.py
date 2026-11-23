@@ -65,6 +65,9 @@ CHOICE_TEMPER = require_use_site("choice_temper")
 CHOICE_EXPOSURE = require_use_site("choice_exposure")
 
 
+_STANCE_SCALE_LOW = 0.2   # [canonical: engine/season/data/fixtures.py §stance_scale (H-464): the gentlest swept value; 0 and STANCE_MAX are the arm's off and its control]
+
+
 def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = None) -> float:
     """§F2's SECOND TERM, by `Fixtures.stance_polarity` (v9 IN-18 `G2`, `H-194`).
 
@@ -99,7 +102,11 @@ def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = 
     # B10.04 (`U5a_CHAR_owed_amendments` §2, H-464): regard read as a share of `STANCE_MAX` times `Fixtures stance_scale`, applied to
     # the arm's value BEFORE either gain. At the control (`stance_scale == STANCE_MAX`) the quotient is `25 / 25 == 1.0` and
     # `t * 1.0 == t` for every float, so the term is today's exactly. The clamp to the bound is B10.10's (`stance_clamp`), inside `_stance_arm`, so this factor reads the clamped value.
-    t = _stance_arm(p, c, fx, memo) * (fx.get("stance_scale") / STANCE_MAX)
+    scale = fx.get("stance_scale")
+    if not (scale == 0 or _STANCE_SCALE_LOW <= scale <= STANCE_MAX):    # `not (...)`, so a NaN is refused too
+        raise ValueError(f"stance_scale {scale} is outside 0 and [{_STANCE_SCALE_LOW}, {STANCE_MAX}] (H-464): above the stance bound regard would outweigh itself, "
+                         "and between 0 and the gentlest swept value no sweep reads it")
+    t = _stance_arm(p, c, fx, memo) * (scale / STANCE_MAX)
     # v11 CR-87 (THE GRUDGE'S BOUND): on a VIOLENT row (`data/verbs.py::VIOLENT_VERBS`, off `rosters.yaml:
     # violent_prizes`) whose subject is its opponent, the term is read at `Fixtures hostile_stance_gain` in place of
     # `1 + g`, so a grudge's pull on violence is bounded apart from its pull on every other act; `declared`'s sign
@@ -171,7 +178,7 @@ def deliberation_memo(p: Person, fx: "Fixtures") -> dict:
     if not k >= 0:                   # `not >=`, so a NaN is refused too
         raise ValueError(f"confliction_weight {k} is not >= 0: it would invert, divide by zero "
                          f"or poison the score (H-188)")
-    return {_AXIS_W: project(p, fx.get("scar_weight_shift")),
+    return {_AXIS_W: project(p, fx.get("scar_weight_shift"), hold=fx.get("scar_hold"), mass=fx.get("scar_primary_mass")),
             _DAMP: 1.0 if k == 0 else 1.0 / (1.0 + k * confliction(p)),
             _AIM: {}}
 
@@ -550,6 +557,13 @@ def temper(p: Person, fx: "Fixtures") -> float:
     return 1.0 if factor is None else factor
 
 
+def own_temperature(p: Person, fx: "Fixtures") -> float:
+    """A PERSON'S OWN CHOICE TEMPERATURE (B10.28): the realm's `choice_temperature` times his `temper` factor, exactly `choice_temperature` at the shipped gain 0 (x 1.0).
+    THE ONE OWNER: `_sample_order` draws at it, `make_ranker`'s `decide` attributes at it, and `harness/decision_spread.py::own_tau` and
+    `harness/interactions.py`'s softmax read it, so the person's temperature is one quantity however many readers ask."""
+    return float(fx.get("choice_temperature")) * temper(p, fx)
+
+
 def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
     """`U4` / `H-96`: the triage stops being decided by the SPELLING of a verb.
 
@@ -637,7 +651,7 @@ def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
     candidate-keyed replay this function depends on — the noise must be a property of the candidate,
     not of the order it was reached in. Recorded here because a declaration that a mechanism is
     missing, made without naming the adjacent one, is the defect this lane keeps finding."""
-    tau = float(fx.get("choice_temperature")) * temper(p, fx)     # B10.28: x 1.0 is exact at the shipped gain 0
+    tau = own_temperature(p, fx)
     if tau == 0 or len(ranked) < 2:
         return ranked
     if draw is None:
@@ -825,6 +839,33 @@ def _scruple_strikes(p: Person, c: Candidate, margin: float, fx: "Fixtures", dra
     return draw(p.id, f"scruple:{c.verb}:{c.subject or '-'}").random() < 1.0 - fmath.exp(-margin / t)
 
 
+def strike_scruples(p: Person, cands: list, fx: "Fixtures", draw, score_of: Callable[[Any], float]) -> tuple:
+    """B10.24: THE ONE STRIKE. `(kept, marked)` for `cands` under `p`'s scruple (`Fixtures refusal_axis`, his `refusal_tolerance`): a candidate whose verb's `options.scruple` margin
+    is positive is struck by `_scruple_strikes` (the threshold at `scruple_temperature` 0, a draw above it) and left out of `kept`; `marked` is every candidate with a positive margin as
+    `(candidate, margin, score_of(candidate), struck)`, the struck and the standing alike (`make_ranker` keeps them for `Ranked.forgone_of` and the fold's `scruple.overridden`).
+    No axis armed: `cands` itself and `[]`. `make_ranker` calls it after scoring; `harness/decision_spread.py::formed_set` calls it on the formed set, so the instrument reads the
+    chooser's candidate set and not the one before his scruple."""
+    axis = fx.get("refusal_axis")
+    tolerance = refusal_tolerance(p, axis)
+    marked: list = []
+    if tolerance is None:
+        return cands, marked
+    kept = []
+    for c in cands:
+        margin = scruple(c.verb, axis, tolerance)
+        if margin <= 0.0:
+            kept.append(c)
+            continue
+        struck = _scruple_strikes(p, c, margin, fx, draw)
+        marked.append((c, margin, score_of(c), struck))
+        if struck:
+            TRACE.note(f"{p.id} refuses {c.verb!r}: its `{axis}` alignment lies {margin:.3f} past his tolerance "
+                       f"{tolerance:+.3f} toward the refused pole (ED-IN-0261)", "H-146")
+        else:
+            kept.append(c)
+    return kept, marked
+
+
 def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
                 draw: Optional[Callable[[str, str], Any]] = None,
                 watch: Optional[Callable[..., None]] = None) -> Callable[..., list]:
@@ -869,24 +910,7 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
         # is struck from the order. The strike is `_scruple_strikes`: the threshold at `scruple_temperature` 0, a draw on the margin above
         # it (B10.25). What is struck, with its margin and score, is kept (`Ranked.forgone_of`); a candidate with a positive margin
         # the strike leaves standing is kept too, for the fold's `scruple.overridden` (`loop/resolve.py::_scruple_overridden`).
-        axis = fx.get("refusal_axis")
-        tolerance = refusal_tolerance(p, axis)
-        marked: list = []           # (Candidate, margin, score, struck): every candidate with a positive margin
-        if tolerance is not None:
-            kept = []
-            for c in cands:
-                margin = scruple(c.verb, axis, tolerance)
-                if margin <= 0.0:
-                    kept.append(c)
-                    continue
-                struck = _scruple_strikes(p, c, margin, fx, draw)
-                marked.append((c, margin, _scores[id(c)], struck))
-                if struck:
-                    TRACE.note(f"{p.id} refuses {c.verb!r}: its `{axis}` alignment lies {margin:.3f} past his tolerance "
-                               f"{tolerance:+.3f} toward the refused pole (ED-IN-0261)", "H-146")
-                else:
-                    kept.append(c)
-            cands = kept
+        cands, marked = strike_scruples(p, cands, fx, draw, lambda c: _scores[id(c)])   # (Candidate, margin, score, struck): every candidate with a positive margin
         # CP-T01-05 NPC half: the person may put effort behind a contested act (`npc_effort`); `off` is a no-op.
         cands, _scores = settle_efforts(cands, _scores, score, fx)
         ranked = score_order(cands, _scores)
@@ -904,7 +928,7 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
         # Scene's first act heads the whole order, which is the reading `harness/decision_spread.py` takes of it.
         order = tuple(sampled)
         at = {id(c): i for i, c in enumerate(order)}
-        tau = float(fx.get("choice_temperature"))
+        tau = own_temperature(p, fx)
 
         def decide(c: Candidate) -> str:
             i = at.get(id(c))

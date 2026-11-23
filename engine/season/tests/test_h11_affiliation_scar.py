@@ -22,6 +22,7 @@ from __future__ import annotations
 import pytest
 
 from engine.season.data import affiliations as A
+from engine.season.data.fixtures import DEFAULT_FIXTURES
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.rosters import AFFILIATIONS, FAN_OUT_MODES, table
 from engine.season.data.verbs import VERB_TABLE
@@ -29,7 +30,7 @@ from engine.season.epistemic import observers_for
 from engine.season.gaps import Forbidden, Unspecified
 from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, mint_token
-from engine.season.queries.person_q import broken_by, elements_violated_by, said_of
+from engine.season.queries.person_q import broken_by as _broken_by, elements_violated_by, said_of
 from engine.season.seam import Resolution
 from engine.season.state.carriers import Act, Claim, Person, Tenure
 from engine.substrate.descriptors import AFFILIATION_CEILING
@@ -37,6 +38,11 @@ from engine.substrate.descriptors import AFFILIATION_CEILING
 from ._scar_helpers import fight
 from ._scar_helpers import rebound as _rebound
 from ._scar_helpers import scars as _scars
+
+
+def broken_by(p, violated):
+    """`person_q.broken_by` at the fixtures' own `scar_hold` and `scar_primary_mass` (the function holds no default of its own)."""
+    return _broken_by(p, violated, DEFAULT_FIXTURES.get("scar_hold"), DEFAULT_FIXTURES.get("scar_primary_mass"))
 
 _ROSTER = sorted(AFFILIATIONS)
 _STRAINED = sorted(_ROSTER)[:2]          # any two holdings; which two is not the point

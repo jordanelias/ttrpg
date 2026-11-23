@@ -30,7 +30,7 @@ from ..data.requires import (
 )
 from ..data.rosters import (
     CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, SUCCESSIONS,
-    capability_rows, refusable, refusing_pole, remove_distance, require_member, require_use_site,
+    capability_rows, is_faction_id, refusable, refusing_pole, remove_distance, require_member, require_use_site,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
@@ -192,7 +192,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # at lap 0 every cast person did, so `holder_faction_of` read None and a march folded `field.unopposed` (B10.99's
             # bisect of test_in36_foreign and test_task_draw to B10.72). Release stays for a commit to a Proposition.
             mine = tuple(dict.fromkeys(t.object for t in p.tenures if t.kind == sourced_kind and t.live
-                                       and not t.object.startswith("fac_")))
+                                       and not is_faction_id(t.object)))
             refs = tuple(refs) + tuple(o for o in mine if o not in refs)
         # B10-09 close one, D3 (`rosters.yaml: held_edge_declines`): A VERB A PERSON DOES NOT FORM ON AN OBJECT
         # HE ALREADY HOLDS A LIVE EDGE OF THE NAMED KIND ON -- `commit` on a Proposition he commits to
@@ -528,7 +528,7 @@ for _v, _ctx in VIOLENCE_CONTEXTS.items():
 # `project`'s stated single owner is `data/pursuits.to_axes`; it is not moved here.
 
 
-def project(p: Person, scar_shift: float = 0.0, manner: bool = True) -> dict:
+def project(p: Person, scar_shift: float = 0.0, manner: bool = True, **scar_read) -> dict:
     """A person's fifteen pursuit weights, in the seven-axis basis. `U3` / R-06a.
 
     ⚠⚠ **§F2's `conviction[axis]` IS COMPUTED, NOT LOOKED UP.** V2 §F2 spells
@@ -559,10 +559,11 @@ def project(p: Person, scar_shift: float = 0.0, manner: bool = True) -> dict:
     `to_axes` projects are `person_q.crisis_weights(p, scar_shift)` -- a pursuit whose scar count has
     reached threshold 2 gives weight to the others. `0`, the shipped control, hands `to_axes` the
     person's own `pursuits` untouched. Only `choose`'s score passes it; `refusal_tolerance` (dormant)
-    reads the unshifted weight.
+    reads the unshifted weight. `scar_read` is `hold=` and `mass=` (`Fixtures.scar_hold`, `scar_primary_mass`; `person_q.crisis_weights`'s): a reader that holds the
+    fixtures passes both, so the shifted weights keep the shift among a person's primaries at `scar_hold: primary`, as the writer scars them (B10.07).
 
     ⚠ `manner` (B10.58) IS `person_q.projected_axes`'s: `False` projects his pursuits WITHOUT his stored manner offset, and `refusal_tolerance` alone asks it (M37)."""
-    return projected_axes(p, scar_shift, manner)
+    return projected_axes(p, scar_shift, manner, **scar_read)
 
 
 def refusal_tolerance(p: Person, axis: Optional[str]) -> Optional[float]:
@@ -587,6 +588,7 @@ def refusal_tolerance(p: Person, axis: Optional[str]) -> Optional[float]:
                    "H-146", law="ED-IN-0261 -- the gate reads a ROSTERED axis; an unrostered one "
                                 "would raise `Unspecified` rather than project to a real weight")
     refusing_pole(axis)       # CR-21: an armed axis the roster authors no pole for refuses HERE, not at an engaged verb
+    refusable(axis)           # B10.21: nor an armed axis with a pole and no authored list of refusable verbs: it refuses at arming, not at the first verb `scruple` is asked of
     # B10.58 / M37: NO MANNER AXIS FEEDS THE GATE. The armed axis can be one a person holds a stored offset on, so both the weight and the length are read from his pursuits alone.
     reach = decisiveness(p, manner=False)   # the vector's length, `_AXES` order (`person_q.decisiveness`, the one owner of the norm)
     return project(p, manner=False)[axis] / reach if reach else 0.0
@@ -1660,7 +1662,7 @@ def _judgement_factor(p: Person, rows: list, fx) -> Optional[float]:
     there are no rows, or `p` holds no value at any row's key (a READ, never a default; the caller reads it as the factor 1). The value is
     `p.attributes` at the row's `key`, on `substrate.descriptors.scale_of(key)`; the form is `about_mid`, its `gain` the Fixture the row
     names (`fx.get(row.gain)`), so a sweep of that Fixture overrides the shipped value through `fx`. `side: actor` is the only side read:
-    `p` is the actor (the loader refuses any other). A site with several rows multiplies them. The one caller is `competence`."""
+    `p` is the actor (the loader refuses any other). A site with several rows multiplies them. Its three callers are `temper`, `nerve` (`decision/choose.py`) and `competence` (here), one per site."""
     factor = None
     for row in rows:
         held = (getattr(p, "attributes", None) or {}).get(row.key)

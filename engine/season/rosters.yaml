@@ -1565,7 +1565,7 @@ rosters:
     kit: "combat_systems.act_cost's caller -- no reader of this row on this tree; B05 (CAP B1, B7) builds it"
     told_claim_credit: decision/options.py::competence
     choice_temper: decision/choose.py::temper
-    choice_exposure: decision/choose.py::score_terms     # B10.31: `nerve`, how far a person's Spirit lets him bear a danger, on the `risk` element; no row ships
+    choice_exposure: decision/choose.py::nerve     # B10.31: `nerve`, how far a person's Spirit lets him bear a danger, on the `risk` element; no row ships
     own_state_gate: queries/person_q.py::OwnStateReader
     crisis: loop/resolve.py::_crisis_net_sigma   # B10.15: the crisis of faith's roll, read only at `Fixtures.crisis_arm: drawn`
 
@@ -2775,7 +2775,8 @@ rosters:
       a person committed to nothing forms what he formed before. ONE LOADER, `data/verbs.py::HELD_EDGE_SOURCED`, refused at
       import when a line names a verb the table lacks or a kind `tenure_kinds` does not carry. [ASSUMPTION; medium; Jordan to
       correct; revert: drop the line, and `release` forms on the question's referents only -- a want is then never offered
-      for laying down.]
+      for laying down.] A FACTION MEMBERSHIP IS NOT AN OBJECT HERE (B10.72's fix): a `commit` whose object is a faction (`data/rosters.py::is_faction_id`) is
+      left out of what the verb forms on, because releasing it is leaving the faction; the verb forms on a commit to a Proposition that is no faction.
     values:
       release: commit
 
@@ -4048,7 +4049,7 @@ tables:
   # step 5". No row is measured. [ASSUMPTION; medium; Jordan to correct; revert: `crisis_arm: rule`, which reads none of it.]
   crisis_bands:
     source: >-
-      `proposals/16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` "The resolution, decided" 3 (the four-band table, copied), "Exact edits, by owner"
+      `proposals/2026-11-12-subsystem-audit-suite/proposals/16_PESSIMIST_CHAR_A_a_crisis_of_faith_is_drawn_and_told.md` "The resolution, decided" 3 (the four-band table, copied), "Exact edits, by owner"
       (row `rosters.yaml`); workplan v12 B10.13.
     note: >-
       Overwhelming -- FAITH RENEWED, the one outflow the count has: `intensity: 1` (the reader clamps at the ceiling) and `scar: zero` (the count on `x` resets

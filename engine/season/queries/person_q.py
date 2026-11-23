@@ -43,6 +43,7 @@ from engine.substrate.descriptors import (
 from ..data import requires as _requires
 from ..data import verbs as _verbs
 from ..data import affiliations as _aff
+from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.affiliations import AFFILIATION_CEILING, AFFILIATION_FLOOR, conviction_map, engagement
 from ..data.cast import STANCE_MAX
 from ..data.pursuits import _AXES, pursuit_cosine_axes, to_axes   # `_AXES`: the sorted axis order, owned once
@@ -62,6 +63,12 @@ from ..trace_log import TRACE
 # `(actor, "fell_to_hand", <standing party>)` on the actor's `person.died` Event; WITNESS deposits it as an ordinary claim,
 # and `deed_doer` reads it. The one spelling; the writer imports it from here.
 HAND_PREDICATE = "fell_to_hand"
+
+
+# THE READERS' CONTROL for `scar_hold` and `scar_primary_mass`, read off the one owner (`DEFAULT_FIXTURES`), never a literal here. A reader that holds the
+# fixtures (`fx`, `w.fixtures`) passes its own; a hand-built read with none gets the control, as `scar_shift`'s `0.0` does.
+_CONTROL_SCAR_HOLD = DEFAULT_FIXTURES.get("scar_hold")                 # [canonical: engine/season/data/fixtures.py §scar_hold (H-466)]
+_CONTROL_SCAR_MASS = DEFAULT_FIXTURES.get("scar_primary_mass")         # [canonical: engine/season/data/fixtures.py §scar_primary_mass (H-469)]
 
 
 def entrenchment(p: Person, seasons_held: int, scale: int, span: int) -> int:
@@ -93,7 +100,8 @@ def held_against(p: Person, referent: str) -> tuple:
                  if len(row) >= 3 and row[0] == referent and float(row[1]) < 0)
 
 
-def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0, counterparty_arm: Optional[str] = None) -> tuple:
+def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0, counterparty_arm: Optional[str] = None,
+                 hold: str = _CONTROL_SCAR_HOLD, mass: float = _CONTROL_SCAR_MASS) -> tuple:
     """`(judged, told)`: WHAT `p` MAKES OF THE DEEDS THEY HOLD ABOUT `referent`, by `p`'s OWN
     pursuits (v9 IN-18 `G1`, telling workplan §3's `regard` row). A deed claim is an event-kind
     claim `(referent, <kind>, True)` -- WITNESS's first deposit, or a told copy of one -- with
@@ -138,10 +146,11 @@ def deeds_judged(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: 
     (`deed_term` itself reads the control: `reception` and this sum part when it is non-zero).
     `counterparty_arm` is `Fixtures deed_counterparty` (B10.20, H-474; `None` is the control, `paired_only`): at `person_subject` a deed
     whose verb row takes a Person as its subject is weighed by the judge's bond to the one it was done to (`deed_term`)."""
-    return _split_deeds(p, referent, scar_shift, sworn_bond, deed_term, counterparty_arm)
+    return _split_deeds(p, referent, scar_shift, sworn_bond, deed_term, counterparty_arm, hold, mass)
 
 
-def _split_deeds(p: Person, referent: str, scar_shift: float, sworn_bond: float, worth, counterparty_arm: Optional[str] = None) -> tuple:
+def _split_deeds(p: Person, referent: str, scar_shift: float, sworn_bond: float, worth, counterparty_arm: Optional[str] = None,
+                 hold: str = _CONTROL_SCAR_HOLD, mass: float = _CONTROL_SCAR_MASS) -> tuple:
     """`(judged, told)` OF `attributed_deeds(p.ledger, referent)`, each claim worth `worth(p, axis_w, c, sworn_bond, counterparty_arm, seen_of)` and split by
     `firsthand`: the one walk `deeds_judged` (`worth` = `deed_term`, the raw sum) and `regard_steps` (`worth` = `deed_steps`, stance steps) share.
     `seen_of` is the holder's `_seen_index`, built once for the walk and only if a worth asks for it (B10.20)."""
@@ -150,7 +159,7 @@ def _split_deeds(p: Person, referent: str, scar_shift: float, sworn_bond: float,
     judged = told = 0.0
     for c in attributed_deeds(p.ledger, referent):
         if axis_w is None:
-            axis_w = projected_axes(p, scar_shift)
+            axis_w = projected_axes(p, scar_shift, hold=hold, mass=mass)
         v = worth(p, axis_w, c, sworn_bond, counterparty_arm, seen_of)
         # FIRSTHAND only is judged (`dissents`' and `record`'s precedent, `decision/options.py`):
         # a `told_by` claim whose chain is empty is still hearsay, and lands in `told`.
@@ -161,19 +170,22 @@ def _split_deeds(p: Person, referent: str, scar_shift: float, sworn_bond: float,
     return judged, told
 
 
-def deeds_judged_steps(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0, counterparty_arm: Optional[str] = None) -> tuple:
+def deeds_judged_steps(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0, counterparty_arm: Optional[str] = None,
+                       hold: str = _CONTROL_SCAR_HOLD, mass: float = _CONTROL_SCAR_MASS) -> tuple:
     """`deeds_judged`' `(judged, told)` IN STANCE STEPS (`deed_steps` for `deed_term`; B10.09, `Fixtures regard_unit` `stance`): the same
     claims, the same `firsthand` split, each deed worth a cosine. `regard`'s `stance` arm is the one reader; `deeds_judged` is unchanged."""
-    return _split_deeds(p, referent, scar_shift, sworn_bond, deed_steps, counterparty_arm)
+    return _split_deeds(p, referent, scar_shift, sworn_bond, deed_steps, counterparty_arm, hold, mass)
 
 
-def holds_dispute(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0) -> bool:
+def holds_dispute(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond: float = 0.0, counterparty_arm: Optional[str] = None,
+                  hold: str = _CONTROL_SCAR_HOLD, mass: float = _CONTROL_SCAR_MASS) -> bool:
     """v11 CR-87 (the DISPUTE, `challenge`'s conjunct; `data/requires.py`'s `dispute` stem): DOES `p` HOLD A DEED CLAIM
     OF `referent`'s THAT HIS OWN JUDGEMENT SCORES AGAINST HIM -- `deeds_judged`' two parts summed below zero (what he
     saw and what he was told, each by his own pursuits). Person-side; the fold asks it of the actor's own ledger.
     CR-88 re-points the conjunct to `grievance_against`. [ASSUMPTION; medium; Jordan to correct; revert: drop the
-    conjunct from `challenge`'s cell.]"""
-    judged, told = deeds_judged(p, referent, scar_shift, sworn_bond)
+    conjunct from `challenge`'s cell.] `counterparty_arm` is `Fixtures deed_counterparty`, passed as `regard` passes it, so the dispute and the regard weigh the
+    same deeds by one rule (B10.20, H-474; `None` is the control)."""
+    judged, told = deeds_judged(p, referent, scar_shift, sworn_bond, counterparty_arm, hold, mass)
     return judged + told < 0
 
 
@@ -577,7 +589,7 @@ def regard_parts(p: Person, referent: str, fx=None) -> RegardParts:
         if arm not in DEED_COUNTERPARTIES:
             raise ValueError(f"deed_counterparty {arm!r} is not in rosters.yaml: deed_counterparties {sorted(DEED_COUNTERPARTIES)} (H-474)")
         raw_judged, raw_told = (deeds_judged_steps if unit == "stance" else deeds_judged)(
-            p, referent, fx.get("scar_weight_shift"), fx.get("sworn_bond"), arm)
+            p, referent, fx.get("scar_weight_shift"), fx.get("sworn_bond"), arm, fx.get("scar_hold"), fx.get("scar_primary_mass"))
         judged, told = jg * raw_judged, tg * raw_told
     # v11 CR-31: the caste estimate, `heritage_regard`, a third term at its own gain (0 reads nothing: the control). It reads `p`'s own ledger and
     # own convictions only.
@@ -809,7 +821,7 @@ def recent_claims(ledger, window) -> list:
     return [c for c in ledger if newest - c.when < window]
 
 
-def legitimacy(p: Person, holder: str, window, scar_shift: float = 0.0) -> float:
+def legitimacy(p: Person, holder: str, window, scar_shift: float = 0.0, hold: str = _CONTROL_SCAR_HOLD, mass: float = _CONTROL_SCAR_MASS) -> float:
     """HOW `p` READS `holder`'s STANDING -- the legitimacy of a seat-holder as one person estimates it
     (R7: a Query over stance; v9 IN-23). Computed when read and never written:
 
@@ -832,7 +844,7 @@ def legitimacy(p: Person, holder: str, window, scar_shift: float = 0.0) -> float
     deeds = attributed_deeds(recent_claims(p.ledger, window), holder)
     if not deeds:
         return total
-    axis_w = projected_axes(p, scar_shift)
+    axis_w = projected_axes(p, scar_shift, hold=hold, mass=mass)
     for c in deeds:
         total += deed_term(p, axis_w, c)
     return total
@@ -889,7 +901,8 @@ def opinion_terms(p: Person, expected: dict, engaged: tuple, regarded: tuple, fx
     and members are, what it expects and which poles its goals engage are the caller's to read
     (`world_q.opinion_of`), and arrive here as plain values. Nothing is stored (A-29, T-a)."""
     shift = fx.get("scar_weight_shift") if fx is not None else 0.0
-    cosine = pursuit_cosine_axes(projected_axes(p, shift), to_axes(expected or {}))
+    hold, mass = (fx.get("scar_hold"), fx.get("scar_primary_mass")) if fx is not None else (_CONTROL_SCAR_HOLD, _CONTROL_SCAR_MASS)
+    cosine = pursuit_cosine_axes(projected_axes(p, shift, hold=hold, mass=mass), to_axes(expected or {}))
     held = p.conviction or {}
     aff = (ltr_sum(sign * held.get(name, 0) / AFFILIATION_CEILING for name, sign in engaged) / len(engaged)
            if engaged else 0.0)
@@ -1057,22 +1070,21 @@ def _primary_of(p: Person, hold: str, mass: float) -> Optional[frozenset]:
     return primary_pursuits(p.pursuits, mass) | frozenset(stands_for(p, "stands"))
 
 
-# [canonical: engine/season/data/fixtures.py §scar_primary_mass (H-469): the default is the fixture's control, read at the one call site that passes it]
-def broken_by(p: Person, violated: tuple, hold: str = "any", mass: float = 0.6) -> tuple:
+def broken_by(p: Person, violated: tuple, hold: str, mass: float) -> tuple:
     """The elements `p` holds that `violated` (an `elements_violated_by` answer) names: the held
     pursuits, then the held affiliations, each sorted. "Held" is `_held`'s sense (a weight above
     zero); the sign test is not re-asked, `violated` already carries it. `hold` and `mass` are
-    `Fixtures.scar_hold` and `scar_primary_mass`: at `primary` only his primary elements count (`_primary_of`)."""
+    `Fixtures.scar_hold` and `scar_primary_mass`, REQUIRED (no default is held here, so no second copy of `scar_primary_mass` exists):
+    at `primary` only his primary elements count (`_primary_of`)."""
     only = _primary_of(p, hold, mass)
     pursuits, affiliations = violated
     return _held(p.pursuits, pursuits, only) + _held(p.conviction, affiliations, only)
 
 
-# [canonical: engine/season/data/fixtures.py §scar_primary_mass (H-469): the default is the fixture's control, read at the one call site that passes it]
-def upheld_by(p: Person, upheld: frozenset, hold: str = "any", mass: float = 0.6) -> tuple:
+def upheld_by(p: Person, upheld: frozenset, hold: str, mass: float) -> tuple:
     """The pursuits `p` holds that `upheld` (a `_pursuits_upheld_by` answer) names, sorted: the elements an act honours that he lives
     for, the vindication's candidates. `hold` and `mass` as `broken_by`: at `primary` only his primary pursuits. Pursuits only (an
-    affiliation has a sign cell and no lean, so no floor to honour past)."""
+    affiliation has a sign and no lean, so no floor to honour past)."""
     return _held(p.pursuits, upheld, _primary_of(p, hold, mass))
 
 
@@ -1127,8 +1139,7 @@ def religious_intensity(p: Person) -> float:
     return top / AFFILIATION_CEILING
 
 
-# [canonical: engine/season/data/fixtures.py §scar_primary_mass (H-469): the default is the fixture's control; a reader that holds the fixtures passes both]
-def crisis_weights(p: Person, shift: float = 0.0, hold: str = "any", mass: float = 0.6) -> dict:
+def crisis_weights(p: Person, shift: float = 0.0, hold: str = _CONTROL_SCAR_HOLD, mass: float = _CONTROL_SCAR_MASS) -> dict:
     """`p`'s pursuit weights as the chooser should read them: the threshold-2 scar shift below, THEN
     `doctrine` scaled by religious conviction (v9 IN-71, H-188; the one site every reader projects).
     `choose`'s pursuit dot, `deeds_judged` and the telling weights all read this vector.
@@ -1171,8 +1182,7 @@ def _most_to_least_scarred(p: Person, base: dict, held: dict, among: list, shift
     return out
 
 
-# [canonical: engine/season/data/fixtures.py §scar_primary_mass (H-469): the default is the fixture's control; a reader that holds the fixtures passes both]
-def _scar_shifted(p: Person, shift: float, hold: str = "any", mass: float = 0.6) -> dict:
+def _scar_shifted(p: Person, shift: float, hold: str = _CONTROL_SCAR_HOLD, mass: float = _CONTROL_SCAR_MASS) -> dict:
     """`p`'s pursuit weights as the chooser should read them once scars have reached threshold 2
     (IN-08 H9, `ED-IN-0261`: *"WEIGHT SHIFTS, others gain proportionally"*) -- A READER, it writes
     nothing and `Person.pursuits` is untouched.
@@ -1219,27 +1229,30 @@ def _scar_shifted(p: Person, shift: float, hold: str = "any", mass: float = 0.6)
     return out
 
 
-def projected_axes(p: Person, shift: float = 0.0, manner: bool = True) -> dict:
+def projected_axes(p: Person, shift: float = 0.0, manner: bool = True, hold: str = _CONTROL_SCAR_HOLD, mass: float = _CONTROL_SCAR_MASS) -> dict:
     """`p`'s pursuits projected to the axes, `to_axes(crisis_weights(p, shift))`, plus his own stored manner offset on each axis he holds one
     (B10.58, A-108; `Person.manner_offset`): person-side (AX-2). THE ONE READER OF THE OFFSET. An axis he holds none on is exactly his pursuits'
     projection (nothing is added, so a person with no offset projects as he did before the offset existed).
 
     ⚠ `manner=False` IS THE PROJECTION FROM HIS PURSUITS ALONE, AND THE REFUSAL GATE'S ONE ASK (`decision/options.py::refusal_tolerance`): M37 --
     no manner axis feeds the gate (`proposals/2026-10-24-character-layers-v2.md` section 11.5), and the armed axis, `deontological_instrumental`, is one
-    of the three the offset sits on. Every other reader takes the default and gets the offset."""
-    axes = to_axes(crisis_weights(p, shift))
+    of the three the offset sits on. Every other reader takes the default and gets the offset.
+
+    `hold` and `mass` are `Fixtures.scar_hold` and `scar_primary_mass` (B10.07): a reader that holds the fixtures passes both, so the weights it reads are shifted among the
+    elements the writer (`loop/resolve.py::_scar_witnesses`) scars; a hand-built read with none gets the fixtures' control."""
+    axes = to_axes(crisis_weights(p, shift, hold, mass))
     if manner:
         for axis, offset in p.manner_offset.items():
             axes[axis] += offset
     return axes
 
 
-def decisiveness(p: PersonInterior, shift: float = 0.0, manner: bool = True) -> float:
+def decisiveness(p: PersonInterior, shift: float = 0.0, manner: bool = True, hold: str = _CONTROL_SCAR_HOLD, mass: float = _CONTROL_SCAR_MASS) -> float:
     """HOW FIRMLY `p`'s PURSUITS POINT ONE WAY: the length of `projected_axes(p, shift, manner)`. The draw in
     `decision/choose.py::_sample_order` is read against score margins, which scale with this, so it is
     the person's decisiveness at a given `choice_temperature`. Person-side (AX-2); stores nothing.
     Summed in `_AXES` order by `ltr_sum`, the order of `pursuit_cosine_axes`'s norm."""
-    v = projected_axes(p, shift, manner)
+    v = projected_axes(p, shift, manner, hold, mass)
     return math.sqrt(ltr_sum(v[a] ** 2 for a in _AXES))
 
 
@@ -1647,7 +1660,8 @@ class OwnStateReader:
             return (any(t.kind == "hold" and t.object == subject and t.live for t in self._p.tenures)
                     if arg == me else UNKNOWN)
         if stem == "dispute":       # `WorldReader.read`'s own call, from the same `Fixtures`
-            return (holds_dispute(self._p, subject, self._fx.get("scar_weight_shift"), self._fx.get("sworn_bond"))
+            return (holds_dispute(self._p, subject, self._fx.get("scar_weight_shift"), self._fx.get("sworn_bond"),
+                                  self._fx.get("deed_counterparty"), self._fx.get("scar_hold"), self._fx.get("scar_primary_mass"))
                     if arg == me else UNKNOWN)
         if stem == "individual":    # `Person.is_cohort`, the carrier's own predicate, asked of the actor
             return (not self._p.is_cohort) if subject == me else UNKNOWN
@@ -1716,7 +1730,7 @@ def said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 
     # own motives). Only the claim he made himself is skipped (no chain, held by its subject): a `self:` claim he was TOLD (a chain) is deposited as any told claim and is still said.
     pool = [c for c in claims if c.subject == subject and not (c.predicate.startswith(_SELF_STEMS) and not c.chain and c.holder == subject)] if claims else []
     if teller is not None and fx is not None and pool and _slant(fx) == "valence":
-        axis_w = projected_axes(teller, fx.get("scar_weight_shift"))
+        axis_w = projected_axes(teller, fx.get("scar_weight_shift"), hold=fx.get("scar_hold"), mass=fx.get("scar_primary_mass"))
         strength = {id(c): abs(deed_valence(axis_w, c)) for c in pool}
         top = max(strength.values())
         if top > 0:

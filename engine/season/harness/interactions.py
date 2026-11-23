@@ -164,7 +164,7 @@ def relation(w, a: str, t: str, authored: dict, heads: dict) -> dict:
     sf = same_faction(w, a, t)
     offs_a, offs_t = held_offices(w, a), held_offices(w, t)
     stance = person_q.stance_toward(p, t)
-    judged, told = person_q.deeds_judged(p, t, fx.get("scar_weight_shift"), fx.get("sworn_bond"))
+    judged, told = person_q.deeds_judged(p, t, fx.get("scar_weight_shift"), fx.get("sworn_bond"), fx.get("deed_counterparty"), fx.get("scar_hold"), fx.get("scar_primary_mass"))
     via = known_via(p, t)
     # `Office.faction` is the faction NAME (`office_faction`); `faction_holding` answers the Proposition id
     off_in_tf = bool(ft) and any(w.offices[o].faction and faction_prop_id(w.offices[o].faction) == ft
@@ -246,7 +246,6 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
                 for pid, p in w.persons.items()}
     heads = faction_heads(w)
     fx = w.fixtures
-    tau = float(fx.get("choice_temperature"))
     axis = fx.get("refusal_axis")
     delibs: list = []
     by_act: dict = {}                      # id(Act) -> (deliberation index, candidate index)
@@ -275,6 +274,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
         # THE CHOOSER'S OWN TABLE, as `make_chooser(watch=...)` handed it (B09.13): the candidates in score order, the terms it
         # scored them with and the order it sampled -- not a second scoring of the opening set.
         (cands, terms, sampled), = heard
+        tau = CH.own_temperature(p, fx)        # THIS person's temperature, the one `choose._sample_order` draws at
         scores = {id(c): CH.score_total(t) for c, t in zip(cands, terms)}
         rank = {id(c): i for i, c in enumerate(cands)}
         srank = {id(c): i for i, c in enumerate(sampled)}

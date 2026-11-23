@@ -33,7 +33,7 @@ from ..data.requires import (
 )
 from ..data.rosters import (
     CONTINUATION_TIES, SUCCESSIONS,
-    ARMS_KINDS, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
+    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
     INVESTED,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
@@ -789,7 +789,7 @@ def reception(w: World, speaker: str, audience: tuple) -> float:
         return 0.0
     full = float(w.fixtures.get("confidence_default"))
     decay = w.fixtures.claim_decay()
-    shift = w.fixtures.get("scar_weight_shift")
+    shift, hold, mass = w.fixtures.get("scar_weight_shift"), w.fixtures.get("scar_hold"), w.fixtures.get("scar_primary_mass")
     total = 0.0
     for hid in dict.fromkeys(audience):
         h = w.persons.get(hid)
@@ -805,7 +805,7 @@ def reception(w: World, speaker: str, audience: tuple) -> float:
                 if called is not None and (c.when, c.lap) <= called:
                     continue
             if axis_w is None:
-                axis_w = projected_axes(h, shift)
+                axis_w = projected_axes(h, shift, hold=hold, mass=mass)
             total += remove_weight(c.source) * (present_confidence(c.confidence, c.when, w.tick, decay) / full) * deed_term(h, axis_w, c)
     return total
 
@@ -3045,7 +3045,7 @@ def opinion_referents(w: World, p: Person, c, memo: Optional[dict] = None) -> tu
     if memo is None:
         memo = {}
     if "axes" not in memo:
-        memo["axes"] = projected_axes(p, w.fixtures.get("scar_weight_shift"))
+        memo["axes"] = projected_axes(p, w.fixtures.get("scar_weight_shift"), hold=w.fixtures.get("scar_hold"), mass=w.fixtures.get("scar_primary_mass"))
 
     def _seen():                           # built once, and only if some claim's lean asks for it
         if "seen" not in memo:
@@ -3812,9 +3812,10 @@ def disputes_held(w: World, p: Person) -> tuple:
     if p.is_cohort:                       # a population calls no man out (`challenge`'s `individual` of `actor`)
         return ()
     shift, sworn = w.fixtures.get("scar_weight_shift"), w.fixtures.get("sworn_bond")
+    arm, hold, mass = w.fixtures.get("deed_counterparty"), w.fixtures.get("scar_hold"), w.fixtures.get("scar_primary_mass")
     named = (set(ledger_names(p.ledger)) | set(known_persons(p.ledger, p.id))) - {p.id}
     held = [r for r in sorted(named)
-            if r in w.persons and not w.persons[r].is_cohort and holds_dispute(p, r, shift, sworn)]
+            if r in w.persons and not w.persons[r].is_cohort and holds_dispute(p, r, shift, sworn, arm, hold, mass)]
     if not held:
         return ()
     homes = home_map(w)
@@ -3938,7 +3939,7 @@ def attention_key(w: World, p: Person, ambs: Optional[list] = None,
 
     @functools.cache
     def axis_w() -> dict:
-        return projected_axes(p, w.fixtures.get("scar_weight_shift"))
+        return projected_axes(p, w.fixtures.get("scar_weight_shift"), hold=w.fixtures.get("scar_hold"), mass=w.fixtures.get("scar_primary_mass"))
 
     @functools.cache
     def seen_of() -> tuple:
@@ -4533,7 +4534,8 @@ class WorldReader:
             p = w.persons.get(self._actor)
             if p is None or arg != self._actor or subject not in w.persons:
                 return UNKNOWN
-            return holds_dispute(p, subject, w.fixtures.get("scar_weight_shift"), w.fixtures.get("sworn_bond"))
+            return holds_dispute(p, subject, w.fixtures.get("scar_weight_shift"), w.fixtures.get("sworn_bond"),
+                                 w.fixtures.get("deed_counterparty"), w.fixtures.get("scar_hold"), w.fixtures.get("scar_primary_mass"))
         if stem == "rank":
             # `21_RECONCILIATION.md` PHASE 2 step 9 / `03_PARAMETERS.md` §C.1 -- THE ORDINAL, NOT
             # A KIND CHECK. `rung_kinds` is an ORDERED roster (`person` first), so a rung's rank
@@ -4620,6 +4622,9 @@ def practice(w: World, p: Person, verb: str) -> int:
     choice and its roll (what else can, `odds_of` lists). The window is
     `[w.tick - practice_window, w.tick - 1]`.
 
+    ⚠ A `conviction.moved` EVENT IS NEVER COUNTED: it names the scarring act in `causes` and carries the OBSERVER'S crisis band as `degree` (`resolve._drawn_crisis`), so
+    credited here an observer's Success would raise the scarring actor's pool.
+
     ⚠ IT RAISES THE ACTOR'S POOL ONLY. `_opposition_of` reads the held key and never `faculty`, so the Ob
     against a practised person does not move. `practice_cap` 0 is the control and answers 0 before the log is
     read: the realm is then byte-equal to the tree without this reader. The three fixtures are assumptions
@@ -4639,7 +4644,7 @@ def practice(w: World, p: Person, verb: str) -> int:
     first, good = w.tick - window, DEGREE_STEP["Success"]
     acts: set = set()
     for e in w.log:
-        if not first <= e.emitted_at < w.tick or DEGREE_STEP.get(e.degree, 0) < good:
+        if not first <= e.emitted_at < w.tick or e.kind == CONVICTION_MOVED or DEGREE_STEP.get(e.degree, 0) < good:
             continue
         a = causing_act(w, e)
         if a is not None and a.actor == p.id and VERB_CAPABILITY.get(a.verb) == key:

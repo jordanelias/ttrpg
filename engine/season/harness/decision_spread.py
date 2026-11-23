@@ -210,7 +210,8 @@ def null_alignment():
 def attribute_top(p, cands: list, fx, draw=None, odds=None, q=None) -> dict:
     """Rank `cands` for `p` as the chooser does and say WHICH TERM decided the top: it SCORES, ORDERS and SAMPLES `cands`
     (a second scoring, for a reader that has no chooser's deliberation to watch: `read_decisions`' common set) and hands the
-    result to `choose.deciding_term`, the one owner of the rule (the module docstring lists its tests in order). Returns
+    result to `choose.deciding_term`, the one owner of the rule (the module docstring lists its tests in order). `cands` are the chooser's own set: `formed_set`'s,
+    already struck by his scruple (`choose.strike_scruples`), so this scores nothing the chooser would have struck. Returns
     `{top, decider, margin, scores, terms, draw_kind, field_zero}`; `scores` and `terms` are parallel to `cands`. `cands` empty
     -> `top` None, `decider` `none`; one candidate -> `sole`. A reading of a deliberation the chooser itself ran does not call
     this: it takes `make_chooser(watch=...)`'s lists and calls `deciding_term` (`play_season`).
@@ -246,11 +247,10 @@ def _scored(p, cands: list, fx, odds=None, q=None) -> tuple:
 
 
 def own_tau(p, fx) -> float:
-    """A PERSON'S OWN choice temperature: the realm's `choice_temperature` times `choose.temper(p, fx)`, as `_sample_order`
-    forms it (B10.28). The one place the instrument computes it; `deciding_term` reads only whether it is above 0, which
-    `temper` (refused outside (-1, 0] at its gain) never changes, so the labels are the same at every gain and the call keeps
+    """A PERSON'S OWN choice temperature: `choose.own_temperature`, the one owner, as `_sample_order` forms it (B10.28). `deciding_term` reads only whether it
+    is above 0, which `temper` (refused outside (-1, 0] at its gain) never changes, so the labels are the same at every gain and the call keeps
     the reading honest about whose temperature it is."""
-    return float(fx.get("choice_temperature")) * CH.temper(p, fx)
+    return CH.own_temperature(p, fx)
 
 
 def new_split() -> dict:
@@ -304,7 +304,7 @@ def _cosine(a: list, b: list) -> Optional[float]:
 
 
 def projected_vector(p, fx) -> list:
-    axis_w = project(p, fx.get("scar_weight_shift"))
+    axis_w = project(p, fx.get("scar_weight_shift"), hold=fx.get("scar_hold"), mass=fx.get("scar_primary_mass"))
     return [axis_w[ax] for ax in PURSUIT_AXES]
 
 
@@ -405,10 +405,13 @@ def decision_question(referent: str) -> Question:
 
 def formed_set(w, p, q, foldable=None) -> list:
     """`p`'s opening set for `q`, formed as `corpus_run.py:958-960` forms it, narrowed to the verbs the
-    fold resolves (the chooser's own `verbs=`; `foldable` where the caller already holds the set)."""
+    fold resolves (the chooser's own `verbs=`; `foldable` where the caller already holds the set), then STRUCK BY HIS SCRUPLE as the chooser strikes it
+    (`choose.strike_scruples`, B10.24: the one function, on the realm's own draw), so the instrument scores the chooser's candidate set when the gate is armed.
+    No `refusal_axis` (the shipped control) strikes nothing."""
     view = assemble(p, q, w.fixtures.get("view_k"))
     foldable = resolvable_verbs() if foldable is None else foldable
-    return [c for c in opening_set(p, view, q, w.fixtures) if c.verb in foldable]
+    formed = [c for c in opening_set(p, view, q, w.fixtures) if c.verb in foldable]
+    return CH.strike_scruples(p, formed, w.fixtures, draw_factory(w.world_seed, lambda: w.tick), lambda c: 0.0)[0]
 
 
 def is_self_plea(c, actor: str) -> bool:
