@@ -69,17 +69,23 @@ from typing import Any, NamedTuple, Optional
 
 from engine.dice_engine.dice_engine import DEGREE_LABEL, DEGREE_ORDINAL
 from engine.dice_engine.draw import Draw
+from engine.dice_engine import fmath
 from engine.dice_engine.fmath import ltr_sum
-from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds
+from engine.dice_engine.sigma_leverage import level as sigma_level, levels_to_net_sigma, record_odds
 from engine.substrate import composition, descriptors
 
-from ...data.arrangements import ARRANGEMENTS
+from ...data.affiliations import AFFILIATION_CEILING
+from ...data.arrangements import ARRANGEMENTS, CONTEXT, DISPOSAL, RITES, abridged
 from ...data.rosters import STANCE_MAX
+from ...data.rosters import (AUTHORITY_BY_FACTION, DIFFICULTY_LEVELS, GROUNDS, ISSUE_RUNGS, MATTERS, PROCEEDING_ENDS, PROCEEDING_MOVES,
+                             PROOF_KIND_OF_SOURCE, RUNG_KINDS)
 from ...data.rosters import capability_rows, obstacle_bound, require_use_site, roster, when_holds
 from ...data.verbs import SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE, _OPENERS_FROM_EFFECTS
 from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, sides_of
-from ...queries.person_q import believed_capability, stance_toward
+from ...queries.person_q import (BEARING_PARTS, believed_capability, believes, bearing, conflict, false_items, stance_toward, strain_carried,
+                                 takes_side, tie)
+from ...queries.person_q import care as person_care
 # ⚠ THE LEAF, NOT THE PACKAGE'S RE-EXPORT. `manifest/providers.py` imports nothing, so no import
 # here closes a loop back into this package (`_entry.py` says the same of the entry lookup);
 # `manifest/registry.py` imports only `data/` and `gaps` and `queries/` is below `seam/`, so the
@@ -87,11 +93,11 @@ from ...queries.person_q import believed_capability, stance_toward
 from ...manifest.providers import provider
 from ...manifest.registry import (BELIEVED_ESTIMATE_ROLE, BENCH, HEARD_BY_ROOMS, RESIDENTS, SEAT_BODY, TOWARD_TO, call as _provider_for,
                                   resolve as _prize_row)
-from ...queries.inputs import Margin, SocialContestInput
+from ...queries.inputs import Card, Input, Item, Margin, Point, Present, Rite, SocialContestInput
 # The room's two resolver-side reads. The host READS them; the module composes the obstacle they move.
-from ...queries.world_q import docketed_under, hold_force, judging_set, proofs, reception, residence_of
+from ...queries.world_q import docketed_under, faction_holding, hold_force, judging_set, place_of, presence, proofs, reception, residence_of
 from ...state.carriers import EFFORT, effort_of
-from ...state.gate import UNDECLARED_DISPOSAL, sits_over
+from ...state.gate import BENCH_BASIS, UNDECLARED_DISPOSAL, sits_over
 from ._entry import entry_for
 from .pool import (POOL_ADDENDS, _capability, faculty, governing_attribute, governing_score, rank, opposing_attribute, pool_pair, register_pool_addend,  # noqa: F401  (moved: see pool.py)
                    score, untrained)
@@ -706,14 +712,15 @@ OBSTACLE_TERMS = _bound_to({fn.__name__[1:-len("_term")]: fn for fn in (
     _even_term, _difficulty_term, _opposition_term, _standard_term, _stakes_term, _regard_term, _reception_term, _capability_term)},
                            "obstacle_terms", members=obstacle_bound("host"))
 
-PROCEEDING_ROLE = "social_contest.proceeding"   # the composition row whose module supplies the `bound: module` members (B24p.12 registers it)
+PROCEEDING_ROLE = "social_contest.proceeding"   # the composition row whose module supplies the `bound: module` members (registered at B24p.12)
 
 
 @functools.lru_cache(maxsize=None)
 def _module_terms_checked() -> bool:
     """The `bound: module` members of `obstacle_terms` against the proceeding module's `TERMS` (B24p.05), once per process: refused if they
     differ (a module term that is no roster member would reach `Margin.terms` unnamed; a member the module never supplies would silently weigh 0).
-    Skipped, and `False`, while the composition row is absent (B24p.12 registers it and asserts this half)."""
+    The row is registered (B24p.12) and this half is asserted there; the `False` return is for a tree whose `composition.json` carries no
+    such row."""
     if PROCEEDING_ROLE not in composition.ROLES:
         return False
     terms = getattr(sys.modules[composition.require(PROCEEDING_ROLE).__module__], "TERMS")
@@ -1205,9 +1212,351 @@ def proceeding_dials(fx: Any) -> Any:
     beside the dice settings the proceeding shares with the single roll -- `pool_add` and `pool_floor` (`pool_pair`, the one reader of
     the `social_roll` site's `dice` row), `pool_default` and `opposition_rate` -- and the attribute scale's three numbers
     (`descriptors.ATTRIBUTE_FLOOR` and `ATTRIBUTE_CEILING`, and `pool.attribute_midpoint()`, the one mid-point), sixty-one names in all,
-    as a read-only mapping. The fold's `fold_*` coefficients are not in it. Nothing reads this yet (B24p.05 on)."""
+    as a read-only mapping. The fold's `fold_*` coefficients are not in it. `proceeding_input` (B24p.13) reads it and adds the two rosters
+    the module is handed (`moves`, `reads`), which are not settings."""
     pool_add, pool_floor = pool_pair(fx)
     d = {name: fx.get(name) for name in PROCEEDING_SETTINGS}
     d.update(pool_add=pool_add, pool_floor=pool_floor, pool_default=fx.get("pool_default"), opposition_rate=fx.get("opposition_rate"),
              attribute_mid=attribute_midpoint(), attribute_floor=descriptors.ATTRIBUTE_FLOOR, attribute_ceiling=descriptors.ATTRIBUTE_CEILING)
     return MappingProxyType(d)
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B24p.13 -- THE HOST BUILDER AND THE CARD (V2 p2 §A, §H, §I; p1 §E). The one place `World` is read for a proceeding: it turns an
+# arrangement row, a matter and the people into the typed `Input` the entry reads (`modules/social_contest/proceeding.py`) and derives the
+# `Card` every participant reads. It writes nothing and holds no token; of ledgers it reads only each person's own, for his own `Present`
+# (the precedent `contest_input` sets: F8). Nothing calls it until B24p.19.
+# ---------------------------------------------------------------------------------------------------------------------
+
+#: `[HOOK]` THE CONTEXT'S THREE CARRIERS (V2 p2 §A.3's rule: a layer with no carrier is a key of the context table read as its control
+#: until one exists). No tree field names an era of faith or trade, the regime in force, or the kind of an open strife flow
+#: (`world_q.open_era` names the flow, not its kind `[UNVERIFIED]`), so each reads its plain row; `arrangements.yaml: context` holds the rest.
+ERA, REGIME, STRIFE = "plain", "crown", "peace"
+
+_SIDES = ("for", "against")
+_OTHER_SIDE = {"for": "against", "against": "for"}
+_SIGN = {"for": 1.0, "against": -1.0}
+#: The Record kinds a `matters` row names by its carrier (`Record:decree` is a `law`), read off the roster and never restated.
+_RECORD_MATTER = {m["carrier"].partition(":")[2]: mid for mid, m in MATTERS.items() if m["carrier"].startswith("Record:")}
+
+
+class Arrangement(NamedTuple):
+    """What the builder decided about the forum that the `Input` does not carry whole (p2 §H): who arranged it, how far the tilt works,
+    against which side, and which seats stepped down. `card` reads it with the built `Input`."""
+    arranger: Optional[str]
+    tilt: float
+    tilted_against: Optional[str]
+    recused: tuple
+
+
+class _Sitting(NamedTuple):
+    """The operands every `Present` of one proceeding is built with."""
+    fx: Any
+    regime: dict
+    strife: dict
+    topic: Optional[str]
+    admits: tuple
+    bears: dict
+    for_id: str
+    against_id: Optional[str]
+    room: tuple
+    factions: dict
+    presume: float
+    rank_key: Optional[str]
+
+
+def _refuse(key: str, why: str) -> None:
+    raise ValueError(f"refused[{key}]: {why}")
+
+
+def _proceeding_module() -> Any:
+    """The proceeding module, reached by its composition row (the host never names it: A-25), for the closed forms the card prints."""
+    return sys.modules[composition.require(PROCEEDING_ROLE).__module__]
+
+
+def _clip01(x: float) -> float:
+    return min(1.0, max(0.0, x))
+
+
+def _seats_held(w: Any, pid: str) -> list:
+    """The offices `pid` holds now, from his own live `hold` edges."""
+    return [w.offices[t.object] for t in w.persons[pid].tenures if t.kind == "hold" and t.live and t.object in w.offices]
+
+
+def _rung_ordinal(w: Any, office: Any) -> int:
+    rung = w.rungs.get(office.rung) if office.rung is not None else None
+    return RUNG_KINDS.index(rung.kind) if rung is not None else 0
+
+
+def _power(w: Any, pid: str, regime: dict) -> tuple:
+    """`(power, precedence)` of a person (V2 p2 §H): his highest seat's rung ordinal, plus twice the level of its `modifier`, plus the
+    regime's weight for the authority of its faction. A man with no seat has none (0, 0)."""
+    seats = _seats_held(w, pid)
+    if not seats:
+        return 0.0, 0
+    top = max(seats, key=lambda o: (_rung_ordinal(w, o), o.id))
+    rank = _rung_ordinal(w, top)
+    modifier = 2.0 * sigma_level(top.modifier) if top.modifier else 0.0
+    return rank + modifier + regime["power"].get(AUTHORITY_BY_FACTION.get(top.faction), 0.0), rank
+
+
+def _lawful(regime: dict, row: dict) -> bool:
+    """A regime's `unlawful` names rites or rows; it is keyed on the row requested, and a rite it names stays lawful in a row of the regime's
+    own authority (the one it weighs most; none where it weighs two alike) (V2 p4 §L 12)."""
+    top = max(regime["power"].values())
+    own = [a for a, x in regime["power"].items() if x == top]
+    return row["id"] not in regime["unlawful"] and not (row["rite"] in regime["unlawful"] and row["authority"] != (own[0] if len(own) == 1 else None))
+
+
+def _rite_of(fx: Any, verb: str, row: dict, effort: int, regime: dict, strife: dict) -> Rite:
+    """The rite's cells with the row's, then the context's deltas (V2 p2 §B, §I). Every number here is a cell of a table or a setting."""
+    cells, (lo, hi) = RITES[row["rite"]], row["turns"]
+    silence = cells["silence"]
+    if regime["silence"] is not None and not (silence == "free" and "must" not in cells["reply"].values()):
+        silence = regime["silence"]
+    if silence == "free" and "must" in cells["reply"].values():
+        silence = "refusal"                                   # never free where an answer is owed (A-145; V2 p4 §L 6)
+    admits = tuple(dict.fromkeys(k for k in (*row["admits"], *regime["admits_add"]) if k not in regime["admits_drop"]))
+    moves = row.get("moves") or cells["moves"]
+    return Rite(id=cells["id"], live=cells["live"], bears=cells["bears"], reply=tuple(cells["reply"].items()), silence=silence,
+                issues=tuple(cells["issues"]), concede=cells["concede"], moves=tuple((s, tuple(ms)) for s, ms in moves.items()),
+                weighs=tuple((i, tuple(ISSUE_RUNGS[i]["weighs"].items())) for i in cells["issues"] if ISSUE_RUNGS[i]["weighs"]),
+                close=row["close"], turns=max(lo, min(hi, effort + 1 + strife["turns"])), quorum=row.get("quorum"),
+                standard=attribute_midpoint() + DIFFICULTY_LEVELS.index(row["standard"]) + regime["standard"],     # [ASSUMPTION; Jordan to correct: mid plus the level's ordinal -- basis: V2's model reads plain 4, formal 5, solemn 6]
+                reason_lean=row["reason_lean"] + regime["reason_lean"], admits=admits,
+                difficulty=_difficulty_term(fx, {"verb": verb})["difficulty"], gravity=strife["gravity"] + regime["gravity"],
+                unrest=strife["unrest"])
+
+
+def _bench_of(w: Any, venue: Optional[str], topic: Optional[str], authority: str) -> list:
+    """Who may sit at `venue`: `judging_set`'s holders, each kept where a seat he holds that sits over the venue (the grant and the containment
+    `judging_set` asks) has a faction the authority maps from (`AUTHORITY_BY_FACTION`: the office's own faction, never the seat's proposition
+    id); `parties` and `none` seat nobody by office. A holder who is gone sits empty."""
+    ids = [p for p in dict.fromkeys(judging_set(w, venue, topic)) if p in w.persons]
+    if authority in ("parties", "none"):
+        return ids
+    return [p for p in ids if any(t.kind == "hold" and t.live and BENCH_BASIS in t.granted_acts and t.object in w.offices
+                                  and sits_over(w, w.offices[t.object], venue)
+                                  and AUTHORITY_BY_FACTION.get(w.offices[t.object].faction) == authority for t in w.persons[p].tenures)]
+
+
+def _watchers(w: Any, venue: Optional[str], floor: str, basis: Optional[str]) -> list:
+    """Those present at `venue` the row's floor lets watch: `open` all, `closed` none, `admitted` the holders of a seat (of one granting `basis`
+    where the row names one) `[ASSUMPTION; Jordan to correct: the model admits the holders of an office]`."""
+    if venue is None or floor == "closed":
+        return []
+    here = [x for x in dict.fromkeys(presence(w, venue)) if x in w.persons]
+    if floor == "open":
+        return here
+    return [x for x in here if any(t.kind == "hold" and t.live and t.object in w.offices and (basis is None or basis in t.granted_acts)
+                                   for t in w.persons[x].tenures)]
+
+
+def _holds(p: Any, bears: dict) -> tuple:
+    """What he wants and holds, tag by tag, and how the matter bears on each: `((channel, tag, weight, bears), ...)`, the channels the grounds read
+    (`want`: his pursuits; `hold`: his convictions over the roster's ceiling). Needs, goals and ambitions have no carrier `[HOOK]`."""
+    want = tuple(("want", t, _clip01(float(v)), max(-1.0, min(1.0, bears.get(t, 0.0)))) for t, v in p.pursuits.items())
+    held = tuple(("hold", t, _clip01(c / AFFILIATION_CEILING), max(-1.0, min(1.0, bears.get(t, 0.0)))) for t, c in p.conviction.items() if c > 0)
+    return want + held
+
+
+def _items_of(w: Any, p: Any, ctx: _Sitting, side: Optional[str]) -> tuple:
+    """The things he holds of the kinds the rite admits (V2 p2 §G), from his own edges and his own ledger: the `Record`s he holds (a kind a
+    `matters` row names by its carrier, else `record`), the seats he holds (`title`), the oaths he swore, the claims he holds on the matter (by
+    the kind of their source, `PROOF_KIND_OF_SOURCE`), and, for a speaker, his own false word (`false_items`). `debt` (an oath owed to him is on
+    the debtor's side) and `precedent`, `confession` and `state_of_realm` (the case file and the strife reading) have no carrier he holds `[HOOK]`."""
+    out = []
+    for t in p.tenures:
+        if not t.live:
+            continue
+        if t.kind == "hold" and t.object in w.records:
+            rec = w.records[t.object]
+            out.append(Item(rec.id, _RECORD_MATTER.get(rec.kind, "record"), 1.0, source=p.id))
+        elif t.kind == "hold" and t.object in w.offices:
+            out.append(Item(t.id, "title", 1.0, source=p.id, about=t.object))
+        elif t.kind == "oblige" and not t.imposed and t.subject == p.id:
+            out.append(Item(t.id, "oath", 1.0, source=p.id, about=t.object))
+    if ctx.topic is not None:
+        full = ctx.fx.get("confidence_default")
+        for c in p.ledger:
+            kind = PROOF_KIND_OF_SOURCE.get(c.source)
+            if c.subject == ctx.topic and kind is not None:
+                out.append(Item(c.id, kind, _clip01(c.confidence / full), source=p.id, about=c.subject))
+        if side is not None:
+            out.extend(false_items(p, ctx.topic, side, ctx.fx))
+    return tuple(it for it in out if it.kind in ctx.admits)
+
+
+def _present(w: Any, p: Any, side: Optional[str], decides: bool, ctx: _Sitting) -> Present:
+    """One person of the room, built from his OWN interior (his attributes, pursuits, convictions, stance, edges and ledger) and the
+    operands `ctx` carries: never another person's ledger or true values (F8)."""
+    fx, mid = ctx.fx, attribute_midpoint()
+    if isinstance(p.weight, bool) or not isinstance(p.weight, (int, float)) or p.weight != int(p.weight):
+        _refuse("bad_weight", f"{p.id} weighs {p.weight!r}: a weight is a whole number of heads")
+    attr = {k: float(mid if (v := (p.attributes or {}).get(descriptors.ATTRIBUTE_NAMES[k])) is None else v)
+            for k in ("focus", "reason", "attunement", "presence", "grace", "will")}
+    shares = tuple(x for x in (ctx.for_id, ctx.against_id) if x is not None and ctx.factions[x] is not None and ctx.factions[x] == ctx.factions[p.id])
+    stake = bearing(p, ctx.bears, for_party=ctx.for_id, against_party=ctx.against_id, edges=p.tenures, shares=shares)
+    care = person_care(p)
+    care = (_clip01(care[0] + ctx.strife["care_want"]) if p.pursuits else care[0], care[1], care[2])
+    bonds = tuple((q, b) for q in ctx.room if q != p.id
+                  and (b := tie(p, q, edges=p.tenures, shared_faction=ctx.factions[q] is not None and ctx.factions[q] == ctx.factions[p.id])))
+    start = fx.get("start_step") * (ltr_sum(stake) / BEARING_PARTS) + (ctx.presume if decides and side is None else 0.0)
+    power, precedence = _power(w, p.id, ctx.regime)
+    return Present(id=p.id, weight=int(p.weight), side=side, decides=decides, **attr,
+                   rank=float((p.capability or {}).get(ctx.rank_key) or 0) if ctx.rank_key else 0.0,
+                   care=care, stake=stake, bonds=bonds, start=start, holds=_holds(p, ctx.bears),
+                   believes=believes(p, ctx.topic, fx) if ctx.topic is not None else 0.0,
+                   bias=0.0,                                  # [HOOK: his stable misjudgement has no carrier]
+                   power=power, precedence=precedence, items=_items_of(w, p, ctx, side),
+                   strain=strain_carried((), fx))             # [HOOK: B24p.20's reader gives his rattles this season]
+
+
+def _rank_key() -> Optional[str]:
+    """The one skill whose rank joins the dice of a drawing move (`rosters.yaml: proceeding_moves`' `capability`; V2 p2 §A.1: `rank` is one
+    number, his rank in the proceeding's skill), read as `pool._capability` reads a verb's skill: off the person's `capability`."""
+    keys = {m.get("capability") for m in PROCEEDING_MOVES.values() if m["draw"]} - {None}
+    if len(keys) > 1:
+        raise Unspecified(f"the drawing moves name {sorted(keys)} as their skill", "rosters.yaml -- proceeding_moves", needs="one skill",
+                          law="V2 p2 §A.1 -- `Present.rank` is his rank in the proceeding's skill, one number")
+    return next(iter(keys), None)
+
+
+def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[str], topic: Optional[str], effort: int, row: dict,
+                     arranger: Optional[str] = None, rig: float = 0.0, form: str = "auto", state: Any = None) -> tuple:
+    """`(Input, Card)`: THE HOST BUILDER OF A PROCEEDING (V2 p2 §A, §H, §I; B24p.13). `claimants[0]` is the bearer (`for`); the other party is the
+    next claimant, else `subject` where he is a person other than the bearer, else (where the rite gives the other side moves) the most opposed
+    man on the floor. `row` is an arrangement row (a seeded one, or `abridged(row)`'s); `form` is `full`, `abridged` or `auto` (abridged where
+    the act's `effort` is 0 and nobody watches). `arranger` and `rig` are the arrangement (p2 §H); `topic` is the matter argued.
+
+    Refused, each a `ValueError` whose message begins `refused[<key>]`: `unlawful`, `absent`, `both_parties`, `no_seat`, `short_bench`,
+    `bad_weight`, and (from `Input`) the sitting's own invariants. It reads `w.persons`, `w.offices`, `w.fixtures`, seats, Tenures, and each
+    person's own interior and ledger; never `proofs` or `reception`, and never one person's ledger for another's values. It writes nothing."""
+    fx = w.fixtures
+    era, regime, strife = CONTEXT["eras"][ERA], CONTEXT["regimes"][REGIME], CONTEXT["strife"][STRIFE]
+    if not claimants:
+        _refuse("absent", "a proceeding needs a bearer")
+    fid = claimants[0]
+    aid = next((c for c in claimants[1:] if c != fid), None)
+    if len(claimants) > 1 and claimants[1] == fid:
+        _refuse("both_parties", f"the two parties to the matter are one character ({fid})")
+    if aid is None and subject in w.persons and subject != fid:
+        aid = subject
+    gone = [x for x in (fid, aid, arranger) if x is not None and x not in w.persons]
+    if gone:
+        _refuse("absent", f"{gone[0]} is not in the world (a party or arranger who is gone)")
+    if not _lawful(regime, row):
+        _refuse("unlawful", f"{row['id']} is not lawful under {REGIME}")
+    venue = place_of(w, topic) or place_of(w, fid)
+    floor = row["floor"] if regime["floor"] is None else regime["floor"]
+    here = [x for x in dict.fromkeys(presence(w, venue)) if x in w.persons] if venue is not None else []
+    watchers = [x for x in _watchers(w, venue, floor, row["floor_basis"] if regime["floor"] is None else None) if x not in (fid, aid)]
+    if form == "abridged" or (form == "auto" and effort <= 0 and not watchers):
+        row = abridged(row) if row["close"] != "exchange" else row
+    rite = _rite_of(fx, verb, row, effort, regime, strife)
+    moves, close = dict(rite.moves), rite.close
+    bench = _bench_of(w, venue, topic, row["authority"]) if close in ("bench", "declared") else []
+    # the other party: where the rite gives the other side moves and the matter names nobody, the most opposed man on the floor (p4 §K D4)
+    if aid is None and moves.get("against"):
+        opposed = [x for x in here if x != fid and x not in bench
+                   and takes_side(bearing(w.persons[x], {}, for_party=fid, against_party=None, edges=w.persons[x].tenures)) == "against"]
+        if opposed:
+            aid = min(opposed, key=lambda x: (ltr_sum(bearing(w.persons[x], {}, for_party=fid, against_party=None, edges=w.persons[x].tenures)), x))
+            watchers = [x for x in watchers if x != aid]
+    bears: dict = {}                                          # [HOOK: what tags the matter bears on has no carrier; B27.05 owns it (C(B24p) UNDECIDED (5))]
+    precedence = {x: _power(w, x, regime)[1] for x in bench}
+    # who sits: the authority's seats, the presiding seat first; a conflicted non-party steps down where another can sit (a party who sits does not)
+    seats, recused = sorted(bench, key=lambda x: (-precedence[x], x)), []
+    if close in ("bench", "declared"):
+        need = 1 if close == "bench" else (rite.quorum or 1)
+        for x in list(seats):
+            partial, _ = conflict(w.persons[x], bears, for_party=fid, against_party=aid, edges=w.persons[x].tenures)
+            if x not in (fid, aid) and partial >= fx.get("recuse_at") and len(seats) > need:
+                seats.remove(x)
+                recused.append(x)
+        if close == "bench" and aid is None and len(seats) > 1 and seats[0] == fid:
+            seats = seats[1:] + seats[:1]                     # the sole speaker is not his own only listener: the next seat presides (§L 16)
+        if not seats:
+            _refuse("no_seat", f"{row['id']}: no seat of authority {row['authority']} at {venue}")
+        if len(seats) < need:
+            _refuse("short_bench", f"{row['id']}: {len(seats)} seat(s) offered for a quorum of {need}")
+    seated = seats if close == "declared" else seats[:1] if close == "bench" else []
+    # the room: who is a side and who decides are two cells; one person may hold both
+    cells: dict = {}
+
+    def add(pid: str, side: Optional[str], decides: bool) -> None:
+        if pid not in cells:
+            cells[pid] = [side, decides]
+        elif decides:
+            cells[pid][1] = True
+    add(fid, "for", False)
+    if aid is not None:
+        add(aid, "against" if moves.get("against") else None, close in ("exchange", "hearers"))
+    for x in seated:
+        add(x, None, True)
+    for x in watchers:
+        add(x, None, close == "hearers")
+    # the arrangement (p2 §H): the arranger's side is his own where he is a party, else the side his ties favour; one lever, the seats' start
+    arr = arranger if arranger is not None else (fid if rig > 0 else None)
+    factions = {x: faction_holding(w, x) for x in dict.fromkeys([*cells, *([arr] if arr else [])])}
+    tilt, arr_side = 0.0, None
+    if arr is not None:
+        if arr in (fid, aid):
+            arr_side = "for" if arr == fid else "against"
+        else:
+            a = w.persons[arr]
+            lean = tie(a, fid, edges=a.tenures, shared_faction=factions[fid] is not None and factions[fid] == factions[arr]) \
+                - (tie(a, aid, edges=a.tenures, shared_faction=factions[aid] is not None and factions[aid] == factions[arr]) if aid else 0.0)
+            arr_side = "for" if lean > 0 else "against" if lean < 0 else None
+        weak = None if arr_side is None else (aid if arr_side == "for" else fid)
+        if weak is not None:
+            tilt = rig * max(0.0, fmath.tanh((_power(w, arr, regime)[0] - _power(w, weak, regime)[0]) / fx.get("power_scale")))
+    if tilt > 0 and not [x for x, (side, decides) in cells.items() if decides and x not in (fid, aid)]:
+        tilt = 0.0                                            # only a party decides (a conversation, a questioning, a negotiation): nothing to tilt
+    ctx = _Sitting(fx=fx, regime=regime, strife=strife, topic=topic, admits=rite.admits, bears=bears, for_id=fid, against_id=aid,
+                   room=tuple(cells), factions=factions, presume=fx.get("presume_step") * tilt * _SIGN[arr_side] if tilt > 0 else 0.0,
+                   rank_key=_rank_key())
+    room = tuple(_present(w, w.persons[x], side, decides, ctx) for x, (side, decides) in cells.items())
+    dials = dict(proceeding_dials(fx))
+    dials["moves"] = {m: (r["effect"], r["draw"]) for m, r in PROCEEDING_MOVES.items()}      # the two rosters the module is handed (its head)
+    dials["reads"] = {g: r["reads"] for g, r in GROUNDS.items()}
+    inp = Input(rite=rite, matter=topic if topic is not None else (subject or ""), room=room,
+                grounds=tuple((g, r["reason"], era[g]) for g, r in GROUNDS.items()), dials=MappingProxyType(dials), state=state,
+                frames=tuple(sorted({(c, t) for p in room for c, t, _, _ in p.holds})))
+    return inp, card(inp, row, Arrangement(arr if tilt > 0 else None, tilt, None if tilt <= 0 else _OTHER_SIDE[arr_side], tuple(recused)))
+
+
+def card(inp: Input, row: dict, arrangement: Arrangement) -> Card:
+    """THE CARD (V2 p1 §E; pure): what the proceeding IS, derived from the built rite and room and never authored. It holds no true attribute and
+    no true start; its `odds` is the close itself where nobody speaks (`card_odds`), `None` where nothing is drawn."""
+    mod, rite, D = _proceeding_module(), inp.rite, inp.dials
+    moves, ds = dict(rite.moves), [p for p in inp.room if p.decides]
+    bearer = mod._lead(inp, rite.bears)
+    owed = dict(rite.reply).get(_OTHER_SIDE[rite.bears]) == "must" and rite.silence != "free"
+    unmoved = fmath.ltr_sum(mod.silence_cost(inp, d, None, bearer) for d in ds) / len(ds) if (owed and bearer is not None and ds) else 0.0
+    if rite.silence == "free":
+        silence = "free: nothing here must be answered, and silence costs nothing"
+    else:
+        side = "against" if dict(rite.reply).get("against") == "must" else rite.bears
+        owes = mod._lead(inp, side) or (ds[0] if ds else None)
+        pt = Point(-1, _OTHER_SIDE[side], "", "", None, "", ())
+        cost = fmath.ltr_sum(mod.silence_cost(inp, d, pt, owes) for d in ds) / len(ds) if (ds and owes is not None) else 0.0
+        silence = f"{rite.silence}: a point owed an answer and left standing costs {cost:.2f} with each who decides" \
+            + (" (he decides himself, and answers to the contempt of those present)" if ds == [owes] else "") \
+            + (", and counts with him again as tacitly admitted" if rite.silence == "admits" else "")
+    crowd = mod._crowd(inp)
+    return Card(kind=row["id"], genre=RITES[row["rite"]]["genre"], arranged_by=arrangement.arranger, tilt=round(arrangement.tilt, 2),
+                tilted_against=arrangement.tilted_against, stake=row["disposes"], outcomes=tuple(DISPOSAL[row["disposes"]].items()),
+                room=tuple((p.id, ("speaks " + p.side + (" and judges" if p.decides else "")) if p.side else ("judges" if p.decides else "attends"),
+                            round(p.power, 1)) for p in inp.room),
+                live=rite.live, bears=rite.bears, reply=rite.reply, moves=rite.moves,
+                barred=tuple((s, m) for s in _SIDES for m in PROCEEDING_MOVES if moves.get(s) and m not in moves[s]),
+                admits=rite.admits, close=rite.close, decided_by=tuple(p.id for p in ds), turns=rite.turns, issues=rite.issues,
+                silence=silence,
+                unargued=(f"it lapses: the bearer must put it, and his rest is priced as silence ({unmoved:.2f} with those who decide)" if owed and unmoved
+                          else "it stands where the room starts: the bearer decides it himself" if owed
+                          else "it stands where the room starts"),
+                ends="/".join(PROCEEDING_ENDS), standard=rite.standard, unrest=rite.unrest, gravity=rite.gravity,
+                reason_weight=tuple((g, min(10, max(0, round(10 * (reason + rite.reason_lean - D["crowd_lean"] * crowd)))) / 10)
+                                    for g, reason, _ in inp.grounds),
+                recused=arrangement.recused, odds=mod.card_odds(inp))
