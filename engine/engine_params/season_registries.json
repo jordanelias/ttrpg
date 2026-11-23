@@ -1111,12 +1111,12 @@
             "convene"
           ],
           "modifier": "minor",
-          "conferral": null,
+          "conferral": "appointed",
           "revocation": null,
           "holder": "NPC-032",
           "obligees": [],
           "source": "harness/populated.py -- post normalised from the live \"Queen (Widow Regent if Almud eliminated)\", which is not on `titles.domains` verbatim; the condition moves to this note",
-          "note": "[LIVE]. r2 03 \u00a7A.15 row 5: a parenthesis is what stopped this seat reading as a title at all -- `title_domain` matches on the bare post."
+          "note": "[LIVE]. r2 03 \u00a7A.15 row 5: a parenthesis is what stopped this seat reading as a title at all -- `title_domain` matches on the bare post. A title of the royal house, conferred through `off_king` (`off_heir`'s shape, IN-61); HAPPENINGS-B."
         },
         {
           "id": "off_heir",
@@ -1143,12 +1143,12 @@
           "body": null,
           "faction": "Valorsmark",
           "remit_acts": [],
-          "conferral": null,
+          "conferral": "appointed",
           "revocation": null,
           "holder": "NPC-030",
           "obligees": [],
           "source": "harness/populated.py -- no draft row; kept as one of the two Royal Family succession seats",
-          "note": "[LIVE]. No `offices_draft.yaml` row; r2 03 \u00a7A.13.2 argues the Royal Family seats stay against the draft's silence."
+          "note": "[LIVE]. No `offices_draft.yaml` row; r2 03 \u00a7A.13.2 argues the Royal Family seats stay against the draft's silence. A title of the royal house, conferred through `off_king` (`off_heir`'s shape, IN-61); HAPPENINGS-B."
         },
         {
           "id": "off_royal_marshal",

@@ -129,3 +129,48 @@ def test_planted_release_of_the_throne_reaches_the_heir_as_a_classed_office_refe
     assert spy.sets and all(not s["throne_held"] for s in spy.sets), "fixture: the throne was held again"
     link = _failing_link(deposited, readings)
     assert link is None, f"the release route fails -- first failing link: {link}; readings {readings}"
+
+
+# --- B21.15: THE TWO ROYAL SEATS ARE TITLES THE THRONE CONFERS ---------------------------------
+
+def test_g3_queens_seat_confer_opens():
+    """B21.15 (HAPPENINGS-B edit 1, G3): the Queen's and the Princess's seats, vacant, are refilled by a `confer` through a King's
+    seat. Each row's `conferral` is read off the SHIPPED registry (`build_realm(0).offices`) onto a hand-built `_gov_world` (a realm
+    costs about 0.6 s a seed, and the world is the one B21.14's band test draws on); then 40 world seeds are each drawn through
+    the real `resolve`: never `confer.refused` (eligibility admits the conferral), and the seat opens at Overwhelming, Success or
+    Partial, `appointment.resisted` at Failure with the seat still empty. FALSIFIER (run once, not kept): `conferral: null` on
+    either row returns `confer.refused` at every seed."""
+    from collections import Counter
+
+    from .test_g3_not_yours import _gov_world, _hold
+    from ..state.carriers import Office
+
+    shipped = build_realm(0).offices
+    bands = {"off_widow_regent": Counter(), "off_princess": Counter()}
+    checked = 0
+    for seed in range(40):
+        for seat in bands:
+            row = shipped[seat]
+            w, d = _gov_world()
+            w.world_seed = seed
+            w.offices[seat] = Office(seat, row.post, "R", [], faction="Crown", conferral=row.conferral,
+                                     revocation=row.revocation)
+            w.step = Step.RESOLVE
+            out = d.resolve(mint_token(w, WriteClass.ACTS),
+                            [Act(id=f"g3_{seat}_{seed}", actor="p_king", verb="confer", via="off_crown",
+                                 payload={"subject": seat, "to": "p_low"})],
+                            contest_max_depth=w.fixtures.get("contest_max_depth"))
+            kinds = [e.kind for e in out]
+            assert "confer.refused" not in kinds, (seed, seat, row.conferral, kinds)
+            band = out[0].degree
+            bands[seat][band] += 1
+            if band == "Failure":
+                assert kinds == ["appointment.resisted"] and _hold(w, seat) is None, (seed, seat, kinds)
+            else:
+                assert kinds == ["tenure.opened"], (seed, seat, band, kinds)
+                h = _hold(w, seat)
+                assert h is not None and h.subject == "p_low", (seed, seat, band, h)
+            checked += 1
+    assert checked >= 80, checked
+    for seat, c in bands.items():
+        assert c["Failure"] > 0 and sum(v for k, v in c.items() if k != "Failure") > 0, (seat, dict(c))
