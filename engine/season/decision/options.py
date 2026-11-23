@@ -36,7 +36,7 @@ from ..data.rosters import (
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
     CHOICE_RANGES, CHOICE_SOURCED, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LIE_VERBS,
-    OPPOSED_WITHOUT_PRIZE, OWN_STANCE_DECLINES, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
+    OPPOSED_WITHOUT_PRIZE, OWN_STANCE_DECLINES, SAID_KEY, SAID_RANK_KEY, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
     TERMS_SOURCED, VERB_TABLE, VIOLENCE_CONTEXTS, VIOLENT_VERBS, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED,
     align,
 )
@@ -45,7 +45,7 @@ from ..gaps import Forbidden
 from ..queries.person_q import (
     BOND_STEM, PAIRED_KINDS, LedgerReader, OwnStateReader, addressed_to, attackers_of, content_kind, content_said,
     decisiveness, held_against, known_persons, ledger_names,
-    is_cell as _is_cell, lie_said_of, projected_axes, regard, said_of, telling_hearers,
+    is_cell as _is_cell, lie_said_of, projected_axes, regard, said_of, said_set, telling_hearers,
 )
 from ..state.carriers import Candidate, Claim, Person, Question, Record, View, fade_of
 # 04 §C.3 says `decision/` does not import `state/`; the AX-2 scan (`test_season_shape.py`) forbids `state.world` only and has admitted `state.carriers` since
@@ -422,26 +422,35 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 # and the fold would refuse it on `holds` -- a scene spent on a refusal the person could
                 # have known. Only the named conjunct declines; `survey` and
                 # `reconstruct` carry no `said` and are untouched.
+                saids: tuple = (None,)
                 if ledger_of:
                     # `said` depends on the entity alone, never on the hearer, so a subject's
-                    # one telling is read once however many hearers it fans to.
+                    # telling is read once however many hearers it fans to.
                     entity = ops.get(ledger_of[0])
                     if entity not in said_of_entity:
                         # CR-27: a row in `lie_verbs` says the claim FALSELY (`lie_said_of`), every other row
                         # says it as held (`said_of`); both are the actor's own ledger and nothing else.
-                        said_of_entity[entity] = (lie_said_of if verb in LIE_VERBS else said_of)(
-                            p.ledger, entity, fx, teller=p, tick=tick, weigh=weigh)
-                    said = said_of_entity[entity]
-                    if said is None:
+                        # v12 B11.10 (`08_FI_02` edit 7): AND ONE CANDIDATE PER CLAIM -- the top `said_choices` the slant ranks (`said_set`).
+                        # Only a row whose `choice_sourced` line names `said` ranges over several (`issue` shares the form and takes the one pick).
+                        said_of_entity[entity] = said_set(
+                            p.ledger, entity, fx, p, pick=lie_said_of if verb in LIE_VERBS else said_of, tick=tick, weigh=weigh,
+                            choose=SAID_KEY in CHOICE_SOURCED.get(verb, ()))
+                    saids = said_of_entity[entity]
+                    if not saids:
                         continue
-                    ops = {**ops, "said": said}
-                # `H-134`: the seat rides on the Candidate ONLY where it was chosen among several,
-                # under `VIA` -- not a cell operand, so `binding_of` drops it (the seat reaches the
-                # binding as `via=`), exactly as `said` is dropped; `pack_scenes` reads it onto
-                # `Act.via`. A single-seat Candidate carries nothing extra: byte-identical.
-                if len(seats) > 1:
-                    ops = {**ops, VIA: st}
-                out.append(Candidate(verb, subject, operands=ops))
+                for rank, said in enumerate(saids):
+                    cand_ops = ops
+                    if said is not None:
+                        cand_ops = {**ops, "said": said}
+                        if len(saids) > 1:       # a real choice: the rank is what the act's id and score read (`data/verbs.py::choice_values`)
+                            cand_ops[SAID_RANK_KEY] = rank
+                    # `H-134`: the seat rides on the Candidate ONLY where it was chosen among several,
+                    # under `VIA` -- not a cell operand, so `binding_of` drops it (the seat reaches the
+                    # binding as `via=`), exactly as `said` is dropped; `pack_scenes` reads it onto
+                    # `Act.via`. A single-seat Candidate carries nothing extra: byte-identical.
+                    if len(seats) > 1:
+                        cand_ops = {**cand_ops, VIA: st}
+                    out.append(Candidate(verb, subject, operands=cand_ops))
     return out
 
 
@@ -1390,7 +1399,7 @@ def _fanned_choices(row: "VerbRow", bags: list) -> list:
     sourced = CHOICE_SOURCED.get(row.verb)
     if not sourced:
         return bags
-    keys = tuple(k for k in sourced if len(CHOICE_RANGES[k]) > 1)
+    keys = tuple(k for k in sourced if len(CHOICE_RANGES.get(k, ())) > 1)   # `said` has no roster: `opening_set` fans it over the claims `said_set` ranks
     if not keys:
         return bags
     combos = tuple(itertools.product(*(CHOICE_RANGES[k] for k in keys)))

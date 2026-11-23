@@ -7192,6 +7192,19 @@ rows:
     cite:      "MEASURED at v12 B11.08 (`aperture 1 s`, seeds 0 to 2, before 71dd43d6c and after): `oblige` formed by 78/77/79 persons and attempted 38/29/42 times before; formed by 82 and attempted 212/225/222 after, executed 210/217/218"
     source:    "workplan v12 B11.08 (`08_FI_01` edit 6; B11's H block)"
 
+  - id:        H-494
+    tier:      1
+    hole:      "THE PRIVACY ARM NO LONGER REACHES COMPUTED PLAY (v12 B11.10). A computed `tell` or `lie` now carries `in_confidence`, chosen at CHOOSE (`rosters.yaml: choice_sourced`), and `loop/witness.py::_circle_of` reads the act's own value where it drew on `telling_privacy` (`08_FI_02` edit 8, taken strictly), so the swept share applies only to an act that carries none (a hand-built one). At `telling_privacy` 1.0 the realm no longer reaches `confidence.broken`. With no `choices:` cell authored on `in_confidence`, the two Candidates score alike and `settle_confidences` keeps the first formed (`False`), so no computed telling is confided at all until a cell is authored. The break path (`resolve.py::_confidence_broken`) stays covered only by the hand-built `test_told_by_channel.py::test_g6_*`; the plan's `test_confidence_broken_occurs_on_the_privacy_arm` is not left in the tree."
+    kind:      "WIRING"
+    owner:     "`engine/season/loop/witness.py::_circle_of`, the `in_confidence` operand's consumer, and `rosters.yaml: choice_sourced`'s `in_confidence` line that supplies it"
+    grade:     "measured"
+    default:   "kept: a computed telling is private exactly where its `in_confidence` says; `telling_privacy` is the share for an act that carries none"
+    site:      "engine/season/loop/witness.py::_circle_of, read at each told deposit"
+    sweep:     []
+    unblocks:  "a realm reading of the break path (R-28, H-204) at the privacy arm: either a `tables.alignment.choices` cell on `in_confidence` (BA1's), or the share read beside the operand (a ruling, since edit 8 says the operand replaces the draw)"
+    cite:      "MEASURED at v12 B11.10 (`telling_privacy` 1.0, seeds 0 to 2, two seasons, `confidence.broken` events): 0, 0, 0 with `said_slant` `unshared_first` and `telling_hearers` `seen_since_move` (and at the shipped arms); the base tree d7a7b5f96 read 1, 1, 0 under the first pair. The OR reading (private if the operand is true or the draw is under the share) also read 0, 0, 0 (read before `settle_confidences`)"
+    source:    "workplan v12 B11.10 (`08_FI_02` edit 8; B11's H block)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

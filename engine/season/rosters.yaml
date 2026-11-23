@@ -2660,9 +2660,20 @@ rosters:
       FANNED (`decision/options.py::_fanned_choices`): CP-T04-06's `march` ranges `posture` over `march_postures`, shipped
       `[storm]`, so no `march` Candidate carries a `posture` and the shipped season does not move.
       [ASSUMPTION; medium; Jordan to correct; revert: delete the row, and `marshal` forms one Candidate with no order.]
+      v12 B11.10 (`08_FI_02` edits 7-8): `tell` AND `lie` CARRY TWO CHOICES, `said` AND `in_confidence`, on `marshal`'s precedent. `said` is WHAT is
+      told: one Candidate per claim among the top `Fixtures.said_choices` the teller's slant ranks for the subject (`queries/person_q.py::said_set`, `said_of`
+      or `lie_said_of` over the teller's own ledger), and a claim is scored by `deed_valence` under the teller's own projected pursuits inside the
+      `pursuit` term (`decision/choose.py::score_terms`) -- no new term. It has no closed roster, and it is a choice (`data/verbs.py::choice_values`) only
+      where more than one claim was offered, so `said_choices` 1 leaves the act's id and score as they were. `in_confidence` is WHETHER the telling is made in
+      confidence, `{false, true}`: `loop/witness.py::_circle_of` reads the act's own value where it would draw on `Fixtures.telling_privacy`, which
+      stays the swept share for an act that carries none (control 0). Who hears is unchanged (presence). ⚠ A TELLING WRITES NOTHING, so the carrier a key is
+      checked against is the kind its deposit is: the row must emit `news.told` (`data/verbs.py::CHOICE_CARRIER`).
+      [ASSUMPTION; medium; Jordan to correct; revert: delete the two `tell` and `lie` lines, and the telling is the single pick at the single draw.]
     values:
       marshal: [role, retreat_at]
       march: [posture]
+      tell: [said, in_confidence]
+      lie: [said, in_confidence]
 
   vocation_sourced:
     source: >-

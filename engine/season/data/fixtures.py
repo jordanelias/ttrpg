@@ -985,13 +985,19 @@ DEFAULT_FIXTURES = Fixtures(
     # The fold's `hearer` conjunct still refuses an absent one (`rosters.yaml: telling_hearer_arms`). Flipped by the batch's flip item.
     # [JUSTIFIED: v12 B11.08 (08_FI_02 edit 5) -- no document gives who a teller offers a telling to, so both readings are declared and swept known / seen_since_move; shipped at the control]
     telling_hearers="known",           # B11.08, swept known (control, SHIPPED) / seen_since_move
+    # v12 B11.10 (`08_FI_02` edit 7). HOW MANY CLAIMS ABOUT A SUBJECT A TELLER MAY CHOOSE AMONG TO PASS ON: the top this many the slant ranks
+    # (`queries/person_q.py::said_set`), one Candidate per claim and hearer (`rosters.yaml: choice_sourced`). `1` is the CONTROL and is SHIPPED: the single pick
+    # `said_of` made before the choice, so no act is renamed or rescored. A whole number of 1 or more.
+    # [JUSTIFIED: v12 B11.10 (08_FI_02 edit 7) -- no document gives how many claims a teller weighs, so it is injected and swept 1 (control, shipped) / 3; the shipped value is B98's]
+    said_choices=1,                    # B11.10, swept 1 (control, SHIPPED) / 3
     # `H-197` (v9 IN-18 `G6`, confidences). HOW OFTEN A TELLING IS MADE IN CONFIDENCE: the chance
     # `loop/witness.py::_circle_of` draws once per telling (its docstring says what a circle is and does).
     # `0` is the CONTROL and is SHIPPED [ASSUMPTION; medium; Jordan to
     # correct; revert: none needed while it ships at 0 -- shipping it on is this one value], on
     # `H-190`'s precedent: the plan names the shape (a swept chance at control 0) and is silent on
     # shipping it on. At 0 no draw is taken, every deposit is `own`, and no circle exists for a
-    # retelling to break. Must lie in [0, 1].
+    # retelling to break. Must lie in [0, 1]. v12 B11.10: an act that carries its own `in_confidence` (`tell`, `lie`: `rosters.yaml: choice_sourced`) is read by
+    # that, and this is the share only for an act that carries none.
     # [JUSTIFIED: engine/season/hole_register.yaml H-197 -- the privacy chance; no document gives how often a telling is made in confidence, so it is injected and swept 0 / 0.5 / 1.0]
     telling_privacy=0.0,               # `H-197`, swept 0 (control, SHIPPED) / 0.5 / 1.0
     # `H-199` (v9 IN-15, `AX-7`'s divergence formula; `H-36` rules its shape). HOW FAR THE CHANNEL A

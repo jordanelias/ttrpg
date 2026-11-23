@@ -97,3 +97,73 @@ def test_unshared_never_passes_on_a_transport_kind():
     newer = claim(5, deed, 4)
     assert said_of([told_old, newer], "HH", DEFAULT_FIXTURES.sweep("said_slant", "unshared_first")).predicate == "some.reading"
     assert said_of([told_old, newer], "HH", DEFAULT_FIXTURES.sweep("said_slant", "unshared")).predicate == deed
+
+
+# ---- B11.10 (`08_FI_02` edits 7-8): WHAT IS TOLD AND WHETHER IT IS CONFIDED ARE THE TELLER'S CHOICES -----------------------------------------
+CHOICES = DEFAULT_FIXTURES.sweep("said_choices", 3)
+
+
+def _best_said(w, p, subject):
+    """`(what `p` would pass on about `subject`, whether that is not the claim his slant ranks first)` to the first person he could tell it to: the best-scored
+    `tell` Candidate (not in confidence), by the chooser's own score; `None` where he has nothing to say."""
+    from ..decision.choose import deliberation_memo, score_terms, score_total
+    from ..decision.options import opening_set
+    from ..state.carriers import Question, View
+    q = Question("q_b11_10", "claim_landed", (subject,), "")
+    cands = [c for c in opening_set(p, View(p.id, [], w.fixtures.get("view_k"), q), q, w.fixtures)
+             if c.verb == "tell" and c.subject == subject and not c.operands.get("in_confidence")]
+    if not cands:
+        return None
+    to = cands[0].operands["to"]
+    memo = deliberation_memo(p, w.fixtures)
+    best = max((c for c in cands if c.operands["to"] == to), key=lambda c: score_total(score_terms(p, c, w.fixtures, memo, None, q)))
+    return best.operands["said"], "said_rank" in best.operands and best.operands["said_rank"] > 0
+
+
+def test_two_persons_with_the_same_claims_tell_different_claims():
+    """At `said_choices` 3, seeds 0-2, one season: persons who hold the same claims about one subject, and differ in what they pursue, do not all tell the
+    same claim -- the claim is ranked by `deed_valence` under each teller's own pursuits (`decision/choose.py::choice_lean`)."""
+    checked = differing = 0
+    for seed in SEEDS:
+        w = build_realm(seed, fixtures=CHOICES)
+        populated.run(1, seed, w=w)
+        held: dict = {}
+        for p in w.persons.values():
+            about: dict = {}
+            for c in p.ledger:
+                about.setdefault(c.subject, set()).add((c.predicate, c.value, c.chain))
+            for subject, claims in about.items():
+                if subject != p.id and len({k[0] for k in claims}) >= 2:
+                    held.setdefault((subject, frozenset(claims)), []).append(p)
+        for (subject, _), group in held.items():
+            if len(group) < 2:
+                continue
+            got = [_best_said(w, p, subject) for p in group]
+            got = [g for g in got if g is not None]
+            if len(got) >= 2:
+                checked += 1
+                # different claims, and at least one is a pick the teller's pursuits made over his slant's first (a claim of lower rank): ranking by valence, not by order
+                differing += len({(s.predicate, s.value, s.chain) for s, _ in got}) > 1 and any(moved for _, moved in got)
+    print("SAME CLAIMS", checked, differing)
+    assert checked >= 1
+    assert differing >= 1, (checked, differing)
+
+
+def test_in_confidence_on_the_act_decides_the_circle():
+    """`loop/witness.py::_circle_of` reads the telling's own `in_confidence` where it drew on `telling_privacy` (`08_FI_02` edit 8): True makes the circle at the
+    control share 0, False makes none at share 1.0 and takes no draw, and a telling that carries none is the share's as before. The break path itself
+    (`confidence.broken` on a retelling outside the circle, the privacy arm) is `test_told_by_channel.py`'s `test_g6_*`."""
+    from ..harness import probes as P
+    from ..loop.witness import _circle_of
+    from ..state.carriers import Act
+    w = P.tiny_world()
+
+    def circle(rate, **own):
+        act = Act("a_b11_10", "p_low", "tell", payload={"subject": "Hh", "to": "p_mid", **own})
+        return _circle_of(w, act, rate)
+    checked = 0
+    for rate, own, want in ((0.0, {"in_confidence": True}, ("p_low", "p_mid")), (1.0, {"in_confidence": False}, None),
+                            (1.0, {}, ("p_low", "p_mid")), (0.0, {}, None)):
+        assert circle(rate, **own) == want, (rate, own)
+        checked += 1
+    assert checked == 4

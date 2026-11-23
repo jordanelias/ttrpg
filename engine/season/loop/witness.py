@@ -22,7 +22,7 @@ from ..data.rosters import (
     CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, OBSERVATION_TERMS, READ_TO_ADDRESSEE, RECORD_CONTENT,
     UNDEPOSITED_KINDS, WITNESS_CHANNELS, require_member, roster,
 )
-from ..data.verbs import VERB_TABLE
+from ..data.verbs import IN_CONFIDENCE_KEY, VERB_TABLE
 # ⚠ `04:178` lists WITNESS's reads as the log, the presence cache, the channel predicates and the act
 # store, and `04:142` keeps `decision/` an island; this is the first non-DELIBERATE step to import it.
 # Refraction (v9 IN-15, H-201) is asker-first -- it grades what THIS holder believes -- so its rule lives
@@ -131,13 +131,21 @@ def _circle_of(w, act, rate: float):
     as before `G6`. A telling that names no addressee (a hand-built act; a row with no counterparty)
     has no circle of two and is never private. `rate` is `telling_privacy`, read and range-checked
     ONCE PER BARRIER by `witness`, beside `gain` (a value outside [0, 1] raises there, `H-190`'s
-    rule, whether or not any telling is deposited)."""
-    if rate == 0:
-        return None
+    rule, whether or not any telling is deposited).
+
+    ⚠ v12 B11.10 (`08_FI_02` edit 8): CONFIDING IS AN OPERAND, NOT A DRAW. A telling that carries `in_confidence` on its payload (`rosters.yaml: choice_sourced`,
+    chosen at CHOOSE among `{false, true}`) is private exactly where it says so, and takes no draw; `telling_privacy` is the share for a telling that
+    carries none (a hand-built act), at control 0."""
     row = VERB_TABLE.get(getattr(act, "verb", None))
+    pay = getattr(act, "payload", None)
+    own = pay.get(IN_CONFIDENCE_KEY) if isinstance(pay, dict) else None
+    if own is None and rate == 0:
+        return None
     hearer = binding_from_act(act).get(row.counterparty) if row is not None else None
     if not isinstance(hearer, str) or hearer == act.actor:
         return None
+    if own is not None:
+        return (act.actor, hearer) if own else None
     if draw_factory(w.world_seed, lambda: w.tick)(act.actor, f"confide:{act.id}").random() < rate:
         return (act.actor, hearer)
     return None

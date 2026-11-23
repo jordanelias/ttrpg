@@ -1551,9 +1551,8 @@ def act_key(verb: str, subject, operands) -> str:
     # CP-T04-02: AND THE CHOICE, FOR A ROW THAT CARRIES ONE (`CHOICE_SOURCED`, `marshal`'s `role` and `retreat_at`). A
     # Candidate is formed once per combination on the same subject, so two chosen in one deliberation would share
     # `(actor, verb, subject)` and `state/acts.py` would refuse the second. Present only on a row the roster names.
-    for n in CHOICE_SOURCED.get(verb, ()):
-        if ops.get(n) is not None:
-            key += f"#{ops[n]}"
+    for _, v in choice_values(verb, ops):
+        key += f"#{v}"
     if ops.get(VIA) is not None:
         key += f"@{ops[VIA]}"
     return key
@@ -1949,9 +1948,15 @@ VOCATION_SOURCED = _load_vocation_sourced(roster_map("vocation_sourced", "values
 # lists spelt here. REFUSED AT IMPORT, `VOCATION_SOURCED`'s reason: a verb the table lacks, a key with no range, or a verb whose
 # row writes no `CHOICE_CARRIER` of the key (the order is a minted document, `Record.exists`; a besieged posture's wear is
 # written on `Site.condition`) would each carry a choice nothing reads.
+SAID_KEY, SAID_RANK_KEY, IN_CONFIDENCE_KEY = "said", "said_rank", "in_confidence"
 CHOICE_RANGES = {ORDER_ROLE_KEY: tuple(ORDER_ROLES), ORDER_RETREAT_KEY: tuple(ORDER_RETREAT_AT),
-                 MARCH_POSTURE_KEY: tuple(MARCH_POSTURES)}
-CHOICE_CARRIER = {ORDER_ROLE_KEY: "Record.exists", ORDER_RETREAT_KEY: "Record.exists", MARCH_POSTURE_KEY: "Site.condition"}
+                 MARCH_POSTURE_KEY: tuple(MARCH_POSTURES), IN_CONFIDENCE_KEY: (False, True)}
+CHOICE_CARRIER = {ORDER_ROLE_KEY: "Record.exists", ORDER_RETREAT_KEY: "Record.exists", MARCH_POSTURE_KEY: "Site.condition",
+                  SAID_KEY: "news.told", IN_CONFIDENCE_KEY: "news.told"}
+# v12 B11.10 (`08_FI_02` edits 7-8): `SAID_KEY` IS A CHOICE WHOSE RANGE IS NOT A ROSTER -- the top `Fixtures.said_choices` claims `said_of`'s slant ranks for the
+# subject (`queries/person_q.py::said_set`), so it has no `CHOICE_RANGES` entry; it rides the payload as it always did, and counts as chosen only where the
+# fan held several (`SAID_RANK_KEY`, `choice_values`). A telling writes nothing, so the carrier of its two keys is the kind its deposit is (`loop/witness.py`'s
+# `news.told` branch reads `said`, `_circle_of` reads `in_confidence`): the row must emit it.
 
 
 def _load_choice_sourced(values: dict) -> dict:
@@ -1959,17 +1964,32 @@ def _load_choice_sourced(values: dict) -> dict:
     out = {v: tuple(ks or ()) for v, ks in values.items()}
     for v, ks in out.items():
         row = VERB_TABLE.get(v)
-        if row is None or not ks or any(k not in CHOICE_RANGES or CHOICE_CARRIER[k] not in row.writes for k in ks):
+        if row is None or not ks or any(k not in CHOICE_CARRIER or (k not in CHOICE_RANGES and k != SAID_KEY)
+                                        or CHOICE_CARRIER[k] not in (*row.writes, *row.emits) for k in ks):
             raise Forbidden(
                 f"`rosters.yaml: choice_sourced` names {v!r}: {list(ks)}, and the verb table carries no such verb, "
-                f"its row writes no carrier of a key (`CHOICE_CARRIER`), or the line names a key outside {sorted(CHOICE_RANGES)}",
+                f"its row writes or emits no carrier of a key (`CHOICE_CARRIER`), or the line names a key outside {sorted(CHOICE_CARRIER)}",
                 "rosters.yaml",
-                needs="a `verb_table.yaml` verb that writes each key's carrier, and keys `CHOICE_RANGES` carries",
+                needs="a `verb_table.yaml` verb that writes or emits each key's carrier, and keys `CHOICE_CARRIER` carries",
                 law="CP-T04-02 -- a choice rides an act that writes what the choice is read from, over a closed set")
     return out
 
 
 CHOICE_SOURCED = _load_choice_sourced(roster_map("choice_sourced", "values"))
+
+
+def choice_values(verb: str, ops) -> tuple:
+    """`(key, value)` for each CHOICE VALUE the operands `ops` carry for `verb` (`rosters.yaml: choice_sourced`, in its order): the one reader, for `act_key`'s
+    suffix and the chooser's score (`decision/choose.py::chosen_values`). `said` is a choice only where `opening_set` fanned it over several claims, and
+    its value is then the claim's RANK (`SAID_RANK_KEY`, 0 for the claim `said_of` ranks first), never the `Said`: with one claim to say there is nothing
+    to choose among, and riding the lone claim on every act would rename every telling (`_fanned_choices`'s reason for a one-member range)."""
+    ops = ops if isinstance(ops, dict) else {}
+    out = []
+    for k in CHOICE_SOURCED.get(verb, ()):
+        v = ops.get(SAID_RANK_KEY) if k == SAID_KEY else ops.get(k)
+        if v is not None:
+            out.append((k, v))
+    return tuple(out)
 
 
 # v9 IN-12 step 10: `{verb: record kind}` -- the verbs a person does not form while he holds a document
@@ -2338,7 +2358,7 @@ def _check_choice_cells(choices: Optional[dict]) -> dict:
     operands), a value outside that key's `CHOICE_RANGES` (no candidate holds it), an axis off the roster (`axis_weight` never reaches it)
     and a cell that is not a number. No value is required to carry a cell: a value the block does not name scores as the table's default.
     A value is spelt as `CHOICE_RANGES` spells it (`retreat_at`'s `0.5` is quoted in the YAML, and compared as the string it is)."""
-    sourced = {k for ks in CHOICE_SOURCED.values() for k in ks}
+    sourced = {k for ks in CHOICE_SOURCED.values() for k in ks if k in CHOICE_RANGES}   # `said` ranges over no roster: it is scored by the claim's own valence
     law = ("B10.56 / `02_CHAR_choice_alignment` -- a choice cell scores a value a candidate's operands can carry, on a rostered axis; "
            "a cell nothing reads is never reported")
     out: dict = {}

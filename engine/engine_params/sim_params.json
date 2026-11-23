@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 125,
-    "total": 426,
-    "uncited": 301,
+    "total": 427,
+    "uncited": 302,
     "of_which_assumption_grade": 8
   },
-  "count": 426,
+  "count": 427,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 30,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 131,
+    "engine.season.settings": 132,
     "engine.season.realm": 8
   },
   "params": [
@@ -4902,6 +4902,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "B11.08, swept known (control, SHIPPED) / seen_since_move",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.said_choices",
+      "name": "said_choices",
+      "value": 1,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "B11.10, swept 1 (control, SHIPPED) / 3",
       "citation": null,
       "citation_grade": null
     },

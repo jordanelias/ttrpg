@@ -549,9 +549,20 @@ def deed_valence(axis_w: dict, c) -> float:
     a `PAIRED_KINDS` claim, whose valence enters only for its doer through `deeds_judged`'s pairing
     (v9 IN-58) -- never for the claim's subject, who may be the patient. The one scoring of a deed,
     read by `deeds_judged` (G1), `said_of`'s slant (G3) and `world_q.attention_key` (IN-57)."""
-    if not is_deed(c) or c.predicate in PAIRED_KINDS:
+    if not valenced_deed(c):
         return 0.0
     return _lean(axis_w, c.predicate)
+
+
+def valenced_deed(c) -> bool:
+    """A DEED CLAIM WHOSE VALENCE IS ITS OWN: a deed (`is_deed`) of a kind that is not `PAIRED_KINDS`. The one test `deed_valence` and `deed_align` ask."""
+    return is_deed(c) and c.predicate not in PAIRED_KINDS
+
+
+def deed_align(c, axis: str) -> float:
+    """ONE AXIS OF `deed_valence`: `align_kind(c.predicate, axis)` for a valenced deed claim, else 0. `deed_valence(axis_w, c)` is `Σ_axis axis_w[axis] · deed_align(c, axis)`;
+    the chooser scores the claim a telling passes on by it (v12 B11.10, `decision/choose.py::choice_lean`), through the same weights as any choice value."""
+    return _verbs.align_kind(c.predicate, axis) if valenced_deed(c) else 0.0
 
 
 def _lean(axis_w: dict, kind: str) -> float:
@@ -1796,6 +1807,29 @@ def said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 
     if c is None:
         return None
     return Said(c.subject, c.predicate, c.value, reader.present(c), c.chain)
+
+
+def said_set(claims, subject, fx, teller: "Person | None" = None, *, pick=None, tick: int = 0, weigh=None, choose: bool = True) -> tuple:
+    """THE CLAIMS A TELLER MAY CHOOSE AMONG TO SAY ABOUT `subject`: the top `Fixtures.said_choices` of `pick`'s ranking (v12 B11.10, `08_FI_02` edit 7), best first.
+    `pick` is `said_of` (the default) or `lie_said_of`, the one pick this repeats: it asks for the best, drops every claim of that predicate about the subject
+    from what it reads, and asks again, until it has the number or the teller has nothing more to say (so each member is a different predicate). `said_choices` 1
+    is `pick` asked once of the ledger itself, today's single pick exactly, with no copy of it. `()` is nothing to say. A value that is not a whole number of 1
+    or more raises (`telling_privacy`'s rule). `choose` False (a row `rosters.yaml: choice_sourced` does not give `said`) is the single pick whatever the fixture."""
+    n = fx.get("said_choices") if choose else 1
+    if isinstance(n, bool) or not isinstance(n, int) or n < 1:
+        raise ValueError(f"said_choices {n!r} is not a whole number of 1 or more (B11.10)")
+    pick = pick or said_of
+    first = pick(claims, subject, fx, teller, tick=tick, weigh=weigh)
+    if first is None:
+        return ()
+    out, rest = [first], claims
+    while len(out) < n:
+        rest = [c for c in rest if not (c.subject == out[-1].subject and c.predicate == out[-1].predicate)]
+        nxt = pick(rest, subject, fx, teller, tick=tick, weigh=weigh)
+        if nxt is None:
+            break
+        out.append(nxt)
+    return tuple(out)
 
 
 def drifted(before, band: float, sel: int, whole_band: bool = False):

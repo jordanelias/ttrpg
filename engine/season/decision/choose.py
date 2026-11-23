@@ -37,13 +37,13 @@ from ..data import goals as goals_data
 from ..data.rosters import STANCE_MAX
 from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
 from ..data.rosters import SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
-from ..data.verbs import BODILY_PRIZES, CHOICE_SOURCED, VERB_TABLE, act_key, align, align_choice
+from ..data.verbs import BODILY_PRIZES, IN_CONFIDENCE_KEY, SAID_KEY, VERB_TABLE, act_key, align, align_choice, choice_values
 from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
 # imports `person_q` and `data/`); `_stance_arm` calls it, and `confliction` (IN-08 6f,
 # the derived Query's caller, ID-13).
 from ..queries.person_q import (
-    believed_capability, confliction, intent_named, intent_said, refused_before, regard, stance_toward,
+    believed_capability, confliction, deed_align, intent_named, intent_said, refused_before, regard, stance_toward,
 )
 from ..state.carriers import EFFORT, Act, Candidate, Person, Question, Scene, Sensation, View, fade_of
 from ..trace_log import TRACE
@@ -389,8 +389,16 @@ def score_total(terms: tuple) -> float:
 
 
 def chosen_values(c) -> tuple:
-    """`(key, value)` for each CHOICE VALUE the candidate's operands carry (`choice_sourced` keys, B10.56): the one reader, for `score_terms` and `score_parts`."""
-    return tuple((k, c.operands[k]) for k in CHOICE_SOURCED.get(c.verb, ()) if k in (c.operands or {}))
+    """`(key, value)` for each CHOICE VALUE the candidate's operands carry (`choice_sourced` keys, B10.56): the one reader, for `score_terms` and `score_parts`.
+    Read through `data/verbs.py::choice_values`, so a telling's `said` is a choice only where it was fanned over several claims, and its value is then the claim."""
+    ops = c.operands or {}
+    return tuple((k, ops[SAID_KEY] if k == SAID_KEY else v) for k, v in choice_values(c.verb, ops))
+
+
+def choice_lean(key: str, value, axis: str) -> float:
+    """THE LEAN OF ONE CHOICE VALUE ON AN AXIS: a claim a telling passes on (`said`) leans as the deed it is (`person_q.deed_align`, so the teller's weights over it are
+    `deed_valence`); every other value is its `choice:<key>=<value>` cell (`data/verbs.py::align_choice`). The one reader, for `score_terms` and `score_parts`."""
+    return deed_align(value, axis) if key == SAID_KEY else align_choice(key, value, axis)
 
 
 def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional[Callable] = None,
@@ -402,7 +410,7 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
     The ONE owner of the formula (`CLAUDE.md` §8): `make_chooser`'s `score` calls this and adds, and
     a reading that wants to know WHICH TERM decided a ranking calls this and never re-derives one.
 
-      * `pursuit` -- `damp * Σ_axis axis_w[axis] * (align(c.verb, axis) + Σ_(key, value) align_choice(key, value, axis)) * odds_weight(...)` (the
+      * `pursuit` -- `damp * Σ_axis axis_w[axis] * (align(c.verb, axis) + Σ_(key, value) choice_lean(key, value, axis)) * odds_weight(...)` (the
         parenthesised sum over the candidate's `choice_sourced` operands, B10.56; empty where no cell is authored), `axis_w` the
         person's projected pursuits, `damp` the `confliction_weight` arm's factor (exactly 1.0 at 0) and
         `odds_weight` CR-17's believed-chance factor on a contested candidate (exactly 1.0 at
@@ -431,7 +439,7 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
     # roster) leaves `pursuit` the very float above, not that float plus a signed zero.
     chosen = chosen_values(c)
     if chosen:
-        by_choice = damp * ltr_sum(axis_w[ax] * ltr_sum(align_choice(k, v, ax) for k, v in chosen) for ax in _AXES)
+        by_choice = damp * ltr_sum(axis_w[ax] * ltr_sum(choice_lean(k, v, ax) for k, v in chosen) for ax in _AXES)
         if by_choice != 0.0:
             pursuit += by_choice
     if pursuit != 0.0:
@@ -451,6 +459,27 @@ def _npc_effort_arm(fx: "Fixtures") -> str:
                    law="CP-T01-05 NPC half -- declare it, default it, sweep it; an unknown arm silently "
                        "reading `off` would make the sweep report the control twice")
     return arm
+
+
+def settle_confidences(cands: list, scores: dict) -> tuple:
+    """ONE ACT PER OPPORTUNITY, FOR A TELLING'S `in_confidence` (v12 B11.10, `08_FI_02` edit 8): of the Candidates that differ only in whether the telling is made in
+    confidence (same verb, subject, hearer, claim and seat -- the same `act_key` once `in_confidence` is left out), only the best-scoring survives, a tie keeping the
+    first formed (`False`, `CHOICE_RANGES` order). `settle_efforts` is the precedent: a base and its variants are one opportunity, so one of them stays, and a teller does
+    not tell one hearer one thing twice in a scene, once in confidence and once not. A Candidate with no `in_confidence` is its own group, so every other row passes through.
+    Returns `(cands, scores)` for the kept set, `scores` keyed on `id(c)` as `score_order` wants."""
+    best: dict = {}
+    for c in cands:
+        ops = c.operands or {}
+        if ops.get(IN_CONFIDENCE_KEY) is None:
+            continue
+        key = (c.verb, act_key(c.verb, c.subject, {**ops, IN_CONFIDENCE_KEY: None}))
+        if key not in best or scores[id(c)] > scores[id(best[key])]:
+            best[key] = c
+    if not best:
+        return cands, scores
+    kept = [c for c in cands if (c.operands or {}).get(IN_CONFIDENCE_KEY) is None
+            or best[(c.verb, act_key(c.verb, c.subject, {**c.operands, IN_CONFIDENCE_KEY: None}))] is c]
+    return kept, {id(c): scores[id(c)] for c in kept}
 
 
 def settle_efforts(cands: list, scores: dict, score: Callable, fx: "Fixtures") -> tuple:
@@ -917,6 +946,7 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
         # the strike leaves standing is kept too, for the fold's `scruple.overridden` (`loop/resolve.py::_scruple_overridden`).
         cands, marked = strike_scruples(p, cands, fx, draw, lambda c: _scores[id(c)])   # (Candidate, margin, score, struck): every candidate with a positive margin
         # CP-T01-05 NPC half: the person may put effort behind a contested act (`npc_effort`); `off` is a no-op.
+        cands, _scores = settle_confidences(cands, _scores)       # B11.10: a telling in confidence and one not are one opportunity
         cands, _scores = settle_efforts(cands, _scores, score, fx)
         ranked = score_order(cands, _scores)
         # ⚠ KEYED ON `id(c)` AND THAT IS SAFE HERE, NARROWLY: `cands` holds every Candidate alive
