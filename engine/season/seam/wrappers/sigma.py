@@ -1053,8 +1053,11 @@ def believed_chance(w: Any, believer: Any, act: Any, bands: Any) -> Optional[flo
     (`odds_of`'s own refusal).
 
     A ROW THAT PROCEEDS (B24p.14; `VerbRow.proceeds`, which B24p.16 gives the table) IS ANSWERED BY `_believed_proceeding_chance`, the chooser's
-    own odds that the proceeding carries (`view_odds` on a room of himself and ordinary men); no row carries one before B24p.16."""
-    if getattr(VERB_TABLE.get(act.verb), "proceeds", ()):
+    own odds that the proceeding carries (`view_odds` on a room of himself and ordinary men) -- ONCE THE ROW STOPS POOLING ON `governing`: B24p.16 wrote
+    `proceeds:` beside the interim `governing:` of five rows, which still roll the single roll until B24p.19 deletes it and the seam dispatches, and the
+    believed odds follow the roll the act actually takes."""
+    row = VERB_TABLE.get(act.verb)
+    if getattr(row, "proceeds", ()) and not row.governing:
         return _believed_proceeding_chance(w, believer, act, bands)
     believed, claimants, _target = _estimating(w, act, BELIEVED_ESTIMATE_ROLE)
     if believed is not None:                # a fight: the believer's own estimate, the resolver sampled over the bands asked (B14.24)

@@ -27,7 +27,7 @@ from typing import Callable, NamedTuple, Optional
 
 from engine.dice_engine.fmath import ltr_sum
 
-from ..data.arrangements import ARRANGEMENTS      # v11 CR-34: `declared_sitting` reads a row's `close`/`quorum`
+from ..data.arrangements import ARRANGEMENTS, abridged      # v11 CR-34: `declared_sitting` reads a row's `close`/`quorum`; B24p.16: `proceeding_row`
 from ..data.requires import (
     RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE, UNKNOWN, binding_from_act, binding_of, evaluate,
 )
@@ -474,6 +474,32 @@ def docketed_under(w: World, matter: Optional[str]) -> set:
     world an act built (`open_case` declines a matter already docketed); more than one only in a
     hand-planted docket, which `_eff_determine` declines rather than choosing between."""
     return {d.get(DOCKET_ARRANGEMENT) for d in docketed(w, matter)}
+
+
+def proceeding_row(w: World, act) -> tuple:
+    """B24p.16: THE PROCEEDING AN ACT OF A VERB THAT PROCEEDS OPENS -- `(row dict, form, move, item)`, the first entry of the verb row's `proceeds` whose
+    `when` holds (RD §D.1). `hearer: cohort` asks `is_cohort` of the person the act addresses (the row's `opponent_operand`, as the fold names its
+    target); `docketed: True` asks `docketed(w, subject)`. A `row` that is an arrangement id is that arrangement; `docket` is the arrangement the docket
+    hears the matter under (`DOCKET_ARRANGEMENT` of the first item `docketed` lists); `form: abridged` is `abridged(row)`, the same row with one turn
+    and the speech's own close. A verb that does not proceed, an act no entry answers, or a matter on no docket (or one whose item names no
+    arrangement) is refused naming the verb: there is no row to proceed under. READ-ONLY; the seam reads it at B24p.19."""
+    row = VERB_TABLE.get(act.verb)
+    entries = getattr(row, "proceeds", ())
+    payload = act.payload if isinstance(act.payload, dict) else {}
+    subject, hearer = payload.get("subject"), w.persons.get(payload.get(row.opponent_operand() if row is not None else "subject"))
+    held = {"hearer": lambda v: hearer is not None and hearer.is_cohort, "docketed": lambda v: bool(docketed(w, subject))}
+    for when, rid, form, move, item in entries:
+        if all(held[key](value) for key, value in when):
+            if rid == "docket":
+                items = docketed(w, subject)
+                rid = items[0].get(DOCKET_ARRANGEMENT) if items else None
+                if rid is None:
+                    raise Unspecified(f"{act.verb!r} proceeds under the docket's row, and {subject!r} is on no docket under one", "world_q.proceeding_row",
+                                      needs="a docketed matter naming the arrangement it is heard under", law="B24p.16, RD §D.1")
+            arrangement = ARRANGEMENTS[rid]
+            return (abridged(arrangement) if form == "abridged" else arrangement), form, move, item
+    raise Unspecified(f"{act.verb!r} has no `proceeds` entry that holds for this act", "world_q.proceeding_row",
+                      needs="a verb row carrying `proceeds:`, its last entry holding for any act", law="B24p.16, RD §D.1")
 
 
 # ===========================================================================

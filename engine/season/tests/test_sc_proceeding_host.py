@@ -23,7 +23,9 @@ from ..queries import person_q
 from ..queries.inputs import Card, Input, Margin, Outcome, Sitting
 from ..seam.ladder import degree_of
 from ..seam.wrappers import sigma as S
-from ..state.carriers import Claim, Office, Person, Record, Tenure
+from ..data.verbs import VERB_TABLE, _check_proceeds
+from ..queries import world_q
+from ..state.carriers import Act, Claim, Office, Person, Record, Tenure
 from ..state.world import World
 from .test_sc_proceeding_module import _key
 
@@ -454,3 +456,65 @@ def test_believed_odds_use_his_own_values_and_an_ordinary_man_for_the_rest(monke
     w.persons["p_mid"].stance, w.persons["p_mid"].pursuits = [("p_low", 9, 9)], {"grain": 0.9}  # a listener's true interior moves ...
     w.persons["p_mid"].attributes = {acuity: 9.0}
     assert true_odds() != before and believe() == believed                                       # ... the true odds and not the believed
+
+
+# B24p.16 -- THE VERB ROWS SAY HOW THEY PROCEED (RD §D.1 to §D.4; V2 p2 §M): `VerbRow.proceeds`, `data/verbs.py::_check_proceeds`,
+# `world_q.proceeding_row`. Nothing dispatches on the cell until B24p.19; the routing is what these read.
+FIVE = ("argue", "tell", "lie", "speak", "interrogate")
+
+
+def _act(verb, **payload):
+    return Act(id=f"a_{verb}", actor="p_low", verb=verb, payload=payload)
+
+
+def test_five_rows_proceed_and_name_a_loadable_row():
+    """Each of the five verbs carries a `proceeds` cell whose every entry names an arrangement the tree loads (or the docket's own row), a
+    form, and a drawing move; no other verb is routed (`covenant`, `interview`, `determine` are their own items'). A planted cell that names a
+    row nothing loads is refused naming the verb: the check observes the failure it excludes."""
+    routed = {v: r for v, r in VERB_TABLE.items() if r.proceeds}
+    assert set(routed) == set(FIVE), sorted(routed)
+    checked = 0
+    for verb, row in routed.items():
+        for when, rid, form, move, item in row.proceeds:
+            assert rid in ROWS or rid == "docket", (verb, rid)
+            assert form in ("full", "abridged", "auto") and PROCEEDING_MOVES[move]["draw"] and item in ("any", "false"), (verb, form, move, item)
+            checked += 1
+        assert row.proceeds[-1][0] == (), verb                                           # a fallback closes every list
+    assert checked >= len(FIVE), checked
+    _check_proceeds(VERB_TABLE)                                                           # control: the shipped table passes
+    entry = (("hearer", "cohort"),), "no_such_row", "full", "argue", "any"
+    with pytest.raises(Unspecified, match="argue"):
+        _check_proceeds({**VERB_TABLE, "argue": replace(VERB_TABLE["argue"], proceeds=(entry, *VERB_TABLE["argue"].proceeds))})
+
+
+def test_argue_to_a_cohort_proceeds_as_a_rally():
+    """An `argue` addressed to a cohort is a rally, in the full form; to one man it is a conversation, in the full form."""
+    w = _world()
+    assert world_q.proceeding_row(w, _act("argue", to="p_mid", subject="p_mid")) == (ROWS["conversation"], "full", "argue", "any")
+    w.persons["p_mid"].weight = 30
+    assert w.persons["p_mid"].is_cohort
+    assert world_q.proceeding_row(w, _act("argue", to="p_mid", subject="p_mid")) == (ROWS["rally"], "full", "argue", "any")
+    assert world_q.proceeding_row(w, _act("interrogate", to="p_mid", subject="p_mid"))[:2] == (ROWS["interrogation"], "full")   # no cohort clause
+
+
+def test_speak_proceeds_abridged_under_the_dockets_row():
+    """A `speak` on a docketed matter proceeds abridged, under the row the docket hears the matter under (`abridged` of it); two matters on
+    two rows read two rows; a matter on no docket has no row to proceed under and is refused naming the verb."""
+    w = _world()
+    w.docket.append({"date": None, "matter": "p_mid", "arrangement": "audience", "petition": None})
+    w.docket.append({"date": None, "matter": "p_other", "arrangement": "arbitration", "petition": None})
+    read = lambda who: world_q.proceeding_row(w, _act("speak", subject=who))
+    assert read("p_mid") == (A.abridged(ROWS["audience"]), "abridged", "argue", "any")
+    assert read("p_other") == (A.abridged(ROWS["arbitration"]), "abridged", "argue", "any")
+    assert read("p_mid")[0]["close"] == "exchange" and ROWS["audience"]["close"] == "bench"      # the row's venue kept, its close the speech's
+    with pytest.raises(Unspecified, match="speak"):
+        world_q.proceeding_row(w, _act("speak", subject="p_high"))
+
+
+def test_a_lie_is_an_argue_on_his_own_false_word():
+    """`lie` proceeds as `tell` does (a conversation, abridged) with the move `argue` and the item `false`, so the speaker is offered his own
+    false items only; `tell` and `argue` offer any."""
+    w = _world()
+    lie, tell = (world_q.proceeding_row(w, _act(v, to="p_mid", subject="p_mid")) for v in ("lie", "tell"))
+    assert lie == (A.abridged(ROWS["conversation"]), "abridged", "argue", "false")
+    assert tell == (A.abridged(ROWS["conversation"]), "abridged", "argue", "any")

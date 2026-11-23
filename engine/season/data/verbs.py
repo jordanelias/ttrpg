@@ -31,13 +31,14 @@ from typing import Optional
 from . import files
 from ...substrate.descriptors import ATTRIBUTES, CAPABILITIES
 from ..gaps import Forbidden, InstrumentDefect, Ungraded, Unspecified
+from .arrangements import ARRANGEMENTS
 from .matrix import MATRIX, Step
 from .requires import (
     KNOWN_PERSON_OPERANDS, RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS, VIA, AllOf, Existence, Relation,
     TypedRequires, build_typed_requires,
 )
 from .rosters import (
-    COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PROCEEDING_MOVES, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS,
     SCRUPLE_OVERRIDDEN, is_event_kind, refusing_pole,
     RUNG_KINDS, STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
@@ -263,6 +264,13 @@ class VerbRow:
     # verb needing more columns is one the design has not finished thinking about*). The column is picked, as U1 §1 picks `capability:`,
     # because a loader default makes a missing value explicit and refusable (B4's third disposition); `04` is not edited.
     regard_sign: Optional[int] = None
+    # B24p.16 (RD §D.1; V2 p2 §M): HOW THE VERB PROCEEDS -- a verb that influences a person by words opens a proceeding, and its row says WHICH and in what
+    # form (R3, R6). A tuple of `(when, row, form, move, item)` entries, the first whose `when` holds read (`world_q.proceeding_row`): `when` a tuple of
+    # `(key, value)` pairs (`hearer`: `cohort`; `docketed`: `True`), empty for the fallback that closes every list; `row` an arrangement id, or `docket` (the
+    # row the docket hears the matter under); `form` `full`, `abridged` or `auto`; `move` a `proceeding_moves` member that draws (`argue`); `item` `any`, or
+    # `false` (the speaker is offered his own false items only, `person_q.false_items`: a `lie` is an `argue` on his own false word, V2 p2 §M).
+    # `()` is the declared absence, every row but five; nothing reads it until the seam does (B24p.19), and `governing:` pools those five rows until then.
+    proceeds: tuple = ()
 
     def referents_of(self, q) -> tuple:
         """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
@@ -721,9 +729,9 @@ def _check_governing_attributes(rows: dict, prizes: dict) -> None:
     for verb, row in rows.items():
         inputs = (prizes.get(row.contests) or {}).get("person_inputs") if row.contests else None
         exempt = inputs == "own"
-        taken = [k for k, held in (("brute", row.brute), ("governing", row.governing), ("exempt prize", exempt)) if held]
-        if len(taken) != 1:
-            bad.append(f"{verb!r} takes {taken or 'none'} of `brute`, `governing` and an exempt prize; it takes exactly one")
+        taken = [k for k, held in (("brute", row.brute), ("governing", row.governing), ("exempt prize", exempt), ("proceeds", row.proceeds)) if held]
+        if len(taken) != 1 and taken != ["governing", "proceeds"]:      # B24p.16: both admitted until B24p.19 deletes the five rows' `governing`
+            bad.append(f"{verb!r} takes {taken or 'none'} of `brute`, `governing`, an exempt prize and `proceeds`; it takes exactly one")
         if row.brute:
             if row.brute not in BRUTE_KINDS:
                 bad.append(f"{verb!r}: `brute: {row.brute}` is none of {sorted(BRUTE_KINDS)}")
@@ -752,6 +760,71 @@ def _check_governing_attributes(rows: dict, prizes: dict) -> None:
                   "attributes; `opposed_attribute:` on a row contested on a `pool` prize) or an exempt prize (`person_inputs: own`)",
             law="B05.24 (ED-IN-0379), Jordan 2026-11-13 -- every verb's dice amount is set by the character's attributes, or it never rolls, or it "
                 "is the subsystem's")
+
+
+# B24p.16: THE KEYS OF ONE `proceeds:` ENTRY, AND THE SET EACH CELL IS A MEMBER OF. Read by `_proceeds_entries` (the normaliser) and `_check_proceeds`.
+_PROCEEDS_KEYS = ("when", "row", "form", "move", "item")
+_PROCEEDS_FORMS = ("full", "abridged", "auto")
+_PROCEEDS_ITEMS = ("any", "false")
+_PROCEEDS_WHEN = {"hearer": ("cohort",), "docketed": (True,)}      # a `when` key and the one value it may take
+_PROCEEDS_DOCKET = "docket"                                         # a `row` that is no arrangement id: the row the docket hears the matter under
+
+
+def _proceeds_entries(verb: str, raw) -> tuple:
+    """A ROW'S `proceeds:` CELL AS ITS ENTRIES (B24p.16): absent is `()`, a single mapping is ONE entry with an empty `when`, a list is its entries in order.
+    Each is `(when, row, form, move, item)` -- `when` a tuple of `(key, value)` pairs, `move` defaulting to `argue`, `item` to `any` (YAML's `false` reads
+    as the cell `false`); `row` and `form` stay `None` where the file names none, for `_check_proceeds` to refuse with the rest. A cell that is no mapping
+    or list of mappings, or an entry key outside `_PROCEEDS_KEYS`, is refused here (invariant 10's rule for a column: a key read by nothing is a typo)."""
+    if raw is None:
+        return ()
+    entries = [raw] if isinstance(raw, dict) else list(raw) if isinstance(raw, (list, tuple)) else None
+    if entries is None or not all(isinstance(e, dict) for e in entries):
+        raise Unspecified(f"verb_table.yaml: {verb!r} `proceeds:` is {raw!r}", "verb_table.yaml: proceeds",
+                          needs="a mapping, or a list of mappings, each `{when?, row, form, move?, item?}`", law="B24p.16, RD §D.1")
+    out = []
+    for e in entries:
+        stray = sorted(set(e) - set(_PROCEEDS_KEYS))
+        if stray:
+            raise Unspecified(f"verb_table.yaml: {verb!r} `proceeds:` names {stray}", "verb_table.yaml: proceeds",
+                              needs=f"only {list(_PROCEEDS_KEYS)} in an entry", law="B24p.16, RD §D.1")
+        when = e.get("when") or {}
+        out.append((tuple(sorted(when.items())) if isinstance(when, dict) else when, e.get("row"), e.get("form"),
+                    e.get("move", "argue"), "false" if e.get("item") is False else e.get("item", "any")))
+    return tuple(out)
+
+
+def _check_proceeds(rows: dict) -> None:
+    """B24p.16: A `proceeds:` CELL IS ROUTING THE LOAD CAN CHECK, OR THE LOAD REFUSES, NAMING EACH ROW THAT IS NOT. `rows` is `{verb: VerbRow}`. A row refused:
+    one that carries `proceeds` with `brute` (R7: a brute function opens nothing); an entry whose `row` is neither an arrangement id (`ARRANGEMENTS`) nor
+    `docket`; whose `form` is outside `full`, `abridged`, `auto`; whose `move` is not a `PROCEEDING_MOVES` member that draws; whose `item` is outside `any`,
+    `false`; whose `when` names a key outside `hearer` (value `cohort`) and `docketed` (value `True`); and a cell whose last entry's `when` is not empty
+    (nothing then answers an act no `when` holds for). `governing` beside `proceeds` is admitted here (`_check_governing_attributes`) and refused from B24p.19."""
+    bad = []
+    for verb, row in rows.items():
+        if not row.proceeds:
+            continue
+        if row.brute:
+            bad.append(f"{verb!r} is brute and carries `proceeds:`: a brute verb opens no proceeding")
+        for when, rid, form, move, item in row.proceeds:
+            if rid != _PROCEEDS_DOCKET and rid not in ARRANGEMENTS:
+                bad.append(f"{verb!r}: `proceeds` row {rid!r} is no arrangement id and not `{_PROCEEDS_DOCKET}`")
+            if form not in _PROCEEDS_FORMS:
+                bad.append(f"{verb!r}: `proceeds` form {form!r} is none of {list(_PROCEEDS_FORMS)}")
+            if not (PROCEEDING_MOVES.get(move) or {}).get("draw"):
+                bad.append(f"{verb!r}: `proceeds` move {move!r} is no `proceeding_moves` member that draws")
+            if item not in _PROCEEDS_ITEMS:
+                bad.append(f"{verb!r}: `proceeds` item {item!r} is none of {list(_PROCEEDS_ITEMS)}")
+            for key, value in (when if isinstance(when, tuple) else ()):
+                if key not in _PROCEEDS_WHEN or value not in _PROCEEDS_WHEN[key]:
+                    bad.append(f"{verb!r}: `proceeds` when {key!r}: {value!r} is outside {_PROCEEDS_WHEN}")
+        if row.proceeds[-1][0] != ():
+            bad.append(f"{verb!r}: the last `proceeds` entry has a `when`; the list ends in an entry that holds for any act")
+    if bad:
+        raise Unspecified(
+            "verb_table.yaml: " + "; ".join(bad), "verb_table.yaml: proceeds",
+            needs="`proceeds:` on a non-brute row only: each entry an arrangement id (or `docket`), a form of full | abridged | auto, a drawing move, an item of "
+                  "any | false, a `when` of hearer: cohort | docketed: true, the last entry with no `when`",
+            law="B24p.16, RD §D.1 to §D.4 (R3, R6, R7): a verb that influences a person by words names the proceeding it opens, and whether in full or abridged")
 
 
 def _load_verb_table() -> dict:
@@ -828,7 +901,8 @@ def _load_verb_table() -> dict:
                       brute=str(r["brute"]).strip() if r.get("brute") else None,
                       brute_note=str(r.get("brute_note") or "").strip(),
                       difficulty=str(r["difficulty"]).strip() if r.get("difficulty") else None,
-                      regard_sign=r.get("regard_sign"))
+                      regard_sign=r.get("regard_sign"),
+                      proceeds=_proceeds_entries(name, r.get("proceeds")))
         # B10.11: THE `regard_sign:` COLUMN, A `regard_signs` MEMBER OR THE LOAD REFUSES (a `True` is no sign: it equals 1 in a set). An absent
         # cell is the declared default -- `-1` on a row done against its subject (`opposed_to_subject`), else `+1` -- the sign `_stance_arm` read before the column.
         if row.regard_sign is None:
@@ -1392,8 +1466,9 @@ def _load_verb_table() -> dict:
             raise SystemExit(
                 f"write_matrix.yaml ({kind}, {fld}) declares `unproduced:` and a verb writes it. "
                 "04 §B.13 #2 -- the declaration is stale; delete it.")
-    # B05.25: EVERY ROW IS ONE OF THREE KINDS (`_check_governing_attributes`).
+    # B05.25: EVERY ROW IS ONE OF FOUR KINDS (`_check_governing_attributes`; B24p.16 added `proceeds`), and a `proceeds:` cell is routing the load checks.
     _check_governing_attributes(out, _PRIZES)
+    _check_proceeds(out)
     return out
 
 

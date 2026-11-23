@@ -53,7 +53,8 @@ def _exempt(row, prizes=PRIZES) -> bool:
 
 
 def _kinds_of(row, prizes=PRIZES) -> list:
-    return [k for k, held in (("a", bool(row.brute)), ("b", bool(row.governing)), ("c", _exempt(row, prizes))) if held]
+    """(a) brute, (b) governing, (c) an exempt prize, (d) proceeds (B24p.16: a verb that opens a proceeding)."""
+    return [k for k, held in (("a", bool(row.brute)), ("b", bool(row.governing)), ("c", _exempt(row, prizes)), ("d", bool(row.proceeds))) if held]
 
 
 def _check(rows=None, prizes=None):
@@ -65,7 +66,8 @@ def _check(rows=None, prizes=None):
 def test_every_verb_row_names_its_attributes_or_its_authority_or_its_subsystem():
     checked = 0
     for verb, row in VERB_TABLE.items():
-        assert len(_kinds_of(row)) == 1, (verb, _kinds_of(row))                # exactly one of (a), (b), (c)
+        kinds = _kinds_of(row)
+        assert len(kinds) == 1 or kinds == ["b", "d"], (verb, kinds)           # exactly one of (a), (b), (c), (d); (b)+(d) only until B24p.19
         if row.contests and PRIZES[row.contests].get("person_inputs") == "pool":
             assert row.governing and not row.brute, verb                       # a pool-prize row takes (b)
             assert row.opposed_attribute in descriptors.ATTRIBUTES, verb       # and names who resists it
@@ -76,8 +78,8 @@ def test_every_verb_row_names_its_attributes_or_its_authority_or_its_subsystem()
             assert set(row.governing) <= set(descriptors.ATTRIBUTES), verb
         checked += 1
     assert checked == len(VERB_TABLE) == 67, checked
-    kinds = [_kinds_of(r)[0] for r in VERB_TABLE.values()]
-    assert (kinds.count("a"), kinds.count("b"), kinds.count("c")) == (32, 31, 4), kinds   # B05.24's count of the interim cells
+    kinds = [k for r in VERB_TABLE.values() for k in _kinds_of(r)]
+    assert (kinds.count("a"), kinds.count("b"), kinds.count("c"), kinds.count("d")) == (32, 31, 4, 5), kinds   # the five interim cells also proceed
     assert _check() is None                                                    # the shipped table passes the loader's own check
 
 
@@ -175,7 +177,7 @@ def test_a_rolled_act_does_mint_a_roll_stream_under_the_same_counter(monkeypatch
 def test_a_row_naming_none_is_refused_at_load():
     for verb in ("give", "examine", "tell"):                                   # one row of each kind (a), (b), (b with an opposition)
         row = VERB_TABLE[verb]
-        bare = dataclasses.replace(row, brute=None, brute_note="", governing=(), opposed_attribute=None)
+        bare = dataclasses.replace(row, brute=None, brute_note="", governing=(), opposed_attribute=None, proceeds=())
         with pytest.raises(Unspecified, match=verb):
             _check({**VERB_TABLE, verb: bare})
     with pytest.raises(Unspecified, match="examine"):                           # more than one of (a), (b), (c)

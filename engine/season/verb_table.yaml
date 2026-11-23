@@ -102,6 +102,10 @@ verbs:
     beneficiary: "actor"
     governing:   [attr.social.charisma, attr.social.attunement, attr.mind.acuity]
     opposed_attribute: attr.spirit.will
+    proceeds:
+      - {when: {hearer: cohort}, row: rally, form: full}
+      - {row: conversation, form: full}
+    proceeds_note: "B24p.16 (RD §D.1, R3): an argument is the proceeding itself, in the full form -- a rally where the hearer is a cohort, a conversation where he is one man. Read by the seam at B24p.19, which deletes the interim `governing:` and `opposed_attribute:` above. `lie`'s entry is this row's, with the item the liar's own false word."
     governing_note: "B05.25 INTERIM [ASSUMPTION; medium; Jordan to correct at BA1.13]: a hand-off to the social subsystem (R3, R6); B24p.16 writes this row's `proceeds:` cell beside these, B24p.19 deletes `governing:` and `opposed_attribute:`."
     beneficiary_note: "v9 IN-12 step 9 (#453 §9.4: *'beneficiary `actor`'*): THE ARGUER -- he argues for what he holds right; the hearer is the counterparty, not the party served."
     referent_class: Proposition
@@ -587,6 +591,8 @@ verbs:
     beneficiary: "subject"
     governing:   [attr.social.attunement, attr.mind.acuity, attr.social.grace]
     opposed_attribute: attr.social.attunement
+    proceeds:    {row: conversation, form: abridged, move: argue, item: false}
+    proceeds_note: "B24p.16 (RD §D.1, R6; V2 p2 §M): a lie is an `argue` whose item is the liar's own false word or forgery, so the move is `argue` (`deceive` is not built, V2 p4 §F 1) and the item `false` (`person_q.false_items`); abridged, in the room the lie is told in. Read by the seam at B24p.19."
     governing_note: "B05.25 INTERIM [ASSUMPTION; medium; Jordan to correct at BA1.13]: a hand-off to the social subsystem (R3, R6); B24p.16 writes this row's `proceeds:` cell beside these, B24p.19 deletes `governing:` and `opposed_attribute:`."
     requires:    "the liar holds a claim on the subject, and the person told is with the liar"
     requires_typed:
@@ -1664,6 +1670,8 @@ verbs:
     beneficiary: "none"
     governing:   [attr.social.charisma, attr.mind.acuity, attr.social.grace]
     opposed_attribute: attr.spirit.will
+    proceeds:    {row: docket, form: abridged}
+    proceeds_note: "B24p.16 (RD §D.1, R6): a speech at a sitting is abridged, under the row the docket hears the matter under (`world_q.proceeding_row`); B24.08 keeps `speak` a single filing act, which the abridged form is. Read by the seam at B24p.19."
     governing_note: "B05.25 INTERIM [ASSUMPTION; medium; Jordan to correct at BA1.13]: a hand-off to the social subsystem (R3, R6); B24p.16 writes this row's `proceeds:` cell beside these, B24p.19 deletes `governing:` and `opposed_attribute:`."
     requires:    "a live occasion at the actor's venue whose docket names the subject"
     requires_typed:
@@ -1801,6 +1809,8 @@ verbs:
     beneficiary: "subject"
     governing:   [attr.mind.acuity, attr.social.attunement]
     opposed_attribute: attr.spirit.will
+    proceeds:    {row: conversation, form: abridged}
+    proceeds_note: "B24p.16 (RD §D.1, R6): a telling is a passing word put to one man, abridged. Read by the seam at B24p.19."
     governing_note: "B05.25 INTERIM [ASSUMPTION; medium; Jordan to correct at BA1.13]: a hand-off to the social subsystem (R3, R6); B24p.16 writes this row's `proceeds:` cell beside these, B24p.19 deletes `governing:` and `opposed_attribute:`."
     requires:    "the teller holds a claim on the subject, and the person told is with the teller"
     requires_typed:
@@ -1976,6 +1986,8 @@ verbs:
     beneficiary: "actor"
     governing:   [attr.social.attunement, attr.social.charisma]
     opposed_attribute: attr.spirit.will
+    proceeds:    {row: interrogation, form: full}
+    proceeds_note: "B24p.16 (RD §D.1, R6): interrogation for information is a full questioning. RD §D.1 spells the row `questioning`, which is the RITE; the arrangement that opens it is `interrogation` (`arrangements.yaml`, `rite: questioning`) [ASSUMPTION; Jordan to correct: the arrangement id, since `_check_proceeds` takes arrangement ids]. Read by the seam at B24p.19."
     governing_note: "B05.25 INTERIM [ASSUMPTION; medium; Jordan to correct at BA1.13]: a hand-off to the social subsystem (R3, R6); B24p.16 writes this row's `proceeds:` cell beside these, B24p.19 deletes `governing:` and `opposed_attribute:`."
     beneficiary_note: "#453 §9.1: `actor` -- what a confession settles is the questioner's matter, and the seat he acts through is carried on `via`, not on an operand."
     requires:    "the subject is a person, held in a live `detain`, and a docketed petition's `terms` names him"
