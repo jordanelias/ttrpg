@@ -53,7 +53,7 @@ from ..data.rosters import (
     AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, SCAR_HOLDS, SEEN_PREDICATE, capability_rows, require_use_site,
     roster, roster_map,
 )
-from ..state.carriers import Person, Said
+from ..state.carriers import Person, PersonInterior, Said
 from ..state.ledgers import present_confidence
 from ..trace_log import TRACE
 
@@ -1048,6 +1048,15 @@ def _scar_shifted(p: Person, shift: float) -> dict:
 def projected_axes(p: Person, shift: float = 0.0) -> dict:
     """`p`'s pursuits projected to the axes, `to_axes(crisis_weights(p, shift))`: person-side (AX-2)."""
     return to_axes(crisis_weights(p, shift))
+
+
+def decisiveness(p: PersonInterior, shift: float = 0.0) -> float:
+    """HOW FIRMLY `p`'s PURSUITS POINT ONE WAY: the length of `projected_axes(p, shift)`. The draw in
+    `decision/choose.py::_sample_order` is read against score margins, which scale with this, so it is
+    the person's decisiveness at a given `choice_temperature`. Person-side (AX-2); stores nothing.
+    Summed in `_AXES` order by `ltr_sum`, the order of `pursuit_cosine_axes`'s norm."""
+    v = projected_axes(p, shift)
+    return math.sqrt(ltr_sum(v[a] ** 2 for a in _AXES))
 
 
 def conviction_after_crisis(p: Person, among: frozenset | None = None) -> dict:

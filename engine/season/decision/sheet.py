@@ -57,7 +57,7 @@ from typing import Any, Callable, Iterable, Mapping, Optional, Sequence
 from ...substrate.descriptors import ATTRIBUTE_GLOSSES, CAPABILITIES, attribute_key
 from ..data.rosters import AFFILIATIONS, SEEN_PREDICATE
 from ..gaps import Forbidden
-from ..queries.person_q import LedgerReader
+from ..queries.person_q import LedgerReader, decisiveness
 from ..state.carriers import Person, PersonInterior, Question, View, fade_of, frozen
 from .choose import make_ranker, release
 from .options import ledger_weigh
@@ -131,7 +131,10 @@ class DevelopmentSheet:
     season remainder (`ask_budget()`). The own-field copies are the inputs `make_chooser` admits
     (`pursuits`, `stance`, `conviction`, `scar`) plus `body` and `capability`, and (B04.13) `attributes`, `thread_sensitivity`, `heritage` and `tenures` (his live edges as
     `(kind, object)`: seats, oaths, commits, residence); derived lines
-    (`confliction`, `crisis_weights`' shifted weights) stay derived and are not stored here."""
+    (`confliction`, `crisis_weights`' shifted weights) stay derived and are not stored here, with one line SHOWN
+    that the person does not hold: `decisiveness`, `person_q.decisiveness(p, scar_weight_shift)` read once when the
+    sheet is built -- how firmly his pursuits point one way, the length of his projected pursuit vector, which the
+    draw's temperature is read against. The person stores nothing."""
     person_id: str
     view: View
     question: Question
@@ -149,6 +152,7 @@ class DevelopmentSheet:
     thread_sensitivity: Optional[int]
     heritage: Optional[str]
     tenures: tuple
+    decisiveness: float          # derived, B10.27: `person_q.decisiveness(p, fx.get("scar_weight_shift"))`
 
 
 def development_space(fx: Any, mint: Callable[[str, str, str], str],
@@ -175,7 +179,8 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
         sheet = DevelopmentSheet(p.id, v, q, tuple(copy.deepcopy(c) for c in cands), n, frozen(p.capability),
                                  frozen(p.pursuits), tuple(p.stance), frozen(p.conviction),
                                  frozen(p.scar), p.body, frozen(p.attributes), p.thread_sensitivity, p.heritage,
-                                 tuple((t.kind, t.object) for t in p.tenures if t.live))
+                                 tuple((t.kind, t.object) for t in p.tenures if t.live),
+                                 decisiveness(p, fx.get("scar_weight_shift")))
         chosen = [int(i) for i in pick(sheet)]
         if len(set(chosen)) != len(chosen) or any(not 0 <= i < len(cands) for i in chosen):
             raise Forbidden(f"{p.id}'s pick {chosen} is not a selection from the {len(cands)} candidates "

@@ -288,6 +288,9 @@ DEFAULT_FIXTURES = Fixtures(
     # OPTIMUM: most contested rows score alike at stance 0, so the share is a function of how tau
     # compares to the score gaps. It goes stale under any later mover of those gaps (B10-18's,
     # CL-PERSON's first non-neutral value).
+    # ⚠ THE TEMPERATURE IS IN SCORE UNITS, AND SCORE MARGINS SCALE WITH `person_q.decisiveness` (the length of the
+    # person's projected pursuit vector, shown on `decision/sheet.py::DevelopmentSheet`): the 46 persons holding a
+    # question at round 0 of `build_realm(0)` read 0.14 to 0.89, so one temperature is a different draw for each.
     # [ASSUMPTION; medium; Jordan to correct; revert: choice_temperature 0.1, one re-pin]
     # [JUSTIFIED: engine/season/hole_register.yaml H-96 -- `site: Fixtures choice_temperature`, graded `measured`; the alphabetical tie-break is the measured defect and this is the injected magnitude of its remedy, swept 0 / 0.01 / 0.02 / 0.03 / 0.05 / 0.1 / 0.25 / 0.5 / 1.0, the row's own `sweep:`]
     choice_temperature=0.05,
