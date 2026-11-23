@@ -1,0 +1,17 @@
+# The test-lane ratchet's floor: how many tests each lane may hold, and how many files tools/ may track.
+# Owner of the rule: tools/ci_test_lane_ratchet.py (blocking, CI job `unit-tests`). Jordan, 2026-11-23: "Do NOT
+# allow unwarranted accretion to happen." A lane may not hold more tests than `base` plus the `added` of its
+# `warrants`; it may not hold FEWER either without `--tighten` (the floor follows every retirement down, so a
+# retirement is never spent again by someone else). A warrant is a deliberate edit: the batch, how many it adds, and
+# the game-state behaviour those tests observe (or, for tools/, the caller). Nothing else raises the cap.
+# Lanes are assigned in conftest.py; `process` is the leftover lane and is meant to reach zero.
+lanes:
+  season_loop:    {base: 2793, warrants: []}
+  engine:         {base: 1041, warrants: []}
+  combat:         {base: 473,  warrants: []}
+  mass_battle:    {base: 324,  warrants: []}
+  social_contest: {base: 0,    warrants: []}
+  threadwork:     {base: 22,   warrants: []}
+  process:        {base: 8,    warrants: []}
+tools:
+  files: {base: 55, warrants: []}   # 54 + the ratchet itself

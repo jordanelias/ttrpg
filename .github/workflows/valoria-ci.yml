@@ -360,6 +360,10 @@ jobs:
       #
       # IF THIS EVER NEEDS TO BE FASTER STILL: split into JOBS whose union is the full
       # collection. Do not select a subset of it.
+      # Jordan, 2026-11-23: "Do NOT allow unwarranted accretion to happen." No test lane, and not tools/, may hold
+      # more than references/test_lane_caps.yaml allows; the check collects, it runs no test (about 30 s).
+      - name: Test-lane ratchet (no unwarranted accretion)
+        run: python tools/ci_test_lane_ratchet.py --base-ref origin/main
       - run: python -m pytest tests/valoria -q -n auto
       # [SPLIT 2026-10-02] `engine/season/tests` and `register --requirements` MOVED to the
       # `season-tests` job below (see the note at this job's cap). The union of the two jobs is the
