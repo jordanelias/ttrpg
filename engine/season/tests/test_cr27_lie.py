@@ -154,11 +154,18 @@ def test_the_offer_is_gated_in_opening_set_and_not_in_resolvable_verbs():
 
 # ---- the row ------------------------------------------------------------------------------------
 
+def _less_own_kind(col):
+    """A column less `scruple.overridden` (B10.24): `lie` is a refusable row, so it declares the act's own kind beside `tell`'s."""
+    if isinstance(col, dict):
+        return {k: _less_own_kind(v) for k, v in col.items()}
+    return type(col)(k for k in col if k != "scruple.overridden") if isinstance(col, (tuple, list)) else col
+
+
 def test_the_row_shares_tells_cell_and_kinds_and_mints_no_kind_of_its_own():
     lie, tell = VERB_TABLE["lie"], VERB_TABLE["tell"]
     for col in ("eligibility", "beneficiary", "counterparty", "contests", "requires_typed", "emits",
                 "emits_on_refusal", "writes", "emits_by_degree", "refusals_by_clause"):
-        assert getattr(lie, col) == getattr(tell, col), col
+        assert _less_own_kind(getattr(lie, col)) == getattr(tell, col), col
     assert LIE_VERBS == {"lie"}
     assert not any(k.startswith("lie") for r in VERB_TABLE.values() for k in (*r.emits, *r.emits_on_refusal))
 

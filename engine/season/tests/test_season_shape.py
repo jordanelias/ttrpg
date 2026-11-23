@@ -2556,7 +2556,7 @@ def test_t2_one_rebind_moves_score_and_gate(monkeypatch):
     weighs at -0.4 (the refusing pole). Under A `v0` sits past the weight (+0.3: refused, score
     -0.12) and `v1` does not (-0.6); under B it is the other way round (`v0` -0.6: tolerated, score
     +0.24). The score is read through `_sample_order`, the one place `make_chooser` hands it on; the
-    gate through `opening_set`'s formed set. A second `ALIGNMENT` in `decision/options.py` would
+    gate through the ranker's formed set (`make_ranker`, B10.24). A second `ALIGNMENT` in `decision/options.py` would
     leave `refuses` reading the stale copy, the gate half of this test would see A's verdict under
     B, and it would fail -- the §0.1 pt 1 read/write asymmetry this move exists to remove."""
     from ..decision import choose as _choose
@@ -2601,7 +2601,7 @@ def test_t2_one_rebind_moves_score_and_gate(monkeypatch):
 
     def reading(table):
         monkeypatch.setattr(data_verbs, "ALIGNMENT", table)
-        gate = {c.verb for c in _options.opening_set(p, v, q, fx_gate)}
+        gate = {c.verb for c in _choose.make_ranker(fx_gate)(p, v)}      # B10.24: the gate is the ranker's, after scoring
         return scores(), gate
 
     score_a, gate_a = reading({axis: {v0: 0.3, v1: -0.6}})

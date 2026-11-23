@@ -604,7 +604,15 @@ class Scene:
     of the candidates still unspent when it was taken -- `choose.deciding_term`'s label for it (`pursuit`, `stance`, `fit`, a `+`
     of them, `draw`, `tiebreak`, `sole` or `overdetermined`). `decision/` stamps it (`choose.pack_scenes`); the Scene is its own
     return value, so this is no write, and nothing is hashed from it. `""` is a Scene packed from a list no chooser ranked (a
-    hand-built one, or a player's pick), where no deliberation said what decided it."""
+    hand-built one, or a player's pick), where no deliberation said what decided it.
+
+    A SECOND DEPARTURE, NAMED THE SAME WAY (B10.24; B4's third disposition; `04` not edited): `forgone`, `((verb, subject, margin), ...)`,
+    the candidates his scruple (`decision/options.py::scruple`) struck that he ranked above what he did -- the struck candidates whose
+    score exceeded the one that leads this Scene -- and, once a strike can be a draw, the candidates it left standing at a positive
+    margin that this Scene carries. It is the chooser's record of what was given up, NOT a belief the person holds about himself.
+    `choose.pack_scenes` stamps it from the ranker; its one reader is the fold (`loop/resolve.py::_scruple_overridden`), which
+    emits `scruple.overridden` where the act's own `(verb, subject)` stands in it at a positive margin. `()` is a Scene whose
+    deliberation struck nothing (the gate unarmed, the shipped control) or that no chooser ranked."""
     id: str
     actor: str
     acts: list = field(default_factory=list)
@@ -619,6 +627,7 @@ class Scene:
     # the Event. Adding it to match a type signature would be the defect the idiom names.
     occasion: Optional["Question"] = None
     decided: str = ""      # the deciding term of the Scene's first act; the docstring names it (a Layer 1 departure)
+    forgone: tuple = ()    # `((verb, subject, margin), ...)`: what his scruple struck that he ranked above his lead act; the docstring names it
 
     # roster-exempt: MECHANISM. `PLAIN_COST` is the DEFINITION OF THE UNIT -- one ordinary scene
     # is one scene action -- not a tunable value. `H-77` tunes what an EXTENDED scene costs

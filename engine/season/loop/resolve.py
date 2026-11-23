@@ -321,6 +321,9 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
 # `G6` (`H-197`): declared on `tell`'s told bands; kept only when `_confidence_broken` says so.
 CONFIDENCE_BROKEN = "confidence.broken"
 
+# B10.24: declared on every row `rosters.yaml: pursuit_axes.refusable` lists; kept only when `_scruple_overridden` says so.
+SCRUPLE_OVERRIDDEN = "scruple.overridden"
+
 # B09.11: the kind `(Person, scar)` declares (`write_matrix.yaml`), emitted by `_scar_witnesses` beside its write.
 SCAR_TAKEN = "scar.taken"
 # B10.07: the same row's kind for a count that falls by vindication (`Fixtures scar_vindication`, `H-468`) [ASSUMPTION: the kind's name].
@@ -568,6 +571,9 @@ def _fold(self, w: "World", token: Token, a: Act,
     # revert is the one fixture value). Any other band-keyed row folded with no degree still raises (`H-115`).
     _undrawn = _degree is None and row.emits_by_degree and armed_route_off(a.verb, w.fixtures)
     _declared = row.emits_at(UNROUTED_BAND if _undrawn else _degree)
+    # B10.24: `scruple.overridden` is the ACT's, not an effect's earning: it leaves the `earned` intersection and is emitted below, graded by no band.
+    _gives_way = SCRUPLE_OVERRIDDEN in _declared and _scruple_overridden(w, a)
+    _declared = tuple(k for k in _declared if k != SCRUPLE_OVERRIDDEN)
     kinds = tuple(k for k in _declared if k in earned) if earned else _declared
     # v9 IN-18 `G6` (`H-197`): `confidence.broken` IS EARNED BY THE ACT, NOT BY THE BAND -- declared on
     # `tell`'s told bands, emitted only when the act breaks a circle (`_confidence_broken`).
@@ -612,7 +618,22 @@ def _fold(self, w: "World", token: Token, a: Act,
     # reading, rare in computed play, not a Jordan question.
     if changed:
         _scar_witnesses(w, token, a, out, self._scar_tally)
+    if _gives_way:
+        out.extend(_act_events(self, w, a, (SCRUPLE_OVERRIDDEN,), None, None, verdict.observed))
     return out
+
+
+def _scruple_overridden(w: "World", a: Act) -> bool:
+    """B10.24: DID THE ACTOR DO WHAT HIS OWN SCRUPLE FORBADE HIM? True where the Scene the act was released in (`w.acts.scene_of`)
+    keeps, in its `forgone`, the act's own `(verb, subject)` at a positive margin -- a candidate his scruple (`options.scruple`)
+    marked and the chooser let stand, so he acted against it. `Scene.forgone` is the chooser's record, read here and nowhere else; an
+    act with no Scene (a hand-built one) or a Scene that struck nothing is False. The Event is `confidence.broken`'s shape, EARNED BY
+    THE ACT, NOT BY THE BAND, and for the same forced choice: the verb row declares the kind and the fold keeps it only on this."""
+    sc = w.acts.scene_of(a.id)
+    if sc is None:
+        return False
+    subject = subject_of(a)
+    return any(v == a.verb and s == subject and m > 0.0 for v, s, m in sc.forgone)
 
 
 def _confidence_broken(w: "World", a: Act, row: "VerbRow") -> bool:

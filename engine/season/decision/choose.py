@@ -45,10 +45,11 @@ from ..queries.person_q import (
     believed_capability, confliction, intent_named, intent_said, refused_before, regard, stance_toward,
 )
 from ..state.carriers import EFFORT, Act, Candidate, Person, Question, Scene, Sensation, View, fade_of
+from ..trace_log import TRACE
 # `project` is DEFINED in `options.py` (see this module's docstring) and imported here because
 # `make_chooser`'s score calls it; `options` never imports this module.
 # `seat_of` is `options.py`'s own G3 helper (`via=seat_of(...)`, below).
-from .options import VIOLENT_OPPONENT_VERBS, opening_set, project, seat_of, subject_is_opponent
+from .options import VIOLENT_OPPONENT_VERBS, opening_set, project, refusal_tolerance, scruple, seat_of, subject_is_opponent
 # `options.py`'s one reader of a `judgement` row (`competence` is its other caller), under public names here: a call, not a copy (B10.28; CR-93 premise correction 2).
 from .options import _judgement_factor as judgement_factor, _judgement_rows as judgement_rows
 
@@ -618,8 +619,13 @@ class Ranked(list):
     (`deciding_term`'s label) of candidate `c` among the candidates still unspent when `c` was taken (`c` and those after
     it in the order), `""` for a candidate not in the order. `pack_scenes` reads it by `getattr` to stamp `Scene.decided`, so
     a list that is not a `Ranked` (a player's pick, a hand-built list) packs Scenes stamped `""`. It scores nothing: `decide`
-    is a closure over the terms the ranker itself summed (the ones `watch` is handed)."""
+    is a closure over the terms the ranker itself summed (the ones `watch` is handed).
+
+    It carries `forgone_of(lead, chunk)` beside it (B10.24; `Scene.forgone`'s docstring): the `((verb, subject, margin), ...)` a Scene
+    led by `lead` and carrying `chunk` keeps of what his scruple struck, `pack_scenes` reading it by `getattr` as it reads `decide`.
+    The ranker's strike is the carrier's one writer; a list that is not a `Ranked` packs Scenes whose `forgone` is `()`."""
     decide: Optional[Callable[[Candidate], str]] = None
+    forgone_of: Optional[Callable[[Candidate, list], tuple]] = None
 
 
 def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
@@ -674,7 +680,8 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
                 draw: Optional[Callable[[str, str], Any]] = None,
                 watch: Optional[Callable[..., None]] = None) -> Callable[..., list]:
     """`rank(p, v) -> list[Candidate]`: THE SHIPPED POLICY'S ORDER over the person's own candidate set
-    -- `opening_set`, narrowed to `verbs`, scored, effort-settled and sampled -- and nothing packed.
+    -- `opening_set`, narrowed to `verbs`, scored, struck by his scruple (the armed gate, B10.24), effort-settled and sampled -- and
+    nothing packed.
 
     v10 REM-30 (IN-47): split out of `make_chooser` unchanged, so the automated chooser and the player's
     development space (`decision/sheet.py::development_space`) read ONE candidate set in ONE order: the
@@ -708,6 +715,29 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
         # ⚠ SCORED ONCE, NOT TWICE. `score` is pure in `c` given the closure, so each candidate is
         # scored once here and `_sample_order` reads it back from `_scores`.
         _scores = {id(c): score(c) for c in cands}
+        # B10.24 (ED-IN-0261's deontological gate, moved here from `opening_set`: AFTER scoring, BEFORE the sample, so a struck
+        # candidate's score is known): a candidate whose verb his scruple forbids (`options.scruple` > 0 at his `refusal_tolerance`)
+        # is struck from the order. The strike is the threshold, `scruple > 0`; a draw on the margin is B10.25's and changes the
+        # `struck` line only. What is struck, with its margin and score, is kept (`Ranked.forgone_of`); a candidate with a positive margin
+        # the strike leaves standing is kept too, for the fold's `scruple.overridden` (`loop/resolve.py::_scruple_overridden`).
+        axis = fx.get("refusal_axis")
+        tolerance = refusal_tolerance(p, axis)
+        marked: list = []           # (Candidate, margin, score, struck): every candidate with a positive margin
+        if tolerance is not None:
+            kept = []
+            for c in cands:
+                margin = scruple(c.verb, axis, tolerance)
+                if margin <= 0.0:
+                    kept.append(c)
+                    continue
+                struck = True        # B10.25: the draw on `margin`
+                marked.append((c, margin, _scores[id(c)], struck))
+                if struck:
+                    TRACE.note(f"{p.id} refuses {c.verb!r}: its `{axis}` alignment lies {margin:.3f} past his tolerance "
+                               f"{tolerance:+.3f} toward the refused pole (ED-IN-0261)", "H-146")
+                else:
+                    kept.append(c)
+            cands = kept
         # CP-T01-05 NPC half: the person may put effort behind a contested act (`npc_effort`); `off` is a no-op.
         cands, _scores = settle_efforts(cands, _scores, score, fx)
         ranked = score_order(cands, _scores)
@@ -733,8 +763,19 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
                 return ""
             tail = order[i:]
             return deciding_term(list(tail), [_terms[id(x)] for x in tail], c, tau)["decider"]
+
+        def forgone_of(lead: Candidate, chunk: list) -> tuple:
+            # B10.24: a STRUCK candidate that out-scored the Scene's lead (what he gave up for what he did), and a standing one with a
+            # positive margin that this Scene carries (the act the fold looks for). `(verb, subject, margin)`, in the order struck.
+            if not marked or id(lead) not in _scores:
+                return ()
+            lead_score = _scores[id(lead)]           # the kept candidates' (effort-settled) scores: what the Scene's lead scored
+            carried = {(c.verb, c.subject) for c in chunk} | {(lead.verb, lead.subject)}
+            return tuple((c.verb, c.subject or "", margin) for c, margin, score, struck in marked
+                         if (score > lead_score if struck else (c.verb, c.subject) in carried))
         out = Ranked(sampled)
         out.decide = decide
+        out.forgone_of = forgone_of
         return out
     return rank
 
@@ -869,6 +910,7 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
     width = 1 if rule == "one_per_scene" else (len(ranked) if per is None else per)
 
     decide = getattr(ranked, "decide", None)        # a `Ranked`'s: what decided a candidate (`Scene.decided`); `None` of any other list
+    forgone_of = getattr(ranked, "forgone_of", None)    # a `Ranked`'s: what his scruple struck (`Scene.forgone`, B10.24); `None` of any other list
 
     def scene(n: int, chunk: list, lead: Optional["Candidate"] = None) -> "Scene":
         # `lead` is the candidate the Scene's first act was taken from, where `chunk` holds a rebuilt copy of it (the unaffordable effort below)
@@ -904,7 +946,8 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                           via=seat_of(p, c)) for c in chunk],
                      # `H-77`: `Scene.cost` prices the scene from the `slots` it fills.
                      occasion=occasion,
-                     decided="" if decide is None else decide(chunk[0] if lead is None else lead))
+                     decided="" if decide is None else decide(chunk[0] if lead is None else lead),
+                     forgone=() if forgone_of is None else forgone_of(chunk[0] if lead is None else lead, chunk))
 
     # ⚠ THE BOUND IS THE COST, NOT THE SCENE COUNT: once `extended` is set, five greedy scenes
     # cost ten against a budget of five, so a packer bounded by count would overspend by

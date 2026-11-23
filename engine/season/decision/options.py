@@ -104,8 +104,6 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     the only eligibility kind that still declines unconditionally (`person_side_eligible`)."""
     TRACE.query("opening_set", "person")
     out: list[Candidate] = []
-    axis = fx.get("refusal_axis")
-    tolerance = refusal_tolerance(p, axis)
     tick, decay = fade_of(p)     # B09.01: his claims are read at his tick, faded (`state/ledgers.py::present_confidence`)
     weigh = ledger_weigh(p, fx, tick)
     # Own-ledger reads every row asks alike, computed at most once per call and only when a row
@@ -152,10 +150,8 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 and evaluate(row.requires_typed, OwnStateReader(p, fx),
                              binding_of(p.id, {})).value is not True):
             continue
-        if tolerance is not None and refuses(verb, axis, tolerance):
-            TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment lies further toward the "
-                       f"other pole than their own projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
-            continue
+        # B10.24: THE DEONTOLOGICAL GATE IS NOT HERE. It moved to `choose.make_ranker`, after scoring and before the sample, so the
+        # struck candidate's score is known and the Scene can keep what was given up (`Scene.forgone`).
         # v9 IN-12 step 10 (`rosters.yaml: held_document_declines`): A VERB A PERSON DOES NOT FORM WHILE HE
         # HOLDS A DOCUMENT OF A NAMED KIND ABOUT HIMSELF -- `conceal` while he holds a cover (#453 §9.3's
         # person-side decline). His own Tenures and own ledger, no World (`holds_own_document`).
@@ -557,16 +553,15 @@ def refusal_tolerance(p: Person, axis: Optional[str]) -> Optional[float]:
     an alignment cell does, so the two are compared on one scale; the raw weight's size moves with
     how many pursuits the registry authors and is not. Read through `data.pursuits.to_axes`
     (`project`), the norm in `_AXES` order (`person_q.decisiveness`).
-    `None` when `refusal_axis` is unset -- the control arm, under which `opening_set` refuses
+    `None` when `refusal_axis` is unset -- the control arm, under which `choose.make_ranker` strikes
     nothing. The axis is whatever `Fixtures` names, checked against the live roster, never a
     literal here.
 
     ⚠ RUNS `project(p)` TWICE MORE FOR THE SAME PERSON `choose()` PROJECTS FOR `score` (`decisiveness`
     is the second), AND THIS IS KNOWN AND DEFERRED, NOT MISSED. Dormant today -- `refusal_axis` ships unset, and this
-    line short-circuits above before `project` is ever called. Threading the caller's own
-    projection through would need an optional parameter on `opening_set` itself, which breaks
-    every test/harness spy pinned to its current four-parameter arity; worth doing WITH `H6`, when the gate ships live and the
-    cost stops being theoretical, not as a speculative widening now."""
+    line short-circuits above before `project` is ever called. The ranker holds the shifted projection in its memo,
+    but this reads the unshifted weight (the `scar_shift` note above); threading one through is worth doing WITH `H6`,
+    when the gate ships live and the cost stops being theoretical, not as a speculative widening now."""
     if axis is None:
         return None
     require_member(axis, PURSUIT_AXES, f"refusal axis {axis!r} is not on the pursuit_axes roster",

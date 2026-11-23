@@ -10,10 +10,15 @@ import math
 
 import pytest
 
+from ..boot.chooser import chooser
 from ..boot.realm import build_realm
 from ..data import verbs as data_verbs
+from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.rosters import _ROSTERS, PURSUIT_AXES, refusable
+from ..decision import choose as _choose
 from ..decision import options as _options
+from ..loop.driver import SeasonDriver, resolvable_verbs
+from ..state.carriers import subject_of
 from .test_cr21_cells import _deontological_axis
 
 
@@ -83,3 +88,79 @@ def test_scruple_is_zero_outside_the_set_and_positive_past_the_tolerance(monkeyp
             assert _options.refuses(v, axis, tol) == (_options.scruple(v, axis, tol) > 0.0)
             checked += 1
     assert checked == 21
+
+
+def test_forgone_scores_exceed_released_lead(monkeypatch):
+    """B10.24: armed, the gate strikes AFTER scoring and the Scene keeps what was given up. On a seed-0 realm season with a
+    planted refusable verb (never the shipped cells), every Scene's `forgone` is exactly the struck candidates that out-scored
+    the Scene's first act, each at its positive margin; the oracle is the score the chooser itself computed, recorded as it
+    scored (the struck candidate's included), not read back off the carrier."""
+    axis = _deontological_axis()
+    planted = "create_record"             # the commonest act of the seed-0 season: a struck candidate that out-scores the lead is likely
+    table = {a: dict(cells) for a, cells in data_verbs.ALIGNMENT.items()}
+    table[axis][planted] = 0.9            # past every tolerance short of 0.9: refused by nearly every cast member
+    w = build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("refusal_axis", axis))
+    monkeypatch.setattr(data_verbs, "ALIGNMENT", table)
+    monkeypatch.setitem(_ROSTERS["pursuit_axes"], "refusable", {axis: [planted]})
+
+    scored: list = []                     # (actor, verb, subject, score), in scoring order, cleared at each release
+    inner_terms, inner_release = _choose.score_terms, _choose.release
+    seen = {"scenes": 0, "forgone": 0, "struck_persons": 0}
+
+    def spy_terms(p, c, fx, memo, odds=None):
+        t = inner_terms(p, c, fx, memo, odds)
+        scored.append((p.id, c.verb, c.subject or "", _choose.score_total(t)))
+        return t
+
+    def spy_release(p, ranked, n_scenes, fx, mint, q, draw=None):
+        scenes = inner_release(p, ranked, n_scenes, fx, mint, q, draw)
+        seg, scored[:] = dict(((v, s), sc) for _, v, s, sc in scored), []
+        margin = _options.scruple(planted, axis, _options.refusal_tolerance(p, axis))
+        seen["struck_persons"] += margin > 0
+        for sc in scenes:
+            lead = sc.acts[0]
+            lead_score = seg[(lead.verb, subject_of(lead))]
+            want = {(planted, s) for (v, s) in seg if v == planted and margin > 0 and seg[(v, s)] > lead_score}
+            assert {(v, s) for v, s, _ in sc.forgone} == want, (p.id, lead.verb, sc.forgone, want)
+            assert all(m == margin and m > 0 for _, _, m in sc.forgone)
+            seen["scenes"] += 1
+            seen["forgone"] += len(sc.forgone)
+        return scenes
+
+    monkeypatch.setattr(_choose, "score_terms", spy_terms)
+    monkeypatch.setattr(_choose, "release", spy_release)
+    d = SeasonDriver(w)
+    d.season(chooser(w, verbs=resolvable_verbs()), question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert seen["struck_persons"] >= 1, "nobody's scruple struck the planted verb, so the gate observed nothing"
+    assert seen["forgone"] >= 1, f"no Scene kept a struck candidate that out-scored its lead: {seen}"
+    assert seen["scenes"] >= 10, "too few Scenes were checked for the equality to mean anything"
+    stored = [sc for sc in w.acts.scenes() if sc.forgone]
+    assert stored, "the Scenes RESOLVE stored carry no `forgone`"
+
+
+def test_giving_way_to_a_scruple_is_an_event_the_fold_emits():
+    """B10.24: where the Scene's `forgone` gives the act's own candidate a positive margin and the act resolves, the fold
+    emits `scruple.overridden` beside the act's own kinds, caused by the act and graded by no band. An entry for another
+    candidate, or at margin 0.0, or no entry, emits nothing."""
+    from ..data.matrix import WriteClass
+    from ..loop.driver import mint_token
+    from ..state.carriers import Act, Scene
+    from .test_in09_dispensation_answer import HOLDER, WRIT, _read_terms, _with_writ
+
+    verb = "evade / defy"
+    assert "scruple.overridden" in data_verbs.VERB_TABLE[verb].emits
+
+    def fold(forgone, key):
+        w, d = _with_writ()
+        _read_terms(w, HOLDER)
+        a = Act(id=key, actor=HOLDER, verb=verb, payload={"subject": WRIT})
+        a.scene = f"sc_{key}"
+        w.acts.add_scene(Scene(a.scene, HOLDER, [a], forgone=forgone))
+        return a, d._fold(w, mint_token(w, WriteClass.ACTS), a)
+
+    a, out = fold(((verb, WRIT, 0.4),), "gives_way")
+    assert [e.kind for e in out] == ["compliance.withheld", "scruple.overridden"]
+    assert out[1].degree is None and a.id in out[1].causes
+    for forgone, key in (((), "no_entry"), (((verb, WRIT, 0.0),), "zero_margin"),
+                         ((("construe", WRIT, 0.4),), "other_verb"), (((verb, "p_mid", 0.4),), "other_subject")):
+        assert [e.kind for e in fold(forgone, key)[1]] == ["compliance.withheld"], key

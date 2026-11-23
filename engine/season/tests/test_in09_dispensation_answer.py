@@ -114,7 +114,8 @@ def test_in09_each_row_is_typed_resolvable_classed_and_emission_only(verb):
     assert row.writes == (), f"{verb}: declares writes {row.writes} -- not emission-only"
     assert verb not in EFFECTS, f"{verb}: an effect the fold never calls (`ID-13`)"
     assert (row.referent_class, row.referent_named) == ("Record", True)
-    assert (row.emits, row.emits_on_refusal) == ((EMITS[verb],), (REFUSAL[verb],))
+    # B10.24: `evade / defy` and `construe` also declare `scruple.overridden` (the refusable rows, kept only where the fold finds the act's scruple overridden)
+    assert (tuple(k for k in row.emits if k != "scruple.overridden"), row.emits_on_refusal) == ((EMITS[verb],), (REFUSAL[verb],))
 
 
 def test_in09_the_record_class_is_declared_by_the_three_alone_and_answers_dispensations():

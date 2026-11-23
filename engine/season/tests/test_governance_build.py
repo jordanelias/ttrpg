@@ -2913,7 +2913,7 @@ def test_24d_i_a_dwelling_is_silent_again_at_b0921(monkeypatch):
     deposited = lambda world: sum(1 for e in world.log if e.kind == "claim.deposited")
     assert seq(w) != seq(cw) or deposited(w) != deposited(cw), (
         "the two arms are identical in acts AND in ledger deposits: deleting 211 Sites parted nothing")
-# H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-146`. A refusal at `opening_set`, not a score term:
+# H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-146`. A refusal after scoring, in `make_ranker` (B10.24; it was `opening_set`'s), not a score term:
 # the person's projected weight on the gating axis IS the threshold, and a verb that axis engages
 # past it never forms a Candidate. Roster-generic: the axis is whatever `Fixtures refusal_axis`
 # names, so these tests take the axis that `pursuit_axes.refusing_pole` authors (`_h2_axis`).
@@ -2969,6 +2969,13 @@ def _h2_inject(p, axis, weight, cells):
     return restore
 
 
+def _h2_ranked(fx, p, v):
+    """The candidates the chooser orders: `opening_set`'s, less what his scruple struck. The gate moved there from `opening_set` (B10.24), so the set
+    a gate test reads is the ranker's; `choice_temperature` 0 takes the score order and needs no draw."""
+    from ..decision import choose as _choose
+    return _choose.make_ranker(fx.sweep("choice_temperature", 0))(p, v)
+
+
 def test_h2_the_shipped_arm_is_the_control_and_refuses_nothing():
     """`refusal_axis` ships unset, and unset is a no-op: the same synthetic tables that make the
     gate refuse below form the full set here. Without this arm the refusal test cannot tell the
@@ -2992,8 +2999,6 @@ def test_h2_a_verb_past_the_persons_weight_never_forms():
     """THE FALSIFIER. Person weight `-0.4` on the axis (the NEG, refusing pole). Three engaged
     verbs: `+0.3` and `-0.2` sit past `-0.4` toward the POS pole and are refused; `-0.6` does not
     and survives. Every verb the axis does not engage survives -- only *certain actions* gate."""
-    from ..decision import options as _options
-
     w, p, q, v, base, verbs = _h2_base()
     refused_pos, refused_neg, tolerated = verbs[0], verbs[1], verbs[2]
     axis = _h2_axis()
@@ -3001,7 +3006,7 @@ def test_h2_a_verb_past_the_persons_weight_never_forms():
     restore = _h2_inject(p, axis, -0.4,
                          {refused_pos: 0.3, refused_neg: -0.2, tolerated: -0.6})
     try:
-        got = {(c.verb, c.subject) for c in _options.opening_set(p, v, q, fx)}
+        got = {(c.verb, c.subject) for c in _h2_ranked(fx, p, v)}
     finally:
         restore()
 
@@ -3067,4 +3072,4 @@ def test_h2_an_unrostered_axis_refuses_rather_than_gating_on_nothing():
 
     w, p, q, v = _h2_setup()
     with pytest.raises(Unspecified):
-        _options.opening_set(p, v, q, w.fixtures.sweep("refusal_axis", "h2_not_an_axis"))
+        _h2_ranked(w.fixtures.sweep("refusal_axis", "h2_not_an_axis"), p, v)
