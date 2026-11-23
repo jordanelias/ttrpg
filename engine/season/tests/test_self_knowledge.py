@@ -17,15 +17,20 @@ from ..boot.realm import seed_self_knowledge
 from ..data import cast
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.pursuits import pursuit
+from ..data.matrix import Step, WriteClass
 from ..data.verbs import VERB_TABLE
 from ..decision import choose as CH
 from ..decision import score_parts as SP
 from ..decision.options import opening_set
 from ..decision.sheet import creation_sheet, development_space, take_ranked
 from ..harness import probes as P
+from ..loop.driver import SeasonDriver, mint_token
+from ..seam.contest import Resolution
+from ..seam.wrappers import sigma
 from ..queries.person_q import SELF_STEM, OwnStateReader
 from ..state.carriers import Candidate, Claim, Person, Question, View, interior_of
 from ..state.ids import draw_factory
+from .test_in12_step9 import _argue, _argue_world
 
 pytestmark = pytest.mark.flat_fold
 
@@ -107,16 +112,19 @@ def test_a_told_self_claim_is_weighed_by_regard_for_the_teller():
     act forms. At the shipped floor (0, the control) no teller is weighed and the disregarded one is believed, so the floor is what refuses it."""
     friend, foe = TWIN, "p_high"
 
-    def formed_with(teller, floor):
+    def formed_with(teller, floor, shown=False):
         w = P.tiny_world(DEFAULT_FIXTURES.sweep("self_told_floor", floor))
         me = w.persons[ACTOR]
         me.thread_sensitivity = GATE + 10
         me.stance = [(friend, cast.STANCE_VALENCE_SCALE, cast.STANCE_VALENCE_SCALE), (foe, -cast.STANCE_VALENCE_SCALE, cast.STANCE_VALENCE_SCALE)]
         me.ledger.append(Claim("c_told", ACTOR, ACTOR, SELF_STEM + KEY, True, 0, "told_by", 100, "own", chain=(teller,)))
+        if shown:       # B10.66: his own act showed it (WITNESS's deposit to him), which no teller's weight can overrule
+            me.ledger.append(Claim("c_shown", ACTOR, ACTOR, "skill_shown:" + KEY, True, 1, "firsthand", 50, "own"))
         return _formed(w, ACTOR)
 
     assert formed_with(friend, 0.5) is True, "a claim from a teller he trusts did not admit the act"
     assert formed_with(foe, 0.5) is False, "a claim from a teller he disregards admitted the act"
+    assert formed_with(foe, 0.5, shown=True) is True, "a skill shown to him was weighed against the teller he disregards"
     assert formed_with(foe, 0.0) is True, "the shipped floor refused a told claim"
 
 
@@ -132,3 +140,72 @@ def test_a_mans_own_self_claim_is_never_offered_as_news_about_himself_and_a_told
     me.ledger.append(Claim("c_told", ACTOR, ACTOR, SELF_STEM + KEY, True, 0, "told_by", 90, "own", chain=(TWIN,)))
     said = said_of(me.ledger, ACTOR, w.fixtures, me)
     assert said is not None and said.chain == (TWIN,), "a told self-claim was withheld"
+
+
+# -- B10.66: a skill shown at Overwhelming tells its holder he has it (`U5a` edit 6 (b)) ---------------------------------------------------------------------------
+SHOWN = "skill_shown:"
+
+
+def _fold_shown(w, d, act_id, band, *rows):
+    """One `argue` of the arguer's through the real fold at `band`, the roll's record naming `rows` in `fed_by` (the shape `sigma._fed_by` returns)."""
+    w.step = Step.RESOLVE
+    w.frozen = False
+    out = d._fold(w, mint_token(w, WriteClass.ACTS), _argue(w.proposition, act_id), Resolution(band, {"fed_by": rows}))
+    w.log.extend(out)
+    return out
+
+
+def _witness(w, d, out):
+    w.step = Step.WITNESS
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
+
+
+def _argued_world():
+    w, d, w.proposition, _ = _argue_world()
+    w.persons[ACTOR].thread_sensitivity = GATE + 10
+    return w, d
+
+
+def _own(w, pid, stem):
+    return [c for c in w.persons[pid].ledger if c.predicate.startswith(stem)]
+
+
+def _fed(key, side="actor"):
+    return (sigma.SOCIAL_ROLL_SITE, "edge", key, side, 3, 3.0)
+
+
+def test_a_shown_skill_is_deposited_to_the_actor_alone():
+    """He holds the gift and no claim of it; his argument reaches Overwhelming with a use row keyed on it in the roll's `fed_by`. WITNESS deposits ONE
+    `skill_shown:<key>` claim (firsthand, about himself) to him and to nobody else, though the others witnessed the same Event (the shipped
+    `observation_deposit_mode: actor`), and he now recognises the gift (`thread_read` forms). A second such act adds no second claim; a man seeded
+    with `self:<key>` is not told what he holds, so his ledger gains nothing and no Event carries the Observation."""
+    w, d = _argued_world()
+    assert not _formed(w, ACTOR)
+    _witness(w, d, _fold_shown(w, d, "sk_1", "Overwhelming", _fed(KEY)))
+    mine = _own(w, ACTOR, SHOWN)
+    assert [(c.subject, c.predicate, c.value, c.source) for c in mine] == [(ACTOR, SHOWN + KEY, True, "firsthand")], mine
+    others = [p for p in w.persons if p != ACTOR]
+    assert all(not _own(w, p, SHOWN) and not _own(w, p, SELF_STEM) for p in others), "a person other than the holder was told"
+    assert w.persons[TWIN].ledger, "the others witnessed nothing: 'alone' was not observed"
+    assert _formed(w, ACTOR) is True, "the shown skill did not tell him he has it"
+    _witness(w, d, _fold_shown(w, d, "sk_2", "Overwhelming", _fed(KEY)))
+    assert len(_own(w, ACTOR, SHOWN)) == 1, "a repeat deposited a second claim"
+    w2, d2 = _argued_world()
+    seed_self_knowledge(w2)
+    out = _fold_shown(w2, d2, "sk_3", "Overwhelming", _fed(KEY))
+    assert not any(o.predicate.startswith(SHOWN) for e in out for o in e.observed), "a man who knows his skill was shown it"
+    _witness(w2, d2, out)
+    assert not _own(w2, ACTOR, SHOWN) and len(_own(w2, ACTOR, SELF_STEM + KEY)) == 1
+
+
+def test_an_act_below_overwhelming_adds_no_skill_shown_observation():
+    """The control: the same roll record at Success, a row of the SUBJECT's side at Overwhelming, and a row keyed on something he cannot be unaware of
+    (`verb`, the dice row's key) add no Observation and no claim."""
+    w, d = _argued_world()
+    outs = [_fold_shown(w, d, "ct_1", "Success", _fed(KEY)), _fold_shown(w, d, "ct_2", "Overwhelming", _fed(KEY, "subject")),
+            _fold_shown(w, d, "ct_3", "Overwhelming", _fed("verb"))]
+    assert {e.degree for out in outs for e in out} == {"Success", "Overwhelming"}, "the bands were not folded"
+    assert not any(o.predicate.startswith(SHOWN) for out in outs for e in out for o in e.observed)
+    for out in outs:
+        _witness(w, d, out)
+    assert not _own(w, ACTOR, SHOWN) and not _formed(w, ACTOR)

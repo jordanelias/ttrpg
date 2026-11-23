@@ -34,6 +34,7 @@ import functools
 import math
 from typing import NamedTuple, Optional
 
+from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
 from engine.dice_engine.fmath import ltr_sum
 from engine.substrate.descriptors import (
     AFFILIATION_CONCERNS, HERITAGE_ENGAGES, HERITAGES, PURSUITS,
@@ -46,7 +47,7 @@ from ..data.affiliations import AFFILIATION_CEILING, AFFILIATION_FLOOR, convicti
 from ..data.cast import STANCE_MAX
 from ..data.pursuits import _AXES, pursuit_cosine_axes, to_axes   # `_AXES`: the sorted axis order, owned once
 from ..data.requires import (
-    CELL_STEMS, KNOWN_PERSON_CLAIM, OWN_STATE_STEMS, REQUIRES_OPERANDS, REQUIRES_STEMS, SHORTFALL_PREDICATE,
+    CELL_STEMS, KNOWN_PERSON_CLAIM, OWN_STATE_STEMS, Observation, REQUIRES_OPERANDS, REQUIRES_STEMS, SHORTFALL_PREDICATE,
     UNKNOWN, WORLD_ONLY_STEMS,
 )
 from ..data.rosters import (
@@ -1552,6 +1553,31 @@ def holds_self_key(p, key: str) -> bool:
     return _held_at(p, key) is not None
 
 
+# B10.66 (`U5a` edit 6 (b)): A SKILL SHOWN AT OVERWHELMING TELLS ITS HOLDER HE HAS IT. The Observation `(himself, "skill_shown:<key>", True)` rides the act's Event (`Event.observed`,
+# D-U1-06), a named predicate beside `BODY_STEM` and `BROKE_STEM` and no member of `rosters.yaml: observation_terms`, which is `epistemic.Seen`'s field list. WITNESS deposits it
+# as written, to the actor alone at the shipped `observation_deposit_mode: actor` (no channel rule is written here), and `knows_self` reads it as his own `self:<key>`.
+SKILL_SHOWN_STEM = "skill_shown:"
+_SELF_STEMS = (SELF_STEM, SKILL_SHOWN_STEM)
+
+
+def _firsthand_self(p, key: str) -> bool:
+    """WHETHER `p` already holds, of himself, a claim he made of it himself (no chain) for `key`: the seeded `self:<key>` or an earlier shown deposit."""
+    return any(c.subject == p.id and c.value is True and not c.chain and c.predicate in (s + key for s in _SELF_STEMS) for c in p.ledger)
+
+
+def skill_shown_observed(p, fed_by: tuple, degree) -> tuple:
+    """THE OBSERVATIONS A GRADED ACT OF `p`'S CARRIES FOR WHAT IT SHOWED OF HIM: one `(p.id, "skill_shown:<key>", True)` per distinct `key` that a row of the act's
+    `fed_by` (`seam/wrappers/sigma.py::_fed_by`: `(use, role, key, side, value, contributed)`) names on his own side with a contribution, where the act's own band is Overwhelming
+    (`DEGREE_LABEL`; no second draw), the key is one he can be unaware of (`SELF_BELIEVED`) and holds (`holds_self_key`), and he does not already hold a claim of it he made himself
+    (`_firsthand_self`: a man seeded with `self:<key>`, or shown it before, is told nothing, so no claim is stored twice and none contradicts the seeded one). `()` otherwise.
+    [ASSUMPTION; medium; Jordan to correct -- basis: `U5a` edit 6 (b); revert: the Observation is emitted on every Overwhelming act that names the key, a repeat included.]"""
+    if degree != DEGREE_LABEL[Degree.OVERWHELMING]:
+        return ()
+    keys = dict.fromkeys(key for _use, _role, key, side, _value, contributed in fed_by
+                         if side != "subject" and contributed and key in SELF_BELIEVED and holds_self_key(p, key) and not _firsthand_self(p, key))
+    return tuple(Observation(p.id, SKILL_SHOWN_STEM + key, True) for key in keys)
+
+
 def knows_self(p, key: str, weigh=None, fx=None) -> bool:
     """THE ONE READER OF WHETHER A PERSON RECOGNISES `key` IN HIMSELF: True for a key outside `data/rosters.py::SELF_BELIEVED` (known by construction), and for a member
     where his own ledger holds `self:<key>` as True (the best-supported, then latest claim, `LedgerReader`'s comparator), and False where it holds none -- a person marked `unaware:` at build is seeded none (`boot/realm.py::seed_self_knowledge`).
@@ -1562,7 +1588,9 @@ def knows_self(p, key: str, weigh=None, fx=None) -> bool:
     `Fixtures.self_told_floor` (H-483; read only here, only for a told claim, and `0.0` at the control believes every one). Without a `weigh` a told claim is read as it stands."""
     if key not in SELF_BELIEVED:        # a key outside the roster is known by construction, as it always was
         return True
-    mine = [c for c in p.ledger if c.subject == p.id and c.predicate == SELF_STEM + key]
+    mine = [c for c in p.ledger if c.subject == p.id and c.predicate in (s + key for s in _SELF_STEMS)]    # B10.66: a skill shown is his `self:<key>`
+    if _firsthand_self(p, key):         # B10.66: what he made of himself stands against a teller he disregards
+        return True
     best = LedgerReader(mine, weigh).belief_among()
     if best is None or best.value is not True:
         return False
@@ -1686,7 +1714,7 @@ def said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 
     the newest thing he holds (decided at B09.07, `16_PESSIMIST_SC_B`)."""
     # B10.65: A MAN'S OWN `self:<key>` CLAIM IS WHAT HE BELIEVES OF HIMSELF, NOT HEARSAY, so it is never offered as news about himself (the seeding would otherwise make every holder a teller of his
     # own motives). Only the claim he made himself is skipped (no chain, held by its subject): a `self:` claim he was TOLD (a chain) is deposited as any told claim and is still said.
-    pool = [c for c in claims if c.subject == subject and not (c.predicate.startswith(SELF_STEM) and not c.chain and c.holder == subject)] if claims else []
+    pool = [c for c in claims if c.subject == subject and not (c.predicate.startswith(_SELF_STEMS) and not c.chain and c.holder == subject)] if claims else []
     if teller is not None and fx is not None and pool and _slant(fx) == "valence":
         axis_w = projected_axes(teller, fx.get("scar_weight_shift"))
         strength = {id(c): abs(deed_valence(axis_w, c)) for c in pool}

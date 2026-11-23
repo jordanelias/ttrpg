@@ -41,7 +41,7 @@ from .effects_combat import MARK_ROLE
 from ..seam.wrappers.pool import pool_pair
 from ..seam.wrappers.sigma import ADVANTAGE_SOURCES, CAPABILITY, EDGE
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
-                                 elements_violated_by, pursuit_lean, upheld_by, _pursuits_upheld_by)
+                                 elements_violated_by, pursuit_lean, skill_shown_observed, upheld_by, _pursuits_upheld_by)
 from engine.substrate.descriptors import AFFILIATION_CEILING
 from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
 from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
@@ -438,9 +438,13 @@ def _fold(self, w: "World", token: Token, a: Act,
     # rather than at the four `ev(...)` call sites. `None` on every uncontested act, which is
     # honest: no contest graded it.
     _degree = resolution.degree if resolution is not None else None
+    # B10.66 (`U5a` edit 6 (b)): WHAT THE ACT'S OWN BAND SHOWED OF ITS ACTOR rides every Event `ev` builds, beside the precondition's reads -- read off the roll's own
+    # record (`fed_by`, `sigma.resolve`), no second draw. Only a contested act carries a record; `()` for every other.
+    _fed = resolution.result.get("fed_by", ()) if resolution is not None and isinstance(resolution.result, dict) else ()
+    _shown = skill_shown_observed(w.persons[a.actor], _fed, _degree) if _fed and a.actor in w.persons else ()
 
     def ev(kinds, changes=None):
-        return _act_events(self, w, a, kinds, changes, _degree, verdict.observed)
+        return _act_events(self, w, a, kinds, changes, _degree, tuple(verdict.observed) + _shown)
 
     def refuse(kinds):
         # B07.10: a refusal is a precondition failed, never an outcome (04 §C.4), so a task act's refusal carries no band.
