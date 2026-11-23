@@ -175,7 +175,7 @@ def test_thrust_axes_is_a_closed_roster_whose_opposes_names_only_members():
     axes = roster("thrust_axes")
     assert rosters._ROSTERS["thrust_axes"]["open"] is False
     # one membership per assert: spelling the roster together would DUPLICATE it in a body
-    # (`test_season_shape.py::test_jordan_no_definition_is_hardcoded_in_a_body`)
+    # (`test_season_shape.py::test_jordan_no_definition_is_hardcoded_in_a_body` (retired))
     assert "suppress_einhir_revival" in axes and "revive_einhir" in axes
     for pole in ("reveal_thread_truth", "uphold_church", "uphold_caste", "altonian_ascendancy"):
         assert pole in axes, f"{pole!r}, an opposite pole that is not among the ten, is a member too"

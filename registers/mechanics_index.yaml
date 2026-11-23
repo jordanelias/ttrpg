@@ -457,7 +457,7 @@ mechanics:
     notes: "Position 27 (2026-09-29): reshaped from the retired 10-to-0 depleting track (the old
       threadwork_v30.md#part-3 citation is superseded, ED-WR-0010) to two quantities -- a resting
       point (permanent set) and elastic displacement -- per the RULINGS.md elastic/plastic model.
-      tests/valoria/test_coherence_elastic_plastic.py covers the mechanics; provisional because
+      tests/valoria/test_coherence_elastic_plastic.py (retired) covered the mechanics; provisional because
       no balance/Monte-Carlo pass has run against it."
 
   co_movement:

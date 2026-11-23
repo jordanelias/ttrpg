@@ -7,7 +7,7 @@ between. Every head at 1.0 is the control and reproduces the pre-PC-20 `strength
 Falsifier (CLAUDE.md §0.1 pt 3), run at the build: `K_STR_HEAD[weapon_head]*` deleted from `strike_impact` reddens
 `test_a_blunt_head_gains_more_damage_per_strength_point_than_a_point` and
 `test_the_point_damage_gain_from_strength_falls_through_strike` (the slopes come out equal); with it present and every
-head at 1.0 the control tests stay green (`test_all_ones_is_the_pre_item_impact`).
+head at 1.0 the control tests stay green (`test_all_ones_is_the_pre_item_impact`, retired since).
 
 (2) The weapon's weight. `combat_systems.str_demand` adds `D_MASS*mass` (kg) beside the swing inertia `wield_heft`
 already carries, so a heavier weapon of equal inertia handles worse for a fighter short of its demand. D_MASS = 0 is
@@ -15,7 +15,7 @@ the control.
 
 Falsifier, run at the build: `+cfg['D_MASS']*w['mass']` deleted from `str_demand` reddens
 `test_a_heavier_weapon_of_equal_inertia_handles_worse_for_a_weaker_fighter` (the twin and the greatsword handle
-alike) and the shipped-minus-control half of `test_d_mass_zero_is_the_pre_item_demand` (the demand no longer moves
+alike) and the shipped-minus-control half of `test_d_mass_zero_is_the_pre_item_demand` (retired since) (the demand no longer moves
 by D_MASS*mass); with it present and D_MASS = 0 the twin and the greatsword read one demand bitwise.
 
 (3) The harness. `combat_systems.act_cost` adds `ACT_WEIGHT/D_WT * max(0, ARMOR_DEMAND[armor] - strength)` (AR-10,

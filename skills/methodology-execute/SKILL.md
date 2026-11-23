@@ -92,8 +92,8 @@ does not match it stops and reports it (`STOPPED`); it never opens a second batc
    worktrees (detached, named for their instrument) are removed and the instrument re-run, not
    integrated; each remaining producer worktree is verified and integrated (step 5) or removed. A
    BATCH-CLOSE suite tree whose verdict a `suite verdict:` commit already records at the snapshot SHA is not re-run.
-3. **Re-enter.** Run BATCH OPEN items 1, 2, 3 and 5 (currency, context set, gate check, assignment
-   plan — read back from the batch-open commit, not re-derived); **never item 4**: `open` stays the
+3. **Re-enter.** Run BATCH OPEN items 1 to 4 (currency, context set, gate check, assignment
+   plan — read back from the batch-open commit, not re-derived); **never item 5**: `open` stays the
    row's, or the range BATCH-CLOSE reads silently shrinks. Build only the items not in `built`; run
    BATCH-CLOSE from the phase after `close`.
 4. **Built but not closed.** A position the plan or handoff records as BUILT with its close not run
@@ -167,8 +167,8 @@ short without saying so.
    unmet gate stops the batch before any planning is spent on it.
 5. **Record the starting commit and commit the row, before any dispatch.** `open <sha>` is `HEAD` as
    items 1–3 found it. Write the in-flight row (§THE IN-FLIGHT ROW) — and, for a derived batch, its
-   batch rows (§BATCHES, source 5) — and commit them **row-only, `[skip ci]`**, with the assignment
-   plan as the commit body's one paragraph, then arm the checkpoint timer (§CHECKPOINTS). A death anywhere after this resumes from step 0; a death
+   batch rows (§BATCHES, source 5) — and commit them **row-only, `[skip ci]`**, the body holding the assignment
+   plan's one paragraph and the opening counts BATCH-CLOSE's accretion step 5 compares against, then arm the checkpoint timer (§CHECKPOINTS). A death anywhere after this resumes from step 0; a death
    before it loses nothing but the plan. The batch's diff is the **commit range `<open sha>..HEAD`**;
    every item commits at once, so the tree is clean when BATCH-CLOSE runs.
 
@@ -237,64 +237,63 @@ working-tree diff. A batch has ONE close (RULED, Jordan 2026-11-06, §BATCHES).
    and reconciliation (§1.2–1.5) apply as written there. **The roster is the one the assignment plan
    provisionally fixed (§THE ASSIGNMENT PLAN), confirmed now against the real range diff**: dispatch it
    as planned, or change it with the reason stated.
-   - **The one suite run starts as Phase 1 opens, in the background.** **It is `tests/valoria`, and the
-     lane the batch concerns, and nothing else** (Jordan, 2026-11-22: *"methodology execute should only run
-     tests/valoria. All other test calls to be specified by workplan according to subsystem test suite or
-     season test"*; 2026-11-23: *"every batch concerns a lane ... identify them based on our lanes"*). The
-     batch's lane is the `lane` column of the live plan's batch table (v12: part 2 §1) and the plan maps it
-     to a test lane (v12's head, rule P18: a subsystem lane to its `-m` suite, a season-loop lane to
-     `-m season_loop`, GO to `-m engine`); an item's `TESTS:` or `GATE:` line may name a further lane. This
-     skill chooses no lane itself and does not consult `tools/tests_for_diff.py` (the inner-loop tool). At most
-     once per batch, only if it can observe something CI will not (CLAUDE.md §0.4 cl.1). No item inside the
-     batch runs it. Phase 1's critics are read-only and use no CPU it needs, so it overlaps them: snapshot
-     `HEAD` (`git worktree add --detach <scratchpad>/suite-<sha> HEAD`) and run there, launched as
-     *Running a slow instrument* step 2 says. Its verdict is on the same tree CI's first run reads, which is
-     why running it beside Phase 1 loses nothing.
-   - **Lanes are separate verdicts.** Run `tests/valoria`, then each lane the plan names, as separate
-     commands, one after another, and as each finishes record its verdict and the snapshot SHA in a
-     `[skip ci]` checkpoint (§CHECKPOINTS), so a restart loses one run, not all.
-   - **Flags.** Each command carries `--durations=30` (the accretion pass reads it) and
-     `--timeout=<budget>`. A test's budget is a multiple of its last `--durations` reading, never a
-     guessed number; the run's `--timeout` is the largest budget among the tests it covers; a tree
-     with no reading yet runs without one and becomes the reading. A timed-out test is reported as a
-     measurement failure, not red or green (*Running a slow instrument* step 5). No `--maxfail`: it
-     hides the red list the next step reads.
+   - **The one suite run is `tests/valoria` plus the batch's lanes, and nothing else** (Jordan, 2026-11-22:
+     *"methodology execute should only run tests/valoria. All other test calls to be specified by workplan
+     according to subsystem test suite or season test"*; 2026-11-23: *"every batch concerns a lane ... identify
+     them based on our lanes"*). The batch's lanes are the test lane the live plan maps its `lane` column to
+     (v12: part 2 §1's table, mapped by the head's rule P18) and any lane an item's `TESTS:` or `GATE:` line
+     names. This skill chooses no lane and does not use `tools/tests_for_diff.py`. It runs at most once per
+     batch, only if it can observe something CI will not (CLAUDE.md §0.4 cl.1), and no item runs it.
+   - **It starts as Phase 1 opens, in the background**, on a snapshot of `HEAD` (`git worktree add --detach
+     <scratchpad>/suite-<sha> HEAD`), launched as *Running a slow instrument* step 2 says: Phase 1's critics
+     are read-only and need no CPU it holds, and the snapshot is the tree CI's first run reads.
+   - **Each lane is a separate verdict.** Run `tests/valoria`, then each lane, one command after another; as
+     each finishes, record its verdict and the snapshot SHA in a `suite verdict:` commit (§CHECKPOINTS), so a
+     restart loses one run, not all.
+   - **Flags.** Each command carries `--durations=30` (the accretion pass reads it) and `--timeout=<budget>`:
+     a test's budget is a multiple of its last `--durations` reading, never a guessed number; the run's
+     `--timeout` is the largest budget among the tests it covers; a tree with no reading yet runs without one
+     and becomes the reading. A timed-out test is a measurement failure, not red or green (*Running a slow
+     instrument* step 5). No `--maxfail`: it hides the red list Phase 2 reads.
    - **Wait on it with `Monitor`** on its log (CLAUDE.md §11 permits it for local jobs). Ending the
      turn is not waiting, and the 20-minute checkpoint timer never resumes a close.
 2. **Phase 2.** Order and apply-before-next-reads (§2.1–2.4) as written there, against the cumulative
    diff. Phase 2's test runs wait until the background run has finished (it holds every core).
    - **Carried red.** A close-run red that fails the same way, with the same test id, when its file is
-     run at `<open sha>` (a detached worktree) is CARRIED: it does not block this batch's close, is
-     named in the close commit body, and is disposed of as the next bullet says. Only a red that
-     passes at `<open sha>` blocks. Start from the previous close's quoted carried list and re-run at
-     the base only ids not on it. Whether an item touched the test's file is no criterion: an item can
-     break a test it never edits. A blocking red is fixed by CLAUDE.md §0.4 cl.4.
+     run at `<open sha>` (a detached worktree) is CARRIED: it does not block this batch's close and is
+     named in the close commit body. Only a red that passes at `<open sha>` blocks; it is fixed by
+     CLAUDE.md §0.4 cl.4. Start from the previous close's quoted carried list and re-run at the base only
+     ids not on it. Whether an item touched the test's file is no criterion: an item can break a test it
+     never edits.
    - **Disposing of a carried red.** It is fixed if minimal (CLAUDE.md §0, *"fix it minimally"*). It is
      deleted only if its subject is superseded or retired (CLAUDE.md §0's ladder steps 1–2, citing the
-     successor or what died), or if it is a build-verification test (the accretion pass's class test,
-     class named in the commit body). Otherwise it becomes one `hole_register.yaml` row, or a ledger
-     row if `needs_jordan` survives the ladder. A red asserting live design, or a game-state red, is
-     never deleted to reach green, and none is skipped, xfailed or quarantined (the live plan's
-     stopping rule). Disposing of carried reds is out-of-scope work the batch plan states, never
-     silent.
-   - **After Phase 2**, re-run only the covering files of Phase 2's diff (CLAUDE.md §0.4 cl.2, with
-     the flags above). A Phase 2 edit outside every covering file's reach, or a fix to a snapshot red
-     that changes code beyond its failing file, gets the plan-named lane's covering file or files (`-m <lane>`
-     only where the batch's lane or the item names it) — never the whole suite again.
+     successor or what died), or if it is build-verification (step 3.2, class named in the commit body).
+     Otherwise it becomes one `hole_register.yaml` row, or a ledger row if `needs_jordan` survives the
+     ladder. A game-state red, or one asserting live design, is never deleted to reach green, and none is
+     skipped, xfailed or quarantined (the live plan's stopping rule). Disposing of carried reds is
+     out-of-scope work the batch plan states, never silent.
+   - **After Phase 2**, re-run only the covering files of Phase 2's diff, with the flags above; an edit
+     beyond every covering file's reach, or a snapshot-red fix that changes code beyond its failing file,
+     gets the covering files in the lanes this close ran — never the whole suite again. That is CLAUDE.md
+     §0.4 cl.4's "only what the fix diff reaches", read within the plan's lanes.
 3. **The accretion pass — this skill's one addition, between Phase 2 and Phase 3** (the session's
    user, 2026-11-05: *"each batch creates its own specific tools and they accrete causing increasingly
-   longer run times for test suites"*; *"as part of methodology execute close"*). Phase 3 then grades
-   the tree as it will be left. The orchestrator runs it in its own tree, over what the batch ADDED
+   longer run times for test suites"*; *"as part of methodology execute close"*; Jordan, 2026-11-23:
+   *"I care about unwanted accretion over batches."*). Phase 3 then grades the tree as it will be left.
+   The orchestrator runs it in its own tree, over what the batch ADDED
    (`git diff --diff-filter=A --name-only <open sha>..HEAD -- tools tests engine`), the tests it
    edited, what it made redundant (an old tool or test an item replaced; CLAUDE.md §2 retires it in
    the same change), and every test the suite run's `--durations` reading puts over its budget.
-   **A reader's discipline: NO GUARD MAY BE BUILT FOR THIS** (§0.1 pt 5); its output is deletions in
+   **A reader's discipline, with ONE mechanical backstop, `tools/ci_test_lane_ratchet.py` (Jordan,
+   2026-11-23: *"Do NOT allow unwarranted accretion to happen"*): build no other guard (§0.1 pt 5); a retirement runs
+   `python tools/ci_test_lane_ratchet.py --tighten` and commits `references/test_lane_caps.yaml`, and growth needs a warrant
+   there; its output is deletions in
    the batch's close commit, never a document or a ledger row. For each such file:
    1. **A tool names its caller:** a CI step, a hook, a `ci_checks_registry.yaml` row, an import from
       `engine/` or `modules/`, or a named invocation in the plan. None: delete it; the commit is its
       record. A tool whose only consumer is this repository's own process is judged by §0.1 pt 5's
-      predicate (not load-bearing on the game or a Jordan decision): delete it, or accept it and write
-      nothing. It never earns a registry row because one batch needed it once.
+      predicate: delete it, or accept it and write nothing. It never earns a registry row because one
+      batch needed it once.
    2. **A test stays only if it tracks where the game is** (Jordan, this rule's session: *"We don't
       need tests that keep confirming we built something correctly. We need tests that keep track of
       where our game is at."*). It is **game-state**, and stays, only if it observes (a) one of THE
@@ -307,30 +306,31 @@ working-tree diff. A batch has ONE close (RULED, Jordan 2026-11-06, §BATCHES).
       whose only subject is a tool step 1 deleted), and scaffolding written to drive a build, an
       iteration or a patch is the same class — and it RETIRES here: its item's commit already records
       the falsifier and its outcome (CLAUDE.md §0.1 pt 3), so the close deletes the test file or
-      function. Where one file holds both, delete only the build-verification assertion or function.
-      **Before deleting, confirm it is not the only observer of a game behaviour** — name the
-      behaviour; if it is, it is game-state and stays. The close commit body names each deleted path
-      with its class (no count, CLAUDE.md §1). The producer's receipt names each new test's class
-      (5.4); the orchestrator checks it, not trusts it.
-   3. **A test's cost is read, not guessed — from the one suite run.** That run carries
-      `--durations=30` (step 1), so the reading costs nothing extra; read it. A test over its budget,
-      added by this batch or not, is judged first by step 2's class: build-verification is deleted,
-      not rewritten; game-state is rewritten in-process or at no more than the live plan's test
-      horizon, or deleted, unless it names what the cheaper form would miss. A test
-      that starts a fresh interpreter (`subprocess`, `python -m engine.season…`) or runs seasons
-      states the same. **The first reading is the control:** record it in the close commit body
-      (`reading @<sha>`); later readings are compared with it, which is how a per-test slowdown is
-      located — its cause is unmeasured until such a comparison shows it.
+      function (where one file holds both, only the build-verification function). **Before deleting,
+      confirm it is not the only observer of a game behaviour** — name the behaviour; if it is, it is
+      game-state and stays. The producer's receipt names each new test's class (5.4); the orchestrator
+      checks it, not trusts it.
+   3. **A test's cost is read, not guessed**, from the suite run's `--durations` reading. A test over
+      its budget, added by this batch or not, is judged first by step 2's class: build-verification is
+      deleted, not rewritten; game-state is rewritten in-process or at no more than the live plan's
+      test horizon, or deleted, unless it names what the cheaper form would miss. A test that starts a
+      fresh interpreter (`subprocess`, `python -m engine.season…`) or runs seasons states the same.
+      The reading is best-effort and never a baseline: record it in the close commit body (`reading
+      @<sha>`); a per-test slowdown is located only by comparing two such readings.
    4. **Unearned, by `valoria-simplify`'s own list** (a second owner of a fact; apparatus where an edit
       to the existing owner would serve; dead or retired code), read at that skill. Its DISTIL mode is
       not run per batch.
+   5. **No lane and no `tools/` ends the batch larger than it began without naming why.** BATCH OPEN
+      item 5 recorded, as `reading @<open sha>`, each test lane's collected count (`python -m pytest
+      tests/valoria engine/season/tests engine/tests --collect-only -q -p no:cacheprovider -m <lane>`:
+      seconds, nothing runs) and `git ls-files tools | wc -l`; take both again now. A lane or `tools/`
+      that grew names, per added test or tool, the game-state behaviour it observes or the caller it
+      has, or retires it in this close; a net growth with nothing named fails the close. The next BATCH
+      OPEN takes its own counts from the merged tree, so this close's counts are its baseline by
+      construction and no figure lives in an index or handoff (CLAUDE.md §1).
 
-   5. **Growth is read, and must be accounted for.** The close commit body records, per lane the close ran
-      (`reading @<sha>`), the tests collected and the `--durations` total, beside the previous close's. A lane
-      that grew names the game-state behaviour each added test observes; one that grew and cannot is retired
-      here, not carried. These figures live in the commit body only (CLAUDE.md §1).
-
-   The commit body names the paths deleted; no count or running total (CLAUDE.md §1) beyond step 5's readings.
+   The close commit body names each deleted path with its class, and step 3's and step 5's readings; no
+   other count or running total (CLAUDE.md §1).
 4. **Phase 3.** Tier, escalation trigger, checklist and the top-down/bottom-up handshake (§3.1–3.7) as
    written there, against the post-Phase-2 diff. INTERDEPENDENCIES and the FORWARD/BACKWARD SWEEPS are
    likelier to find something real here than at single-item scale, because several items have landed
@@ -709,13 +709,13 @@ not "one realm, one season", and it is superlinear in them).
 | "the expunge took only what no remaining batch needs" | after the boundary commit, a remaining batch's gate or reading list names a handle or file that is gone from the tree, with no landing SHA written in its place |
 | "the batch was expunged" | a finished position, or its in-flight row, is still present after the boundary commit, or that commit added a narrative, a "done" row or a count beyond what the plan's own rule for finished positions prescribes |
 | "the batch resumed from its row" | a resumed batch rebuilt an item whose handle was in `built`, skipped one that was not, re-ran a BATCH-CLOSE phase at or before `close`, overwrote `open`, or trusted the row over the commits where they disagreed |
-| "BATCH-CLOSE ran once per batch" | the full pytest suite, `/code-review`, `/simplify`, `layer-conformance`, the agonist/antagonist fan, or the terminal critique ran between two items of the *same* batch, or the review phases did not run before the batch's items were reported done (the suite runs per CLAUDE.md §0.4 cl.1, not unconditionally; its one run starts in the background as Phase 1 opens, on a snapshot of the last `Item:` commit, and Phase 2's covering-file or narrowed-tree re-runs are not a second run); or after a red, the whole suite ran again over trees the fix diff could not reach; or a tree's verdict was not recorded in a `suite verdict:` commit as it finished |
-| "the close ran only what the plan names" | the close run engine/season/tests, engine/tests or a `-m` lane that neither the batch's lane (the plan's P18 mapping) nor an item's `TESTS:` or `GATE:` line names, or chose a lane by `tools/tests_for_diff.py`, or left `tests/valoria` out |
+| "BATCH-CLOSE ran once per batch" | the full pytest suite, `/code-review`, `/simplify`, `layer-conformance`, the agonist/antagonist fan, or the terminal critique ran between two items of the *same* batch, or the review phases did not run before the batch's items were reported done (the suite runs per CLAUDE.md §0.4 cl.1, not unconditionally; its one run starts in the background as Phase 1 opens, on a snapshot of the last `Item:` commit, and Phase 2's covering-file re-runs are not a second run); or after a red, the whole suite ran again over trees the fix diff could not reach; or a tree's verdict was not recorded in a `suite verdict:` commit as it finished |
+| "the close ran only what the plan names" | the close ran engine/season/tests, engine/tests or a `-m` lane that neither the batch's lane (the plan's P18 mapping) nor an item's `TESTS:` or `GATE:` line names, or chose a lane by `tools/tests_for_diff.py`, or left `tests/valoria` out |
 | "the red was carried, not blocking" | its file, run at `<open sha>`, passed, or failed another way or under another test id; or it is not named in the close commit body; or it was skipped, xfailed or quarantined, or deleted while game-state or asserting live design, or deleted with no successor, retired subject or build-verification class cited |
 | "the timeout was a budget" | a `--timeout` value no `--durations` reading names a multiple of; or a timed-out test was reported as red or green rather than as a measurement failure; or the close run carried `--maxfail` |
 | "CI ran twice per batch" | a CI run started on a commit other than the batch's last `Item:` commit or the confirming head (a pushed head commit without `[skip ci]`), no PR existed when the first run was due, or a full CI run was used to find what a covering test file or a one- or two-season probe could show |
-| "the accretion pass ran" | a tool or test file in the batch's added list has no stated caller or observed behaviour and was neither deleted nor given a stated reason; or a build-verification test (or scaffolding) the batch added or edited survives the close, or a deleted one was the only observer of a named game behaviour, or a deletion's class is not in the close commit body; or a test over its budget in the close run's `--durations` reading was left as it was with no statement of what the cheaper form would miss; or the first reading was not recorded `reading @<sha>`; or the pass ran after Phase 3; or it added a file, row or document rather than deleting one |
-| "accretion was stopped at the source" | a producer's brief lacked the 5.1a rule; or an item's commit left a build-verification test, a test with no lane, or a tool with no named caller in the tree; or a close grew a lane's tests or run time with no game-state behaviour named for the growth |
+| "the accretion pass ran" | a tool or test file in the batch's added list has no stated caller or observed behaviour and was neither deleted nor given a stated reason; or a build-verification test (or scaffolding) the batch added or edited survives the close, or a deleted one was the only observer of a named game behaviour, or a deletion's class is not in the close commit body; or a test over its budget in the close run's `--durations` reading was left as it was with no statement of what the cheaper form would miss; or the pass ran after Phase 3; or it added a file, row or document rather than deleting one |
+| "accretion was stopped at the source and across batches" | a producer's brief lacked the 5.1a rule; or an item's commit left a build-verification test, a test with no lane, or a tool with no named caller in the tree; or the batch-open commit lacks the lane and `tools/` counts (`reading @<open sha>`); or a lane's collected count or `tools/`'s file count is larger at the close than in that reading and an added test or tool names no game-state behaviour or caller and was not retired; or a count was kept in an index or handoff rather than taken from the tree |
 | every Phase 1–3 claim, at BATCH-CLOSE | `methodology-close`'s own falsifier table, unchanged, checked against the batch's cumulative post-Phase-0 diff |
 
 **If this skill's guidance conflicts with `CLAUDE.md`, `architecture/`, or `methodology-close`, they

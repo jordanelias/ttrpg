@@ -26,7 +26,7 @@ class InstrumentDefect(Exception):
     So: a refusal that means *"the design forbids this"* is a `Forbidden` and is a finding. A
     refusal that means *"you called me wrong"* is this, and is an INSTRUMENT-ERROR -- a bucket
     `run_cases` already had. The separation is by CLASS, so no probe can absorb one as the other,
-    and `test_w5_no_gap_is_an_instrument_defect` is the falsifier."""
+    and its falsifier, `test_w5_no_gap_is_an_instrument_defect`, is retired."""
 
 
 class ShapeGap(Exception):

@@ -390,7 +390,7 @@ def test_the_four_verb_capability_rows_resolve_and_are_the_vocation_range():
         "argue": "argue", "research": "inquiry", "examine": "inquiry", "surveil": "inquiry"}
     # CR-20: the range is closed over the skill definition rows (B05.25 deleted the derived `VOCATION_ATTRIBUTE` map with the
     # rows' `base:` column, so the closure is read on the one definition, `descriptors.CAPABILITIES`; a literal set here is
-    # flagged by `test_jordan_no_definition_is_hardcoded_in_a_body`).
+    # flagged by `test_jordan_no_definition_is_hardcoded_in_a_body` (retired)).
     from engine.substrate import descriptors
     # v11 CP-T03-04: `arms` (`fight`/`accept`/`capture`) joins the range, three -> four.
     assert VERBS.VOCATIONS == set(VERB_CAPABILITY.values()) and VERBS.VOCATIONS <= set(descriptors.CAPABILITIES)

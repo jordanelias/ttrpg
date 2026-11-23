@@ -31,7 +31,7 @@ THE VALUES THIS GRID CHOOSES, because the composer wants them and CAL §2 (writt
   * C7 reads every cell any other row read: P(F) <= 0.90 (so P(Partial or better) >= 0.10), P(F) at or above the `OB_MIN` floor's own, and both
     tails open (0 < P(F) < 1, the standing rule). An S27.4-refused cell (`ob > multiple x pool`: no dice dealt) is read as P(F) = 1.
 
-THE REALM READ (OBS gate 4) is `test_every_rolled_verb_with_five_rolls_shows_more_than_two_obstacles`, at the foot: `Margin.terms` off the
+THE REALM READ (OBS gate 4) was `test_every_rolled_verb_with_five_rolls_shows_more_than_two_obstacles` (retired): `Margin.terms` off the
 Event's `ending` (B05.18) over `build_realm(0..2)`, one season each.
 """
 from __future__ import annotations

@@ -234,7 +234,7 @@ def test_in53v_b_no_office_referent_outside_reach():
 
 def test_in53v_c_the_classes_survive_the_fold_and_are_closed():
     # The class roster is closed by its loader (the `Forbidden` refusals below), so its size is not pinned here: the
-    # memberships this test reads are. Spelled as memberships because `test_jordan_no_definition_is_hardcoded_in_a_body`
+    # memberships this test reads are. Spelled as memberships because `test_jordan_no_definition_is_hardcoded_in_a_body` (retired)
     # flags a three-string literal as a roster duplicated from rosters.yaml.
     assert {"Office", "Record"} <= REFERENT_CLASSES and "Rung" in REFERENT_CLASSES
     a = Question("q:claim:x", "claim_landed", ("S",), "x")

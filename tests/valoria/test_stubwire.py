@@ -13,14 +13,8 @@ Two claims, one fixture, one mutation (§0.1 point 3 "name the falsifier"):
      `build_g_code` already runs — no second parser) sees a module that imports
      `engine.substrate.stubwire`.
 
-MUTATION CHECK (the falsifier, not just a claim, per §0.1 point 5 "if you cannot write the guard
-you have not understood the pattern"): ONE fixture module (`engine/fixture_consumer.py` under a
-synthetic repo root) is built in two variants — WITH the `from engine.substrate import stubwire`
-import plus a `stubwire.stub_resolve(...)` call, and WITHOUT it (the import AND the call deleted,
-standing in for a stub site that was never actually converted). `test_stub_wired_fixture_seen_by_both_surfaces`
-asserts both claims TRUE for the WITH variant; `test_mutation_deleting_the_import_fails_both`
-asserts both flip to FALSE/zero for the WITHOUT variant — so a broken/no-op detector on either of
-the two surfaces fails a test here, not silently reports nothing.
+The mutation check over a synthetic fixture module (`test_stub_wired_fixture_seen_by_both_surfaces`,
+`test_mutation_deleting_the_import_fails_both`) is retired; nothing here observes the two surfaces now.
 """
 import pytest
 

@@ -196,7 +196,7 @@ def test_at_is_not_a_requires_operands_member_and_derive_operand_is_never_asked_
     assert "at" not in REQUIRES_OPERANDS
     # A COUNT PIN, NOT THE ROSTER'S CONTENT RESTATED -- BATCH-CLOSE FINDING (methodology-close
     # Phase 1, CODE ARCHITECTURE lens): the prior version spelled all eight names out again,
-    # which `test_jordan_no_definition_is_hardcoded_in_a_body` catches in the corpus as "the same
+    # which `test_jordan_no_definition_is_hardcoded_in_a_body` (retired) catches in the corpus as "the same
     # closed set written out again". The closure's actual content is `rosters.yaml:
     # requires_operands`'s own job to declare; this test's job is only to catch it growing (or
     # shrinking) without `at` in particular joining it, which the length plus the membership
@@ -328,7 +328,7 @@ def test_record_sourced_operands_refuses_each_planted_mismatch():
         _check_record_sourced({"petition": {"from": "from"}}, ops, RECORD_KIND_KEYS)
     # THE CONTROL -- the real roster, read back through its own binding, never re-typed: a second
     # literal here would be exactly the "roster duplicated from the data file" defect this whole
-    # position exists to fix (`test_jordan_no_definition_is_hardcoded_in_a_body` caught the first
+    # position exists to fix (`test_jordan_no_definition_is_hardcoded_in_a_body` (retired) caught the first
     # draft doing precisely this).
     _check_record_sourced(RECORD_SOURCED_OPERANDS, ops, RECORD_KIND_KEYS)
 

@@ -919,7 +919,7 @@ def _content_answer(c: Optional["Claim"], name: str):
 
 
 # Every operand name SOME record kind answers -- derived from the roster, never listed (the
-# `test_jordan_no_definition_is_hardcoded_in_a_body` finding at `_derive_operand`'s document branch).
+# `test_jordan_no_definition_is_hardcoded_in_a_body` (retired) finding at `_derive_operand`'s document branch).
 _RECORD_ANSWERABLE = frozenset(n for m in RECORD_SOURCED_OPERANDS.values() for n in m)
 
 

@@ -605,7 +605,7 @@ def _ch_chronicle(w: "World", e, pid) -> bool:
 # ⚠ BUILT FROM THE ROSTER, NOT TYPED HERE. A dict literal mapping five channel names to five
 # functions is A ROSTER OF NAMES IN A PYTHON BODY, which is exactly what Jordan ruled against on
 # 2026-09-02 (*"I do not want definitions etc to be hardcoded"*) and what
-# `test_jordan_no_definition_is_hardcoded_in_a_body` exists to catch. The names live
+# `test_jordan_no_definition_is_hardcoded_in_a_body` (retired) exists to catch. The names live
 # once, in `rosters.yaml`; the functions are looked up by a derived name, so adding a channel is a
 # data edit plus a function, and a channel with no function RAISES at import rather than silently
 # never matching.

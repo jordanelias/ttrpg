@@ -85,6 +85,6 @@ def test_sweep_displaces_laterally_grid():
 
 def test_sweep_displaces_laterally_node():
     """Acceptance: V-SWEEP on the LIVE default (node/field) path -- Unit._resolve_maneuver_goal/
-    _sweep_goal (fix-plan step 7), same mechanism as test_envelop_reaches_rear_node."""
+    _sweep_goal (fix-plan step 7), same mechanism as the retired test_envelop_reaches_rear_node."""
     r = _val.v_sweep(path='node', seeds=_CI_SEEDS)
     assert r.passed, f"V-SWEEP (node) measured={r.measured} expected={r.expected}"

@@ -553,7 +553,7 @@ def _model_modules():
     Derived, never listed. Three tests keyed on this — `test_d6_no_constant_is_hardcoded_in_a_body`,
     `test_h115_the_fourteen_load_time_raises_are_unchanged` (its exact count of load-time exits is a
     pin B02.01 D deleted, with the test) and
-    `test_jordan_no_definition_is_hardcoded_in_a_body` — and each previously named files by hand:
+    `test_jordan_no_definition_is_hardcoded_in_a_body` (retired) — and each previously named files by hand:
     the exact shape this file records three separate incidents about (`files.package_modules`,
     `:1773-1783`, `:4306-4311`), each written after a module went unscanned BY CONSTRUCTION. A
     decomposition adds a model module every step, so a hardcoded list is guaranteed to fall
@@ -1108,7 +1108,7 @@ def _run(module: str):
 
 
 # ── THE W15 PAIR IS SERIALIZED (ED-IN-0260's deferred fix, taken 2026-09-22) ───────────────
-# `test_w15_the_run_cases_entrypoint_writes_nothing` fingerprints this package with MTIME, and
+# `test_w15_the_run_cases_entrypoint_writes_nothing` (retired) fingerprinted this package with MTIME, and
 # `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte` WRITES `runs/results.json`
 # (the one tracked file there) by executing the emitter — twice, because its `finally` puts the committed bytes back
 # and a restore is itself a write. On separate xdist workers the two straddle each other and the
@@ -4876,7 +4876,7 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     #
     # THE REAL CAUSE, MEASURED RATHER THAN GUESSED: `kill / wound` now executes in `tiny_world`, for
     # the identical reason `examine` newly executes in the 89-world corpus
-    # (`test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this`'s `11a` note)
+    # (`test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this`'s `11a` note, retired with its test)
     # — its typed cell needs a PERSON referent, which no Question's referent could ever supply
     # before `11a`. Excluding `transfer` vs excluding `move` puts a DIFFERENT population through ten
     # seasons of combat, so a DIFFERENT number of `Hh` residents (`p_low`/`p_mid`/`p_other`) survive
@@ -6891,7 +6891,7 @@ def test_wc_no_corpus_refusal_arises_from_a_missing_operand():
       * `_derive_operand` returns `None` for `"from"` -- a person cannot name their own hearth
         again. Every `transfer` Candidate then DECLINES: this test goes RED on the second
         assertion with `723 Candidates declined`, and
-        `test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this` goes red
+        `test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this` (retired) went red
         beside it with `transfer executed ZERO times`.
       * the same, PLUS dropping `operands_for`'s `if v is None: ... return None` guard. The
         Candidate now forms with `from` absent, the act is minted with a hole, the fold reads

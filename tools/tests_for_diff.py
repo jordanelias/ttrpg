@@ -4,21 +4,24 @@
 An INNER-LOOP ACCELERATOR, not a gate: CI runs everything and is the full-suite tier (`CLAUDE.md` section 8).
 It reads the files this session changed (committed since the branch left `origin/main`, staged, unstaged,
 untracked) and prints the narrowest honest command. Every test belongs to one LANE: the season loop, the engine, or
-one subsystem (combat, mass battle, social contest, threadwork); `conftest.py` owns the assignment, as a marker. A
-change runs its own lane and no other:
+one subsystem (combat, mass battle, social contest, threadwork); the root `conftest.py` owns the assignment, as a
+marker. A change runs its own lane and no other:
 
   * a test file edited                                    ->  that file alone;
   * `engine/season/` edited                               ->  `pytest -m season_loop`; no subsystem lane (their
     tests execute `modules/` and the dice engine, nothing in `engine/season/`);
   * `modules/<s>/` or `systems/<s>/` edited               ->  `pytest -m <s>`;
   * anything else (engine/dice_engine/, engine/substrate/, exporters, registries, tools/)  ->  no narrowing: it
-    prints the full-gate commands of `CLAUDE.md` section 0.4, because every lane reaches it;
+    prints the full-gate commands of `CLAUDE.md` section 8, because every lane reaches it;
   * only prose changed (.md and the like)                 ->  nothing to run beyond the validators.
 
 WHAT THE NARROW ANSWER DOES NOT COVER, said here because it is the cost of skipping: the season suite builds a whole
 realm, so its tests execute the combat, mass-battle and contest modules too. A subsystem edit that changes what a realm
 does shows up there, and in the realm-hash goldens, only when the season lane runs; with this tool that is CI's run.
 If your edit could change a realm (a module's output the season loop reads), run `-m season_loop` as well.
+
+WHO USES IT: `/close` (`.claude/commands/close.md` step 4) and the inner loop. `methodology-execute`'s BATCH-CLOSE does
+not: its lanes are the ones its plan names (v12 P18).
 
 Usage:  python tools/tests_for_diff.py [--base REF] [--run]
 """

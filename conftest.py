@@ -1,21 +1,21 @@
-"""Subsystem markers: `pytest -m combat`, `-m mass_battle`, `-m social_contest`; and the `flat_fold` mark's fixture (`_flat_fold_arm`, below).
+"""Lane markers (`pytest -m <lane>`, the table below); and the `flat_fold` mark's fixture (`_flat_fold_arm`, below).
 
 WHY. A change to mass battle does not need the personal-combat tests and the reverse, and most test files say
 what they test in their name. This file assigns the marker from the file name, in one place, to every test
-collected under the repo root (tests/valoria, engine/season/tests, engine/tests). It is an inner-loop
-accelerator, nothing more:
+collected under the repo root (tests/valoria, engine/season/tests, engine/tests). It selects tests, nothing more: the
+inner loop's (`tools/tests_for_diff.py`) and a batch close's (v12 P18):
 
   * `python -m pytest -m mass_battle -q -n auto` runs the mass-battle files across all three trees.
   * CI runs no `-m` filter, and `pytest.ini` says why it must not (a filter at the gate is a coverage cut).
   * It is NOT a statement of what a change can break. The season suite builds a whole realm, so its tests
     execute the combat, mass-battle and contest modules too (measured: a `modules/combat/` edit is reached by
-    tests costing about three quarters of the whole suite). After a module edit run `-m <subsystem>` for the
-    quick answer, then the full season suite once at the close (`CLAUDE.md` section 0.4).
+    tests costing about three quarters of the whole suite). If a module edit could change a realm, run
+    `-m season_loop` too (`tools/tests_for_diff.py`'s docstring).
 
 MEMBERSHIP IS BY NAME, and was checked against what each file executes (coverage by test, 2026-11-04): every
 `combat` file under tests/valoria executes `modules/combat` or `engine/dice_engine` and nothing in
 `engine/season`; every `mass_battle` file executes `modules/mass_battle`. A file whose name does not say
-which subsystem it tests carries no marker; add its prefix to the table below rather than guessing.
+which lane it tests would carry no marker, and every test has one lane: add its prefix to the table below.
 """
 import os
 import re

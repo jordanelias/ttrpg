@@ -204,9 +204,9 @@ ALL DIRECTIONS  top-down · bottom-up · vertical · diagonal · lateral · hori
    asserted (`assert checked >= N`).
 3. **Name the falsifier, or you have not attacked the result.** A result claim carries, in the same
    commit, the test that would have shown it wrong and that test's outcome; the commit is the record, so a control
-   or falsifier that only shows a build was built is RUN ONCE AND NOT KEPT. A test is committed only if it observes game state (the
-   nine, the season loop or a subsystem, a pin the output crosses) and sits in one lane (`conftest.py`); `methodology-execute`'s
-   accretion pass retires what slips in. A result claim is wider than a number, and **the claim and its support are different objects; check the support.**
+   or falsifier that only shows a build was built is RUN ONCE AND NOT KEPT. A test is committed only if it observes game state
+   and sits in one lane (`conftest.py`), and a batch leaves no lane larger than it found it without naming what the growth
+   observes (`methodology-execute`'s accretion pass defines both and retires what slips in). A result claim is wider than a number, and **the claim and its support are different objects; check the support.**
 
    | claiming | observe this first |
    |---|---|
@@ -230,7 +230,7 @@ ALL DIRECTIONS  top-down · bottom-up · vertical · diagonal · lateral · hori
    > without cost. Delete it, or accept the defect and write nothing.***
 
    **Load-bearing ≠ "about the game".** KEPT: `test_morale_write_sweep.py`, the golden-modes and
-   sim-fabrication CI checks, `tools/export_engine_params.py`'s round-trip `--check`, a compile gate.
+   sim-fabrication CI checks, `tools/export_engine_params.py`'s round-trip `--check`, a compile gate, the test-lane ratchet (Jordan).
    FORBIDDEN: a guard whose subject is another guard, a grader over the gate list, a test that the
    blocking tier's membership is honest. ⚠ A forbidden guard may not reappear as **a finding** (§0).
    Sweep only what the current task is load-bearing on; otherwise fix it here or drop it.
@@ -273,7 +273,7 @@ Timings: `CLAUDE_RATIONALE.md` §0.4 — re-measure rather than quote them.
 1. **The full suite runs AT MOST once per commit, and only when it can observe something CI will not (RULED).**
    CI runs it on every push not marked `[skip ci]`, and §11 bars you from reading that result: for a code change the suite can reach, your close run is the only result before the commit. Name what a local run would catch first; a diff of prose, ledgers, skills
    or links runs only the test files that read what it touched (`grep -rl <path> tests/`).
-2. **Mid-session, run only the file covering what you touched.** If you cannot name it, find it. At the close, `python tools/tests_for_diff.py` names the suites your edits call for (a season-loop edit runs the season suite alone; `-m <subsystem>` when only that subsystem changed).
+2. **Mid-session, run only the file covering what you touched.** If you cannot name it, find it. At the close, `python tools/tests_for_diff.py` names the lane each edit belongs to (`-m season_loop` or `-m <subsystem>`; the full gates where no lane owns it); a `methodology-execute` batch runs its plan's lanes instead.
 3. **Never re-run to re-confirm a green you already hold.**
 4. **A red close run re-runs the FAILING FILE ONLY while you fix it.** The suite comes back once, when you
    believe you are done, over only what the fix diff reaches (`tests_for_diff.py --base`). Red is not a licence to loop the gate.

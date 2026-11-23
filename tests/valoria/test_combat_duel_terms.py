@@ -11,8 +11,8 @@ The falsifiers are the plan position's own (v9 `_part7`, PC-10):
   (2) a seeded `blood` fight stops at the first wound with `surrender` set and NO felling;
   (3) a seeded `yield` fight stops at the threshold;
   (4) under `death` terms Felled stays reachable;
-  (5) the stop rule made a no-op sends (2) red -- the control is in this file
-      (`test_the_blood_assertions_observe_a_missing_stop`), not left to a one-off run.
+  (5) the stop rule made a no-op sends (2) red -- run once at the build; its control
+      (`test_the_blood_assertions_observe_a_missing_stop`) is retired.
 The cross-TREE half of (1) -- the lethal fight equal to the pre-PC-10a engine's -- is the existing combat suite and
 the draw-stream pins, which this position does not move.
 """

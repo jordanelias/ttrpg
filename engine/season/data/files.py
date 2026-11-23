@@ -20,7 +20,7 @@ not match, too deep and the repo markers are absent.
 THE PATHS ARE FLAT CONSTANTS, DELIBERATELY. No dict, no tuple, no lookup by string key -- a caller
 names the thing it wants and a typo is an `AttributeError` at the call site rather than a `None`
 that travels. (It is also what keeps this module clear of the roster gate in
-`test_jordan_no_definition_is_hardcoded_in_a_body`, which reads any collection of three or more
+`test_jordan_no_definition_is_hardcoded_in_a_body` (retired), which reads any collection of three or more
 short string constants as a definition that belongs in a data file. These are locations, not
 definitions, and they are not spelled as a collection.)
 """
@@ -117,8 +117,8 @@ COHORTS_YAML = PACKAGE_DIR / "cohorts.yaml"
 # registry above is: one path owner, never a local `__file__`.
 GOALS_YAML = PACKAGE_DIR / "goals.yaml"
 
-# The degree sweep's two arm modules (plus their shared `sweep_core`), imported by source in two
-# tests. Moved out of `proposals/2026-09-04-degree-sweep` to `engine/reference/degree-sweep/` so
+# The degree sweep's two arm modules (plus their shared `sweep_core`), once imported by source in two
+# tests, both retired (nothing reads this path now). Moved out of `proposals/2026-09-04-degree-sweep` to `engine/reference/degree-sweep/` so
 # the blocking test suite depends on no unratified tree (ED-IN-0231 precedent); the measurement
 # record (runs/, README.md, EXECUTION_PLAN.md, the other arms) stays in the proposal.
 DEGREE_SWEEP_DIR = ENGINE_DIR / "reference" / "degree-sweep"

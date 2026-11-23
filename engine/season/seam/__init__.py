@@ -44,7 +44,7 @@ from .contest import (ContestError, ContestRefused, Resolution, contest, contest
 from .ladder import combat_degree, degree_ladder, degree_of, ladder_error, party_degree
 
 # ⚠ DERIVED, NOT LISTED -- Jordan 2026-09-02, definitions are not hardcoded, and
-# `test_jordan_no_definition_is_hardcoded_in_a_body` reads a written-out name list in a model module
+# `test_jordan_no_definition_is_hardcoded_in_a_body` (retired) reads a written-out name list in a model module
 # as a literal roster. The predicate keeps only what a member DEFINED, which is what makes the
 # exclusion structural rather than remembered: `_LADDER` is a tuple with no `__module__` and would
 # be excluded even if the underscore rule were dropped.

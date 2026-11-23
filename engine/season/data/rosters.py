@@ -1136,7 +1136,7 @@ def _load_finding_terms(mapping: dict, bands, terms) -> dict:
 # THE DEGREE BANDS, FROM THE LADDER'S OWNER, BOUND ONCE HERE. `engine/dice_engine/dice_engine.py::DEGREE_LABEL`
 # is the single owner of the ladder (Jordan ruling, 2026-08-14: "THE degree ladder... for every scale of
 # the game"); `data/arrangements.py` imports `DEGREE_BANDS` from this module. A second spelling of the
-# four labels is a second owner (`test_jordan_no_definition_is_hardcoded_in_a_body`).
+# four labels is a second owner (`test_jordan_no_definition_is_hardcoded_in_a_body` (retired)).
 from engine.dice_engine.dice_engine import DEGREE_LABEL as _DEGREE_LABEL   # noqa: E402
 from engine.dice_engine.dice_engine import DEGREE_ORDINAL as _DEGREE_ORDINAL   # noqa: E402
 from engine.dice_engine.dice_engine import Degree as _Degree   # noqa: E402

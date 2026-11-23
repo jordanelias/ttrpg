@@ -253,7 +253,7 @@ def test_the_shipped_table_brings_no_edge_and_the_channel_names_capability():
     assert VERB_CAPABILITY["tell"] == SKILL
     # B05.99 re-pin: B05.17 (`proofs`, `favour`), B05.20 (`office`) and B05.60 (`wounds`) joined the roster; was [effort, capability]
     # (read off the roster and compared member by member: a literal copy of the whole roster would be the duplicate
-    # `test_jordan_no_definition_is_hardcoded_in_a_body` refuses)
+    # `test_jordan_no_definition_is_hardcoded_in_a_body` (retired) refuses)
     sources = tuple(rosters.roster("advantage_sources", ordered=True))
     assert sources[:2] == ("effort", "capability") and len(sources) == 6
     assert sources[2:] == ("proofs", "favour", "office", "wounds")

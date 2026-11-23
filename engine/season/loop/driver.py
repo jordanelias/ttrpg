@@ -280,7 +280,7 @@ class SeasonDriver:
         and `pending_matter` stay in this frame, and ENCOUNTER's token is minted ONCE, in the argument
         expression below, never kept, never re-minted on resume -- there is no resume but the decider's
         return. The draw ordinal resets once per tick (above) and the decider is handed no `World`, so by convention it
-        consumes none (`test_rem31_grid_suspension.py` plants a drawing decider and sees it). `choose` -- a host's own callback included (`harness/play_surface.py`) -- runs inside
+        consumes none (`test_rem31_grid_suspension.py::test_no_draw_and_no_mint_while_suspended`; its planted drawing decider is retired). `choose` -- a host's own callback included (`harness/play_surface.py`) -- runs inside
         DELIBERATE's per-person map, which must not depend on the order it visits persons
         (`loop/deliberate.py::deliberation_order`)."""
         w = self.w

@@ -100,7 +100,7 @@ def test_in66_the_two_rosters_are_closed_and_hold_the_ruled_members():
     from engine.season.data import rosters
     kinds = roster("goal_object_kinds")
     # one membership per assert: spelling the five together would DUPLICATE the roster in a body,
-    # which `test_season_shape.py::test_jordan_no_definition_is_hardcoded_in_a_body` refuses
+    # which `test_season_shape.py::test_jordan_no_definition_is_hardcoded_in_a_body` (retired) refuses
     assert len(kinds) == 5
     for member in ("person", "seat_holders", "rung"):
         assert member in kinds, member

@@ -148,6 +148,9 @@ jobs:
           # declaring-is-not-having defect in a file that ships game content. Verified passing
           # before wiring -- 46 NPCs, every row naming a real case, a real place, a seated person.
           v python3 tools/export_npc_roster.py --check
+          # Its only CI caller was test_cp_t04_02_marshal.py, retired with the CP-T04 tests (2026-11-22): a blocking
+          # round-trip exporter is gated by its own step, not by a test that happened to import it.
+          v python3 tools/export_battle_orders.py --check
           # references/names_index.yaml -> engine/engine_params/names.json, read at import by
           # engine/substrate/names.py. Blocking, NEW 2026-09-16: it is the first naming register
           # that reaches executable code, so a stale artifact is the wrong faction in a generated

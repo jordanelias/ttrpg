@@ -525,7 +525,7 @@ def test_in45_a_document_the_question_is_about_does_not_re_aim_a_classed_destina
 #   * `_eff_migrate` keeping its own inline throttle (`ancestry`/`population`/`capacity` imported by
 #     name at module level, the pre-REM-29 code) instead of calling `has_room` -> `test_rem29_b` RED
 #     (the patched leaf reaches the conjunct, and the effect still declines) and
-#     `test_24d_ii_capacity_has_a_caller_outside_the_tests` RED.
+#     `test_24d_ii_capacity_has_a_caller_outside_the_tests` (retired since) RED.
 
 from unittest import mock as _mock
 

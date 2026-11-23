@@ -96,8 +96,9 @@ _REPO = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), '..', '..'))
 # missing builder (`continue`), which is what made this an easy edit to miss: the layer still built
 # green with the stale rows in place, silently producing three fewer artifacts than declared. The
 # rows are removed rather than left for the skip to keep hiding, per `ID-13` — a declared row
-# nothing can ever populate again is not a weak entry, it is one that does not exist. The paired
-# floor is `test_generated_layer.py::test_the_layer_is_not_vacuous`, lowered in the same commit.
+# nothing can ever populate again is not a weak entry, it is one that does not exist.
+# ⚠ NO TEST REQUESTS `generated_layer` NOW: its consumers (`test_generated_layer.py`, `test_definitions_store.py`)
+# are retired. It stays because CI's workflow comment and `.gitignore` name it as the builders' on-demand caller.
 _GENERATED_LAYER = (
     ('build_engine_atlas.py',      ['references/engine_atlas.json', 'references/ENGINE_ATLAS.md']),
     ('build_identifier_census.py', ['references/identifier_census.json']),

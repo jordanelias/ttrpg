@@ -70,7 +70,7 @@ from .options import (
 from .questions import aggregate_questions, assemble, view_ids
 
 # ⚠ `__all__` IS DERIVED, NOT LISTED, AND JORDAN'S OWN GUARD IS WHY.
-# `test_jordan_no_definition_is_hardcoded_in_a_body` reads a written-out list
+# `test_jordan_no_definition_is_hardcoded_in_a_body` (retired) reads a written-out list
 # as a literal roster in a model module (Jordan, 2026-09-02: definitions are not hardcoded),
 # and the fix is to derive rather than to claim a `roster-exempt:` -- an exemption is counted against
 # a ceiling that "needs an argument, not a bump", and there is no argument here because the set is

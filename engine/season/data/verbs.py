@@ -65,7 +65,7 @@ BENEFICIARY_KINDS = roster("beneficiary_kinds")
 #                 (`actor` is held unconditionally, `subject` is a field, `none` carries nothing);
 #   operand    -- carried only where the row's own cell binds or admits it, so invariant 13's
 #                 third check must verify carriability for it.
-# ⚠⚠ A hand-kept list of either half (`test_jordan_no_definition_is_hardcoded_in_a_body`) would
+# ⚠⚠ A hand-kept list of either half (`test_jordan_no_definition_is_hardcoded_in_a_body` (retired)) would
 # silently stop covering a member the moment `rosters.yaml` gains one. A new member with no
 # `carriage:` entry REFUSES at load, so the check cannot fall behind the roster.
 _BENEFICIARY_CARRIAGE = roster_map("beneficiary_kinds", "carriage")
