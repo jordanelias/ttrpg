@@ -21,7 +21,7 @@ GATE: Batch B01a-attributes-generated @cbca1ad4fcee656f908d8a75e99bf79213ddeeab 
 GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B04-capability-home @74910ca78a3ed2afb8898679a8142031c974223b
 GATE: Batch B05-one-roll @ca3f4bcf76a6b057013c85d1c466b83ef9446470
-GATE: Batch B10-character @7f520d7a59d254e4056f8dd47f481ff0f4ca6a7f
+GATE: Batch B10-character @c21e451f19f778fcd80d8c15e712b9b86ef61640
 GATE: Batch B14-pc-outcome @9f260ef5b6bd5cb98d4b996f66e93c5d386e18fa
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — no conjunct of the nine is closed here (`V12_STRUCTURE.md` §2.2: "R-04's combat scale becomes observable"); the batch serves A-31 (longer fights), A-71/A-79 (one opposed rule, live), A-101 (a round ends at every separation), A-8 (a carried wound is a level), A-24 (the yield is a draw), A-112 (no `faculty` attribute), and the standing rule "we do not do deterministic" (the riposte, the armour gap, the mortal-wound draw). The close re-reads and quotes the nine (`register --requirements`) and `IS-PC-03`'s integrated reading (Readings R1).
