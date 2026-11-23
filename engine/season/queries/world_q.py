@@ -2875,6 +2875,32 @@ def current_stage(w: World, p: Person, ambition, weigh=None) -> Optional[dict]:
     return out or None
 
 
+def believed_met(w: World, p: Person, ambition) -> bool:
+    """B10.71 (U5a `CHAR` owed amendments §3 (a)): DOES `p` BELIEVE THE AMBITION MET -- his OWN ledger reads every stage of
+    its `goal_stages` row as passed, for every referent (`current_stage` reads `None` with a row and a referent: nothing
+    left to climb). A want with no row has no content a ledger can read, so it reads `False` and Q4 is unchanged for it;
+    so does one naming no referent (nothing is passed on nobody). Person-side (`current_stage`'s reader), so a want he
+    believes met that the world does not hold met reads `True`: a false belief at work, which the source intends. It
+    stands BESIDE `aim_state`, which reads the world (a rung its org holds), and neither reads the other. Stored nowhere."""
+    goal = _goals.goal(ambition)
+    prop = w.propositions.get(ambition)
+    if goal is None or goal.stages is None or prop is None:
+        return False
+    return any(r is not None for r in goal_referents(w, p, prop)) and current_stage(w, p, ambition) is None
+
+
+def opens_mandatory(w: World, p: Person, ambition) -> bool:
+    """B10.71 (A-47): IS `p`'S QUESTION ON THIS AMBITION ONE HE MAY NOT PASS OVER FOR ANOTHER -- its `goal_stages` row says
+    `opens: mandatory` and, for some referent, the stage `current_stage` stands him on is the row's LAST. `False` for an
+    ambition with no row, a row that opens `ordinary`, a person who has not reached the last stage, and one who has passed
+    it (that is `believed_met`: no question is raised). It reads where he stands and chooses no act."""
+    goal = _goals.goal(ambition)
+    if goal is None or goal.stages is None or goal.stages.opens != _goals.OPENS_MANDATORY:
+        return False
+    cur = current_stage(w, p, ambition)
+    return cur is not None and any(s.id == goal.stages.stages[-1].id for s in cur.values())
+
+
 def _aim_held_by_org_member(w: World, goal) -> bool:
     """`rung`'s aim rule: the goal's rung is governed (`governing_hold`, the nearest held rung at or above it) by a
     person committed to the goal's organization's faction (`faction_holding`, the one owner of *which faction a person
@@ -4138,8 +4164,11 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
         refs_of[pid] = set(refs) - {None}
         # CP-T02-03: a MET aim (a rung goal whose rung its org already governs) has no work to ask for. Its
         # referents stay in `refs_of`: they still orient `attention_key`; only the standing question is not formed.
-        if refs and aim_state(w, p, w.propositions[pid]) != "met":
-            out.append(Question(f"q:need:{pid}", "need", refs, pid))
+        # B10.71 (U5a `CHAR` §3 (a)): nor has a want he BELIEVES met (`believed_met`, his own ledger), where either reads met
+        # [ASSUMPTION; medium; Jordan to correct; revert: drop `believed_met` -- the world's aim state alone gates it].
+        # And a row opening `mandatory` marks the question of its last stage (`opens_mandatory`; sorted first below).
+        if refs and aim_state(w, p, w.propositions[pid]) != "met" and not believed_met(w, p, pid):
+            out.append(Question(f"q:need:{pid}", "need", refs, pid, mandatory=opens_mandatory(w, p, pid)))
 
     # v9 SC-01 FIRED-SLOT STEP (H-163 limit 2, #453 pass-1 step 4): A JUDGE IS ASKED ABOUT THE
     # MATTERS BEFORE A SITTING HE SITS ON. One question per fired sitting (`sittings_before`: a docket
@@ -4174,7 +4203,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
 
     # v9 IN-57: the order is `attention_key`'s tiered read of the person's own state; the
     # `(source, q.id)` key is its final tiebreak (hole_register H-54).
-    out.sort(key=attention_key(w, p, ambs, refs_of))
+    # B10.71 (A-47): a MANDATORY question sorts ahead of every other, `attention_key` ordering within each side; with none
+    # marked the key is `False` throughout and the order is `attention_key`'s alone.
+    order = attention_key(w, p, ambs, refs_of)
+    out.sort(key=lambda q: (not q.mandatory, order(q)))
     # IN-53 (H-207, DECISION 2026-10-13 D1): A VACANT SEAT THE PERSON MAY FILL IS A STANDING
     # OCCASION, AND IT RIDES ON WHATEVER QUESTION HE ANSWERS. After the sort, so it displaces
     # nothing: `out[0]` -- the question every aggregation rule delivers (`first` returns it; `all`/

@@ -193,8 +193,9 @@ def test_the_stage_pursuits_join_the_salience_target_as_the_goals_own_do():
     assert lifted > base, (lifted, base)
     assert same_axis <= base, "a stage weighing what he does not point at does not raise it (the control, other way)"
     with goals.rows_replaced(goals.parse(_doc(pursuits={"honour": 3}))):
-        done = _need_salience(_world(_passing(), pursuits=mine))
-    assert done == base, "a stage he has passed weighs nothing"
+        done = _world(_passing(), pursuits=mine)
+        assert [q for q in _answered(done) if q.source == "need"] == [], (
+            "a stage he has passed weighs nothing: since B10.71 he believes the want met and is asked no `need` question")
 
 
 # ---------------------------------------------------------------------------------------------------

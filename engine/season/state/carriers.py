@@ -521,12 +521,18 @@ class Question:
     as a vacancy), and neither side's formations move the other's. It rides per referent, not on
     `source`, because `decision/questions.py::aggregate_questions` folds several questions under ONE
     source and unions the pairs. A Question is not in `World._STATE_COLLECTIONS` and is never
-    hashed, so the field moves no `content_hash`; `()` carries none."""
+    hashed, so the field moves no `content_hash`; `()` carries none.
+
+    `mandatory` (B10.71, A-47): the question a person may not pass over for another -- `questions_for` sorts it first, ahead of
+    `attention_key`, and sets it only on the `need` question of an ambition whose `goal_stages` row says `opens: mandatory`
+    while he stands on the row's last stage. It opens a scene and DECIDES NOTHING: which act he takes is the chooser's draw.
+    Not hashed, as the rest of a Question is not."""
     id: str
     source: str
     referents: tuple
     about: str = ""
     classes: tuple = ()
+    mandatory: bool = False
 
     def referents_for(self, cls: Optional[str]) -> tuple:
         """THE REFERENTS A ROW DECLARING `cls` FORMS ON: the plain `referents` for `None` (a row
