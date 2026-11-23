@@ -15,6 +15,7 @@ from engine.substrate.descriptors import PURSUITS
 
 from ..boot.realm import seed_self_knowledge
 from ..data import cast
+from ..data.rosters import STANCE_VALENCE_SCALE
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.pursuits import pursuit
 from ..data.matrix import Step, WriteClass
@@ -116,7 +117,7 @@ def test_a_told_self_claim_is_weighed_by_regard_for_the_teller():
         w = P.tiny_world(DEFAULT_FIXTURES.sweep("self_told_floor", floor))
         me = w.persons[ACTOR]
         me.thread_sensitivity = GATE + 10
-        me.stance = [(friend, cast.STANCE_VALENCE_SCALE, cast.STANCE_VALENCE_SCALE), (foe, -cast.STANCE_VALENCE_SCALE, cast.STANCE_VALENCE_SCALE)]
+        me.stance = [(friend, STANCE_VALENCE_SCALE, STANCE_VALENCE_SCALE), (foe, -STANCE_VALENCE_SCALE, STANCE_VALENCE_SCALE)]
         me.ledger.append(Claim("c_told", ACTOR, ACTOR, SELF_STEM + KEY, True, 0, "told_by", 100, "own", chain=(teller,)))
         if shown:       # B10.66: his own act showed it (WITNESS's deposit to him), which no teller's weight can overrule
             me.ledger.append(Claim("c_shown", ACTOR, ACTOR, "skill_shown:" + KEY, True, 1, "firsthand", 50, "own"))

@@ -2775,7 +2775,7 @@ rosters:
       a person committed to nothing forms what he formed before. ONE LOADER, `data/verbs.py::HELD_EDGE_SOURCED`, refused at
       import when a line names a verb the table lacks or a kind `tenure_kinds` does not carry. [ASSUMPTION; medium; Jordan to
       correct; revert: drop the line, and `release` forms on the question's referents only -- a want is then never offered
-      for laying down.] A FACTION MEMBERSHIP IS NOT AN OBJECT HERE (B10.72's fix): a `commit` whose object is a faction (`data/rosters.py::is_faction_id`) is
+      for laying down.] A FACTION MEMBERSHIP IS NOT AN OBJECT HERE (B10.72's fix): a `commit` whose object is a faction (`data/rosters.py::FACTION_BY_PROP`) is
       left out of what the verb forms on, because releasing it is leaving the faction; the verb forms on a commit to a Proposition that is no faction.
     values:
       release: commit

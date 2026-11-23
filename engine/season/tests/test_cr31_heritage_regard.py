@@ -20,7 +20,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from engine.season.data.cast import STANCE_MAX
+from engine.season.data.rosters import STANCE_MAX
 from engine.season.data.fixtures import DEFAULT_FIXTURES
 from engine.season.data.rosters import SEEN_PREDICATE
 from engine.season.decision.choose import _stance_arm

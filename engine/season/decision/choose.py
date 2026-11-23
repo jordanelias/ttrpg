@@ -34,7 +34,7 @@ from typing import Any, Callable, Optional
 from engine.dice_engine import fmath
 from engine.dice_engine.fmath import ltr_sum
 from ..data import goals as goals_data
-from ..data.cast import STANCE_MAX
+from ..data.rosters import STANCE_MAX
 from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
 from ..data.rosters import SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
 from ..data.verbs import BODILY_PRIZES, CHOICE_SOURCED, VERB_TABLE, act_key, align, align_choice
@@ -388,6 +388,11 @@ def score_total(terms: tuple) -> float:
     return s + terms[4] if terms[4] else s
 
 
+def chosen_values(c) -> tuple:
+    """`(key, value)` for each CHOICE VALUE the candidate's operands carry (`choice_sourced` keys, B10.56): the one reader, for `score_terms` and `score_parts`."""
+    return tuple((k, c.operands[k]) for k in CHOICE_SOURCED.get(c.verb, ()) if k in (c.operands or {}))
+
+
 def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional[Callable] = None,
                 q: Optional[Question] = None) -> tuple:
     """§F2's score, term by term: `(pursuit, stance, fit, aim, risk)`, and `score(c)` is `score_total` of them (IN-62; the sum, `fit`
@@ -424,7 +429,7 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
     # B10.56: the candidate's CHOICE VALUES (`choice_sourced` keys its operands carry), scored by their own alignment cells through the same
     # weights and damp, so `odds_weight` below prices them with the verb's. Added only where a cell moves it: no cell authored (the shipped
     # roster) leaves `pursuit` the very float above, not that float plus a signed zero.
-    chosen = tuple((k, c.operands[k]) for k in CHOICE_SOURCED.get(c.verb, ()) if k in (c.operands or {}))
+    chosen = chosen_values(c)
     if chosen:
         by_choice = damp * ltr_sum(axis_w[ax] * ltr_sum(align_choice(k, v, ax) for k, v in chosen) for ax in _AXES)
         if by_choice != 0.0:
@@ -559,7 +564,7 @@ def temper(p: Person, fx: "Fixtures") -> float:
 
 def own_temperature(p: Person, fx: "Fixtures") -> float:
     """A PERSON'S OWN CHOICE TEMPERATURE (B10.28): the realm's `choice_temperature` times his `temper` factor, exactly `choice_temperature` at the shipped gain 0 (x 1.0).
-    THE ONE OWNER: `_sample_order` draws at it, `make_ranker`'s `decide` attributes at it, and `harness/decision_spread.py::own_tau` and
+    THE ONE OWNER: `_sample_order` draws at it, `make_ranker`'s `decide` attributes at it, and `harness/decision_spread.py` and
     `harness/interactions.py`'s softmax read it, so the person's temperature is one quantity however many readers ask."""
     return float(fx.get("choice_temperature")) * temper(p, fx)
 

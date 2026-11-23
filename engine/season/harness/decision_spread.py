@@ -233,7 +233,7 @@ def attribute_top(p, cands: list, fx, draw=None, odds=None, q=None) -> dict:
         return CH.deciding_term([], [], None, 0.0)
     terms, by_id, ranked = _scored(p, cands, fx, odds, q)
     actual = CH.sample_order(ranked, lambda c: by_id[id(c)], p, fx, draw)[0]
-    return CH.deciding_term(cands, terms, actual, own_tau(p, fx))
+    return CH.deciding_term(cands, terms, actual, CH.own_temperature(p, fx))
 
 
 def _scored(p, cands: list, fx, odds=None, q=None) -> tuple:
@@ -244,13 +244,6 @@ def _scored(p, cands: list, fx, odds=None, q=None) -> tuple:
     terms = [CH.score_terms(p, c, fx, memo, odds, q) for c in cands]
     by_id = {id(c): CH.score_total(t) for c, t in zip(cands, terms)}
     return terms, by_id, CH.score_order(cands, by_id)
-
-
-def own_tau(p, fx) -> float:
-    """A PERSON'S OWN choice temperature: `choose.own_temperature`, the one owner, as `_sample_order` forms it (B10.28). `deciding_term` reads only whether it
-    is above 0, which `temper` (refused outside (-1, 0] at its gain) never changes, so the labels are the same at every gain and the call keeps
-    the reading honest about whose temperature it is."""
-    return CH.own_temperature(p, fx)
 
 
 def new_split() -> dict:
@@ -475,7 +468,6 @@ def read_decisions(w) -> dict:
     for label, ref in common_referents(w):
         split = new_split()
         handed, keyed, order = common_set(w, ref, foldable)
-        common = set(order)
         tops: dict = {}
         score_tops: dict = {}
         deciders: Counter = Counter()
@@ -500,7 +492,7 @@ def read_decisions(w) -> dict:
             if fac is not None and top is not None:
                 by_faction.setdefault(fac, set()).add(top)
         rows.append({"referent": label, "handed": handed, "forming": len(keyed),
-                     "common": len(common), "distinct_tops": len({t for t in tops.values() if t is not None}),
+                     "common": len(order), "distinct_tops": len({t for t in tops.values() if t is not None}),
                      "faction_tops": sum(len(v) for v in by_faction.values()),
                      "deciders": dict(deciders), "tops": tops, "split": split_figures(split)})
     return {"rows": rows, "split": split_figures(total), "tau": float(fx.get("choice_temperature")), "pairwise": pairwise}
@@ -598,7 +590,7 @@ def play_season(w, seasons: int = 1, rebuild=None) -> dict:
     def watch(p, q, ranked, terms, sampled):
         # `make_chooser`'s observer hook: what the chooser itself ranked, scored and sampled (B09.13). Nothing is
         # scored again and nothing is steered; `choose.deciding_term` is the one owner of the attribution rule.
-        tally_split(split, p.id, CH.deciding_term(ranked, terms, sampled[0] if sampled else None, own_tau(p, w.fixtures)))
+        tally_split(split, p.id, CH.deciding_term(ranked, terms, sampled[0] if sampled else None, CH.own_temperature(p, w.fixtures)))
         key = (q.source, goal_class(q))
         answered[key] += 1
         heard.append(key)

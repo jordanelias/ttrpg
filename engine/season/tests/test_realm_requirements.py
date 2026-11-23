@@ -30,7 +30,7 @@ from __future__ import annotations
 
 import pytest
 
-from ..data.cast import STANCE_VALENCE_SCALE
+from ..data.rosters import STANCE_VALENCE_SCALE
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
 from ..data.matrix import Step, WriteClass
 from ..data.verbs import VERB_TABLE

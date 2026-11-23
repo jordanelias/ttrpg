@@ -45,7 +45,7 @@ from ..data import verbs as _verbs
 from ..data import affiliations as _aff
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.affiliations import AFFILIATION_CEILING, AFFILIATION_FLOOR, conviction_map, engagement
-from ..data.cast import STANCE_MAX
+from ..data.rosters import STANCE_MAX
 from ..data.pursuits import _AXES, pursuit_cosine_axes, to_axes   # `_AXES`: the sorted axis order, owned once
 from ..data.requires import (
     CELL_STEMS, KNOWN_PERSON_CLAIM, OWN_STATE_STEMS, Observation, REQUIRES_OPERANDS, REQUIRES_STEMS, SHORTFALL_PREDICATE,
@@ -1601,9 +1601,9 @@ def knows_self(p, key: str, weigh=None, fx=None) -> bool:
     `Fixtures.self_told_floor` (H-483; read only here, only for a told claim, and `0.0` at the control believes every one). Without a `weigh` a told claim is read as it stands."""
     if key not in SELF_BELIEVED:        # a key outside the roster is known by construction, as it always was
         return True
-    mine = [c for c in p.ledger if c.subject == p.id and c.predicate in (s + key for s in _SELF_STEMS)]    # B10.66: a skill shown is his `self:<key>`
     if _firsthand_self(p, key):         # B10.66: what he made of himself stands against a teller he disregards
         return True
+    mine = [c for c in p.ledger if c.subject == p.id and c.predicate in (s + key for s in _SELF_STEMS)]    # B10.66: a skill shown is his `self:<key>`
     best = LedgerReader(mine, weigh).belief_among()
     if best is None or best.value is not True:
         return False

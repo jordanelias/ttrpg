@@ -22,7 +22,7 @@ from __future__ import annotations
 import dataclasses
 
 from ..data import goals as G
-from ..data.cast import STANCE_MAX
+from ..data.rosters import STANCE_MAX
 from ..data.pursuits import pursuit_cosine_axes, to_axes
 from ..data.rosters import PURSUITS, SEEN_PREDICATE
 from ..epistemic import Seen

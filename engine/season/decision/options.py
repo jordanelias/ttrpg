@@ -23,14 +23,14 @@ from __future__ import annotations
 
 import itertools
 from typing import Any, Callable, Optional
-from ..data.cast import STANCE_MAX
+from ..data.rosters import STANCE_MAX
 from ..data.requires import (
     OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE,
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
 )
 from ..data.rosters import (
     CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, SUCCESSIONS,
-    capability_rows, is_faction_id, refusable, refusing_pole, remove_distance, require_member, require_use_site,
+    capability_rows, FACTION_BY_PROP, refusable, refusing_pole, remove_distance, require_member, require_use_site,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
@@ -150,9 +150,9 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # (`thread_read`) keeps `is not True` (no authored value is UNKNOWN and declines); every other cell declines on `False`
         # alone, so a conjunct this reader cannot answer (UNKNOWN) still forms the Candidate, and clause 4 and the fold keep
         # theirs. Not a decline on a skill: there is no `capability` stem (A-11).
-        own_stems = set(row.requires_typed.stems()) if row.requires_typed is not None else ()
-        own_read = bool(OWN_STATE_STEMS & set(own_stems))
-        own_only = own_read and set(own_stems) <= SENSITIVITY_STEMS
+        own_stems = set(row.requires_typed.stems()) if row.requires_typed is not None else set()
+        own_read = bool(OWN_STATE_STEMS & own_stems)
+        own_only = own_read and own_stems <= SENSITIVITY_STEMS
         # B10.24: THE DEONTOLOGICAL GATE IS NOT HERE. It moved to `choose.make_ranker`, after scoring and before the sample, so the
         # struck candidate's score is known and the Scene can keep what was given up (`Scene.forgone`).
         # v9 IN-12 step 10 (`rosters.yaml: held_document_declines`): A VERB A PERSON DOES NOT FORM WHILE HE
@@ -192,7 +192,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             # at lap 0 every cast person did, so `holder_faction_of` read None and a march folded `field.unopposed` (B10.99's
             # bisect of test_in36_foreign and test_task_draw to B10.72). Release stays for a commit to a Proposition.
             mine = tuple(dict.fromkeys(t.object for t in p.tenures if t.kind == sourced_kind and t.live
-                                       and not is_faction_id(t.object)))
+                                       and t.object not in FACTION_BY_PROP))
             refs = tuple(refs) + tuple(o for o in mine if o not in refs)
         # B10-09 close one, D3 (`rosters.yaml: held_edge_declines`): A VERB A PERSON DOES NOT FORM ON AN OBJECT
         # HE ALREADY HOLDS A LIVE EDGE OF THE NAMED KIND ON -- `commit` on a Proposition he commits to

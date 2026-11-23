@@ -1152,7 +1152,7 @@ DEFAULT_FIXTURES = Fixtures(
     difficulty_ob=dict(zip(DIFFICULTY_LEVELS, (0, 0.8, 1.6, 2.4), strict=True)),   # `H-424`, swept control (`DIFFICULTY_OB_CONTROL`) / half / three-quarter / calibrated (SHIPPED)
     # `H-426` (B05.21; T13 edit 1, T3). HOW FAR A HEARER'S HOSTILITY MOVES THE OBSTACLE, per full clamp: the obstacle term `regard` is
     # `regard_step x clamp(-stance / STANCE_MAX, 0, 1)` over the stance rows the counterparty holds toward the actor (`person_q.stance_toward`,
-    # `data/cast.py::STANCE_MAX`), for one person counterparty and no audience (`sigma.py::_regard_term`); the favourable half of the same clamp is
+    # `data/rosters.py::STANCE_MAX`), for one person counterparty and no audience (`sigma.py::_regard_term`); the favourable half of the same clamp is
     # `favour` leverage, at the same step. `0` is the CONTROL: the term reads nothing and is not listed, and no stance brings a level.
     # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-426 -- site: Fixtures regard_step, graded `assumption`; T13 T3 gives the live 1.0 and no document derives it, so it is injected and swept 0 / 0.5 / 1.0 / 2.0]
@@ -1255,7 +1255,7 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-468 -- site: Fixtures scar_vindication, graded `assumption`; the source proposes `on`, so it is injected at the control and swept off / on]
     scar_vindication="off",            # `H-468`, swept off (control, SHIPPED) / on (proposed)
     # `H-471` (B10.10; `U5a_CHAR_owed_amendments` §2). WHETHER THE STANCE TERM'S REGARD IS BOUND TO THE ROW TYPE'S OWN BOUND: `decision/choose.py::_stance_arm` clamps the
-    # value it reads (`regard`, and `legacy`'s `stance_toward`) to `+-STANCE_MAX` (`data/cast.py`) before the polarity sign, so B10.04's `stance_scale` factor in `stance_term`
+    # value it reads (`regard`, and `legacy`'s `stance_toward`) to `+-STANCE_MAX` (`data/rosters.py`) before the polarity sign, so B10.04's `stance_scale` factor in `stance_term`
     # reads the clamped value. `False` is the CONTROL and SHIPS: today's unbounded sum, the realm hash the one before B10.10; the flip is B98's, after a reading.
     # [ASSUMPTION; medium; Jordan to correct; revert: `False`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-471 -- site: Fixtures stance_clamp, graded `assumption`; the source proposes the clamp and no live reading, so it is injected at the control and swept False / True]

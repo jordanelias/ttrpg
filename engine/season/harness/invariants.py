@@ -35,7 +35,7 @@ from collections import Counter
 
 # §F2's stance row is `(referent, valence -5..+5, weight 0..5)` (#353 `:333`). The bound is the
 # row type's, single-owned where the loyalty translation reads it.
-from ..data.cast import STANCE_VALENCE_SCALE
+from ..data.rosters import STANCE_VALENCE_SCALE
 
 #: Every invariant's id, in report order. A stable roster so a caller can name one.
 INVARIANTS = (

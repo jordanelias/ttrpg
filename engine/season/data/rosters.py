@@ -489,12 +489,6 @@ def faction_prop_id(name: str) -> str:
     return _FACTION_PROP_PREFIX + "".join(c if c.isalnum() else "_" for c in str(name).lower()).strip("_")
 
 
-def is_faction_id(ident: str) -> bool:
-    """WHETHER `ident` IS A FACTION'S PROPOSITION ID (`faction_prop_id`'s image), by the prefix the one relation forms it with: the other half of the relation, so
-    no reader spells the prefix itself (`decision/options.py::opening_set` excludes a faction membership from `held_edge_sourced`'s objects through it)."""
-    return str(ident).startswith(_FACTION_PROP_PREFIX)
-
-
 # The prefix of a territory RUNG id, and nothing else. Named so the relation below has one spelling.
 _TERRITORY_RUNG_PREFIX = "terr_"  # [JUSTIFIED: an id SPELLING, not a game value -- the territory-rung half of the faction-id relation's shape above]
 

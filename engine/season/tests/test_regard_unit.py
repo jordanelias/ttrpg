@@ -69,7 +69,7 @@ def test_stance_term_is_clamped():
     """B10.10 (H-471): twenty grudges of weight 5 against one person (H-339's hand-set rows) sum to -100 in stance units; through
     `stance_term` at `stance_gain` 1 the term reads +-200 unclamped and +-50 (2 x `STANCE_MAX`) with `stance_clamp` on, under every
     polarity arm. A sum inside the bound (five grudges, -25) reads the same either way."""
-    from ..data.cast import STANCE_MAX
+    from ..data.rosters import STANCE_MAX
     from ..state.carriers import Candidate
     w = P.tiny_world()
     p = w.persons[A]
