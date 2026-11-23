@@ -268,6 +268,7 @@ def signature_breaks(signatures: Optional[dict] = None, creeds: Optional[dict] =
     return out
 
 
+# [JUSTIFIED: a display count, how many of a pursuit's highest and lowest verbs `--words` prints -- the reading's width, not a game value]
 def _words(top: int = 5) -> None:
     """`--words`: `signature_breaks()` and, per pursuit, its `top` highest and lowest verbs by lean and its violated set.
 
