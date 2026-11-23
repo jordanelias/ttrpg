@@ -42,7 +42,7 @@ from typing import Optional
 from .data.requires import binding_of, evaluate
 from .data.rosters import (
     CLAIM_SUBJECT_RULES, COVERT_KINDS, DOMINANCE_KINDS, EVENT_REACH_ROWS, FAN_OUT_MODES, OBSERVATION_TERMS, PERSON_DIED,
-    REACH_FROM_STRATUM, REACH_FROM_UNREST, REACH_ROOM, SEAT_NEWS_ARMS, SEAT_NEWS_KINDS, SEEN_PREDICATE, TERMS_SUPPLIED_BY,
+    REACH_FROM_STRATUM, REACH_FROM_UNREST, REACH_ROOM, RUNG_KINDS, SEAT_NEWS_ARMS, SEAT_NEWS_KINDS, SEEN_PREDICATE, TERMS_SUPPLIED_BY,
     WITNESS_CHANNELS, require_member)
 from .data.verbs import EVENT_KINDS, NO_PRECONDITION, VERB_TABLE, VerbRow
 from .gaps import Unspecified
@@ -574,11 +574,17 @@ def _ch_post_remit(w: "World", e, pid) -> bool:
 
 
 def _seat_place(w: "World", e) -> "str | None":
-    """WHERE AN EVENT NO ONE PLACED HAPPENED, WHEN IT IS ABOUT A SEAT: the rung of the first Office its changes name
-    (`Office.rung`; `None` for an office with no rung, `S6.2`'s cluster case). A MATTER death's `tenure.closed` has no
-    actor and anchors on the Office, which `place_of` does not place (`event_place` is `None`), and the `chronicle` this
-    channel replaced told the realm of the vacancy regardless: without this limb the death of a seat-holder at MATTER
-    would reach nobody by `reach`. Asked only where `event_place` answers `None`."""
+    """WHERE AN EVENT NO ONE PLACED HAPPENED, WHEN IT IS ABOUT A SEAT: the rung of the seat the causing act was exercised
+    through (`Act.via` -> `Office.rung`, as `_ch_post_remit` reads it), else the rung of the first Office the Event's
+    changes name (`None` for an office with no rung, `S6.2`'s cluster case). A MATTER death's `tenure.closed` has no actor
+    and anchors on the Office, which `place_of` does not place (`event_place` is `None`), and the `chronicle` this channel
+    replaced told the realm of the vacancy regardless: without this limb the death of a seat-holder at MATTER would reach
+    nobody by `reach`. Asked only where `event_place` answers `None`. STILL UNPLACED, so reaching nobody: an act of an
+    unplaced actor exercised through no seat (`release`'s `tenure.closed` and `commitment.ended`, eligibility its own)."""
+    act = causing_act(w, e)
+    seat = w.offices.get(act.via) if act is not None and act.via else None
+    if seat is not None and seat.rung is not None:
+        return seat.rung
     for c in e.changes:
         office = w.offices.get(c.subject)
         if office is not None:
@@ -590,22 +596,30 @@ def _ch_reach(w: "World", e, pid) -> bool:
     """The event-kind reach channel (CR-29): news of an event reaches persons by the event's kind, at a stated reach.
 
     True where `e.kind` has a reach in `EVENT_REACH` and `pid`'s place (`world_q.place_of`) lies within the rung of that
-    kind that contains the event's place (`world_q.event_place`), or is that place for `room`. A kind with no reach, an
-    unplaced event or an unplaced person admits nobody; so does a seat-change kind (`SEAT_NEWS_KINDS`) at
-    `Fixtures.seat_news == "local"`, the A-32 arm that leaves that news to presence, jurisdiction and telling. Unlike the
-    `chronicle` it replaced, it reads `pid`: a person nowhere within the reach is not admitted.
+    kind that contains the event's place (`world_q.event_place`, else `_seat_place`), or is that place for `room`. Where the
+    event's place has NO rung of that kind above it and the reach is wider than the place itself (Altonia, a territory in no
+    `realm`), the outermost rung above it is the reach. An event no one placed, a kind with no reach or an unplaced person
+    admits nobody; so does a seat-change kind (`SEAT_NEWS_KINDS`) at `Fixtures.seat_news == "local"`, the A-32 arm that
+    leaves that news to presence, jurisdiction and telling. Unlike the `chronicle` it replaced, it reads `pid`: a person
+    nowhere within the reach is not admitted.
 
     ⚠ `person.died` IS NOT IN THE MAP (A-33): a death reaches those who were there, those on its trail and those told.
     The seats it empties earn `tenure.closed`, which does travel."""
     reach = EVENT_REACH.get(e.kind)
     if reach is None or (e.kind in SEAT_NEWS_KINDS and _seat_news(w) == "local"):
         return False
-    at, here = world_q.event_place(w, e) or _seat_place(w, e), world_q.place_of(w, pid)
+    homes = cache.home_index(w)
+    at, here = world_q.event_place(w, e, homes=homes) or _seat_place(w, e), world_q.place_of(w, pid, homes=homes)
     if at is None or here is None:
         return False
     if reach == REACH_ROOM:
         return here == at
-    rung = next((r for r in ancestry(w, at) if getattr(w.rungs.get(r), "kind", None) == reach), None)
+    chain = ancestry(w, at)
+    rung = next((r for r in chain if getattr(w.rungs.get(r), "kind", None) == reach), None)
+    if rung is None:
+        at_kind = getattr(w.rungs.get(at), "kind", None)
+        if at_kind in RUNG_KINDS and RUNG_KINDS.index(reach) > RUNG_KINDS.index(at_kind):
+            rung = chain[-1]
     return rung is not None and rung in ancestry(w, here)
 
 

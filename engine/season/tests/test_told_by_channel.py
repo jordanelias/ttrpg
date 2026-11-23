@@ -2313,7 +2313,7 @@ def test_the_same_event_at_room_and_at_realm_deposits_different_counts(monkeypat
     assert {"p_king", "p_high"} <= realm - room, (room, realm)
 
 
-def test_an_emptied_map_drops_told_by_to_zero(monkeypatch):
+def test_an_emptied_map_mints_less_told_by_than_the_shipped_one(monkeypatch):
     """CR-29's control: with the map emptied the realm's first season holds no hearsay a binding decision minted -- the
     `told_by` claims without a `chain` (the map's; a chained one is the told channel's, `T4`) fall to what `document_key`
     alone mints, and every one of them is a claim the shipped map also minted."""
@@ -2327,6 +2327,32 @@ def test_an_emptied_map_drops_told_by_to_zero(monkeypatch):
     emptied = season(True)
     assert shipped > 0, "the shipped map minted no hearsay in the realm's first season: the control observes nothing"
     assert emptied < shipped, (shipped, emptied)
+
+
+def test_a_realm_reach_event_in_a_territory_with_no_realm_reaches_that_territory():
+    """P2: Altonia is a `territory` under no `realm` rung, so `realm` reach has no rung of its kind above an event placed
+    there; the outermost rung is the reach. An Altonian elsewhere in the territory hears a decision made in it, the
+    Valorian in the realm does not, and an event in the realm still reaches the realm (control: the rung is found, no
+    fallback)."""
+    from ..state.carriers import Person, Rung
+    from ..state.ids import ROOT
+    w = P.tiny_world()
+    for rid, kind in (("ALT", "territory"), ("AS", "settlement"), ("AS2", "settlement")):
+        w.rungs[rid] = Rung(rid, kind)
+    w.add_tenure(Tenure("t_as_in", "AS", "ALT", "contain", since=0))
+    w.add_tenure(Tenure("t_as2_in", "AS2", "ALT", "contain", since=0))
+    for pid, at in (("p_alt1", "AS"), ("p_alt2", "AS2")):
+        w.persons[pid] = Person(pid, "an Altonian")
+        w.rungs[pid] = Rung(pid, "person")
+        w.add_tenure(Tenure(f"t_{pid}_in", pid, at, "contain", since=0))
+    def hears(anchor):
+        e = Event(id="e_alt", kind="order.given", changes=[P.about(w, anchor)], causes=[ROOT], emitted_at=1)
+        assert EP.EVENT_REACH["order.given"] == "realm"
+        return sorted(pid for pid in w.persons if CHANNEL_PREDICATES["reach"](w, e, pid))
+    alt = hears("p_alt1")
+    assert "p_alt2" in alt and "p_king" not in alt and "p_low" not in alt, alt
+    realm = hears("p_high")
+    assert {"p_king", "p_low"} <= set(realm) and "p_alt2" not in realm, realm
 
 
 def _released_seat(arm):

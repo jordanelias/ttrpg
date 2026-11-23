@@ -393,12 +393,18 @@ rosters:
     # on its trail, or told, and the seats it empties earn `tenure.closed`, below, which does travel):
     #   binding_decision kinds -> realm: what the public record carried before this channel replaced it (a decision
     #     by an institution is public to the realm that institution is of; `order.given`, `date.scheduled`, `tenure.*`,
-    #     `succession.claimed`, `place.surrendered`, `dispensation.issued` ...).
-    #   the unrest kinds -> settlement: a sign of coercion (a wound, a field won, a seizure, a requisition) is news to the
-    #     settlement it happened in and no wider -- `person_q.stability` reads a sign about a place, and H-234's gap is that
-    #     none reached a person who was not there; a settlement is the least rung that holds the people whose standing it
-    #     moves. [ASSUMPTION; medium; Jordan to correct; revert: an empty `from_unrest`, and the signs travel by presence
-    #     and telling alone]
+    #     `succession.claimed`, `place.surrendered`, `dispensation.issued` ...). Where the event's place lies in no realm
+    #     (Altonia, a territory) the outermost rung above it is the reach (`_ch_reach`). ⚠ WHAT THIS DOES NOT CARRY, because
+    #     the Event has no place: an act of an unplaced actor exercised through no seat (`release`'s `tenure.closed` and
+    #     `commitment.ended`, whose eligibility is its own) reaches nobody by `reach` (H-214's cite). ⚠ THE LEAK IT
+    #     CARRIES: `pursuit.moved` is a `determine` kind and `argue` emits it too, so an argument's private conviction change
+    #     is realm hearsay -- carried, and open under H-333.
+    #   the unrest kinds -> settlement: the signs of coercion (a wound, a field won, a seizure, a requisition) are deposited
+    #     at the settlement they happened in, to the persons who stand in it. ⚠ NO READER YET: `person_q.stability` counts
+    #     only claims whose SUBJECT is the rung (`person_q.py::stability`), and these claims' subjects are the persons and
+    #     records the signs are about, so nothing reads the deposit until FA-01 (B21b) decides the claim subject (H-234). A
+    #     told copy takes ledger space (the cap evicts), so this row has a cost and no reader. [ASSUMPTION; medium; Jordan
+    #     to correct; revert: an empty `from_unrest`, and the signs travel by presence and telling alone]
     event_reach:
       from_stratum: {binding_decision: realm}
       from_unrest: settlement
@@ -406,10 +412,13 @@ rosters:
   seat_news_kinds:
     source: "v11 CR-29, A-32 (one reach row for seat changes)"
     note: >-
-      The kinds a seat's holding opens or closes. `witness_channels.event_reach` carries them (shipped at `realm`, by
+      The kinds tenure edges open or close. `witness_channels.event_reach` carries them (shipped at `realm`, by
       `from_stratum`); `Fixtures.seat_news: local` lifts exactly these from the `reach` channel, so the news travels by
-      presence, jurisdiction and telling. Every member must be an Event kind with a reach in `event_reach`
-      (`epistemic.py` refuses at import).
+      presence, jurisdiction and telling. ⚠ A HAND LIST, AND WIDER THAN ITS NAME: no owner of "the kinds a seat opens or
+      closes" exists (`data/verbs.py`'s derived openers are per tenure KIND and `hold` covers Records and Rungs), and
+      `tenure.closed` is emitted by `release` over six tenure kinds (`hold`, `commit`, `oblige`, `succeed`, `tie`,
+      `knot`), so `local` lifts ALL tenure-kind news, not only seats'. Every member must be an Event kind with a reach in
+      `event_reach` (`epistemic.py` refuses at import).
     values: [tenure.opened, tenure.closed, succession.claimed]
 
   seat_news_arms:
@@ -1181,7 +1190,8 @@ rosters:
       anything. It admits the persons standing within the reach the Event's kind states
       (`witness_channels.event_reach`): what a binding decision emits is news to the realm it
       is the decision of, because a binding decision is the design's own category for an act
-      whose effect is institutional rather than private -- and to no one outside that realm.
+      whose effect is institutional rather than private. A person outside it, or a decision
+      with no place, is not admitted.
       (It REPLACED `chronicle`, CR-29: a kind filter that read no person and so admitted every
       person alive, wherever they stood.)
     # ⚠ THE NAMES ARE NOT REPEATED HERE. `witness_channels` above is the one place the five are
