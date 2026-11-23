@@ -53,7 +53,7 @@ The batch block's head (every line of `V12_STRUCTURE_part2.md` §5.2), its posit
 - FALSIFIER and CONTROL: a seated resident who is neither sworn nor revocable reads commanded. Control: the realm content hash at seed 0 after one season equal to the previous commit's reading (nothing calls the Query yet).
 - GATE: `python -m pytest engine/season/tests/test_command_basis.py -q` → four pass, `test_dispatch_to_a_stranger_refused` fails (EXPECTED RED UNTIL B21.21, under `[skip ci]`).
 - HASH MOVERS: none.
-- DEPENDS ON: EXISTS-IN-TREE `state/gate.py::may_revoke`, `::purview_reaches`, `queries/world_q.py::establishment_of`, `::place_of`, `state/world.py::World.seat_holds`; V12 B21.18 (U3's order: the decree's edits 1–2 before FA_C).
+- DEPENDS ON: EXISTS-IN-TREE `state/gate.py::may_revoke`, `::purview_reaches`, `queries/world_q.py::establishment_of`, `::place_of`, `state/world.py::World.seat_holds`; U3's order (the decree's edits 1–2 before FA_C) is a landing order, not a read.
 - GLOSSARY: row *command basis* (§D): its owner cell becomes a pointer to `queries/world_q.py::commands` (the `basis: command` value at B21.20); "under the seat" stays refused.
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B21's producer; `Item: B21.19`, `[skip ci]`.
