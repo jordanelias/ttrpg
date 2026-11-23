@@ -726,9 +726,10 @@ def test_sc03a_open_case_declines_an_arrangement_it_cannot_dispose_and_a_malform
 def test_sc03a_a_determination_under_disposes_ban_opens_a_ban_and_release_is_refused_on_it():
     """#453 §10.4 step 3's observable, and §8.3's reason for the kind: the bench opens the kind the
     docketed row `disposes:` -- a `ban`, owned by the party, on the seat exercised, and no `oblige` --
-    and the party's own `release` of it is refused (`RELEASABLE_KINDS` excludes it). CONTROL: the same
-    party's `release` of an `oblige` (the undeclared disposal) closes it -- the convict's price C-1
-    ruled -- so the refusal is the kind's and not the actor's."""
+    and the party's own `release` of it is refused (`RELEASABLE_KINDS` excludes it). B21.07 (A-37, which
+    overwrites the convict's price C-1 ruled): the same party's `release` of an `oblige` (the undeclared
+    disposal) is refused too, by `_req_release`'s clause on an edge a bench imposed (`test_vb_a_formation.py`
+    runs it with its controls), so the two refusals are one rule reached by two doors."""
     w, d = _sentenced(BAN_KIND)
     ban, = _edges(w, BAN_KIND)
     assert ban.live and not _edges(w, "oblige"), w.tenures
@@ -738,8 +739,10 @@ def test_sc03a_a_determination_under_disposes_ban_opens_a_ban_and_release_is_ref
     assert ban.live
     w, d = _ready("determine")
     assert _kinds(_fold(w, d, _determine("dt"))) == ["matter.determined"]
+    oblige, = _edges(w, "oblige")
     assert _kinds(_fold(w, d, Act(id="rl", actor=PARTY, verb="release",
-                                  payload={"subject": SEAT}))) == ["tenure.closed"]
+                                  payload={"subject": SEAT}))) == ["release.refused"]
+    assert oblige.live
 
 
 def test_sc03a_move_is_refused_while_a_detain_is_live():

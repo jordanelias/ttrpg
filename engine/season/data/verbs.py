@@ -263,6 +263,10 @@ class VerbRow:
     # verb needing more columns is one the design has not finished thinking about*). The column is picked, as U1 §1 picks `capability:`,
     # because a loader default makes a missing value explicit and refusable (B4's third disposition); `04` is not edited.
     regard_sign: Optional[int] = None
+    # B21.07 (VB-A commit A1): THE TENURE KINDS THIS ROW CLOSES, its `domain:` column (`release`'s, asserted against `RELEASABLE_KINDS` below;
+    # `pardon`'s `[detain, ban]`); `()` for a row that closes nothing. The loader already read the column for loader invariant 6 and kept it
+    # nowhere; `OWN_EDGE_DECLINES` is its first reader after the load, so the row carries it rather than a second parse of the file.
+    domain: tuple = ()
 
     def referents_of(self, q) -> tuple:
         """THE REFERENTS OF QUESTION `q` A CANDIDATE OF THIS VERB MAY BE FORMED ON: `q`'s plain
@@ -828,7 +832,8 @@ def _load_verb_table() -> dict:
                       brute=str(r["brute"]).strip() if r.get("brute") else None,
                       brute_note=str(r.get("brute_note") or "").strip(),
                       difficulty=str(r["difficulty"]).strip() if r.get("difficulty") else None,
-                      regard_sign=r.get("regard_sign"))
+                      regard_sign=r.get("regard_sign"),
+                      domain=tuple(r.get("domain") or ()))
         # B10.11: THE `regard_sign:` COLUMN, A `regard_signs` MEMBER OR THE LOAD REFUSES (a `True` is no sign: it equals 1 in a set). An absent
         # cell is the declared default -- `-1` on a row done against its subject (`opposed_to_subject`), else `+1` -- the sign `_stance_arm` read before the column.
         if row.regard_sign is None:
@@ -2061,6 +2066,50 @@ def _load_own_title_declines(values) -> frozenset:
 
 
 OWN_TITLE_DECLINES = _load_own_title_declines(roster("own_title_declines"))
+
+
+# VB-A commit A1 (B21.07): `{verb: the Tenure kinds its row's `domain:` names}` -- the verbs a person forms only on a referent
+# he is tied to by a live edge of such a kind (`rosters.yaml: own_edge_declines`, read in `opening_set`; `release`).
+# `own_title_declines`' shape one carrier over. REFUSED AT IMPORT when a member names a verb the table lacks, one that is
+# not `own`-eligible (an edge a person ends is his own act's), or one with no `domain:` (no kind to read the edges against).
+def _load_own_edge_declines(values) -> dict:
+    """`rosters.yaml: own_edge_declines`' `values`, as `{verb: frozenset(row.domain)}` -- refused per member (above)."""
+    out: dict = {}
+    for v in sorted(str(v or "") for v in (values or ())):
+        row = VERB_TABLE.get(v)
+        if row is None or "own" not in row.eligibility or not row.domain:
+            raise Forbidden(
+                f"`rosters.yaml: own_edge_declines` names {v!r}, and the verb table carries no such verb, or its row is "
+                "not `own`-eligible, or it declares no `domain:`", "rosters.yaml",
+                needs="a `verb_table.yaml` verb with `eligibility: [own]` and a `domain:` of Tenure kinds",
+                law="VB-A -- an own-edge decline reads the kinds the row's own `domain:` names")
+        out[v] = frozenset(row.domain)
+    return out
+
+
+OWN_EDGE_DECLINES = _load_own_edge_declines(roster("own_edge_declines"))
+
+
+# VRES §4 (A-37): `{verb: the Event kind its disposal edge earns}` -- the verbs whose edge a party does not release
+# (`rosters.yaml: own_edge_declines: disposal`; `determine` -> `matter.determined`). The fold's half
+# (`loop/predicates.py::_req_release`) reads the VERB through `causing_act`, the formation half (`opening_set`) reads the KIND off
+# the person's own ledger. REFUSED AT IMPORT for a verb the table lacks or a kind its row does not emit: a stale pair would
+# decline for nobody, and must not read as a live decline.
+def _load_disposal_events(values: dict) -> dict:
+    """`rosters.yaml: own_edge_declines: disposal`, checked and frozen -- refused per line (above)."""
+    out = {str(v): str(k or "") for v, k in (values or {}).items()}
+    for v, k in out.items():
+        row = VERB_TABLE.get(v)
+        if row is None or k not in row.emits:
+            raise Forbidden(
+                f"`rosters.yaml: own_edge_declines: disposal` names {v!r}: {k!r}, and the verb table carries no such verb, "
+                f"or its row does not emit {k!r}", "rosters.yaml",
+                needs="a `verb_table.yaml` verb, and an Event kind its `emits:` declares",
+                law="A-37 -- a party does not release an edge a bench imposed; the kind is the claim the bench's finding earns")
+    return out
+
+
+DISPOSAL_EVENTS = _load_disposal_events(roster_map("own_edge_declines", "disposal"))
 
 
 # B10-09 close one, D3: `{verb: tenure kind}` -- the verbs a person does not form on an object he already

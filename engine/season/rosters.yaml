@@ -2741,6 +2741,30 @@ rosters:
       or later (none at lap 0, where no heir yet holds a title he was told of).
     values: [succeed]
 
+  own_edge_declines:
+    source: >-
+      VB-A (`proposals/2026-11-12-subsystem-audit-suite/proposals/14_VERBS_BINDING_A_formation.md`, commit A1; VRES §4 edits 1-2,
+      A-37); `own_title_declines`' shape (above), one carrier over: any live Tenure of a kind the row closes. (`own_hold_declines`,
+      the sibling the source names, was deleted at B10.61.)
+    note: >-
+      WHICH VERBS A PERSON FORMS ONLY ON A REFERENT HE IS TIED TO BY A LIVE EDGE OF A KIND THE ROW'S OWN
+      `domain:` NAMES. Read in `decision/options.py::opening_set`, person-side and World-free (AX-2): the
+      objects of his own live Tenures whose kind is in the row's `domain:`. It NARROWS the referents a
+      question carries and widens nothing. ONE LOADER, `data/verbs.py::OWN_EDGE_DECLINES`, refused at
+      import when a member names a verb the table lacks, one that is not `own`-eligible, or one with no
+      `domain:`. [ASSUMPTION; medium; Jordan to correct; revert: drop the member, and `release` forms on
+      every plain referent.]
+      `disposal:` IS THE SECOND DECLINE'S SOURCE (A-37: a party does not release an edge a bench imposed), `{verb: the Event
+      kind that verb's disposal edge earns}`. The FOLD half (`loop/predicates.py::_req_release`) refuses a release whose
+      edge's opening Event was caused by an Act of a verb named here, read through `state/attribution.py::causing_act`; the
+      FORMATION half drops a referent he holds a claim of that kind on, naming his own edge to it (the deposit is the generic
+      Event claim, `Claim(subject=<the edge's id>, predicate=<the kind>, value=True)`, `loop/witness.py`; it names the
+      judge and the edge, never the party, so the party is the edge's own owner). ONE LOADER, `data/verbs.py::DISPOSAL_EVENTS`,
+      refused at import for a verb the table lacks or a kind its row does not emit. The fold is the check and the formation
+      only spares the scene (a party who never heard the finding still forms the candidate and is refused).
+    values: [release]
+    disposal: {determine: matter.determined}
+
   held_edge_declines:
     source: >-
       B10-09 close one, D3 (the batch-close antagonist's ruling on the duplicate-commit decline);

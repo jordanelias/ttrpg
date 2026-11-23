@@ -522,9 +522,13 @@ def _eff_determine(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
         for `arbitration`, `detain` and `ban` for the SC-03a rows); the other two dispose a `Record`.
         This bullet is the `oblige` case: C-1 (`21_RECONCILIATION.md:167`,
         RULED A there): *"who owns the Tenure a determiner opens: its SUBJECT ... exactly `confer`,
-        which opens a `hold` whose subject is the conferee"*, and its price, stated: *"the subject
-        may `release` what the finding opened (T-m) ... a convict can discharge his own penance"* --
-        `oblige` is in `release`'s domain, so that price is paid as ruled. The kind is a LITERAL
+        which opens a `hold` whose subject is the conferee"*. ⚠ THE PRICE C-1 STATED (*"the subject
+        may `release` what the finding opened (T-m) ... a convict can discharge his own penance"*, `oblige`
+        being in `release`'s domain) IS OVERWRITTEN BY A-37 (Jordan; VRES §4 edit 2): an imposed service ends
+        by the bench's `pardon` or its term maturing at MATTER, as detention and banishment do, and a party
+        does not release it -- `loop/predicates.py::_req_release` refuses an edge this act opened, and
+        `opening_set` forms no `release` on one (`rosters.yaml: own_edge_declines`). The gate basis for
+        closing a disposal stays `determination`, through the seat that is the edge's object. The kind is a LITERAL
         here because `data/verbs.py::_derive_openers_from_effects` reads a `Tenure(...)` site's kind
         off its string literal (`_eff_commit`'s docstring records what factoring it cost), and
         that derivation is what `data/arrangements.py::arrangements_without_a_disposal_opener`

@@ -35,8 +35,8 @@ from ..data.rosters import (
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    CHOICE_RANGES, CHOICE_SOURCED, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LIE_VERBS,
-    OPPOSED_WITHOUT_PRIZE, OWN_STANCE_DECLINES, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
+    CHOICE_RANGES, CHOICE_SOURCED, DETAINEE_CLASS, DISPOSAL_EVENTS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LIE_VERBS,
+    OPPOSED_WITHOUT_PRIZE, OWN_EDGE_DECLINES, OWN_STANCE_DECLINES, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
     TERMS_SOURCED, VERB_TABLE, VIOLENCE_CONTEXTS, VIOLENT_VERBS, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED,
     align,
 )
@@ -229,6 +229,24 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             if held is None:
                 held = _held_objects(p)
             refs = tuple(r for r in refs if SUCCESSIONS.get(r) in held)
+        # VB-A commit A1 (B21.07, `rosters.yaml: own_edge_declines`): A VERB A PERSON FORMS ONLY ON A REFERENT HE IS TIED TO BY A
+        # LIVE EDGE OF A KIND THE ROW'S OWN `domain:` NAMES -- `release`, which the fold refuses on any referent he owns no
+        # releasable edge toward (a person releasing the King, a cohort the settlement it lives in): no scene is spent on a refusal
+        # of the row's conjunct he could have known. His own live Tenures, no World. It NARROWS and widens nothing; the
+        # predicate is unchanged and stays the fold's check. (After every widening above, `held_edge_sourced`'s too.)
+        kinds = OWN_EDGE_DECLINES.get(verb)
+        if kinds is not None and refs:
+            tied = {t.object for t in p.tenures if t.kind in kinds and t.live}
+            refs = tuple(r for r in refs if r in tied)
+        # VRES §4 edit 1 (A-37; the formation half, the fold's being `loop/predicates.py::_req_release`): A PARTY DOES NOT RELEASE
+        # AN EDGE A BENCH IMPOSED, so a referent he holds a claim of a determination on, naming his own edge to it, is dropped.
+        # The claim is the generic Event claim (`loop/witness.py`): `subject` the disposal edge's id, `predicate` the Event kind
+        # (`DISPOSAL_EVENTS`), `value` True -- it names the judge and the edge and never the party, whose own `tenures` say the
+        # edge is his. `decision/` never reads the log (`04` §B.9: `state/acts` is resolver-side): his own ledger and Tenures only.
+        if kinds is not None and refs:
+            found = {c.subject for c in p.ledger if c.predicate in DISPOSAL_EVENTS.values()}
+            imposed = {t.object for t in p.tenures if t.kind in kinds and t.live and t.id in found}
+            refs = tuple(r for r in refs if r not in imposed)
         # B11 lane A (`data/verbs.py::RECORD_SUBKINDS_BY_VERB`): A `Record` ROW WHOSE CELL ASKS A SUB-KIND forms only
         # on a Record his own content claims say is of that kind (`documents_known_as`) -- `accept` on a challenge,
         # `comply` on a dispensation. The kind is read off the row's own cell, never a verb name; a document is known

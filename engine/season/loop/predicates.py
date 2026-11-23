@@ -16,11 +16,13 @@ from __future__ import annotations
 from typing import NamedTuple, Optional
 
 from ..data.requires import binding_from_act
+from ..data.verbs import DISPOSAL_EVENTS, _OPENERS_FROM_EFFECTS
 from ..data.rosters import (BINDS_BASES, FOUNDED_CONFERRAL, FOUNDED_REVOCATION, FOUNDER_KEEPS, RELEASABLE_KINDS,
                             RUNG_KINDS, TITLE_DOMAINS)
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..queries.person_q import ABOUT_KEYS
 from ..queries.world_q import BAN_KIND, DETAIN_KIND, DOCKET_PETITION, docketed, founds_over, restrained
+from ..state.attribution import causing_act
 from ..state.carriers import Office, operand_of, subject_of
 from ..trace_log import TRACE
 # G3: THE SEAT-AUTHORITY RULES LIVE WITH THE GATE THAT ENFORCES THEM. The write gate's F3 clause
@@ -482,12 +484,36 @@ def _req_release(w: "World", a: "Act") -> bool:
     subj = subject_of(a)
     if not subj:
         return _refuse("a release names no subject", a.actor)
-    if any(t.subject == a.actor and t.object == subj
-           and t.kind in RELEASABLE_KINDS and t.live
-           for t in w.tenures):
-        return True
-    return _refuse("a release of a tenure the actor does not own toward the subject "
-                   "(live, of a releasable kind)", f"{a.actor} toward {subj!r}")
+    owned = [t for t in w.tenures
+             if t.subject == a.actor and t.object == subj and t.kind in RELEASABLE_KINDS and t.live]
+    if not owned:
+        return _refuse("a release of a tenure the actor does not own toward the subject "
+                       "(live, of a releasable kind)", f"{a.actor} toward {subj!r}")
+    # VRES §4 edit 1 (A-37, B21.07): A PARTY DOES NOT RELEASE AN EDGE A BENCH IMPOSED -- an imposed service ends by the bench's
+    # `pardon` or its term, as detention and banishment do. `_eff_release` closes EVERY live edge the actor owns toward the
+    # subject, so one such edge among them refuses the act. The opening Event is the first logged Event naming the edge whose causing
+    # Act (`state/attribution.py::causing_act`) is of a verb that opens its kind (`_OPENERS_FROM_EFFECTS`, `_opened_by_acts`' proxy:
+    # a later closure naming the edge is not its opening), and the act is a bench's when that verb is a `DISPOSAL_EVENTS` key
+    # (`rosters.yaml: own_edge_declines: disposal`). No field is added to `Tenure`.
+    for t in owned:
+        openers = {v for v in DISPOSAL_EVENTS if v in _OPENERS_FROM_EFFECTS.get(t.kind, ())}
+        if openers and _opened_by(w, t, openers):
+            return _refuse("own: an edge a bench imposed is not the party's to release (A-37)",
+                           f"{a.actor} toward {subj!r}")
+    return True
+
+
+def _opened_by(w: "World", t, verbs: set) -> bool:
+    """Is `t`'s OPENING Event the work of an Act of one of `verbs`? The opening is the first logged Event that names the edge
+    and was caused by an Act whose verb opens the edge's kind (`_OPENERS_FROM_EFFECTS`), so a re-grant or a closure naming it
+    later is not it. A seeded edge, or one planted by hand, has no opening Event and answers False."""
+    opens = _OPENERS_FROM_EFFECTS.get(t.kind, ())
+    for e in w.log:
+        if any(c.subject == t.id for c in e.changes):
+            a = causing_act(w, e)
+            if a is not None and a.verb in opens:
+                return a.verb in verbs
+    return False
 
 
 @requires_predicate("oblige", clauses=("seat", "binds", "own_seat", "one_edge", "banned"))
