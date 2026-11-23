@@ -971,12 +971,9 @@
     },
     "engine/season/offices.yaml": {
       "meta": {
-        "source": "engine/season/offices.yaml -- the governance ladder's titles, and 31 authored seats (29, then the two Riskbreakers rows at v9 IN-64).",
+        "source": "engine/season/offices.yaml -- the governance ladder's titles, and 32 authored seats (29, then the two Riskbreakers rows at v9 IN-64, then NPC-084's at B21.03).",
         "derivation": "proposals/2026-09-16-term-ownership/offices_draft.yaml, per r2 03_SEATS_AND_CONTENT.md \u00a7A.13-\u00a7A.15, with conferral/revocation recomputed against ED-IN-0256 (see the header above)",
-        "rule": "one seat = one row. `rung` is an ANCHOR (never an id), resolved at load against the world being built -- `CLAUDE.md` \u00a75's hand-transcription hazard, one layer earlier.",
-        "remit_unruled": [
-          "dispatch"
-        ]
+        "rule": "one seat = one row. `rung` is an ANCHOR (never an id), resolved at load against the world being built -- `CLAUDE.md` \u00a75's hand-transcription hazard, one layer earlier."
       },
       "titles": {
         "source": "JORDAN, 2026-09-02, VERBATIM. `H-90`. Folded from `rosters.yaml: titles` per r2 05 RULED (c) -- see this file's header.",
@@ -1017,7 +1014,8 @@
             "determine",
             "confer",
             "revoke",
-            "convene"
+            "convene",
+            "dispatch"
           ],
           "modifier": "minor",
           "conferral": "inheritance",
@@ -1043,7 +1041,8 @@
             "issue",
             "confer",
             "revoke",
-            "convene"
+            "convene",
+            "dispatch"
           ],
           "conferral": null,
           "revocation": null,
@@ -1064,7 +1063,8 @@
             "issue",
             "confer",
             "revoke",
-            "convene"
+            "convene",
+            "dispatch"
           ],
           "conferral": null,
           "revocation": "rung_above_in_holdings",
@@ -1085,7 +1085,8 @@
             "issue",
             "confer",
             "revoke",
-            "convene"
+            "convene",
+            "dispatch"
           ],
           "conferral": "elected",
           "revocation": "rung_above_in_holdings",
@@ -1159,7 +1160,8 @@
           "faction": null,
           "remit_acts": [
             "issue",
-            "convene"
+            "convene",
+            "dispatch"
           ],
           "conferral": "appointed",
           "revocation": "rung_above_same_faction",
@@ -1230,7 +1232,9 @@
           },
           "body": null,
           "faction": "Valorsmark",
-          "remit_acts": [],
+          "remit_acts": [
+            "dispatch"
+          ],
           "conferral": "appointed",
           "revocation": "rung_above_same_faction",
           "holder": "NPC-035",
@@ -1264,7 +1268,9 @@
           },
           "body": null,
           "faction": "Church of Solmund",
-          "remit_acts": [],
+          "remit_acts": [
+            "issue"
+          ],
           "conferral": "appointed",
           "revocation": null,
           "holder": "NPC-034",
@@ -1325,7 +1331,8 @@
           "remit_acts": [
             "issue",
             "determine",
-            "convene"
+            "convene",
+            "dispatch"
           ],
           "modifier": "minor",
           "conferral": "appointed",
@@ -1380,7 +1387,8 @@
           "body": "Cardinal of Justice",
           "faction": null,
           "remit_acts": [
-            "determine"
+            "determine",
+            "dispatch"
           ],
           "modifier": "minor",
           "conferral": "appointed",
@@ -1415,7 +1423,8 @@
           "body": "Inner Council",
           "faction": null,
           "remit_acts": [
-            "convene"
+            "convene",
+            "dispatch"
           ],
           "conferral": "appointed",
           "revocation": "rung_above_same_faction",
@@ -1455,6 +1464,24 @@
           "obligees": [],
           "source": "faction_canon_v30.md; the 2026-09-13 ruling drops Feldhaus from Hafenmark's COUNCIL, not the world -- her registry primary role is \"Guilds Representative\"",
           "note": "[NEW]. Re-seated on `Guild` (live roster, faction Guilds), not on Hafenmark's council. `conferral: elected` -- the Guild Forum. r2 03 \u00a7A.15 flags this row for attack first; carried forward unattacked here."
+        },
+        {
+          "id": "off_guild_leader",
+          "post": "Guild Leader",
+          "rung": {
+            "duchy": "Hafenmark"
+          },
+          "body": "Guild",
+          "faction": null,
+          "remit_acts": [
+            "convene"
+          ],
+          "conferral": "elected",
+          "revocation": "rung_above_same_faction",
+          "holder": "NPC-084",
+          "obligees": [],
+          "source": "references/npc_registry.yaml NPC-084 (`guild leader`); `06_FA_remit_grant_by_row` edit 1",
+          "note": "[LIVE]. Loop-built from the registry cell; this row overlays rung, remit and bases. `conferral: elected` -- the Guild Forum, as `off_guild_comptroller`'s."
         },
         {
           "id": "off_senior_jarl_west",
@@ -1503,7 +1530,8 @@
           "body": "Jarl Council",
           "faction": null,
           "remit_acts": [
-            "convene"
+            "convene",
+            "dispatch"
           ],
           "conferral": "elected",
           "revocation": "rung_above_same_faction",
@@ -1521,7 +1549,8 @@
           "body": "Lions' Table",
           "faction": null,
           "remit_acts": [
-            "convene"
+            "convene",
+            "dispatch"
           ],
           "conferral": "appointed",
           "revocation": null,
@@ -1538,7 +1567,9 @@
           },
           "body": "Riskbreakers",
           "faction": null,
-          "remit_acts": [],
+          "remit_acts": [
+            "dispatch"
+          ],
           "conferral": "appointed",
           "revocation": null,
           "holder": "NPC-005",
@@ -1554,7 +1585,9 @@
           },
           "body": "Riskbreakers",
           "faction": null,
-          "remit_acts": [],
+          "remit_acts": [
+            "dispatch"
+          ],
           "conferral": "appointed",
           "revocation": null,
           "holder": "NPC-080",

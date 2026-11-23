@@ -115,7 +115,11 @@ def test_purview_is_the_set_form_of_purview_reaches_over_every_seated_office():
 
 def test_purview_of_a_rungless_or_unknown_seat_is_empty():
     w = build_realm(0)
-    rungless = next(oid for oid, off in w.offices.items() if off.rung is None)
+    # B21.03: every shipped seat now has a row, so none is built rungless; plant the S6.2 cluster case on one.
+    # CONTROL: the seat's purview reaches its own rung before the plant.
+    rungless = next(oid for oid, off in w.offices.items() if off.rung is not None)
+    assert faction_q.purview(w, rungless) != []
+    w.offices[rungless].rung = None
     assert faction_q.purview(w, rungless) == []
     assert faction_q.purview(w, "no_such_seat_in_this_world") == []
 

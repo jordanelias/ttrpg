@@ -5244,15 +5244,24 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
     w = build_realm(0)
     offices = list(w.offices.values())
     # [GROUNDED: measured 2026-09-18 on `build_realm(0)` -- the populated realm seats 19 offices, of which 3 carried a remit before `remit_default` and 19 after; the seat registry is `harness/populated.py`'s own, not a constant chosen here]
-    # [RE-CITED 2026-10-01, `13d-iii`, `python -c "from engine.season.harness.populated import build_realm as b; w=b(0); print(len(w.offices), w._office_census['unauthored'])"` -- 30 offices; `remit_default` now fills ONE of them (`off_npc_084`, the seat no `offices.yaml` row authors) and the other 29 carry their row's `remit_acts` plus whatever `remit_unruled` lets a loop-built seat keep, so this assertion no longer observes the default's reach -- `test_13d_iii_the_remit_overlay_replaces_the_default_and_leaves_only_the_unruled_act` does. ⚠ `assert not ungranted` BELOW PASSES ONLY THROUGH THAT LEAK, NOT BECAUSE A DECLARED `[]` GRANTS ANYTHING. MEASURED, `build_realm(0)`, 2026-10-02: `dispatch` is held by 22 of the 29 authored seats -- 22 of the 23 loop-built (`held` is the testing default; the one exception, `off_parliamentary_clerk`, has an overlay declaring `remit: [issue]`) and 0 of the 6 minted -- so `march` (eligible on `remit:dispatch`) is eligible to all 22. The seven `remit_acts: []` rows are only the seats where `dispatch` is the WHOLE remit, which is why they are the ones this assertion would report; the same `[]` on a MINTED row would hold nothing. Stripping `dispatch` (J-8) is a GRANT decision for Jordan, not a code fix, and would turn this assertion red on those seven seats]
+    # B21.03: a seat holds a remit act iff its row names it, so a seat's grant is its row's and no seat is filled from the
+    # testing default (every shipped seat has a row). A row naming nothing leaves its seat with an empty remit, lawfully.
     assert len(offices) >= 19, f"the realm seats {len(offices)} offices; the fixture has moved"
-    ungranted = [o.id for o in offices if not o.remit_acts]
-    assert not ungranted, f"offices with no remit after the default: {ungranted}"
+    from ..data.rosters import SEAT_ROW_BY_ID
+    assert w._office_census["unauthored"] == [], w._office_census["unauthored"]
+    checked = 0
+    for oid in w._office_census["authored"].values():
+        off = w.offices[oid]
+        assert set(off.remit_acts) == set(SEAT_ROW_BY_ID[off.id]["remit_acts"]), (
+            f"{off.id}: grant {sorted(off.remit_acts)} is not its row's {SEAT_ROW_BY_ID[off.id]['remit_acts']}")
+        checked += 1
+    assert checked == len(offices), (checked, len(offices))
 
     held = [t for t in w.tenures if t.kind == "hold" and t.live and t.object in w.offices]
     assert held, "no office is held; `_grant_remit` has nothing to stamp"
-    assert all(t.granted_acts for t in held), (
-        "a seated holder carries no grant — `add_tenure` is not stamping, or the office is empty")
+    assert any(t.granted_acts for t in held), "no seated holder carries a grant"
+    assert all(set(t.granted_acts) == set(w.offices[t.object].remit_acts) for t in held), (
+        "a seated holder's grant is not his seat's remit — `add_tenure` is not stamping it")
 
     gov = [v for v, r in VERB_TABLE.items()
            if any(a.startswith("remit:") for a in (r.eligibility or ()))]

@@ -910,7 +910,7 @@ def test_sc03a_a_ban_holder_is_refused_service_and_seating():
         w.offices["off_reeve"] = Office("off_reeve", "Reeve", "S", ["issue"], faction="Crown",
                                         conferral="appointed", revocation="rung_above_same_faction")
         if banned:
-            w.add_tenure(Tenure("t_ban", PARTY, "off_dicastery", BAN_KIND, since=w.tick))
+            w.add_tenure(Tenure("t_ban", PARTY, SEAT, BAN_KIND, since=w.tick))
         return w, d
     confer = Act(id="cf", actor=DUKE, verb="confer", payload={"office": "off_reeve", "to": PARTY},
                  via=SEAT)

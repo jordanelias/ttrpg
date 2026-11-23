@@ -931,7 +931,7 @@ def remit_or_default(declared) -> list[str]:
     ⚠ IT FILLS AN EMPTY REMIT AND NEVER OVERWRITES A DECLARED ONE. The three grounded overlays
     (NPC-008/033/038) keep exactly what their case text supports; `remit_default` reaches only the
     seats that carry `[]`. Every seat with an `offices.yaml` row takes the row's remit through
-    `authored_remit` (below), so only the seat no row authors (`off_npc_084`), the spine and the
+    `authored_remit` (below), so only a seat no row authors, the spine and the
     fixtures fall through to this default.
 
     ⚠⚠ THE DEFAULT IS NOT CANON — see `rosters.yaml: remit_default`'s own note for why a
@@ -952,40 +952,17 @@ def remit_or_default(declared) -> list[str]:
     return declared if declared else sorted(REMIT_DEFAULT)
 
 
-# `offices.yaml: meta: remit_unruled` -- the remit acts whose standing as an act is an OPEN RULING
-# (J-8: `dispatch`), so the overlay of an authored `remit_acts` leaves them exactly where they were.
-# Read once at import and checked against `REMIT_ACTS` HERE, for the reason every roster above is
-# bound at import: an unrecognised name would match no seat's remit and be dropped without a sound.
-OFFICES_REMIT_UNRULED = frozenset(((_OFFICES_DOC.get("meta") or {}).get("remit_unruled")) or ())
-if not OFFICES_REMIT_UNRULED <= REMIT_ACTS:
-    raise Unspecified(
-        f"offices.yaml `meta: remit_unruled` names {sorted(OFFICES_REMIT_UNRULED - REMIT_ACTS)}, "
-        "which are not remit acts", "offices.yaml",
-        needs="a member of `rosters.yaml: remit_acts`",
-        law="a remit act off the closed roster matches no seat's remit -- the one that is named "
-            "unruled would be silently granted to nobody, which is a ruling, not a typo")
-
-
-def authored_remit(row: dict, held=()) -> list[str]:
+def authored_remit(row: dict) -> list[str]:
     """A seat's remit from its authored `offices.yaml` row -- the ONE owner of the overlay rule,
     beside `remit_or_default`, which it supersedes wherever a row exists.
 
-    ⚠ THE ROW'S `remit_acts` IS THE REMIT, `[]` INCLUDED, EXCEPT FOR WHAT `held` BRINGS. A declared
-    empty list is NOT passed to `remit_or_default` (which would fill it with every act): the row
-    was authored from canon and the default is a testing fixture (`rosters.yaml: remit_default`).
-    But it does NOT grant nothing on a loop-built seat -- see `held`.
-
-    ⚠ `held` IS WHAT THE SEAT HAD BEFORE THE OVERLAY, and only the acts in `OFFICES_REMIT_UNRULED`
-    survive from it -- `dispatch` today, an open ruling (J-8). THIS GRANTS IT, it does not stay
-    neutral: a loop-built seat was seated with `remit_default` (every act) unless its case's own
-    overlay declares a remit, so its `held` carries `dispatch` and it keeps it, and `march`,
-    eligible on `remit:dispatch`, is eligible to every such holder. A seat the loop did not build
-    (a MINTED row) passes nothing and so does NOT gain it: two identical rows diverge by build
-    route. Stripping
-    `dispatch` (J-8) is a GRANT decision for Jordan, not a code fix. `sorted`, for
-    `remit_or_default`'s reason: a set's order is per-process and the grant folds into
+    A seat holds a remit act if and only if its row names it (B21.03): the row's `remit_acts` IS the
+    remit, `[]` included, and a loop-built seat keeps nothing it held before the overlay. A declared
+    empty list is NOT passed to `remit_or_default` (which would fill it with every act): the row was
+    authored from canon and the default is a testing fixture (`rosters.yaml: remit_default`).
+    `sorted`, for `remit_or_default`'s reason: a set's order is per-process and the grant folds into
     `World.content_hash`."""
-    return sorted(set(row["remit_acts"]) | (set(held) & OFFICES_REMIT_UNRULED))
+    return sorted(set(row["remit_acts"]))
 
 
 WITNESS_CHANNELS = roster("witness_channels", ordered=True)

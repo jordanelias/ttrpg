@@ -1974,7 +1974,7 @@ def test_8a_a_repeated_row_id_refuses_at_load_instead_of_being_collapsed(tmp_pat
     row id and skips a row already in that dict, so a second row under one id was collapsed without a
     sound (the test above asserts uniqueness of the CHECKED-IN file, which a loader refusal does not
     depend on). The loader is pointed at a throwaway copy; the unchanged copy is the positive control
-    (it loads, all 29 rows), so a loader that refused every file cannot pass."""
+    (it loads, every row), so a loader that refused every file cannot pass."""
     import yaml
     from ..data import rosters
 
@@ -1983,7 +1983,7 @@ def test_8a_a_repeated_row_id_refuses_at_load_instead_of_being_collapsed(tmp_pat
     monkeypatch.setattr(rosters, "OFFICES_YAML", path)
 
     path.write_text(yaml.safe_dump(real), encoding="utf-8")
-    assert len(rosters._load_offices()["seats"]) == 31
+    assert len(rosters._load_offices()["seats"]) == 32
 
     first = real["seats"][0]
     for twin in (dict(first), dict(first, holder="NPC-999", post="Somebody Else")):
@@ -2024,7 +2024,7 @@ def test_8a_every_authored_seat_carries_its_authored_basis_after_the_overlay():
         checked += 1
         checked_a_real_conferral = checked_a_real_conferral or off.conferral is not None
         checked_a_real_revocation = checked_a_real_revocation or off.revocation is not None
-    assert checked == len(doc["seats"]) == 31, checked
+    assert checked == len(doc["seats"]) == 32, checked
     assert checked_a_real_conferral and checked_a_real_revocation, (
         "every seat checked had a None basis -- this test cannot tell the overlay ran")
 
@@ -2099,7 +2099,7 @@ def test_13d_iii_every_authored_anchor_resolves_to_one_live_rung_of_its_own_kind
             f"stands at {off.rung!r}")
         by_kind[kind] += 1
         new_resolved += row["note"].startswith("[NEW]")
-    assert sum(by_kind.values()) == len(_seat_rows()) == 31, by_kind
+    assert sum(by_kind.values()) == len(_seat_rows()) == 32, by_kind
     assert set(by_kind) == {"realm", "duchy", "territory"}, (
         f"{by_kind}: a form no row uses is not observed here -- the settlement form has its own test")
     assert new_resolved == 10, f"{new_resolved} `[NEW]`-marked rows resolved; r2 `03` marks ten"
@@ -2172,19 +2172,19 @@ def test_13d_iii_a_stale_index_entry_is_refused_not_trusted(_realm13):
 def test_13d_iii_a_minted_row_may_not_reuse_a_standing_seat_id(_realm13, monkeypatch):
     """A MINTED seat is one no loop-built seat stands for, so its id must be fresh. A row carrying
     the id of a seat the loop already built used to REPLACE that seat without a sound. The probe
-    renames the first minted row to the id of the loop-built `off_npc_084` (NPC-084's `guild leader`, the
-    one seat no row stands for, so the one loop-built seat that still carries a slug id; since CP-T02-02 a
-    seat a row overlays stands under the ROW's id, and a minted row carrying that id is skipped as authored);
-    the realm must refuse, naming the id. The build with the real rows
-    is the control (`_realm13`, and every other test here, build it)."""
-    from ..boot import realm as boot_realm
-    from ..data.rosters import OFFICES_SEATS
+    takes NPC-084's row (`off_guild_leader`) out of the roster and its by-holder index, so the loop builds
+    NPC-084's `guild leader` with no row, the one loop-built seat that carries a slug id (`off_npc_084`; since
+    CP-T02-02 a seat a row overlays stands under the ROW's id, and a minted row carrying that id is skipped as
+    authored), and renames the first minted row to that id; the realm must refuse, naming the id. The build with
+    the real rows is the control (`_realm13`, and every other test here, build it)."""
+    from ..data.rosters import OFFICES_BY_HOLDER, OFFICES_SEATS
 
-    real = OFFICES_SEATS
     minted_id = _realm13._office_census["minted"][0]
-    rows = [dict(r, id="off_npc_084") if r["id"] == minted_id else r for r in real]
+    rows = [dict(r, id="off_npc_084") if r["id"] == minted_id else r
+            for r in OFFICES_SEATS if r["id"] != "off_guild_leader"]
     assert sum(r["id"] == "off_npc_084" for r in rows) == 1
-    monkeypatch.setattr(boot_realm, "OFFICES_SEATS", rows)
+    by_holder = {h: [r for r in rs if r["id"] != "off_guild_leader"] for h, rs in OFFICES_BY_HOLDER.items()}
+    _populated_rows(monkeypatch, rows, by_holder)
     with pytest.raises(Forbidden) as red:
         build_realm(seed=0)
     assert "off_npc_084" in str(red.value) and "minted" in str(red.value), str(red.value)
@@ -2299,7 +2299,7 @@ def test_13d_iii_a_cap_keeps_exactly_the_seats_whose_holders_it_kept():
     assert ids.index(obligee) >= cap, "the obligee is inside the cap: this probe cannot drop it"
     w = build_realm(seed=0, cap=cap)
     kept = {r["id"] for r in OFFICES_SEATS if f"p_{r['holder'].lower().replace('-', '_')}" in w.persons}
-    assert 0 < len(kept) < len(OFFICES_SEATS) == 31, len(kept)
+    assert 0 < len(kept) < len(OFFICES_SEATS) == 32, len(kept)
     assert set(w._office_census["authored"]) == kept, sorted(set(w._office_census["authored"]) ^ kept)
     assert row["id"] in w._office_census["authored"]
     assert f"p_{obligee.lower().replace('-', '_')}" not in w.persons
@@ -2368,14 +2368,14 @@ def test_13d_iii_a_titled_seat_must_stand_at_the_rung_kind_its_title_governs(_re
     assert w.rungs[ok].kind == title_domain("Duke")
 
 
-def test_13d_iii_every_seat_the_realm_builds_has_a_rung_but_the_one_declared_exception(_realm13):
+def test_13d_iii_every_seat_the_realm_builds_has_a_rung(_realm13):
     """`H-163` limit 1 was *16 of 19 seats carry no rung*; measured at this position's start, 21 of
     the 24 the loop builds. Now every seat stands at its row's rung, `scope_rung` the same one (a
-    bench's ground, `H-32`), save the seat the registry derives and no row authors: NPC-084's
-    `guild leader`, which has no anchor and is given none."""
+    bench's ground, `H-32`): B21.03 gave NPC-084's `guild leader`, the last seat no row authored,
+    its row (`off_guild_leader`), so none is left without an anchor."""
     w = _realm13
     cen = w._office_census
-    assert cen["unauthored"] == ["off_npc_084"], cen["unauthored"]
+    assert cen["unauthored"] == [], cen["unauthored"]
     assert len(w.offices) == cen["seated"] and w.offices, (len(w.offices), cen["seated"])
     anchored = 0
     for oid, off in w.offices.items():
@@ -2433,31 +2433,25 @@ def test_13d_iii_an_authored_obligee_serves_the_seat_with_no_term(_realm13):
             assert t.term is None and t.live
 
 
-def test_13d_iii_the_remit_overlay_replaces_the_default_and_leaves_only_the_unruled_act(_realm13):
-    """The row's `remit_acts` IS a seat's remit, `[]` included: an authored empty list is NOT filled
-    by `rosters.yaml: remit_default` (a testing fixture). The one thing a seat keeps beyond its row
-    is an act `offices.yaml: meta: remit_unruled` names (`dispatch`, J-8) -- and only if it held it
-    before. The unauthored seat is the control: with no row, the default still fills."""
-    from ..data.rosters import OFFICES_REMIT_UNRULED, REMIT_DEFAULT
-
+def test_13d_iii_a_seat_holds_a_remit_act_if_and_only_if_its_row_names_it(_realm13):
+    """The row's `remit_acts` IS a seat's remit, `[]` included (B21.03): an authored empty list is NOT
+    filled by `rosters.yaml: remit_default` (a testing fixture), and nothing a loop-built seat was seated
+    with survives the overlay. Each seat's grant equals its row's; `dispatch` is among the grants of
+    exactly the rows that name it, and NPC-084's seat reads `convene` only."""
     w = _realm13
-    assert OFFICES_REMIT_UNRULED, "the unruled set is empty: the overlay below would strip J-8's act"
     cen = w._office_census
-    empty_rows = checked = 0
+    empty_rows = dispatchers = checked = 0
     for row in _seat_rows():
         off = w.offices[cen["authored"][row["id"]]]
-        have, authored = set(off.remit_acts), set(row["remit_acts"])
-        assert authored <= have, f"{row['id']}: authored {sorted(authored)} not all granted {sorted(have)}"
-        assert have - authored <= OFFICES_REMIT_UNRULED, (
-            f"{row['id']} holds {sorted(have - authored)} beyond its row: the testing default leaked "
-            "past the overlay")
-        if not authored:
-            empty_rows += 1
+        assert set(off.remit_acts) == set(row["remit_acts"]), (
+            f"{row['id']}: grant {sorted(off.remit_acts)} is not its row's {sorted(row['remit_acts'])}")
+        assert ("dispatch" in off.remit_acts) == ("dispatch" in row["remit_acts"]), row["id"]
+        empty_rows += not row["remit_acts"]
+        dispatchers += "dispatch" in off.remit_acts
         checked += 1
-    assert checked == 31 and empty_rows >= 1, (checked, empty_rows)
-    assert set(w.offices["off_npc_084"].remit_acts) == set(REMIT_DEFAULT), (
-        "the seat no row authors lost the testing default -- the fill path the overlay replaces "
-        "only where a row exists")
+    assert checked == 32 and dispatchers >= 1, (checked, dispatchers)
+    assert cen["unauthored"] == [], "a seat no row authors would be filled from the testing default"
+    assert sorted(w.offices["off_guild_leader"].remit_acts) == ["convene"]
 
 
 # ⚠ RETIRED (B-K close, ACC 7 / FID 4; v9 §0.5, 2026-10-13: no test asserts a verb executed in the

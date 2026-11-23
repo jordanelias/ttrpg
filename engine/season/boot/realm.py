@@ -1828,9 +1828,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         oid = _seat_id(_off_row, cid)
         if _off_row is not None:
             rung = seat_anchor(w, anchors, _off_row)
-            # `held` is what this seat would have had without the overlay: the acts `offices.yaml:
-            # meta: remit_unruled` names survive it (`authored_remit`), the rest is the row's.
-            remit = authored_remit(_off_row, remit_or_default(over.get("remit")))
+            # A seat holds a remit act iff its row names it: nothing the loop seated it with survives.
+            remit = authored_remit(_off_row)
             authored[_off_row["id"]] = oid
         elif governs is not None:
             # A TITLED holder with no authored row would be seated rungless, silently.
@@ -1840,8 +1839,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
                 needs="a row naming this holder, so the seat has an anchor",
                 law="a titled seat sits at the rung its title governs (r2 03 §A.8); no row, no rung")
         else:
-            # THE DECLARED EXCEPTION: a seat the registry derives and no row authors (NPC-084's
-            # `guild leader`). It has no anchor to resolve and invents none.
+            # A seat the registry derives and no row authors (none in the shipped cast since B21.03
+            # gave NPC-084's `guild leader` a row). It has no anchor to resolve and invents none.
             rung, remit = None, remit_or_default(over.get("remit"))
             unauthored.append(oid)
         w.offices[oid] = Office(

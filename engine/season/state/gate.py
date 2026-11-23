@@ -228,9 +228,8 @@ DISPOSABLE_KINDS = frozenset(
 WARRANT = "warrant"
 # [ASSUMPTION; medium; Jordan to correct; revert: name another remit act here, or drop the grant
 # conjunct from `may_warrant`]: `dispatch` is the act whose grant licenses a warrant. K-52 names it,
-# but `dispatch` is a remit act whose per-post status is J-8's, UNRULED (`engine/season/offices.yaml`
-# `meta: remit_unruled`) -- so which posts carry the grant, and whether it is a remit act at all, is
-# Jordan's to rule, and this basis moves with the ruling.
+# and a seat holds a remit act iff its row names it (`engine/season/offices.yaml`), so the posts that
+# carry the grant are the rows that name `dispatch`, and this basis moves with those rows.
 WARRANT_ACT = "dispatch"
 # `seizure` (v9 IN-12 step 6, #453 §10.4 step 6, `seize`'s Record half; v9 IN-13 the Rung
 # half) -- the PURE CLOSURE of another person's live `hold` on a RECORD or a RUNG, by a seated
@@ -261,9 +260,9 @@ SEIZURE_ACT = "issue"
 # own legs are `T-m`.
 MUSTER = "muster"
 # The remit act whose grant licenses a muster: `march`'s own eligibility, `remit:dispatch`, and the
-# act `may_warrant` reads (`WARRANT_ACT`). ⚠ J-8 (whether `dispatch` is a remit act at all,
-# `engine/season/offices.yaml` `meta: remit_unruled`) gates this basis as it gates `warrant`; it moves
-# with the ruling. One owner of the string: it IS `WARRANT_ACT`'s value, re-named for its second reader.
+# act `may_warrant` reads (`WARRANT_ACT`). A seat holds a remit act iff its row names it
+# (`engine/season/offices.yaml`), so the rows that name `dispatch` gate this basis as they gate
+# `warrant`. One owner of the string: it IS `WARRANT_ACT`'s value, re-named for its second reader.
 # ⚠ THE VALUE IT MUST EQUAL IS `verb_table.yaml`'s `march` eligibility (`remit:dispatch`), which the
 # fold admits the act on. Re-pointing `WARRANT_ACT` without re-pointing this line leaves `_fold`
 # admitting the march while `_not_yet_under`'s `may_muster` filter drops every non-actor claimant:
