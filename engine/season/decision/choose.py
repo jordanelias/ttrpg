@@ -579,6 +579,15 @@ def deciding_term(cands: list, terms: list, actual: Optional[Candidate], tau: fl
             "draw_kind": draw_kind, "field_zero": field_zero}
 
 
+class Ranked(list):
+    """A deliberation's SAMPLED ORDER (`make_ranker`'s return), a plain list that also carries `decide(c)`: the deciding term
+    (`deciding_term`'s label) of candidate `c` among the candidates still unspent when `c` was taken (`c` and those after
+    it in the order), `""` for a candidate not in the order. `pack_scenes` reads it by `getattr` to stamp `Scene.decided`, so
+    a list that is not a `Ranked` (a player's pick, a hand-built list) packs Scenes stamped `""`. It scores nothing: `decide`
+    is a closure over the terms the ranker itself summed (the ones `watch` is handed)."""
+    decide: Optional[Callable[[Candidate], str]] = None
+
+
 def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
                  verbs: Optional[frozenset] = None,
                  draw: Optional[Callable[[str, str], Any]] = None,
@@ -677,7 +686,22 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
             # B09.13: an OBSERVER. Copies, so a watcher that mutates what it is handed changes nothing packed; the return is ignored.
             # `_terms[id(c)]` is the entry `score(c)` last wrote for a LIVE `c` (a kept effort variant stays alive, so its id is not reused).
             watch(p, q, list(ranked), [_terms[id(c)] for c in ranked], list(sampled))
-        return sampled
+        # `Scene.decided`: the rule is `deciding_term`'s, over the unspent tail the candidate heads, on the terms summed above (lazy:
+        # `pack_scenes` asks once per Scene it builds, so a deliberation's candidates are not all attributed). The first
+        # Scene's first act heads the whole order, which is the reading `harness/decision_spread.py` takes of it.
+        order = tuple(sampled)
+        at = {id(c): i for i, c in enumerate(order)}
+        tau = float(fx.get("choice_temperature"))
+
+        def decide(c: Candidate) -> str:
+            i = at.get(id(c))
+            if i is None:
+                return ""
+            tail = order[i:]
+            return deciding_term(list(tail), [_terms[id(x)] for x in tail], c, tau)["decider"]
+        out = Ranked(sampled)
+        out.decide = decide
+        return out
     return rank
 
 
@@ -810,7 +834,10 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
     per = fx.get("interactions_per_scene")
     width = 1 if rule == "one_per_scene" else (len(ranked) if per is None else per)
 
-    def scene(n: int, chunk: list) -> "Scene":
+    decide = getattr(ranked, "decide", None)        # a `Ranked`'s: what decided a candidate (`Scene.decided`); `None` of any other list
+
+    def scene(n: int, chunk: list, lead: Optional["Candidate"] = None) -> "Scene":
+        # `lead` is the candidate the Scene's first act was taken from, where `chunk` holds a rebuilt copy of it (the unaffordable effort below)
         # ⚠ `occasion=` IS NOT DECORATION. `choose` already holds the question — it refuses to
         # produce anything without one — and dropping it here is what left the act with no route
         # back to what raised it (`N3`).
@@ -842,7 +869,8 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                           payload=_payload_of(c),
                           via=seat_of(p, c)) for c in chunk],
                      # `H-77`: `Scene.cost` prices the scene from the `slots` it fills.
-                     occasion=occasion)
+                     occasion=occasion,
+                     decided="" if decide is None else decide(chunk[0] if lead is None else lead))
 
     # ⚠ THE BOUND IS THE COST, NOT THE SCENE COUNT: once `extended` is set, five greedy scenes
     # cost ten against a budget of five, so a packer bounded by count would overspend by
@@ -882,7 +910,7 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                 if sc.cost(ext) > left:
                     c0 = chunk[0]
                     sc = scene(len(out), [Candidate(c0.verb, c0.subject,
-                                                    {k: v for k, v in (c0.operands or {}).items() if k != EFFORT})])
+                                                    {k: v for k, v in (c0.operands or {}).items() if k != EFFORT})], lead=c0)
             out.append(sc)
             left -= sc.cost(ext)
         return out

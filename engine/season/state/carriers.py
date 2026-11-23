@@ -596,7 +596,15 @@ class Scene:
 
     A scene filling more than one interaction slot (`slots`) costs more than one scene action
     (`H-77`, swept). Both that cost and the interactions bound are FIXTURES and register rows --
-    Jordan ruled the UNIT and the NUMBER and ruled neither of these."""
+    Jordan ruled the UNIT and the NUMBER and ruled neither of these.
+
+    ⚠ LAYER 1 DEPARTURE, NAMED HERE (B4's third disposition; C3-C16): `04` §B.9's `Scene` record is `(id, person, occasion, place,
+    interactions)` and has no `decided`. `decided` is not in it and `04` is not edited. Its one reader is `harness/chronicle.py`
+    (ID-13: `lines`' per-act line). THE DECIDING TERM: the term of the score, or the draw, that put the Scene's FIRST act on top
+    of the candidates still unspent when it was taken -- `choose.deciding_term`'s label for it (`pursuit`, `stance`, `fit`, a `+`
+    of them, `draw`, `tiebreak`, `sole` or `overdetermined`). `decision/` stamps it (`choose.pack_scenes`); the Scene is its own
+    return value, so this is no write, and nothing is hashed from it. `""` is a Scene packed from a list no chooser ranked (a
+    hand-built one, or a player's pick), where no deliberation said what decided it."""
     id: str
     actor: str
     acts: list = field(default_factory=list)
@@ -610,6 +618,7 @@ class Scene:
     # nothing here reads a scene's place; `place_of(w, event)` already answers that question from
     # the Event. Adding it to match a type signature would be the defect the idiom names.
     occasion: Optional["Question"] = None
+    decided: str = ""      # the deciding term of the Scene's first act; the docstring names it (a Layer 1 departure)
 
     # roster-exempt: MECHANISM. `PLAIN_COST` is the DEFINITION OF THE UNIT -- one ordinary scene
     # is one scene action -- not a tunable value. `H-77` tunes what an EXTENDED scene costs
