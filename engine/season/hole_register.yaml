@@ -698,7 +698,7 @@ rows:
     site:      ""
     sweep:     []
     unblocks:  "unmeasured"
-    cite:      "PLAN §3.1, test 3 (answered by a design document). #353 :876 types `choose : (Person, View, Sensation) -> Act[] -- ordered, bounded by budget(person, view)`. NOTE, because the plan states this more strongly than the source does: :876 is a TYPE SIGNATURE, not a sentence. It carries the claim because it is typed over `Person` with no player carve-out anywhere, and Jordan's 2026-09-02 ruling says \"a character\" -- the neutral word. Verified by hand 2026-09-02."
+    cite:      "CLOSED (`U5a_CHAR_owed_amendments` §9): the player's space, `decision/sheet.py::development_space`, calls `ask_budget()` and `release` exactly as the automated chooser does, so the budget is symmetric in code. PLAN §3.1, test 3 (answered by a design document). #353 :876 types `choose : (Person, View, Sensation) -> Act[] -- ordered, bounded by budget(person, view)`. NOTE, because the plan states this more strongly than the source does: :876 is a TYPE SIGNATURE, not a sentence. It carries the claim because it is typed over `Person` with no player carve-out anywhere, and Jordan's 2026-09-02 ruling says \"a character\" -- the neutral word. Verified by hand 2026-09-02."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row | `absent` here ONLY because W0 transcribes the state V2 left; W1 closes it"
   - id:        H-61
     tier:      1
