@@ -41,8 +41,9 @@ from typing import Optional
 
 from .data.requires import binding_of, evaluate
 from .data.rosters import (
-    CLAIM_SUBJECT_RULES, COVERT_KINDS, EVENT_REACH_ROWS, FAN_OUT_MODES, OBSERVATION_TERMS, REACH_FROM_STRATUM,
-    REACH_ROOM, SEEN_PREDICATE, TERMS_SUPPLIED_BY, WITNESS_CHANNELS, require_member)
+    CLAIM_SUBJECT_RULES, COVERT_KINDS, DOMINANCE_KINDS, EVENT_REACH_ROWS, FAN_OUT_MODES, OBSERVATION_TERMS, PERSON_DIED,
+    REACH_FROM_STRATUM, REACH_FROM_UNREST, REACH_ROOM, SEAT_NEWS_ARMS, SEAT_NEWS_KINDS, SEEN_PREDICATE, TERMS_SUPPLIED_BY,
+    WITNESS_CHANNELS, require_member)
 from .data.verbs import EVENT_KINDS, NO_PRECONDITION, VERB_TABLE, VerbRow
 from .gaps import Unspecified
 from .state.attribution import event_by_id, actor_of, anchor_of, causing_act
@@ -572,35 +573,17 @@ def _ch_post_remit(w: "World", e, pid) -> bool:
     return purview_reaches(w, seat, world_q.place_of(w, pid))
 
 
-def _ch_chronicle(w: "World", e, pid) -> bool:
-    """The matter-of-record channel: what a binding decision emits is public.
-
-    ⚠ THIS DOES NOT READ `pid`, AND SAYING SO IS THE HONEST DESCRIPTION. It is an EVENT-KIND
-    FILTER, not a per-person predicate: when it fires it fires for everyone alive, so it is
-    `total` conditioned on kind. That is a defensible thing for a PUBLIC channel to be -- a matter
-    of record is public to everyone by definition -- but it does not keep `all_five` distinct from
-    `total`. In Carin's world `chronicle` matches NOBODY: the eight `binding_decision` verbs all
-    have prose `requires:` and none is in `REQUIRES_PREDICATES`, so `resolvable_verbs()` excludes
-    every one of them, and the MATTER/WITNESS kinds appear on no verb's `emits:` at all. The
-    `any(...)` is over an empty generator for every Event the fold can produce there.
-    So the whole of `all_five - presence_only` is `document_key`, and the register carries it as
-    the reason `H-33`'s `all_five` arm is not yet a measurement of five channels.
-
-    ⚠ TRUE OF CARIN'S WORLD, NOT OF THE REALM. In the realm (`boot/realm.py`) this channel is the
-    strongest admitting one for `order.given` (`dispatch`), `date.scheduled` (`convene`),
-    `tenure.closed` and `march.declared` -- every one a person nowhere near the room -- and they
-    hold those deposits `told_by`. This channel is ahead of `post_remit` in the roster (the
-    ordinal: told before inferred).
-
-    ⚠ KEPT, NOT DELETED. The proceedings design deletes `chronicle` on the ground that it *"matches
-    nobody"* (`21_RECONCILIATION.md` C-6) and pairs the deletion with the channel that replaces its
-    reach (the `<rung kind>` reach channel, the design's step 15); the v9 plan scheduled no
-    replacement. In the realm it is the ONLY channel minting `told_by` -- every hearsay deposit of a
-    binding decision. Deleting it before its replacement exists removes that reach outright; it
-    goes in the change that builds the `<rung kind>` channel (`19_PLAN.md` step 16's pairing), not
-    before."""
-    return any(r.stratum == "binding_decision" for r in VERB_TABLE.values()
-               if e.kind in (r.emits or ()))
+def _seat_place(w: "World", e) -> "str | None":
+    """WHERE AN EVENT NO ONE PLACED HAPPENED, WHEN IT IS ABOUT A SEAT: the rung of the first Office its changes name
+    (`Office.rung`; `None` for an office with no rung, `S6.2`'s cluster case). A MATTER death's `tenure.closed` has no
+    actor and anchors on the Office, which `place_of` does not place (`event_place` is `None`), and the `chronicle` this
+    channel replaced told the realm of the vacancy regardless: without this limb the death of a seat-holder at MATTER
+    would reach nobody by `reach`. Asked only where `event_place` answers `None`."""
+    for c in e.changes:
+        office = w.offices.get(c.subject)
+        if office is not None:
+            return office.rung
+    return None
 
 
 def _ch_reach(w: "World", e, pid) -> bool:
@@ -608,11 +591,16 @@ def _ch_reach(w: "World", e, pid) -> bool:
 
     True where `e.kind` has a reach in `EVENT_REACH` and `pid`'s place (`world_q.place_of`) lies within the rung of that
     kind that contains the event's place (`world_q.event_place`), or is that place for `room`. A kind with no reach, an
-    unplaced event or an unplaced person admits nobody, so with the map empty (as shipped) this admits nobody."""
+    unplaced event or an unplaced person admits nobody; so does a seat-change kind (`SEAT_NEWS_KINDS`) at
+    `Fixtures.seat_news == "local"`, the A-32 arm that leaves that news to presence, jurisdiction and telling. Unlike the
+    `chronicle` it replaced, it reads `pid`: a person nowhere within the reach is not admitted.
+
+    ⚠ `person.died` IS NOT IN THE MAP (A-33): a death reaches those who were there, those on its trail and those told.
+    The seats it empties earn `tenure.closed`, which does travel."""
     reach = EVENT_REACH.get(e.kind)
-    if reach is None:
+    if reach is None or (e.kind in SEAT_NEWS_KINDS and _seat_news(w) == "local"):
         return False
-    at, here = world_q.event_place(w, e), world_q.place_of(w, pid)
+    at, here = world_q.event_place(w, e) or _seat_place(w, e), world_q.place_of(w, pid)
     if at is None or here is None:
         return False
     if reach == REACH_ROOM:
@@ -621,12 +609,22 @@ def _ch_reach(w: "World", e, pid) -> bool:
     return rung is not None and rung in ancestry(w, here)
 
 
+def _seat_news(w: "World") -> str:
+    """`Fixtures.seat_news`, held to `rosters.yaml: seat_news_arms` (H-214): an unknown arm raises rather than reading as
+    `realm`, the control."""
+    arm = w.fixtures.get("seat_news")
+    require_member(arm, SEAT_NEWS_ARMS, f"seat_news {arm!r} is not one of the declared arms {sorted(SEAT_NEWS_ARMS)}", "H-214",
+                   law="`rosters.yaml: seat_news_arms` -- an arm outside it that read as `realm` would make every reading "
+                       "of the A-32 sweep report the control")
+    return arm
+
+
 def _event_reach(rows: dict) -> dict:
     """`{event kind: reach}` for the `reach` channel, from `rosters.yaml: witness_channels.event_reach`: an entry
-    `from_stratum: {stratum: reach}` expands to every kind a verb row of that stratum emits (derived, as
-    `_ch_chronicle` derives its kinds, never spelt), and a kind an entry names must be one the loop declares
-    (`EVENT_KINDS`) or import refuses. The reach values are `data/rosters.py::check_event_reach`'s. A function so a
-    test can plant a row."""
+    `from_stratum: {stratum: reach}` expands to every kind a verb row of that stratum emits and `from_unrest: reach` to
+    the unrest kinds `person_q.stability` reads (`DOMINANCE_KINDS` less `person.died`, A-33) -- both derived, never
+    spelt -- and a kind an entry names must be one the loop declares (`EVENT_KINDS`) or import refuses. The reach values
+    are `data/rosters.py::check_event_reach`'s. A function so a test can plant a row."""
     out = {}
     for k, v in rows.items():
         if k == REACH_FROM_STRATUM:
@@ -634,6 +632,8 @@ def _event_reach(rows: dict) -> dict:
                 for r in VERB_TABLE.values():
                     if r.stratum == stratum:
                         out.update({kind: reach for kind in (r.emits or ())})
+        elif k == REACH_FROM_UNREST:
+            out.update({kind: v for kind in DOMINANCE_KINDS if kind != PERSON_DIED})
         else:
             if k not in EVENT_KINDS:
                 raise Unspecified(
@@ -645,8 +645,15 @@ def _event_reach(rows: dict) -> dict:
     return out
 
 
-#: `{event kind: reach}` -- EMPTY AT CR-29 COMMIT (1), so `_ch_reach` admits nobody; a later commit fills the roster row.
+#: `{event kind: reach}` for `_ch_reach`, derived from the roster row (CR-29).
 EVENT_REACH = _event_reach(EVENT_REACH_ROWS)
+_no_reach = sorted(k for k in SEAT_NEWS_KINDS if k not in EVENT_REACH)
+if _no_reach:
+    raise Unspecified(
+        f"`seat_news_kinds` names {_no_reach}, which `witness_channels.event_reach` gives no reach", "rosters.yaml -- seat_news_kinds",
+        needs="give each seat-change kind a reach in `event_reach`, or drop it from `seat_news_kinds`",
+        law="A-32 -- the `local` arm lifts the seat-change news from the map; a kind the map never carried is a lift of nothing")
+del _no_reach
 
 
 # ⚠ BUILT FROM THE ROSTER, NOT TYPED HERE. A dict literal mapping five channel names to five
@@ -730,7 +737,7 @@ def changes_only_held_claims(w: "World", e: "Event", held: frozenset, mode: str)
     claim id, a hash (`state/ids.py::H`) that is no person, site, record, date or rung, so the
     anchor is the claim, `place_of` answers `None` (`co_located` admits nobody), `witness_key`'s
     `pid == anchor` and its knot test have no person to match, and `document_key` needs a `hold`
-    whose object is that claim id; `chronicle` filters on a verb's `emits:` and no verb emits a
+    whose object is that claim id; `reach` is keyed on kinds a verb row emits and no verb emits a
     claim-changing kind.
 
     ⚠ NOT "EVERY CHANGE SUBJECT RESOLVES IN NO WORLD STORE". That also matches a MATTER death:
@@ -747,10 +754,10 @@ def changes_only_held_claims(w: "World", e: "Event", held: frozenset, mode: str)
     WHEN IN DOUBT THE FAN RUNS. An Event with no change (`condition.band_crossed`, anchored through
     its cause), a change with no subject, or a claim id no ledger holds any more (its holder died, or
     the cap evicted it, or this very Event removed it) is NOT skipped. Nor is an Event whose kind
-    the `chronicle` channel admits (`_ch_chronicle` reads `e.kind` alone, so it would admit
-    everyone): no row emits a claim-changing kind today, and that is a fact of the table, not of
-    this predicate."""
-    if mode == "total" or not e.changes or causing_act(w, e) is not None or _ch_chronicle(w, e, None):
+    the `reach` channel carries (`EVENT_REACH`: a kind with a reach may admit people the other
+    channels do not): no row emits a claim-changing kind today, and that is a fact of the table,
+    not of this predicate."""
+    if mode == "total" or not e.changes or causing_act(w, e) is not None or e.kind in EVENT_REACH:
         return False
     return all(c.subject and c.subject in held for c in e.changes)
 

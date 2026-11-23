@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 125,
-    "total": 424,
-    "uncited": 299,
+    "total": 425,
+    "uncited": 300,
     "of_which_assumption_grade": 8
   },
-  "count": 424,
+  "count": 425,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 30,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 129,
+    "engine.season.settings": 130,
     "engine.season.realm": 8
   },
   "params": [
@@ -4880,6 +4880,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-196`, swept newest (control, SHIPPED) / valence",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.seat_news",
+      "name": "seat_news",
+      "value": "realm",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-214`, swept realm (SHIPPED) / local (A-32's arm B)",
       "citation": null,
       "citation_grade": null
     },
