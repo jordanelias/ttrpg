@@ -2608,6 +2608,13 @@
             "told_retain"
           ]
         },
+        "self_believed": {
+          "source": "B10.64 (`U5a_CHAR_self_knowledge_is_a_belief`, A-34: a belief, built narrowly): the one gated gift, plus the pursuit roster.",
+          "note": "THE NON-PURSUIT MEMBERS. A cast row's `unaware:` may name only a member of `data/rosters.py::SELF_BELIEVED`, which is these values JOINED TO the `pursuits` roster at the one binding (a roster carries a `values:` or an owner pointer, never both, so the pursuit half is not copied here). `data/cast.py::unaware_of` refuses any other key, and any key the row does not hold. For such a key the person-side answer is his own claim `self:<key>` (`queries/person_q.py::knows_self`); every other own-state stem is answered from the field as before. [ASSUMPTION; medium; Jordan to correct -- basis: the source's own roster; revert: the roster is empty.]",
+          "values": [
+            "prac.thread_sensitivity"
+          ]
+        },
         "difficulty_levels": {
           "source": "B05.14 (`proposals/05_SC_obstacle_difficulty_and_modifiers_B.md` Edit A, D-U1-04): what lane A's `task_difficulty` roster becomes -- a level a row names, not a number a roster holds",
           "note": "THE LEVELS A ROLLED VERB ROW'S `difficulty:` CELL NAMES, in order of how hard the act itself is. `data/verbs.py` refuses a row that is contested on the social roll's prize or graded to it with no `difficulty:`, a value outside this set, and a `difficulty:` on a row nothing rolls. `Fixtures.difficulty_ob` gives each level its size in obstacle (refused at load if its keys are not exactly these). A new level is a member here and a size there, and no code.",
@@ -9290,7 +9297,8 @@
           "capabilities",
           "resonant_style",
           "manner",
-          "relations"
+          "relations",
+          "unaware"
         ]
       },
       "characters": [

@@ -34,7 +34,7 @@ import re
 from typing import Optional
 
 from . import files
-from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_RANKS, LIFEPATH_TEMPLATES, MANNER_OFFSET_AXES, RELATION_GROUNDS, load_yaml, roster
+from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_RANKS, LIFEPATH_TEMPLATES, MANNER_OFFSET_AXES, RELATION_GROUNDS, SELF_BELIEVED, load_yaml, roster
 from ..gaps import Unspecified
 from ...substrate.descriptors import (
     ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, CAPABILITIES, HERITAGES, PRACTITIONER_STATS, TRAIT_BY_SEATING,
@@ -484,6 +484,35 @@ def relations_of(r: dict) -> tuple:
                               law="B10.62 -- the weight is the stance row's, bounded as the loyalty row's is")
         out.append((to, ground, valence, weight))
     return tuple(out)
+
+
+def unaware_of(r: dict) -> frozenset:
+    """`Person.unaware`'s authored source (B10.64, `U5a` edit 2): the row's `unaware:` list, as a frozenset of the keys he is not aware of in himself, or
+    `frozenset()` where nothing is authored -- the key absent, `unaware: null`, or no row at all. Each key must be a `data/rosters.py::SELF_BELIEVED` member
+    (`rosters.yaml: self_believed` and the pursuit roster) AND a key the row actually holds: a pursuit its `convictions:` names (`pursuits_of`), the gift its
+    `ts:` authors (`thread_sensitivity_of`). A `unaware:` that is no list, a key outside the roster, a key the row does not hold and a repeat REFUSE, naming
+    the row (`attributes_of`'s shape). The ONE caller is `boot/realm.py::build_realm`."""
+    raw = (r or {}).get("unaware")
+    if raw is None:
+        return frozenset()
+    who = (r or {}).get("id", "?")
+    if not isinstance(raw, list):
+        raise Unspecified(f"cast row {who}: unaware {raw!r} is no list", "references/npc_registry.yaml",
+                          needs="a list of `self_believed` keys the row holds, or null",
+                          law="B10.64 -- an authored value this reader cannot parse refuses")
+    if len(set(map(str, raw))) != len(raw):
+        raise Unspecified(f"cast row {who}: unaware {raw!r} names a key twice", "references/npc_registry.yaml",
+                          needs="each key once", law="B10.64 -- a mark is a set")
+    for key in raw:
+        if not isinstance(key, str) or key not in SELF_BELIEVED:
+            raise Unspecified(f"cast row {who}: unaware key {key!r} is none of {sorted(SELF_BELIEVED)}", "rosters.yaml",
+                              needs=f"one of {sorted(SELF_BELIEVED)}", law="B10.64 -- only a `self_believed` key may be marked unaware")
+        held = (thread_sensitivity_of(r) is not None if key == "prac.thread_sensitivity" else key in pursuits_of(r))
+        if not held:
+            raise Unspecified(f"cast row {who}: unaware key {key!r} is one the row does not hold", "references/npc_registry.yaml",
+                              needs="a key the row holds (a pursuit in `convictions:`, a value in `ts:`)",
+                              law="B10.64 -- a person cannot be unaware of what he has not got")
+    return frozenset(raw)
 
 
 def capabilities_of(r: dict) -> dict:

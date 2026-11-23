@@ -857,6 +857,11 @@ class Person:
     # (`data/cast.py::manner_offset_of`), written at build only (`write_matrix.yaml`'s `Person.manner_offset` row has no step), and EMPTY where unauthored: an axis nobody
     # holds is absent, never 0.0. ONE READER: `queries/person_q.py::projected_axes` adds it to the projected axis; the refusal gate asks for the projection without it.
     manner_offset: Mapping[str, float] = field(default_factory=dict)
+    # B10.64 (`U5a_CHAR_self_knowledge_is_a_belief` edit 2): THE KEYS HE IS NOT AWARE OF IN HIMSELF (`data/cast.py::unaware_of`, over `data/rosters.py::SELF_BELIEVED`).
+    # ⚠ NOT A DATACLASS FIELD, ON PURPOSE: no annotation, so `World.content_hash` and a snapshot do not see it (a field would move every build hash, and the entry is hash-equal).
+    # Set once by `boot/realm.py::build_realm` from a cast row's `unaware:`, NEVER WRITTEN IN PLAY, and `frozenset()` for everybody until a row is marked (none ships). It is the
+    # ARMING CONDITION of `queries/person_q.py::knows_self` and goes when `B10.65` seeds the `self:` claims: a mark is then the absence of the claim, which the ledger carries.
+    unaware = frozenset()
     travel_leg: list[str] = field(default_factory=list)
     # ⚠ THE TENURE STORE IS HERE, as `Tenure`'s OWN DOCSTRING says: "S15 -- THE ONE EDGE. Owned by its
     # SUBJECT (S15.1)." `budget : (Person, View) -> int` reads "own `hold` Tenures" WITH NO WORLD
@@ -925,6 +930,7 @@ class PersonInterior:
     # `Fixtures.claim_decay()`, copied in by `interior_of`. `fade_of` reads them; a hand-built `Person` carries neither.
     tick: int = 0
     claim_decay: int = 0
+    unaware: frozenset = frozenset()    # B10.64: `Person.unaware`, copied; read by `queries/person_q.py::knows_self` (not a hashed field)
 
     @property
     def is_cohort(self) -> bool:
@@ -945,7 +951,7 @@ def interior_of(p: Person, tick: int, claim_decay: int) -> PersonInterior:
         p.id, p.name, frozen(p.capability), frozen(p.pursuits), frozen(p.conviction), frozen(p.scar),
         frozen(p.attributes), frozen(p.manner_offset),
         p.body, p.thread_sensitivity, tuple(p.stance), tuple(p.travel_leg), tuple(p.tenures), tuple(p.ledger),
-        p.weight, p.heritage, tick, claim_decay)
+        p.weight, p.heritage, tick, claim_decay, p.unaware)
 
 
 def fade_of(p) -> tuple:

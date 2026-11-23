@@ -57,7 +57,7 @@ from typing import Any, Callable, Iterable, Mapping, Optional, Sequence
 from ...substrate.descriptors import ATTRIBUTE_GLOSSES, CAPABILITIES, attribute_key
 from ..data.rosters import AFFILIATIONS, SEEN_PREDICATE
 from ..gaps import Forbidden
-from ..queries.person_q import LedgerReader, decisiveness
+from ..queries.person_q import LedgerReader, decisiveness, recognised
 from ..state.carriers import Person, PersonInterior, Question, View, fade_of, frozen
 from .choose import make_ranker, release
 from .options import ledger_weigh
@@ -101,7 +101,7 @@ def creation_sheet(persons: Iterable[Person]) -> tuple:
     """The creation sheet: one `CreationRow` per seated person, in id order (a pick list, not a ranking).
     `persons` is what the caller already holds (`w.persons.values()` before the first season); this
     function takes no `World` and writes nothing."""
-    return tuple(CreationRow(p.id, p.name, frozen(p.capability), frozen(p.pursuits),
+    return tuple(CreationRow(p.id, p.name, frozen(p.capability), frozen(recognised(p, p.pursuits)),
                              frozen(p.conviction), frozen(p.attributes))
                  for p in sorted(persons, key=lambda q: q.id))
 
@@ -177,7 +177,7 @@ def development_space(fx: Any, mint: Callable[[str, str, str], str],
         cands = rank(p, v)
         n = ask_budget()
         sheet = DevelopmentSheet(p.id, v, q, tuple(copy.deepcopy(c) for c in cands), n, frozen(p.capability),
-                                 frozen(p.pursuits), tuple(p.stance), frozen(p.conviction),
+                                 frozen(recognised(p, p.pursuits)), tuple(p.stance), frozen(p.conviction),
                                  frozen(p.scar), p.body, frozen(p.attributes), p.thread_sensitivity, p.heritage,
                                  tuple((t.kind, t.object) for t in p.tenures if t.live),
                                  decisiveness(p, fx.get("scar_weight_shift")))
@@ -244,7 +244,7 @@ def chronicle(p: Person, fx: Any = None) -> Chronicle:
         p.id, tuple(p.ledger),
         tuple((subj, reader.latest_about(subj)) for subj in subjects),
         frozen(p.conviction),
-        frozen({k: n for k, n in (p.scar or {}).items() if k not in AFFILIATIONS}),
+        frozen(recognised(p, {k: n for k, n in (p.scar or {}).items() if k not in AFFILIATIONS})),
         frozen({k: n for k, n in aff.items() if k in held}),
         frozen({k: n for k, n in aff.items() if k not in held}),
         threads)

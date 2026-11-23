@@ -1494,6 +1494,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
         w.persons[pid].traits = cast.traits_of(cast.row(cid) or {})
         # B10.58 (A-108): the row's `manner:` offsets, within `Fixtures.manner_offset_bound`, set here and NEVER written in play; a row with no `manner:` holds none (`{}`).
         w.persons[pid].manner_offset = cast.manner_offset_of(cast.row(cid) or {}, w.fixtures.get("manner_offset_bound"))
+        # B10.64 (`U5a` edit 2): the keys the row marks `unaware:`, set here and NEVER written in play; none ships (`frozenset()`). Not a hashed field (`Person.unaware`).
+        w.persons[pid].unaware = cast.unaware_of(cast.row(cid) or {})
         # v10 CR-33: the row's `lifepath:` EXPANDED into the capability keys its template names, each at
         # `pool_default` (the grant changes no POOL; it makes the key one `train` can raise, and it LOWERS the
         # obstacle the holder presents: a held key at 2 is opposed at `opposed_ob(2, opposition_rate)`, a person

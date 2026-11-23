@@ -1539,6 +1539,26 @@ def _held_at(p: Person, key: str):
     return getattr(p, key.rpartition(".")[2], None)
 
 
+# B10.64 (`U5a_CHAR_self_knowledge_is_a_belief` edits 2, 4, 5): WHAT A PERSON BELIEVES OF HIMSELF. The claim a person holds of himself under a key of
+# `data/rosters.py::SELF_BELIEVED` is `Claim(subject=<himself>, predicate=SELF_STEM + <key>, value=True)`, his own; the spelling beside `BOND_STEM`'s.
+SELF_STEM = "self:"
+
+
+def knows_self(p, key: str) -> bool:
+    """THE ONE READER OF WHETHER A PERSON RECOGNISES `key` IN HIMSELF: True for a key he is not marked unaware of (`p.unaware`), and for a marked one only
+    where his own ledger holds `self:<key>` as True (the latest claim, `LedgerReader`'s comparator). Person-side (AX-2): his ledger and his id, nothing else.
+    ARMED ONLY FOR A MARKED PERSON until `B10.65` seeds the claims for everybody (`Person.unaware` says why): an unmarked person keeps today's answer."""
+    if key not in p.unaware:
+        return True
+    return LedgerReader(p.ledger).read(p.id, SELF_STEM + key) is True
+
+
+def recognised(p, mapping) -> dict:
+    """`mapping` (a pursuit-keyed map: his weights, his scar counts) with the keys he does not recognise in himself taken out -- the one filter his sheet
+    reads (`decision/sheet.py`). A key outside `SELF_BELIEVED` is always recognised."""
+    return {k: v for k, v in dict(mapping or {}).items() if knows_self(p, k)}
+
+
 class OwnStateReader:
     """THE QUESTIONS A PERSON ANSWERS OF HIMSELF (v9 PC-06 K-3, `H-85`) -- `OWN_STATE_STEMS`, and
     nothing else: every other predicate is UNKNOWN here.
@@ -1546,7 +1566,7 @@ class OwnStateReader:
     ⚠ THE ONE ANSWERER OF BOTH STEMS, FOR BOTH SIDES. The fold's `queries/world_q.py::WorldReader`
     delegates to it for the person the act names, and `decision/options.py::opening_set` asks it of
     the person forming, so the gate and the person's own reading of it are one read, not two copies.
-    It takes the PERSON and the fixtures and no World and no ledger: a person's sensitivity is his
+    It takes the PERSON and the fixtures and no World (and reads his own ledger only under `believes`, below): a person's sensitivity is his
     own state (`Person.thread_sensitivity`), not a belief about the world (§F1's asymmetry is about
     the world, as `opening_set`'s self-contest decline is about being alone in a room).
 
@@ -1560,11 +1580,15 @@ class OwnStateReader:
         is an individual, each of HIMSELF: `held_by` and `dispute` asked of the actor, `individual` of the actor's own id.
         UNKNOWN for anybody else, so a conjunct this reader cannot answer never declines (`opening_set` declines on False).
 
+      * `believes=True` (B10.64, the PERSON'S side only: `decision/options.py::opening_set` passes it, the fold's `WorldReader` does not) -- a key he is
+        marked unaware of (`Person.unaware`) is answered from his own claim `self:<key>` (`knows_self`): held, the field's value; not held, UNKNOWN. The fold's
+        read of the field is unchanged, so a hand-built act still folds.
+
     ⚠ THE KEY AND THE FIXTURE ARE THE `own_state_gate` ROW'S (`rosters.yaml: tables.capability_uses`, B04.06); the two stems
     are the verb table's grammar and stay. A site with no row answers UNKNOWN to both."""
 
-    def __init__(self, p: Person, fx):
-        self._p, self._fx = p, fx
+    def __init__(self, p: Person, fx, *, believes: bool = False):
+        self._p, self._fx, self._believes = p, fx, believes
 
     def read(self, subject, predicate: str):
         stem, _, arg = str(predicate).partition(":")
@@ -1586,6 +1610,8 @@ class OwnStateReader:
             return UNKNOWN
         if stem == "thread_sensitivity":
             v = _held_at(self._p, row.key) if subject == me else None
+            if self._believes and not knows_self(self._p, row.key):     # B10.64: HIS OWN CLAIM, NOT THE FIELD (the fold's reader is built without `believes`)
+                return UNKNOWN
             return UNKNOWN if v is None else v
         if stem == "thread_sensitivity.gate":
             return self._fx.get(row.gain)

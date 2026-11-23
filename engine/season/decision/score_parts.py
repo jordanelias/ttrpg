@@ -17,7 +17,7 @@ from typing import Callable, Optional
 from engine.dice_engine.fmath import ltr_sum
 from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
 from ..data.verbs import VERB_TABLE, align, align_kind
-from ..queries.person_q import crisis_weights, is_deed, regard_parts
+from ..queries.person_q import crisis_weights, is_deed, knows_self, regard_parts
 from ..state.carriers import Candidate, Claim, Question
 from .choose import _DAMP, TERM_NAMES, admission_weight, odds_weight, score_terms
 
@@ -29,6 +29,7 @@ ATTRIBUTED_TERMS = ("pursuit", "stance", "fit", "aim", "risk")
 HEARD_FLOOR = 0.5   # [canonical: proposals/2026-11-12-subsystem-audit-suite/proposals/02_CHAR_voices_and_the_room.md §Exact edits 3 ([ASSUMPTION; medium; GO and Jordan to correct])]
 
 DRAW = "draw"       # the kind of the voice that says the person did not take his own best (`heard`)
+UNRECOGNISED = "unrecognised"   # B10.64: the owner a pursuit voice carries when he holds no `self:` claim for that pursuit -- the motive still pulls, and he does not name it
 
 
 @dataclass(frozen=True)
@@ -53,7 +54,7 @@ def _order(part: ScorePart) -> tuple:
 
 
 def _pursuit_parts(p, c: Candidate, fx, memo: dict, odds: Optional[Callable], total: float) -> list:
-    """`damp * Σ_axis to_axes({e: w_e})[axis] * align(c.verb, axis) * odds_weight * admission_weight` for each held pursuit `e`, `w_e` from
+    """B10.64: a pursuit he does not recognise (`knows_self`) is owned `UNRECOGNISED`; its pull is the same. `damp * Σ_axis to_axes({e: w_e})[axis] * align(c.verb, axis) * odds_weight * admission_weight` for each held pursuit `e`, `w_e` from
     `crisis_weights(p, scar_weight_shift)`, the weights `choose.project` reads. A candidate whose pursuit term is exactly 0.0 is not asked the
     two factors (nor is `score_terms`: the odds query scans the log), so its parts carry none."""
     factor_o, factor_a = (odds_weight(p, c, fx, odds), admission_weight(p, c, fx)) if total != 0.0 else (1.0, 1.0)
@@ -63,7 +64,7 @@ def _pursuit_parts(p, c: Candidate, fx, memo: dict, odds: Optional[Callable], to
         axes = to_axes({e: weights[e]})
         pull = memo[_DAMP] * ltr_sum(axes[ax] * align(c.verb, ax) for ax in _AXES)
         if pull != 0.0:
-            parts.append(ScorePart("pursuit", e, pull * factor_o * factor_a))
+            parts.append(ScorePart("pursuit", e if knows_self(p, e) else UNRECOGNISED, pull * factor_o * factor_a))
     return parts
 
 
@@ -114,7 +115,7 @@ def history(p, part: ScorePart, fx=None):
     `regard` sums: B10.55). `None` for any other voice."""
     if part.kind == "stance":
         return regard_parts(p, part.owner, fx)
-    if part.kind != "pursuit":
+    if part.kind != "pursuit" or part.owner == UNRECOGNISED:      # B10.64: an owner withheld cites no history
         return None
     axes = [ax for ax, w in to_axes({part.owner: 1.0}).items() if w]
     newest = None

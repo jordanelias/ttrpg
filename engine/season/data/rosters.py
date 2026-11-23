@@ -1153,6 +1153,8 @@ if not MANNER_OFFSET_AXES <= PURSUIT_AXES:
                       law="B10.58 (A-108) -- a stored offset is added to a projected axis, so it can sit only on one the projection has")
 # B10.62. THE GROUNDS A CAST ROW'S `relations:` MAY NAME (`data/cast.py::relations_of`), bound at import; each is the suffix of a `bond:<ground>` claim.
 RELATION_GROUNDS = roster("relation_grounds")
+# B10.64. THE KEYS A CAST ROW MAY MARK `unaware:` (`data/cast.py::unaware_of`): the roster's own members and the pursuit roster, joined here, once.
+SELF_BELIEVED = roster("self_believed") | roster("pursuits")
 # `R8.1`. THE `seen` CLAIM -- its four terms (ordered: they are the struct's fields), the one
 # predicate it is deposited under, and which terms each witness channel shows. Bound at import for
 # `TITLE_DOMAINS`' reason; the terms are cross-validated against `WITNESS_CHANNELS` and

@@ -1604,6 +1604,17 @@ rosters:
   capability_gate_sites:
     values: [own_state_gate, told_retain]
 
+  # B10.64 (`U5a_CHAR_self_knowledge_is_a_belief` edit 1): THE KEYS A PERSON MAY BE UNAWARE OF IN HIMSELF.
+  self_believed:
+    source: >-
+      B10.64 (`U5a_CHAR_self_knowledge_is_a_belief`, A-34: a belief, built narrowly): the one gated gift, plus the pursuit roster.
+    note: >-
+      THE NON-PURSUIT MEMBERS. A cast row's `unaware:` may name only a member of `data/rosters.py::SELF_BELIEVED`, which is these values JOINED TO the `pursuits`
+      roster at the one binding (a roster carries a `values:` or an owner pointer, never both, so the pursuit half is not copied here). `data/cast.py::unaware_of`
+      refuses any other key, and any key the row does not hold. For such a key the person-side answer is his own claim `self:<key>` (`queries/person_q.py::knows_self`);
+      every other own-state stem is answered from the field as before. [ASSUMPTION; medium; Jordan to correct -- basis: the source's own roster; revert: the roster is empty.]
+    values: [prac.thread_sensitivity]
+
   # B05.14 (OBS §1, §2; SC-B Edit A; D-U1-04): THE OBSTACLE'S FORM. `difficulty_levels` is the closed, ordered set of levels a rolled
   # verb row's `difficulty:` names (`data/verbs.py`); `Fixtures.difficulty_ob` sizes each one. `obstacle_terms` is the closed,
   # ordered set of the terms the social roll's obstacle is composed of (`modules/social_contest/roll.py::obstacle`), bound member
