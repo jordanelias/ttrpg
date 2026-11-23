@@ -909,6 +909,7 @@ def _primary_of(p: Person, hold: str, mass: float) -> Optional[frozenset]:
     return primary_pursuits(p.pursuits, mass) | frozenset(stands_for(p, "stands"))
 
 
+# [canonical: engine/season/data/fixtures.py §scar_primary_mass (H-469): the default is the fixture's control, read at the one call site that passes it]
 def broken_by(p: Person, violated: tuple, hold: str = "any", mass: float = 0.6) -> tuple:
     """The elements `p` holds that `violated` (an `elements_violated_by` answer) names: the held
     pursuits, then the held affiliations, each sorted. "Held" is `_held`'s sense (a weight above
@@ -919,6 +920,7 @@ def broken_by(p: Person, violated: tuple, hold: str = "any", mass: float = 0.6) 
     return _held(p.pursuits, pursuits, only) + _held(p.conviction, affiliations, only)
 
 
+# [canonical: engine/season/data/fixtures.py §scar_primary_mass (H-469): the default is the fixture's control, read at the one call site that passes it]
 def upheld_by(p: Person, upheld: frozenset, hold: str = "any", mass: float = 0.6) -> tuple:
     """The pursuits `p` holds that `upheld` (a `_pursuits_upheld_by` answer) names, sorted: the elements an act honours that he lives
     for, the vindication's candidates. `hold` and `mass` as `broken_by`: at `primary` only his primary pursuits. Pursuits only (an
