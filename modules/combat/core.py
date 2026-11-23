@@ -35,7 +35,7 @@ from . import weapon_physics as WP   # percussion authority lives ONCE in WP (th
 
 TN = SL.TN_STANDARD
 POOL_FLOOR = 5     # [canonical: params/core.md §Derived Scores (Combat Pool min 5)]
-BASE_POOL = 6      # [class-C: armature — faculty-driven pool base; pool = max(5, faculty+6), ED-901 (History until CR-85, ED-IN-0330); relocated verbatim from r1, ED-1085]
+BASE_POOL = 6      # [class-C: armature — score-driven pool base; pool = max(5, score+6), ED-901 (History until CR-85, ED-IN-0330); relocated verbatim from r1, ED-1085]
 OPPOSITION_RATE = 0.5   # control (today's half-score); flips to DE.MU_PER_DIE at item 29-3 (A-71)
 
 def resolution_pool(score, addends=0, add=BASE_POOL, floor=POOL_FLOOR):
@@ -68,7 +68,7 @@ def band_floor(band, ob):
     The workbench's displayed distribution and `strike()`'s overwhelming tail both need an edge, so the edge is
     DERIVED here rather than copied. Exact to the float: `degree(band_floor(b, ob), ob)` is `b` and the next float down is not.
     The +/-64 bracket around `ob` is asserted, not assumed (the owner's edges sit within 3 of `ob`). Pure; cached
-    per (band, ob) — Ob is `opposed_ob(faculty, rate)`, so a fight touches a handful of values. `band` is 'partial', 'success' or
+    per (band, ob) — Ob is `opposed_ob(score, rate)`, so a fight touches a handful of values. `band` is 'partial', 'success' or
     'overwhelming': 'fail' is the lowest band and has no edge (it fails the bracket assert)."""
     k = DE.DEGREE_ORDINAL[_DEGREE_OF[band]]
     rank = lambda x: DE.DEGREE_ORDINAL[DE.degree_from_net(x, ob)]
@@ -89,11 +89,11 @@ def ob_from_defender(defender, cfg):
     absent, this module's `OPPOSITION_RATE` (the control, 0.5). RULED Ob-derivation (Jordan, 2026-08-15, verbatim: "DECISIVE_OB
     for combat is stupid as hell and is dead because Ob should be determined by your opponent more than anything" --
     tests/valoria/test_degree_ladder_single_owner.py's RULINGS dict, entry "2026-08-15 — combat, and the sequence").
-    The operand is `defender.faculty`, the party's SKILL SCORE for the verb (`engine/season/seam/wrappers/pool.py::score`), passed
+    The operand is `defender.score`, the party's SKILL SCORE for the verb (`engine/season/seam/wrappers/pool.py::score`), passed
     in through `PersonalCombatInput.scores` (CR-85, ED-IN-0330; B05.57) -- the SAME score `resolution_pool()` derives dice from
     (ED-901); one value per party feeds his pool and the Ob he is attacked against. His registered addends
     (`PersonalCombatInput.addends`) feed his pool alone, never the Ob.
-    [ASSUMPTION; medium; Jordan to correct; revert: the faculty value feeds the pool only and the Ob reads the class
+    [ASSUMPTION; medium; Jordan to correct; revert: the score feeds the pool only and the Ob reads the class
     default 3] -- the CR-85 design is UNRATIFIED (ED-IN-0351).
     NO INSTANCE MODIFIER IS ADDED HERE. Wound impairment already has its OWNER
     (combat_systems.wound_impairment, ED-1041) and is folded into net_sigma at every call site (bind_sigma,
@@ -102,7 +102,7 @@ def ob_from_defender(defender, cfg):
     by dsig, which already shaped the roll via net_sigma (audit C-2: avoid double-counting defender skill)").
     A genuine per-instance Ob modifier would be a NEW term with its own owner, not folded into this function
     silently. Pure."""
-    return SL.opposed_ob(defender.faculty, cfg.get('OPPOSITION_RATE', OPPOSITION_RATE))
+    return SL.opposed_ob(defender.score, cfg.get('OPPOSITION_RATE', OPPOSITION_RATE))
 
 
 def resolve(pool, net_sigma, rng, ob):

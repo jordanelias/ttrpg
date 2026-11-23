@@ -222,7 +222,7 @@ def test_resolution_pool_is_unrounded_and_floored():
 
 def test_an_addend_raises_the_pool_and_never_the_ob_and_the_records_pair_is_the_engines():
     """The fight's pool is `pool_of(score, addends, pool_add, pool_floor)` and its Ob is the defender's skill score alone
-    (`faculty / 2`): a party with three addends rolls three dice more and is attacked at the same Ob (A-79: practice raises a pool,
+    (`score / 2`): a party with three addends rolls three dice more and is attacked at the same Ob (A-79: practice raises a pool,
     never an opposition). The record's `pool_add` and `pool_floor` are the pair every roll reads (here 3 and 0, not the module's 6
     and 5); a record naming neither rolls at the module's own."""
     import importlib

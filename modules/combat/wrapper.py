@@ -69,13 +69,13 @@ def _carry(ready, cfg):
     return {c: (max(0.0, r) % cfg['ACT_THRESHOLD']) for c, r in ready.items()}
 
 def _pool_dice(c, cfg):
-    """THE POOL A COMBATANT ROLLS (B05.57, `UPR` §2 edit 3): `core.resolution_pool(c.faculty, c.pool_addends, add, floor)` at the
-    three roll sites (the pursuit, the stop-hit, the exchange). `c.faculty` is his skill score; `c.pool_addends` his registered
+    """THE POOL A COMBATANT ROLLS (B05.57, `UPR` §2 edit 3): `core.resolution_pool(c.score, c.pool_addends, add, floor)` at the
+    three roll sites (the pursuit, the stop-hit, the exchange). `c.score` is his skill score; `c.pool_addends` his registered
     pool addends, set by the module entry (a `Combatant` built by the workbench has none and reads 0). `add` and `floor` are the
     record's `pool_add` and `pool_floor` when the entry carried them in `cfg` as `BASE_POOL` and `POOL_FLOOR`, else the owner's
     own defaults (the bounds are read nowhere else, so this spells no pool constant)."""
     kw = {k: cfg[name] for k, name in (("add", "BASE_POOL"), ("floor", "POOL_FLOOR")) if name in cfg}
-    return core.resolution_pool(c.faculty, getattr(c, "pool_addends", 0), **kw)
+    return core.resolution_pool(c.score, getattr(c, "pool_addends", 0), **kw)
 
 
 def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):

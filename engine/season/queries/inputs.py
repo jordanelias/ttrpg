@@ -161,7 +161,7 @@ class PersonalCombatInput:
                        without kits is fought by two Combatants at the engine's own default kit;
       * `scores`    -- each party's SKILL SCORE for the fight's verb, in `claimants` order, `ends`' shape (CR-85, ED-IN-0330,
                        B05.57; `seam/wrappers/pool.py::score`: no attribute, no addend; 0 where the skill gives him none). Passed
-                       to `Combatant(..., faculty=)`, where it is the number the opponent's Ob is taken from
+                       to `Combatant(..., score=)`, where it is the number the opponent's Ob is taken from
                        (`core.ob_from_defender`) and the base of his own pool. The default is `()`: a record built without it
                        is fought at the module's own default (3);
       * `addends`   -- each party's registered pool addends for the verb, the sum of `pool.py::POOL_ADDENDS` (`pool.addends_of`,

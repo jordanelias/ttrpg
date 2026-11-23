@@ -39,10 +39,10 @@ def _kit_kw(kit) -> dict:
     return {} if kit is None else dict(weapon=kit[0], armor=kit[1])
 
 
-def _faculty_kw(fac) -> dict:
+def _score_kw(score) -> dict:
     """`Combatant`'s keyword for one party's skill score (CR-85; the record's `scores` entry); `None` (none given) is none, so the
     Combatant keeps its own default."""
-    return {} if fac is None else dict(faculty=fac)
+    return {} if score is None else dict(score=score)
 
 
 def _fight_cfg(inp: PersonalCombatInput, cfg: Optional[dict] = None) -> Optional[dict]:
@@ -65,7 +65,7 @@ def _extras_kw(trad, tech, axes, disp) -> dict:
 def _attr_kw(authored) -> dict:
     """`Combatant`'s keywords for one party's authored attributes (PC-06 K-1): each `attributes.SPEC` entry whose
     `registry_key` the party authored, by that key; every other field stays at the class default. `end` is the input's
-    `ends` (the seam composes it with the body bands), and `faculty`/`disp` have no registry key. `None` is none."""
+    `ends` (the seam composes it with the body bands), and `disp` has no registry key. `None` is none."""
     if not authored:
         return {}
     return {s.key: authored[s.registry_key] for s in spec.SPEC
@@ -170,19 +170,19 @@ def fight(inp: PersonalCombatInput, rng: Draw,
     # built without them (`kits == ()`) is two Combatants at the engine's own default kit, as before.
     a_kit, b_kit = inp.kits or (None, None)
     # THE SKILL SCORES (CR-85, ED-IN-0330; B05.57): each party's skill score for the fight's verb, read off the typed input; it
-    # is `Combatant.faculty`, the number the Ob his opponent rolls against is taken from. A record built without them
+    # is `Combatant.score`, the number the Ob his opponent rolls against is taken from. A record built without them
     # (`scores == ()`) fights at the Combatant's own default. His registered pool addends ride beside it as `pool_addends`
     # (read by the pool alone, never the Ob). [ASSUMPTION: carrier -- basis: the smallest edit that keeps the two numbers
-    # apart; IS-PC-05 (B15) replaces it with the `pool` slot]
-    a_fac, b_fac = inp.scores or (None, None)
+    # apart; `Combatant.score` is the score's one home, IS-PC-05]
+    a_score, b_score = inp.scores or (None, None)
     a_add, b_add = inp.addends or (0, 0)
     # THE AUTHORED ATTRIBUTES (PC-06 K-1): each party's `Person.attributes`, mapped by PC-14's `registry_key`.
     a_attr, b_attr = inp.attributes or (None, None)
     # THE WORKBENCH'S FOUR FIELDS (B14.11): each party's tradition, techniques, axes and disposition, passed as the kits are.
     a_ext = _extras_kw(*(p[0] if p else None for p in (inp.traditions, inp.techniques, inp.axes, inp.dispositions)))
     b_ext = _extras_kw(*(p[1] if p else None for p in (inp.traditions, inp.techniques, inp.axes, inp.dispositions)))
-    A = combatant.Combatant(a_id, end=a_end, **_attr_kw(a_attr), **_kit_kw(a_kit), **_faculty_kw(a_fac), **a_ext)
-    B = combatant.Combatant(b_id, end=b_end, **_attr_kw(b_attr), **_kit_kw(b_kit), **_faculty_kw(b_fac), **b_ext)
+    A = combatant.Combatant(a_id, end=a_end, **_attr_kw(a_attr), **_kit_kw(a_kit), **_score_kw(a_score), **a_ext)
+    B = combatant.Combatant(b_id, end=b_end, **_attr_kw(b_attr), **_kit_kw(b_kit), **_score_kw(b_score), **b_ext)
     A.pool_addends, B.pool_addends = a_add, b_add
     # THE CARRIED WOUND (B05.61, `UPR` §3 edit 4; A-8): each party's signed level from before the fight, read by `assemble_net_sigma` alone.
     # Carried the way `pool_addends` is, an instance attribute [ASSUMPTION: carrier; IS-PC-05 (B15) replaces it]; 0.0 where the record carries none.

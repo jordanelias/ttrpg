@@ -6003,8 +6003,8 @@ def _k1_holds(w, monkeypatch) -> int:
         for key, v in want.items():
             assert getattr(c, key) == v, f"{c.label}: {key} is {getattr(c, key)}, authored {v}"
             checked += 1
-    for key in ("spirit", "focus", "disp", "faculty"):   # unauthored (or keyless): the class default / the input's
-        want = inp.scores[0] if key == "faculty" else spec.DEFAULT[key]
+    for key in ("spirit", "focus", "disp", "score"):   # unauthored (or keyless): the class default / the input's
+        want = inp.scores[0] if key == "score" else spec.DEFAULT[key]
         assert getattr(low, key) == want, f"{key} moved without an authored value"
         checked += 1
     assert mid.strength == spec.DEFAULT["strength"] and mid.end == inp.ends[1]

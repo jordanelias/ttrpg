@@ -24,6 +24,9 @@ STAMINA_PER_END = 3          # [canonical: derived_stats §4.2 — proposed-cano
 STAMINA_PER_SPIRIT = 2       # [canonical: derived_stats §4.2 — proposed-canon replacement; Spirit contribution to Stamina (energy reserves); sim-tunable]
 
 
+DEFAULT_SCORE = 3            # the skill score a fighter built without one carries (the workbench's and the control arm's; the season always passes his own, `PersonalCombatInput.scores`)
+
+
 def max_wounds(end):
     """Max Wounds (derived_stats_v30 §4.1, authoritative): min(floor(End/2)+1, cap)."""
     return min(end // MAXWOUNDS_DIV + MAXWOUNDS_ADD, MAXWOUNDS_CAP)
@@ -98,13 +101,18 @@ class WoundTracker:
 class Combatant:
     """THE ATTRIBUTES (PC-14): one storage, `self.attrs`, a dict keyed by `attributes.KEYS` (the spec is the one owner of
     which attributes exist and their defaults). Each key is also a generated property with a getter AND a setter
-    (`c.faculty`, `c.faculty = 5`), so every read and assignment site keeps working; a setter is `set_attr`, which
+    (`c.agi`, `c.agi = 5`), so every read and assignment site keeps working; a setter is `set_attr`, which
     re-derives. `Combatant(label, attrs=None, **kw)`: `attrs` is a `{key: value}` dict, `**kw` takes the same keys as
     keywords (a key given both ways is a TypeError, as Python's own "multiple values" is); an unknown attribute name is
     a TypeError. `disp` is disposition / temperament, the aggression axis; lean = (disp - NEUTRAL['disp'])/3,
-    orthogonal to tradition."""
+    orthogonal to tradition.
+
+    THE SKILL SCORE (`IS-PC-05`, A-98: a skill score is not an attribute): `score`, the party's number for the verb that opened the
+    fight, as the skill table gives it (`engine/season/seam/wrappers/pool.py::score`, handed in as `PersonalCombatInput.scores`; default
+    `DEFAULT_SCORE`). It is a plain field, not a spec key: nothing derives from it, so a plain assignment re-values it. Read in two
+    places, the pool (`core.resolution_pool`) and the Ob his opponent rolls against (`core.ob_from_defender`)."""
     def __init__(self, label, attrs=None, weapon='arming', armor='light', skills=None, equipped=None, tradition='none',
-                 **kw):
+                 score=DEFAULT_SCORE, **kw):
         given = dict(attrs or {})
         twice = sorted(set(given) & set(kw))
         if twice:
@@ -115,6 +123,7 @@ class Combatant:
             raise TypeError(f"Combatant() got unknown attribute(s) {unknown}; the attributes are {_A.KEYS} "
                             f"(modules/combat/attributes.py)")
         self.label=label
+        self.score=score
         self.attrs = {k: given.get(k, _A.DEFAULT[k]) for k in _A.KEYS}
         self.weapon=weapon; self.armor=armor
         self.tradition=tradition             # cognitive-mode profile (selection-weights over the substrate)
@@ -134,7 +143,7 @@ class Combatant:
         self.equipped=equipped or []        # LEARNED techniques (ability_primitives): a LIST of names (each level 1.0) OR a DICT {name: level} for graded levels-of-investment (level>=0; 0=untrained/inert). Efficacy emerges from the invested level, not tradition membership (ED-PC-0023). Default none.
         # ---- DERIVED CHARACTER FIGURES — the combatant is the HOST; core/systems CONSUME these, never recompute ----
         # (resolution pool is NOT hosted here: §8 "every rule lives once" — any consumer needing the pool calls
-        # core.resolution_pool(faculty).)
+        # core.resolution_pool(score).)
         a = self.attrs
         self.wt=WoundTracker(a['end'], spirit=a['spirit'], strength=a['strength'])
         # ---- live state (reset/managed by the wrapper each bout) ----

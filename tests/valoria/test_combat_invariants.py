@@ -140,13 +140,13 @@ def _enclosing_function_names(tree):
     return out
 
 
-def _refs_faculty(node):
-    """True if the subtree reads the pool's score under either spelling the engine uses (`faculty` as a
-    bare parameter in core, `<combatant>.faculty` everywhere else). RE-KEYED by CR-85 (ED-IN-0330), which
-    renamed the input `history` -> `faculty`: left on the old name, every scan below would pass while observing
+def _refs_score(node):
+    """True if the subtree reads the pool's score under either spelling the engine uses (`score` as a
+    bare parameter in core, `<combatant>.score` everywhere else). RE-KEYED by CR-85 (ED-IN-0330), which
+    renamed the input `history` -> `score`: left on the old name, every scan below would pass while observing
     nothing (CLAUDE.md §0.1 pt 2)."""
-    return any((isinstance(n, ast.Name) and n.id == 'faculty')
-               or (isinstance(n, ast.Attribute) and n.attr == 'faculty')
+    return any((isinstance(n, ast.Name) and n.id == 'score')
+               or (isinstance(n, ast.Attribute) and n.attr == 'score')
                for n in ast.walk(node))
 
 
@@ -162,17 +162,17 @@ def _routes_through_owner(node):
 
 
 def test_resolution_pool_single_source():
-    """No live engine site may derive a pool from `faculty` (History until CR-85) except core.resolution_pool.
+    """No live engine site may derive a pool from `score` (History until CR-85) except core.resolution_pool.
 
     THREE independent scans, because a recurrence can copy the rule three ways. Scans (b) and (c) exist
     because mutation testing killed a two-scan draft of this guard, not because they were foreseen:
-      (a) HARDCODED — a clamp call (`max(...)`/`min(...)`) whose operands read `faculty` and which does
+      (a) HARDCODED — a clamp call (`max(...)`/`min(...)`) whose operands read `score` and which does
           not reach the owner. The exact shape of the deleted `max(5, history+6)`.
-      (b) BORROWED-CONSTANT — any read of POOL_FLOOR/BASE_POOL outside the owner. `c.faculty +
+      (b) BORROWED-CONSTANT — any read of POOL_FLOOR/BASE_POOL outside the owner. `c.score +
           core.BASE_POOL` passes scan (a) clean (no clamp) while still living twice.
-      (c) BARE-LITERAL — `c.faculty + 6` with a separate if/ternary floor. Passes (a) AND (b).
+      (c) BARE-LITERAL — `c.score + 6` with a separate if/ternary floor. Passes (a) AND (b).
 
-    Legitimate callers are unaffected: wrapper.py's three `max(1, core.resolution_pool(x.faculty))`
+    Legitimate callers are unaffected: wrapper.py's three `max(1, core.resolution_pool(x.score))`
     sites reach the owner. The other History readers combat_systems.py had (reading/bind/initiative/counter)
     were deleted by CR-85; `core.ob_from_defender` divides, so it trips none of the three scans.
 
@@ -191,52 +191,52 @@ def test_resolution_pool_single_source():
         for n in ast.walk(tree):
             owner_site = (mod, enclosing.get(id(n))) == _POOL_OWNER
             if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id in ('max', 'min') \
-                    and _refs_faculty(n) and not _routes_through_owner(n) and not owner_site:
+                    and _refs_score(n) and not _routes_through_owner(n) and not owner_site:
                 hardcoded.append(f"{mod}:{n.lineno}")
             # BOTH spellings: a bare `BASE_POOL` (inside core.py) and a qualified `core.BASE_POOL`
-            # (from any other module). Matching only the bare Name let a `c.faculty + core.BASE_POOL`
+            # (from any other module). Matching only the bare Name let a `c.score + core.BASE_POOL`
             # copy pass this scan clean — found by mutation, not by reading.
             const = n.id if isinstance(n, ast.Name) else (n.attr if isinstance(n, ast.Attribute) else None)
             if const in ('POOL_FLOOR', 'BASE_POOL') and isinstance(n.ctx, ast.Load) and not owner_site:
                 borrowed.append(f"{mod}:{n.lineno} ({const})")
-            # (c) BARE-LITERAL. `c.faculty + 6` then an if/ternary floor evades both scans above — no
-            # clamp CALL and no named constant. `faculty` is OFFSET by a bare int literal exactly nowhere in
+            # (c) BARE-LITERAL. `c.score + 6` then an if/ternary floor evades both scans above — no
+            # clamp CALL and no named constant. `score` is OFFSET by a bare int literal exactly nowhere in
             # the engine, so this shape is unambiguous rather than noisy. Also found by mutation, not by reading.
             if isinstance(n, ast.BinOp) and isinstance(n.op, ast.Add) and not owner_site \
                     and not _routes_through_owner(n) \
-                    and ((_refs_faculty(n.left) and isinstance(n.right, ast.Constant)
+                    and ((_refs_score(n.left) and isinstance(n.right, ast.Constant)
                           and isinstance(n.right.value, int))
-                         or (_refs_faculty(n.right) and isinstance(n.left, ast.Constant)
+                         or (_refs_score(n.right) and isinstance(n.left, ast.Constant)
                              and isinstance(n.left.value, int))):
                 offset.append(f"{mod}:{n.lineno}")
 
     assert not hardcoded, (
-        "the resolution-pool rule lives twice again — faculty is clamped into a pool outside "
-        f"core.resolution_pool at {hardcoded}. Call core.resolution_pool(faculty); do not re-spell "
-        "max(5, faculty+6) (it drops the int(round(...)) and diverges on a fractional faculty).")
+        "the resolution-pool rule lives twice again — score is clamped into a pool outside "
+        f"core.resolution_pool at {hardcoded}. Call core.resolution_pool(score); do not re-spell "
+        "max(5, score+6) (it drops the int(round(...)) and diverges on a fractional score).")
     assert not borrowed, (
         f"POOL_FLOOR/BASE_POOL read outside core.resolution_pool at {borrowed} — the pool constants are "
         "the owner's private armature; a second assembly of them is a second copy of the rule.")
     assert not offset, (
-        f"faculty offset by a bare integer literal outside core.resolution_pool at {offset} — that is the "
-        "pool base being re-spelled. Call core.resolution_pool(faculty).")
+        f"score offset by a bare integer literal outside core.resolution_pool at {offset} — that is the "
+        "pool base being re-spelled. Call core.resolution_pool(score).")
 
 
 def test_resolution_pool_keeps_a_fractional_faculty():
-    """The owner does NOT round `faculty` (History until CR-85): B05.57 (`UPR` §2 edit 3, F-PC-08 (d)) removed the `int(round(.))`
+    """The owner does NOT round `score` (History until CR-85): B05.57 (`UPR` §2 edit 3, F-PC-08 (d)) removed the `int(round(.))`
     -- a fractional pool is canonical and the bell-curve sampler takes one -- and the pool is `sigma_leverage.pool_of`, the one
-    rule. This was `test_resolution_pool_rounds_fractional_faculty`, which pinned the rounding the ruling retired; it keeps its
+    rule. This was `test_resolution_pool_rounds_fractional_score`, which pinned the rounding the ruling retired; it keeps its
     purpose, to observe the historical failure rather than coexist with it (§0.1 point 2): a second spelling of the rule that
     ROUNDS (3.4 gave 9 where the unrounded rule gives 9.4) disagrees with the owner on exactly the fractional values below, and
-    an integer faculty is unchanged either way, which is why the probe must be fractional.
+    an integer score is unchanged either way, which is why the probe must be fractional.
     """
     C, core, S, WP, CFG = _mods()
-    assert core.resolution_pool(3.4) == 9.4, "3.4 is faculty 3.4 -> pool 9.4: the owner no longer rounds"
-    assert core.resolution_pool(3.6) == 9.6, "3.6 is faculty 3.6 -> pool 9.6"
-    assert core.resolution_pool(3) == 9 and core.resolution_pool(4) == 10, "an integer faculty must be unchanged"
+    assert core.resolution_pool(3.4) == 9.4, "3.4 is score 3.4 -> pool 9.4: the owner no longer rounds"
+    assert core.resolution_pool(3.6) == 9.6, "3.6 is score 3.6 -> pool 9.6"
+    assert core.resolution_pool(3) == 9 and core.resolution_pool(4) == 10, "an integer score must be unchanged"
     for h in (3.4, 3.5, 3.6):
         assert core.resolution_pool(h) == h + core.BASE_POOL, (
-            f"resolution_pool({h}) is not `faculty + BASE_POOL` -- the owner is rounding again, which is how the deleted "
+            f"resolution_pool({h}) is not `score + BASE_POOL` -- the owner is rounding again, which is how the deleted "
             "duplicate diverged")
     assert core.resolution_pool(-5) == 5, "the POOL_FLOOR clamp must still hold below it"
 
@@ -244,13 +244,13 @@ def test_resolution_pool_keeps_a_fractional_faculty():
 def test_combatant_hosts_no_cached_pool():
     """`Combatant.pool` stays gone (deleted ED-PC-0023). A cached copy on the host is not merely a second
     spelling of the arithmetic — it is the read/write-asymmetry hazard of §0.1 point 1: it is computed
-    once at __init__ and would silently go stale against any later write to `.faculty`, whether or not it
-    was computed by the owner. Consumers call core.resolution_pool(c.faculty) at the point of use."""
+    once at __init__ and would silently go stale against any later write to `.score`, whether or not it
+    was computed by the owner. Consumers call core.resolution_pool(c.score) at the point of use."""
     C, core, S, WP, CFG = _mods()
-    c = C.Combatant('A', faculty=3)
+    c = C.Combatant('A', score=3)
     assert not hasattr(c, 'pool'), (
         "Combatant.pool resurrected — the resolution-pool rule is hosted on the combatant again; "
-        "call core.resolution_pool(c.faculty) at the point of use instead")
+        "call core.resolution_pool(c.score) at the point of use instead")
 
 
 # ── PERCUSSION-AUTHORITY ANCHOR SINGLE-OWNER (ED-PC-0042 rider I1b) ──────────────────────────────

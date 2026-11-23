@@ -36,7 +36,7 @@ something the actor genuinely has (his authored attributes, PC-06 K-1), leave ev
 other field at the class's own constructor default, and return a typed gap rather than fabricate a party. The
 `Combatant` defaults it names — strength 4, agi 4, end 4, att 3, spirit 3, focus 3, disp 4,
 weapon `arming`, armor `light`, tradition `none` — are the class's, not this module's. The record carries
-each party's kit (CP-T03-03) and `faculty` (CR-85, `combat_input`).
+each party's kit (CP-T03-03) and skill score (CR-85, `combat_input`).
 
 ⚠ THE ONE FIELD THE SEAM COMPUTES IS `end`, FROM `body_band_penalty`, AND IT INVENTS NO NUMBER. A
 `Person` carries `body`, an int on the condition scale, and `attributes` (PC-06 K-1: those ride

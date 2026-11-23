@@ -399,12 +399,6 @@
     "registry_key": "attr.body.endurance",
     "status": "IN_FLUX"
    },
-   "faculty": {
-    "default": 3,
-    "neutral": null,
-    "registry_key": null,
-    "status": "IN_FLUX"
-   },
    "focus": {
     "default": 3,
     "neutral": 3,
@@ -690,6 +684,7 @@
   },
   "combat_systems": {},
   "combatant": {
+   "DEFAULT_SCORE": 3,
    "MAXWOUNDS_ADD": 1,
    "MAXWOUNDS_CAP": 3,
    "MAXWOUNDS_DIV": 2,
