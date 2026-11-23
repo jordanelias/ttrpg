@@ -1244,6 +1244,12 @@ DEFAULT_FIXTURES = Fixtures(
     # SHIPS: no count ever falls. A value outside `rosters.yaml: scar_vindications` is refused where it is read. [ASSUMPTION; medium; Jordan to correct; revert: `off`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-468 -- site: Fixtures scar_vindication, graded `assumption`; the source proposes `on`, so it is injected at the control and swept off / on]
     scar_vindication="off",            # `H-468`, swept off (control, SHIPPED) / on (proposed)
+    # `H-471` (B10.10; `U5a_CHAR_owed_amendments` §2). WHETHER THE STANCE TERM'S REGARD IS BOUND TO THE ROW TYPE'S OWN BOUND: `decision/choose.py::_stance_arm` clamps the
+    # value it reads (`regard`, and `legacy`'s `stance_toward`) to `+-STANCE_MAX` (`data/cast.py`) before the polarity sign, so B10.04's `stance_scale` factor in `stance_term`
+    # reads the clamped value. `False` is the CONTROL and SHIPS: today's unbounded sum, the realm hash the one before B10.10; the flip is B98's, after a reading.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `False`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-471 -- site: Fixtures stance_clamp, graded `assumption`; the source proposes the clamp and no live reading, so it is injected at the control and swept False / True]
+    stance_clamp=False,                # `H-471`, swept False (control, SHIPPED) / True (proposed)
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

@@ -65,6 +65,27 @@ def test_a_strong_loyalty_makes_acting_against_rare_not_impossible():
 
 
 
+def test_stance_term_is_clamped():
+    """B10.10 (H-471): twenty grudges of weight 5 against one person (H-339's hand-set rows) sum to -100 in stance units; through
+    `stance_term` at `stance_gain` 1 the term reads +-200 unclamped and +-50 (2 x `STANCE_MAX`) with `stance_clamp` on, under every
+    polarity arm. A sum inside the bound (five grudges, -25) reads the same either way."""
+    from ..data.cast import STANCE_MAX
+    from ..state.carriers import Candidate
+    w = P.tiny_world()
+    p = w.persons[A]
+    cand = Candidate("speak", B)
+    got = {}
+    for rows in (20, 5):
+        p.stance = [(B, -1, 5)] * rows
+        for arm in ("legacy", "regard", "declared"):
+            for clamp in (False, True):
+                fx = w.fixtures.sweep("stance_polarity", arm).sweep("stance_gain", 1.0).sweep("stance_clamp", clamp)
+                got[rows, arm, clamp] = abs(CH.stance_term(p, cand, fx))
+    assert all(got[20, arm, False] == 2 * 100 for arm in ("legacy", "regard", "declared")), got
+    assert all(got[20, arm, True] == 2 * STANCE_MAX for arm in ("legacy", "regard", "declared")), got
+    assert all(got[5, arm, c] == 2 * 25 for arm in ("legacy", "regard", "declared") for c in (False, True)), got
+
+
 def _five_sights(cap):
     """`scars` after ONE driver folds the same violating act (`fight`, which violates every pursuit below) five times in one season
     with everyone an observer (`fan_out_mode: total`), each person holding `stability` 0.2 and `justice` 0.5."""

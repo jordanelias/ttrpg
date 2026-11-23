@@ -88,7 +88,7 @@ def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = 
                          f"term, and inverting it is G2's polarity, not this gain (H-202)")
     # B10.04 (`U5a_CHAR_owed_amendments` §2, H-464): regard read as a share of `STANCE_MAX` times `Fixtures stance_scale`, applied to
     # the arm's value BEFORE either gain. At the control (`stance_scale == STANCE_MAX`) the quotient is `25 / 25 == 1.0` and
-    # `t * 1.0 == t` for every float, so the term is today's exactly. The clamp to the bound is B10.10's (`stance_clamp`), not here.
+    # `t * 1.0 == t` for every float, so the term is today's exactly. The clamp to the bound is B10.10's (`stance_clamp`), inside `_stance_arm`, so this factor reads the clamped value.
     t = _stance_arm(p, c, fx, memo) * (fx.get("stance_scale") / STANCE_MAX)
     # v11 CR-87 (THE GRUDGE'S BOUND): on a VIOLENT row (`data/verbs.py::VIOLENT_VERBS`, off `rosters.yaml:
     # violent_prizes`) whose subject is its opponent, the term is read at `Fixtures hostile_stance_gain` in place of
@@ -103,12 +103,20 @@ def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = 
     return (1.0 + g) * t             # at g == 0 this is 1.0 * t: exact for every float
 
 
+def _bounded(v: float, clamp: bool) -> float:
+    """`v` held to `+-STANCE_MAX` at `Fixtures.stance_clamp`, else `v` itself (the control)."""
+    return max(-STANCE_MAX, min(STANCE_MAX, v)) if clamp else v
+
+
 def _stance_arm(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict]) -> float:
     """`stance_term`'s value at §F2's weight (gain 0): the arm `Fixtures.stance_polarity` names (H-194)."""
     subject = c.subject or ""
     arm = fx.get("stance_polarity")
+    # B10.10 (`U5a_CHAR_owed_amendments` §2, H-471): at `stance_clamp` the value read is bound to the row type's own bound before the polarity sign, so a sum past
+    # it (`stance_toward` has no ceiling) is read at `STANCE_MAX`. `False` is the control: the value is returned untouched.
+    clamp = fx.get("stance_clamp")
     if arm == "legacy":
-        return stance_toward(p, subject)
+        return _bounded(stance_toward(p, subject), clamp)
     require_member(arm, STANCE_POLARITIES, f"stance polarity {arm!r} is not in the roster", "H-194",
                    law="§G -- declare it, default it, sweep it; an unknown arm silently reading "
                        "`legacy` would make the sweep report the control twice")
@@ -116,7 +124,7 @@ def _stance_arm(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict]) -
         memo = {}
     if subject not in memo:
         memo[subject] = regard(p, subject, fx)
-    r = memo[subject]
+    r = _bounded(memo[subject], clamp)
     if arm == "regard":
         return r
     row = VERB_TABLE.get(c.verb)
