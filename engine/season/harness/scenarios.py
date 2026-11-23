@@ -12,7 +12,9 @@ THE ROW (`Scenario`, frozen):
                                  `boot/realm.py::place_person`, assigning no store directly. A scenario whose opening
                                  situation is made by acts folds them inside `build`; the row has no field for them.
   * `seat(w) -> str`          -- the default seated person (`--person` overrides it).
-  * `ending(w) -> str | None` -- a reader of the world: the ending's name, or `None` while the run goes on.
+  * `ending(w, pid, seasons_left) -> str | None` -- a reader of the world: the ending's name, or `None` while the run goes on.
+                                 `pid` is the seated person now bound (`None` once `carry_on` found his line extinct) and
+                                 `seasons_left` the seasons `run` has yet to play.
   * `kinds`                   -- from each name `ending` can return to a member of `ENDING_KINDS`: whether it is a win, a
                                  loss or a draw for the seated person. The row refuses a value outside the tuple at
                                  construction; `run` refuses an ending whose name `kinds` does not hold. A reader's
@@ -40,8 +42,10 @@ from ..decision.sheet import DevelopmentSheet, creation_sheet, development_space
 from ..boot.chooser import chooser
 from ..gaps import Forbidden
 from ..loop.driver import SeasonDriver, resolvable_verbs
+from ..queries import world_q
 from ..state.ids import H, draw_factory
 from ..state.world import World
+from .headless import build_world
 from .play_surface import carry_on, dispatching_chooser
 
 #: What an ending is for the seated person. The one closed tuple; a row's `kinds` values are members of it.
@@ -52,7 +56,7 @@ ENDING_KINDS = ("won", "lost", "drawn")
 class Scenario:
     build: Callable[[int], World]
     seat: Callable[[World], str]
-    ending: Callable[[World], Optional[str]]
+    ending: Callable[[World, Optional[str], int], Optional[str]]
     verbs: Optional[frozenset] = None
     role: Optional[str] = None
     kinds: Mapping[str, str] = field(default_factory=dict)
@@ -73,8 +77,23 @@ class Scenario:
                             needs="a member of engine.substrate.composition.ROLES", law="IS-B2-CORE-01 (1)")
 
 
-#: The one mapping from a scenario's name to its row. B11.06 registers the first; every lane registers its own in its batch.
-SCENARIOS: dict[str, Scenario] = {}
+def season_ending(w: World, pid: Optional[str], seasons_left: int) -> Optional[str]:
+    """The `season` row's reader: `realm_ended` when `world_q.endings_reached(w)` is non-empty; `line_extinct` when the seat
+    has no person (`carry_on` found no living tie); `time` when no season is left; else `None`. In that order."""
+    if world_q.endings_reached(w):
+        return "realm_ended"
+    if pid is None:
+        return "line_extinct"
+    return "time" if seasons_left <= 0 else None
+
+
+#: The one mapping from a scenario's name to its row; every lane registers its own in its batch. `season` is Carin's case
+#: (`headless.build_world`) as a played scenario, seated on its first person in id order; the world is built to need no role.
+#: `IS-B3-GO-02` (B34) splits `realm_ended` by the seat's side.
+SCENARIOS: dict[str, Scenario] = {
+    "season": Scenario(build=build_world, seat=lambda w: sorted(w.persons)[0], ending=season_ending,
+                       kinds={"realm_ended": "drawn", "line_extinct": "lost", "time": "drawn"}),
+}
 
 
 def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[DevelopmentSheet], list]] = None,
@@ -108,13 +127,13 @@ def run(name: str, seed: int, seasons: int, pick: Optional[Callable[[Development
 
     def loop() -> Optional[str]:
         bound, last = carry_on(w, overrides, pid, (), lambda offer: offer[0])
-        ended = row.ending(w)
+        ended = row.ending(w, bound, seasons)
         while ended is None and played["n"] < seasons:
             d.season(choose, None, contest_max_depth=w.fixtures.get("contest_max_depth"), host=host)
             played["n"] += 1
             if bound is not None:
                 bound, last = carry_on(w, overrides, bound, last, lambda offer: offer[0])
-            ended = row.ending(w)
+            ended = row.ending(w, bound, seasons - played["n"])
         return ended
 
     ended, entries = aperture.engines_entered(loop)
