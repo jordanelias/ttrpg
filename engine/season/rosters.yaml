@@ -4458,6 +4458,19 @@ tables:
     # no `choice_sourced` line carries, a value outside that key's `CHOICE_RANGES` (a value `0.5` is quoted), an axis off the roster and a
     # cell that is not a number; `align_choice` reads the cells through `ALIGNMENT`. The cells are Jordan's (`BA1-cast-content`): each
     # authored cell is a declared mover of the realm hash.
+    # BA1.04 (`IS-A-11` table (c.1), the draft uncorrected): the two cells the source authors, on `retreat_at`: its `never` is the tree's
+    # `none`, its `early` the earliest threshold `0.5` [ASSUMPTION: "never" is `none`; "early" is `0.5`; the source calls both cells
+    # "illustrative; the cells are Jordan's"; medium; Jordan to correct; revert: delete this block]. `0.25`, the fifteen `role` values
+    # and `storm` carry no source cell and none is written. The source's `approach` cells wait on the PC lane's key (no `approach`
+    # on the tree: the loader refuses it).
+    choices:
+      retreat_at:
+        none:
+          rigid_flexible: -0.4
+          grandiose_humble: -0.3
+        "0.5":
+          rigid_flexible: 0.3
+          selfish_selfless: -0.2
     # §G's third term. ORDER IS SEMANTIC: `declared` is the default and the first arm, and every
     # point is built from it rather than from the previous one. `uniform` is THE CONTROL — every
     # (verb, axis) pair equal, so convictions cannot discriminate at all and a verdict that does

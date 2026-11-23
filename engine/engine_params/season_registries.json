@@ -4802,6 +4802,18 @@
             "surrender": "v11 CP-T04-07: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); a lean on seven axes is authored content (IN-08's method), and a place yielded on terms is a moral weight the field would have carried (the stormed town's `fight`/`march` cells). It scores 0.0 on every axis until a cell is authored, so no witness is scarred by a surrender and `place.surrendered` judges as no deed. Revert: the seven cells, IN-08's method.",
             "tell": "No cell on any axis BY DESIGN: testimony's moral weight is in WHAT is told (a claim), which no verb x axis cell can carry, and telling is driven by regard (the telling workplan's G1), not by pursuit (the retired pursuit-cells draft's \u00a73.6, \u00a77.4; G-1, [medium; Jordan to correct]). `corpus_run`'s RANKING counts only candidates whose verb has a celled axis, so a `tell` is neither a tie nor a discrimination there."
           },
+          "choices": {
+            "retreat_at": {
+              "none": {
+                "rigid_flexible": -0.4,
+                "grandiose_humble": -0.3
+              },
+              "0.5": {
+                "rigid_flexible": 0.3,
+                "selfish_selfless": -0.2
+              }
+            }
+          },
           "sweep": [
             "declared",
             "uniform",
