@@ -2,8 +2,8 @@
 rides, as a CLASSED referent, on the question he answers; `confer` forms on it with a conferee who
 may be himself, and executes end to end through the fold ((d)).
 
-The pieces, each of which can fail here: `queries/world_q.py::vacancies` (every Office with no live
-`hold` that `may_fill` reaches through a seat of the person granting `confer`) and the post-sort
+The pieces, each of which can fail here: `queries/world_q.py::vacancies` (every Office his OWN ledger holds empty --
+`person_q.vacant_named`, v12 B11.08 -- that `may_fill` reaches through a seat of the person granting `confer`) and the post-sort
 splice in `questions_for` (`out[0]` carries them through `_stamped`; a person with no question gets
 one `need` question carrying them), the classed referents (`state/carriers.py::Question.classes`,
 a PARTITION beside `referents`, `Question.referents_for`, unioned by `decision/questions.py::
@@ -167,12 +167,13 @@ def test_in53v_a_the_partition_moves_no_other_rows_formations():
     now every row declaring no `referent_class:` -- `oblige` declares `Office` too (a seat the person
     was told of), so both are the classed side of the partition and neither forms when stripped."""
     classed_rows = {v for v, r in VERB_TABLE.items() if r.referent_class}
-    w, _ = _gov_world()
-    _hold(w, "off_duke2").until = w.tick
+    w, _ = _heard_world()
+    _vacate(w, "off_duke2", "p_king")        # the one person whose seat may fill it hears it: the vacancy is on his question, not only plain referents
     for pid in w.persons:
         _know(w, pid, *[o for o in w.persons if o != pid])
         _ambition(w, pid, f"prop_{pid}", "off_reeve")     # an office id ALSO as a plain referent
     checked = 0
+    on_vacancy = 0
     for pid, p in w.persons.items():
         qs = world_q.questions_for(w, p)
         folded = [aggregate_questions(qs, rule) for rule in ("all", "one_per_source")]
@@ -182,7 +183,8 @@ def test_in53v_a_the_partition_moves_no_other_rows_formations():
             assert _sig(c for c in got if c.verb not in classed_rows) == _sig(bare), (pid, q.id)
             assert not [c for c in bare if c.verb in classed_rows], (pid, q.id)
             checked += bool(q.classes)
-    assert checked >= 3, checked
+            on_vacancy += ("off_duke2", "Office") in q.classes
+    assert checked >= 3 and on_vacancy >= 1, (checked, on_vacancy)
 
 
 # ======================================================================================
@@ -208,7 +210,7 @@ def test_in53v_b_confer_forms_on_the_vacancy_with_to_over_known_persons_and_hims
 def test_in53v_b_only_confer_forms_on_a_classed_referent_and_only_on_one():
     """Every `confer` Candidate names a referent its question carries as `Office`; no other row
     forms on an id it carries ONLY classed. RE-RECORDED AT v9 IN-10 (a): `oblige`, which declares the
-    class too, is held to `confer`'s rule (no `oblige` forms here: nobody was told of a seat).
+    class too, is held to `confer`'s rule (v12 B11.08: it forms here on `off_reeve`, which the king has heard empty and so been told of).
     RE-RECORDED AT v10 REM-24: a classed row names the referent as ITS OWN class, not `Office` -- `petition`
     (`Person`) now forms here on the person a claim is about, and the rule it is held to is the row's
     (`(subject, row.referent_class)` in the question's classes), `confer`'s unchanged."""
@@ -430,7 +432,7 @@ def test_in53v_f_a_vacancy_opening_under_a_standing_question_moves_the_formed_se
     assert sig1 != sig0 and any("'confer', 'off_reeve'" in s for s in sig1), sig1
 
 
-def test_in53v_f_being_told_of_a_seat_already_carried_moves_the_formed_set():
+def test_in53v_f_a_seat_he_heard_empty_is_already_one_he_was_told_of():
     """`off_reeve` is already `p_king`'s vacancy. RE-RECORDED AT v12 B11.08 (`08_FI_01` edit 3): a vacancy is now the claims his OWN
     ledger holds of it (`vacant_named` over `ledger_names`), so the seat is ALREADY one he was told of -- `oblige` (`referent_named`) forms on it from
     the claim that made it a vacancy -- and being told of it AGAIN moves no class, no id and no Candidate (it was a told-of term the vacancy

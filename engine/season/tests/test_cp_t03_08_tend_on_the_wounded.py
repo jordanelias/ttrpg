@@ -141,11 +141,14 @@ def test_a_believed_wound_beside_him_forms_tend_on_the_other_through_questions_f
     assert w.persons[B].body == scale
 
 
-def test_rem52s_fall_is_tended_whole_the_same_season():
-    """THE REALM READING THE ITEM MAKES, PINNED (seed 0, one season): REM-52's hunger lowers every short cohort's body in
-    MATTER, `wounded_with` stamps each for himself below his ceiling, and `_eff_tend` restores the whole headroom -- so
-    every short person stands whole at the season's end, each named by a `body.tended`. A finding about `_eff_tend`'s
-    whole-headroom magnitude (CP-T10-04's `tend_share`, unbuilt), not a claim that it is right."""
+def test_rem52s_fall_is_tended_by_31_of_37_while_the_seat_news_floods_oblige():
+    """THE REALM READING, PINNED (seed 0, one season), AS IT NOW STANDS: REM-52's hunger lowers every short cohort's body in MATTER,
+    `wounded_with` stamps each for himself below his ceiling, and `_eff_tend` restores the whole headroom to the persons who choose it --
+    31 of the 37 short, each named by a `body.tended`, every one tended whole, none tended who was not short. THE SIX THE OLD READING TENDED
+    ARE A REGRESSION THIS PIN RECORDS, NOT A FINDING: (37, 37) -> (37, 31) at v12 B11.08, whose `seed_seat_news` tells every person of every
+    seat of his realm, so `seats_named` stamps ~31 Offices on his question and `oblige` forms on them for everyone (`hole_register.yaml`'s
+    B11.08 row); the cohorts spend the season on it. The mechanism itself (`wounded_with`, `_eff_tend`'s whole-headroom magnitude, CP-T10-04's
+    `tend_share`, unbuilt) is the hand-built tests of this file, unmoved."""
     w = build_realm(0)
     run(1, 0, w=w)
     short = {pid for pid in w._subsistence_shortfall if pid in w.persons}
@@ -159,9 +162,5 @@ def test_rem52s_fall_is_tended_whole_the_same_season():
     # B01a.99 (every person's attributes are drawn, a population change): (37, 38) -> (37, 37): the duels the drawn sheets
     # resolve do not wound `p_npc_033`, so the tended are exactly the short (`tended - short` and `short - tended` both empty,
     # read in process at PYTHONHASHSEED=0).
-    # v12 B11.08 re-pin, SAID PLAINLY: (37, 37) -> (37, 31), and the reading's headline (`short <= tended`: every short person stands whole at the
-    # season's end) NO LONGER HOLDS in the realm. Every person is now told of every seat of his realm (`seed_seat_news`), so `oblige` forms on all
-    # of them for everyone (the seat classes `seats_named` stamps) and the cohorts choose it (aperture, seed 0: `oblige` attempts 38 -> 234; the reading is this test's own process) in
-    # the season they might have tended themselves; the 31 who did are whole, and none is tended who was not short. The mechanism (`wounded_with`
-    # stamps each for himself, `_eff_tend` restores the headroom) is the first test of this file, hand-built and unmoved.
+    # v12 B11.08 re-pin, SAID PLAINLY: (37, 37) -> (37, 31); the cause is the docstring's.
     assert (len(short), len(tended)) == (37, 31)

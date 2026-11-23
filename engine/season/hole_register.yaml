@@ -5880,7 +5880,7 @@ rows:
 
   - id:        H-304
     tier:      1
-    hole:      "A STARVING COHORT RESTORES ITS BODY WHOLE BY RESTING, WITH NO FOOD EATEN (premise-check, larder). After a season in which every home larder is empty, `tend` on the cohort raises its body back to 1000. In build_realm seasons 37 of 37 cohorts were short at season 0 and 37 and 38 `body.tended` events followed in two seeds at 4 seasons; the empty-larder cohort in the scarce fixture tends itself in 6 of 8 seasons and is alive at 8, where the no-act control dies at tick 4. Hunger therefore costs nothing durable. The reading is pinned by a named test (`test_rem52s_fall_is_tended_whole_the_same_season`)."
+    hole:      "A STARVING COHORT RESTORES ITS BODY WHOLE BY RESTING, WITH NO FOOD EATEN (premise-check, larder). After a season in which every home larder is empty, `tend` on the cohort raises its body back to 1000. In build_realm seasons 37 of 37 cohorts were short at season 0 and 37 and 38 `body.tended` events followed in two seeds at 4 seasons; the empty-larder cohort in the scarce fixture tends itself in 6 of 8 seasons and is alive at 8, where the no-act control dies at tick 4. Hunger therefore costs nothing durable. The reading is pinned by a named test (`test_rem52s_fall_is_tended_by_31_of_37_while_the_seat_news_floods_oblige`)."
     kind:      "MECHANISM"
     owner:     "`engine/season/loop/effects_combat.py` (`_eff_tend`); `modules/settlements/subsist.py` (`subsist`); `engine/season/harness/scarce.py`"
     grade:     "measured"
@@ -7165,6 +7165,32 @@ rows:
     unblocks:  "B98's flip of the floor, and the case where a man is talked into a false view of himself"
     cite:      "`proposals/2026-11-12-subsystem-audit-suite/proposals/U5a_CHAR_self_knowledge_is_a_belief.md` Exact edits 6 (a) and Gate 3 (a told claim from a person he holds low regard for leaves his reader at UNKNOWN below the confidence the reader requires; from one he trusts the candidate forms). [ASSUMPTION; medium; Jordan to correct: that the floor is on the teller's weight (`teller_weight`, told_weight to the power of the hops times the relation to the teller) and not on the claim's confidence, which fades for a claim he made himself; that a claim he made of himself is never weighed.] FALSIFIER `engine/season/tests/test_self_knowledge.py::test_a_told_self_claim_is_weighed_by_regard_for_the_teller` (at a planted floor of 0.5 a told claim from a teller he disregards leaves him forming no Thread read and one from a teller he trusts admits it; at the floor 0 both admit it); CONTROL `self_told_floor` 0, every told claim taken up."
     source:    "workplan v12 B10.65 (`U5a_CHAR_self_knowledge_is_a_belief` edit 6 (a); B10's H block slot 19)"
+
+  - id:        H-492
+    tier:      1
+    hole:      "A PERSON DELETED WITH NO EVENT STILL LOSES FIVE CLASS-STAMPED ROWS (v12 B11.08). `16_PESSIMIST_FI_C`'s falsifier is *any pair of worlds that differ only by an un-evented edit to another person's existence or place, in which the subject's candidate set differs*. B11.08 moved `questions_for`'s claim loop off `place_of` and `World` existence for a person subject, and the pair no longer differs in its questions or in the rows that declare no `referent_class`; it still differs in `capture`, `tend`, `open_case`, `petition` and `dispatch` on the dead man (measured at seed 0, the King deleted silently: 2 to 5 lost for each of the 10 of the 12 persons who know him that differ), because those rows form on a referent only where `World.class_of` stamps it and a person the world no longer holds has no class"
+    kind:      "WIRING"
+    owner:     "`engine/season/queries/world_q.py::own_referents_of_class` (through `_of_stamped_class`, REM-21), the one read of `World.class_of` on the question's own plain referents"
+    grade:     "measured"
+    default:   "kept: a class stamp is read off the World for each plain referent of the question he answers"
+    site:      "engine/season/queries/world_q.py::_of_stamped_class, asked by `questions_for` of the first question's plain referents"
+    sweep:     []
+    unblocks:  "the falsifier of `16_PESSIMIST_FI_C` edit 4 read whole (`test_fi_referents.py::test_a_silent_death_removes_no_candidate` compares the questions and the rows with no class, and says so); closing it means a referent the asker holds as a person and the world holds as nothing is stamped `Person`, a change to REM-21's term outside B11.08's edits"
+    cite:      "MEASURED at v12 B11.08 on the realm at seed 0: `test_fi_referents.py`'s pair (the King silently deleted against the same realm), the five rows named; before B11.08 the same pair also lost every question about the King the claim loop turned on `place_of` (the item's own `p1d_where` 38 -> 10 reading)"
+    source:    "workplan v12 B11.08 (`16_PESSIMIST_FI_C` edit 4; B11's H block)"
+
+  - id:        H-493
+    tier:      1
+    hole:      "EVERY PERSON IS NOW TOLD OF EVERY SEAT OF HIS REALM, AND `oblige` FLOODS (v12 B11.08). `boot/realm.py::seed_seat_news` (`08_FI_01` edit 6, A-32: seat changes realm-wide) gives each person at build the claims a witness of each held seat's opening would hold, so `seats_named`' premise (`()` for nearly everyone, H-203) is false: a realm person names about 31 seats from the first season, `seats_named` stamps them on the question he answers as `Office`, and `oblige` (`referent_named`, IN-10 (a)) forms on all of them. Measured at seed 0, one season (`aperture 1 0`): `oblige` attempts 38 -> 212 (about 40% of the season's acts; seeds 1 and 2: 29 -> 225 and 42 -> 222), `confer` attempts all refused, and the cohorts that tended themselves fall 37 -> 31 of the 37 short (`test_cp_t03_08_tend_on_the_wounded.py`'s `rem52s` pin)"
+    kind:      "WIRING"
+    owner:     "`engine/season/queries/world_q.py::seats_named` and `decision/options.py`'s `oblige` formation on a told-of seat (IN-10 (a), H-207), the consumer; the seed (`seed_seat_news`) is A-32's and is kept"
+    grade:     "measured"
+    default:   "kept: every person told of every seat of his realm at build; `oblige` forms on each"
+    site:      "engine/season/queries/world_q.py::seats_named, read by `questions_for` through `told = ledger_names(p.ledger)`"
+    sweep:     []
+    unblocks:  "the realm's act mix read as a season rather than an `oblige` season; the narrowing belongs at the `seats_named`/`oblige` consumer and needs a ruling or a plan item (which told-of seats a person offers a duty on), since narrowing the seed would overwrite A-32's realm-wide news"
+    cite:      "MEASURED at v12 B11.08 (`aperture 1 s`, seeds 0 to 2, before 71dd43d6c and after): `oblige` formed by 78/77/79 persons and attempted 38/29/42 times before; formed by 82 and attempted 212/225/222 after, executed 210/217/218"
+    source:    "workplan v12 B11.08 (`08_FI_01` edit 6; B11's H block)"
 
 discharges:
   D1:   "row:H-01"

@@ -2001,10 +2001,12 @@ def _kinds_of_tenure(kind: str) -> tuple:
 
 
 #: THE KINDS A CLAIM ABOUT A SEAT OR RUNG CARRIES WHEN SOMEBODY CAME TO HOLD IT, and the one when he ceased to: the
-#: `hold` openers' exclusive kinds, and the kind the opener `confer` shares with the closer `release` (`tenure.closed`).
-#: A death is `PERSON_DIED` (`data/rosters.py`). Derived, so a verb that opens a `hold` joins with no edit here.
+#: `hold` openers' exclusive kinds, and the kinds a `hold` opener emits that a CLOSER also does -- a verb row that writes `Tenure.until` and opens no
+#: tenure kind (`_OPENERS_FROM_EFFECTS`): `confer` and `succeed` emit the closing of the incumbent they displace (`tenure.closed`, which `release`,
+#: `fight` and `accept` emit too). A death is `PERSON_DIED` (`data/rosters.py`). Derived, so a verb that opens a `hold` or closes one joins with no edit here.
 _HOLD_EMITS, HOLD_OPEN_KINDS = _kinds_of_tenure("hold")
-HOLD_CLOSE_KINDS = _HOLD_EMITS & _emitted_by(("release",))
+_OPENS_SOME = frozenset(v for vs in _verbs._OPENERS_FROM_EFFECTS.values() for v in vs)
+HOLD_CLOSE_KINDS = _HOLD_EMITS & _emitted_by(v for v, r in _verbs.VERB_TABLE.items() if "Tenure.until" in r.writes and v not in _OPENS_SOME)
 #: THE KINDS OF A PERSON'S OWN MOVEMENT, derived the same way from the `contain` openers (`move`, `march`, `migrate`, ...).
 MOVE_KINDS = _kinds_of_tenure("contain")[1]
 

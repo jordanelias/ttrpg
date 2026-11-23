@@ -26,7 +26,7 @@ from typing import Any, Callable, Optional
 from ..data.rosters import STANCE_MAX
 from ..data.requires import (
     OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, Relation, SENSITIVITY_STEMS, SHORTFALL_PREDICATE,
-    SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
+    SHORTFALL_SOURCED_OPERANDS, VIA, WORLD_ONLY_STEMS, binding_of, evaluate,
 )
 from ..data.rosters import (
     CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, SUCCESSIONS,
@@ -59,13 +59,19 @@ from ...substrate.descriptors import about_mid, scale_of
 # `rosters.yaml: referent_classes` declares; read off the type, never spelt.
 _HELD_WRIT_CLASS = Record.__name__
 
-# B11.08: THE `with` STEM, which `data/requires.py::WORLD_ONLY_STEMS` holds (where another person is NOW: only the world answers it).
+# B11.08: THE `with` STEM (where another person is NOW: only the world answers it). `data/requires.py` names it only inside the `WORLD_ONLY_STEMS`
+# set literal, with no constant of its own to import, so it is spelt once here and held to that owner at import: were the stem renamed there,
+# this refuses rather than reading no row as a hearing row.
 _WITH_STEM = "with"
+if _WITH_STEM not in WORLD_ONLY_STEMS:
+    raise Forbidden(f"`{_WITH_STEM}` is no longer a stem `data/requires.py::WORLD_ONLY_STEMS` holds", "B11.08",
+                    needs="the `with` stem's present name", law="a reader keyed on a stem nothing asks reads every row as no hearing row")
 
 
 def _hears_by_presence(row: "VerbRow") -> bool:
     """WHETHER `row`'s CELL CARRIES A `with` CONJUNCT ON `to` -- the hearer must be with the actor (`tell`'s, `lie`'s, `give`'s,
-    `argue`'s and `accept`'s cells). Read off the typed cell's clauses, never a verb name; an untyped row has none."""
+    `argue`'s and `accept`'s cells). Read off the typed cell's clauses, never a verb name; an untyped row has none. ONLY THE TOP-LEVEL CLAUSES ARE
+    SCANNED (an `AllOf`'s, or the lone clause): a `with` on `to` nested under another conjunction is not seen -- no shipped cell nests one."""
     req = row.requires_typed
     if req is None:
         return False

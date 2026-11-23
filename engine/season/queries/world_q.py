@@ -2880,7 +2880,8 @@ def commitment_kept(w: World, tenure) -> bool:
     ledger as it stood then: a claim that reached him after he let the want go does not count, and neither does the world's
     own state or another person's ledger. A want with no stage row has no content a ledger can read and reads `False`,
     `believed_met`'s refusal; a live edge reads at the world's tick. Read at the world's tick for confidence (the one reader
-    `current_stage` builds), and `goal_referents`' world read of a seat's holder is as it stands, not as it stood.
+    `current_stage` builds), and `goal_referents`' read of a seat's holder is his ledger's (`holders_named`, v12 B11.08), here the ledger truncated
+    to what he held at the closing tick, so as it stood.
     Stored nowhere; the person closed his own edge (T-m), and nothing here closes it."""
     p = w.persons.get(tenure.subject)
     if p is None or tenure.kind != "commit":
@@ -2956,9 +2957,13 @@ def aim_state(w: World, p: Person, prop) -> str:
     rule = roster_map("goal_object_kinds", "aim").get(goal.object["kind"])
     if rule is None or not _aim_rule(rule)(w, goal):
         return "open"
-    rung = goal.object["rung"]
-    governing = governing_hold(w, rung)
-    return "met" if governing is not None and governing.subject in holders_named(p.ledger, rung) else "open"
+    governing = governing_hold(w, goal.object["rung"])
+    if governing is None:
+        return "open"
+    # HEARD: his own live `hold` on the very rung that governs (a man knows his own lands, R-03: an own-edge read), else his own claims name its
+    # holder (`holders_named` over the GOVERNING hold's object -- `governing_hold` walks `ancestry`, so that is the goal's rung or one above it).
+    own = governing.subject == p.id
+    return "met" if own or governing.subject in holders_named(p.ledger, governing.object) else "open"
 
 
 # A `deed_doers` goal's referents are the doers it acts AGAINST: every authored form names them so --
@@ -2998,7 +3003,8 @@ def opinion_of(w: World, p: Person, faction: str) -> float:
         leader `boot/realm.py` subjects the creed on, where that is a living person -- then every
         doer `p`'s OWN ledger names (`person_q.deed_doers` over every deed kind: a paired deed's doer
         by the `seen.who` pairing, any other by its subject) who is a live member of it (`members`:
-        membership is `commit`, a World read, IN-67's `seat_holders` precedent). `p` himself never.
+        membership is `commit`, a World read of other persons' edges: the `seat_holders` precedent it cited was reversed at v12 B11.08, and
+        this read is `opinion_referents`' own and untouched, an open residual of `08_FI_01`'s R-03). `p` himself never.
 
     `Unspecified` for an id that is no rostered faction's Proposition: a non-faction has no opinion,
     and none is guessed.
@@ -3045,7 +3051,8 @@ def opinion_referents(w: World, p: Person, c, memo: Optional[dict] = None) -> tu
     [ASSUMPTION; medium; Jordan to correct; revert: only the members `p`'s own ledger names, `opinion_of`'s
     `regarded` set] The referents are every live member of the doer's faction, the RS-23 text
     ("the members of the faction whose member killed my lord"); membership is world truth read by this
-    function, not a belief `p` holds (the `seat_holders` precedent, ED-IN-0292 (2)).
+    function, not a belief `p` holds (the `seat_holders` precedent this cited, ED-IN-0292 (2), was reversed at v12 B11.08: that read is now his
+    ledger's; this one is untouched and stays a World read of other persons' faction edges).
 
     `memo` is the caller's per-`p`, per-call cache: `questions_for` asks this once per claim in `p`'s
     ledger, and the pursuit axes, the `seen.who` index (each O(ledger)), `opinion_of` and `members` (each a
@@ -3137,8 +3144,9 @@ def seats_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple
     """THE SEATS `p` HAS BEEN TOLD OF (IN-10 (a), #453 K-25 / `:524`), sorted by id: the Offices
     among `person_q.ledger_names(p.ledger)` -- a claim about the seat (chiefly the `tenure.opened`
     claim a witness of a conferral holds, `epistemic.claim_subjects`' Tenure expansion) or a held
-    document whose `terms` names it. `()` for nearly everyone: before any seat changes hands no
-    ledger holds a claim about one (H-203).
+    document whose `terms` names it. `()` for nearly everyone WAS TRUE UNTIL v12 B11.08 and IS NOT NOW: `boot/realm.py::seed_seat_news` tells
+    every person of every seat of his realm at build (A-32), so a realm person names ~31 seats from the first season (H-203 recorded the
+    old premise; the `oblige` formation this feeds is H-207's, IN-10 (a), and `hole_register.yaml`'s B11.08 row records its cost).
 
     Reads `p`'s OWN LEDGER, never the store's Records (AX-2: a document's content is what the person
     holding it believes); the World is asked only which ids are seats (`w.offices`), the class

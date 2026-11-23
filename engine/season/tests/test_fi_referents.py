@@ -6,10 +6,13 @@ subject still exists or where he is (the claim loop). Each pair below is two rea
 on the World with no Event and no WITNESS, so the subject's ledger and own edges are identical in both; his candidates (`opening_set` over
 every question `questions_for` gives him) must be too. The positive arms are the same change made by the real fold and the real WITNESS.
 
-⚠ THE BOUND OF `test_a_silent_death_removes_no_candidate`, STATED: the rows that declare a `referent_class` (`capture`, `tend`, `open_case`,
-`petition`, `dispatch` on the dead man) form on a referent only when `World.class_of` stamps it (`_of_stamped_class`, REM-21), and a person the
-world no longer holds has no class. That stamp is another world read and is not this item's; the test compares the questions and the
-candidates of the rows with no class.
+⚠ A MEASURED RESIDUAL OF THE ITEM'S OWN FALSIFIER (`16_PESSIMIST_FI_C`: "any pair of worlds that differ only by an un-evented edit to another
+person's existence or place, in which the subject's candidate set differs"), NOT A BOUND OF THE TEST: on the silent death the pair still differs
+in five rows -- `capture`, `tend`, `open_case`, `petition`, `dispatch` on the dead man (measured, seed 0, the King: 2 to 5 lost for each of the 10 of the
+12 persons who know him that differ). Those rows declare a `referent_class`, so they form on a referent only where `World.class_of` stamps it
+(`world_q._of_stamped_class`, called by `own_referents_of_class`, REM-21), and a person the world no longer holds has no class. The claim loop
+this item edits admits the same questions in both worlds; the class stamp is another world read on the same man, outside the item's edits
+(`hole_register.yaml`, the B11.08 rows). `test_a_silent_death_removes_no_candidate` compares the questions and the rows with no class, and says so.
 """
 from __future__ import annotations
 
@@ -61,9 +64,11 @@ def _knowers(w, x) -> list:
 
 
 def _silently_gone(w, x) -> None:
-    """`x` stops existing on the World with no Event: his edges close, he and his person-kind rung leave the stores."""
+    """`x` stops existing on the World with no Event, as `World.remove_person`'s cascade leaves it (`state/world.py`: every live edge naming him,
+    his own and the ones that hold him as their object, closes) -- so the aim rule's `governing_hold`, `members` and `faction_holding` (which
+    `opinion_referents` reads) see no edge of his -- then he and his person-kind rung leave the stores. No Event, no WITNESS."""
     for t in list(w.tenures):
-        if t.object == x and t.live:
+        if (t.subject == x or t.object == x) and t.live:
             t.until = w.tick
     w.persons.pop(x)
     w.rungs.pop(x, None)
@@ -98,7 +103,12 @@ def _released_through_the_fold(w, seat) -> set:
 
 def test_a_silent_death_removes_no_candidate():
     """`p1_belief.py` `dead-silent`: the King deleted on the World with no Event; every person who knows him holds the same ledger, so
-    the same questions and the same candidates (the class-stamped rows aside, the module docstring)."""
+    the same questions and the same candidates (the class-stamped rows aside, the module docstring).
+
+    ⚠ IT ITERATES ONLY THE PERSONS WHO KNOW HIM (`_knowers`: `known_persons` names him, from an acquaintance, a sighting or a teller). A person who
+    holds a claim about a man he has no acquaintance, sighting or teller for reads him as a thing once the world no longer holds him
+    (`world_q._is_person_subject`), so a deletion nobody has heard of is outside this pair: it is the old clauses' reading for him, and the
+    pair would differ there (`_is_person_subject`'s stated bound)."""
     control, dead = build_realm(0), build_realm(0)
     _silently_gone(dead, KING)
     assert KING not in dead.persons and KING in control.persons
@@ -112,18 +122,28 @@ def test_a_silent_death_removes_no_candidate():
 
 
 def test_who_is_where_is_read_from_the_askers_ledger():
-    """`p1d_where.py`: the King moved to a hearth nobody lives at, outside his own territory, on the World alone; nobody who knows him has his candidates move."""
-    control, moved = build_realm(0), build_realm(0)
-    homes = world_q.home_of(control)
-    territory = next(r for r in world_q.ancestry(control, homes[KING]) if control.rungs[r].kind == "territory")
-    to = next(r.id for r in sorted(control.rungs.values(), key=lambda r: r.id)
-              if r.kind == "hearth" and r.id not in set(homes.values()) and territory not in world_q.ancestry(control, r.id))
-    _silently_moved(moved, KING, to)
-    assert world_q.home_of(moved)[KING] == to != world_q.home_of(control)[KING]
-    knowers = _knowers(control, KING)
-    for s in knowers:
-        assert _candidates(moved, s) == _candidates(control, s), s
-    assert sum(len(_candidates(control, s)) for s in knowers) > 0
+    """`p1d_where.py`: a man moved to a hearth nobody lives at, outside his own territory, on the World alone; nobody who knows him has his
+    candidates move. Two movers: the King, and the heir (`p_npc_031`), who is not the King and whose seat is not the throne.
+
+    ⚠ BOUNDED, NOT CLOSED: `matters_awaiting` still reads `place_of` of a matter (a person on a docket) to place its tier -- `08_FI_01` edit 5
+    keeps "the seat and tier logic" and only gates the matter on his own ledger holding a claim of its docketing. The realm holds no docketed matter
+    at build, so that read is dormant in this pair; a docketed person who moves still moves the tier a convener is offered
+    (`test_cr56_matter_stamped.py` observes the tier logic with the matter's place planted)."""
+    HEIR = "p_npc_031"
+    arms = 0
+    for mover in (KING, HEIR):
+        control, moved = build_realm(0), build_realm(0)
+        homes = world_q.home_of(control)
+        territory = next(r for r in world_q.ancestry(control, homes[mover]) if control.rungs[r].kind == "territory")
+        to = next(r.id for r in sorted(control.rungs.values(), key=lambda r: r.id)
+                  if r.kind == "hearth" and r.id not in set(homes.values()) and territory not in world_q.ancestry(control, r.id))
+        _silently_moved(moved, mover, to)
+        assert world_q.home_of(moved)[mover] == to != world_q.home_of(control)[mover]
+        knowers = _knowers(control, mover)
+        for s in knowers:
+            assert _candidates(moved, s) == _candidates(control, s), (mover, s)
+        arms += sum(len(_candidates(control, s)) for s in knowers) > 0
+    assert arms == 2
 
 
 def test_a_witnessed_change_does_move_the_candidates():
@@ -192,3 +212,23 @@ def test_telling_hearers_seen_since_move(known_hearers):
     assert hearer in tells()                                                                                       # seen
     led.append(Claim("c_moved", teller, teller, "travel.moved", True, 0, "firsthand", 100, "own", 1))
     assert hearer not in tells()                                                                                   # he moved since
+
+
+def test_the_realms_rung_aim_is_met_for_its_holder_and_open_for_those_who_have_not_heard():
+    """`aim_state` on the realm's one met aim (`goal_varfell_oastad_gate`, rung `terr_T13`, governed by a Varfell man -- `test_governance_build.py`'s
+    589 reads it): the holder reads `met` from his own live hold (R-03: a man knows his own lands, an own-edge read) and is asked no `need`; every
+    other man committed to it reads `open`, since the realm seeds no news of a RUNG's holder (`seed_seat_news` seeds Office holds, and a rung hold
+    is the build's own edge), until his claims name the GOVERNING hold's holder -- told, `met` again."""
+    w = build_realm(0)
+    gid = "goal_varfell_oastad_gate"
+    prop = w.propositions[gid]
+    committed = sorted(t.subject for t in w.tenures if t.kind == "commit" and t.live and t.object == gid)
+    governing = world_q.governing_hold(w, "terr_T13")
+    assert governing is not None and governing.subject in committed and len(committed) >= 3, (governing, committed)
+    state = {pid: world_q.aim_state(w, w.persons[pid], prop) for pid in committed}
+    assert state[governing.subject] == "met" and {s for pid, s in state.items() if pid != governing.subject} == {"open"}, state
+    need = lambda pid: [q for q in world_q.questions_for(w, w.persons[pid]) if q.id == f"q:need:{gid}"]
+    other = next(pid for pid in committed if pid != governing.subject)
+    assert not need(governing.subject) and need(other)
+    hears_of(w.persons[other], governing.object, governing.subject)
+    assert world_q.aim_state(w, w.persons[other], prop) == "met" and not need(other)
