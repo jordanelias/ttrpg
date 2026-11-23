@@ -73,7 +73,7 @@ from collections import Counter
 from ..data.rosters import FACTION_BY_PROP, faction_prop_id
 from ..data.verbs import VERB_TABLE, act_key
 from ..decision import choose as CH, make_chooser
-from ..decision.options import refusal_tolerance, refuses, subject_is_opponent
+from ..decision.options import refusal_tolerance, scruple, subject_is_opponent
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries import faction_q, person_q, world_q
 from ..state.gate import seated_on_the_rung_above_structure
@@ -310,7 +310,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
         row["decider"] = {"decider": r["decider"], "margin": r["margin"], "draw_kind": r["draw_kind"]}
         tol = refusal_tolerance(p, axis)
         row["refusal_gate"] = ("unarmed (refusal_axis unset)" if tol is None else
-                               {c["verb"]: refuses(c["verb"], axis, tol)
+                               {c["verb"]: scruple(c["verb"], axis, tol)
                                 for c in row["candidates"] if c["chosen"]})
         for a in returned:
             for t in person_targets(w.persons, p.id, a.payload):

@@ -56,3 +56,30 @@ def test_share_not_projected_weight_is_the_tolerance(seed, monkeypatch):
     tol, refused = planted(0.1, 0.0)
     assert tol == pytest.approx(1.0)
     assert refused == set()
+
+
+def test_scruple_is_zero_outside_the_set_and_positive_past_the_tolerance(monkeypatch):
+    """B10.23: the refusal is a MARGIN. On planted cells a listed verb's scruple is how far its cell sits past the tolerance
+    toward the refused pole (0.0 on the tolerated side), a verb outside the closed set has none however far its cell lies, and
+    `refuses` is exactly `scruple > 0`."""
+    build_realm(0)
+    axis = _deontological_axis()
+    mild, harsh = sorted(refusable(axis))[:2]
+    outside = next(v for v in sorted(data_verbs.ALIGNMENT[axis]) if v not in refusable(axis))
+    monkeypatch.setitem(_ROSTERS["pursuit_axes"], "refusable", {axis: [mild, harsh]})
+    monkeypatch.setattr(data_verbs, "ALIGNMENT", {axis: {mild: -0.5, harsh: 0.5, outside: 0.9}})
+
+    # tolerance +0.2: `harsh` lies 0.3 past it toward the refused pole, `mild` lies on the tolerated side, and `outside` lies
+    # 0.7 past him but is not one of the certain actions
+    assert _options.scruple(harsh, axis, 0.2) == pytest.approx(0.3)
+    assert _options.scruple(mild, axis, 0.2) == 0.0
+    assert _options.scruple(outside, axis, 0.2) == 0.0
+    # tolerance -0.9: `mild` (-0.5) now lies 0.4 past it
+    assert _options.scruple(mild, axis, -0.9) == pytest.approx(0.4)
+    assert _options.scruple(outside, axis, -0.9) == 0.0
+    checked = 0
+    for tol in (-1.0, -0.9, -0.5, 0.0, 0.2, 0.5, 1.0):
+        for v in (mild, harsh, outside):
+            assert _options.refuses(v, axis, tol) == (_options.scruple(v, axis, tol) > 0.0)
+            checked += 1
+    assert checked == 21

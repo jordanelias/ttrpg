@@ -577,8 +577,22 @@ def refusal_tolerance(p: Person, axis: Optional[str]) -> Optional[float]:
     return project(p)[axis] / reach if reach else 0.0
 
 
+def scruple(verb: str, axis: str, tolerance: float) -> float:
+    """HOW FAR `verb`'s cell on `axis` sits PAST `tolerance` toward the refused pole (B10.23): a margin, not a boolean, so a large
+    scruple is an act far past what he allows himself and a small one is near it. `0.0` where the cell does not lie past it, where
+    the axis does not engage the verb (a zero cell, including the sparse default) and for a verb outside `refusable(axis)`.
+
+    The refused pole is `data.rosters.refusing_pole(axis)`'s sign, as `refuses` has always read it: the cell is past the tolerance
+    where `sign * (cell - tolerance) < 0`, and the margin is that gap, `-sign * (cell - tolerance)`. `tolerance` is on the cells' ±1
+    scale (`refusal_tolerance`). Reads `data.verbs.align`, the one `choose`'s score reads too."""
+    if verb not in refusable(axis):
+        return 0.0
+    a = align(verb, axis)
+    return max(0.0, -refusing_pole(axis) * (a - tolerance)) if a else 0.0
+
+
 def refuses(verb: str, axis: str, tolerance: float) -> bool:
-    """Does a person whose weight on `axis` is `tolerance` refuse `verb`? The PERSON-SIDE refusal
+    """Does a person whose weight on `axis` is `tolerance` refuse `verb`? It is `scruple(...) > 0`. The PERSON-SIDE refusal
     `score` cannot express: it ranks, and at `choice_temperature` 0.1 a good enough outcome
     outranks any finite penalty (`ED-IN-0261`).
 
@@ -596,10 +610,7 @@ def refuses(verb: str, axis: str, tolerance: float) -> bool:
 
     Reads `data.verbs.align`, the one `choose`'s score reads too, so a rebind of
     `data.verbs.ALIGNMENT` moves the gate and the ranking together."""
-    if verb not in refusable(axis):
-        return False
-    a = align(verb, axis)
-    return bool(a) and refusing_pole(axis) * (a - tolerance) < 0
+    return scruple(verb, axis, tolerance) > 0.0
 
 
 def person_side_eligible(p: Person, row: "VerbRow") -> bool:
