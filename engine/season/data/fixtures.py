@@ -1250,6 +1250,13 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `False`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-471 -- site: Fixtures stance_clamp, graded `assumption`; the source proposes the clamp and no live reading, so it is injected at the control and swept False / True]
     stance_clamp=False,                # `H-471`, swept False (control, SHIPPED) / True (proposed)
+    # `H-476` (B10.28; `02_CHAR_resolve_and_temper` edit 2; CR-93 item 2, AR-23). THE GAIN OF A PERSON'S OWN FACTOR ON THE CHOICE TEMPERATURE: `decision/choose.py::temper`
+    # reads it through the `choice_temper` row of `rosters.yaml: tables.capability_uses` (key `attr.mind.focus`, role `judgement`), and `_sample_order` multiplies
+    # `choice_temperature` by the factor. ⚠ THE SIGN: `about_mid` rises with the attribute, so a temperature that falls with Focus is a NEGATIVE gain; the value the flip (B98)
+    # sets is -0.5 (CR-93 §2's sweep, the least magnitude at which the low-Focus group strays more and the high-Focus group less at seeds 0 to 2). Must lie in (-1, 0].
+    # `0` is the CONTROL and SHIPS: the factor is exactly 1.0 for every person and the draw is today's. [ASSUMPTION; medium; Jordan to correct; revert: the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-476 -- site: Fixtures temper_gain, graded `assumption`; the design names no live value to ship, so it is injected at the control and swept 0 / -0.5 / -0.75]
+    temper_gain=0.0,                   # `H-476`, swept 0 (control, SHIPPED) / -0.5 (proposed) / -0.75
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

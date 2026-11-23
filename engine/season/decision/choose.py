@@ -35,7 +35,7 @@ from engine.dice_engine import fmath
 from engine.dice_engine.fmath import ltr_sum
 from ..data.cast import STANCE_MAX
 from ..data.pursuits import _AXES   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
-from ..data.rosters import SCENE_PACKING_RULES, require_member, roster, seat_capability
+from ..data.rosters import SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
 from ..data.verbs import VERB_TABLE, act_key, align
 from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
@@ -49,10 +49,15 @@ from ..state.carriers import EFFORT, Act, Candidate, Person, Question, Scene, Se
 # `make_chooser`'s score calls it; `options` never imports this module.
 # `seat_of` is `options.py`'s own G3 helper (`via=seat_of(...)`, below).
 from .options import VIOLENT_OPPONENT_VERBS, opening_set, project, seat_of, subject_is_opponent
+# `options.py`'s one reader of a `judgement` row (`competence` is its other caller), under public names here: a call, not a copy (B10.28; CR-93 premise correction 2).
+from .options import _judgement_factor as judgement_factor, _judgement_rows as judgement_rows
 
 STANCE_POLARITIES = roster("stance_polarities")
 ODDS_WEIGHTINGS = roster("odds_weightings")
 NPC_EFFORTS = roster("npc_efforts")
+# B10.28: the use row that carries a person's own factor on the choice temperature (`rosters.yaml: tables.capability_uses`); a site
+# renamed there refuses here at import, so `temper` cannot read no row and pass silently as 1.0.
+CHOICE_TEMPER = require_use_site("choice_temper")
 
 
 def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = None) -> float:
@@ -394,6 +399,27 @@ def beneficiary_of(p: Person, c: Candidate) -> Optional[str]:
     return c.operands.get(kind)
 
 
+def temper(p: Person, fx: "Fixtures") -> float:
+    """THE PERSON'S OWN FACTOR ON THE CHOICE TEMPERATURE (B10.28; CR-93 item 2, AR-23: a high-Focus person is less distracted, so
+    his draw strays less from what he most values). The `judgement` rows of site `choice_temper`, read by `options._judgement_factor`
+    as `competence` reads its own: `about_mid(held, floor, ceiling, gain)`, exactly 1 at the scale's mid-point and at gain 0, and
+    1.0 where no row is authored or `p` holds no value at the row's key (a READ, never a default). `decision/` names no attribute
+    (U1 §8): the key is the row's.
+
+    ⚠ THE SIGN. `about_mid` RISES with the attribute, so a temperature that FALLS with Focus needs a NEGATIVE `temper_gain`; the
+    shipped value is the control, 0 (H-476). A gain above 0 would make a focused person the more distracted, and a gain at or
+    below -1 would take the factor to 0 at the top of the scale, where `_sample_order`'s `tau == 0` short-circuit would hand him
+    the score order and its `(verb, subject)` tie-break, the alphabet H-96's sampler removes. Both are refused where read."""
+    rows = judgement_rows(CHOICE_TEMPER)
+    for row in rows:
+        gain = fx.get(row.gain)
+        if not -1.0 < gain <= 0.0:
+            raise ValueError(f"{row.gain} {gain!r} is outside (-1, 0] (H-476): above 0 a focused person draws more widely, and at -1 "
+                             "the factor reaches 0 at the scale's ceiling and the draw is lost")
+    factor = judgement_factor(p, rows, fx)
+    return 1.0 if factor is None else factor
+
+
 def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
     """`U4` / `H-96`: the triage stops being decided by the SPELLING of a verb.
 
@@ -481,7 +507,7 @@ def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
     candidate-keyed replay this function depends on — the noise must be a property of the candidate,
     not of the order it was reached in. Recorded here because a declaration that a mechanism is
     missing, made without naming the adjacent one, is the defect this lane keeps finding."""
-    tau = float(fx.get("choice_temperature"))
+    tau = float(fx.get("choice_temperature")) * temper(p, fx)     # B10.28: x 1.0 is exact at the shipped gain 0
     if tau == 0 or len(ranked) < 2:
         return ranked
     if draw is None:
