@@ -15,7 +15,7 @@ from ..queries.person_q import projected_axes
 from ..state.carriers import Person
 
 _SWING = DEFAULT_FIXTURES.get("manner_offset_bound")        # a planted offset AT the bound, the largest one the loader admits (H-481)
-_AXIS = "deontological_instrumental"        # the gate's armed axis (B10.32) and one of the three
+_AXIS = "deontological_instrumental"        # the gate's axis (`refusal_axis`, None at the control since B10.32) and one of the three
 
 
 def _person(pid, offset):

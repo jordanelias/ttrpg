@@ -821,7 +821,7 @@ def seed_self_knowledge(w: World, unaware=None) -> list:
     `claim_landed` question on every claim of his own that landed at or after the floor and whose subject is within his reach, and he is within his own: a claim seeded at `when` 0
     (as `seed_acquaintances`' are) would be news to him in season one, fifteen questions about himself each, and every one a scene he could spend on it. What a person has always
     known of himself is not news. [ASSUMPTION; medium; Jordan to correct; revert: `when` 0, which moves every season's tallies]. The claim still ranks lowest under
-    `state/ledgers.py::eviction_key` (the ledger cap is never reached early, `tests/test_cr82_ledger_retention.py`), and `knows_self` reads the stored value, so it does not fade out of him."""
+    `state/ledgers.py::eviction_key` (the ledger cap is never reached early, `tests/test_cr82_ledger_retention.py`), and `knows_self` reads the stored value. ⚠ AT `when` -2 THE KEY IS NEGATIVE (`confidence * (recency + 1)`), so at `ledger_cap` it is the FIRST claim evicted and `knows_self` then reads False: a latent defect past about eight seasons at the shipped cap, no durable carrier ruled (B10.99's close)."""
     conf = w.fixtures.get("confidence_default")
     when = landing_floor(w)[0] - 1
     unaware = unaware or {}

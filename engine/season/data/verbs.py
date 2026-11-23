@@ -39,7 +39,7 @@ from .requires import (
 from .rosters import (
     COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS,
-    is_event_kind, refusing_pole,
+    SCRUPLE_OVERRIDDEN, is_event_kind, refusing_pole,
     RUNG_KINDS, STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
     roster_map,
     table,
@@ -2527,10 +2527,11 @@ def check_refusable(rows: Optional[dict] = None) -> dict:
     """`rosters.yaml: pursuit_axes.refusable`, CHECKED AT LOAD (B10.21), returned as `{axis: frozenset(verb)}`. `rows` is the
     table under test (default: the shipped one).
 
-    Four refusals: a key off the axis roster or with no refusing pole (a list nobody can arm); a list that is not a list of
+    Five refusals: a key off the axis roster or with no refusing pole (a list nobody can arm); a list that is not a list of
     distinct strings; a verb off `VERB_TABLE` (an act nobody can do); a verb with a ZERO cell on its axis (`data.verbs.align`
     is `0` -- the act the axis does not engage, which `refuses` could never refuse, so the listing would be a claim the gate
-    cannot keep; the sparse default cell reads `0` too).
+    cannot keep; the sparse default cell reads `0` too); a verb whose row emits no `scruple.overridden` in any band (B10.24: the kind is declared
+    on every refusable row, or giving way on that verb leaves no Event).
 
     ⚠ IT LIVES HERE, NOT IN `data/rosters.py`, and is called from the foot of this module: `VERB_TABLE` and `align` live here, and
     `rosters` imports no `verbs` (this module imports it)."""
@@ -2551,6 +2552,11 @@ def check_refusable(rows: Optional[dict] = None) -> dict:
                 raise Unspecified(f"pursuit_axes.refusable[{axis!r}] names {v!r}, which has no cell on {axis!r}", "rosters.yaml",
                                   needs=f"a non-zero `tables.alignment` cell for {v!r} on {axis!r}, or drop the verb",
                                   law="ED-IN-0261 -- only a verb the axis engages is one of the certain actions; a zero cell is never refused")
+            row = VERB_TABLE[v]
+            if not any(SCRUPLE_OVERRIDDEN in kinds for kinds in (row.emits, *row.emits_by_degree.values())):
+                raise Unspecified(f"pursuit_axes.refusable[{axis!r}] names {v!r}, whose row emits no `{SCRUPLE_OVERRIDDEN}`", "rosters.yaml",
+                                  needs=f"`{SCRUPLE_OVERRIDDEN}` in {v!r}'s `emits:` (a band of it, where it is band-keyed), or drop the verb",
+                                  law="B10.24 -- a refusable verb done against his scruple is told: a row that cannot emit the kind leaves the giving way untold")
         out[axis] = frozenset(verbs)
     return out
 

@@ -1135,6 +1135,7 @@ OBSERVATION_TERMS = roster("observation_terms", ordered=True)
 # need, below both. `state/gate.py` imports it back, so `gate.PERSON_DIED` still resolves for every importer.
 PERSON_DIED = "person.died"
 # The `conviction.moved` Event kind (B10.15), spelt here for the same reason: `loop/resolve.py::_drawn_crisis` tells it, and `queries/world_q.py::practice` must not credit it.
+SCRUPLE_OVERRIDDEN = "scruple.overridden"   # [canonical: engine/season/verb_table.yaml `emits:` on every row `pursuit_axes.refusable` lists; B10.24]
 CONVICTION_MOVED = "conviction.moved"     # [canonical: engine/season/write_matrix.yaml §(Person, conviction) emits]
 OBSERVATION_DEPOSIT = roster_map("observation_terms", "deposit")
 # THE ONE NAME THE `seen` CLAIM IS DEPOSITED UNDER. It lives here and not in `epistemic.py` (where

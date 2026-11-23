@@ -766,12 +766,12 @@ class Ranked(list):
     """A deliberation's SAMPLED ORDER (`make_ranker`'s return), a plain list that also carries `decide(c)`: the deciding term
     (`deciding_term`'s label) of candidate `c` among the candidates still unspent when `c` was taken (`c` and those after
     it in the order), `""` for a candidate not in the order. `pack_scenes` reads it by `getattr` to stamp `Scene.decided`, so
-    a list that is not a `Ranked` (a player's pick, a hand-built list) packs Scenes stamped `""`. It scores nothing: `decide`
+    a list that is not a `Ranked` (a hand-built list) packs Scenes stamped `""`; the player's pick is a `Ranked` that carries `forgone_of` only (`decision/sheet.py`). It scores nothing: `decide`
     is a closure over the terms the ranker itself summed (the ones `watch` is handed).
 
     It carries `forgone_of(lead, chunk)` beside it (B10.24; `Scene.forgone`'s docstring): the `((verb, subject, margin), ...)` a Scene
     led by `lead` and carrying `chunk` keeps of what his scruple struck, `pack_scenes` reading it by `getattr` as it reads `decide`.
-    The ranker's strike is the carrier's one writer; a list that is not a `Ranked` packs Scenes whose `forgone` is `()`."""
+    The ranker's strike is the carrier's one writer; a list that is not a `Ranked` packs Scenes whose `forgone` is `()`; a `Ranked` without `forgone_of` does the same."""
     decide: Optional[Callable[[Candidate], str]] = None
     forgone_of: Optional[Callable[[Candidate, list], tuple]] = None
 

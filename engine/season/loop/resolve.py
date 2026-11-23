@@ -20,7 +20,7 @@ from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree, degree_from_net
 from engine.dice_engine.sigma_leverage import levels_to_net_sigma, opposed_ob, pool_of
 from engine.substrate import composition
 from ..gaps import InstrumentDefect
-from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, capability_rows, graded_route,
+from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, SCRUPLE_OVERRIDDEN, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, capability_rows, graded_route,
                             MARGIN_ENDING, SCAR_HOLDS, SCAR_SEASON_CAPS, SCAR_VINDICATIONS, STANDING_OCCASION_OPENED_BY, STRATA, UNROUTED_BAND,
                             require_member, require_use_site, task_share, when_holds)
 
@@ -328,8 +328,7 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
 # `G6` (`H-197`): declared on `tell`'s told bands; kept only when `_confidence_broken` says so.
 CONFIDENCE_BROKEN = "confidence.broken"
 
-# B10.24: declared on every row `rosters.yaml: pursuit_axes.refusable` lists; kept only when `_scruple_overridden` says so.
-SCRUPLE_OVERRIDDEN = "scruple.overridden"
+# B10.24: declared on every row `rosters.yaml: pursuit_axes.refusable` lists (`data/verbs.py::check_refusable` refuses a row that does not); kept only when `_scruple_overridden` says so. The kind is `data/rosters.py::SCRUPLE_OVERRIDDEN`.
 
 # B09.11: the kind `(Person, scar)` declares (`write_matrix.yaml`), emitted by `_scar_witnesses` beside its write.
 SCAR_TAKEN = "scar.taken"
