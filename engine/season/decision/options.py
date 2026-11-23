@@ -228,7 +228,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         if verb in OWN_TITLE_DECLINES:
             if held is None:
                 held = _held_objects(p)
-            refs = tuple(r for r in refs if SUCCESSIONS.get(r) in held)
+            refs = tuple(r for r in refs if any(t in held for t in SUCCESSIONS.get(r, ())))   # B21.16: any listed title
         # VB-A commit A1 (B21.07, `rosters.yaml: own_edge_declines`): A VERB A PERSON FORMS ONLY ON A REFERENT HE IS TIED TO BY A
         # LIVE EDGE OF A KIND THE ROW'S OWN `domain:` NAMES -- `release`, which the fold refuses on any referent he owns no
         # releasable edge toward (a person releasing the King, a cohort the settlement it lives in): no scene is spent on a refusal

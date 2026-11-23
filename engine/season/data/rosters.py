@@ -904,13 +904,15 @@ REVOCATION_BASES = roster("revocation_bases")
 FOUNDER_KEEPS = tuple(_OFFICES_DOC["founding"]["keeps"])
 FOUNDED_CONFERRAL = _OFFICES_DOC["founding"]["conferral"]
 FOUNDED_REVOCATION = _OFFICES_DOC["founding"]["revocation"]
-# v10 IN-61 (RS-27): `{seat: title}` -- which title a seat of conferral basis `inheritance` passes to
-# (`rosters.yaml: successions`). Read IN PLACE (never copied) by `state/gate.py`'s claim basis,
-# `loop/predicates.py::_req_succeed`, `loop/effects_governance.py::_eff_succeed` and
-# `decision/options.py::opening_set`, so one dict answers all four. Its cross-check against `offices.yaml`
+# v10 IN-61 (RS-27), B21.16 (HAPPENINGS-B edit 3): `{seat: (title, ...)}` -- the titles whose holders may claim a seat of
+# conferral basis `inheritance` (`rosters.yaml: successions`); the tuple is eligibility, never an order, and a bare string
+# in the file reads as a one-title tuple. Read IN PLACE (never copied) by `state/gate.py`'s claim basis,
+# `loop/predicates.py::_req_succeed`, `loop/effects_governance.py::_eff_succeed`, `queries/world_q.py::_heir_title_holders` and
+# `decision/options.py::opening_set`, so one dict answers all five. Its cross-check against `offices.yaml`
 # and `state/gate.py::FILLED_BY` is the gate's (`check_successions`), since the claim basis lives there
 # and `data/` may not import `state/`.
-SUCCESSIONS = {str(k): str(v) for k, v in roster_map("successions", "values").items()}
+SUCCESSIONS = {str(k): ((str(v),) if isinstance(v, str) else tuple(str(t) for t in v))
+               for k, v in roster_map("successions", "values").items()}
 # v10 CP-T02-06 (B10-10): WHO CARRIES ON A SEATED PERSON'S LINE, in the order they are offered
 # (`rosters.yaml: continuation_ties`, ORDERED). The reader per member is `queries/world_q.py::_TIE_READERS`,
 # cross-checked there at import (`data/` may not import `queries/`, `SUCCESSIONS`' reason).

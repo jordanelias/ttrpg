@@ -1574,8 +1574,10 @@ def _remit_acts_attribute_reads_outside_allowlist() -> list:
             # remit of the office THE ACT DESCRIBES (clause 5's H-132 (b) reduction test, against the sitting
             # holders' `granted_acts`), never a stored office's remit as an eligibility fact. Its derivation
             # (`office_founded_by`) reads the founder's grant, not `remit_acts`, and stays outside the list.
+            # B21.16: `state/gate.py::passes_a_seat` joins them -- it asks whether a SEAT'S OWN design is a bare title
+            # (`appointed`, an empty remit) for the claim to lay it down, never whether an act is eligible.
             if isinstance(node, ast.FunctionDef) and node.name in ("_grant_remit", "_eff_establish",
-                                                                   "_req_establish"):
+                                                                   "_req_establish", "passes_a_seat"):
                 allowed_spans.append((node.lineno, node.end_lineno))
             elif isinstance(node, ast.ClassDef) and node.name == "Office":
                 allowed_spans += [(sub.lineno, sub.end_lineno) for sub in node.body

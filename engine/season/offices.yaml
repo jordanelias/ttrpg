@@ -237,14 +237,14 @@ seats:
     rung:       {realm: true}
     body:       null
     faction:    "Valorsmark"
-    remit_acts: [issue, determine, confer, revoke, convene]
+    remit_acts: []   # B21.16 (REMIT edit 1, R-16; HAPPENINGS-B A-19): the consort's powers arrive with a regency (a termed `confer`, or the heir's claim), never a standing grant; her own claim in the race closes this seat only because its remit is empty (`_eff_succeed`) [ASSUMPTION; medium; Jordan to correct; revert: restore `[issue, determine, confer, revoke, convene]`, one re-pin]
     modifier:   minor   # B05.23, T13 edit 5: a bench seat (`off_king`'s note)
     conferral:  appointed   # B21.15 (HAPPENINGS-B edit 1, A-19): a title of the royal house, conferred through `off_king` [ASSUMPTION; medium; Jordan to correct; revert: null]
     revocation: null
     holder:     "NPC-032"
     obligees:   []
     source:     "harness/populated.py -- post normalised from the live \"Queen (Widow Regent if Almud eliminated)\", which is not on `titles.domains` verbatim; the condition moves to this note"
-    note:       "[LIVE]. r2 03 §A.15 row 5: a parenthesis is what stopped this seat reading as a title at all -- `title_domain` matches on the bare post. A title of the royal house, conferred through `off_king` (`off_heir`'s shape, IN-61); HAPPENINGS-B."
+    note:       "[LIVE]. r2 03 §A.15 row 5: a parenthesis is what stopped this seat reading as a title at all -- `title_domain` matches on the bare post. A title of the royal house, conferred through `off_king` (`off_heir`'s shape, IN-61); HAPPENINGS-B. B21.16: the consort's powers arrive with a regency, which is a termed `confer` or the heir's claim, never a standing grant; or a claim in the race by the consort herself (A-19 lists her among those who may claim)."
 
   - id:         off_heir
     post:       "Prince (Heir Apparent)"

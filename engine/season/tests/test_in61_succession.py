@@ -100,8 +100,11 @@ def test_a_claim_by_anyone_but_the_title_holder_is_refused_at_the_fold_and_at_th
     refusing every opening)."""
     w, d, king, heir = _realm()
     _vacate_by_release(w, d, king)
+    # B21.16: THE LISTED TITLES' HOLDERS MAY NOW CLAIM TOO (HAPPENINGS-B), so "anyone but" is anyone who holds none of them
+    titled = {t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object in SUCCESSIONS[THRONE]}
+    assert heir in titled and len(titled) >= 2, titled
     others = sorted({t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object in w.offices
-                     and t.subject not in (heir,)})
+                     and t.subject not in titled})
     assert len(others) >= 5, others
     for i, p in enumerate(others):
         assert _act(w, d, p, "succeed", f"other{i}", subject=THRONE) == ["succession.refused"], p
@@ -150,6 +153,21 @@ def test_no_seat_may_confer_the_vacant_throne():
         off.conferral = "inheritance"
 
 
+def test_with_king_and_heir_removed_someone_may_claim_the_throne():
+    """B21.16 (`U5d_FA_owed_edits` §1, restating `pf1_static.py`): THE BUILT REALM WITH THE KING AND THE HEIR REMOVED THROUGH `_die`:
+    at least one person may claim `off_king` (`G.may_claim`, over the seats each holds), and none of them is the dead heir. Before
+    `successions` listed more than the heir this read zero eligible claimants (F-PES-FA-11)."""
+    w, d, king, heir = _realm()
+    w.step = Step.MATTER
+    w._emitted_by_write = []
+    for who in (king, heir):
+        _die(w, mint_token(w, WriteClass.MATTER), who)
+    assert _holder(w, THRONE) is None and heir not in w.persons
+    throne = w.offices[THRONE]
+    claimants = sorted(p for p in w.persons if G.may_claim(w, p, throne, {t.object for t in w.seat_holds(p)}))
+    assert claimants, "zero eligible claimants: the throne is stranded"
+
+
 # --- THE ONE-ACT CLAIM: TWO SEATS, ONE TITLE ----------------------------------------------------
 
 @pytest.mark.usefixtures("seat_at_success")       # B21.14: the claim's write, not its draw (C3's test)
@@ -161,7 +179,7 @@ def test_one_claim_opens_every_vacant_seat_that_names_the_title_and_closes_the_t
     are held, is refused (first valid claim wins)."""
     w, d, king, heir = _realm()
     assert _holder(w, DUCHY) == king, "fixture: the King no longer holds the Crown's duchy"
-    monkeypatch.setitem(SUCCESSIONS, DUCHY, TITLE)
+    monkeypatch.setitem(SUCCESSIONS, DUCHY, (TITLE,))
     monkeypatch.setattr(w.offices[DUCHY], "conferral", "inheritance")
     w.step = Step.MATTER
     w._emitted_by_write = []
@@ -206,9 +224,10 @@ def test_a_throne_released_by_its_holder_reaches_the_heir_and_he_forms_the_claim
         formed.extend((p.id, c.subject) for c in out if c.verb == "succeed")
         return out
     monkeypatch.setattr(CH, "opening_set", spy)
+    titled = {t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object in SUCCESSIONS[THRONE]}
     _one_season(w, d)
     assert (heir, THRONE) in formed, f"the heir never formed the claim; formed: {formed}"
-    assert {pid for pid, _ in formed} == {heir}, f"somebody but the heir formed a claim: {formed}"
+    assert {pid for pid, _ in formed} <= titled, f"somebody who holds no listed title formed a claim: {formed}"   # B21.16: any listed title
     claimed = _holder(w, THRONE) == heir
     print(f"\nIN-61 RELEASE ARM: heir {heir} formed `succeed` on {THRONE} {formed.count((heir, THRONE))} "
           f"time(s); executed in the season: {'yes' if claimed else 'no'}")
@@ -322,7 +341,7 @@ def test_a_filled_by_naming_a_basis_that_opens_no_seat_is_refused(monkeypatch):
 def test_a_succession_on_a_seat_the_claim_does_not_open_is_refused(monkeypatch):
     """`successions` against `offices.yaml`: a key whose row is `appointed` (the claim does not open it),
     and an `inheritance` row with no key (a seat nobody can ever fill), each refuse."""
-    monkeypatch.setitem(SUCCESSIONS, "off_widow_regent", TITLE)
+    monkeypatch.setitem(SUCCESSIONS, "off_widow_regent", (TITLE,))
     with pytest.raises(Unspecified, match="the claim does not open it"):
         G.check_successions()
     monkeypatch.delitem(SUCCESSIONS, "off_widow_regent")

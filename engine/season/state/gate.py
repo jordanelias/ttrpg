@@ -666,11 +666,12 @@ def has_filler(off: Office) -> bool:
 
 def check_successions() -> None:
     """REFUSED AT IMPORT: `rosters.yaml: successions` against `offices.yaml` and `FILLED_BY`. A key or a
-    value that is no `offices.yaml` row names a seat that cannot exist; a key whose row's basis the claim
+    title (every member of a value's tuple) that is no `offices.yaml` row names a seat that cannot exist, and an
+    empty tuple names no claimant (B21.16); a key whose row's basis the claim
     does not open (`FILLED_BY`) is a title that passes nothing; and a row whose basis ONLY the claim opens,
     with no key, is a seat nobody can ever fill. Callable again so a test can observe it refuse."""
     rows = SEAT_ROW_BY_ID
-    bad = sorted(f"{k}: {v}" for k, v in SUCCESSIONS.items() if k not in rows or v not in rows)
+    bad = sorted(f"{k}: {v}" for k, v in SUCCESSIONS.items() if k not in rows or not v or any(t not in rows for t in v))
     bad += sorted(f"{k} (conferral {rows[k].get('conferral')!r}): the claim does not open it"
                   for k in SUCCESSIONS if k in rows
                   and CLAIM not in FILLED_BY.get(rows[k].get("conferral"), ()))
@@ -690,30 +691,40 @@ check_successions()
 
 def may_claim(w: "World", actor: Optional[str], off: Office, titles,
               besides: Optional[Tenure] = None) -> bool:
-    """THE CLAIM, AS ONE PREDICATE (v10 IN-61, RS-27): may `actor` take `off` by the claim of its title?
+    """THE CLAIM, AS ONE PREDICATE (v10 IN-61, RS-27): may `actor` take `off` by the claim of a title?
 
-    Three conjuncts: `off`'s conferral basis is opened by the claim (`FILLED_BY`); `off`'s `successions`
-    title is among `titles` -- the seats the CALLER says the actor holds the title by; and `off` has no
+    Three conjuncts: `off`'s conferral basis is opened by the claim (`FILLED_BY`); one of `off`'s `successions`
+    titles (B21.16: a list is eligibility) is among `titles` -- the seats the CALLER says the actor holds the title by; and `off` has no
     live `hold` but `besides`. Two readers, `may_fill`'s shape: `_req_succeed` asks it BEFORE the write
     with the actor's live seat-holds and `besides=None`; the gate asks it AFTER the write -- which closed
     the title in the same act -- with `released` (the objects of the `hold`s this actor ended under `T-m`
     in this write) and `besides` the opened edge itself. So the vacancy and the title are asked once, here,
     and the precondition and the gate cannot disagree. ⚠ "First valid claim wins" is this conjunct: the
     first claim opens the seat, and every later one meets a live `hold`."""
-    title = SUCCESSIONS.get(off.id)
-    if actor is None or title is None or title not in titles or CLAIM not in filled_by(off):
+    listed = SUCCESSIONS.get(off.id)
+    if actor is None or not listed or not any(t in titles for t in listed) or CLAIM not in filled_by(off):
         return False
     return not any(t is not besides and t.kind == "hold" and t.object == off.id and t.live
                    for t in w.tenures)
 
 
-def claimable_seats(w: "World", actor: Optional[str], title: str) -> tuple:
-    """Every seat `actor` may take by the claim of `title` (`may_claim`, so vacancy and basis are asked
+def passes_a_seat(off: Office) -> bool:
+    """IS `off` A TITLE THAT EXISTS ONLY TO PASS A SEAT? (B21.16, HAPPENINGS-B edit 3.) `conferral: appointed` and an empty remit:
+    `off_heir`, the Princess, the consort once her standing grant is gone. A claim lays down such a title it claims by -- it was
+    the claimant's licence and has no use beside the seat -- and keeps any other: a duke who takes the throne keeps his duchy,
+    a consort whose seat still carries a grant keeps hers. `_eff_succeed` closes by it and `tenure_write_basis` counts a title
+    the claim did not close as licence by it, so the two cannot disagree."""
+    return off.conferral == "appointed" and not off.remit_acts
+
+
+def claimable_seats(w: "World", actor: Optional[str], titles) -> tuple:
+    """Every seat `actor` may take by the claim of a title in `titles` (`may_claim`, so vacancy and basis are asked
     once), sorted -- what ONE claim opens (v10 IN-61's one-act write, *"opens every vacant seat whose
-    `successions` value is the claimant's title, then closes that title"*). The seat the act names is in
-    the set whenever `_req_succeed` admitted it. The caller says the actor holds `title`."""
-    return tuple(sorted(s for s, ti in SUCCESSIONS.items()
-                        if ti == title and s in w.offices and may_claim(w, actor, w.offices[s], {title})))
+    `successions` titles include the claimant's, then closes that title"*). The seat the act names is in
+    the set whenever `_req_succeed` admitted it. The caller says the actor holds `titles` (one id is read as a
+    one-title set)."""
+    held = {titles} if isinstance(titles, str) else set(titles)
+    return tuple(sorted(s for s in SUCCESSIONS if s in w.offices and may_claim(w, actor, w.offices[s], held)))
 
 
 def has_revocation_disposal(off: Office) -> bool:
@@ -1366,7 +1377,11 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     # under `T-m` in this same write (`released`, `refuse_unauthored`'s first pass) -- so it is reached on
     # the second pass only, `handover`'s licence read for a seat. Not spent: one title opens every vacant
     # seat that names it (`claimable_seats`), and the seat's own vacancy (`besides=t`) bars a second.
-    if opened and owner == actor and may_claim(w, actor, seat, released, besides=t):
+    # B21.16: A TITLE THE CLAIM DOES NOT LAY DOWN (`passes_a_seat` false: a duke's duchy) licenses by being STILL HELD, so it is
+    # counted with the ones `released`; a title that exists to pass a seat licenses only by its closure in this write.
+    if opened and owner == actor and may_claim(
+            w, actor, seat, set(released) | {s.object for s in w.seat_holds(actor) if not passes_a_seat(w.offices[s.object])},
+            besides=t):
         return CLAIM
     if (opened or moved == {"payload"}) and may_fill(w, actor, via, seat):
         return CONFERRAL

@@ -3126,14 +3126,13 @@ class Continuation(NamedTuple):
 
 
 def _heir_title_holders(w: World, p: Person) -> list:
-    """`heir_title`: the live holders of the `successions` title of each seat `p` holds (`SUCCESSIONS`, the
-    registry IN-61's claim reads), seats in `p`'s store order."""
+    """`heir_title`: the live holders of any `successions` title of each seat `p` holds (`SUCCESSIONS`, the
+    registry IN-61's claim reads), seats in `p`'s store order and titles in list order -- an order for the OFFER only (B21.16:
+    the list is eligibility, never a ranking of who succeeds)."""
     out = []
     for s in w.seat_holds(p.id):
-        title = SUCCESSIONS.get(s.object)
-        if title is None:
-            continue
-        out += [t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == title]
+        for title in SUCCESSIONS.get(s.object, ()):
+            out += [t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object == title]
     return out
 
 

@@ -22,7 +22,7 @@ from ..loop.predicates import TERM_KEY, office_founded_by, office_named_by
 from ..queries.world_q import BAN_KIND, DETAIN_KIND, restrained
 from ..state.carriers import Tenure, Term
 from ..state.gate import (NO_CHANGE, TENURE_CLOSED, Change, Subject, claimable_seats, has_revocation_disposal,
-                          revocation_disposal)
+                          passes_a_seat, revocation_disposal)
 from ..state.ids import H
 
 from .effects_shared import _exercised_office, _new_oblige_term, _operand, _provisional_term, _scaled, _shift, effect_for
@@ -146,8 +146,9 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
 @effect_for("succeed")
 def _eff_succeed(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """v10 IN-61 (RS-27): THE HEIR'S CLAIM, ONE ACT, ONE WRITE. Opens the claimant's `hold` on EVERY vacant
-    seat whose `successions` title is the one he claims by (`state/gate.py::claimable_seats` -- the King
-    who dies holding two such seats leaves both to one claim), then closes his `hold` on that title.
+    seat whose `successions` titles include one he holds (`state/gate.py::claimable_seats` -- the King
+    who dies holding two such seats leaves both to one claim), then closes his `hold` on each such title that
+    exists to pass a seat (B21.16: `passes_a_seat`; a duke keeps his duchy).
 
     THE GATE ADMITS EACH EDGE BY NAME: the title's closure is `T-m` (his own seat-`hold`, laid down -- a
     pure closure, which `T-m`'s seat carve-out keeps), and each opened seat-`hold` is the CLAIM basis,
@@ -162,13 +163,18 @@ def _eff_succeed(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     stamped by `World.add_tenure`, as for every seat-`hold`. Limits: one title deep -- the title it
     closes passes to nobody; the first valid claim wins (a later one finds the seat held)."""
     seat = _operand(a, "subject")
-    title = SUCCESSIONS.get(seat) if isinstance(seat, str) else None
-    if title is None:
+    listed = SUCCESSIONS.get(seat) if isinstance(seat, str) else None
+    if not listed:
         return NO_CHANGE
-    held = [t for t in w.seat_holds(a.actor) if t.object == title]   # the title is a seat (`check_successions`)
-    seats = claimable_seats(w, a.actor, title) if held else ()
+    # B21.16 (HAPPENINGS-B edit 3): ANY LISTED TITLE MAY CLAIM, and the claim is by the ones he holds (a title is a seat,
+    # `check_successions`). It lays down each of those that exists only to pass a seat (`passes_a_seat`) and keeps the rest: a duke
+    # who takes the throne keeps his duchy, a consort whose seat still carries a grant keeps hers. Every such title is the licence
+    # of the opened seats (`tenure_write_basis`'s claim arm counts a title not laid down as still held).
+    by = [t for t in w.seat_holds(a.actor) if t.object in listed]
+    seats = claimable_seats(w, a.actor, {t.object for t in by}) if by else ()
     if seat not in seats:
         return NO_CHANGE
+    held = [t for t in by if passes_a_seat(w.offices[t.object])]
     # B21.14 (BIND_C edit 7): A PARTIAL CLAIM TAKES EACH SEAT PROVISIONALLY -- opened with `_provisional_term`, under the same claim
     # basis and the title laid down in the same write, exactly as at Success. At the control the term is none (Partial = Success).
     term = _provisional_term(w, a) if _provisional(res) else None

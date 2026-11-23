@@ -1103,20 +1103,14 @@
           },
           "body": null,
           "faction": "Valorsmark",
-          "remit_acts": [
-            "issue",
-            "determine",
-            "confer",
-            "revoke",
-            "convene"
-          ],
+          "remit_acts": [],
           "modifier": "minor",
           "conferral": "appointed",
           "revocation": null,
           "holder": "NPC-032",
           "obligees": [],
           "source": "harness/populated.py -- post normalised from the live \"Queen (Widow Regent if Almud eliminated)\", which is not on `titles.domains` verbatim; the condition moves to this note",
-          "note": "[LIVE]. r2 03 \u00a7A.15 row 5: a parenthesis is what stopped this seat reading as a title at all -- `title_domain` matches on the bare post. A title of the royal house, conferred through `off_king` (`off_heir`'s shape, IN-61); HAPPENINGS-B."
+          "note": "[LIVE]. r2 03 \u00a7A.15 row 5: a parenthesis is what stopped this seat reading as a title at all -- `title_domain` matches on the bare post. A title of the royal house, conferred through `off_king` (`off_heir`'s shape, IN-61); HAPPENINGS-B. B21.16: the consort's powers arrive with a regency, which is a termed `confer` or the heir's claim, never a standing grant; or a claim in the race by the consort herself (A-19 lists her among those who may claim)."
         },
         {
           "id": "off_heir",
@@ -3610,16 +3604,22 @@
         },
         "successions": {
           "source": "v10 IN-61 (RS-27, B10-09; `workplans/valoria_master_workplan_v10_part4.md` IN-61, part (1)): Jordan 2026-10-14, *\"designated heir is not a verb but a status or title. the heir still has to claim their throne\"*. RS-29 ratified the title carrier (2026-10-14).",
-          "note": "WHICH TITLE A SEAT OF CONFERRAL BASIS `inheritance` PASSES TO -- a mapping, `{seat: title}`, both `offices.yaml` row ids (realm seat ids equal their row ids since CP-T02-02). The title is an ordinary seat, filled by `confer` (`off_heir`, `appointed`): designation is no verb. The seat is claimed by the title's holder through `succeed` (`loop/predicates.py::_req_succeed`, `loop/effects_governance.py:: _eff_succeed`, the write gate's claim basis), admitted only while the seat has no live `hold`; the claim opens EVERY vacant seat this mapping gives the same title and closes the title, in one act. LIMITS: the route only awards a vacant seat; the first valid claim wins; one title deep (the heir's own title, closed by his claim, passes to nobody). READ BY `data/rosters.py::SUCCESSIONS`, refused at import when a key or value is no `offices.yaml` row, a key's row is not `inheritance`, or an `inheritance` row has no key (a seat nobody could ever fill). `off_duke_valorsmark` gets its row at CP-T09-06 (B10-17), not here. [ASSUMPTION; medium; Jordan to correct; revert: drop the row, `inheritance` and `succeed`'s row back to its decline.]",
+          "note": "WHICH TITLES A SEAT OF CONFERRAL BASIS `inheritance` PASSES TO -- a mapping, `{seat: [title, ...]}`, every member an `offices.yaml` row id (realm seat ids equal their row ids since CP-T02-02); a bare string reads as a one-title list. THE TITLES WHOSE HOLDERS MAY CLAIM THE SEAT; A LIST IS ELIGIBILITY, NEVER AN ORDER (HAPPENINGS-B, A-19): who takes the seat is `succeed`'s draw, and the founding order is a head start, never a right. A title is an ordinary seat, filled by `confer` (`off_heir`, `appointed`) or, for the two houses' heads, by their own basis: designation is no verb. The seat is claimed by a title's holder through `succeed` (`loop/predicates.py::_req_succeed`, `loop/effects_governance.py::_eff_succeed`, the write gate's claim basis), admitted only while the seat has no live `hold`; the claim opens EVERY vacant seat that lists a title he holds and lays down each such title that exists only to pass a seat (`conferral: appointed`, an empty remit -- `state/gate.py::passes_a_seat`), in one act: a duke who takes the throne keeps his duchy. LIMITS: the route only awards a vacant seat; the first valid claim wins; one title deep (a title laid down by a claim passes to nobody). READ BY `data/rosters.py::SUCCESSIONS`, refused at import when a key or a member is no `offices.yaml` row, a list is empty, a key's row is not `inheritance`, or an `inheritance` row has no key (a seat nobody could ever fill). `off_duke_valorsmark` gets its row at CP-T09-06 (B10-17), not here. [ASSUMPTION; medium; Jordan to correct; revert: the single title (`off_king: off_heir`), the claim closing the heir's title alone.]",
           "values": {
-            "off_king": "off_heir"
+            "off_king": [
+              "off_heir",
+              "off_widow_regent",
+              "off_princess",
+              "off_duchess_hafenmark",
+              "off_duke_varfell"
+            ]
           }
         },
         "continuation_ties": {
           "source": "v10 CP-T02-06 (B10-10; M7 taken (b), `workplans/valoria_master_workplan_v11_part6.md` DECISION: *title, then oath*). The seated person's line CONTINUES or ENDS (`-02` \u00a72 CP-T02-06, P30 heir transfer, P42 a dead line).",
           "open": false,
           "ordered": true,
-          "note": "WHO MAY CARRY ON A SEATED PERSON'S LINE WHEN HE DIES, AND IN WHAT ORDER THEY ARE OFFERED -- a closed ORDERED roster (the order is semantic: `ordered: true`). `heir_title`: the holder of the `successions` title of a seat the person holds (the registry above; one title per seat). `sworn`: a person with a live `oblige` to a seat the person holds (`state/gate.py::sworn_to`, the one walk `establishment_of` composes on). A person who is both is offered once, at the earlier tie. WHAT EACH TIE MEANS IS CODE: `queries/world_q.py::_TIE_READERS`, one reader per member; `check_continuation_ties` REFUSES AT IMPORT a member with no reader and a reader with no member, and `continuations` iterates this roster, so a `Continuation` tagged with a kind off this list is never returned. THE CLIENT HOLDS NO COPY: which persons may be chosen is a game fact, so `harness/play_surface.py::carry_on` offers `world_q.continuations`' answer and nothing it composed itself. `follower` (a live `commit` to a Proposition the person made) was in the design's draft and is NOT taken; appending it is one member here and one reader there. [ASSUMPTION; medium; Jordan to correct; revert: bind to the first living tie in this order without offering a choice (`carry_on` takes `offer[0]`), or drop `sworn`, or append `follower`.]",
+          "note": "WHO MAY CARRY ON A SEATED PERSON'S LINE WHEN HE DIES, AND IN WHAT ORDER THEY ARE OFFERED -- a closed ORDERED roster (the order is semantic: `ordered: true`). `heir_title`: the holders of the `successions` titles of a seat the person holds (the registry above; the list's order is the offer's only). `sworn`: a person with a live `oblige` to a seat the person holds (`state/gate.py::sworn_to`, the one walk `establishment_of` composes on). A person who is both is offered once, at the earlier tie. WHAT EACH TIE MEANS IS CODE: `queries/world_q.py::_TIE_READERS`, one reader per member; `check_continuation_ties` REFUSES AT IMPORT a member with no reader and a reader with no member, and `continuations` iterates this roster, so a `Continuation` tagged with a kind off this list is never returned. THE CLIENT HOLDS NO COPY: which persons may be chosen is a game fact, so `harness/play_surface.py::carry_on` offers `world_q.continuations`' answer and nothing it composed itself. `follower` (a live `commit` to a Proposition the person made) was in the design's draft and is NOT taken; appending it is one member here and one reader there. [ASSUMPTION; medium; Jordan to correct; revert: bind to the first living tie in this order without offering a choice (`carry_on` takes `offer[0]`), or drop `sworn`, or append `follower`.]",
           "values": [
             "heir_title",
             "sworn"
