@@ -1,6 +1,6 @@
 """PC-03 (ED-PC-0058 critique): the three readers of the per-defender Ob that ED-PC-0058 left behind.
 
-`core.resolve` bands a roll at `core.ob_from_defender(defender, cfg)` (`opposed_ob(score, rate)`, control 0.5; History / 2 until CR-85) on the owner ladder
+`core.resolve` bands a roll at `core.ob_from_defender(defender, cfg)` (`opposed_ob(score, rate)`, rate `MU_PER_DIE` since B15.03, control 0.5; History / 2 until CR-85) on the owner ladder
 (`engine.dice_engine.dice_engine.degree_from_net`, migrated at PC-02). Three things downstream of that
 change kept reading the retired fixed `core.DECISIVE_OB = 3`:
 
@@ -166,7 +166,7 @@ def test_faculty_enters_the_roll_through_exactly_one_channel():
         channels[f'net_sigma[{mode}]'] = (_defender_side_sigma(aggressor, hi, mode)
                                           - _defender_side_sigma(aggressor, lo, mode))
     assert len(channels) == 4
-    assert channels['ob'] == 1.0
+    assert channels['ob'] == DE.MU_PER_DIE * 5 - DE.MU_PER_DIE * 3   # two points of skill score at the rate the fight opposes at (A-71)
     # each mode is a separate exchange; the claim is per exchange: Ob plus that mode's sigma
     for mode in ('parry', 'dodge', 'wind'):
         live = [k for k in ('ob', f'net_sigma[{mode}]') if abs(channels[k]) > 1e-12]
@@ -175,36 +175,38 @@ def test_faculty_enters_the_roll_through_exactly_one_channel():
     assert S.counter_success_prob(hi, CFG, TR) == S.counter_success_prob(lo, CFG, TR)
 
 
-def test_set_attr_faculty_7_reads_pool_13_ob_3_5_and_no_sigma_moves():
-    """PC-14's exit, re-based by CR-85: a skill score of 7 reads pool 13 and Ob 3.5, and no sigma term moves."""
+def test_set_attr_score_7_reads_pool_13_ob_mu_per_die_x_7_and_no_sigma_moves():
+    """PC-14's exit, re-based by CR-85 and re-pinned at B15.03 (A-71): a skill score of 7 reads pool 13 and Ob `MU_PER_DIE x 7`
+    (the rate the fight opposes at; not typed as 2.8, the product is 2.8000000000000003), and no sigma term moves."""
     aggressor, d = C.Combatant('A'), C.Combatant('D')
     for c in (aggressor, d):
         wrapper._init_live(c, CFG)
     before = {m: _defender_side_sigma(aggressor, d, m) for m in ('parry', 'dodge', 'wind')}
     d.score = 7
-    assert (core.resolution_pool(d.score), core.ob_from_defender(d, CFG)) == (13, 3.5)
+    assert (core.resolution_pool(d.score), core.ob_from_defender(d, CFG)) == (13, DE.MU_PER_DIE * 7)
     assert {m: _defender_side_sigma(aggressor, d, m) for m in ('parry', 'dodge', 'wind')} == before
 
 
 # ── B05.58 (29-2): the fight's Ob is the owner's `opposed_ob` at the cfg's rate ────────────────────
 
 def test_the_fight_obstacle_is_opposed_ob_at_the_cfg_rate():
-    """A fight run with `cfg=dict(CFG, OPPOSITION_RATE=0.4)` and skill scores 2 and 3: every `roll` event's `ob` is
-    `0.4 x` the struck party's skill score (`sigma_leverage.opposed_ob`, A-71), not the control's half-score."""
+    """A fight run with `cfg=dict(CFG, OPPOSITION_RATE=0.3)` and skill scores 2 and 3: every `roll` event's `ob` is
+    `0.3 x` the struck party's skill score (`sigma_leverage.opposed_ob`, A-71), not the module's own rate (`MU_PER_DIE`, 0.4 since B15.03:
+    a planted rate equal to it could not show the override read)."""
     checked = 0
     for seed in range(8):
         events = []
         A, B = C.Combatant('A', score=2), C.Combatant('B', score=3)
         wrapper._TRACE = events.append
         try:
-            wrapper.fight(A, B, cfg=dict(CFG, OPPOSITION_RATE=0.4), rng=draw.seeded(draw.H2("test_combat_ob_from_defender_consumers", seed)))
+            wrapper.fight(A, B, cfg=dict(CFG, OPPOSITION_RATE=0.3), rng=draw.seeded(draw.H2("test_combat_ob_from_defender_consumers", seed)))
         finally:
             wrapper._TRACE = None
         for ev in events:
             if ev['kind'] != 'roll':
                 continue
             struck = B if ev['aggressor'] == 'A' else A
-            assert ev['ob'] == SL.opposed_ob(struck.score, 0.4) == 0.4 * struck.score, ev
+            assert ev['ob'] == SL.opposed_ob(struck.score, 0.3) == 0.3 * struck.score != SL.opposed_ob(struck.score, DE.MU_PER_DIE), ev
             checked += 1
     assert checked >= 1, checked
 

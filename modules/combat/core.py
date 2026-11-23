@@ -36,7 +36,7 @@ from . import weapon_physics as WP   # percussion authority lives ONCE in WP (th
 TN = SL.TN_STANDARD
 POOL_FLOOR = 5     # [canonical: params/core.md §Derived Scores (Combat Pool min 5)]
 BASE_POOL = 6      # [class-C: armature — score-driven pool base; pool = max(5, score+6), ED-901 (History until CR-85, ED-IN-0330); relocated verbatim from r1, ED-1085]
-OPPOSITION_RATE = 0.5   # control (today's half-score); flips to DE.MU_PER_DIE at item 29-3 (A-71)
+OPPOSITION_RATE = DE.MU_PER_DIE   # A-71, live (item 29-3): the owner's mean net per die per point of the opponent's score; read from `dice_engine`, never retyped. The control, 0.5 (the half-score), is an arm's override `cfg['OPPOSITION_RATE']`
 
 def resolution_pool(score, addends=0, add=BASE_POOL, floor=POOL_FLOOR):
     """THE FIGHT'S POOL: `sigma_leverage.pool_of(score, addends, add, floor)` = `max(floor, score + addends + add)` (A-6, D-U1-08,
@@ -86,7 +86,7 @@ def band_floor(band, ob):
 def ob_from_defender(defender, cfg):
     """The obstacle a struck party presents: `sigma_leverage.opposed_ob(his skill score, rate)`, the one owner of the opposition
     (A-26, A-71), where the rate is `cfg['OPPOSITION_RATE']` (an arm's override; the record's `opposition_rate`, `fight.py`) or,
-    absent, this module's `OPPOSITION_RATE` (the control, 0.5). RULED Ob-derivation (Jordan, 2026-08-15, verbatim: "DECISIVE_OB
+    absent, this module's `OPPOSITION_RATE` (`DE.MU_PER_DIE`, A-71). RULED Ob-derivation (Jordan, 2026-08-15, verbatim: "DECISIVE_OB
     for combat is stupid as hell and is dead because Ob should be determined by your opponent more than anything" --
     tests/valoria/test_degree_ladder_single_owner.py's RULINGS dict, entry "2026-08-15 — combat, and the sequence").
     The operand is `defender.score`, the party's SKILL SCORE for the verb (`engine/season/seam/wrappers/pool.py::score`), passed
@@ -140,7 +140,7 @@ QUAL={'graze':0.25,'partial':0.5,'success':1.0,'overwhelming':1.5}  # [damage_mo
 # graze/bind rather than a damage call, and damage() gates on the LITERAL tuple ('graze','success','overwhelming'),
 # not on QUAL membership. A quality table that omits a member of its own domain is a worse artifact than an unused row.
 OW_MAX=2.5; OW_Z=1.5          # [M-QUAL D-A: overwhelming quality saturates 1.5->OW_MAX by sigma-leverage severity]
-DMG_SCALE=1.55                                                      # [damage_model — even Success ~= 1 WI; emergent-tunable]
+DMG_SCALE=1.07                                                      # even Success = 1 WI at the season default kit (holds for 0.99..1.08); A-31
 # PENETRATION THRESHOLD (ED-PC-0032): armour resists up to a floor — a blow whose coupling-
 # reduced impact does not clear the tier's resistance inflicts little LASTING WOUND (it is stopped/deflected), so a
 # weapon that CANNOT defeat the harness cannot win by VOLUME of sub-penetration pokes. Applied as a SOFT knee

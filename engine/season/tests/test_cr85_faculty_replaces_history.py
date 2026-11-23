@@ -4,17 +4,17 @@ The season computes each party's `faculty(w, person, verb)` (`seam/wrappers/sigm
 `seam/wrappers/combat.py::combat_input`, it crosses the seam as `PersonalCombatInput.scores` and `.addends` (B05.57), and the module
 (`modules/combat/fight.py`) constructs each `Combatant` with it. Inside the module it is read in exactly two places,
 the pool (`core.resolution_pool`, `max(5, faculty + 6)`) and the Ob the opponent rolls against
-(`core.ob_from_defender`, `faculty / 2`); the five sigma reads of `history` are deleted.
+(`core.ob_from_defender`, `MU_PER_DIE x faculty`, A-71: `sigma_leverage.opposed_ob` at `core.OPPOSITION_RATE`); the five sigma reads of `history` are deleted.
 [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] -- built on
 `proposals/2026-11-05-cr85-histories-hooks-and-combat-input.md` as written, which is UNRATIFIED (ED-IN-0349 was
 withdrawn by ED-IN-0351).
 
-  FALSIFIER: every roll a seeded season's fights make reads (8, 1.0) -- no verb names a combat key, so `faculty` is
-  `pool_default` 2 and the module reads pool `max(5, 2 + 6)` against Ob `2 / 2`.
+  FALSIFIER: every roll a seeded season's fights make reads (8, 0.8) -- no verb names a combat key, so `faculty` is
+  `pool_default` 2 and the module reads pool `max(5, 2 + 6)` against Ob `MU_PER_DIE x 2` (0.8).
   PLANTED: a party holding the combat key at 5 (a test-local `VERB_CAPABILITY` row, no roster row) rolls pool 11 and
-  his opponent rolls against Ob 2.5.
+  his opponent rolls against Ob 2.0 (`MU_PER_DIE x 5`).
   MUTATION (executed, not by hand): the seam's read dropped (`scores` and `addends` left empty, the module default 3) reproduces
-  (9, 1.5), and the falsifier's check goes red.
+  (9, 1.2), and the falsifier's check goes red.
   CONTROL: the realm hashes are `_realm_goldens.py`'s.
   ⚠ `build_realm(0)` forms no fight in one season since CR-87, so the falsifier reads seeds 1 and 2.
 """
@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import importlib
 from engine.dice_engine import draw
+from engine.dice_engine.dice_engine import MU_PER_DIE
 from collections import Counter
 
 import pytest
@@ -65,7 +66,7 @@ def _season_rolls(monkeypatch, seed) -> tuple:
     return seen, w.content_hash()
 
 
-def _off_the_reading(seen: Counter, want=(8, 1.0)) -> list:
+def _off_the_reading(seen: Counter, want=(8, MU_PER_DIE * 2)) -> list:
     """The falsifier's check: every roll at `want`, and at least one roll seen (an empty count asserts nothing)."""
     bad = [k for k in seen if k != want]
     if not seen:
@@ -75,7 +76,7 @@ def _off_the_reading(seen: Counter, want=(8, 1.0)) -> list:
 
 @pytest.mark.parametrize("seed", [1, 2])
 def test_falsifier_every_season_roll_reads_pool_8_against_ob_1(seed, monkeypatch):
-    """Every roll the engine makes reads pool 8 against Ob 1.0 -- on the world where every person's score is
+    """Every roll the engine makes reads pool 8 against Ob 0.8 (`MU_PER_DIE x 2`, A-71) -- on the world where every person's score is
     `pool_default` (B11 lane A's persons-hold-scores at its revert: a drawn sheet moves a pool and an Ob by itself, and
     the falsifier is about the seam's read, not the sheets). The realm's hash is `_realm_goldens.py`'s."""
     from .test_b11a_scores_and_obstacle import revert_b11a_scores
@@ -86,7 +87,7 @@ def test_falsifier_every_season_roll_reads_pool_8_against_ob_1(seed, monkeypatch
 
 def test_planted_a_party_holding_the_combat_key_at_5_rolls_11_and_is_attacked_at_ob_2_5(monkeypatch):
     """A test-local `VERB_CAPABILITY` row names `fight`'s key; one party holds it at 5, the other none (the fallback,
-    `pool_default` 2). His rolls are pool 11 against his opponent's Ob 1.0; his opponent's are pool 8 against 2.5."""
+    `pool_default` 2). His rolls are pool 11 against his opponent's Ob 0.8; his opponent's are pool 8 against 2.0."""
     monkeypatch.setattr(pool, "VERB_CAPABILITY", {**pool.VERB_CAPABILITY, "fight": _KEY})
     w = build_realm(1)
     a, b = sorted(w.persons)[:2]
@@ -101,13 +102,13 @@ def test_planted_a_party_holding_the_combat_key_at_5_rolls_11_and_is_attacked_at
     for s in range(6):
         entry(inp, draw.seeded(draw.H2("test_cr85_faculty_replaces_history", s)))
         checked += 1
-    assert set(seen) == {(11, 1.0), (8, 2.5)}, dict(seen)
+    assert set(seen) == {(11, MU_PER_DIE * 2), (8, MU_PER_DIE * 5)}, dict(seen)
     assert checked == 6
 
 
 def test_the_record_carries_the_opposition_rate_to_the_module():
-    """B05.58 (29-2): a hand-built `PersonalCombatInput` with `opposition_rate=0.4` and skill scores (2, 3) is fought at Ob
-    `0.4 x` the struck party's score, `{0.8, 1.2}`; with `None` (the module's own constant, 0.5) at `{1.0, 1.5}`."""
+    """B05.58 (29-2): a hand-built `PersonalCombatInput` with `opposition_rate=0.5` and skill scores (2, 3) is fought at Ob
+    `0.5 x` the struck party's score (the control's half-score, which is not the module's own rate), `{1.0, 1.5}`; with `None` (the module's own constant, `MU_PER_DIE`, 0.4) at `{0.8, 1.2}`."""
     from ..queries.inputs import PersonalCombatInput
     mod, attr = entry_target("the body")[1].split(":", 1)
     entry = getattr(importlib.import_module(mod), attr)
@@ -123,5 +124,5 @@ def test_the_record_carries_the_opposition_rate_to_the_module():
         assert checked >= 1, checked
         return seen
 
-    assert obs(0.4) == {0.8, 1.2}
-    assert obs(None) == {1.0, 1.5}
+    assert obs(0.5) == {1.0, 1.5}
+    assert obs(None) == {MU_PER_DIE * 2, round(MU_PER_DIE * 3, 9)} == {0.8, 1.2}

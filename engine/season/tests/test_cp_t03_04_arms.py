@@ -12,7 +12,7 @@ for a survivor who held none (the never-minted rule and its mutation test are re
 CP-T03-03's `arms_kinds` (equipment).
 
   FALSIFIER: a person holding `arms` 5 (the shipped roster, no test-local row) against a default party rolls pool 11
-  against Ob 1.0, his opponent pool 8 against Ob 2.5 -- CR-85's planted faculty-5 reading, reproduced through the
+  against Ob 0.8, his opponent pool 8 against Ob 2.0 (`MU_PER_DIE x score`, B15.03) -- CR-85's planted faculty-5 reading, reproduced through the
   roster. A surviving holder of a bloodied fight gains one; a surviving non-holder is minted one.
   CONTROL: a FORMATION MOVER EVEN AT CONTROL -- `arms` in the vocation range adds one `train` Candidate per `train`
   formation, so with nobody holding the key every 1-season hash still moves. The realm hashes are
@@ -24,6 +24,7 @@ from __future__ import annotations
 import importlib
 import random
 from engine.dice_engine import draw
+from engine.dice_engine.dice_engine import MU_PER_DIE
 from collections import Counter
 
 import pytest
@@ -114,7 +115,7 @@ def _spy(monkeypatch) -> Counter:
 
 
 @pytest.mark.parametrize("verb", ["fight", "accept"])
-def test_falsifier_arms_5_rolls_pool_11_and_is_attacked_at_ob_2_5_through_the_seam(verb, monkeypatch, _engine):
+def test_falsifier_arms_5_rolls_pool_11_and_is_attacked_at_ob_mu_x_5_through_the_seam(verb, monkeypatch, _engine):
     w = build_realm(1)
     a, b = sorted(w.persons)[:2]
     w.persons[a].capability = {**(w.persons[a].capability or {}), KEY: 5}
@@ -132,14 +133,15 @@ def test_falsifier_arms_5_rolls_pool_11_and_is_attacked_at_ob_2_5_through_the_se
     # B05.99 re-pin (B05.09: the skill score has no attribute; B05.57/B05.58: the fight's pool is `pool_of(score, addends, 6, 5)`
     # and its Ob `opposed_ob(defender's score, 0.5)`): b scores the untrained 2, so a meets Ob 1.0 and b rolls pool 8 -- the
     # docstring's CR-85 reading again (B01a.99 had read b's drawn attribute: {(11, 0.5), (7, 2.5)}).
-    assert set(seen) == {(11, 1.0), (8, 2.5)}, dict(seen)
+    # B15.03 re-pin (A-71): the fight opposes at `MU_PER_DIE`, so a meets Ob `MU_PER_DIE x 2` (0.8) and b is attacked at `MU_PER_DIE x 5` (2.0); was 1.0 and 2.5
+    assert set(seen) == {(11, MU_PER_DIE * 2), (8, MU_PER_DIE * 5)}, dict(seen)
     assert checked == 6
 
 
 def test_control_with_nobody_holding_arms_every_season_roll_reads_the_untrained_score_alone(monkeypatch, _engine):
     """The item moves formation, not a roll: seed 1's season fights roll no `arms` key above the untrained score (nobody holds
     one at the build). B05.99 re-pin: B05.09 took the attribute out of the skill score and B05.57/B05.58 make the fight's pool
-    `pool_of(score, addends, 6, 5)` and its Ob `opposed_ob(score, 0.5)`, so every roll is CR-85's (8, 1.0) again (B01a.99 had
+    `pool_of(score, addends, 6, 5)` and its Ob `opposed_ob(score, 0.5)`, so every roll is CR-85's (8, `MU_PER_DIE x 2` = 0.8 since B15.03) again (B01a.99 had
     read the drawn attributes: (9, 2.5), (11, 2.0), (11, 1.5)). Since B05.09 a surviving party of a bloodied fight is MINTED a
     first rank (`_grown`), so after the season the holders are exactly those survivors, each at or below the untrained
     score (1 or 2) and so reading the same pool (was: no holder after the season)."""
@@ -154,7 +156,7 @@ def test_control_with_nobody_holding_arms_every_season_roll_reads_the_untrained_
     # what the claim needs is that no holder stands above the untrained score (`pool_default`), so a held rank adds nothing to a roll
     from ..seam.wrappers.pool import untrained
     assert held and max(held.values()) <= untrained(w.fixtures), held
-    assert seen and set(seen) == {(8, 1.0)}, dict(seen)
+    assert seen and set(seen) == {(8, MU_PER_DIE * 2)}, dict(seen)
 
 
 def test_control_with_the_item_off_the_same_holder_rolls_the_fallback(monkeypatch, _engine):
@@ -278,7 +280,7 @@ def test_capture_and_accept_grow_by_the_same_rule():
 
 
 def test_season_every_person_holding_arms_2_some_survivor_grows_at_the_encounter_step(_engine):
-    """Every person in `build_realm(1)` planted at `arms` 2 (= `pool_default`, so no roll moves: pool 8, Ob 1.0):
+    """Every person in `build_realm(1)` planted at `arms` 2 (= `pool_default`, so no roll moves: pool 8, Ob 0.8):
     after one season at least one survivor holds 3 -- the write admitted at ENCOUNTER, where the season fights --
     and every value is 2 or more (nothing lowered, nothing minted)."""
     w = build_realm(1)

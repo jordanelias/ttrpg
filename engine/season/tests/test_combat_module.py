@@ -222,13 +222,14 @@ def test_resolution_pool_is_unrounded_and_floored():
 
 def test_an_addend_raises_the_pool_and_never_the_ob_and_the_records_pair_is_the_engines():
     """The fight's pool is `pool_of(score, addends, pool_add, pool_floor)` and its Ob is the defender's skill score alone
-    (`score / 2`): a party with three addends rolls three dice more and is attacked at the same Ob (A-79: practice raises a pool,
+    (`MU_PER_DIE x score`, A-71): a party with three addends rolls three dice more and is attacked at the same Ob (A-79: practice raises a pool,
     never an opposition). The record's `pool_add` and `pool_floor` are the pair every roll reads (here 3 and 0, not the module's 6
     and 5); a record naming neither rolls at the module's own."""
     import importlib
     import random
     from collections import Counter
     from ..queries.inputs import PersonalCombatInput
+    from engine.dice_engine.dice_engine import MU_PER_DIE
     core = importlib.import_module("modules.combat.core")
     mod, attr = entry_target(_PRIZE)[1].split(":", 1)
     entry = getattr(importlib.import_module(mod), attr)
@@ -242,9 +243,10 @@ def test_an_addend_raises_the_pool_and_never_the_ob_and_the_records_pair_is_the_
     core.resolve = spy
     try:
         checked = 0
-        for kw, want in ((dict(pool_add=6, pool_floor=5), {(11, 1.0), (8, 1.0)}),
-                         (dict(pool_add=3, pool_floor=0), {(8, 1.0), (5, 1.0)}),
-                         (dict(), {(11, 1.0), (8, 1.0)})):
+        ob = MU_PER_DIE * 2                    # score 2, opposed at the rate the module opposes at (B15.03; was the half-score, 1.0)
+        for kw, want in ((dict(pool_add=6, pool_floor=5), {(11, ob), (8, ob)}),
+                         (dict(pool_add=3, pool_floor=0), {(8, ob), (5, ob)}),
+                         (dict(), {(11, ob), (8, ob)})):
             seen.clear()
             for seed in range(5):
                 entry(PersonalCombatInput(claimants=("a", "b"), ends=(4, 4), wound_quantities=qs, scores=(2, 2),
