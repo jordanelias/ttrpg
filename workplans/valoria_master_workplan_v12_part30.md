@@ -76,20 +76,20 @@ EST: 12 h [estimate: `V12_STRUCTURE.md` §2.4's per-commit formula over this bat
 | pos | item | source | state | hash | gates on |
 |---|---|---|---|---|---|
 | B20.01 | standing orders on the unit row, from closed sets | MGR §2 | BUILD | EQUAL | Batch B19 |
-| B20.02 | the strategy roster leaves the choice surface | MGR §3 | BUILD | EQUAL | B20.01 |
+| B20.02 | the strategy roster leaves the choice surface | MGR §3 | BUILD (probe) | EQUAL | B20.01 |
 | B20.03 | one commander's action at each window of the same call | MGR §4 | BUILD | EQUAL | B20.01; Batch B16 |
 | B20.04 | the interventions list: one slice at every depth | MGR §5 | BUILD | EQUAL | B20.03 |
 | B20.05 | the report: what each phase cost each side | SCN §D | BUILD | MOVER(behaviour) | B20.04 |
-| B20.06 | the report names the orders that fired and the actions taken | MGR §6 | BUILD | MOVER(behaviour) | B20.05 |
+| B20.06 | the report names the orders that fired and the actions taken | MGR §6 | BUILD | MOVER(behaviour), conditional | B20.05 |
 | B20.07 | the troops past the fifth depth group are reported | RES §9 R-29 | BUILD | EQUAL | B20.05 |
 | B20.08 | a commander's order is obeyed by a draw, as a standing order is | MNV §1 with B19.52 (HELD there) | BUILD | EQUAL | B20.03; Batch B19 |
 | B20.09 | two triggers, three behaviours, three lull actions | MNV §2 | BUILD | EQUAL | B20.08 |
 | B20.10 | the manoeuvres as doctrine rows; the bait's own draw | MNV §3, its exact-edit rows | BUILD | EQUAL | B20.09 |
 | B20.11 | the battle scenario and its instrument | SCN §A with `IS-MB-01` step 2 | BUILD | EQUAL | B20.06; Batch B11 |
 | B20.12 | the scenario's command line, its policies, its ending kinds | `IS-MB-01` steps 1, 3 | BUILD | EQUAL | B20.11 |
-| B20.13 | a commander may weigh a field by what he believes | RES §5 with SCN §F | BUILD | MOVER(behaviour) | B20.11; Batch B05 |
-| B20.14 | after a won field: the routed re-homed, a grudge eased | SCN §G | BUILD | MOVER(behaviour) | B20.06 |
-| B20.15 | the odds of one order, from the dice owner | CHO 27D-1 | BUILD | EQUAL | B20.08 |
+| B20.13 | a commander may weigh a field by what he believes | RES §5 with SCN §F | BUILD | MOVER(behaviour), conditional | B20.11; Batch B05 |
+| B20.14 | after a won field: the routed re-homed, a grudge eased | SCN §G | BUILD | MOVER(behaviour), conditional | B20.06 |
+| B20.15 | the odds of one order, from the dice owner | CHO 27D-1 | BUILD (probe) | EQUAL | B20.08 |
 | B20.16 | what a commander is shown at a window | CHO 27D-2 | BUILD | EQUAL | B20.15, B20.13 |
 | B20.17 | who commands each unit and where the commander rides | CHO 27D-3 | BUILD | EQUAL | B20.16, B20.10 |
 | B20.18 | the unplayed commander's decider | CHO 27D-4 | POINTER | — | B20.19 |
@@ -362,7 +362,7 @@ Carried from another batch: B19.52 (the window and lull actions through `obey`, 
 - WHERE: `engine/season/seam/wrappers/mass_battle.py` (`field_estimate`'s `believed`; the AQ-X1 docstring sentence); `engine/season/seam/wrappers/sigma.py` (`believed_chance`'s `mass_battle` branch); `engine/season/data/fixtures.py` (`believed_field_samples`); `engine/season/tests/test_march.py`.
 - TESTS: `test_march.py::test_a_commander_told_a_false_strength_marches_where_a_truthful_one_does_not` `[ASSUMPTION: test name; the item creates it]` (RES gate: "A commander told a false strength marches where one told the truth does not (the first audit's 5b gate), over seeds 0 to 29"); `test_an_unchosen_estimate_leaves_the_hash` `[ASSUMPTION: test name]` ("`content_hash` is unchanged by an estimate whose act is not chosen"); `test_no_claim_no_estimate` (a believer with no claim reads `None`). Written first, red.
 - FALSIFIER and CONTROL: "An NPC's estimate built from a strength no claim of his names" (RES). Control: `odds_weighting: none` (H-248's control arm) reproduces B20.07's realm hashes; MGR §8's falsifier: `git grep -n "def .*odds.*field\|closed.form" engine/season/seam/wrappers/mass_battle.py` shows no closed-form field estimate (read, quoted in the commit body).
-- GATE: `python -m pytest engine/season/tests/test_march.py -q` → pass; `python tools/ci_sim_fabrication_check.py` → exit 0; realm hashes (`HASH READING`) at seeds 0–2, one season → moved where a `march` Candidate is scored (recorded for B20.99), act tallies quoted.
+- GATE: `python -m pytest engine/season/tests/test_march.py -q` → pass; `python tools/ci_sim_fabrication_check.py` → exit 0; realm hashes (`HASH READING`) at seeds 0–2, one season → moved at each seed whose act tallies show a `march` Candidate scored under `believed`, equal to B20.07's at each seed whose tallies show none (recorded for B20.99); which holds is read off the tallies and quoted beside the hashes, so a hash that moves with none, or stays with one, fails the arm (R2d, CHK_K7 F-14).
 - HASH MOVERS: "Worlds in which a `march` Candidate is scored under `odds_weighting: believed`" (shipped `believed`, `fixtures.py` H-248). Declared; B20.99.
 - DEPENDS ON: V12 B20.11 (none strictly; placed after the scenario so its `Report` shows the believed estimate); V12 Batch B05 (`10_DICE_believed_odds_have_a_prior` Edits A–B); EXISTS-IN-TREE `seam/wrappers/sigma.py::believed_chance`, `seam/wrappers/mass_battle.py::field_estimate`, `Fixtures.odds_weighting`.
 - GLOSSARY: none.
@@ -513,7 +513,7 @@ Carried from another batch: B19.52 (the window and lull actions through `obey`, 
 - INSTRUCTION, copied from B19.27 (27C-1): (1) "`_grade` collects [the draw trace events B19.06 emits, `trace_event('draw', tick, side, unit, kind, band)`] into `report.draws`": `FieldReport` gains `draws: tuple = ()` with its default (B20.05's rule: each later member is added by its own item with a default), each entry `(tick, side, unit, kind, band)`, "summarised per unit per bout" for the pair's draw and the cell breakpoints, inside `modules/mass_battle/massbattle.py`'s `tracing()` block around the bout loop that B20.05 opened. (2) "`engine/season/loop/effects_combat.py::_eff_march` writes the draws that changed the end state as Observations on the band Event's `observed`, each predicate `draw:<kind>` a member of `rosters.yaml: observation_terms` (added in the same commit; D-U1-06); no new Event field." (3) Cell scale §3: "`report` is per bout; a duration line is `bouts x bout_minutes`": the report keys its phases and draws by bout, and the duration is the product of the field's bouts and `bout_minutes` (B19's `deployment` block) `[ASSUMPTION: `bout_minutes` is read from where B19.20 put it — basis: B19.27's text; the item opens `references/troops.yaml: deployment` and records the key]`.
 - WHERE: `modules/mass_battle/massbattle.py` (`_grade`; the tracing block); `engine/season/queries/inputs.py` (`FieldReport.draws`); `engine/season/loop/effects_combat.py` (`_eff_march`); `engine/season/rosters.yaml` (`observation_terms`: `draw:<kind>` members, appended); `tests/valoria/test_army_battle.py`; `engine/season/tests/test_mass_battle_module.py`.
 - TESTS: `tests/valoria/test_army_battle.py::test_report_draws_lists_every_named_draw_that_fired` (27C-1's own test; B19.06's `test_draw_trace_names_each_draw_site_that_fired` stays); `engine/season/tests/test_mass_battle_module.py::test_every_field_folds_to_won_lost_or_drawn_from_end_state_alone` gains 27_MB_C gate 6's arm ("`report.draws` non-empty whenever a draw changed which side broke"); both written first and read red.
-- FALSIFIER and CONTROL: a field in which a draw changed which side broke and `report.draws` is empty (27_MB_C gate 6). Control: a field fought by no season act: realm hash at seeds 0 and 1, one season, equal to B20.07's reading.
+- FALSIFIER and CONTROL: a field in which a draw changed which side broke and `report.draws` is empty (27_MB_C gate 6). Control: a field fought by no season act: realm hash at seeds 0 and 1, one season, equal to the same seeds read on this item's base tree (`reading @<base sha>`).
 - GATE: `python -m pytest tests/valoria/test_army_battle.py engine/season/tests/test_mass_battle_module.py -q` → pass; the seed-2 one-season realm hash (`HASH READING`) → moved ("moves every fought field's band Event", 27C-1), act tallies equal; recorded for B20.99.
 - EXPECTED RED UNTIL: B20.99 for the seed-2 pin of `_realm_goldens.py` (under `[skip ci]`).
 - HASH MOVERS: every seeded realm that folds a fought field. Declared; B20.99.

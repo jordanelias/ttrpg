@@ -60,12 +60,12 @@ EST: 10 h [estimate: `V12_STRUCTURE.md` §2.4's formula over this batch's 13 pos
 | B16.01 | one round as its own entry; the fight a loop over it; the round says how it ended | PB step 1 with PCR-2 | BUILD | EQUAL | Batch B15 (PCR-1), Batch B06 |
 | B16.02 | one word in code for the round | PCR-3 | BUILD | EQUAL (stops if a pin moves) | B16.01 |
 | B16.03 | each round drawn from its own key | PB step 2 (A-30) | BUILD | MOVER(behaviour) | B16.01; Batch B06 |
-| B16.04 | the approach-policy probe, written before the leans | PB §7 row "—" (step 3's added gate) | BUILD | EQUAL | B16.03 |
-| B16.05 | the approach, the three phases, the consult points; the lean on commit depth and counter selection | PB step 3a | BUILD | EQUAL | B16.04 |
-| B16.06 | the lean on the fighting withdrawal in a bind | PB step 3b | BUILD | EQUAL | B16.05 |
-| B16.07 | the standing initiative bonus for aggression retired | PB step 3e | BUILD | EQUAL (season); the workbench table moves | B16.05 |
-| B16.08 | the conserved transfer, shipped at 0; step 3's gate read | PB step 3c (D-40) | BUILD | EQUAL | B16.06, B16.07 |
-| B16.09 | a decider per party, the widened view, the NPC's chooser; the priced withdrawal | PB step 4 with `EXITS` Part A; `IS-B2-CHAR-02`'s role listing | BUILD | EQUAL | B16.08; Batch B10 |
+| B16.04 | the approach-policy probe, written before the leans | PB §7 row "—" (step 3's added gate) | BUILD (probe) | EQUAL | B16.03 |
+| B16.05 | the approach, the three phases, the consult points; the lean on commit depth and counter selection | PB step 3a | BUILD (probe) | EQUAL | B16.04 |
+| B16.06 | the lean on the fighting withdrawal in a bind | PB step 3b | BUILD (probe) | EQUAL | B16.05 |
+| B16.07 | the standing initiative bonus for aggression retired | PB step 3e | BUILD (probe) | EQUAL (season); the workbench table moves | B16.05 |
+| B16.08 | the conserved transfer, shipped at 0; step 3's gate read | PB step 3c (D-40) | BUILD (probe) | EQUAL | B16.06, B16.07 |
+| B16.09 | a decider per party, the widened view, the NPC's chooser; the priced withdrawal | PB step 4 with `EXITS` Part A; `IS-B2-CHAR-02`'s role listing | BUILD (probe) | EQUAL | B16.08; Batch B10 |
 | B16.10 | the first round proposal is superseded by PB | `03_PC_duel_round_and_approach` | POINTER | — | B16.09 |
 | B16.11 | the duel scenario: a world, a runner, a report | `IS-PC-01` steps 1–5 | BUILD | EQUAL | B16.09; Batch B11, Batch B14, Batch B01 |
 | B16.12 | the integrated reading at this close | `IS-PC-03` | READING | — | B16.11 |
@@ -132,7 +132,7 @@ Not in this batch, and where each is: PB step 5 (the `duel` callable through `ne
 - WHERE (PCR-3's measured list; `git grep -ln "turn_start\|engagement_end\|CombatTurnView\|max_bouts" -- '*.py'` at `aa31fd2` returns these fifteen plus two files outside the game code, `.audit/…/trace_backward.py` and `proposals/2026-09-04-degree-sweep/arm2_onramp.py`, which are not edited: `.audit/` is loaded by nothing, CLAUDE.md §3): `modules/combat/wrapper.py`, `fight.py`, `config.py`; `engine/season/queries/inputs.py`; `engine/season/seam/wrappers/combat.py`; `systems/combat/combat_engine_v1/workbench/trace.py`, `commentary.py`, `narrate.py`; `systems/combat/combat_engine_v1/state_graph.py`; `engine/season/tests/test_rem31_grid_suspension.py`, `test_pc10b_challenge_record.py`; `tests/valoria/test_combat_duel_terms.py`, `test_combat_yield.py`; `tools/build_identifier_census.py`; `unified/U1_GLOSSARY.md` (§K *round*, *turn*).
 - TESTS: none new; the four test files above are edited with the rename and stay green.
 - FALSIFIER and CONTROL: "a remaining `turn_start` or `max_bouts` in the combat files (`git grep`); a season hash that moves. Control: the combat goldens and the season pins unchanged." (PCR-3.)
-- GATE: "the four named test files and the workbench narrator's own run green; season golden pins EQUAL" (PCR-3): `python -m pytest engine/season/tests/test_rem31_grid_suspension.py engine/season/tests/test_pc10b_challenge_record.py tests/valoria/test_combat_duel_terms.py tests/valoria/test_combat_yield.py -q` → pass; `python systems/combat/combat_engine_v1/workbench/narrate.py` → exit 0 `[ASSUMPTION: the narrator runs with no arguments — basis: PCR-3 names "its own run" and no command]`; `git grep -n "turn_start\|engagement_end\|CombatTurnView\|max_bouts\|TURN_CHOICES" -- modules engine systems tools tests` → no hit; the realm content hash (`HASH READING`) after one season at seeds 0 and 2 → equal to B16.01's reading.
+- GATE: "the four named test files and the workbench narrator's own run green; season golden pins EQUAL" (PCR-3): `python -m pytest engine/season/tests/test_rem31_grid_suspension.py engine/season/tests/test_pc10b_challenge_record.py tests/valoria/test_combat_duel_terms.py tests/valoria/test_combat_yield.py -q` → pass; `python systems/combat/combat_engine_v1/workbench/narrate.py` → exit 0 `[ASSUMPTION: the narrator runs with no arguments — basis: PCR-3 names "its own run" and no command]`; `git grep -n "turn_start\|engagement_end\|CombatTurnView\|max_bouts\|TURN_CHOICES" -- modules engine systems tools tests` → no hit; the realm content hash (`HASH READING`) after one season at seeds 0 and 2 → equal to the same seeds read on B16.01's tree at this item's open (`reading @<sha>`).
 - STOPS IF: a season pin moves ("if the season pin moves, the assumption was wrong and the item stops", PCR-3: `[ASSUMPTION: trace event names and the round count do not enter World.content_hash(); the pins are the check]`). At `aa31fd2` the seam derives `bouts` from the trace and `content_hash` folds Event frames and state collections; the gate is the reading.
 - HASH MOVERS: none expected.
 - DEPENDS ON: V12 B16.01 ("same files, same batch"); V12 Batch B14 (`03_PC_typed_outcome_one_door`: `bouts` or `CombatOutcome.rounds`); EXISTS-IN-TREE `modules/combat/wrapper.py::TURN_CHOICES`, `::fight(max_bouts=12)`, `engine/season/queries/inputs.py::CombatTurnView`, `systems/combat/combat_engine_v1/state_graph.py`.
@@ -156,7 +156,7 @@ Not in this batch, and where each is: PB step 5 (the `duel` callable through `ne
 - COST and TIER: small build; `sonnet`, `high` (PB "Lands": "steps 1–2 `sonnet`").
 - LANDS IT: B16's producer; `Item: B16.03`, `[skip ci]`.
 
-### B16.04 — the approach-policy probe, written before the leans · PB §7 row "—" · BUILD · HASH EQUAL
+### B16.04 — the approach-policy probe, written before the leans · PB §7 row "—" · BUILD (probe) · HASH EQUAL
 - SOURCE: PB §7, the unnumbered row between steps 2 and 3a ("Step 3 as a whole gains one gate … this step first writes it as `systems/combat/combat_engine_v1/workbench/approach_policy_probe.py`"); rulings A-31, D-40; closes the pessimist's R-6 (PB's added gate); U3 §6.2 row `pI_approach2.py` (a scratch probe restated as a committed file).
 - ADVANCES: none of the nine; the instrument step 3's gate is read on (B16.08).
 - INSTRUCTION: write `systems/combat/combat_engine_v1/workbench/approach_policy_probe.py`, beside `build_levers.py` and in its shape (a sweep table printed, `n` an argument): (1) the default mode prints, "per named matchup, the state-reading policy's win share, never-lean's, and the disjoint-seed interval at n ≥ 2,000" (PB §7); the state-reading policy is "press the wounded; guard when hurt" (PB §7): a fighter whose foe carries a wound plans `aggressive`, one who carries a wound plans `defensive`, else `normal`, given as `DuelRoundInput.plans` per round from the `DuelState`s the loop holds (B16.01); never-lean plans `normal` throughout; the named matchups are PB §3's ("a dagger against an arming sword", "against a low-Endurance opponent", "a lightly armoured fighter against plate", the arming, mace and rapier mirrors). (2) a `leans` mode printing each approach against a `normal` fighter per named matchup and per mirror at n ≥ 2,000, the "`build_levers.py`-style table" steps 3a and 3c read `[ASSUMPTION: one probe file carries both tables — basis: PB names a "`build_levers.py`-style table" for 3a and no file; one instrument fewer]`. The file draws through the fight's own entry only (`fight_round`, B16.01; `fight`), never re-implementing a round (PB §6). Run both modes on this tree and keep the printed tables in the commit body: with no lean built every column equals `normal`'s within the interval (the control that the probe cannot make a difference the engine does not have).
@@ -170,7 +170,7 @@ Not in this batch, and where each is: PB step 5 (the `duel` callable through `ne
 - COST and TIER: small build; `sonnet`; the n ≥ 2,000 runs `haiku` (`valoria-measure`), read by `opus` (PB "Lands": "the workbench sweep run by `haiku` … and read by `opus` (a calibration judgment)").
 - LANDS IT: B16's producer; `Item: B16.04`, `[skip ci]`.
 
-### B16.05 — the approach, the three phases, the consult points; the lean on commit depth and counter selection · PB step 3a · BUILD · HASH EQUAL
+### B16.05 — the approach, the three phases, the consult points; the lean on commit depth and counter selection · PB step 3a · BUILD (probe) · HASH EQUAL
 - SOURCE: PB §3 (vocabulary; "What a lean does, phase by phase", rows 1–2; the starting values), §4 (consult points), §7 row 3a; rulings A-31, D-40, ED-PC-0023 (a lean is a prior on a gate the engine already rolls).
 - ADVANCES: none of the nine; the choice surface of a fight (PB §1 row 2).
 - INSTRUCTION:
@@ -189,7 +189,7 @@ Not in this batch, and where each is: PB step 5 (the `duel` callable through `ne
 - COST and TIER: small build; `sonnet`, `high`; the sweep `haiku`, read by `opus`.
 - LANDS IT: B16's producer; `Item: B16.05`, `[skip ci]`.
 
-### B16.06 — the lean on the fighting withdrawal in a bind · PB step 3b · BUILD · HASH EQUAL
+### B16.06 — the lean on the fighting withdrawal in a bind · PB step 3b · BUILD (probe) · HASH EQUAL
 - SOURCE: PB §3 table row 3 (`bind`), §7 row 3b.
 - ADVANCES: none of the nine; the `bind` phase's choice.
 - INSTRUCTION: "`disengage_attempt_p × (1 − APPROACH_BREAK_K · lean)`" (PB §3) at the call of `combat_systems.disengage_attempt_p` (the withdrawing fighter's `c.lean['bind']`); "a read withdrawal is pursued and the pursuer takes the tempo" (the cost side, already built). `modules/combat/config.py`, `CFG`: `APPROACH_BREAK_K=0.5` tagged `[SIM-CALIBRATE]` `[ASSUMPTION: PB gives no starting value for this coefficient; 0.5 is `DISP_COUNTER_K`'s, the smaller of the two values PB's other two coefficients start from — basis: PB §3 "start at the values of …"; the gate below reads only its sign; UNDECIDED (5)]`. Re-derive the export with the tool.
@@ -203,21 +203,21 @@ Not in this batch, and where each is: PB step 5 (the `duel` callable through `ne
 - COST and TIER: small build; `sonnet`; the sweep `haiku`, read by `opus`.
 - LANDS IT: B16's producer; `Item: B16.06`, `[skip ci]`.
 
-### B16.07 — the standing initiative bonus for aggression retired · PB step 3e · BUILD · HASH EQUAL (season); the workbench disposition table moves
+### B16.07 — the standing initiative bonus for aggression retired · PB step 3e · BUILD (probe) · HASH EQUAL (season); the workbench disposition table moves
 - SOURCE: PB §3 "The drift hook is retired with this change", §7 row 3e; ED-PC-0037 (the precedent: `ATTACKER_BIAS` deleted).
 - ADVANCES: none of the nine; no approach with a free advantage (PB §1 row 2).
 - INSTRUCTION: "`DISP_INIT_K` (0.10 per beat per unit of lean …) is a standing initiative bonus for aggression with no cost … Set it to 0. No season fight moves (every person is at lean 0)." (PB §3.) `modules/combat/config.py`, `CFG`: `DISP_INIT_K=0.0`, its comment saying why (PB §3's sentence) and its revert (`0.10`). Re-derive the export with the tool.
 - WHERE: `modules/combat/config.py` (`CFG['DISP_INIT_K']`); `engine/engine_params/combat_engine_v1.json` (re-derived).
 - TESTS: none new.
 - FALSIFIER and CONTROL: disposition 7 or 1 outside 50 ± 3 against neutral after the edit. Control: the season hash equal (every season person at lean 0).
-- GATE: `python systems/combat/combat_engine_v1/workbench/build_levers.py disposition 2000` → "disposition 7 and 1 inside 50 ± 3 against neutral (they read 57.7 and 40.8 today)" (PB §7 row 3e), before and after in the commit body; `python tools/export_engine_params.py --check` → exit 0; the realm hash (`HASH READING`) after one season at seed 2 → equal to B16.06's reading.
+- GATE: `python systems/combat/combat_engine_v1/workbench/build_levers.py disposition 2000` → "disposition 7 and 1 inside 50 ± 3 against neutral (they read 57.7 and 40.8 today)" (PB §7 row 3e), before and after in the commit body; `python tools/export_engine_params.py --check` → exit 0; the realm hash (`HASH READING`) after one season at seed 2 → equal to the reading on this item's base (`reading @<sha>`).
 - HASH MOVERS: "step 3e (the workbench disposition table only)" (PB "Implementation"); the exported `combat_engine_v1.json` value, re-derived in this commit (a pin no other item moves, E-1).
 - DEPENDS ON: V12 B16.05; EXISTS-IN-TREE `modules/combat/config.py` `DISP_INIT_K`, `systems/combat/combat_engine_v1/workbench/build_levers.py::disposition`.
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`; the sweep `haiku`, read by `opus`.
 - LANDS IT: B16's producer; `Item: B16.07`, `[skip ci]`.
 
-### B16.08 — the conserved transfer, shipped at 0; step 3's gate read · PB step 3c · BUILD · HASH EQUAL
+### B16.08 — the conserved transfer, shipped at 0; step 3's gate read · PB step 3c · BUILD (probe) · HASH EQUAL
 - SOURCE: PB §3 table row 4, "The case against the transfer", the D-40 reconciliation ("step 3c builds the term and ships `APPROACH_SIGMA_K = 0`; no coefficient is chosen before the calibration batch"), §7 rows "—" and 3c; rulings A-31, D-40.
 - ADVANCES: none of the nine; intensity as a choice (how long, how bloody, whether undecided), dormant until B98.
 - INSTRUCTION: (1) `modules/combat/combat_systems.py::assemble_net_sigma`: "`net_sigma += APPROACH_SIGMA_K · (lean of aggressor + lean of defender)`", each fighter's `c.lean['exchange']`: "conserved by construction: what a fighter adds to his own attacks he gives to attacks on him" (PB §3). (2) `CFG`: `APPROACH_SIGMA_K=0.0`, tagged `[SIM-CALIBRATE]`, its comment naming B98 as the batch that sets it and the target of `DIALS AT CONTROL`. Re-derive the export with the tool. (3) Step 3's gate, read now on 3a, 3b, 3e and 3c together: run `approach_policy_probe.py 2000` and record its table in the commit body.
@@ -232,7 +232,7 @@ Not in this batch, and where each is: PB step 5 (the `duel` callable through `ne
 - COST and TIER: small build; `sonnet`; the probe run `haiku`, its reading `opus` (the gate is a calibration judgment).
 - LANDS IT: B16's producer; `Item: B16.08`, `[skip ci]`.
 
-### B16.09 — a decider per party, the widened view, the NPC's chooser; the priced withdrawal · PB step 4 with `EXITS` Part A · BUILD · HASH EQUAL
+### B16.09 — a decider per party, the widened view, the NPC's chooser; the priced withdrawal · PB step 4 with `EXITS` Part A · BUILD (probe) · HASH EQUAL
 - SOURCE: PB §4, §5, §7 row 4; `EXITS` Part A; `IS-B2-CHAR-02` (`master/instructions/IS_B2_SC_FI_CORE_CHAR_part2.md`); U3 §1 item 16 (one commit); A-1, A-4, A-9, A-24, A-30, A-79, A-81, D-U1-08; closes F-PC-04's withdrawal half, R-PC-11. Only the edit text is copied; the prose is cited by section (E-12; R2c, K5 F6).
 - ADVANCES: none of the nine; one interface for a player and an NPC in a fight (CHAR §0A I-1); B16.11's policies.
 - INSTRUCTION:
@@ -248,7 +248,7 @@ Not in this batch, and where each is: PB step 5 (the `duel` callable through `ne
 - WHERE: `modules/combat/wrapper.py`, `fight.py`; under `engine/season/`: `queries/inputs.py`, `seam/wrappers/combat.py`, `decision/choose.py`, `data/verbs.py`, `data/fixtures.py`, `rosters.yaml`, `data/rosters.py`, `tests/test_rem31_grid_suspension.py`, `tests/test_combat_module.py`, NEW `tests/test_approach_responses.py`; `unified/U1_GLOSSARY.md` (*approach*).
 - TESTS (red first): `test_rem31_grid_suspension.py`: REM-31's equality extended (a constant, a host callback and `approach_of` give one outcome and one hash; a differing script moves it); `test_combat_module.py::test_a_read_withdrawal_draws_one_pursuit_strike` (`disengage_clean_p` forced to 0), `::test_a_clean_withdrawal_ends_the_fight_and_emits_the_event` (forced to 1.0: today's table), `::test_one_authored_cell_makes_opposed_persons_answer_differently` `[ASSUMPTION: test name; the item creates it]`; NEW `test_approach_responses.py`: `test_a_value_outside_approaches_is_refused_naming_the_row`, `test_a_phase_outside_phases_is_refused`, `test_a_band_outside_the_views_bands_is_refused`, `test_the_empty_table_is_read_at_load` `[ASSUMPTION: file and test names]`.
 - FALSIFIER and CONTROL: PB §9's and `EXITS` Part A's "Falsifier", cited. Control: nothing authored, `build_realm(0)` hash EQUAL; at seed 2 a season fight under an all-`normal` scripted host equals the AUTOMATED one.
-- GATE: `python -m pytest engine/season/tests/test_rem31_grid_suspension.py engine/season/tests/test_combat_module.py engine/season/tests/test_approach_responses.py engine/season/tests/test_contest_decider.py -q` → pass; realm hash (`HASH READING`), seeds 0 and 2, one season → equal to B16.08's; `EXITS` Part A's table re-run on its 300 seeds (one-time, commit body): "'both stand' under withdraw-at-first-wound falls below 50.7%", pursuit wounds counted, on B15's damage scale (A-31).
+- GATE: `python -m pytest engine/season/tests/test_rem31_grid_suspension.py engine/season/tests/test_combat_module.py engine/season/tests/test_approach_responses.py engine/season/tests/test_contest_decider.py -q` → pass; realm hash (`HASH READING`), seeds 0 and 2, one season → equal to the same seeds read on B16.08's tree at this item's open (`reading @<sha>`); `EXITS` Part A's table re-run on its 300 seeds (one-time, commit body): "'both stand' under withdraw-at-first-wound falls below 50.7%", pursuit wounds counted, on B15's damage scale (A-31).
 - HASH MOVERS: none with nothing authored (PB; `EXITS`: none AUTOMATED); `npc_decider_roles` gaining `combat.fight` moves nothing while no cell or row is authored.
 - DEPENDS ON: V12 B16.05, B16.08; V12 Batch B10 (`align_choice`, `temper`, `make_decider`, `npc_decider_roles`), B03 (`PersonInterior`), B05 (`pool_of`), B06 (the keyed draw); EXISTS-IN-TREE `decision/choose.py::score_terms`, `::deliberation_memo`, `data/verbs.py::CHOICE_RANGES`, `seam/wrappers/combat.py::resolve`, `queries/inputs.py::PlayHost`, `combat_systems.py::disengage_clean_p`, `::pursuit_sigma`, `wrapper.py::_wound`.
 - GLOSSARY: *approach*; "decider" the plain word; no new row.
@@ -355,7 +355,7 @@ EST: 5.3 h [estimate: §2.4's formula over 7 positions (0.4 h × 7 + 2.5 h), B08
 | B08.02 | an interaction may hang on the band of the one before: the field, its reader, the `sequence` clause | `SEQ` edits 2 and 3 | BUILD | EQUAL | B08.01 |
 | B08.03 | the fold orders scenes, then flattens | `SEQ` edit 1 | BUILD | MOVER(behaviour) | B08.02 |
 | B08.04 | the chooser sets `after` from the row | `SEQ` edit 4, with H-249's reading | BUILD | MOVER(behaviour) | B08.03, B08.01 |
-| B08.05 | rivals for one exclusive thing are ordered by a draw | `RIVAL` | BUILD | MOVER(behaviour) | B08.03; Batch B05, Batch B06 |
+| B08.05 | rivals for one exclusive thing are ordered by a draw | `RIVAL` | BUILD | MOVER(behaviour) if gate 1 reads > 0 groups at seeds 0–2, else EQUAL | B08.03; Batch B05, Batch B06 |
 | B08.06 | the lap stamp earns its test arm or the arm goes (H-172) | `U5a_tests_digest_additions` §G (Covered: C-01) | BUILD | EQUAL | B08.03, B08.04 |
 | B08.99 | re-pin and close readings | E-1 | BUILD | MOVER (the re-pin) | B08.01 to B08.06 |
 
@@ -429,7 +429,7 @@ Not in this batch: `SEQ` edit 5 (the Layer 1 text; APPLIED, `L1-A9`, `04:662`, "
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B08's producer; `Item: B08.04`, `[skip ci]`.
 
-### B08.05 — rivals for one exclusive thing are ordered by a draw · `RIVAL` · BUILD · HASH MOVER(behaviour)
+### B08.05 — rivals for one exclusive thing are ordered by a draw · `RIVAL` · BUILD · HASH MOVER(behaviour) if gate 1 reads > 0 groups at seeds 0–2, else EQUAL
 - SOURCE: `RIVAL` "The resolution, decided" 1–4, "Exact edits, by owner" 1–2, "Gate", "Falsifier"; its W3-5b Reconciled line ("this file's B08 commit carries the seat, Record and larder keys only"); rulings A-5, A-9, A-30, D-36 (rank never breaks a tie, for these keys), D-U1-08; closes `audits/18_DETERMINISM_SWEEP.md` C-11.
 - ADVANCES: none of the nine directly (a scarce thing two persons reach for has odds); the standing rule's "fixed-order tie-breaks that decide outcomes".
 - INSTRUCTION:
@@ -441,7 +441,7 @@ Not in this batch: `SEQ` edit 5 (the Layer 1 text; APPLIED, `L1-A9`, `04:662`, "
 - WHERE: `engine/season/loop/resolve.py` (`rival_key`; `_canonical_order`'s group re-order, "shared with `loop/encounter.py` already, so one copy"); `engine/season/data/fixtures.py` (`rival_precedence`); NEW `engine/season/tests/test_rival_precedence.py`; `unified/U1_GLOSSARY.md` (*precedence draw*).
 - TESTS (`RIVAL` "Gate", the new file, written before the edit and read red): `test_two_requisitions_on_one_larder_each_win_sometimes` (gate 2, 200 seeds); `test_higher_pool_wins_more_often` (gate 2); `test_two_heirs_each_reign_in_some_seeds` (gate 3); `test_hash_control_reproduces_base` and `test_no_group_world_is_byte_identical` (gate 4). Each loop over seeds asserts `checked >= 200` (CLAUDE.md §0.1 pt 2).
 - FALSIFIER and CONTROL: "A rivalry group whose winner is the same at every seed; an act outside a group whose position moved." Control: "`rival_precedence: hash` reproduces the base hashes; at `draw`, a world with no rivalry group is byte-identical to `hash`" (gate 4).
-- GATE: `python -m pytest engine/season/tests/test_rival_precedence.py engine/season/tests/test_scene_sequence.py -q` → pass; gate 1: "realm seeds 0, 1, 2, two seasons: rivalry groups formed by this file's three keys (reported; the number decides whether this is live today)", quoted (zero is a reading: "If the count is zero at the shipped configuration, this changes nothing at runtime today and says so"); gate 2: "two persons, one larder of 4 grain, each `requisition` 4, 200 seeds: each wins in some seeds; the one holding the higher pool wins more often; neither share is 0 or 1"; gate 3: "two heirs whose titles both claim one vacant seat: each reigns in some seeds".
+- GATE: `python -m pytest engine/season/tests/test_rival_precedence.py engine/season/tests/test_scene_sequence.py -q` → pass; gate 1: "realm seeds 0, 1, 2, two seasons: rivalry groups formed by this file's three keys (reported; the number decides whether this is live today)", quoted (zero is a reading: "If the count is zero at the shipped configuration, this changes nothing at runtime today and says so"); gate 2: "two persons, one larder of 4 grain, each `requisition` 4, 200 seeds: each wins in some seeds; the one holding the higher pool wins more often; neither share is 0 or 1"; gate 3: "two heirs whose titles both claim one vacant seat: each reigns in some seeds"; the seed-0 realm hash after one season → moved if gate 1 read > 0 groups, else equal to B08.04's reading; the commit says which.
 - HASH MOVERS: "only worlds with a rivalry group". Declared; B08's one re-pin.
 - DEPENDS ON: V12 B08.03 ("the scene order lands first"); V12 Batch B05 (`roll_net_continuous` as the one sampler; the pool rule); V12 Batch B06 (`Draw`); EXISTS-IN-TREE `engine/season/loop/resolve.py::_canonical_order`, `engine/dice_engine/sigma_leverage.py::roll_net_continuous`, `engine/season/seam/wrappers/pool.py::faculty`.
 - GLOSSARY: *precedence draw* (step 5).

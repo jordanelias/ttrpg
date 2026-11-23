@@ -74,8 +74,8 @@
   4. `DEFAULT_N["proceeding"] = 200000` for the abridged form and `40000` for the full form `[ASSUMPTION: under the two minutes a contest the instrument allows — basis: `social`'s 0.25 s per 1,000 pairs and `DRAWS_PER_EXCHANGE(4)` = 35 normals an exchange; re-measured and written in the docstring]`.
 - WHERE: `engine/season/harness/pairs.py`; `engine/season/tests/test_pairs.py`.
 - TESTS: in `test_pairs.py`, written first and read red: `test_proceeding_pairs_are_reproducible`; `test_a_planted_speaker_of_higher_reason_carries_more_often` (the `plant` hook: `a` at Reason 6, `b` at Reason 2, else equal, 20,000 pairs, at the shipped settings in the test's own fixtures); `test_the_instrument_reads_an_end_and_an_exchange_count`; `test_an_operand_off_reads_a_flat_curve` (`--off relevance` with Reason the key: SLOPE exactly 0 on the abridged form at control of the dice share).
-- FALSIFIER and CONTROL: the instrument calling `roll` instead of the entry (`ENDS` would be empty); a curve that is one point. Control: `pairs social --verb examine` prints what it printed at B24p.16's tree.
-- GATE: `python -m pytest engine/season/tests/test_pairs.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.pairs proceeding --type conversation --form abridged --n 20000 --seed 0 --diff all` → ten SLOPE lines; its wall time quoted.
+- FALSIFIER and CONTROL: the instrument calling `roll` instead of the entry (`ENDS` would be empty); a curve that is one point. Control: `pairs social --verb examine` prints, on the integrated block tree, what it printed at B24p.14's commit (both `reading @<sha>`).
+- GATE: `python -m pytest engine/season/tests/test_pairs.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.pairs proceeding --type conversation --form abridged --n 20000 --seed 0 --diff all` → ten SLOPE lines; the wall time and `DEFAULT_N`'s re-measurement taken on the integrated tree after both producers return, before .17's commit (`reading @<sha>`).
 - HASH MOVERS: none (an instrument).
 - DEPENDS ON: V12 B24p.13, .14; EXISTS-IN-TREE `harness/pairs.py`, `probes.tiny_world` (`p_low`, `p_mid`, `p_high`).
 - GLOSSARY: none.
@@ -92,7 +92,7 @@
 - WHERE: `engine/season/tests/test_sc_roles.py`.
 - TESTS: those above, written before any setting leaves control and read green on the module as B24p.12 left it (they set their own fixtures); read red once, by a planted fault (Presence added to the pool outside its share), reverted.
 - FALSIFIER and CONTROL: one attribute's change moving another role's operand; an operand reading other than exactly 0 with its own setting off; the planted fault not reddening the test. Control: the CONTROL ARMS above.
-- GATE: `python -m pytest engine/season/tests/test_sc_roles.py -q` → every role test passes, `checked` counts asserted; the planted fault's red reading named in the commit body.
+- GATE: `python -m pytest engine/season/tests/test_sc_roles.py -q` → every role test passes, `checked` counts asserted; the planted fault's red reading named in the commit body; the member's tests re-run on the integrated tree before its commit.
 - HASH MOVERS: none.
 - DEPENDS ON: V12 B24p.12.
 - GLOSSARY: none.
@@ -101,7 +101,7 @@
 
 *(B24p.21 is a READING position, taken between B24p.18 and B24p.19: no item body; its text is reading R1 in the Readings block below.)*
 
-### B24p.19 — the influence verbs call the proceeding · RD §D.1; V2 p2 §M · BUILD · HASH MOVER(behaviour)
+### B24p.19 — the influence verbs call the proceeding · RD §D.1; V2 p2 §M · BUILD · HASH MOVER(behaviour; reads rates)
 - SOURCE: RD §D.1, §D.2, §D.3; V2 p2 §M (the abridged form is the same entry); `seam/contest.py::contest`, `loop/resolve.py::_contest`; rulings R3, R6.
 - ADVANCES: R-09.c (re-read); R3 and R6 execute.
 - INSTRUCTION:
@@ -112,7 +112,7 @@
 - WHERE: `engine/season/seam/contest.py`; `engine/season/loop/resolve.py` (`_contest`); `engine/season/verb_table.yaml` (five rows); `engine/season/data/verbs.py` (`_check_proceeds`); `engine/season/seam/wrappers/pool.py` (`faculty`); `engine/season/tests/test_sc_proceeding_host.py`; `engine/season/tests/test_verb_governing_attributes.py`; the pool-pinning tests the commit names.
 - TESTS: written first and read red: `test_a_row_with_proceeds_and_governing_is_refused` (planted); `test_a_tell_resolves_through_the_proceeding_entry_as_one_exchange` (a hand-built act: the Event's record names `social_contest.proceeding`, one beat, the one addressed its adjudicator); `test_an_argue_resolves_as_exchanges_and_the_hearers_draw`; `test_an_arrest_still_resolves_on_the_single_roll` (control: `social_contest.roll`); `test_the_same_seed_twice_gives_the_same_season` (seed 0, one season, twice: equal hashes).
 - FALSIFIER and CONTROL: an influence verb still on `social_contest.roll`; a non-influence verb (`arrest`, `examine`, `research`, `surveil`) moved. Control: what moves is named and nothing else: the pool (the blend, Reason alone at the grounds' control `reason` 1.0, plus rank, where B05.25 read a mean), the opposition (the listener's Will plus rank), the stream (the exchange's fixed draws where one normal was taken), the close's draw, the shipped settings B24p.04 did not control (temper, conceding, the close's `track_step`), and the obstacle's host `standard` term leaving the five rows' speeches; `pairs social --verb examine` equal to B24p.17's reading.
-- GATE: `python -m pytest engine/season/tests/test_sc_proceeding_host.py engine/season/tests/test_sc01_provider.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 0` with the `ENGINES` block → `social_contest.proceeding` entered, count quoted; the per-verb `DEGREES RESOLVED` lines for `tell`, `lie`, `speak`, `argue`, `interrogate` before (`reading @<B24p.18 sha>`) and after; the seed-0 hash → moved, run twice equal.
+- GATE: `python -m pytest engine/season/tests/test_sc_proceeding_host.py engine/season/tests/test_sc01_provider.py -q` → pass; `PYTHONHASHSEED=0 python -m engine.season.harness.aperture 2 0` with the `ENGINES` block → `social_contest.proceeding` entered, count quoted; the per-verb `DEGREES RESOLVED` lines for `tell`, `lie`, `speak`, `argue`, `interrogate` before (`reading @<the commit before B24p.19>`) and after; the seed-0 hash → moved, run twice equal.
 - HASH MOVERS: every world in which one of the five verbs resolves. Declared; B24p.99.
 - EXPECTED RED UNTIL: B24p.99 (the realm pins; each pool-pinning test, and each test pinning an obstacle or a `terms["standard"]` entry for one of the five verbs, named in the commit).
 - DEPENDS ON: V12 B24p.16, reading R1 (B24p.21: the before-curves must be on file first); EXISTS-IN-TREE `seam/contest.py::contest`, `loop/resolve.py::_contest`, `loop/sides.py::sides_of`.
@@ -120,7 +120,7 @@
 - COST and TIER: small build; `sonnet`, `high`; `opus` reads the before and after `DEGREES RESOLVED`.
 - LANDS IT: B24p's producer; `Item: B24p.19`, `[skip ci]`.
 
-### B24p.24 — the arranger and his rig reach the builder as operands of `open_case` and `convene` · V2 p2 §E, §H; p4 §H item 13 · BUILD · HASH MOVER(behaviour)
+### B24p.24 — the arranger and his rig reach the builder as operands of `open_case` and `convene` · V2 p2 §E, §H; p4 §H item 13 · BUILD · HASH MOVER(encoding, behaviour)
 - SOURCE: V2 p4 §H item 13 (the arrangement reaches the builder as operands of `open_case` and `convene`), §F 19 (`rig_price x tilt^2`; each rig level best somewhere on `2 x stake x P(carried) - price`), §K C3; p2 §H (the tilt, the arranger's side, the price), §E ("Before: … with power how hard to rig the forum"); `loop/effects_information.py::_docket_item` (`:191`, the docket item's one owner), `::_eff_open_case` (`:356`); `loop/effects_governance.py::_eff_convene` (`:391`); `decision/options.py::opening_set` (`:61`); B24p.13 (`proceeding_input`'s `arranger`, `rig`, which until this item every caller passes at `rig=0.0`).
 - ADVANCES: none of the nine; the twelve statements' (10), a type arranged by power, reaches the realm.
 - INSTRUCTION:
@@ -138,7 +138,7 @@
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B24p's producer; `Item: B24p.24`, `[skip ci]`.
 
-### B24p.20 — the sitting is written; each hearer is moved for himself; the topic reaches the effect · V2 p2 §C.1, §J · BUILD · HASH MOVER(behaviour)
+### B24p.20 — the sitting is written; each hearer is moved for himself; the topic reaches the effect · V2 p2 §C.1, §J · BUILD · HASH MOVER(encoding, behaviour)
 - SOURCE: V2 p2 §C.1 (the beat is the narrative record; `Sitting.tracks` kept so a resume needs no replay; a resumed sitting continues its count, its issue reached kept), §J (the ending and the case file B24p.20 and B24.14; every sitting leaves the stage on the case file); p4 §F 12; `state/carriers.py:291` (`Event.ending`); B05.18 (SC-P1: the social roll's record on its Event); B24.14 (the case-file copy, B24's); `loop/effects_information.py::_eff_argue` (`:635`), `person_q.argued_pursuits` (`:675`); A-81; INT E-10, E-11.
 - ADVANCES: R-04 (contributor): a proceeding leaves a record; a crowd is moved hearer by hearer.
 - INSTRUCTION:
@@ -174,7 +174,7 @@
 - COST and TIER: small build; `sonnet`, `high`.
 - LANDS IT: B24p's producer; `Item: B24p.22`, `[skip ci]`.
 
-### B24p.23 — the six roles on · V2 p2 §K (the shipped column), §I · BUILD · HASH MOVER(behaviour)
+### B24p.23 — the six roles on · V2 p2 §K (the shipped column), §I · BUILD · HASH MOVER(behaviour; reads rates)
 - SOURCE: V2 p2 §K (every setting's shipped value), §I (the context deltas), §C.2 (the grounds' Reason shares and the venues' lean); V2's model (`sc2/host.py::GROUNDS`, `::RITES`' `reason_lean`, `::ERAS`, `::REGIMES`, `::STRIFE`); R1, R2, R8, R11; A-79 (an even argument on a routine matter carries about one time in four; B05's difficulty cell holds the centre, B05.23); `proposals/13_SC_calibration.md` C1 to C8 (B05.22's test); B01a.05.
 - ADVANCES: R-09.b (the obstacle and the pool differ person to person); R1 and R2 execute in the realm.
 - INSTRUCTION, one commit:
@@ -195,7 +195,7 @@
 
 ## Readings (B24p)
 
-Reading R1 (B24p.21): on B24p.18's tree, the settings at B24p.04's controls, the grounds' `reason` at 1.0 and every `reason_lean` 0, `PYTHONHASHSEED=0 python -m engine.season.harness.pairs proceeding --diff all --seed 0 1 2` for `--type conversation --form abridged`, `--type conversation --form full`, `--type rally --room crowd`, `--type legal_trial`, `--type interrogation`, at the instrument's defaults: per reading the SLOPE lines for `--side for`, the two for `--side against` on Will and Grace, the adjudicator's for `--side decider`, SPREAD, MONOTONE, DOMINANT, `EXCHANGES`, `ENDS`, `RATTLES`, with the tree's SHA. Expected at control: Reason reads a slope through the dice (every ground's share 1.0, every venue 0); the operands whose settings B24p.04 controls read exactly 0; the operands it shipped (the temper, conceding, the close's `track_step`) read what they read, quoted. Written here by the producer, copied into B24p.23's and B24p.99's commit bodies, and deleted with the block at the expunge.
+Reading R1 (B24p.21): on the tree B24p.19 lands on (B24p.01 to .18 all landed), `reading @<its sha>`, the settings at B24p.04's controls, the grounds' `reason` at 1.0 and every `reason_lean` 0, `PYTHONHASHSEED=0 python -m engine.season.harness.pairs proceeding --diff all --seed 0 1 2` for `--type conversation --form abridged`, `--type conversation --form full`, `--type rally --room crowd`, `--type legal_trial`, `--type interrogation`, at the instrument's defaults: per reading the SLOPE lines for `--side for`, the two for `--side against` on Will and Grace, the adjudicator's for `--side decider`, SPREAD, MONOTONE, DOMINANT, `EXCHANGES`, `ENDS`, `RATTLES`, with the tree's SHA. Expected at control: Reason reads a slope through the dice (every ground's share 1.0, every venue 0); the operands whose settings B24p.04 controls read exactly 0; the operands it shipped (the temper, conceding, the close's `track_step`) read what they read, quoted. Written here by the producer, copied into B24p.23's and B24p.99's commit bodies, and deleted with the block at the expunge.
 
 ### B24p.99 — re-pin and close readings · the batch's one re-pin (E-1) · BUILD · HASH MOVER (the re-pin)
 - SOURCE: `V12_STRUCTURE_part4.md` E-1, E-2; Jordan, R10: *"we can re-pin after it's been built"*.
@@ -203,7 +203,7 @@ Reading R1 (B24p.21): on B24p.18's tree, the settings at B24p.04's controls, the
 - INSTRUCTION: (1) re-record, once, the realm pins in `engine/season/tests/_realm_goldens.py` at seeds 0 to 2 and every seeded golden the movers reached, against the base this batch rebased on in S12 (`reading @<sha>`); the commit says "re-pin: behaviour (B24p.19 the proceeding entry; B24p.24 the arranged forum; B24p.20 the ending and the hearers; B24p.22 the witnessed sitting; B24p.23 the six roles on)" and names each pin old → new. (2) Write the BATCH GATE's readings into the commit body: the five `pairs proceeding` readings before (R1) and after, `aperture 2 s` for s = 0, 1, 2, the `DEGREES RESOLVED` lines, `register --requirements` (nine lines), `m1_acceptance --summary`'s verdict line, the batch's wall time. (3) Append the batch's 80 register rows from its H block once, in merge order, if the items did not each write their own. (4) `registers/handoffs/HANDOFF_SC.md`: the Open row closed, with a pointer to B24's block.
 - WHERE: `engine/season/tests/_realm_goldens.py`; the pinned digests the items name; `engine/season/hole_register.yaml` (if step 3 applies); `registers/handoffs/HANDOFF_SC.md`.
 - TESTS: the full gates the BATCH GATE names, once (CLAUDE.md §0.4).
-- FALSIFIER and CONTROL: a pin moved that no item declared; a behaviour tally moved where every item said EQUAL (B24p.01 to .18). Control: B24p.18's seed-0 hash equal to B24p.01's (the EQUAL items moved nothing).
+- FALSIFIER and CONTROL: a pin moved that no item declared; a behaviour tally moved where every item said EQUAL (B24p.01 to .18). Control: the seed-0 hash at the commit before B24p.19 equals this batch's opening reading (`reading @<open sha>`).
 - GATE: the BATCH GATE, read once on this commit's tree.
 - HASH MOVERS: the re-pin itself.
 - DEPENDS ON: B24p.01 to B24p.24.

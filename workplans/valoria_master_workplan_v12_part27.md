@@ -32,11 +32,11 @@
 | B19.60 | the captured share, and what the season writes | `26_…rout…` §4; `16_PESSIMIST_MB_rout…` step 5 | BUILD | MOVER(behaviour) | B19.53, B19.58; Batch B29 (UNDECIDED 3) |
 | B19.61 | the `stand_draw` flip: `off` → `on` | `26_…rout…` "Cost class" (its one declared flip); A-61 | BUILD | MOVER(behaviour) | B19.54, B19.59, B19.60 |
 | B19.62 | the troop class, the matchup reader and the ten ★ rows | MBA-06 steps 1, 4; MBA §3.2 | BUILD | EQUAL | Batch B19a; Batch B17 |
-| B19.63 | the charge on the contact draw: the situation, whether it closes, its shock to the stand draw | MBA-06 steps 2, 3 | BUILD | MOVER(behaviour) | B19.61, B19.62; MBA-04 (first half) |
-| B19.64 | the chase's casualties are the contact draw under the `pursuit` row | MBA-04 step 5 | BUILD | MOVER(behaviour) | B19.58, B19.62 |
+| B19.63 | the charge on the contact draw: the situation, whether it closes, its shock to the stand draw | MBA-06 steps 2, 3 | BUILD | MOVER(behaviour), conditional | B19.61, B19.62; MBA-04 (first half) |
+| B19.64 | the chase's casualties are the contact draw under the `pursuit` row | MBA-04 step 5 | BUILD | MOVER(behaviour), conditional | B19.58, B19.62 |
 | B19.65 | one resolver, one fixture, one landing order | `U5b_MB_rulings_in_the_field` §4, §6 | POINTER | — | — |
 | B19.70 | the `command` skill row, its three `field` use rows, and the one host builder of a `CommandRecord` (Covered: C-02) | `27_MB_A` §1, §2, §5, item 27A-6 | BUILD | MOVER(behaviour) | B19.55; B19.02 (first half); Batch B04, Batch B05 |
-| B19.66 | the six-arm instrument | `27_MB_C` 27C-2 | BUILD | EQUAL | B19.61; the T-rows block (first half) |
+| B19.66 | the six-arm instrument | `27_MB_C` 27C-2 | BUILD (probe) | EQUAL | B19.61; the T-rows block (first half) |
 | B19.67 | the calibration read: exposure, the levels and the seeds against the targets | MBA-08 (with `26_MASS_BATTLE_calibration_targets` §3's sweeps) | BUILD (calibration) | MOVER(behaviour) | B19.51 to B19.64 |
 | B19.68 | the multiplier leaves: the six-arm table, the criterion, the licensed commit | `27_MB_C` 27C-3 (and 27C-3′, its other branch) | BUILD | MOVER(behaviour) | B19.66, B19.67 |
 | B19.69 | the targets, read last | `26_MASS_BATTLE_calibration_targets` §1, §2; MBA §4.2 | READING | — | B19.68 |
@@ -327,7 +327,7 @@
 - COST and TIER: edit and a loader; `sonnet`, `high`; the row values read by `opus` at `B19.67` (MBA-06: "the row values read by `opus` at MBA-08").
 - LANDS IT: B19's producer; `Item: B19.62`, `[skip ci]`.
 
-### B19.63 — the charge on the contact draw: the situation, whether it closes, its shock to the stand draw · MBA-06 steps 2, 3 · BUILD · HASH MOVER(behaviour)
+### B19.63 — the charge on the contact draw: the situation, whether it closes, its shock to the stand draw · MBA-06 steps 2, 3 · BUILD · HASH MOVER(behaviour), conditional
 - SOURCE: `master/mb_abstraction/MBA_DESIGN_part3.md` §7.1 "Item: MBA-06" steps 2, 3, its WHERE, FALSIFIER, GATE, Hash movers; `MBA_DESIGN_part2.md` §3.2 ("How a row acts on the contact draw"; "The brace and shock idiom is reused, not re-implemented"); ruling A-100 layer (2), A-61; lexicon S-8.
 - ADVANCES: A-100 layer (2); T-6, T-6a, T-6c (`## Readings` R-1, R-2).
 - INSTRUCTION (MBA-06 steps 2–3, copied; "body" → unit, S-8):
@@ -337,7 +337,7 @@
 - WHERE: `modules/mass_battle/resolution.py` (`situation_of`, `_charge_shock_sigma`); `modules/mass_battle/orchestration.py` (`resolve_engagements`, the first tick of a contact); `modules/mass_battle/config.py` (`MB_RECOIL_CHARGER_GATE`, `MB_CHARGE_RECOIL`); `engine/engine_params/sim_params.json` (re-derived); `tests/valoria/test_mass_battle_matchups.py`.
 - TESTS: in `tests/valoria/test_mass_battle_matchups.py`, written before step 1 and read red: "`::test_t6_charge_ordering` (n 400 per arm, `assert checked >= 1200`), `::test_t6a_braced_pike_beats_a_frontal_charge_more_often_than_not`, `::test_t6c_a_horse_screen_helps_a_pike_block_under_bows`, `::test_no_troop_name_in_the_charge` (grep, asserted), `::test_light_horse_does_not_charge_a_set_wall`."
 - FALSIFIER and CONTROL: "a charge that reads a troop name; a braced pike block that a frontal horse charge beats more often than the horse beats unbraced levy (T-6 inverted). Control: the horse against itself."
-- GATE: `python -m pytest tests/valoria/test_mass_battle_matchups.py -q -m mass_battle` → the seven tests pass; `git grep -n -w "MB_RECOIL_CHARGER_GATE" modules/ engine/ systems/` → nothing; `python tools/export_sim_params.py --check` → exit 0; the seed-0 field hash → moved where a mounted unit charges (E-2).
+- GATE: `python -m pytest tests/valoria/test_mass_battle_matchups.py -q -m mass_battle` → the seven tests pass; `git grep -n -w "MB_RECOIL_CHARGER_GATE" modules/ engine/ systems/` → nothing; `python tools/export_sim_params.py --check` → exit 0; the seed-0 field hash → moved where a mounted unit charges, equal to the previous commit's recorded reading (`reading @<sha>`) where none does; which holds is read off the tallies and quoted beside the hash, so a hash that moves with none, or stays with one, fails the arm (E-2).
 - HASH MOVERS: "every field with a mounted [unit]". Declared; `B19.99`.
 - DEPENDS ON: V12 B19.61 (the stand draw on), B19.62 (`troop_class`, `matchup_row`, the rows); V12 MBA-04 steps 1–2 (first half: `ContactVector`, `contact_casualties`, the vector's builder in `resolve_engagements`); EXISTS-IN-TREE `resolution.py::_charge_shock_sigma`, `::_unit_braced`, `::_subunit_braced`, `::_brace_setup_ok`, `::_disc_prep`, `::_depth_prep`, `::_wall_prep`, `orchestration.py::_momentum_speed`, `config.py` `MB_KITE_ENABLED`, `MB_KITE_STANDOFF`, `MB_BRACE_SETUP_DELAY`.
 - GLOSSARY: none beyond `B19.62`.
@@ -345,7 +345,7 @@
 - COST and TIER: small build; `sonnet`, `high`; the row values read by `opus` at `B19.67`.
 - LANDS IT: B19's producer; `Item: B19.63`, `[skip ci]`.
 
-### B19.64 — the chase's casualties are the contact draw under the `pursuit` row · MBA-04 step 5 · BUILD · HASH MOVER(behaviour)
+### B19.64 — the chase's casualties are the contact draw under the `pursuit` row · MBA-04 step 5 · BUILD · HASH MOVER(behaviour), conditional
 - SOURCE: `master/mb_abstraction/MBA_DESIGN_part3.md` §7.1 "Item: MBA-04" step 5 (split off by U3 §1.2 B19 step 13, "MBA-04 step 5 reads the `pursuit` row MBA-06 ships"); its step 7's `CASUALTY_SCALE` clause; MBA §1.3 (the draw), §1.4 (exposure); the A-100 `Reconciled:` lines of `26_…rout…` and `16_PESSIMIST_MB_rout…` ("pursuit casualties are the contact draw under the `pursuit` matchup row, one law"); UNDECIDED 4.
 - ADVANCES: A-100 (one law for a field's casualties), A-60; T-3 (`## Readings` R-1).
 - INSTRUCTION:
@@ -356,7 +356,7 @@
 - WHERE: `modules/mass_battle/core/contact_draw.py` (`pursuit_damage`); `modules/mass_battle/orchestration.py` (`REARGUARD_PENALTY`'s comment); `modules/mass_battle/config.py` (`CASUALTY_SCALE`, if unread); `engine/engine_params/sim_params.json` (re-derived if so); `tests/valoria/test_mass_battle_rout.py`.
 - TESTS: `tests/valoria/test_mass_battle_rout.py::test_chase_casualties_are_the_contact_draw_under_the_pursuit_row` `[ASSUMPTION: test name, E-3]`, written first and read red: over 200 chases the pursuer's casualties from the chase are 0 in every one, the routing unit's mean equals `mu` of its vector within 1% where `mu >= 5` (MBA-04's `test_contact_draw_mean_equals_mu_above_five` form), and a planted `pursuit` row with `exposure_d: 0.0` gives `pursuit_loss` 0 in every field; `assert checked >= 200`. `B19.58`'s four tests re-read green.
 - FALSIFIER and CONTROL: a chase whose casualties do not move with the routing unit's armour (MBA-04 falsifier (e)'s form: `test_heavier_armour_loses_fewer_men`, re-run with the chase); a second casualty law left in `pursuit_damage`. Control: the same seed twice is one hash; a field with no rout reads as `B19.63`'s.
-- GATE: `python -m pytest tests/valoria/test_mass_battle_rout.py tests/valoria/test_mass_battle_contact_draw.py tests/valoria/test_mass_battle_yield.py -q -m mass_battle` → pass; `git grep -n "roll_net_continuous\|base_combat_pool\|CASUALTY_SCALE" modules/mass_battle/core/contact_draw.py` names no line inside `pursuit_damage`; the seed-0 field hash → moved where a field ends in a chase (E-2).
+- GATE: `python -m pytest tests/valoria/test_mass_battle_rout.py tests/valoria/test_mass_battle_contact_draw.py tests/valoria/test_mass_battle_yield.py -q -m mass_battle` → pass; `git grep -n "roll_net_continuous\|base_combat_pool\|CASUALTY_SCALE" modules/mass_battle/core/contact_draw.py` names no line inside `pursuit_damage`; the seed-0 field hash → moved where a field ends in a chase, equal to the previous commit's recorded reading (`reading @<sha>`) where none does; which holds is read off the tallies and quoted beside the hash, so a hash that moves with none, or stays with one, fails the arm (E-2).
 - HASH MOVERS: every field ending in a chase. Declared; `B19.99`.
 - DEPENDS ON: V12 B19.58 (`pursuit_damage`'s signature and key), B19.62 (the `pursuit` row and `matchup_row`); V12 MBA-04 steps 1–3 (first half: `ContactVector`, `contact_casualties`, `engaged_files`); V12 Batch B19a (`contact_table`); V12 B19.10 (`core/contact_draw.py::pursuit_damage`); EXISTS-IN-TREE `orchestration.py::REARGUARD_PENALTY`, `config.py::OCTAGON_DMG_MULT`, `CASUALTY_SCALE`, `percell.py::distribute_casualties`.
 - GLOSSARY: row *contact draw* gains the chase in its definition's last clause ("… and of a chase, under the `pursuit` row") in this commit.

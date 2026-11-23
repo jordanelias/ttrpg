@@ -170,28 +170,28 @@ The batch block's head, its position table and B19.01 to B19.16 are in `valoria_
 - COST and TIER: edit; `sonnet`, `high` (effort set explicitly, CLAUDE.md §10; R2c, K6 F16); the flip's readings `haiku` (`valoria-measure`), `high`, read by `opus`, `high` (the source).
 - LANDS IT: B19's producer; `Item: B19.23`, `[skip ci]`.
 
-### B19.24 — flip: the per-arm ranges · `26_MASS_BATTLE_cell_scale_and_time` §2 (flip 1) · BUILD · HASH MOVER(behaviour)
+### B19.24 — flip: the per-arm ranges · `26_MASS_BATTLE_cell_scale_and_time` §2 (flip 1) · BUILD · HASH MOVER(behaviour), conditional
 - SOURCE: the same file, §2, "Gate" 2, 4, "Hash movers" ("each flip (`range`, `opening_rows: auto`, `max_bouts: 6`) its own commit").
 - ADVANCES: R-04.c4 (shooting before contact).
 - INSTRUCTION: every arm's `range` takes its `range_stated` value (B19.21's table: `javelin` `[1, 6]`, `bow` and `crossbow` `[2, 40]`, `sling` and `siege` `[2, 8]`); revert: `[2, 8]` for every arm. Re-export. MBA-05 (the second half) reads these ranges through the range bands.
 - WHERE: `references/troops.yaml` (`arms.<key>.range`); `engine/engine_params/troops.json`.
 - TESTS: B19.21's three `test_mass_battle_ammo.py` tests re-read on the shipped values.
 - FALSIFIER and CONTROL: a javelin body shooting at seven cells; volleys before contact at zero with bows on the field. Control: B19.23's reading at `[2, 8]`.
-- GATE: `python -m pytest tests/valoria/test_mass_battle_ammo.py -q` → pass; `python tools/export_troops.py --check` → exit 0; the seed-0 field hash moved, recorded.
+- GATE: `python -m pytest tests/valoria/test_mass_battle_ammo.py -q` → pass; `python tools/export_troops.py --check` → exit 0; the field hashes at seeds 0–2 → moved at each seed whose act tallies show a missile arm fighting, equal to the previous commit's recorded reading (`reading @<sha>`) at each seed whose tallies show none; which holds is read off the tallies and quoted beside the hashes, so a hash that moves with none, or stays with one, fails the arm.
 - HASH MOVERS: every army field with a missile arm. Declared; `B19.99`.
 - DEPENDS ON: V12 B19.21, B19.23.
 - GLOSSARY: none.
 - COST and TIER: edit; `sonnet`, `high` (effort set explicitly, CLAUDE.md §10; R2c, K6 F16).
 - LANDS IT: B19's producer; `Item: B19.24`, `[skip ci]`.
 
-### B19.25 — flip: `opening_rows: auto` · `26_MASS_BATTLE_cell_scale_and_time` §2 (flip 2) · BUILD · HASH MOVER(behaviour)
+### B19.25 — flip: `opening_rows: auto` · `26_MASS_BATTLE_cell_scale_and_time` §2 (flip 2) · BUILD · HASH MOVER(behaviour), conditional
 - SOURCE: the same file, §2 (the opening rule), "Hash movers"; `04_MB_cell_hierarchy_as_data.md` "Conflicts" (`ED-MB-0080`'s stress finding bears on `opening_rows`).
 - ADVANCES: R-04.c4 ("An army facing bows starts in range and must cross it").
 - INSTRUCTION: `formations.<name>.opening_rows: 3` → `auto` for `line`, `envelopment`, `refused_flank` (revert: 3). Re-export.
 - WHERE: `references/troops.yaml` (`formations.<name>.opening_rows`); `engine/engine_params/troops.json`.
 - TESTS: `test_opening_rows_auto_is_the_longest_missile_range_with_a_floor` (B19.21) re-read on the shipped value.
 - FALSIFIER and CONTROL: two armies with no missiles starting more than three rows apart. Control: B19.24's reading.
-- GATE: `python -m pytest tests/valoria/test_mass_battle_order_of_battle.py tests/valoria/test_mass_battle_ammo.py -q` → pass; the seed-0 field hash moved (where a missile arm fights), recorded.
+- GATE: `python -m pytest tests/valoria/test_mass_battle_order_of_battle.py tests/valoria/test_mass_battle_ammo.py -q` → pass; the field hashes at seeds 0–2 → moved at each seed whose act tallies show a missile arm fighting, equal to the previous commit's recorded reading (`reading @<sha>`) at each seed whose tallies show none; which holds is read off the tallies and quoted beside the hashes, so a hash that moves with none, or stays with one, fails the arm.
 - HASH MOVERS: every army field with a missile arm on either side. Declared; `B19.99`.
 - DEPENDS ON: V12 B19.21, B19.24.
 - GLOSSARY: none.
