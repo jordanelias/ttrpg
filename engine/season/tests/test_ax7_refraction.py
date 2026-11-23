@@ -73,7 +73,7 @@ def _told(w, pid):
 
 def test_in15_channel_remove_is_the_ordinal_of_remove_read_off_the_roster():
     """`remove` is the channel's SOURCE's place among the distinct `claim_source:` values in the
-    precedence order, one spacing `k / K` (`H-199`): presence 0, a knot 1/4, a document and the event-kind reach 1/2
+    precedence order, one spacing `k / K` (`H-199`): presence 0, a knot 1/4, a document and the public record 1/2
     (one source, one remove), `post_remit`'s `inferred` 3/4. Checked against the roster, so a reordered roster is
     followed rather than contradicted."""
     got = [channel_remove(ch) for ch in WITNESS_CHANNELS]
@@ -84,7 +84,7 @@ def test_in15_channel_remove_is_the_ordinal_of_remove_read_off_the_roster():
             assert (channel_remove(a) == channel_remove(b)) == same, (a, b)
     # The shipped roster, read as values (no roster literal here: `rosters.yaml` owns the list).
     assert channel_remove("co_located") == 0.0 and channel_remove("witness_key") == 1 / 4
-    assert channel_remove("document_key") == channel_remove("reach") == 1 / 2
+    assert channel_remove("document_key") == channel_remove("chronicle") == 1 / 2
     assert channel_remove("post_remit") == 3 / 4
 
 

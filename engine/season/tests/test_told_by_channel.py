@@ -23,7 +23,7 @@ when they stand in `Hh`.
 
 from __future__ import annotations
 
-from ..data.matrix import Step, WriteClass
+from ..data.matrix import WriteClass
 from ..data.rosters import CHANNEL_CLAIM_SOURCE, CLAIM_SOURCES, WITNESS_CHANNELS
 from .. import epistemic as EP
 from ..epistemic import CHANNEL_PREDICATES, SEEN_PREDICATE, observers_for
@@ -2284,92 +2284,19 @@ def test_g6_the_privacy_chance_refuses_what_is_not_a_chance():
 
 
 def test_reach_channel_with_an_empty_map_admits_nobody(monkeypatch):
-    """CR-29: the `reach` channel is rostered where `chronicle` stood, mints `told_by`, and admits by the event's kind alone:
-    with the map emptied it admits nobody; planting one row shows the predicate can admit (a `reach` that admitted anyone
-    with the map empty, or never admitted with a row, would both fail here)."""
-    assert "chronicle" not in WITNESS_CHANNELS and WITNESS_CHANNELS.index("reach") == WITNESS_CHANNELS.index("document_key") + 1
+    """CR-29 commit (1): the `reach` channel is rostered after `chronicle`, mints `told_by`, and ships with an empty
+    kind->reach map, so it admits nobody; planting one row shows the predicate can admit (a `reach` that admitted
+    anyone with the map empty, or never admitted with a row, would both fail here)."""
+    assert WITNESS_CHANNELS.index("reach") == WITNESS_CHANNELS.index("chronicle") + 1
     assert CHANNEL_CLAIM_SOURCE["reach"] == "told_by"
     w, _d, _out, e = _transfer_into_hh("p_low")
-    assert e.kind not in EP.EVENT_REACH, "the shipped map carries `transfer.made`; the plant below would plant nothing"
-    monkeypatch.setattr(EP, "EVENT_REACH", {})
+    assert not EP.EVENT_REACH, "the shipped map is empty at this item"
     assert [pid for pid in w.persons if CHANNEL_PREDICATES["reach"](w, e, pid)] == []
     monkeypatch.setitem(EP.EVENT_REACH, e.kind, "room")
     room = [pid for pid in w.persons if CHANNEL_PREDICATES["reach"](w, e, pid)]
     assert ACTOR in room and "p_high" not in room, room
     monkeypatch.setitem(EP.EVENT_REACH, e.kind, "realm")
     assert "p_king" in [pid for pid in w.persons if CHANNEL_PREDICATES["reach"](w, e, pid)]
-
-
-def test_the_same_event_at_room_and_at_realm_deposits_different_counts(monkeypatch):
-    """CR-29 EXIT: the same Event, witnessed with its kind at reach `room` and then at `realm`, leaves a different number
-    of `told_by` claims -- the persons the reach adds beyond the room hold it as hearsay, and only they."""
-    def told(reach):
-        monkeypatch.setattr(EP, "EVENT_REACH", {"transfer.made": reach})
-        w, d, out, e = _transfer_into_hh("p_other")
-        d.witness(mint_token(w, WriteClass.INTERIOR), out)
-        return {pid for pid in w.persons for c in w.persons[pid].ledger if c.source == "told_by" and c.predicate == e.kind}
-    room, realm = told("room"), told("realm")
-    assert realm > room, (room, realm)
-    assert {"p_king", "p_high"} <= realm - room, (room, realm)
-
-
-def test_an_emptied_map_drops_told_by_to_zero(monkeypatch):
-    """CR-29's control: with the map emptied the realm's first season holds no hearsay a binding decision minted -- the
-    `told_by` claims without a `chain` (the map's; a chained one is the told channel's, `T4`) fall to what `document_key`
-    alone mints, and every one of them is a claim the shipped map also minted."""
-    def season(emptied):
-        if emptied:
-            monkeypatch.setattr(EP, "EVENT_REACH", {})
-        w = build_realm(0)
-        populated.run(1, 0, w=w)
-        return sum(1 for p in w.persons.values() for c in p.ledger if c.source == "told_by" and not c.chain)
-    shipped = season(False)
-    emptied = season(True)
-    assert shipped > 0, "the shipped map minted no hearsay in the realm's first season: the control observes nothing"
-    assert emptied < shipped, (shipped, emptied)
-
-
-def _released_seat(arm):
-    """`p_high` resigns `off_duke` through the real fold and the real WITNESS under `Fixtures.seat_news` `arm`; returns the
-    world. `p_king` stands in `R`, nowhere near `S`, holds nothing there and is the far heir's stand-in."""
-    from ..data.fixtures import DEFAULT_FIXTURES
-    w = P.tiny_world(DEFAULT_FIXTURES.sweep("seat_news", arm))
-    d = SeasonDriver(w)
-    d.matter(mint_token(w, WriteClass.MATTER), [])
-    out = d.resolve(mint_token(w, WriteClass.ACTS),
-                    [Act(id="rel_seat", actor="p_high", verb="release", payload={"subject": "off_duke"})],
-                    contest_max_depth=w.fixtures.get("contest_max_depth"))
-    assert "tenure.closed" in {e.kind for e in out}, [e.kind for e in out]
-    w.log.extend(out)
-    d.witness(mint_token(w, WriteClass.INTERIOR), out)
-    return w
-
-
-def test_a_throne_released_by_its_holder_still_reaches_the_heir():
-    """CR-29's control and A-32: a seat vacated by its holder is news to the realm, so a person far from it holds the
-    vacancy as hearsay at the shipped `seat_news: realm`; at `local` (the seat-change kinds lifted from the map) the same
-    person holds nothing of it, so the news above is the map's and not another channel's."""
-    def held(w):
-        return [c.source for c in w.persons["p_king"].ledger if c.subject == "off_duke"]
-    assert held(_released_seat("realm")) == ["told_by"] * len(held(_released_seat("realm"))) != []
-    assert held(_released_seat("local")) == []
-
-
-def test_a_death_does_not_travel_by_reach():
-    """A-33: `person.died` is no key of the map, so a death reaches nobody by `reach` -- while the seat it empties earns
-    `tenure.closed`, which does. A duke dying at `S` with `p_king` at `R`: the death admits no one, the closure admits him."""
-    from ..loop.matter import _die
-    w = P.tiny_world()
-    d = SeasonDriver(w)
-    w.step = Step.MATTER
-    w._emitted_by_write = []
-    _die(w, mint_token(w, WriteClass.MATTER), "p_high")
-    evs = list(w._emitted_by_write)
-    assert [e.kind for e in evs] == ["person.died", "tenure.closed"], [e.kind for e in evs]
-    died, closed = evs
-    assert "person.died" not in EP.EVENT_REACH
-    assert [pid for pid in w.persons if CHANNEL_PREDICATES["reach"](w, died, pid)] == []
-    assert "p_king" in [pid for pid in w.persons if CHANNEL_PREDICATES["reach"](w, closed, pid)]
 
 
 def test_a_reach_value_outside_the_closed_set_is_refused():

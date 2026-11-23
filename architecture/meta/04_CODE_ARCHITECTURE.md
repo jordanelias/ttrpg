@@ -829,7 +829,7 @@ the claim shape is a property of the channel**, declared in data beside its pred
 | `document_key` | **the change claims only. No attribution** |
 | `witness_key` | change claims about self; via a knot, the partner's deposits, reusing the event id |
 | `post_remit` | the change claims, `inferred` |
-| `reach` | the change claims, `told_by`, to the persons within the reach the event's kind states (`rosters.yaml: event_reach`) |
+| `chronicle` | the change claims, `told_by` |
 
 > **Covert action then needs no flag:** an act performed where nobody is co-located has **no
 > `firsthand` attribution anywhere**, and false attribution is a `tell` carrying a claim whose subject
