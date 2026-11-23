@@ -49,7 +49,7 @@ The batch block's head, the position table, its UNDECIDED line and the words and
 - WHERE: `references/module_contracts.yaml` (the `fieldwork` module row).
 - TESTS: none new; the covering readers are the tests `grep -rl module_contracts tests/valoria engine` names, run once.
 - FALSIFIER and CONTROL: the export or a composition check reads a changed `fieldwork.find` row; the row still names an Evidence Track as held. Control: `engine/engine_params/composition.json` byte-identical.
-- GATE: `python tools/export_composition.py --check` → exit 0; `git diff --stat -- engine/engine_params` → empty.
+- GATE: `python tools/export_composition.py --check` → exit 0; `git status --porcelain -- engine/engine_params` → empty in the producer's worktree before the commit; `git show --stat --format= <this item's commit> -- engine/engine_params` → empty after it.
 - HASH MOVERS: none.
 - DEPENDS ON: V12 Batch B03 (CI-03) and Batch B03g @048724cd545117255e71d04a583d99c6cb5fe3a9 (GO-11), which edit the same file earlier; EXISTS-IN-TREE `references/module_contracts.yaml` (`fieldwork`, `fieldwork.find`), `tools/export_composition.py`.
 - GLOSSARY: none.
@@ -63,7 +63,7 @@ The batch block's head, the position table, its UNDECIDED line and the words and
 - WHERE: `registers/editorial_ledger_fi.jsonl` (two appended rows); `registers/handoffs/HANDOFF_FI.md` (two rows' pointer and wording).
 - TESTS: none new.
 - FALSIFIER and CONTROL: a row with a new id (the ids exist); an edit to `registers/editorial_ledger_fi_archive.jsonl`. Control: `validate_ed_citations.py` exit 0 before and after.
-- GATE: `python tools/validate_ed_citations.py` → exit 0; `python tools/currency_consistency_check.py` → exit 0; `git diff --stat -- registers/editorial_ledger_fi_archive.jsonl` → empty.
+- GATE: `python tools/validate_ed_citations.py` → exit 0; `python tools/currency_consistency_check.py` → exit 0; `git status --porcelain -- registers/editorial_ledger_fi_archive.jsonl` → empty in the producer's worktree before the commit; `git show --stat --format= <this item's commit> -- registers/editorial_ledger_fi_archive.jsonl` → empty after it.
 - HASH MOVERS: none.
 - DEPENDS ON: EXISTS-IN-TREE `registers/handoffs/HANDOFF_FI.md` (the ED-FI-0009 and ED-FI-0002 rows), `registers/editorial_ledger_fi.jsonl`, `registers/editorial_ledger_fi_archive.jsonl`.
 - GLOSSARY: none.

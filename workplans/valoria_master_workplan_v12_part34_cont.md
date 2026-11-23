@@ -202,10 +202,10 @@ Short names and paths are the head of `valoria_master_workplan_v12_part34.md`'s.
 - INSTRUCTION: re-record, once, the realm and corpus pins in `engine/season/tests/_realm_goldens.py` at seeds 0 to 2 (build, one season, two seasons) against B28's after-reading (`reading @<sha>`; the RE-PIN line; lane H3), and every test-local golden two items moved; write the R-04.a conjunct's `reading:` record in `engine/season/requirements.yaml` (`determine`, `convene` via-counts from `aperture 2 0`; `IS-A-12`), `status:` untouched; the commit says "re-pin" and lists the movers of the RE-PIN line.
 - WHERE: `engine/season/tests/_realm_goldens.py`; `engine/season/requirements.yaml` (`reading:` only).
 - TESTS: the full gates the BATCH GATE names, once (CLAUDE.md §0.4); no new test.
-- FALSIFIER and CONTROL: a pin moved that no item declared; a behaviour tally moved where an item said EQUAL (B32.01 to B32.04, B32.06, B32.07, B32.09, B32.11, B32.15, B32.28 to B32.31). Control: B32.31's seed-0 hash equal to B32.30's.
+- FALSIFIER and CONTROL: a pin moved that no item declared; a behaviour tally moved where an item said EQUAL (B32.01 to B32.04, B32.06, B32.07, B32.09, B32.10, B32.11, B32.15, B32.28 to B32.31). Control: B32.31's seed-0 hash equal to B32.30's.
 - GATE: the BATCH GATE, read once.
 - HASH MOVERS: the re-pin itself.
-- DEPENDS ON: V12 B32.01 to B32.32 (B32.10 is BLOCKED and B32.18 a POINTER: no commit).
+- DEPENDS ON: V12 B32.01 to B32.32 (B32.18 a POINTER: no commit).
 - GLOSSARY: the close reads every glossary row the items named against the code (`STAGES.md` rule 2).
 - COST and TIER: reading; `sonnet`, `high` runs; the close's terminal critique `opus`.
 - LANDS IT: B32's producer; `Item: B32.99`; the batch's last `Item:` commit, CI runs on its push.
@@ -290,7 +290,7 @@ Placement (§5.6): no member names these ids (the batch has no proposal members)
 - WHERE: `engine/season/queries/person_q.py` (`_bond`); NEW `engine/season/tests/test_deeds_to_me.py`.
 - TESTS: `test_deeds_to_me.py` (red before) `test_killing_his_sibling_weighs_as_harm_to_him` (the home's falsifier narrowed to the paired kinds: A kills B's sibling → B's regard of A falls as for a deed done to B himself; C, same pursuits and no kin edge, moves by the stance ratio only) `[ASSUMPTION: name and the narrowed reading — basis: AM-F-03 keeps death and wound, drops the unpaired kinds]`; mutation "key the term on the witness instead of the patient → C moves → red".
 - FALSIFIER and CONTROL: the mutation. Control: no live kin edge → `_bond` as today.
-- GATE: `python -m pytest engine/season/tests/test_deeds_to_me.py -q` → pass.
+- GATE: `python -m pytest engine/season/tests/test_deeds_to_me.py -q` → pass; the seed-0 one-season hash and the count of `_bond` calls with a live kin edge in the same run are both quoted; moved with count 0, or equal with count > 0, stops the item (its HASH line is wrong).
 - HASH MOVERS: every run in which a person with a kin edge judges a death or wound of his kin. Re-pinned at B37p.99.
 - DEPENDS ON: V12 B37p.01; EXISTS-IN-TREE `queries/person_q.py::_bond`, `::deeds_judged` (IN-58's pairing), `::regard`.
 - GLOSSARY: none.
@@ -321,8 +321,8 @@ Placement (§5.6): no member names these ids (the batch has no proposal members)
 - INSTRUCTION: "**`tend` heals a share of the headroom** … fixture `tend_share` **[ASSUMPTION: 0.5]** of the headroom to `body_ceiling`." "**`tend.refused` keyed by clause** (dead or absent / not with / whole), on `migrate`'s keyed-refusal precedent." `tend_share` ships 0.5 with a NUMBER row (H block slot 2); "Control: … `tend_share` 1.0 → the behaviour of today". The Observation B12a.69 put on `_eff_tend` carries the new written body.
 - WHERE: `engine/season/loop/effects_combat.py` (`_eff_tend`); `engine/season/data/fixtures.py` (`tend_share`); `engine/season/verb_table.yaml` (`tend`'s keyed `emits_on_refusal`); `engine/season/hole_register.yaml` (its row); NEW `engine/season/tests/test_recovery.py`.
 - TESTS: `test_recovery.py` (red before): "`tend` at 250 with `body_ceiling` 1000 gives 625, and at 250 with `body_ceiling` 799 (a T03 mark) gives `250 + 0.5 × 549 = 524`, never 1000"; mutation "`tend` reads `condition_scale` instead of `body_ceiling` → the marked person rises past 799 → red"; `test_tend_refused_names_its_clause` `[ASSUMPTION: name]`.
-- FALSIFIER and CONTROL: the mutation. Control: `tend_share` 1.0 reproduces B37p.03's tallies.
-- GATE: `python -m pytest engine/season/tests/test_recovery.py engine/season/tests/test_season_shape.py -k "tend or wounded" -q` → pass (B12a.69's `test_a_witnessed_recovery_clears_a_believed_wound` still green).
+- FALSIFIER and CONTROL: the mutation. Control: `tend_share` 1.0 reproduces the previous commit's seed-0 one-season hash (`reading @<sha>`).
+- GATE: `python -m pytest engine/season/tests/test_recovery.py engine/season/tests/test_season_shape.py -k "tend or wounded" -q` → pass (B12a.69's `test_a_witnessed_recovery_clears_a_believed_wound` still green); the seed-0 one-season hash and the count of `tend` acts that heal in the same run are both quoted; moved with count 0, or equal with count > 0, stops the item (its HASH line is wrong).
 - HASH MOVERS: every run with a `tend` that heals. Re-pinned at B37p.99.
 - DEPENDS ON: EXISTS-IN-TREE `loop/effects_combat.py::_eff_tend`, `state/carriers.py::Person.body_ceiling` (CP-T03-07, landed: `effects_combat.py::CEILING`); V12 B12a.69 (the Observation on `_eff_tend`).
 - GLOSSARY: none.

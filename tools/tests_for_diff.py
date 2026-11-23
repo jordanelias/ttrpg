@@ -23,10 +23,15 @@ If your edit could change a realm (a module's output the season loop reads), run
 WHO USES IT: `/close` (`.claude/commands/close.md` step 4) and the inner loop. `methodology-execute`'s BATCH-CLOSE does
 not: its lanes are the ones its plan names (v12 P18).
 
-Usage:  python tools/tests_for_diff.py [--base REF] [--run]
+A SUBSYSTEM'S SUITE is its lane plus its `<lane>_season` marker: the subsystem's tests that live in `engine/season/tests/` are
+`season_loop` by tree, and the second marker (root `conftest.py`, `SEASON_SUITES`) selects them. `--suite` picks suites by name,
+`--list` names every lane and suite, `--all` prints the full gates.
+
+Usage:  python tools/tests_for_diff.py [--base REF] [--run] [--suite NAME[,NAME...]] [--list] [--all]
 """
 import argparse
 import os
+import shlex
 import subprocess
 import sys
 
@@ -34,9 +39,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # source directory -> lane marker. The lanes and the test-file patterns have ONE owner: the root conftest.py.
 SOURCE_PREFIXES = {
-    "modules/combat/": "combat", "systems/combat/": "combat",
-    "modules/mass_battle/": "mass_battle", "systems/mass_battle/": "mass_battle",
-    "modules/social_contest/": "social_contest", "systems/social_contest/": "social_contest",
+    "modules/combat/": "combat or pc_season", "systems/combat/": "combat or pc_season",
+    "modules/mass_battle/": "mass_battle or mb_season", "systems/mass_battle/": "mass_battle or mb_season",
+    "modules/social_contest/": "social_contest or sc_season", "systems/social_contest/": "social_contest or sc_season",
     "systems/threadwork/": "threadwork",
     "engine/season/": "season_loop",
 }
@@ -93,7 +98,7 @@ def commands(lanes, tests, wide):
         return [f"python -m pytest {' '.join(TREES[:1])} -q -n auto --durations=30",
                 "python -m pytest engine/season/tests -q -n auto --dist worksteal --durations=30",
                 "python -m pytest engine/tests -q --durations=30"]
-    cmds = [f"python -m pytest {' '.join(TREES)} -m {m} -q -n auto --dist worksteal --durations=30" for m in lanes]
+    cmds = [f"python -m pytest {' '.join(TREES)} -m {shlex.quote(m)} -q -n auto --dist worksteal --durations=30" for m in lanes]
     if tests:
         cmds.append("python -m pytest " + " ".join(tests) + " -q --durations=30")
     return cmds
@@ -104,9 +109,23 @@ def main(argv=None):
     ap.add_argument("--base", default="origin/main")
     ap.add_argument("--run", action="store_true",
                     help="run every command and report each one's verdict (exit 1 if any is red)")
+    ap.add_argument("--suite", help="comma-separated lane or suite names (see --list): run those across the three trees, whatever changed")
+    ap.add_argument("--list", action="store_true", help="name every lane and suite (the root conftest.py owns them)")
+    ap.add_argument("--all", action="store_true", help="the full gates, whatever changed")
     a = ap.parse_args(argv)
-    files = changed_files(a.base)
-    lanes, tests, wide, prose = classify(files)
+    if a.list:
+        sys.path.insert(0, ROOT)
+        import conftest
+        print("lanes:  " + ", ".join(conftest.SUBSYSTEM_FILES))
+        print("suites: " + ", ".join(conftest.SEASON_SUITES) + "  (a second marker on engine/season/tests files, never a lane)")
+        return 0
+    if a.suite:
+        files, lanes, tests, wide, prose = [], [" or ".join(n.strip() for n in a.suite.split(",") if n.strip())], [], [], []
+    elif a.all:
+        files, lanes, tests, wide, prose = [], [], [], ["--all"], []
+    else:
+        files = changed_files(a.base)
+        lanes, tests, wide, prose = classify(files)
     print(f"changed files: {len(files)}  | lanes touched: {lanes or 'none'}  | test files: {len(tests)}  | "
           f"wide: {len(wide)}  | prose only: {len(prose)}")
     if wide:
@@ -119,7 +138,7 @@ def main(argv=None):
         print("  " + c)
     if a.run:
         # Every tree runs and reports, so a red in the first does not hide the others' verdicts.
-        verdicts = [(c, subprocess.run(c.split(), cwd=ROOT).returncode) for c in cmds]
+        verdicts = [(c, subprocess.run(shlex.split(c), cwd=ROOT).returncode) for c in cmds]
         for c, rc in verdicts:
             print(("green        " if rc == 0 else f"RED (exit {rc})  ") + c)
         return 1 if any(rc for _, rc in verdicts) else 0
