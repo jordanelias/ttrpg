@@ -46,7 +46,7 @@ schema:
   # `stats:` (the ten attributes, v10 CR-20) reads through `cast.py::attributes_of`; legacy spellings resolve.
   # `manner:` (B10.58, A-108) is `{<axis>: <number>}`, a person's own stored offset on a manner axis, over `engine/season/rosters.yaml: manner_offset_axes`, each within
   # `+-Fixtures.manner_offset_bound`; read by `cast.py::manner_offset_of` into `Person.manner_offset`, which RAISES on any other axis or a value outside the bound. No row
-  # authors one where the IS-A-11 draft's `manner:` cell is filled (BA1.02, uncorrected: ten rows); silence is no key. Sign: negative = the axis name's first pole (`descriptor_registry.yaml: axis_roster`).
+  # authors one: BA1.02 drafted ten (the IS-A-11 draft's `manner:` column, commit 27ab0bb3b) and they are HELD BACK for Jordan, because they take R-06.d's strict-top share at seed 0 from 255 to 249 of 498 (one half, not above it); silence is no key. Sign when they land: negative = the axis name's first pole (`descriptor_registry.yaml: axis_roster`).
   # `relations:` (B10.62) is a list of `{to: <registry case id>, ground: <a `engine/season/rosters.yaml: relation_grounds` member>, valence: -1 or +1,
   # weight: <whole number 0-5>}`, read by `engine/season/data/cast.py::relations_of`, which RAISES on an unknown id, ground or valence and on a weight outside the
   # stance row's own bound. A relation is authored on the side that HOLDS it: a symmetric one is two rows, one on each person, and they need not agree. At build
@@ -111,7 +111,6 @@ characters:
       thread_truth: 5
       einhir_restoration: 1
       altonian_civics: 1
-    manner: {rigid_flexible: -0.10}  # IS-A-11 draft cell (BA1.02)
     source: systems/npcs/reference/edeyja_npc.md, npc_roster_v30 §1
     notes: "Highest TS of any living practitioner. Survived proximity to a major Gap/tear."
 
@@ -152,7 +151,6 @@ characters:
       thread_truth: 2
       einhir_restoration: 4
       altonian_civics: 1
-    manner: {deontological_instrumental: 0.10}  # IS-A-11 draft cell (BA1.02)
     source: npc_roster_v30 §2
     notes: "Vaynard's intelligence operative. Thread-sensitive. RM-adjacent targets consistently 1 season behind. Southern Einhir solidarity."
 
@@ -232,7 +230,6 @@ characters:
       thread_truth: 1
       einhir_restoration: 0
       altonian_civics: 1
-    manner: {rigid_flexible: -0.15, deontological_instrumental: -0.10}  # IS-A-11 draft cell (BA1.02)
     unaware: [prac.thread_sensitivity]  # BA1.12, U5a self-knowledge edit 2: he attributes his hunches to investigative instinct; status: seed [ASSUMPTION; medium; Jordan to correct; reverts alone]
     source: npc_roster_v30 §4
     notes: "TS 15. Attributes Thread perception to investigative instinct. Field Inquisitor, NOT Cardinal. Savonarola archetype."
@@ -386,7 +383,6 @@ characters:
       solmund_orthodoxy: 2
       einhir_restoration: 0
       altonian_civics: 2
-    manner: {rigid_flexible: -0.15}  # IS-A-11 draft cell (BA1.02)
     source: npc_roster_v30 §8
 
   - id: NPC-009
@@ -424,7 +420,6 @@ characters:
       solmund_orthodoxy: 2
       einhir_restoration: 1
       altonian_civics: 1
-    manner: {deontological_instrumental: 0.10}  # IS-A-11 draft cell (BA1.02)
     source: npc_roster_v30 §9
 
   - id: NPC-010
@@ -501,7 +496,6 @@ characters:
       solmund_orthodoxy: 1
       einhir_restoration: 1
       altonian_civics: 3
-    manner: {rigid_flexible: 0.10}  # IS-A-11 draft cell (BA1.02)
     source: npc_roster_v30 §11
 
   - id: NPC-012
@@ -578,7 +572,6 @@ characters:
       solmund_orthodoxy: 3
       einhir_restoration: 1
       altonian_civics: 1
-    manner: {deontological_instrumental: 0.10}  # IS-A-11 draft cell (BA1.02)
     source: npc_roster_v30 §13, npc_character_analyses_v30_infill
 
 # ═══════════════════════════════════════════════════════════════
@@ -1214,7 +1207,6 @@ characters:
       thread_truth: 2
       einhir_restoration: 5
       altonian_civics: 1
-    manner: {deontological_instrumental: 0.15, grandiose_humble: -0.10}  # IS-A-11 draft cell (BA1.02)
     relations: [{to: NPC-050, ground: rivalry, valence: -1, weight: 4}]  # IS-A-11 draft (d), BA1.08; [ASSUMPTION; low; Jordan to correct]
     source: npc_behavior_v30 §2.4, npc_character_analyses_infill §5, faction_canon_v30
     notes: "PP-650 STRUCK on Cultural Reformation + VTM associations; character active. Reinhardt von Lohengramm archetype per Jordan."
@@ -1422,7 +1414,6 @@ characters:
       thread_truth: 4
       einhir_restoration: 2
       altonian_civics: 1
-    manner: {rigid_flexible: -0.10}  # IS-A-11 draft cell (BA1.02)
     source: arc_expansion_v30
 
   - id: NPC-080
@@ -1458,7 +1449,6 @@ characters:
       solmund_orthodoxy: 3
       einhir_restoration: 1
       altonian_civics: 1
-    manner: {rigid_flexible: -0.10, deontological_instrumental: -0.10}  # IS-A-11 draft cell (BA1.02)
     source: proposed
 
   - id: NPC-081

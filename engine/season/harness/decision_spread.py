@@ -189,6 +189,7 @@ def apply_control(w) -> dict:
         if p.pursuits:
             p.pursuits = dict(mean)
             p.conviction = dict(conv)
+            p.manner_offset = {}          # `person_q.projected_axes` adds a person's own offset to his vector: a flat arm holds none
     return mean
 
 
@@ -535,6 +536,7 @@ def read_signatures(w, signatures: Optional[dict] = None) -> dict:
         foldable = resolvable_verbs()
         for p in wk.persons.values():
             p.pursuits = {k: 1.0}
+            p.manner_offset = {}          # a single-pursuit holder: his own manner offset is not part of what the signature reads
         tops: Counter = Counter()
         for _label, ref in common_referents(wk):
             _handed, keyed, order = common_set(wk, ref, foldable)

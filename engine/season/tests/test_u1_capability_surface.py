@@ -837,7 +837,7 @@ def test_a_rank_at_its_ceiling_is_not_raised():
 # ---------------------------------------------------------------------------------------------------------------------
 # B04.09 -- A CAST ROW MAY AUTHOR SKILL SCORES (CAP A7; CORE Edit 5). `data/cast.py::capabilities_of` is the one reader;
 # the builder merges it over the lifepath expansion; the case overlay's `cast: capability:` is checked through it.
-# The shipped registry authors no row, so each test plants the row it reads.
+# The shipped registry authors `capabilities:` on rows since BA1.01, so each test plants the row it reads (and picks rows that author none).
 
 def test_a_cast_capability_naming_no_definition_is_refused():
     """FALSIFIER: a row naming an undefined skill that builds. `capabilities_of` refuses it naming the row and the roster;
