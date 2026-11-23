@@ -29,7 +29,7 @@
 
 schema:
   required: [id, faction, role, status]
-  optional: [heritage, lifepath, ts, stats, convictions, affiliations, title, capabilities, resonant_style]
+  optional: [heritage, lifepath, ts, stats, convictions, affiliations, title, capabilities, resonant_style, manner]
   # B04.12: `engine/season/data/cast.py` reads `required` + `optional` as the keys a row may carry THAT A READER TAKES BY NAME, and
   # REFUSES any other, except the keys it declares unread (`cast.UNREAD_KEYS`, the one list: authored prose and threadwork's tracks
   # that no engine code reads -- `first_name`, `last_name`, `age`, `birthplace`, `territory`, `goals`, `notes`, `source`, `certainty`,
@@ -43,6 +43,9 @@ schema:
   # row's own text (role, notes) names or clearly states one of the 34; silence is no key. It is NOT `vocation:` --
   # in code "vocation" names a capability key.
   # `stats:` (the ten attributes, v10 CR-20) reads through `cast.py::attributes_of`; legacy spellings resolve.
+  # `manner:` (B10.58, A-108) is `{<axis>: <number>}`, a person's own stored offset on a manner axis, over `engine/season/rosters.yaml: manner_offset_axes`, each within
+  # `+-Fixtures.manner_offset_bound`; read by `cast.py::manner_offset_of` into `Person.manner_offset`, which RAISES on any other axis or a value outside the bound. No row
+  # authors one yet (the values are the cast content pass's); silence is no key.
   # `affiliations:` (IN-08 H10) is `{<affiliation>: <int 0-5>}` over
   # `references/descriptor_registry.yaml: affiliation_roster` -- the person's religious affiliations
   # and, since ED-IN-0293, `altonian_civics` (the political structure they want), read by

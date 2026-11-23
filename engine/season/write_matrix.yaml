@@ -253,6 +253,13 @@ rows:
     by:      "B04.07 (A-107): `frozenset` of `descriptors.TRAITS` ids, seated at world build from the cast row's `resonant_style:` (`data/cast.py::traits_of`, `boot/realm.py::build_realm`) and written NOWHERE in play: no step, so the gate refuses any write (`(Proposition, *)`'s shape). A trait is held or not and never gives dice; it is never a key of `Person.capability`"
     emits:   "—"
   - kind:    "Person"
+    field:   "manner_offset"
+    steps:   []
+    class:   "—"
+    social:  "n/a"
+    by:      "B10.58 (A-108, `IS-B2-CHAR-07`): `{axis: float}` over `rosters.yaml: manner_offset_axes`, each within `+-Fixtures.manner_offset_bound`, seated at world build from the cast row's `manner:` (`data/cast.py::manner_offset_of`, `boot/realm.py::build_realm`) and written NOWHERE in play: no step, so the gate refuses any write (`traits`' shape). Empty where unauthored. Read once, by `queries/person_q.py::projected_axes`"
+    emits:   "—"
+  - kind:    "Person"
     field:   "conviction"
     steps:   [RES, ENC]
     class:   "ACTS"

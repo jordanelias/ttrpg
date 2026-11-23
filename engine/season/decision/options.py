@@ -510,7 +510,7 @@ for _v, _ctx in VIOLENCE_CONTEXTS.items():
 # `project`'s stated single owner is `data/pursuits.to_axes`; it is not moved here.
 
 
-def project(p: Person, scar_shift: float = 0.0) -> dict:
+def project(p: Person, scar_shift: float = 0.0, manner: bool = True) -> dict:
     """A person's fifteen pursuit weights, in the seven-axis basis. `U3` / R-06a.
 
     ⚠⚠ **§F2's `conviction[axis]` IS COMPUTED, NOT LOOKED UP.** V2 §F2 spells
@@ -541,8 +541,10 @@ def project(p: Person, scar_shift: float = 0.0) -> dict:
     `to_axes` projects are `person_q.crisis_weights(p, scar_shift)` -- a pursuit whose scar count has
     reached threshold 2 gives weight to the others. `0`, the shipped control, hands `to_axes` the
     person's own `pursuits` untouched. Only `choose`'s score passes it; `refusal_tolerance` (dormant)
-    reads the unshifted weight."""
-    return projected_axes(p, scar_shift)
+    reads the unshifted weight.
+
+    ⚠ `manner` (B10.58) IS `person_q.projected_axes`'s: `False` projects his pursuits WITHOUT his stored manner offset, and `refusal_tolerance` alone asks it (M37)."""
+    return projected_axes(p, scar_shift, manner)
 
 
 def refusal_tolerance(p: Person, axis: Optional[str]) -> Optional[float]:
@@ -567,8 +569,9 @@ def refusal_tolerance(p: Person, axis: Optional[str]) -> Optional[float]:
                    "H-146", law="ED-IN-0261 -- the gate reads a ROSTERED axis; an unrostered one "
                                 "would raise `Unspecified` rather than project to a real weight")
     refusing_pole(axis)       # CR-21: an armed axis the roster authors no pole for refuses HERE, not at an engaged verb
-    reach = decisiveness(p)   # the vector's length, `_AXES` order (`person_q.decisiveness`, the one owner of the norm)
-    return project(p)[axis] / reach if reach else 0.0
+    # B10.58 / M37: NO MANNER AXIS FEEDS THE GATE. The armed axis can be one a person holds a stored offset on, so both the weight and the length are read from his pursuits alone.
+    reach = decisiveness(p, manner=False)   # the vector's length, `_AXES` order (`person_q.decisiveness`, the one owner of the norm)
+    return project(p, manner=False)[axis] / reach if reach else 0.0
 
 
 def scruple(verb: str, axis: str, tolerance: float) -> float:

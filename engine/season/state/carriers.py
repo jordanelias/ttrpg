@@ -852,6 +852,11 @@ class Person:
     # skills only), and written at build only (`write_matrix.yaml`'s `Person.traits` row has no step). No reader reads it
     # yet: the `edge` reader that will (U1-B step 4) reads 1 if the subject holds the trait, else 0.
     traits: frozenset = frozenset()
+    # B10.58 (A-108): A PERSON'S OWN MANNER OFFSET -- `{axis: float}` over `rosters.yaml: manner_offset_axes`, how far his way of going about things sits from what
+    # his pursuits alone would make it, on that axis (each within `+-Fixtures.manner_offset_bound`). Filled ONCE at world build from a cast row's `manner:`
+    # (`data/cast.py::manner_offset_of`), written at build only (`write_matrix.yaml`'s `Person.manner_offset` row has no step), and EMPTY where unauthored: an axis nobody
+    # holds is absent, never 0.0. ONE READER: `queries/person_q.py::projected_axes` adds it to the projected axis; the refusal gate asks for the projection without it.
+    manner_offset: Mapping[str, float] = field(default_factory=dict)
     travel_leg: list[str] = field(default_factory=list)
     # ⚠ THE TENURE STORE IS HERE, as `Tenure`'s OWN DOCSTRING says: "S15 -- THE ONE EDGE. Owned by its
     # SUBJECT (S15.1)." `budget : (Person, View) -> int` reads "own `hold` Tenures" WITH NO WORLD
@@ -902,6 +907,7 @@ class PersonInterior:
     conviction: Mapping
     scar: Mapping
     attributes: Mapping
+    manner_offset: Mapping
     body: int
     thread_sensitivity: Optional[int]
     stance: tuple
@@ -931,7 +937,7 @@ def interior_of(p: Person, tick: int, claim_decay: int) -> PersonInterior:
     `tick` and `claim_decay` his claims are read at (B09.01)."""
     return PersonInterior(
         p.id, p.name, frozen(p.capability), frozen(p.pursuits), frozen(p.conviction), frozen(p.scar),
-        frozen(p.attributes),
+        frozen(p.attributes), frozen(p.manner_offset),
         p.body, p.thread_sensitivity, tuple(p.stance), tuple(p.travel_leg), tuple(p.tenures), tuple(p.ledger),
         p.weight, p.heritage, tick, claim_decay)
 

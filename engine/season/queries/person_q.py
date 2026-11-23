@@ -1218,17 +1218,27 @@ def _scar_shifted(p: Person, shift: float, hold: str = "any", mass: float = 0.6)
     return out
 
 
-def projected_axes(p: Person, shift: float = 0.0) -> dict:
-    """`p`'s pursuits projected to the axes, `to_axes(crisis_weights(p, shift))`: person-side (AX-2)."""
-    return to_axes(crisis_weights(p, shift))
+def projected_axes(p: Person, shift: float = 0.0, manner: bool = True) -> dict:
+    """`p`'s pursuits projected to the axes, `to_axes(crisis_weights(p, shift))`, plus his own stored manner offset on each axis he holds one
+    (B10.58, A-108; `Person.manner_offset`): person-side (AX-2). THE ONE READER OF THE OFFSET. An axis he holds none on is exactly his pursuits'
+    projection (nothing is added, so a person with no offset projects as he did before the offset existed).
+
+    ⚠ `manner=False` IS THE PROJECTION FROM HIS PURSUITS ALONE, AND THE REFUSAL GATE'S ONE ASK (`decision/options.py::refusal_tolerance`): M37 --
+    no manner axis feeds the gate (`proposals/2026-10-24-character-layers-v2.md` section 11.5), and the armed axis, `deontological_instrumental`, is one
+    of the three the offset sits on. Every other reader takes the default and gets the offset."""
+    axes = to_axes(crisis_weights(p, shift))
+    if manner:
+        for axis, offset in p.manner_offset.items():
+            axes[axis] += offset
+    return axes
 
 
-def decisiveness(p: PersonInterior, shift: float = 0.0) -> float:
-    """HOW FIRMLY `p`'s PURSUITS POINT ONE WAY: the length of `projected_axes(p, shift)`. The draw in
+def decisiveness(p: PersonInterior, shift: float = 0.0, manner: bool = True) -> float:
+    """HOW FIRMLY `p`'s PURSUITS POINT ONE WAY: the length of `projected_axes(p, shift, manner)`. The draw in
     `decision/choose.py::_sample_order` is read against score margins, which scale with this, so it is
     the person's decisiveness at a given `choice_temperature`. Person-side (AX-2); stores nothing.
     Summed in `_AXES` order by `ltr_sum`, the order of `pursuit_cosine_axes`'s norm."""
-    v = projected_axes(p, shift)
+    v = projected_axes(p, shift, manner)
     return math.sqrt(ltr_sum(v[a] ** 2 for a in _AXES))
 
 

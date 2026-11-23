@@ -3014,6 +3014,16 @@ rosters:
       the writes in words and names no kinds; the three are the words its table uses; Jordan to correct.]
     values: [intensity, scar, branch]
 
+  manner_offset_axes:
+    source: >-
+      B10.58 (`IS-B2-CHAR-07`; A-108, ED-IN-0261's superseding row, 2026-11-12): the manner axes on which a person may carry a stored offset.
+    note: >-
+      THE THREE AXES A CAST ROW'S `manner:` MAY NAME, read by `data/cast.py::manner_offset_of`, which refuses any other (and any value beyond
+      `+-Fixtures.manner_offset_bound`); each is a member of `pursuit_axes`. The other axes stay as their pursuits project them (A-108: "the other axes
+      ... projected"). `selfish_selfless` is left out by M34's default (spread 0). [ASSUMPTION: the roster's name and shape -- basis: `crisis_write_kinds`' closed
+      set of names read by a loader; Jordan to correct.]
+    values: [rigid_flexible, grandiose_humble, deontological_instrumental]
+
   odds_weightings:
     source: >-
       v10 CR-17 (M1, AQ-X1 (b), taken at `CLAUDE.md` section 0's ladder step 5): whether the chooser's pursuit

@@ -1145,6 +1145,12 @@ SCAR_HOLDS = roster("scar_holds")
 SCAR_VINDICATIONS = roster("scar_vindications")
 # `H-470`. THE ARMS OF `Fixtures.regard_unit`, bound at import; the control `raw` is a member.
 REGARD_UNITS = roster("regard_units")
+# `H-481` (B10.58). THE AXES A CAST ROW'S `manner:` MAY NAME (`data/cast.py::manner_offset_of`), bound at import; each is an axis `projected_axes` projects onto.
+MANNER_OFFSET_AXES = roster("manner_offset_axes")
+if not MANNER_OFFSET_AXES <= PURSUIT_AXES:
+    raise Unspecified(f"`rosters.yaml: manner_offset_axes` names {sorted(MANNER_OFFSET_AXES - PURSUIT_AXES)}, which are none of `pursuit_axes`", "rosters.yaml",
+                      needs=f"members of {sorted(PURSUIT_AXES)}",
+                      law="B10.58 (A-108) -- a stored offset is added to a projected axis, so it can sit only on one the projection has")
 # `R8.1`. THE `seen` CLAIM -- its four terms (ordered: they are the struct's fields), the one
 # predicate it is deposited under, and which terms each witness channel shows. Bound at import for
 # `TITLE_DOMAINS`' reason; the terms are cross-validated against `WITNESS_CHANNELS` and

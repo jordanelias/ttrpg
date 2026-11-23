@@ -1318,6 +1318,11 @@ DEFAULT_FIXTURES = Fixtures(
     # today. Each name is a role of `references/module_contracts.yaml`'s `composition_roles:` (refused at load otherwise). `()` is the CONTROL and SHIPS: no role is named, no
     # wrapper passes a decider. The first role is listed by the batch that makes its module accept `decide=` (B16 the duel round, B20 the field's commander, B24 the hearing), each a declared mover there.
     npc_decider_roles=(),
+    # `H-481` (B10.58; `IS-B2-CHAR-07`, A-108). THE LARGEST STORED MANNER OFFSET A CAST ROW MAY AUTHOR: `data/cast.py::manner_offset_of` refuses a `manner:` value outside
+    # `+-` this, at build (the seeder hands it in: `cast` cannot import this module). 0.15 is CL-PERSON's draft (`proposals/2026-10-24-character-layers-v2.md` section 2). It moves nothing
+    # while no row authors an offset, which is every shipped row. [ASSUMPTION; medium; Jordan to correct; revert: none needed, no row authors an offset.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-481 -- site: Fixtures manner_offset_bound, graded `assumption`; CL-PERSON drafts +-0.15 and no live reading fixes it, so it is injected and swept 0.1 / 0.15 / 0.3]
+    manner_offset_bound=0.15,          # `H-481`, swept 0.1 / 0.15 (SHIPPED, CL-PERSON's draft) / 0.3
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

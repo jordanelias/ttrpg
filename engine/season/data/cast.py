@@ -34,7 +34,7 @@ import re
 from typing import Optional
 
 from . import files
-from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_RANKS, LIFEPATH_TEMPLATES, load_yaml, roster
+from .rosters import FACTION_ALIAS, FACTIONS, LIFEPATH_RANKS, LIFEPATH_TEMPLATES, MANNER_OFFSET_AXES, load_yaml, roster
 from ..gaps import Unspecified
 from ...substrate.descriptors import (
     ATTRIBUTE_CEILING, ATTRIBUTE_FLOOR, ATTRIBUTES, CAPABILITIES, HERITAGES, PRACTITIONER_STATS, TRAIT_BY_SEATING,
@@ -412,6 +412,33 @@ def traits_of(r: dict) -> frozenset:
         f"cast row {(r or {}).get('id', '?')}: resonant_style {v!r} seats no trait; the traits seat {sorted(seats)}",
         "references/descriptor_registry.yaml", needs=f"one of {sorted(seats)} (any case), or no key",
         law="A-107 -- a resonant_style no trait row names is refused at build")
+
+
+def manner_offset_of(r: dict, bound: float) -> dict:
+    """`Person.manner_offset`'s authored source (B10.58, A-108): the row's `manner:` mapping, as `{axis: float}`, or `{}` where nothing is authored
+    -- the key absent, `manner: null`, or no row at all. An axis the row leaves out is left out of the result: ABSENT, never 0.0. An axis outside
+    `rosters.yaml: manner_offset_axes`, a value that is no number (a bool and a numeric string included) or lies outside `+-bound`
+    (`Fixtures.manner_offset_bound`, handed in because `data/fixtures.py` imports this module), or a `manner:` that is no mapping, REFUSES, naming the row
+    (`attributes_of`'s shape). The ONE caller is `boot/realm.py::build_realm`."""
+    raw = (r or {}).get("manner")
+    if raw is None:
+        return {}
+    who = (r or {}).get("id", "?")
+    if not isinstance(raw, dict):
+        raise Unspecified(f"cast row {who}: manner {raw!r} is no mapping", "references/npc_registry.yaml",
+                          needs="a mapping of manner axis to a number, or null",
+                          law="A-108 -- an authored value this reader cannot parse refuses")
+    out: dict = {}
+    for axis, v in raw.items():
+        if axis not in MANNER_OFFSET_AXES:
+            raise Unspecified(f"cast row {who}: manner axis {axis!r} is none of {sorted(MANNER_OFFSET_AXES)}", "rosters.yaml",
+                              needs=f"one of {sorted(MANNER_OFFSET_AXES)}",
+                              law="A-108 -- a stored offset sits only on the axes `manner_offset_axes` names")
+        if isinstance(v, bool) or not isinstance(v, (int, float)) or not -bound <= v <= bound:
+            raise Unspecified(f"cast row {who}: manner {axis!r}: {v!r} is no number within +-{bound}", "references/npc_registry.yaml",
+                              needs=f"a number from {-bound} to {bound}", law="A-108 -- a stored offset lies within `Fixtures.manner_offset_bound`")
+        out[axis] = float(v)
+    return out
 
 
 def capabilities_of(r: dict) -> dict:

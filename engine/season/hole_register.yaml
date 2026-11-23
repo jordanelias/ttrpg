@@ -7135,6 +7135,18 @@ rows:
     unblocks:  "B16's round choices and the wrappers of B22 and B24 deciding a choice by the person's own cells; B98's flip of the roles"
     cite:      "Workplan v12 B10.57 (IS-B2-CHAR-02 steps 1 to 5) and `decision/decider.py::make_decider` and `::decides_for`; the composition roles are `engine/substrate/composition.py` ROLES. Added by the batch orchestrator after B10.57's commit left `test_season_shape.py::test_w9_check3_every_fixture_read_resolves_to_a_register_site` red (a fixture the run reads names no site on any row). [ASSUMPTION; medium; Jordan to correct: the sweep points are the roles a wrapper could name, not a reading.]"
     source:    "workplan v12 B10.57; batch B10-character orchestrator, 2026-11-23"
+  - id:        H-481
+    tier:      1
+    hole:      "HOW FAR A PERSON'S OWN MANNER MAY SIT FROM WHAT HIS PURSUITS MAKE IT -- `manner_offset_bound` (B10.58; `IS-B2-CHAR-07`, A-108). `data/cast.py::manner_offset_of` refuses a cast row's `manner:` value outside plus or minus this, on each of the three axes of `rosters.yaml: manner_offset_axes`; `queries/person_q.py::projected_axes` adds the stored offset to the projected axis. A-108 rules that a person may carry a stored offset on those axes and names no size; CL-PERSON drafts 0.15. No cast row authors an offset yet (the values are the content pass's), so the bound moves nothing in the shipped world."
+    kind:      "NUMBER"
+    owner:     "data/cast.py::manner_offset_of"
+    grade:     "assumption"
+    default:   "0.15 -- CL-PERSON's draft, SHIPPED; read only where a cast row authors a `manner:`, which none does, so it moves no behaviour at the control [ASSUMPTION; medium; Jordan to correct; revert: none needed]"
+    site:      "Fixtures manner_offset_bound, read by `boot/realm.py::build_realm` and handed to `data/cast.py::manner_offset_of`; a `manner:` value outside plus or minus it raises at build"
+    sweep:     ["0.1", "0.15 (SHIPPED)", "0.3"]
+    unblocks:  "the cast's offsets (BA1-cast-content, which authors the `manner:` values) and CL-PERSON's personality falsifier read at live offsets (`decision_spread --arms`: no decision moved means the offset is inert)"
+    cite:      "`proposals/2026-10-24-character-layers-v2.md` section 2 (overridden for three axes, plus or minus 0.15) and section 11.4; A-108 (`ED-IN-0261`'s superseding row, 2026-11-12: a person may carry a stored offset on each manner axis). [ASSUMPTION; medium; Jordan to correct: that the bound is 0.15 and a Fixtures field rather than a roster number, because `data/fixtures.py` imports `data/cast.py` and the loader takes it as an argument; that no manner axis feeds the refusal gate (M37, section 11.5), so `projected_axes` takes a `manner` keyword and `refusal_tolerance` alone passes False.] FALSIFIER `engine/season/tests/test_manner_offsets.py::test_a_manner_offset_does_not_move_the_refusal_threshold` (two persons with identical pursuits and opposite offsets on the refused axis hold one threshold; planted failure, the gate reading the offset: red) and `::test_two_persons_with_identical_pursuits_differ_by_their_offsets`; CONTROL with every offset absent, `projected_axes` for every cast person and the realm's executed-act and Event tallies at seeds 0 to 2, one season, equal the tree before, and the content hash moves by encoding only (a new field on `Person`)."
+    source:    "workplan v12 B10.58 (`IS-B2-CHAR-07`; B10's H block slot 18)"
 
 discharges:
   D1:   "row:H-01"
