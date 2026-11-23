@@ -52,7 +52,7 @@ from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.rosters import faction_prop_id
 from engine.season.decision.choose import make_chooser
 from engine.season.decision.options import opening_set
-from engine.season.boot.realm import build_realm
+from engine.season.boot.realm import build_realm as _shipped_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.loop.effects import EFFECTS
 from engine.season.queries import person_q as PQ
@@ -63,6 +63,24 @@ from engine.season.state.carriers import Act, Person, Question, Rung, Sensation,
 from engine.season.state.ids import H, draw_factory
 
 from ._field_outcomes import SCALE, field_outcome
+
+
+def build_realm(seed):
+    """FIXTURE EDIT, NAMED (B21.03, re-recorded on what the row names): a seat now holds a remit act iff its row names it, and
+    `off_spymaster` and `off_cardinal_prudence` name `[issue]` alone, so the shipped Spymaster (`p_npc_033`) and Cardinal
+    (`p_npc_013`) no longer hold the `dispatch` that `march` reads, and the fixtures here march them through those seats. This file
+    observes the march mechanics, never who may march, so the one realm every test builds seats the two grants as the rows that
+    name `dispatch` do: the seat's remit gains `dispatch` and the sitting `hold` is re-stamped through `World._grant_remit(force=True)`,
+    the writer `establish` uses, not a hand-written payload. `off_parliamentary_clerk` is left without it (its test is the refusal)."""
+    w = _shipped_realm(seed)
+    for pid, seat_id in (("p_npc_033", "off_spymaster"), ("p_npc_013", "off_cardinal_prudence")):
+        seat = w.offices[seat_id]
+        seat.remit_acts = list(seat.remit_acts) + ["dispatch"]
+        held = [t for t in w.persons[pid].tenures if t.kind == "hold" and t.object == seat_id and t.live]
+        assert len(held) == 1, f"fixture moved: {pid} no longer sits in {seat_id}; re-read it"
+        w._grant_remit(held[0], force=True)
+        assert "dispatch" in held[0].granted_acts
+    return w
 
 
 def _march_act(actor: str, target: str, via: str, act_id: str = "m1") -> Act:
