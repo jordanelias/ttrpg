@@ -79,9 +79,11 @@ def _pool_dice(c, cfg):
 
 
 def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
-    """One engagement (the exchange inside a bout). `first` is the initiating Combatant object. `prev_closed` is the
-    measure state the PREVIOUS engagement ended in (see the re-presentation gate below). Returns (felled Combatant or
-    None, ended_closed) — the second element threads forward as the next engagement's prev_closed. A and B are fixed
+    """One round (A-101): the two close, exchange attempts to attack, and separate. `first` is the initiating Combatant
+    object. `prev_closed` is the measure state the PREVIOUS engagement ended in (see the re-presentation gate below).
+    Returns (felled Combatant or None, ended_closed, ended_by) — the second element threads forward as the next
+    engagement's prev_closed; the third is how the round ended, a member of `vocabulary.ROUND_ENDS` ('felled' at each
+    felling, else the reason of the `separation` event it emitted). A and B are fixed
     objects throughout — never swapped. `terms` is `fight`'s non-lethal duel terms (RS-25), or None under lethal
     ones: when set, the burst ends at the first beat that opens with `_terms_met` true, and `fight` reads the stop."""
     aggressor = first; defender = B if first is A else A
@@ -152,7 +154,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
         # A pure read of the trackers: no draw, and under lethal terms (`terms is None`) not even the read, so
         # the lethal fight is byte-identical.
         if terms is not None and _terms_met(A, B, terms, cfg):
-            _emit('separation', reason='terms'); return None, closed
+            _emit('separation', reason='terms'); return None, closed, 'terms'
         beats+=1
         # CONDITIONAL TEMPO (correction 2): recompute each beat with current fatigue — grip/stance/fatigue change
         # cadence; it is not a static weapon property. Approach uses general cadence; closed uses close-cadence.
@@ -188,7 +190,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             if base_gap>cfg['CLOSE_GAP_REF'] and rng.random()<S.reopen_prob(longer, shorter, base_gap, ffat[longer], push_avail, cfg, TR)*S.reach_threat(longer, shorter, cfg):
                 closed=False; measure_gap=base_gap; ready=_carry(ready,cfg)
                 reopen_moment=False; push_avail=False
-                continue
+                _emit('separation', reason='reopen'); return None, False, 'reopen'
         reopen_moment=False; push_avail=False   # the moment is fleeting; consumed/expires each beat unless re-created below (RR-01: push_avail no longer carries across beats)
         # PROACTIVE FIGHTING WITHDRAWAL (ED-PC-0030): a reach weapon closed into a bind it LOSES does not have to
         # trade exchanges to a decision — it can REFUSE the bind, break measure with footwork, and re-present its
@@ -207,7 +209,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                 if rng.random() < S.disengage_clean_p(longer, shorter, cfg, TR):
                     closed=False; measure_gap=base_gap; ready=_carry(ready,cfg)   # CLEAN break -> re-open to measure
                     _emit('disengage', longer=longer.label, shorter=shorter.label, ok=True, gap=round(base_gap,2))
-                    continue
+                    _emit('separation', reason='disengage'); return None, False, 'disengage'
                 else:                                            # READ -> the closer pursues into the withdrawal (Nachreisen)
                     pool=max(1, _pool_dice(shorter, cfg))
                     deg,net=core.resolve(pool, S.pursuit_sigma(shorter, longer, ffat[shorter], ffat[longer], cfg, TR), rng, core.ob_from_defender(longer, cfg))   # ED-PC-0036: systems.pursuit_sigma owns the formula (the whole sigma-assembly: armour, wounds, the withdrawer's attributes). Ob-from-defender (ED-PC-0058): `longer` is struck if the pursuit lands, so `longer` is the defender this roll is against.
@@ -215,7 +217,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                     if deg in ('success','overwhelming'):
                         d=core.strike(shorter, longer, deg, cfg, net=net, pool=pool)
                         _wound('pursuit', shorter, longer, d); longer.conc=max(0,longer.conc-cfg['CONC_DRAIN_HIT'])
-                        if longer.felled: return longer, closed
+                        if longer.felled: return longer, closed, 'felled'
                     ready[shorter]=max(ready[shorter], cfg['ACT_THRESHOLD'])   # the pursuer seizes the tempo
         # ----- APPROACH: longer weapon threatens (stop-thrusts) while shorter closes -----
         if not closed:
@@ -249,7 +251,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                     _wound('stophit', longer, shorter, d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
                     _sd,_pb=S.percussion_stagger(longer, shorter, d, deg, cfg)   # ED-PC-0031: wind + stagger (armour-gated impulse), distinct from the wound
                     shorter.stamina-=_sd; shorter.poise=S.clamp_poise(shorter.poise-_pb, cfg)
-                    if shorter.felled: return shorter, closed
+                    if shorter.felled: return shorter, closed, 'felled'
                     recoil = S.arrest_impulse(longer, cfg)   # the ARREST: braced-weapon impulse vs the charge (reach+structure, not wound)
             measure_gap=S.approach_step(measure_gap, base_gap, close_rate, recoil)   # net advance − arrest (systems owns the arithmetic)
             just_closed = (measure_gap<=cfg['CLOSE_GAP_REF'])
@@ -258,7 +260,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             _emit('approach', beat=beats, shorter=shorter.label, longer=longer.label, gap=round(measure_gap,2),
                   close_rate=round(close_rate,3), just_closed=just_closed, stophit_p=round(stophit_p,3))
             if not closed:
-                if A.stamina<=cfg['STAMINA_COLLAPSE'] or B.stamina<=cfg['STAMINA_COLLAPSE']: _emit('separation', reason='collapse'); return None, closed
+                if A.stamina<=cfg['STAMINA_COLLAPSE'] or B.stamina<=cfg['STAMINA_COLLAPSE']: _emit('separation', reason='collapse'); return None, closed, 'collapse'
                 continue
         # ----- CLOSED: tempo-gated exchange -----
         actors=[c for c in (A,B) if ready[c]>=cfg['ACT_THRESHOLD']]
@@ -393,7 +395,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                     d=core.strike(aggressor, defender, 'graze', cfg)
                     _wound('displace_graze', aggressor, defender, d)
                     if defender.felled:
-                        _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B); return defender, closed
+                        _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B); return defender, closed, 'felled'
                 riposte=True   # defender now inside with initiative
         # ---- distance-creating moments for re-opening (corrections 1+3), benefiting the LONGER weapon ----
         # (a) opponent over-committed: a deep commit by the SHORTER weapon (the one who must stay close) leaves it
@@ -416,7 +418,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             _sd,_pb=S.percussion_stagger(aggressor, defender, hit, deg, cfg)   # ED-PC-0031: concussive wind + strong stagger (armour-gated; the blunt-through-plate path the wound-only break above cannot see)
             defender.stamina-=_sd; defender.poise=S.clamp_poise(defender.poise-_pb, cfg)
             if defender.felled:
-                _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B); return defender, closed
+                _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B); return defender, closed, 'felled'
         if bind:
             opening_created=True   # CONTACT AXIS precondition site 3: a bind IS a contact opening (Ringen am Schwert)
             # German Fühlen / Stärke-Schwäche: whoever DOMINATES the bind (bind_sigma sign) steals the Vor through the
@@ -438,7 +440,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                         _sd,_pb=S.percussion_stagger(aggressor, defender, d, 'success', cfg)   # ED-PC-0031: wind + stagger in the bind
                         defender.stamina-=_sd; defender.poise=S.clamp_poise(defender.poise-_pb, cfg)
                         if defender.felled:
-                            _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B); return defender, closed
+                            _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B); return defender, closed, 'felled'
                         break
                 else: riposte=True; break
         if riposte:
@@ -468,17 +470,17 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                 aggressor.initiative=S.clamp_initiative(aggressor.initiative + cfg['INIT_STEAL_INDES']*cfg['CONTACT_CONTROL_VOR_K'], cfg)
         _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B)
         exchanges+=1
-        # TURN = one approach -> burst -> separation (Jordan 2026-06-03). The burst is a SMALL EMERGENT run of
+        # ROUND = one approach -> burst -> separation (Jordan 2026-06-03; A-101). The burst is a SMALL EMERGENT run of
         # exchanges, gated by TEMPO (who re-reaches ACT_THRESHOLD via close_tempo), NOT by ripostes: a faster fighter
-        # can land SEVERAL hits in a single turn with no reply. It ends when (a) the ceiling BURST_MAX is reached, or
+        # can land SEVERAL hits in a single round with no reply. It ends when (a) the ceiling BURST_MAX is reached, or
         # (b) an exchange resolves CLEANLY on defence -- a dodge/parry/miss with no hit, no riposte, no bind -- so the
         # measure breaks (the floor: one swing, one dodge, separate = 1 exchange). A landed hit, a riposte (role flip),
         # or a bind CONTINUES the pressing. Felling / stamina-collapse exits are handled above. Combat = many such
-        # turns; wounds persist across them, so equal fighters take several turns to resolve (emergent, not enforced).
-        if A.stamina<=cfg['STAMINA_COLLAPSE'] or B.stamina<=cfg['STAMINA_COLLAPSE']: _emit('separation', reason='collapse'); return None, closed
-        if exchanges >= cfg['BURST_MAX']: _emit('separation', reason='burst_ceiling'); return None, closed
-        if not (hit>0 or riposte or bind): _emit('separation', reason='clean_defence'); return None, closed
-    _emit('separation', reason='beat_exhaustion'); return None, closed
+        # rounds; wounds persist across them, so equal fighters take several rounds to resolve (emergent, not enforced).
+        if A.stamina<=cfg['STAMINA_COLLAPSE'] or B.stamina<=cfg['STAMINA_COLLAPSE']: _emit('separation', reason='collapse'); return None, closed, 'collapse'
+        if exchanges >= cfg['BURST_MAX']: _emit('separation', reason='burst_ceiling'); return None, closed, 'burst_ceiling'
+        if not (hit>0 or riposte or bind): _emit('separation', reason='clean_defence'); return None, closed, 'clean_defence'
+    _emit('separation', reason='beat_exhaustion'); return None, closed, 'beat_exhaustion'
 
 class Yield:
     """§11.4 YIELD (PC-01, `ED-PC-0056`), a Phase-1 DECLARATION, not a fourth resolver and not a fourth band.
@@ -586,7 +588,7 @@ def _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide):
           armor_A=A.armor, armor_B=B.armor, tradition_A=A.tradition, tradition_B=B.tradition)
     result=0
     prev_closed=False   # measure state threaded across engagements (ED-PC-0033): a reach weapon only re-presents at open measure if it can hold a crowding opponent off; the first engagement always opens at measure
-    for turn in range(max_bouts):   # each iteration = ONE engagement (~10s turn); victor emerges over MULTIPLE turns with persistent wounds/fatigue. fight() is the multi-turn SIM harness (runs to a decision for win-rates); the GAME calls one engagement per turn.
+    for turn in range(max_bouts):   # each iteration = ONE round (A-101); victor emerges over MULTIPLE turns with persistent wounds/fatigue. fight() is the multi-turn SIM harness (runs to a decision for win-rates); the GAME calls one engagement per turn.
         if yield_decl is not None and yield_decl.turn == turn+1:   # PHASE 1: the declaration precedes every draw of its turn
             _refused = 'objective_contested' if yield_decl.objective_contested else None
             _emit('yield', turn=turn+1, by=yield_decl.by.label, accepted=(yield_decl.accepted and _refused is None), refused=_refused)
@@ -605,8 +607,8 @@ def _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide):
                 break            # result is 0 here (a felling breaks with a result set): UNRESOLVED, no upset draw
         first = A if rng.random()<0.5 else B
         _emit('turn_start', turn=turn+1, first=first.label)
-        loser, prev_closed = engagement(A,B,first,cfg,rng,prev_closed,terms=stop)
-        _emit('engagement_end', turn=turn+1, felled=(loser.label if loser is not None else None))
+        loser, prev_closed, ended_by = engagement(A,B,first,cfg,rng,prev_closed,terms=stop)
+        _emit('engagement_end', turn=turn+1, felled=(loser.label if loser is not None else None), ended_by=ended_by)
         if loser is not None:
             result = -1 if loser is A else 1   # +1 => A won
             break

@@ -255,7 +255,7 @@ def _fight_with_stub_engagement(monkeypatch, damage_A, damage_B, terms):
 
     def _both_cross(A_, B_, first, cfg, rng, prev_closed=False, terms=None):
         A_.apply_wound(damage_A); B_.apply_wound(damage_B)
-        return None, False
+        return None, False, 'terms'
     monkeypatch.setattr(wrapper, 'engagement', _both_cross)
     trace = []
     monkeypatch.setattr(wrapper, '_TRACE', trace.append)
