@@ -233,6 +233,7 @@ characters:
       einhir_restoration: 0
       altonian_civics: 1
     manner: {rigid_flexible: -0.15, deontological_instrumental: -0.10}  # IS-A-11 draft cell (BA1.02)
+    unaware: [prac.thread_sensitivity]  # BA1.12, U5a self-knowledge edit 2: he attributes his hunches to investigative instinct; status: seed [ASSUMPTION; medium; Jordan to correct; reverts alone]
     source: npc_roster_v30 §4
     notes: "TS 15. Attributes Thread perception to investigative instinct. Field Inquisitor, NOT Cardinal. Savonarola archetype."
 
@@ -539,6 +540,7 @@ characters:
       solmund_orthodoxy: 1
       einhir_restoration: 1
       altonian_civics: 2
+    unaware: [stability]  # BA1.12, U5a self-knowledge edit 2: the pursuit his case names (homesickness steering policy toward stability; engine/season/cases/chain/NPC1.yaml); status: seed [ASSUMPTION; medium; Jordan to correct; reverts alone]
     source: npc_roster_v30 §12
 
   - id: NPC-013

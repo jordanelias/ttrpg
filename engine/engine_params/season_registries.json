@@ -9785,6 +9785,9 @@
             "rigid_flexible": -0.15,
             "deontological_instrumental": -0.1
           },
+          "unaware": [
+            "prac.thread_sensitivity"
+          ],
           "source": "npc_roster_v30 \u00a74",
           "notes": "TS 15. Attributes Thread perception to investigative instinct. Field Inquisitor, NOT Cardinal. Savonarola archetype."
         },
@@ -10559,6 +10562,9 @@
             "einhir_restoration": 1,
             "altonian_civics": 2
           },
+          "unaware": [
+            "stability"
+          ],
           "source": "npc_roster_v30 \u00a712"
         },
         {
