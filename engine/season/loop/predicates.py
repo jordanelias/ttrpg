@@ -18,10 +18,11 @@ from typing import NamedTuple, Optional
 from ..data.requires import binding_from_act
 from ..data.verbs import DISPOSAL_EVENTS, _OPENERS_FROM_EFFECTS
 from ..data.rosters import (BINDS_BASES, FOUNDED_CONFERRAL, FOUNDED_REVOCATION, FOUNDER_KEEPS, RELEASABLE_KINDS,
-                            RUNG_KINDS, TITLE_DOMAINS)
+                            RUNG_KINDS)
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..queries.person_q import ABOUT_KEYS
-from ..queries.world_q import BAN_KIND, DETAIN_KIND, DOCKET_PETITION, docketed, founds_over, restrained
+from ..queries.world_q import (BAN_KIND, DETAIN_KIND, DOCKET_PETITION, docketed, founded_office_id, founded_post, founds_over,
+                               restrained)
 from ..state.attribution import causing_act
 from ..state.carriers import Office, operand_of, subject_of
 from ..trace_log import TRACE
@@ -273,13 +274,8 @@ def office_described_by(a: "Act") -> "Optional[Office]":
 
 # v11 CR-25 (CR-11's design §1): WHAT A COMPUTED FOUNDING DECLARES is `offices.yaml: founding:` (B04.23), read here
 # through `data/rosters.py` (`FOUNDER_KEEPS`, `FOUNDED_CONFERRAL`, `FOUNDED_REVOCATION`) and checked against their
-# rosters at load.
-
-
-def founded_office_id(rung: str, post: str) -> str:
-    """The id a computed founding gives the office it founds: deterministic from (rung, post), so the same
-    founding forms the same id and a repeat meets `_req_establish`'s clause 4 on its existing-id arm."""
-    return f"off_{post.strip().lower().replace(' ', '_')}_{rung}"
+# rosters at load. The id rule and the post rule are `queries/world_q.py`'s (`founded_office_id`, `founded_post`): the
+# stamp that offers a holding and the derivation that founds it read the one owner.
 
 
 def office_founded_by(w: "World", a: "Act") -> "Optional[Office]":
@@ -297,8 +293,8 @@ def office_founded_by(w: "World", a: "Act") -> "Optional[Office]":
 
       rung        `subject`, admitted by `queries/world_q.py::founds_over`'s four conjuncts (holding, purview,
                   rank, the seat on its parent);
-      post        `offices.yaml: titles.domains` (`TITLE_DOMAINS`, post -> kind) read in reverse for the rung's
-                  kind, as data and never a branch on a kind; where a kind has two posts (King/Queen,
+      post        `queries/world_q.py::founded_post` (`offices.yaml: titles.domains`, `TITLE_DOMAINS`, post -> kind,
+                  read in reverse for the rung's kind), as data and never a branch on a kind; where a kind has two posts (King/Queen,
                   Duke/Duchess, Count/Countess) the FIRST IN AUTHORED ORDER [ASSUMPTION; medium; Jordan to
                   correct; revert: the second, or the eventual holder's];
       faction,    the exercised seat's (a seat with a `body` founding a titled post is refused by the constructor,
@@ -322,8 +318,7 @@ def office_founded_by(w: "World", a: "Act") -> "Optional[Office]":
     rung = subject_of(a)
     if seat is None or not founds_over(w, a.actor, seat, rung):
         return None
-    kind = w.rungs[rung].kind
-    post = next((p for p, k in TITLE_DOMAINS.items() if k == kind), None)
+    post = founded_post(w, rung)
     if post is None:
         return None
     return Office(founded_office_id(rung, post), post, rung,

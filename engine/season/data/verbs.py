@@ -2312,6 +2312,16 @@ if DISPUTANT_CLASS not in REFERENT_CLASSES:
                     needs="the dispute-context class in the closed roster",
                     law="B11 lane A -- a class stamped by name must be one the roster declares")
 
+# B21.08 (VB-A commit A2 [ASSUMPTION; medium; Jordan to correct; revert: `establish`'s `referent_class: Rung`, drop the
+# value and the `Holding` term in `queries/world_q.py::questions_for`]): THE UNFOUNDED HOLDING, `Detainee`'s shape -- no
+# collection, stamped by name by the standing occasion `queries/world_q.py::holdings_to_found` (through `questions_for`), and
+# refused at import off `rosters.yaml: referent_classes`. `establish` declares it.
+HOLDING_CLASS = "Holding"
+if HOLDING_CLASS not in REFERENT_CLASSES:
+    raise Forbidden(f"{HOLDING_CLASS!r} is not a `rosters.yaml: referent_classes` value", "rosters.yaml",
+                    needs="the founding-holding class in the closed roster",
+                    law="B21.08 -- a class stamped by name must be one the roster declares")
+
 # v11 CR-25 ([ASSUMPTION; medium; Jordan to correct; revert: drop `holdings_to_found` and the derivation]): THE
 # REMIT ACTS A SEAT FOUNDS AN OFFICE THROUGH -- `establish`'s own `remit:` alternatives (`confer` today), read off
 # the row, so the founding stamp (`queries/world_q.py::holdings_to_found`) offers a holding only to a holder of a

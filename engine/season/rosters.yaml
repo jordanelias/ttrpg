@@ -603,10 +603,10 @@ rosters:
       (`queries/world_q.py::holdings_to_found` -- a rung on one of his own live `hold` edges that
       `founds_over` admits through a seat of his granting an act `establish` is eligible by,
       `data/verbs.py::FOUNDING_REMIT_ACTS`: held, in that seat's purview, below its rank, the seat on its
-      parent), stamped directly after the larders and never twice; `establish` declares the class, so its
-      `subject` binds the holding `loop/predicates.py::office_founded_by` derives the office from. Shared, as
-      above: the other `Rung` rows form on a stamped holding too, and `establish` on a place named or a
-      larder; the fold disposes. `RUNG_REMIT_ACTS` gains `confer`.
+      parent), stamped directly after the larders and never twice. Since B21.08 (VB-A) only a holding whose office is not
+      yet founded is stamped, and it is stamped twice, as `Rung` (the other `Rung` rows form on it, and the fold disposes)
+      and as `Holding` (below), the class `establish` alone declares, so `establish` forms on no place named, no larder
+      and no founded holding. `RUNG_REMIT_ACTS` no longer holds `confer`.
       v10 REM-21 (B10-05, AM-A-06, [ASSUMPTION; medium; Jordan to correct]): `Site`, `Proposition`
       and `Person` -- THE THINGS A QUESTION IS ITSELF ABOUT, carried as their kind. Not a standing
       occasion: `queries/world_q.py::own_referents_of_class`, one more term of `questions_for`'s
@@ -652,7 +652,9 @@ rosters:
       question he answers, `Enemy`'s shape (no collection; named by `data/verbs.py::DISPUTANT_CLASS`; occasion-only).
       `challenge` declares it. It is a class of its own, not `Person`, because `Person` is shared: stamped as
       `Person`, `capture` formed on the same men and executed where no context licensed violence (ED-IN-0337).
-    values: [Office, Record, Rung, Site, Proposition, Person, Detainee, Enemy, Disputant]
+      `Holding` (VB-A): a rung the person holds and may found an office over, not yet founded (`world_q.holdings_to_found`); not a
+      collection, stamped explicitly; `establish` declares it.
+    values: [Office, Record, Rung, Site, Proposition, Person, Detainee, Enemy, Disputant, Holding]
 
   occasion_only_classes:
     source: "v10 REM-21 (B10-05, AM-A-06's exclusion)"

@@ -36,7 +36,7 @@ from ..data.rosters import (
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
     INVESTED,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
-    RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
+    RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
     faction_prop_id,
     remove_distance, require_member,
     roster_map,
@@ -48,7 +48,7 @@ from ..data.rosters import (
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
     DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FOUNDING_REMIT_ACTS,
-    HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
+    HOLDING_CLASS, HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
@@ -3494,23 +3494,43 @@ def _top_arms(w: World, rungs) -> dict:
     return {field: key for field, (_rank, key) in best.items()}
 
 
+def founded_office_id(rung: str, post: str) -> str:
+    """The id a computed founding gives the office it founds: deterministic from (rung, post), so the same
+    founding forms the same id and a repeat meets `_req_establish`'s clause 4 on its existing-id arm. The ONE
+    owner of the id rule: `holdings_to_found` (the stamp) and `loop/predicates.py::office_founded_by` (the
+    derivation) both read it here."""
+    return f"off_{post.strip().lower().replace(' ', '_')}_{rung}"
+
+
+def founded_post(w: World, rung: str) -> Optional[str]:
+    """The post a computed founding over `rung` gives its office: the first post in `offices.yaml: titles.domains`'
+    authored order (`TITLE_DOMAINS`, post -> kind) whose kind is the rung's kind, `None` where no post names it or
+    the rung is not in the world. Data read in reverse, never a branch on a kind; the ONE owner of the post rule,
+    asked by `holdings_to_found` and `loop/predicates.py::office_founded_by`."""
+    if rung not in w.rungs:
+        return None
+    kind = w.rungs[rung].kind
+    return next((post for post, k in TITLE_DOMAINS.items() if k == kind), None)
+
+
 def holdings_to_found(w: World, p: Person) -> tuple:
     """THE HOLDINGS `p` MAY FOUND AN OFFICE OVER (v11 CR-25, CR-11's design; [ASSUMPTION; medium; Jordan to
     correct; revert: drop the term in `questions_for` and `establish`'s `referent_class`]), sorted by id: every
     rung a live `hold` edge of his names (his HOLDINGS, `state/gate.py::holdings_of`, read over `w.tenures`, so an
     edge not yet re-homed onto him counts; the SEATS below are his own edges) that
     `founds_over` admits through some seat of his own live `hold`s whose grant carries an act `establish` is
-    eligible by (`data/verbs.py::FOUNDING_REMIT_ACTS`). A `Rung` stamper term, `larders_in_purview`'s shape and
+    eligible by (`data/verbs.py::FOUNDING_REMIT_ACTS`) and whose office is NOT YET FOUNDED (B21.08, VB-A: its derived id,
+    `founded_office_id(rung, founded_post(w, rung))`, is not in `w.offices`; the id rule has one owner, above). A `Rung`
+    stamper term, `larders_in_purview`'s shape and
     `vacancies`' standing-occasion reading: world-read over his own edges and NOT gated on his ledger (a man knows
-    his own lands), resolver-side and read-only. `questions_for` stamps the ids onto the question he answers as
-    `Rung` (`_stamped`), so `establish` (`referent_class: Rung`) forms on them with the holding as `subject`, and
-    `loop/predicates.py::office_founded_by` derives the office from that subject and `Act.via`.
-    ⚠ THE CLASS IS SHARED (the `Rung` note in `rosters.yaml: referent_classes`): `migrate`, `requisition`,
-    `march` and `convene` form on a stamped holding too, and the fold disposes. ⚠ A HOLDING ALREADY FOUNDED IS
-    STILL OFFERED: the derived office's id is the derivation's (`loop/`), not this module's, and a repeat
-    founding writes nothing, so the fold emits `establish.refused` (G4's `NoOpReceipt`). Not filtered here: that
-    would be a second copy of the id rule. `()` for a person whose seats grant none of the acts, which is nearly
-    everyone, so nothing else is read for him."""
+    his own lands), resolver-side and read-only. `questions_for` stamps the ids onto the question he answers twice: as
+    `Rung` (`_stamped`), so `migrate`, `requisition`, `march` and `convene` are unmoved, and as `Holding`
+    (`data/verbs.py::HOLDING_CLASS`), the class `establish` alone declares, so `establish` forms on them with the holding
+    as `subject` and on nothing else; `loop/predicates.py::office_founded_by` derives the office from that subject and
+    `Act.via`.
+    ⚠ THE `Rung` CLASS IS SHARED (the `Rung` note in `rosters.yaml: referent_classes`): `migrate`, `requisition`,
+    `march` and `convene` form on a stamped holding too, and the fold disposes. `()` for a person whose seats grant
+    none of the acts, which is nearly everyone, so nothing else is read for him."""
     if not FOUNDING_REMIT_ACTS:
         return ()
     live = [t for t in p.tenures if t.kind == "hold" and t.live]
@@ -3518,7 +3538,9 @@ def holdings_to_found(w: World, p: Person) -> tuple:
         t.object for t in live if t.object in w.offices and not FOUNDING_REMIT_ACTS.isdisjoint(t.granted_acts))]
     if not seats:
         return ()
-    return tuple(r for r in holdings_of(w, p.id) if any(founds_over(w, p.id, s, r) for s in seats))
+    return tuple(r for r in holdings_of(w, p.id)
+                 if (post := founded_post(w, r)) is not None and founded_office_id(r, post) not in w.offices
+                 and any(founds_over(w, p.id, s, r) for s in seats))
 
 
 # ⚠ `04` §A.2:133 and §B.10-§B.12:460 name `faction_q.at_war(w, a, b) -> bool`. DEFINED HERE (v11 CR-87) because
@@ -4271,10 +4293,11 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # no chooser reads a flow's opening kind or last move. Read only when `Fixtures stamp_flow_stakes` is on (it
     # SHIPS ON, H-274; off, the output is byte-identical). "Never twice" is `_stamped`'s dedup.
     told = ledger_names(p.ledger)
+    founding = holdings_to_found(w, p)
     added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + challenges_heard(w, p, told)
              + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + matters_awaiting(w, p) + larders_in_purview(w, p, told)
-             + holdings_to_found(w, p)
+             + founding
              + (own_referents_of_class(w, out[0]) if out else ())
              + works_sites(w, p) + propositions_heard(w, p) + stage_referents(w, p, ambs)
              + wounded_with(w, p)
@@ -4284,6 +4307,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # collection; only `interrogate` declares it. Empty while no live `detain` names his seat, and then
     # the output is byte-identical. REVERT: drop the term.
     held = tuple((d, DETAINEE_CLASS) for d in detainees_held(w, p))
+    # B21.08 (VB-A commit A2 [ASSUMPTION; medium; Jordan to correct; revert: `establish`'s `referent_class: Rung`, drop this
+    # term]): AND THE HOLDINGS HE MAY FOUND AN OFFICE OVER, AGAIN AS `Holding`, the class `establish` alone declares. The
+    # `Rung` stamp above is kept, so `migrate`, `requisition`, `march` and `convene` form as they did.
+    held += tuple((r, HOLDING_CLASS) for r in founding)
     # v11 CR-87 ([ASSUMPTION; medium; Jordan to correct]): AND, AFTER THEM, THE ENEMIES OF A WAR HE KNOWS OF
     # (`enemies_heard`), as `Enemy` -- no row forms on it; the `fight` decline reads it as the war context. It
     # rides a question he already has and never raises one of its own (a war is a context, not a question). Empty

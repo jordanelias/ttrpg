@@ -1,4 +1,4 @@
-"""B21.07 -- VB-A commit A1: `release` forms only on a tie the actor holds, and a bench's sentence is not released by its party.
+"""B21.07/B21.08 -- VB-A commits A1 and A2: `release` forms only on a tie the actor holds, and a bench's sentence is not released by its party.
 
 GAME STATE, lane `season_loop` (`engine/season/tests/`). Two claims, each asked of the real `opening_set`, the real fold and the real witness:
 
@@ -13,16 +13,28 @@ GAME STATE, lane `season_loop` (`engine/season/tests/`). Two claims, each asked 
      (the person-side decline is a courtesy to the scene budget, not the rule); an edge he opened himself is released as ever.
      FALSIFIER (3a): a disposal edge closed by an Event whose actor is its subject -- no logged Event naming the edge has the party
      for its actor.
+
+B21.08 -- commit A2: `establish` forms only on an unfounded holding.
+
+  3. `test_a2_establish_forms_only_on_an_unfounded_holding` -- the row declares the class `Holding`, which only
+     `world_q.holdings_to_found` stamps, and that stamp leaves out a holding whose office is already founded. Asked of the real
+     `questions_for` and the real `opening_set`: a king who holds one territory (`T`) and holds nothing of another (`T2`) forms
+     `establish` on `T` alone; a `Rung`-classed place that is no holding forms none; once the founding executes the same king forms
+     none. CONTROL, same world: the holding is still stamped as a `Rung` (so `migrate`, `requisition`, `march` and `convene` keep
+     their formation), and `migrate` still forms on a `Rung`-classed place. FALSIFIER: edit 6's `founded_office_id` filter dropped,
+     the founded holding is offered again (read once, not kept).
 """
 
 from __future__ import annotations
 
 from ..data.matrix import WriteClass
+from ..data.verbs import VERB_TABLE
 from ..decision.options import opening_set
 from ..loop.driver import mint_token
 from ..queries import world_q
 from ..state.attribution import causing_act
 from ..state.carriers import Act, Proposition, Question, Tenure, View
+from .test_cr25_computed_establish import _act as _found_act, _world as _king_world
 from .test_u7_remit import DUKE, JUDGE, OPENS, PARTY, SEAT, _determine, _fold, _kinds, _obliges, _open, _world
 
 
@@ -87,3 +99,34 @@ def test_a1_a_bench_imposed_edge_is_not_released_by_its_party():
                     and causing_act(w, e).verb != "determine")]
     assert closers == [], [e.kind for e in closers]
     assert world_q.establishment_of(w, SEAT).count(PARTY) == 1
+
+
+def _forms(w, pid, verb, q):
+    p = w.persons[pid]
+    return sorted(c.subject for c in opening_set(p, View(pid, [], w.fixtures.get("view_k")), q, w.fixtures) if c.verb == verb)
+
+
+def test_a2_establish_forms_only_on_an_unfounded_holding():
+    w, d = _king_world()
+    holding_cls = VERB_TABLE["establish"].referent_class
+    assert holding_cls != "Rung", "establish still declares the class its sibling rows share"
+    p = w.persons["p_king"]
+
+    q = world_q.questions_for(w, p)[0]
+    assert world_q.holdings_to_found(w, p) == ("T",), world_q.holdings_to_found(w, p)
+    assert q.referents_for(holding_cls) == ("T",), q.classes
+    assert _forms(w, "p_king", "establish", q) == ["T"]
+
+    # a place that is no holding, carried as a `Rung`: no `establish`, while `migrate` (which declares `Rung`) is untouched
+    stray = Question("q:vba2", "need", (), "T2", classes=(("T2", "Rung"),))
+    assert _forms(w, "p_king", "establish", stray) == [], "establish formed on a Rung that is no holding"
+    assert _forms(w, "p_king", "migrate", stray) == ["T2"]
+    # CONTROL: the holding is still stamped as a Rung, so the sibling Rung rows form on it as before
+    assert ("T", "Rung") in q.classes and _forms(w, "p_king", "migrate", q) == ["T"]
+
+    # the founding executes; the holding is then founded, so it is no longer stamped as one and no `establish` forms on it
+    assert [e.kind for e in _found_act(w, d, "e_vba2", "p_king", "off_king", {"subject": "T"})] == ["office.established"]
+    assert world_q.founded_office_id("T", world_q.founded_post(w, "T")) in w.offices
+    assert world_q.holdings_to_found(w, p) == ()
+    q2 = world_q.questions_for(w, p)
+    assert q2 and all(q_.referents_for(holding_cls) == () and _forms(w, "p_king", "establish", q_) == [] for q_ in q2)
