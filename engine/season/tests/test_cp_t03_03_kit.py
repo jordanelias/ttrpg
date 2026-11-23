@@ -253,11 +253,16 @@ def test_combat_input_carries_a_kit_per_party_in_claimants_order(armed):
 
 
 def test_the_sampler_fight_estimate_builds_the_same_input_so_kits_reach_it(armed):
+    # B15.07: the estimate's shares now include the mortal-wound draw (a felled man it stands up is no felling); the claim here is the KIT's, so
+    # both worlds hold `mortal_wound_ob` at its unreachable control, where every felling is a death and the shares are the scene's
+    unreachable = lambda w: w.fixtures.sweep("mortal_wound_ob", {c: 99.0 for c in w.fixtures.get("mortal_wound_ob")})
     w = _world()
+    w.fixtures = unreachable(w)
     est = combat.fight_estimate(w, ACTOR, None, SUBJECT, "fight")
     assert est["status"] == "ESTIMATED" and est["samples"] == w.fixtures.get("estimate_samples")
     assert est["actor_felled"] > 0.9, est
     bare = _world(); bare.rungs["Arsenal"].stores = {}
+    bare.fixtures = unreachable(bare)
     assert combat.fight_estimate(bare, ACTOR, None, SUBJECT, "fight")["actor_felled"] < 0.6
 
 

@@ -118,3 +118,58 @@ def test_accept_forms_on_a_heard_challenge(monkeypatch):
         checked += 1
     assert checked == len(SEEDS)
     assert complete >= FLOOR, (complete, FLOOR)
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# A3 (B15.07): A FELLING IS FOLLOWED BY THE MORTAL-WOUND DRAW, IN THE COMBAT MODULE (the audit §3.7's standing-rule gate).
+# ---------------------------------------------------------------------------------------------------------------------
+def _a3_scene(w, seed: int, aid: str = "a3"):
+    """One fight between `A` and `B` on `w` at `world_seed = seed`: `(the module's CombatOutcome, the host's resolve dict)`, both on the
+    record `combat_input` builds and the scene key `resolve` forms (`contest:the body:<aid>`), so the module's `mortal` is what the host maps."""
+    from ..state.ids import draw_factory
+    w.world_seed = seed
+    entry, refusal = CW.entry_for(CW._PRIZE, CW._PROVIDER)
+    assert entry is not None, refusal
+    got = entry.fn(CW.combat_input(w, [A, B], "fight", cause=aid), draw_factory(w.world_seed, lambda: w.tick)(A, f"contest:{CW._PRIZE}:{aid}"))
+    return got, CW.resolve(w, [A, B], [aid], CW._PRIZE, verb="fight")
+
+
+def test_a3_a_felling_is_followed_by_a_drawn_death():
+    """A felled party's fate is the mortal-wound draw's, drawn in the module (`fight.py::mortal_wound`) and only MAPPED by the host
+    (`seam/wrappers/combat.py::_wound_state`): over 120 seeded fights at a reachable `mortal_wound_ob`, some felled parties die and some do
+    not, and every host `wound_state` entry of a felled party is the module's `MortalResult` (`felled` = `mortal`, `wounds` as drawn).
+    FALSIFIER: bypass the mortal roll (no `mortal` on the outcome, or the host not mapping it) and no felled party survives. CONTROL: the same
+    seeds at the unreachable control (99.0) leave every felled party felled. SITE: the host adapter calls no sampler, no ladder and no
+    uniform (an AST scan of `seam/wrappers/combat.py`): a planted wrapper-side draw computing `felled` is found here."""
+    import ast
+    import inspect
+    from ..loop.driver import SeasonDriver
+    w = P.tiny_world()
+    SeasonDriver(w)                                              # registers the module entry the host resolves
+    shipped = w.fixtures
+    reading = {}
+    for arm, ob in (("reachable", 2.0), ("control", 99.0)):
+        w.fixtures = shipped.sweep("mortal_wound_ob", {c: ob for c in shipped.get("mortal_wound_ob")})
+        felled = died = checked = 0
+        for seed in range(120):
+            got, res = _a3_scene(w, seed)
+            assert res["status"] == "RESOLVED", res
+            for pid, pw in got.wounds.items():
+                st = res["wound_state"][pid]
+                if not pw.felled:
+                    assert pid not in got.mortal and st["felled"] is False and st["wounds"] == pw.wounds, (seed, pid, st)
+                    continue
+                m = got.mortal[pid]                          # a felled party is ALWAYS drawn for
+                assert (st["felled"], st["wounds"]) == (m.mortal, m.wounds), (seed, pid, st, m)
+                felled += 1
+                died += m.mortal
+            checked += 1
+        assert checked == 120 and felled >= 40, (arm, checked, felled)
+        reading[arm] = (felled, died)
+    assert 0 < reading["reachable"][1] < reading["reachable"][0], f"a felling is neither always nor never a death: {reading}"
+    assert reading["control"][1] == reading["control"][0], f"the unreachable control kills every felled party: {reading}"
+    # THE SITE: the host forms the key and maps; it draws nothing and grades nothing.
+    calls = {n.func.attr if isinstance(n.func, ast.Attribute) else getattr(n.func, "id", None)
+             for n in ast.walk(ast.parse(inspect.getsource(CW))) if isinstance(n, ast.Call)}
+    planted = calls & {"roll_net_continuous", "roll_net", "net_boost", "degree_from_net", "u", "random", "below", "mortal_wound"}
+    assert not planted, f"seam/wrappers/combat.py draws or grades the mortal roll itself: {sorted(planted)}"

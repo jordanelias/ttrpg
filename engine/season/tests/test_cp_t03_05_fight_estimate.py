@@ -167,14 +167,15 @@ def test_the_shares_follow_the_trackers_not_the_sign_of_the_result():
     got = _estimate(w)
     entry, refusal = entry_for(combat._PRIZE, combat._PROVIDER)
     assert entry is not None, refusal
-    inp = _ran("combat_input", combat.combat_input, w, [ACTOR, SUBJECT], "fight")
+    # B15.07: the estimate's record carries no dealt mortal key (`mortal_keyed=False`) and each tracker is read with its mortal-wound draw mapped on
+    inp = _ran("combat_input", combat.combat_input, w, [ACTOR, SUBJECT], "fight", mortal_keyed=False)
     rng = draw_factory(w.world_seed, lambda: w.tick)(ACTOR, "estimate")
     n = w.fixtures.get("estimate_samples")
     by_trackers = dict.fromkeys(combat.ESTIMATE_OUTCOMES, 0)
     disagree = scenes = 0
     for _ in range(n):
         r = _ran("entry.fn", entry.fn, inp, rng)
-        a, b = bool(r.wounds[ACTOR].felled), bool(r.wounds[SUBJECT].felled)
+        a, b = (bool(combat._wound_state(r.wounds[p], r.mortal.get(p))["felled"]) for p in (ACTOR, SUBJECT))
         # the sign `wrapper.fight` returned is not lifted into the record; the engine's own `fight_result` event names it
         sign = next(e["result"] for e in r.trace if e["kind"] == "fight_result")
         if r.surrender is not None:

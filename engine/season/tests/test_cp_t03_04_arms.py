@@ -104,13 +104,22 @@ def test_nobody_holds_arms_at_landing_in_the_realm_the_overlay_or_a_lifepath():
 
 def _spy(monkeypatch) -> Counter:
     # by name, inside the function: `test_importing_every_engine_module_pulls_in_no_subsystem` fails on a module-scope import and the ratchet counts a written one
-    core = importlib.import_module("modules.combat.core")
-    seen, real = Counter(), core.resolve
+    core, fight = (importlib.import_module(f"modules.combat.{n}") for n in ("core", "fight"))
+    seen, real, real_mortal, inside = Counter(), core.resolve, fight.mortal_wound, [False]
 
     def spy(pool, net_sigma, rng, ob):
-        seen[(pool, ob)] += 1
+        if not inside[0]:            # the fight's own rolls: B15.07's mortal-wound draw rolls on the same owner after the scene, and is not one
+            seen[(pool, ob)] += 1
         return real(pool, net_sigma, rng, ob)
+
+    def mortal(*a):
+        inside[0] = True
+        try:
+            return real_mortal(*a)
+        finally:
+            inside[0] = False
     monkeypatch.setattr(core, "resolve", spy)
+    monkeypatch.setattr(fight, "mortal_wound", mortal)
     return seen
 
 

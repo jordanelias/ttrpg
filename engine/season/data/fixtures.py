@@ -657,12 +657,13 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-567 -- `site: Fixtures mark_ob`, graded `assumption`; no document gives how hard it is to mend clean at one's limit, so it is injected and swept 1.2 / 2.4 / 4.8]
     mark_ob=2.4,                       # `H-567`, swept 1.2 / 2.4 (seed value, read only under `drawn`) / 4.8
     # B15.06 (`H-574`). HOW HARD A FELLED BODY IS TO KILL, per cause: the obstacle `queries/world_q.py::mortal_terms` answers for `death`,
-    # `yield` and `blood` (PHY_A A3's three terms; `spell` has none until B37). Fractional like every obstacle (A-5). SHIPPED AT AN UNREACHABLE
-    # CONTROL, 99.0 a cause (no pool can meet it, PC_A's "an obstacle no pool can beat"), so every felled body dies as it does today; B15.07's
-    # sweep sets the shipped values with the draw, and nothing calls `mortal_terms` before it.
-    # [ASSUMPTION; medium; Jordan to correct; revert: none, the control is the shipped value until B15.07]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-574 -- `site: Fixtures mortal_wound_ob`, graded `assumption`; no document gives how hard a felled body is to kill, so it is injected, shipped at its control and swept by B15.07]
-    mortal_wound_ob={_c: 99.0 for _c in MORTAL_CAUSES if _c != "spell"},   # `H-574`, swept 99.0 (control, SHIPPED) / B15.07's arms
+    # `yield` and `blood` (PHY_A A3's three terms; `spell` has none until B37). Fractional like every obstacle (A-5). Shipped at B15.06 at an
+    # unreachable control, 99.0 a cause (PC_A's "an obstacle no pool can beat"), under which every felled body dies as before the draw. B15.07's
+    # sweep (0..4 a cause, 1,000 felled parties a cell, `H-574`) SETS THE SHIPPED VALUES: a felling under `death` terms is a death about half the
+    # time, one whole obstacle step less lethal a term down the terms' intent (`yield`, then `blood`), on the one sampler and pool the mark roll takes.
+    # [ASSUMPTION; medium; Jordan to correct (D-19, in the PR body); revert: 99.0 a cause, the control]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-574 -- `site: Fixtures mortal_wound_ob`, graded `assumption`; no document gives how hard a felled body is to kill, so it is injected and swept]
+    mortal_wound_ob=dict(zip((_c for _c in MORTAL_CAUSES if _c != "spell"), (3.0, 2.0, 1.0), strict=True)),   # `H-574`, swept 99.0 (control) / 0..4 a cause; death 3 / yield 2 / blood 1 SHIPPED (B15.07)
     # `H-184` (split out of `H-98`). WHERE THE `Wounded` BAND STARTS: the threshold `wounds` must be
     # strictly above for a standing subject to read `Wounded` rather than `Untouched`. The edge is
     # `rosters.yaml: combat_band_edges` and `None` MEANS ITS VALUE (`0`, any wound), so the number is

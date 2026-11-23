@@ -665,3 +665,80 @@ def test_drawn_marks_yield_all_three_outcomes_over_200_seeds():
     assert ceilings[1000] < checked, "a mark on every survivor is the certainty the draw replaces"
     for seed in range(8):                                                # keyed by victim and purpose, not by the act or a stream position
         assert one(seed, "drawn", aid="x")[0] == one(seed, "drawn", aid="y")[0]
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# B15.07 (PHY_A A3; A-5 to A-8, A-30, A-81): A FELLING IS FOLLOWED BY THE MORTAL-WOUND DRAW, IN THE MODULE.
+# ---------------------------------------------------------------------------------------------------------------------
+def _module_of_entry():
+    """The combat module the host's entry resolves to (reached by the composition row, never imported by name here)."""
+    import sys
+    from ..loop.driver import SeasonDriver
+    from ..harness import probes as P
+    from ..seam.wrappers import combat
+    SeasonDriver(P.tiny_world())
+    entry, refusal = combat.entry_for(combat._PRIZE, combat._PROVIDER)
+    assert entry is not None, refusal
+    return sys.modules[entry.fn.__module__], entry
+
+
+def test_mortal_wound_every_band_writes():
+    """A-81: every band of the mortal draw writes. Over 400 keyed draws for one felled party (pool 8, the season's untrained default; obstacle 3):
+    Failure keeps him felled at the scene's wounds (he dies: the host's band `Felled`); Partial stands him up at `max_wounds` (left for dead);
+    Success and Overwhelming stand him up at the scene's wounds. Through the host's map (`_wound_state`) and the one grader (`party_degree`)
+    no band is `Untouched`, the band that writes nothing. FALSIFIER: a band missing over 400 draws, a Partial below `max_wounds`, a survivor
+    still felled, or a band the host grades `Untouched`. The draw is keyed: the same key gives the same result."""
+    import dataclasses
+    from ..data.rosters import FELLED
+    from ..queries.inputs import PartyWounds
+    from ..seam.ladder import party_degree
+    from ..seam.wrappers import combat
+    mod, _entry = _module_of_entry()
+    pw = PartyWounds(felled=True, wounds=3, max_wounds=5, health_remaining=0, health_full=12)
+    seen, checked = {}, 0
+    for scene_wounds in (3, 7):                                  # under and over `max_wounds`: left for dead is never lighter than standing up
+        pw = dataclasses.replace(pw, wounds=scene_wounds)
+        for seed in range(400):
+            m = mod.mortal_wound(pw, draw.seeded(draw.H2("test_mortal_wound", seed)), (8.0, 3.0, (), ()))
+            assert m == mod.mortal_wound(pw, draw.seeded(draw.H2("test_mortal_wound", seed)), (8.0, 3.0, (), ())), seed
+            want = {"fail": (True, scene_wounds), "partial": (False, max(5, scene_wounds))}.get(m.degree, (False, scene_wounds))
+            assert (m.mortal, m.wounds) == want, (seed, m)
+            band = party_degree(combat._wound_state(pw, m))
+            assert (band == FELLED) == m.mortal and band in ("Felled", "Wounded"), (seed, m, band)
+            seen[m.degree] = seen.get(m.degree, 0) + 1
+            checked += 1
+    assert checked >= 800
+    pw = dataclasses.replace(pw, wounds=3)
+    assert set(seen) == {"fail", "partial", "success", "overwhelming"}, f"each band occurs over {checked} draws: {seen}"
+    # levels move it: a level for raises the survivors, a level against lowers them, on the same keys
+    def survivors(f, a):
+        return sum(not mod.mortal_wound(pw, draw.seeded(draw.H2("test_mortal_wound", s)), (8.0, 3.0, f, a)).mortal for s in range(400))
+    assert survivors(("major",), ()) > survivors((), ()) > survivors((), ("major",)), "a level is not applied to the mortal roll"
+
+
+def test_unreachable_mortal_ob_reproduces_the_shipped_deaths():
+    """THE CONTROL (PHY_A's falsifier): at the unreachable `mortal_wound_ob` (99.0 for every cause) the season's fight, under `death` terms, deals
+    exactly the deaths it dealt with no draw: over 200 seeds, the host's `wound_state` with the draw equals the one built on the same record with
+    `mortal=()` (no draw), party by party, and the scene (rounds, beat, trace) is the same scene -- the draw is keyed apart from the scene's
+    stream (`fight.mortal`) and moves nothing at control. Every felled party is drawn for and dies. FALSIFIER: a survivor at the control, a scene
+    that differs with the draw, or a felled party not drawn for."""
+    import dataclasses
+    from ..seam.wrappers import combat
+    from ..harness import probes as P
+    _mod, entry = _module_of_entry()
+    w = P.tiny_world()
+    w.fixtures = w.fixtures.sweep("mortal_wound_ob", {c: 99.0 for c in w.fixtures.get("mortal_wound_ob")})
+    deaths = checked = 0
+    for seed in range(200):
+        w.world_seed = seed
+        inp = combat.combat_input(w, ["p_low", "p_mid"], "fight")
+        assert inp.terms == "death" and len(inp.mortal) == 2, (inp.terms, inp.mortal)
+        key = draw.H2("test_unreachable_mortal_ob", seed)
+        drawn, bare = entry.fn(inp, draw.seeded(key)), entry.fn(dataclasses.replace(inp, mortal=()), draw.seeded(key))
+        assert (drawn.rounds, drawn.beat, drawn.trace, drawn.wounds) == (bare.rounds, bare.beat, bare.trace, bare.wounds), seed
+        assert set(drawn.mortal) == {p for p, pw in drawn.wounds.items() if pw.felled} and not bare.mortal, (seed, drawn.mortal)
+        for pid in drawn.wounds:
+            assert combat._wound_state(drawn.wounds[pid], drawn.mortal.get(pid)) == combat._wound_state(bare.wounds[pid]), (seed, pid)
+        deaths += sum(m.mortal for m in drawn.mortal.values())
+        checked += 1
+    assert checked == 200 and deaths >= 150, (checked, deaths)

@@ -1580,6 +1580,7 @@ rosters:
     choice_exposure: decision/choose.py::nerve     # B10.31: `nerve`, how far a person's Spirit lets him bear a danger, on the `risk` element; no row ships
     own_state_gate: queries/person_q.py::OwnStateReader
     crisis: loop/resolve.py::_crisis_net_sigma   # B10.15: the crisis of faith's roll, read only at `Fixtures.crisis_arm: drawn`
+    mortal: seam/wrappers/combat.py::_mortal_operands   # B15.07 (PHY_A A3): the mortal-wound draw's levels, carried on `PersonalCombatInput.mortal`
 
   # WHAT A SITE'S READER READS OF A ROW, where it reads the row by ROLE and not by the row's other columns (B04 Phase 3): a row
   # of that `role` at that site must carry exactly this `key` and `side`, and the site carries one row of the role. Any other
@@ -1594,9 +1595,10 @@ rosters:
 
   # `side`: whose sheet a row reads -- not who benefits (U1 §3 item 3). `per`: once when held, once per rank, or signed steps
   # of the held value from its scale's mid-point (U1 §3 item 2). `key` selectors: the skill the act's verb names (`verb`)
-  # and that skill's governing attribute (`verb.base`) (U1 §3 item 1).
+  # and that skill's governing attribute (`verb.base`) (U1 §3 item 1). `ally` (B15.07): the person at the roller's place, neither the roller
+  # nor the party he fought, who holds the most of the row's key -- the one who tends a felled man (PHY_A A3); read by the `mortal` site alone.
   capability_sides:
-    values: [actor, subject, each]
+    values: [actor, subject, each, ally]
   capability_per:
     values: [held, rank, mid]
   # the columns whose value names a registered `Fixtures` entry (a `gain`, and a `dice` row's pool rule)
@@ -3791,6 +3793,14 @@ tables:
       # [ASSUMPTION; medium; Jordan to correct: Spirit governs faith, and by one `minor` step a point -- basis: the source's "will governs faith"; the CHAR content pass may
       # substitute; revert: delete this row, and the crisis reads no attribute.]
       - {use: crisis,            role: edge,      key: attr.spirit.will, side: actor, level: minor, per: mid}
+      # B15.07 (PHY_A A3, "Standing (R4 7b.0 (4))"; A-7): the mortal-wound draw's levels, read by `seam/wrappers/combat.py::_mortal_operands` through the one
+      # `edge` reader as the crisis row is. The felled man's own Endurance, one `minor` step a point from the scale's mid-point (his governing attribute
+      # as levels, the crisis row's form); a tending ally's `healing`, one `minor` step FOR him a rank he holds. His body band is the `wounds` source's.
+      # [ASSUMPTION; medium; Jordan to correct: Endurance governs surviving a wound, `minor` a step, the ally's rank as steps -- basis: PHY_A A3 names
+      # "the governing attribute as levels" and "a co-located ally's `healing` score as a level for" and no size; revert: delete both rows, and the
+      # draw reads the body band alone.]
+      - {use: mortal,            role: edge,      key: attr.body.endurance, side: actor, level: minor, per: mid}
+      - {use: mortal,            role: edge,      key: healing,          side: ally,  level: minor, per: rank}
 
   site_yield:
     source: "`W8` / `H-93`. #353 §25 lists `yield` as written at MATTER and *blocked on `season_factor`'s distribution* (§22.3); it never says what a place produces."

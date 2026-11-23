@@ -47,15 +47,25 @@ _KEY = "cr85_test_arms"   # a test-local capability key: no roster row is added
 
 
 def _spy(monkeypatch) -> Counter:
-    """Count every `(pool, ob)` the engine's `core.resolve` is called with."""
+    """Count every `(pool, ob)` the engine's `core.resolve` is called with by the fight's own rolls (B15.07's mortal-wound draw, which rolls on
+    the same owner after the scene, is not one of them)."""
     # by name, inside the function: `test_importing_every_engine_module_pulls_in_no_subsystem` fails on a module-scope import and the ratchet counts a written one
-    core = importlib.import_module("modules.combat.core")
-    seen, real = Counter(), core.resolve
+    core, fight = (importlib.import_module(f"modules.combat.{n}") for n in ("core", "fight"))
+    seen, real, real_mortal, inside = Counter(), core.resolve, fight.mortal_wound, [False]
 
     def spy(pool, net_sigma, rng, ob):
-        seen[(pool, ob)] += 1
+        if not inside[0]:
+            seen[(pool, ob)] += 1
         return real(pool, net_sigma, rng, ob)
+
+    def mortal(*a):
+        inside[0] = True
+        try:
+            return real_mortal(*a)
+        finally:
+            inside[0] = False
     monkeypatch.setattr(core, "resolve", spy)
+    monkeypatch.setattr(fight, "mortal_wound", mortal)
     return seen
 
 

@@ -169,7 +169,8 @@
       "argue",
       "inquiry",
       "arms",
-      "law"
+      "law",
+      "healing"
     ],
     "rows": {
       "copying": {
@@ -232,6 +233,18 @@
           "practice"
         ],
         "source": "05_SC_hearing_capabilities (SC-B3); D-U1-03; U1 \u00a75 (FA's `judgment` is `law`)"
+      },
+      "healing": {
+        "kind": "skill",
+        "gloss": "Tends a wound or a sickness so the body recovers.",
+        "floor": 0,
+        "ceiling": 7,
+        "untrained": "default",
+        "grows_by": [
+          "train",
+          "practice"
+        ],
+        "source": "U1 \u00a72 (PC, tend); B15.07 [ASSUMPTION: the gloss; tend's verb row names its governing attribute]"
       }
     }
   },

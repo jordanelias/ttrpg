@@ -48,7 +48,8 @@ def test_scene_outcome_reads_what_fight_estimate_read():
         got = combat.fight_estimate(w, a, None, b, verb)
         assert got["status"] == "ESTIMATED"
         entry, _ = entry_for(combat._PRIZE, combat._PROVIDER)
-        inp, rng, n = combat.combat_input(w, [a, b], verb), rng_of(w, a), samples_of(w)
+        # the estimate's own record: no dealt mortal key (B15.07), so its mortal draws are off the same private stream
+        inp, rng, n = combat.combat_input(w, [a, b], verb, mortal_keyed=False), rng_of(w, a), samples_of(w)
         tally = dict.fromkeys(combat.ESTIMATE_OUTCOMES, 0)
         for _ in range(n):
             tally[combat.scene_outcome(entry.fn(inp, rng), a, b)[0]] += 1

@@ -24,10 +24,11 @@ from __future__ import annotations
 import dataclasses
 from typing import Callable, Mapping, Optional
 
-from engine.dice_engine.draw import Draw
+from engine.dice_engine.draw import H2, Draw, seeded
+from engine.dice_engine.sigma_leverage import levels_to_net_sigma
 from engine.season.queries.inputs import (
-    CombatOutcome, CombatTurnView, DecisiveBeat, PartyWounds, PersonalCombatInput, SceneShape, Surrender)
-from . import attributes as spec, combatant, wrapper
+    CombatOutcome, CombatTurnView, DecisiveBeat, MortalResult, PartyWounds, PersonalCombatInput, SceneShape, Surrender)
+from . import attributes as spec, combatant, core, wrapper
 from .config import CFG
 
 _MISSING = object()   # `getattr`'s default for a tracker field the engine does not carry (None is a value)
@@ -144,6 +145,36 @@ def scene_shape(trace, claimants: tuple, health_full: Mapping[str, int]) -> Scen
     return SceneShape(rounds=rounds, blows=blows, first_blood=first_blood, lead_changes=changes, nearest=nearest)
 
 
+def mortal_wound(outcome: PartyWounds, rng: Draw, terms: tuple) -> MortalResult:
+    """THE MORTAL-WOUND DRAW (B15.07, PHY_A A3; A-5 to A-8, A-81): whether a party the scene FELLED dies, is left for dead, or lives.
+
+    `outcome` is his lifted tracker (`felled` true); `rng` his own `Draw` (`_mortal_draw`: keyed `fight.mortal`, A-30), never the scene's stream;
+    `terms` is `(pool, obstacle, levels_for, levels_against)`, the record's `mortal` entry less its key: the pool the one pool rule on the untrained
+    default and the obstacle `mortal_wound_ob[terms]` (both `world_q.mortal_terms`), the levels named `LEVEL_SIGMA` levels (his governing
+    attribute and a tending ally's `healing` for or against him, his body band against him), summed by `levels_to_net_sigma`. ONE ROLL ON THE
+    ONE SAMPLER: `core.resolve` (`roll_net_continuous` plus `net_boost`, the roll a fight's every exchange and the survivor's mark roll take),
+    banded by `degree_from_net` (`core.degree`'s label of the owner ladder).
+
+    Failure: he dies (`mortal`, the scene's wounds). Partial: he stands up at `max_wounds` (or the scene's, if more), left for dead. Success and Overwhelming: he stands
+    up with the scene's wounds. Every band writes (A-81): none is the untouched band. Pure: one roll, nothing kept."""
+    pool, ob, levels_for, levels_against = terms
+    deg, _net = core.resolve(pool, levels_to_net_sigma(list(levels_for), list(levels_against)), rng, ob)
+    if deg == "fail":
+        return MortalResult(mortal=True, wounds=outcome.wounds, degree=deg)
+    # Partial is AT LEAST `max_wounds`: a felling can leave more wounds than `max_wounds` (the tracker counts every wounding blow), and left for
+    # dead is never lighter than standing up wounded as the scene left him [ASSUMPTION; low; PHY_A says "`wounds = max_wounds`"; revert: that]
+    return MortalResult(mortal=False, wounds=max(outcome.wounds, outcome.max_wounds) if deg == "partial" else outcome.wounds, degree=deg)
+
+
+def _mortal_draw(rng: Draw, pid: str, key) -> Draw:
+    """The `Draw` one felled party's mortal roll takes. `key` (the record's): the host's keyed draw `(world_seed, tick, pid, "fight.mortal:<cause>")`
+    (A-30), seeded through the one constructor -- the dealt fight's, never a position in the scene's stream, and carried as its key so the
+    record stays a value (a `Draw` object in it would be consumed by the first call). `None` (a sampled estimate's record, whose draws must stay
+    private): a sub-key of the scene's own `Draw` at its current ordinal (B15.05's form, `H2(rng.key, purpose)`), so each sample draws afresh
+    and nothing of the dealt key is read."""
+    return seeded(key) if key is not None else seeded(H2(rng.key, f"fight.mortal:{pid}:{rng.n}"))
+
+
 def fight(inp: PersonalCombatInput, rng: Draw,
           decide: Optional[Callable[[CombatTurnView], str]] = None, cfg: Optional[dict] = None,
           max_bouts: Optional[int] = None) -> CombatOutcome:
@@ -215,5 +246,9 @@ def fight(inp: PersonalCombatInput, rng: Draw,
 
     wounds = {pid: pw for pid, pw in ((a_id, _party_wounds(A)), (b_id, _party_wounds(B))) if pw is not None}
     shape = scene_shape(trace, (a_id, b_id), {pid: pw.health_full for pid, pw in wounds.items()})
+    # THE MORTAL-WOUND DRAW (B15.07, PHY_A A3): the last step of the scene, before the outcome is returned -- each party the scene felled rolls
+    # once (`inp.mortal`, claimants order). A record without the operands (`()`) draws nothing: the felling stands.
+    mortal = {pid: mortal_wound(wounds[pid], _mortal_draw(rng, pid, ops[4]), ops[:4]) for pid, ops in zip((a_id, b_id), inp.mortal)
+              if pid in wounds and wounds[pid].felled}
     return CombatOutcome(claimants=(a_id, b_id), wounds=wounds, surrender=_surrender(trace), beat=_beat(trace),
-                         rounds=shape.rounds, shape=shape, trace=tuple(trace))
+                         rounds=shape.rounds, shape=shape, trace=tuple(trace), mortal=mortal)

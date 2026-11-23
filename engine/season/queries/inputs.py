@@ -190,7 +190,15 @@ class PersonalCombatInput:
                        passes them to `Combatant(..., tradition=, equipped=, skills=, disp=)` as it passes `kits`:
                        `traditions` a tradition name; `techniques` `{name: level}` (a list of names is each at level 1.0);
                        `axes` `{axis: bonus}` (`Combatant`'s own attribute stays `skills`); `dispositions` the `disp` number.
-                       The season fills none of them until a carrier exists (`03_PC_person_inputs_content.md`)."""
+                       The season fills none of them until a carrier exists (`03_PC_person_inputs_content.md`);
+      * `mortal`    -- the MORTAL-WOUND DRAW's operands (B15.07, PHY_A A3), one entry per party in `claimants` order: `(pool, obstacle,
+                       levels_for, levels_against, key)`. `(pool, obstacle)` is `queries/world_q.py::mortal_terms` at the record's
+                       `terms`; the levels are tuples of `sigma_leverage.LEVEL_SIGMA` names, the host's reading of the `mortal` site's
+                       `edge` rows and the `wounds` advantage source (`combat.py::_mortal_operands`); `key` the 16-hex key of the keyed
+                       draw `(world_seed, tick, party, "fight.mortal:<causing act>")` (A-30, `state.ids.draw_factory`), never a position in the scene's
+                       stream -- a key, not a `Draw`, so the record stays a value -- or `None` for a sampled estimate, whose draw is a
+                       sub-key of its own private stream. The module draws (`modules/combat/fight.py::mortal_wound`) for each party the
+                       scene felled. The default `()` is no draw: a felling stands, as before the draw."""
     claimants: tuple
     ends: tuple
     wound_quantities: tuple
@@ -207,6 +215,20 @@ class PersonalCombatInput:
     techniques: tuple = ()
     axes: tuple = ()
     dispositions: tuple = ()
+    mortal: tuple = ()
+
+
+@dataclass(frozen=True)
+class MortalResult:
+    """ONE FELLED PARTY'S MORTAL-WOUND DRAW (B15.07, PHY_A A3), returned on `CombatOutcome.mortal` by the module
+    (`modules/combat/fight.py::mortal_wound`) and MAPPED by the host onto that party's `felled` and `wounds`
+    (`seam/wrappers/combat.py::_wound_state`), which computes nothing (`04` §A.2).
+      * `mortal` -- he dies: the draw's band was Failure, and `felled` stands;
+      * `wounds` -- his wounds after the draw: at least `max_wounds` at Partial (left for dead), the scene's otherwise;
+      * `degree` -- the band (`core.degree`'s label of the one ladder, `degree_from_net`), for the trace."""
+    mortal: bool
+    wounds: int
+    degree: str
 
 
 @dataclass(frozen=True)
@@ -281,7 +303,10 @@ class CombatOutcome:
       * `beat`      -- the wound that felled a party, or `None` when nobody was felled;
       * `rounds`    -- rounds fought (A-101; the `turn_start` count);
       * `shape`     -- the scene's course, folded from its trace (B14.15);
-      * `trace`     -- the scene's events, for a viewer; `shape` and `beat` are the only folds of it."""
+      * `trace`     -- the scene's events, for a viewer; `shape` and `beat` are the only folds of it;
+      * `mortal`    -- `{party id: MortalResult}` for each party the scene felled, where the record carried the draw's operands
+                       (`PersonalCombatInput.mortal`, B15.07); empty where it carried none. `wounds` stays the scene's tracker: the host maps
+                       this onto it."""
     claimants: tuple
     wounds: Mapping[str, PartyWounds]
     surrender: Optional[Surrender]
@@ -289,6 +314,7 @@ class CombatOutcome:
     rounds: int
     shape: SceneShape
     trace: tuple
+    mortal: Mapping[str, MortalResult] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)

@@ -8990,7 +8990,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
         pytest.fail(f"personal_combat engine unavailable: {C.load_error()}")
     SeasonDriver(P.tiny_world())   # `31b`: registers the module entries a direct `contest()` calls
     w = _w(); w.step = Step.RESOLVE
-    raw = contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we3"])   # seed re-picked at B06.99: the stream changed (was we0)
+    raw = contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we9"])   # seed re-picked at B15.07: the mortal draw moved the stream (was we3, B06.99; was we0)
     assert raw["wound_state"]["p_low"]["felled"] is True, raw["wound_state"]
     assert raw["wound_state"]["p_mid"]["felled"] is False, raw["wound_state"]
     assert raw["wound_state"]["p_mid"]["wounds"] > 0, raw["wound_state"]
@@ -9004,7 +9004,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
     d = SeasonDriver(w2)
     # v10 REM-31: declared at RESOLVE, fought at ENCOUNTER (`_we_bands`' note); the fight's Events are ENCOUNTER's.
     evs = d.encounter(mint_token(d.w, WriteClass.ACTS),
-                      d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we3", actor="p_low", verb="fight",   # seed re-picked at B06.99: the stream changed (was we0)
+                      d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we9", actor="p_low", verb="fight",   # seed re-picked at B15.07: the mortal draw moved the stream (was we3, B06.99; was we0)
                                 payload={"subject": "p_mid"})], 2), 2)
     assert {e.kind for e in evs} >= {"person.died", "body.changed"}, [(e.kind, e.degree) for e in evs]
     assert "p_mid" in w2.persons, (
