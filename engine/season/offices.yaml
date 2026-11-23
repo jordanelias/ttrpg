@@ -135,6 +135,8 @@
 #     `rosters.yaml: remit_default`'s own note); only a MINTED seat carries this file's `post`, `body`
 #     and `faction`. Every seat a row stands for, loop-built or minted, is under the row's `id`
 #     (`harness/populated.py::_seat_id`, CP-T02-02); a seat with no row keeps `off_<holder>`.
+#   * A SEAT ROW MAY CARRY `term: <positive int> | null` (seasons; B21.01) -- the DEFAULT length a `confer` onto the seat writes onto
+#     the hold's `term?` where the act declares none (`loop/effects_governance.py::_declared_term`); no shipped row carries one.
 
 meta:
   source: "engine/season/offices.yaml -- the governance ladder's titles, and 31 authored seats (29, then the two Riskbreakers rows at v9 IN-64)."

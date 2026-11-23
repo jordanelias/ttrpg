@@ -105,7 +105,7 @@ def _refuse_at(clause: str, ids: str, said: Optional[str] = None) -> Answer:
 # ---------------------------------------------------------------------------
 
 
-@requires_predicate("confer", clauses=("office", "basis", "conferee", "purview", "held", "displacement"))
+@requires_predicate("confer", clauses=("office", "basis", "term", "conferee", "purview", "held", "displacement"))
 def _req_confer(w: "World", a: "Act") -> Answer:
     """Part E, IN FULL: *"the office's **conferral basis**, and 1-per-object: no live `hold` on the
     object, **or** the holder-Proposition has zero live `commit` (§54 it. 20)"*.
@@ -128,8 +128,8 @@ def _req_confer(w: "World", a: "Act") -> Answer:
     whose subject is somebody else"*, which is why the displacement is T-o and not a second reading
     of the conferral basis.
 
-    B09.19: THE ANSWER IS `Answer(ok, clause)`, the clause one of the six declared on the decorator -- `office`, `basis`,
-    `conferee`, `purview` (G3's `may_fill`), `held` (1-per-object: the seat is held and the conferral is to its own holder or
+    B09.19: THE ANSWER IS `Answer(ok, clause)`, the clause one of the seven declared on the decorator -- `office`, `basis`,
+    `term` (B21.01: the act declares a term that is no positive whole number), `conferee`, `purview` (G3's `may_fill`), `held` (1-per-object: the seat is held and the conferral is to its own holder or
     displaces one who carries a live `commit`) and `displacement` (T-o over the incumbent). The trace phrase beside each is the
     sentence the REM-14 rows have always carried."""
     obj = office_named_by(a)
@@ -139,6 +139,11 @@ def _req_confer(w: "World", a: "Act") -> Answer:
     off = w.offices[obj]
     if not has_conferral_basis(off):
         return _refuse_at("basis", f"{a.actor} on {obj!r}", "a confer of an office with no conferral basis")
+    # B21.01: A DECLARED TERM IS A POSITIVE WHOLE NUMBER, asked before `may_fill` so a malformed one refuses (and EMITS
+    # `confer.refused`) where `_declared_term`'s raise would end the season; that raise stays as the backstop for an act that skipped this.
+    declared = a.payload.get(TERM_KEY) if isinstance(a.payload, dict) else None
+    if declared is not None and (isinstance(declared, bool) or not isinstance(declared, int) or declared < 1):
+        return _refuse_at("term", f"{a.actor} on {obj!r} term {declared!r}", "a confer declares a malformed term")
     # Batch B-I close (C1): THE CONFEREE IS A LIVING PERSON. `to` comes from the conferrer's own
     # claims (`known_persons`), which can name somebody since dead, and nothing downstream asks:
     # `_admits` refuses only a missing or self `to`, and the gate admits the hold under the
@@ -205,6 +210,14 @@ def _req_succeed(w: "World", a: "Act") -> Answer:
     if may_claim(w, a.actor, w.offices[seat], titles):
         return ADMITTED
     return _refuse_at("claim", f"{a.actor} on {seat!r}", "a succeed the heir's claim does not admit")
+
+
+#: IN-10 (b): THE PAYLOAD KEY A `confer` DECLARES ITS SEAT-HOLD'S TERM UNDER -- the carrier's own field name (`Tenure.term`), not a
+#: `requires_operands` member: no typed cell binds it (the row is untyped), exactly as `create_record`'s act-declared `stages` and a
+#: hand-built `confer`'s `office` are payload keys the effect reads and no cell does. A computed act carries none. It lives beside
+#: `office_named_by`, the other payload key `confer` reads, because `_req_confer` asks it before `loop/effects_governance.py`
+#: (which imports this module) reads it; the seat row's `term:` (`offices.yaml`) is the same word.
+TERM_KEY = "term"
 
 
 def office_named_by(a: "Act") -> "Optional[str]":

@@ -13,10 +13,10 @@ from __future__ import annotations
 
 from typing import Optional
 
-from ..data.rosters import RELEASABLE_KINDS, RESTRAINT_KINDS, SUCCESSIONS
+from ..data.rosters import RELEASABLE_KINDS, RESTRAINT_KINDS, SEAT_ROW_BY_ID, SUCCESSIONS
 from ..data.verbs import VERB_TABLE
 from ..gaps import InstrumentDefect
-from ..loop.predicates import office_founded_by, office_named_by
+from ..loop.predicates import TERM_KEY, office_founded_by, office_named_by
 from ..queries.world_q import BAN_KIND, DETAIN_KIND, restrained
 from ..state.carriers import Tenure, Term
 from ..state.gate import (NO_CHANGE, TENURE_CLOSED, Change, Subject, claimable_seats, has_revocation_disposal,
@@ -29,22 +29,19 @@ from .effects_shared import _exercised_office, _new_oblige_term, _operand, _scal
 # order is an EMISSION and nothing else, which is `L1` in one row -- a dispatch does not move a
 # person, it tells one, and whether they go is their own act next season.
 
-#: IN-10 (b): THE PAYLOAD KEY A `confer` DECLARES ITS SEAT-HOLD'S TERM UNDER -- the carrier's own field
-#: name (`Tenure.term`), not a `requires_operands` member: no typed cell binds it (the row is untyped),
-#: exactly as `create_record`'s act-declared `stages` and a hand-built `confer`'s `office` are payload
-#: keys the effect reads and no cell does. A computed act carries none.
-TERM_KEY = "term"
-
-
-def _declared_term(w: "World", a: "Act") -> "Optional[Term]":
-    """THE TERM A `confer` DECLARES ON THE HOLD IT OPENS (IN-10 (b), #453 `:1382`/`:2071`): `None`
-    when the act declares none -- every computed act, and every conferral before IN-10, so an
-    untermed seat is what it was -- else `Term(w.tick + n, a.id)` for a declared length `n` in
-    seasons, `_new_oblige_term`'s shape: matured at the MATTER barrier of tick `w.tick + n`, citing
-    this act (AX-5). A declared length that is not a positive whole number is a CALLER defect,
-    raised as `_operand` raises for a missing operand, never a guessed term."""
+def _declared_term(w: "World", a: "Act", off: "Office") -> "Optional[Term]":
+    """THE TERM A `confer` DECLARES ON THE HOLD IT OPENS (IN-10 (b), #453 `:1382`/`:2071`; B21.01): the act's declared length
+    where its payload names one (`predicates.TERM_KEY`), else the seat row's own `term:` (`offices.yaml`, through
+    `SEAT_ROW_BY_ID`; a founded seat has no row and reads `None`), else `None` -- every computed act onto a row with no
+    term, and every conferral before IN-10, so an untermed seat is what it was. A length `n` is `Term(w.tick + n, a.id)`,
+    `_new_oblige_term`'s shape: matured at the MATTER barrier of tick `w.tick + n`, citing this act (AX-5), so a row's term is
+    the default and the conferring act its author, not a second store. A declared length that is not a positive whole number
+    is a CALLER defect, raised as `_operand` raises for a missing operand, never a guessed term (the row's own is refused at
+    load, `data/rosters.py::_load_offices`; `_req_confer` refuses the act's before this runs, and this is its backstop)."""
     d = a.payload if isinstance(a.payload, dict) else {}
     n = d.get(TERM_KEY)
+    if n is None:
+        n = (SEAT_ROW_BY_ID.get(off.id) or {}).get(TERM_KEY)
     if n is None:
         return None
     if isinstance(n, bool) or not isinstance(n, int) or n < 1:
@@ -102,7 +99,7 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     # the terms'*), read off the act as `create_record` reads its act-declared `stages`; MATTER
     # matures it and closes the hold under `T-n`, so the seat falls vacant when the term comes.
     nt = Tenure(H(w.world_seed, w.tick, to, f"hold:{obj}"), to, obj, "hold", w.tick,
-                term=_declared_term(w, a))
+                term=_declared_term(w, a, w.offices[obj]))
 
     def perform() -> None:
         for t in closed:

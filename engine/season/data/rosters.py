@@ -209,6 +209,19 @@ def _load_offices() -> dict:
                 "offices.yaml -- seats",
                 needs="one of " + ", ".join(_LEVELS) + " or `null`",
                 law="D-U1-01 -- a seat's modifier is one named level of `sigma_leverage.LEVEL_SIGMA`, the only ladder of levels")
+    # A SEAT ROW MAY NAME ITS TERM (B21.01): `term: <positive whole number of seasons> | null`, row data and not an `Office` field. It is
+    # the DEFAULT a `confer` onto the seat writes onto the hold's `term?` (`loop/effects_governance.py::_declared_term`), never a second
+    # store. `True` is no whole number here (a bool is an int to Python and not to this row), so it is refused with the rest.
+    for row in (*doc["seats"], *(doc.get("foreign_seats") or ())):
+        if isinstance(row, dict) and row.get("term") is not None:
+            term = row["term"]
+            if isinstance(term, bool) or not isinstance(term, int) or term < 1:
+                raise Unspecified(
+                    f"offices.yaml row {row.get('id')!r} names `term: {term!r}`, which is not a positive whole number of seasons",
+                    "offices.yaml -- seats",
+                    needs="a positive whole number of seasons, or `null`",
+                    law="`Tenure.term` is `Term(tick + n, act)` and `n` is a whole number of seasons >= 1 (`_declared_term`); a seat row's "
+                        "`term:` is the default that `n` takes, so a malformed one would fabricate a term nobody declared")
     # WHAT A COMPUTED FOUNDING DECLARES (B04.23): `founding:` carries `keeps:` (acts of `remit_acts`), `conferral:` (a member
     # of `conferral_bases`) and `revocation:` (a member of `revocation_bases`). A missing block or key is refused, not
     # defaulted: a founding that defaulted would silently found a seat the data never described.
