@@ -35,10 +35,12 @@ from engine.season.state.carriers import Act, Tenure
 from engine.season.state.gate import (
     DETERMINATION, NO_CHANGE, T_O, NotYours, may_determine, may_revoke)
 
+from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 from .test_g3_not_yours import _gov_world, _hold
 from .test_in10b_termed_seat import _seasons
 
 KING, VIA, DUKE, TARGET = "p_king", "off_crown", "p_high", "off_duke"
+pytestmark = pytest.mark.usefixtures("seat_at_success")   # B21.14: the ruled disposal at O/S is the fold's; the draw is C3's test
 
 
 def _edges(w) -> set:
@@ -252,8 +254,9 @@ def test_in31_a_release_a_displacing_confer_and_a_matured_term_cost_nothing():
 def test_in31_ban_is_opened_by_determine_and_revoke_and_kind_verb_is_unmoved():
     assert set(V._derive_openers_from_effects()[BAN_KIND]) == {"determine", "revoke"}
     assert V.KIND_VERB.get("tenure.opened") == "confer", "a second `tenure.opened` emitter unpriced confer"
-    assert V.VERB_TABLE["revoke"].emits == ("tenure.closed",)
-    assert V.VERB_TABLE["revoke"].writes == ("Tenure.until", "Tenure.since")
+    # B21.14: `revoke` is drawn -- its emits and writes are degree-keyed; at the ruled O/S bands they are what they were
+    assert all(V.VERB_TABLE["revoke"].emits_at(b) == ("tenure.closed",) for b in ("Overwhelming", "Success"))
+    assert all(V.VERB_TABLE["revoke"].writes_at(b) == ("Tenure.until", "Tenure.since") for b in ("Overwhelming", "Success"))
 
 
 # 11 -- THE EXIT, ON THE BUILT REALM ---------------------------------------------------------------------

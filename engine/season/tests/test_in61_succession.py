@@ -30,6 +30,7 @@ from ..loop.matter import _die
 from ..state import gate as G
 from ..state.carriers import Act, Tenure
 from ..state.ids import H
+from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 from .test_in61_heir_hears_vacancy import _holder, _one_season
 
 THRONE, TITLE, DUCHY = "off_king", "off_heir", "off_duke_valorsmark"
@@ -64,6 +65,7 @@ def _live_hold(w, who, seat):
 
 # --- THE CLAIM EXECUTES (the exit), AND THE TITLE IS SPENT BY IT ---------------------------------
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the claim's write, not its draw (C3's test)
 def test_the_heir_claims_the_vacant_throne_and_his_title_closes_in_the_same_act():
     """EXIT: the throne vacated, the title-holder's `succeed` opens the throne's `hold` for him, through
     the real fold. FALSIFIER: *the claimant's `off_heir` hold still live after the claim* -- asserted
@@ -150,6 +152,7 @@ def test_no_seat_may_confer_the_vacant_throne():
 
 # --- THE ONE-ACT CLAIM: TWO SEATS, ONE TITLE ----------------------------------------------------
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the claim's write, not its draw (C3's test)
 def test_one_claim_opens_every_vacant_seat_that_names_the_title_and_closes_the_title(monkeypatch):
     """THE ONE-ACT FALSIFIER (the second decision round's): the King dies holding BOTH `off_king` and
     `off_duke_valorsmark`, and both seats name the heir's title (`off_duke_valorsmark`'s row is CP-T09-06's,

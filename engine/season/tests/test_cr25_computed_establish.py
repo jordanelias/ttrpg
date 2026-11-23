@@ -33,6 +33,7 @@ from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..seam import Resolution
 from ..state.carriers import Act, Office, Rung, Tenure
+from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 
 
 def _world():
@@ -154,6 +155,7 @@ def test_cr25_5_control_a_reduction_the_seats_basis_admits_executes():
     assert _kinds(out) == ["remit.changed", "tenure.payload_set"], _kinds(out)
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the founder's conferral and revocation are drawn; read here at Success
 def test_cr25_6_the_founder_revokes_the_founded_lord_through_his_seat():
     w, d = _world()
     _act(w, d, "e_found", "p_king", "off_king", {"subject": "T"})

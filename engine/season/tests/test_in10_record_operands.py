@@ -44,6 +44,8 @@ MUTATIONS, run at the build 2026-10-16 (each RED, then restored byte-exact and G
 
 from __future__ import annotations
 
+import pytest
+
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import WriteClass
 from ..data.rosters import RECORD_CONTENT
@@ -58,6 +60,7 @@ from ..queries import world_q
 from ..state.carriers import Act, Claim, Question, Record, Tenure
 from ..state.ids import H
 
+from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 from .test_g3_not_yours import _gov_world, _hold
 
 SEAT, DUKE = "off_duke", "p_high"
@@ -311,6 +314,7 @@ def test_in10_a_held_commission_saying_nothing_of_the_referent_forms_no_bag():
     assert {c.operands.get("to") for c in got} == {"p_king"}, got
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the channel's conferral executes at Success; the draw is C3's test
 def test_in10_the_channels_confer_carries_its_seat_and_executes():
     """THE ENTRY'S FALSIFIER, FIRST HALF: an execution the channel forms carries `Act.via`. The act
     `pack_scenes` mints from the commission's Candidate names the seat it is exercised through and
@@ -334,6 +338,7 @@ def test_in10_the_channels_confer_carries_its_seat_and_executes():
 # 5 -- H-71's LEAK: RE-SEATING DEPOSITS NO CLAIM ABOUT THE OUTGOING HOLDER'S TENURE
 # ======================================================================================
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: what the conferral deposits, at Success; the draw is C3's test
 def test_in10_a_channel_confer_onto_a_held_office_deposits_no_claim_about_the_outgoing_tenure():
     """THE ENTRY'S FALSIFIER, SECOND HALF. `off_reeve` is held by `p_mid` (no live commit). The duke,
     whose seat sits on `D` (S's parent, same faction: he may fill AND revoke the reeve), holds a

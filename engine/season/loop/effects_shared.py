@@ -131,7 +131,7 @@ def _provisional_term(w: "World", a: "Act") -> Optional["Term"]:
     `_new_oblige_term`'s shape: matured at the MATTER barrier of tick `w.tick + n`, citing this act (AX-5). `None` is the CONTROL and
     SHIPS: an untermed hold, exactly what a Success opens, so a Partial reads as a Success until the fixture is set. Anything else
     must be a whole number of seasons, at least one, refused here as `_oblige_term` refuses it (a `0` would lapse at the very next
-    barrier). No caller yet: B21.14's `succeed` and `revoke` are its first."""
+    barrier). Callers (B21.14): `_eff_confer` and `_eff_succeed` at a Partial band; a Partial `revoke` opens no hold."""
     n = w.fixtures.get("provisional_term")
     if n is None:
         return None

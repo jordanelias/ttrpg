@@ -29,6 +29,7 @@ from pathlib import Path
 import pytest
 
 from ._flat_fold import flat_fold, flat_fold_fixtures
+from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 from .. import decision
 from .. import seam
 from ..data.fixtures import DEFAULT_FIXTURES
@@ -4472,6 +4473,7 @@ def test_the_title_ladder_is_total_over_the_rungs():
 # section; the `sovereign` assertion moved to `test_the_title_ladder_is_total_over_the_rungs`.
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the revocation branch's write, at Success; the draw is C3's test
 def test_the_revocation_branch_executes_in_the_fold_and_not_only_as_a_predicate():
     """§0.2 — DONE MEANS IT RUNS. Every other assertion about `_req_revoke` calls the predicate
     DIRECTLY out of `REQUIRES_PREDICATES`, which is a claim about a function, not about a
@@ -8727,11 +8729,16 @@ def test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else()
     # v12 B21.09 (`14_VERBS_BINDING_A` commit A3): `establish` IS contested (`a seat`, B07's prize row, its first verb), the twelfth
     # entry, with its own measurement: `engine/season/tests/test_vb_a_formation.py::test_a3_establish_bands_on_a_hand_built_holding`
     # folds it through the real seam over 40 seeds (all four bands; Partial founds half the remit, Failure writes nothing).
+    # v12 B21.14 (`14_VERBS_BINDING_C` commit C3): `confer`, `revoke` and `succeed` ARE contested (`a seat`, opposed by the named
+    # seat's live holder), the thirteenth to fifteenth entries, with their own measurement:
+    # `engine/season/tests/test_vb_c_turnover.py::test_c3_confer_revoke_succeed_band_on_a_hand_built_world` folds each through the
+    # real seam over 40 seeds (all four bands for `confer` and `succeed`; a withstood `revoke` leaves the holder seated).
     assert contested == {"fight": "the body", "tell": "a standing", "march": "a field",
                          "accept": "the body", "speak": "a matter",
                          "determine": "a proposition", "argue": "a proposition",
                          "arrest": "a standing", "interrogate": "a proposition",
-                         "capture": "the body", "lie": "a standing", "establish": "a seat"}, (
+                         "capture": "the body", "lie": "a standing", "establish": "a seat",
+                         "confer": "a seat", "revoke": "a seat", "succeed": "a seat"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
         "can be graded today is scoped to this set. A SEVENTH entry is a real widening and wants "
         "its own measurement; losing one of these six means its prize row or its verb row has "

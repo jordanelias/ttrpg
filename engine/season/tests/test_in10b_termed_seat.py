@@ -23,9 +23,11 @@ from engine.season.harness import probes as P
 from engine.season.loop.effects import EFFECTS
 from engine.season.state.carriers import Act
 
+from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 from .test_g3_not_yours import _gov_world, _hold
 
 SEAT, CONFERRER, VIA, CONFEREE = "off_reeve", "p_king", "off_crown", "p_mid"
+pytestmark = pytest.mark.usefixtures("seat_at_success")   # B21.14: the term the conferral writes, not its draw (C3's test)
 
 
 def _act(term=None, key="cf_in10b"):

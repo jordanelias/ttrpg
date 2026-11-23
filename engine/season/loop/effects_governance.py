@@ -25,7 +25,15 @@ from ..state.gate import (NO_CHANGE, TENURE_CLOSED, Change, Subject, claimable_s
                           revocation_disposal)
 from ..state.ids import H
 
-from .effects_shared import _exercised_office, _new_oblige_term, _operand, _scaled, _shift, effect_for
+from .effects_shared import _exercised_office, _new_oblige_term, _operand, _provisional_term, _scaled, _shift, effect_for
+
+
+def _provisional(res: "Resolution | None") -> bool:
+    """B21.14 (BIND_C commit C3, "the bands"): IS THE SEAT TURNED OVER PROVISIONALLY? True where the act's band lands only part of
+    its effect -- read through the one band table (`data/rosters.py::task_share`, so no band is named here): the middle band,
+    Partial. An undrawn act (no degree) and the two full bands are not; Failure writes nothing (the rows' `writes:` are empty there),
+    so the effect never runs at it."""
+    return task_share(res.degree if res is not None else None) < 1
 
 # --- THE GOVERNANCE SLICE'S EFFECTS. `dispatch` needs none: Part E gives it `writes: []`, so an
 # order is an EMISSION and nothing else, which is `L1` in one row -- a dispatch does not move a
@@ -100,8 +108,15 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
     # term-limited seat. The term is the OPENING ACT's declaration (T-n, *'the opening act declares
     # the terms'*), read off the act as `create_record` reads its act-declared `stages`; MATTER
     # matures it and closes the hold under `T-n`, so the seat falls vacant when the term comes.
-    nt = Tenure(H(w.world_seed, w.tick, to, f"hold:{obj}"), to, obj, "hold", w.tick,
-                term=_declared_term(w, a, w.offices[obj]))
+    term = _declared_term(w, a, w.offices[obj])
+    # B21.14 (BIND_C edit 5): A PARTIAL CONFERRAL SEATS HIM PROVISIONALLY -- the hold opens with `_provisional_term` unless the
+    # act or the seat's row declares a shorter one (the earlier maturity wins). At the control (`provisional_term` None) the
+    # provisional term is none, so a Partial seats him exactly as a Success does.
+    if _provisional(res):
+        provisional = _provisional_term(w, a)
+        if provisional is not None and (term is None or provisional.matures_at < term.matures_at):
+            term = provisional
+    nt = Tenure(H(w.world_seed, w.tick, to, f"hold:{obj}"), to, obj, "hold", w.tick, term=term)
 
     def perform() -> None:
         for t in closed:
@@ -154,7 +169,10 @@ def _eff_succeed(w: "World", a: "Act", res: "Resolution | None" = None) -> Chang
     seats = claimable_seats(w, a.actor, title) if held else ()
     if seat not in seats:
         return NO_CHANGE
-    opened = [Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{s}"), a.actor, s, "hold", w.tick)
+    # B21.14 (BIND_C edit 7): A PARTIAL CLAIM TAKES EACH SEAT PROVISIONALLY -- opened with `_provisional_term`, under the same claim
+    # basis and the title laid down in the same write, exactly as at Success. At the control the term is none (Partial = Success).
+    term = _provisional_term(w, a) if _provisional(res) else None
+    opened = [Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{s}"), a.actor, s, "hold", w.tick, term=term)
               for s in seats]
 
     def perform() -> None:
@@ -322,7 +340,10 @@ def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> Change
         return NO_CHANGE
     closed = [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live]
     bans: list = []
-    if off is not None and a.via in w.offices and revocation_disposal(off) == BAN_KIND:
+    # B21.14 (BIND_C edit 6): A PARTIAL REVOCATION UNSEATS HIM WITHOUT THE DISPOSAL (`bans = []`) -- an unseating short of a completed
+    # revocation, so the ruled cost is not charged [ASSUMPTION; medium; Jordan to correct -- basis: R4 §2 (BYZ_E conflict) takes
+    # BIND_C's Partial; revert: drop `not _provisional(res)` below]. At Overwhelming and Success (and an undrawn act) it is charged.
+    if off is not None and a.via in w.offices and revocation_disposal(off) == BAN_KIND and not _provisional(res):
         for h in dict.fromkeys(t.subject for t in closed):
             if h != a.actor and h in w.persons and not restrained(w, h, BAN_KIND):
                 bans.append(Tenure(H(w.world_seed, w.tick, h, f"ban:{a.via}:{a.id}"), h, a.via,

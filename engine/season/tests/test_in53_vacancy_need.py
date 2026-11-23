@@ -36,6 +36,7 @@ import dataclasses
 
 import pytest
 
+from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 from engine.season.data import verbs as _verbs
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.rosters import REFERENT_CLASSES
@@ -293,6 +294,7 @@ def _fold_confer(w, d, payload, via, aid="cf"):
         contest_max_depth=w.fixtures.get("contest_max_depth"))]
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the computed act's admission and write, not its draw
 @pytest.mark.parametrize("to", ["p_mid", "p_king"])
 def test_in53v_d_a_computed_confer_fills_the_vacant_seat(to):
     """The Candidate `opening_set` forms (subject the vacancy, `to` a known person or the conferrer
@@ -308,6 +310,7 @@ def test_in53v_d_a_computed_confer_fills_the_vacant_seat(to):
     assert "tenure.opened" in kinds and _hold(w, "off_reeve").subject == to, kinds
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the fold's refusal, not the draw
 @pytest.mark.parametrize("to", ["p_mid", "p_king"])
 def test_in53v_g_conferring_a_seat_on_its_own_holder_is_refused(to):
     """B-I close, Phase 3 F1: a seat conferred on the person who already holds it changes nothing but
@@ -335,6 +338,7 @@ def test_in53v_d_a_confer_naming_nobody_is_refused():
     assert kinds == ["confer.refused"] and _hold(w, "off_reeve") is None, kinds
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the causes the fold cites, not the draw
 def test_in53v_d_an_act_on_a_classed_referent_cites_no_unrelated_occasion():
     """A vacancy rides on whatever question the person answers (D1), so a `confer` can be packed in
     a scene whose occasion is a `claim_landed` question about something else. Its occasion is the
@@ -491,6 +495,7 @@ def _the_heir_claims(w, heir, n="cause"):
     return a, out
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the causes the claim's Events cite, not the claim's draw
 @pytest.mark.parametrize("route", ["hazard", "plant"])
 def test_a_succession_names_the_tenure_closed_that_opened_it(route):
     """FALSIFIER: the branch returning `[]` (the code before B09.12) leaves `succession.claimed` citing `[act]` alone.

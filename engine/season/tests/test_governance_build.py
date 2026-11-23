@@ -47,6 +47,7 @@ from ..state.carriers import (
     matrix_rows_without_a_field, refuse_a_title_in_a_body, subject_of,
 )
 from ..seam import Resolution
+from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 
 SUCCESS = DEGREE_LABEL[Degree.SUCCESS]   # B21.09: the writing band `_establish` folds a founding at
 
@@ -1881,6 +1882,7 @@ def test_13d_i_the_title_in_a_body_refusal_is_rehomed_not_dropped():
     assert Office("off_t", "Chancellor", None, [], body="Imperial Court").faction == "Valorsmark"
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the revocation basis is read here at Success; the draw is C3's test
 def test_13d_i_revoke_executes_in_the_fold_for_the_seat_above_and_refuses_the_other_faction():
     """§0.2 -- DONE MEANS IT RUNS. Planted `revoke` acts through the resolver, both revokers seated
     with `revoke` in their grant so eligibility passes and the PREDICATE decides: the other

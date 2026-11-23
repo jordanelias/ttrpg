@@ -107,6 +107,11 @@ def resolvable_verbs() -> frozenset:
         #     the room the prize names is what stands opposite (`seam/wrappers/sigma.py::audience_of`), and the social roll
         #     opposes nobody at the untrained score (`roll.py::obstacle`, never absent). Narrowed to a registered predicate, as
         #     the clause above is. Today: `establish` (`a seat`) alone.
+        #   * B21.14 (VB-C commit C3) [ASSUMPTION; medium; Jordan to correct; revert: the three clauses above alone, under which a
+        #     drawn `confer` leaves the chooser's verb set]: **OR the prize's row names who stands opposite (`opposed_by:`).** The
+        #     opponent is then read off the world by the prize (`loop/sides.py::sides_of`: the named seat's live holder), not off an
+        #     operand the act must carry, so `confer` (whose `counterparty: to` is the conferee, not the opponent) has nothing to
+        #     miss. Narrowed to a registered predicate, as above. Today: `a seat`'s rows -- `confer`, `revoke`, `succeed`, `establish`.
         contested = bool(row.contests)
         resolvable_contest = False
         if contested:
@@ -120,7 +125,8 @@ def resolvable_verbs() -> frozenset:
             resolvable_contest = bool(_mod) and (
                 row.requires_typed is not None
                 or (row.counterparty == "subject" and v in REQUIRES_PREDICATES)
-                or (not row.counterparty and bool(_prize.get("heard_by")) and v in REQUIRES_PREDICATES))
+                or (not row.counterparty and bool(_prize.get("heard_by")) and v in REQUIRES_PREDICATES)
+                or (bool(_prize.get("opposed_by")) and v in REQUIRES_PREDICATES))
         if gated and effected and (not contested or resolvable_contest):
             out.add(v)
     return frozenset(out)

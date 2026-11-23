@@ -1402,9 +1402,6 @@ rosters:
       only in `_E`; `release` in `_A`, not `_B`); each other verb's file is the one naming it most]
     keys: [verb_table]
     values:
-      confer:    "14_VERBS_BINDING_C_turnover"
-      revoke:    "14_VERBS_BINDING_C_turnover"
-      succeed:   "14_VERBS_BINDING_C_turnover"
       pardon:    "14_VERBS_BINDING_B_sittings"
       release:   "14_VERBS_BINDING_A_formation"
       surrender: "14_VERBS_BINDING_E_war_seats"
@@ -1771,13 +1768,14 @@ rosters:
         heard_by: "bench"   # the bench at the act's rung hears this prize (`world_q.reception`, `world_q.proofs`; `manifest/registry.py::_check_heard_by`).
         cite:     "v9 SC-01 step 12 (B-N): `speak`'s prize (`proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` §B.1, `08_SEAM.md`: `a matter` -> the proceedings provider). Routed to the interim provider at step 12; ED-SC-0033 clause (2)'s repoint (steps 13 + 15, ONE change) reached THIS row too, so it was three rows, not the two the plan names [ASSUMPTION; medium; revert: no row, and `speak` declares no `contests:`]."
       # B07.04 (`U5c_VERBS_residue` §2 edit 3): the two governance prizes, with the room each is heard in (`seam/wrappers/sigma.py::audience_of`'s table
-      # keyed by room). A row naming one lands with its verb (`a seat`: `establish` since B21.09, then confer, revoke, succeed; `a holding`: surrender).
+      # keyed by room). A row naming one lands with its verb (`a seat`: `establish` since B21.09, `confer`, `revoke` and `succeed` since B21.14; `a holding`: surrender).
       "a seat":
         module:   "social_contest"
         person_inputs: "pool"
         provider: "social_contest"   # as `a proposition`'s
         module_entry: "social_contest.roll"   # as `a proposition`'s
         heard_by: "seat_body"   # the members of the body the act's seat belongs to, else the seated persons at that seat's rung (`audience_of`).
+        opposed_by: "holder"   # B21.14 (BIND_C C3): where the act names a seat (`loop/predicates.py::office_named_by`), who stands opposite is that seat's live holder, nobody where it is vacant; an act naming no seat (`establish`'s holding) keeps its own opponent operand. Read by `loop/sides.py::sides_of` alone (`manifest/registry.py::_check_opposed_by`).
         cite:     "U5c_VERBS_residue §2 edit 3 (B07.04): the audience is a cell of the prize row, read by one host function and by no verb's name."
       "a holding":
         module:   "social_contest"

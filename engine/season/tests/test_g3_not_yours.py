@@ -47,8 +47,12 @@ from engine.season.state.gate import (
 from engine.season.state.ids import H
 
 from ._scar_helpers import party_state
+from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 
 _RUNG_ABOVE = "rung_above_same_faction"
+# B21.14: `confer` and `revoke` are drawn (`contests: a seat`); these tests read the gate and the effect, not the draw, so a bare
+# `_fold` of either is folded at a writing band (B21.09's `establish` precedent below); the draw is `test_vb_c_turnover.py`'s.
+_SUCCESS = Resolution(DEGREE_LABEL[Degree.SUCCESS], {})
 
 
 def _seat_on(w, pid, oid, post, rung, faction="Crown", remit=("confer", "revoke")):
@@ -164,7 +168,7 @@ def test_g3_every_live_violation_is_refused_without_its_basis_and_admitted_with_
 
     w, d = _gov_world()
     out = d._fold(w, mint_token(w, WriteClass.ACTS),
-                  Act(id="rv0", actor="p_king", verb="revoke", payload={"office": "off_duke"}))
+                  Act(id="rv0", actor="p_king", verb="revoke", payload={"office": "off_duke"}), _SUCCESS)
     assert [e.kind for e in out] == ["revoke.refused"], [e.kind for e in out]
     assert _hold(w, "off_duke") is not None, "the refused revocation closed the hold"
     refused.append("revoke")
@@ -172,7 +176,7 @@ def test_g3_every_live_violation_is_refused_without_its_basis_and_admitted_with_
     w, d = _gov_world()
     out = d._fold(w, mint_token(w, WriteClass.ACTS),
                   Act(id="cf0", actor="p_high", verb="confer",
-                      payload={"office": "off_reeve", "to": "p_mid"}))
+                      payload={"office": "off_reeve", "to": "p_mid"}), _SUCCESS)
     assert [e.kind for e in out] == ["confer.refused"], [e.kind for e in out]
     assert _hold(w, "off_reeve") is None, "the refused conferral left a hold on the seat"
     refused.append("confer")
@@ -200,12 +204,12 @@ def test_g3_every_live_violation_is_refused_without_its_basis_and_admitted_with_
     w, d = _gov_world()
     out = d._fold(w, mint_token(w, WriteClass.ACTS),
                   Act(id="rv1", actor="p_king", verb="revoke", payload={"office": "off_duke"},
-                      via="off_crown"))
+                      via="off_crown"), _SUCCESS)
     assert "tenure.closed" in {e.kind for e in out} and _hold(w, "off_duke") is None     # T-o
     w, d = _gov_world()
     out = d._fold(w, mint_token(w, WriteClass.ACTS),
                   Act(id="cf1", actor="p_high", verb="confer",
-                      payload={"office": "off_reeve", "to": "p_mid"}, via="off_duke"))
+                      payload={"office": "off_reeve", "to": "p_mid"}, via="off_duke"), _SUCCESS)
     assert _hold(w, "off_reeve").subject == "p_mid"                                     # conferral
     w, d = _gov_world()
     victim_edges = [t for t in w.tenures if t.subject == "p_mid" and t.live]
@@ -244,7 +248,7 @@ def test_g3_the_conferral_opener_is_admitted_only_through_a_seat_with_purview(ga
             w.offices["off_reeve"].conferral = None
         out = d._fold(w, mint_token(w, WriteClass.ACTS),
                       Act(id="cf", actor=c["actor"], verb="confer",
-                          payload={"office": "off_reeve", "to": "p_mid"}, via=c["via"]))
+                          payload={"office": "off_reeve", "to": "p_mid"}, via=c["via"]), _SUCCESS)
         assert [e.kind for e in out] == ["confer.refused"], (why, [e.kind for e in out])
         assert not [t for t in w.tenures if t.object == "off_reeve" and t.subject == "p_mid"], (
             f"{why}: the refused opener left the conferee a hold")
@@ -265,10 +269,11 @@ def test_g3_the_conferral_opener_is_admitted_only_through_a_seat_with_purview(ga
     kinds = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS),
                                      Act(id="cf", actor="p_high", verb="confer",
                                          payload={"office": "off_reeve", "to": "p_mid"},
-                                         via="off_duke"))]
+                                         via="off_duke"), _SUCCESS)]
     assert "tenure.opened" in kinds and _hold(w, "off_reeve").subject == "p_mid", kinds
 
 
+@pytest.mark.usefixtures("seat_at_success")       # B21.14: the precondition and the gate are read here, not the draw
 def test_g3_confer_refuses_at_the_precondition_what_the_gate_would_refuse():
     """The SHIPPED fold: `_req_confer` asks the gate's own `may_fill` (and, on a held seat,
     `may_revoke`), so an opener without a basis EMITS `confer.refused` and never reaches the gate
@@ -320,7 +325,7 @@ def test_g3_a_revoke_with_no_seat_is_refused_at_the_gate_itself(gate_only):
     with pytest.raises(Forbidden):
         w.gate.mint(t.id, "set", "Act", "until")
     out = d._fold(w, mint_token(w, WriteClass.ACTS),
-                  Act(id="rv_none", actor="p_king", verb="revoke", payload={"office": "off_duke"}))
+                  Act(id="rv_none", actor="p_king", verb="revoke", payload={"office": "off_duke"}), _SUCCESS)
     assert [e.kind for e in out] == ["revoke.refused"], [e.kind for e in out]
     assert t.live, "(b) the fold's refused write closed the hold"
 
@@ -602,9 +607,9 @@ def test_g3_every_basis_name_the_gate_can_return_is_reached_in_this_file():
         # The conferral FIRST: the revocation closes the duke's own seat, after which he no
         # longer sits in the seat he would confer through.
         d._fold(w, tok(), Act(id="b", actor="p_high", verb="confer",
-                              payload={"office": "off_reeve", "to": "p_mid"}, via="off_duke"))
+                              payload={"office": "off_reeve", "to": "p_mid"}, via="off_duke"), _SUCCESS)
         d._fold(w, tok(), Act(id="a", actor="p_king", verb="revoke",
-                              payload={"office": "off_duke"}, via="off_crown"))          # T-o
+                              payload={"office": "off_duke"}, via="off_crown"), _SUCCESS)  # T-o
         # `p_low` and `p_mid` share a hearth: a Record made and handed over before the fight below
         # takes `p_mid` out of the world.
         d._fold(w, tok(), Act(id="r", actor="p_low", verb="create_record",

@@ -21,9 +21,11 @@ from ..loop.matter import _die
 from ..queries import world_q
 from ..queries.world_q import BAN_KIND
 from ..state.carriers import Act, Tenure
+from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
 from .test_g3_not_yours import _gov_world, _hold
 
 SEAT, CONFERRER, VIA, CONFEREE = "off_reeve", "p_king", "off_crown", "p_mid"
+pytestmark = pytest.mark.usefixtures("seat_at_success")   # B21.14: a seat row's term and a ban's reach are the fold's; the draw is C3's test
 
 
 def _plant(monkeypatch, term):

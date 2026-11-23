@@ -57,7 +57,8 @@ STANDING = tuple(n for n in ROSTER if n not in CONDITIONAL)
 LANE_A_STEPS = ("forgery",)                        # outside the roster (U-6); lane A's `room` step left it at B05.17 (the hostile half is the `reception` member, the rest leverage)
 BOUNDS = ("ceiling", "floor")
 SHIPPED_TABLE = V.VERB_TABLE_YAML                 # read at import, before any test re-points the loader
-ROLLED = ("tell", "lie", "argue", "speak", "determine", "arrest", "interrogate", "research", "examine", "surveil", "establish")   # B21.09: `establish`
+ROLLED = ("tell", "lie", "argue", "speak", "determine", "arrest", "interrogate", "research", "examine", "surveil", "establish",   # B21.09: `establish`
+          "confer", "revoke", "succeed")                                                                                          # B21.14
 #: The control arm, pinned (B05.23 ships the calibrated one): the settings T13 commit 2 and OBS §4 step 5 flipped, each at its control, and
 #: the ceiling's form at its control (`hard`, B05.53), so the arm reads the flat bound whatever form ships (H-213, H-430).
 CONTROL_ARM = dict(pool_add=0, pool_floor=0, opposition_rate=0.5, attribute_level=None, difficulty_ob=DIFFICULTY_OB_CONTROL, regard_step=0,
@@ -183,14 +184,14 @@ def _load_with(monkeypatch, tmp_path, verb, **cell):
 
 def test_a_rolled_row_with_no_difficulty_is_refused(monkeypatch, tmp_path):
     armed = {v for v, r in V.GRADED_TASKS.items() if r.get("armed_by")}                            # B07.01: the task rows, dealt once their arm is on
-    assert set(V.social_roll_verbs()) == set(ROLLED) | armed, sorted(V.social_roll_verbs())      # the eleven rows and the armed routes, derived from the prizes and routes
+    assert set(V.social_roll_verbs()) == set(ROLLED) | armed, sorted(V.social_roll_verbs())      # the fourteen rows (B21.14) and the armed routes, derived from the prizes and routes
     assert _load_with(monkeypatch, tmp_path, "tell", difficulty="routine")["tell"].difficulty == "routine"       # CONTROL: the shipped cell loads
     for verb in ROLLED:                                                                           # contested rows and graded rows both
         with pytest.raises(SystemExit, match=f"{verb!r} is dealt by the social roll and declares no `difficulty:`"):
             _load_with(monkeypatch, tmp_path, verb, difficulty=None)
     with pytest.raises(SystemExit, match="not a member of `rosters.yaml: difficulty_levels`"):
         _load_with(monkeypatch, tmp_path, "tell", difficulty="easy")
-    assert set(V.GRADED_TASKS) - armed and set(V.GRADED_TASKS) - armed <= set(ROLLED)  # the live graded rows are among the eleven, and were refused above
+    assert set(V.GRADED_TASKS) - armed and set(V.GRADED_TASKS) - armed <= set(ROLLED)  # the live graded rows are among the fourteen, and were refused above
     unrolled = next(v for v, r in V.VERB_TABLE.items() if v not in ROLLED and r.brute)
     with pytest.raises(SystemExit, match=f"{unrolled!r} declares `difficulty: 'routine'` and the social roll does not deal it"):
         _load_with(monkeypatch, tmp_path, unrolled, difficulty="routine")

@@ -222,7 +222,8 @@ def test_inv4_a_flat_row_with_two_clauses_and_two_refusal_kinds_refuses_the_load
     every refusal, so a second kind is published for a clause that did not fail (`ID-9`)."""
     assert not VERB_TABLE["confer"].refusals_by_clause, "fixture: confer must be a flat row"
     _plant(monkeypatch, "confer", lambda r: r["emits_on_refusal"].append("confer.also"))
-    with pytest.raises(SystemExit, match=r"'confer' is a FLAT row with \d failable clause\(s\) and "
+    # B21.14: `confer` is contested (`a seat`), so the loader names its party gap too
+    with pytest.raises(SystemExit, match=r"'confer' is a FLAT row with \d failable clause\(s\) and a contest/graded party gap and "
                                          r"declares 2 refusal kinds \['confer\.refused', 'confer\.also'\]"):
         _verbs._load_verb_table()
 

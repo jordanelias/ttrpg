@@ -7172,14 +7172,14 @@ rows:
 
   - id:        H-611
     tier:      1
-    hole:      "HOW LONG A PARTIAL'S HOLD LASTS -- `provisional_term`, the length in seasons of the term a Partial `succeed` or `revoke` opens its hold with (`14_VERBS_BINDING_C` commit C1, edit 1), built by `loop/effects_shared.py::_provisional_term` in `_new_oblige_term`'s shape (`Term(w.tick + n, a.id)`). At the control the term is `None`: an untermed hold, exactly what a Success opens, so a Partial reads as a Success. The proposed 2 is uncalibrated and no document derives it."
+    hole:      "HOW LONG A PARTIAL'S HOLD LASTS -- `provisional_term`, the length in seasons of the term a Partial `confer` or `succeed` opens its hold with (`14_VERBS_BINDING_C` commit C1, edit 1), built by `loop/effects_shared.py::_provisional_term` in `_new_oblige_term`'s shape (`Term(w.tick + n, a.id)`). At the control the term is `None`: an untermed hold, exactly what a Success opens, so a Partial reads as a Success. The proposed 2 is uncalibrated and no document derives it."
     kind:      "NUMBER"
-    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.provisional_term` the one home (the BYZANTINE files cite it and ship no second value, F-R4-10). READER: `engine/season/loop/effects_shared.py::_provisional_term`, the one constructor of a Partial's term (first callers B21.14's `succeed` and `revoke`)"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.provisional_term` the one home (the BYZANTINE files cite it and ship no second value, F-R4-10). READER: `engine/season/loop/effects_shared.py::_provisional_term`, the one constructor of a Partial's term (callers since B21.14: `_eff_confer` and `_eff_succeed` at a Partial band)"
     grade:     "assumption"
     default:   "None -- THE CONTROL, SHIPPED (UNDECIDED u-12: BIND_C edit 1 states the control as a behaviour, `Partial = Success`, and it is encoded as `None`): `_provisional_term` returns `None`, so a Partial opens an untermed hold as a Success does [ASSUMPTION; medium; Jordan to correct; revert: None]. Set by B98 (the batch's DIALS AT CONTROL line; UNDECIDED u-1: BIND_C's flip may set it instead)"
-    site:      "Fixtures provisional_term, read by `loop/effects_shared.py::_provisional_term` once per Partial that opens a hold; no caller at B21.12"
+    site:      "Fixtures provisional_term, read by `loop/effects_shared.py::_provisional_term` once per Partial that opens a hold; no caller at B21.12, called by `_eff_confer` and `_eff_succeed` since B21.14"
     sweep:     [null, 1, 2, 4]
-    unblocks:  "a Partial `succeed` or `revoke` that holds for a stated number of seasons and then lapses, where a Success holds without end (B21.14); the joint re-centring (OBS §4 step 5) or the story census sets it"
+    unblocks:  "a Partial `confer` or `succeed` that holds for a stated number of seasons and then lapses, where a Success holds without end (B21.14); the joint re-centring (OBS §4 step 5) or the story census sets it"
     cite:      "THE PROPOSED VALUE AND THE SWEEP ARE `14_VERBS_BINDING_C_turnover.md` edit 1's (proposed 2, swept 1 / 2 / 4; 'the joint re-centring (OBS §4 step 5) or the story census sets it'); no reading is named that sets it, so it ships at the control. CONTROL: the realm content hash at seed 0 after one season is equal to its parent's, since nothing calls the constructor yet (B21.12's receipt). FALSIFIER: a non-`None` term returned at the control value, whereupon a Partial would differ from a Success before the setting is set."
     source:    "workplan v12 B21.12 (`14_VERBS_BINDING_C_turnover.md` commit C1; B21's H block slot 2)"
 
