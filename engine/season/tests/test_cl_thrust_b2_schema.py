@@ -156,15 +156,17 @@ def test_a_missing_goal_stages_key_reads_as_empty_and_nothing_else_moves():
     assert all(g.axis is None and g.stages is None for g in got)
 
 
-def test_the_shipped_goals_file_carries_no_axis_and_no_goal_stages_and_loads_unchanged(monkeypatch):
+def test_the_shipped_goals_file_carries_no_axis_and_its_stage_rows_load_onto_their_goals(monkeypatch):
     raw = yaml.safe_load(files.GOALS_YAML.read_text(encoding="utf-8"))
-    assert "goal_stages" not in raw, "no stage is authored in this landing"
+    # B10.73 authors the first stage row (ARC-47's); a goal carries stages exactly when a row names it in `for:`.
+    staged = {gid: row["id"] for row in raw.get("goal_stages") or [] for gid in row["for"]}
     assert not any("axis" in r for r in raw["goals"]), "no shipped row carries an axis"
     monkeypatch.setattr(goals, "_CACHE", None)
     loaded = goals.goals()
     checked = 0
     for g in loaded:
-        assert g.axis is None and g.stages is None, g.id
+        assert g.axis is None, g.id
+        assert (None if g.stages is None else g.stages.id) == staged.get(g.id), g.id
         checked += 1
     assert checked == len(raw["goals"]) >= 9, checked
 

@@ -35,8 +35,10 @@
 #             it. No shipped row carries one.
 #   source:   a provenance string (`offices.yaml`'s `source:` precedent).
 #
-# TOP-LEVEL `goal_stages:` (CL-THRUST B2.2), optional; a missing key reads as `[]` and none is authored here.
-# A list of rows `{id, for, stages}`; the loader (`data/goals.py`) refuses a key beyond those (and any
+# TOP-LEVEL `goal_stages:` (CL-THRUST B2.2), optional; a missing key reads as `[]`. One row is authored (B10.73, at the
+# end of this file). A list of rows `{id, for, stages}` and an optional `opens: mandatory | ordinary` (B10.71, default
+# `ordinary`); a row carries no `source:` key, so its provenance is the comment above it. The loader (`data/goals.py`)
+# refuses a key beyond those (and any
 # top-level key but `goals` and `goal_stages`, so a stray `ladders:` is refused, not read as no stages), and the
 # stage `deadline` and the row keys `closing`, `successor` and `deal` are NOT part of the schema.
 #   id:       unique.
@@ -491,3 +493,38 @@ goals:
       NPC-090's own row: "Enforces ancient trade treaties"; stability .80, wealth .10 (the instrument of the
       empire's aim "pressed here through the ancient trade treaties", ED-IN-0293 (10)). An orientation: it
       mints no Proposition. [ASSUMPTION; medium; Jordan to correct -- the weights.]
+
+# ======================================================================================================
+# B10.73 (D-19: drafted early, landed at its batch, ratified at its merge): ARC-47 / NSC-08, Ehrenwall.
+# SOURCE (the case need it stands for, `engine/season/cases/ARC4.yaml` ARC-47 "The Counter She Keeps"): "a hidden counter,
+# invisible to players by default, must be able to accumulate from three unrelated conditions triggering
+# independently, in any order, across different subsystems (an institutional-standing clock, an individual's
+# loyalty value, and a territorial-control rule)"; read by `12_ARCS_arcs_as_staged_goals` resolution 1 as
+# stages of `goal_lowenritter_throne_security` armed by claims in her own ledger (a seizure she has heard of, the
+# heir's turning, territory lost). A stage names no verb, act, subject or outcome; the demand is an ordinary
+# seat act, and nothing fires.
+# [ASSUMPTION; status: seed; Jordan to correct -- EVERY value below. THE GRAMMAR CANNOT ASK THE CASE'S THREE
+# CLAIMS: a stage is read with `subject` bound to the goal's referent (the king, `world_q.current_stage`) and
+# `actor` to the holder, so the heir and a territory have no operand; and a seizure or a lost territory reaches
+# a ledger as an event-kind claim (`tenure.closed` ...), which is no requirement stem. They collapse here to the
+# one claim kind the grammar can ask that bears on the throne: a matter docketed naming the king. The row binds
+# every Loewenritter committed to the goal, not Ehrenwall alone (the goal is the faction's). Revert: delete the
+# row; the realm hash returns to B10.72's.]
+goal_stages:
+  - id: stages_lowenritter_throne_security
+    for: [goal_lowenritter_throne_security]
+    opens: mandatory
+    stages:
+      # The default lean (the goal's own pursuits); passed when her ledger holds a docketed matter naming the king.
+      - id: watch
+        term: short
+        predicate: {form: existence, of: subject, kind: DocketItem}
+        pursuits: {honour: 0.5, stability: 0.5}
+      # The last stage (`opens: mandatory`): the lean shifts toward honour, the pursuit on the hierarchical axis that
+      # `issue` and `petition` align with. Passed (the want believed met) when her ledger holds the king in her keeping
+      # (`held_by` her): no claim of that kind is deposited about a person today, so the throne's security reads as a
+      # standing duty that is never believed met.
+      - id: resolve
+        term: medium
+        predicate: {form: relation, of: subject, relation: held_by}
+        pursuits: {honour: 0.7, stability: 0.3}

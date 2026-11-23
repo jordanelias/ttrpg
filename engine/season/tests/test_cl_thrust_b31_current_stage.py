@@ -249,9 +249,9 @@ def test_with_no_goal_stages_row_current_stage_is_none_for_every_ambition(unstag
     assert checked == 2
 
 
-def test_every_shipped_goal_and_every_ambition_of_the_realm_reads_none():
-    shipped = goals.goals()
-    assert all(g.stages is None for g in shipped), "the control: the shipped goals file carries no stages"
+def test_every_unstaged_shipped_goal_and_every_unstaged_ambition_of_the_realm_reads_none():
+    # B10.73 ships the first stage row (ARC-47's); the control is every goal no row names.
+    shipped = [g for g in goals.goals() if g.stages is None]
     checked = 0
     for g in shipped:
         w = World(0)
@@ -270,7 +270,10 @@ def test_every_shipped_goal_and_every_ambition_of_the_realm_reads_none():
     realm_checked = authored = 0
     for p in w.persons.values():
         for amb in world_q.ambitions(w, p):
-            assert world_q.current_stage(w, p, amb) is None, (p.id, amb)
+            stage = world_q.current_stage(w, p, amb)
+            if goals.goal(amb) is not None and goals.goal(amb).stages is not None:
+                continue    # a staged ambition is asked too (the hash check below), but reads its stage
+            assert stage is None, (p.id, amb)
             realm_checked += 1
             authored += goals.goal(amb) is not None
     assert realm_checked >= 100 and authored >= 10, (realm_checked, authored)
