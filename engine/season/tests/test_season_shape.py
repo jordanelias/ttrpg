@@ -6590,6 +6590,9 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
         f"{sorted(typed_own - offered)} were filtered out of the option set by a person who holds "
         "NO claims at all. Clause 4 is KNOWN-FALSE, not 'unproven'")
     p.thread_sensitivity = w.fixtures.get("thread_sensitivity_gate")
+    # B10.65: the gate reads his OWN claim `self:thread_sensitivity` (`knows_self`), so "his own state passes it" means he holds the gift AND knows he does, as the realm builds him
+    from ..boot.realm import seed_self_knowledge
+    seed_self_knowledge(w)
     regained = {c.verb for c in decision.opening_set(
         p, View(p.id, [], w.fixtures.get("view_k"), q), q, w.fixtures)}
     assert own_state <= regained, (
@@ -7230,6 +7233,9 @@ def test_wc_the_fold_binds_what_the_person_bound(monkeypatch):
     # (`OWN_STATE_STEMS`), so `p_low` is given exactly the gate and the row stays in the walk -- its
     # `actor`-of cell is then one more binding the equality below covers, rather than an exclusion.
     p.thread_sensitivity = w.fixtures.get("thread_sensitivity_gate")
+    # B10.65: the gate reads his OWN claim `self:thread_sensitivity` (`knows_self`), so he is also given what the realm builds him with: he knows he holds the gift.
+    from ..boot.realm import seed_self_knowledge
+    seed_self_knowledge(w)
     # ⚠ THE WALK IS OVER TYPED VERBS AND THE SCOPE IS DECLARED RATHER THAN HIDDEN. An UNTYPED
     # verb's two bindings DO differ -- the person's is `{actor}` and the fold's is
     # `{actor, subject}`, because `_payload_of` always writes the subject and an untyped verb
@@ -7562,10 +7568,15 @@ def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_e
     p = w.persons["p_low"]
     q = Question("q:wc_collide", "need", ("Hh",))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
-    untyped = [c for c in decision.opening_set(p, v, q, w.fixtures)
-               if VERB_TABLE[c.verb].requires_typed is None]
-    assert any(c.verb == "create_record" for c in untyped), (
-        "`create_record` is no longer an untyped verb in the option set; re-derive this arm")
+    # B10.60 typed `create_record` (one `individual` conjunct), so it carries operands now (`subject`, `to`) and is no longer in the untyped set. The collision
+    # this arm guards is `kind` reaching it, so that is asserted of `create_record` directly, beside the untyped set that still carries nothing.
+    cands_wc = decision.opening_set(p, v, q, w.fixtures)
+    untyped = [c for c in cands_wc if VERB_TABLE[c.verb].requires_typed is None]
+    assert untyped, "no untyped verb is in the option set; re-derive this arm"
+    records = [c for c in cands_wc if c.verb == "create_record"]
+    assert records, "`create_record` is no longer in the option set; re-derive this arm"
+    assert all("kind" not in c.operands for c in records), (
+        f"`kind` reached `create_record`: {[c.operands for c in records]}, which `_eff_create_record` reads as the RECORD's kind")
     assert all(c.operands == {} for c in untyped), (
         f"an untyped verb carries operands: "
         f"{[(c.verb, c.operands) for c in untyped if c.operands][:3]}. `kind` would then reach "
@@ -7752,11 +7763,13 @@ def test_wb_the_fold_attaches_the_verdicts_reads_to_every_event_the_act_emits():
     assert typed and typed[0].observed, (
         "the priming act read nothing, so the leak this asserts against cannot happen and the "
         "assertion below is vacuous")
-    untyped = d3._fold(w3, mint_token(w3, WriteClass.ACTS), Act(id="wb_cr", actor="p_low", verb="create_record",
+    # B10.60 typed `create_record` (an `individual` conjunct, which reads one Observation of its own), so the untyped verb here is `utter`, which still has no cell.
+    assert VERB_TABLE["utter"].requires_typed is None, "`utter` is typed now; pick a verb whose row has no `requires_typed`"
+    untyped = d3._fold(w3, mint_token(w3, WriteClass.ACTS), Act(id="wb_cr", actor="p_low", verb="utter",
                                  payload={"subject": "S"}))
-    assert untyped, "create_record emitted nothing — the fixture changed"
+    assert untyped, "utter emitted nothing — the fixture changed"
     assert all(e.observed == () for e in untyped), (
-        f"`create_record` carried {[len(e.observed) for e in untyped]} read(s) immediately after "
+        f"`utter` carried {[len(e.observed) for e in untyped]} read(s) immediately after "
         "a `transfer` that read one. It is untyped, so nothing went through the `Observation` "
         "channel — a non-empty tuple here is the PREVIOUS act's reads leaking through a `verdict` "
         "that outlived its fold")
