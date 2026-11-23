@@ -204,16 +204,18 @@ def test_the_stage_pursuits_join_the_salience_target_as_the_goals_own_do():
 
 def test_with_goal_stages_empty_the_realm_stamps_nothing_and_its_questions_are_equal():
     raw = yaml.safe_load(files.GOALS_YAML.read_text(encoding="utf-8"))
-    assert "goal_stages" not in raw
+    # B10.73 ships ONE stage row (ARC-47's), so the control is the shipped file WITHOUT it: an absent key against an explicit empty list.
+    absent = {k: v for k, v in raw.items() if k != "goal_stages"}
     w = build_realm(0)
-    shipped = {pid: world_q.questions_for(w, p) for pid, p in w.persons.items()}
-    explicit = copy.deepcopy(raw)
+    with goals.rows_replaced(goals.parse(absent)):
+        shipped = {pid: world_q.questions_for(w, p) for pid, p in w.persons.items()}
+        committed = [p for p in w.persons.values() if world_q.ambitions(w, p)]
+        assert len(committed) >= 40, "the loop must have looked at the committed persons"
+        assert all(world_q.stage_referents(w, p) == () for p in w.persons.values())
+    explicit = copy.deepcopy(absent)
     explicit["goal_stages"] = []
     with goals.rows_replaced(goals.parse(explicit)):
         again = {pid: world_q.questions_for(w, p) for pid, p in w.persons.items()}
-    committed = [p for p in w.persons.values() if world_q.ambitions(w, p)]
-    assert len(committed) >= 40, "the loop must have looked at the committed persons"
-    assert all(world_q.stage_referents(w, p) == () for p in w.persons.values())
     assert shipped == again
 
 
@@ -316,7 +318,9 @@ def test_the_realm_reading_sees_the_term_stubbed_and_news_told_is_read_against_n
     assert stubbed["stage"] < r["stage"] and stubbed["hit"] < r["hit"], (
         f"the stub moved neither count: the realm reading cannot see the stamp ({stubbed['stage']}/{stubbed['hit']} "
         f"against {r['stage']}/{r['hit']})")
-    with goals.rows_replaced(goals.parse(yaml.safe_load(files.GOALS_YAML.read_text(encoding="utf-8")))):
+    bare_doc = yaml.safe_load(files.GOALS_YAML.read_text(encoding="utf-8"))
+    bare_doc.pop("goal_stages", None)                   # B10.73 ships one stage row: the no-ladder control is the file without it
+    with goals.rows_replaced(goals.parse(bare_doc)):
         bare = stage_run(build_realm(0), 1)
     assert bare["stage"] == 0, "no ladder, so no stage referent: the control must read zero"
     # v11 CR-87 (B10-11): 6 against 4 at seed 0 (was 5 against 4 with CR-87 at its revert, `revert_cr87`: the ladder arm alone
