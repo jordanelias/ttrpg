@@ -4419,6 +4419,186 @@
             }
           }
         },
+        "pursuit_signatures": {
+          "source": "B10.17 (`16_PESSIMIST_CHAR_B` step 1): what a pursuit's NAME must mean in acts, as verbs. A FLOOR, not the whole character. Read by `data/pursuits.py::signature_breaks` against `queries/person_q.py::pursuit_lean`, which reports and refuses nothing yet.",
+          "keys": [
+            "pursuits",
+            "verbs"
+          ],
+          "note": "[ASSUMPTION; medium; Jordan to correct: every row is content.] `favours`: verbs whose lean on the pursuit should be above zero. `opposes`: verbs whose lean should be below zero, and below every favoured verb's. Verb keys are `verb_table.yaml`'s, spelled as it spells them (`\"evade / defy\"`). The loader refuses a pursuit off the roster and a verb off `VERB_TABLE`; a verb with no `alignment` cell is lawful and reads lean 0.",
+          "cells": {
+            "love": {
+              "favours": [
+                "give",
+                "tend",
+                "forgive"
+              ],
+              "opposes": [
+                "sabotage",
+                "raze",
+                "forge"
+              ]
+            },
+            "justice": {
+              "favours": [
+                "open_case",
+                "determine",
+                "petition"
+              ],
+              "opposes": [
+                "forge",
+                "lie",
+                "conceal"
+              ]
+            },
+            "family": {
+              "favours": [
+                "give",
+                "tend",
+                "succeed"
+              ],
+              "opposes": [
+                "migrate",
+                "sabotage"
+              ]
+            },
+            "wealth": {
+              "favours": [
+                "exchange",
+                "work",
+                "requisition"
+              ],
+              "opposes": [
+                "give",
+                "raze"
+              ]
+            },
+            "reputation": {
+              "favours": [
+                "challenge",
+                "speak",
+                "utter"
+              ],
+              "opposes": [
+                "conceal",
+                "evade / defy"
+              ]
+            },
+            "scholastics": {
+              "favours": [
+                "research",
+                "examine",
+                "reconstruct"
+              ],
+              "opposes": [
+                "destroy_record",
+                "raze"
+              ]
+            },
+            "community": {
+              "favours": [
+                "build",
+                "found",
+                "convene"
+              ],
+              "opposes": [
+                "raze",
+                "migrate"
+              ]
+            },
+            "stewardship": {
+              "favours": [
+                "build",
+                "restore",
+                "work"
+              ],
+              "opposes": [
+                "raze",
+                "sabotage"
+              ]
+            },
+            "honour": {
+              "favours": [
+                "challenge",
+                "accept",
+                "commit"
+              ],
+              "opposes": [
+                "lie",
+                "forge",
+                "evade / defy"
+              ]
+            },
+            "liberty": {
+              "favours": [
+                "evade / defy",
+                "release",
+                "migrate"
+              ],
+              "opposes": [
+                "comply",
+                "arrest",
+                "capture"
+              ]
+            },
+            "stability": {
+              "favours": [
+                "restore",
+                "comply",
+                "create_record"
+              ],
+              "opposes": [
+                "raze",
+                "evade / defy"
+              ]
+            },
+            "virtue": {
+              "favours": [
+                "give",
+                "forgive",
+                "pardon"
+              ],
+              "opposes": [
+                "lie",
+                "forge",
+                "sabotage"
+              ]
+            },
+            "doctrine": {
+              "favours": [
+                "utter",
+                "commit",
+                "oblige"
+              ],
+              "opposes": [
+                "forge",
+                "destroy_record"
+              ]
+            },
+            "happiness": {
+              "favours": [
+                "give",
+                "release",
+                "tend"
+              ],
+              "opposes": [
+                "fight",
+                "arrest"
+              ]
+            },
+            "individuality": {
+              "favours": [
+                "evade / defy",
+                "found",
+                "migrate"
+              ],
+              "opposes": [
+                "comply",
+                "oblige"
+              ]
+            }
+          }
+        },
         "alignment": {
           "source": "the retired pursuit-cells draft (its `FORK:` row in `references/restructure_ledger.md`) \u00a73 (the re-cell over the seven axes), FOLDED INTO THE BUILD by Jordan 2026-10-06 (RS-1, ED-IN-0291), plus the six table verbs the draft does not cell (`build`, `found`, `give`, `march`, `migrate`, `survey`), celled in IN-08's cells commit by the draft's own method (each cell's reason below). Formula: ARCHITECTURE_V2.md \u00a7F2 \u2014 `score(c) = \u03a3_axis axis_weight[axis] \u00b7 alignment(c.verb, axis)`, the person's axis weights being their pursuits projected through `pursuit_projection`.",
           "row": "H-66",

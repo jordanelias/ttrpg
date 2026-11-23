@@ -35,7 +35,8 @@ from engine.dice_engine.fmath import ltr_sum
 from ..gaps import Unspecified
 from engine.substrate.descriptors import resolve_pursuit
 
-from .rosters import PURSUITS, PURSUIT_AXES, require_member
+from .rosters import PURSUITS, PURSUIT_AXES, require_member, table
+from .verbs import VERB_TABLE
 
 
 def pursuit(name: str) -> str:
@@ -170,3 +171,61 @@ def pursuit_cosine(weights_a: dict, weights_b: dict) -> Optional[float]:
     module and `cast.loyalty` holds a registry row, not a Person. (Named for what it computes: `decision/`
     has a verb-axis table called `alignment`, a different quantity.)"""
     return pursuit_cosine_axes(to_axes(weights_a), to_axes(weights_b))
+
+
+_SIGNATURE_KEYS = ("favours", "opposes")
+
+
+def _load_signatures(rows: Optional[dict] = None) -> dict:
+    """`rosters.yaml: tables.pursuit_signatures`, CHECKED AT LOAD (B10.17): what each pursuit's NAME must mean in acts.
+
+    A row is `{favours: [verb, ...], opposes: [verb, ...]}`. The refusals are the roster-membership refusal
+    (`require_member`), once per name: a pursuit off `PURSUITS` is a signature nobody holds, and a verb off `VERB_TABLE`
+    is one nobody can do. A verb with NO `tables.alignment` cell is lawful here: it reads lean 0 and `signature_breaks`
+    reports it. `rows` is the table under test (default: the shipped one)."""
+    out = {}
+    for p, row in (table("pursuit_signatures") if rows is None else rows).items():
+        require_member(p, PURSUITS, f"pursuit_signatures names {p!r}, which is not a canonical pursuit",
+                       "rosters.yaml: tables.pursuit_signatures", "a signature is read for a pursuit somebody can hold")
+        if sorted(row) != sorted(_SIGNATURE_KEYS):
+            raise Unspecified(f"pursuit_signatures[{p}] carries {sorted(row)}", "rosters.yaml: tables.pursuit_signatures",
+                              needs=f"exactly {list(_SIGNATURE_KEYS)}", law="a signature is the verbs favoured and the verbs opposed")
+        for key in _SIGNATURE_KEYS:
+            for v in row[key]:
+                require_member(v, VERB_TABLE, f"pursuit_signatures[{p}].{key} names {v!r}, which is not a verb",
+                               "rosters.yaml: tables.pursuit_signatures", "a signature is read as the lean of a verb the table resolves",
+                               needs="a `verb_table.yaml` key, spelled as it spells it")
+        out[p] = {key: tuple(row[key]) for key in _SIGNATURE_KEYS}
+    return out
+
+
+PURSUIT_SIGNATURES = _load_signatures()
+
+
+def signature_breaks(signatures: Optional[dict] = None) -> dict:
+    """WHERE THE TABLES DO NOT YET MAKE A PURSUIT MEAN ITS NAME, `{pursuit: [clause, ...]}`, only the pursuits that break.
+
+    A clause is one of three, each a dict `{clause, verb, lean}` (the third adds `over`, the favoured verbs it out-leans):
+    `favoured_not_above_zero` (a favoured verb whose `pursuit_lean` is <= 0), `opposed_not_below_zero` (an opposed verb
+    whose lean is >= 0), `opposed_outleans_favoured` (an opposed verb whose lean exceeds some favoured verb's).
+    It composes on `person_q.pursuit_lean`, THE ONE OWNER of the verb-on-pursuit dot, reads the live tables at call time
+    (so a rebound alignment is what is asked), and REFUSES NOTHING: it is a reader. `signatures` is the roster under test
+    (default: the shipped one, already checked at load).
+
+    ⚠ THE `queries/` IMPORT IS INSIDE THE FUNCTION. `queries/person_q.py` imports this module, so a module-level import
+    here is a cycle; the reader is the one place `data/` asks a `queries/` owner."""
+    from ..queries.person_q import pursuit_lean
+    rows = PURSUIT_SIGNATURES if signatures is None else signatures
+    out = {}
+    for p in sorted(rows):
+        fav = {v: pursuit_lean(v, p) for v in rows[p]["favours"]}
+        opp = {v: pursuit_lean(v, p) for v in rows[p]["opposes"]}
+        clauses = [dict(clause="favoured_not_above_zero", verb=v, lean=x) for v, x in fav.items() if not x > 0]
+        clauses += [dict(clause="opposed_not_below_zero", verb=v, lean=x) for v, x in opp.items() if not x < 0]
+        for v, x in opp.items():
+            over = [f for f, y in fav.items() if x > y]
+            if over:
+                clauses.append(dict(clause="opposed_outleans_favoured", verb=v, lean=x, over=over))
+        if clauses:
+            out[p] = clauses
+    return out

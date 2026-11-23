@@ -4143,6 +4143,34 @@ tables:
         grandiose_humble:             0.5
         deontological_instrumental:  -0.1
 
+  pursuit_signatures:
+    source: >-
+      B10.17 (`16_PESSIMIST_CHAR_B` step 1): what a pursuit's NAME must mean in acts, as verbs. A FLOOR, not the
+      whole character. Read by `data/pursuits.py::signature_breaks` against `queries/person_q.py::pursuit_lean`,
+      which reports and refuses nothing yet.
+    keys: [pursuits, verbs]
+    note: >-
+      [ASSUMPTION; medium; Jordan to correct: every row is content.] `favours`: verbs whose lean on the pursuit
+      should be above zero. `opposes`: verbs whose lean should be below zero, and below every favoured verb's.
+      Verb keys are `verb_table.yaml`'s, spelled as it spells them (`"evade / defy"`). The loader refuses a pursuit
+      off the roster and a verb off `VERB_TABLE`; a verb with no `alignment` cell is lawful and reads lean 0.
+    cells:
+      love:          {favours: [give, tend, forgive],            opposes: [sabotage, raze, forge]}
+      justice:       {favours: [open_case, determine, petition], opposes: [forge, lie, conceal]}
+      family:        {favours: [give, tend, succeed],            opposes: [migrate, sabotage]}
+      wealth:        {favours: [exchange, work, requisition],    opposes: [give, raze]}
+      reputation:    {favours: [challenge, speak, utter],        opposes: [conceal, "evade / defy"]}
+      scholastics:   {favours: [research, examine, reconstruct], opposes: [destroy_record, raze]}
+      community:     {favours: [build, found, convene],          opposes: [raze, migrate]}
+      stewardship:   {favours: [build, restore, work],           opposes: [raze, sabotage]}
+      honour:        {favours: [challenge, accept, commit],      opposes: [lie, forge, "evade / defy"]}
+      liberty:       {favours: ["evade / defy", release, migrate], opposes: [comply, arrest, capture]}
+      stability:     {favours: [restore, comply, create_record], opposes: [raze, "evade / defy"]}
+      virtue:        {favours: [give, forgive, pardon],          opposes: [lie, forge, sabotage]}
+      doctrine:      {favours: [utter, commit, oblige],          opposes: [forge, destroy_record]}
+      happiness:     {favours: [give, release, tend],            opposes: [fight, arrest]}
+      individuality: {favours: ["evade / defy", found, migrate], opposes: [comply, oblige]}
+
   alignment:
     source: >-
       the retired pursuit-cells draft (its `FORK:` row in `references/restructure_ledger.md`) §3 (the re-cell

@@ -5,7 +5,11 @@
 here, because a ledger entry stating measured numbers must name a re-runnable instrument
 (`ED-PC-0040`, and `CLAUDE.md` §0.1 pt 3 for the same reason one layer up).
 
-    python -m engine.season.harness.conviction_spread
+    python -m engine.season.harness.conviction_spread [--candidate FILE.json] [--words]
+
+`--words` (B10.17) reads the same table in the other direction: not how far the pursuits sit from each other but whether
+each one MEANS ITS NAME in acts. It prints `data/pursuits.py::signature_breaks()` and, per pursuit, the verbs it leans
+toward most and away from most (`queries/person_q.py::pursuit_lean`) and the verbs an act of which violates it.
 
 TWO QUANTITIES, AND THE SECOND ONE ASKS A DIFFERENT QUESTION FROM THE FIRST.
 
@@ -229,8 +233,37 @@ def _report(s: dict, tag: str) -> None:
     # printing a pass/fail here would be this instrument deciding it.
 
 
+def _words(top: int = 5) -> None:
+    """`--words`: `signature_breaks()` and, per pursuit, its `top` highest and lowest verbs by lean and its violated set.
+
+    The lean is `person_q.pursuit_lean`'s and the violated set `person_q._pursuits_violated_by`'s (the scar's own sign
+    test, `Fixtures.scar_lean_floor` left at its `0.0` default), so this prints what the engine reads and computes
+    nothing of its own. It judges nothing: a break is a reading, and refusing one is a later position's."""
+    from ..data.pursuits import PURSUIT_SIGNATURES, signature_breaks
+    from ..data.verbs import VERB_TABLE
+    from ..queries.person_q import _pursuits_violated_by, pursuit_lean
+    breaks = signature_breaks()
+    n = sum(len(c) for c in breaks.values())
+    print(f"\nsignature_breaks: {len(breaks)} of {len(PURSUIT_SIGNATURES)} pursuits, {n} clauses")
+    for p, clauses in breaks.items():
+        for c in clauses:
+            over = f" over {','.join(c['over'])}" if "over" in c else ""
+            print(f"    {p:14} {c['clause']:26} {c['verb']} ({c['lean']:+.2f}){over}")
+    verbs = sorted(VERB_TABLE)
+    hurt = {v: _pursuits_violated_by(v) for v in verbs}
+    print("\n  per pursuit: verbs it leans toward most / away from most, and the verbs that violate it")
+    for p in sorted(PURSUIT_SIGNATURES):
+        lean = {v: pursuit_lean(v, p) for v in verbs}
+        hi = sorted(verbs, key=lambda v: (-lean[v], v))[:top]
+        lo = sorted(verbs, key=lambda v: (lean[v], v))[:top]
+        print(f"    {p}")
+        print("      highest   " + "  ".join(f"{v} {lean[v]:+.2f}" for v in hi))
+        print("      lowest    " + "  ".join(f"{v} {lean[v]:+.2f}" for v in lo))
+        print(f"      violated  {len([v for v in verbs if p in hurt[v]])}: " + ", ".join(v for v in verbs if p in hurt[v]))
+
+
 def main(argv: Optional[list] = None) -> int:
-    """`python -m engine.season.harness.conviction_spread [--candidate FILE.json]`.
+    """`python -m engine.season.harness.conviction_spread [--candidate FILE.json] [--words]`.
 
     ⚠ **THE `--candidate` FLAG EXISTS BECAUSE THE PARAMETER WITHOUT IT WAS A DECLARED-BUT-UNREAD
     ROW.** `spread(candidate=...)` shipped on 2026-09-16 with no caller anywhere in the tree —
@@ -253,6 +286,8 @@ def main(argv: Optional[list] = None) -> int:
         cand_path = argv[i + 1]
 
     _report(spread(), "CONTROL: the live basis")
+    if "--words" in argv:
+        _words()
     if cand_path:
         with open(cand_path, encoding="utf-8") as fh:
             doc = json.load(fh)
