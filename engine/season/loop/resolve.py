@@ -18,7 +18,7 @@ import random
 from dataclasses import replace
 from ..gaps import InstrumentDefect
 from ..data.rosters import (PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, graded_route,
-                            MARGIN_ENDING, SCAR_SEASON_CAPS, STANDING_OCCASION_OPENED_BY, STRATA, UNROUTED_BAND,
+                            MARGIN_ENDING, SCAR_HOLDS, SCAR_SEASON_CAPS, SCAR_VINDICATIONS, STANDING_OCCASION_OPENED_BY, STRATA, UNROUTED_BAND,
                             require_member, task_share)
 
 from typing import Any, Optional
@@ -34,7 +34,7 @@ from .. import manifest
 from ..epistemic import observers_for
 from ..data.affiliations import engagement
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
-                                 elements_violated_by, pursuit_lean)
+                                 elements_violated_by, pursuit_lean, upheld_by, _pursuits_upheld_by)
 from engine.substrate.descriptors import AFFILIATION_CEILING
 from ..queries.world_q import WorldReader, ceiling, demanded_person, occasioned_by
 from ..seam import ContestError, ContestRefused, Resolution, contest, degree_of, find_trail, grade
@@ -323,6 +323,9 @@ CONFIDENCE_BROKEN = "confidence.broken"
 
 # B09.11: the kind `(Person, scar)` declares (`write_matrix.yaml`), emitted by `_scar_witnesses` beside its write.
 SCAR_TAKEN = "scar.taken"
+# B10.07: the same row's kind for a count that falls by vindication (`Fixtures scar_vindication`, `H-468`) [ASSUMPTION: the kind's name].
+SCAR_HEALED = "scar.healed"
+HEALED = "healed"      # the tally's marker for a vindication taken this season: `(HEALED, pid, None)`, a shape no `(pid, e)` or `(pid,)` pair has
 
 # v9 SE-01 (`24g`) / `H-51`: `PERSON_DEMANDED` (`data/rosters.py`) is declared on `dispatch`'s refusal; kept
 # only when `_demand_earned` says so, and the loader's flat-row rule exempts exactly that kind.
@@ -663,6 +666,12 @@ def _most_violated(p, verb: str, broken: tuple, violated: tuple) -> str:
     return min(broken, key=lambda e: (-size(e), e))
 
 
+def _most_upheld(p, verb: str, healable: tuple) -> str:
+    """THE ONE PURSUIT AN ACT OF `verb` HONOURS MOST AMONG `healable`: the largest weight x `pursuit_lean`, ties by name (`_most_violated`'s
+    rule on the other side), so a vindication takes its one count from the pursuit he lives for most that the act serves."""
+    return min(healable, key=lambda e: (-(float(p.pursuits[e]) * pursuit_lean(verb, e)), e))
+
+
 def _scar_witnesses(w: "World", token: Token, a: Act, events: list, tally: set) -> None:
     """IN-08 H3 -- `(Person, scar)` as `{pursuit: count}`: ONE COUNT PER OBSERVER PER VIOLATED
     PURSUIT, written AT RESOLVE BY THE ACT (`ED-IN-0261`'s scar model).
@@ -702,31 +711,51 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list, tally: set) 
     scratch (`SeasonDriver._scar_tally`, cleared where `w.draw` is, at the start of each `season()`): the (observer, element) pairs
     (`element`) or observers (`person`) already counted this season. Before the write, every pair in it is dropped, and at `person`
     each observer keeps the one element he holds most violated (`_most_violated`). It is a local of the driver's step, not world
-    state; the count written is still `(Person, scar)`."""
+    state; the count written is still `(Person, scar)`.
+
+    B10.07 -- THE STOCK'S TWO ENDS (`02_CHAR_scar_is_a_wound`). Four fixtures, each at its control a no-op: `scar_hold` (`H-466`, `any`) and
+    `scar_primary_mass` (`H-469`) say whose elements count (`primary`: his primary pursuits and the affiliations he stands for), `scar_lean_floor`
+    (`H-467`, `0.0`) how far an act must lean against a pursuit to violate it, and `scar_vindication` (`H-468`, `off`): under `on`, an observer
+    holding a count on a primary pursuit the act honours (lean above `+floor`) loses ONE of it, from the pursuit the act serves most (`_most_upheld`),
+    never below 0 (a key at 0 is dropped), at most once per person per season (the tally's `(HEALED, pid, None)`, spent only by a count that fell)
+    and BEFORE the act's own violations, in a write of its own that earns `scar.healed`. A pursuit is never both honoured and violated by one act.
+    The vindication reads pursuits only: the affiliation table has a sign and no lean."""
     if not events:
         return
     # Which elements this verb violates is a property of the verb alone, asked once per act; whose
     # holdings it breaks is person-side and known before anyone is asked whether they saw it. When
     # it is nobody (a verb with no celled axis and no affiliation cell, or no one holding an element
     # it leans against) the presence index is not rebuilt for nothing.
-    violated = elements_violated_by(a.verb)
-    if not any(violated):
+    hold, mass = w.fixtures.get("scar_hold"), w.fixtures.get("scar_primary_mass")
+    floor, vindicating = w.fixtures.get("scar_lean_floor"), w.fixtures.get("scar_vindication")
+    require_member(vindicating, SCAR_VINDICATIONS, f"scar vindication {vindicating!r} is not in the roster", "H-468",
+                   law="§G -- declare it, default it, sweep it; an unknown arm silently reading off would make the sweep report the control twice")
+    require_member(hold, SCAR_HOLDS, f"scar hold {hold!r} is not in the roster", "H-466",
+                   law="§G -- declare it, default it, sweep it; an unknown arm silently reading `any` would make the sweep report the control twice")
+    violated = elements_violated_by(a.verb, floor)
+    upheld = _pursuits_upheld_by(a.verb, floor) if vindicating == "on" else frozenset()
+    if not any(violated) and not upheld:
         return
     everyone = list(w.persons)
-    broken_of = {pid: broken_by(w.persons[pid], violated) for pid in everyone}
-    if not any(broken_of.values()):
+    broken_of = {pid: broken_by(w.persons[pid], violated, hold, mass) for pid in everyone}
+    # A person can be vindicated only on a primary pursuit the act honours that he already holds a count on.
+    healable_of = {pid: tuple(e for e in upheld_by(w.persons[pid], upheld, hold, mass) if w.persons[pid].scar.get(e, 0) > 0)
+                   for pid in everyone} if upheld else {}
+    if not any(broken_of.values()) and not any(healable_of.values()):
         return
     mode = w.fixtures.get("fan_out_mode")
     exclude_actor = bool(w.fixtures.get("scar_excludes_actor"))
     w.discard_caches()
-    # Only a person with something broken can be scarred, so only they are asked whether they saw
+    # Only a person with something broken (or something to heal) can be scarred, so only they are asked whether they saw
     # it: `observers_for` judges each person alone and answers in the order it is given, so the
     # filtered list yields the same persons, in `everyone`'s order, as WITNESS's call would.
     candidates = [pid for pid in everyone
-                  if broken_of[pid] and not (exclude_actor and pid == a.actor)]
+                  if (broken_of[pid] or healable_of.get(pid)) and not (exclude_actor and pid == a.actor)]
     seen = {pid for e in events for pid, _ch in observers_for(w, e, mode, candidates)}
-    hits = [(pid, broken_of[pid]) for pid in candidates if pid in seen]
-    if not hits:
+    hits = [(pid, broken_of[pid]) for pid in candidates if pid in seen and broken_of[pid]]
+    healed = {pid: _most_upheld(w.persons[pid], a.verb, healable_of[pid]) for pid in candidates
+              if pid in seen and healable_of.get(pid) and (HEALED, pid, None) not in tally}
+    if not hits and not healed:
         return
     cap = w.fixtures.get("scar_season_cap")
     spent: set = set()
@@ -748,8 +777,29 @@ def _scar_witnesses(w: "World", token: Token, a: Act, events: list, tally: set) 
                 spent.update((pid, e) for e in broken)
             kept.append((pid, broken))
         hits = kept
-        if not hits:
+        if not hits and not healed:
             return
+
+    if healed:
+        def mend() -> None:
+            for pid, e in healed.items():
+                counts = dict(w.persons[pid].scar)
+                if counts[e] > 1:
+                    counts[e] -= 1
+                else:
+                    del counts[e]                    # never below 0, and a spent count leaves no key behind
+                w.persons[pid].scar = counts
+
+        mended = w.write("scar", token, None, record_kind="Person", fieldname="scar", driver="Act",
+                         actor=a.actor, via=a.via,
+                         change=Change(tuple(Subject.entity("persons", pid, fields=("scar",), earns=SCAR_HEALED) for pid in healed), mend))
+        tally.update((HEALED, pid, None) for pid in healed)
+        mev = Event(id=H(w.world_seed, w.tick, a.actor, f"{SCAR_HEALED}:{a.id}"), kind=SCAR_HEALED,
+                    changes=[r for _s, r in mended], causes=[a.id], emitted_at=w.tick)
+        w.log.append(mev)
+        TRACE.event(mev.id, mev.kind, mev.causes)
+    if not hits:
+        return
 
     def perform() -> None:
         for pid, broken in hits:

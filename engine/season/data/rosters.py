@@ -1090,6 +1090,9 @@ OBSERVATION_DEPOSIT_MODES = roster("observation_deposit_modes")
 FAN_OUT_MODES = roster("fan_out_modes")
 # `H-465`. THE ARMS OF `Fixtures.scar_season_cap`, bound at import like the roster above; `None` (the control) is not a member.
 SCAR_SEASON_CAPS = roster("scar_season_caps")
+# `H-466`, `H-469`. THE ARMS OF `Fixtures.scar_hold` and `Fixtures.scar_vindication`, bound at import; unlike the cap, each control (`any`, `off`) is a member.
+SCAR_HOLDS = roster("scar_holds")
+SCAR_VINDICATIONS = roster("scar_vindications")
 # `R8.1`. THE `seen` CLAIM -- its four terms (ordered: they are the struct's fields), the one
 # predicate it is deposited under, and which terms each witness channel shows. Bound at import for
 # `TITLE_DOMAINS`' reason; the terms are cross-validated against `WITNESS_CHANNELS` and

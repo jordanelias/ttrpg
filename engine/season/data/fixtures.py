@@ -1221,6 +1221,26 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `None`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-465 -- site: Fixtures scar_season_cap, graded `assumption`; the sources give the domain and not a live value, so it is injected at the control and swept None / element / person]
     scar_season_cap=None,              # `H-465`, swept None (control, SHIPPED) / element / person
+    # `H-466` (B10.07; `02_CHAR_scar_is_a_wound` row 1). WHO CAN BE SCARRED: `person_q.broken_by` reads it. `any` is the CONTROL and SHIPS: every held element
+    # an act violates is counted, today's rule exactly. `primary` counts only a person's primary elements: the fewest top-weighted pursuits whose weights
+    # sum to `scar_primary_mass`, and the affiliations he stands for (`person_q.stands_for`, intensity 3 or more of 5). A value outside `rosters.yaml: scar_holds` is refused where
+    # it is read. [ASSUMPTION; medium; Jordan to correct; revert: `any`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-466 -- site: Fixtures scar_hold, graded `assumption`; the source proposes `primary` and no derivation of the arm, so it is injected at the control and swept any / primary]
+    scar_hold="any",                   # `H-466`, swept any (control, SHIPPED) / primary (proposed)
+    # `H-469` (B10.07). HOW MUCH OF A PERSON'S WEIGHT HIS PRIMARY PURSUITS MAKE UP: read only at `scar_hold: primary`, by `person_q.broken_by` and `upheld_by`. 0.6 is PP-684's
+    # lower bound for the primary band, so it SHIPS (it moves nothing while `scar_hold` is `any`). [ASSUMPTION; medium; Jordan to correct; revert: none, it is inert at the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-469 -- site: Fixtures scar_primary_mass, graded `assumption`; PP-684's lower bound is the one value the source gives; the sweep points 0.4 and 0.8 are an assumption (a step of 0.2 either side), swept 0.4 / 0.6 / 0.8]
+    scar_primary_mass=0.6,             # `H-469`, swept 0.4 / 0.6 (SHIPPED, PP-684's lower bound) / 0.8
+    # `H-467` (B10.07). HOW FAR AN ACT MUST POINT AGAINST A PURSUIT TO VIOLATE IT (and for the vindication, how far it must point with one to honour it): `person_q._pursuits_violated_by`
+    # counts a pursuit violated only when `pursuit_lean(verb, e) < -floor`, and `_pursuits_upheld_by` honoured when the lean is above `+floor`. `0.0` is the CONTROL and SHIPS: the
+    # sign test, today's. [ASSUMPTION; medium; Jordan to correct; revert: `0.0`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-467 -- site: Fixtures scar_lean_floor, graded `assumption`; the source proposes 0.2, swept 0 / 0.2 / 0.4, so it is injected at the control]
+    scar_lean_floor=0.0,               # `H-467`, swept 0.0 (control, SHIPPED) / 0.2 (proposed) / 0.4
+    # `H-468` (B10.07). WHETHER SEEING A THING ONE LIVES FOR HONOURED TAKES A SCAR AWAY: under `on`, `loop/resolve.py::_scar_witnesses` writes `-1` on the primary pursuit an act upholds
+    # most (above `+scar_lean_floor`) that the observer holds a count on, never below 0, at most once per person per season, before the act's own violations. `off` is the CONTROL and
+    # SHIPS: no count ever falls. A value outside `rosters.yaml: scar_vindications` is refused where it is read. [ASSUMPTION; medium; Jordan to correct; revert: `off`, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-468 -- site: Fixtures scar_vindication, graded `assumption`; the source proposes `on`, so it is injected at the control and swept off / on]
+    scar_vindication="off",            # `H-468`, swept off (control, SHIPPED) / on (proposed)
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

@@ -50,8 +50,8 @@ from ..data.requires import (
     UNKNOWN, WORLD_ONLY_STEMS,
 )
 from ..data.rosters import (
-    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, SEEN_PREDICATE, capability_rows, require_use_site, roster,
-    roster_map,
+    AFFILIATIONS, DEGREE_STEP, DOMINANCE_KINDS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, SCAR_HOLDS, SEEN_PREDICATE, capability_rows, require_use_site,
+    roster, roster_map,
 )
 from ..state.carriers import Person, Said
 from ..state.ledgers import present_confidence
@@ -582,6 +582,16 @@ def conviction_stand(p: Person, affiliation: str) -> float:
     return (v - (AFFILIATION_FLOOR + half)) / half
 
 
+def stands_for(p: Person, reading: str) -> tuple:
+    """THE AFFILIATIONS `p` STANDS FOR, sorted by name: those of `p.conviction` with `conviction_stand(p, a) > 0`, so above the scale's
+    midpoint (intensity 3 or more of 5; an absent key stands neither way, a stored 0 stands against). The one owner of what "stands for"
+    means (B10.07 writes the `"stands"` reading only; `20_NARRATIVE_A_stands_for` edit 1 adds the others), composed on
+    `conviction_stand`, so no second threshold is written beside it. Any other `reading` is refused, not read as `"stands"`. Person-side (AX-2)."""
+    if reading != "stands":
+        raise ValueError(f"stands_for reading {reading!r} is not built: only \"stands\" is")
+    return tuple(a for a in sorted(p.conviction or {}) if conviction_stand(p, a) > 0)
+
+
 def heritage_regard(p: Person, q: str, fx) -> float:
     """THE CASTE ESTIMATE (v11 CR-31; ED-IN-0301): how `p`'s OWN creed colours his regard for `q`, through
     what `p` BELIEVES of `q`'s descent -- never through what `q` is (another person's `Person.heritage` is world
@@ -750,15 +760,25 @@ def opinion(p: Person, expected: dict, engaged: tuple, regarded: tuple, fx=None)
     return pursuit + affiliation + reg
 
 
-def _pursuits_violated_by(verb: str) -> frozenset:
+def _pursuits_violated_by(verb: str, floor: float = 0.0) -> frozenset:
     """The pursuits an act of `verb` violates, whoever holds them: `elements_violated_by`' pursuit
     half, which reads only `(verb, element)`. The candidates are `data/verbs.py::PURSUIT_PROJECTION`'s
     keys, read through the module at call time so a rebound projection is what is asked; a pursuit
-    the projection does not list projects to the zero vector and violates nothing."""
+    the projection does not list projects to the zero vector and violates nothing. A pursuit is violated when
+    `pursuit_lean(verb, e) < -floor` (`Fixtures.scar_lean_floor`, `H-467`; `0.0` is the sign test)."""
     row = {ax: _verbs.align(verb, ax) for ax in PURSUIT_AXES}
     if not any(row.values()):
         return frozenset()
-    return frozenset(e for e in _verbs.PURSUIT_PROJECTION if pursuit_lean(verb, e, row) < 0)
+    return frozenset(e for e in _verbs.PURSUIT_PROJECTION if pursuit_lean(verb, e, row) < -floor)
+
+
+def _pursuits_upheld_by(verb: str, floor: float = 0.0) -> frozenset:
+    """`_pursuits_violated_by`' twin: the pursuits an act of `verb` honours, whoever holds them, those whose `pursuit_lean(verb, e)` is
+    above `+floor` (`Fixtures.scar_lean_floor`). An act can uphold and violate no pursuit at once (`floor >= 0`)."""
+    row = {ax: _verbs.align(verb, ax) for ax in PURSUIT_AXES}
+    if not any(row.values()):
+        return frozenset()
+    return frozenset(e for e in _verbs.PURSUIT_PROJECTION if pursuit_lean(verb, e, row) > floor)
 
 
 def pursuit_lean(verb: str, e: str, row: Optional[dict] = None) -> float:
@@ -831,7 +851,7 @@ def _affiliations_violated_by(verb: str) -> frozenset:
     return frozenset(a for a in AFFILIATIONS if engagement(verb, a) < 0)
 
 
-def elements_violated_by(verb: str) -> tuple:
+def elements_violated_by(verb: str, floor: float = 0.0) -> tuple:
     """WHICH ELEMENTS AN ACT OF `verb` VIOLATES -- `(pursuits, affiliations)`, as two frozensets, the
     person-free reading under the scar (IN-08 H3, `ED-IN-0261`'s scar model: a COUNT per element,
     accrued by WITNESSING; H11 over the affiliation table, J-5's C4).
@@ -856,21 +876,54 @@ def elements_violated_by(verb: str) -> tuple:
     test is made in `_pursuits_violated_by` or `_affiliations_violated_by`. Person-side, no World
     (AX-2). Reads `ALIGNMENT` and `PURSUIT_PROJECTION` at call time: never cache it across a sweep's
     rebind."""
-    return _pursuits_violated_by(verb), _affiliations_violated_by(verb)
+    return _pursuits_violated_by(verb, floor), _affiliations_violated_by(verb)
 
 
-def _held(weights, violated: frozenset) -> tuple:
-    """The elements of `weights` held above zero and in `violated`, sorted by name."""
+def _held(weights, violated: frozenset, only: Optional[frozenset] = None) -> tuple:
+    """The elements of `weights` held above zero and in `violated`, sorted by name; with `only` (a person's primary set), those in it too."""
     weights = weights or {}
-    return tuple(e for e in sorted(weights) if float(weights[e]) > 0 and e in violated)
+    return tuple(e for e in sorted(weights) if float(weights[e]) > 0 and e in violated and (only is None or e in only))
 
 
-def broken_by(p: Person, violated: tuple) -> tuple:
+def primary_pursuits(pursuits, mass: float) -> frozenset:
+    """A PERSON'S PRIMARY PURSUITS: the fewest top-weighted held pursuits whose weights sum to at least `mass`
+    (`Fixtures.scar_primary_mass`), taken by weight descending, ties by name ascending, the sum added left to right. A person
+    whose held weights never reach `mass` has every held pursuit primary."""
+    ranked = sorted(((e, float(w)) for e, w in (pursuits or {}).items() if float(w) > 0), key=lambda ew: (-ew[1], ew[0]))
+    out, total = [], 0.0
+    for e, w in ranked:
+        if total >= mass:
+            break
+        out.append(e)
+        total += w
+    return frozenset(out)
+
+
+def _primary_of(p: Person, hold: str, mass: float) -> Optional[frozenset]:
+    """THE ELEMENTS `p` MAY BE SCARRED ON under `hold` (`Fixtures.scar_hold`): `None` (no restriction) at `any`; at `primary`
+    his primary pursuits and the affiliations he stands for (`stands_for`), computed once per call. An unknown `hold` is refused."""
+    if hold not in SCAR_HOLDS:
+        raise ValueError(f"scar_hold {hold!r} is not in rosters.yaml: scar_holds {sorted(SCAR_HOLDS)} (H-466)")
+    if hold == "any":
+        return None
+    return primary_pursuits(p.pursuits, mass) | frozenset(stands_for(p, "stands"))
+
+
+def broken_by(p: Person, violated: tuple, hold: str = "any", mass: float = 0.6) -> tuple:
     """The elements `p` holds that `violated` (an `elements_violated_by` answer) names: the held
     pursuits, then the held affiliations, each sorted. "Held" is `_held`'s sense (a weight above
-    zero); the sign test is not re-asked, `violated` already carries it."""
+    zero); the sign test is not re-asked, `violated` already carries it. `hold` and `mass` are
+    `Fixtures.scar_hold` and `scar_primary_mass`: at `primary` only his primary elements count (`_primary_of`)."""
+    only = _primary_of(p, hold, mass)
     pursuits, affiliations = violated
-    return _held(p.pursuits, pursuits) + _held(p.conviction, affiliations)
+    return _held(p.pursuits, pursuits, only) + _held(p.conviction, affiliations, only)
+
+
+def upheld_by(p: Person, upheld: frozenset, hold: str = "any", mass: float = 0.6) -> tuple:
+    """The pursuits `p` holds that `upheld` (a `_pursuits_upheld_by` answer) names, sorted: the elements an act honours that he lives
+    for, the vindication's candidates. `hold` and `mass` as `broken_by`: at `primary` only his primary pursuits. Pursuits only (an
+    affiliation has a sign cell and no lean, so no floor to honour past)."""
+    return _held(p.pursuits, upheld, _primary_of(p, hold, mass))
 
 
 def confliction(p: Person) -> int:

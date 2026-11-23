@@ -3293,6 +3293,22 @@
             "person"
           ]
         },
+        "scar_holds": {
+          "source": "B10.07 (`02_CHAR_scar_is_a_wound` row 1): the arms of which elements a person can be scarred on.",
+          "note": "THE ARMS OF `Fixtures.scar_hold` (`H-466`), read by `loop/resolve.py::_scar_witnesses` and applied by `queries/person_q.py::broken_by`. `any` is the CONTROL (every held element an act violates, today's rule); `primary` counts only a person's primary pursuits (the fewest top-weighted ones whose weights sum to `Fixtures.scar_primary_mass`) and the affiliations he stands for (`person_q.stands_for`). [ASSUMPTION: the roster's name and shape -- basis: B10.06's `scar_season_caps`; Jordan to correct.]",
+          "values": [
+            "any",
+            "primary"
+          ]
+        },
+        "scar_vindications": {
+          "source": "B10.07 (`02_CHAR_scar_is_a_wound` row 4): whether seeing a thing one lives for honoured takes a scar count away.",
+          "note": "THE ARMS OF `Fixtures.scar_vindication` (`H-468`), read by `loop/resolve.py::_scar_witnesses`. `off` is the CONTROL (no count ever falls). [ASSUMPTION: the roster's name and shape -- basis: B10.06's `scar_season_caps`; Jordan to correct.]",
+          "values": [
+            "off",
+            "on"
+          ]
+        },
         "odds_weightings": {
           "source": "v10 CR-17 (M1, AQ-X1 (b), taken at `CLAUDE.md` section 0's ladder step 5): whether the chooser's pursuit term for a CONTESTED candidate is weighted by the person's own believed chance of the band that writes what the term prices.",
           "note": "THE ARMS OF `Fixtures.odds_weighting` (`H-248`), read by `decision/choose.py::odds_weight`, the factor `score_terms` multiplies the pursuit term by. `none` is the CONTROL: the factor is 1 for every candidate, the term as it stood before CR-17. `believed` multiplies a contested candidate's pursuit term by the sum, over the bands the verb's `writes:` map gives a non-empty write, of the person's believed chance of that band (`seam/wrappers/sigma.py::believed_chance`, CP-T01-03's mode (b), passed to the chooser on the View as `View.odds`); a candidate whose verb contests nothing, whose verb writes in no band, or whose believed chance is `None` (a factor he cannot know, no dice dealt, S27.4 refuses the attempt, a prize another module rolls) keeps the term as it was.",
@@ -8579,7 +8595,7 @@
           "class": "ACTS",
           "social": "true",
           "by": "IN-08 H3 (`ED-IN-0261`'s scar model): `{element: count}`, one count per OBSERVER per violated pursuit -- and, from IN-08 H11, per violated held affiliation (`rosters.yaml: tables.affiliation_engagement`) -- written by the act's outcome through `loop/resolve.py::_scar_witnesses` (was V2's `scar[axis]` on the wounded person, \u00a754 item 21)",
-          "emits": "`scar.taken`",
+          "emits": "`scar.taken` \u00b7 `scar.healed`",
           "unproduced": "H-62 (loader invariant 2 counts verb writes only): no verb row declares it; written by loop/resolve.py::_scar_witnesses after any outcome that moved state"
         },
         {
