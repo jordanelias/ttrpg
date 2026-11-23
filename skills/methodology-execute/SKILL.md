@@ -90,7 +90,7 @@ does not match it stops and reports it (`STOPPED`); it never opens a second batc
    its own falsifier rejected and a revert undid: it is not rebuilt, and the hole row it cites is its
    record. Never commit residue as an `Item:`; a checkpoint is the only unreviewed commit. Instrument
    worktrees (detached, named for their instrument) are removed and the instrument re-run, not
-   integrated; each remaining producer worktree is verified and integrated (step 5) or removed. A
+   integrated; each remaining producer worktree is verified and integrated (step 5) or removed; a set member's worktree is integrated only if no committed member's receipt records the set dropped — otherwise it is removed and the member rebuilt (§5.3). A
    BATCH-CLOSE suite tree whose verdict a `suite verdict:` commit already records at the snapshot SHA is not re-run.
 3. **Re-enter.** Run BATCH OPEN items 1 to 4 (currency, context set, gate check, assignment
    plan — read back from the batch-open commit, not re-derived); **never item 5**: `open` stays the
@@ -175,9 +175,7 @@ short without saying so.
 ### 5. Build, once per item (the producer's work, then the orchestrator's)
 
 For each item in order — **serial by default: each commits before the next builds; a fan lives inside an
-item**. The one exception: **items whose WHERE and gate sets are disjoint AND which both declare
-hash-EQUAL may be built in parallel producer worktrees; the orchestrator integrates and commits each as
-its own commit in plan order** (5.3–5.4 per item, unchanged):
+item**. The one exception is **a set**: items whose WHERE and gate sets are disjoint, with no gate or serial edge between two members directly or through a chain, every member's gates met when the set is dispatched, and all declaring hash-EQUAL (or forming a mover pair, below). Its members are built in parallel producer worktrees, dispatched as 5.2 dispatches a fan (the first alone, its first streamed token awaited), and **integrated one member at a time, in plan order, each its own commit** (5.3–5.4 per item). **Absent a live plan that names the set, every commit stays in plan order** (an item between two members builds and commits in its place) and the set shares no file and holds no mover. A live plan that names sets governs where they are listed, when one is dispatched and where the items between its members commit (v12: the batch's `PARALLEL ITEMS:` line, head §2.1 (f)), and may admit two things only: two members sharing a file in different top-level functions, classes or keys, or by rows appended to one registry or glossary block, kept in plan order — never a serial instrument file the plan names, a carrier `World.content_hash()` encodes, or a pin file; and a mover pair — exactly two members, the mover a plain `MOVER(behaviour)` (never encoding, conditional or a flip), each member's seed-0 reading taken on the tree it commits on — under the plan's further restrictions:
 
 **5.1 Read the unit's instruction — never invented here.** A workplan position: read its
 content-owner entry (INSTRUCTION / WHERE / FALSIFIER / GATE) in full. An ad hoc task: the plan
@@ -203,15 +201,15 @@ its first streamed token awaited, before the rest go in one message (CLAUDE.md �
 **5.3 Checkpoint, then integrate.** At every producer hand-back, before verifying it, commit a
 checkpoint (§CHECKPOINTS). Then the **orchestrator**, not a subagent, verifies each worktree's result
 (the covering test file, or a one- or two-season probe) and merges it into the working branch — when
-fanned, in an order that respects any named serial edge. **If two lanes touched the same file, the
+fanned, in an order that respects any named serial edge. **Within an item's fan, if two lanes touched the same file, the
 split was wrong, not the merge:** stop, do not resolve the collision by hand, and rebuild that file's
 portion as one producer. A silent auto-merge of a same-file collision is what the FALSIFIERS table
-catches.
+catches. **A set** is integrated one member at a time: merge the first member's worktree, run its covering test files on that tree and commit it; then merge the next member's worktree onto that commit, run that member's covering files and commit it, and so on in plan order; no member is merged before the one before it is committed. A file the live plan admits as shared is not a fan's collision; any other shared file is. A covering file red on that tree and green in the member's worktree, a merge needing any hand resolution beyond keeping both of two appended rows in plan order, a producer that must touch a file or symbol outside its WHERE or one another member owns, or a member's `STOPS IF` that holds, **drops the set for the run**: each member not yet committed is rebuilt from the last commit, one after another in plan order (its parallel worktree removed), and the receipt says so. Where a live plan has the items between a set's members commit after the set's block, it has checked that none of them gates a member.
 
 **5.4 Commit the item as one commit**, subject `[scope] …` with the `Item: <handle>` trailer, the
 in-flight row's `built` update, and the producer's receipt in the body (`NOT DONE` included, and each
 new test's class, game-state or build-verification, its lane, and each falsifier's outcome; and each new tool's caller). **Never
-one diff spanning several items.** Subject `[skip ci]` unless this is the batch's last item (§CI
+one diff spanning several items.** Subject `[skip ci]` unless this is the batch's last `Item:` commit (§CI
 CADENCE).
 
 **5.5 What the phase must not do.** The producer never reviews its own output (verifying its edit runs
@@ -448,7 +446,7 @@ judgment"*; a single lookup is not a row), then Phase 0 rows in item order, then
 Phase 2 and the accretion pass are the orchestrator's own and are not rows.
 
 **Fans are decided here, not at dispatch** (the test is 5.2's). Two sub-parts, or two items, that name
-the same file are a collision found at planning, where it costs a sentence: collapse to one producer.
+the same file are a collision found at planning, where it costs a sentence: collapse to one producer — except two members of a set sharing a file only as §5 lets a live plan admit. A set is one row (its members; what serial building would cost).
 
 **Recorded once, in the batch-open commit's body** (BATCH OPEN item 5) — one paragraph, no file,
 ledger row or scratchpad note; the commit is its record and it dies with the range. It is **not an
@@ -696,11 +694,11 @@ not "one realm, one season", and it is superlinear in them).
 
 | the claim | what would show it false |
 |---|---|
-| "the agent assignments were planned at batch open" | a producer was dispatched before the batch-open commit existed (it precedes the first `Item:` commit in `git log`); or a dispatch ran, at Phase 0 or BATCH-CLOSE, that the plan neither lists nor defaults to, with no deviation stated; or two sub-parts or items of the plan share a file and the plan did not collapse them to one producer; or a critic row sets a tier or effort `methodology-close` fixes differently |
+| "the agent assignments were planned at batch open" | a producer was dispatched before the batch-open commit existed (it precedes the first `Item:` commit in `git log`); or a dispatch ran, at Phase 0 or BATCH-CLOSE, that the plan neither lists nor defaults to, with no deviation stated; or two sub-parts or items of the plan share a file, beyond what §5 lets a live plan admit for a set, and the plan did not collapse them to one producer; or a critic row sets a tier or effort `methodology-close` fixes differently |
 | "one producer was enough" | the instruction itself named independent, file-disjoint sub-parts, and only one dispatch ran with no stated reason to collapse them |
 | "the build matched the instruction" | the produced diff's scope is broader or narrower than the instruction's own `WHERE`, or silently substitutes a different fix for the one named — what BATCH-CLOSE's FIDELITY TO PLAN lens exists to catch; if it passed anyway, name why |
 | "fanned lanes integrated cleanly" | 5.3's merge resolved a same-file collision instead of stopping and rebuilding that file as one producer |
-| "the parallel items were independent" | two items built in parallel (step 5's exception) shared a file of their WHERE or a gate, or either was a hash mover; or their commits landed out of plan order |
+| "the parallel items were independent" | two members of a set shared a file of their WHERE beyond what §5 lets a live plan admit, a gate or a gate chain; or a member's gate was unmet when the set was dispatched; or a member was a hash mover outside §5's mover-pair floor and the live plan's restrictions; or a member was merged before the one before it was committed, or integrated from its parallel worktree after the set was dropped; or the members' commits landed out of plan order, or, with no live plan naming the set, any commit did |
 | "the gate was met before building" | an item's gate (a workplan `GATE`, or the gates an ad hoc plan names) named a position or a Jordan decision that had not actually landed |
 | "the batches were partitioned, not sized" | an item's gate is met only by a later batch, or a link was cut with no stated reason |
 | "the batch size was right" | a linked group was carried whole through BATCH-CLOSE with no stated reason not to cut it along a link, or was cut with no stated reason the whole group would have been too large (a plan's own cut: stated at the approval stop) |
