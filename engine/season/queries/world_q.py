@@ -2889,6 +2889,22 @@ def believed_met(w: World, p: Person, ambition) -> bool:
     return any(r is not None for r in goal_referents(w, p, prop)) and current_stage(w, p, ambition) is None
 
 
+def commitment_kept(w: World, tenure) -> bool:
+    """B10.72 (U5a `CHAR` owed amendments §3 (b), the D-48 precedent: a reading computed where read, never a second
+    emission): WAS THE WANT HE LAID DOWN KEPT -- the closed `commit` `tenure`'s Proposition content (the goal's `goal_stages`
+    row) held true in the RELEASER'S OWN ledger at the tick the edge closed (`Tenure.until`)? It is `believed_met` over the
+    ledger as it stood then: a claim that reached him after he let the want go does not count, and neither does the world's
+    own state or another person's ledger. A want with no stage row has no content a ledger can read and reads `False`,
+    `believed_met`'s refusal; a live edge reads at the world's tick. Read at the world's tick for confidence (the one reader
+    `current_stage` builds), and `goal_referents`' world read of a seat's holder is as it stands, not as it stood.
+    Stored nowhere; the person closed his own edge (T-m), and nothing here closes it."""
+    p = w.persons.get(tenure.subject)
+    if p is None or tenure.kind != "commit":
+        return False
+    at = w.tick if tenure.until is None else tenure.until
+    return believed_met(w, replace(p, ledger=[c for c in p.ledger if c.when <= at]), tenure.object)
+
+
 def opens_mandatory(w: World, p: Person, ambition) -> bool:
     """B10.71 (A-47): IS `p`'S QUESTION ON THIS AMBITION ONE HE MAY NOT PASS OVER FOR ANOTHER -- its `goal_stages` row says
     `opens: mandatory` and, for some referent, the stage `current_stage` stands him on is the row's LAST. `False` for an

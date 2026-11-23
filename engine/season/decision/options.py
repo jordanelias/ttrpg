@@ -35,7 +35,7 @@ from ..data.rosters import (
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    CHOICE_RANGES, CHOICE_SOURCED, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, LIE_VERBS,
+    CHOICE_RANGES, CHOICE_SOURCED, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LIE_VERBS,
     OPPOSED_WITHOUT_PRIZE, OWN_STANCE_DECLINES, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
     TERMS_SOURCED, VERB_TABLE, VIOLENCE_CONTEXTS, VIOLENT_VERBS, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED,
     align,
@@ -183,6 +183,13 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                         and addressed_to(content_said(c), p.id))
                 refs = tuple(refs) + tuple(t for t in dict.fromkeys(said)
                                            if t is not None and t not in refs)
+        # B10.72 (`rosters.yaml: held_edge_sourced`): A VERB THAT FORMS ALSO ON THE OBJECT OF A LIVE EDGE HE HOLDS -- `release` on a
+        # `commit` of his own, which no question is about (the `need` question names the seat's holder). His own live Tenures, no
+        # World; it ADDS the objects he holds and nothing else, so a person committed to nothing forms what he formed before.
+        sourced_kind = HELD_EDGE_SOURCED.get(verb)
+        if sourced_kind is not None:
+            mine = tuple(dict.fromkeys(t.object for t in p.tenures if t.kind == sourced_kind and t.live))
+            refs = tuple(refs) + tuple(o for o in mine if o not in refs)
         # B10-09 close one, D3 (`rosters.yaml: held_edge_declines`): A VERB A PERSON DOES NOT FORM ON AN OBJECT
         # HE ALREADY HOLDS A LIVE EDGE OF THE NAMED KIND ON -- `commit` on a Proposition he commits to
         # (`_eff_commit` always opens a fresh Tenure). After every widening above, so it covers each route

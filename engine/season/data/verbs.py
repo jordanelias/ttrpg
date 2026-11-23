@@ -2084,6 +2084,26 @@ def _load_held_edge_declines(values: dict) -> dict:
 HELD_EDGE_DECLINES = _load_held_edge_declines(roster_map("held_edge_declines", "values"))
 
 
+# B10.72: `{verb: tenure kind}` -- the verbs that ALSO form on the object of a live Tenure of that kind the person holds
+# (`rosters.yaml: held_edge_sourced`, read in `opening_set`; `release` on a `commit` he holds). `held_edge_declines`' shape
+# and loader rule, its mirror. REFUSED AT IMPORT for a verb the table lacks or a kind `tenure_kinds` does not carry: either
+# would form for nobody, and a stale line must not read as a live route.
+def _load_held_edge_sourced(values: dict) -> dict:
+    """`rosters.yaml: held_edge_sourced`' `values`, checked and frozen -- refused per line (above)."""
+    out = {v: str(k or "") for v, k in (values or {}).items()}
+    for v, k in out.items():
+        if v not in VERB_TABLE or k not in TENURE_KINDS:
+            raise Forbidden(
+                f"`rosters.yaml: held_edge_sourced` names {v!r}: {k!r}, and the verb table carries no "
+                f"such verb, or {k!r} is no `tenure_kinds` member ({sorted(TENURE_KINDS)})", "rosters.yaml",
+                needs="a `verb_table.yaml` verb, and a Tenure kind an edge can be",
+                law="B10.72 -- a verb sourced from a held edge forms on the object of an edge of a kind that exists")
+    return out
+
+
+HELD_EDGE_SOURCED = _load_held_edge_sourced(roster_map("held_edge_sourced", "values"))
+
+
 # v11 CR-87 (ED-IN-0337): `{verb: (context, ...)}` -- the verbs a person forms only on a subject he holds a context
 # of violence against (`rosters.yaml: violence_contexts`, read in `opening_set`; `fight`). `held_edge_declines`'
 # shape, a list of contexts per verb. REFUSED AT IMPORT for a verb the table lacks or a context list that is not a
