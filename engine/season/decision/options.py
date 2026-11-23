@@ -25,7 +25,7 @@ import itertools
 from typing import Any, Callable, Optional
 from ..data.cast import STANCE_MAX
 from ..data.requires import (
-    OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, SHORTFALL_PREDICATE,
+    OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE,
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
 )
 from ..data.rosters import (
@@ -145,11 +145,15 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # the world he can be wrong about, the self-contest decline's reasoning below. The SAME cell,
         # asked of the same answerer the fold delegates to (`OwnStateReader`), so the two cannot
         # disagree; `build_typed_requires` refuses a cell mixing these stems with any other.
-        if (row.requires_typed is not None
-                and OWN_STATE_STEMS & set(row.requires_typed.stems())
-                and evaluate(row.requires_typed, OwnStateReader(p, fx),
-                             binding_of(p.id, {})).value is not True):
-            continue
+        # B10.59 (`02_CHAR_offer_what_can_be_done` edits 1-2): THE SAME READ, NOW FOR EVERY ROW WHOSE CELL ASKS ANY OWN-STATE STEM
+        # (`held_by`, `dispute`, `individual` of the actor, beside the sensitivity pair), and asked BELOW, once the Candidate's
+        # own operands are bound -- a cell over `subject` cannot be read before there is one. A cell of the sensitivity pair ONLY
+        # (`thread_read`) keeps `is not True` (no authored value is UNKNOWN and declines); every other cell declines on `False`
+        # alone, so a conjunct this reader cannot answer (UNKNOWN) still forms the Candidate, and clause 4 and the fold keep
+        # theirs. Not a decline on a skill: there is no `capability` stem (A-11).
+        own_stems = set(row.requires_typed.stems()) if row.requires_typed is not None else ()
+        own_read = bool(OWN_STATE_STEMS & set(own_stems))
+        own_only = own_read and set(own_stems) <= SENSITIVITY_STEMS
         # B10.24: THE DEONTOLOGICAL GATE IS NOT HERE. It moved to `choose.make_ranker`, after scoring and before the sample, so the
         # struck candidate's score is known and the Scene can keep what was given up (`Scene.forgone`).
         # v9 IN-12 step 10 (`rosters.yaml: held_document_declines`): A VERB A PERSON DOES NOT FORM WHILE HE
@@ -354,6 +358,11 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 # (`VerbRow.self_counterparty_refused`, the one owner the fold asks too).
                 if row.counterparty and row.self_counterparty_refused(ops.get(row.counterparty), p.id):
                     continue
+                # B10.59: WHAT HE CAN READ OFF HIMSELF, ASKED OF THIS CANDIDATE'S OWN BINDING (the K-3 branch above says why).
+                if own_read:
+                    own_verdict = evaluate(row.requires_typed, OwnStateReader(p, fx), binding_of(p.id, ops)).value
+                    if own_verdict is False or (own_only and own_verdict is not True):
+                        continue
                 # `19`: THE SEAT THE ACT WILL BE EXERCISED THROUGH rides into the belief test as it rides
                 # onto `Act.via` (`pack_scenes`), so a `basis` conjunct is asked of the same seat both
                 # sides. `st` is the seat this Candidate is formed for.

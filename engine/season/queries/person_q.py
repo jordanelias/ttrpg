@@ -1556,6 +1556,10 @@ class OwnStateReader:
       * `thread_sensitivity.gate` -- the Fixture the gate row names (`thread_sensitivity_gate`), the SECOND READ
         the value is held against (`work`'s `floor`, `determine`'s `quorum`), the same for every subject.
 
+      * `held_by`, `dispute`, `individual` (B10.59) -- what he holds, whom his own judgement scores against him, and whether he
+        is an individual, each of HIMSELF: `held_by` and `dispute` asked of the actor, `individual` of the actor's own id.
+        UNKNOWN for anybody else, so a conjunct this reader cannot answer never declines (`opening_set` declines on False).
+
     ⚠ THE KEY AND THE FIXTURE ARE THE `own_state_gate` ROW'S (`rosters.yaml: tables.capability_uses`, B04.06); the two stems
     are the verb table's grammar and stay. A site with no row answers UNKNOWN to both."""
 
@@ -1563,22 +1567,35 @@ class OwnStateReader:
         self._p, self._fx = p, fx
 
     def read(self, subject, predicate: str):
-        stem = str(predicate).partition(":")[0]
+        stem, _, arg = str(predicate).partition(":")
+        me = self._p.id
+        # B10.59 (`02_CHAR_offer_what_can_be_done` edits 1-2): THE THREE STEMS THE WORLD'S READER ANSWERS TOO, which a person
+        # answers of himself from `self._p` alone -- never a ledger, never a World, and only where he is the actor (`arg`, the
+        # relation's second side) or the subject is himself, so the person-side and fold answers cannot differ. Anything
+        # else is UNKNOWN: a belief about the world forms the Candidate and the fold refuses it (clause 4, R-07).
+        if stem == "held_by":       # his own live `hold` Tenures (an edge is owned by its subject, `_held_objects`'s reading)
+            return (any(t.kind == "hold" and t.object == subject and t.live for t in self._p.tenures)
+                    if arg == me else UNKNOWN)
+        if stem == "dispute":       # `WorldReader.read`'s own call, from the same `Fixtures`
+            return (holds_dispute(self._p, subject, self._fx.get("scar_weight_shift"), self._fx.get("sworn_bond"))
+                    if arg == me else UNKNOWN)
+        if stem == "individual":    # `Person.is_cohort`, the carrier's own predicate, asked of the actor
+            return (not self._p.is_cohort) if subject == me else UNKNOWN
         row = _gate_row(OWN_STATE_GATE)
         if row is None:
             return UNKNOWN
         if stem == "thread_sensitivity":
-            v = _held_at(self._p, row.key) if subject == self._p.id else None
+            v = _held_at(self._p, row.key) if subject == me else None
             return UNKNOWN if v is None else v
         if stem == "thread_sensitivity.gate":
             return self._fx.get(row.gain)
         return UNKNOWN
 
 
-if OWN_STATE_STEMS != {"thread_sensitivity", "thread_sensitivity.gate"}:
+if OWN_STATE_STEMS != {"thread_sensitivity", "thread_sensitivity.gate", "held_by", "dispute", "individual"}:
     raise SystemExit(f"`data/requires.py: OWN_STATE_STEMS` is {sorted(OWN_STATE_STEMS)}, and "
-                     "`OwnStateReader.read` answers only `thread_sensitivity` and its gate: a stem "
-                     "added there with no branch here would read UNKNOWN for everybody")
+                     "`OwnStateReader.read` answers only `held_by`, `dispute`, `individual`, `thread_sensitivity` and its "
+                     "gate: a stem added there with no branch here would read UNKNOWN for everybody")
 
 
 SAID_SLANTS = roster("said_slants")

@@ -29,7 +29,7 @@ from engine.dice_engine.fmath import ltr_sum
 
 from ..data.arrangements import ARRANGEMENTS      # v11 CR-34: `declared_sitting` reads a row's `disposal`/`quorum`
 from ..data.requires import (
-    OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, UNKNOWN, binding_from_act, binding_of, evaluate,
+    RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, UNKNOWN, binding_from_act, binding_of, evaluate,
 )
 from ..data.rosters import (
     CONTINUATION_TIES, SUCCESSIONS,
@@ -4544,7 +4544,7 @@ class WorldReader:
             if row is UNKNOWN:
                 return UNKNOWN
             return declared_votes(w, subject, row) if stem == "declared.votes" else row["quorum"]
-        if stem in OWN_STATE_STEMS:
+        if stem in SENSITIVITY_STEMS:     # B10.59: `held_by`, `dispute` and `individual` are answered above, from the world
             # v9 PC-06 K-3 (`H-85`): `thread_sensitivity` and its gate, through
             # `person_q.OwnStateReader` -- the one answerer, which the person's own formation asks
             # too, so the fold and the person cannot read it apart. ⚠ BUILT ON THIS READER'S OWN

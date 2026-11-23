@@ -926,6 +926,12 @@ class PersonInterior:
     tick: int = 0
     claim_decay: int = 0
 
+    @property
+    def is_cohort(self) -> bool:
+        """`Person.is_cohort`, the one owner of the test (B10.59: `OwnStateReader` asks it of the person forming, who is an
+        interior here). A property reading `weight`, so it is no field and no second copy of the predicate."""
+        return Person.is_cohort.fget(self)
+
 
 def frozen(d) -> Mapping:
     """A read-only copy of a mapping (`None` reads as empty): what a handed-down record holds in place of the store's dict."""

@@ -6575,12 +6575,12 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
     # v11 CR-87: a row formed only on a subject the person holds a context of violence against (`rosters.yaml:
     # violence_contexts`; `p_low` holds none here) -- a person-side decline, not clause 4. DERIVED FROM THE ROSTER.
     needs_held |= set(VIOLENCE_CONTEXTS)
-    # v9 PC-06 K-3: a row whose cell asks the actor's OWN STATE (`OWN_STATE_STEMS`, `thread_read`'s
+    # v9 PC-06 K-3: a row whose cell asks the actor's OWN STATE (`SENSITIVITY_STEMS`, `thread_read`'s
     # Thread Sensitivity) is declined by that state, not by clause 4 -- `p_low` carries no sensitivity.
     # DERIVED FROM THE CELL'S STEMS; its control, below, is the same person once his own state admits it.
-    from ..data.requires import OWN_STATE_STEMS
+    from ..data.requires import SENSITIVITY_STEMS
     own_state = {v for v, r in VERB_TABLE.items() if r.requires_typed is not None
-                 and OWN_STATE_STEMS & set(r.requires_typed.stems())}
+                 and SENSITIVITY_STEMS & set(r.requires_typed.stems())}
     assert own_state, "no row asks own state -- the exclusion below excludes nothing"
     needs_held |= own_state
     typed_own = {v for v, r in VERB_TABLE.items()
@@ -7210,6 +7210,11 @@ def test_wc_the_fold_binds_what_the_person_bound(monkeypatch):
     # only on that class since `referent_class: Record`; what `world_q.records_held_for_holding_rows` stamps for a
     # Record the person holds) on the same ground: without it the three drop out of `cands`. (`comply`, the fourth
     # `Record` row, is in `WALK_NAMED` below.)
+    # B10.59: AND `p_low` HOLDS A DISPUTE AGAINST `p_mid` (`OwnStateReader` answers `dispute` of himself, and `challenge` is
+    # declined at formation for a man who holds none): one deed claim his own pursuits judge against its doer, the
+    # `test_b11a_duel_reach._grievance` shape, so `challenge` stays in the walk instead of sitting in `WALK_EXCLUDES`.
+    p.ledger.append(Claim("c_wc_deed", p.id, "p_mid", "fight.declared", True, 0, "firsthand", 100, "own"))
+    p.pursuits = {"liberty": 1.0}
     q = Question("q:wc_agree", "need", ("S", "Hh"),
                  classes=(("D", "Rung"), ("site_harbour", "Site"), ("prop_wc", "Proposition"),
                           ("p_mid", "Person"), ("rec_wc", "Record"), ("p_mid", "Disputant")))
