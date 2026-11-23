@@ -632,14 +632,65 @@ if set(RECORD_KIND_KEYS.get(ORDER_KIND, ())) != {ORDER_AT_KEY} | {ORDER_ROLE_KEY
             "`reserve` and `general` are not keys")
 ORDER_ROLES = roster("order_roles", ordered=True)
 ORDER_RETREAT_AT = roster("order_retreat_at", ordered=True)
-# B11 lane A: the record kinds whose making is put to the addressee's face (`rosters.yaml: read_to_addressee`), read by
-# `loop/witness.py::addressee_reads`. Refused at import for a member that is no `record_kinds` member.
-READ_TO_ADDRESSEE = frozenset(roster("read_to_addressee"))
-if not READ_TO_ADDRESSEE <= RECORD_KINDS:
-    raise Unspecified(
-        f"`rosters.yaml: read_to_addressee` names {sorted(READ_TO_ADDRESSEE - RECORD_KINDS)}, no record kind",
-        "rosters.yaml -- read_to_addressee", needs="`record_kinds` members only",
-        law="B11 lane A -- only a document can be read to the man it is addressed to")
+# THE TWO ROSTERS OF WHO LEARNS A DOCUMENT'S CONTENT WITHOUT HOLDING IT, one shape: `{record_kinds member: verbs whose mint of
+# that kind the roster covers}`. `read_to_addressee` (B11 lane A) is "put to the addressee's face": the content reaches a witness
+# the document is ADDRESSED TO. `proclaimed` (B21.17, A-21) is "made public": the content reaches EVERYONE who learns of the
+# mint. Read by `loop/witness.py::addressee_reads` (`proclaimed` from B21.18; until then nothing reads it). Both refused at import
+# by `check_record_verb_rosters` below (refusals (a), (b), (d)) and `data/verbs.py::_check_record_verb_minting` (refusal (c), which
+# needs the verb table this module loads before).
+def check_record_verb_rosters(named: dict, kinds=None, keys=None, addressee=None) -> dict:
+    """THE LOAD CHECK OF `read_to_addressee` AND `proclaimed`, on the raw maps `{roster name: {kind: [verb, ...]}}`; returns each as
+    `{kind: frozenset(verbs)}`. Refuses (a) a key that is no `record_kinds` member, (b) a key whose content keys hold no
+    addressee key (`record_kinds.content.addressee`), (d) a kind named in two of the rosters (a kind is read to its addressee or
+    proclaimed, never both), and an entry that is no non-empty list of verb names. (c), a verb that is no `verb_table.yaml` row
+    or whose effect does not mint the kind, is `data/verbs.py`'s. The three arguments default to the live rosters and are
+    parameters only so a test can plant a bad line and watch it refuse."""
+    kinds = RECORD_KINDS if kinds is None else kinds
+    keys = RECORD_KIND_KEYS if keys is None else keys
+    addressee = RECORD_CONTENT.get("addressee") if addressee is None else addressee
+    out: dict = {}
+    for name, raw in named.items():
+        if not isinstance(raw, dict):
+            raise Unspecified(
+                f"`rosters.yaml: {name}` is no `{{record kind: [verb, ...]}}` mapping", f"rosters.yaml -- {name}",
+                needs="a mapping from a `record_kinds` member to the verbs whose mint of that kind it covers",
+                law="B21.17 -- the two document-reach rosters share one shape, so one loader reads them")
+        for kind, verbs in raw.items():
+            if kind not in kinds:
+                raise Unspecified(
+                    f"`rosters.yaml: {name}` names {kind!r}, no record kind", f"rosters.yaml -- {name}",
+                    needs=f"`record_kinds` members only ({sorted(kinds)})",
+                    law="B21.17 (a) -- only a document can be read to the man it is addressed to or proclaimed")
+            if addressee not in keys.get(kind, ()):
+                raise Unspecified(
+                    f"`rosters.yaml: {name}` names {kind!r}, whose content keys {list(keys.get(kind, ()))} hold no "
+                    f"addressee key {addressee!r}", f"rosters.yaml -- {name}",
+                    needs="a kind that names whom it addresses (`record_kinds.content.addressee`)",
+                    law="B21.17 (b) -- the addressee key is what `addressed_to` reads and what the answer to the "
+                        "document is offered by")
+            if not isinstance(verbs, (list, tuple)) or not verbs or not all(isinstance(v, str) and v for v in verbs):
+                raise Unspecified(
+                    f"`rosters.yaml: {name}.{kind}` is no non-empty list of verb names ({verbs!r})",
+                    f"rosters.yaml -- {name}", needs="the verbs whose mint of this kind the roster covers",
+                    law="B21.17 -- the verb qualifier is what keeps `covenant`'s dispensation out of `proclaimed`")
+        out[name] = {kind: frozenset(verbs) for kind, verbs in raw.items()}
+    names = list(out)
+    for i, n1 in enumerate(names):
+        for n2 in names[i + 1:]:
+            both = sorted(set(out[n1]) & set(out[n2]))
+            if both:
+                raise Unspecified(
+                    f"`rosters.yaml`: {both} named in both `{n1}` and `{n2}`", "rosters.yaml",
+                    needs="each record kind in one of them: read to its addressee, or proclaimed",
+                    law="B21.17 (d) -- a kind is carried by one document-reach roster, so which reader reaches a "
+                        "witness never depends on read order")
+    return out
+
+
+_DOCUMENT_REACH = check_record_verb_rosters(
+    {n: roster_map(n, "values") for n in ("read_to_addressee", "proclaimed")})
+READ_TO_ADDRESSEE = _DOCUMENT_REACH["read_to_addressee"]
+PROCLAIMED = _DOCUMENT_REACH["proclaimed"]
 # ⚠ ONE STEM READS BOTH VOCABULARIES, SO THEY MAY NOT SHARE A WORD. `exists:<kind>`
 # (`queries/world_q.py::WorldReader.read`) answers a `tenure_kinds` member as a live EDGE and a
 # `record_kinds` member as a Record OF THAT KIND; a word in both rosters would be answered by

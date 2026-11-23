@@ -91,7 +91,7 @@ def addressee_reads(rec, pid: str) -> bool:
     """B11 lane A: DOES WITNESS `pid` READ DOCUMENT `rec` AS ITS ADDRESSEE -- its kind is one whose making is put to the
     addressee's face (`rosters.yaml: read_to_addressee`) and he is among its addressees (`person_q.addressed_to`, the one
     owner). The content deposit's second reader beside the holder (below, in `witness`). [ASSUMPTION; medium; Jordan to
-    correct; revert: the roster `[]`.]"""
+    correct; revert: the roster `{}`.]"""
     return rec.kind in READ_TO_ADDRESSEE and addressed_to(rec.subject_matter, pid)
 
 

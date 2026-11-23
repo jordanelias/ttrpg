@@ -309,5 +309,5 @@ def test_effects_corpus_is_enumerated_through_effects_modules_and_the_openers_re
     from ..data import files
     mods = files.effects_modules()
     assert len(mods) >= 8 and all(p.name.startswith("effects") for p in mods), [p.name for p in mods]
-    body = inspect.getsource(_verbs._derive_openers_from_effects)
+    body = inspect.getsource(_verbs._effect_calls)      # the walk `_derive_openers_from_effects` reads (B21.17 moved it)
     assert "effects_modules()" in body, "the openers walk a hand-listed corpus"

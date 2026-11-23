@@ -28,7 +28,7 @@ import ast
 from dataclasses import dataclass, field, fields, replace
 from typing import Optional
 
-from . import files
+from . import files, rosters as _rosters
 from ...substrate.descriptors import ATTRIBUTES, CAPABILITIES
 from ..gaps import Forbidden, InstrumentDefect, Ungraded, Unspecified
 from .matrix import MATRIX, Step
@@ -37,7 +37,7 @@ from .requires import (
     TypedRequires, build_typed_requires,
 )
 from .rosters import (
-    COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
+    COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PROCLAIMED, PURSUIT_AXES, PURSUITS, READ_TO_ADDRESSEE, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
     RESTRAINT_KINDS, STANDING_OCCASION_OPENED_BY, STRIFE_KINDS,
     SCRUPLE_OVERRIDDEN, is_event_kind, refusing_pole,
     RUNG_KINDS, STRATA, TENURE_KINDS, THREAD_OPERATIONS, UNDEPOSITED_KINDS, load_yaml, require_member, roster,
@@ -502,39 +502,12 @@ ROUTE_FORMS = (FORM_INQUIRY, FORM_TASK)
 BOOKKEEPING_FORBIDDEN_CELLS = frozenset(roster("bookkeeping_forbidden_cells"))
 
 
-def _derive_openers_from_effects() -> dict:
-    """LOADER INVARIANT 6'S SECOND HALF, DERIVED RATHER THAN HAND-COPIED (`OPENERS-DERIVE`). The
-    single owner of "which verb opens which kind" is the `Tenure(...)` construction itself, inside
-    the function `@effect_for` registers for that verb (`CLAUDE.md` §8's every-rule-lives-once):
-    every site names `kind` as a STRING LITERAL -- `Tenure(id, subject, object, kind, ...)`,
-    positional, or a `kind=` keyword -- so an AST walk over the effect modules' own source (read as
-    TEXT, never imported -- no `data` -> `loop` import edge) reads the fact with no second copy to
-    fall behind.
-
-    Returns EVERY tenure kind, including the ones no effect opens -- an empty list, the "declared
-    means present" contract -- because a kind with a `writes: Tenure.since` cell and no opener
-    (`commit`, `oblige`, `succeed`, `tie`, `knot`) is a real, disclosed hole, not an absent
-    declaration. Run this function for the current set.
-
-    ⚠ THE WALK FOLLOWS A REGISTERED EFFECT INTO THE MODULE'S OWN HELPERS. `create_record`, `issue`
-    and `petition` share ONE mint, `_mint_document`, and the `hold` it opens is constructed there
-    rather than in any decorated body -- so a walk confined to the decorated function would DROP
-    `create_record` from `hold`'s openers, a derived fact going quietly wrong in the direction
-    nobody reads. A call to a function defined at the top of the SAME FILE, or imported from a
-    SIBLING `effects_*.py`, is walked as if inlined (transitively, each helper once).
-
-    ⚠⚠ SEVERAL FILES, NOT ONE. `effects.py` is a thin aggregator -- no `@effect_for`, no
-    `Tenure(...)` -- and every decorated function lives in one of its `effects_*.py` siblings
-    (`files.effects_modules()`, discovered by name rather than hand-listed). Every sibling is
-    parsed first and a decorated function's helpers are resolved through its OWN file's namespace:
-    the top-level functions it defines plus the ones it imports from a sibling (`from .effects_x
-    import name`), so a shared helper that constructs a Tenure is walked from every sibling that
-    reaches it (v9 IN-13: `_relocate`, defined in `effects_migration.py`, opens `contain` for
-    `march` in `effects_combat.py`). A call through anything but a bare name, or a `Tenure` whose
-    `kind` is not a literal, is not read.
-    """
-    openers: dict = {k: set() for k in TENURE_KINDS}
-
+def _effect_calls() -> list:
+    """EVERY `Call` NODE EACH REGISTERED EFFECT REACHES, as `(verb, call)` -- the one walk over `files.effects_modules()` that
+    `_derive_openers_from_effects` (which `Tenure(...)` a verb opens) and `_derive_minted_record_kinds` (which `Record` kind a verb
+    mints, B21.17) both read, so the namespace and helper resolution described on the first live once. Source is read as TEXT,
+    never imported (no `data` -> `loop` edge); a helper is walked as if inlined, transitively, each once."""
+    calls: list = []
     # Every sibling is parsed FIRST, so a helper one file imports from another is walked in ITS OWN
     # file's namespace. `namespace[stem]` = the top-level functions of `stem` plus the ones it brings in
     # with `from .<sibling> import name` (level 1, a sibling stem), the import binding the name the
@@ -583,17 +556,54 @@ def _derive_openers_from_effects() -> dict:
             if verb is None:
                 continue
             for call in (c for f in _reached(node) for c in ast.walk(f)):
-                if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
-                        and call.func.id == "Tenure"):
-                    continue
-                kind = None
-                if len(call.args) > 3 and isinstance(call.args[3], ast.Constant):
-                    kind = call.args[3].value
-                else:
-                    kind = next((kw.value.value for kw in call.keywords
-                                if kw.arg == "kind" and isinstance(kw.value, ast.Constant)), None)
-                if kind is not None:
-                    openers.setdefault(kind, set()).add(verb)
+                if isinstance(call, ast.Call):
+                    calls.append((verb, call))
+    return calls
+
+
+def _derive_openers_from_effects() -> dict:
+    """LOADER INVARIANT 6'S SECOND HALF, DERIVED RATHER THAN HAND-COPIED (`OPENERS-DERIVE`). The
+    single owner of "which verb opens which kind" is the `Tenure(...)` construction itself, inside
+    the function `@effect_for` registers for that verb (`CLAUDE.md` §8's every-rule-lives-once):
+    every site names `kind` as a STRING LITERAL -- `Tenure(id, subject, object, kind, ...)`,
+    positional, or a `kind=` keyword -- so an AST walk over the effect modules' own source (read as
+    TEXT, never imported -- no `data` -> `loop` import edge) reads the fact with no second copy to
+    fall behind.
+
+    Returns EVERY tenure kind, including the ones no effect opens -- an empty list, the "declared
+    means present" contract -- because a kind with a `writes: Tenure.since` cell and no opener
+    (`commit`, `oblige`, `succeed`, `tie`, `knot`) is a real, disclosed hole, not an absent
+    declaration. Run this function for the current set.
+
+    ⚠ THE WALK FOLLOWS A REGISTERED EFFECT INTO THE MODULE'S OWN HELPERS. `create_record`, `issue`
+    and `petition` share ONE mint, `_mint_document`, and the `hold` it opens is constructed there
+    rather than in any decorated body -- so a walk confined to the decorated function would DROP
+    `create_record` from `hold`'s openers, a derived fact going quietly wrong in the direction
+    nobody reads. A call to a function defined at the top of the SAME FILE, or imported from a
+    SIBLING `effects_*.py`, is walked as if inlined (transitively, each helper once).
+
+    ⚠⚠ SEVERAL FILES, NOT ONE. `effects.py` is a thin aggregator -- no `@effect_for`, no
+    `Tenure(...)` -- and every decorated function lives in one of its `effects_*.py` siblings
+    (`files.effects_modules()`, discovered by name rather than hand-listed). Every sibling is
+    parsed first and a decorated function's helpers are resolved through its OWN file's namespace:
+    the top-level functions it defines plus the ones it imports from a sibling (`from .effects_x
+    import name`), so a shared helper that constructs a Tenure is walked from every sibling that
+    reaches it (v9 IN-13: `_relocate`, defined in `effects_migration.py`, opens `contain` for
+    `march` in `effects_combat.py`). A call through anything but a bare name, or a `Tenure` whose
+    `kind` is not a literal, is not read.
+    """
+    openers: dict = {k: set() for k in TENURE_KINDS}
+    for verb, call in _effect_calls():
+        if not (isinstance(call.func, ast.Name) and call.func.id == "Tenure"):
+            continue
+        kind = None
+        if len(call.args) > 3 and isinstance(call.args[3], ast.Constant):
+            kind = call.args[3].value
+        else:
+            kind = next((kw.value.value for kw in call.keywords
+                         if kw.arg == "kind" and isinstance(kw.value, ast.Constant)), None)
+        if kind is not None:
+            openers.setdefault(kind, set()).add(verb)
     return {k: sorted(v) for k, v in openers.items()}
 
 
@@ -1450,6 +1460,44 @@ for _v, _k in WARRANT_SOURCED.items():
             f"such verb or `record_sourced_operands.{_k}` maps no `subject`", "rosters.yaml",
             needs="a `verb_table.yaml` verb, and a record kind whose `subject` a held Record answers",
             law="IN-12 step 6 -- a warrant-sourced verb forms only on what a held warrant names")
+
+def _derive_minted_record_kinds() -> dict:
+    """`{verb: {record kind}}` -- WHICH `record_kinds` MEMBER EACH VERB'S EFFECT MINTS (B21.17), derived as `OPENERS-DERIVE` derives
+    openers: from `_mint_document(w, a, <kind>, ...)`, the one mint, inside the function `@effect_for` registers for the verb or a
+    helper it reaches (`_effect_calls`). The kind is read where it is a string literal or a name `data/rosters.py` binds to one
+    (`CHALLENGE_KIND`); a kind passed through a variable (`create_record`'s) or from another module's attribute is not read, so a
+    verb minting only those has no entry. `covenant` reaches `issue`'s body, so it mints `dispensation`."""
+    minted: dict = {}
+    for verb, call in _effect_calls():
+        if not (isinstance(call.func, ast.Name) and call.func.id == "_mint_document"):
+            continue
+        arg = call.args[2] if len(call.args) > 2 else next((kw.value for kw in call.keywords if kw.arg == "kind"), None)
+        kind = (arg.value if isinstance(arg, ast.Constant) else
+                getattr(_rosters, arg.id, None) if isinstance(arg, ast.Name) else None)
+        if isinstance(kind, str):
+            minted.setdefault(verb, set()).add(kind)
+    return {v: frozenset(ks) for v, ks in minted.items()}
+
+
+def _check_record_verb_minting(name: str, mapping: dict, table: dict, minted: dict) -> None:
+    """REFUSAL (c) OF `rosters.yaml: read_to_addressee` AND `proclaimed` (`data/rosters.py::check_record_verb_rosters` has (a), (b)
+    and (d)): every verb a kind lists is a `verb_table.yaml` row whose effect mints that kind. A function, so a test can plant a
+    bad line and watch it refuse. ⚠ IT CANNOT TELL `covenant` FROM `issue` ON `dispensation`: both mint one, which is why the
+    verb list, and not the kind, is the roster's content."""
+    for kind, verbs in mapping.items():
+        for verb in sorted(verbs):
+            if verb not in table or kind not in minted.get(verb, ()):
+                raise Forbidden(
+                    f"`rosters.yaml: {name}` lists {verb!r} for {kind!r}, and either the verb table carries no such verb or "
+                    f"its effect does not mint a {kind!r} Record", "rosters.yaml",
+                    needs=f"a `verb_table.yaml` verb whose effect mints a {kind!r} document (`_mint_document`)",
+                    law="B21.17 (c) -- the verb qualifier names the mint the roster covers, so a verb that mints something "
+                        "else would be covered by a line that reads as covering it")
+
+
+_MINTED_RECORD_KINDS = _derive_minted_record_kinds()
+for _n, _m in (("read_to_addressee", READ_TO_ADDRESSEE), ("proclaimed", PROCLAIMED)):
+    _check_record_verb_minting(_n, _m, VERB_TABLE, _MINTED_RECORD_KINDS)
 
 # CP-T03-09: `{verb: term}` -- the terms a verb's personal-combat scene is fought under (`rosters.yaml:
 # duel_terms`), read by `seam/wrappers/combat.py::combat_input`. REFUSED AT IMPORT for a verb the table lacks or

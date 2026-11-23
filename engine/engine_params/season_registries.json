@@ -3168,10 +3168,21 @@
         },
         "read_to_addressee": {
           "source": "B11 lane A (the duel chain's third link; `14_VERBS_PHYSICAL_A_custody_and_force.md` A4's *heard of*).",
-          "note": "THE RECORD KINDS WHOSE MAKING IS PUT TO THE ADDRESSEE'S FACE -- a list of `record_kinds` members. WITNESS deposits a document's content (`content:<kind>`) to its new holder; for a kind listed here it deposits it too to a witness the document is addressed to (`loop/witness.py::addressee_reads`, the addressee test `person_q.addressed_to`'s), so he reads what was put to him while the Record stays in its maker's hand (ED-IN-0292 (1), RULED NO on a mint into the addressee's, stands). `challenge`: its cell asks the challenged present (`with`), so a challenge is issued to him in person; without this deposit `accept` could not tell it from any other document. A writ or a petition is not listed: who learns what it says is `give`'s (`test_give.py`). Refused at import for a member that is no record kind. [ASSUMPTION; medium; Jordan to correct; revert: `[]`.]",
-          "values": [
-            "challenge"
-          ]
+          "note": "THE RECORD KINDS WHOSE MAKING IS PUT TO THE ADDRESSEE'S FACE -- a map from a `record_kinds` member to the verbs whose mint of that kind is put to its addressee. WITNESS deposits a document's content (`content:<kind>`) to its new holder; for a kind listed here it deposits it too to a witness the document is addressed to (`loop/witness.py::addressee_reads`, the addressee test `person_q.addressed_to`'s), so he reads what was put to him while the Record stays in its maker's hand (ED-IN-0292 (1), RULED NO on a mint into the addressee's, stands). `challenge`: its cell asks the challenged present (`with`), so a challenge is issued to him in person; without this deposit `accept` could not tell it from any other document. A writ or a petition is not listed: who learns what it says is `give`'s (`test_give.py`). Refused at import (`data/rosters.py:: check_record_verb_rosters`, `data/verbs.py::_check_record_verb_minting`) for a key that is no record kind, a key whose content keys hold no addressee key, a verb that is no `verb_table.yaml` row or whose effect does not mint that kind, and a kind also in `proclaimed`. [ASSUMPTION; medium; Jordan to correct; revert: `{}`.]",
+          "values": {
+            "challenge": [
+              "challenge"
+            ]
+          }
+        },
+        "proclaimed": {
+          "source": "B21.17 (`06_FA_decree_binds` edit 1; ruling A-21; D-U1-05's sibling-list precedent, `covert_kinds`, `forgeable_kinds`).",
+          "note": "THE RECORD KINDS WHOSE MINT IS MADE PUBLIC -- `read_to_addressee`'s shape (a `record_kinds` member to the verbs whose mint of it is covered), the other property. A-21 rules a decree proclaimed: its content reaches EVERYONE who learns of the mint, addressee or not, where `read_to_addressee` reaches only the addressee. The verb qualifier is the point: `covenant` also mints a `dispensation`, and its counterparty learns the terms only by holding the Record (A-21 keeps covenants in person), so `dispensation` is carried for `issue` alone. No record kind is in both rosters (refused at import), and no `record_kinds.dispensation.public_terms` cell exists (it would give one member a second shape). Nothing reads this roster until B21.18 (`loop/witness.py::addressee_reads`). Refused at import as `read_to_addressee` is. [ASSUMPTION; medium; Jordan to correct; revert: `{}`, which restores the holder-and-addressee deposits alone.]",
+          "values": {
+            "dispensation": [
+              "issue"
+            ]
+          }
         },
         "record_sourced_operands": {
           "source": "#453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) \u00a710.1, *the shared enabler*, plan position IN-10 (`workplans/valoria_master_workplan_v9_part5.md`); it replaces plan position `15c`'s flat `writ_sourced_operands` (`to, kind, amount`), whose source was r2 `02_THE_WRIT_AND_THE_WORD.md` \u00a7A.13.",
