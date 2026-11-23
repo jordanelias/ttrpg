@@ -572,6 +572,21 @@ rows:
         argv: ["python", "-m", "engine.season.harness.conviction_spread"]
         expects: "passes"
         holds: "unread"
+        reading:
+          tree: "fbd22a0e7536fa9224e8d49971f9fc69d659a450"
+          date: "2026-11-23"
+          seed: "none (a roster reading: the 15 pursuits over the 7 axes, no realm built)"
+          seasons: 0
+          line: "signature_breaks: 13 of 15 pursuits, 45 clauses"
+          control: >-
+            `conviction_spread` exits 0 (`rc=0`, `PYTHONHASHSEED=0`); the `--words` reading is the printed
+            line above, the same count B10.17 measured (13 of 15, 45 clauses; the source's hand count
+            was 13 of 15 and 35 clauses on the starting roster); `creed signature_breaks: 0 of 0 creeds
+            with a signature (5 creeds on the roster)`
+          does_not_show: >-
+            that a clause the `--words` list names moves a choice; 45 clauses name a pursuit that
+            favours or opposes a verb the table does not rank that way, and none is a ruling to fix;
+            `holds` stays `unread` (A-114: the batch writes the reading, not the status)
       - id: R-06.d
         text: >-
           pursuit decides more than the draw: `decision_spread --decisions` at seeds 0 to 2, the
@@ -585,23 +600,27 @@ rows:
         expects: "the strict-top share above one half at the shipped tau at seeds 0, 1, 2, and above the `--control` arm's (pursuits = realm mean) at each seed: one half alone does not separate the two, the flattened arm clears it too"
         holds: "yes"
         reading:
-          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
-          date: "2026-11-15"
+          tree: "fbd22a0e7536fa9224e8d49971f9fc69d659a450"
+          date: "2026-11-23"
           seed: "0, 1, 2"
           seasons: 0
-          line: "  all referents: {'draw': 224, 'pursuit': 274}; distinct tops 79; distinct tops within a faction, summed over its factions 177"
+          line: "  all referents: {'draw': 243, 'pursuit': 255}; distinct tops 42; distinct tops within a faction, summed over its factions 142"
           control: >-
-            seed 0 shown (274 of 498, 0.55); seeds 1 and 2 read pursuit 301 and 280 of 498 (0.60,
-            0.56); choice_temperature swept to 0 reads pursuit 486 and tiebreak 12 of 498 at each
-            seed (`B02.38_R-06.d.tau0.log`); the `--control` arm (pursuits = realm mean) reads pursuit
-            253, 269, 252 of 498, so the shipped arm exceeds it by 21, 32 and 28 at seeds 0, 1, 2 (274 v
-            253, 301 v 269, 280 v 252): the comparison the `yes` rests on
+            seed 0 shown (255 of 498, 0.512); seeds 1 and 2 read pursuit 265 and 273 of 498 (0.532,
+            0.548) (`--decisions --seed s`, `PYTHONHASHSEED=0`); choice_temperature swept to 0 reads
+            pursuit 450 and tiebreak 48 of 498 at each seed (0.904), by a one-line `read_decisions`
+            call on `build_realm(s)` with `fixtures.sweep("choice_temperature", 0)`; the `--control` arm
+            (pursuits = realm mean) reads pursuit 210, 210, 211 of 498 (0.422, 0.422, 0.424; the flag
+            run at seed 0 reads 210 too), so the shipped arm exceeds it by 45, 55 and 62 at seeds 0, 1,
+            2 (255 v 210, 265 v 210, 273 v 211): the comparison the `yes` rests on. Against the B02.38
+            reading (274, 301, 280 of 498; control 253, 269, 252) the shipped share fell 19, 36 and 7
+            and the control arm's fell 43, 59 and 41: the margin over the control widened while the share
+            at the shipped tau came down to 0.512 at seed 0 (6 of 498 over one half)
           does_not_show: >-
             a built realm with no season played; the share is derived from two printed counts and
-            the command prints no share; the `--control` arm reads above one half (249 of 498) at every
-            seed (253, 269, 252), so one half alone does not separate it from the shipped arm; how much
-            of the margin over it (21 to 32 of 498) is the pursuit term and how much the realm-mean
-            projection is not read here
+            the command prints no share; seed 0 clears one half by 6 of 498 (255 against 249), so one
+            half alone is a thin margin there; how much of the margin over the control arm is the pursuit
+            term and how much the realm-mean projection is not read here
       - id: R-06.e
         text: >-
           every acting person carries a pursuit vector: `decision_spread --persons`, n of n at the
@@ -661,19 +680,21 @@ rows:
         expects: "the test passes"
         holds: "yes"
         reading:
-          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
-          date: "2026-11-15"
+          tree: "fbd22a0e7536fa9224e8d49971f9fc69d659a450"
+          date: "2026-11-23"
           seed: 0
           seasons: 2
-          line: "1 passed in 42.40s"
+          line: "1 passed in 79.62s (0:01:19)"
           control: >-
             the test's own control arm (both gains set to 0, every other fixture shipped) must show
             no pair differing beyond stance (`out["control"][1] == 0`), and passed; seed and
             seasons are the test body's (`build_realm(0)`, `populated.run(2, 0, w=w)`), the log
-            holds pytest's closing line only
+            holds pytest's closing line only; the wall time is a shared machine's (the B02 reading
+            took 42.40s)
           does_not_show: >-
             one seed; a regard that differs between hearers is not a regard that changes a
-            decision (R-07.d); run with `-p no:cacheprovider` added
+            decision (R-07.d); run with `-p no:cacheprovider` `--timeout=600` and `PYTHONHASHSEED=0`
+            added
       - id: R-07.c
         text: >-
           a fought field writes the losers' stance: `aperture 1 s`, s = 0 to 2, `field.won +
@@ -693,6 +714,24 @@ rows:
         argv: ["python", "-m", "pytest", "engine/season/tests/test_realm_requirements.py", "-q", "-k", "r07"]
         expects: "a planted regard changes the top candidate at least once in seeds 0-2; the unplanted seed is equal"
         holds: "unread"
+        reading:
+          tree: "fbd22a0e7536fa9224e8d49971f9fc69d659a450"
+          date: "2026-11-23"
+          seed: "0, 1, 2"
+          seasons: 0
+          line: "1 passed, 12 deselected in 4.29s"
+          control: >-
+            the test (`test_r07_a_planted_regard_changes_what_a_person_ranks_first`) reads each seed's built
+            realm: the unplanted world ranks the first holder of a person-subject candidate equal on a
+            second read, a row toward a person he holds no candidate about moves nothing, and a grudge
+            at the row type's bound toward the subject moves the top candidate about him in at least one
+            of the three seeds (`assert changed`, `checked >= len(SEEDS)`); the log holds pytest's
+            closing line only (`PYTHONHASHSEED=0`, `-p no:cacheprovider`)
+          does_not_show: >-
+            a played season (the realm is built, not run); which of the three seeds moved (the test
+            asserts a non-empty set and prints none); a changed top is a changed ranking of one person
+            on one question, not a changed act in play (R-08.c); `holds` stays `unread` (A-114: the
+            batch writes the reading, not the status)
     blocks: [IN-38]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W-F spent (A-12, IN-18 G1); W27: `17` landed, IN-38 remains
 
@@ -745,19 +784,24 @@ rows:
         expects: "not the top above 0 at the shipped temperature and 0 at temperature 0, at seeds 0, 1, 2"
         holds: "yes"
         reading:
-          tree: "1c9238db4c46af9c92a842b1b11d0f2b3d499bdf"
-          date: "2026-11-15"
+          tree: "fbd22a0e7536fa9224e8d49971f9fc69d659a450"
+          date: "2026-11-23"
           seed: "0, 1, 2"
           seasons: 1
-          line: "3 passed, 8 deselected in 46.28s"
+          line: "3 passed, 10 deselected in 96.28s (0:01:36)"
           control: >-
             the same test plays each seed at `choice_temperature` swept to 0 and asserts 0
             deliberations chose other than the leading candidate, and that both arms deliberated
-            over a strict top
+            over a strict top; the printed line of `decision_spread --season --seed s` (one season,
+            `PYTHONHASHSEED=0`) reads `not the top candidate: 128 of 284` at seed 0, `142 of 302` at
+            seed 1 and `117 of 313` at seed 2 (0.451, 0.470, 0.374), deliberations with a strict top
+            and not resolved acts
           does_not_show: >-
-            one season a seed; the counts the test asserts on are not printed in this log (pytest's
-            closing line only); the share is a count above 0, not a size; run with
-            `-p no:cacheprovider` added
+            one season a seed; the test's own counts are not printed in this log (pytest's closing
+            line only), and the printed line counts deliberations with a strict top, not resolved acts
+            (the unit the conjunct names), and prints no temperature-0 count (the test asserts it);
+            the share is a count above 0, not a size; run with `-p no:cacheprovider` `--timeout=600`
+            and `PYTHONHASHSEED=0` added
     blocks: [SC-01, IN-08, IN-18, IN-12]
     # spent/removed ids (v9 `_part2`, `blocks:` traces): W26 is SC-01's; H-62 re-scoped to IN-08, IN-18, IN-12 step 9
     needs_jordan: false
