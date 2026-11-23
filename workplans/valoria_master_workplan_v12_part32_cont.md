@@ -12,7 +12,7 @@
 INVOCATION: /methodology-execute Batch B11F2-flow-in
 IN-FLIGHT ROW: registers/handoffs/HANDOFF_IN.md, Open table
 GATE: Batch B09-memory @2e95f6736718140bb817f325ec3ae5c2b90e5a23
-GATE: Batch B10-character
+GATE: Batch B10-character @7f520d7a59d254e4056f8dd47f481ff0f4ca6a7f
 GATE: Batch B11F1-flow-se
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: none — carried v11 positions (`V12_STRUCTURE.md` §2.2); what the batch serves: Jordan's rulings of 2026-11-08 recorded at `ED-IN-0352` (T1, T2, K1, K2, D6, D7, W1; v11 part 16 §3.5) and ID-16 (`architecture/meta/01_AXIOMS.md`, every feedback path declared with a sign before a further amplifier, for CR-98). The close reads the nine lines on the closing tree and names no conjunct, so no `reading:` record is written and `status:` is not edited (`IS-A-12`).

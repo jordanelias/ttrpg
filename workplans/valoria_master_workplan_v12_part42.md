@@ -24,7 +24,7 @@ GATE: Batch B02-tests @895dc07319e40f9723a5ad857e068c7bdbde145d
 GATE: Batch B04-capability-home @74910ca78a3ed2afb8898679a8142031c974223b
 GATE: Batch B06-keyed-draw @bcbe3ed5e595ff465e12dbe246c29f1216d14f3a
 GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
-GATE: Batch B10-character
+GATE: Batch B10-character @7f520d7a59d254e4056f8dd47f481ff0f4ca6a7f
 GATE: Batch B11-fi-readers
 GATE: Batch B11F1-flow-se
 GATE: Batch B12c-material-verbs-and-valley

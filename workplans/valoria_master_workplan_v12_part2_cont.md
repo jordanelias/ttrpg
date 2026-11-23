@@ -206,7 +206,6 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `tests/test_gate_observation.py` | B09.21, B12a.72 | B09 → B12a |  | **not listed** |
 | `tests/test_governance_spine_play.py` | B21.72, B21.74, B21.76, B34.09, B40.01 | B21 → B34 → B40 |  | **not listed** |
 | `tests/test_in34_bodies_clock.py` | B15.06, B12b.38, B37.04, B37.06, B37.08 | B15 → B12b → B37 |  | **not listed** |
-| `tests/test_realm_requirements.py` | B05.63, B10.12 | B10 |  | **not listed** |
 | `tests/test_social_contest_module.py` | B05.02, B05.14, B05.56, B05.59 | B05 |  | **not listed** |
 | `tests/test_strife_instrument.py` | B11F2.03, B11F2.06, B21s.01, B21s.02, B38.64 | B11F2 → B21s → B38 |  | **not listed** |
 | `tests/valoria/test_conditional_orders.py` | B19.05, B20.01, B20.06, B20.08, B20.15 | B19 → B20 |  | **not listed** |
@@ -249,9 +248,7 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `tests/test_sc_calibration_targets.py` | B05.22, B05.51, B05.59, B24p.23 | B24p |  | **not listed** |
 | `decision/budget.py` | B12b.04, B35.16 | B12b → B35 |  | listed |
 | `harness/access.py` | B28.22, B28.27, B38.12 | B28 → B38 |  | **not listed** |
-| `harness/conviction_spread.py` | B10.17, B10.19 | B10 |  | **not listed** |
 | `harness/headless.py` | B01a.03, B11.05, B24.38 | B01a → B11 → B24 |  | **not listed** |
-| `harness/interactions.py` | B10.23 | B10 |  | **not listed** |
 | `harness/run_cases.py` | B11.07 | B11 |  | **not listed** |
 | `harness/strife_moves.yaml` | B21s.01, B21s.02, B33.29 | B21s → B33 |  | listed |
 | `harness/valley.py` | B12c.28, B12c.29, B39.31 | B12c → B39 |  | listed |
@@ -309,13 +306,11 @@ Every file items of two or more batches edit, the permanent surface left out (§
 | `tests/test_in33_exchange.py` | B12a.13, B12c.14 | B12a → B12c |  | **not listed** |
 | `tests/test_in37_chronicle.py` | B36.07, B38.76 | B36 → B38 |  | **not listed** |
 | `tests/test_in53_vacancy_need.py` | B09.12 | B09 |  | **not listed** |
-| `tests/test_in62_decision_spread.py` | B10.29 | B10 |  | **not listed** |
 | `tests/test_inst_syn_b_deed_ledger.py` | B32.07, B39.32 | B32 → B39 |  | **not listed** |
 | `tests/test_narrative_dues.py` | B38.07, B39.21 | B38 → B39 |  | **not listed** |
 | `tests/test_rem30_character_sheet.py` | B34.06, B38.75 | B34 → B38 |  | **not listed** |
 | `tests/test_resv_field_defender.py` | B22.29, B23.10 | B22 → B23 |  | **not listed** |
 | `tests/test_sc_hearing_negotiation.py` | B24.30, B28.13 | B24 → B28 |  | **not listed** |
-| `tests/test_scene_store.py` | B09.16, B10.05 | B09 → B10 |  | **not listed** |
 | `tests/test_staged_goals.py` | B10.71, B39.37 | B10 → B39 |  | **not listed** |
 | `tests/test_territorial_subsistence.py` | B12a.54, B38.56 | B12a → B38 |  | **not listed** |
 | `tests/test_u7_remit.py` | B27.01, B37.12 | B27 → B37 |  | **not listed** |
