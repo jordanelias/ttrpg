@@ -231,19 +231,19 @@ working-tree diff. A batch has ONE close (RULED, Jordan 2026-11-06, §BATCHES).
    and reconciliation (§1.2–1.5) apply as written there. **The roster is the one the assignment plan
    provisionally fixed (§THE ASSIGNMENT PLAN), confirmed now against the real range diff**: dispatch it
    as planned, or change it with the reason stated.
-   - **The one suite run starts as Phase 1 opens, in the background.** **It is `tests/valoria`, and
-     nothing else unless the plan names it** (Jordan, 2026-11-22: *"methodology execute should only run
+   - **The one suite run starts as Phase 1 opens, in the background.** **It is `tests/valoria`, and the
+     lane the batch concerns, and nothing else** (Jordan, 2026-11-22: *"methodology execute should only run
      tests/valoria. All other test calls to be specified by workplan according to subsystem test suite or
-     season test"*). A batch item's `TESTS:` or `GATE:` line names a lane: a subsystem (`-m combat`,
-     `-m mass_battle`, `-m social_contest`, `-m threadwork`) or the season loop (`-m season_loop`); the close
-     runs exactly the lanes the batch's items name, once, and a batch whose items name none runs
-     `tests/valoria` alone. This skill chooses no lane itself and does not consult `tools/tests_for_diff.py`
-     (that is the inner-loop tool). At most once per batch, only if it can observe something CI will not
-     (CLAUDE.md §0.4 cl.1). No item inside the batch runs it. Phase 1's critics are
-     read-only and use no CPU it needs, so it overlaps them: snapshot `HEAD` (`git worktree add
-     --detach <scratchpad>/suite-<sha> HEAD`) and run there, launched as *Running a slow instrument*
-     step 2 says. Its verdict is on the same tree CI's first run reads, which is why running it
-     beside Phase 1 loses nothing.
+     season test"*; 2026-11-23: *"every batch concerns a lane ... identify them based on our lanes"*). The
+     batch's lane is the `lane` column of the live plan's batch table (v12: part 2 §1) and the plan maps it
+     to a test lane (v12's head, rule P18: a subsystem lane to its `-m` suite, a season-loop lane to
+     `-m season_loop`, GO to `-m engine`); an item's `TESTS:` or `GATE:` line may name a further lane. This
+     skill chooses no lane itself and does not consult `tools/tests_for_diff.py` (the inner-loop tool). At most
+     once per batch, only if it can observe something CI will not (CLAUDE.md §0.4 cl.1). No item inside the
+     batch runs it. Phase 1's critics are read-only and use no CPU it needs, so it overlaps them: snapshot
+     `HEAD` (`git worktree add --detach <scratchpad>/suite-<sha> HEAD`) and run there, launched as
+     *Running a slow instrument* step 2 says. Its verdict is on the same tree CI's first run reads, which is
+     why running it beside Phase 1 loses nothing.
    - **Lanes are separate verdicts.** Run `tests/valoria`, then each lane the plan names, as separate
      commands, one after another, and as each finishes record its verdict and the snapshot SHA in a
      `[skip ci]` checkpoint (§CHECKPOINTS), so a restart loses one run, not all.
@@ -274,7 +274,7 @@ working-tree diff. A batch has ONE close (RULED, Jordan 2026-11-06, §BATCHES).
    - **After Phase 2**, re-run only the covering files of Phase 2's diff (CLAUDE.md §0.4 cl.2, with
      the flags above). A Phase 2 edit outside every covering file's reach, or a fix to a snapshot red
      that changes code beyond its failing file, gets the plan-named lane's covering file or files (`-m <lane>`
-     only where the item names the lane) — never the whole suite again.
+     only where the batch's lane or the item names it) — never the whole suite again.
 3. **The accretion pass — this skill's one addition, between Phase 2 and Phase 3** (the session's
    user, 2026-11-05: *"each batch creates its own specific tools and they accrete causing increasingly
    longer run times for test suites"*; *"as part of methodology execute close"*). Phase 3 then grades
@@ -699,7 +699,7 @@ not "one realm, one season", and it is superlinear in them).
 | "the batch was expunged" | a finished position, or its in-flight row, is still present after the boundary commit, or that commit added a narrative, a "done" row or a count beyond what the plan's own rule for finished positions prescribes |
 | "the batch resumed from its row" | a resumed batch rebuilt an item whose handle was in `built`, skipped one that was not, re-ran a BATCH-CLOSE phase at or before `close`, overwrote `open`, or trusted the row over the commits where they disagreed |
 | "BATCH-CLOSE ran once per batch" | the full pytest suite, `/code-review`, `/simplify`, `layer-conformance`, the agonist/antagonist fan, or the terminal critique ran between two items of the *same* batch, or the review phases did not run before the batch's items were reported done (the suite runs per CLAUDE.md §0.4 cl.1, not unconditionally; its one run starts in the background as Phase 1 opens, on a snapshot of the last `Item:` commit, and Phase 2's covering-file or narrowed-tree re-runs are not a second run); or after a red, the whole suite ran again over trees the fix diff could not reach; or a tree's verdict was not recorded in a `suite verdict:` commit as it finished |
-| "the close ran only what the plan names" | the close run engine/season/tests, engine/tests or a `-m` lane that no item of the batch names in a `TESTS:` or `GATE:` line, or chose a lane by `tools/tests_for_diff.py`, or left `tests/valoria` out |
+| "the close ran only what the plan names" | the close run engine/season/tests, engine/tests or a `-m` lane that neither the batch's lane (the plan's P18 mapping) nor an item's `TESTS:` or `GATE:` line names, or chose a lane by `tools/tests_for_diff.py`, or left `tests/valoria` out |
 | "the red was carried, not blocking" | its file, run at `<open sha>`, passed, or failed another way or under another test id; or it is not named in the close commit body; or it was skipped, xfailed or quarantined, or deleted while game-state or asserting live design, or deleted with no successor, retired subject or build-verification class cited |
 | "the timeout was a budget" | a `--timeout` value no `--durations` reading names a multiple of; or a timed-out test was reported as red or green rather than as a measurement failure; or the close run carried `--maxfail` |
 | "CI ran twice per batch" | a CI run started on a commit other than the batch's last `Item:` commit or the confirming head (a pushed head commit without `[skip ci]`), no PR existed when the first run was due, or a full CI run was used to find what a covering test file or a one- or two-season probe could show |
