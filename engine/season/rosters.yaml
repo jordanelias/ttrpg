@@ -1652,8 +1652,32 @@ rosters:
       are listed only where they weigh, so a world whose three are at their control sizes carries the terms it carried before them
       (the terms are folded into the Event's `ending` and so into the content hash). A member lands with its host
       function in `sigma.OBSTACLE_TERMS` and no other code; later members are those the verb lanes add (OBS §2's table).
+      B24p.05: EVERY MEMBER IS BOUND (`bound:` below) to ONE reader, never both and never neither. `host` -- read by its function in
+      `sigma.OBSTACLE_TERMS` (the eight above). `module` -- the proceeding's own, supplied by `modules/social_contest/proceeding.py` (its
+      `TERMS`, B24p.07) as a raw operand and a step on the record the one composer (`roll.py::obstacle`) reads, so there is no second
+      composer: `weary` (the Will his staying power has spent, V2 p2 §C.2's `weary(V)`), `standing` (the other side's circumstances
+      unless his Reason accounts for them, `gap(V)`), `press` (`press_ob`, on a press only) and `gravity` (the close's and the
+      abridged form's). `data/rosters.py::obstacle_bound` reads the column and refuses a value but these two; `sigma.py` refuses at import
+      a `host` member with no function (and a function with no member) and, at the first call of the module, a `module` member the
+      module's `TERMS` lacks. `standard` stays `host`: inside a proceeding the venue's standard is Grace's `esteem` on the leverage, never
+      an obstacle (B24p.19 omits it for an act on the `proceeds=` path). No leverage source is module-bound.
     ordered: true
-    values: [even, difficulty, opposition, standard, stakes, regard, reception, capability]
+    values: [even, difficulty, opposition, standard, stakes, regard, reception, capability, weary, standing, press, gravity]
+    # [ASSUMPTION; Jordan to correct -- basis: B24p.05's instruction: the four appended after `capability`, so the proceeding's terms follow the
+    # host's in composition order; revert: the four rows and their `bound:` cells.]
+    bound:
+      even: host
+      difficulty: host
+      opposition: host
+      standard: host
+      stakes: host
+      regard: host
+      reception: host
+      capability: host
+      weary: module
+      standing: module
+      press: module
+      gravity: module
 
   lifepaths:
     source: >-

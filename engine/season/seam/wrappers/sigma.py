@@ -60,6 +60,7 @@ prize row names. NO entry is added to
 """
 from __future__ import annotations
 
+import functools
 import math
 import sys
 from dataclasses import asdict
@@ -74,7 +75,7 @@ from engine.substrate import composition, descriptors
 
 from ...data.arrangements import ARRANGEMENTS
 from ...data.rosters import STANCE_MAX
-from ...data.rosters import capability_rows, require_use_site, roster, when_holds
+from ...data.rosters import capability_rows, obstacle_bound, require_use_site, roster, when_holds
 from ...data.verbs import SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE, _OPENERS_FROM_EFFECTS
 from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, sides_of
@@ -407,11 +408,13 @@ def _wound_levels(fx: Any, operands: dict) -> tuple:
 # list of level names. THE ROSTER IS
 # THE CLOSED SET AND THIS IS ITS BINDING: refused at import if the two disagree, so a member with no function
 # (it would silently add nothing) and a function with no member (it would silently never run) are both loud.
-def _bound_to(binding: dict, roster_name: str, law: str = "OBS §1 -- the roster is the closed set and the binding is its only reader") -> dict:
+def _bound_to(binding: dict, roster_name: str, law: str = "OBS §1 -- the roster is the closed set and the binding is its only reader",
+              members: Optional[tuple] = None) -> dict:
     """`binding` (member -> host function) checked against `rosters.yaml: <roster_name>`, both ways: a member
     with no function would silently add nothing, a function with no member would silently never run. Returns the binding in the
-    roster's order."""
-    members = roster(roster_name, ordered=True)
+    roster's order. `members` narrows the roster to the part this host reads (`obstacle_bound("host")`, B24p.05: the module-bound
+    members have no host function and must not)."""
+    members = roster(roster_name, ordered=True) if members is None else members
     if set(binding) != set(members):
         raise Unspecified(
             f"`{roster_name}` members {list(members)} and their host functions {sorted(binding)} differ", "rosters.yaml",
@@ -701,7 +704,31 @@ def _regard_term(fx: Any, facts: dict) -> dict:
 #: that is a raw operand times a step returns `{"obstacle_operands": ((name, raw, step),)}` instead. Refused at import, both ways.
 OBSTACLE_TERMS = _bound_to({fn.__name__[1:-len("_term")]: fn for fn in (
     _even_term, _difficulty_term, _opposition_term, _standard_term, _stakes_term, _regard_term, _reception_term, _capability_term)},
-                           "obstacle_terms")
+                           "obstacle_terms", members=obstacle_bound("host"))
+
+PROCEEDING_ROLE = "social_contest.proceeding"   # the composition row whose module supplies the `bound: module` members (B24p.12 registers it)
+
+
+@functools.lru_cache(maxsize=None)
+def _module_terms_checked() -> bool:
+    """The `bound: module` members of `obstacle_terms` against the proceeding module's `TERMS` (B24p.05), once per process: refused if they
+    differ (a module term that is no roster member would reach `Margin.terms` unnamed; a member the module never supplies would silently weigh 0).
+    Skipped, and `False`, while the composition row is absent (B24p.12 registers it and asserts this half)."""
+    if PROCEEDING_ROLE not in composition.ROLES:
+        return False
+    terms = getattr(sys.modules[composition.require(PROCEEDING_ROLE).__module__], "TERMS")
+    want = obstacle_bound("module")
+    if set(terms) != set(want):
+        raise Unspecified(f"`obstacle_terms` module-bound members {list(want)} and the proceeding module's `TERMS` {sorted(terms)} differ",
+                          "modules/social_contest/proceeding.py -- TERMS",
+                          needs="a `TERMS` key for every `bound: module` member and a member for every key",
+                          law="B24p.05 -- the roster is the only door into the obstacle, for the module's terms as for the host's")
+    return True
+
+
+def check_module_terms() -> bool:
+    """`True` once the module's `TERMS` have been read against the roster's `bound: module` members, `False` while the module is not registered."""
+    return _module_terms_checked()
 
 
 def obstacle_operands(fx: Any, facts: dict) -> dict:
@@ -710,6 +737,7 @@ def obstacle_operands(fx: Any, facts: dict) -> dict:
     operand times a step, in roster order). `facts` is what the act is: its `verb`, the `opposition` its builder read (`None`
     for nobody), the room's `reception` and the `circumstance` rows it selected and read, and (B05.21) the `docketed` arrangement row (or `None`),
     whether a bench `heard` the act, and the counterparty's signed `regard` (or `None`). `contest_input` and `believed_input` reach it through `_frame` alone, so they cannot compose different obstacles."""
+    check_module_terms()                       # the module's half of the roster, read at the first record built (B24p.05; `False` until it registers)
     fields: dict = {}
     operands: list = []
     for name, read in OBSTACLE_TERMS.items():

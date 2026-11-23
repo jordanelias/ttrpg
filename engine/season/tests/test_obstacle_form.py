@@ -33,7 +33,7 @@ from engine.substrate import descriptors
 
 from ..data import verbs as V
 from ..data.fixtures import DEFAULT_FIXTURES, DIFFICULTY_OB_CONTROL
-from ..data.rosters import roster
+from ..data.rosters import obstacle_bound, roster
 from ..gaps import Unspecified
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver
@@ -51,7 +51,7 @@ def _fold(terms):
     return total
 
 
-ROSTER = roster("obstacle_terms", ordered=True)
+ROSTER = obstacle_bound("host")                  # B24p.05: the members the HOST reads (`bound: host`); the module-bound four are `proceeding.py`'s own
 CONDITIONAL = ("standard", "stakes", "regard")      # B05.21: members listed in an act's terms only where they weigh (the rest of the roster stands at 0.0)
 STANDING = tuple(n for n in ROSTER if n not in CONDITIONAL)
 LANE_A_STEPS = ("forgery",)                        # outside the roster (U-6); lane A's `room` step left it at B05.17 (the hostile half is the `reception` member, the rest leverage)
@@ -147,13 +147,13 @@ def test_every_roster_member_has_a_host_function():
     fields = sigma.OBSTACLE_TERMS["even"](DEFAULT_FIXTURES, {})
     assert fields == {"pool_add": DEFAULT_FIXTURES.get("pool_add")}, fields
     # the refusal at import, in both directions, on planted bindings (the import-time call is `sigma._bound_to`)
-    sigma._bound_to(dict(sigma.OBSTACLE_TERMS), "obstacle_terms")                                 # CONTROL: the shipped binding passes
+    sigma._bound_to(dict(sigma.OBSTACLE_TERMS), "obstacle_terms", members=ROSTER)                 # CONTROL: the shipped binding passes
     members = dict(sigma.OBSTACLE_TERMS)
     gone = members.pop("difficulty")
     with pytest.raises(Unspecified, match="difficulty"):                                         # a member with no function
-        sigma._bound_to(members, "obstacle_terms")
+        sigma._bound_to(members, "obstacle_terms", members=ROSTER)
     with pytest.raises(Unspecified, match="zebra"):                                              # a function with no member
-        sigma._bound_to({**sigma.OBSTACLE_TERMS, "zebra": gone}, "obstacle_terms")
+        sigma._bound_to({**sigma.OBSTACLE_TERMS, "zebra": gone}, "obstacle_terms", members=ROSTER)
 
 
 def test_the_difficulty_levels_are_sized_and_closed():

@@ -371,6 +371,33 @@ def roster_map(name: str, key: str) -> dict:
     return dict(m)
 
 
+# roster-exempt: this is the loader's own grammar -- the two values a `bound:` cell may take -- as `_ptrs`'s key names are; the MEMBERS
+# the cells sort are `rosters.yaml: obstacle_terms`, and no game fact lives here.
+_OBSTACLE_BOUND = ("host", "module")
+
+
+def obstacle_bound(side: str) -> tuple:
+    """THE MEMBERS OF `rosters.yaml: obstacle_terms` BOUND TO `side` (`host`: read by `sigma.OBSTACLE_TERMS`; `module`: supplied by the
+    proceeding module's `TERMS`), in the roster's order (B24p.05). The `bound:` column is closed both ways: a member with no cell, a cell for
+    no member, and a value but `host` or `module` are each refused, so a member is bound to exactly one reader and none is read by neither."""
+    members = roster("obstacle_terms", ordered=True)
+    bound = roster_map("obstacle_terms", "bound")
+    if side not in _OBSTACLE_BOUND:
+        raise Unspecified(f"`obstacle_terms` has no binding {side!r}", "rosters.yaml: obstacle_terms",
+                          needs=f"one of {list(_OBSTACLE_BOUND)}",
+                          law="B24p.05 -- a member is read by the host or supplied by the module, and nothing else reads the obstacle")
+    odd = {k: v for k, v in bound.items() if v not in _OBSTACLE_BOUND}
+    if odd:
+        raise Unspecified(f"`obstacle_terms` `bound:` carries {odd}, not one of {list(_OBSTACLE_BOUND)}", "rosters.yaml: obstacle_terms",
+                          needs="`host` or `module` on each member",
+                          law="B24p.05 -- another value would be a member no reader owns")
+    if set(bound) != set(members):
+        raise Unspecified(f"`obstacle_terms` members {list(members)} and their `bound:` cells {sorted(bound)} differ", "rosters.yaml: obstacle_terms",
+                          needs="a `bound:` cell for every member and a member for every cell",
+                          law="B24p.05 -- every member is bound exactly once; a member with no cell would be read by neither reader")
+    return tuple(n for n in members if bound[n] == side)
+
+
 # `_load_offices` is CALLED here, after `roster()` above: its `founding:` check reads three rosters (B04.23).
 _OFFICES_DOC = _load_offices()
 # Every authored seat, in file order. `boot/realm.py` is the caller (the `8a` overlay);
