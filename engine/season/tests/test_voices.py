@@ -13,6 +13,7 @@ import math
 from engine.dice_engine.fmath import ltr_sum
 from engine.substrate.descriptors import AFFILIATION_CONCERNS, HERITAGE_ENGAGES, PURSUITS
 
+from ..boot.realm import seed_self_knowledge
 from ..data import goals as goals_data
 from ..data import verbs as V
 from ..data.fixtures import DEFAULT_FIXTURES
@@ -37,6 +38,9 @@ def _person():
     goal = goals_data.goals()[0]
     p = Person(id="p_vc", name="p_vc", pursuits={e: 1.0 + 0.1 * i for i, e in enumerate(sorted(PURSUITS))}, stance=[(_SUBJECT, 3, 2), (_TO, 2, 4)])
     p.tenures.append(Tenure("t_vc", p.id, goal.id, "commit", 0))
+    w = P.tiny_world()
+    w.persons[p.id] = p
+    seed_self_knowledge(w)      # B10.65: he recognises every pursuit he holds, as the realm builds him
     return p, Question(f"q:need:{goal.id}", "need", (_SUBJECT,), goal.id)
 
 

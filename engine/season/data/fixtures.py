@@ -1328,6 +1328,11 @@ DEFAULT_FIXTURES = Fixtures(
     # while no row authors an offset, which is every shipped row. [ASSUMPTION; medium; Jordan to correct; revert: none needed, no row authors an offset.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-481 -- site: Fixtures manner_offset_bound, graded `assumption`; CL-PERSON drafts +-0.15 and no live reading fixes it, so it is injected and swept 0.1 / 0.15 / 0.3]
     manner_offset_bound=0.15,          # `H-481`, swept 0.1 / 0.15 (SHIPPED, CL-PERSON's draft) / 0.3
+    # `H-483` (B10.65; `U5a_CHAR_self_knowledge_is_a_belief` edit 6 (a)). THE LEAST A TOLD `self:<key>` CLAIM MUST WEIGH FOR HIM TO TAKE IT UP: `queries/person_q.py::knows_self` reads a
+    # told claim by `teller_weight` (his regard for the teller, in `[0, 1]`) and counts it only at or above this; a claim he made of himself (no chain) is never weighed. `0.0` is the
+    # CONTROL and SHIPS: every told claim is taken up, as an unweighed read does, and the fixture is read only where a told self-claim is the best he holds. [ASSUMPTION; medium; Jordan to correct; revert: 0.0.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-483 -- site: Fixtures self_told_floor, graded `assumption`; no document gives how far he must credit a teller before he believes a thing of himself, so it is injected at the control and swept 0 / 0.5 / 0.75]
+    self_told_floor=0.0,               # `H-483`, swept 0 (control, SHIPPED) / 0.5 / 0.75
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

@@ -487,7 +487,7 @@ def relations_of(r: dict) -> tuple:
 
 
 def unaware_of(r: dict) -> frozenset:
-    """`Person.unaware`'s authored source (B10.64, `U5a` edit 2): the row's `unaware:` list, as a frozenset of the keys he is not aware of in himself, or
+    """THE KEYS A CAST ROW MARKS UNAWARE (B10.64, `U5a` edit 2): the row's `unaware:` list, as a frozenset of the keys `boot/realm.py::seed_self_knowledge` seeds no `self:` claim for, or
     `frozenset()` where nothing is authored -- the key absent, `unaware: null`, or no row at all. Each key must be a `data/rosters.py::SELF_BELIEVED` member
     (`rosters.yaml: self_believed` and the pursuit roster) AND a key the row actually holds: a pursuit its `convictions:` names (`pursuits_of`), the gift its
     `ts:` authors (`thread_sensitivity_of`). A `unaware:` that is no list, a key outside the roster, a key the row does not hold and a repeat REFUSE, naming

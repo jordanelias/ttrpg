@@ -354,10 +354,11 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 if row.counterparty and row.self_counterparty_refused(ops.get(row.counterparty), p.id):
                     continue
                 # B10.59: WHAT HE CAN READ OFF HIMSELF, ASKED OF THIS CANDIDATE'S OWN BINDING (the K-3 branch above says why).
-                # B10.64: `believes=True` -- the PERSON'S answer for a key he is marked unaware of is his own `self:<key>` claim, so the two readers differ
-                # for him alone and by design: he does not deliberately read a Thread he does not know he reads, and a hand-built act still folds.
+                # B10.64, B10.65: `believes=True` -- the PERSON'S answer for a key in `SELF_BELIEVED` is his own `self:<key>` claim (read by `weigh`, so a claim he was told is
+                # graded by his regard for the teller), so the two readers differ for him alone and by design: he does not deliberately read a Thread he does not know he
+                # reads, and a hand-built act still folds.
                 if own_read:
-                    own_verdict = evaluate(row.requires_typed, OwnStateReader(p, fx, believes=True), binding_of(p.id, ops)).value
+                    own_verdict = evaluate(row.requires_typed, OwnStateReader(p, fx, believes=True, weigh=weigh), binding_of(p.id, ops)).value
                     if own_verdict is False or (own_only and own_verdict is not True):
                         continue
                 # `19`: THE SEAT THE ACT WILL BE EXERCISED THROUGH rides into the belief test as it rides

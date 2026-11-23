@@ -7143,6 +7143,19 @@ rows:
     cite:      "`proposals/2026-10-24-character-layers-v2.md` section 2 (overridden for three axes, plus or minus 0.15) and section 11.4; A-108 (`ED-IN-0261`'s superseding row, 2026-11-12: a person may carry a stored offset on each manner axis). [ASSUMPTION; medium; Jordan to correct: that the bound is 0.15 and a Fixtures field rather than a roster number, because `data/fixtures.py` imports `data/cast.py` and the loader takes it as an argument; that no manner axis feeds the refusal gate (M37, section 11.5), so `projected_axes` takes a `manner` keyword and `refusal_tolerance` alone passes False.] FALSIFIER `engine/season/tests/test_manner_offsets.py::test_a_manner_offset_does_not_move_the_refusal_threshold` (two persons with identical pursuits and opposite offsets on the refused axis hold one threshold; planted failure, the gate reading the offset: red) and `::test_two_persons_with_identical_pursuits_differ_by_their_offsets`; CONTROL with every offset absent, `projected_axes` for every cast person and the realm's executed-act and Event tallies at seeds 0 to 2, one season, equal the tree before, and the content hash moves by encoding only (a new field on `Person`)."
     source:    "workplan v12 B10.58 (`IS-B2-CHAR-07`; B10's H block slot 18)"
 
+  - id:        H-483
+    tier:      1
+    hole:      "HOW FAR A PERSON MUST CREDIT A TELLER BEFORE HE BELIEVES WHAT HE IS TOLD OF HIMSELF -- `self_told_floor` (B10.65; `U5a_CHAR_self_knowledge_is_a_belief` edit 6 (a)). `queries/person_q.py::knows_self` reads a claim he holds of himself, `self:<key>`, and counts a claim he was TOLD only where `decision/options.py::teller_weight` (his regard for the teller, in the interval 0 to 1) puts it at or above this; a claim he made of himself is never weighed. The source says only that he may disbelieve it, and no document gives how much credit is enough."
+    kind:      "NUMBER"
+    owner:     "queries/person_q.py::knows_self"
+    grade:     "assumption"
+    default:   "0.0 -- THE CONTROL, SHIPPED: every told self-claim is taken up, and the fixture is read only where a told self-claim is the best he holds of himself, which no shipped claim is, so it moves nothing at the control [ASSUMPTION; medium; Jordan to correct; revert: 0.0]"
+    site:      "Fixtures self_told_floor, read by `queries/person_q.py::knows_self` (through `OwnStateReader` built with `believes` and the `weigh` of `decision/options.py::ledger_weigh`) only for a told claim of `self:<key>`; the sheet and the reason trail read his own ledger unweighed"
+    sweep:     ["0 (control, SHIPPED)", "0.5", "0.75"]
+    unblocks:  "B98's flip of the floor, and the case where a man is talked into a false view of himself"
+    cite:      "`proposals/2026-11-12-subsystem-audit-suite/proposals/U5a_CHAR_self_knowledge_is_a_belief.md` Exact edits 6 (a) and Gate 3 (a told claim from a person he holds low regard for leaves his reader at UNKNOWN below the confidence the reader requires; from one he trusts the candidate forms). [ASSUMPTION; medium; Jordan to correct: that the floor is on the teller's weight (`teller_weight`, told_weight to the power of the hops times the relation to the teller) and not on the claim's confidence, which fades for a claim he made himself; that a claim he made of himself is never weighed.] FALSIFIER `engine/season/tests/test_self_knowledge.py::test_a_told_self_claim_is_weighed_by_regard_for_the_teller` (at a planted floor of 0.5 a told claim from a teller he disregards leaves him forming no Thread read and one from a teller he trusts admits it; at the floor 0 both admit it); CONTROL `self_told_floor` 0, every told claim taken up."
+    source:    "workplan v12 B10.65 (`U5a_CHAR_self_knowledge_is_a_belief` edit 6 (a); B10's H block slot 19)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

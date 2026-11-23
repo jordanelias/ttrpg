@@ -24,6 +24,7 @@ import pathlib
 
 import pytest
 
+from ..boot.realm import seed_self_knowledge
 from ..data import cast, files
 from ..data.matrix import matrix_row
 from ..data.requires import SENSITIVITY_STEMS, UNKNOWN, WORLD_ONLY_STEMS, binding_of, evaluate
@@ -49,6 +50,7 @@ GATE = P.DEFAULT_FIXTURES.get("thread_sensitivity_gate")
 def _world(ts, fixtures=None):
     w = P.tiny_world(fixtures) if fixtures is not None else P.tiny_world()
     w.persons[ACTOR].thread_sensitivity = ts
+    seed_self_knowledge(w)       # B10.65: he holds the gift and knows he does, as the realm builds him
     return w
 
 

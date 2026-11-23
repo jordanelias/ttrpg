@@ -50,7 +50,7 @@ from ..data.requires import (
     UNKNOWN, WORLD_ONLY_STEMS,
 )
 from ..data.rosters import (
-    AFFILIATIONS, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, capability_rows, require_use_site,
+    AFFILIATIONS, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
     roster, roster_map,
 )
 from ..state.carriers import Person, PersonInterior, Said
@@ -1544,18 +1544,36 @@ def _held_at(p: Person, key: str):
 SELF_STEM = "self:"
 
 
-def knows_self(p, key: str) -> bool:
-    """THE ONE READER OF WHETHER A PERSON RECOGNISES `key` IN HIMSELF: True for a key he is not marked unaware of (`p.unaware`), and for a marked one only
-    where his own ledger holds `self:<key>` as True (the latest claim, `LedgerReader`'s comparator). Person-side (AX-2): his ledger and his id, nothing else.
-    ARMED ONLY FOR A MARKED PERSON until `B10.65` seeds the claims for everybody (`Person.unaware` says why): an unmarked person keeps today's answer."""
-    if key not in p.unaware:
+def holds_self_key(p, key: str) -> bool:
+    """WHETHER `p` HOLDS `key`, a member of `data/rosters.py::SELF_BELIEVED`: a pursuit he has a weight on, or the gated gift's field authored (not `None`).
+    The one test `boot/realm.py::seed_self_knowledge` asks of a person, so the keys it seeds are the keys `knows_self` is asked of."""
+    if key in PURSUITS:
+        return key in (p.pursuits or {})
+    return _held_at(p, key) is not None
+
+
+def knows_self(p, key: str, weigh=None, fx=None) -> bool:
+    """THE ONE READER OF WHETHER A PERSON RECOGNISES `key` IN HIMSELF: True for a key outside `data/rosters.py::SELF_BELIEVED` (known by construction), and for a member
+    where his own ledger holds `self:<key>` as True (the best-supported, then latest claim, `LedgerReader`'s comparator), and False where it holds none -- a person marked `unaware:` at build is seeded none (`boot/realm.py::seed_self_knowledge`).
+    Person-side (AX-2): his ledger and his id, nothing else.
+
+    A claim he made of himself (firsthand, no chain) is believed as it stands, so it never fades out of him. A claim he was TOLD is believed only where `weigh` (his
+    reading of the teller, `decision/options.py::ledger_weigh`, built by the caller because this module may not import `decision/`) puts it at or above
+    `Fixtures.self_told_floor` (H-483; read only here, only for a told claim, and `0.0` at the control believes every one). Without a `weigh` a told claim is read as it stands."""
+    if key not in SELF_BELIEVED:        # a key outside the roster is known by construction, as it always was
         return True
-    return LedgerReader(p.ledger).read(p.id, SELF_STEM + key) is True
+    mine = [c for c in p.ledger if c.subject == p.id and c.predicate == SELF_STEM + key]
+    best = LedgerReader(mine, weigh).belief_among()
+    if best is None or best.value is not True:
+        return False
+    if best.chain and weigh is not None and fx is not None:
+        return weigh(best) >= fx.get("self_told_floor")
+    return True
 
 
 def recognised(p, mapping) -> dict:
     """`mapping` (a pursuit-keyed map: his weights, his scar counts) with the keys he does not recognise in himself taken out -- the one filter his sheet
-    reads (`decision/sheet.py`). A key outside `SELF_BELIEVED` is always recognised."""
+    reads (`decision/sheet.py`). A key outside `SELF_BELIEVED` is always recognised (`knows_self`)."""
     return {k: v for k, v in dict(mapping or {}).items() if knows_self(p, k)}
 
 
@@ -1580,15 +1598,15 @@ class OwnStateReader:
         is an individual, each of HIMSELF: `held_by` and `dispute` asked of the actor, `individual` of the actor's own id.
         UNKNOWN for anybody else, so a conjunct this reader cannot answer never declines (`opening_set` declines on False).
 
-      * `believes=True` (B10.64, the PERSON'S side only: `decision/options.py::opening_set` passes it, the fold's `WorldReader` does not) -- a key he is
-        marked unaware of (`Person.unaware`) is answered from his own claim `self:<key>` (`knows_self`): held, the field's value; not held, UNKNOWN. The fold's
-        read of the field is unchanged, so a hand-built act still folds.
+      * `believes=True` (B10.64, B10.65; the PERSON'S side only: `decision/options.py::opening_set` passes it with his `weigh`, the fold's `WorldReader` does
+        not) -- the gated gift is answered from his own claim `self:<key>` (`knows_self`) for EVERY person: held, the field's value; not held (a mark at build,
+        or a told claim from a teller he disregards, `Fixtures.self_told_floor`), UNKNOWN. The fold's read of the field is unchanged, so a hand-built act still folds.
 
     ⚠ THE KEY AND THE FIXTURE ARE THE `own_state_gate` ROW'S (`rosters.yaml: tables.capability_uses`, B04.06); the two stems
     are the verb table's grammar and stay. A site with no row answers UNKNOWN to both."""
 
-    def __init__(self, p: Person, fx, *, believes: bool = False):
-        self._p, self._fx, self._believes = p, fx, believes
+    def __init__(self, p: Person, fx, *, believes: bool = False, weigh=None):
+        self._p, self._fx, self._believes, self._weigh = p, fx, believes, weigh
 
     def read(self, subject, predicate: str):
         stem, _, arg = str(predicate).partition(":")
@@ -1610,7 +1628,7 @@ class OwnStateReader:
             return UNKNOWN
         if stem == "thread_sensitivity":
             v = _held_at(self._p, row.key) if subject == me else None
-            if self._believes and not knows_self(self._p, row.key):     # B10.64: HIS OWN CLAIM, NOT THE FIELD (the fold's reader is built without `believes`)
+            if self._believes and not knows_self(self._p, row.key, self._weigh, self._fx):     # B10.64: HIS OWN CLAIM, NOT THE FIELD (the fold's reader is built without `believes`)
                 return UNKNOWN
             return UNKNOWN if v is None else v
         if stem == "thread_sensitivity.gate":
@@ -1666,7 +1684,9 @@ def said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 
     passes on the belief he acts on. `None` (a hand-built read) is the plain comparator. ⚠ `LedgerReader._support`
     under a `weigh` ranks `latest_about` ACROSS predicates: a person passes on what he is SUREST of about a subject, not
     the newest thing he holds (decided at B09.07, `16_PESSIMIST_SC_B`)."""
-    pool = [c for c in claims if c.subject == subject] if claims else []
+    # B10.65: A MAN'S OWN `self:<key>` CLAIM IS WHAT HE BELIEVES OF HIMSELF, NOT HEARSAY, so it is never offered as news about himself (the seeding would otherwise make every holder a teller of his
+    # own motives). Only the claim he made himself is skipped (no chain, held by its subject): a `self:` claim he was TOLD (a chain) is deposited as any told claim and is still said.
+    pool = [c for c in claims if c.subject == subject and not (c.predicate.startswith(SELF_STEM) and not c.chain and c.holder == subject)] if claims else []
     if teller is not None and fx is not None and pool and _slant(fx) == "valence":
         axis_w = projected_axes(teller, fx.get("scar_weight_shift"))
         strength = {id(c): abs(deed_valence(axis_w, c)) for c in pool}
