@@ -282,9 +282,9 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
         # COMMIT DEPTH — disposition lean + wariness skew a Beta over [2,5] (the commitment-recovery spectrum). The
         # draw + skew live in systems.commit_depth; the wrapper just sequences it and emits (orchestrator owns no formula).
         commit, _ba, _bb, _ln = S.commit_depth(aggressor, defender, cfg, rng, TR)
-        _emit('commit', aggressor=_agg0, defender=_def0, commit=round(commit,2), beta_a=round(_ba,3), beta_b=round(_bb,3), stance_lean=round(_ln,3))
-        if commit>=cfg['LUNGE_COMMIT'] and rng.random() < S.lunge_quality(aggressor, cfg):
-            aggressor.lunge_depth = min(1.0, (commit-cfg['LUNGE_COMMIT'])/cfg['LUNGE_DEPTH_SCALE'])   # a deep thrust BECOMES a lunge (gated stochastically by lunge_quality: rapier readily, a cutter never) — its DEPTH scales with commit (CONTINUOUS); the extended body -> lower recovery (recoverability_factor) + more readable (legibility)
+        _emit('commit', aggressor=_agg0, defender=_def0, commit=round(commit,2), deep=round(S.deep_commit(aggressor, cfg),2), beta_a=round(_ba,3), beta_b=round(_bb,3), stance_lean=round(_ln,3))
+        if commit>=S.lunge_commit(aggressor, cfg) and rng.random() < S.lunge_quality(aggressor, cfg):
+            aggressor.lunge_depth = min(1.0, (commit-S.lunge_commit(aggressor, cfg))/cfg['LUNGE_DEPTH_SCALE'])   # a deep thrust BECOMES a lunge (gated stochastically by lunge_quality: rapier readily, a cutter never) — its DEPTH scales with commit (CONTINUOUS); the extended body -> lower recovery (recoverability_factor) + more readable (legibility)
         aggressor.stamina-=S.act_cost(aggressor,commit,cfg)
         ready[aggressor]-=cfg['RECOVERY_TEMPO_K']*(commit-2.0)*S.recoverability_factor(aggressor,cfg)   # TEMPO is coupled to RECOVERY: a deep, hard-to-recover commit (a heavy or lunged blow) leaves you SLOWER to act again — the next action waits on the recovery; a feint (commit~2, full recovery) costs no tempo. Non-linear in weight via recoverability_factor.
         oob=cfg['OOB'] if aggressor.stamina<=0 else 0
@@ -324,8 +324,8 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
         # steals the Vor. Per-tradition: in a bind (winding) German tactile+leverage steals hardest; open, Italian tempo.
         # INDES STEAL — systems computes the steal AMOUNT + the counter selection; the wrapper APPLIES the mutation.
         counter_attempt=False
-        if read_win and commit>=cfg['DEEP_COMMIT']:
-            steal=S.indes_steal_amount(defender, mode==V.DEF_WIND, commit, read_d, read_a, cfg, TR)
+        if read_win and commit>=S.deep_commit(aggressor, cfg):
+            steal=S.indes_steal_amount(aggressor, defender, mode==V.DEF_WIND, commit, read_d, read_a, cfg, TR)
             defender.initiative=S.clamp_initiative(defender.initiative+steal, cfg)
             aggressor.initiative=S.clamp_initiative(aggressor.initiative-steal, cfg)
             counter_attempt=S.counter_select(defender, cfg, rng, TR)
@@ -386,7 +386,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
         slip_inside = (S.reach_base(defender,cfg) < S.reach_base(aggressor,cfg)
                        and S.reflex(defender,cfg) >= S.reflex(aggressor,cfg))
         agg_head = getattr(aggressor,'sel_head',None) or aggressor.w['head']   # I4/D5: the SELECTED head, native fallback only when unset
-        if (agg_head==V.HEAD_POINT and commit>=cfg['DEEP_COMMIT'] and not hit and read_win and (beat_aside or slip_inside)):
+        if (agg_head==V.HEAD_POINT and commit>=S.deep_commit(aggressor, cfg) and not hit and read_win and (beat_aside or slip_inside)):
             if rng.random() < cfg['DISPLACE_P']:
                 opening_created=True   # CONTACT AXIS precondition site 1: the point set aside / the defender inside
                 if not closed: closed=True; measure_gap=0.0; ready=_carry(ready,cfg)
@@ -400,7 +400,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
         # ---- distance-creating moments for re-opening (corrections 1+3), benefiting the LONGER weapon ----
         # (a) opponent over-committed: a deep commit by the SHORTER weapon (the one who must stay close) leaves it
         #     recovering balance -> the longer weapon can make distance next beat.
-        if closed and aggressor is shorter and commit>=cfg['DEEP_COMMIT']:
+        if closed and aggressor is shorter and commit>=S.deep_commit(aggressor, cfg):
             reopen_moment=True; opening_created=True   # CONTACT AXIS precondition site 2: the over-committed shorter fighter is exposed
         # (b) the longer weapon, defending, won a defensive maneuver (bind/parry/deflect) this exchange -> a gap opens.
         if closed and defender is longer and (bind or (deg in ('fail','partial') and not hit)):

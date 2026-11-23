@@ -155,7 +155,7 @@ CFG = dict(
   REC_I_REF=0.139, REC_S_REF=0.212, REC_GRIP_REF=0.255,   # [SIM-CALIBRATE] anchor MoI / static-moment / grip_len in METRES (U0: 0.85 lu ×0.30 — ~1.4kg 2H cut-thrust blade) -> the scale-setter, recoverability 1.0
   ARREST_STR_K=0.05,   # PC-20 (4), AR-13 (Strength counterbalances heft): systems.recoverability_factor multiplies the WHOLE mode's irrecoverability by 1 - ARREST_STR_K*(strength - NEUTRAL['strength'])*wield_heft*(1 - pc) (no clamp of its own; RECOVER_FLOOR bounds the product; the term is scaled by the swung share (1 - pc) but the factor it scales multiplies the thrust component too at 0 < pc < 1), so a strong fighter arrests his own swing sooner (smaller overcommit_exposure, smaller tempo cost of a deep commit) and a weak one later, in proportion to the heft arrested; 0 at Strength 4. [SIM-CALIBRATE; ASSUMPTION; medium; Jordan to correct; revert: 0.0, the control, which reproduces the PC-20 (3) tree.] RULE: the middle grid member of the range over which (a) the factor stays above 0 for a Strength-7 fighter at the roster's heaviest wield_heft with no thrust share (guandao 3.116 at grip 0: ARREST_STR_K < 1/(3*3.116) = 0.107; above it Strength stops mattering at the top of the scale, a cliff), and (b) ED-1040's observable (str-2 greatsword mirror draw rate, n=3000) and every matchup family's pooled draw rate (weapon n=1000/weapon vs arming, attribute n=3000, tradition n=500/pair; balance.winrate, PYTHONHASHSEED=0) stay inside their ARREST_STR_K=0 Wilson 95% intervals. The draw bound does NOT bite on the grid .025 .05 .075 .1 (the weapon and tradition families fight at Strength 4, where the term is 0), so (a) alone bounds the range (0, .107); .05 is the grid member nearest its midpoint.
   REC_S_FLOOR=0.3, REC_THRUST_BASE=1.0, REC_W2=0.6, REC_K_COUPLE=0.9, REC_CTRL_K=0.3, RECOVER_FLOOR=0.3,   # [FIAT] swing static-moment floor / thrust anchor / 2H-couple gains / control-credit / lower bound
-  CHOKE_DRIVE_REF=1.5, LUNGE_DEPTH_SCALE=4.0,   # [FIAT] close_unwieldiness to fully gather; commit over LUNGE_COMMIT for a full-depth lunge
+  CHOKE_DRIVE_REF=1.5, LUNGE_DEPTH_SCALE=4.0,   # [FIAT] close_unwieldiness to fully gather; commit over `lunge_commit` (the window's upper third, LUNGE_FRAC) for a full-depth lunge
   # WIELDING heft (tempo/stamina/strength COST) — DERIVED from the g-aware swing inertia (WP.at_grip I_g), a
   # COMPRESSED power-law (like agility) so the ~1000x MoI range maps to a sane spread; anchored at REC_I_REF so the
   # 2H cut-thrust reference ~= 1.0 (the old heavy heft). The half-
@@ -260,7 +260,7 @@ CFG = dict(
   # CONTINUOUS commitment (the commitment-recovery axis is a SPECTRUM, not 4 rungs): commit ~ 2 + 3*Beta(a,b),
   # with the disposition+wariness skew _k shaping the Beta (neutral a=b -> centred ~3.5; aggressive -> toward 5;
   # cautious/wary -> toward 2). Param floor 0.25 = the spread-floor. Replaces the old integer {2,3,4,5} draw.
-  COMMIT_BETA_BASE=1.2, COMMIT_BETA_K=0.6, LUNGE_COMMIT=4.0,   # LUNGE_COMMIT: a THRUST committed at/above this depth IS a lunge (the body extends — reach+commitment, low recovery, more readable)
+  COMMIT_BETA_BASE=1.2, COMMIT_BETA_K=0.6, LUNGE_FRAC=2/3,   # LUNGE_FRAC: a THRUST committed at/above `S.lunge_commit` (this fraction of the beat's window, from its floor 2) IS a lunge (the body extends — reach+commitment, low recovery, more readable)
   # No imposition gate (Jordan, 2026-07-23, ED-PC-0023: top-down scripting that FORCED a tradition's preferred node
   # over the emergent bind/counter resolution — the antithesis of "each combatant resolves in a way that feels correct
   # to their style"). Tradition preference EMERGES from BUILD: a fighter binds more because they INVESTED in it (skill('bind') + a bind-friendly
@@ -284,14 +284,18 @@ CFG = dict(
   # ── PC-15: thresholds lifted from wrapper.py / combat_systems.py literals (each was inline; values and meanings kept).
   # CLOSE_GAP_REF (above) is ALSO the one reach-gap threshold at the other three sites
   # (re-presentation gate, reopen, disengage): a reopened gap at or below it re-closes at the approach step, so "a gap worth
-  # acting on" and the closed latch are one fact. DEEP_COMMIT: the commit depth at/above which a commit is DEEP (the Indes
-  # steal, the displace-and-step-inside route, and the shorter fighter's over-commit reopen moment); it is also the anchor
-  # the Indes scale is centred on (scale 1.0 at DEEP_COMMIT). LUNGE_COMMIT stays its own key (a lunge is a different fact,
-  # though both read 4.0 today), and the ramp in systems.mode_sigma (3 to 4) is a formula coefficient, not moved.
+  # acting on" and the closed latch are one fact. DEEP_FRAC: where the DEEP tier begins, as a fraction of the commit window
+  # `S.commit_depth` draws in this beat (`S.deep_commit` = 2 + DEEP_FRAC * the window's span: the lower edge of its upper third).
+  # Deep gates the Indes steal, the displace-and-step-inside route and the shorter fighter's over-commit reopen moment; it is also
+  # the anchor the Indes scale is centred on (scale 1.0 at the deep edge). A threshold on a drawn quantity is stated in the
+  # quantity's live range: the keys this replaced (4.0, set when the window was [2, 5]) sat in the top 1.5% of the closed
+  # window [2, ~4.03], about 1% of exchanges. At full room (range_avail >= RANGE_COMMIT_PEAK) the edge is exactly 4.0, as shipped.
+  # LUNGE_FRAC stays its own key (a lunge is a different fact, though both read 2/3 today), and the ramp in systems.mode_sigma
+  # (3 to 4) is a formula coefficient, not moved.
   # STAMINA_COLLAPSE: a fighter whose stamina is at or below this ends the burst. BEAT_BUDGET: the engagement's beat
   # ceiling (was soft*3 with soft=8). RIPOSTE_CAP: the ceiling on the riposte chance after the overcommit add-on.
   # CONTACT_*: the grapple branch effects, as multiples of the existing structure/initiative constants.
-  DEEP_COMMIT=4.0, STAMINA_COLLAPSE=-4, BEAT_BUDGET=24, RIPOSTE_CAP=0.95,
+  DEEP_FRAC=2/3, STAMINA_COLLAPSE=-4, BEAT_BUDGET=24, RIPOSTE_CAP=0.95,
   CONTACT_DISARM_POISE_K=2.0, CONTACT_THROW_POISE_K=3.0, CONTACT_CONTROL_VOR_K=0.5,
 
   # ── contact axis (I7b, D8/D9): grab affinity derives from free-hand availability + LEVERAGE ONLY —

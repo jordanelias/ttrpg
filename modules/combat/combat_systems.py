@@ -985,7 +985,8 @@ def commit_depth(aggressor, defender, cfg, rng, TR):
     SWING-ROOM (I5, D4): the Beta's UPPER SUPPORT is contracted by range_avail's _commit_range_factor (a swing you
     cannot fully develop commits shallower) — reshapes the Beta PARAMS/window only, never adds or reorders the
     single draw (seeded determinism). At range_avail>=cfg['RANGE_COMMIT_PEAK'] (the default, 1.0) the window is the
-    full [2,5]."""
+    full [2,5]. An exchange is fought closed, where the window is AS DRAWN [2, ~4.03] (factor ~0.676; at most [2, ~4.14]):
+    the DEEP and LUNGE tiers are stated in this window (`deep_commit`, `lunge_commit`), not in [2,5]."""
     ln=disp_lean(aggressor)
     wary=cfg['WARINESS_K']*(1-TR.familiarity(aggressor.tradition, defender.tradition))   # >=0, biases shallow
     g=cfg['COMMIT_BETA_K']*(cfg['DISP_COMMIT_K']*ln - wary)
@@ -993,6 +994,19 @@ def commit_depth(aggressor, defender, cfg, rng, TR):
     span=3.0*_commit_range_factor(getattr(aggressor,'range_avail',1.0), cfg)
     commit=2.0+span*float(rng.beta(ba,bb))   # Beta draw (`Draw.beta`)
     return commit, ba, bb, ln
+
+def deep_commit(aggressor, cfg):
+    """The depth at/above which a commit is DEEP this beat: the lower edge of the upper third of the window `commit_depth` draws in
+    (`2 + DEEP_FRAC * span`, the ONE owner of "deep"). At full room (`range_avail >= RANGE_COMMIT_PEAK`) exactly 4.0; an exchange
+    is fought closed, where the window is about [2, 4.03] and the edge about 3.35. Pure."""
+    span=3.0*_commit_range_factor(getattr(aggressor,'range_avail',1.0), cfg)
+    return 2.0+cfg['DEEP_FRAC']*span
+
+def lunge_commit(aggressor, cfg):
+    """The depth at/above which a THRUST is a lunge this beat: `deep_commit`'s form over its own key (`LUNGE_FRAC`; a lunge is a
+    different fact from deep, equal today). The reference of `LUNGE_DEPTH_SCALE`. Pure."""
+    span=3.0*_commit_range_factor(getattr(aggressor,'range_avail',1.0), cfg)
+    return 2.0+cfg['LUNGE_FRAC']*span
 
 def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d, cfg, rng, TR):
     """The defender's READ of the attack + the resulting mode selection. read_d (visual+precommit, familiarity-
@@ -1016,11 +1030,12 @@ def read_contest(aggressor, defender, commit, consistency_a, mental_fat_d, fat_d
     mode=max(msig,key=msig.get) if read_win else modes[rng.below(3)]   # uniform int (`Draw.below`)
     return dict(read_win=read_win, read_d=read_d, read_a=read_a, p_read=p_read, mode=mode, msig=msig)
 
-def indes_steal_amount(defender, wind, commit, read_d, read_a, cfg, TR):
+def indes_steal_amount(aggressor, defender, wind, commit, read_d, read_a, cfg, TR):
     """The Indes / sen-no-sen initiative-steal AMOUNT: a defender who out-read a deep commit steals the Vor, scaled
-    by commit-depth x read-margin (bounded). Pure — the wrapper applies the clamp/mutation."""
+    by commit-depth x read-margin (bounded); the scale is 1.0 at `deep_commit(aggressor, cfg)`, the deep edge of the window the
+    commit was drawn in. Pure — the wrapper applies the clamp/mutation."""
     indes_scale=max(cfg['INDES_SCALE_FLOOR'], min(cfg['INDES_SCALE_CEIL'],
-                    (1+cfg['INDES_COMMIT_K']*(commit-cfg['DEEP_COMMIT']))*(1+cfg['INDES_READ_K']*(read_d-read_a))))
+                    (1+cfg['INDES_COMMIT_K']*(commit-deep_commit(aggressor, cfg)))*(1+cfg['INDES_READ_K']*(read_d-read_a))))
     return cfg['INIT_STEAL_INDES']*init_steal_factor(defender, wind, cfg, TR)*indes_scale
 
 def counter_select(defender, cfg, rng, TR):
