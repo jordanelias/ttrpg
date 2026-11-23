@@ -314,9 +314,19 @@ def seat_hold(w: "World", actor: Optional[str], via: Optional[str]) -> Optional[
 def _seat_grants(w: "World", actor: Optional[str], via: Optional[str], act: str) -> bool:
     """`actor` SITS in `via` (`seat_hold`) AND the hold's GRANT snapshot (`Tenure.granted_acts`, `13e` --
     never the office's live field) carries `act`: the first two conjuncts every remit-act basis
-    (`may_determine`, `may_warrant`, `may_seize`, `may_muster`) opens with."""
+    (`may_determine`, `may_warrant`, `may_seize`, `may_muster`, `may_cede`) opens with -- AND `actor` is
+    not in custody (B21.11, A-23: a holder detained acts through no seat; *custody suspends, it does
+    not vacate*, so `seat_hold` is untouched and the `hold` stays live for the day he is pardoned).
+    The custody read is the live `detain` the actor owns, the edge `world_q.restrained(w, actor,
+    DETAIN_KIND)` answers for a Query; `state/` may not import a Query (`04` §A.2), so the same scan is
+    spelt here over the actor's own Tenures (`DETAIN_KIND`, the one owner of the kind's name). Its
+    mirror on the person side is `decision/options.py::seat_of`, so a candidate is not formed on a
+    seat this refuses."""
     t = seat_hold(w, actor, via)
-    return t is not None and act in t.granted_acts
+    if t is None or act not in t.granted_acts:
+        return False
+    person = w.persons.get(actor)
+    return person is None or not any(d.kind == DETAIN_KIND and d.live for d in person.tenures)
 
 
 def seat_faction(w: "World", via: Optional[str]) -> Optional[str]:

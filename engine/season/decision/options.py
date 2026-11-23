@@ -29,7 +29,7 @@ from ..data.requires import (
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
 )
 from ..data.rosters import (
-    CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, SUCCESSIONS,
+    CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, DETAIN_KIND, PERSON_PREDICATES, PURSUIT_AXES, SUCCESSIONS,
     capability_rows, FACTION_BY_PROP, refusable, refusing_pole, remove_distance, require_member, require_use_site,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
@@ -724,7 +724,15 @@ def seat_of(p: Person, c: Candidate) -> Optional[str]:
     """THE SEAT A CANDIDATE'S ACT IS EXERCISED THROUGH -- the one `pack_scenes` puts on `Act.via`.
     The seat `opening_set` formed it for where it chose among several (`VIA` in its operands); else
     `exercised_seat`'s, which is the only seat there is. One reader, so a Candidate and the act
-    minted from it cannot name two seats."""
+    minted from it cannot name two seats.
+
+    NONE FOR A HOLDER IN CUSTODY (B21.11, A-23): a live `detain` he owns suspends every seat he holds
+    (`state/gate.py::_seat_grants` refuses the act through it), so no seat-gated candidate forms --
+    formation follows admission. The seat's `hold` is untouched: custody suspends, it does not vacate.
+    The scan is `world_q.restrained(w, p, DETAIN_KIND)`'s, spelt over the person's own Tenures because
+    a `decision/` reader holds no `World`."""
+    if any(t.kind == DETAIN_KIND and t.live for t in p.tenures):
+        return None
     seat = (c.operands or {}).get(VIA)
     return seat if seat is not None else exercised_seat(p, VERB_TABLE.get(c.verb))
 
