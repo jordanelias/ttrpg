@@ -4,6 +4,7 @@ Inputs: two `combatant.Combatant` objects, `config.CFG` (or a `cfg` passed in) a
 reaches it through `fight.py`. Here `engagement`
 assigns aggressor/defender ONCE per beat and passes Combatant objects to every subsystem (`combat_systems`, `core`,
 `contact`, `tradition`), the structural cure for the role-inversion bug class: nothing ever indexes raw 'A'/'B'."""
+from engine.dice_engine import draw as KD   # the one keyed draw (`H2`, `seeded`): the per-blow coverage-gap draw below forms its key from the fight's own
 from . import core, combat_systems as S, tradition as TR, contact as CT
 from . import vocabulary as V   # the token ALPHABET, owned once (ED-PC-0042)
 from .config import CFG
@@ -20,17 +21,18 @@ def _emit(kind, **data):
     if _TRACE is not None:
         _TRACE(dict(kind=kind, **data))
 
-def _wound(source, by, victim, damage):
+def _wound(source, by, victim, damage, bare=None):
     """The ONE damage site (PC-13): `victim.apply_wound(damage)` plus the `wound` trace event, nothing else. The event
     carries the APPLIED amount (`int(damage)`; the tracker adds `max(0, int(d))` and `apply_wound` skips `d <= 0`), so
     `sum(wound.damage per victim)` within one fight() is the tracker's `cumulative_damage` (fight() zeroes the
     tracker's damage at its start). `source` names the site (pursuit, stophit,
-    displace_graze, exchange, bind); `by` is the striker. Draws nothing and keeps no state: concentration drain,
-    stagger and every other per-site effect stay at their sites."""
+    displace_graze, exchange, bind); `by` is the striker. `bare` is the blow's coverage-gap draw (`core.bare_zone`: True a bare
+    zone, False the harness, None no draw: against `none`); the event carries it as `bare: bool`. Draws nothing and keeps no
+    state: concentration drain, stagger and every other per-site effect stay at their sites."""
     victim.apply_wound(damage)
     if _TRACE is not None and int(damage) > 0:
         _emit('wound', by=by.label, victim=victim.label, damage=int(damage), source=source,
-              wounds=victim.wt.wounds, cumulative=victim.wt.cumulative_damage, felled=bool(victim.felled))
+              wounds=victim.wt.wounds, cumulative=victim.wt.cumulative_damage, felled=bool(victim.felled), bare=bare is True)
 
 def _emit_outcome(agg0, def0, mode, deg, hit, bind, riposte, A, B):
     """The exchange's `outcome` event, emitted on the normal tail AND before each felling `return` in the exchange (PC-13)."""
@@ -78,14 +80,26 @@ def _pool_dice(c, cfg):
     return core.resolution_pool(c.score, getattr(c, "pool_addends", 0), **kw)
 
 
-def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
+def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, scene=0):
     """One round (A-101): the two close, exchange attempts to attack, and separate. `first` is the initiating Combatant
     object. `prev_closed` is the measure state the PREVIOUS engagement ended in (see the re-presentation gate below).
     Returns (felled Combatant or None, ended_closed, ended_by) — the second element threads forward as the next
     engagement's prev_closed; the third is how the round ended, a member of `vocabulary.ROUND_ENDS` ('felled' at each
     felling, else the reason of the `separation` event it emitted). A and B are fixed
     objects throughout — never swapped. `terms` is `fight`'s non-lethal duel terms (RS-25), or None under lethal
-    ones: when set, the burst ends at the first beat that opens with `_terms_met` true, and `fight` reads the stop."""
+    ones: when set, the burst ends at the first beat that opens with `_terms_met` true, and `fight` reads the stop.
+    `turn` is this round's index in the fight (1-based, the `turn_start` count) and `scene` the fight's `rng.n` where it began:
+    with the blow's index within the round they key the coverage-gap draw of each landed blow (`_strike`)."""
+    blow = 0
+    def _strike(attacker, defender, deg, **kw):
+        """`core.strike` with the blow's keyed coverage-gap draw (PC_D, A-30). Returns (damage, bare) for the caller to carry to
+        `_wound`. The key is a sub-key of the fight's own `Draw`, `H2(rng.key, "gap:<scene>:<turn>:<blow>")`: a function of the
+        fight's key and the blow's place in it, never of how many uniforms the stream has taken, so an unrelated draw added
+        elsewhere does not move which blows find a bare zone. A defender in no armour takes no draw (`core.bare_zone`)."""
+        nonlocal blow
+        blow += 1
+        bare = core.bare_zone(KD.seeded(KD.H2(rng.key, f"gap:{scene}:{turn}:{blow}")), defender.armor)
+        return core.strike(attacker, defender, deg, cfg, bare=bare, **kw), bare
     aggressor = first; defender = B if first is A else A
     # OPEN-MEASURE RESET (ED-PC-0033): a NEW engagement begins at open measure — weapons at full extension, no lunge
     # committed. The per-beat transient geometry (grip_position, lunge_depth) is otherwise carried on the Combatant
@@ -215,8 +229,10 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                     deg,net=core.resolve(pool, S.pursuit_sigma(shorter, longer, ffat[shorter], ffat[longer], cfg, TR), rng, core.ob_from_defender(longer, cfg))   # ED-PC-0036: systems.pursuit_sigma owns the formula (the whole sigma-assembly: armour, wounds, the withdrawer's attributes). Ob-from-defender (ED-PC-0058): `longer` is struck if the pursuit lands, so `longer` is the defender this roll is against.
                     _emit('disengage', longer=longer.label, shorter=shorter.label, ok=False, pursued=True, degree=deg)
                     if deg in ('success','overwhelming'):
-                        d=core.strike(shorter, longer, deg, cfg, net=net, pool=pool)
-                        _wound('pursuit', shorter, longer, d); longer.conc=max(0,longer.conc-cfg['CONC_DRAIN_HIT'])
+                        d,_bare=_strike(shorter, longer, deg, net=net, pool=pool)
+                        _wound('pursuit', shorter, longer, d, _bare)
+                        if d<=0 and _bare is False: _emit('turned', by=shorter.label, victim=longer.label, source='pursuit')
+                        longer.conc=max(0,longer.conc-cfg['CONC_DRAIN_HIT'])
                         if longer.felled: return longer, closed, 'felled'
                     ready[shorter]=max(ready[shorter], cfg['ACT_THRESHOLD'])   # the pursuer seizes the tempo
         # ----- APPROACH: longer weapon threatens (stop-thrusts) while shorter closes -----
@@ -247,8 +263,10 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                 _emit('stophit', longer=longer.label, shorter=shorter.label, gap=round(measure_gap,2),
                       pool=pool, net_sigma=round(nsig,3), ob=_ob, net=round(net,2), degree=deg)   # `ob`: the workbench bands its distribution at it (PC-03)
                 if deg in ('success','overwhelming'):
-                    d=core.strike(longer, shorter, deg, cfg, net=net, pool=pool)
-                    _wound('stophit', longer, shorter, d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
+                    d,_bare=_strike(longer, shorter, deg, net=net, pool=pool)
+                    _wound('stophit', longer, shorter, d, _bare)
+                    if d<=0 and _bare is False: _emit('turned', by=longer.label, victim=shorter.label, source='stophit')
+                    shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
                     _sd,_pb=S.percussion_stagger(longer, shorter, d, deg, cfg)   # ED-PC-0031: wind + stagger (armour-gated impulse), distinct from the wound
                     shorter.stamina-=_sd; shorter.poise=S.clamp_poise(shorter.poise-_pb, cfg)
                     if shorter.felled: return shorter, closed, 'felled'
@@ -340,35 +358,35 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             aggressor.initiative=S.clamp_initiative(aggressor.initiative - S.init_overcommit_loss(aggressor,overcommit_exposure,cfg,TR), cfg)
             aggressor.poise=S.clamp_poise(aggressor.poise - cfg['POISE_BREAK_OVERCOMMIT']*overcommit_exposure, cfg)  # overextended = off-balance
         # ----- outcome mapping (deg = AGGRESSOR's degree; defender mode can neutralize) -----
-        hit=0; riposte=False; bind=False
+        hit=0; riposte=False; bind=False; hit_bare=None   # `hit_bare`: the coverage-gap draw of the blow `hit` carries (None where no blow was struck or none was drawn)
         # neutralize is a FIXED mode-shape (parry deflects / dodge voids / wind binds) — NOT re-scaled by dsig,
         # which already shaped the roll via net_sigma (audit C-2: avoid double-counting defender skill).
         neutralize=cfg['NEUTRALIZE_PARRY'] if mode==V.DEF_PARRY else (cfg['NEUTRALIZE_DODGE'] if mode==V.DEF_DODGE else cfg['NEUTRALIZE_WIND'])
         if deg=='fail':
             riposte=(rng.random() < min(cfg['RIPOSTE_CAP'], cfg['RIPOSTE_ON_FAIL']+overcommit_exposure))
         elif deg=='partial':
-            if mode==V.DEF_DODGE: hit=core.strike(aggressor, defender, 'graze', cfg) if rng.random()<cfg['PARTIAL_DODGE_GRAZE'] else 0
-            elif mode==V.DEF_PARRY: hit=core.strike(aggressor, defender, 'graze', cfg) if rng.random()<cfg['PARTIAL_PARRY_GRAZE'] else 0
+            if mode==V.DEF_DODGE: hit,hit_bare=_strike(aggressor, defender, 'graze') if rng.random()<cfg['PARTIAL_DODGE_GRAZE'] else (0,None)
+            elif mode==V.DEF_PARRY: hit,hit_bare=_strike(aggressor, defender, 'graze') if rng.random()<cfg['PARTIAL_PARRY_GRAZE'] else (0,None)
             else: bind=True
         elif deg=='success':
             if mode==V.DEF_WIND and rng.random()<cfg['WIND_BIND_P']: bind=True
             elif rng.random()<neutralize: riposte=(rng.random() < min(cfg['RIPOSTE_CAP'], cfg['RIPOSTE_ON_NEUTRALIZE']+overcommit_exposure))
-            else: hit=core.strike(aggressor, defender, 'success', cfg)
+            else: hit,hit_bare=_strike(aggressor, defender, 'success')
         else:
             if rng.random()<max(0.0,neutralize-cfg['NEUTRALIZE_OVERWHELM_DROP']): hit=0
-            else: hit=core.strike(aggressor, defender, 'overwhelming', cfg, net=net, pool=pool)
+            else: hit,hit_bare=_strike(aggressor, defender, 'overwhelming', net=net, pool=pool)
         if counter_attempt:
             # SUCCESS scales with reflex (CR-85/ED-IN-0330); the untrained single-time counter mostly fails — a
             # desperate-idiot move. Tradition abilities will modulate this upward (added later). (systems.counter_success_prob)
             if rng.random() < S.counter_success_prob(defender, cfg, TR):
-                hit=0; bind=False; riposte=True            # LANDS: committed attack voided in-tempo, defender ripostes (keeps the seized Vor)
+                hit=0; hit_bare=None; bind=False; riposte=True            # LANDS: committed attack voided in-tempo, defender ripostes (keeps the seized Vor)
             else:
                 # MISS: the botched counter cedes the seized Vor and leaves the defender eating the attack UNDEFENDED
                 # (no mode reduction); the hit-block below then applies the wound + further Vor/poise loss — the downside.
                 defender.initiative=S.clamp_initiative(defender.initiative-steal, cfg)
                 aggressor.initiative=S.clamp_initiative(aggressor.initiative+steal, cfg)
                 bind=False; riposte=False
-                hit=core.strike(aggressor, defender, 'overwhelming' if deg=='overwhelming' else 'success', cfg, net=net, pool=pool) if deg in ('partial','success','overwhelming') else 0
+                hit,hit_bare=_strike(aggressor, defender, 'overwhelming' if deg=='overwhelming' else 'success', net=net, pool=pool) if deg in ('partial','success','overwhelming') else (0,None)
         # CONTACT AXIS (I7b, D8/D9): a unified opening_created flag, set by all three precondition sites below
         # (DISPLACE, deep-commit reopen, bind) — NOT three parallel grab checks. Consumed once, in THIS beat's
         # outcome tail (after riposte resolves, below); never carries across beats (unlike reopen_moment/push_avail).
@@ -392,8 +410,9 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                 if not closed: closed=True; measure_gap=0.0; ready=_carry(ready,cfg)
                 # pull-back of the committed thrust can still graze the closing defender
                 if rng.random() < cfg['DISPLACE_PULLBACK_GRAZE']:
-                    d=core.strike(aggressor, defender, 'graze', cfg)
-                    _wound('displace_graze', aggressor, defender, d)
+                    d,_bare=_strike(aggressor, defender, 'graze')
+                    _wound('displace_graze', aggressor, defender, d, _bare)
+                    if d<=0 and _bare is False: _emit('turned', by=aggressor.label, victim=defender.label, source='displace_graze')
                     if defender.felled:
                         _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B); return defender, closed, 'felled'
                 riposte=True   # defender now inside with initiative
@@ -410,7 +429,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
         if closed and longer.w['hands']==2 and rng.random()<cfg['PUSH_AVAIL_P']:
             push_avail=True; reopen_moment=True; opening_created=True   # a freed hand IS a contact precondition
         if hit>0:
-            _wound('exchange', aggressor, defender, hit); defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
+            _wound('exchange', aggressor, defender, hit, hit_bare); defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
             # forced-to-Nach by DAMAGE: the aggressor presses the advantage (gains the Vor); the struck defender loses it.
             aggressor.initiative=S.clamp_initiative(aggressor.initiative+cfg['INIT_GAIN_HIT'], cfg)
             defender.initiative=S.clamp_initiative(defender.initiative-cfg['INIT_LOSS_WOUNDED'], cfg)
@@ -419,6 +438,8 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
             defender.stamina-=_sd; defender.poise=S.clamp_poise(defender.poise-_pb, cfg)
             if defender.felled:
                 _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B); return defender, closed, 'felled'
+        elif hit_bare is False:   # a blow struck against the harness that dealt nothing: the blade was turned (PC_D)
+            _emit('turned', by=aggressor.label, victim=defender.label, source='exchange')
         if bind:
             opening_created=True   # CONTACT AXIS precondition site 3: a bind IS a contact opening (Ringen am Schwert)
             # German Fühlen / Stärke-Schwäche: whoever DOMINATES the bind (bind_sigma sign) steals the Vor through the
@@ -435,8 +456,10 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None):
                 bsig = S.bind_sigma(aggressor, defender, cfg, TR)   # module: leverage + tactile (Fuhlen), Str minor
                 if rng.random() < S.bind_dominance_p(bsig):
                     if rng.random()<cfg['BIND_HIT_P']:
-                        d=core.strike(aggressor, defender, 'success', cfg)
-                        _wound('bind', aggressor, defender, d); defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
+                        d,_bare=_strike(aggressor, defender, 'success')
+                        _wound('bind', aggressor, defender, d, _bare)
+                        if d<=0 and _bare is False: _emit('turned', by=aggressor.label, victim=defender.label, source='bind')
+                        defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
                         _sd,_pb=S.percussion_stagger(aggressor, defender, d, 'success', cfg)   # ED-PC-0031: wind + stagger in the bind
                         defender.stamina-=_sd; defender.poise=S.clamp_poise(defender.poise-_pb, cfg)
                         if defender.felled:
@@ -587,6 +610,7 @@ def _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide):
     _emit('fight_start', A=A.label, B=B.label, weapon_A=A.weapon, weapon_B=B.weapon,
           armor_A=A.armor, armor_B=B.armor, tradition_A=A.tradition, tradition_B=B.tradition)
     result=0
+    scene=rng.n   # the stream's ordinal where this fight begins: it keys the fight's per-blow coverage-gap draws (`engagement._strike`), so a caller that reuses one `Draw` for many fights (a workbench loop) gets a fresh gap sequence per fight; a host's per-fight key begins at 0
     prev_closed=False   # measure state threaded across engagements (ED-PC-0033): a reach weapon only re-presents at open measure if it can hold a crowding opponent off; the first engagement always opens at measure
     for turn in range(max_bouts):   # each iteration = ONE round (A-101); victor emerges over MULTIPLE turns with persistent wounds/fatigue. fight() is the multi-turn SIM harness (runs to a decision for win-rates); the GAME calls one engagement per turn.
         if yield_decl is not None and yield_decl.turn == turn+1:   # PHASE 1: the declaration precedes every draw of its turn
@@ -607,7 +631,7 @@ def _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide):
                 break            # result is 0 here (a felling breaks with a result set): UNRESOLVED, no upset draw
         first = A if rng.random()<0.5 else B
         _emit('turn_start', turn=turn+1, first=first.label)
-        loser, prev_closed, ended_by = engagement(A,B,first,cfg,rng,prev_closed,terms=stop)
+        loser, prev_closed, ended_by = engagement(A,B,first,cfg,rng,prev_closed,terms=stop,turn=turn+1,scene=scene)
         _emit('engagement_end', turn=turn+1, felled=(loser.label if loser is not None else None), ended_by=ended_by)
         if loser is not None:
             result = -1 if loser is A else 1   # +1 => A won

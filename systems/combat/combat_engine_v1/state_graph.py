@@ -25,6 +25,7 @@ TRACE_KINDS = {
     'commit', 'read', 'mode', 'roll', 'outcome', 'contact', 'separation', 'engagement_end', 'fight_result',
     'yield',   # §11.4 (PC-01): a Phase-1 declaration; an unrefused one ends the fight at FinalResult via Yielded
     'wound',   # PC-13: every point of damage the tracker takes, from the ONE helper wrapper._wound (pursuit, stophit, displace_graze, exchange, bind)
+    'turned',   # PC_D (B15.05): a blow struck against a harness that dealt nothing (`wound` carries `bare`: the blow reached a bare zone)
     'disengage',   # the closed-phase withdrawal attempt (ED-PC-0030): ok=True re-opens to measure, ok=False is pursued
     'withdraw',    # REM-31: the decider's early UNRESOLVED exit, taken at the head of a turn
 }

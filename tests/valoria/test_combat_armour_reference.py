@@ -84,3 +84,110 @@ def test_reference_table_covers_the_whole_roster():
     assert ref['n'] >= 40, f"reference generated at n={ref['n']}, too small to be a stable baseline"
     for tiers in ref['table'].values():
         assert set(tiers) == {'none', 'light', 'medium', 'heavy'}, "reference must cover all four armour tiers"
+
+
+# ── PC_D (B15.05): armour turns a blade by a draw ──────────────────────────────────────────────────────────────────
+# The coverage gap is a chance at the one damage call, not an average inside it. The four tests below read it off fights
+# (the trace seam and a spy on `core.strike`), never off the helper that draws it.
+
+def _fight(a_armor, b_armor, seed, weapon='arming', trace=None):
+    from engine.dice_engine import draw
+    from modules.combat import wrapper
+    from modules.combat.combatant import Combatant
+    from modules.combat.config import CFG
+    A, B = Combatant('A', weapon=weapon, armor=a_armor), Combatant('B', weapon=weapon, armor=b_armor)
+    wrapper.fight(A, B, CFG, draw.seeded(draw.H2('armour_gap', seed)), trace=(trace.append if trace is not None else None))
+
+
+def _success_blows(armor, fights):
+    """The damage of every Success struck against a defender in `armor` (light armour on the other side), by value."""
+    from modules.combat import core
+    seen, orig = [], core.strike
+
+    def spy(attacker, defender, deg, cfg, *a, **k):
+        v = orig(attacker, defender, deg, cfg, *a, **k)
+        if deg == 'success' and defender.armor == armor:
+            seen.append(v)
+        return v
+
+    core.strike = spy
+    try:
+        for s in range(fights):
+            _fight('light' if armor != 'none' else 'none', armor, s)
+    finally:
+        core.strike = orig
+    return seen
+
+
+def test_success_against_heavy_has_more_than_one_damage_value():
+    """Gate 1: a Success against plate is not one number, and the share of landed blows that draw no blood is higher
+    against plate than against bare skin by more than the interval (it was one value, and nothing but the defence coin)."""
+    heavy, bare = _success_blows('heavy', 150), _success_blows('none', 150)
+    assert len(heavy) >= 100 and len(bare) >= 100
+    assert len(set(heavy)) > 1, sorted(set(heavy))
+    p_heavy, p_bare = sum(v == 0 for v in heavy) / len(heavy), sum(v == 0 for v in bare) / len(bare)
+    interval = 3.0 * (p_heavy * (1 - p_heavy) / len(heavy) + p_bare * (1 - p_bare) / len(bare)) ** 0.5
+    assert p_heavy - p_bare > interval, (p_heavy, p_bare, interval)
+
+
+def test_light_against_heavy_plated_man_felled_sometimes():
+    """Gate 2: 1,500 arming-sword fights, light against heavy: the plated man is felled a share strictly above 0."""
+    felled = 0
+    for s in range(1500):
+        tr = []
+        _fight('light', 'heavy', s, trace=tr)
+        felled += any(e['kind'] == 'engagement_end' and e['felled'] == 'B' for e in tr)
+    assert felled > 0, "the plated man was felled in 0 of 1500: plate is an immunity"
+
+
+def _bare_share(armor, fights):
+    """(blows struck at a defender in `armor`, those that reached a bare zone, `wound` events missing the `bare` flag) over `fights` mirrors."""
+    from modules.combat import core
+    blows = [0, 0]
+    orig = core.strike
+
+    def spy(attacker, defender, deg, cfg, *a, **k):
+        if defender.armor == armor:
+            blows[0] += 1
+            blows[1] += bool(k.get('bare'))
+        return orig(attacker, defender, deg, cfg, *a, **k)
+
+    unflagged = 0
+    core.strike = spy
+    try:
+        for s in range(fights):
+            tr = []
+            _fight(armor, armor, s, trace=tr)
+            unflagged += sum('bare' not in e for e in tr if e['kind'] == 'wound')
+    finally:
+        core.strike = orig
+    return blows[0], blows[1], unflagged
+
+
+def test_coverage_gap_zero_gives_no_bare_zone_blows():
+    """Gate 3: at the shipped gap the share of blows on armour that reach a bare zone is near COVERAGE_GAP; at 0 none does."""
+    from modules.combat import core
+    n, bare, unflagged = _bare_share('heavy', 60)
+    assert n >= 200 and unflagged == 0, (n, unflagged)
+    assert 0.6 * core.COVERAGE_GAP < bare / n < 1.4 * core.COVERAGE_GAP, bare / n
+    was, core.COVERAGE_GAP = core.COVERAGE_GAP, 0.0
+    try:
+        n0, bare0, unflagged0 = _bare_share('heavy', 60)
+    finally:
+        core.COVERAGE_GAP = was
+    assert n0 >= 200 and bare0 == 0 and unflagged0 == 0, (n0, bare0, unflagged0)
+
+
+def test_no_turned_event_between_unarmoured_men():
+    """The falsifier's second clause: a blade is turned only by a harness. Bare men turn nothing; plate does (the observer sees it)."""
+    turned = {}
+    for armor in ('none', 'heavy'):
+        count = rounds = 0
+        for s in range(100):
+            tr = []
+            _fight(armor, armor, s, trace=tr)
+            count += sum(e['kind'] == 'turned' for e in tr)
+            rounds += sum(e['kind'] == 'engagement_end' for e in tr)
+        assert rounds >= 100
+        turned[armor] = count
+    assert turned['none'] == 0 and turned['heavy'] > 0, turned

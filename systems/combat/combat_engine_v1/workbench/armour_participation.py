@@ -128,8 +128,8 @@ def strike_profile(n=20, armor='heavy', cfg=CFG):
     cur = {'w': None}
     orig = core.strike
 
-    def probe(attacker, defender, deg, c, net=None, pool=None):
-        v = orig(attacker, defender, deg, c, net, pool)
+    def probe(attacker, defender, deg, c, net=None, pool=None, **kw):   # `kw`: the blow's coverage-gap draw (`bare`, PC_D)
+        v = orig(attacker, defender, deg, c, net, pool, **kw)
         if defender.armor == armor and attacker.weapon in (cur['w'], str(cur['w']) + '_halfsword'):
             t = tally[(cur['w'], getattr(attacker, 'sel_head', None))]
             t[0] += 1
