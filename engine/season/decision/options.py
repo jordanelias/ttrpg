@@ -188,7 +188,11 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # World; it ADDS the objects he holds and nothing else, so a person committed to nothing forms what he formed before.
         sourced_kind = HELD_EDGE_SOURCED.get(verb)
         if sourced_kind is not None:
-            mine = tuple(dict.fromkeys(t.object for t in p.tenures if t.kind == sourced_kind and t.live))
+            # NOT A FACTION MEMBERSHIP (a `commit` whose object is a faction, `fac_...`): releasing it is leaving the faction, and
+            # at lap 0 every cast person did, so `holder_faction_of` read None and a march folded `field.unopposed` (B10.99's
+            # bisect of test_in36_foreign and test_task_draw to B10.72). Release stays for a commit to a Proposition.
+            mine = tuple(dict.fromkeys(t.object for t in p.tenures if t.kind == sourced_kind and t.live
+                                       and not t.object.startswith("fac_")))
             refs = tuple(refs) + tuple(o for o in mine if o not in refs)
         # B10-09 close one, D3 (`rosters.yaml: held_edge_declines`): A VERB A PERSON DOES NOT FORM ON AN OBJECT
         # HE ALREADY HOLDS A LIVE EDGE OF THE NAMED KIND ON -- `commit` on a Proposition he commits to

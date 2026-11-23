@@ -813,6 +813,10 @@ def test_se06_control_without_the_block_the_realm_is_the_uniform_one(tmp_path, m
     assert uniform.content_hash() != realm.content_hash(), "the block moved nothing"
     monkeypatch.undo()
     shipped = build_realm(0)
+    from ..queries.person_q import SELF_STEM
     for p in _cohorts(shipped).values():
         p.pursuits = {}
+        # B10.99 re-read: since B10.65 the build seeds a `self:<key>` claim for each pursuit a person holds, so the pursuits the
+        # block seats also seat those claims; a cohort with no pursuit holds none, and the uniform realm's cohorts hold none
+        p.ledger[:] = [c for c in p.ledger if not (c.predicate.startswith(SELF_STEM) and c.subject == p.id)]
     assert shipped.content_hash() == uniform.content_hash()
