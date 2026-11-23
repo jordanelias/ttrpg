@@ -853,7 +853,7 @@ characters:
         - {conviction: family, weight: 0.02}
         - {conviction: love, weight: 0.02}
         - {conviction: stewardship, weight: 0.03}
-    goals: null  # [GAP]
+    goals: ["Carry the Crown Inner Circle's counsel to Himlensendt", "Hold the Church's place at court"]  # IS-A-11 draft (e.2), BA1.09; [ASSUMPTION; low; Jordan to correct]
     affiliations:  # ED-IN-0293: Himlensendt's agent (Church > Holy See) seated in Crown > Inner Circle, Truth 5: orthodoxy at ceiling; the Church side of his dual loyalty dominates
       solmund_orthodoxy: 5
       einhir_restoration: 1
@@ -1284,6 +1284,7 @@ characters:
       solmund_orthodoxy: 1
       einhir_restoration: 1
       altonian_civics: 1
+    goals: ["Ground the Duchess's Sovereign Authority claim in law", "Keep Hafenmark's procedure correct"]  # IS-A-11 draft (e.2), BA1.09; [ASSUMPTION; low; Jordan to correct]
     source: behavior_v30 §2.16
 
   - id: NPC-072

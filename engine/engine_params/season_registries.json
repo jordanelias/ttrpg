@@ -11317,7 +11317,10 @@
               }
             ]
           },
-          "goals": null,
+          "goals": [
+            "Carry the Crown Inner Circle's counsel to Himlensendt",
+            "Hold the Church's place at court"
+          ],
           "affiliations": {
             "solmund_orthodoxy": 5,
             "einhir_restoration": 1,
@@ -12362,6 +12365,10 @@
             "einhir_restoration": 1,
             "altonian_civics": 1
           },
+          "goals": [
+            "Ground the Duchess's Sovereign Authority claim in law",
+            "Keep Hafenmark's procedure correct"
+          ],
           "source": "behavior_v30 \u00a72.16"
         },
         {
