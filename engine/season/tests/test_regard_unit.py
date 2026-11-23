@@ -72,7 +72,7 @@ def _five_sights(cap):
     w.step = Step.RESOLVE
     w.fixtures = w.fixtures.sweep("scar_season_cap", cap).sweep("fan_out_mode", "total")
     for p in w.persons.values():
-        p.pursuits = {"stability": 0.2, "justice": 0.5}
+        p.pursuits = {pursuit("stability"): 0.2, pursuit("justice"): 0.5}
     d = SeasonDriver(w)
     for i in range(5):
         d._fold(w, mint_token(w, WriteClass.ACTS), Act(id=f"cap{i}", actor="p_low", verb="fight", payload={"subject": "p_mid"}), wounded())
@@ -83,8 +83,8 @@ def test_a_capped_witness_holds_one_count_for_five_sights():
     """B10.06 (H-465): the same violating act seen five times in one season is five counts per element uncapped and one at the
     cap -- per element at `element`, and at `person` one count in all, on the element he holds most violated (`justice`, 0.5)."""
     got = {cap: _five_sights(cap) for cap in (None, "element", "person")}
-    assert got[None] and all(c == {"justice": 5, "stability": 5} for c in got[None].values()), got[None]
+    assert got[None] and all(c == {pursuit("justice"): 5, pursuit("stability"): 5} for c in got[None].values()), got[None]
     assert got["element"].keys() == got[None].keys() and all(
-        c == {"justice": 1, "stability": 1} for c in got["element"].values()), got["element"]
+        c == {pursuit("justice"): 1, pursuit("stability"): 1} for c in got["element"].values()), got["element"]
     assert got["person"].keys() == got[None].keys() and all(
-        c == {"justice": 1} for c in got["person"].values()), got["person"]
+        c == {pursuit("justice"): 1} for c in got["person"].values()), got["person"]
