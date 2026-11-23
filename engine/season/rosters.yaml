@@ -363,10 +363,10 @@ rosters:
       ⚠ `post_remit` IS LAST, AND THAT IS THE SAME ORDINAL TAKEN ONE STEP FURTHER. `19_PLAN.md`'s
       ordinal of remove is *firsthand > knot-sourced > told > inferred* in full (`:517`), and
       `post_remit` mints `inferred`, so it ranks below both `told_by` channels: an obligee who is
-      ALSO admitted by the public record (`chronicle`, every `binding_decision` emission) holds the
+      ALSO admitted by the news of the Event's kind (`reach`, `event_reach` below) holds the
       Event `told_by`, never downgraded to `inferred`. `claim_source:` is keyed on exactly these five
       and names only `claim_sources` members (`data/rosters.py` refuses at import otherwise).
-      `chronicle` is `told_by` on `04_CODE_ARCHITECTURE.md` §C.6's own row, and so is
+      `reach` is `told_by` on `04_CODE_ARCHITECTURE.md` §C.6's own row, and so is
       `post_remit`'s `inferred` (§C.6: *"the change claims, `inferred`"*). `post_remit` is the
       place-bound remit channel (r2 item 9: *"the place-blind remit channel -> obligees co-located,
       minting `inferred`"*); see `epistemic._ch_post_remit`.
@@ -377,20 +377,51 @@ rosters:
       knot, the partner's deposits"*) and one channel cannot. A placed actor is credited first by
       presence (`co_located`).
     ordered: true
-    values: [co_located, witness_key, document_key, chronicle, reach, post_remit]
+    values: [co_located, witness_key, document_key, reach, post_remit]
     claim_source:
       co_located:   firsthand
       witness_key:  firsthand_via_knot
       document_key: told_by
-      chronicle:    told_by
       reach:        told_by
       post_remit:   inferred
-    # CR-29 commit (1): the `reach` channel's kind -> reach map, SHIPPED EMPTY, so the channel admits nobody until a
-    # later commit fills it. A key is an event kind (held to `EVENT_KINDS` at import, `epistemic.EVENT_REACH`), or
-    # `from_stratum:` naming `{stratum: reach}` for every kind a verb row of that stratum emits (never spelt out, as
-    # `_ch_chronicle` derives its kinds). A value is `room` (the event's place) or a member of `rung_kinds`
-    # (`data/rosters.py::check_event_reach` refuses any other).
-    event_reach: {}
+    # CR-29 (commit 2): the `reach` channel's kind -> reach map (`epistemic.EVENT_REACH`). A key is an event kind (held to
+    # `EVENT_KINDS` at import), or a directive that expands to many: `from_stratum:` names `{stratum: reach}` for every
+    # kind a verb row of that stratum emits, and `from_unrest:` names ONE reach for the coercive kinds `person_q.stability`
+    # reads (`standing_routes.kinds.dominance`) less `person.died` -- both derived, never spelt out here. A value is `room`
+    # (the Event's own place) or a member of `rung_kinds` (`data/rosters.py::check_event_reach` refuses any other).
+    # THE TABLE, KIND BY KIND, AND WHY (`person.died` is NOT a key: A-33 -- a death reaches only those who were there,
+    # on its trail, or told, and the seats it empties earn `tenure.closed`, below, which does travel):
+    #   binding_decision kinds -> realm: what the public record carried before this channel replaced it (a decision
+    #     by an institution is public to the realm that institution is of; `order.given`, `date.scheduled`, `tenure.*`,
+    #     `succession.claimed`, `place.surrendered`, `dispensation.issued` ...).
+    #   the unrest kinds -> settlement: a sign of coercion (a wound, a field won, a seizure, a requisition) is news to the
+    #     settlement it happened in and no wider -- `person_q.stability` reads a sign about a place, and H-234's gap is that
+    #     none reached a person who was not there; a settlement is the least rung that holds the people whose standing it
+    #     moves. [ASSUMPTION; medium; Jordan to correct; revert: an empty `from_unrest`, and the signs travel by presence
+    #     and telling alone]
+    event_reach:
+      from_stratum: {binding_decision: realm}
+      from_unrest: settlement
+
+  seat_news_kinds:
+    source: "v11 CR-29, A-32 (one reach row for seat changes)"
+    note: >-
+      The kinds a seat's holding opens or closes. `witness_channels.event_reach` carries them (shipped at `realm`, by
+      `from_stratum`); `Fixtures.seat_news: local` lifts exactly these from the `reach` channel, so the news travels by
+      presence, jurisdiction and telling. Every member must be an Event kind with a reach in `event_reach`
+      (`epistemic.py` refuses at import).
+    values: [tenure.opened, tenure.closed, succession.claimed]
+
+  seat_news_arms:
+    source: >-
+      v11 CR-29 (A-32: one reach row for seat changes at `realm`, B -- the seat-change kinds left out of the map -- the
+      tested alternative), commit (2).
+    note: >-
+      THE ARMS OF `Fixtures.seat_news` (`H-214`), read by `epistemic._ch_reach`. `realm` (SHIPPED) leaves the seat-change
+      kinds (`seat_news_kinds`) at the reach `event_reach` gives them; `local` is the tested alternative:
+      the `reach` channel admits nobody for those kinds, so a seat change reaches a person only by presence, the seat's
+      jurisdiction (`post_remit`, `document_key`) and telling. `local` is a measurement arm, not a design.
+    values: [realm, local]
 
   claim_sources:
     source: "#353 §20 — how a Claim came to be held"
@@ -1136,7 +1167,7 @@ rosters:
       an injected default and this row stays `assumption`.
       ⚠ **UNDER `all_five` THESE PREDICATES DECIDE EVERY DEPOSIT.** Under `total`, `observers_for`
       returned everyone and they were never consulted. Only THREE of the five can admit anyone in a
-      world the fold can currently drive (`chronicle` matches nobody, `post_remit` needs an obligee
+      world the fold can currently drive (`reach` matches nobody there, no `binding_decision` verb resolving, and `post_remit` needs an obligee
       standing at the seat an act was exercised through;
       `test_w6_every_named_channel_has_a_predicate_and_they_are_data` asserts exactly which two are
       inert).
@@ -1144,12 +1175,15 @@ rosters:
       declared -- §19.3 is explicit that an Event carries NO TARGET, *"observers are computed at
       WITNESS from presence; the emitter declares no recipient"*, so a channel that needed the
       emitter to name someone would be a different design and not a fill of this hole.
-      ⚠ `chronicle` IS DELIBERATELY NOT `everyone`. A public channel that matched every person
+      ⚠ `reach` IS DELIBERATELY NOT `everyone`. A public channel that matched every person
       would make the `all_five` union identical to `total`, and the sweep would have two points
       that are the same arm wearing different names -- an arrangement that cannot measure
-      anything. It is the MATTER-OF-RECORD channel: what a binding decision emits is public,
-      because a binding decision is the design's own category for an act whose effect is
-      institutional rather than private.
+      anything. It admits the persons standing within the reach the Event's kind states
+      (`witness_channels.event_reach`): what a binding decision emits is news to the realm it
+      is the decision of, because a binding decision is the design's own category for an act
+      whose effect is institutional rather than private -- and to no one outside that realm.
+      (It REPLACED `chronicle`, CR-29: a kind filter that read no person and so admitted every
+      person alive, wherever they stood.)
     # ⚠ THE NAMES ARE NOT REPEATED HERE. `witness_channels` above is the one place the five are
     # named; this row carries only what each one MEANS. The names are loaded by `data/rosters.py`
     # (`WITNESS_CHANNELS`) and read by `epistemic.py`, which builds `CHANNEL_PREDICATES` from them
@@ -1161,7 +1195,6 @@ rosters:
       document_key:  "the person holds a live `hold` Tenure over something THIS EVENT CHANGED -- a subject named in `changes[]` (a Record, a store). ⚠ THIS ROW READ *the Event's SUBJECT* until `R8.4`, and that clause is why the channel could not fire on a single act: every fold-emitted Event sets `subject = a.actor` and no `hold` takes a PERSON as object, so the equality held only on `MATTER`/`CALENDAR` kinds, which carry no verb and no actor. The parenthetical was always right and the clause it qualified was wrong. Corrected here in the same change as the predicate, because this row is where the meaning lives (see the note above) and `R5` quotes it verbatim as the channel's definition"
       witness_key:   "the person IS the Event's anchor (`state/attribution.py::anchor_of` -- the actor where one acted, the written thing otherwise; it read the deleted `Event.subject` until G1b), or shares a live `knot` Tenure with it -- S28's knot deposit, which already reuses the Event id"
       post_remit:    "the person is an OBLIGEE of the seat the Event's act was exercised through (`Act.via`) -- a live `oblige` Tenure to it, read through `queries/world_q.py::establishment_of`, the one owner of that set -- AND stands AT that seat: the seat's rung is where they are or above it (`state/gate.py::purview_reaches`). Plan position `17a`, r2 item 9. ⚠ THIS ROW READ *the person holds a live office Tenure whose remit covers the verb that emitted this kind* until `17a` -- a remit-holder learning of every covered act anywhere in the realm, the place-blind broadcast r2 `02` §A.7 and `01` both delete. An Event no act caused, or an act exercised through no seat, admits nobody through this predicate. ONE other admission rides this channel's source (`inferred`) and its live/off switch, in `loop/witness.py` (v9 IN-22): an ACTORLESS Event's observation READS (MATTER's recorded shortfall) go to the holders of a live seat whose purview reaches the read rung (`queries/world_q.py::governors_of`) -- reads only, never an event-kind, `seen` or `content:` claim"
-      chronicle:     "the kind is emitted by a `binding_decision` verb -- a matter of record, and public because the decision is institutional"
       reach:         "the Event's kind has a reach in `event_reach` and the person stands within it -- in the Event's own place for `room`, else inside the rung of that kind that contains the Event's place (CR-29: news of an event reaches persons by the event's kind, at a stated reach)"
 
   observation_terms:
@@ -1188,7 +1221,7 @@ rosters:
       witness saw who acted; a document holder saw only that the document changed"* -- so
       `document_key` shows NOTHING, and its witness holds an all-`None` struct, which IS deposited
       (the claim's subject still says WHERE something happened). `witness_key`, `post_remit` and
-      `chronicle` are unruled: they withhold rather than invent, and are an injected default in
+      `reach` are unruled: they withhold rather than invent, and are an injected default in
       `H-33`'s sense, exactly as the channel predicates themselves are.
       `why` IS THE ANTECEDENT A WITNESS HOLDS AND MAY CONNECT, NOT THE ACTOR'S MOTIVE (B09.17, `R8.4` narrowed; the engine
       keeps no motive: `Candidate.why` is dropped at `pack_scenes` and `Act` carries none): the id of a claim in the witness's
@@ -1207,7 +1240,6 @@ rosters:
       witness_key:  [stratum, who, why]
       document_key: []
       post_remit:   [stratum]
-      chronicle:    [stratum]
       reach:        [stratum]
 
   # ── WHAT THE SEASON LOOP IS ───────────────────────────────────────────────────────────────────

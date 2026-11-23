@@ -7,7 +7,8 @@
   ship     -- nothing changed.
   draw1    -- the shipped world with only the chooser's draw seed changed (`boot/chooser.py::chooser(draw_seed=1)`).
   nod3     -- `interview`, `reconstruct` and `thread_read` out of the chooser's verb set.
-  nochron  -- `CHANNEL_PREDICATES["chronicle"]` forced False, everything else shipped.
+  nochron  -- `CHANNEL_PREDICATES["reach"]` forced False, everything else shipped (B11.03: `["chronicle"]`, the channel
+              `reach` replaced at B11.04; the arm names the public-record channel off, whichever it is called).
 
 The arm is applied through `harness/probes.py::chooser`, the one name `instrumented_season` composes its chooser
 from, so the measured season is the shipped one with the arm's single change. The test reports; it asserts no spread.
@@ -40,7 +41,7 @@ def run_arm(seed: int, seasons: int, arm: str) -> dict:
             mp.setattr(P, "chooser", lambda w_, verbs=None, **kw: base(
                 w_, verbs=frozenset(resolvable_verbs() if verbs is None else verbs) - NOD3, **kw))
         elif arm == "nochron":
-            mp.setitem(EP.CHANNEL_PREDICATES, "chronicle", lambda w_, e, pid: False)
+            mp.setitem(EP.CHANNEL_PREDICATES, "reach", lambda w_, e, pid: False)
         m = aperture.instrumented_season(w, seasons)
     per_verb = lambda table: {v: sum(c.get(v, 0) for c in table.values()) for v in sorted(resolvable_verbs())}
     return {"attempted": per_verb(m["attempted"]), "executed": per_verb(m["executed"]),

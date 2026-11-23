@@ -3698,7 +3698,7 @@ def test_w6_h33s_declared_sweep_runs_and_the_deposit_count_falls():
     # seasons), but every one of those admissions is a SUBSET of who `presence_only` already
     # admits, on this seed, so the deposit COUNT can no longer tell the two arms apart -- checked
     # directly instead of inferred from a count, which is what the docstring's claim actually is.
-    non_presence = {"document_key", "witness_key", "post_remit", "chronicle"}
+    non_presence = {"document_key", "witness_key", "post_remit", "reach"}
     w5 = worlds["all_five"]
     everyone = list(w5.persons)
     live_extra = {c for e in w5.log for c in non_presence
@@ -3707,7 +3707,7 @@ def test_w6_h33s_declared_sweep_runs_and_the_deposit_count_falls():
         f"no channel beyond `co_located` admitted anyone over this run: {got} — THIS would be the "
         "four channels genuinely inert, and the sweep would have two points measuring one thing")
     assert got["all_five"][1] < got["total"][1], (
-        f"`all_five` is indistinguishable from `total`: {got} — `chronicle` is matching everyone, "
+        f"`all_five` is indistinguishable from `total`: {got} — `reach` is matching everyone, "
         "which is the degenerate reading `rosters.yaml` warns against")
     # ⚠ `==`, NOT `>=`. The cap fix (`if` -> `while`: one deposit can mint several claims, so a
     # single pop left the ledger at 203 against `L = 200`) had NO FALSIFIER, because `>=` passes
@@ -3813,14 +3813,15 @@ def test_w6_every_named_channel_has_a_predicate_and_they_are_data():
     # not tell `chronicle` going dark from `witness_key` going dark, which are different findings
     # (§0.1 pt 2).
     # [GROUNDED: measured 2026-09-11 at `build_world(0)`, 2 seasons -- under `release` alone `chronicle` fired once on a `tenure.closed`; under `U2` the executed verb set in this world is {create_record, move, reconstruct, research, transfer, work} and it admits nobody]
-    # B11.03: `reach` is rostered with an EMPTY kind->reach map (CR-29 commit (1)), so it is inert by construction until a later commit fills it.
-    assert inert == ["chronicle", "post_remit", "reach"], (
+    # B11.04: `reach` replaced `chronicle` (CR-29 commit (2)) and keeps its place in this list: it admits by event KIND at a
+    # stated reach, and no event of a kind it carries fires in THIS world (the act mix above), so the pin is the same two.
+    assert inert == ["post_remit", "reach"], (
         f"the inert channels are {inert}, not the two this item published. `post_remit` needs an "
         "obligee standing at the seat an act was exercised through (since `17a`; before it, an "
         "office whose remit covers the emitting verb), and nobody in this world obliges. "
-        "`chronicle` fires only on a `binding_decision` verb: it came alive with `release` on "
+        "`reach` fires only on a kind it carries (a `binding_decision` verb's, the unrest kinds): `chronicle`, which it replaced, came alive with `release` on "
         "2026-09-11 and went dark again under `U2`, because the scene tick changed which acts win "
-        "a scene in THIS world. If `chronicle` is out of this list a binding-decision verb is "
+        "a scene in THIS world. If `reach` is out of this list a binding-decision verb is "
         "executing here again, which is a GAIN and should be re-pinned rather than reverted; if a "
         "third channel is in it, the register's reading of `H-33` has to change with it")
     # AND THE INJECTION IS DECLARED AS ONE. `H-33` must not read `ruled` off the back of this.
@@ -5346,11 +5347,11 @@ def test_h71_the_grant_is_a_snapshot_not_a_mirror():
 
 
 def test_a_binding_decision_lights_the_two_witness_channels_that_needed_one():
-    """`W6`'s adversarial pass found `post_remit` and `chronicle` firing ZERO times, and traced it
+    """`W6`'s adversarial pass found `post_remit` and `chronicle` (now `reach`) firing ZERO times, and traced it
     to the same cause: both need a `binding_decision`, and none was executable. This is the other
     half of that finding — with governance running, the channels are reachable.
 
-    `chronicle` is an event-kind filter (it does not read `pid`) and `post_remit` needs the witness
+    `reach` admits by the event's kind and the person's place and `post_remit` needs the witness
     to be OBLIGED to the seat the act was exercised through and to stand at it, so the two admit
     different people. ⚠ `post_remit` READ THE REMIT until plan position `17a` -- *hold an office whose
     remit covers the emitting verb*, which admitted the duke himself -- and `17a` re-based it onto
@@ -5383,8 +5384,8 @@ def test_a_binding_decision_lights_the_two_witness_channels_that_needed_one():
     assert e is not None, (
         f"the fold emitted {[x.kind for x in out]} — no `tenure.closed` to test the channels with")
     everyone = list(w.persons)
-    assert any(CHANNEL_PREDICATES["chronicle"](w, e, pid) for pid in everyone), (
-        "`chronicle` does not fire on a binding decision's emission — then it can never fire at "
+    assert any(CHANNEL_PREDICATES["reach"](w, e, pid) for pid in everyone), (
+        "`reach` does not fire on a binding decision's emission — then it can never fire at "
         "all, and `all_five` is permanently a measurement of fewer channels than it names")
     remit = [pid for pid in everyone if CHANNEL_PREDICATES["post_remit"](w, e, pid)]
     assert remit == ["p_low"], (
@@ -5414,7 +5415,7 @@ def test_h71_others_half_a_witness_learns_who_was_seated_on_what():
 
     `fan_out_mode` is the control axis: `presence_only` shows the fact travels through witnessing
     (only a co-located person learns it), `total`/`all_five` show every living person does once
-    `chronicle` admits them (it is a `binding_decision` kind and fires unconditionally)."""
+    `reach` admits them (it is a `binding_decision` kind, carried at `realm`)."""
     def run(mode):
         w = P.tiny_world(DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
         w.offices["off_dicastery"].conferral = "appointed"
@@ -5453,8 +5454,8 @@ def test_h71_others_half_a_witness_learns_who_was_seated_on_what():
     holder_claim = ("p_mid", "tenure.opened", True)
 
     # `total` and `all_five` (the shipped default) both admit every living person, by different
-    # channels: `total` unconditionally, `all_five` because `chronicle` is an event-kind filter
-    # over every `binding_decision` verb (`_ch_chronicle`, `epistemic.py`) and `confer` is one.
+    # channels: `total` unconditionally, `all_five` because `reach` carries every `binding_decision` verb's kinds at
+    # `realm` (`rosters.yaml: event_reach`, `epistemic._ch_reach`) and `confer` is one, and every person stands in the realm.
     # Same guarantee, same assertion, so one loop over both rather than two copies that could
     # silently drift apart on what each checks.
     for mode in ("total", "all_five"):

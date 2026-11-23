@@ -1040,18 +1040,23 @@ STRATA = roster("strata", ordered=True)
 REACH_ROOM = "room"
 #: The key of an `event_reach` entry that names a verb-table stratum instead of one kind.
 REACH_FROM_STRATUM = "from_stratum"
+#: The key of an `event_reach` entry that names ONE reach for the unrest kinds (`DOMINANCE_KINDS` less `PERSON_DIED`, A-33).
+REACH_FROM_UNREST = "from_unrest"
 
 
 def check_event_reach(mapping: dict, rung_kinds, strata) -> dict:
     """CR-29 (`rosters.yaml: witness_channels.event_reach`): THE `reach` CHANNEL'S KIND -> REACH MAP, held to its closed
     sets at import or refused naming the row. A key is an event kind (`is_event_kind`'s spelling; that it is one the loop
     declares is `epistemic.py`'s check, where `EVENT_KINDS` is bound) or `from_stratum`, whose value is `{stratum: reach}`
-    over `strata`; a reach is `room` or a member of `rung_kinds`. A function, so a test can plant a bad row. Returns it."""
+    over `strata`, or `from_unrest` whose value is one reach; a reach is `room` or a member of `rung_kinds`. A function,
+    so a test can plant a bad row. Returns it."""
     reaches = {REACH_ROOM, *rung_kinds}
     bad = []
     for k, v in mapping.items():
         if k == REACH_FROM_STRATUM:
             ok = isinstance(v, dict) and all(s in strata and r in reaches for s, r in v.items())
+        elif k == REACH_FROM_UNREST:
+            ok = v in reaches
         else:
             ok = is_event_kind(k) and v in reaches
         if not ok:
@@ -1066,6 +1071,8 @@ def check_event_reach(mapping: dict, rung_kinds, strata) -> dict:
 
 
 EVENT_REACH_ROWS = check_event_reach(roster_map("witness_channels", "event_reach"), RUNG_KINDS, STRATA)
+SEAT_NEWS_KINDS = roster("seat_news_kinds")
+SEAT_NEWS_ARMS = roster("seat_news_arms")
 # The leaf import: the fifteen pursuits are owned one layer out (`references/descriptor_registry.yaml:
 # pursuit_roster`, exported behind a blocking `--check`). `roster("pursuits")` resolves to the same
 # set through `from_descriptor:` -- two routes, one owner; a third route carrying its own literal is

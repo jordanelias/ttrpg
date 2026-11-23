@@ -971,6 +971,12 @@ DEFAULT_FIXTURES = Fixtures(
     # and is silent on shipping `valence`, and `valence` moves what tellings carry.
     # [JUSTIFIED: engine/season/hole_register.yaml H-196 -- the slant arm; no document says which claim a teller chooses to pass on, so both readings are declared and swept newest / valence]
     said_slant="newest",               # `H-196`, swept newest (control, SHIPPED) / valence
+    # `H-214` (v11 CR-29, A-32). WHETHER NEWS OF A SEAT CHANGE TRAVELS BY KIND: `realm` (SHIPPED) leaves the seat-change
+    # kinds (`rosters.yaml: seat_news_kinds`) at the reach `witness_channels.event_reach` gives them; `local` lifts them
+    # from the `reach` channel, so a seat change reaches a person only by presence, the seat's jurisdiction and telling
+    # (`epistemic._ch_reach`, `rosters.yaml: seat_news_arms`). A measurement arm, B of A-32, not a design.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-214 -- the reach channel's seat-news arm; no document says how far a seat change travels, so both readings are declared and swept realm / local]
+    seat_news="realm",                 # `H-214`, swept realm (SHIPPED) / local (A-32's arm B)
     # `H-197` (v9 IN-18 `G6`, confidences). HOW OFTEN A TELLING IS MADE IN CONFIDENCE: the chance
     # `loop/witness.py::_circle_of` draws once per telling (its docstring says what a circle is and does).
     # `0` is the CONTROL and is SHIPPED [ASSUMPTION; medium; Jordan to
