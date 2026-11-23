@@ -6,11 +6,14 @@ FALSIFIER: a non-primary or mild violation is still counted at the live arms, or
 """
 from __future__ import annotations
 
+import pytest
+
 from ..data import affiliations as A
 from ..data.pursuits import pursuit
 from ..data.matrix import Step, WriteClass
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token
+from ..queries import person_q as PQ
 from ..state.carriers import Act
 from ._scar_helpers import rebound, scars, wounded
 
@@ -72,3 +75,25 @@ def test_vindication_lowers_a_count_at_least_once():
     assert twice["p_other"] == {pursuit("justice"): 3}
     healed = [e for e in w.log if e.kind == "scar.healed"]
     assert len(healed) == 1 and len(healed[0].changes) == 4, [(e.kind, len(e.changes)) for e in w.log if e.kind.startswith("scar.")]
+
+
+def test_the_most_scarred_man_is_not_the_least_changed():
+    """B10.08: a person scarred to 5 on every held pursuit but one at 3 (all at the threshold) reads differently from his unscarred
+    twin at `scar_weight_shift` 0.5: the weight goes from the most-scarred (ties by name) to the least-scarred, the total kept; at 0 the
+    twins read alike. At `scar_hold` primary the set is the primaries, so the shift stays among them while a non-primary is unscarred."""
+    p = P.tiny_world().persons["p_low"]
+    j, l, v, h, wl = pursuit("justice"), pursuit("liberty"), pursuit("love"), pursuit("honour"), pursuit("wealth")
+    p.conviction = {}
+    p.pursuits = {j: 0.3, l: 0.25, v: 0.2, h: 0.15, wl: 0.1}
+    p.scar = {j: 5, l: 5, v: 5, h: 5, wl: 3}
+    twin = dict(p.pursuits)
+    assert PQ.crisis_weights(p, 0.0) == twin, "at the control the scarred man reads as his twin"
+    got = PQ.crisis_weights(p, 0.5)
+    source = min((j, l, v, h))                                # the most-scarred, ties by name
+    assert got != twin and got[source] == twin[source] * 0.5, got
+    assert got[wl] == pytest.approx(twin[wl] + twin[source] * 0.5), "the least-scarred gains what the most-scarred gives up"
+    assert {e: w for e, w in got.items() if e not in (source, wl)} == {e: w for e, w in twin.items() if e not in (source, wl)}, got
+    assert abs(sum(got.values()) - sum(twin.values())) < 1e-12
+    p.pursuits, p.scar = {j: 0.4, l: 0.3, v: 0.2, wl: 0.1}, {j: 4, l: 2, v: 0, wl: 0}      # primaries j, l (mass .6): both at the threshold
+    assert PQ.crisis_weights(p, 0.5, hold="primary", mass=0.6) == pytest.approx({j: 0.2, l: 0.5, v: 0.2, wl: 0.1}), "within the primaries, not to the unscarred"
+    assert PQ.crisis_weights(p, 0.5)[v] > 0.2, "at `any` the unscarred are the heirs, as before"

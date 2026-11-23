@@ -979,7 +979,8 @@ def religious_intensity(p: Person) -> float:
     return top / AFFILIATION_CEILING
 
 
-def crisis_weights(p: Person, shift: float = 0.0) -> dict:
+# [canonical: engine/season/data/fixtures.py §scar_primary_mass (H-469): the default is the fixture's control; a reader that holds the fixtures passes both]
+def crisis_weights(p: Person, shift: float = 0.0, hold: str = "any", mass: float = 0.6) -> dict:
     """`p`'s pursuit weights as the chooser should read them: the threshold-2 scar shift below, THEN
     `doctrine` scaled by religious conviction (v9 IN-71, H-188; the one site every reader projects).
     `choose`'s pursuit dot, `deeds_judged` and the telling weights all read this vector.
@@ -995,7 +996,7 @@ def crisis_weights(p: Person, shift: float = 0.0) -> dict:
     a conviction-less person by 0]. A STORED 0 on every religious member is a held rejection and does
     zero it.
     """
-    out = _scar_shifted(p, shift)
+    out = _scar_shifted(p, shift, hold, mass)
     w = out.get(DOCTRINE_PURSUIT)
     if not w or not p.conviction:
         return out
@@ -1005,7 +1006,25 @@ def crisis_weights(p: Person, shift: float = 0.0) -> dict:
     return {**out, DOCTRINE_PURSUIT: w * k}
 
 
-def _scar_shifted(p: Person, shift: float) -> dict:
+def _most_to_least_scarred(p: Person, base: dict, held: dict, among: list, shift: float) -> dict:
+    """`base` with the fraction `shift` of the MOST-scarred of `among` (highest count, ties by name) given to the LEAST-scarred of it
+    (lowest count, shared in proportion to their weights, the source never its own heir): a person's total is kept. One member: `base`."""
+    ranked = sorted(among, key=lambda e: (-p.scar.get(e, 0), e))
+    source = ranked[0]
+    low = min(p.scar.get(e, 0) for e in ranked)
+    heirs = {e: held[e] for e in ranked[1:] if p.scar.get(e, 0) == low}
+    if not heirs:
+        return base
+    given, pool = held[source] * shift, ltr_sum(heirs.values())
+    out = dict(base)
+    out[source] = held[source] * (1.0 - shift)
+    for e, w in heirs.items():
+        out[e] = w + given * w / pool
+    return out
+
+
+# [canonical: engine/season/data/fixtures.py §scar_primary_mass (H-469): the default is the fixture's control; a reader that holds the fixtures passes both]
+def _scar_shifted(p: Person, shift: float, hold: str = "any", mass: float = 0.6) -> dict:
     """`p`'s pursuit weights as the chooser should read them once scars have reached threshold 2
     (IN-08 H9, `ED-IN-0261`: *"WEIGHT SHIFTS, others gain proportionally"*) -- A READER, it writes
     nothing and `Person.pursuits` is untouched.
@@ -1013,8 +1032,8 @@ def _scar_shifted(p: Person, shift: float) -> dict:
     A held pursuit `e` with `p.scar[e] >= SCAR_WEIGHT_SHIFT_AT` gives up the fraction `shift` of
     its weight (downward: `conviction_track_v1.md` §2, reference for intent), and the mass given up
     is shared among the held pursuits that have NOT reached the threshold in proportion to their
-    own weights, so a person's total weight is conserved. Where every held pursuit is at the
-    threshold there is nobody to gain and the weights are returned unshifted rather than lose mass.
+    own weights, so a person's total weight is conserved. Where every held pursuit (at `hold` `primary`, every primary) is at the
+    threshold, the most-scarred gives its share to the least-scarred (`_most_to_least_scarred`), not skipped.
     `shift` is `Fixtures.scar_weight_shift`; `0` -- the shipped control -- returns `p.pursuits`
     itself, so the arm at its control is the unmodified read by construction.
 
@@ -1032,8 +1051,15 @@ def _scar_shifted(p: Person, shift: float) -> dict:
     # A LIST IN `held`'s ORDER, not a set: `given` sums over it, and a set's order is
     # PYTHONHASHSEED's, so the float sum would not be reproducible across processes.
     crisis = [e for e in held if p.scar.get(e, 0) >= SCAR_WEIGHT_SHIFT_AT]
+    if not crisis:
+        return base
+    # EVERY HELD (`_held`'s sense, at `hold` his primary) PURSUIT AT THE THRESHOLD: nobody is below it to gain, so the shift runs from the
+    # most-scarred (count descending, ties by name) to the least-scarred, by count, not skipped (B10.08, F-PES-CHAR-11).
+    among = _held(held, frozenset(held), _primary_of(p, hold, mass))
+    if among and all(p.scar.get(e, 0) >= SCAR_WEIGHT_SHIFT_AT for e in among):
+        return _most_to_least_scarred(p, base, held, among, shift)
     heirs = {e: w for e, w in held.items() if e not in crisis}
-    if not crisis or not heirs:
+    if not heirs:
         return base
     given = ltr_sum(held[e] * shift for e in crisis)
     pool = ltr_sum(heirs.values())
