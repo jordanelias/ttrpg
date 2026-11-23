@@ -474,7 +474,7 @@ rows:
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-42
     tier:      0
-    hole:      "`utter` -- Proposition creation. `commit`, `petition` and `issue` all `require` a Proposition to exist and NO VERB CREATES ONE, so the season cannot start"
+    hole:      "CLOSED (B11.07), INDEX STATUS: `loop/effects_information.py::_eff_utter` creates the Proposition through the gate, and `utter` is a row of `verb_table.yaml`. The text that follows is the row's history. `utter` -- Proposition creation. `commit`, `petition` and `issue` all `require` a Proposition to exist and NO VERB CREATES ONE, so the season cannot start"
     kind:      "PRODUCER"
     owner:     "the resolver (Part E)"
     grade:     "ruled"
@@ -486,7 +486,7 @@ rows:
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-43
     tier:      0
-    hole:      "⚠ PARTLY DISCHARGED AND THE ROW IS STALE (recorded 2026-09-03): write_matrix.yaml now carries `Proposition.exists`, `Petition.exists` and `Dispensation.exists` citing W2/H-43, and `utter` writes Proposition THROUGH THE GATE (`_eff_utter`). The Proposition half is built; the Petition/Dispensation halves have rows and no effects. Under G.4.8 an instrument may fill only what the register declares, so either this grade is wrong or a fill went off-register -- SPLIT THE ROW rather than regrading the whole. Petition, Dispensation and Proposition are 'created, not written' and so BYPASS `write()`. #353 `:1061-1064`: 'Either the gate applies the write, or direct assignment is made impossible.' An object created beside the gate is the unmarked-cell defect wearing a different hat"
+    hole:      "CLOSED (B11.07), INDEX STATUS: `loop/effects_information.py::_mint_document` is the one mint of a petition and a dispensation, on the one `(Record, exists)` row; the closing text is `cite:`'s. The text that follows is the row's history. ⚠ PARTLY DISCHARGED AND THE ROW IS STALE (recorded 2026-09-03): write_matrix.yaml now carries `Proposition.exists`, `Petition.exists` and `Dispensation.exists` citing W2/H-43, and `utter` writes Proposition THROUGH THE GATE (`_eff_utter`). The Proposition half is built; the Petition/Dispensation halves have rows and no effects. Under G.4.8 an instrument may fill only what the register declares, so either this grade is wrong or a fill went off-register -- SPLIT THE ROW rather than regrading the whole. Petition, Dispensation and Proposition are 'created, not written' and so BYPASS `write()`. #353 `:1061-1064`: 'Either the gate applies the write, or direct assignment is made impossible.' An object created beside the gate is the unmarked-cell defect wearing a different hat"
     kind:      "PRODUCER"
     owner:     "the write gate (Part D)"
     grade:     "ruled"
@@ -510,7 +510,7 @@ rows:
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-45
     tier:      1
-    hole:      "the SIX investigation acts. T9 makes them first-class; they are unnamed, and V2 grades them `assumption` with `requires: per act` -- so there is nothing to inject"
+    hole:      "CLOSED AS ROWS (B11.07), INDEX STATUS: `examine`, `interview`, `research`, `surveil`, `thread_read` and `reconstruct` are six named rows of `verb_table.yaml`, each with a typed `requires` and `emits_on_refusal`. RESIDUE, NOT THIS HOLE: `interview`, `reconstruct` and `thread_read` have no product of their own -- `interview` is a prompt (the questioned person answers by his own act), `reconstruct` mints no conclusion (its `writes_note`), `thread_read` reads no bands (H-331) -- until the first FI audit's order reaches them (`proposals/2026-11-12-subsystem-audit-suite/proposals/U5c_FI_residue.md` §2 steps 9 and 10). The text that follows is the row's history. the SIX investigation acts. T9 makes them first-class; they are unnamed, and V2 grades them `assumption` with `requires: per act` -- so there is nothing to inject"
     kind:      "PRODUCER ×6"
     owner:     "the resolver (Part E)"
     grade:     "ruled"
@@ -724,7 +724,7 @@ rows:
     sweep:     []
     unblocks:  "unmeasured"
     cite:      "FOUND BY W2's ADVERSARIAL PASS, and it is the finding that corrected the RULE rather than a row. §7.2 says an `emits:` kind with no producing verb is a RED ROW, and W2 retired six on that reading. Applied uniformly the same rule condemns `(Person, convictions)` -- which #353 §9.3 MANDATES -- so a producerless row is one of two different things: a HOLE (the verb is missing) or DEAD (nothing produces it). W2's six were dead; these five are holes. `rows_without_a_producer()` reports them and a human decides, because the rule cannot tell them apart and deleting on sight is what the first reading would have done. ⚠ RELATED BUT NOT THE SAME AS H-37: that row defers the twelve named argument FAULTS to the social-contest subsystem, and this is the absence of any verb at all that moves an interior field in the season loop."
-    source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
+    source:    "FILED UNDER CHAR (B11.07; the register carries no `lane:` key; filed by path under FI, re-filed as the first FI audit's §6a lists it). PLAN.md §1.4 — a hole an instrument must fill that carried no row"
 
   - id:        H-63
     tier:      0
@@ -1024,7 +1024,7 @@ rows:
     source:    "W9 — found by the adversarial pass"
   - id:        H-84
     tier:      0
-    hole:      "no verb in the resolvable vocabulary moves a Record to another person, so no second person ever holds one. ⚠ CORRECTED 2026-09-03 — the second clause of this hole read 'and §F1's Q2 never fires for anybody but the maker', AND THAT IS NOW FALSE BY MEASUREMENT. Q2 fires for a listener without any Record moving, because a TELLING deposits a claim about what was told; the Record half of the hole stands and the consequence half was too wide"
+    hole:      "CLOSED (B11.07), INDEX STATUS: `give` (`verb_table.yaml`) moves a Record from one person to another in one effect, `loop/effects_information.py::_eff_give`; it is rare in play, which `cite:` and the first FI audit record and which is not this hole. The text that follows is the row's history. no verb in the resolvable vocabulary moves a Record to another person, so no second person ever holds one. ⚠ CORRECTED 2026-09-03 — the second clause of this hole read 'and §F1's Q2 never fires for anybody but the maker', AND THAT IS NOW FALSE BY MEASUREMENT. Q2 fires for a listener without any Record moving, because a TELLING deposits a claim about what was told; the Record half of the hole stands and the consequence half was too wide"
     kind:      "PRODUCER"
     owner:     "Part E — the verb that would do it"
     grade:     "ruled"
@@ -1139,7 +1139,7 @@ rows:
     sweep:     []
     unblocks:  "unmeasured, and NOT zero: a `hold` whose object is a RUNG already exists in the probe corpus at probes.py::f2 (probe F2 holds the settlement `S`), so the object class pre-dates `in_holdings` and any world that both holds a rung and asks for a budget already miscounts. No verb MINTS a holding, which is why nothing has surfaced it"
     cite:      "FOUND BY THE GOVERNANCE-CANON ADVERSARIAL PASS, and the honest attribution matters: THIS IS PRE-EXISTING AND WAS WIDENED, NOT INTRODUCED. `_eff_create_record` already mints a `hold` over a Record, so `decision.budget` already counted a possessed book as an office; `in_holdings` adds a second non-office object class to a relation two readers already misread. The narrow §8 claim made for `in_holdings` -- *no new tenure kind, `tenure_kinds` does not move* -- is TRUE and was the wrong thing to check: what needed checking was the READERS, and a sweep of all sixteen `t.kind == 'hold'` sites in `engine/season/loop/driver.py` found two that treat every hold as an office. Clean: `_ch_post_remit` guards with `w.offices.get`; `world_q.hold_force` is per-object; the bare-`hold` eligibility branches are unreachable because every `hold:` in the verb table carries a placeholder argument and declines (H-75). `absent` rather than a default: whether a landholding should confer scene actions is a design question, and the fix belongs with whatever builds holdings as a general relation (H-90). ⚠ MEASURED AT IN-14 (B-B, 2026-10-07): the one-line repair, `decision/budget.py` counting only a live `hold` whose `granted_acts` is non-empty, is NOT LANDED, because it breaks `test_n3`'s collapse floor. On the 27 NPC-rung lane cases (seed 0, 3 seasons) `attempt_cases` reads 20 today and 12 under the repair, against a floor of 15 (20 and 13 were read by instrumenting the count, not by pass or fail; only the repair arm's 12 reproduces through the command below, in the floor's failure message; the 13 arm counts a live `hold` only if its object is not a Record); excluding only Record holds reads 13, so the NPC telling transport runs on budget that `_eff_create_record`'s `hold` over a Record mints (the starvation `ED-IN-0246` recorded on deleting `budget_office_bonus`). Under the repair the one-round arm's pre-tick Event-kind multiset also read red when it was measured (2026-09-11; the committed test `test_u2_the_one_round_arm_resolves_acts` no longer asserts it). Reproduce: make that one-line change, then `python -m pytest engine/season/tests/test_season_shape.py -q -k test_n3` and `python -m pytest engine/season/tests -q -k test_u2_`. Landing waits on where that transport's volume comes from, which is `H-10`'s three forms. ⚠ v9 IN-11 ADDS A THIRD NON-OFFICE HOLD CLASS, PROPOSITIONS: every `utter` now mints the utterer's permanent `hold` on the Proposition (`loop/effects_information.py::_makers_hold`), which `decision/budget.py:52-53` counts as an office like any live `hold`, and only `release` closes it (`_eff_destroy_record` closes holds on Records only; a Proposition is never destroyed, §14). The effect is BOUNDED by the scene ceiling (`loop/deliberate.py:88-96`: 5 releasable scenes per person per season at the shipped fixtures, whatever the budget reads), and its accumulation was MEASURED OVER ONE SEASON ONLY. ⚠ AND `release` NOW TIES THE MAKER'S HOLD TO THE VOW: `_eff_release` closes every releasable edge the actor owns on the subject, so an utterer who committed to his own Proposition cannot end the vow without also releasing the hold (and the budget it buys), nor release the hold without ending the vow. SUPPLEMENTED 2026-11-08 (premise-check on decision making, PR #588): observed in the headless world (seeds 0, 1, 2; three seasons): the remaining-budget query returned up to 11 for p_carin (seeds 0 and 2) and 8 (seed 1), up to 8 for the bailiff and 5 for the warden, against five releasable scenes a season (scene_budget 5 rounds x scenes_per_round 1). Budget passes what the season can release as soon as Records are created, as this row says. B03.86 (2026-11-15) TRIED THE REPAIR C3-L8 NAMES AND ITS OWN STOPS IF REJECTED IT: committed at `b4f339224` with `Falsified: B03.86` and reverted at `0d53505b7`; the row stays open. Removing the `offices x budget_office_bonus` term (a seat buys no scene) moved the one-season realm at seeds 0, 1, 2 from 793, 777, 744 acts to 518, 507, 499, kept `test_n3` green with no headroom (its floors now read `attempt_cases >= 6` and `told_cases >= 2`; on the same 27-case lane read `attempt_cases` fell 18 to 10 and `told_cases` 12 to 2, so the text above, 20 and a floor of 15, is stale) and turned `test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_same_season` red, with six more tests of the removed behaviour (`test_w5_budget_moves_with_the_persons_own_state_in_the_ruled_directions`, `test_w5_a_tenure_added_before_its_subject_still_reaches_its_owner`, `test_r3_choose_asks_its_own_budget`, `test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_percent_under_it`, `test_the_corpus_runs_and_the_ranking_cannot_discriminate`, and `test_governance_build::test_24d_i_a_dwelling_is_silent_again_at_b0921`). Only the budget half of this row was in view; the second consumer, `_ch_document_key` making a landholder a witness, is untouched by C3-L8. The item leaves for the batch that lands `08_FI_02_rumour-that-travels`'s traffic arm (B11)."
-    source:    "governance-canon adversarial pass"
+    source:    "FILED UNDER CHAR (B11.07; the register carries no `lane:` key; filed by path under FI, re-filed as the first FI audit's §6a lists it). governance-canon adversarial pass"
 
   - id:        H-93
     tier:      1
@@ -1495,7 +1495,7 @@ rows:
     sweep:     []
     unblocks:  "any statement of the form 'these are the loops', as opposed to 'these are the loops somebody wrote down'"
     cite:      "UPDATED BY IN-24 (batch B-C, 2026-10-08): THE DERIVED HALF IS NOW BUILT, AS A READING, NOT AS COMPLETENESS. `harness/loops.py` (`python -m engine.season.harness.loops`, exit 0) derives the amplifier cycles from `requires_typed` where a verb row has one (ten verbs have an untyped `requires` today: confer, construe, convene, dispatch, establish, evade / defy, exchange, oblige, release, revoke) and from three hand-written step-read tables inside the module, which it checks against `REQUIRES_STEMS`, the question-source roster and the write matrix by key set only. READING as taken at B-C's close: 49 processes, 1038 simple cycles (+ 3, - 2, ? 1033); among the SIGNED cycles the amplifiers derived equal the amplifying `kind: LOOP` rows (H-102, H-112) and the damping cycles equal H-103 and H-104. 1033 cycles pass through a verb write and are UNSIGNED, because the grammar names the cell a verb writes and not its direction; any of them could be an undeclared amplifier, so this still cannot say how incomplete the enumeration is, and the grade stays `absent`. THE PRIOR CITE FOLLOWS. || BLOCKED ON `H-94`, MEASURED: `write_matrix.yaml` types what every verb writes, and `requires` is a PROSE STRING in all 32 rows of `verb_table.yaml`, so one half of the cycle graph is data and the other is English. `F.24a` reads the grammar off those 32 cells and finds it needs seven forms, which is what makes the derived half tractable rather than hypothetical -- but until `requires` is typed the enumeration is a list somebody authored and `G13` can only check the rows that exist. ⚠ THIS ROW IS THE HONEST FORM OF `ID-16` AND IS WHY THE OTHERS DO NOT OVERCLAIM: a gate that validates every declared loop cannot see one nobody declared CORRECTED 2026-10-26 (CR-02 (f); text only): `python -m engine.season.harness.loops` exits 0 on 2026-10-26: 62 processes, 7072 cycles (+4, -2, ?7066), amplifiers derived equal declared, damping equal H-103 and H-104; five LOOP rows are declared now (H-235 joined H-102, H-103, H-104 and H-112)."
-    source:    "ID-16 -- the meta-architecture, folded back into the register that reads it"
+    source:    "FILED UNDER IN (B11.07; the register carries no `lane:` key; filed by path under FI, re-filed as the first FI audit's §6a lists it). ID-16 -- the meta-architecture, folded back into the register that reads it"
 
   # -------------------------------------------------------------------------
   # SHAPE CONFORMANCE AGAINST THE META-ARCHITECTURE. Added 2026-09-03.
@@ -1751,7 +1751,7 @@ rows:
   - id:        H-138
     tier:      1
     kind:      "WIRING"
-    hole:      "F9 CAN READ A TRUE NO-OP `transfer` AS MOVED WHEN A SIDE DOES NOT ALREADY HOLD THE TRANSFERRED `kind`. `_eff_transfer`'s `perform` (`loop/effects_information.py:30-34`) does `stores[kind] = stores.get(kind, 0) - amount` / `+ amount` unconditionally -- at `amount == 0` and `kind` absent from a side's `stores` dict, this INSERTS a new `kind: 0` entry where none existed. `Rung`'s digest (`state/world.py`, `_entity_digest`, which GO-07 made a canonical encoding of its `_DECLARED` fields, a mapping folded by entry count and sorted by key) folds the whole `stores` dict, so a dict gaining a zero-valued key IS a genuine digest change even though no value of consequence moved -- F9 reads the subject as moved and mints `transfer.made` with two receipts for a transfer that, in every sense that matters to the economy, did not happen. This is the same `ID-9` shape G4 exists to close, surviving in one specific corner F9's own dict-identity notion of `state_of` does not cover"
+    hole:      "F9 CAN READ A TRUE NO-OP `transfer` AS MOVED WHEN A SIDE DOES NOT ALREADY HOLD THE TRANSFERRED `kind`. `_eff_transfer`'s `perform` (`loop/effects_economy.py`, CORRECTED at B11.07: `_eff_transfer` is not in `loop/effects_information.py`; `perform` calls `loop/effects_shared.py::_shift`, whose `_debit` and credit lines hold the assignments) does `stores[kind] = stores.get(kind, 0) - amount` / `+ amount` unconditionally -- at `amount == 0` and `kind` absent from a side's `stores` dict, this INSERTS a new `kind: 0` entry where none existed. `Rung`'s digest (`state/world.py`, `_entity_digest`, which GO-07 made a canonical encoding of its `_DECLARED` fields, a mapping folded by entry count and sorted by key) folds the whole `stores` dict, so a dict gaining a zero-valued key IS a genuine digest change even though no value of consequence moved -- F9 reads the subject as moved and mints `transfer.made` with two receipts for a transfer that, in every sense that matters to the economy, did not happen. This is the same `ID-9` shape G4 exists to close, surviving in one specific corner F9's own dict-identity notion of `state_of` does not cover"
     owner:     "loop/effects_economy.py -- `_eff_transfer`'s `perform`; state/world.py -- `state_of`'s entity digest, which has no notion of a semantically-empty dict mutation distinct from a real one (`tests/test_season_shape.py`'s `norm` helper (two definitions, in the tests of the semantically-empty mutation) solves exactly this for a DIFFERENT comparison, in the test itself, not in the gate)"
     grade:     "measured"
     default:   "none"
@@ -1759,7 +1759,7 @@ rows:
     sweep:     []
     unblocks:  "nothing at the shipped `default_transfer_amount = 1` fixture (`H-94`): a real transfer of amount >= 1 either finds the kind already present (no spurious insertion) or genuinely adds a new resource to a side that had none (a real, meaningful change, correctly read as moved). Reachable at `H-94`'s own declared sweep point `amount = 0` (`hole_register.yaml`'s H-94 row, `sweep: [0, 1, 3]`) for any transfer whose giver or receiver does not already hold the swept `kind`"
     cite:      "FOUND BY AN ANTAGONIST PASS ON G4's CLOSE (valoria-critic, no Bash, 2026-09-27), reading `_eff_transfer`'s `perform` against `state_of`'s entity-digest reader and deriving the counterexample from Python dict-assignment semantics rather than executing it (a self-transfer at `Hh -> Hh`, `kind='coin'` -- absent from `tiny_world`'s fixture stores -- `amount=0`: both sides gain `coin: 0` and F9 reads the subject as moved). Not verified by direct execution by the orchestrator; the reasoning was checked by re-reading the cited lines and confirming Python's `dict.get(k, 0)` followed by `dict[k] = ...` does insert the key. Registered rather than fixed: the fix (compare stores by value with zero-valued keys normalised out, as the test's own `norm` helper already does for a different purpose) is a real change to `state_of`'s entity-digest reader or to `_eff_transfer`'s own bookkeeping, and CLAUDE.md section 0.1 pt 5 withholds a guard for a gap the shipped fixture cannot reach SINCE v10 REM-2B (B10-06) `_eff_exchange` calls `_shift` twice and `return_amount` reads `default_transfer_amount` (`decision/options.py`), so at H-94's 0 arm an `exchange` against a rung lacking `return_kind` inserts `return_kind: 0` and publishes `exchange.made` for a move of nothing, exactly as `transfer` does; the control arm is not shipped."
-    source:    "antagonist pass on G4, plan position 7 close, 2026-09-27"
+    source:    "FILED UNDER SE (B11.07; the register carries no `lane:` key; filed by path under FI, re-filed as the first FI audit's §6a lists it). antagonist pass on G4, plan position 7 close, 2026-09-27"
 
   - id:        H-139
     tier:      1
@@ -2076,6 +2076,11 @@ rows:
   - id:        "H-116"
     tier:      0
     hole:      >-
+      CLOSED BY W-A AND W-B (B11.07), INDEX STATUS: clause 4 of `opening_set` fires -- it declined
+      461 / 445 / 485 candidates in one realm season at seeds 0 / 1 / 2 (the first FI audit's §12,
+      `proposals/2026-11-12-subsystem-audit-suite/audits/08_FI_audit.md`, read at 601e715; not re-run here),
+      and `engine/season/tests/test_season_shape.py::test_wa_a_planted_claim_removes_transfer_and_a_larger_one_leaves_it`
+      executes it (passed @9d2f27062). The text that follows is the row's history.
       THE FEEDBACK EDGE FROM CONSEQUENCE TO DECISION IS SEVERED, AND BY A TYPE MISMATCH RATHER
       THAN BY AN ABSENCE. `belief_contradicts` (engine/season/epistemic.py::belief_contradicts) narrows a person's candidate
       set only for a claim whose `predicate` is in `PERSON_PREDICATES` (church_standing, grade,
@@ -4168,27 +4173,31 @@ rows:
 
   - id:        H-182
     tier:      1
-    hole:      "TIES -- A TELLING DOES NOT KNIT TELLER AND HEARER. Since `T4` a telling names its
-      hearer (`to`, a person the teller knows) and is contested against them, so two people who
-      tell each other things are exactly the pair a `tie / knot` would join -- and nothing joins
-      them: `tie / knot` has no effect, so it is formed and never offered (`aperture 1 0`, `tie /
-      knot` row: formed for 83 persons, offered 0, executed 0 in the realm at `T4`). Who knows whom is read
-      afresh from each ledger (`known_persons`) and never stored as a relation."
+    hole:      "TIES -- THE EFFECT WAS BUILT ONCE AND REVERTED, FOR WANT OF A READER, AND IT WAITS ON
+      RUMOUR TRAFFIC (B11.07; `08_FI_08`'s correction of the first FI audit's disposition of this
+      row). `tie / knot` has no effect today: the realm forms it for 83 persons and offers it to
+      none (`aperture 1 0`, at `T4`). IN-32 built it (attempt `53ed995d`, revert `7c6df560`:
+      `_eff_tie` opened the actor's `tie` to the act's subject and `teller_weight` gained a `tied`
+      term) and it was reverted as falsified: the row went 83 / 0 / 0 / 0 to 80 / 80 / 43 / 11
+      (formed / offered / attempted / executed), but at seeds 0 and 5 no told claim carried a chain,
+      so `teller_weight` was never built, `tied()` was called 0 times and eleven to thirteen live
+      ties were read by nothing (`ID-13`). The telling is the traffic that would give a tie a
+      reader: a told claim that carries a chain. Who knows whom is read afresh from each ledger
+      (`known_persons`) and never stored as a relation."
     kind:      "WIRING"
-    owner:     "loop/effects.py -- the `tie / knot` effect (`_eff_tie`), UNBUILT AND OWNED BY NO PLAN
-      POSITION (CORRECTED AT THE BATCH C CLOSE): plan position `14` DECLINED it (`verb_table.yaml`
-      `effect_decline_note`), and `29f`'s listed work is retiring `systems/fieldwork/sim/knots.py`, not
-      writing an effect. Building it needs a reader first (`ID-13`: `tie` has none) and the partner
-      operand the row does not bind. No marker here, because the field it will write is not this
-      workplan's"
+    owner:     "loop/effects.py -- the `tie / knot` effect (`_eff_tie`), BUILT AT IN-32 AND
+      REVERTED (`53ed995d`, `7c6df560`); it re-lands when (a) chained told claims exist in seeded play,
+      so `teller_weight`'s relation term runs, and (b) a person-side decline is in place, so a tie forms
+      only on a referent the actor's own ledger presents as a person he has seen since he last moved.
+      `knot` stays declined. No marker here, because the field it will write is not this workplan's"
     grade:     "absent"
     default:   "none"
     site:      ""
     sweep:     []
     unblocks:  "a telling that leaves a lasting relation between teller and hearer, and the knots
       fieldwork (`29f`) waits on. Trigger: `python -m engine.season.harness.aperture 1 0` shows
-      `tie / knot` executed > 0; prerequisite `_eff_tie`, which no plan position owns and which
-      needs a reader first (`ID-13`)"
+      `tie / knot` executed > 0; prerequisite `_eff_tie`, re-landed once the reader exists
+      (chained told claims in seeded play, `ID-13`)"
     cite:      "LADDER RUN at `T4`, 2026-10-01: not superseded -- plan position `14` owns the effect
       and is not built; not irrelevant -- `T4` makes the teller-hearer pair real, and the realm
       forms `tie / knot` for 83 persons (`aperture`'s persons-formed column, not a Candidate count); no design document says a telling writes a tie,
@@ -4697,7 +4706,7 @@ rows:
     sweep:     []
     unblocks:  "IN-61's tribunal route over a vacant throne (`_part5` IN-61; `_part6` SC-04's `succession` row, whose limit was already stated: it can only AWARD a VACANT seat)"
     cite:      "MEASURED at v9 SC-04 (B-P, 2026-10-17, base `07510eae`): the row was seeded and four tests went red, two outside SC-04's EDITS (`test_u7_remit.py::test_19_the_disposal_opener_closes_c1s_report`, `::test_sc03a_the_determination_basis_opens_each_disposed_kind_and_no_other`), because adding `hold` to the disposable kinds lets the gate admit a bench opening a `hold` on its own seat and lets `open_case` dock a matter `determine` declines forever. Making them green needs a `_disposal` site for `hold` and a gate clause for an object other than `via`, plus an operand naming the throne: IN-61's code, not a data row. THE PLAN'S OWN REVERT TAKEN (SC-04 WHAT: *Revert: no `succession` row*). `test_arrangements.py::test_a_hold_disposing_row_is_reported_by_c1_until_determine_can_open_a_hold` goes red the day a `determine` site opens a `hold`, which is the signal the row can be seeded."
-    source:    "v9 SC-04 (`workplans/valoria_master_workplan_v9_part6.md` §SC-04), batch B-P, 2026-10-17"
+    source:    "FILED UNDER SC (B11.07; the register carries no `lane:` key; filed by path under FI, re-filed as the first FI audit's §6a lists it). v9 SC-04 (`workplans/valoria_master_workplan_v9_part6.md` §SC-04), batch B-P, 2026-10-17"
 
   - id:        H-218
     tier:      1
@@ -4723,7 +4732,7 @@ rows:
     sweep:     []
     unblocks:  "*terminal = being seen at it* (`18_FINDINGS.md` shape 4): a discovered failure costing more than an unseen one, which the design calls the corpus's cleanest severity rule"
     cite:      "MEASURED at v9 SC-02 `22a` piece 2 (B-P, 2026-10-17, tree `ece00cfd`), reading `data/verbs.py::VERB_TABLE`'s `writes_by_degree` for every row: no row's `Failure` band writes anything a severity could grade -- `speak`, `tell` and `determine` write `[]` at `Failure` (and `speak` at every band: `H-63`'s step-12 clause, the speaker's own stance write names no value), `fight`/`accept` (`Untouched`) and `march` (`Lost`) are not social failures, and no row declares a TERMINAL write beside a costly one (`stakes_grade`, the key that graded it, was deleted with the design's own step 11; `arrangements.yaml` header). So *writes the actor's own stance* has no value (`H-63`) and *the row's terminal write* has no row: a barrier-scoped observer count built now would be read by nothing (ID-13). CLAUDE.md §0's ladder: not superseded; not irrelevant (the rule is live intent); no design document supplies the stance value or a terminal column; no precedent; the architecture cannot pick the terminal consequence per row. `Claim.visibility`, RE-GREPPED AND RUN: writer `loop/witness.py::_circle_of` (a private telling's circle), reader `loop/resolve.py::_confidence_broken` -> `queries/person_q.py::confided_outside` IN THE FOLD (`tell`'s told bands, `resolve.py` `kinds = ... _confidence_broken(w, a, row)`); `build_realm(0)`, 2 seasons, a spy on `confided_outside` as `resolve.py` binds it: 2 calls from the fold, 4 matching copies' `visibility` read, 0 True, 0 circles held (shipped `telling_privacy` 0, `H-197`; the break path unreached, `H-204`). So step 21's *inert* is false today; the field stays (`19_PLAN.md` step 27's four dead carriers become three, `22b`'s). Not built; nothing moved. STEP 27 FOUND NOTHING LEFT TO DELETE (B-P Phase 3, read on the tree): `Person.beliefs` and `Person.marks` were deleted 2026-09-24/25 (ED-IN-0261), `Tenure.payload` has live readers (`Tenure.grant` and the remit, `World._grant_remit`, the `DETERMINED_BY` mark `gate.purview_reaches` skips on), `Claim.visibility` is kept here, and the dead public channel `chronicle` is held for the step-16 reach channel (H-214); `22b` left no obligation."
-    source:    "v9 SC-02 `22a` piece 2 (`workplans/valoria_master_workplan_v9_part6.md` §SC-02; `19_PLAN.md` step 21), batch B-P, 2026-10-17"
+    source:    "FILED UNDER SC (B11.07; the register carries no `lane:` key; filed by path under FI, re-filed as the first FI audit's §6a lists it). v9 SC-02 `22a` piece 2 (`workplans/valoria_master_workplan_v9_part6.md` §SC-02; `19_PLAN.md` step 21), batch B-P, 2026-10-17"
 
   - id:        H-220
     tier:      1
@@ -5555,7 +5564,7 @@ rows:
     sweep:     []
     unblocks:  "a ruling that requires, or is shaped by, the sitting that heard it, or a ruled reading that the sitting is only a calendar"
     cite:      "RE-RUN by the author: the paired control (the null arm matched on tick) reads 100 of 100 identical pairs, and `determine` on a carried dateless item executes with no sitting. The 1-of-41 slot count is the agent's. In the author's own four-season run the King's seed-1 ruling does list a `convene` among its log ancestors, so the sitting is in the provenance and not in the outcome. Neighbours: H-163 (the docket to determination chain), H-254 (who owns the docket conjunct)."
-    source:    "premise-check run over the Proceedings (social contest) subsystem, 2026-11-07, branch ccr-9207f975-dylpas (jordanelias/ttrpg), slice S5 of a seven-premise run [ASSUMPTION: the premise sentences were rendered from plain words by the author, and the user confirmed the subject is Proceedings and not the legacy kernel]. MEASURED by read-only agents; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
+    source:    "FILED UNDER SC (B11.07; the register carries no `lane:` key; filed by path under FI, re-filed as the first FI audit's §6a lists it). premise-check run over the Proceedings (social contest) subsystem, 2026-11-07, branch ccr-9207f975-dylpas (jordanelias/ttrpg), slice S5 of a seven-premise run [ASSUMPTION: the premise sentences were rendered from plain words by the author, and the user confirmed the subject is Proceedings and not the legacy kernel]. MEASURED by read-only agents; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
   - id:        H-280
     tier:      1
@@ -5633,7 +5642,7 @@ rows:
     sweep:     []
     unblocks:  "a won argument that leaves some proposition accepted by someone, or a ruled reading that argument only moves what a hearer wants"
     cite:      "THE AGENT'S MEASUREMENT (the tenure diffs, the 12-round loop, the 40-of-40 content arms), NOT RE-RUN BY THE AUTHOR, on `tiny_world` fixtures. The author's own look was limited to the verb rows' notes. `interrogate`'s empty write is H-226. A Partial `argue` logged as won is H-269. Neighbours: H-267 (the hearer's regard does not enter `argue`), H-62 (the `argue` row's declared writes)."
-    source:    "premise-check run over the Proceedings (social contest) subsystem, 2026-11-07, branch ccr-9207f975-dylpas (jordanelias/ttrpg), slice S3 of a seven-premise run [ASSUMPTION: the premise sentences were rendered from plain words by the author, and the user confirmed the subject is Proceedings and not the legacy kernel]. MEASURED by read-only agents; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
+    source:    "FILED UNDER SC (B11.07; the register carries no `lane:` key; filed by path under FI, re-filed as the first FI audit's §6a lists it). premise-check run over the Proceedings (social contest) subsystem, 2026-11-07, branch ccr-9207f975-dylpas (jordanelias/ttrpg), slice S3 of a seven-premise run [ASSUMPTION: the premise sentences were rendered from plain words by the author, and the user confirmed the subject is Proceedings and not the legacy kernel]. MEASURED by read-only agents; the author re-confirmed only the anchor facts named in the cite. Reproduce by the call described, not by any scratch script."
 
   - id:        H-286
     tier:      1
@@ -5763,7 +5772,7 @@ rows:
     sweep:     []
     unblocks:  "a ruler who can take land by authority, or a ruling that only war does"
     cite:      "MEASURED by the S2 agent (hand-built, EXECUTES; plus the existing occupied-town tests, 4 passed); the author did not re-run it. Seized attempts in the realm: 1 to 10 a run, all refused. Related: H-186 (insurgency), H-252 and H-254 (refusal clause unread)."
-    source:    "premise-check run, 2026-11-07, slice S2 removal of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a ruler can strip a post, seize a holding, lock a person up and forgive [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+    source:    "FILED UNDER FA (B11.07; the register carries no `lane:` key; filed by path under FI, re-filed as the first FI audit's §6a lists it). premise-check run, 2026-11-07, slice S2 removal of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a ruler can strip a post, seize a holding, lock a person up and forgive [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
 
   - id:        H-296
     tier:      1
@@ -5815,7 +5824,7 @@ rows:
     sweep:     []
     unblocks:  "a petition that has an addressee above the petitioner and an answer that comes back"
     cite:      "MEASURED by the S3 agent at EXECUTES depth on the ladder fixture; not re-run by the author. Related: H-280 (who a computed petition is addressed to), H-203 (no writ reaches the person who would act on it), H-168."
-    source:    "premise-check run, 2026-11-07, slice S3 orders of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: an officer issues an order and those beneath it receive it, comply or defy, and what follows shows [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+    source:    "FILED UNDER FA (B11.07; the register carries no `lane:` key; filed by path under FI, re-filed as the first FI audit's §6a lists it). premise-check run, 2026-11-07, slice S3 orders of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: an officer issues an order and those beneath it receive it, comply or defy, and what follows shows [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
 
   - id:        H-300
     tier:      1
@@ -5841,7 +5850,7 @@ rows:
     sweep:     []
     unblocks:  "a hearing whose result depends on who is judging and who is judged, and one that can go the other way"
     cite:      "MEASURED by the S4 agent (n=400 per arm, controls named); the degree table RE-RAN by the author (Failure leaves the matter docketed with no edge; Partial, Success and Overwhelming give the same edge). The 400-of-400 count and the swap result were not re-run by the author. Related, and already registered: H-162 (no acquittal path; `Tenure.degree` has no reader), H-126 (the judge's pool is a fixture), H-287 and H-288 (the roll in general), H-163 (the docket to determination chain: 10 `determine` attempts, 1 executed, over 3 realm seeds x 2 seasons)."
-    source:    "premise-check run, 2026-11-07, slice S4 cases of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a matter is brought to the seat that can judge it, the holder determines it and the ruling changes the world [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+    source:    "FILED UNDER SC (B11.07; the register carries no `lane:` key; filed by path under FI, re-filed as the first FI audit's §6a lists it). premise-check run, 2026-11-07, slice S4 cases of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a matter is brought to the seat that can judge it, the holder determines it and the ruling changes the world [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
 
   - id:        H-302
     tier:      1
@@ -5854,7 +5863,7 @@ rows:
     sweep:     []
     unblocks:  "a docket that records where a matter is to be heard, and a case that does not pass silently"
     cite:      "MEASURED by the S4 agent (hand-built, EXECUTES; 6 empty seasons for the vacated seat, 3 seasons for a dead party); not re-run by the author. CR-55 (the lapse) is planned work and not a hole. Related: H-277 (a seat-holder opens a case on himself), H-52, H-161."
-    source:    "premise-check run, 2026-11-07, slice S4 cases of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a matter is brought to the seat that can judge it, the holder determines it and the ruling changes the world [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
+    source:    "FILED UNDER SC (B11.07; the register carries no `lane:` key; filed by path under FI, re-filed as the first FI audit's §6a lists it). premise-check run, 2026-11-07, slice S4 cases of the governance/settlement subsystem (a slice the user named, not a PR claim), premise: a matter is brought to the seat that can judge it, the holder determines it and the ruling changes the world [ASSUMPTION: rendered from the user's word 'governance/settlement']. MEASURED by a read-only agent run; the author re-confirmed only what the cite names. Reproduce by the call described, not by any scratch script."
 
   - id:        H-303
     tier:      1
@@ -6138,7 +6147,7 @@ rows:
     sweep:     []
     unblocks:  "an act that discovers a place, and a difference between a familiar place and an unfamiliar one"
     cite:      "MEASURED by the agent (slice S6) by search; the author's own grep of the same terms found no owner. An absence claim, by search and not exhaustive. No neighbour row found."
-    source:    "premise-check run over the fieldwork / investigation / exploration subsystem, 2026-11-07, branch ccr-6c82ac30-bmifse (no PR number yet), slice S6; the premise sentences are the author's rendering of the subject name [ASSUMPTION]. MEASURED by read-only agent runs; the author re-ran only: a confirming grep. Reproduce by the call described, not by any scratch script."
+    source:    "FILED UNDER SE (B11.07; the register carries no `lane:` key; filed by path under FI, re-filed as the first FI audit's §6a lists it). premise-check run over the fieldwork / investigation / exploration subsystem, 2026-11-07, branch ccr-6c82ac30-bmifse (no PR number yet), slice S6; the premise sentences are the author's rendering of the subject name [ASSUMPTION]. MEASURED by read-only agent runs; the author re-ran only: a confirming grep. Reproduce by the call described, not by any scratch script."
   - id:        H-326
     tier:      1
     hole:      "THE DESIGN HEAD'S DEPTH AXIS, EVIDENCE TRACK, CASE BOARD, AND EXPOSURE AND COVER TRACKS HAVE NO CARRIER IN THE SEASON LOOP (premise-check, fieldwork head). A grep of `engine/season`, `modules/` and `engine/engine_params` for exposure, depth, concealment, evidence track, case board and intelligibility found: Exposure named in the `surveil` row of `engine/season/verb_table.yaml` as the one canon effect of that act with no carrier; Depth and Concealment as terms only; the Church-attention pool, drafted only in the retired `systems/threadwork/sim/co_movement.py` (`FORK:` row) and never read by the season loop. The disposition track is carried as stance (see the regard rows)."
@@ -6258,7 +6267,7 @@ rows:
     sweep:     []
     unblocks:  "a persuasion that spends something"
     cite:      "MEASURED by the agent (slice S8), not re-run by the author. Neighbours: H-63, H-215, H-219, H-269."
-    source:    "premise-check run over the fieldwork / investigation / exploration subsystem, 2026-11-07, branch ccr-6c82ac30-bmifse (no PR number yet), slice S8; the premise sentences are the author's rendering of the subject name [ASSUMPTION]. MEASURED by read-only agent runs; the author re-ran only: nothing (the agent's figures). Reproduce by the call described, not by any scratch script."
+    source:    "FILED UNDER SC (B11.07; the register carries no `lane:` key; filed by path under FI, re-filed as the first FI audit's §6a lists it). premise-check run over the fieldwork / investigation / exploration subsystem, 2026-11-07, branch ccr-6c82ac30-bmifse (no PR number yet), slice S8; the premise sentences are the author's rendering of the subject name [ASSUMPTION]. MEASURED by read-only agent runs; the author re-ran only: nothing (the agent's figures). Reproduce by the call described, not by any scratch script."
   - id:        H-336
     tier:      1
     hole:      "NO CONVERSATION HAS STATE: NO DODGE, NO TRUST GATE, NO TURN, NO STALL (premise-check, conversation). A search of `engine/season` and `modules` for conversation, dialogue, stall, rapport, dodge, deflect, stonewall and prevaricat matched only case-file need strings. `interview` is a prompt with no reply (K-36); `argue` is lost, won (Partial) or won (Success and above); `speak` has four kinds; there is no refusal by trust and no multi-turn state. The design head's Dialogue Lattice and Response Matrix are design-only (FI-G21)."
@@ -6270,7 +6279,7 @@ rows:
     sweep:     []
     unblocks:  "a conversation in which what one says opens or shuts what the other may say"
     cite:      "MEASURED by the agent (slice S8) by search, not re-run by the author. An absence claim. Neighbours: H-267, H-179, H-218."
-    source:    "premise-check run over the fieldwork / investigation / exploration subsystem, 2026-11-07, branch ccr-6c82ac30-bmifse (no PR number yet), slice S8; the premise sentences are the author's rendering of the subject name [ASSUMPTION]. MEASURED by read-only agent runs; the author re-ran only: nothing (the agent's figures). Reproduce by the call described, not by any scratch script."
+    source:    "FILED UNDER SC (B11.07; the register carries no `lane:` key; filed by path under FI, re-filed as the first FI audit's §6a lists it). premise-check run over the fieldwork / investigation / exploration subsystem, 2026-11-07, branch ccr-6c82ac30-bmifse (no PR number yet), slice S8; the premise sentences are the author's rendering of the subject name [ASSUMPTION]. MEASURED by read-only agent runs; the author re-ran only: nothing (the agent's figures). Reproduce by the call described, not by any scratch script."
   - id:        H-337
     tier:      1
     hole:      "A GRUDGE MAKES A HOSTILE ACT ON ITS OBJECT LESS LIKELY FOR EVERY ROW BUT SEVEN (premise-check, regard). `decision/choose.py::stance_term` adds the stance toward the act's subject with one sign, negated only for rows where the subject is the act's opponent (`decision/options.py::subject_is_opponent`: arrest, determine, fight, capture, march, speak, interrogate). At stance +25 and -25 the term is +50 and -50 for `challenge`, `forge`, `conceal`, `interview` and `move` (the author re-ran these) and, by the agent, for `tell`, `forgive`, `sabotage`, `seize`, `raze` and `requisition`. A friend is the likelier object of sabotage and a hated person the least."
