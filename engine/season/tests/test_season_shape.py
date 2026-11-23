@@ -2384,7 +2384,9 @@ def test_person_q_cannot_reach_the_world_side():
     # was rewritten to avoid, and that scan relies on this one for the other half of the edge.
     # B09.01: `state.ledgers` too -- `present_confidence`, the one owner of how a claim fades, lives beside the eviction
     # comparator in that import-free leaf (it holds no store and reaches nothing), and `LedgerReader` reads a claim through it.
-    ALLOWED = ("data", "state.carriers", "state.ledgers", "trace_log")
+    # B24p.06: `queries.inputs` too -- the stdlib-only record leaf (its own docstring: it imports nothing from the season package), whose
+    # `Item` is what `false_items` returns; it holds no store and reaches no World, as `state.ledgers` above.
+    ALLOWED = ("data", "state.carriers", "state.ledgers", "queries.inputs", "trace_log")
     PKG = "engine.season"
 
     def _absolute(node):
