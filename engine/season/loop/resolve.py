@@ -39,7 +39,7 @@ from ..data import affiliations as _aff     # read at call time (`_aff.ENGAGEMEN
 from ..data.affiliations import engagement
 from .effects_combat import MARK_ROLE
 from ..seam.wrappers.pool import pool_pair
-from ..seam.wrappers.sigma import ADVANTAGE_SOURCES, CAPABILITY, EDGE
+from ..seam.wrappers.sigma import ADVANTAGE_SOURCES, CAPABILITY, EDGE, topic_of
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
                                  elements_violated_by, pursuit_lean, skill_shown_observed, upheld_by, _pursuits_upheld_by)
 from engine.substrate.descriptors import AFFILIATION_CEILING
@@ -1125,8 +1125,7 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # B24p.19: THE MATTER A PROCEEDING IS ABOUT (INT C.1). Where the row's opponent operand is another than `subject` (`tell`, `lie`, `argue`: their
     # hearer, `to`), the matter is the act's `subject`; where the opponent IS the subject (`speak`: the docketed matter; `interrogate`: the man
     # questioned) the matter is that same operand, `_subject`. Read by the seam only for a row carrying `proceeds:` (`seam/contest.py`).
-    _topic = ((a.payload or {}).get("subject") if isinstance(a.payload, dict) else None) \
-        if _row is not None and _row.opponent_operand() != "subject" else _subject
+    _topic = topic_of(a, _subject)
     r = contest(w, rung=_rung, prize=contests[0], claimants=_parties, depth=0,
                 max_depth=contest_max_depth, causes=[a.id], verb=a.verb, subject=_subject,
                 rng=_rng, effort=effort_of(a), host=host, via=a.via, act=a, topic=_topic)

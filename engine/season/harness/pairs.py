@@ -2,7 +2,7 @@
 difference, read over generated random pairs at a very high iteration count, as a CURVE -- never one even-matchup
 number. A-79's even centres are the curve's middle bin.
 
-    python -m engine.season.harness.pairs {duel,social,proceeding} [--terms yield blood death] [--verb argue] [--n N]
+    python -m engine.season.harness.pairs {duel,social,proceeding} [--terms yield blood death] [--verb examine] [--n N]
                                           [--seed S ...] [--diff sheet|read|<registry key>|all] [--min-bin 200]
     python -m engine.season.harness.pairs proceeding [--type conversation] [--form full|abridged] [--side for|against|decider]
                                           [--room none|gallery|crowd] [--off <setting>]
@@ -455,7 +455,7 @@ def main(argv: Optional[list] = None) -> int:
         "its SPREAD, MONOTONE and DOMINANT. A reading, not a gate."))
     ap.add_argument("contest", choices=("duel", "social", "proceeding"))
     ap.add_argument("--terms", nargs="+", default=None, help="duel terms (default: every term the combat module deals)")
-    ap.add_argument("--verb", default="argue", help="the social verb (default argue)")
+    ap.add_argument("--verb", default="examine", help="the social verb (default examine; `argue`, `tell`, `lie`, `speak` and `interrogate` proceed: read them with `pairs proceeding`)")
     ap.add_argument("--type", default="conversation", help="proceeding: the arrangement id (default conversation)")
     ap.add_argument("--form", choices=FORMS, default="abridged", help="proceeding: abridged (default) or full")
     ap.add_argument("--side", choices=SIDES, default="for", help="proceeding: whose sheet the difference is taken on (default for)")

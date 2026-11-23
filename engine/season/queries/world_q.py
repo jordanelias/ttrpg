@@ -481,8 +481,8 @@ def proceeding_row(w: World, act) -> tuple:
     `when` holds (RD §D.1). `hearer: cohort` asks `is_cohort` of the person the act addresses (the row's `opponent_operand`, as the fold names its
     target); `docketed: True` asks `docketed(w, subject)`. A `row` that is an arrangement id is that arrangement; `docket` is the arrangement the docket
     hears the matter under (`DOCKET_ARRANGEMENT` of the first item `docketed` lists); `form: abridged` is `abridged(row)`, the same row with one turn
-    and the speech's own close. A verb that does not proceed, an act no entry answers, or a matter on no docket (or one whose item names no
-    arrangement) is refused naming the verb: there is no row to proceed under. READ-ONLY; the seam reads it at B24p.19."""
+    and the speech's own close. A verb that does not proceed, an act no entry answers, or a matter on no docket is refused naming the verb:
+    there is no row to proceed under. A docketed matter whose item names no arrangement (a computed case) makes `docket` fall through to the next entry. READ-ONLY; the seam reads it at B24p.19."""
     row = VERB_TABLE.get(act.verb)
     entries = getattr(row, "proceeds", ())
     payload = act.payload if isinstance(act.payload, dict) else {}

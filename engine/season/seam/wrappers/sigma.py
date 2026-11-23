@@ -1485,6 +1485,11 @@ def proceeding_input(w: Any, claimants: list, *, verb: str, subject: Optional[st
     rite = _rite_of(fx, verb, row, effort, regime, strife)
     moves, close = dict(rite.moves), rite.close
     bench = _bench_of(w, venue, topic, row["authority"]) if close in ("bench", "declared") else []
+    # a speech put to no man (`speak` at a sitting, a self-plea) is put to the presiding seat of the row's own bench, who is the one addressed
+    # [ASSUMPTION; Jordan to correct: B24p.19 -- the abridged row (`abridged()`) keeps its authority but no bench, so the speaker would sit alone (`refused[one_character]`)]
+    if aid is None and close == "exchange":
+        sitting = sorted(_bench_of(w, venue, topic, row["authority"]), key=lambda x: (-_power(w, x, regime)[1], x))
+        aid = next((x for x in sitting if x != fid), None)
     # the other party: where the rite gives the other side moves and the matter names nobody, the most opposed man on the floor (p4 §K D4)
     if aid is None and moves.get("against"):
         opposed = [x for x in here if x != fid and x not in bench
@@ -1673,6 +1678,9 @@ def _draw_of(inp: Input, out: Outcome, band: dict, weights: Mapping) -> tuple:
     return drawn[0][0], ltr_sum(h * rec.leverage for h, (_, rec) in zip(heads, drawn)) / ltr_sum(heads)
 
 
+_DATA_DEFECTS = ("refused[bad_weight]", "refused[no_weight]")
+
+
 def _resolve_proceeding(w: Any, claimants: list, rng: Draw, *, verb: str, subject: Optional[str], effort: int, proceeds: tuple,
                         topic: Optional[str] = None) -> dict:
     """`resolve`'s path for an act that proceeds: build the room, call the entry the composition row names (every sitting of this batch is
@@ -1688,8 +1696,8 @@ def _resolve_proceeding(w: Any, claimants: list, rng: Draw, *, verb: str, subjec
         inp, card_ = proceeding_input(w, [c for c in claimants if c in w.persons], verb=verb, subject=subject,
                                       topic=subject if topic is None else topic, effort=effort, row=row, form=form)
     except ValueError as refused:
-        if not str(refused).startswith("refused["):
-            raise
+        if not str(refused).startswith("refused[") or str(refused).startswith(_DATA_DEFECTS):
+            raise                                # a weight that is no whole head count is a data defect, not a room the game refuses
         return dict(status="REFUSED", why=str(refused), module=_PROVIDER, resolver=_RESOLVER, pool=None, terms=())
     entry = composition.require(PROCEEDING_ROLE)
     out = entry(inp, rng)
@@ -1750,8 +1758,19 @@ class _Believed:
         return self.shells[pid]
 
 
+def topic_of(act: Any, subject: Optional[str]) -> Optional[str]:
+    """THE MATTER A PROCEEDING IS ABOUT (INT C.1), the one owner of the rule: where the verb row's opponent operand is another than `subject`
+    (`tell`, `lie`, `argue`: their hearer, `to`) the matter is the act's `subject`; where the opponent IS the subject (`speak`: the docketed
+    matter; `interrogate`: the man questioned) it is that same operand, `subject` as `sides_of` read it. The fold (`loop/resolve.py::_contest`)
+    and the chooser's odds (`_believed_proceeding_chance`) both read it here, so what is priced is the sitting that is rolled."""
+    row = VERB_TABLE.get(act.verb)
+    if row is not None and row.opponent_operand() != "subject":
+        return (act.payload or {}).get("subject") if isinstance(act.payload, dict) else None
+    return subject
+
+
 def believed_proceeding_odds(w: Any, believer: Any, claimants: list, *, verb: str, subject: Optional[str], effort: int,
-                             proceeds: tuple) -> Optional[float]:
+                             proceeds: tuple, topic: Optional[str] = None) -> Optional[float]:
     """THE CHOOSER'S OWN ODDS that the proceeding `proceeds` names carries (V2 p2 §E; B05.62): `view_odds` on an `Input` built from what
     he holds, read as his own view reads it, without luck. Himself at his true values, every other person an ordinary man (`_Believed`),
     so the odds are the close before an unmoved ordinary bench at the starts he believes `[ASSUMPTION: the chooser prices a full
@@ -1762,8 +1781,8 @@ def believed_proceeding_odds(w: Any, believer: Any, claimants: list, *, verb: st
     mod = _proceeding_module()
 
     def read(acc: float) -> tuple:
-        inp, _ = proceeding_input(w, list(claimants), verb=verb, subject=subject, topic=subject, effort=effort, row=row, form=form,
-                                  seen=_Believed(w, believer, acc))
+        inp, _ = proceeding_input(w, list(claimants), verb=verb, subject=subject, topic=subject if topic is None else topic, effort=effort,
+                                  row=row, form=form, seen=_Believed(w, believer, acc))
         return inp, mod.view(inp, mod._start(inp), mod._who(inp, believer.id), _NoNoise())
     try:
         inp, first = read(1.0)
@@ -1782,8 +1801,14 @@ def _believed_proceeding_chance(w: Any, believer: Any, act: Any, bands: Any) -> 
     if called is None or believer.id != act.actor or w.persons.get(called[0][0]) is None:
         return None
     mod = _proceeding_module()
-    p = believed_proceeding_odds(w, believer, called[0], verb=act.verb, subject=called[1], effort=effort_of(act),
-                                 proceeds=_world_q.proceeding_row(w, act))
+    try:
+        row = _world_q.proceeding_row(w, act)
+    except Unspecified as no_row:               # a matter on no docket: no room is priced for it (the fold refuses it the same way)
+        if no_row.where != "world_q.proceeding_row":
+            raise
+        return None
+    p = believed_proceeding_odds(w, believer, called[0], verb=act.verb, subject=called[1], effort=effort_of(act), proceeds=row,
+                                 topic=topic_of(act, called[1]))
     carried = {DEGREE_LABEL[d] for d, n in DEGREE_ORDINAL.items() if n >= mod._CARRIED}
     held = set(bands)
     return None if p is None else p if held == carried else 1.0 - p if held == set(DEGREE_LABEL.values()) - carried else None

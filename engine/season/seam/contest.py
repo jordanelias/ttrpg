@@ -16,7 +16,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Optional
 from ..data.verbs import VERB_TABLE
-from ..gaps import Forbidden, Unspecified, expect_refusal
+from ..gaps import Forbidden, Unspecified
 from ..manifest import resolve as manifest_resolve
 from ..queries.world_q import proceeding_row
 from ..state.world import World
@@ -263,8 +263,7 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             proceeds = {}
             if act is not None and getattr(VERB_TABLE.get(act.verb), "proceeds", ()):
                 try:
-                    with expect_refusal():                  # a refusal this branch turns into the typed one below, not a gap in the design
-                        proceeds = dict(proceeds=proceeding_row(w, act), topic=topic)
+                    proceeds = dict(proceeds=proceeding_row(w, act), topic=topic)
                 except Unspecified as no_row:
                     if no_row.where != "world_q.proceeding_row":
                         raise
