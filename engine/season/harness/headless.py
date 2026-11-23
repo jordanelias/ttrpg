@@ -170,7 +170,16 @@ def main() -> int:
     ap.add_argument("--seasons", type=int, default=2)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--log", action="store_true", help="print the Event log with its causes[]")
+    ap.add_argument("--world", help="a name in `harness/scenarios.py::SCENARIOS`; plays it with that registry's `run` instead of Carin's case")
     a = ap.parse_args()
+    if a.world is not None:
+        from . import scenarios                    # lazy: the registry is the one owner of names, this file keeps no list
+        if a.world not in scenarios.SCENARIOS:
+            raise SystemExit(f"no scenario {a.world!r}; registered: {sorted(scenarios.SCENARIOS) or 'none'}")
+        r = scenarios.run(a.world, a.seed, a.seasons)
+        print(f"{a.world} · {r['seasons']} season(s) · seed {a.seed} · tick {r['tick']} · ending {r['ending']} · kind {r['kind']}")
+        print(f"CONTENT HASH: {r['hash']}")
+        return 0
     if a.case != CASE:
         raise SystemExit(f"this artifact is {CASE}; `PLAN.md` §6.5 (was §6.1 before the 2026-09-02 rewrite) names the second case as "
                          "NPC-033 if she fails for a reason about her own rows")
