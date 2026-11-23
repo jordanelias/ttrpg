@@ -549,7 +549,7 @@ rows:
           seed: 0
           seasons: "2 (capped; `temporal.span_seasons` per case)"
           line: "  RANKING EXCLUDES         ['conceal', 'interview', 'sabotage', 'tend', 'train'] (no celled axis: declared `uncelled:` or all-`null`)"
-          control: "B10's close (c21e451f1) is the base; its RANKING lines were not re-read. BA1's cells landed none that touch the alignment table: the draft's table (c) carries no verb alignment cell, so the line is the one the last reading recorded"
+          control: "read on this tree (a9bbec8); the earlier recording's lines were `8..13 of 13` at 1c9238db. BA1 landed no verb alignment cell (the draft's table (c) carries none; BA1.04's two `choices:` cells are `choice:` keys, which `celled_verbs` does not count), so the EXCLUDES line is the one the last reading recorded and the DISCRIMINATION numerator and denominator moved with the cast and the verb table, not with a cell"
           does_not_show: >-
             one seed; BA1 authors no verb alignment cell (the draft has none, and none is an agent's to
             invent), so five verbs stay excluded and `RANKING DISCRIMINATION` reads `8..14 of 14`; the
@@ -617,7 +617,10 @@ rows:
             a built realm with no season played; the share is derived from two printed counts; the
             conjunct reads "above one half at seeds 0, 1, 2" and seed 0 reads exactly one half, so it does
             not hold as written by one count; the cause is BA1.02's drafted manner offsets (uncorrected,
-            D-19), which reverts alone; whether a different offset set restores it is not measured here
+            D-19), which reverts alone; whether a different offset set restores it is not measured here; the `--control` arm
+            flattens pursuits and conviction but not `Person.manner_offset`, so after BA1.02 it is no longer an
+            everyone-identical arm (it moved 210/210/211 -> 205/215/218 for the same cause, and the margin over it
+            fell 45/55/62 -> 44/44/48); the `choice_temperature` swept to 0 arm of the conjunct's text was not re-read
       - id: R-06.e
         text: >-
           every acting person carries a pursuit vector: `decision_spread --persons`, n of n at the
@@ -631,7 +634,7 @@ rows:
           seed: "0"
           seasons: 0
           line: "  persons 83 (cast 46, cohorts 37); 83 hold a projected vector, 0 hold none"
-          control: "the same line at B10's close was read at the last recording (tree 1c9238db4c46af9c92a842b1b11d0f2b3d499bdf): 83 hold a projected vector, 0 hold none"
+          control: "the same line at the last recording (tree 1c9238db4c46af9c92a842b1b11d0f2b3d499bdf, 2026-11-15): 83 hold a projected vector, 0 hold none; B10's close (c21e451f1) was not read for this line"
           does_not_show: >-
             a built realm with no season played; a vector held is not a vector that moved a choice
             (R-06.d); the realm of 83 persons, not B39's generated cast; `--persons` reads projected
@@ -748,7 +751,7 @@ rows:
           moved by BA1 (the cells)
         argv: ["python", "-m", "engine.season.harness.corpus_run", "--seasons", "2"]
         expects: "every tie is between candidates of equal, nonzero choice score (`RANKING DISCRIMINATION`, the tie ordering, and `decision_spread --decisions`)"
-        holds: "no"
+        holds: "unread"
         reading:
           tree: "a9bbec8aff368d5fcdcf7254982f0df99ad04ae0"
           date: "2026-11-23"
@@ -758,11 +761,14 @@ rows:
           control: >-
             `decision_spread --decisions` at seeds 0, 1, 2: `every candidate scores 0: 0 of 498 readings`
             (no person is handed an all-zero field) and the draw's tops split tie 31, 29, 27 of 249, 239,
-            232; the tied candidates of the five excluded verbs score zero on every axis, so a tie there is
-            broken by the draw between candidates of zero choice score
+            232. The five verbs under RANKING EXCLUDES carry a zero PURSUIT term only: their stance, fit,
+            aim and risk terms still score (`choose.py`: five terms), and `celled_verbs` (G-1) leaves such
+            candidates out of the tie test, so a tie between candidates of zero choice score is not
+            observed here
           does_not_show: >-
             which of the 31 tied tops are between zero-score candidates (the command prints the split, not
-            the score of each tied candidate); one seed of the corpus; BA1 landed no verb alignment cell
+            the score of each tied candidate), so `holds` stays `unread` (A-114: the batch writes the reading, not
+            the verdict); one seed of the corpus; BA1 landed no verb alignment cell
       - id: R-08.b
         text: >-
           the choice is sampling, and the argmax is its zero-temperature control
@@ -870,7 +876,7 @@ rows:
           A-6, A-7), BA1 (the cast's attributes and skill scores; U1-C's check)
         argv: ["python", "-m", "engine.season.harness.aperture", "2", "0"]
         expects: "`POOLS ROLLED` prints `two actors at different pools: yes` on a non-combat verb, beside the default-pool control"
-        holds: "yes"
+        holds: "unread"
         reading:
           tree: "a9bbec8aff368d5fcdcf7254982f0df99ad04ae0"
           date: "2026-11-23"
@@ -878,14 +884,16 @@ rows:
           seasons: 2
           line: "    `argue`: pools rolled [9.3, 10.0, 11.3, 15.7] over 4 actors · two actors at different pools: yes"
           control: >-
-            the same block reads "yes" on 17 of 19 rolled verbs (`requisition`, one actor, reads "no"); at B10's
-            close (c21e451f1) it read "yes" on every rolled verb but `determine` and `requisition`, with
+            the same block reads "yes" on 17 of 18 rolled verbs (`requisition`, one actor, reads "no"); at B10's
+            close (c21e451f1) it read "yes" on 17 of 19 (`determine` and `requisition` read "no"), with
             `argue` at [8.0, 9.3, 10.0, 10.7] over 4 actors, so the yes predates BA1: B01a's generated
             attributes already separate persons, and BA1's authored `stats:` and `capabilities:` moved
-            the pools (the `argue` set above), not the verdict. The plan's control (every person at the
-            default reads "no") was not run: no `aperture` argument seats it
+            the pools (the `argue` set above), not the verdict. The conjunct's default-pool control was not
+            run: it is a one-line `measure_world` over a builder with `cast_attributes=False` and the
+            authored `capabilities:` stripped (`build_realm` seats them outside that switch)
           does_not_show: >-
-            the default-pool control the conjunct names; that BA1's content, and not B01a's generated
+            the default-pool control the conjunct names, so `holds` stays `unread` (A-114: the batch writes the reading,
+            not the verdict); that BA1's content, and not B01a's generated
             attributes, is what makes two actors differ (the pools moved, the verdict did not); one seed
       - id: R-09.c
         text: >-

@@ -4340,8 +4340,8 @@ tables:
       `data/affiliations.py::engagement` (`tables.affiliation_engagement`), which reports and refuses nothing yet.
     keys: [affiliations, verbs]
     note: >-
-      [ASSUMPTION; Jordan to correct: every row is content.] EMPTY: the reader ships first and the rows land with the
-      CHAR content pass (`IS-A-11` stage 1 table (e)). `favours`: verbs whose engagement cell on the creed should be above
+      [ASSUMPTION; Jordan to correct: every row is content.] The rows are the CHAR content pass's (`IS-A-11` stage 1 table
+      (e); four of the five creeds, landed uncorrected at BA1.06; `altonian_civics` has no basis). `favours`: verbs whose engagement cell on the creed should be above
       zero. `opposes`: verbs whose cell should be below zero, and below every favoured verb's. Verb keys are
       `verb_table.yaml`'s. The loader refuses a creed off `affiliations` and a verb off `VERB_TABLE`; a verb with no
       engagement cell is lawful and reads 0. A cell is repaired in `affiliation_engagement` and nowhere else.

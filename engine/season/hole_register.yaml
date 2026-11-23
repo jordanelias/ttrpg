@@ -7124,7 +7124,7 @@ rows:
     kind:      "NUMBER"
     owner:     "data/cast.py::manner_offset_of"
     grade:     "assumption"
-    default:   "0.15 -- CL-PERSON's draft, SHIPPED; read only where a cast row authors a `manner:`, which none does, so it moves no behaviour at the control [ASSUMPTION; medium; Jordan to correct; revert: none needed]"
+    default:   "0.15 -- CL-PERSON's draft, SHIPPED; read where a cast row authors a `manner:`: ten rows do since BA1.02 (uncorrected), and they moved R-06.d at seed 0 (249 of 498); the swept 0.1 point refuses the shipped cast at build (NPC-004 and NPC-008 author -0.15), and nothing executes the sweep [ASSUMPTION; medium; Jordan to correct; revert: BA1.02 reverts alone]"
     site:      "Fixtures manner_offset_bound, read by `boot/realm.py::build_realm` and handed to `data/cast.py::manner_offset_of`; a `manner:` value outside plus or minus it raises at build"
     sweep:     ["0.1", "0.15 (SHIPPED)", "0.3"]
     unblocks:  "the cast's offsets (BA1-cast-content, which authors the `manner:` values) and CL-PERSON's personality falsifier read at live offsets (`decision_spread --arms`: no decision moved means the offset is inert)"

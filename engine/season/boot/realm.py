@@ -1208,8 +1208,8 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True,
     person (the cohorts included) last; `Fixtures generated_attribute_range` None draws nothing. ⚠ `True` SHIPS
     (persons hold scores, so a person is opposed by the score he rolls and his resisting attribute, never by the stand-in `opposed_ob(pool_default)`), a declared mover
     of the build (every `Person` repr) and of every season. `False` is the CONTROL ARM: no person holds an attribute, so
-    `faculty` falls to `pool_default`. The registry authors ONE row's `stats:` (NPC-001), and `True` is a MOVER by
-    that one person (her pool on the `inquiry` vocation is her Reason, not the default; on `argue`, her Attunement).
+    `faculty` falls to `pool_default`. The registry authors `stats:` on 43 rows (NPC-001's, and 42 more at BA1.01), and `True` is a MOVER by
+    those persons (a person's pool on the `inquiry` vocation is his Reason, not the default; on `argue`, his Attunement).
     [ASSUMPTION; medium; Jordan to correct; revert: none needed -- flipping
     the default is its own declared mover, with the cast's values Jordan's content.]
 

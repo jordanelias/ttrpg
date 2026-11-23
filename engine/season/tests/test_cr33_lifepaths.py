@@ -5,7 +5,7 @@ pool_default}`, rolls the same pool on `research` as a row with no lifepath, and
 it and is refused for the other; a template naming a key outside `descriptors.CAPABILITIES` is refused at import;
 `repr(Person)` contains no lifepath id. PLANTED FAILURE: the expansion skipped reddens the `train` assertion (run
 in-test below, `test_the_planted_failure_...`). CONTROL: the one-season hash with the expansion skipped differs from the
-shipped one (the shipped state's movers are NPC-004's and NPC-088's `inquiry`); the shipped hash is `_realm_goldens.py`'s.
+shipped one (the shipped state's movers are the authored holders': NPC-004's and NPC-088's `inquiry` among them, and the cast's authored scores since BA1.01); the shipped hash is `_realm_goldens.py`'s.
 
 Built on `build_realm` with a PLANTED `lifepath:` on a row that authors none (NPC-030), so the falsifier does not
 read the registry's own authoring; the registry's authored set is pinned separately.

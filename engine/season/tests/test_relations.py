@@ -108,14 +108,14 @@ def test_an_authored_relation_gives_its_holder_a_stance_row_and_his_own_bond_cla
 
 
 @pytest.fixture(scope="module")
-def planted_realm():
+def shipped_realm():
     """`build_realm(0)`: the shipped registry authors the six rows (BA1.08), so none is planted."""
     from ..boot.realm import build_realm
     return build_realm(0)
 
 
-def test_a_rival_ranks_hostile_acts_higher_than_a_stranger(planted_realm):
-    w = planted_realm
+def test_a_rival_ranks_hostile_acts_higher_than_a_stranger(shipped_realm):
+    w = shipped_realm
     fx = w.fixtures
     checked = 0
     for holder, to, ground, valence, weight in SIX:

@@ -46,16 +46,16 @@ schema:
   # `stats:` (the ten attributes, v10 CR-20) reads through `cast.py::attributes_of`; legacy spellings resolve.
   # `manner:` (B10.58, A-108) is `{<axis>: <number>}`, a person's own stored offset on a manner axis, over `engine/season/rosters.yaml: manner_offset_axes`, each within
   # `+-Fixtures.manner_offset_bound`; read by `cast.py::manner_offset_of` into `Person.manner_offset`, which RAISES on any other axis or a value outside the bound. No row
-  # authors one where the IS-A-11 draft's `manner:` cell is filled (BA1.02); silence is no key. Sign: negative = the axis name's first pole (`descriptor_registry.yaml: axis_roster`).
+  # authors one where the IS-A-11 draft's `manner:` cell is filled (BA1.02, uncorrected: ten rows); silence is no key. Sign: negative = the axis name's first pole (`descriptor_registry.yaml: axis_roster`).
   # `relations:` (B10.62) is a list of `{to: <registry case id>, ground: <a `engine/season/rosters.yaml: relation_grounds` member>, valence: -1 or +1,
   # weight: <whole number 0-5>}`, read by `engine/season/data/cast.py::relations_of`, which RAISES on an unknown id, ground or valence and on a weight outside the
   # stance row's own bound. A relation is authored on the side that HOLDS it: a symmetric one is two rows, one on each person, and they need not agree. At build
-  # `boot/realm.py::seed_relations` gives the holder a stance row `(<to's person id>, valence, weight)` and his own `bond:<ground>` claim about `to`. No row authors one
-  # yet (the cast content pass's, BA1); silence is no key.
+  # `boot/realm.py::seed_relations` gives the holder a stance row `(<to's person id>, valence, weight)` and his own `bond:<ground>` claim about `to`. Six rows on five holders
+  # author one (BA1.08, the draft's table (d), uncorrected); silence is no key.
   # `unaware:` (B10.64, A-34) is a list of keys the person does not know of himself, each a member of `engine/season/data/rosters.py::SELF_BELIEVED` (`engine/season/rosters.yaml:
   # self_believed` and the pursuit roster) that the row itself holds (a pursuit in `convictions:`, the gift in `ts:`), read by `engine/season/data/cast.py::unaware_of`, which RAISES
-  # on any other key. A marked key is read from the person's own `self:<key>` claim and not from the field (`queries/person_q.py::knows_self`). No row authors one yet (the cast
-  # content pass's, BA1); silence is no key.
+  # on any other key. A marked key is read from the person's own `self:<key>` claim and not from the field (`queries/person_q.py::knows_self`). NPC-004 and NPC-012
+  # author one (BA1.12, `status: seed`); silence is no key.
   # `affiliations:` (IN-08 H10) is `{<affiliation>: <int 0-5>}` over
   # `references/descriptor_registry.yaml: affiliation_roster` -- the person's religious affiliations
   # and, since ED-IN-0293, `altonian_civics` (the political structure they want), read by

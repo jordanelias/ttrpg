@@ -73,6 +73,14 @@ WHAT EACH MODE READS, AND WHETHER IT PLAYS A SEASON (each prints the answer in i
                `projection_at()` (`data/verbs.py:1166-1172`), and under a uniform projection the pursuit
                dot still varies by verb identically for everyone.
 
+  --signatures BUILT REALM, NO SEASON (BA1.05).  For each pursuit with a row in `rosters.yaml: pursuit_signatures`, every
+               person is given that one pursuit at weight 1.0 (a fresh build per pursuit; conviction as built), the
+               common referents are scored as `--decisions` scores them, and the SAMPLED tops are tallied: `SIGNATURE <k>`
+               per pursuit (modal top verb, the tops, any top its row opposes), `SHARED TOP <verb>` for a verb modal for
+               more than two pursuits, and the footer `signature_violations` / `shared_tops_over_two`. A reading: it
+               exits 0 and changes nothing. The tops are the sampled ones, as `--decisions`' are, so a top the draw picked
+               counts; its own flag, refused beside every other mode (`--seed` only).
+
 THERE IS NO `--cells`: per-cell leverage needs a projection rebind the tree does not have; the cells the
 cast producer questioned go to the cell-value and cosine pass with `--decisions`' deciding-term reading as
 evidence, and no cell is edited here.
@@ -964,7 +972,7 @@ def main(argv=None) -> int:
         ap.error("--control and --null are separate arms; run them apart")
     if not (a.persons or a.decisions or a.season or a.arms or a.retest):
         if not (a.control or a.null):
-            ap.error("name a reading: --persons, --decisions, --season, --retest or --arms")
+            ap.error("name a reading: --persons, --decisions, --season, --retest, --signatures or --arms")
         a.decisions = True                 # an arm alone reads the cheapest realm reading
         print("(--control/--null alone implies --decisions)")
     if a.arms:

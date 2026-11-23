@@ -260,8 +260,8 @@ def test_the_creation_sheet_carries_the_attributes_as_a_read_only_copy():
 
 def test_the_realm_reads_the_cast_stats_only_on_the_arm_that_is_switched_on():
     """`cast_attributes=False` (the control) leaves every person with no attribute; `True` (SHIPPED since B11 lane A)
-    seats the sheet `state/carriers.py::generated_attributes` draws (B01a.01) on every person and the one row the
-    registry authors (NPC-001, Edeyja) over it, key by key. The event-list and hash readings of the two arms are in
+    seats the sheet `state/carriers.py::generated_attributes` draws (B01a.01) on every person and each row the
+    registry authors (NPC-001, Edeyja, and 42 more at BA1.01) over it, key by key. The event-list and hash readings of the two arms are in
     `build_realm`'s docstring and the CR-20 and B11 lane A commit bodies."""
     from engine.season.boot.realm import build_realm
     from engine.season.state.carriers import generated_attributes
