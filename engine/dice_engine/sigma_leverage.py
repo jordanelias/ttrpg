@@ -256,6 +256,23 @@ def governing_mean(scores) -> float:
     return (20 * sum(scores) + n) // (2 * n) / 10
 
 
+def weighted_tenth(scores, tenths) -> float:
+    """A WEIGHTED GOVERNING SCORE (B24p.07; R11, *argument dice is Presence and/or Reason depending upon content of argument and venue*): the mean
+    of `scores` weighted by `tenths` (whole tenths, summing to 10), rounded to the nearest tenth, a value halfway between two tenths rounding up.
+    `governing_mean`'s rule with unequal weights, not a second rounding rule: at equal tenths it is `governing_mean`. A score is taken in
+    tenths first (`round(10 s)`), so the sum is an integer and only the last division is a float, as there. Refuses a negative score or tenth,
+    a count that differs, and tenths that do not sum to 10."""
+    scores, tenths = list(scores), list(tenths)
+    if len(scores) != len(tenths):
+        raise ValueError(f"weighted_tenth takes one tenth per score, got {len(scores)} scores and {len(tenths)} tenths")
+    if any(s < 0 for s in scores) or any(t < 0 for t in tenths):
+        raise ValueError(f"weighted_tenth takes no negative score or tenth, got {scores} and {tenths}")
+    if sum(tenths) != 10:
+        raise ValueError(f"weighted_tenth takes tenths that sum to 10, got {tenths}")
+    # [canonical: ED-IN-0379 (Jordan, 2026-11-13; the ledger row is ratified): the tenth, taken as 20 half-tenths a point]
+    return (2 * sum(t * round(10 * s) for s, t in zip(scores, tenths)) + 10) // 20 / 10
+
+
 # ---------------------------------------------------------------------------
 # Level lookup + aggregation
 # ---------------------------------------------------------------------------

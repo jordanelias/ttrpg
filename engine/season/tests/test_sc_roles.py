@@ -2,14 +2,16 @@
 
 Every reader here is person-side: it reads the person's OWN interior and the operands the host passes, never `World`,
 another person's ledger or a true attribute of anyone else. Hand-built people only; `test_sc_roles.py` is shared with
-the exchange's and the roles' tests (B24p.07, .18)."""
+the exchange's and the roles' tests (B24p.07, .18): the last two tests below are the exchange's (a Focus role and a Reason role)."""
 from __future__ import annotations
 
 from ..data.affiliations import AFFILIATION_CEILING, AFFILIATIONS
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.rosters import STANCE_MAX
 from ..queries import person_q as PQ
+from ..queries.inputs import Choice
 from ..state.carriers import Claim, Person, interior_of
+from .test_sc_proceeding_module import P, _dials, _inp, _key, _p, _rite, _sit
 
 FX = DEFAULT_FIXTURES
 FULL = (("x", 5, 5),)        # one stance row at the row type's bound: a relationship of +1
@@ -99,3 +101,37 @@ def test_strain_carried_fades_and_is_bounded():
     still = FX.sweep("strain_fade", 0.0)
     assert PQ.strain_carried((9,), still) == PQ.strain_carried((0,), still)
     assert PQ.strain_carried((3, 0), FX) == PQ.strain_carried((0, 3), FX)
+
+
+def _speak(inp, mover, keyed, ground="consequence"):
+    return P.exchange(inp, _sit(inp), mover, Choice("argue", ground, None, None), _key("roles", keyed))[1]
+
+
+def test_drift_is_continuous_in_the_pull():
+    """FOCUS (R1, B14): what pulls a man off the point (the times' `unrest`) moves him only as far as his hold fails to carry it: no pull,
+    no drift; a pull of 0.0001 a drift of at most 0.0001 even at Focus 1 (it once read 0.67); a real pull sometimes carries him."""
+    seen = {}
+    for pull in (0.0, 0.0001, 0.5):
+        inp = _inp([_p("a", "for", focus=1.0), _p("b", "against"), _p("j", decides=True)], _rite(unrest=pull))
+        drifts = [_speak(inp, inp.room[0], i).drift for i in range(60)]
+        assert all(0.0 <= d <= pull for d in drifts), (pull, max(drifts))
+        seen[pull] = sum(d > 0 for d in drifts)
+    assert seen[0.0] == 0 and seen[0.5] > 5, seen
+
+
+def test_a_party_who_decides_hears_his_own_case_by_his_own_reason():
+    """REASON, C2: a party who decides is moved by his own speech, heard by HIMSELF: his own Reason validates it (a sounder speaker moves
+    his own track further, the dice held equal), his own Will resists it, and the other side's Reason and Will, which he is not hearing
+    through, change nothing on his track (his own Reason is 7, off the middle, so that a validation read from anyone else would show)."""
+    def own_move(a_reason=7.0, a_will=4.0, b_reason=4.0, b_will=4.0):
+        dials = _dials(DEFAULT_FIXTURES.sweep("fit_level", "strong"))
+        grounds = (("consequence", 0.0, 1.0),)                # Reason's share of the dice 0: only Presence rolls, so Reason acts by validating
+        inp = _inp([_p("a", "for", True, reason=a_reason, will=a_will), _p("b", "against", reason=b_reason, will=b_will)], dials=dials, grounds=grounds)
+        return dict(_speak(inp, inp.room[0], 7).moved)
+
+    base = own_move()
+    assert "a" in base
+    assert own_move(a_reason=7.0)["a"] > own_move(a_reason=1.0)["a"]
+    assert own_move(a_will=7.0)["a"] < own_move(a_will=1.0)["a"]
+    assert own_move(b_reason=7.0)["a"] == own_move(b_reason=1.0)["a"] == base["a"]
+    assert own_move(b_will=7.0)["a"] == own_move(b_will=1.0)["a"] == base["a"]
