@@ -7157,6 +7157,19 @@ rows:
     cite:      "`proposals/2026-11-12-subsystem-audit-suite/proposals/U5a_CHAR_self_knowledge_is_a_belief.md` Exact edits 6 (a) and Gate 3 (a told claim from a person he holds low regard for leaves his reader at UNKNOWN below the confidence the reader requires; from one he trusts the candidate forms). [ASSUMPTION; medium; Jordan to correct: that the floor is on the teller's weight (`teller_weight`, told_weight to the power of the hops times the relation to the teller) and not on the claim's confidence, which fades for a claim he made himself; that a claim he made of himself is never weighed.] FALSIFIER `engine/season/tests/test_self_knowledge.py::test_a_told_self_claim_is_weighed_by_regard_for_the_teller` (at a planted floor of 0.5 a told claim from a teller he disregards leaves him forming no Thread read and one from a teller he trusts admits it; at the floor 0 both admit it); CONTROL `self_told_floor` 0, every told claim taken up."
     source:    "workplan v12 B10.65 (`U5a_CHAR_self_knowledge_is_a_belief` edit 6 (a); B10's H block slot 19)"
 
+  - id:        H-610
+    tier:      1
+    hole:      "HOW MUCH ONE RUNG OF RANK STANDING AGAINST AN ACT WEIGHS -- `rank_step`, the obstacle one `rung_kinds` step is worth in the term `rank_gap` (OBS §2 member 6: how far the person acted on or for stands above the actor's exercised seat; `14_VERBS_BINDING_A` commit A3, which lands the member with its first reader, `establish`). The term is `rank_step x` the steps `seam/wrappers/sigma.py::_rank_gap_of` counts from the rung of the seat `Act.via` names up to the subject's (a rung's own kind; a person's highest held seat's rung), never below 0. No document derives the live value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.rank_step` the one home. READER: `engine/season/seam/wrappers/sigma.py::_rank_gap_term`, the `rank_gap` member of `OBSTACLE_TERMS` (through `obstacle_operands`, from `_frame`, for `contest_input`; `believed_input` passes no gap, so a believer reads none: the rank a hearer ranks a teller by is `H-181`'s, absent)"
+    grade:     "assumption"
+    default:   "0 -- THE CONTROL, SHIPPED (OBS §4 step 6+: each verb proposal's member lands with its step at control 0 first, 'equal at control'): the term reads nothing and is not listed (`sigma.py::_weighing`), so every roll composes the obstacle it had before [ASSUMPTION; medium; Jordan to correct; revert: 0]. Set by B98 (the batch's DIALS AT CONTROL line; UNDECIDED u-1: BIND_C's flip may set it instead)"
+    site:      "Fixtures rank_step, read by `seam/wrappers/sigma.py::_rank_gap_term` once per social-roll record; at 0 the member is unlisted"
+    sweep:     [0, 0.25, 0.5]
+    unblocks:  "a founding over a holding that stands above the founder's seat costs more than one at or below it (`establish`, B21.09); BINDING_C's and D's governance acts across rank, which read the member and do not add it again"
+    cite:      "THE PROPOSED VALUE AND THE SWEEP ARE `unified/work/R4_READ.md:315`'s (0.25, swept 0 / 0.25 / 0.5); no reading is named that sets it, so it ships at the control. CONTROL (OBS §4 step 6+, 'equal at control'): at `rank_step` 0 no roll's `Margin.terms` lists `rank_gap` (read once at B21.09 over one season of `build_realm(0)`, the count in the item's receipt). The member count read at landing (OBS §2, C3-N9: never typed): `python -c \"import yaml; print(len(yaml.safe_load(open('engine/season/rosters.yaml'))['rosters']['obstacle_terms']['values']))\"`."
+    source:    "workplan v12 B21.09 (`14_VERBS_BINDING_A_formation.md` commit A3; `U5c_SC_one_obstacle_form.md` §2 member 6, §4 step 6+; B21's H block slot 1)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

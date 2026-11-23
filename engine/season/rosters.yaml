@@ -1405,7 +1405,6 @@ rosters:
       confer:    "14_VERBS_BINDING_C_turnover"
       revoke:    "14_VERBS_BINDING_C_turnover"
       succeed:   "14_VERBS_BINDING_C_turnover"
-      establish: "14_VERBS_BINDING_A_formation"
       pardon:    "14_VERBS_BINDING_B_sittings"
       release:   "14_VERBS_BINDING_A_formation"
       surrender: "14_VERBS_BINDING_E_war_seats"
@@ -1642,7 +1641,10 @@ rosters:
       is opposite (never absent); `standard` -- what the room demands (OBS §2 member 3; B05.21): for an act a bench hears on a
       docketed matter, the size (`Fixtures.difficulty_ob`) of the `standard:` level of the arrangement row the matter is docketed
       under; `stakes` -- the weight of what the act would take or impose (member 5): `Fixtures.stakes_ob` of the Tenure kind the act
-      opens (a kind the verb alone opens, or the one the docketed row `disposes:` for a verb that opens several); `regard` -- the
+      opens (a kind the verb alone opens, or the one the docketed row `disposes:` for a verb that opens several); `rank_gap` -- how
+      far the person acted on or for stands above the actor's exercised seat (member 6; B21.09, landed with its first reader,
+      `establish`): `rank_step x` the `rung_kinds` steps from the rung of the seat `Act.via` names up to the subject's (a rung's own
+      kind; a person's highest held seat's rung), 0 where the subject stands at or below it; `regard` -- the
       counterparty's hostility to the actor (member 7): `regard_step x clamp(-stance / STANCE_MAX, 0, 1)` over the stance rows he
       holds toward the actor (`person_q.stance_toward`), for one person counterparty and no audience (its favourable half is
       leverage, `advantage_sources: favour`); `reception` -- the audience's hostility (OBS §2 member 8; B05.17): a bench that regards the speaker
@@ -1650,12 +1652,12 @@ rosters:
       0 where none hears it; its favourable half is leverage, `advantage_sources: favour`); `capability` -- a circumstance that punishes a want, the sum over the `circumstance` rows of
       `tables: capability_uses` for the act's site whose `when` holds, each its held value times its `gain` (B05.15; no row ships,
       so it stands at 0). Every member stands AGAINST the act and is never negative. `even`, `difficulty`, `opposition`,
-      `reception` and `capability` stand in every act's terms (at 0.0 where they weigh nothing); `standard`, `stakes` and `regard`
-      are listed only where they weigh, so a world whose three are at their control sizes carries the terms it carried before them
+      `reception` and `capability` stand in every act's terms (at 0.0 where they weigh nothing); `standard`, `stakes`, `rank_gap` and
+      `regard` are listed only where they weigh, so a world whose four are at their control sizes carries the terms it carried before them
       (the terms are folded into the Event's `ending` and so into the content hash). A member lands with its host
       function in `sigma.OBSTACLE_TERMS` and no other code; later members are those the verb lanes add (OBS §2's table).
     ordered: true
-    values: [even, difficulty, opposition, standard, stakes, regard, reception, capability]
+    values: [even, difficulty, opposition, standard, stakes, rank_gap, regard, reception, capability]
 
   lifepaths:
     source: >-
@@ -1769,7 +1771,7 @@ rosters:
         heard_by: "bench"   # the bench at the act's rung hears this prize (`world_q.reception`, `world_q.proofs`; `manifest/registry.py::_check_heard_by`).
         cite:     "v9 SC-01 step 12 (B-N): `speak`'s prize (`proposals/2026-09-05-proceedings-subsystem/04_VERBS.md` §B.1, `08_SEAM.md`: `a matter` -> the proceedings provider). Routed to the interim provider at step 12; ED-SC-0033 clause (2)'s repoint (steps 13 + 15, ONE change) reached THIS row too, so it was three rows, not the two the plan names [ASSUMPTION; medium; revert: no row, and `speak` declares no `contests:`]."
       # B07.04 (`U5c_VERBS_residue` §2 edit 3): the two governance prizes, with the room each is heard in (`seam/wrappers/sigma.py::audience_of`'s table
-      # keyed by room). No verb row names either yet: a row naming one lands with its verb (`a seat`: confer, revoke, succeed, establish; `a holding`: surrender).
+      # keyed by room). A row naming one lands with its verb (`a seat`: `establish` since B21.09, then confer, revoke, succeed; `a holding`: surrender).
       "a seat":
         module:   "social_contest"
         person_inputs: "pool"

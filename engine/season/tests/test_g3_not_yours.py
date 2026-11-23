@@ -29,6 +29,7 @@ import pytest
 
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.data.requires import UNKNOWN, Verdict
+from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
 from engine.season.data.rosters import FELLED
 from engine.season.data.verbs import VERB_TABLE
 from engine.season.decision import person_side_eligible
@@ -458,8 +459,10 @@ def test_g3_the_restamp_of_anothers_grant_needs_the_conferral_basis(gate_only, m
     monkeypatch.setattr(_preds, "founds_over", lambda *a, **k: True)
     w, d, t = world()
     assert t.granted_acts == ("issue",), "fixture"
+    # B21.09: `establish` is drawn, so it is folded at a writing band (Success); the draw is `test_vb_a_formation.py`'s
+    success = Resolution(DEGREE_LABEL[Degree.SUCCESS], {})
     out = d._fold(w, mint_token(w, WriteClass.ACTS),
-                  Act(id="e0", actor="p_other", verb="establish", payload=_RESTAMP, via="off_duke2"))
+                  Act(id="e0", actor="p_other", verb="establish", payload=_RESTAMP, via="off_duke2"), success)
     assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
     assert t.granted_acts == ("issue",), "the refused re-stamp reached the sitting holder"
     assert w.offices["off_reeve"].remit_acts == ["issue", "dispatch"], (
@@ -468,7 +471,7 @@ def test_g3_the_restamp_of_anothers_grant_needs_the_conferral_basis(gate_only, m
     w, d, t = world()
     kinds = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS),
                                      Act(id="e1", actor="p_high", verb="establish",
-                                         payload=_RESTAMP, via="off_duke"))]
+                                         payload=_RESTAMP, via="off_duke"), success)]
     assert "tenure.payload_set" in kinds and t.granted_acts == ("issue", "dispatch"), kinds
 
 

@@ -77,7 +77,7 @@ def test_every_verb_row_names_its_attributes_or_its_authority_or_its_subsystem()
         checked += 1
     assert checked == len(VERB_TABLE) == 67, checked
     kinds = [_kinds_of(r)[0] for r in VERB_TABLE.values()]
-    assert (kinds.count("a"), kinds.count("b"), kinds.count("c")) == (32, 31, 4), kinds   # B05.24's count of the interim cells
+    assert (kinds.count("a"), kinds.count("b"), kinds.count("c")) == (31, 32, 4), kinds   # B05.24's count of the interim cells; B21.09 moved `establish` from (a) to (b) (it is drawn)
     assert _check() is None                                                    # the shipped table passes the loader's own check
 
 

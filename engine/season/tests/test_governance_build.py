@@ -23,6 +23,8 @@ import pytest
 
 from collections import Counter
 
+from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
+
 from ..data import files
 from ..data.matrix import MATRIX, Step, WriteClass
 from ..data.rosters import CONFERRAL_BASES, REVOCATION_BASES, RUNG_KINDS, TITLE_DOMAINS, title_domain
@@ -44,6 +46,9 @@ from ..state.carriers import (
     Act, Claim, Office, Person, Proposition, Rung, Site, Tenure, View,
     matrix_rows_without_a_field, refuse_a_title_in_a_body, subject_of,
 )
+from ..seam import Resolution
+
+SUCCESS = DEGREE_LABEL[Degree.SUCCESS]   # B21.09: the writing band `_establish` folds a founding at
 
 
 # ---------------------------------------------------------------------------
@@ -1108,10 +1113,15 @@ def _establish(w, d, aid: str, payload, actor: str = "p_high", via: str = "off_d
     """G3 (plan position 6): the act names the seat it is exercised through. `establish` is
     `remit:confer`-eligible, and `off_duke` -- a Crown seat at `D`, over every rung `_founding` uses
     -- is the duke's seat whose grant carries `confer`; since G3 `_eligible` asks THAT seat, and the
-    write gate asks its purview before a sitting holder's grant may be re-stamped."""
-    return d.resolve(mint_token(d.w, WriteClass.ACTS),
-                     [Act(id=aid, actor=actor, verb="establish", payload=payload, via=via)],
-                     contest_max_depth=w.fixtures.get("contest_max_depth"))
+    write gate asks its purview before a sitting holder's grant may be re-stamped.
+
+    B21.09: `establish` is DRAWN (`contests: a seat`); these tests read the founding's admission, gate and effect, not its draw,
+    so the act is folded at Success through the real `_fold` (its `_admits`, the gate, the effect), as `test_aperture.py` folds
+    a band. The draw is `test_vb_a_formation.py::test_a3_establish_bands_on_a_hand_built_holding`'s."""
+    act = Act(id=aid, actor=actor, verb="establish", payload=payload, via=via)
+    w.step = Step.RESOLVE
+    w.acts.append(act)
+    return d._fold(w, mint_token(d.w, WriteClass.ACTS), act, Resolution(SUCCESS, {}))
 
 
 def _seat_reeve(w, remit):

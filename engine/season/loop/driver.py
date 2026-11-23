@@ -101,6 +101,12 @@ def resolvable_verbs() -> frozenset:
         #     ROW DECLARING A REGISTERED PREDICATE, because an untyped row with a precondition
         #     reaches here only through `REQUIRES_PREDICATES` (the first gate) and one with none
         #     would contest with no custody or party read at all.
+        #   * B21.09 (VB-A commit A3) [ASSUMPTION; medium; Jordan to correct; revert: the two clauses above alone, under which a
+        #     drawn `establish` leaves the chooser's verb set]: **OR the untyped row names NO counterparty and its prize's row
+        #     names a room that hears it (`heard_by:`).** Such a contest has no second claimant to miss: the actor alone claims,
+        #     the room the prize names is what stands opposite (`seam/wrappers/sigma.py::audience_of`), and the social roll
+        #     opposes nobody at the untrained score (`roll.py::obstacle`, never absent). Narrowed to a registered predicate, as
+        #     the clause above is. Today: `establish` (`a seat`) alone.
         contested = bool(row.contests)
         resolvable_contest = False
         if contested:
@@ -109,10 +115,12 @@ def resolvable_verbs() -> frozenset:
             # exists so `resolve` does not branch on a role's name."* Two readings of one row's
             # `provider:` is how a new role or row shape silently stops reaching the verb set.
             from ..manifest import resolve as _resolve_row
-            _mod = (_resolve_row("contest", row.contests) or {}).get("provider")
+            _prize = _resolve_row("contest", row.contests) or {}
+            _mod = _prize.get("provider")
             resolvable_contest = bool(_mod) and (
                 row.requires_typed is not None
-                or (row.counterparty == "subject" and v in REQUIRES_PREDICATES))
+                or (row.counterparty == "subject" and v in REQUIRES_PREDICATES)
+                or (not row.counterparty and bool(_prize.get("heard_by")) and v in REQUIRES_PREDICATES))
         if gated and effected and (not contested or resolvable_contest):
             out.add(v)
     return frozenset(out)

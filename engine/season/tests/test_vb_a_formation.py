@@ -23,6 +23,16 @@ B21.08 -- commit A2: `establish` forms only on an unfounded holding.
      none. CONTROL, same world: the holding is still stamped as a `Rung` (so `migrate`, `requisition`, `march` and `convene` keep
      their formation), and `migrate` still forms on a `Rung`-classed place. FALSIFIER: edit 6's `founded_office_id` filter dropped,
      the founded holding is offered again (read once, not kept).
+
+B21.09 -- commit A3: `establish` is drawn.
+
+  4. `test_a3_establish_bands_on_a_hand_built_holding` -- the founding contests the prize `a seat` (the social roll, no person
+     opposite) and its band decides what it writes. On the king's world with one foundable holding (`T`), seeded across 40 world
+     seeds, each seed's founding is folded by the real driver: all four bands occur; Overwhelming and Success found the office the
+     derivation describes (`office_founded_by`), Partial founds it with the first half of that remit in authored order, and Failure
+     writes nothing, emits `office.unrecognised` (deposited to the actor's own ledger at WITNESS, the durable write of the band,
+     A-81) and leaves the holding stamped, so `establish` forms on it again. FALSIFIER: the roll pinned to Success, the band count
+     collapses to one (read once, not kept). CONTROL: `rank_step` 0 lists no `rank_gap` term on any roll (read once, not kept).
 """
 
 from __future__ import annotations
@@ -31,6 +41,7 @@ from ..data.matrix import WriteClass
 from ..data.verbs import VERB_TABLE
 from ..decision.options import opening_set
 from ..loop.driver import mint_token
+from ..loop.predicates import office_founded_by
 from ..queries import world_q
 from ..state.attribution import causing_act
 from ..state.carriers import Act, Proposition, Question, Tenure, View
@@ -130,3 +141,40 @@ def test_a2_establish_forms_only_on_an_unfounded_holding():
     assert world_q.holdings_to_found(w, p) == ()
     q2 = world_q.questions_for(w, p)
     assert q2 and all(q_.referents_for(holding_cls) == () and _forms(w, "p_king", "establish", q_) == [] for q_ in q2)
+
+
+def test_a3_establish_bands_on_a_hand_built_holding():
+    bands: dict = {}
+    checked = 0
+    for seed in range(40):
+        w, d = _king_world()
+        w.world_seed = seed
+        p = w.persons["p_king"]
+        # the king holds Presence 5 (the row's one governing attribute), so each band carries several of the 40 draws; untrained he
+        # reads one Overwhelming in 40 and the four-band check would rest on a single draw
+        p.attributes = {**(p.attributes or {}), VERB_TABLE["establish"].governing[0]: 5}
+        derived = office_founded_by(w, Act(id="probe", actor="p_king", verb="establish", via="off_king",
+                                           payload={"subject": "T"}))
+        assert derived is not None and derived.id not in w.offices and len(derived.remit_acts) >= 2, derived
+        before = {k: list(o.remit_acts) for k, o in w.offices.items()}
+        out = d.resolve(mint_token(w, WriteClass.ACTS),      # the real RESOLVE: the seam's draw decides the band
+                        [Act(id=f"e_vba3_{seed}", actor="p_king", verb="establish", via="off_king", payload={"subject": "T"})],
+                        contest_max_depth=w.fixtures.get("contest_max_depth"))
+        band = out[0].degree
+        bands[band] = bands.get(band, 0) + 1
+        if band == "Failure":
+            assert _kinds(out) == ["office.unrecognised"], _kinds(out)
+            assert {k: list(o.remit_acts) for k, o in w.offices.items()} == before, "a Failed founding wrote an office"
+            w.log.extend(out)                                   # logged as `SeasonDriver.season` logs a RESOLVE pass
+            d.witness(mint_token(w, WriteClass.INTERIOR), list(out))
+            assert any(c.predicate == "office.unrecognised" for c in p.ledger), "the refused founding is no remembered deed"
+            q = world_q.questions_for(w, p)[0]
+            assert _forms(w, "p_king", "establish", q) == ["T"], "the Failed founding does not re-form"
+        else:
+            assert _kinds(out) == ["office.established"], (band, _kinds(out))
+            got = w.offices[derived.id].remit_acts
+            want = derived.remit_acts[: (len(derived.remit_acts) + 1) // 2] if band == "Partial" else derived.remit_acts
+            assert got == want, (band, got, derived.remit_acts)
+        checked += 1
+    assert checked >= 40, checked
+    assert set(bands) == {"Overwhelming", "Success", "Partial", "Failure"}, bands

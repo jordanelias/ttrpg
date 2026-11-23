@@ -73,7 +73,7 @@ from engine.dice_engine.sigma_leverage import levels_to_net_sigma, record_odds
 from engine.substrate import composition, descriptors
 
 from ...data.arrangements import ARRANGEMENTS
-from ...data.rosters import STANCE_MAX
+from ...data.rosters import RUNG_KINDS, STANCE_MAX
 from ...data.rosters import capability_rows, require_use_site, roster, when_holds
 from ...data.verbs import SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE, _OPENERS_FROM_EFFECTS
 from ...gaps import InstrumentDefect, Unspecified
@@ -90,6 +90,7 @@ from ...queries.inputs import Margin, SocialContestInput
 # The room's two resolver-side reads. The host READS them; the module composes the obstacle they move.
 from ...queries.world_q import docketed_under, hold_force, judging_set, proofs, reception, residence_of
 from ...state.carriers import EFFORT, effort_of
+from ...state.containment import edges_of
 from ...state.gate import UNDECLARED_DISPOSAL, sits_over
 from ._entry import entry_for
 from .pool import (POOL_ADDENDS, _capability, faculty, governing_attribute, governing_score, rank, opposing_attribute, pool_pair, register_pool_addend,  # noqa: F401  (moved: see pool.py)
@@ -551,7 +552,8 @@ def _read_social_roll(w: Any, claimants: list, *, verb: str = "",
     regard = _regard_of(w, claimants[0], subject, room)                         # the counterparty's stance toward the actor, signed, in the clamp unit (B05.21)
     bodies = (_body_of(actor), _body_of(other))                                 # the `wounds` source's operands: his own body, and a person subject's (B05.60)
     inp = _frame(fx, pool, opposition, doc.forgery_quality if doc is not None else 0.0, room_terms, effort, verb, edge, circumstance, office,
-                 docketed=docketed, heard=room is not None, regard=regard, bodies=bodies)
+                 docketed=docketed, heard=room is not None, regard=regard, bodies=bodies,
+                 rank_gap=_rank_gap_of(w, via, subject))                         # the subject's rank above the exercised seat (B21.09)
     levels = _levels_count(advantage_levels(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies)))     # the same sources `leverage` summed (OBS §5)
     read = {"dice": governing_score(w, actor, verb) + rank(actor, verb) if "dice" in roles else None, "opposes": opposition}   # the pool's own base (B05.25), not `score`
     chosen = {id(r): (value, levels_to_net_sigma(*_edge_levels(r, key, value))) for r, key, value in edge}
@@ -696,10 +698,40 @@ def _regard_term(fx: Any, facts: dict) -> dict:
     return _weighing("regard", max(0.0, -x) if x is not None else 0.0, fx.get("regard_step"))
 
 
+def _rung_rank(w: Any, rung: Optional[str]) -> Optional[int]:
+    """A rung's rank: its kind's ordinal in the ordered `rung_kinds` roster (`person` first, rank 0) -- the reading the gate's `rank` stem
+    makes (`queries/world_q.py`, the `rank` stem). `None` for no rung or one the world does not hold."""
+    r = w.rungs.get(rung) if rung is not None else None
+    return None if r is None else RUNG_KINDS.index(r.kind)
+
+
+def _rank_gap_of(w: Any, via: Optional[str], subject: Optional[str]) -> int:
+    """HOW FAR THE ONE ACTED ON OR FOR STANDS ABOVE THE ACTOR'S EXERCISED SEAT (OBS §2 member 6; B21.09), in `rung_kinds` steps, never below 0.
+    The actor's side is the rung of the seat `Act.via` names (rank 0 where he exercises none: he acts as a person). The subject's side is a
+    rung's own rank where the subject is a rung (`establish`'s holding), and the highest rank among the rungs of the seats a person subject
+    holds (rank 0 for a person holding none). 0 for no subject, or one that is neither. Read by `_rank_gap_term` through `rank_step`."""
+    seat = w.offices.get(via) if via is not None else None
+    own = (_rung_rank(w, seat.rung) or 0) if seat is not None else 0
+    if subject in w.persons:
+        theirs = max((_rung_rank(w, w.offices[t.object].rung) or 0 for t in edges_of(w, "hold", subject)
+                      if t.live and t.object in w.offices), default=0)
+    else:
+        theirs = _rung_rank(w, subject) or 0
+    return max(0, theirs - own)
+
+
+def _rank_gap_term(fx: Any, facts: dict) -> dict:
+    """`rank_gap`: how far the one acted on or for stands above the actor's exercised seat (OBS §2 member 6; B21.09, landed with its first reader,
+    `establish`): `rank_step x` the gap `_rank_gap_of` counts (`facts["rank_gap"]`; 0 where the record's builder read none). Not listed at
+    `rank_step` 0 (the control: "equal at control", OBS §4 step 6+) or where the subject stands at or below the seat."""
+    return _weighing("rank_gap", float(facts.get("rank_gap") or 0), fx.get("rank_step"))
+
+
 #: Each member of `rosters.yaml: obstacle_terms` -> the ONE function that reads it: `fn(fixtures, facts) -> {record field: value}`. A member
 #: that is a raw operand times a step returns `{"obstacle_operands": ((name, raw, step),)}` instead. Refused at import, both ways.
 OBSTACLE_TERMS = _bound_to({fn.__name__[1:-len("_term")]: fn for fn in (
-    _even_term, _difficulty_term, _opposition_term, _standard_term, _stakes_term, _regard_term, _reception_term, _capability_term)},
+    _even_term, _difficulty_term, _opposition_term, _standard_term, _stakes_term, _rank_gap_term, _regard_term, _reception_term,
+    _capability_term)},
                            "obstacle_terms")
 
 
@@ -721,7 +753,7 @@ def obstacle_operands(fx: Any, facts: dict) -> dict:
 def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: float,
            room_terms: dict, effort: int, verb: str, edge: tuple = (), circumstance: tuple = (),
            office: Optional[str] = None, docketed: Optional[dict] = None, heard: bool = False,
-           regard: Optional[float] = None, bodies: tuple = (None, None)) -> SocialContestInput:
+           regard: Optional[float] = None, bodies: tuple = (None, None), rank_gap: int = 0) -> SocialContestInput:
     """THE RECORD, FILLED THE ONE WAY: what `contest_input` (the true input) and `believed_input` (a
     person's) both hand the module. They differ in where the pool's opposition, the forgery quality
     and the room terms COME FROM; the fixtures and the record's shape are this
@@ -737,7 +769,8 @@ def _frame(fx: Any, pool: float, opposition: Optional[float], forgery_quality: f
         leverage=advantage_sigma(fx, _advantage_operands(effort, edge, room_terms, office, regard, *bodies)),      # the one place the operands are named
         forgery_quality=forgery_quality,
         **obstacle_operands(fx, dict(verb=verb, opposition=opposition, circumstance=circumstance,
-                                     reception=room_terms.get("reception", 0.0), docketed=docketed, heard=heard, regard=regard)),
+                                     reception=room_terms.get("reception", 0.0), docketed=docketed, heard=heard, regard=regard,
+                                     rank_gap=rank_gap)),
         **room_terms)
 
 

@@ -1157,6 +1157,13 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-426 -- site: Fixtures regard_step, graded `assumption`; T13 T3 gives the live 1.0 and no document derives it, so it is injected and swept 0 / 0.5 / 1.0 / 2.0]
     regard_step=1.0,                   # `H-426`, swept 0 (control) / 0.5 / 1.0 (live, SHIPPED, B05.23: C5) / 2.0
+    # `H-610` (B21.09; OBS §2 member 6, OBS §4 step 6+; `14_VERBS_BINDING_A` commit A3). HOW MUCH ONE RUNG OF RANK STANDING AGAINST THE ACT WEIGHS, in
+    # obstacle: the term `rank_gap` is `rank_step x` the count of `rung_kinds` steps by which the person (or holding) acted on or for stands above
+    # the rung of the seat the actor exercises (`sigma.py::_rank_gap_of`, `_rank_gap_term`). `0` is the CONTROL ("equal at control"): the term
+    # reads nothing and is not listed, so every roll composes the obstacle it had before.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-610 -- site: Fixtures rank_step, graded `assumption`; OBS proposes 0.25 and no document derives it, so it is injected at the control and swept 0 / 0.25 / 0.5]
+    rank_step=0.0,                     # `H-610`, swept 0 (control, SHIPPED) / 0.25 / 0.5
     # `H-427` (B05.21; T13 edit 1, edit 4, T5). WHETHER THE ARRANGEMENT ROW'S `proofs:` COLUMN FILTERS WHAT A SPEAKER'S PROOFS WEIGH: `off` -- every
     # deed claim counts (`world_q.proofs` as it was); `on` -- under a docketed row only the claims whose kind (`rosters.yaml: proof_kind_of_source`) the
     # row admits count, the rest weigh 0 (`sigma.py::_read_social_roll` passes the row's `proofs:`; `world_q` reads no arrangement itself).

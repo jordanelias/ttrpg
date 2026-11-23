@@ -23,12 +23,15 @@ from __future__ import annotations
 import pytest
 
 from ..data.rosters import TITLE_DOMAINS
-from ..data.matrix import WriteClass
+from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
+
+from ..data.matrix import Step, WriteClass
 from ..harness import probes as P
 from ..boot.realm import build_realm
 from ..loop import predicates as _preds
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
+from ..seam import Resolution
 from ..state.carriers import Act, Office, Rung, Tenure
 
 
@@ -57,9 +60,13 @@ def _world():
 
 
 def _act(w, d, aid, actor, via, payload):
-    return d.resolve(mint_token(d.w, WriteClass.ACTS),
-                     [Act(id=aid, actor=actor, verb="establish", payload=payload, via=via)],
-                     contest_max_depth=w.fixtures.get("contest_max_depth"))
+    """B21.09: `establish` is DRAWN (`contests: a seat`); these tests read the founding's admission, gate and effect, not its
+    draw, so the act is folded at Success through the real `_fold` (its `_admits`, the gate, the effect), as `test_aperture.py`
+    folds a band. The draw is `test_vb_a_formation.py::test_a3_establish_bands_on_a_hand_built_holding`'s."""
+    act = Act(id=aid, actor=actor, verb="establish", payload=payload, via=via)
+    w.step = Step.RESOLVE
+    w.acts.append(act)
+    return d._fold(w, mint_token(d.w, WriteClass.ACTS), act, Resolution(DEGREE_LABEL[Degree.SUCCESS], {}))
 
 
 def _kinds(out):

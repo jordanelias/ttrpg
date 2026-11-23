@@ -11,9 +11,11 @@ cross-file helpers this file's effects call (`_exercised_office`, `_new_oblige_t
 
 from __future__ import annotations
 
+import math
+from dataclasses import replace
 from typing import Optional
 
-from ..data.rosters import RELEASABLE_KINDS, RESTRAINT_KINDS, SEAT_ROW_BY_ID, SUCCESSIONS
+from ..data.rosters import RELEASABLE_KINDS, RESTRAINT_KINDS, SEAT_ROW_BY_ID, SUCCESSIONS, task_share
 from ..data.verbs import VERB_TABLE
 from ..gaps import InstrumentDefect
 from ..loop.predicates import TERM_KEY, office_founded_by, office_named_by
@@ -210,6 +212,14 @@ def _eff_establish(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     off = office_founded_by(w, a)
     if off is None:
         return NO_CHANGE
+    # B21.09 (VB-A edit 13): THE FOUNDING IS DRAWN, AND ITS BAND SAYS HOW MUCH OF THE REMIT TAKES. The office is still built once, by
+    # `office_founded_by`; this narrows the copy it writes to the first `ceil(n x share)` acts of the derived remit in authored order,
+    # the share read through the one band table (`data/rosters.py::task_share`, so no band is named here): Partial founds with the
+    # first half (`(n + 1) // 2`), Success and Overwhelming with all of it, an undrawn act (no degree) with all of it, as before.
+    # Failure writes nothing (`verb_table.yaml`: its `writes:` is empty), so the effect never runs at it. No branch on an entity.
+    share = task_share(res.degree if res is not None else None)
+    if share < 1:
+        off = replace(off, remit_acts=list(off.remit_acts)[: math.ceil(len(off.remit_acts) * share)])
     cur = w.offices.get(off.id)
     holds = [t for t in w.tenures if t.kind == "hold" and t.object == off.id and t.live]
 

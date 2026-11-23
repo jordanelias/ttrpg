@@ -8724,11 +8724,14 @@ def test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else()
     # fought under `rosters.yaml: duel_terms`; `engine/season/tests/test_cp_t03_09_capture.py` folds it.
     # v11 CR-27 (re-recorded at the B10-13 pin commit, P15): `lie` IS contested (`a standing`, `tell`'s prize and contest), the
     # eleventh entry; it shares `tell`'s cell and contest and emits `tell`'s kinds.
+    # v12 B21.09 (`14_VERBS_BINDING_A` commit A3): `establish` IS contested (`a seat`, B07's prize row, its first verb), the twelfth
+    # entry, with its own measurement: `engine/season/tests/test_vb_a_formation.py::test_a3_establish_bands_on_a_hand_built_holding`
+    # folds it through the real seam over 40 seeds (all four bands; Partial founds half the remit, Failure writes nothing).
     assert contested == {"fight": "the body", "tell": "a standing", "march": "a field",
                          "accept": "the body", "speak": "a matter",
                          "determine": "a proposition", "argue": "a proposition",
                          "arrest": "a standing", "interrogate": "a proposition",
-                         "capture": "the body", "lie": "a standing"}, (
+                         "capture": "the body", "lie": "a standing", "establish": "a seat"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
         "can be graded today is scoped to this set. A SEVENTH entry is a real widening and wants "
         "its own measurement; losing one of these six means its prize row or its verb row has "
