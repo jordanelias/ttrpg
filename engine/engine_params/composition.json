@@ -22,7 +22,7 @@
       "kind": "callable",
       "entry": "query",
       "verb": null,
-      "needed_by": "engine/season/loop/effects_combat.py \u2014 `_mark_degree` (B14.23), the one roll of a survivor's mark, `(pool, net_sigma, rng, ob) -> (degree, net)`: the module owns the roll and the boost (`roll_net + SL.net_boost`), the host keeps the stream (`fight.mark`) and the pool. Declared in `effects_combat.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `social_contest.obstacle` is."
+      "needed_by": "engine/season/loop/effects_combat.py \u2014 `_mark_degree` (B14.23) and engine/season/loop/resolve.py \u2014 `_crisis_band` (B10.13, the one roll of a drawn crisis, the same role at `fx.crisis_obstacle`), the one roll of a survivor's mark, `(pool, net_sigma, rng, ob) -> (degree, net)`: the module owns the roll and the boost (`roll_net + SL.net_boost`), the host keeps the stream (`fight.mark`) and the pool. Declared in `effects_combat.QUERY_ENTRIES` and held by `manifest/registrar.py::require_entries`, as `social_contest.obstacle` is."
     },
     "fieldwork.find": {
       "target": "modules.fieldwork.find:find",
