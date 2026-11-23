@@ -1164,6 +1164,13 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-610 -- site: Fixtures rank_step, graded `assumption`; OBS proposes 0.25 and no document derives it, so it is injected at the control and swept 0 / 0.25 / 0.5]
     rank_step=0.0,                     # `H-610`, swept 0 (control, SHIPPED) / 0.25 / 0.5
+    # `H-611` (B21.12; `14_VERBS_BINDING_C` commit C1, edit 1). THE LENGTH, IN SEASONS, OF THE TERM A PARTIAL `succeed`/`revoke` OPENS A HOLD FOR (the one
+    # `provisional_term`; the BYZANTINE files cite it and ship no second value). Read at ONE place, `loop/effects_shared.py::_provisional_term`.
+    # `None` is the CONTROL and SHIPS: a Partial opens an untermed hold, exactly as a Success does, so the two differ by nothing until a value is set.
+    # The proposed 2 is uncalibrated and enters later (B98, or BIND_C's flip).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `None`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-611 -- site: Fixtures provisional_term, graded `assumption`; BIND_C proposes 2 and no document derives it, so it is injected at the control (None: Partial reads as Success) and swept None / 1 / 2 / 4]
+    provisional_term=None,             # `H-611`, swept None (control, SHIPPED) / 1 / 2 (proposed) / 4
     # `H-427` (B05.21; T13 edit 1, edit 4, T5). WHETHER THE ARRANGEMENT ROW'S `proofs:` COLUMN FILTERS WHAT A SPEAKER'S PROOFS WEIGH: `off` -- every
     # deed claim counts (`world_q.proofs` as it was); `on` -- under a docketed row only the claims whose kind (`rosters.yaml: proof_kind_of_source`) the
     # row admits count, the rest weigh 0 (`sigma.py::_read_social_roll` passes the row's `proofs:`; `world_q` reads no arrangement itself).

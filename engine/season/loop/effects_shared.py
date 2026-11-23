@@ -126,6 +126,24 @@ def _new_oblige_term(w: "World", a: "Act") -> Optional["Term"]:
     return None if n is None else Term(w.tick + n, a.id)
 
 
+def _provisional_term(w: "World", a: "Act") -> Optional["Term"]:
+    """The `Term` a PARTIAL's hold OPENS with -- the one constructor of it (`H-611`, `14_VERBS_BINDING_C` commit C1), in
+    `_new_oblige_term`'s shape: matured at the MATTER barrier of tick `w.tick + n`, citing this act (AX-5). `None` is the CONTROL and
+    SHIPS: an untermed hold, exactly what a Success opens, so a Partial reads as a Success until the fixture is set. Anything else
+    must be a whole number of seasons, at least one, refused here as `_oblige_term` refuses it (a `0` would lapse at the very next
+    barrier). No caller yet: B21.14's `succeed` and `revoke` are its first."""
+    n = w.fixtures.get("provisional_term")
+    if n is None:
+        return None
+    if isinstance(n, bool) or not isinstance(n, int) or n < 1:
+        raise Forbidden(
+            f"fixture provisional_term is {n!r}", "T-n",
+            needs="None (no term: a Partial reads as a Success, H-611's control) or a whole number of seasons >= 1",
+            law="04 §B.8 `term?` / T-n -- the opening act declares a term that MATTER matures at a later barrier; "
+                "a term that cannot outlive its own season is not one")
+    return Term(w.tick + n, a.id)
+
+
 def _debit(rung, kind: str, amount) -> None:
     """`rung`'s stores down by `amount` of `kind`: copied before it is written, as `_eff_transfer`
     always did, so no other holder of the old dict sees it change. The one body of the debit side of
