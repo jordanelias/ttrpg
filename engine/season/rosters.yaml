@@ -4345,7 +4345,18 @@ tables:
       zero. `opposes`: verbs whose cell should be below zero, and below every favoured verb's. Verb keys are
       `verb_table.yaml`'s. The loader refuses a creed off `affiliations` and a verb off `VERB_TABLE`; a verb with no
       engagement cell is lawful and reads 0. A cell is repaired in `affiliation_engagement` and nowhere else.
-    cells: {}
+    # BA1.06 (`IS-A-11` table (e.1), the draft UNCORRECTED, landed under D-19; every row [ASSUMPTION; low; Jordan to correct;
+    # revert: delete the row]). The draft grounds four of the five creeds; `altonian_civics` has no basis in either cell
+    # (`[NO BASIS IN THE TREE]`: its two holders' roles name offices, not acts) and carries no row. `solmund_orthodoxy`'s
+    # `opposes` is the tree's own cell (`affiliation_engagement`: -1 on `thread_read`); the rest is the draft's. `open_case`,
+    # `examine` and `reconstruct` have no engagement cell, so the reader reports them (`conviction_spread --words`): a cell is
+    # repaired in `affiliation_engagement` and nowhere else, and the draft authors none. `inner_tradition` and `thread_truth`
+    # read alike here, so the draft's gate ("each creed's violating set differs from another's") does not hold for the two.
+    cells:
+      solmund_orthodoxy:  {favours: [open_case, examine], opposes: [thread_read]}
+      inner_tradition:    {favours: [thread_read],        opposes: []}
+      thread_truth:       {favours: [thread_read],        opposes: []}
+      einhir_restoration: {favours: [reconstruct],        opposes: []}
 
   alignment:
     source: >-

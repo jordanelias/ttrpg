@@ -4773,7 +4773,35 @@
             "verbs"
           ],
           "note": "[ASSUMPTION; Jordan to correct: every row is content.] EMPTY: the reader ships first and the rows land with the CHAR content pass (`IS-A-11` stage 1 table (e)). `favours`: verbs whose engagement cell on the creed should be above zero. `opposes`: verbs whose cell should be below zero, and below every favoured verb's. Verb keys are `verb_table.yaml`'s. The loader refuses a creed off `affiliations` and a verb off `VERB_TABLE`; a verb with no engagement cell is lawful and reads 0. A cell is repaired in `affiliation_engagement` and nowhere else.",
-          "cells": {}
+          "cells": {
+            "solmund_orthodoxy": {
+              "favours": [
+                "open_case",
+                "examine"
+              ],
+              "opposes": [
+                "thread_read"
+              ]
+            },
+            "inner_tradition": {
+              "favours": [
+                "thread_read"
+              ],
+              "opposes": []
+            },
+            "thread_truth": {
+              "favours": [
+                "thread_read"
+              ],
+              "opposes": []
+            },
+            "einhir_restoration": {
+              "favours": [
+                "reconstruct"
+              ],
+              "opposes": []
+            }
+          }
         },
         "alignment": {
           "source": "the retired pursuit-cells draft (its `FORK:` row in `references/restructure_ledger.md`) \u00a73 (the re-cell over the seven axes), FOLDED INTO THE BUILD by Jordan 2026-10-06 (RS-1, ED-IN-0291), plus the six table verbs the draft does not cell (`build`, `found`, `give`, `march`, `migrate`, `survey`), celled in IN-08's cells commit by the draft's own method (each cell's reason below). Formula: ARCHITECTURE_V2.md \u00a7F2 \u2014 `score(c) = \u03a3_axis axis_weight[axis] \u00b7 alignment(c.verb, axis)`, the person's axis weights being their pursuits projected through `pursuit_projection`.",
