@@ -1277,6 +1277,25 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: 0, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-477 -- site: Fixtures aim_gain, graded `assumption`; the design ships no live value, so it is injected at the control and swept 0 / 0.5 / 1 / 2]
     aim_gain=0.0,                      # `H-477`, swept 0 (control, SHIPPED) / 0.5 / 1 / 2
+    # `H-478` (B10.31; `02_CHAR_what_an_act_risks` edit 4). THE GAIN ON `risk`, THE SCORE TERM FOR WHAT AN ACT MIGHT COST THE PERSON WHO DOES IT IN BODY OR FIELD:
+    # `decision/choose.py::score_terms` adds `- risk_gain * exposed * (1 - chance) * (1 + body_band_penalty) * nerve` on a candidate whose row contests a prize
+    # `rosters.yaml: bodily_prizes` lists, and 0.0 on every other. Must be >= 0 (a negative gain would pull a person toward danger). `0` is the CONTROL and SHIPS:
+    # `risk` is exactly 0.0 for every candidate and the chance is never asked. The flip is B98's. The source's sweep points 0.5 and 1.0 are about ten times
+    # the choice temperature's margins (CR-93 / B10.53 measured it): the readings that separate persons sit nearer 0.05 and 0.1.
+    # [ASSUMPTION; medium; Jordan to correct; revert: 0, the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-478 -- site: Fixtures risk_gain, graded `assumption`; the design ships no live value, so it is injected at the control and swept 0 / 0.05 / 0.1 / 1]
+    risk_gain=0.0,                     # `H-478`, swept 0 (control, SHIPPED) / 0.05 / 0.1 / 1 (the source's top point)
+    # `H-479` (B10.31). THE CHANCE `risk` READS WHERE THE ONE ODDS QUERY CANNOT SAY: an answer of `None` (a row whose prize provider carries no believed estimate, a band
+    # its ladder lacks, another's act), and no query at all, read this in place of the believed chance. A fixture, not his belief: it is not a figure he holds, so no later
+    # error on his belief (B10.80) is put on it. In [0, 1]. Read only at `risk_gain` > 0. [ASSUMPTION; low; Jordan to correct; revert: none needed, read only where the gain is live.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-479 -- site: Fixtures risk_unknown_chance, graded `assumption`; no document gives the chance of coming through a danger he cannot estimate, so the even chance is injected and swept 0.25 / 0.5 / 0.75]
+    risk_unknown_chance=0.5,           # `H-479`, swept 0.25 / 0.5 (SHIPPED) / 0.75
+    # `H-480` (B10.31). THE GAIN OF `nerve`, A PERSON'S OWN FACTOR ON THE `risk` TERM: `decision/choose.py::nerve` reads it through the `choice_exposure` row of
+    # `rosters.yaml: tables.capability_uses` (role `judgement`, Spirit) and `risk` is multiplied by the factor; NO ROW SHIPS, so the factor is 1.0 for every person whatever
+    # this holds. ⚠ THE SIGN, as `temper_gain`'s: `about_mid` rises with the attribute, so a danger that weighs LESS on the high-Spirit needs a NEGATIVE gain. Must lie in [-1, 0].
+    # `0` is the CONTROL and SHIPS. [ASSUMPTION; medium; Jordan to correct; revert: the control.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-480 -- site: Fixtures nerve_gain, graded `assumption`; the design names no live value to ship, so it is injected at the control and swept 0 / -0.25 / -0.5]
+    nerve_gain=0.0,                    # `H-480`, swept 0 (control, SHIPPED) / -0.25 / -0.5
     # `H-472` (B10.13; `16_PESSIMIST_CHAR_A` "The resolution, decided" 3; U1 F-43). HOW A CRISIS OF FAITH COMES OUT: `rule` is the CONTROL and SHIPS (today's
     # `person_q.conviction_after_crisis`: the branch is chosen by a rule over state the crisis already reads, nothing is rolled); `drawn` rolls one draw per
     # scarring act and reads the band from `rosters.yaml: tables.crisis_bands` (B10.14, B10.15). A value outside `rosters.yaml: crisis_arms` is refused at load.

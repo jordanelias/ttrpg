@@ -127,7 +127,7 @@ def test_the_fit_term_is_the_third_of_score_terms_and_is_exactly_zero_at_weight_
     checked = 0
     for c in cands:
         terms = CH.score_terms(p, c, fx, memo)
-        assert len(terms) == 4 and terms[2] == 0.0, terms     # B10.30: `aim` follows `fit`
+        assert len(terms) == 5 and terms[2] == 0.0, terms     # B10.30: `aim` follows `fit`; B10.31: `risk` follows `aim`
         checked += 1
     assert checked == 6     # three conferees through each of the conferrer's two seats
     # another verb's candidate reads no fit term even at weight 1.0: the term follows the row's shape, not a verb name

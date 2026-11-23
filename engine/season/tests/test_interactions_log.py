@@ -87,7 +87,7 @@ def test_the_logged_scores_are_the_choosers_own_and_carry_the_believed_odds_fact
     for r in rows:
         for c in r["candidates"]:
             key = (r["actor"], c["verb"], c["subject"])
-            t = (c["pursuit"], c["stance"], c["fit"], c["aim"])
+            t = (c["pursuit"], c["stance"], c["fit"], c["aim"], c["risk"])
             assert t in scored[key], f"a logged candidate's terms are not any the chooser scored: {key} {t}"
             checked += 1
             carried += t not in odds_free[key]

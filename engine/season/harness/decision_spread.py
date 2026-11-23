@@ -3,7 +3,7 @@
 ED-IN-0293's headline expectation (*"I expect all of this to end up generating unique decisions"*) as
 three readings and three arms. Every reading that BUILDS A REALM lives here; `harness/conviction_spread.py`
 is not extended, because it declares that it *"MEASURES THE TABLE, NOT A RUN"* (`:34-37`) and builds no
-world. The score's terms have ONE owner, `decision/choose.py::score_terms` -> `(pursuit, stance, fit, aim)`;
+world. The score's terms have ONE owner, `decision/choose.py::score_terms` -> `(pursuit, stance, fit, aim, risk)`;
 this module calls it (through the module, so a rebind of it reaches every reading) and never
 re-derives a term.
 
@@ -86,7 +86,7 @@ THE DECIDING TERM (`decision/choose.py::deciding_term`, the one owner; `attribut
                  (`field_zero`);
   2. `tiebreak`  the top two scores are within `EPS` at temperature 0 (`(verb, subject)` ordered them);
   3. otherwise the TERMS whose removal leaves the top no longer strictly ahead of the field (it changes, or
-     collapses into a tie): `pursuit`, `stance`, `fit`, `aim` (`choose.TERM_NAMES`), joined by `+`; `overdetermined` if no single
+     collapses into a tie): `pursuit`, `stance`, `fit`, `aim`, `risk` (`choose.TERM_NAMES`, read by position), joined by `+`; `overdetermined` if no single
      term's removal does (two terms each separate it alone).
 So the attribution CAN say "no state decided": two persons with nothing separating their candidates read
 `draw` or `tiebreak`, never `pursuit`.

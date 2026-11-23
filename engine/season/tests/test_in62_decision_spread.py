@@ -1,7 +1,7 @@
 """v9 IN-62 -- ONE OWNER OF THE SCORE'S TERMS, AND THE READING THAT ATTRIBUTES A DECISION TO ONE OF THEM.
 
-`decision/choose.py::score_terms(p, c, fx, memo) -> (pursuit, stance, fit, aim)` owns the formula and
-`make_chooser`'s `score` adds its four terms (`fit` is 0.0 at `confer_fit_weight`'s shipped 0.0, `aim` at `aim_gain`'s); `harness/decision_spread.py::attribute_top` says which
+`decision/choose.py::score_terms(p, c, fx, memo) -> (pursuit, stance, fit, aim, risk)` owns the formula and
+`make_chooser`'s `score` adds its five terms (`fit` is 0.0 at `confer_fit_weight`'s shipped 0.0, `aim` at `aim_gain`'s, `risk` at `risk_gain`'s); `harness/decision_spread.py::attribute_top` says which
 term decided a top. Five claims, each executed and each able to fail:
 
   1. `score(c) == sum(score_terms(...))` for EVERY candidate a seeded realm season forms (observed
@@ -254,9 +254,10 @@ def season_pairs():
 
 def test_in62_score_is_the_sum_of_score_terms_for_every_candidate_a_season_forms(season_pairs):
     checked = 0
-    for score, (pursuit, stance, fit, aim) in season_pairs:
+    for score, (pursuit, stance, fit, aim, risk) in season_pairs:
         assert fit == 0.0, fit      # `confer_fit_weight` ships 0.0 (B04.22)
         assert aim == 0.0, aim      # `aim_gain` ships 0 (B10.30)
+        assert risk == 0.0, risk    # `risk_gain` ships 0 (B10.31)
         assert score == pursuit + stance, (score, pursuit, stance)
         checked += 1
     assert checked >= 1000, f"a seeded realm season formed only {checked} candidates"

@@ -69,10 +69,10 @@ def _rank(p, q, gain, verbs, monkeypatch):
 
 
 def _aims(p, q, gain, verbs):
-    """`score_terms`' last element for each of `verbs`, as the chooser scores them for `q`."""
+    """`score_terms`' `aim` element (the fourth: `risk` follows it, B10.31) for each of `verbs`, as the chooser scores them for `q`."""
     fx = _fx(gain)
     memo = CH.deliberation_memo(p, fx)
-    return [CH.score_terms(p, Candidate(v, _SUBJECT), fx, memo, None, q)[-1] for v in verbs]
+    return [CH.score_terms(p, Candidate(v, _SUBJECT), fx, memo, None, q)[3] for v in verbs]
 
 
 def test_aim_is_zero_at_gain_zero():

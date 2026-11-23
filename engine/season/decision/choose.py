@@ -37,7 +37,7 @@ from ..data import goals as goals_data
 from ..data.cast import STANCE_MAX
 from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
 from ..data.rosters import SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
-from ..data.verbs import VERB_TABLE, act_key, align
+from ..data.verbs import BODILY_PRIZES, VERB_TABLE, act_key, align
 from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
 # imports `person_q` and `data/`); `_stance_arm` calls it, and `confliction` (IN-08 6f,
@@ -53,6 +53,7 @@ from ..trace_log import TRACE
 from .options import VIOLENT_OPPONENT_VERBS, opening_set, project, refusal_tolerance, scruple, seat_of
 # `options.py`'s one reader of a `judgement` row (`competence` is its other caller), under public names here: a call, not a copy (B10.28; CR-93 premise correction 2).
 from .options import _judgement_factor as judgement_factor, _judgement_rows as judgement_rows
+from .budget import body_band_penalty
 
 STANCE_POLARITIES = roster("stance_polarities")
 ODDS_WEIGHTINGS = roster("odds_weightings")
@@ -60,6 +61,8 @@ NPC_EFFORTS = roster("npc_efforts")
 # B10.28: the use row that carries a person's own factor on the choice temperature (`rosters.yaml: tables.capability_uses`); a site
 # renamed there refuses here at import, so `temper` cannot read no row and pass silently as 1.0.
 CHOICE_TEMPER = require_use_site("choice_temper")
+# B10.31: the use row that carries a person's own factor on the `risk` term (`nerve`); no row ships, and a site renamed there refuses here at import.
+CHOICE_EXPOSURE = require_use_site("choice_exposure")
 
 
 def stance_term(p: Person, c: Candidate, fx: "Fixtures", memo: Optional[dict] = None) -> float:
@@ -208,11 +211,18 @@ def odds_weight(p: Person, c: Candidate, fx: "Fixtures", odds: Optional[Callable
     arm = _odds_arm(fx)
     if arm == "none" or odds is None:
         return 1.0
+    chance = _believed_chance(p, c, odds)
+    return 1.0 if chance is None else float(chance)
+
+
+def _believed_chance(p: Person, c: Candidate, odds: Callable) -> Optional[float]:
+    """THE ONE ASK OF THE ODDS QUERY (B10.31: `odds_weight` and `risk_term` both read it here, so no second site builds the probe): `odds(act, bands)`
+    for the candidate probed as the act it would become, over the bands its row writes in (`_writing_bands`); `None` for a candidate with no such
+    bands (nothing a chance can price) and for the query's own `None` (a factor he cannot know)."""
     bands = _writing_bands(c)
     if bands is None:
-        return 1.0
-    chance = odds(Act(f"odds:{c.verb}", p.id, c.verb, payload=_payload_of(c), via=seat_of(p, c)), bands)
-    return 1.0 if chance is None else float(chance)
+        return None
+    return odds(Act(f"odds:{c.verb}", p.id, c.verb, payload=_payload_of(c), via=seat_of(p, c)), bands)
 
 
 def admission_weight(p: Person, c: Candidate, fx: "Fixtures") -> float:
@@ -292,21 +302,78 @@ def aim_term(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional
     return aim * odds_weight(p, c, fx, odds) if aim != 0.0 else aim
 
 
+def nerve(p: Person, fx: "Fixtures") -> float:
+    """HOW FAR A PERSON'S SPIRIT LETS HIM BEAR A DANGER (B10.31; `H-480`): his own factor on `risk`, the `judgement` rows of site `choice_exposure` read by
+    `options._judgement_factor` as `temper` and `competence` read theirs: `about_mid(held, floor, ceiling, nerve_gain)`, exactly 1 at the scale's mid-point and at
+    gain 0, and 1.0 where no row is authored (none ships) or `p` holds no value at the row's key (a READ, never a default). `decision/` names no attribute (U1 §8):
+    the key is the row's.
+
+    ⚠ THE SIGN, as `temper`'s. `about_mid` RISES with the attribute, so a danger that weighs LESS on the high-Spirit person needs a NEGATIVE `nerve_gain`; a gain
+    above 0 would make the bold fear more, and below -1 the factor goes negative at the top of the scale and `risk` becomes a pull toward danger. Both are refused
+    where read."""
+    rows = judgement_rows(CHOICE_EXPOSURE)
+    for row in rows:
+        gain = fx.get(row.gain)
+        if not -1.0 <= gain <= 0.0:
+            raise ValueError(f"{row.gain} {gain!r} is outside [-1, 0] (H-480): above 0 the bold fear more, and below -1 the factor is negative at the "
+                             "scale's ceiling and `risk` would pull toward danger")
+    factor = judgement_factor(p, rows, fx)
+    return 1.0 if factor is None else factor
+
+
+def risk_term(p: Person, c: Candidate, fx: "Fixtures", odds: Optional[Callable]) -> float:
+    """WHAT AN ACT MIGHT COST THE PERSON WHO DOES IT, IN BODY OR IN THE FIELD (B10.31; `H-478`, `H-479`, `H-480`):
+
+        risk = - risk_gain * exposed * (1 - chance) * (1 + body_band_penalty) * nerve
+
+      * `exposed` -- 1 where the candidate's row contests a prize `rosters.yaml: bodily_prizes` lists (`BODILY_PRIZES`), else 0. Read off the row's own
+        `contests:` column, never a verb name; a candidate that is not exposed reads exactly `0.0`;
+      * `chance` -- his believed chance, asked of the ONE odds query (`View.odds`, `_believed_chance`: the bands the row writes in, as `odds_weight` asks), and
+        `Fixtures.risk_unknown_chance` where the query answers `None` or there is none. The believed chance is read, never made here: a later error on his
+        belief (B10.80, `misjudged`) wraps the query once and reaches this term through the argument, with no second owner of it. ⚠ WHAT THE QUERY SAYS OF A
+        BODILY ROW: for a row whose prize provider registered a `believed_estimate` (`personal_combat`'s) it is the chance the SUBJECT ends in the bands the row
+        writes (the combat module's own, `Felled`, `Wounded` ...), the figure `odds_weight` prices a gain by; it does not say which party fell, so it is the
+        nearest figure the one query carries for his chance of coming through, not that chance [ASSUMPTION; low; Jordan to correct: H-478's cite]. A row whose
+        provider has none (`march`, the field's) answers `None` and reads `risk_unknown_chance`;
+      * `body_band_penalty` -- `decision/budget.py`'s count of the bands his body has fallen below the top: 0 at full health, so `1 + 0` is 1;
+      * `nerve` -- `nerve(p, fx)`, his Spirit's factor; 1.0 where no row ships.
+
+    Exactly `0.0` at `risk_gain` 0, the CONTROL, and nothing is read there: the odds query is not asked. The gain is refused below 0 (a negative gain would pull a
+    person toward danger), and `risk_unknown_chance` outside [0, 1] where it is read."""
+    gain = fx.get("risk_gain")
+    if not gain >= 0:                # `not >=`, so a NaN is refused too
+        raise ValueError(f"risk_gain {gain} is not >= 0: a negative gain would pull a person toward danger (H-478)")
+    if gain == 0.0:
+        return 0.0
+    row = VERB_TABLE.get(c.verb)
+    if row is None or row.contests not in BODILY_PRIZES:
+        return 0.0
+    chance = None if odds is None else _believed_chance(p, c, odds)
+    if chance is None:
+        chance = fx.get("risk_unknown_chance")
+        if not 0.0 <= chance <= 1.0:
+            raise ValueError(f"risk_unknown_chance {chance} is not in [0, 1]: it stands for a chance (H-479)")
+    return 0.0 - gain * (1.0 - float(chance)) * (1 + body_band_penalty(p, fx)) * nerve(p, fx)     # `0.0 -`: a sure chance reads 0.0, not -0.0
+
+
 def score_total(terms: tuple) -> float:
     """A candidate's score from its `score_terms`, the one sum (`make_chooser`, `harness/interactions.py` and
-    `harness/decision_spread.py` read it here), left to right. A `fit` or an `aim` of `0.0` -- every candidate at the shipped
-    weight and gain -- adds nothing, not even a sign of zero, so the score is the two-term sum exactly."""
+    `harness/decision_spread.py` read it here), left to right. A `fit`, an `aim` or a `risk` of `0.0` -- every candidate at the shipped
+    weight and gains -- adds nothing, not even a sign of zero, so the score is the two-term sum exactly."""
     s = terms[0] + terms[1]
     if terms[2]:
         s = s + terms[2]
-    return s + terms[3] if terms[3] else s
+    if terms[3]:
+        s = s + terms[3]
+    return s + terms[4] if terms[4] else s
 
 
 def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optional[Callable] = None,
                 q: Optional[Question] = None) -> tuple:
-    """§F2's score, term by term: `(pursuit, stance, fit, aim)`, and `score(c)` is `score_total` of them (IN-62; the sum, `fit`
-    being `0.0` at `confer_fit_weight`'s shipped `0.0` and `aim` at `aim_gain`'s). `aim` is appended after `fit`, not set before it:
-    `fit` was the tuple's third element before `aim` landed (B04.22), and every reader of it by index keeps it. `risk` follows `aim`.
+    """§F2's score, term by term: `(pursuit, stance, fit, aim, risk)`, and `score(c)` is `score_total` of them (IN-62; the sum, `fit`
+    being `0.0` at `confer_fit_weight`'s shipped `0.0`, `aim` at `aim_gain`'s and `risk` at `risk_gain`'s). `aim` is appended after `fit`, not set before it:
+    `fit` was the tuple's third element before `aim` landed (B04.22), and every reader of it by index keeps it. `risk` follows `aim`, fifth, for the same reason
+    (the entry's `(pursuit, stance, aim, risk)` cannot hold: slot 3 is `fit`); `TERM_NAMES` is this tuple's names in order.
     The ONE owner of the formula (`CLAUDE.md` §8): `make_chooser`'s `score` calls this and adds, and
     a reading that wants to know WHICH TERM decided a ranking calls this and never re-derives one.
 
@@ -317,7 +384,8 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
         `admission_weight` the factor a remembered refusal puts on it (exactly 1.0 at `refusal_memory` `0.0`, B09.03);
       * `stance` -- `stance_term(p, c, fx, memo)`, by `Fixtures.stance_polarity`, at gain `1 + g`;
       * `fit` -- `fit_term(p, c, fx)`: the conferrer's view of the candidate a seating row names in `to`;
-      * `aim` -- `aim_term(p, c, fx, memo, odds, q)`: the lean of the goal `q` was raised by, on that goal's own question only (B10.30).
+      * `aim` -- `aim_term(p, c, fx, memo, odds, q)`: the lean of the goal `q` was raised by, on that goal's own question only (B10.30);
+      * `risk` -- `risk_term(p, c, fx, odds)`: what a bodily candidate might cost its doer, by the same `odds` query (B10.31; not asked at `risk_gain` 0).
 
     `q` is the question being answered (`View.question`); `None` -- a reading that scores a person outside `choose` -- reads `aim` 0.0.
     `odds` is the believed-odds query a View carries (`View.odds`); a reading that scores a person outside
@@ -338,7 +406,7 @@ def score_terms(p: Person, c: Candidate, fx: "Fixtures", memo: dict, odds: Optio
     else:
         _odds_arm(fx)           # a zero term is zero whatever the factor: the query is not asked (it scans the log), the arm is still checked.
                                 # Value-equal; the one difference is an error the query would raise on this candidate, which is no longer raised
-    return (pursuit, stance_term(p, c, fx, memo), fit_term(p, c, fx), aim_term(p, c, fx, memo, odds, q))
+    return (pursuit, stance_term(p, c, fx, memo), fit_term(p, c, fx), aim_term(p, c, fx, memo, odds, q), risk_term(p, c, fx, odds))
 
 
 def _npc_effort_arm(fx: "Fixtures") -> str:
@@ -603,7 +671,7 @@ def score_order(cands: list, scores: dict) -> list:
 
 # [JUSTIFIED: a float-tie tolerance for the attribution (two scores within it are a tie), an instrument constant and not a game number]
 ATTRIBUTION_EPS = 1e-9
-TERM_NAMES = ("pursuit", "stance", "fit", "aim")      # `score_terms`' tuple, in order: what `deciding_term` names
+TERM_NAMES = ("pursuit", "stance", "fit", "aim", "risk")      # `score_terms`' tuple, in order: what `deciding_term` names
 
 
 def deciding_term(cands: list, terms: list, actual: Optional[Candidate], tau: float) -> dict:

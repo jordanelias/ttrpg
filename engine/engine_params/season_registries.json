@@ -2544,6 +2544,7 @@
           "kit": "combat_systems.act_cost's caller -- no reader of this row on this tree; B05 (CAP B1, B7) builds it",
           "told_claim_credit": "decision/options.py::competence",
           "choice_temper": "decision/choose.py::temper",
+          "choice_exposure": "decision/choose.py::score_terms",
           "own_state_gate": "queries/person_q.py::OwnStateReader",
           "crisis": "loop/resolve.py::_crisis_net_sigma"
         },
@@ -3251,6 +3252,14 @@
           "note": "THE CONTEST PRIZES WHOSE ROWS ARE VIOLENT -- a list of `contest_subsystems.prizes` keys. A row is violent when its `contests:` is listed (`data/verbs.py::VIOLENT_VERBS`, derived off the table: today `fight`, `capture` and `accept`); `decision/choose.py::stance_term` reads `Fixtures hostile_stance_gain` in place of `1 + stance_gain` on such a row where its subject is its opponent, so a grudge's pull on violence is bounded apart from its pull on every other act. Refused at import when a member is no prize. [ASSUMPTION; medium; Jordan to correct; revert: `hostile_stance_gain` null, which reads `1 + stance_gain`.]",
           "values": [
             "the body"
+          ]
+        },
+        "bodily_prizes": {
+          "source": "v12 B10.31 (`02_CHAR_what_an_act_risks` edit 2): the contest prizes whose loss a person's own body or field pays.",
+          "note": "THE CONTEST PRIZES THE ACTOR HIMSELF STAKES IN BODY OR IN THE FIELD -- a list of `contest_subsystems.prizes` keys. A candidate is EXPOSED when its row's `contests:` is listed (`data/verbs.py::BODILY_PRIZES`; read off the row's own column, never a verb name); `decision/choose.py::score_terms`' `risk` element prices only an exposed candidate. Today `the body` (`fight`, `capture`, `accept`) and `a field` (`march`). Refused at import when a member is no prize any verb row contests (a closed set read against the verb table, so a renamed prize cannot leave the term reading nobody). [ASSUMPTION; medium; Jordan to correct; revert: delete the row, and `risk` reads 0 for every candidate.]",
+          "values": [
+            "the body",
+            "a field"
           ]
         },
         "shortfall_sourced_operands": {

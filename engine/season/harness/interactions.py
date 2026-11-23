@@ -22,7 +22,7 @@ ROWS (JSONL, one object per line, `kind` first):
     position in the person's question list and that list's sources, the CLAIM behind a question whose
     `about` is a claim the person holds (id, subject, predicate, source, chain, and its origin: an
     acquaintance claim written at build by CR-81 is recognised by membership in `w._acquaintances`, the ids
-    `seed_acquaintances` returned), the candidate table (verb, subject, `to`, `pursuit`, `stance`, `fit`, `aim`, score,
+    `seed_acquaintances` returned), the candidate table (verb, subject, `to`, `pursuit`, `stance`, `fit`, `aim`, `risk`, score,
     softmax probability of being sampled first at `choice_temperature`, score rank, sampled rank, chosen),
     the deciding term, the refusal gate's reading, and the relation facts toward every PERSON a chosen act
     names as `subject` or `to`.
@@ -303,7 +303,7 @@ def run(seed: int, seasons: int, acquaintances: bool = True, observe: bool = Tru
             row["candidates"].append({
                 "verb": c.verb, "subject": c.subject, "to": ops.get("to"),
                 "hostile": is_hostile(c.verb, ("subject",)) and c.subject in w.persons,
-                "pursuit": t[0], "stance": t[1], "fit": t[2], "aim": t[3], "score": CH.score_total(t), "p_first": prob[id(c)],
+                "pursuit": t[0], "stance": t[1], "fit": t[2], "aim": t[3], "risk": t[4], "score": CH.score_total(t), "p_first": prob[id(c)],
                 "score_rank": rank[id(c)], "sample_rank": srank[id(c)],
                 "chosen": k in chosen, "act": chosen.get(k)})
         r = CH.deciding_term(cands, terms, sampled[0] if sampled else None, tau)

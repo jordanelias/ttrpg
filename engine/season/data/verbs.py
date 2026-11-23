@@ -2149,6 +2149,25 @@ def _derive_violent_verbs(prizes) -> frozenset:
 VIOLENT_VERBS = _derive_violent_verbs(roster("violent_prizes"))
 
 
+# B10.31: THE PRIZES THE ACTOR HIMSELF STAKES IN BODY OR FIELD (`rosters.yaml: bodily_prizes`); `decision/choose.py::score_terms`' `risk` prices a
+# candidate whose row's `contests:` is one of them. Closed against the `contests:` values the verb table declares, so a prize no row contests
+# (a renamed one) refuses here and cannot leave the term reading nobody.
+def _load_bodily_prizes(prizes) -> frozenset:
+    """The `bodily_prizes` roster, refused at import if a member is no prize any verb row contests."""
+    prizes = frozenset(prizes or ())
+    declared = frozenset(r.contests for r in VERB_TABLE.values() if r.contests)
+    if not prizes or not prizes <= declared:
+        raise Forbidden(
+            f"`rosters.yaml: bodily_prizes` names {sorted(prizes - declared)}, no `contests:` value a verb row declares"
+            if prizes else "`rosters.yaml: bodily_prizes` is empty", "rosters.yaml",
+            needs=f"a prize of {sorted(declared)}",
+            law="B10.31 -- an exposed candidate is one whose row contests a listed prize")
+    return prizes
+
+
+BODILY_PRIZES = _load_bodily_prizes(roster("bodily_prizes"))
+
+
 def _load_opposed_without_prize(values) -> frozenset:
     """`rosters.yaml: opposed_without_prize` (B11 lane A): verbs naming no prize whose second side is their subject,
     read as done against him. Refused at import for a verb the table lacks or whose second side is not `subject`."""
