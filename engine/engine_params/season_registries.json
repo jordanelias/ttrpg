@@ -5423,8 +5423,15 @@
           ],
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
           "beneficiary_note": "v9 IN-12 step 10 (#453 \u00a79.3: *'beneficiary `actor`'*): THE CONCEALER -- the cover is minted into his own hand and hides his own name.",
-          "requires": "\u2014",
-          "requires_note": "#453 \u00a79.3: *'requires: \u2014 (no precondition, so an empty `emits_on_refusal` is lawful)'*. Untyped, `create_record`'s shape: a computed `conceal` forms on its question's referents and carries `subject`, which the effect does not read (the cover names the actor, not the referent). \u26a0 ONE PERSON-SIDE DECLINE, NOT A PRECONDITION: a person holding a cover that names him forms no second one (`rosters.yaml: held_document_declines`, read in `decision/options.py::opening_set`), #453's *'a person-side decline while the actor holds a live cover'*; a hand-built act is not declined by the fold.",
+          "requires": "the actor is an individual, not a population",
+          "requires_typed": {
+            "form": "relation",
+            "of": "actor",
+            "relation": "individual",
+            "conjunct": "individual"
+          },
+          "requires_typed_note": "B10.60 (`proposals/02_CHAR_offer_what_can_be_done.md` edit 3; [ASSUMPTION; medium; Jordan to correct; revert: drop this cell and the `individual` refusal key, which restores `requires: \u2014`): `fight`'s `individual` conjunct of `actor`. A population's heavy moves are petition, migrate, work, tend, comply or refuse and riot (A-56); taking a cover is none of them. A cohort forms none (`queries/person_q.py::OwnStateReader`, B10.59) and a hand-built cohort act is refused with the row's one refusal kind. The cell is the ONLY precondition: the note below states the row as #453 \u00a79.3 had it, with none.",
+          "requires_note": "#453 \u00a79.3: *'requires: \u2014 (no precondition, so an empty `emits_on_refusal` is lawful)'*. Untyped before B10.60, `create_record`'s shape: a computed `conceal` forms on its question's referents and carries `subject`, which the effect does not read (the cover names the actor, not the referent). \u26a0 ONE PERSON-SIDE DECLINE, NOT A PRECONDITION: a person holding a cover that names him forms no second one (`rosters.yaml: held_document_declines`, read in `decision/options.py::opening_set`), #453's *'a person-side decline while the actor holds a live cover'*; a hand-built act is not declined by the fold.",
           "writes": [
             "Record.exists"
           ],
@@ -5434,6 +5441,9 @@
           ],
           "emits_note": "#453 \u00a79.3's kind, emitted by this row alone. \u26a0 NO CHANNEL EXCEPTION (K-19): taking a cover is witnessed as any act is, by `witness_channels`' ordinary precedence -- a per-verb exception there would be scripting drift. `social`, so `_ch_chronicle` does not broadcast it.",
           "emits_on_refusal": {
+            "individual": [
+              "conceal.refused"
+            ],
             "write": [
               "conceal.refused"
             ],
@@ -5442,7 +5452,7 @@
             ]
           },
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
-          "refusal_note": "#453 \u00a79.3: no precondition; a mint that moves nothing (a hand-built act naming the id of an identical Record) is the `write` clause's `conceal.refused` (B07.01; it was the fold's flat `act.refused`).",
+          "refusal_note": "#453 \u00a79.3: no precondition (B10.60 adds the actor's `individual` conjunct, refused with this kind too); a mint that moves nothing (a hand-built act naming the id of an identical Record) is the `write` clause's `conceal.refused` (B07.01; it was the fold's flat `act.refused`).",
           "grade": "assumption",
           "grade_note": "an argued addition (#453 \u00a710.4 step 10): the matrix row `(Record, exists)` is the tree's; the row, the `cover` kind and the `anchor_of` cover read are v9 IN-12's, on #453 \u00a78.2 `:1486-1495`, \u00a79.3 `:1826-1863`, K-19 `:2722-2727`.",
           "source": "v9 IN-12 step 10 (`workplans/valoria_master_workplan_v9_part5.md`), on #453 (`proposals/2026-10-03-verb-coverage-and-gap-fill.md`) \u00a79.3 `:1826-1863`"
@@ -5567,7 +5577,13 @@
           "brute": "own",
           "brute_note": "his own paper (18_DET `bookkeeping`); a false one is `forge`",
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
-          "requires": "\u2014",
+          "requires": "the actor is an individual, not a population",
+          "requires_typed": {
+            "form": "relation",
+            "of": "actor",
+            "relation": "individual"
+          },
+          "requires_typed_note": "B10.60 (`proposals/02_CHAR_offer_what_can_be_done.md` edit 3; [ASSUMPTION; medium; Jordan to correct; revert: drop this cell and the refusal kind, which restores `requires: \u2014` and `emits_on_refusal: []`): `fight`'s `individual` conjunct of `actor`, on a row that had no cell. A population's heavy moves are petition, migrate, work, tend, comply or refuse and riot (A-56), and keeping its own books is none of them. WORLD-ONLY in the fold (`Person.is_cohort`) and the actor's own state at formation (`queries/person_q.py::OwnStateReader`, B10.59), so a cohort forms none and a hand-built cohort act is refused with the row's one kind (`create_record.refused`).",
           "writes": [
             "Record.exists",
             "Record.stages"
@@ -5575,7 +5591,9 @@
           "emits": [
             "record.created"
           ],
-          "emits_on_refusal": [],
+          "emits_on_refusal": [
+            "create_record.refused"
+          ],
           "grade": "ruled",
           "grade_note": "`ruled`: W2 landed Part D's five `Record` rows, which are the verb's table (V2 \u00a7E3 had a Part B defect id, `D7`, in the grade column).",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed"
@@ -5922,12 +5940,21 @@
           ],
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
           "beneficiary_note": "the forgery is minted into the FORGER's hand (`_mint_document`'s maker's `hold`), `survey`'s carrier: he holds it to plant it (`give`).",
-          "requires": "the forger has heard of what he forges a sheet on, and it coheres under one faction",
+          "requires": "the forger has heard of what he forges a sheet on, it coheres under one faction and the forger is an individual",
           "requires_typed": {
-            "form": "own_ledger",
-            "of": "subject"
+            "all": [
+              {
+                "form": "own_ledger",
+                "of": "subject"
+              },
+              {
+                "form": "relation",
+                "of": "actor",
+                "relation": "individual"
+              }
+            ]
           },
-          "requires_typed_note": "v9 IN-45: `survey`'s cell, for `survey`'s reasons (its `requires_typed_note:`) -- #453's row for the verb, *'a faction the forger holds a claim on (`survey`'s cell)'*. `own_ledger` of `subject` carries `subject` onto a computed act, which is what makes the row TYPED: an untyped row carries nothing, so a computed `forge` would have no faction to forge a sheet on. THE KIND IS THE VERB'S, NOT AN OPERAND: a forgery is a `faction_sheet` (`loop/effects_information.py::_eff_forge`), supplied by the verb that knows it as `issue`, `petition` and `survey` supply theirs -- `requires_operands`' `kind` is a MATTER kind and is not bound, and no ninth operand is coined. *It coheres under one faction* is the effect's decline, `survey`'s.",
+          "requires_typed_note": "B10.60 (`proposals/02_CHAR_offer_what_can_be_done.md` edit 3; [ASSUMPTION; medium; Jordan to correct; revert: drop the second conjunct, `relation` `individual` of `actor`, which is `fight`'s spelling): a population does not forge (A-56's heavy moves are petition, migrate, work, tend, comply or refuse and riot); a cohort forms none and a hand-built cohort act is refused with the row's one refusal kind, unnamed as the first conjunct is. v9 IN-45: `survey`'s cell, for `survey`'s reasons (its `requires_typed_note:`) -- #453's row for the verb, *'a faction the forger holds a claim on (`survey`'s cell)'*. `own_ledger` of `subject` carries `subject` onto a computed act, which is what makes the row TYPED: an untyped row carries nothing, so a computed `forge` would have no faction to forge a sheet on. THE KIND IS THE VERB'S, NOT AN OPERAND: a forgery is a `faction_sheet` (`loop/effects_information.py::_eff_forge`), supplied by the verb that knows it as `issue`, `petition` and `survey` supply theirs -- `requires_operands`' `kind` is a MATTER kind and is not bound, and no ninth operand is coined. *It coheres under one faction* is the effect's decline, `survey`'s.",
           "writes": [
             "Record.exists",
             "Record.forgery_quality"
@@ -7423,7 +7450,7 @@
           ],
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
           "beneficiary_note": "v9 IN-12 step 9 (#453 \u00a79.3; K-04, K-09): THE SABOTEUR -- a damaged fabric benefits whoever wanted it damaged, and a Site cannot be held at all (`rosters.yaml: hold_object_kinds`), so *the fabric's holder* is nobody and the row names NO counterparty (K-04). Its sign and beneficiary are what separate it from `restore`/`work` (K-09).",
-          "requires": "the site exists and the actor is present at it",
+          "requires": "the site exists, the actor is present at it and the actor is an individual",
           "requires_typed": {
             "all": [
               {
@@ -7437,10 +7464,16 @@
                 "of": "site",
                 "relation": "present_at",
                 "conjunct": "present"
+              },
+              {
+                "form": "relation",
+                "of": "actor",
+                "relation": "individual",
+                "conjunct": "individual"
               }
             ]
           },
-          "requires_typed_note": "v9 IN-12 step 9 -- #453 \u00a79.3: *'requires: `restore`'s cell'*, copied whole: the site exists and the actor stands at it.",
+          "requires_typed_note": "v9 IN-12 step 9 -- #453 \u00a79.3: *'requires: `restore`'s cell'*, copied whole: the site exists and the actor stands at it. B10.60 (`proposals/02_CHAR_offer_what_can_be_done.md` edit 3; [ASSUMPTION; medium; Jordan to correct; revert: drop the `individual` conjunct and its refusal key): ADDS `fight`'s `individual` conjunct of `actor`. A population's heavy moves are petition, migrate, work, tend, comply or refuse and riot (A-56); `riot` has no verb row, and the cohort-heavy-moves proposal names no riot on `sabotage` (checked, so `sabotage` stays in the set).",
           "writes": [
             "Site.condition"
           ],
@@ -7456,6 +7489,9 @@
               "sabotage.refused"
             ],
             "present": [
+              "sabotage.refused"
+            ],
+            "individual": [
               "sabotage.refused"
             ],
             "write": [
@@ -7922,13 +7958,22 @@
           "brute": "counterparty",
           "brute_note": "a prompt: the questioned person answers by his own `tell`, which is drawn (`rosters.yaml:1433-1434`, K-36)",
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
-          "requires": "the person questioned exists",
+          "requires": "the person questioned exists and the actor is an individual",
           "requires_typed": {
-            "form": "existence",
-            "of": "subject",
-            "kind": "Person"
+            "all": [
+              {
+                "form": "existence",
+                "of": "subject",
+                "kind": "Person"
+              },
+              {
+                "form": "relation",
+                "of": "actor",
+                "relation": "individual"
+              }
+            ]
           },
-          "requires_typed_note": "`fieldwork_v30.md:294` -- *Interview \u00b7 Attunement \u00b7 Question a witness, informant, or subject*. \u26a0 THE PRECONDITION CANON WOULD PREFER IS UNASKABLE BY CONSTRUCTION, and that is worth stating rather than leaving as a thin cell: a witness is someone who HOLDS a claim on the matter, and `04 \u00a7B.2`'s corrected `F8` carve-out admits a resolver-side ledger read for THE ACTOR'S OWN ledger and no other -- *'a Query taking a ledger and an asker who is not its holder still does not exist'*. So `own_ledger` cannot be pointed at the person being questioned, and existence is the strongest clause the grammar admits here. \u26a0 A SECOND CONSEQUENCE, NAMED SO IT IS NOT DISCOVERED AS A SURPRISE: `questions_for`'s Q2 can raise a question whose referent is the asker themselves (`world_q.py:198` -- `c.subject == p.id`), so this cell admits an act whose subject is its actor. Excluding it needs a negation the closed seven forms do not carry, and `rosters.yaml: requires_forms` rules an eighth form *'a design change, not a table edit'*.",
+          "requires_typed_note": "B10.60 (`proposals/02_CHAR_offer_what_can_be_done.md` edit 3; [ASSUMPTION; medium; Jordan to correct; revert: drop the second conjunct, `fight`'s `individual` of `actor`): a population does not take an individual's acts (A-56), so a cohort forms no `interview` and a hand-built cohort act is refused with the row's one kind.`fieldwork_v30.md:294` -- *Interview \u00b7 Attunement \u00b7 Question a witness, informant, or subject*. \u26a0 THE PRECONDITION CANON WOULD PREFER IS UNASKABLE BY CONSTRUCTION, and that is worth stating rather than leaving as a thin cell: a witness is someone who HOLDS a claim on the matter, and `04 \u00a7B.2`'s corrected `F8` carve-out admits a resolver-side ledger read for THE ACTOR'S OWN ledger and no other -- *'a Query taking a ledger and an asker who is not its holder still does not exist'*. So `own_ledger` cannot be pointed at the person being questioned, and existence is the strongest clause the grammar admits here. \u26a0 A SECOND CONSEQUENCE, NAMED SO IT IS NOT DISCOVERED AS A SURPRISE: `questions_for`'s Q2 can raise a question whose referent is the asker themselves (`world_q.py:198` -- `c.subject == p.id`), so this cell admits an act whose subject is its actor. Excluding it needs a negation the closed seven forms do not carry, and `rosters.yaml: requires_forms` rules an eighth form *'a design change, not a table edit'*.",
           "writes": [],
           "writes_note": "\u2014 (as `examine`)",
           "emits": [
@@ -8061,7 +8106,7 @@
             "attr.mind.focus"
           ],
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
-          "requires": "the place watched exists and the actor is present at it",
+          "requires": "the place watched exists, the actor is present at it and the actor is an individual",
           "requires_typed": {
             "all": [
               {
@@ -8073,10 +8118,15 @@
                 "form": "relation",
                 "of": "subject",
                 "relation": "present_at"
+              },
+              {
+                "form": "relation",
+                "of": "actor",
+                "relation": "individual"
               }
             ]
           },
-          "requires_typed_note": "`fieldwork_v30.md:296` -- *Surveil \u00b7 Cognition \u00b7 Observe a location, person, or faction operation over extended time*. `Rung` is the loop's carrier for a place and for what happens in it, so one clause covers the location and the operation. \u26a0 THE PERSON CASE HAS NO HOME: it is neither `interview`'s (which QUESTIONS a witness, `:294`) nor `examine`'s (which STUDIES physical evidence, `:293`), but COVERT OBSERVATION of a person, a third thing. The grammar cannot express it -- there is no disjunction, and one cell binds one kind -- so it is named as absent rather than reassigned. Same `H-94` shape as everything else in this file. `present_at` answers over a Rung directly (`world_q.py:448`), so no second stem is needed. \u26a0 CANON'S OTHER HALF OF THIS ROW HAS NO HOME: *+2 Exposure (conspicuous activity)*. Exposure is tracked per territory (`fieldwork_v30.md:270`) and `04:237` forbids ANY social aggregate on a `Rung` -- *no norms, unrest, legitimacy, reputation, discipline*. It is not written here and not invented elsewhere; ED-FI-0009 carries it.",
+          "requires_typed_note": "B10.60 (`proposals/02_CHAR_offer_what_can_be_done.md` edit 3; [ASSUMPTION; medium; Jordan to correct; revert: drop the third conjunct, `fight`'s `individual` of `actor`): a population does not take an individual's acts (A-56); a cohort forms no `surveil` and a hand-built cohort act is refused with the row's one kind. `fieldwork_v30.md:296` -- *Surveil \u00b7 Cognition \u00b7 Observe a location, person, or faction operation over extended time*. `Rung` is the loop's carrier for a place and for what happens in it, so one clause covers the location and the operation. \u26a0 THE PERSON CASE HAS NO HOME: it is neither `interview`'s (which QUESTIONS a witness, `:294`) nor `examine`'s (which STUDIES physical evidence, `:293`), but COVERT OBSERVATION of a person, a third thing. The grammar cannot express it -- there is no disjunction, and one cell binds one kind -- so it is named as absent rather than reassigned. Same `H-94` shape as everything else in this file. `present_at` answers over a Rung directly (`world_q.py:448`), so no second stem is needed. \u26a0 CANON'S OTHER HALF OF THIS ROW HAS NO HOME: *+2 Exposure (conspicuous activity)*. Exposure is tracked per territory (`fieldwork_v30.md:270`) and `04:237` forbids ANY social aggregate on a `Rung` -- *no norms, unrest, legitimacy, reputation, discipline*. It is not written here and not invented elsewhere; ED-FI-0009 carries it.",
           "writes": [],
           "writes_note": "\u2014 (as `examine`; and see the Exposure note above, which is the one canon effect of this act that has no carrier at all)",
           "emits": {
@@ -8231,7 +8281,7 @@
           ],
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
           "beneficiary_note": "THE PERSON TRAINED, self or a present pupil (#453 \u00a79.4: *'beneficiary `subject` (self or pupil)'*) -- the subject whose `capability` the act raises.",
-          "requires": "the person trained exists and is with the actor",
+          "requires": "the person trained exists, is with the actor and the actor is an individual",
           "requires_typed": {
             "all": [
               {
@@ -8245,10 +8295,16 @@
                 "of": "subject",
                 "relation": "with",
                 "conjunct": "with"
+              },
+              {
+                "form": "relation",
+                "of": "actor",
+                "relation": "individual",
+                "conjunct": "individual"
               }
             ]
           },
-          "requires_typed_note": "v9 IN-12 step 9 -- #453 \u00a79.4's cell, verbatim in shape and `tend`'s: *`existence` of `subject` kind Person \u2227 `relation` of `subject`, `with` (the pupil present, as `tend`'s cell)*. Two existing forms on existing stems (`with` is `ED-IN-0282`'s, world-only, so the person forms the Candidate and the fold refuses an absent pupil). A person stands with himself (`world_q.place_of` answers one place for both sides), so self-practice is admitted by the same cell.",
+          "requires_typed_note": "B10.60 (`proposals/02_CHAR_offer_what_can_be_done.md` edit 3; [ASSUMPTION; medium; Jordan to correct; revert: drop the `individual` conjunct and its refusal key): a population does not take an individual's acts (A-56), so a cohort forms no `train`; a hand-built cohort act is refused with the row's one kind. v9 IN-12 step 9 -- #453 \u00a79.4's cell, verbatim in shape and `tend`'s: *`existence` of `subject` kind Person \u2227 `relation` of `subject`, `with` (the pupil present, as `tend`'s cell)*. Two existing forms on existing stems (`with` is `ED-IN-0282`'s, world-only, so the person forms the Candidate and the fold refuses an absent pupil). A person stands with himself (`world_q.place_of` answers one place for both sides), so self-practice is admitted by the same cell.",
           "writes": [
             "Person.capability"
           ],
@@ -8261,6 +8317,9 @@
               "train.refused"
             ],
             "with": [
+              "train.refused"
+            ],
+            "individual": [
               "train.refused"
             ],
             "write": [
