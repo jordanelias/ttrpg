@@ -45,8 +45,8 @@ def _roll_module():
     load would put `modules/` in its subprocess."""
     return importlib.import_module(composition.require("social_contest.roll").__module__)
 
-TELL = "tell"                                   # draws on `copying`; governed by two attributes, resisted by Will
-GOV = VERB_TABLE[TELL].governing                # (acuity, attunement)
+TELL = "determine"                              # B24p.19: `tell` proceeds and pools nothing; `determine` is the nearest row still on the single roll: draws on `argue`, two attributes, resisted by Will
+GOV = VERB_TABLE[TELL].governing                # (acuity, focus)
 WILL = VERB_TABLE[TELL].opposed_attribute
 ATTR = GOV[0]
 LOW, MID, HIGH = "p_low", "p_mid", "p_high"

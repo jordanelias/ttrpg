@@ -492,10 +492,12 @@ def proceeding_row(w: World, act) -> tuple:
         if all(held[key](value) for key, value in when):
             if rid == "docket":
                 items = docketed(w, subject)
-                rid = items[0].get(DOCKET_ARRANGEMENT) if items else None
-                if rid is None:
-                    raise Unspecified(f"{act.verb!r} proceeds under the docket's row, and {subject!r} is on no docket under one", "world_q.proceeding_row",
-                                      needs="a docketed matter naming the arrangement it is heard under", law="B24p.16, RD §D.1")
+                if not items:
+                    raise Unspecified(f"{act.verb!r} proceeds under the docket's row, and {subject!r} is on no docket", "world_q.proceeding_row",
+                                      needs="a docketed matter", law="B24p.16, RD §D.1")
+                rid = items[0].get(DOCKET_ARRANGEMENT)
+                if rid is None:     # a computed case names no arrangement (`_eff_open_case`: none is derived): the next entry answers
+                    continue
             arrangement = ARRANGEMENTS[rid]
             return (abridged(arrangement) if form == "abridged" else arrangement), form, move, item
     raise Unspecified(f"{act.verb!r} has no `proceeds` entry that holds for this act", "world_q.proceeding_row",

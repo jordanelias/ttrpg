@@ -15,8 +15,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Optional
-from ..gaps import Forbidden, Unspecified
+from ..data.verbs import VERB_TABLE
+from ..gaps import Forbidden, Unspecified, expect_refusal
 from ..manifest import resolve as manifest_resolve
+from ..queries.world_q import proceeding_row
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -178,8 +180,14 @@ def find_trail(w: World, a: Any, e: Any) -> tuple:
 def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             depth: int, max_depth: int, causes: list[str],
             *, verb: str = "", subject: Optional[str] = None,
-            rng: Optional[Any] = None, effort: int = 0, host: Optional[Any] = None, via: Optional[str] = None):
+            rng: Optional[Any] = None, effort: int = 0, host: Optional[Any] = None, via: Optional[str] = None,
+            act: Optional[Any] = None, topic: Optional[str] = None):
     """S39. EVERY ARGUMENT IS LOAD-BEARING.
+
+    `act` and `topic` (B24p.19) are the act the verb row's `proceeds:` cell is read for, and the matter it is about. WHERE THE ACT'S VERB ROW CARRIES
+    `proceeds:`, the seam resolves `world_q.proceeding_row(w, act)` and hands the provider `proceeds=` and `topic=`, and the provider runs the
+    proceeding entry whatever the prize row's `module_entry`: no verb is named, the branch is the row's cell. Every other act is called as before
+    and the provider never sees either keyword. A row with no proceeding to open (a matter on no docket under a row) is a game refusal, typed.
 
     `via` (B05.20) is the seat the act is exercised through (`Act.via`), passed to the provider as `effort` is: the social roll's
     `office` source reads that seat's `modifier` (`rosters.yaml: advantage_sources`); the other providers accept and ignore it.
@@ -252,8 +260,17 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             # `social_contest` reads it as the room whose bench hears the speaker, for a prize
             # row saying `heard_by: bench`; every other provider accepts and ignores it (`combat.py`'s own
             # note on `rng` is the precedent).
+            proceeds = {}
+            if act is not None and getattr(VERB_TABLE.get(act.verb), "proceeds", ()):
+                try:
+                    with expect_refusal():                  # a refusal this branch turns into the typed one below, not a gap in the design
+                        proceeds = dict(proceeds=proceeding_row(w, act), topic=topic)
+                except Unspecified as no_row:
+                    if no_row.where != "world_q.proceeding_row":
+                        raise
+                    return ContestRefused("REFUSED", no_row.what)
             out = _run(w, claimants, causes, prize, verb=verb, subject=subject, rng=rng, rung=rung,
-                       effort=effort, host=host, via=via)
+                       effort=effort, host=host, via=via, **proceeds)
             return _returned(out, f"a contest for {prize!r}", f"contest for {prize!r}")
         raise Unspecified(
             f"a contest for {prize!r} belongs to the `{_sub['module']}` subsystem "

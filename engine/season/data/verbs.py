@@ -269,7 +269,8 @@ class VerbRow:
     # `(key, value)` pairs (`hearer`: `cohort`; `docketed`: `True`), empty for the fallback that closes every list; `row` an arrangement id, or `docket` (the
     # row the docket hears the matter under); `form` `full`, `abridged` or `auto`; `move` a `proceeding_moves` member that draws (`argue`); `item` `any`, or
     # `false` (the speaker is offered his own false items only, `person_q.false_items`: a `lie` is an `argue` on his own false word, V2 p2 §M).
-    # `()` is the declared absence, every row but five; nothing reads it until the seam does (B24p.19), and `governing:` pools those five rows until then.
+    # `()` is the declared absence, every row but five; `seam/contest.py::contest` reads it (B24p.19) and the provider runs the proceeding for such a row, so
+    # a row that proceeds names no `governing:` and no `opposed_attribute:` (refused by `_check_proceeds`).
     proceeds: tuple = ()
 
     def referents_of(self, q) -> tuple:
@@ -715,7 +716,8 @@ def _check_resolution_classes(rows: dict) -> None:
 
 
 def _check_governing_attributes(rows: dict, prizes: dict) -> None:
-    """B05.25: EVERY ROW IS ONE OF THREE KINDS, OR THE LOAD REFUSES, NAMING EACH ROW THAT IS NOT. `rows` is `{verb: VerbRow}`,
+    """B05.25: EVERY ROW IS ONE OF FOUR KINDS, OR THE LOAD REFUSES, NAMING EACH ROW THAT IS NOT (B24p.16 added (d), `proceeds`: a verb that opens a
+    proceeding, whose dice are the proceeding's own). `rows` is `{verb: VerbRow}`,
     `prizes` is `rosters.yaml: contest_subsystems.prizes`. (a) `brute` (a member of `BRUTE_KINDS`, with a `brute_note`; `seat` only where the eligibility carries `remit:`
     or the referent class is `Office`); (b) `governing` (one to three distinct `descriptors.ATTRIBUTES` keys); (c) the exemption:
     the row's prize reads `person_inputs: own`. A brute row never rolls, so it also carries no `opposed_attribute`, no `contests:`
@@ -730,7 +732,7 @@ def _check_governing_attributes(rows: dict, prizes: dict) -> None:
         inputs = (prizes.get(row.contests) or {}).get("person_inputs") if row.contests else None
         exempt = inputs == "own"
         taken = [k for k, held in (("brute", row.brute), ("governing", row.governing), ("exempt prize", exempt), ("proceeds", row.proceeds)) if held]
-        if len(taken) != 1 and taken != ["governing", "proceeds"]:      # B24p.16: both admitted until B24p.19 deletes the five rows' `governing`
+        if len(taken) != 1:
             bad.append(f"{verb!r} takes {taken or 'none'} of `brute`, `governing`, an exempt prize and `proceeds`; it takes exactly one")
         if row.brute:
             if row.brute not in BRUTE_KINDS:
@@ -748,7 +750,7 @@ def _check_governing_attributes(rows: dict, prizes: dict) -> None:
             bad.append(f"{verb!r}: `governing: {list(row.governing)}` is not one to three distinct keys of the ten attributes")
         if row.opposed_attribute is not None and row.opposed_attribute not in ATTRIBUTES:
             bad.append(f"{verb!r}: `opposed_attribute: {row.opposed_attribute}` is no attribute key")
-        if inputs == "pool":
+        if inputs == "pool" and not row.proceeds:        # a row that proceeds (B24p.19) pools nothing: the proceeding's own dice are the six attributes of the room
             if not row.governing:
                 bad.append(f"{verb!r} is contested on a `pool` prize ({row.contests!r}) and names no `governing:`")
             if row.opposed_attribute is None:
@@ -798,13 +800,16 @@ def _check_proceeds(rows: dict) -> None:
     one that carries `proceeds` with `brute` (R7: a brute function opens nothing); an entry whose `row` is neither an arrangement id (`ARRANGEMENTS`) nor
     `docket`; whose `form` is outside `full`, `abridged`, `auto`; whose `move` is not a `PROCEEDING_MOVES` member that draws; whose `item` is outside `any`,
     `false`; whose `when` names a key outside `hearer` (value `cohort`) and `docketed` (value `True`); and a cell whose last entry's `when` is not empty
-    (nothing then answers an act no `when` holds for). `governing` beside `proceeds` is admitted here (`_check_governing_attributes`) and refused from B24p.19."""
+    (nothing then answers an act no `when` holds for); and one that carries `governing` or `opposed_attribute` beside it (B24p.19 deleted the five rows')."""
     bad = []
     for verb, row in rows.items():
         if not row.proceeds:
             continue
         if row.brute:
             bad.append(f"{verb!r} is brute and carries `proceeds:`: a brute verb opens no proceeding")
+        for what, present in (("governing", row.governing), ("opposed_attribute", row.opposed_attribute)):
+            if present:
+                bad.append(f"{verb!r} carries `proceeds:` and `{what}:`: a verb that proceeds pools nothing, its dice are the proceeding's own (B24p.19)")
         for when, rid, form, move, item in row.proceeds:
             if rid != _PROCEEDS_DOCKET and rid not in ARRANGEMENTS:
                 bad.append(f"{verb!r}: `proceeds` row {rid!r} is no arrangement id and not `{_PROCEEDS_DOCKET}`")

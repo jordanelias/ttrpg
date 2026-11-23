@@ -675,8 +675,9 @@ def _standard_term(fx: Any, facts: dict) -> dict:
     """`standard`: what the room demands (OBS §2 member 3; T13 T2): for an act a bench hears on a docketed matter, the size (`Fixtures.difficulty_ob`,
     the one ladder) of the `standard:` level of the row the matter is docketed under. Not listed where nothing is docketed, no bench hears the act or
     the level is `plain` (0). ⚠ THIS IS THE SINGLE ROLL'S FLAT TERM: inside a proceeding the same cell is the Grace the occasion asks, reached through
-    Grace's `esteem` on the leverage and never an obstacle term (B24p.13), so the host omits `standard` for an act resolving through that path
-    (B24p.05, B24p.19) -- which is not built; until it is, every bench-heard act on a docketed matter reads it here."""
+    Grace's `esteem` on the leverage and never an obstacle term (B24p.13): since B24p.19 an act that proceeds (`VerbRow.proceeds`) never reaches this
+    composer at all (`proceeding_input` builds the rite's own `standard`, and `pool.governing_score` refuses the verb), so the term is the single
+    roll's alone."""
     row = facts.get("docketed")
     return _weighing("standard", float(fx.get("difficulty_ob")[row["standard"]]) if row is not None and facts.get("heard") else 0.0, 1.0)
 
@@ -1053,11 +1054,10 @@ def believed_chance(w: Any, believer: Any, act: Any, bands: Any) -> Optional[flo
     (`odds_of`'s own refusal).
 
     A ROW THAT PROCEEDS (B24p.14; `VerbRow.proceeds`, which B24p.16 gives the table) IS ANSWERED BY `_believed_proceeding_chance`, the chooser's
-    own odds that the proceeding carries (`view_odds` on a room of himself and ordinary men) -- ONCE THE ROW STOPS POOLING ON `governing`: B24p.16 wrote
-    `proceeds:` beside the interim `governing:` of five rows, which still roll the single roll until B24p.19 deletes it and the seam dispatches, and the
-    believed odds follow the roll the act actually takes."""
+    own odds that the proceeding carries (`view_odds` on a room of himself and ordinary men): the believed odds follow the roll the act actually
+    takes, and since B24p.19 a row that proceeds is dispatched to the proceeding by the seam and pools nothing."""
     row = VERB_TABLE.get(act.verb)
-    if getattr(row, "proceeds", ()) and not row.governing:
+    if getattr(row, "proceeds", ()):
         return _believed_proceeding_chance(w, believer, act, bands)
     believed, claimants, _target = _estimating(w, act, BELIEVED_ESTIMATE_ROLE)
     if believed is not None:                # a fight: the believer's own estimate, the resolver sampled over the bands asked (B14.24)
@@ -1086,12 +1086,13 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
             verb: str = "", subject: Optional[str] = None,
             rung: Optional[str] = None,
             module_entry: Optional[str] = None, effort: int = 0, host: Any = None, via: Optional[str] = None,
-            proceeds: Optional[tuple] = None) -> dict:
+            proceeds: Optional[tuple] = None, topic: Optional[str] = None) -> dict:
     """Roll for one contested act: build the record, call the module entry, hold its return to a
     `Margin`, refuse S27.4. Returns a net/ob pair, NEVER a band and never a winner.
 
     `proceeds` (B24p.14) is `(row dict, form, move, item)`, the verb row's cell as the seam resolves it (B24p.19), and `None` for every act
-    that does not proceed: the body below is then what it was. Given, the act is a PROCEEDING instead: `_resolve_proceeding` builds the
+    that does not proceed: the body below is then what it was. `topic` is the matter the proceeding is about (the act's `subject` where its
+    opponent is another operand, the docket's matter where the opponent is the `subject`). Given, the act is a PROCEEDING instead: `_resolve_proceeding` builds the
     room (`proceeding_input`), calls the entry the composition row `social_contest.proceeding` names, holds its return to an `Outcome` of
     `Margin` verdicts and reads the act's record off it (`act_band`). `prize`, `rung`, `module_entry` and `via` are not read on that path.
 
@@ -1159,7 +1160,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
             caller = sys._getframe(1)
             raise InstrumentDefect(f"{__name__}.resolve was handed no `rng` by {caller.f_globals.get('__name__', '?')}.{caller.f_code.co_name}: "
                                    f"a proceeding is drawn on the act's own generator, passed down by parameter (04 §C.12)")
-        return _resolve_proceeding(w, claimants, rng, verb=verb, subject=subject, effort=effort, proceeds=proceeds)
+        return _resolve_proceeding(w, claimants, rng, verb=verb, subject=subject, topic=topic, effort=effort, proceeds=proceeds)
     # The room that hears this prize, off its row (`heard_by:`); an inquiry has no prize
     # and so no room. `rung` is the act's place (`loop/sides.py`), which the bench sits over.
     row = _prize_row("contest", prize) if prize is not None else None
@@ -1247,7 +1248,7 @@ def proceeding_dials(fx: Any) -> Any:
 # B24p.13 -- THE HOST BUILDER AND THE CARD (V2 p2 §A, §H, §I; p1 §E). The one place `World` is read for a proceeding: it turns an
 # arrangement row, a matter and the people into the typed `Input` the entry reads (`modules/social_contest/proceeding.py`) and derives the
 # `Card` every participant reads. It writes nothing and holds no token; of ledgers it reads only each person's own, for his own `Present`
-# (the precedent `contest_input` sets: F8). Nothing calls it until B24p.19.
+# (the precedent `contest_input` sets: F8). `resolve(proceeds=...)` calls it, for a verb row that carries `proceeds:` (B24p.19).
 # ---------------------------------------------------------------------------------------------------------------------
 
 #: `[HOOK]` THE CONTEXT'S THREE CARRIERS (V2 p2 §A.3's rule: a layer with no carrier is a key of the context table read as its control
@@ -1593,8 +1594,8 @@ def card(inp: Input, row: dict, arrangement: Arrangement) -> Card:
 # ---------------------------------------------------------------------------------------------------------------------
 # B24p.14 -- THE PROVIDER PATH AND THE BELIEVED ODDS (V2 p2 §C.5, §D, §E; p4 §F 8, 13, 21). `resolve(proceeds=...)` runs a proceeding and
 # `act_band` reads the act's record off what the entry returned; `believed_proceeding_odds` is what a chooser prices an act by before he
-# makes it. The module returns margins; every band is read here, on the one ladder (`seam/ladder.py::degree_of`). Nothing dispatches on
-# `proceeds` until B24p.19.
+# makes it. The module returns margins; every band is read here, on the one ladder (`seam/ladder.py::degree_of`). The seam dispatches on a verb
+# row's `proceeds:` cell from B24p.19 (`seam/contest.py::contest`).
 # ---------------------------------------------------------------------------------------------------------------------
 
 #: Who yields decides what a yield is (V2 p2 §C.5): the bearer drops the matter, the other side's party gives way. A band, never a side.
@@ -1672,14 +1673,24 @@ def _draw_of(inp: Input, out: Outcome, band: dict, weights: Mapping) -> tuple:
     return drawn[0][0], ltr_sum(h * rec.leverage for h, (_, rec) in zip(heads, drawn)) / ltr_sum(heads)
 
 
-def _resolve_proceeding(w: Any, claimants: list, rng: Draw, *, verb: str, subject: Optional[str], effort: int, proceeds: tuple) -> dict:
+def _resolve_proceeding(w: Any, claimants: list, rng: Draw, *, verb: str, subject: Optional[str], effort: int, proceeds: tuple,
+                        topic: Optional[str] = None) -> dict:
     """`resolve`'s path for an act that proceeds: build the room, call the entry the composition row names (every sitting of this batch is
     automatic: no callback is handed in), hold the return to an `Outcome` of `Margin` verdicts (a winner, a band or a side cannot cross
     the module boundary), read the act's record (`act_band`) and refuse S27.4 on an `exchange` close's pair only (a close is an adjudicator's
     draw and is never refused). RESOLVED -> `dict(status, module, resolver, pool, net, ob, leverage, terms, settled_margin, proceeding, card)`.
-    `move` and `item` of `proceeds` are the seam's (B24p.19): the automatic policy chooses the speech until then."""
+    `move` and `item` of `proceeds` are read by no caller yet (the automatic policy chooses the speech). `claimants` are the persons
+    of the act's two sides (`loop/sides.py`: where the opponent operand is the matter itself, as `speak`'s, the second is the matter and no
+    party: the builder reads parties off persons only, the matter as `topic`). A proceeding the builder refuses (`refused[<key>]`: no seat,
+    a party gone, one man as both parties, ...) is the game's refusal, never a raise: `REFUSED`, which the fold takes as the verb's refusal kind."""
     row, form, _move, _item = proceeds
-    inp, card_ = proceeding_input(w, claimants, verb=verb, subject=subject, topic=subject, effort=effort, row=row, form=form)
+    try:
+        inp, card_ = proceeding_input(w, [c for c in claimants if c in w.persons], verb=verb, subject=subject,
+                                      topic=subject if topic is None else topic, effort=effort, row=row, form=form)
+    except ValueError as refused:
+        if not str(refused).startswith("refused["):
+            raise
+        return dict(status="REFUSED", why=str(refused), module=_PROVIDER, resolver=_RESOLVER, pool=None, terms=())
     entry = composition.require(PROCEEDING_ROLE)
     out = entry(inp, rng)
     if not isinstance(out, Outcome) or not all(isinstance(v, tuple) and len(v) == 2 and isinstance(v[1], Margin) for v in out.verdicts):

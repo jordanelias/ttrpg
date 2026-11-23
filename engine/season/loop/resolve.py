@@ -1122,9 +1122,14 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # before the call, because PARTY-GAP is the WRAPPER's own vocabulary for every shape of
     # missing party (empty claimants, wrong-typed claimant, no subject, no rung) and a pre-check
     # here would have to re-enumerate all of them to stay in sync.
+    # B24p.19: THE MATTER A PROCEEDING IS ABOUT (INT C.1). Where the row's opponent operand is another than `subject` (`tell`, `lie`, `argue`: their
+    # hearer, `to`), the matter is the act's `subject`; where the opponent IS the subject (`speak`: the docketed matter; `interrogate`: the man
+    # questioned) the matter is that same operand, `_subject`. Read by the seam only for a row carrying `proceeds:` (`seam/contest.py`).
+    _topic = ((a.payload or {}).get("subject") if isinstance(a.payload, dict) else None) \
+        if _row is not None and _row.opponent_operand() != "subject" else _subject
     r = contest(w, rung=_rung, prize=contests[0], claimants=_parties, depth=0,
                 max_depth=contest_max_depth, causes=[a.id], verb=a.verb, subject=_subject,
-                rng=_rng, effort=effort_of(a), host=host, via=a.via)
+                rng=_rng, effort=effort_of(a), host=host, via=a.via, act=a, topic=_topic)
     if isinstance(r, ContestRefused):
         # `04 §A.2`'s typed refusal (`seam/contest.py::REFUSAL_STATUSES`): `PARTY-GAP` (a missing
         # party) and `REFUSED` (`sigma.py`'s S27.4, `Ob > 2x Pool`). `speak` is contested, so a

@@ -499,7 +499,7 @@ def test_argue_to_a_cohort_proceeds_as_a_rally():
 
 def test_speak_proceeds_abridged_under_the_dockets_row():
     """A `speak` on a docketed matter proceeds abridged, under the row the docket hears the matter under (`abridged` of it); two matters on
-    two rows read two rows; a matter on no docket has no row to proceed under and is refused naming the verb."""
+    two rows read two rows; a matter on no docket has no row to proceed under and is refused naming the verb; a docketed matter whose item names no arrangement (a computed case) is heard by the seat, the `audience` row."""
     w = _world()
     w.docket.append({"date": None, "matter": "p_mid", "arrangement": "audience", "petition": None})
     w.docket.append({"date": None, "matter": "p_other", "arrangement": "arbitration", "petition": None})
@@ -508,7 +508,9 @@ def test_speak_proceeds_abridged_under_the_dockets_row():
     assert read("p_other") == (A.abridged(ROWS["arbitration"]), "abridged", "argue", "any")
     assert read("p_mid")[0]["close"] == "exchange" and ROWS["audience"]["close"] == "bench"      # the row's venue kept, its close the speech's
     with pytest.raises(Unspecified, match="speak"):
-        world_q.proceeding_row(w, _act("speak", subject="p_high"))
+        world_q.proceeding_row(w, _act("speak", subject="p_high"))                      # on no docket: refused naming the verb
+    w.docket.append({"date": None, "matter": "p_high", "arrangement": None, "petition": None})
+    assert read("p_high") == (A.abridged(ROWS["audience"]), "abridged", "argue", "any")   # a computed case names no row: the seat hears it
 
 
 def test_a_lie_is_an_argue_on_his_own_false_word():
@@ -518,3 +520,87 @@ def test_a_lie_is_an_argue_on_his_own_false_word():
     lie, tell = (world_q.proceeding_row(w, _act(v, to="p_mid", subject="p_mid")) for v in ("lie", "tell"))
     assert lie == (A.abridged(ROWS["conversation"]), "abridged", "argue", "false")
     assert tell == (A.abridged(ROWS["conversation"]), "abridged", "argue", "any")
+
+
+# B24p.19 -- THE INFLUENCE VERBS CALL THE PROCEEDING (RD §D.1; V2 p2 §M): `seam/contest.py::contest` resolves `proceeding_row` for a verb row that
+# carries `proceeds:` and the provider takes `social_contest.proceeding`; every other act keeps `social_contest.roll`. A spy stands on each entry.
+class _Spy:
+    """Records each call of the two entries the social provider can reach: the proceeding (through its composition row) and the single roll."""
+
+    def __init__(self, monkeypatch):
+        from ..manifest import MODULE_ENTRIES
+        self.sittings, self.rolls = [], []
+        real, roll = composition.require, MODULE_ENTRIES["social_contest.roll"]
+        proceed = real(S.PROCEEDING_ROLE)
+
+        def entry(inp, rng):
+            out = proceed(inp, rng)
+            self.sittings.append((inp, out))
+            return out
+        entry.__module__ = proceed.__module__
+        monkeypatch.setattr(composition, "require", lambda role: entry if role == S.PROCEEDING_ROLE else real(role))
+
+        def rolled(inp, rng):
+            self.rolls.append(inp)
+            return roll.fn(inp, rng)
+        monkeypatch.setitem(MODULE_ENTRIES, "social_contest.roll", replace(roll, fn=rolled))
+
+
+def _seamed(w, verb, prize, *, to="p_mid", topic=None, effort=0, **payload):
+    """`seam/contest.py::contest` as `loop/resolve.py::_contest` calls it for the act."""
+    from ..seam import contest
+    act = Act(id=f"a19_{verb}", actor="p_low", verb=verb, payload={"to": to, "subject": topic or to, **payload})
+    return contest(w, "Hh", prize, ["p_low", to], 0, 2, [act.id], verb=verb, subject=to, topic=topic, rng=_key(f"b19-{verb}"), effort=effort, act=act)
+
+
+def test_a_tell_resolves_through_the_proceeding_entry_as_one_exchange(monkeypatch):
+    """A `tell` folded by the driver reaches `social_contest.proceeding` and never `social_contest.roll`: one sitting, one beat, the man addressed
+    its only adjudicator, the matter the act's subject; the Event's band is the one ladder's reading of the sitting's own margin. CONTROL: the
+    spy sees a roll for an act on the single roll (`test_an_arrest_still_resolves_on_the_single_roll`). The pool reader refuses the verb."""
+    from ..data.matrix import WriteClass
+    from ..gaps import Forbidden
+    from ..loop.driver import SeasonDriver, mint_token
+    from ..seam.wrappers import pool
+    w = _world()
+    d = SeasonDriver(w)
+    w.persons["p_low"].ledger.append(Claim("c_held", "p_low", "Hh", "stores:grain", 8, 0, "firsthand", 80, "own"))
+    spy = _Spy(monkeypatch)
+    said = person_q.said_of(w.persons["p_low"].ledger, "Hh", w.fixtures)
+    act = Act(id="a_tell19", actor="p_low", verb="tell", payload={"subject": "Hh", "to": "p_mid", "said": said})
+    events = d.resolve(mint_token(w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert len(spy.sittings) == 1 and not spy.rolls, (len(spy.sittings), len(spy.rolls))
+    inp, out = spy.sittings[0]
+    assert len(out.beats) == 1 and [v[0] for v in out.verdicts] == ["p_mid"] and inp.matter == "Hh", (len(out.beats), out.verdicts, inp.matter)
+    assert inp.rite.close == "exchange" and _deciders(inp) == ("p_mid",)
+    assert events and {e.degree for e in events} == {degree_of(S.act_band(out, inp.rite))}, [(e.kind, e.degree) for e in events]
+    with pytest.raises(Forbidden, match="tell"):
+        pool.faculty(w, w.persons["p_low"], "tell")
+
+
+def test_an_argue_resolves_as_exchanges_and_the_hearers_draw():
+    """An `argue` to one man runs the full conversation (more than one exchange, the one addressed drawing the close); to a cohort it is a rally
+    in which the hearers each draw their own verdict, so the act's band is read off the weight-mean of those who hear (`close: hearers`)."""
+    from ..loop.driver import SeasonDriver
+    w = _world()
+    SeasonDriver(w)                                                  # constructed first: the registrar fills the provider and entry tables
+    one = _seamed(w, "argue", "a proposition", topic="m1", effort=2)
+    assert one["status"] == "RESOLVED" and one["proceeding"] is not None and len(one["proceeding"].beats) > 1, one.get("status")
+    assert [v[0] for v in one["proceeding"].verdicts] == ["p_mid"]
+    w = _world()
+    SeasonDriver(w)
+    w.persons["p_mid"].weight = 30
+    w.persons["p_other"].weight = 3
+    many = _seamed(w, "argue", "a proposition", topic="m1", effort=2)
+    heard = [v[0] for v in many["proceeding"].verdicts]
+    assert many["status"] == "RESOLVED" and "p_mid" in heard and len(heard) > 1, heard
+
+
+def test_an_arrest_still_resolves_on_the_single_roll(monkeypatch):
+    """CONTROL: `arrest` carries no `proceeds:` cell, so the same call takes today's path: the spy sees `social_contest.roll` and no sitting, and
+    the result carries no proceeding. The five verbs' prize rows name the same provider, so what separates them is the row's cell alone."""
+    from ..loop.driver import SeasonDriver
+    w = _world()
+    SeasonDriver(w)
+    spy = _Spy(monkeypatch)
+    out = _seamed(w, "arrest", "a standing", to="p_other")
+    assert out["status"] == "RESOLVED" and len(spy.rolls) == 1 and not spy.sittings and "proceeding" not in out, out
