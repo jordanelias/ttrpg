@@ -3146,7 +3146,22 @@ rosters:
       -- the CONTROL, shipped. `valence` first narrows the teller's claims about the subject to
       those THEY judge most strongly (the largest `|deed_valence|` by their own pursuits) and picks
       among those by the same comparator; with no valenced claim it is `newest` exactly.
-    values: [newest, valence]
+      `unshared` (v12 B11.09, `08_FI_02` edit 2) never passes on the transport's own kinds -- the teller's claims whose
+      predicate a `tell` or a `lie` row emits (on success or on refusal) are dropped from the pool -- and so retells what
+      the room did not see for itself. `unshared_first` is `unshared` that then picks, by the same comparator, within the
+      first non-empty tier of its `prefers:`, and a `seen` claim remains the last resort as at every arm. THE TWO KEYS ARE
+      DATA, PER ARM, under `arms:` (read by `queries/person_q.py::_load_slant_arms`, refused at import): `excludes_kinds_of`
+      names VERBS of `verb_table.yaml` (a name the table lacks refuses, as `lie_verbs` does; the excluded predicates are
+      those rows' `emits` and `emits_on_refusal`, derived, never spelt) and `prefers` is an ordered list of tiers, each
+      one `person_q.py::_SLANT_TIERS` reads (told: a claim with a chain; inferred: `source == "inferred"`; deed: `is_deed`;
+      quantity: a cell whose value is a number; other: anything else).
+    values: [newest, valence, unshared, unshared_first]
+    arms:
+      unshared:
+        excludes_kinds_of: [tell, lie]
+      unshared_first:
+        excludes_kinds_of: [tell, lie]
+        prefers: [told, inferred, deed, quantity, other]
 
   telling_hearer_arms:
     source: >-

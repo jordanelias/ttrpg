@@ -4879,7 +4879,7 @@
       "kind": "other",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-196`, swept newest (control, SHIPPED) / valence",
+      "note": "`H-196`, swept newest (control, SHIPPED) / valence / unshared / unshared_first",
       "citation": null,
       "citation_grade": null
     },

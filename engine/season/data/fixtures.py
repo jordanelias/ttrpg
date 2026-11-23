@@ -968,9 +968,11 @@ DEFAULT_FIXTURES = Fixtures(
     # pre-G3 pick; `valence` passes on the deed the teller judges most strongly by their own
     # pursuits, however old (`queries/person_q.py::said_of`; `rosters.yaml: said_slants`). `newest`
     # is the CONTROL and is SHIPPED [ASSUMPTION], on `H-190`'s precedent: the plan names the control
-    # and is silent on shipping `valence`, and `valence` moves what tellings carry.
-    # [JUSTIFIED: engine/season/hole_register.yaml H-196 -- the slant arm; no document says which claim a teller chooses to pass on, so both readings are declared and swept newest / valence]
-    said_slant="newest",               # `H-196`, swept newest (control, SHIPPED) / valence
+    # and is silent on shipping `valence`, and `valence` moves what tellings carry. v12 B11.09 (`08_FI_02` edits 2-4) adds `unshared` (drops the transport's
+    # own kinds, `rosters.yaml: said_slants` `arms:`) and `unshared_first` (the same, then the first non-empty tier of `prefers`); `unshared_first` ships when
+    # the batch's flip item sets it, once its gate reads (`16_PESSIMIST_FI_A` edits 1-3), so `newest` stays the shipped arm here.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-196 -- the slant arm; no document says which claim a teller chooses to pass on, so the readings are declared and swept newest / valence / unshared / unshared_first]
+    said_slant="newest",               # `H-196`, swept newest (control, SHIPPED) / valence / unshared / unshared_first
     # v11 CR-29, A-32. WHETHER NEWS OF A SEAT CHANGE TRAVELS BY KIND: `realm` (SHIPPED) leaves the tenure-kind news
     # (`rosters.yaml: seat_news_kinds`) at the reach `witness_channels.event_reach` gives it; `local` lifts it from the
     # `reach` channel, so it reaches a person only by presence, jurisdiction and telling (`epistemic._ch_reach`,

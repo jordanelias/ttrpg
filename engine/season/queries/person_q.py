@@ -1698,6 +1698,45 @@ def _slant(fx) -> str:
     return arm
 
 
+#: THE TIERS an `unshared_first` pick reads, in the vocabulary `rosters.yaml: said_slants` `arms.<arm>.prefers` names them (v12 B11.09, `08_FI_02`
+#: edit 2). Each is a test of one claim; the roster says their ORDER and a name not here refuses at import (`_load_slant_arms`). `deed` is `is_deed`
+#: (what a witness of the act deposits); `quantity` is a cell whose value is a number and no truth value (`16_PESSIMIST_FI_A` edit 1's derived
+#: `QUANTITY_STEMS` is the stem form of the same reading, a later item's; it replaces this test when it lands).
+_SLANT_TIERS = {
+    "told": lambda c: bool(c.chain),
+    "inferred": lambda c: c.source == "inferred",
+    "deed": is_deed,
+    "quantity": lambda c: is_cell(c) and isinstance(c.value, (int, float)) and not isinstance(c.value, bool),
+    "other": lambda c: True,
+}
+
+
+def _load_slant_arms(arms: dict, values, verb_table, tiers) -> dict:
+    """`rosters.yaml: said_slants` `arms:`, checked and resolved: `{arm: (excluded predicates, tier order)}`. REFUSED AT IMPORT (`ValueError`, this module's
+    reason: `_check_intent_claim`'s) when an arm is not one of `values`, an `excludes_kinds_of` member is no verb of the table (`lie_verbs`' rule,
+    `data/verbs.py::_load_lie_verbs`), or a `prefers` member is no tier. The excluded predicates are DERIVED: every kind those rows emit, on success or on
+    refusal, so a row that gains a kind is excluded with it."""
+    out = {}
+    for arm, spec in arms.items():
+        if arm not in values:
+            raise ValueError(f"rosters.yaml: said_slants.arms names {arm!r}, which is not one of its values {sorted(values)}")
+        excluded = set()
+        for v in (spec or {}).get("excludes_kinds_of") or ():
+            row = verb_table.get(v)
+            if row is None:
+                raise ValueError(f"rosters.yaml: said_slants.arms.{arm}.excludes_kinds_of names {v!r}, and the verb table carries no such verb")
+            excluded |= {*row.emits, *row.emits_on_refusal}
+        prefers = tuple((spec or {}).get("prefers") or ())
+        bad = [t for t in prefers if t not in tiers]
+        if bad:
+            raise ValueError(f"rosters.yaml: said_slants.arms.{arm}.prefers names {bad}, which are no tier of `_SLANT_TIERS` {sorted(tiers)}")
+        out[arm] = (frozenset(excluded), prefers)
+    return out
+
+
+SLANT_ARMS = _load_slant_arms(roster_map("said_slants", "arms"), SAID_SLANTS, _verbs.VERB_TABLE, _SLANT_TIERS)
+
+
 def said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 0, weigh=None) -> "Said | None":
     """WHAT THIS PERSON WOULD SAY ABOUT `subject`, as the `Said` a telling carries -- or `None` for
     nothing to say. Asked of the TELLER'S OWN claims at CHOOSE (`decision/options.py::opening_set`),
@@ -1721,6 +1760,10 @@ def said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 
     CONTROL, shipped), with no `teller`, or with no `fx`, it is the unslanted pick and reads no
     pursuits.
 
+    ⚠ SLANT `unshared` / `unshared_first` (v12 B11.09, `08_FI_02` edit 2-3, `rosters.yaml: said_slants` `arms:`): the pool first drops every claim whose
+    predicate is a kind the `tell` or `lie` row emits (a telling is not passed on as news of itself), and `unshared_first` then narrows it to the first
+    non-empty tier of its `prefers:` (`_SLANT_TIERS`) before the same comparator picks. Neither reads a ledger but the teller's or spends a draw.
+
     ⚠ B09.07 `weigh`: the closure the one comparator ranks by (`decision/options.py::ledger_weigh`, passed in because this
     module may not import `decision/`), handed to `LedgerReader` as `epistemic.belief_contradicts` hands it, so a person
     passes on the belief he acts on. `None` (a hand-built read) is the plain comparator. ⚠ `LedgerReader._support`
@@ -1735,7 +1778,18 @@ def said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 
         top = max(strength.values())
         if top > 0:
             pool = [c for c in pool if strength[id(c)] == top]
-    reader = LedgerReader(pool, weigh, tick=tick, decay=0 if fx is None else fx.claim_decay())
+    if fx is not None and pool and _slant(fx) in SLANT_ARMS:
+        # `unshared` / `unshared_first` (v12 B11.09): the transport's own kinds leave the pool; then, at an arm with `prefers`, the pool is narrowed to the
+        # first non-empty tier of the claims that are not a `seen` one (a `seen` claim stays the last resort below). No ledger but the teller's, no draw.
+        excluded, prefers = SLANT_ARMS[_slant(fx)]
+        pool = [c for c in pool if c.predicate not in excluded]
+        live = [c for c in pool if c.predicate != SEEN_PREDICATE]
+        for tier in prefers:
+            hit = [c for c in live if _SLANT_TIERS[tier](c)]
+            if hit:
+                pool = hit
+                break
+    reader =LedgerReader(pool, weigh, tick=tick, decay=0 if fx is None else fx.claim_decay())
     # ABSENT: H-198 deception  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
     c = (reader._best(lambda c: c.subject == subject and c.predicate != SEEN_PREDICATE)
          or reader.latest_about(subject))
