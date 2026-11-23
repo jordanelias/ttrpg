@@ -3344,27 +3344,15 @@ rosters:
       "which genres it is apt in" column already needs somewhere closed to point at.
     values: [forensic, deliberative, epideictic]
 
-  proofs:
-    source: "`03_PARAMETERS.md` PART D's `proofs:` schema comment -- Fig. 6 -- and §E.2's worked rows (`record`, `testimony`, `oath`, `confession` are the four names actually used across all twelve games)."
-    open: true
-    note: >-
-      ⚠ A KNOWN-THIN ROSTER, NAMED RATHER THAN PADDED. `03_PARAMETERS.md` §E.2's own examination
-      row flags a strain: what an examination weighs is a *performance*, and Fig. 6 (which this
-      roster transcribes) enumerates what a FORENSIC proceeding admits -- so `proofs` may need a
-      fifth member (`performance`) once a non-forensic proof-bearing game is authored, registered
-      there as `10_LOOPS_AND_GAPS.md` `P-13` and NOT invented here. Adding a member is a roster
-      edit, never a code change -- the closure claim this roster exists to make survives the gap.
-    values: [record, testimony, oath, confession]
-
   proof_kind_of_source:
     source: "B05.21 (`proposals/13_SC_tuning_tables.md` T5, edit 3): the kind of proof a deed claim is, by how its holder came to hold it"
     from_roster: claim_sources
     note: >-
       THE ADMISSION FILTER'S MAPPING (`Fixtures.proof_admission` `on`; `queries/world_q.py::proofs`): a deed claim weighs for the
-      speaker only if the arrangement row he is heard under admits the kind of proof it is (`arrangements.yaml: proofs:`, the
-      `proofs` roster). `proof_kind:` maps each `claim_sources` member (a way ONE person came to hold ONE claim) to a `proofs` member,
-      or to `null` where the way of holding is no kind of proof the rows name. A mapping total over the sources and closed over the
-      proofs, refused at import (`data/rosters.py::PROOF_KIND_OF_SOURCE`).
+      speaker only if the arrangement row he is heard under admits the kind of proof it is (`arrangements.yaml: admits:`, the
+      `matters` roster, which absorbed the retired `proofs` roster at B24p.03). `proof_kind:` maps each `claim_sources` member (a way
+      ONE person came to hold ONE claim) to a `matters` member, or to `null` where the way of holding is no kind of proof the rows
+      name. A mapping total over the sources and closed over the matters, refused at import (`data/rosters.py::PROOF_KIND_OF_SOURCE`).
       [ASSUMPTION: every cell below -- basis: none in a document; the kind a claim is, by its source, read from the sources' own
       words: what one saw (`firsthand`) is testimony; what one held through a bond's knot (`firsthand_via_knot`) is sworn, an oath;
       what one was told by a document or a chronicle (`told_by`) is a record; what one worked out (`inferred`) is none of the four.
@@ -3506,6 +3494,42 @@ rosters:
       - {id: rumour,         carrier: "Claim:hearsay",   brings: holder,                cost: low_weight}
       - {id: state_of_realm, carrier: strife_reading,    brings: anyone_in_realm,       cost: none}
       - {id: confession,     carrier: "Record:confession", brings: bench_or_questioner, cost: none}
+
+  disposal_writes:
+    source: "V2 p2 §J -- the typed writes the fold performs on a sitting's outcome; `arrangements.yaml: disposal:` names them by id."
+    cite: "B24p.03"
+    note: >-
+      THE CLOSED SET OF A DISPOSAL ROW'S WRITES, one row each. A `disposal:` cell naming an id outside it is refused at load
+      (`data/arrangements.py::_load_disposal`). `weight` is the one cell a write may carry: how much a claim written to a ledger
+      counts (a yield 1, a hint 0.4: V2 p2 §J); a write with no `weight` carries none. Nothing performs a write until B24p.20 (the
+      sitting) and B24p.22 (the witnesses' ledgers); a bounded write (regard, pursuits, standing, legitimacy, strife) is
+      B27.28's and B33.51's, on B24p.04's fold table.
+      [ASSUMPTION; Jordan to correct: each `weight` below -- basis: V2 p2 §J states 1 and 0.4 for a yield and a hint; the roster's
+      spelling of each write (`regard-` for the questioned man's, the accuser's and the loser's regard alike, `office:contested` for
+      V2's "office contested", `tenure:oblige` for the surety) is this item's reading of the table's prose.]
+    rows:
+      - {id: "pursuits+"}
+      - {id: "regard+"}
+      - {id: "regard-"}
+      - {id: "grievance"}
+      - {id: "claim:converted"}
+      - {id: "claim:yielded", weight: 1.0}
+      - {id: "claim:hinted", weight: 0.4}
+      - {id: "record:confession"}
+      - {id: "tenure:oblige"}
+      - {id: "tenure:detain"}
+      - {id: "tenure:ban"}
+      - {id: "office:contested"}
+      - {id: "precedent"}
+      - {id: "legitimacy+"}
+      - {id: "legitimacy-"}
+      - {id: "faction+"}
+      - {id: "faction-"}
+      - {id: "record:acquittal"}
+      - {id: "record:decree"}
+      - {id: "record:defeated"}
+      - {id: "docket:adjourned"}
+      - {id: "docket:other_forum"}
 
   module_kinds:
     source: "plan v8 `_part5` `### A-25` (`ED-IN-0284`, revised by `ED-IN-0285`) -- the seven headings of its roster paragraph."

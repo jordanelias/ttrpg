@@ -327,7 +327,10 @@ def test_an_injected_act_reddens_the_bar(verb):
 
 def _branches_on_an_arrangement_id(tree: ast.AST) -> list:
     """`(line, id)` for every comparison or `match` case whose operand is an arrangement id."""
-    return branches_on_ids(tree, ARRANGEMENTS)
+    # B24p.03: the row `audience` shares its id with the `requires` stem `audience` (`world_q`'s `stem == "audience"`: may an actor enter a rung),
+    # a grammar word and no arrangement; a comparison against it is read as the stem. Every other row id is scanned as before.
+    from ..data.requires import REQUIRES_STEMS
+    return branches_on_ids(tree, set(ARRANGEMENTS) - set(REQUIRES_STEMS))
 
 
 def test_no_game_code_branches_on_an_arrangement_id():

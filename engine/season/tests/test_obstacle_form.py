@@ -505,7 +505,7 @@ def test_a_docketed_speak_reads_its_rows_standard_and_the_shipped_rows_are_t2s_f
     nine shipped rows carry T2's first values (commit 2, B05.23; `test_sc_tuning_tables.T2_FIRST_VALUES`). FALSIFIER: a non-`plain` row whose
     term list lacks `standard`, or a `plain` one that lists it."""
     from .test_sc_tuning_tables import T2_FIRST_VALUES
-    assert len(ARR.ARRANGEMENTS) == 9 and {k: r["standard"] for k, r in ARR.ARRANGEMENTS.items()} == T2_FIRST_VALUES
+    assert len(ARR.ARRANGEMENTS) == 13 and {k: r["standard"] for k, r in ARR.ARRANGEMENTS.items() if k in T2_FIRST_VALUES} == T2_FIRST_VALUES   # B24p.03: four new rows, each `plain`
     sizes = DEFAULT_FIXTURES.get("difficulty_ob")
     assert "standard" not in _speak_terms(R._judging_world()[0])                                # nothing docketed
     row = "arbitration"
@@ -564,7 +564,7 @@ def test_a_row_that_admits_no_proofs_weighs_none_when_admission_is_on():
     """T13 T5's falsifier: a `speak` under `parliamentary_debate` (which admits no proofs) whose `levels` show a non-zero `proofs`, with
     `proof_admission` `on`. CONTROL: the same speaker under the same row with admission `off` shows proofs; under `arbitration` (which
     admits `testimony`, the kind of a firsthand claim) with admission `on` he shows them too -- the filter is the row's, not a blanket zero."""
-    assert ARR.ARRANGEMENTS["parliamentary_debate"]["proofs"] == () and "testimony" in ARR.ARRANGEMENTS["arbitration"]["proofs"]
+    assert ARR.ARRANGEMENTS["parliamentary_debate"]["admits"] == () and "testimony" in ARR.ARRANGEMENTS["arbitration"]["admits"]
     assert DEFAULT_FIXTURES.get("proof_admission") == "on"                                       # shipped at commit 2 (B05.23); each arm is set below
     kinds = ROS.roster_map("proof_kind_of_source", "proof_kind")
     assert kinds["firsthand"] == "testimony" and set(kinds) == set(roster("claim_sources")), kinds

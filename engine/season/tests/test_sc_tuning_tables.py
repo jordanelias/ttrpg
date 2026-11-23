@@ -38,7 +38,7 @@ from .test_sc01_obstacle_ceiling import _module
 
 #: T13 edit 2 (T2 "First values"), copied: one level per formal layer the row's `interposed:` names among `procedure`, `office`, `document`,
 #: `ceremony` (`person`, an advocate, is help, not a layer).
-T2_FIRST_VALUES = {"arbitration": "plain", "interrogation": "plain", "negotiation": "plain",
+T2_FIRST_VALUES = {"arbitration": "plain", "examination": "plain", "negotiation": "plain",
                    "parliamentary_debate": "routine", "council_of_state": "routine", "legal_trial": "routine",
                    "tribunal": "demanding", "excommunication_deliberation": "demanding", "inquisition_hearing": "hard"}
 #: T1 row values at commit 2 (T13 edit 7): `interrogate` `demanding`, every other rolled row (the inquiries with them) `routine`.
@@ -93,7 +93,7 @@ def test_planted_grid_moves_lie_interrogate_and_speak():
     assert _ob(w, ["p_low"], "lie", "p_other")[0] == read[-1][1]
 
     # speak: under each of the nine rows, docketed; T2's standard is the row's level's size, and the four levels compose four obstacles
-    assert {row: r["standard"] for row, r in ARR.ARRANGEMENTS.items()} == T2_FIRST_VALUES
+    assert {row: r["standard"] for row, r in ARR.ARRANGEMENTS.items() if row in T2_FIRST_VALUES} == T2_FIRST_VALUES   # B24p.03: the four new rows are `plain` and not T2's
     by_level: dict = {}
     for row, level in T2_FIRST_VALUES.items():
         h, _d = R._judging_world()

@@ -84,7 +84,7 @@ def test_the_bench_is_three_church_seat_holders_and_the_row_is_declared_at_two()
     `declared` with `quorum: 2` -- so the tests below fail on the clause and not on a bench that never formed."""
     w, _ = _church_world()
     assert sorted(world_q.judging_set(w, "D", PARTY)) == sorted(SEATS.values())
-    assert A.ARRANGEMENTS[ROW]["disposal"] == "declared" and A.ARRANGEMENTS[ROW]["quorum"] == 2
+    assert A.ARRANGEMENTS[ROW]["close"] == "declared" and A.ARRANGEMENTS[ROW]["quorum"] == 2
     assert "vote" in VERB_TABLE["determine"].requires_typed.conjuncts()
     assert tuple(VERB_TABLE["determine"].refusal_for("vote")) == ("determine.refused",)
 
@@ -158,9 +158,9 @@ def test_a_commit_by_a_non_member_is_not_a_vote():
 
 
 def test_control_2_a_bench_disposal_matter_in_the_same_world_is_admitted_as_before():
-    """`legal_trial` (`disposal: bench`) in the same world, with NO commits at all: admitted. The `vote` conjunct
+    """`legal_trial` (`close: bench`) in the same world, with NO commits at all: admitted. The `vote` conjunct
     reads 0 against 0 for it and refuses nothing."""
-    assert A.ARRANGEMENTS["legal_trial"]["disposal"] == "bench"
+    assert A.ARRANGEMENTS["legal_trial"]["close"] == "bench"
     w, d = _church_world(row="legal_trial")
     out = _determine_now(w, d)
     assert _kinds(out) == ["matter.determined"], _kinds(out)
@@ -196,7 +196,7 @@ def test_control_3_at_quorum_one_with_the_determiner_committed_the_result_equals
     _vote_against(w, "p_high")
     declared = _determine_now(w, d)
     declared_bans = len(_bans(w))
-    monkeypatch.setitem(A.ARRANGEMENTS[ROW], "disposal", "bench")
+    monkeypatch.setitem(A.ARRANGEMENTS[ROW], "close", "bench")
     monkeypatch.setitem(A.ARRANGEMENTS[ROW], "quorum", None)
     w2, d2 = _church_world()
     _vote_against(w2, "p_high")

@@ -56,10 +56,461 @@
           "reachable_bands": []
         }
       ],
+      "rites": [
+        {
+          "id": "conversation",
+          "genre": "dyadic",
+          "live": "claim",
+          "bears": "for",
+          "reply": {
+            "for": "may",
+            "against": "may"
+          },
+          "silence": "free",
+          "issues": [],
+          "concede": "accepts",
+          "moves": {
+            "for": [
+              "argue",
+              "press",
+              "rest",
+              "concede"
+            ],
+            "against": [
+              "argue",
+              "press",
+              "rest",
+              "concede"
+            ]
+          }
+        },
+        {
+          "id": "negotiation",
+          "genre": "dyadic",
+          "live": "offer",
+          "bears": "for",
+          "reply": {
+            "for": "may",
+            "against": "may"
+          },
+          "silence": "free",
+          "issues": [],
+          "concede": "accepts",
+          "moves": {
+            "for": [
+              "argue",
+              "press",
+              "rest",
+              "concede"
+            ],
+            "against": [
+              "argue",
+              "press",
+              "rest",
+              "concede"
+            ]
+          }
+        },
+        {
+          "id": "questioning",
+          "genre": "judicial",
+          "live": "question",
+          "bears": "for",
+          "reply": {
+            "for": "may",
+            "against": "must"
+          },
+          "silence": "refusal",
+          "issues": [],
+          "concede": "accepts",
+          "moves": {
+            "for": [
+              "argue",
+              "press",
+              "rest"
+            ],
+            "against": [
+              "argue",
+              "rest",
+              "concede"
+            ]
+          }
+        },
+        {
+          "id": "inquisition",
+          "genre": "judicial",
+          "live": "charge",
+          "bears": "for",
+          "reply": {
+            "for": "may",
+            "against": "must"
+          },
+          "silence": "admits",
+          "issues": [
+            "fact",
+            "justification"
+          ],
+          "concede": "descends",
+          "moves": {
+            "for": [
+              "argue",
+              "press",
+              "rest"
+            ],
+            "against": [
+              "argue",
+              "rest",
+              "concede"
+            ]
+          }
+        },
+        {
+          "id": "trial",
+          "genre": "judicial",
+          "live": "charge",
+          "bears": "for",
+          "reply": {
+            "for": "must",
+            "against": "must"
+          },
+          "silence": "refusal",
+          "issues": [
+            "fact",
+            "definition",
+            "justification"
+          ],
+          "concede": "descends",
+          "moves": {
+            "for": [
+              "argue",
+              "press",
+              "rest",
+              "concede"
+            ],
+            "against": [
+              "argue",
+              "press",
+              "rest",
+              "concede"
+            ]
+          }
+        },
+        {
+          "id": "debate",
+          "genre": "deliberative",
+          "live": "motion",
+          "bears": "for",
+          "reply": {
+            "for": "may",
+            "against": "may"
+          },
+          "silence": "free",
+          "issues": [],
+          "concede": "accepts",
+          "moves": {
+            "for": [
+              "argue",
+              "press",
+              "rest",
+              "concede"
+            ],
+            "against": [
+              "argue",
+              "press",
+              "rest",
+              "concede"
+            ]
+          }
+        },
+        {
+          "id": "rally",
+          "genre": "deliberative",
+          "live": "theme",
+          "bears": "for",
+          "reply": {
+            "for": "raise"
+          },
+          "silence": "free",
+          "issues": [],
+          "concede": "accepts",
+          "moves": {
+            "for": [
+              "argue",
+              "rest"
+            ],
+            "against": []
+          }
+        },
+        {
+          "id": "audience",
+          "genre": "deliberative",
+          "live": "plea",
+          "bears": "for",
+          "reply": {
+            "for": "may",
+            "against": "may"
+          },
+          "silence": "free",
+          "issues": [],
+          "concede": "accepts",
+          "moves": {
+            "for": [
+              "argue",
+              "rest"
+            ],
+            "against": [
+              "argue",
+              "press",
+              "rest"
+            ]
+          }
+        }
+      ],
+      "context": {
+        "eras": {
+          "plain": {
+            "evidence": 1.0,
+            "consequence": 1.0,
+            "authority": 1.0,
+            "solidarity": 1.0
+          },
+          "age_of_faith": {
+            "evidence": 1.0,
+            "consequence": 1.0,
+            "authority": 1.0,
+            "solidarity": 1.0
+          },
+          "mercantile": {
+            "evidence": 1.0,
+            "consequence": 1.0,
+            "authority": 1.0,
+            "solidarity": 1.0
+          }
+        },
+        "regimes": {
+          "crown": {
+            "unlawful": [],
+            "gravity": 0,
+            "standard": 0,
+            "reason_lean": 0,
+            "admits_add": [],
+            "admits_drop": [],
+            "power": {
+              "parties": 1.0,
+              "polity": 1.0,
+              "church": 1.0,
+              "guild": 1.0,
+              "none": 1.0
+            },
+            "silence": null,
+            "floor": null
+          },
+          "theocracy": {
+            "unlawful": [],
+            "gravity": 0,
+            "standard": 0,
+            "reason_lean": 0,
+            "admits_add": [],
+            "admits_drop": [],
+            "power": {
+              "parties": 1.0,
+              "polity": 1.0,
+              "church": 1.0,
+              "guild": 1.0,
+              "none": 1.0
+            },
+            "silence": null,
+            "floor": null
+          },
+          "commune": {
+            "unlawful": [],
+            "gravity": 0,
+            "standard": 0,
+            "reason_lean": 0,
+            "admits_add": [],
+            "admits_drop": [],
+            "power": {
+              "parties": 1.0,
+              "polity": 1.0,
+              "church": 1.0,
+              "guild": 1.0,
+              "none": 1.0
+            },
+            "silence": null,
+            "floor": null
+          }
+        },
+        "strife": {
+          "peace": {
+            "turns": 0,
+            "unrest": 0,
+            "gravity": 0,
+            "care_want": 0
+          },
+          "war": {
+            "turns": 0,
+            "unrest": 0,
+            "gravity": 0,
+            "care_want": 0
+          },
+          "famine": {
+            "turns": 0,
+            "unrest": 0,
+            "gravity": 0,
+            "care_want": 0
+          },
+          "schism": {
+            "turns": 0,
+            "unrest": 0,
+            "gravity": 0,
+            "care_want": 0
+          }
+        }
+      },
+      "disposal": {
+        "none": {
+          "Overwhelming": [
+            "pursuits+",
+            "regard+",
+            "claim:converted"
+          ],
+          "Success": [
+            "pursuits+",
+            "regard+"
+          ],
+          "Partial": [
+            "regard+"
+          ],
+          "Failure": [
+            "regard-",
+            "grievance"
+          ],
+          "impasse": [
+            "regard-"
+          ]
+        },
+        "yield": {
+          "Overwhelming": [
+            "claim:yielded",
+            "record:confession",
+            "regard-"
+          ],
+          "Success": [
+            "claim:yielded",
+            "regard-"
+          ],
+          "Partial": [
+            "claim:hinted"
+          ],
+          "Failure": [
+            "regard-"
+          ],
+          "impasse": [
+            "regard-"
+          ]
+        },
+        "oblige": {
+          "Overwhelming": [
+            "tenure:oblige",
+            "regard+",
+            "precedent"
+          ],
+          "Success": [
+            "tenure:oblige",
+            "regard+"
+          ],
+          "Partial": [
+            "docket:adjourned"
+          ],
+          "Failure": [
+            "grievance",
+            "docket:other_forum"
+          ],
+          "impasse": [
+            "docket:other_forum"
+          ]
+        },
+        "detain": {
+          "Overwhelming": [
+            "tenure:detain",
+            "office:contested",
+            "precedent",
+            "legitimacy+"
+          ],
+          "Success": [
+            "tenure:detain",
+            "precedent",
+            "legitimacy+"
+          ],
+          "Partial": [
+            "tenure:oblige",
+            "docket:adjourned"
+          ],
+          "Failure": [
+            "record:acquittal",
+            "precedent",
+            "regard-"
+          ],
+          "impasse": [
+            "docket:adjourned"
+          ]
+        },
+        "ban": {
+          "Overwhelming": [
+            "tenure:ban",
+            "office:contested",
+            "precedent"
+          ],
+          "Success": [
+            "tenure:ban",
+            "legitimacy+"
+          ],
+          "Partial": [
+            "tenure:oblige",
+            "docket:adjourned"
+          ],
+          "Failure": [
+            "record:acquittal",
+            "legitimacy-"
+          ],
+          "impasse": [
+            "docket:adjourned"
+          ]
+        },
+        "Record": {
+          "Overwhelming": [
+            "record:decree",
+            "faction+",
+            "precedent",
+            "legitimacy+"
+          ],
+          "Success": [
+            "record:decree",
+            "faction+"
+          ],
+          "Partial": [
+            "docket:adjourned"
+          ],
+          "Failure": [
+            "record:defeated",
+            "faction-"
+          ],
+          "impasse": [
+            "docket:adjourned"
+          ]
+        }
+      },
       "arrangements": [
         {
           "id": "arbitration",
-          "disposal": "bench",
+          "rite": "trial",
+          "turns": [
+            2,
+            5
+          ],
+          "authority": "parties",
+          "reason_lean": 0,
+          "close": "bench",
           "bench_basis": "determine",
           "floor": "closed",
           "records_dissent": false,
@@ -67,8 +518,7 @@
           "term_required": true,
           "appeal_basis": "none",
           "interposed": [],
-          "order": "alternating",
-          "proofs": [
+          "admits": [
             "record",
             "testimony",
             "oath"
@@ -79,7 +529,14 @@
         },
         {
           "id": "parliamentary_debate",
-          "disposal": "bench",
+          "rite": "debate",
+          "turns": [
+            2,
+            4
+          ],
+          "authority": "polity",
+          "reason_lean": 0,
+          "close": "bench",
           "bench_basis": "determine",
           "floor": "open",
           "records_dissent": true,
@@ -89,15 +546,21 @@
           "interposed": [
             "procedure"
           ],
-          "order": "rank",
-          "proofs": [],
+          "admits": [],
           "disposes": "Record",
           "disposal_reach": "realm",
           "standard": "routine"
         },
         {
           "id": "council_of_state",
-          "disposal": "bench",
+          "rite": "debate",
+          "turns": [
+            2,
+            4
+          ],
+          "authority": "polity",
+          "reason_lean": 0,
+          "close": "bench",
           "bench_basis": "determine",
           "floor": "closed",
           "records_dissent": false,
@@ -107,15 +570,21 @@
           "interposed": [
             "procedure"
           ],
-          "order": "rank",
-          "proofs": [],
+          "admits": [],
           "disposes": "Record",
           "disposal_reach": "realm",
           "standard": "routine"
         },
         {
           "id": "legal_trial",
-          "disposal": "bench",
+          "rite": "trial",
+          "turns": [
+            2,
+            5
+          ],
+          "authority": "polity",
+          "reason_lean": 0,
+          "close": "bench",
           "bench_basis": "determine",
           "floor": "open",
           "records_dissent": true,
@@ -126,8 +595,7 @@
             "person",
             "procedure"
           ],
-          "order": "rank",
-          "proofs": [
+          "admits": [
             "record",
             "testimony",
             "oath"
@@ -138,7 +606,14 @@
         },
         {
           "id": "tribunal",
-          "disposal": "bench",
+          "rite": "trial",
+          "turns": [
+            2,
+            5
+          ],
+          "authority": "polity",
+          "reason_lean": 0,
+          "close": "bench",
           "bench_basis": "determine",
           "floor": "admitted",
           "records_dissent": true,
@@ -149,8 +624,7 @@
             "office",
             "procedure"
           ],
-          "order": "rank",
-          "proofs": [
+          "admits": [
             "record",
             "testimony",
             "oath"
@@ -160,8 +634,15 @@
           "standard": "demanding"
         },
         {
-          "id": "interrogation",
-          "disposal": "bench",
+          "id": "examination",
+          "rite": "inquisition",
+          "turns": [
+            2,
+            5
+          ],
+          "authority": "polity",
+          "reason_lean": 0,
+          "close": "bench",
           "bench_basis": "determine",
           "floor": "closed",
           "records_dissent": false,
@@ -169,8 +650,7 @@
           "term_required": false,
           "appeal_basis": "none",
           "interposed": [],
-          "order": "scripted",
-          "proofs": [
+          "admits": [
             "testimony",
             "confession"
           ],
@@ -180,7 +660,14 @@
         },
         {
           "id": "inquisition_hearing",
-          "disposal": "bench",
+          "rite": "inquisition",
+          "turns": [
+            2,
+            5
+          ],
+          "authority": "church",
+          "reason_lean": 0,
+          "close": "bench",
           "bench_basis": "determine",
           "floor": "closed",
           "records_dissent": false,
@@ -192,8 +679,7 @@
             "procedure",
             "document"
           ],
-          "order": "scripted",
-          "proofs": [
+          "admits": [
             "testimony",
             "confession",
             "record"
@@ -204,7 +690,14 @@
         },
         {
           "id": "excommunication_deliberation",
-          "disposal": "declared",
+          "rite": "debate",
+          "turns": [
+            2,
+            4
+          ],
+          "authority": "church",
+          "reason_lean": 0,
+          "close": "declared",
           "quorum": 2,
           "bench_basis": "determine",
           "floor": "closed",
@@ -216,8 +709,7 @@
             "procedure",
             "ceremony"
           ],
-          "order": "rank",
-          "proofs": [
+          "admits": [
             "record",
             "testimony"
           ],
@@ -227,7 +719,14 @@
         },
         {
           "id": "negotiation",
-          "disposal": "mutual",
+          "rite": "negotiation",
+          "turns": [
+            1,
+            3
+          ],
+          "authority": "parties",
+          "reason_lean": 0,
+          "close": "consent",
           "bench_basis": "none",
           "floor": "closed",
           "records_dissent": false,
@@ -235,10 +734,123 @@
           "term_required": false,
           "appeal_basis": "none",
           "interposed": [],
-          "order": "alternating",
-          "proofs": [
+          "admits": [
             "record",
             "testimony"
+          ],
+          "disposes": "oblige",
+          "disposal_reach": "room",
+          "standard": "plain"
+        },
+        {
+          "id": "conversation",
+          "rite": "conversation",
+          "turns": [
+            1,
+            3
+          ],
+          "authority": "parties",
+          "reason_lean": 0,
+          "close": "hearers",
+          "bench_basis": "none",
+          "floor": "closed",
+          "records_dissent": false,
+          "venue_min_rank": "hearth",
+          "term_required": false,
+          "appeal_basis": "none",
+          "interposed": [],
+          "admits": [
+            "record",
+            "testimony",
+            "deed",
+            "oath",
+            "debt",
+            "rumour",
+            "state_of_realm"
+          ],
+          "disposes": "none",
+          "disposal_reach": "room",
+          "standard": "plain"
+        },
+        {
+          "id": "interrogation",
+          "rite": "questioning",
+          "turns": [
+            1,
+            4
+          ],
+          "authority": "parties",
+          "reason_lean": 0,
+          "close": "hearers",
+          "bench_basis": "none",
+          "floor": "closed",
+          "records_dissent": false,
+          "venue_min_rank": "hearth",
+          "term_required": false,
+          "appeal_basis": "none",
+          "interposed": [],
+          "admits": [
+            "testimony",
+            "record",
+            "deed",
+            "rumour",
+            "confession"
+          ],
+          "disposes": "yield",
+          "disposal_reach": "room",
+          "standard": "plain"
+        },
+        {
+          "id": "rally",
+          "rite": "rally",
+          "turns": [
+            1,
+            3
+          ],
+          "authority": "none",
+          "reason_lean": 0,
+          "close": "hearers",
+          "bench_basis": "none",
+          "floor": "open",
+          "records_dissent": false,
+          "venue_min_rank": "hearth",
+          "term_required": false,
+          "appeal_basis": "none",
+          "interposed": [],
+          "admits": [
+            "deed",
+            "rumour",
+            "state_of_realm",
+            "oath"
+          ],
+          "disposes": "none",
+          "disposal_reach": "room",
+          "standard": "plain"
+        },
+        {
+          "id": "audience",
+          "rite": "audience",
+          "turns": [
+            1,
+            2
+          ],
+          "authority": "polity",
+          "reason_lean": 0,
+          "close": "bench",
+          "bench_basis": "determine",
+          "floor": "admitted",
+          "records_dissent": false,
+          "venue_min_rank": "hearth",
+          "term_required": false,
+          "appeal_basis": "none",
+          "interposed": [],
+          "admits": [
+            "record",
+            "debt",
+            "title",
+            "oath",
+            "precedent",
+            "law"
           ],
           "disposes": "oblige",
           "disposal_reach": "room",
@@ -3618,21 +4230,10 @@
             "epideictic"
           ]
         },
-        "proofs": {
-          "source": "`03_PARAMETERS.md` PART D's `proofs:` schema comment -- Fig. 6 -- and \u00a7E.2's worked rows (`record`, `testimony`, `oath`, `confession` are the four names actually used across all twelve games).",
-          "open": true,
-          "note": "\u26a0 A KNOWN-THIN ROSTER, NAMED RATHER THAN PADDED. `03_PARAMETERS.md` \u00a7E.2's own examination row flags a strain: what an examination weighs is a *performance*, and Fig. 6 (which this roster transcribes) enumerates what a FORENSIC proceeding admits -- so `proofs` may need a fifth member (`performance`) once a non-forensic proof-bearing game is authored, registered there as `10_LOOPS_AND_GAPS.md` `P-13` and NOT invented here. Adding a member is a roster edit, never a code change -- the closure claim this roster exists to make survives the gap.",
-          "values": [
-            "record",
-            "testimony",
-            "oath",
-            "confession"
-          ]
-        },
         "proof_kind_of_source": {
           "source": "B05.21 (`proposals/13_SC_tuning_tables.md` T5, edit 3): the kind of proof a deed claim is, by how its holder came to hold it",
           "from_roster": "claim_sources",
-          "note": "THE ADMISSION FILTER'S MAPPING (`Fixtures.proof_admission` `on`; `queries/world_q.py::proofs`): a deed claim weighs for the speaker only if the arrangement row he is heard under admits the kind of proof it is (`arrangements.yaml: proofs:`, the `proofs` roster). `proof_kind:` maps each `claim_sources` member (a way ONE person came to hold ONE claim) to a `proofs` member, or to `null` where the way of holding is no kind of proof the rows name. A mapping total over the sources and closed over the proofs, refused at import (`data/rosters.py::PROOF_KIND_OF_SOURCE`). [ASSUMPTION: every cell below -- basis: none in a document; the kind a claim is, by its source, read from the sources' own words: what one saw (`firsthand`) is testimony; what one held through a bond's knot (`firsthand_via_knot`) is sworn, an oath; what one was told by a document or a chronicle (`told_by`) is a record; what one worked out (`inferred`) is none of the four. Jordan to correct; revert: `proof_admission: off`, under which no cell is read.]",
+          "note": "THE ADMISSION FILTER'S MAPPING (`Fixtures.proof_admission` `on`; `queries/world_q.py::proofs`): a deed claim weighs for the speaker only if the arrangement row he is heard under admits the kind of proof it is (`arrangements.yaml: admits:`, the `matters` roster, which absorbed the retired `proofs` roster at B24p.03). `proof_kind:` maps each `claim_sources` member (a way ONE person came to hold ONE claim) to a `matters` member, or to `null` where the way of holding is no kind of proof the rows name. A mapping total over the sources and closed over the matters, refused at import (`data/rosters.py::PROOF_KIND_OF_SOURCE`). [ASSUMPTION: every cell below -- basis: none in a document; the kind a claim is, by its source, read from the sources' own words: what one saw (`firsthand`) is testimony; what one held through a bond's knot (`firsthand_via_knot`) is sworn, an oath; what one was told by a document or a chronicle (`told_by`) is a record; what one worked out (`inferred`) is none of the four. Jordan to correct; revert: `proof_admission: off`, under which no cell is read.]",
           "proof_kind": {
             "firsthand": "testimony",
             "firsthand_via_knot": "oath",
@@ -3870,6 +4471,81 @@
               "carrier": "Record:confession",
               "brings": "bench_or_questioner",
               "cost": "none"
+            }
+          ]
+        },
+        "disposal_writes": {
+          "source": "V2 p2 \u00a7J -- the typed writes the fold performs on a sitting's outcome; `arrangements.yaml: disposal:` names them by id.",
+          "cite": "B24p.03",
+          "note": "THE CLOSED SET OF A DISPOSAL ROW'S WRITES, one row each. A `disposal:` cell naming an id outside it is refused at load (`data/arrangements.py::_load_disposal`). `weight` is the one cell a write may carry: how much a claim written to a ledger counts (a yield 1, a hint 0.4: V2 p2 \u00a7J); a write with no `weight` carries none. Nothing performs a write until B24p.20 (the sitting) and B24p.22 (the witnesses' ledgers); a bounded write (regard, pursuits, standing, legitimacy, strife) is B27.28's and B33.51's, on B24p.04's fold table. [ASSUMPTION; Jordan to correct: each `weight` below -- basis: V2 p2 \u00a7J states 1 and 0.4 for a yield and a hint; the roster's spelling of each write (`regard-` for the questioned man's, the accuser's and the loser's regard alike, `office:contested` for V2's \"office contested\", `tenure:oblige` for the surety) is this item's reading of the table's prose.]",
+          "rows": [
+            {
+              "id": "pursuits+"
+            },
+            {
+              "id": "regard+"
+            },
+            {
+              "id": "regard-"
+            },
+            {
+              "id": "grievance"
+            },
+            {
+              "id": "claim:converted"
+            },
+            {
+              "id": "claim:yielded",
+              "weight": 1.0
+            },
+            {
+              "id": "claim:hinted",
+              "weight": 0.4
+            },
+            {
+              "id": "record:confession"
+            },
+            {
+              "id": "tenure:oblige"
+            },
+            {
+              "id": "tenure:detain"
+            },
+            {
+              "id": "tenure:ban"
+            },
+            {
+              "id": "office:contested"
+            },
+            {
+              "id": "precedent"
+            },
+            {
+              "id": "legitimacy+"
+            },
+            {
+              "id": "legitimacy-"
+            },
+            {
+              "id": "faction+"
+            },
+            {
+              "id": "faction-"
+            },
+            {
+              "id": "record:acquittal"
+            },
+            {
+              "id": "record:decree"
+            },
+            {
+              "id": "record:defeated"
+            },
+            {
+              "id": "docket:adjourned"
+            },
+            {
+              "id": "docket:other_forum"
             }
           ]
         },

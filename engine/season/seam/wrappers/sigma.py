@@ -648,7 +648,7 @@ def _docketed_row(w: Any, subject: Optional[str]) -> Optional[dict]:
 
 def _admitted_proofs(fx: Any, docketed: Optional[dict]) -> Optional[tuple]:
     """The proof kinds the docketed row admits, for `world_q.proofs`' filter -- or `None` for no filter: nothing docketed, or `proof_admission` `off`."""
-    return tuple(docketed["proofs"]) if docketed is not None and fx.get("proof_admission") == "on" else None
+    return tuple(docketed["admits"]) if docketed is not None and fx.get("proof_admission") == "on" else None
 
 
 def _regard_of(w: Any, actor: str, subject: Optional[str], room: Optional[str]) -> Optional[float]:

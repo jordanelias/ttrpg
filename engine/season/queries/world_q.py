@@ -27,7 +27,7 @@ from typing import Callable, NamedTuple, Optional
 
 from engine.dice_engine.fmath import ltr_sum
 
-from ..data.arrangements import ARRANGEMENTS      # v11 CR-34: `declared_sitting` reads a row's `disposal`/`quorum`
+from ..data.arrangements import ARRANGEMENTS      # v11 CR-34: `declared_sitting` reads a row's `close`/`quorum`
 from ..data.requires import (
     RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE, UNKNOWN, binding_from_act, binding_of, evaluate,
 )
@@ -683,14 +683,14 @@ def judging_set(w: World, venue: str, matter: Optional[str] = None) -> list[str]
 
 def declared_sitting(w: World, matter: Optional[str]):
     """v11 CR-34 (C-7, `ED-SC-0034`): THE ARRANGEMENT ROW `matter` IS HEARD UNDER WHEN THAT ROW DECLARES ITS
-    DISPOSAL (`disposal: declared`), else `None` -- the one owner of *is this a vote at a sitting*, read by the
+    DISPOSAL (`close: declared`, B24p.03: was `disposal`), else `None` -- the one owner of *is this a vote at a sitting*, read by the
     `declared.votes` and `declared.quorum` stems of `determine`'s `vote` conjunct. The row comes from the
     docket item (`docketed_under`); a computed `open_case` names none (H-80), so every computed matter is
     `None` here. More than one row on one matter (a hand-planted docket, which `_eff_determine` declines
     rather than choosing between) is `UNKNOWN` when any of them declares: absence refuses, never a guessed row."""
     rows = docketed_under(w, matter)
     declared = [ARRANGEMENTS[r] for r in rows
-                if isinstance(r, str) and r in ARRANGEMENTS and ARRANGEMENTS[r]["disposal"] == "declared"]
+                if isinstance(r, str) and r in ARRANGEMENTS and ARRANGEMENTS[r]["close"] == "declared"]
     if not declared:
         return None
     return declared[0] if len(rows) == 1 else UNKNOWN

@@ -877,7 +877,6 @@ REMIT_ACTS = roster("remit_acts")
 # bare `roster(...)` call at the one call site, on this file's own established convention.
 INTERPOSITION_KINDS = roster("interposition_kinds")
 GENRES = roster("genres")
-PROOFS = roster("proofs")
 LADDER_RUNGS = roster("ladder_rungs", ordered=True)
 
 
@@ -990,6 +989,17 @@ def _load_matters(rows) -> dict:
     return out
 
 
+def _load_disposal_writes(rows) -> dict:
+    """`rosters.yaml: disposal_writes`: each row's one optional cell, `weight`, a positive number (how much a claim a write
+    leaves in a ledger counts: V2 p2 §J's yield 1 against a hint 0.4)."""
+    out = _proceeding_rows(rows, "disposal_writes", frozenset({"weight"}), frozenset())
+    for wid, w in out.items():
+        if "weight" in w and (not _is_number(w["weight"]) or w["weight"] <= 0):
+            raise Unspecified(f"disposal write {wid!r} has `weight: {w['weight']!r}`", "rosters.yaml -- disposal_writes",
+                              needs="a positive number", law="a write of no weight leaves nothing, which is no write")
+    return out
+
+
 def _load_authority_by_faction(mapping: dict, authorities, factions, templated) -> dict:
     """`rosters.yaml: authorities.by_faction`: each key a `factions` member, each value an `authorities` member, and every
     faction `role_templates.by_faction` keys (`templated`) mapped."""
@@ -1016,6 +1026,8 @@ AUTHORITIES = roster("authorities", ordered=True)
 AUTHORITY_BY_FACTION = _load_authority_by_faction(roster_map("authorities", "by_faction"), AUTHORITIES, roster("factions"),
                                                   roster_map("role_templates", "by_faction"))
 MATTERS = _load_matters(_roster_rows("matters"))
+# B24p.03: THE TYPED WRITES OF `arrangements.yaml: disposal:` (V2 p2 §J). `MATTERS` absorbed the `proofs` roster, which was deleted here.
+DISPOSAL_WRITES = _load_disposal_writes(_roster_rows("disposal_writes"))
 # ED-IN-0256 rulings (2) and (3): HOW A SEAT IS FILLED and WHO MAY STRIP IT.
 # Bound at import: an unbound roster is the one whose absence goes unnoticed.
 # `Office.__post_init__` refuses a declared basis off either; `state/gate.py`'s
@@ -1157,15 +1169,16 @@ def remove_distance(source: str) -> float:
 
 
 # THE KIND OF PROOF A DEED CLAIM IS, BY HOW ITS HOLDER CAME TO HOLD IT (B05.21, T13 edit 3 / T5): `queries/world_q.py::proofs` reads it where the
-# arrangement row's `proofs:` column filters what weighs (`Fixtures.proof_admission` `on`). Total over `claim_sources`, closed over `proofs` (or
-# `None`, a way of holding that is no kind the rows name), refused at import: a claim whose source maps nowhere would weigh by a guess.
+# arrangement row's `admits:` column filters what weighs (`Fixtures.proof_admission` `on`). Total over `claim_sources`, closed over `MATTERS` (the
+# roster that absorbed `proofs` at B24p.03) or `None`, a way of holding that is no kind the rows name, refused at import: a claim whose source maps
+# nowhere would weigh by a guess.
 PROOF_KIND_OF_SOURCE = roster_map("proof_kind_of_source", "proof_kind")
-if set(PROOF_KIND_OF_SOURCE) != set(CLAIM_SOURCES) or not {k for k in PROOF_KIND_OF_SOURCE.values() if k is not None} <= set(PROOFS):
+if set(PROOF_KIND_OF_SOURCE) != set(CLAIM_SOURCES) or not {k for k in PROOF_KIND_OF_SOURCE.values() if k is not None} <= set(MATTERS):
     raise Unspecified(
         f"`proof_kind_of_source.proof_kind` is {PROOF_KIND_OF_SOURCE!r}; it must key exactly the claim sources {sorted(CLAIM_SOURCES)} "
-        f"and name only `proofs` members {sorted(PROOFS)} (or null)", "rosters.yaml",
-        needs="one `proofs` member (or null) for every `claim_sources` member",
-        law="T13 T5 -- the kind of a deed claim is its source mapped to the `proofs` roster, a roster row and not a code literal")
+        f"and name only `matters` members {sorted(MATTERS)} (or null)", "rosters.yaml",
+        needs="one `matters` member (or null) for every `claim_sources` member",
+        law="T13 T5 -- the kind of a deed claim is its source mapped to the `matters` roster, a roster row and not a code literal")
 # The coercive deed kinds (`standing_routes.kinds.dominance`); `prestige` is the complement and carries
 # no list. Checked against the deed kinds beside `covert_kinds`' own check (`data/verbs.py::
 # _check_dominance_kinds`).
