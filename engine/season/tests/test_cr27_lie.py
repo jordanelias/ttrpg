@@ -179,10 +179,13 @@ def _claim(pred, value, pid="x", chain=()):
 def test_a_number_moves_one_whole_step_sign_preserving_and_never_across_zero():
     fx = DEFAULT_FIXTURES                                    # band 0.5
     got = {v: lie_said_of([_claim("stores:grain", v)], "S", fx) for v in (8, 1, -8, -1, 3, -3)}
-    assert {v: s.value for v, s in got.items()} == {8: 12, 1: 2, -8: -4, -1: -2, 3: 5, -3: -1}
-    for v, s in got.items():
-        assert s.value != v and (s.value > 0) == (v > 0), (v, s.value)
-        assert s.chain == () and s.confidence == 70 and (s.subject, s.predicate) == ("S", "stores:grain")
+    assert {v: [s.value for s in said] for v, said in got.items()} == {
+        8: [12, 4], 1: [2], -8: [-4, -12], -1: [-2], 3: [5, 1], -3: [-1, -5]}       # one `Said` per direction; a step that would reach zero is dropped, not flipped
+    for v, said in got.items():
+        assert said, v
+        for s in said:
+            assert s.value != v and (s.value > 0) == (v > 0), (v, s.value)
+            assert s.chain == () and s.confidence == 70 and (s.subject, s.predicate) == ("S", "stores:grain")
 
 
 def test_numeric_lie_forms_both_directions_on_a_quantity():
