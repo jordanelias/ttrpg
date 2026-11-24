@@ -31,7 +31,7 @@ from ..data.rosters import MARCH_TARGET_KINDS, SUBTREE_OCCUPATION_KINDS
 from ..data.verbs import VerbRow
 from ..manifest.registry import OPPOSED_BY_HOLDER
 from ..queries.world_q import (
-    DETAIN_KIND, hold_force, holder_faction_of, march_origin, mustered, place_of, restrained, standing_at,
+    DETAIN_KIND, hold_force, holder_faction_of, march_origin, place_of, restrained, seat_people_at, standing_at,
 )
 from .predicates import office_named_by
 from ..state.carriers import Act
@@ -67,7 +67,8 @@ def sides_of(w: World, a: Act, target: Optional[str],
     - `mass_battle` (`a field`, `march`'s prize): `claimants` is the MUSTERED ARMY at the actor's
       own nearest settlement, under the FACTION OF THE OFFICE THE ACT WAS EXERCISED THROUGH --
       `a.via`, `seat_of`'s own field (`decision/options.py`), read here rather than
-      re-derived, because the chooser already computed which seat granted the act and the fold
+      re-derived (at a settlement the army is the seat's PEOPLE, `world_q.seat_people_at`: that faction's members and the
+      seat's sworn men present, B21.79), because the chooser already computed which seat granted the act and the fold
       trusts the same value everywhere else it appears (`_eligible`'s `remit:` branch,
       `loop/resolve.py`). `subject` is the DEFENDING faction -- `world_q.holder_faction_of(w,
       target)`, which walks `target`'s own ancestry to the nearest HELD rung (a settlement is
@@ -131,11 +132,15 @@ def sides_of(w: World, a: Act, target: Optional[str],
         # there (`world_q.march_origin`, the one owner since CP-T04-02, which reads the standing order about it). A
         # settlement is mustered by subtree (its people stand in buildings beneath it), a territory by who is
         # standing AT it, so a parked army can march on and a territory does not muster its whole realm.
+        # B21.79 (CP-T09-07 (b)): THE SEAT'S PEOPLE AT A SETTLEMENT are its faction's members AND the seat's sworn men present
+        # (`world_q.seat_people_at`), retainers fighting beside the faction. A TERRITORY ORIGIN IS NOT WIDENED: it keeps
+        # `standing_at`'s faction-only reading, so an army that has arrived at one carries its members on and leaves its
+        # sworn men behind -- named, not settled (the item's WHERE is the settlement union).
         origin = march_origin(w, a.actor)
         if not (origin and faction):
             claimants = []
         elif w.rungs[origin].kind in SUBTREE_OCCUPATION_KINDS:
-            claimants = mustered(w, origin, faction)
+            claimants = seat_people_at(w, a.via, origin)
         else:
             claimants = standing_at(w, origin, faction)
         # v9 SC-03a (#453 §10.4 step 3, K-53): A PRISONER IS NOT IN THE ARMY. Every claimant holding

@@ -2112,6 +2112,25 @@ def mustered(w: World, rung_id: str, faction: str) -> list[str]:
                   and t.object in here and t.subject in inside)
 
 
+def seat_people_at(w: World, via: str, rid: str) -> list[str]:
+    """B21.79 (CP-T09-07 (b), AM-F-13). A SEAT'S PEOPLE PRESENT AT `rid`: `mustered(rid, seat_faction(via))` -- its faction's
+    members present in `rid`'s subtree -- UNION the seat's OBLIGEES present there (`establishment_of(via)`, each with a live
+    `contain` in the same subtree), the faction's own first in `mustered`'s order and the obligees after, in `w.tenures` order, none
+    twice. Retainers fight; a vassal's oath yields men. An obligee need not belong to the seat's faction: the oath is the tie.
+    A seat with no faction has no members to muster and still has its sworn; a seat with no obligee present reads `mustered`
+    exactly. Read-only: the openers of `oblige` are untouched. Readers: `loop/sides.py::sides_of` (the army a march musters at a
+    settlement) and `loop/effects_shared.py::occupying_faction` (the presence that licenses occupying one)."""
+    TRACE.query("seat_people_at", "resolver")
+    faction = seat_faction(w, via)
+    people = mustered(w, rid, faction) if faction else []
+    sworn = establishment_of(w, via)
+    if sworn:
+        here = _subtree(w, rid)
+        present = {t.subject for t in w.tenures if t.kind == "contain" and t.live and t.object in here}
+        people += [p for p in dict.fromkeys(sworn) if p in present and p not in people]
+    return people
+
+
 def occupies(w: World, rung_id: str, faction: str) -> bool:
     """ED-IN-0306 phase 4. Does `faction` OCCUPY `rung_id`? Occupation is what `seize` and `raze` license on, and
     it is presence, never a title (R-6: a won field writes presence).

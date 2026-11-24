@@ -937,10 +937,10 @@ def test_sc03a_a_ban_holder_is_refused_service_and_seating():
 
 def test_sc03a_a_mustered_army_excludes_a_person_held_in_custody(monkeypatch):
     """The `detain`'s third reader: `sides_of`'s army is the muster at the actor's settlement less
-    every person in custody. `mustered` is stubbed to a known list so the read under test is the
+    every person in custody. `seat_people_at` (the seat's people, B21.79) is stubbed to a known list so the read under test is the
     exclusion alone; CONTROL: with nobody detained the list passes through unchanged."""
     w, _ = _world()
-    monkeypatch.setattr(_sides, "mustered", lambda *a, **k: [DUKE, PARTY, "p_low"])
+    monkeypatch.setattr(_sides, "seat_people_at", lambda *a, **k: [DUKE, PARTY, "p_low"])
     march = Act(id="mr", actor=DUKE, verb="march", payload={"subject": "S"}, via=SEAT)
     claimants, _, _ = _sides.sides_of(w, march, "S", "a field")
     assert claimants == [DUKE, PARTY, "p_low"], claimants

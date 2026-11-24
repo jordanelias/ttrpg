@@ -14,9 +14,9 @@ from __future__ import annotations
 
 from typing import Optional
 
-from ..data.rosters import MARCH_TARGET_KINDS, task_share
+from ..data.rosters import MARCH_TARGET_KINDS, SUBTREE_OCCUPATION_KINDS, task_share
 from ..gaps import Forbidden, InstrumentDefect
-from ..queries.world_q import holder_faction_of, occupies
+from ..queries.world_q import holder_faction_of, occupies, seat_people_at
 from ..state.carriers import Term
 from ..state.gate import NO_CHANGE, seat_faction
 from ..trace_log import TRACE
@@ -191,6 +191,11 @@ def occupying_faction(w: "World", via: str, rid: str) -> Optional[str]:
     if rung is None or rung.kind not in MARCH_TARGET_KINDS or mine is None:
         return None
     holder = holder_faction_of(w, rid)
-    if holder is None or holder == mine or not occupies(w, rid, mine):
+    if holder is None or holder == mine:
+        return None
+    # B21.79 (CP-T09-07 (b)): the seat's sworn men present at a settlement are presence as its faction's members are
+    # (`world_q.seat_people_at`); a territory is occupied by standing AT it, which the union does not widen.
+    if not (occupies(w, rid, mine)
+            or (rung.kind in SUBTREE_OCCUPATION_KINDS and seat_people_at(w, via, rid))):
         return None
     return mine
