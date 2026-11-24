@@ -337,8 +337,11 @@ def test_a_claim_older_than_the_event_does_not_close_the_trail():
     w, d, rid = trail_world()
     e = forged_event(w)
     assert trail_of(w, rid, INVESTIGATOR) != [], "the world offers the investigator no trail to close"
+    # B11.61: the trail is closed by the thing AND the hand (`holds_trail`), so the hand is held at the forging in both readings and
+    # the thing's `when` is the one that moves.
+    hand = Claim("c_hand", INVESTIGATOR, FORGER, "record.forged", True, e.emitted_at, "inferred", 50, "own")
     held = Claim("c_older", INVESTIGATOR, rid, "record.forged", True, e.emitted_at - 1, "inferred", 50, "own")
-    w.persons[INVESTIGATOR].ledger.append(held)
+    w.persons[INVESTIGATOR].ledger.extend([hand, held])
     assert trail_of(w, rid, INVESTIGATOR) != [], "a claim older than the forging closed its trail"
     w.persons[INVESTIGATOR].ledger[-1] = dataclasses.replace(held, id="c_at", when=e.emitted_at)
     assert trail_of(w, rid, INVESTIGATOR) == [], "a claim made at the forging did not close its trail"
@@ -385,20 +388,29 @@ def test_a_witness_of_the_forgery_finds_nothing_new():
     assert trail_of(w, rid, ABOUT) == []
 
 
-def test_a_partial_find_closes_the_same_trail_to_a_later_better_one():
-    """After a BLIND-band find (the claim on the Record, not the hand), a second `research` of the same
-    Record drawing a HAND band deposits nothing: the Record claim is specific to the forging
-    (`holds_trail`), so one partial find closes it -- the hand is not learned later by re-reading."""
+def test_a_partial_find_leaves_the_hand_to_a_later_better_one():
+    """B11.61 (CP-T06-03; AM-D-09): after a BLIND-band find (the claim on the Record, not the hand), a second `research` of the
+    same Record drawing a HAND band is NOT closed out: `holds_trail` answers True only when the finder holds the HAND (the anchor's
+    event-kind claim, or a `seen` claim whose `who` is set), so the better find deposits what he lacks -- `(forger, record.forged,
+    True)` and a `seen` claim naming the forger -- and does not re-deposit `(Record, record.forged, True)`, which he holds."""
     if not BLIND_BANDS:
         pytest.skip("finding_terms shows the hand at every band -- nothing is withheld to learn later")
     n, cand = find_band(BLIND_BANDS)
     w, d, rid = trail_world()
     step(w, d, research(n, cand))
     assert {c.subject for c in forged_claims(w, INVESTIGATOR)} == {rid}
+    held_before = [c for c in forged_claims(w, INVESTIGATOR) if c.subject == rid]
     w.tick += 1
     out = step_until(w, d, cand, "better", HAND_BANDS.__contains__)
-    assert found_deposits(w, out[0].id) == [], found_deposits(w, out[0].id)
-    assert {c.subject for c in forged_claims(w, INVESTIGATOR)} == {rid}
+    assert {c.subject for c in forged_claims(w, INVESTIGATOR)} == {rid, FORGER}
+    assert [c for c in forged_claims(w, INVESTIGATOR) if c.subject == rid] == held_before, "the Record claim was deposited again"
+    assert sorted(getattr(c.value, HAND_TERM, None) for c in found_seen(w, INVESTIGATOR, rid)
+                  if getattr(c.value, HAND_TERM, None) is not None) == [FORGER]
+    assert len(found_deposits(w, out[0].id)) == 2, found_deposits(w, out[0].id)    # the forger's claim and the hand-showing `seen`
+    # ... and now he holds the hand: a third find of any band deposits nothing.
+    w.tick += 1
+    again = step_until(w, d, cand, "third", lambda degree: degree in FINDING_TERMS)
+    assert found_deposits(w, again[0].id) == [], found_deposits(w, again[0].id)
 
 
 FORGE_B = "fi03_forge_b"
@@ -1023,7 +1035,9 @@ def test_a_cover_is_found_by_research_on_its_id():
     seen_who = lambda w: [c.value.who for c in w.persons[INVESTIGATOR].ledger
                           if c.predicate == SEEN_PREDICATE and c.subject == COVER and c.source == "inferred"]
     w, _ = band_world(cover_research, HAND_BANDS)
-    assert seen_who(w) == [FORGER], seen_who(w)
+    # B11.61: the finder was handed the Record by the forger, so he already holds `seen(rec:cv){social, who: p_other}` FIRSTHAND; the find's
+    # `seen` is the same triple and is not deposited again (the exact-triple guard), so the hand is read off any source.
+    assert [c.value.who for c in w.persons[INVESTIGATOR].ledger if c.predicate == SEEN_PREDICATE and c.subject == COVER] == [FORGER]
     assert held_by(w, INVESTIGATOR, "cover.assumed") == {FORGER, COVER}, held_by(w, INVESTIGATOR, "cover.assumed")
     assert FORGER in held_by(w, INVESTIGATOR, "record.forged")
     w, _ = band_world(cover_research, frozenset({"Partial"}))

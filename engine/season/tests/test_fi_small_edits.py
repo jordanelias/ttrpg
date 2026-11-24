@@ -1,9 +1,9 @@
-"""B11.12 (`08_FI_04` §1, A-81): a refused inquiry and a failed one are two kinds, and a failed one leaves its actor's own claim.
+"""B11.12 (`08_FI_04` §1, A-81): a refused inquiry and a failed one are two kinds, and a failed one teaches its actor.
 
 `inquiry.refused` is the kind of an inquiry the fold would not admit (the six inquiry rows' `emits_on_refusal`); `finding.none` is
-the kind of one that was admitted, rolled, and found nothing (the `Failure` band). WITNESS deposits the second to its own doer and to
-nobody else (`rosters.yaml: undeposited_actor_kinds`, behind `finding_none_deposit`); the first stays skipped for everyone until the
-refusal card CP-T06-04 lands.
+the kind of one that was admitted, rolled, and found nothing (the `Failure` band). B11.61 (CP-T06-04): both are `undeposited_kinds`, so WITNESS
+makes no event-kind claim of either and deposits the Event's other claims as for any Event (`finding_none_deposit`, shipped `actor`;
+`none` is the whole-Event skip, kept as the control).
 
 Both tests are game-state tests in the `season_loop` lane: each resolves a planted act through the real driver and witnesses its Event.
 """
@@ -21,7 +21,7 @@ from ..data.verbs import EVENT_KINDS, VERB_TABLE
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token
 from ..state.carriers import Act, Claim, Record
-from .test_fi03_trail import INVESTIGATOR, forged_event, trail_world
+from .test_fi03_trail import FORGER, INVESTIGATOR, forged_event, trail_world
 
 INQUIRIES = ("examine", "interview", "research", "surveil", "thread_read", "reconstruct")
 REC, ACTOR = "rec_b1112", "p_low"
@@ -72,30 +72,30 @@ def test_inquiry_refused_is_split_from_finding_none():
             checked += 1
     assert checked >= 9 and {"inquiry.refused", "finding.none"} <= set(EVENT_KINDS) and "inquiry.refused" in UNDEPOSITED_KINDS
 
-    # A refused `research` (no such Record) emits the new kind, and it deposits to nobody -- the actor included.
+    # A refused `research` (no such Record) emits the new kind, and nobody holds an event-kind claim of it -- the actor included.
     w, d = _world()
     out = _act_witnessed(w, d, Act(id="a_b1112_gone", actor=ACTOR, verb="research", payload={"subject": "rec_none"}))
     assert [(e.kind, e.degree) for e in out] == [("inquiry.refused", None)], [(e.kind, e.degree) for e in out]
     assert not _holders(w, "inquiry.refused") and not _holders(w, "finding.none")
-    # ... and the fan WOULD have reached somebody besides the actor, so the empty ledgers are the skip's doing.
+    # ... and the fan WOULD have reached somebody besides the actor, so the empty ledgers are the kind's skip, not an empty room.
     reach = {pid for pid, _ in observers_for(w, out[0], w.fixtures.get("fan_out_mode"), list(w.persons))}
     assert reach - {ACTOR}, reach
 
 
-def test_failed_inquiry_leaves_the_actors_own_claim():
+def test_failed_inquiry_makes_no_event_kind_claim_and_teaches_its_actor():
     from ..epistemic import observers_for
 
-    # THE SHIPPED ROSTER: the failed inquiry is held by its actor, firsthand, and by nobody else.
+    # THE SHIPPED ARM (B11.61): nobody holds a `finding.none` claim, and the Event is deposited otherwise, so a ledger moved.
     assert DEFAULT_FIXTURES.get("finding_none_deposit") == "actor"
     w, d, out = _failed_research(None)
-    assert _holders(w, "finding.none") == {ACTOR}, _holders(w, "finding.none")
-    (claim,) = [c for c in w.persons[ACTOR].ledger if c.predicate == "finding.none"]
-    assert claim.doer == ACTOR and claim.source == "firsthand", claim
-    assert [e for e in w.log if e.kind == "claim.deposited" and out[0].id in e.causes], "the deposit did not emit"
+    assert not _holders(w, "finding.none"), _holders(w, "finding.none")
+    deposited = {e.changes[0].subject for e in w.log if e.kind == "claim.deposited" and out[0].id in e.causes}
+    assert deposited, "the failed inquiry deposited nothing: a null scene"
+    assert any(c.id in deposited and c.doer == ACTOR for c in w.persons[ACTOR].ledger), "the actor holds nothing of his own act"
     reach = {pid for pid, _ in observers_for(w, out[0], w.fixtures.get("fan_out_mode"), list(w.persons))}
     assert reach - {ACTOR}, "no bystander could have been reached; the absence above would be an empty room"
 
-    # CONTROL: the roster as it stood (`finding.none` skipped for everyone) leaves the same failed inquiry no write at all.
+    # CONTROL: the whole-Event skip (`none`) leaves the same failed inquiry no write at all.
     w, d, out = _failed_research("none")
     assert not _holders(w, "finding.none")
     assert not [e for e in w.log if e.kind == "claim.deposited" and out[0].id in e.causes]
@@ -167,8 +167,10 @@ def test_a_claim_decayed_to_zero_no_longer_closes_the_trail():
     e = forged_event(w)
     decay = w.fixtures.claim_decay()
     assert decay > 0 and trail_of(w, rid, INVESTIGATOR) != [], "the world offers no trail to close, or claims do not fade"
+    # B11.61: the trail is closed by the thing AND the hand, both held and fading at one rate.
+    hand = Claim("c_hand", INVESTIGATOR, FORGER, "record.forged", True, e.emitted_at, "inferred", decay, "own")
     held = Claim("c_held", INVESTIGATOR, rid, "record.forged", True, e.emitted_at, "inferred", decay, "own")
-    w.persons[INVESTIGATOR].ledger.append(held)
+    w.persons[INVESTIGATOR].ledger.extend([hand, held])
 
     # CONTROL: confidence 5 at its own tick still closes the trail.
     w.tick = e.emitted_at

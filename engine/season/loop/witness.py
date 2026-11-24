@@ -51,12 +51,6 @@ from ..trace_log import TRACE
 
 # B09.04 (`H-111`): the arms of the `finding_none_deposit` fixture (`none` | `actor`), bound at import like the roster beside it.
 FINDING_NONE_DEPOSIT_ARMS = roster("finding_none_deposit_arms")
-# B11.12 (`08_FI_04` §1, A-81): the skipped kinds whose Event still leaves its own doer a claim at the `actor` arm; the rest of
-# `UNDEPOSITED_KINDS` (`inquiry.refused`) deposits to nobody. A member the skip does not name could never be skipped, so it refuses here.
-UNDEPOSITED_ACTOR_KINDS = roster("undeposited_actor_kinds")
-if not UNDEPOSITED_ACTOR_KINDS <= UNDEPOSITED_KINDS:
-    raise SystemExit(f"rosters.yaml: `undeposited_actor_kinds` {sorted(UNDEPOSITED_ACTOR_KINDS - UNDEPOSITED_KINDS)} "
-                     "is not in `undeposited_kinds`: the actor's claim is a narrowing of the skip, not a second route")
 
 # v9 IN-22: THE SEAT CHANNEL -- the obligee channel (`epistemic._ch_post_remit`), borrowed for its
 # `inferred` source and its live/off switch; this route's recipients are seat holders
@@ -368,7 +362,7 @@ def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cfx
 
     `self.findings` is POPPED here (`((trail id, terms shown), ...)`, put there at RESOLVE). The
     `holds_trail` re-check exists because two finds of one Event can reach one WITNESS -- a second
-    `research` of the same Record deposits nothing. The claims are the fan's own shapes
+    `research` of the same Record deposits nothing once the finder holds the hand, and only the triples he lacks before. The claims are the fan's own shapes
     (`claim_subjects`, `seen_subject`), masked to the terms the band shows (`seen_showing`)."""
     found = self.findings.pop(e.id, ())
     pid = actor_of(w, e) if found else None
@@ -400,6 +394,12 @@ def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cfx
             out.append(Claim(H(w.world_seed, w.tick, pid, f"found_seen:{e.id}:{fid}"), pid, subj,
                              SEEN_PREDICATE, masked, w.tick, src, conf, "own", self.lap, doer=None))
         for c in out:
+            # B11.61 (CP-T06-03): `holds_trail` is true only of a finder who holds the HAND, so a partial finder's later, better find reaches here
+            # holding some of what it deposits. Only the triples he lacks are deposited -- the told channel's exact-triple guard (a held copy of
+            # the same subject, predicate and value, with no chain, skips), one deposit over; a deposit made earlier in this barrier is
+            # already in `p.ledger` (`World.write` applies synchronously), so no second dedup set is kept.
+            if any(h.subject == c.subject and h.predicate == c.predicate and h.value == c.value and not h.chain for h in p.ledger):
+                continue
             yield p, f, (_refract(c, p, FOUND_CHANNEL, gain, prior_act, prior_weigh, cfx)
                          if refracting else c)
 
@@ -432,14 +432,15 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # IN-55: an Event that changes only held claims, with no act, fans to nobody
     # (epistemic.changes_only_held_claims); the ledgers are read here once, before any deposit.
     held = held_claim_ids(w) if mode != "total" else frozenset()
-    # v9 FI-01, THE SKIP ARM (RS-21 item 1, H-111 [medium; Jordan to correct]): an Event whose KIND is in
-    # `rosters.yaml: undeposited_kinds` (`finding.none`) fans to nobody -- no event-kind claim, no read,
-    # no `seen`, no content -- and stays in the log and its act's causes. Keyed on the kind, not on a band
-    # or an empty `changes[]`: `news.untold`, `tell.refused` and `matter.undetermined` keep depositing. Rebinding `events`
-    # covers every pass below that reads it; the trace still counts every Event handed in.
-    # B09.04 (`H-111`): THE ACTOR ARM. `finding_none_deposit` is `none` (the CONTROL: the skip above stands) or `actor` (shipped by B11.12): such an
-    # Event is still skipped by every pass below that reads `events`, and enters the FAN for its own doer alone (`actor_of`, the person
-    # `witness_key` anchors on) -- so a search he failed is a claim he holds, and no non-actor ever receives it at either arm.
+    # v9 FI-01, THE SKIP ARM (RS-21 item 1, H-111 [medium; Jordan to correct]), NARROWED BY B11.61 (CP-T06-04): an Event whose KIND is in
+    # `rosters.yaml: undeposited_kinds` (`finding.none`, `inquiry.refused`) makes NO EVENT-KIND CLAIM -- and every other deposit goes as for any
+    # Event: its actor's own observation reads (at `observation_deposit_mode: actor`, the refusing `present_at` read among them) and the `seen` claim
+    # of each witness present. So a refused or failed inquiry teaches its actor what it read, and a bystander holds that he tried. Keyed on the
+    # KIND, not on a band or an empty `changes[]`: those would also swallow `matter.undetermined`, `news.untold` and `tell.refused`, which keep
+    # depositing their event-kind claim.
+    # B09.04 (`H-111`): THE ARM. `finding_none_deposit` is `none` (the CONTROL: the whole Event fans to nobody, as before B11.61) or `actor` (shipped
+    # by B11.12; the arm's name is the one B09.04 gave it, and under B11.61 it reads: deposit as any Event, less the event-kind claim). `total`
+    # (S61, the sweep's control) keeps the whole skip: its ledgers are identical by construction, and one doer's reads would differ them.
     # Read once per barrier, and refused outside `rosters.yaml: finding_none_deposit_arms`, as `obs_mode` below is.
     none_arm = w.fixtures.get("finding_none_deposit")
     require_member(
@@ -450,16 +451,14 @@ def witness(self, token: Token, events: list[Event]) -> int:
         law="`observers_for`'s precedent: an unrecognised arm silently falling back to the skip would make every measurement "
             "of the actor arm read the control")
     n_handed = len(events)
-    handed, events = events, [e for e in events if e.kind not in UNDEPOSITED_KINDS]
-    # B11.12: the actor arm reads `undeposited_actor_kinds`, the per-kind audience (one roster beside the arm, chosen over a second key on
-    # `undeposited_kinds`: `roster()` reads `values:` alone), so a REFUSED inquiry (`inquiry.refused`) still deposits to nobody.
-    # `total` (S61, the sweep's control) keeps the skip whole: its ledgers are identical by construction, and one doer's claim would differ them.
-    actor_only = {e.id for e in handed if e.kind in UNDEPOSITED_ACTOR_KINDS} if none_arm == "actor" and mode != "total" else frozenset()
+    # The whole-Event skip stays the control: it drops the Event from the fan and from every pass below that reads `events`; the trace still
+    # counts every Event handed in.
+    if none_arm == "none" or mode == "total":
+        events = [e for e in events if e.kind not in UNDEPOSITED_KINDS]
     fan: list[tuple[str, Event, str]] = [
-        (pid, e, ch) for e in handed
-        if (e.kind not in UNDEPOSITED_KINDS or e.id in actor_only) and not changes_only_held_claims(w, e, held, mode)
-        for pid, ch in observers_for(w, e, mode, everyone)
-        if e.id not in actor_only or pid == actor_of(w, e)]
+        (pid, e, ch) for e in events
+        if not changes_only_held_claims(w, e, held, mode)
+        for pid, ch in observers_for(w, e, mode, everyone)]
     # (this count is the FAN alone: IN-22's purview extension below appends after it)
     TRACE.decision(f"fan-out over {n_handed} events -> {len(fan)} deposits", "S28/S61",
                    chose=f"mode={mode} over {len(everyone)} persons "
@@ -714,7 +713,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # `test_15d_falsifier` neutralises) -- the told channel's exact-triple guard, one deposit over. Keyed on the row's shape, never on a verb name; moot per row once the row has a product.
         ungraded = _ungraded(VERB_TABLE.get(getattr(self.act_of.get(e.id), "verb", None)))
         # B11.58 (CP-T06-09): a channel that shows `who` files a covered deed under the actor, not the alias (`deposit_anchor`).
-        for n, subj in enumerate(() if only is not None else
+        for n, subj in enumerate(() if only is not None or e.kind in UNDEPOSITED_KINDS else
                                  claim_subjects(w, e, claim_rule, act_refs(self.act_of.get(e.id)),
                                                 deposit_anchor(w, e, HAND_TERM in TERMS_SUPPLIED_BY[channel]))):
             if ungraded and any(h.subject == subj and h.predicate == e.kind and h.value is True and not h.chain for h in p.ledger):

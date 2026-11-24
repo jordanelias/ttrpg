@@ -263,41 +263,50 @@ def deposit_anchor(w: "World", e: "Event", shows_who: bool) -> Optional[str]:
 
 
 def holds_trail(w: World, p: Person, e: Event, rule: str) -> bool:
-    """Does `p` already hold this deed as a witness would -- an event-kind claim `(s, e.kind, True)`
-    for an `s` SPECIFIC TO `e`, whatever its `when`?
+    """Does `p` already hold this deed as a witness would -- THE THING AND THE HAND?
 
-    THE SPECIFIC SUBJECTS are what the deposit rule makes a claim about `e` (`claim_subjects`) MINUS
-    the Event's anchor (`anchor_of`, the actor for an act-caused Event) -- or, where nothing else is
-    left (the `actor` rule, or an Event that names only its anchor), the anchor alone. The
-    anchor is excluded because it is not specific to ONE Event: `(forger, record.forged, True)` is the
-    same claim for every forging by that forger, so keying on it would close every LATER forging by him
-    to an investigator who had found (or witnessed) ANY one of them.
+    B11.61 (CP-T06-03): TRUE ONLY WHEN HE HOLDS THE HAND. Two tests, both read off his OWN ledger (AX-2), both at a claim no older than the
+    Event and still above 0:
+      (1) THE DEED: an event-kind claim `(s, e.kind, True)` for an `s` SPECIFIC TO `e` -- what the deposit rule makes a claim about `e`
+          (`claim_subjects`) MINUS the Event's anchor (`anchor_of`, the actor for an act-caused Event), or, where nothing else is left (the
+          `actor` rule, or an Event that names only its anchor), the anchor alone.
+      (2) THE HAND, and ONE OF: the event-kind claim on the subject a hand-showing deposit files the deed under (`deposit_anchor`: the
+          actor, else the anchor), or a `seen` claim on a specific subject whose `who` is set AND whose `stratum` is this deed's (`_term_stratum`: a `seen` claim
+          names no Event, and the Record he was handed by the forger shows the forger too -- as the hand of a `give`, whose stratum differs.
+          Every channel that shows `who` shows `stratum`, `rosters.yaml: observation_terms.supplied_by`, so no witness of the deed is excluded).
+    A partial finding lands (1) and withholds (2) (`rosters.yaml: finding_terms`), so it leaves the hand to a LATER, BETTER finding of the same
+    Event, which deposits only the triples the finder lacks (`loop/witness.py::_found_claims`); a second finding of the same Event, once the
+    hand is held, deposits nothing. ⚠ THE EDGE, DECLARED: a claim on the anchor from the same actor's LATER Event of the same kind satisfies (2)
+    for this one too -- the `when` guard cannot separate them -- so a finder who holds the forger from one forging has the hand of another he
+    holds only the Record of.
 
-    ⚠ A SUBJECT IS SPECIFIC TO ONE EVENT ONLY WHEN THE EVENT MINTED IT: each forging mints a fresh Record
-    id, so `(rid, record.forged, True)` is about that forging alone. A repeatable covert deed on one
-    patient (an arrest of the same man twice) would not be, so a held claim also has to be no OLDER
-    than the Event (`c.when >= e.emitted_at`): a claim made before the Event existed cannot be
-    knowledge of it. Nothing changes for `record.forged` (a witness's and a finder's claims are made
-    at or after the forging).
+    The anchor is excluded from (1) because it is not specific to ONE Event: `(forger, record.forged, True)` is the same claim for every
+    forging by that forger, so keying (1) on it would close every LATER forging by him to an investigator who had found (or witnessed) ANY
+    one of them.
 
-    One test for both readers: `trail_of` (an Event he holds is not news, so it is not trail) and
-    `loop/witness.py`'s found deposit (re-checked there, because a find runs at RESOLVE and two finds of
-    one Event can reach the same WITNESS). Reads `p`'s OWN ledger only (AX-2). ⚠ WHAT HOLDS: a held
-    claim on any specific subject closes the Event, so a partial finding -- which lands the claim on
-    the written thing and withholds the hand -- also closes it to a later, better finding of the same
-    Event, and a second finding of the same Event deposits nothing; under the shipped `both` rule a
-    claim on the actor ALONE does not close it. Under the `actor` rule the anchor is the only subject,
-    so there one forging found still closes the forger's others.
+    ⚠ A SUBJECT IS SPECIFIC TO ONE EVENT ONLY WHEN THE EVENT MINTED IT: each forging mints a fresh Record id, so `(rid, record.forged, True)`
+    is about that forging alone. A repeatable covert deed on one patient (an arrest of the same man twice) would not be, so a held claim also
+    has to be no OLDER than the Event (`c.when >= e.emitted_at`): a claim made before the Event existed cannot be knowledge of it. Nothing
+    changes for `record.forged` (a witness's and a finder's claims are made at or after the forging).
+
+    One test for both readers: `trail_of` (an Event he holds is not news, so it is not trail) and `loop/witness.py`'s found deposit
+    (re-checked there, because a find runs at RESOLVE and two finds of one Event can reach the same WITNESS). Reads `p`'s OWN ledger only.
 
     ⚠ A CLAIM HE HAS FORGOTTEN DOES NOT HOLD IT (ED-IN-0320, `08_FI_04` §2): the held claim must still be read at
     a confidence above 0 -- `present_confidence` at `w.tick`, the one owner of the fade, never the stored value
     (which nothing rewrites). `deeds_judged` is NOT changed: a stale claim leaves the opinion there, by the same ruling."""
     subj = claim_subjects(w, e, rule, act_refs(causing_act(w, e)))
     specific = set(non_anchor_subjects(subj, anchor_of(w, e))) or set(subj)
+    hand_subject = deposit_anchor(w, e, True)
+    act = causing_act(w, e)
+    stratum = _term_stratum(w, e, act, p.id)
     decay = w.fixtures.claim_decay()
-    return any(c.predicate == e.kind and c.value is True and c.subject in specific
-               and c.when >= e.emitted_at and present_confidence(c.confidence, c.when, w.tick, decay) > 0
-               for c in p.ledger)
+    live = [c for c in p.ledger if c.when >= e.emitted_at and present_confidence(c.confidence, c.when, w.tick, decay) > 0]
+    return (any(c.predicate == e.kind and c.value is True and c.subject in specific for c in live)
+            and any((c.predicate == e.kind and c.value is True and c.subject == hand_subject)
+                    or (c.predicate == SEEN_PREDICATE and c.subject in specific and getattr(c.value, "who", None) is not None
+                        and c.value.stratum == stratum)
+                    for c in live))
 
 
 def trail_of(w: World, subject: Optional[str], pid: str) -> list:

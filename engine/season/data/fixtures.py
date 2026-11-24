@@ -1212,9 +1212,9 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `0.0`, the control.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-456 -- site: Fixtures refusal_memory, graded `assumption`; the source proposes 0.5 and gives no derivation, so it ships as an assumption for Jordan and is swept 0.0 / 0.5 / 1.0]
     refusal_memory=0.5,                # `H-456`, swept 0.0 (control; revert) / 0.5 (SHIPPED since B09.05) / 1.0
-    # `H-111` (B09.04; `U5a_DICE_owed_edits` §4; B11.12, A-81). WHO RECEIVES A `finding.none` EVENT AT WITNESS (`rosters.yaml: undeposited_kinds` skips it for everyone):
-    # `none` -- nobody (the CONTROL); `actor` -- its own doer alone, so a search he failed is a claim he holds (SHIPS since B11.12: no null scene).
-    # The kinds it applies to are `rosters.yaml: undeposited_actor_kinds`; the arms are `finding_none_deposit_arms`.
+    # `H-111` (B09.04; `U5a_DICE_owed_edits` §4; B11.12, A-81; B11.61, CP-T06-04). HOW WITNESS TREATS AN EVENT OF A KIND `rosters.yaml: undeposited_kinds` NAMES (`finding.none`, `inquiry.refused`):
+    # `none` -- the whole Event fans to nobody (the CONTROL; revert); `actor` -- the Event is deposited as any Event but for its event-kind claim: its doer holds his own reads,
+    # the present hold `seen` (SHIPS since B11.12: no null scene; the arm's name is B09.04's and B11.61 widened what it deposits). The arms are `finding_none_deposit_arms`.
     # [ASSUMPTION; medium; Jordan to correct; revert: `none`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-111 -- site: Fixtures finding_none_deposit, graded `assumption`; the skip's own note names the narrower arm as the alternative Jordan would name, so it is injected at the control and swept none / actor]
     finding_none_deposit="actor",      # `H-111`, swept none (control; revert) / actor (SHIPPED since B11.12)

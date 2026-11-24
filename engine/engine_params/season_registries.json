@@ -2493,26 +2493,18 @@
           }
         },
         "undeposited_kinds": {
-          "source": "RS-21 item 1 (H-111 ANSWERED [medium; Jordan to correct]): SKIP at WITNESS, except keyed kinds a verb declares (`news.untold` and `tell.refused` stay, T4; CP-T05-03 split the one kind in two) -- a refused inquiry deposits nothing, and no `finding.none` is deposited. Built by v9 FI-01 as the deposit half of `ED-FI-0009`. B11.12 (`08_FI_04` \u00a71, A-81): `inquiry.refused` is the kind of a REFUSED inquiry, split from `finding.none` (a failed one); both stay skipped for every BYSTANDER, and `undeposited_actor_kinds` below names the kind that leaves its own doer a claim.",
+          "source": "RS-21 item 1 (H-111 ANSWERED [medium; Jordan to correct]): at WITNESS, except keyed kinds a verb declares (`news.untold` and `tell.refused` stay, T4; CP-T05-03 split the one kind in two), a refused or failed inquiry makes no event-kind claim. Built by v9 FI-01 as the deposit half of `ED-FI-0009`. B11.12 (`08_FI_04` \u00a71, A-81): `inquiry.refused` is the kind of a REFUSED inquiry, split from `finding.none` (a failed one). B11.61 (CP-T06-04; H-111's default revised to its own named alternative, Remediation DEC-12 reversed): the meaning narrows from \"fans to nobody\" to \"no event-kind claim\".",
           "row": "H-111",
-          "note": "\u26a0 THE EVENT KINDS WITNESS FANS TO NOBODY BUT THE ONE THE ROSTER BELOW NAMES (`loop/witness.py::witness`): an Event of one of these kinds stays in the log and in its act's causes, and no ledger receives any claim from it -- except its own doer's, where `undeposited_actor_kinds` names the kind and `finding_none_deposit` reads `actor`. B11.12: `inquiry.refused` stays here, deposited to nobody, until CP-T06-04 rules its audience. Keyed on the KIND, never on a band or on an empty `changes[]`: those would also swallow `matter.undetermined`, `news.untold` and `tell.refused`, which keep depositing. [ASSUMPTION; medium; Jordan to correct] the six inquiry rows' `finding.none` only, not every refusal kind -- a widening would move every refusal-bearing row's deposits, which nothing here measured. Revert: Jordan rules deposit at WITNESS, and this roster is deleted. Each member must be a kind some verb row declares (`data/verbs.py` refuses one that is not, so a misspelling cannot skip nothing). THE SKIP IS STRICT, AND ITS CONSEQUENCE WAS THE THING TO CORRECT: the plan's words (\"a refused inquiry deposits nothing\") drop the actor's own observation reads and `seen` claims as well as the event-kind claim, so a failed inquiry taught its actor nothing and the same person re-formed it (A-81: no null scene). The narrower arm is `finding_none_deposit_arms` below (B09.04, shipped `actor` by B11.12): the Event of a kind in `undeposited_actor_kinds` is deposited to its own doer and to nobody else; `none` is the skip as written here.",
+          "note": "\u26a0 THE EVENT KINDS WHOSE EVENT-KIND CLAIM WITNESS NEVER MAKES (`loop/witness.py::witness`): an Event of one of these kinds stays in the log and in its act's causes and is witnessed like any other Event -- the actor's own observation reads (at `observation_deposit_mode: actor`; a refused `examine` leaves its actor the refusing `present_at` read, so his next deliberation declines it) and the `seen` claim of each witness present (a bystander holds that someone tried) -- but nobody holds `(subject, <kind>, True)`. The whole-Event skip this roster once named is the arm `finding_none_deposit: none` below, kept as the control (and under `fan_out_mode: total`). Keyed on the KIND, never on a band or on an empty `changes[]`: those would also swallow `matter.undetermined`, `news.untold` and `tell.refused`, which keep depositing their event-kind claim. [ASSUMPTION; medium; Jordan to correct] the six inquiry rows' `finding.none` and `inquiry.refused` only, not every refusal kind -- a widening would move every refusal-bearing row's deposits, which nothing here measured. Revert: set `finding_none_deposit` to `none`. Each member must be a kind some verb row declares (`data/verbs.py` refuses one that is not, so a misspelling cannot skip nothing).",
           "values": [
             "finding.none",
             "inquiry.refused"
           ]
         },
-        "undeposited_actor_kinds": {
-          "source": "B11.12 (`08_FI_04` \u00a71, A-81: \"every scene writes at least one durable change to the world, whatever its outcome\"; H-111's narrower arm): the members of `undeposited_kinds` whose Event leaves its own doer a claim. A second roster, not a second key on the first, because `roster()` reads `values:` alone and `finding_none_deposit_arms` is already the per-kind arm.",
-          "row": "H-111",
-          "note": "`[ASSUMPTION; medium; Jordan to correct; revert: empty this roster, or set `finding_none_deposit` to `none`]` a FAILED inquiry (`finding.none`, the `Failure` band) leaves the actor's own claim `(subject, finding.none, doer = himself)` and no bystander any; a REFUSED one (`inquiry.refused`) is not here and deposits to nobody. Every member must be a member of `undeposited_kinds` (`loop/witness.py` refuses at import one that is not).",
-          "values": [
-            "finding.none"
-          ]
-        },
         "finding_none_deposit_arms": {
-          "source": "B09.04 (`U5a_DICE_owed_edits` \u00a74; H-111, `undeposited_kinds`' own note: \"the narrower arm ... is the alternative Jordan would name\"): who receives a `finding.none` Event at WITNESS, the one kind `undeposited_kinds` skips.",
+          "source": "B09.04 (`U5a_DICE_owed_edits` \u00a74; H-111, `undeposited_kinds`' own note: \"the narrower arm ... is the alternative Jordan would name\"): how WITNESS treats an Event of a kind `undeposited_kinds` names.",
           "row": "H-111",
-          "note": "`none` is THE CONTROL: the Event fans to nobody, as `undeposited_kinds` says. `actor` (SHIPPED by B11.12) deposits each kind of `undeposited_actor_kinds` to its own doer alone -- the `witness_key` channel's rule, *change claims about self* -- so a person who failed a search holds the claim `(subject, finding.none, doer = himself)` until it fades. `person_q.refused_before` reads a row's `emits_on_refusal` kinds, which since B11.12 are `inquiry.refused` for the inquiry rows, so that claim is held and read by no discount. No non-actor receives it at either arm, and no other reader is added. Read once per barrier by `loop/witness.py::witness`; a value outside the roster refuses.",
+          "note": "`none` is THE CONTROL: the whole Event fans to nobody -- no event-kind claim, no read, no `seen` (the skip before B11.61). `actor` (SHIPPED by B11.12; B11.61 widened what it deposits and kept its name, the fixture key B09.04 gave it) deposits the Event as any Event but for its event-kind claim: its doer holds his own reads, the present hold `seen`, and nobody holds `(subject, finding.none, True)` or `(subject, inquiry.refused, True)`. `person_q.refused_before` reads a row's `emits_on_refusal` kinds (`inquiry.refused` for the inquiry rows), a claim no deposit makes now, so an inquiry's refusal is remembered through the reads it taught (`belief_contradicts`), not through that reader. Read once per barrier by `loop/witness.py::witness`; a value outside the roster refuses.",
           "values": [
             "none",
             "actor"
@@ -8081,7 +8073,7 @@
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
           "beneficiary_note": "the six investigation verbs (`examine`, `interview`, `research`, `surveil`, `thread_read`, `reconstruct`) all write `[]` and emit `finding.made`: a finding is a Claim minted at WITNESS into THE ACTOR'S OWN LEDGER, which is the carrier the good lands on. `tell` is the one that points the other way -- it deposits with the person told, so its beneficiary is `subject`.",
           "referent_class": "Site",
-          "referent_class_note": "v10 REM-22 (B10-05, AM-A-07; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Site`-CLASSED REFERENT, as `restore` (`queries/world_q.py::own_referents_of_class` stamps the question's own Site, `decision/options.py::opening_set` forms on it alone). THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: the cell, the eligibility and the graded route (`graded_tasks`, FI-01) are unchanged, and it claims no finding. No question the realm delivers carries a Site among its referents, so the row forms nowhere there (sideways, declared, not progress); `finding.none` deposits to its actor alone at WITNESS (`undeposited_actor_kinds`). A person present at a Site reaches the graded route through the real fold (`tests/test_referent_class_stamps.py`); what remains refused is `present_at`, a learnable state. REVERT: delete this column.",
+          "referent_class_note": "v10 REM-22 (B10-05, AM-A-07; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Site`-CLASSED REFERENT, as `restore` (`queries/world_q.py::own_referents_of_class` stamps the question's own Site, `decision/options.py::opening_set` forms on it alone). THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: the cell, the eligibility and the graded route (`graded_tasks`, FI-01) are unchanged, and it claims no finding. No question the realm delivers carries a Site among its referents, so the row forms nowhere there (sideways, declared, not progress); a failed or refused inquiry teaches its actor his reads at WITNESS and makes no event-kind claim (`undeposited_kinds`, B11.61). A person present at a Site reaches the graded route through the real fold (`tests/test_referent_class_stamps.py`); what remains refused is `present_at`, a learnable state. REVERT: delete this column.",
           "requires": "the site exists and the actor is present at it",
           "requires_typed": {
             "all": [
@@ -8114,7 +8106,7 @@
               "finding.none"
             ]
           },
-          "emits_note": "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits to its actor alone (`undeposited_actor_kinds`, B11.12; a refusal is `inquiry.refused`, deposited to nobody); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built.",
+          "emits_note": "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none` and a refusal `inquiry.refused`, kinds in `undeposited_kinds`: WITNESS makes no event-kind claim of either (B11.61) and deposits the rest as for any Event; the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built.",
           "emits_on_refusal": [
             "inquiry.refused"
           ],
@@ -8265,7 +8257,7 @@
               "finding.none"
             ]
           },
-          "emits_note": "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits to its actor alone (`undeposited_actor_kinds`, B11.12; a refusal is `inquiry.refused`, deposited to nobody); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built.",
+          "emits_note": "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none` and a refusal `inquiry.refused`, kinds in `undeposited_kinds`: WITNESS makes no event-kind claim of either (B11.61) and deposits the rest as for any Event; the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built.",
           "emits_on_refusal": [
             "inquiry.refused"
           ],
@@ -8325,7 +8317,7 @@
               "finding.none"
             ]
           },
-          "emits_note": "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits to its actor alone (`undeposited_actor_kinds`, B11.12; a refusal is `inquiry.refused`, deposited to nobody); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built.",
+          "emits_note": "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none` and a refusal `inquiry.refused`, kinds in `undeposited_kinds`: WITNESS makes no event-kind claim of either (B11.61) and deposits the rest as for any Event; the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built.",
           "emits_on_refusal": [
             "inquiry.refused"
           ],

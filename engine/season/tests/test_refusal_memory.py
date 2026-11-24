@@ -220,27 +220,29 @@ def _failed_search(arm: str):
     return w, ev, [(pid, c) for pid, p in w.persons.items() for c in p.ledger if c.predicate == "finding.none"]
 
 
-def test_finding_none_deposits_to_its_actor_only_at_the_actor_arm():
+def test_finding_none_makes_no_event_kind_claim_but_teaches_its_actor_at_the_actor_arm():
     from ..epistemic import observers_for
 
     assert DEFAULT_FIXTURES.get("finding_none_deposit") == "actor"                 # the shipped arm (B11.12); `none` is the control
 
-    # CONTROL ARM: nobody holds the claim -- the skip stands, the actor included.
+    def caused(w, ev):
+        return [e for e in w.log if e.kind == "claim.deposited" and ev.id in e.causes]
+
+    # CONTROL ARM: nothing is deposited from the Event -- the whole-Event skip stands, the actor included.
     w, ev, held = _failed_search("none")
-    assert held == [], held
-    # THE CLAIM COULD HAVE REACHED A NON-ACTOR: the fan that WITNESS would have asked admits somebody besides the actor, so
-    # "no non-actor holds it" below is the arm's doing and not an empty room.
+    assert held == [] and not caused(w, ev), (held, caused(w, ev))
+    # THE EVENT COULD HAVE REACHED A NON-ACTOR: the fan that WITNESS would have asked admits somebody besides the actor, so
+    # the empty ledgers above are the arm's doing and not an empty room.
     reach = {pid for pid, _ in observers_for(w, ev, w.fixtures.get("fan_out_mode"), list(w.persons))}
     assert "p_low" in reach and reach - {"p_low"}, reach
 
-    # ACTOR ARM: the doer, and only the doer, holds one firsthand claim about the subject, stamped as his own act, and the
-    # reader of a refusal one remembers finds it. (An arm wired backwards fails the control's `held == []` and this line.)
+    # ACTOR ARM (B11.61): nobody makes a `finding.none` claim, so the reader of a refusal one remembers finds none either -- and the Event is
+    # deposited otherwise: the actor's ledger moved, from his own act. (An arm wired backwards fails the control's emptiness and this line.)
     w, ev, held = _failed_search("actor")
-    assert [pid for pid, _ in held] == ["p_low"], held
-    claim = held[0][1]
-    assert claim.doer == "p_low" and claim.source == "firsthand", claim
-    assert person_q.refused_before(w.persons["p_low"], ("finding.none",), claim.subject) == claim.confidence > 0
-    assert [e for e in w.log if e.kind == "claim.deposited" and ev.id in e.causes], "the deposit did not emit"
+    assert held == [], held
+    deposited = {e.changes[0].subject for e in caused(w, ev)}
+    assert deposited and any(c.id in deposited and c.doer == "p_low" for c in w.persons["p_low"].ledger), "the actor holds nothing of his own act"
+    assert person_q.refused_before(w.persons["p_low"], ("finding.none",), "rec_b0904") == 0
 
     # AN ARM OUTSIDE THE ROSTER REFUSES, so a misspelt arm cannot read as the control.
     with pytest.raises(Exception, match="finding.none deposit arm"):
