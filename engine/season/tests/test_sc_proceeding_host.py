@@ -20,7 +20,7 @@ from ..data.rosters import GROUNDS, PROCEEDING_MOVES, RUNG_KINDS
 from ..harness import probes as PR
 from ..gaps import Unspecified
 from ..queries import person_q
-from ..queries.inputs import Card, Input, Margin, Outcome, Sitting
+from ..queries.inputs import Beat, Card, Cond, Input, Margin, Outcome, Sitting
 from ..seam.ladder import degree_of
 from ..seam.wrappers import sigma as S
 from ..data.verbs import VERB_TABLE, _check_proceeds
@@ -742,3 +742,173 @@ def test_a_docketed_rig_reaches_the_card(monkeypatch):
     arranger, rig = S.arranged_by(w, _act("speak", subject="p_mid"), "p_mid")
     card = _build(w, row=ROWS["legal_trial"], arranger=arranger, rig=rig)[1]
     assert (card.arranged_by, card.tilted_against) == ("p_king", "against") and card.tilt > 0, card
+
+
+# B24p.20 -- THE SITTING IS WRITTEN (V2 p2 §C.1, §J; p4 §L 20): `loop/resolve.py::_proceeding_ending` writes the Event's `ending`, `world_q.ending_*`
+# read it back, `_eff_argue` moves each hearer of a rally for himself. A sitting is run by the entry and folded through the driver's own `_fold`.
+def _beat(n, mover, side, mood, *, rattled=None, moved=()):
+    return Beat(n, mover, mover, side, "argue", "raises", "m1", "consequence", None, None, None, 0.5, 0.0, False, None, 0.0, (), rattled, None, 1.0, 1.0, 0.0,
+                False, tuple(moved), None, mood, (("difficulty", 1.0),))
+
+
+def _planted(beats, ended="budget", by=None, read=("p_mid",), tracks=None, who=("p_low", "p_mid"), verdicts=(("p_mid", 3.0),)):
+    """A hand-built sitting of `beats` over `who` (every start 0): the outcome, and the result `_resolve_proceeding` would hold it in."""
+    run = {p: 0.0 for p in who}
+    for b in beats:
+        for p, d in b.moved:
+            run[p] += d
+    state = Sitting(n=len(beats), tracks=tuple((tracks or run).items()), cond=tuple((p, Cond(rattles=sum(b.rattled == p for b in beats))) for p in who), ended=ended)
+    out = Outcome(tuple(beats), state, ended, by, tuple((p, _m(m)) for p, m in verdicts))
+    return dict(status="RESOLVED", proceeding=out, card=SimpleNamespace(close="bench"), arrangement="conversation", form="full", topic="m1",
+                read=read, starts=tuple((p, 0.0) for p in who), net=5.0, ob=1.0, settled_margin=4.0, terms=())
+
+
+def _folded(w, result, *, verb="argue", to="p_mid", degree="Success", act_id="a20"):
+    """`result` folded as the driver folds an act of `verb` (`_fold`, with the act's own resolution): the Events the act emitted."""
+    from ..data.matrix import WriteClass
+    from ..loop.driver import SeasonDriver, mint_token
+    from ..seam import Resolution
+    act = Act(id=act_id, actor="p_low", verb=verb, payload={"to": to, "subject": "m1"})
+    return SeasonDriver(w)._fold(w, mint_token(w, WriteClass.ACTS), act, Resolution(degree, result))
+
+
+def _sat(w, row="conversation", form="full", effort=2):
+    """One real sitting on the entry, as the provider path runs it: `(input, card, outcome, the result `_resolve_proceeding` would return)`."""
+    inp, card = _build(w, row=ROWS[row], effort=effort)
+    out = PROCEED(inp, _key("b20-sat"))
+    return inp, card, out, dict(status="RESOLVED", proceeding=out, card=card, arrangement=row, form=form, topic=inp.matter, read=(out.verdicts[0][0],),
+                                starts=tuple((p.id, p.start) for p in inp.room), net=5.0, ob=1.0, settled_margin=4.0, terms=())
+
+
+def test_a_proceedings_event_carries_its_beats_sitting_and_verdicts():
+    """A full sitting folded as an act leaves, on every Event the act emitted, its head, one tuple per beat (a `Beat`'s fields in order, never `terms`),
+    the whole `Sitting` and each verdict's band on the one ladder, in milli-units; `ending_beats`, `ending_sitting` and `ending_verdicts` read back what
+    the outcome held and no more. CONTROL: one abridged speech writes the head, one beat and its one verdict. FALSIFIER: a sitting whose tracks are not
+    the starts plus the beats' moves is refused at the write, so a stored aggregate cannot drift from the beats."""
+    from ..gaps import InstrumentDefect
+    w = _world()
+    inp, card, out, result = _sat(w)
+    events = _folded(w, result)
+    assert events and len({e.ending for e in events}) == 1 and events[0].ending, [e.kind for e in events]
+    e = events[0]
+    assert e.ending[0] == ("proceeding", "conversation", "full", out.ended, out.ended_by)
+    beats = world_q.ending_beats(e)
+    assert len(out.beats) > 1 and [(b.n, b.mover, b.move, b.margin) for b in beats] == [(b.n, b.mover, b.move, round(b.margin * 1000)) for b in out.beats]
+    assert all(len(t) == len(fields(Beat)) for t in e.ending if t[0] == "beat")                    # one field fewer than the beat (`terms`), one tag more
+    assert out.beats[0].terms and all(out.beats[0].terms not in t for t in e.ending)
+    state = world_q.ending_sitting(e)
+    assert (state.n, state.issue, state.ended) == (out.state.n, out.state.issue, out.state.ended)
+    assert len(state.tracks) == len(out.state.tracks) and all(abs(a - b) <= 0.001 for (_, a), (_, b) in zip(state.tracks, out.state.tracks))
+    assert world_q.ending_verdicts(e) == tuple((who, degree_of(dict(net=m.net, ob=m.ob, settled_margin=m.net - m.ob))) for who, m in out.verdicts)
+    # the control: the one-speech form
+    w = _world()
+    abridged_inp, _ = _build(w, row=A.abridged(ROWS["conversation"]), effort=0)
+    one = PROCEED(abridged_inp, _key("b20-one"))
+    result = dict(result, proceeding=one, form="abridged", starts=tuple((p.id, p.start) for p in abridged_inp.room), read=(one.verdicts[0][0],))
+    ended = _folded(w, result)[0].ending
+    assert [t[0] for t in ended] == ["proceeding", "beat", "sitting", "verdict"] and ended[0][2] == "abridged", [t[0] for t in ended]
+    # the falsifier
+    bad = dict(result, starts=tuple((p, s + 1.0) for p, s in result["starts"]))
+    with pytest.raises(InstrumentDefect, match="04 G.1.5"):
+        _folded(_world(), bad)
+
+
+def test_the_record_names_the_rooms_stance_where_it_turns():
+    """The record names the room in five bands of the beat's mood, at the beat that turns it (the first, and each whose band differs from the one before)
+    and nowhere else; the clamped number is never in it; a yield that decided is said to have decided, and one the close then drew on is not. FALSIFIER: a
+    writer that named every beat, or kept the number, or called a drawn close's yield `decided`, fails one of the three reads below."""
+    from ..data.rosters import STANCE_BANDS, STANCE_DECIDED
+    moods = [0.0, 0.1, 0.5, 0.7, 0.3, -0.9, -0.5, -0.1]
+    edges = (-0.6, -0.2, 0.2, 0.6)
+    band = lambda m: STANCE_BANDS[sum(m >= e for e in edges)]
+    beats = [_beat(i + 1, "p_low", "for", m) for i, m in enumerate(moods)]
+    e = _folded(_world(), _planted(beats))[0]
+    stances = [b.stance for b in world_q.ending_beats(e)]
+    want = [band(m) if i == 0 or band(m) != band(moods[i - 1]) else None for i, m in enumerate(moods)]
+    assert stances == want and None in stances and len({s for s in stances if s}) >= 4, stances      # the bands are the five fifths of -1..1
+    assert not any(isinstance(v, float) for t in e.ending for v in t), "a real is written in whole milli-units only"
+    two = [_beat(1, "p_low", "for", 0.1), _beat(2, "p_low", "for", 0.1)]
+    settled = world_q.ending_beats(_folded(_world(), _planted(two, "yielded", "p_low", read=()))[0])
+    assert [b.stance for b in settled] == ["hanging", STANCE_DECIDED]                                 # the yield that decided names itself, though the band held
+    drawn = world_q.ending_beats(_folded(_world(), _planted(two, "yielded", "p_low", read=("p_mid",)))[0])
+    assert [b.stance for b in drawn] == ["hanging", None]                                              # a yield the close was then drawn on is a beat like another
+
+
+def test_a_written_sitting_resumes_without_replay():
+    """`ending_sitting` handed back as `Input.state` continues the sitting: the count of beats, the issue reached and each man's turns are the written
+    ones, and the new beats begin after them with no beat replayed. A sitting that `yielded` is refused, as the entry refuses one."""
+    w = _world()
+    inp, card = _build(w, row=ROWS["conversation"], effort=2)
+    first = PROCEED(replace(inp, rite=replace(inp.rite, turns=2)), _key("b20-resume"))
+    assert first.ended == "budget" and first.state.n >= 2, first.ended
+    result = dict(_planted(first.beats, "budget", read=("p_mid",), tracks=dict(first.state.tracks), who=tuple(p.id for p in inp.room)), proceeding=first,
+                  starts=tuple((p.id, p.start) for p in inp.room))
+    state = world_q.ending_sitting(_folded(w, result)[0])
+    assert (state.n, state.issue) == (first.state.n, first.state.issue)
+    assert {i: c.spoken for i, c in state.cond} == {i: c.spoken for i, c in first.state.cond}
+    more = PROCEED(replace(inp, rite=replace(inp.rite, turns=4), state=state), _key("b20-resume-2"))
+    assert more.beats and more.beats[0].n == state.n + 1 and more.state.n == state.n + len(more.beats), (state.n, [b.n for b in more.beats])
+    assert more.state.issue >= state.issue
+    with pytest.raises(ValueError, match=r"refused\[resume_yielded\]"):
+        replace(inp, state=replace(state, ended="yielded"))
+
+
+def test_a_rally_moves_each_carried_hearer_and_no_other():
+    """An `argue` to a crowd under a `hearers` close moves, for each verdict, THAT hearer's pursuits at his own band: the two carried hearers move
+    (the man the act names, `to`, is one the sitting did not carry and does not move); the two not carried do not. CONTROL: the same band under any
+    other close moves the one named, at the act's band. FALSIFIER: an effect that moved the named man at the act's band moves p_mid and not p_other."""
+    from ..data.rosters import PURSUITS
+    from ..loop.effects import EFFECTS
+    a, b = sorted(PURSUITS)[:2]
+    heard = ("p_mid", "p_other", "p_high", "p_king")
+
+    def stage(close):
+        w = _world()
+        for who in heard:
+            w.persons[who].pursuits = {a: 0.2, b: 0.4}
+        w.persons["p_low"].pursuits = {a: 1.0, b: 0.0}
+        result = _planted([], read=heard, who=("p_low",) + heard, verdicts=(("p_mid", -1.0), ("p_other", 3.5), ("p_high", 0.4), ("p_king", 1.5)))
+        result["card"] = SimpleNamespace(close=close)
+        return w, Act(id="a20r", actor="p_low", verb="argue", payload={"to": "p_mid", "subject": "m1"}), result
+    w, act, result = stage("hearers")
+    change = EFFECTS["argue"](w, act, SimpleNamespace(degree="Success", result=result))
+    change.apply()
+    moved = {who for who in heard if w.persons[who].pursuits != {a: 0.2, b: 0.4}}
+    assert moved == {"p_other", "p_king"} and {s.id for s in change.subjects} == moved, moved                        # Overwhelming and Success carried; Partial and Failure did not
+    over, success = (w.persons[who].pursuits for who in ("p_other", "p_king"))
+    assert over[a] - 0.2 > 1.5 * (success[a] - 0.2) > 0, (over, success)                                                # each at his own band: the one ladder's steps
+    for close, read in (("bench", heard), ("hearers", ())):                  # another close, and a yield that decided the band (no verdict did)
+        w, act, result = stage(close)
+        EFFECTS["argue"](w, act, SimpleNamespace(degree="Success", result=dict(result, read=read))).apply()
+        assert {who for who in heard if w.persons[who].pursuits != {a: 0.2, b: 0.4}} == {"p_mid"}, close
+
+
+def test_a_rattle_is_counted_into_the_strain_he_carries_next():
+    """A press that landed on a man is in his sitting's ending (`ending_rattles`) and the next proceeding builds him carrying it (`rattled_since`, through
+    `strain_carried`): less the more scenes since, none for a man it did not land on, none for a chooser's picture of him, and none once the season
+    closes. FALSIFIER: the old caller, handing `strain_carried` nothing, builds every man at zero."""
+    w = _world()
+    beats = [_beat(1, "p_low", "for", 0.0), _beat(2, "p_low", "for", 0.0, rattled="p_mid")]
+    events = _folded(w, _planted(beats, who=("p_low", "p_mid", "p_other")), act_id="a20-first")
+    w.log.extend(events)
+    assert [world_q.ending_rattles(events[0], who) for who in ("p_mid", "p_low", "p_other")] == [1, 0, 0]
+    strain = lambda who, **kw: {p.id: p.strain for p in _build(w, row=ROWS["conversation"], **kw)[0].room}[who]
+    fresh = strain("p_mid")
+    assert fresh == person_q.strain_carried((0,), w.fixtures) > 0 and strain("p_low") == 0.0
+    w.log.extend(_folded(w, _planted([_beat(1, "p_low", "for", 0.0)], who=("p_low", "p_mid")), act_id="a20-second"))       # a later scene he sat in
+    assert world_q.rattled_since(w, "p_mid") == (1,) and 0.0 < strain("p_mid") < fresh
+    assert strain("p_mid", seen=S._Believed(w, w.persons["p_low"], 0.5)) == 0.0                                          # a picture of him carries none
+    w.tick += 1
+    assert strain("p_mid") == 0.0
+
+
+def test_every_end_of_a_proceeding_writes_an_ending():
+    """A-81: a sitting that ended on its budget, a whole round at rest or a yield leaves a non-empty ending on every Event the act emitted, a refusal after
+    the sitting's included (an `argue` at Success that moved nobody is refused, and the sitting is still on the stage)."""
+    checked = 0
+    for ended, by, read in (("budget", None, ("p_mid",)), ("rested", None, ("p_mid",)), ("yielded", "p_low", ())):
+        events = _folded(_world(), _planted([_beat(1, "p_low", "for", 0.2), _beat(2, "p_mid", "against", 0.0)], ended, by, read=read))
+        assert events and all(e.ending and e.ending[0][3] == ended for e in events), (ended, [(e.kind, e.ending[:1]) for e in events])
+        checked += len(events)
+        assert {e.kind for e in events} == {"argument.refused"}
+    assert checked >= 3

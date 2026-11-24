@@ -21,10 +21,12 @@ and `_model_modules()` derives that set from a recursive glob.
 from __future__ import annotations
 
 import functools
-from dataclasses import dataclass, replace
+from collections import namedtuple
+from dataclasses import dataclass, fields, replace
 from fractions import Fraction
 from typing import Callable, NamedTuple, Optional
 
+from engine.dice_engine.dice_engine import MARGIN_SCALE
 from engine.dice_engine.fmath import ltr_sum
 
 from ..data.arrangements import ARRANGEMENTS, abridged      # v11 CR-34: `declared_sitting` reads a row's `close`/`quorum`; B24p.16: `proceeding_row`
@@ -33,7 +35,7 @@ from ..data.requires import (
 )
 from ..data.rosters import (
     CONTINUATION_TIES, SUCCESSIONS,
-    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
+    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
     INVESTED,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
@@ -95,8 +97,8 @@ from ..state.world import World, rung_kind_ascends
 from ..trace_log import TRACE
 # v9 IN-07 E1: the `settlements` module's records (the one host leaf a module imports) and the
 # role-string resolver its entries are reached through. Neither pulls in module code at import.
-from .inputs import (DrawRecord, DrawRow, Eater, FabricInput, FortInput, HousingInput, LarderInput,
-                     ProduceInput, SubsistInput, Under)
+from .inputs import (Beat, Cond, DrawRecord, DrawRow, Eater, FabricInput, FortInput, HousingInput, LarderInput, Point,
+                     ProduceInput, Sitting, SubsistInput, Under)
 from ..data.fixtures import SITE_YIELD
 from engine.substrate import combat_kit as _combat_kit, composition
 
@@ -506,6 +508,69 @@ def proceeding_row(w: World, act) -> tuple:
             return (abridged(arrangement) if form == "abridged" else arrangement), form, move, item
     raise Unspecified(f"{act.verb!r} has no `proceeds` entry that holds for this act", "world_q.proceeding_row",
                       needs="a verb row carrying `proceeds:`, its last entry holding for any act", law="B24p.16, RD §D.1")
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------
+# B24p.20 -- A PROCEEDING'S ENDING, READ BACK (`rosters.yaml: proceeding_endings`; the one writer is `loop/resolve.py::_proceeding_ending`). Pure
+# readers over `Event.ending`: they hold nothing and decide nothing, and an Event no proceeding wrote answers empty.
+# ---------------------------------------------------------------------------------------------------------------------------------------
+#: A written beat: a `Beat`'s fields in declared order, `terms` left out (the true values are never written) and `mood` read as `stance` (its band, named
+#: only where the room turns; `None` at the beats that leave it as it was; the clamped number is not in the record).
+EndedBeat = namedtuple("EndedBeat", [("stance" if f.name == "mood" else f.name) for f in fields(Beat) if f.name != "terms"])
+
+
+def _tagged(event, tag: str) -> list:
+    """The tuples of `event.ending` that begin with `tag` (`()` for an Event with no ending, or a single roll's: its elements are pairs of keys)."""
+    return [x for x in getattr(event, "ending", ()) if x and x[0] == tag]
+
+
+def ending_beats(event) -> tuple:
+    """The beats a proceeding's Event holds, in order, each an `EndedBeat` of milli-unit whole numbers where the beat held reals."""
+    return tuple(EndedBeat(*x[1:]) for x in _tagged(event, ENDING_BEAT))
+
+
+def ending_sitting(event) -> Optional[Sitting]:
+    """THE WRITTEN SITTING, as a `Sitting` (what a resume passes as `Input.state`: it continues the count and the issue reached, with no replay), its
+    reals read back from milli-units; `None` for an Event holding none. A sitting that ended `yielded` is refused at `Input`, not here."""
+    held = _tagged(event, ENDING_SITTING)
+    if not held:
+        return None
+    _, n, issue, points, live, tracks, cond, used, last_voice, ended = held[0]
+    unit = lambda pairs: tuple((who, v / MARGIN_SCALE) for who, v in pairs)
+    return Sitting(n=n, issue=issue,
+                   points=tuple(Point(*x[:6], held=unit(x[6])) for x in points), live=tuple(live), tracks=unit(tracks),
+                   cond=tuple((who, Cond(c[0], c[1] / MARGIN_SCALE, c[2] / MARGIN_SCALE, c[3], c[4] / MARGIN_SCALE)) for who, c in cond),
+                   used=tuple(used), last_voice=tuple(last_voice), ended=ended)
+
+
+def ending_verdicts(event) -> tuple:
+    """`((person, band), ...)`: each verdict of the sitting, graded on the one ladder when it was written."""
+    return tuple((x[1], x[2]) for x in _tagged(event, ENDING_VERDICT))
+
+
+def ending_rattles(event, person: str) -> int:
+    """How many rattles landed on `person` in the sitting this Event wrote: the beats that name him `rattled`."""
+    return sum(1 for b in ending_beats(event) if b.rattled == person)
+
+
+def rattled_since(w: World, person: str) -> tuple:
+    """`(scenes since, ...)`, one for each rattle that landed on `person` in a proceeding THIS SEASON, freshest first: what `person_q.strain_carried` reads
+    (V2 p2 §A.4, a derived read of his own acts' endings). A scene is a proceeding act in which he sat (the sitting's `cond` holds him); an act's Events
+    are one scene, counted once. Read off `w.log` newest first, stopping where the season ends; stores nothing."""
+    out, scenes, seen = [], 0, set()
+    for e in reversed(w.log):
+        if e.emitted_at < w.tick:
+            break
+        if not e.ending or e.causes[0] in seen:
+            continue
+        sitting = ending_sitting(e)
+        if sitting is None:
+            continue
+        seen.add(e.causes[0])
+        if any(who == person for who, _c in sitting.cond):
+            out.extend([scenes] * ending_rattles(e, person))
+            scenes += 1
+    return tuple(out)
 
 
 # ===========================================================================

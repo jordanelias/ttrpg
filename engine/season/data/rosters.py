@@ -1516,6 +1516,9 @@ ESTIMATE_OUTCOMES = roster("estimate_outcomes", ordered=True)
 ENDING_FELLED, ENDING_YIELDED, ENDING_UNDECIDED, ENDING_PREVAILED = roster("fight_endings", ordered=True)
 # SC-P1 (B05.18): the keys of a margin provider's `Event.ending` tuple, in order (`loop/resolve.py::_fold`).
 MARGIN_ENDING = roster("margin_endings", ordered=True)
+# B24p.20 (V2 p2 §C.1; p4 §L 20): the five bands of a beat's mood in order from the lowest, and the stance of a yield that decided.
+ENDING_HEAD, ENDING_BEAT, ENDING_SITTING, ENDING_VERDICT = roster("proceeding_endings", ordered=True)   # B24p.20: the tags of a proceeding's `Event.ending`
+*STANCE_BANDS, STANCE_DECIDED = roster("stance_bands", ordered=True)
 # B05 close: the levels a verb row's `difficulty:` and an arrangement row's `standard:` name, and `Fixtures.difficulty_ob` sizes; bound once.
 DIFFICULTY_LEVELS = roster("difficulty_levels", ordered=True)
 

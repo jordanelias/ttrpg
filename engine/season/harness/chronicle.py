@@ -168,7 +168,7 @@ def _rolled(log, act_of: dict) -> dict:
     for e in log:
         a = act_of.get(e.id)
         end = getattr(e, "ending", ())                    # a planted Event (a test's namespace) may carry none
-        if a is not None and end and {k for k, _v in end} == set(MARGIN_ENDING):
+        if a is not None and end and all(len(x) == 2 for x in end) and {k for k, _v in end} == set(MARGIN_ENDING):   # a proceeding's ending (B24p.20) is no pair list
             out.setdefault(a.id, end)
     return out
 

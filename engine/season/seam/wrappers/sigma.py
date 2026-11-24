@@ -97,7 +97,7 @@ from ...manifest.registry import (BELIEVED_ESTIMATE_ROLE, BENCH, HEARD_BY_ROOMS,
 from ...queries import world_q as _world_q
 from ...queries.inputs import Card, Input, Item, Margin, Outcome, Point, Present, Rite, SocialContestInput
 # The room's two resolver-side reads. The host READS them; the module composes the obstacle they move.
-from ...queries.world_q import docketed_under, faction_holding, hold_force, judging_set, place_of, presence, proofs, reception, residence_of
+from ...queries.world_q import docketed_under, faction_holding, hold_force, judging_set, place_of, presence, proofs, rattled_since, reception, residence_of
 from ...state.carriers import EFFORT, effort_of
 from ...state.gate import BENCH_BASIS, UNDECLARED_DISPOSAL, sits_over
 from ._entry import entry_for
@@ -1435,7 +1435,9 @@ def _present(w: Any, p: Any, side: Optional[str], decides: bool, ctx: _Sitting) 
                    believes=believes(p, ctx.topic, fx) if ctx.topic is not None else 0.0,
                    bias=0.0,                                  # [HOOK: his stable misjudgement has no carrier]
                    power=power, precedence=precedence, items=_items_of(w, p, ctx, side),
-                   strain=strain_carried((), fx))             # [HOOK: B24p.20's reader gives his rattles this season]
+                   # what he carries in is the rattles of this season's sittings (`world_q.rattled_since`, B24p.20), his OWN: a person a chooser pictures
+                   # (`_Believed`'s shell, an ordinary man) is no world's person and carries none
+                   strain=strain_carried(rattled_since(w, p.id) if w.persons.get(p.id) is p else (), fx))
 
 
 def _rank_key() -> Optional[str]:
@@ -1688,7 +1690,8 @@ def _resolve_proceeding(w: Any, claimants: list, rng: Draw, *, verb: str, subjec
     """`resolve`'s path for an act that proceeds: build the room, call the entry the composition row names (every sitting of this batch is
     automatic: no callback is handed in), hold the return to an `Outcome` of `Margin` verdicts (a winner, a band or a side cannot cross
     the module boundary), read the act's record (`act_band`) and refuse S27.4 on an `exchange` close's pair only (a close is an adjudicator's
-    draw and is never refused). RESOLVED -> `dict(status, module, resolver, pool, net, ob, leverage, terms, settled_margin, proceeding, card)`.
+    draw and is never refused). RESOLVED -> `dict(status, module, resolver, pool, net, ob, leverage, terms, settled_margin, proceeding, card, arrangement, form, topic, read, starts)`
+    (the last five are what `loop/resolve.py::_proceeding_ending` writes and `loop/effects_information.py::_eff_argue` reads, B24p.20).
     `move` and `item` of `proceeds` are read by no caller yet (the automatic policy chooses the speech). `claimants` are the persons
     of the act's two sides (`loop/sides.py`: where the opponent operand is the matter itself, as `speak`'s, the second is the matter and no
     party: the builder reads parties off persons only, the matter as `topic`). A proceeding the builder refuses (`refused[<key>]`: no seat,
@@ -1712,7 +1715,11 @@ def _resolve_proceeding(w: Any, claimants: list, rng: Draw, *, verb: str, subjec
             law="08_SEAM provider rule (intent) and S27.2 -- a provider returns MARGINS, never a winner; the band is the one ladder's reading")
     weights = {p.id: p.weight for p in inp.room}
     band = act_band(out, inp.rite, weights)
-    held = dict(module=_PROVIDER, resolver=_RESOLVER, proceeding=out, card=card_)
+    # What the fold writes of this sitting (B24p.20): the arrangement and form it was held under, the matter, the verdicts the act's margin was read from
+    # (`()` where a yield decided) and each person's track as the sitting began (a given `state`'s, else his `start`), which the fold's written tracks are asserted against.
+    begun = dict(inp.state.tracks) if inp.state is not None else {p.id: p.start for p in inp.room}
+    held = dict(module=_PROVIDER, resolver=_RESOLVER, proceeding=out, card=card_, arrangement=row["id"], form=form, topic=inp.matter,
+                read=band["read"], starts=tuple(begun.items()))
     if band["status"] == "IMPASSE":
         return dict(status="IMPASSE", pool=None, terms=(), **held)
     pool, leverage = _draw_of(inp, out, band, weights)

@@ -28,7 +28,8 @@ from ..data.rosters import (
 from ..gaps import Forbidden
 from ..data.verbs import VERB_TABLE, WARRANT_SOURCED
 from ..queries import faction_q
-from ..queries.inputs import ArmyCommand
+from ..queries.inputs import ArmyCommand, Outcome
+from ..seam.ladder import degree_of
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
     ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
@@ -666,17 +667,44 @@ def _eff_argue(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     `pursuit_shift` 0, the control) is `NO_CHANGE` -> `argument.refused` at its write (F9): a success
     Event over an unmoved mind would be a deed that did not happen.
 
+    B24p.20 -- UNDER A `hearers` CLOSE (an address to a crowd, the rally) THE EFFECT RUNS ONCE PER VERDICT, ON THAT HEARER, AT HIS OWN BAND: each man of the
+    cohort who heard is moved by what his own draw read, and none the sitting did not carry (`argued_pursuits` moves nothing below `Success`). The act's own
+    band (the weight-mean of the verdicts, `act_band`) still chooses the row's `emits` and whether this effect runs at all. Any other close is as it was: one
+    hearer, the act's band; and so is a sitting a yield decided (`result["read"]` is empty: no verdict decided it, the yield's band is the act's).
+
     DECLINES: no resolution (a hand-built call with no contest), no hearer, no arguer, or nothing moves."""
     hearer, arguer = w.persons.get(_operand(a, "to")), w.persons.get(a.actor)
     if res is None or hearer is None or arguer is None:
         return NO_CHANGE
-    moved = argued_pursuits(hearer, arguer, res.degree, w.fixtures.get("pursuit_shift"))
+    held = res.result if isinstance(res.result, dict) else {}
+    out = held.get("proceeding")
+    if isinstance(out, Outcome) and getattr(held.get("card"), "close", None) == "hearers" and held.get("read"):   # a yield that decided is the act's band, not a draw
+        moves = {}
+        for who, m in out.verdicts:
+            heard = w.persons.get(who)
+            new = None if heard is None else _argued(w, heard, arguer, degree_of(dict(net=m.net, ob=m.ob, settled_margin=m.net - m.ob)), held.get("topic"))
+            if new is not None:
+                moves[who] = new
+        if not moves:
+            return NO_CHANGE
+
+        def perform_each() -> None:
+            for who, new in moves.items():
+                w.persons[who].pursuits = new
+        return Change(tuple(Subject.entity("persons", who, fields=("pursuits",)) for who in moves), perform_each)
+    moved = _argued(w, hearer, arguer, res.degree, held.get("topic"))
     if moved is None:
         return NO_CHANGE
 
     def perform() -> None:
         hearer.pursuits = moved
     return Change((Subject.entity("persons", hearer.id, fields=("pursuits",)),), perform)
+
+
+def _argued(w: "World", hearer, arguer, degree, topic) -> Optional[dict]:
+    """`argued_pursuits` at the world's `pursuit_shift`, handed the matter the argument was about. `topic` is passed on and read by nobody:
+    `[ASSUMPTION: which pursuits a topic bears on is B27.05's edit; this item delivers the operand it needs]`."""
+    return argued_pursuits(hearer, arguer, degree, w.fixtures.get("pursuit_shift"))
 
 
 def _disposal(w: "World", a: "Act", party: str, seat: str, kind: str,

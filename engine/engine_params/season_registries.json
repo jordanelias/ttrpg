@@ -2650,6 +2650,30 @@
             "leverage"
           ]
         },
+        "proceeding_endings": {
+          "source": "B24p.20 (V2 p2 \u00a7C.1, \u00a7J): the tags of a proceeding's `Event.ending`",
+          "cite": "V2 p2 \u00a7C.1",
+          "note": "A PROCEEDING'S ENDING IS A TUPLE OF TUPLES, EACH BEGINNING WITH ONE OF THESE TAGS, in THIS order: `(\"proceeding\", row id, form, ended, ended_by)`, one `(\"beat\", ...)` per beat (a `Beat`'s fields in declared order, `terms` left out, `mood` replaced by its stance, `stance_bands`), one `(\"sitting\", n, issue, points, live, tracks, cond, used, last_voice, ended)` and one `(\"verdict\", id, band)` per verdict, every real a whole number of milli-units. Written by `loop/resolve.py::_proceeding_ending` from the outcome and the result `seam/wrappers/sigma.py::_resolve_proceeding` returned; read by `queries/world_q.py::ending_beats`, `ending_sitting`, `ending_verdicts`, `ending_rattles`. It names no `Claim`'s predicate. An ending of a single roll (`margin_endings`) holds none of these tags.",
+          "values": [
+            "proceeding",
+            "beat",
+            "sitting",
+            "verdict"
+          ]
+        },
+        "stance_bands": {
+          "source": "B24p.20 (V2 p2 \u00a7C.1; p4 \u00a7L 20): how a proceeding's `Event.ending` names the room's stance",
+          "cite": "V2 p2 \u00a7C.1",
+          "note": "THE FIVE BANDS OF A BEAT'S MOOD, THEN THE WORD A YIELD THAT DECIDED IS NAMED BY. The mood is the room's lean toward `for`, clamped to -1..1 (`modules/social_contest/proceeding.py::mood`); the record never shows the number. Its five bands are the five equal fifths of that range, in THIS order from the lowest: firmly with `against`, leaning `against`, hanging, leaning `for`, firmly with `for`. The sixth member is the stance of the beat on which a yield settled the matter itself (the act's band was the yield's: `act_band`'s `read` is empty), said to have decided and never a band of the mood. Written by `loop/resolve.py::_proceeding_ending` at the beat that TURNS the stance (the first beat, and each whose band differs from the beat before); read by nobody as a number. [ASSUMPTION; medium; Jordan to correct; basis: V2 p2 \u00a7C.1 says \"five bands of its mood (firmly with one side, leaning, hanging)\", not their edges; equal fifths of the clamped range; revert: edit the edges in `_stance_of`]",
+          "values": [
+            "firm_against",
+            "lean_against",
+            "hanging",
+            "lean_for",
+            "firm_for",
+            "decided"
+          ]
+        },
         "duel_terms": {
           "source": "CP-T03-09 (`-08` AM-C-03; home `proposals/2026-10-23-subsystem-completion/` T03 \u00a72): the terms a verb's fight is fought under.",
           "cite": "AM-C-03",
