@@ -38,7 +38,7 @@ from .carriers import Office, Receipt, Tenure
 # import-cycle instrument (`tests/valoria/test_import_cycle_game_state_npe.py`) reads a guarded
 # import as an edge like any other. The functions below take the `World` they are handed and name
 # its type as a string only.
-from .containment import ancestry, descendants, edges_of, home_of, parent_of
+from .containment import ancestry, descendants, edges_of, home_of, lives_in, parent_of
 
 
 @dataclass(frozen=True)
@@ -999,6 +999,38 @@ def may_wage(w: "World", person: Optional[str], faction: Optional[str]) -> bool:
         return False
     return any(_seat_grants(w, person, t.object, MUSTER_ACT) and seat_faction(w, t.object) == faction
                for t in w.persons[person].tenures if t.kind == "hold" and t.live)
+
+
+def commands_a_seated(w: "World", actor: Optional[str], via: Optional[str], person: Optional[str]) -> bool:
+    """DOES `via` COMMAND `person` BY THE FIRST TWO OF A-22's CLASSES (B21.59)? (i) he is SWORN to the seat (a live `oblige`,
+    `sworn_to`), wherever he lives; (ii) he holds a seat OTHER than `via` that `actor`, exercising `via`, may revoke
+    (`may_revoke`), so whom a seat may order and whom it may dismiss are one relation. The third class, an unseated person in
+    its land, is `world_q.commands`' own (it reads where he stands). ONE BODY, TWO READERS: `world_q.commands` composes on it
+    and `may_levy` asks it of a SEATED cohort (the A-22 arm), so neither keeps a second copy of the two disjuncts."""
+    if person is None or via not in w.offices or person not in w.persons:
+        return False
+    if any(t.subject == person for t in sworn_to(w, via)):
+        return True
+    return any(may_revoke(w, actor, via, w.offices[t.object]) for t in w.seat_holds(person) if t.object != via)
+
+
+def may_levy(w: "World", actor: Optional[str], via: Optional[str], cohort: Optional[str], faction: Optional[str]) -> bool:
+    """MAY `actor`, EXERCISING `via`, PUT `cohort`'s PEOPLE UNDER ARMS FOR `faction`'S ARMY? (B21.59, `06_FA_levy_through_the_seat_B`
+    edit 1; A-22.) `faction` is the Proposition id. `may_muster`'s shape: `_seat_grants` (he sits in `via`, the grant carries
+    `MUSTER_ACT`, he is not in custody); `seat_faction(via) == faction`; `purview_reaches(via's seat, the rung the cohort LIVES
+    in)` (`lives_in`, his own `reside` edge). A-22: the basis is command over the unseated on the seat's ground, so a cohort that
+    holds a seat is levied through `via` only if the seat commands him (`commands_a_seated`: sworn to it, or a holder of a seat it
+    may revoke) -- living on its ground is not enough.
+
+    ⚠ NOT HERE: the entry's fifth conjunct, `world_q.raisable_by` (the faction governs where the cohort lives, or the cohort is
+    committed to it) -- a Query, which `state/` may not import (`04` §A.2). `_eff_recruit` and `harness/military_menu.py::
+    cohorts_raisable` ask it beside this, the one owner of that rule. `False` for a cohort that is no person."""
+    if not faction or seat_faction(w, via) != faction or not _seat_grants(w, actor, via, MUSTER_ACT):
+        return False
+    p = w.persons.get(cohort) if cohort else None
+    if p is None or not purview_reaches(w, w.offices[via], lives_in(p)):
+        return False
+    return not w.seat_holds(cohort) or commands_a_seated(w, actor, via, cohort)
 
 
 def _committed_to(w: "World", person: Optional[str], fac: str) -> bool:

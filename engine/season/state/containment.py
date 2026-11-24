@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from typing import Optional
 
+from ..gaps import Forbidden
 from ..trace_log import TRACE
 
 # NO `World` IMPORT, even under `TYPE_CHECKING`: `world` imports `gate`, which imports this module,
@@ -157,3 +158,29 @@ def ancestry(w: "World", rung_id: str) -> list[str]:
         out.append(cur); seen.add(cur)
         cur = parent_of(w, cur)
     return out
+
+
+# B21.59 -- THE RESIDENCE KIND AND THE ONE-PERSON READ MOVE HERE FROM `queries/world_q.py` (which re-exports them: `world_q.lives_in
+# is containment.lives_in`), for `parent_of`'s reason: `state/gate.py::may_levy` asks where a cohort LIVES, and the gate may not import
+# `queries/`. The roster check on the kind stays with `world_q` (it imports the roster); `residence_of`, the aggregate, stays there too.
+RESIDE_KIND = "reside"
+
+
+def _refuse_two_residences(pid: str, first: str, second: str) -> None:
+    """THE ONE OWNER OF *A PERSON LIVES IN ONE PLACE* (plan position `19c`): raised by `residence_of` (over the
+    aggregate) and `lives_in` (over one person's own edges) alike, so the rule, its kind and its text live once."""
+    raise Forbidden(
+        f"{pid!r} has two live `{RESIDE_KIND}` edges ({first!r}, {second!r})", "S15",
+        law="plan position `19c` -- a person lives in ONE place; `migrate` closes the old "
+            "residence as it opens the new, so this world was built by hand")
+
+
+def lives_in(p: "Person") -> Optional[str]:
+    """THE RUNG ONE PERSON LIVES IN -- the object of his one live `reside` edge, read off his OWN edges
+    (`p.tenures`), or `None` for a man of no fixed abode; two raise (`_refuse_two_residences`, `residence_of`'s
+    rule). The per-person read `kit_of` takes; `residence_of` keeps its scan of the aggregate (it maps everyone,
+    and an edge not yet re-homed onto its subject is in `w.tenures` and not in `p.tenures`)."""
+    found = [t.object for t in p.tenures if t.kind == RESIDE_KIND and t.live]
+    if len(found) > 1:
+        _refuse_two_residences(p.id, found[0], found[1])
+    return found[0] if found else None

@@ -30,11 +30,14 @@ from typing import Any, Callable, Optional
 from engine.substrate import composition
 
 from ..data.rosters import ARMY_VERBS, FACTION_BY_PROP
+from ..data.verbs import VERB_TABLE
+from ..decision.options import exercisable_seats
 from ..loop.effects_information import _army_mintable
 from ..queries import world_q
 from ..queries.inputs import ArmyOptionsQuery
 from ..queries.world_q import faction_holding, hold_force
 from ..state.carriers import Act
+from ..state.gate import may_levy
 
 #: How many "can raise" rows `describe` spells out before saying "and N more". [canonical: none -- a display length]
 SHOWN = 12  # [canonical: ED-IN-0306 -- display length only, no game meaning]
@@ -70,12 +73,35 @@ class MilitaryMenu:
     advisories: tuple = ()
 
 
-def cohorts_raisable(w, faction: str) -> tuple:
-    """`((cohort id, weight, {site kind: best condition}), ...)` for each cohort `faction` may raise
-    (`world_q.raisable_by`), in id order -- the fact the module's `recruit_limit` needs about a place."""
+#: The army verbs a SEAT licenses (`verb_table.yaml`: eligibility `remit:dispatch`, B21.59): the act names the seat it is exercised through.
+_SEATED_VERBS = ("recruit", "discharge_troops")
+
+
+def _levy_seats(w, person: str, verb: str = "recruit") -> tuple:
+    """The seats `person` may exercise `verb` through, in his Tenure order: `decision/options.py::exercisable_seats`, the one owner
+    of *which seats grant this* (what `seat_of` reads for a computed act), so the menu's acts are admitted as a chooser's would be."""
+    p = w.persons.get(person)
+    return exercisable_seats(p, VERB_TABLE[verb]) if p is not None else ()
+
+
+def _levy_seat(w, person: str, faction: str, cohort: Optional[str], verb: str = "recruit") -> Optional[str]:
+    """The seat `person` levies `cohort` through: the first of his seats that `may_levy` it, else his first seat, else None."""
+    seats = _levy_seats(w, person, verb)
+    return next((s for s in seats if may_levy(w, person, s, cohort, faction)), seats[0] if seats else None)
+
+
+def cohorts_raisable(w, person: str) -> tuple:
+    """`((cohort id, weight, {site kind: best condition}), ...)` for each cohort `person` may raise for the faction he commits to,
+    in id order -- the fact the module's `recruit_limit` needs about a place. A cohort is listed when the faction may raise it
+    (`world_q.raisable_by`) AND one of his seats may levy it (`state/gate.py::may_levy`, B21.59): the menu lists no row the fold
+    refuses for want of a seat."""
+    faction = faction_holding(w, person) if person in w.persons else None
+    if faction is None:
+        return ()
     return tuple((p.id, p.weight, world_q.training_sites(w, p.id))
                  for _id, p in sorted(w.persons.items())
-                 if p.is_cohort and p.weight > 1 and world_q.raisable_by(w, p.id, faction))
+                 if p.is_cohort and p.weight > 1 and world_q.raisable_by(w, p.id, faction)
+                 and any(may_levy(w, person, s, p.id, faction) for s in _levy_seats(w, person)))
 
 
 def _empty_army(faction: str, strategy: str = "line") -> dict:
@@ -99,7 +125,7 @@ def menu(w, actor: str) -> MilitaryMenu:
     if not commands:
         return MilitaryMenu(actor, faction, rid, False, False)
     opts = composition.require(world_q.ARMY_OPTIONS)(
-        ArmyOptionsQuery(rec, cohorts_raisable(w, faction), w.fixtures.get("condition_scale"),
+        ArmyOptionsQuery(rec, cohorts_raisable(w, actor), w.fixtures.get("condition_scale"),
                          world_q.other_army_records(w, rid)))
     roles = {t: r for t, r, _site in opts["troop_types"]}
     sfs = rec["units"]
@@ -118,7 +144,7 @@ def act_for(w, actor: str, verb: str, **payload: Any) -> Act:
     `strategy`) or one of the six army verbs, whose payload is the command (`recruit`: cohort, troop_type, count;
     `form_unit`: name, troop_type, role?; `assign_troops`: name, cohort, count (negative releases); `order_unit`: name and
     any of role, posture, target, fall_back_at, or strategy alone; `disband_unit`: name; `discharge_troops`: cohort,
-    troop_type, count). The army is the actor's faction's. The id is derived from the tick, the actor, the verb and the
+    troop_type, count). The army is the actor's faction's. `recruit` and `discharge_troops` carry `via`: the actor's seat that may levy the cohort. The id is derived from the tick, the actor, the verb and the
     payload (the same command gives the same id; folding it twice applies it twice). Builds, does not check: the fold's refusals are the check."""
     faction = faction_holding(w, actor)
     if verb == "create_record":
@@ -135,8 +161,12 @@ def act_for(w, actor: str, verb: str, **payload: Any) -> Act:
         body = {"subject": rid, **payload}
     else:
         raise ValueError(f"{verb!r} is not an army command (known: create_record, {', '.join(sorted(ARMY_VERBS))})")
+    if verb in _SEATED_VERBS:                         # B21.59: a levy is exercised through a seat (`verb_table.yaml`: `remit:dispatch`)
+        via = _levy_seat(w, actor, faction, payload.get("cohort"), verb)
+    else:
+        via = None
     key = hashlib.sha1(repr((w.tick, actor, verb, sorted(body.items(), key=lambda kv: kv[0]))).encode()).hexdigest()[:10]
-    return Act(id=f"mil_{key}", actor=actor, verb=verb, payload=body)
+    return Act(id=f"mil_{key}", actor=actor, verb=verb, payload=body, via=via)
 
 
 def callback(w, select: Callable[[MilitaryMenu], list]) -> Callable[..., list]:

@@ -39,7 +39,7 @@ from ..state.carriers import Proposition, Record, Tenure
 from ..state.carriers import DETERMINED_BY
 from ..state.gate import (
     DISPOSABLE_KINDS, NO_CHANGE, UNDECLARED_DISPOSAL, Change, Subject, may_cede, may_determine, may_seize,
-    may_warrant,
+    may_warrant, may_wage,
 )
 from ..state.ids import H
 
@@ -100,13 +100,16 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
 def _army_mintable(w: "World", actor: str, content) -> bool:
     """ED-IN-0306 phase 2. An `army` Record is minted whole and well formed (`mass_battle.army`'s `validate`), for a
     faction Proposition the world holds, BY A MEMBER OF THAT FACTION (`faction_holding`: anyone else minting it
-    would lock the faction out of its own army), and ONE PER FACTION (`world_q.army_of`, which counts HELD armies
+    would lock the faction out of its own army) WHO SITS IN A MUSTER SEAT OF IT (B21.59, `06_FA_levy_through_the_seat_B` edit 4:
+    `gate.may_wage`, B21.58 -- a faction's army is not its first minter's), and ONE PER FACTION (`world_q.army_of`, which counts HELD armies
     only): a second would leave two records claiming to be one faction's army, with no rule for which the battle
     reads."""
     if not isinstance(content, dict) or not isinstance(content.get("faction"), str) \
             or content["faction"] not in FACTION_BY_PROP or content["faction"] not in w.propositions:
         return False
     if faction_holding(w, actor) != content["faction"]:        # a faction's army is raised by one of its own
+        return False
+    if not may_wage(w, actor, content["faction"]):             # B21.59 (edit 4): ... through a muster seat of it (`may_wage`, B21.58)
         return False
     if army_of(w, content["faction"]) is not None:
         return False

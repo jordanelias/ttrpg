@@ -8696,8 +8696,9 @@
           "capability_note": "B07.01 (workplan v12 B07-task-draw UNDECIDED (11) (iv)) [ASSUMPTION; Jordan to correct]: no skill of `descriptor_registry.yaml: capabilities` (argue, arms, copying, inquiry, law) covers `recruit`, so the draw rolls the untrained `pool_default` (`seam/wrappers/pool.py::faculty`) until a skill is defined for it.",
           "stratum": "uncontested_material",
           "eligibility": [
-            "own"
+            "remit:dispatch"
           ],
+          "eligibility_note": "B21.59 (`06_FA_levy_through_the_seat_B` edit 2; ED-IN-0256 (4)): men are levied THROUGH A SEAT, as `march` is ordered through one: the act names the seat it is exercised through (`Act.via`), whose grant carries the muster act; `state/gate.py::may_levy` asks the rest in the effect (its faction, and its purview over where the cohort lives). The actor must also hold the army Record (the typed cell below).",
           "beneficiary": "none",
           "governing": [
             "attr.social.charisma",
@@ -8731,6 +8732,9 @@
             "army.recruited"
           ],
           "emits_on_refusal": {
+            "eligibility": [
+              "recruit.refused"
+            ],
             "exists": [
               "recruit.refused"
             ],
@@ -8747,7 +8751,7 @@
           "draw_note": "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 \u00a7C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`).",
           "grade": "assumption",
           "grade_note": "ED-IN-0306 (Jordan, 2026-10-28): the army record is ruled; the verb, its magnitudes and its refusals are phase 2's. No ARCHITECTURE_V2.md cell.",
-          "refusal_note": "FLAT. Refusal conditions: the subject is no army, or the actor does not hold it (the cell); the payload names no cohort of the army's faction, no known troop type, or a count above `recruit_limit` for the cohort's population and training sites (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError).",
+          "refusal_note": "FLAT. Refusal conditions: the act names no seat that licenses it (`via` is not a seat the actor sits in whose grant carries `dispatch`), or the seat is not the army's faction's or does not reach where the cohort lives (`may_levy`); the subject is no army, or the actor does not hold it (the cell); the payload names no cohort of the army's faction, no known troop type, or a count above `recruit_limit` for the cohort's population and training sites (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError).",
           "source": "ED-IN-0306 (`registers/editorial_ledger_in.jsonl`), phase 2; `modules/mass_battle/armyrecord.py`, `modules/mass_battle/troop_types/recruitment.py`"
         },
         {
@@ -8880,8 +8884,9 @@
           "verb": "discharge_troops",
           "stratum": "uncontested_material",
           "eligibility": [
-            "own"
+            "remit:dispatch"
           ],
+          "eligibility_note": "B21.59 (`06_FA_levy_through_the_seat_B` edit 2): as `recruit` -- sending men home is the seat's exercise over the ground they live on (`state/gate.py::may_levy`, asked in `_eff_discharge_troops`).",
           "beneficiary": "none",
           "brute": "own",
           "brute_note": "as `form_unit`",
@@ -8915,7 +8920,7 @@
           ],
           "grade": "assumption",
           "grade_note": "ED-IN-0306 (Jordan, 2026-10-28): the army record is ruled; the verb, its magnitudes and its refusals are phase 2's. No ARCHITECTURE_V2.md cell.",
-          "refusal_note": "FLAT. Refusal conditions: the subject is no army, or the actor does not command it (the cell, and the effect's own faction check); the payload discharges more troops than the cohort has trained and unassigned (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError).",
+          "refusal_note": "FLAT. Refusal conditions: the act names no seat that licenses it, or the seat is not the army's faction's or does not reach where the cohort lives (`may_levy`, B21.59); the subject is no army, or the actor does not command it (the cell, and the effect's own faction check); the payload discharges more troops than the cohort has trained and unassigned (the effect's decline, `modules/mass_battle/armyrecord.py`'s ValueError).",
           "source": "ED-IN-0306 (`registers/editorial_ledger_in.jsonl`), phase 2; `modules/mass_battle/armyrecord.py`, `modules/mass_battle/troop_types/recruitment.py`"
         },
         {

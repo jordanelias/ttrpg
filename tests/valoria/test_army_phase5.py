@@ -22,7 +22,7 @@ from engine.season.queries import world_q
 from engine.season.seam.ladder import field_degree
 from engine.season.tests._field_outcomes import SCALE
 from engine.season.seam.wrappers import mass_battle as MB
-from engine.season.state.carriers import Act, Site, Tenure
+from engine.season.state.carriers import Act, Office, Site, Tenure
 from modules.mass_battle import armyrecord as A
 from modules.mass_battle.config import MIN_ARMY_TROOPS
 from modules.mass_battle.troop_types import recruitment as R
@@ -46,6 +46,16 @@ def _fold(w, *acts):
     return [e.kind for e in ev]
 
 
+def _seat(w, who, faction="Valorsmark", rung="r_valoria"):
+    """B21.59: men are levied through a seat. The realm's commanders (`p_npc_033` holds no muster seat) are given one, a Levy-master of
+    `faction` over the whole realm's ground (`rung`), and the seat's id is returned for `Act.via`; the seat's faction and `raisable_by` still bind."""
+    oid = f"off_levy_{who}"
+    if oid not in w.offices:
+        w.offices[oid] = Office(oid, "Levy-master", rung, ["dispatch"], faction=faction)
+        w.add_tenure(Tenure(f"t_levy_{who}", who, oid, "hold", since=w.tick))
+    return oid
+
+
 def _governed_cohorts(w, faction):
     res = world_q.residence_of(w)
     return sorted(p for p, x in w.persons.items() if x.is_cohort and world_q.holder_faction_of(w, res[p]) == faction)
@@ -55,6 +65,7 @@ def _crown_levy(w, strategy="advance", troop_type="levy"):
     """The Crown's whole levy under arms in one unit, through the real verbs, commanded by ACTOR. A trained
     type needs its Site: one full barracks is planted in each cohort's town, as a faction that had built them would
     have (the shipped realm seats none, so it can only raise levy, and a levy line does not advance)."""
+    via = _seat(w, ACTOR)
     _fold(w, Act(id="mk", actor=ACTOR, verb="create_record",
                  payload={"record": "crown_army", "kind": "army", "rung": ORIGIN, "subject_matter": A.new(CROWN)}))
     cohorts = _governed_cohorts(w, CROWN)
@@ -64,7 +75,7 @@ def _crown_levy(w, strategy="advance", troop_type="levy"):
             w.sites[f"site_bk_{c}"] = Site(f"site_bk_{c}", res[c], "barracks", condition=w.fixtures.get("condition_scale"))
     for i, c in enumerate(cohorts):
         _fold(w, Act(id=f"r{i}", actor=ACTOR, verb="recruit",
-                     payload={"subject": "crown_army", "cohort": c, "troop_type": troop_type, "count": R.under_arms_cap(2)}))
+                     payload={"subject": "crown_army", "cohort": c, "troop_type": troop_type, "count": R.under_arms_cap(2)}, via=via))
     # B17.16: at 1,000 troops a weight the whole levy is 30,000 troops and one unit may hold 10,000 (`MAX_TROOPS_PER_UNIT`), so it is
     # three units of five cohorts each; one unit of the lot is a field the module refuses (`SCALE-GAP`).
     names = ("host", "host_2", "host_3")
@@ -126,13 +137,14 @@ def test_an_army_is_where_its_commander_is():
 
 def test_a_faction_raises_only_the_people_it_governs():
     w = build_realm(0)
+    via = _seat(w, ACTOR)
     _fold(w, Act(id="mk", actor=ACTOR, verb="create_record",
                  payload={"record": "crown_army", "kind": "army", "rung": ORIGIN, "subject_matter": A.new(CROWN)}))
     foreign = _governed_cohorts(w, HAFEN)[0]
     mine = _governed_cohorts(w, CROWN)[0]
     pay = lambda c: {"subject": "crown_army", "cohort": c, "troop_type": "levy", "count": 10}
-    assert "recruit.refused" in _fold(w, Act(id="rf", actor=ACTOR, verb="recruit", payload=pay(foreign)))
-    assert "army.recruited" in _fold(w, Act(id="rm", actor=ACTOR, verb="recruit", payload=pay(mine)))
+    assert "recruit.refused" in _fold(w, Act(id="rf", actor=ACTOR, verb="recruit", payload=pay(foreign), via=via))
+    assert "army.recruited" in _fold(w, Act(id="rm", actor=ACTOR, verb="recruit", payload=pay(mine), via=via))
 
 
 # --------------------------------------------------------------------------------------------------- M4: the cap
@@ -141,6 +153,7 @@ def test_a_cohort_cannot_be_raised_to_its_cap_into_two_armies():
     cohort = _governed_cohorts(w, CROWN)[0]
     hafen_member = world_q.members(w, HAFEN)[0]
     w.add_tenure(Tenure("t_dual", cohort, HAFEN, "commit", since=0))          # raisable by both factions now
+    vias = {ACTOR: _seat(w, ACTOR), hafen_member: _seat(w, hafen_member, "Hafenmark")}
     for rid, who, fac in (("crown_army", ACTOR, CROWN), ("hafen_army", hafen_member, HAFEN)):
         _fold(w, Act(id=f"mk_{rid}", actor=who, verb="create_record",
                      payload={"record": rid, "kind": "army", "rung": ORIGIN, "subject_matter": A.new(fac)}))
@@ -148,7 +161,7 @@ def test_a_cohort_cannot_be_raised_to_its_cap_into_two_armies():
 
     def recruit(rid, who, c, n, act_id):
         return _fold(w, Act(id=act_id, actor=who, verb="recruit",
-                            payload={"subject": rid, "cohort": c, "troop_type": "levy", "count": n}))
+                            payload={"subject": rid, "cohort": c, "troop_type": "levy", "count": n}, via=vias[who]))
     assert "army.recruited" in recruit("crown_army", ACTOR, cohort, cap, "c1")
     assert "recruit.refused" in recruit("hafen_army", hafen_member, cohort, 1, "h1"), "the cohort was raised twice"
     other = _governed_cohorts(w, HAFEN)[0]
@@ -218,11 +231,12 @@ def test_a_lost_army_costs_the_cohorts_at_home_their_bodies():
             t.until = w.tick
     w.add_tenure(Tenure("t_cmdr_in", cmdr, inside, "contain", w.tick))
     assert cmdr in world_q.mustered(w, UNDEFENDED, HAFEN), "fixture: the Hafenmark commander stands in the territory"
+    hvia = _seat(w, cmdr, "Hafenmark")
     _fold(w, Act(id="mkh", actor=cmdr, verb="create_record",
                  payload={"record": "hafen_army", "kind": "army", "rung": "set_s_016", "subject_matter": A.new(HAFEN)}))
     for i, c in enumerate(hafen):
         _fold(w, Act(id=f"rh{i}", actor=cmdr, verb="recruit",
-                     payload={"subject": "hafen_army", "cohort": c, "troop_type": "levy", "count": R.under_arms_cap(2)}))
+                     payload={"subject": "hafen_army", "cohort": c, "troop_type": "levy", "count": R.under_arms_cap(2)}, via=hvia))
     for name in ("g", "g_2"):       # B17.16: ten cohorts are 20,000 troops, two units at most 10,000 each
         _fold(w, Act(id=f"fh_{name}", actor=cmdr, verb="form_unit", payload={"subject": "hafen_army", "name": name, "troop_type": "levy"}))
     for i, c in enumerate(hafen):

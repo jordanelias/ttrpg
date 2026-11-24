@@ -93,7 +93,7 @@ from ..state.gate import holdings_of, in_holdings, seat_faction, seat_on_parent_
 # (below) composes on it.
 from ..state.gate import sworn_to
 # B21.58 (A-20): `at_war`'s last line asks the gate's `may_wage` of each live commit's subject.
-from ..state.gate import may_wage
+from ..state.gate import commands_a_seated, may_wage
 from ..state.ids import H, ROOT, draw_factory
 from ..state.ledgers import present_confidence
 from ..state.world import World, rung_kind_ascends
@@ -1685,7 +1685,7 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
 # its one `Tenure(...)` construction, because `data/verbs.py::_derive_openers_from_effects` reads a
 # kind off that call as a string CONSTANT. Refused at import if the roster stops carrying it: every
 # residence Query would otherwise match nothing and read as a world where nobody lives anywhere.
-RESIDE_KIND = "reside"
+from ..state.containment import RESIDE_KIND, _refuse_two_residences, lives_in  # noqa: F401 -- re-exported (B21.59: the gate reads a residence)
 if RESIDE_KIND not in TENURE_KINDS:
     raise Unspecified(
         f"tenure kind {RESIDE_KIND!r} is not a `tenure_kinds` member ({sorted(TENURE_KINDS)})",
@@ -1723,26 +1723,6 @@ def residence_of(w: World) -> dict:
             _refuse_two_residences(t.subject, out[t.subject], t.object)
         out[t.subject] = t.object
     return out
-
-
-def _refuse_two_residences(pid: str, first: str, second: str) -> None:
-    """THE ONE OWNER OF *A PERSON LIVES IN ONE PLACE* (plan position `19c`): raised by `residence_of` (over the
-    aggregate) and `lives_in` (over one person's own edges) alike, so the rule, its kind and its text live once."""
-    raise Forbidden(
-        f"{pid!r} has two live `{RESIDE_KIND}` edges ({first!r}, {second!r})", "S15",
-        law="plan position `19c` -- a person lives in ONE place; `migrate` closes the old "
-            "residence as it opens the new, so this world was built by hand")
-
-
-def lives_in(p: Person) -> Optional[str]:
-    """THE RUNG ONE PERSON LIVES IN -- the object of his one live `reside` edge, read off his OWN edges
-    (`p.tenures`), or `None` for a man of no fixed abode; two raise (`_refuse_two_residences`, `residence_of`'s
-    rule). The per-person read `kit_of` takes; `residence_of` keeps its scan of the aggregate (it maps everyone,
-    and an edge not yet re-homed onto its subject is in `w.tenures` and not in `p.tenures`)."""
-    found = [t.object for t in p.tenures if t.kind == RESIDE_KIND and t.live]
-    if len(found) > 1:
-        _refuse_two_residences(p.id, found[0], found[1])
-    return found[0] if found else None
 
 
 def restrained(w: World, person: Optional[str], kind: str, at: Optional[str] = None) -> bool:
@@ -2744,12 +2724,9 @@ def commands(w: World, actor: Optional[str], via: Optional[str], person_id: str)
     if via not in w.offices:
         return False
     seat = w.offices[via]
-    if person_id in establishment_of(w, via):
+    if commands_a_seated(w, actor, via, person_id):         # (i) and (ii): B21.59 moved their one body to the gate (`may_levy` asks it too)
         return True
-    held = w.seat_holds(person_id)
-    if any(may_revoke(w, actor, via, w.offices[t.object]) for t in held if t.object != via):
-        return True
-    return not held and purview_reaches(w, seat, place_of(w, person_id))
+    return not w.seat_holds(person_id) and purview_reaches(w, seat, place_of(w, person_id))
 
 
 def upkeep_of(w: World, office_id: str) -> int:
