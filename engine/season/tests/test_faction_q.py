@@ -39,7 +39,10 @@ What each block proves, and the control that stops it passing vacuously:
      the same mechanism `test_governance_build.py`'s LB-1 tests use, rather than constructing a
      `Tenure`/`Proposition` by hand. FOUR observables: the control before the commit is `False`;
      after it, both `at_war(w, A, B)` and the symmetric `at_war(w, B, A)` are `True`; after
-     `release`-ing the commit (peace, `T-m`'s own discretion) it is `False` again.
+     `release`-ing the commit (peace, `T-m`'s own discretion) it is `False` again. B21.58 (A-20) adds the seat: a
+     commit wages only from a seat granted `dispatch` (`gate.may_wage`), so the declarer's own `release` of his seat's
+     `hold` ends the war with his commit live, an unseated member's or a treasurer's commit keeps none alive, and a
+     second holder's commit does.
 """
 from engine.season.boot.realm import build_realm
 from engine.season.loop.driver import SeasonDriver, mint_token
@@ -219,10 +222,31 @@ def _resolve_one(w, d, act):
     return [e.kind for e in out]
 
 
+def _wagers(w, fac):
+    """The persons holding a live seat of `fac` whose grant carries `dispatch` (`gate.MUSTER_ACT`), id order. Read off
+    `Tenure.granted_acts` directly, not by `gate.may_wage`, so the choice is independent of the rule under test."""
+    return sorted(pid for pid, p in w.persons.items()
+                  if any(t.kind == "hold" and t.live and t.object in w.offices and gate.MUSTER_ACT in t.granted_acts
+                         and gate.seat_faction(w, t.object) == fac for t in p.tenures))
+
+
 def test_at_war_through_the_real_fold_utter_then_commit_then_release():
+    """B21.58 (A-20): a war lives in the seats that wage it. The declarer is a Valorsmark holder of a `dispatch` seat
+    (one only: the Captain of the Guard), so releasing that seat's `hold` leaves his `commit` live and the war dead."""
     w = build_realm(0)
     d = SeasonDriver(w)
-    declarer = world_q.members(w, "fac_valorsmark")[0]
+    wagers = _wagers(w, "fac_valorsmark")
+    declarer = next(p for p in wagers
+                    if sum(t.kind == "hold" and t.live and t.object in w.offices for t in w.persons[p].tenures) == 1)
+    seat = next(t.object for t in w.persons[declarer].tenures
+                if t.kind == "hold" and t.live and t.object in w.offices)
+    second = next(p for p in wagers if p != declarer)
+    # A seated Valorsmark member whose seat carries no `dispatch` (the Lord Treasurer), and an unseated one.
+    treasurer = next(p for p in world_q.members(w, "fac_valorsmark") if p not in wagers and any(
+        t.kind == "hold" and t.live and t.object in w.offices for t in w.persons[p].tenures))
+    unseated = next(p for p in world_q.members(w, "fac_valorsmark") if not any(
+        t.kind == "hold" and t.live and t.object in w.offices for t in w.persons[p].tenures))
+    assert len({declarer, second, treasurer, unseated}) == 4
 
     assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is False, (
         "control failed -- fac_valorsmark/fac_guilds already read at_war before anything was uttered")
@@ -257,6 +281,31 @@ def test_at_war_through_the_real_fold_utter_then_commit_then_release():
     assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is False, (
         "at_war stayed True after the declaring commit was released -- peace is not being read")
     assert faction_q.at_war(w, "fac_guilds", "fac_valorsmark") is False
+
+    # Re-declare, then the seat goes: his `commit` stays live and the war does not (step 2).
+    kinds = _resolve_one(w, d, Act(id="c_58_commit2", actor=declarer, verb="commit", payload={"subject": prop_id}))
+    assert kinds == ["commitment.made"], kinds
+    assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is True, "control: the seated declarer's commit wages"
+    kinds = _resolve_one(w, d, Act(id="c_58_quit", actor=declarer, verb="release", payload={"subject": seat}))
+    assert kinds == ["tenure.closed"], f"the seat's hold did not close cleanly: {kinds}"
+    assert any(t.kind == "commit" and t.object == prop_id and t.live for t in w.persons[declarer].tenures), (
+        "control: his commit is still live, so only the seat decides")
+    assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is False
+    assert faction_q.at_war(w, "fac_guilds", "fac_valorsmark") is False
+
+    # Step 3: neither an unseated member's commit nor a seated treasurer's (a seat whose grant lacks `dispatch`) wages.
+    for who in (unseated, treasurer):
+        kinds = _resolve_one(w, d, Act(id=f"c_58_{who}", actor=who, verb="commit", payload={"subject": prop_id}))
+        assert kinds == ["commitment.made"], kinds
+        assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is False, f"{who} keeps a war alive without a seat"
+
+    # Step 4: a second holder of a `dispatch` seat commits: True; he releases his commit: False.
+    kinds = _resolve_one(w, d, Act(id="c_58_second", actor=second, verb="commit", payload={"subject": prop_id}))
+    assert kinds == ["commitment.made"], kinds
+    assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is True
+    assert faction_q.at_war(w, "fac_guilds", "fac_valorsmark") is True
+    _resolve_one(w, d, Act(id="c_58_second_rel", actor=second, verb="release", payload={"subject": prop_id}))
+    assert faction_q.at_war(w, "fac_valorsmark", "fac_guilds") is False
 
 
 # ---------------------------------------------------------------------------------------------

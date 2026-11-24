@@ -92,6 +92,8 @@ from ..state.gate import holdings_of, in_holdings, seat_faction, seat_on_parent_
 # its one body lives in `state/gate.py`; `world_q.sworn_to is gate.sworn_to`. `establishment_of`
 # (below) composes on it.
 from ..state.gate import sworn_to
+# B21.58 (A-20): `at_war`'s last line asks the gate's `may_wage` of each live commit's subject.
+from ..state.gate import may_wage
 from ..state.ids import H, ROOT, draw_factory
 from ..state.ledgers import present_confidence
 from ..state.world import World, rung_kind_ascends
@@ -3711,10 +3713,13 @@ def at_war(w: World, a: str, b: str) -> bool:
     Proposition names its leader (`subject`) and faction (`value`, `boot/realm.py`):
     `subject` and `value` are the two factions, UNORDERED (a war has no "first" side), so this
     compares `{p.subject, p.value}` as a set against `{a, b}` rather than picking a slot for
-    either. `at_war` asks whether that Proposition still has ANY live `commit` -- `F.32`: *"a
-    `commit` whose subject is the declaring person, so `T-m` gives peace to the declarer"* (peace
-    = writing `until` on that edge, the owner's own discretion, exactly as a faction's own
-    membership commits close).
+    either. `at_war` asks whether that Proposition still has a live `commit` WHOSE SUBJECT WAGES
+    IT (B21.58, A-20: `gate.may_wage` -- the subject holds a seat of `p.subject`'s faction or of
+    `p.value`'s whose grant carries `MUSTER_ACT`): a war lives in the seats that wage it, so a
+    commit by an unseated member, or by the declarer after he releases his seat's `hold`, keeps
+    no war alive. Peace is still the commit's own release -- `until` written on that edge by its
+    owner, exactly as a faction's own membership commits close -- and a second wager's commit
+    keeps the war alive after the first's release.
 
     ⚠ MEASURABLY `False` FOR EVERY PAIR IN EVERY WORLD THIS TREE'S WORLD-GEN CAN BUILD TODAY --
     BUT NOT FOR WANT OF A PRODUCER. `_eff_utter` (generic over `mood`) and `_eff_commit` are both
@@ -3732,7 +3737,9 @@ def at_war(w: World, a: str, b: str) -> bool:
     for p in w.propositions.values():
         if p.mood != WAR_MOOD or {p.subject, p.value} != pair:
             continue
-        if any(t.kind == "commit" and t.object == p.id and t.live for t in w.tenures):
+        if any(t.kind == "commit" and t.object == p.id and t.live
+               and (may_wage(w, t.subject, p.subject) or may_wage(w, t.subject, p.value))
+               for t in w.tenures):
             return True
     return False
 

@@ -988,6 +988,19 @@ def may_muster(w: "World", actor: Optional[str], via: Optional[str],
     return any(t.subject == subject for t in sworn_to(w, via))
 
 
+def may_wage(w: "World", person: Optional[str], faction: Optional[str]) -> bool:
+    """DOES `person` HOLD A SEAT OF `faction` WHOSE GRANT CARRIES `MUSTER_ACT`? (B21.58, `06_FA_war_lives_in_seats_B`
+    edit 1; A-20.) `faction` is the Proposition id; `seat_faction` is the one owner of seat -> faction id. A war lives in
+    the seats that wage it: `world_q.at_war` asks this of the subject of each live `commit` to a WAR Proposition, so a
+    commit by a man who sits in no such seat (an unseated member, a treasurer, a holder detained by `_seat_grants`'s
+    custody clause) keeps no war alive. It adds no rule: both conjuncts are `may_muster`'s first two, and the faction
+    read is `seat_faction`'s. `False` for a missing person or faction, or a person with no live `hold`."""
+    if not person or not faction or person not in w.persons:
+        return False
+    return any(_seat_grants(w, person, t.object, MUSTER_ACT) and seat_faction(w, t.object) == faction
+               for t in w.persons[person].tenures if t.kind == "hold" and t.live)
+
+
 def _committed_to(w: "World", person: Optional[str], fac: str) -> bool:
     """Does `person` hold a LIVE `commit` to the faction Proposition `fac`? `may_muster`'s last conjunct, named once for
     `may_cede`'s two readings of it."""
