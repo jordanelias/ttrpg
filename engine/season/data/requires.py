@@ -508,7 +508,9 @@ class Basis(Requirement):
     `basis:` NAMES WHICH SEAT RULE IS ASKED, and the rule is the WRITE GATE'S OWN, never a copy
     (`state/gate.py` -- `_req_confer`/`may_fill`'s one-owner shape): `purview` is ruling (4),
     `purview_reaches` over the subject's place (`04:330`'s *"purview is asked of the seat exercised,
-    never the actor"*); `bench` is `may_determine`, the `determination` basis's own predicate. Each is
+    never the actor"*); `bench` is `may_determine`, the `determination` basis's own predicate.
+    `command` (B21.20, A-22) is `world_q.commands`: whom the seat may order (the sworn, the holder of a seat it may
+    revoke, an unseated person in its land), which is not the purview of the person's place. Each is
     a `REQUIRES_STEMS` member, so a misspelt rule refuses at load rather than reading UNKNOWN forever.
 
     ⚠ OCCUPANCY IS ELIGIBILITY'S, NOT THIS FORM'S -- except where the gate's own predicate asks it.
@@ -827,7 +829,7 @@ OWN_STATE_STEMS = SENSITIVITY_STEMS | frozenset({"held_by", "dispute", "individu
 # roster-exempt: MECHANISM. The grammar's own predicate stems (what a REQUIREMENT MAY ASK), not the game's vocabulary; `rosters.yaml` says what the world contains.
 REQUIRES_STEMS = frozenset({
     "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
-    "claim.held", "rank", "purview", "bench", "bench.size", "quorum", "with", "audience", "room",
+    "claim.held", "rank", "purview", "command", "bench", "bench.size", "quorum", "with", "audience", "room",
     "individual", "names", "dispute", "declared.votes", "declared.quorum",
 }) | OWN_STATE_STEMS
 
@@ -860,9 +862,14 @@ OPERAND_NAMED_STEMS = frozenset({"names"})
 # `record` would then pair those readings as cells. What a document says reaches a person by the content
 # deposit to its HOLDER (`loop/witness.py`), not by watching somebody else's refusal. The person forms the
 # Candidate (UNKNOWN never contradicts) and the fold refuses a Record that does not name the pair.
+# ⚠ B21.20 (`16_PESSIMIST_FA_C` edit 2, A-22): `command` is `Basis`'s third seat rule, `purview`'s dispatch -- the
+# argument is the seat (`command:<via>`), answered by `world_q.commands`. WORLD-ONLY for `audience`'s reason: who is
+# sworn to whom, and who holds what seat, NOW is the world's to decide, so a refused `issue` deposits no stale
+# `command:<via>` reading that would stop a later oath from being formed on. The person forms the Candidate and the
+# fold refuses it (`issue.unauthorized`). One stem; no form, no operand.
 # roster-exempt: MECHANISM. The grammar's own predicate stems a ledger never answers, not the game's vocabulary.
 WORLD_ONLY_STEMS = frozenset({"with", "audience", "individual", "names", "dispute",
-                              "declared.votes", "declared.quorum"}) | SENSITIVITY_STEMS
+                              "declared.votes", "declared.quorum", "command"}) | SENSITIVITY_STEMS
 
 # THE STEMS A LEDGER CLAIM IS A *CELL* OF -- one `(subject, predicate)` slot that holds one value at a
 # time and can be re-asserted, so two claims on it agree or disagree (`decision/options.py::record`).

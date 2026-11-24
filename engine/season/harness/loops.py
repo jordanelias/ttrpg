@@ -112,6 +112,7 @@ STEM_READS = {
     "dispute":      (("Person.claim_ledger", "?"),),
     "rank":         (("Rung.exists", "?"),),
     "purview":      (("Office.exists", "?"),) + _TENURE,
+    "command":      (("Office.exists", "?"),) + _TENURE,   # B21.20: `world_q.commands`, over oaths, seat holds and place
     "bench":        (("Office.exists", "?"),) + _TENURE,
     "bench.size":   _TENURE,
     # v11 CR-34: the live commits of the bench's members to an OUGHT about the party (`declared_votes`), and the row's `quorum:`

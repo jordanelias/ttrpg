@@ -2698,7 +2698,7 @@ def commands(w: World, actor: Optional[str], via: Optional[str], person_id: str)
     word *command basis* -- *whom a seat may order* -- and not *purview* (the rung a seat's ground covers,
     `purview_reaches`, which `may_fill` and the rung referents keep).
 
-    ⚠ NO CALLER YET (B21.19): `issue`'s `basis: command` (B21.20) and `_req_dispatch` (B21.21) ask it. `actor` is
+    ⚠ CALLERS: `issue`'s `basis: command` (B21.20, `WorldReader.read`'s `command` stem); `_req_dispatch` (B21.21) not yet. `actor` is
     asked only by `may_revoke`, which refuses an actor not seated in `via`; the sworn and the land disjuncts read
     the seat `via` names alone, as `purview_reaches` does (`04:332`: purview is asked of the seat exercised)."""
     TRACE.query("commands", "resolver")
@@ -4631,6 +4631,11 @@ class WorldReader:
             # Proposition) is reached by nothing, which `purview_reaches` answers `False`.
             seat = w.offices.get(arg)
             return UNKNOWN if seat is None else purview_reaches(w, seat, place_of(w, subject))
+        if stem == "command":
+            # B21.20 (`16_PESSIMIST_FA_C` edit 2, A-22): MAY THE SEAT (`arg`) ORDER THE PERSON `subject` -- `purview`'s
+            # dispatch over `commands`, the one owner. The actor is asked only by `may_revoke` inside it. UNKNOWN for a
+            # seat that does not exist or a subject that is no person (`ID-5`). WORLD-ONLY (`data/requires.py`).
+            return UNKNOWN if arg not in w.offices or subject not in w.persons else commands(w, self._actor, arg, subject)
         if stem == "bench":
             # `may_determine`, the `determination` basis whole: the seat is a judging seat the ACTOR
             # sits in, and its bench's ground holds the subject's home. Actor-relative through

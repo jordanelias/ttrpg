@@ -186,7 +186,7 @@ derived score, choice score).
 | **stake** | what an actor puts down on a drawn act | `rosters.yaml: stakes` (P) | "price", "cost", "risk" (CHAR's `what_an_act_risks` keeps "risk" for the score term) | `14_VERBS_MILITARY_A`, `MATERIAL_C` |
 | **party** | a person on a docket; a party to an instrument | — | a battle's **side**; the person served → **beneficiary**; the one acted on → **counterparty** (`verb_table.yaml: counterparty:`, T); "patient" → counterparty | `16_PESSIMIST_SC_C`, `23_STORY_A`, `02_CHAR_*` |
 | **occupy** | an army holds ground it does not own (A-66) | `world_q.occupies` (P) | a visited person's being busy (A-63) → **engaged** | `28_CORE_scene_access_*` |
-| **command basis** | whom a seat may order (A-22) | `queries/world_q.py::commands` (T, B21.19); its `basis: command` value (P, B21.20) | "chain of command", "purview" (a different basis), "under the seat" | `16_PESSIMIST_FA_C`, `14_VERBS_BINDING_D` |
+| **command basis** | whom a seat may order (A-22) | `queries/world_q.py::commands` (T, B21.19); its `basis: command` value (`data/requires.py`: `REQUIRES_STEMS`, dispatched by `queries/world_q.py::WorldReader.read`; `issue`'s `authority` conjunct, T, B21.20) | "chain of command", "purview" (a different basis), "under the seat" | `16_PESSIMIST_FA_C`, `14_VERBS_BINDING_D` |
 | **sworn** | a person with a live `oblige` to a seat; in prose **a sworn man**, **the men sworn to a seat** | `04` §B.7 | "obligee" (ordinary "obligee" is the party an obligation is owed TO, the seat's side; the tree's `offices.yaml` key `obligees` lists those who owe, so the tree name reads backwards: §H candidate), "establishment" (the Query over the sworn) | U4d: prose done in seven files |
 
 ## E. Mass battle and personal combat
