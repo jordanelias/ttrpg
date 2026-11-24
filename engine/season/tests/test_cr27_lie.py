@@ -298,6 +298,26 @@ def test_unshared_first_prefers_a_deed_to_a_quantity_to_an_existence_reading():
     assert said_of([d, q, e], "S", DEFAULT_FIXTURES).predicate == "exists:Person"     # the control: `newest`
 
 
+def test_partial_told_deed_withholds_the_hand(monkeypatch):
+    """B11.53: a hearer of a deed at a band holds what a FINDER at that band holds -- the sighting names the hand where `rosters.yaml: finding_terms`' row shows
+    `HAND_TERM`, and names nobody where it does not (`loop/witness.py::_told_pairing` reads that one table). Through the WITNESS barrier: W saw K kill V and tells J at
+    each band the telling emits at; J names K as the doer, or nobody. Then the table PLANTED (`Success` loses the hand) and the same telling names nobody."""
+    from ..data.rosters import FINDING_TERMS
+    from .test_told_pairing import J, K, _doers, _world
+    bands = sorted(set(VERB_TABLE["tell"].emits_by_degree) & set(FINDING_TERMS))
+    assert W.HAND_TERM in FINDING_TERMS["Success"] and W.HAND_TERM not in FINDING_TERMS["Partial"], FINDING_TERMS      # the shipped table the bands read
+    assert len(bands) >= 2, bands
+    for band in bands:
+        w, tell, _claims = _world("on")
+        tell("p_low", K, band)
+        assert _doers(w, J) == ((K,) if W.HAND_TERM in FINDING_TERMS[band] else ()), (band, _doers(w, J))
+    with monkeypatch.context() as m:                                   # the falsifier: one table, so moving a row moves the hearer
+        m.setitem(FINDING_TERMS, "Success", tuple(t for t in FINDING_TERMS["Success"] if t != W.HAND_TERM))
+        w, tell, _claims = _world("on")
+        tell("p_low", K, "Success")
+        assert _doers(w, J) == (), _doers(w, J)
+
+
 def test_existence_lie_is_a_negation():
     """A lie about an existence reading says the other truth value (`0` for `1`, `1` for `0`), never a whole-band drift of it (`2`)."""
     fx = DEFAULT_FIXTURES

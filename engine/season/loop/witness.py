@@ -19,7 +19,7 @@ from ..data.matrix import Step
 from ..state.gate import Token
 from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN, WORLD_ONLY_STEMS, binding_from_act
 from ..data.rosters import (
-    CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, OBSERVATION_TERMS, READ_TO_ADDRESSEE, RECORD_CONTENT,
+    CHANNEL_CLAIM_SOURCE, FINDING_TERMS, OBSERVATION_DEPOSIT_MODES, OBSERVATION_TERMS, READ_TO_ADDRESSEE, RECORD_CONTENT,
     UNDEPOSITED_KINDS, WITNESS_CHANNELS, require_member, roster,
 )
 from ..data.verbs import IN_CONFIDENCE_KEY, QUANTITY_STEMS, VERB_TABLE
@@ -233,9 +233,11 @@ def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = 
 
 
 def _told_pairing(e: Event, pairing):
-    """THE PAIRING A HEARER RECEIVES (B11.22, `08_FI_06` edit 3): the teller's `Said.pairing` at every band but `Partial`, where the copy withholds `who` -- the
-    lossy copy's own rule (`_told_value`) and `rosters.yaml: finding_terms`' precedent, *a partial finding withholds the hand*. Reads `pairing`, never writes it."""
-    return replace(pairing, who=None) if e.degree == "Partial" else pairing
+    """THE PAIRING A HEARER RECEIVES (B11.22, `08_FI_06` edit 3; B11.53, `16_PESSIMIST_FI_A` edit 4): the teller's `Said.pairing` at a band whose `rosters.yaml: finding_terms`
+    row shows `HAND_TERM`, and the same sighting WITHOUT `who` at a band whose row does not (shipped: `Partial`) -- the copy says that it happened and not who. One table,
+    read by the finder's deposit (`_found_claims`) and this one: a hearer of a deed at a band holds what a finder at that band holds. A band no row names (the failing
+    one, which no telling emits `news.told` at) shows nothing, so no hand. Reads `pairing`, never writes it."""
+    return pairing if HAND_TERM in FINDING_TERMS.get(e.degree, ()) else replace(pairing, who=None)
 
 
 def _refract(c: Claim, p, channel: str, gain: float, act=None, weigh=None,
