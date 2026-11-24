@@ -1,7 +1,7 @@
 """
 systems/fieldwork/sim/knots.py — Knot lifecycle — formation, sustaining, rupture
 
-Canon source: systems/fieldwork/reference/knots_v30.md (Pass 2g synthesis 2026-05-17)
+Intent (archived, not canon): knots_v30.md (Pass 2g synthesis 2026-05-17)
 
 Implements:
   - form_knot: §3.1 prerequisites + §3.2 procedure
@@ -179,6 +179,10 @@ def form_knot(actor_a: str, actor_b: str, world=None,
     Caller supplies actor_a_obj / actor_b_obj for stat lookups (.bonds,
     .spirit, .ts, .disposition_with_other).
     """
+    # A knot is between two actors; with oneself there is none.
+    if actor_a == actor_b:
+        return None
+
     # §3.1 Prerequisites
     if actor_a_obj is None or actor_b_obj is None:
         return None
