@@ -171,16 +171,15 @@ def test_with_king_and_heir_removed_someone_may_claim_the_throne():
 # --- THE ONE-ACT CLAIM: TWO SEATS, ONE TITLE ----------------------------------------------------
 
 @pytest.mark.usefixtures("seat_at_success")       # B21.14: the claim's write, not its draw (C3's test)
-def test_one_claim_opens_every_vacant_seat_that_names_the_title_and_closes_the_title(monkeypatch):
+def test_one_claim_opens_every_vacant_seat_that_names_the_title_and_closes_the_title():
     """THE ONE-ACT FALSIFIER (the second decision round's): the King dies holding BOTH `off_king` and
-    `off_duke_valorsmark`, and both seats name the heir's title (`off_duke_valorsmark`'s row is CP-T09-06's,
-    B10-17, so it is planted here, in place, on this world and the shared roster dict only). ONE `succeed`
+    `off_duke_valorsmark`, and both seats name the heir's title (`off_duke_valorsmark`'s row shipped at B21.51,
+    so nothing is planted here; it was, until then). ONE `succeed`
     on the throne opens both seats and closes the title: one act, one write. A second claim, now that both
     are held, is refused (first valid claim wins)."""
     w, d, king, heir = _realm()
     assert _holder(w, DUCHY) == king, "fixture: the King no longer holds the Crown's duchy"
-    monkeypatch.setitem(SUCCESSIONS, DUCHY, (TITLE,))
-    monkeypatch.setattr(w.offices[DUCHY], "conferral", "inheritance")
+    assert TITLE in SUCCESSIONS[DUCHY] and w.offices[DUCHY].conferral == "inheritance", "fixture: the duchy passes with the throne"
     w.step = Step.MATTER
     w._emitted_by_write = []
     _die(w, mint_token(w, WriteClass.MATTER), king)

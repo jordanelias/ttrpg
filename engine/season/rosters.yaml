@@ -3308,11 +3308,13 @@ rosters:
       the route only awards a vacant seat; the first valid claim wins; one title deep (a title laid down by a
       claim passes to nobody). READ BY `data/rosters.py::SUCCESSIONS`, refused at import when a key or a member is
       no `offices.yaml` row, a list is empty, a key's row is not `inheritance`, or an `inheritance` row has no key
-      (a seat nobody could ever fill). `off_duke_valorsmark` gets its row at CP-T09-06 (B10-17), not here.
+      (a seat nobody could ever fill). `off_duke_valorsmark`'s row (B21.51, `16_PESSIMIST_FA_A` edit 1) lists
+      `off_king`'s own titles: whoever wins the deed race for the throne takes the Crown's duchy in the same write.
       [ASSUMPTION; medium; Jordan to correct; revert: the single title (`off_king: off_heir`), the claim closing
-      the heir's title alone.]
+      the heir's title alone; for the duchy, drop its row and its `conferral: inheritance`.]
     values:
       off_king: [off_heir, off_widow_regent, off_princess, off_duchess_hafenmark, off_duke_varfell]
+      off_duke_valorsmark: [off_heir, off_widow_regent, off_princess, off_duchess_hafenmark, off_duke_varfell]
 
   continuation_ties:
     source: >-

@@ -199,7 +199,7 @@ seats:
     body:       null
     faction:    "Valorsmark"
     remit_acts: [issue, confer, revoke, convene, dispatch]
-    conferral:  null
+    conferral:  inheritance   # B21.51 (`16_PESSIMIST_FA_A` edit 1, A-19): the duchy passes with the throne -- `rosters.yaml: successions` lists `off_king`'s titles for it, and the one `succeed` that opens the throne opens it [ASSUMPTION; medium; Jordan to correct; revert: null]
     revocation: null
     holder:     "NPC-020"
     obligees:   []
