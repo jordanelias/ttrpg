@@ -102,12 +102,17 @@ def _hold_tenure_ends(w: "World", subject: str) -> tuple:
     return (subject,)
 
 
-def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = None) -> list:
+def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = None,
+                   anchor: Optional[str] = None) -> list:
     """`H-79`: what the claims deposited from one Event are ABOUT.
 
     `actor` is the incumbent — one claim, subject = the Event's anchor (`anchor_of`). `per_change` mints
     one per `StateChange`, subject = THE THING CHANGED, which is what makes §F1's Q2 clause
     "something they hold" reachable at all. `both` is the union.
+
+    `anchor` (B11.58) is the anchor to use, the deposit's own call: `None` is `anchor_of` (the alias a
+    cover makes of the actor), and `deposit_anchor` answers the actor itself where the deposit shows `who`.
+    This function stays the one owner of what a deposit is about; the caller only says which anchor.
 
     Order is deterministic and de-duplicated, because a person holding two identical claims about
     one Event would double-count in every eviction comparison."""
@@ -121,7 +126,8 @@ def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = Non
     # `anchor_of` (`state/attribution.py`) separates the two senses an Event's subject could carry: an
     # act-caused Event anchors on its ACTOR, a MATTER write on the THING WRITTEN, and a reader does not
     # have to infer which it received from whether the id happens to name a person.
-    anchor = anchor_of(w, e)
+    if anchor is None:
+        anchor = anchor_of(w, e)
     out = [] if rule == "per_change" else [anchor]
 
     def _add(entity: str) -> None:
@@ -240,6 +246,20 @@ def non_anchor_subjects(subj, anchor) -> list:
     subjects SPECIFIC to one Event; the one place that subtraction is written (`holds_trail`,
     `loop/witness.py::_found_claims`)."""
     return [s for s in subj if s != anchor]
+
+
+def deposit_anchor(w: "World", e: "Event", shows_who: bool) -> Optional[str]:
+    """B11.58 (CP-T06-09, R-07): THE ANCHOR AN EVENT-KIND DEPOSIT IS ABOUT, `claim_subjects`' `anchor` argument. A cover
+    makes the Event's anchor an alias (`anchor_of`: the cover's id), which is right for a deposit that does not show the doer;
+    where the deposit shows `who` (a channel whose `rosters.yaml: observation_terms.supplied_by` lists it, a finding whose band's
+    `finding_terms` do), the witness knows who did it, so the claim is about the actor -- `(actor, kind, True)`, not
+    `(cover, kind, True)`. The identity where the anchor is the actor (no cover, or an Event no one acted, whose anchor is the
+    thing written). The observation, `seen`, told and content deposits take no event-kind subject from the anchor and do not call
+    this. AM-D-16's limit: a found or seen deed reaches a bench through the bench's own regard and the witness's judgement of the
+    doer, not through `proofs`, because the doer always holds his own claim."""
+    anchor = anchor_of(w, e)
+    actor = actor_of(w, e)
+    return actor if shows_who and actor is not None else anchor
 
 
 def holds_trail(w: World, p: Person, e: Event, rule: str) -> bool:

@@ -20,7 +20,7 @@ from ..state.gate import Token
 from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN, WORLD_ONLY_STEMS, binding_from_act
 from ..data.rosters import (
     CHANNEL_CLAIM_SOURCE, FINDING_TERMS, OBSERVATION_DEPOSIT_MODES, OBSERVATION_TERMS, READ_TO_ADDRESSEE, RECORD_CONTENT,
-    UNDEPOSITED_KINDS, WITNESS_CHANNELS, require_member, roster,
+    TERMS_SUPPLIED_BY, UNDEPOSITED_KINDS, WITNESS_CHANNELS, require_member, roster,
 )
 from ..data.verbs import IN_CONFIDENCE_KEY, QUANTITY_STEMS, VERB_TABLE
 # ⚠ `04:178` lists WITNESS's reads as the log, the presence cache, the channel predicates and the act
@@ -38,7 +38,7 @@ from ..data.verbs import IN_CONFIDENCE_KEY, QUANTITY_STEMS, VERB_TABLE
 # `decision/` (`refracted_confidence` takes no world-derived number: `decision/` stays an island, AX-2).
 # CONVENTION, no scan reads this step's person reads; AX-7's governors are widened by hunk H-L0-11.
 from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, changes_only_held_claims,
-                         claim_subjects, held_claim_ids, holds_trail, live_channels,
+                         claim_subjects, deposit_anchor, held_claim_ids, holds_trail, live_channels,
                          non_anchor_subjects, observers_for, seen_of, seen_showing, seen_subject)
 from ..queries import cache, world_q
 from ..queries.person_q import LedgerReader, addressed_to, drifted, ledger_weigh, refracted_confidence
@@ -352,7 +352,8 @@ def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cfx
         refracting = bool(gain) and actor_of(w, f) != pid
         prior_act = _happened(act_f, f) if refracting else None
         prior_weigh = ledger_weigh(p, w.fixtures, w.tick) if prior_act is not None else None
-        subjects = claim_subjects(w, f, claim_rule, act_refs(act_f))
+        # B11.58: a band showing the hand files the deed under the actor, not under a cover's alias (`deposit_anchor`).
+        subjects = claim_subjects(w, f, claim_rule, act_refs(act_f), deposit_anchor(w, f, HAND_TERM in terms))
         if HAND_TERM not in terms:
             subjects = non_anchor_subjects(subjects, anchor_of(w, f))
         out = [Claim(H(w.world_seed, w.tick, pid, f"found:{e.id}:{fid}:{n}"), pid, subj, f.kind,
@@ -677,9 +678,10 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # chain, the told channel's own reading of the word (reading `source` instead would make the count depend on the channel map, which
         # `test_15d_falsifier` neutralises) -- the told channel's exact-triple guard, one deposit over. Keyed on the row's shape, never on a verb name; moot per row once the row has a product.
         ungraded = _ungraded(VERB_TABLE.get(getattr(self.act_of.get(e.id), "verb", None)))
+        # B11.58 (CP-T06-09): a channel that shows `who` files a covered deed under the actor, not the alias (`deposit_anchor`).
         for n, subj in enumerate(() if only is not None else
-                                 claim_subjects(w, e, claim_rule,
-                                                act_refs(self.act_of.get(e.id)))):
+                                 claim_subjects(w, e, claim_rule, act_refs(self.act_of.get(e.id)),
+                                                deposit_anchor(w, e, HAND_TERM in TERMS_SUPPLIED_BY[channel]))):
             if ungraded and any(h.subject == subj and h.predicate == e.kind and h.value is True and not h.chain for h in p.ledger):
                 continue
             cid = (e.id if via_knot and n == 0

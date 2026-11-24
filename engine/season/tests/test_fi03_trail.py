@@ -67,7 +67,7 @@ from ..manifest.providers import PROVIDERS
 from ..queries import world_q
 from ..queries.inputs import Findings
 from ..seam import find_trail
-from ..state.attribution import actor_of
+from ..state.attribution import actor_of, anchor_of, live_cover
 from ..state.carriers import Act, Claim, Event, Proposition, Tenure, View
 from ._closure_scan import branches_on_ids, game_code
 from ._fresh_process import probe
@@ -96,7 +96,19 @@ def step(w, d, *acts):
     return out
 
 
-def trail_world(verb="forge", kind="record.forged", second=None, fixtures=None):
+COVER = "rec:cv"
+
+
+def conceal_forger(w, d):
+    """The forger takes a cover (`conceal`, through the fold) and a tick passes: `anchor_of` now answers `COVER` for his
+    acts. Asserted, so no test below reads an uncovered world as a covered one."""
+    assert [e.kind for e in step(w, d, Act(id="cv", actor=FORGER, verb="conceal", payload={"subject": FORGER}))] == [
+        "cover.assumed"]
+    assert live_cover(w, FORGER) == COVER
+    w.tick += 1
+
+
+def trail_world(verb="forge", kind="record.forged", second=None, fixtures=None, covered=False):
     """THE WORLD, built through the fold to the moment the investigator holds the forged Record (tick 2).
     Returns `(w, d, rid)`. `verb`/`kind`: the tick-0 act that mints the Record and the one Event it must
     emit -- `forge` by default; step 3's structural control passes `survey` (`faction.surveyed`), which
@@ -109,7 +121,10 @@ def trail_world(verb="forge", kind="record.forged", second=None, fixtures=None):
     composes an obstacle above 2 for a pool-2 investigator, and the per-pool cap lets it stand (2.842 at
     pool 2, against the fixed 2.0), so the draw odds F / P / S / O read 74 / 19 / 7 / 0 % at the fixed
     arm and 90 / 8.05 / 1.95 / 0 % at the shipped one: a hand band (Success or better) is 1.95 % per
-    act, and the 60-id sweep, being seeded, does not reach one."""
+    act, and the 60-id sweep, being seeded, does not reach one.
+
+    `covered` (B11.58): the forger `conceal`s first (a live `cover`, `COVER`) and forges a tick later, so the forging
+    anchors on the alias (`anchor_of`)."""
     if fixtures is None:
         fixtures = DEFAULT_FIXTURES.sweep("ceiling_per_pool", False)
     w = flat_fold(P.tiny_world(fixtures))   # the builder owns the flat fold: test_odds_of and test_sc02_22b build this world too, unmarked or on their own
@@ -118,6 +133,8 @@ def trail_world(verb="forge", kind="record.forged", second=None, fixtures=None):
         w.add_tenure(Tenure(f"t_commit_{pid}", pid, FAC, "commit", since=0))
     d = SeasonDriver(w)
     _hear(w, FORGER, ABOUT)
+    if covered:
+        conceal_forger(w, d)
     out = step(w, d, Act(id=FORGE_ID, actor=FORGER, verb=verb, payload={"subject": ABOUT}))
     assert [e.kind for e in out] == [kind], [e.kind for e in out]
     (rid,) = [c.subject for c in out[0].changes]
@@ -856,3 +873,66 @@ def test_the_find_lands_through_the_season_loop_in_a_later_round():
     assert {c.id for c in landed} == {e.changes[0].subject for e in deposits}, (landed, deposits)
     assert all(c.lap == released for c in landed), [(c.id, c.lap, released) for c in landed]
     assert d.findings == {}, "the season left a find on the driver"
+
+
+# ======================================================================================
+# B11.58 (CP-T06-09, R-07) -- THE ROOM FILES A COVERED DEED UNDER THE HAND
+# ======================================================================================
+
+def covered_forging(covered=True, document_holder=None):
+    """The forger (`conceal`ed when `covered`) forges on `p_mid` with `p_mid` and `p_low` in the room; WITNESS runs
+    once. `document_holder` is handed the new Record's `hold` between RESOLVE and WITNESS (the forger's ends), so the
+    channel that admits him is `document_key`, which shows no `who`. Returns `(w, forging Event)`."""
+    w = flat_fold(P.tiny_world(DEFAULT_FIXTURES.sweep("ceiling_per_pool", False)))
+    w.propositions[FAC] = Proposition(FAC, "HOLDS", "Valorsmark", "is a faction of this world", True, 0)
+    for pid in (INVESTIGATOR, ABOUT):
+        w.add_tenure(Tenure(f"t_commit_{pid}", pid, FAC, "commit", since=0))
+    d = SeasonDriver(w)
+    _hear(w, FORGER, ABOUT)
+    if covered:
+        conceal_forger(w, d)
+    w.step = Step.RESOLVE
+    out = d.resolve(mint_token(w, WriteClass.ACTS), [Act(id=FORGE_ID, actor=FORGER, verb="forge", payload={"subject": ABOUT})],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    w.log.extend(out)
+    (e,) = out
+    if document_holder is not None:
+        (rid,) = [c.subject for c in e.changes]
+        for t in w.persons[FORGER].tenures:
+            if t.kind == "hold" and t.object == rid:
+                t.until = w.tick
+        w.add_tenure(Tenure("t_hold_doc", document_holder, rid, "hold", since=w.tick))
+    w.step = Step.WITNESS
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
+    return w, e
+
+
+def test_a_bystander_files_a_covered_deed_under_the_hand():
+    """T06 §3's cover probe: the forger holds a live cover, so the forging anchors on `COVER`. The two neighbours in the room
+    (`co_located` shows `who`) hold `(forger, record.forged, True)` and the Record's, and NOT `(COVER, record.forged, True)`; a
+    `document_key` holder of the Record (`supplied_by` shows no `who`) still holds the alias claim. CONTROL: the same forging with
+    no cover -- the neighbour's subjects are the same set, so the swap is the identity where the anchor is the actor."""
+    w, e = covered_forging(document_holder="p_king")
+    (rid,) = [c.subject for c in e.changes]
+    assert anchor_of(w, e) == COVER, "the fixture: the forging is covered"
+    via = dict(epistemic.observers_for(w, e, w.fixtures.get("fan_out_mode"), list(w.persons)))
+    assert via["p_mid"] == via["p_low"] == "co_located" and via["p_king"] == "document_key", via
+    held = lambda pid: {c.subject for c in forged_claims(w, pid) if c.value is True}
+    for pid in ("p_mid", "p_low"):
+        assert held(pid) == {FORGER, rid}, (pid, held(pid))
+    assert held("p_king") == {COVER, rid}, held("p_king")
+    ctl, _ = covered_forging(covered=False)
+    assert {c.subject for c in forged_claims(ctl, "p_mid")} == held("p_mid")
+
+
+def test_a_finder_files_a_covered_deed_under_the_hand_where_his_band_shows_it():
+    """The found deposit's site: the investigator `research`es the Record a covered forger forged and gave him, at a band whose
+    `finding_terms` show the hand, and holds `(forger, record.forged, True)` -- not the alias. A band that does not show the
+    hand deposits neither (the blind-band masking is unchanged: `non_anchor_subjects` drops the anchor)."""
+    w, d, rid = trail_world(covered=True)
+    assert anchor_of(w, forged_event(w)) == COVER
+    cand = chooser_research(w, rid)
+    assert cand is not None
+    step_until(w, d, cand, "cov", lambda deg: deg in HAND_BANDS)
+    held = {c.subject for c in forged_claims(w, INVESTIGATOR)}
+    assert held == {FORGER, rid}, held
