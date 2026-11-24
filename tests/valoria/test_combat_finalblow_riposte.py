@@ -54,8 +54,12 @@ def test_finalblow_riposte_event_changes_the_tracker():
             assert e['round'] == _round_of(trace, i), (seed, e)
             continued += any(x['kind'] in ('wound', 'turn_start') for x in trace[i + 2:])
             checked += 1
-        assert result != 1 or (B.felled and not A.felled), (seed, result)
-        assert result != -1 or (A.felled and not B.felled), (seed, result)
+        yielded = next((e['by'] for e in trace if e['kind'] == 'yield'), None)   # a failed yield roll (B15.10) ends the scene with the yielder standing
+        if yielded is None:
+            assert result != 1 or (B.felled and not A.felled), (seed, result)
+            assert result != -1 or (A.felled and not B.felled), (seed, result)
+        else:
+            assert result == (-1 if yielded == 'A' else 1) and not (A.felled or B.felled), (seed, result, yielded)
         for c in (A, B):
             assert sum(e['damage'] for e in trace if e['kind'] == 'wound' and e['victim'] == c.label) == c.wt.cumulative_damage, seed
     assert checked >= 50, checked

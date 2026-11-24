@@ -206,7 +206,7 @@ def test_an_edge_at_max_wounds_grades_the_standing_subject_below_the_cap_untouch
     THE UNIVERSAL CLAIM: the universal one (every STANDING fought subject, over the 24 real ones) is
     `test_an_unreachable_arm_grades_every_standing_fought_subject_untouched`, and the cap case is
     `test_a_standing_subject_at_the_wound_cap_still_reads_wounded_at_max_wounds`."""
-    raw = _scene("we9")   # seed re-picked at B15.07: the mortal-wound draw stands up a felled party (was we1, B15.04; we3, B06.99; we0)
+    raw = _scene("we0")   # seed re-picked at B15.10: the yield roll moved the stream (was we9, B15.07; we1, B15.04; we3, B06.99; we0)
     fx = DEFAULT_FIXTURES.sweep("combat_wounded_above", "max_wounds")
     standing = 0
     for subject, st in raw["wound_state"].items():
@@ -332,8 +332,8 @@ def test_the_swept_fixture_reaches_the_fold():
         # v10 REM-31: RESOLVE declares the fight (`the body`'s `step: ENCOUNTER`); the fight's Events are ENCOUNTER's.
         evs = d.encounter(mint_token(d.w, WriteClass.ACTS),
                           d.resolve(mint_token(d.w, WriteClass.ACTS),
-                                    # seed re-picked at B15.07: the mortal-wound draw stands up a felled party (was we1, B15.04; we3, B06.99; we0)
-                                    [Act(id="we9", actor="p_low", verb="fight", payload={"subject": "p_mid"})], 2), 2)
+                                    # seed re-picked at B15.10: the yield roll moved the stream (was we9, B15.07; we1, B15.04; we3, B06.99; we0)
+                                    [Act(id="we0", actor="p_low", verb="fight", payload={"subject": "p_mid"})], 2), 2)
         degrees[arm] = {e.degree for e in evs}
         kinds[arm] = {e.kind for e in evs}
         assert w.fixtures.reads.get("combat_wounded_above", 0) >= 1, "the fixture was never read"

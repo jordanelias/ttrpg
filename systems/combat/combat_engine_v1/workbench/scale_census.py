@@ -59,12 +59,28 @@ def arm(name):
         raise ValueError(f"arm {name!r} is not 'live' or 'control'")
 
 
+@contextlib.contextmanager
+def no_yield():
+    """B15.10: hold the yield roll at Success for the call -- nobody yields, is shaken or rallies -- and restore it on exit (the patch-and-restore
+    of `arm`'s `core.DMG_SCALE`). The census reads the opposed rule, and whether a wounded man gives up is the yield roll's (A-24,
+    `CFG['YIELD_OB']`: the person's, as the riposte is the designer's cap), so a fight is read to its felling, the fight the calibration windows
+    were set on; the yield's own shares are `test_combat_yield_draw.py`'s. The roll draws nothing of the stream, so a fight here is the B15.09 fight."""
+    real = wrapper._yield_roll
+    wrapper._yield_roll = lambda c, terms, sigma, cfg, draw: 'success'
+    try:
+        yield
+    finally:
+        wrapper._yield_roll = real
+
+
 def play(score_a, score_b, seed, cfg=None, weapon='arming', armor='light'):
-    """One lethal fight, arming sword and light armour, A at `score_a`, B at `score_b`, on `seed`. Returns (result, trace, A, B)."""
+    """One lethal fight, arming sword and light armour, A at `score_a`, B at `score_b`, on `seed`, read to its felling (`no_yield`).
+    Returns (result, trace, A, B)."""
     A = combatant.Combatant('A', weapon=weapon, armor=armor, score=score_a)
     B = combatant.Combatant('B', weapon=weapon, armor=armor, score=score_b)
     trace = []
-    result = wrapper.fight(A, B, cfg, draw.seeded(draw.H2(KEY, seed)), trace=trace.append)
+    with no_yield():
+        result = wrapper.fight(A, B, cfg, draw.seeded(draw.H2(KEY, seed)), trace=trace.append)
     return result, trace, A, B
 
 

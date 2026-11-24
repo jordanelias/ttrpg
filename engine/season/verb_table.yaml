@@ -913,8 +913,13 @@ verbs:
     emits:
       Declared:    ["fight.declared"]
       Felled:      ["person.died", "tenure.closed", "body.changed", "capability.raised"]
-      Wounded:     ["body.changed", "capability.raised"]
+      Wounded:     ["body.changed", "duel.yielded", "capability.raised"]
       Untouched:   ["contest.undecided"]
+    # B15.10 (PC_A, A-24; `03_PC_exits_withdrawal_recovery.md` Part B's second bullet, adopted): `Wounded` declares `duel.yielded`, EARNED BY THE YIELDER ALONE
+    # (`loop/effects_combat.py::_eff_kill` reads the scene's `surrender`, as it does for `accept`), because a `fight` can now end in a yield under every
+    # term: a failed yield roll ends the scene with the yielder standing. NOT `Untouched` (the entry's text names both): a yielder has taken a wound gate,
+    # so he is `Wounded` off his own tracker, and an `Untouched` cell declaring it emitted a yield nobody made on every untouched fight
+    # (`test_cp_t03_02_band_ending_and_body.py::test_an_untouched_fight_carries_no_ending_and_no_body`); `accept`'s `Untouched` declares none either.
     # Under #358 rev.2 loader invariant 4 (widened, F7) every failable clause needs a refusal kind, and a
     # contested verb can be refused by the seam at the depth cap (§C.5 returns a typed Refusal, never a raise).
     # A contest that cannot report its own refusal is D22.

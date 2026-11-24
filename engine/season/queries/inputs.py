@@ -198,7 +198,11 @@ class PersonalCombatInput:
                        draw `(world_seed, tick, party, "fight.mortal:<causing act>")` (A-30, `state.ids.draw_factory`), never a position in the scene's
                        stream -- a key, not a `Draw`, so the record stays a value -- or `None` for a sampled estimate, whose draw is a
                        sub-key of its own private stream. The module draws (`modules/combat/fight.py::mortal_wound`) for each party the
-                       scene felled. The default `()` is no draw: a felling stands, as before the draw."""
+                       scene felled. The default `()` is no draw: a felling stands, as before the draw;
+      * `decisiveness` -- each party's σ for the YIELD ROLL (B15.10, `PC_A`, A-24), in `claimants` order: what the host knows that the module does
+                       not (what he is fighting for). It enters the roll as `net_sigma`, under the owner's soft cap, beside his Spirit and wounds
+                       (`wrapper._yield_roll`). The host reads it from `person_q.decisiveness` (`combat.py::combat_input`). The default `()` is
+                       0.0 for both parties (`fight.py` passes `inp.decisiveness or (0.0, 0.0)`)."""
     claimants: tuple
     ends: tuple
     wound_quantities: tuple
@@ -216,6 +220,7 @@ class PersonalCombatInput:
     axes: tuple = ()
     dispositions: tuple = ()
     mortal: tuple = ()
+    decisiveness: tuple = ()
 
 
 @dataclass(frozen=True)
@@ -249,7 +254,7 @@ class Surrender:
     start or end the yield came (A-101; the engine's trace event still names it `turn`)."""
     by: str
     round: int
-    accepted: bool
+    accepted: Optional[bool]   # `None`: the scene ended with the yielder standing under `death` terms, the victor's choice the host's (B15.10)
 
 
 @dataclass(frozen=True)

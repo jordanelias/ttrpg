@@ -266,9 +266,18 @@ CFG = dict(
   # to their style"). Tradition preference EMERGES from BUILD: a fighter binds more because they INVESTED in it (skill('bind') + a bind-friendly
   # weapon's wind affinity + learned binding abilities + disposition), all already live in mode_sigma/bind_sigma.
   # The tradition gates ACCESS to a technique kit; investment + skill drive efficacy.
-  YIELD_HEALTH_FRAC=0.5,  # [ASSUMPTION; medium; Jordan to correct -- v9 PC-10a, RS-25.] Under the 'yield' duel term a fighter
-  # yields once his Health falls to this fraction of full (`wrapper._terms_crossed`); 'blood' stops at the first wound
-  # and 'death' is the lethal fight. Here, in CFG, so it crosses the exporter with every other tunable.
+  YIELD_HEALTH_FRAC=0.5,  # [ASSUMPTION; medium; Jordan to correct -- v9 PC-10a, RS-25.] Under the 'yield' duel term this is the BURST-BREAKER's
+  # line (B15.10): the round is cut between beats when a fighter takes a wound gate while his Health is at or below this fraction of full
+  # (`wrapper._terms_crossed`), so the yield roll comes at that crossing; it is no longer the decision to stop -- that is `YIELD_OB`'s roll.
+  # 'blood' cuts the round at the first wound gate a fighter takes in it and 'death' never cuts it. Here, in CFG, so it crosses the exporter.
+  # THE YIELD ROLL's obstacle by duel term (B15.10, PC_A, A-24; `wrapper._yield_roll`): the term sets how much is at stake in stopping, and the
+  # wound a fighter has taken enters as a level against him, not as points here. One roll to fight on at the end of any round in which a
+  # wound gate was crossed on a standing party, under every term; a lower obstacle is a fight on more often. [SIM-CALIBRATE]
+  # [ASSUMPTION; medium; Jordan to correct (IS-PC-B2: the pick among admitted values is his) -- the grid blood {2, 3, 4, 5} x yield {1, 2, 3} x death
+  # {-1, 0, 1}, centred on the prototype's {4, 2, 0}; RULE: the `blood` mirror's yield share stays above nine in ten (a duel to first blood usually
+  # ends at first blood), the `yield` mirror's felled share is reported beside each member, and the admitted value nearest the prototype's is the one
+  # shipped. Sweep table: the commit body.]
+  YIELD_OB={'blood': 4, 'yield': 2, 'death': 0},
   # No matchup is certain: the chance a blow that would fell a fighter is TURNED (`wrapper.engagement`'s `_land`, B15.09).
   UPSET_FLOOR=0.05,   # [DESIGNER RULE — Jordan; deliberate, NOT an emergent mechanic. Tagged ED-PC-0036.]
   # One keyed draw at each felling (a sub-key of the fight's own Draw, "upset:<scene>:<round>", so it takes no position of the

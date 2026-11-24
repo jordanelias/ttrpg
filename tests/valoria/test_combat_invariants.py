@@ -1311,6 +1311,7 @@ def test_reach_class_beats_arming_not_inverted():
     C, core, S, WP, CFG = _mods()
     share, decided = {}, {}
     checked = 0
+    _FELL = dict(CFG, YIELD_OB=dict(CFG['YIELD_OB'], death=-99))   # no pool fails -99: nobody yields in a lethal fight
     for w in _REACH_WEAPONS:
         for armor in _REACH_ARMOURS:
             # crc32, not hash() — hash() is PYTHONHASHSEED-salted (non-reproducible run-to-run); see
@@ -1328,7 +1329,7 @@ def test_reach_class_beats_arming_not_inverted():
                 swap = i >= n // 2
                 A = C.Combatant('A', weapon=(w if not swap else 'arming'), armor=armor)
                 B = C.Combatant('B', weapon=('arming' if not swap else w), armor=armor)
-                r = wrapper.fight(A, B, CFG, rng)
+                r = wrapper.fight(A, B, _FELL, rng)   # read to the felling: a yield (B15.10) is the person's, and this ladder is which weapon decides a fight
                 if swap: r = -r
                 if r == 1: wins += 1; dec += 1
                 elif r == -1: dec += 1

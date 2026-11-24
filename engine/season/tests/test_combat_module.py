@@ -252,7 +252,12 @@ def test_an_addend_raises_the_pool_and_never_the_ob_and_the_records_pair_is_the_
                 entry(PersonalCombatInput(claimants=("a", "b"), ends=(4, 4), wound_quantities=qs, scores=(2, 2),
                                           addends=(3, 0), **kw), draw.seeded(draw.H2("test_combat_module", seed)))
                 checked += 1
-            assert set(seen) == want, (kw, dict(seen))
+            # B15.10: a wounded party's yield roll is the fight's other roll through `core.resolve`; it is at the `death` obstacle and takes the
+            # pool WITHOUT the party's addends (the verb's, not the roll's), so it is told apart by its obstacle and read separately
+            from modules.combat.config import CFG
+            yob = CFG["YIELD_OB"]["death"]
+            assert {k for k in seen if k[1] != yob} == want, (kw, dict(seen))
+            assert {p for p, o in seen if o == yob} <= {min(p for p, _ in want)}, (kw, dict(seen))
     finally:
         core.resolve = real
     assert checked == 15
@@ -718,7 +723,7 @@ def test_mortal_wound_every_band_writes():
 
 def test_unreachable_mortal_ob_reproduces_the_shipped_deaths():
     """THE CONTROL (PHY_A's falsifier): at the unreachable `mortal_wound_ob` (99.0 for every cause) the season's fight, under `death` terms, deals
-    exactly the deaths it dealt with no draw: over 200 seeds, the host's `wound_state` with the draw equals the one built on the same record with
+    exactly the deaths it dealt with no draw: over 300 seeds, the host's `wound_state` with the draw equals the one built on the same record with
     `mortal=()` (no draw), party by party, and the scene (rounds, beat, trace) is the same scene -- the draw is keyed apart from the scene's
     stream (`fight.mortal`) and moves nothing at control. Every felled party is drawn for and dies. FALSIFIER: a survivor at the control, a scene
     that differs with the draw, or a felled party not drawn for."""
@@ -729,7 +734,7 @@ def test_unreachable_mortal_ob_reproduces_the_shipped_deaths():
     w = P.tiny_world()
     w.fixtures = w.fixtures.sweep("mortal_wound_ob", {c: 99.0 for c in w.fixtures.get("mortal_wound_ob")})
     deaths = checked = 0
-    for seed in range(200):
+    for seed in range(300):     # was 200: a failed yield roll (B15.10) ends about a third of lethal scenes with both alive, so fewer parties are felled
         w.world_seed = seed
         inp = combat.combat_input(w, ["p_low", "p_mid"], "fight")
         assert inp.terms == "death" and len(inp.mortal) == 2, (inp.terms, inp.mortal)
@@ -741,4 +746,4 @@ def test_unreachable_mortal_ob_reproduces_the_shipped_deaths():
             assert combat._wound_state(drawn.wounds[pid], drawn.mortal.get(pid)) == combat._wound_state(bare.wounds[pid]), (seed, pid)
         deaths += sum(m.mortal for m in drawn.mortal.values())
         checked += 1
-    assert checked == 200 and deaths >= 150, (checked, deaths)
+    assert checked == 300 and deaths >= 150, (checked, deaths)

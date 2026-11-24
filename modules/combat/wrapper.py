@@ -4,8 +4,10 @@ Inputs: two `combatant.Combatant` objects, `config.CFG` (or a `cfg` passed in) a
 reaches it through `fight.py`. Here `engagement`
 assigns aggressor/defender ONCE per beat and passes Combatant objects to every subsystem (`combat_systems`, `core`,
 `contact`, `tradition`), the structural cure for the role-inversion bug class: nothing ever indexes raw 'A'/'B'."""
+import math
+from types import SimpleNamespace
 from engine.dice_engine import draw as KD   # the one keyed draw (`H2`, `seeded`): the per-blow coverage-gap draw below forms its key from the fight's own
-from . import core, combat_systems as S, tradition as TR, contact as CT
+from . import core, combat_systems as S, tradition as TR, contact as CT, attributes as ATTR
 from . import vocabulary as V   # the token ALPHABET, owned once (ED-PC-0042)
 from .config import CFG
 
@@ -70,14 +72,15 @@ def _carry(ready, cfg):
     # action, and no free one either.
     return {c: (max(0.0, r) % cfg['ACT_THRESHOLD']) for c, r in ready.items()}
 
-def _pool_dice(c, cfg):
+def _pool_dice(c, cfg, addends=None):
     """THE POOL A COMBATANT ROLLS (B05.57, `UPR` §2 edit 3): `core.resolution_pool(c.score, c.pool_addends, add, floor)` at the
     three roll sites (the pursuit, the stop-hit, the exchange). `c.score` is his skill score; `c.pool_addends` his registered
     pool addends, set by the module entry (a `Combatant` built by the workbench has none and reads 0). `add` and `floor` are the
     record's `pool_add` and `pool_floor` when the entry carried them in `cfg` as `BASE_POOL` and `POOL_FLOOR`, else the owner's
-    own defaults (the bounds are read nowhere else, so this spells no pool constant)."""
+    own defaults (the bounds are read nowhere else, so this spells no pool constant). `addends` overrides his registered ones
+    (the yield roll (B15.10) takes none: the addends are the verb's, the roll is not a blow)."""
     kw = {k: cfg[name] for k, name in (("add", "BASE_POOL"), ("floor", "POOL_FLOOR")) if name in cfg}
-    return core.resolution_pool(c.score, getattr(c, "pool_addends", 0), **kw)
+    return core.resolution_pool(c.score, getattr(c, "pool_addends", 0) if addends is None else addends, **kw)
 
 
 def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, scene=0):
@@ -179,6 +182,7 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
     # more often, it simply no longer owns the first action by construction. Who acts first FROM those phases is then
     # decided by cadence x anticipation (systems.tempo_pressure — the Vor and the read).
     ready={c: rng.random()*cfg['ACT_THRESHOLD'] for c in (A,B)}
+    wounds0 = {A: A.wt.wounds, B: B.wt.wounds}   # the wounds each fighter has as the round opens: the line is crossed when he has more (B15.10)
     beats=0; exchanges=0
     reopen_moment=False; push_avail=False   # distance-creating-moment state for re-opening (corrections 1+3)
     # (feint_streak removed — feint dissolved into the attack, WS-5)
@@ -186,12 +190,13 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
           longer=longer.label, shorter=shorter.label, weapon_A=A.weapon, weapon_B=B.weapon,
           reach_A=round(erA,2), reach_B=round(erB,2), measure_gap=round(measure_gap,2), closed=closed)
     while beats < cfg['BEAT_BUDGET']:
-        # DUEL TERMS (RS-25): checked at the head of every beat, so a wound dealt in one beat stops the engagement
-        # before the NEXT beat opens. Inside the beat that dealt it, the later draws still run (the riposte graze,
-        # the bind loop, the contact axis), so both fighters can cross in one beat; `_terms_yielder` decides that.
-        # A pure read of the trackers: no draw, and under lethal terms (`terms is None`) not even the read, so
-        # the lethal fight is byte-identical.
-        if terms is not None and _terms_met(A, B, terms, cfg):
+        # DUEL TERMS (RS-25; B15.10 the BURST-BREAKER): checked at the head of every beat, so a wound gate taken in one beat cuts
+        # the round before the NEXT beat opens -- the round then ends and the yield roll comes (`_fight`). It reads a NEW crossing,
+        # the line crossed during THIS round (`wounds0`, taken at the round's start), never standing state: a man who fought on
+        # past the line would otherwise end every later round at its first beat. Inside the beat that dealt it, the later draws still
+        # run (the riposte graze, the bind loop, the contact axis), so both fighters can cross in one beat; the tie rule decides that.
+        # A pure read of the trackers: no draw, and under lethal terms (`terms is None`) not even the read.
+        if terms is not None and _terms_met(A, B, terms, cfg, wounds0):
             _emit('separation', reason='terms'); return None, closed, 'terms'
         beats+=1
         # CONDITIONAL TEMPO (correction 2): recompute each beat with current fatigue — grip/stance/fatigue change
@@ -549,43 +554,69 @@ class Yield:
     def __init__(self, by, turn=1, accepted=True, objective_contested=False):
         self.by, self.turn, self.accepted, self.objective_contested = by, int(turn), bool(accepted), bool(objective_contested)
 
-# ── DUEL TERMS (RS-25, plan position PC-10a) ─────────────────────────────────────────────────────────────────────
-# Jordan 2026-10-14: "a duel doesn't have to be lethal". The terms are agreed BEFORE the scene, like `Yield`, but unlike
-# it they REACT to the bouts: under a non-lethal term the fight stops when a fighter's own WoundTracker crosses it, and
-# that fighter yields. [ASSUMPTION; medium; Jordan to correct -- the three terms, the two stop rules and the threshold.
-# Revert: no terms; every fight is lethal, as before.]
-#   - 'death' : today's fight, unchanged -- runs to a felling or to UNRESOLVED. The default.
-#   - 'blood' : stops at the first WOUND (a wound gate crossed, `wt.wounds >= 1`), not at the first point of damage.
-#   - 'yield' : stops when Health falls to `CFG['YIELD_HEALTH_FRAC']` of full (`wt.health_remaining`).
-# The stop rides the result exactly as an accepted `Yield` does: a `yield` trace event (with `terms` beside it), the
-# opponent's result, and no further roll -- so `fight.py::_surrender` lifts it unchanged, and no
-# band is added (H-98). ⚠ What a term does NOT do: it does not reshape a blow. A strike that fells a fighter on the
-# beat it lands (a decisive blow crossing every gate, or the gate past the threshold) is a felling under any term;
-# the stop is read between beats, never inside a strike.
+# ── DUEL TERMS (RS-25, plan position PC-10a; B15.10 the yield is a roll) ───────────────────────────────────────────
+# Jordan 2026-10-14: "a duel doesn't have to be lethal". The terms are agreed BEFORE the scene, like `Yield`. Under every term a fighter
+# who takes a wound gate in a round makes ONE YIELD ROLL at its end (`_yield_roll`, A-24): the term sets only how hard it is to fight on,
+# `cfg['YIELD_OB'][terms]`; his Spirit and his wounds are levels on it and the host's `decisiveness` a σ. Failure: he yields, STANDING, through
+# the `yield` trace event `fight._surrender` lifts (the opponent's result, no riposte: a lucky blow cannot turn a fight he has given up);
+# Partial: he is shaken (`CONC_DRAIN_LOSS`) and fights on; Success: he fights on; Overwhelming: he rallies (Concentration full).
+# [ASSUMPTION; medium; Jordan to correct -- the three terms, the roll, the bands and `YIELD_OB`'s values. Revert: no roll; the fighter who
+# crosses the term's line yields, always, and `death` never yields.]
+#   - 'death' : the fight runs to a felling or to UNRESOLVED, or until a yield roll fails. The default. It never cuts a round.
+#   - 'blood' : the round is cut between beats when a fighter takes a wound gate (the burst-breaker).
+#   - 'yield' : the round is cut between beats when a fighter takes a wound gate at or below `CFG['YIELD_HEALTH_FRAC']` of full Health.
+# THE TERM'S LINE IS THE BURST-BREAKER'S, NEVER THE DECISION: it decides where a round is cut so the roll comes at the crossing, not after a
+# further burst of blows; whether he stops is the roll's. Acceptance: under `blood` and `yield` the terms are the acceptance (`accepted=True`);
+# under `death` the scene ends with the yielder standing and the event carries `accepted=None` -- what the other man does with an unresisting
+# man is the host's. ⚠ What a term does NOT do: it does not reshape a blow. A strike that fells a fighter on the beat it lands is a felling
+# under any term; the cut is read between beats, never inside a strike.
 DUEL_TERMS = ('yield', 'blood', 'death')   # closed set, this module's: the season's `duel_terms` and `challenge_terms` rosters are checked against it through the composition row `combat.duel_terms`, never re-declared
 LETHAL_TERMS = 'death'
+SPIRIT_LEVEL = 'minor'   # [ASSUMPTION; medium; Jordan to correct -- one `LEVEL_SIGMA` step a point of Spirit from the scale's mid-point, as the crisis and mortal `edge` rows (`rosters.yaml: capability_uses`) count their governing attribute; revert: delete the level, and the roll reads wounds and σ alone.]
+_UNHURT = SimpleNamespace(wt=SimpleNamespace(wounds=0))   # the unwounded party `wound_impairment` is read against: his own wounds are the only term
 
-def _terms_crossed(c, terms, cfg):
-    """True when Combatant `c` has crossed the non-lethal `terms`. A pure read of its tracker; no draw.
-    `cfg['YIELD_HEALTH_FRAC']` is the 'yield' term's fraction of full Health (config.CFG, so it is exported)."""
+def _gate_crossed(c, wounds0):
+    """True when `c` has taken a wound gate since `wounds0[c]` (the round's start): his tracker's wound count is higher. A pure read."""
+    return c.wt.wounds > wounds0[c]
+
+def _terms_crossed(c, terms, cfg, wounds0):
+    """True when Combatant `c` has crossed the non-lethal `terms` DURING THIS ROUND: he has taken a wound gate (`_gate_crossed`) and, under
+    'yield', his Health is at or below `cfg['YIELD_HEALTH_FRAC']` of full (`wt.health_remaining`). A pure read of its tracker; no draw."""
     if terms == 'blood':
-        return c.wt.wounds >= 1
+        return _gate_crossed(c, wounds0)
     if terms == 'yield':
-        return c.wt.health_remaining <= cfg['YIELD_HEALTH_FRAC'] * c.wt.health_full
+        return _gate_crossed(c, wounds0) and c.wt.health_remaining <= cfg['YIELD_HEALTH_FRAC'] * c.wt.health_full
     raise ValueError(f"terms {terms!r} is not a non-lethal term")
 
-def _terms_met(A, B, terms, cfg):
-    return _terms_crossed(A, terms, cfg) or _terms_crossed(B, terms, cfg)
+def _terms_met(A, B, terms, cfg, wounds0):
+    return _terms_crossed(A, terms, cfg, wounds0) or _terms_crossed(B, terms, cfg, wounds0)
 
-def _terms_yielder(A, B, terms, cfg):
-    """Which fighter yields once the terms are met: the one who crossed them; if both crossed on the same beat, the one
-    with the smaller fraction of Health left; on an exact tie, nobody -- honour is even, and the fight ends UNRESOLVED
-    (the ruled outcome, Jordan 2026-06-02), with no yield. Called only after `_terms_met`."""
-    a, b = _terms_crossed(A, terms, cfg), _terms_crossed(B, terms, cfg)
-    if a != b:
-        return A if a else B
+def _terms_yielder(A, B, failed):
+    """Which fighter yields once the rolls are made: the one who failed his; if both failed in the same round, the one with the smaller
+    fraction of Health left; on an exact tie, nobody -- honour is even, and the fight ends UNRESOLVED (the ruled outcome, Jordan
+    2026-06-02), with no yield. `failed` is the fighters whose yield roll failed, at least one."""
+    if len(failed) == 1:
+        return failed[0]
     fa, fb = (c.wt.health_remaining / c.wt.health_full for c in (A, B))
     return A if fa < fb else B if fb < fa else None
+
+def _spirit_levels(c):
+    """`(levels for, levels against)` the yield roll from his Spirit: the signed WHOLE steps of `c.spirit` from the attribute scale's mid-point
+    (`attributes.NEUTRAL['spirit']`, the spec's centring value: this module reads no registry, A-25), each one `SPIRIT_LEVEL` for him above it and
+    against him below (a half step is no step)."""
+    n = math.trunc(c.spirit - ATTR.NEUTRAL['spirit'])
+    return ([SPIRIT_LEVEL] * n, []) if n > 0 else ([], [SPIRIT_LEVEL] * -n)
+
+def _yield_roll(c, terms, sigma, cfg, draw):
+    """THE YIELD ROLL (B15.10, `PC_A`, A-24): one roll through `core.resolve` (the owner ladder), returning the degree; the caller applies
+    the band. The pool is the one pool rule on his skill score and no addends (`_pool_dice`), the obstacle `cfg['YIELD_OB'][terms]`, the net σ
+    his Spirit as levels (`_spirit_levels`) plus how hurt he is as a level against him (`S.wound_impairment`'s per-wound term, the channel the
+    exchange uses, read against an unhurt man) plus `sigma`, the host's `decisiveness` for him. `draw` is the keyed `Draw` of
+    `"yield:<scene>:<round>:<party>"`. Draws only from `draw`; mutates nothing."""
+    pool = max(1, _pool_dice(c, cfg, addends=0))
+    net_sigma = core.SL.levels_to_net_sigma(*_spirit_levels(c)) + S.wound_impairment(_UNHURT, c, cfg) + sigma
+    deg, _net = core.resolve(pool, net_sigma, draw, cfg['YIELD_OB'][terms])
+    return deg
 
 # ── THE PER-TURN CHOICE (v10 REM-31, IN-46: the grid mode's suspension) ──────────────────────────────────────────────
 # A PLAYABLE fight hands each turn's choice to a DECIDER, a parameter (never a module attribute: the way `_TRACE` was
@@ -601,24 +632,25 @@ def _terms_yielder(A, B, terms, cfg):
 ENGAGE, WITHDRAW = 'engage', 'withdraw'
 TURN_CHOICES = (ENGAGE, WITHDRAW)   # closed set, this module's: the host's decider is checked against this tuple
 
-def fight(A, B, cfg, rng, max_bouts=12, yield_decl=None, terms=LETHAL_TERMS, decide=None, trace=None):
+def fight(A, B, cfg, rng, max_bouts=12, yield_decl=None, terms=LETHAL_TERMS, decide=None, trace=None, decisiveness=(0.0, 0.0)):
     """One scene (`_fight`, below). `cfg` and `rng` take no default: a missing stream is a signature error at the call site,
     not a branch (B14.20); `cfg=None` is passed on purpose and means the engine's own `CFG`; pass a keyed
     `Draw` (`draw.seeded(...)`) for `rng`. `trace` is a callable(event: dict) the engine binds to `_TRACE` for the call and
-    restores after it, on every exit; `None` leaves `_TRACE` as it stands (a caller that still holds it bound is not undone)."""
+    restores after it, on every exit; `None` leaves `_TRACE` as it stands (a caller that still holds it bound is not undone).
+    `decisiveness` is the host's σ for each party's yield roll, `(A's, B's)` (B15.10; `PersonalCombatInput.decisiveness`)."""
     global _TRACE
     prev = _TRACE
     if trace is not None:
         _TRACE = trace
     try:
-        return _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide)
+        return _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide, decisiveness)
     finally:
         _TRACE = prev
 
-def _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide):
+def _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide, decisiveness=(0.0, 0.0)):
     if terms not in DUEL_TERMS:
         raise ValueError(f"terms {terms!r} is not one of {DUEL_TERMS}")
-    stop = None if terms == LETHAL_TERMS else terms   # None: the lethal fight takes neither the check nor its read
+    stop = None if terms == LETHAL_TERMS else terms   # None: the lethal fight never cuts a round (`engagement` takes no terms); the yield roll below reads `terms`
     if yield_decl is not None:
         if not (yield_decl.by is A or yield_decl.by is B):
             raise ValueError("Yield.by must be the A or B Combatant passed to fight (compared by identity)")
@@ -634,7 +666,7 @@ def _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide):
     _emit('fight_start', A=A.label, B=B.label, weapon_A=A.weapon, weapon_B=B.weapon,
           armor_A=A.armor, armor_B=B.armor, tradition_A=A.tradition, tradition_B=B.tradition)
     result=0
-    scene=rng.n   # the stream's ordinal where this fight begins: it keys the fight's per-blow coverage-gap draws (`engagement._strike`), so a caller that reuses one `Draw` for many fights (a workbench loop) gets a fresh gap sequence per fight; a host's per-fight key begins at 0
+    scene=rng.n   # the stream's ordinal where this fight begins: it keys the fight's per-blow coverage-gap draws (`engagement._strike`), its riposte and its yield rolls, so a caller that reuses one `Draw` for many fights (a workbench loop) gets a fresh gap sequence per fight; a host's per-fight key begins at 0
     prev_closed=False   # measure state threaded across engagements (ED-PC-0033): a reach weapon only re-presents at open measure if it can hold a crowding opponent off; the first engagement always opens at measure
     for turn in range(max_bouts):   # each iteration = ONE round (A-101); victor emerges over MULTIPLE turns with persistent wounds/fatigue. fight() is the multi-turn SIM harness (runs to a decision for win-rates); the GAME calls one engagement per turn.
         if yield_decl is not None and yield_decl.turn == turn+1:   # PHASE 1: the declaration precedes every draw of its turn
@@ -655,21 +687,34 @@ def _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide):
                 break            # result is 0 here (a felling breaks with a result set): UNRESOLVED, no riposte draw
         first = A if rng.random()<0.5 else B
         _emit('turn_start', turn=turn+1, first=first.label)
+        wounds0 = {A: A.wt.wounds, B: B.wt.wounds}   # the round's opening wounds: a wound gate crossed since is the yield roll's licence (B15.10)
         loser, prev_closed, ended_by = engagement(A,B,first,cfg,rng,prev_closed,terms=stop,turn=turn+1,scene=scene)
         _emit('engagement_end', turn=turn+1, felled=(loser.label if loser is not None else None), ended_by=ended_by)
         if loser is not None:
             result = -1 if loser is A else 1   # +1 => A won
             break
-        if stop is not None and _terms_met(A, B, stop, cfg):
-            # THE TERMS ARE MET (RS-25): the fighter who crossed them yields, standing. It is the accepted-`Yield` ending
-            # -- the same `yield` event `fight._surrender` lifts, the opponent's result (no felling, so no riposte: a lucky blow
-            # cannot turn a fight the terms have already closed) -- read at the END of the turn the terms were met in,
-            # where a declared `Yield` is read at the start of its turn. An exact tie yields nobody: UNRESOLVED.
-            yielder = _terms_yielder(A, B, stop, cfg)
+        failed = []
+        for side, c in (('A', A), ('B', B)):
+            if not _gate_crossed(c, wounds0):
+                continue
+            # THE YIELD ROLL (B15.10, A-24): at the end of the round in which he took a wound gate, once, the party's own keyed sub-draw (a function of the
+            # fight's key, the round and the party, never of how many uniforms the stream has taken: B15.05's form).
+            deg = _yield_roll(c, terms, decisiveness[0 if c is A else 1], cfg, KD.seeded(KD.H2(rng.key, f"yield:{scene}:{turn+1}:{side}")))
+            if deg == 'fail':
+                failed.append(c)
+            elif deg == 'partial':
+                c.conc = max(0, c.conc - cfg['CONC_DRAIN_LOSS']); _emit(V.EV_SHAKEN, turn=turn+1, by=c.label)
+            elif deg == 'overwhelming':
+                c.conc = c.conc_max; _emit(V.EV_RALLIED, turn=turn+1, by=c.label)
+        if failed:
+            # A FAILED ROLL ENDS THE SCENE with the yielder standing: the `yield` event `fight._surrender` lifts, the opponent's result (no felling, so no
+            # riposte), read at the END of the round where a declared `Yield` is read at the start of its turn. Two failures in one round: the smaller fraction of
+            # Health yields; an exact tie yields nobody and the fight ends UNRESOLVED.
+            yielder = _terms_yielder(A, B, failed)
             if yielder is None:
                 _emit('fight_result', result=0, winner=None)
                 return 0
-            _emit('yield', turn=turn+1, by=yielder.label, accepted=True, refused=None, terms=stop)
+            _emit('yield', turn=turn+1, by=yielder.label, accepted=(None if terms == LETHAL_TERMS else True), refused=None, terms=terms, degree='fail')
             result, winner = (-1, B) if yielder is A else (1, A)
             _emit('fight_result', result=result, winner=winner.label)
             return result

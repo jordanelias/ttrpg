@@ -316,7 +316,7 @@ def test_fell_to_hand_names_the_prevailing_party(monkeypatch):
     assert checked >= 100, (checked, fought_n)
     # the pairing stands for every other case: the subject felled, the bystander still names the actor
     others = 0
-    for i in range(60):
+    for i in range(100):   # was 60: a failed yield roll ends a lethal fight with both alive (B15.10), so fewer scenes fell the subject
         w, _d, _declared, fought, _out = _fought(f"h{i}", fan="total", witness=True, obs="total")
         if "p_mid" not in w.persons and "p_low" in w.persons:
             assert not [o for e in fought for o in e.observed if o.predicate == "fell_to_hand"], i

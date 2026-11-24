@@ -346,6 +346,8 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
     (CP-T03-04, `rosters.yaml: verb_capability`); a person holding no such key reads the untrained score `pool_default`.
     [ASSUMPTION; medium; Jordan to correct; revert: delete the design file; history stays] -- the CR-85 design is UNRATIFIED (ED-IN-0351).
 
+    B15.10 (PC_A): `decisiveness` is each party's `person_q.decisiveness`, the yield roll's σ.
+
     B15.07 (PHY_A A3): `mortal` is each party's mortal-wound operands (`_mortal_operands`) at the fight's terms, always filled; the module draws
     them for a party the scene fells. `mortal_keyed=False` (`fight_estimate`) carries no dealt key, so a sampled estimate draws its mortal rolls
     off its own private stream and its shares are the dealt fight's distribution, the draw included."""
@@ -372,6 +374,10 @@ def combat_input(w: Any, claimants: list, verb: str, record: Optional[str] = Non
         # no `person.died` (no party is Felled to license it), so the control runs with no draw -- a felling is the death, as before B15.07.
         mortal=() if w.fixtures.get("wound_harm_model") == "total" else tuple(
             _mortal_operands(w, pid, (a_id, b_id), terms or PersonalCombatInput.terms, mortal_keyed, cause) for pid in (a_id, b_id)),
+        # B15.10 (PC_A, A-24; B10's reader `person_q.decisiveness` is in the tree): each party's σ for the yield roll, read as the development sheet
+        # reads it (`decision/sheet.py`: at the chooser's scar shift, hold and mass), so one quantity has one reading. The dealt party's own, never the believer's picture.
+        decisiveness=tuple(person_q.decisiveness(p, w.fixtures.get("scar_weight_shift"), hold=w.fixtures.get("scar_hold"),
+                                                 mass=w.fixtures.get("scar_primary_mass")) for p in (pa, pb)),
         # PC-06 K-1: the attributes each party HOLDS (authored or drawn), whenever either party holds any -- under the
         # shipped build (`cast_attributes=True`) every person does, so this always passes them; the field's default (the
         # record as it was) is reached only where neither holds one.

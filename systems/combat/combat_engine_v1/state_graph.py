@@ -29,6 +29,7 @@ TRACE_KINDS = {
     'turned',   # PC_D (B15.05): a blow struck against a harness that dealt nothing (`wound` carries `bare`: the blow reached a bare zone)
     'disengage',   # the closed-phase withdrawal attempt (ED-PC-0030): ok=True re-opens to measure, ok=False is pursued
     'withdraw',    # REM-31: the decider's early UNRESOLVED exit, taken at the head of a turn
+    'shaken', 'rallied',   # B15.10: the yield roll's Partial and Overwhelming bands (`vocabulary.YIELD_ROLL_EVENTS`); no state of their own (they fall between rounds)
 }
 
 # Separation reasons the engine can emit (wrapper.engagement `return None` sites). The dynamic coverage check

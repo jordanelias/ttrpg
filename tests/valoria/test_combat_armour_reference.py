@@ -122,7 +122,7 @@ def _success_blows(armor, fights):
 def test_success_against_heavy_has_more_than_one_damage_value():
     """Gate 1: a Success against plate is not one number, and the share of landed blows that draw no blood is higher
     against plate than against bare skin by more than the interval (it was one value, and nothing but the defence coin)."""
-    heavy, bare = _success_blows('heavy', 150), _success_blows('none', 150)
+    heavy, bare = _success_blows('heavy', 250), _success_blows('none', 250)   # 250 fights: a yield ends a lethal fight early (B15.10), so 150 held fewer than 100 Successes
     assert len(heavy) >= 100 and len(bare) >= 100
     assert len(set(heavy)) > 1, sorted(set(heavy))
     p_heavy, p_bare = sum(v == 0 for v in heavy) / len(heavy), sum(v == 0 for v in bare) / len(bare)

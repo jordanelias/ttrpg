@@ -41,7 +41,7 @@ SPEC = (
     AttributeSpec('agi', 4, 4, 'attr.body.agility', IN_FLUX),
     AttributeSpec('end', 4, None, 'attr.body.endurance', IN_FLUX),
     AttributeSpec('att', 3, None, 'attr.mind.perception', IN_FLUX),
-    AttributeSpec('spirit', 3, None, 'attr.spirit.will', IN_FLUX),
+    AttributeSpec('spirit', 3, 4, 'attr.spirit.will', IN_FLUX),   # neutral 4: B15.10's yield roll counts Spirit in whole steps from the 1-7 scale's mid-point (`wrapper._spirit_levels`), as Strength and Coordination centre on it
     AttributeSpec('focus', 3, 3, 'attr.mind.focus', IN_FLUX),
     AttributeSpec('disp', 4, 4, None, IN_FLUX),
 )

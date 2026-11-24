@@ -242,7 +242,7 @@ def fight(inp: PersonalCombatInput, rng: Draw,
     # why the scene may be recorded without perturbing it. `wrapper.fight` binds the hook from `trace` and restores it itself.
     bouts = {} if max_bouts is None else dict(max_bouts=max_bouts)
     wrapper.fight(A, B, cfg=_fight_cfg(inp, cfg), rng=rng, terms=terms, decide=turn_choice, trace=trace.append,
-                  **bouts)   # the integer it returns is not lifted
+                  decisiveness=inp.decisiveness or (0.0, 0.0), **bouts)   # the integer it returns is not lifted; B15.10: the yield roll's σ
 
     wounds = {pid: pw for pid, pw in ((a_id, _party_wounds(A)), (b_id, _party_wounds(B))) if pw is not None}
     shape = scene_shape(trace, (a_id, b_id), {pid: pw.health_full for pid, pw in wounds.items()})
