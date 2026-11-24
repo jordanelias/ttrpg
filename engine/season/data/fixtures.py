@@ -1171,6 +1171,15 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `None`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-611 -- site: Fixtures provisional_term, graded `assumption`; BIND_C proposes 2 and no document derives it, so it is injected at the control (None: Partial reads as Success) and swept None / 1 / 2 / 4]
     provisional_term=None,             # `H-611`, swept None (control, SHIPPED) / 1 / 2 (proposed) / 4
+    # `H-612` (B21.23; `06_FA_decree_binds` edit 4). HOW MANY SEASONS OF SUSPICION OPEN A WRIT-MAKER'S RECALL: `queries/person_q.py::suspicion_of`
+    # (his own ledger's count of the seasons a person withheld compliance on a writ he made, less those he only obeyed in, floored at zero)
+    # reaching this number puts the person and each seat of his that `may_revoke` admits on the maker's question as classed referents
+    # (`queries/world_q.py::recalls`). It opens the question and decides nothing: the recall is `revoke`'s resistible draw (A-24, A-47).
+    # `None` is the REVERT: the occasion is off and no question carries a recall. The design names a threshold and no number; its audit
+    # escape is worth two, so the threshold is read as above two.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `None`, the occasion off.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-612 -- site: Fixtures recall_suspicion, graded `assumption`; the design names a threshold and gives no number, so it ships at 3 (above its audit escape's two) and is swept 1 / 3 / 5, with None the revert]
+    recall_suspicion=3,                # `H-612`, swept 1 / 3 (SHIPPED) / 5; `None` the revert (the occasion off)
     # `H-427` (B05.21; T13 edit 1, edit 4, T5). WHETHER THE ARRANGEMENT ROW'S `proofs:` COLUMN FILTERS WHAT A SPEAKER'S PROOFS WEIGH: `off` -- every
     # deed claim counts (`world_q.proofs` as it was); `on` -- under a docketed row only the claims whose kind (`rosters.yaml: proof_kind_of_source`) the
     # row admits count, the rest weigh 0 (`sigma.py::_read_social_roll` passes the row's `proofs:`; `world_q` reads no arrangement itself).

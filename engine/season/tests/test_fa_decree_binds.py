@@ -229,3 +229,91 @@ def test_a_writ_to_the_issuers_superior_forms_no_comply():
     assert not world_q.commands(w, DUKE, SEAT, OTHER), "fixture: the Duke's seat commands the King"
     assert world_q.writs_addressed(w, other) == ()
     assert not _offered(w, OTHER, rec.id)
+
+
+# B21.23 (edit 4): SUSPICION IS A FOLD, AND DEFIANCE OPENS THE ISSUER'S RECALL -- `person_q.suspicion_of` counts the seasons in
+# which the writ-maker's own ledger holds a withheld answer, less those he holds only a given one (E11), floored at zero, and
+# `world_q.recalls` names the defier and his seats `may_revoke` admits once it reaches `Fixtures recall_suspicion`.
+
+STEWARD = "off_steward"
+DEFY, COMPLY = "evade / defy", "comply"
+
+
+def _recall_scene():
+    """The Duke's seat on the rung above a Steward's, in his faction (`rung_above_same_faction`), and `OTHER` the Steward."""
+    w, d = _world()
+    w.offices[STEWARD] = Office(STEWARD, "Steward", "S", ["issue"], faction="Valorsmark", revocation="rung_above_same_faction")
+    w.add_tenure(Tenure("t_fa_stw", OTHER, STEWARD, "hold", since=w.tick))
+    assert world_q.may_revoke(w, DUKE, SEAT, w.offices[STEWARD]), "fixture: the Duke's seat may strip the Steward's"
+    return w, d
+
+
+def _season(w, d, season, *answers):
+    """One season: the Duke issues a writ to `OTHER` for each answer, and `OTHER` answers it (`comply` or `evade / defy`)."""
+    w.tick = season
+    for n, verb in enumerate(answers):
+        key = f"fa_s{season}_{n}"
+        rec = _issue(w, d, key=key)
+        out = _resolve(w, d, Act(id=f"{key}_ans", actor=OTHER, verb=verb, payload={"subject": rec.id}))
+        assert EMITS[verb] in [e.kind for e in out], [e.kind for e in out]
+        d.witness(mint_token(w, WriteClass.INTERIOR), out)
+
+
+def _recall_named(w):
+    """Does the question the Duke is next delivered carry the Steward as a `Person` and his seat as an `Office` referent?"""
+    qs = world_q.questions_for(w, w.persons[DUKE])
+    return any(OTHER in q.referents_for("Person") and STEWARD in q.referents_for("Office") for q in qs)
+
+
+def test_suspicion_floors_at_zero_and_a_complied_season_delays_the_recall():
+    """Edit 4, D6 and E11: at the shipped 3 the Duke's question names the Steward and his seat after three defied seasons, and
+    not before; a complied season between them delays it by one; the cap is one a season; the fold floors at zero; and the
+    recall names only a seat `may_revoke` admits. At the sweep arm 1, one withheld answer is enough; at `None` (the revert) the
+    occasion is off."""
+    from ..queries import person_q
+
+    def sus(w):
+        return person_q.suspicion_of(w.persons[DUKE], OTHER)
+    w, d = _recall_scene()
+    assert w.fixtures.get("recall_suspicion") == 3, "the shipped value"
+    checked = 0
+    for season in (0, 1):
+        _season(w, d, season, DEFY)
+        assert sus(w) == season + 1 and not _recall_named(w), season
+        checked += 1
+    _season(w, d, 2, DEFY)
+    assert sus(w) == 3 and _recall_named(w) and world_q.recalls(w, w.persons[DUKE]) == (OTHER, STEWARD)
+    # a seat the Duke's may not strip is not named (the gate's own predicate): the Steward also sits on the Crown
+    w.offices["off_crown"] = Office("off_crown", "King", "R", ["confer", "revoke"], faction="Valorsmark")
+    w.add_tenure(Tenure("t_fa_crown", OTHER, "off_crown", "hold", since=w.tick))
+    assert not world_q.may_revoke(w, DUKE, SEAT, w.offices["off_crown"])
+    assert world_q.recalls(w, w.persons[DUKE]) == (OTHER, STEWARD)
+    # E11: a complied season in between delays the recall by one season
+    w, d = _recall_scene()
+    for season, verb in enumerate((DEFY, COMPLY, DEFY, DEFY)):
+        _season(w, d, season, verb)
+        checked += 1
+    assert sus(w) == 2 and not _recall_named(w), "defy, comply, defy, defy: three less one"
+    _season(w, d, 4, DEFY)
+    assert sus(w) == 3 and _recall_named(w)
+    # the cap: two withheld answers in one season count once
+    w, d = _recall_scene()
+    _season(w, d, 0, DEFY, DEFY)
+    assert sus(w) == 1
+    # the floor: obedience banks no credit below zero
+    w, d = _recall_scene()
+    _season(w, d, 0, DEFY)
+    for season in (1, 2, 3):
+        _season(w, d, season, COMPLY)
+    assert sus(w) == 0
+    _season(w, d, 4, COMPLY)
+    assert sus(w) == 0 and not _recall_named(w)
+    # the sweep arm and the revert, on one season's defiance
+    w, d = _recall_scene()
+    _season(w, d, 0, DEFY)
+    assert not _recall_named(w)
+    w.fixtures = w.fixtures.sweep("recall_suspicion", 1)
+    assert _recall_named(w)
+    w.fixtures = w.fixtures.sweep("recall_suspicion", None)
+    assert not _recall_named(w) and world_q.recalls(w, w.persons[DUKE]) == ()
+    assert checked >= 6

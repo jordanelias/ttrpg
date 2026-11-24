@@ -54,7 +54,9 @@ from ..data.verbs import (
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
 # the asker-first module (which may not import this one; this edge runs the other way).
-from .person_q import LedgerReader, OwnStateReader, addressed_to, content_said, intent_named, ledger_names
+from .person_q import (
+    COMPLIANCE_GIVEN, COMPLIANCE_WITHHELD, LedgerReader, OwnStateReader, addressed_to, content_said, intent_named, ledger_names,
+    suspicions)
 # v9 IN-57: `attention_key`'s tier 2 scores a deed claim by `deed_valence`, one owner per factor.
 from .person_q import (
     _seen_index, deed_valence, paired_deed_term, projected_axes)
@@ -3141,6 +3143,36 @@ def vacancies(w: World, p: Person) -> tuple:
                  if o.id not in held and any(may_fill(w, p.id, s, o) for s in seats))
 
 
+def recalls(w: World, p: Person) -> tuple:
+    """THE RECALL OCCASION (B21.23, `06_FA_decree_binds` edit 4; rulings A-24, A-47), `vacancies`' shape: for each person `other`
+    whose `person_q.suspicions` in `p`'s own ledger has reached `Fixtures recall_suspicion`, `other` (stamped `Person`) and each seat
+    he holds that `may_revoke` admits through one of `p`'s own seats (stamped `Office`), in that order, each person's seats by id.
+    Suspicion counts only the answers of persons the writ's issuing seat commands (`commands`, the A-22 basis `writs_addressed`
+    asks): `admit` hands it the command basis, so a writ to someone the seat does not command enters no count. `()` at
+    `recall_suspicion: None` (the revert), for a person with no seat of his own, and for nearly everyone else.
+
+    ⚠ IT OPENS THE ISSUER'S QUESTION AND DECIDES NOTHING (A-24, A-47): the recall itself is `revoke`'s resistible draw, the fold's. It
+    asks the gate's own `may_revoke`, so it names no SEAT the gate would refuse to have stripped through that seat. THE PERSON IS
+    NAMED EITHER WAY (the edit's own words: *"the person and each seat he holds that `may_revoke` admits"*): a defier none of whose
+    seats `p` may strip is an occasion with no `revoke` candidate on him. Resolver-side and read-only, as `vacancies`."""
+    threshold = w.fixtures.get("recall_suspicion")
+    if threshold is None:
+        return ()
+    mine = [t.object for t in w.seat_holds(p.id)]
+    if not mine:
+        return ()
+
+    def commanded(other, writ):
+        return commands(w, p.id, issuing_seat(w, writ), other)
+    out = []
+    for other, n in suspicions(p, commanded).items():
+        if n < threshold or other not in w.persons:
+            continue
+        seats = sorted({t.object for t in w.seat_holds(other) if any(may_revoke(w, p.id, s, w.offices[t.object]) for s in mine)})
+        out += [other, *seats]
+    return tuple(out)
+
+
 def seats_named(w: World, p: Person, named: Optional[frozenset] = None) -> tuple:
     """THE SEATS `p` HAS BEEN TOLD OF (IN-10 (a), #453 K-25 / `:524`), sorted by id: the Offices
     among `person_q.ledger_names(p.ledger)` -- a claim about the seat (chiefly the `tenure.opened`
@@ -3233,7 +3265,7 @@ def continuations(w: World, p: Person) -> tuple:
 # `terms.distorted` is not here: a construal is the construer's reading of the terms, after which he may still comply or
 # defy. Refused at import unless each is emitted by a row answering a writ kind (`data/verbs.py::RECORD_SUBKINDS_BY_VERB`),
 # so a renamed emission cannot leave the net reading a kind no answer writes.
-WRIT_ANSWERED_KINDS = frozenset({"compliance.given", "compliance.withheld"})
+WRIT_ANSWERED_KINDS = frozenset({COMPLIANCE_GIVEN, COMPLIANCE_WITHHELD})      # `person_q`'s two, which `suspicions` folds
 _unanswering = WRIT_ANSWERED_KINDS - {k for v, kinds in RECORD_SUBKINDS_BY_VERB.items()
                                       if kinds & RECORD_REFERENT_KINDS for k in VERB_TABLE[v].emits}
 if _unanswering:
@@ -4375,9 +4407,12 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # strand names), as the classes `World.class_of` gives them within `FLOW_STAKE_CLASSES` -- no `Flow` class, and
     # no chooser reads a flow's opening kind or last move. Read only when `Fixtures stamp_flow_stakes` is on (it
     # SHIPS ON, H-274; off, the output is byte-identical). "Never twice" is `_stamped`'s dedup.
+    # B21.23 (`06_FA_decree_binds` edit 4; A-24, A-47 [ASSUMPTION; medium; Jordan to correct; revert: `recall_suspicion` `None`,
+    # the occasion off]): AND, BESIDE THE VACANCIES, THE PERSONS WHOSE DEFIANCE OF HIS WRITS HAS REACHED THE THRESHOLD AND THE SEATS HE
+    # MAY STRIP FROM THEM (`recalls`), as `Person` and `Office`. The occasion only; the recall is `revoke`'s draw.
     told = ledger_names(p.ledger)
     founding = holdings_to_found(w, p)
-    added = (vacancies(w, p) + seats_named(w, p, told) + writs_addressed(w, p) + challenges_heard(w, p, told)
+    added = (vacancies(w, p) + recalls(w, p) + seats_named(w, p, told) + writs_addressed(w, p) + challenges_heard(w, p, told)
              + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + matters_awaiting(w, p) + larders_in_purview(w, p, told)
              + founding

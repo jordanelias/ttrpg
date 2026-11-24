@@ -7183,6 +7183,19 @@ rows:
     cite:      "THE PROPOSED VALUE AND THE SWEEP ARE `14_VERBS_BINDING_C_turnover.md` edit 1's (proposed 2, swept 1 / 2 / 4; 'the joint re-centring (OBS §4 step 5) or the story census sets it'); no reading is named that sets it, so it ships at the control. CONTROL: the realm content hash at seed 0 after one season is equal to its parent's, since nothing calls the constructor yet (B21.12's receipt). FALSIFIER: a non-`None` term returned at the control value, whereupon a Partial would differ from a Success before the setting is set."
     source:    "workplan v12 B21.12 (`14_VERBS_BINDING_C_turnover.md` commit C1; B21's H block slot 2)"
 
+  - id:        H-612
+    tier:      1
+    hole:      "HOW MANY SEASONS OF SUSPICION OPEN A WRIT-MAKER'S RECALL -- `recall_suspicion` (B21.23; `06_FA_decree_binds` edit 4, rulings A-24, A-47). `queries/person_q.py::suspicions` folds, from a person's own ledger, how many seasons another withheld compliance on a writ he made (at most one a season), less those the other only obeyed in (E11), floored at zero; nothing is stored. `queries/world_q.py::recalls` names the other and each seat of his that `may_revoke` admits through the maker's own seats on the maker's question, as classed referents, once the fold reaches this number. It opens the question and decides nothing: the recall is `revoke`'s resistible draw. The design names a threshold and gives no number; its audit escape is worth two, so the threshold is read as above two."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.recall_suspicion` the one home. READER: `engine/season/queries/world_q.py::recalls`, called by `questions_for` beside `vacancies`"
+    grade:     "assumption"
+    default:   "3 -- SHIPPED, the design's threshold read as above its audit escape's two [ASSUMPTION; medium; Jordan to correct; revert: None, the occasion off]: a maker whose suspicion of a commanded addressee reaches 3 carries that person and his strippable seats on his question"
+    site:      "Fixtures recall_suspicion, read by `queries/world_q.py::recalls` once per `questions_for` call (per person per lap); `None` returns `()` before any ledger is read"
+    sweep:     [1, 3, 5]
+    unblocks:  "`revoke` attempted in computed play on a seat whose holder defied the maker's own writ (R-04.a; the recall is its occasion), and a defiance that is answered (R-04.c2's loop); the recalled officer's answer, the `Submit to audit` escape and Bargain stay unbuilt (SC's hearing; A-63, A-64)"
+    cite:      "`06_FA_decree_binds.md` Exact edits 4 and Gate bullets 2 and 3 (at `recall_suspicion` 1, after a `compliance.withheld` the issuer's next delivered question carries the defier's seat as an `Office` referent; at the shipped 3 the same after three defied seasons on a hand-built world, and a complied season between them delays it by one); ED-IN-0046 (D5, the one-a-season cap), ED-IN-0047 (D6, the cumulative accrual and its symmetric counter, E11). CONTROL: `recall_suspicion: None` (the revert) leaves every question as it was, so the realm content hash equals B21.22's at seed 0, one season. FALSIFIER: a stored suspicion value anywhere (the fold reads the ledger and writes nothing), or a recall naming a seat `may_revoke` refuses. [ASSUMPTION; medium; Jordan to correct: that the count is over `Claim.when` seasons with one answer one event whoever repeats it; that the sum, not a running total, is floored at zero; that a writ to several addressees is attributed to none.] `engine/season/tests/test_fa_decree_binds.py::test_suspicion_floors_at_zero_and_a_complied_season_delays_the_recall`."
+    source:    "workplan v12 B21.23 (`06_FA_decree_binds.md` edit 4; B21's H block slot 3, UNDECIDED u-3)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

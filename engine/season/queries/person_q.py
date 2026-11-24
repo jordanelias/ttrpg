@@ -1919,6 +1919,59 @@ def addressed_to(said, pid) -> bool:
     return pid in (tuple(v) if isinstance(v, (list, tuple)) else ())
 
 
+#: THE TWO ANSWERS TO A WRIT, as the kinds `comply` and `evade / defy` emit (the claims a witness of the answer holds). The one home:
+#: `world_q.WRIT_ANSWERED_KINDS` is these two.
+COMPLIANCE_GIVEN, COMPLIANCE_WITHHELD = "compliance.given", "compliance.withheld"
+
+
+def suspicions(p: Person, admit=None) -> dict:
+    """SUSPICION AS A FOLD (B21.23, `06_FA_decree_binds` edit 4; D5 ED-IN-0046, D6 ED-IN-0047, E11; ED-IN-0343 to ED-IN-0345 --
+    a quantity that accumulates from events is a fold of them, not a stored value): `{other: suspicion}` for every person whose
+    answer to a writ `p` MADE `p`'s own ledger holds a claim of. Nothing is written, nothing is carried between reads.
+
+    A writ `p` made is one on which his ledger holds a content claim of his own doing (`Claim.doer`, stamped by WITNESS on the
+    maker's own deposits) naming exactly ONE addressee: the answer claim (`compliance.given` / `.withheld`) names the writ and not
+    its answerer, so a writ to several is attributed to no one (the pairing never guesses, `deed_doer`'s rule). Per person, over
+    SEASONS (`Claim.when`): plus one for each season in which he holds a claim that the person withheld compliance (at most one a
+    season, the ruled cap of D5), minus one for each season in which he holds a claim that the person complied and none that he
+    withheld (E11: *"a way to reduce suspicion by over-compliance"*), the sum floored at zero.
+    ONE ANSWER IS ONE EVENT, WHOEVER REPEATS IT (ED-IN-0322, *"one origin repeating itself doesn't carry more weight"*, read at the
+    count): claims of one writ's one answer from several origins (his own sighting, a told copy) are one answer, at the earliest
+    season he holds it [ASSUMPTION; medium; Jordan to correct; revert: count each origin's claim, `chain[0]` or the holder].
+    `admit(other, writ_id) -> bool`, when given, drops an answer it refuses: `world_q.recalls` passes the command basis, so a writ to
+    someone the issuing seat does not command enters no count (A-22; the Reconciled line of `06_FA_decree_binds`). Person-side
+    and World-free (AX-2), so the caller that holds a World supplies it; omitted, every answer counts."""
+    addressee = RECORD_CONTENT.get("addressee")
+    made = {}
+    for c in p.ledger:
+        if c.doer == p.id:
+            said = content_said(c)
+            to = said.get(addressee) if said is not None else None
+            if isinstance(to, (list, tuple)) and len(to) == 1:
+                made[c.subject] = to[0]
+    if not made:
+        return {}
+    answered: dict = {}          # (writ, kind) -> the earliest season he holds the answer from
+    for c in p.ledger:
+        if c.subject in made and c.predicate in (COMPLIANCE_GIVEN, COMPLIANCE_WITHHELD) and c.doer != p.id:
+            key = (c.subject, c.predicate)
+            answered[key] = min(answered.get(key, c.when), c.when)
+    given: dict = {}
+    withheld: dict = {}
+    for (writ, kind), when in answered.items():
+        other = made[writ]
+        if admit is None or admit(other, writ):
+            (withheld if kind == COMPLIANCE_WITHHELD else given).setdefault(other, set()).add(when)
+    return {o: max(0, len(withheld.get(o, ())) - len(given.get(o, set()) - withheld.get(o, set())))
+            for o in sorted(set(given) | set(withheld))}
+
+
+def suspicion_of(p: Person, other: str, admit=None) -> int:
+    """HOW FAR `p` BELIEVES `other` HAS DEFIED HIM (ordinary English: the belief that someone is disloyal or doing wrong) -- one
+    person's entry in `suspicions`, `0` for a person whose answers he holds no claim of. Computed when read, never stored."""
+    return suspicions(p, admit).get(other, 0)
+
+
 #: THE CONTENT KEY THAT SAYS WHAT A DOCUMENT IS ABOUT, PER RECORD KIND -- the key `rosters.yaml:
 #: record_sourced_operands` maps `subject` to for that kind (`terms` for a dispensation or petition,
 #: `proposition` for a faction sheet). The ONE owner of "what a document is
