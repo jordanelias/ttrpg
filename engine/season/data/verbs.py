@@ -319,6 +319,17 @@ class VerbRow:
         return ((self.counterparty,)
                 if self.counterparty and self.counterparty in KNOWN_PERSON_OPERANDS else ())
 
+    def commanded_operand(self) -> Optional[str]:
+        """THE OPERAND THIS ROW ORDERS -- the person the seat must command (B21.55, A-22) -- or `None` for a row that orders nobody.
+        The ONE owner `decision/options.py::operand_bags` reads. A TYPED row answers its cell's: the operand of a `basis`
+        conjunct under the `command` rule (`issue`'s `to`). An UNTYPED row, whose cell no clause can carry, answers `subject`
+        when `rosters.yaml: command_declines` names it (`dispatch`, whose predicate asks the same rule in the fold). Read off the
+        cell and the roster; no verb name."""
+        if self.requires_typed is not None:
+            ops = self.requires_typed.command_operands()
+            return ops[0] if ops else None
+        return "subject" if self.verb in COMMAND_DECLINES else None
+
     def precondition_evaluable(self, predicates) -> bool:
         """Can the fold evaluate this row's precondition: none at all, a typed cell, or a
         `predicates` (`loop/predicates.py::REQUIRES_PREDICATES`) entry. The ONE answer
@@ -2044,6 +2055,27 @@ def _load_held_document_declines(values: dict) -> dict:
 
 
 HELD_DOCUMENT_DECLINES = _load_held_document_declines(roster_map("held_document_declines", "values"))
+
+
+# B21.55 (`14_VERBS_BINDING_D` commit D2, A-22): the UNTYPED verbs whose `subject` is a person the seat must command
+# (`rosters.yaml: command_declines`, read in `decision/options.py::operand_bags` through `VerbRow.commanded_operand`;
+# `dispatch`). REFUSED AT IMPORT when a member names a verb the table lacks, one whose row is TYPED (its cell's `basis`
+# conjunct is the one owner of whom it orders) or one whose referent class is not `Person` (the subject is the man ordered).
+def _load_command_declines(values) -> frozenset:
+    """`rosters.yaml: command_declines`' `values`, checked and frozen -- refused per member (above)."""
+    out = frozenset(str(v or "") for v in (values or ()))
+    for v in sorted(out):
+        row = VERB_TABLE.get(v)
+        if row is None or row.requires_typed is not None or row.referent_class != "Person":
+            raise Forbidden(
+                f"`rosters.yaml: command_declines` names {v!r}, and the verb table carries no such verb, or its row is typed "
+                "or forms on no `Person` referent", "rosters.yaml",
+                needs="an untyped `verb_table.yaml` verb with `referent_class: Person`, whose subject is the man it orders",
+                law="B21.55 -- a typed row's `basis: command` conjunct says whom it orders; an untyped row's subject is the person")
+    return out
+
+
+COMMAND_DECLINES = _load_command_declines(roster("command_declines"))
 
 
 # v9 IN-12 step 13: the verbs a person forms only on a referent he holds a row against -- his own

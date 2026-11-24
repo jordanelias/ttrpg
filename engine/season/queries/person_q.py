@@ -2000,6 +2000,38 @@ def ledger_names(claims) -> frozenset:
     return frozenset(out)
 
 
+def commanded_read(p: Person) -> frozenset:
+    """WHOM `p` CAN READ AS COMMANDED -- the persons a seat of his may order, as his OWN state names them (B21.55, A-22; the
+    formation half of `queries/world_q.py::commands`, which decides at the fold). Person-side, `p.tenures` and `p.ledger` only (AX-2).
+
+    Empty for a person who holds no live `hold` (no seat, no one to order). Otherwise two readings, each over a claim he holds that
+    was not told him (`chain` empty: a retelling is a rumour, not what he saw):
+
+      * THE MEN SWORN -- a `(x, duty.taken, True)` claim: the oath's Event is anchored on the man who swore, so the claim names him;
+      * THE HOLDERS HE NAMES OF OTHER SEATS -- a `(S, hold, x)` claim (the shape `sworn_to_holder` and the gate's `Subject.seat` write),
+        for a seat `S` that is not one he sits in.
+
+    ⚠ TWO LIMITS, STATED, BOTH OVER-INCLUSIONS THE FOLD CORRECTS. (1) An oath's claim names the man and never the seat he swore to
+    (the Event's one change is the Tenure edge, whose id a person cannot read), so a man seen swearing to ANOTHER seat is read as
+    sworn here. (2) *Beneath his* is the rung's containment, the World's (`may_revoke`'s rule), so every other seat's named holder is
+    read, and an order up the chain is refused at the fold (`commands` is False for it) and not declined here. Neither widens the
+    fold: it narrows who is OFFERED an order. [ASSUMPTION; medium; Jordan to correct; revert: drop this reader and
+    `rosters.yaml: command_declines`, and `operand_bags` fans over every known person again.] A person is never his own man."""
+    seats = {t.object for t in p.tenures if t.kind == "hold" and t.live}
+    if not seats:
+        return frozenset()
+    out = set()
+    for c in p.ledger:
+        if c.chain:
+            continue
+        if c.predicate == "duty.taken" and c.value is True:
+            out.add(c.subject)
+        elif c.predicate == "hold" and c.subject not in seats and isinstance(c.value, str):
+            out.add(c.value)
+    out.discard(p.id)
+    return frozenset(out)
+
+
 def known_persons(claims, actor) -> tuple:
     """THE PERSONS THIS HOLDER KNOWS OF, from their OWN claims only -- sorted ids, never `actor`
     (telling workplan `T4`, `ED-IN-0282`). Three sources, and no other:

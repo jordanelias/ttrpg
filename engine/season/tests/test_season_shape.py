@@ -10264,6 +10264,11 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
     # pre-T4 derivation), with `tell` the row the fan was built for. The size of the set is not pinned.
     assert {"tell", "issue"} <= fanned and "petition" not in fanned, sorted(fanned)
     w, p = _t4_person(knows=("p_mid", "p_high", "p_king"))
+    # B21.55: `issue`'s `to` fans over the persons the issuer reads as commanded, so he sits in a seat and reads each as sworn (the control
+    # `petition` is unaffected, which is the point of this control).
+    p.tenures.append(Tenure("t_t4_seat", p.id, "off_t4", "hold", since=0))
+    for i, k in enumerate(("p_mid", "p_high", "p_king")):
+        p.ledger.append(Claim(f"c_sw{i}", p.id, k, "duty.taken", True, 0, "firsthand", 100, "own"))
     q = Question("q:t4c", "need", ("p_mid",))
     checked = 0
     for verb in ("petition",):

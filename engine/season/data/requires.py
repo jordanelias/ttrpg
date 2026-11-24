@@ -270,6 +270,11 @@ class Requirement:
         verb name (`decision/options.py::opening_set` is the reader)."""
         return ()
 
+    def command_operands(self) -> tuple:
+        """The operands a clause of form `basis` asks under the `command` rule (whom the seat may order), and `()` for every
+        other clause. Walks the TYPED FORM, so `VerbRow.commanded_operand` (B21.55, `operand_bags`' reader) never keys on a verb name."""
+        return ()
+
     def entity_operands(self) -> tuple:
         """The operand naming THE THING THE REQUIREMENT IS ABOUT -- what a Candidate's `subject`
         can bind, and nothing else. A Candidate is `(verb, subject, why)` and carries exactly one
@@ -531,6 +536,9 @@ class Basis(Requirement):
     def operands(self) -> tuple:
         return (self.of,)
 
+    def command_operands(self) -> tuple:
+        return (self.of,) if self.basis == "command" else ()
+
     def entity_operands(self) -> tuple:
         return (self.of,)
 
@@ -564,6 +572,9 @@ class AllOf(Requirement):
 
     def own_ledger_operands(self) -> tuple:
         return tuple(dict.fromkeys(o for c in self.clauses for o in c.own_ledger_operands()))
+
+    def command_operands(self) -> tuple:
+        return tuple(dict.fromkeys(o for c in self.clauses for o in c.command_operands()))
 
     def needs(self) -> frozenset:
         return frozenset().union(*(c.needs() for c in self.clauses)) if self.clauses else frozenset()
@@ -660,6 +671,9 @@ class TypedRequires:
 
     def own_ledger_operands(self) -> tuple:
         return self.requirement.own_ledger_operands()
+
+    def command_operands(self) -> tuple:
+        return self.requirement.command_operands()
 
     def needs(self) -> frozenset:
         return self.requirement.needs()

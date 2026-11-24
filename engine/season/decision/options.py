@@ -44,7 +44,7 @@ from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..queries.person_q import (
     BOND_STEM, PAIRED_KINDS, LedgerReader, OwnStateReader, addressed_to, attackers_of, content_kind, content_said,
-    decisiveness, held_against, known_persons, ledger_names,
+    commanded_read, decisiveness, held_against, known_persons, ledger_names,
     is_cell as _is_cell, lie_said_of, projected_axes, regard, said_of,
 )
 from ..state.carriers import Candidate, Claim, Person, Question, Record, View, fade_of
@@ -1367,7 +1367,15 @@ def operand_bags(p: Person, row: "VerbRow", q: "Question", subject,
     and a Record about anything else forms nothing here. A Record whose kind maps none of the fan's
     operands, or whose addressee is a known person's bag already, adds nothing (same act id,
     `data/verbs.py::act_key`). A row with no fan is untouched: its operands are what it is about."""
-    return _fanned_choices(row, _person_bags(p, row, q, subject, fx, seat, people, records, tick))
+    bags = _person_bags(p, row, q, subject, fx, seat, people, records, tick)
+    # B21.55 (`14_VERBS_BINDING_D` commit D2, A-22): A ROW THAT ORDERS A PERSON (`VerbRow.commanded_operand`: `issue`'s `to`, `dispatch`'s
+    # `subject`) FORMS ONLY ON THE ONES `p` CAN READ AS COMMANDED (`person_q.commanded_read`), so a seat's writ or order is not offered to a
+    # stranger the fold would refuse (`world_q.commands`, which still decides) and nobody orders himself. NARROWS and widens nothing.
+    ordered = row.commanded_operand()
+    if ordered is not None and bags:
+        commanded = commanded_read(p)
+        bags = [b for b in bags if b.get(ordered, subject if ordered == "subject" else None) in commanded]
+    return _fanned_choices(row, bags)
 
 
 def _fanned_choices(row: "VerbRow", bags: list) -> list:

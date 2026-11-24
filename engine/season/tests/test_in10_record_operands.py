@@ -88,6 +88,12 @@ def _knows(p, *who):
         p.ledger.append(Claim(f"k{p.id}{i}", p.id, x, "exists:Person", 1, 0, "firsthand", 100, "own"))
 
 
+def _reads_sworn(p, *who):
+    """B21.55: `issue`'s `to` fans over the persons the issuer reads as commanded (`person_q.commanded_read`), the men whose oath he saw."""
+    for i, x in enumerate(who):
+        p.ledger.append(Claim(f"sw{p.id}{i}", p.id, x, "duty.taken", True, 0, "firsthand", 100, "own"))
+
+
 def _formed(w, pid, q):
     p = w.persons[pid]
     return opening_set(p, assemble(p, q, 12), q, w.fixtures)
@@ -215,6 +221,7 @@ def test_in10_issue_fans_over_known_persons_so_terms_and_executor_separate():
     w, _ = _issue_world()
     p = w.persons[DUKE]
     _knows(p, "p_mid", "p_low")
+    _reads_sworn(p, "p_mid", "p_low")
     p.ledger.append(Claim("c_s", p.id, PROP, "exists:Proposition", 1, 0, "firsthand", 100, "own"))
     q = Question("q:s", "claim_landed", (PROP,), None, classes=((PROP, "Proposition"),))
     got = [c for c in _formed(w, DUKE, q) if c.verb == "issue"]
@@ -236,6 +243,7 @@ def test_in10_a_fanned_issue_folds_through_its_seat_to_a_writ_whose_terms_is_not
     w, d = _issue_world()
     duke = w.persons[DUKE]
     _knows(duke, "p_mid")
+    _reads_sworn(duke, "p_mid")
     duke.ledger.append(Claim("c_s", DUKE, PROP, "exists:Proposition", 1, 0, "firsthand", 100, "own"))
     q = Question("q:s", "claim_landed", (PROP,), None, classes=((PROP, "Proposition"),))
     (a,) = [a for a in _acts(w, DUKE, _formed(w, DUKE, q)) if a.verb == "issue"]

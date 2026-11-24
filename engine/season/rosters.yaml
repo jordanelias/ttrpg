@@ -2712,6 +2712,22 @@ rosters:
       pairs at seeds 0-2, 243 of them at lap 0.
     values: [forgive]
 
+  command_declines:
+    source: >-
+      B21.55 (`14_VERBS_BINDING_D` commit D2, A-22 *command*; `16_PESSIMIST_FA_C` edits 1-3): a seat's writ or order reaches only the
+      persons it commands (`queries/world_q.py::commands`, the one body), and a person forms the act only on a man he can read as
+      commanded.
+    note: >-
+      WHICH UNTYPED VERBS FORM ONLY ON A `subject` THE ACTOR READS AS COMMANDED -- a list of verbs. A TYPED row says it in its cell (a
+      `basis` conjunct under the `command` rule: `issue`'s `to`, which `VerbRow.commanded_operand` reads off the cell), so this roster
+      names only a row no cell can carry: `dispatch`, whose predicate (`loop/predicates.py::_req_dispatch`) asks the same
+      `world_q.commands` in the fold. Read in `decision/options.py::operand_bags`, person-side and World-free (AX-2), against
+      `queries/person_q.py::commanded_read` -- what his own ledger names. WHAT HE CANNOT READ STAYS THE FOLD'S REFUSAL: the roster
+      narrows formation and widens nothing, and `commands` still decides at the fold. ONE LOADER, `data/verbs.py::COMMAND_DECLINES`,
+      refused at import when a member names a verb the table lacks, a typed row, or a row whose `referent_class` is not `Person`.
+      [ASSUMPTION; medium; Jordan to correct; revert: empty `values`, and `operand_bags` fans `dispatch` over every referent again.]
+    values: [dispatch]
+
   lie_verbs:
     source: >-
       v11 CR-27 (B10-13), M9 taken (a) (`workplans/valoria_master_workplan_v11_part6.md` M9): the cell lie.
