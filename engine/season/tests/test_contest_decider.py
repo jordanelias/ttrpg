@@ -1,6 +1,6 @@
 """B10.57 (`IS-B2-CHAR-02` steps 1-5) -- ONE DECIDER FOR A CHOICE INSIDE A CONTEST: `decision/decider.py::make_decider(p, fx, draw, *, key, odds, bias, watch)` picks
 one of a view's `legal` values by the alignment cells of `(key, value)` (B10.56) and the person's own axis weights, as a DRAW whose odds his interior sets. Lane: the
-season loop. Planted persons, views and cells throughout (the shipped roster authors no choice cell, so no test reads it).
+season loop. Planted persons, views and cells throughout (the shipped roster authors two `retreat_at` cells at BA1.04, so a test that means "no cell" plants an empty block and none reads the shipped one).
 """
 from __future__ import annotations
 
@@ -34,9 +34,9 @@ def _weights(sign):
 
 
 def _plant(monkeypatch, sign, cell=None):
-    """A person whose only weight is `sign` on `_AXIS`; `cell` (`{value: weight}`) authored on `_KEY` through the loader, else none."""
+    """A person whose only weight is `sign` on `_AXIS`; `cell` (`{value: weight}`) authored on `_KEY` through the loader, else an empty block (never the shipped one)."""
     monkeypatch.setattr(CH, "project", lambda person, shift=0.0, **read: _weights(sign))
-    monkeypatch.setattr(V, "ALIGNMENT", V._load_alignment(choices={_KEY: {v: {_AXIS: w} for v, w in cell.items()}} if cell else None))
+    monkeypatch.setattr(V, "ALIGNMENT", V._load_alignment(choices={_KEY: {v: {_AXIS: w} for v, w in cell.items()}} if cell else {}))
     return Person(id="p_decider", name="d")
 
 

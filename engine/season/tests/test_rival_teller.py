@@ -1,7 +1,7 @@
 """B10.63 -- A RIVAL'S REPORT IS DISCOUNTED AS INTERESTED (`H-180`; `02_CHAR_relations_have_a_ground` edit 5).
 
 `teller_weight` multiplies a told claim's weight by `1 - rival_gain` when the HEARER holds the teller's own `bond:rivalry` claim on the claim's
-subject, told to him. Planted on `probes.tiny_world`: the shipped registry authors no relation, so no hearer holds such a claim."""
+subject, told to him. Planted on `probes.tiny_world`: the claim is planted, so the six relation rows the shipped registry authors since BA1.08 do not enter."""
 from __future__ import annotations
 
 from ..data.fixtures import DEFAULT_FIXTURES
