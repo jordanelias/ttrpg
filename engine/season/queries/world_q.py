@@ -81,7 +81,7 @@ from ..state.containment import descendants, edges_of, parent_of  # noqa: F401 -
 from ..state.containment import ancestry, home_map, home_of  # noqa: F401 -- re-exported
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
-from ..state.gate import BENCH_BASIS, may_determine, may_fill, purview_reaches, sits_over
+from ..state.gate import BENCH_BASIS, may_determine, may_fill, may_revoke, purview_reaches, sits_over
 # v11 CR-25: conjuncts (i) and (iv) of a founding, asked by `founds_over` below.
 from ..state.gate import holdings_of, in_holdings, seat_faction, seat_on_parent_of
 # ⚠ AND `sworn_to` BY THE SAME ROUTE (v9 IN-40, `H-101`): THE QUERY OF THE LIVE `oblige` EDGES SWORN
@@ -2681,6 +2681,36 @@ def establishment_of(w: World, office_id: str) -> list[str]:
     # v9 IN-40: the walk is `sworn_to`'s (`state/gate.py`, re-exported at the import block), shared with
     # `purview_reaches`' oblige clause, so *who is sworn to this seat* has one answer.
     return [t.subject for t in sworn_to(w, office_id) if t.subject in w.persons]
+
+
+def commands(w: World, actor: Optional[str], via: Optional[str], person_id: str) -> bool:
+    """THE COMMAND BASIS: WHOM A SEAT MAY ORDER (A-22). May `actor`, exercising `via`, order `person_id`?
+    Read-only; three classes, one disjunct each, every one composed on the relation that already owns it:
+
+      (i)   THE SWORN -- a live `oblige` to this seat (`establishment_of`), wherever he lives;
+      (ii)  THE HOLDER OF A SEAT THIS SEAT MAY REVOKE -- `may_revoke` over each seat he holds other than `via`
+            itself, so whom a seat may order and whom it may dismiss are one relation;
+      (iii) AN UNSEATED PERSON IN ITS LAND -- he holds no seat and the seat's purview reaches the place he lives
+            (`purview_reaches` of `place_of`).
+
+    A seated resident who is none of the three is NOT commanded by living in the seat's land: where a person
+    lives no longer decides whose man he is, and an order to a superior is a petition, not a writ. This is the
+    word *command basis* -- *whom a seat may order* -- and not *purview* (the rung a seat's ground covers,
+    `purview_reaches`, which `may_fill` and the rung referents keep).
+
+    ⚠ NO CALLER YET (B21.19): `issue`'s `basis: command` (B21.20) and `_req_dispatch` (B21.21) ask it. `actor` is
+    asked only by `may_revoke`, which refuses an actor not seated in `via`; the sworn and the land disjuncts read
+    the seat `via` names alone, as `purview_reaches` does (`04:332`: purview is asked of the seat exercised)."""
+    TRACE.query("commands", "resolver")
+    if via not in w.offices:
+        return False
+    seat = w.offices[via]
+    if person_id in establishment_of(w, via):
+        return True
+    held = w.seat_holds(person_id)
+    if any(may_revoke(w, actor, via, w.offices[t.object]) for t in held if t.object != via):
+        return True
+    return not held and purview_reaches(w, seat, place_of(w, person_id))
 
 
 def upkeep_of(w: World, office_id: str) -> int:
