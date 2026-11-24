@@ -1039,6 +1039,7 @@
           "faction": "Valorsmark",
           "remit_acts": [
             "issue",
+            "determine",
             "confer",
             "revoke",
             "convene",
@@ -1061,6 +1062,7 @@
           "faction": "Hafenmark",
           "remit_acts": [
             "issue",
+            "determine",
             "confer",
             "revoke",
             "convene",
@@ -1083,6 +1085,7 @@
           "faction": "Varfell",
           "remit_acts": [
             "issue",
+            "determine",
             "confer",
             "revoke",
             "convene",

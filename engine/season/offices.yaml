@@ -198,7 +198,7 @@ seats:
     rung:       {duchy: "Valorsmark"}
     body:       null
     faction:    "Valorsmark"
-    remit_acts: [issue, confer, revoke, convene, dispatch]
+    remit_acts: [issue, determine, confer, revoke, convene, dispatch]   # B21.53 (`16_PESSIMIST_FA_A` edit 3, A-37): a seat that dismisses may also pardon -- `pardon` asks the grant (`remit:determine`) and the ban's object (this seat), and the ban `revoke` opens is on this seat [ASSUMPTION; medium; Jordan to correct; revert: drop `determine`]
     conferral:  inheritance   # B21.51 (`16_PESSIMIST_FA_A` edit 1, A-19): the duchy passes with the throne -- `rosters.yaml: successions` lists `off_king`'s titles for it, and the one `succeed` that opens the throne opens it [ASSUMPTION; medium; Jordan to correct; revert: null]
     revocation: null
     holder:     "NPC-020"
@@ -211,7 +211,7 @@ seats:
     rung:       {duchy: "Hafenmark"}
     body:       null
     faction:    "Hafenmark"
-    remit_acts: [issue, confer, revoke, convene, dispatch]
+    remit_acts: [issue, determine, confer, revoke, convene, dispatch]   # B21.53 (A-37): a seat that dismisses may also pardon [ASSUMPTION; medium; Jordan to correct; revert: drop `determine`]
     conferral:  null
     revocation: rung_above_in_holdings   # Jordan 2026-10-12: strippable by the monarch only if the duchy is in their holdings
     holder:     "NPC-050"
@@ -224,7 +224,7 @@ seats:
     rung:       {duchy: "Varfell"}
     body:       null
     faction:    "Varfell"
-    remit_acts: [issue, confer, revoke, convene, dispatch]
+    remit_acts: [issue, determine, confer, revoke, convene, dispatch]   # B21.53 (A-37): a seat that dismisses may also pardon [ASSUMPTION; medium; Jordan to correct; revert: drop `determine`]
     conferral:  elected
     revocation: rung_above_in_holdings   # Jordan 2026-10-12: strippable by the monarch only if the duchy is in their holdings
     holder:     "NPC-052"

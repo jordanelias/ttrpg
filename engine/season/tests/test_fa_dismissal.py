@@ -106,3 +106,70 @@ def test_a_duke_commands_his_council_and_the_guild_comptroller_is_not_his():
         for seat in seats:
             assert commands(w, _holder(w, duke), duke, _holder(w, seat)), (duke, seat)
     assert not commands(w, _holder(w, "off_duchess_hafenmark"), "off_duchess_hafenmark", _holder(w, "off_guild_comptroller"))
+
+
+def _banned(w, who) -> bool:
+    return any(t.kind == "ban" and t.subject == who and t.object == DUCHY and t.live for t in w.tenures)
+
+
+def _dismissed(w, d, king, marshal, tag) -> bool:
+    """The King's `revoke` of the Marshal through the duchy, tried until it lands (a Failure writes nothing); True where it left the ban
+    (a Partial revocation unseats him without the disposal)."""
+    for attempt in range(6):
+        if "tenure.closed" in _resolve(w, d, Act(id=f"{tag}_rv_{attempt}", actor=king, verb="revoke", via=DUCHY,
+                                                payload={"subject": MARSHAL})):
+            break
+    return _banned(w, marshal)
+
+
+def test_dismiss_then_pardon_through_the_ducal_seat():
+    """G3 (B21.53). The King dismisses the Marshal through `off_duke_valorsmark`, which opens the permanent ban on that seat, and the
+    reappointment through the duchy is refused while it stands. The King then `pardon`s him through the SAME seat (undrawn until
+    `14_VERBS_BINDING_B`): `ban.ended`, and the reappointment opens (a `confer` is drawn, so tried until it lands). FALSIFIER: the duchy
+    without `determine` on its grant (the bench asks the grant and the object, not more): `pardon.refused` at every seed, the ban stands.
+    Read as a count over seeds."""
+    checked = pardoned = reappointed = 0
+    for seed in range(8):
+        w = build_realm(seed)
+        d = SeasonDriver(w)
+        king, marshal = _holder(w, THRONE), _holder(w, MARSHAL)
+        if not _dismissed(w, d, king, marshal, f"fa_pardon_{seed}"):    # a Partial revocation (no ban) or no landing: nothing to pardon
+            continue
+        checked += 1
+        assert _holder(w, MARSHAL) is None
+        for attempt in range(6):                        # the ban is read in the effect, after the draw: a Failure is "resisted", not "refused"
+            refused = _resolve(w, d, Act(id=f"fa_pardon_cf0_{seed}_{attempt}", actor=king, verb="confer", via=DUCHY,
+                                         payload={"subject": MARSHAL, "office": MARSHAL, "to": marshal}))
+            if refused != ["appointment.resisted"]:
+                break
+        assert refused == ["confer.refused"] and _holder(w, MARSHAL) is None, refused    # the ban bars the reappointment
+        kinds = _resolve(w, d, Act(id=f"fa_pardon_{seed}", actor=king, verb="pardon", via=DUCHY, payload={"subject": marshal}))
+        assert kinds == ["ban.ended"], kinds
+        pardoned += 1
+        assert not _banned(w, marshal)
+        for attempt in range(6):
+            kinds = _resolve(w, d, Act(id=f"fa_pardon_cf_{seed}_{attempt}", actor=king, verb="confer", via=DUCHY,
+                                       payload={"subject": MARSHAL, "office": MARSHAL, "to": marshal}))
+            assert "confer.refused" not in kinds, kinds
+            if "tenure.opened" in kinds:
+                assert _holder(w, MARSHAL) == marshal
+                reappointed += 1
+                break
+    assert checked >= 3 and pardoned == checked and reappointed >= 1, (checked, pardoned, reappointed)
+
+
+def test_pardon_through_off_king_still_refused():
+    """G3's control (B21.53). A ban stands on the revoking seat; `pardon` through `off_king`, which is not the ban's object, closes nothing
+    at any seed: the bench asks the grant AND the object. The ban stands."""
+    checked = 0
+    for seed in range(8):
+        w = build_realm(seed)
+        d = SeasonDriver(w)
+        king, marshal = _holder(w, THRONE), _holder(w, MARSHAL)
+        if not _dismissed(w, d, king, marshal, f"fa_pk_{seed}"):
+            continue
+        checked += 1
+        assert _resolve(w, d, Act(id=f"fa_pk_{seed}", actor=king, verb="pardon", via=THRONE, payload={"subject": marshal})) \
+            == ["pardon.refused"]
+        assert _banned(w, marshal)
+    assert checked >= 3, checked
