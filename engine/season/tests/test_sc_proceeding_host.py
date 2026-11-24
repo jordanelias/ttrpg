@@ -604,3 +604,141 @@ def test_an_arrest_still_resolves_on_the_single_roll(monkeypatch):
     spy = _Spy(monkeypatch)
     out = _seamed(w, "arrest", "a standing", to="p_other")
     assert out["status"] == "RESOLVED" and len(spy.rolls) == 1 and not spy.sittings and "proceeding" not in out, out
+
+
+
+# B24p.24 -- THE ARRANGER AND HIS RIG REACH THE BUILDER (V2 p2 §E, §H; p4 §F 19, §K C3): `_docket_item`'s two keys, `_eff_open_case`, `_eff_convene`,
+# `decision/options.py::rig_offer`, `seam/wrappers/sigma.py::arranged_by`.
+def _opened(w, d, key="oc", **payload):
+    """`open_case` on the party by the Duke, folded: `(its Event kinds, the matter's docket items)`."""
+    from .test_u7_remit import _fold, _kinds, _open
+    out = _fold(w, d, _open(key, **payload))
+    return _kinds(out), world_q.docketed(w, "p_mid")
+
+
+def test_an_opened_case_carries_its_arranger_and_rig():
+    """The docket item says who arranged the sitting and how hard: the opener, at the rig his act carried (none where it carried none); a level
+    outside `rig_levels` is declined and nothing is docketed; and a convening's rig stands for the sitting where the opener rigged none, the
+    opener's own where he did (V2 p2 §H, the convening seat). A convening that rigs nothing writes neither key on its Date."""
+    from .test_u7_remit import SEAT, _act, _fold, _kinds, _world as case_world
+    from ..data.matrix import WriteClass
+    from ..loop.driver import mint_token
+    for rig, want in ((0.5, 0.5), (1, 1.0), (None, 0.0)):
+        w, d = case_world()
+        kinds, (item,) = _opened(w, d, **({} if rig is None else {"rig": rig}))
+        assert kinds == ["case.opened"] and (item[world_q.DOCKET_ARRANGER], item[world_q.DOCKET_RIG]) == ("p_high", want), item
+    w, d = case_world()
+    kinds, items = _opened(w, d, rig=0.3)
+    assert kinds == ["case.refused"] and items == [], (kinds, items)                      # a level outside the roster is no rig
+
+    def sitting(w, d, **rig):
+        out = _fold(w, d, _act("cv", "convene", subject="S", **rig))
+        assert _kinds(out) == ["date.scheduled"], _kinds(out)
+        did, = [k for k, v in w.dates.items() if v.get("venue") == "S"]
+        w.tick += 1
+        d.calendar(mint_token(w, WriteClass.CALENDAR))                                       # the sitting fires and forms its empty slot
+        assert [x for x in w.docket if x.get("date") == did and x.get("matter") is None], w.docket
+        return did
+    w, d = case_world()
+    did = sitting(w, d)
+    assert "rig" not in w.dates[did] and "arranger" not in w.dates[did]                    # nothing rigged: the Date is what it was
+    w, d = case_world()
+    did = sitting(w, d, rig=1)
+    assert (w.dates[did]["arranger"], w.dates[did]["rig"]) == ("p_high", 1.0)
+    item, = _opened(w, d)[1]
+    assert (item["date"], item[world_q.DOCKET_ARRANGER], item[world_q.DOCKET_RIG]) == (did, "p_high", 1.0)          # the convener's rig stands
+    w, d = case_world()
+    sitting(w, d, rig=1)
+    item, = _opened(w, d, rig=0.5)[1]
+    assert item[world_q.DOCKET_RIG] == 0.5                                                  # the opener's own, where he rigged
+
+
+_SHIPPED_HEARING = S._hearing
+
+
+def _gap_world(weak=None, *, hearing=True, monkeypatch=None):
+    """The King (a realm seat on no bench) may open a case on `p_mid`, heard by the Duke's bench in the full legal trial; `weak` gives `p_mid` a seat of
+    that rung, so his power is the gap's other end. `hearing` plants the full row for the case's hearing: the shipped one is abridged and has nobody
+    but a party to decide, so there is nothing to tilt (V2 p4 §L 10)."""
+    from ..loop.driver import SeasonDriver
+    w = _world()
+    SeasonDriver(w)
+    _seat(w, "off_chancellor", "p_king", post="Chancellor", rung="R", scope=None)
+    if weak:
+        _seat(w, "off_weak", "p_mid", post="Clerk", rung=weak, scope=None)
+    w.persons["p_king"].ledger.append(Claim("c_knows", "p_king", "p_mid", "exists:Person", 1, 0, "firsthand", 100, "own"))
+    monkeypatch.setattr(S, "_hearing", (lambda w_: ("speak", (ROWS["legal_trial"], "full", None, None))) if hearing else _SHIPPED_HEARING)
+    return w
+
+
+def _rigs(w, **fx):
+    """The `rig` each `open_case` candidate the King forms on `p_mid` carries (`None` for one that carries none), through `opening_set`."""
+    from ..decision import opening_set
+    from ..state.carriers import Question, View
+    fixtures = w.fixtures
+    for name, value in fx.items():
+        fixtures = fixtures.sweep(name, value)
+    q = Question("q_rig", "need", ("p_mid",), "p_mid", classes=(("p_mid", "Person"),))
+    king = w.persons["p_king"]
+    v = View(king.id, [], fixtures.get("view_k"), q, odds=S.believed_odds_query(w, king))
+    return [c.operands.get("rig") for c in opening_set(king, v, q, fixtures) if c.verb == "open_case"]
+
+
+def test_rig_is_offered_only_over_a_power_gap(monkeypatch):
+    """A man of more power than the other party, before a bench that someone else sits, is offered a rig by the reckoning (the half, at the shipped
+    price); between equals, and where only a party decides, none; and a View that cannot ask offers none. CONTROL: the same King offers a rig at the
+    gap and not at the equal's seat, so what withholds it is the gap and not the verb."""
+    w = _gap_world(monkeypatch=monkeypatch)
+    assert _rigs(w) == [0.5]                                         # a gap of the realm's seat over nobody: the reckoning's half
+    equal = _gap_world("R", monkeypatch=monkeypatch)                  # the other party sits as high: no tilt, no price, no rig
+    assert _rigs(equal) == [None]
+    only_a_party = _gap_world(hearing=False, monkeypatch=monkeypatch)   # the shipped hearing: abridged, nobody but a party decides
+    assert _rigs(only_a_party) == [None]
+    from ..decision import opening_set
+    from ..state.carriers import Question, View
+    q = Question("q_rig", "need", ("p_mid",), "p_mid", classes=(("p_mid", "Person"),))
+    blind = View("p_king", [], w.fixtures.get("view_k"), q, odds=lambda act, bands: None)        # a query that answers odds and not arrangements
+    assert [c.operands.get("rig") for c in opening_set(w.persons["p_king"], blind, q, w.fixtures) if c.verb == "open_case"] == [None]
+
+
+def test_each_rig_level_is_best_somewhere(monkeypatch):
+    """V2 p4 §K C3, on the host's own readings: over the stakes a man may have in a matter and the power gaps he may hold over the other party, the
+    reckoning's best level is none somewhere, the half somewhere and the whole somewhere; the price is `rig_price x tilt^2` and it rises with the rig,
+    so no level is the best for being dearer. FALSIFIER: a price that fell as the rig rose would make the whole rig dominate wherever the half did."""
+    from ..decision import options as O
+    act = Act("x", "p_king", "open_case", payload={"subject": "p_mid"})
+    best, rising = set(), 0
+    for weak in (None, "S", "D"):
+        w = _gap_world(weak, monkeypatch=monkeypatch)
+        ask = S.believed_odds_query(w, w.persons["p_king"]).arranged
+        readings = {r: ask(act, r) for r in (0, 0.5, 1)}
+        price = w.fixtures.get("fold_rig_price")
+        costs = [-O.rig_worth(0.0, 0.0, readings[r][1], price) for r in (0, 0.5, 1)]          # what the reckoning charges, the stake and odds nothing
+        assert costs[0] == 0.0 < costs[1] < costs[2], costs                                  # monotone in the rig
+        rising += 1
+        best |= {O.best_rig(stake, readings, price) for stake in (0.25, 0.5, 1, 2, 4)}
+    assert rising == 3 and best == {0, 0.5, 1}, best
+
+
+def test_a_docketed_rig_reaches_the_card(monkeypatch):
+    """A docketed item's arranger and rig are what the act that hears it hands the builder (`arranged_by`, through `_contest` and `contest()`), and the
+    card the builder then derives from them names the tilt and the side it works against; an item with no rig names no arranger to the builder."""
+    from ..data.matrix import WriteClass
+    from ..loop.driver import SeasonDriver, mint_token
+    seen, real = [], S.proceeding_input
+    monkeypatch.setattr(S, "proceeding_input", lambda w_, claimants, **kw: (seen.append((kw.get("arranger"), kw.get("rig"))), real(w_, claimants, **kw))[1])
+    for rig, want in ((1.0, ("p_king", 1.0)), (0.0, (None, 0.0))):
+        w = _world()
+        d = SeasonDriver(w)
+        w.docket.append({"date": None, "matter": "p_mid", "arrangement": None, "petition": None, "arranger": "p_king", "rig": rig})
+        del seen[:]
+        d.resolve(mint_token(w, WriteClass.ACTS), [Act(id="a_speak24", actor="p_low", verb="speak", payload={"subject": "p_mid"})],
+                  contest_max_depth=w.fixtures.get("contest_max_depth"))
+        assert seen and set(seen) == {want}, (rig, seen)                                     # the pair the item holds, and nothing where it holds no rig
+    w = _world()
+    _seat(w, "off_chancellor", "p_king", post="Chancellor", rung="R", scope=None)
+    w.persons["p_king"].stance = [("p_low", 5, 5)]                                           # he favours the bearer: the side his tie takes
+    w.docket.append({"date": None, "matter": "p_mid", "arrangement": "legal_trial", "petition": None, "arranger": "p_king", "rig": 1.0})
+    arranger, rig = S.arranged_by(w, _act("speak", subject="p_mid"), "p_mid")
+    card = _build(w, row=ROWS["legal_trial"], arranger=arranger, rig=rig)[1]
+    assert (card.arranged_by, card.tilted_against) == ("p_king", "against") and card.tilt > 0, card

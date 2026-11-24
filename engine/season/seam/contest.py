@@ -181,9 +181,10 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             depth: int, max_depth: int, causes: list[str],
             *, verb: str = "", subject: Optional[str] = None,
             rng: Optional[Any] = None, effort: int = 0, host: Optional[Any] = None, via: Optional[str] = None,
-            act: Optional[Any] = None, topic: Optional[str] = None):
+            act: Optional[Any] = None, topic: Optional[str] = None, arranger: Optional[str] = None, rig: float = 0.0):
     """S39. EVERY ARGUMENT IS LOAD-BEARING.
 
+    `arranger` and `rig` (B24p.24) are the arrangement the docket gave the sitting (V2 p2 §H), passed to the provider with `proceeds=` and read on that path alone.
     `act` and `topic` (B24p.19) are the act the verb row's `proceeds:` cell is read for, and the matter it is about. WHERE THE ACT'S VERB ROW CARRIES
     `proceeds:`, the seam resolves `world_q.proceeding_row(w, act)` and hands the provider `proceeds=` and `topic=`, and the provider runs the
     proceeding entry whatever the prize row's `module_entry`: no verb is named, the branch is the row's cell. Every other act is called as before
@@ -263,7 +264,7 @@ def contest(w: World, rung: Optional[str], prize: Any, claimants: list[str],
             proceeds = {}
             if act is not None and getattr(VERB_TABLE.get(act.verb), "proceeds", ()):
                 try:
-                    proceeds = dict(proceeds=proceeding_row(w, act), topic=topic)
+                    proceeds = dict(proceeds=proceeding_row(w, act), topic=topic, arranger=arranger, rig=rig)
                 except Unspecified as no_row:
                     if no_row.where != "world_q.proceeding_row":
                         raise

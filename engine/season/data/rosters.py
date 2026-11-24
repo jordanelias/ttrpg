@@ -1627,6 +1627,14 @@ if STORM not in MARCH_POSTURES or not set(MARCH_POSTURES) <= {STORM, BESIEGE}:
         needs=f"a roster holding {STORM!r} (the default) and at most {BESIEGE!r} beside it",
         law="CP-T04-06 -- a posture is a way of meeting the opposing side that code reads; a name no code reads would "
             "be a posture nothing performs")
+# B24p.24 (V2 p2 §H): HOW HARD AN ARRANGER RIGS THE FORUM, a payload key (`RIG_KEY`) `open_case` and `convene` declare; the closed set is the
+# roster's, `0` first (no rig) and the levels above it the ones a chooser may offer. Refused at import for a roster that does not open on `0`.
+RIG_LEVELS = roster("rig_levels", ordered=True)
+RIG_KEY = "rig"
+if RIG_LEVELS[0] != 0 or list(RIG_LEVELS) != sorted(RIG_LEVELS):
+    raise Unspecified(
+        f"`rig_levels` is {list(RIG_LEVELS)!r}", "rosters.yaml -- rig_levels", needs="`0` first, then the levels in ascending order",
+        law="V2 p2 §H -- `rig` is the arranger's choice from none to full; a roster that does not open on none has no act that carries none")
 SUBTREE_OCCUPATION_KINDS = roster("subtree_occupation_kinds")
 RAZE_TARGET_KINDS = roster("raze_target_kinds")
 ARRIVAL_ONLY_KINDS = roster("arrival_only_kinds")

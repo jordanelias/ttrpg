@@ -2052,6 +2052,15 @@ def _load_choice_sourced(values: dict) -> dict:
 CHOICE_SOURCED = _load_choice_sourced(roster_map("choice_sourced", "values"))
 
 
+# B24p.24: THE VERBS THAT CARRY A `rig` (`rosters.yaml: rigged_verbs`, read in `decision/options.py::opening_set`). REFUSED AT IMPORT for a verb the
+# table lacks: an offer on a verb nothing performs would be a rig no effect writes.
+RIGGED_VERBS = frozenset(roster("rigged_verbs"))
+if not RIGGED_VERBS <= VERB_TABLE.keys():
+    raise Forbidden(
+        f"`rosters.yaml: rigged_verbs` names {sorted(RIGGED_VERBS - VERB_TABLE.keys())}, which the verb table lacks", "rosters.yaml",
+        needs="`verb_table.yaml` verbs whose effects read `rig`", law="B24p.24 -- a rig rides an act that writes the arrangement it sets")
+
+
 # v9 IN-12 step 10: `{verb: record kind}` -- the verbs a person does not form while he holds a document
 # of that kind whose content names him (`rosters.yaml: held_document_declines`, read in `opening_set`;
 # `conceal` while a cover is held). REFUSED AT IMPORT, `TERMS_SOURCED`'s reason: a verb the table lacks

@@ -22,7 +22,7 @@ from ..data.matrix import matrix_row
 from ..data.requires import RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS
 from ..data.rosters import (
     CHALLENGE_KIND, CHALLENGE_TERMS, CHALLENGER_KEY, COVER_KEY, COVER_KIND, FACTION_BY_PROP, ORDER_AT_KEY, ORDER_KIND,
-    ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, RECORD_CONTENT, RECORD_KIND_KEYS, STAKES_KEY,
+    ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, RECORD_CONTENT, RECORD_KIND_KEYS, RIG_KEY, RIG_LEVELS, STAKES_KEY,
     SUBTREE_OCCUPATION_KINDS, forge_quality_at,
 )
 from ..gaps import Forbidden
@@ -31,7 +31,7 @@ from ..queries import faction_q
 from ..queries.inputs import ArmyCommand
 from ..queries.person_q import ABOUT_KEYS, argued_pursuits, consequence_pursuits
 from ..queries.world_q import (
-    ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_PETITION, army_of, docketed, docketed_under,
+    ARMY, BAN_KIND, DETAIN_KIND, DOCKET_ARRANGEMENT, DOCKET_ARRANGER, DOCKET_PETITION, DOCKET_RIG, army_of, docketed, docketed_under,
     faction_holding, faction_of, hold_force, holder_faction_of, issuing_seat, place_of, restrained,
     siege_pressed_by, slot_for, works_for, works_target,
 )
@@ -188,13 +188,16 @@ def _declared_stages(w: "World", a: "Act") -> list:
     return stages
 
 
-def _docket_item(matter, arrangement, petition, date=None) -> dict:
+def _docket_item(matter, arrangement, petition, date=None, arranger=None, rig=0.0) -> dict:
     """ONE DOCKET ITEM AS AN ACT WRITES IT -- `World.docket`'s shape, the one owner for the two
     acts that put a matter before a room (`open_case` by remit, `carry` by right). `date` is the
     sitting's Date when the matter fills a slot CALENDAR formed (`_eff_open_case`, v9 SC-01
-    fired-slot step), else `None`: no sitting was convened for it."""
+    fired-slot step), else `None`: no sitting was convened for it. `arranger` and `rig` (B24p.24,
+    V2 p2 §H) are who arranged its sitting and how hard, a `rig_levels` member: the builder reads
+    them (`seam/wrappers/sigma.py::arranged_by`); `carry` arranges nothing and writes `None`, `0`."""
     return {"date": date, "matter": matter,
-            DOCKET_ARRANGEMENT: arrangement, DOCKET_PETITION: petition}
+            DOCKET_ARRANGEMENT: arrangement, DOCKET_PETITION: petition,
+            DOCKET_ARRANGER: arranger, DOCKET_RIG: rig}
 
 
 def _mint_document(w: "World", a: "Act", kind: str, content, rung: str,
@@ -411,6 +414,7 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     matter = _operand(a, "subject")
     d = a.payload if isinstance(a.payload, dict) else {}
     arrangement, petition = d.get(DOCKET_ARRANGEMENT), d.get(DOCKET_PETITION)
+    rig = d.get(RIG_KEY, 0)
     # A NAMED arrangement must be a row id (`str` first: a list or dict payload is unhashable and
     # `in ARRANGEMENTS` would raise) whose `disposes:` is a Tenure kind `determine` can open
     # (`DISPOSABLE_KINDS`) -- else the matter would dock and `determine` decline it forever, and
@@ -423,6 +427,10 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     if petition is not None and not (
             isinstance(petition, str) and getattr(w.records.get(petition), "kind", None) == "petition"):
         return NO_CHANGE
+    # B24p.24: THE OPENER'S ARRANGEMENT -- he arranges the sitting of the case he opens, `rig` a `rig_levels` member (a level outside it, or one that
+    # is no number, is declined like a bad arrangement: the item would carry a rig no builder can read).
+    if isinstance(rig, bool) or not isinstance(rig, (int, float)) or rig not in RIG_LEVELS:
+        return NO_CHANGE
     if docketed(w, matter) or d.get("record") in w.records:
         return NO_CHANGE
     made = _mint_document(w, a, "text", None, _seat_rung(w, a))
@@ -430,10 +438,15 @@ def _eff_open_case(w: "World", a: "Act", res: "Resolution | None" = None) -> Cha
     def perform() -> None:
         made.apply()
         slot = slot_for(w, matter)        # read at the write, so two cases never share one slot
+        arranger, level = a.actor, float(rig)
         if slot is not None:              # the sitting's slot, filled where it stands (`date` kept)
-            slot.update(_docket_item(matter, arrangement, petition, slot.get("date")))
+            # an opener who rigged nothing leaves the forum to the one who convened the sitting, where he rigged it (`_eff_convene`)
+            convened = w.dates.get(slot.get("date")) or {}
+            if level == 0 and convened.get(RIG_KEY):
+                arranger, level = convened.get(DOCKET_ARRANGER), float(convened[RIG_KEY])
+            slot.update(_docket_item(matter, arrangement, petition, slot.get("date"), arranger, level))
         else:
-            w.docket.append(_docket_item(matter, arrangement, petition))
+            w.docket.append(_docket_item(matter, arrangement, petition, None, arranger, level))
     return Change(made.subjects, perform)
 
 

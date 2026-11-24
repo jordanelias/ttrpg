@@ -3825,6 +3825,24 @@
           "ordered": true,
           "from_battle_orders": "retreat_at"
         },
+        "rig_levels": {
+          "source": "B24p.24 (V2 p2 \u00a7H): *`rig` is the arranger's one choice (0, 0.5, 1)*; V2 p4 \u00a7F 19: each level is best somewhere on `2 x stake x P(carried) - rig_price x tilt^2`.",
+          "note": "HOW HARD THE ARRANGER RIGS THE FORUM -- the closed set of `rig`, a PAYLOAD KEY on `open_case` and `convene` (`rosters.yaml: choice_sourced`'s shape: no cell binds it, the closed operand vocabulary stays closed). `0` is no rig and the act that carries none. Read by `data/rosters.py::RIG_LEVELS`: `loop/effects_information.py::_eff_open_case` refuses a level outside it, `decision/options.py::rig_offer` reads the levels above 0 as the ones it may offer, and `seam/wrappers/sigma.py::proceeding_input` reads the rig as the number it multiplies the tilt by. [ASSUMPTION; medium; Jordan to correct; revert: a one-member roster `[0]` offers no rig and refuses any.]",
+          "ordered": true,
+          "values": [
+            0,
+            0.5,
+            1
+          ]
+        },
+        "rigged_verbs": {
+          "source": "B24p.24 (V2 p4 \u00a7H item 13): *the arrangement reaches the builder as operands of `open_case` and `convene`*.",
+          "note": "THE VERBS THAT CARRY A `rig` (`rig_levels`): the act that puts a matter before a room (`open_case`) and the one that convenes the sitting (`convene`). Read by `decision/options.py::opening_set`, which offers a rig on these alone and only where the actor's power exceeds the other party's (the host's reading of the room, `View.odds.arranged`), and by the two effects, which write it. Refused at import for a verb the table lacks (`data/verbs.py::RIGGED_VERBS`).",
+          "values": [
+            "open_case",
+            "convene"
+          ]
+        },
         "choice_sourced": {
           "source": "v11 CP-T04-02 (B10-12): `decision/options.py::operand_bags` *\"ranges `role` and `retreat_at` over their closed sets, or no NPC marshals\"*, after `confer`'s `to` (a known person) and `train`'s vocation (`vocation_sourced`).",
           "note": "WHICH VERBS CARRY A CHOICE, AND OVER WHICH PAYLOAD KEYS -- `verb: [key, ...]`. A verb named here forms ONE bag per COMBINATION of its keys' closed sets (`data/verbs.py::CHOICE_RANGES`: `role` is `order_roles`, `retreat_at` is `order_retreat_at`), each value riding on the act's payload under its own name. \u26a0 THE KEYS ARE NOT `requires_operands` MEMBERS and a cell never binds them: the closed operand vocabulary stays closed (`challenge`'s `stakes` is the precedent for a payload key the effect reads). \u26a0 THE CHOOSER IS CONTENT-BLIND UNTIL A CELL IS AUTHORED: Candidates score on `(verb, subject)` (`decision/choose.py`), so the fan is a draw among equally scored orders, not a judgement of which role suits the field. CONTENT ENTERS AT ONE PLACE, `tables.alignment`'s optional `choices:` block (B10.56, shipped absent): a cell there on a key this table names scores that value in `score_terms`' `pursuit`, through the person's own axis weights. \u26a0 THE FAN IS A COST, MEASURED AT ITS LANDING (`hole_register.yaml` `H-361`): 15 roles x 3 `retreat_at` values = 45 bags per settlement a marshal forms on. ONE LOADER, `data/verbs.py::CHOICE_SOURCED`, refused at import for a verb the table lacks, a key without a range, or a key whose carrier the verb's row does not write (`role`, `retreat_at`: `Record.exists`; `posture`: `Site.condition`). \u26a0 A KEY WHOSE RANGE HAS ONE MEMBER IS NOT FANNED (`decision/options.py::_fanned_choices`): CP-T04-06's `march` ranges `posture` over `march_postures`, shipped `[storm]`, so no `march` Candidate carries a `posture` and the shipped season does not move. [ASSUMPTION; medium; Jordan to correct; revert: delete the row, and `marshal` forms one Candidate with no order.]",

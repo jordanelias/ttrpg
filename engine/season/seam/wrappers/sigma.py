@@ -1073,12 +1073,12 @@ def believed_chance(w: Any, believer: Any, act: Any, bands: Any) -> Optional[flo
 
 def believed_odds_query(w: Any, holder: Any):
     """THE QUERY THE CHOOSER IS HANDED (`View.odds`): `believed_chance` closed over `w` and BOUND TO `holder`, as
-    `(act, bands) -> chance or None`. The query answers for its holder alone (`04` §20, the own-ledger rule: a
+    `(act, bands) -> chance or None` (a `_BelievedQuery`, which also answers `arranged`). The query answers for its holder alone (`04` §20, the own-ledger rule: a
     person's View carries his own record): it takes no person, so nothing downstream can ask it for another's
     belief. The ONE place the closure is made -- `loop/deliberate.py` hands it to every person's View and the
     harness readings that score a person outside `choose` (`harness/decision_spread.py`,
     `harness/interactions.py`) take it from here, so the figure they read is the figure the chooser reads."""
-    return lambda act, bands: believed_chance(w, holder, act, bands)
+    return _BelievedQuery(w, holder)
 
 
 @provider("contest", _PROVIDER)
@@ -1086,7 +1086,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
             verb: str = "", subject: Optional[str] = None,
             rung: Optional[str] = None,
             module_entry: Optional[str] = None, effort: int = 0, host: Any = None, via: Optional[str] = None,
-            proceeds: Optional[tuple] = None, topic: Optional[str] = None) -> dict:
+            proceeds: Optional[tuple] = None, topic: Optional[str] = None, arranger: Optional[str] = None, rig: float = 0.0) -> dict:
     """Roll for one contested act: build the record, call the module entry, hold its return to a
     `Margin`, refuse S27.4. Returns a net/ob pair, NEVER a band and never a winner.
 
@@ -1095,6 +1095,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
     opponent is another operand, the docket's matter where the opponent is the `subject`). Given, the act is a PROCEEDING instead: `_resolve_proceeding` builds the
     room (`proceeding_input`), calls the entry the composition row `social_contest.proceeding` names, holds its return to an `Outcome` of
     `Margin` verdicts and reads the act's record off it (`act_band`). `prize`, `rung`, `module_entry` and `via` are not read on that path.
+    `arranger` and `rig` (B24p.24) are the arrangement the docket gave the sitting (`arranged_by`), read by the builder on that path alone.
 
     `host` (v10 REM-31) is accepted and NOT USED HERE: the seam's call is uniform, and only the
     personal-combat provider has a PLAYABLE mode (`seam/wrappers/combat.py::resolve`).
@@ -1160,7 +1161,8 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *, rng: Draw,
             caller = sys._getframe(1)
             raise InstrumentDefect(f"{__name__}.resolve was handed no `rng` by {caller.f_globals.get('__name__', '?')}.{caller.f_code.co_name}: "
                                    f"a proceeding is drawn on the act's own generator, passed down by parameter (04 §C.12)")
-        return _resolve_proceeding(w, claimants, rng, verb=verb, subject=subject, topic=topic, effort=effort, proceeds=proceeds)
+        return _resolve_proceeding(w, claimants, rng, verb=verb, subject=subject, topic=topic, effort=effort, proceeds=proceeds,
+                                   arranger=arranger, rig=rig)
     # The room that hears this prize, off its row (`heard_by:`); an inquiry has no prize
     # and so no room. `rung` is the act's place (`loop/sides.py`), which the bench sits over.
     row = _prize_row("contest", prize) if prize is not None else None
@@ -1682,7 +1684,7 @@ _DATA_DEFECTS = ("refused[bad_weight]", "refused[no_weight]")
 
 
 def _resolve_proceeding(w: Any, claimants: list, rng: Draw, *, verb: str, subject: Optional[str], effort: int, proceeds: tuple,
-                        topic: Optional[str] = None) -> dict:
+                        topic: Optional[str] = None, arranger: Optional[str] = None, rig: float = 0.0) -> dict:
     """`resolve`'s path for an act that proceeds: build the room, call the entry the composition row names (every sitting of this batch is
     automatic: no callback is handed in), hold the return to an `Outcome` of `Margin` verdicts (a winner, a band or a side cannot cross
     the module boundary), read the act's record (`act_band`) and refuse S27.4 on an `exchange` close's pair only (a close is an adjudicator's
@@ -1694,7 +1696,8 @@ def _resolve_proceeding(w: Any, claimants: list, rng: Draw, *, verb: str, subjec
     row, form, _move, _item = proceeds
     try:
         inp, card_ = proceeding_input(w, [c for c in claimants if c in w.persons], verb=verb, subject=subject,
-                                      topic=subject if topic is None else topic, effort=effort, row=row, form=form)
+                                      topic=subject if topic is None else topic, effort=effort, row=row, form=form,
+                                      arranger=arranger, rig=rig)
     except ValueError as refused:
         if not str(refused).startswith("refused[") or str(refused).startswith(_DATA_DEFECTS):
             raise                                # a weight that is no whole head count is a data defect, not a room the game refuses
@@ -1770,28 +1773,89 @@ def topic_of(act: Any, subject: Optional[str]) -> Optional[str]:
 
 
 def believed_proceeding_odds(w: Any, believer: Any, claimants: list, *, verb: str, subject: Optional[str], effort: int,
-                             proceeds: tuple, topic: Optional[str] = None) -> Optional[float]:
+                             proceeds: tuple, topic: Optional[str] = None, arranger: Optional[str] = None, rig: float = 0.0) -> Optional[float]:
     """THE CHOOSER'S OWN ODDS that the proceeding `proceeds` names carries (V2 p2 §E; B05.62): `view_odds` on an `Input` built from what
     he holds, read as his own view reads it, without luck. Himself at his true values, every other person an ordinary man (`_Believed`),
     so the odds are the close before an unmoved ordinary bench at the starts he believes `[ASSUMPTION: the chooser prices a full
     proceeding by the card's own odds as he reads them, and an abridged one by the same close on its one addressed man -- basis: V2 p2 §E,
     "the card's odds is the close before an unmoved ordinary bench"]`. His accuracy is the view's own (`View.acc`, read off a first pass).
-    `None` where nothing is drawn (`consent`) or the proceeding is refused him (`refused[...]`); read-only, no draw."""
+    `None` where nothing is drawn (`consent`) or the proceeding is refused him (`refused[...]`); read-only, no draw. `arranger` and `rig`
+    are the arrangement the sitting is held under (B24p.24), as `proceeding_input` reads them."""
+    read = believed_proceeding(w, believer, claimants, verb=verb, subject=subject, effort=effort, proceeds=proceeds, topic=topic,
+                               arranger=arranger, rig=rig)
+    return None if read is None else read[0]
+
+
+def believed_proceeding(w: Any, believer: Any, claimants: list, *, verb: str, subject: Optional[str], effort: int, proceeds: tuple,
+                        topic: Optional[str] = None, arranger: Optional[str] = None, rig: float = 0.0) -> Optional[tuple]:
+    """`(odds, tilt)` as `believed_proceeding_odds` reads the odds, with the tilt the same build gave the forum (B24p.24: the chooser prices a
+    rig on the odds it buys and the tilt it costs, from one room). `None` where `believed_proceeding_odds` is."""
     row, form, _move, _item = proceeds
     mod = _proceeding_module()
 
     def read(acc: float) -> tuple:
-        inp, _ = proceeding_input(w, list(claimants), verb=verb, subject=subject, topic=subject if topic is None else topic, effort=effort,
-                                  row=row, form=form, seen=_Believed(w, believer, acc))
-        return inp, mod.view(inp, mod._start(inp), mod._who(inp, believer.id), _NoNoise())
+        inp, card_ = proceeding_input(w, list(claimants), verb=verb, subject=subject, topic=subject if topic is None else topic, effort=effort,
+                                      row=row, form=form, arranger=arranger, rig=rig, seen=_Believed(w, believer, acc))
+        return inp, card_, mod.view(inp, mod._start(inp), mod._who(inp, believer.id), _NoNoise())
     try:
-        inp, first = read(1.0)
-        inp, seen = read(first.acc)
+        inp, _, first = read(1.0)
+        inp, card_, seen = read(first.acc)
     except ValueError as refused:
         if str(refused).startswith("refused["):
             return None
         raise
-    return None if inp.rite.close == "consent" else seen.odds
+    return None if inp.rite.close == "consent" else (seen.odds, card_.tilt)
+
+
+def arranged_by(w: Any, act: Any, topic: Optional[str]) -> tuple:
+    """`(arranger, rig)` THE DOCKET GIVES THE SITTING AN ACT HEARS (B24p.24): for a verb whose `proceeds:` cell names the docket's row, the first
+    item `docketed` lists for the matter says who arranged its sitting and how hard (`_docket_item`). The arranger is named only where there is a
+    rig to work (`rig > 0`): at rig 0 he arranges nothing, and a builder asked to find him would refuse the sitting if he were gone. Any other
+    act, and a matter on no docket, has none."""
+    row = VERB_TABLE.get(act.verb)
+    if not any(entry[1] == "docket" for entry in getattr(row, "proceeds", ())):
+        return None, 0.0
+    items = _world_q.docketed(w, topic)
+    if not items:
+        return None, 0.0
+    rig = float(items[0].get(_world_q.DOCKET_RIG) or 0.0)
+    return (items[0].get(_world_q.DOCKET_ARRANGER) if rig > 0 else None), rig
+
+
+def _hearing(w: Any) -> Optional[tuple]:
+    """`(verb, proceeds)` of the hearing a case just opened will have (B24p.24): the verb whose `proceeds:` cell names the docket's row, and
+    its last entry's proceeding (`(row dict, form, move, item)`) -- the one that holds for a matter no row was named for (a computed case:
+    `_eff_open_case` derives no arrangement), which is what `world_q.proceeding_row` falls through to. `None` where no verb hears a docket."""
+    for verb, row in sorted(VERB_TABLE.items()):
+        entries = getattr(row, "proceeds", ())
+        if any(entry[1] == "docket" for entry in entries):
+            _when, rid, form, move, item = entries[-1]
+            arrangement = ARRANGEMENTS[rid]
+            return verb, ((abridged(arrangement) if form == "abridged" else arrangement), form, move, item)
+    return None
+
+
+class _BelievedQuery:
+    """`View.odds`: `believed_chance` closed over `w` and bound to `holder` (`believed_odds_query`), called as `(act, bands) -> chance or None`;
+    and `arranged(act, rig)`, what an opener reads of the hearing of the case he would open (B24p.24): `(odds, tilt)` for the sitting
+    held under his arrangement at `rig`, from the same believed picture of the room. It answers for its holder alone, as the call does."""
+    __slots__ = ("w", "holder")
+
+    def __init__(self, w: Any, holder: Any):
+        self.w, self.holder = w, holder
+
+    def __call__(self, act: Any, bands: Any) -> Optional[float]:
+        return believed_chance(self.w, self.holder, act, bands)
+
+    def arranged(self, act: Any, rig: float) -> Optional[tuple]:
+        """`(odds that the matter carries for him, the tilt his rig gives the forum)`, or `None` where he cannot say (no hearing, no matter, a
+        room the builder refuses him). At `rig` 0 he arranges nothing."""
+        hearing, matter = _hearing(self.w), (act.payload or {}).get("subject") if isinstance(act.payload, dict) else None
+        if hearing is None or act.actor != self.holder.id or matter not in self.w.persons:
+            return None
+        verb, proceeds = hearing
+        return believed_proceeding(self.w, self.holder, [self.holder.id, matter], verb=verb, subject=matter, effort=0, proceeds=proceeds,
+                                   topic=matter, arranger=self.holder.id if rig > 0 else None, rig=rig)
 
 
 def _believed_proceeding_chance(w: Any, believer: Any, act: Any, bands: Any) -> Optional[float]:
@@ -1807,8 +1871,10 @@ def _believed_proceeding_chance(w: Any, believer: Any, act: Any, bands: Any) -> 
         if no_row.where != "world_q.proceeding_row":
             raise
         return None
-    p = believed_proceeding_odds(w, believer, called[0], verb=act.verb, subject=called[1], effort=effort_of(act), proceeds=row,
-                                 topic=topic_of(act, called[1]))
+    topic = topic_of(act, called[1])
+    arranger, rig = arranged_by(w, act, topic)
+    p = believed_proceeding_odds(w, believer, called[0], verb=act.verb, subject=called[1], effort=effort_of(act), proceeds=row, topic=topic,
+                                 arranger=arranger, rig=rig)
     carried = {DEGREE_LABEL[d] for d, n in DEGREE_ORDINAL.items() if n >= mod._CARRIED}
     held = set(bands)
     return None if p is None else p if held == carried else 1.0 - p if held == set(DEGREE_LABEL.values()) - carried else None

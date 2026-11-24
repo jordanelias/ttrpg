@@ -218,6 +218,10 @@ def docketed(w: World, matter: Optional[str]) -> list[dict]:
 # carries neither -- no operand channel names them (`H-80`/§F1) -- and writes both as `None`.
 DOCKET_ARRANGEMENT = "arrangement"
 DOCKET_PETITION = "petition"
+# B24p.24 (V2 p2 §H): THE TWO KEYS A DOCKET ITEM GAINED -- who arranged its sitting and how hard (`rig`, a `rosters.yaml: rig_levels` member). Written by
+# `_docket_item` and read by `seam/wrappers/sigma.py::arranged_by`, which hands them to the proceeding's builder.
+DOCKET_ARRANGER = "arranger"
+DOCKET_RIG = "rig"
 
 
 # CALENDAR's Event kind for a date that came due, named once: `loop/calendar.py` emits and chains

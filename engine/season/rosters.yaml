@@ -2614,6 +2614,26 @@ rosters:
     ordered: true
     from_battle_orders: retreat_at
 
+  rig_levels:
+    source: "B24p.24 (V2 p2 §H): *`rig` is the arranger's one choice (0, 0.5, 1)*; V2 p4 §F 19: each level is best somewhere on `2 x stake x P(carried) - rig_price x tilt^2`."
+    note: >-
+      HOW HARD THE ARRANGER RIGS THE FORUM -- the closed set of `rig`, a PAYLOAD KEY on `open_case` and `convene` (`rosters.yaml: choice_sourced`'s
+      shape: no cell binds it, the closed operand vocabulary stays closed). `0` is no rig and the act that carries none. Read by `data/rosters.py::RIG_LEVELS`:
+      `loop/effects_information.py::_eff_open_case` refuses a level outside it, `decision/options.py::rig_offer` reads the levels above 0 as the ones it
+      may offer, and `seam/wrappers/sigma.py::proceeding_input` reads the rig as the number it multiplies the tilt by.
+      [ASSUMPTION; medium; Jordan to correct; revert: a one-member roster `[0]` offers no rig and refuses any.]
+    ordered: true
+    values: [0, 0.5, 1]
+
+  rigged_verbs:
+    source: "B24p.24 (V2 p4 §H item 13): *the arrangement reaches the builder as operands of `open_case` and `convene`*."
+    note: >-
+      THE VERBS THAT CARRY A `rig` (`rig_levels`): the act that puts a matter before a room (`open_case`) and the one that convenes the sitting
+      (`convene`). Read by `decision/options.py::opening_set`, which offers a rig on these alone and only where the actor's power exceeds the other
+      party's (the host's reading of the room, `View.odds.arranged`), and by the two effects, which write it. Refused at import for a verb the
+      table lacks (`data/verbs.py::RIGGED_VERBS`).
+    values: [open_case, convene]
+
   choice_sourced:
     source: >-
       v11 CP-T04-02 (B10-12): `decision/options.py::operand_bags` *"ranges `role` and `retreat_at` over their closed
