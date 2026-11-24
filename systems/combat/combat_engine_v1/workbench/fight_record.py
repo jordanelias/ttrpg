@@ -53,7 +53,7 @@ def record_of(pa, pb, terms='death'):
 
 def result_of(outcome):
     """+1 / -1 / 0 (A won / B won / unresolved): the engine's own `fight_result` event, the last event of every scene. The
-    record lifts no integer (B14.01), and the trackers cannot give it: the upset flip turns a felling's winner over."""
+    record lifts no integer (B14.01), and the trackers cannot give it (an undecided fight has none, and the mortal-wound draw may stand a felled man up)."""
     return [e for e in outcome.trace if e['kind'] == 'fight_result'][-1]['result']
 
 

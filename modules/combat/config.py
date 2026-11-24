@@ -269,17 +269,13 @@ CFG = dict(
   YIELD_HEALTH_FRAC=0.5,  # [ASSUMPTION; medium; Jordan to correct -- v9 PC-10a, RS-25.] Under the 'yield' duel term a fighter
   # yields once his Health falls to this fraction of full (`wrapper._terms_crossed`); 'blood' stops at the first wound
   # and 'death' is the lethal fight. Here, in CFG, so it crosses the exporter with every other tunable.
-  # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
+  # No matchup is certain: the chance a blow that would fell a fighter is TURNED (`wrapper.engagement`'s `_land`, B15.09).
   UPSET_FLOOR=0.05,   # [DESIGNER RULE — Jordan; deliberate, NOT an emergent mechanic. Tagged ED-PC-0036.]
-  # The '95% cap': with this probability the DECIDED loser steals the win, so no matchup is ever certain. This is the
-  # one place the engine deliberately OVERRIDES its own emergent outcome — the trace stream emits `engagement_end
-  # felled=X` and then `fight_result winner=X`, with no in-model event corresponding to the reversal (the flip is
-  # marked only by `fight_result.upset`, PC-13). It is a
-  # legitimate videogame design choice; it is tagged so it is distinguishable from ungrounded fiat, and because it has a MEASUREMENT consequence every reader should know:
-  # every win-rate this engine reports (including the ledgered calibration figures) is COMPRESSED toward
-  # [UPSET_FLOOR, 1-UPSET_FLOOR], so an observed 0.95 is a raw ~1.00 and the roster's apparent ceiling at ~0.94-0.95
-  # is partly this clamp rather than pure physics. If the design ever wants upsets to be diegetic instead of a
-  # scoreboard edit, the in-fight home for them is a critical-opening mechanic, not a post-hoc flip — Jordan's call.
+  # One keyed draw at each felling (a sub-key of the fight's own Draw, "upset:<scene>:<round>", so it takes no position of the
+  # fight's stream); with this probability the blow is turned (not applied: the tracker stays as it stood before it) and the would-be-felled fighter
+  # lands the damage it carried back through the one damage site (`finalblow_riposte`), and the fight goes on from there. It MOVES THE TRACKERS: it is
+  # a blow the trackers record, not an edit of the result -- the result is whatever the continued fight ends with, so a felled
+  # fighter's win-rate is no longer clamped by a scoreboard flip but reached by the dice that follow. A blow that fells nobody draws nothing.
 
   # ── PC-15: thresholds lifted from wrapper.py / combat_systems.py literals (each was inline; values and meanings kept).
   # CLOSE_GAP_REF (above) is ALSO the one reach-gap threshold at the other three sites

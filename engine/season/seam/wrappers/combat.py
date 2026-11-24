@@ -443,8 +443,8 @@ def scene_outcome(got: CombatOutcome, actor: str, target: str) -> tuple:
     ⚠ THE FELLING IS `ladder.party_degree`'S VERDICT ON THE PARTY'S TRACKER, his mortal-wound draw mapped on as `resolve` maps it (B15.07: a
     felled man the draw stands up is no felling here, as in the dealt fight) (the walk `_eff_kill` writes by and
     `combat_degree` grades by; it refuses a missing tracker), NEVER the integer `wrapper.fight` returns (not lifted).
-    That integer flips after the scene in `UPSET_FLOOR` of the decided fights and leaves the trackers alone, so it
-    names a winner the fold never grades by. A yield is read first; neither or both down is `undecided` (a draw has
+    That integer is the engine's own ending (B15.09: the riposte turns a felling on the trackers, so it no longer flips
+    after them), and a felled man the mortal-wound draw stands up leaves it naming a winner the fold never grades by. A yield is read first; neither or both down is `undecided` (a draw has
     no one felled; a mutual felling names no one)."""
     a_down, b_down = (party_degree(_wound_state(got.wounds.get(pid), got.mortal.get(pid))) == FELLED for pid in (actor, target))
     if got.surrender is not None:

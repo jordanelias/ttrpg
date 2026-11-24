@@ -100,6 +100,30 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
         blow += 1
         bare = core.bare_zone(KD.seeded(KD.H2(rng.key, f"gap:{scene}:{turn}:{blow}")), defender.armor)
         return core.strike(attacker, defender, deg, cfg, bare=bare, **kw), bare
+    drawn = False   # the round's one riposte draw is taken: a second felling in the same round (a counter's own) is final
+    def _land(source, by, victim, d, bare=None):
+        """`_wound` for a blow that may FELL: the ONE site of the riposte (`18_DET`, B15.09). A blow that would fell `victim` (his
+        damage after it reaches his Health: a pure read of the tracker, nothing applied yet) draws once, before his tracker is
+        final: a sub-key of the fight's own `Draw`, `H2(rng.key, "upset:<scene>:<round>")` (B15.05's form: a function of the fight's
+        key and the round, never of how many uniforms the stream has taken, so it consumes no position of it). With probability
+        `cfg['UPSET_FLOOR']` the blow is TURNED: it is not applied, so his tracker stays as it stood immediately before it (the felling
+        undone, and every reader of the trace still sees the tracker as the sum of its `wound` events), `finalblow_riposte` is emitted,
+        and he lands the damage the blow carried back on the striker through `_wound` (source `finalblow_riposte`). The fight goes on
+        from that state, and the counter may itself fell. One draw a round: the key names the round, so a felling after a turned one in
+        the same round (a counter's) is final and draws nothing.
+        `source` names the site, as `_wound`'s does."""
+        nonlocal drawn
+        wt = victim.wt
+        if not drawn and int(d) > 0 and wt.cumulative_damage + int(d) >= wt.health_full:
+            drawn = True
+            if KD.seeded(KD.H2(rng.key, f"upset:{scene}:{turn}")).random() < cfg['UPSET_FLOOR']:
+                _emit('finalblow_riposte', round=turn, by=victim.label, source=source)
+                _wound('finalblow_riposte', victim, by, d)
+                return
+        _wound(source, by, victim, d, bare)
+    def _down():
+        """The party the burst has felled, or None: after `_land` it is the victim, or the striker his counter felled."""
+        return A if A.felled else B if B.felled else None
     aggressor = first; defender = B if first is A else A
     # OPEN-MEASURE RESET (ED-PC-0033): a NEW engagement begins at open measure — weapons at full extension, no lunge
     # committed. The per-beat transient geometry (grip_position, lunge_depth) is otherwise carried on the Combatant
@@ -230,10 +254,10 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
                     _emit('disengage', longer=longer.label, shorter=shorter.label, ok=False, pursued=True, degree=deg)
                     if deg in ('success','overwhelming'):
                         d,_bare=_strike(shorter, longer, deg, net=net, pool=pool)
-                        _wound('pursuit', shorter, longer, d, _bare)
+                        _land('pursuit', shorter, longer, d, _bare)
                         if d<=0 and _bare is False: _emit('turned', by=shorter.label, victim=longer.label, source='pursuit')
                         longer.conc=max(0,longer.conc-cfg['CONC_DRAIN_HIT'])
-                        if longer.felled: return longer, closed, 'felled'
+                        if _down() is not None: return _down(), closed, 'felled'
                     ready[shorter]=max(ready[shorter], cfg['ACT_THRESHOLD'])   # the pursuer seizes the tempo
         # ----- APPROACH: longer weapon threatens (stop-thrusts) while shorter closes -----
         if not closed:
@@ -264,12 +288,12 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
                       pool=pool, net_sigma=round(nsig,3), ob=_ob, net=round(net,2), degree=deg)   # `ob`: the workbench bands its distribution at it (PC-03)
                 if deg in ('success','overwhelming'):
                     d,_bare=_strike(longer, shorter, deg, net=net, pool=pool)
-                    _wound('stophit', longer, shorter, d, _bare)
+                    _land('stophit', longer, shorter, d, _bare)
                     if d<=0 and _bare is False: _emit('turned', by=longer.label, victim=shorter.label, source='stophit')
                     shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
                     _sd,_pb=S.percussion_stagger(longer, shorter, d, deg, cfg)   # ED-PC-0031: wind + stagger (armour-gated impulse), distinct from the wound
                     shorter.stamina-=_sd; shorter.poise=S.clamp_poise(shorter.poise-_pb, cfg)
-                    if shorter.felled: return shorter, closed, 'felled'
+                    if _down() is not None: return _down(), closed, 'felled'
                     recoil = S.arrest_impulse(longer, cfg)   # the ARREST: braced-weapon impulse vs the charge (reach+structure, not wound)
             measure_gap=S.approach_step(measure_gap, base_gap, close_rate, recoil)   # net advance − arrest (systems owns the arithmetic)
             just_closed = (measure_gap<=cfg['CLOSE_GAP_REF'])
@@ -411,10 +435,10 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
                 # pull-back of the committed thrust can still graze the closing defender
                 if rng.random() < cfg['DISPLACE_PULLBACK_GRAZE']:
                     d,_bare=_strike(aggressor, defender, 'graze')
-                    _wound('displace_graze', aggressor, defender, d, _bare)
+                    _land('displace_graze', aggressor, defender, d, _bare)
                     if d<=0 and _bare is False: _emit('turned', by=aggressor.label, victim=defender.label, source='displace_graze')
-                    if defender.felled:
-                        _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B); return defender, closed, 'felled'
+                    if _down() is not None:
+                        _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B); return _down(), closed, 'felled'
                 riposte=True   # defender now inside with initiative
         # ---- distance-creating moments for re-opening (corrections 1+3), benefiting the LONGER weapon ----
         # (a) opponent over-committed: a deep commit by the SHORTER weapon (the one who must stay close) leaves it
@@ -429,15 +453,15 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
         if closed and longer.w['hands']==2 and rng.random()<cfg['PUSH_AVAIL_P']:
             push_avail=True; reopen_moment=True; opening_created=True   # a freed hand IS a contact precondition
         if hit>0:
-            _wound('exchange', aggressor, defender, hit, hit_bare); defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
+            _land('exchange', aggressor, defender, hit, hit_bare); defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
             # forced-to-Nach by DAMAGE: the aggressor presses the advantage (gains the Vor); the struck defender loses it.
             aggressor.initiative=S.clamp_initiative(aggressor.initiative+cfg['INIT_GAIN_HIT'], cfg)
             defender.initiative=S.clamp_initiative(defender.initiative-cfg['INIT_LOSS_WOUNDED'], cfg)
             defender.poise=S.clamp_poise(defender.poise - cfg['POISE_BREAK_HIT']*min(1.0, hit/cfg['POISE_SOLID_HIT']), cfg)  # solid blows stagger; chip damage barely
             _sd,_pb=S.percussion_stagger(aggressor, defender, hit, deg, cfg)   # ED-PC-0031: concussive wind + strong stagger (armour-gated; the blunt-through-plate path the wound-only break above cannot see)
             defender.stamina-=_sd; defender.poise=S.clamp_poise(defender.poise-_pb, cfg)
-            if defender.felled:
-                _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B); return defender, closed, 'felled'
+            if _down() is not None:
+                _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B); return _down(), closed, 'felled'
         elif hit_bare is False:   # a blow struck against the harness that dealt nothing: the blade was turned (PC_D)
             _emit('turned', by=aggressor.label, victim=defender.label, source='exchange')
         if bind:
@@ -457,13 +481,13 @@ def engagement(A, B, first, cfg, rng, prev_closed=False, terms=None, turn=1, sce
                 if rng.random() < S.bind_dominance_p(bsig):
                     if rng.random()<cfg['BIND_HIT_P']:
                         d,_bare=_strike(aggressor, defender, 'success')
-                        _wound('bind', aggressor, defender, d, _bare)
+                        _land('bind', aggressor, defender, d, _bare)
                         if d<=0 and _bare is False: _emit('turned', by=aggressor.label, victim=defender.label, source='bind')
                         defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
                         _sd,_pb=S.percussion_stagger(aggressor, defender, d, 'success', cfg)   # ED-PC-0031: wind + stagger in the bind
                         defender.stamina-=_sd; defender.poise=S.clamp_poise(defender.poise-_pb, cfg)
-                        if defender.felled:
-                            _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B); return defender, closed, 'felled'
+                        if _down() is not None:
+                            _emit_outcome(_agg0, _def0, mode, deg, hit, bind, riposte, A, B); return _down(), closed, 'felled'
                         break
                 else: riposte=True; break
         if riposte:
@@ -569,7 +593,7 @@ def _terms_yielder(A, B, terms, cfg):
 # a declared `Yield` of the same turn (the declaration is the earlier fact), and returns one member of this closed set:
 #   - 'engage'   : the turn is fought. Today's loop engages every turn, so `decide=None` (the default, AUTOMATED) is
 #                  exactly 'engage' every turn.
-#   - 'withdraw' : the loop's existing UNRESOLVED exit, taken early -- no further turn, no UPSET_FLOOR draw (the fight is
+#   - 'withdraw' : the loop's existing UNRESOLVED exit, taken early -- no further turn, no riposte draw (the fight is
 #                  undecided, result 0, the ruled outcome). A `withdraw` trace event names the turn.
 # [ASSUMPTION; the set is {engage, withdraw}, Jordan's "you choose to attack" (#445 `05:8-11`); PC's Plan layer (M-4) may
 # widen it, and whether `yield` joins it is #445 `05` §4.1 (J-15), not decided here.] The decider draws nothing from
@@ -617,10 +641,10 @@ def _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide):
             _refused = 'objective_contested' if yield_decl.objective_contested else None
             _emit('yield', turn=turn+1, by=yield_decl.by.label, accepted=(yield_decl.accepted and _refused is None), refused=_refused)
             if _refused is None:
-                # Combat ends with the yielder standing; the opponent holds the field. NO UPSET_FLOOR draw: that is a
-                # roll, and §11.4 is "no further rolls" -- a lucky blow cannot steal a fight nobody is contesting.
+                # Combat ends with the yielder standing; the opponent holds the field. no riposte draw: that is a
+                # roll, and §11.4 is "no further rolls" -- a lucky blow cannot turn a fight nobody is contesting.
                 result, winner = (-1, B) if yield_decl.by is A else (1, A)
-                _emit('fight_result', result=result, winner=winner.label, upset=False)
+                _emit('fight_result', result=result, winner=winner.label)
                 return result
         if decide is not None:   # THE PER-TURN CHOICE (REM-31): before every draw of the turn; draws nothing
             choice = decide(turn+1)
@@ -628,7 +652,7 @@ def _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide):
                 raise ValueError(f"the decider returned {choice!r}, which is not one of {TURN_CHOICES}")
             if choice == WITHDRAW:
                 _emit('withdraw', turn=turn+1)
-                break            # result is 0 here (a felling breaks with a result set): UNRESOLVED, no upset draw
+                break            # result is 0 here (a felling breaks with a result set): UNRESOLVED, no riposte draw
         first = A if rng.random()<0.5 else B
         _emit('turn_start', turn=turn+1, first=first.label)
         loser, prev_closed, ended_by = engagement(A,B,first,cfg,rng,prev_closed,terms=stop,turn=turn+1,scene=scene)
@@ -638,27 +662,23 @@ def _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide):
             break
         if stop is not None and _terms_met(A, B, stop, cfg):
             # THE TERMS ARE MET (RS-25): the fighter who crossed them yields, standing. It is the accepted-`Yield` ending
-            # -- the same `yield` event `fight._surrender` lifts, the opponent's result, NO UPSET_FLOOR draw (a lucky blow
-            # cannot steal a fight the terms have already closed) -- read at the END of the turn the terms were met in,
+            # -- the same `yield` event `fight._surrender` lifts, the opponent's result (no felling, so no riposte: a lucky blow
+            # cannot turn a fight the terms have already closed) -- read at the END of the turn the terms were met in,
             # where a declared `Yield` is read at the start of its turn. An exact tie yields nobody: UNRESOLVED.
             yielder = _terms_yielder(A, B, stop, cfg)
             if yielder is None:
-                _emit('fight_result', result=0, winner=None, upset=False)
+                _emit('fight_result', result=0, winner=None)
                 return 0
             _emit('yield', turn=turn+1, by=yielder.label, accepted=True, refused=None, terms=stop)
             result, winner = (-1, B) if yielder is A else (1, A)
-            _emit('fight_result', result=result, winner=winner.label, upset=False)
+            _emit('fight_result', result=result, winner=winner.label)
             return result
         for c in (A,B):
             c.stamina=min(c.stamina_max, c.stamina+cfg['RECOVERY_FRAC']*(c.stamina_max-c.stamina)*(c.stamina_max/cfg['STAMINA_REF']))
             c.conc=max(0,min(c.conc_max, c.conc-cfg['CONC_DRAIN_BOUT']+cfg['CONC_RECOVER_FRAC']*(c.conc_max-c.conc)))
     # NO automatic tiebreak (Jordan 2026-06-02): if neither fighter is felled, the round ends UNRESOLVED (result 0).
     # We do not foreclose by awarding the round on wound-count — an undecided fight is a legitimate outcome.
-    # 95% cap (videogame rule): no matchup is ever certain. With probability UPSET_FLOOR, the decided LOSER steals
-    # the win — a "lucky blow"/critical-opening that the model otherwise suppresses. Applied only to decided fights,
-    # symmetric in form, so an X% raw win-rate is clamped toward [UPSET_FLOOR, 1-UPSET_FLOOR].
-    upset = False   # True iff the UPSET_FLOOR flip changed `result` (False on every other path: yield, terms, withdraw, unresolved)
-    if result!=0 and rng.random()<cfg['UPSET_FLOOR']:
-        result = -result; upset = True
-    _emit('fight_result', result=result, winner=(A.label if result==1 else B.label if result==-1 else None), upset=upset)
+    # No matchup is ever certain (`UPSET_FLOOR`) -- and that is a blow, not an edit of the result: at a felling the riposte
+    # (`engagement`'s `_land`) may turn it, so `result` is whatever the fight, continued, ends with.
+    _emit('fight_result', result=result, winner=(A.label if result==1 else B.label if result==-1 else None))
     return result

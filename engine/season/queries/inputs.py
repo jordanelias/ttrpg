@@ -257,7 +257,7 @@ class DecisiveBeat:
     """The wound that ended the scene: the trace's last `wound` event that felled its victim (B14.01).
       * `by`     -- the striker's id;
       * `victim` -- the felled party's id;
-      * `source` -- the engine's own site name for the wound: exchange | bind | stophit | pursuit | displace_graze;
+      * `source` -- the engine's own site name for the wound: exchange | bind | stophit | pursuit | displace_graze | finalblow_riposte (a counter that fells, B15.09);
       * `weapon` -- the striker's weapon key as the fight opened (the `fight_start` event; the `wound` event carries none);
       * `round`  -- the round it landed in (A-101; the count of `turn_start` events up to it)."""
     by: str

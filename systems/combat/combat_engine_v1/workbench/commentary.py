@@ -105,7 +105,7 @@ def commentate(events, cfg):
         elif k == 'fight_result':
             if e['winner']:
                 out.append({'type': 'result', 'line': f"It's over — {e['winner']} takes it.",
-                            'mech': "decided by a felling (a 5% upset chance is always live, so nothing is certain)."})
+                            'mech': "decided by a felling that stood (each felling blow may be turned, `UPSET_FLOOR`, so nothing is certain)."})
             else:
                 out.append({'type': 'result', 'line': "Time — neither could put the other down. No decision.",
                             'mech': "12 turns elapsed with no felling: a legitimate draw (no wound-count tiebreak)."})

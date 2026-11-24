@@ -12,15 +12,17 @@ skill score the only thing the two sides differ in. The reading of one fight (`r
   rolls / fails    `roll` events / those banded `fail`
   bloodless        rounds (`turn_start` to `engagement_end`) holding no `wound` event
   winner_behind    the LEAD CHANGE: in a decided fight, the fighter the result gives the fight to dealt less cumulative damage than his
-                   opponent at some wound (the upset flip counts: it hands the fight to the one who trailed). Chosen as the reading
+                   opponent at some wound (the result is the fight's as it ends, a turned felling and its riposte included: a fight the
+                   riposte hands to the one who trailed counts). Chosen as the reading
                    that reproduces the control arm's 0.352 and the live arm's 0.452 at the plan's seeds' own scheme (the plan's
                    readers are scratchpad files, not in the tree).
   first_wins       the fighter who dealt the first wound is the fighter the result gives the fight to
   loser_blows      wound events on the fighter felled, when a fighter was felled (a death)
-  felled_winner    the fighter who was NOT felled, when one was: the fight's outcome BEFORE `UPSET_FLOOR`'s 5% flip (the designer's cap,
-                   ED-PC-0036, which is not the opposed rule). `a_wins` reads it: the plan's better-fighter figures (0.923 at 7 against 3)
-                   are the felling's, and the flipped result reads about 0.04 below them at every cell (0.879 at 7 against 3, measured).
-                   The lead change reads the flipped result, the reading that reproduces the plan's 0.352 and 0.452.
+  felled_winner    the fighter who was NOT felled by the FIRST felling in the trace, when there was one: the fight's outcome BEFORE any riposte
+                   (`UPSET_FLOOR`'s turned blow, ED-PC-0036, which is not the opposed rule): the first `wound` that felled a fighter, or the
+                   first `finalblow_riposte` (the blow that would have felled its `by`-party, turned), whichever the trace holds first. `a_wins` reads it: the plan's better-fighter figures (0.923 at 7
+                   against 3) are the first felling's, and the fight as it ends reads a little below them (the old flip read about 0.04
+                   below at every cell, 0.879 at 7 against 3, measured). The lead change reads the result as the fight ends.
 
 The two ARMS: `live` is the shipped tree; `control` is the 2026-08-14 scale put back by an override, `cfg=dict(CFG,
 OPPOSITION_RATE=0.5)` and `core.DMG_SCALE` 1.55 (a module global, patched for the arm and restored).
@@ -70,6 +72,7 @@ def read(result, trace):
     """The reading of one fight, off its trace (see the module docstring for each name)."""
     turns = rounds_blooded = 0
     in_round = bloody = False
+    first_down = None   # the fighter the first deciding felling (applied or turned) went to
     wounds, rolls, fails = [], [], 0
     for e in trace:
         k = e['kind']
@@ -77,6 +80,10 @@ def read(result, trace):
             turns += 1; in_round = True; bloody = False
         elif k == 'wound':
             wounds.append(e); bloody = True
+            if e['felled'] and first_down is None:
+                first_down = e['victim']
+        elif k == 'finalblow_riposte':
+            first_down = first_down or e['by']   # the blow that would have felled him, turned: the deciding felling all the same
         elif k == 'roll':
             rolls.append(e['aggressor']); fails += e['degree'] == 'fail'
         elif k == 'engagement_end' and in_round:
@@ -89,11 +96,10 @@ def read(result, trace):
             dealt[e['by']] += e['damage']
             behind = behind or dealt[winner] < dealt['B' if winner == 'A' else 'A']
         first = wounds[0]['by'] == winner
-    felled = [e['victim'] for e in wounds if e['felled']]
-    return dict(felled_winner=('B' if felled[0] == 'A' else 'A') if felled else None, turns=turns, bloodless=turns - rounds_blooded, wounds=len(wounds), rolls=len(rolls), fails=fails,
+    return dict(felled_winner=('B' if first_down == 'A' else 'A') if first_down else None, turns=turns, bloodless=turns - rounds_blooded, wounds=len(wounds), rolls=len(rolls), fails=fails,
                 wounds_by={s: sum(e['by'] == s for e in wounds) for s in 'AB'}, rolls_by={s: rolls.count(s) for s in 'AB'},
                 decided=winner is not None, winner=winner, winner_behind=behind, first_wins=first,
-                loser_blows=sum(e['victim'] == felled[0] for e in wounds) if felled else None)
+                loser_blows=sum(e['victim'] == first_down for e in wounds) if first_down else None)
 
 
 class Tally:
@@ -128,7 +134,7 @@ class Tally:
     def first_wounded_wins(self): return self._decided_share('first_wins')
 
     def a_wins(self):
-        """Share of the fights ending in a felling that A won, before the upset flip (`felled_winner`)."""
+        """Share of the fights with a felling that A won at the first felling, before any riposte (`felled_winner`)."""
         dec = [r for r in self.rows if r['felled_winner'] is not None]
         return sum(r['felled_winner'] == 'A' for r in dec) / len(dec)
 
