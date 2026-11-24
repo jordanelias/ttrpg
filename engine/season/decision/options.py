@@ -435,6 +435,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                         # says it as held (`said_of`); both are the actor's own ledger and nothing else.
                         # v12 B11.10 (`08_FI_02` edit 7): AND ONE CANDIDATE PER CLAIM -- the top `said_choices` the slant ranks (`said_set`).
                         # Only a row whose `choice_sourced` line names `said` ranges over several (`issue` shares the form and takes the one pick).
+                        # v12 B11.54: a `lie` of an amount says it BOTH ways (`lie_said_of`'s tuple, spread by `said_set`), one Candidate each; the loop below forms them.
                         said_of_entity[entity] = said_set(
                             p.ledger, entity, fx, p, pick=lie_said_of if verb in LIE_VERBS else said_of, tick=tick, weigh=weigh,
                             choose=SAID_KEY in CHOICE_SOURCED.get(verb, ()))

@@ -1865,22 +1865,28 @@ def said_set(claims, subject, fx, teller: "Person | None" = None, *, pick=None, 
     """THE CLAIMS A TELLER MAY CHOOSE AMONG TO SAY ABOUT `subject`: the top `Fixtures.said_choices` of `pick`'s ranking (v12 B11.10, `08_FI_02` edit 7), best first.
     `pick` is `said_of` (the default) or `lie_said_of`, the one pick this repeats: it asks for the best, drops every claim of that predicate about the subject
     from what it reads, and asks again, until it has the number or the teller has nothing more to say (so each member is a different predicate). `said_choices` 1
-    is `pick` asked once of the ledger itself, today's single pick exactly, with no copy of it. `()` is nothing to say. A value that is not a whole number of 1
+    is `pick` asked once of the ledger itself, today's single pick exactly, with no copy of it. `lie_said_of` gives every false value of the claim it picks
+    (v12 B11.54): the count is of claims, and each claim is said every way it has, best claim first. `()` is nothing to say. A value that is not a whole number of 1
     or more raises (`telling_privacy`'s rule). `choose` False (a row `rosters.yaml: choice_sourced` does not give `said`) is the single pick whatever the fixture."""
     n = fx.get("said_choices") if choose else 1
     if isinstance(n, bool) or not isinstance(n, int) or n < 1:
         raise ValueError(f"said_choices {n!r} is not a whole number of 1 or more (B11.10)")
     pick = pick or said_of
-    first = pick(claims, subject, fx, teller, tick=tick, weigh=weigh)
-    if first is None:
+    def picked(rest) -> tuple:
+        # `said_of` gives the one `Said` or `None`; `lie_said_of` the tuple of every false value of the one claim it picked (v12 B11.54): both read as a tuple
+        got = pick(rest, subject, fx, teller, tick=tick, weigh=weigh)
+        return () if got is None else (got,) if isinstance(got, Said) else tuple(got)
+    first = picked(claims)
+    if not first:
         return ()
-    out, rest = [first], claims
-    while len(out) < n:
+    out, rest, claims_said = list(first), claims, 1      # `n` counts CLAIMS; a claim may be said more than one way
+    while claims_said < n:
         rest = [c for c in rest if not (c.subject == out[-1].subject and c.predicate == out[-1].predicate)]
-        nxt = pick(rest, subject, fx, teller, tick=tick, weigh=weigh)
-        if nxt is None:
+        nxt = picked(rest)
+        if not nxt:
             break
-        out.append(nxt)
+        out.extend(nxt)
+        claims_said += 1
     return tuple(out)
 
 
@@ -1916,24 +1922,29 @@ def is_cell(c) -> bool:
     return str(c.predicate).partition(":")[0] in CELL_STEMS
 
 
-def lie_said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 0, weigh=None) -> "Said | None":
+def lie_said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 0, weigh=None) -> tuple:
     """WHAT THIS PERSON WOULD SAY FALSELY ABOUT `subject`: `said_of`'s pick, over the teller's CELL claims
-    only, with its value made false -- or `None` where there is no false value to say (v11 CR-27, M9 taken
-    (a), the cell lie; H-198 rule (i)). Asked of the LIAR'S OWN claims at CHOOSE
+    only, with its value made false -- a TUPLE of `Said`, every false value he may choose among, `()` where
+    there is no false value to say (v11 CR-27, M9 taken (a), the cell lie; H-198 rule (i); v12 B11.54,
+    `16_PESSIMIST_SC_E` edits 2-3: a lie about an amount is formed in both directions and the liar's own
+    choice picks one). Asked of the LIAR'S OWN claims at CHOOSE
     (`decision/options.py::opening_set`, for a row named in `rosters.yaml: lie_verbs`) and carried on the
     Act's `payload["said"]`, so WITNESS deposits it through the one told channel and reads no ledger.
 
     THE FALSE-VALUE RULE [ASSUMPTION; medium; Jordan to correct; revert: a different false-value rule]:
       * an AMOUNT (a number on a stem of `data/verbs.py: QUANTITY_STEMS`) is moved one whole step of
-        `told_drift_band`'s unit by `drifted` -- sign-preserving and never crossing zero, `_told_value`'s own
-        clauses and not a copy of them. A held 0, or a band of 0, has no false number to say: `None`.
+        `told_drift_band`'s unit by `drifted`, in BOTH directions -- upward (`sel` 0) then downward (`sel` the
+        step, `ceil(band * |held|)`, whose direction bit is the downward one): sign-preserving and never crossing
+        zero, `_told_value`'s own clauses and not a copy of them. `drifted`'s clamp returns the upward value for
+        a downward step that would reach zero, so the two collapse to one there (duplicates are dropped). A
+        held 0, or a band of 0, has no false number to say: `()`.
       * any OTHER number (an existence reading stored as 0/1) is negated by truthiness, `0 if held else 1`:
         the one false thing to say of it (B11.51).
       * a TRUTH VALUE becomes the other member of its closed roster, `(False, True)`. No draw is spent: the
         roster of every non-numeric cell value a ledger holds today has two members, so the other member is
         the only one (a roster with several would be drawn on `draw(actor, 'lie:<act id>')`, and the act has
         no id at CHOOSE, so none is built; it would be a WITNESS-side change).
-      * anything else -- a value that is neither -- has no roster: `None`.
+      * anything else -- a value that is neither -- has no roster: `()`.
     A claim that is no CELL (`data/requires.py: CELL_STEMS`: a deed kind, a `seen` sighting, a `content:` or
     `shortfall:` claim) is never lied about: the pool is cells only, so the DEED lie (H-198 rule (ii)) stays
     unbuilt. The chain is EMPTY: the liar is the origin of what he says, so the hearer's claim reads
@@ -1947,19 +1958,26 @@ def lie_said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: in
     cells = [c for c in claims if c.subject == subject and is_cell(c)]
     said = said_of(cells, subject, fx, teller, tick=tick, weigh=weigh)
     if said is None:
-        return None
+        return ()
     held = said.value
     if isinstance(held, bool):
-        false = not held
+        falses = [not held]
     elif isinstance(held, (int, float)):
-        # an AMOUNT moves one whole step; an existence reading stored as 0/1 is negated by truthiness (v12 B11.51, `16_PESSIMIST_FI_A` edit 3)
-        false = (drifted(held, fx.get("told_drift_band"), 0, whole_band=True)
-                 if said.predicate.partition(":")[0] in _verbs.QUANTITY_STEMS else (0 if held else 1))
+        if said.predicate.partition(":")[0] in _verbs.QUANTITY_STEMS:
+            # an AMOUNT moves one whole step each way (v12 B11.54): `sel` 0 is upward, `sel` the step (`max_delta`) the downward selector
+            band = fx.get("told_drift_band")
+            step = math.ceil(band * abs(held))
+            falses = [drifted(held, band, 0, whole_band=True), drifted(held, band, step, whole_band=True)]
+        else:
+            # an existence reading stored as 0/1 is negated by truthiness (v12 B11.51, `16_PESSIMIST_FI_A` edit 3)
+            falses = [0 if held else 1]
     else:
-        return None
-    if false == held:
-        return None
-    return Said(said.subject, said.predicate, false, said.confidence, ())
+        return ()
+    out: list = []
+    for false in falses:
+        if false != held and false not in out:
+            out.append(false)
+    return tuple(Said(said.subject, said.predicate, false, said.confidence, ()) for false in out)
 
 
 def confided_outside(claims, said: "Said", hearer: str) -> bool:

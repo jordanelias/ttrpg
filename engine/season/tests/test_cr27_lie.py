@@ -185,26 +185,46 @@ def test_a_number_moves_one_whole_step_sign_preserving_and_never_across_zero():
         assert s.chain == () and s.confidence == 70 and (s.subject, s.predicate) == ("S", "stores:grain")
 
 
+def test_numeric_lie_forms_both_directions_on_a_quantity():
+    """B11.54: a liar of a held amount may say it moved either way -- `lie_said_of` gives one `Said` per direction (the upward whole step, then the downward), `opening_set`
+    forms one `lie` Candidate per `Said`; the control, a `tell` (a row not in `lie_verbs`), forms the one Candidate saying the held value as it holds it. A step that
+    would reach zero comes back as the upward one, so a held 1 has one false number (2), not two."""
+    fx = DEFAULT_FIXTURES                                    # band 0.5
+    assert [s.value for s in lie_said_of([_claim("stores:grain", 8)], "S", fx)] == [12, 4]
+    assert [s.value for s in lie_said_of([_claim("stores:grain", 1)], "S", fx)] == [2]
+    assert [s.value for s in lie_said_of([_claim("stores:grain", -3)], "S", fx)] == [-1, -5]
+    assert lie_said_of([_claim("stores:grain", 0)], "S", fx) == ()
+    for said in lie_said_of([_claim("stores:grain", 8)], "S", fx):
+        assert said.chain == () and said.confidence == 70 and (said.subject, said.predicate) == ("S", "stores:grain")
+    w = _world()
+    lies = [c.operands["said"].value for c in _cands(w) if c.verb == "lie" and c.operands.get("to") == KNOWNOT]
+    assert set(lies) == {4, 12} and lies.count(4) == lies.count(12), lies    # the falsifier: one direction only fails here (`in_confidence` fans each said twice)
+    tells = [c.operands["said"].value for c in _cands(w) if c.verb == "tell" and c.operands.get("to") == KNOWNOT]
+    assert tells and set(tells) == {TRUE_VALUE}, tells         # the control: a row not in `lie_verbs` is unchanged
+    ranks = [c.operands.get("said_rank") for c in _cands(w) if c.verb == "lie" and c.operands.get("to") == KNOWNOT]
+    assert set(ranks) == {0, 1}, ranks                     # distinct act ids: the rank is what `choice_values` reads
+
+
 def test_a_held_zero_a_band_of_zero_a_non_roster_value_and_a_non_cell_have_nothing_false_to_say():
     fx = DEFAULT_FIXTURES
-    assert lie_said_of([_claim("stores:grain", 0)], "S", fx) is None
-    assert lie_said_of([_claim("stores:grain", 8)], "S", fx.sweep("told_drift_band", 0)) is None
-    assert lie_said_of([_claim("held_by:p", "a string")], "S", fx) is None
-    assert lie_said_of([_claim("person.died", True)], "S", fx) is None            # a deed kind: no deed lie
-    assert lie_said_of([_claim("seen", object())], "S", fx) is None
-    assert lie_said_of([], "S", fx) is None
+    assert lie_said_of([_claim("stores:grain", 0)], "S", fx) == ()
+    assert lie_said_of([_claim("stores:grain", 8)], "S", fx.sweep("told_drift_band", 0)) == ()
+    assert lie_said_of([_claim("held_by:p", "a string")], "S", fx) == ()
+    assert lie_said_of([_claim("person.died", True)], "S", fx) == ()            # a deed kind: no deed lie
+    assert lie_said_of([_claim("seen", object())], "S", fx) == ()
+    assert lie_said_of([], "S", fx) == ()
 
 
 def test_a_truth_value_becomes_the_other_member_of_its_roster():
     fx = DEFAULT_FIXTURES
-    assert lie_said_of([_claim("held_by:p", True)], "S", fx).value is False
-    assert lie_said_of([_claim("held_by:p", False)], "S", fx).value is True
+    assert [s.value for s in lie_said_of([_claim("held_by:p", True)], "S", fx)] == [False]
+    assert [s.value for s in lie_said_of([_claim("held_by:p", False)], "S", fx)] == [True]
 
 
 def test_a_cell_is_lied_about_even_when_a_deed_is_the_teller_s_newest_claim():
     deed = Claim("c_deed", "x", "S", "news.told", True, 9, "firsthand", 99, "own")
     got = lie_said_of([_claim("stores:grain", 8), deed], "S", DEFAULT_FIXTURES)
-    assert got is not None and got.predicate == "stores:grain" and got.value == 12
+    assert got and {s.predicate for s in got} == {"stores:grain"} and [s.value for s in got] == [12, 4]
 
 
 def test_the_liars_number_and_the_channels_lossy_copy_are_one_rule(monkeypatch):
@@ -217,7 +237,7 @@ def test_the_liars_number_and_the_channels_lossy_copy_are_one_rule(monkeypatch):
     monkeypatch.setattr(W, "drifted", lambda *a, **k: "owner")
     monkeypatch.setattr(PQ, "drifted", lambda *a, **k: "owner")
     assert W._told_value(w, "p_mid", ev, held) == "owner"
-    assert lie_said_of([held], "S", DEFAULT_FIXTURES).value == "owner"
+    assert [s.value for s in lie_said_of([held], "S", DEFAULT_FIXTURES)] == ["owner"]
 
 
 # ---- the knowledge-model fold's second falsifier (ED-IN-0327) -----------------------------------
@@ -233,7 +253,7 @@ def _two_hear_a_lie(competence_gain):
     for pid, a in ((HOLDER, 2), (KNOWNOT, 6)):
         w.persons[pid].attributes = {next(r.key for r in capability_uses() if r.use == "told_claim_credit"): a}
     act = Act(id="a_lie_cr27", actor=T, verb="lie",
-              payload={"subject": "Hh", "said": lie_said_of(w.persons[T].ledger, "Hh", w.fixtures)})
+              payload={"subject": "Hh", "said": lie_said_of(w.persons[T].ledger, "Hh", w.fixtures)[0]})
     w.acts.append(act)
     ev = Event(H(w.world_seed, w.tick, T, f"ev:news.told:{act.id}"), "news.told", [], [act.id], w.tick, "Success", ())
     w.log.append(ev)
@@ -321,12 +341,12 @@ def test_partial_told_deed_withholds_the_hand(monkeypatch):
 def test_existence_lie_is_a_negation():
     """A lie about an existence reading says the other truth value (`0` for `1`, `1` for `0`), never a whole-band drift of it (`2`)."""
     fx = DEFAULT_FIXTURES
-    assert lie_said_of([_claim("exists:Person", 1)], "S", fx).value == 0
-    assert lie_said_of([_claim("exists:Person", 0)], "S", fx).value == 1       # a held 0 has a false thing to say here, unlike an amount
+    assert [s.value for s in lie_said_of([_claim("exists:Person", 1)], "S", fx)] == [0]
+    assert [s.value for s in lie_said_of([_claim("exists:Person", 0)], "S", fx)] == [1]       # a held 0 has a false thing to say here, unlike an amount
     for v in (0, 1):
-        got = lie_said_of([_claim("exists:Record", v)], "S", fx)
+        (got,) = lie_said_of([_claim("exists:Record", v)], "S", fx)
         assert got.value in (0, 1) and got.value != v and (got.subject, got.predicate) == ("S", "exists:Record")
-    assert lie_said_of([_claim("stores:grain", 8)], "S", fx).value == 12      # the control: an amount still moves one whole step
+    assert [s.value for s in lie_said_of([_claim("stores:grain", 8)], "S", fx)] == [12, 4]      # the control: an amount moves one whole step each way
 
 
 def test_partial_telling_passes_an_existence_reading_whole():
