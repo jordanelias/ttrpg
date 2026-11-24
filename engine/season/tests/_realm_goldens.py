@@ -49,27 +49,27 @@ RE-PINNED AT BA1.99 (every value below, BUILD too), ONCE for the batch BA1-cast-
 
 BUILD = {0: "f8f4cb234a523f56d6a912625cb3046f"}                      # build_realm(seed), unplayed
 
-SHIPPED = {(0, 1): "e279b27a950aef7c84e535271039af89",
-           (1, 1): "eae45beebd2f52777399e8f371b716ef",
-           (2, 1): "40f92a88caa78315183c2946c475636e",
-           (0, 2): "aea26494edfe0505a21d615c1ba821c2",
-           (1, 2): "5d165eb4d6558b7890ca45a2527aa0fb",
-           (2, 2): "63065b278ffb44a6c12a6191cedb7870"}    # BA1.99 re-pin (the docstring); the B10.99 values are in `git log`
+SHIPPED = {(0, 1): "4aab36db1767d39e1074cc7996678350",   # B15.99 re-record: e279b27a.. -> 4aab36db..
+           (1, 1): "20fe61b8784c62f9f3146edef2b35ec8",   # B15.99 re-record: eae45bee.. -> 20fe61b8..
+           (2, 1): "cc07d47191ad6f9aa997fbdb6d24dd98",   # B15.99 re-record: 40f92a88.. -> cc07d471..
+           (0, 2): "e6466cf763c438ba8699db9e8ec659d0",   # B15.99 re-record: aea26494.. -> e6466cf7..
+           (1, 2): "ab117da3abaaf3efd54519fffdf3de16",   # B15.99 re-record: 5d165eb4.. -> ab117da3..
+           (2, 2): "810c688f94ea052a7d899d176c5ef5e8"}    # B15.99 re-record: 63065b27.. -> 810c688f.. (last row); the earlier values are in `git log`
 
 #: What the run leaves, beside its hash: `acts` is `populated.run`'s act count, `log` the
 #: length of the world's Event log, `census` the sha256 of `populated.run`'s return value as sorted
 #: JSON (the census plus `acts`, `actors`, `act_subjects` and `claim_sources`).
 CENSUS = {
-    (0, 1): dict(acts=570, log=13315,
-                 census="8a58cd349f23fdd56f8223449151942b0659a060d44465b05435a06e51ddbeed"),
-    (1, 1): dict(acts=593, log=11681,
-                 census="76f43359661c0f1b982c24ae152b6f7a9b7f4bfa4a6226881e47e1fb8e9c8218"),
-    (2, 1): dict(acts=567, log=12208,
-                 census="8dd936c6faace0b3d80b6a4b6a30a1dcbdf4c90f53ac2cd45e3d369db3158fa9"),
-    (0, 2): dict(acts=1235, log=26996,
-                 census="caa693b0d47fdd9b3b274898265f4a2b4160e2049ca95b1e15069336f09e99b4"),
-    (1, 2): dict(acts=1230, log=27998,
-                 census="44dc9ad3c9cad4248ade0a67b7ab0e0d76ab35d76101c6b14f3b4836dc38576a"),
-    (2, 2): dict(acts=1245, log=29699,
-                 census="268e6c196019d3966fed055e21e1ea1f2836ff9fb823f19861b49f49b33cf639"),
+    (0, 1): dict(acts=583, log=13525,   # B15.99 re-record: acts 570 -> 583, log 13315 -> 13525, census 8a58cd34.. -> 1f2426e6..
+                 census="1f2426e61d00a5e6c625cddd0d262a47f48a7e1792872da54a9f143d9cb5df55"),
+    (1, 1): dict(acts=593, log=11304,   # B15.99 re-record: acts 593 (equal), log 11681 -> 11304, census 76f43359.. -> 0439b04c..
+                 census="0439b04cd5e6ccf849b51e4de1cddae34a19cb207b42b9e4c8c73e78879509ff"),
+    (2, 1): dict(acts=561, log=12097,   # B15.99 re-record: acts 567 -> 561, log 12208 -> 12097, census 8dd936c6.. -> 800444a0..
+                 census="800444a09fae60b6fc1705c6deddffb4a07e01c71941fcb5d41cf06a35b247f6"),
+    (0, 2): dict(acts=1192, log=32794,   # B15.99 re-record: acts 1235 -> 1192, log 26996 -> 32794, census caa693b0.. -> d55dac81..
+                 census="d55dac8175f7314c5a84aa53ffad4b63964767b11eb9f86a88a2a6a7b57834da"),
+    (1, 2): dict(acts=1230, log=38677,   # B15.99 re-record: acts 1230 (equal), log 27998 -> 38677, census 44dc9ad3.. -> b6f4878c..
+                 census="b6f4878ce70c224997a1a205cad8e9439c35d6969e96bb004df7fc588d29fcbb"),
+    (2, 2): dict(acts=1230, log=33701,   # B15.99 re-record: acts 1245 -> 1230, log 29699 -> 33701, census 268e6c19.. -> 425e91e7..
+                 census="425e91e7f0722374592458001928315c81c13b8baa704c283b21218c9a95e61a"),
 }

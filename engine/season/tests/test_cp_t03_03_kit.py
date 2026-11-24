@@ -44,7 +44,7 @@ from ..state.carriers import Rung, Tenure
 
 ACTOR, SUBJECT = "p_low", "p_mid"            # tiny_world: both reside at the hearth `Hh`
 N = 400                                      # the falsifier's fights (the home's n)
-HOME_RATE = 0.975                            # T03 §3: a plated subject fells the actor in 97.5 % of fights
+HOME_RATE = 0.65                             # B15.99 re-record: 0.975 -> 0.65 (T03 §3's 97.5 % was the pre-B15 fight; read here at seeds 1-5, 7 and n = 400: 0.645-0.6775, and 0.64 at n = 4000)
 # [JUSTIFIED: a 4-sigma band on a binomial share at n = 400 and p = 0.975 (sigma 0.0078), rounded up; sampling, not a tuned figure]
 TOL = 0.04
 
@@ -260,10 +260,12 @@ def test_the_sampler_fight_estimate_builds_the_same_input_so_kits_reach_it(armed
     w.fixtures = unreachable(w)
     est = combat.fight_estimate(w, ACTOR, None, SUBJECT, "fight")
     assert est["status"] == "ESTIMATED" and est["samples"] == w.fixtures.get("estimate_samples")
-    assert est["actor_felled"] > 0.9, est
+    # B15.99 re-record: > 0.9 -> > 0.5 (the plated subject now fells the actor about 0.63-0.65, HOME_RATE, since B15.05's armour gap draw; the claim is that the
+    # kit reaches the estimate, so the plated reading must stand clear of the bare one, which reads 0.26-0.36)
+    assert est["actor_felled"] > 0.5, est
     bare = _world(); bare.rungs["Arsenal"].stores = {}
     bare.fixtures = unreachable(bare)
-    assert combat.fight_estimate(bare, ACTOR, None, SUBJECT, "fight")["actor_felled"] < 0.6
+    assert combat.fight_estimate(bare, ACTOR, None, SUBJECT, "fight")["actor_felled"] < 0.45   # B15.99 re-record: < 0.6 -> < 0.45
 
 
 def test_a_record_built_without_kits_is_fought_at_the_engines_default():
