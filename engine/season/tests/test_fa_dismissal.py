@@ -11,6 +11,7 @@ from ..boot.realm import build_realm
 from ..data.matrix import Step, WriteClass
 from ..loop.driver import SeasonDriver, mint_token
 from ..loop.matter import _die
+from ..queries.world_q import commands
 from ..state import gate as G
 from ..state.carriers import Act
 from .test_in61_heir_hears_vacancy import _holder
@@ -75,3 +76,33 @@ def test_heir_holds_both_titles_after_one_succeed():
             resisted += 1
     assert claimed >= 3, claimed
     assert revoked >= 1 and resisted >= 1, (claimed, revoked, resisted)
+
+
+CROWN_SIX = {"off_guard_captain", "off_lord_steward", "off_lord_treasurer", "off_parliamentary_clerk", "off_royal_marshal", "off_spymaster"}
+COUNCIL_SIX = {"off_legal_advisor_hm", "off_military_commander_hm", "off_commune_rep_hm",
+               "off_senior_jarl_west", "off_skald_chief", "off_military_jarl"}
+DUKES = {"off_duchess_hafenmark", "off_duke_varfell"}
+
+
+def test_strippable_set_at_build_includes_six_council_seats():
+    """G1 (B21.52). At build `strippable` is a superset of the Crown's six (through the duchy) and adds the six ducal council seats, each
+    through its own duke's seat (`rung_above_same_faction`: the duke's seat is on the rung directly above the seat's territory anchor, in
+    the seat's faction). FALSIFIER: a council whose body resolved to a faction other than its duke's. CONTROL: the Guild Comptroller
+    (faction `Guilds`) is strippable by nobody, and `off_king` strips none of the twelve (the Crown's rule is unchanged)."""
+    s = strippable(build_realm(0))
+    assert {(DUCHY, seat) for seat in CROWN_SIX} <= s
+    assert COUNCIL_SIX <= {seat for via, seat in s if via in DUKES}, COUNCIL_SIX - {seat for via, seat in s if via in DUKES}
+    assert {via for via, seat in s if seat in COUNCIL_SIX} <= DUKES, "a council seat is strippable through a seat that is not its duke's"
+    assert "off_guild_comptroller" not in {seat for _, seat in s}
+    assert not any(via == THRONE and seat in CROWN_SIX | COUNCIL_SIX for via, seat in s)
+
+
+def test_a_duke_commands_his_council_and_the_guild_comptroller_is_not_his():
+    """B21.20's `commands` (ii) reads `may_revoke`, so anchoring the council one rung below the duchy puts the three Varfell holders (NPC-073,
+    074, 082) and Hafenmark's three under their duke's `issue`. CONTROL: the Comptroller (a Guilds seat) is not the Duchess's man."""
+    w = build_realm(0)
+    for duke, seats in (("off_duke_varfell", ("off_senior_jarl_west", "off_skald_chief", "off_military_jarl")),
+                        ("off_duchess_hafenmark", ("off_legal_advisor_hm", "off_military_commander_hm", "off_commune_rep_hm"))):
+        for seat in seats:
+            assert commands(w, _holder(w, duke), duke, _holder(w, seat)), (duke, seat)
+    assert not commands(w, _holder(w, "off_duchess_hafenmark"), "off_duchess_hafenmark", _holder(w, "off_guild_comptroller"))

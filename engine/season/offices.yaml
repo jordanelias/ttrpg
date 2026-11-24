@@ -444,9 +444,11 @@ seats:
     source:     "faction_politics_v30.md -- \"Cardinal Justice (alternate) / Senior Inquisitor\""
     note:       "[NEW]. Two seats on one body is lawful -- a body is not a seat."
 
+  # B21.52 (A-58, C3-L7): anchored on `T8` (Gransol, Hafenmark's constitutional capital): its `revocation:` is `rung_above_same_faction`, not
+  # `holder_of_rung`, so a seizure of this territory alone does not carry this seat; it passes with the ducal seat.
   - id:         off_legal_advisor_hm
     post:       "Legal Advisor to Baralta"
-    rung:       {duchy: "Hafenmark"}
+    rung:       {territory: "T8"}
     body:       "Inner Council"
     faction:    null
     remit_acts: []
@@ -457,9 +459,11 @@ seats:
     source:     "faction_canon_v30.md; npc_behavior_v30.md §2.16 (one of Hafenmark's ruled two)"
     note:       "[LIVE]."
 
+  # B21.52 (A-58, C3-L7): anchored on `T8` (Gransol): its `revocation:` is `rung_above_same_faction`, not `holder_of_rung`, so a seizure
+  # of this territory alone does not carry this seat; it passes with the ducal seat.
   - id:         off_military_commander_hm
     post:       "Military Commander"
-    rung:       {duchy: "Hafenmark"}
+    rung:       {territory: "T8"}
     body:       "Inner Council"
     faction:    null
     remit_acts: [convene, dispatch]
@@ -470,9 +474,11 @@ seats:
     source:     "faction_canon_v30.md; npc_behavior_v30.md §2.16 (the second of Hafenmark's ruled two)"
     note:       "[LIVE]. `convene`: a muster is a sitting."
 
+  # B21.52 (A-58, C3-L7): anchored on `T8` (Gransol): its `revocation:` is `rung_above_same_faction`, not `holder_of_rung`, so a seizure
+  # of this territory alone does not carry this seat; it passes with the ducal seat.
   - id:         off_commune_rep_hm
     post:       "Commune Representative (Banneret)"
-    rung:       {duchy: "Hafenmark"}
+    rung:       {territory: "T8"}
     body:       "Inner Council"
     faction:    null
     remit_acts: []
@@ -515,9 +521,12 @@ seats:
     source:     "references/npc_registry.yaml NPC-084 (`guild leader`); `06_FA_remit_grant_by_row` edit 1"
     note:       "[LIVE]. Loop-built from the registry cell; this row overlays rung, remit and bases. `conferral: elected` -- the Guild Forum, as `off_guild_comptroller`'s."
 
+  # B21.52 (A-58, C3-L7): anchored on `T12` (Sigurdshelm, the ducal seat; [ASSUMPTION: the ducal seat's territory -- Jordan may move this
+  # row onto the Western Highlands' own territory; the rule reaches him either way]): its `revocation:` is `rung_above_same_faction`, not
+  # `holder_of_rung`, so a seizure of this territory alone does not carry this seat; it passes with the ducal seat.
   - id:         off_senior_jarl_west
     post:       "Senior Jarl of the Western Highlands"
-    rung:       {duchy: "Varfell"}
+    rung:       {territory: "T12"}
     body:       "Jarl Council"
     faction:    null
     remit_acts: [determine]
@@ -529,9 +538,11 @@ seats:
     source:     "faction_politics_v30.md; ED-637 rename to Björn Holdar"
     note:       "[LIVE]. draft body `Council of the Highlands` and draft `rung_kind: province` are both dropped -- the world has zero `province` rungs."
 
+  # B21.52 (A-58, C3-L7): anchored on `T12` (Sigurdshelm): its `revocation:` is `rung_above_same_faction`, not `holder_of_rung`, so a
+  # seizure of this territory alone does not carry this seat; it passes with the ducal seat.
   - id:         off_skald_chief
     post:       "Skald-Chief"
-    rung:       {duchy: "Varfell"}
+    rung:       {territory: "T12"}
     body:       "Jarl Council"
     faction:    null
     remit_acts: [determine]
@@ -543,9 +554,11 @@ seats:
     source:     "faction_politics_v30.md; ED-638 rename to Ingrid Stenskald"
     note:       "[LIVE]. `determine` remit is canon: the draft's own note -- \"any Deed-Claim succession in Varfell needs the Skald-Chief's endorsement\"."
 
+  # B21.52 (A-58, C3-L7): anchored on `T12` (Sigurdshelm): its `revocation:` is `rung_above_same_faction`, not `holder_of_rung`, so a
+  # seizure of this territory alone does not carry this seat; it passes with the ducal seat.
   - id:         off_military_jarl
     post:       "Military Jarl"
-    rung:       {duchy: "Varfell"}
+    rung:       {territory: "T12"}
     body:       "Jarl Council"
     faction:    null
     remit_acts: [convene, dispatch]

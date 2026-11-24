@@ -1396,7 +1396,7 @@
           "id": "off_legal_advisor_hm",
           "post": "Legal Advisor to Baralta",
           "rung": {
-            "duchy": "Hafenmark"
+            "territory": "T8"
           },
           "body": "Inner Council",
           "faction": null,
@@ -1412,7 +1412,7 @@
           "id": "off_military_commander_hm",
           "post": "Military Commander",
           "rung": {
-            "duchy": "Hafenmark"
+            "territory": "T8"
           },
           "body": "Inner Council",
           "faction": null,
@@ -1431,7 +1431,7 @@
           "id": "off_commune_rep_hm",
           "post": "Commune Representative (Banneret)",
           "rung": {
-            "duchy": "Hafenmark"
+            "territory": "T8"
           },
           "body": "Inner Council",
           "faction": null,
@@ -1484,7 +1484,7 @@
           "id": "off_senior_jarl_west",
           "post": "Senior Jarl of the Western Highlands",
           "rung": {
-            "duchy": "Varfell"
+            "territory": "T12"
           },
           "body": "Jarl Council",
           "faction": null,
@@ -1503,7 +1503,7 @@
           "id": "off_skald_chief",
           "post": "Skald-Chief",
           "rung": {
-            "duchy": "Varfell"
+            "territory": "T12"
           },
           "body": "Jarl Council",
           "faction": null,
@@ -1522,7 +1522,7 @@
           "id": "off_military_jarl",
           "post": "Military Jarl",
           "rung": {
-            "duchy": "Varfell"
+            "territory": "T12"
           },
           "body": "Jarl Council",
           "faction": null,
