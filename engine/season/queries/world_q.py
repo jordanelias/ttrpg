@@ -35,7 +35,7 @@ from ..data.rosters import (
     CONTINUATION_TIES, SUCCESSIONS,
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
     INVESTED,
-    MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
+    MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROCLAIMED, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS, TITLE_DOMAINS,
     faction_prop_id,
     remove_distance, require_member,
@@ -1524,7 +1524,7 @@ def guard_weight(w: World, rung_id: str) -> int:
     return sum(w.persons[p].weight for p in sworn)
 
 
-def issuing_seat(w: World, rid: str, verb: Optional[str] = None) -> Optional[str]:
+def issuing_seat(w: World, rid: str, verb: Optional[frozenset] = None) -> Optional[str]:
     """THE SEAT THAT ISSUED THE WRIT `rid` -- the `via` of the Act that caused the Record's CREATING
     Event (#453 §9.1 / K-52: *"read through `state/attribution.py::causing_act` on the warrant Record's
     creating Event -- that Act's `via`"*), or `None` when no Event wrote it (a hand-planted Record), no
@@ -1533,9 +1533,10 @@ def issuing_seat(w: World, rid: str, verb: Optional[str] = None) -> Optional[str
     FIRST in the log whose changes name the Record (`loop/matter.py`'s `prior` reads the last, for a
     different question). `arrest` and the `audience` stem's writ limb both ask it, and `queries/` may not
     import `loop/`, so the one owner sits where both readers reach it. `verb` (v10 PC-10b), when given, asks only
-    for a Record that verb's act minted (the writ limb passes `WRIT_MINTING_VERB`); `None` is every creating act."""
+    for a Record one of those verbs' acts minted (a collection; the writ limb passes `WRIT_MINTING_VERBS`); `None` is every
+    creating act."""
     act = _creating_act(w, rid)
-    if verb is not None and getattr(act, "verb", None) != verb:
+    if verb is not None and getattr(act, "verb", None) not in verb:
         return None
     via = getattr(act, "via", None)
     return via if via in w.offices else None
@@ -1549,17 +1550,25 @@ def _creating_act(w: World, rid: str):
     return causing_act(w, made) if made is not None else None
 
 
-# THE VERB WHOSE MINT IS AN INVITATION (v10 PC-10b; H-240's carried point): `admits_audience`'s writ limb reads
+def minting_verb(w: World, rid: str) -> Optional[str]:
+    """THE VERB OF THE ACT THAT MADE THE RECORD `rid` -- `_creating_act`'s, the read `issuing_seat` filters on -- or `None` (a
+    hand-planted Record, or an Event no act caused). B21.18: `loop/witness.py::addressee_reads` asks it of a document, since
+    `rosters.yaml: read_to_addressee` and `proclaimed` cover a kind as one verb mints it (`covenant` mints `issue`'s
+    `dispensation` through `issue`'s body, and only `issue`'s is proclaimed, A-21)."""
+    return getattr(_creating_act(w, rid), "verb", None)
+
+
+# THE VERBS WHOSE MINT IS AN INVITATION (v10 PC-10b; H-240's carried point): `admits_audience`'s writ limb reads
 # a held, addressed Record as a licence to enter only when `issue` made it. `writs_held` stamps every
 # `RECORD_REFERENT_KINDS` member, and PC-10b's `challenge` joins that set (`accept`'s row), so without this
 # narrowing a challenge addressed to a man would be read as a writ admitting him to a court. A VERB, not a kind:
 # H-240 names the creating act's verb, and a `covenant`'s dispensation (`_eff_issue`'s body, another verb) is an
 # instrument, not an invitation [ASSUMPTION; medium; Jordan to correct; revert: any `dispensation`-kind Record].
-WRIT_MINTING_VERB = "issue"
-if WRIT_MINTING_VERB not in VERB_TABLE:           # the sibling constants refuse at import; a renamed verb would close the limb silently
-    raise Forbidden(f"`world_q.WRIT_MINTING_VERB` names {WRIT_MINTING_VERB!r}, which `verb_table.yaml` does not",
-                    "verb_table.yaml", needs="the verb whose mint is an invitation, as a `verb_table.yaml` row",
-                    law="v10 PC-10b -- the writ limb of `admits_audience` reads a verb; a renamed verb must refuse, not close it")
+# B21.18 (`06_FA_decree_binds` edit 2): THE LIST IS DATA -- the verbs `rosters.yaml: proclaimed` lists (a writ made public is
+# the seat's instrument, A-21), so `issue` is named once, there, and refused at import by its loader if no row mints the kind
+# (`data/verbs.py::_check_record_verb_minting`). ⚠ The roster's revert (`proclaimed: {}`) empties this set too, closing the
+# limb that before B21.18 opened on an `issue`-minted writ; the limb is unreached in computed play (`admits_audience`, limb 4).
+WRIT_MINTING_VERBS = frozenset().union(*PROCLAIMED.values())
 
 
 def record_names(w: World, rid, operand: str, value):
@@ -1617,7 +1626,7 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
          `dispensation` counts: its content, its `at` and the issuer's continued tenure are not read
          [ASSUMPTION; medium; Jordan to correct; revert: read them]; and a writ reaches its addressee
          only by `give` (`ED-IN-0292` (1), RULED NO), so the limb is built but unreached in computed play.
-         ⚠ v10 PC-10b: ONLY A RECORD `issue` MINTED (`WRIT_MINTING_VERB`, read off the creating act): `writs_held`
+         ⚠ v10 PC-10b: ONLY A RECORD `issue` MINTED (`WRIT_MINTING_VERBS`, read off the creating act): `writs_held`
          stamps a held `challenge` too, and a challenge is not an invitation.
 
     ⚠ LIMIT, STATED: no limb admits a person to the rung where he LIVES (`residence_of`). Where a live sworn
@@ -1639,10 +1648,10 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
     p = w.persons.get(actor)
     if p is None:
         return False
-    # v10 PC-10b: NARROWED TO RECORDS `issue` MINTED (`WRIT_MINTING_VERB`), so `challenge` joining
+    # v10 PC-10b: NARROWED TO RECORDS `issue` MINTED (`WRIT_MINTING_VERBS`), so `challenge` joining
     # `RECORD_REFERENT_KINDS` does not widen the gate (a challenge is minted by an `own` act, and is no invitation).
     for rid in writs_held(w, p):
-        seat = issuing_seat(w, rid, WRIT_MINTING_VERB)
+        seat = issuing_seat(w, rid, WRIT_MINTING_VERBS)
         if seat is not None and purview_reaches(w, w.offices[seat], rung):
             return True
     return False
