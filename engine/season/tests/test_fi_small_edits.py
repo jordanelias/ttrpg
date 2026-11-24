@@ -118,3 +118,31 @@ def test_research_from_elsewhere_is_refused():
     # CONTROL: the person present still executes -- no refusal, and the finding kinds the row emits.
     assert not [k for k in present if "inquiry.refused" in k], present
     assert {k for ks in present for k in ks} & {"finding.made", "finding.none"}, present
+
+
+# ---- B11.14 (`08_FI_04` §2, second bullet): a repeated ungraded finding deposits nothing --------------------------------
+
+
+def _claims_of(w, kind: str) -> list:
+    return [(pid, c) for pid, p in w.persons.items() for c in p.ledger if c.predicate == kind]
+
+
+def test_ten_repeated_interviews_leave_one_claim():
+    # Ten `interview` acts of one person by one actor in one world: each holder keeps ONE `(subject, finding.made, True)`, not ten (H-320).
+    w, d = _world()
+    for i in range(10):
+        out = _act_witnessed(w, d, Act(id=f"a_b1114_interview_{i}", actor=ACTOR, verb="interview", payload={"subject": "p_mid"}))
+        assert [e.kind for e in out] == ["finding.made"], [e.kind for e in out]
+    held = _claims_of(w, "finding.made")
+    holders = {pid for pid, _ in held}
+    assert ACTOR in holders and len(holders) >= 2, holders        # the fan reached a bystander too: the one claim is the skip's doing
+    assert len(held) == len(holders), f"{len(held)} claims for {len(holders)} holders"
+    assert all(c.value is True and c.source == "firsthand" for _, c in held), held
+
+    # CONTROL: a graded inquiry's repeated finding still deposits per band -- ten `research` acts leave several claims on one holder.
+    w, d = _world()
+    kinds = []
+    for i in range(10):
+        kinds += [e.kind for e in _act_witnessed(w, d, Act(id=f"a_b1114_research_{i}", actor=ACTOR, verb="research", payload={"subject": REC}))]
+    assert kinds.count("finding.made") >= 3, kinds
+    assert len([c for pid, c in _claims_of(w, "finding.made") if pid == ACTOR]) > 1

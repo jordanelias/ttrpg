@@ -302,6 +302,13 @@ require_member(HAND_TERM, OBSERVATION_TERMS,
                    "does not carry would mask nothing and show every finder the hand")
 
 
+def _ungraded(row) -> bool:
+    """B11.14: A VERB ROW THAT DECLARES NO WRITE AT ANY BAND AND NO BANDS -- the shape of an ungraded inquiry (`interview`), read off the
+    row's columns (`writes`, `writes_by_degree`, `emits_by_degree`), never off its name. `None` (an Event no act caused, a verb with no
+    row) is not one."""
+    return row is not None and not row.writes and not row.writes_by_degree and not row.emits_by_degree
+
+
 def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cfx):
     """v9 FI-03 (`ED-FI-0002`): THE CLAIMS A FINDING DEPOSITS -- `(finder, trail Event, Claim)` per claim,
     yielded per uncovered trail Event so each re-check sees the deposits already written.
@@ -646,9 +653,17 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # "a claim whose subject is SOMETHING THEY HOLD" unreachable. `changes[]` already names
         # what an act touched, so this reads the Event the design has rather than adding a field
         # to it (§8.1).
+        # B11.14 (`08_FI_04` §2, H-320): A REPEATED UNGRADED FINDING LEAVES ONE CLAIM. An Event whose verb row declares no `writes:` at any
+        # band and no bands (`_ungraded`) reports a thing no cell changed, so its claim is `(subject, kind, True)` and a second one is the
+        # same belief stored again; it is skipped below when the holder already holds that exact triple FIRSTHAND -- not told, an EMPTY
+        # chain, the told channel's own reading of the word (reading `source` instead would make the count depend on the channel map, which
+        # `test_15d_falsifier` neutralises) -- the told channel's exact-triple guard, one deposit over. Keyed on the row's shape, never on a verb name; moot per row once the row has a product.
+        ungraded = _ungraded(VERB_TABLE.get(getattr(self.act_of.get(e.id), "verb", None)))
         for n, subj in enumerate(() if only is not None else
                                  claim_subjects(w, e, claim_rule,
                                                 act_refs(self.act_of.get(e.id)))):
+            if ungraded and any(h.subject == subj and h.predicate == e.kind and h.value is True and not h.chain for h in p.ledger):
+                continue
             cid = (e.id if via_knot and n == 0
                    else H(w.world_seed, w.tick, pid, f"claim:{e.id}:{n}"))
             # ⚠ `self.lap` IS THE LAST ARGUMENT AND `U2` IS WHY. §F1 Q2 is *a claim LANDING in
