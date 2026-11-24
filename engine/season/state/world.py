@@ -39,7 +39,7 @@ from ..data.matrix import Step, WriteClass, matrix_row, partition_lookup
 from ..data.requires import UNKNOWN, Observation
 from ..data.verbs import EVENT_KINDS
 from ..data.rosters import (
-    HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, TENURE_KINDS, roster)
+    HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, TENURE_KINDS)
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
 from ..trace_log import TRACE
 from .attribution import anchor_of, cover_at_logging
@@ -1372,7 +1372,7 @@ class World:
         """A kind no Part D row declares is a FABRICATED kind, and the `emits:` column is the only
         thing that may name one.
 
-        ⚠ ONE RULE, ONE MESSAGE, for the must-name-a-kind path and the exempt path alike, so a test
+        ⚠ ONE RULE, ONE MESSAGE, for the must-name-a-kind path and this one alike, so a test
         matching one message matches both (§8)."""
         if emits is None or emits in declared:
             return
@@ -1570,15 +1570,7 @@ class World:
         # true while the mutation happens beside it is worse than no gate.
         # -- W4: THE EMISSION, GATED ON THE SAME ROW AS THE WRITE ------------------------
         declared = tuple(row.emits or ())
-        # `H-86`. A row whose declared emissions are ALL CONDITIONAL is exempt from the
-        # must-name-a-kind rule -- `(Record, ttl)` declares only `record.expired`, and emitting
-        # that on a non-terminal decrement asserts an expiry that has not happened. The exempt
-        # rows are DATA (`rosters.yaml: conditional_emission_rows`), never a literal here, and the
-        # ambiguity in Part D's column that makes the roster necessary is registered rather than
-        # decided. The exemption is narrow: an UNDECLARED kind is still refused below.
-        conditional = roster("conditional_emission_rows")
-        if (wclass is WriteClass.MATTER and declared and emits is None
-                and f"{record_kind}.{fieldname}" not in conditional):
+        if wclass is WriteClass.MATTER and declared and emits is None:
             TRACE.write(thing, wclass.value, sname, False)
             raise Forbidden(
                 f"({record_kind}, {fieldname}) written at MATTER and emitted nothing, while "

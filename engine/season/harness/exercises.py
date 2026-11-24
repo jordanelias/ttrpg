@@ -286,7 +286,7 @@ def resolve(token: str, *, probes, verb_table, resolvable, register, matrix) -> 
         # a literal in a Python body is a defect, whatever else is true of it."
         #
         # And the primitive was already loaded. Part D's `emits:` column carries every MATTER
-        # emission -- `term.matured`, `record.expired`, `condition.band_crossed`, `claim.decayed`
+        # emission -- `term.matured`, `condition.band_crossed`, `claim.decayed`
         # and thirty more -- so composing on `MATRIX` covers all of them and moves when the data
         # moves. The hand-added word covered one and would have produced a spurious blocker on
         # any of the rest. Found by the `W10` adversarial pass.

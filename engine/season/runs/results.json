@@ -9797,16 +9797,6 @@
    "by": "construction",
    "tests": "a disaster must be able to strike many places at once and be one thing that happened"
   },
-  "W7": {
-   "id": "W7",
-   "verdict": "PASS",
-   "detail": "PASS: `(Record, ttl)` is decremented at MATTER by an Event -- Part D's row (D7, \u00a713's licensed clock)",
-   "kind": null,
-   "section": "S13",
-   "title": "a record expires",
-   "by": "construction",
-   "tests": "a document must be able to lapse after a time"
-  },
   "W8": {
    "id": "W8",
    "verdict": "PASS",
@@ -11209,7 +11199,7 @@
   "BARRIER": 1892,
   "DECISION": 1945,
   "QUERY": 30012,
-  "WRITE": 2306,
+  "WRITE": 2305,
   "EVENT": 2336,
   "ACT": 95,
   "CLAIM": 1625,

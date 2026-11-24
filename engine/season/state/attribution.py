@@ -152,7 +152,7 @@ def live_cover(w, actor: Optional[str]) -> Optional[str]:
     (S15: an edge is owned by its subject, so this reads his `Person.tenures`, never an index over every
     edge); (2) it is a `cover` (`COVER_KIND`) whose one key (`COVER_KEY`, `terms`) names HIM -- #453's
     *"where `terms == actor`"*: a cover handed to another hides nobody but the man it names, and only
-    while that man holds it; (3) A STAGE IS UNMATURED (`_a_stage_unmatured`). Several at once answer the first by
+    while that man holds it; (3) A STAGE IS UNMATURED (`a_stage_unmatured`). Several at once answer the first by
     Record id, so the read is deterministic. A second cover is REACHABLE in computed play: `opening_set`
     declines it only through the holder's `content:cover` LEDGER claim (`held_document_declines`), which the
     ledger cap can evict and which two `conceal`s packed into one scene precede.
@@ -175,12 +175,12 @@ def live_cover(w, actor: Optional[str]) -> Optional[str]:
         if rec is None or rec.kind != COVER_KIND:
             continue
         sm = rec.subject_matter if isinstance(rec.subject_matter, dict) else {}
-        if sm.get(COVER_KEY) == actor and _a_stage_unmatured(w, rec):
+        if sm.get(COVER_KEY) == actor and a_stage_unmatured(w, rec):
             found.append(rec.id)
     return min(found) if found else None
 
 
-def _a_stage_unmatured(w, rec) -> bool:
+def a_stage_unmatured(w, rec) -> bool:
     """IS SOME DECLARED STAGE OF `rec` NOT YET RIPENED? -- `matured_terms`' count against the stage list,
     the log being the ruled carrier of *how many have ripened* (`matured_terms`' docstring). A Record
     with no stage has none unmatured. Two shortcuts, each EXACT rather than approximate, so the log is
@@ -215,7 +215,7 @@ def matured_terms(w, rid: str, stop: Optional[int] = None) -> int:
     ⚠ IT LIVES HERE, NOT IN `queries/world_q.py` (which re-exports it for
     `ceiling`): `live_cover` (above) asks it from `anchor_of`, and `state/` imports nothing from
     `queries/` (`world_q` imports this module), so the one owner moved down rather than gaining a copy."""
-    # `stop`: a caller that asks only whether the count REACHES a number (`_a_stage_unmatured`: every
+    # `stop`: a caller that asks only whether the count REACHES a number (`a_stage_unmatured`: every
     # declared stage) ends the scan there; the answer is `min(count, stop)`, which is all it reads.
     n = 0
     for e in w.log:

@@ -985,7 +985,6 @@ class Record:
     kind: str
     forgery_quality: int = 0
     subject_matter: Any = None
-    ttl: Optional[int] = None
     stages: list[tuple] = field(default_factory=list)
     # ⚠⚠ **RULED BY JORDAN, 2026-09-10: "add `Record.matured`, write it at MATTER".** Of three
     # costed options — add the field and write it; make the Event carry no change; move maturation

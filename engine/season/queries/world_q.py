@@ -72,7 +72,8 @@ from .person_q import deed_doers
 # expectations here; the doer of a paired deed is the pairing rule's (IN-58).
 from ..data.verbs import DEED_KINDS, VERB_CAPABILITY
 from .person_q import PAIRED_KINDS, opinion
-from ..state.attribution import anchor_of, causing_act, event_by_id, matured_terms  # noqa: F401 -- re-exported
+from ..state.attribution import (  # noqa: F401 -- re-exported
+    a_stage_unmatured, anchor_of, causing_act, event_by_id, matured_terms)
 from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE. The write gate's F3 clause needs
 # both -- ruling (3)'s parent rung and ruling (4)'s purview subtree -- and the gate is in `state/`,
@@ -2249,7 +2250,7 @@ def standing_order(w: World, faction: Optional[str], place: Optional[str]):
     """CP-T04-02 (AM-C-09): THE STANDING ORDER `faction`'s line fights `place` under, or `None` -- the live
     `standing_order` Record about `place` (its `at` key) held by a seat of `faction`, the one whose HOLDER EDGE has the
     greatest `since`; a tie goes to the later in `w.tenures` (the read-only owner-first view: the last-write rule of
-    `containment.home_of`). `Record` has no creation tick (`ttl` has no reader), so the edge's `since` -- opened at
+    `containment.home_of`). `Record` has no creation tick, so the edge's `since` -- opened at
     `w.tick` by `_makers_hold` -- is the order's age. OLDER ORDERS ARE IGNORED, NOT DELETED. A holder is `a seat of
     that faction` when he holds a live `hold` on an Office `seat_faction` reads as `faction`; a Record held by anyone else, or about
     another place, or already closed, is not the faction's order here. `None` for no faction or no place: the field as it was."""
@@ -4580,6 +4581,14 @@ class WorldReader:
             # answers this (`WORLD_ONLY_STEMS`).
             p = w.persons.get(subject)
             return UNKNOWN if p is None else not p.is_cohort
+        if stem == "stage_open":
+            # v12 B11.17 (`08_FI_04` §4): HAS A DECLARED STAGE OF THE RECORD `subject` NOT YET MATURED --
+            # `a_stage_unmatured`, the one owner of that reading. A writ ends when its last declared stage
+            # matures, so `comply`'s conjunct refuses a lapsed one. A Record declaring no stage has none to
+            # mature and is open (it can never lapse). `arg` (the actor) is not read. UNKNOWN for a subject
+            # that is no Record (`ID-5`). The person side never answers this (`WORLD_ONLY_STEMS`).
+            rec = w.records.get(subject)
+            return UNKNOWN if rec is None else (not rec.stages or a_stage_unmatured(w, rec))
         if stem == "names":
             # v10 PC-10b (H-240 route (1)): DOES THE RECORD `subject` NAME THE VALUE OF ONE OPERAND, under
             # the content key its kind maps for that operand -- `arg` is `<operand>:<value>`, the

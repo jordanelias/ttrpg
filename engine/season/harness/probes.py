@@ -1809,26 +1809,6 @@ def w6():
             f"ONE ID (S31.1 exception 3). It reached {r['deposits']} ledger(s) through WITNESS")
 
 
-@probe("W7", "a record expires", "S13", by="construction",
-       tests="a document must be able to lapse after a time")
-def w7():
-    w = tiny_world()
-    rec = Record("rec_ttl", "S", "text", ttl=2)   # `record_kinds` closes the kind (position `15`)
-    w.records[rec.id] = rec
-    w.step = Step.MATTER
-    # `W4` / `H-86`: `(Record, ttl)` declares ONLY `record.expired`, which fires at zero -- so a
-    # non-terminal decrement of §13's licensed clock has no declared kind and the row is exempt
-    # from the must-name-a-kind rule by `rosters.yaml: conditional_emission_rows`. Emitting the
-    # terminal kind here would assert an expiry that has not happened.
-    w.write("carrier_exists", mint_token(w, WriteClass.MATTER), lambda: setattr(rec, "ttl", rec.ttl - 1),
-            record_kind="Record", fieldname="ttl", driver="Event")
-    # W2: raised until Part D carried the five `Record` rows -- defect D7, under which EVERY
-    # Record write was an unmarked cell. `(Record, ttl)` is MATTER-only, `social: false`,
-    # "§13's licensed clock".
-    return ("PASS: `(Record, ttl)` is decremented at MATTER by an Event -- Part D's row (D7, "
-            "§13's licensed clock)")
-
-
 @probe("W8", "a case ripens against someone who does nothing", "S13.1", by="probe-model",
        tests="a legal or institutional process must be able to advance against a character who is passive")
 def w8():

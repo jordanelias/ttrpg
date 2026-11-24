@@ -1490,7 +1490,7 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
         ("Date", "fired"), ("DocketItem", "matter"),
         ("Person", "claim_ledger"), ("Person", "pursuits"), ("Person", "exists"),
         ("Person", "scar"), ("Person", "stance"), ("Record", "matured"),
-        ("Record", "stages"), ("Record", "ttl"), ("Rung", "envelope"),
+        ("Record", "stages"), ("Rung", "envelope"),
         ("Rung", "stores"), ("Rung", "yield"), ("Site", "condition"),
         ("Tenure", "since"), ("Tenure", "until"),
     }
@@ -3391,13 +3391,14 @@ def test_w4_root_belongs_only_to_the_seed_and_a_clocks_genuine_first_emission():
             f"{seasons} season(s): {len(rooted)} roots for {len(w.sites)} site(s)")
 
 
-def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_conditional():
+def test_w4_every_matter_write_on_a_declaring_row_emits():
     """The gate itself, both directions. A MATTER write on a row Part D gives an `emits:` must name
-    one of the declared kinds; a kind the row does not declare is refused.
+    one of the declared kinds; a kind the row does not declare is refused. No row is exempt (`H-12`).
 
     ⚠ THE GATE FOUND SIX SILENT MATTER WRITES THE MOMENT IT WAS TURNED ON — `(Record, matured)`,
     `(Person, exists)` twice, `(Tenure, until)`, `(Record, ttl)` and `(Rung, envelope)`, every one
-    on a row whose `emits:` Part D declares. Five were fixed; the sixth is `H-86`."""
+    on a row whose `emits:` Part D declares. Five were fixed; the sixth, `(Record, ttl)`, was
+    deleted with its field."""
     from ..harness import headless as HL
     w = HL.build_world(0)
     w.step = Step.MATTER
@@ -3417,27 +3418,6 @@ def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_cond
                 record_kind="Site", fieldname="condition", driver="Event",
                 emits="condition.worn", subject=site.id, causes=[])
 
-    # AND THE REGISTERED EXEMPTION IS READ FROM DATA, NOT FROM A LITERAL (`H-86`).
-    #
-    # ⚠ THIS CLAUSE USED TO BE VACUOUS AND THE VACUITY WAS INVISIBLE. It read
-    # `rec = next(iter(w.records.values()), None)` then `if rec is not None:` — and
-    # `headless.build_world` creates NO Records, so `rec` was unconditionally `None` and the write
-    # never ran. Deleting the exemption from `write()` left all four `w4` tests green. A Record is
-    # built here rather than hoped for. Found by the `W4` adversarial pass.
-    assert "Record.ttl" in roster("conditional_emission_rows")
-    rec = Record("rec_w4", "S", "text", ttl=2)   # `record_kinds` closes the kind (position `15`)
-    w.records[rec.id] = rec
-    w.write("ttl", mint_token(w, WriteClass.MATTER), lambda: setattr(rec, "ttl", rec.ttl - 1),
-            record_kind="Record", fieldname="ttl", driver="Event")
-    assert rec.ttl == 1, "the exempt write did not apply"
-    assert not [e for e in w.log if anchor_of(w, e) == rec.id], (
-        "the exempt row emitted anyway — `record.expired` on a non-terminal decrement asserts an "
-        "expiry that has not happened")
-    # AND THE EXEMPTION IS NARROW: an UNDECLARED kind is still refused on the same row.
-    with pytest.raises(Forbidden, match="does not declare"):
-        w.write("ttl", mint_token(w, WriteClass.MATTER), lambda: setattr(rec, "ttl", rec.ttl - 1),
-                record_kind="Record", fieldname="ttl", driver="Event",
-                emits="record.vanished", subject=rec.id, causes=[ROOT])
     # AND `subject=` IS MANDATORY WHEN EMITTING — the trace-label fallback was the value that
     # made every site's wear emit under the subject `"condition"`.
     with pytest.raises(Forbidden, match="no `subject="):

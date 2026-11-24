@@ -2813,17 +2813,6 @@
             }
           }
         },
-        "conditional_emission_rows": {
-          "source": "`W4`. Part D's `emits:` column does not distinguish a kind emitted ON EVERY WRITE from one emitted only WHEN A CONDITION HOLDS, and the two are different things.",
-          "note": "\u26a0 THIS ROSTER EXISTS BECAUSE PART D'S COLUMN IS AMBIGUOUS, AND THE AMBIGUITY IS REGISTERED AS `H-86` RATHER THAN DECIDED HERE. `W4` makes a MATTER write on a row that declares an `emits:` kind name one -- that is `D22`, and `H-12` is RULED that way. But `(Record, ttl)` declares only `record.expired`, and the row is DECREMENTED EVERY SEASON: emitting `record.expired` on every decrement would publish an expiry that has not happened, which is worse than the silent write the gate exists to stop. `(Site, condition)` shows the other shape -- `condition.worn` per write PLUS `condition.band_crossed` on a condition -- so the column carries both kinds of kind with nothing to tell them apart. Listing the rows whose declared emissions are ALL conditional is the smallest thing that is true; deciding the column's schema is a Part D change and belongs to whoever ratifies `H-86`.",
-          "why": {
-            "Record.ttl": "`record.expired` fires at zero; every other decrement of \u00a713's licensed clock is a tick with no declared kind, and emitting the terminal one would assert an expiry that has not happened"
-          },
-          "cite": "H-86",
-          "values": [
-            "Record.ttl"
-          ]
-        },
         "knowledge_kinds": {
           "source": "`H-85`; NPC-087's own `season_requires` supplies the two values",
           "open": true,
@@ -5543,7 +5532,7 @@
           "referent_class": "Record",
           "referent_named": true,
           "referent_class_note": "v9 IN-09 (H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): FORMED ON A WRIT THE PERSON HOLDS AND IS ADDRESSED BY, AND HIS OWN LEDGER NAMES. `queries/world_q.py::writs_held` stamps the dispensations on his live `hold` edges onto the question he answers as `Record` (IN-53 D1's partition, `_stamped`), and `referent_named` (IN-10 (a)'s column) keeps the Candidate to a writ `person_q.ledger_names` names -- the content claim WITNESS deposits for a new holder. A WRIT is stamped by `writs_held` alone (the own-referent term skips it), so a bystander who merely saw it issued is offered no `comply`; the shared `Record` class also forms the row on a held petition or works and on a Record the question names, which the fold refuses on `exists:dispensation`. REVERT: drop both columns.",
-          "requires": "a claim of the dispensation's terms is in the actor's own ledger",
+          "requires": "a claim of the dispensation's terms is in the actor's own ledger, and the writ's last stage has not matured",
           "requires_typed": {
             "all": [
               {
@@ -5554,10 +5543,15 @@
               {
                 "form": "own_ledger",
                 "of": "subject"
+              },
+              {
+                "form": "relation",
+                "of": "subject",
+                "relation": "stage_open"
               }
             ]
           },
-          "requires_typed_note": "v9 IN-09 (`19b`, J-2 arm A, J-10) TYPES THIS CELL. \u00a7E3 `:430` \u2014 *a claim of the dispensation's terms is in the actor's **own** ledger*. \u00a7F.24a form 6, `tell`'s form, and THE OPERAND IS THE ACT'S `subject`, READ AS THE WRIT: after plan positions `15`/`15c` a dispensation is a `Record` of kind `dispensation` (`rosters.yaml: record_kinds`), and its holder holds `(writ, content:dispensation, <terms>)` by the content deposit (`loop/witness.py`), so the act's subject IS the dispensation whose terms are sought and no operand is coined (`H-94` is not filled; the closed roster stands). TWO CONJUNCTS, UNNAMED (`survey`'s precedent: an unnamed own-ledger clause carries no `said`): `existence` of `subject` kind `dispensation` -- the act answers a WRIT, so a person, a rung or another kind of document is refused; `own_ledger` of `subject` -- the actor's own ledger holds a claim on that writ (the `F8` carve-out, `claim.held`). \u26a0 LIMIT: `claim.held` accepts ANY claim on the writ, not only its `content:` claim, so a person who saw the writ issued and never read it passes the fold; a predicate-typed ledger read is a grammar change. In computed play the formation (`referent_class` above) offers it only to a writ's addressee who holds it (`writs_held`), who holds the content claim; the own-referent term never stamps a writ (the B10-05 close), so a non-addressee whose question names it is offered no `comply`, though this cell would admit him (`test_in09_dispensation_answer.py`'s fourth test). \u26a0 ARM (A)'s `dispatch`ed ORDER IS NOT ANSWERED: an order mints no Record, so there is no writ to bind.",
+          "requires_typed_note": "v12 B11.17 (`08_FI_04` \u00a74; the `ttl` field deleted): THIRD CONJUNCT, `stage_open` of `subject` -- the writ's last declared stage has not matured, a writ ending when its last stage matures (`issue` winds the stages, `_declared_stages`; MATTER matures them). One reader, `state/attribution.py::a_stage_unmatured`; a writ declaring no stage never lapses. WORLD-ONLY (`data/requires.py::WORLD_ONLY_STEMS`) and unnamed, so a lapsed writ is refused with the row's one kind (`compliance.impossible`). [ASSUMPTION: the conjunct's stem, `stage_open`, is new -- no existing stem reads a Record's stages; revert: drop this clause and the stem.] v9 IN-09 (`19b`, J-2 arm A, J-10) TYPES THIS CELL. \u00a7E3 `:430` \u2014 *a claim of the dispensation's terms is in the actor's **own** ledger*. \u00a7F.24a form 6, `tell`'s form, and THE OPERAND IS THE ACT'S `subject`, READ AS THE WRIT: after plan positions `15`/`15c` a dispensation is a `Record` of kind `dispensation` (`rosters.yaml: record_kinds`), and its holder holds `(writ, content:dispensation, <terms>)` by the content deposit (`loop/witness.py`), so the act's subject IS the dispensation whose terms are sought and no operand is coined (`H-94` is not filled; the closed roster stands). TWO CONJUNCTS, UNNAMED (`survey`'s precedent: an unnamed own-ledger clause carries no `said`): `existence` of `subject` kind `dispensation` -- the act answers a WRIT, so a person, a rung or another kind of document is refused; `own_ledger` of `subject` -- the actor's own ledger holds a claim on that writ (the `F8` carve-out, `claim.held`). \u26a0 LIMIT: `claim.held` accepts ANY claim on the writ, not only its `content:` claim, so a person who saw the writ issued and never read it passes the fold; a predicate-typed ledger read is a grammar change. In computed play the formation (`referent_class` above) offers it only to a writ's addressee who holds it (`writs_held`), who holds the content claim; the own-referent term never stamps a writ (the B10-05 close), so a non-addressee whose question names it is offered no `comply`, though this cell would admit him (`test_in09_dispensation_answer.py`'s fourth test). \u26a0 ARM (A)'s `dispatch`ed ORDER IS NOT ANSWERED: an order mints no Record, so there is no writ to bind.",
           "writes": [],
           "emits": [
             "compliance.given"
@@ -5567,7 +5561,7 @@
           ],
           "grade": "ruled",
           "writes_note": "per the term's own row. \u26a0 v9 IN-09: EMISSION-ONLY, #453's hook (`proposals/2026-10-03-verb-coverage-and-gap-fill.md:502`): `comply` writes nothing itself and emits `compliance.given`; what compliance PERFORMS is the separate act the writ names (`transfer`, ...). The fold calls an effect only for a declared write and `effect_carried` answers a row writing nothing without one, so no `_eff_comply` exists (it would be a body nothing calls, `ID-13`). Which acts a dispensation's `terms` may name stays `H-44`'s (re-scoped).",
-          "refusal_note": "\u00a7E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel, or a failed precondition produces no Event, no witness and no arc. Refusal condition: no claim of the dispensation's terms is in the actor's own ledger",
+          "refusal_note": "\u00a7E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel, or a failed precondition produces no Event, no witness and no arc. Refusal condition: no claim of the dispensation's terms is in the actor's own ledger, or the writ's last stage has matured",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed"
         },
         {
@@ -5599,7 +5593,7 @@
           "writes": [
             "Record.exists"
           ],
-          "writes_note": "v9 IN-12 step 10 (#453 \u00a79.3; K-19): `loop/effects_information.py::_eff_conceal` MINTS A `Record` OF KIND `cover` through `_mint_document` -- `terms` THE ACTOR, written by the effect whatever the act's `subject` (#453: *'`terms` = the actor, written by the effect whatever the act's `subject`'*); the Record's own id is the alias; the maker's `hold` opens with it; its stages are the mint's (`_declared_stages`, `H-80`'s default for a computed act), which MATTER matures, not `Record.ttl`. `forge`'s declaration, the one pair the mint writes as its declared write (the stages are wound inside it). WHAT THE COVER CHANGES IS ATTRIBUTION AFTERWARDS, NOT WITNESSING (K-19): `state/attribution.py::anchor_of` answers the cover's id at tier 1 for an act by a person holding a cover whose `terms` is himself while a stage is unmatured (`live_cover`), so the deposits about his later acts are about the alias and his knot-partners stop witnessing by key (`epistemic._ch_witness_key` tests `pid == anchor`); `seen.who` still names him for those present (`epistemic._term_who` reads the act). Ended by `destroy_record` or by its stages maturing (#453 \u00a78.1).",
+          "writes_note": "v9 IN-12 step 10 (#453 \u00a79.3; K-19): `loop/effects_information.py::_eff_conceal` MINTS A `Record` OF KIND `cover` through `_mint_document` -- `terms` THE ACTOR, written by the effect whatever the act's `subject` (#453: *'`terms` = the actor, written by the effect whatever the act's `subject`'*); the Record's own id is the alias; the maker's `hold` opens with it; its stages are the mint's (`_declared_stages`, `H-80`'s default for a computed act), which MATTER matures. `forge`'s declaration, the one pair the mint writes as its declared write (the stages are wound inside it). WHAT THE COVER CHANGES IS ATTRIBUTION AFTERWARDS, NOT WITNESSING (K-19): `state/attribution.py::anchor_of` answers the cover's id at tier 1 for an act by a person holding a cover whose `terms` is himself while a stage is unmatured (`live_cover`), so the deposits about his later acts are about the alias and his knot-partners stop witnessing by key (`epistemic._ch_witness_key` tests `pid == anchor`); `seen.who` still names him for those present (`epistemic._term_who` reads the act). Ended by `destroy_record` or by its stages maturing (#453 \u00a78.1).",
           "emits": [
             "cover.assumed"
           ],
@@ -9259,17 +9253,6 @@
           "social": "true",
           "by": "ED-IN-0306 phase 2 -- AN ARMY IS WRITTEN AFTER ITS MINT, the one Record kind that is. `recruit`, `form_unit`, `assign_troops` and `order_unit` (`loop/effects_army.py`) replace an `army` Record's content with the one `modules/mass_battle/armyrecord.py` returns for that command, so the row that said `subject_matter` is written once, inside `(Record, exists)`'s gate, no longer holds for this kind. Every other kind stays write-once: each effect declines a Record that is not an `army`. [ASSUMPTION; medium; Jordan to correct; revert: delete this row and the four verbs, and mint an army afresh for every change.]",
           "emits": "`army.recruited` \u00b7 `army.formed` \u00b7 `army.assigned` \u00b7 `army.ordered` \u00b7 `army.disbanded` \u00b7 `army.discharged`"
-        },
-        {
-          "kind": "Record",
-          "field": "ttl",
-          "steps": [
-            "MAT"
-          ],
-          "class": "MATTER",
-          "social": "false",
-          "by": "D7 \u2014 \u00a713's licensed clock",
-          "emits": "`record.expired`"
         },
         {
           "kind": "Rung",

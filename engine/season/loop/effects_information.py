@@ -1181,8 +1181,7 @@ def _eff_destroy_record(w: "World", a: "Act", res: "Resolution | None" = None) -
     v9 IN-26 (BOUND-PAPER, `A-13`): THE RECORD IS THE BOUND `subject` -- the row's typed cell binds it
     (`existence` kind `Record`, `held_by` the actor) and a computed Candidate carries it; the `record`
     payload key this read before no Candidate carried, so it is gone rather than kept as a second
-    spelling. It is the SINK for paper the verb-coverage survey found none for (`Record.ttl` has no
-    reader): a holder burns what he holds. Whether anybody FORMS it is `opening_set`'s
+    spelling. It is the SINK for paper the verb-coverage survey found none for: a holder burns what he holds. Whether anybody FORMS it is `opening_set`'s
     (`Fixtures withheld_verbs`, `OwnStateReader`'s `held_by`), never this body's. A Proposition
     is never a subject here: §14 makes it undestroyable, and the cell's `existence` conjunct refuses
     one before this runs."""

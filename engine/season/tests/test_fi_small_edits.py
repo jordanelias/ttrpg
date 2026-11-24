@@ -186,3 +186,36 @@ def test_a_claim_decayed_to_zero_no_longer_closes_the_trail():
     assert trail_of(w, rid, INVESTIGATOR) != [], "a claim held at 0 closed its trail"
     w.persons[INVESTIGATOR].ledger.append(held)
     assert trail_of(w, rid, INVESTIGATOR) == []
+
+
+# ---- B11.17 (`08_FI_04` §4 with `17_CENSUS_REST_1` D2): the `ttl` field deleted; a writ ends when its last stage matures ----
+# Both are game-state tests in the `season_loop` lane: the first resolves `comply` through the real fold and MATTER's
+# maturing; the second writes a declared row through the real gate.
+
+def test_a_writ_stops_admitting_comply_after_its_last_stage():
+    from .test_in09_dispensation_answer import HOLDER, WRIT, _fold, _read_terms, _with_writ
+
+    w, d = _with_writ()
+    w.records[WRIT].stages = [(w.tick + 1, "last", "mk")]     # a writ whose last stage matures at the next barrier
+    _read_terms(w, HOLDER)
+    assert _fold(w, d, HOLDER, "comply", WRIT, "c_before") == ["compliance.given"], "an open writ refused `comply`"
+
+    w.tick += 1
+    w.step = Step.MATTER
+    d.matter(mint_token(w, WriteClass.MATTER), [])
+    assert w.records[WRIT].matured, "its last stage did not mature"
+    w.step = Step.RESOLVE
+    assert _fold(w, d, HOLDER, "comply", WRIT, "c_after") == ["compliance.impossible"], "a lapsed writ still admitted `comply`"
+
+
+def test_a_declared_row_with_no_emission_still_raises_d22():
+    from ..state.gate import Forbidden
+
+    w = P.tiny_world()
+    rec = Record("rec_d22", "Hh", "text")
+    w.records[rec.id] = rec
+    w.step = Step.MATTER
+    with pytest.raises(Forbidden, match="D22|emitted nothing"):
+        w.write("matured", mint_token(w, WriteClass.MATTER), lambda: setattr(rec, "matured", True),
+                record_kind="Record", fieldname="matured", driver="Event")
+    assert rec.matured is False, "the refused write applied"
