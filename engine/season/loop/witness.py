@@ -24,12 +24,9 @@ from ..data.rosters import (
 )
 from ..data.verbs import IN_CONFIDENCE_KEY, VERB_TABLE
 # ⚠ `04:178` lists WITNESS's reads as the log, the presence cache, the channel predicates and the act
-# store, and `04:142` keeps `decision/` an island; this is the first non-DELIBERATE step to import it.
-# Refraction (v9 IN-15, H-201) is asker-first -- it grades what THIS holder believes -- so its rule lives
-# beside `teller_weight`/`record`, which `queries/person_q.py` cannot host (it may not reach
-# `epistemic`, test_season_shape's allow-list); it reads the verb table (`_happened`, `dissents`) and the
-# holder's own stance (`regard`). `04:178` is exceeded on those two reads. Layer-conformance, B-E close:
-# CONVENTION, no scan reads this step's imports; the spec is ambiguous, `decision/` chosen.
+# store. Refraction (v9 IN-15, H-201) is asker-first -- it grades what THIS holder believes -- so its rule lives
+# in `queries/person_q.py` (B11.21, D-74: `ledger_weigh` and `refracted_confidence` moved there; this step imports nothing from `decision/`);
+# it reads the verb table (`_happened`, `dissents`) and the holder's own stance (`regard`). `04:178` is exceeded on those two reads.
 # IN-55's `held_claim_ids(w)` exceeds `04:178` a second time, beside the refraction reads: it reads every
 # holder's ledger id set (to decide whether an Event changes only held claims, and so skip its fan),
 # writes no ledger, and is a CONVENTION exceedance justified by IN-55's measured saving.
@@ -40,12 +37,11 @@ from ..data.verbs import IN_CONFIDENCE_KEY, VERB_TABLE
 # only when `regime_gain` is not 0, so the control reads nothing new. Kept on the WITNESS side, not in
 # `decision/` (`refracted_confidence` takes no world-derived number: `decision/` stays an island, AX-2).
 # CONVENTION, no scan reads this step's person reads; AX-7's governors are widened by hunk H-L0-11.
-from ..decision.options import ledger_weigh, refracted_confidence
 from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, changes_only_held_claims,
                          claim_subjects, held_claim_ids, holds_trail, live_channels,
                          non_anchor_subjects, observers_for, seen_of, seen_showing, seen_subject)
 from ..queries import cache, world_q
-from ..queries.person_q import addressed_to, drifted
+from ..queries.person_q import addressed_to, drifted, ledger_weigh, refracted_confidence
 from ..queries.world_q import hold_force
 from ..state.attribution import event_by_id, actor_of, anchor_of, causing_act
 from ..state.carriers import Claim, Event
@@ -236,7 +232,7 @@ def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = 
 
 def _refract(c: Claim, p, channel: str, gain: float, act=None, weigh=None,
              fx=None) -> Claim:
-    """`c` AS THIS WITNESS RECEIVES IT: `c` with `decision/options.py::refracted_confidence`'s
+    """`c` AS THIS WITNESS RECEIVES IT: `c` with `queries/person_q.py::refracted_confidence`'s
     confidence (v9 IN-15, `AX-7`'s divergence formula; `H-199`). The one place every deposit below
     passes through, so the six `Claim` constructions share one rule rather than six. The caller
     decides WHETHER to refract (the gain is live and the witness is not the act's own actor); this

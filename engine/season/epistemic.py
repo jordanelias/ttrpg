@@ -20,9 +20,11 @@ predicates and it raises at import — loud, which is the good case, and the rea
 moves the table, its loop and its `del` as one block rather than as three statements. It is the
 package's second such lookup; `state/carriers.py` records the first.
 
-⚠ NOTHING HERE READS `belief_contradicts`, AND THAT IS LOAD-BEARING RATHER THAN INCIDENTAL. Its
-only bare-name caller is `opening_set`, which lives in `season.decision` and resolves
-the name in THAT module's globals at call time — so every rebind must name `decision`
+⚠ NOTHING HERE READS `belief_contradicts`, AND THAT IS LOAD-BEARING RATHER THAN INCIDENTAL. It is defined in
+`queries/person_q.py` since B11.21 (a person-side read of one ledger; `LedgerReader` and the typed `requires` are all it
+needs) and bound here only for the importers that spell it `epistemic.belief_contradicts`. Its
+bare-name callers are `opening_set`, which lives in `season.decision` and resolves
+the name in THAT module's globals at call time (`person_q.dissents` reads person_q's own binding, since B11.21) — so every rebind must name `decision`
 (`wd_acceptance.py`'s through `sweep_core.PS`).
 **If a function here ever calls it directly, that reader would bind THIS module's copy and those
 rebinds would become no-ops on it** — the same hazard, one module over.
@@ -39,12 +41,11 @@ from __future__ import annotations
 from dataclasses import dataclass, fields as _dc_fields
 from typing import Optional
 
-from .data.requires import binding_of, evaluate
 from .data.rosters import (
     CLAIM_SUBJECT_RULES, COVERT_KINDS, DOMINANCE_KINDS, EVENT_REACH_ROWS, FAN_OUT_MODES, OBSERVATION_TERMS, PERSON_DIED,
     REACH_FROM_STRATUM, REACH_FROM_UNREST, REACH_ROOM, RUNG_KINDS, SEAT_NEWS_ARMS, SEAT_NEWS_KINDS, SEEN_PREDICATE, TERMS_SUPPLIED_BY,
     WITNESS_CHANNELS, require_member)
-from .data.verbs import EVENT_KINDS, NO_PRECONDITION, VERB_TABLE, VerbRow
+from .data.verbs import EVENT_KINDS, VERB_TABLE
 from .gaps import Unspecified
 from .state.attribution import event_by_id, actor_of, anchor_of, causing_act
 from .state.containment import ancestry
@@ -52,75 +53,9 @@ from .state.gate import purview_reaches
 from .state.ledgers import present_confidence
 from .state.ids import ROOT, draw_factory
 from .queries import cache, world_q
-from .queries.person_q import LedgerReader
+from .queries.person_q import LedgerReader, belief_contradicts   # `belief_contradicts` moved to person_q (B11.21), re-bound for its importers
 from .state.carriers import Event, Person, subject_of
 from .state.world import World, register_snapshot_type
-
-
-def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict,
-                       via: "str | None" = None, weigh=None,
-                       actor: "str | None" = None, tick: int = 0, decay: int = 0) -> bool:
-    """§F1 clause 4 -- is `requires(verb)` KNOWN-FALSE from `p`'s OWN claims?
-
-    ⚠ THE ASYMMETRY IS THE WHOLE POINT AND MUST NOT BE SOFTENED TO "requires holds". This returns
-    True only when the person HOLDS A CLAIM THAT CONTRADICTS the requirement. Having no belief
-    either way is NOT a contradiction, so the Candidate forms, the person acts on a false premise,
-    and the fold refuses them -- which is §F1's "a person who *wrongly* believes the granary full
-    still forms the Candidate ... That is T3 and L2 working."
-
-    Jordan, 2026-09-02: *"we can't control how others perceive and interpret our words or
-    actions"* and *"our understanding of all other words and actions is subjective and singular."*
-    A filter on world truth would be `choose` reading the world; this reads one person's ledger.
-
-    ⚠ `W-A`: IT ASKS THE VERB'S OWN TYPED CELL, NOT A ROSTER. A filter on
-    `predicate in PERSON_PREDICATES and value is False` is a MEMBERSHIP TEST standing in for a
-    requirement (`H-72`: the map from a requirement to a predicate), and the two vocabularies are
-    DISJOINT, so clause 4 could not fire and the candidate set would be invariant with respect to
-    everything that happened in the simulation (`H-116`). The predicate is DERIVED from the form
-    (`stores:grain`, `condition`, `contain.path:D`), so there is one namespace and the write side
-    has a name to aim at. `H-116`'s other half -- WITNESS depositing claims in that namespace -- is not this item.
-
-    ⚠ AN UNTYPED VERB IS NOT CONTRADICTED. `evaluate(None, ...)` is UNKNOWN, and UNKNOWN is not
-    False: a person cannot know a requirement fails when nothing states what the requirement is.
-    That polarity is the OPPOSITE of the fold's, deliberately -- §F1 filters on belief and §42.2
-    governs the resolver -- and the same `Verdict` carries both readings.
-
-    ⚠ `W-C`: IT READS THE CANDIDATE'S OWN OPERANDS, WHICH IS WHAT MAKES THIS THE SAME QUESTION
-    THE FOLD ASKS. `binding_from` would rebind `subject` onto whichever operand
-    the cell called its entity -- so for `transfer` the person would ask *does the RECEIVER hold the
-    grain*, and §54 item 7 asks about the GIVER's hearth: a different cell from the fold's and a
-    defensible-looking answer to the wrong question. `operands` is the
-    same bag the Act will carry, passed through the same `binding_of`, so the two sides differ
-    only in WHAT THEY READ (one ledger, one world) and in POLARITY -- which is the difference
-    that is supposed to be there.
-
-    ⚠ PLAN POSITION `19`: AND THE SEAT, FOR THE SAME REASON. `via` is the seat the Candidate's act
-    will be exercised through -- `decision/options.py::seat_of`, the value `pack_scenes` puts
-    on `Act.via` -- and `binding_of` carries it exactly as `binding_from_act` does for the fold, so a
-    `basis` conjunct (§F.24a form 7, `data/requires.py::Basis`) asks the person's ledger about THE
-    SAME seat the fold will ask the world about. Omitted (`None`), the conjunct is UNKNOWN, which
-    contradicts nothing.
-
-    ⚠ TELLING WORKPLAN `T3a` (`ED-IN-0282`): `weigh` GRADES HEARSAY AS IT IS READ. `opening_set`
-    passes `decision/options.py::teller_weight(p, fx)`, so a newer claim a teller passed on does
-    not beat the person's own firsthand claim merely by being newer. The CLOSURE is passed in,
-    not built here, because `decision.options` imports this module and a deferred import back
-    would hide that cycle rather than remove it. Omitted (`None`), the reader is unweighted.
-
-    ⚠ v9 IN-15 / `H-201`: `actor` IS WHO THE CELL'S `actor` OPERAND BINDS TO, AND IT DEFAULTS TO `p`.
-    The person choosing an act is its actor, so `opening_set` passes nothing. A WITNESS asking whether an act they saw could have happened is a
-    different question -- *could THE ACTOR have done this, on what I hold* -- and answering it with
-    `p.id` bound reads the witness's own granary instead of the actor's. The ledger stays `p`'s
-    (the belief is the witness's); only the operand moves. `actor=None` is `p.id`, never "no
-    actor": an empty binding would make every actor-bound form UNKNOWN, i.e. contradict nothing.
-
-    ⚠ B09.01: `tick` AND `decay` ARE WHAT HE READS HIS CLAIMS AT (`LedgerReader`'s; `state/ledgers.py::present_confidence`):
-    a stored `confidence` is what a claim was deposited at, and its fade is computed here, where it is read. Omitted, a
-    hand-built ledger reads as deposited."""
-    if (row.requires or "").strip() in NO_PRECONDITION:
-        return False
-    return evaluate(row.requires_typed, LedgerReader(p.ledger, weigh, tick=tick, decay=decay),
-                    binding_of(p.id if actor is None else actor, operands, via)).value is False
 
 
 def act_refs(a) -> list:

@@ -1322,7 +1322,7 @@ def test_t6_a_teller_contradicted_twice_weighs_less_than_one_confirmed_twice():
     MUTATION (run 2026-10-01, `T6`): `agree` and `dis` swapped in `record`'s balance -- `good`
     weighs 0.25 and `bad` 0.75, and this goes RED on the first weight assertion. Restored, GREEN."""
     from ..data.fixtures import DEFAULT_FIXTURES as fx
-    from ..decision.options import _pair, record, teller_weight
+    from ..queries.person_q import _pair, record, teller_weight
 
     p = P.tiny_world().persons["p_low"]
     own_rows = [("Hh", 5), ("S", 6)]
@@ -1356,7 +1356,7 @@ def test_t6_record_gain_zero_is_the_control():
     (`1 + (agree - dis)/(agree + dis)`) -- `good` weighs 1.0 at the control instead of 0.5 and this
     goes RED. Restored, GREEN."""
     from ..data.fixtures import DEFAULT_FIXTURES
-    from ..decision.options import _pair, teller_weight
+    from ..queries.person_q import _pair, teller_weight
 
     p = P.tiny_world().persons["p_low"]
     _t6_claims(p, [("Hh", 5), ("S", 6)],
