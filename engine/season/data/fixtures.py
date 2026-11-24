@@ -437,11 +437,11 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-433 -- `site: Fixtures wound_levels_max`, graded `assumption`; the most levels a wound can stack is ADV Edit D's two, injected and swept]
     wound_levels_max=2,                # `H-433`, swept 1 / 2 (SHIPPED) / 3 (levels, per side)
     # B05.61 (`UPR` §3 edit 1; A-8): HOW A WOUND CARRIED INTO A FIGHT ENTERS IT, read ONLY by `seam/wrappers/combat.py` (`party_end`, `combat_input`).
-    # `endurance_cut` is the CONTROL and the shipped arm until B15 reads `UPR` §3's gate: Endurance one point lower per body band, the tracker clean
-    # (Health, Wound Interval and Max Wounds all shrink). `level` is the A-8 arm: the authored Endurance whole, and the person's `wounds` level carried
-    # on `PersonalCombatInput.carried` against his own attack and defence.
-    # [JUSTIFIED: engine/season/hole_register.yaml H-434 -- `site: Fixtures carried_wound_model`, graded `ruled` (A-8); the arm is swept endurance_cut (control, SHIPPED) / level]
-    carried_wound_model="endurance_cut",   # `H-434`, swept endurance_cut (control, SHIPPED until B15) / level
+    # `level` is the A-8 arm and the SHIPPED one since B15.11 (`UPR` §3's flip): the authored Endurance whole, and the person's `wounds` level carried
+    # on `PersonalCombatInput.carried` against his own attack and defence. `endurance_cut` is the CONTROL: Endurance one point lower per body band, the
+    # tracker clean (Health, Wound Interval and Max Wounds all shrink).
+    # [JUSTIFIED: engine/season/hole_register.yaml H-434 -- `site: Fixtures carried_wound_model`, graded `ruled` (A-8); the arm is swept level (SHIPPED) / endurance_cut (control)]
+    carried_wound_model="level",           # `H-434`, swept endurance_cut (control) / level (SHIPPED since B15.11)
     # v9 SC-02 `22b` step 24 (proceedings `19_PLAN.md` step 24): HOW FAR A DETERMINATION MOVES ITS MAKER'S
     # OWN PURSUITS, per unit of `queries/person_q.py::pursuit_lean` and per band step (`data/rosters.py::
     # DEGREE_STEP`), read by `person_q.consequence_pursuits` from `loop/effects_information.py::

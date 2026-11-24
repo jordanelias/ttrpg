@@ -4166,11 +4166,11 @@
     {
       "key": "engine.season.settings.carried_wound_model",
       "name": "carried_wound_model",
-      "value": "endurance_cut",
+      "value": "level",
       "kind": "other",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-434`, swept endurance_cut (control, SHIPPED until B15) / level",
+      "note": "`H-434`, swept endurance_cut (control) / level (SHIPPED since B15.11)",
       "citation": null,
       "citation_grade": null
     },

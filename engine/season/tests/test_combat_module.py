@@ -597,18 +597,22 @@ def test_an_estimate_reads_no_kit_the_believer_has_no_claim_about(monkeypatch):
 
     blind, w = read()
     unhurt = _believing_world(3)
-    true_end = C.party_end(w.persons[_B], w.fixtures)
-    assert true_end < C.party_end(unhurt.persons[_B], unhurt.fixtures), "the world's wound cuts nothing: the control cannot see the leak"
+    def wound_of(inp):
+        """How the wound reaches the fight under the shipped arm: his `end` (the cut, `endurance_cut`) and his carried level (`level`)."""
+        return inp.ends[1], inp.carried[1]
+    true_wound = (C.party_end(w.persons[_B], w.fixtures), C._carried_of(w.persons[_B], w.fixtures))
+    unhurt_wound = (C.party_end(unhurt.persons[_B], unhurt.fixtures), C._carried_of(unhurt.persons[_B], unhurt.fixtures))
+    assert true_wound != unhurt_wound, "the world's wound reaches the fight by neither arm: the control cannot see the leak"
     assert blind.kits == (own, default), blind.kits                            # his own kit is his own; the stranger's is the DEFAULT, not the true one
-    assert blind.ends[1] == C.party_end(unhurt.persons[_B], unhurt.fixtures), (blind.ends, "the opponent's wound leaked into the believer's picture")
+    assert wound_of(blind) == unhurt_wound, (wound_of(blind), "the opponent's wound leaked into the believer's picture")
     sighting = Claim("c_seen", _A, "R", SEEN_PREDICATE, _Sighting(_B), 0, "firsthand", 5, "own")
     seen_it = read(sighting)[0]
-    assert seen_it.kits == (own, true_kit) and seen_it.ends[1] == true_end, (seen_it.kits, seen_it.ends, true_end)   # where he has seen him: the world's
+    assert seen_it.kits == (own, true_kit) and wound_of(seen_it) == true_wound, (seen_it.kits, wound_of(seen_it), true_wound)   # where he has seen him: the world's
     said = read(Claim("c_w", _A, _B, person_q.KIT_CLAIM + "weapon", claimed[0], 0, "told", 5, "own"),
                 Claim("c_a", _A, _B, person_q.KIT_CLAIM + "armor", claimed[1], 0, "told", 5, "own"))[0]
     assert said.kits == (own, claimed), said.kits                              # a claim of his: the claim's, over the default
     wounded = read(Claim("c_b", _A, _B, person_q.BODY_CLAIM, 400, 0, "told", 5, "own"))[0]
-    assert wounded.ends[1] == true_end and wounded.kits == (own, default), (wounded.ends, wounded.kits)   # a claim of his wound: the wound, the kit still the default
+    assert wound_of(wounded) == true_wound and wounded.kits == (own, default), (wound_of(wounded), wounded.kits)   # a claim of his wound: the wound, the kit still the default
 
 
 def test_the_believed_estimate_is_private_and_moves_no_hash():
