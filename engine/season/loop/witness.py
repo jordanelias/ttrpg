@@ -15,7 +15,7 @@ from __future__ import annotations
 
 from dataclasses import replace
 
-from ..data.matrix import Step
+from ..data.matrix import MATRIX, Step
 from ..state.gate import Token
 from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN, WORLD_ONLY_STEMS, binding_from_act
 from ..data.rosters import (
@@ -287,6 +287,41 @@ def _credit(w, c: Claim, hearer: str, teller: str, regime_gain: float, ceiling: 
     # `k` is in [-1, 1] (the range check and `commensurate`), so `x` is never below 0 and only the ceiling clamps
     x = min(c.confidence * (1.0 + k), max(ceiling, c.confidence))
     return replace(c, confidence=int(x + 0.5))
+
+
+def _ended_entities(w, e: Event) -> list:
+    """B11.60 (`16_PESSIMIST_FI_C` edit 3, R-02): THE ENTITIES THE EVENT ENDED, as `(entity id, Kind)` -- what a witness of an
+    ending holds as `(entity, exists:<Kind>, 0)`, the cell the fold's `kind` conjunct asks (`data/requires.py::Existence`).
+
+    KEYED ON THE CELL WRITTEN AND THE WORLD'S ANSWER, NEVER ON AN EVENT KIND OR A VERB. A change names an entity cell when its
+    receipt's field is a write-matrix field, and it ENDED the entity when the gate read it so -- the receipt's `mode` is `delete`
+    (a whole-entity write that left the subject absent, `world._mode`), or its `delta`, `(before, after)` over the named
+    attributes (`world._delta`), reads the subject absent after the write -- or when the cell is `exists` itself (the cell MATTER's
+    death writes, whose Event carries a bare `set` receipt on it: `create` is `exists`'s other direction, `person.individuated`,
+    `record.created`) -- AND the subject is gone from its kind's store now. The second half is what tells `exists` set false from
+    `exists` set true. `fight` writes `Person.body` and `World.remove_person` pops him in the same `apply()`, so a killing names
+    `body`, not `exists`: a test of `field == "exists"` alone would see hunger's death and miss every blow. A write that leaves
+    its subject standing (a `body.changed`) ends nothing.
+
+    THE KIND comes from the write matrix by the field written: the kinds that have a row for it. `body` is Person's alone; `exists`
+    is six kinds' cell, and there the rows that DECLARE the Event's kind (`emits`) say which -- the matrix naming its own cell,
+    not a branch per kind. Not exactly one kind: nothing is deposited (an unknown is not a reading, the observation block's rule
+    below; the receipt carries no record kind to ask). `w._entity_stores` is the one list of what can cease to exist, which
+    `class_of` and the F3 gate share; `class_of` itself would answer `Rung` for a dead person, who has a same-id rung."""
+    stores = dict(w._entity_stores())
+    out = []
+    for c in e.changes:
+        after = c.delta[1] if isinstance(c.delta, tuple) and len(c.delta) == 2 else None
+        if not c.subject or not (c.mode == "delete" or after == (False,) or c.field == "exists"):
+            continue
+        kinds = {k for (k, f) in MATRIX if f == c.field}
+        if len(kinds) > 1:
+            kinds = {k for k in kinds if e.kind in MATRIX[(k, c.field)].emits}
+        if len(kinds) == 1:
+            (kind,) = kinds
+            if c.subject not in stores[kind]:
+                out.append((c.subject, kind))
+    return out
 
 
 def _happened(act, e: Event):
@@ -701,6 +736,25 @@ def witness(self, token: Token, events: list[Event]) -> int:
             # witnessed`, which is what #353 §19.4 means by the substrate of the emergent-narrative
             # claim.
             _deposit(p, c, e)
+        # B11.60 (`16_PESSIMIST_FI_C` edit 3, R-02): A WITNESS OF AN ENDING HOLDS IT IN THE WORDS A REQUIREMENT READS. For each entity
+        # this Event ended (`_ended_entities`, keyed on the receipt the gate minted, never on an event kind or a verb) the witness
+        # holds `(entity, exists:<Kind>, 0)` beside the event-kind claim -- one fact, so a belief that a man is dead declines the
+        # candidates the fold would refuse (`questions_for` clause 4, `belief_contradicts`) as the cell itself does. Same
+        # witness, source, confidence and refraction as the event-kind claim above; the person-side `(subject, predicate)` key
+        # `seen_obs_by_pid` keeps is the observation block's too, so a read of that cell in this barrier is not stored twice.
+        # An Event that ended nothing adds nothing; a governor reached by purview (`only`) gets the reads alone.
+        if only is None:
+            seen_obs = seen_obs_by_pid.setdefault(pid, set())
+            for entity, kind in _ended_entities(w, e):
+                pred = f"exists:{kind}"
+                if (entity, pred) in seen_obs:
+                    continue
+                seen_obs.add((entity, pred))
+                xc = Claim(H(w.world_seed, w.tick, pid, f"ended:{e.id}:{entity}"), pid, entity, pred, 0, w.tick, src, conf, "own",
+                           self.lap, doer=doer)   # `U2`: see the event-kind deposit
+                if refracting:
+                    xc = _refract(xc, p, channel, gain, prior_act, prior_weigh, cfx)
+                _deposit(p, xc, e)
         # `W-B`. THE SECOND DEPOSIT: ONE CLAIM PER READ THE FOLD MADE, IN THE `requires`
         # VOCABULARY. `Observation` is `(subject, predicate, value)` and so is `Claim`; its
         # own docstring says an Observation *"is what a Claim would be if the reader wrote

@@ -6,7 +6,7 @@
 
   * `test_examine_finds_site_damaged` -- the SITE side, GREEN here: a saboteur damages a Site with nobody at its place, a
     second man `examine`s it and holds the deed. CP-T06-01's two-band reading is `test_fi03_trail.py`'s.
-  * `test_bystander_holds_exists_person_zero` -- EXPECTED RED UNTIL B11.60: a witness of a killing holds the victim ended
+  * `test_bystander_holds_exists_person_zero` -- GREEN since B11.60: a witness of a killing holds the victim ended
     (`exists:Person` 0), not only `person.died`.
   * `test_surveil_at_the_place_of_a_killing_finds_the_deed_at_partial` -- EXPECTED RED UNTIL B11.63: the place side. `trail_of`
     reads the Events that wrote or were anchored on the inquiry's subject, and a place is neither for a killing.
@@ -65,7 +65,7 @@ def killing():
 
 
 def test_bystander_holds_exists_person_zero():
-    """EXPECTED RED UNTIL B11.60. The witness stood in the room, holds the death, and holds the victim ended: `(victim,
+    """B11.60. The witness stood in the room, holds the death, and holds the victim ended: `(victim,
     exists:Person, 0)` (the same cell the fold asks, R-02). He also holds `person.died`, asserted first so the red is the
     missing reading and not a fan that admitted nobody."""
     w, _ = killing()
