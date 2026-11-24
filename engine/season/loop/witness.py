@@ -41,7 +41,7 @@ from ..epistemic import (SEEN_PREDICATE, _hold_tenure_ends, act_refs, changes_on
                          claim_subjects, held_claim_ids, holds_trail, live_channels,
                          non_anchor_subjects, observers_for, seen_of, seen_showing, seen_subject)
 from ..queries import cache, world_q
-from ..queries.person_q import addressed_to, drifted, ledger_weigh, refracted_confidence
+from ..queries.person_q import LedgerReader, addressed_to, drifted, ledger_weigh, refracted_confidence
 from ..queries.world_q import hold_force
 from ..state.attribution import event_by_id, actor_of, anchor_of, causing_act
 from ..state.carriers import Claim, Event
@@ -186,6 +186,12 @@ def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = 
     three clauses, applied to the value directly since there is no `content:` wrapper to reach
     through.
 
+    ⚠ B11.55 (`16_PESSIMIST_SC_E` edit 1): THIS BRANCH READS THE HEARER'S OWN LEDGER, which `04` §A.2's list of WITNESS's reads ("this tick's log, presence
+    cache, channel predicates, the act store") omits -- the departure is named here, not hidden. WITNESS already reads that ledger at this deposit (the
+    exact-triple guard that follows the call), so no new read class is opened. A hearer holding the cell FIRSTHAND (`Claim.firsthand`) is handed the
+    figure he holds (`LedgerReader.belief_among` over those claims), not a drifted one, while `Fixtures knower_hears_true` is `True`; his own claim is
+    not written, and the teller's `record` with him is not moved by a copy he could check and that was only garbled in transit.
+
     ⚠ ANYTHING ELSE -- a bare `True`/`False` from an event-kind claim, an `epistemic.Seen` struct,
     any value with neither an addressee key nor a plain number -- carries nothing either branch
     can act on and is deposited VERBATIM.
@@ -227,6 +233,12 @@ def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = 
         # §A.10.2's three clauses live once, in `queries/person_q.py::drifted` (v11 CR-27: the liar's false
         # number is the same rule), and this branch is its caller. ONLY AN AMOUNT IS GARBLED (v12 B11.51, `16_PESSIMIST_FI_A`
         # edit 2; D-44, D-45: a rumour may lose the doer, not replace him): `data/verbs.py: QUANTITY_STEMS`.
+        # B11.55 (`16_PESSIMIST_SC_E` edit 1): A HEARER WHO HOLDS THE FIGURE FIRSTHAND HEARS IT AS HE HOLDS IT (`knower_hears_true`;
+        # `False` is the control, the drifted copy below). The copy is then his own claim and the exact-triple guard at the deposit drops it.
+        own = [c for c in w.persons[pid].ledger
+               if c.firsthand and c.subject == held.subject and c.predicate == held.predicate]
+        if own and w.fixtures.get("knower_hears_true"):
+            return LedgerReader(own).belief_among().value
         return drifted(held.value, w.fixtures.get("told_drift_band"), sel)
     # any other numeric value (an existence reading stored as 0/1) falls through and is deposited as held
     return held.value  # nothing either mechanism can act on -- deposited verbatim, honestly

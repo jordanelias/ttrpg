@@ -822,6 +822,10 @@ DEFAULT_FIXTURES = Fixtures(
     # actually lossy at `Partial`, not one parked inert pending a later ruling.
     # [JUSTIFIED: engine/season/hole_register.yaml H-155 -- the drift band; r2 states the direction and leaves the magnitude, and the sweep brackets no-drift / shipped / aggressive]
     told_drift_band=0.5,               # `H-155`, swept 0 (control) / 0.5 (SHIPPED) / 1.0
+    # v12 B11.55 (`16_PESSIMIST_SC_E` edit 1, C3-K1): A HEARER WHO HOLDS THE FIGURE FIRSTHAND HEARS IT AS HE HOLDS IT at a `Partial` telling of an amount, instead of the drifted copy (`loop/witness.py::_told_value`). A switch, not
+    # a number: `True` SHIPS (an honest teller's partial telling no longer lowers a knower's `record` of him), `False` is the control, today's drifted copy.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-155 -- the told channel's numeric loss; the telling that reaches a firsthand holder is the one case the copy has a figure to be measured against, swept True (SHIPPED) / False (the control)]
+    knower_hears_true=True,            # `H-155`, swept False (control) / True (SHIPPED)
     # `H-177`..`H-179` (telling workplan `T3a`, `ED-IN-0282`; `RULINGS.yaml` CAT-3, closed: store
     # the teller, grade the claim WHEN READ by the hearer's relation to them). HOW MUCH A HEARER
     # CREDITS A CLAIM SOMEONE TOLD THEM, read by `decision/options.py::teller_weight` -- the `weigh`

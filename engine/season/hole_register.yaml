@@ -3629,7 +3629,9 @@ rows:
       2026-09-30 (terminal whole-of-Phase-2 critique): the branch keys on TYPE
       (`isinstance(held.value, (int, float))`, in `loop/witness.py::_told_value`), not on field name, so plan
       position `19d`'s `shortfall:<kind>` integer claim ALSO drifts under this sweep -- see
-      `H-160` limit 4, where a drifted shortfall is read as a computed `transfer`'s `amount`"
+      `H-160` limit 4, where a drifted shortfall is read as a computed `transfer`'s `amount`.
+      v12 B11.55: the branch hands a hearer who holds the cell FIRSTHAND the figure he holds
+      instead (`Fixtures knower_hears_true`, shipped True, swept False = the control, the drifted copy)"
     sweep:     [0.0, 0.5, 1.0]
     unblocks:  "the numeric half of position `15b`'s loss function (r2 item 8) -- the addressee-
       omission half (§A.10.1) needs no fixture and ships unconditionally at `Partial`"

@@ -390,3 +390,35 @@ def test_a_hand_built_lie_on_a_man_s_existence_declines_the_hearers_challenge_on
         return told[0].value, PQ.belief_contradicts(w.persons[HOLDER], VERB_TABLE["challenge"], "p_other", {"subject": "p_other"})
     assert hearer_declines_the_challenge("lie") == (0, True)
     assert hearer_declines_the_challenge("tell") == (1, False)
+
+
+# ---- a hearer who knows the figure hears it as he holds it (v12 B11.55, `16_PESSIMIST_SC_E` edit 1) ----------------
+
+def test_knower_hears_true_on_a_partial_telling(monkeypatch):
+    """B11.55: a `Partial` telling of an amount (net 2 against obstacle 2) to a hearer who holds that cell FIRSTHAND is heard as he holds it: no copy lands (the told deposit
+    would be his own claim, and the exact-triple guard drops it), and his `record` of the teller does not fall, whether the teller was honest (`tell`: 8) or a liar (`lie`: 12). A hearer
+    who holds nothing on the cell still receives the drifted copy, so the arm touches the knower and nobody else."""
+    for verb in ("tell", "lie"):
+        w = _world(record_gain=0.5)
+        evs = _season(monkeypatch, w, verb, HOLDER, net=2)
+        assert [e.degree for e in evs if e.kind == "news.told"] == ["Partial"], [(e.kind, e.degree) for e in evs]
+        assert _told(w, HOLDER) == [], (verb, [(c.value, c.chain) for c in _told(w, HOLDER)])
+        assert record(w.persons[HOLDER], T, w.fixtures) >= 1.0, verb
+    for verb in ("tell", "lie"):
+        got = []
+        for arm in (True, False):
+            w = _world(record_gain=0.5)
+            w.fixtures = w.fixtures.sweep("knower_hears_true", arm)
+            _season(monkeypatch, w, verb, KNOWNOT, net=2)
+            got.append([c.value for c in _told(w, KNOWNOT)])
+        assert got[0] == got[1] and len(got[0]) == 1 and got[0][0] != (TRUE_VALUE if verb == "tell" else 12), (verb, got)   # the drifted copy, either arm
+
+
+def test_knower_hears_true_false_reproduces_todays_branch(monkeypatch):
+    """The control: `knower_hears_true` False hands a knower the drifted copy, as before the arm -- an honest `tell` of 8 reaches him as 5 and his `record` of the teller falls below 1.0
+    (the falsifier: a landed truthful telling after which the hearer's `record` of the teller is below 1.0)."""
+    w = _world(record_gain=0.5)
+    w.fixtures = w.fixtures.sweep("knower_hears_true", False)
+    _season(monkeypatch, w, "tell", HOLDER, net=2)
+    assert [c.value for c in _told(w, HOLDER)] == [5], [(c.value, c.chain) for c in _told(w, HOLDER)]
+    assert record(w.persons[HOLDER], T, w.fixtures) < 1.0
