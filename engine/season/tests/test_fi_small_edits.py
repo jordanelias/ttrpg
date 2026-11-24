@@ -10,13 +10,18 @@ Both tests are game-state tests in the `season_loop` lane: each resolves a plant
 
 from __future__ import annotations
 
+import dataclasses
+
+import pytest
+
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import UNDEPOSITED_KINDS
 from ..data.verbs import EVENT_KINDS, VERB_TABLE
 from ..harness import probes as P
 from ..loop.driver import SeasonDriver, mint_token
-from ..state.carriers import Act, Record
+from ..state.carriers import Act, Claim, Record
+from .test_fi03_trail import INVESTIGATOR, forged_event, trail_world
 
 INQUIRIES = ("examine", "interview", "research", "surveil", "thread_read", "reconstruct")
 REC, ACTOR = "rec_b1112", "p_low"
@@ -146,3 +151,38 @@ def test_ten_repeated_interviews_leave_one_claim():
         kinds += [e.kind for e in _act_witnessed(w, d, Act(id=f"a_b1114_research_{i}", actor=ACTOR, verb="research", payload={"subject": REC}))]
     assert kinds.count("finding.made") >= 3, kinds
     assert len([c for pid, c in _claims_of(w, "finding.made") if pid == ACTOR]) > 1
+
+
+# ---- B11.15 (`08_FI_04` §2, third bullet): a forgotten trail claim stops closing its trail ---------------------------------
+
+
+@pytest.mark.flat_fold
+def test_a_claim_decayed_to_zero_no_longer_closes_the_trail():
+    # H-341's trail arm: the investigator's `(rid, record.forged, True)` claim closes the Event's trail while he still holds it, and stops
+    # closing it once it has faded to 0 (`present_confidence`), whether the fade is the stored floor or the seasons since `when`.
+    from ..epistemic import holds_trail, trail_of
+    from ..state.ledgers import present_confidence
+
+    w, d, rid = trail_world()
+    e = forged_event(w)
+    decay = w.fixtures.claim_decay()
+    assert decay > 0 and trail_of(w, rid, INVESTIGATOR) != [], "the world offers no trail to close, or claims do not fade"
+    held = Claim("c_held", INVESTIGATOR, rid, "record.forged", True, e.emitted_at, "inferred", decay, "own")
+    w.persons[INVESTIGATOR].ledger.append(held)
+
+    # CONTROL: confidence 5 at its own tick still closes the trail.
+    w.tick = e.emitted_at
+    assert present_confidence(held.confidence, held.when, w.tick, decay) > 0
+    assert holds_trail(w, w.persons[INVESTIGATOR], e, w.fixtures.get("claim_subject_rule")) and trail_of(w, rid, INVESTIGATOR) == []
+
+    # The same claim one season on has faded to 0: it no longer closes the trail.
+    w.tick = e.emitted_at + 1
+    assert present_confidence(held.confidence, held.when, w.tick, decay) == 0
+    assert trail_of(w, rid, INVESTIGATOR) != [], "a claim faded to 0 still closed its trail"
+
+    # A claim deposited at 0 does not close it either, and a fresh one beside it does.
+    w.tick = e.emitted_at
+    w.persons[INVESTIGATOR].ledger[-1] = dataclasses.replace(held, id="c_zero", confidence=0)
+    assert trail_of(w, rid, INVESTIGATOR) != [], "a claim held at 0 closed its trail"
+    w.persons[INVESTIGATOR].ledger.append(held)
+    assert trail_of(w, rid, INVESTIGATOR) == []

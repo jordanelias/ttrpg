@@ -49,6 +49,7 @@ from .gaps import Unspecified
 from .state.attribution import event_by_id, actor_of, anchor_of, causing_act
 from .state.containment import ancestry
 from .state.gate import purview_reaches
+from .state.ledgers import present_confidence
 from .state.ids import ROOT, draw_factory
 from .queries import cache, world_q
 from .queries.person_q import LedgerReader
@@ -331,11 +332,17 @@ def holds_trail(w: World, p: Person, e: Event, rule: str) -> bool:
     the written thing and withholds the hand -- also closes it to a later, better finding of the same
     Event, and a second finding of the same Event deposits nothing; under the shipped `both` rule a
     claim on the actor ALONE does not close it. Under the `actor` rule the anchor is the only subject,
-    so there one forging found still closes the forger's others."""
+    so there one forging found still closes the forger's others.
+
+    ⚠ A CLAIM HE HAS FORGOTTEN DOES NOT HOLD IT (ED-IN-0320, `08_FI_04` §2): the held claim must still be read at
+    a confidence above 0 -- `present_confidence` at `w.tick`, the one owner of the fade, never the stored value
+    (which nothing rewrites). `deeds_judged` is NOT changed: a stale claim leaves the opinion there, by the same ruling."""
     subj = claim_subjects(w, e, rule, act_refs(causing_act(w, e)))
     specific = set(non_anchor_subjects(subj, anchor_of(w, e))) or set(subj)
+    decay = w.fixtures.claim_decay()
     return any(c.predicate == e.kind and c.value is True and c.subject in specific
-               and c.when >= e.emitted_at for c in p.ledger)
+               and c.when >= e.emitted_at and present_confidence(c.confidence, c.when, w.tick, decay) > 0
+               for c in p.ledger)
 
 
 def trail_of(w: World, subject: Optional[str], pid: str) -> list:
