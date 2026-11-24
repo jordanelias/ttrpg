@@ -837,7 +837,7 @@ def test_a_rank_at_its_ceiling_is_not_raised():
 # ---------------------------------------------------------------------------------------------------------------------
 # B04.09 -- A CAST ROW MAY AUTHOR SKILL SCORES (CAP A7; CORE Edit 5). `data/cast.py::capabilities_of` is the one reader;
 # the builder merges it over the lifepath expansion; the case overlay's `cast: capability:` is checked through it.
-# The shipped registry authors no row, so each test plants the row it reads.
+# The shipped registry authors `capabilities:` on rows since BA1.01, so each test plants the row it reads (and picks rows that author none).
 
 def test_a_cast_capability_naming_no_definition_is_refused():
     """FALSIFIER: a row naming an undefined skill that builds. `capabilities_of` refuses it naming the row and the roster;
@@ -888,7 +888,7 @@ def test_an_authored_capability_wins_over_the_lifepath(monkeypatch):
     from engine.season.data.rosters import LIFEPATH_TEMPLATES
     rows = {cid: dict(r) for cid, r in cast.load().items()}
     lifepath = next(k for k, v in LIFEPATH_TEMPLATES.items() if "inquiry" in v)
-    both, only_path, neither = "NPC-087", "NPC-084", "NPC-086"
+    both, only_path, neither = "NPC-030", "NPC-031", "NPC-040"       # BA1.99: re-picked from NPC-087, NPC-084, NPC-086, which BA1.01 authors `capabilities:` on
     assert not any(rows[c].get("lifepath") or rows[c].get("capabilities") for c in (both, only_path, neither))
     rows[both].update(lifepath=lifepath, capabilities={"inquiry": 5, "arms": 4})
     rows[only_path]["lifepath"] = lifepath
@@ -896,9 +896,9 @@ def test_an_authored_capability_wins_over_the_lifepath(monkeypatch):
     w = build_realm(0)
     default = w.fixtures.get("pool_default")
     assert default != 5
-    assert w.persons["p_npc_087"].capability == {"inquiry": 5, "arms": 4}
-    assert w.persons["p_npc_084"].capability == {"inquiry": default}
-    assert w.persons["p_npc_086"].capability == {}
+    assert w.persons["p_npc_030"].capability == {"inquiry": 5, "arms": 4}
+    assert w.persons["p_npc_031"].capability == {"inquiry": default}
+    assert w.persons["p_npc_040"].capability == {}
 
 
 # ---------------------------------------------------------------------------------------------------------------------

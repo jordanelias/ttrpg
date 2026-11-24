@@ -4843,8 +4843,36 @@
             "affiliations",
             "verbs"
           ],
-          "note": "[ASSUMPTION; Jordan to correct: every row is content.] EMPTY: the reader ships first and the rows land with the CHAR content pass (`IS-A-11` stage 1 table (e)). `favours`: verbs whose engagement cell on the creed should be above zero. `opposes`: verbs whose cell should be below zero, and below every favoured verb's. Verb keys are `verb_table.yaml`'s. The loader refuses a creed off `affiliations` and a verb off `VERB_TABLE`; a verb with no engagement cell is lawful and reads 0. A cell is repaired in `affiliation_engagement` and nowhere else.",
-          "cells": {}
+          "note": "[ASSUMPTION; Jordan to correct: every row is content.] The rows are the CHAR content pass's (`IS-A-11` stage 1 table (e); four of the five creeds, landed uncorrected at BA1.06; `altonian_civics` has no basis). `favours`: verbs whose engagement cell on the creed should be above zero. `opposes`: verbs whose cell should be below zero, and below every favoured verb's. Verb keys are `verb_table.yaml`'s. The loader refuses a creed off `affiliations` and a verb off `VERB_TABLE`; a verb with no engagement cell is lawful and reads 0. A cell is repaired in `affiliation_engagement` and nowhere else.",
+          "cells": {
+            "solmund_orthodoxy": {
+              "favours": [
+                "open_case",
+                "examine"
+              ],
+              "opposes": [
+                "thread_read"
+              ]
+            },
+            "inner_tradition": {
+              "favours": [
+                "thread_read"
+              ],
+              "opposes": []
+            },
+            "thread_truth": {
+              "favours": [
+                "thread_read"
+              ],
+              "opposes": []
+            },
+            "einhir_restoration": {
+              "favours": [
+                "reconstruct"
+              ],
+              "opposes": []
+            }
+          }
         },
         "alignment": {
           "source": "the retired pursuit-cells draft (its `FORK:` row in `references/restructure_ledger.md`) \u00a73 (the re-cell over the seven axes), FOLDED INTO THE BUILD by Jordan 2026-10-06 (RS-1, ED-IN-0291), plus the six table verbs the draft does not cell (`build`, `found`, `give`, `march`, `migrate`, `survey`), celled in IN-08's cells commit by the draft's own method (each cell's reason below). Formula: ARCHITECTURE_V2.md \u00a7F2 \u2014 `score(c) = \u03a3_axis axis_weight[axis] \u00b7 alignment(c.verb, axis)`, the person's axis weights being their pursuits projected through `pursuit_projection`.",
@@ -4872,6 +4900,18 @@
             "marshal": "v11 CP-T04-02: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); a lean on seven axes is authored content (IN-08's method), and a standing order is a document written before the field, whose moral weight is the field's. It scores 0.0 on every axis until a cell is authored, so no witness is scarred by an order marshalled and `order.marshaled` judges as no deed. Revert: the seven cells, IN-08's method.",
             "surrender": "v11 CP-T04-07: NOT CELLED BY THE PRODUCER (`covenant`'s reason, above); a lean on seven axes is authored content (IN-08's method), and a place yielded on terms is a moral weight the field would have carried (the stormed town's `fight`/`march` cells). It scores 0.0 on every axis until a cell is authored, so no witness is scarred by a surrender and `place.surrendered` judges as no deed. Revert: the seven cells, IN-08's method.",
             "tell": "No cell on any axis BY DESIGN: testimony's moral weight is in WHAT is told (a claim), which no verb x axis cell can carry, and telling is driven by regard (the telling workplan's G1), not by pursuit (the retired pursuit-cells draft's \u00a73.6, \u00a77.4; G-1, [medium; Jordan to correct]). `corpus_run`'s RANKING counts only candidates whose verb has a celled axis, so a `tell` is neither a tie nor a discrimination there."
+          },
+          "choices": {
+            "retreat_at": {
+              "none": {
+                "rigid_flexible": -0.4,
+                "grandiose_humble": -0.3
+              },
+              "0.5": {
+                "rigid_flexible": 0.3,
+                "selfish_selfless": -0.2
+              }
+            }
           },
           "sweep": [
             "declared",
@@ -9539,7 +9579,13 @@
           "territory": null,
           "ts": "~50",
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "perception": 5,
+            "attunement": 4
+          },
+          "capabilities": {
+            "inquiry": 5
+          },
           "convictions": {
             "primary": [
               {
@@ -9629,7 +9675,13 @@
           "territory": null,
           "ts": 25,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "charisma": 5,
+            "will": 4
+          },
+          "capabilities": {
+            "argue": 5
+          },
           "convictions": {
             "primary": [
               {
@@ -9720,7 +9772,15 @@
           "territory": null,
           "ts": 15,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "perception": 5,
+            "will": 4
+          },
+          "capabilities": {
+            "inquiry": 5,
+            "argue": 3,
+            "law": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -9795,6 +9855,9 @@
             "einhir_restoration": 0,
             "altonian_civics": 1
           },
+          "unaware": [
+            "prac.thread_sensitivity"
+          ],
           "source": "npc_roster_v30 \u00a74",
           "notes": "TS 15. Attributes Thread perception to investigative instinct. Field Inquisitor, NOT Cardinal. Savonarola archetype."
         },
@@ -9811,7 +9874,14 @@
           "territory": null,
           "ts": 35,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "agility": 5,
+            "perception": 4
+          },
+          "capabilities": {
+            "arms": 5,
+            "inquiry": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -9900,7 +9970,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "strength": 4,
+            "charisma": 4
+          },
+          "capabilities": {
+            "arms": 5
+          },
           "convictions": {
             "primary": [
               {
@@ -9989,7 +10065,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "charisma": 5,
+            "acuity": 4
+          },
+          "capabilities": {
+            "argue": 5
+          },
           "convictions": {
             "primary": [
               {
@@ -10077,7 +10159,14 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "focus": 5,
+            "acuity": 4
+          },
+          "capabilities": {
+            "law": 5,
+            "copying": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -10165,7 +10254,14 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "acuity": 5,
+            "grace": 4
+          },
+          "capabilities": {
+            "law": 3,
+            "argue": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -10253,7 +10349,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "attunement": 5,
+            "charisma": 4
+          },
+          "capabilities": {
+            "argue": 5
+          },
           "convictions": {
             "primary": [
               {
@@ -10343,7 +10445,14 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "grace": 5,
+            "charisma": 4
+          },
+          "capabilities": {
+            "argue": 3,
+            "law": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -10433,7 +10542,13 @@
           "territory": "T16 (Schoenland)",
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "acuity": 4,
+            "attunement": 4
+          },
+          "capabilities": {
+            "argue": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -10508,6 +10623,9 @@
             "einhir_restoration": 1,
             "altonian_civics": 2
           },
+          "unaware": [
+            "stability"
+          ],
           "source": "npc_roster_v30 \u00a712"
         },
         {
@@ -10522,7 +10640,14 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "acuity": 5,
+            "will": 4
+          },
+          "capabilities": {
+            "law": 3,
+            "argue": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -10612,7 +10737,13 @@
           "territory": "T1 (Valorsplatz)",
           "ts": 28,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "charisma": 5,
+            "will": 4
+          },
+          "capabilities": {
+            "argue": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -10684,6 +10815,20 @@
             "einhir_restoration": 2,
             "altonian_civics": 1
           },
+          "relations": [
+            {
+              "to": "NPC-032",
+              "ground": "kin",
+              "valence": 1,
+              "weight": 4
+            },
+            {
+              "to": "NPC-050",
+              "ground": "rivalry",
+              "valence": -1,
+              "weight": 3
+            }
+          ],
           "source": "faction_canon_v30 \u00a7Crown",
           "notes": "TS 28 per character_canon \u2014 no threshold crossing. Honor enters via valorian_court cultural template."
         },
@@ -10700,7 +10845,13 @@
           "territory": "T9 (Himmelenger)",
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "will": 5,
+            "charisma": 4
+          },
+          "capabilities": {
+            "argue": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -10961,7 +11112,15 @@
           "territory": "T1 (Valorsplatz)",
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "acuity": 5,
+            "focus": 4
+          },
+          "capabilities": {
+            "inquiry": 5,
+            "copying": 3,
+            "law": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -11035,6 +11194,14 @@
             "einhir_restoration": 5,
             "altonian_civics": 1
           },
+          "relations": [
+            {
+              "to": "NPC-020",
+              "ground": "kin",
+              "valence": 1,
+              "weight": 4
+            }
+          ],
           "source": "npc_character_analyses \u00a72, faction_canon_v30 \u00a7Crown",
           "notes": "Queen Lenneth Almqvist. Archivist by training. PP-685 \u00a72.3 ecclesiastical profile was misattribution. Lenneth archive awakened Torsvald's TS (character_analyses_infill \u00a75)."
         },
@@ -11050,7 +11217,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "perception": 5,
+            "attunement": 4
+          },
+          "capabilities": {
+            "inquiry": 5
+          },
           "convictions": {
             "primary": [
               {
@@ -11136,7 +11309,14 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "grace": 4,
+            "attunement": 4
+          },
+          "capabilities": {
+            "argue": 3,
+            "inquiry": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -11201,7 +11381,10 @@
               }
             ]
           },
-          "goals": null,
+          "goals": [
+            "Carry the Crown Inner Circle's counsel to Himlensendt",
+            "Hold the Church's place at court"
+          ],
           "affiliations": {
             "solmund_orthodoxy": 5,
             "einhir_restoration": 1,
@@ -11221,7 +11404,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "agility": 5,
+            "strength": 4
+          },
+          "capabilities": {
+            "arms": 5
+          },
           "convictions": {
             "primary": [
               {
@@ -11306,7 +11495,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "acuity": 4,
+            "charisma": 4
+          },
+          "capabilities": {
+            "arms": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -11391,7 +11586,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "acuity": 5,
+            "focus": 4
+          },
+          "capabilities": {
+            "inquiry": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -11477,7 +11678,14 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "will": 5,
+            "acuity": 4
+          },
+          "capabilities": {
+            "law": 5,
+            "inquiry": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -11563,7 +11771,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "acuity": 4
+          },
+          "capabilities": {
+            "inquiry": 3,
+            "arms": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -11650,7 +11864,9 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "will": 4
+          },
           "convictions": {
             "primary": [
               {
@@ -11735,7 +11951,12 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "charisma": 5
+          },
+          "capabilities": {
+            "argue": 5
+          },
           "convictions": {
             "primary": [
               {
@@ -11822,7 +12043,14 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "charisma": 5,
+            "acuity": 4
+          },
+          "capabilities": {
+            "law": 5,
+            "argue": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -11897,6 +12125,14 @@
             "einhir_restoration": 0,
             "altonian_civics": 0
           },
+          "relations": [
+            {
+              "to": "NPC-020",
+              "ground": "rivalry",
+              "valence": -1,
+              "weight": 3
+            }
+          ],
           "source": "npc_behavior_v30 \u00a72.3, npc_character_analyses \u00a76, faction_canon_v30"
         },
         {
@@ -11913,7 +12149,13 @@
           "territory": null,
           "ts": null,
           "coherence": null,
-          "stats": null,
+          "stats": {
+            "charisma": 5,
+            "acuity": 5
+          },
+          "capabilities": {
+            "inquiry": 3
+          },
           "convictions": {
             "primary": [
               {
@@ -11990,6 +12232,14 @@
             "einhir_restoration": 5,
             "altonian_civics": 1
           },
+          "relations": [
+            {
+              "to": "NPC-050",
+              "ground": "rivalry",
+              "valence": -1,
+              "weight": 4
+            }
+          ],
           "source": "npc_behavior_v30 \u00a72.4, npc_character_analyses_infill \u00a75, faction_canon_v30",
           "notes": "PP-650 STRUCK on Cultural Reformation + VTM associations; character active. Reinhardt von Lohengramm archetype per Jordan."
         },
@@ -12000,6 +12250,13 @@
           "faction": "L\u00f6wenritter",
           "role": "Grandmaster",
           "status": "canonical",
+          "stats": {
+            "will": 5,
+            "charisma": 4
+          },
+          "capabilities": {
+            "arms": 5
+          },
           "ts": 0,
           "certainty": 4,
           "resonant_style": "Consequence",
@@ -12072,6 +12329,14 @@
             "einhir_restoration": 1,
             "altonian_civics": 1
           },
+          "relations": [
+            {
+              "to": "NPC-020",
+              "ground": "service",
+              "valence": 1,
+              "weight": 3
+            }
+          ],
           "source": "behavior_v30 \u00a72.5"
         },
         {
@@ -12081,6 +12346,14 @@
           "faction": "Hafenmark (Inner Council)",
           "role": "Legal Advisor to Baralta",
           "status": "canonical",
+          "stats": {
+            "acuity": 5,
+            "focus": 4
+          },
+          "capabilities": {
+            "law": 5,
+            "argue": 3
+          },
           "certainty": 5,
           "resonant_style": "Evidence",
           "convictions": {
@@ -12152,6 +12425,10 @@
             "einhir_restoration": 1,
             "altonian_civics": 1
           },
+          "goals": [
+            "Ground the Duchess's Sovereign Authority claim in law",
+            "Keep Hafenmark's procedure correct"
+          ],
           "source": "behavior_v30 \u00a72.16"
         },
         {
@@ -12161,6 +12438,13 @@
           "faction": "Hafenmark (Inner Council)",
           "role": "Military Commander",
           "status": "canonical",
+          "stats": {
+            "endurance": 4,
+            "charisma": 4
+          },
+          "capabilities": {
+            "arms": 5
+          },
           "certainty": 4,
           "resonant_style": "Consequence",
           "convictions": {
@@ -12321,6 +12605,13 @@
           "faction": "Varfell (Jarl Council)",
           "role": "Skald-Chief",
           "status": "canonical",
+          "stats": {
+            "charisma": 5
+          },
+          "capabilities": {
+            "argue": 3,
+            "copying": 3
+          },
           "certainty": 3,
           "resonant_style": "Solidarity",
           "convictions": {
@@ -12401,6 +12692,9 @@
           "faction": "Independent (Southernmost Wardens)",
           "role": "Second Senior Warden",
           "status": "canonical",
+          "stats": {
+            "focus": 5
+          },
           "territory": "T15 (Southernmost)",
           "ts": 60,
           "certainty": 0,
@@ -12488,6 +12782,12 @@
           "role": "Riskbreaker (doctrine-following \u2014 foil to Torsvald)",
           "lifepath": "3-LO3",
           "status": "proposed",
+          "stats": {
+            "agility": 5
+          },
+          "capabilities": {
+            "arms": 5
+          },
           "ts": 0,
           "certainty": 5,
           "resonant_style": "Authority",
@@ -12569,6 +12869,13 @@
           "faction": "Hafenmark (Inner Council)",
           "role": "Commune Representative (Banneret)",
           "status": "proposed",
+          "stats": {
+            "charisma": 4
+          },
+          "capabilities": {
+            "argue": 3,
+            "arms": 3
+          },
           "resonant_style": "Consequence",
           "convictions": {
             "primary": [
@@ -12648,6 +12955,12 @@
           "faction": "Varfell (Jarl Council)",
           "role": "Military Jarl",
           "status": "proposed",
+          "stats": {
+            "strength": 4
+          },
+          "capabilities": {
+            "arms": 5
+          },
           "resonant_style": "Solidarity",
           "convictions": {
             "primary": [
@@ -12727,6 +13040,13 @@
           "faction": "Crown",
           "role": "Governor of Ehrenfeld (T14)",
           "status": "proposed",
+          "stats": {
+            "acuity": 4,
+            "focus": 4
+          },
+          "capabilities": {
+            "law": 3
+          },
           "territory": "T14 (Ehrenfeld)",
           "resonant_style": "Evidence",
           "convictions": {
@@ -12807,6 +13127,12 @@
           "faction": "Guilds",
           "role": "Zunftmeisterin (Guildmaster Council)",
           "status": "proposed",
+          "stats": {
+            "charisma": 4
+          },
+          "capabilities": {
+            "argue": 3
+          },
           "resonant_style": "Solidarity",
           "convictions": {
             "primary": [
@@ -12886,6 +13212,14 @@
           "faction": "Guilds",
           "role": "Guild Advocate (legal representative at Crown court)",
           "status": "proposed",
+          "stats": {
+            "acuity": 5,
+            "charisma": 4
+          },
+          "capabilities": {
+            "law": 5,
+            "argue": 5
+          },
           "resonant_style": "Evidence",
           "convictions": {
             "primary": [
@@ -12965,6 +13299,13 @@
           "faction": "Guilds",
           "role": "Guild Surveyor (mapping maritime Forgetting boundary)",
           "status": "proposed",
+          "stats": {
+            "perception": 5,
+            "focus": 4
+          },
+          "capabilities": {
+            "inquiry": 5
+          },
           "resonant_style": "Evidence",
           "convictions": {
             "primary": [
@@ -13044,6 +13385,13 @@
           "faction": "Restoration Movement",
           "role": "Buditel (hedge school teacher)",
           "status": "proposed",
+          "stats": {
+            "acuity": 4,
+            "charisma": 4
+          },
+          "capabilities": {
+            "argue": 3
+          },
           "resonant_style": "Solidarity",
           "convictions": {
             "primary": [
@@ -13124,6 +13472,14 @@
           "role": "Copyist (hand-copies suppressed Einhir cultural texts)",
           "lifepath": "3-CF4",
           "status": "proposed",
+          "stats": {
+            "focus": 5,
+            "agility": 4
+          },
+          "capabilities": {
+            "copying": 5,
+            "inquiry": 3
+          },
           "resonant_style": "Evidence",
           "convictions": {
             "primary": [
@@ -13203,6 +13559,14 @@
           "faction": "Altonia",
           "role": "Katepano (frontier governor)",
           "status": "proposed",
+          "stats": {
+            "acuity": 4,
+            "charisma": 4
+          },
+          "capabilities": {
+            "law": 3,
+            "arms": 3
+          },
           "resonant_style": "Consequence",
           "convictions": {
             "primary": [
@@ -13282,6 +13646,14 @@
           "faction": "Altonia",
           "role": "Kommerkiarios (trade prefect at Schoenland interface)",
           "status": "proposed",
+          "stats": {
+            "acuity": 4,
+            "focus": 4
+          },
+          "capabilities": {
+            "law": 3,
+            "inquiry": 3
+          },
           "resonant_style": "Authority",
           "convictions": {
             "primary": [

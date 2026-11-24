@@ -44,9 +44,12 @@ from engine.season.state.carriers import Act
 from engine.season.state.ids import H, draw_factory
 
 SEED = 0
-# Two disjoint fights between co-located persons of `build_realm(0)` (the barracks pair and a court pair): each runs three
-# turns or more when both engage, and they share no claimant, so a host playing one claimant leaves the other AUTOMATED.
-FIGHTS = (("p_npc_035", "p_npc_072"), ("p_npc_005", "p_npc_083"))
+# Two disjoint fights between persons of `build_realm(0)`: each runs three turns or more when both engage (5 and 6 turns,
+# read at BA1.99 on the authored cast, `PYTHONHASHSEED=0`), and they share no claimant, so a host playing one claimant leaves the
+# other AUTOMATED. BA1.99 re-pin (BA1.01's authored `stats:` and `capabilities:`): the pairs this file held (p_npc_035 against
+# p_npc_072, p_npc_005 against p_npc_083) each ended at turn 1 on the authored cast, so no suspended fight ran two turns; the
+# pairs now are the scan's, by a round-robin of every person against every other, the seed unmoved (0).
+FIGHTS = (("p_npc_005", "p_npc_036"), ("p_npc_041", "p_npc_039"))
 
 
 def _scripted(p, v, s, ask_budget, auto):

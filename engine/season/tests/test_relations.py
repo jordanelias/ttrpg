@@ -9,9 +9,7 @@ one acted on reads differently at the two arms (the factor guessed a counterpart
 """
 from __future__ import annotations
 
-import pytest
 
-from ..data import cast
 from ..data.pursuits import to_axes
 from ..data.rosters import PURSUITS, SEEN_PREDICATE
 from ..decision import choose as CH
@@ -81,14 +79,14 @@ def test_a_deed_done_to_a_man_is_weighed_by_his_bond_to_him():
 # or a holder's ledger holds no `bond:` claim after the build, or a person nobody authored a relation for holds one.
 # ----------------------------------------------------------------------------------------------------------------------------------------------
 
-# The source's six rows (`02_CHAR_relations_have_a_ground` edit 6), PLANTED: the shipped registry authors none until BA1.
-# [ASSUMPTION; Jordan to correct; basis: the foil document's own relations, `weight` the source's one example (2) for every row -- the numbers are placeholders]
-SIX = (("NPC-020", "NPC-032", "kin", 1, 2),         # Almud -> Lenneth
-       ("NPC-032", "NPC-020", "kin", 1, 2),         # Lenneth -> Almud
-       ("NPC-050", "NPC-020", "rivalry", -1, 2),    # Baralta -> Almud
-       ("NPC-020", "NPC-050", "rivalry", -1, 2),    # Almud -> Baralta
-       ("NPC-070", "NPC-020", "service", 1, 2),     # Ehrenwall -> Almud
-       ("NPC-052", "NPC-050", "rivalry", -1, 2))    # Vaynard -> Baralta
+# The source's six rows (`02_CHAR_relations_have_a_ground` edit 6), AUTHORED at BA1.08 on the shipped registry with the draft's weights.
+# [ASSUMPTION; low; Jordan to correct; basis: `IS-A-11` draft table (d), weight 4 where the source's words are absolute, else 3]
+SIX = (("NPC-020", "NPC-032", "kin", 1, 4),         # Almud -> Lenneth
+       ("NPC-032", "NPC-020", "kin", 1, 4),         # Lenneth -> Almud
+       ("NPC-050", "NPC-020", "rivalry", -1, 3),    # Baralta -> Almud
+       ("NPC-020", "NPC-050", "rivalry", -1, 3),    # Almud -> Baralta
+       ("NPC-070", "NPC-020", "service", 1, 3),     # Ehrenwall -> Almud
+       ("NPC-052", "NPC-050", "rivalry", -1, 4))    # Vaynard -> Baralta
 
 
 def _pid(cid):
@@ -108,20 +106,10 @@ def test_an_authored_relation_gives_its_holder_a_stance_row_and_his_own_bond_cla
     assert low.ledger == [] and low.stance == [] and w.persons["p_king"].ledger == []
 
 
-@pytest.fixture(scope="module")
-def planted_realm():
-    """`build_realm(0)` with the six rows planted into the registry's row cache (the shipped registry authors none)."""
+def test_a_rival_ranks_hostile_acts_higher_than_a_stranger():
+    """On `build_realm(0)`: the shipped registry authors the six rows (BA1.08), so none is planted."""
     from ..boot.realm import build_realm
-    rows = {cid: dict(r) for cid, r in cast._rows().items()}
-    for holder, to, ground, valence, weight in SIX:
-        rows[holder].setdefault("relations", []).append({"to": to, "ground": ground, "valence": valence, "weight": weight})
-    with pytest.MonkeyPatch.context() as mp:
-        mp.setattr(cast, "_CACHE", rows)
-        yield build_realm(0)
-
-
-def test_a_rival_ranks_hostile_acts_higher_than_a_stranger(planted_realm):
-    w = planted_realm
+    w = build_realm(0)
     fx = w.fixtures
     checked = 0
     for holder, to, ground, valence, weight in SIX:
