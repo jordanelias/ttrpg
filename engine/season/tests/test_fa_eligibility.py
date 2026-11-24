@@ -1,4 +1,5 @@
 """B21.60 -- a seat is held by an individual (`16_PESSIMIST_FA_B` edit 1, G1; R-04 who may sit).
+B21.62 -- a war has two parties and a declarer who can wage it (edit 4, G4; the last test, on the realm).
 
 `state/gate.py::may_sit` is the one predicate: the person exists and is not a cohort. `confer`'s and `succeed`'s preconditions and
 the write gate's `conferral` and `claim` clauses all ask it, so a cohort is refused at the fold (`confer.refused`) where the gate
@@ -10,7 +11,11 @@ import pytest
 
 from ..data.matrix import WriteClass
 from ..data.verbs import VERB_TABLE
+from ..boot.realm import build_realm
 from ..harness import probes as P
+from ..loop.driver import SeasonDriver
+from ..queries import faction_q, world_q
+from ..state import gate
 from ..loop.driver import mint_token
 from ..loop.sides import seat_named_by, sides_of
 from .. import manifest
@@ -101,3 +106,58 @@ def test_self_conferral_across_chains_refused():
     kinds = _confer_on(w, d, SEAT, CONFERRER, "elig_self_within")
     assert "tenure.opened" in kinds and "confer.refused" not in kinds, kinds
     assert _hold(w, SEAT).subject == CONFERRER, "the control: a self-conferral inside one chain was not admitted"
+
+
+HAFENMARK, VARFELL = "fac_hafenmark", "fac_varfell"
+
+
+def _utter_war(w, d, actor, subject, value, aid):
+    act = Act(id=aid, actor=actor, verb="utter", payload={"mood": "WAR", "subject": subject, "value": value})
+    return [e.kind for e in d.resolve(mint_token(w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))]
+
+
+def _wars(w):
+    return [p for p in w.propositions.values() if p.mood == world_q.WAR_MOOD]
+
+
+def _hafenmark_cast(w):
+    """The Duchess (a Hafenmark member whose seat grants `dispatch`), a clerk (a Hafenmark member whose seat does not), and a stranger (no
+    commit to Hafenmark or Varfell, no seat), each CHOSEN off the world's own `members` and grants, and a planted cohort."""
+    ours = world_q.members(w, HAFENMARK)
+    duchess = next(p for p in ours if gate.may_wage(w, p, HAFENMARK))
+    clerk = next(p for p in ours if not gate.may_wage(w, p, HAFENMARK) and any(
+        t.kind == "hold" and t.live and t.object in w.offices for t in w.persons[p].tenures))
+    sides = set(ours) | set(world_q.members(w, VARFELL))
+    stranger = next(p for p in sorted(w.persons) if p not in sides and not w.persons[p].is_cohort and not any(
+        t.kind == "hold" and t.live and t.object in w.offices for t in w.persons[p].tenures))
+    cohort = P.plant_cohort(w, "c_war_crowd", next(iter(w.rungs)), weight=3)
+    assert w.persons[cohort].is_cohort and len({duchess, clerk, stranger, cohort}) == 4, "fixture: four distinct declarers"
+    return duchess, clerk, stranger, cohort
+
+
+def test_war_between_same_faction_refused():
+    """G4: `WAR(Hafenmark, Hafenmark)` by the Duchess is refused (`utter.refused`), no Proposition minted and no war read. CONTROL: the Duchess's
+    `WAR(Hafenmark, Varfell)` mints, so only the party pair decides."""
+    w = build_realm(0)
+    d = SeasonDriver(w)
+    duchess, *_ = _hafenmark_cast(w)
+    kinds = _utter_war(w, d, duchess, HAFENMARK, HAFENMARK, "elig_war_self")
+    assert kinds == ["utter.refused"], kinds
+    assert not _wars(w) and faction_q.at_war(w, HAFENMARK, HAFENMARK) is False, "a faction was set against itself"
+    assert _utter_war(w, d, duchess, HAFENMARK, VARFELL, "elig_war_two") == ["proposition.uttered"], "the control: two parties did not mint"
+    assert len(_wars(w)) == 1
+
+
+def test_war_utterance_without_a_waging_seat_is_not_a_declaration():
+    """G4: a cohort's, a stranger's and a clerk's `WAR` between Hafenmark and Varfell is refused; the Duchess's mints. The same stranger's
+    utterance of another mood is admitted (a call for war is an ordinary utterance)."""
+    w = build_realm(0)
+    d = SeasonDriver(w)
+    duchess, clerk, stranger, cohort = _hafenmark_cast(w)
+    for who in (cohort, stranger, clerk):
+        assert _utter_war(w, d, who, HAFENMARK, VARFELL, f"elig_war_{who}") == ["utter.refused"], who
+    assert not _wars(w), "a refused utterance minted a WAR Proposition"
+    ordinary = Act(id="elig_ordinary", actor=stranger, verb="utter", payload={"mood": "OUGHT", "subject": HAFENMARK, "value": VARFELL})
+    assert [e.kind for e in d.resolve(mint_token(w, WriteClass.ACTS), [ordinary])] == ["proposition.uttered"], "another mood was refused"
+    assert _utter_war(w, d, duchess, HAFENMARK, VARFELL, "elig_war_duchess") == ["proposition.uttered"], "the control: the Duchess's war"
+    assert len(_wars(w)) == 1 and _wars(w)[0].subject == HAFENMARK

@@ -21,8 +21,8 @@ from ..data.rosters import (BINDS_BASES, FOUNDED_CONFERRAL, FOUNDED_REVOCATION, 
                             RUNG_KINDS)
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..queries.person_q import ABOUT_KEYS
-from ..queries.world_q import (BAN_KIND, DETAIN_KIND, DOCKET_PETITION, commands, docketed, founded_office_id, founded_post,
-                               founds_over, restrained)
+from ..queries.world_q import (BAN_KIND, DETAIN_KIND, DOCKET_PETITION, WAR_MOOD, commands, docketed, founded_office_id,
+                               founded_post, founds_over, members, restrained)
 from ..state.attribution import causing_act
 from ..state.carriers import Office, operand_of, subject_of
 from ..trace_log import TRACE
@@ -34,7 +34,7 @@ from ..trace_log import TRACE
 # `has_conferral_basis` still reaches both preconditions that call it by that name.
 from ..state.gate import (  # noqa: F401 -- `REVOCATION_RULES`, `in_holdings`, `seated_on_the_rung_above` re-exported
     REVOCATION_RULES, across_chains, has_conferral_basis, has_filler, has_revocation_disposal, in_holdings, may_claim, may_fill,
-    may_revoke, may_sit, purview_reaches, seat_hold, seated_on_the_rung_above)
+    may_revoke, may_sit, may_wage, purview_reaches, seat_hold, seated_on_the_rung_above)
 
 
 # A `requires:` predicate. The table states preconditions in PROSE, which the fold cannot read --
@@ -703,6 +703,41 @@ def _req_dispatch(w: "World", a: "Act") -> bool:
         if not isinstance(dest, str) or seat is None or dest not in w.rungs or not purview_reaches(w, seat, dest):
             return _refuse("a dispatch to a place outside the seat's purview", f"{a.actor} via {a.via!r} to {dest!r}")
     return True
+
+
+@requires_predicate("utter", clauses=("subject", "same_party", "parties", "declarer", "seat"))
+def _req_utter(w: "World", a: "Act") -> Answer:
+    """B21.62 (`16_PESSIMIST_FA_B` edit 4, G4, A-20): A WAR HAS TWO PARTIES AND A DECLARER WHO CAN WAGE IT. Every other mood is admitted
+    as it was (`utter` admits a Proposition's creation and nothing else, §14); only a `WAR` utterance is asked, and only of its payload and
+    its declarer, never of a Proposition already in the world:
+      * `subject` -- a named subject is a string (a list is unhashable: refused, never raised);
+      * `same_party` -- the two parties are two (`subject != value`; the source's *payload well-formedness*, asked here because the tree has
+        no Act-construction refusal and a refusal is an Event, never a raise);
+      * `parties` -- each party is a faction with members (`world_q.members`; the source's `Existence(members(subject))` and `(value)`);
+      * `declarer` -- the declarer is a member of one of them;
+      * `seat` -- and sits in a seat of one of them whose grant carries `MUSTER_ACT` (`gate.may_wage`, B21.58, the rule `world_q.at_war` asks of
+        each commit): a member's `WAR` utterance without such a seat is a call for war, an ordinary utterance, and no declaration.
+    The source types these as `requires_typed` clauses; that grammar binds closed operands and cannot read a payload's `mood` or `value`, and
+    a cell asked of every utterance would refuse each other mood, so the conditions are this predicate's [ASSUMPTION; medium; Jordan to
+    correct; revert: delete this predicate, the row's `requires:` and `emits_on_refusal:`]."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    subject, value = d.get("subject"), d.get("value")
+    if subject is not None and not isinstance(subject, str):
+        return _refuse_at("subject", f"{a.actor} names {subject!r}", "an utterance names a subject that is no id")
+    if d.get("mood") != WAR_MOOD:
+        return ADMITTED
+    if not isinstance(subject, str) or not isinstance(value, str):
+        return _refuse_at("parties", f"{a.actor} {subject!r} against {value!r}", "a war between parties that are no ids")
+    if subject == value:
+        return _refuse_at("same_party", f"{a.actor} {subject!r}", "a war of a faction against itself")
+    sides = (members(w, subject), members(w, value))
+    if not all(sides):
+        return _refuse_at("parties", f"{a.actor} {subject!r} against {value!r}", "a war between parties of which one has no members")
+    if a.actor not in sides[0] and a.actor not in sides[1]:
+        return _refuse_at("declarer", f"{a.actor} {subject!r} against {value!r}", "a war declared by a member of neither party")
+    if not (may_wage(w, a.actor, subject) or may_wage(w, a.actor, value)):
+        return _refuse_at("seat", f"{a.actor} {subject!r} against {value!r}", "a war declared by a member who sits in no seat that wages it")
+    return ADMITTED
 
 
 @requires_predicate("convene")

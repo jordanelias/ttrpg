@@ -102,7 +102,7 @@ def test_every_branch_names_a_declared_clause_and_every_declared_clause_has_a_br
         assert set(declared) <= set(used), (verb, sorted(set(declared) - set(used)))
         assert len(set(declared)) == len(declared), verb
         checked += 1
-    assert checked == 4, f"the four naming predicates (confer, establish, oblige, succeed): saw {checked}"
+    assert checked == 5, f"the five naming predicates (confer, establish, oblige, succeed, utter): saw {checked}"
     # the walk observes what it excludes
     def _planted(w, a):
         return PR._refuse_at("undeclared", "x")

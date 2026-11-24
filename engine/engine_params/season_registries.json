@@ -9015,7 +9015,9 @@
           "brute": "own",
           "brute_note": "it makes a Proposition exist; belief in it is a later `tell` or `argue`",
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
-          "requires": "\u2014",
+          "requires": "a WAR utterance names two distinct factions with members, and its declarer is a member of one who sits in a seat that wages for it (B21.62); every other mood is unconditioned",
+          "requires_typed": "none",
+          "requires_typed_note": "B21.62 (`16_PESSIMIST_FA_B` edit 4, G4; A-20): `none` FOR THE GRAMMAR'S REASON -- the conditions bind only a `WAR` utterance and read the payload's `mood` and `value`, which are no `requires_operands` member, and a typed cell asked of every utterance would refuse every other mood. They are `loop/predicates.py::_req_utter`'s (`world_q.members` of each party, `gate.may_wage` of the declarer; `subject != value` beside them). [ASSUMPTION; medium; Jordan to correct; revert: delete the predicate, the `requires:` and `emits_on_refusal:`.]",
           "writes": [
             "Proposition.exists"
           ],
@@ -9023,7 +9025,9 @@
           "emits": [
             "proposition.uttered"
           ],
-          "emits_on_refusal": [],
+          "emits_on_refusal": [
+            "utter.refused"
+          ],
           "grade": "assumption",
           "source": "W3 -- #353 names it and Part E omits it. WITHOUT IT NO PROPOSITION EXISTS, and `commit`, `petition` and `issue` all `require` one, so the season cannot start. Register row H-42. \u00a714 makes a Proposition IMMUTABLE, so this row admits its CREATION and nothing else -- there is no verb that alters one."
         },
