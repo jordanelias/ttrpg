@@ -2078,6 +2078,29 @@ def _load_command_declines(values) -> frozenset:
 COMMAND_DECLINES = _load_command_declines(roster("command_declines"))
 
 
+# B21.57 (`IS-B3-FA-05`, A-24): the verbs whose WRITING ROW MAY LAWFULLY WRITE NOTHING, and the kinds each emits when it does
+# (`rosters.yaml: write_optional`, read in `loop/resolve.py::_fold`'s `NoOpReceipt` branch; `comply`). REFUSED AT IMPORT when a
+# member names a verb the table lacks, a row that writes nothing (no write to decline) or a kind the row does not emit.
+def _load_write_optional(values: dict) -> dict:
+    """`rosters.yaml: write_optional`'s `values`, checked and frozen -- refused per member (above). A function, so a test can plant
+    a bad line and watch it refuse."""
+    out: dict = {}
+    for verb, kinds in (values or {}).items():
+        row = VERB_TABLE.get(verb)
+        kinds = tuple(kinds) if isinstance(kinds, (list, tuple)) else ()
+        if row is None or not row.writes or not kinds or not set(kinds) <= set(row.emits):
+            raise Forbidden(
+                f"`rosters.yaml: write_optional` names {verb!r}: {list(kinds)}, and the verb table carries no such verb, its row "
+                "writes nothing, or it lists a kind the row does not emit", "rosters.yaml",
+                needs="a writing `verb_table.yaml` verb and a non-empty list of kinds its `emits:` declares",
+                law="B21.57 -- a decline is the row's refusal (F9) unless the roster says the verb is also answered without a write")
+        out[verb] = kinds
+    return out
+
+
+WRITE_OPTIONAL = _load_write_optional(roster_map("write_optional", "values"))
+
+
 # v9 IN-12 step 13: the verbs a person forms only on a referent he holds a row against -- his own
 # `Person.stance` rows naming it with a valence below zero (`rosters.yaml: own_stance_declines`, read in
 # `opening_set`; `forgive`). Keyed on the row's `writes:`: REFUSED AT IMPORT when a member names a verb the

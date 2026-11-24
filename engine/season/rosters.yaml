@@ -1368,6 +1368,7 @@ rosters:
       oblige:           {why: "`brute: seat` -- the row's `brute_note:` says what authorises the write"}
       convene:          {why: "a sitting is scheduled; what it decides is its members' acts [ASSUMPTION: the producer's sentence, 18-A gives none]"}
       dispatch:         {why: "an order is sent; its addressee's compliance is his act [ASSUMPTION: the producer's sentence, 18-A gives none]"}
+      comply:           {why: "`brute: own` -- the man's own going: he moves his own legs and no one else's (B21.57, A-24) [ASSUMPTION: the producer's sentence, 18-A gives none]"}
       petition:         {why: "filing; the addressee's answer is his act"}
       give:             {why: "consent is each side's sampled choice; `brute: own` -- the row's `brute_note:`"}
       transfer:         {why: "consent is each side's sampled choice; `brute: own` -- the row's `brute_note:`"}
@@ -2455,12 +2456,13 @@ rosters:
       of it is covered), the other property. A-21 rules a decree proclaimed: its content reaches EVERYONE who learns of the mint,
       addressee or not, where `read_to_addressee` reaches only the addressee. The verb qualifier is the point: `covenant`
       also mints a `dispensation`, and its counterparty learns the terms only by holding the Record (A-21 keeps covenants in
-      person), so `dispensation` is carried for `issue` alone. No record kind is in both rosters (refused at import), and no
+      person), so `dispensation` is carried for `issue` and, from B21.57, `dispatch` (an order is a decree to the man it sends,
+      `_eff_dispatch`), and for `covenant` not at all. No record kind is in both rosters (refused at import), and no
       `record_kinds.dispensation.public_terms` cell exists (it would give one member a second shape). Nothing reads this roster
       until B21.18 (`loop/witness.py::addressee_reads`). Refused at import as `read_to_addressee` is. [ASSUMPTION; medium;
       Jordan to correct; revert: `{}`, which restores the holder-and-addressee deposits alone.]
     values:
-      dispensation: [issue]
+      dispensation: [issue, dispatch]
 
   record_sourced_operands:
     source: >-
@@ -2729,6 +2731,23 @@ rosters:
       refused at import when a member names a verb the table lacks, a typed row, or a row whose `referent_class` is not `Person`.
       [ASSUMPTION; medium; Jordan to correct; revert: empty `values`, and `operand_bags` fans `dispatch` over every referent again.]
     values: [dispatch]
+
+  write_optional:
+    source: >-
+      B21.57 (`IS-B3-FA-05`, CP-T09-08; ruling A-24 -- *the man's going is his own answer*): `comply` is the act that relocates the man
+      a `dispatch` ordered, and it is also the answer to every other writ, which names nothing to perform.
+    note: >-
+      WHICH VERBS MAY LAWFULLY WRITE NOTHING, AND WHAT THEY EMIT WHEN THEY DO -- a map `verb: [Event kind, ...]`. A writing row whose
+      effect declines (`NO_CHANGE`) is REFUSED at the fold (`loop/resolve.py::_fold`, F9: a success Event for a write that did not
+      happen is `ID-9`); a verb listed here is the one kind of row whose decline is not a failure, because the act it is also is
+      answered without a write: `comply` on a writ that names no place is the answer given, `compliance.given`, with nothing to go
+      to. Read in `_fold` beside the `NoOpReceipt` it catches, which then emits exactly the kinds listed (never the kinds the write
+      earns, which did not happen). ONE LOADER, `data/verbs.py::WRITE_OPTIONAL`, refused at import when a member names a verb the
+      table lacks, a row that writes nothing (it has no write to decline), or a kind the row does not emit.
+      [ASSUMPTION; medium; Jordan to correct; revert: empty `values`, under which a `comply` on a writ naming no place is refused
+      `compliance.impossible`, and `comply`'s write is `[]` again.]
+    values:
+      comply: [compliance.given]
 
   lie_verbs:
     source: >-
@@ -3653,7 +3672,7 @@ rosters:
               detention.ended, ban.ended, record.given, transfer.made, record.destroyed, tenure.closed,
               tenure.opened, office.established, rung.founded, army.recruited, army.formed, army.assigned]
       never: [argument.lost, argument.won, commitment.ended, commitment.made, date.scheduled, duty.refused,
-              duty.taken, news.told, order.given, residence.changed, stance.moved, travel.moved]
+              duty.taken, news.told, order.given, residence.changed, stance.moved, travel.moved, travel.ordered]
       concludes: [army.arrived, succession.claimed, petition.filed, petition.carried, covenant.offered,
                   matter.determined, dispensation.issued, rung.ceded, record.given, transfer.made,
                   record.destroyed, tenure.opened]

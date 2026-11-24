@@ -20,11 +20,12 @@ from ..data.verbs import VERB_TABLE
 from ..gaps import InstrumentDefect
 from ..loop.predicates import TERM_KEY, office_founded_by, office_named_by
 from ..queries.world_q import BAN_KIND, DETAIN_KIND, restrained
-from ..state.carriers import Tenure, Term
+from ..state.carriers import Tenure, Term, subject_of
 from ..state.gate import (NO_CHANGE, TENURE_CLOSED, Change, Subject, claimable_seats, has_revocation_disposal,
                           passes_a_seat, revocation_disposal)
 from ..state.ids import H
 
+from .effects_information import _mint_document, _seat_rung
 from .effects_shared import _exercised_office, _new_oblige_term, _operand, _provisional_term, _scaled, _shift, effect_for
 
 
@@ -35,9 +36,28 @@ def _provisional(res: "Resolution | None") -> bool:
     so the effect never runs at it."""
     return task_share(res.degree if res is not None else None) < 1
 
-# --- THE GOVERNANCE SLICE'S EFFECTS. `dispatch` needs none: Part E gives it `writes: []`, so an
-# order is an EMISSION and nothing else, which is `L1` in one row -- a dispatch does not move a
-# person, it tells one, and whether they go is their own act next season.
+# --- THE GOVERNANCE SLICE'S EFFECTS. `dispatch` DOES NOT MOVE A PERSON, IT TELLS ONE, and whether he goes is his own act
+# (`L1` in one row, A-24): B21.57's `_eff_dispatch` below deposits the order as a document the man may answer, and his `comply`
+# (`effects_migration.py::_eff_comply`) is what relocates him.
+
+@effect_for("dispatch")
+def _eff_dispatch(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """B21.57 (`IS-B3-FA-05`, CP-T09-08; rulings A-21, A-24): A DISPATCH IS AN ORDER DEPOSITED, NOT A MAN MOVED. It mints a
+    `dispensation` -- `issue`'s one document, through `_mint_document`, the one mint -- drawn up at the seat's rung and held by
+    the sender: `terms` the man ordered (the act's `subject`), `to` the same man as its ADDRESSEE, `at` the place he is sent to
+    (the act's `dest`, `_req_dispatch`'s Rung inside the seat's purview), `force` `None` (an order is not drawn: no contest sits on
+    `dispatch`, `14_VERBS_BINDING_D` UNDECIDED (U2)). `rosters.yaml: proclaimed` lists `dispatch` beside `issue`, so WITNESS
+    deposits its content to whoever learns it was given and the man answers it as he answers a decree: `comply` relocates him
+    (`_eff_comply`), `evade / defy` withholds, and the recall occasion reads the second.
+
+    ⚠ AN ORDER WITH NO `dest` MINTS TOO, WITH `at` NONE: it moves no one, answered or not, and emits `order.given` as before.
+    A row that writes must write on every act the fold admits (a decline is the row's refusal), so the one document is minted
+    either way rather than a second path that wrote nothing [ASSUMPTION; medium; Jordan to correct; revert: `writes: []` and
+    delete this effect, and the order is the emission alone it was]."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    man = subject_of(a)
+    return _mint_document(w, a, "dispensation", {"terms": man, "to": man, "at": d.get("dest"), "force": None}, _seat_rung(w, a))
+
 
 def _declared_term(w: "World", a: "Act", off: "Office") -> "Optional[Term]":
     """THE TERM A `confer` DECLARES ON THE HOLD IT OPENS (IN-10 (b), #453 `:1382`/`:2071`; B21.01): the act's declared length

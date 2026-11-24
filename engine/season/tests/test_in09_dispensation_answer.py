@@ -111,11 +111,17 @@ def test_in09_each_row_is_typed_resolvable_classed_and_emission_only(verb):
     assert row.requires_typed is not None, f"{verb}: the cell is still untyped"
     assert not row.requires_decline_note, f"{verb}: a stale `requires_decline_note:`"
     assert verb in resolvable_verbs(), f"{verb}: the fold still cannot carry it"
-    assert row.writes == (), f"{verb}: declares writes {row.writes} -- not emission-only"
-    assert verb not in EFFECTS, f"{verb}: an effect the fold never calls (`ID-13`)"
+    # B21.57 (A-24): `comply` alone writes -- the man's own legs, when the writ it answers names a place (`_eff_comply`) -- and emits
+    # `travel.ordered` beside its answer; `evade / defy` and `construe` stay emission-only, with no effect the fold never calls.
+    if verb == "comply":
+        assert row.writes == ("Person.travel_leg", "Tenure.until", "Tenure.since") and verb in EFFECTS
+    else:
+        assert row.writes == (), f"{verb}: declares writes {row.writes} -- not emission-only"
+        assert verb not in EFFECTS, f"{verb}: an effect the fold never calls (`ID-13`)"
     assert (row.referent_class, row.referent_named) == ("Record", True)
     # B10.24: `evade / defy` and `construe` also declare `scruple.overridden` (the refusable rows, kept only where the fold finds the act's scruple overridden)
-    assert (tuple(k for k in row.emits if k != "scruple.overridden"), row.emits_on_refusal) == ((EMITS[verb],), (REFUSAL[verb],))
+    emitted = tuple(k for k in row.emits if k not in ("scruple.overridden", "travel.ordered"))
+    assert (emitted, row.emits_on_refusal) == ((EMITS[verb],), (REFUSAL[verb],))
 
 
 def test_in09_the_record_class_is_declared_by_the_three_alone_and_answers_dispensations():

@@ -970,7 +970,10 @@ def may_muster(w: "World", actor: Optional[str], via: Optional[str],
       3. `subject` holds a LIVE `commit` to the seat's FACTION Proposition -- K-52's faction conjunct,
          a Tenure the gate observes. The seat's display faction is turned into its Proposition id by
          `data/rosters.py::faction_prop_id`, the one owner of that relation (`loop/sides.py` musters
-         the army through the same id).
+         the army through the same id) -- OR (B21.57, CP-T09-07 (b)) a LIVE `oblige` to `via` itself
+         (`sworn_to`, the walk `purview_reaches` and `establishment_of` read): a vassal's oath is the tie, so an
+         obligee who belongs to no faction of the seat's is as mustered as a member is. A seat with no faction
+         still has its sworn.
     PLUS ONE THE ROW DOES NOT LIST: `subject` is a PERSON other than the actor (the marcher's own legs
     are `T-m`'s). ⚠ WHAT IT DOES NOT DECIDE: where the army goes and whether the field allowed it to
     arrive -- the effect's (`_eff_march`); and whether a mustered person may refuse -- `sides_of`'s,
@@ -980,9 +983,9 @@ def may_muster(w: "World", actor: Optional[str], via: Optional[str],
     if subject is None or subject == actor or subject not in w.persons:
         return False
     fac = seat_faction(w, via)
-    if fac is None:
-        return False
-    return _committed_to(w, subject, fac)
+    if fac is not None and _committed_to(w, subject, fac):
+        return True
+    return any(t.subject == subject for t in sworn_to(w, via))
 
 
 def _committed_to(w: "World", person: Optional[str], fac: str) -> bool:

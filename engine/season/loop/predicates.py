@@ -34,7 +34,7 @@ from ..trace_log import TRACE
 # `has_conferral_basis` still reaches both preconditions that call it by that name.
 from ..state.gate import (  # noqa: F401 -- `REVOCATION_RULES`, `in_holdings`, `seated_on_the_rung_above` re-exported
     REVOCATION_RULES, has_conferral_basis, has_filler, has_revocation_disposal, in_holdings, may_claim, may_fill,
-    may_revoke, seat_hold, seated_on_the_rung_above)
+    may_revoke, purview_reaches, seat_hold, seated_on_the_rung_above)
 
 
 # A `requires:` predicate. The table states preconditions in PROSE, which the fold cannot read --
@@ -677,12 +677,22 @@ def _req_dispatch(w: "World", a: "Act") -> bool:
     this seat may revoke, or an unseated person in its land (A-22). A `dispatch` is an order, so an order to a stranger
     (a man seated in another chain, living inside the sender's land) is refused here as `issue`'s writ is: he is not the
     sender's man by living where the sender's purview reaches. The basis reads the seat the act exercises (`a.via`); a
-    dispatch naming none commands nobody (`commands` is False for a `via` that is no office)."""
+    dispatch naming none commands nobody (`commands` is False for a `via` that is no office).
+
+    B21.57 (`IS-B3-FA-05`, CP-T09-08): THE OPTIONAL DESTINATION. An order that names one (`dest`, the key `_eff_dispatch` reads)
+    names a Rung the seat's purview reaches (`purview_reaches`, the gate's one walk): a seat orders a man only to ground it
+    holds. An order naming none is the order it was, unchanged [ASSUMPTION; medium; Jordan to correct; revert: drop this
+    clause and `dest` is any rung the world holds]."""
     subject = subject_of(a)                # a non-string `subject` (a list is unhashable) reads as "": refused, never raised
     if subject not in w.persons:
         return _refuse("a dispatch names no person the world holds", f"{a.actor} to {subject!r}")
     if not commands(w, a.actor, a.via, subject):
         return _refuse("not commanded", f"{a.actor} via {a.via!r} to {subject!r}")
+    dest = a.payload.get("dest") if isinstance(a.payload, dict) else None
+    if dest is not None:
+        seat = w.offices.get(a.via) if isinstance(a.via, str) else None
+        if not isinstance(dest, str) or seat is None or dest not in w.rungs or not purview_reaches(w, seat, dest):
+            return _refuse("a dispatch to a place outside the seat's purview", f"{a.actor} via {a.via!r} to {dest!r}")
     return True
 
 

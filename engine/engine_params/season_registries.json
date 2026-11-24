@@ -2408,6 +2408,9 @@
             "dispatch": {
               "why": "an order is sent; its addressee's compliance is his act [ASSUMPTION: the producer's sentence, 18-A gives none]"
             },
+            "comply": {
+              "why": "`brute: own` -- the man's own going: he moves his own legs and no one else's (B21.57, A-24) [ASSUMPTION: the producer's sentence, 18-A gives none]"
+            },
             "petition": {
               "why": "filing; the addressee's answer is his act"
             },
@@ -3178,10 +3181,11 @@
         },
         "proclaimed": {
           "source": "B21.17 (`06_FA_decree_binds` edit 1; ruling A-21; D-U1-05's sibling-list precedent, `covert_kinds`, `forgeable_kinds`).",
-          "note": "THE RECORD KINDS WHOSE MINT IS MADE PUBLIC -- `read_to_addressee`'s shape (a `record_kinds` member to the verbs whose mint of it is covered), the other property. A-21 rules a decree proclaimed: its content reaches EVERYONE who learns of the mint, addressee or not, where `read_to_addressee` reaches only the addressee. The verb qualifier is the point: `covenant` also mints a `dispensation`, and its counterparty learns the terms only by holding the Record (A-21 keeps covenants in person), so `dispensation` is carried for `issue` alone. No record kind is in both rosters (refused at import), and no `record_kinds.dispensation.public_terms` cell exists (it would give one member a second shape). Nothing reads this roster until B21.18 (`loop/witness.py::addressee_reads`). Refused at import as `read_to_addressee` is. [ASSUMPTION; medium; Jordan to correct; revert: `{}`, which restores the holder-and-addressee deposits alone.]",
+          "note": "THE RECORD KINDS WHOSE MINT IS MADE PUBLIC -- `read_to_addressee`'s shape (a `record_kinds` member to the verbs whose mint of it is covered), the other property. A-21 rules a decree proclaimed: its content reaches EVERYONE who learns of the mint, addressee or not, where `read_to_addressee` reaches only the addressee. The verb qualifier is the point: `covenant` also mints a `dispensation`, and its counterparty learns the terms only by holding the Record (A-21 keeps covenants in person), so `dispensation` is carried for `issue` and, from B21.57, `dispatch` (an order is a decree to the man it sends, `_eff_dispatch`), and for `covenant` not at all. No record kind is in both rosters (refused at import), and no `record_kinds.dispensation.public_terms` cell exists (it would give one member a second shape). Nothing reads this roster until B21.18 (`loop/witness.py::addressee_reads`). Refused at import as `read_to_addressee` is. [ASSUMPTION; medium; Jordan to correct; revert: `{}`, which restores the holder-and-addressee deposits alone.]",
           "values": {
             "dispensation": [
-              "issue"
+              "issue",
+              "dispatch"
             ]
           }
         },
@@ -3278,6 +3282,15 @@
           "values": [
             "dispatch"
           ]
+        },
+        "write_optional": {
+          "source": "B21.57 (`IS-B3-FA-05`, CP-T09-08; ruling A-24 -- *the man's going is his own answer*): `comply` is the act that relocates the man a `dispatch` ordered, and it is also the answer to every other writ, which names nothing to perform.",
+          "note": "WHICH VERBS MAY LAWFULLY WRITE NOTHING, AND WHAT THEY EMIT WHEN THEY DO -- a map `verb: [Event kind, ...]`. A writing row whose effect declines (`NO_CHANGE`) is REFUSED at the fold (`loop/resolve.py::_fold`, F9: a success Event for a write that did not happen is `ID-9`); a verb listed here is the one kind of row whose decline is not a failure, because the act it is also is answered without a write: `comply` on a writ that names no place is the answer given, `compliance.given`, with nothing to go to. Read in `_fold` beside the `NoOpReceipt` it catches, which then emits exactly the kinds listed (never the kinds the write earns, which did not happen). ONE LOADER, `data/verbs.py::WRITE_OPTIONAL`, refused at import when a member names a verb the table lacks, a row that writes nothing (it has no write to decline), or a kind the row does not emit. [ASSUMPTION; medium; Jordan to correct; revert: empty `values`, under which a `comply` on a writ naming no place is refused `compliance.impossible`, and `comply`'s write is `[]` again.]",
+          "values": {
+            "comply": [
+              "compliance.given"
+            ]
+          }
         },
         "lie_verbs": {
           "source": "v11 CR-27 (B10-13), M9 taken (a) (`workplans/valoria_master_workplan_v11_part6.md` M9): the cell lie.",
@@ -3942,7 +3955,8 @@
               "order.given",
               "residence.changed",
               "stance.moved",
-              "travel.moved"
+              "travel.moved",
+              "travel.ordered"
             ],
             "concludes": [
               "army.arrived",
@@ -5560,16 +5574,21 @@
               }
             ]
           },
-          "requires_typed_note": "v9 IN-09 (`19b`, J-2 arm A, J-10) TYPES THIS CELL. \u00a7E3 `:430` \u2014 *a claim of the dispensation's terms is in the actor's **own** ledger*. \u00a7F.24a form 6, `tell`'s form, and THE OPERAND IS THE ACT'S `subject`, READ AS THE WRIT: after plan positions `15`/`15c` a dispensation is a `Record` of kind `dispensation` (`rosters.yaml: record_kinds`), and its holder holds `(writ, content:dispensation, <terms>)` by the content deposit (`loop/witness.py`), so the act's subject IS the dispensation whose terms are sought and no operand is coined (`H-94` is not filled; the closed roster stands). TWO CONJUNCTS, UNNAMED (`survey`'s precedent: an unnamed own-ledger clause carries no `said`): `existence` of `subject` kind `dispensation` -- the act answers a WRIT, so a person, a rung or another kind of document is refused; `own_ledger` of `subject` -- the actor's own ledger holds a claim on that writ (the `F8` carve-out, `claim.held`). \u26a0 LIMIT: `claim.held` accepts ANY claim on the writ, not only its `content:` claim, so a person who saw the writ issued and never read it passes the fold; a predicate-typed ledger read is a grammar change. In computed play the formation (`referent_class` above) offers it only to a writ's addressee who holds it (`writs_held`), who holds the content claim; the own-referent term never stamps a writ (the B10-05 close), so a non-addressee whose question names it is offered no `comply`, though this cell would admit him (`test_in09_dispensation_answer.py`'s fourth test). \u26a0 ARM (A)'s `dispatch`ed ORDER IS NOT ANSWERED: an order mints no Record, so there is no writ to bind.",
-          "writes": [],
+          "requires_typed_note": "v9 IN-09 (`19b`, J-2 arm A, J-10) TYPES THIS CELL. \u00a7E3 `:430` \u2014 *a claim of the dispensation's terms is in the actor's **own** ledger*. \u00a7F.24a form 6, `tell`'s form, and THE OPERAND IS THE ACT'S `subject`, READ AS THE WRIT: after plan positions `15`/`15c` a dispensation is a `Record` of kind `dispensation` (`rosters.yaml: record_kinds`), and its holder holds `(writ, content:dispensation, <terms>)` by the content deposit (`loop/witness.py`), so the act's subject IS the dispensation whose terms are sought and no operand is coined (`H-94` is not filled; the closed roster stands). TWO CONJUNCTS, UNNAMED (`survey`'s precedent: an unnamed own-ledger clause carries no `said`): `existence` of `subject` kind `dispensation` -- the act answers a WRIT, so a person, a rung or another kind of document is refused; `own_ledger` of `subject` -- the actor's own ledger holds a claim on that writ (the `F8` carve-out, `claim.held`). \u26a0 LIMIT: `claim.held` accepts ANY claim on the writ, not only its `content:` claim, so a person who saw the writ issued and never read it passes the fold; a predicate-typed ledger read is a grammar change. In computed play the formation (`referent_class` above) offers it only to a writ's addressee who holds it (`writs_held`), who holds the content claim; the own-referent term never stamps a writ (the B10-05 close), so a non-addressee whose question names it is offered no `comply`, though this cell would admit him (`test_in09_dispensation_answer.py`'s fourth test). ARM (A)'s `dispatch`ed ORDER IS ANSWERED SINCE B21.57: `_eff_dispatch` mints it as a `dispensation`, so it is a writ to bind, and `comply` on one that names a place relocates the man (`writes_note`).",
+          "writes": [
+            "Person.travel_leg",
+            "Tenure.until",
+            "Tenure.since"
+          ],
           "emits": [
-            "compliance.given"
+            "compliance.given",
+            "travel.ordered"
           ],
           "emits_on_refusal": [
             "compliance.impossible"
           ],
           "grade": "ruled",
-          "writes_note": "per the term's own row. \u26a0 v9 IN-09: EMISSION-ONLY, #453's hook (`proposals/2026-10-03-verb-coverage-and-gap-fill.md:502`): `comply` writes nothing itself and emits `compliance.given`; what compliance PERFORMS is the separate act the writ names (`transfer`, ...). The fold calls an effect only for a declared write and `effect_carried` answers a row writing nothing without one, so no `_eff_comply` exists (it would be a body nothing calls, `ID-13`). Which acts a dispensation's `terms` may name stays `H-44`'s (re-scoped).",
+          "writes_note": "B21.57 (`IS-B3-FA-05`, CP-T09-08, A-24; [ASSUMPTION; medium; Jordan to correct; revert: `writes: []`, delete `_eff_comply` and `rosters.yaml: write_optional`]): A BRANCH ON AN ORDER WHOSE CONTENT NAMES A DESTINATION. `move`'s three cells, written by `loop/effects_migration.py::_eff_comply` through `_relocate(w, a, dest, mover=a.actor)` -- his own legs, so the gate admits them as `T-m`, and the journey charges him its leg (`Person.travel_leg`) -- ONLY when the writ answered is a `dispensation` whose `at` names a Rung (`world_q.order_destination`, the order a `dispatch` mints), and then the act also emits `travel.ordered`, the journey's own Event kind: not `move`'s `travel.moved`, which a second emitter would pair (`person_q.PAIRED_KINDS`, `KIND_VERB`) and so move every reading of a plain `move` (the realm's one-season hash did). Every other comply writes nothing and emits `compliance.given` alone, as below, and `rosters.yaml: write_optional` is what makes that the answer rather than a refusal. THE REST IS THE ROW AS IT STOOD: per the term's own row. \u26a0 v9 IN-09: EMISSION-ONLY, #453's hook (`proposals/2026-10-03-verb-coverage-and-gap-fill.md:502`): `comply` writes nothing itself and emits `compliance.given`; what compliance PERFORMS is the separate act the writ names (`transfer`, ...). Before B21.57 the row declared no write, the fold called no effect, and none existed; `_eff_comply` is now called, and returns `NO_CHANGE` for a writ naming no place. Which acts a dispensation's `terms` may name stays `H-44`'s (re-scoped).",
           "refusal_note": "\u00a7E2 -- 'failure emits, never raises': a verb with a `requires` needs a refusal channel, or a failed precondition produces no Event, no witness and no arc. Refusal condition: no claim of the dispensation's terms is in the actor's own ledger",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed"
         },
@@ -5988,9 +6007,11 @@
           "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
           "beneficiary_note": "an order is given TO the named person and taken FOR the issuing remit; the remit is an Office and no Candidate carries it.",
           "referent_class": "Person",
-          "referent_class_note": "v10 REM-28 (B10-06, AM-A-14, [ASSUMPTION; medium; Jordan to correct]): THE NAMED PERSON. FORMED ONLY ON A `Person`-CLASSED REFERENT -- the plain referent of the question he answers that is a person or a cohort (`queries/world_q.py::own_referents_of_class`, REM-21's term, stamps it through `_stamped`, as `open_case` and `petition` use it: `Person` is not `occasion_only`, and a person's own `person`-kind rung is a `Person` there, `World.class_of`) -- and `decision/options.py::opening_set` then forms on the classed ids alone (IN-53 D1's partition), `subject` binding it through the unchanged referent rule (`_derive_operand`), so `subject` never binds a rung, a Record or a Site. `loop/predicates.py::_req_dispatch` is the fold's reader of the referent: the named person exists (`subject` in `w.persons`) AND the seat he is sent by commands him (B21.21, `queries/world_q.py::commands`, the basis `issue` asks: his sworn man, the holder of a seat it may revoke, or an unseated person in its land) -- the row writes nothing and has no effect function, so what is ordered rides `order.given`. B21.55 (14_VERBS_BINDING_D commit D2, A-22; [ASSUMPTION; medium; Jordan to correct; revert: empty `rosters.yaml: command_declines`]): FORMATION ASKS THE SAME RULE PERSON-SIDE. `decision/options.py::operand_bags` forms a `dispatch` only on a `subject` the sender can read as commanded (`queries/person_q.py::commanded_read`, the men his ledger names as sworn and the holders it names of other seats; `VerbRow.commanded_operand` reads the row off `rosters.yaml: command_declines`, one body with `issue`'s `to` fan), so no order is offered to a stranger the fold would refuse and nobody orders himself; what he cannot read stays the fold's refusal. THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: this row's eligibility (`remit:dispatch`) and its cell are unchanged; whom a seat may order is `commands`, at formation by what the sender reads and at the fold by the world. THE LIMIT, STATED: `dispatch` is an UNTYPED PREDICATE row, so a refusal records no `observed` read -- REM-11 files its refusals under 'other', and REM-22's test shape for the typed rows (a refusal on an `exists:<kind>` read) cannot observe it; the kind failure is read off the predicate's own refusal clause (REM-14's `_refuse` trace) and `tests/test_referent_class_stamps.py` holds the untyped row to that. The class is shared with `open_case` and `petition` and moves no derived set: `DECLARED_CLASSES` already holds `Person`, and `RUNG_REMIT_ACTS` reads `Rung` rows alone. A computed `dispatch` forms only on an id `World.class_of` holds, so `person.demanded` (SE-01's census individuation trigger, `loop/census.py`) is reachable only by a hand-built act. REVERT: delete this column.",
-          "requires": "the named person exists",
-          "writes": [],
+          "referent_class_note": "v10 REM-28 (B10-06, AM-A-14, [ASSUMPTION; medium; Jordan to correct]): THE NAMED PERSON. FORMED ONLY ON A `Person`-CLASSED REFERENT -- the plain referent of the question he answers that is a person or a cohort (`queries/world_q.py::own_referents_of_class`, REM-21's term, stamps it through `_stamped`, as `open_case` and `petition` use it: `Person` is not `occasion_only`, and a person's own `person`-kind rung is a `Person` there, `World.class_of`) -- and `decision/options.py::opening_set` then forms on the classed ids alone (IN-53 D1's partition), `subject` binding it through the unchanged referent rule (`_derive_operand`), so `subject` never binds a rung, a Record or a Site. `loop/predicates.py::_req_dispatch` is the fold's reader of the referent: the named person exists (`subject` in `w.persons`) AND the seat he is sent by commands him (B21.21, `queries/world_q.py::commands`, the basis `issue` asks: his sworn man, the holder of a seat it may revoke, or an unseated person in its land) -- B21.57 (`IS-B3-FA-05`, CP-T09-08; [ASSUMPTION; medium; Jordan to correct; revert: `writes: []`, delete `_eff_dispatch`, `rosters.yaml: proclaimed`'s `dispatch` and `comply`'s write]): THE ROW DEPOSITS THE ORDER -- `loop/effects_governance.py::_eff_dispatch` mints a `dispensation` addressed to the man, `at` the optional destination operand `dest` (a Rung `_req_dispatch` holds inside the seat's purview), and the row moves nobody: the man's own `comply` relocates him (A-24). No contest sits on the row (`14_VERBS_BINDING_D` UNDECIDED (U2): a draw on the sender's act beside the man's own answer would be two ladders for one quantity), so `contests:` is not added and `grade: ruled` stands. B21.55 (14_VERBS_BINDING_D commit D2, A-22; [ASSUMPTION; medium; Jordan to correct; revert: empty `rosters.yaml: command_declines`]): FORMATION ASKS THE SAME RULE PERSON-SIDE. `decision/options.py::operand_bags` forms a `dispatch` only on a `subject` the sender can read as commanded (`queries/person_q.py::commanded_read`, the men his ledger names as sworn and the holders it names of other seats; `VerbRow.commanded_operand` reads the row off `rosters.yaml: command_declines`, one body with `issue`'s `to` fan), so no order is offered to a stranger the fold would refuse and nobody orders himself; what he cannot read stays the fold's refusal. THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: this row's eligibility (`remit:dispatch`) and its cell are unchanged; whom a seat may order is `commands`, at formation by what the sender reads and at the fold by the world. THE LIMIT, STATED: `dispatch` is an UNTYPED PREDICATE row, so a refusal records no `observed` read -- REM-11 files its refusals under 'other', and REM-22's test shape for the typed rows (a refusal on an `exists:<kind>` read) cannot observe it; the kind failure is read off the predicate's own refusal clause (REM-14's `_refuse` trace) and `tests/test_referent_class_stamps.py` holds the untyped row to that. The class is shared with `open_case` and `petition` and moves no derived set: `DECLARED_CLASSES` already holds `Person`, and `RUNG_REMIT_ACTS` reads `Rung` rows alone. A computed `dispatch` forms only on an id `World.class_of` holds, so `person.demanded` (SE-01's census individuation trigger, `loop/census.py`) is reachable only by a hand-built act. REVERT: delete this column.",
+          "requires": "the named person exists, the seat he is sent by commands him, and a destination, where the order names one, lies inside its purview",
+          "writes": [
+            "Record.exists"
+          ],
           "emits": [
             "order.given"
           ],

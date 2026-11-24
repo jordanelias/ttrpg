@@ -1553,6 +1553,19 @@ def _creating_act(w: World, rid: str):
     return causing_act(w, made) if made is not None else None
 
 
+def order_destination(w: World, rid) -> Optional[str]:
+    """B21.57 (`IS-B3-FA-05`, CP-T09-08): THE PLACE AN ORDER SENDS ITS ADDRESSEE TO -- the Rung the Record `rid`'s `at` key
+    names (`dispensation`'s place of discharge, `rosters.yaml: record_kinds`), or `None` for a Record that is not a
+    dispensation, one naming no place, or one naming a place the world does not hold. Read-only, and the ONE reading of
+    *an order whose content names a destination*: `loop/effects_migration.py::_eff_comply` relocates the man who answers it."""
+    rec = w.records.get(rid) if isinstance(rid, str) else None
+    content = getattr(rec, "subject_matter", None)
+    if rec is None or rec.kind != "dispensation" or not isinstance(content, dict):
+        return None
+    dest = content.get("at")
+    return dest if isinstance(dest, str) and dest in w.rungs else None
+
+
 def minting_verb(w: World, rid: str) -> Optional[str]:
     """THE VERB OF THE ACT THAT MADE THE RECORD `rid` -- `_creating_act`'s, the read `issuing_seat` filters on -- or `None` (a
     hand-planted Record, or an Event no act caused). B21.18: `loop/witness.py::addressee_reads` asks it of a document, since

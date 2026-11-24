@@ -28,7 +28,7 @@ from typing import Any, Optional
 from ..data.matrix import Step, matrix_row
 from ..data.requires import UNKNOWN, Verdict, binding_from_act, evaluate
 from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, EVENT_KINDS, FORM_TASK,
-                          VERB_TABLE, WRITE_CLAUSE, VerbRow)
+                          VERB_TABLE, WRITE_CLAUSE, WRITE_OPTIONAL, VerbRow)
 from ..gaps import Forbidden, Unspecified
 from ..loop.effects import EFFECTS
 from ..loop.predicates import REQUIRES_PREDICATES
@@ -533,11 +533,20 @@ def _fold(self, w: "World", token: Token, a: Act,
         # act emits. The WRITE is refused too: the trace records it as refused (`F9`). A refused
         # first pair leaves the later pairs unchecked: a refused write authorizes nothing after it.
         except NoOpReceipt:
-            TRACE.decision(f"{a.verb} wrote nothing", "E3",
-                           chose="emit the refusal, not the success",
-                           alternatives=["emit `emits:` anyway (publishes an event for a "
-                                         "state change that did not happen)"])
-            return refuse(_demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,))
+            # B21.57 (A-24): A VERB THAT `rosters.yaml: write_optional` NAMES IS ALSO ANSWERED WITHOUT A WRITE (`comply` on a writ
+            # naming no place), so its decline is the answer given with nothing to perform: it earns exactly the kinds the roster
+            # lists, never the write's, and nothing was changed. Every other row's decline is the refusal below.
+            if a.verb in WRITE_OPTIONAL:
+                TRACE.decision(f"{a.verb} had nothing to write", "E3",
+                               chose="emit the kinds `write_optional` lists, a write declined being no refusal for this verb",
+                               alternatives=["emit the refusal (a `comply` on any writ naming no place would be impossible)"])
+                earned.update(WRITE_OPTIONAL[a.verb])
+            else:
+                TRACE.decision(f"{a.verb} wrote nothing", "E3",
+                               chose="emit the refusal, not the success",
+                               alternatives=["emit `emits:` anyway (publishes an event for a "
+                                             "state change that did not happen)"])
+                return refuse(_demand_earned(w, a, row.refusal_for(WRITE_CLAUSE), False) or (FOLD_REFUSED,))
         # ⚠ H-143 (B03.76): THE GATE'S REFUSAL EMITS TOO, `04 §C`'s row *"a refusal emits, never
         # raises"* (MECHANICAL). `NotYours` is F3's judgment that the write is not the actor's; a
         # precondition that admitted what the gate then refuses would end the season here, where
