@@ -108,7 +108,7 @@ def test_revoke_names_the_clause_it_refused_on():
 def test_dispatch_names_no_person_the_world_holds():
     w = P.tiny_world()
     ok, rows = _rows_of(lambda: _preds._req_dispatch(
-        w, Act(id="d_ok", actor="p_high", verb="dispatch", payload={"subject": "p_low"})))
+        w, Act(id="d_ok", actor="p_high", verb="dispatch", via="off_duke", payload={"subject": "p_low"})))   # B21.21: `via` is the seat that commands him
     assert ok is True and rows == [], rows
     out, rows = _rows_of(lambda: _preds._req_dispatch(
         w, Act(id="d_no", actor="p_high", verb="dispatch", payload={"subject": "p_nobody"})))

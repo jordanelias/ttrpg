@@ -21,8 +21,8 @@ from ..data.rosters import (BINDS_BASES, FOUNDED_CONFERRAL, FOUNDED_REVOCATION, 
                             RUNG_KINDS)
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..queries.person_q import ABOUT_KEYS
-from ..queries.world_q import (BAN_KIND, DETAIN_KIND, DOCKET_PETITION, docketed, founded_office_id, founded_post, founds_over,
-                               restrained)
+from ..queries.world_q import (BAN_KIND, DETAIN_KIND, DOCKET_PETITION, commands, docketed, founded_office_id, founded_post,
+                               founds_over, restrained)
 from ..state.attribution import causing_act
 from ..state.carriers import Office, operand_of, subject_of
 from ..trace_log import TRACE
@@ -671,11 +671,19 @@ def _req_revoke(w: "World", a: "Act") -> bool:
 
 @requires_predicate("dispatch")
 def _req_dispatch(w: "World", a: "Act") -> bool:
-    """Part E: *the named person exists*."""
+    """Part E: *the named person exists*; and (`16_PESSIMIST_FA_C` edit 3, B21.21) *the seat he is sent by commands him*.
+
+    THE SAME BASIS `issue` ASKS (B21.20): `world_q.commands(w, actor, via, subject)` -- his sworn man, the holder of a seat
+    this seat may revoke, or an unseated person in its land (A-22). A `dispatch` is an order, so an order to a stranger
+    (a man seated in another chain, living inside the sender's land) is refused here as `issue`'s writ is: he is not the
+    sender's man by living where the sender's purview reaches. The basis reads the seat the act exercises (`a.via`); a
+    dispatch naming none commands nobody (`commands` is False for a `via` that is no office)."""
     subject = subject_of(a)                # a non-string `subject` (a list is unhashable) reads as "": refused, never raised
-    if subject in w.persons:
-        return True
-    return _refuse("a dispatch names no person the world holds", f"{a.actor} to {subject!r}")
+    if subject not in w.persons:
+        return _refuse("a dispatch names no person the world holds", f"{a.actor} to {subject!r}")
+    if not commands(w, a.actor, a.via, subject):
+        return _refuse("not commanded", f"{a.actor} via {a.via!r} to {subject!r}")
+    return True
 
 
 @requires_predicate("convene")
