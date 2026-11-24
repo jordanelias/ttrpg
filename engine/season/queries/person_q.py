@@ -2244,13 +2244,27 @@ def present_persons(claims, actor) -> tuple:
     (`MOVE_KINDS`), sorted ids, never `actor` (v12 B11.08, `08_FI_02` edit 5). The one reader of BELIEVED co-location: from his own
     ledger and nothing else, so a man who walked away this lap is still named and the fold refuses the telling (`tell`'s
     `hearer` conjunct). With no movement claim, every firsthand sighting counts. A told sighting never does: the person who
-    was told where somebody is has not seen him."""
+    was told where somebody is has not seen him.
+
+    v12 B11.84 (`U5c_VERBS_residue` §3 step 2): A PERSON HIS NEWEST `absent` CLAIM SAYS IS NOT THERE IS LEFT OUT, until a NEWER firsthand
+    sighting of him. The `absent` claim is the one a refusal on the `with` conjunct leaves its actor (`rosters.yaml: absence_claim`, deposited
+    by `loop/witness.py`); the sighting must be strictly newer by `(when, lap)`, so a refusal read at the same moment as a sighting stands. A
+    told claim never restores him (the line above: nothing told places a man here), and only the holder's own firsthand `absent` claim counts.
+    The claim's value (the place) is not read: a sighting that counts here is already one since the holder last moved, so an `absent` claim
+    older than the move is older than any sighting this reads."""
     term = KNOWN_PERSON_CLAIM.get("seen_term")
     moved = max(((c.when, c.lap) for c in claims if c.subject == actor and c.predicate in MOVE_KINDS and not c.chain), default=None)
-    seen = {getattr(c.value, term, None) for c in claims
-            if c.predicate == SEEN_PREDICATE and c.source == "firsthand" and not c.chain
-            and (moved is None or (c.when, c.lap) >= moved)}
-    return tuple(x for x in known_persons(claims, actor) if x in seen)
+    seen: dict = {}
+    absent: dict = {}
+    for c in claims:
+        key = (c.when, c.lap)
+        if c.predicate == SEEN_PREDICATE and c.source == "firsthand" and not c.chain and (moved is None or key >= moved):
+            who = getattr(c.value, term, None)
+            if key > seen.get(who, (-1 << 60, 0)):
+                seen[who] = key
+        elif c.predicate == ABSENT_PREDICATE and c.source == "firsthand" and not c.chain and key > absent.get(c.subject, (-1 << 60, 0)):
+            absent[c.subject] = key
+    return tuple(x for x in known_persons(claims, actor) if x in seen and seen[x] > absent.get(x, (-1 << 60, 0)))
 
 
 def telling_hearers(claims, actor, fx) -> tuple:

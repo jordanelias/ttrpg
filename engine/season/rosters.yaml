@@ -2987,7 +2987,7 @@ rosters:
       value is the place, so a reader can ask whether the absence was HERE. A bare stem, held by the checks at the
       predicate's reader: not a `requires` grammar stem, not the `seen` or `content:` predicate, not an emitted event kind (`loop/witness.py`).
       No roster of claim predicates existed for it to join: the deposits' predicates are declared one roster each (`observation_terms.deposit`,
-      `record_content`, `intent_claim`), and so is this one. Nothing reads it back yet (B11.84's `present_persons` will).
+      `record_content`, `intent_claim`), and so is this one. `queries/person_q.py::present_persons` reads it back (B11.84): a person the holder's newest `absent` claim names is left out until a newer firsthand sighting.
     claim:
       predicate: absent
 

@@ -19,19 +19,23 @@ from pathlib import Path
 import pytest
 from engine.dice_engine import draw
 
+from ..boot.realm import build_realm
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.rosters import ABSENT_PREDICATE, roster_map
 from ..data.verbs import VERB_TABLE
 from ..gaps import Unspecified
+from ..decision.options import _hears_by_presence
+from ..epistemic import SEEN_PREDICATE, Seen
 from ..harness import probes as P
 from ..harness.play_surface import dispatching_chooser
 from ..loop.driver import SeasonDriver
 from ..manifest import registry
 from ..queries import world_q
-from ..queries.person_q import said_of
+from ..queries.person_q import known_persons, present_persons, said_of
 from ..seam.wrappers import sigma
 from ..state.carriers import Act, Claim, Office, Scene, Tenure
 from ..state.ids import H
+from .test_fi_referents import _candidates
 from .test_u7_remit import _world
 
 SPEAKER, PARTY, DUKE, REEVE = "p_low", "p_mid", "p_high", "p_other"
@@ -187,3 +191,35 @@ def test_an_absent_claim_is_never_passed_on_by_the_man_who_holds_it():
     fx = DEFAULT_FIXTURES
     assert said_of([absent], "p_king", fx) is None
     assert said_of([other, absent], "p_king", fx).predicate == "exists:Person"
+
+
+# --- B11.84 (`U5c_VERBS_residue` §3 step 2): `present_persons` LEAVES OUT A PERSON THE HOLDER'S NEWEST CLAIM SAYS IS ABSENT ---
+
+def test_absent_claim_removes_the_person_until_a_newer_sighting():
+    """The source's gate (`p1b_belief.py`'s shape): under `telling_hearers: seen_since_move` a teller who holds a sighting of a man forms acts on him;
+    the `absent` claim a refused `with` leaves removes every one of them; a sighting newer than it restores them, and an `absent` claim about somebody
+    else removes nothing (the control: no `absent` claim about him, the same reading as before). FALSIFIER: a candidate formed on a man the holder's
+    newest claim says is absent."""
+    w = build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("telling_hearers", "seen_since_move"))
+    control = build_realm(0)
+    teller = hearer = None
+    for pid in sorted(control.persons):
+        for c in _candidates(control, pid):
+            if c[0] == "tell" and dict(c[2]).get("to") in known_persons(control.persons[pid].ledger, pid):
+                teller, hearer = pid, dict(c[2])["to"]
+                break
+        if teller:
+            break
+    assert teller, "no person forms a tell at build"
+    led = w.persons[teller].ledger
+    on_him = lambda: [c for c in _candidates(w, teller) if _hears_by_presence(VERB_TABLE[c[0]]) and dict(c[2]).get("to") == hearer]
+    assert not on_him()                                                                          # no sighting: nobody to offer it to
+    led.append(Claim("c_saw1", teller, hearer, SEEN_PREDICATE, Seen(stratum="speech", who=hearer), 0, "firsthand", 100, "own", 0))
+    before = len(on_him())
+    assert before > 0, "the sighting forms no act on him: the falsifier cannot see a removal"
+    led.append(Claim("c_abs_other", teller, "p_nobody", ABSENT_PREDICATE, "Hh", 1, "firsthand", 100, "own", 0))
+    assert len(on_him()) == before                                                                # absent of somebody else: nothing moves
+    led.append(Claim("c_abs", teller, hearer, ABSENT_PREDICATE, "Hh", 1, "firsthand", 100, "own", 0))
+    assert hearer not in present_persons(led, teller) and not on_him(), on_him()                  # 0 after the refusal
+    led.append(Claim("c_saw2", teller, hearer, SEEN_PREDICATE, Seen(stratum="speech", who=hearer), 2, "firsthand", 100, "own", 0))
+    assert hearer in present_persons(led, teller) and len(on_him()) == before                     # a newer sighting places him there again
