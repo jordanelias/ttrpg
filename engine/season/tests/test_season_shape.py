@@ -3463,7 +3463,7 @@ def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate(
     `H-86`'s exemption argument). A sweep point that fabricates is worse than one nobody runs."""
     from ..harness import headless as HL
     from collections import Counter
-    seen = {}
+    seen, faded = {}, {}
     for rate in (0, 5, 20):
         w = HL.build_world(0, DEFAULT_FIXTURES.sweep("claim_decay_per_season", rate))
         d = SeasonDriver(w)
@@ -3476,10 +3476,14 @@ def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate(
         # B09.01: the confidence he holds each claim at NOW (`present_confidence`), a stored value being the deposit's
         confs = [present_confidence(c.confidence, c.when, w.tick, rate) for p in w.persons.values() for c in p.ledger]
         seen[rate] = (Counter(e.kind for e in w.log)["claim.decayed"], min(confs), max(confs))
+        # B11.12: a told claim deposits below the default (75), so `min == max` is no longer the proof that nothing faded at rate 0;
+        # the fade is the difference between the confidence he holds the claim at now and the one it was deposited at.
+        faded[rate] = sum(1 for p in w.persons.values() for c in p.ledger
+                          if present_confidence(c.confidence, c.when, w.tick, rate) != c.confidence)
     print(f"\n  H-40 sweep — (decay events, min confidence, max) by rate: {seen}")
     assert all(seen[r][0] == 0 for r in seen), (
         f"a `claim.decayed` Event stands in the log: {seen}. B09.01: a fade is computed where a claim is read, never written")
-    assert seen[0][1] == seen[0][2], "confidence moved at rate 0"
+    assert faded[0] == 0 and faded[20] > 0, f"claims faded by rate (the control must be 0, rate 20 above it): {faded}"   # was `min == max` at rate 0
     assert seen[20][1] < seen[5][1] < seen[0][1], (
         f"confidence does not fall faster at a higher rate: {seen} — then the rate is inert and "
         "this sweep is measuring nothing")
@@ -4315,11 +4319,12 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
     # gives: nobody ever separates from `co_located` here any more.
     # [GROUNDED: measured 2026-09-29 -- `presence_only` and `all_five` resolve the IDENTICAL
     # 19-member `(actor, verb)` set; `total` resolves a different 16-member set]
-    assert len({tuple(got[m][3]) for m in ("total", "presence_only", "all_five")}) == 2, (
-        f"the resolved-act sets by arm: {got}. Expected exactly two distinct sets (the narrow "
-        "pair coinciding, `total` apart) -- three would mean the narrow-arm collapse this note "
-        "describes has reversed, and one would mean the fan-out stopped mattering to ACTS at all; "
-        "either way, re-measure rather than re-pin the count")
+    # ⚠⚠ 2 -> AT LEAST 2, B11.12 (`08_FI_04` §1, A-81), RE-MEASURED AS THE MESSAGE ASKS: a failed inquiry now leaves its actor's own claim
+    # (`finding_none_deposit` ships `actor`), a deposit the arms reach by different routes, so the narrow pair resolves different sets again
+    # (three distinct sets, the third-link state of `U2`). The property is that the fan-out matters to ACTS, which `>= 2` still observes.
+    assert len({tuple(got[m][3]) for m in ("total", "presence_only", "all_five")}) >= 2, (
+        f"the resolved-act sets by arm: {got}. Expected at least two distinct sets -- one would mean the "
+        "fan-out stopped mattering to ACTS at all; re-measure rather than re-pin the count")
 
 
 # ===========================================================================
@@ -8349,11 +8354,13 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
     # after its cause was removed rather than the opposite one.
     # These are INDICES into the sweep the loop above ran, not magnitudes chosen here.
     # [GROUNDED: 0/5/20 are `H-40`'s own declared three-point sweep]
-    assert (out["total"][20][1] == out["actor"][20][1] == out["none"][20][1]
-            and out["total"][5][1] == out["actor"][5][1] == out["none"][5][1]), (
-        f"the three deposit arms no longer agree on minimum confidence: {out}. Under `R7` nothing "
-        "is evicted, so the deposit mode cannot change which claims survive to be decayed — if it "
-        "does, eviction pressure is back and `H-122`'s row must be re-argued a second time")
+    # ⚠⚠ AGREE -> EACH ARM OBSERVABLE, B11.12 (`08_FI_04` §1, A-81). A failed inquiry now deposits to its actor (`finding_none_deposit`
+    # ships `actor`), so the three arms are three different RUNS (a told claim of 75 enters `actor` and `total`, and the minimum is the
+    # trajectory's): measured, seed 0, three seasons, min confidence at rate 0 / 5 / 20 -- `none` 100/85/40, `actor` 75/70/40,
+    # `total` 50/45/30. What the equality protected is that `total` does not go INERT, which is asserted in its place.
+    assert out["total"][20][1] < out["total"][5][1] < out["total"][0][1], (
+        f"`H-40`'s sweep went inert at `total`: {out['total']}. Under `R7` nothing is evicted, so the deposit mode cannot flatten it — "
+        "if it does, eviction pressure is back and `H-122`'s row must be re-argued a second time")
     # AND THE MECHANISM, ASSERTED: NOTHING IS EVICTED, IN ANY ARM. This asserted evictions rise
     # monotonically with the deposit fan-out (48 < 49 < 204 at `total` fan-out) — true then, and
     # the reading `H-122` rests on. It is 0 < 0 < 0 now, which is not a weaker version of that

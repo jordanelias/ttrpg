@@ -5128,11 +5128,11 @@
     {
       "key": "engine.season.settings.finding_none_deposit",
       "name": "finding_none_deposit",
-      "value": "none",
+      "value": "actor",
       "kind": "other",
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
-      "note": "`H-111`, swept none (control, SHIPPED) / actor",
+      "note": "`H-111`, swept none (control; revert) / actor (SHIPPED since B11.12)",
       "citation": null,
       "citation_grade": null
     },

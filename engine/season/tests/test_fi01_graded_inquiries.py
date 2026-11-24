@@ -93,11 +93,11 @@ def test_the_rosters_name_three_graded_and_the_skip_names_finding_none():
     # B07.05 ships the arm on, so every armed route is live at the shipped fixtures; the three CARRIED inquiries are the routes live with it off.
     live = {v for v in GRADED_TASKS if graded_route(v, DEFAULT_FIXTURES.sweep("task_draw_arm", "off")) is not None}
     assert live == set(GRADED), sorted(live)
-    assert UNDEPOSITED_KINDS == frozenset({"finding.none"}), UNDEPOSITED_KINDS
+    assert UNDEPOSITED_KINDS == frozenset({"finding.none", "inquiry.refused"}), UNDEPOSITED_KINDS   # B11.12: the refusal is its own kind
     for verb in GRADED:
         row = VERB_TABLE[verb]
         assert set(row.emits_by_degree) == {"Overwhelming", "Success", "Partial", "Failure"}, verb
-        assert row.emits_at("Failure") == ("finding.none",) and "finding.none" in row.emits_on_refusal
+        assert row.emits_at("Failure") == ("finding.none",) and "inquiry.refused" in row.emits_on_refusal
     off = DEFAULT_FIXTURES.sweep("task_draw_arm", "off")
     for verb in (PROMPT, *WAITING):
         assert graded_route(verb, off) is None and not VERB_TABLE[verb].emits_by_degree, (
@@ -107,7 +107,8 @@ def test_the_rosters_name_three_graded_and_the_skip_names_finding_none():
 
 
 def test_a_failed_inquiry_deposits_no_claim_and_news_untold_still_does():
-    """THE SKIP ARM, ON A SEEDED CASE. `research` at the shipped fixtures (`pool_default` 2 against the
+    """THE SKIP ARM, ON A SEEDED CASE (B11.12: the name is the test's first form; a FAILED inquiry now deposits to its actor alone and a
+    REFUSED one to nobody). `research` at the shipped fixtures (`pool_default` 2 against the
     module's stand-in `opposed_ob(pool_default, opposition_rate)`): the act ids are swept until one draws `Failure` and one draws a finding
     band; each is resolved through the real driver and witnessed. The `Failure` act emits `finding.none`
     with the degree on it and NOTHING lands in any ledger -- no `claim.deposited` names it; the finding
@@ -134,8 +135,9 @@ def test_a_failed_inquiry_deposits_no_claim_and_news_untold_still_does():
     (ev,) = out
     assert (ev.kind, ev.degree) == ("finding.none", "Failure"), (ev.kind, ev.degree)
     before, after = _witness(w, d, out)
-    assert before == after, "a Failure inquiry deposited a claim"
-    assert not _deposits_caused_by(w, ev.id), "a `claim.deposited` names the `finding.none`"
+    # B11.12 (A-81): the failed inquiry leaves its ACTOR's claim and no bystander's (`test_fi_small_edits.py` owns the control arm).
+    assert {p for p in before if before[p] != after[p]} == {ACTOR}, "a Failure inquiry deposited to somebody besides its actor"
+    assert _deposits_caused_by(w, ev.id), "the actor's own claim did not deposit"
 
     w, d, out = found["finding"]
     (ev,) = out
@@ -149,7 +151,7 @@ def test_a_failed_inquiry_deposits_no_claim_and_news_untold_still_does():
     w, d = _world()
     gone = Act(id="a_fi01_research_gone", actor=ACTOR, verb="research", payload={"subject": "rec_none"})
     out = _resolve(w, d, gone)
-    assert [(e.kind, e.degree) for e in out] == [("finding.none", None)], [(e.kind, e.degree) for e in out]
+    assert [(e.kind, e.degree) for e in out] == [("inquiry.refused", None)], [(e.kind, e.degree) for e in out]
     before, after = _witness(w, d, out)
     assert before == after and not _deposits_caused_by(w, out[0].id), "a refused inquiry deposited"
 
@@ -291,7 +293,7 @@ def test_an_inquiry_admits_before_it_rolls():
     with mock.patch.dict(MODULE_ENTRIES, {"social_contest.roll": dataclasses.replace(
             real, fn=lambda inp, rng: called.append(inp) or Margin(net=0, ob=2))}):
         out = _resolve(w, d, a)
-    assert not called and [e.kind for e in out] == ["finding.none"], (called, [e.kind for e in out])
+    assert not called and [e.kind for e in out] == ["inquiry.refused"], (called, [e.kind for e in out])
 
 
 def test_the_realm_grades_inquiries_in_one_season():

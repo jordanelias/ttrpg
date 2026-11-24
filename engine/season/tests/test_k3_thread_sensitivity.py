@@ -89,9 +89,9 @@ def test_k3_a_the_gate_reads_the_actors_own_carrier_at_the_fold_the_reader_and_f
         # the fold, end to end
         kinds = _fold_kinds(w)
         if verdict is True:
-            assert "finding.made" in kinds and "finding.none" not in kinds, (ts, kinds)
+            assert "finding.made" in kinds and "inquiry.refused" not in kinds, (ts, kinds)
         else:
-            assert "finding.none" in kinds and "finding.made" not in kinds, (ts, kinds)
+            assert "inquiry.refused" in kinds and "finding.made" not in kinds, (ts, kinds)   # B11.12: a refusal is `inquiry.refused`
         checked += 1
     assert checked == 3
 
@@ -126,7 +126,7 @@ def test_k3_a_a_person_reads_nobody_elses_sensitivity_and_no_ledger_answers_it()
 def test_k3_b_sweeping_the_gate_fixture_flips_the_same_persons_verdict():
     ts = GATE - 1
     control = _fold_kinds(_world(ts))
-    assert "finding.none" in control and "finding.made" not in control, (
+    assert "inquiry.refused" in control and "finding.made" not in control, (
         f"the control: {ts} is not refused at the shipped gate: {control}")
     lower = P.DEFAULT_FIXTURES.sweep("thread_sensitivity_gate", ts)
     w = _world(ts, lower)
@@ -136,7 +136,7 @@ def test_k3_b_sweeping_the_gate_fixture_flips_the_same_persons_verdict():
     zero = P.DEFAULT_FIXTURES.sweep("thread_sensitivity_gate", 0)
     assert "finding.made" in _fold_kinds(_world(0, zero))
     w0 = _world(None, zero)
-    assert _formed(w0) is False and "finding.none" in _fold_kinds(w0), (
+    assert _formed(w0) is False and "inquiry.refused" in _fold_kinds(w0), (
         "a person with no authored sensitivity passed a gate at 0 -- `None` read as 0")
 
 

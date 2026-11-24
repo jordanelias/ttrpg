@@ -1875,8 +1875,8 @@ verbs:
   #
   # `research`, `examine` and `surveil` key `emits:` by degree (v9 FI-01, `ED-FI-0009`, J-22 option
   # (A)), graded by the `graded_tasks` route in `rosters.yaml` -- a routing row, not a prize, so
-  # no `contests:` here -- and `Failure` emits `finding.none`, which WITNESS deposits nothing for
-  # (`undeposited_kinds`). `interview` (a prompt, K-36), `reconstruct` (K-37) and `thread_read`
+  # no `contests:` here -- and `Failure` emits `finding.none`, which WITNESS deposits to its actor alone
+  # (`undeposited_actor_kinds`, B11.12); a refusal emits `inquiry.refused` (`undeposited_kinds`). `interview` (a prompt, K-36), `reconstruct` (K-37) and `thread_read`
   # (K-37, H-85) are routed from B07.01, armed by `task_draw_arm` (arm `off`: flat). `fieldwork_v30.md:302-309` grades every one of these acts on
   # four bands (Failure's false lead, Partial's incomplete detail, Success's reliable one,
   # Overwhelming's bonus revelation); `rosters.yaml:482` types investigation's seam
@@ -1921,7 +1921,7 @@ verbs:
     governing_note: "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` §2) [ASSUMPTION; medium; Jordan to correct at BA1.13]."
     beneficiary_note: "the six investigation verbs (`examine`, `interview`, `research`, `surveil`, `thread_read`, `reconstruct`) all write `[]` and emit `finding.made`: a finding is a Claim minted at WITNESS into THE ACTOR'S OWN LEDGER, which is the carrier the good lands on. `tell` is the one that points the other way -- it deposits with the person told, so its beneficiary is `subject`."
     referent_class: Site
-    referent_class_note: "v10 REM-22 (B10-05, AM-A-07; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Site`-CLASSED REFERENT, as `restore` (`queries/world_q.py::own_referents_of_class` stamps the question's own Site, `decision/options.py::opening_set` forms on it alone). THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: the cell, the eligibility and the graded route (`graded_tasks`, FI-01) are unchanged, and it claims no finding. No question the realm delivers carries a Site among its referents, so the row forms nowhere there (sideways, declared, not progress); `finding.none` deposits nothing at WITNESS (`undeposited_kinds`). A person present at a Site reaches the graded route through the real fold (`tests/test_referent_class_stamps.py`); what remains refused is `present_at`, a learnable state. REVERT: delete this column."
+    referent_class_note: "v10 REM-22 (B10-05, AM-A-07; M19 taken, [ASSUMPTION; medium; Jordan to correct]): FORMED ONLY ON A `Site`-CLASSED REFERENT, as `restore` (`queries/world_q.py::own_referents_of_class` stamps the question's own Site, `decision/options.py::opening_set` forms on it alone). THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: the cell, the eligibility and the graded route (`graded_tasks`, FI-01) are unchanged, and it claims no finding. No question the realm delivers carries a Site among its referents, so the row forms nowhere there (sideways, declared, not progress); `finding.none` deposits to its actor alone at WITNESS (`undeposited_actor_kinds`). A person present at a Site reaches the graded route through the real fold (`tests/test_referent_class_stamps.py`); what remains refused is `present_at`, a learnable state. REVERT: delete this column."
     requires:    "the site exists and the actor is present at it"
     requires_typed:
       all:
@@ -1939,8 +1939,8 @@ verbs:
       Success:      ["finding.made"]
       Partial:      ["finding.made"]
       Failure:      ["finding.none"]
-    emits_note: "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits nothing for (`undeposited_kinds`, RS-21 item 1); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built."
-    emits_on_refusal: ["finding.none"]
+    emits_note: "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits to its actor alone (`undeposited_actor_kinds`, B11.12; a refusal is `inquiry.refused`, deposited to nobody); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built."
+    emits_on_refusal: ["inquiry.refused"]
     grade:       "assumption"
     source:      "systems/fieldwork/reference/investigation_systems_v30.md:217 names the six; systems/fieldwork/reference/fieldwork_v30.md:293 (§4.2) and :317 (§4.3) carry this row's content"
   - verb:        "interview"
@@ -1963,7 +1963,7 @@ verbs:
     writes:      []
     writes_note: "— (as `examine`)"
     emits:       ["finding.made"]
-    emits_on_refusal: ["finding.none"]
+    emits_on_refusal: ["inquiry.refused"]
     grade:       "assumption"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:294 (§4.2), :318 (§4.3). ⚠ THE SINGLE-ROLL INTERVIEW IS RETIRING AND THIS ROW IS ITS BASELINE, NOT A SECOND SPEC: `fieldwork_v30.md:300` (ED-FI-0004, 2026-07-08) folds it into the Dialogue Lattice -- *'the richer object wins'* -- and retains the bare-roll row as *the current mechanical baseline* only until ED-921 and ED-IN-0016 EP-8 settle. This row is that baseline; when the Lattice is built it replaces this row rather than sitting beside it."
   - verb:        "interrogate"
@@ -2028,8 +2028,8 @@ verbs:
       Success:      ["finding.made"]
       Partial:      ["finding.made"]
       Failure:      ["finding.none"]
-    emits_note: "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits nothing for (`undeposited_kinds`, RS-21 item 1); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built."
-    emits_on_refusal: ["finding.none"]
+    emits_note: "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits to its actor alone (`undeposited_actor_kinds`, B11.12; a refusal is `inquiry.refused`, deposited to nobody); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built."
+    emits_on_refusal: ["inquiry.refused"]
     grade:       "assumption"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:295 (§4.2), :319 (§4.3)"
   - verb:        "surveil"
@@ -2061,8 +2061,8 @@ verbs:
       Success:      ["finding.made"]
       Partial:      ["finding.made"]
       Failure:      ["finding.none"]
-    emits_note: "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits nothing for (`undeposited_kinds`, RS-21 item 1); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built."
-    emits_on_refusal: ["finding.none"]
+    emits_note: "v9 FI-01 (`ED-FI-0009`, J-22 (A)): degree-keyed, graded by the `graded_tasks` route (`rosters.yaml`), not a prize. `Failure` emits `finding.none`, which WITNESS deposits to its actor alone (`undeposited_actor_kinds`, B11.12; a refusal is `inquiry.refused`, deposited to nobody); the three finding bands differ only in `Event.degree` -- depth has no carrier and none is built."
+    emits_on_refusal: ["inquiry.refused"]
     grade:       "assumption"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:296 (§4.2), :320 (§4.3)"
   - verb:        "thread_read"
@@ -2088,8 +2088,8 @@ verbs:
     writes_note: "— (as `examine`)"
     emits:       ["finding.made"]
     emits_on_refusal:
-      eligibility: ["finding.none"]
-      sensitivity: ["finding.none"]
+      eligibility: ["inquiry.refused"]
+      sensitivity: ["inquiry.refused"]
       draw:        ["thread_read.failed"]
     draw_note:   "B07.01 (18-A item 4; A-81): the `draw` clause's Event reports a LOST DRAW, not a refusal (04 §C.4: a refusal is a precondition failed, a loss an outcome that went against you) -- emitted at the Failure band once `task_draw_arm` is `on` (B07.05), with no typed write; its durable write is the Event and the claims WITNESS deposits of it. Kept out of the refusal union (`data/verbs.py::VerbRow.draw_kinds`)."
     grade:       "assumption"
@@ -2115,8 +2115,8 @@ verbs:
       Success:      ["finding.made"]
       Partial:      ["finding.made"]
       Failure:      ["finding.none"]
-    emits_note: "B07.05 (workplan v12 B07-task-draw UNDECIDED (2); 18-A): degree-keyed as the three inquiries are, graded by its armed `graded_tasks` route (`task_draw_arm`). `Failure` emits `finding.none`, which WITNESS deposits nothing for; the WRONG conclusion of `:278` is still not minted (see `writes_note`). With the arm `off` the fold reads the `Success` row (`UNROUTED_BAND`) with no degree, as before B07."
-    emits_on_refusal: ["finding.none"]
+    emits_note: "B07.05 (workplan v12 B07-task-draw UNDECIDED (2); 18-A): degree-keyed as the three inquiries are, graded by its armed `graded_tasks` route (`task_draw_arm`). `Failure` emits `finding.none`, which WITNESS deposits to its actor alone (B11.12); the WRONG conclusion of `:278` is still not minted (see `writes_note`). With the arm `off` the fold reads the `Success` row (`UNROUTED_BAND`) with no degree, as before B07."
+    emits_on_refusal: ["inquiry.refused"]
     grade:       "ruled"
     source:      "investigation_systems_v30.md:217; fieldwork_v30.md:298 (§4.2), :256-280 (§4.1), :323 (§4.3)"
   - verb:        "tie / knot"

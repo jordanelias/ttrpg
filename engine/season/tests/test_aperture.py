@@ -27,9 +27,11 @@ never does. Hand-built worlds (`probes.tiny_world`), no count of a realm run ass
   * `attribute` and `attempts` agree on every act the fold set holds;
   * `unrowed_acts` counts a verb that is no table row; `foreign_kinds` a logged kind outside both
     columns of the act's row;
-  * `graded_loss` (HR-8): a lost `tell` (`news.untold`, `Failure`) and a `Failure` `research`
-    (`finding.none`) are graded losses; an admission-refused `research` (`finding.none`, degree
-    `None`), a Success `tell` and a refused `transfer` are not; every graded loss is also a `both` act.
+  * `graded_loss` (HR-8): a row with a kind in both columns whose every refusal-kind Event carries `Failure`
+    is a graded loss, and every graded loss is also a `both` act. No shipped row has one since B11.12
+    (`inquiry.refused` split from `finding.none`; `tell` at CP-T05-03), so the reader is read over `research`
+    as it stood before the split (`_kind_in_both_columns`); a failed `research`, a lost or Success `tell`
+    and a refused `transfer` are no graded loss at the shipped rows.
 
 CR-14 (the pooled census). Planted worlds and planted dicts; no realm count is asserted (V2):
   * a `need` scene about a goal id and one about a non-goal id read into the two scene rows, through
@@ -44,6 +46,9 @@ CR-14 (the pooled census). Planted worlds and planted dicts; no realm count is a
 
 from __future__ import annotations
 
+import dataclasses
+import unittest.mock as mock
+from contextlib import contextmanager
 from types import SimpleNamespace
 
 import pytest
@@ -233,6 +238,15 @@ def test_rem10_foreign_kinds_names_a_logged_kind_outside_both_of_the_rows_column
     assert foreign_kinds(w)[("speak", "transfer.made")] == 1, foreign_kinds(w)
 
 
+@contextmanager
+def _kind_in_both_columns():
+    """B11.12 split a refused inquiry's kind (`inquiry.refused`) from a failed one's (`finding.none`), so no shipped row has a kind in both
+    columns and `graded_loss` finds no producer (as for `tell` at CP-T05-03). This is `research` as it stood before the split, read over a
+    world folded unpatched: the reader's positive control, kept so its `degree` test and its reason still observe something."""
+    with mock.patch.dict(VERB_TABLE, {"research": dataclasses.replace(VERB_TABLE["research"], emits_on_refusal=("finding.none",))}):
+        yield
+
+
 def _graded_research(failure: bool):
     """A `research` on the Record folded through the real driver, swept over act ids until one draws
     `Failure` (`finding.none`, degree `Failure`) or a finding band (`finding.made`)."""
@@ -267,8 +281,10 @@ def test_rem10_graded_loss_counts_a_lost_tell_and_a_failed_inquiry_and_nothing_e
     # -- the failed inquiry
     wf, _, outf = _graded_research(failure=True)
     assert (outf[0].kind, outf[0].degree) == ("finding.none", "Failure")
-    (gl,) = graded_losses(wf, wf.tick + 1)
-    assert gl.verb == "research" and _rows(wf)[gl.id] == (("finding.none",), ("finding.none",))
+    assert graded_losses(wf, wf.tick + 1) == [] and list(_rows(wf).values()) == [(("finding.none",), ())], _rows(wf)   # B11.12: now realised
+    with _kind_in_both_columns():
+        (gl,) = graded_losses(wf, wf.tick + 1)
+        assert gl.verb == "research" and _rows(wf)[gl.id] == (("finding.none",), ("finding.none",))
     # -- the finding band is not a loss
     wm, _, outm = _graded_research(failure=False)
     assert outm[0].kind == "finding.made" and graded_losses(wm, wm.tick + 1) == []
@@ -276,8 +292,8 @@ def test_rem10_graded_loss_counts_a_lost_tell_and_a_failed_inquiry_and_nothing_e
     wa, da = _fi_world()
     outa = _fi_resolve(wa, da, Act(id="a_rem10_res_gone", actor=FI_ACTOR, verb="research",
                                    payload={"subject": "rec_none"}))
-    assert [(e.kind, e.degree) for e in outa] == [("finding.none", None)]
-    assert _rows(wa)["a_rem10_res_gone"] == (("finding.none",), ("finding.none",))
+    assert [(e.kind, e.degree) for e in outa] == [("inquiry.refused", None)]
+    assert _rows(wa)["a_rem10_res_gone"] == ((), ("inquiry.refused",))                  # B11.12: a refusal only, no longer `both`
     assert graded_losses(wa, wa.tick + 1) == [], "an admission refusal (degree None) read as a graded loss"
     assert not graded_loss(Act(id="x", actor="p", verb="research"), outa)
     # -- a refusal with no kind in both columns
@@ -288,9 +304,11 @@ def test_rem10_graded_loss_counts_a_lost_tell_and_a_failed_inquiry_and_nothing_e
     # -- the reader itself, on a synthetic Failure: every refusal-kind Event must carry it
     ev = lambda kind, degree: SimpleNamespace(kind=kind, degree=degree)
     a = Act(id="x", actor="p", verb="research")
-    assert graded_loss(a, [ev("finding.none", "Failure")])
-    assert not graded_loss(a, [ev("finding.none", "Failure"), ev("finding.none", None)])
-    assert not graded_loss(a, [ev("finding.made", "Success")]) and not graded_loss(a, [])
+    assert not graded_loss(a, [ev("finding.none", "Failure")])                          # shipped rows: `finding.none` is not a refusal kind
+    with _kind_in_both_columns():
+        assert graded_loss(a, [ev("finding.none", "Failure")])
+        assert not graded_loss(a, [ev("finding.none", "Failure"), ev("finding.none", None)])
+        assert not graded_loss(a, [ev("finding.made", "Success")]) and not graded_loss(a, [])
     assert not graded_loss(Act(id="y", actor="p", verb="tell"), [ev("news.untold", "Failure")])
 
 
@@ -299,8 +317,9 @@ def test_rem10_every_graded_loss_is_also_a_both_act(realm):
     exceed `both`. Checked on the hand-built losses and, per verb, on a populated season's own dict."""
     checked = 0
     for w in (_graded_research(failure=True)[0],):
-        both = {a.id for a, made, no in attempts(w, w.tick + 1) if made and no}
-        losses = {a.id for a in graded_losses(w, w.tick + 1)}
+        with _kind_in_both_columns():
+            both = {a.id for a, made, no in attempts(w, w.tick + 1) if made and no}
+            losses = {a.id for a in graded_losses(w, w.tick + 1)}
         assert losses and losses <= both, (losses, both)
         checked += len(losses)
     assert checked == 1
@@ -412,9 +431,11 @@ def test_rem11_a_graded_loss_is_no_refusal_reason_and_is_never_post_admission():
     refusal with its own deciding read. (A fold that bypasses `d.resolve`, as `_lost_or_won_tell`
     does, leaves `d.act_of` empty and the act reads `no-event`: the instrument says so, not 0.)"""
     w, d, _ = _graded_research(failure=True)
-    rd = _reading(w, d)
-    assert rd["reasons"]["research"] == {"graded-loss": 1}, rd
-    assert rd["post_admission"] == {}
+    assert "research" not in _reading(w, d)["reasons"]        # B11.12: a failed inquiry is no refusal at all, as a lost telling is not
+    with _kind_in_both_columns():
+        rd = _reading(w, d)
+        assert rd["reasons"]["research"] == {"graded-loss": 1}, rd
+        assert rd["post_admission"] == {}
     wa, da = _fi_world()
     _fi_resolve(wa, da, Act(id="a_rem11_res_gone", actor=FI_ACTOR, verb="research",
                             payload={"subject": "rec_none"}))

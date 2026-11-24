@@ -55,6 +55,12 @@ from ..trace_log import TRACE
 
 # B09.04 (`H-111`): the arms of the `finding_none_deposit` fixture (`none` | `actor`), bound at import like the roster beside it.
 FINDING_NONE_DEPOSIT_ARMS = roster("finding_none_deposit_arms")
+# B11.12 (`08_FI_04` §1, A-81): the skipped kinds whose Event still leaves its own doer a claim at the `actor` arm; the rest of
+# `UNDEPOSITED_KINDS` (`inquiry.refused`) deposits to nobody. A member the skip does not name could never be skipped, so it refuses here.
+UNDEPOSITED_ACTOR_KINDS = roster("undeposited_actor_kinds")
+if not UNDEPOSITED_ACTOR_KINDS <= UNDEPOSITED_KINDS:
+    raise SystemExit(f"rosters.yaml: `undeposited_actor_kinds` {sorted(UNDEPOSITED_ACTOR_KINDS - UNDEPOSITED_KINDS)} "
+                     "is not in `undeposited_kinds`: the actor's claim is a narrowing of the skip, not a second route")
 
 # v9 IN-22: THE SEAT CHANNEL -- the obligee channel (`epistemic._ch_post_remit`), borrowed for its
 # `inferred` source and its live/off switch; this route's recipients are seat holders
@@ -370,7 +376,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # no `seen`, no content -- and stays in the log and its act's causes. Keyed on the kind, not on a band
     # or an empty `changes[]`: `news.untold`, `tell.refused` and `matter.undetermined` keep depositing. Rebinding `events`
     # covers every pass below that reads it; the trace still counts every Event handed in.
-    # B09.04 (`H-111`): THE ACTOR ARM. `finding_none_deposit` is `none` (the CONTROL, shipped: the skip above stands) or `actor`: such an
+    # B09.04 (`H-111`): THE ACTOR ARM. `finding_none_deposit` is `none` (the CONTROL: the skip above stands) or `actor` (shipped by B11.12): such an
     # Event is still skipped by every pass below that reads `events`, and enters the FAN for its own doer alone (`actor_of`, the person
     # `witness_key` anchors on) -- so a search he failed is a claim he holds, and no non-actor ever receives it at either arm.
     # Read once per barrier, and refused outside `rosters.yaml: finding_none_deposit_arms`, as `obs_mode` below is.
@@ -384,7 +390,10 @@ def witness(self, token: Token, events: list[Event]) -> int:
             "of the actor arm read the control")
     n_handed = len(events)
     handed, events = events, [e for e in events if e.kind not in UNDEPOSITED_KINDS]
-    actor_only = {e.id for e in handed if e.kind in UNDEPOSITED_KINDS} if none_arm == "actor" else frozenset()
+    # B11.12: the actor arm reads `undeposited_actor_kinds`, the per-kind audience (one roster beside the arm, chosen over a second key on
+    # `undeposited_kinds`: `roster()` reads `values:` alone), so a REFUSED inquiry (`inquiry.refused`) still deposits to nobody.
+    # `total` (S61, the sweep's control) keeps the skip whole: its ledgers are identical by construction, and one doer's claim would differ them.
+    actor_only = {e.id for e in handed if e.kind in UNDEPOSITED_ACTOR_KINDS} if none_arm == "actor" and mode != "total" else frozenset()
     fan: list[tuple[str, Event, str]] = [
         (pid, e, ch) for e in handed
         if (e.kind not in UNDEPOSITED_KINDS or e.id in actor_only) and not changes_only_held_claims(w, e, held, mode)
