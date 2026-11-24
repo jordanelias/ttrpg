@@ -94,3 +94,27 @@ def test_failed_inquiry_leaves_the_actors_own_claim():
     w, d, out = _failed_research("none")
     assert not _holders(w, "finding.none")
     assert not [e for e in w.log if e.kind == "claim.deposited" and out[0].id in e.causes]
+
+
+# ---- B11.13 (`08_FI_04` §2, first bullet): `research` needs presence ----------------------------------------------------
+
+
+def _research_kinds(actor: str, n: int = 40):
+    """`n` `research` acts of the planted Record by `actor`, each resolved on a fresh world: the Events' kinds."""
+    kinds = []
+    for i in range(n):
+        w, d = _world()
+        out = _act_witnessed(w, d, Act(id=f"a_b1113_research_{i}", actor=actor, verb="research", payload={"subject": REC}))
+        kinds.append([e.kind for e in out])
+    return kinds
+
+
+def test_research_from_elsewhere_is_refused():
+    # The Record is at `Hh` (its holder's place, `world_q.place_of`); `p_low` lives at `Hh`, `p_high` at `S`.
+    present = _research_kinds(ACTOR)
+    elsewhere = _research_kinds("p_high")
+    # H-319's reading: someone elsewhere is refused 40 of 40.
+    assert elsewhere == [["inquiry.refused"]] * 40, [k for k in elsewhere if k != ["inquiry.refused"]][:3]
+    # CONTROL: the person present still executes -- no refusal, and the finding kinds the row emits.
+    assert not [k for k in present if "inquiry.refused" in k], present
+    assert {k for ks in present for k in ks} & {"finding.made", "finding.none"}, present

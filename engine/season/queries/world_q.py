@@ -4546,7 +4546,10 @@ class WorldReader:
                        for t in w.tenures)
         if stem == "present_at":
             s = w.sites.get(subject)
-            place = s.rung if s is not None else (subject if subject in w.rungs else None)
+            # B11.13 (`08_FI_04` §2): a RECORD is where its holder is -- `place_of`'s record limb, the one owner
+            # (`research`'s cell; a Record is no Site and no rung, so the two limbs above answered UNKNOWN for it).
+            place = (s.rung if s is not None else subject if subject in w.rungs
+                     else place_of(w, subject) if subject in w.records else None)
             return UNKNOWN if place is None else (arg in presence(w, place))
         if stem == "with":
             # Telling workplan `T4`: TWO PERSONS IN ONE PLACE -- `subject` (the cell's `of:`, a
