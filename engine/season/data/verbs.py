@@ -33,8 +33,8 @@ from ...substrate.descriptors import ATTRIBUTES, CAPABILITIES
 from ..gaps import Forbidden, InstrumentDefect, Ungraded, Unspecified
 from .matrix import MATRIX, Step
 from .requires import (
-    KNOWN_PERSON_OPERANDS, RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS, VIA, AllOf, Existence, Relation,
-    TypedRequires, build_typed_requires,
+    CELL_STEMS, KNOWN_PERSON_OPERANDS, RECORD_SOURCED_OPERANDS, REQUIRES_OPERANDS, VIA, AllOf, Existence, Relation,
+    ScalarThreshold, TypedRequires, build_typed_requires,
 )
 from .rosters import (
     COVERT_KINDS, DIFFICULTY_LEVELS, DOMINANCE_KINDS, BOOKKEEPING_VERBS, CONTEST_OWED, FOLD_KINDS, LOGGED_KINDS, GRADED_TASKS, MARCH_POSTURE_KEY, MARCH_POSTURES, ORDER_RETREAT_AT, ORDER_RETREAT_KEY, ORDER_ROLE_KEY, ORDER_ROLES, PERSON_DEMANDED, PURSUIT_AXES, PURSUITS, RECORD_KINDS, REFERENT_CLASSES, RELEASABLE_KINDS,
@@ -1412,6 +1412,28 @@ def tenure_kinds_without_an_opener() -> list:
     return sorted(k for k, vs in _OPENERS_FROM_EFFECTS.items() if not vs)
 
 VERB_TABLE = _load_verb_table()
+
+
+def _quantity_stems(table: dict) -> frozenset:
+    """THE STEMS OF AN AMOUNT (v12 B11.51, `16_PESSIMIST_FI_A` edit 1): the stems of every `scalar_threshold` clause any row's `requires_typed`
+    carries -- whatever the table compares against a threshold -- kept to the ones a cell holds (`data/requires.py: CELL_STEMS`). Derived,
+    never spelt, on `CELL_STEMS`' own precedent. A rumour may garble an amount (`loop/witness.py::_told_value`; the liar's number,
+    `queries/person_q.py::lie_said_of`); a numeric value on any other stem is an existence reading stored as 0/1 and is passed whole."""
+    out = set()
+
+    def walk(req) -> None:
+        if isinstance(req, AllOf):
+            for c in req.clauses:
+                walk(c)
+        elif isinstance(req, ScalarThreshold):
+            out.update(req.stems())
+    for row in table.values():
+        if row.requires_typed is not None:
+            walk(row.requires_typed.requirement)
+    return frozenset(out) & CELL_STEMS
+
+
+QUANTITY_STEMS = _quantity_stems(VERB_TABLE)
 
 # B04.04 (U1-A steps 2-3): WHICH SKILL A VERB TESTS, DERIVED FROM THE ROW THAT HOLDS IT -- the `capability:` column on this table
 # (`descriptors.CAPABILITIES` defines the skill, `descriptor_registry.yaml: capabilities`). The `rosters.yaml: verb_capability`

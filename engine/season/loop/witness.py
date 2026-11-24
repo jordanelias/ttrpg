@@ -22,7 +22,7 @@ from ..data.rosters import (
     CHANNEL_CLAIM_SOURCE, OBSERVATION_DEPOSIT_MODES, OBSERVATION_TERMS, READ_TO_ADDRESSEE, RECORD_CONTENT,
     UNDEPOSITED_KINDS, WITNESS_CHANNELS, require_member, roster,
 )
-from ..data.verbs import IN_CONFIDENCE_KEY, VERB_TABLE
+from ..data.verbs import IN_CONFIDENCE_KEY, QUANTITY_STEMS, VERB_TABLE
 # ⚠ `04:178` lists WITNESS's reads as the log, the presence cache, the channel predicates and the act
 # store. Refraction (v9 IN-15, H-201) is asker-first -- it grades what THIS holder believes -- so its rule lives
 # in `queries/person_q.py` (B11.21, D-74: `ledger_weigh` and `refracted_confidence` moved there; this step imports nothing from `decision/`);
@@ -223,10 +223,12 @@ def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = 
                 new_to = tuple(tid for i, tid in enumerate(to_ids) if i != drop)
                 return tuple((k, new_to if k == addressee else v) for k, v in held.value)
         return held.value  # one addressee, or none at all -- §A.10.1's floor; nothing droppable
-    if isinstance(held.value, (int, float)) and not isinstance(held.value, bool):
+    if isinstance(held.value, (int, float)) and not isinstance(held.value, bool) and stem in QUANTITY_STEMS:
         # §A.10.2's three clauses live once, in `queries/person_q.py::drifted` (v11 CR-27: the liar's false
-        # number is the same rule), and this branch is its caller.
+        # number is the same rule), and this branch is its caller. ONLY AN AMOUNT IS GARBLED (v12 B11.51, `16_PESSIMIST_FI_A`
+        # edit 2; D-44, D-45: a rumour may lose the doer, not replace him): `data/verbs.py: QUANTITY_STEMS`.
         return drifted(held.value, w.fixtures.get("told_drift_band"), sel)
+    # any other numeric value (an existence reading stored as 0/1) falls through and is deposited as held
     return held.value  # nothing either mechanism can act on -- deposited verbatim, honestly
 
 

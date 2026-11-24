@@ -56,21 +56,21 @@ def _world(lie_offered=True, record_gain=None):
     return w
 
 
-def _cands(w, pid=T):
+def _cands(w, pid=T, subject="Hh"):
     p = w.persons[pid]
-    q = Question("q_cr27", "claim_landed", ("Hh",), "")
+    q = Question("q_cr27", "claim_landed", (subject,), "")
     return opening_set(p, View(p.id, [], w.fixtures.get("view_k"), q), q, w.fixtures)
 
 
-def _candidate(w, verb, to):
-    got = [c for c in _cands(w) if c.verb == verb and c.subject == "Hh" and c.operands.get("to") == to]
+def _candidate(w, verb, to, subject="Hh"):
+    got = [c for c in _cands(w, subject=subject) if c.verb == verb and c.subject == subject and c.operands.get("to") == to]
     return got[0] if got else None
 
 
-def _season(monkeypatch, w, verb, to, net=3):
+def _season(monkeypatch, w, verb, to, net=3, subject="Hh"):
     """One season in which T is handed the ONE act the offered candidate makes (payload as `pack_scenes` builds
     it) and nobody else chooses; the contest is forced to `net` against obstacle 2. Returns the events."""
-    cand = _candidate(w, verb, to)
+    cand = _candidate(w, verb, to, subject)
     assert cand is not None, f"`{verb}` to {to} was not offered"
     d = SeasonDriver(w)                  # constructed first: the registrar fills the module table
     asked = []
@@ -264,3 +264,71 @@ def test_a_lie_told_to_attunement_2_and_6_at_a_live_gain_is_held_higher_by_the_o
     as it is)."""
     got = _two_hear_a_lie(0.5)
     assert got[KNOWNOT] > got[HOLDER], got
+
+
+# ---- a rumour garbles only an amount (v12 B11.51, `16_PESSIMIST_FI_A` edits 1-3) ----------------------------------
+
+def _partial_telling(w, hearer, held, n):
+    """What `hearer` receives when the `n`th `Partial` telling of `held` reaches him (a distinct event id per hop, so a distinct draw)."""
+    return W._told_value(w, hearer, Event(f"ev_hop{n}", "news.told", [], [f"a_hop{n}"], 0, "Partial", ()), held)
+
+
+def test_the_quantity_stems_are_what_the_table_compares_against_a_threshold():
+    """`QUANTITY_STEMS` is derived: the cell stems a `scalar_threshold` clause carries; an existence reading, a deed and a `seen` are in no row's threshold."""
+    from ..data.verbs import QUANTITY_STEMS
+    assert {"stores", "condition"} <= QUANTITY_STEMS
+    assert not QUANTITY_STEMS & {"exists", "person.died", "seen", "held_by"}, sorted(QUANTITY_STEMS)
+
+
+def test_existence_lie_is_a_negation():
+    """A lie about an existence reading says the other truth value (`0` for `1`, `1` for `0`), never a whole-band drift of it (`2`)."""
+    fx = DEFAULT_FIXTURES
+    assert lie_said_of([_claim("exists:Person", 1)], "S", fx).value == 0
+    assert lie_said_of([_claim("exists:Person", 0)], "S", fx).value == 1       # a held 0 has a false thing to say here, unlike an amount
+    for v in (0, 1):
+        got = lie_said_of([_claim("exists:Record", v)], "S", fx)
+        assert got.value in (0, 1) and got.value != v and (got.subject, got.predicate) == ("S", "exists:Record")
+    assert lie_said_of([_claim("stores:grain", 8)], "S", fx).value == 12      # the control: an amount still moves one whole step
+
+
+def test_partial_telling_passes_an_existence_reading_whole():
+    """`(King, exists:Person, 1)` told at `Partial` down a six-hop chain reads `1` at every hop, at every hearer; no existence reading leaves {0, 1}."""
+    w = P.tiny_world()
+    held = Claim("c_king", "p_low", "p_king", "exists:Person", 1, 0, "firsthand", 80, "own")
+    seen = []
+    for hearer in ("p_mid", "p_high", "p_other"):
+        for hop in range(6):
+            held = dataclasses.replace(held, value=_partial_telling(w, hearer, held, hop))
+            seen.append(held.value)
+        held = dataclasses.replace(held, value=1)
+    assert len(seen) == 18 and set(seen) == {1}, seen
+    assert _partial_telling(w, "p_mid", Claim("c_k0", "p_low", "p_king", "exists:Person", 0, 0, "firsthand", 80, "own"), 0) == 0
+
+
+def test_quantity_still_drifts_on_a_partial_telling():
+    """The control, green before and after: an amount on a quantity stem is moved at `Partial` by `drifted`'s own rule, the grain rows as they were."""
+    w = P.tiny_world()
+    band = w.fixtures.get("told_drift_band")
+    for stem, v in (("stores:grain", 8), ("condition", 3), ("stores:grain", -8)):
+        held = Claim("c_q", "p_low", "S", stem, v, 0, "firsthand", 80, "own")
+        got = [_partial_telling(w, "p_mid", held, n) for n in range(12)]
+        assert any(g != v for g in got), (stem, got)
+        ev = Event("ev_hop0", "news.told", [], ["a_hop0"], 0, "Partial", ())
+        sel = int(H(w.world_seed, w.tick, "p_mid", f"told:{ev.id}"), 16)
+        assert got[0] == drifted(v, band, sel), (stem, got[0])
+
+
+def test_a_hand_built_lie_on_a_man_s_existence_declines_the_hearers_challenge_only_as_the_negation_it_is(monkeypatch):
+    """`p1c_exists.py` (i), the lie produced by a hand-built `lie` and not a plant: T tells HOLDER `(p_other, exists:Person, v)`. After the lie HOLDER holds the
+    negation `0` and his own ledger contradicts a `challenge` on `p_other` (§F1 clause 4: no such Candidate forms); after a `tell` (the control) he holds `1`
+    and it does not. Before B11.51 the lie said `2`, which `exists` reads as `>= 1` -- a lie that declined nothing."""
+    def hearer_declines_the_challenge(verb):
+        w = _world()
+        w.persons[T].ledger[:] = [c for c in w.persons[T].ledger if (c.subject, c.predicate) != ("p_other", "exists:Person")]
+        w.persons[T].ledger.append(Claim("c_exists", T, "p_other", "exists:Person", 1, 0, "firsthand", 80, "own"))   # the reading a refused act's observation deposits: 0/1
+        _season(monkeypatch, w, verb, HOLDER, subject="p_other")
+        told = [c for c in w.persons[HOLDER].ledger if c.source == "told_by" and (c.subject, c.predicate) == ("p_other", "exists:Person")]
+        assert len(told) == 1, told
+        return told[0].value, PQ.belief_contradicts(w.persons[HOLDER], VERB_TABLE["challenge"], "p_other", {"subject": "p_other"})
+    assert hearer_declines_the_challenge("lie") == (0, True)
+    assert hearer_declines_the_challenge("tell") == (1, False)

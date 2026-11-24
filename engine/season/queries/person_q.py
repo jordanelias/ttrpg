@@ -1923,9 +1923,11 @@ def lie_said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: in
     Act's `payload["said"]`, so WITNESS deposits it through the one told channel and reads no ledger.
 
     THE FALSE-VALUE RULE [ASSUMPTION; medium; Jordan to correct; revert: a different false-value rule]:
-      * a NUMBER is moved one whole step of `told_drift_band`'s unit by `drifted` -- sign-preserving and
-        never crossing zero, `_told_value`'s own clauses and not a copy of them. A held 0, or a band of 0,
-        has no false number to say: `None`.
+      * an AMOUNT (a number on a stem of `data/verbs.py: QUANTITY_STEMS`) is moved one whole step of
+        `told_drift_band`'s unit by `drifted` -- sign-preserving and never crossing zero, `_told_value`'s own
+        clauses and not a copy of them. A held 0, or a band of 0, has no false number to say: `None`.
+      * any OTHER number (an existence reading stored as 0/1) is negated by truthiness, `0 if held else 1`:
+        the one false thing to say of it (B11.51).
       * a TRUTH VALUE becomes the other member of its closed roster, `(False, True)`. No draw is spent: the
         roster of every non-numeric cell value a ledger holds today has two members, so the other member is
         the only one (a roster with several would be drawn on `draw(actor, 'lie:<act id>')`, and the act has
@@ -1949,7 +1951,9 @@ def lie_said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: in
     if isinstance(held, bool):
         false = not held
     elif isinstance(held, (int, float)):
-        false = drifted(held, fx.get("told_drift_band"), 0, whole_band=True)
+        # an AMOUNT moves one whole step; an existence reading stored as 0/1 is negated by truthiness (v12 B11.51, `16_PESSIMIST_FI_A` edit 3)
+        false = (drifted(held, fx.get("told_drift_band"), 0, whole_band=True)
+                 if said.predicate.partition(":")[0] in _verbs.QUANTITY_STEMS else (0 if held else 1))
     else:
         return None
     if false == held:

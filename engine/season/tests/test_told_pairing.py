@@ -106,19 +106,14 @@ def test_the_witness_asked_about_the_doer_says_the_death():
     assert PQ.said_of(p.ledger, V, w.fixtures, p) == said
 
 
-def test_off_arm_is_todays_reading_and_hash_equal():
-    """`off`: the witness asked about K says nothing, nothing is told with a hand, J names nobody; and the realm at seed 0 after one
-    season reads the hash it read before this item (B11.21's after-reading; B11.99 re-reads it with the other arm-off pins)."""
+def test_off_arm_is_todays_reading():
+    """`off`: the witness asked about K says nothing, nothing is told with a hand, J names nobody. (The realm-hash half this
+    test once carried was a second pin beside `_realm_goldens`, which B11.99 owns, and is dropped.)"""
     w, tell, claims = _world("off")
     assert PQ.said_of(w.persons[W].ledger, K, w.fixtures, w.persons[W]) is None
     said = tell(W, V)
     assert said.pairing is None
     assert claims(J, SEEN_PREDICATE) == [] and _doers(w, J) == ()
-    from ..boot.realm import build_realm
-    from ..harness import populated
-    realm = build_realm(0, fixtures=DEFAULT_FIXTURES.sweep("told_pairing", "off"))
-    populated.run(1, 0, w=realm)
-    assert realm.content_hash() == "879408acf51cb0882800d0058eebbea8"
 
 
 def _ledger(*rows):
