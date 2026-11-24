@@ -34,7 +34,7 @@ from ..trace_log import TRACE
 # `has_conferral_basis` still reaches both preconditions that call it by that name.
 from ..state.gate import (  # noqa: F401 -- `REVOCATION_RULES`, `in_holdings`, `seated_on_the_rung_above` re-exported
     REVOCATION_RULES, has_conferral_basis, has_filler, has_revocation_disposal, in_holdings, may_claim, may_fill,
-    may_revoke, purview_reaches, seat_hold, seated_on_the_rung_above)
+    may_revoke, may_sit, purview_reaches, seat_hold, seated_on_the_rung_above)
 
 
 # A `requires:` predicate. The table states preconditions in PROSE, which the fold cannot read --
@@ -156,6 +156,8 @@ def _req_confer(w: "World", a: "Act") -> Answer:
     if conferee not in w.persons:
         return _refuse_at("conferee", f"{a.actor} to {conferee!r}",
                           "a confer on a conferee who is no living person the world holds")
+    if not may_sit(w, conferee):           # B21.60: a seat is held by an individual -- the gate's own `may_sit`, asked early
+        return _refuse_at("conferee", f"{a.actor} to {conferee!r}", "a confer on a conferee who is a cohort, not an individual")
     if not may_fill(w, a.actor, a.via, off):
         # G3: the seat exercised does not reach the seat conferred
         return _refuse_at("purview", f"{a.actor} via {a.via!r} on {obj!r}",
@@ -210,7 +212,7 @@ def _req_succeed(w: "World", a: "Act") -> Answer:
         # a banned man is seated by no route within the banning seat's reach (`confer` declines him, `_req_oblige` 5)
         return _refuse_at("banned", f"{a.actor} on {seat!r}")
     titles = {t.object for t in w.seat_holds(a.actor)}
-    if may_claim(w, a.actor, w.offices[seat], titles):
+    if may_sit(w, a.actor) and may_claim(w, a.actor, w.offices[seat], titles):     # B21.60: `may_sit`, the gate's own, asked first
         return ADMITTED
     return _refuse_at("claim", f"{a.actor} on {seat!r}", "a succeed the heir's claim does not admit")
 

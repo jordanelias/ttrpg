@@ -708,6 +708,19 @@ def may_claim(w: "World", actor: Optional[str], off: Office, titles,
                    for t in w.tenures)
 
 
+def may_sit(w: "World", person_id: Optional[str]) -> bool:
+    """MAY `person_id` HOLD A SEAT AT ALL? (B21.60, `16_PESSIMIST_FA_B` edit 1, A-19, A-58.) A seat is held by an individual: the
+    person exists and `not Person.is_cohort` (S9, a population is a person at `weight > 1`, and a population is no officeholder).
+    ONE BODY, FOUR READERS: `tenure_write_basis`'s `conferral` and `claim` clauses ask it of the subject of the opened seat-`hold`,
+    and `loop/predicates.py::_req_confer` (of `to`) and `_req_succeed` (of the actor) ask it through the same name, so the fold
+    refuses (`confer.refused`, `succession.refused`) where the gate would raise. The person-side counterparty fan
+    (`decision/options.py`) cannot ask it: AX-2 gives `decision/` no `World`, and a cohort's weight is the world's to say, so
+    a Candidate on a cohort forms and the fold refuses it. A seat-eligibility rule of a later item composes on this: it is its
+    first conjunct, never a second predicate."""
+    p = w.persons.get(person_id) if person_id else None
+    return p is not None and not p.is_cohort
+
+
 def passes_a_seat(off: Office) -> bool:
     """IS `off` A TITLE THAT EXISTS ONLY TO PASS A SEAT? (B21.16, HAPPENINGS-B edit 3.) `conferral: appointed` and an empty remit:
     `off_heir`, the Princess, the consort once her standing grant is gone. A claim lays down such a title it claims by -- it was
@@ -1175,7 +1188,8 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
       `conferral` an OPENING of a `hold` on a SEAT, or a change to that `hold`'s grant (`payload`)
                   alone, by `may_fill`. The re-grant is `establish`'s re-stamp (`13f`): the grant a
                   seat confers on its holder, written by the authority that may fill the seat.
-                  Never on a seat whose `FILLED_BY` lacks it (v10 IN-61: an `inheritance` seat).
+                  Never on a seat whose `FILLED_BY` lacks it (v10 IN-61: an `inheritance` seat), and never for a
+                  subject that may not sit (`may_sit`, B21.60: a cohort).
       `claim`     an OPENING of the ACTOR'S OWN `hold` on a seat whose `FILLED_BY` names it, which
                   has no other live `hold`, and whose `successions` title is in `released` -- the
                   actor ended his own `hold` on that title under `T-m` in this same write (v10 IN-61,
@@ -1427,11 +1441,13 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     # seat that names it (`claimable_seats`), and the seat's own vacancy (`besides=t`) bars a second.
     # B21.16: A TITLE THE CLAIM DOES NOT LAY DOWN (`passes_a_seat` false: a duke's duchy) licenses by being STILL HELD, so it is
     # counted with the ones `released`; a title that exists to pass a seat licenses only by its closure in this write.
-    if opened and owner == actor and may_claim(
+    # B21.60: A SEAT IS HELD BY AN INDIVIDUAL -- `may_sit` of the subject of the opened seat-`hold`, on both openings (`claim`'s subject
+    # is the actor, `conferral`'s the conferee). An existing edge's payload re-grant (`establish`'s re-stamp) opens no seat-hold: unchanged.
+    if opened and owner == actor and may_sit(w, t.subject) and may_claim(
             w, actor, seat, set(released) | {s.object for s in w.seat_holds(actor) if not passes_a_seat(w.offices[s.object])},
             besides=t):
         return CLAIM
-    if (opened or moved == {"payload"}) and may_fill(w, actor, via, seat):
+    if ((opened and may_sit(w, t.subject)) or moved == {"payload"}) and may_fill(w, actor, via, seat):
         return CONFERRAL
     return None
 
