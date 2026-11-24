@@ -15,16 +15,19 @@ claim dropped -> the hearer test RED.
 
 from __future__ import annotations
 
+import pytest
+
 from ..data.matrix import WriteClass
 from ..data.rosters import RECORD_CONTENT
 from ..loop import witness as WIT
 from ..loop.driver import SeasonDriver, mint_token
 from ..queries import world_q
 from ..queries.person_q import addressed_to, said_of
-from ..state.carriers import Act, Claim, Event, Tenure
+from ..state.carriers import Act, Claim, Event, Office, Tenure
 from ..state.ids import H
 from .test_in10_record_operands import _resolve
 from .test_in12_covenant import DUKE, OTHER, SEAT, _covenant, _utter, _world
+from .test_in53_vacancy_need import _formed
 
 _CONTENT = RECORD_CONTENT["predicate"]
 BYSTANDERS = ("p_low", "p_mid", "p_other")      # neither the issuer, nor the writ's addressee (`OTHER`)
@@ -147,3 +150,82 @@ def test_dispensation_absent_from_proclaimed_reproduces_the_hash(monkeypatch):
             hashes[arm] = w.content_hash()
     assert hashes["revert"] == hashes["pre_item"], hashes
     assert hashes["treatment"] != hashes["revert"], "the scene cannot see the item"
+
+
+# B21.22 (edit 3): WHO IS OFFERED THE ANSWER -- `world_q.writs_addressed`, the writs a person holds addressed to him OR
+# whose terms his own ledger holds naming him, where the issuing seat commands him (A-22), less those he answered.
+
+THREE = ("comply", "evade / defy", "construe")
+EMITS = {"comply": "compliance.given", "evade / defy": "compliance.withheld", "construe": "terms.distorted"}
+
+
+def _offered(w, pid, rid):
+    """The answers formed on `rid` over every question `pid` is asked (`opening_set`, the real formation)."""
+    return {c.verb for q in world_q.questions_for(w, w.persons[pid])
+            for c in _formed(w, pid, q) if c.verb in THREE and c.subject == rid}
+
+
+def test_an_addressee_is_offered_comply_defy_construe():
+    """A-21 with A-22: the addressee witnessed the issue, holds its terms and no paper, and the issuing seat commands
+    him (an unseated man in its land): he is offered all three answers. CONTROL: the issuer, who holds the paper and the
+    terms and is not its addressee, is offered none."""
+    w, d = _issue_scene()
+    rec = w.records["rec:fa_is"]
+    assert world_q.hold_force(w, rec.id).subject == DUKE and _content(w, OTHER, rec), "fixture: terms without paper"
+    assert world_q.commands(w, DUKE, SEAT, OTHER), "fixture: the seat commands the addressee"
+    assert world_q.writs_addressed(w, w.persons[OTHER]) == (rec.id,)
+    assert _offered(w, OTHER, rec.id) == set(THREE)
+    assert world_q.writs_addressed(w, w.persons[DUKE]) == () and not _offered(w, DUKE, rec.id)
+
+
+def _issue_scene():
+    w, d = _world()
+    _issue(w, d)
+    return w, d
+
+
+@pytest.mark.parametrize("verb,netted", [("comply", True), ("evade / defy", True), ("construe", False)])
+def test_writs_addressed_nets_an_answered_writ(verb, netted):
+    """Edit 3's third clause: an addressee who has complied or withheld compliance (a claim of his own doing on the writ,
+    in his own ledger) is not offered the writ again; a construal is a reading, not an answer, and nets nothing. CONTROL:
+    a witnessed answer on the same writ (the claim, no `doer`) leaves the writ offered."""
+    w, d = _issue_scene()
+    rec, other = w.records["rec:fa_is"], w.persons[OTHER]
+    other.ledger.append(Claim("c_seen_answer", OTHER, rec.id, EMITS["comply"], True, w.tick, "firsthand", 100, "own"))
+    assert world_q.writs_addressed(w, other) == (rec.id,), "a witnessed answer is not his own"
+    out = _resolve(w, d, Act(id="fa_ans", actor=OTHER, verb=verb, payload={"subject": rec.id}))
+    assert EMITS[verb] in [e.kind for e in out], [e.kind for e in out]
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
+    assert any(c.subject == rec.id and c.predicate == EMITS[verb] and c.doer == OTHER for c in other.ledger), \
+        "WITNESS deposited no claim of his own answer: the fixture moved"
+    assert world_q.writs_addressed(w, other) == (() if netted else (rec.id,))
+    assert bool(_offered(w, OTHER, rec.id)) is not netted
+
+
+def test_a_bystander_is_offered_nothing():
+    """The B10-05 close's defect must not return under A-21: each bystander witnessed the issue, holds the
+    `content:dispensation` claim and is a man the issuing seat commands, yet is not the writ's addressee -- so
+    `writs_addressed` is empty for him and no answer forms."""
+    w, d = _issue_scene()
+    rec = w.records["rec:fa_is"]
+    checked = 0
+    for pid in BYSTANDERS:
+        assert _content(w, pid, rec) and world_q.commands(w, DUKE, SEAT, pid), f"{pid}: the fixture moved"
+        assert world_q.writs_addressed(w, w.persons[pid]) == (), pid
+        assert not _offered(w, pid, rec.id), pid
+        checked += 1
+    assert checked >= 3
+
+
+def test_a_writ_to_the_issuers_superior_forms_no_comply():
+    """A-22: a writ whose addressee the issuing seat does not command is a petition to him, not an order. The addressee,
+    commanded while unseated, takes the Crown (a seat the Duke's may not revoke): the writ he knows of now forms no
+    answer. CONTROL: the same writ before he is seated is offered."""
+    w, d = _issue_scene()
+    rec, other = w.records["rec:fa_is"], w.persons[OTHER]
+    assert world_q.writs_addressed(w, other) == (rec.id,), "control: commanded, the writ is his to answer"
+    w.offices["off_crown"] = Office("off_crown", "King", "R", ["confer", "revoke"], faction="Valorsmark")
+    w.add_tenure(Tenure("t_fa_crown", OTHER, "off_crown", "hold", since=w.tick))
+    assert not world_q.commands(w, DUKE, SEAT, OTHER), "fixture: the Duke's seat commands the King"
+    assert world_q.writs_addressed(w, other) == ()
+    assert not _offered(w, OTHER, rec.id)

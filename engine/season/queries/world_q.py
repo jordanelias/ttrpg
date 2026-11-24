@@ -48,7 +48,8 @@ from ..data.rosters import (
 # v10 REM-21: `DECLARED_CLASSES`, the referent classes some row declares, the same way.
 from ..data.verbs import (
     DECLARED_CLASSES, DETAINEE_CLASS, DETAINEE_REMIT_ACTS, DISPUTANT_CLASS, ENEMY_CLASS, FOUNDING_REMIT_ACTS,
-    HOLDING_CLASS, HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, RECORD_REFERENT_KINDS, RUNG_REMIT_ACTS, VERB_TABLE, _OPENERS_FROM_EFFECTS,
+    HOLDING_CLASS, HOLDING_RECORD_KINDS, CONVENING_REMIT_ACTS, RECORD_REFERENT_KINDS, RECORD_SUBKINDS_BY_VERB, RUNG_REMIT_ACTS,
+    VERB_TABLE, _OPENERS_FROM_EFFECTS,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
 # Telling `T7` (v9 IN-16): the declared-intent claim's stem and its value's reader, owned once in
@@ -1559,7 +1560,7 @@ def minting_verb(w: World, rid: str) -> Optional[str]:
 
 
 # THE VERBS WHOSE MINT IS AN INVITATION (v10 PC-10b; H-240's carried point): `admits_audience`'s writ limb reads
-# a held, addressed Record as a licence to enter only when `issue` made it. `writs_held` stamps every
+# a held, addressed Record as a licence to enter only when `issue` made it. `writs_addressed` stamps every
 # `RECORD_REFERENT_KINDS` member, and PC-10b's `challenge` joins that set (`accept`'s row), so without this
 # narrowing a challenge addressed to a man would be read as a writ admitting him to a court. A VERB, not a kind:
 # H-240 names the creating act's verb, and a `covenant`'s dispensation (`_eff_issue`'s body, another verb) is an
@@ -1620,13 +1621,13 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
          over his own obliges (`sworn_to` is keyed by seat, the inverse question), and an IMPOSED oblige
          is a sentence, not an oath (`Tenure.imposed`): skipped as `guard_weight` and `purview_reaches`'
          oblige clause skip it.
-      4. A WRIT: he holds a live writ addressed to him (`writs_held`) whose issuing seat
+      4. A WRIT: he holds a live writ addressed to him (`writs_addressed(..., held=True)`) whose issuing seat
          (`issuing_seat`, K-52) reaches the rung -- an invitation, minted by `issue`. A hand-planted
          writ has no creating Event and therefore no issuer, and opens nothing. ⚠ Any addressed
          `dispensation` counts: its content, its `at` and the issuer's continued tenure are not read
          [ASSUMPTION; medium; Jordan to correct; revert: read them]; and a writ reaches its addressee
          only by `give` (`ED-IN-0292` (1), RULED NO), so the limb is built but unreached in computed play.
-         ⚠ v10 PC-10b: ONLY A RECORD `issue` MINTED (`WRIT_MINTING_VERBS`, read off the creating act): `writs_held`
+         ⚠ v10 PC-10b: ONLY A RECORD `issue` MINTED (`WRIT_MINTING_VERBS`, read off the creating act): `writs_addressed`
          stamps a held `challenge` too, and a challenge is not an invitation.
 
     ⚠ LIMIT, STATED: no limb admits a person to the rung where he LIVES (`residence_of`). Where a live sworn
@@ -1650,7 +1651,8 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
         return False
     # v10 PC-10b: NARROWED TO RECORDS `issue` MINTED (`WRIT_MINTING_VERBS`), so `challenge` joining
     # `RECORD_REFERENT_KINDS` does not widen the gate (a challenge is minted by an `own` act, and is no invitation).
-    for rid in writs_held(w, p):
+    # B21.22: the HELD writs alone (`held=True`) -- entry on a writ is the paper's, not the terms'.
+    for rid in writs_addressed(w, p, held=True):
         seat = issuing_seat(w, rid, WRIT_MINTING_VERBS)
         if seat is not None and purview_reaches(w, w.offices[seat], rung):
             return True
@@ -2698,7 +2700,8 @@ def commands(w: World, actor: Optional[str], via: Optional[str], person_id: str)
     word *command basis* -- *whom a seat may order* -- and not *purview* (the rung a seat's ground covers,
     `purview_reaches`, which `may_fill` and the rung referents keep).
 
-    ⚠ CALLERS: `issue`'s `basis: command` (B21.20, `WorldReader.read`'s `command` stem); `_req_dispatch` (B21.21) not yet. `actor` is
+    ⚠ CALLERS: `issue`'s `basis: command` (B21.20, `WorldReader.read`'s `command` stem); `_req_dispatch` (B21.21);
+    `writs_addressed`'s terms clause (B21.22: a decree forms an answer only for an addressee the seat commands). `actor` is
     asked only by `may_revoke`, which refuses an actor not seated in `via`; the sworn and the land disjuncts read
     the seat `via` names alone, as `purview_reaches` does (`04:332`: purview is asked of the seat exercised)."""
     TRACE.query("commands", "resolver")
@@ -3225,40 +3228,81 @@ def continuations(w: World, p: Person) -> tuple:
     return tuple(out)
 
 
-def writs_held(w: World, p: Person) -> tuple:
-    """THE WRITS `p` HOLDS (v9 IN-09, H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to
-    correct]), sorted by id: the Records on `p`'s own live `hold` edges whose kind a row declaring
-    `referent_class: Record` answers (`data/verbs.py::RECORD_REFERENT_KINDS`, `dispensation`). #453
-    `:502`: *"the executor holds the writ ... `comply` forms on the held writ"*. ONLY A WRIT THAT
-    NAMES HIM: a writ is minted into its maker's hand (the writ-to-addressee mint, IN-10 (c), was
-    refused 2026-10-14: the user, ED-IN-0292 (1), *"just say no for now"*), so a holder who is not
-    in the writ's addressee list is the issuer or a custodian, not the person the writ orders, and
-    is offered nothing. A writ reaches its addressee only by a `give`. `()` for nearly everyone.
+# THE EVENT KINDS THAT ANSWER A WRIT (B21.22, `06_FA_decree_binds` edit 3): a claim of one of them, of the holder's own
+# doing (`Claim.doer`), on a writ means he has answered it, and `writs_addressed` no longer offers it. `construe`'s
+# `terms.distorted` is not here: a construal is the construer's reading of the terms, after which he may still comply or
+# defy. Refused at import unless each is emitted by a row answering a writ kind (`data/verbs.py::RECORD_SUBKINDS_BY_VERB`),
+# so a renamed emission cannot leave the net reading a kind no answer writes.
+WRIT_ANSWERED_KINDS = frozenset({"compliance.given", "compliance.withheld"})
+_unanswering = WRIT_ANSWERED_KINDS - {k for v, kinds in RECORD_SUBKINDS_BY_VERB.items()
+                                      if kinds & RECORD_REFERENT_KINDS for k in VERB_TABLE[v].emits}
+if _unanswering:
+    raise Unspecified(
+        f"`WRIT_ANSWERED_KINDS` names {sorted(_unanswering)}, which no row answering a writ kind emits",
+        "verb_table.yaml -- emits",
+        needs="the kinds `comply` and `evade / defy` emit, or the net retired with them",
+        law="B21.22 (`06_FA_decree_binds` edit 3) -- an answered writ is one the actor's own ledger holds his answer to")
 
-    A STANDING OCCASION, `vacancies`' shape: resolver-side and read-only, it supplies Record IDS,
-    which `questions_for` adds to the question the person answers as CLASSED referents, and whether
-    the act then passes is the fold's (the rows' typed cells: the actor's own ledger holds a claim on
-    the writ). It reads `p`'s own edges and the store only for the kinds of the Records they name.
-    ⚠ NO 'ALREADY ANSWERED' DECLINE: a holder who complied once is offered the writ again while he
-    holds it -- the scene tax IN-10 (a) recorded for a repeated `oblige` (H-203).
-    ⚠ v10 PC-10b: THE KINDS ARE `{dispensation, challenge}` -- `accept` declares `referent_class: Record` on a
-    `challenge` (its `existence` conjunct), so `RECORD_REFERENT_KINDS` derives it and a held challenge ADDRESSED TO
-    `p` (its `to`, the person challenged) is stamped here, `accept`'s occasion. Minted into the challenger's hand,
-    it reaches its addressee only by a `give` (H-229, unreached in the realm): `accept`'s named R-05 residue.
-    `admits_audience` reads only the writs `issue` minted, so the stamp does not widen the access gate."""
-    # v10 IN-12 step 5a: the addressee test is `person_q.addressed_to`'s, its one owner (the terms-sourced
-    # reader in `decision/options.py` asks the same rule of the holder's content claim).
-    return tuple(sorted({t.object for t in p.tenures
-                         if t.kind == "hold" and t.live and t.object in w.records
-                         and w.records[t.object].kind in RECORD_REFERENT_KINDS
-                         and addressed_to(w.records[t.object].subject_matter, p.id)}))
+
+def writs_addressed(w: World, p: Person, held: bool = False) -> tuple:
+    """THE WRITS ADDRESSED TO `p` THAT ARE HIS TO ANSWER (B21.22, `06_FA_decree_binds` edit 3, rulings A-21, A-22;
+    was `writs_held`, v9 IN-09, H-203), sorted by id: the Records of a `RECORD_REFERENT_KINDS` kind
+    (`data/verbs.py`, derived off the rows declaring `referent_class: Record`: `dispensation`, `challenge`) whose
+    addressee list names him (`person_q.addressed_to`, the one owner of the addressee test) and that reach him by
+    either of two clauses, minus those he has already answered:
+
+      1. THE PAPER -- he holds it, on his own live `hold` edge. #453 `:502`: *"the executor holds the writ ...
+         `comply` forms on the held writ"*. A writ is minted into its maker's hand (ED-IN-0292 (1), RULED NO), so a
+         holder who is not an addressee is the issuer or a custodian, and is offered nothing.
+      2. THE TERMS -- his own ledger holds a content claim on it (`person_q.content_said`) whose addressee key names
+         him, the writ's kind and minting verb are proclaimed (`rosters.yaml: proclaimed`, A-21: whoever learns of a
+         decree holds its terms), and the issuing seat COMMANDS him (`commands`, A-22): `issuer` and seat read off the
+         creating act (`_creating_act`, `issuing_seat`). A writ whose addressee the seat does not command is a petition
+         to him, not an order, and forms no answer. A challenge is not proclaimed, so `accept`'s kind reaches a
+         person here only by the paper (`challenges_heard` stamps the one he has heard of). A bystander who knows the
+         terms is not an addressee and is offered nothing [ASSUMPTION: A-21's "and may answer it without holding
+         paper" is read as the answer of those the decree binds -- basis: A-21 answers how a decree reaches its
+         addressee, A-22 whom a seat binds; revert: drop the addressee conjunct of this clause].
+      3. LESS THE ANSWERED -- a writ on which his own ledger holds a `WRIT_ANSWERED_KINDS` claim of his own doing
+         (`Claim.doer`, stamped by WITNESS on the actor's own deposits) is not offered again: the standing scene tax
+         `writs_held` recorded ("NO 'ALREADY ANSWERED' DECLINE", H-203) is closed. A witnessed answer of another
+         person on the same writ is not his.
+
+    `held=True` asks clause 1 alone and nets nothing: `admits_audience`'s writ limb, since entry on a writ is the
+    paper's, and holding the invitation still admits him once he has answered it [ASSUMPTION: the net is the
+    formation's, not the gate's -- basis: edit 3, "`admits_audience` keeps asking for a *held* writ"; revert: net
+    there too].
+
+    A STANDING OCCASION, `vacancies`' shape: resolver-side and read-only, it supplies Record IDS, which
+    `questions_for` adds to the question the person answers as CLASSED referents, and whether the act then passes is
+    the fold's (the rows' typed cells: the actor's own ledger holds a claim on the writ). It reads `p`'s own edges and
+    ledger, the store for the kinds and content of the Records they name, and the log for a proclaimed writ's creating
+    act. `()` for nearly everyone."""
+    out = {t.object for t in p.tenures
+           if t.kind == "hold" and t.live and t.object in w.records
+           and w.records[t.object].kind in RECORD_REFERENT_KINDS
+           and addressed_to(w.records[t.object].subject_matter, p.id)}
+    if held:
+        return tuple(sorted(out))
+    tried = set()
+    for c in p.ledger:
+        rec = w.records.get(c.subject)
+        if (rec is None or c.subject in out or c.subject in tried or rec.kind not in RECORD_REFERENT_KINDS
+                or rec.kind not in PROCLAIMED or not addressed_to(content_said(c), p.id)):
+            continue
+        tried.add(rec.id)
+        seat = issuing_seat(w, rec.id, frozenset(PROCLAIMED[rec.kind]))
+        if seat is not None and commands(w, getattr(_creating_act(w, rec.id), "actor", None), seat, p.id):
+            out.add(rec.id)
+    answered = {c.subject for c in p.ledger if c.predicate in WRIT_ANSWERED_KINDS and c.doer == p.id}
+    return tuple(sorted(out - answered))
 
 
 def addressed_records(w: World, p: Person, kind: str, named: Optional[frozenset] = None) -> tuple:
     """THE RECORDS OF `kind` ADDRESSED TO `p` THAT HE HAS HEARD OF (B11 lane A, carrying
     `proposals/2026-11-12-subsystem-audit-suite/proposals/14_VERBS_PHYSICAL_A_custody_and_force.md` A0 [ASSUMPTION;
     medium; Jordan to correct; revert: return `()`]), sorted by id: each Record of that kind whose addressee list
-    names him (`person_q.addressed_to`, the one owner `writs_held` asks too) and whose id his own ledger names
+    names him (`person_q.addressed_to`, the one owner `writs_addressed` asks too) and whose id his own ledger names
     (`person_q.ledger_names`: he saw it made, or was told of it). A document addressed to a man who has not heard of it
     is not his business. No mint and no custody: the Record stays in its maker's hand (ED-IN-0292 (1), RULED NO, stands).
     `named` is `ledger_names(p.ledger)` when the caller holds it already. Resolver-side, read-only."""
@@ -3280,19 +3324,18 @@ def records_held_for_holding_rows(w: World, p: Person) -> tuple:
     taken, [ASSUMPTION; medium; Jordan to correct]), sorted by id: the Records on `p`'s own live `hold`
     edges whose kind is one a `referent_class: Record` row whose typed cell asks `held_by` of `subject`
     asks `existence` of (`data/verbs.py::HOLDING_RECORD_KINDS`: `carry`'s `petition`, `found`'s and
-    `build`'s `works`). The second half of the `Record` term, beside `writs_held`: THE ADDRESSEE TEST
+    `build`'s `works`). The second half of the `Record` term, beside `writs_addressed`: THE ADDRESSEE TEST
     IS NOT HERE, because these rows ask only that the actor HOLD the document (a petitioner holds his
     petition from the mint and is not its addressee), while a writ reaches the person it orders (the
-    addressee test is `comply`'s, kept in `writs_held`). `()` for nearly everyone.
+    addressee test is `comply`'s, kept in `writs_addressed`). `()` for nearly everyone.
 
-    A STANDING OCCASION, `writs_held`'s shape: resolver-side and read-only, it supplies Record IDS,
+    A STANDING OCCASION, `writs_addressed`'s shape: resolver-side and read-only, it supplies Record IDS,
     which `questions_for` adds to the question the person answers as CLASSED referents, and whether the
     act then passes is the fold's (the rows' typed cells). It reads `p`'s own edges and the store only
     for the kinds of the Records they name. ⚠ THE CLASS IS SHARED, as `Office` is between `confer` and
     `oblige`: a held petition is a `Record` for `comply` too (which forms on a Record his own ledger
     names and the fold refuses on `exists:dispensation`), and a held writ is a `Record` for `carry`.
-    ⚠ NO 'ALREADY CARRIED' DECLINE, `writs_held`'s
-    scene tax: a holder who carried a petition is offered it again while he holds it (the fold's
+    ⚠ NO 'ALREADY CARRIED' DECLINE, the scene tax `writs_addressed` had until B21.22 netted the answered: a holder who carried a petition is offered it again while he holds it (the fold's
     `docketed` decline refuses a second carry of one matter only while it stays on the docket; a
     `determine` ends the item and the holder may carry again). REVERT: drop the term in
     `questions_for` (and the three rows' `referent_class`)."""
@@ -3754,10 +3797,10 @@ def own_referents_of_class(w: World, q: Question, classes: Optional[frozenset] =
     read at call time, so no class literal lives here; while no row declares a class outside that list
     the set is empty and this returns `()`. A caller may pass another set. Resolver-side and read-only.
     A WRIT IS NOT STAMPED HERE (the B10-05 close, [ASSUMPTION; medium; Jordan to correct]): a Record of a
-    writ kind (`data/verbs.py::RECORD_REFERENT_KINDS`) reaches a question only through `writs_held`,
+    writ kind (`data/verbs.py::RECORD_REFERENT_KINDS`) reaches a question only through `writs_addressed`,
     whose addressee test is `comply`'s whole formation (its cell asks a claim on the writ, which any
     witness of the issue holds). Since REM-2C released `Record` to this term, a bystander whose question
-    names the writ would be offered `comply` and the fold would execute it; the kinds `writs_held` owns are
+    names the writ would be offered `comply` and the fold would execute it; the kinds `writs_addressed` owns are
     skipped, so he is offered none, and no row forms on a writ for a non-addressee. The petition and
     works kinds are NOT skipped: `carry`, `found` and `build` form on an unheld one and the fold refuses
     it on `held_by`, REM-2C's shared-class cost. REVERT: drop the term in `questions_for`
@@ -4107,7 +4150,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     """§F1's `q` producer -- TWO sources, resolver-side, at the DELIBERATE barrier, plus the
     STANDING OCCASIONS stamped onto the first question as classed referents (`_stamped`, below the
     sort): the vacant seats the person may fill (`vacancies`, IN-53), the seats he has been told of
-    (`seats_named`, v9 IN-10 (a)), the writs he holds (`writs_held`, v9 IN-09, widened at v10 REM-25 by
+    (`seats_named`, v9 IN-10 (a)), the writs addressed to him (`writs_addressed`, v9 IN-09, B21.22; widened at v10 REM-25 by
     the Records he holds that a row asking him to hold them answers, `records_held_for_holding_rows`:
     the same `Record` term, not another occasion), the places he has
     been told of and could settle in (`places_named`, v9 IN-45 `migrate`) and the larders his seat
@@ -4284,7 +4327,9 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # whether a seat is held is the fold's question, not the referent's.
     # IN-09 (H-203, DECISION 2026-10-13 [ASSUMPTION; medium; Jordan to correct]): AND SO DO THE WRITS
     # HE HOLDS (`writs_held`), after the seats, as `Record` -- only `comply` declares that class, so
-    # no other row's formations move. REVERT: drop the term.
+    # no other row's formations move. REVERT: drop the term. B21.22 (A-21, A-22): renamed `writs_addressed`, and
+    # widened to the proclaimed writs his own ledger holds the terms of, where the issuing seat commands him, less
+    # those he has answered.
     # B11 lane A (14_VERBS_PHYSICAL_A A4, [ASSUMPTION; medium; Jordan to correct]): AND, BESIDE THEM, THE CHALLENGES
     # ADDRESSED TO HIM THAT HE HAS HEARD OF (`challenges_heard`), as `Record` -- `accept` forms on them. REVERT: drop.
     # v10 REM-25 (AM-A-10, [ASSUMPTION; medium; Jordan to correct]): AND THE RECORDS HE HOLDS THAT A
@@ -4332,7 +4377,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # SHIPS ON, H-274; off, the output is byte-identical). "Never twice" is `_stamped`'s dedup.
     told = ledger_names(p.ledger)
     founding = holdings_to_found(w, p)
-    added = (vacancies(w, p) + seats_named(w, p, told) + writs_held(w, p) + challenges_heard(w, p, told)
+    added = (vacancies(w, p) + seats_named(w, p, told) + writs_addressed(w, p) + challenges_heard(w, p, told)
              + records_held_for_holding_rows(w, p)
              + places_named(w, p, told) + matters_awaiting(w, p) + larders_in_purview(w, p, told)
              + founding

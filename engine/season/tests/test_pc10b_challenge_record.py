@@ -202,10 +202,10 @@ def test_a_stakes_outside_the_roster_is_refused_naming_it():
     assert "rec:ch0" not in w.records
 
 
-def test_writs_held_stamps_a_held_addressed_challenge_and_the_audience_limb_does_not_open_on_it():
+def test_writs_addressed_stamps_a_held_addressed_challenge_and_the_audience_limb_does_not_open_on_it():
     w, _ = _challenged("blood")
     w.add_tenure(Tenure("t_given", ACC, "rec:ch0", "hold", since=w.tick))        # as a `give` would leave it
-    assert world_q.writs_held(w, w.persons[ACC]) == ("rec:ch0",)
+    assert world_q.writs_addressed(w, w.persons[ACC]) == ("rec:ch0",)
     seat = "off_duke"                                                            # its purview reaches the hearth
     with mock.patch.object(world_q, "guard_weight", lambda *_: 1), \
             mock.patch.object(world_q, "governors_of", lambda *_: ()):
