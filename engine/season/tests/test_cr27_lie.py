@@ -280,6 +280,24 @@ def test_the_quantity_stems_are_what_the_table_compares_against_a_threshold():
     assert not QUANTITY_STEMS & {"exists", "person.died", "seen", "held_by"}, sorted(QUANTITY_STEMS)
 
 
+def test_unshared_first_prefers_a_deed_to_a_quantity_to_an_existence_reading():
+    """B11.52: at `unshared_first` a teller holding a deed claim (OLDEST), a `stores` amount and a NEWER `exists:Person` reading says the deed; with the deed removed,
+    the amount, not the newer existence reading (an existence reading is in `QUANTITY_STEMS`' complement, so it falls in `other`); at `newest` (the control) the newest."""
+    from ..data.verbs import DEED_KINDS, QUANTITY_STEMS
+    transport = {k for v in ("tell", "lie") for k in (*VERB_TABLE[v].emits, *VERB_TABLE[v].emits_on_refusal)}
+    deed = sorted(DEED_KINDS - transport)[0]
+    assert "exists" not in QUANTITY_STEMS and "stores" in QUANTITY_STEMS
+
+    def claim(n, predicate, value, when):
+        return Claim(f"c{n}", "T", "S", predicate, value, when, "firsthand", 100, "own")
+    d, q, e = claim(1, deed, True, 1), claim(2, "stores:grain", 8, 3), claim(3, "exists:Person", 1, 5)
+    fx = DEFAULT_FIXTURES.sweep("said_slant", "unshared_first")
+    assert said_of([d, q, e], "S", fx).predicate == deed
+    assert said_of([q, e], "S", fx).predicate == "stores:grain"
+    assert said_of([e], "S", fx).predicate == "exists:Person"                       # an existence reading is still said when it is all he holds (`other`)
+    assert said_of([d, q, e], "S", DEFAULT_FIXTURES).predicate == "exists:Person"     # the control: `newest`
+
+
 def test_existence_lie_is_a_negation():
     """A lie about an existence reading says the other truth value (`0` for `1`, `1` for `0`), never a whole-band drift of it (`2`)."""
     fx = DEFAULT_FIXTURES

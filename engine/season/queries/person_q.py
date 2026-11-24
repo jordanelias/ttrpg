@@ -1750,13 +1750,14 @@ def _slant(fx) -> str:
 
 #: THE TIERS an `unshared_first` pick reads, in the vocabulary `rosters.yaml: said_slants` `arms.<arm>.prefers` names them (v12 B11.09, `08_FI_02`
 #: edit 2). Each is a test of one claim; the roster says their ORDER and a name not here refuses at import (`_load_slant_arms`). `deed` is `is_deed`
-#: (what a witness of the act deposits); `quantity` is a cell whose value is a number and no truth value (`16_PESSIMIST_FI_A` edit 1's derived
-#: `QUANTITY_STEMS` is the stem form of the same reading, a later item's; it replaces this test when it lands).
+#: (what a witness of the act deposits: a kind some row emits and none emits on refusal, `DEED_KINDS`, derived); `quantity` is a claim on a stem of
+#: `data/verbs.py: QUANTITY_STEMS` (v12 B11.52, `16_PESSIMIST_FI_A` edit 5: what a rumour may garble and a liar may move), so an existence reading
+#: (`exists:*`, stored 0/1) is in no tier but `other`.
 _SLANT_TIERS = {
     "told": lambda c: bool(c.chain),
     "inferred": lambda c: c.source == "inferred",
     "deed": is_deed,
-    "quantity": lambda c: is_cell(c) and isinstance(c.value, (int, float)) and not isinstance(c.value, bool),
+    "quantity": lambda c: str(c.predicate).partition(":")[0] in _verbs.QUANTITY_STEMS,
     "other": lambda c: True,
 }
 

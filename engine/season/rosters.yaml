@@ -3166,7 +3166,7 @@ rosters:
       names VERBS of `verb_table.yaml` (a name the table lacks refuses, as `lie_verbs` does; the excluded predicates are
       those rows' `emits` and `emits_on_refusal`, derived, never spelt) and `prefers` is an ordered list of tiers, each
       one `person_q.py::_SLANT_TIERS` reads (told: a claim with a chain; inferred: `source == "inferred"`; deed: `is_deed`;
-      quantity: a cell whose value is a number; other: anything else).
+      quantity: a claim on a stem of `data/verbs.py: QUANTITY_STEMS`, so an existence reading is not one; other: anything else).
     values: [newest, valence, unshared, unshared_first]
     arms:
       unshared:
