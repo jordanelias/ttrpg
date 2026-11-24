@@ -111,3 +111,45 @@ def test_d2_no_writ_or_order_to_a_person_the_seat_does_not_command():
 
     own = _orders(build_realm(1), "p_npc_050", [("p_npc_050", "duty.taken")])
     assert [a for _, a in own if a == "p_npc_050"] == [], "a man ordered himself"
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# D3 (B21.56; A-21, A-30, A-81): the draw on `issue` -- a writ at every band, its `force` written.
+# ---------------------------------------------------------------------------------------------------------------------
+
+def test_d3_a_writ_is_minted_at_every_band_with_its_force():
+    """G D3: an `issue` contests `a standing` against its executor, and whatever band the draw reaches the writ is minted, its
+    content's `force` the band; a Failure emits `dispensation.ignored`, and the dead letter is itself remembered -- the executor,
+    who did not make it, holds a claim of the issue and of its content, `force` and all (A-81; proclaimed, A-21).
+
+    `test_u7_remit._world` (`p_high` on `off_duke`, whose remit grants `issue`, ordering `p_mid`, an unseated man in its land),
+    the issuer at Presence 5 so each band carries some of the 40 world seeds; one act a seed through the shipped
+    `SeasonDriver.resolve` (the seam's draw, key `roll:a standing:<act id>`). The realm forms no `issue` since B21.55, so the
+    share by band is read here (Failure 24, Partial 6, Success 9, Overwhelming 1 at landing). CONTROL: a covenant's
+    instrument carries `force` None (`test_in12_covenant.py`). FALSIFIER (run once, not kept): the roll pinned to Success
+    collapses the band count to one."""
+    from engine.season.data.matrix import WriteClass
+    from engine.season.loop.driver import mint_token
+    from .test_u7_remit import DUKE, PARTY, _fold, _issue, _world
+
+    bands: dict = {}
+    checked = 0
+    for seed in range(40):
+        w, d = _world()
+        w.world_seed = seed
+        w.persons[DUKE].attributes = {**(w.persons[DUKE].attributes or {}), "attr.social.charisma": 5}
+        out = _fold(w, d, _issue(f"d3_{seed}"))
+        band, kinds = out[0].degree, [e.kind for e in out]
+        bands[band] = bands.get(band, 0) + 1
+        recs = [w.records[c.subject] for c in out[0].changes if c.subject in w.records]
+        assert len(recs) == 1 and recs[0].kind == "dispensation", (band, kinds, out[0].changes)   # the writ exists at every band
+        assert recs[0].subject_matter["force"] == band, (band, recs[0].subject_matter)
+        assert kinds == (["dispensation.ignored"] if band == "Failure" else ["dispensation.issued"]), (band, kinds)
+        if band == "Failure":
+            d.witness(mint_token(w, WriteClass.INTERIOR), list(out))
+            held = {(c.predicate, c.value) for c in w.persons[PARTY].ledger if c.subject == recs[0].id}
+            assert ("dispensation.ignored", True) in held, "the dead letter is no remembered deed"
+            assert any(p == "content:dispensation" and ("force", "Failure") in v for p, v in held), held
+        checked += 1
+    assert checked >= 40, checked
+    assert set(bands) == {"Overwhelming", "Success", "Partial", "Failure"}, bands

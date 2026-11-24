@@ -7351,7 +7351,7 @@ def test_wc_the_fold_binds_what_the_person_bound(monkeypatch):
     # v9 IN-12 step 6: A WARRANT IN THE DUKE'S HAND naming `Hh` (a referent of `q`), so the warrant-sourced
     # verb forms and is walked with the four -- the seat is present on both sides for `seize` too.
     from .test_in10_record_operands import _hold_document
-    _hold_document(w, duke, "dispensation", {"terms": "Hh", "to": ["p_mid"], "at": None},
+    _hold_document(w, duke, "dispensation", {"terms": "Hh", "to": ["p_mid"], "at": None, "force": None},
                    rec_id="rec_wc_warrant")
     remit = [c for c in decision.opening_set(duke, View(duke.id, [], w.fixtures.get("view_k"), q),
                                              q, w.fixtures) if c.verb in WALK_REMIT | WALK_WARRANT]
@@ -8733,12 +8733,16 @@ def test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else()
     # seat's live holder), the thirteenth to fifteenth entries, with their own measurement:
     # `engine/season/tests/test_vb_c_turnover.py::test_c3_confer_revoke_succeed_band_on_a_hand_built_world` folds each through the
     # real seam over 40 seeds (all four bands for `confer` and `succeed`; a withstood `revoke` leaves the holder seated).
+    # v12 B21.56 (`14_VERBS_BINDING_D` commit D3): `issue` IS contested (`a standing`, `tell`'s prize, against its executor `to`), the
+    # sixteenth entry, with its own measurement: `engine/season/tests/test_vb_d_orders.py::test_d3_a_writ_is_minted_at_every_band_with_its_force`
+    # folds it through the real seam over 40 seeds (all four bands; the writ minted at each, its `force` the band).
     assert contested == {"fight": "the body", "tell": "a standing", "march": "a field",
                          "accept": "the body", "speak": "a matter",
                          "determine": "a proposition", "argue": "a proposition",
                          "arrest": "a standing", "interrogate": "a proposition",
                          "capture": "the body", "lie": "a standing", "establish": "a seat",
-                         "confer": "a seat", "revoke": "a seat", "succeed": "a seat"}, (
+                         "confer": "a seat", "revoke": "a seat", "succeed": "a seat",
+                         "issue": "a standing"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
         "can be graded today is scoped to this set. A SEVENTH entry is a real widening and wants "
         "its own measurement; losing one of these six means its prize row or its verb row has "
@@ -10283,10 +10287,11 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
     assert all(b["subject"] == "p_mid" for b in issue_bags), issue_bags
     assert sorted(b["to"] for b in issue_bags) == sorted(
         x for x in ("p_mid", "p_high", "p_king") if x != p.id), issue_bags
-    assert VERB_TABLE["issue"].counterparty == "to" and not VERB_TABLE["issue"].contests
+    # B21.56: `issue` is now contested (`a standing`), against its executor `to` -- its opponent operand is the fanned `to`.
+    assert VERB_TABLE["issue"].counterparty == "to" and VERB_TABLE["issue"].opponent_operand() == "to"
     checked += 1
     assert checked == 2
     # The contested rows with a counterparty are a growing set (each new contested row joins it); what this control reads
-    # is `tell` and `determine`, which are in it, and the two rows that are not contested: `petition` and `issue`.
+    # is `tell`, `determine` and (B21.56) `issue`, which are in it, and the row that is not contested: `petition`.
     contested = {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty}
-    assert {"tell", "determine"} <= contested and not ({"petition", "issue"} & contested), sorted(contested)
+    assert {"tell", "determine", "issue"} <= contested and "petition" not in contested, sorted(contested)

@@ -60,7 +60,7 @@ from ..queries import world_q
 from ..state.carriers import Act, Claim, Question, Record, Tenure
 from ..state.ids import H
 
-from ._seat_at_success import seat_at_success  # noqa: F401  (the fixture; its reason is in its module)
+from ._seat_at_success import seat_at_success, writ_at_success  # noqa: F401  (the fixtures; their reason is in their module)
 from .test_g3_not_yours import _gov_world, _hold
 
 SEAT, DUKE = "off_duke", "p_high"
@@ -118,7 +118,7 @@ def _resolve(w, d, *acts):
 def test_in10_a_held_dispensations_terms_answers_subject_in_derive_operand():
     w = P.tiny_world()
     p = w.persons[DUKE]
-    c = _hold_document(w, p, "dispensation", {"terms": "off_dicastery", "to": ["p_mid"], "at": None})
+    c = _hold_document(w, p, "dispensation", {"terms": "off_dicastery", "to": ["p_mid"], "at": None, "force": None})
     (held,) = held_record_claims(p)
     assert held is c
     q = Question("q:other", "claim_landed", ("S",), None)        # a question about something else
@@ -153,7 +153,7 @@ def test_in10_a_held_petition_answers_too_and_never_from():
 def test_in10_held_record_claims_reads_only_live_holds_of_mapped_kinds():
     w = P.tiny_world()
     p = w.persons[DUKE]
-    sm = {"terms": "p_mid", "to": ["p_low"], "at": None}
+    sm = {"terms": "p_mid", "to": ["p_low"], "at": None, "force": None}
     _hold_document(w, p, "dispensation", sm, rec_id="rec_seen", held=False)   # witnessed only
     _hold_document(w, p, "text", {}, rec_id="rec_text")                        # kind not mapped
     assert held_record_claims(p) == []
@@ -176,7 +176,7 @@ def test_in10_what_a_document_is_about_has_one_owner_per_kind():
     w = P.tiny_world()
     p = w.persons[DUKE]
     writ = _content_claim("c_w", p.id, "rec_w", "dispensation",
-                          {"terms": "off_reeve", "to": ["p_low"], "at": None})
+                          {"terms": "off_reeve", "to": ["p_low"], "at": None, "force": None})
     sheet = _content_claim("c_s", p.id, "rec_s", "faction_sheet",
                            {"proposition": "prop_crown", "members": ["p_mid"], "holdings": [],
                             "seats": [], "head": "p_other"})
@@ -192,7 +192,7 @@ def test_in10_held_record_claims_picks_by_the_ledger_readers_comparator():
     2026-10-16): the old `c.when >= best.when` pick restored -> the later, less confident claim."""
     w = P.tiny_world()
     p = w.persons[DUKE]
-    sm = {"terms": "p_mid", "to": ["p_low"], "at": None}
+    sm = {"terms": "p_mid", "to": ["p_low"], "at": None, "force": None}
     sure = _hold_document(w, p, "dispensation", sm, rec_id="rec_two")
     unsure = _content_claim("c_rec_two_b", p.id, "rec_two", "dispensation", sm)
     unsure.confidence = 50
@@ -239,6 +239,7 @@ def test_in10_issue_fans_over_known_persons_so_terms_and_executor_separate():
         assert not [c for c in _formed(w2, DUKE, q) if c.verb == "issue"]
 
 
+@pytest.mark.usefixtures("writ_at_success")   # B21.56: the clauses and the mint, not the draw (D3's test)
 def test_in10_a_fanned_issue_folds_through_its_seat_to_a_writ_whose_terms_is_not_its_executor():
     w, d = _issue_world()
     duke = w.persons[DUKE]
@@ -252,7 +253,7 @@ def test_in10_a_fanned_issue_folds_through_its_seat_to_a_writ_whose_terms_is_not
     # treatment so it shares nothing with it, is refused on the eligibility clause -- the seat is
     # load-bearing. Exact, as block 4's `confer.refused` control is.
     bare = Act(id="is_bare", actor=DUKE, verb="issue", via=None, payload=dict(a.payload))
-    assert [e.kind for e in _resolve(w, d, bare)] == ["issue.unauthorized"]
+    assert [e.kind for e in _resolve(w, d, bare)] == ["issue.refused"]   # B21.56: `issue.unauthorized` retired into it
     assert not [r for r in w.records.values() if r.kind == "dispensation"]
     kinds = [e.kind for e in _resolve(w, d, a)]
     assert kinds == ["dispensation.issued"], kinds
@@ -260,6 +261,7 @@ def test_in10_a_fanned_issue_folds_through_its_seat_to_a_writ_whose_terms_is_not
     assert rec.subject_matter["terms"] == PROP and rec.subject_matter["to"] == ["p_mid"], rec
 
 
+@pytest.mark.usefixtures("writ_at_success")   # B21.56: the clauses and the mint, not the draw (D3's test)
 def test_in10_the_terms_conjunct_refuses_a_writ_whose_issuer_holds_nothing_on_it():
     w, d = _issue_world()
     unknown = Act(id="is_unknown", actor=DUKE, verb="issue", via=SEAT,
@@ -280,7 +282,7 @@ def test_in10_the_terms_conjunct_refuses_a_writ_whose_issuer_holds_nothing_on_it
 
 def _commission(w, pid, seat, to, rec_id="rec_cm"):
     """`pid` holds (and has read) a dispensation whose `terms` is `seat`, addressed to `to`."""
-    return _hold_document(w, w.persons[pid], "dispensation", {"terms": seat, "to": [to], "at": None},
+    return _hold_document(w, w.persons[pid], "dispensation", {"terms": seat, "to": [to], "at": None, "force": None},
                           rec_id=rec_id)
 
 
@@ -322,7 +324,7 @@ def test_in10_a_held_commission_saying_nothing_of_the_referent_forms_no_bag():
     confer_of_its_seat_on_its_addressee`, the same commission WITH `terms`."""
     w, _ = _gov_world()
     _hold_document(w, w.persons["p_king"], "dispensation",
-                   {"terms": None, "to": ["p_low"], "at": None}, rec_id="rec_cm")
+                   {"terms": None, "to": ["p_low"], "at": None, "force": None}, rec_id="rec_cm")
     _, got = _confers_on(w, "p_king", "off_reeve")
     assert {c.operands.get("to") for c in got} == {"p_king"}, got
 

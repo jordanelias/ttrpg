@@ -880,7 +880,7 @@ OPERAND_NAMED_STEMS = frozenset({"names"})
 # argument is the seat (`command:<via>`), answered by `world_q.commands`. WORLD-ONLY for `audience`'s reason: who is
 # sworn to whom, and who holds what seat, NOW is the world's to decide, so a refused `issue` deposits no stale
 # `command:<via>` reading that would stop a later oath from being formed on. The person forms the Candidate and the
-# fold refuses it (`issue.unauthorized`). One stem; no form, no operand.
+# fold refuses it (`issue.refused` on `authority`; `issue.unauthorized` until B21.56). One stem; no form, no operand.
 # roster-exempt: MECHANISM. The grammar's own predicate stems a ledger never answers, not the game's vocabulary.
 WORLD_ONLY_STEMS = frozenset({"with", "audience", "individual", "names", "dispute",
                               "declared.votes", "declared.quorum", "command"}) | SENSITIVITY_STEMS

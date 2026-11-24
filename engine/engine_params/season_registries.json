@@ -1703,7 +1703,8 @@
             "dispensation": [
               "terms",
               "to",
-              "at"
+              "at",
+              "force"
             ],
             "petition": [
               "terms",
@@ -2441,9 +2442,6 @@
               "why": "a person records a tie he holds himself [ASSUMPTION: the producer's sentence, 18-A gives none]"
             },
             "open_case": {
-              "why": "`brute: seat` -- the row's `brute_note:` says what authorises the write (UNDECIDED (10))"
-            },
-            "issue": {
               "why": "`brute: seat` -- the row's `brute_note:` says what authorises the write (UNDECIDED (10))"
             },
             "destroy_record": {
@@ -4036,6 +4034,7 @@
             ],
             "Record": [
               "dispensation.issued",
+              "dispensation.ignored",
               "petition.filed",
               "record.created"
             ],
@@ -6516,9 +6515,16 @@
             "remit:issue"
           ],
           "beneficiary": "none",
-          "brute": "seat",
-          "brute_note": "`remit:issue`; execution is each executor's own act",
-          "governing_note": "B05.25 (`proposals/2026-11-13-verb-governing-attributes.md` \u00a72) [ASSUMPTION; medium; Jordan to correct at BA1.13].",
+          "governing": [
+            "attr.social.charisma"
+          ],
+          "opposed_attribute": "attr.spirit.will",
+          "governing_note": "B21.56 (14_VERBS_BINDING_D commit D3): the writ is DRAWN, so the row leaves B05.25's `brute: seat` (a brute row never rolls, `data/verbs.py::_check_governing_attributes`) for the efficacy kind, whole, in one commit, and leaves `rosters.yaml: bookkeeping_verbs` (a row is exactly one class; 18-A's UNDECIDED (10) had classed it bookkeeping as a brute row). [ASSUMPTION; medium; Jordan to correct at BA1.13 -- basis: no source names `issue`'s attributes (`proposals/2026-11-05-verb-attribute-map.md` gives `--`); `establish`'s and `confer`'s cells, the other seat-authorised acts drawn on the social roll, are copied: Presence leads a command a man must heed, and his Will (`opposed_attribute`) is what he resists it with, read because a person (`to`) stands opposite. revert: `brute: seat` with its note `remit:issue; execution is each executor's own act`, the row back in `bookkeeping_verbs`, and no `contests:`, `difficulty:` or `capability:`.]",
+          "contests": "a standing",
+          "contests_note": "B21.56 (`14_VERBS_BINDING_D_orders.md` commit D3, edit 8; A-21, A-30, A-81): the prize `a standing` (`rosters.yaml: contest_subsystems.prizes`, `tell`'s prize; no new prize, no new provider), rolled by the social contest module (`social_contest.roll`), OPPOSED BY THE EXECUTOR: the row's `counterparty: to` is the opponent operand (`data/verbs.py::VerbRow.opponent_operand`), so the obstacle is the one composer's (`roll.py::obstacle`): `difficulty` `routine`, `opposition` (his skill score plus his Will, `sigma.py::_opposing`), `regard` (his stance toward the issuer, the hostile half, `regard_step`) and `rank_gap` (how far his seats stand above the issuing seat, `rank_step`, at control 0). The pool is the one pool rule (`pool_of`) on the issuer's score, the governing attribute as levels, a wound a level against him, and the exercised seat as the `office` level. THE DRAW KEY IS `_contest`'s, `roll:a standing:<act id>` (`loop/resolve.py`), the shape every contested row draws on, not the source's `H(.., \"issue.standing\")`: a second key for one prize would be a second shape (B21.09's and B21.14's reading). [ASSUMPTION; medium; Jordan to correct; revert: the flat `writes:`/`emits:`, `brute: seat`, no `contests:`, the row before B21.56.]",
+          "difficulty": "routine",
+          "capability": "none",
+          "capability_note": "B21.56 [ASSUMPTION; medium; Jordan to correct -- basis: `establish`'s and `confer`'s cell (B21.09, B21.14): no skill of `descriptor_registry.yaml: capabilities` is named for a writ by any source, so the draw rolls on the governing attribute and the untrained skill score (`seam/wrappers/pool.py::faculty`), and the executor opposes at the untrained score plus his Will, until one is; revert: the row with no `capability:`].",
           "referent_class": "Proposition",
           "referent_class_note": "B21.54 (14_VERBS_BINDING_D commit D1, A-21, A-22; [ASSUMPTION; medium; Jordan to correct; revert: delete this column, and `issue` forms on the question's plain referent again, so a writ's `terms` names a person]): WHAT A WRIT ORDERS IS A PROPOSITION. FORMED ONLY ON A `Proposition`-CLASSED REFERENT -- the plain referent of the question he answers that is a Proposition (`queries/world_q.py::own_referents_of_class`), the Propositions he has heard of (`propositions_heard`) and the Propositions he is committed to as an OUGHT (`ambitions`, stamped by `questions_for` beside them) -- and `decision/options.py::opening_set` then forms on the classed ids alone (IN-53 D1's partition), so `subject` (the writ's `terms`) binds a Proposition and never a person, while `to` still fans over the persons the seat commands (the typed cell is unchanged: `executors`, `authority`, `terms`). THE CLASS REMOVES WRONG-KIND FORMATIONS ONLY: the row's eligibility, its cell and whom a seat may address are unchanged. DECLARED WIDENING, shared with `argue` (the other `Proposition`-classed row): both form on the Propositions their person is committed to; `commit` does not, `rosters.yaml: held_edge_declines` declining a cause he already holds.",
           "requires": "scope enumerates executors, not places (\u00a737.1); the issuing seat commands each executor (A-22)",
@@ -6547,21 +6553,44 @@
           "requires_typed_note": "PLAN POSITION IN-10 (#453 \u00a710.1, *`issue` joins the known-person fan for `to`*): `terms` IS THE CELL'S THIRD CONJUNCT (with `executors` and `authority`, below), AND ITS JOB IS TO BIND `subject`. A computed `issue` would otherwise bind `subject` and `to` to the question's ONE referent, so every writ's `terms` would name its own executor (`loop/effects_information.py::_eff_issue`) -- and a warrant read off such a writ would have the holder arrest himself. A cell binding `subject` beside `to` puts `to` in `TypedRequires.known_person_operands` (`data/requires.py`: the fan is empty for a cell binding `to` alone), so `decision/options.py::operand_bags` forms one `issue` per person the issuer knows and `data/verbs.py::act_key` keys each act by `subject>to`: the referent is the writ's `terms`, a known person its executor. [ASSUMPTION; medium; Jordan to correct; revert: an unpriced `terms` clause, which the grammar cannot write (a keyed row names every conjunct, and no form holds of every referent)] WHAT THE CONJUNCT ASKS: the issuer HOLDS A CLAIM ON THE TERMS (`own_ledger`, \u00a7F.24a form 6, `tell`'s form) -- a writ is about something its issuer knows of. It is the weakest clause the grammar can write on a referent of any class: a `claim_landed` referent is a claim the issuer holds, so it never refuses one. Refused, it is `issue.refused` -- the issuer, not the seat, said no. \u26a0 TWO SHAPES CONSIDERED AND NOT TAKEN: the seat's purview over the terms (`Basis` `purview`) REFUSES A PROPOSITION, which has no place -- so a covenant dispensation, whose `terms` is a Proposition (#453 K-54, `commit`'s route), could never be issued; and r2 `02` \u00a7A.6's `existence of subject kind Proposition` refuses a warrant, whose `terms` is a person (#453 \u00a710.1, `arrest`/`seize`). \u26a0 A NAMED `own_ledger` CONJUNCT CARRIES `said` (`decision/options.py::opening_set`, telling `T4`), and a Candidate with nothing to say is declined: an `issue` act's payload holds the issuer's newest claim on the terms. Nothing reads it off an `issue` -- WITNESS reads `said` on `news.told` only, and the mint reads the kind's keys -- except `decision/choose.py::declare_intents`, which treats any act carrying `said` as a telling at a swept `intent_disclosure` > 0 (shipped 0). The Person clause stays on the executor alone: `terms` may name a person, a Record, a place or a Proposition. THE OTHER TWO CONJUNCTS, which the fold refuses (\u00a7F.24a calls this cell *'a constraint on the well-formedness of the Act'*). `executors` -- *scope enumerates EXECUTORS, not places*: the addressee (`to`, the dispensation's addressee key) exists and is a PERSON, so a writ addressed to a rung is refused. `authority` -- `Basis` (\u00a7F.24a form 7) with the `command` rule (B21.20, `16_PESSIMIST_FA_C` edit 2, A-22): the issuing seat COMMANDS the executor (`queries/world_q.py::commands`: sworn to the seat, the holder of a seat it may revoke, or unseated in its land), asked of the seat exercised, not whoever lives in its land. REVERT: `basis: purview`, the issuing seat's purview reaching where the executor lives (`04:330`). \u26a0 ONE EXECUTOR PER ACT: `existence` reads one id, and `decision/options.py::_from_content_claim` collapses a held writ's addressee list to its one member or declines; a hand-built act naming several is outside what this cell can ask.",
           "counterparty": "to",
           "counterparty_note": "PLAN POSITION `19`: THE EXECUTOR IS THE SECOND SIDE, AND AN ISSUER IS NOT HIS OWN. `petition`'s precedent exactly: its typed cell binds `to`, and `opening_set` forms no Candidate whose `to` is the person -- a writ a man addresses to himself would EXECUTE (he is a person, and his seat's purview reaches his own home) and mint a document that orders nobody, a constant scene tax the fold could never refuse.",
-          "writes": [
-            "Record.exists"
-          ],
-          "emits": [
-            "dispensation.issued"
-          ],
+          "writes": {
+            "Overwhelming": [
+              "Record.exists"
+            ],
+            "Success": [
+              "Record.exists"
+            ],
+            "Partial": [
+              "Record.exists"
+            ],
+            "Failure": [
+              "Record.exists"
+            ]
+          },
+          "emits": {
+            "Overwhelming": [
+              "dispensation.issued"
+            ],
+            "Success": [
+              "dispensation.issued"
+            ],
+            "Partial": [
+              "dispensation.issued"
+            ],
+            "Failure": [
+              "dispensation.ignored"
+            ]
+          },
+          "emits_note": "B21.56 (edit 8): `dispensation.ignored` is the Failure band's kind, emitted by this row alone (`data/verbs.py::KIND_VERB` is derived from the rows' emits) -- the writ was made and its executor is not moved by it, which a witness reads differently from a refusal (`issue.refused`: the act never reached the draw). It opens a held writ's standing occasion as `dispensation.issued` does (`rosters.yaml: standing_occasion_opened_by`), since the Record exists at every band.",
           "emits_on_refusal": {
             "eligibility": [
-              "issue.unauthorized"
+              "issue.refused"
             ],
             "executors": [
               "issue.refused"
             ],
             "authority": [
-              "issue.unauthorized"
+              "issue.refused"
             ],
             "terms": [
               "issue.refused"
@@ -6573,9 +6602,9 @@
               "issue.refused"
             ]
           },
-          "refusal_note": "PLAN POSITION `19`: KEYED PER CLAUSE (`04 \u00a7B.13` invariant 4's per-conjunct half). `issue.unauthorized` -- the SEAT: none exercised grants `issue`, or it does not command the executor (B21.20; was: its purview does not reach him). `issue.refused` -- the WORLD: the addressee is no person, the issuer holds no claim on the terms (`terms`, plan position IN-10), or the mint moved nothing. `unauthorized` is `determine`'s word for the same refusal, and its note says why it is not `unseated`. \u26a0 PLAN POSITION `14`: `counterparty` -- the writ names no executor or names its issuer -- is the fold's own clause (`loop/resolve.py::_admits`), keyed `issue.refused`.",
+          "refusal_note": "PLAN POSITION `19`: KEYED PER CLAUSE (`04 \u00a7B.13` invariant 4's per-conjunct half), BUT ONE KIND: `issue.refused` under every key since B21.56 (edit 8). The row is contested, and the loader refuses a contested row keying more than one refusal kind unless it keys `counterparty` (`data/verbs.py`; `determine`'s v9 SC-03b precedent). `issue.unauthorized` (the SEAT: none exercised grants `issue`, or it does not command the executor, B21.20) is retired into it; the refusal's `observed` reads still say which clause failed -- `eligibility` or `authority` for the seat, `executors` for an addressee who is no person, `terms` for an issuer holding no claim on the terms (plan position IN-10), `write` for a mint that moved nothing. \u26a0 PLAN POSITION `14`: `counterparty` -- the writ names no executor or names its issuer -- is the fold's own clause (`loop/resolve.py::_admits`).",
           "grade": "ruled",
-          "writes_note": "\u2014 (a Dispensation is not a state write \u2014 \u00a737.3)  ||  \u26a0 W3, ON THE W2 AUDIT: as `petition`. Part E's '(a Dispensation is not a state write)' is the bypass \u00a71.4 hole 4 names, not a licence for one.  ||  \u26a0 PLAN POSITION `15`: `Dispensation.exists` -> `Record.exists`. A dispensation is a `Record` of kind `dispensation` (`04_CODE_ARCHITECTURE.md` \u00a7B.5, `rosters.yaml: record_kinds`), minted with the issuer's `hold` by `loop/effects.py::_eff_issue`; `(Dispensation, exists)` is deleted from the matrix in the same commit, which the loader requires (an entry naming no row is refused at load).",
+          "writes_note": "B21.56 (edit 8; A-81, C3-C11, THE DURABLE WRITE OF THE FAILURE BAND): THE WRIT EXISTS AT EVERY BAND. The band is not whether a dispensation is made but how strongly it binds: `loop/effects_information.py::_eff_issue` writes it into the Record's content as `force` (`rosters.yaml: record_kinds.dispensation`), and the writ is proclaimed at every band (`rosters.yaml: proclaimed`, A-21), so whoever learns of the issue holds a claim of it and of its `force` -- a dead letter (Failure) is itself a remembered deed against the issuing seat. What answers a writ reading its `force` (the answer rows' obstacles, the source's edit 10) is cross-lane and not edited here.  ||  \u2014 (a Dispensation is not a state write \u2014 \u00a737.3)  ||  \u26a0 W3, ON THE W2 AUDIT: as `petition`. Part E's '(a Dispensation is not a state write)' is the bypass \u00a71.4 hole 4 names, not a licence for one.  ||  \u26a0 PLAN POSITION `15`: `Dispensation.exists` -> `Record.exists`. A dispensation is a `Record` of kind `dispensation` (`04_CODE_ARCHITECTURE.md` \u00a7B.5, `rosters.yaml: record_kinds`), minted with the issuer's `hold` by `loop/effects.py::_eff_issue`; `(Dispensation, exists)` is deleted from the matrix in the same commit, which the loader requires (an entry naming no row is refused at load).",
           "source": "ARCHITECTURE_V2.md \u00a7E3, transcribed"
         },
         {

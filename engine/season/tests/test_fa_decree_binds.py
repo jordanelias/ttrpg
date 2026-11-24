@@ -28,6 +28,9 @@ from ..state.ids import H
 from .test_in10_record_operands import _resolve
 from .test_in12_covenant import DUKE, OTHER, SEAT, _covenant, _utter, _world
 from .test_in53_vacancy_need import _formed
+from ._seat_at_success import writ_at_success  # noqa: F401  (the fixture; its reason is in its module)
+
+pytestmark = pytest.mark.usefixtures("writ_at_success")   # B21.56: the decree's reach and answers are the fold's; the draw is D3's test
 
 _CONTENT = RECORD_CONTENT["predicate"]
 BYSTANDERS = ("p_low", "p_mid", "p_other")      # neither the issuer, nor the writ's addressee (`OTHER`)

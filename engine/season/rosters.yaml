@@ -190,7 +190,9 @@ rosters:
       load rather than letting one reading silently shadow the other.
     values:
       text:         []
-      dispensation: [terms, to, at]
+      # `force` (B21.56, BIND_D commit D3 edit 9): how strongly the writ binds, the band its `issue` reached, written by
+      # `loop/effects_information.py::_eff_issue` alone; `None` on a covenant's instrument (`_eff_covenant`, undrawn).
+      dispensation: [terms, to, at, force]
       petition:     [terms, to, from]
       works:        [plan, at]
       faction_sheet: [proposition, members, holdings, seats, head]
@@ -1378,7 +1380,7 @@ rosters:
       forgive:          {why: "a person releases his own grievance; nothing of anyone else's moves [ASSUMPTION: the producer's sentence, 18-A gives none]"}
       "tie / knot":     {why: "a person records a tie he holds himself [ASSUMPTION: the producer's sentence, 18-A gives none]"}
       open_case:        {why: "`brute: seat` -- the row's `brute_note:` says what authorises the write (UNDECIDED (10))"}
-      issue:            {why: "`brute: seat` -- the row's `brute_note:` says what authorises the write (UNDECIDED (10))"}
+      # `issue` left this class at B21.56 (BIND_D commit D3): it is drawn (`contests: "a standing"`), and a row is exactly one class.
       destroy_record:   {why: "`brute: own` -- the row's `brute_note:` says what authorises the write (UNDECIDED (10))"}
 
   # B07.01 (18-A item 1): THE `Person` CELLS A `bookkeeping` ROW MAY NOT WRITE WITHOUT `brute:` -- another's body or being.
@@ -3814,7 +3816,7 @@ rosters:
       are the proposal's reading of each source's docstring in `queries/world_q.py::questions_for`.]
     values:
       Office:      [tenure.closed, office.established]
-      Record:      [dispensation.issued, petition.filed, record.created]
+      Record:      [dispensation.issued, dispensation.ignored, petition.filed, record.created]   # B21.56: a writ exists at every band, so its Failure kind opens it too
       Person:      [body.changed]              # `wounded_with`
       Detainee:    [person.captured, arrest.made]
       Rung:        [stores.changed, rung.seized]

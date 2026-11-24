@@ -65,7 +65,7 @@ REFUSAL = {"comply": "compliance.impossible", "evade / defy": "compliance.imposs
 HOLDER, OTHER = "p_low", "p_mid"                  # `tiny_world`: both in Hh
 WRIT = "rec_writ"
 _CONTENT = RECORD_CONTENT["predicate"]
-TERMS = {"terms": OTHER, "to": [HOLDER], "at": None}
+TERMS = {"terms": OTHER, "to": [HOLDER], "at": None, "force": None}
 
 
 def _with_writ(kind="dispensation"):
@@ -270,7 +270,7 @@ def test_in09_a_custodian_who_is_not_the_addressee_is_offered_none_of_the_three(
     `records_held_for_holding_rows` stamps for every holder with no addressee test -- and he is then offered
     all three, so the assertion could have failed."""
     w, _ = _with_writ()
-    w.records[WRIT].subject_matter = {"terms": HOLDER, "to": [OTHER], "at": None}
+    w.records[WRIT].subject_matter = {"terms": HOLDER, "to": [OTHER], "at": None, "force": None}
     _read_terms(w, HOLDER)
     maker = w.persons[HOLDER]
     assert hold_force(w, WRIT).subject == HOLDER, "fixture: he does not hold the writ"
@@ -312,7 +312,7 @@ def test_in09_the_partition_moves_no_other_rows_formations():
             out = d._fold(w, mint_token(w, WriteClass.ACTS),
                           Act(id=f"mk{i}", actor=pid, verb="create_record",
                               payload={"record": rid, "kind": "dispensation",
-                                       "subject_matter": {"terms": pid, "to": [pid], "at": None}}))
+                                       "subject_matter": {"terms": pid, "to": [pid], "at": None, "force": None}}))
             assert [e.kind for e in out] == ["record.created"]
         _claim(w, pid, rid, f"{_CONTENT}:dispensation", content_value(w.records[rid].subject_matter),
                f"c_t{i}")

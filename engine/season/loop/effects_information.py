@@ -257,8 +257,25 @@ def _eff_issue(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
 
     ⚠ `terms` IS THE REFERENT AND `to` AN EXECUTOR: since plan position IN-10 `to` fans over the
     persons the issuer knows (the row's `terms` conjunct binds `subject`, #453 §10.1).
-    `petition`'s row keeps the single-referent limit (`H-94`)."""
-    return _mint_document(w, a, "dispensation", _content_of(a, "dispensation"), _seat_rung(w, a))
+    `petition`'s row keeps the single-referent limit (`H-94`).
+
+    B21.56 (`14_VERBS_BINDING_D` commit D3, edit 9; A-81): THE WRIT IS DRAWN (`contests: "a standing"`) AND MINTED AT EVERY
+    BAND; the band its draw reached is written into the content as `force` (`rosters.yaml: record_kinds.dispensation`), so how
+    strongly it binds travels with the document and with every claim of its content. Written HERE and nowhere else: a hand-built
+    act's own `force` operand is overwritten, and an undrawn fold (`res` None) writes `None`."""
+    return _mint_dispensation(w, a, None if res is None else res.degree)
+
+
+#: B21.56: the `dispensation` content key the issuing draw's band is written to (`rosters.yaml: record_kinds.dispensation`).
+FORCE_KEY = "force"
+if FORCE_KEY not in RECORD_KIND_KEYS["dispensation"]:
+    raise Forbidden(f"`rosters.yaml: record_kinds.dispensation` lacks {FORCE_KEY!r}, which `_eff_issue` writes (B21.56)")
+
+
+def _mint_dispensation(w: "World", a: "Act", force) -> Change:
+    """`issue`'s and `covenant`'s one body: a `dispensation` read off the act, its `force` the caller's."""
+    content = {**(_content_of(a, "dispensation") or {}), FORCE_KEY: force}
+    return _mint_document(w, a, "dispensation", content, _seat_rung(w, a))
 
 
 @effect_for("covenant")
@@ -274,8 +291,10 @@ def _eff_covenant(w: "World", a: "Act", res: "Resolution | None" = None) -> Chan
     acceptance is his own `commit` to the Proposition, formed from the held dispensation
     (`rosters.yaml: terms_sourced`, `decision/options.py::opening_set`). The instrument is in force
     when both holders are committed -- a reading nothing performs yet: its readers (tribute through
-    `_renewals`, allied sides through `mustered`) are deferred (#453 §10.4 step 7)."""
-    return _eff_issue(w, a, res)
+    `_renewals`, allied sides through `mustered`) are deferred (#453 §10.4 step 7).
+
+    B21.56: an instrument carries no `force` (`None`): the key is the issuing draw's band, which `_eff_issue` alone writes."""
+    return _mint_dispensation(w, a, None)
 
 
 @effect_for("conceal")

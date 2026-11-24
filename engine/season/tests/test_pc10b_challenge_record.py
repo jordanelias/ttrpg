@@ -372,5 +372,5 @@ def test_the_names_reader_answers_off_the_one_map():
     assert world_q.record_names(w, "rec:ch0", "from", CHAL) is UNKNOWN             # the kind maps no `from`
     assert world_q.record_names(w, "rec:none", "to", CHAL) is UNKNOWN
     w.records["rec:writ"] = Record("rec:writ", "Hh", "dispensation",
-                                   subject_matter={"terms": ACC, "to": [CHAL], "at": None})
+                                   subject_matter={"terms": ACC, "to": [CHAL], "at": None, "force": None})
     assert world_q.record_names(w, "rec:writ", "to", CHAL) is True                  # an addressee list names each

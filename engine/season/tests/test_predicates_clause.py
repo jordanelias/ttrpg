@@ -153,7 +153,8 @@ from ..gaps import Unspecified  # noqa: E402
 from ..loop.driver import mint_token  # noqa: E402
 from ..manifest import check_preconditions  # noqa: E402
 
-_PURVIEW_KIND, _HELD_KIND, _DISPLACE_KIND = "case.unauthorized", "confer.refused", "issue.unauthorized"
+# B21.56: `_DISPLACE_KIND` was `issue.unauthorized`, retired into `issue.refused`; any declared kind distinct from the other two serves.
+_PURVIEW_KIND, _HELD_KIND, _DISPLACE_KIND = "case.unauthorized", "confer.refused", "seize.unauthorized"
 
 
 def _keyed_confer(clause_kinds: dict):

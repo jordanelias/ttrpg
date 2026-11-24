@@ -63,6 +63,11 @@ from ..seam.contest import Resolution
 from ..state.carriers import Act, Claim, Office, Question, Tenure
 from .test_in10_record_operands import _acts, _formed, _hold_document
 from .test_u7_remit import JUDGE
+from ._seat_at_success import writ_at_success  # noqa: F401  (the fixture; its reason is in its module)
+
+import pytest  # noqa: E402
+
+pytestmark = pytest.mark.usefixtures("writ_at_success")   # B21.56: a warrant is issued at Success here; `issue`'s draw is D3's test
 
 SEAT, DUKE = "off_duke", "p_high"
 WATCH, WATCHMAN = "off_watch", "p_other"       # a second seat granting `dispatch` only, at `S`
@@ -340,7 +345,7 @@ def _arrests(w, referents, who=WATCHMAN):
 def test_in12_5_arrest_forms_only_on_a_person_a_held_warrant_names():
     w, d = _world(**JUDGE)
     _hold_document(w, w.persons[WATCHMAN], "dispensation",
-                   {"terms": PRISONER, "to": [WATCHMAN], "at": None}, rec_id="rec_held")
+                   {"terms": PRISONER, "to": [WATCHMAN], "at": None, "force": None}, rec_id="rec_held")
     (cand,) = _arrests(w, (PRISONER, FAR))
     assert cand.subject == PRISONER
     (act,) = _acts(w, WATCHMAN, [cand])
@@ -371,7 +376,7 @@ def test_a_detained_holder_forms_and_is_admitted_no_act_through_his_seat():
     assert arrest(w, d) == ["arrest.made"] and len(_restraints(w)) == 1          # released: admitted again
     w, d = _world(**JUDGE)
     _hold_document(w, w.persons[WATCHMAN], "dispensation",
-                   {"terms": PRISONER, "to": [WATCHMAN], "at": None}, rec_id="rec_held")
+                   {"terms": PRISONER, "to": [WATCHMAN], "at": None, "force": None}, rec_id="rec_held")
     (cand,) = _arrests(w, (PRISONER, FAR))
     assert seat_of(w.persons[WATCHMAN], cand) == WATCH
     custody = Tenure("t_custody", WATCHMAN, SEAT, "detain", since=w.tick)

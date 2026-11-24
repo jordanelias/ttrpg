@@ -56,6 +56,8 @@ from ..state.gate import DETERMINATION, NotYours
 
 pytestmark = pytest.mark.flat_fold
 
+from ._seat_at_success import writ_at_success  # noqa: F401,E402  (the fixture; its reason is in its module)
+
 SEAT, DUKE, TREASURY = "off_duke", "p_high", "D"
 PARTY, OUTSIDER = "p_mid", "p_king"          # inside the duchy (Hh) / outside it (R)
 REMIT = ("requisition", "open_case", "determine", "issue")
@@ -192,6 +194,7 @@ def test_19_a_flat_row_refuses_exactly_as_before():
 # 1 -- THE PLAN'S FALSIFIER: NONE OF THE FOUR EXECUTES WITH `via=None`
 # ======================================================================================
 
+@pytest.mark.usefixtures("writ_at_success")   # B21.56: the seat's admission is read here; `issue`'s draw is D3's test
 @pytest.mark.parametrize("verb", REMIT)
 def test_19_none_of_the_four_executes_with_via_none(verb):
     """The same well-formed act, seated and seatless. Through the seat it EXECUTES (the control);
@@ -518,9 +521,10 @@ def test_19_judging_set_and_the_gate_read_one_bench():
 # 6 -- ISSUE: THE PRECONDITION `15`'s EFFECT WAITED FOR
 # ======================================================================================
 
+@pytest.mark.usefixtures("writ_at_success")   # B21.56: the mint and its clauses, not the draw
 def test_19_issue_mints_the_dispensation_at_the_seats_rung_for_an_executor_in_its_purview():
     """`15`'s effect, reached: a `dispensation` Record at the issuing seat's rung, addressed to the
-    executor. Outside the seat's purview: `issue.unauthorized`. Addressed to a PLACE: `issue.refused`
+    executor. Outside the seat's purview: `issue.refused` (on `authority`; `issue.unauthorized` until B21.56). Addressed to a PLACE: `issue.refused`
     on `executors` -- *"scope enumerates executors, not places"*."""
     w, d = _world()
     out = _fold(w, d, _issue("is"))
@@ -528,10 +532,11 @@ def test_19_issue_mints_the_dispensation_at_the_seats_rung_for_an_executor_in_it
     rec = w.records[out[0].changes[0].subject]
     assert (rec.kind, rec.rung) == ("dispensation", TREASURY)
     assert rec.subject_matter["to"] == [PARTY]
-    assert _kinds(_fold(w, d, _issue("is2", to=OUTSIDER))) == ["issue.unauthorized"]
+    assert _kinds(_fold(w, d, _issue("is2", to=OUTSIDER))) == ["issue.refused"]   # B21.56: `issue.unauthorized` retired into it
     assert _kinds(_fold(w, d, _issue("is3", to="S"))) == ["issue.refused"]
 
 
+@pytest.mark.usefixtures("writ_at_success")   # B21.56: the control's mint, not the draw
 def test_19_a_writ_naming_several_executors_refuses_rather_than_ending_the_season():
     """r2 §A.3 types the addressee as a LIST; the cell asks about ONE executor. A hand-built writ
     naming two reached `WorldReader.read` with an unhashable subject and raised `TypeError` from
