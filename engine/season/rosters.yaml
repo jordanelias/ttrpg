@@ -3625,11 +3625,29 @@ rosters:
       DATA, NOT A WALK OF EVERY DEED KIND: a kind joins the trail by a line here, and each member
       must be a deed kind the verb table emits (`data/verbs.py::DEED_KINDS`; refused at import,
       naming it, `data/verbs.py::_check_covert_kinds`), so a misspelling cannot find nothing and
-      report the trail built. One member today: `forge` is the one covert act that executes
-      (`record.forged`, v9 IN-45). `conceal`, `arrest`, a covert `destroy_record` (H-75) and a
-      costed `surveil` (ED-FI-0009) are unbuilt and belong to their own positions.
+      report the trail built. A deed that writes a place, an alias or a person leaves a trail
+      (B11.59, CP-T06-01 with `16_PESSIMIST_FI_C` edits 1-2): `record.forged` (`forge`, v9 IN-45),
+      `site.damaged` (`sabotage`, a place), `cover.assumed` (`conceal`, an alias: the cover
+      Record), and the deeds done to a person -- `person.died`, `body.changed`, `person.captured`.
+      A covert `destroy_record` (H-75), `arrest` and a costed `surveil` (ED-FI-0009) are unbuilt
+      and belong to their own positions.
+      THE MEMBERSHIP RULE, so the next member is decided by it and not by taste. A deed kind is
+      covert when (i) no `binding_decision` row emits it, so `chronicle` never broadcasts it;
+      (ii) its row has no `remit:` eligibility, so it is not done through a seat and `post_remit`
+      never reports it; (iii) it writes a thing some graded inquiry takes as its subject (a Site
+      for `examine`, a Record for `research`, a Person for `interview` and `surveil` at the
+      place -- the card's "or a person").
+      AT THIS TREE, (i) holds for all six; (ii) holds for `record.forged`, `site.damaged`,
+      `cover.assumed` and for `fight`'s and `accept`'s `person.died` and `body.changed`, and not
+      for `capture`'s (a `remit:dispatch` row, which also emits `person.captured`) or `march`'s
+      `person.died`; `body.changed` has a `reach` (`event_reach` `from_unrest`: settlement), which
+      admits the settlement's own persons by news and leaves the trail to everyone else. The six
+      are the card's list (FI_C edit 1), kept whole; a seat-done emission also reaches the
+      obligee, which closes his own trail through `holds_trail`.
+      `trail_of` keeps only Events a person did (a MATTER `body.changed`, from hunger, is no
+      trail) and `holds_trail` excludes a finder who witnessed the deed.
       Why a trail is reachable only through a plant: see `epistemic.trail_of`.
-    values: ["record.forged"]
+    values: ["record.forged", "site.damaged", "cover.assumed", "person.died", "body.changed", "person.captured"]
 
   strife_kinds:
     source: >-

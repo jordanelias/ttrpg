@@ -68,7 +68,7 @@ from ..queries import world_q
 from ..queries.inputs import Findings
 from ..seam import find_trail
 from ..state.attribution import actor_of, anchor_of, live_cover
-from ..state.carriers import Act, Claim, Event, Proposition, Tenure, View
+from ..state.carriers import Act, Claim, Event, Proposition, Site, Tenure, View
 from ._closure_scan import branches_on_ids, game_code
 from ._fresh_process import probe
 from .test_information_cluster import _hear
@@ -936,3 +936,95 @@ def test_a_finder_files_a_covered_deed_under_the_hand_where_his_band_shows_it():
     step_until(w, d, cand, "cov", lambda deg: deg in HAND_BANDS)
     held = {c.subject for c in forged_claims(w, INVESTIGATOR)}
     assert held == {FORGER, rid}, held
+
+
+# ======================================================================================
+# B11.59 (CP-T06-01, FI_C edits 1-2) -- A DEED THAT WRITES A PLACE OR AN ALIAS LEAVES A TRAIL
+# ======================================================================================
+# `test_deed_trail_at_place.py` reads these builders for the person and place sides.
+
+def tiny():
+    """`tiny_world` at the flat fold and the fixed ceiling arm, as `trail_world` builds it."""
+    return flat_fold(P.tiny_world(DEFAULT_FIXTURES.sweep("ceiling_per_pool", False)))
+
+
+def sabotaged_site():
+    """A Site at `D` (the duchy: nobody stands directly at it). `p_other` walks there alone and damages it; a tick passes and
+    `p_high` walks there. Returns `(w, d)`: no channel admitted the finder to the deed, and nobody else was in the room."""
+    w = tiny()
+    w.sites["site_x"] = Site("site_x", "D", "ruin", condition=500)
+    d = SeasonDriver(w)
+    assert [e.kind for e in step(w, d, Act(id="sab_mv", actor=FORGER, verb="move", payload={"to": "D"}))] == ["travel.moved"]
+    assert [e.kind for e in step(w, d, Act(id="sab", actor=FORGER, verb="sabotage", payload={"site": "site_x"}))] == [
+        "site.damaged"]
+    w.tick += 1
+    assert [e.kind for e in step(w, d, Act(id="fnd_mv", actor=INVESTIGATOR, verb="move", payload={"to": "D"}))] == [
+        "travel.moved"]
+    return w, d
+
+
+def examine_at(n):
+    """A fresh `sabotaged_site` and the finder's `examine` of it as act id `n`: `(w, finding Event)`. The payload names the
+    place twice: `site` is the cell's operand, `subject` is what `act_refs` reads to say what the inquiry is about (without it
+    the find reads no trail and deposits nothing)."""
+    w, d = sabotaged_site()
+    (e,) = step(w, d, Act(id=f"ex_{n}", actor=INVESTIGATOR, verb="examine", payload={"site": "site_x", "subject": "site_x"}))
+    return w, e
+
+
+def band_world(build, bands):
+    """`build(n)` for the first act id `n` in `SWEEP` whose finding draws a band in `bands`: `(w, finding)`."""
+    for n in range(SWEEP):
+        w, e = build(n)
+        if e.degree in bands:
+            return w, e
+    raise AssertionError(f"{SWEEP} act ids drew no band in {sorted(bands)}")
+
+
+def held_by(w, pid, predicate):
+    return {c.subject for c in w.persons[pid].ledger if c.predicate == predicate and c.value is True}
+
+
+def test_a_sabotage_at_an_empty_place_is_found_by_examine():
+    """CP-T06-01's Site half, on a hand-built world (no seeded run executes a `sabotage`): `p_other` damages a Site with nobody
+    at its place; `p_high` walks there and `examine`s it. At a band showing the hand he holds `(p_other, site.damaged, True)`
+    and the Site's, and the `seen` claim on the Site names `p_other`; at Partial he holds the Site's claim and the `seen`
+    claim's `who` is None. Both `inferred` -- a finding, not a sight. CONTROL: before the `examine` he holds nothing of it."""
+    w, _ = sabotaged_site()
+    assert held_by(w, INVESTIGATOR, "site.damaged") == set(), "the finder was admitted to the deed before any inquiry"
+    seen_who = lambda w: [c.value.who for c in w.persons[INVESTIGATOR].ledger
+                          if c.predicate == SEEN_PREDICATE and c.subject == "site_x" and c.source == "inferred"]
+    w, _ = band_world(examine_at, HAND_BANDS)
+    assert held_by(w, INVESTIGATOR, "site.damaged") == {FORGER, "site_x"}, held_by(w, INVESTIGATOR, "site.damaged")
+    assert seen_who(w) == [FORGER], seen_who(w)
+    w, _ = band_world(examine_at, frozenset({"Partial"}))
+    assert held_by(w, INVESTIGATOR, "site.damaged") == {"site_x"}, held_by(w, INVESTIGATOR, "site.damaged")
+    assert seen_who(w) == [None], seen_who(w)
+    assert {c.source for c in w.persons[INVESTIGATOR].ledger if c.predicate == "site.damaged"} == {"inferred"}
+
+
+def cover_research(n):
+    """`trail_world(covered=True)`, then the forger gives the cover Record `COVER` to the investigator and he `research`es it
+    as act id `n`: `(w, finding Event)`."""
+    w, d, _ = trail_world(covered=True)
+    assert [e.kind for e in step(w, d, Act(id="cv_give", actor=FORGER, verb="give", payload={"subject": COVER, "to": INVESTIGATOR}))
+            ] == ["record.given"]
+    (e,) = step(w, d, Act(id=f"cv_rs_{n}", actor=INVESTIGATOR, verb="research", payload={"subject": COVER}))
+    return w, e
+
+
+def test_a_cover_is_found_by_research_on_its_id():
+    """CP-T06-01's alias half: `p_other` conceals (the cover Record `rec:cv`) and forges under it; `p_high` is handed `rec:cv`
+    and `research`es it. At a band showing the hand he holds `seen(rec:cv){who: p_other}` and the cover deed under the hand --
+    and, because the forging is anchored on the alias, the forging too (`(p_other, record.forged, True)`, the hand under the
+    alias, B11.58's filing). At Partial the `who` is withheld. CONTROL: before the `research` he holds none of it."""
+    w, d, _ = trail_world(covered=True)
+    assert not [c for c in w.persons[INVESTIGATOR].ledger if c.subject == COVER], "he was told of the cover before any inquiry"
+    seen_who = lambda w: [c.value.who for c in w.persons[INVESTIGATOR].ledger
+                          if c.predicate == SEEN_PREDICATE and c.subject == COVER and c.source == "inferred"]
+    w, _ = band_world(cover_research, HAND_BANDS)
+    assert seen_who(w) == [FORGER], seen_who(w)
+    assert held_by(w, INVESTIGATOR, "cover.assumed") == {FORGER, COVER}, held_by(w, INVESTIGATOR, "cover.assumed")
+    assert FORGER in held_by(w, INVESTIGATOR, "record.forged")
+    w, _ = band_world(cover_research, frozenset({"Partial"}))
+    assert seen_who(w) == [None], seen_who(w)
