@@ -171,7 +171,7 @@ def _keyed_confer(clause_kinds: dict):
 def test_a_keyed_predicate_row_emits_its_clauses_kind(monkeypatch):
     from .test_g3_not_yours import _gov_world
     declared = PR.REQUIRES_PREDICATES["confer"].clauses
-    assert declared == ("office", "basis", "term", "conferee", "purview", "held", "displacement"), declared
+    assert declared == ("office", "basis", "term", "conferee", "purview", "self_across_chains", "held", "displacement"), declared
     kinds = {c: _HELD_KIND for c in declared}
     kinds.update(purview=_PURVIEW_KIND, displacement=_DISPLACE_KIND)
     keyed = _keyed_confer(kinds)

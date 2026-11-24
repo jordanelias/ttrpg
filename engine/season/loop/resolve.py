@@ -32,7 +32,7 @@ from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, 
 from ..gaps import Forbidden, Unspecified
 from ..loop.effects import EFFECTS
 from ..loop.predicates import REQUIRES_PREDICATES
-from ..loop.sides import _contests_of, sides_of     # `_contests_of` lives in sides.py (B10-08 close)
+from ..loop.sides import _contests_of, seat_named_by, sides_of    # `_contests_of` lives in sides.py (B10-08 close)
 from .. import manifest
 from ..epistemic import observers_for
 from ..data import affiliations as _aff     # read at call time (`_aff.ENGAGEMENT`, `_aff.INCOMPATIBLE`): a rebound table is what is read
@@ -1133,7 +1133,7 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # here would have to re-enumerate all of them to stay in sync.
     r = contest(w, rung=_rung, prize=contests[0], claimants=_parties, depth=0,
                 max_depth=contest_max_depth, causes=[a.id], verb=a.verb, subject=_subject,
-                rng=_rng, effort=effort_of(a), host=host, via=a.via)
+                rng=_rng, effort=effort_of(a), host=host, via=a.via, seat=seat_named_by(w, a, contests[0]))
     if isinstance(r, ContestRefused):
         # `04 §A.2`'s typed refusal (`seam/contest.py::REFUSAL_STATUSES`): `PARTY-GAP` (a missing
         # party) and `REFUSED` (`sigma.py`'s S27.4, `Ob > 2x Pool`). `speak` is contested, so a

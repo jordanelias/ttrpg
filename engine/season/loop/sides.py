@@ -52,6 +52,17 @@ def _contests_of(a: Act, row: "VerbRow | None") -> list:
     return list(a.contests or ()) or ([row.contests] if row and row.contests else [])
 
 
+def seat_named_by(w: World, a: Act, prize: str) -> Optional[str]:
+    """THE SEAT AN ACT NAMES, where its prize is one that says so (B21.61; B21.14's reading, shared): the prize row's `opposed_by: holder`
+    (`a seat`'s) marks a prize whose act names a seat (`office_named_by`: `office`, else `subject`; the reader `_req_*` and `_eff_*` share),
+    and the answer is that seat's id where the world holds it, else `None` -- an act naming no seat (`establish`'s holding), or a prize
+    whose row says nothing of one. Read off the prize row, never the verb. ONE OWNER of the reading, for `sides_of` (the live holder who
+    stands opposite) and the roll's `cross_chain` term (`seam/wrappers/sigma.py`, through `loop/resolve.py` and `odds_of`)."""
+    row = manifest.resolve("contest", prize)
+    seat = office_named_by(a) if row is not None and row.get("opposed_by") == OPPOSED_BY_HOLDER else None
+    return seat if isinstance(seat, str) and seat in w.offices else None
+
+
 def sides_of(w: World, a: Act, target: Optional[str],
              prize: str) -> tuple[list[str], Optional[str], Optional[str]]:
     """`(claimants, subject, rung)` for `contest()`, given `target` -- the act's
@@ -177,10 +188,9 @@ def sides_of(w: World, a: Act, target: Optional[str],
     # never the verb; an act naming no seat (`establish`'s holding) keeps its own opponent operand, as before. The act's operands are
     # untouched: the effect still reads the seat and the conferee off the payload. [ASSUMPTION; medium; Jordan to correct; revert:
     # drop the cell and this block -- `confer` is then opposed by its conferee, `revoke` by no person (a seat id is no claimant)]
-    if prize_row is not None and prize_row.get("opposed_by") == OPPOSED_BY_HOLDER:
-        seat = office_named_by(a)
-        if seat in w.offices:
-            held = hold_force(w, seat)
-            target = held.subject if held is not None else None
+    seat = seat_named_by(w, a, prize)
+    if seat is not None:
+        held = hold_force(w, seat)
+        target = held.subject if held is not None else None
     return ([a.actor] + ([target] if target and target != a.actor else []), target,
             place_of(w, a.actor))

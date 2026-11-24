@@ -33,7 +33,7 @@ from ..trace_log import TRACE
 # here and the gate there cannot disagree (`CLAUDE.md` §8) -- and a `monkeypatch` of this module's
 # `has_conferral_basis` still reaches both preconditions that call it by that name.
 from ..state.gate import (  # noqa: F401 -- `REVOCATION_RULES`, `in_holdings`, `seated_on_the_rung_above` re-exported
-    REVOCATION_RULES, has_conferral_basis, has_filler, has_revocation_disposal, in_holdings, may_claim, may_fill,
+    REVOCATION_RULES, across_chains, has_conferral_basis, has_filler, has_revocation_disposal, in_holdings, may_claim, may_fill,
     may_revoke, may_sit, purview_reaches, seat_hold, seated_on_the_rung_above)
 
 
@@ -108,7 +108,7 @@ def _refuse_at(clause: str, ids: str, said: Optional[str] = None) -> Answer:
 # ---------------------------------------------------------------------------
 
 
-@requires_predicate("confer", clauses=("office", "basis", "term", "conferee", "purview", "held", "displacement"))
+@requires_predicate("confer", clauses=("office", "basis", "term", "conferee", "purview", "self_across_chains", "held", "displacement"))
 def _req_confer(w: "World", a: "Act") -> Answer:
     """Part E, IN FULL: *"the office's **conferral basis**, and 1-per-object: no live `hold` on the
     object, **or** the holder-Proposition has zero live `commit` (§54 it. 20)"*.
@@ -131,8 +131,9 @@ def _req_confer(w: "World", a: "Act") -> Answer:
     whose subject is somebody else"*, which is why the displacement is T-o and not a second reading
     of the conferral basis.
 
-    B09.19: THE ANSWER IS `Answer(ok, clause)`, the clause one of the seven declared on the decorator -- `office`, `basis`,
-    `term` (B21.01: the act declares a term that is no positive whole number), `conferee`, `purview` (G3's `may_fill`), `held` (1-per-object: the seat is held and the conferral is to its own holder or
+    B09.19: THE ANSWER IS `Answer(ok, clause)`, the clause one of the eight declared on the decorator -- `office`, `basis`,
+    `term` (B21.01: the act declares a term that is no positive whole number), `conferee`, `purview` (G3's `may_fill`), `self_across_chains`
+    (B21.61: the conferrer seats himself on a seat of another faction than the seat he exercises), `held` (1-per-object: the seat is held and the conferral is to its own holder or
     displaces one who carries a live `commit`) and `displacement` (T-o over the incumbent). The trace phrase beside each is the
     sentence the REM-14 rows have always carried."""
     obj = office_named_by(a)
@@ -162,6 +163,12 @@ def _req_confer(w: "World", a: "Act") -> Answer:
         # G3: the seat exercised does not reach the seat conferred
         return _refuse_at("purview", f"{a.actor} via {a.via!r} on {obj!r}",
                           "a confer the seat exercised does not reach the office conferred")
+    # B21.61 (`16_PESSIMIST_FA_B` edit 2, A-105): NO SELF-CONFERRAL ACROSS CHAINS OF SEATS. A conferrer seating HIMSELF on a seat of another
+    # faction than the seat he exercises is refused (`Office.faction`, the resolved faction); inside one chain it is admitted as before, and a
+    # conferral on another person across chains is priced, not refused (`rosters.yaml: obstacle_terms`' `cross_chain`).
+    if conferee == a.actor and across_chains(w, a.via, obj):
+        return _refuse_at("self_across_chains", f"{a.actor} via {a.via!r} on {obj!r}",
+                          "a confer on himself of a seat of another chain of seats")
     tenures = w.tenures                    # one view for the three scans below
     if not any(t.kind == "hold" and t.object == obj and t.live for t in tenures):
         return ADMITTED                    # 1-per-object satisfied

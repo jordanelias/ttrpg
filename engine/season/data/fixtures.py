@@ -1164,6 +1164,13 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-610 -- site: Fixtures rank_step, graded `assumption`; OBS proposes 0.25 and no document derives it, so it is injected at the control and swept 0 / 0.25 / 0.5]
     rank_step=0.0,                     # `H-610`, swept 0 (control, SHIPPED) / 0.25 / 0.5
+    # `H-613` (B21.61; OBS §2 member 29, OBS §4 step 6+; `16_PESSIMIST_FA_B` edit 2, A-105). HOW MUCH A SEAT OF ANOTHER CHAIN OF SEATS WEIGHS AGAINST A
+    # CONFERRAL, in obstacle: the term `cross_chain` is `cross_chain_step x` 1 where the seat the act names and the seat it is exercised through are of
+    # different factions (`gate.across_chains`; `sigma.py::_cross_chain_term`), so a foreign holder stays uncommon (A-105). `0` is the CONTROL ("equal at
+    # control"): the term reads nothing and is not listed, so every roll composes the obstacle it had before.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `0`.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-613 -- site: Fixtures cross_chain_step, graded `assumption`; the source proposes 2 and no document derives it, so it is injected at the control and swept 0 / 1 / 2]
+    cross_chain_step=0.0,              # `H-613`, swept 0 (control, SHIPPED) / 1 / 2 (proposed)
     # `H-611` (B21.12; `14_VERBS_BINDING_C` commit C1, edit 1). THE LENGTH, IN SEASONS, OF THE TERM A PARTIAL `succeed`/`revoke` OPENS A HOLD FOR (the one
     # `provisional_term`; the BYZANTINE files cite it and ship no second value). Read at ONE place, `loop/effects_shared.py::_provisional_term`.
     # `None` is the CONTROL and SHIPS: a Partial opens an untermed hold, exactly as a Success does, so the two differ by nothing until a value is set.

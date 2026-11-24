@@ -1651,13 +1651,15 @@ rosters:
       ill raises the obstacle by `reception_gain x |reception|` (`world_q.reception`, the hostile half, for a prize a room hears,
       0 where none hears it; its favourable half is leverage, `advantage_sources: favour`); `capability` -- a circumstance that punishes a want, the sum over the `circumstance` rows of
       `tables: capability_uses` for the act's site whose `when` holds, each its held value times its `gain` (B05.15; no row ships,
-      so it stands at 0). Every member stands AGAINST the act and is never negative. `even`, `difficulty`, `opposition`,
-      `reception` and `capability` stand in every act's terms (at 0.0 where they weigh nothing); `standard`, `stakes`, `rank_gap` and
-      `regard` are listed only where they weigh, so a world whose four are at their control sizes carries the terms it carried before them
+      so it stands at 0); `cross_chain` -- a conferral across chains of seats (OBS §2 member 29; B21.61, `confer`'s): `cross_chain_step x` 1 where the
+      seat the act names and the seat it is exercised through are of different factions (`gate.across_chains`; the seat is read off a prize row
+      saying its act names one, `loop/sides.py::seat_named_by`). Every member stands AGAINST the act and is never negative. `even`, `difficulty`, `opposition`,
+      `reception` and `capability` stand in every act's terms (at 0.0 where they weigh nothing); `standard`, `stakes`, `rank_gap`, `regard` and
+      `cross_chain` are listed only where they weigh, so a world whose five are at their control sizes carries the terms it carried before them
       (the terms are folded into the Event's `ending` and so into the content hash). A member lands with its host
       function in `sigma.OBSTACLE_TERMS` and no other code; later members are those the verb lanes add (OBS §2's table).
     ordered: true
-    values: [even, difficulty, opposition, standard, stakes, rank_gap, regard, reception, capability]
+    values: [even, difficulty, opposition, standard, stakes, rank_gap, regard, reception, capability, cross_chain]
 
   lifepaths:
     source: >-

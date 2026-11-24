@@ -721,6 +721,16 @@ def may_sit(w: "World", person_id: Optional[str]) -> bool:
     return p is not None and not p.is_cohort
 
 
+def across_chains(w: "World", via: Optional[str], seat: Optional[str]) -> bool:
+    """ARE THE SEAT EXERCISED AND THE SEAT NAMED OF DIFFERENT CHAINS OF SEATS? (B21.61, `16_PESSIMIST_FA_B` edit 2, A-105.) Both are
+    seats the world holds and their `Office.faction` (the resolved faction) differ; False where either is no seat (an act exercised
+    through none, or naming none). ONE BODY, TWO READERS: `loop/predicates.py::_req_confer` refuses a conferrer seating himself across
+    chains, and the roll's `cross_chain` term (`seam/wrappers/sigma.py::_cross_chain_term`, `rosters.yaml: obstacle_terms`) prices any other
+    act across them."""
+    a, b = w.offices.get(via), w.offices.get(seat)
+    return a is not None and b is not None and a.faction != b.faction
+
+
 def passes_a_seat(off: Office) -> bool:
     """IS `off` A TITLE THAT EXISTS ONLY TO PASS A SEAT? (B21.16, HAPPENINGS-B edit 3.) `conferral: appointed` and an empty remit:
     `off_heir`, the Princess, the consort once her standing grant is gone. A claim lays down such a title it claims by -- it was
