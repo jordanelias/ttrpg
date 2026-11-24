@@ -32,7 +32,7 @@ from ..data.requires import (
     KNOWN_PERSON_CLAIM, RECORD_SOURCED_OPERANDS, SENSITIVITY_STEMS, SHORTFALL_PREDICATE, UNKNOWN, binding_from_act, binding_of, evaluate,
 )
 from ..data.rosters import (
-    CONTINUATION_TIES, SUCCESSIONS,
+    ABSENT_PREDICATE, CONTINUATION_TIES, SUCCESSIONS,
     ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
     INVESTED,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
@@ -4194,6 +4194,10 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     opinions: dict = {}                    # `opinion_referents`' per-call memo of `opinion_of` by faction
     for c in p.ledger:
         if (c.when, c.lap) < floor:
+            continue
+        # B11.83: WHAT A REFUSED `with` TAUGHT HIM -- THAT A MAN WAS NOT WHERE HE STOOD (`rosters.yaml: absence_claim`) -- IS NOT NEWS TO DELIBERATE ABOUT HIM: a
+        # question on the absent man is one he forms the same refused act on (`test_t4_a_with_read_is_observed_and_never_deposited...`'s own ground for the `with` read).
+        if c.predicate == ABSENT_PREDICATE:
             continue
         if _is_person_subject(w, c.subject, known):
             admitted = c.subject not in gone or any(x in R for x in named(c))

@@ -53,7 +53,7 @@ from ..data.requires import (
 )
 from ..data.verbs import NO_PRECONDITION, VERB_TABLE
 from ..data.rosters import (
-    AFFILIATIONS, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
+    ABSENT_PREDICATE, AFFILIATIONS, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, remove_distance, CRISIS_BANDS, DEGREE_STEP, DOMINANCE_KINDS, PERSON_DIED, PURSUIT_AXES, RECORD_CONTENT, REGARD_UNITS, SCAR_HOLDS, SEEN_PREDICATE, SELF_BELIEVED, capability_rows, require_use_site,
     roster, roster_map,
 )
 from ..state.carriers import Claim, Person, PersonInterior, Said
@@ -1826,7 +1826,10 @@ def said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 
     the told one on the deed's own chain, so the hand survives a retelling. At `off` (the control) the pool and the `Said` are as they were."""
     # B10.65: A MAN'S OWN `self:<key>` CLAIM IS WHAT HE BELIEVES OF HIMSELF, NOT HEARSAY, so it is never offered as news about himself (the seeding would otherwise make every holder a teller of his
     # own motives). Only the claim he made himself is skipped (no chain, held by its subject): a `self:` claim he was TOLD (a chain) is deposited as any told claim and is still said.
-    pool = [c for c in claims if c.subject == subject and not (c.predicate.startswith(_SELF_STEMS) and not c.chain and c.holder == subject)] if claims else []
+    # B11.83 (`U5c_VERBS_residue` §3 step 3): AND A MAN'S `absent` CLAIM (what a refused `with` taught HIM, `rosters.yaml: absence_claim`) IS NEVER OFFERED: nobody
+    # else learns it, so it is not news he passes on (a hearer holding it would be the second holder the deposit exists to forbid).
+    pool = [c for c in claims if c.subject == subject and c.predicate != ABSENT_PREDICATE
+            and not (c.predicate.startswith(_SELF_STEMS) and not c.chain and c.holder == subject)] if claims else []
     told_on = fx is not None and told_pairing_on(fx)
     if told_on and claims:
         # B11.22 (`08_FI_06` edit 2): AT `told_pairing` `on` THE POOL ALSO HOLDS THE DEEDS `subject` DID (`attributed_deeds`, the one owner), so a

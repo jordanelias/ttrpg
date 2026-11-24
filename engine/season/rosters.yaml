@@ -2975,6 +2975,22 @@ rosters:
       predicate: intent
     values: [subject, to]
 
+  absence_claim:
+    source: >-
+      B11.83 (`U5c_VERBS_residue` §3 steps 1 and 3; SOCIAL1 D2, decision register D-46: a man who seeks someone who is not there is refused,
+      learns nothing and forms the same act again).
+    note: >-
+      THE CLAIM A REFUSAL ON THE `with` CONJUNCT TEACHES ITS ACTOR: `(<the person sought>, absent, <the rung the refused act stood at>)`, firsthand, deposited
+      by `loop/witness.py::witness` to the ACTOR ALONE (whatever `observation_deposit_mode`: the claim is his reading, not an Event's public payload) when the read
+      that decided the refusal is a `with` read the world answered False. A `with` read is observed and never deposited (`WORLD_ONLY_STEMS`: the person
+      side cannot answer it), so this is the one claim the refusal leaves of it; a read the world could not answer (UNKNOWN: no place) teaches nothing. The
+      value is the place, so a reader can ask whether the absence was HERE. A bare stem, held by the checks at the
+      predicate's reader: not a `requires` grammar stem, not the `seen` or `content:` predicate, not an emitted event kind (`loop/witness.py`).
+      No roster of claim predicates existed for it to join: the deposits' predicates are declared one roster each (`observation_terms.deposit`,
+      `record_content`, `intent_claim`), and so is this one. Nothing reads it back yet (B11.84's `present_persons` will).
+    claim:
+      predicate: absent
+
   stance_polarities:
     source: >-
       v9 IN-18 `G2` (telling workplan §5, `ED-IN-0282`): *"polarity in §F2 term 2"* -- the score's

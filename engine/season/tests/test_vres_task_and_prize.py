@@ -19,13 +19,19 @@ from pathlib import Path
 import pytest
 from engine.dice_engine import draw
 
-from ..data.rosters import roster_map
+from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.rosters import ABSENT_PREDICATE, roster_map
 from ..data.verbs import VERB_TABLE
 from ..gaps import Unspecified
+from ..harness import probes as P
+from ..harness.play_surface import dispatching_chooser
+from ..loop.driver import SeasonDriver
 from ..manifest import registry
 from ..queries import world_q
+from ..queries.person_q import said_of
 from ..seam.wrappers import sigma
-from ..state.carriers import Office, Tenure
+from ..state.carriers import Act, Claim, Office, Scene, Tenure
+from ..state.ids import H
 from .test_u7_remit import _world
 
 SPEAKER, PARTY, DUKE, REEVE = "p_low", "p_mid", "p_high", "p_other"
@@ -120,3 +126,64 @@ def test_no_row_of_the_audience_table_names_a_verb():
                 assert not (isinstance(sub, ast.Attribute) and sub.attr == "verb"), (node.name, sub.lineno)
                 assert not (isinstance(sub, ast.Constant) and isinstance(sub.value, str) and sub.value in VERB_TABLE), (node.name, sub.value)
     assert checked == len(owned)
+
+
+# --- B11.83 (`U5c_VERBS_residue` §3 steps 1 and 3): A REFUSAL ON THE `with` CONJUNCT TEACHES THE ACTOR, AND ONLY HIM, THAT THE PERSON WAS NOT THERE ---
+
+_TELLER, _AT = "p_low", "Hh"          # `p_low` stands in `Hh`; `p_king` stands in `R`, `p_mid` in `Hh`
+
+
+def _tell_season(subject, hearer, **fx):
+    """One season in which `_TELLER` (holding one claim, about `Hh`) is handed a `tell` of `subject` to `hearer` every time he is asked, and nobody
+    else chooses anything. Returns the world and the refusal Events in log order."""
+    fixtures = DEFAULT_FIXTURES
+    for name, value in fx.items():
+        fixtures = fixtures.sweep(name, value)
+    w = P.tiny_world(fixtures)
+    d = SeasonDriver(w)
+    w.persons[_TELLER].ledger.append(Claim("c_held", _TELLER, _AT, "stores:grain", 8, 0, "firsthand", 80, "own"))
+    said = said_of(w.persons[_TELLER].ledger, subject, w.fixtures)
+
+    def tell(p, v, s, ask_budget, auto):
+        aid = H(w.world_seed, w.tick, p.id, f"act:tell:{subject}:{hearer}")
+        return [Scene(H(w.world_seed, w.tick, p.id, f"scene:b11_83"), p.id,
+                      [Act(aid, p.id, "tell", payload={"subject": subject, "to": hearer, "said": said})])]
+
+    d.season(dispatching_chooser(P.NOCHOOSE, {_TELLER: tell}), question=None, contest_max_depth=w.fixtures.get("contest_max_depth"))
+    return w, [e for e in w.log if e.kind == "tell.refused"]
+
+
+def _absent_claims(w):
+    return [c for p in w.persons.values() for c in p.ledger if c.predicate == ABSENT_PREDICATE]
+
+
+@pytest.mark.parametrize("mode", ["actor", "total"])
+def test_a_with_refusal_deposits_absent_to_the_actor_only(mode):
+    """The source's falsifier, "a second person holding the `absent` claim": a `tell` to a hearer who stands elsewhere is refused on `hearer` (the `with`
+    conjunct); the teller alone holds a firsthand `(hearer, absent, <the place he stood>)`, and no other ledger holds the predicate.
+    CONTROL: a `tell` refused on `holds` (the teller holds nothing of the subject) deposits no `absent` claim -- the refusal is the same kind, the
+    deciding read is not a `with` read."""
+    w, refused = _tell_season(_AT, "p_king", observation_deposit_mode=mode)
+    assert refused, "no refusal reached the log: the falsifier cannot see a deposit"
+    got = _absent_claims(w)
+    assert got, "the refused `with` conjunct deposited nothing"
+    assert {c.holder for c in got} == {_TELLER}, [(c.holder, c.subject) for c in got]
+    assert {(c.subject, c.value, c.source, c.chain) for c in got} == {("p_king", _AT, "firsthand", ())}, got
+    assert all(c.confidence > 0 and c.visibility == "own" for c in got)
+    # the control: the same refusal kind, decided by another conjunct (the hearer stands with him, so no `with` read is ever False)
+    w2, refused2 = _tell_season("R", "p_mid")
+    assert refused2 and not _absent_claims(w2), [(c.holder, c.subject) for c in _absent_claims(w2)]
+    assert {e.kind for e in refused2} == {"tell.refused"} and all(o.predicate == "claim.held" for e in refused2 for o in e.observed[-1:])
+    # and a hearer who IS there is told: nothing is absent
+    w3, refused3 = _tell_season(_AT, "p_mid")
+    assert not refused3 and not _absent_claims(w3)
+
+
+def test_an_absent_claim_is_never_passed_on_by_the_man_who_holds_it():
+    """Step 3 against a retelling: `said_of` offers the newest non-`seen` claim a teller holds about a subject; his own `absent` claim about the man is
+    not among them, so a telling cannot make a second holder. With another claim about him held, that one is said; with nothing else, nothing."""
+    absent = Claim("c_abs", _TELLER, "p_king", ABSENT_PREDICATE, _AT, 3, "firsthand", 100, "own")
+    other = Claim("c_oth", _TELLER, "p_king", "exists:Person", 1, 0, "firsthand", 80, "own")
+    fx = DEFAULT_FIXTURES
+    assert said_of([absent], "p_king", fx) is None
+    assert said_of([other, absent], "p_king", fx).predicate == "exists:Person"

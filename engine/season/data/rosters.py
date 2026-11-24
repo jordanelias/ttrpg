@@ -1188,6 +1188,14 @@ if not isinstance(SEEN_PREDICATE, str) or not SEEN_PREDICATE:
         needs="name the predicate the `seen` claim is deposited under",
         law="Jordan 2026-09-02 -- a definition is data. A deposit with no declared predicate "
             "would have to spell one in a body")
+# B11.83: THE PREDICATE A REFUSED `with` CONJUNCT TEACHES ITS ACTOR (`rosters.yaml: absence_claim`), spelt once here for the writer
+# (`loop/witness.py`) and, at B11.84, the reader (`queries/person_q.py::present_persons`).
+ABSENT_PREDICATE = roster_map("absence_claim", "claim").get("predicate")
+if not isinstance(ABSENT_PREDICATE, str) or not ABSENT_PREDICATE or ":" in ABSENT_PREDICATE:
+    raise Unspecified(
+        "`absence_claim.claim.predicate` is absent or not a bare name", "B11.83",
+        needs="name the predicate a refused `with` conjunct deposits under",
+        law="Jordan 2026-09-02 -- a definition is data. A deposit with no declared predicate would have to spell one in a body")
 TERMS_SUPPLIED_BY = roster_map("observation_terms", "supplied_by")
 
 

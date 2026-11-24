@@ -26,7 +26,7 @@ from typing import Optional
 from ..data.rosters import STANCE_MAX
 from ..data.requires import (
     OWN_STATE_STEMS, RECORD_SOURCED_OPERANDS, Relation, SENSITIVITY_STEMS, SHORTFALL_PREDICATE,
-    SHORTFALL_SOURCED_OPERANDS, VIA, WORLD_ONLY_STEMS, binding_of, evaluate,
+    SHORTFALL_SOURCED_OPERANDS, VIA, WITH_STEM, binding_of, evaluate,
 )
 from ..data.rosters import (
     CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, SUCCESSIONS,
@@ -62,13 +62,9 @@ from ...substrate.descriptors import about_mid, scale_of
 # `rosters.yaml: referent_classes` declares; read off the type, never spelt.
 _HELD_WRIT_CLASS = Record.__name__
 
-# B11.08: THE `with` STEM (where another person is NOW: only the world answers it). `data/requires.py` names it only inside the `WORLD_ONLY_STEMS`
-# set literal, with no constant of its own to import, so it is spelt once here and held to that owner at import: were the stem renamed there,
-# this refuses rather than reading no row as a hearing row.
-_WITH_STEM = "with"
-if _WITH_STEM not in WORLD_ONLY_STEMS:
-    raise Forbidden(f"`{_WITH_STEM}` is no longer a stem `data/requires.py::WORLD_ONLY_STEMS` holds", "B11.08",
-                    needs="the `with` stem's present name", law="a reader keyed on a stem nothing asks reads every row as no hearing row")
+# B11.08: THE `with` STEM (where another person is NOW: only the world answers it) is `data/requires.py::WITH_STEM` (B11.83 gave it a constant for its
+# second reader, `loop/witness.py`; the set literal it sat in is built from it, so a rename moves every reader and no check is needed here).
+_WITH_STEM = WITH_STEM
 
 
 def _hears_by_presence(row: "VerbRow") -> bool:

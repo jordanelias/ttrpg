@@ -17,12 +17,12 @@ from dataclasses import replace
 
 from ..data.matrix import MATRIX, Step
 from ..state.gate import Token
-from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN, WORLD_ONLY_STEMS, binding_from_act
+from ..data.requires import LEDGER_DERIVED_STEMS, REQUIRES_STEMS, UNKNOWN, WITH_STEM, WORLD_ONLY_STEMS, binding_from_act
 from ..data.rosters import (
-    CHANNEL_CLAIM_SOURCE, FINDING_TERMS, OBSERVATION_DEPOSIT_MODES, OBSERVATION_TERMS, READ_TO_ADDRESSEE, RECORD_CONTENT,
+    ABSENT_PREDICATE, CHANNEL_CLAIM_SOURCE, FINDING_TERMS, OBSERVATION_DEPOSIT_MODES, OBSERVATION_TERMS, READ_TO_ADDRESSEE, RECORD_CONTENT,
     TERMS_SUPPLIED_BY, UNDEPOSITED_KINDS, WITNESS_CHANNELS, require_member, roster,
 )
-from ..data.verbs import IN_CONFIDENCE_KEY, QUANTITY_STEMS, VERB_TABLE
+from ..data.verbs import EMITTED_KINDS, IN_CONFIDENCE_KEY, QUANTITY_STEMS, VERB_TABLE
 # ⚠ `04:178` lists WITNESS's reads as the log, the presence cache, the channel predicates and the act
 # store. Refraction (v9 IN-15, H-201) is asker-first -- it grades what THIS holder believes -- so its rule lives
 # in `queries/person_q.py` (B11.21, D-74: `ledger_weigh` and `refracted_confidence` moved there; this step imports nothing from `decision/`);
@@ -51,6 +51,11 @@ from ..trace_log import TRACE
 
 # B09.04 (`H-111`): the arms of the `finding_none_deposit` fixture (`none` | `actor`), bound at import like the roster beside it.
 FINDING_NONE_DEPOSIT_ARMS = roster("finding_none_deposit_arms")
+
+# B11.83: THE `absent` PREDICATE (`rosters.yaml: absence_claim`) is one predicate with one meaning: it is no `requires` grammar stem (a world fact `record`
+# would pair), no `seen` or `content:` predicate and no emitted event kind (`person_q._check_intent_claim`'s refusal, for the same reason).
+if ABSENT_PREDICATE in REQUIRES_STEMS or ABSENT_PREDICATE in EMITTED_KINDS or ABSENT_PREDICATE in (SEEN_PREDICATE, RECORD_CONTENT.get("predicate")):
+    raise SystemExit(f"rosters.yaml: absence_claim.claim.predicate {ABSENT_PREDICATE!r} is already a predicate another reader answers")
 
 # v9 IN-22: THE SEAT CHANNEL -- the obligee channel (`epistemic._ch_post_remit`), borrowed for its
 # `inferred` source and its live/off switch; this route's recipients are seat holders
@@ -835,6 +840,18 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 # Only the LEDGER APPEND is skipped: `Event.observed` still carries the read (the
                 # hash-bearing Event is unchanged) and the T4 refusal is the WorldReader's.
                 if str(o.predicate).partition(":")[0] in WORLD_ONLY_STEMS:
+                    # B11.83 (`U5c_VERBS_residue` §3 steps 1 and 3): THE ONE CLAIM A REFUSED `with` LEAVES. The read that DECIDED a refusal is the
+                    # last one the fold made (`AllOf` stops at the first False), so a last read of the `with` stem that the world answered False
+                    # is a refusal on the `with` conjunct: the actor sought a person who was not where he stood. He alone is taught it, at any
+                    # `observation_deposit_mode` (it is his reading, never an Event's public payload), as `(person, absent, <the rung he stood at>)`.
+                    # A read the world could not answer (UNKNOWN) never reaches here, and a read of himself teaches nothing.
+                    if (o is e.observed[-1] and actor is not None and pid == actor and o.value is False and o.subject != pid
+                            and str(o.predicate).partition(":")[0] == WITH_STEM
+                            and (here := world_q.event_place_at(w, e)) is not None
+                            and (o.subject, ABSENT_PREDICATE) not in seen_obs):
+                        seen_obs.add((o.subject, ABSENT_PREDICATE))
+                        _deposit(p, Claim(H(w.world_seed, w.tick, pid, f"absent:{e.id}:{o.subject}"), pid, o.subject, ABSENT_PREDICATE, here,
+                                          w.tick, src, conf, "own", self.lap, doer=doer), e)
                     continue
                 key = (o.subject, o.predicate)
                 if key in seen_obs:
