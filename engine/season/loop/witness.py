@@ -230,6 +230,12 @@ def _told_value(w, pid: str, e: Event, held, told_hash: str = None, stem: str = 
     return held.value  # nothing either mechanism can act on -- deposited verbatim, honestly
 
 
+def _told_pairing(e: Event, pairing):
+    """THE PAIRING A HEARER RECEIVES (B11.22, `08_FI_06` edit 3): the teller's `Said.pairing` at every band but `Partial`, where the copy withholds `who` -- the
+    lossy copy's own rule (`_told_value`) and `rosters.yaml: finding_terms`' precedent, *a partial finding withholds the hand*. Reads `pairing`, never writes it."""
+    return replace(pairing, who=None) if e.degree == "Partial" else pairing
+
+
 def _refract(c: Claim, p, channel: str, gain: float, act=None, weigh=None,
              fx=None) -> Claim:
     """`c` AS THIS WITNESS RECEIVES IT: `c` with `queries/person_q.py::refracted_confidence`'s
@@ -932,6 +938,24 @@ def witness(self, token: Token, events: list[Event]) -> int:
                     if regime:
                         tc = _credit(w, tc, pid, _act.actor, regime, conf)
                     _deposit(p, tc, e)
+                    # B11.22 (`08_FI_06` edit 3): A DEED TOLD WITH ITS HAND DEPOSITS THE HAND -- one told `seen` claim on the same subject, `when`, `lap`,
+                    # source and CHAIN as the deed claim just deposited, which is the key `person_q.deed_doer` pairs a told deed on (`_seen_index`'s fifth
+                    # index); through the same guard, refraction and credit. At `Partial` the copy withholds `who` (`_told_pairing`), so a garbled report
+                    # says that it happened and not who. `_held.pairing` is carried only by a `Said` `said_of` made at `told_pairing` `on`.
+                    _pairing = getattr(_held, "pairing", None)
+                    if _pairing is not None:
+                        _pv = _told_pairing(e, _pairing)
+                        if not any(c.subject == _held.subject and c.predicate == SEEN_PREDICATE and c.value == _pv
+                                   and (not c.chain or c.chain[0] == _origin) for c in p.ledger):
+                            pc = Claim(H(w.world_seed, w.tick, pid, f"told:{e.id}:seen"),
+                                       pid, _held.subject, SEEN_PREDICATE, _pv, w.tick,
+                                       "told_by", _held.confidence, _circle or "own", self.lap,
+                                       chain=_held.chain + (_act.actor,))
+                            if refracting:
+                                pc = _refract(pc, p, channel, gain, fx=cfx)
+                            if regime:
+                                pc = _credit(w, pc, pid, _act.actor, regime, conf)
+                            _deposit(p, pc, e)
         if len(p.ledger) > cap:
             _cap(p)
     # v9 FI-03 (`ED-FI-0002`): THE SIXTH DEPOSIT -- WHAT A FINDING UNCOVERED, INTO THE FINDER'S OWN LEDGER.

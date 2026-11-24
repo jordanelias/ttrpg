@@ -985,6 +985,12 @@ DEFAULT_FIXTURES = Fixtures(
     # The fold's `hearer` conjunct still refuses an absent one (`rosters.yaml: telling_hearer_arms`). Flipped by the batch's flip item.
     # [JUSTIFIED: v12 B11.08 (08_FI_02 edit 5) -- no document gives who a teller offers a telling to, so both readings are declared and swept known / seen_since_move; shipped at the control]
     telling_hearers="known",           # B11.08, swept known (control, SHIPPED) / seen_since_move
+    # v12 B11.22 (`08_FI_06` edit 6). WHETHER A TELLING CARRIES THE HAND THAT DID A DEED: under `on`, `queries/person_q.py::said_of` offers a person's deed claims
+    # about what a subject DID (`attributed_deeds`) beside the claims whose subject he is, and a `PAIRED_KINDS` deed carries the sighting that names its doer
+    # (`Said.pairing`); WITNESS deposits it as a told `seen` claim on the deed's chain, and `deed_doer` answers a told deed from it. `off` is the CONTROL (and the revert): a
+    # paired deed heard second-hand names nobody. SHIPPED `on` by this item's last step, after the gate's `on` readings read (`test_told_pairing.py`). A value but `off` and `on` is refused where read.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-495 -- site: Fixtures told_pairing, the limit it closes; the proposal ships `on` when its gate reads, so it is injected, swept off (the control) / on, and shipped `on` once the hand-built gate read]
+    told_pairing="on",                 # B11.22, swept off (the control) / on (SHIPPED, the gate read)
     # v12 B11.10 (`08_FI_02` edit 7). HOW MANY CLAIMS ABOUT A SUBJECT A TELLER MAY CHOOSE AMONG TO PASS ON: the top this many the slant ranks
     # (`queries/person_q.py::said_set`), one Candidate per claim and hearer (`rosters.yaml: choice_sourced`). `1` is the CONTROL and is SHIPPED: the single pick
     # `said_of` made before the choice, so no act is renamed or rescored. A whole number of 1 or more.

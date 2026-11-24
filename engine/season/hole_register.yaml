@@ -7205,6 +7205,19 @@ rows:
     cite:      "MEASURED at v12 B11.10 (`telling_privacy` 1.0, seeds 0 to 2, two seasons, `confidence.broken` events): 0, 0, 0 with `said_slant` `unshared_first` and `telling_hearers` `seen_since_move` (and at the shipped arms); the base tree d7a7b5f96 read 1, 1, 0 under the first pair. The OR reading (private if the operand is true or the draw is under the share) also read 0, 0, 0 (read before `settle_confidences`)"
     source:    "workplan v12 B11.10 (`08_FI_02` edit 8; B11's H block)"
 
+  - id:        H-495
+    tier:      1
+    hole:      "A DEED HEARD SECOND-HAND NAMED NOBODY, AND A WITNESS ASKED ABOUT THE DOER SAID NOTHING (v12 B11.22, `08_FI_06`). `queries/person_q.py::deed_doer` paired a deed of a `PAIRED_KINDS` kind (`person.died`, `body.changed`, `tenure.closed`, ...) only with the holder's own UNTOLD `seen` claim on the same subject, `when` and `lap`, and a telling passed on one claim (`said_of`), so the sighting of who did it never travelled: a hearer held the death and named no doer, `attributed_deeds`, `suffered_deeds`, `deed_doers` and `paired_deed_term` skipped every told paired claim (`c.chain`), `legitimacy` was moved by a killing only for a witness, and a witness asked about the doer had no claim whose subject was the doer. The limit was written in two docstrings and in no row"
+    kind:      "WIRING"
+    owner:     "`engine/season/queries/person_q.py::deed_doer` and `::said_of`, with `engine/season/loop/witness.py`'s told deposit and `engine/season/state/carriers.py::Said.pairing`; the arm is `Fixtures.told_pairing`"
+    grade:     "measured"
+    default:   "CLOSED BY B11.22: a telling carries the sighting beside a paired deed (`Said.pairing`), WITNESS deposits it as a told `seen` claim on the deed's own chain, `deed_doer` answers a told deed from the sightings told on that chain and from nothing else, and `said_of` offers the deeds a person did beside the claims about him; a partial telling withholds the hand, and a told deed with no pairing names nobody. `told_pairing` is SHIPPED `on` (this item's last step, after the gate read) and `off` is the control (today's readings) and the revert"
+    site:      "Fixtures told_pairing, read by `queries/person_q.py::told_pairing_on` (once per `said_of` call); an arm outside `rosters.yaml: told_pairing_arms` raises"
+    sweep:     ["off (the control)", "on"]
+    unblocks:  "`08_FI_05`'s matters about a death, a wound or a seat's closing, and CP-T06-05 (the person questioned answers by his own act) naming anyone; NOT BUILT, named: saying a FALSE hand (the deed lie, H-198 rule (ii)), which is design-first"
+    cite:      "MEASURED at v12 B11.22 on the realm after one season (`told_pairing` `off` and `on` read the same): seed 0 holds 443 firsthand paired-deed claims and 0 told ones, seed 1 315 and 0, seed 2 503 and 0, and seed 0 after two seasons 969 and 0, so no told paired deed exists in the realm to name a doer and the content hash is equal across the two arms (seed 0, one season: 879408acf51cb0882800d0058eebbea8). The proposal's own reading (seed 1, three seasons): seven persons hold a firsthand claim of the one death by a hand, none names a doer, and `deed_doers` with that kind names anyone for 0 of 82. FALSIFIER `engine/season/tests/test_told_pairing.py::test_a_hearers_own_sighting_is_never_the_told_ones` (planted failure, the told index keyed without the chain: it and `test_a_retelling_keeps_the_chain` read red)"
+    source:    "workplan v12 B11.22 (`08_FI_06` edit 7; B11's H block)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

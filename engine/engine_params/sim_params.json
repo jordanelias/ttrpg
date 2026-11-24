@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 125,
-    "total": 427,
-    "uncited": 302,
+    "total": 428,
+    "uncited": 303,
     "of_which_assumption_grade": 8
   },
-  "count": 427,
+  "count": 428,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 30,
@@ -17,7 +17,7 @@
     "overview": 5,
     "social_contest": 31,
     "threadwork": 28,
-    "engine.season.settings": 132,
+    "engine.season.settings": 133,
     "engine.season.realm": 8
   },
   "params": [
@@ -4902,6 +4902,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "B11.08, swept known (control, SHIPPED) / seen_since_move",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.told_pairing",
+      "name": "told_pairing",
+      "value": "on",
+      "kind": "other",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "B11.22, swept off (the control) / on (SHIPPED, the gate read)",
       "citation": null,
       "citation_grade": null
     },

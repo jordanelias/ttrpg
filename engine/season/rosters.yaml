@@ -3187,6 +3187,14 @@ rosters:
       fold's `hearer` conjunct still refuses that.
     values: [known, seen_since_move]
 
+  told_pairing_arms:
+    source: >-
+      v12 B11.22 (`08_FI_06` edit 6): *"`told_pairing`, `off` (control, today) / `on`; ships `on` when the gate reads"*.
+    note: >-
+      THE ARMS OF `Fixtures.told_pairing` (`H-495`), read by `queries/person_q.py::told_pairing_on` (`said_of`'s pool and pairing). `off` is the CONTROL, shipped:
+      a paired deed heard second-hand names nobody. `on` carries the hand: the deed's pairing rides the telling and is deposited as a told `seen` claim.
+    values: ["off", "on"]    # quoted: bare `off` and `on` are YAML 1.1 booleans
+
   stock_reports:
     source: >-
       v10 CR-23 (M17 taken (a), a seat-channel stock report at crossings, [ASSUMPTION; medium;

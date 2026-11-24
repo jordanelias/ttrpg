@@ -193,16 +193,17 @@ def holds_dispute(p: Person, referent: str, scar_shift: float = 0.0, sworn_bond:
 def attributed_deeds(ledger, referent: str):
     """THE DEED CLAIMS IN `ledger` THAT RECORD AN ACT OF `referent`'s, in ledger order -- the one owner
     of *which of a holder's claims are about what this person did* (v9 SC-02 `22a`). An unpaired kind's claim is `referent`'s when its subject is
-    ([ASSUMPTION, H-192]), told or not; a `PAIRED_KINDS` claim is `referent`'s when it is untold and its
+    ([ASSUMPTION, H-192]), told or not; a `PAIRED_KINDS` claim is `referent`'s when its
     `seen.who` pairing names him (`deed_doer`, IN-58) -- the paired kinds are the ones whose subject
-    may be the PATIENT, so the doer is read off the sighting's `who`, never the subject. A told copy
-    carries no `seen`, so a paired claim heard second-hand names nobody. Person-side (AX-2)."""
+    may be the PATIENT, so the doer is read off the sighting's `who`, never the subject. A told paired claim
+    is paired with the sighting told on its own chain at its own deposit (B11.22), so a deed heard second-hand
+    names a doer only where the telling carried the hand (`Fixtures.told_pairing` `on`). Person-side (AX-2)."""
     seen = functools.cache(lambda: _seen_index(ledger))
     for c in ledger:
         if not is_deed(c):
             continue
         if c.predicate in PAIRED_KINDS:
-            if c.chain or deed_doer(c, seen()) != referent:
+            if deed_doer(c, seen()) != referent:
                 continue
         elif c.subject != referent:
             continue
@@ -247,14 +248,14 @@ def deed_steps(p: Person, axis_w: dict, c, sworn_bond: float = 0.0, counterparty
 
 def suffered_deeds(ledger, patient: str):
     """THE DEEDS `ledger` RECORDS AS DONE TO `patient` BY SOMEBODY ELSE, in ledger order (v9 SC-02 `22a`,
-    step 20's called bluff): the untold `PAIRED_KINDS` claims whose subject is `patient` and whose
+    step 20's called bluff): the `PAIRED_KINDS` claims whose subject is `patient` and whose
     `seen.who` pairing names a doer (`deed_doer`, which never names the subject himself). Only a paired
     kind has a patient on its claim; an unpaired kind's subject is its doer (H-192), so it is never a
-    deed suffered. A told copy has no sighting and so names no doer: what a holder was only told of
-    does not count. Person-side (AX-2)."""
+    deed suffered. A told copy names a doer only where its telling carried the hand (B11.22, `Fixtures.told_pairing` `on`):
+    what a holder was only told of, with no hand, does not count. Person-side (AX-2)."""
     seen = functools.cache(lambda: _seen_index(ledger))
     for c in ledger:
-        if (c.subject == patient and not c.chain and is_deed(c) and c.predicate in PAIRED_KINDS
+        if (c.subject == patient and is_deed(c) and c.predicate in PAIRED_KINDS
                 and deed_doer(c, seen()) is not None):
             yield c
 
@@ -264,7 +265,7 @@ def attackers_of(ledger, patient: str, kinds: frozenset, window: int = 1, strata
     HOLDS (v11 CR-87, the DEFENCE context of `rosters.yaml: violence_contexts`): the doers `deed_doer` pairs to
     `suffered_deeds`' claims, kept when the claim is among `recent_claims(ledger, window)` (anchored on his newest
     claim, so `window == 1` is "this season" as he knows it) and its kind is in `kinds` (the caller's: the kinds an
-    opponent-rule row emits). Person-side (AX-2); what he was only told of names nobody, as in `suffered_deeds`.
+    opponent-rule row emits). Person-side (AX-2); what he was only told of is not what he SAW: a told deed (`chain`) is skipped here, whatever hand its telling carried (B11.22).
 
     `strata`, where given, keeps a doer only if the holder saw him act at one of them ON THIS DEED'S SUBJECT in that deed's lap. A kind several rows emit
     (`capability.raised`: `fight` and `train`) pairs on any of its emitters' strata, so a benefit and a blow carry the same kind;
@@ -275,7 +276,7 @@ def attackers_of(ledger, patient: str, kinds: frozenset, window: int = 1, strata
     recent = {id(c) for c in recent_claims(ledger, window)}
     seen, out = None, set()
     for c in suffered_deeds(ledger, patient):
-        if id(c) in recent and c.predicate in kinds:
+        if id(c) in recent and c.predicate in kinds and not c.chain:
             seen = _seen_index(ledger) if seen is None else seen      # built only when a claim qualifies
             d = deed_doer(c, seen)
             if d is not None and (strata is None or any(getattr(x.value, "who", None) == d and getattr(x.value, "stratum", None) in strata
@@ -310,13 +311,18 @@ def _seen_index(ledger) -> tuple:
     """A holder's own, untold claims, indexed four times: `(subject, when, lap) -> [seen]` and
     `(when, lap) -> {(who, stratum)}` -- who the holder saw acting, and at what, in each lap -- and
     `(subject, when, lap) -> {value}` for a `fell_to_hand` claim (B14.16: who stood when `subject`, the actor, fell), and
-    `(who, when, lap) -> {(subject, stratum)}` -- what the holder saw each actor act on, the inverse of the first (B10.20: `deed_counterparty`)."""
+    `(who, when, lap) -> {(subject, stratum)}` -- what the holder saw each actor act on, the inverse of the first (B10.20: `deed_counterparty`);
+    and a FIFTH, the TOLD sightings, `(subject, when, lap, chain) -> [seen]` (B11.22): the sighting a telling carried beside a deed, deposited with the
+    deed's own `when`, `lap` and chain, so a told deed is paired with the sighting of its own telling and never with the holder's own."""
     by_subject: dict = {}
     acting: dict = {}
     hand: dict = {}
     acted_on: dict = {}
+    told: dict = {}
     for s in ledger:
-        if s.predicate == HAND_PREDICATE and not s.chain:
+        if s.predicate == SEEN_PREDICATE and s.chain:
+            told.setdefault((s.subject, s.when, s.lap, s.chain), []).append(s)
+        elif s.predicate == HAND_PREDICATE and not s.chain:
             hand.setdefault((s.subject, s.when, s.lap), set()).add(s.value)
         elif s.predicate == SEEN_PREDICATE and not s.chain:
             by_subject.setdefault((s.subject, s.when, s.lap), []).append(s)
@@ -324,14 +330,17 @@ def _seen_index(ledger) -> tuple:
             if who is not None:
                 acting.setdefault((s.when, s.lap), set()).add((who, getattr(s.value, "stratum", None)))
                 acted_on.setdefault((who, s.when, s.lap), set()).add((s.subject, getattr(s.value, "stratum", None)))
-    return by_subject, acting, hand, acted_on
+    return by_subject, acting, hand, acted_on, told
 
 
 def deed_doer(c, seen: tuple):
     """v9 IN-58's PAIRING RULE: WHO DID THE DEED `c` TO ITS SUBJECT, as the holder saw it, or `None`.
 
-    `c` is an untold deed claim `(s, kind, True)` of a `PAIRED_KINDS` kind; `seen` is
-    `_seen_index` of the same ledger. A `seen` claim PAIRS with it when it has the same subject
+    `c` is a deed claim `(s, kind, True)` of a `PAIRED_KINDS` kind; `seen` is
+    `_seen_index` of the same ledger. A TOLD `c` (`chain`, B11.22) is paired with the sightings TOLD on its own chain at its own `when` and `lap`
+    (`seen[4]`) and with nothing else -- never the holder's own sightings -- by the refusals below that apply to a sighting alone (a `who` withheld,
+    two different `who`, a stratum the kind's rows do not carry); a telling that carried no pairing leaves nothing to pair, so it names nobody. For an
+    untold `c`, a `seen` claim PAIRS with it when it has the same subject
     `s`, `when` and `lap` (WITNESS deposits both from one Event in one pass), names a `who`, that
     `who` is not `s` (a deed done TO `s` -- `s`'s own act in the same lap is not it), and its
     `stratum` is the stratum of a row emitting `kind`. The doer is the ONE `who` the pairing
@@ -355,24 +364,46 @@ def deed_doer(c, seen: tuple):
     channel that withheld the actor) makes the pairing ambiguous, so `None`: an unnamed hand may be
     the one that did it. Holder-side and World-free: `Seen` is read by its fields, never imported
     (AX-2)."""
-    if c.chain or not is_deed(c) or c.predicate not in PAIRED_KINDS:
+    if not is_deed(c) or c.predicate not in PAIRED_KINDS:
         return None
-    by_subject, acting, hand, _ = seen
+    by_subject, acting, hand, _, told = seen
+    strata = _KIND_STRATA[c.predicate]
+    if c.chain:
+        return _named_hand(told.get((c.subject, c.when, c.lap, c.chain), ()), c.subject, strata)
     if c.predicate == PERSON_DIED and (c.subject, c.when, c.lap) in hand:
         named = hand[(c.subject, c.when, c.lap)]
         return next(iter(named)) if len(named) == 1 else None
-    strata = _KIND_STRATA[c.predicate]
     if any(who == c.subject and st in strata for who, st in acting.get((c.when, c.lap), ())):
         return None
+    return _named_hand(by_subject.get((c.subject, c.when, c.lap), ()), c.subject, strata)
+
+
+def _named_hand(sightings, subject: str, strata: frozenset):
+    """THE ONE `who` THE `sightings` OF A DEED ON `subject` NAME, or `None`: `deed_doer`'s two pairings (the holder's own, and a told deed's own telling) read it
+    alike. A sighting that names no `who` makes the pairing ambiguous, so `None`: an unnamed hand may be the one that did it. A `who` that is the subject, or a
+    stratum the kind's rows do not carry, names nobody; two different `who` are `None`."""
     whos = set()
-    for s in by_subject.get((c.subject, c.when, c.lap), ()):
+    for s in sightings:
         who = getattr(s.value, "who", None)
         if who is None:
             return None             # an actorless sighting on the same key: ambiguous, never guess
-        if who == c.subject or getattr(s.value, "stratum", None) not in strata:
+        if who == subject or getattr(s.value, "stratum", None) not in strata:
             continue
         whos.add(who)
     return next(iter(whos)) if len(whos) == 1 else None
+
+
+def paired_sighting(c, seen: tuple):
+    """THE `Seen` VALUE THAT NAMES THE DOER `deed_doer` GIVES THE DEED `c`, as the holder holds it, or `None` (B11.22): the sighting a teller passes on beside the
+    deed -- the holder's own for an untold `c`, the one told on `c`'s own chain for a told one (so a hand survives a retelling). `None` where the deed names no
+    doer, or where the doer is named by a `fell_to_hand` claim, which is no sighting."""
+    doer = deed_doer(c, seen)
+    if doer is None:
+        return None
+    sightings = seen[4].get((c.subject, c.when, c.lap, c.chain), ()) if c.chain else seen[0].get((c.subject, c.when, c.lap), ())
+    strata = _KIND_STRATA[c.predicate]
+    return next((s.value for s in sightings
+                 if getattr(s.value, "who", None) == doer and getattr(s.value, "stratum", None) in strata), None)
 
 
 def deed_counterparty(c, seen: tuple):
@@ -482,9 +513,9 @@ def paired_deed_term(p: Person, axis_w: dict, c, seen_of) -> tuple:
     `doer` is the one `deed_doer` names and `term = lean · bond` (`_lean`, `_bond`) is what the deed
     adds to `p`'s judgement of that doer; `world_q.attention_key`'s tier 2 ranks a claim by `|term|`
     (`deed_term` is the same number for `deeds_judged` and `world_q.reception`). `(None, 0.0)` for every claim that is not a paired deed, that `p`'s
-    pursuits do not lean on, that is told (`chain`), or whose pairing names no doer (no `seen`, `who`
-    withheld, ambiguous): an unpaired claim scores 0, so a hidden actor stays hidden. Person-side (AX-2)."""
-    if c.predicate not in PAIRED_KINDS or c.chain:
+    pursuits do not lean on, or whose pairing names no doer (no `seen`, `who`
+    withheld, ambiguous; a told claim is paired with the sighting its telling carried, B11.22): an unpaired claim scores 0, so a hidden actor stays hidden. Person-side (AX-2)."""
+    if c.predicate not in PAIRED_KINDS:
         return None, 0.0
     lean = _lean(axis_w, c.predicate)
     if not lean:
@@ -842,11 +873,9 @@ def legitimacy(p: Person, holder: str, window, scar_shift: float = 0.0, hold: st
 
     `p`'s own stance rows toward the holder (a stance row has no `when`, so the window does not cut
     it) plus what `p`'s own pursuits make of the holder's deeds `p` holds claims of from the window
-    -- firsthand and told alike FOR THE UNPAIRED KINDS ONLY, because R7's channel is the news:
-    legitimacy falls where the news of a deed has reached. ⚠ The PAIRED kinds (`person.died`,
-    `body.changed`) count firsthand only: `attributed_deeds` drops a told copy of one (it carries no
-    `seen`, so it names no doer), so second-hand news of a killing or a wound never moves legitimacy.
-    Each deed is scored by its one owner (`deed_term`; `attributed_deeds` decides
+    -- firsthand and told alike, because R7's channel is the news: legitimacy falls where the news of a deed has
+    reached. A paired kind (`person.died`, `body.changed`) told with its hand counts as the claim that names its doer does
+    (`deed_doer`; B11.22). Each deed is scored by its one owner (`deed_term`; `attributed_deeds` decides
     which claims are the holder's, the paired kinds through `seen.who`), so this is `regard`'s two
     halves read over the window at unit weight, not a second scoring of a deed. Which seat the holder
     holds is the CALLER's: `p` holds no claim of who sits where (`H-195`: no `held_by` claim), so
@@ -1697,6 +1726,15 @@ if OWN_STATE_STEMS != {"thread_sensitivity", "thread_sensitivity.gate", "held_by
 
 
 SAID_SLANTS = roster("said_slants")
+TOLD_PAIRING_ARMS = roster("told_pairing_arms")
+
+
+def told_pairing_on(fx) -> bool:
+    """IS `Fixtures.told_pairing` `on` (B11.22, `H-495`), held to `rosters.yaml: told_pairing_arms`: an unknown arm raises, `_slant`'s rule."""
+    arm = fx.get("told_pairing")
+    if arm not in TOLD_PAIRING_ARMS:
+        raise ValueError(f"told_pairing {arm!r} is not in rosters.yaml: told_pairing_arms {sorted(TOLD_PAIRING_ARMS)} (H-495)")
+    return arm == "on"
 
 
 def _slant(fx) -> str:
@@ -1780,10 +1818,20 @@ def said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 
     module may not import `decision/`), handed to `LedgerReader` as `epistemic.belief_contradicts` hands it, so a person
     passes on the belief he acts on. `None` (a hand-built read) is the plain comparator. ⚠ `LedgerReader._support`
     under a `weigh` ranks `latest_about` ACROSS predicates: a person passes on what he is SUREST of about a subject, not
-    the newest thing he holds (decided at B09.07, `16_PESSIMIST_SC_B`)."""
+    the newest thing he holds (decided at B09.07, `16_PESSIMIST_SC_B`).
+
+    ⚠ B11.22 (`08_FI_06` edit 2, `Fixtures.told_pairing` `on`): the pool is also the deeds `subject` DID (`attributed_deeds`: a witness asked about K can say
+    `(V, person.died, True)`), and a pick of a `PAIRED_KINDS` deed carries the sighting `deed_doer` pairs it with as `Said.pairing` (`paired_sighting`) -- his own, or
+    the told one on the deed's own chain, so the hand survives a retelling. At `off` (the control) the pool and the `Said` are as they were."""
     # B10.65: A MAN'S OWN `self:<key>` CLAIM IS WHAT HE BELIEVES OF HIMSELF, NOT HEARSAY, so it is never offered as news about himself (the seeding would otherwise make every holder a teller of his
     # own motives). Only the claim he made himself is skipped (no chain, held by its subject): a `self:` claim he was TOLD (a chain) is deposited as any told claim and is still said.
     pool = [c for c in claims if c.subject == subject and not (c.predicate.startswith(_SELF_STEMS) and not c.chain and c.holder == subject)] if claims else []
+    told_on = fx is not None and told_pairing_on(fx)
+    if told_on and claims:
+        # B11.22 (`08_FI_06` edit 2): AT `told_pairing` `on` THE POOL ALSO HOLDS THE DEEDS `subject` DID (`attributed_deeds`, the one owner), so a
+        # witness asked about K can say the death of V that K's hand did. Ledger order is kept: the comparator's tie goes to the first found.
+        kept = {id(c) for c in pool} | {id(c) for c in attributed_deeds(claims, subject)}
+        pool = [c for c in claims if id(c) in kept]
     if teller is not None and fx is not None and pool and _slant(fx) == "valence":
         axis_w = projected_axes(teller, fx.get("scar_weight_shift"), hold=fx.get("scar_hold"), mass=fx.get("scar_primary_mass"))
         strength = {id(c): abs(deed_valence(axis_w, c)) for c in pool}
@@ -1803,11 +1851,13 @@ def said_of(claims, subject, fx, teller: "Person | None" = None, *, tick: int = 
                 break
     reader =LedgerReader(pool, weigh, tick=tick, decay=0 if fx is None else fx.claim_decay())
     # ABSENT: H-198 deception  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
-    c = (reader._best(lambda c: c.subject == subject and c.predicate != SEEN_PREDICATE)
-         or reader.latest_about(subject))
+    # The pool holds the subject's claims, and at `told_pairing` `on` the deeds he did: its members are what is asked, so no second subject test is made.
+    c = reader._best(lambda c: c.predicate != SEEN_PREDICATE) or reader.belief_among()
     if c is None:
         return None
-    return Said(c.subject, c.predicate, c.value, reader.present(c), c.chain)
+    # B11.22 (`08_FI_06` edit 2): A PAIRED DEED CARRIES THE SIGHTING THE TELLER PAIRS WITH IT -- his own, or the one his telling carried to him.
+    pairing = paired_sighting(c, _seen_index(claims)) if told_on and c.predicate in PAIRED_KINDS and is_deed(c) else None
+    return Said(c.subject, c.predicate, c.value, reader.present(c), c.chain, pairing)
 
 
 def said_set(claims, subject, fx, teller: "Person | None" = None, *, pick=None, tick: int = 0, weigh=None, choose: bool = True) -> tuple:

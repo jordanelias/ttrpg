@@ -401,12 +401,18 @@ class Said(NamedTuple):
     anyone holds -- it is a thing said. `chain` is the chain of the claim the teller picked
     (`said_of` copies `Claim.chain`; `()` for a claim the teller holds firsthand), and the told
     deposit extends it by the teller. A confidence's circle is NOT carried here (see
-    `Claim.visibility`)."""
+    `Claim.visibility`).
+
+    `pairing` (B11.22, `Fixtures.told_pairing`): the `epistemic.Seen` value the teller pairs with a deed of a `PAIRED_KINDS` kind he is
+    passing on, as he holds it (`person_q.said_of`), or `None` -- the sighting of WHO did it, which the deed claim alone does not say. The told
+    deposit (`loop/witness.py`) deposits it as a told `seen` claim beside the deed. A NamedTuple member cannot be keyword-only, so the
+    default `None` is what leaves every construction as it was."""
     subject: str
     predicate: str
     value: Any
     confidence: int
     chain: tuple = ()
+    pairing: Any = None
 
 
 
