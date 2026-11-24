@@ -114,7 +114,9 @@ def test_in53v_a_the_first_question_carries_them_and_keeps_its_id_source_and_ref
     qs = world_q.questions_for(w, p)
     assert [(q.id, q.source, q.referents) for q in qs] == [
         ("q:need:prop_a", "need", ("S",)), ("q:need:prop_b", "need", ("R",))], qs
-    assert qs[0].classes == tuple((o, "Office") for o in vac) and qs[1].classes == (), qs
+    # B21.54: his ambitions ride the first question as `Proposition` (`issue`'s and `argue`'s referents), beside the vacancies
+    offices = lambda q: tuple(c for c in q.classes if c[1] == "Office")
+    assert offices(qs[0]) == tuple((o, "Office") for o in vac) and offices(qs[1]) == (), qs
 
 
 def test_in53v_a_control_with_no_vacancy_the_questions_are_byte_identical(monkeypatch):
@@ -134,7 +136,7 @@ def test_in53v_a_control_with_no_vacancy_the_questions_are_byte_identical(monkey
     monkeypatch.setattr(world_q, "vacancies", lambda w, p: ())
     stub = {pid: world_q.questions_for(w, p) for pid, p in w.persons.items()}
     assert real == stub and repr(real) == repr(stub)
-    assert all(q.classes == () for qs in real.values() for q in qs)
+    assert all(c[1] != "Office" for qs in real.values() for q in qs for c in q.classes)   # B21.54: ambitions ride as `Proposition`
 
 
 def _sig(cands):
@@ -202,7 +204,9 @@ def test_in53v_b_only_confer_forms_on_a_classed_referent_and_only_on_one():
     checked = other = 0
     for pid, p in w.persons.items():
         for q in world_q.questions_for(w, p):
-            only_classed = {r for r, _ in q.classes} - set(q.referents)
+            # B21.54: his own ambitions ride the question as `Proposition` (`issue`'s and `argue`'s referents); `release` forms
+            # on his own ambition through the claim route he held before, so it is not a classed-only id for this partition
+            only_classed = {r for r, _ in q.classes} - set(q.referents) - set(world_q.ambitions(w, p))
             for c in _formed(w, pid, q):
                 if c.verb in classed_rows:
                     assert (c.subject, VERB_TABLE[c.verb].referent_class) in q.classes, (pid, q.id, c)

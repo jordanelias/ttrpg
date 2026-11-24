@@ -4296,6 +4296,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # v9 IN-67: what the ambition is ABOUT is `goal_referents`' (a goal's, else the subject);
     # an ambition about nobody forms no question.
     refs_of: dict = {}                     # handed to `attention_key`, which reads the same referents
+    standing: list = []                    # the ambitions that raised a question: B21.54 stamps these as `Proposition`
     for pid in ambs:
         refs = goal_referents(w, p, w.propositions[pid])
         refs_of[pid] = set(refs) - {None}
@@ -4306,6 +4307,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
         # And a row opening `mandatory` marks the question of its last stage (`opens_mandatory`; sorted first below).
         if refs and aim_state(w, p, w.propositions[pid]) != "met" and not believed_met(w, p, pid):
             out.append(Question(f"q:need:{pid}", "need", refs, pid, mandatory=opens_mandatory(w, p, pid)))
+            standing.append(pid)
 
     # v9 SC-01 FIRED-SLOT STEP (H-163 limit 2, #453 pass-1 step 4): A JUDGE IS ASKED ABOUT THE
     # MATTERS BEFORE A SITTING HE SITS ON. One question per fired sitting (`sittings_before`: a docket
@@ -4396,6 +4398,12 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
     # PROPOSITIONS HE HAS HEARD OF FROM ANOTHER (`propositions_heard`), as `Proposition` -- `commit` and `argue`
     # form on them; `commit` is declined on a cause he already holds (`rosters.yaml: held_edge_declines`).
     # REVERT: drop the term.
+    # B21.54 (14_VERBS_BINDING_D D1, A-21; [ASSUMPTION; medium; Jordan to correct; revert: drop `tuple(standing)` from the splice
+    # and `issue`'s `referent_class`]): AND, BESIDE THEM, THE PROPOSITIONS HE IS COMMITTED TO AS AN OUGHT (`ambitions`, the one
+    # owner, read once above as `ambs`) THAT STILL RAISE A STANDING QUESTION (`standing`: not a met aim, not a want he believes
+    # met -- CP-T02-03's and B10.71's gates, so a met ambition raises no `need` question by this stamp either), as
+    # `Proposition` -- what a writ orders is an ambition's terms, so `issue` forms on them. DECLARED WIDENING: `argue`, the other `Proposition`-classed row, forms on them too; `commit` does not
+    # (`held_edge_declines`: he already holds a live `commit` on each).
     # CL-THRUST B3.2 (R2; [ASSUMPTION; medium; Jordan to correct; revert: drop the term]): AND, APPENDED LAST, THE
     # REFERENTS OF THE STAGES HE HAS NOT PASSED (`stage_referents`), through the same class test as a question's own
     # referent. `()` while `goal_stages` is `[]`, so with no ladder the output is byte-identical.
@@ -4417,7 +4425,7 @@ def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Qu
              + places_named(w, p, told) + matters_awaiting(w, p) + larders_in_purview(w, p, told)
              + founding
              + (own_referents_of_class(w, out[0]) if out else ())
-             + works_sites(w, p) + propositions_heard(w, p) + stage_referents(w, p, ambs)
+             + works_sites(w, p) + propositions_heard(w, p) + tuple(standing) + stage_referents(w, p, ambs)
              + wounded_with(w, p)
              + (flow_stakes(w, p) if w.fixtures.get("stamp_flow_stakes") else ()))
     # v10 IN-12 step 5 ([ASSUMPTION; medium; Jordan to correct]): AND, LAST, THE PRISONERS HIS SEATS HOLD

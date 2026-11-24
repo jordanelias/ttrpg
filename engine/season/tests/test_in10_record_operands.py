@@ -206,20 +206,25 @@ def _issue_world():
     return w, d
 
 
+# B21.54 (`14_VERBS_BINDING_D` D1): a writ's `terms` is a Proposition (`issue`'s `referent_class`), so the two blocks below
+# form `issue` on one the question carries as such, where they formed it on a plain referent (a stores report, "S") before.
+PROP = "prop_s"
+
+
 def test_in10_issue_fans_over_known_persons_so_terms_and_executor_separate():
     w, _ = _issue_world()
     p = w.persons[DUKE]
     _knows(p, "p_mid", "p_low")
-    p.ledger.append(Claim("c_s", p.id, "S", "stores:grain", 8, 0, "firsthand", 100, "own"))
-    q = Question("q:s", "claim_landed", ("S",), None)
+    p.ledger.append(Claim("c_s", p.id, PROP, "exists:Proposition", 1, 0, "firsthand", 100, "own"))
+    q = Question("q:s", "claim_landed", (PROP,), None, classes=((PROP, "Proposition"),))
     got = [c for c in _formed(w, DUKE, q) if c.verb == "issue"]
     assert sorted(c.operands["to"] for c in got) == ["p_low", "p_mid"], got
-    assert all(c.subject == c.operands["subject"] == "S" for c in got)
-    assert {act_key("issue", c.subject, c.operands) for c in got} == {"S>p_low", "S>p_mid"}
+    assert all(c.subject == c.operands["subject"] == PROP for c in got)
+    assert {act_key("issue", c.subject, c.operands) for c in got} == {f"{PROP}>p_low", f"{PROP}>p_mid"}
     assert VERB_TABLE["issue"].known_person_operands() == ("to",)
     # CONTROLS: knowing nobody forms no writ (an act with a hole); knowing them but holding
     # nothing on the terms forms none either (the `terms` conjunct's `said`).
-    for mk in (lambda x: x.ledger.append(Claim("c_s", x.id, "S", "stores:grain", 8, 0, "firsthand",
+    for mk in (lambda x: x.ledger.append(Claim("c_s", x.id, PROP, "exists:Proposition", 1, 0, "firsthand",
                                                100, "own")),
                lambda x: _knows(x, "p_mid", "p_low")):
         w2, _ = _issue_world()
@@ -231,8 +236,8 @@ def test_in10_a_fanned_issue_folds_through_its_seat_to_a_writ_whose_terms_is_not
     w, d = _issue_world()
     duke = w.persons[DUKE]
     _knows(duke, "p_mid")
-    duke.ledger.append(Claim("c_s", DUKE, "S", "stores:grain", 8, 0, "firsthand", 100, "own"))
-    q = Question("q:s", "claim_landed", ("S",), None)
+    duke.ledger.append(Claim("c_s", DUKE, PROP, "exists:Proposition", 1, 0, "firsthand", 100, "own"))
+    q = Question("q:s", "claim_landed", (PROP,), None, classes=((PROP, "Proposition"),))
     (a,) = [a for a in _acts(w, DUKE, _formed(w, DUKE, q)) if a.verb == "issue"]
     assert a.via == SEAT, a                                       # the falsifier's `Act.via`
     # CONTROL, FIRST and one change (B-K close, LOG 9): the same act with no seat, folded before the
@@ -244,7 +249,7 @@ def test_in10_a_fanned_issue_folds_through_its_seat_to_a_writ_whose_terms_is_not
     kinds = [e.kind for e in _resolve(w, d, a)]
     assert kinds == ["dispensation.issued"], kinds
     (rec,) = [r for r in w.records.values() if r.kind == "dispensation"]
-    assert rec.subject_matter["terms"] == "S" and rec.subject_matter["to"] == ["p_mid"], rec
+    assert rec.subject_matter["terms"] == PROP and rec.subject_matter["to"] == ["p_mid"], rec
 
 
 def test_in10_the_terms_conjunct_refuses_a_writ_whose_issuer_holds_nothing_on_it():
