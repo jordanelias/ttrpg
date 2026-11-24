@@ -897,7 +897,11 @@ rosters:
       milli-units. Written by `loop/resolve.py::_proceeding_ending` from the outcome and the result `seam/wrappers/sigma.py::_resolve_proceeding` returned;
       read by `queries/world_q.py::ending_beats`, `ending_sitting`, `ending_verdicts`, `ending_rattles`. It names no `Claim`'s predicate. An ending of a
       single roll (`margin_endings`) holds none of these tags.
-    values: [proceeding, beat, sitting, verdict]
+      B24p.22: the LAST tag is `("card", decided_by, arranged_by, tilt, tilted_against, ruled)`, the public cells of the card (who decides, who tilted the
+      forum, how far and against which side) and a played adjudicator's departures (`Outcome.ruled`, `((decider, departure), ...)`), every real in
+      milli-units; read by `world_q.ending_card`. It holds no true attribute: what the witnesses read of who decided and what the forum was is what the
+      card showed every participant. `loop/witness.py` deposits what the sitting showed into each man's own ledger from the beats and this tuple.
+    values: [proceeding, beat, sitting, verdict, card]
 
   stance_bands:
     source: "B24p.20 (V2 p2 §C.1; p4 §L 20): how a proceeding's `Event.ending` names the room's stance"
@@ -912,6 +916,31 @@ rosters:
       [ASSUMPTION; medium; Jordan to correct; basis: V2 p2 §C.1 says "five bands of its mood (firmly with one side, leaning, hanging)", not their
       edges; equal fifths of the clamped range; revert: edit the edges in `_stance_of`]
     values: [firm_against, lean_against, hanging, lean_for, firm_for, decided]
+
+  sitting_claims:
+    source: "B24p.22 (V2 p2 §J: *every sitting also leaves, from the beats, ... a claim*; p4 §K B2, B4, B21, C1, C4): the claims a sitting deposits in the ledgers of those who saw it"
+    cite: "V2 p2 §J"
+    note: >-
+      THE KINDS OF CLAIM A PROCEEDING'S WITNESSES HOLD, one member each; the PREDICATE is `<claim.predicate>:<kind>` (`sitting:rattled`), and the
+      source is `claim.source`, a `claim_sources` member (each person present saw it: `firsthand`). Written by `loop/witness.py::_sitting_claims` from
+      `Event.ending` alone (`world_q.ending_beats`, `ending_sitting`, `ending_card`), into the OWN ledger of each person in the sitting's room and no
+      other. Every claim's SUBJECT is the person it is about; its VALUE is: `rattled` the man rattled; `shown` the item shown; `conceded` and
+      `contumacy` the issue it was said on; `hypocrite` the issue of the speech his reading turned (held by those whose reading turned it, alone);
+      `temper` the beat on which the man first spoke with his temper broken (one a man a sitting); `partial` a decider's `(conflict, lean)`
+      in milli-units; `rigged` `(the side the forum worked against, how far)` with the arranger as subject; `overruled` how far a played
+      adjudicator's ruling departed from his own track; `heard` the issue the sitting reached, held by each bystander who does not decide (he learns,
+      he does not rule), about the man who bore the matter; `yielded` and `hinted` the matter's questioned man as subject and the issue reached as
+      value, held by the questioner under the `yield` disposal at the band `arrangements.yaml: disposal` names, at confidence `confidence_default`
+      times that write's `weight` in `disposal_writes`. NO VALUE IS A TRUE ATTRIBUTE OR A `terms` CELL. Regard, pursuits, standing and legitimacy
+      are the fold's (B27.28, B33.51), and a conviction is never written (A-92, `04:251`).
+      [ASSUMPTION; Jordan to correct: the kinds' predicates, subjects and values, which V2 names in prose and no roster carried; `heard`'s subject
+      is the bearer and not the matter, because `said_of` would otherwise offer the hearer's newest claim on the matter in place of what he believes
+      of it; `partial` is deposited only where a decider's conflict reaches `recuse_at` (the host's own line for a partial seat); a sitting's claims are
+      first-hand and never refracted (they are the typed record of what a man saw in the room, not a reading of an act).]
+    claim:
+      predicate: sitting
+      source: firsthand
+    values: [rattled, shown, conceded, contumacy, hypocrite, temper, partial, rigged, overruled, heard, yielded, hinted]
 
   duel_terms:
     source: "CP-T03-09 (`-08` AM-C-03; home `proposals/2026-10-23-subsystem-completion/` T03 §2): the terms a verb's fight is fought under."

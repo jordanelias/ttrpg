@@ -746,30 +746,44 @@ def test_a_docketed_rig_reaches_the_card(monkeypatch):
 
 # B24p.20 -- THE SITTING IS WRITTEN (V2 p2 §C.1, §J; p4 §L 20): `loop/resolve.py::_proceeding_ending` writes the Event's `ending`, `world_q.ending_*`
 # read it back, `_eff_argue` moves each hearer of a rally for himself. A sitting is run by the entry and folded through the driver's own `_fold`.
-def _beat(n, mover, side, mood, *, rattled=None, moved=()):
-    return Beat(n, mover, mover, side, "argue", "raises", "m1", "consequence", None, None, None, 0.5, 0.0, False, None, 0.0, (), rattled, None, 1.0, 1.0, 0.0,
-                False, tuple(moved), None, mood, (("difficulty", 1.0),))
+def _beat(n, mover, side, mood, *, rattled=None, moved=(), move="argue", relation="raises", issue="m1", item=None, evaded=False, caught=(), broke=False):
+    return Beat(n, mover, mover, side, move, relation, issue, "consequence", item, None, None, 0.5, 0.0, evaded, None, 0.0, tuple(caught), rattled, None, 1.0, 1.0,
+                0.0, broke, tuple(moved), None, mood, (("difficulty", 1.0),))
 
 
-def _planted(beats, ended="budget", by=None, read=("p_mid",), tracks=None, who=("p_low", "p_mid"), verdicts=(("p_mid", 3.0),)):
+def _card(**kw):
+    """The cells of a card a sitting writes (`_proceeding_ending`): `close`, who decided, who tilted the forum, how far and against which side."""
+    return SimpleNamespace(**{**dict(close="bench", decided_by=("p_mid",), arranged_by=None, tilt=0.0, tilted_against=None), **kw})
+
+
+def _planted(beats, ended="budget", by=None, read=("p_mid",), tracks=None, who=("p_low", "p_mid"), verdicts=(("p_mid", 3.0),), card=None, ruled=(),
+             arrangement="conversation"):
     """A hand-built sitting of `beats` over `who` (every start 0): the outcome, and the result `_resolve_proceeding` would hold it in."""
     run = {p: 0.0 for p in who}
     for b in beats:
         for p, d in b.moved:
             run[p] += d
     state = Sitting(n=len(beats), tracks=tuple((tracks or run).items()), cond=tuple((p, Cond(rattles=sum(b.rattled == p for b in beats))) for p in who), ended=ended)
-    out = Outcome(tuple(beats), state, ended, by, tuple((p, _m(m)) for p, m in verdicts))
-    return dict(status="RESOLVED", proceeding=out, card=SimpleNamespace(close="bench"), arrangement="conversation", form="full", topic="m1",
+    out = Outcome(tuple(beats), state, ended, by, tuple((p, _m(m)) for p, m in verdicts), tuple(ruled))
+    return dict(status="RESOLVED", proceeding=out, card=card or _card(), arrangement=arrangement, form="full", topic="m1",
                 read=read, starts=tuple((p, 0.0) for p in who), net=5.0, ob=1.0, settled_margin=4.0, terms=())
 
 
-def _folded(w, result, *, verb="argue", to="p_mid", degree="Success", act_id="a20"):
-    """`result` folded as the driver folds an act of `verb` (`_fold`, with the act's own resolution): the Events the act emitted."""
+def _folded(w, result, *, verb="argue", to="p_mid", degree="Success", act_id="a20", witness=False):
+    """`result` folded as the driver folds an act of `verb` (`_fold`, with the act's own resolution): the Events the act emitted; `witness` runs the
+    driver's WITNESS barrier over them, as the loop does (B24p.22)."""
     from ..data.matrix import WriteClass
     from ..loop.driver import SeasonDriver, mint_token
     from ..seam import Resolution
     act = Act(id=act_id, actor="p_low", verb=verb, payload={"to": to, "subject": "m1"})
-    return SeasonDriver(w)._fold(w, mint_token(w, WriteClass.ACTS), act, Resolution(degree, result))
+    d = SeasonDriver(w)
+    events = d._fold(w, mint_token(w, WriteClass.ACTS), act, Resolution(degree, result))
+    if witness:
+        w.log.extend(events)
+        for e in events:
+            d.act_of[e.id] = act
+        d.witness(mint_token(w, WriteClass.INTERIOR), events)
+    return events
 
 
 def _sat(w, row="conversation", form="full", effort=2):
@@ -806,7 +820,7 @@ def test_a_proceedings_event_carries_its_beats_sitting_and_verdicts():
     one = PROCEED(abridged_inp, _key("b20-one"))
     result = dict(result, proceeding=one, form="abridged", starts=tuple((p.id, p.start) for p in abridged_inp.room), read=(one.verdicts[0][0],))
     ended = _folded(w, result)[0].ending
-    assert [t[0] for t in ended] == ["proceeding", "beat", "sitting", "verdict"] and ended[0][2] == "abridged", [t[0] for t in ended]
+    assert [t[0] for t in ended] == ["proceeding", "beat", "sitting", "verdict", "card"] and ended[0][2] == "abridged", [t[0] for t in ended]
     # the falsifier
     bad = dict(result, starts=tuple((p, s + 1.0) for p, s in result["starts"]))
     with pytest.raises(InstrumentDefect, match="04 G.1.5"):
@@ -868,7 +882,7 @@ def test_a_rally_moves_each_carried_hearer_and_no_other():
             w.persons[who].pursuits = {a: 0.2, b: 0.4}
         w.persons["p_low"].pursuits = {a: 1.0, b: 0.0}
         result = _planted([], read=heard, who=("p_low",) + heard, verdicts=(("p_mid", -1.0), ("p_other", 3.5), ("p_high", 0.4), ("p_king", 1.5)))
-        result["card"] = SimpleNamespace(close=close)
+        result["card"] = _card(close=close)
         return w, Act(id="a20r", actor="p_low", verb="argue", payload={"to": "p_mid", "subject": "m1"}), result
     w, act, result = stage("hearers")
     change = EFFECTS["argue"](w, act, SimpleNamespace(degree="Success", result=result))
@@ -912,3 +926,120 @@ def test_every_end_of_a_proceeding_writes_an_ending():
         checked += len(events)
         assert {e.kind for e in events} == {"argument.refused"}
     assert checked >= 3
+
+
+# B24p.22 -- WHAT THE BEATS SHOW IS DEPOSITED WITH THOSE WHO SAW IT (V2 p2 §J; p4 §K B2, B4, B21, C1, C4): `loop/witness.py::_sitting_claims` reads a sitting's
+# `Event.ending` alone and each person in its room holds the claims in his OWN ledger (`rosters.yaml: sitting_claims`). A sitting is hand-built here
+# (`_planted`) and folded and witnessed as the loop does it (`_folded(witness=True)`).
+def _held(w, who, *kinds):
+    """The sitting's claims `who` holds, `(kind, subject, value, confidence)` each, in his ledger's order; `kinds` narrows them."""
+    from ..data.rosters import SITTING_PREDICATES
+    named = {v: k for k, v in SITTING_PREDICATES.items()}
+    return [(named[c.predicate], c.subject, c.value, c.confidence) for c in w.persons[who].ledger if c.predicate in named and (not kinds or named[c.predicate] in kinds)]
+
+
+def _room(*, decided=("p_mid",), **kw):
+    return dict(who=("p_low", "p_mid", "p_other"), card=_card(decided_by=decided), verdicts=tuple((d, 3.0) for d in decided), **{"read": decided, **kw})
+
+
+def test_a_sitting_deposits_only_in_the_ledgers_of_those_present():
+    """A sitting that rattled a man, showed an item and ended in a concession leaves each claim in the own ledger of each person in its room, about
+    the speaker and never about the holder himself, and in no ledger of anyone who was not in the room. FALSIFIER: a deposit in `p_high`'s or `p_king`'s
+    ledger (the world holds both, in the realm and not in the room), or a man holding a claim of himself. CONTROL: a sitting with no rattle, no item, no
+    concession and no rest under a standing point deposits only the bystander's `heard` claim."""
+    w = _world()
+    beats = [_beat(1, "p_low", "for", 0.0, item="i1"), _beat(2, "p_mid", "against", 0.0, rattled="p_low", move="press", relation="presses"),
+             _beat(3, "p_mid", "against", 0.0, move="concede", relation="concedes")]
+    _folded(w, _planted(beats, **_room()), witness=True)
+    got = {who: {(k, s) for k, s, _, _ in _held(w, who)} for who in w.persons}
+    assert got["p_high"] == got["p_king"] == set(), got
+    assert got["p_low"] == {("rattled", "p_mid"), ("conceded", "p_mid")}, got["p_low"]
+    assert got["p_mid"] == {("shown", "p_low")}, got["p_mid"]
+    assert got["p_other"] == {("shown", "p_low"), ("rattled", "p_mid"), ("conceded", "p_mid"), ("heard", "p_low")}, got["p_other"]
+    assert [v for k, s, v, _ in _held(w, "p_other", "rattled")] == ["p_low"] and [v for k, s, v, _ in _held(w, "p_low", "rattled")] == ["p_low"]
+    control = _world()
+    _folded(control, _planted([_beat(1, "p_low", "for", 0.0), _beat(2, "p_mid", "against", 0.0)], **_room()), witness=True)
+    assert [(who, [k for k, *_ in _held(control, who)]) for who in control.persons] == [(who, ["heard"] if who == "p_other" else []) for who in control.persons]
+
+
+def test_hypocrite_only_where_the_reading_turned_the_lie():
+    """A speech some hearer's own reading turned (`caught`) leaves a `hypocrite` claim of the speaker with those hearers alone; the same speech where
+    nobody's reading turned it leaves none, with the room or the man caught. FALSIFIER: a claim held by `p_other`, who was in the room and read him as
+    he spoke; or one in the world where the lie carried."""
+    w = _world()
+    beats = [_beat(1, "p_low", "for", 0.0, issue="fact", caught=("p_mid",)), _beat(2, "p_low", "for", 0.0, issue="definition")]
+    _folded(w, _planted(beats, **_room()), witness=True)
+    assert _held(w, "p_mid", "hypocrite") == [("hypocrite", "p_low", "fact", w.fixtures.get("confidence_default"))]
+    assert _held(w, "p_other", "hypocrite") == _held(w, "p_low", "hypocrite") == []
+    carried = _world()
+    _folded(carried, _planted([_beat(1, "p_low", "for", 0.0, issue="fact")], **_room()), witness=True)
+    assert [c for who in carried.persons for c in _held(carried, who, "hypocrite")] == []
+
+
+def test_one_temper_claim_per_man_per_sitting():
+    """A man whose temper breaks on three beats of one sitting is one claim with each witness, at the first of them; a second sitting in which he breaks
+    again is a second. FALSIFIER: three claims with each witness (one a beat); the broken man holding a claim of himself."""
+    w = _world()
+    beats = [_beat(1, "p_low", "for", 0.0)] + [_beat(n, "p_mid", "against", 0.0, issue=i, broke=True) for n, i in ((2, "fact"), (3, "definition"), (4, "justification"))]
+    _folded(w, _planted(beats, **_room(decided=("p_other",))), witness=True)
+    assert [_held(w, who, "temper") for who in ("p_low", "p_other", "p_mid")] == [[("temper", "p_mid", "fact", 100)], [("temper", "p_mid", "fact", 100)], []]
+    _folded(w, _planted(beats, **_room(decided=("p_other",))), act_id="a22-second", witness=True)
+    assert len(_held(w, "p_low", "temper")) == 2
+
+
+def test_a_bystander_holds_heard_and_no_ruling():
+    """A person in the room who neither speaks nor decides holds one `heard` claim, of the man who bore the matter, and nothing of what was decided: no
+    verdict is his, and the one who decides holds no `heard`. FALSIFIER: a `heard` claim in a decider's or a speaker's ledger, or a verdict naming him."""
+    w = _world()
+    events = _folded(w, _planted([_beat(1, "p_low", "for", 0.0), _beat(2, "p_mid", "against", 0.0)], **_room()), witness=True)
+    assert _held(w, "p_other") == [("heard", "p_low", "m1", 100)]
+    assert [_held(w, who, "heard") for who in ("p_low", "p_mid")] == [[], []]
+    assert [who for who, _ in world_q.ending_verdicts(events[0])] == ["p_mid"]
+
+
+def test_a_silent_accused_leaves_contumacy_claims():
+    """An accused who rests, or presses, in place of an answer a standing point is owed (`evaded`) leaves a `contumacy` claim of him with the judge and the
+    accuser, one for each issue; a speech that raises in place of an answer, and a rest where nothing stood, leave none. FALSIFIER: a claim from the `argue`
+    on the third issue or the unowed rest on the fourth."""
+    w = _world()
+    beats = [_beat(1, "p_low", "for", 0.0, issue="fact"),
+             _beat(2, "p_mid", "against", 0.0, issue="fact", move="rest", relation="rests", evaded=True),
+             _beat(3, "p_mid", "against", 0.0, issue="definition", move="press", relation="presses", evaded=True),
+             _beat(4, "p_mid", "against", 0.0, issue="justification", evaded=True),
+             _beat(5, "p_mid", "against", 0.0, issue="procedure", move="rest", relation="rests")]
+    _folded(w, _planted(beats, **_room(decided=("p_other",))), witness=True)
+    want = [("contumacy", "p_mid", "fact", 100), ("contumacy", "p_mid", "definition", 100)]
+    assert [_held(w, who, "contumacy") for who in ("p_other", "p_low", "p_mid")] == [want, want, []]
+
+
+def test_a_yield_leaves_the_questioner_what_the_band_names():
+    """Under the `yield` disposal the questioner holds a `yielded` claim of the questioned man at the claim's full weight at Success, a `hinted` one at
+    its weight (0.4) at Partial and neither at Failure; a sitting whose row disposes nothing leaves neither at any band. FALSIFIER: a claim in the
+    questioned man's ledger, or a `yielded` claim at Partial."""
+    full = _world().fixtures.get("confidence_default")
+    beats = [_beat(1, "p_low", "for", 0.0), _beat(2, "p_mid", "against", 0.0, move="concede", relation="concedes")]
+    held = {}
+    for arrangement, degree in (("interrogation", "Success"), ("interrogation", "Partial"), ("interrogation", "Failure"), ("conversation", "Success")):
+        w = _world()
+        _folded(w, _planted(beats, "yielded", "p_mid", arrangement=arrangement, **_room(read=())), degree=degree, witness=True)
+        assert _held(w, "p_mid", "yielded", "hinted") == []
+        held[arrangement, degree] = _held(w, "p_low", "yielded", "hinted")
+    assert held == {("interrogation", "Success"): [("yielded", "p_mid", "m1", full)], ("interrogation", "Partial"): [("hinted", "p_mid", "m1", round(0.4 * full))],
+                    ("interrogation", "Failure"): [], ("conversation", "Success"): []}, held
+
+
+def test_the_cards_cells_a_rigged_forum_and_a_conflicted_seat_are_deposited():
+    """A forum the card shows tilted leaves a `rigged` claim of the arranger with each person in the room, a played adjudicator whose ruling departed
+    from his own track an `overruled` one, and a decider whose conflict reaches `recuse_at` a `partial` one with everyone but himself; a decider with no
+    ties holds none. FALSIFIER: a `partial` claim of the unconflicted `p_high`, or one in `p_king`'s ledger (not in the room)."""
+    w = _world()
+    w.persons["p_other"].stance = [("p_low", 5, 5)]                                              # the seat favours the bearer: a conflict
+    who = ("p_low", "p_mid", "p_other", "p_high")
+    card = _card(decided_by=("p_other", "p_high"), arranged_by="p_king", tilt=0.5, tilted_against="against")
+    _folded(w, _planted([_beat(1, "p_low", "for", 0.0), _beat(2, "p_mid", "against", 0.0)], who=who, card=card, ruled=(("p_high", 0.4),),
+                        verdicts=(("p_other", 3.0),), read=("p_other",)), witness=True)
+    assert all(_held(w, x, "rigged") == [("rigged", "p_king", ("against", 500), 100)] for x in who) and _held(w, "p_king") == []
+    assert [_held(w, x, "overruled") for x in ("p_low", "p_other", "p_high")] == [[("overruled", "p_high", 400, 100)], [("overruled", "p_high", 400, 100)], []]
+    partial = {x: [(s, v) for k, s, v, _ in _held(w, x, "partial")] for x in who}
+    assert partial["p_other"] == [] and partial["p_high"] != [] and {s for s, _ in partial["p_high"]} == {"p_other"}, partial
+    assert all(partial[x] == partial["p_high"] for x in ("p_low", "p_mid")) and partial["p_high"][0][1][0] >= round(1000 * w.fixtures.get("recuse_at")), partial

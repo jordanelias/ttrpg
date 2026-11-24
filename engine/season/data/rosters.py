@@ -1517,7 +1517,17 @@ ENDING_FELLED, ENDING_YIELDED, ENDING_UNDECIDED, ENDING_PREVAILED = roster("figh
 # SC-P1 (B05.18): the keys of a margin provider's `Event.ending` tuple, in order (`loop/resolve.py::_fold`).
 MARGIN_ENDING = roster("margin_endings", ordered=True)
 # B24p.20 (V2 p2 §C.1; p4 §L 20): the five bands of a beat's mood in order from the lowest, and the stance of a yield that decided.
-ENDING_HEAD, ENDING_BEAT, ENDING_SITTING, ENDING_VERDICT = roster("proceeding_endings", ordered=True)   # B24p.20: the tags of a proceeding's `Event.ending`
+ENDING_HEAD, ENDING_BEAT, ENDING_SITTING, ENDING_VERDICT, ENDING_CARD = roster("proceeding_endings", ordered=True)   # B24p.20, .22: the tags of a proceeding's `Event.ending`
+# B24p.22: the kinds of claim a sitting leaves with those who saw it (`rosters.yaml: sitting_claims`), each kind's predicate `<stem>:<kind>`; and the four
+# effects a move may have (`proceeding_effects`), so a witness reads a beat's move by its effect and never by its id.
+SITTING_CLAIMS = roster("sitting_claims", ordered=True)
+_SITTING_CLAIM = roster_map("sitting_claims", "claim")
+SITTING_PREDICATES = {kind: f"{_SITTING_CLAIM['predicate']}:{kind}" for kind in SITTING_CLAIMS}
+SITTING_SOURCE = _SITTING_CLAIM["source"]
+if SITTING_SOURCE not in CLAIM_SOURCES:
+    raise Unspecified(f"`sitting_claims` has `claim.source: {SITTING_SOURCE!r}`", "rosters.yaml -- sitting_claims", needs="a `claim_sources` member",
+                      law="V2 p2 §J -- a claim is held by one of the ways a person comes to hold one")
+EFFECT_TRACK, EFFECT_STRIKE, EFFECT_YIELD, EFFECT_NONE = roster("proceeding_effects", ordered=True)
 *STANCE_BANDS, STANCE_DECIDED = roster("stance_bands", ordered=True)
 # B05 close: the levels a verb row's `difficulty:` and an arrangement row's `standard:` name, and `Fixtures.difficulty_ob` sizes; bound once.
 DIFFICULTY_LEVELS = roster("difficulty_levels", ordered=True)

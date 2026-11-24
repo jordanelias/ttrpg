@@ -35,7 +35,7 @@ from ..data.requires import (
 )
 from ..data.rosters import (
     CONTINUATION_TIES, SUCCESSIONS,
-    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
+    ARMS_KINDS, CONVICTION_MOVED, BAN_KIND, CHALLENGE_KIND, DEGREE_STEP, DETAIN_KIND, DOMINANCE_KINDS, ENDING_ANY_ONE, ENDING_BEAT, ENDING_CARD, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, ENDINGS, FACTION_BY_PROP, HUNGER_BANDS,
     INVESTED,
     MARCH_TARGET_KINDS, OCCASION_ONLY_CLASSES, ORDER_AT_KEY, ORDER_KIND, PROOF_KIND_OF_SOURCE, QUESTION_SOURCES, RECORD_CONTENT, RECORD_KINDS,
     RESTRAINT_KINDS, RUNG_KINDS, SITE_KINDS, STAKES_KEY, STANDING_CROSSED, SUBTREE_OCCUPATION_KINDS, TENURE_KINDS,
@@ -538,6 +538,7 @@ def ending_sitting(event) -> Optional[Sitting]:
     _, n, issue, points, live, tracks, cond, used, last_voice, ended = held[0]
     unit = lambda pairs: tuple((who, v / MARGIN_SCALE) for who, v in pairs)
     return Sitting(n=n, issue=issue,
+                   # [canonical: engine/season/loop/resolve.py §_proceeding_ending -- a written point is its six fields then its `held` pairs: an index, not a tuned value]
                    points=tuple(Point(*x[:6], held=unit(x[6])) for x in points), live=tuple(live), tracks=unit(tracks),
                    cond=tuple((who, Cond(c[0], c[1] / MARGIN_SCALE, c[2] / MARGIN_SCALE, c[3], c[4] / MARGIN_SCALE)) for who, c in cond),
                    used=tuple(used), last_voice=tuple(last_voice), ended=ended)
@@ -546,6 +547,26 @@ def ending_sitting(event) -> Optional[Sitting]:
 def ending_verdicts(event) -> tuple:
     """`((person, band), ...)`: each verdict of the sitting, graded on the one ladder when it was written."""
     return tuple((x[1], x[2]) for x in _tagged(event, ENDING_VERDICT))
+
+
+#: The card's public cells a sitting's Event holds (B24p.22): who decided, who tilted the forum, how far (a real again) and against which side, and a played
+#: adjudicator's departures `((decider, how far his ruling departed from his own track), ...)`.
+EndedCard = namedtuple("EndedCard", ["decided_by", "arranged_by", "tilt", "tilted_against", "ruled"])
+
+
+def ending_card(event) -> Optional[EndedCard]:
+    """The card's public cells as the sitting wrote them (reals read back from milli-units); `None` for an Event no proceeding wrote."""
+    held = _tagged(event, ENDING_CARD)
+    if not held:
+        return None
+    _, decided_by, arranged_by, tilt, tilted_against, ruled = held[0]
+    return EndedCard(tuple(decided_by), arranged_by, tilt / MARGIN_SCALE, tilted_against, tuple((who, d / MARGIN_SCALE) for who, d in ruled))
+
+
+def ending_arrangement(event) -> Optional[str]:
+    """The id of the arrangement row a sitting was held under (its head's second cell); `None` for an Event no proceeding wrote."""
+    held = _tagged(event, ENDING_HEAD)
+    return held[0][1] if held else None
 
 
 def ending_rattles(event, person: str) -> int:

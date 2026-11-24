@@ -21,7 +21,7 @@ from engine.dice_engine.sigma_leverage import levels_to_net_sigma, opposed_ob, p
 from engine.substrate import composition
 from ..gaps import InstrumentDefect
 from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, SCRUPLE_OVERRIDDEN, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, capability_rows, graded_route,
-                            ENDING_BEAT, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, MARGIN_ENDING, STANCE_BANDS, STANCE_DECIDED,
+                            ENDING_BEAT, ENDING_CARD, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, MARGIN_ENDING, STANCE_BANDS, STANCE_DECIDED,
                             SCAR_HOLDS, SCAR_SEASON_CAPS, SCAR_VINDICATIONS, STANDING_OCCASION_OPENED_BY, STRATA, UNROUTED_BAND,
                             require_member, require_use_site, task_share, when_holds)
 
@@ -427,7 +427,9 @@ def _proceeding_ending(resolution: "Resolution | None") -> tuple:
         beats.append((ENDING_BEAT, *(shown if name == "mood" else _plain(getattr(b, name)) for name in named)))
         before = band
     verdicts = tuple((ENDING_VERDICT, who, degree_of(dict(net=m.net, ob=m.ob, settled_margin=m.net - m.ob))) for who, m in out.verdicts)
-    return ((ENDING_HEAD, r["arrangement"], r["form"], out.ended, out.ended_by), *beats, (ENDING_SITTING, *_plain(out.state)), *verdicts)
+    card = r["card"]       # B24p.22: the card's public cells (who decided, who tilted the forum and how far) and a played judge's departures, which the witnesses read
+    held = (ENDING_CARD, tuple(card.decided_by), card.arranged_by, _milli(card.tilt), card.tilted_against, _plain(out.ruled))
+    return ((ENDING_HEAD, r["arrangement"], r["form"], out.ended, out.ended_by), *beats, (ENDING_SITTING, *_plain(out.state)), *verdicts, held)
 
 
 def _refusal_degree(row: "VerbRow", degree):
