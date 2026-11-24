@@ -7170,6 +7170,19 @@ rows:
     cite:      "B15.07: `engine/season/tests/test_combat_module.py::test_unreachable_mortal_ob_reproduces_the_shipped_deaths` (the control: 200 seeded fights deal the deaths they dealt with no draw), `::test_mortal_wound_every_band_writes` (A-81) and `engine/season/tests/test_vm_phy_a_custody.py::test_a3_a_felling_is_followed_by_a_drawn_death` (bypass the roll and no felled party survives). FALSIFIER: PHY_A A3's falsifier, the control at an unreachable value reproducing 200 of 200 deaths in the F-PC-04 probe. `engine/season/tests/test_in34_bodies_clock.py::test_mortal_terms_takes_the_endurance_from_its_caller` (the pool is the one pool rule on the untrained default, the obstacle is this row, and the caller's endurance moves neither) and `::test_mortal_terms_refuses_an_unknown_cause`. CONTROL: the seed-0 realm hash after one season is equal before and after B15.06 (no caller). [ASSUMPTION; medium; Jordan to correct: that the control value is 99.0, PC_A's prototype's own.]"
     source:    "workplan v12 B15.06 (`14_VERBS_PHYSICAL_A_custody_and_force` A3, `22_HAPPENINGS_A_a_death_is_rare_caused_and_drawn` edit 3; B15's H block slot 1)"
 
+  - id:        H-575
+    tier:      1
+    hole:      "WHICH KNOB CARRIES THE ATTRIBUTE SLOPE BOUND -- `READ_SCALE` DOES NOT (B15.15; `U5b_PC_residue` section 1 item 3). The bound is one point of any attribute or skill axis moving the season-default mirror no more than one point of skill score does. `build_levers.py ladders` (module scale, arming and light, n 2,000, `PYTHONHASHSEED=0`, tree at B15.11) reads one point of score as 12.4 points and Perception (`att`) +1 as +27.1 per point (outside by 14.7) and +2 as +20.2 (outside by 7.9); Perception 5 against 3 wins 91.4% and 91.8% (seeds 0 and 1, n 3,000) against 85.9% and 86.3% for four points of score (7 against 3). A sweep of `CFG['READ_SCALE']` over 0.5, 1, 2, 4, 8 and a decorrelated read (1000) never closes the gap (best +2.0, decorrelated +2.5 to +3.7, CI half-width about 1.2): the read's logistic moves the figure by about 1.5 points end to end, so 1.0 stands and nothing was written to `config.py`."
+    kind:      "MECHANISM"
+    owner:     "`modules/combat/combat_systems.py::mode_sigma`'s read term (`CFG['READ_K']`, isolated by B14.17), not `READ_SCALE`'s logistic"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "Perception 5 against 3 within four points of score, if that is wanted; the lever table already reports every lever outside the bound and gates none"
+    cite:      "`systems/combat/combat_engine_v1/workbench/build_levers.py` (the `ladders` sweep, B15.15) and the commit body of B15.15's `Item:` commit (the grid and the readings, seeds 0 and 1); B14.17's isolation reading is in the commit body of `9f260ef` (its `mode_sigma` read term arm: 87.7% to 69.6%). The producer's figures; the orchestrator re-ran none of them."
+    source:    "workplan v12 B15.15 (`U5b_PC_residue` section 1 items 3 and 5; B15's H block spare slot), batch B15-pc-calibration, 2026-11-24"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
