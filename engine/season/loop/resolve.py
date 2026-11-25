@@ -64,6 +64,7 @@ RIVAL_PRECEDENCE_ARMS = roster("rival_precedence_arms")        # `rosters.yaml`:
 #: The most re-draws one tie gets (`_precedence_order`): a tie nobody's pool can break (two rival acts sharing one id, so one stream; a roll with no `dice`
 #: row) would otherwise draw forever. [ASSUMPTION; low; Jordan to correct; revert: re-draw without a bound] A fixed bound far past any real tie (each
 #: re-draw of two honest streams ties again with probability near zero); on reaching it the tied scenes keep the content-hash order, as the zero-pool case does.
+# [JUSTIFIED: engine/season/hole_register.yaml H-30 -- site: Fixtures rival_precedence; a loop bound, not a game value: a tie that survives this many independent re-draws is one no pool can break]
 PRECEDENCE_REDRAW_CAP = 32
 
 def _canonical_order(w: "World", acts: list) -> list:
