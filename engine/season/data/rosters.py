@@ -1146,14 +1146,19 @@ def _load_issue_rungs(rows, grounds) -> dict:
     return out
 
 
-def _load_matters(rows) -> dict:
-    """`rosters.yaml: matters`: each row names its `carrier`, `brings` and `cost`, each a non-empty string."""
-    out = _proceeding_rows(rows, "matters", frozenset({"carrier", "brings", "cost"}), frozenset({"carrier", "brings", "cost"}))
+def _load_matters(rows, rungs) -> dict:
+    """`rosters.yaml: matters`: each row names its `carrier`, `brings`, `cost` and `bears_on`, each a non-empty string, and
+    `bears_on` (B24.17) a member of `rungs` (the `issue_rungs` ids): the rung an exhibit of the kind bears on, from which an item's
+    `rung` is derived (EVID_B "Exact edits" 1). A `bears_on` outside `rungs` is refused naming the row."""
+    cells = frozenset({"carrier", "brings", "cost", "bears_on"})
+    out = _proceeding_rows(rows, "matters", cells, cells)
     for mid, m in out.items():
         for k, v in m.items():
             if not isinstance(v, str) or not v:
                 raise Unspecified(f"matter {mid!r} has `{k}: {v!r}`", "rosters.yaml -- matters", needs="a non-empty token",
-                                  law="V2 p2 §G -- an item is a typed reference; its carrier, who brings it and what it costs are each named")
+                                  law="V2 p2 §G -- an item is a typed reference; its carrier, who brings it, what it costs and the rung it bears on are each named")
+        require_member(m["bears_on"], rungs, f"matter {mid!r} has `bears_on: {m['bears_on']!r}`", "rosters.yaml -- matters",
+                       "V2 p2 §B -- an exhibit bears on one issue of the matter, and the issues are the `issue_rungs`")
     return out
 
 
@@ -1193,7 +1198,7 @@ PROCEEDING_MOVES = _load_proceeding_moves(_roster_rows("proceeding_moves"), tupl
 AUTHORITIES = roster("authorities", ordered=True)
 AUTHORITY_BY_FACTION = _load_authority_by_faction(roster_map("authorities", "by_faction"), AUTHORITIES, roster("factions"),
                                                   roster_map("role_templates", "by_faction"))
-MATTERS = _load_matters(_roster_rows("matters"))
+MATTERS = _load_matters(_roster_rows("matters"), tuple(ISSUE_RUNGS))
 # B24p.03: THE TYPED WRITES OF `arrangements.yaml: disposal:` (V2 p2 §J). `MATTERS` absorbed the `proofs` roster, which was deleted here.
 DISPOSAL_WRITES = _load_disposal_writes(_roster_rows("disposal_writes"))
 # ED-IN-0256 rulings (2) and (3): HOW A SEAT IS FILLED and WHO MAY STRIP IT.

@@ -8518,6 +8518,19 @@ rows:
     cite:      "`U5c_SC_proceedings_residue.md` §6 items 2 and 3: one `lean_level` a commit; `lean` is not added to `advantage_sources` (a seat's commits are where his track starts, V2 p1 §B D8; a lean at the close is cut, V2 p4 §G). [ASSUMPTION: the first value `minor` and the sweep `None` / `minor` / `moderate` -- basis: `LEVEL_SIGMA`'s smallest names; no source states them]. CONTROL: `None` -- a commit moves no seat. FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row; `test_sc_hearing_ballots.py` observes the carried share move with the setting."
     source:    "workplan v12 B24.11 (`U5c_SC_proceedings_residue.md` §6; a slot of B24's H block beyond the ten taken, H-671..H-675 being its five spares)"
 
+  - id:        H-666
+    tier:      1
+    hole:      "THE CEILING ON ONE CORROBORATED CELL'S WEIGHT -- `evidence_cap`, a number (EVID_B `standing` rule 4: 'capped at `evidence_cap`'): the same cell, same value, same side, from distinct origins is one item of weight `1 - Prod(1 - w_i)` (FI's ruled noisy-OR, `ED-IN-0322`), and that weight is capped here; the same origin twice counts once. No document derives the value."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption; `engine/season/data/fixtures.py::Fixtures.evidence_cap` the one home. READERS: none at B24.17; the `standing` rule (`modules/social_contest/evidence.py`) reads it through `Input.dials` once a later item gives it a corroboration step"
+    grade:     "assumption"
+    default:   "2.0 -- EVID_B's PROPOSED value, SHIPPED here [ASSUMPTION; Jordan to correct; revert: none named (EVID_B gives it no control); the sweep's other points are the alternatives]. Nothing reads it at B24.17, so shipping it moves no run"
+    site:      "Fixtures evidence_cap, read by nothing at B24.17; the `standing` rule's corroboration step reads it through `Input.dials`"
+    sweep:     [1.0, 2.0, 3.0]
+    unblocks:  "corroboration having a cap in the evidence term (R-04.c3), and B98's sweep of it"
+    cite:      "EVID_B `standing` rule 4 and 'Exact edits' 1: `evidence_cap` proposed 2.0, NUMBER row, three-point sweep. [ASSUMPTION: the sweep 1.0 / 2.0 / 3.0 -- basis: the proposed value +/- 1]. CONTROL: nothing reads the setting, so no run moves by it (the realm hashes at seeds 0 to 2 read equal to B24.14's). FALSIFIER: `python tools/ci_sim_fabrication_check.py` refuses a `Fixtures` setting with no register row."
+    source:    "workplan v12 B24.17 (EVID_B 'Exact edits' 1; B24's H block slot 6; slot 5, H-665, is the struck `argument_step` and is returned unused)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"

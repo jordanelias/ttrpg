@@ -3920,19 +3920,28 @@ rosters:
       holds. `brings` and `cost` are the table's own words as tokens, checked only as present, until a reader names a closed set.
       [ASSUMPTION; Jordan to correct: the spelling of every `brings` and `cost` token and of the `carrier` suffix after the colon --
       basis: V2 p2 §G's table gives them in prose.]
+      `bears_on` (B24.17; EVID_B "Exact edits" 1) is the `issue_rungs` member an exhibit of the kind bears on: an item's `rung` is derived
+      from its kind, read off this column, never typed on the item. It is a member of `issue_rungs`, refused at import
+      (`data/rosters.py::_load_matters`).
+      [ASSUMPTION; Jordan to correct: `fact` for the four kinds `proofs` held (record, testimony, oath, confession) -- basis: EVID_B's
+      "`fact` for all four members"; and `fact` for the other eight -- basis: none in a document, the same reading carried over, so that
+      no kind bears on a rung the evidence rule does not yet weigh (V2 p2 §G names `precedent` as bearing on `definition`, and EVID_B
+      leaves that fifth member to FI, so it stays `fact` here).]
+      [ASSUMPTION: the refusal of a `bears_on` outside `issue_rungs` -- basis: every closed-set column in this roster file is refused
+      by its loader, `_refuse_not_in`'s practice.]
     rows:
-      - {id: record,         carrier: Record,            brings: holder,                cost: disclosure}
-      - {id: testimony,      carrier: "Claim:testimony", brings: witness_or_caller,     cost: speaks_and_may_be_pressed}
-      - {id: deed,           carrier: "Claim:deed",      brings: holder,                cost: names_source}
-      - {id: oath,           carrier: "Tenure:oblige",   brings: party,                 cost: binds_again}
-      - {id: debt,           carrier: "Tenure:oblige",   brings: party,                 cost: spent_when_called}
-      - {id: title,          carrier: "Tenure:hold",     brings: holder,                cost: puts_title_in_question}
-      - {id: precedent,      carrier: case_file_stages,  brings: witness,               cost: none}
-      - {id: law,            carrier: "Record:decree",   brings: anyone,                cost: disclosure}
-      - {id: treaty,         carrier: "Record:covenant", brings: party,                 cost: disclosure}
-      - {id: rumour,         carrier: "Claim:hearsay",   brings: holder,                cost: low_weight}
-      - {id: state_of_realm, carrier: strife_reading,    brings: anyone_in_realm,       cost: none}
-      - {id: confession,     carrier: "Record:confession", brings: bench_or_questioner, cost: none}
+      - {id: record,         carrier: Record,            brings: holder,                cost: disclosure, bears_on: fact}
+      - {id: testimony,      carrier: "Claim:testimony", brings: witness_or_caller,     cost: speaks_and_may_be_pressed, bears_on: fact}
+      - {id: deed,           carrier: "Claim:deed",      brings: holder,                cost: names_source, bears_on: fact}
+      - {id: oath,           carrier: "Tenure:oblige",   brings: party,                 cost: binds_again, bears_on: fact}
+      - {id: debt,           carrier: "Tenure:oblige",   brings: party,                 cost: spent_when_called, bears_on: fact}
+      - {id: title,          carrier: "Tenure:hold",     brings: holder,                cost: puts_title_in_question, bears_on: fact}
+      - {id: precedent,      carrier: case_file_stages,  brings: witness,               cost: none, bears_on: fact}
+      - {id: law,            carrier: "Record:decree",   brings: anyone,                cost: disclosure, bears_on: fact}
+      - {id: treaty,         carrier: "Record:covenant", brings: party,                 cost: disclosure, bears_on: fact}
+      - {id: rumour,         carrier: "Claim:hearsay",   brings: holder,                cost: low_weight, bears_on: fact}
+      - {id: state_of_realm, carrier: strife_reading,    brings: anyone_in_realm,       cost: none, bears_on: fact}
+      - {id: confession,     carrier: "Record:confession", brings: bench_or_questioner, cost: none, bears_on: fact}
 
   disposal_writes:
     source: "V2 p2 §J -- the typed writes the fold performs on a sitting's outcome; `arrangements.yaml: disposal:` names them by id."

@@ -1702,6 +1702,11 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; Jordan to correct; revert: `None`. The shipped first value is the smallest name -- no source sizes it; the sweep's points are `LEVEL_SIGMA`'s two smallest.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-671 -- `site: Fixtures lean_level`, graded `assumption`; no document derives the level of one commit, so it is injected at `minor` and swept None / minor / moderate]
     lean_level="minor",               # `H-671`, swept None (control) / minor (SHIPPED) / moderate
+    # `evidence_cap`: the ceiling on the weight of one corroborated cell (B24.17; EVID_B `standing` rule 4): the same cell, same value, same side, from distinct origins is one item of weight `1 - Prod(1 - w_i)` (FI's
+    # noisy-OR, `ED-IN-0322`), capped at `evidence_cap`; the same origin twice counts once. Nothing reads it until the `standing` rule reads it through `Input.dials`, so the shipped value moves no run.
+    # [ASSUMPTION; Jordan to correct; revert: none named, EVID_B gives it no control (the sweep's other points are the alternatives). EVID_B proposes 2.0 -- basis: none; the sweep's points are the proposed value +/- 1.]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-666 -- `site: Fixtures evidence_cap`, graded `assumption`; EVID_B proposes 2.0 and no document derives it, so it is injected at 2.0 and swept 1.0 / 2.0 / 3.0]
+    evidence_cap=2.0,                 # `H-666`, swept 1.0 / 2.0 (proposed, SHIPPED) / 3.0
 )
 
 #: `H-424`'s two arms by name, the shipped one first: `calibrated` is `DEFAULT_FIXTURES`' own table (one copy), `control` is `DIFFICULTY_OB_CONTROL`.

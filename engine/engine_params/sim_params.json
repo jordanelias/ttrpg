@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 133,
-    "total": 530,
-    "uncited": 397,
+    "total": 531,
+    "uncited": 398,
     "of_which_assumption_grade": 9
   },
-  "count": 530,
+  "count": 531,
   "by_module": {
     "engine.dice_engine": 13,
     "engine.season": 40,
@@ -17,7 +17,7 @@
     "fieldwork": 15,
     "overview": 5,
     "threadwork": 28,
-    "engine.season.settings": 224,
+    "engine.season.settings": 225,
     "engine.season.realm": 8
   },
   "params": [
@@ -6507,6 +6507,17 @@
       "module": "engine.season.settings",
       "file": "engine/season/data/fixtures.py",
       "note": "`H-671`, swept None (control) / minor (SHIPPED) / moderate",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "engine.season.settings.evidence_cap",
+      "name": "evidence_cap",
+      "value": 2.0,
+      "kind": "scalar",
+      "module": "engine.season.settings",
+      "file": "engine/season/data/fixtures.py",
+      "note": "`H-666`, swept 1.0 / 2.0 (proposed, SHIPPED) / 3.0",
       "citation": null,
       "citation_grade": null
     },
