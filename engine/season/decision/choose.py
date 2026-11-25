@@ -37,13 +37,15 @@ from ..data import goals as goals_data
 from ..data.rosters import STANCE_MAX
 from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
 from ..data.rosters import SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
-from ..data.verbs import BODILY_PRIZES, IN_CONFIDENCE_KEY, SAID_KEY, VERB_TABLE, act_key, align, align_choice, choice_values
+from ..data.verbs import (
+    BODILY_PRIZES, CITES_KEY, CONCLUDED_RANK_KEY, IN_CONFIDENCE_KEY, SAID_KEY, VERB_TABLE, act_key, align, align_choice, choice_values,
+)
 from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
 # imports `person_q` and `data/`); `_stance_arm` calls it, and `confliction` (IN-08 6f,
 # the derived Query's caller, ID-13).
 from ..queries.person_q import (
-    believed_capability, confliction, deed_align, intent_named, intent_said, refused_before, regard, stance_toward,
+    believed_capability, cited_support, confliction, deed_align, intent_named, intent_said, ledger_weigh, refused_before, regard, stance_toward,
 )
 from ..state.carriers import EFFORT, Act, Candidate, Person, Question, Scene, Sensation, View, fade_of
 from ..trace_log import TRACE
@@ -479,6 +481,54 @@ def settle_confidences(cands: list, scores: dict) -> tuple:
         return cands, scores
     kept = [c for c in cands if (c.operands or {}).get(IN_CONFIDENCE_KEY) is None
             or best[(c.verb, act_key(c.verb, c.subject, {**c.operands, IN_CONFIDENCE_KEY: None}))] is c]
+    return kept, {id(c): scores[id(c)] for c in kept}
+
+
+def settle_conclusions(cands: list, scores: dict, p: Person, fx: "Fixtures", draw) -> tuple:
+    """ONE SUSPECT PER CONCLUSION, DRAWN BY HIS SUPPORT (v12 B11.75, `19_LACUNA` R-19-04): of the `reconstruct` Candidates that differ only in WHICH DOER his ledger names (same verb,
+    subject and seat -- the same `act_key` once `CONCLUDED_RANK_KEY` is left out), exactly one survives, `settle_confidences`' shape. The Candidates are the variants `opening_set`
+    formed, one per `(deed kind, doer)`, each carrying the deed claims that name him (`CITES_KEY`); a variant's SUPPORT is `person_q.cited_support` over them (`LedgerReader._support`: over
+    distinct origins, under his own `ledger_weigh`), so a doer named by two independent tellers stands above one named by a single one, and a claim he has half forgotten weighs half.
+
+    THE WEIGHTS (the design read the commit body states): a variant's weight is its SUPPORT, and the survivor is drawn in proportion, `P(v) = support(v) / sum(support)`, by the sampler's own
+    arithmetic (`_sample_order`'s Gumbel-max) on `ln(support)` at unit temperature, one stream per variant keyed `conclude:<subject>:<rank>` (so a variant's draw is its own, and the
+    same on every lap). So a doer at 0.3 against one at 0.9 is named a quarter of the time: sometimes, never as often as the better supported (NOT `exp(ln s / choice_temperature)`: at the
+    shipped 0.05 that is `s ** 20`, which names the weaker about once in ten billion, and R-19-04 asks that a less-supported suspect be named SOMETIMES). The person's temperature enters
+    as the gate `_sample_order` has: AT `choice_temperature` 0 THERE IS NO DRAW, and the best-supported variant (the first formed on a tie) is his conclusion. A variant with no support (its
+    cites are not in his ledger) is never drawn; a family where none has any keeps the first formed. A missing `draw` at a nonzero temperature RAISES, as `_sample_order`'s does.
+    A Candidate with no `CONCLUDED_RANK_KEY` is its own group, so every other row passes through. Returns `(cands, scores)` for the kept set, `scores` keyed on `id(c)`."""
+    families: dict = {}
+    for c in cands:
+        ops = c.operands or {}
+        if ops.get(CONCLUDED_RANK_KEY) is not None:
+            families.setdefault((c.verb, act_key(c.verb, c.subject, {**ops, CONCLUDED_RANK_KEY: None})), []).append(c)
+    if not families:
+        return cands, scores
+    tau = own_temperature(p, fx)
+    if tau != 0 and draw is None:
+        raise Unspecified(
+            "the conclusion draw", "B11.75",
+            needs=f"`make_chooser(fx, mint, verbs, draw)` with a draw at choice_temperature={tau}",
+            law="R-19-04 -- at a nonzero temperature the suspect is DRAWN by his support, and a chooser built without a draw would silently name the best-supported every time")
+    tick, decay = fade_of(p)
+    weigh = ledger_weigh(p, fx, tick)
+    keep = set()
+    for fam in families.values():
+        support = [cited_support(p.ledger, c.operands.get(CITES_KEY, ()), weigh, tick=tick, decay=decay) for c in fam]
+        best = max(range(len(fam)), key=lambda i: (support[i], -i))     # the best-supported, the first formed on a tie
+        if tau != 0 and sum(1 for sp in support if sp > 0) > 1:
+            keyed = []
+            for i, (c, sp) in enumerate(zip(fam, support)):
+                if sp <= 0:
+                    continue
+                rng = draw(p.id, f"conclude:{c.subject}:{c.operands[CONCLUDED_RANK_KEY]}")
+                u = rng.random()
+                while u <= 0.0:
+                    u = rng.random()
+                keyed.append((fmath.log(sp) - fmath.log(-fmath.log(u)), -i))
+            best = -max(keyed)[1]
+        keep.add(id(fam[best]))
+    kept = [c for c in cands if (c.operands or {}).get(CONCLUDED_RANK_KEY) is None or id(c) in keep]
     return kept, {id(c): scores[id(c)] for c in kept}
 
 
@@ -947,6 +997,7 @@ def make_ranker(fx: "Fixtures", verbs: Optional[frozenset] = None,
         cands, marked = strike_scruples(p, cands, fx, draw, lambda c: _scores[id(c)])   # (Candidate, margin, score, struck): every candidate with a positive margin
         # CP-T01-05 NPC half: the person may put effort behind a contested act (`npc_effort`); `off` is a no-op.
         cands, _scores = settle_confidences(cands, _scores)       # B11.10: a telling in confidence and one not are one opportunity
+        cands, _scores = settle_conclusions(cands, _scores, p, fx, draw)    # B11.75: where his ledger names several doers, one suspect, drawn by support
         cands, _scores = settle_efforts(cands, _scores, score, fx)
         ranked = score_order(cands, _scores)
         # ⚠ KEYED ON `id(c)` AND THAT IS SAFE HERE, NARROWLY: `cands` holds every Candidate alive

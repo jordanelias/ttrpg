@@ -1000,6 +1000,12 @@ DEFAULT_FIXTURES = Fixtures(
     # `said_of` made before the choice, so no act is renamed or rescored. A whole number of 1 or more.
     # [JUSTIFIED: v12 B11.10 (08_FI_02 edit 7) -- no document gives how many claims a teller weighs, so it is injected and swept 1 (control, shipped) / 3; the shipped value is B98's]
     said_choices=1,                    # B11.10, swept 1 (control, SHIPPED) / 3
+    # v12 B11.75 (`19_LACUNA` R-19-05). WHETHER `record` GRADES A CONCLUDER: at `1`, what a teller told a holder as a conclusion that names a doer (a told `concluded:<kind>` claim) is
+    # paired by `queries/person_q.py::record` against the holder's own reading of who did that deed, as a told cell is (`_pair`), so a concluder caught naming the wrong hand loses his
+    # record with that holder. `0` is the CONTROL and is SHIPPED: `record`'s `told` set is the cell predicates alone, so no pair is read and no weight moves. Only a TOLD holder is
+    # scored (the design departs from R-19-05's "by WITNESS or by telling": `proposals/v12_B11_a_conclusion_acted_on.md` §2). B98 sets it.
+    # [JUSTIFIED: v12 B11.75 (19_LACUNA R-19-05) -- no document gives whether a concluder is graded, only that one who is not is a free pass; injected and swept 0 (control, shipped) / 1, no target reading yet (B98)]
+    record_concluders=0,               # B11.75, swept 0 (control, SHIPPED) / 1
     # `H-197` (v9 IN-18 `G6`, confidences). HOW OFTEN A TELLING IS MADE IN CONFIDENCE: the chance
     # `loop/witness.py::_circle_of` draws once per telling (its docstring says what a circle is and does).
     # `0` is the CONTROL and is SHIPPED [ASSUMPTION; medium; Jordan to

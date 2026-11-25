@@ -35,7 +35,7 @@ from ..data.rosters import (
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
 from ..data.verbs import (
-    CHOICE_RANGES, CHOICE_SOURCED, CONCLUDED_KEY, CONCLUDING_VERBS, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LEDGER_RANGES, LIE_VERBS,
+    CHOICE_RANGES, CHOICE_SOURCED, CITES_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, CONCLUDING_VERBS, DETAINEE_CLASS, ELIGIBILITY_KINDS, ENEMY_CLASS, HELD_DOCUMENT_DECLINES, HELD_EDGE_DECLINES, HELD_EDGE_SOURCED, LEDGER_RANGES, LIE_VERBS,
     OPPOSED_WITHOUT_PRIZE, OWN_STANCE_DECLINES, SAID_KEY, SAID_RANK_KEY, OWN_TITLE_DECLINES, RECORD_SUBKINDS_BY_VERB, RECORD_SUBKINDS_HELD,
     TERMS_SOURCED, VERB_TABLE, VIOLENCE_CONTEXTS, VIOLENT_VERBS, VOCATION_SOURCED, VOCATIONS, WARRANT_SOURCED,
     align,
@@ -45,7 +45,7 @@ from ..gaps import Forbidden
 # import `decision/`); re-bound here by name, as `opening_set` and `standing_of` call them and the tests reach them as `options.<name>`.
 from ..queries.person_q import (
     PAIRED_KINDS, LedgerReader, OwnStateReader, addressed_to, agreement, attackers_of, belief_contradicts, channel_remove,
-    competence, conclusions_of, content_kind, content_said, decisiveness, dissents, held_against, known_persons, ledger_names, ledger_range,
+    competence, conclusion_cites, content_kind, content_said, decisiveness, dissents, held_against, known_persons, ledger_names, ledger_range,
     ledger_weigh, lie_said_of, projected_axes, rank, record, refracted_confidence, regard, said_of, said_set,
     teller_weight, telling_hearers,
     _judgement_factor, _judgement_rows,
@@ -452,13 +452,18 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 # B11.73 (`08_FI_03` §3 act 1; FRES §7 (1)): A ROW THAT REPORTS A CONCLUSION (`CONCLUDING_VERBS`: `reconstruct`, read off its `emits:`) CARRIES WHAT HIS OWN
                 # LEDGER LETS HIM CONCLUDE of this subject -- `(the one the deed was done to, deed kind, doer)`, `person_q.conclusions_of`, fixed here as `said` is so WITNESS
                 # reads the act and never his live ledger -- under `CONCLUDED_KEY`, and nothing where his ledger names no doer (the key is absent, the act folds as any
-                # reconstruct). One conclusion: where several are named the first in ledger order rides (the choice among them is B11.75's variants).
-                # It is no operand (`binding_of` drops it) and no part of the act's id (`act_key`). Own ledger only, no World.
+                # reconstruct). It is no operand (`binding_of` drops it) and no part of the act's id (`act_key`). Own ledger only, no World.
+                # v12 B11.75 (`19_LACUNA` R-19-04, "Which doer"): AND WHERE HIS LEDGER NAMES SEVERAL, THE SUSPECT IS A CHOICE -- ONE CANDIDATE PER `(deed kind, doer)` (`conclusion_cites`,
+                # `conclusions_of`'s reading in ledger order), each carrying the deed claims that name him under `CITES_KEY` (what a later `utter` of the conclusion cites and what
+                # `settle_conclusions` weighs it by) and, where there is more than one, its place among them (`CONCLUDED_RANK_KEY`, so the acts' ids differ, as `said`'s do).
+                # `decision/choose.py::settle_conclusions` keeps one. One doer is no choice: no rank, no rename.
+                conclusions: tuple = (None,)
                 if verb in CONCLUDING_VERBS:
                     if concluded is None:
-                        concluded = conclusions_of(p.ledger, p.id, COVERT_KINDS)
-                    if concluded.get(subject):
-                        ops = {**ops, CONCLUDED_KEY: (subject, *concluded[subject][0])}
+                        concluded = conclusion_cites(p.ledger, p.id, COVERT_KINDS)
+                    named_by = tuple((k, ids) for k, ids in concluded.items() if k[0] == subject)
+                    if named_by:
+                        conclusions = named_by
                 for rank, said in enumerate(saids):
                     cand_ops = ops
                     if said is not None:
@@ -471,7 +476,13 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                     # `Act.via`. A single-seat Candidate carries nothing extra: byte-identical.
                     if len(seats) > 1:
                         cand_ops = {**cand_ops, VIA: st}
-                    out.append(Candidate(verb, subject, operands=cand_ops))
+                    for place, named in enumerate(conclusions):
+                        c_ops = cand_ops
+                        if named is not None:
+                            c_ops = {**cand_ops, CONCLUDED_KEY: named[0], CITES_KEY: named[1]}
+                            if len(conclusions) > 1:
+                                c_ops[CONCLUDED_RANK_KEY] = place
+                        out.append(Candidate(verb, subject, operands=c_ops))
     return out
 
 

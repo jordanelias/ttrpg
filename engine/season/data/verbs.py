@@ -1913,6 +1913,10 @@ _check_dominance_kinds(DOMINANCE_KINDS, DEED_KINDS)
 # (`concluded:<deed kind>`, `loop/witness.py`). `CONCLUDING_VERBS` is read off the table, no verb listed: the rows that report the kind. Refused at import when
 # no row does, so a deposit nothing forms an act for cannot read as built.
 CONCLUSION_KIND, CONCLUDED_KEY, CONCLUDED_STEM = "conclusion.reached", "concluded", "concluded"
+# B11.75 (`19_LACUNA` R-19-04): WHICH SUSPECT IS A CHOICE. Where his ledger names several doers of a deed on one subject, `opening_set` forms one `reconstruct` Candidate per
+# `(deed kind, doer)`, each carrying its own `concluded` triple, the claims that name him (`CITES_KEY`) and this key -- its place among them -- so the acts' ids differ
+# (`choice_values`: `concluded` is a choice only where fanned, as `said` is); `decision/choose.py::settle_conclusions` keeps one, drawn by support.
+CONCLUDED_RANK_KEY = "concluded_rank"
 CONCLUDING_VERBS = frozenset(v for v, r in VERB_TABLE.items() if CONCLUSION_KIND in r.emits)
 if not CONCLUDING_VERBS:
     raise Unspecified(
@@ -2072,7 +2076,8 @@ SITE_KEY = "site"
 # `14_VERBS_SOCIAL2_B` §1) forms one from a held claim; `_fanned_choices` never fans it (no closed range), so the shipped season forms what it formed.
 CITES_KEY = "cites"
 CHOICE_CARRIER = {ORDER_ROLE_KEY: "Record.exists", ORDER_RETREAT_KEY: "Record.exists", MARCH_POSTURE_KEY: "Site.condition",
-                  SAID_KEY: "news.told", IN_CONFIDENCE_KEY: "news.told", SITE_KEY: "finding.made", CITES_KEY: "Proposition.exists"}
+                  SAID_KEY: "news.told", IN_CONFIDENCE_KEY: "news.told", SITE_KEY: "finding.made", CITES_KEY: "Proposition.exists",
+                  CONCLUDED_KEY: CONCLUSION_KIND}
 # v12 B11.72 (`08_FI_07` §2 (a)): `SITE_KEY` IS A CHOICE WHOSE RANGE IS THE ACTOR'S OWN LEDGER -- the ids his claims present as a Site
 # (`rosters.yaml: choice_sourced`'s `ledger_ranges`, read by `queries/person_q.py::ledger_range`), so it has no `CHOICE_RANGES` entry (`SAID_KEY`'s
 # shape). The carrier is the kind the look emits (`finding.made`), as a telling's is its deposit.
@@ -2088,7 +2093,7 @@ def _load_choice_sourced(values: dict) -> dict:
     out = {v: tuple(ks or ()) for v, ks in values.items()}
     for v, ks in out.items():
         row = VERB_TABLE.get(v)
-        if row is None or not ks or any(k not in CHOICE_CARRIER or (k not in CHOICE_RANGES and k not in (SAID_KEY, CITES_KEY) and k not in LEDGER_RANGES)
+        if row is None or not ks or any(k not in CHOICE_CARRIER or (k not in CHOICE_RANGES and k not in (SAID_KEY, CITES_KEY, CONCLUDED_KEY) and k not in LEDGER_RANGES)
                                         or CHOICE_CARRIER[k] not in (*row.writes, *row.emits) for k in ks):
             raise Forbidden(
                 f"`rosters.yaml: choice_sourced` names {v!r}: {list(ks)}, and the verb table carries no such verb, "
@@ -2106,11 +2111,12 @@ def choice_values(verb: str, ops) -> tuple:
     """`(key, value)` for each CHOICE VALUE the operands `ops` carry for `verb` (`rosters.yaml: choice_sourced`, in its order): the one reader, for `act_key`'s
     suffix and the chooser's score (`decision/choose.py::chosen_values`). `said` is a choice only where `opening_set` fanned it over several claims, and
     its value is then the claim's RANK (`SAID_RANK_KEY`, 0 for the claim `said_of` ranks first), never the `Said`: with one claim to say there is nothing
-    to choose among, and riding the lone claim on every act would rename every telling (`_fanned_choices`'s reason for a one-member range)."""
+    to choose among, and riding the lone claim on every act would rename every telling (`_fanned_choices`'s reason for a one-member range).
+    `concluded` (B11.75) is a choice the same way: its value is the variant's place among the doers his ledger names (`CONCLUDED_RANK_KEY`), absent for one doer."""
     ops = ops if isinstance(ops, dict) else {}
     out = []
     for k in CHOICE_SOURCED.get(verb, ()):
-        v = ops.get(SAID_RANK_KEY) if k == SAID_KEY else ops.get(k)
+        v = ops.get(SAID_RANK_KEY) if k == SAID_KEY else ops.get(CONCLUDED_RANK_KEY) if k == CONCLUDED_KEY else ops.get(k)
         if v is not None:
             out.append((k, v))
     return tuple(out)

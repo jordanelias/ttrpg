@@ -521,8 +521,18 @@ def conclusions_of(ledger, holder: str, kinds) -> dict:
     doer is the sighting's; an unpaired deed of a Person-subject kind is filed under the counterparty `deed_counterparty` reads off his sightings. Any other unpaired
     kind names no one it was done to (its claim's subject is its doer, H-192) and concludes nothing here -- the pairing never guesses. Nothing wrong is deposited
     by a roll (K-37): a wrong name is a wrong ledger. Holder-side and World-free (AX-2)."""
-    seen = None
     out: dict = {}
+    for c, to, doer in _concluded(ledger, holder, kinds):
+        pair = (c.predicate, doer)
+        if pair not in out.setdefault(to, []):
+            out[to].append(pair)
+    return {to: tuple(pairs) for to, pairs in out.items() if pairs}
+
+
+def _concluded(ledger, holder: str, kinds):
+    """`(deed claim, the one it was done to, doer)` FOR EACH DEED OF `kinds` THE LEDGER LETS THE HOLDER CONCLUDE OF, in ledger order -- `conclusions_of`'s one reading (its docstring is
+    the rule), kept as a generator so the readers of a conclusion (`conclusion_cites`, `concluded_cells`) ask the same question of the same claims (B11.75)."""
+    seen = None
     for c, doer in _named_deeds(ledger, {"kinds": kinds}, holder):
         if c.predicate in PAIRED_KINDS:
             to = c.subject
@@ -531,10 +541,42 @@ def conclusions_of(ledger, holder: str, kinds) -> dict:
             to = deed_counterparty(c, seen)
         else:
             continue
-        pair = (c.predicate, doer)
-        if to is not None and pair not in out.setdefault(to, []):
-            out[to].append(pair)
-    return {to: tuple(pairs) for to, pairs in out.items() if pairs}
+        if to is not None:
+            yield c, to, doer
+
+
+def conclusion_cites(ledger, holder: str, kinds) -> dict:
+    """`{(the one the deed was done to, deed kind, doer): (the ids of the deed claims that name him, in ledger order)}` -- what each conclusion `conclusions_of` reads rests on
+    (B11.75, R-19-04's `cites`: the claims that name him). The claim cited is the DEED claim `_named_deeds` read the doer off (for a paired kind it is paired with the sighting
+    that carries the hand, for an unpaired kind its subject is the doer): the holder holds it, so a later `utter` may cite it (`_held_cites`)."""
+    out: dict = {}
+    for c, to, doer in _concluded(ledger, holder, kinds):
+        ids = out.setdefault((to, c.predicate, doer), [])
+        if c.id not in ids:
+            ids.append(c.id)
+    return {k: tuple(ids) for k, ids in out.items()}
+
+
+def cited_support(ledger, cites, weigh=None, *, tick: int = 0, decay: int = 0) -> float:
+    """HOW WELL SUPPORTED A CONCLUSION IS BY THE CLAIMS IT CITES, in `[0, 1]`: `LedgerReader._support` over those claims -- `1 - PROD over distinct origins (1 - weigh(c))`, one
+    origin counting once at its highest weight, so a doer named by two independent tellers stands higher than one named by a single one repeating himself (B11.75, R-19-04). `0.0`
+    for a cite the ledger does not hold. `weigh` is `ledger_weigh`'s: `None` weighs every claim 1.0, so any held cite is support 1.0 (`_support` at `weigh == 1`). The cites
+    of one conclusion share a predicate and a value (a deed kind, `True`), so they form one group and the first entry is the answer."""
+    ids = set(cites)
+    matches = [c for c in ledger if c.id in ids]
+    if not matches:
+        return 0.0
+    if weigh is None:
+        return 1.0
+    return LedgerReader(ledger, weigh, tick=tick, decay=decay)._support(matches)[0]
+
+
+def concluded_cells(ledger, holder: str, kinds) -> list:
+    """THE HOLDER'S OWN READING OF WHO DID A DEED, AS THE CELL A CONCLUSION IS TOLD AS: one claim `(the one it was done to, concluded:<kind>, doer)` per resolved deed in
+    `ledger` (`_concluded`; a `Claim` carrying the deed claim's own id, `when`, `source` and `confidence`), for `record`'s pairing of a told conclusion against what he saw
+    (B11.75). The caller passes the holder's UNTOLD claims: a conclusion is checked against what he saw, never against what he was told. No claim is stored."""
+    return [Claim(c.id, holder, to, f"{_verbs.CONCLUDED_STEM}:{c.predicate}", doer, c.when, c.source, c.confidence, "own", c.lap)
+            for c, to, doer in _concluded(ledger, holder, kinds)]
 
 
 def paired_deed_term(p: Person, axis_w: dict, c, seen_of) -> tuple:
@@ -2682,6 +2724,12 @@ def rank(p: Person, teller: str) -> int:
     return 0
 
 
+def _is_conclusion(c) -> bool:
+    """A TOLD CONCLUSION THAT NAMES A DOER: a claim `(the one a deed was done to, concluded:<deed kind>, doer)` (`loop/witness.py`'s deposit; B11.73), its value a person -- the
+    `Partial` band's claim has value `True` and names no hand, so it has nothing `record` can check (B11.75)."""
+    return str(c.predicate).startswith(f"{_verbs.CONCLUDED_STEM}:") and c.value is not True
+
+
 def record(p: Person, teller: str, fx: "Fixtures", tick: int = 0) -> float:
     """A TELLER'S RECORD WITH `p`: how often what `teller` told `p` matched what `p` holds firsthand
     (telling workplan `T6`, `ED-IN-0282`; E5).
@@ -2718,6 +2766,16 @@ def record(p: Person, teller: str, fx: "Fixtures", tick: int = 0) -> float:
     gain = fx.get("record_gain")
     told = [c for c in p.ledger if c.teller == teller and _is_cell(c)]
     own = [c for c in p.ledger if c.firsthand and _is_cell(c)]
+    # B11.75 (R-19-05; `proposals/v12_B11_a_conclusion_acted_on.md` §2): A CONCLUDER IS A TELLER OF HIS OWN CONCLUSION. At `record_concluders` 1 the `told` set also admits what `teller`
+    # told `p` as a conclusion that NAMES A DOER (`concluded:<kind>`, value a person -- the `Partial` deposit, value `True`, withholds the hand and says nothing to check), and `own`
+    # gains `p`'s own reading of who did each such deed (`concluded_cells`, over his UNTOLD claims), so `_pair` grades it as it grades a told cell: the same agree/disagree rule,
+    # no second arithmetic, no store. WHERE R-19-05 DEPARTS: it scores a holder "by WITNESS or by telling"; this scores the TOLD holder only (a witness of the bare utterance
+    # holds nothing of what was asserted). At `0` (the control) the filter is the cell filter above, exactly, and the flag is read only for a teller who told a conclusion.
+    told_concluded = [c for c in p.ledger if c.teller == teller and _is_conclusion(c)]
+    if told_concluded and fx.get("record_concluders"):
+        kinds = frozenset(c.predicate.partition(":")[2] for c in told_concluded)
+        told = told + told_concluded
+        own = own + concluded_cells([c for c in p.ledger if not c.chain], p.id, kinds)
     agree, dis = _pair(told, own, lambda c: (c.subject, c.predicate), None, tick, fx.claim_decay())
     # ABSENT: H-191 intent reconciliation  (an `absent` hole row, read by harness/register.py; nothing reads this marker)
     if agree + dis == 0:
