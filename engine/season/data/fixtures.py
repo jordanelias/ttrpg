@@ -724,12 +724,13 @@ DEFAULT_FIXTURES = Fixtures(
     # [JUSTIFIED: engine/season/hole_register.yaml H-525 -- `site: Fixtures arrival_report`, graded `assumption`; the source ships the arm `off` and names neither a setter nor a reading that flips it, so it is injected at the control and swept off / on]
     arrival_report="off",              # `H-525`, swept off (control, SHIPPED) / on
     # B12a.51 (`07_SE_ground_and_granaries` §4 (b), CP-T08-02): WHICH PRODUCING SITES A SETTLEMENT IS ENDOWED WITH at the world's making
-    # (`boot/realm.py::build_realm`'s site loop, through `endowment_for`, which reads `rosters.yaml: site_endowment`). `uniform` is THE CONTROL,
-    # SHIPPED: `harbour` and `seam` at every settlement, today's placement byte for byte. `ground` is the arm: each territory's own row. The flip
-    # to `ground` is B12a.54's, its own declared mover.
+    # (`boot/realm.py::build_realm`'s site loop, through `endowment_for`, which reads `rosters.yaml: site_endowment`). `uniform` places `harbour` and `seam`
+    # at every settlement (today's placement, B12a.51's control); `ground` places each territory's own row.
     # [ASSUMPTION; medium; Jordan to correct; revert: `endowment_mode: uniform`]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-526 -- `site: Fixtures endowment_mode`, graded `assumption`; CP-T08-02 gives the arm and no territory's row, so the arm is injected at the control and swept uniform / ground]
-    endowment_mode="uniform",          # `H-526`, swept uniform (control, SHIPPED) / ground (B12a.54 flips)
+    # B12a.54 FLIPPED IT to `ground` (a declared HASH MOVER): each territory's own row of `site_endowment` is the placement. `uniform` is THE CONTROL, the arm the
+    # flip came from (`harbour` and `seam` at every settlement; the realm hash and Site ids of B12a.53's tree byte for byte). Revert: `uniform`.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-526 -- `site: Fixtures endowment_mode`, graded `assumption`; CP-T08-02 gives the arm and no territory's row, so the arm is injected and swept uniform (control) / ground (SHIPPED)]
+    endowment_mode="ground",           # `H-526`, swept uniform (control) / ground (SHIPPED, B12a.54's flip)
     # B12a.51 (`07_SE_ground_and_granaries` §4 (b)): SEASONS OF THE EATEN-KIND DEFICIT A GRANARY RUNG STARTS WITH under `ground`
     # (`07_SE_treasury_granary_B`'s seed, B12a.52). `0` is THE CONTROL, SHIPPED: no territory stock. Read by nothing until B12a.52.
     # [ASSUMPTION; medium; Jordan to correct; revert: `granary_seasons: 0`]
