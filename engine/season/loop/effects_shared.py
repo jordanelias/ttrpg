@@ -210,4 +210,3 @@ def occupying_faction(w: "World", via: str, rid: str) -> Optional[str]:
     if not march_at_band(w, at, WON) and len(seat_people_at(w, via, at)) <= len(mustered(w, at, holder)):
         return None
     return mine
-

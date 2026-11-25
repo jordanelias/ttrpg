@@ -74,4 +74,3 @@ def test_a_march_on_a_settlement_counts_against_its_territory():
     _march(w2, SPY, "set_s_001", "m_cap_1")
     whole, events2 = _march(w2, CARDINAL, "terr_T1", "m_cap_2")
     assert whole == ["march.refused"] and _cap_reads(events2)["march.nth"] == 2, (whole, _cap_reads(events2))
-
