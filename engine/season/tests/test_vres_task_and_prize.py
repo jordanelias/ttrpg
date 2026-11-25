@@ -183,6 +183,14 @@ def test_a_with_refusal_deposits_absent_to_the_actor_only(mode):
     assert not refused3 and not _absent_claims(w3)
 
 
+def test_a_with_refusal_deposits_no_absent_claim_at_none():
+    """`none` is the control arm of `observation_deposit_mode`: the deposit block it gates is the `absent` claim's too, so the same refusal that leaves
+    one at `actor` and `total` leaves none. The refusal itself is asserted, so the empty reading is an observation and not an absent run."""
+    w, refused = _tell_season(_AT, "p_king", observation_deposit_mode="none")
+    assert refused, "no refusal reached the log: the control cannot see a deposit"
+    assert not _absent_claims(w), [(c.holder, c.subject) for c in _absent_claims(w)]
+
+
 def test_an_absent_claim_is_never_passed_on_by_the_man_who_holds_it():
     """Step 3 against a retelling: `said_of` offers the newest non-`seen` claim a teller holds about a subject; his own `absent` claim about the man is
     not among them, so a telling cannot make a second holder. With another claim about him held, that one is said; with nothing else, nothing."""

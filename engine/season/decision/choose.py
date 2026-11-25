@@ -38,7 +38,7 @@ from ..data.rosters import STANCE_MAX
 from ..data.pursuits import _AXES, to_axes   # the sorted axis order: a sum over the frozenset would add in PYTHONHASHSEED's order
 from ..data.rosters import SCENE_PACKING_RULES, require_member, require_use_site, roster, seat_capability
 from ..data.verbs import (
-    BODILY_PRIZES, CITES_KEY, CONCLUDED_RANK_KEY, IN_CONFIDENCE_KEY, SAID_KEY, VERB_TABLE, act_key, align, align_choice, choice_values,
+    BODILY_PRIZES, CITES_KEY, CONCLUDED_KEY, CONCLUDED_RANK_KEY, IN_CONFIDENCE_KEY, SAID_KEY, VERB_TABLE, act_key, align, align_choice, choice_values,
 )
 from ..gaps import Unspecified
 # `stance_toward` is the asker-first reader `queries/person_q.py` owns (`04 §C.3`: `decision/`
@@ -521,7 +521,8 @@ def settle_conclusions(cands: list, scores: dict, p: Person, fx: "Fixtures", dra
             for i, (c, sp) in enumerate(zip(fam, support)):
                 if sp <= 0:
                     continue
-                rng = draw(p.id, f"conclude:{c.subject}:{c.operands[CONCLUDED_RANK_KEY]}")
+                _to, _kind, _doer = c.operands[CONCLUDED_KEY]      # keyed on WHO and WHAT is concluded, never on the variant's place in a list
+                rng = draw(p.id, f"conclude:{c.subject}:{_kind}:{_doer}")
                 u = rng.random()
                 while u <= 0.0:
                     u = rng.random()

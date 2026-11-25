@@ -9,7 +9,7 @@ budget.   NO World in scope."*
 
     questions.py   assemble · aggregate_questions · view_ids
     options.py     THE `opening_set` MEMBER -- opening_set and its operand machinery,
-                   person_side_eligible, agreement, standing_of, and `project`
+                   person_side_eligible, standing_of, and `project`
                    (which the `H-146` refusal gate calls; defined here so `options` never
                    imports `choose`)
 
@@ -59,7 +59,8 @@ identical, which is the fabricated null `CLAUDE.md` §0.1 pt 4 calls the worse d
 # ---------------------------------------------------------------------------
 # THE PACKAGE SURFACE. Every public name the rest of the tree imports from `..decision`, re-exported
 # from its owning member so no importer has to know which file holds what. `ALIGNMENT` and
-# `belief_contradicts` are deliberately ABSENT -- see the module docstring.
+# `belief_contradicts` are deliberately ABSENT -- see the module docstring. `agreement` is `queries/person_q.py`'s (B11.21): re-bound from `.options`
+# by name for its importers, and so not in `__all__`, which lists only what a member of this package defines.
 # ---------------------------------------------------------------------------
 from .budget import body_band_penalty, budget
 from .choose import make_chooser, pack_scenes

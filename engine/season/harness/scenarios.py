@@ -61,7 +61,7 @@ from ..state.ids import H, draw_factory
 from ..state.world import World
 from ..tests._flat_fold import flat_fold, flat_fold_fixtures      # the one place a world asks for the flat fold; `trail_world` is built at it
 from . import probes as P
-from .headless import build_world
+from .carin import build_world
 from .play_surface import board, carry_on, dispatching_chooser
 
 #: What an ending is for the seated person. The one closed tuple; a row's `kinds` values are members of it.
@@ -272,6 +272,7 @@ def trail_world(verb="forge", kind="record.forged", second=None, fixtures=None, 
 
 # THE INQUIRY SCENARIO'S CAST AND PLACES. Ids of this builder's own world (as `trail_world`'s are), never game vocabulary.
 FORGE_PLACE, HAND_PLACE, TOWN = "Hf", "Hw", "Sq"       # the hearths the sheet is forged at and handed over at, and the settlement they are in
+LEAN_GOAL = "goal_riskbreakers_prevent_corruption"   # the `goals.yaml` row whose lean (`pursuits:`) the investigator's goal takes
 CASE_GOAL = "goal_scenario_inquiry"  # the investigator's one goal: the Proposition id and the `data/goals.py` row's id
 INQUIRY_CAST = ("p_forger", "p_holder", "p_witness", "p_investigator", "p_bench_a", "p_bench_b")
 
@@ -281,11 +282,10 @@ def inquiry_goal():
     loader's own `parse`: its `object:` is `deed_doers` over `rosters.yaml: covert_kinds` -- the doers his OWN ledger names of
     any covert deed, `person_q.deed_doers` -- so its referents are his suspects, empty until his ledger names someone.
     [ASSUMPTION; medium; Jordan to correct] a scenario goal is authored in the builder as `build_realm`'s ambitions are,
-    not drawn; its lean (`justice`, `virtue`) is `goals.yaml`'s `goal_riskbreakers_prevent_corruption`'s."""
+    not drawn; its lean is READ off `goals.yaml`'s `goal_riskbreakers_prevent_corruption` row (`LEAN_GOAL`), the covert-deed goal the realm already authors, never retyped."""
     (g,) = goals_data.parse({"goals": [{
         "id": CASE_GOAL, "org": {"faction": "Valorsmark"}, "text": "an inquirer learns who did the covert deed",
-        # [canonical: engine/season/goals.yaml §goal_riskbreakers_prevent_corruption] the lean 0.6 / 0.4 is that row's, copied
-        "object": {"kind": "deed_doers", "kinds": sorted(COVERT_KINDS)}, "pursuits": {"justice": 0.6, "virtue": 0.4},
+        "object": {"kind": "deed_doers", "kinds": sorted(COVERT_KINDS)}, "pursuits": dict(goals_data.goal(LEAN_GOAL).pursuits),
         "source": "B11.70 -- `harness/scenarios.py::inquiry_goal`"}]})
     return g
 

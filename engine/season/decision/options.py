@@ -29,8 +29,8 @@ from ..data.requires import (
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
 )
 from ..data.rosters import (
-    CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, COVERT_KINDS, PERSON_PREDICATES, PURSUIT_AXES, SUCCESSIONS,
-    capability_rows, FACTION_BY_PROP, refusable, refusing_pole, remove_distance, require_member, require_use_site,
+    CHALLENGE_KIND, COVERT_KINDS, PURSUIT_AXES, SUCCESSIONS,
+    FACTION_BY_PROP, refusable, refusing_pole, require_member,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
 # `H-66` sweep rebinds, and `align` reads it there.
@@ -51,11 +51,7 @@ from ..queries.person_q import (
     _judgement_factor, _judgement_rows,
 )
 from ..state.carriers import Candidate, Claim, Person, Question, Record, View, fade_of
-# 04 §C.3 says `decision/` does not import `state/`; the AX-2 scan (`test_season_shape.py`) forbids `state.world` only and has admitted `state.carriers` since
-# before B09. `state/ledgers.py` is a leaf that imports nothing and `present_confidence` is a pure function of a Claim: admitted on that precedent (B09.01).
-from ..state.ledgers import present_confidence
 from ..trace_log import TRACE
-from ...substrate.descriptors import about_mid, scale_of
 
 # v9 IN-12 step 7: THE CLASS A HELD WRIT RIDES THE QUESTION AS -- the carrier's own type name, which is
 # what `queries/world_q.py::_stamped` stamps for a document (`World.class_of`) and what
@@ -309,7 +305,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         ledger_of = row.requires_typed.named_own_ledger_operands() if row.requires_typed else ()
         opposes_subject = subject_is_opponent(row)
         said_of_entity: dict = {}           # entity -> `said_of` (this row's own-ledger read, per entity)
-        concluded = None                    # B11.73: `conclusions_of` of his own ledger, read once per call for a row that reports a conclusion
+        concluded = None                    # B11.73: `conclusion_cites` of his own ledger, read once per call for a row that reports a conclusion
         # IN-10 (a) (H-203): a row declaring `referent_named` forms only on a classed referent the
         # person's OWN LEDGER names (`person_q.ledger_names`: a deposit, or a held document's
         # `terms`) -- `oblige` on a seat he was told of, never on a vacancy a world read stamped.
@@ -453,11 +449,11 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                     if not saids:
                         continue
                 # B11.73 (`08_FI_03` §3 act 1; FRES §7 (1)): A ROW THAT REPORTS A CONCLUSION (`CONCLUDING_VERBS`: `reconstruct`, read off its `emits:`) CARRIES WHAT HIS OWN
-                # LEDGER LETS HIM CONCLUDE of this subject -- `(the one the deed was done to, deed kind, doer)`, `person_q.conclusions_of`, fixed here as `said` is so WITNESS
+                # LEDGER LETS HIM CONCLUDE of this subject -- `(the one the deed was done to, deed kind, doer)`, `person_q._concluded`, fixed here as `said` is so WITNESS
                 # reads the act and never his live ledger -- under `CONCLUDED_KEY`, and nothing where his ledger names no doer (the key is absent, the act folds as any
                 # reconstruct). It is no operand (`binding_of` drops it) and no part of the act's id (`act_key`). Own ledger only, no World.
                 # v12 B11.75 (`19_LACUNA` R-19-04, "Which doer"): AND WHERE HIS LEDGER NAMES SEVERAL, THE SUSPECT IS A CHOICE -- ONE CANDIDATE PER `(deed kind, doer)` (`conclusion_cites`,
-                # `conclusions_of`'s reading in ledger order), each carrying the deed claims that name him under `CITES_KEY` (what a later `utter` of the conclusion cites and what
+                # `_concluded`'s reading in ledger order), each carrying the deed claims that name him under `CITES_KEY` (what a later `utter` of the conclusion cites and what
                 # `settle_conclusions` weighs it by) and, where there is more than one, its place among them (`CONCLUDED_RANK_KEY`, so the acts' ids differ, as `said`'s do).
                 # `decision/choose.py::settle_conclusions` keeps one. One doer is no choice: no rank, no rename.
                 conclusions: tuple = (None,)
@@ -467,12 +463,12 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                     named_by = tuple((k, ids) for k, ids in concluded.items() if k[0] == subject)
                     if named_by:
                         conclusions = named_by
-                for rank, said in enumerate(saids):
+                for said_rank, said in enumerate(saids):
                     cand_ops = ops
                     if said is not None:
                         cand_ops = {**ops, "said": said}
                         if len(saids) > 1:       # a real choice: the rank is what the act's id and score read (`data/verbs.py::choice_values`)
-                            cand_ops[SAID_RANK_KEY] = rank
+                            cand_ops[SAID_RANK_KEY] = said_rank
                     # `H-134`: the seat rides on the Candidate ONLY where it was chosen among several,
                     # under `VIA` -- not a cell operand, so `binding_of` drops it (the seat reaches the
                     # binding as `via=`), exactly as `said` is dropped; `pack_scenes` reads it onto
@@ -481,10 +477,10 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                         cand_ops = {**cand_ops, VIA: st}
                     if contexts:                 # B15.08: the context that admitted this subject (set above where the decline reads it)
                         cand_ops = {**cand_ops, CONTEXT_KEY: context_of[subject]}
-                    for place, named in enumerate(conclusions):
+                    for place, concl in enumerate(conclusions):
                         c_ops = cand_ops
-                        if named is not None:
-                            c_ops = {**cand_ops, CONCLUDED_KEY: named[0], CITES_KEY: named[1]}
+                        if concl is not None:
+                            c_ops = {**cand_ops, CONCLUDED_KEY: concl[0], CITES_KEY: concl[1]}
                             if len(conclusions) > 1:
                                 c_ops[CONCLUDED_RANK_KEY] = place
                         out.append(Candidate(verb, subject, operands=c_ops))

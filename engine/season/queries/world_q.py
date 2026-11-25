@@ -77,7 +77,7 @@ from ..data.verbs import DEED_KINDS, VERB_CAPABILITY
 from .person_q import PAIRED_KINDS, opinion
 from ..state.attribution import (  # noqa: F401 -- re-exported
     a_stage_unmatured, anchor_of, causing_act, event_by_id, matured_terms)
-from ..state.carriers import Person, Question, Site, Tenure, fade_of
+from ..state.carriers import Person, Question, Site, Tenure
 # ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE. The write gate's F3 clause needs
 # both -- ruling (3)'s parent rung and ruling (4)'s purview subtree -- and the gate is in `state/`,
 # which may not import this module. These names are the same function objects as `state/containment`'s.
@@ -4156,7 +4156,7 @@ def contradicted_tellers(w: World, p: Person, since: Optional[tuple] = None) -> 
     told = [t for t in p.ledger if t.teller is not None and t.teller != p.id and (t.subject, t.predicate) in cells]
     if not told:
         return []
-    tick, below = fade_of(p)[0], {}                  # `below`: teller -> is his record under neutral (read once per teller)
+    tick, below = w.tick, {}                  # `below`: teller -> is his record under neutral (read once per teller)
     out = []
     for c in fresh:
         tellers: list = []

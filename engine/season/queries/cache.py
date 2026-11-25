@@ -64,9 +64,9 @@ from __future__ import annotations
 
 from typing import NamedTuple
 
-from engine.dice_engine.sigma_leverage import levels_to_net_sigma, pool_of
+from engine.dice_engine.sigma_leverage import pool_of
 
-from ..data.rosters import capability_rows, require_use_site, when_holds
+from ..data.rosters import capability_rows, require_use_site
 from ..state import containment
 from ..trace_log import TRACE
 from . import world_q
@@ -172,14 +172,10 @@ def notice_pools(w: "World") -> dict:
 
 
 def notice_edges(w: "World") -> dict:
-    """The barrier-scoped `{person id: his net sigma for noticing a deed}` map (B11.66), `notice_pools`' sibling and built beside it for the same reason: the `notice` site's
-    `edge` rows (the shipped one keys his Perception, `per: mid`) are selected as the social roll's are (`when_holds`), each read at the value he holds, summed by the ONE `edge`
-    reader (`sigma.ADVANTAGE_SOURCES["capability"]`) into named levels and turned into a sigma by `levels_to_net_sigma` -- the reader `loop/resolve.py::_crisis_net_sigma`
-    uses for its own site. A person who holds no value reads the scale's mid-point: no step. `0.0` where the site has no `edge` row. Same lifetime and lazy import as `notice_pools`."""
+    """The barrier-scoped `{person id: his net sigma for noticing a deed}` map (B11.66), `notice_pools`' sibling and built beside it for the same reason: each person's
+    `site_net_sigma` at the `notice` site (the shipped `edge` row keys his Perception, `per: mid`), the ONE reader `loop/resolve.py::_crisis_net_sigma` calls for its own site.
+    `0.0` where the site has no `edge` row. Same lifetime and lazy import as `notice_pools`."""
     def build() -> dict:
-        from ..seam.wrappers.sigma import ADVANTAGE_SOURCES, CAPABILITY, EDGE
-        rows = tuple(r for r in capability_rows(NOTICE_SITE) if r.role == "edge")
-        return {pid: levels_to_net_sigma(*ADVANTAGE_SOURCES[CAPABILITY](
-                    w.fixtures, {EDGE: tuple((r, r.key, (p.attributes or {}).get(r.key)) for r in rows if when_holds(r, p))}))
-                for pid, p in w.persons.items()}
+        from ..seam.wrappers.edge import site_net_sigma
+        return {pid: site_net_sigma(w, p, NOTICE_SITE) for pid, p in w.persons.items()}
     return w.cache_at_barrier("notice_edges", build)

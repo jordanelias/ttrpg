@@ -14,9 +14,12 @@
 """
 from __future__ import annotations
 
+import dataclasses
+
 import pytest
 
 from ..data.matrix import Step, WriteClass
+from ..data.requires import Observation
 from ..loop.driver import SeasonDriver, mint_token
 from ..seam.contest import Resolution
 from ..state.carriers import Act
@@ -49,10 +52,13 @@ def test_examine_finds_site_damaged():
     assert {c.source for c in w.persons[FINDER].ledger if c.predicate == "site.damaged"} == {"inferred"}
 
 
-def killing():
+def killing(read_first=None):
     """The killer fells the victim at `Hh`, where the witness also stands (`tiny_world`'s hearth holds p_low, p_mid and
-    p_other); a constructed `Felled` through the real fold, then the real WITNESS. Returns `(w, d)`; the finder stands at `S`."""
+    p_other); a constructed `Felled` through the real fold, then the real WITNESS. Returns `(w, d)`; the finder stands at `S`.
+    `read_first`: a value for `(VICTIM, exists:Person)` carried by an EARLIER Event of the same WITNESS call (the killing's own ending comes after it)."""
     w = tiny()
+    if read_first is not None:
+        w.fixtures = w.fixtures.sweep("observation_deposit_mode", "total")     # the witness is no actor: only `total` deposits the read he did not make
     d = SeasonDriver(w)
     w.step = Step.RESOLVE
     w.frozen = False
@@ -61,6 +67,10 @@ def killing():
     w.log.extend(out)
     assert VICTIM not in w.persons and "person.died" in [e.kind for e in out], "fixture: the victim did not die"
     w.step = Step.WITNESS
+    if read_first is not None:
+        early = dataclasses.replace(out[0], id="e_early_read", changes=[], observed=(Observation(VICTIM, "exists:Person", read_first),))
+        w.log.extend([early])
+        out = [early] + list(out)
     d.witness(mint_token(w, WriteClass.INTERIOR), out)
     return w, d
 
@@ -73,6 +83,15 @@ def test_bystander_holds_exists_person_zero():
     assert VICTIM in held(w, WITNESS, "person.died"), "the bystander was not admitted to the killing"
     ended = [c for c in w.persons[WITNESS].ledger if c.subject == VICTIM and c.predicate == "exists:Person"]
     assert [c.value for c in ended] == [0], ended
+
+
+def test_an_ending_overrides_an_earlier_read_of_the_same_cell_in_one_call():
+    """A read of `(victim, exists:Person)` at 1 earlier in the SAME witness call must not suppress the ending that follows it: the witness holds the
+    victim ended, as when no read came first. CONTROL: an earlier read at 0 is the same belief, stored once."""
+    for first, want in ((1, [1, 0]), (0, [0])):
+        w, _ = killing(read_first=first)
+        got = [c.value for c in w.persons[WITNESS].ledger if c.subject == VICTIM and c.predicate == "exists:Person"]
+        assert sorted(got, reverse=True) == want, (first, got)
 
 
 def test_surveil_at_the_place_of_a_killing_finds_the_deed_at_partial():

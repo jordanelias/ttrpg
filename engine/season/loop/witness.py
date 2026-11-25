@@ -351,6 +351,13 @@ def _ungraded(row) -> bool:
     return row is not None and not row.writes and not row.writes_by_degree and not row.emits_by_degree
 
 
+def _live(w, h) -> bool:
+    """A HELD CLAIM THAT IS STILL LIVE: read at a confidence above 0 at `w.tick` (`present_confidence`, the one owner of the fade -- the
+    reading `epistemic.holds_trail` takes). The three exact-triple dedup guards below ask it of the held copy they would skip on: a claim he
+    has FORGOTTEN does not block a re-deposit (a trail re-offered by `trail_of` must land, and a witness who saw a deed again holds it again)."""
+    return ledgers.present_confidence(h.confidence, h.when, w.tick, w.fixtures.claim_decay()) > 0
+
+
 def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cfx):
     """v9 FI-03 (`ED-FI-0002`): THE CLAIMS A FINDING DEPOSITS -- `(finder, trail Event, Claim)` per claim,
     yielded per uncovered trail Event so each re-check sees the deposits already written.
@@ -393,7 +400,7 @@ def _found_claims(self, w, e: Event, claim_rule: str, conf, mode: str, gain, cfx
             # holding some of what it deposits. Only the triples he lacks are deposited -- the told channel's exact-triple guard (a held copy of
             # the same subject, predicate and value, with no chain, skips), one deposit over; a deposit made earlier in this barrier is
             # already in `p.ledger` (`World.write` applies synchronously), so no second dedup set is kept.
-            if any(h.subject == c.subject and h.predicate == c.predicate and h.value == c.value and not h.chain for h in p.ledger):
+            if any(h.subject == c.subject and h.predicate == c.predicate and h.value == c.value and not h.chain and _live(w, h) for h in p.ledger):
                 continue
             yield p, f, (_refract(c, p, FOUND_CHANNEL, gain, prior_act, prior_weigh, cfx)
                          if refracting else c)
@@ -539,6 +546,9 @@ def witness(self, token: Token, events: list[Event]) -> int:
     # them and something must: the first read the fan reaches -- i.e. the earliest Event in
     # RESOLVE order -- is kept, which is the answer `LedgerReader`'s strict `>` gives.
     seen_obs_by_pid: dict = {}
+    # `(pid, entity, predicate)` this call has deposited at ZERO -- an ENDING (`_ended_entities`) or a read of 0. The ending deposit is skipped only when the
+    # held value is already 0, so a read of the same cell at 1 earlier in the call never suppresses the ending that follows it.
+    zero_held: set = set()
     # WHAT A TELLING CONTAINED is `Act.payload["said"]`, fixed at CHOOSE (`_told_content`): the
     # teller's ledger is not read at this barrier, so no order-dependence on whether the teller
     # sorted before the first hearer arises (plan position `15d`).
@@ -740,7 +750,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
         if not hand_seen and noticed.get((pid, e.id)) == NOTICE_PARTIAL:
             subjects = non_anchor_subjects(subjects, anchor_of(w, e))
         for n, subj in enumerate(subjects):
-            if ungraded and any(h.subject == subj and h.predicate == e.kind and h.value is True and not h.chain for h in p.ledger):
+            if ungraded and any(h.subject == subj and h.predicate == e.kind and h.value is True and not h.chain and _live(w, h) for h in p.ledger):
                 continue
             cid = (e.id if via_knot and n == 0
                    else H(w.world_seed, w.tick, pid, f"claim:{e.id}:{n}"))
@@ -770,8 +780,9 @@ def witness(self, token: Token, events: list[Event]) -> int:
             seen_obs = seen_obs_by_pid.setdefault(pid, set())
             for entity, kind in _ended_entities(w, e):
                 pred = f"exists:{kind}"
-                if (entity, pred) in seen_obs:
-                    continue
+                if (pid, entity, pred) in zero_held:
+                    continue      # an ending OVERRIDES an earlier read at 1; only a held 0 makes it a second copy
+                zero_held.add((pid, entity, pred))
                 seen_obs.add((entity, pred))
                 xc = Claim(H(w.world_seed, w.tick, pid, f"ended:{e.id}:{entity}"), pid, entity, pred, 0, w.tick, src, conf, "own",
                            self.lap, doer=doer)   # `U2`: see the event-kind deposit
@@ -863,8 +874,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 if str(o.predicate).partition(":")[0] in WORLD_ONLY_STEMS:
                     # B11.83 (`U5c_VERBS_residue` §3 steps 1 and 3): THE ONE CLAIM A REFUSED `with` LEAVES. The read that DECIDED a refusal is the
                     # last one the fold made (`AllOf` stops at the first False), so a last read of the `with` stem that the world answered False
-                    # is a refusal on the `with` conjunct: the actor sought a person who was not where he stood. He alone is taught it, at any
-                    # `observation_deposit_mode` (it is his reading, never an Event's public payload), as `(person, absent, <the rung he stood at>)`.
+                    # is a refusal on the `with` conjunct: the actor sought a person who was not where he stood. He alone is taught it, at `actor`
+                    # and `total` (the block's own gate: `none` deposits nothing, as the control; it is his reading, never an Event's public payload), as `(person, absent, <the rung he stood at>)`.
                     # A read the world could not answer (UNKNOWN) never reaches here, and a read of himself teaches nothing.
                     if (o is e.observed[-1] and actor is not None and pid == actor and o.value is False and o.subject != pid
                             and str(o.predicate).partition(":")[0] == WITH_STEM
@@ -888,6 +899,8 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 if key in seen_obs:
                     continue
                 seen_obs.add(key)
+                if value == 0 and not isinstance(value, bool):
+                    zero_held.add((pid, o.subject, o.predicate))
                 # `e.id` is in the digest, so the per-person counter need only separate
                 # two reads OF ONE EVENT; it spans the pass now and is still strictly
                 # increasing, so no two ids collide.
@@ -900,7 +913,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
         # B11.73 (`08_FI_03` §3 act 1; FRES §7 (2); `19_LACUNA_conclusion_is_a_committed_assertion` R-19-04): THE CONCLUSION A WINNING `reconstruct` REACHED IS DEPOSITED
         # TO ITS MAKER ALONE -- one claim, `(the one the deed was done to, concluded:<deed kind>, doer)`, source `inferred` (`FOUND_CHANNEL`'s: known from the business, not
         # seen), at the confidence the deposit starts at (the maker is no witness of himself, so nothing refracts it). The act carries it (`payload[CONCLUDED_KEY]`, fixed
-        # at CHOOSE from his OWN ledger: `person_q.conclusions_of`), so this reads the act and never his live ledger, and the roll states nothing wrong (K-37): the doer is
+        # at CHOOSE from his OWN ledger: `person_q.conclusion_cites`), so this reads the act and never his live ledger, and the roll states nothing wrong (K-37): the doer is
         # whoever his ledger named at the act. WHAT IT SHOWS IS `rosters.yaml: finding_terms`' BY BAND, the one table: a band that lists the hand (`HAND_TERM`) names the doer,
         # `Partial` lists none and the claim is the deed alone (value `True`, the trail's own `Partial` shape), and a band with no row -- `Failure` emits `finding.none`, an
         # arm-`off` fold carries no degree -- deposits nothing. The exact-triple guard is the found deposit's: a conclusion he already holds is not stored twice.
@@ -911,7 +924,7 @@ def witness(self, token: Token, events: list[Event]) -> int:
                 _to, _kind, _hand = _concl
                 _said = _hand if HAND_TERM in FINDING_TERMS[e.degree] else True
                 _pred = f"{CONCLUDED_STEM}:{_kind}"
-                if not any(h.subject == _to and h.predicate == _pred and h.value == _said and not h.chain for h in p.ledger):
+                if not any(h.subject == _to and h.predicate == _pred and h.value == _said and not h.chain and _live(w, h) for h in p.ledger):
                     _deposit(p, Claim(H(w.world_seed, w.tick, pid, f"concluded:{e.id}"), pid, _to, _pred, _said, w.tick,
                                       CHANNEL_CLAIM_SOURCE[FOUND_CHANNEL], conf, "own", self.lap, doer=None), e)
         # `R8.1`. THE THIRD DEPOSIT: ONE `seen` CLAIM PER (WITNESS, EVENT), BESIDE THE TWO ABOVE.

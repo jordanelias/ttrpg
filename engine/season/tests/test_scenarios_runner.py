@@ -111,13 +111,14 @@ def test_every_ending_name_a_reader_can_return_has_a_kind(monkeypatch):
         w = row.build(0)
         pid = sorted(w.persons)[0] if row.seat is None else row.seat(w)       # a row with no default seat is read at a person of its world
         for planted in (False, True):
-            if planted:
-                monkeypatch.setattr(SC.world_q, "endings_reached", lambda w: [object()])
-            for who, left in ((pid, 1), (pid, 0), (None, 1)):
-                got = row.ending(w, who, left)
-                if got is not None:
-                    assert got in row.kinds, f"{name}: ending {got!r} has no `kinds` entry"
-                    checked += 1
+            with monkeypatch.context() as mp:      # undone before the next row: a planted pass must not reach the rows after it
+                if planted:
+                    mp.setattr(SC.world_q, "endings_reached", lambda w: [object()])
+                for who, left in ((pid, 1), (pid, 0), (None, 1)):
+                    got = row.ending(w, who, left)
+                    if got is not None:
+                        assert got in row.kinds, f"{name}: ending {got!r} has no `kinds` entry"
+                        checked += 1
     assert checked >= 1
 
 

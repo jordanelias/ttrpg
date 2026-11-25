@@ -17,12 +17,12 @@ from __future__ import annotations
 import random
 from dataclasses import replace
 from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree, degree_from_net
-from engine.dice_engine.sigma_leverage import levels_to_net_sigma, opposed_ob, pool_of
+from engine.dice_engine.sigma_leverage import opposed_ob, pool_of
 from engine.substrate import composition
 from ..gaps import InstrumentDefect
-from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, SCRUPLE_OVERRIDDEN, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, capability_rows, graded_route,
+from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, SCRUPLE_OVERRIDDEN, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, graded_route,
                             MARGIN_ENDING, SCAR_HOLDS, SCAR_SEASON_CAPS, SCAR_VINDICATIONS, STANDING_OCCASION_OPENED_BY, STRATA, UNROUTED_BAND,
-                            require_member, require_use_site, task_share, when_holds)
+                            require_member, require_use_site, task_share)
 
 from typing import Any, Optional
 from ..data.matrix import Step, matrix_row
@@ -39,7 +39,7 @@ from ..data import affiliations as _aff     # read at call time (`_aff.ENGAGEMEN
 from ..data.affiliations import engagement
 from .effects_combat import MARK_ROLE
 from ..seam.wrappers.pool import pool_pair
-from ..seam.wrappers.sigma import ADVANTAGE_SOURCES, CAPABILITY, EDGE
+from ..seam.wrappers.edge import site_net_sigma
 from ..queries.person_q import (broken_by, confided_outside, conviction_after_crisis,
                                  elements_violated_by, pursuit_lean, skill_shown_observed, upheld_by, _pursuits_upheld_by)
 from engine.substrate.descriptors import AFFILIATION_CEILING
@@ -935,12 +935,9 @@ _CRISIS_SITE = require_use_site("crisis")  # the `capability_use_sites` site who
 
 
 def _crisis_net_sigma(w: "World", p: Any) -> float:
-    """THE READER OF `capability_use_sites: crisis` (B10.15, A-7): the net sigma the person in crisis rolls with. The site's `edge` rows (the shipped one keys
-    his Spirit, `per: mid`) are selected as the social roll's are (`when_holds`) and each read at the value he holds, then summed by the ONE `edge` reader
-    (`sigma.ADVANTAGE_SOURCES["capability"]`) into named levels for or against him and by `levels_to_net_sigma` into a sigma. A person who holds no value reads the
-    scale's mid-point: no step. `0.0` where the site has no row."""
-    reads = tuple((r, r.key, (p.attributes or {}).get(r.key)) for r in capability_rows(_CRISIS_SITE) if r.role == "edge" and when_holds(r, p))
-    return levels_to_net_sigma(*ADVANTAGE_SOURCES[CAPABILITY](w.fixtures, {EDGE: reads}))
+    """THE READER OF `capability_use_sites: crisis` (B10.15, A-7): the net sigma the person in crisis rolls with -- `seam/wrappers/edge.py::site_net_sigma` at the crisis site
+    (his Spirit, `per: mid`; the one reader the notice site's map uses for its own)."""
+    return site_net_sigma(w, p, _CRISIS_SITE)
 
 
 def _crisis_obstacle(w: "World", p: Any, x: str) -> float:

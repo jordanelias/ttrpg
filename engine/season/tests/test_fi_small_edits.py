@@ -190,6 +190,33 @@ def test_a_claim_decayed_to_zero_no_longer_closes_the_trail():
     assert trail_of(w, rid, INVESTIGATOR) == []
 
 
+@pytest.mark.flat_fold
+def test_a_trail_found_again_after_its_claims_faded_deposits_again():
+    # Close fix F-A1: `_found_claims`' exact-triple guard counts only a held copy that is still LIVE (`present_confidence` > 0, the reading `holds_trail`
+    # takes), so a finder whose claims faded to 0 is offered the trail by `trail_of` AND the deposit lands. FALSIFIER: with the guard reading the raw
+    # ledger the faded copy blocks it, the find deposits nothing and `trail_of` offers the same trail for ever.
+    from ..epistemic import trail_of
+    from ..state.ledgers import present_confidence
+    from .test_fi03_trail import HAND_BANDS, find_band, forged_claims, found_deposits, research, step, step_until
+
+    n, cand = find_band(HAND_BANDS)
+    w, d, rid = trail_world()
+    step(w, d, research(n, cand))
+    decay = w.fixtures.claim_decay()
+    held = forged_claims(w, INVESTIGATOR)
+    assert decay > 0 and len(held) == 2 and trail_of(w, rid, INVESTIGATOR) == [], "the first find did not close the trail"
+    for _ in range(1000):
+        if all(present_confidence(c.confidence, c.when, w.tick, decay) == 0 for c in held):
+            break
+        w.tick += 1
+    else:
+        raise AssertionError("the held claims never faded to 0")
+    assert trail_of(w, rid, INVESTIGATOR) != [], "a faded claim still closed the trail"
+    out = step_until(w, d, cand, "faded", HAND_BANDS.__contains__)
+    assert found_deposits(w, out[0].id), "the find deposited nothing: the faded copy blocked it"
+    assert any(present_confidence(c.confidence, c.when, w.tick, decay) > 0 for c in forged_claims(w, INVESTIGATOR))
+
+
 # ---- B11.17 (`08_FI_04` §4 with `17_CENSUS_REST_1` D2): the `ttl` field deleted; a writ ends when its last stage matures ----
 # Both are game-state tests in the `season_loop` lane: the first resolves `comply` through the real fold and MATTER's
 # maturing; the second writes a declared row through the real gate.

@@ -77,6 +77,7 @@ from ...data.rosters import GRADED_TASKS, STANCE_MAX
 from ...data.rosters import capability_rows, require_use_site, roster, when_holds
 from ...data.verbs import FORM_INQUIRY, SOCIAL_ROLL_PROVIDER, VERB_CAPABILITY, VERB_TABLE, _OPENERS_FROM_EFFECTS
 from ...epistemic import trail_concealment
+from .edge import CAPABILITY, EDGE, _capability_levels, _edge_levels, _edge_scale  # noqa: F401  (moved: see edge.py)
 from ...gaps import InstrumentDefect, Unspecified
 from ...loop.sides import _contests_of, sides_of
 from ...queries.person_q import believed_capability, stance_toward
@@ -150,8 +151,8 @@ def _effort_levels(fx: Any, operands: dict) -> tuple:
 # step; `against: true` flips the sign, so a count counts AGAINST the roller. `contest_input` and `believed_input` choose the rows that
 # apply (`when`) and read each one's value, and hand them to the source as the `edge` operand: `((row, key, value), ...)`.
 # ---------------------------------------------------------------------------------------------
-EDGE = "edge"                      # the operand key of the selected `edge` rows, beside `EFFORT`
-CAPABILITY = "capability"          # the roster member (`rosters.yaml: advantage_sources`)
+# `EDGE`, `CAPABILITY`, `_edge_levels` and `_capability_levels` are `edge.py`'s (the leaf `queries/cache.py` and `loop/resolve.py` read a site's net sigma through, which
+# may not import this module: it imports `epistemic`); bound here by name for this module and its importers.
 _UNKNOWN = object()                # a value the believer cannot read: `believed_input` answers `None`, never a guess
 
 
@@ -220,45 +221,6 @@ def _edge_reads(verb: str, actor: Any, subject_read, role: str = EDGE) -> Any:
         if when_holds(row, holder):
             out.append((row, key, value))
     return tuple(out)
-
-
-def _edge_scale(key: str) -> tuple:
-    """`(floor, ceiling)` of the scale `key`'s value lives on: an attribute's or a practitioner stat's (`descriptors.scale_of`), a skill's own."""
-    if key in descriptors.CAPABILITIES:
-        row = descriptors.CAPABILITIES[key]
-        return row.floor, row.ceiling
-    return descriptors.scale_of(key)
-
-
-def _edge_levels(row: Any, key: str, value: Any) -> tuple:
-    """`(levels for the roller, levels against him)` of one selected row. The count is `per: held` 1 if held, `per: rank` the held rank,
-    `per: mid` the signed WHOLE steps of the value from its scale's mid-point (an unauthored value IS the mid-point: zero steps; a
-    half step is no step); `against: true` negates it; a positive count is that many copies of the row's `level` FOR the roller, a
-    negative one that many AGAINST him."""
-    if row.per == "held":
-        n = 1 if value else 0
-    elif row.per == "rank":
-        n = int(value or 0)
-    elif row.per == "mid":
-        floor, ceiling = _edge_scale(key)
-        mid = (floor + ceiling) / 2
-        n = math.trunc((mid if value is None else value) - mid)
-    else:
-        raise Unspecified(f"an `edge` row at the social roll ({row.key!r}) has per {row.per!r}", "rosters.yaml -- tables: capability_uses",
-                          needs="`per: held`, `per: rank` or `per: mid`", law="U1 §3 item 2 -- an edge row counts its held value one of three ways")
-    n = -n if row.against else n
-    return ([row.level] * n, []) if n > 0 else ([], [row.level] * -n)
-
-
-def _capability_levels(fx: Any, operands: dict) -> tuple:
-    """THE `capability` SOURCE: `(levels for the roller, levels against him)` summed over the act's selected `edge` rows
-    (`operands[EDGE]`, chosen and read by the input builders). `([], [])` where the act brings none -- the shipped case."""
-    for_, against = [], []
-    for row, key, value in operands.get(EDGE, ()):
-        f, a = _edge_levels(row, key, value)
-        for_.extend(f)
-        against.extend(a)
-    return for_, against
 
 
 def _circumstance_ob(fx: Any, row: Any, value: Any) -> float:

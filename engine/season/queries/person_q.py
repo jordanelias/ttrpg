@@ -485,7 +485,7 @@ def deed_doers(ledger, spec: dict, holder: str, against=()) -> tuple:
 
 def _named_deeds(ledger, spec: dict, holder: str, against=()):
     """`(claim, doer)` FOR EACH DEED CLAIM `spec` SELECTS THAT NAMES A DOER OTHER THAN THE HOLDER, in ledger order -- `deed_doers`' one reading (its docstring is the
-    rule), kept as a generator so a second reader asks the same question of the same claims and never re-derives it (B11.73's `conclusions_of`)."""
+    rule), kept as a generator so a second reader asks the same question of the same claims and never re-derives it (B11.73's `_concluded`)."""
     form = next((f for f in roster_map("goal_object_kinds", "forms")["deed_doers"] if f in spec), None)
     if form is None or (form == "against" and not against):
         return
@@ -515,24 +515,13 @@ def _named_deeds(ledger, spec: dict, holder: str, against=()):
             yield c, doer
 
 
-def conclusions_of(ledger, holder: str, kinds) -> dict:
-    """WHAT THE HOLDER'S OWN LEDGER LETS HIM CONCLUDE OF A DEED -- `{one the deed was done to: ((deed kind, doer), ...)}`, in ledger order, each pair once (B11.73,
-    FRES §7 (1); `08_FI_03` §3 act 1). The value space of `reconstruct`'s conclusion (U-7): `deed_doers`' reading of `kinds` (`_named_deeds`: the doer his ledger names,
-    never himself, never a guess), each doer filed under the one the deed was done to. A `PAIRED_KINDS` claim is about that one (its subject, the patient) and its
-    doer is the sighting's; an unpaired deed of a Person-subject kind is filed under the counterparty `deed_counterparty` reads off his sightings. Any other unpaired
-    kind names no one it was done to (its claim's subject is its doer, H-192) and concludes nothing here -- the pairing never guesses. Nothing wrong is deposited
-    by a roll (K-37): a wrong name is a wrong ledger. Holder-side and World-free (AX-2)."""
-    out: dict = {}
-    for c, to, doer in _concluded(ledger, holder, kinds):
-        pair = (c.predicate, doer)
-        if pair not in out.setdefault(to, []):
-            out[to].append(pair)
-    return {to: tuple(pairs) for to, pairs in out.items() if pairs}
-
-
 def _concluded(ledger, holder: str, kinds):
-    """`(deed claim, the one it was done to, doer)` FOR EACH DEED OF `kinds` THE LEDGER LETS THE HOLDER CONCLUDE OF, in ledger order -- `conclusions_of`'s one reading (its docstring is
-    the rule), kept as a generator so the readers of a conclusion (`conclusion_cites`, `concluded_cells`) ask the same question of the same claims (B11.75)."""
+    """`(deed claim, the one it was done to, doer)` FOR EACH DEED OF `kinds` THE LEDGER LETS THE HOLDER CONCLUDE OF, in ledger order (B11.73, FRES §7 (1); `08_FI_03` §3 act 1):
+    the value space of `reconstruct`'s conclusion (U-7). `deed_doers`' reading of `kinds` (`_named_deeds`: the doer his ledger names, never himself, never a guess), each
+    filed under the one the deed was done to. A `PAIRED_KINDS` claim is about that one (its subject, the patient) and its doer is the sighting's; an unpaired deed of a
+    Person-subject kind is filed under the counterparty `deed_counterparty` reads off his sightings. Any other unpaired kind names no one it was done to (its claim's subject
+    is its doer, H-192) and concludes nothing here -- the pairing never guesses. Nothing wrong is deposited by a roll (K-37): a wrong name is a wrong ledger. Holder-side and
+    World-free (AX-2). A generator, so the readers of a conclusion (`conclusion_cites`, `concluded_cells`) ask the same question of the same claims (B11.75)."""
     seen = None
     for c, doer in _named_deeds(ledger, {"kinds": kinds}, holder):
         if c.predicate in PAIRED_KINDS:
@@ -547,7 +536,7 @@ def _concluded(ledger, holder: str, kinds):
 
 
 def conclusion_cites(ledger, holder: str, kinds) -> dict:
-    """`{(the one the deed was done to, deed kind, doer): (the ids of the deed claims that name him, in ledger order)}` -- what each conclusion `conclusions_of` reads rests on
+    """`{(the one the deed was done to, deed kind, doer): (the ids of the deed claims that name him, in ledger order)}` -- what each conclusion `_concluded` reads rests on
     (B11.75, R-19-04's `cites`: the claims that name him). The claim cited is the DEED claim `_named_deeds` read the doer off (for a paired kind it is paired with the sighting
     that carries the hand, for an unpaired kind its subject is the doer): the holder holds it, so a later `utter` may cite it (`_held_cites`)."""
     out: dict = {}
@@ -2295,7 +2284,8 @@ def holders_named(ledger, obj) -> tuple:
     For each claim about `obj` whose predicate is a kind a `hold` opener emits (`HOLD_OPEN_KINDS`), the SUBJECTS of the claims of
     the same predicate deposited at the same `(when, lap)` -- the pairing key `deed_doer` and `_seen_index` use for a deed
     and its sighting, since WITNESS deposits every claim of one Event in one pass. A holder is dropped when a NEWER claim about
-    `obj` or about him carries a closing kind (`HOLD_CLOSE_KINDS`) or a death (`PERSON_DIED`); a claim of the same key is not newer,
+    `obj` carries a closing kind (`HOLD_CLOSE_KINDS`), a NEWER claim about him carries a death (`PERSON_DIED`), or a newer claim about him closes in
+    the same `(when, lap)` as a closing claim about `obj` (one Event: his own release of it); a claim of the same key is not newer,
     so the seat's new holder survives the `tenure.closed` of the man he displaced.
     ⚠ OVER-INCLUSIVE, AND IT SAYS SO [ASSUMPTION; medium; Jordan to correct]: it cannot tell a person from another id by the
     ledger alone, so the seat itself is excluded and every other subject of the Event is named -- the conferrer beside the man
@@ -2303,12 +2293,15 @@ def holders_named(ledger, obj) -> tuple:
     that needs persons only (`world_q`'s call sites) drops the ids the world knows to be something else; it asks nothing of any
     person's state. Each holder once."""
     news = [c for c in ledger if c.predicate in HOLD_OPEN_KINDS or c.predicate in HOLD_CLOSE_KINDS or c.predicate == PERSON_DIED]
+    # A closing claim about a person ends HIS hold of `obj` only when it is a death or shares its `(when, lap)` with a closing claim about `obj` itself
+    # -- the same Event's one pass, the pairing key the opener side uses. A witness of K's release of ANOTHER commitment holds `(K, tenure.closed, True)`
+    # at a newer key, and that says nothing of the seat.
+    obj_close = {(c.when, c.lap) for c in news if c.subject == obj and (c.predicate in HOLD_CLOSE_KINDS or c.predicate == PERSON_DIED)}
     ends: dict = {}
     for c in news:
-        if c.predicate in HOLD_CLOSE_KINDS or c.predicate == PERSON_DIED:
-            at = (c.when, c.lap)
-            if at > ends.get(c.subject, (-1 << 60, 0)):
-                ends[c.subject] = at
+        at = (c.when, c.lap)
+        if (c.predicate == PERSON_DIED or (c.predicate in HOLD_CLOSE_KINDS and at in obj_close)) and at > ends.get(c.subject, (-1 << 60, 0)):
+            ends[c.subject] = at
     seat_end = ends.get(obj)
     named: dict = {}
     for c in ledger:

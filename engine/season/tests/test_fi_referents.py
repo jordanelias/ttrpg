@@ -188,6 +188,18 @@ def test_the_realm_starts_with_seat_news():
     assert checked > 5000, checked
 
 
+def test_a_witnessed_release_of_another_commitment_does_not_end_the_seat_hold():
+    """Close fix F-B1: a claim that K ceased some OTHER tenure (`tenure.closed` about K, no closing claim about the seat in its `(when, lap)`) is no news
+    of the seat, so `holders_named` still names K. CONTROL: a closing claim about the seat at the same `(when, lap)` as K's ends his hold; a death ends it
+    whatever the key. FALSIFIER: the pre-fix reading drops K at the first ledger."""
+    mk = lambda cid, subj, pred, when: Claim(cid, "p_w", subj, pred, True, when, "firsthand", 100, "own", 0)
+    base = [mk("a", "T", "tenure.opened", 2), mk("b", "K", "tenure.opened", 2)]
+    assert holders_named(base + [mk("c", "K", "tenure.closed", 9)], "T") == ("K",), "an unrelated closing claim ended the seat hold"
+    assert holders_named(base + [mk("d", "K", "tenure.closed", 9), mk("e", "T", "tenure.closed", 9)], "T") == ()
+    assert holders_named(base + [mk("f", "K", "person.died", 9)], "T") == ()
+    assert set(holders_named(base, "T")) == {"K"}
+
+
 @pytest.fixture(scope="module")
 def known_hearers():
     """The shipped realm and a person who forms a `tell` on somebody he knows, with that somebody."""

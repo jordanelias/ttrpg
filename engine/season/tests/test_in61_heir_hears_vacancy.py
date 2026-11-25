@@ -79,9 +79,10 @@ def _plant(monkeypatch, route, seed=0):
     assert king and heir_id and king != heir_id, "fixture: no distinct throne-holder and heir"
     heir = w.persons[heir_id]
     d = SeasonDriver(w)
-    # throne held, before anything. v12 B11.08: the realm starts with the seat news (`seed_seat_news`), so the heir already holds the throne as HELD
-    # (links (ii)-(iv) read true before the death too) and what the vacancy adds is the closing claim: `vacant` is the control now.
+    # throne held, before anything. v12 B11.08: the realm starts with the seat news (`seed_seat_news`), so the heir already holds the throne as HELD: links (i)-(iii) read true
+    # before the death, and `_reading`'s "stamped" and "answered" mean he has HEARD IT VACANT, so they read false here and are the control beside `vacant`.
     control = {**_reading(w, heir, world_q.questions_for(w, heir, None)), "vacant": vacant_named(heir.ledger, THRONE)}
+    assert not (control["stamped"] or control["answered"] or control["vacant"]), f"control: the throne reads vacant to the heir while held: {control}"
     if route == "death":
         w.step = Step.MATTER
         w._emitted_by_write = []
