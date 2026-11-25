@@ -339,6 +339,29 @@ def test_a_taken_earlier_move_merges_the_strand_it_links_to():
     assert era_line.endswith("opening kinds beneath: rung.seized"), era_line
 
 
+def test_two_deeds_of_one_doer_whose_first_opened_the_strand_still_link():
+    """B12a.06 (A-45), the clause that must hold: a person's later deed joins a strand he STARTED, though it shares
+    no referent with it (S and S3 sit in two duchies, no step apart)."""
+    w = _world()
+    ev(w, "e_seize", "rung.seized", ["S"], actor="p_low", verb="seize")
+    ev(w, "e_cede", "rung.ceded", ["S3"], actor="p_low", verb="tell", tick=2)
+    (s,) = W.flows_in(w).strands
+    assert [m.event for m in s.moves] == ["e_seize", "e_cede"]
+
+
+def test_a_non_opening_doers_unrelated_deed_no_longer_links():
+    """B12a.06 (A-45), the clause that must not: `p_low` joins p_mid's strand by a shared referent only (he did not
+    open it), then does an unrelated deed (S3); the doer clause no longer pulls it in, and a joining kind opens
+    nothing of its own."""
+    w = _world()
+    ev(w, "e_seize", "rung.seized", ["S"], actor="p_mid", verb="seize")
+    ev(w, "e_cede1", "rung.ceded", ["S"], actor="p_low", tick=2)
+    ev(w, "e_cede2", "rung.ceded", ["S3"], actor="p_low", tick=3)
+    (s,) = W.flows_in(w).strands
+    assert [m.event for m in s.moves] == ["e_seize", "e_cede1"]
+    assert "p_low" in s.parties
+
+
 def test_a_pulled_earlier_move_is_an_opening_move_and_never_closes_the_era():
     """A content opener's pulled prior is one of the movement's opening moves, so it is never terminal, though
     its kind is in `concludes`. p1 is placed at the realm (its terms under D3, the petition at S4) and links to

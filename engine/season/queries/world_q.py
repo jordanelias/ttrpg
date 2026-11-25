@@ -5646,6 +5646,7 @@ class _Chain:
         self.refs: set = set()
         self.parents: set = set()
         self.doers: set = set()
+        self.openers: set = set()      # the doers of its opening moves (`opened_by`)
 
     def take(self, rd: "_StrifeReading", mv: Move) -> None:
         self.moves.append(mv)
@@ -5653,18 +5654,26 @@ class _Chain:
         self.parents |= _parents(rd, mv.referents)
         if mv.doer is not None:
             self.doers.add(mv.doer)
+            if mv.opens:
+                self.openers.add(mv.doer)
+
+    def opened_by(self, doer: str) -> bool:
+        """True when `doer` did one of the chain's opening moves (A-45: the same-doer link is bounded by it)."""
+        return doer in self.openers
 
     def absorb(self, other: "_Chain") -> None:
         self.moves += other.moves
         self.refs |= other.refs
         self.parents |= other.parents
         self.doers |= other.doers
+        self.openers |= other.openers
 
 
 def _links(m: Move, up: set, s: _Chain) -> bool:
     """`strife-00` §4's linking rule (A9), ONE OWNER FOR BOTH READINGS: a shared referent; a referent the parent
     or child of one of the strand's, one rung step apart (`up` is the move's `_parents`, read once per move by the
-    caller); or the same doer (`Move.doer`). Never through the
+    caller); or the same doer (`Move.doer`), bounded (A-45): the doer must have opened the strand, or the move must
+    itself be an opener. Never through the
     realm rung (it is in no referent set and no parent set); never by who holds a rung (no holder is read).
     THE SAME-DOER CLAUSE READS `Move.doer` AND NOTHING ELSE; who fills it decides what it reaches. The world
     reading fills it from the act store (`causing_act(...).actor`, `actor_of`'s body), so there it links any two
@@ -5676,7 +5685,7 @@ def _links(m: Move, up: set, s: _Chain) -> bool:
     from what he saw, not a read of the act store."""
     if m.referents & s.refs or up & s.refs or m.referents & s.parents:
         return True
-    return m.doer is not None and m.doer in s.doers
+    return m.doer is not None and m.doer in s.doers and (m.kind in OPENS_KINDS or s.opened_by(m.doer))
 
 
 def _merge(live: list, s0: _Chain, others) -> _Chain:
