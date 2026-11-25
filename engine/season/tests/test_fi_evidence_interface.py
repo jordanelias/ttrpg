@@ -10,9 +10,13 @@ from __future__ import annotations
 from fractions import Fraction
 
 from ..data import verbs as _verbs
+from ..data.matrix import WriteClass
 from ..data.rosters import COVERT_KINDS, MATTERS
+from ..harness import probes as P
+from ..loop.driver import SeasonDriver, mint_token
 from ..queries import person_q
-from ..state.carriers import Claim, Said
+from ..state.carriers import Act, Claim, Event, Record, Said
+from ..state.ids import H
 
 
 def _claim(predicate: str, *, subject: str = "p_x", value=True, chain: tuple = ()) -> Claim:
@@ -63,3 +67,60 @@ def test_a_withheld_confession_is_no_proof_and_a_full_one_is():
     assert row.emits_by_degree["Failure"] == ["confession.withheld"] and total(ledger_of("confession.withheld")) == total([]) == 0
     other = sorted(_verbs.DEED_KINDS - set(person_q.CONFESSION_BAND))[0]
     assert total(ledger_of(other)) == 1 and person_q.proof_weight(_claim("stance", value=0.4)) == 0
+
+
+def test_a_cites_payload_is_told_like_said():
+    """B24.24 / E-3 (game-state, season_loop): a `speak` that cites is a telling. Hand-built (no computed act carries `cites` before B24.27), the act cites one held claim
+    and one Record; at EVERY band the verb grades, `Failure` included (ADM: the room heard it said), each present hearer comes to hold one told copy of the claim with
+    the citer on its chain and one `content:<kind>` claim of the Record, with the citer on its chain; the citer holds no copy of his own telling; an Event the verb's row
+    does not emit, or that grades no band (the refusal kind), tells nothing; and an act citing nothing deposits no told claim."""
+    emits = _verbs.VERB_TABLE["speak"].emits_by_degree
+    assert set(emits) >= {"Failure", "Partial", "Success", "Overwhelming"}
+    teller, hearer = "p_low", "p_mid"
+    content = {"terms": "prop_x", "to": ("p_other",), "from": teller}
+    checked = 0
+    for band in ("Failure", "Partial", "Success", "Overwhelming"):
+        w = P.tiny_world()
+        w.records["r_doc"] = Record("r_doc", "Hh", "petition", subject_matter=content)
+        held = Claim("c_held", teller, "Hh", "stores:grain", 8, 0, "firsthand", 41, "own")
+        w.persons[teller].ledger.append(held)
+        said = Said("Hh", "stores:grain", 8, 41)
+        act = Act(id=f"a_cite_{band}", actor=teller, verb="speak",
+                  payload={"subject": "Hh", "cites": ("c_held", "r_doc"), "cited": {"c_held": said}})
+        w.acts.append(act)
+        d = SeasonDriver(w)
+
+        def fire(kind, degree, _w=w, _act=act, _d=d):
+            ev = Event(H(_w.world_seed, _w.tick, teller, f"ev:{kind}:{_act.id}"), kind, [], [_act.id], _w.tick, degree, ())
+            _w.log.append(ev)
+            _d.act_of[ev.id] = _act
+            _d.witness(mint_token(_w, WriteClass.INTERIOR), [ev])
+
+        def told(pid, _w=w):
+            return [c for c in _w.persons[pid].ledger if c.source == "told_by"]
+
+        fire(sorted(_verbs.VERB_TABLE["speak"].emits_on_refusal)[0], None)     # a refusal grades no band: nothing was said
+        fire("conviction.moved", band)                                          # not an Event the speak row emits
+        assert not told(hearer), f"{band}: an Event that is no telling of the citing verb told something: {told(hearer)}"
+        fire(emits[band][0], band)
+        mine = told(hearer)
+        claim = [c for c in mine if c.predicate == "stores:grain"]
+        doc = [c for c in mine if c.subject == "r_doc"]
+        assert len(claim) == 1 and claim[0].chain == (teller,) and claim[0].confidence == 41, (band, mine)
+        assert (claim[0].value != 8) <= (band == "Partial"), f"{band}: the told value drifted at a band that is not Partial (the told channel's own grading): {claim[0].value}"
+        assert len(doc) == 1 and doc[0].predicate == "content:petition" and doc[0].chain == (teller,), (band, mine)
+        assert len({c.id for c in mine}) == len(mine) == 2, f"{band}: two claims one act passed on share an id"
+        assert not told(teller), f"{band}: the citer holds a told copy of his own citation"
+        checked += 1
+    assert checked == 4
+
+    w = P.tiny_world()
+    w.persons[teller].ledger.append(Claim("c_held", teller, "Hh", "stores:grain", 8, 0, "firsthand", 41, "own"))
+    act = Act(id="a_plain", actor=teller, verb="speak", payload={"subject": "Hh"})
+    w.acts.append(act)
+    d = SeasonDriver(w)
+    ev = Event(H(w.world_seed, w.tick, teller, "ev:plain"), emits["Success"][0], [], [act.id], w.tick, "Success", ())
+    w.log.append(ev)
+    d.act_of[ev.id] = act
+    d.witness(mint_token(w, WriteClass.INTERIOR), [ev])
+    assert not [c for c in w.persons[hearer].ledger if c.source == "told_by"], "a speak that cites nothing deposited a told claim"

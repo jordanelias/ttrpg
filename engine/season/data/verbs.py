@@ -2253,6 +2253,10 @@ SITE_KEY = "site"
 # (`opening_set`), and the held ids are what a CONCLUSION cites, not what `utter` forms on, so no Candidate carries `cites` until typed `utter` (B25,
 # `14_VERBS_SOCIAL2_B` §1) forms one from a held claim; `_fanned_choices` never fans it (no closed range), so the shipped season forms what it formed.
 CITES_KEY = "cites"
+# B24.24 (FI_05_B E-3): `CITED_KEY` IS WHAT THE CITED CLAIMS SAID, `{claim id: Said}`, carried on the act beside `cites` for the told deposit alone -- WITNESS opens no
+# citer's ledger (`F8`), so the `Said` of each cited claim is copied out of his own at CHOOSE as `said` is (`person_q.said_of`). A cited Record needs none: its content is
+# read off `w.records`. Read by `loop/witness.py::_told_items`; bound by no cell, dropped by `binding_of`, and not a choice (no `CHOICE_RANGES`/`CHOICE_CARRIER` entry).
+CITED_KEY = "cited"
 CHOICE_CARRIER = {ORDER_ROLE_KEY: "Record.exists", ORDER_RETREAT_KEY: "Record.exists", MARCH_POSTURE_KEY: "Site.condition",
                   SAID_KEY: "news.told", IN_CONFIDENCE_KEY: "news.told", SITE_KEY: "finding.made", CITES_KEY: "Proposition.exists",
                   CONCLUDED_KEY: CONCLUSION_KIND}
