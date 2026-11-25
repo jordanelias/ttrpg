@@ -32,8 +32,9 @@ captive -> the capturer's `via` seat, `off_watch`). Per route, as built:
   NOT SAID BY THIS FILE, AND MEASURED WHEN IT WAS WRITTEN (recorded, never asserted: an assertion would be a guard on an
   absence, `CLAUDE.md` §0.1 pt 5). A death the REAL fold wrote (`_run` over a `fight` by the Duke on the prisoner, 60 act
   ids) and the real `harness/strife.py::readers_for(w).victim_held` read over it:
-    * the real `person.died` carries its change on field `body` (`state/gate.py::death_subjects(..., fields=("body",))`),
-      and `victim_held` collects only changes with field `exists` -- so it names NO victim of a real death;
+    * the real `person.died` carries its change on field `body` (`state/gate.py::death_subjects(..., fields=("body",))`);
+      `victim_held` collected only changes with field `exists` and so named NO victim of a real death, until B12a.68
+      made it read `body` too (`test_a_hand_built_execution_reads_xe`);
     * a dead man's own edges are gone from `w.tenures` after `World.remove_person`, so the `detain` the reader would
       test is no longer there to be found when it is asked after the run (the way `measure` asks it).
   Either one alone reads a held man's real death as KL, never XE. The owner of both is `harness/strife.py` (the reader)
@@ -43,8 +44,13 @@ captive -> the capturer's `via` seat, `off_watch`). Per route, as built:
 """
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 import pytest
 
+from ..data.rosters import DETAIN_KIND
+from ..harness.strife import Readers, classify, readers_for
+from ..state.carriers import Event, StateChange, Tenure
 from ..data.verbs import VIOLENCE_CONTEXTS
 from ..decision import options as O
 from ..decision.options import opening_set, violence_context_of
@@ -166,3 +172,31 @@ def test_control_the_admission_read_sees_a_refusal_when_the_holder_stands_elsewh
     assert _fights(w, holder, victim)
     act, kinds = _fold_fight(w, d, holder, victim)
     assert "kill.refused" in kinds and "fight.declared" not in kinds, kinds
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# (c) -- THE READER: a hand-built execution reads XE (B12a.68, H-257)
+# ---------------------------------------------------------------------------------------------------------------
+
+def _death(changed_field):
+    """A `person.died` Event at tick 9 whose one change, on `changed_field`, names `PRISONER`."""
+    return Event("e_death", "person.died", [StateChange(PRISONER, "set", "Act", changed_field)], ["a_fight"], 9)
+
+
+def _held_world(since=3, until=None, subject=PRISONER):
+    return SimpleNamespace(tenures=[Tenure("t_detain", subject, DUKE, DETAIN_KIND, since, until)])
+
+
+@pytest.mark.parametrize("changed_field", ["body", "exists"])
+def test_a_hand_built_execution_reads_xe(changed_field):
+    """The real death's change is on `body`; the held man's `detain` is live at the tick. The read names him a victim
+    and `classify` reads the fight-caused death as XE, not KL. CONTROLS: the `detain` closed a tick before the death,
+    and a `detain` on another man, both read KL, so the read can see a refusal."""
+    e = _death(changed_field)
+    fight = lambda w: Readers(lambda _: "fight", lambda _: None, readers_for(w).victim_held)
+    w = _held_world()
+    assert readers_for(w).victim_held(e) is True
+    assert [c for c, _ in classify(e, fight(w))] == ["XE"]
+    for free in (_held_world(until=8), _held_world(subject="someone_else")):
+        assert readers_for(free).victim_held(e) is False
+        assert [c for c, _ in classify(e, fight(free))] == ["KL"]
