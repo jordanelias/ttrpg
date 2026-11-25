@@ -161,13 +161,25 @@ class Item:
       * `weight`  -- how much it weighs where it is shown;
       * `source`  -- whose it is (the holder, the witness, the one implicated), where it has one;
       * `about`   -- whom or what it bears on, where it has one;
-      * `sincere` -- `False`: its holder knows it false (his own false word, or a forgery)."""
+      * `sincere` -- `False`: its holder knows it false (his own false word, or a forgery).
+
+    B24.05: the item SHOWN at a sitting is this record (HEAR_B's `Exhibit` is not a second one), so it also carries, each defaulted
+    (a record built without them is the record it was):
+      * `side`   -- `"for"` | `"against"` the party it is shown for, `None` before it is entered;
+      * `rung`   -- the `rosters.yaml: issue_rungs` member it bears on;
+      * `cell`   -- `(subject, predicate, value)` as filed;  `origin` -- the root of its chain, the thing `impugn` halves by;
+      * `forged_found` -- a filed finding names the Record it comes from forged."""
     id: str
     kind: str
     weight: float
     source: Optional[str] = None
     about: Optional[str] = None
     sincere: bool = True
+    side: Optional[str] = None
+    rung: Optional[str] = None
+    cell: tuple = ()
+    origin: Optional[str] = None
+    forged_found: bool = False
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -329,7 +341,11 @@ class Beat:
       * `rattled` -- whom it rattled; `frame` -- the frame of an argument or the object of a press;
       * `relevance` (Reason), `heard` (Presence), `esteem` (Grace) -- the operands of the speech;
       * `broke` -- he spoke with his temper broken; `moved` -- each listener's move; `closed` -- how it ended the sitting;
-      * `mood` -- the room's, named only at the beat that turns it; `terms` -- true values."""
+      * `mood` -- the room's, named only at the beat that turns it; `terms` -- true values.
+
+    ⚠ EVERY FIELD BUT `terms` IS WRITTEN: `loop/resolve.py::_BEAT_CELLS` and `queries/world_q.py::EndedBeat` both read `fields(Beat)`, so a field
+    added here is a cell of every proceeding's `Event.ending` and moves the content hash. HEAR_B's board cells (`exhibit`, `entered`, `struck`,
+    `fault`) are not here yet for that reason (B24.05)."""
     n: int
     mover: str
     voice: str
@@ -370,7 +386,9 @@ class View:
       * `broke` -- his temper has broken: he cannot hold his tongue, and `rest` is not on his menu (A-146);
       * `visible` -- each speaker's rattles; `mood`, `odds` -- the room as he reads it, and P(carried) on that reading before an ordinary bench;
       * `intent` -- the perceived stake of the man opposite; `acc` -- his accuracy;
-      * `burden` -- he bears the matter and no point of his stands: resting is a charge not pressed."""
+      * `burden` -- he bears the matter and no point of his stands: resting is a charge not pressed;
+      * B24.05 (each defaulted): `board` -- the `Item`s standing and struck, as the rite discloses them to him;
+        `hand` -- his own `Item`s not yet shown."""
     n: int
     mover: str
     side: str
@@ -390,6 +408,8 @@ class View:
     intent: float
     acc: float
     burden: bool = False
+    board: tuple = ()
+    hand: tuple = ()
 
 
 @dataclass(frozen=True)
@@ -457,13 +477,18 @@ class Outcome:
     and `ruled` -- `((decider, how far his ruling departed from his own track), ...)` for a played judge.
 
     `verdicts` is a tuple of `(id, Margin)`: margins, never a band, a side or a winner: the host grades each on the one
-    ladder (`seam/ladder.py::degree_of`)."""
+    ladder (`seam/ladder.py::degree_of`).
+
+    B24.05 (each defaulted): `standing` -- the `Item`s left standing on the board at the close; `faults` -- the `proceeding_faults`
+    members recorded over the sitting, in order. Neither names a side or a winner."""
     beats: tuple
     state: Sitting
     ended: str
     ended_by: Optional[str]
     verdicts: tuple
     ruled: tuple = ()
+    standing: tuple = ()
+    faults: tuple = ()
 
 
 @dataclass(frozen=True)
@@ -727,9 +752,14 @@ class PlayHost:
                      (`modules/combat/wrapper.py::TURN_CHOICES`). It is written to draw nothing, write nothing and
                      hold no token (CONVENTION; `test_rem31_grid_suspension.py::test_no_draw_and_no_mint_while_suspended` checks the shipped deciders): it is called inside the provider's frame, with the driver below it on
                      the stack (a call-out, not a return), and its return is the only resume.
+      * `deciders` -- B24.05, `module role -> decide(view) -> choice` (`social_contest.proceeding`, ...): the role-keyed form `decide` is
+                     the first of. `decide` stays for `combat.fight` until B34 folds it into `deciders["combat.fight"]`. The wrapper
+                     resolves a role's decider here and passes it as `decide=`; a role with none is automated for this host. Empty by
+                     default, so a host built as before is the host it was.
     Nothing records the mode: no Event, id purpose, carrier or `RESOLVED` field names it."""
     persons: frozenset
     decide: Callable
+    deciders: Mapping[str, Callable] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
