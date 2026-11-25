@@ -63,6 +63,7 @@ from ..state.world import World
 from .flat_fold import flat_fold, flat_fold_fixtures      # the one place a world asks for the flat fold; `trail_world` is built at it
 from . import probes as P
 from .carin import build_world
+from .governance_spine import ACCUSER, build_hearing
 from .play_surface import board, carry_on, dispatching_chooser
 
 #: What an ending is for the seated person. The one closed tuple; a row's `kinds` values are members of it.
@@ -484,6 +485,48 @@ def life_reading(w: World, pid: Optional[str]) -> str:
 
 #: `seat=None`: no default person; `--person` names one. [ASSUMPTION; medium; Jordan to correct] `realm_ended` is `drawn` for every seat; B34 splits it by the seat's side as `IS-B3-GO-02` states for `season`.
 SCENARIOS["life"] = Scenario(build=build_realm, seat=None, ending=life_ending, kinds=LIFE_KINDS, reading=life_reading)
+
+
+# ======================================================================================
+# THE HEARING ROW (B24.15, HEAR_B edit 9, `IS-B2` §1.0): the spine with a sitting fired, a matter docketed and two parties holding three exhibits each
+# (`governance_spine.build_hearing`), the accuser seated, the verbs a party may do in and outside the room, and the proceeding role the scenario exists to enter.
+# ======================================================================================
+HEARING_VERBS = frozenset({"speak", "determine", "argue", "tell", "lie", "petition", "carry", "open_case", "commit", "utter", "give"})   # `IS-B2` §1.0 "verb set"
+
+
+def hearing_ending(w: World, pid: Optional[str], seasons_left: int) -> Optional[str]:
+    """THE HEARING'S ENDING: `None` until B24.38 (`IS-B2-SC-08` (5)) lands `hearing_ending` and the row's `kinds`; the run goes the seasons it is given.
+    [ASSUMPTION: a row with no ending names is admitted -- basis: `IS-B2-CORE-01` refuses a row without `kinds` "for a name its `ending` reader can return", and this reader returns none.]"""
+    return None
+
+
+SCENARIOS["hearing"] = Scenario(build=build_hearing, seat=lambda w: ACCUSER, ending=hearing_ending, verbs=HEARING_VERBS,
+                                role="social_contest.proceeding")
+
+
+def played_host(person: str, read: Callable[[str], str] = input, out: Callable[[str], None] = print):
+    """THE HOST THAT PLAYS `person` IN A SITTING (`headless --world hearing --play <id>`; `queries/inputs.py::PlayHost`, B24.05): his exchanges are read from `read` -- one line
+    each, the index of the `Option` he makes (blank: the first) -- after the board, his hand and his options are printed through `out`. The rest of the world, the season's
+    own acts included, is the shipped chooser's: the played form of the sitting is the automatic form with one decider swapped (REM-31's shape: no Event, carrier or id records
+    which). The decider draws nothing, holds no token and writes nothing; it is handed no `World`."""
+    from ..queries.inputs import Choice, PlayHost
+    from ..seam.wrappers.sigma import PROCEEDING_ROLE
+
+    def decide(view) -> Choice:
+        out(f"-- exchange {view.n} · {view.mover} · {view.side} · issue {view.issue} · turns left {view.turns_left}")
+        for item, state in view.board:
+            out(f"   board · {state} · {item.id} · {item.kind} · weight {item.weight:g} · side {item.side}")
+        for item in view.hand:
+            out(f"   hand · {item.id} · {item.kind} · weight {item.weight:g}")
+        for i, o in enumerate(view.options):
+            out(f"   [{i}] {o.move}{' ' + o.ground if o.ground else ''}{' ' + o.item if o.item else ''}")
+        text = read("move (index, blank = the first): ").strip()
+        at = int(text) if text else 0
+        if not 0 <= at < len(view.options):
+            raise SystemExit(f"{at} is not in the options 0..{len(view.options) - 1}")
+        o = view.options[at]
+        return Choice(o.move, o.ground, o.item, o.relation)
+    return PlayHost(frozenset({person}), None, deciders={PROCEEDING_ROLE: decide})
 
 
 def board_lines(w: World, pid: str) -> list:

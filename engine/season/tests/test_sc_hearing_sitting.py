@@ -6,6 +6,8 @@ their named tests to this file.
 """
 from __future__ import annotations
 
+import pytest
+
 from ..data import rosters as R
 from ..data.rosters import PROCEEDING_FAULTS, PROCEEDING_MOVES, ISSUE_RUNGS, roster_map
 from ..manifest import registry
@@ -320,3 +322,137 @@ def test_a_sitting_appends_its_exchanges_to_the_case_file():
     # the falsifier's other arm: an item with no case file lists its exchanges on the Event alone
     file, before, events = determined([first, second], case=False)
     assert events and file.stages == before and world_q.ending_exchanges(events[0]) == (("entered", "i1"), ("struck", "i1"))
+
+
+# ---- B24.15: the hearing scenario, `build_hearing` and `headless --world hearing` --------------------------------------------------------
+
+def _sit(seed, hand=(3, 3), decide=None):
+    """ONE SITTING OF `build_hearing(seed, hand)`: the accuser's `determine` of the accused, folded and then fought at ENCOUNTER, the accuser decided by `decide` (a
+    `View -> Choice`, or a ready `PlayHost`) or, with none, by the NPC decider as every other attendee is. Returns `(Event kind, degree, Outcome, closing obstacle,
+    closing net, Event)`."""
+    from ..data.matrix import WriteClass
+    from ..harness import governance_spine as G
+    from ..loop.driver import SeasonDriver, mint_token
+    from ..queries.inputs import PlayHost
+    from ..seam.wrappers import sigma
+    from ..state.carriers import Act
+
+    w = G.build_hearing(seed, hand)
+    d, got, real = SeasonDriver(w), {}, sigma._resolve_proceeding
+    act = Act(id="t:det", actor=G.ACCUSER, verb="determine", via=G.ACCUSER_SEAT, payload={"subject": G.ACCUSED, "to": G.ACCUSED})
+    depth = w.fixtures.get("contest_max_depth")
+    out = d.resolve(mint_token(w, WriteClass.ACTS), [act], contest_max_depth=depth)
+    host = decide if isinstance(decide, PlayHost) else None if decide is None else PlayHost(frozenset({G.ACCUSER}), None,
+                                                                                         deciders={sigma.PROCEEDING_ROLE: decide})
+    sigma._resolve_proceeding = lambda *a, **k: got.setdefault("r", real(*a, **k))
+    try:
+        fought = d.encounter(mint_token(w, WriteClass.ACTS), out, depth, host)
+    finally:
+        sigma._resolve_proceeding = real
+    (event,) = [e for e in fought if e.kind.startswith("matter.")]
+    return event.kind, event.degree, got["r"]["proceeding"], got["r"]["ob"], got["r"]["net"], event
+
+
+def test_headless_hearing_auto_twice_same_hash():
+    """GATE 2 (R-04.c3): `headless --world hearing --seed 0 --auto`, run twice under `PYTHONHASHSEED=0` in two processes (a set-order dependence a same-process comparison
+    cannot see), prints one content hash; and the world the command plays holds a `matter.determined` whose `ending` lists an exchange at some seed of the first six (the season's
+    own draw decides the band and the entries: seed 0's sitting is a Failure that enters none). FALSIFIER: two hashes, or no such Event in six seasons of the world."""
+    import os
+    import subprocess
+    import sys
+
+    from ..harness import scenarios as S
+    from ..queries import world_q
+
+    cmd = [sys.executable, "-m", "engine.season.harness.headless", "--world", "hearing", "--seed", "0", "--auto"]
+    ran = [subprocess.run(cmd, capture_output=True, text=True, env={**os.environ, "PYTHONHASHSEED": "0"}, check=True).stdout.splitlines()[-1] for _ in range(2)]
+    assert ran[0] == ran[1] and ran[0].startswith("CONTENT HASH: ") and len(ran[0].split()[-1]) == 32, ran
+    found = False
+    for seed in range(6):
+        found = any(e.kind == "matter.determined" and world_q.ending_exchanges(e) for e in S.run("hearing", seed, 1)["world"].log)
+        if found:
+            break
+    assert found
+
+
+def test_two_scripts_differing_in_the_first_move_differ_in_standing_and_closing_margin():
+    """GATE 3 (the entry names the closing OBSTACLE; A-25 keeps it the empty board's, so what a move moves is the board and the net the close is drawn on): the played accuser
+    reads his menu (`scenarios.played_host`, the `--play` host) and two scripts differ only in the first line, `present` an exhibit or `rest`, every later line `rest`. Over 20
+    seeds the standing set differs and the closing net differs in every one, the closing obstacle in none (the control: the obstacle is the form's, not the board's).
+    FALSIFIER: a seed at which the two leave one standing set or one net, the moves not being load-bearing."""
+    from ..harness import scenarios as S
+
+    lines: list = []
+    _sit(0, decide=S.played_host("lp_accuser", read=lambda prompt: "", out=lines.append))
+    first = lines[1:next(i for i, t in enumerate(lines) if i and t.startswith("-- exchange"))]
+    menu = {t.split("]")[0].strip()[1:]: t.split("]")[1].split()[0] for t in first if t.lstrip().startswith("[")}
+    present, rest = (next(i for i, m in menu.items() if m == name) for name in ("present", "rest"))
+
+    def script(first_line):
+        said = iter([first_line])
+        return lambda prompt: next(said, rest)
+    checked = same_ob = 0
+    for seed in range(20):
+        a, b = (_sit(seed, decide=S.played_host("lp_accuser", read=script(line), out=lambda t: None)) for line in (present, rest))
+        assert tuple(i.id for i in a[2].standing) != tuple(i.id for i in b[2].standing), seed
+        assert a[4] != b[4], seed
+        same_ob += a[3] == b[3]
+        checked += 1
+    assert checked == 20 and same_ob == checked
+
+
+def test_scripted_player_echoing_the_npc_reproduces_the_auto_hash(monkeypatch):
+    """GATE 4 (REM-31's shape: the mode is recorded nowhere): a host that plays the accuser and returns the NPC decider's own pick each turn (`sigma._npc_decider`, built for the
+    room, asked for him) leaves the world the content hash the automated run leaves, over a season at two seeds. FALSIFIER: two hashes, there being two code paths. CONTROL: a host
+    that plays him and always rests leaves another hash (the played route is the one the decider is read through)."""
+    from types import SimpleNamespace
+
+    from ..harness import scenarios as S
+    from ..harness.governance_spine import ACCUSER
+    from ..queries.inputs import Choice, PlayHost
+    from ..seam.wrappers import sigma
+
+    built, real = {}, sigma._npc_decider
+    monkeypatch.setattr(sigma, "_npc_decider", lambda w, inp: built.__setitem__("npc", real(w, inp)) or built["npc"])   # the room's own, rebuilt for each sitting
+    host = lambda f: PlayHost(frozenset({ACCUSER}), None, deciders={sigma.PROCEEDING_ROLE: f})
+    checked = 0
+    for seed in (1, 4):
+        auto = S.run("hearing", seed, 1)["hash"]
+        built.clear()
+        assert S.run("hearing", seed, 1, host=host(lambda view: built["npc"](view, SimpleNamespace(id=view.mover))), person=ACCUSER)["hash"] == auto, seed
+        built.clear()
+        assert S.run("hearing", seed, 1, host=host(lambda view: Choice("rest")), person=ACCUSER)["hash"] != auto, seed
+        checked += 1
+    assert checked == 2
+
+
+@pytest.mark.slow
+def test_no_constant_decider_wins_on_all_three_hands():
+    """GATE 5 (HEAR_B run 5): three constant deciders for the accuser -- always the heaviest `present`, always `argue`, always `rest` -- against the decider the NPC takes (the
+    chooser's), over 200 seeded sittings on each of three hands (the accuser holds 3, 2, 1 exhibits against the accused's 1, 2, 3), the same 200 seeds for every decider. A
+    decider's share is the sittings whose determination OPENS the disposal (`Overwhelming` or `Success`). FALSIFIER: one constant decider has the best share on all three
+    hands, the menu being stationary. CONTROL: the shares are not all alike (a hand and a decider move what is got)."""
+    from collections import Counter
+
+    from ..queries.inputs import Choice
+
+    def heaviest_present(view):
+        weight = {i.id: i.weight for i in view.hand}
+        present = [o for o in view.options if o.move == "present"]
+        o = max(present, key=lambda o: weight.get(o.item, 0.0)) if present else None
+        return Choice(o.move, o.ground, o.item, o.relation) if o else Choice("rest")
+
+    def always_argue(view):
+        o = next((o for o in view.options if o.move == "argue"), None)
+        return Choice(o.move, o.ground, o.item, o.relation) if o else Choice("rest")
+    arms = {"chooser": None, "present": heaviest_present, "argue": always_argue, "rest": lambda view: Choice("rest")}
+    hands, seeds, share, checked = {"strong": (3, 1), "even": (2, 2), "weak": (1, 3)}, 200, {}, 0
+    for hand, held in hands.items():
+        for name, decide in arms.items():
+            opened = Counter(_sit(s, held, decide)[1] for s in range(seeds))
+            share[hand, name] = (opened["Overwhelming"] + opened["Success"]) / seeds
+            checked += seeds
+    assert checked >= 600 and checked == len(hands) * len(arms) * seeds
+    best = {h: max(arms, key=lambda n: (share[h, n], n)) for h in hands}
+    assert not (len(set(best.values())) == 1 and "chooser" not in best.values()), (best, share)
+    assert len(set(share.values())) > 3, share

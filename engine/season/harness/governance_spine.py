@@ -47,7 +47,7 @@ from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
 from engine.substrate import names as _names
 
 from ..boot.chooser import chooser
-from ..boot.realm import build_realm
+from ..boot.realm import build_realm, place_person
 from ..data import files
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import FACTION_BY_PROP, RESTRAINT_KINDS, SUCCESSIONS, load_yaml, remit_or_default
@@ -60,7 +60,7 @@ from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries import faction_q, world_q
 from ..queries.person_q import COMPLIANCE_WITHHELD, addressed_to
 from ..state.attribution import causing_act
-from ..state.carriers import Act, Office, Person, Rung, Site, Tenure, generated_attributes
+from ..state.carriers import Act, Office, Person, Proposition, Rung, Site, Tenure, generated_attributes
 from ..state.containment import parent_of
 from ..state.gate import TENURE_CLOSED
 from ..state.ids import H, draw_factory
@@ -747,6 +747,62 @@ def _callback(w: World, chosen: tuple, verbs, out: Callable[[str], None]) -> Cal
                 out(line)
         return space(p, v, s, ask_budget, auto)
     return callback
+
+
+# ---------------------------------------------------------------------------------------------------
+# B24.15 -- THE HEARING SCENARIO (HEAR_B edit 9): `build_hearing`, the world `harness/scenarios.py::SCENARIOS["hearing"]` plays.
+# ---------------------------------------------------------------------------------------------------
+HEARING_VENUE, HEARING_PLACE = "lr_settlement_a", "lr_hearth_a"     # where the sitting is held / where the matter lives: the spine's first chain, a settlement and a hearth under it
+ACCUSER, ACCUSED = "lp_accuser", "lp_accused"
+ACCUSER_SEAT, CHARGE = "lo_accuser", "prop:hear:charge"
+EXHIBITS = 3                                                          # `IS-B2` §1.0: "two parties each with three filed exhibits"
+
+
+def build_hearing(seed: int = 0, exhibits: tuple = (EXHIBITS, EXHIBITS)) -> World:
+    """THE HEARING WORLD (HEAR_B edit 9, `IS-B2` §1.0): the spine (`build`), with the sitting's opening made by the game's own acts through the fold at tick 0, as `inquiry_world`'s
+    premise is (`_open`: a refusal stops the build, naming the Event):
+      * a SITTING THAT FIRED -- the Mayor of `HEARING_VENUE` `convene`s it, and CALENDAR and WITNESS run once, so a Date is due and fired, a slot is formed on the docket and the
+        bench holds the claim that it fired (`world_q.sittings_before`);
+      * a CASE FILE and a DOCKET ITEM that names it (`DOCKET_CASE`) -- the Mayor `open_case`s `ACCUSED`, which fills the slot (a computed case: it is heard under the `default` rite);
+      * A BENCH -- the spine's own seats over the venue (each carries `determine` in the remit `remit_or_default` fills), and `ACCUSER`'s: a magistrate's seat scoped to the
+        venue that may `determine`, so the accuser is a seat-holder who brings the matter and the presiding seat is another's (`sigma.proceeding_input`: the bearer is `for`);
+      * TWO PARTIES holding `exhibits` Records each, `(accuser's, accused's)`, three apiece unless a caller asks for another hand (`create_record`, folded; FI is stubbed by
+        planted state, no inquiry verb runs). They are what `sigma._items_of` reads as a party's items today (the Records he holds); the case file's own `filed` stages are
+        B24.25's (`speak` writes them), so none is planted here.
+      * THE SEATED ACCUSER is a person of his own sheet: a `justice` pursuit and a `commit` to an OUGHT whose subject is the accused (his charge), so the sitting question is
+        the first he answers (`world_q.attention_key`, tier 0) and `determine` of the accused is among his candidates.
+    The world runs at its OWN arm of two settings, set here and nowhere else (the shipped realm is a separate world and keeps its control): `sitting_exchanges` 1 (the attendees'
+    effort is exchanges) and `npc_decider_roles` naming the proceeding role (the NPC attendees decide by a draw over their own interior). The opening acts are folded at the flat
+    fold (no task draw); the world plays at its own arm. Returns the world at tick 1, the sitting due."""
+    from ..data.matrix import WriteClass as _WC
+    from ..seam.wrappers.sigma import PROCEEDING_ROLE
+    from .flat_fold import flat_fold_fixtures
+    w = build(seed)
+    played = w.fixtures.sweep("sitting_exchanges", 1).sweep("npc_decider_roles", (PROCEEDING_ROLE,))
+    attrs = lambda pid: generated_attributes(w.world_seed, pid, w.fixtures.get("generated_attribute_range"))
+    place_person(w, ACCUSED, "the accused", HEARING_PLACE, attributes=attrs(ACCUSED))
+    place_person(w, ACCUSER, "the accuser", HEARING_VENUE, attributes=attrs(ACCUSER), pursuits={"justice": 1.0})
+    w.offices[ACCUSER_SEAT] = Office(ACCUSER_SEAT, "Magistrate", HEARING_VENUE, remit_or_default([]), scope_rung=HEARING_VENUE, faction=SPINE_FACTION)
+    w.add_tenure(Tenure("lt_hold_accuser", ACCUSER, ACCUSER_SEAT, "hold", 0))
+    w.propositions[CHARGE] = Proposition(CHARGE, "OUGHT", ACCUSED, "answers to the bench", True, 0)
+    w.add_tenure(Tenure("lt_commit_accuser", ACCUSER, CHARGE, "commit", 0))
+    mayor, seat = _holder_of(w, f"lo_{HEARING_VENUE[3:]}"), f"lo_{HEARING_VENUE[3:]}"
+    w.fixtures = flat_fold_fixtures(w.fixtures)
+    try:
+        d = SeasonDriver(w)
+        _open(w, d, Act(id="hear:convene", actor=mayor, verb="convene", via=seat, payload={"subject": HEARING_VENUE, "when": w.tick}))
+        w.step = Step.CALENDAR
+        fired = d.calendar(mint_token(w, _WC.CALENDAR))                       # the Date is due this tick: it fires, and the bench is told
+        w.log.extend(fired)
+        d.witness(mint_token(w, _WC.INTERIOR), fired)
+        _open(w, d, Act(id="hear:case", actor=mayor, verb="open_case", via=seat, payload={"subject": ACCUSED}))
+        for who, held in zip((ACCUSER, ACCUSED), exhibits):
+            for n in range(held):
+                _open(w, d, Act(id=f"hear:file:{who}:{n}", actor=who, verb="create_record", payload={"kind": "text"}))
+    finally:
+        w.fixtures = played
+    w.tick += 1
+    return w
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:

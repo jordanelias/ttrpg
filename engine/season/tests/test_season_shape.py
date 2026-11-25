@@ -8653,7 +8653,7 @@ def test_a_verb_is_graded_by_a_contest_or_by_its_task_draw_and_by_nothing_else()
     # folds it through the real seam over 40 seeds (all four bands; the writ minted at each, its `force` the band).
     assert contested == {"fight": "the body", "tell": "a standing", "march": "a field",
                          "accept": "the body", "speak": "a matter",
-                         "determine": "a proposition", "argue": "a proposition",
+                         "determine": "a verdict", "argue": "a proposition",
                          "arrest": "a standing", "interrogate": "a proposition",
                          "capture": "the body", "lie": "a standing", "establish": "a seat",
                          "confer": "a seat", "revoke": "a seat", "succeed": "a seat",
