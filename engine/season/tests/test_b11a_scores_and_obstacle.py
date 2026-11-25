@@ -68,7 +68,7 @@ def test_the_pool_is_the_governing_score_plus_the_rank_and_the_score_is_the_oppo
     p = w.persons["p_mid"]
     add, floor = w.fixtures.get("pool_add"), w.fixtures.get("pool_floor")
     checked = 0
-    for verb in ("tell", "argue", "interrogate"):                  # B05.25: `fight` is a subsystem's row and names no `governing:`, so `faculty` refuses it
+    for verb in ("determine", "arrest", "research"):                # B05.25: `fight` is a subsystem's row and names no `governing:`, so `faculty` refuses it
         addends = sum(int(a(w, p, verb)) for a in pool.POOL_ADDENDS)
         assert pool.faculty(w, p, verb) == pool_of(pool.governing_score(w, p, verb) + pool.rank(p, verb), addends, add, floor)
         assert pool.faculty(w, p, verb) != pool.score(w, p, verb) + addends     # at the shipped base, not the old rule
@@ -82,12 +82,12 @@ def test_a_person_opposes_with_the_score_he_rolls():
     resisting attribute (B05.14: `_opposing`)."""
     w = P.tiny_world()
     hearer = w.persons["p_low"]
-    assert hearer.attributes in ({}, None) and not hearer.capability.get("copying")
-    assert sigma._opposition_of(w, "p_low", "tell") == float(w.fixtures.get("pool_default"))
-    assert sigma._opposition_of(w, "site_harbour", "tell") is None
-    assert sigma._opposing(w, "site_harbour", "tell") is None
+    assert hearer.attributes in ({}, None) and not hearer.capability.get("arms")
+    assert sigma._opposition_of(w, "p_low", "arrest") == float(w.fixtures.get("pool_default"))
+    assert sigma._opposition_of(w, "site_harbour", "arrest") is None
+    assert sigma._opposing(w, "site_harbour", "arrest") is None
     # score + the unheld attribute: the untrained score and (B05.16) the scale's mid-point; was 2 x pool_default
-    assert sigma._opposing(w, "p_low", "tell") == float(w.fixtures.get("pool_default")) + pool.attribute_midpoint() == 6.0
+    assert sigma._opposing(w, "p_low", "arrest") == float(w.fixtures.get("pool_default")) + pool.attribute_midpoint() == 6.0
 
 
 def test_every_verb_the_roll_deals_names_a_level_the_fixture_sizes():
@@ -117,37 +117,38 @@ def test_falsifier_a_higher_opposing_score_raises_the_obstacle_and_lowers_the_od
     assert all(a < b for a, b in zip(fail, fail[1:])), fail              # P(Failure) strictly rising, no step ties
 
 
-def test_falsifier_a_believer_weighs_a_lie_against_a_person_only_on_what_he_has_a_claim_on():
-    """`lie` names no vocation, so nobody holds a skill for it and the roll opposes a person at the untrained score on the skill half; the
-    `opposed_attribute` half (`attr.social.attunement`) is that person's own. The believer (`believed_input`, what the chooser weighs,
+def test_falsifier_a_believer_weighs_an_arrest_against_a_person_only_on_what_he_has_a_claim_on():
+    """B24p.99: re-pointed from `lie` (which proceeds since B24p.19; no single-roll row names no vocation and an `opposed_attribute`) to `arrest`,
+    the hearer holding no `arms` key: the roll opposes him at the untrained score on the skill half; the
+    `opposed_attribute` half (`attr.body.strength`) is that person's own. The believer (`believed_input`, what the chooser weighs,
     `odds_weighting: believed`) holds no claim on it, so he CANNOT SAY (`None`, never a figure -- B05.14); with a claim equal to what the
     person holds, his record composes the SAME obstacle the roll is dealt. A non-person subject opposes at nothing, and that he knows."""
     w = P.tiny_world(DEFAULT_FIXTURES.sweep("obstacle_ceiling", None))                  # uncapped: the cap is not this test's subject
     liar, hearer = w.persons["p_mid"], w.persons["p_low"]
-    assert "lie" not in V.VERB_CAPABILITY, "the case is a verb naming no vocation"
-    opposed = V.VERB_TABLE["lie"].opposed_attribute
+    assert not hearer.capability.get(V.VERB_CAPABILITY["arrest"]), "the hearer holds no skill for the verb: the skill half is the untrained score"
+    opposed = V.VERB_TABLE["arrest"].opposed_attribute
     hearer.attributes = {opposed: 6}
     fx = w.fixtures
-    even, routine, rate = even_line(fx.get("pool_add")), fx.get("difficulty_ob")[V.VERB_TABLE["lie"].difficulty], fx.get("opposition_rate")
-    dealt = sigma._composed_obstacle(sigma.contest_input(w, [liar.id], verb="lie", subject="p_low"))
+    even, routine, rate = even_line(fx.get("pool_add")), fx.get("difficulty_ob")[V.VERB_TABLE["arrest"].difficulty], fx.get("opposition_rate")
+    dealt = sigma._composed_obstacle(sigma.contest_input(w, [liar.id], verb="arrest", subject="p_low"))
     # B05.99 re-pin (B05.14's even line, B05.23's calibrated arm): even + difficulty + the rate x (his attribute + the untrained
     # score); was 1.0 + 0.5 x (4 + 2) at the control sizes
     assert dealt == even + routine + opposed_ob(6 + 2, rate), dealt
-    kw = dict(pool=pool.faculty(w, liar, "lie"), person_subject=True)
+    kw = dict(pool=pool.faculty(w, liar, "arrest"), person_subject=True)
     # B05.62 ships `believed_prior: ordinary`: the believer with no claim takes the hearer for an ordinary person (the mid-point
     # attribute, the untrained score), so he composes a figure, and it is NOT the dealt one (the hearer holds 6, not 4)
-    ordinary = sigma.believed_input(liar, "lie", "p_low", w.fixtures, **kw)
+    ordinary = sigma.believed_input(liar, "arrest", "p_low", w.fixtures, **kw)
     assert ordinary is not None and sigma._composed_obstacle(ordinary) == even + routine + opposed_ob(pool.attribute_midpoint() + 2, rate) != dealt
     shipped = w.fixtures
     w.fixtures = w.fixtures.sweep("believed_prior", "none")                     # the prior's control arm: B05.14's rule
-    assert sigma.believed_input(liar, "lie", "p_low", w.fixtures, **kw) is None          # FALSIFIER: a believer reading the dealt figure unasked
+    assert sigma.believed_input(liar, "arrest", "p_low", w.fixtures, **kw) is None          # FALSIFIER: a believer reading the dealt figure unasked
     # back at the shipped prior (with `regard_step` 1.0 shipped, the control arm answers None against any lone person, B05.21):
     # a held claim on the attribute is read instead of the ordinary person's
     w.fixtures = shipped
     liar.ledger.append(Claim(id="c0", holder=liar.id, subject="p_low", predicate=person_q.CAPABILITY_CLAIM + opposed, value=6,
                              when=0, source="told", confidence=5, visibility="own"))
-    believed = sigma.believed_input(liar, "lie", "p_low", w.fixtures, **kw)
+    believed = sigma.believed_input(liar, "arrest", "p_low", w.fixtures, **kw)
     assert believed is not None and sigma._composed_obstacle(believed) == dealt
-    nobody = sigma.believed_input(liar, "lie", "site_harbour", w.fixtures, pool=kw["pool"], person_subject=False)
+    nobody = sigma.believed_input(liar, "arrest", "site_harbour", w.fixtures, pool=kw["pool"], person_subject=False)
     # nobody opposite: the stand-in, `opposed_ob(pool_default)` (was 2.0 at the control sizes)
     assert nobody is not None and sigma._composed_obstacle(nobody) == even + routine + opposed_ob(fx.get("pool_default"), rate)

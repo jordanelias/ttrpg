@@ -115,16 +115,17 @@ def test_the_planted_failure_the_attribute_read_removed_rolls_the_untrained_pool
 
 def test_a_verb_naming_no_skill_still_rolls_its_governing_attributes():
     """B05.25 replaced "a verb with no vocation ignores the attributes": every rolled verb names its governing attributes, so a
-    verb naming no skill (`lie`, three attributes) rolls their mean at rank 0, and its opposition is the untrained score plus
-    the opposing attribute. A brute verb (`transfer`) never rolls: it has no pool to ignore anything with."""
-    lie = VERB_TABLE["lie"]
-    assert VERB_CAPABILITY.get("lie") is None and len(lie.governing) == 3
-    w = _w(**{HIGH: {a: 6 for a in lie.governing}})
-    assert sigma.faculty(w, w.persons[HIGH], "lie") == _pool(w, 6.0) == 12.0
-    assert sigma.faculty(w, w.persons[MID], "lie") == _pool(w, 2.0) == 8.0
-    assert sigma._opposition_of(w, HIGH, "lie") == float(w.fixtures.get("pool_default"))   # no skill: the untrained score
-    assert lie.opposed_attribute in lie.governing
-    assert sigma._opposing(w, HIGH, "lie") == 2.0 + 6.0                                  # plus his opposing attribute, held at 6
+    verb naming no skill (`conceal`, two attributes) rolls their mean at rank 0, and its opposition is the untrained score (it names
+    no opposing attribute). A brute verb (`transfer`) never rolls: it has no pool to ignore anything with. B24p.99: re-pointed from `lie`
+    (three attributes and an opposing one), which proceeds since B24p.19 and names neither; no single-roll row naming no skill names an
+    `opposed_attribute`, so that half of the pin retired with the row."""
+    verb = VERB_TABLE["conceal"]
+    assert VERB_CAPABILITY.get("conceal") is None and len(verb.governing) == 2
+    w = _w(**{HIGH: {a: 6 for a in verb.governing}})
+    assert sigma.faculty(w, w.persons[HIGH], "conceal") == _pool(w, 6.0) == 12.0
+    assert sigma.faculty(w, w.persons[MID], "conceal") == _pool(w, 2.0) == 8.0
+    assert sigma._opposition_of(w, HIGH, "conceal") == float(w.fixtures.get("pool_default"))   # no skill: the untrained score
+    assert verb.opposed_attribute is None and sigma._opposing(w, HIGH, "conceal") == float(w.fixtures.get("pool_default"))   # no opposing attribute: the score alone
     assert VERB_TABLE["transfer"].brute
     with pytest.raises(Forbidden):
         sigma.faculty(w, w.persons[HIGH], "transfer")

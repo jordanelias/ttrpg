@@ -58,6 +58,9 @@ LANE_A_STEPS = ("forgery",)                        # outside the roster (U-6); l
 BOUNDS = ("ceiling", "floor")
 SHIPPED_TABLE = V.VERB_TABLE_YAML                 # read at import, before any test re-points the loader
 ROLLED = ("tell", "lie", "argue", "speak", "determine", "arrest", "interrogate", "research", "examine", "surveil")
+#: The rolled rows still on the single roll: since B24p.19 the five that open a proceeding (`VerbRow.proceeds`) are pooled by no `governing:` and
+#: refuse `contest_input` (`Forbidden`), so the host's obstacle is read through these alone (B24p.99).
+SINGLE = tuple(v for v in ROLLED if not V.VERB_TABLE[v].proceeds)
 #: The control arm, pinned (B05.23 ships the calibrated one): the settings T13 commit 2 and OBS §4 step 5 flipped, each at its control, and
 #: the ceiling's form at its control (`hard`, B05.53), so the arm reads the flat bound whatever form ships (H-213, H-430).
 CONTROL_ARM = dict(pool_add=0, pool_floor=0, opposition_rate=0.5, attribute_level=None, difficulty_ob=DIFFICULTY_OB_CONTROL, regard_step=0,
@@ -233,13 +236,13 @@ def test_step_1a_composes_todays_obstacle_at_control():
     gave; an act against a person composes `1 + 0.5 x (his opposing attribute + his skill score)`: the stand-in's 2.0 for a person
     opposite at the untrained score on an UNHELD attribute no longer exists, so the move is exactly the attribute's half. FALSIFIER: the
     attribute dropped from the opposition (a person's term would equal `0.5 x score`), or a non-person act off 2.0. Read at `CONTROL_ARM`
-    (B05.23 ships the calibrated arm), so `interrogate` is the one row whose level is not `routine`: its difficulty is the control's `demanding`."""
+    (B05.23 ships the calibrated arm), so `interrogate` was the one row whose level is not `routine` (its difficulty is the control's `demanding`); it proceeds since B24p.19, so every row read here is `routine`."""
     w = _world(**CONTROL_ARM)
     default = float(w.fixtures.get("pool_default"))
     checked = moved = 0
-    for verb in ROLLED:
+    for verb in SINGLE:
         row = V.VERB_TABLE[verb]
-        level = float(DIFFICULTY_OB_CONTROL[row.difficulty])                     # 1.0 (`routine`) on every row but `interrogate` (2.0)
+        level = float(DIFFICULTY_OB_CONTROL[row.difficulty])                     # 1.0 (`routine`) on every single-roll row but a `demanding` one (2.0)
         for subject in ("site_harbour", None):                                   # nobody opposite
             inp = sigma.contest_input(w, ["p_low"], verb=verb, subject=subject)
             ob, terms = _module().obstacle(inp)
@@ -257,19 +260,19 @@ def test_step_1a_composes_todays_obstacle_at_control():
         assert inp.opposition == held + default, (verb, inp.opposition)
         assert dict(terms)["opposition"] == 0.5 * (held + default), (verb, terms)
         moved += held > 0
-    assert checked == 2 * len(ROLLED) and moved >= 7, (checked, moved)
+    assert checked == 2 * len(SINGLE) and moved >= 2, (checked, moved)    # B24p.99: `determine` and `arrest` are the single-roll rows with an `opposed_attribute` (was seven of ten, before five proceeded)
 
 
 def test_a_resolved_roll_carries_margin_terms_and_no_ob_terms():
     """The record key lane A added (`ob_terms`, a dict) is replaced by `Margin.terms` (C3-L5): the host's result carries the pair the
     module returned, summing to `ob`, in roster order; the refusal's too."""
     w = _world()
-    w.persons["p_mid"].capability = {"copying": 3}
-    out = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="tell", subject="p_mid", rng=draw.seeded(draw.H2("test_obstacle_form", 0)))
+    w.persons["p_mid"].capability = {"arms": 3}
+    out = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="arrest", subject="p_mid", rng=draw.seeded(draw.H2("test_obstacle_form", 0)))
     assert out["status"] == "RESOLVED" and "ob_terms" not in out, sorted(out)
     named = tuple(n for n, _ in out["terms"])
     assert named[:len(STANDING)] == STANDING and _fold(out["terms"]) == out["ob"], out["terms"]       # the conditional three weigh nothing at the control
-    out = sigma.resolve(_world(), ["p_low"], ["c"], "a standing", verb="tell", subject="site_harbour", rng=draw.seeded(draw.H2("test_obstacle_form", 0)))
+    out = sigma.resolve(_world(), ["p_low"], ["c"], "a standing", verb="arrest", subject="site_harbour", rng=draw.seeded(draw.H2("test_obstacle_form", 0)))
     assert out["terms"] and _fold(out["terms"]) == out["ob"]
     assert isinstance(Margin(net=0.0, ob=1.0).terms, tuple)
 
@@ -279,7 +282,7 @@ def test_the_opposing_attribute_joins_the_skill_score_in_the_opposition():
     only in the attribute read oppositions that differ by it; two differing only in the skill likewise; an UNHELD attribute reads the
     scale's mid-point (`pool.attribute_midpoint`, B05.16; B05.99 re-pin, was the untrained score)."""
     w = _world()
-    verb = "tell"
+    verb = "arrest"
     opposed = V.VERB_TABLE[verb].opposed_attribute
     assert opposed in descriptors.ATTRIBUTES
     key = V.VERB_CAPABILITY[verb]
@@ -320,13 +323,13 @@ def test_a_circumstance_row_raises_the_obstacle_by_its_gain(monkeypatch):
     for arm, ceiling, gain in (("uncapped", None, 0.25), ("shipped", DEFAULT_FIXTURES.get("obstacle_ceiling"), 1.0)):   # the shipped arm's gain overshoots its cap
         w = _world(reception_gain=gain, obstacle_ceiling=ceiling)
         w.persons["p_low"].attributes = {attribute: 4}
-        before = _module().obstacle(sigma.contest_input(w, ["p_low"], verb="tell", subject="site_harbour"))
+        before = _module().obstacle(sigma.contest_input(w, ["p_low"], verb="arrest", subject="site_harbour"))
         assert dict(before[1])["capability"] == 0.0, before                              # CONTROL: nothing ships, the member stands at 0
         with monkeypatch.context() as m:
             _plant_circumstance(m, attribute)
-            inp = sigma.contest_input(w, ["p_low"], verb="tell", subject="site_harbour")
+            inp = sigma.contest_input(w, ["p_low"], verb="arrest", subject="site_harbour")
             after = _module().obstacle(inp)
-            out = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="tell", subject="site_harbour", rng=draw.seeded(draw.H2("test_obstacle_form", 0)))
+            out = sigma.resolve(w, ["p_low"], ["c"], "a standing", verb="arrest", subject="site_harbour", rng=draw.seeded(draw.H2("test_obstacle_form", 0)))
         assert dict(after[1])["capability"] == 4 * gain, (arm, after)                    # 4 held x the gain, one operand (name, raw, 1.0)
         assert _fold(after[1]) == after[0], after
         named = [f for f in out["fed_by"] if f[1] == "circumstance"]
@@ -346,7 +349,7 @@ def test_a_circumstance_row_whose_when_fails_adds_nothing(monkeypatch):
     read = {}
     for rank in (3, 1):
         w.persons["p_low"].capability = {"copying": rank}
-        read[rank] = dict(_module().obstacle(sigma.contest_input(w, ["p_low"], verb="tell", subject="site_harbour"))[1])["capability"]
+        read[rank] = dict(_module().obstacle(sigma.contest_input(w, ["p_low"], verb="arrest", subject="site_harbour"))[1])["capability"]
     assert read == {3: 0.75, 1: 0.0}, read
 
 
@@ -416,16 +419,16 @@ NEW_MEMBERS = CONDITIONAL
 
 
 def _argue_terms(regard_step, stance):
-    """`(terms, levels)` of one `argue`: two NPCs, the hearer (`p_other`) holding the one stance row `stance` toward the arguer (`p_low`)."""
+    """`(terms, levels)` of one `determine` (B24p.99: was `argue`, which proceeds): two NPCs, the hearer (`p_other`) holding the one stance row `stance` toward the arguer (`p_low`)."""
     w = _world(regard_step=regard_step)
     w.persons["p_other"].stance = [("p_low", *stance)] if stance else []
-    out = sigma.resolve(w, ["p_low"], ["c"], "a proposition", verb="argue", subject="p_other", rng=draw.seeded(draw.H2("test_obstacle_form", 0)))
+    out = sigma.resolve(w, ["p_low"], ["c"], "a proposition", verb="determine", subject="p_other", rng=draw.seeded(draw.H2("test_obstacle_form", 0)))
     assert out["status"] in ("RESOLVED", "REFUSED"), out
     return dict(out["terms"]), {n: (f, a) for n, f, a in out["levels"]}
 
 
 def test_a_hostile_hearer_is_a_regard_term_and_a_friendly_one_is_favour():
-    """OBS gate 5, T13 T3's falsifier. A hand-built fold, two NPCs, one `argue`, the hearer holding one stance row toward the arguer at
+    """OBS gate 5, T13 T3's falsifier. A hand-built fold, two NPCs, one `determine` (was `argue`, B24p.99), the hearer holding one stance row toward the arguer at
     `(arguer, +4, 5)` in one arm and `(arguer, -4, 5)` in the other, `regard_step` 1.0: the hostile arm's terms show `regard` 0.8 x
     `regard_step` (a stance of 4 x 5 = 20 over `STANCE_MAX` 25), the friendly arm's levels show `favour` and its terms show no `regard`; the
     two arms' term lists differ in `regard` alone. CONTROL: at `regard_step` 0 neither arm shows `regard` and neither favour. FALSIFIER: the
@@ -454,12 +457,12 @@ def test_the_new_members_are_unlisted_at_the_control_and_the_roster_binds_them()
     assert tuple(sigma.OBSTACLE_TERMS) == ROSTER
     w = _world()
     checked = 0
-    for verb in ROLLED:
+    for verb in SINGLE:
         for subject in ("site_harbour", "p_other", None):
             terms = dict(_module().obstacle(sigma.contest_input(w, ["p_low"], verb=verb, subject=subject))[1])
             assert not set(NEW_MEMBERS) & set(terms), (verb, subject, terms)
             checked += 1
-    assert checked == 3 * len(ROLLED)
+    assert checked == 3 * len(SINGLE)
 
 
 # --- T1: the second arm of `difficulty_ob` ---------------------------------------------------------------------------
@@ -477,13 +480,13 @@ def test_difficulty_ob_has_a_control_and_a_calibrated_arm_and_ships_the_calibrat
     checked = 0
     for arm, sizes in FX.DIFFICULTY_OB_ARMS.items():
         w = _world(difficulty_ob=sizes)
-        for verb in ROLLED:
+        for verb in SINGLE:
             level = V.VERB_TABLE[verb].difficulty
             terms = dict(_module().obstacle(sigma.contest_input(w, ["p_low"], verb=verb, subject="site_harbour"))[1])
             assert (level == "plain") or terms["difficulty"] > 0, (arm, verb, level, terms)
             assert terms["difficulty"] == sizes[level], (arm, verb, terms)
             checked += 1
-    assert checked == 2 * len(ROLLED)
+    assert checked == 2 * len(SINGLE)
 
 
 # --- T2: the venue's standard ---------------------------------------------------------------------------------------
@@ -495,12 +498,12 @@ def _docket(w, matter, row):
 def _speak_terms(w, row=None):
     if row is not None:
         _docket(w, R.PARTY, row)
-    inp = sigma.contest_input(w, [R.SPEAKER, R.PARTY], verb="speak", subject=R.PARTY, room=world_q.place_of(w, R.SPEAKER))
+    inp = sigma.contest_input(w, [R.SPEAKER, R.PARTY], verb="determine", subject=R.PARTY, room=world_q.place_of(w, R.SPEAKER))
     return dict(_module().obstacle(inp)[1])
 
 
-def test_a_docketed_speak_reads_its_rows_standard_and_the_shipped_rows_are_t2s_first_values(monkeypatch):
-    """T13 edit 2 and T2's falsifier: a `speak` before a bench on a docketed matter whose arrangement row names a level other than `plain`
+def test_a_docketed_matter_before_a_bench_reads_its_rows_standard_and_the_shipped_rows_are_t2s_first_values(monkeypatch):
+    """T13 edit 2 and T2's falsifier (B24p.99: a `determine` handed the room, was a `speak`, which proceeds and no longer rolls the single roll's terms): a roll before a bench on a docketed matter whose arrangement row names a level other than `plain`
     shows `standard` at that level's size (`difficulty_ob`); under a `plain` row, and with nothing docketed, no `standard` is listed. The
     nine shipped rows carry T2's first values (commit 2, B05.23; `test_sc_tuning_tables.T2_FIRST_VALUES`). FALSIFIER: a non-`plain` row whose
     term list lacks `standard`, or a `plain` one that lists it."""
@@ -519,7 +522,7 @@ def test_a_docketed_speak_reads_its_rows_standard_and_the_shipped_rows_are_t2s_f
     assert checked == 3
     other = R._judging_world()[0]                                                               # an act no bench hears reads no standard
     _docket(other, R.PARTY, row)
-    no_room = dict(_module().obstacle(sigma.contest_input(other, [R.SPEAKER], verb="argue", subject=R.PARTY))[1])
+    no_room = dict(_module().obstacle(sigma.contest_input(other, [R.SPEAKER], verb="determine", subject=R.PARTY))[1])
     assert "standard" not in no_room, no_room
 
 
@@ -554,8 +557,8 @@ def test_stakes_read_the_tenure_kind_the_act_opens_through_the_docketed_row():
         _docket(w, "p_other", row)
         terms = dict(_module().obstacle(sigma.contest_input(w, ["p_low"], verb="determine", subject="p_other"))[1])
         assert terms["stakes"] == sized[kind], (row, terms)
-    plain = dict(_module().obstacle(sigma.contest_input(_world(stakes_ob=sized), ["p_low"], verb="tell", subject="p_other"))[1])
-    assert "stakes" not in plain, plain                                                          # `tell` opens no kind
+    plain = dict(_module().obstacle(sigma.contest_input(_world(stakes_ob=sized), ["p_low"], verb="examine", subject="p_other"))[1])
+    assert "stakes" not in plain, plain                                                          # `examine` opens no kind (B24p.99: was `tell`)
 
 
 # --- T5: admission ---------------------------------------------------------------------------------------------------
@@ -574,7 +577,7 @@ def test_a_row_that_admits_no_proofs_weighs_none_when_admission_is_on():
         R._proofs(w, 4)                                                                         # four firsthand deed claims against the party
         assert world_q.proofs(w, R.SPEAKER, R.PARTY, world_q.judging_set(w, "Hh")) == 4 * world_q.remove_weight("firsthand")
         _docket(w, R.PARTY, row)
-        out = sigma.resolve(w, [R.SPEAKER, R.PARTY], ["root"], R.PRIZE, verb="speak", subject=R.PARTY, rng=draw.seeded(draw.H2("test_obstacle_form", 0)),
+        out = sigma.resolve(w, [R.SPEAKER, R.PARTY], ["root"], R.PRIZE, verb="determine", subject=R.PARTY, rng=draw.seeded(draw.H2("test_obstacle_form", 0)),
                             rung=world_q.place_of(w, R.SPEAKER))
         return next(f for n, f, _a in out["levels"] if n == "proofs")                           # the count of `proof_level`s the roll recorded
     assert proofs_levels("parliamentary_debate", "off") > 0                                      # the control: held, unfiltered

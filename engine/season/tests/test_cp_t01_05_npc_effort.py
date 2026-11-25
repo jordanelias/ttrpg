@@ -230,18 +230,18 @@ def test_the_believed_chance_on_a_real_world_rises_with_the_acts_effort():
     w = P.tiny_world(DEFAULT_FIXTURES)
     SeasonDriver(w)                                   # the registrar fills MODULE_ENTRIES
     p = w.persons["p_low"]
-    # REM-30's `verb_capability` row makes `argue` draw on the `argue` key, so a person hearer's opposition is a belief the
-    # roller must hold (none held -> no figure) and nothing deposits one in a built realm: the believer is handed it (score 4,
-    # an obstacle of 2.0, the module's own default for a hearer who holds no key).
+    # B24p.99: `arrest` (was `argue`, which proceeds: its believed chance is the proceeding's, not this roll's). The verb's `arms` key
+    # makes a person hearer's opposition a belief the roller must hold (none held -> no figure) and nothing deposits one in a built
+    # realm: the believer is handed it (score 4, an obstacle of 2.0, the module's own default for a hearer who holds no key).
     p.ledger.append(Claim(id=f"c:{p.id}:{HEARER}", holder=p.id, subject=HEARER,
-                          predicate=person_q.CAPABILITY_CLAIM + VERB_CAPABILITY["argue"], value=4, when=0,
+                          predicate=person_q.CAPABILITY_CLAIM + VERB_CAPABILITY["arrest"], value=4, when=0,
                           source="told", confidence=5, visibility="own"))
-    row = VERB_TABLE["argue"]
+    row = VERB_TABLE["arrest"]
     bands = tuple(b for b, written in row.writes_by_degree.items() if written)
     got = []
     for e in (0, 1, 2):
-        payload = {"subject": "prop_x", "to": HEARER, **({EFFORT: e} if e else {})}
-        got.append(sigma.believed_chance(w, p, Act(f"a:{e}", p.id, "argue", payload=payload), bands))
+        payload = {"subject": HEARER, **({EFFORT: e} if e else {})}
+        got.append(sigma.believed_chance(w, p, Act(f"a:{e}", p.id, "arrest", payload=payload), bands))
     assert None not in got, got
     assert got[0] < got[1] < got[2], got
 
@@ -251,13 +251,13 @@ def test_the_believed_chance_on_a_real_world_rises_with_the_acts_effort():
 # ---------------------------------------------------------------------------------------------
 # A wound is a named LEVEL on the roll its bearer makes (one `wound_level` per `wound_step` of body lost below his ceiling, at most
 # `wound_levels_max`), AGAINST him; and the roller's FOR where the bearer is the person he acts on. Never an obstacle term (A-8).
-# Gate 2: the same `tell` by the same person at full body and at one third lost deals what `odds_of` reads, `record_odds(<his pool>, ob, 0.0)`
+# Gate 2: the same `arrest` by the same person at full body and at one third lost deals what `odds_of` reads, `record_odds(<his pool>, ob, 0.0)`
 # and `record_odds(<his pool>, ob, -0.25)`, within three standard errors over 200,000 seeded rolls.
 from dataclasses import asdict                                                    # noqa: E402
 
 from engine.dice_engine.sigma_leverage import LEVEL_SIGMA, record_odds            # noqa: E402
 
-from .test_odds_of import _assert_dealt, _tell, _world as _tell_world             # noqa: E402
+from .test_odds_of import _assert_dealt, _arrest, _world as _tell_world             # noqa: E402
 from .test_sc01_obstacle_ceiling import _module                                   # noqa: E402
 
 N_WOUND = 200_000
@@ -277,8 +277,8 @@ def _lose(w, who, steps):
 
 
 def _contest(w):
-    """The record the fold would build for `p_low` telling `p_mid`, and the obstacle the module composes for it."""
-    inp = sigma.contest_input(w, ["p_low", "p_mid"], verb="tell", subject="p_mid")
+    """The record the fold would build for `p_low` arresting `p_mid`, and the obstacle the module composes for it."""
+    inp = sigma.contest_input(w, ["p_low", "p_mid"], verb="arrest", subject="p_mid")
     return inp, _module().obstacle(inp)[0]
 
 
@@ -298,10 +298,10 @@ def test_a_wounded_actor_rolls_with_a_level_against():
     assert hurt.leverage == -LEVEL_SIGMA["minor"] == -0.25
     odds_whole, odds_hurt = record_odds(whole.pool, ob, 0.0), record_odds(hurt.pool, ob, -0.25)
     assert odds_hurt[0] > odds_whole[0], "the wound makes Failure likelier"
-    assert sigma.odds_of(w, _tell("p_mid")) == odds_hurt, "`odds_of` reads the same record the fold deals"
+    assert sigma.odds_of(w, _arrest("p_mid")) == odds_hurt, "`odds_of` reads the same record the fold deals"
     _assert_dealt(odds_hurt, hurt, N_WOUND)
     fresh = _wound_world()
-    assert sigma.odds_of(fresh, _tell("p_mid")) == odds_whole
+    assert sigma.odds_of(fresh, _arrest("p_mid")) == odds_whole
     _assert_dealt(odds_whole, _contest(fresh)[0], N_WOUND)
 
 
@@ -314,7 +314,7 @@ def test_a_wounded_defender_gives_the_roller_a_level():
     assert hurt.leverage == LEVEL_SIGMA["minor"] == 0.25, "the bearer's wound helps the roller when the bearer defends"
     odds_hurt = record_odds(hurt.pool, ob, 0.25)
     assert odds_hurt[0] < record_odds(whole.pool, ob, 0.0)[0], "the wound makes Failure less likely for the roller"
-    assert sigma.odds_of(w, _tell("p_mid")) == odds_hurt
+    assert sigma.odds_of(w, _arrest("p_mid")) == odds_hurt
     _assert_dealt(odds_hurt, hurt, N_WOUND)
 
 
@@ -326,7 +326,7 @@ def test_wound_level_none_is_todays_bytes():
         w.persons[who].body = w.persons[who].body_ceiling - 2 * w.fixtures.get("condition_scale") // 3
     hurt, _ = _contest(w)
     assert hurt.leverage == 0.0 and asdict(hurt) == asdict(whole)
-    assert sigma.odds_of(w, _tell("p_mid")) == sigma.odds_of(_wound_world(wound_level=None), _tell("p_mid"))
+    assert sigma.odds_of(w, _arrest("p_mid")) == sigma.odds_of(_wound_world(wound_level=None), _arrest("p_mid"))
 
 
 def test_wounds_is_the_channels_last_member_and_a_stack_is_capped_at_the_maximum():
@@ -353,15 +353,15 @@ def test_a_wound_level_that_is_no_level_raises_at_the_owner_never_scores_zero():
 def test_the_believer_passes_his_own_body_and_leaves_the_subjects_out():
     w = _wound_world(regard_step=0)                          # at a live `regard_step` a person counterparty's stance is unknown to him (B05.21): no record at all
     p = w.persons["p_low"]
-    for key in ("copying", VERB_TABLE["tell"].opposed_attribute):     # his belief of the hearer's skill and of the attribute that resists
+    for key in ("arms", VERB_TABLE["arrest"].opposed_attribute):     # his belief of the hearer's skill and of the attribute that resists
         p.ledger.append(Claim(id=f"c:p_low:p_mid:{key}", holder="p_low", subject="p_mid", predicate=person_q.CAPABILITY_CLAIM + key,
                               value=10, when=0, source="told", confidence=5, visibility="own"))
     _lose(w, "p_mid", 2)                                    # the subject's wound is not the believer's to know
     args = dict(pool=4.0, person_subject=True)
-    sound = sigma.believed_input(p, "tell", "p_mid", w.fixtures, **args)
+    sound = sigma.believed_input(p, "arrest", "p_mid", w.fixtures, **args)
     assert sound is not None and sound.leverage == 0.0
     _lose(w, "p_low", 1)
-    assert sigma.believed_input(p, "tell", "p_mid", w.fixtures, **args).leverage == -0.25, "his own wound is his to know"
+    assert sigma.believed_input(p, "arrest", "p_mid", w.fixtures, **args).leverage == -0.25, "his own wound is his to know"
 
 
 def test_the_largest_stack_against_still_leaves_a_chance_of_partial_or_better():
@@ -370,5 +370,5 @@ def test_the_largest_stack_against_still_leaves_a_chance_of_partial_or_better():
     _lose(w, "p_low", 5)                                     # past the maximum: two levels, not five
     inp, ob = _contest(w)
     assert inp.leverage == -2 * LEVEL_SIGMA["moderate"]
-    failure = sigma.odds_of(w, _tell("p_mid"))[0]
+    failure = sigma.odds_of(w, _arrest("p_mid"))[0]
     assert 0.0 < 1.0 - failure < 1.0, failure

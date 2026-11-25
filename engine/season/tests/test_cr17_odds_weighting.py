@@ -59,7 +59,7 @@ def cells(monkeypatch):
     `H-66` sweep's own seam): `argue` 1.0 on AXIS, the uncontested rival 0.4. At a believed chance `c` the
     argue pursuit term is `W * c` against the rival's `W * 0.4`, so the two parts at c = 0.4."""
     table = {ax: dict(row) for ax, row in V.ALIGNMENT.items()}
-    table.setdefault(AXIS, {}).update({"argue": 1.0, RIVAL: 0.4})
+    table.setdefault(AXIS, {}).update({"argue": 1.0, "arrest": 1.0, RIVAL: 0.4})   # B24p.99: `arrest` beside `argue`, the contested verb on the single roll
     monkeypatch.setattr(V, "ALIGNMENT", table)
     return table
 
@@ -72,11 +72,11 @@ def _rival():
     return Candidate(RIVAL, "prop_x")
 
 
-def _ranked(person, arm, odds, monkeypatch):
+def _ranked(person, arm, odds, monkeypatch, verb="argue"):
     """`make_chooser`'s real ranking of the two candidates for `person`, the View carrying `odds` (the
     `test_told_by_channel.py::_g2_ranked` shape: the option set is planted, `pack_scenes` is a spy)."""
     seen = {}
-    monkeypatch.setattr(CH, "opening_set", lambda p, view, q, fx: [_argue(), _rival()])
+    monkeypatch.setattr(CH, "opening_set", lambda p, view, q, fx: [_argue() if verb == "argue" else Candidate(verb, HEARER), _rival()])
 
     def spy(p, ranked, budget, fx, mint, occasion=None):
         seen["ranked"] = [c.verb for c in ranked]
@@ -181,17 +181,18 @@ def _world():
     return w
 
 
-def _believes_the_hearer(p):
+def _believes_the_hearer(p, verb="argue"):
     """REM-30's `verb_capability` row makes `argue` draw on the `argue` key, so the opposition of a person hearer is
     a belief the roller must HOLD (`sigma.believed_input`: none held -> unknown -> no figure), and nothing deposits one
     in a built realm. These readings need a figure, so the believer is handed the claim: the hearer's score 4, an
     obstacle of 2.0, which is what the module's own default reads for a hearer who holds no key."""
     p.ledger.append(Claim(id=f"c:{p.id}:{HEARER}", holder=p.id, subject=HEARER,
-                          predicate=person_q.CAPABILITY_CLAIM + VERB_CAPABILITY["argue"], value=4, when=0,
+                          predicate=person_q.CAPABILITY_CLAIM + VERB_CAPABILITY[verb], value=4, when=0,
                           source="told", confidence=5, visibility="own"))
 
 
 def test_two_pools_give_two_believed_chances_and_two_rankings(cells, monkeypatch):
+    """B24p.99: read on `arrest` (was `argue`, which proceeds: the believed chance of a row that proceeds is the proceeding's own, not a pool's)."""
     w = _world()
     sure, unsure = w.persons["p_low"], w.persons["p_mid"]
     # roster-exempt: TEST FIXTURE addend -- one person's pool eight dice above the other's (`test_odds_of.py`'s way). B05.99
@@ -200,13 +201,13 @@ def test_two_pools_give_two_believed_chances_and_two_rankings(cells, monkeypatch
     monkeypatch.setattr(pool, "POOL_ADDENDS", [lambda w_, who, verb: 8 if who.id == sure.id else 0])
     for p in (sure, unsure):
         p.pursuits = {n: 1.0 for n in PURSUITS}
-        _believes_the_hearer(p)
-    row = VERB_TABLE["argue"]
+        _believes_the_hearer(p, "arrest")
+    row = VERB_TABLE["arrest"]
     bands = tuple(b for b, written in row.writes_by_degree.items() if written)
     place = {DEGREE_LABEL[d]: n for d, n in DEGREE_ORDINAL.items()}
     chance = {}
     for p in (sure, unsure):
-        act = Act(f"a:{p.id}", p.id, "argue", payload={"subject": "prop_x", "to": HEARER})
+        act = Act(f"a:{p.id}", p.id, "arrest", payload={"subject": HEARER})
         odds = sigma.odds_of(w, act, believer=p)
         assert odds is not None
         want = sum(odds[place[b]] for b in bands)
@@ -217,12 +218,12 @@ def test_two_pools_give_two_believed_chances_and_two_rankings(cells, monkeypatch
     # figures part the rankings
     cells[AXIS][RIVAL] = (chance[sure.id] + chance[unsure.id]) / 2
     query = {p.id: sigma.believed_odds_query(w, p) for p in (sure, unsure)}       # each bound to its holder
-    ranks = {p.id: _ranked(p, "believed", query[p.id], monkeypatch) for p in (sure, unsure)}
-    assert ranks[sure.id] == ["argue", RIVAL] and ranks[unsure.id] == [RIVAL, "argue"], (chance, ranks)
-    assert (_ranked(sure, "none", query[sure.id], monkeypatch)
-            == _ranked(unsure, "none", query[unsure.id], monkeypatch))
+    ranks = {p.id: _ranked(p, "believed", query[p.id], monkeypatch, "arrest") for p in (sure, unsure)}
+    assert ranks[sure.id] == ["arrest", RIVAL] and ranks[unsure.id] == [RIVAL, "arrest"], (chance, ranks)
+    assert (_ranked(sure, "none", query[sure.id], monkeypatch, "arrest")
+            == _ranked(unsure, "none", query[unsure.id], monkeypatch, "arrest"))
     # a holder-bound query answers for its holder alone: asked about another's act it is `None`, not his belief
-    other = Act("a:other", unsure.id, "argue", payload={"subject": "prop_x", "to": HEARER})
+    other = Act("a:other", unsure.id, "arrest", payload={"subject": HEARER})
     assert query[sure.id](other, bands) is None
 
 
@@ -244,7 +245,7 @@ def test_a_driver_season_hands_every_view_a_working_query():
     inner = CH.make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}", verbs=frozenset())
     views = []
     for who in w.persons.values():
-        _believes_the_hearer(who)
+        _believes_the_hearer(who, "arrest")
 
     def watched(p, v, s, ask_budget):
         views.append((p, v))
@@ -254,7 +255,7 @@ def test_a_driver_season_hands_every_view_a_working_query():
     answered = 0
     for p, v in views:
         assert callable(v.odds)
-        act = Act(f"a:{p.id}", p.id, "argue", payload={"subject": "prop_x", "to": HEARER})
+        act = Act(f"a:{p.id}", p.id, "arrest", payload={"subject": HEARER})
         got = v.odds(act, (DEGREE_LABEL[Degree.SUCCESS],))
         assert got is None or 0.0 <= got <= 1.0
         answered += got is not None

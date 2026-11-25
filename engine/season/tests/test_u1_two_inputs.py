@@ -36,7 +36,7 @@ from .test_in12_step9 import CARIN, _kinds, _npc088, _resolve
 
 pytestmark = pytest.mark.flat_fold
 
-VERB = "argue"            # draws on the `argue` skill key (`VERB_CAPABILITY`); asserted below
+VERB = "determine"        # draws on the `argue` skill key (`VERB_CAPABILITY`); asserted below
 KEY = "argue"
 
 
@@ -100,7 +100,7 @@ def test_the_opposition_reads_the_skill_score_not_the_pool(monkeypatch):
     the rank (lane A's `max`, which reads 7 here). CONTROL: the roller's pool reads the same addend, so the addend is live."""
     from ..data.verbs import VERB_CAPABILITY, VERB_TABLE
     from ..seam.wrappers import sigma
-    verb = "tell"
+    verb = "determine"
     key = VERB_CAPABILITY[verb]
     w = _world()
     SeasonDriver(w)
@@ -154,9 +154,9 @@ def test_the_governing_attribute_is_the_held_one_else_none():
     assert pool.governing_attribute(p, VERB) == 6
     p.attributes = {}
     assert pool.governing_attribute(p, VERB) is None
-    # B05.25: a verb drawing on no skill still names attributes (`lie`), so it reads the held one; a brute row names none
-    p.attributes = {VERB_TABLE["lie"].governing[0]: 5}
-    assert VERB_CAPABILITY.get("lie") is None and pool.governing_attribute(p, "lie") == 5
+    # B05.25: a verb drawing on no skill still names attributes (`conceal`; B24p.99: was `lie`, which proceeds and names none), so it reads the held one; a brute row names none
+    p.attributes = {VERB_TABLE["conceal"].governing[0]: 5}
+    assert VERB_CAPABILITY.get("conceal") is None and pool.governing_attribute(p, "conceal") == 5
     assert not VERB_TABLE["transfer"].governing and pool.governing_attribute(p, "transfer") is None
 
 
@@ -228,7 +228,7 @@ def test_combat_receives_score_plus_addends_not_faculty():
 def _argued(w, actor, subject):
     """The record the social roll deals for `actor` arguing at `subject`, and its obstacle's named terms."""
     from ..seam.wrappers import sigma
-    inp = sigma.contest_input(w, [actor, subject], verb="tell", subject=subject)
+    inp = sigma.contest_input(w, [actor, subject], verb="determine", subject=subject)
     return inp, dict(sigma._composed_terms(inp))
 
 
@@ -238,7 +238,7 @@ def test_the_opponent_attribute_raises_the_opposition():
     (live) in the test's fixtures: it changes nothing, since no row reads it at the social roll."""
     from ..data.verbs import VERB_TABLE
     from ..seam.wrappers import sigma
-    verb = "tell"
+    verb = "determine"
     row = VERB_TABLE[verb]
     governing, opposed = row.governing[0], row.opposed_attribute
     assert governing and opposed and governing != opposed
@@ -276,7 +276,7 @@ def test_an_unauthored_person_reads_zero_attribute_levels():
     exactly the person authored AT the mid-point. CONTROL: the held reads are what they were (`test_the_opponent_attribute_raises_the_opposition`)."""
     from ..data.verbs import VERB_TABLE
     from ..seam.wrappers import sigma
-    verb = "tell"
+    verb = "determine"
     row = VERB_TABLE[verb]
     opposed, governing = row.opposed_attribute, row.governing[0]
     mid = (descriptors.ATTRIBUTE_FLOOR + descriptors.ATTRIBUTE_CEILING) / 2
@@ -330,21 +330,21 @@ def test_faculty_reads_its_pool_pair_from_the_social_roll_dice_row(monkeypatch):
     w = _world(pool_add=3, pool_floor=0)
     p = w.persons["p_low"]
     p.attributes, p.capability = {}, {}
-    plain = pool.governing_score(w, p, "tell") + pool.rank(p, "tell") + _addends(w, p, "tell")
-    assert pool.faculty(w, p, "tell") == plain + 3                              # shipped: `add: pool_add`
+    plain = pool.governing_score(w, p, "determine") + pool.rank(p, "determine") + _addends(w, p, "determine")
+    assert pool.faculty(w, p, "determine") == plain + 3                              # shipped: `add: pool_add`
 
     def swap(rows):
         i = next(i for i, r in enumerate(rows) if r["use"] == "social_roll" and r["role"] == "dice")
         rows[i] = dict(rows[i], add="pool_floor", floor="pool_add")
     _rebind_rows(monkeypatch, swap)
-    assert pool.faculty(w, p, "tell") == max(3, plain)                          # swapped: the floor reads `pool_add`, the base reads `pool_floor` (0)
-    assert pool.faculty(w, p, "tell") != plain + 3
+    assert pool.faculty(w, p, "determine") == max(3, plain)                          # swapped: the floor reads `pool_add`, the base reads `pool_floor` (0)
+    assert pool.faculty(w, p, "determine") != plain + 3
 
     def bare(rows):
         i = next(i for i, r in enumerate(rows) if r["use"] == "social_roll" and r["role"] == "dice")
         rows[i] = {k: v for k, v in rows[i].items() if k not in ("add", "floor")}
     _rebind_rows(monkeypatch, bare)
-    assert pool.faculty(w, p, "tell") == plain                                  # no names: 0 and 0, whatever the fixtures hold
+    assert pool.faculty(w, p, "determine") == plain                                  # no names: 0 and 0, whatever the fixtures hold
 
 
 def test_equal_trained_ranks_at_plain_are_even():

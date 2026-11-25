@@ -85,7 +85,7 @@ def test_the_audience_follows_the_prize_row(monkeypatch):
     monkeypatch.setattr(sigma, "audience_of", lambda w_, act, room: read.append((room, real(w_, act, room))) or read[-1][1])
     for room in ("bench", "seat_body"):
         monkeypatch.setitem(PRIZES["a matter"], "heard_by", room)
-        out = sigma.resolve(w, [SPEAKER, PARTY], ["root"], "a matter", verb="speak", subject=PARTY, via=SEAT,
+        out = sigma.resolve(w, [SPEAKER, PARTY], ["root"], "a matter", verb="determine", subject=PARTY, via=SEAT,
                             rng=draw.seeded(draw.H2("test_vres_task_and_prize", 0)), rung="Hh")
         assert out["status"] == "RESOLVED", out
     assert [room for room, _ in read] == ["bench", "seat_body"]
@@ -100,7 +100,7 @@ def test_toward_to_asks_the_room_about_the_receiver_and_an_unknown_side_is_refus
     monkeypatch.setattr(sigma, "reception", lambda w_, who, audience: asked.append((who, audience)) or 0.0)
     w = _council_world()
     for toward in (None, "to"):
-        sigma.contest_input(w, [SPEAKER, PARTY], verb="speak", subject=PARTY, room="Hh", heard_by="residents", toward=toward)
+        sigma.contest_input(w, [SPEAKER, PARTY], verb="determine", subject=PARTY, room="Hh", heard_by="residents", toward=toward)
     assert [who for who, _ in asked] == [SPEAKER, PARTY], asked
     assert all(sorted(a) == sorted((SPEAKER, PARTY, REEVE)) for _, a in asked), asked
     monkeypatch.setitem(PRIZES["a holding"], "toward", "from")
