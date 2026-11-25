@@ -1181,11 +1181,12 @@ DEFAULT_FIXTURES = Fixtures(
     faction_power_step=0.0,            # `H-614`, swept 0 (control, SHIPPED) / 1 / 2
     # `H-611` (B21.12; `14_VERBS_BINDING_C` commit C1, edit 1). THE LENGTH, IN SEASONS, OF THE TERM A PARTIAL `succeed`/`revoke` OPENS A HOLD FOR (the one
     # `provisional_term`; the BYZANTINE files cite it and ship no second value). Read at ONE place, `loop/effects_shared.py::_provisional_term`.
-    # `None` is the CONTROL and SHIPS: a Partial opens an untermed hold, exactly as a Success does, so the two differ by nothing until a value is set.
-    # The proposed 2 is uncalibrated and enters later (B98, or BIND_C's flip).
+    # `2` SHIPS since B21.73 (BIND_C's flip; UNDECIDED u-1 reading (a)): a Partial `confer` or `succeed` opens its hold for two seasons, and MATTER
+    # closes it at the barrier of tick `+ 2` (`T-n`), so the seat falls vacant and is offered again. `None` is the CONTROL and the REVERT: a Partial opens an
+    # untermed hold, exactly as a Success does, so the two differ by nothing. The value is BIND_C's proposed one; no document derives it.
     # [ASSUMPTION; medium; Jordan to correct; revert: `None`.]
-    # [JUSTIFIED: engine/season/hole_register.yaml H-611 -- site: Fixtures provisional_term, graded `assumption`; BIND_C proposes 2 and no document derives it, so it is injected at the control (None: Partial reads as Success) and swept None / 1 / 2 / 4]
-    provisional_term=None,             # `H-611`, swept None (control, SHIPPED) / 1 / 2 (proposed) / 4
+    # [JUSTIFIED: engine/season/hole_register.yaml H-611 -- site: Fixtures provisional_term, graded `assumption`; BIND_C proposes 2 and no document derives it, so it ships at the proposed 2 (B21.73) and is swept None (control) / 1 / 2 / 4]
+    provisional_term=2,                # `H-611`, swept None (control) / 1 / 2 (proposed, SHIPPED) / 4
     # `H-612` (B21.23; `06_FA_decree_binds` edit 4). HOW MANY SEASONS OF SUSPICION OPEN A WRIT-MAKER'S RECALL: `queries/person_q.py::suspicion_of`
     # (his own ledger's count of the seasons a person withheld compliance on a writ he made, less those he only obeyed in, floored at zero)
     # reaching this number puts the person and each seat of his that `may_revoke` admits on the maker's question as classed referents

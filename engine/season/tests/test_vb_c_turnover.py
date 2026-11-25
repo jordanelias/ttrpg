@@ -19,7 +19,9 @@ from engine.dice_engine.dice_engine import DEGREE_LABEL, Degree
 from engine.season.data.matrix import Step, WriteClass
 from engine.season.decision.options import opening_set
 from engine.season.loop import predicates as _preds
-from engine.season.loop.driver import mint_token
+from engine.season.data.rosters import SUCCESSIONS
+from engine.season.harness import governance_spine
+from engine.season.loop.driver import SeasonDriver, mint_token
 from engine.season.queries import world_q
 from engine.season.seam import Resolution
 from engine.season.seam.wrappers.sigma import HeardAct, audience_of
@@ -104,6 +106,13 @@ def _heard(w, d, events, who) -> bool:
     return all(any(c.predicate == kind for c in w.persons[p].ledger) for p in who)
 
 
+def _termed_iff_partial(w, band: str, hold) -> bool:
+    """B21.73: A PARTIAL SEAT-OPENING IS PROVISIONAL -- its hold carries `Term(w.tick + provisional_term)` (read off the fixture, not typed here); a Success or an
+    Overwhelming one carries none."""
+    n = w.fixtures.get("provisional_term")
+    return hold.term is None if band != "Partial" else (hold.term is not None and hold.term.matures_at == w.tick + n)
+
+
 def _forms(w, pid, verb) -> list:
     """The seats `pid` forms `verb` on, over the questions the world hands him (`questions_for`'s classed referents)."""
     p = w.persons[pid]
@@ -130,7 +139,7 @@ def test_c3_confer_revoke_succeed_band_on_a_hand_built_world():
         else:
             assert kinds == ["tenure.opened"], (band, kinds)
             h = _hold(w, VACANCY)
-            assert h is not None and h.subject == CONFEREE and h.term is None, (band, h)   # control: a Partial opens untermed
+            assert h is not None and h.subject == CONFEREE and _termed_iff_partial(w, band, h), (band, h)
 
         # REVOKE: the duke, opposed by himself (the seat's live holder)
         band, kinds, out = _resolved(w, d, Act(id=f"c3_revoke_{seed}", actor=KING, verb="revoke", via=VIA,
@@ -158,9 +167,66 @@ def test_c3_confer_revoke_succeed_band_on_a_hand_built_world():
         else:
             assert set(kinds) == {"succession.claimed", "tenure.closed"}, (band, kinds)
             h = _hold(w, THRONE)
-            assert h is not None and h.subject == HEIR and h.term is None and _hold(w, TITLE) is None, (band, h)
+            assert h is not None and h.subject == HEIR and _termed_iff_partial(w, band, h) and _hold(w, TITLE) is None, (band, h)
         checked += 1
     assert checked >= 40, checked
     four = {"Overwhelming", "Success", "Partial", "Failure"}
     assert set(bands["confer"]) == four and set(bands["succeed"]) == four, bands
     assert bands["revoke"].get("Failure", 0) > 0, bands
+
+
+def test_c3_scenario_vacancy_and_succession_bands_and_the_provisional_term():
+    """B21.73, C3's gate on B21.72's scenario, 40 seeds a situation: `vacancy` (the seat below the Duke's laid down; he confers it back on the man who laid it down)
+    and `succession` (the Throne laid down; the Duke claims it by his title). All four bands occur for `confer` and for `succeed`. A FAILURE leaves the seat vacant
+    (the claim's title still held) and the act re-forms. A SUCCESS or an OVERWHELMING opens the hold untermed; a PARTIAL opens it with `provisional_term`, the seat is
+    held until MATTER reaches that tick, then falls vacant and is offered again (`world_q.vacancies` to the man who confers a conferred seat; the `succeed` form to a
+    holder of an inherited seat's title)."""
+    bands = {"vacancy": {}, "succession": {}}
+    checked = {"vacancy": 0, "succession": 0}
+    lapsed = 0
+    for name, verb in (("vacancy", "confer"), ("succession", "succeed")):
+        for seed in range(40):
+            w = governance_spine.build(seed)
+            player = governance_spine.default_player(w)
+            with governance_spine._successions_set(governance_spine.successions_for(w, name, player)):
+                opening = governance_spine.situation(w, name, player)
+                d = SeasonDriver(w)
+                seat, opener = opening[0].payload["subject"], opening[0].actor      # the seat laid down, and the man who laid it down
+                assert _hold(w, seat) is None, "fixture: the situation left the seat held"
+                if verb == "confer":
+                    act = Act(id=f"c3_scn_confer_{seed}", actor=player, verb="confer", via=w.seat_holds(player)[0].object,
+                              payload={"subject": seat, "to": opener})
+                    conferrer, holder = player, opener
+                else:
+                    act = Act(id=f"c3_scn_succeed_{seed}", actor=player, verb="succeed", payload={"subject": seat})
+                    conferrer, holder = opener, player
+                titles = [t.id for t in w.tenures if t.kind == "hold" and t.live and t.subject == holder and t.object in SUCCESSIONS.get(seat, ())]
+                band, kinds, _ = _resolved(w, d, act)
+                bands[name][band] = bands[name].get(band, 0) + 1
+                h = _hold(w, seat)
+                if band == "Failure":
+                    assert h is None and kinds in (["appointment.resisted"], ["succession.contested"]), (name, kinds)
+                    assert seat in _forms(w, player, verb), f"the Failed {verb} does not re-form"
+                    assert all(t.live for t in w.tenures if t.id in titles), "the Failed claim laid the title down"
+                else:
+                    assert h is not None and h.subject == holder and _termed_iff_partial(w, band, h), (name, band, h)
+                    assert seat not in world_q.vacancies(w, w.persons[conferrer])
+                if band == "Partial":
+                    matures = h.term.matures_at
+                    w.tick = matures - 1
+                    d.matter(mint_token(w, WriteClass.MATTER), None)
+                    assert _hold(w, seat) is not None, "the provisional seat lapsed before its term"
+                    w.tick = matures
+                    d.matter(mint_token(w, WriteClass.MATTER), None)
+                    assert _hold(w, seat) is None, "the provisional seat did not fall vacant at its term"
+                    if verb == "confer":
+                        assert seat in world_q.vacancies(w, w.persons[conferrer]), "the lapsed seat is not offered again"
+                    else:       # an inherited seat is no one's to confer: it is offered again to whoever still holds one of its titles
+                        heirs = sorted(t.subject for t in w.tenures if t.kind == "hold" and t.live and t.object in SUCCESSIONS[seat])
+                        assert heirs and any(seat in _forms(w, p, "succeed") for p in heirs), "the lapsed throne is not claimable again"
+                    lapsed += 1
+                checked[name] += 1
+    assert checked["vacancy"] >= 40 and checked["succession"] >= 40, checked
+    four = {"Overwhelming", "Success", "Partial", "Failure"}
+    assert set(bands["vacancy"]) == four and set(bands["succession"]) == four, bands
+    assert lapsed >= 8, lapsed
