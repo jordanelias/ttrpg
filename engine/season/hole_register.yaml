@@ -326,7 +326,7 @@ rows:
     owner:     "the resolver"
     grade:     "measured"
     default:   "composite key `(stratum, actor-hash, intra-person position)` — honours both"
-    site:      "loop/resolve.py::_canonical_order"
+    site:      "loop/resolve.py::_canonical_order; Fixtures rival_precedence (B08.05, `hash` | `draw`: the order inside a group of rivals for one exclusive thing)"
     sweep:     []
     unblocks:  "2"
     cite:      "REGRADED `assumption` -> `measured` AT B03.51 (`U5a_CORE_owed_edits` §A row 2; audit res. 9, F-PES-CORE-09). THE KEY THE TREE RUNS is `(stratum, H(seed, tick, actor, \"order:verb:id\"))` -- `loop/resolve.py::_canonical_order` sorts on `(stratum_of(a), H(w.world_seed, w.tick, a.actor, f\"order:{a.verb}:{a.id}\"))`, and `loop/encounter.py` calls the same function, so the order lives once. THE READING, the audit's (`16_PESSIMIST_CORE.md` E-07, `ordp.py 0 1`, realm, seed 0), quoted as such and not re-run here: reversing the hash order inside each stratum flips 1 of 175 lap-0 acts and 6 of 774 common acts in a season. (The audit says \"round-0\"; corrected to lap, A-101. The code's key keeps the tree's `round` until B04.) The `default:` above is V2's cell as transcribed and is left so (`--verify-transcription` pins it); the key the code runs is the one this cite gives."
