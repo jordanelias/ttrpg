@@ -206,5 +206,7 @@ def test_where_a_cohort_was_a_party_the_realm_moves_and_the_refusals_are_the_con
     # seed re-picked at B06.99: the stream changed (was 2; measured seeds 1..12 refused: 0,0,1,0,2,1,0,0,0,0,0,0 -- 3 is the first)
     # RE-PICKED AT B11.99 (B11's declared movers; the same five reverts, `PYTHONHASHSEED=0`, two seasons): seeds 1..12 refused
     # 0,0,0,0,0,0,1,0,0,1,0,0, so 7 is the first (seed 3 reads 0: 136 `individual` reads, none refused)
-    reads, refused_on_it = _realm_two_seasons(7)
-    assert refused_on_it > 0, "no act was refused on `individual` at seed 7 (re-picked from 3)"
+    # RE-PICKED AT THE B11 CLOSE (after Phase 1's fixes moved the stream): the same five reverts, `PYTHONHASHSEED=0`, seeds 1..12 refused
+    # 0,0,0,0,0,0,0,0,0,1,0,0, so 10 is the only one (seed 7 reads 0: 178 `individual` reads, none refused)
+    reads, refused_on_it = _realm_two_seasons(10)
+    assert refused_on_it > 0, "no act was refused on `individual` at seed 10 (re-picked from 7)"
