@@ -20,7 +20,7 @@ from engine.dice_engine.dice_engine import DEGREE_LABEL, MARGIN_SCALE, Degree, d
 from engine.dice_engine.sigma_leverage import opposed_ob, pool_of
 from engine.substrate import composition
 from ..gaps import InstrumentDefect
-from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, SCRUPLE_OVERRIDDEN, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, graded_route,
+from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, DECLARED, SCRUPLE_OVERRIDDEN, PERSON_DEMANDED, FOLD_INELIGIBLE, FOLD_REFUSED, armed_route_off, graded_route,
                             ENDING_BEAT, ENDING_CARD, ENDING_HEAD, ENDING_SITTING, ENDING_VERDICT, MARGIN_ENDING, STANCE_BANDS, STANCE_DECIDED,
                             SCAR_HOLDS, SCAR_SEASON_CAPS, SCAR_VINDICATIONS, STANDING_OCCASION_OPENED_BY, STRATA, UNROUTED_BAND,
                             require_member, require_use_site, task_share)
@@ -28,7 +28,7 @@ from ..data.rosters import (CONVICTION_MOVED, CRISIS_ARMS, SCRUPLE_OVERRIDDEN, P
 from typing import Any, Optional
 from ..data.matrix import Step, matrix_row
 from ..data.requires import UNKNOWN, Verdict, binding_from_act, evaluate
-from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, EVENT_KINDS, FORM_TASK,
+from ..data.verbs import (COUNTERPARTY_CLAUSE, DRAW_CLAUSE, ELIGIBILITY_CLAUSE, EVENT_KINDS, FORM_TASK, SEQUENCE_CLAUSE,
                           VERB_TABLE, WRITE_CLAUSE, WRITE_OPTIONAL, VerbRow)
 from ..gaps import Forbidden, Unspecified
 from ..loop.effects import EFFECTS
@@ -1129,6 +1129,93 @@ def _refuse_party_gap(self, w: "World", a: Act) -> list:
     return produced
 
 
+def _deferred_prize(w: "World", contests: list) -> Optional[dict]:
+    """M4's deferral test, ONE OWNER (`04` §C.4: *"if prize.get("step") and prize["step"] != w.step.value"*): the prize's
+    manifest row when the act's prize declares a `step:` other than the one running now -- the act is folded at the row's
+    `declares:` band, writing nothing, and fought when that step arrives -- else `None` (no prize, or its step is now).
+    Read by `_contest` (the fork) and `_sequence_refusal` (B08.02: a deferred prize defers what hangs on it)."""
+    prize = manifest.resolve("contest", contests[0]) if contests else None
+    if prize is not None and prize.get("step") and prize["step"] != w.step.value:
+        return prize
+    return None
+
+
+def _previous_interaction(w: "World", a: Act) -> Optional[Act]:
+    """The interaction before `a` in the Scene it was released in (`ActStore.scene_of`, the chooser's order), or `None`:
+    `a` leads its Scene, or carries none."""
+    sc = w.acts.scene_of(a.id)
+    if sc is None:
+        return None
+    at = next((i for i, x in enumerate(sc.acts) if x is a), None)
+    if at is None:
+        at = next((i for i, x in enumerate(sc.acts) if x.id == a.id), None)
+    return sc.acts[at - 1] if at else None
+
+
+def _sequence_refusal(self, w: "World", a: Act, *in_hand: list) -> list:
+    """B08.02 (`16_PESSIMIST_CORE_a_scene_runs_in_its_own_order.md` edit 3; ruling A-9: *a scene's steps apply in the
+    chooser's order and a step may hang on the band of the one before*): THE ONE READER OF `Act.after`, called by both fold
+    entries after `_survives` -- `resolve` with the lap's Events so far, `loop/encounter.py` with RESOLVE's and its own.
+    `[]`: fold `a` as before. Otherwise the Events of its refusal at `SEQUENCE_CLAUSE`, which the caller emits INSTEAD.
+
+    THE BAND READ is the degree on the last Event in hand that `self.act_of` maps to the scene's previous interaction --
+    `None` where it reached none (an uncontested act, a refusal), which no `after` names, so a step hung on it is skipped.
+    The refusal carries no `changes` (A-62: the budget is a Query) and no band; it is in the log and costs its slot, and the
+    scene is not still (A-81): the previous interaction's Event is its write.
+
+    A DEFERRED PRIZE DEFERS WHAT HANGS ON IT (`04` §C.4: a prize whose `step:` is later is folded at its declared band,
+    writing nothing, and fought when the SAME fold runs again from ENCOUNTER). Before that step the previous interaction
+    has reached only `Declared`, a band nobody fought, so `a` is not read against it: it takes its own path, which declares
+    it in turn, and ENCOUNTER (which selects by the declaration) reads `after` here against the band the fight produced. No
+    second path is built, so an interaction whose own row cannot be declared at that step cannot be deferred: `Unspecified`.
+
+    ⚠ THE PREVIOUS INTERACTION MUST HAVE FOLDED FIRST (B08.03's scene key makes a scene fold contiguously, in the chooser's
+    order); one not yet folded at this step is an instrument defect, never a guess at its band."""
+    if a.after is None:
+        return []
+    prev = _previous_interaction(w, a)
+    if prev is None:
+        raise InstrumentDefect(
+            f"act {a.id!r} ({a.verb}) carries after={a.after!r} and no interaction comes before it in its scene "
+            f"({a.scene!r}): there is no band to read (B08.02)")
+    if prev.id not in w.acts:
+        raise InstrumentDefect(
+            f"act {a.id!r} ({a.verb}) hangs on {prev.id!r} ({prev.verb}), which has not folded at {w.step.value}: a "
+            "scene folds in the chooser's order (A-9; B08.03's scene key), so its band cannot be read yet")
+    band = next((e.degree for events in reversed(in_hand) for e in reversed(events)
+                 if getattr(self.act_of.get(e.id), "id", None) == prev.id), None)
+    if band == DECLARED:
+        held = _deferred_prize(w, _contests_of(prev, VERB_TABLE.get(prev.verb)))
+        if held is None:
+            raise InstrumentDefect(
+                f"act {a.id!r} ({a.verb}) hangs on {prev.id!r} ({prev.verb}), declared and not yet fought at "
+                f"{w.step.value}: a scene folds in the chooser's order (A-9; B08.03's scene key)")
+        own = _deferred_prize(w, _contests_of(a, VERB_TABLE.get(a.verb)))
+        if own is None or own.get("step") != held.get("step"):
+            raise Unspecified(
+                f"act {a.id!r} ({a.verb}) hangs on {prev.id!r} ({prev.verb}), whose prize is fought at "
+                f"{held.get('step')}, and its own row is not declared there", "B08.02",
+                needs="the chooser not to hang this row on a deferred prize, or ENCOUNTER to select an interaction "
+                      "deferred with one",
+                law="04 §C.4: a deferred prize is fought when the SAME fold runs again from ENCOUNTER, which selects "
+                    "by the declaration; a step folded now would hang on a band nobody fought")
+        TRACE.decision(f"{a.id} hangs on {prev.id}, whose prize is deferred", "B08.02",
+                       chose=f"defer it with it; read `after` at {held.get('step')}",
+                       alternatives=["read it against `Declared` (a band nobody fought)"])
+        return []
+    if band in a.after:
+        return []
+    row = VERB_TABLE.get(a.verb)
+    declared = () if row is None else row.refusal_for(SEQUENCE_CLAUSE)
+    TRACE.decision(f"{a.id} skipped: {prev.id} reached {band!r}, outside {a.after!r}", "B08.02",
+                   chose="emit the row's refusal at `sequence`",
+                   alternatives=["fold it anyway (a step that hangs on nothing)"])
+    skipped = _act_events(self, w, a, _demand_earned(w, a, declared, False) or (FOLD_REFUSED,))
+    for _e in skipped:
+        self.act_of[_e.id] = a
+    return skipped
+
+
 def _contest(self, w: "World", token: Token, a: Act, contests: list,
              contest_max_depth: Optional[int], host: Optional[Any] = None) -> list:
     """S39.2, and M4's deferral fork (`ED-IN-0279` clause (a)). Extracted from `resolve()`'s own
@@ -1157,8 +1244,8 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     `host` (v10 REM-31, IN-46): the PLAYABLE host, passed by ENCOUNTER only (`loop/encounter.py`); RESOLVE's
     call passes none, so the driver can suspend nowhere but ENCOUNTER. Handed through `contest()` to the
     provider untouched; it enters neither the generator's purpose below nor the fold."""
-    prize = manifest.resolve("contest", contests[0])
-    if prize is not None and prize.get("step") and prize["step"] != w.step.value:
+    prize = _deferred_prize(w, contests)
+    if prize is not None:
         return self._fold(w, token, a, Resolution(prize["declares"], {}))
     if contest_max_depth is None:
         raise Forbidden(
@@ -1410,6 +1497,12 @@ def resolve(self, token: Token, acts: list[Act],
         _gone = self._survives(w, a)
         if _gone:
             out.extend(_gone)
+            continue
+        # B08.02 (A-9): AN INTERACTION HUNG ON THE BAND OF THE ONE BEFORE (`Act.after`) is read against the Events in hand,
+        # before its own admission -- skipped, it is refused at `sequence` and costs its slot. `loop/encounter.py` asks the same.
+        _skipped = _sequence_refusal(self, w, a, out)
+        if _skipped:
+            out.extend(_skipped)
             continue
         # S39.2 line 1: loop -> subsystem, when an act contests something.
         #
