@@ -7,6 +7,9 @@ places. THE COUNTER (test-side, read-only, it draws nothing and writes nothing t
   * LOST AT THE STRIP -- the chunk is built, but the effort act is rebuilt at effort 0 (`Candidate(.., without EFFORT)`):
     the first-built Scene held the act at `effort e > 0`, the Scene that was kept holds the same act with no `effort`.
   * REACHES AN ACT -- the kept Scene holds the act with its `effort` payload untouched.
+B08.04 (CF-E8-2's conditional, UNDECIDED (5)): the reading put the loss at the BUDGET BREAK, so the same counter also runs the control
+`pack_scenes` with `hangs_on` off (every `Act.after` None, the chooser as it was before B08.04) beside each real call, and
+`test_pack_scenes_keeps_the_first_ranked_effort_variant` compares the Scenes: setting `after` must move nothing else.
 `take()` has a fourth, unnamed way to lose one: `chunk[:1]` drops the chunk's later acts, effort or not. It is counted
 apart (`trimmed`) so the three named bins stay what CF-E8-2 asked for and the sum still closes.
 
@@ -49,6 +52,9 @@ class Counter:
         self.formed = 0
         self.order = []          # one bin name per formed effort, in formation order
         self._builds = None
+        self.compared = 0        # `pack_scenes` calls also run with `after` off
+        self.hung = 0            # of those, the calls whose Scenes hold an act with `after` set
+        self.moved = []          # the calls whose Scenes differ, beyond `after`, from the control's
 
     def __enter__(self):
         counter, real_pack, real_scene = self, CH.pack_scenes, CH.Scene
@@ -66,6 +72,7 @@ class Counter:
                 counter._classify(ranked, out)
             finally:
                 counter._builds = None
+            counter._compare(real_pack, (p, ranked, n_scenes, fx, mint), occasion, out)
             return out
 
         self._saved = (real_pack, real_scene)
@@ -75,6 +82,24 @@ class Counter:
     def __exit__(self, *exc):
         CH.pack_scenes, CH.Scene = self._saved
         return False
+
+    def _compare(self, real_pack, args, occasion, out):
+        """The same call with `after` off: `choose.hangs_on` is the one place `pack_scenes` sets it. Pure -- `mint` is a hash."""
+        hangs_on = CH.hangs_on
+        CH.hangs_on = lambda prev, c: None
+        try:
+            control = real_pack(*args, occasion=occasion)
+        finally:
+            CH.hangs_on = hangs_on
+        assert all(a.after is None for sc in control for a in sc.acts), "the control still hangs an act"
+
+        def shape(scenes):
+            return [(sc.id, [(a.id, a.verb, a.payload, a.via) for a in sc.acts]) for sc in scenes]
+
+        self.compared += 1
+        self.hung += any(a.after is not None for sc in out for a in sc.acts)
+        if shape(out) != shape(control):
+            self.moved.append((args[0].id, shape(out), shape(control)))
 
     def _classify(self, ranked, out):
         for c in ranked:
@@ -121,3 +146,16 @@ def test_every_formed_effort_lands_in_one_bin(season_reading):
     assert sum(cnt.bins.values()) == cnt.formed == len(cnt.order)
     print(f"\nB08.01 reading (seed {SEED}, {SEASONS} seasons): formed {cnt.formed}; all {cnt.bins}; "
           f"first {FORMATIONS}: {cnt.first(FORMATIONS)}")
+
+
+def test_pack_scenes_keeps_the_first_ranked_effort_variant(season_reading):
+    """GAME STATE (lane `season_loop`, by tree): B08.01 put every formed NPC effort's loss at `take()`'s budget break, so B08.04's
+    `after` must not change which candidate a Scene carries. Over every `pack_scenes` call of `build_realm(0)`'s two seasons, the
+    Scenes (ids, verbs, payloads -- `effort` included -- and seats) equal those of the same call with `after` off; the efforts the
+    chooser formed are in those calls. `hung >= 1` and `formed >= 1` are the assertions that the comparison compared something:
+    a `hangs_on` that set `after` nowhere would pass the equality for nothing."""
+    cnt = season_reading
+    assert cnt.compared >= 1 and cnt.formed >= 1 and cnt.hung >= 1, (cnt.compared, cnt.formed, cnt.hung)
+    assert not cnt.moved, f"{len(cnt.moved)} of {cnt.compared} calls differ beyond `after`; first: {cnt.moved[0]}"
+    print(f"\nB08.04 reading: {cnt.compared} pack_scenes calls compared, {cnt.hung} hold an act with `after`, "
+          f"{cnt.formed} efforts formed, 0 moved")
