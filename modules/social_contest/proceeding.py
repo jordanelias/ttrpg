@@ -138,11 +138,11 @@ def _bond(p, other) -> float:
     return _d(p.bonds).get(other, 0.0) if other else 0.0
 
 
-def _who(inp, pid):
+def who(inp, pid):
     return next(p for p in inp.room if p.id == pid)
 
 
-def _lead(inp, side):
+def lead(inp, side):
     c = [p for p in inp.room if p.side == side]
     return max(c, key=lambda p: (p.precedence, p.id)) if c else None
 
@@ -173,7 +173,7 @@ def _weight(inp, st, g) -> float:
     return _ground(inp, g)[1] * _d(_d(inp.rite.weighs).get(_issue(inp, st), ())).get(g, 1.0)
 
 
-def _crowd(inp) -> float:
+def crowd(inp) -> float:
     return min(1.0, _wsum(p.weight for p in inp.room if p.side is None) / inp.dials["crowd_at"])
 
 
@@ -189,7 +189,7 @@ def _deciders_for(inp, mover) -> list:
 
 def _foe(inp, mover):
     """whose circumstances he must account for: the other side's lead; in an abridged act, the one he addresses; else nobody (no gap)."""
-    o = _lead(inp, _other(mover.side))
+    o = lead(inp, _other(mover.side))
     if o is None and inp.rite.close == "exchange":
         o = next((p for p in inp.room if p.decides and not p.side and p.id != mover.id), None)
     return o
@@ -221,7 +221,7 @@ def mood(inp, st, viewer=None) -> float:
     T = _d(st.tracks)
     hs = [p for p in inp.room if p.side is None] or [p for p in inp.room if p.decides]
     if not hs:
-        o = _lead(inp, _other(viewer.side)) if viewer else None
+        o = lead(inp, _other(viewer.side)) if viewer else None
         hs = [o] if o else [p for p in inp.room if p.side]
     W = _wsum(p.weight * (1.0 + p.power) for p in hs)
     return _clip(_wsum(p.weight * (1.0 + p.power) * T.get(p.id, 0.0) for p in hs) / W / inp.dials["mood_scale"])
@@ -241,7 +241,7 @@ def validation(inp, h) -> float:
     validate; a crowd less."""
     D = inp.dials
     return _clip(0.5 + D["sense_step"] * (h.reason - D["attribute_mid"])    # [canonical: V2 p2 §C.3 -- 0.5 at the middle of the scale]
-                 + D["involve"] * max(abs(x) for x in h.stake) - D["crowd_lean"] * _crowd(inp), 0.0, 1.0)
+                 + D["involve"] * max(abs(x) for x in h.stake) - D["crowd_lean"] * crowd(inp), 0.0, 1.0)
 
 
 def relevance(inp, v) -> float:
@@ -277,7 +277,7 @@ def awe(inp, v) -> float:
 
 def _heard_abs(inp, v) -> float:
     D = inp.dials
-    need = 1.0 + (D["attribute_ceiling"] - 1.0) * _crowd(inp)
+    need = 1.0 + (D["attribute_ceiling"] - 1.0) * crowd(inp)
     return max(D["heard_floor"], 1.0 - D["heard_step"] * max(0.0, need - v.presence))
 
 
@@ -285,7 +285,7 @@ def heard(inp, v) -> float:
     """PRESENCE: the share of him the room listens to, against the man opposite: the better heard of the two is heard whole and the other by
     his share; with nobody opposite, against what an ordinary man of the middle Presence would get from this room (C1)."""
     own = _heard_abs(inp, v)
-    o = _foe(inp, v) if v.side else None    # V2 p4 §L 15: in an abridged act the one addressed is the man opposite
+    o = lead(inp, _other(v.side)) if v.side else None    # the man opposite, as esteem reads him (V2 p4 §F 16); `_foe`'s abridged addressee is for the gap only
     if o is None:
         return min(1.0, own / _heard_abs(inp, replace(v, presence=inp.dials["attribute_mid"])))
     return own / max(own, _heard_abs(inp, o))
@@ -295,7 +295,7 @@ def case_pool(inp, v, ground) -> float:
     """the speech's dice: Presence's share of them (the ground's `reason` weight is Reason's, by the venue's lean and the crowd's), then
     `heard`. `k` is Reason's share in whole tenths (R11); at control it is 10 and the dice are Reason's."""
     D = inp.dials
-    k = min(10, max(0, round(10 * (_ground(inp, ground)[0] + inp.rite.reason_lean - D["crowd_lean"] * _crowd(inp)))))
+    k = min(10, max(0, round(10 * (_ground(inp, ground)[0] + inp.rite.reason_lean - D["crowd_lean"] * crowd(inp)))))
     return heard(inp, v) * pool_of(weighted_tenth((v.reason, v.presence), (k, 10 - k)) + v.rank, 0, D["pool_add"], D["pool_floor"])
 
 
@@ -306,7 +306,7 @@ def _short(inp, p, c) -> float:
 def esteem(inp, st, v) -> float:
     """GRACE: his standing in the room this sitting: how much better he meets the venue's standard, and his own rattles, than the man opposite."""
     cd = _d(st.cond)
-    o = _lead(inp, _other(v.side)) if v.side else None
+    o = lead(inp, _other(v.side)) if v.side else None
     return (_short(inp, o, cd[o.id]) if o else 0.0) - _short(inp, v, cd[v.id])
 
 
@@ -369,7 +369,7 @@ def _legal(inp, st, mover) -> tuple:
 
 
 def heat(inp, st, v) -> float:
-    return -_sg(v.side) * mood(inp, st) * _crowd(inp) if v.side else 0.0
+    return -_sg(v.side) * mood(inp, st) * crowd(inp) if v.side else 0.0
 
 
 def _pull(inp, st, v, c) -> float:
@@ -581,7 +581,7 @@ def menu(inp, st, mover, turns_left, frames=None, objects=None, acc=1.0) -> tupl
     mean = lambda f: _wsum(h.weight * f(h) for h in hs) / W
     other_side = _other(mover.side)
     tid = _d(st.last_voice).get(other_side)
-    T = _who(inp, tid) if tid else _lead(inp, other_side)
+    T = who(inp, tid) if tid else lead(inp, other_side)
     items = _items(inp, mover)
     pull = _pull(inp, st, mover, c)
     Pf = _hold_pool(mover, D)
@@ -678,7 +678,7 @@ def view(inp, st, mover, rng) -> View:
     frames = {g: frame(inp, hs, mover.side, g, acc, xfa[g], xfb[g]) for g in G}       # framed from his believed reading
     other_side = _other(mover.side)
     tid = _d(st.last_voice).get(other_side)
-    T0 = _who(inp, tid) if tid else _lead(inp, other_side)
+    T0 = who(inp, tid) if tid else lead(inp, other_side)
     objects = {g: press_object(inp, T0, g, acc, xoa[g], xob[g]) for g in G} if T0 is not None else {}
     true, T, P, S = menu(inp, st, mover, turns_left, frames, objects, acc)
     opts = []
@@ -708,9 +708,13 @@ def exchange(inp, st, mover, choice, rng, framed=None, mark=None) -> tuple:
     this takes the hold and then the speech, whatever the move. Pure but for `rng`; new values by `replace`. `mark` is `rng.n` before the
     view: where given, the whole exchange (view and speech) is asserted to have taken `DRAWS_PER_EXCHANGE` normals."""
     new, beat, _ = _exchange(inp, st, mover, choice, rng, framed)
+    _took(inp, rng, mark)
+    return new, beat
+
+
+def _took(inp, rng, mark) -> None:
     if mark is not None:
         assert rng.n - mark == 2 * DRAWS_PER_EXCHANGE(len(inp.grounds)), (rng.n - mark)    # normals are two uniforms each
-    return new, beat
 
 
 def _exchange(inp, st, mover, ch, rng, tag) -> tuple:
@@ -783,7 +787,7 @@ def _exchange(inp, st, mover, ch, rng, tag) -> tuple:
         cond[voice.id] = replace(cv, strain=cv.strain + D["grain_strain"] * insinc)
     elif effect == "strike":
         lv = _d(st.last_voice).get(other)
-        T = _who(inp, lv) if lv else _lead(inp, other)
+        T = who(inp, lv) if lv else lead(inp, other)
         target = T.id
         insinc = 1.0 if (it is not None and not it.sincere) else 0.0          # a press made with a forged item
         obj = None if it is not None else tag
@@ -852,7 +856,7 @@ def _able(inp, st) -> list:
     return [p for p in _speakers(inp) if _d(st.cond)[p.id].spoken < inp.rite.turns]
 
 
-def _start(inp) -> Sitting:
+def start(inp) -> Sitting:
     """the sitting's opening value: a given `Input.state` (refused at `Input` if it cannot be resumed) opened again, else each person at his
     `start` carrying in his `strain`, the first rung (or the one undivided issue) reached."""
     if inp.state is not None:
@@ -909,7 +913,7 @@ def _taken(inp, st, view, me, ch) -> tuple:
 # ------------------------------------------------------------------ the close (B24p.12; V2 p2 §D)
 #: A ruling's margin: the middle of the ladder's Success band, so a ruling carries and is never an Overwhelming; against is its mirror.
 _RULING = (dice_engine.BAND_FLOORS["success"] + dice_engine.BAND_FLOORS["overwhelming"]) / 2.0 / dice_engine.MARGIN_SCALE    # [canonical: the ladder, BAND_FLOORS in MARGIN_SCALE milli-units; the running model's 2.0 (sc2/engine.py:1152)]
-_CARRIED = dice_engine.DEGREE_ORDINAL[dice_engine.Degree.SUCCESS]      # carried is Success or better: the ladder's third band (V2 p3 §B.1 D2: carried = success + overwhelming)
+CARRIED = dice_engine.DEGREE_ORDINAL[dice_engine.Degree.SUCCESS]      # carried is Success or better: the ladder's third band (V2 p3 §B.1 D2: carried = success + overwhelming)
 
 
 def _seats(inp) -> list:
@@ -917,7 +921,7 @@ def _seats(inp) -> list:
     return sorted((p for p in inp.room if p.decides), key=lambda p: (-p.precedence, p.id))
 
 
-def _close_record(inp, track) -> tuple:
+def close_record(inp, track) -> tuple:
     """`(pool, record)` of one adjudicator's draw at `track`: the ordinary bench (the middle of the scale for his dice and for what opposes
     him), his own track as the leverage, the rite's `difficulty` and `gravity` (named in `Margin.terms`) the obstacle. No speaker enters it."""
     D, r = inp.dials, inp.rite
@@ -928,14 +932,16 @@ def _close_record(inp, track) -> tuple:
 def p_carried(inp, track) -> float:
     """P(carried) of one adjudicator's draw at `track`: the closed form of the close at that track (`band_odds` on the same record the close
     rolls), Success or better. Pure."""
-    pool, x = _close_record(inp, track)
-    return _wsum(band_odds(pool, obstacle(x)[0], net_boost(x.leverage, pool))[_CARRIED:])
+    pool, x = close_record(inp, track)
+    return _wsum(band_odds(pool, obstacle(x)[0], net_boost(x.leverage, pool))[CARRIED:])
 
 
 def view_odds(inp, view) -> float:
     """what a chooser is shown (V2 p2 §E; B05.62): P(carried) before an ordinary bench at the track his believed mood implies; no true attribute
     and no true start of anyone enters it. A `consent` has no draw, so none."""
-    return 0.0 if inp.rite.close == "consent" else p_carried(inp, view.mood * inp.dials["mood_scale"])
+    # the mood is signed toward the mover's own side, the track toward `for`: so `_sg(side)` between them (a departure from the running model,
+    # sc2/engine.py:899, which reads the mood as the track and so shows an `against` mover the odds of his own defeat)
+    return 0.0 if inp.rite.close == "consent" else p_carried(inp, _sg(view.side) * view.mood * inp.dials["mood_scale"])
 
 
 def card_odds(inp) -> Optional[float]:
@@ -947,7 +953,7 @@ def card_odds(inp) -> Optional[float]:
     D, r = inp.dials, inp.rite
     if r.close in ("consent", "exchange"):
         return None
-    ds, bearer = _seats(inp), _lead(inp, r.bears)
+    ds, bearer = _seats(inp), lead(inp, r.bears)
     charged = bearer is not None and _reply(inp, _other(r.bears)) == "must"
     quiet = {d.id: d.start - (_sg(r.bears) * silence_cost(inp, d, None, bearer) if charged else 0.0) for d in ds}
     if r.close == "bench":
@@ -959,7 +965,7 @@ def card_odds(inp) -> Optional[float]:
             p = p_carried(inp, quiet[d.id])
             dist = [(dist[k] if k < len(dist) else 0.0) * (1.0 - p) + (dist[k - 1] * p if k > 0 else 0.0) for k in range(len(dist) + 1)]
         return _wsum(dist[q:])
-    pool, x = _close_record(inp, 0.0)
+    pool, x = close_record(inp, 0.0)
     W = _wsum(d.weight for d in ds)
     mu = MU_PER_DIE * pool - obstacle(x)[0] + _wsum(d.weight * net_boost(D["track_step"] * quiet[d.id], pool) for d in ds) / W
     sd = SD_PER_DIE * math.sqrt(pool) * math.sqrt(_wsum(d.weight ** 2 for d in ds)) / W
@@ -978,32 +984,36 @@ def _judge_view(inp, st, d, track) -> JudgeView:
     return JudgeView(d.id, track, p_carried(inp, track), tuple(st.points), tells)
 
 
-def _abridged(inp, beats) -> tuple:
-    """the abridged act's one verdict: the one speech's margin with the one addressed, plus where he started (his net is that margin and the
-    speech's own obstacle, its terms, its `start` added). The host builds the room so that he is the one who heard it."""
+def _abridged(inp, beats, margins=()) -> tuple:
+    """the abridged act's one verdict: the one speech's margin with the one addressed, plus where he started (his net is his own `Margin` of
+    that speech, its obstacle and terms his, his `start` added: a watcher seated after him never lends his). `margins` is the last exchange's,
+    each hearer's; where the addressed man has none (the act was not a speech to him) the beat's margin and terms stand."""
     if not beats:
         raise ValueError("refused[close]: an abridged close reads the one speech's beat, and there is none")
     to = min((p for p in inp.room if p.decides and not p.side), key=lambda p: (-p.precedence, p.id))
+    m = dict(margins).get(to.id)
+    if m is not None:
+        return ((to.id, Margin(net=m.net + to.start, ob=m.ob, terms=m.terms)),)
     b = beats[-1]
     ob = _wsum(v for _, v in b.terms)
     return ((to.id, Margin(net=b.margin + ob + to.start, ob=ob, terms=b.terms)),)
 
 
-def _close(inp, st, rng, rulings=None, *, beats=()) -> tuple:
+def _close(inp, st, rng, rulings=None, *, beats=(), margins=()) -> tuple:
     """THE CLOSE: `(verdicts, ruled)` (V2 p2 §D). `bench`, `declared` and `hearers` take ONE normal for each adjudicator, presiding seat first, and
     each verdict is `Margin(roll + the boost of his own track - the obstacle)`: a draw on his own track (A-14), never a band or a side. `bench`
     returns the presiding seat's alone, the other two every seat's; the host reads them (`declared` by the quorum-th best, `hearers` by the
     weight-mean). `consent` draws nothing and returns `()`: a party's accept is an act. `exchange` draws nothing: the one speech's margin
-    with the one addressed plus his start (`beats`). A played adjudicator (`rulings[id](JudgeView)`, called once, here) rules `"for"`, `"against"`
+    with the one addressed plus his start (`beats`, and `margins`: the last exchange's, each hearer's). A played adjudicator (`rulings[id](JudgeView)`, called once, here) rules `"for"`, `"against"`
     or anything else to leave it to his draw, which is taken whatever he rules; `ruled` is how far each ruling departs from his own track."""
     r = inp.rite
     if r.close == "consent":
         return (), ()
     if r.close == "exchange":
-        return _abridged(inp, beats), ()
+        return _abridged(inp, beats, margins), ()
     T, seats, n0, out, ruled = _d(st.tracks), _seats(inp), rng.n, [], []
     for k, d in enumerate(seats):
-        pool, x = _close_record(inp, T[d.id])
+        pool, x = close_record(inp, T[d.id])
         ob, terms = obstacle(x)
         net = _roll(pool, _z(rng)) + net_boost(x.leverage, pool)
         if (k == 0 or r.close != "bench") and rulings and d.id in rulings:
@@ -1022,7 +1032,7 @@ def proceed(inp: Input, rng, decide: Optional[Callable] = None, deciders: Option
     callback. A resumed sitting (`inp.state`) continues the same sitting: the count of beats, the issue reached and the turns each has had.
     It ends `yielded`, `rested` or `budget` (see the head); `Outcome.ended_by` is who yielded."""
     r, G = inp.rite, len(inp.grounds)
-    st, beats, ended_by = _start(inp), [], None
+    st, beats, ended_by, heard_by = start(inp), [], None, ()
     while st.ended is None:
         able = _able(inp, st)
         if not able:
@@ -1030,12 +1040,13 @@ def proceed(inp: Input, rng, decide: Optional[Callable] = None, deciders: Option
         lo = min(_d(st.cond)[p.id].spoken for p in able)
         round_, rests = [p for p in able if _d(st.cond)[p.id].spoken == lo], 0
         for _ in round_:
-            me = _who(inp, _mover(inp, st))
+            me = who(inp, _mover(inp, st))
             n0 = rng.n
             v = view(inp, st, me, rng)
             fn = None if r.close == "exchange" else (deciders or {}).get(me.id, decide)
             ch, frame = _taken(inp, st, v, me, fn(v, me) if fn else policy(inp, v, me))
-            st, beat = exchange(inp, st, me, ch, rng, frame, mark=n0)
+            st, beat, heard_by = _exchange(inp, st, me, ch, rng, frame)
+            _took(inp, rng, n0)
             beats.append(beat)
             rests += _move(inp, ch.move)[0] == "none"
             if st.ended:
@@ -1044,5 +1055,5 @@ def proceed(inp: Input, rng, decide: Optional[Callable] = None, deciders: Option
         if st.ended is None and rests == len(round_):
             st = replace(st, ended="rested")
     st = replace(st, ended=st.ended or "budget")
-    verdicts, ruled = _close(inp, st, rng, rulings, beats=tuple(beats))
+    verdicts, ruled = _close(inp, st, rng, rulings, beats=tuple(beats), margins=heard_by)
     return Outcome(tuple(beats), st, st.ended, ended_by, verdicts, ruled)

@@ -270,7 +270,7 @@ def weighted_tenth(scores, tenths) -> float:
     if sum(tenths) != 10:
         raise ValueError(f"weighted_tenth takes tenths that sum to 10, got {tenths}")
     # [canonical: ED-IN-0379 (Jordan, 2026-11-13; the ledger row is ratified): the tenth, taken as 20 half-tenths a point]
-    return (2 * sum(t * round(10 * s) for s, t in zip(scores, tenths)) + 10) // 20 / 10
+    return (2 * sum(t * math.floor(10 * s + 0.5) for s, t in zip(scores, tenths)) + 10) // 20 / 10      # a half-tenth rounds UP (`round` goes to the even)
 
 
 # ---------------------------------------------------------------------------
