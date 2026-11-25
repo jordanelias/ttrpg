@@ -227,7 +227,7 @@ class PersonalCombatInput:
 class MortalResult:
     """ONE FELLED PARTY'S MORTAL-WOUND DRAW (B15.07, PHY_A A3), returned on `CombatOutcome.mortal` by the module
     (`modules/combat/fight.py::mortal_wound`) and MAPPED by the host onto that party's `felled` and `wounds`
-    (`seam/wrappers/combat.py::_wound_state`), which computes nothing (`04` §A.2).
+    (`seam/wrappers/combat.py::_wound_state`), which computes nothing (holonic §44.3: a wrapper that computes an outcome is the second resolver).
       * `mortal` -- he dies: the draw's band was Failure, and `felled` stands;
       * `wounds` -- his wounds after the draw: at least `max_wounds` at Partial (left for dead), the scene's otherwise;
       * `degree` -- the band (`core.degree`'s label of the one ladder, `degree_from_net`), for the trace."""

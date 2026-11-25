@@ -507,7 +507,7 @@ _NO_FIELD = object()    # `getattr`'s default for a roster member the lifted rec
 
 def _wound_state(lifted: Optional[PartyWounds], mortal: Optional[MortalResult] = None) -> dict:
     """One party's `wound_state` entry: his lifted tracker by `rosters.yaml: wound_quantities`, with his MORTAL-WOUND DRAW (B15.07, PHY_A A3)
-    mapped onto it where the module drew one: `felled` is the draw's `mortal`, `wounds` its `wounds`. The map computes nothing (`04` §A.2):
+    mapped onto it where the module drew one: `felled` is the draw's `mortal`, `wounds` its `wounds`. The map computes nothing (holonic §44.3: a wrapper that computes an outcome is the second resolver):
     the draw and its band are the module's (`fight.py::mortal_wound`)."""
     if lifted is None:                  # ID-5 polarity: absence REFUSES, it does not default
         return dict(available=False)

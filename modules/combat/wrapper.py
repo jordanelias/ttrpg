@@ -656,7 +656,7 @@ def _fight(A, B, cfg, rng, max_bouts, yield_decl, terms, decide, decisiveness=(0
             raise ValueError("Yield.by must be the A or B Combatant passed to fight (compared by identity)")
         if not (1 <= yield_decl.turn <= max_bouts):
             raise ValueError(f"Yield.turn {yield_decl.turn} is outside 1..max_bouts ({max_bouts}): it would never fire")
-    cfg=cfg or CFG   # `None`: the engine's own CFG. The stream is the caller's keyed `Draw`; never built here
+    cfg=cfg or CFG   # `None`: the engine's own CFG. The stream is the caller's keyed `Draw`; no generator is built here (keyed sub-draws of it are, `_strike`, `_land`, `_yield_roll`: a draw is a function of its key, `04` §C.12 rejection 4 as amended)
     # A FIGHT BEGINS UNWOUNDED: zero each tracker's damage here, at the fight's own start (PC-13's `wound` events sum to
     # the tracker within one fight). `_init_live` calls `Combatant.rederive(cfg)`, the one derivation path (PC-14),
     # which reads the fighter's attributes as they stand now (an attribute edited after construction is followed) and

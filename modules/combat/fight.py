@@ -183,8 +183,9 @@ def fight(inp: PersonalCombatInput, rng: Draw,
     scene's un-refused `yield`, `beat` the wound that felled a party, `rounds` the `turn_start` count and `trace` the
     scene's events.
 
-    The `rng` is a parameter and is never constructed here (`04 §C.12` rejection 4): the host builds it
-    from its own seed and passes it down. A module whose directory is gone is refused earlier, at
+    The `rng` is a parameter, and the module builds no generator of its own (`04 §C.12` rejection 4 as amended, A-30: a draw is a function of its key):
+    the host builds it from its own seed and passes it down; the module forms keyed SUB-draws of it, or of a hex key the record carries
+    (`seeded(H2(rng.key, ...))`), which are values, never state kept between calls. A module whose directory is gone is refused earlier, at
     driver construction, by the registrar resolving this file.
 
     `decide` (v10 REM-31, IN-46) is the host's PLAYABLE per-turn decider, forwarded to the engine's own

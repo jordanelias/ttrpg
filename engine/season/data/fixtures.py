@@ -663,7 +663,7 @@ DEFAULT_FIXTURES = Fixtures(
     # time, one whole obstacle step less lethal a term down the terms' intent (`yield`, then `blood`), on the one sampler and pool the mark roll takes.
     # [ASSUMPTION; medium; Jordan to correct (D-19, in the PR body); revert: 99.0 a cause, the control]
     # [JUSTIFIED: engine/season/hole_register.yaml H-574 -- `site: Fixtures mortal_wound_ob`, graded `assumption`; no document gives how hard a felled body is to kill, so it is injected and swept]
-    mortal_wound_ob=dict(zip((_c for _c in MORTAL_CAUSES if _c != "spell"), (3.0, 2.0, 1.0), strict=True)),   # `H-574`, swept 99.0 (control) / 0..4 a cause; death 3 / yield 2 / blood 1 SHIPPED (B15.07)
+    mortal_wound_ob={_c: _v for _c, _v in (("death", 3.0), ("yield", 2.0), ("blood", 1.0)) if _c in MORTAL_CAUSES},   # `H-574`, swept 99.0 (control) / 0..4 a cause; death 3 / yield 2 / blood 1 SHIPPED (B15.07)
     # `H-184` (split out of `H-98`). WHERE THE `Wounded` BAND STARTS: the threshold `wounds` must be
     # strictly above for a standing subject to read `Wounded` rather than `Untouched`. The edge is
     # `rosters.yaml: combat_band_edges` and `None` MEANS ITS VALUE (`0`, any wound), so the number is
