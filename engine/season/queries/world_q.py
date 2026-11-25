@@ -26,7 +26,7 @@ from dataclasses import dataclass, fields, replace
 from fractions import Fraction
 from typing import Callable, NamedTuple, Optional
 
-from engine.dice_engine.dice_engine import MARGIN_SCALE
+from engine.dice_engine.dice_engine import MARGIN_SCALE, Degree, degree_from_net
 from engine.dice_engine import sigma_leverage as _sigma_leverage     # B15.06: `mortal_terms`' pool rule, one owner
 from engine.dice_engine.fmath import ltr_sum
 
@@ -2815,7 +2815,39 @@ def endings_reached(w: World) -> list:
     probe corpus runs seasons, and a row here moved the committed `runs/TRACE.txt` and `results.json`
     (`test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte`) -- a read-only
     step must move no artifact. It reads through `governing_hold`, not `holder_faction_of`, for the same
-    reason."""
+    reason.
+
+    B12a.12 (`09_WR_B_draws_not_thresholds` edit 3): UNDER `ending_draw` THE CONDITION IS ELIGIBILITY AND A KEYED DRAW DECIDES (A-47: the crossing
+    decides nothing): an eligible row is reached on Success or Overwhelming (`_ending_degree` says how the draw is sized) and `endings_near` reports
+    it on Partial. At the control (`ending_draw: False`, shipped) an eligible row is reached, as before, and no draw is taken."""
+    arm = _ending_draw_rows(w)
+    return [_reached(name, row, edges, opened)
+            for name, row, edges, opened in _eligible_endings(w)
+            if arm is None or _ending_degree(w, name, edges, opened, arm) in (Degree.OVERWHELMING, Degree.SUCCESS)]
+
+
+def endings_near(w: World) -> list:
+    """B12a.12 (`09_WR_B_draws_not_thresholds` edit 3): THE ENDINGS THE DRAW READ PARTIAL -- `endings_reached`'s own eligibility and the SAME keyed
+    draw, so a row is in one answer or the other or neither, never both. `[]` at the control (`ending_draw: False`: nothing is drawn, so nothing
+    is near). Each is an `EndingReached`, in file order. A read like `endings_reached`: no token, no Event, no write; the season reports it
+    as `near` and nothing reads it back [ASSUMPTION: a second Query rather than a widened return -- basis: CLAUDE.md §5.1, the reading that changes less]."""
+    arm = _ending_draw_rows(w)
+    if arm is None:
+        return []
+    return [_reached(name, row, edges, opened) for name, row, edges, opened in _eligible_endings(w)
+            if _ending_degree(w, name, edges, opened, arm) is Degree.PARTIAL]
+
+
+def _reached(name: str, row, edges: tuple, opened: dict) -> EndingReached:
+    return EndingReached(name, row.victory,
+                         tuple(sorted(t.id for t in edges if t.kind == "hold")),
+                         tuple(sorted({e.id for e, _ in opened.values()})),
+                         tuple(sorted({a.id for _, a in opened.values()})))
+
+
+def _eligible_endings(w: World) -> list:
+    """`[(name, row, edges, opened)]` for each row whose condition stands (`_ending_edges`) with an act among its antecedents (`opened_by_acts`), in
+    file order: the eligibility `endings_reached` has always read, and the one the draw stands on (A-47: the selector is eligibility)."""
     out: list = []
     for name, row in ENDINGS.items():
         edges = _ending_edges(w, row)
@@ -2824,11 +2856,39 @@ def endings_reached(w: World) -> list:
         opened = opened_by_acts(w, edges)
         if not opened:
             continue
-        out.append(EndingReached(name, row.victory,
-                                 tuple(sorted(t.id for t in edges if t.kind == "hold")),
-                                 tuple(sorted({e.id for e, _ in opened.values()})),
-                                 tuple(sorted({a.id for _, a in opened.values()}))))
+        out.append((name, row, edges, opened))
     return out
+
+
+def _ending_draw_rows(w: World) -> Optional[tuple]:
+    """`(pool_step, ob)` when the fixture `ending_draw` is on, `None` when it is off (the control: today's reaching, no draw taken). The two
+    `[CALIBRATE]` rows ship `None` (E-14), and an arm on an unset row REFUSES naming the row rather than drawing on a default (`H-524`)."""
+    if not w.fixtures.get("ending_draw"):
+        return None
+    rows = tuple(w.fixtures.get(name) for name in ("ending_draw_pool_step", "ending_draw_ob"))
+    for name, value in zip(("ending_draw_pool_step", "ending_draw_ob"), rows):
+        if value is None:
+            raise Unspecified(
+                f"`ending_draw` is on and the fixture `{name}` is unset", "B12a.12 / H-524",
+                needs=f"a value for `{name}` (a [CALIBRATE] row, set by B98); the control is `ending_draw: False`")
+    return rows
+
+
+def _ending_degree(w: World, name: str, edges: tuple, opened: dict, rows: tuple) -> Degree:
+    """The band of an eligible row's ONE keyed draw `(world_seed, tick, "realm", "ending:<name>")` (a Query's draw advances no ordinal:
+    `season_factor_of`'s precedent), rolled by the one roller and graded on the one ladder. The pool is `pool_step` per season the condition has
+    stood times the share of the edges it reads that an act opened; the obstacle is `ob` plus one per edge it reads that no act opened (inherited
+    at build, so conquest counts for more than inheritance). The seasons stood are read off the antecedent Events' ticks, none stored: the
+    latest opening Event's `emitted_at` through this season, counted inclusively (the season an ending is first reachable is its first), the
+    nearest the record places the crossing [ASSUMPTION; medium; Jordan to correct: the crossing may be authorless and later (`T-a`); revert:
+    none, the arm ships off]. The edges read are the holds AND the sole commits the condition stands on (`_ending_edges`), as `T-b` credits
+    them: a king who converts opens a commit, not a hold."""
+    pool_step, ob = rows
+    stood = w.tick - max(e.emitted_at for e, _ in opened.values()) + 1
+    acted = sum(1 for t in edges if t.id in opened)
+    pool = pool_step * stood * acted / len(edges)
+    net = _sigma_leverage.roll_net_continuous(pool, rng=draw_factory(w.world_seed, lambda: w.tick)("realm", f"ending:{name}"))
+    return degree_from_net(net, ob + (len(edges) - acted))
 
 
 def _ending_edges(w: World, row) -> tuple:
