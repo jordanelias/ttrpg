@@ -747,6 +747,30 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `larder_walk: first`]
     # [JUSTIFIED: engine/season/hole_register.yaml H-528 -- `site: Fixtures larder_walk`, graded `assumption`; the source gives the continued walk and names no setting that ships it, so the arm is injected and swept first (control) / through (SHIPPED)]
     larder_walk="through",             # `H-528`, swept first (control) / through (SHIPPED, B12a.56's flip) / through where the home rung holds the whole want (the walk stops at once)
+    # B12a.58 (`16_PESSIMIST_GAME_the_world_draws` edit 1; the conversion rows are B12a.57's design): HUNGER IS DRAWN. `False` is THE CONTROL, SHIPPED: today's
+    # exact step (`body_step` times the units short), no draw taken, none of the three rows below read. `True` is the arm: per eater short this season one keyed
+    # draw (`draw_factory(...)(pid, "hunger_severity")`), graded on the one ladder, the band choosing the multiple of that step (`hunger_band_steps`). Read by
+    # NOTHING yet (B12a.59 to .61 build the reader; B12a.62 flips the arm), so all four rows ship at the control for the draw. The shape matches `wear_draw`.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `hunger_severity_draw: False`]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-529 -- `site: Fixtures hunger_severity_draw`, graded `assumption`; the source draws the hunger step and names no setting that ships it, so the arm is injected at the control and swept False / True / True with the pool's body term off]
+    hunger_severity_draw=False,        # `H-529`, swept False (control, SHIPPED) / True (pool 4, obstacle 4.5) / True (pool 0, obstacle 4.5)
+    # The multiples of `body_step x units short` each band charges (`09_WR_B_draws_not_thresholds` edit 2; the wear draw's shape, `_WEAR_BAND_SHARE`'s):
+    # Overwhelming spares, Success half, Partial today's step, Failure twice. Keyed by the ladder's band names; read only under `hunger_severity_draw` True.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `hunger_severity_draw: False`, which reads no row]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-530 -- `site: Fixtures hunger_band_steps`, graded `assumption`; the source gives the four multiples and no document derives them, so they are injected and swept the shipped four / every band the control's one step / a harsher tail]
+    hunger_band_steps={"Overwhelming": 0.0, "Success": 0.5, "Partial": 1.0, "Failure": 2.0},   # `H-530`, swept shipped (0 / 0.5 / 1 / 2) / flat (1 / 1 / 1 / 1) / harsher tail (0 / 0.25 / 1 / 3)
+    # B12a.57's conversion (`proposals/2026-11-12-subsystem-audit-suite/proposals/16_PESSIMIST_GAME_hunger_draw_conversion.md` §1): THE POOL A COHORT'S BODY GIVES, the
+    # score `hunger_body_pool x Person.body / condition_scale` through `sigma_leverage.pool_of` with the shared `pool_add` and `pool_floor` (never a hunger-local floor).
+    # Read only under `hunger_severity_draw` True; `0` takes the body term off (the pool is `pool_add`).
+    # [ASSUMPTION; medium; Jordan to correct; revert: `hunger_severity_draw: False`, which reads no row]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-531 -- `site: Fixtures hunger_body_pool`, graded `assumption`; the design gives the form and chooses the value so that depth moves Failure further than the body does, so it is injected and swept 0 / 4 / 8]
+    hunger_body_pool=4,                # `H-531`, swept 0 (the body term off) / 4 (SHIPPED) / 8
+    # B12a.57's conversion (§2): THE OBSTACLE A SHORTFALL GIVES, `hunger_depth_obstacle x (sum of want - take / sum of want)` over the eater's cells -- one share in (0, 1] of
+    # the cohort's own want. 4.5 is the value at which the middle state (half the want short, a half body) keeps today's expected loss to three decimals; the anchor is itself an assumption.
+    # Read only under `hunger_severity_draw` True.
+    # [ASSUMPTION; medium; Jordan to correct; revert: `hunger_severity_draw: False`, which reads no row]
+    # [JUSTIFIED: engine/season/hole_register.yaml H-532 -- `site: Fixtures hunger_depth_obstacle`, graded `assumption`; the design anchors the value to the control's expected loss at one named state and no document sets it, so it is injected and swept 3 / 4.5 / 6]
+    hunger_depth_obstacle=4.5,         # `H-532`, swept 3 / 4.5 (SHIPPED) / 6
     # `W-E` / `H-123`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
     # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
     # supplies this one -- so it is declared, defaulted and swept rather than chosen in a body,

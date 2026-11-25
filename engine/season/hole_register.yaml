@@ -8531,6 +8531,58 @@ rows:
     cite:      "CONTROL: `build_realm(0)`'s content hash at `larder_walk: first`, 0 / 1 / 2 seasons, equals B12a.52's after-reading (08a3ac15... / 6671e3c6... / a5182a4e...). FALSIFIERS: `engine/season/tests/test_demand_delivery.py::test_h303_first_takes_one_through_takes_six_and_splits_the_debit` (home 1, above 1,000, want 6: `first` takes 1 and leaves the rung above whole; `through` takes 6 with the debit 1 at home and 5 above, the two rungs' stores falling by exactly the take). B12a.56 FLIPPED IT TO `through`: at seed 0 the realm's build / one-season / two-season hashes are ba0ecd0e... / 6a39e62c... / 404a6137... under `first` and under `through` (B12a.55's; equal), and the count of draw cells whose `parts` names two or more rungs, over seeds 0 to 2, two seasons, is 0 (counted on `modules/settlements/larder.py::larder_draw`'s real five-element cells, MATTER's call, 148 cells per seed; no cell is short at `granary_seasons` 4, and at 0 the 68 short cells at seed 0 hold nothing at home, so the walk finds a second rung nowhere): the walk is shipped as R4's completeness rule and is unreached on the shipped realm."
     source:    "workplan v12 B12a.53 (`07_SE_ground_and_granaries` §4 (d), (e); H-303; B12a's H block slot 6, the second half's slot 3), B12a.56 (the flip)"
 
+  - id:        H-529
+    tier:      1
+    hole:      "HUNGER IS DRAWN, AND NOTHING YET SAYS WHEN THE ARM FLIPS. `16_PESSIMIST_GAME_the_world_draws` edit 1: every hungry cohort fell by the same step (`body_step` times the units short) and died in the same season; the arm takes one keyed draw per eater short this season, graded on the one ladder, and the band chooses a multiple of that step. The arm ships `False` at B12a.58, THE CONTROL: no draw taken, none of the rows below read, today's exact step. B12a.59 to B12a.61 build the reader (`SubsistInput.severity`, `subsist`'s step, the host's draw) and B12a.62 flips the arm, its own declared mover. The shape matches `wear_draw` (`H-523`); unlike that row's two `[CALIBRATE]` values, the three rows it reads ship valued (B12a.57's design), so the arm does not refuse."
+    kind:      "MECHANISM"
+    owner:     "Jordan, who corrects the assumption; B12a.62 flips the arm. `engine/season/data/fixtures.py` the one home of the row; READER: none at B12a.58 (the host's draw, `engine/season/queries/world_q.py::subsist_input`, is B12a.61's)"
+    grade:     "assumption"
+    default:   "hunger_severity_draw False -- SHIPPED, the control [ASSUMPTION; medium; Jordan to correct; revert: none, the control is the shipped value]: no draw taken, no row read, each hungry cohort's body falling by `body_step` times the units short, byte for byte"
+    site:      "Fixtures hunger_severity_draw, read by nothing at B12a.58; B12a.61's host draw (`engine/season/queries/world_q.py::subsist_input`) reads it"
+    sweep:     ["False (the control, SHIPPED: no draw taken, today's exact step)", "True with `hunger_body_pool` 4 and `hunger_depth_obstacle` 4.5 (the shipped values of the two rows)", "True with `hunger_body_pool` 0 (the body term off, the pool is `pool_add` alone; the arm where falsifier 2 of the design fails by construction)"]
+    unblocks:  "B12a.59 to B12a.62 (the reader and the flip); the famine that differs from town to town, where today every hungry cohort falls by one step"
+    cite:      "CONTROL: `build_realm(0)`'s content hash with the row added equals B12a.56's after-reading (ba0ecd0e... / 6a39e62c... / 404a6137..., 0 / 1 / 2 seasons): no code reads the row, so nothing can move. FALSIFIER: the design's (`16_PESSIMIST_GAME_hunger_draw_conversion.md` §5) are planted tests for the reader (B12a.61); at B12a.58 the falsifier is the fabrication check, which reds a fixture with no hole-register row (`tools/ci_sim_fabrication_check.py`)."
+    source:    "workplan v12 B12a.58 (`16_PESSIMIST_GAME_the_world_draws` edit 1; the second half's H slot 4)"
+
+  - id:        H-530
+    tier:      1
+    hole:      "HOW MUCH OF THE STEP EACH BAND CHARGES. `09_WR_B_draws_not_thresholds` edit 2, taken by `16_PESSIMIST_GAME_the_world_draws` edit 1: the band a hungry eater's draw lands on chooses a multiple of the control's step (`body_step` times the units short): Overwhelming 0.0 (spared), Success 0.5, Partial 1.0 (today's step), Failure 2.0. The shape is the wear draw's (`H-523`, `_WEAR_BAND_SHARE`). The four multiples are `[ASSUMPTION; medium; Jordan to correct]`, as in the source; the design (B12a.57) leaves them unchanged. A dict keyed by the ladder's band names."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption. `engine/season/data/fixtures.py` the one home of the row; READER: none at B12a.58 (B12a.60's `subsist` step reads it)"
+    grade:     "assumption"
+    default:   "hunger_band_steps {Overwhelming 0.0, Success 0.5, Partial 1.0, Failure 2.0} -- SHIPPED [ASSUMPTION; medium; Jordan to correct; revert: `hunger_severity_draw: False`, which reads no row]: read only under `hunger_severity_draw` True; at the control it is read by nothing"
+    site:      "Fixtures hunger_band_steps, read by nothing at B12a.58; B12a.60's `subsist` step reads it"
+    sweep:     ["{Overwhelming 0.0, Success 0.5, Partial 1.0, Failure 2.0} (SHIPPED: the source's multiples)", "{Overwhelming 1.0, Success 1.0, Partial 1.0, Failure 1.0} (flat: every band the control's one step, so the draw redistributes nothing)", "{Overwhelming 0.0, Success 0.25, Partial 1.0, Failure 3.0} (a harsher tail: the spared end kept, Failure charged three steps)"]
+    unblocks:  "B12a.60's step (the band to loss); B12a.62's flip; the joint calibration of A-5 and A-6 (whether famine is deadlier on average under the draw)"
+    cite:      "CONTROL: `build_realm(0)`'s content hash with the row added equals B12a.56's after-reading (ba0ecd0e... / 6a39e62c... / 404a6137...): no code reads the row. FALSIFIER: the fabrication check (a fixture with no row reds); the reader's test is B12a.60's. The sweep's flat arm is a test arm, not a chosen value; the harsher tail likewise. [ASSUMPTION; medium; Jordan to correct: the four multiples]"
+    source:    "workplan v12 B12a.58 (`09_WR_B_draws_not_thresholds` edit 2; `16_PESSIMIST_GAME_the_world_draws` edit 1; the second half's H slot 5)"
+
+  - id:        H-531
+    tier:      1
+    hole:      "HOW MANY DICE A COHORT'S BODY GIVES THE HUNGER DRAW. B12a.57 (`16_PESSIMIST_GAME_hunger_draw_conversion.md` §1): the cohort is the roller, so its pool is the one pool rule, `sigma_leverage.pool_of(hunger_body_pool x Person.body / condition_scale, 0, pool_add, pool_floor)`, the score fractional (A-5), the addends 0 (the draw is not an act), the base and the floor the shared pair (`pool_add` 6, `pool_floor` 5; H-420, H-421), never a hunger-local floor. So a full body rolls 6 + 4 = 10 dice and a body at 1 rolls 6.004. The value 4 makes the body a secondary lever worth up to four dice on the shared base of six: across the whole body range, depth moves Failure further than the body does. `[ASSUMPTION; medium; Jordan to correct]`. Moving the pair moves this draw: at `(pool_add 0, pool_floor 5)` the pool is 5 for every body, because 4 sits below the shared floor, so whoever moves the pair re-reads this row."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption. `engine/season/data/fixtures.py` the one home of the row; READER: none at B12a.58 (B12a.61's host draw reads it)"
+    grade:     "assumption"
+    default:   "hunger_body_pool 4 -- SHIPPED [ASSUMPTION; medium; Jordan to correct; revert: `hunger_severity_draw: False`, which reads no row]: read only under `hunger_severity_draw` True; at the control it is read by nothing"
+    site:      "Fixtures hunger_body_pool, read by nothing at B12a.58; B12a.61's host draw (`engine/season/queries/world_q.py::subsist_input`) reads it"
+    sweep:     ["0 (the body term off: the pool is `pool_add` alone, no body effect; falsifier 2 of the design fails by construction)", "4 (SHIPPED)", "8 (the body worth up to eight dice)"]
+    unblocks:  "B12a.61's draw and B12a.62's flip; the compounding of a weak body (a cohort that drew badly draws worse next season), reachable on the realm only once H-304 is answered"
+    cite:      "CONTROL: `build_realm(0)`'s content hash with the row added equals B12a.56's after-reading: no code reads the row. COMPUTED in the design (§3, the closed form `sigma_leverage.band_odds` and a 200,000-draw seeded sample through the engine's own path, agreeing within 0.003): P(Failure) at a full body one unit short 0.099, at body 1 wholly short 0.858, so neither end is a threshold. FALSIFIERS (planted tests for the reader, design §5): F(body 100) > F(body 1000) at half short; at a full body over 200 seeds at least one Failure; at body 1 wholly short over 200 seeds at least one band that is not Failure."
+    source:    "workplan v12 B12a.58 (B12a.57's design, `16_PESSIMIST_GAME_hunger_draw_conversion.md` §1, §4; the second half's H slot 6)"
+
+  - id:        H-532
+    tier:      1
+    hole:      "HOW HARD A SHORTFALL IS TO RIDE OUT. B12a.57 (`16_PESSIMIST_GAME_hunger_draw_conversion.md` §2): `ob = hunger_depth_obstacle x depth_share`, `depth_share = sum(want - take) / sum(want)` over the eater's cells in `modules/settlements/larder.py::larder_draw`, the cells `subsist` reads its `short` from, so the depth and the loss cannot disagree. The share lies in (0, 1] (the draw is taken only when the eater is short) and the obstacle is fractional (A-5). A share and not units, because `want = weight x subsistence_weight[kind]` and per-head weights (B12b) will make weights differ across cohorts. The value 4.5 is the one at which the middle state (a half body, half the want short) has its expected loss equal to today's step to three decimals (1.0003 times `body_step x units`, closed form), so the draw changes the spread around the control's expected loss at that state; lighter shortfalls cost less on average (0.42) and deeper ones more (1.49). `[ASSUMPTION; medium; Jordan to correct]`; the anchor is itself an assumption."
+    kind:      "NUMBER"
+    owner:     "Jordan, who corrects the assumption. `engine/season/data/fixtures.py` the one home of the row; READER: none at B12a.58 (B12a.61's host draw reads it)"
+    grade:     "assumption"
+    default:   "hunger_depth_obstacle 4.5 -- SHIPPED [ASSUMPTION; medium; Jordan to correct; revert: `hunger_severity_draw: False`, which reads no row]: read only under `hunger_severity_draw` True; at the control it is read by nothing"
+    site:      "Fixtures hunger_depth_obstacle, read by nothing at B12a.58; B12a.61's host draw (`engine/season/queries/world_q.py::subsist_input`) reads it"
+    sweep:     ["3 (an easier shortfall)", "4.5 (SHIPPED: the middle state's expected loss equals the control's)", "6 (a harder shortfall)"]
+    unblocks:  "B12a.61's draw and B12a.62's flip; the joint calibration of A-5 and A-6 (whether the drawn arm should make famine deadlier on average)"
+    cite:      "CONTROL: `build_realm(0)`'s content hash with the row added equals B12a.56's after-reading: no code reads the row. COMPUTED in the design (§3, §4): at pool 8 and ob 2.25 the band odds are F 0.337 / P 0.172 / S 0.309 / O 0.183 and the expected multiple 1.0003 at the shipped bands; the sample of 200,000 agrees within 0.003. FALSIFIER (a planted test for the reader, design §5): for each body in {1000, 500, 100}, F(1/6 short) < F(3/6) < F(6/6)."
+    source:    "workplan v12 B12a.58 (B12a.57's design, `16_PESSIMIST_GAME_hunger_draw_conversion.md` §2, §4; the second half's H slot 7)"
+
 discharges:
   D1:   "row:H-01"
   D2:   "row:H-04"
