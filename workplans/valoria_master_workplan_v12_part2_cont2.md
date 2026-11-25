@@ -484,7 +484,6 @@ Not held, though HD-33 lists them: `holders_named` and `notice` (B11 builds them
 | B12a-world-motion-and-ground | SE+WR | ED-SE-0059..0060 (0+2) | H-523..H-540 (13+5) | same |
 | B12b-weather-arcs-population | SE+WR | ED-SE-0061..0062 (0+2) | H-541..H-549 (4+5) | same |
 | B12c-material-verbs-and-valley | SE+WR | ED-SE-0063..0064 (0+2) | H-550..H-566 (12+5) | H count 11 → 12 |
-| B15-pc-calibration | PC | ED-PC-0064..0065 (0+2) | H-574..H-579 (1+5) | H shifted |
 | B16-pc-round | PC | ED-PC-0066..0067 (0+2) | H-580..H-584 (0+5) | H shifted |
 | B18-pc-content | PC | ED-PC-0068..0069 (0+2) | H-590..H-594 (0+5) | H shifted |
 | B19a-mb-contact-instrument | MB | ED-MB-0088..0089 (0+2) | H-595..H-599 (0+5) | H shifted |

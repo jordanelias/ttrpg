@@ -70,7 +70,7 @@ LEVELS = (0.0, 0.5, 1.0, 2.0, 4.0, 8.0)
 LEVERS = ('visual', 'precommit', 'tactile', 'tempo', 'balance', 'edge_read', 'choke_control')
 
 # a fighter who is BEHIND on reading and footwork, and one who is AHEAD (attributes only; weapons per probe)
-# CR-85 (ED-IN-0330) deleted `history` from every sigma term and renamed the input `faculty`, which feeds only the pool
+# CR-85 (ED-IN-0330) deleted `history` from every sigma term and made the input the skill score (IS-PC-05), which feeds only the pool
 # and the Ob; no probe here reads a pool or an Ob, so the builds carry none.
 WEAK = dict(att=1, agi=2, strength=2)
 STRONG = dict(att=5, agi=6, strength=6)

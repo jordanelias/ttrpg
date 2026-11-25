@@ -22,7 +22,7 @@ GATE: Batch B03-hygiene @61b37b8dc8a68a5434d423f0ed0695102e89fc9f
 GATE: Batch B04-capability-home @74910ca78a3ed2afb8898679a8142031c974223b
 GATE: Batch B05-one-roll @ca3f4bcf76a6b057013c85d1c466b83ef9446470
 GATE: Batch B07-task-draw @7fc98b73c1b4cdfb43c8721a34e07c42ee5b94b4
-GATE: Batch B10-character @7f520d7a59d254e4056f8dd47f481ff0f4ca6a7f
+GATE: Batch B10-character @c21e451f19f778fcd80d8c15e712b9b86ef61640
 HASH READING: `PYTHONHASHSEED=0 python -c "import sys; from engine.season.boot.realm import build_realm; from engine.season.harness.populated import run; s, k = int(sys.argv[1]), int(sys.argv[2]); w = build_realm(s); run(k, s, w=w); print(w.content_hash())" <s> <k>` → the realm content hash at seed `<s>` after `<k>` seasons: `<k>` = 1, one season, unless the gate names two (never more before B99, D-17); `<k>` = 0 reads the build hash; per item `<s>` = 0 (a mover's reading, E-2), at `.99` `<s>` = 0, 1, 2; each value quoted `reading @<sha>`, the tree it was read on (`valoria_master_workplan_v12.md` §3.B, "the hash reading").
 REQUIREMENT: R-04.c7 (investigations) → `holds: yes` with its reading (`test_shortest_case.py` and `test_playable_inquiry.py` green, both written in the second half by `08_FI_07` and `08_FI_03`); `covenant` formed (its `BUILT OUT` line, `IS-A-08`) (`IS_A_NINE_part2.md` §12.2, row B11: "R-04.c7; `covenant` formed | the shortest case and the inquiry tests green"); R-07 conjunct (1) re-read at B11.04 (CR-29's own control); no `status:` edited (A-114)
 BATCH GATE (read once, on the closing tree, `PYTHONHASHSEED=0` on every seeded command; no command past two seasons, D-17):

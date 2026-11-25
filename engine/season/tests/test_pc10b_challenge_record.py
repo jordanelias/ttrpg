@@ -160,7 +160,8 @@ def test_the_accept_row_binds_a_challenge_record_against_the_opponent_on_to():
     assert "accept" in resolvable_verbs()
     assert RECORD_REFERENT_KINDS == frozenset({"dispensation", "challenge"})
     assert VERB_TABLE["challenge"].writes == ("Record.exists",)
-    assert KIND_VERB["duel.yielded"] == "accept"
+    assert "duel.yielded" not in KIND_VERB                  # B15.10: `fight` declares it too, so it names no single verb
+    assert VERB_TABLE["fight"].emits_by_degree["Wounded"].count("duel.yielded") == row.emits_by_degree["Wounded"].count("duel.yielded") == 1
 
 
 def test_a_yield_is_not_a_fourth_band():
@@ -307,11 +308,14 @@ def test_a_seeded_blood_challenge_resolves_with_surrender_set():
     assert yielded, "no blood duel in the scan stopped on its term: the falsifier observed nothing"
 
 
-def test_under_death_felled_stays_reachable_and_no_duel_yields():
+def test_under_death_felled_stays_reachable_and_a_duel_yield_is_unaccepted():
+    """B15.10 (A-24): under `death` a wounded duellist can fail his yield roll and the scene ends with both alive; the yield is then no acceptance
+    (`accepted` is `None`: what the victor does with an unresisting man is the host's), and felling stays reachable."""
     scenes = _scan("death")
     assert all(inp.terms == "death" for _, inp, _, _, _ in scenes)
     assert any("person.died" in _kinds(evs) for _, _, _, evs, _ in scenes), "no death under lethal terms"
-    assert not any("duel.yielded" in _kinds(evs) for _, _, _, evs, _ in scenes)
+    yielded = [got for _, _, got, evs, _ in scenes if "duel.yielded" in _kinds(evs)]
+    assert yielded and all(got.surrender is not None and got.surrender.accepted is None for got in yielded)
 
 
 def test_a_blood_duel_whose_first_wound_is_not_decisive_emits_duel_yielded_and_no_death():
@@ -346,14 +350,14 @@ def test_control_stakes_death_builds_todays_duel_exactly():
 
 def test_the_sampler_reads_the_challenges_stakes_the_fold_fights_under():
     """`fight_estimate` takes the record the act names and builds the SAME input `resolve` does (batch close, A2): a
-    `death` challenge is sampled lethal (no yield exists in its shares), a `yield` challenge is sampled with one."""
+    `death` challenge is sampled under lethal terms (a yield there is the roll's, a smaller share than the `yield` term's: B15.10), a `yield`
+    challenge under the yield term."""
     w_death, _ = _challenged("death")
     w_yield, _ = _challenged("yield")
     dead = combat.fight_estimate(w_death, ACC, None, CHAL, "accept", "rec:ch0")
     yld = combat.fight_estimate(w_yield, ACC, None, CHAL, "accept", "rec:ch0")
     assert dead["status"] == yld["status"] == "ESTIMATED"
-    assert dead["yielded"] == 0.0, dead
-    assert yld["yielded"] > 0.0, yld
+    assert 0.0 < dead["yielded"] < yld["yielded"], (dead, yld)
 
 
 def test_control_an_unchallenged_fight_between_the_same_pair_stays_lethal():

@@ -46,7 +46,7 @@ from engine.season.state.carriers import Claim
 # `PYTHONHASHSEED=0`, on the B10.99 closing tree (after B10.72's release fix); still no `claim.decayed`.
 # BA1.99 RE-PIN, 12998 -> 13348 (read at 12933 with BA1.02's `manner:` rows in; they are held back): the BA1 movers (BA1.01, BA1.08, BA1.12; `_realm_goldens.py`'s
 # BA1.99 paragraph) move the season's log once more; same reading, seed 0, `PYTHONHASHSEED=0`, on the BA1.99 closing tree; still no `claim.decayed`.
-BEFORE_SEASON_ONE_ENTRIES = 13348
+BEFORE_SEASON_ONE_ENTRIES = 13522      # B15.99 re-record: 13348 -> 13522
 BEFORE_SEASON_ONE_DECAYED = 0
 
 

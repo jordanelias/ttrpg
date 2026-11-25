@@ -140,7 +140,9 @@ def duel_pairs(seed: int, n: int, terms: str, plant: Plant = None):
     for i in range(n):
         a, b = _sheets(seed, i, plant)
         _seat(w, a, b)
-        inp = dataclasses.replace(combat.combat_input(w, [FIRST, SECOND], "fight"), terms=terms)
+        # `mortal_keyed=False`: the mortal draw then takes a sub-key of THIS pair's own `Draw` (distinct per pair), not the one host key
+        # `(world_seed, tick, pid, "fight.mortal:")` every pair would share; `terms` goes in, so `mortal` reads `mortal_wound_ob[terms]`
+        inp = combat.combat_input(w, [FIRST, SECOND], "fight", mortal_keyed=False, terms=terms)
         got = entry.fn(inp, draw(f"pair{i}", f"pairs:duel:{terms}"))
         outcome, yielder = combat.scene_outcome(got, FIRST, SECOND)
         if outcome == "subject_felled" or (outcome == "yielded" and yielder == SECOND):

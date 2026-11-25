@@ -181,13 +181,13 @@ def test_combat_input_fills_terms_from_the_roster_by_verb_and_nothing_else_does(
 
 def test_the_sampler_is_called_with_the_same_terms():
     """`fight_estimate` for `capture` samples under `yield` -- a yield exists in its shares -- and for `fight` under
-    `death`, where no yield can occur; both on the one `combat_input`, so there is no second `terms` path."""
+    `death`, where a yield is the roll's alone (B15.10: a smaller share than the `yield` term's); both on the one `combat_input`, so there is
+    no second `terms` path."""
     w, _ = _world()
     cap = combat.fight_estimate(w, ACTOR, SEAT, CAPTIVE, "capture")
     fgt = combat.fight_estimate(w, ACTOR, SEAT, CAPTIVE, "fight")
     assert cap["status"] == fgt["status"] == "ESTIMATED"
-    assert cap["yielded"] > 0.0, cap
-    assert fgt["yielded"] == 0.0, fgt
+    assert 0.0 < fgt["yielded"] < cap["yielded"], (cap, fgt)
     h = w.content_hash()
     combat.fight_estimate(w, ACTOR, SEAT, CAPTIVE, "capture")
     assert w.content_hash() == h, "the sampler consumed a draw"

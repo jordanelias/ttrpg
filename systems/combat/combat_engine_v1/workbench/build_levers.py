@@ -17,7 +17,11 @@ trust it (arming/light reads 50.5/50.8/50.8 at n=2000 over seeds 0/1/7).
 measurement to be quoted as a small positive effect.
 
 CLI:
-    python workbench/build_levers.py [all|skills|abilities|disposition|armour|familiarity|archetypes|mirror] [n]
+    python workbench/build_levers.py [all|skills|abilities|disposition|armour|familiarity|archetypes|ladders|mirror] [n]
+
+`ladders` prints the attribute and skill ladders with the slope bound beside each: one point of any attribute or skill
+axis moves the season-default mirror no more than one point of skill score does. It REPORTS a lever outside the bound; it
+gates nothing.
 """
 import sys, os, random, zlib
 
@@ -210,8 +214,51 @@ def archetypes(n=600):
               skills={'balance': 1.0}), dict(BASE), n)
 
 
+BOUND = ("one point of any attribute or skill axis moves the season-default mirror no more than one point of skill "
+         "score does (about fifteen points near parity)")
+
+
+def _ladder(title, rungs, ref_shift, n):
+    """One ladder under its bound line. `rungs` is (name, points, A spec); each is fought against the default build
+    (BASE at every default), and its shift from 50 per point is set beside `ref_shift`, one point of score's. A lever
+    OUTSIDE the bound is REPORTED in the last column, never gated (U5b_PC_residue §1 item 3)."""
+    print(f"\n### {title}")
+    print(f"bound: {BOUND}; here one point of score = {ref_shift:.1f} points")
+    print("| lever | win% | 95% CI | decided | per point | bound |")
+    print("|---|---|---|---|---|---|")
+    for name, pts, spec in rungs:
+        p, lo, hi, dec = duel(spec, dict(BASE), n, seed=_seed(name))
+        per = (p - 50.0) / pts
+        verdict = 'within' if abs(per) <= ref_shift else f'OUTSIDE by {abs(per) - ref_shift:.1f}'
+        print(f"| {name} | {p} | {lo}-{hi} | {dec}/{n} | {per:+.1f} | {verdict} |", flush=True)
+
+
+def ladders(n=1000):
+    """The attribute and skill ladders, each beside the slope bound (U5b_PC_residue §1 item 3). The reference is the
+    skill-score ladder itself, the lever the bound is stated in: `score` is read at every step, and one point of it
+    (DEFAULT_SCORE + 1 against DEFAULT_SCORE) sets the bound every other axis is held to. A bound is a reading, not a
+    gate: the table prints OUTSIDE and the build is unchanged."""
+    from modules.combat import attributes
+    from modules.combat.combatant import DEFAULT_SCORE
+    _hdr(f"Skill score ladder, the bound's own unit (n={n})")
+    ref = {}
+    for k in (1, 2, 3, 4):
+        ref[k] = _row(f'score +{k} ({DEFAULT_SCORE + k} against {DEFAULT_SCORE})',
+                      dict(BASE, score=DEFAULT_SCORE + k), dict(BASE), n)
+    ref_shift = abs(ref[1] - 50.0)
+    _ladder("Attribute ladder (one attribute raised against the default build)",
+            [(f'{s.key} +{k} ({s.default + k} against {s.default})', k, dict(BASE, **{s.key: s.default + k}))
+             for s in attributes.SPEC if s.key != 'disp' for k in (1, 2)], ref_shift, n)
+    _ladder("Skill axis ladder (one axis raised against the untrained twin)",
+            [(f'skill {ax} +{k}', k, dict(BASE, skills={ax: float(k)})) for ax in SKILL_AXES for k in (1, 2)],
+            ref_shift, n)
+    p5 = duel(dict(BASE, att=5), dict(BASE), n, seed=_seed('perception 5 against 3'))[0]
+    print(f"\nPerception 5 against 3: {p5}%; four points of score ({DEFAULT_SCORE + 4} against {DEFAULT_SCORE}): "
+          f"{ref[4]}% -> {'EXCEEDS' if p5 > ref[4] else 'within'} four points of score")
+
+
 SWEEPS = {'skills': skills, 'abilities': abilities, 'disposition': disposition,
-          'armour': armour, 'familiarity': familiarity, 'archetypes': archetypes}
+          'armour': armour, 'familiarity': familiarity, 'archetypes': archetypes, 'ladders': ladders}
 
 if __name__ == '__main__':
     try:

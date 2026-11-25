@@ -399,12 +399,6 @@
     "registry_key": "attr.body.endurance",
     "status": "IN_FLUX"
    },
-   "faculty": {
-    "default": 3,
-    "neutral": null,
-    "registry_key": null,
-    "status": "IN_FLUX"
-   },
    "focus": {
     "default": 3,
     "neutral": 3,
@@ -413,7 +407,7 @@
    },
    "spirit": {
     "default": 3,
-    "neutral": null,
+    "neutral": 4,
     "registry_key": "attr.spirit.will",
     "status": "IN_FLUX"
    },
@@ -501,7 +495,7 @@
    "COUNTER_SUCCESS_BASE": 0.5,
    "CURVE_RECOVERY_K": 0.15,
    "D0": 1.0,
-   "DEEP_COMMIT": 4.0,
+   "DEEP_FRAC": 0.6666666666666666,
    "DISENGAGE_BASE_P": 0.5,
    "DISENGAGE_GAP_REF": 3.0,
    "DISENGAGE_LEV_SCALE": 0.1,
@@ -573,8 +567,8 @@
    "LEVER_REF": 0.096,
    "LUNGE_1H_BONUS": 1.15,
    "LUNGE_2H_FACTOR": 0.7,
-   "LUNGE_COMMIT": 4.0,
    "LUNGE_DEPTH_SCALE": 4.0,
+   "LUNGE_FRAC": 0.6666666666666666,
    "LUNGE_REF_MASS": 1.4,
    "LUNGE_TEMPO_PEN": 0.6,
    "MAX_TEMPO_PEN": 0.8,
@@ -664,6 +658,7 @@
    "RIPOSTE_ON_FAIL": 0.32,
    "RIPOSTE_ON_NEUTRALIZE": 0.2,
    "SELECT_EPS": 0.05,
+   "SPIRIT_LEVEL": "minor",
    "STAMINA_COLLAPSE": -4,
    "STAMINA_REF": 18.0,
    "STOPHIT_CHANCE": 0.75,
@@ -686,10 +681,16 @@
    "WIND_MOMENT_K": 0.3,
    "WOUND_ATK_OB": 0.15,
    "WOUND_DEF_OB": 0.25,
-   "YIELD_HEALTH_FRAC": 0.5
+   "YIELD_HEALTH_FRAC": 0.5,
+   "YIELD_OB": {
+    "blood": 4,
+    "death": 0,
+    "yield": 2
+   }
   },
   "combat_systems": {},
   "combatant": {
+   "DEFAULT_SCORE": 3,
    "MAXWOUNDS_ADD": 1,
    "MAXWOUNDS_CAP": 3,
    "MAXWOUNDS_DIV": 2,
@@ -711,7 +712,7 @@
     "point": 1.45,
     "straight_cut": 1.5
    },
-   "DMG_SCALE": 1.55,
+   "DMG_SCALE": 1.07,
    "GAP_EXPOSURE": {
     "cloth": 0.97,
     "mail": 0.95,
@@ -736,7 +737,7 @@
     "point": 0.85,
     "straight_cut": 0.925
    },
-   "OPPOSITION_RATE": 0.5,
+   "OPPOSITION_RATE": 0.4,
    "OW_MAX": 2.5,
    "OW_Z": 1.5,
    "PEN_DEFICIT_K": 6.0,

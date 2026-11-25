@@ -100,15 +100,12 @@ def test_the_split_adds_challenge_and_accept_and_no_kill_or_wound_row():
     assert accept.writes == fight.writes
     # v10 REM-31: the `Declared` band (`the body` deferred to ENCOUNTER) names each verb's own declaration, as each
     # names its own refusal; every band the scene reads is carried by hand, identical.
-    # v10 PC-10b: `accept`'s `Wounded` adds `duel.yielded` (the yielder's own kind, earned off the scene's `surrender` in
-    # `_eff_kill`); every other band the scene reads is `fight`'s, identical, and no band is added (H-98).
+    # v10 PC-10b: `accept`'s `Wounded` declares `duel.yielded` (the yielder's own kind, earned off the scene's `surrender` in
+    # `_eff_kill`); B15.10 (PC_A): `fight`'s `Wounded` declares it too, a failed yield roll ending a `fight` as it ends an `accept`. So every
+    # band the scene reads is `fight`'s, identical and in `fight`'s order, and no band is added (H-98).
     fe, ae = fight.emits_by_degree, accept.emits_by_degree
     assert set(ae) == set(fe)
-    assert {b: [x for x in k if x != "duel.yielded"] for b, k in ae.items() if b != "Declared"} == \
-        {b: k for b, k in fe.items() if b != "Declared"}
-    # v11 CP-T03-04 (B10-11): `capability.raised` joins `fight`'s, `accept`'s and `capture`'s `Felled`/`Wounded` bands (a surviving holder
-    # of the `arms` key grows), so `duel.yielded` is no longer the LAST kind of `accept`'s `Wounded`: the contract is that it is `fight`'s
-    # list plus `duel.yielded`, in `fight`'s order (a pin re-recorded in the batch's pin commit, P15).
-    assert [x for x in ae["Wounded"] if x != "duel.yielded"] == fe["Wounded"] and "duel.yielded" in ae["Wounded"]
+    assert {b: k for b, k in ae.items() if b != "Declared"} == {b: k for b, k in fe.items() if b != "Declared"}
+    assert "duel.yielded" in ae["Wounded"] and "duel.yielded" in fe["Wounded"]
     assert (fe["Declared"], ae["Declared"]) == (["fight.declared"], ["accept.declared"])
     assert not {"kill", "wound", "kill / wound"} & set(V.VERB_TABLE)
