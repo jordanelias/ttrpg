@@ -83,6 +83,9 @@ from ..state.containment import descendants, edges_of, parent_of  # noqa: F401 -
 # ⚠ AND `ancestry`/`home_of` BY THE SAME ROUTE: the write gate's `determination` basis asks the
 # bench's containment test of the party's home. Same function objects.
 from ..state.containment import ancestry, home_map, home_of  # noqa: F401 -- re-exported
+# B21.59: the residence kind and the one-person read live in `state/containment.py` (the gate reads a residence); `RESIDE_KIND` is read as
+# `world_q.RESIDE_KIND` by boot, the loop and the harness, so it is the one name here that is re-exported as well as used.
+from ..state.containment import RESIDE_KIND, _refuse_two_residences, lives_in
 # `19`: the bench's two rules, owned by the gate that enforces them (`judging_set` asks both), and
 # the seat-authority predicates the `basis` form's stems read (`WorldReader.read`, below).
 from ..state.gate import BENCH_BASIS, may_determine, may_fill, may_revoke, purview_reaches, sits_over
@@ -1578,7 +1581,7 @@ def _creating_act(w: World, rid: str):
     """THE ACT THAT CAUSED THE EVENT FIRST NAMING `rid` (`issuing_seat`'s read; the
     `audience` stem's writ limb asks the act's VERB of the same act), or `None` (a hand-planted Record, or an
     Event no act caused)."""
-    made = next((e for e in w.log if any(c.subject == rid for c in e.changes)), None)
+    made = w.first_event_naming(rid)
     return causing_act(w, made) if made is not None else None
 
 
@@ -1712,7 +1715,6 @@ def admits_audience(w: World, actor: str, rung: str) -> bool:
 # its one `Tenure(...)` construction, because `data/verbs.py::_derive_openers_from_effects` reads a
 # kind off that call as a string CONSTANT. Refused at import if the roster stops carrying it: every
 # residence Query would otherwise match nothing and read as a world where nobody lives anywhere.
-from ..state.containment import RESIDE_KIND, _refuse_two_residences, lives_in  # noqa: F401 -- re-exported (B21.59: the gate reads a residence)
 if RESIDE_KIND not in TENURE_KINDS:
     raise Unspecified(
         f"tenure kind {RESIDE_KIND!r} is not a `tenure_kinds` member ({sorted(TENURE_KINDS)})",
@@ -2131,6 +2133,12 @@ def _subtree(w: World, rung_id: str) -> set:
     return {rung_id, *descendants(w, rung_id)}
 
 
+def _present_in(w: World, here: set) -> list:
+    """The subjects of every live `contain` whose object is in `here` (a `_subtree`), in `w.tenures` order: who stands in that ground. The one
+    read `mustered` and `seat_people_at` filter."""
+    return [t.subject for t in w.tenures if t.kind == "contain" and t.live and t.object in here]
+
+
 def density(w: World, rung_id: str, faction: str) -> tuple[int, int]:
     """`(members of this faction present, persons present)` over the containment subtree.
 
@@ -2167,9 +2175,7 @@ def mustered(w: World, rung_id: str, faction: str) -> list[str]:
     TRACE.query("mustered", "resolver")
     here = _subtree(w, rung_id)
     inside = set(members(w, faction))
-    return sorted(t.subject for t in w.tenures
-                  if t.kind == "contain" and t.live
-                  and t.object in here and t.subject in inside)
+    return sorted(p for p in _present_in(w, here) if p in inside)
 
 
 def seat_people_at(w: World, via: str, rid: str) -> list[str]:
@@ -2185,8 +2191,7 @@ def seat_people_at(w: World, via: str, rid: str) -> list[str]:
     people = mustered(w, rid, faction) if faction else []
     sworn = establishment_of(w, via)
     if sworn:
-        here = _subtree(w, rid)
-        present = {t.subject for t in w.tenures if t.kind == "contain" and t.live and t.object in here}
+        present = set(_present_in(w, _subtree(w, rid)))
         people += [p for p in dict.fromkeys(sworn) if p in present and p not in people]
     return people
 
@@ -2663,7 +2668,7 @@ def endings_reached(w: World) -> list:
     its object, so it needs no such rule. An edge's antecedent is the first logged Event naming it whose
     causing act (`causing_act`) is of a verb that opens its kind (`data/verbs.py`'s derived opener
     table) -- so a re-grant or a closure naming the edge is not its opening (a proxy on the causing
-    verb; `_opened_by_acts` says why it holds). The realm AS BUILT
+    verb; `opened_by_acts` says why it holds). The realm AS BUILT
     therefore reaches nothing, even where a row's condition already holds at build: a seeded edge has
     no opening Event, and nor does an edge planted by hand. One such act suffices, and THE CROSSING
     ITSELF MAY BE AUTHORLESS: an old `commit` act is credited while a MATTER death (no act) is what
@@ -2684,7 +2689,7 @@ def endings_reached(w: World) -> list:
         edges = _ending_edges(w, row)
         if not edges:
             continue
-        opened = _opened_by_acts(w, edges)
+        opened = opened_by_acts(w, edges)
         if not opened:
             continue
         out.append(EndingReached(name, row.victory,
@@ -2720,7 +2725,7 @@ def _ending_edges(w: World, row) -> tuple:
     return tuple({t.id: t for t in holds + commits}.values())
 
 
-def _opened_by_acts(w: World, edges: tuple) -> dict:
+def opened_by_acts(w: World, edges: tuple) -> dict:
     """`{edge id: (opening Event, its Act)}` for each edge an act opened (`endings_reached` says how).
     ⚠ A PROXY: an Event "opens" an edge it names when the verb that CAUSED it opens that edge's kind,
     not by anything the Event records, which is true only because `establish`, `release` and `revoke`

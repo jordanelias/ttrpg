@@ -193,7 +193,7 @@ def test_one_claim_opens_every_vacant_seat_that_names_the_title_and_closes_the_t
     w._emitted_by_write = []
     _die(w, mint_token(w, WriteClass.MATTER), king)
     assert king not in w.persons and _holder(w, THRONE) is None and _holder(w, DUCHY) is None
-    assert G.claimable_seats(w, heir, TITLE) == tuple(sorted((THRONE, DUCHY)))
+    assert G.claimable_seats(w, heir, {TITLE}) == tuple(sorted((THRONE, DUCHY)))
     kinds = _act(w, d, heir, "succeed", "both", subject=THRONE)
     assert "succession.refused" not in kinds, kinds
     assert _holder(w, THRONE) == heir and _holder(w, DUCHY) == heir, "one claim did not open both seats"

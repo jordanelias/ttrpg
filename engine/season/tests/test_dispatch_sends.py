@@ -79,15 +79,15 @@ def test_a_complied_dispatch_moves_the_man_and_charges_him_the_leg():
 
 def test_a_defied_dispatch_moves_nobody_and_is_read_by_the_issuer():
     """`evade / defy` is the other answer: the man stays, and the issuer's own ledger holds the withheld answer, which
-    `person_q.suspicion_of` (the recall occasion's reading) counts. CONTROL: before the defiance the issuer's suspicion is zero."""
+    `person_q.suspicions` (the recall occasion's reading) counts. CONTROL: before the defiance the issuer's suspicion is zero."""
     w, d = _world()
     _dispatch(w, d, dest=TO)
     rec = w.records["rec:d1"]
-    assert person_q.suspicion_of(w.persons[DUKE], MAN) == 0, "CONTROL"
+    assert person_q.suspicions(w.persons[DUKE]).get(MAN, 0) == 0, "CONTROL"
     out = _answer(w, d, "evade / defy", rec.id)
     assert _kinds(out) == ["compliance.withheld"], _kinds(out)
     assert _place(w, MAN) == FROM and w.persons[MAN].travel_leg == [], "nobody moved"
-    assert person_q.suspicion_of(w.persons[DUKE], MAN) == 1, "the issuer reads it"
+    assert person_q.suspicions(w.persons[DUKE]).get(MAN, 0) == 1, "the issuer reads it"
 
 
 def test_a_dispatch_to_a_man_outside_the_command_is_refused():

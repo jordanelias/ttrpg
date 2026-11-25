@@ -160,8 +160,8 @@ def ancestry(w: "World", rung_id: str) -> list[str]:
     return out
 
 
-# B21.59 -- THE RESIDENCE KIND AND THE ONE-PERSON READ MOVE HERE FROM `queries/world_q.py` (which re-exports them: `world_q.lives_in
-# is containment.lives_in`), for `parent_of`'s reason: `state/gate.py::may_levy` asks where a cohort LIVES, and the gate may not import
+# B21.59 -- THE RESIDENCE KIND AND THE ONE-PERSON READ MOVE HERE FROM `queries/world_q.py` (which imports them, and re-exports `RESIDE_KIND`: `world_q.RESIDE_KIND
+# is containment.RESIDE_KIND`), for `parent_of`'s reason: `state/gate.py::may_levy` asks where a cohort LIVES, and the gate may not import
 # `queries/`. The roster check on the kind stays with `world_q` (it imports the roster); `residence_of`, the aggregate, stays there too.
 RESIDE_KIND = "reside"
 

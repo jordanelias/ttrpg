@@ -124,6 +124,11 @@ _ROSTERS, _TABLES = _load_rosters()
 OFFICES_YAML = files.OFFICES_YAML
 
 
+def is_season_count(n) -> bool:
+    """Is `n` a positive whole number of seasons? `True` is no whole number here (a bool is an int to Python and not to a term)."""
+    return isinstance(n, int) and not isinstance(n, bool) and n >= 1
+
+
 def require_member(value, roster, what: str, where: str, law: str, needs: str = "") -> None:
     """THE ROSTER-MEMBERSHIP REFUSAL, IN ONE PLACE: test a runtime value against a bound roster,
     and on a miss raise `Unspecified` naming the hole, the accepted members and the law.
@@ -215,7 +220,7 @@ def _load_offices() -> dict:
     for row in (*doc["seats"], *(doc.get("foreign_seats") or ())):
         if isinstance(row, dict) and row.get("term") is not None:
             term = row["term"]
-            if isinstance(term, bool) or not isinstance(term, int) or term < 1:
+            if not is_season_count(term):
                 raise Unspecified(
                     f"offices.yaml row {row.get('id')!r} names `term: {term!r}`, which is not a positive whole number of seasons",
                     "offices.yaml -- seats",

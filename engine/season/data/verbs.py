@@ -371,11 +371,11 @@ class VerbRow:
 
     @property
     def party_gap_at_write(self) -> bool:
-        """IS THIS ROW'S PARTY GAP REFUSED AT ITS `write` CLAUSE? True where nobody is opposite on the act's own face -- a `task`
-        row (B07.01: its `draw` key, `draw_kinds`) or a row naming no `counterparty:` (B21.81: `establish`, `revoke`) -- and the row
+        """IS THIS ROW'S PARTY GAP REFUSED AT ITS `write` CLAUSE? True where nobody is opposite on the act's own face -- a row naming no
+        `counterparty:` (a `task` row, B07.01, names none: its `draw` key, `draw_kinds`; so do `establish` and `revoke`, B21.81) -- and the row
         keys `write`: its party gap is an act that did not take, so it emits the `write` key's kinds, never the union. The ONE
         answer the loader's contested-row rule (`_load_verb_table`) and the fold (`loop/resolve.py::_refuse_party_gap`) read."""
-        return bool(self.draw_kinds or not self.counterparty) and WRITE_CLAUSE in self.refusals_by_clause
+        return not self.counterparty and WRITE_CLAUSE in self.refusals_by_clause
 
     @property
     def draw_kinds(self) -> tuple:

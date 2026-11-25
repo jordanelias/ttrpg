@@ -234,7 +234,7 @@ def test_a_writ_to_the_issuers_superior_forms_no_comply():
     assert not _offered(w, OTHER, rec.id)
 
 
-# B21.23 (edit 4): SUSPICION IS A FOLD, AND DEFIANCE OPENS THE ISSUER'S RECALL -- `person_q.suspicion_of` counts the seasons in
+# B21.23 (edit 4): SUSPICION IS A FOLD, AND DEFIANCE OPENS THE ISSUER'S RECALL -- `person_q.suspicions` counts the seasons in
 # which the writ-maker's own ledger holds a withheld answer, less those he holds only a given one (E11), floored at zero, and
 # `world_q.recalls` names the defier and his seats `may_revoke` admits once it reaches `Fixtures recall_suspicion`.
 
@@ -276,7 +276,7 @@ def test_suspicion_floors_at_zero_and_a_complied_season_delays_the_recall():
     from ..queries import person_q
 
     def sus(w):
-        return person_q.suspicion_of(w.persons[DUKE], OTHER)
+        return person_q.suspicions(w.persons[DUKE]).get(OTHER, 0)
     w, d = _recall_scene()
     assert w.fixtures.get("recall_suspicion") == 3, "the shipped value"
     checked = 0

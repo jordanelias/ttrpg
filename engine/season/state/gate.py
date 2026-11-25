@@ -33,7 +33,7 @@ from ..data.rosters import (
     SEAT_ROW_BY_ID, PERSON_DIED, SUCCESSIONS, TENURE_KINDS, faction_prop_id,
 )
 from ..gaps import Forbidden, InstrumentDefect, Unspecified
-from .carriers import Office, Receipt, Tenure
+from .carriers import Office, Receipt, Tenure, in_custody
 # ⚠ NO `World` IMPORT, NOT EVEN UNDER `TYPE_CHECKING`: `world` imports this module, and the tree's
 # import-cycle instrument (`tests/valoria/test_import_cycle_game_state_npe.py`) reads a guarded
 # import as an edge like any other. The functions below take the `World` they are handed and name
@@ -317,22 +317,15 @@ def _seat_grants(w: "World", actor: Optional[str], via: Optional[str], act: str)
     (`may_determine`, `may_warrant`, `may_seize`, `may_muster`, `may_cede`) opens with -- AND `actor` is
     not in custody (B21.11, A-23: a holder detained acts through no seat; *custody suspends, it does
     not vacate*, so `seat_hold` is untouched and the `hold` stays live for the day he is pardoned).
-    The custody read is the live `detain` the actor owns, the edge `world_q.restrained(w, actor,
-    DETAIN_KIND)` answers for a Query; `state/` may not import a Query (`04` §A.2), so the same scan is
-    spelt here over the actor's own Tenures (`DETAIN_KIND`, the one owner of the kind's name). Its
-    mirror on the person side is `decision/options.py::seat_of`, so a candidate is not formed on a
+    The custody read is `carriers.in_custody`, the live `detain` the actor owns (`world_q.restrained(w, actor,
+    DETAIN_KIND)` answers for a Query, over every Tenure including an unowned one; `state/` may not import a Query,
+    `04` §A.2). Its mirror on the person side is `decision/options.py::seat_of`, so a candidate is not formed on a
     seat this refuses."""
     t = seat_hold(w, actor, via)
     if t is None or act not in t.granted_acts:
         return False
-    return not _in_custody(w, actor)
-
-
-def _in_custody(w: "World", actor: Optional[str]) -> bool:
-    """Does `actor` own a live `detain`? (B21.11, A-23: custody suspends a holder's every seat.) The one reading, asked by `_seat_grants`
-    and `may_admit`."""
-    person = w.persons.get(actor)
-    return person is not None and any(d.kind == DETAIN_KIND and d.live for d in person.tenures)
+    holder = w.persons.get(actor)
+    return holder is None or not in_custody(holder.tenures)
 
 
 def seat_faction(w: "World", via: Optional[str]) -> Optional[str]:
@@ -436,6 +429,12 @@ def sworn_to(w: "World", seat_id: Optional[str]) -> list:
     if seat_id is None:
         return []
     return [t for t in w.tenures if t.kind == "oblige" and t.object == seat_id and t.live]
+
+
+def is_sworn_to(w: "World", person: Optional[str], seat_id: Optional[str]) -> bool:
+    """Does `person` own a live `oblige` to the seat -- one of `sworn_to`'s edges? The one spelling of that membership test, asked by
+    `may_muster` and `commands_a_seated`."""
+    return any(t.subject == person for t in sworn_to(w, seat_id))
 
 
 def seated_on_the_rung_above(w: "World", seat: Office, off: Office) -> bool:
@@ -750,9 +749,8 @@ def claimable_seats(w: "World", actor: Optional[str], titles) -> tuple:
     """Every seat `actor` may take by the claim of a title in `titles` (`may_claim`, so vacancy and basis are asked
     once), sorted -- what ONE claim opens (v10 IN-61's one-act write, *"opens every vacant seat whose
     `successions` titles include the claimant's, then closes that title"*). The seat the act names is in
-    the set whenever `_req_succeed` admitted it. The caller says the actor holds `titles` (one id is read as a
-    one-title set)."""
-    held = {titles} if isinstance(titles, str) else set(titles)
+    the set whenever `_req_succeed` admitted it. The caller says the actor holds `titles`."""
+    held = set(titles)
     return tuple(sorted(s for s in SUCCESSIONS if s in w.offices and may_claim(w, actor, w.offices[s], held)))
 
 
@@ -1014,7 +1012,7 @@ def may_muster(w: "World", actor: Optional[str], via: Optional[str],
     fac = seat_faction(w, via)
     if fac is not None and _committed_to(w, subject, fac):
         return True
-    return any(t.subject == subject for t in sworn_to(w, via))
+    return is_sworn_to(w, subject, via)
 
 
 def may_wage(w: "World", person: Optional[str], faction: Optional[str]) -> bool:
@@ -1044,7 +1042,7 @@ def may_admit(w: "World", person: Optional[str], faction: Optional[str]) -> bool
     Altonia, an unrostered party) -- ANY live member admits. A faction that has such a seat and nobody sitting in it admits nobody. `False`
     for a missing person or a faction the roster does not name. Reads Tenures and offices only (`state/` may not import a Query)."""
     name = FACTION_BY_PROP.get(faction) if faction else None
-    if name is None or person not in w.persons or _in_custody(w, person):
+    if name is None or person not in w.persons or in_custody(w.persons[person].tenures):
         return False
     head = HEAD_SEAT.get(name)
     if head is not None and seat_hold(w, person, head) is not None:
@@ -1067,7 +1065,7 @@ def commands_a_seated(w: "World", actor: Optional[str], via: Optional[str], pers
     and `may_levy` asks it of a SEATED cohort (the A-22 arm), so neither keeps a second copy of the two disjuncts."""
     if person is None or via not in w.offices or person not in w.persons:
         return False
-    if any(t.subject == person for t in sworn_to(w, via)):
+    if is_sworn_to(w, person, via):
         return True
     return any(may_revoke(w, actor, via, w.offices[t.object]) for t in w.seat_holds(person) if t.object != via)
 

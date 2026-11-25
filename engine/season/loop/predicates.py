@@ -16,14 +16,13 @@ from __future__ import annotations
 from typing import NamedTuple, Optional
 
 from ..data.requires import binding_from_act
-from ..data.verbs import DISPOSAL_EVENTS, _OPENERS_FROM_EFFECTS
+from ..data.verbs import DISPOSAL_EVENTS
 from ..data.rosters import (BINDS_BASES, FOUNDED_CONFERRAL, FOUNDED_REVOCATION, FOUNDER_KEEPS, RELEASABLE_KINDS,
-                            RUNG_KINDS)
+                            RUNG_KINDS, is_season_count)
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..queries.person_q import ABOUT_KEYS
 from ..queries.world_q import (BAN_KIND, DETAIN_KIND, DOCKET_PETITION, WAR_MOOD, commands, docketed, founded_office_id,
-                               founded_post, founds_over, members, restrained)
-from ..state.attribution import causing_act
+                               founded_post, founds_over, members, opened_by_acts, restrained)
 from ..state.carriers import Office, operand_of, subject_of
 from ..trace_log import TRACE
 # G3: THE SEAT-AUTHORITY RULES LIVE WITH THE GATE THAT ENFORCES THEM. The write gate's F3 clause
@@ -146,7 +145,7 @@ def _req_confer(w: "World", a: "Act") -> Answer:
     # B21.01: A DECLARED TERM IS A POSITIVE WHOLE NUMBER, asked before `may_fill` so a malformed one refuses (and EMITS
     # `confer.refused`) where `_declared_term`'s raise would end the season; that raise stays as the backstop for an act that skipped this.
     declared = a.payload.get(TERM_KEY) if isinstance(a.payload, dict) else None
-    if declared is not None and (isinstance(declared, bool) or not isinstance(declared, int) or declared < 1):
+    if declared is not None and not is_season_count(declared):
         return _refuse_at("term", f"{a.actor} on {obj!r} term {declared!r}", "a confer declares a malformed term")
     # Batch B-I close (C1): THE CONFEREE IS A LIVING PERSON. `to` comes from the conferrer's own
     # claims (`known_persons`), which can name somebody since dead, and nothing downstream asks:
@@ -496,28 +495,13 @@ def _req_release(w: "World", a: "Act") -> bool:
     # VRES §4 edit 1 (A-37, B21.07): A PARTY DOES NOT RELEASE AN EDGE A BENCH IMPOSED -- an imposed service ends by its term maturing
     # at MATTER (`_eff_pardon` closes only a restraint, never an `oblige`). `_eff_release` closes EVERY live edge the actor owns toward the
     # subject, so one such edge among them refuses the act. The opening Event is the first logged Event naming the edge whose causing
-    # Act (`state/attribution.py::causing_act`) is of a verb that opens its kind (`_OPENERS_FROM_EFFECTS`, `_opened_by_acts`' proxy:
+    # Act (`state/attribution.py::causing_act`) is of a verb that opens its kind (`_OPENERS_FROM_EFFECTS`, `opened_by_acts`' proxy:
     # a later closure naming the edge is not its opening), and the act is a bench's when that verb is a `DISPOSAL_EVENTS` key
     # (`rosters.yaml: own_edge_declines: disposal`). No field is added to `Tenure`.
-    for t in owned:
-        openers = {v for v in DISPOSAL_EVENTS if v in _OPENERS_FROM_EFFECTS.get(t.kind, ())}
-        if openers and _opened_by(w, t, openers):
-            return _refuse("own: an edge a bench imposed is not the party's to release (A-37)",
-                           f"{a.actor} toward {subj!r}")
+    if any(act.verb in DISPOSAL_EVENTS for _e, act in opened_by_acts(w, tuple(owned)).values()):
+        return _refuse("own: an edge a bench imposed is not the party's to release (A-37)",
+                       f"{a.actor} toward {subj!r}")
     return True
-
-
-def _opened_by(w: "World", t, verbs: set) -> bool:
-    """Is `t`'s OPENING Event the work of an Act of one of `verbs`? The opening is the first logged Event that names the edge
-    and was caused by an Act whose verb opens the edge's kind (`_OPENERS_FROM_EFFECTS`), so a re-grant or a closure naming it
-    later is not it. A seeded edge, or one planted by hand, has no opening Event and answers False."""
-    opens = _OPENERS_FROM_EFFECTS.get(t.kind, ())
-    for e in w.log:
-        if any(c.subject == t.id for c in e.changes):
-            a = causing_act(w, e)
-            if a is not None and a.verb in opens:
-                return a.verb in verbs
-    return False
 
 
 @requires_predicate("oblige", clauses=("seat", "binds", "own_seat", "one_edge", "banned"))
@@ -714,8 +698,8 @@ def _req_dispatch(w: "World", a: "Act") -> bool:
         return _refuse("not commanded", f"{a.actor} via {a.via!r} to {subject!r}")
     dest = a.payload.get("dest") if isinstance(a.payload, dict) else None
     if dest is not None:
-        seat = w.offices.get(a.via) if isinstance(a.via, str) else None
-        if not isinstance(dest, str) or seat is None or dest not in w.rungs or not purview_reaches(w, seat, dest):
+        # `commands` held above, so `a.via` is a seat the world holds
+        if not isinstance(dest, str) or dest not in w.rungs or not purview_reaches(w, w.offices[a.via], dest):
             return _refuse("a dispatch to a place outside the seat's purview", f"{a.actor} via {a.via!r} to {dest!r}")
     return True
 

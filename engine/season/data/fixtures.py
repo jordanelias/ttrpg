@@ -1195,7 +1195,7 @@ DEFAULT_FIXTURES = Fixtures(
     # [ASSUMPTION; medium; Jordan to correct; revert: `None`.]
     # [JUSTIFIED: engine/season/hole_register.yaml H-611 -- site: Fixtures provisional_term, graded `assumption`; BIND_C proposes 2 and no document derives it, so it ships at the proposed 2 (B21.73) and is swept None (control) / 1 / 2 / 4]
     provisional_term=2,                # `H-611`, swept None (control) / 1 / 2 (proposed, SHIPPED) / 4
-    # `H-612` (B21.23; `06_FA_decree_binds` edit 4). HOW MANY SEASONS OF SUSPICION OPEN A WRIT-MAKER'S RECALL: `queries/person_q.py::suspicion_of`
+    # `H-612` (B21.23; `06_FA_decree_binds` edit 4). HOW MANY SEASONS OF SUSPICION OPEN A WRIT-MAKER'S RECALL: `queries/person_q.py::suspicions`
     # (his own ledger's count of the seasons a person withheld compliance on a writ he made, less those he only obeyed in, floored at zero)
     # reaching this number puts the person and each seat of his that `may_revoke` admits on the maker's question as classed referents
     # (`queries/world_q.py::recalls`). It opens the question and decides nothing: the recall is `revoke`'s resistible draw (A-24, A-47).

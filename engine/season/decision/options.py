@@ -29,7 +29,7 @@ from ..data.requires import (
     SHORTFALL_SOURCED_OPERANDS, VIA, binding_of, evaluate,
 )
 from ..data.rosters import (
-    CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, DETAIN_KIND, PERSON_PREDICATES, PURSUIT_AXES, SUCCESSIONS,
+    CHALLENGE_KIND, CHANNEL_CLAIM_SOURCE, PERSON_PREDICATES, PURSUIT_AXES, SUCCESSIONS,
     capability_rows, FACTION_BY_PROP, refusable, refusing_pole, remove_distance, require_member, require_use_site,
 )
 # `align` is imported, never `ALIGNMENT`: the table's one binding is `data.verbs.ALIGNMENT`, which the
@@ -47,7 +47,7 @@ from ..queries.person_q import (
     commanded_read, decisiveness, held_against, known_persons, ledger_names,
     is_cell as _is_cell, lie_said_of, projected_axes, regard, said_of,
 )
-from ..state.carriers import Candidate, Claim, Person, Question, Record, View, fade_of
+from ..state.carriers import Candidate, Claim, Person, Question, Record, View, fade_of, in_custody
 # 04 §C.3 says `decision/` does not import `state/`; the AX-2 scan (`test_season_shape.py`) forbids `state.world` only and has admitted `state.carriers` since
 # before B09. `state/ledgers.py` is a leaf that imports nothing and `present_confidence` is a pure function of a Claim: admitted on that precedent (B09.01).
 from ..state.ledgers import present_confidence
@@ -58,6 +58,9 @@ from ...substrate.descriptors import about_mid, scale_of
 # what `queries/world_q.py::_stamped` stamps for a document (`World.class_of`) and what
 # `rosters.yaml: referent_classes` declares; read off the type, never spelt.
 _HELD_WRIT_CLASS = Record.__name__
+
+# The Event kinds a bench's disposal emits (`rosters.yaml: own_edge_declines`' `DISPOSAL_EVENTS` values), as a set for the per-claim membership test.
+_DISPOSAL_KINDS = frozenset(DISPOSAL_EVENTS.values())
 
 
 def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candidate]:
@@ -239,17 +242,18 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         # predicate is unchanged and stays the fold's check. (After every widening above, `held_edge_sourced`'s too.)
         kinds = OWN_EDGE_DECLINES.get(verb)
         if kinds is not None and refs:
-            tied = {t.object for t in p.tenures if t.kind in kinds and t.live}
+            live = [t for t in p.tenures if t.kind in kinds and t.live]
+            tied = {t.object for t in live}
             refs = tuple(r for r in refs if r in tied)
-        # VRES §4 edit 1 (A-37; the formation half, the fold's being `loop/predicates.py::_req_release`): A PARTY DOES NOT RELEASE
-        # AN EDGE A BENCH IMPOSED, so a referent he holds a claim of a determination on, naming his own edge to it, is dropped.
-        # The claim is the generic Event claim (`loop/witness.py`): `subject` the disposal edge's id, `predicate` the Event kind
-        # (`DISPOSAL_EVENTS`), `value` True -- it names the judge and the edge and never the party, whose own `tenures` say the
-        # edge is his. `decision/` never reads the log (`04` §B.9: `state/acts` is resolver-side): his own ledger and Tenures only.
-        if kinds is not None and refs:
-            found = {c.subject for c in p.ledger if c.predicate in DISPOSAL_EVENTS.values()}
-            imposed = {t.object for t in p.tenures if t.kind in kinds and t.live and t.id in found}
-            refs = tuple(r for r in refs if r not in imposed)
+            # VRES §4 edit 1 (A-37; the formation half, the fold's being `loop/predicates.py::_req_release`): A PARTY DOES NOT RELEASE
+            # AN EDGE A BENCH IMPOSED, so a referent he holds a claim of a determination on, naming his own edge to it, is dropped.
+            # The claim is the generic Event claim (`loop/witness.py`): `subject` the disposal edge's id, `predicate` the Event kind
+            # (`DISPOSAL_EVENTS`), `value` True -- it names the judge and the edge and never the party, whose own `tenures` say the
+            # edge is his. `decision/` never reads the log (`04` §B.9: `state/acts` is resolver-side): his own ledger and Tenures only.
+            if refs:
+                found = {c.subject for c in p.ledger if c.predicate in _DISPOSAL_KINDS}
+                imposed = {t.object for t in live if t.id in found}
+                refs = tuple(r for r in refs if r not in imposed)
         # B11 lane A (`data/verbs.py::RECORD_SUBKINDS_BY_VERB`): A `Record` ROW WHOSE CELL ASKS A SUB-KIND forms only
         # on a Record his own content claims say is of that kind (`documents_known_as`) -- `accept` on a challenge,
         # `comply` on a dispensation. The kind is read off the row's own cell, never a verb name; a document is known
@@ -750,9 +754,8 @@ def seat_of(p: Person, c: Candidate) -> Optional[str]:
     (`state/gate.py::_seat_grants`, asked by every remit-act basis and by `loop/resolve.py::_eligible`'s `remit:` branch, refuses
     the act through it), so his candidate names no seat: `opening_set` still forms it, the act mints with `via=None`, and the fold
     admits it only on an eligibility alternative that needs no seat. The seat's `hold` is untouched: custody suspends, it does not vacate.
-    The scan is `world_q.restrained(w, p, DETAIN_KIND)`'s, spelt over the person's own Tenures because
-    a `decision/` reader holds no `World`."""
-    if any(t.kind == DETAIN_KIND and t.live for t in p.tenures):
+    The reading is `state/carriers.py::in_custody`'s, over the person's own Tenures because a `decision/` reader holds no `World`."""
+    if in_custody(p.tenures):
         return None
     seat = (c.operands or {}).get(VIA)
     return seat if seat is not None else exercised_seat(p, VERB_TABLE.get(c.verb))

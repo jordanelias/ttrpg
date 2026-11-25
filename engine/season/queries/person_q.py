@@ -1906,6 +1906,13 @@ def content_kind(c) -> "str | None":
     return kind or None
 
 
+def addressees_of(said) -> tuple:
+    """THE ADDRESSEE IDS OF A DOCUMENT SAYING `said` -- the list under the addressee key (`rosters.yaml: record_kinds.content.addressee`, `to`) as a
+    tuple; `()` for anything that is not a dict or carries no list there. The one reader of that value's shape: `addressed_to` and `suspicions` ask it."""
+    v = said.get(RECORD_CONTENT.get("addressee")) if isinstance(said, dict) else None
+    return tuple(v) if isinstance(v, (list, tuple)) else ()
+
+
 def addressed_to(said, pid) -> bool:
     """IS `pid` AMONG THE ADDRESSEES OF A DOCUMENT SAYING `said` -- the id list under the addressee key
     (`rosters.yaml: record_kinds.content.addressee`, `to`), which the mint stores as a list
@@ -1913,10 +1920,7 @@ def addressed_to(said, pid) -> bool:
     lifted out of `world_q.writs_held` (which asks it of a Record's `subject_matter`) so
     `decision/options.py::opening_set`'s terms-sourced reader asks the same rule of the holder's own
     content claim (`content_said`), World-free. `False` for anything that is not a dict."""
-    if not isinstance(said, dict):
-        return False
-    v = said.get(RECORD_CONTENT.get("addressee"))
-    return pid in (tuple(v) if isinstance(v, (list, tuple)) else ())
+    return pid in addressees_of(said)
 
 
 #: THE TWO ANSWERS TO A WRIT, as the kinds `comply` and `evade / defy` emit (the claims a witness of the answer holds). The one home:
@@ -1941,13 +1945,11 @@ def suspicions(p: Person, admit=None) -> dict:
     `admit(other, writ_id) -> bool`, when given, drops an answer it refuses: `world_q.recalls` passes the command basis, so a writ to
     someone the issuing seat does not command enters no count (A-22; the Reconciled line of `06_FA_decree_binds`). Person-side
     and World-free (AX-2), so the caller that holds a World supplies it; omitted, every answer counts."""
-    addressee = RECORD_CONTENT.get("addressee")
     made = {}
     for c in p.ledger:
         if c.doer == p.id:
-            said = content_said(c)
-            to = said.get(addressee) if said is not None else None
-            if isinstance(to, (list, tuple)) and len(to) == 1:
+            to = addressees_of(content_said(c))
+            if len(to) == 1:
                 made[c.subject] = to[0]
     if not made:
         return {}
@@ -1964,12 +1966,6 @@ def suspicions(p: Person, admit=None) -> dict:
             (withheld if kind == COMPLIANCE_WITHHELD else given).setdefault(other, set()).add(when)
     return {o: max(0, len(withheld.get(o, ())) - len(given.get(o, set()) - withheld.get(o, set())))
             for o in sorted(set(given) | set(withheld))}
-
-
-def suspicion_of(p: Person, other: str, admit=None) -> int:
-    """HOW FAR `p` BELIEVES `other` HAS DEFIED HIM (ordinary English: the belief that someone is disloyal or doing wrong) -- one
-    person's entry in `suspicions`, `0` for a person whose answers he holds no claim of. Computed when read, never stored."""
-    return suspicions(p, admit).get(other, 0)
 
 
 #: THE CONTENT KEY THAT SAYS WHAT A DOCUMENT IS ABOUT, PER RECORD KIND -- the key `rosters.yaml:

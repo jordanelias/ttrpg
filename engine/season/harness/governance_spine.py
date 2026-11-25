@@ -50,11 +50,12 @@ from ..boot.chooser import chooser
 from ..boot.realm import build_realm
 from ..data import files
 from ..data.matrix import Step, WriteClass
-from ..data.rosters import RESTRAINT_KINDS, RUNG_KINDS, SUCCESSIONS, load_yaml, remit_or_default
+from ..data.rosters import FACTION_BY_PROP, RESTRAINT_KINDS, SUCCESSIONS, load_yaml, remit_or_default
 from ..data.verbs import REFUSAL_KINDS, VERB_TABLE
 from ..decision.choose import make_ranker
 from ..decision.options import seat_of
 from ..decision.sheet import development_space
+from ..gaps import Forbidden
 from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries import faction_q, world_q
 from ..queries.person_q import COMPLIANCE_WITHHELD, addressed_to
@@ -232,7 +233,6 @@ def census(w: World) -> dict:
     for — "we don't know how dissemination and aggregation works" is a question about people —
     so their absence must be observable here.
     """
-    from collections import Counter
     if not w.rungs:
         raise AssertionError(
             "census() was given a world with no rungs. It reports the SHAPE of a containment "
@@ -314,16 +314,25 @@ def _seat_of(w: World, player: str) -> Office:
 
 
 def _refused(msg: str, needs: str) -> Exception:
-    from ..gaps import Forbidden
     return Forbidden(msg, "harness/governance_spine.py::situation", needs=needs,
                      law="B21.72 -- a scenario starts from a state the engine produced: a situation the fold refuses stops the run, never a fallback")
+
+
+def _top_rung(w: World) -> Optional[str]:
+    """The id of the first rung of the realm's kind (`world_q.REALM_KIND`, the top of the ordered `rung_kinds` roster), or `None`."""
+    return next((r.id for r in w.rungs.values() if r.kind == world_q.REALM_KIND), None)
+
+
+def _held_seats(w: World, where: Callable) -> list:
+    """The ids, sorted, of the seats `where(office)` admits that someone holds."""
+    return sorted(o.id for o in w.offices.values() if where(o) and _holder_of(w, o.id))
 
 
 def default_player(w: World) -> str:
     """The holder of the first seat (by id) one rung below the top of the ladder: the Duke of the first chain, on this spine. Read off the
     containment tree, so no id is spelt."""
-    top = next((r.id for r in w.rungs.values() if r.kind == RUNG_KINDS[-1]), None)
-    below = sorted(o.id for o in w.offices.values() if o.rung and top and parent_of(w, o.rung) == top and _holder_of(w, o.id))
+    top = _top_rung(w)
+    below = _held_seats(w, lambda o: o.rung and top and parent_of(w, o.rung) == top)
     if not below:
         raise _refused("the world has no seat one rung below its top to play", "a seated rung under the realm")
     return _holder_of(w, below[0])
@@ -332,7 +341,7 @@ def default_player(w: World) -> str:
 def _sovereign(w: World, seat: Office) -> Office:
     """The seat on the top rung of `seat`'s own chain (the Sovereign, on this spine)."""
     top = world_q.ancestry(w, seat.rung)[-1]
-    held = sorted(o.id for o in w.offices.values() if o.rung == top and _holder_of(w, o.id))
+    held = _held_seats(w, lambda o: o.rung == top)
     if not held:
         raise _refused(f"no seat on {top!r}, the top of the player's chain, has a holder", "a seated top rung")
     if held[0] == seat.id:
@@ -343,8 +352,7 @@ def _sovereign(w: World, seat: Office) -> Office:
 def _titles(w: World, seat: Office) -> tuple:
     """The seats of the player's own rung kind that someone holds, by id: the set of titles a succession lists (A-19), the player's among them."""
     kind = w.rungs[seat.rung].kind
-    out = tuple(sorted(o.id for o in w.offices.values()
-                       if o.rung in w.rungs and w.rungs[o.rung].kind == kind and _holder_of(w, o.id)))
+    out = tuple(_held_seats(w, lambda o: o.rung in w.rungs and w.rungs[o.rung].kind == kind))
     if len(out) < 2:
         raise _refused(f"only {len(out)} seat(s) of the player's rung kind {kind!r} are held; a succession lists a set of at least two titles",
                        "two held seats of the player's rung kind")
@@ -379,7 +387,7 @@ def _opening(w: World, name: str, player: str) -> Iterator[Act]:
     seat = _seat_of(w, player)
     if name == "vacancy":
         # the seat one rung below the player's, laid down by the man who holds it
-        below = sorted(o.id for o in w.offices.values() if o.rung and parent_of(w, o.rung) == seat.rung and _holder_of(w, o.id))
+        below = _held_seats(w, lambda o: o.rung and parent_of(w, o.rung) == seat.rung)
         if not below:
             raise _refused(f"no held seat stands one rung below {seat.id!r}", "a held seat beneath the player's")
         yield Act(id=f"scn:vacancy:{below[0]}", actor=_holder_of(w, below[0]), verb="release", payload={"subject": below[0]}, via=below[0])
@@ -436,7 +444,7 @@ OATH_KIND = "oblige"                                        # the tenure kind of
 
 def _kinds_of(verb: str) -> frozenset:
     row = VERB_TABLE[verb]
-    return frozenset((*row.emits, *row.emits_on_refusal, *(k for ks in row.emits_by_degree.values() for k in ks)))
+    return frozenset((*row.emits, *row.emits_on_refusal))
 
 
 _KINDS_OF_VERB = {v: _kinds_of(v) for v in _GROUP_OF_VERB}
@@ -526,8 +534,7 @@ def _successions_set(mapping: dict) -> Iterator[None]:
 
 def standing_lines(w: World) -> list:
     """Each rostered faction's `faction_q.standing` record at the realm rung (B03.65's caller; no second footprint, density or provinces reading here); B21.74 adds `faction_q.weight` (B21.68)."""
-    from ..data.rosters import FACTION_BY_PROP
-    top = next((r.id for r in w.rungs.values() if r.kind == RUNG_KINDS[-1]), None)
+    top = _top_rung(w)
     if top is None:
         return []
     out = []
@@ -538,7 +545,7 @@ def standing_lines(w: World) -> list:
     return out
 
 
-def _ending(w: World, player: str, n: int, seasons: int, unseated: Optional[int] = None, linger: int = 0) -> Optional[str]:
+def _ending(w: World, n: int, seasons: int, unseated: Optional[int] = None, linger: int = 0) -> Optional[str]:
     """The first of the three endings that holds, each a Query: the player holds no seat (`unseated` is the season he was first found without one, and `linger`
     seasons have run since); an ending is reached; the season count is."""
     if unseated is not None and n - unseated >= linger:
@@ -684,7 +691,7 @@ def play(seed: int, seasons: int, situation: Optional[str] = None, player: Optio
         def ended_at(n: int) -> Optional[str]:
             if not unseated and not w.seat_holds(player):
                 unseated.append(n)
-            return _ending(w, player, n, seasons, unseated[0] if unseated else None, LINGER_AFTER_UNSEATED.get(situation, 0))
+            return _ending(w, n, seasons, unseated[0] if unseated else None, LINGER_AFTER_UNSEATED.get(situation, 0))
         res = _run(w, seasons, verbs, overrides, out, ended_at)
     res["acts"] = acts
     return res

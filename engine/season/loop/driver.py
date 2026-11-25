@@ -101,13 +101,11 @@ def resolvable_verbs() -> frozenset:
         #     ROW DECLARING A REGISTERED PREDICATE, because an untyped row with a precondition
         #     reaches here only through `REQUIRES_PREDICATES` (the first gate) and one with none
         #     would contest with no custody or party read at all.
-        #   * B21.09 (VB-A commit A3) [ASSUMPTION; medium; Jordan to correct; revert: the two clauses above alone, under which a
-        #     drawn `establish` leaves the chooser's verb set]: **OR the untyped row names NO counterparty and its prize's row
-        #     names a room that hears it (`heard_by:`).** Such a contest has no second claimant to miss: the actor alone claims,
-        #     the room the prize names is what stands opposite (`seam/wrappers/sigma.py::audience_of`), and the social roll
-        #     opposes nobody at the untrained score (`roll.py::obstacle`, never absent). Narrowed to a registered predicate, as
-        #     the clause above is. Today: `establish` (`a seat`) alone.
-        #   * B21.14 (VB-C commit C3) [ASSUMPTION; medium; Jordan to correct; revert: the three clauses above alone, under which a
+        #   * B21.09 (VB-A commit A3): an untyped row naming NO counterparty whose prize's row names a room that hears it (`heard_by:`) --
+        #     `establish` (`a seat`) alone -- has no second claimant to miss (the actor alone claims, the room is what stands opposite,
+        #     `seam/wrappers/sigma.py::audience_of`). Its prize also names `opposed_by:`, so the arm below admits it and the clause is
+        #     not written separately: dropped at B21 close, the resolvable set on the shipped table unchanged.
+        #   * B21.14 (VB-C commit C3) [ASSUMPTION; medium; Jordan to correct; revert: the clauses above alone, under which a
         #     drawn `confer` leaves the chooser's verb set]: **OR the prize's row names who stands opposite (`opposed_by:`).** The
         #     opponent is then read off the world by the prize (`loop/sides.py::sides_of`: the named seat's live holder), not off an
         #     operand the act must carry, so `confer` (whose `counterparty: to` is the conferee, not the opponent) has nothing to
@@ -124,9 +122,7 @@ def resolvable_verbs() -> frozenset:
             _mod = _prize.get("provider")
             resolvable_contest = bool(_mod) and (
                 row.requires_typed is not None
-                or (row.counterparty == "subject" and v in REQUIRES_PREDICATES)
-                or (not row.counterparty and bool(_prize.get("heard_by")) and v in REQUIRES_PREDICATES)
-                or (bool(_prize.get("opposed_by")) and v in REQUIRES_PREDICATES))
+                or (v in REQUIRES_PREDICATES and (row.counterparty == "subject" or bool(_prize.get("opposed_by")))))
         if gated and effected and (not contested or resolvable_contest):
             out.add(v)
     return frozenset(out)

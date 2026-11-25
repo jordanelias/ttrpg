@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from ..data.rosters import MARCH_TARGET_KINDS, SUBTREE_OCCUPATION_KINDS, task_share
+from ..data.rosters import MARCH_TARGET_KINDS, SUBTREE_OCCUPATION_KINDS, is_season_count, task_share
 from ..gaps import Forbidden, InstrumentDefect
 from ..queries.world_q import holder_faction_of, occupies, seat_people_at
 from ..state.carriers import Term
@@ -99,22 +99,26 @@ def _decline_ascent(msg: str) -> Change:
     return NO_CHANGE
 
 
-def _oblige_term(w: "World") -> Optional[int]:
-    """THE LENGTH, IN SEASONS, OF THE TERM AN `oblige` IS DECLARED FOR -- and that a paying act winds
-    it on by -- read ONCE for both of its readers (`_eff_oblige`, `_renewals`), with the refusal
-    in the same place. `None` is `H-159`'s control arm: no term at all. Anything else must be a
-    whole number of seasons, at least one: a term of `0` would mature in the season that declared
-    it (MATTER has already run when RESOLVE opens the edge, so it lapses at the next barrier with
-    no window to pay), and a renewal by `0` moves no clock and would be refused as no renewal at
-    all -- a number that looks like a setting and behaves like a defect."""
-    n = w.fixtures.get("oblige_term")
-    if n is not None and (isinstance(n, bool) or not isinstance(n, int) or n < 1):
+def _fixture_seasons(w: "World", key: str) -> Optional[int]:
+    """A TERM LENGTH A FIXTURE DECLARES, IN SEASONS, with its refusal in one place. `None` is the control arm: no term at all. Anything
+    else must be a whole number of seasons, at least one: a term of `0` would mature in the season that declared it (MATTER has already
+    run when RESOLVE opens the edge, so it lapses at the next barrier with no window to pay), and a renewal by `0` moves no clock and
+    would be refused as no renewal at all -- a number that looks like a setting and behaves like a defect."""
+    n = w.fixtures.get(key)
+    if n is not None and not is_season_count(n):
         raise Forbidden(
-            f"fixture oblige_term is {n!r}", "T-n",
-            needs="None (no term: H-159's control) or a whole number of seasons >= 1",
+            f"fixture {key} is {n!r}", "T-n",
+            needs="None (no term: the control arm) or a whole number of seasons >= 1",
             law="04 §B.8 `term?` / T-n -- the opening act declares a term that MATTER matures at a "
                 "later barrier; a term that cannot outlive its own season is not one")
     return n
+
+
+def _oblige_term(w: "World") -> Optional[int]:
+    """THE LENGTH, IN SEASONS, OF THE TERM AN `oblige` IS DECLARED FOR -- and that a paying act winds
+    it on by -- read ONCE for both of its readers (`_eff_oblige`, `_renewals`), through `_fixture_seasons`.
+    `None` is `H-159`'s control arm: no term at all."""
+    return _fixture_seasons(w, "oblige_term")
 
 
 def _new_oblige_term(w: "World", a: "Act") -> Optional["Term"]:
@@ -130,17 +134,11 @@ def _provisional_term(w: "World", a: "Act") -> Optional["Term"]:
     """The `Term` a PARTIAL's hold OPENS with -- the one constructor of it (`H-611`, `14_VERBS_BINDING_C` commit C1), in
     `_new_oblige_term`'s shape: matured at the MATTER barrier of tick `w.tick + n`, citing this act (AX-5). `None` is the CONTROL: an
     untermed hold, exactly what a Success opens, so a Partial reads as a Success there; the fixture SHIPS at 2 (B21.73). Anything else
-    must be a whole number of seasons, at least one, refused here as `_oblige_term` refuses it (a `0` would lapse at the very next
+    must be a whole number of seasons, at least one, refused as `_oblige_term` refuses it (a `0` would lapse at the very next
     barrier). Callers (B21.14): `_eff_confer` and `_eff_succeed` at a Partial band; a Partial `revoke` opens no hold."""
-    n = w.fixtures.get("provisional_term")
+    n = _fixture_seasons(w, "provisional_term")
     if n is None:
         return None
-    if isinstance(n, bool) or not isinstance(n, int) or n < 1:
-        raise Forbidden(
-            f"fixture provisional_term is {n!r}", "T-n",
-            needs="None (no term: a Partial reads as a Success, H-611's control) or a whole number of seasons >= 1",
-            law="04 §B.8 `term?` / T-n -- the opening act declares a term that MATTER matures at a later barrier; "
-                "a term that cannot outlive its own season is not one")
     return Term(w.tick + n, a.id)
 
 
