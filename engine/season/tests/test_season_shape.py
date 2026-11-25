@@ -10218,3 +10218,58 @@ def test_t4_petition_and_issue_bind_to_and_contest_exactly_as_before():
     # is `tell`, `determine` and (B21.56) `issue`, which are in it, and the row that is not contested: `petition`.
     contested = {v for v, r in VERB_TABLE.items() if r.contests and r.counterparty}
     assert {"tell", "determine", "issue"} <= contested and "petition" not in contested, sorted(contested)
+
+
+@pytest.mark.flat_fold
+def test_a_witnessed_recovery_clears_a_believed_wound(monkeypatch):
+    """B12a.69 (U5d_WR §3, F-WR-23): `_eff_tend` writes the `(pid, "body", v)` Observation `_eff_kill` writes, `v` the
+    MENDED body, so the tender's believed wound of the man he mended is superseded by a claim of the mended body. Planted: the
+    tender believes a man below whole; he tends him whole; the pairs forming `tend` on the healed man (a holder whose
+    `wounded_with` stamps him, a man beside the holder, not the healed man himself) read 0. CONTROL: the same world with
+    the Observation write off reads the old non-zero count. CONTROL 2: a `tend` on a man already whole is still refused
+    (`NoOpReceipt` -> `tend.refused`) and deposits no `body` claim."""
+    from ..harness import probes as P
+    from .test_cp_t03_08_tend_on_the_wounded import A, B, _believe, _tends
+    from .test_in10_record_operands import _acts, _resolve
+    from .test_in12_step9 import _world
+    from ..loop import effects_combat
+
+    def tend_pairs(w, healed):
+        return sum(1 for h in sorted(w.persons) if h != healed and healed in world_q.wounded_with(w, w.persons[h]))
+
+    def recover(observe):
+        with monkeypatch.context() as m:
+            if not observe:
+                m.setattr(effects_combat, "body_observed", lambda pid, body: ())
+            w, d = _world()
+            scale = w.fixtures.get("condition_scale")
+            w.persons[B].body = scale // 4
+            _believe(w, A, B, scale // 4)
+            assert tend_pairs(w, B) == 1, "setup: the tender believes the man wounded"
+            cands = [c for c in _tends(w, A) if c.subject == B]
+            assert cands, "setup: no tend forms on the believed wound"
+            out = _resolve(w, d, *_acts(w, A, cands[:1]))
+            assert [e.kind for e in out] == ["body.tended"]
+            assert w.persons[B].body == scale, "setup: the recovery did not mend him"
+            w.step = Step.WITNESS
+            d.witness(mint_token(w, WriteClass.INTERIOR), out)     # the tender is shown what he did
+            return w, tend_pairs(w, B), [c for c in w.persons[A].ledger if c.subject == B and c.predicate == "body"]
+
+    w, after, claims = recover(observe=True)
+    assert after == 0, f"a witnessed recovery left {after} pair(s) still forming tend on the healed man"
+    assert max(claims, key=lambda c: (c.when, c.lap, w.persons[A].ledger.index(c))).value == w.fixtures.get("condition_scale"), claims
+    _, old, _ = recover(observe=False)
+    assert old == 1, f"CONTROL: without the Observation write the believed wound should stand, read {old}"
+
+    # CONTROL 2: a tend that heals nobody is refused and writes no Observation.
+    w, d = _world()
+    w.persons[B].body = w.persons[B].body_ceiling
+    _believe(w, A, B, w.fixtures.get("condition_scale") // 4, cid="c_stale")
+    before = len(w.persons[A].ledger)
+    cands = [c for c in _tends(w, A) if c.subject == B]
+    assert cands, "setup: the believed wound forms a tend on a whole man"
+    out = _resolve(w, d, *_acts(w, A, cands[:1]))
+    assert [e.kind for e in out] == ["tend.refused"]
+    w.step = Step.WITNESS
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
+    assert not [c for c in w.persons[A].ledger[before:] if c.predicate == "body"], "a refused tend deposited a body claim"
